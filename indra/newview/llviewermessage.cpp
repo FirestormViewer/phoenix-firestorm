@@ -3350,7 +3350,9 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 						std::string strCmd = *itToken;
 
 						ERlvCmdRet eRet = gRlvHandler.processCommand(from_id, strCmd, true);
-						if (RlvSettings::getDebug())
+						if ( (RlvSettings::getDebug()) &&
+							 ( (!RlvSettings::getDebugHideUnsetDup()) || 
+							   ((RLV_RET_SUCCESS_UNSET != eRet) && (RLV_RET_SUCCESS_DUPLICATE != eRet)) ) )
 						{
 							if ( RLV_RET_SUCCESS == (eRet & RLV_RET_SUCCESS) )	
 								pstr = &strExecuted;
@@ -3377,7 +3379,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 					if (RlvForceWear::instanceExists())
 						RlvForceWear::instance().done();
 
-					if (!RlvSettings::getDebug())
+					if ( (!RlvSettings::getDebug()) || ((strExecuted.empty()) && (strFailed.empty()) && (strRetained.empty())) )
 						return;
 
 					// Silly people want comprehensive debug messages, blah :p
@@ -3396,7 +3398,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 						verb = " retained: @";
 						mesg = strRetained;
 					}
-					else 
+					else
 					{
 						verb = ": @";
 						if (!strExecuted.empty())

@@ -281,6 +281,7 @@ enum ERlvAttachGroupType
 
 #define RLV_SETTING_CREATEOUTFITFOLDERS	"RLVaCreateFoldersOnSaveOutfit"
 #define RLV_SETTING_DEBUGUIENABLERS		"RLVaDebugUIEnablers"
+#define RLV_SETTING_DEBUGHIDEUNSETDUP   "RLVaDebugHideUnsetDuplicate"
 #define RLV_SETTING_ENABLECOMPOSITES	"RLVaEnableCompositeFolders"
 #define RLV_SETTING_ENABLELEGACYNAMING	"RLVaEnableLegacyNaming"
 #define RLV_SETTING_ENABLESHAREDWEAR	"RLVaEnableSharedWear"
