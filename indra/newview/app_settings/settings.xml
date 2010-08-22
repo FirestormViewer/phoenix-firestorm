@@ -45,17 +45,6 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>RLVaCreateFoldersOnSaveOutfit</key>
-    <map>
-      <key>Comment</key>
-      <string>Automatically create ".(&lt;attachpt&gt;>)" folders when saving an outfit"</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>RLVaDebugUIEnablers</key>
     <map>
       <key>Comment</key>

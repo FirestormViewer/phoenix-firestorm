@@ -1182,12 +1182,8 @@ void LLAppearanceMgr::shallowCopyCategory(const LLUUID& src_id, const LLUUID& ds
 }
 
 // Copy contents of src_id to dst_id.
-//void LLAppearanceMgr::shallowCopyCategoryContents(const LLUUID& src_id, const LLUUID& dst_id,
-//													  LLPointer<LLInventoryCallback> cb)
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 void LLAppearanceMgr::shallowCopyCategoryContents(const LLUUID& src_id, const LLUUID& dst_id,
-													  LLPointer<LLInventoryCallback> cb, bool fRlvCreateFolders)
-// [/RLVa:KB]
+													  LLPointer<LLInventoryCallback> cb)
 {
 	LLInventoryModel::cat_array_t* cats;
 	LLInventoryModel::item_array_t* items;
@@ -1202,54 +1198,14 @@ void LLAppearanceMgr::shallowCopyCategoryContents(const LLUUID& src_id, const LL
 		{
 			case LLAssetType::AT_LINK:
 			{
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-				const LLViewerInventoryItem* pItemTarget = item->getLinkedItem();
-				if ( (rlv_handler_t::isEnabled()) && (fRlvCreateFolders) && (pItemTarget) )
-				{
-					switch (pItemTarget->getType())
-					{
-						case LLAssetType::AT_OBJECT:
-							{
-								// Attachments fall through to default unless they're currently worn in which case we need to stuff them
-								// into their own .(<attachpt>) folder (unless the target already specifies an attachment point name)
-								if ( (isAgentAvatarValid()) && (!RlvAttachPtLookup::hasAttachPointName(pItemTarget)) )
-								{
-									std::string strAttachPt = gAgentAvatarp->getAttachedPointName(pItemTarget->getUUID());
-									if (!strAttachPt.empty())
-									{
-										LLStringUtil::toLower(strAttachPt);
-										LLUUID idAttachPtFolder = gInventory.createNewCategory(
-											dst_id, LLFolderType::FT_NONE, llformat(".(%s)", strAttachPt.c_str()));
-										//LLInventoryItem::getDescription() is used for a new description 
-										//to propagate ordering information saved in descriptions of links
-										link_inventory_item(gAgent.getID(), pItemTarget->getUUID(), idAttachPtFolder, 
-											pItemTarget->getName(), pItemTarget->LLInventoryItem::getDescription(), LLAssetType::AT_LINK, cb);
-										break;
-									}
-								}
-							}
-						default:
-							//LLInventoryItem::getDescription() is used for a new description 
-							//to propagate ordering information saved in descriptions of links
-							link_inventory_item(gAgent.getID(), item->getLinkedUUID(), dst_id, item->getName(), 
-								item->LLInventoryItem::getDescription(), LLAssetType::AT_LINK, cb);
-							break;
-					}
-				}
-				else
-				{
-// [/RLVa:KB]
-					//LLInventoryItem::getDescription() is used for a new description 
-					//to propagate ordering information saved in descriptions of links
-					link_inventory_item(gAgent.getID(),
-										item->getLinkedUUID(),
-										dst_id,
-										item->getName(),
-										item->LLInventoryItem::getDescription(),
-										LLAssetType::AT_LINK, cb);
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0e) | Added: 2010-04-20
-				}
-// [/RLVa:KB]
+				//LLInventoryItem::getDescription() is used for a new description 
+				//to propagate ordering information saved in descriptions of links
+				link_inventory_item(gAgent.getID(),
+									item->getLinkedUUID(),
+									dst_id,
+									item->getName(),
+									item->LLInventoryItem::getDescription(),
+									LLAssetType::AT_LINK, cb);
 				break;
 			}
 			case LLAssetType::AT_LINK_FOLDER:

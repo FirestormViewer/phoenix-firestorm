@@ -87,12 +87,8 @@ public:
 	bool getCanReplaceCOF(const LLUUID& outfit_cat_id);
 
 	// Copy all items in a category.
-//	void shallowCopyCategoryContents(const LLUUID& src_id, const LLUUID& dst_id,
-//									 LLPointer<LLInventoryCallback> cb);
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 	void shallowCopyCategoryContents(const LLUUID& src_id, const LLUUID& dst_id,
-									 LLPointer<LLInventoryCallback> cb, bool fRlvCreateFolders = false);
-// [/RLVa:KB]
+									 LLPointer<LLInventoryCallback> cb);
 
 	// Find the Current Outfit folder.
 	const LLUUID getCOF() const;
