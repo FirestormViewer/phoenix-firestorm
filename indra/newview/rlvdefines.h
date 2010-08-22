@@ -279,7 +279,6 @@ enum ERlvAttachGroupType
 #define RLV_SETTING_NOSETENV			"RestrainedLoveNoSetEnv"
 #define RLV_SETTING_FORBIDGIVETORLV		"RestrainedLoveForbidGiveToRLV"
 
-#define RLV_SETTING_DEBUGUIENABLERS		"RLVaDebugUIEnablers"
 #define RLV_SETTING_ENABLECOMPOSITES	"RLVaEnableCompositeFolders"
 #define RLV_SETTING_ENABLELEGACYNAMING	"RLVaEnableLegacyNaming"
 #define RLV_SETTING_ENABLESHAREDWEAR	"RLVaEnableSharedWear"
