@@ -716,6 +716,16 @@ void LLFloaterWorldMap::updateLocation()
 		{	// Empty SLURL will disable the "Copy SLURL to clipboard" button
 			mSLURL = LLSLURL();
 		}
+
+// [RLVa:KB] - Checked: 2009-07-04 (RLVa-1.0.0a)
+/*
+		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+		{
+			childSetValue("location", RlvStrings::getString(RLV_STRING_HIDDEN_REGION));
+			mSLURL.clear();
+		}
+*/
+// [/RLVa:KB]
 	}
 }
 

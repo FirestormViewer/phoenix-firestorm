@@ -2116,6 +2116,16 @@ void LLLiveLSLEditor::onLoad(void* userdata)
 void LLLiveLSLEditor::onSave(void* userdata, BOOL close_after_save)
 {
 	LLLiveLSLEditor* self = (LLLiveLSLEditor*)userdata;
+
+// [RLVa:KB] - Checked: 2009-10-10 (RLVa-1.0.5a) | Modified: RLVa-1.0.5a
+/*
+	if ( (rlv_handler_t::isEnabled()) && (gRlvHandler.isLockedAttachment(gObjectList.findObject(self->mObjectID), RLV_LOCK_REMOVE)) )
+	{
+		return;
+	}
+*/
+// [/RLVa:KB]
+
 	self->mCloseAfterSave = close_after_save;
 	self->saveIfNeeded();
 }

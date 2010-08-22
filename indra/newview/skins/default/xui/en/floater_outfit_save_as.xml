@@ -2,7 +2,7 @@
 <floater
  can_close="false"
  can_minimize="false"
- height="100"
+ height="125"
  layout="topleft"
  title="Save Outfit"
  name="modal container"
@@ -14,7 +14,7 @@
      layout="topleft"
      left="20"
      name="Save"
-     top="70"
+     top="90"
      width="82" />
     <button
      height="23"
@@ -55,4 +55,15 @@ as a new Outfit:
      width="200">
         [DESC] (new)
     </line_editor>
+    <check_box
+     visible="false"
+     control_name="RLVaCreateFoldersOnSaveOutfit"
+     height="16"
+     label="#RLV compatible outfit"
+     tool_tip="Creates attachment point folders"
+     layout="topleft"
+     left_delta="0"
+     name="rlv_create_folders"
+     top_pad="4"
+     width="200" />
 </floater>

@@ -39,6 +39,11 @@ class LLSidepanelAppearance;
 class LLTabContainer;
 class LLSaveOutfitComboBtn;
 
+// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+extern const std::string OUTFITS_TAB_NAME;
+extern const std::string COF_TAB_NAME;
+// [/RLVa:KB]
+
 class LLPanelOutfitsInventory : public LLPanel
 {
 	LOG_CLASS(LLPanelOutfitsInventory);

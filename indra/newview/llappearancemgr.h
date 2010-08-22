@@ -51,6 +51,11 @@ public:
 	void updateAppearanceFromCOF(bool update_base_outfit_ordering = false);
 	bool needToSaveCOF();
 	void updateCOF(const LLUUID& category, bool append = false);
+// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+	void updateCOF(LLInventoryModel::item_array_t& body_items_new, LLInventoryModel::item_array_t& wear_items_new,
+				   LLInventoryModel::item_array_t& obj_items_new, LLInventoryModel::item_array_t& gest_items_new,
+				   bool append = false, U32 cntMaxPerType = LLAgentWearables::MAX_CLOTHING_PER_TYPE, const LLUUID& idOutfit = LLUUID::null);
+// [/RLVa:KB]
 	void wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append);
 	void wearInventoryCategoryOnAvatar(LLInventoryCategory* category, bool append);
 	void wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append);
@@ -82,8 +87,12 @@ public:
 	bool getCanReplaceCOF(const LLUUID& outfit_cat_id);
 
 	// Copy all items in a category.
+//	void shallowCopyCategoryContents(const LLUUID& src_id, const LLUUID& dst_id,
+//									 LLPointer<LLInventoryCallback> cb);
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 	void shallowCopyCategoryContents(const LLUUID& src_id, const LLUUID& dst_id,
-									 LLPointer<LLInventoryCallback> cb);
+									 LLPointer<LLInventoryCallback> cb, bool fRlvCreateFolders = false);
+// [/RLVa:KB]
 
 	// Find the Current Outfit folder.
 	const LLUUID getCOF() const;
@@ -199,6 +208,10 @@ private:
 	static void onOutfitRename(const LLSD& notification, const LLSD& response);
 
 	void setOutfitLocked(bool locked);
+
+// [SL:KB] - Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+	void syncCOF(const LLInventoryModel::item_array_t& items, LLAssetType::EType type, LLPointer<LLInventoryCallback> cb);
+// [/SL:KB]
 
 	std::set<LLUUID> mRegisteredAttachments;
 	bool mAttachmentInvLinkEnabled;

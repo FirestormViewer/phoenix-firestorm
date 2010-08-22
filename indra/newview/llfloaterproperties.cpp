@@ -303,8 +303,22 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		else
 		{
 			gCacheName->getFullName(perm.getOwner(), name);
+// [RLVa:KB] - Checked: 2009-07-08 (RLVa-1.0.0e)
+/*
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+			{
+				name = RlvStrings::getAnonym(name);
+			}
+*/
+// [/RLVa:KB]
 		}
+//		childSetEnabled("BtnOwner",TRUE);
+// [RLVa:KB] - Checked: 2009-07-08 (RLVa-1.0.0e) | Added: RLVa-1.0.0e
 		childSetEnabled("BtnOwner",TRUE);
+/*
+		childSetEnabled("BtnOwner", !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+*/
+// [/RLVa:KB]
 		childSetEnabled("LabelOwnerTitle",TRUE);
 		childSetEnabled("LabelOwnerName",TRUE);
 		childSetText("LabelOwnerName",name);

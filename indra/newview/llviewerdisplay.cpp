@@ -913,7 +913,15 @@ void render_hud_attachments()
 	glh::matrix4f current_mod = glh_get_current_modelview();
 
 	// clamp target zoom level to reasonable values
+//	gAgentCamera.mHUDTargetZoom = llclamp(gAgentCamera.mHUDTargetZoom, 0.1f, 1.f);
+// [RLVa:KB] - Checked: 2009-07-06 (RLVa-1.0.0c)
 	gAgentCamera.mHUDTargetZoom = llclamp(gAgentCamera.mHUDTargetZoom, 0.1f, 1.f);
+/*
+	// TODO-RLVa: while hasLockedHUD() isn't slow this is called per frame so find a better way
+	gAgent.mHUDTargetZoom = llclamp(gAgent.mHUDTargetZoom, 
+		( (!rlv_handler_t::isEnabled()) || (!gRlvHandler.hasLockedHUD()) ) ? 0.1f : 0.85f, 1.f);
+*/
+// [/RLVa:KB]
 	// smoothly interpolate current zoom level
 	gAgentCamera.mHUDCurZoom = lerp(gAgentCamera.mHUDCurZoom, gAgentCamera.mHUDTargetZoom, LLCriticalDamp::getInterpolant(0.03f));
 

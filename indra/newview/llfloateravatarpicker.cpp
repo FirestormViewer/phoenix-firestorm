@@ -36,6 +36,9 @@
 #include "lltooldraganddrop.h"	// for LLToolDragAndDrop
 #include "llviewercontrol.h"
 #include "llworld.h"
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 // Linden libraries
 #include "llbutton.h"
@@ -234,6 +237,21 @@ void LLFloaterAvatarPicker::onRangeAdjust()
 void LLFloaterAvatarPicker::onList()
 {
 	childSetEnabled("ok_btn", isSelectBtnEnabled());
+
+// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.0X) | Modified: RLVa-1.2.0X
+	if (rlv_handler_t::isEnabled())
+	{
+		LLTabContainer* pTabs = getChild<LLTabContainer>("ResidentChooserTabs");
+		LLPanel* pNearMePanel = getChild<LLPanel>("NearMePanel");
+		if ( (pTabs) && (pNearMePanel) )
+		{
+			bool fRlvEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+			pTabs->enableTabButton(pTabs->getIndexForPanel(pNearMePanel), fRlvEnable);
+			if ( (!fRlvEnable) && (pTabs->getCurrentPanel() == pNearMePanel) )
+				pTabs->selectTabByName("SearchPanel");
+		}
+	}
+// [/RLVa:KB]
 }
 
 void LLFloaterAvatarPicker::populateNearMe()

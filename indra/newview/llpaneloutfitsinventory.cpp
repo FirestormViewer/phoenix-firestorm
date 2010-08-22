@@ -42,9 +42,16 @@
 #include "llsidepanelappearance.h"
 #include "llsidetray.h"
 #include "llviewerfoldertype.h"
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
-static const std::string OUTFITS_TAB_NAME = "outfitslist_tab";
-static const std::string COF_TAB_NAME = "cof_tab";
+//static const std::string OUTFITS_TAB_NAME = "outfitslist_tab";
+//static const std::string COF_TAB_NAME = "cof_tab";
+// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+const std::string OUTFITS_TAB_NAME = "outfitslist_tab";
+const std::string COF_TAB_NAME = "cof_tab";
+// [/RLVa:KB]
 
 static LLRegisterPanelClassWrapper<LLPanelOutfitsInventory> t_inventory("panel_outfits_inventory");
 

@@ -40,6 +40,10 @@
 #include "llfloaterreg.h"//for LLFloaterReg::getTypedInstance
 #include "llviewerwindow.h"//for screen channel position
 
+// [RLVa:KB] - Checked: 2010-04-21 (RLVa-1.2.0f)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 //add LLNearbyChatHandler to LLNotificationsUI namespace
 using namespace LLNotificationsUI;
 
@@ -340,13 +344,33 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 {
 	if(chat_msg.mMuted == TRUE)
 		return;
-	if(chat_msg.mSourceType == CHAT_SOURCE_AGENT && chat_msg.mFromID.notNull())
+//	if(chat_msg.mSourceType == CHAT_SOURCE_AGENT && chat_msg.mFromID.notNull())
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+	if ( (chat_msg.mSourceType == CHAT_SOURCE_AGENT && chat_msg.mFromID.notNull()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
+// [/RLVa:KB]
          LLRecentPeople::instance().add(chat_msg.mFromID);
 
 	if(chat_msg.mText.empty())
 		return;//don't process empty messages
 
 	LLChat& tmp_chat = const_cast<LLChat&>(chat_msg);
+
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+	if (rlv_handler_t::isEnabled())
+	{
+		// NOTE-RLVa: we can only filter the *message* here since most everything else will already be part of "args" as well
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) && (!tmp_chat.mRlvLocFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
+		{
+			gRlvHandler.filterLocation(tmp_chat.mText);
+			tmp_chat.mRlvLocFiltered = TRUE;
+		}
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!tmp_chat.mRlvNamesFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
+		{
+			gRlvHandler.filterNames(tmp_chat.mText);
+			tmp_chat.mRlvNamesFiltered = TRUE;
+		}
+	}
+// [/RLVa:KB]
 
 	LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
 	{
@@ -434,6 +458,10 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 		notification["source"] = (S32)chat_msg.mSourceType;
 		notification["chat_type"] = (S32)chat_msg.mChatType;
 		notification["chat_style"] = (S32)chat_msg.mChatStyle;
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+		if (rlv_handler_t::isEnabled())
+			notification["show_icon_tooltip"] = !chat_msg.mRlvNamesFiltered;
+// [/RLVa:KB]
 		
 		std::string r_color_name = "White";
 		F32 r_color_alpha = 1.0f; 

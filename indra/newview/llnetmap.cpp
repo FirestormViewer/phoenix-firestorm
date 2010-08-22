@@ -57,6 +57,9 @@
 #include "llviewerregion.h"
 #include "llworld.h"
 #include "llworldmapview.h"		// shared draw code
+// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 static LLDefaultChildRegistry::Register<LLNetMap> r1("net_map");
 
@@ -354,7 +357,11 @@ void LLNetMap::draw()
 				BOOL show_as_friend = FALSE;
 				if( i < regionp->mMapAvatarIDs.count())
 				{
-					show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(regionp->mMapAvatarIDs.get(i)) != NULL);
+// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+					show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(regionp->mMapAvatarIDs.get(i)) != NULL) &&
+						(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+// [/RLVa:KB]
+//					show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(regionp->mMapAvatarIDs.get(i)) != NULL);
 				}
 				LLWorldMapView::drawAvatar(
 					pos_map.mV[VX], pos_map.mV[VY], 
@@ -553,7 +560,11 @@ BOOL LLNetMap::handleToolTip( S32 x, S32 y, MASK mask )
 	std::string fullname;
 	if(mClosestAgentToCursor.notNull() && gCacheName->getFullName(mClosestAgentToCursor, fullname))
 	{
-		args["[AGENT]"] = fullname + "\n";
+// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+		args["[AGENT]"] = 
+			((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? fullname : RlvStrings::getAnonym(fullname)) + "\n";
+// [/RLVa:KB]
+//		args["[AGENT]"] = fullname + "\n";
 	}
 	else
 	{
@@ -563,7 +574,11 @@ BOOL LLNetMap::handleToolTip( S32 x, S32 y, MASK mask )
 	LLViewerRegion*	region = LLWorld::getInstance()->getRegionFromPosGlobal( viewPosToGlobal( x, y ) );
 	if( region )
 	{
-		args["[REGION]"] = region->getName() + "\n";
+// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+		args["[REGION]"] = 
+			((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? region->getName() : RlvStrings::getString(RLV_STRING_HIDDEN_REGION)) + "\n";
+// [/RLVa:KB]
+//		args["[REGION]"] = region->getName() + "\n";
 	}
 	else
 	{

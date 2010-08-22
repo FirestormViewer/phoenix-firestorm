@@ -84,6 +84,9 @@
 // system includes
 #include <iomanip>
 
+// [RLVa:KB]
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 //
 // Globals

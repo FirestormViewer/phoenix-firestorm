@@ -37,6 +37,10 @@
 #include "llviewermedia.h"
 #include "llviewermediafocus.h"
 #include "llviewerobjectlist.h"	// to select the requested object
+// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0c)
+#include "rlvhandler.h"
+#include "lltoolpie.h"
+// [/RLVa:KB]
 
 // Linden libraries
 #include "llbutton.h"			// setLabel(), not virtual!
@@ -377,6 +381,15 @@ void LLInspectObject::updateSitLabel(LLSelectNode* nodep)
 	{
 		sit_btn->setLabel( getString("Sit") );
 	}
+
+// [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
+	// RELEASE-RLVa: [SL-2.0.0] Make sure we're examining the same object that handle_sit_or_stand() will request a sit for
+	if (rlv_handler_t::isEnabled())
+	{
+		const LLPickInfo& pick = LLToolPie::getInstance()->getPick();
+		sit_btn->setEnabled( (pick.mObjectID.notNull()) && (gRlvHandler.canSit(pick.getObject(), pick.mObjectOffset)) );
+	}
+// [/RLVa:KB]
 }
 
 void LLInspectObject::updateTouchLabel(LLSelectNode* nodep)
