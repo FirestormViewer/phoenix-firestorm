@@ -74,8 +74,8 @@ const S32 RLV_VERSION_BUILD = 0;
 // Implementation version
 const S32 RLVa_VERSION_MAJOR = 1;
 const S32 RLVa_VERSION_MINOR = 2;
-const S32 RLVa_VERSION_PATCH = 0;
-const S32 RLVa_VERSION_BUILD = 7;
+const S32 RLVa_VERSION_PATCH = 1;
+const S32 RLVa_VERSION_BUILD = 0;
 
 // Uncomment before a final release
 //#define RLV_RELEASE
