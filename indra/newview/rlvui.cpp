@@ -69,6 +69,10 @@ RlvUIEnabler::RlvUIEnabler()
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWWORLDMAP, boost::bind(&RlvUIEnabler::onToggleShowWorldMap, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_UNSIT, boost::bind(&RlvUIEnabler::onToggleUnsit, this)));
 
+	// onToggleTp
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_TPLOC, boost::bind(&RlvUIEnabler::onToggleTp, this)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_TPLM, boost::bind(&RlvUIEnabler::onToggleTp, this)));
+
 	// onUpdateLoginLastLocation
 	#ifdef RLV_EXTENSION_STARTLOCATION
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_TPLOC, boost::bind(&RlvUIEnabler::onUpdateLoginLastLocation, this)));
@@ -321,6 +325,16 @@ void RlvUIEnabler::onToggleShowWorldMap()
 		addGenericFloaterFilter("world_map");
 	else
 		removeGenericFloaterFilter("world_map");
+}
+
+// Checked: 2010-08-22 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+void RlvUIEnabler::onToggleTp()
+{
+	// Disable the navigation bar "Home" button if both @tplm=n *and* @tploc=n restricted
+	LLButton* pNavBarHomeBtn = LLNavigationBar::getInstance()->getChild<LLButton>("home_btn");
+	RLV_ASSERT(pNavBarHomeBtn);
+	if (pNavBarHomeBtn)
+		pNavBarHomeBtn->setEnabled(!(gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)));
 }
 
 // Checked: 2010-03-01 (RLVa-1.2.0c) | Added: RLVa-1.2.0a

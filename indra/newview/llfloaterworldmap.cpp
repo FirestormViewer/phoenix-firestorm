@@ -75,6 +75,10 @@
 
 #include "llwindow.h"			// copyTextToClipboard()
 
+// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 //---------------------------------------------------------------------------
 // Constants
 //---------------------------------------------------------------------------
@@ -434,6 +438,10 @@ void LLFloaterWorldMap::draw()
 //	childSetEnabled("Clear", (BOOL)tracking_status);
 	childSetEnabled("Show Destination", (BOOL)tracking_status || LLWorldMap::getInstance()->isTracking());
 	childSetEnabled("copy_slurl", (mSLURL.isValid()) );
+// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+	childSetEnabled("Go Home", 
+		(!rlv_handler_t::isEnabled()) || !(gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)));
+// [/RLVa:KB]
 
 	setMouseOpaque(TRUE);
 	getDragHandle()->setMouseOpaque(TRUE);

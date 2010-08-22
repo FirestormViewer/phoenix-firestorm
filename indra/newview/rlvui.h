@@ -52,6 +52,7 @@ protected:
 	void onToggleShowMinimap();											// showminimap
 	void onToggleShowNames();											// shownames
 	void onToggleShowWorldMap();										// showworldmap
+	void onToggleTp();													// tploc and tplm
 	void onToggleUnsit();												// unsit
 	void onToggleViewXXX();												// viewnote, viewscript, viewtexture
 	void onUpdateLoginLastLocation();									// tploc and unsit
