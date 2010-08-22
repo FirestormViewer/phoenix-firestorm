@@ -1085,12 +1085,15 @@ const LLViewerJointAttachment *LLVOAvatarSelf::attachObject(LLViewerObject *view
 		const LLUUID& attachment_id = viewer_object->getItemID();
 		LLAppearanceMgr::instance().registerAttachment(attachment_id);
 
-// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
 		// NOTE: RLVa event handlers should be invoked *after* LLVOAvatar::attachObject() calls LLViewerJointAttachment::addObject()
 		if (rlv_handler_t::isEnabled())
 		{
 			RlvAttachmentLockWatchdog::instance().onAttach(viewer_object, attachment);
 			gRlvHandler.onAttach(viewer_object, attachment);
+
+			if ( (attachment->getIsHUDAttachment()) && (!gRlvAttachmentLocks.hasLockedHUD()) )
+				gRlvAttachmentLocks.updateLockedHUD();
 		}
 // [/RLVa:KB]
 	}
@@ -1151,6 +1154,11 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 			LLAppearanceMgr::instance().unregisterAttachment(attachment_id);
 		}
 		
+// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+		if ( (rlv_handler_t::isEnabled()) && (viewer_object->isHUDAttachment()) && (gRlvAttachmentLocks.hasLockedHUD()) )
+			gRlvAttachmentLocks.updateLockedHUD();
+// [/RLVa:KB]
+
 		return TRUE;
 	}
 	return FALSE;

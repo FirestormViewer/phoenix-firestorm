@@ -17,6 +17,7 @@
 #include "llviewerprecompiledheaders.h"
 #include "llnotifications.h"
 #include "llviewerobjectlist.h"
+#include "pipeline.h"
 
 #include "rlvhelper.h"
 #include "rlvlocks.h"
@@ -177,6 +178,7 @@ void RlvAttachmentLocks::addAttachmentLock(const LLUUID& idAttachObj, const LLUU
 #endif // RLV_RELEASE
 
 	m_AttachObjRem.insert(std::pair<LLUUID, LLUUID>(idAttachObj, idRlvObj));
+	updateLockedHUD();
 }
 
 // Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
@@ -190,7 +192,10 @@ void RlvAttachmentLocks::addAttachmentPointLock(S32 idxAttachPt, const LLUUID& i
 
 	// NOTE: m_AttachPtXXX can contain duplicate <idxAttachPt, idRlvObj> pairs (ie @detach:spine=n,detach=n from an attachment on spine)
 	if (eLock & RLV_LOCK_REMOVE)
+	{
 		m_AttachPtRem.insert(std::pair<S32, LLUUID>(idxAttachPt, idRlvObj));
+		updateLockedHUD();
+	}
 	if (eLock & RLV_LOCK_ADD)
 		m_AttachPtAdd.insert(std::pair<S32, LLUUID>(idxAttachPt, idRlvObj));
 }
@@ -233,21 +238,6 @@ bool RlvAttachmentLocks::hasLockedAttachment(const LLViewerJointAttachment* pAtt
 		}
 	}
 	return false;
-}
-
-bool RlvAttachmentLocks::hasLockedHUD() const
-{
-	if (!isAgentAvatarValid())
-		return false;
-	
-	for (LLVOAvatar::attachment_map_t::const_iterator itAttachPt = gAgentAvatarp->mAttachmentPoints.begin(); 
-			itAttachPt != gAgentAvatarp->mAttachmentPoints.end(); ++itAttachPt)
-	{
-		const LLViewerJointAttachment* pAttachPt = itAttachPt->second;
-		if ( (pAttachPt) && (pAttachPt->getIsHUDAttachment()) && (hasLockedAttachment(pAttachPt)) )
-			return true;	// At least one of our locked attachments is a HUD
-	}
-	return false;			// None of our locked attachments is a HUD
 }
 
 // Checked: 2010-03-19 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
@@ -321,6 +311,7 @@ void RlvAttachmentLocks::removeAttachmentLock(const LLUUID& idAttachObj, const L
 		if (idRlvObj == itAttachObj->second)
 		{
 			m_AttachObjRem.erase(itAttachObj);
+			updateLockedHUD();
 			break;
 		}
 	}
@@ -344,6 +335,7 @@ void RlvAttachmentLocks::removeAttachmentPointLock(S32 idxAttachPt, const LLUUID
 			if (idRlvObj == itAttachPt->second)
 			{
 				m_AttachPtRem.erase(itAttachPt);
+				updateLockedHUD();
 				break;
 			}
 		}
@@ -360,6 +352,32 @@ void RlvAttachmentLocks::removeAttachmentPointLock(S32 idxAttachPt, const LLUUID
 				break;
 			}
 		}
+	}
+}
+
+// Checked: 2010-08-22 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
+void RlvAttachmentLocks::updateLockedHUD()
+{
+	if (!isAgentAvatarValid())
+		return;
+
+	m_fHasLockedHUD = false;
+	for (LLVOAvatar::attachment_map_t::const_iterator itAttachPt = gAgentAvatarp->mAttachmentPoints.begin(); 
+			itAttachPt != gAgentAvatarp->mAttachmentPoints.end(); ++itAttachPt)
+	{
+		const LLViewerJointAttachment* pAttachPt = itAttachPt->second;
+		if ( (pAttachPt) && (pAttachPt->getIsHUDAttachment()) && (hasLockedAttachment(pAttachPt)) )
+		{
+			m_fHasLockedHUD = true;
+			break;
+		}
+	}
+
+	// Reset HUD visibility and wireframe options if at least one HUD attachment is locked
+	if (m_fHasLockedHUD)
+	{
+		LLPipeline::sShowHUDAttachments = TRUE;
+		gUseWireframe = FALSE;
 	}
 }
 

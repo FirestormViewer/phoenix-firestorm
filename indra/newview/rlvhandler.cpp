@@ -16,13 +16,13 @@
 
 #include "llviewerprecompiledheaders.h"
 #include "llagentwearables.h"
+#include "llappviewer.h"
 #include "llcallbacklist.h"
 #include "llviewermessage.h"
 #include "llviewerobjectlist.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "llworld.h"
-#include "pipeline.h"
 
 #include "rlvhandler.h"
 #include "rlvinventory.h"
@@ -412,12 +412,7 @@ void RlvHandler::onAttach(const LLViewerObject* pAttachObj, const LLViewerJointA
 
 				// We need to check this object for an active "@detach=n" and actually lock it down now that it's been attached somewhere
 				if (itObj->second.hasBehaviour(RLV_BHVR_DETACH, false))
-				{
-					// (Copy/paste from processAddCommand)
 					gRlvAttachmentLocks.addAttachmentLock(pAttachObj->getID(), itObj->second.m_UUID);
-					if (pAttachObj->isHUDAttachment())
-						LLPipeline::sShowHUDAttachments = TRUE;	// Prevents hiding of locked HUD attachments
-				}
 			}
 		}
 	}
@@ -525,11 +520,7 @@ bool RlvHandler::onGC()
 				//	-> if it does run it likely means that there's a @detach=n in a *child* prim that we couldn't look up in onAttach()
 				//  -> since RLV doesn't currently support @detach=n from child prims it's actually not such a big deal right now but still
 				if ( (pObj->isAttachment()) && (itCurObj->second.hasBehaviour(RLV_BHVR_DETACH, false)) )
-				{
 					gRlvAttachmentLocks.addAttachmentLock(pObj->getID(), itCurObj->second.m_UUID);
-					if (pObj->isHUDAttachment())
-						LLPipeline::sShowHUDAttachments = TRUE;
-				}
 			}
 		}
 	}
@@ -1290,10 +1281,6 @@ ERlvCmdRet RlvHandler::onAddRemAttach(const LLUUID& idObj, const RlvCommand& rlv
 		}
 	}
 
-	// Refresh HUD visibility if needed
-	if ( (RLV_BHVR_REMATTACH == rlvCmd.getBehaviourType()) && (gRlvAttachmentLocks.hasLockedHUD()) )
-		LLPipeline::sShowHUDAttachments = TRUE;
-
 	fRefCount = rlvCmd.getOption().empty();	// Only reference count global locks
 	return RLV_RET_SUCCESS;
 }
@@ -1332,10 +1319,6 @@ ERlvCmdRet RlvHandler::onAddRemDetach(const LLUUID& idObj, const RlvCommand& rlv
 		else
 			gRlvAttachmentLocks.removeAttachmentPointLock(idxAttachPt, idObj, (ERlvLockMask)(RLV_LOCK_ADD | RLV_LOCK_REMOVE));
 	}
-
-	// Refresh HUD visibility if needed
-	if ( (RLV_TYPE_ADD == rlvCmd.getParamType()) && (gRlvAttachmentLocks.hasLockedHUD()) )
-		LLPipeline::sShowHUDAttachments = TRUE;
 
 	fRefCount = false;	// Don't reference count @detach[:<option>]=n
 	return RLV_RET_SUCCESS;

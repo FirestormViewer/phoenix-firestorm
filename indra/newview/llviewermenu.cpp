@@ -1080,7 +1080,10 @@ class LLAdvancedToggleWireframe : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		gUseWireframe = !(gUseWireframe);
+//		gUseWireframe = !(gUseWireframe);
+// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+		gUseWireframe = (!gUseWireframe) && (!gRlvAttachmentLocks.hasLockedHUD());
+// [/RLVa:KB]
 		return true;
 	}
 };
@@ -7777,7 +7780,7 @@ class LLViewShowHUDAttachments : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.0.0c
+// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.1a) | Modified: RLVa-1.0.0c
 		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedHUD()) && (LLPipeline::sShowHUDAttachments) )
 			return true;
 // [/RLVa:KB]

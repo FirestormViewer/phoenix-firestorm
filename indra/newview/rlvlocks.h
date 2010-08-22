@@ -64,6 +64,9 @@ private:
 class RlvAttachmentLocks
 {
 public:
+	RlvAttachmentLocks() : m_fHasLockedHUD(false) {}
+
+public:
 	// Adds an RLV_LOCK_REMOVE lock (held by idRlvObj) for the attachment
 	void addAttachmentLock(const LLUUID& idAttachObj, const LLUUID& idRlvObj);
 	// Adds an eLock type lock (held by idRlvObj) for the attachment point
@@ -75,7 +78,7 @@ public:
 	//   - RLV_LOCK_REMOVE: specific attachment locked *or* any attachment point locked (regardless of whether it currently has attachments)
 	bool hasLockedAttachmentPoint(ERlvLockMask eLock) const;
 	// Returns TRUE if there is at least 1 non-detachable HUD attachment
-	bool hasLockedHUD() const;
+	bool hasLockedHUD() const { return m_fHasLockedHUD; }
 
 	// Returns TRUE if the attachment is RLV_LOCK_REMOVE locked
 	bool isLockedAttachment(const LLViewerObject* pObj) const;
@@ -91,6 +94,8 @@ public:
 	// Removes an eLock type lock (held by idRlvObj) for the attachment point
 	void removeAttachmentPointLock(S32 idxAttachPt, const LLUUID& idRlvObj, ERlvLockMask eLock);
 
+	// Refreshes locked HUD attachment state
+	void updateLockedHUD();
 	// Iterates over all current attachment and attachment point locks and verifies their status (returns TRUE if verification succeeded)
 	bool verifyAttachmentLocks();
 
@@ -125,6 +130,8 @@ private:
 	rlv_attachptlock_map_t	m_AttachPtAdd;		// Map of attachment points that can't be attached to (idxAttachPt -> idObj)
 	rlv_attachptlock_map_t	m_AttachPtRem;		// Map of attachment points whose attachments can't be detached (idxAttachPt -> idObj)
 	rlv_attachobjlock_map_t	m_AttachObjRem;		// Map of attachments that can't be detached (idAttachObj -> idObj)
+
+	bool m_fHasLockedHUD;
 };
 
 extern RlvAttachmentLocks gRlvAttachmentLocks;
