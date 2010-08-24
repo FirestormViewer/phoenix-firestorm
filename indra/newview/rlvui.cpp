@@ -24,9 +24,11 @@
 #include "llmoveview.h"					// Movement panel (contains "Stand" and "Stop Flying" buttons)
 #include "llnavigationbar.h"			// Navigation bar
 #include "llnotificationsutil.h"
+#include "lloutfitslist.h"				// "My Outfits" sidebar panel
 #include "llpaneloutfitsinventory.h"	// "My Appearance" sidebar panel
 #include "llpanelpeople.h"				// "People" sidebar panel
 #include "llpanelprofile.h"				// "Profile" sidebar panel
+#include "llpanelwearing.h"				// "Current Outfit" sidebar panel
 #include "llparcel.h"
 #include "llsidetray.h"
 #include "llsidetraypanelcontainer.h"
@@ -166,7 +168,7 @@ void RlvUIEnabler::onToggleSetEnv()
 	}
 }
 
-// Checked: 2010-03-01 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
+// Checked: 2010-08-24 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
 void RlvUIEnabler::onToggleShowInv()
 {
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV);
@@ -204,22 +206,20 @@ void RlvUIEnabler::onToggleShowInv()
 	//
 	// Enable/disable the "My Outfits" panel on the "My Appearance" sidebar tab
 	//
-	LLPanelOutfitsInventory* pAppearancePanel =
-		dynamic_cast<LLPanelOutfitsInventory*>(LLSideTray::getInstance()->getPanel("panel_outfits_inventory"));
-	RLV_ASSERT(pAppearancePanel);
+	LLPanelOutfitsInventory* pAppearancePanel = LLPanelOutfitsInventory::findInstance();
 	if (pAppearancePanel)
 	{
-		LLTabContainer* pAppearanceTabs = pAppearancePanel->getChild<LLTabContainer>("appearance_tabs");
-		LLInventoryPanel* pOutfitsPanel = pAppearancePanel->getChild<LLInventoryPanel>(OUTFITS_TAB_NAME);
-		RLV_ASSERT( (pAppearanceTabs) && (pOutfitsPanel) );
-		if ( (pAppearanceTabs) && (pOutfitsPanel) )
+		LLTabContainer* pAppearanceTabs = pAppearancePanel->getAppearanceTabs();
+		LLOutfitsList* pMyOutfitsPanel = pAppearancePanel->getMyOutfitsPanel();
+		if ( (pAppearanceTabs) && (pMyOutfitsPanel) )
 		{
-			S32 idxTab = pAppearanceTabs->getIndexForPanel(pOutfitsPanel);
+			S32 idxTab = pAppearanceTabs->getIndexForPanel(pMyOutfitsPanel);
+			RLV_ASSERT(-1 != idxTab);
 			pAppearanceTabs->enableTabButton(idxTab, fEnable);
 
 			// When disabling, switch to the COF tab if "My Outfits" is currently active
 			if ( (!fEnable) && (pAppearanceTabs->getCurrentPanelIndex() == idxTab) )
-				pAppearanceTabs->selectTabByName(COF_TAB_NAME);
+				pAppearanceTabs->selectTabPanel(pAppearancePanel->getCurrentOutfitPanel());
 		}
 	}
 
