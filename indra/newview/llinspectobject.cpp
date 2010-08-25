@@ -485,10 +485,26 @@ void LLInspectObject::updateCreator(LLSelectNode* nodep)
 		// a clickable link		
 		// Objects cannot be created by a group, so use agent URL format
 		LLUUID creator_id = nodep->mPermissions->getCreator();
-		std::string creator_url =
-			LLSLURL("agent", creator_id, "about").getSLURLString();
-		args["[CREATOR]"] = creator_url;
-				
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+		// Only anonimize the creator if they're also the owner or if they're a nearby avie
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) &&
+			 ((nodep->mPermissions->getOwner() == creator_id) || (RlvHandler::isNearbyAgent(creator_id))) )
+		{
+			// TODO-RLVa: [RLVa-1.2.2] We need to put a callback here in case the name hasn't previously resolved
+			std::string strFullName;
+			args["[CREATOR]"] = (gCacheName->getFullName(creator_id, strFullName)) ? RlvStrings::getAnonym(strFullName) 
+			                                                                       : LLTrans::getString("Unknown");
+		}
+		else
+		{
+// [/RLVa:KB]
+			std::string creator_url = 
+				LLSLURL("agent", creator_id, "about").getSLURLString();
+			args["[CREATOR]"] = creator_url;
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+		}
+// [/RLVa:KB]
+
 		// created by one user but owned by another
 		std::string owner_url;
 		LLUUID owner_id;
@@ -501,7 +517,21 @@ void LLInspectObject::updateCreator(LLSelectNode* nodep)
 		else
 		{
 			owner_id = nodep->mPermissions->getOwner();
-			owner_url =	LLSLURL("agent", owner_id, "about").getSLURLString();
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+			{
+				// TODO-RLVa: [RLVa-1.2.2] We need to put a callback here in case the name hasn't previously resolved
+				std::string strFullName;
+				owner_url = (gCacheName->getFullName(owner_id, strFullName)) ? RlvStrings::getAnonym(strFullName)
+				                                                             : LLTrans::getString("Unknown");
+			}
+			else
+			{
+// [/RLVa:KB]
+				owner_url = LLSLURL("agent", owner_id, "about").getSLURLString();
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+			}
+// [/RLVa:KB]
 		}
 		args["[OWNER]"] = owner_url;
 		
