@@ -3956,14 +3956,7 @@ void LLObjectBridge::performAction(LLInventoryModel* model, std::string action)
 		item = (LLViewerInventoryItem*)gInventory.getItem(object_id);
 		if(item && gInventory.isObjectDescendentOf(object_id, gInventory.getRootFolderID()))
 		{
-//			rez_attachment(item, NULL);
-// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-			// Either nothing is locked, or we need to look up the specific attach point from its name
-			// RELEASE-RLVa: [SL-2.0.0] This will need rewriting for "ENABLE_MULTIATTACHMENTS"
-			rez_attachment(item, 
-				( (!rlv_handler_t::isEnabled()) || (!gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
-					? NULL : RlvAttachPtLookup::getAttachPoint(item));
-// [/RLVa:KB]
+			rez_attachment(item, NULL);
 		}
 		else if(item && item->isFinished())
 		{
@@ -4030,6 +4023,14 @@ std::string LLObjectBridge::getLabelSuffix() const
 
 void rez_attachment(LLViewerInventoryItem* item, LLViewerJointAttachment* attachment)
 {
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+	// If no attachment point was specified, try looking it up from the item name
+	if ( (rlv_handler_t::isEnabled()) && (!attachment) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+	{
+		attachment = RlvAttachPtLookup::getAttachPoint(item);
+	}
+// [/RLVa:KB]
+
 	LLSD payload;
 	payload["item_id"] = item->getLinkedUUID(); // Wear the base object in case this is a link.
 
@@ -4057,9 +4058,9 @@ void rez_attachment(LLViewerInventoryItem* item, LLViewerJointAttachment* attach
 	if (!gSavedSettings.getBOOL("MultipleAttachments") &&
 		(attachment && attachment->getNumObjects() > 0))
 	{
-// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-		// RELEASE-RLVa: [SL-2.0.0] This will need rewriting for "ENABLE_MULTIATTACHMENTS"
-		if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canAttach(attachment))  )
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
+		// Block if we can't "replace wear" what's currently there
+		if ( (rlv_handler_t::isEnabled()) && ((gRlvAttachmentLocks.canAttach(attachment) & RLV_WEAR_REPLACE) == 0)  )
 			return;
 // [/RLVa:KB]
 		LLNotificationsUtil::add("ReplaceAttachment", LLSD(), payload, confirm_replace_attachment_rez);

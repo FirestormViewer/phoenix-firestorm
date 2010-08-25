@@ -1605,8 +1605,7 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 
 // [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
 	// RELEASE-RLVa: [SL-2.0.0] This will need revisiting for "ENABLE_MULTIATTACHMENTS"
-	LLViewerJointAttachment* pAttachPt = NULL;
-	if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canAttach(item, &pAttachPt)) )
+	if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canAttach(item)) )
 	{
 		return ACCEPT_NO_LOCKED;
 	}
@@ -1627,11 +1626,7 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 		}
 		else
 		{
-// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a) | Modified: RLVa-1.0.0c
-			// RELEASE-RLVa: [SL-2.0.0] This will need revisiting for "ENABLE_MULTIATTACHMENTS"
-			rez_attachment(item, pAttachPt);
-// [/RLVa:KB]
-//			rez_attachment(item, 0);
+			rez_attachment(item, 0);
 		}
 	}
 	return ACCEPT_YES_SINGLE;

@@ -321,8 +321,7 @@ inline ERlvWearMask RlvAttachmentLocks::canAttach(const LLInventoryItem* pItem, 
 	LLViewerJointAttachment* pAttachPt = RlvAttachPtLookup::getAttachPoint(pItem);
 	if (ppAttachPtOut)
 		*ppAttachPtOut = pAttachPt;
-	return (!pAttachPt) ? (ERlvWearMask)(RLV_WEAR_REPLACE | ((gSavedSettings.getBOOL("MultipleAttachments")) ? RLV_WEAR_ADD : 0))
-						: canAttach(pAttachPt);
+	return (!pAttachPt) ? (ERlvWearMask)(RLV_WEAR_REPLACE | RLV_WEAR_ADD) : canAttach(pAttachPt);
 }
 
 // Checked: 2010-08-07 (RLVa-1.2.0i) | Modified: RLVa-1.2.0i
@@ -335,7 +334,7 @@ inline ERlvWearMask RlvAttachmentLocks::canAttach(const LLViewerJointAttachment*
 	RLV_ASSERT(pAttachPt);	// TODO-RLVa: [RLVa-1.2.1] Maybe it's better to just return something similar like above?
 	return 
 		(ERlvWearMask)(((pAttachPt) && (!isLockedAttachmentPoint(pAttachPt, RLV_LOCK_ADD))) 
-			? ((canDetach(pAttachPt, true)) ? RLV_WEAR_REPLACE : 0) | ((gSavedSettings.getBOOL("MultipleAttachments")) ? RLV_WEAR_ADD : 0)
+			? ((canDetach(pAttachPt, true)) ? RLV_WEAR_REPLACE : 0) | RLV_WEAR_ADD
 			: RLV_WEAR_LOCKED);
 }
 
