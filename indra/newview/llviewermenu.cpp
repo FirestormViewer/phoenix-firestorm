@@ -2795,7 +2795,10 @@ bool enable_object_mute()
 		bool is_linden =
 			lastname && !LLStringUtil::compareStrings(lastname->getString(), "Linden");
 		bool is_self = avatar->isSelf();
-		return !is_linden && !is_self;
+//		return !is_linden && !is_self;
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+		return !is_linden && !is_self && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+// [/RLVa:KB]
 	}
 	else
 	{
@@ -2818,13 +2821,9 @@ class LLObjectMute : public view_listener_t
 		LLVOAvatar* avatar = find_avatar_from_object(object); 
 		if (avatar)
 		{
-// [RLVa:KB] - Checked: 2009-07-08 (RLVa-1.0.0e) | Added: RLVa-1.0.0e
-/*
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.0.0e
 			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-			{
-				return true;	// Fallback code [see LLObjectEnableMute::handleEvent()]
-			}
-*/
+				return true;
 // [/RLVa:KB]
 			id = avatar->getID();
 
@@ -5663,7 +5662,10 @@ bool enable_pay_avatar()
 {
 	LLViewerObject* obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
 	LLVOAvatar* avatar = find_avatar_from_object(obj);
-	return (avatar != NULL);
+//	return (avatar != NULL);
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+	return (avatar != NULL) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+// [/RLVa:KB]
 }
 
 bool enable_pay_object()
@@ -6603,6 +6605,13 @@ class LLAvatarCall : public view_listener_t
 		return true;
 	}
 };
+
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+bool enable_avatar_call()
+{
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (LLAvatarActions::canCall());
+}
+// [/RLVa:KB]
 
 namespace
 {
@@ -8423,7 +8432,10 @@ void initialize_menus()
 	commit.add("Avatar.Eject", boost::bind(&handle_avatar_eject, LLSD()));
 	view_listener_t::addMenu(new LLAvatarSendIM(), "Avatar.SendIM");
 	view_listener_t::addMenu(new LLAvatarCall(), "Avatar.Call");
-	enable.add("Avatar.EnableCall", boost::bind(&LLAvatarActions::canCall));
+//	enable.add("Avatar.EnableCall", boost::bind(&LLAvatarActions::canCall));
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+	enable.add("Avatar.EnableCall", boost::bind(&enable_avatar_call));
+// [/RLVa:KB]
 	view_listener_t::addMenu(new LLAvatarReportAbuse(), "Avatar.ReportAbuse");
 	
 	view_listener_t::addMenu(new LLAvatarEnableAddFriend(), "Avatar.EnableAddFriend");
