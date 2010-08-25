@@ -308,7 +308,7 @@ void LLCallFloater::updateSession()
 		}
 	}
 
-// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.0X) | Added: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
 	mAvatarList->setRlvCheckShowNames(is_local_chat);
 // [/RLVa:KB]
 }

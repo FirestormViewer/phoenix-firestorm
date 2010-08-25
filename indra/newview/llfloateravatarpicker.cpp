@@ -36,7 +36,7 @@
 #include "lltooldraganddrop.h"	// for LLToolDragAndDrop
 #include "llviewercontrol.h"
 #include "llworld.h"
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X)
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d)
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -238,7 +238,7 @@ void LLFloaterAvatarPicker::onList()
 {
 	childSetEnabled("ok_btn", isSelectBtnEnabled());
 
-// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.0X) | Modified: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
 	if (rlv_handler_t::isEnabled())
 	{
 		LLTabContainer* pTabs = getChild<LLTabContainer>("ResidentChooserTabs");

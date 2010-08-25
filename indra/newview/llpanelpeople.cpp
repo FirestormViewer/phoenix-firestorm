@@ -60,7 +60,7 @@
 #include "llvoiceclient.h"
 #include "llworld.h"
 #include "llspeakers.h"
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X)
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d)
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -831,7 +831,7 @@ void LLPanelPeople::updateButtons()
 
 	bool enable_calls = LLVoiceClient::getInstance()->isVoiceWorking() && LLVoiceClient::getInstance()->voiceEnabled();
 
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X) | Modified: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
 	if ( (nearby_tab_active) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
 	{
 		item_selected = multiple_selected = false;

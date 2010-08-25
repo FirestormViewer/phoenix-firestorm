@@ -286,7 +286,7 @@ void RlvUIEnabler::onToggleShowMinimap()
 		removeGenericFloaterFilter("mini_map");
 }
 
-// Checked: 2010-06-05 (RLVa-1.2.0X) | Modified: RLVa-1.2.0X
+// Checked: 2010-06-05 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
 void RlvUIEnabler::onToggleShowNames()
 {
 	// Refresh the nearby people list

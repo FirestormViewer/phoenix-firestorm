@@ -195,7 +195,7 @@ void LLNearbyChatToastPanel::init(LLSD& notification)
 			style_params_name.font.size(font_style_size);
 
 //			style_params_name.link_href = LLSLURL("agent",mFromID,"about").getSLURLString();
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X) | Added: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
 			if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 				style_params_name.link_href = LLSLURL("agent",mFromID,"about").getSLURLString();
 // [/RLVa:KB]

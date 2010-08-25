@@ -3192,7 +3192,7 @@ class LLAvatarGiveCard : public view_listener_t
 		llinfos << "handle_give_card()" << llendl;
 		LLViewerObject* dest = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
 //		if(dest && dest->isAvatar())
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X) | Modified: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
 		if ( (dest && dest->isAvatar()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
 // [/RLVa:KB]
 		{
@@ -3643,7 +3643,7 @@ class LLAvatarEnableAddFriend : public view_listener_t
 	{
 		LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
 //		bool new_value = avatar && !LLAvatarActions::isFriend(avatar->getID());
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | 
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
 		bool new_value = avatar && !LLAvatarActions::isFriend(avatar->getID()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
 // [/RLVa:KB]
 		return new_value;
@@ -5562,7 +5562,7 @@ class LLAvatarInviteToGroup : public view_listener_t
 	{
 		LLVOAvatar* avatar = find_avatar_from_object( LLSelectMgr::getInstance()->getSelection()->getPrimaryObject() );
 //		if(avatar)
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X) | Added: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
 		if ( (avatar) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
 // [/RLVa:KB]
 		{
@@ -5934,7 +5934,7 @@ class LLShowAgentProfile : public view_listener_t
 
 		LLVOAvatar* avatar = find_avatar_from_object(agent_id);
 //		if (avatar)
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X) | Modified: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
 		if ( (avatar) && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) || (gAgent.getID() == agent_id)) )
 // [/RLVa:KB]
 		{
@@ -6576,7 +6576,7 @@ class LLAvatarSendIM : public view_listener_t
 	{
 		LLVOAvatar* avatar = find_avatar_from_object( LLSelectMgr::getInstance()->getSelection()->getPrimaryObject() );
 //		if(avatar)
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X) | Added: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
 		if ( (avatar) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
 // [/RLVa:KB]
 		{
@@ -6592,7 +6592,7 @@ class LLAvatarCall : public view_listener_t
 	{
 		LLVOAvatar* avatar = find_avatar_from_object( LLSelectMgr::getInstance()->getSelection()->getPrimaryObject() );
 //		if(avatar)
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X) | Added: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
 		if ( (avatar) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
 // [/RLVa:KB]
 		{
