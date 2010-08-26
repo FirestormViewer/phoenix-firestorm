@@ -52,7 +52,6 @@ public:
 	static BOOL getForbidGiveToRLV()		{ return rlvGetSettingBOOL(RLV_SETTING_FORBIDGIVETORLV, TRUE); }
 	static BOOL getNoSetEnv()				{ return fNoSetEnv; }
 
-	static BOOL getDebugUIEnablers()		{ return rlvGetSettingBOOL(RLV_SETTING_DEBUGUIENABLERS, FALSE); }
 	static BOOL getDebugHideUnsetDup()		{ return rlvGetSettingBOOL(RLV_SETTING_DEBUGHIDEUNSETDUP, FALSE); }
 	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	static BOOL getEnableComposites()		{ return fCompositeFolders; }

@@ -45,7 +45,7 @@
 #include "lluuid.h"
 #include "llvoiceclient.h"
 #include "llviewercontrol.h"	// for gSavedSettings
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X)
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d)
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -397,7 +397,7 @@ BOOL LLAvatarList::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	BOOL handled = LLUICtrl::handleRightMouseDown(x, y, mask);
 //	if ( mContextMenu )
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X) | Modified: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
 	if ( (mContextMenu) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) )
 // [/RLVa:KB]
 	{
@@ -456,13 +456,13 @@ void LLAvatarList::updateLastInteractionTimes()
 void LLAvatarList::onItemDoucleClicked(LLUICtrl* ctrl, S32 x, S32 y, MASK mask)
 {
 //	mItemDoubleClickSignal(ctrl, x, y, mask);
-// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.0X) | Added: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
 	if ( (!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
 		mItemDoubleClickSignal(ctrl, x, y, mask);
 // [/RLVa:KB]
 }
 
-// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.0X) | Added: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
 void LLAvatarList::refreshNames()
 {
 	std::vector<LLPanel*> items;

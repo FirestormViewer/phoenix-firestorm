@@ -3195,7 +3195,7 @@ class LLAvatarGiveCard : public view_listener_t
 		llinfos << "handle_give_card()" << llendl;
 		LLViewerObject* dest = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
 //		if(dest && dest->isAvatar())
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X) | Modified: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
 		if ( (dest && dest->isAvatar()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
 // [/RLVa:KB]
 		{
@@ -3646,7 +3646,7 @@ class LLAvatarEnableAddFriend : public view_listener_t
 	{
 		LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
 //		bool new_value = avatar && !LLAvatarActions::isFriend(avatar->getID());
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | 
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
 		bool new_value = avatar && !LLAvatarActions::isFriend(avatar->getID()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
 // [/RLVa:KB]
 		return new_value;
@@ -5565,7 +5565,7 @@ class LLAvatarInviteToGroup : public view_listener_t
 	{
 		LLVOAvatar* avatar = find_avatar_from_object( LLSelectMgr::getInstance()->getSelection()->getPrimaryObject() );
 //		if(avatar)
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X) | Added: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
 		if ( (avatar) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
 // [/RLVa:KB]
 		{
@@ -5937,7 +5937,7 @@ class LLShowAgentProfile : public view_listener_t
 
 		LLVOAvatar* avatar = find_avatar_from_object(agent_id);
 //		if (avatar)
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X) | Modified: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
 		if ( (avatar) && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) || (gAgent.getID() == agent_id)) )
 // [/RLVa:KB]
 		{
@@ -6024,11 +6024,11 @@ private:
 				attachment_point = get_if_there(gAgentAvatarp->mAttachmentPoints, index, (LLViewerJointAttachment*)NULL);
 
 // [RLVa:KB] - Checked: 2010-03-16 (RLVa-1.2.0e) | Modified: RLVa-1.2.0a
-			// RELEASE-RLVa: [SL-2.0.0] This will need rewriting for "ENABLE_MULTIATTACHMENTS"
+			// RELEASE-RLVa: [SL-2.1.2] This will need revisiting when LL deprecates the "MultipleAttachment" debug setting
 			if ( (rlv_handler_t::isEnabled()) &&
-				 ( ((index == 0) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY))) || // Can't wear on default attach point
-				   ((index > 0) && (!gRlvAttachmentLocks.canAttach(attachment_point))) ||			 // or replace a locked attachment
-				   (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) ) )										 // Attach on rezzed object == "Take"
+				 ( ((index == 0) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY))) ||		// Can't wear on default attach point
+				   ((index > 0) && (RLV_WEAR_LOCKED == gRlvAttachmentLocks.canAttach(attachment_point))) ||	// or replace a locked attachment
+				   (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) ) )												// Attach on rezzed object == "Take"
 			{
 				setObjectSelection(NULL); // Clear the selection or it'll get stuck
 				return true;
@@ -6481,20 +6481,20 @@ BOOL object_selected_and_point_valid(const LLSD& sdParam)
 // [RLVa:KB] - Checked: 2010-03-16 (RLVa-1.2.0e) | Modified: RLVa-1.2.0a
 	if (rlv_handler_t::isEnabled())
 	{
-		// RELEASE-RLVa: [SL-2.0.0] Look at the caller graph for this function on every new release
-		//		- object_is_wearable() => dead code [sdParam == 0 => default attach point => OK!]
-		//      - enabler set up in LLVOAvatarSelf::buildMenus() => Rezzed prim / Put On / "Attach To" [sdParam == idxAttachPt]
-		// RELEASE-RLVa: [SL-2.0.0] This will need rewriting for "ENABLE_MULTIATTACHMENTS"
-		if (isAgentAvatarValid())
+		if (!isAgentAvatarValid())
+			return FALSE;
+
+		// RELEASE-RLVa: [SL-2.1.1] Look at the caller graph for this function on every new release
+		//   - object_is_wearable() => dead code [sdParam == 0 => default attach point => OK!]
+		//   - enabler set up in LLVOAvatarSelf::buildMenus() => Rezzed prim / Put On / "Attach To" [sdParam == idxAttachPt]
+		// RELEASE-RLVa: [SL-2.1.2] This will need revisiting when LL deprecates the "MultipleAttachment" debug setting
+		const LLViewerJointAttachment* pAttachPt = 
+			get_if_there(gAgentAvatarp->mAttachmentPoints, sdParam.asInteger(), (LLViewerJointAttachment*)NULL);
+		if ( ((!pAttachPt) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY))) ||	// Can't wear on default attach point
+			 ((pAttachPt) && (RLV_WEAR_LOCKED == gRlvAttachmentLocks.canAttach(pAttachPt))) ||	// or replace a locked attachment
+			 (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) )											// Attach on rezzed object == "Take"
 		{
-			LLVOAvatar::attachment_map_t::iterator itAttachPt = gAgentAvatarp->mAttachmentPoints.find(sdParam.asInteger());
-			LLViewerJointAttachment* pAttachPt = (itAttachPt != gAgentAvatarp->mAttachmentPoints.end()) ? itAttachPt->second : NULL;
-			if ( ((!pAttachPt) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY))) ||	// Can't wear on default attach point
-				 ((pAttachPt) && (!gRlvAttachmentLocks.canAttach(pAttachPt))) ||					// or replace a locked attachment
-				 (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) )											// Attach on rezzed object == "Take"
-			{
-				return FALSE;
-			}
+			return FALSE;
 		}
 	}
 // [/RLVa:KB]
@@ -6564,6 +6564,7 @@ class LLAttachmentPointFilled : public view_listener_t
 		{
 //			enable = found_it->second->getNumObjects() > 0;
 // [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+			// Enable the option if there is at least one attachment on this attachment point that can be detached
 			enable = (found_it->second->getNumObjects() > 0) &&
 				((!rlv_handler_t::isEnabled()) || (gRlvAttachmentLocks.canDetach(found_it->second)));
 // [/RLVa:KB]
@@ -6578,7 +6579,7 @@ class LLAvatarSendIM : public view_listener_t
 	{
 		LLVOAvatar* avatar = find_avatar_from_object( LLSelectMgr::getInstance()->getSelection()->getPrimaryObject() );
 //		if(avatar)
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X) | Added: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
 		if ( (avatar) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
 // [/RLVa:KB]
 		{
@@ -6594,7 +6595,7 @@ class LLAvatarCall : public view_listener_t
 	{
 		LLVOAvatar* avatar = find_avatar_from_object( LLSelectMgr::getInstance()->getSelection()->getPrimaryObject() );
 //		if(avatar)
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0X) | Added: RLVa-1.2.0X
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
 		if ( (avatar) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
 // [/RLVa:KB]
 		{
