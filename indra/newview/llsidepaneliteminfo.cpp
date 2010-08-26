@@ -42,7 +42,9 @@
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
 #include "llviewerobjectlist.h"
-
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLItemPropertiesObserver
@@ -280,6 +282,16 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 		childSetEnabled("BtnCreator",TRUE);
 		childSetEnabled("LabelCreatorTitle",TRUE);
 		childSetEnabled("LabelCreatorName",TRUE);
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Modified: RLVa-1.0.0e
+		// If the object creator matches the object owner we need to anonimize the creator field as well
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && 
+			( ((perm.isOwned()) && (!perm.isGroupOwned()) && (perm.getOwner() == item->getCreatorUUID()) ) ||
+			  (RlvHandler::isNearbyAgent(item->getCreatorUUID())) ) )
+		{
+			childSetEnabled("BtnCreator", FALSE);
+			name = RlvStrings::getAnonym(name);
+		}
+// [/RLVa:KB]
 		childSetText("LabelCreatorName",name);
 	}
 	else
@@ -303,8 +315,15 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 		else
 		{
 			gCacheName->getFullName(perm.getOwner(), name);
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Modified: RLVa-1.0.0e
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+				name = RlvStrings::getAnonym(name);
+// [/RLVa:KB]
 		}
-		childSetEnabled("BtnOwner",TRUE);
+//		childSetEnabled("BtnOwner",TRUE);
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.0.0e
+		childSetEnabled("BtnOwner", !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+// [/RLVa:KB]
 		childSetEnabled("LabelOwnerTitle",TRUE);
 		childSetEnabled("LabelOwnerName",TRUE);
 		childSetText("LabelOwnerName",name);
@@ -606,6 +625,17 @@ void LLSidepanelItemInfo::onClickCreator()
 	if(!item) return;
 	if(!item->getCreatorUUID().isNull())
 	{
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+		{
+			const LLPermissions& perm = item->getPermissions();
+			if ( ((perm.isOwned()) && (!perm.isGroupOwned()) && (perm.getOwner() == item->getCreatorUUID()) ) ||
+			     (RlvHandler::isNearbyAgent(item->getCreatorUUID())) )
+			{
+				return;
+			}
+		}
+// [/RLVa:KB]
 		LLAvatarActions::showProfile(item->getCreatorUUID());
 	}
 }
@@ -621,6 +651,10 @@ void LLSidepanelItemInfo::onClickOwner()
 	}
 	else
 	{
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Modified: RLVa-1.0.0e
+		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+			return;
+// [/RLVa:KB]
 		LLAvatarActions::showProfile(item->getPermissions().getOwner());
 	}
 }
