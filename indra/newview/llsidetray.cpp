@@ -328,6 +328,12 @@ bool LLSideTray::selectTabByName	(const std::string& name)
 
 	if(side_bar == mActiveTab)
 		return false;
+
+// [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
+	if ( (mValidateSignal) && (!(*mValidateSignal)(side_bar, LLSD(name))) )
+		return false;
+// [/RLVa:KB]
+
 	//deselect old tab
 	toggleTabButton(mActiveTab);
 	if(mActiveTab)
@@ -637,7 +643,15 @@ LLPanel*	LLSideTray::showPanel		(const std::string& panel_name, const LLSD& para
 		LLView* view = (*child_it)->findChildView(panel_name,true);
 		if(view)
 		{
-			selectTabByName	((*child_it)->getName());
+// [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
+			// NOTE: - selectTabByName() returns false if the tab is currently active so we can't use its return value to make a decision
+			//       - "panel_name" is a name of a panel *inside* of the tab, not the name of the tab that's being switched to
+			const std::string& tab_name = (*child_it)->getName();
+			if ( (mValidateSignal) && (!(*mValidateSignal)(getTab(tab_name), LLSD(tab_name))) )
+				continue;
+			selectTabByName(tab_name);
+// [/RLVa:KB]
+//			selectTabByName	((*child_it)->getName());
 			if(mCollapsed)
 				expandSideBar();
 
@@ -748,3 +762,9 @@ void	LLSideTray::updateSidetrayVisibility()
 	}
 }
 
+// [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+const LLPanel* LLSideTray::getActiveTab() const
+{
+	return mActiveTab;
+}
+// [/RLVa:KB]

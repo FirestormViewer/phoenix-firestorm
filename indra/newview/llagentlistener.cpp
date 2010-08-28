@@ -37,6 +37,9 @@
 #include "llviewerobject.h"
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
+// [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 LLAgentListener::LLAgentListener(LLAgent &agent)
   : LLEventAPI("LLAgent",
@@ -85,6 +88,14 @@ void LLAgentListener::requestSit(LLSD const & event_data) const
 	// *TODO - find a permanent place to share this code properly.
 	LLViewerObject *object = gObjectList.findObject(event_data["obj_uuid"]);
 
+// [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c) | Modified: RLVa-1.1.0j
+	// TODO-RLVa: [RLVa-1.2.1] Figure out how to call this?
+	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canSit(object)) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 	if (object && object->getPCode() == LL_PCODE_VOLUME)
 	{
 		gMessageSystem->newMessageFast(_PREHASH_AgentRequestSit);
@@ -101,6 +112,14 @@ void LLAgentListener::requestSit(LLSD const & event_data) const
 
 void LLAgentListener::requestStand(LLSD const & event_data) const
 {
+// [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
+	// TODO-RLVa: [RLVa-1.2.1] Figure out how to call this?
+	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStand()) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 	mAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
 }
 

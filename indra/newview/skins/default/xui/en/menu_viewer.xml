@@ -1420,6 +1420,112 @@
                  parameter="flexible" />
             </menu_item_check>
         </menu>        
+		<menu
+		 label="RLVa"
+		 name="RLVa"
+		 tear_off="true"
+		 visible="false">
+			<menu
+			 label="Debug"
+			 name="Debug"
+			 tear_off="true">
+				<menu_item_check
+				 label="Show Debug Messages"
+				 name="Show Debug Messages">
+					<menu_item_check.on_check
+					 function="CheckControl"
+					 parameter="RestrainedLoveDebug" />
+					<menu_item_check.on_click
+					 function="ToggleControl"
+					 parameter="RestrainedLoveDebug" />
+				</menu_item_check>
+				<menu_item_separator/>
+				<menu_item_check
+				 label="Enable Legacy Naming"
+				 name="Enable Legacy Naming">
+					<menu_item_check.on_check
+					 function="CheckControl"
+					 parameter="RLVaEnableLegacyNaming" />
+					<menu_item_check.on_click
+					 function="ToggleControl"
+					 parameter="RLVaEnableLegacyNaming" />
+				</menu_item_check>
+				<menu_item_check
+				 label="Rename Shared Items on Wear"
+				 name="Rename Shared Items on Wear">
+					<menu_item_check.on_check
+					 function="CheckControl"
+					 parameter="RLVaSharedInvAutoRename" />
+					<menu_item_check.on_click
+					 function="ToggleControl"
+					 parameter="RLVaSharedInvAutoRename" />
+				</menu_item_check>
+				<menu_item_separator/>
+				<menu_item_check
+				 label="Locks..."
+				 name="Locks">
+					<menu_item_check.on_check
+					 function="Floater.Visible"
+					 parameter="rlv_locks" />
+					<menu_item_check.on_click
+					 function="Floater.Toggle"
+					 parameter="rlv_locks" />
+				</menu_item_check>
+			</menu>
+			<menu_item_separator/>
+			<menu_item_check
+			 label="Hide Locked Layers"
+			 name="Hide Locked Layers">
+				<menu_item_check.on_check
+				 function="CheckControl"
+				 parameter="RLVaHideLockedLayers" />
+				<menu_item_check.on_click
+				 function="ToggleControl"
+				 parameter="RLVaHideLockedLayers" />
+			</menu_item_check>
+			<menu_item_check
+			 label="Hide Locked Attachments"
+			 name="Hide Locked Attachments">
+				<menu_item_check.on_check
+				 function="CheckControl"
+				 parameter="RLVaHideLockedAttachments" />
+				<menu_item_check.on_click
+				 function="ToggleControl"
+				 parameter="RLVaHideLockedAttachments" />
+			</menu_item_check>
+			<menu_item_separator/>
+			<menu_item_check
+			 label="Forbid Give to #RLV"
+			 name="Forbid Give to #RLV">
+				<menu_item_check.on_check
+				 function="CheckControl"
+				 parameter="RestrainedLoveForbidGiveToRLV" />
+				<menu_item_check.on_click
+				 function="ToggleControl"
+				 parameter="RestrainedLoveForbidGiveToRLV" />
+			</menu_item_check>
+			<menu_item_check
+			 label="Show Name Tags"
+			 name="Show Name Tags">
+				<menu_item_check.on_check
+				 function="CheckControl"
+				 parameter="RLVaShowNameTags" />
+				<menu_item_check.on_click
+				 function="ToggleControl"
+				 parameter="RLVaShowNameTags" />
+			</menu_item_check>
+			<menu_item_separator/>
+			<menu_item_check
+			 label="Restrictions..."
+			 name="Restrictions">
+				<menu_item_check.on_check
+				 function="Floater.Visible"
+				 parameter="rlv_behaviours" />
+				<menu_item_check.on_click
+				 function="Floater.Toggle"
+				 parameter="rlv_behaviours" />
+			</menu_item_check>
+		</menu>
         <menu_item_check
          label="Use Plugin Read Thread"
          name="Use Plugin Read Thread">
@@ -1680,7 +1786,14 @@
         </menu> <!--Shortcuts-->
 
         <menu_item_separator/>
-
+        <menu_item_check
+           label="RestrainedLove API"
+           name="RLV API">
+              <menu_item_check.on_check
+               function="RLV.CheckEnabled" />
+              <menu_item_check.on_click
+               function="RLV.ToggleEnabled" />
+        </menu_item_check>
         <menu_item_call
          label="Show Debug Settings"
          name="Debug Settings">

@@ -62,7 +62,9 @@
 #include "lltextbox.h"
 #include "llviewercontrol.h"
 #include "llviewerparcelmgr.h"
-
+// [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 const static std::string IM_TIME("time");
 const static std::string IM_TEXT("message");
@@ -3072,6 +3074,20 @@ public:
 			{
 				return;
 			}
+// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Modified: RLVa-1.2.0a
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_RECVIM))
+			{
+				if (gAgent.isInGroup(session_id))							// Group chat: don't accept the invite if not an exception
+				{
+					if (!gRlvHandler.isException(RLV_BHVR_RECVIM, session_id))
+						return;
+				}
+				else if (!gRlvHandler.isException(RLV_BHVR_RECVIM, from_id))// Conference chat: don't block; censor if not an exception
+				{
+					message = RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM);
+				}
+			}
+// [/RLVa:KB]
 
 			// standard message, not from system
 			std::string saved;
