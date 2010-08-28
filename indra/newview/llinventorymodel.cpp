@@ -46,6 +46,9 @@
 #include "llviewerregion.h"
 #include "llcallbacklist.h"
 #include "llvoavatarself.h"
+// [RLVa:KB] - Checked: RLVa-1.2.0a (2010-03-05)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 //#define DIFF_INVENTORY_FILES
 #ifdef DIFF_INVENTORY_FILES
@@ -2442,6 +2445,14 @@ void LLInventoryModel::processSaveAssetIntoInventory(LLMessageSystem* msg,
 		llinfos << "LLInventoryModel::processSaveAssetIntoInventory item"
 			" not found: " << item_id << llendl;
 	}
+
+// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0a) | Added: RLVa-0.2.0e
+	if (rlv_handler_t::isEnabled())
+	{
+		RlvAttachmentLockWatchdog::instance().onSavedAssetIntoInventory(item_id);
+	}
+// [/RLVa:KB]
+
 	if(gViewerWindow)
 	{
 		gViewerWindow->getWindow()->decBusyCount();
@@ -2492,6 +2503,20 @@ void LLInventoryModel::processBulkUpdateInventory(LLMessageSystem* msg, void**)
 			{
 				if(tfolder->getParentUUID() == folderp->getParentUUID())
 				{
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
+					// NOTE-RLVa: not sure if this is a hack or a bug-fix :o
+					//		-> if we rename the folder on the first BulkUpdateInventory message subsequent messages will still contain
+					//         the old folder name and gInventory.updateCategory() below will "undo" the folder name change but on the
+					//         viewer-side *only* so the folder name actually becomes out of sync with what's on the inventory server
+					//      -> so instead we keep the name of the existing folder and only do it for #RLV/~ in case this causes issues
+					//		-> a better solution would be to only do the rename *after* the transaction completes but there doesn't seem
+					//		   to be any way to accomplish that either *sighs*
+					if ( (rlv_handler_t::isEnabled()) && (!folderp->getName().empty()) && (tfolder->getName() != folderp->getName()) &&
+						 ((tfolder->getName().find(RLV_PUTINV_PREFIX) == 0)) )
+					{
+						tfolder->rename(folderp->getName());
+					}
+// [/RLVa:KB]
 					update[tfolder->getParentUUID()];
 				}
 				else

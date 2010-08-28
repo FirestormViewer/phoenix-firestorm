@@ -60,6 +60,9 @@
 #include "llvoiceclient.h"
 #include "llworld.h"
 #include "llspeakers.h"
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 #define FRIEND_LIST_UPDATE_TIMEOUT	0.5
 #define NEARBY_LIST_UPDATE_INTERVAL 1
@@ -532,6 +535,9 @@ BOOL LLPanelPeople::postBuild()
 	mNearbyList->setNoItemsMsg(getString("no_one_near"));
 	mNearbyList->setNoFilteredItemsMsg(getString("no_one_filtered_near"));
 	mNearbyList->setShowIcons("NearbyListShowIcons");
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+	mNearbyList->setRlvCheckShowNames(true);
+// [/RLVa:KB]
 
 	mRecentList = getChild<LLPanel>(RECENT_TAB_NAME)->getChild<LLAvatarList>("avatar_list");
 	mRecentList->setNoItemsCommentText(getString("no_recent_people"));
@@ -833,7 +839,11 @@ void LLPanelPeople::updateButtons()
 		LLPanel* cur_panel = mTabContainer->getCurrentPanel();
 		if (cur_panel)
 		{
-			cur_panel->getChildView("add_friend_btn")->setEnabled(!is_friend);
+//			cur_panel->getChildView("add_friend_btn")->setEnabled(!is_friend);
+// [RLVa:KB] - Checked: 2010-07-20 (RLVa-1.2.0h) | Added: RLVa-1.2.0h
+			cur_panel->getChildView("add_friend_btn")->setEnabled(
+				!is_friend && ((!nearby_tab_active) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))));
+// [/RLBa:KB]
 			if (friends_tab_active)
 			{
 				cur_panel->getChildView("del_btn")->setEnabled(multiple_selected);
@@ -842,6 +852,13 @@ void LLPanelPeople::updateButtons()
 	}
 
 	bool enable_calls = LLVoiceClient::getInstance()->isVoiceWorking() && LLVoiceClient::getInstance()->voiceEnabled();
+
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
+	if ( (nearby_tab_active) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
+	{
+		item_selected = multiple_selected = false;
+	}
+// [/RLBa:KB]
 
 	buttonSetEnabled("teleport_btn",		friends_tab_active && item_selected && isFriendOnline(selected_uuids.front()));
 	buttonSetEnabled("view_profile_btn",	item_selected);
