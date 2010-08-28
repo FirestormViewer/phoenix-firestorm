@@ -458,7 +458,11 @@ void LLWearableHoldingPattern::onAllComplete()
 	LLAppearanceMgr::instance().updateAgentWearables(this, false);
 	
 	// Update attachments to match those requested.
-	if (isAgentAvatarValid())
+//	if (isAgentAvatarValid())
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-08-14 (Catznip-2.1.2a) | Modified: Catznip-2.1.1d
+	// Don't update attachments until initial wearables have loaded (should reduce random attaching/detaching/reattaching at log-on)
+	if ( (isAgentAvatarValid()) && (gAgentWearables.areInitalWearablesLoaded()) )
+// [/SL:KB]
 	{
 		llinfos << "Updating " << mObjItems.count() << " attachments" << llendl;
 		LLAgentWearables::userUpdateAttachments(mObjItems);
@@ -1359,7 +1363,11 @@ void LLAppearanceMgr::filterWearableItems(
 		S32 size = items_by_type[i].size();
 		if (size <= 0)
 			continue;
-		S32 start_index = llmax(0,size-max_per_type);
+//		S32 start_index = llmax(0,size-max_per_type);
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-05-11 (Catznip-2.1.2a) | Added: Catznip-2.0.0h
+		S32 start_index = 
+			llmax(0, size - ((LLAssetType::AT_BODYPART == LLWearableType::getAssetType((LLWearableType::EType)i)) ? 1 : max_per_type));
+// [/SL:KB[
 		for (S32 j = start_index; j<size; j++)
 		{
 			items.push_back(items_by_type[i][j]);
@@ -2501,11 +2509,27 @@ void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
 	switch (item_to_remove->getType())
 	{
 		case LLAssetType::AT_CLOTHING:
-			if (get_is_item_worn(id_to_remove))
+//			if (get_is_item_worn(id_to_remove))
+//			{
+//				//*TODO move here the exact removing code from LLWearableBridge::removeItemFromAvatar in the future
+//				LLWearableBridge::removeItemFromAvatar(item_to_remove);
+//			}
+// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-2.1.2a) | Added: Catznip-2.1.1d
 			{
-				//*TODO move here the exact removing code from LLWearableBridge::removeItemFromAvatar in the future
-				LLWearableBridge::removeItemFromAvatar(item_to_remove);
+				/*const*/ LLWearable* pWearable = gAgentWearables.getWearableFromItemID(item_to_remove->getLinkedUUID());
+				if ( (pWearable) && (LLAssetType::AT_BODYPART != pWearable->getAssetType()) )
+				{
+					U32 idxWearable = gAgentWearables.getWearableIndex(pWearable);
+					if (idxWearable < LLAgentWearables::MAX_CLOTHING_PER_TYPE)
+					{
+						gAgentWearables.removeWearable(pWearable->getType(), false, idxWearable);
+
+						LLAppearanceMgr::instance().removeCOFItemLinks(item_to_remove->getLinkedUUID(), false);
+						gInventory.notifyObservers();
+					}
+				}
 			}
+// [/SL:KB]
 			break;
 		case LLAssetType::AT_OBJECT:
 			LLVOAvatarSelf::detachAttachmentIntoInventory(item_to_remove->getLinkedUUID());
