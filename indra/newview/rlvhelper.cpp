@@ -15,16 +15,13 @@
  */
 
 #include "llviewerprecompiledheaders.h"
-#include "llagentui.h"
 #include "llagentwearables.h"
 #include "llappearancemgr.h"
 #include "llgesturemgr.h"
-#include "llinstantmessage.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llviewerobject.h"
 #include "llviewerobjectlist.h"
-#include "llviewerstats.h"
 #include "llwlparammanager.h"
 
 #include "rlvhelper.h"
@@ -790,7 +787,7 @@ void RlvBehaviourNotifyHandler::onCommand(const LLUUID& idRlvObj, const RlvComma
 			itNotify != m_Notifications.end(); ++itNotify)
 	{
 		if ( (itNotify->second.strFilter.empty()) || (std::string::npos != strCmd.find(itNotify->second.strFilter)) )
-			rlvSendChatReply(itNotify->second.nChannel, strNotify);
+			RlvUtil::sendChatReply(itNotify->second.nChannel, strNotify);
 	}
 }
 
@@ -867,52 +864,6 @@ bool rlvCanDeleteOrReturn()
 	}
 
 	return fIsAllowed;
-}
-
-// Checked: 2010-04-08 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-void rlvNotifyFailedAssertion(const char* pstrAssert, const char* pstrFile, int nLine)
-{
-	LLSD argsNotify;
-	argsNotify["MESSAGE"] = llformat("RLVa assertion failure: %s (%s - %d)", pstrAssert, pstrFile, nLine);
-	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
-}
-
-// =========================================================================
-// Message sending functions
-//
-
-// Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0b
-void rlvSendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession)
-{
-	// [See process_improved_im()]
-	std::string strFullName;
-	LLAgentUI::buildFullname(strFullName);
-
-	pack_instant_message(gMessageSystem, gAgent.getID(), FALSE, gAgent.getSessionID(), idTo, strFullName,
-		strMsg, IM_ONLINE, IM_BUSY_AUTO_RESPONSE, idSession);
-	gAgent.sendReliableMessage();
-}
-
-// Checked: 2010-03-09 (RLVa-1.2.0a) | Modified: RLVa-1.0.1e
-bool rlvSendChatReply(S32 nChannel, const std::string& strReply)
-{
-	if (!rlvIsValidReplyChannel(nChannel))
-		return false;
-
-	// Copy/paste from send_chat_from_viewer()
-	LLMessageSystem* msg = gMessageSystem;
-	msg->newMessageFast(_PREHASH_ChatFromViewer);
-	msg->nextBlockFast(_PREHASH_AgentData);
-	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-	msg->nextBlockFast(_PREHASH_ChatData);
-	msg->addStringFast(_PREHASH_Message, strReply);
-	msg->addU8Fast(_PREHASH_Type, CHAT_TYPE_SHOUT);
-	msg->addS32("Channel", nChannel);
-	gAgent.sendReliableMessage();
-	LLViewerStats::getInstance()->incStat(LLViewerStats::ST_CHAT_COUNT);
-
-	return true;
 }
 
 // =========================================================================

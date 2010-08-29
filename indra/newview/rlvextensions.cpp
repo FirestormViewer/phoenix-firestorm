@@ -82,7 +82,7 @@ bool RlvExtGetSet::processCommand(const LLUUID& idObj, const RlvCommand& rlvCmd,
 		{
 			if ( ("get" == strGetSet) && (RLV_TYPE_REPLY == rlvCmd.getParamType()) )
 			{
-				rlvSendChatReply(rlvCmd.getParam(), onGetDebug(strSetting));
+				RlvUtil::sendChatReply(rlvCmd.getParam(), onGetDebug(strSetting));
 				eRet = RLV_RET_SUCCESS;
 				return true;
 			}
@@ -97,7 +97,7 @@ bool RlvExtGetSet::processCommand(const LLUUID& idObj, const RlvCommand& rlvCmd,
 		{
 			if ( ("get" == strGetSet) && (RLV_TYPE_REPLY == rlvCmd.getParamType()) )
 			{
-				rlvSendChatReply(rlvCmd.getParam(), onGetEnv(strSetting));
+				RlvUtil::sendChatReply(rlvCmd.getParam(), onGetEnv(strSetting));
 				eRet = RLV_RET_SUCCESS;
 				return true;
 			}

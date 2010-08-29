@@ -116,6 +116,28 @@ protected:
 };
 
 // ============================================================================
+// RlvUtil - Collection of (static) helper functions
+//
+
+class RlvUtil
+{
+public:
+	static bool isEmote(const std::string& strUTF8Text);
+	static bool isNearbyAgent(const LLUUID& idAgent);						// @shownames
+	static bool isNearbyRegion(const std::string& strRegion);				// @showloc
+
+	static void filterLocation(std::string& strUTF8Text);					// @showloc
+	static void filterNames(std::string& strUTF8Text);						// @shownames
+
+	static void notifyFailedAssertion(const char* pstrAssert, const char* pstrFile, int nLine);
+
+	static void sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession = LLUUID::null);
+	static bool isValidReplyChannel(S32 nChannel);
+	static bool sendChatReply(S32 nChannel, const std::string& strUTF8Text);
+	static bool sendChatReply(const std::string& strChannel, const std::string& strUTF8Text);
+};
+
+// ============================================================================
 // Extensibility classes
 //
 
@@ -185,6 +207,29 @@ struct RlvPredIsEqualOrLinkedItem
 protected:
 	const LLViewerInventoryItem* m_pItem;
 };
+
+// ============================================================================
+// Inlined class member functions
+//
+
+// Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.2a
+inline bool RlvUtil::isEmote(const std::string& strUTF8Text)
+{
+	return (strUTF8Text.length() > 4) && ( (strUTF8Text.compare(0, 4, "/me ") == 0) || (strUTF8Text.compare(0, 4, "/me'") == 0) );
+}
+
+// Checked: 2010-03-09 (RLVa-1.2.0b) | Added: RLVa-1.0.2a
+inline bool RlvUtil::isValidReplyChannel(S32 nChannel)
+{
+	return (nChannel > 0) && (CHAT_CHANNEL_DEBUG != nChannel);
+}
+
+// Checked: 2009-08-05 (RLVa-1.0.1e) | Added: RLVa-1.0.0e
+inline bool RlvUtil::sendChatReply(const std::string& strChannel, const std::string& strUTF8Text)
+{
+	S32 nChannel;
+	return (LLStringUtil::convertToS32(strChannel, nChannel)) ? sendChatReply(nChannel, strUTF8Text) : false;
+}
 
 // ============================================================================
 

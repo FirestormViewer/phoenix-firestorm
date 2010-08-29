@@ -95,10 +95,6 @@ public:
 	bool canStand() const;
 	bool canTouch(LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;	// @touch
 	void filterChat(std::string& strUTF8Text, bool fFilterEmote) const;							// @sendchat, @recvchat and @redirchat
-	static void filterLocation(std::string& strUTF8Text);										// @showloc
-	static void filterNames(std::string& strUTF8Text);											// @shownames
-	static bool isNearbyAgent(const LLUUID& idAgent);											// @shownames
-	static bool isNearbyRegion(const std::string& strRegion);									// @showloc
 	bool redirectChatOrEmote(const std::string& strUTF8Test) const;								// @redirchat and @rediremote
 
 	// Command processing helper functions

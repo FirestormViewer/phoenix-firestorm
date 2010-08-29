@@ -336,7 +336,7 @@ void LLSidepanelTaskInfo::refresh()
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 	{
 		// Only anonimize the creator if all of the selection was created by the same avie who's also the owner or they're a nearby avie
-		if ( (creators_identical) && ((mCreatorID == mOwnerID) || (RlvHandler::isNearbyAgent(mCreatorID))) )
+		if ( (creators_identical) && ((mCreatorID == mOwnerID) || (RlvUtil::isNearbyAgent(mCreatorID))) )
 			creator_name = RlvStrings::getAnonym(creator_name);
 
 		// Only anonimize the owner name if all of the selection is owned by the same avie and isn't group owned

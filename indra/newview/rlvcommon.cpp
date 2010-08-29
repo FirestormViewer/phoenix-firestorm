@@ -16,10 +16,16 @@
 
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
+#include "llagentui.h"
 #include "llappviewer.h"
+#include "llinstantmessage.h"
 #include "llnotificationsutil.h"
 #include "lluictrlfactory.h"
 #include "llversionviewer.h"
+#include "llviewerparcelmgr.h"
+#include "llviewerregion.h"
+#include "llviewerstats.h"
+#include "llworld.h"
 
 #include "rlvcommon.h"
 #include "rlvhandler.h"
@@ -318,6 +324,111 @@ std::string RlvStrings::getVersionNum()
 bool RlvStrings::hasString(const std::string& strStringName)
 {
 	return m_StringMap.find(strStringName) != m_StringMap.end();
+}
+
+// ============================================================================
+// RlvUtil
+//
+
+// Checked: 2009-07-04 (RLVa-1.0.0a) | Modified: RLVa-1.0.0a
+void RlvUtil::filterLocation(std::string& strUTF8Text)
+{
+	// TODO-RLVa: if either the region or parcel name is a simple word such as "a" or "the" then confusion will ensue?
+	//            -> not sure how you would go about preventing this though :|...
+
+	// Filter any mention of the surrounding region names
+	LLWorld::region_list_t regions = LLWorld::getInstance()->getRegionList();
+	const std::string& strHiddenRegion = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+	for (LLWorld::region_list_t::const_iterator itRegion = regions.begin(); itRegion != regions.end(); ++itRegion)
+		rlvStringReplace(strUTF8Text, (*itRegion)->getName(), strHiddenRegion);
+
+	// Filter any mention of the parcel name
+	LLViewerParcelMgr* pParcelMgr = LLViewerParcelMgr::getInstance();
+	if (pParcelMgr)
+		rlvStringReplace(strUTF8Text, pParcelMgr->getAgentParcelName(), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
+}
+
+// Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+void RlvUtil::filterNames(std::string& strUTF8Text)
+{
+	std::vector<LLUUID> idAgents;
+	LLWorld::getInstance()->getAvatars(&idAgents, NULL);
+
+	std::string strFullName;
+	for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
+	{
+		// LLCacheName::getFullName() will add the UUID to the lookup queue if we don't know it yet
+		if (gCacheName->getFullName(idAgents[idxAgent], strFullName))
+			rlvStringReplace(strUTF8Text, strFullName, RlvStrings::getAnonym(strFullName));
+	}
+}
+
+// Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+bool RlvUtil::isNearbyAgent(const LLUUID& idAgent)
+{
+	// Sanity check since we call this with notification payloads as well and those strings tend to change from one release to another
+	RLV_ASSERT(idAgent.notNull());
+	if ( (idAgent.notNull()) && (gAgent.getID() != idAgent) )
+	{
+		std::vector<LLUUID> idAgents;
+		LLWorld::getInstance()->getAvatars(&idAgents, NULL);
+
+		for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
+			if (idAgents[idxAgent] == idAgent)
+				return true;
+	}
+	return false;
+}
+
+// Checked: 2010-04-05 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
+bool RlvUtil::isNearbyRegion(const std::string& strRegion)
+{
+	LLWorld::region_list_t regions = LLWorld::getInstance()->getRegionList();
+	for (LLWorld::region_list_t::const_iterator itRegion = regions.begin(); itRegion != regions.end(); ++itRegion)
+		if ((*itRegion)->getName() == strRegion)
+			return true;
+	return false;
+}
+
+// Checked: 2010-04-08 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+void RlvUtil::notifyFailedAssertion(const char* pstrAssert, const char* pstrFile, int nLine)
+{
+	LLSD argsNotify;
+	argsNotify["MESSAGE"] = llformat("RLVa assertion failure: %s (%s - %d)", pstrAssert, pstrFile, nLine);
+	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
+}
+
+// Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0b
+void RlvUtil::sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession)
+{
+	// [See process_improved_im()]
+	std::string strFullName;
+	LLAgentUI::buildFullname(strFullName);
+
+	pack_instant_message(gMessageSystem, gAgent.getID(), FALSE, gAgent.getSessionID(), idTo, strFullName,
+		strMsg, IM_ONLINE, IM_BUSY_AUTO_RESPONSE, idSession);
+	gAgent.sendReliableMessage();
+}
+
+// Checked: 2010-03-09 (RLVa-1.2.0a) | Modified: RLVa-1.0.1e
+bool RlvUtil::sendChatReply(S32 nChannel, const std::string& strUTF8Text)
+{
+	if (!isValidReplyChannel(nChannel))
+		return false;
+
+	// Copy/paste from send_chat_from_viewer()
+	gMessageSystem->newMessageFast(_PREHASH_ChatFromViewer);
+	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
+	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	gMessageSystem->nextBlockFast(_PREHASH_ChatData);
+	gMessageSystem->addStringFast(_PREHASH_Message, strUTF8Text);
+	gMessageSystem->addU8Fast(_PREHASH_Type, CHAT_TYPE_SHOUT);
+	gMessageSystem->addS32("Channel", nChannel);
+	gAgent.sendReliableMessage();
+	LLViewerStats::getInstance()->incStat(LLViewerStats::ST_CHAT_COUNT);
+
+	return true;
 }
 
 // ============================================================================

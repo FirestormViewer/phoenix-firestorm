@@ -728,7 +728,7 @@ void LLNearbyChatBar::sendChatFromViewer(const LLWString &wtext, EChatType type,
 		else if ( (CHAT_TYPE_WHISPER == type) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATWHISPER)) )
 			type = CHAT_TYPE_NORMAL;
 
-		animate &= !gRlvHandler.hasBehaviour( (!rlvIsEmote(utf8_text)) ? RLV_BHVR_REDIRCHAT : RLV_BHVR_REDIREMOTE );
+		animate &= !gRlvHandler.hasBehaviour( (!RlvUtil::isEmote(utf8_text)) ? RLV_BHVR_REDIRCHAT : RLV_BHVR_REDIREMOTE );
 	}
 // [/RLVa:KB]
 
@@ -901,7 +901,7 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 			// Don't allow chat on debug channel if @sendchat, @redirchat or @rediremote restricted (shows as public chat on viewers)
 			if (CHAT_CHANNEL_DEBUG == channel)
 			{
-				bool fIsEmote = rlvIsEmote(utf8_out_text);
+				bool fIsEmote = RlvUtil::isEmote(utf8_out_text);
 				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SENDCHAT)) || 
 					 ((!fIsEmote) && (gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT))) || 
 					 ((fIsEmote) && (gRlvHandler.hasBehaviour(RLV_BHVR_REDIREMOTE))) )

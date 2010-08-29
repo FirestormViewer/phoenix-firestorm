@@ -305,23 +305,10 @@ public:
 //
 
 bool rlvCanDeleteOrReturn();
-bool rlvIsEmote(const std::string& strUTF8Text);
-bool rlvIsValidReplyChannel(S32 nChannel);
-
-void rlvSendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession = LLUUID::null);
-bool rlvSendChatReply(const std::string& strChannel, const std::string& strReply);
-bool rlvSendChatReply(S32 nChannel, const std::string& strReply);
 
 std::string rlvGetFirstParenthesisedText(const std::string& strText, std::string::size_type* pidxMatch = NULL);
 std::string rlvGetLastParenthesisedText(const std::string& strText, std::string::size_type* pidxStart = NULL);
 void        rlvStringReplace(std::string& strText, std::string strFrom, const std::string& strTo);
-
-// ============================================================================
-// Debug helper functions
-//
-
-void rlvDebugFailedAssertion(const char* pstrAssert, const char* pstrFile, int nLine);
-void rlvNotifyFailedAssertion(const char* pstrAssert, const char* pstrFile, int nLine);
 
 // ============================================================================
 // Inlined class member functions
@@ -366,29 +353,6 @@ inline bool RlvForceWear::isWearableItem(const LLInventoryItem* pItem)
 	return 
 		(LLAssetType::AT_BODYPART == assetType) || (LLAssetType::AT_CLOTHING == assetType) ||
 		(LLAssetType::AT_OBJECT == assetType) || (LLAssetType::AT_GESTURE == assetType);
-}
-
-// ============================================================================
-// Inlined helper functions
-//
-
-// Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.2a
-inline bool rlvIsEmote(const std::string& strUTF8Text)
-{
-	return (strUTF8Text.length() > 4) && ( (strUTF8Text.compare(0, 4, "/me ") == 0) || (strUTF8Text.compare(0, 4, "/me'") == 0) );
-}
-
-// Checked: 2010-03-09 (RLVa-1.2.0b) | Added: RLVa-1.0.2a
-inline bool rlvIsValidReplyChannel(S32 nChannel)
-{
-	return (nChannel > 0) && (CHAT_CHANNEL_DEBUG != nChannel);
-}
-
-// Checked: 2009-08-05 (RLVa-1.0.1e) | Added: RLVa-1.0.0e
-inline bool rlvSendChatReply(const std::string& strChannel, const std::string& strReply)
-{
-	S32 nChannel;
-	return (LLStringUtil::convertToS32(strChannel, nChannel)) ? rlvSendChatReply(nChannel, strReply) : false;
 }
 
 // ============================================================================

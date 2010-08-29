@@ -599,7 +599,7 @@ void LLChatBar::sendChatFromViewer(const LLWString &wtext, EChatType type, BOOL 
 		else if ( (CHAT_TYPE_WHISPER == type) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATWHISPER)) )
 			type = CHAT_TYPE_NORMAL;
 
-		animate &= !gRlvHandler.hasBehaviour( (!rlvIsEmote(utf8_text)) ? RLV_BHVR_REDIRCHAT : RLV_BHVR_REDIREMOTE );
+		animate &= !gRlvHandler.hasBehaviour( (!RlvUtil::isEmote(utf8_text)) ? RLV_BHVR_REDIRCHAT : RLV_BHVR_REDIREMOTE );
 	}
 // [/RLVa:KB]
 

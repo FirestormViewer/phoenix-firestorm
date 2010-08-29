@@ -570,9 +570,9 @@ void LLHUDText::setStringUTF8(const std::string &wtext)
 		if (gRlvHandler.canShowHoverText(mSourceObject))
 		{
 			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
-				gRlvHandler.filterLocation(text);
+				RlvUtil::filterLocation(text);
 			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-				gRlvHandler.filterNames(text);
+				RlvUtil::filterNames(text);
 		}
 		else
 		{

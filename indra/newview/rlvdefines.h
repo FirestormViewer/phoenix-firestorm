@@ -89,7 +89,7 @@ const S32 RLVa_VERSION_BUILD = 1;
 #define RLV_INFOS		LL_INFOS("RLV")
 #define RLV_DEBUGS		LL_DEBUGS("RLV")
 #define RLV_ENDL		LL_ENDL
-#define RLV_VERIFY(f)	if (!(f)) { rlvNotifyFailedAssertion(#f, __FILE__, __LINE__); }
+#define RLV_VERIFY(f)	if (!(f)) { RlvUtil::notifyFailedAssertion(#f, __FILE__, __LINE__); }
 
 #if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
 	// Turn on extended debugging information

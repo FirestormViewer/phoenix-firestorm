@@ -22,7 +22,6 @@
 #include "llviewerobjectlist.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
-#include "llworld.h"
 
 #include "rlvhandler.h"
 #include "rlvinventory.h"
@@ -89,7 +88,7 @@ static bool rlvParseNotifyOption(const std::string& strOption, S32& nChannel, st
 	boost_tokenizer::const_iterator itTok = tokens.begin();
 
 	// Extract and sanity check the first token (required) which is the channel
-	if ( (itTok == tokens.end()) || (!LLStringUtil::convertToS32(*itTok, nChannel)) || (!rlvIsValidReplyChannel(nChannel)) )
+	if ( (itTok == tokens.end()) || (!LLStringUtil::convertToS32(*itTok, nChannel)) || (!RlvUtil::isValidReplyChannel(nChannel)) )
 		return false;
 
 	// Second token (optional) is the filter
@@ -624,7 +623,7 @@ void RlvHandler::filterChat(std::string& strUTF8Text, bool fFilterEmote) const
 	if (strUTF8Text.empty())
 		return;
 
-	if (rlvIsEmote(strUTF8Text))					// Check if it's an emote
+	if (RlvUtil::isEmote(strUTF8Text))				// Check if it's an emote
 	{
 		if (fFilterEmote)							// Emote filtering depends on fFilterEmote
 		{
@@ -652,45 +651,11 @@ void RlvHandler::filterChat(std::string& strUTF8Text, bool fFilterEmote) const
 	}
 }
 
-// Checked: 2009-07-04 (RLVa-1.0.0a) | Modified: RLVa-1.0.0a
-void RlvHandler::filterLocation(std::string& strUTF8Text)
-{
-	// TODO-RLVa: if either the region or parcel name is a simple word such as "a" or "the" then confusion will ensue?
-	//            -> not sure how you would go about preventing this though :|...
-
-	// Filter any mention of the surrounding region names
-	LLWorld::region_list_t regions = LLWorld::getInstance()->getRegionList();
-	const std::string& strHiddenRegion = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
-	for (LLWorld::region_list_t::const_iterator itRegion = regions.begin(); itRegion != regions.end(); ++itRegion)
-		rlvStringReplace(strUTF8Text, (*itRegion)->getName(), strHiddenRegion);
-
-	// Filter any mention of the parcel name
-	LLViewerParcelMgr* pParcelMgr = LLViewerParcelMgr::getInstance();
-	if (pParcelMgr)
-		rlvStringReplace(strUTF8Text, pParcelMgr->getAgentParcelName(), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
-}
-
-// Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
-void RlvHandler::filterNames(std::string& strUTF8Text)
-{
-	// TODO-RLVa: [RLVa-1.2.1] Should we restrict this to a certain radius?
-	std::vector<LLUUID> idAgents;
-	LLWorld::getInstance()->getAvatars(&idAgents, NULL);
-
-	std::string strFullName;
-	for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
-	{
-		// LLCacheName::getFullName() will add the UUID to the lookup queue if we don't know it yet
-		if (gCacheName->getFullName(idAgents[idxAgent], strFullName))
-			rlvStringReplace(strUTF8Text, strFullName, RlvStrings::getAnonym(strFullName));
-	}
-}
-
 // Checked: 2010-02-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0a
 bool RlvHandler::redirectChatOrEmote(const std::string& strUTF8Text) const
 {
 	// Sanity check - @redirchat only for chat and @rediremote only for emotes
-	ERlvBehaviour eBhvr = (!rlvIsEmote(strUTF8Text)) ? RLV_BHVR_REDIRCHAT : RLV_BHVR_REDIREMOTE;
+	ERlvBehaviour eBhvr = (!RlvUtil::isEmote(strUTF8Text)) ? RLV_BHVR_REDIRCHAT : RLV_BHVR_REDIREMOTE;
 	if (!hasBehaviour(eBhvr))
 		return false;
 
@@ -707,41 +672,10 @@ bool RlvHandler::redirectChatOrEmote(const std::string& strUTF8Text) const
 	{
 		S32 nChannel = boost::get<S32>(itRedir->second.varOption);
 		if ( (!hasBehaviour(RLV_BHVR_SENDCHANNEL)) || (isException(RLV_BHVR_SENDCHANNEL, nChannel)) )
-			rlvSendChatReply(nChannel, strUTF8Text);
+			RlvUtil::sendChatReply(nChannel, strUTF8Text);
 	}
 
 	return true;
-}
-
-// ============================================================================
-// Public service functions (called by the outside world or by extension handlers)
-//
-
-// Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
-bool RlvHandler::isNearbyAgent(const LLUUID& idAgent)
-{
-	// Sanity check since we call this with notification payloads as well and those strings tend to change from one release to another
-	RLV_ASSERT(idAgent.notNull());
-	if ( (idAgent.notNull()) && (gAgent.getID() != idAgent) )
-	{
-		std::vector<LLUUID> idAgents;
-		LLWorld::getInstance()->getAvatars(&idAgents, NULL);
-
-		for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
-			if (idAgents[idxAgent] == idAgent)
-				return true;
-	}
-	return false;
-}
-
-// Checked: 2010-04-05 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
-bool RlvHandler::isNearbyRegion(const std::string& strRegion)
-{
-	LLWorld::region_list_t regions = LLWorld::getInstance()->getRegionList();
-	for (LLWorld::region_list_t::const_iterator itRegion = regions.begin(); itRegion != regions.end(); ++itRegion)
-		if ((*itRegion)->getName() == strRegion)
-			return true;
-	return false;
 }
 
 // ============================================================================
@@ -1085,7 +1019,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const LLUUID& idObj, const RlvComman
 			{
 				// There should be an option which should specify a valid reply channel (if there's an empty option the command is invalid)
 				S32 nChannel = 0;
-				VERIFY_OPTION_REF( (LLStringUtil::convertToS32(strOption, nChannel)) && (rlvIsValidReplyChannel(nChannel)) );
+				VERIFY_OPTION_REF( (LLStringUtil::convertToS32(strOption, nChannel)) && (RlvUtil::isValidReplyChannel(nChannel)) );
 
 				if (RLV_TYPE_ADD == eType) 
 					addException(idObj, eBhvr, nChannel);
@@ -1571,7 +1505,7 @@ ERlvCmdRet RlvHandler::processReplyCommand(const LLUUID& idObj, const RlvCommand
 
 	// Sanity check - <param> should specify a - valid - reply channel
 	S32 nChannel;
-	if ( (!LLStringUtil::convertToS32(rlvCmd.getParam(), nChannel)) || (!rlvIsValidReplyChannel(nChannel)) )
+	if ( (!LLStringUtil::convertToS32(rlvCmd.getParam(), nChannel)) || (!RlvUtil::isValidReplyChannel(nChannel)) )
 		return RLV_RET_FAILED_PARAM;
 
 	ERlvCmdRet eRet = RLV_RET_SUCCESS; std::string strReply;
@@ -1661,7 +1595,7 @@ ERlvCmdRet RlvHandler::processReplyCommand(const LLUUID& idObj, const RlvCommand
 	// If we made it this far then:
 	//   - the command was handled successfully so we send off the response
 	//   - the command failed but we still send off an - empty - response to keep the issuing script from blocking
-	rlvSendChatReply(nChannel, strReply);
+	RlvUtil::sendChatReply(nChannel, strReply);
 
 	return eRet;
 }

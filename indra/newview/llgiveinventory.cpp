@@ -305,7 +305,7 @@ void LLGiveInventory::logInventoryOffer(const LLUUID& to_agent, const LLUUID &im
 		gIMMgr->addSystemMessage(im_session_id, "inventory_item_offered", args);
 	}
 // [RLVa:KB] - Checked: 2010-05-26 (RLVa-1.2.0h) | Modified: RLVa-1.2.0h
-	else if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (gRlvHandler.isNearbyAgent(to_agent)) &&
+	else if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(to_agent)) &&
 		      (!RlvUIEnabler::hasOpenProfile(to_agent)) )
 	{
 		// Log to chat history if the user didn't drop on an IM session or a profile to avoid revealing the name of the recipient
@@ -418,7 +418,7 @@ void LLGiveInventory::commitGiveInventoryItem(const LLUUID& to_agent,
 //	LLRecentPeople::instance().add(to_agent);
 // [RLVa:KB] - Checked: 2010-04-21 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 	// Block the recent activity update if this was an in-world drop on an avatar (as opposed to a drop on an IM session or on a profile)
-	if ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) || (im_session_id.notNull()) || (!gRlvHandler.isNearbyAgent(to_agent)) ||
+	if ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) || (im_session_id.notNull()) || (!RlvUtil::isNearbyAgent(to_agent)) ||
 		 (RlvUIEnabler::hasOpenProfile(to_agent)) )
 	{
 		LLRecentPeople::instance().add(to_agent);
@@ -481,7 +481,7 @@ void LLGiveInventory::commitGiveInventoryCategory(const LLUUID& to_agent,
 //	LLRecentPeople::instance().add(to_agent);
 // [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 	// Block the recent activity update if this was an in-world drop on an avatar (as opposed to a drop on an IM session or on a profile)
-	if ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) || (im_session_id.notNull()) || (!gRlvHandler.isNearbyAgent(to_agent)) ||
+	if ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) || (im_session_id.notNull()) || (!RlvUtil::isNearbyAgent(to_agent)) ||
 		 (RlvUIEnabler::hasOpenProfile(to_agent)) )
 	{
 		LLRecentPeople::instance().add(to_agent);

@@ -287,7 +287,7 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		// If the object creator matches the object owner we need to anonimize the creator field as well
 		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && 
 			( ((perm.isOwned()) && (!perm.isGroupOwned()) && (perm.getOwner() == item->getCreatorUUID()) ) ||
-			  (RlvHandler::isNearbyAgent(item->getCreatorUUID())) ) )
+			  (RlvUtil::isNearbyAgent(item->getCreatorUUID())) ) )
 		{
 			childSetEnabled("BtnCreator", FALSE);
 			name = RlvStrings::getAnonym(name);
@@ -566,7 +566,7 @@ void LLFloaterProperties::onClickCreator()
 		{
 			const LLPermissions& perm = item->getPermissions();
 			if ( ((perm.isOwned()) && (!perm.isGroupOwned()) && (perm.getOwner() == item->getCreatorUUID()) ) ||
-			     (RlvHandler::isNearbyAgent(item->getCreatorUUID())) )
+			     (RlvUtil::isNearbyAgent(item->getCreatorUUID())) )
 			{
 				return;
 			}

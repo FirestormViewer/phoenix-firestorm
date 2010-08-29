@@ -1384,7 +1384,7 @@ void LLOfferInfo::send_auto_receive_response(void)
 //		LLRecentPeople::instance().add(mFromID);
 // [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 		// RELEASE-RLVa: [RLVa-1.2.0] Make sure this stays in sync with the condition in inventory_offer_handler()
-		if ((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) || (!gRlvHandler.isNearbyAgent(mFromID)) || (RlvUIEnabler::hasOpenIM(mFromID)))
+		if ((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) || (!RlvUtil::isNearbyAgent(mFromID)) || (RlvUIEnabler::hasOpenIM(mFromID)))
 		{
 			LLRecentPeople::instance().add(mFromID);
 		}
@@ -1647,7 +1647,7 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 			{
 // [RLVa:KB] - Checked: 2010-04-022 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
 				// RELEASE-RLVa: [RLVa-1.2.0] Make sure this stays in sync with the condition in inventory_offer_handler()
-				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (gRlvHandler.isNearbyAgent(mFromID)) &&
+				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(mFromID)) &&
 					 (!RlvUIEnabler::hasOpenIM(mFromID)) )
 				{
 					strFullName = RlvStrings::getAnonym(strFullName);
@@ -1893,7 +1893,7 @@ void inventory_offer_handler(LLOfferInfo* info)
 	{
 // [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 		// Only filter if the object owner is a nearby agent
-		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (gRlvHandler.isNearbyAgent(info->mFromID)) )
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(info->mFromID)) )
 		{
 			payload["rlv_shownames"] = TRUE;
 			args["NAME"] = args["NAME_SLURL"] = RlvStrings::getAnonym(info->mFromName);
@@ -1913,7 +1913,7 @@ void inventory_offer_handler(LLOfferInfo* info)
 	{
 // [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 		// Only filter if the offer is from a nearby agent and if there's no open IM session (doesn't necessarily have to be focused)
-		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (gRlvHandler.isNearbyAgent(info->mFromID)) &&
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(info->mFromID)) &&
 			 (!RlvUIEnabler::hasOpenIM(info->mFromID)) )
 		{
 			payload["rlv_shownames"] = TRUE;
@@ -2194,7 +2194,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		else if ( (rlv_handler_t::isEnabled()) && (offline == IM_ONLINE) && ("@version" == message) )
 		{
 			// TODO-RLVa: [RLVa-1.2.1] Should we send our version string if the other party is muted?
-			rlvSendBusyMessage(from_id, RlvStrings::getVersion(), session_id);
+			RlvUtil::sendBusyMessage(from_id, RlvStrings::getVersion(), session_id);
 		}
 // [/RLVa:KB]
 //		else if (offline == IM_ONLINE && !is_linden && is_busy && name != SYSTEM_FROM)
@@ -2284,7 +2284,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				 (gRlvHandler.hasBehaviour(RLV_BHVR_RECVIM)) && (!gRlvHandler.isException(RLV_BHVR_RECVIM, from_id)) )
 			{
 				if (!mute_im)
-					rlvSendBusyMessage(from_id, RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM_REMOTE), session_id);
+					RlvUtil::sendBusyMessage(from_id, RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM_REMOTE), session_id);
 				message = RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM);
 			}
 // [/RLVa:KB]
@@ -2583,7 +2583,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 //		args["NAME"] = name;
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
 		// Only filter the name if the agent is nearby, there isn't an open IM session to them and their profile isn't open
-		bool fRlvFilterName = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (gRlvHandler.isNearbyAgent(from_id)) && 
+		bool fRlvFilterName = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(from_id)) && 
 			(!RlvUIEnabler::hasOpenProfile(from_id)) && (!RlvUIEnabler::hasOpenIM(from_id));
 		args["NAME"] = (!fRlvFilterName) ? name : RlvStrings::getAnonym(name);
 // [/RLVa:KB]
@@ -2597,7 +2597,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 //		args["NAME"] = name;
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
 		// Only filter the name if the agent is nearby, there isn't an open IM session to them and their profile isn't open
-		bool fRlvFilterName = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (gRlvHandler.isNearbyAgent(from_id)) && 
+		bool fRlvFilterName = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(from_id)) && 
 			(!RlvUIEnabler::hasOpenProfile(from_id)) && (!RlvUIEnabler::hasOpenIM(from_id));
 		args["NAME"] = (!fRlvFilterName) ? name : RlvStrings::getAnonym(name);
 // [/RLVa:KB]
@@ -2725,7 +2725,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			if (rlv_handler_t::isEnabled())
 			{
 				// NOTE: the chat message itself will be filtered in LLNearbyChatHandler::processChat()
-				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!from_group) && (gRlvHandler.isNearbyAgent(from_id)) )
+				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!from_group) && (RlvUtil::isNearbyAgent(from_id)) )
 				{
 					std::string strOwnerName;
 					if (gCacheName->getFullName(from_id, strOwnerName))
@@ -2734,13 +2734,13 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 						query_string["owner_name"] = RlvStrings::getAnonym(strOwnerName);
 					}
 
-					gRlvHandler.filterNames(name);
+					RlvUtil::filterNames(name);
 					chat.mFromName = name;
 				}
 				if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 				{
 					std::string::size_type idxPos = location.find('/');
-					if ( (std::string::npos != idxPos) && (gRlvHandler.isNearbyRegion(location.substr(0, idxPos))) )
+					if ( (std::string::npos != idxPos) && (RlvUtil::isNearbyRegion(location.substr(0, idxPos))) )
 						location = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
 				}
 			}
@@ -2852,7 +2852,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					if ( ( (gRlvHandler.hasBehaviour(RLV_BHVR_TPLURE)) && (!gRlvHandler.isException(RLV_BHVR_TPLURE, from_id)) ) || 
 						 ( (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) ) )
 					{
-						rlvSendBusyMessage(from_id, RlvStrings::getString(RLV_STRING_BLOCKED_TPLURE_REMOTE));
+						RlvUtil::sendBusyMessage(from_id, RlvStrings::getString(RLV_STRING_BLOCKED_TPLURE_REMOTE));
 						return;
 					}
 
@@ -3229,7 +3229,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				 ( (CHAT_SOURCE_OBJECT == chat.mSourceType) && ((!is_owned_by_me) || (!is_attachment)) && 
 				   (CHAT_TYPE_OWNER != chat.mChatType) ) )
 			{
-				if (!rlvIsEmote(mesg))
+				if (!RlvUtil::isEmote(mesg))
 				{
 					if ( (gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHAT)) && (!gRlvHandler.isException(RLV_BHVR_RECVCHAT, from_id)) )
 						gRlvHandler.filterChat(mesg, false);
@@ -3253,7 +3253,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				} 
 				else if ( (!is_owned_by_me) || (!is_attachment) )
 				{
-					gRlvHandler.filterNames(chat.mFromName);
+					RlvUtil::filterNames(chat.mFromName);
 				}
 			}
 

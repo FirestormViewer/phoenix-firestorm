@@ -120,7 +120,7 @@ void LLFloaterInspect::onClickCreatorProfile()
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Modified: RLVa-1.0.0e
 			const LLUUID& idCreator = node->mPermissions->getCreator();
 			if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && 
-				 ((node->mPermissions->getOwner() == idCreator) || (RlvHandler::isNearbyAgent(idCreator))) )
+				 ((node->mPermissions->getOwner() == idCreator) || (RlvUtil::isNearbyAgent(idCreator))) )
 			{
 				return;
 			}
@@ -237,7 +237,7 @@ void LLFloaterInspect::refresh()
 				owner_name = RlvStrings::getAnonym(owner_name);
 
 			const LLUUID& idCreator = obj->mPermissions->getCreator();
-			if ( (obj->mPermissions->getOwner() == idCreator) || (RlvHandler::isNearbyAgent(idCreator)) )
+			if ( (obj->mPermissions->getOwner() == idCreator) || (RlvUtil::isNearbyAgent(idCreator)) )
 				creator_name = RlvStrings::getAnonym(creator_name);
 		}
 // [/RLVa:KB]

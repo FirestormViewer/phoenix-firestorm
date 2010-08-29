@@ -361,12 +361,12 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 		// NOTE-RLVa: we can only filter the *message* here since most everything else will already be part of "args" as well
 		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) && (!tmp_chat.mRlvLocFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
 		{
-			gRlvHandler.filterLocation(tmp_chat.mText);
+			RlvUtil::filterLocation(tmp_chat.mText);
 			tmp_chat.mRlvLocFiltered = TRUE;
 		}
 		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!tmp_chat.mRlvNamesFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
 		{
-			gRlvHandler.filterNames(tmp_chat.mText);
+			RlvUtil::filterNames(tmp_chat.mText);
 			tmp_chat.mRlvNamesFiltered = TRUE;
 		}
 	}

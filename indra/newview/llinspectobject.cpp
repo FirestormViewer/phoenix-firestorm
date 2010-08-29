@@ -488,7 +488,7 @@ void LLInspectObject::updateCreator(LLSelectNode* nodep)
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
 		// Only anonimize the creator if they're also the owner or if they're a nearby avie
 		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) &&
-			 ((nodep->mPermissions->getOwner() == creator_id) || (RlvHandler::isNearbyAgent(creator_id))) )
+			 ((nodep->mPermissions->getOwner() == creator_id) || (RlvUtil::isNearbyAgent(creator_id))) )
 		{
 			// TODO-RLVa: [RLVa-1.2.2] We need to put a callback here in case the name hasn't previously resolved
 			std::string strFullName;
