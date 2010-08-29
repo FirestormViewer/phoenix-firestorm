@@ -68,21 +68,21 @@
 // Version of the specifcation we support
 const S32 RLV_VERSION_MAJOR = 2;
 const S32 RLV_VERSION_MINOR = 1;
-const S32 RLV_VERSION_PATCH = 0;
+const S32 RLV_VERSION_PATCH = 2;
 const S32 RLV_VERSION_BUILD = 0;
 
 // Implementation version
 const S32 RLVa_VERSION_MAJOR = 1;
 const S32 RLVa_VERSION_MINOR = 2;
 const S32 RLVa_VERSION_PATCH = 1;
-const S32 RLVa_VERSION_BUILD = 1;
+const S32 RLVa_VERSION_BUILD = 2;
 
 // Uncomment before a final release
 //#define RLV_RELEASE
 
 // The official viewer version we're patching against
 #define RLV_MAKE_TARGET(x, y, z)	((x << 16) | (y << 8) | z)
-#define RLV_TARGET					RLV_MAKE_TARGET(2, 0, 2)
+#define RLV_TARGET					RLV_MAKE_TARGET(2, 1, 2)
 
 // Defining these makes it easier if we ever need to change our tag
 #define RLV_WARNS		LL_WARNS("RLV")
