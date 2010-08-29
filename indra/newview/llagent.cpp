@@ -3403,7 +3403,7 @@ void LLAgent::teleportCancel()
 void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 {
 // [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.2.0c) | Modified: RLVa-1.2.0a
-	if (rlv_handler_t::isEnabled()) 
+	if ( (rlv_handler_t::isEnabled()) && (!RlvUtil::isForceTp()) )
 	{
 		// If we're getting teleported due to @tpto we should disregard any @tploc=n or @unsit=n restrictions from the same object
 		if ( (gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOC, gRlvHandler.getCurrentObject())) ||

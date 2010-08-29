@@ -3768,6 +3768,18 @@ void handle_object_sit_or_stand()
 		 ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canSit(object, pick.mObjectOffset))) )
 // [/RLVa:KB]
 	{
+// [RLVa:KB] - Checked: 2010-08-29 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_STANDTP)) && (isAgentAvatarValid()) )
+		{
+			if (gAgentAvatarp->isSitting())
+			{
+				gAgent.standUp();
+				return;
+			}
+			gRlvHandler.setSitSource(gAgent.getPositionGlobal());
+		}
+// [/RLVa:KB]
+
 		gMessageSystem->newMessageFast(_PREHASH_AgentRequestSit);
 		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());

@@ -107,7 +107,7 @@ static bool rlvParseNotifyOption(const std::string& strOption, S32& nChannel, st
 //
 
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.0.1d
-RlvHandler::RlvHandler() : m_fCanCancelTp(true), m_pGCTimer(NULL), m_pWLSnapshot(NULL)
+RlvHandler::RlvHandler() : m_fCanCancelTp(true), m_posSitSource(), m_pGCTimer(NULL), m_pWLSnapshot(NULL)
 {
 	// Array auto-initialization to 0 is non-standard? (Compiler warning in VC-8.0)
 	memset(m_Behaviours, 0, sizeof(S16) * RLV_BHVR_COUNT);
@@ -384,6 +384,23 @@ ERlvCmdRet RlvHandler::processClearCommand(const LLUUID& idObj, const RlvCommand
 // ============================================================================
 // Externally invoked event handlers
 //
+
+// Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
+void RlvHandler::onSitOrStand(bool fSitting)
+{
+	#ifdef RLV_EXTENSION_STARTLOCATION
+	if (rlv_handler_t::isEnabled())
+	{
+		RlvSettings::updateLoginLastLocation();
+	}
+	#endif // RLV_EXTENSION_STARTLOCATION
+
+	if ( (hasBehaviour(RLV_BHVR_STANDTP)) && (!fSitting) && (!m_posSitSource.isExactlyZero()) )
+	{
+		RlvUtil::forceTp(m_posSitSource);
+		m_posSitSource.setZero();
+	}
+}
 
 // Checked: 2010-03-11 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
 void RlvHandler::onAttach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt)
@@ -1100,6 +1117,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const LLUUID& idObj, const RlvComman
 		case RLV_BHVR_SHOWHOVERTEXTHUD:		// @showhovertexthud=n|y			- Checked: 2010-03-27 (RLVa-1.2.0b)
 		case RLV_BHVR_SHOWHOVERTEXTWORLD:	// @showhovertextworld=n|y			- Checked: 2010-03-27 (RLVa-1.2.0b)
 		case RLV_BHVR_SHOWHOVERTEXTALL:		// @showhovertextall=n|y			- Checked: 2010-03-27 (RLVa-1.2.0b)
+		case RLV_BHVR_STANDTP:				// @standtp=n|y						- Checked: 2010-08-29 (RLVa-1.2.1c)
 		case RLV_BHVR_TPLM:					// @tplm=n|y						- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
 		case RLV_BHVR_TPLOC:				// @tploc=n|y						- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
 		case RLV_BHVR_VIEWNOTE:				// @viewnote=n|y					- Checked: 2010-03-27 (RLVa-1.2.0b)
@@ -1464,6 +1482,12 @@ ERlvCmdRet RlvHandler::onForceSit(const LLUUID& idObj, const RlvCommand& rlvCmd)
 
 	if (!canSit(pObj))
 		return RLV_RET_FAILED_LOCK;
+	else if ( (hasBehaviour(RLV_BHVR_STANDTP)) && (isAgentAvatarValid()) )
+	{
+		if (gAgentAvatarp->isSitting())
+			return RLV_RET_FAILED_LOCK;
+		m_posSitSource = gAgent.getPositionGlobal();
+	}
 
 	// Copy/paste from handle_sit_or_stand() [see http://wiki.secondlife.com/wiki/AgentRequestSit]
 	gMessageSystem->newMessageFast(_PREHASH_AgentRequestSit);

@@ -86,8 +86,10 @@ public:
 	 */
 public:
 	// Accessors
-	bool getCanCancelTp() const			{ return m_fCanCancelTp; }								// @accepttp and @tpto
-	void setCanCancelTp(bool fAllow)	{ m_fCanCancelTp = fAllow; }							// @accepttp and @tpto
+	bool              getCanCancelTp() const		{ return m_fCanCancelTp; }					// @accepttp and @tpto
+	void              setCanCancelTp(bool fAllow)	{ m_fCanCancelTp = fAllow; }				// @accepttp and @tpto
+	const LLVector3d& getSitSource() const						{ return m_posSitSource; }		// @standtp
+	void              setSitSource(const LLVector3d& posSource)	{ m_posSitSource = posSource; }	// @standtp
 
 	// Command specific helper functions
 	bool canShowHoverText(LLViewerObject* pObj) const;											// @showhovertext* command family
@@ -138,6 +140,7 @@ public:
 	void onDetach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
 	bool onGC();
 	void onLoginComplete();
+	void onSitOrStand(bool fSitting);
 	void onTeleportFailed();
 	void onTeleportFinished(const LLVector3d& posArrival);
 	static void onIdleStartup(void* pParam);
@@ -197,7 +200,8 @@ protected:
 
 	static BOOL			  m_fEnabled;				// Use setEnabled() to toggle this
 
-	bool m_fCanCancelTp;
+	bool                  m_fCanCancelTp;			// @accepttp and @tpto
+	mutable LLVector3d    m_posSitSource;			// @standtp (mutable because onForceXXX handles are all declared as const)
 
 	friend class RlvSharedRootFetcher;				// Fetcher needs access to m_fFetchComplete
 	friend class RlvGCTimer;						// Timer clear its own point at destruction
@@ -241,12 +245,14 @@ inline bool RlvHandler::canSit(LLViewerObject* pObj, const LLVector3& posOffset 
 	// The user can sit on the specified object if:
 	//   - not prevented from sitting
 	//   - not prevented from standing up or not currently sitting
+	//   - not standtp restricted or not currently sitting (if the user is sitting and tried to sit elsewhere the tp would just kick in)
 	//   - [regular sit] not @sittp=n or @fartouch=n restricted or if they clicked on a point within 1.5m of the avie's current position
 	//   - [force sit] not @sittp=n restricted by a *different* object than the one that issued the command or the object is within 1.5m
 	return
 		( (pObj) && (LL_PCODE_VOLUME == pObj->getPCode()) ) &&
 		(!hasBehaviour(RLV_BHVR_SIT)) && 
-		( (!hasBehaviour(RLV_BHVR_UNSIT)) || ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting())) ) &&
+		( ((!hasBehaviour(RLV_BHVR_UNSIT)) && (!hasBehaviour(RLV_BHVR_STANDTP))) || 
+		  ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting())) ) &&
 		( ((NULL == getCurrentCommand() || (RLV_BHVR_SIT != getCurrentCommand()->getBehaviourType()))
 			? ((!hasBehaviour(RLV_BHVR_SITTP)) && (!hasBehaviour(RLV_BHVR_FARTOUCH)))	// [regular sit]
 			: (!hasBehaviourExcept(RLV_BHVR_SITTP, getCurrentObject()))) ||				// [force sit]

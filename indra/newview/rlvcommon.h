@@ -129,12 +129,18 @@ public:
 	static void filterLocation(std::string& strUTF8Text);					// @showloc
 	static void filterNames(std::string& strUTF8Text);						// @shownames
 
+	static bool isForceTp()	{ return m_fForceTp; }
+	static void forceTp(const LLVector3d& posDest);							// Ignores restrictions that might otherwise prevent tp'ing
+
 	static void notifyFailedAssertion(const char* pstrAssert, const char* pstrFile, int nLine);
 
 	static void sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession = LLUUID::null);
 	static bool isValidReplyChannel(S32 nChannel);
 	static bool sendChatReply(S32 nChannel, const std::string& strUTF8Text);
 	static bool sendChatReply(const std::string& strChannel, const std::string& strUTF8Text);
+
+protected:
+	static bool m_fForceTp;													// @standtp
 };
 
 // ============================================================================

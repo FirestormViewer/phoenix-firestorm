@@ -5753,13 +5753,11 @@ void LLVOAvatar::sitDown(BOOL bSitting)
 		// Update Movement Controls according to own Sitting mode
 		LLFloaterMove::setSittingMode(bSitting);
 
-// [RLVa:KB] - Checked: 2010-04-01 (RLVa-1.2.0c) | Added: RLVa-0.2.1d
-		#ifdef RLV_EXTENSION_STARTLOCATION
+// [RLVa:KB] - Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 		if (rlv_handler_t::isEnabled())
 		{
-			RlvSettings::updateLoginLastLocation();
+			gRlvHandler.onSitOrStand(bSitting);
 		}
-		#endif // RLV_EXTENSION_STARTLOCATION
 // [/RLVa:KB]
 	}
 }

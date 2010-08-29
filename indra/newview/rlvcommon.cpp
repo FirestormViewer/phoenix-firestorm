@@ -330,6 +330,8 @@ bool RlvStrings::hasString(const std::string& strStringName)
 // RlvUtil
 //
 
+bool RlvUtil::m_fForceTp = false;
+
 // Checked: 2009-07-04 (RLVa-1.0.0a) | Modified: RLVa-1.0.0a
 void RlvUtil::filterLocation(std::string& strUTF8Text)
 {
@@ -361,6 +363,14 @@ void RlvUtil::filterNames(std::string& strUTF8Text)
 		if (gCacheName->getFullName(idAgents[idxAgent], strFullName))
 			rlvStringReplace(strUTF8Text, strFullName, RlvStrings::getAnonym(strFullName));
 	}
+}
+
+// Checked: 2010-08-29 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+void RlvUtil::forceTp(const LLVector3d &posDest)
+{
+	m_fForceTp = true;
+	gAgent.teleportViaLocation(posDest);
+	m_fForceTp = false;
 }
 
 // Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
