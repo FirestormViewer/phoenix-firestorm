@@ -156,6 +156,21 @@ protected:
 	boost::variant<LLViewerJointAttachment*, ERlvAttachGroupType, LLViewerInventoryCategory*, std::string, LLUUID, LLWearableType::EType> m_varOption;
 };
 
+class RlvCommandOptionGetPath : public RlvCommandOption
+{
+public:
+	RlvCommandOptionGetPath(const RlvCommand& rlvCmd);
+	/*virtual*/ ~RlvCommandOptionGetPath() {}
+
+	/*virtual*/ bool  isEmpty() const	 { return m_idItems.empty(); }
+	/*virtual*/ bool  isValid() const	 { return m_fValid; }
+	const uuid_vec_t& getItemIDs() const { return m_idItems; }
+
+protected:
+	bool       m_fValid;
+	uuid_vec_t m_idItems;
+};
+
 // ============================================================================
 // RlvObject
 //

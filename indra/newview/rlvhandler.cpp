@@ -1277,7 +1277,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const LLUUID& idObj, const RlvCommand
 	ERlvCmdRet eRet = RLV_RET_SUCCESS;
 	switch (rlvCmd.getBehaviourType())
 	{
-		case RLV_BHVR_DETACH:		// @detach[:<option>]=force		- Checked: 2009-12-21 (RLVa-1.1.0k) | Modified: RLVa-1.1.0j
+		case RLV_BHVR_DETACH:		// @detach[:<option>]=force				- Checked: 2009-12-21 (RLVa-1.1.0k) | Modified: RLVa-1.1.0j
 			eRet = onForceRemAttach(idObj, rlvCmd);
 			if (RLV_RET_SUCCESS != eRet)
 				eRet = onForceWear(rlvCmd.getOption(), false, false);
@@ -1288,7 +1288,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const LLUUID& idObj, const RlvCommand
 		case RLV_BHVR_REMOUTFIT:	// @remoutfit[:<option>]=force
 			eRet = onForceRemOutfit(idObj, rlvCmd);
 			break;
-		case RLV_BHVR_UNSIT:		// @unsit=force					- Checked: 2010-03-18 (RLVa-1.2.0c) | Modified: RLVa-0.2.0g
+		case RLV_BHVR_UNSIT:		// @unsit=force							- Checked: 2010-03-18 (RLVa-1.2.0c) | Modified: RLVa-0.2.0g
 			{
 				VERIFY_OPTION(rlvCmd.getOption().empty());
 				if ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && (!hasBehaviourExcept(RLV_BHVR_UNSIT, idObj)) )
@@ -1301,7 +1301,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const LLUUID& idObj, const RlvCommand
 		case RLV_BHVR_SIT:			// @sit:<option>=force
 			eRet = onForceSit(idObj, rlvCmd);
 			break;
-		case RLV_BHVR_TPTO:			// @tpto:<option>=force			- Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.0.0h
+		case RLV_BHVR_TPTO:			// @tpto:<option>=force					- Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.0.0h
 			{
 				eRet = RLV_RET_FAILED_OPTION;
 				if ( (!rlvCmd.getOption().empty()) && (std::string::npos == rlvCmd.getOption().find_first_not_of("0123456789/.")) )
@@ -1324,31 +1324,52 @@ ERlvCmdRet RlvHandler::processForceCommand(const LLUUID& idObj, const RlvCommand
 			}
 			break;
 		case RLV_BHVR_ADDOUTFIT:	// @addoutfit:<option>=force <- synonym of @attach:<option>=force
-		case RLV_BHVR_ATTACH:		// @attach:<option>=force
-			eRet = onForceWear(rlvCmd.getOption(), true, false);	// Force attach single folder
-			break;
-		case RLV_BHVR_ATTACHALL:	// @attachall:<option>=force
-			eRet = onForceWear(rlvCmd.getOption(), true, true);		// Force attach nested folders
-			break;
-		case RLV_BHVR_DETACHALL:	// @detachall:<option>=force
-			eRet = onForceWear(rlvCmd.getOption(), false, true);	// Force detach nested folders
-			break;
-		case RLV_BHVR_ATTACHTHIS:	// @attachthis[:<option>]=force
-		case RLV_BHVR_ATTACHALLTHIS:// @attachallthis[:<option>]=force
-		case RLV_BHVR_DETACHTHIS:	// @detachthis[:<option>]=force
-		case RLV_BHVR_DETACHALLTHIS:// @detachallthis[:<option>]=force
+		case RLV_BHVR_ATTACH:		// @attach:<option>=force				- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 			{
-				ERlvBehaviour eBehaviour = rlvCmd.getBehaviourType(); std::string strReply;
-				if ( ((eRet = onGetPath(idObj, rlvCmd, strReply)) == RLV_RET_SUCCESS) && (!strReply.empty()) )
+				RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+				VERIFY_OPTION(rlvCmdOption.isSharedFolder());
+
+				eRet = onForceWear(rlvCmdOption.getSharedFolder(), true, false);	// Force attach single folder
+			}
+			break;
+		case RLV_BHVR_ATTACHALL:	// @attachall:<option>=force			- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
+			{
+				RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+				VERIFY_OPTION(rlvCmdOption.isSharedFolder());
+
+				eRet = onForceWear(rlvCmdOption.getSharedFolder(), true, true);		// Force attach nested folders
+			}
+			break;
+		case RLV_BHVR_DETACHALL:	// @detachall:<option>=force			- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
+			{
+				RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+				VERIFY_OPTION(rlvCmdOption.isSharedFolder());
+
+				eRet = onForceWear(rlvCmdOption.getSharedFolder(), false, true);	// Force detach nested folders
+			}
+			break;
+		case RLV_BHVR_ATTACHTHIS:	// @attachthis[:<option>]=force			- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
+		case RLV_BHVR_ATTACHALLTHIS:// @attachallthis[:<option>]=force		- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
+		case RLV_BHVR_DETACHTHIS:	// @detachthis[:<option>]=force			- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
+		case RLV_BHVR_DETACHALLTHIS:// @detachallthis[:<option>]=force		- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
+			{
+				RlvCommandOptionGetPath rlvGetPathOption(rlvCmd);
+				VERIFY_OPTION(rlvGetPathOption.isValid());
+
+				LLInventoryModel::cat_array_t folders;
+				if (RlvInventory::instance().getPath(rlvGetPathOption.getItemIDs(), folders))
 				{
-					LLStringUtil::toLower(strReply);
-					eRet = onForceWear(strReply, 
-						(RLV_BHVR_ATTACHTHIS == eBehaviour) || (RLV_BHVR_ATTACHALLTHIS == eBehaviour), 
-						(RLV_BHVR_ATTACHALLTHIS == eBehaviour) || (RLV_BHVR_DETACHALLTHIS == eBehaviour));
+					ERlvBehaviour eBehaviour = rlvCmd.getBehaviourType();
+					for (S32 idxFolder = 0, cntFolder = folders.count(); idxFolder < cntFolder; idxFolder++)
+					{
+						onForceWear(folders.get(idxFolder), 
+							(RLV_BHVR_ATTACHTHIS == eBehaviour) || (RLV_BHVR_ATTACHALLTHIS == eBehaviour), 
+							(RLV_BHVR_ATTACHALLTHIS == eBehaviour) || (RLV_BHVR_DETACHALLTHIS == eBehaviour));
+					}
 				}
 			}
 			break;
-		case RLV_BHVR_DETACHME:		// @detachme=force				- Checked: 2010-04-04 (RLVa-1.2.0c) | Modified: RLVa-1.2.0c
+		case RLV_BHVR_DETACHME:		// @detachme=force						- Checked: 2010-04-04 (RLVa-1.2.0c) | Modified: RLVa-1.2.0c
 			{
 				VERIFY_OPTION(rlvCmd.getOption().empty());
 				// NOTE: @detachme should respect locks but shouldn't respect things like nostrip
@@ -1466,6 +1487,18 @@ ERlvCmdRet RlvHandler::onForceWear(const std::string& strPath, bool fAttach, boo
 	const LLViewerInventoryCategory* pFolder = (pRlvRoot) ? RlvInventory::instance().getSharedFolder(strPath) : NULL;
 	if ( (!pFolder)	|| (pFolder->getUUID() == pRlvRoot->getUUID()) )
 		return (pRlvRoot != NULL) ? RLV_RET_FAILED_OPTION : RLV_RET_FAILED_NOSHAREDROOT;
+
+	RlvForceWear::instance().forceFolder(pFolder, 
+		(fAttach) ? RlvForceWear::ACTION_ATTACH : RlvForceWear::ACTION_DETACH, 
+		(fMatchAll) ? (RlvForceWear::eWearFlags)(RlvForceWear::FLAG_DEFAULT | RlvForceWear::FLAG_MATCHALL) : (RlvForceWear::FLAG_DEFAULT));
+	return RLV_RET_SUCCESS;
+}
+
+// Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
+ERlvCmdRet RlvHandler::onForceWear(const LLViewerInventoryCategory* pFolder, bool fAttach, bool fMatchAll) const
+{
+	if ( (pFolder) && (!RlvInventory::instance().isSharedFolder(pFolder->getUUID())) )
+		return RLV_RET_FAILED_OPTION;
 
 	RlvForceWear::instance().forceFolder(pFolder, 
 		(fAttach) ? RlvForceWear::ACTION_ATTACH : RlvForceWear::ACTION_DETACH, 
@@ -1889,64 +1922,33 @@ ERlvCmdRet RlvHandler::onGetOutfitNames(const LLUUID& idObj, const RlvCommand& r
 	return RLV_RET_SUCCESS;
 }
 
-// Checked: 2010-08-10 (RLVa-1.2.0i) | Modified: RLVa-1.2.0i
+// Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 ERlvCmdRet RlvHandler::onGetPath(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const
 {
-	// NOTE: @attachthis/attachallthis/detachthis/detachallthis call us directly to simulate @attach:getpath[:<option>]=force
+	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
+	RLV_ASSERT( (RLV_BHVR_GETPATH == rlvCmd.getBehaviourType()) || (RLV_BHVR_GETPATHNEW == rlvCmd.getBehaviourType()) ); 
 
-	// Sanity check - no need to go through all this trouble if we don't have a shared root
-	const LLViewerInventoryCategory* pRlvRoot = RlvInventory::instance().getSharedRoot();
-	if (!pRlvRoot)
-		return RLV_RET_FAILED_NOSHAREDROOT;
+	RlvCommandOptionGetPath rlvGetPathOption(rlvCmd);
+	if (!rlvGetPathOption.isValid())
+		return RLV_RET_FAILED_OPTION;
 
-	LLWearableType::EType wtType = LLWearableType::typeNameToType(rlvCmd.getOption()); uuid_vec_t idItems;
-	if (LLWearableType::WT_INVALID != wtType)		// <option> can be a clothing layer
+	LLInventoryModel::cat_array_t folders;
+	if (RlvInventory::instance().getPath(rlvGetPathOption.getItemIDs(), folders))
 	{
-		for (S32 idxWearable = 0, cntWearable = gAgentWearables.getWearableCount(wtType); idxWearable < cntWearable; idxWearable++)
-			idItems.push_back(gAgentWearables.getWearableItemID(wtType, idxWearable));
-	}
-	else if (rlvCmd.getOption().empty())			// ... or it can be empty (in which case we act on the object that issued the command)
-	{
-		const LLViewerObject* pObj = gObjectList.findObject(idObj);
-		if ( (!pObj) || (!pObj->isAttachment()) )
-			idItems.push_back(pObj->getAttachmentItemID());
-	}
-	else											// ... or it can specify an attachment point
-	{
-		const LLViewerJointAttachment* pAttachPt = RlvAttachPtLookup::getAttachPoint(rlvCmd.getOption());
-		if (pAttachPt)
+		if (RLV_BHVR_GETPATH == rlvCmd.getBehaviourType())
 		{
-			for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator itAttachObj = pAttachPt->mAttachedObjects.begin();
-					itAttachObj != pAttachPt->mAttachedObjects.end(); ++itAttachObj)
+			strReply = RlvInventory::instance().getSharedPath(folders.get(0));
+		}
+		else if (RLV_BHVR_GETPATHNEW == rlvCmd.getBehaviourType())
+		{
+			for (S32 idxFolder = 0, cntFolder = folders.count(); idxFolder < cntFolder; idxFolder++)
 			{
-				idItems.push_back((*itAttachObj)->getAttachmentItemID());
+				if (!strReply.empty())
+					strReply.push_back(',');
+				strReply += RlvInventory::instance().getSharedPath(folders.get(idxFolder));
 			}
 		}
 	}
-
-	// If we found something get its inventory item UUID, otherwise return failure
-	if (0 == idItems.size())
-		return RLV_RET_FAILED_OPTION;
-
-	// If what we found is under the shared root then get its path
-	for (uuid_vec_t::const_iterator itItem = idItems.begin(); itItem != idItems.end(); ++itItem)
-	{
-		const LLInventoryItem* pItem = gInventory.getItem(*itItem);
-		if ( (pItem) && (gInventory.isObjectDescendentOf(pItem->getUUID(), pRlvRoot->getUUID())) )
-		{
-			// (unless the containing folder is a folded folder in which case we need its parent)
-			const LLViewerInventoryCategory* pFolder = gInventory.getCategory(pItem->getParentUUID());
-			if (!strReply.empty())
-				strReply.push_back(',');
-			strReply += RlvInventory::instance().getSharedPath( 
-				(!RlvInventory::instance().isFoldedFolder(pFolder, true)) ? pFolder : gInventory.getCategory(pFolder->getParentUUID()) );
-
-			// Break after the first result for anything but @getpathnew
-			if ( (!strReply.empty()) && (RLV_BHVR_GETPATHNEW != rlvCmd.getBehaviourType()) )
-				break;
-		}
-	}
-
 	return RLV_RET_SUCCESS;
 }
 

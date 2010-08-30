@@ -39,8 +39,10 @@ protected:
 	 * #RLV Shared inventory
 	 */
 public:
-	// Find all folders that match a supplied criteria (clears the supplied array)
+	// Find all folders that match a supplied criteria (clears the output array)
 	bool                       findSharedFolders(const std::string& strCriteria, LLInventoryModel::cat_array_t& folders) const;
+	// Gets the shared path for any shared items present in idItems (clears the output array)
+	bool                       getPath(const uuid_vec_t& idItems, LLInventoryModel::cat_array_t& folders) const;
 	// Returns a pointer to the shared root folder (if there is one)
 	LLViewerInventoryCategory* getSharedRoot() const;
 	// Returns a subfolder of idParent that starts with strFolderName (exact match > partial match)
@@ -49,6 +51,8 @@ public:
 	LLViewerInventoryCategory* getSharedFolder(const std::string& strPath) const;
 	// Returns the path of the supplied folder (relative to the shared root)
 	std::string                getSharedPath(const LLViewerInventoryCategory* pFolder) const;
+	// Returns TRUE if the supplied folder is a descendent of the #RLV folder
+	bool                       isSharedFolder(const LLUUID& idFolder);
 
 	/*
 	 * Inventory fetching
@@ -238,6 +242,13 @@ inline bool RlvInventory::isFoldedFolder(const LLInventoryCategory* pFolder, boo
 		     (pFolder) && (RLV_FOLDER_PREFIX_HIDDEN == pFolder->getName().at(0)) && (isCompositeFolder(pFolder)) )
 		#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	  );
+}
+
+// Checked: 2010-08-29 (RLVa-1.2.0c) | Added: RLVa-1.2.0c
+inline bool RlvInventory::isSharedFolder(const LLUUID& idFolder)
+{
+	const LLViewerInventoryCategory* pRlvRoot = getSharedRoot();
+	return (pRlvRoot) ? (pRlvRoot->getUUID() != idFolder) && (gInventory.isObjectDescendentOf(idFolder, pRlvRoot->getUUID())) : false;
 }
 
 // ============================================================================

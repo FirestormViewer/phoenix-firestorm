@@ -163,6 +163,7 @@ protected:
 	ERlvCmdRet onForceRemOutfit(const LLUUID& idObj, const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceSit(const LLUUID& idObj, const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceWear(const std::string& strPath, bool fAttach, bool fMatchAll) const;
+	ERlvCmdRet onForceWear(const LLViewerInventoryCategory* pFolder, bool fAttach, bool fMatchAll) const;
 	// Command handlers (RLV_TYPE_REPLY)
 	ERlvCmdRet processReplyCommand(const LLUUID& idObj, const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onFindFolder(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const;

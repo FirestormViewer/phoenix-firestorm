@@ -186,6 +186,31 @@ bool RlvInventory::findSharedFolders(const std::string& strCriteria, LLInventory
 	return (folders.count() != 0);
 }
 
+// Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
+bool RlvInventory::getPath(const uuid_vec_t& idItems, LLInventoryModel::cat_array_t& folders) const
+{
+	// Sanity check - can't do anything without a shared root
+	const LLViewerInventoryCategory* pRlvRoot = RlvInventory::instance().getSharedRoot();
+	if (!pRlvRoot)
+		return false;
+
+	folders.clear();
+	for (uuid_vec_t::const_iterator itItem = idItems.begin(); itItem != idItems.end(); ++itItem)
+	{
+		const LLInventoryItem* pItem = gInventory.getItem(*itItem);
+		if ( (pItem) && (gInventory.isObjectDescendentOf(pItem->getUUID(), pRlvRoot->getUUID())) )
+		{
+			// If the containing folder is a folded folder we need its parent
+			LLViewerInventoryCategory* pFolder = gInventory.getCategory(pItem->getParentUUID());
+			if (RlvInventory::instance().isFoldedFolder(pFolder, true))
+				pFolder = gInventory.getCategory(pFolder->getParentUUID());
+			folders.push_back(pFolder);
+		}
+	}
+
+	return (folders.count() != 0);
+}
+
 // Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.0.0h
 LLViewerInventoryCategory* RlvInventory::getSharedRoot() const
 {

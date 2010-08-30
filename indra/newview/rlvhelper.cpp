@@ -172,6 +172,40 @@ RlvCommandOptionGeneric::RlvCommandOptionGeneric(const std::string& strOption)
 	}
 }
 
+// Checked: 2010-09-28 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd)
+	: m_fValid(true)							// Assume the option will be a valid one until we find out otherwise
+{
+	// @getpath[:<option>]=<channel> => <option> is transformed to a list of inventory item UUIDs to get the path of
+
+	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+	if (rlvCmdOption.isWearableType())			// <option> can be a clothing layer
+	{
+		LLWearableType::EType wtType = rlvCmdOption.getWearableType();
+		for (S32 idxWearable = 0, cntWearable = gAgentWearables.getWearableCount(wtType); idxWearable < cntWearable; idxWearable++)
+			m_idItems.push_back(gAgentWearables.getWearableItemID(wtType, idxWearable));
+	}
+	else if (rlvCmdOption.isAttachmentPoint())	// ... or it can specify an attachment point
+	{
+		const LLViewerJointAttachment* pAttachPt = rlvCmdOption.getAttachmentPoint();
+		for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator itAttachObj = pAttachPt->mAttachedObjects.begin();
+				itAttachObj != pAttachPt->mAttachedObjects.end(); ++itAttachObj)
+		{
+			m_idItems.push_back((*itAttachObj)->getAttachmentItemID());
+		}
+	}
+	else if (rlvCmdOption.isEmpty())			// ... or it can be empty (in which case we act on the object that issued the command)
+	{
+		const LLViewerObject* pObj = gObjectList.findObject(rlvCmd.getObjectID());
+		if ( (pObj) || (pObj->isAttachment()) )
+			m_idItems.push_back(pObj->getAttachmentItemID());
+	}
+	else										// ... but anything else isn't a valid option
+	{
+		m_fValid = false;
+	}
+}
+
 // =========================================================================
 // RlvObject
 //
