@@ -218,11 +218,12 @@ protected:
 
 public:
 	// Folders
-	enum eWearAction { ACTION_ATTACH, ACTION_DETACH };
-	enum eWearFlags { FLAG_NONE = 0x00, FLAG_MATCHALL = 0x01, FLAG_DEFAULT = FLAG_NONE };
-	void forceFolder(const LLViewerInventoryCategory* pFolder, eWearAction eAction, eWearFlags eFlags);
+	enum EWearAction { ACTION_WEAR_REPLACE, ACTION_WEAR_ADD, ACTION_REMOVE };
+	enum EWearFlags { FLAG_NONE = 0x00, FLAG_MATCHALL = 0x01, FLAG_DEFAULT = FLAG_NONE };
+	void forceFolder(const LLViewerInventoryCategory* pFolder, EWearAction eAction, EWearFlags eFlags);
 
 	// Generic
+	static bool isWearAction(EWearAction eAction) { return (ACTION_WEAR_REPLACE == eAction) || (ACTION_WEAR_ADD == eAction); }
 	static bool isWearableItem(const LLInventoryItem* pItem);
 	static bool isWearingItem(const LLInventoryItem* pItem);
 
@@ -245,15 +246,22 @@ public:
 public:
 	void done();
 protected:
-	void addAttachment(const LLViewerInventoryItem* pItem);
+	void addAttachment(const LLViewerInventoryItem* pItem, EWearAction eAction);
 	void remAttachment(const LLViewerObject* pAttachObj);
-	void addWearable(const LLViewerInventoryItem* pItem);
+	void addWearable(const LLViewerInventoryItem* pItem, EWearAction eAction);
 	void remWearable(const LLWearable* pWearable);
 
 	// Convenience (prevents long lines that run off the screen elsewhere)
 	bool isAddAttachment(const LLViewerInventoryItem* pItem) const
 	{
-		return std::find_if(m_addAttachments.begin(), m_addAttachments.end(), RlvPredIsEqualOrLinkedItem(pItem)) != m_addAttachments.end();
+		bool fFound = false;
+		for (addattachments_map_t::const_iterator itAddAttachments = m_addAttachments.begin(); 
+				(!fFound) && (itAddAttachments != m_addAttachments.end()); ++itAddAttachments)
+		{
+			const LLInventoryModel::item_array_t& wearItems = itAddAttachments->second;
+			fFound = (std::find_if(wearItems.begin(), wearItems.end(), RlvPredIsEqualOrLinkedItem(pItem)) != wearItems.end());
+		}
+		return fFound;
 	}
 	bool isRemAttachment(const LLViewerObject* pAttachObj) const
 	{
@@ -261,7 +269,14 @@ protected:
 	}
 	bool isAddWearable(const LLViewerInventoryItem* pItem) const
 	{
-		return std::find_if(m_addWearables.begin(), m_addWearables.end(), RlvPredIsEqualOrLinkedItem(pItem)) != m_addWearables.end();
+		bool fFound = false;
+		for (addwearables_map_t::const_iterator itAddWearables = m_addWearables.begin(); 
+				(!fFound) && (itAddWearables != m_addWearables.end()); ++itAddWearables)
+		{
+			const LLInventoryModel::item_array_t& wearItems = itAddWearables->second;
+			fFound = (std::find_if(wearItems.begin(), wearItems.end(), RlvPredIsEqualOrLinkedItem(pItem)) != wearItems.end());
+		}
+		return fFound;
 	}
 	bool isRemWearable(const LLWearable* pWearable) const
 	{
@@ -269,9 +284,16 @@ protected:
 	}
 
 protected:
-	LLInventoryModel::item_array_t m_addAttachments, m_addWearables, m_addGestures, m_remGestures;
+	typedef std::pair<LLWearableType::EType, LLInventoryModel::item_array_t> addwearable_pair_t;
+	typedef std::map<LLWearableType::EType, LLInventoryModel::item_array_t> addwearables_map_t;
+	addwearables_map_t               m_addWearables;
+	typedef std::pair<S32, LLInventoryModel::item_array_t> addattachment_pair_t;
+	typedef std::map<S32, LLInventoryModel::item_array_t> addattachments_map_t;
+	addattachments_map_t             m_addAttachments;
+	LLInventoryModel::item_array_t   m_addGestures;
 	std::list<const LLViewerObject*> m_remAttachments;
-	std::list<const LLWearable*> m_remWearables;
+	std::list<const LLWearable*>     m_remWearables;
+	LLInventoryModel::item_array_t   m_remGestures;
 
 private:
 	friend class LLSingleton<RlvForceWear>;

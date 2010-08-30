@@ -162,8 +162,7 @@ protected:
 	ERlvCmdRet onForceRemAttach(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceRemOutfit(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceSit(const RlvCommand& rlvCmd) const;
-	ERlvCmdRet onForceWear(const std::string& strPath, bool fAttach, bool fMatchAll) const;
-	ERlvCmdRet onForceWear(const LLViewerInventoryCategory* pFolder, bool fAttach, bool fMatchAll) const;
+	ERlvCmdRet onForceWear(const LLViewerInventoryCategory* pFolder, ERlvBehaviour eBhvr) const;
 	// Command handlers (RLV_TYPE_REPLY)
 	ERlvCmdRet processReplyCommand(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onFindFolder(const RlvCommand& rlvCmd, std::string& strReply) const;

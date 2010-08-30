@@ -1490,15 +1490,14 @@ void LLAppearanceMgr::updateCOF(const LLUUID& category, bool append)
 	getDescendentsOfAssetType(category, wear_items_new, LLAssetType::AT_CLOTHING, false);
 	getDescendentsOfAssetType(category, obj_items_new, LLAssetType::AT_OBJECT, false);
 	getDescendentsOfAssetType(category, gest_items_new, LLAssetType::AT_GESTURE, false);
-	updateCOF(body_items_new, wear_items_new, obj_items_new, gest_items_new, append, LLAgentWearables::MAX_CLOTHING_PER_TYPE, category);
+	updateCOF(body_items_new, wear_items_new, obj_items_new, gest_items_new, append, category);
 }
 
 void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new, 
 								LLInventoryModel::item_array_t& wear_items_new, 
 								LLInventoryModel::item_array_t& obj_items_new,
 								LLInventoryModel::item_array_t& gest_items_new,
-								bool append /*=false*/, U32 cntMaxPerType /*=LLAgentWearables::MAX_CLOTHING_PER_TYPE*/,
-								const LLUUID& idOutfit /*=LLUUID::null*/)
+								bool append /*=false*/, const LLUUID& idOutfit /*=LLUUID::null*/)
 // [/RLVa:KB]
 {
 //	LLViewerInventoryCategory *pcat = gInventory.getCategory(category);
@@ -1569,10 +1568,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 // [/RLVa:KB]
 	// Reduce wearables to max of one per type.
 	removeDuplicateItems(wear_items);
-//	filterWearableItems(wear_items, LLAgentWearables::MAX_CLOTHING_PER_TYPE);
-// [RLVa:KB] - Checked: 2010-08-09 (RLVa-1.2.0i) | Added: RLVa-1.2.0i
-	filterWearableItems(wear_items, cntMaxPerType);
-// [/RLVa:KB]
+	filterWearableItems(wear_items, LLAgentWearables::MAX_CLOTHING_PER_TYPE);
 
 	//
 	// - Attachments: include COF contents only if appending.

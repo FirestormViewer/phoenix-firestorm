@@ -59,7 +59,6 @@
 
 // Workarounds
 #define RLV_WORKAROUND_REZMULTIPLEATTACH	// See http://jira.secondlife.com/browse/SVC-5383 ; disables "Shared Wear"
-#define RLV_WORKAROUND_SHAREDINVREPLACE		// Keeps shared inventory working the way it did before multi-wearables/multi-attachments
 
 // ============================================================================
 // Defines
