@@ -125,14 +125,14 @@ public:
 	typedef boost::signals2::signal<void (ERlvBehaviour, ERlvParamType)> rlv_behaviour_signal_t;
 	boost::signals2::connection setBehaviourCallback(const rlv_behaviour_signal_t::slot_type& cb ) { return m_OnBehaviour.connect(cb); }
 	// The command signal is triggered whenever a command is processed
-	typedef boost::signals2::signal<void (const LLUUID&, const RlvCommand&, ERlvCmdRet, bool)> rlv_command_signal_t;
+	typedef boost::signals2::signal<void (const RlvCommand&, ERlvCmdRet, bool)> rlv_command_signal_t;
 	boost::signals2::connection setCommandCallback(const rlv_command_signal_t::slot_type& cb ) { return m_OnCommand.connect(cb); }
 
 	void addCommandHandler(RlvCommandHandler* pHandler);
 	void removeCommandHandler(RlvCommandHandler* pHandler);
 protected:
 	void clearCommandHandlers();
-	bool notifyCommandHandlers(rlvCommandHandler f, const LLUUID& idObj, const RlvCommand& rlvCmd, ERlvCmdRet& eRet, bool fNotifyAll) const;
+	bool notifyCommandHandlers(rlvCommandHandler f, const RlvCommand& rlvCmd, ERlvCmdRet& eRet, bool fNotifyAll) const;
 
 	// Externally invoked event handlers
 public:
@@ -149,31 +149,31 @@ public:
 	 * Command processing
 	 */
 protected:
-	ERlvCmdRet processCommand(const LLUUID& idObj, const RlvCommand& rlvCmd, bool fFromObj);
-	ERlvCmdRet processClearCommand(const LLUUID& idObj, const RlvCommand& rlvCmd);
-	ERlvCmdRet processForceCommand(const LLUUID& idObj, const RlvCommand& rlvCmd) const;
+	ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool fFromObj);
+	ERlvCmdRet processClearCommand(const RlvCommand& rlvCmd);
 
 	// Command handlers (RLV_TYPE_ADD and RLV_TYPE_CLEAR)
-	ERlvCmdRet processAddRemCommand(const LLUUID& idObj, const RlvCommand& rlvCmd);
-	ERlvCmdRet onAddRemAttach(const LLUUID& idObj, const RlvCommand& rlvCmd, bool& fRefCount);
-	ERlvCmdRet onAddRemDetach(const LLUUID& idObj, const RlvCommand& rlvCmd, bool& fRefCount);
-	ERlvCmdRet onAddRemSetEnv(const LLUUID& idObj, const RlvCommand& rlvCmd, bool& fRefCount);
+	ERlvCmdRet processAddRemCommand(const RlvCommand& rlvCmd);
+	ERlvCmdRet onAddRemAttach(const RlvCommand& rlvCmd, bool& fRefCount);
+	ERlvCmdRet onAddRemDetach(const RlvCommand& rlvCmd, bool& fRefCount);
+	ERlvCmdRet onAddRemSetEnv(const RlvCommand& rlvCmd, bool& fRefCount);
 	// Command handlers (RLV_TYPE_FORCE)
-	ERlvCmdRet onForceRemAttach(const LLUUID& idObj, const RlvCommand& rlvCmd) const;
-	ERlvCmdRet onForceRemOutfit(const LLUUID& idObj, const RlvCommand& rlvCmd) const;
-	ERlvCmdRet onForceSit(const LLUUID& idObj, const RlvCommand& rlvCmd) const;
+	ERlvCmdRet processForceCommand(const RlvCommand& rlvCmd) const;
+	ERlvCmdRet onForceRemAttach(const RlvCommand& rlvCmd) const;
+	ERlvCmdRet onForceRemOutfit(const RlvCommand& rlvCmd) const;
+	ERlvCmdRet onForceSit(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceWear(const std::string& strPath, bool fAttach, bool fMatchAll) const;
 	ERlvCmdRet onForceWear(const LLViewerInventoryCategory* pFolder, bool fAttach, bool fMatchAll) const;
 	// Command handlers (RLV_TYPE_REPLY)
-	ERlvCmdRet processReplyCommand(const LLUUID& idObj, const RlvCommand& rlvCmd) const;
-	ERlvCmdRet onFindFolder(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const;
-	ERlvCmdRet onGetAttach(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const;
-	ERlvCmdRet onGetAttachNames(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const;
-	ERlvCmdRet onGetInv(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const;
-	ERlvCmdRet onGetInvWorn(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const;
-	ERlvCmdRet onGetOutfit(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const;
-	ERlvCmdRet onGetOutfitNames(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const;
-	ERlvCmdRet onGetPath(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const;
+	ERlvCmdRet processReplyCommand(const RlvCommand& rlvCmd) const;
+	ERlvCmdRet onFindFolder(const RlvCommand& rlvCmd, std::string& strReply) const;
+	ERlvCmdRet onGetAttach(const RlvCommand& rlvCmd, std::string& strReply) const;
+	ERlvCmdRet onGetAttachNames(const RlvCommand& rlvCmd, std::string& strReply) const;
+	ERlvCmdRet onGetInv(const RlvCommand& rlvCmd, std::string& strReply) const;
+	ERlvCmdRet onGetInvWorn(const RlvCommand& rlvCmd, std::string& strReply) const;
+	ERlvCmdRet onGetOutfit(const RlvCommand& rlvCmd, std::string& strReply) const;
+	ERlvCmdRet onGetOutfitNames(const RlvCommand& rlvCmd, std::string& strReply) const;
+	ERlvCmdRet onGetPath(const RlvCommand& rlvCmd, std::string& strReply) const;
 
 	// --------------------------------
 
@@ -349,7 +349,7 @@ inline ERlvCmdRet RlvHandler::processCommand(const LLUUID& idObj, const std::str
 		m_Retained.push_back(RlvRetainedCommand(idObj, RlvCommand(idObj, strCommand)));
 		return RLV_RET_RETAINED;
 	}
-	return processCommand(idObj, RlvCommand(idObj, strCommand), fFromObj);
+	return processCommand(RlvCommand(idObj, strCommand), fFromObj);
 }
 
 // ============================================================================

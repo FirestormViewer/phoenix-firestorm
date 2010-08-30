@@ -151,12 +151,12 @@ class RlvCommandHandler
 {
 public:
 	virtual ~RlvCommandHandler() {}
-	virtual bool onAddRemCommand(const LLUUID& idObj, const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet) { return false; }
-	virtual bool onClearCommand(const LLUUID& idObj, const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet)  { return false; }
-	virtual bool onReplyCommand(const LLUUID& idObj, const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet)  { return false; }
-	virtual bool onForceCommand(const LLUUID& idObj, const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet)  { return false; }
+	virtual bool onAddRemCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet) { return false; }
+	virtual bool onClearCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet)  { return false; }
+	virtual bool onReplyCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet)  { return false; }
+	virtual bool onForceCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet)  { return false; }
 };
-typedef bool (RlvCommandHandler::*rlvCommandHandler)(const LLUUID& idObj, const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet);
+typedef bool (RlvCommandHandler::*rlvCommandHandler)(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet);
 
 // ============================================================================
 // Generic menu enablers

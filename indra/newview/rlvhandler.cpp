@@ -159,13 +159,13 @@ void RlvHandler::clearCommandHandlers()
 }
 
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
-bool RlvHandler::notifyCommandHandlers(rlvCommandHandler f, const LLUUID& idObj, const RlvCommand& rlvCmd, ERlvCmdRet& eRet, bool fNotifyAll) const
+bool RlvHandler::notifyCommandHandlers(rlvCommandHandler f, const RlvCommand& rlvCmd, ERlvCmdRet& eRet, bool fNotifyAll) const
 {
 	std::list<RlvCommandHandler*>::const_iterator itHandler = m_CommandHandlers.begin(); bool fContinue = true; eRet = RLV_RET_UNKNOWN;
 	while ( (itHandler != m_CommandHandlers.end()) && ((fContinue) || (fNotifyAll)) )
 	{
 		ERlvCmdRet eCmdRet = RLV_RET_UNKNOWN;
-		if ((fContinue = !((*itHandler)->*f)(idObj, rlvCmd, eCmdRet)) == false)
+		if ((fContinue = !((*itHandler)->*f)(rlvCmd, eCmdRet)) == false)
 			eRet = eCmdRet;
 		++itHandler;
 	}
@@ -174,10 +174,10 @@ bool RlvHandler::notifyCommandHandlers(rlvCommandHandler f, const LLUUID& idObj,
 }
 
 // Checked: 2009-11-25 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
-ERlvCmdRet RlvHandler::processCommand(const LLUUID& idObj, const RlvCommand& rlvCmd, bool fFromObj)
+ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 {
 	#ifdef RLV_DEBUG
-		RLV_INFOS << "[" << idObj << "]: " << rlvCmd.asString() << RLV_ENDL;
+		RLV_INFOS << "[" << rlvCmd.getObjectID() << "]: " << rlvCmd.asString() << RLV_ENDL;
 	#endif // RLV_DEBUG
 
 	if (!rlvCmd.isValid())
@@ -191,7 +191,7 @@ ERlvCmdRet RlvHandler::processCommand(const LLUUID& idObj, const RlvCommand& rlv
 	// Using a stack for executing commands solves a few problems:
 	//   - if we passed RlvObject::m_UUID for idObj somewhere and process a @clear then idObj points to invalid/cleared memory at the end
 	//   - if command X triggers command Y along the way then getCurrentCommand()/getCurrentObject() still return Y even when finished
-	m_CurCommandStack.push(&rlvCmd); m_CurObjectStack.push(idObj);
+	m_CurCommandStack.push(&rlvCmd); m_CurObjectStack.push(rlvCmd.getObjectID());
 	const LLUUID& idCurObj = m_CurObjectStack.top();
 
 	ERlvCmdRet eRet = RLV_RET_UNKNOWN;
@@ -230,7 +230,7 @@ ERlvCmdRet RlvHandler::processCommand(const LLUUID& idObj, const RlvCommand& rlv
 				if (fAdded) {	// If FALSE then this was a duplicate, there's no need to handle those
 					if (!m_pGCTimer)
 						m_pGCTimer = new RlvGCTimer();
-					eRet = processAddRemCommand(idCurObj, rlvCmd);
+					eRet = processAddRemCommand(rlvCmd);
 //					notifyBehaviourObservers(rlvCmd, !fFromObj);
 				}
 				else
@@ -251,7 +251,7 @@ ERlvCmdRet RlvHandler::processCommand(const LLUUID& idObj, const RlvCommand& rlv
 				#endif // RLV_DEBUG
 
 				if (fRemoved) {	// Don't handle non-sensical removes
-					eRet = processAddRemCommand(idCurObj, rlvCmd);
+					eRet = processAddRemCommand(rlvCmd);
 //					notifyBehaviourObservers(rlvCmd, !fFromObj);
 
 					if (0 == itObj->second.m_Commands.size())
@@ -269,13 +269,13 @@ ERlvCmdRet RlvHandler::processCommand(const LLUUID& idObj, const RlvCommand& rlv
 			}
 			break;
 		case RLV_TYPE_CLEAR:		// Checked: 2009-11-25 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
-			eRet = processClearCommand(idCurObj, rlvCmd);
+			eRet = processClearCommand(rlvCmd);
 			break;
 		case RLV_TYPE_FORCE:		// Checked: 2009-11-26 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
-			eRet = processForceCommand(idCurObj, rlvCmd);
+			eRet = processForceCommand(rlvCmd);
 			break;
 		case RLV_TYPE_REPLY:		// Checked: 2009-11-25 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
-			eRet = processReplyCommand(idCurObj, rlvCmd);
+			eRet = processReplyCommand(rlvCmd);
 			break;
 		case RLV_TYPE_UNKNOWN:		// Checked: 2009-11-25 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
 		default:
@@ -284,7 +284,7 @@ ERlvCmdRet RlvHandler::processCommand(const LLUUID& idObj, const RlvCommand& rlv
 	}
 	RLV_ASSERT(RLV_RET_UNKNOWN != eRet);
 
-	m_OnCommand(idCurObj, rlvCmd, eRet, !fFromObj);
+	m_OnCommand(rlvCmd, eRet, !fFromObj);
 
 	#ifdef RLV_DEBUG
 		RLV_INFOS << "\t--> command " << ((eRet & RLV_RET_SUCCESS) ? "succeeded" : "failed") << RLV_ENDL;
@@ -306,17 +306,17 @@ void RlvHandler::processRetainedCommands(ERlvBehaviour eBhvrFilter /*=RLV_BHVR_U
 		if ( ((RLV_BHVR_UNKNOWN == eBhvrFilter) || (cmd.rlvCmd.getBehaviourType() == eBhvrFilter)) && 
 		     ((RLV_TYPE_UNKNOWN == eTypeFilter) || (cmd.rlvCmd.getParamType() == eTypeFilter)) )
 		{
-			processCommand(cmd.idObject, cmd.rlvCmd, true);
+			processCommand(cmd.rlvCmd, true);
 			m_Retained.erase(itCurCmd);
 		}
 	}
 }
 
-ERlvCmdRet RlvHandler::processClearCommand(const LLUUID& idObj, const RlvCommand& rlvCmd)
+ERlvCmdRet RlvHandler::processClearCommand(const RlvCommand& rlvCmd)
 {
 	const std::string& strFilter = rlvCmd.getParam(); std::string strCmdRem;
 
-	rlv_object_map_t::const_iterator itObj = m_Objects.find(idObj);
+	rlv_object_map_t::const_iterator itObj = m_Objects.find(rlvCmd.getObjectID());
 	if (itObj != m_Objects.end())	// No sense in clearing if we don't have any commands for this object
 	{
 		const RlvObject& rlvObj = itObj->second; bool fContinue = true;
@@ -329,14 +329,14 @@ ERlvCmdRet RlvHandler::processClearCommand(const LLUUID& idObj, const RlvCommand
 			if ( (strFilter.empty()) || (std::string::npos != strCmdRem.find(strFilter)) )
 			{
 				fContinue = (rlvObj.m_Commands.size() > 1); // rlvObj will become invalid once we remove the last command
-				processCommand(idObj, strCmdRem.append("=y"), false);
+				processCommand(rlvCmd.getObjectID(), strCmdRem.append("=y"), false);
 			}
 		}
 	}
 
 	// Let our observers know about clear commands
 	ERlvCmdRet eRet = RLV_RET_SUCCESS;
-	notifyCommandHandlers(&RlvCommandHandler::onClearCommand, idObj, rlvCmd, eRet, true);
+	notifyCommandHandlers(&RlvCommandHandler::onClearCommand, rlvCmd, eRet, true);
 
 	return RLV_RET_SUCCESS; // Don't fail clear commands even if the object didn't exist since it confuses people
 }
@@ -950,7 +950,7 @@ void RlvHandler::clearState()
 #define VERIFY_OPTION_REF(x)	{ if (!(x)) { eRet = RLV_RET_FAILED_OPTION; break; } fRefCount = true; }
 
 // Checked: 2010-03-03 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-ERlvCmdRet RlvHandler::processAddRemCommand(const LLUUID& idObj, const RlvCommand& rlvCmd)
+ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 {
 	// NOTE: - at this point the command has already been:
 	//            * added to the RlvObject
@@ -962,14 +962,14 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const LLUUID& idObj, const RlvComman
 	switch (eBhvr)
 	{
 		case RLV_BHVR_DETACH:				// @detach[:<option>]=n|y
-			eRet = onAddRemDetach(idObj, rlvCmd, fRefCount);
+			eRet = onAddRemDetach(rlvCmd, fRefCount);
 			break;
 		case RLV_BHVR_ADDATTACH:			// @addattach[:<option>]=n|y
 		case RLV_BHVR_REMATTACH:			// @addattach[:<option>]=n|y
-			eRet = onAddRemAttach(idObj, rlvCmd, fRefCount);
+			eRet = onAddRemAttach(rlvCmd, fRefCount);
 			break;
 		case RLV_BHVR_SETENV:				// @setenv=n|y
-			eRet = onAddRemSetEnv(idObj, rlvCmd, fRefCount);
+			eRet = onAddRemSetEnv(rlvCmd, fRefCount);
 			break;
 		case RLV_BHVR_ADDOUTFIT:			// @addoutfit[:<layer>]=n|y			- Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 		case RLV_BHVR_REMOUTFIT:			// @remoutfit[:<layer>]=n|y			- Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
@@ -984,9 +984,9 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const LLUUID& idObj, const RlvComman
 					if ( (rlvCmdOption.isEmpty()) || ((LLWearableType::EType)idxType == rlvCmdOption.getWearableType()) )
 					{
 						if (RLV_TYPE_ADD == eType)
-							gRlvWearableLocks.addWearableTypeLock((LLWearableType::EType)idxType, idObj, eLock);
+							gRlvWearableLocks.addWearableTypeLock((LLWearableType::EType)idxType, rlvCmd.getObjectID(), eLock);
 						else
-							gRlvWearableLocks.removeWearableTypeLock((LLWearableType::EType)idxType, idObj, eLock);
+							gRlvWearableLocks.removeWearableTypeLock((LLWearableType::EType)idxType, rlvCmd.getObjectID(), eLock);
 					}
 				}
 			}
@@ -999,9 +999,9 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const LLUUID& idObj, const RlvComman
 				VERIFY_OPTION_REF( (LLStringUtil::convertToS32(strOption, nChannel)) && (RlvUtil::isValidReplyChannel(nChannel)) );
 
 				if (RLV_TYPE_ADD == eType) 
-					addException(idObj, eBhvr, nChannel);
+					addException(rlvCmd.getObjectID(), eBhvr, nChannel);
 				else
-					removeException(idObj, eBhvr, nChannel);
+					removeException(rlvCmd.getObjectID(), eBhvr, nChannel);
 			}
 			break;
 		case RLV_BHVR_SENDCHANNEL:			// @sendchannel[:<channel>]=n|y		- Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.1.0h
@@ -1011,9 +1011,9 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const LLUUID& idObj, const RlvComman
 				if ( (LLStringUtil::convertToS32(strOption, nChannel)) && (nChannel > 0) )
 				{
 					if (RLV_TYPE_ADD == eType) 
-						addException(idObj, eBhvr, nChannel);
+						addException(rlvCmd.getObjectID(), eBhvr, nChannel);
 					else
-						removeException(idObj, eBhvr, nChannel);
+						removeException(rlvCmd.getObjectID(), eBhvr, nChannel);
 					break;
 				}
 				VERIFY_OPTION_REF(strOption.empty());
@@ -1026,9 +1026,9 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const LLUUID& idObj, const RlvComman
 				VERIFY_OPTION_REF( (!strOption.empty()) && (rlvParseNotifyOption(strOption, nChannel, strFilter)) );
 
 				if (RLV_TYPE_ADD == eType)
-					RlvBehaviourNotifyHandler::getInstance()->addNotify(idObj, nChannel, strFilter);
+					RlvBehaviourNotifyHandler::getInstance()->addNotify(rlvCmd.getObjectID(), nChannel, strFilter);
 				else
-					RlvBehaviourNotifyHandler::getInstance()->removeNotify(idObj, nChannel, strFilter);
+					RlvBehaviourNotifyHandler::getInstance()->removeNotify(rlvCmd.getObjectID(), nChannel, strFilter);
 			}
 			break;
 		case RLV_BHVR_SHOWHOVERTEXT:		// @showhovertext:<uuid>=n|y		- Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.1.0h
@@ -1038,9 +1038,9 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const LLUUID& idObj, const RlvComman
 				VERIFY_OPTION_REF(idException.notNull());
 
 				if (RLV_TYPE_ADD == eType)
-					addException(idObj, eBhvr, idException);
+					addException(rlvCmd.getObjectID(), eBhvr, idException);
 				else
-					removeException(idObj, eBhvr, idException);
+					removeException(rlvCmd.getObjectID(), eBhvr, idException);
 
 				// Clear/restore the object's hover text as needed
 				LLViewerObject* pObj = gObjectList.findObject(idException);
@@ -1056,9 +1056,9 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const LLUUID& idObj, const RlvComman
 				VERIFY_OPTION_REF(idException.notNull());
 
 				if (RLV_TYPE_ADD == eType)
-					addException(idObj, eBhvr, idException);
+					addException(rlvCmd.getObjectID(), eBhvr, idException);
 				else
-					removeException(idObj, eBhvr, idException);
+					removeException(rlvCmd.getObjectID(), eBhvr, idException);
 			}
 			break;
 #endif // RLV_EXTENSION_CMD_TOUCHXXX
@@ -1117,9 +1117,9 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const LLUUID& idObj, const RlvComman
 				if (idException.notNull())		// If there's an option then it should specify a valid UUID
 				{
 					if (RLV_TYPE_ADD == eType)
-						addException(idObj, eBhvr, idException);
+						addException(rlvCmd.getObjectID(), eBhvr, idException);
 					else
-						removeException(idObj, eBhvr, idException);
+						removeException(rlvCmd.getObjectID(), eBhvr, idException);
 					break;
 				}
 				VERIFY_OPTION_REF(strOption.empty());
@@ -1127,7 +1127,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const LLUUID& idObj, const RlvComman
 			break;
 		case RLV_BHVR_UNKNOWN:
 			// Pass unknown commands on to registered command handlers
-			return (notifyCommandHandlers(&RlvCommandHandler::onAddRemCommand, idObj, rlvCmd, eRet, false)) ? eRet : RLV_RET_FAILED_UNKNOWN;
+			return (notifyCommandHandlers(&RlvCommandHandler::onAddRemCommand, rlvCmd, eRet, false)) ? eRet : RLV_RET_FAILED_UNKNOWN;
 		default:
 			// Fail with "Invalid param" if none of the above handled it
 			eRet = RLV_RET_FAILED_PARAM;
@@ -1140,13 +1140,13 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const LLUUID& idObj, const RlvComman
 		if (RLV_TYPE_ADD == eType)
 		{
 			if (rlvCmd.isStrict())
-				addException(idObj, RLV_BHVR_PERMISSIVE, eBhvr);
+				addException(rlvCmd.getObjectID(), RLV_BHVR_PERMISSIVE, eBhvr);
 			m_Behaviours[eBhvr]++;
 		}
 		else
 		{
 			if (rlvCmd.isStrict())
-				removeException(idObj, RLV_BHVR_PERMISSIVE, eBhvr);
+				removeException(rlvCmd.getObjectID(), RLV_BHVR_PERMISSIVE, eBhvr);
 			m_Behaviours[eBhvr]--;
 		}
 
@@ -1167,7 +1167,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const LLUUID& idObj, const RlvComman
 }
 
 // Checked: 2010-03-03 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-ERlvCmdRet RlvHandler::onAddRemAttach(const LLUUID& idObj, const RlvCommand& rlvCmd, bool& fRefCount)
+ERlvCmdRet RlvHandler::onAddRemAttach(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	RLV_ASSERT( (RLV_TYPE_ADD == rlvCmd.getParamType()) || (RLV_TYPE_REMOVE == rlvCmd.getParamType()) );
 	RLV_ASSERT( (RLV_BHVR_ADDATTACH == rlvCmd.getBehaviourType()) || (RLV_BHVR_REMATTACH == rlvCmd.getBehaviourType()) );
@@ -1187,9 +1187,9 @@ ERlvCmdRet RlvHandler::onAddRemAttach(const LLUUID& idObj, const RlvCommand& rlv
 		if ( (0 == idxAttachPt) || (itAttach->first == idxAttachPt) )
 		{
 			if (RLV_TYPE_ADD == rlvCmd.getParamType())
-				gRlvAttachmentLocks.addAttachmentPointLock(itAttach->first, idObj, eLock);
+				gRlvAttachmentLocks.addAttachmentPointLock(itAttach->first, rlvCmd.getObjectID(), eLock);
 			else
-				gRlvAttachmentLocks.removeAttachmentPointLock(itAttach->first, idObj, eLock);
+				gRlvAttachmentLocks.removeAttachmentPointLock(itAttach->first, rlvCmd.getObjectID(), eLock);
 		}
 	}
 
@@ -1198,7 +1198,7 @@ ERlvCmdRet RlvHandler::onAddRemAttach(const LLUUID& idObj, const RlvCommand& rlv
 }
 
 // Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-ERlvCmdRet RlvHandler::onAddRemDetach(const LLUUID& idObj, const RlvCommand& rlvCmd, bool& fRefCount)
+ERlvCmdRet RlvHandler::onAddRemDetach(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	RLV_ASSERT( (RLV_TYPE_ADD == rlvCmd.getParamType()) || (RLV_TYPE_REMOVE == rlvCmd.getParamType()) );
 	RLV_ASSERT(RLV_BHVR_DETACH == rlvCmd.getBehaviourType());
@@ -1210,13 +1210,13 @@ ERlvCmdRet RlvHandler::onAddRemDetach(const LLUUID& idObj, const RlvCommand& rlv
 		//                - if it hasn't rezzed yet then it's a @detach=n from a non-attachment and RlvHandler::onAttach() takes care of it
 		//   * @detach=y: - if it ever rezzed as an attachment we'll have cached the UUID of its root
 		//                - if it never rezzed as an attachment there won't be a lock to remove
-		rlv_object_map_t::const_iterator itObj = m_Objects.find(idObj);
+		rlv_object_map_t::const_iterator itObj = m_Objects.find(rlvCmd.getObjectID());
 		if ( (itObj != m_Objects.end()) && (itObj->second.m_fLookup) && (itObj->second.m_idxAttachPt) )
 		{
 			if (RLV_TYPE_ADD == rlvCmd.getParamType())
-				gRlvAttachmentLocks.addAttachmentLock(itObj->second.m_idRoot, idObj);
+				gRlvAttachmentLocks.addAttachmentLock(itObj->second.m_idRoot, itObj->first);
 			else
-				gRlvAttachmentLocks.removeAttachmentLock(itObj->second.m_idRoot, idObj);
+				gRlvAttachmentLocks.removeAttachmentLock(itObj->second.m_idRoot, itObj->first);
 		}
 	}
 	else							// @detach:<attachpt>=n|y - RLV_LOCK_ADD and RLV_LOCK_REMOVE locks an attachment *point*
@@ -1227,9 +1227,9 @@ ERlvCmdRet RlvHandler::onAddRemDetach(const LLUUID& idObj, const RlvCommand& rlv
 			return RLV_RET_FAILED_OPTION;
 
 		if (RLV_TYPE_ADD == rlvCmd.getParamType())
-			gRlvAttachmentLocks.addAttachmentPointLock(idxAttachPt, idObj, (ERlvLockMask)(RLV_LOCK_ADD | RLV_LOCK_REMOVE));
+			gRlvAttachmentLocks.addAttachmentPointLock(idxAttachPt, rlvCmd.getObjectID(), (ERlvLockMask)(RLV_LOCK_ADD | RLV_LOCK_REMOVE));
 		else
-			gRlvAttachmentLocks.removeAttachmentPointLock(idxAttachPt, idObj, (ERlvLockMask)(RLV_LOCK_ADD | RLV_LOCK_REMOVE));
+			gRlvAttachmentLocks.removeAttachmentPointLock(idxAttachPt, rlvCmd.getObjectID(), (ERlvLockMask)(RLV_LOCK_ADD | RLV_LOCK_REMOVE));
 	}
 
 	fRefCount = false;	// Don't reference count @detach[:<option>]=n
@@ -1237,7 +1237,7 @@ ERlvCmdRet RlvHandler::onAddRemDetach(const LLUUID& idObj, const RlvCommand& rlv
 }
 
 // Checked: 2010-03-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0a
-ERlvCmdRet RlvHandler::onAddRemSetEnv(const LLUUID& idObj, const RlvCommand& rlvCmd, bool& fRefCount)
+ERlvCmdRet RlvHandler::onAddRemSetEnv(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// Sanity check - there shouldn't be an option
 	if (!rlvCmd.getOption().empty())
@@ -1270,7 +1270,7 @@ ERlvCmdRet RlvHandler::onAddRemSetEnv(const LLUUID& idObj, const RlvCommand& rlv
 //
 
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0j
-ERlvCmdRet RlvHandler::processForceCommand(const LLUUID& idObj, const RlvCommand& rlvCmd) const
+ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 {
 	RLV_ASSERT(RLV_TYPE_FORCE == rlvCmd.getParamType());
 
@@ -1278,20 +1278,20 @@ ERlvCmdRet RlvHandler::processForceCommand(const LLUUID& idObj, const RlvCommand
 	switch (rlvCmd.getBehaviourType())
 	{
 		case RLV_BHVR_DETACH:		// @detach[:<option>]=force				- Checked: 2009-12-21 (RLVa-1.1.0k) | Modified: RLVa-1.1.0j
-			eRet = onForceRemAttach(idObj, rlvCmd);
+			eRet = onForceRemAttach(rlvCmd);
 			if (RLV_RET_SUCCESS != eRet)
 				eRet = onForceWear(rlvCmd.getOption(), false, false);
 			break;
 		case RLV_BHVR_REMATTACH:	// @remattach[:<option>]=force
-			eRet = onForceRemAttach(idObj, rlvCmd);
+			eRet = onForceRemAttach(rlvCmd);
 			break;
 		case RLV_BHVR_REMOUTFIT:	// @remoutfit[:<option>]=force
-			eRet = onForceRemOutfit(idObj, rlvCmd);
+			eRet = onForceRemOutfit(rlvCmd);
 			break;
 		case RLV_BHVR_UNSIT:		// @unsit=force							- Checked: 2010-03-18 (RLVa-1.2.0c) | Modified: RLVa-0.2.0g
 			{
 				VERIFY_OPTION(rlvCmd.getOption().empty());
-				if ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && (!hasBehaviourExcept(RLV_BHVR_UNSIT, idObj)) )
+				if ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && (!hasBehaviourExcept(RLV_BHVR_UNSIT, rlvCmd.getObjectID())) )
 				{
 					gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
 					send_agent_update(TRUE, TRUE);	// See behaviour notes on why we have to force an agent update here
@@ -1299,7 +1299,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const LLUUID& idObj, const RlvCommand
 			}
 			break;
 		case RLV_BHVR_SIT:			// @sit:<option>=force
-			eRet = onForceSit(idObj, rlvCmd);
+			eRet = onForceSit(rlvCmd);
 			break;
 		case RLV_BHVR_TPTO:			// @tpto:<option>=force					- Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.0.0h
 			{
@@ -1373,7 +1373,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const LLUUID& idObj, const RlvCommand
 			{
 				VERIFY_OPTION(rlvCmd.getOption().empty());
 				// NOTE: @detachme should respect locks but shouldn't respect things like nostrip
-				const LLViewerObject* pAttachObj = gObjectList.findObject(idObj);
+				const LLViewerObject* pAttachObj = gObjectList.findObject(rlvCmd.getObjectID());
 				if ( (pAttachObj) && (pAttachObj->isAttachment()) && (!gRlvAttachmentLocks.isLockedAttachment(pAttachObj)) )
 				{
 					gMessageSystem->newMessage("ObjectDetach");
@@ -1389,7 +1389,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const LLUUID& idObj, const RlvCommand
 			break;
 		case RLV_BHVR_UNKNOWN:
 			// Pass unknown commands on to registered command handlers
-			return (notifyCommandHandlers(&RlvCommandHandler::onForceCommand, idObj, rlvCmd, eRet, false)) ? eRet : RLV_RET_FAILED_UNKNOWN;
+			return (notifyCommandHandlers(&RlvCommandHandler::onForceCommand, rlvCmd, eRet, false)) ? eRet : RLV_RET_FAILED_UNKNOWN;
 		default:
 			// Fail with "Invalid param" if none of the above handled it
 			eRet = RLV_RET_FAILED_PARAM;
@@ -1399,7 +1399,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const LLUUID& idObj, const RlvCommand
 }
 
 // Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
-ERlvCmdRet RlvHandler::onForceRemAttach(const LLUUID& idObj, const RlvCommand& rlvCmd) const
+ERlvCmdRet RlvHandler::onForceRemAttach(const RlvCommand& rlvCmd) const
 {
 	RLV_ASSERT(RLV_TYPE_FORCE == rlvCmd.getParamType());
 	RLV_ASSERT( (RLV_BHVR_REMATTACH == rlvCmd.getBehaviourType()) || (RLV_BHVR_DETACH == rlvCmd.getBehaviourType()) );
@@ -1434,7 +1434,7 @@ ERlvCmdRet RlvHandler::onForceRemAttach(const LLUUID& idObj, const RlvCommand& r
 }
 
 // Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
-ERlvCmdRet RlvHandler::onForceRemOutfit(const LLUUID& idObj, const RlvCommand& rlvCmd) const
+ERlvCmdRet RlvHandler::onForceRemOutfit(const RlvCommand& rlvCmd) const
 {
 	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
 	if ( (!rlvCmdOption.isWearableType()) && (!rlvCmdOption.isEmpty()) )
@@ -1449,7 +1449,7 @@ ERlvCmdRet RlvHandler::onForceRemOutfit(const LLUUID& idObj, const RlvCommand& r
 }
 
 // Checked: 2010-03-18 (RLVa-1.2.0c) | Modified: RLVa-1.1.0j
-ERlvCmdRet RlvHandler::onForceSit(const LLUUID& idObj, const RlvCommand& rlvCmd) const
+ERlvCmdRet RlvHandler::onForceSit(const RlvCommand& rlvCmd) const
 {
 	LLViewerObject* pObj = NULL; LLUUID idTarget(rlvCmd.getOption());
 	// Sanity checking - we need to know about the object and it should identify a prim/linkset
@@ -1511,7 +1511,7 @@ ERlvCmdRet RlvHandler::onForceWear(const LLViewerInventoryCategory* pFolder, boo
 //
 
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
-ERlvCmdRet RlvHandler::processReplyCommand(const LLUUID& idObj, const RlvCommand& rlvCmd) const
+ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
 
@@ -1533,7 +1533,7 @@ ERlvCmdRet RlvHandler::processReplyCommand(const LLUUID& idObj, const RlvCommand
 			strReply = RlvStrings::getVersionNum();
 			break;
 		case RLV_BHVR_GETATTACH:		// @getattach[:<layer>]=<channel>
-			eRet = onGetAttach(idObj, rlvCmd, strReply);
+			eRet = onGetAttach(rlvCmd, strReply);
 			break;
 #ifdef RLV_EXTENSION_CMD_GETXXXNAMES
 		case RLV_BHVR_GETATTACHNAMES:	// @getattachnames[:<grp>]=<channel>
@@ -1543,7 +1543,7 @@ ERlvCmdRet RlvHandler::processReplyCommand(const LLUUID& idObj, const RlvCommand
 			break;
 #endif // RLV_EXTENSION_CMD_GETXXXNAMES
 		case RLV_BHVR_GETOUTFIT:		// @getoutfit[:<layer>]=<channel>
-			eRet = onGetOutfit(idObj, rlvCmd, strReply);
+			eRet = onGetOutfit(rlvCmd, strReply);
 			break;
 #ifdef RLV_EXTENSION_CMD_GETXXXNAMES
 		case RLV_BHVR_GETOUTFITNAMES:	// @getoutfitnames=<channel>
@@ -1556,17 +1556,17 @@ ERlvCmdRet RlvHandler::processReplyCommand(const LLUUID& idObj, const RlvCommand
 #ifdef RLV_EXTENSION_CMD_FINDFOLDERS
 		case RLV_BHVR_FINDFOLDERS:		// @findfolders:<criteria>=<channel>
 #endif // RLV_EXTENSION_CMD_FINDFOLDERS
-			eRet = onFindFolder(idObj, rlvCmd, strReply);
+			eRet = onFindFolder(rlvCmd, strReply);
 			break;
 		case RLV_BHVR_GETPATH:			// @getpath[:<option>]=<channel>
 		case RLV_BHVR_GETPATHNEW:		// @getpathnew[:<option>]=<channel>
-			eRet = onGetPath(idObj, rlvCmd, strReply);
+			eRet = onGetPath(rlvCmd, strReply);
 			break;
 		case RLV_BHVR_GETINV:			// @getinv[:<path>]=<channel>
-			eRet = onGetInv(idObj, rlvCmd, strReply);
+			eRet = onGetInv(rlvCmd, strReply);
 			break;
 		case RLV_BHVR_GETINVWORN:		// @getinvworn[:<path>]=<channel>
-			eRet = onGetInvWorn(idObj, rlvCmd, strReply);
+			eRet = onGetInvWorn(rlvCmd, strReply);
 			break;
 		case RLV_BHVR_GETSITID:			// @getsitid=<channel>					- Checked: 2010-03-09 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
 			{
@@ -1584,7 +1584,7 @@ ERlvCmdRet RlvHandler::processReplyCommand(const LLUUID& idObj, const RlvCommand
 		case RLV_BHVR_GETSTATUS:		// @getstatus[:<option>]=<channel>		- Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
 			{
 				// NOTE: specification says response should start with '/' but RLV-1.16.1 returns an empty string when no rules are set
-				rlv_object_map_t::const_iterator itObj = m_Objects.find(idObj);
+				rlv_object_map_t::const_iterator itObj = m_Objects.find(rlvCmd.getObjectID());
 				if (itObj != m_Objects.end())
 					strReply = itObj->second.getStatusString(rlvCmd.getOption());
 			}
@@ -1598,7 +1598,7 @@ ERlvCmdRet RlvHandler::processReplyCommand(const LLUUID& idObj, const RlvCommand
 			break;
 		case RLV_BHVR_UNKNOWN:
 			// Pass unknown commands on to registered command handlers
-			return (notifyCommandHandlers(&RlvCommandHandler::onReplyCommand, idObj, rlvCmd, eRet, false)) ? eRet : RLV_RET_FAILED_UNKNOWN;
+			return (notifyCommandHandlers(&RlvCommandHandler::onReplyCommand, rlvCmd, eRet, false)) ? eRet : RLV_RET_FAILED_UNKNOWN;
 		default:
 			// Fail with "Invalid param" if none of the above handled it
 			return RLV_RET_FAILED_PARAM;
@@ -1613,7 +1613,7 @@ ERlvCmdRet RlvHandler::processReplyCommand(const LLUUID& idObj, const RlvCommand
 }
 
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
-ERlvCmdRet RlvHandler::onFindFolder(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const
+ERlvCmdRet RlvHandler::onFindFolder(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
 	RLV_ASSERT( (RLV_BHVR_FINDFOLDER == rlvCmd.getBehaviourType()) || (RLV_BHVR_FINDFOLDERS == rlvCmd.getBehaviourType()) ); 
@@ -1656,7 +1656,7 @@ ERlvCmdRet RlvHandler::onFindFolder(const LLUUID& idObj, const RlvCommand& rlvCm
 }
 
 // Checked: 2010-03-19 (RLVa-1.2.0c) | Modified: RLVa-1.1.0e
-ERlvCmdRet RlvHandler::onGetAttach(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const
+ERlvCmdRet RlvHandler::onGetAttach(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
 	RLV_ASSERT(RLV_BHVR_GETATTACH == rlvCmd.getBehaviourType());
@@ -1680,7 +1680,7 @@ ERlvCmdRet RlvHandler::onGetAttach(const LLUUID& idObj, const RlvCommand& rlvCmd
 		if ( (0 == idxAttachPt) || (itAttach->first == idxAttachPt) )
 		{
 			bool fWorn = (pAttachPt->getNumObjects()) && 
-				( (!RlvSettings::getHideLockedAttach()) || (RlvForceWear::isForceDetachable(pAttachPt, true, idObj)) );
+				( (!RlvSettings::getHideLockedAttach()) || (RlvForceWear::isForceDetachable(pAttachPt, true, rlvCmd.getObjectID())) );
 			strReply.push_back( (fWorn) ? '1' : '0' );
 		}
 	}
@@ -1688,7 +1688,7 @@ ERlvCmdRet RlvHandler::onGetAttach(const LLUUID& idObj, const RlvCommand& rlvCmd
 }
 
 // Checked: 2010-03-19 (RLVa-1.2.0a) | Added: RLVa-1.1.0e
-ERlvCmdRet RlvHandler::onGetAttachNames(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const
+ERlvCmdRet RlvHandler::onGetAttachNames(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
 	RLV_ASSERT( (RLV_BHVR_GETATTACHNAMES == rlvCmd.getBehaviourType()) || (RLV_BHVR_GETADDATTACHNAMES == rlvCmd.getBehaviourType()) || 
@@ -1718,7 +1718,7 @@ ERlvCmdRet RlvHandler::onGetAttachNames(const LLUUID& idObj, const RlvCommand& r
 					break;
 */
 				case RLV_BHVR_GETREMATTACHNAMES:	// Every attachment point that can be detached (but ignore any locks set by the issuer)
-					fAdd = RlvForceWear::isForceDetachable(pAttachPt, true, idObj);
+					fAdd = RlvForceWear::isForceDetachable(pAttachPt, true, rlvCmd.getObjectID());
 					break;
 				default:
 					break;
@@ -1736,7 +1736,7 @@ ERlvCmdRet RlvHandler::onGetAttachNames(const LLUUID& idObj, const RlvCommand& r
 }
 
 // Checked: 2010-03-09 (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
-ERlvCmdRet RlvHandler::onGetInv(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const
+ERlvCmdRet RlvHandler::onGetInv(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
 	RLV_ASSERT(RLV_BHVR_GETINV == rlvCmd.getBehaviourType());
@@ -1771,7 +1771,7 @@ ERlvCmdRet RlvHandler::onGetInv(const LLUUID& idObj, const RlvCommand& rlvCmd, s
 struct rlv_wear_info { U32 cntWorn, cntTotal, cntChildWorn, cntChildTotal; };
 
 // Checked: 2010-04-05 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
-ERlvCmdRet RlvHandler::onGetInvWorn(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const
+ERlvCmdRet RlvHandler::onGetInvWorn(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	// Sanity check - gAgentAvatarp can't be NULL [see RlvForceWear::isWearingItem()]
 	if (!isAgentAvatarValid())
@@ -1846,7 +1846,7 @@ ERlvCmdRet RlvHandler::onGetInvWorn(const LLUUID& idObj, const RlvCommand& rlvCm
 }
 
 // Checked: 2010-03-19 (RLVa-1.2.0c) | Modified: RLVa-1.2.0a
-ERlvCmdRet RlvHandler::onGetOutfit(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const
+ERlvCmdRet RlvHandler::onGetOutfit(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
 	RLV_ASSERT(RLV_BHVR_GETOUTFIT == rlvCmd.getBehaviourType());
@@ -1873,7 +1873,7 @@ ERlvCmdRet RlvHandler::onGetOutfit(const LLUUID& idObj, const RlvCommand& rlvCmd
 			bool fWorn = (gAgentWearables.getWearableCount(wtRlvTypes[idxType]) > 0) && 
 				( (!RlvSettings::getHideLockedLayers()) || 
 				  (LLAssetType::AT_BODYPART == LLWearableType::getAssetType(wtRlvTypes[idxType])) ||
-				  (RlvForceWear::isForceRemovable(wtRlvTypes[idxType], true, idObj)) );
+				  (RlvForceWear::isForceRemovable(wtRlvTypes[idxType], true, rlvCmd.getObjectID())) );
 			strReply.push_back( (fWorn) ? '1' : '0' );
 		}
 	}
@@ -1881,7 +1881,7 @@ ERlvCmdRet RlvHandler::onGetOutfit(const LLUUID& idObj, const RlvCommand& rlvCmd
 }
 
 // Checked: 2009-11-21 (RLVa-1.1.0f) | Added: RLVa-1.1.0e
-ERlvCmdRet RlvHandler::onGetOutfitNames(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const
+ERlvCmdRet RlvHandler::onGetOutfitNames(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
 	RLV_ASSERT( (RLV_BHVR_GETOUTFITNAMES == rlvCmd.getBehaviourType()) || (RLV_BHVR_GETADDOUTFITNAMES == rlvCmd.getBehaviourType()) || 
@@ -1923,7 +1923,7 @@ ERlvCmdRet RlvHandler::onGetOutfitNames(const LLUUID& idObj, const RlvCommand& r
 }
 
 // Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
-ERlvCmdRet RlvHandler::onGetPath(const LLUUID& idObj, const RlvCommand& rlvCmd, std::string& strReply) const
+ERlvCmdRet RlvHandler::onGetPath(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
 	RLV_ASSERT( (RLV_BHVR_GETPATH == rlvCmd.getBehaviourType()) || (RLV_BHVR_GETPATHNEW == rlvCmd.getBehaviourType()) ); 

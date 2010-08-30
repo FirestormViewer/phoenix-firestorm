@@ -828,11 +828,11 @@ RlvBehaviourNotifyHandler::RlvBehaviourNotifyHandler()
 {
 	// NOTE: the reason we use rlv_command_signal_t instead of the better-suited rlv_behaviour_signal_t is because
 	//       RLV will notify scripts about "invalid" commands so we need to as well
-	m_ConnCommand = gRlvHandler.setCommandCallback(boost::bind(&RlvBehaviourNotifyHandler::onCommand, this, _1, _2, _3, _4));
+	m_ConnCommand = gRlvHandler.setCommandCallback(boost::bind(&RlvBehaviourNotifyHandler::onCommand, this, _1, _2, _3));
 }
 
 // Checked: 2010-03-03 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-void RlvBehaviourNotifyHandler::onCommand(const LLUUID& idRlvObj, const RlvCommand& rlvCmd, ERlvCmdRet eRet, bool fInternal)
+void RlvBehaviourNotifyHandler::onCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet, bool fInternal)
 {
 	if (fInternal)
 		return;

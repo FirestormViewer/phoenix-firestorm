@@ -53,7 +53,7 @@ std::string rlvGetItemNameFromObjID(const LLUUID& idObj, bool fIncludeAttachPt =
 // Checked: 2010-04-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
 void RlvFloaterBehaviours::onOpen(const LLSD& sdKey)
 {
-	m_ConnRlvCommand = gRlvHandler.setCommandCallback(boost::bind(&RlvFloaterBehaviours::onRlvCommand, this, _2, _3));
+	m_ConnRlvCommand = gRlvHandler.setCommandCallback(boost::bind(&RlvFloaterBehaviours::onRlvCommand, this, _1, _2));
 
 	refreshAll();
 }
@@ -149,7 +149,7 @@ void RlvFloaterBehaviours::onAvatarNameLookup(const LLUUID& idAgent, const std::
 // Checked: 2010-03-11 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
 void RlvFloaterLocks::onOpen(const LLSD& sdKey)
 {
-	m_ConnRlvCommand = gRlvHandler.setCommandCallback(boost::bind(&RlvFloaterLocks::onRlvCommand, this, _2, _3));
+	m_ConnRlvCommand = gRlvHandler.setCommandCallback(boost::bind(&RlvFloaterLocks::onRlvCommand, this, _1, _2));
 
 	refreshAll();
 }

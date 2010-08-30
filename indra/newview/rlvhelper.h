@@ -309,7 +309,7 @@ public:
 			delete this;	// Delete ourself if we have nothing to do
 	}
 protected:
-	void onCommand(const LLUUID& idRlvObj, const RlvCommand& rlvCmd, ERlvCmdRet eRet, bool fInternal);
+	void onCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet, bool fInternal);
 
 protected:
 	struct notifyData

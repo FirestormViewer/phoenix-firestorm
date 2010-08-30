@@ -33,8 +33,8 @@ public:
 	RlvExtGetSet();
 	virtual ~RlvExtGetSet() {}
 
-	virtual bool onForceCommand(const LLUUID& idObj, const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet);
-	virtual bool onReplyCommand(const LLUUID& idObj, const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet);
+	virtual bool onForceCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet);
+	virtual bool onReplyCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet);
 protected:
 	std::string onGetDebug(std::string strSetting);
 	std::string onGetPseudoDebug(const std::string& strSetting);
@@ -44,7 +44,7 @@ protected:
 	std::string onGetEnv(std::string strSetting);
 	ERlvCmdRet  onSetEnv(std::string strSetting, const std::string& strValue);
 
-	bool processCommand(const LLUUID& idObj, const RlvCommand& rlvCmd, ERlvCmdRet& eRet);
+	bool processCommand(const RlvCommand& rlvCmd, ERlvCmdRet& eRet);
 
 public:
 	enum { DBG_READ = 0x01, DBG_WRITE = 0x02, DBG_PERSIST = 0x04, DBG_PSEUDO = 0x08 };
