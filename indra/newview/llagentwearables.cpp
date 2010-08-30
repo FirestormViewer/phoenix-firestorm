@@ -2017,12 +2017,11 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 
 //		msg->addU8Fast(_PREHASH_AttachmentPt, 0 );	// Wear at the previous or default attachment point
 // [RLVa:KB] - Checked: 2010-07-28 (RLVa-1.2.0i) | Added: RLVa-1.2.0i
-		bool fWearAdd = (gSavedSettings.getBOOL("MultipleAttachments"));
+		bool fWearAdd = false;
 		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 		{
-			RlvAttachmentLockWatchdog::instance().onWearAttachment(item, (fWearAdd) ? RLV_WEAR_ADD : RLV_WEAR_REPLACE);
-
 			fWearAdd = true;
+			RlvAttachmentLockWatchdog::instance().onWearAttachment(item, (fWearAdd) ? RLV_WEAR_ADD : RLV_WEAR_REPLACE);
 		}
 		msg->addU8Fast(_PREHASH_AttachmentPt, (fWearAdd) ? 0 | ATTACHMENT_ADD : 0);
 // [/RLVa:KB]
