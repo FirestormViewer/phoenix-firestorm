@@ -38,46 +38,6 @@ BOOL RlvHandler::m_fEnabled = FALSE;
 rlv_handler_t gRlvHandler;
 
 // ============================================================================
-// Attachment group helper functions
-//
-
-// Has to match the order of ERlvAttachGroupType
-const std::string cstrAttachGroups[RLV_ATTACHGROUP_COUNT] = { "head", "torso", "arms", "legs", "hud" };
-
-// Checked: 2009-10-19 (RLVa-1.1.0e) | Added: RLVa-1.1.0e
-inline ERlvAttachGroupType rlvGetAttachGroupTypeFromIndex(S32 idxGroup)
-{
-	switch (idxGroup)
-	{
-		case 0: // Right Hand
-		case 1: // Right Arm
-		case 3: // Left Arm
-		case 4: // Left Hand
-			return RLV_ATTACHGROUP_ARMS;
-		case 2: // Head
-			return RLV_ATTACHGROUP_HEAD;
-		case 5: // Left Leg
-		case 7: // Right Leg
-			return RLV_ATTACHGROUP_LEGS;
-		case 6: // Torso
-			return RLV_ATTACHGROUP_TORSO;
-		case 8: // HUD
-			return RLV_ATTACHGROUP_HUD;
-		default:
-			return RLV_ATTACHGROUP_INVALID;
-	}
-}
-
-// Checked: 2009-10-19 (RLVa-1.1.0e) | Added: RLVa-1.1.0e
-inline ERlvAttachGroupType rlvGetAttachGroupTypeFromString(const std::string& strGroup)
-{
-	for (int idx = 0; idx < RLV_ATTACHGROUP_COUNT; idx++)
-		if (cstrAttachGroups[idx] == strGroup)
-			return (ERlvAttachGroupType)idx;
-	return RLV_ATTACHGROUP_INVALID;
-}
-
-// ============================================================================
 // Command specific helper functions
 //
 
@@ -1011,17 +971,17 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const LLUUID& idObj, const RlvComman
 		case RLV_BHVR_SETENV:				// @setenv=n|y
 			eRet = onAddRemSetEnv(idObj, rlvCmd, fRefCount);
 			break;
-		case RLV_BHVR_ADDOUTFIT:			// @addoutfit[:<layer>]=n|y			- Checked: 2010-03-18 (RLVa-1.2.0g) | Modified: RLVa-1.2.0a
-		case RLV_BHVR_REMOUTFIT:			// @remoutfit[:<layer>]=n|y			- Checked: 2010-03-18 (RLVa-1.2.0g) | Modified: RLVa-1.2.0a
+		case RLV_BHVR_ADDOUTFIT:			// @addoutfit[:<layer>]=n|y			- Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
+		case RLV_BHVR_REMOUTFIT:			// @remoutfit[:<layer>]=n|y			- Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 			{
-				 // If there's an option it should specify a wearable type name (reference count on no option *and* a valid option)
-				LLWearableType::EType wtType = LLWearableType::typeNameToType(strOption);
-				VERIFY_OPTION_REF( (strOption.empty()) || (LLWearableType::WT_INVALID != wtType) );
+				// If there's an option it should specify a wearable type name (reference count on no option *and* a valid option)
+				RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+				VERIFY_OPTION_REF( (rlvCmdOption.isEmpty()) || (rlvCmdOption.isWearableType()) );
 
 				ERlvLockMask eLock = (RLV_BHVR_ADDOUTFIT == eBhvr) ? RLV_LOCK_ADD : RLV_LOCK_REMOVE;
 				for (int idxType = 0; idxType < LLWearableType::WT_COUNT; idxType++)
 				{
-					if ( ((LLWearableType::EType)idxType == wtType) || (LLWearableType::WT_INVALID == wtType) )
+					if ( (rlvCmdOption.isEmpty()) || ((LLWearableType::EType)idxType == rlvCmdOption.getWearableType()) )
 					{
 						if (RLV_TYPE_ADD == eType)
 							gRlvWearableLocks.addWearableTypeLock((LLWearableType::EType)idxType, idObj, eLock);
@@ -1417,7 +1377,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const LLUUID& idObj, const RlvCommand
 	return eRet;
 }
 
-// Checked: 2010-03-19 (RLVa-1.2.0c) | Modified: RLVa-1.1.0i
+// Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 ERlvCmdRet RlvHandler::onForceRemAttach(const LLUUID& idObj, const RlvCommand& rlvCmd) const
 {
 	RLV_ASSERT(RLV_TYPE_FORCE == rlvCmd.getParamType());
@@ -1426,27 +1386,23 @@ ERlvCmdRet RlvHandler::onForceRemAttach(const LLUUID& idObj, const RlvCommand& r
 	if (!isAgentAvatarValid())
 		return RLV_RET_FAILED;
 
-	S32 idxAttachPt = 0; ERlvAttachGroupType eAttachGroup = RLV_ATTACHGROUP_INVALID;
+	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
 	// @remattach:<attachpt>=force - force detach single attachment point
-	if ((idxAttachPt = RlvAttachPtLookup::getAttachPointIndex(rlvCmd.getOption())) != 0)
+	if (rlvCmdOption.isAttachmentPoint())
 	{
-		const LLViewerJointAttachment* pAttachPt = 
-			get_if_there(gAgentAvatarp->mAttachmentPoints, (S32)idxAttachPt, (LLViewerJointAttachment*)NULL);
-		if (pAttachPt)
-			RlvForceWear::instance().forceDetach(pAttachPt);
+		RlvForceWear::instance().forceDetach(rlvCmdOption.getAttachmentPoint());
 		return RLV_RET_SUCCESS;
 	}
 	// @remattach:<group>=force - force detach attachments points belonging to <group>
 	// @remattach=force         - force detach all attachments points
-	else if ( ((eAttachGroup = rlvGetAttachGroupTypeFromString(rlvCmd.getOption())) != RLV_ATTACHGROUP_INVALID) || 
-		      (rlvCmd.getOption().empty()) )
+	else if ( (rlvCmdOption.isAttachmentPointGroup()) || (rlvCmdOption.isEmpty()) )
 	{
 		for (LLVOAvatar::attachment_map_t::const_iterator itAttach = gAgentAvatarp->mAttachmentPoints.begin(); 
 				itAttach != gAgentAvatarp->mAttachmentPoints.end(); ++itAttach)
 		{
 			const LLViewerJointAttachment* pAttachPt = itAttach->second;
 			if ( (pAttachPt) && (pAttachPt->getNumObjects()) &&
-				 ((RLV_ATTACHGROUP_INVALID == eAttachGroup) || (rlvGetAttachGroupTypeFromIndex(pAttachPt->getGroup()) == eAttachGroup)) )
+				 ((rlvCmdOption.isEmpty()) || (rlvAttachGroupFromIndex(pAttachPt->getGroup()) == rlvCmdOption.getAttachmentPointGroup())) )
 			{
 				RlvForceWear::instance().forceDetach(pAttachPt);
 			}
@@ -1456,18 +1412,17 @@ ERlvCmdRet RlvHandler::onForceRemAttach(const LLUUID& idObj, const RlvCommand& r
 	return RLV_RET_FAILED_OPTION;
 }
 
-// Checked: 2010-03-19 (RLVa-1.2.0c) | Modified: RLVa-1.1.0i
+// Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 ERlvCmdRet RlvHandler::onForceRemOutfit(const LLUUID& idObj, const RlvCommand& rlvCmd) const
 {
-	LLWearableType::EType wtOption = LLWearableType::typeNameToType(rlvCmd.getOption()), wtType;
-	if ( (LLWearableType::WT_INVALID == wtOption) && (!rlvCmd.getOption().empty()) )
+	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+	if ( (!rlvCmdOption.isWearableType()) && (!rlvCmdOption.isEmpty()) )
 		return RLV_RET_FAILED_OPTION;
 
 	for (int idxType = 0; idxType < LLWearableType::WT_COUNT; idxType++)
 	{
-		wtType = (LLWearableType::EType)idxType;
-		if ( (wtType == wtOption) || (LLWearableType::WT_INVALID == wtOption) )
-			RlvForceWear::instance().forceRemove(wtType);
+		if ( (rlvCmdOption.isEmpty()) || ((LLWearableType::EType)idxType == rlvCmdOption.getWearableType()))
+			RlvForceWear::instance().forceRemove((LLWearableType::EType)idxType);
 	}
 	return RLV_RET_SUCCESS;
 }
@@ -1709,12 +1664,12 @@ ERlvCmdRet RlvHandler::onGetAttachNames(const LLUUID& idObj, const RlvCommand& r
 	if (!isAgentAvatarValid())
 		return RLV_RET_FAILED;
 
-	ERlvAttachGroupType eAttachGroup = rlvGetAttachGroupTypeFromString(rlvCmd.getOption());
+	ERlvAttachGroupType eAttachGroup = rlvAttachGroupFromString(rlvCmd.getOption());
 	for (LLVOAvatar::attachment_map_t::const_iterator itAttach = gAgentAvatarp->mAttachmentPoints.begin(); 
 			itAttach != gAgentAvatarp->mAttachmentPoints.end(); ++itAttach)
 	{
 		const LLViewerJointAttachment* pAttachPt = itAttach->second;
-		if ( (RLV_ATTACHGROUP_INVALID == eAttachGroup) || (rlvGetAttachGroupTypeFromIndex(pAttachPt->getGroup()) == eAttachGroup) )
+		if ( (RLV_ATTACHGROUP_INVALID == eAttachGroup) || (rlvAttachGroupFromIndex(pAttachPt->getGroup()) == eAttachGroup) )
 		{
 			bool fAdd = false;
 			switch (rlvCmd.getBehaviourType())

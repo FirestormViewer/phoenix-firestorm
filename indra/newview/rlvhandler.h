@@ -345,10 +345,10 @@ inline ERlvCmdRet RlvHandler::processCommand(const LLUUID& idObj, const std::str
 {
 	if (STATE_STARTED != LLStartUp::getStartupState())
 	{
-		m_Retained.push_back(RlvRetainedCommand(idObj, RlvCommand(strCommand)));
+		m_Retained.push_back(RlvRetainedCommand(idObj, RlvCommand(idObj, strCommand)));
 		return RLV_RET_RETAINED;
 	}
-	return processCommand(idObj, RlvCommand(strCommand), fFromObj);
+	return processCommand(idObj, RlvCommand(idObj, strCommand), fFromObj);
 }
 
 // ============================================================================

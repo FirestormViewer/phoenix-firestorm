@@ -35,8 +35,8 @@
 RlvCommand::RlvBhvrTable RlvCommand::m_BhvrMap;
 
 // Checked: 2009-12-27 (RLVa-1.1.0k) | Modified: RLVa-1.1.0k
-RlvCommand::RlvCommand(const std::string& strCommand)
-	: m_eBehaviour(RLV_BHVR_UNKNOWN), m_fStrict(false), m_eParamType(RLV_TYPE_UNKNOWN)
+RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
+	: m_idObj(idObj), m_eBehaviour(RLV_BHVR_UNKNOWN), m_fStrict(false), m_eParamType(RLV_TYPE_UNKNOWN)
 {
 	if ((m_fValid = parseCommand(strCommand, m_strBehaviour, m_strOption, m_strParam)))
 	{
@@ -142,6 +142,33 @@ void RlvCommand::initLookupTable()
 			m_BhvrMap.insert(std::pair<std::string, ERlvBehaviour>(arBehaviours[idxBvhr], (ERlvBehaviour)idxBvhr));
 
 		fInitialized = true;
+	}
+}
+
+// ============================================================================
+// RlvCommandOption
+//
+
+// Checked: 2010-09-28 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+RlvCommandOptionGeneric::RlvCommandOptionGeneric(const std::string& strOption)
+{
+	LLWearableType::EType wtType(LLWearableType::WT_INVALID); LLUUID idOption; ERlvAttachGroupType eAttachGroup(RLV_ATTACHGROUP_INVALID);
+	LLViewerJointAttachment* pAttachPt = NULL; LLViewerInventoryCategory* pFolder = NULL;
+
+	if (!(m_fEmpty = strOption.empty()))														// <option> could be an empty string
+	{
+		if ((wtType = LLWearableType::typeNameToType(strOption)) != LLWearableType::WT_INVALID)
+			m_varOption = wtType;																// ... or specify a clothing layer
+		else if ((pAttachPt = RlvAttachPtLookup::getAttachPoint(strOption)) != NULL)
+			m_varOption = pAttachPt;															// ... or specify an attachment point
+		else if (idOption.set(strOption))
+			m_varOption = idOption;																// ... or specify an UUID
+		else if ((pFolder = RlvInventory::instance().getSharedFolder(strOption)) != NULL)
+			m_varOption = pFolder;																// ... or specify a shared folder path
+		else if ((eAttachGroup = rlvAttachGroupFromString(strOption)) != RLV_ATTACHGROUP_INVALID)
+			m_varOption = eAttachGroup;															// ... or specify an attachment point group
+		else
+			m_varOption = strOption;															// ... or it might just be a string
 	}
 }
 
@@ -865,6 +892,46 @@ bool rlvCanDeleteOrReturn()
 	}
 
 	return fIsAllowed;
+}
+
+// ============================================================================
+// Attachment group helper functions
+//
+
+// Has to match the order of ERlvAttachGroupType
+const std::string cstrAttachGroups[RLV_ATTACHGROUP_COUNT] = { "head", "torso", "arms", "legs", "hud" };
+
+// Checked: 2009-10-19 (RLVa-1.1.0e) | Added: RLVa-1.1.0e
+ERlvAttachGroupType rlvAttachGroupFromIndex(S32 idxGroup)
+{
+	switch (idxGroup)
+	{
+		case 0: // Right Hand
+		case 1: // Right Arm
+		case 3: // Left Arm
+		case 4: // Left Hand
+			return RLV_ATTACHGROUP_ARMS;
+		case 2: // Head
+			return RLV_ATTACHGROUP_HEAD;
+		case 5: // Left Leg
+		case 7: // Right Leg
+			return RLV_ATTACHGROUP_LEGS;
+		case 6: // Torso
+			return RLV_ATTACHGROUP_TORSO;
+		case 8: // HUD
+			return RLV_ATTACHGROUP_HUD;
+		default:
+			return RLV_ATTACHGROUP_INVALID;
+	}
+}
+
+// Checked: 2009-10-19 (RLVa-1.1.0e) | Added: RLVa-1.1.0e
+ERlvAttachGroupType rlvAttachGroupFromString(const std::string& strGroup)
+{
+	for (int idx = 0; idx < RLV_ATTACHGROUP_COUNT; idx++)
+		if (cstrAttachGroups[idx] == strGroup)
+			return (ERlvAttachGroupType)idx;
+	return RLV_ATTACHGROUP_INVALID;
 }
 
 // =========================================================================

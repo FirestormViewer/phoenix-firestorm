@@ -39,20 +39,21 @@
 class RlvCommand
 {
 public:
-	explicit RlvCommand(const std::string& strCommand);
+	explicit RlvCommand(const LLUUID& idObj, const std::string& strCommand);
 
 	/*
 	 * Member functions
 	 */
 public:
 	std::string        asString() const;
-	const std::string& getBehaviour() const     { return m_strBehaviour; }
-	ERlvBehaviour      getBehaviourType() const { return m_eBehaviour; }
-	const std::string& getOption() const        { return m_strOption; }
-	const std::string& getParam() const         { return m_strParam; }
-	ERlvParamType      getParamType() const     { return m_eParamType; }
+	const std::string& getBehaviour() const		{ return m_strBehaviour; }
+	ERlvBehaviour      getBehaviourType() const	{ return m_eBehaviour; }
+	const LLUUID&      getObjectID() const		{ return m_idObj; }
+	const std::string& getOption() const		{ return m_strOption; }
+	const std::string& getParam() const			{ return m_strParam; }
+	ERlvParamType      getParamType() const		{ return m_eParamType; }
 	bool               isStrict() const			{ return m_fStrict; }
-	bool               isValid() const          { return m_fValid; }
+	bool               isValid() const			{ return m_fValid; }
 
 	static ERlvBehaviour      getBehaviourFromString(const std::string& strBhvr, bool* pfStrict = NULL);
 	static const std::string& getStringFromBehaviour(ERlvBehaviour eBhvr);
@@ -72,13 +73,14 @@ public:
 	 * Member variables
 	 */
 protected:
-	bool         	m_fValid;
-	std::string  	m_strBehaviour;
-	ERlvBehaviour	m_eBehaviour;
-	bool            m_fStrict;
-	std::string  	m_strOption;
-	std::string  	m_strParam;
-	ERlvParamType	m_eParamType;
+	bool          m_fValid;
+	LLUUID        m_idObj;
+	std::string   m_strBehaviour;
+	ERlvBehaviour m_eBehaviour;
+	bool          m_fStrict;
+	std::string   m_strOption;
+	std::string   m_strParam;
+	ERlvParamType m_eParamType;
 
 	typedef std::map<std::string, ERlvBehaviour> RlvBhvrTable;
 	static RlvBhvrTable m_BhvrMap;
@@ -86,6 +88,73 @@ protected:
 	friend class RlvHandler;
 };
 typedef std::list<RlvCommand> rlv_command_list_t;
+
+// ============================================================================
+// RlvCommandOption (and derived classed)
+//
+
+class RlvCommandOption
+{
+protected:
+	RlvCommandOption() {}
+public:
+	virtual ~RlvCommandOption() {}
+
+public:
+	virtual bool isAttachmentPoint() const		{ return false; }
+	virtual bool isAttachmentPointGroup() const	{ return false; }
+	virtual bool isEmpty() const = 0;
+	virtual bool isSharedFolder() const			{ return false; }
+	virtual bool isString() const				{ return false; }
+	virtual bool isUUID() const					{ return false; }
+	virtual bool isValid() const = 0;
+	virtual bool isWearableType() const			{ return false; }
+
+	virtual LLViewerJointAttachment*   getAttachmentPoint() const		{ return NULL; }
+	virtual ERlvAttachGroupType        getAttachmentPointGroup() const	{ return RLV_ATTACHGROUP_INVALID; }
+	virtual LLViewerInventoryCategory* getSharedFolder() const			{ return NULL; }
+	virtual const std::string&         getString() const				{ return LLStringUtil::null; }
+	virtual const LLUUID&              getUUID() const					{ return LLUUID::null; }
+	virtual LLWearableType::EType      getWearableType() const			{ return LLWearableType::WT_INVALID; }
+};
+
+class RlvCommandOptionGeneric : public RlvCommandOption
+{
+public:
+	explicit RlvCommandOptionGeneric(const std::string& strOption);
+	RlvCommandOptionGeneric(LLViewerJointAttachment* pAttachPt) : m_fEmpty(false)	{ m_varOption = pAttachPt; }
+	RlvCommandOptionGeneric(LLViewerInventoryCategory* pFolder) : m_fEmpty(false)	{ m_varOption = pFolder; }
+	RlvCommandOptionGeneric(const LLUUID& idOption) : m_fEmpty(false)				{ m_varOption = idOption; }
+	RlvCommandOptionGeneric(LLWearableType::EType wtType) : m_fEmpty(false)			{ m_varOption = wtType; }
+	/*virtual*/ ~RlvCommandOptionGeneric() {}
+
+public:
+	/*virtual*/ bool isAttachmentPoint() const		{ return typeid(LLViewerJointAttachment*) == m_varOption.type(); }
+	/*virtual*/ bool isAttachmentPointGroup() const	{ return typeid(ERlvAttachGroupType) == m_varOption.type(); }
+	/*virtual*/ bool isEmpty() const				{ return m_fEmpty; }
+	/*virtual*/ bool isSharedFolder() const			{ return typeid(LLViewerInventoryCategory*) == m_varOption.type(); }
+	/*virtual*/ bool isString() const				{ return typeid(std::string) == m_varOption.type(); }
+	/*virtual*/ bool isUUID() const					{ return typeid(LLUUID) == m_varOption.type(); }
+	/*virtual*/ bool isValid() const				{ return true; } // This doesn't really have any significance for the generic class
+	/*virtual*/ bool isWearableType() const			{ return typeid(LLWearableType::EType) == m_varOption.type(); }
+
+	/*virtual*/ LLViewerJointAttachment*   getAttachmentPoint() const
+		{ return (isAttachmentPoint()) ? boost::get<LLViewerJointAttachment*>(m_varOption) : RlvCommandOption::getAttachmentPoint(); }
+	/*virtual*/ ERlvAttachGroupType        getAttachmentPointGroup() const
+		{ return (isAttachmentPointGroup()) ? boost::get<ERlvAttachGroupType>(m_varOption) : RlvCommandOption::getAttachmentPointGroup(); }
+	/*virtual*/ LLViewerInventoryCategory* getSharedFolder() const
+		{ return (isSharedFolder()) ? boost::get<LLViewerInventoryCategory*>(m_varOption) : RlvCommandOption::getSharedFolder(); }
+	/*virtual*/ const std::string&         getString() const
+		{ return (isString()) ? boost::get<std::string>(m_varOption) : RlvCommandOption::getString(); }
+	/*virtual*/ const LLUUID&              getUUID() const
+		{ return (isUUID()) ? boost::get<LLUUID>(m_varOption) : RlvCommandOption::getUUID(); }
+	/*virtual*/ LLWearableType::EType      getWearableType() const
+		{ return (isWearableType()) ? boost::get<LLWearableType::EType>(m_varOption) : RlvCommandOption::getWearableType(); }
+
+protected:
+	bool m_fEmpty;
+	boost::variant<LLViewerJointAttachment*, ERlvAttachGroupType, LLViewerInventoryCategory*, std::string, LLUUID, LLWearableType::EType> m_varOption;
+};
 
 // ============================================================================
 // RlvObject
@@ -305,6 +374,9 @@ public:
 //
 
 bool rlvCanDeleteOrReturn();
+
+ERlvAttachGroupType rlvAttachGroupFromIndex(S32 idxGroup);
+ERlvAttachGroupType rlvAttachGroupFromString(const std::string& strGroup);
 
 std::string rlvGetFirstParenthesisedText(const std::string& strText, std::string::size_type* pidxMatch = NULL);
 std::string rlvGetLastParenthesisedText(const std::string& strText, std::string::size_type* pidxStart = NULL);
