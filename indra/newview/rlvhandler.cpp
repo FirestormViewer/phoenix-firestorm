@@ -297,16 +297,16 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 // Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
 void RlvHandler::processRetainedCommands(ERlvBehaviour eBhvrFilter /*=RLV_BHVR_UNKNOWN*/, ERlvParamType eTypeFilter /*=RLV_TYPE_UNKNOWN*/)
 {
-	rlv_retained_list_t::iterator itCmd = m_Retained.begin(), itCurCmd;
+	rlv_command_list_t::iterator itCmd = m_Retained.begin(), itCurCmd;
 	while (itCmd != m_Retained.end())
 	{
 		itCurCmd = itCmd++;  // Point the loop iterator ahead
 
-		const RlvRetainedCommand& cmd = *itCurCmd;
-		if ( ((RLV_BHVR_UNKNOWN == eBhvrFilter) || (cmd.rlvCmd.getBehaviourType() == eBhvrFilter)) && 
-		     ((RLV_TYPE_UNKNOWN == eTypeFilter) || (cmd.rlvCmd.getParamType() == eTypeFilter)) )
+		const RlvCommand& rlvCmd = *itCurCmd;
+		if ( ((RLV_BHVR_UNKNOWN == eBhvrFilter) || (rlvCmd.getBehaviourType() == eBhvrFilter)) && 
+		     ((RLV_TYPE_UNKNOWN == eTypeFilter) || (rlvCmd.getParamType() == eTypeFilter)) )
 		{
-			processCommand(cmd.rlvCmd, true);
+			processCommand(rlvCmd, true);
 			m_Retained.erase(itCurCmd);
 		}
 	}

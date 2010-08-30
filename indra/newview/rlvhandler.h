@@ -188,7 +188,7 @@ protected:
 	rlv_exception_map_t   m_Exceptions;				// Map of currently active restriction exceptions (ERlvBehaviour -> RlvException)
 	S16                   m_Behaviours[RLV_BHVR_COUNT];
 
-	rlv_retained_list_t   m_Retained;
+	rlv_command_list_t    m_Retained;
 	RlvGCTimer*           m_pGCTimer;
 	RlvWLSnapshot*        m_pWLSnapshot;
 
@@ -346,7 +346,7 @@ inline ERlvCmdRet RlvHandler::processCommand(const LLUUID& idObj, const std::str
 {
 	if (STATE_STARTED != LLStartUp::getStartupState())
 	{
-		m_Retained.push_back(RlvRetainedCommand(idObj, RlvCommand(idObj, strCommand)));
+		m_Retained.push_back(RlvCommand(idObj, strCommand));
 		return RLV_RET_RETAINED;
 	}
 	return processCommand(RlvCommand(idObj, strCommand), fFromObj);

@@ -323,22 +323,6 @@ protected:
 };
 
 // ============================================================================
-// RlvRetainedCommand
-//
-
-struct RlvRetainedCommand
-{
-public:
-	LLUUID      idObject;
-	RlvCommand  rlvCmd;
-
-	RlvRetainedCommand(const LLUUID& uuid, const RlvCommand& cmd) : idObject(uuid), rlvCmd(cmd) {}
-private:
-	RlvRetainedCommand();
-};
-typedef std::list<RlvRetainedCommand> rlv_retained_list_t;
-
-// ============================================================================
 // RlvException
 //
 
