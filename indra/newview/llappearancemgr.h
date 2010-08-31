@@ -224,6 +224,19 @@ private:
 
 	std::auto_ptr<LLOutfitUnLockTimer> mUnlockOutfitTimer;
 
+// [RLVa:KB] - Checked: 2010-08-31 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+public:
+	void onRegisterAttachmentComplete(const LLUUID& idItem)
+	{
+		const LLUUID& idItemBase = gInventory.getLinkedItemID(idItem);
+		uuid_vec_t::const_iterator itPendingObjLink = std::find(mPendingObjLinks.begin(), mPendingObjLinks.end(), idItemBase);
+		if (itPendingObjLink != mPendingObjLinks.end())
+			mPendingObjLinks.erase(itPendingObjLink);
+	}
+private:
+	uuid_vec_t mPendingObjLinks;
+// [/RLVa:KB]
+
 	//////////////////////////////////////////////////////////////////////////////////
 	// Item-specific convenience functions 
 public:
@@ -250,6 +263,19 @@ private:
 	bool mUpdateBaseOrder;
 };
 
+// [RLVa:KB] - Checked: 2010-08-31 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+class LLRegisterAttachmentCallback : public LLInventoryCallback
+{
+public:
+	LLRegisterAttachmentCallback() {}
+	/*virtual*/ ~LLRegisterAttachmentCallback() {}
+
+	/*virtual*/ void fire(const LLUUID& idItem)
+	{
+		LLAppearanceMgr::instance().onRegisterAttachmentComplete(idItem);
+	}
+};
+// [/RLVa:KB]
 
 #define SUPPORT_ENSEMBLES 0
 
