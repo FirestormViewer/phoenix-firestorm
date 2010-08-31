@@ -64,6 +64,9 @@ RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
 		return;
 	}
 
+	// HACK: all those @addoutfit* synonyms are rather tedious (and error-prone) to deal with so replace them their @attach* equivalent
+	if ( (RLV_TYPE_FORCE == m_eParamType) && (0 == m_strBehaviour.find("addoutfit")) )
+		m_strBehaviour.replace(0, 9, "attach");
 	m_eBehaviour = getBehaviourFromString(m_strBehaviour, &m_fStrict);
 }
 
@@ -131,11 +134,11 @@ void RlvCommand::initLookupTable()
 				"notify", "showinv", "showminimap", "showworldmap", "showloc", "shownames", "showhovertext", "showhovertexthud",
 				"showhovertextworld", "showhovertextall", "tplm", "tploc", "tplure", "viewnote", "viewscript", "viewtexture", 
 				"acceptpermission", "accepttp", "allowidle", "edit", "rez", "fartouch", "interact", "touch", "touchattach", "touchhud", 
-				"touchworld", "fly", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv", "detachme", "detachthis", "detachall", 
-				"detachallthis", "attachthis", "attachall", "attachallthis", "tpto", "version", "versionnew", "versionnum", 
-				"getattach", "getattachnames", 	"getaddattachnames", "getremattachnames", "getoutfit", "getoutfitnames", 
-				"getaddoutfitnames", "getremoutfitnames", "findfolder", "findfolders", "getpath", "getpathnew", "getinv", "getinvworn", 
-				"getsitid", "getstatus", "getstatusall"
+				"touchworld", "fly", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv", "detachme", "attachover", "attachthis",
+				"attachthisover", "detachthis", "attachall", "attachallover", "detachall", "attachallthis", "attachallthisover",
+				"detachallthis", "tpto", "version", "versionnew", "versionnum", "getattach", "getattachnames", 	"getaddattachnames", 
+				"getremattachnames", "getoutfit", "getoutfitnames", "getaddoutfitnames", "getremoutfitnames", "findfolder", "findfolders", 
+				"getpath", "getpathnew", "getinv", "getinvworn", "getsitid", "getstatus", "getstatusall"
 			};
 
 		for (int idxBvhr = 0; idxBvhr < RLV_BHVR_COUNT; idxBvhr++)

@@ -1327,10 +1327,11 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 				}
 			}
 			break;
-		case RLV_BHVR_ADDOUTFIT:	// @addoutfit:<option>=force <- synonym of @attach:<option>=force
-		case RLV_BHVR_ATTACH:		// @attach:<option>=force				- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
-		case RLV_BHVR_ATTACHALL:	// @attachall:<option>=force			- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
-		case RLV_BHVR_DETACHALL:	// @detachall:<option>=force			- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
+		case RLV_BHVR_ATTACH:
+		case RLV_BHVR_ATTACHOVER:
+		case RLV_BHVR_ATTACHALL:
+		case RLV_BHVR_ATTACHALLOVER:
+		case RLV_BHVR_DETACHALL:
 			{
 				RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
 				VERIFY_OPTION(rlvCmdOption.isSharedFolder());
@@ -1338,10 +1339,12 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 				eRet = onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourType());
 			}
 			break;
-		case RLV_BHVR_ATTACHTHIS:	// @attachthis[:<option>]=force			- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
-		case RLV_BHVR_ATTACHALLTHIS:// @attachallthis[:<option>]=force		- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
-		case RLV_BHVR_DETACHTHIS:	// @detachthis[:<option>]=force			- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
-		case RLV_BHVR_DETACHALLTHIS:// @detachallthis[:<option>]=force		- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
+		case RLV_BHVR_ATTACHTHIS:
+		case RLV_BHVR_ATTACHTHISOVER:
+		case RLV_BHVR_DETACHTHIS:
+		case RLV_BHVR_ATTACHALLTHIS:
+		case RLV_BHVR_ATTACHALLTHISOVER:
+		case RLV_BHVR_DETACHALLTHIS:
 			{
 				RlvCommandOptionGetPath rlvGetPathOption(rlvCmd);
 				VERIFY_OPTION(rlvGetPathOption.isValid());
@@ -1471,38 +1474,23 @@ ERlvCmdRet RlvHandler::onForceWear(const LLViewerInventoryCategory* pFolder, ERl
 	if ( (pFolder) && (!RlvInventory::instance().isSharedFolder(pFolder->getUUID())) )
 		return RLV_RET_FAILED_OPTION;
 
-	RlvForceWear::EWearAction eAction;
-	switch (eBhvr)
+	RlvForceWear::EWearAction eAction = RlvForceWear::ACTION_WEAR_REPLACE;
+	if ( (RLV_BHVR_ATTACHOVER == eBhvr) || (RLV_BHVR_ATTACHTHISOVER == eBhvr) || 
+		 (RLV_BHVR_ATTACHALLOVER == eBhvr) || (RLV_BHVR_ATTACHALLTHISOVER == eBhvr) )
 	{
-		case RLV_BHVR_ATTACH:
-		case RLV_BHVR_ATTACHALL:
-		case RLV_BHVR_ATTACHTHIS:
-		case RLV_BHVR_ATTACHALLTHIS:
-		case RLV_BHVR_ADDOUTFIT:
-			eAction = RlvForceWear::ACTION_WEAR_REPLACE;
-			break;
-		case RLV_BHVR_DETACH:
-		case RLV_BHVR_DETACHALL:
-		case RLV_BHVR_DETACHTHIS:
-		case RLV_BHVR_DETACHALLTHIS:
-			eAction = RlvForceWear::ACTION_REMOVE;
-			break;
-		default:
-			RLV_ASSERT(false);
-			return RLV_RET_FAILED_UNKNOWN;
+		eAction = RlvForceWear::ACTION_WEAR_ADD;
+	}
+	else if ( (RLV_BHVR_DETACH == eBhvr) || (RLV_BHVR_DETACHTHIS == eBhvr) || 
+		      (RLV_BHVR_DETACHALL == eBhvr) || (RLV_BHVR_DETACHALLTHIS == eBhvr) )
+	{
+		eAction = RlvForceWear::ACTION_REMOVE;
 	}
 
 	RlvForceWear::EWearFlags eFlags = RlvForceWear::FLAG_DEFAULT;
-	switch (eBhvr)
+	if ( (RLV_BHVR_ATTACHALL == eBhvr) || (RLV_BHVR_ATTACHALLOVER == eBhvr) || (RLV_BHVR_DETACHALL == eBhvr) ||
+		 (RLV_BHVR_ATTACHALLTHIS == eBhvr) || (RLV_BHVR_ATTACHALLTHISOVER == eBhvr) || (RLV_BHVR_DETACHALLTHIS == eBhvr) )
 	{
-		case RLV_BHVR_ATTACHALL:
-		case RLV_BHVR_ATTACHALLTHIS:
-		case RLV_BHVR_DETACHALL:
-		case RLV_BHVR_DETACHALLTHIS:
-			eFlags = (RlvForceWear::EWearFlags)(eFlags | RlvForceWear::FLAG_MATCHALL);
-			break;
-		default:
-			break;
+		eFlags = (RlvForceWear::EWearFlags)(eFlags | RlvForceWear::FLAG_MATCHALL);
 	}
 
 	RlvForceWear::instance().forceFolder(pFolder, eAction, eFlags);
