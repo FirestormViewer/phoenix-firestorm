@@ -676,11 +676,11 @@ void RlvForceWear::remAttachment(const LLViewerObject* pAttachObj)
 // Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 void RlvForceWear::addWearable(const LLViewerInventoryItem* pItem, EWearAction eAction)
 {
-	// When replacing remove all currently worn wearables of this type
-	if (ACTION_WEAR_REPLACE == eAction)
+	const LLWearable* pWearable = gAgentWearables.getWearableFromItemID(pItem->getLinkedUUID());
+	// When replacing remove all currently worn wearables of this type *unless* the item is currently worn
+	if ( (ACTION_WEAR_REPLACE == eAction) && (!pWearable) )
 		forceRemove(pItem->getWearableType());
 	// Remove it from 'm_remWearables' if it's pending removal
-	const LLWearable* pWearable = gAgentWearables.getWearableFromItemID(pItem->getLinkedUUID());;
 	if ( (pWearable) && (isRemWearable(pWearable)) )
 		m_remWearables.erase(std::remove(m_remWearables.begin(), m_remWearables.end(), pWearable), m_remWearables.end());
 
@@ -801,12 +801,16 @@ void RlvForceWear::done()
 		for (S32 idxItem = 0, cntItem = wearItems.count(); idxItem < cntItem; idxItem++)
 		{
 			LLViewerInventoryItem* pItem = wearItems.get(idxItem);
-			if (LLAssetType::AT_BODYPART == pItem->getType())
-				addBodyParts.push_back(pItem);
-			else
-				addClothing.push_back(pItem);
+			if (!pAppearanceMgr->isLinkInCOF(pItem->getUUID()))		// It's important to examine COF here and *not* gAgentWearables
+			{
+				if (LLAssetType::AT_BODYPART == pItem->getType())
+					addBodyParts.push_back(pItem);
+				else
+					addClothing.push_back(pItem);
+			}
 		}
 	}
+	m_addWearables.clear();
 
 	// Until LL provides a way for updateCOF to selectively attach add/replace we have to deal with attachments ourselves
 	if (m_addAttachments.size())
@@ -832,12 +836,10 @@ void RlvForceWear::done()
 	}
 
 	// If there are additions we need to call LLAppearanceManager::updateCOF(), otherwise LLAppearanceManager::updateAppearanceFromCOF()
-	if ( (!m_addWearables.empty()) || (!m_addAttachments.empty()) || (!m_addGestures.empty()) )
+	if ( (!addBodyParts.empty()) || (!addClothing.empty()) || (!m_addGestures.empty()) )
 	{
 		pAppearanceMgr->updateCOF(addBodyParts, addClothing, LLInventoryModel::item_array_t(), m_addGestures, true);
 
-		m_addWearables.clear();
-		m_addAttachments.clear();
 		m_addGestures.clear();
 	}
 	else if (fUpdateAppearance)
