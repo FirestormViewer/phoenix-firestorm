@@ -1,0 +1,3 @@
+[Viewer/Build]
+- changed: compiler options for "Release with Debug" builds
+- changed: compiler and linker options for "Release" builds
