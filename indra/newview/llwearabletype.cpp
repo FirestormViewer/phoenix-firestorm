@@ -58,6 +58,12 @@ class LLWearableDictionary : public LLSingleton<LLWearableDictionary>,
 {
 public:
 	LLWearableDictionary();
+
+// [RLVa:KB] - Checked: 2010-03-03 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+protected:
+	// The default implementation asserts on 'notFound()' and returns -1 which isn't a valid EWearableType
+	virtual LLWearableType::EType notFound() const { return LLWearableType::WT_INVALID; }
+// [/RLVa:KB]
 };
 
 LLWearableDictionary::LLWearableDictionary()
@@ -94,6 +100,10 @@ const std::string& LLWearableType::getTypeName(LLWearableType::EType type)
 { 
 	const LLWearableDictionary *dict = LLWearableDictionary::getInstance();
 	const WearableEntry *entry = dict->lookup(type);
+// [RLVa:KB] - Checked: 2010-05-15 (RLVa-1.2.0g) | Added: RLVa-1.2.0g
+	if (!entry)
+		entry = dict->lookup(WT_INVALID);
+// [/RLVa:KB]
 	return entry->mName;
 }
 
@@ -102,6 +112,10 @@ const std::string& LLWearableType::getTypeDefaultNewName(LLWearableType::EType t
 { 
 	const LLWearableDictionary *dict = LLWearableDictionary::getInstance();
 	const WearableEntry *entry = dict->lookup(type);
+// [RLVa:KB] - Checked: 2010-05-15 (RLVa-1.2.0g) | Added: RLVa-1.2.0g
+	if (!entry)
+		entry = dict->lookup(WT_INVALID);
+// [/RLVa:KB]
 	return entry->mDefaultNewName;
 }
 
@@ -110,6 +124,10 @@ const std::string& LLWearableType::getTypeLabel(LLWearableType::EType type)
 { 
 	const LLWearableDictionary *dict = LLWearableDictionary::getInstance();
 	const WearableEntry *entry = dict->lookup(type);
+// [RLVa:KB] - Checked: 2010-05-15 (RLVa-1.2.0g) | Added: RLVa-1.2.0g
+	if (!entry)
+		entry = dict->lookup(WT_INVALID);
+// [/RLVa:KB]
 	return entry->mLabel;
 }
 
@@ -118,6 +136,10 @@ LLAssetType::EType LLWearableType::getAssetType(LLWearableType::EType type)
 {
 	const LLWearableDictionary *dict = LLWearableDictionary::getInstance();
 	const WearableEntry *entry = dict->lookup(type);
+// [RLVa:KB] - Checked: 2010-05-15 (RLVa-1.2.0g) | Added: RLVa-1.2.0g
+	if (!entry)
+		entry = dict->lookup(WT_INVALID);
+// [/RLVa:KB]
 	return entry->mAssetType;
 }
 
@@ -126,6 +148,10 @@ LLInventoryIcon::EIconName LLWearableType::getIconName(LLWearableType::EType typ
 {
 	const LLWearableDictionary *dict = LLWearableDictionary::getInstance();
 	const WearableEntry *entry = dict->lookup(type);
+// [RLVa:KB] - Checked: 2010-05-15 (RLVa-1.2.0g) | Added: RLVa-1.2.0g
+	if (!entry)
+		entry = dict->lookup(WT_INVALID);
+// [/RLVa:KB]
 	return entry->mIconName;
 }
 

@@ -37,6 +37,9 @@
 #include "llagent.h"
 #include "llavatariconctrl.h"
 #include "lloutputmonitorctrl.h"
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 bool LLAvatarListItem::sStaticInitialized = false;
 S32 LLAvatarListItem::sLeftPadding = 0;
@@ -65,7 +68,11 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	mProfileBtn(NULL),
 	mOnlineStatus(E_UNKNOWN),
 	mShowInfoBtn(true),
-	mShowProfileBtn(true)
+//	mShowProfileBtn(true)
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+	mShowProfileBtn(true),
+	mRlvCheckShowNames(false)
+// [/RLVa:KB]
 {
 	if (not_from_ui_factory)
 	{
@@ -122,8 +129,12 @@ S32 LLAvatarListItem::notifyParent(const LLSD& info)
 void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( true);
-	mInfoBtn->setVisible(mShowInfoBtn);
-	mProfileBtn->setVisible(mShowProfileBtn);
+//	mInfoBtn->setVisible(mShowInfoBtn);
+//	mProfileBtn->setVisible(mShowProfileBtn);
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+	mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+// [/RLVa:KB]
 
 	LLPanel::onMouseEnter(x, y, mask);
 
@@ -163,7 +174,11 @@ void LLAvatarListItem::setOnline(bool online)
 
 void LLAvatarListItem::setName(const std::string& name)
 {
-	setNameInternal(name, mHighlihtSubstring);
+//	setNameInternal(name, mHighlihtSubstring);
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+	bool fRlvFilter = (mRlvCheckShowNames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+	setNameInternal( (!fRlvFilter) ? name : RlvStrings::getAnonym(name), mHighlihtSubstring);
+// [/RLVa:KB]
 }
 
 void LLAvatarListItem::setHighlight(const std::string& highlight)
