@@ -55,6 +55,9 @@
 LLAgentWearables gAgentWearables;
 
 BOOL LLAgentWearables::mInitialWearablesUpdateReceived = FALSE;
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1.2a) | Added: Catznip-2.1.1d
+bool LLAgentWearables::mInitialWearablesLoaded = false;
+// [/SL:KB]
 
 using namespace LLVOAvatarDefines;
 
@@ -2097,9 +2100,23 @@ boost::signals2::connection LLAgentWearables::addLoadedCallback(loaded_callback_
 	return mLoadedSignal.connect(cb);
 }
 
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1.2a) | Added: Catznip-2.1.1d
+boost::signals2::connection LLAgentWearables::addInitialWearablesLoadedCallback(loaded_callback_t cb)
+{
+	return mInitialWearablesLoadedSignal.connect(cb);
+}
+// [/SL:KB]
+
 void LLAgentWearables::notifyLoadingStarted()
 {
 	mCOFChangeInProgress = true;
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1.2a) | Added: Catznip-2.1.1d
+	if (!mInitialWearablesLoaded)
+	{
+		mInitialWearablesLoaded = true;
+		mInitialWearablesLoadedSignal();
+	}
+// [/SL:KB]
 	mLoadingStartedSignal();
 }
 
