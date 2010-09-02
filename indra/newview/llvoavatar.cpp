@@ -85,6 +85,9 @@
 #include "llanimstatelabels.h"
 #include "lltrans.h"
 #include "llappearancemgr.h"
+// [RLVa:KB] - Checked: 2010-04-01 (RLVa-1.2.0c)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 #include "llgesturemgr.h" //needed to trigger the voice gesticulations
 #include "llvoiceclient.h"
@@ -2757,12 +2760,18 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 	const F32 time_visible = mTimeVisible.getElapsedTimeF32();
 	const F32 NAME_SHOW_TIME = gSavedSettings.getF32("RenderNameShowTime");	// seconds
 	const F32 FADE_DURATION = gSavedSettings.getF32("RenderNameFadeDuration"); // seconds
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d) | Added: RLVa-0.2.0b
+	bool fRlvShowNames = gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+// [/RLVa:KB]
 	BOOL visible_avatar = isVisible() || mNeedsAnimUpdate;
 	BOOL visible_chat = gSavedSettings.getBOOL("UseChatBubbles") && (mChats.size() || mTyping);
 	BOOL render_name =	visible_chat ||
-		(visible_avatar &&
-		 ((sRenderName == RENDER_NAME_ALWAYS) ||
-		  (sRenderName == RENDER_NAME_FADE && time_visible < NAME_SHOW_TIME)));
+		                (visible_avatar &&
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d) | Added: RLVa-1.0.0h
+						( (!fRlvShowNames) || (RlvSettings::getShowNameTags()) ) &&
+// [/RLVa:KB]
+		                ((sRenderName == RENDER_NAME_ALWAYS) ||
+		                 (sRenderName == RENDER_NAME_FADE && time_visible < NAME_SHOW_TIME)));
 	// If it's your own avatar, don't draw in mouselook, and don't
 	// draw if we're specifically hiding our own name.
 	if (isSelf())
@@ -2782,7 +2791,18 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 			new_name = TRUE;
 		}
 		
-		if (sRenderGroupTitles != mRenderGroupTitles)
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d) | Added: RLVa-0.2.0b
+		if (fRlvShowNames)
+		{
+			if (mRenderGroupTitles)
+			{
+				mRenderGroupTitles = FALSE;
+				new_name = TRUE;
+			}
+		}
+		else if (sRenderGroupTitles != mRenderGroupTitles)
+// [/RLVa]
+//		if (sRenderGroupTitles != mRenderGroupTitles)
 		{
 			mRenderGroupTitles = sRenderGroupTitles;
 			new_name = TRUE;
@@ -2905,27 +2925,38 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 				)
 			{
 				std::string line;
-				if (!sRenderGroupTitles)
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d) | Added: RLVa-0.2.0b
+				if (!fRlvShowNames)
 				{
-					// If all group titles are turned off, stack first name
-					// on a line above last name
-					line += firstname->getString();
-					line += "\n";
-				}
-				else if (title && title->getString() && title->getString()[0] != '\0')
-				{
-					line += title->getString();
-					LLStringFn::replace_ascii_controlchars(line,LL_UNKNOWN_CHAR);
-					line += "\n";
-					line += firstname->getString();
+// [/RLVa:KB]
+					if (!sRenderGroupTitles)
+					{
+						// If all group titles are turned off, stack first name
+						// on a line above last name
+						line += firstname->getString();
+						line += "\n";
+					}
+					else if (title && title->getString() && title->getString()[0] != '\0')
+					{
+						line += title->getString();
+						LLStringFn::replace_ascii_controlchars(line,LL_UNKNOWN_CHAR);
+						line += "\n";
+						line += firstname->getString();
+					}
+					else
+					{
+						line += firstname->getString();
+					}
+
+					line += " ";
+					line += lastname->getString();
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d) | Added: RLVa-0.2.0b
 				}
 				else
 				{
-					line += firstname->getString();
+					line = RlvStrings::getAnonym(line.assign(firstname->getString()).append(" ").append(lastname->getString()));
 				}
-
-				line += " ";
-				line += lastname->getString();
+// [/RLVa:KB]
 				BOOL need_comma = FALSE;
 
 				if (is_away || is_muted || is_busy)
@@ -5727,6 +5758,13 @@ void LLVOAvatar::sitDown(BOOL bSitting)
 	{
 		// Update Movement Controls according to own Sitting mode
 		LLFloaterMove::setSittingMode(bSitting);
+
+// [RLVa:KB] - Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
+		if (rlv_handler_t::isEnabled())
+		{
+			gRlvHandler.onSitOrStand(bSitting);
+		}
+// [/RLVa:KB]
 	}
 }
 

@@ -98,7 +98,9 @@
 #include "llspatialpartition.h"
 #include "llmutelist.h"
 #include "lltoolpie.h"
-
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 #ifdef _DEBUG
 // Debug indices is disabled for now for debug performance - djs 4/24/02
@@ -2330,8 +2332,13 @@ void LLPipeline::stateSort(LLDrawable* drawablep, LLCamera& camera)
 	
 	if (LLSelectMgr::getInstance()->mHideSelectedObjects)
 	{
-		if (drawablep->getVObj().notNull() &&
-			drawablep->getVObj()->isSelected())
+//		if (drawablep->getVObj().notNull() &&
+//			drawablep->getVObj()->isSelected())
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d) | Modified: RLVa-1.0.5a
+		const LLViewerObject* pObj = drawablep->getVObj();
+		if ( (pObj) && (pObj->isSelected()) && 
+			 ((!rlv_handler_t::isEnabled()) || (!pObj->isHUDAttachment()) || (!gRlvAttachmentLocks.isLockedAttachment(pObj))) )
+// [/RVLa:KB]
 		{
 			return;
 		}
