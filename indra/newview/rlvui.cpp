@@ -33,6 +33,8 @@
 #include "llsidetray.h"
 #include "llsidetraypanelcontainer.h"
 #include "lltabcontainer.h"
+#include "llteleporthistory.h"
+#include "llteleporthistorystorage.h"
 #include "lltoolmgr.h"
 #include "llviewerparcelmgr.h"
 #include "roles_constants.h"			// Group "powers"
@@ -259,6 +261,38 @@ void RlvUIEnabler::onToggleShowLoc()
 		// Hide the "God Tools" floater if it's currently visible
 		if (LLFloaterReg::floaterInstanceVisible("god_tools"))
 			LLFloaterReg::hideInstance("god_tools");
+
+		//
+		// Manipulate the teleport history
+		//
+
+		// If the last entry in the persistent teleport history matches the current teleport history entry then we should remove it
+		LLTeleportHistory* pTpHistory = LLTeleportHistory::getInstance();
+		LLTeleportHistoryStorage* pTpHistoryStg = LLTeleportHistoryStorage::getInstance();
+		RLV_ASSERT( (pTpHistory) && (pTpHistoryStg) && (pTpHistory->getItems().size() > 0) && (pTpHistory->getCurrentItemIndex() >= 0) );
+		if ( (pTpHistory) && (pTpHistory->getItems().size() > 0) && (pTpHistory->getCurrentItemIndex() >= 0) &&
+			 (pTpHistoryStg) && (pTpHistory->getItems().size() > 0) )
+		{
+			const LLTeleportHistoryItem& tpItem = pTpHistory->getItems().back();
+			const LLTeleportHistoryPersistentItem& tpItemStg = pTpHistoryStg->getItems().back();
+			if (pTpHistoryStg->compareByTitleAndGlobalPos(tpItemStg, LLTeleportHistoryPersistentItem(tpItem.mTitle, tpItem.mGlobalPos)))
+			{
+				// TODO-RLVa: [RLVa-1.2.2] Is there a reason why LLTeleportHistoryStorage::removeItem() doesn't trigger history changed?
+				pTpHistoryStg->removeItem(pTpHistoryStg->getItems().size() - 1);
+				pTpHistoryStg->mHistoryChangedSignal(-1);
+			}
+		}
+
+		// Clear the current location in the teleport history
+		if (pTpHistory)
+			pTpHistory->updateCurrentLocation(gAgent.getPositionGlobal());
+	}
+	else
+	{
+		// Reset the current location in the teleport history (also takes care of adding it to the persistent teleport history)
+		LLTeleportHistory* pTpHistory = LLTeleportHistory::getInstance();
+		if ( (pTpHistory) && (NULL != gAgent.getRegion()) )
+			pTpHistory->updateCurrentLocation(gAgent.getPositionGlobal());
 	}
 
 	// Start or stop filtering the "About Land" and "Region / Estate" floaters
