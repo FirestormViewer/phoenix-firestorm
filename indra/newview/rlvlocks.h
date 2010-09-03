@@ -321,16 +321,16 @@ inline ERlvWearMask RlvAttachmentLocks::canAttach(const LLInventoryItem* pItem, 
 	LLViewerJointAttachment* pAttachPt = RlvAttachPtLookup::getAttachPoint(pItem);
 	if (ppAttachPtOut)
 		*ppAttachPtOut = pAttachPt;
-	return (!pAttachPt) ? (ERlvWearMask)(RLV_WEAR_REPLACE | RLV_WEAR_ADD) : canAttach(pAttachPt);
+	return (!pAttachPt) ? RLV_WEAR : canAttach(pAttachPt);
 }
 
 // Checked: 2010-08-07 (RLVa-1.2.0i) | Modified: RLVa-1.2.0i
 inline ERlvWearMask RlvAttachmentLocks::canAttach(const LLViewerJointAttachment* pAttachPt) const
 {
 	// Non-attachable attachment point  => RLV_WEAR_LOCKED
-	// One or more locked attachment(s) => RLV_WEAR_LOCKED  (or RLV_WEAR_ADD)
-	// Unlocked attachment(s)           => RLV_WEAR_REPLACE (or RLV_WEAR_ADD | RLV_WEAR_REPLACE)
-	// Empty attachment point           => RLV_WEAR_REPLACE (or RLV_WEAR_ADD | RLV_WEAR_REPLACE)
+	// One or more locked attachment(s) => RLV_WEAR_ADD
+	// Unlocked attachment(s)           => RLV_WEAR_ADD | RLV_WEAR_REPLACE
+	// Empty attachment point           => RLV_WEAR_ADD | RLV_WEAR_REPLACE
 	RLV_ASSERT(pAttachPt);	// TODO-RLVa: [RLVa-1.2.1] Maybe it's better to just return something similar like above?
 	return 
 		(ERlvWearMask)(((pAttachPt) && (!isLockedAttachmentPoint(pAttachPt, RLV_LOCK_ADD))) 

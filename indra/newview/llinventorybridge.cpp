@@ -4169,7 +4169,6 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 			{
 				items.push_back(std::string("Wearable And Object Separator"));
 				items.push_back(std::string("Detach From Yourself"));
-
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
 				if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canDetach(item)) )
 					disabled_items.push_back(std::string("Detach From Yourself"));
@@ -4192,10 +4191,14 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 					disabled_items.push_back(std::string("Attach To"));
 					disabled_items.push_back(std::string("Attach To HUD"));
 				}
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-				else if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canAttach(item)) )
+// [RLVa:KB] - Checked: 2010-09-03 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
+				else if (rlv_handler_t::isEnabled())
 				{
-					disabled_items.push_back(std::string("Object Wear"));
+					ERlvWearMask eWearMask = gRlvAttachmentLocks.canAttach(item);
+					if ((eWearMask & RLV_WEAR_REPLACE) == 0)
+						disabled_items.push_back(std::string("Wearable And Object Wear"));
+					if ((eWearMask & RLV_WEAR_ADD) == 0)
+						disabled_items.push_back(std::string("Wearable Add"));
 				}
 // [/RLVa:KB]
 
@@ -4565,9 +4568,7 @@ void LLWearableBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 						disabled_items.push_back(std::string("Wearable Add"));
 // [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0c) | Added: RLVa-1.2.0c
 						if ( (rlv_handler_t::isEnabled()) && (!gRlvWearableLocks.canRemove(item)) )
-						{
 							disabled_items.push_back(std::string("Take Off"));
-						}
 // [/RLVa:KB]
 					}
 					else
@@ -4582,7 +4583,7 @@ void LLWearableBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 						{
 							ERlvWearMask eWearMask = gRlvWearableLocks.canWear(item);
 							if ((eWearMask & RLV_WEAR_REPLACE) == 0)
-								disabled_items.push_back(std::string("Wearable Wear"));
+								disabled_items.push_back(std::string("Wearable And Object Wear"));
 							if ((eWearMask & RLV_WEAR_ADD) == 0)
 								disabled_items.push_back(std::string("Wearable Add"));
 						}
