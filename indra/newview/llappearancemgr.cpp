@@ -1009,7 +1009,7 @@ bool LLAppearanceMgr::wearItemOnAvatar(const LLUUID& item_id_to_wear, bool do_up
 		return false;
 	}
 
-// [RLVa:KB] - Checked: 2010-06-08 (RLVa-1.2.0g) | Added: RLVa-1.2.0g
+// [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
 	if ( (rlv_handler_t::isEnabled()) && 
 		 ((gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) || (gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_ANY))) )
 	{
@@ -1019,15 +1019,14 @@ bool LLAppearanceMgr::wearItemOnAvatar(const LLUUID& item_id_to_wear, bool do_up
 			case LLAssetType::AT_CLOTHING:
 				{
 					ERlvWearMask eWear = gRlvWearableLocks.canWear(item_to_wear);
-					if (RLV_WEAR_LOCKED == eWear)
+					if ( (RLV_WEAR_LOCKED == eWear) || ((replace) && ((RLV_WEAR_REPLACE & eWear) == 0)) )
 						return false;
-					replace &= ((RLV_WEAR_REPLACE & eWear) == RLV_WEAR_REPLACE);
 				}
 				break;
 			case LLAssetType::AT_OBJECT:
 				{
-					// TODO-RLVa: [SL-2.1.0] Rewrite for MULTI_ATTACHMENTS
-					if (!gRlvAttachmentLocks.canAttach(item_to_wear))
+					ERlvWearMask eWear = gRlvAttachmentLocks.canAttach(item_to_wear);
+					if ( (RLV_WEAR_LOCKED == eWear) || ((replace) && ((RLV_WEAR_REPLACE & eWear) == 0)) )
 						return false;
 				}
 				break;
