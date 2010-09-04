@@ -4708,7 +4708,10 @@ void LLWearableBridge::removeAllClothesFromAvatar()
 		if (itype == LLWearableType::WT_SHAPE || itype == LLWearableType::WT_SKIN || itype == LLWearableType::WT_HAIR || itype == LLWearableType::WT_EYES)
 			continue;
 
-		for (S32 index = gAgentWearables.getWearableCount(itype)-1; index >= 0 ; --index)
+//		for (S32 index = gAgentWearables.getWearableCount(itype)-1; index >= 0 ; --index)
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-04 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+		for (S32 index = gAgentWearables.getWearableCount((LLWearableType::EType)itype)-1; index >= 0 ; --index)
+// [/SL:KB]
 		{
 			LLViewerInventoryItem *item = dynamic_cast<LLViewerInventoryItem*>(
 				gAgentWearables.getWearableInventoryItem((LLWearableType::EType)itype, index));
