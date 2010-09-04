@@ -2794,6 +2794,9 @@ void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
 //				LLWearableBridge::removeItemFromAvatar(item_to_remove);
 //			}
 // [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-2.1.2a) | Added: Catznip-2.1.1d
+// [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+			if ( (!rlv_handler_t::isEnabled()) || (gRlvWearableLocks.canRemove(item_to_remove)) )
+// [/RLVa:KB]
 			{
 				/*const*/ LLWearable* pWearable = gAgentWearables.getWearableFromItemID(item_to_remove->getLinkedUUID());
 				if ( (pWearable) && (LLAssetType::AT_BODYPART != pWearable->getAssetType()) )

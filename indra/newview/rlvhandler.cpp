@@ -1357,21 +1357,14 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 				}
 			}
 			break;
-		case RLV_BHVR_DETACHME:		// @detachme=force						- Checked: 2010-04-04 (RLVa-1.2.0c) | Modified: RLVa-1.2.0c
+		case RLV_BHVR_DETACHME:		// @detachme=force						- Checked: 2010-09-04 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 			{
 				VERIFY_OPTION(rlvCmd.getOption().empty());
 				// NOTE: @detachme should respect locks but shouldn't respect things like nostrip
 				const LLViewerObject* pAttachObj = gObjectList.findObject(rlvCmd.getObjectID());
-				if ( (pAttachObj) && (pAttachObj->isAttachment()) && (!gRlvAttachmentLocks.isLockedAttachment(pAttachObj)) )
+				if ( (pAttachObj) && (pAttachObj->isAttachment()) )
 				{
-					gMessageSystem->newMessage("ObjectDetach");
-					gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-					gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-					gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-
-					gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
-					gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, pAttachObj->getLocalID());
-					gMessageSystem->sendReliable( gAgent.getRegionHost() );
+					LLVOAvatarSelf::detachAttachmentIntoInventory(pAttachObj->getAttachmentItemID());
 				}
 			}
 			break;

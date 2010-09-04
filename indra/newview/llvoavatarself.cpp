@@ -1209,7 +1209,10 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 BOOL LLVOAvatarSelf::detachAttachmentIntoInventory(const LLUUID &item_id)
 {
 	LLInventoryItem* item = gInventory.getItem(item_id);
-	if (item)
+//	if (item)
+// [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+	if ( (item) && ((!rlv_handler_t::isEnabled()) || (gRlvAttachmentLocks.canDetach(item))) )
+// [/RLVa:KB]
 	{
 		gMessageSystem->newMessageFast(_PREHASH_DetachAttachmentIntoInv);
 		gMessageSystem->nextBlockFast(_PREHASH_ObjectData);

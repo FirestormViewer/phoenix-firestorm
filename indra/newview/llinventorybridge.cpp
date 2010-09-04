@@ -3985,10 +3985,7 @@ void LLObjectBridge::performAction(LLInventoryModel* model, std::string action)
 	else if (isRemoveAction(action))
 	{
 		LLInventoryItem* item = gInventory.getItem(mUUID);
-//		if(item)
-// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
-		if ( (item) && ((!rlv_handler_t::isEnabled()) || (gRlvAttachmentLocks.canDetach(item))) )
-// [/RLVa:KB]
+		if(item)
 		{
 			LLVOAvatarSelf::detachAttachmentIntoInventory(item->getLinkedUUID());
 		}
@@ -4408,10 +4405,7 @@ void remove_inventory_category_from_avatar_step2( BOOL proceed, LLUUID category_
 			for(i = 0; i  < obj_count; ++i)
 			{
 				LLViewerInventoryItem *obj_item = obj_item_array.get(i);
-//				if (get_is_item_worn(obj_item->getUUID()))
-// [RLVa:KB] - Checked: 2010-03-16 (RLVa-1.2.0a) | Modified: RLVa-1.0.5a
-				if ((get_is_item_worn(obj_item->getUUID())) && ((!rlv_handler_t::isEnabled()) || (gRlvAttachmentLocks.canDetach(obj_item))))
-// [/RVLa:KB]
+				if (get_is_item_worn(obj_item->getUUID()))
 				{
 					LLVOAvatarSelf::detachAttachmentIntoInventory(obj_item->getLinkedUUID());
 				}
