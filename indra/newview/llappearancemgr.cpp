@@ -1726,7 +1726,7 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 			const LLUUID& idItem = *itPendingObjLink;
 			if (!gAgentAvatarp->isWearingAttachment(idItem))
 			{
-				mPendingObjLinks.erase(itPendingObjLink++);
+				itPendingObjLink = mPendingObjLinks.erase(itPendingObjLink);
 				continue;
 			}
 

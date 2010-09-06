@@ -225,7 +225,7 @@ public:
 	void onRegisterAttachmentComplete(const LLUUID& idItem)
 	{
 		const LLUUID& idItemBase = gInventory.getLinkedItemID(idItem);
-		uuid_vec_t::const_iterator itPendingObjLink = std::find(mPendingObjLinks.begin(), mPendingObjLinks.end(), idItemBase);
+		uuid_vec_t::iterator itPendingObjLink = std::find(mPendingObjLinks.begin(), mPendingObjLinks.end(), idItemBase);
 		if (itPendingObjLink != mPendingObjLinks.end())
 			mPendingObjLinks.erase(itPendingObjLink);
 	}
