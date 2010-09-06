@@ -109,7 +109,11 @@ public:
 	/*
 	 * get currently active tab
 	 */
-    const LLSideTrayTab*	getActiveTab() const { return mActiveTab; }
+//    const LLSideTrayTab*	getActiveTab() const { return mActiveTab; }
+// [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+	// *sighs* LLSideTrayTab is defined in llsidetray.cpp... we can make do with an LLPanel* though 
+    const LLPanel*	getActiveTab() const;
+// [/RLVa:KB]
 
 	/*
      * collapse SideBar, hiding visible tab and moving tab buttons
@@ -134,6 +138,13 @@ public:
 	}
 
 	LLPanel*	getButtonsPanel() { return mButtonsPanel; }
+// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+	LLButton*	getButtonFromName(const std::string& strName)
+	{ 
+		std::map<std::string, LLButton*>::const_iterator itBtn = mTabButtons.find(strName);
+		return (mTabButtons.end() != itBtn) ? itBtn->second : NULL;
+	}
+// [/RLVa:KB]
 
 	bool		getCollapsed() { return mCollapsed; }
 

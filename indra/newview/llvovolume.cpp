@@ -63,6 +63,9 @@
 #include "llmediadataclient.h"
 #include "llagent.h"
 #include "llviewermediafocus.h"
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 const S32 MIN_QUIET_FRAMES_COALESCE = 30;
 const F32 FORCE_SIMPLE_RENDER_AREA = 512.f;
@@ -3222,7 +3225,12 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 {
 	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
 
-	if (facep->getViewerObject()->isSelected() && LLSelectMgr::getInstance()->mHideSelectedObjects)
+//	if (facep->getViewerObject()->isSelected() && LLSelectMgr::getInstance()->mHideSelectedObjects)
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d) | Modified: RLVa-1.0.5a
+	const LLViewerObject* pObj = facep->getViewerObject();
+	if ( (pObj->isSelected() && LLSelectMgr::getInstance()->mHideSelectedObjects) && 
+		 ((!rlv_handler_t::isEnabled()) || (!pObj->isHUDAttachment()) || (!gRlvAttachmentLocks.isLockedAttachment(pObj))) )
+// [/RVLa:KB]
 	{
 		return;
 	}
