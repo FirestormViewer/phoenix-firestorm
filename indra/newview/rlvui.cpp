@@ -170,18 +170,33 @@ void RlvUIEnabler::onToggleSetEnv()
 	}
 }
 
-// Checked: 2010-08-24 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
+// Checked: 2010-09-07 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
 void RlvUIEnabler::onToggleShowInv()
 {
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV);
 
 	//
-	// Enable/disable the "My Inventory" button on the sidebar button panel
+	// Enable/disable the "My Inventory" sidebar tab
 	//
 	LLSideTray* pSideTray = LLSideTray::getInstance(); 
 	RLV_ASSERT(pSideTray);
 	if (pSideTray)
 	{
+		// If the inventory sidebar tab is currently undocked we need to redock it first
+		if ( (!fEnable) && (!pSideTray->isTabAttached("sidebar_inventory")) )
+		{
+			// NOTE: redocking will expand the sidebar and select the redocked tab so we need enough information to undo that again
+			bool fCollapsed = pSideTray->getCollapsed();
+			const LLPanel* pActiveTab = pSideTray->getActiveTab();
+
+			pSideTray->toggleTabDocked("sidebar_inventory");
+
+			if (pActiveTab)
+				pSideTray->selectTabByName(pActiveTab->getName());
+			if (fCollapsed)
+				pSideTray->collapseSideBar();
+		}
+
 		LLButton* pInvBtn = pSideTray->getButtonFromName("sidebar_inventory");
 		RLV_ASSERT(pInvBtn);
 		if (pInvBtn) 
@@ -209,6 +224,7 @@ void RlvUIEnabler::onToggleShowInv()
 	// Enable/disable the "My Outfits" panel on the "My Appearance" sidebar tab
 	//
 	LLPanelOutfitsInventory* pAppearancePanel = LLPanelOutfitsInventory::findInstance();
+	RLV_ASSERT(pAppearancePanel);
 	if (pAppearancePanel)
 	{
 		LLTabContainer* pAppearanceTabs = pAppearancePanel->getAppearanceTabs();

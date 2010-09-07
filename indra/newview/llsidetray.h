@@ -176,6 +176,10 @@ public:
 
 	bool 		isTabAttached	(const std::string& name);
 
+// [RLVa:KB] - Checked: 2010-09-07 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+	void 		toggleTabDocked(const std::string& strTabName);
+// [/RLVa:KB]
+
 protected:
 	bool		hasTabs			();
 

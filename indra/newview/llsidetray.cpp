@@ -540,6 +540,32 @@ bool LLSideTray::isTabAttached(const std::string& name)
 	return std::find(mTabs.begin(), mTabs.end(), tab) != mTabs.end();
 }
 
+// [RLVa:KB] - Checked: 2010-09-07 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+void LLSideTray::toggleTabDocked(const std::string& strTabName)
+{
+	if (!isTabAttached(strTabName))
+	{
+		for (child_vector_iter_t itTab = mDetachedTabs.begin(); itTab != mDetachedTabs.end(); ++itTab)
+		{
+			LLSideTrayTab* pTab = *itTab;
+			if (strTabName == pTab->getName())
+			{
+				pTab->toggleTabDocked();
+				return;
+			}
+		}
+	}
+	else
+	{
+		LLSideTrayTab* pTab = getTab(strTabName);
+		if (pTab)
+		{
+			pTab->toggleTabDocked();
+		}
+	}
+}
+// [/RLVa:KB]
+
 bool LLSideTray::hasTabs()
 {
 	// The open/close tab doesn't count.
