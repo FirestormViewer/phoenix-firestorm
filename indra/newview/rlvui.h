@@ -46,6 +46,7 @@ protected:
 	void onRefreshHoverText();											// showloc, shownames, showhovertext(all|world|hud)
 	void onToggleEdit();												// edit
 	void onToggleFly();													// fly
+	void onToggleRez();													// rez
 	void onToggleSetEnv();												// setenv
 	void onToggleShowInv();												// showinv
 	void onToggleShowLoc();												// showloc
@@ -92,6 +93,7 @@ public:
 	static bool canViewRegionProperties();								// showloc
 	static bool hasOpenIM(const LLUUID& idAgent);						// shownames
 	static bool hasOpenProfile(const LLUUID& idAgent);					// shownames
+	static bool isBuildEnabled();										// edit and rez
 
 	/*
 	 * Member variables

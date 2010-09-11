@@ -65,6 +65,7 @@ RlvUIEnabler::RlvUIEnabler()
 	// onToggleXXX
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_EDIT, boost::bind(&RlvUIEnabler::onToggleEdit, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_FLY, boost::bind(&RlvUIEnabler::onToggleFly, this)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_REZ, boost::bind(&RlvUIEnabler::onToggleRez, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SETENV, boost::bind(&RlvUIEnabler::onToggleSetEnv, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWINV, boost::bind(&RlvUIEnabler::onToggleShowInv, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWLOC, boost::bind(&RlvUIEnabler::onToggleShowLoc, this)));
@@ -127,6 +128,9 @@ void RlvUIEnabler::onToggleEdit()
 			LLToolMgr::instance().toggleBuildMode();
 	}
 
+	// Enable/disable the "Build" bottom tray button (but only if edit *and* rez restricted)
+	LLBottomTray::getInstance()->getChild<LLButton>("build_btn")->setEnabled(isBuildEnabled());
+
 	// Start or stop filtering opening the beacons floater
 	if (!fEnable)
 		addGenericFloaterFilter("beacons");
@@ -145,6 +149,13 @@ void RlvUIEnabler::onToggleFly()
 
 	// Force an update since the status only updates when the current parcel changes [see LLFloaterMove::postBuild()]
 	LLFloaterMove::sUpdateFlyingStatus();
+}
+
+// Checked: 2010-09-11 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
+void RlvUIEnabler::onToggleRez()
+{
+	// Enable/disable the "Build" bottom tray button
+	LLBottomTray::getInstance()->getChild<LLButton>("build_btn")->setEnabled(isBuildEnabled());
 }
 
 // Checked: 2010-03-17 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
@@ -595,6 +606,12 @@ bool RlvUIEnabler::hasOpenProfile(const LLUUID& idAgent)
 		}
 	}
 	return false;
+}
+
+// Checked: 2010-09-11 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
+bool RlvUIEnabler::isBuildEnabled()
+{
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT) || !gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) && LLToolMgr::getInstance()->canEdit();
 }
 
 // ============================================================================

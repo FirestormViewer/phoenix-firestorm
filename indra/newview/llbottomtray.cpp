@@ -48,10 +48,17 @@
 #include "llsyswellwindow.h"
 #include "lltoolmgr.h"
 #include "llviewerparcelmgr.h"
+// [RLVa:KB] - Checked: 2010-09-11 (RLVa-1.2.1d)
+#include "rlvhandler.h"
+#include "rlvui.h"
+// [/RLVa:KB]
 
 static void update_build_button_enable_state()
 {
-	bool can_edit = LLToolMgr::getInstance()->canEdit();
+//	bool can_edit = LLToolMgr::getInstance()->canEdit();
+// [RLVa:KB] - Checked: 2010-09-11 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
+	bool can_edit = RlvUIEnabler::isBuildEnabled();
+// [/RLVa:KB]
 
 	LLBottomTray::getInstance()->getChildView("build_btn")->setEnabled(can_edit);
 }
