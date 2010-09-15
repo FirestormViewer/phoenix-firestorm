@@ -1411,7 +1411,7 @@ if (WINDOWS)
     if(MSVC71)
         set(release_flags "/MAP:Release/${VIEWER_BINARY_NAME}.map /MAPINFO:LINES")
     else(MSVC71)
-        set(release_flags "/MAP:Release/${VIEWER_BINARY_NAME}.map")
+        set(release_flags "/MAP:Release/${VIEWER_BINARY_NAME}.map /OPT:REF")
     endif(MSVC71)
     
     set_target_properties(${VIEWER_BINARY_NAME}
