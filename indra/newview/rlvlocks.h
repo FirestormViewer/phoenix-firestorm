@@ -153,7 +153,7 @@ protected:
 	 */
 protected:
 	// NOTE: attach/detach do *not* respect attachment locks so use with care
-	void attach(S32 idxAttachPt, const LLUUID& idItem);
+	void attach(const LLUUID& idItem, S32 idxAttachPt);
 	void detach(const LLViewerObject* pAttachObj);
 	void detach(S32 idxAttachPt, const LLViewerObject* pAttachObjExcept = NULL);
 

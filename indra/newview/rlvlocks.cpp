@@ -16,7 +16,9 @@
 
 #include "llviewerprecompiledheaders.h"
 #include "llnotifications.h"
+#include "lltooldraganddrop.h"
 #include "llviewerobjectlist.h"
+#include "llviewerregion.h"
 #include "pipeline.h"
 
 #include "rlvhelper.h"
@@ -408,15 +410,26 @@ bool RlvAttachmentLocks::verifyAttachmentLocks()
 // RlvAttachmentLockWatchdog member functions
 //
 
-// Checked: 2010-07-28 (RLVa-1.2.0i) | Modified: RLVa-1.2.0i
-void RlvAttachmentLockWatchdog::attach(S32 idxAttachPt, const LLUUID& idItem)
+// Checked: 2010-09-15 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
+void RlvAttachmentLockWatchdog::attach(const LLUUID& idItem, S32 idxAttachPt)
 {
-	// RELEASE-RLVa: [SL-2.0.0] This will need rewriting for "ENABLE_MULTIATTACHMENTS"
-	LLSD payload;
-	payload["item_id"] = idItem;
-	payload["attachment_point"] = idxAttachPt | ATTACHMENT_ADD;
-	payload["rlv_force"] = true;
-	LLNotifications::instance().forceResponse(LLNotification::Params("ReplaceAttachment").payload(payload), 0);
+	const LLViewerInventoryItem* pItem = gInventory.getItem(idItem);
+	if (!pItem)
+		return;
+
+	LLMessageSystem* pMsg = gMessageSystem;
+	pMsg->newMessageFast(_PREHASH_RezSingleAttachmentFromInv);
+	pMsg->nextBlockFast(_PREHASH_AgentData);
+	pMsg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+	pMsg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	pMsg->nextBlockFast(_PREHASH_ObjectData);
+	pMsg->addUUIDFast(_PREHASH_ItemID, pItem->getUUID());
+	pMsg->addUUIDFast(_PREHASH_OwnerID, pItem->getPermissions().getOwner());
+	pMsg->addU8Fast(_PREHASH_AttachmentPt, idxAttachPt | ATTACHMENT_ADD);
+	pack_permissions_slam(pMsg, pItem->getFlags(), pItem->getPermissions());
+	pMsg->addStringFast(_PREHASH_Name, pItem->getName());
+	pMsg->addStringFast(_PREHASH_Description, pItem->getDescription());
+	pMsg->sendReliable(gAgent.getRegion()->getHost());
 }
 
 // Checked: 2010-07-28 (RLVa-1.2.0i) | Modified: RLVa-1.2.0i
@@ -651,7 +664,7 @@ void RlvAttachmentLockWatchdog::onSavedAssetIntoInventory(const LLUUID& idItem)
 	{
 		if ( (!itAttach->second.fAssetSaved) && (idItem == itAttach->second.idItem) )
 		{
-			attach(itAttach->first, itAttach->second.idItem);
+			attach(itAttach->second.idItem, itAttach->first);
 			itAttach->second.tsAttach = LLFrameTimer::getElapsedSeconds();
 		}
 	}
@@ -699,7 +712,7 @@ BOOL RlvAttachmentLockWatchdog::onTimer()
 
 		if (fAttach)
 		{
-			attach(itAttach->first, itAttach->second.idItem);
+			attach(itAttach->second.idItem, itAttach->first);
 			itAttach->second.tsAttach = tsCurrent;
 		}
 
