@@ -9,3 +9,5 @@
 - added   : LegacyMultiAttachmentSupport debug setting to route "secondary attachment points" to the primary attachment point
     -> maps secondary attachment point range [39,68] onto [1,30]
     -> only dislays "secondary attachment points" correctly for *other* avatars (by design)
+- fixed   : Add to/Replace Outfit removes newly worn attachments on completion
+- fixed   : LLWearableBridge::removeAllClothesFromAvatar() doesn't remove all clothing from the avatar
