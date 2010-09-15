@@ -58,6 +58,9 @@
 #include "llviewerwindow.h"
 #include "llworld.h"
 #include "llworldmapview.h"		// shared draw code
+// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 static LLDefaultChildRegistry::Register<LLNetMap> r1("net_map");
 
@@ -354,7 +357,11 @@ void LLNetMap::draw()
 				BOOL show_as_friend = FALSE;
 				if( i < regionp->mMapAvatarIDs.count())
 				{
-					show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(regionp->mMapAvatarIDs.get(i)) != NULL);
+// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+					show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(regionp->mMapAvatarIDs.get(i)) != NULL) &&
+						(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+// [/RLVa:KB]
+//					show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(regionp->mMapAvatarIDs.get(i)) != NULL);
 				}
 				LLWorldMapView::drawAvatar(
 					pos_map.mV[VX], pos_map.mV[VY], 
@@ -568,35 +575,57 @@ BOOL LLNetMap::handleToolTip( S32 x, S32 y, MASK mask )
 		return FALSE;
 	}
 
+	LLStringUtil::format_map_t args;
 	std::string avatar_name;
 	if(mClosestAgentToCursor.notNull() && gCacheName->getFullName(mClosestAgentToCursor, avatar_name))
 	{
-		// only show tooltip if same inspector not already open
-		LLFloater* existing_inspector = LLFloaterReg::findInstance("inspect_avatar");
-		if (!existing_inspector 
-			|| !existing_inspector->getVisible()
-			|| existing_inspector->getKey()["avatar_id"].asUUID() != mClosestAgentToCursor)
+// [RLVa:KB] - Checked: 2010-08-08 (RLVa-1.2.0h) | Added: RLVa-1.2.0h | RLVa-1.2.0-final
+		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 		{
-			LLInspector::Params p;
-			p.fillFrom(LLUICtrlFactory::instance().getDefaultParams<LLInspector>());
-			p.message(avatar_name);
-			p.image.name("Inspector_I");
-			p.click_callback(boost::bind(showAvatarInspector, mClosestAgentToCursor));
-			p.visible_time_near(6.f);
-			p.visible_time_far(3.f);
-			p.delay_time(0.35f);
-			p.wrap(false);
+// [/RLVa:KB]
+			// only show tooltip if same inspector not already open
+			LLFloater* existing_inspector = LLFloaterReg::findInstance("inspect_avatar");
+			if (!existing_inspector 
+				|| !existing_inspector->getVisible()
+				|| existing_inspector->getKey()["avatar_id"].asUUID() != mClosestAgentToCursor)
+			{
+				LLInspector::Params p;
+				p.fillFrom(LLUICtrlFactory::instance().getDefaultParams<LLInspector>());
+				p.message(avatar_name);
+				p.image.name("Inspector_I");
+				p.click_callback(boost::bind(showAvatarInspector, mClosestAgentToCursor));
+				p.visible_time_near(6.f);
+				p.visible_time_far(3.f);
+				p.delay_time(0.35f);
+				p.wrap(false);
 
-			LLToolTipMgr::instance().show(p);
+				LLToolTipMgr::instance().show(p);
+			}
+			return TRUE;
+// [RLVa:KB] - Checked: 2010-08-08 (RLVa-1.2.0h) | Added: RLVa-1.2.0h | RLVa-1.2.0-final
 		}
-		return TRUE;
+		else
+		{
+			args["[AGENT]"] = RlvStrings::getAnonym(avatar_name) + "\n";
+		}
+// [/RLVa:KB]
+ 	}
+// [RLVa:KB] - Checked: 2010-08-08 (RLVa-1.2.0h) | Added: RLVa-1.2.0h | RLVa-1.2.0-final
+	else
+	{
+		args["[AGENT]"] = "";
 	}
+// [/RLVa:KB]
 
-	LLStringUtil::format_map_t args;
+//	LLStringUtil::format_map_t args;
 	LLViewerRegion*	region = LLWorld::getInstance()->getRegionFromPosGlobal( viewPosToGlobal( x, y ) );
 	if( region )
 	{
-		args["[REGION]"] = region->getName() + "\n";
+// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+		args["[REGION]"] = 
+			((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? region->getName() : RlvStrings::getString(RLV_STRING_HIDDEN_REGION)) + "\n";
+// [/RLVa:KB]
+//		args["[REGION]"] = region->getName() + "\n";
 	}
 	else
 	{

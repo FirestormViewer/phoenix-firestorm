@@ -100,7 +100,13 @@ bool LLOfferHandler::processNotification(const LLSD& notify)
 			notification->setReusable(LLHandlerUtil::isNotificationReusable(notification));
 
 			LLUUID session_id;
-			if (LLHandlerUtil::canSpawnIMSession(notification))
+//			if (LLHandlerUtil::canSpawnIMSession(notification))
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+			// Don't spawn a new IM session for inventory offers if this notification was subject to @shownames=n
+			// RELEASE-RLVa: [SL-2.0.1] Test on every new release to make sure the notification gets routed the way we want it to be
+			bool fSpawnIM = (LLHandlerUtil::canSpawnIMSession(notification)) && (!notification->getPayload().has("rlv_shownames"));
+			if (fSpawnIM)
+// [/RLVa:KB]
 			{
 				const std::string name = LLHandlerUtil::getSubstitutionName(notification);
 
@@ -110,7 +116,12 @@ bool LLOfferHandler::processNotification(const LLSD& notify)
 			}
 
 			bool show_toast = LLHandlerUtil::canSpawnToast(notification);
-			bool add_notid_to_im = LLHandlerUtil::canAddNotifPanelToIM(notification);
+//			bool add_notid_to_im = LLHandlerUtil::canAddNotifPanelToIM(notification);
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+			// NOTE: add_notid_to_im needs to be FALSE if we suppressed spawning an IM because in that case the notification needs to
+			//       be routed to the "syswell" or the inventory offer floater will dissapear and the user won't be able to accept it
+			bool add_notid_to_im = (fSpawnIM) && (LLHandlerUtil::canAddNotifPanelToIM(notification));
+// [/RLVa:KB]
 			if (add_notid_to_im)
 			{
 				LLHandlerUtil::addNotifPanelToIM(notification);
@@ -149,7 +160,15 @@ bool LLOfferHandler::processNotification(const LLSD& notify)
 			if (LLHandlerUtil::canLogToIM(notification))
 			{
 				// log only to file if notif panel can be embedded to IM and IM is opened
-				if (add_notid_to_im && LLHandlerUtil::isIMFloaterOpened(notification))
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+				if (notification->getPayload().has("rlv_shownames"))
+				{
+					// Log to chat history if this notification was subject to @shownames=n
+					LLHandlerUtil::logToNearbyChat(notification, CHAT_SOURCE_SYSTEM);
+				}
+				else if (add_notid_to_im && LLHandlerUtil::isIMFloaterOpened(notification))
+// [/RLVa:KB]
+//				if (add_notid_to_im && LLHandlerUtil::isIMFloaterOpened(notification))
 				{
 					LLHandlerUtil::logToIMP2P(notification, true);
 				}
@@ -170,8 +189,25 @@ bool LLOfferHandler::processNotification(const LLSD& notify)
 		}
 		else
 		{
-			if (LLHandlerUtil::canAddNotifPanelToIM(notification)
-					&& !LLHandlerUtil::isIMFloaterOpened(notification))
+//			if (LLHandlerUtil::canAddNotifPanelToIM(notification)
+//					&& !LLHandlerUtil::isIMFloaterOpened(notification))
+// [SL:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+			// Repro:
+			//   1) have someone drop you 2 inventory items (new IM session will be spawned)
+			//   2) accept/decline the inventory offers as they come in
+			//		-> unread IM counter shows 0
+			//   3) toggle "Enable plain text chat history" while the IM session with the inventory offers isn't the active session
+			//		-> unread IM counter shows -2
+			//		-> LLHandlerUtil::decIMMesageCounter() really should be fixed to check for "0" before decreasing the count but
+			//         there are enough bugfixes in RLVa as it is already :(
+			// Fix:
+			//   - the one and only time we need to decrease the unread IM count is when we've clicked any of the buttons on the *toast*
+			//   - since LLIMFloater::updateMessages() hides the toast when we open the IM (which resets the unread count to 0) we should 
+			//     *only* decrease the unread IM count if there's a visible toast since the unread count will be at 0 otherwise anyway
+			LLScreenChannel* pChannel = dynamic_cast<LLScreenChannel*>(mChannel);
+			LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification->getID()) : NULL;
+			if ( (pToast) && (!pToast->getCanBeStored()) )
+// [/SL:KB]
 			{
 				LLHandlerUtil::decIMMesageCounter(notification);
 			}
@@ -186,7 +222,11 @@ bool LLOfferHandler::processNotification(const LLSD& notify)
 
 void LLOfferHandler::onDeleteToast(LLToast* toast)
 {
-	if (!LLHandlerUtil::canAddNotifPanelToIM(toast->getNotification()))
+//	if (!LLHandlerUtil::canAddNotifPanelToIM(toast->getNotification()))
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+	// BUGFIX: LLHandlerUtil::canAddNotifPanelToIM() won't necessarily tell us whether the notification went into an IM or to the syswell
+	if (toast->getCanBeStored())
+// [/RLVa:KB]
 	{
 		// send a signal to the counter manager
 		mDelNotificationSignal();

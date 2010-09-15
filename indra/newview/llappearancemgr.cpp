@@ -49,6 +49,9 @@
 #include "llvoavatarself.h"
 #include "llviewerregion.h"
 #include "llwearablelist.h"
+// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0b)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 // RAII thingy to guarantee that a variable gets reset when the Setter
 // goes out of scope.  More general utility would be handy - TODO:
@@ -1007,6 +1010,33 @@ bool LLAppearanceMgr::wearItemOnAvatar(const LLUUID& item_id_to_wear, bool do_up
 		return false;
 	}
 
+// [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
+	if ( (rlv_handler_t::isEnabled()) && 
+		 ((gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) || (gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_ANY))) )
+	{
+		switch (item_to_wear->getType())
+		{
+			case LLAssetType::AT_BODYPART:
+			case LLAssetType::AT_CLOTHING:
+				{
+					ERlvWearMask eWear = gRlvWearableLocks.canWear(item_to_wear);
+					if ( (RLV_WEAR_LOCKED == eWear) || ((replace) && ((RLV_WEAR_REPLACE & eWear) == 0)) )
+						return false;
+				}
+				break;
+			case LLAssetType::AT_OBJECT:
+				{
+					ERlvWearMask eWear = gRlvAttachmentLocks.canAttach(item_to_wear);
+					if ( (RLV_WEAR_LOCKED == eWear) || ((replace) && ((RLV_WEAR_REPLACE & eWear) == 0)) )
+						return false;
+				}
+				break;
+			default:
+				return false;
+		}
+	}
+// [/RLVa:KB]
+
 	switch (item_to_wear->getType())
 	{
 	case LLAssetType::AT_CLOTHING:
@@ -1368,6 +1398,45 @@ void LLAppearanceMgr::purgeCategory(const LLUUID& category, bool keep_outfit_lin
 	}
 }
 
+// [SL:KB] - Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+void LLAppearanceMgr::syncCOF(const LLInventoryModel::item_array_t& items, LLAssetType::EType type, LLPointer<LLInventoryCallback> cb)
+{
+	const LLUUID idCOF = getCOF();
+	LLInventoryModel::item_array_t cur_cof_items, new_cof_items = items;
+
+	// Grab the current COF contents
+	LLIsType f(type);
+	LLInventoryModel::cat_array_t cats; 
+	gInventory.collectDescendentsIf(getCOF(), cats, cur_cof_items, LLInventoryModel::EXCLUDE_TRASH, f);
+
+	// Purge everything in cur_cof_items that isn't part of new_cof_items
+	for (S32 idxCurItem = 0, cntCurItem = cur_cof_items.count(); idxCurItem < cntCurItem; idxCurItem++)
+	{
+		const LLViewerInventoryItem* pItem = cur_cof_items.get(idxCurItem);
+		if (std::find_if(new_cof_items.begin(), new_cof_items.end(), RlvPredIsEqualOrLinkedItem(pItem)) == new_cof_items.end())
+		{
+			// Item doesn't exist in new_cof_items => purge (if it's a link)
+			if (pItem->getIsLinkType())
+				gInventory.purgeObject(pItem->getUUID());
+		}
+		else
+		{
+			// Item exists in new_cof_items => remove *all* occurances in new_cof_items (removes duplicate COF links to this item as well)
+			new_cof_items.erase(
+				std::remove_if(new_cof_items.begin(), new_cof_items.end(), RlvPredIsEqualOrLinkedItem(pItem)), new_cof_items.end());
+		}
+	}
+
+	// Link to whatever remains in new_cof_items
+	for (S32 idxNewItem = 0, cntNewItem = new_cof_items.count(); idxNewItem < cntNewItem; idxNewItem++)
+	{
+		const LLInventoryItem* pItem = new_cof_items.get(idxNewItem);
+		link_inventory_item(
+			gAgent.getID(), pItem->getLinkedUUID(), idCOF, pItem->getName(), pItem->getDescription(), LLAssetType::AT_LINK, cb);
+	}
+}
+// [/SL:KB]
+
 // Keep the last N wearables of each type.  For viewer 2.0, N is 1 for
 // both body parts and clothing items.
 void LLAppearanceMgr::filterWearableItems(
@@ -1420,10 +1489,31 @@ void LLAppearanceMgr::linkAll(const LLUUID& cat_uuid,
 	}
 }
 
+//void LLAppearanceMgr::updateCOF(const LLUUID& category, bool append)
+// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0b) | Added: RLVa-1.2.0b
 void LLAppearanceMgr::updateCOF(const LLUUID& category, bool append)
 {
-	LLViewerInventoryCategory *pcat = gInventory.getCategory(category);
-	llinfos << "starting, cat " << (pcat ? pcat->getName() : "[UNKNOWN]") << llendl;
+	LLInventoryModel::item_array_t body_items_new, wear_items_new, obj_items_new, gest_items_new;
+	getDescendentsOfAssetType(category, body_items_new, LLAssetType::AT_BODYPART, false);
+	getDescendentsOfAssetType(category, wear_items_new, LLAssetType::AT_CLOTHING, false);
+	getDescendentsOfAssetType(category, obj_items_new, LLAssetType::AT_OBJECT, false);
+	getDescendentsOfAssetType(category, gest_items_new, LLAssetType::AT_GESTURE, false);
+	updateCOF(body_items_new, wear_items_new, obj_items_new, gest_items_new, append, category);
+}
+
+void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new, 
+								LLInventoryModel::item_array_t& wear_items_new, 
+								LLInventoryModel::item_array_t& obj_items_new,
+								LLInventoryModel::item_array_t& gest_items_new,
+								bool append /*=false*/, const LLUUID& idOutfit /*=LLUUID::null*/)
+// [/RLVa:KB]
+{
+//	LLViewerInventoryCategory *pcat = gInventory.getCategory(category);
+//	llinfos << "starting, cat " << (pcat ? pcat->getName() : "[UNKNOWN]") << llendl;
+// [RLVa:KB] - Checked: 2010-03-26 (RLVa-1.2.0b) | Added: RLVa-1.2.0b
+	// RELEASE-RLVa: [SL-2.0.0] If pcat ever gets used for anything further down the beta we'll know about it
+	llinfos << "starting" << llendl;
+// [/RLVa:KB]
 
 	const LLUUID cof = getCOF();
 
@@ -1444,75 +1534,142 @@ void LLAppearanceMgr::updateCOF(const LLUUID& category, bool append)
 	
 	// Collect and filter descendents to determine new COF contents.
 
-	// - Body parts: always include COF contents as a fallback in case any
-	// required parts are missing.
+	//
+	// - Body parts: always include COF contents as a fallback in case any required parts are missing.
+	//
 	// Preserve body parts from COF if appending.
 	LLInventoryModel::item_array_t body_items;
 	getDescendentsOfAssetType(cof, body_items, LLAssetType::AT_BODYPART, false);
-	getDescendentsOfAssetType(category, body_items, LLAssetType::AT_BODYPART, false);
+//	getDescendentsOfAssetType(category, body_items, LLAssetType::AT_BODYPART, false);
+// [RLVa:KB] - Checked: 2010-03-19 (RLVa-1.2.0c) | Modified: RLVa-1.2.0b
+	// Filter out any new body parts that can't be worn before adding them
+	if ( (rlv_handler_t::isEnabled()) && (gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_ANY)) )
+		body_items_new.erase(std::remove_if(body_items_new.begin(), body_items_new.end(), rlvPredIsNotWearableItem), body_items_new.end());
+	body_items.insert(body_items.end(), body_items_new.begin(), body_items_new.end());
+// [/RLVa:KB]
 	if (append)
 		reverse(body_items.begin(), body_items.end());
 	// Reduce body items to max of one per type.
 	removeDuplicateItems(body_items);
 	filterWearableItems(body_items, 1);
 
+	//
 	// - Wearables: include COF contents only if appending.
+	//
 	LLInventoryModel::item_array_t wear_items;
 	if (append)
 		getDescendentsOfAssetType(cof, wear_items, LLAssetType::AT_CLOTHING, false);
-	getDescendentsOfAssetType(category, wear_items, LLAssetType::AT_CLOTHING, false);
+// [RLVa:KB] - Checked: 2010-03-19 (RLVa-1.2.0c) | Modified: RLVa-1.2.0b
+	else if ( (rlv_handler_t::isEnabled()) && (gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_ANY)) )
+	{
+		// Make sure that all currently locked clothing layers remain in COF when replacing
+		getDescendentsOfAssetType(cof, wear_items, LLAssetType::AT_CLOTHING, false);
+		wear_items.erase(std::remove_if(wear_items.begin(), wear_items.end(), rlvPredIsRemovableItem), wear_items.end());
+	}
+// [/RLVa:KB]
+//	getDescendentsOfAssetType(category, wear_items, LLAssetType::AT_CLOTHING, false);
+// [RLVa:KB] - Checked: 2010-03-19 (RLVa-1.2.0c) | Modified: RLVa-1.2.0b
+	// Filter out any new wearables that can't be worn before adding them
+	if ( (rlv_handler_t::isEnabled()) && (gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_ANY)) )
+		wear_items_new.erase(std::remove_if(wear_items_new.begin(), wear_items_new.end(), rlvPredIsNotWearableItem), wear_items_new.end());
+	wear_items.insert(wear_items.end(), wear_items_new.begin(), wear_items_new.end());
+// [/RLVa:KB]
 	// Reduce wearables to max of one per type.
 	removeDuplicateItems(wear_items);
 	filterWearableItems(wear_items, LLAgentWearables::MAX_CLOTHING_PER_TYPE);
 
+	//
 	// - Attachments: include COF contents only if appending.
+	//
 	LLInventoryModel::item_array_t obj_items;
 	if (append)
 		getDescendentsOfAssetType(cof, obj_items, LLAssetType::AT_OBJECT, false);
-	getDescendentsOfAssetType(category, obj_items, LLAssetType::AT_OBJECT, false);
+// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0z) | Modified: RLVa-1.2.0b
+	else if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+	{
+		// Make sure that all currently locked attachments remain in COF when replacing
+		getDescendentsOfAssetType(cof, obj_items, LLAssetType::AT_OBJECT, false);
+		obj_items.erase(std::remove_if(obj_items.begin(), obj_items.end(), rlvPredIsRemovableItem), obj_items.end());
+	}
+// [/RLVa:KB]
+//	getDescendentsOfAssetType(category, obj_items, LLAssetType::AT_OBJECT, false);
+// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0z) | Modified: RLVa-1.2.0b
+	// Filter out any new attachments that can't be worn before adding them
+	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+		obj_items_new.erase(std::remove_if(obj_items_new.begin(), obj_items_new.end(), rlvPredIsNotWearableItem), obj_items_new.end());
+	obj_items.insert(obj_items.end(), obj_items_new.begin(), obj_items_new.end());
+// [/RLVa:KB]
 	removeDuplicateItems(obj_items);
 
+	//
 	// - Gestures: include COF contents only if appending.
+	//
 	LLInventoryModel::item_array_t gest_items;
 	if (append)
 		getDescendentsOfAssetType(cof, gest_items, LLAssetType::AT_GESTURE, false);
-	getDescendentsOfAssetType(category, gest_items, LLAssetType::AT_GESTURE, false);
+//	getDescendentsOfAssetType(category, gest_items, LLAssetType::AT_GESTURE, false);
+// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0z) | Added: RLVa-1.2.0b
+	gest_items.insert(gest_items.end(), gest_items_new.begin(), gest_items_new.end());
+// [/RLVa:KB]
 	removeDuplicateItems(gest_items);
 	
-	// Remove current COF contents.
-	bool keep_outfit_links = append;
-	purgeCategory(cof, keep_outfit_links);
-	gInventory.notifyObservers();
-
 	// Create links to new COF contents.
 	llinfos << "creating LLUpdateAppearanceOnDestroy" << llendl;
 	LLPointer<LLInventoryCallback> link_waiter = new LLUpdateAppearanceOnDestroy(!append);
 
-#ifndef LL_RELEASE_FOR_DOWNLOAD
-	llinfos << "Linking body items" << llendl;
-#endif
-	linkAll(cof, body_items, link_waiter);
-
-#ifndef LL_RELEASE_FOR_DOWNLOAD
-	llinfos << "Linking wear items" << llendl;
-#endif
-	linkAll(cof, wear_items, link_waiter);
-
-#ifndef LL_RELEASE_FOR_DOWNLOAD
-	llinfos << "Linking obj items" << llendl;
-#endif
-	linkAll(cof, obj_items, link_waiter);
-
-#ifndef LL_RELEASE_FOR_DOWNLOAD
-	llinfos << "Linking gesture items" << llendl;
-#endif
-	linkAll(cof, gest_items, link_waiter);
-
-	// Add link to outfit if category is an outfit. 
+// [SL:KB] - Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 	if (!append)
 	{
-		createBaseOutfitLink(category, link_waiter);
+// [/SL:KB]
+		// Remove current COF contents.
+		bool keep_outfit_links = append;
+		purgeCategory(cof, keep_outfit_links);
+		gInventory.notifyObservers();
+		#ifndef LL_RELEASE_FOR_DOWNLOAD
+			llinfos << "Linking body items" << llendl;
+		#endif
+		linkAll(cof, body_items, link_waiter);
+
+		#ifndef LL_RELEASE_FOR_DOWNLOAD
+			llinfos << "Linking wear items" << llendl;
+		#endif
+		linkAll(cof, wear_items, link_waiter);
+
+		#ifndef LL_RELEASE_FOR_DOWNLOAD
+			llinfos << "Linking obj items" << llendl;
+		#endif
+		linkAll(cof, obj_items, link_waiter);
+
+		#ifndef LL_RELEASE_FOR_DOWNLOAD
+			llinfos << "Linking gesture items" << llendl;
+		#endif
+		linkAll(cof, gest_items, link_waiter);
+// [SL:KB] - Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 	}
+	else
+	{
+		// Synchronize COF
+		//  -> it's possible that we don't link to any new items in which case 'link_waiter' fires when it goes out of scope below
+		syncCOF(body_items, LLAssetType::AT_BODYPART, link_waiter);
+		syncCOF(wear_items, LLAssetType::AT_CLOTHING, link_waiter);
+		syncCOF(obj_items, LLAssetType::AT_OBJECT, link_waiter);
+		syncCOF(gest_items, LLAssetType::AT_GESTURE, link_waiter);
+		gInventory.notifyObservers();
+	}
+// [/SL:KB]
+
+	// Add link to outfit if category is an outfit. 
+// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0z) | Added: RLVa-1.2.0b
+	if ( (!append) && (idOutfit.notNull()) )
+	{
+		createBaseOutfitLink(idOutfit, link_waiter);
+	}
+// [/RLVa:KB]
+//	if (!append)
+//	{
+//		createBaseOutfitLink(category, link_waiter);
+//	}
+
 	llinfos << "waiting for LLUpdateAppearanceOnDestroy" << llendl;
 }
 
@@ -1563,6 +1720,25 @@ void LLAppearanceMgr::updateAgentWearables(LLWearableHoldingPattern* holder, boo
 				LLViewerInventoryItem* item = (LLViewerInventoryItem*)gInventory.getItem(data.mItemID);
 				if( item && (item->getAssetUUID() == wearable->getAssetID()) )
 				{
+// [RLVa:KB] - Checked: 2010-03-19 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
+					// TODO-RLVa: [RLVa-1.2.1] This is fall-back code so if we don't ever trigger this code it can just be removed
+					//   -> one way to trigger the assertion:
+					//			1) "Replace Outfit" on a folder with clothing and an attachment that goes @addoutfit=n
+					//			2) updateCOF will add/link the items into COF => no @addoutfit=n present yet => allowed
+					//			3) llOwnerSay("@addoutfit=n") executes
+					//			4) code below runs => @addoutfit=n conflicts with adding new wearables
+					//     => if it's left as-is then the wearables won't get worn (but remain in COF which causes issues of its own)
+					//     => if it's changed to debug-only then we make tge assumption that anything that makes it into COF is always OK
+#ifdef RLV_DEBUG
+					// NOTE: make sure we don't accidentally block setting the initial wearables
+					if ( (rlv_handler_t::isEnabled()) && (RLV_WEAR_LOCKED == gRlvWearableLocks.canWear(wearable->getType())) &&
+						 (!gAgentWearables.getWearableFromItemID(item->getUUID())) && (gAgentWearables.areWearablesLoaded()) )
+					{
+						RLV_VERIFY(RLV_WEAR_LOCKED == gRlvWearableLocks.canWear(wearable->getType()));
+						continue;
+					}
+#endif // RLV_DEBUG
+// [/RLVa:KB]
 					items.put(item);
 					wearables.put(wearable);
 				}
@@ -2618,6 +2794,9 @@ void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
 //				LLWearableBridge::removeItemFromAvatar(item_to_remove);
 //			}
 // [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-2.1.2a) | Added: Catznip-2.1.1d
+// [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+			if ( (!rlv_handler_t::isEnabled()) || (gRlvWearableLocks.canRemove(item_to_remove)) )
+// [/RLVa:KB]
 			{
 				/*const*/ LLWearable* pWearable = gAgentWearables.getWearableFromItemID(item_to_remove->getLinkedUUID());
 				if ( (pWearable) && (LLAssetType::AT_BODYPART != pWearable->getAssetType()) )
