@@ -1547,8 +1547,9 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 		body_items_new.erase(std::remove_if(body_items_new.begin(), body_items_new.end(), rlvPredIsNotWearableItem), body_items_new.end());
 	body_items.insert(body_items.end(), body_items_new.begin(), body_items_new.end());
 // [/RLVa:KB]
-	if (append)
-		reverse(body_items.begin(), body_items.end());
+	// NOTE-RLVa: we don't actually want to favour COF body parts over the folder's body parts (if only because it breaks force wear)
+//	if (append)
+//		reverse(body_items.begin(), body_items.end());
 	// Reduce body items to max of one per type.
 	removeDuplicateItems(body_items);
 	filterWearableItems(body_items, 1);
