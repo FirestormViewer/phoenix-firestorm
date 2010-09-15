@@ -292,8 +292,13 @@ public:
 	
 private:
 	found_list_t mFoundList;
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-03-22 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+	// Fix for http://jira.secondlife.com/browse/VWR-18512
+/*
 	LLInventoryModel::item_array_t mObjItems;
 	LLInventoryModel::item_array_t mGestItems;
+*/
+// [/SL:KB]
 	typedef std::set<S32> type_set_t;
 	type_set_t mTypesToRecover;
 	type_set_t mTypesToLink;
@@ -358,6 +363,9 @@ void LLWearableHoldingPattern::eraseTypeToRecover(LLWearableType::EType type)
 	mTypesToRecover.erase(type);
 }
 
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-06-19 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+// Fix for http://jira.secondlife.com/browse/VWR-18512
+/*
 void LLWearableHoldingPattern::setObjItems(const LLInventoryModel::item_array_t& items)
 {
 	mObjItems = items;
@@ -367,6 +375,8 @@ void LLWearableHoldingPattern::setGestItems(const LLInventoryModel::item_array_t
 {
 	mGestItems = items;
 }
+*/
+// [/SL:KB]
 
 bool LLWearableHoldingPattern::isFetchCompleted()
 {
@@ -436,6 +446,9 @@ void LLWearableHoldingPattern::onAllComplete()
 	}
 
 	// Activate all gestures in this folder
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-03-22 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+	// Fix for http://jira.secondlife.com/browse/VWR-18512
+/*
 	if (mGestItems.count() > 0)
 	{
 		llinfos << "Activating " << mGestItems.count() << " gestures" << llendl;
@@ -453,17 +466,28 @@ void LLWearableHoldingPattern::onAllComplete()
 			gInventory.notifyObservers();
 		}
 	}
+*/
+// [/SL:KB]
 
 	// Update wearables.
 	llinfos << "Updating agent wearables with " << mResolved << " wearable items " << llendl;
 	LLAppearanceMgr::instance().updateAgentWearables(this, false);
 	
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-03-22 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+	// Fix for http://jira.secondlife.com/browse/VWR-18512
+/*
 	// Update attachments to match those requested.
-	if (isAgentAvatarValid())
+//	if (isAgentAvatarValid())
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-08-14 (Catznip-2.1.2a) | Modified: Catznip-2.1.1d
+	// Don't update attachments until initial wearables have loaded (should reduce random attaching/detaching/reattaching at log-on)
+	if ( (isAgentAvatarValid()) && (gAgentWearables.areInitalWearablesLoaded()) )
+// [/SL:KB]
 	{
 		llinfos << "Updating " << mObjItems.count() << " attachments" << llendl;
 		LLAgentWearables::userUpdateAttachments(mObjItems);
 	}
+*/
+// [/SL:KB]
 
 	if (isFetchCompleted() && isMissingCompleted())
 	{
@@ -1360,7 +1384,11 @@ void LLAppearanceMgr::filterWearableItems(
 		S32 size = items_by_type[i].size();
 		if (size <= 0)
 			continue;
-		S32 start_index = llmax(0,size-max_per_type);
+//		S32 start_index = llmax(0,size-max_per_type);
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-05-11 (Catznip-2.1.2a) | Added: Catznip-2.0.0h
+		S32 start_index = 
+			llmax(0, size - ((LLAssetType::AT_BODYPART == LLWearableType::getAssetType((LLWearableType::EType)i)) ? 1 : max_per_type));
+// [/SL:KB[
 		for (S32 j = start_index; j<size; j++)
 		{
 			items.push_back(items_by_type[i][j]);
@@ -1689,6 +1717,29 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 	remove_non_link_items(obj_items);
 	remove_non_link_items(gest_items);
 
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+	// Include attachments which should be in COF but don't have their link created yet
+	if (isAgentAvatarValid())
+	{
+		uuid_vec_t::iterator itPendingObjLink = mPendingObjLinks.begin();
+		while (itPendingObjLink != mPendingObjLinks.end())
+		{
+			const LLUUID& idItem = *itPendingObjLink;
+			if (!gAgentAvatarp->isWearingAttachment(idItem))
+			{
+				itPendingObjLink = mPendingObjLinks.erase(itPendingObjLink);
+				continue;
+			}
+
+			LLViewerInventoryItem* pItem = gInventory.getItem(idItem);
+			if (pItem)
+				obj_items.push_back(pItem);
+
+			++itPendingObjLink;
+		}
+	}
+// [/SL:KB]
+
 	dumpItemArray(wear_items,"asset_dump: wear_item");
 	dumpItemArray(obj_items,"asset_dump: obj_item");
 
@@ -1701,11 +1752,49 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 	//preparing the list of wearables in the correct order for LLAgentWearables
 	sortItemsByActualDescription(wear_items);
 
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-03-22 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+	// Fix for http://jira.secondlife.com/browse/VWR-18512 [code below copied from LLWearableHoldingPattern::pollCompletion()]
+
+	// Activate all gestures in this folder
+	if (gest_items.count() > 0)
+	{
+		llinfos << "Activating " << gest_items.count() << " gestures" << llendl;
+		
+		LLGestureMgr::instance().activateGestures(gest_items);
+		
+		// Update the inventory item labels to reflect the fact
+		// they are active.
+		LLViewerInventoryCategory* catp =
+			gInventory.getCategory(LLAppearanceMgr::instance().getCOF());
+		
+		if (catp)
+		{
+			gInventory.updateCategory(catp);
+			gInventory.notifyObservers();
+		}
+	}
+
+	// Update attachments to match those requested.
+//	if (isAgentAvatarValid())
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-08-14 (Catznip-2.1.2a) | Modified: Catznip-2.1.1d
+	// Don't update attachments until initial wearables have loaded (should reduce random attaching/detaching/reattaching at log-on)
+	if ( (isAgentAvatarValid()) && (gAgentWearables.areInitalWearablesLoaded()) )
+// [/SL:KB]
+	{
+		llinfos << "Updating " << obj_items.count() << " attachments" << llendl;
+		LLAgentWearables::userUpdateAttachments(obj_items);
+	}
+// [/SL:KB]
 
 	LLWearableHoldingPattern* holder = new LLWearableHoldingPattern;
 
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-03-22 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+	// Fix for http://jira.secondlife.com/browse/VWR-18512
+/*
 	holder->setObjItems(obj_items);
 	holder->setGestItems(gest_items);
+*/
+// [/SL:KB]
 		
 	// Note: can't do normal iteration, because if all the
 	// wearables can be resolved immediately, then the
@@ -2508,11 +2597,27 @@ void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
 	switch (item_to_remove->getType())
 	{
 		case LLAssetType::AT_CLOTHING:
-			if (get_is_item_worn(id_to_remove))
+//			if (get_is_item_worn(id_to_remove))
+//			{
+//				//*TODO move here the exact removing code from LLWearableBridge::removeItemFromAvatar in the future
+//				LLWearableBridge::removeItemFromAvatar(item_to_remove);
+//			}
+// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-2.1.2a) | Added: Catznip-2.1.1d
 			{
-				//*TODO move here the exact removing code from LLWearableBridge::removeItemFromAvatar in the future
-				LLWearableBridge::removeItemFromAvatar(item_to_remove);
+				/*const*/ LLWearable* pWearable = gAgentWearables.getWearableFromItemID(item_to_remove->getLinkedUUID());
+				if ( (pWearable) && (LLAssetType::AT_BODYPART != pWearable->getAssetType()) )
+				{
+					U32 idxWearable = gAgentWearables.getWearableIndex(pWearable);
+					if (idxWearable < LLAgentWearables::MAX_CLOTHING_PER_TYPE)
+					{
+						gAgentWearables.removeWearable(pWearable->getType(), false, idxWearable);
+
+						LLAppearanceMgr::instance().removeCOFItemLinks(item_to_remove->getLinkedUUID(), false);
+						gInventory.notifyObservers();
+					}
+				}
 			}
+// [/SL:KB]
 			break;
 		case LLAssetType::AT_OBJECT:
 			LLVOAvatarSelf::detachAttachmentIntoInventory(item_to_remove->getLinkedUUID());
@@ -2685,7 +2790,11 @@ void LLAppearanceMgr::registerAttachment(const LLUUID& item_id)
 		   // we have to pass do_update = true to call LLAppearanceMgr::updateAppearanceFromCOF.
 		   // it will trigger gAgentWariables.notifyLoadingFinished()
 		   // But it is not acceptable solution. See EXT-7777
-		   LLAppearanceMgr::addCOFItemLink(item_id, false);  // Add COF link for item.
+//		   LLAppearanceMgr::addCOFItemLink(item_id, false);  // Add COF link for item.
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+		   mPendingObjLinks.push_back(item_id);
+		   LLAppearanceMgr::addCOFItemLink(item_id, false, new LLRegisterAttachmentCallback());  // Add COF link for item.
+// [/SL:KB]
 	   }
 	   else
 	   {
