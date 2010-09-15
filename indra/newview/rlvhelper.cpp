@@ -17,6 +17,7 @@
 #include "llviewerprecompiledheaders.h"
 #include "llagentwearables.h"
 #include "llappearancemgr.h"
+#include "llattachmentsmgr.h"
 #include "llgesturemgr.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
@@ -826,10 +827,8 @@ void RlvForceWear::done()
 					continue;
 				gAgentAvatarp->addAttachmentRequest(idItem);
 
-				LLSD payload;
-				payload["item_id"] = idItem;
-				payload["attachment_point"] = itAddAttachments->first;
-				LLNotifications::instance().forceResponse(LLNotification::Params("ReplaceAttachment").payload(payload), 0/*YES*/);
+				LLAttachmentsMgr::instance().addAttachment(
+					idItem, itAddAttachments->first & ~ATTACHMENT_ADD, itAddAttachments->first | ATTACHMENT_ADD);
 			}
 		}
 		m_addAttachments.clear();

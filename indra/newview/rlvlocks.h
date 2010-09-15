@@ -152,8 +152,7 @@ protected:
 	 * Member functions
 	 */
 protected:
-	// NOTE: attach/detach do *not* respect attachment locks so use with care
-	void attach(const LLUUID& idItem, S32 idxAttachPt);
+	// NOTE: detach does *not* respect attachment locks so use with care
 	void detach(const LLViewerObject* pAttachObj);
 	void detach(S32 idxAttachPt, const LLViewerObject* pAttachObjExcept = NULL);
 

@@ -71,7 +71,7 @@ void LLAttachmentsMgr::onIdle(void *)
 void LLAttachmentsMgr::onIdle()
 {
 // [RLVa:KB] - Checked: 2010-09-13 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
-	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+	if ( (mPendingAttachments.size()) && (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 	{
 		attachments_vec_t::iterator itPending = mPendingAttachments.begin();
 		while (itPending != mPendingAttachments.end())
