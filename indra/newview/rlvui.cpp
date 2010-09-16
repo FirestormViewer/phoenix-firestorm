@@ -32,6 +32,7 @@
 #include "llparcel.h"
 #include "llsidetray.h"
 #include "llsidetraypanelcontainer.h"
+#include "llsidepanelappearance.h"
 #include "lltabcontainer.h"
 #include "llteleporthistory.h"
 #include "llteleporthistorystorage.h"
@@ -249,6 +250,14 @@ void RlvUIEnabler::onToggleShowInv()
 			// When disabling, switch to the COF tab if "My Outfits" is currently active
 			if ( (!fEnable) && (pAppearanceTabs->getCurrentPanelIndex() == idxTab) )
 				pAppearanceTabs->selectTabPanel(pAppearancePanel->getCurrentOutfitPanel());
+		}
+
+		LLSidepanelAppearance* pCOFPanel = pAppearancePanel->getAppearanceSP();
+		RLV_ASSERT(pCOFPanel);
+		if ( (!fEnable) && (pCOFPanel) && (pCOFPanel->isOutfitEditPanelVisible()) )
+		{
+			// TODO-RLVa: we should really just be collapsing the "Add more..." inventory panel (and disable the button)
+			pCOFPanel->showOutfitsInventoryPanel();
 		}
 	}
 
