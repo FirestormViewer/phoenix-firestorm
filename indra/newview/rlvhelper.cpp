@@ -828,7 +828,7 @@ void RlvForceWear::done()
 				gAgentAvatarp->addAttachmentRequest(idItem);
 
 				LLAttachmentsMgr::instance().addAttachment(
-					idItem, itAddAttachments->first & ~ATTACHMENT_ADD, itAddAttachments->first | ATTACHMENT_ADD);
+					idItem, itAddAttachments->first & ~ATTACHMENT_ADD, itAddAttachments->first & ATTACHMENT_ADD);
 			}
 		}
 		m_addAttachments.clear();
