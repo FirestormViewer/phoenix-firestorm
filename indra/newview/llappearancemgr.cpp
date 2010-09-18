@@ -2816,6 +2816,22 @@ void LLAppearanceMgr::unregisterAttachment(const LLUUID& item_id)
 	   }
 }
 
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.1.2e) | Modified: Catznip-2.1.2e
+void LLAppearanceMgr::onRegisterAttachmentComplete(const LLUUID& idItem)
+{
+	const LLUUID& idItemBase = gInventory.getLinkedItemID(idItem);
+
+	// Remove the attachment from the pending list
+	uuid_vec_t::iterator itPendingObjLink = std::find(mPendingObjLinks.begin(), mPendingObjLinks.end(), idItemBase);
+	if (itPendingObjLink != mPendingObjLinks.end())
+		mPendingObjLinks.erase(itPendingObjLink);
+
+	// It may have been detached already in which case we should remove the COF link
+	if ( (isAgentAvatarValid()) && (!gAgentAvatarp->isWearingAttachment(idItemBase)) )
+		removeCOFItemLinks(idItem, false);
+}
+// [/SL:KB]
+
 BOOL LLAppearanceMgr::getIsInCOF(const LLUUID& obj_id) const
 {
 	return gInventory.isObjectDescendentOf(obj_id, getCOF());

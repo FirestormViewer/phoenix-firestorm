@@ -11,3 +11,4 @@
     -> only dislays "secondary attachment points" correctly for *other* avatars (by design)
 - fixed   : Add to/Replace Outfit removes newly worn attachments on completion
 - fixed   : LLWearableBridge::removeAllClothesFromAvatar() doesn't remove all clothing from the avatar
+- fixed   : attachments that attach and then instantly detach don't have their COF link removed
