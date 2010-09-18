@@ -343,21 +343,24 @@ void RlvUIEnabler::onToggleShowMinimap()
 {
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWMINIMAP);
 
-	// Hide the mini-map if it's currently visible
-	if ( (!fEnable) && (LLFloaterReg::floaterInstanceVisible("mini_map")) )
+	// Start or stop filtering opening the mini-map
+	if (!fEnable)
+		addGenericFloaterFilter("mini_map");
+	else
+		removeGenericFloaterFilter("mini_map");
+
+	// Hide the mini-map if it's currently visible (or restore it if it was previously visible)
+	static bool fPrevVisibile = false;
+	if ( (!fEnable) && ((fPrevVisibile = LLFloaterReg::floaterInstanceVisible("mini_map"))) )
 		LLFloaterReg::hideFloaterInstance("mini_map");
+	else if ( (fEnable) && (fPrevVisibile) )
+		LLFloaterReg::showFloaterInstance("mini_map");
 
 	// Enable/disable the "Mini-Map" bottom tray button
 	const LLBottomTray* pTray = LLBottomTray::getInstance();
 	LLView* pBtnView = (pTray) ? pTray->getChildView("mini_map_btn") : NULL;
 	if (pBtnView)
 		pBtnView->setEnabled(fEnable);
-
-	// Start or stop filtering opening the mini-map
-	if (!fEnable)
-		addGenericFloaterFilter("mini_map");
-	else
-		removeGenericFloaterFilter("mini_map");
 }
 
 // Checked: 2010-06-05 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
