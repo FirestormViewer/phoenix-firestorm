@@ -1456,7 +1456,17 @@
 					 function="ToggleControl"
 					 parameter="RLVaEnableLegacyNaming" />
 				</menu_item_check>
-				<menu_item_check
+        <menu_item_check
+				 label="Enable Shared Wear"
+				 name="Enable Shared Wear">
+          <menu_item_check.on_check
+					 function="CheckControl"
+					 parameter="RLVaEnableSharedWear" />
+          <menu_item_check.on_click
+					 function="ToggleControl"
+					 parameter="RLVaEnableSharedWear" />
+        </menu_item_check>
+        <menu_item_check
 				 label="Rename Shared Items on Wear"
 				 name="Rename Shared Items on Wear">
 					<menu_item_check.on_check

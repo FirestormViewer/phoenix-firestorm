@@ -109,17 +109,6 @@ void RlvSettings::initClass()
 	}
 }
 
-BOOL RlvSettings::getEnableSharedWear()
-{
-	return FALSE;
-/*
-	// NOTE-RLVa: it's not proper but some code relies on the fact that getEnableSharedWear() returns FALSE if any attach point is locked
-	return 
-		(rlvGetSettingBOOL(RLV_SETTING_ENABLESHAREDWEAR, FALSE)) && // "Enable Shared Wear" is toggled on and...
-		(!gRlvHandler.hasLockedAttachment(RLV_LOCK_ANY));			// no attachment point is non-attachable or non-detachable
-*/
-}
-
 #ifdef RLV_EXTENSION_STARTLOCATION
 	// Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.1d
 	void RlvSettings::updateLoginLastLocation()

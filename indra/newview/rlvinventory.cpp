@@ -609,7 +609,7 @@ bool RlvWearableItemCollector::onCollectFolder(const LLInventoryCategory* pFolde
 bool RlvWearableItemCollector::onCollectItem(const LLInventoryItem* pItem)
 {
 	#ifdef RLV_EXTENSION_FLAG_NOSTRIP
-	if ( (!m_fAttach) && (!RlvForceWear::isStrippable(pItem)) )						// Don't process "nostrip" items on detach
+	if ( (!m_fAttach) && (!RlvForceWear::isStrippable(pItem)) )							// Don't process "nostrip" items on detach
 		return false;
 	#endif // RLV_EXTENSION_FLAG_NOSTRIP
 

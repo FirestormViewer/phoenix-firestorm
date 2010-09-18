@@ -57,7 +57,7 @@ public:
 	static BOOL getEnableComposites()		{ return fCompositeFolders; }
 	#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	static BOOL getEnableLegacyNaming()		{ return fLegacyNaming; }
-	static BOOL getEnableSharedWear();
+	static BOOL getEnableSharedWear()		{ return rlvGetSettingBOOL(RLV_SETTING_ENABLESHAREDWEAR, FALSE); }
 	static BOOL getHideLockedLayers()		{ return rlvGetSettingBOOL(RLV_SETTING_HIDELOCKEDLAYER, FALSE); }		
 	static BOOL getHideLockedAttach()		{ return rlvGetSettingBOOL(RLV_SETTING_HIDELOCKEDATTACH, FALSE); }
 	static BOOL getHideLockedInventory()	{ return rlvGetSettingBOOL(RLV_SETTING_HIDELOCKEDINVENTORY, FALSE); }

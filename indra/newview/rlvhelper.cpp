@@ -370,7 +370,9 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 			case LLAssetType::AT_OBJECT:
 				if (isWearAction(eAction))
 				{
-					if ( (gRlvAttachmentLocks.canAttach(pRlvItem)) || (RlvSettings::getEnableSharedWear()) )
+					ERlvWearMask eWearMask = gRlvAttachmentLocks.canAttach(pRlvItem);
+					if ( ((ACTION_WEAR_REPLACE == eAction) && (eWearMask & RLV_WEAR_REPLACE)) ||
+						 ((ACTION_WEAR_ADD == eAction) && (eWearMask & RLV_WEAR_ADD)) )
 					{
 						if (!isAddAttachment(pRlvItem))
 						{
