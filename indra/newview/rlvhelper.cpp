@@ -839,7 +839,8 @@ void RlvForceWear::done()
 	// If there are additions we need to call LLAppearanceManager::updateCOF(), otherwise LLAppearanceManager::updateAppearanceFromCOF()
 	if ( (!addBodyParts.empty()) || (!addClothing.empty()) || (!m_addGestures.empty()) )
 	{
-		pAppearanceMgr->updateCOF(addBodyParts, addClothing, LLInventoryModel::item_array_t(), m_addGestures, true);
+		LLInventoryModel::item_array_t addAttachments;
+		pAppearanceMgr->updateCOF(addBodyParts, addClothing, addAttachments, m_addGestures, true);
 
 		m_addGestures.clear();
 	}
