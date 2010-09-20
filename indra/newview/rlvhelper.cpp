@@ -165,7 +165,7 @@ RlvCommandOptionGeneric::RlvCommandOptionGeneric(const std::string& strOption)
 			m_varOption = wtType;																// ... or specify a clothing layer
 		else if ((pAttachPt = RlvAttachPtLookup::getAttachPoint(strOption)) != NULL)
 			m_varOption = pAttachPt;															// ... or specify an attachment point
-		else if (idOption.set(strOption))
+		else if ( ((UUID_STR_LENGTH - 1) == strOption.length()) && (idOption.set(strOption)) )
 			m_varOption = idOption;																// ... or specify an UUID
 		else if ((pFolder = RlvInventory::instance().getSharedFolder(strOption)) != NULL)
 			m_varOption = pFolder;																// ... or specify a shared folder path
