@@ -772,10 +772,15 @@ void RlvForceWear::done()
 		{
 			gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 			gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, (*itAttachObj)->getLocalID());
-
-			pAppearanceMgr->removeCOFItemLinks((*itAttachObj)->getAttachmentItemID(), false);
 		}
 		gMessageSystem->sendReliable(gAgent.getRegionHost());
+
+		for (std::list<const LLViewerObject*>::const_iterator itAttachObj = m_remAttachments.begin(); 
+				itAttachObj != m_remAttachments.end(); ++itAttachObj)
+		{
+			pAppearanceMgr->removeCOFItemLinks((*itAttachObj)->getAttachmentItemID(), false);
+		}
+
 		m_remAttachments.clear();
 	}
 
