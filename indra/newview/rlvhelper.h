@@ -129,14 +129,14 @@ public:
 	/*virtual*/ ~RlvCommandOptionGeneric() {}
 
 public:
-	/*virtual*/ bool isAttachmentPoint() const		{ return typeid(LLViewerJointAttachment*) == m_varOption.type(); }
-	/*virtual*/ bool isAttachmentPointGroup() const	{ return typeid(ERlvAttachGroupType) == m_varOption.type(); }
+	/*virtual*/ bool isAttachmentPoint() const		{ return (!isEmpty()) && (typeid(LLViewerJointAttachment*) == m_varOption.type()); }
+	/*virtual*/ bool isAttachmentPointGroup() const	{ return (!isEmpty()) && (typeid(ERlvAttachGroupType) == m_varOption.type()); }
 	/*virtual*/ bool isEmpty() const				{ return m_fEmpty; }
-	/*virtual*/ bool isSharedFolder() const			{ return typeid(LLViewerInventoryCategory*) == m_varOption.type(); }
-	/*virtual*/ bool isString() const				{ return typeid(std::string) == m_varOption.type(); }
-	/*virtual*/ bool isUUID() const					{ return typeid(LLUUID) == m_varOption.type(); }
+	/*virtual*/ bool isSharedFolder() const			{ return (!isEmpty()) && (typeid(LLViewerInventoryCategory*) == m_varOption.type()); }
+	/*virtual*/ bool isString() const				{ return (!isEmpty()) && (typeid(std::string) == m_varOption.type()); }
+	/*virtual*/ bool isUUID() const					{ return (!isEmpty()) && (typeid(LLUUID) == m_varOption.type()); }
 	/*virtual*/ bool isValid() const				{ return true; } // This doesn't really have any significance for the generic class
-	/*virtual*/ bool isWearableType() const			{ return typeid(LLWearableType::EType) == m_varOption.type(); }
+	/*virtual*/ bool isWearableType() const			{ return (!isEmpty()) && (typeid(LLWearableType::EType) == m_varOption.type()); }
 
 	/*virtual*/ LLViewerJointAttachment*   getAttachmentPoint() const
 		{ return (isAttachmentPoint()) ? boost::get<LLViewerJointAttachment*>(m_varOption) : RlvCommandOption::getAttachmentPoint(); }
