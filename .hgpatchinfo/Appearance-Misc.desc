@@ -12,3 +12,4 @@
 - fixed   : Add to/Replace Outfit removes newly worn attachments on completion
 - fixed   : LLWearableBridge::removeAllClothesFromAvatar() doesn't remove all clothing from the avatar
 - fixed   : attachments that attach and then instantly detach don't have their COF link removed
+- changed : enable "Replace Current Outfit" on the base outfit if it's marked dirty
