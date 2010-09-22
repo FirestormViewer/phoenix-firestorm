@@ -58,6 +58,9 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llworld.h"
+// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 // syntactic sugar
 #define callMemberFunction(object,ptrToMember)  ((object).*(ptrToMember))
@@ -1135,6 +1138,15 @@ void LLToolDragAndDrop::dropObject(LLViewerObject* raycast_target,
 		return;
 	}
 
+
+// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Modified: RLVa-1.2.0a
+	// Fallback in case there's a new code path that leads here (see behaviour notes)
+	if ( (rlv_handler_t::isEnabled()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT))) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 	//llinfos << "Rezzing object" << llendl;
 	make_ui_sound("UISndObjectRezIn");
 	LLViewerInventoryItem* item;
@@ -1400,6 +1412,23 @@ EAcceptance LLToolDragAndDrop::willObjectAcceptInventory(LLViewerObject* obj, LL
 	BOOL volume = (LL_PCODE_VOLUME == obj->getPCode());
 	BOOL attached = obj->isAttachment();
 	BOOL unrestricted = ((perm.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED) ? TRUE : FALSE;
+
+// [RLVa:KB] - Checked: 2010-03-31 (RLVa-1.2.0c) | Modified: RLVa-1.0.0c
+	if (rlv_handler_t::isEnabled())
+	{
+		const LLViewerObject* pObjRoot = obj->getRootEdit();
+		if (gRlvAttachmentLocks.isLockedAttachment(pObjRoot))
+		{
+			return ACCEPT_NO_LOCKED;		// Disallow inventory drops on a locked attachment
+		}
+		else if ( (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) )
+		{
+			if ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && (gAgentAvatarp->getRoot() == pObjRoot) )
+				return ACCEPT_NO_LOCKED;	// ... or on a linkset the avie is sitting on under @unsit=n/@sittp=n
+		}
+	}
+// [/RLVa:KB]
+
 	if (attached && !unrestricted)
 	{
 		return ACCEPT_NO_LOCKED;
@@ -1619,6 +1648,14 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 		return ACCEPT_NO;
 	}
 
+// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
+	// RELEASE-RLVa: [SL-2.0.0] This will need revisiting for "ENABLE_MULTIATTACHMENTS"
+	if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canAttach(item)) )
+	{
+		return ACCEPT_NO_LOCKED;
+	}
+// [/RLVa:KB]
+
 	if (drop)
 	{
 		if (mSource == SOURCE_LIBRARY)
@@ -1644,6 +1681,14 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 EAcceptance LLToolDragAndDrop::dad3dRezObjectOnLand(
 	LLViewerObject* obj, S32 face, MASK mask, BOOL drop)
 {
+// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
+	// RELEASE-RLVa: [SL-2.0.0] Make sure the code below is the only code path to LLToolDragAndDrop::dad3dRezFromObjectOnLand()
+	if ( (rlv_handler_t::isEnabled()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT))) )
+	{
+		return ACCEPT_NO_LOCKED;
+	}
+// [/RLVa:KB]
+
 	if (mSource == SOURCE_WORLD)
 	{
 		return dad3dRezFromObjectOnLand(obj, face, mask, drop);
@@ -1705,6 +1750,18 @@ EAcceptance LLToolDragAndDrop::dad3dRezObjectOnLand(
 EAcceptance LLToolDragAndDrop::dad3dRezObjectOnObject(
 	LLViewerObject* obj, S32 face, MASK mask, BOOL drop)
 {
+// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
+	// NOTE: if (mask & MASK_CONTROL) then it's a drop rather than a rez, so we let that pass through when @rez=n restricted
+	// (but not when @interact=n restricted unless the drop target is a HUD attachment)
+	// RELEASE-RLVa: [SL-2.0.0] Make sure the code below is the only code path to LLToolDragAndDrop::dad3dRezFromObjectOnObject()
+	if ( (rlv_handler_t::isEnabled()) &&
+		 ( ( (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) && ((mask & MASK_CONTROL) == 0) ) ||
+		   ( (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) && (((mask & MASK_CONTROL) == 0) || (!obj->isHUDAttachment())) ) ) )
+	{
+		return ACCEPT_NO_LOCKED;
+	}
+// [/RLVa:KB]
+
 	// handle objects coming from object inventory
 	if (mSource == SOURCE_WORLD)
 	{
@@ -1907,6 +1964,13 @@ EAcceptance LLToolDragAndDrop::dad3dWearItem(
 		{
 			return ACCEPT_NO;
 		}
+
+// [RLVa:KB] - Checked: 2010-03-20 (RLVa-1.2.0c) | Modified: RLVa-1.2.0a
+		if ( (rlv_handler_t::isEnabled()) && (RLV_WEAR_LOCKED == gRlvWearableLocks.canWear(item)) )
+		{
+			return ACCEPT_NO_LOCKED;
+		}
+// [/RLVa:KB]
 
 		if (drop)
 		{

@@ -80,6 +80,10 @@
 #include "llurlmatch.h"
 #include "lltextutil.h"
 
+// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 #include "llweb.h"
 #include "llsecondlifeurls.h"
 
@@ -334,7 +338,16 @@ LLAppViewer::LLUpdaterInfo *LLAppViewer::sUpdaterInfo = NULL ;
 void idle_afk_check()
 {
 	// check idle timers
+//	if (gSavedSettings.getS32("AFKTimeout") && (gAwayTriggerTimer.getElapsedTimeF32() > gSavedSettings.getS32("AFKTimeout")))
+// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
+#ifdef RLV_EXTENSION_CMD_ALLOWIDLE
+	// Enforce an idle time of 30 minutes if @allowidle=n restricted
+	S32 nAFKTimeout = (gRlvHandler.hasBehaviour(RLV_BHVR_ALLOWIDLE)) ? gSavedSettings.getS32("AFKTimeout") : 60 * 30;
+	if ( (nAFKTimeout) && (gAwayTriggerTimer.getElapsedTimeF32() > nAFKTimeout) )
+#else
 	if (gSavedSettings.getS32("AFKTimeout") && (gAwayTriggerTimer.getElapsedTimeF32() > gSavedSettings.getS32("AFKTimeout")))
+#endif // RLV_EXTENSION_CMD_ALLOWIDLE
+// [/RLVa:KB]
 	{
 		gAgent.setAFK();
 	}
