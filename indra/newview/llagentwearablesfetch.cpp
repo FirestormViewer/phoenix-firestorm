@@ -119,7 +119,7 @@ void LLInitialWearablesFetch::processContents()
 	gInventory.collectDescendentsIf(mComplete.front(), cat_array, wearable_array, 
 									LLInventoryModel::EXCLUDE_TRASH, is_wearable);
 
-// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-05-18 (Catznip-2.1.2a) | Modified: Catznip-2.0.0h
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-05-18 (Catznip-2.2.0a) | Modified: Catznip-2.0.0h
 	// NOTE: don't use the current COF contents if 'wearable_array' is empty (ie first logon with 2.0 or some other problem)
 	bool fUpdateFromCOF = !wearable_array.empty();
 	if (fUpdateFromCOF)
@@ -134,7 +134,7 @@ void LLInitialWearablesFetch::processContents()
 		{
 			const LLUUID& idItem = itWearableData->mItemID; bool fFound = false;
 
-			// TODO-Catznip: [SL-2.1.0] Bit of a hack until LL supports changing the descriptions of links
+			// TODO-Catznip: [SL-2.2.0] Bit of a hack until LL supports changing the descriptions of links
 			for (S32 idxItem = 0, cntItem = items_by_type[itWearableData->mType].size(); idxItem < cntItem; idxItem++)
 			{
 				const LLViewerInventoryItem* pCOFItem = items_by_type[itWearableData->mType].get(idxItem);
@@ -152,7 +152,7 @@ void LLInitialWearablesFetch::processContents()
 
 	LLAppearanceMgr::instance().setAttachmentInvLinkEnable(true);
 //	if (wearable_array.count() > 0)
-// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-28 (Catznip-2.1.2a) | Modified: Catznip-2.0.0e
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-28 (Catznip-2.2.0a) | Modified: Catznip-2.0.0e
 	if (fUpdateFromCOF)
 // [/SL:KB]
 	{
@@ -205,12 +205,12 @@ public:
 								link_waiter);
 		}
 */
-// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-08-14 (Catznip-2.1.2a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-08-14 (Catznip-2.2.0a) | Added: Catznip-2.1.1d
 		doOnIdleOneTime(boost::bind(&LLFetchAndLinkObserver::doneIdle, this));
 // [/SL:KB]
 	}
 
-// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-02 (Catznip-2.1.2a) | Added: Catznip-2.0.0a
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-02 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
 	void doneIdle()
 	{
 		// NOTE: the code above makes the assumption that COF is empty which won't be the case the way it's used now
@@ -243,7 +243,7 @@ void LLInitialWearablesFetch::processWearablesMessage()
 		{
 			// Populate the current outfit folder with links to the wearables passed in the message
 //			InitialWearableData *wearable_data = new InitialWearableData(mAgentInitialWearables[i]); // This will be deleted in the callback.
-// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-05-02 (Catznip-2.1.2a) | Added: Catznip-2.0.0f
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-05-02 (Catznip-2.2.0a) | Added: Catznip-2.0.0f
 			// Fixes minor leak: since COF is used onInitialWearableAssetArrived() will never get called and "wearable_data" leaks
 			InitialWearableData* wearable_data = &mAgentInitialWearables[i];
 // [/SL:KB]

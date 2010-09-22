@@ -1774,7 +1774,7 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 	}
 }
 
-// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-02 (Catznip-2.1.2a) | Added: Catznip-2.0.0a
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-02 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
 void LLAppearanceMgr::updateAppearanceFromInitialWearables(LLInventoryModel::item_array_t& initial_items)
 {
 	const LLUUID& idCOF = getCOF();
@@ -1784,7 +1784,7 @@ void LLAppearanceMgr::updateAppearanceFromInitialWearables(LLInventoryModel::ite
 	gInventory.notifyObservers();
 
 	// Create links to new COF contents
-	LLPointer<LLInventoryCallback> link_waiter = new LLUpdateAppearanceOnDestroy;
+	LLPointer<LLInventoryCallback> link_waiter = new LLUpdateAppearanceOnDestroy();
 	linkAll(idCOF, initial_items, link_waiter);
 }
 // [/SL:KB]
