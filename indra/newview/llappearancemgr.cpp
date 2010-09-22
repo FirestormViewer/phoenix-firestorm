@@ -280,7 +280,7 @@ public:
 	void onWearableAssetFetch(LLWearable *wearable);
 	void onAllComplete();
 
-// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.0.1a) | Added: Catznip-2.0.0a
+// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
 	bool pollStopped();
 // [/SL:KB]
 
@@ -508,7 +508,7 @@ bool LLWearableHoldingPattern::pollFetchCompletion()
 	{
 		llwarns << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
 
-// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.0.1a) | Added: Catznip-2.0.0a
+// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
 		// If we were signalled to stop then we shouldn't do anything else except poll for when it's safe to delete ourselves
 		doOnIdleRepeating(boost::bind(&LLWearableHoldingPattern::pollStopped, this));
 		return true;
@@ -605,7 +605,7 @@ public:
 		{
 			llwarns << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
 
-// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.0.1a) | Added: Catznip-2.0.0a
+// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
 			// If we were signalled to stop then we shouldn't do anything else except poll for when it's safe to delete ourselves
 			return;
 // [/SL:KB]
@@ -683,7 +683,7 @@ void LLWearableHoldingPattern::clearCOFLinksForMissingWearables()
 	}
 }
 
-// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.0.1a) | Added: Catznip-2.0.0a
+// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
 bool LLWearableHoldingPattern::pollStopped()
 {
 	// We have to keep on polling until we're sure that all callbacks have completed or they'll cause a crash
@@ -702,7 +702,7 @@ bool LLWearableHoldingPattern::pollMissingWearables()
 	{
 		llwarns << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
 
-// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.0.1a) | Added: Catznip-2.0.0a
+// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
 		// If we were signalled to stop then we shouldn't do anything else except poll for when it's safe to delete ourselves
 		doOnIdleRepeating(boost::bind(&LLWearableHoldingPattern::pollStopped, this));
 		return true;
@@ -1340,7 +1340,7 @@ bool LLAppearanceMgr::getCanReplaceCOF(const LLUUID& outfit_cat_id)
 
 	// Check whether it's the base outfit.
 //	if (outfit_cat_id.isNull() || outfit_cat_id == getBaseOutfitUUID())
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-21 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-21 (Catznip-2.2.0a) | Added: Catznip-2.1.2d
 	if ( (outfit_cat_id.isNull()) || ((outfit_cat_id == getBaseOutfitUUID()) && (!isOutfitDirty())) )
 // [/SL:KB]
 	{
@@ -1408,7 +1408,7 @@ void LLAppearanceMgr::filterWearableItems(
 		if (size <= 0)
 			continue;
 //		S32 start_index = llmax(0,size-max_per_type);
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-05-11 (Catznip-2.1.2a) | Added: Catznip-2.0.0h
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-05-11 (Catznip-2.2.0a) | Added: Catznip-2.0.0h
 		S32 start_index = 
 			llmax(0, size - ((LLAssetType::AT_BODYPART == LLWearableType::getAssetType((LLWearableType::EType)i)) ? 1 : max_per_type));
 // [/SL:KB[
@@ -1779,6 +1779,7 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 
 	//preparing the list of wearables in the correct order for LLAgentWearables
 	sortItemsByActualDescription(wear_items);
+
 
 	LLWearableHoldingPattern* holder = new LLWearableHoldingPattern;
 
@@ -2591,7 +2592,7 @@ void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
 //				//*TODO move here the exact removing code from LLWearableBridge::removeItemFromAvatar in the future
 //				LLWearableBridge::removeItemFromAvatar(item_to_remove);
 //			}
-// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-2.1.2a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-2.2.0a) | Added: Catznip-2.1.1d
 			{
 				/*const*/ LLWearable* pWearable = gAgentWearables.getWearableFromItemID(item_to_remove->getLinkedUUID());
 				if ( (pWearable) && (LLAssetType::AT_BODYPART != pWearable->getAssetType()) )
