@@ -55,7 +55,7 @@
 LLAgentWearables gAgentWearables;
 
 BOOL LLAgentWearables::mInitialWearablesUpdateReceived = FALSE;
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1.2a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.2.0a) | Added: Catznip-2.1.1d
 bool LLAgentWearables::mInitialWearablesLoaded = false;
 // [/SL:KB]
 
@@ -1451,6 +1451,13 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 	// Start rendering & update the server
 	mWearablesLoaded = TRUE; 
 	checkWearablesLoaded();
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-09-22 (Catznip-2.2.0a) | Modified: Catznip-2.2.0a
+	if (!mInitialWearablesLoaded)
+	{
+		mInitialWearablesLoaded = true;
+		mInitialWearablesLoadedSignal();
+	}
+// [/SL:KB]
 	notifyLoadingFinished();
 	queryWearableCache();
 	updateServer();
@@ -2103,7 +2110,7 @@ boost::signals2::connection LLAgentWearables::addLoadedCallback(loaded_callback_
 	return mLoadedSignal.connect(cb);
 }
 
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1.2a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.2.0a) | Added: Catznip-2.1.1d
 boost::signals2::connection LLAgentWearables::addInitialWearablesLoadedCallback(loaded_callback_t cb)
 {
 	return mInitialWearablesLoadedSignal.connect(cb);
@@ -2113,13 +2120,6 @@ boost::signals2::connection LLAgentWearables::addInitialWearablesLoadedCallback(
 void LLAgentWearables::notifyLoadingStarted()
 {
 	mCOFChangeInProgress = true;
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1.2a) | Added: Catznip-2.1.1d
-	if (!mInitialWearablesLoaded)
-	{
-		mInitialWearablesLoaded = true;
-		mInitialWearablesLoadedSignal();
-	}
-// [/SL:KB]
 	mLoadingStartedSignal();
 }
 
