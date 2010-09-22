@@ -1735,7 +1735,10 @@ void LLAgentWearables::userRemoveAllClothesStep2(BOOL proceed)
 
 // Combines userRemoveAllAttachments() and userAttachMultipleAttachments() logic to
 // get attachments into desired state with minimal number of adds/removes.
-void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array)
+//void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array)
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.2.0a) | Added: Catznip-2.2.0a
+void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array, bool fAttachOnly)
+// [/SL:KB]
 {
 	// Possible cases:
 	// already wearing but not in request set -> take off.
@@ -1800,7 +1803,13 @@ void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj
 	// llinfos << "remove " << remove_count << " add " << add_count << llendl;
 
 	// Remove everything in objects_to_remove
-	userRemoveMultipleAttachments(objects_to_remove);
+//	userRemoveMultipleAttachments(objects_to_remove);
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.2.0a) | Added: Catznip-2.2.0a
+	if (!fAttachOnly)
+	{
+		userRemoveMultipleAttachments(objects_to_remove);
+	}
+// [/SL:KB]
 
 	// Add everything in items_to_add
 	userAttachMultipleAttachments(items_to_add);
