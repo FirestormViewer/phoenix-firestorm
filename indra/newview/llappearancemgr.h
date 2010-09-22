@@ -220,15 +220,9 @@ private:
 
 	std::auto_ptr<LLOutfitUnLockTimer> mUnlockOutfitTimer;
 
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.2.0a) | Modified: Catznip-2.1.2e
 public:
-	void onRegisterAttachmentComplete(const LLUUID& idItem)
-	{
-		const LLUUID& idItemBase = gInventory.getLinkedItemID(idItem);
-		uuid_vec_t::iterator itPendingObjLink = std::find(mPendingObjLinks.begin(), mPendingObjLinks.end(), idItemBase);
-		if (itPendingObjLink != mPendingObjLinks.end())
-			mPendingObjLinks.erase(itPendingObjLink);
-	}
+	void onRegisterAttachmentComplete(const LLUUID& idItem);
 private:
 	uuid_vec_t mPendingObjLinks;
 // [/SL:KB]
@@ -259,7 +253,7 @@ private:
 	bool mUpdateBaseOrder;
 };
 
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
 class LLRegisterAttachmentCallback : public LLInventoryCallback
 {
 public:
