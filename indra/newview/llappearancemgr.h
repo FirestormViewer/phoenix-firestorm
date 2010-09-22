@@ -217,6 +217,13 @@ private:
 
 	std::auto_ptr<LLOutfitUnLockTimer> mUnlockOutfitTimer;
 
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.1.2e) | Modified: Catznip-2.1.2e
+public:
+	void onRegisterAttachmentComplete(const LLUUID& idItem);
+private:
+	uuid_vec_t mPendingObjLinks;
+// [/SL:KB]
+
 	//////////////////////////////////////////////////////////////////////////////////
 	// Item-specific convenience functions 
 public:
@@ -243,6 +250,19 @@ private:
 	bool mUpdateBaseOrder;
 };
 
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+class LLRegisterAttachmentCallback : public LLInventoryCallback
+{
+public:
+	LLRegisterAttachmentCallback() {}
+	/*virtual*/ ~LLRegisterAttachmentCallback() {}
+
+	/*virtual*/ void fire(const LLUUID& idItem)
+	{
+		LLAppearanceMgr::instance().onRegisterAttachmentComplete(idItem);
+	}
+};
+// [/SL:KB]
 
 #define SUPPORT_ENSEMBLES 0
 

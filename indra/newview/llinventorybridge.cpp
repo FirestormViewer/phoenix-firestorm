@@ -4331,11 +4331,16 @@ void remove_inventory_category_from_avatar_step2( BOOL proceed, LLUUID category_
 					continue;
 				if (get_is_item_worn(item->getUUID()))
 				{
+/*
 					LLWearableList::instance().getAsset(item->getAssetUUID(),
 														item->getName(),
 														item->getType(),
 														LLWearableBridge::onRemoveFromAvatarArrived,
 														new OnRemoveStruct(item->getLinkedUUID()));
+*/
+// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-2.1.2a) | Added: Catznip-2.1.1d
+					LLAppearanceMgr::instance().removeItemFromAvatar(item->getUUID());
+// [/SL:KB]
 				}
 			}
 		}
@@ -4566,6 +4571,7 @@ void LLWearableBridge::wearAddOnAvatar()
 }
 
 // static
+/*
 void LLWearableBridge::onWearOnAvatarArrived( LLWearable* wearable, void* userdata )
 {
 	LLUUID* item_id = (LLUUID*) userdata;
@@ -4589,9 +4595,11 @@ void LLWearableBridge::onWearOnAvatarArrived( LLWearable* wearable, void* userda
 	}
 	delete item_id;
 }
+*/
 
 // static
 // BAP remove the "add" code path once everything is fully COF-ified.
+/*
 void LLWearableBridge::onWearAddOnAvatarArrived( LLWearable* wearable, void* userdata )
 {
 	LLUUID* item_id = (LLUUID*) userdata;
@@ -4616,6 +4624,7 @@ void LLWearableBridge::onWearAddOnAvatarArrived( LLWearable* wearable, void* use
 	}
 	delete item_id;
 }
+*/
 
 // static
 BOOL LLWearableBridge::canEditOnAvatar(void* user_data)
@@ -4653,6 +4662,7 @@ BOOL LLWearableBridge::canRemoveFromAvatar(void* user_data)
 }
 
 // static
+/*
 void LLWearableBridge::onRemoveFromAvatar(void* user_data)
 {
 	LLWearableBridge* self = (LLWearableBridge*)user_data;
@@ -4671,8 +4681,10 @@ void LLWearableBridge::onRemoveFromAvatar(void* user_data)
 		}
 	}
 }
+*/
 
 // static
+/*
 void LLWearableBridge::onRemoveFromAvatarArrived(LLWearable* wearable,
 												 void* userdata)
 {
@@ -4700,6 +4712,7 @@ void LLWearableBridge::onRemoveFromAvatarArrived(LLWearable* wearable,
 
 	delete on_remove_struct;
 }
+*/
 
 // static
 void LLWearableBridge::removeAllClothesFromAvatar()
@@ -4710,7 +4723,10 @@ void LLWearableBridge::removeAllClothesFromAvatar()
 		if (itype == LLWearableType::WT_SHAPE || itype == LLWearableType::WT_SKIN || itype == LLWearableType::WT_HAIR || itype == LLWearableType::WT_EYES)
 			continue;
 
-		for (S32 index = gAgentWearables.getWearableCount(itype)-1; index >= 0 ; --index)
+//		for (S32 index = gAgentWearables.getWearableCount(itype)-1; index >= 0 ; --index)
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-04 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+		for (S32 index = gAgentWearables.getWearableCount((LLWearableType::EType)itype)-1; index >= 0 ; --index)
+// [/SL:KB]
 		{
 			LLViewerInventoryItem *item = dynamic_cast<LLViewerInventoryItem*>(
 				gAgentWearables.getWearableInventoryItem((LLWearableType::EType)itype, index));
@@ -4736,11 +4752,16 @@ void LLWearableBridge::removeItemFromAvatar(LLViewerInventoryItem *item)
 {
 	if (item)
 	{
+/*
 		LLWearableList::instance().getAsset(item->getAssetUUID(),
 											item->getName(),
 											item->getType(),
 											LLWearableBridge::onRemoveFromAvatarArrived,
 											new OnRemoveStruct(item->getUUID()));
+*/
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-08-13 (Catznip-2.1.2a) | Added: Catznip-2.1.1d
+		LLAppearanceMgr::instance().removeItemFromAvatar(item->getUUID());
+// [/SL:KB]
 	}
 }
 

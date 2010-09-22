@@ -1,0 +1,15 @@
+[Appearance/Misc]
+- fixed   : LLAppearanceMgr::filterWearableItems() doesn't properly filter body parts
+- fixed   : LLWearableList::processGetAssetReply() creates multiple LLWearable instances for the same asset UUID
+    -> fix for http://jira.secondlife.com/browse/VWR-20608
+- changed : deprecated removeItemFromAvatar() in favour of having LLAppearanceMgr::removeItemFromAvatar() handle it directly/correctly
+    -> wearables can't be worn/removed in 2.X without the viewer already having an LLWearable instance for it anyway
+- added   : InitialWearablesLoadedSignal signal which is emitted *once* when the initial wearables are loaded
+- fixed   : attachments sometimes detach only to instantly get reattached after logon
+- added   : LegacyMultiAttachmentSupport debug setting to route "secondary attachment points" to the primary attachment point
+    -> maps secondary attachment point range [39,68] onto [1,30]
+    -> only dislays "secondary attachment points" correctly for *other* avatars (by design)
+- fixed   : Add to/Replace Outfit removes newly worn attachments on completion
+- fixed   : LLWearableBridge::removeAllClothesFromAvatar() doesn't remove all clothing from the avatar
+- fixed   : attachments that attach and then instantly detach don't have their COF link removed
+- changed : enable "Replace Current Outfit" on the base outfit if it's marked dirty
