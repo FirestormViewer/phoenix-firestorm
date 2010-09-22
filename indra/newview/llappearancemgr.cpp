@@ -280,6 +280,10 @@ public:
 	void onWearableAssetFetch(LLWearable *wearable);
 	void onAllComplete();
 
+// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.0.1a) | Added: Catznip-2.0.0a
+	bool pollStopped();
+// [/SL:KB]
+
 	typedef std::list<LLFoundData> found_list_t;
 	found_list_t& getFoundList();
 	void eraseTypeToLink(LLWearableType::EType type);
@@ -517,6 +521,12 @@ bool LLWearableHoldingPattern::pollFetchCompletion()
 	if (!isMostRecent())
 	{
 		llwarns << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
+
+// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.0.1a) | Added: Catznip-2.0.0a
+		// If we were signalled to stop then we shouldn't do anything else except poll for when it's safe to delete ourselves
+		doOnIdleRepeating(boost::bind(&LLWearableHoldingPattern::pollStopped, this));
+		return true;
+// [/SL:KB]
 	}
 
 	bool completed = isFetchCompleted();
@@ -608,6 +618,11 @@ public:
 		if (!mHolder->isMostRecent())
 		{
 			llwarns << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
+
+// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.0.1a) | Added: Catznip-2.0.0a
+			// If we were signalled to stop then we shouldn't do anything else except poll for when it's safe to delete ourselves
+			return;
+// [/SL:KB]
 		}
 
 		llinfos << "Recovered item for type " << mType << llendl;
@@ -682,11 +697,30 @@ void LLWearableHoldingPattern::clearCOFLinksForMissingWearables()
 	}
 }
 
+// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.0.1a) | Added: Catznip-2.0.0a
+bool LLWearableHoldingPattern::pollStopped()
+{
+	// We have to keep on polling until we're sure that all callbacks have completed or they'll cause a crash
+	if ( (isFetchCompleted()) && (isMissingCompleted()) )
+	{
+		delete this;
+		return true;
+	}
+	return false;
+}
+// [/SL:KB]
+
 bool LLWearableHoldingPattern::pollMissingWearables()
 {
 	if (!isMostRecent())
 	{
 		llwarns << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
+
+// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.0.1a) | Added: Catznip-2.0.0a
+		// If we were signalled to stop then we shouldn't do anything else except poll for when it's safe to delete ourselves
+		doOnIdleRepeating(boost::bind(&LLWearableHoldingPattern::pollStopped, this));
+		return true;
+// [/SL:KB]
 	}
 	
 	bool timed_out = isTimedOut();

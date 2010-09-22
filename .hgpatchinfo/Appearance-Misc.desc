@@ -1,4 +1,5 @@
 [Appearance/Misc]
+- fixed   : multiple LLWearableHoldingPattern instances lead to "COF corruption"
 - fixed   : LLAppearanceMgr::filterWearableItems() doesn't properly filter body parts
 - fixed   : LLWearableList::processGetAssetReply() creates multiple LLWearable instances for the same asset UUID
     -> fix for http://jira.secondlife.com/browse/VWR-20608
