@@ -67,9 +67,6 @@ private:
 		LLUUID mItemID;
 		U8 mAttachmentPt;
 		BOOL mAdd;
-// [RLVa:KB] - Checked: 2010-09-13 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
-		BOOL mRlvForce;
-// [/RLVa:KB]
 	};
 
 	typedef std::vector<AttachmentsInfo> attachments_vec_t;

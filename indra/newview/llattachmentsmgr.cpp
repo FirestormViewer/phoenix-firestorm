@@ -49,16 +49,33 @@ void LLAttachmentsMgr::addAttachment(const LLUUID& item_id,
 									 const U8 attachment_pt,
 //									 const BOOL add)
 // [RLVa:KB] - Checked: 2010-09-13 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
-									 const BOOL add, const BOOL fRlvForce /*= FALSE*/)
+									 const BOOL add, const BOOL fRlvForce /*=FALSE*/)
 // [/RLVa:KB]
 {
 	AttachmentsInfo attachment;
 	attachment.mItemID = item_id;
 	attachment.mAttachmentPt = attachment_pt;
 	attachment.mAdd = add;
-// [RLVa:KB] - Checked: 2010-09-13 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
-	attachment.mRlvForce = fRlvForce;
+
+// [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1d) | Modified: RLVa-1.2.1d
+	if ( (rlv_handler_t::isEnabled()) && (!fRlvForce) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+	{
+		const LLInventoryItem* pItem = gInventory.getItem(item_id); 
+		if (!pItem)
+			return;
+
+		LLViewerJointAttachment* pAttachPt = NULL;
+		ERlvWearMask eWearMask = gRlvAttachmentLocks.canAttach(pItem, &pAttachPt);
+		if ( ((add) && ((RLV_WEAR_ADD & eWearMask) == 0)) || ((!add) && ((RLV_WEAR_REPLACE & eWearMask) == 0)) )
+			return;
+
+		if ( (0 == attachment_pt) && (NULL != pAttachPt) )
+			attachment.mAttachmentPt = RlvAttachPtLookup::getAttachPointIndex(pAttachPt);
+		RlvAttachmentLockWatchdog::instance().onWearAttachment(pItem, (add) ? RLV_WEAR_ADD : RLV_WEAR_REPLACE);
+		attachment.mAdd = true;
+	}
 // [/RLVa:KB]
+
 	mPendingAttachments.push_back(attachment);
 }
 
@@ -70,29 +87,6 @@ void LLAttachmentsMgr::onIdle(void *)
 
 void LLAttachmentsMgr::onIdle()
 {
-// [RLVa:KB] - Checked: 2010-09-13 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
-	if ( (mPendingAttachments.size()) && (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
-	{
-		attachments_vec_t::iterator itPending = mPendingAttachments.begin();
-		while (itPending != mPendingAttachments.end())
-		{
-			AttachmentsInfo& infoAttachment = *itPending;
-			const LLInventoryItem* pItem = gInventory.getItem(infoAttachment.mItemID);
-			if (!infoAttachment.mRlvForce)
-			{
-				if (!gRlvAttachmentLocks.canAttach(pItem))
-				{
-					itPending = mPendingAttachments.erase(itPending);
-					continue;
-				}
-				RlvAttachmentLockWatchdog::instance().onWearAttachment(pItem, (infoAttachment.mAdd) ? RLV_WEAR_ADD : RLV_WEAR_REPLACE);
-				infoAttachment.mAdd = true;
-			}
-			++itPending;
-		}
-	}
-// [/RLVa:KB]
-
 	S32 obj_count = mPendingAttachments.size();
 	if (obj_count == 0)
 	{
