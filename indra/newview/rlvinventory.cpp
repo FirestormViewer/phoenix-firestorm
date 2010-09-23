@@ -495,6 +495,8 @@ void RlvGiveToRLVTaskOffer::doneIdle()
 				pNewFolder->updateServer(FALSE);
 				gInventory.updateCategory(pNewFolder);
 
+				RlvBehaviourNotifyHandler::instance().sendNotification("accepted_in_rlv inv_offer " + pNewFolder->getName());
+
 				gInventory.notifyObservers();
 				break;
 			}

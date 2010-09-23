@@ -1677,6 +1677,9 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 	
 	bool busy=FALSE;
 	
+// [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1e) | Added: RLVa-1.2.1e
+	bool fRlvNotifyAccepted = false;
+// [/RLVa:KB]
 	switch(button)
 	{
 		case IOR_ACCEPT:
@@ -1684,21 +1687,26 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 			// for inventory_offered, task_inventory_offer or
 			// group_notice_inventory is 1 greater than the offer integer value.
 
-// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
+// [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1e) | Modified: RLVa-1.2.1e
 			// Only change the inventory offer's destination folder to the shared root if:
 			//   - the user has enabled the feature
 			//   - the inventory offer came from a script (and specifies a folder)
 			//   - the name starts with the prefix - mDesc format: '[OBJECTNAME]'  ( http://slurl.com/... )
-			if ( (rlv_handler_t::isEnabled()) && (!RlvSettings::getForbidGiveToRLV()) && 
+			if ( (rlv_handler_t::isEnabled()) && 
 				 (IM_TASK_INVENTORY_OFFERED == mIM) && (LLAssetType::AT_CATEGORY == mType) && (mDesc.find(RLV_PUTINV_PREFIX) == 1) )
 			{
-				const LLViewerInventoryCategory* pRlvRoot = RlvInventory::instance().getSharedRoot();
-				if (pRlvRoot)
+				fRlvNotifyAccepted = true;
+				if (!RlvSettings::getForbidGiveToRLV())
 				{
-					mFolderID = pRlvRoot->getUUID();
+					const LLViewerInventoryCategory* pRlvRoot = RlvInventory::instance().getSharedRoot();
+					if (pRlvRoot)
+					{
+						fRlvNotifyAccepted = false;		// "accepted_in_rlv" is sent from RlvGiveToRLVTaskOffer *after* we have the folder
+						mFolderID = pRlvRoot->getUUID();
 
-					RlvGiveToRLVTaskOffer* pOfferObserver = new RlvGiveToRLVTaskOffer(mTransactionID);
-					gInventory.addObserver(pOfferObserver);
+						RlvGiveToRLVTaskOffer* pOfferObserver = new RlvGiveToRLVTaskOffer(mTransactionID);
+						gInventory.addObserver(pOfferObserver);
+					}
 				}
 			}
 // [/RLVa:KB]
@@ -1711,6 +1719,15 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 			// send the message
 			msg->sendReliable(mHost);
 			
+// [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1e) | Added: RLVa-1.2.1e
+			if (fRlvNotifyAccepted)
+			{
+				std::string::size_type idxToken = mDesc.find("'  ( http://");
+				if (std::string::npos != idxToken)
+					RlvBehaviourNotifyHandler::instance().sendNotification("accepted_in_inv inv_offer " + mDesc.substr(1, idxToken - 1));
+			}
+// [/RLVa:KB]
+
 			//don't spam them if they are getting flooded
 			if (check_offer_throttle(mFromName, true))
 			{
@@ -1759,6 +1776,16 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 			// send the message
 			msg->sendReliable(mHost);
 			
+// [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1e) | Added: RLVa-1.2.1e
+			if ( (rlv_handler_t::isEnabled()) && 
+				 (IM_TASK_INVENTORY_OFFERED == mIM) && (LLAssetType::AT_CATEGORY == mType) && (mDesc.find(RLV_PUTINV_PREFIX) == 1) )
+			{
+				std::string::size_type idxToken = mDesc.find("'  ( http://");
+				if (std::string::npos != idxToken)
+					RlvBehaviourNotifyHandler::instance().sendNotification("declined inv_offer " + mDesc.substr(1, idxToken - 1));
+			}
+// [/RLVa:KB]
+
 			log_message = LLTrans::getString("InvOfferYouDecline") + " " + mDesc + " " + LLTrans::getString("InvOfferFrom") + " " + mFromName +".";
 			LLSD args;
 			args["MESSAGE"] = log_message;

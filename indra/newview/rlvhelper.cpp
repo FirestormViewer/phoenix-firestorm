@@ -891,19 +891,29 @@ void RlvBehaviourNotifyHandler::onCommand(const RlvCommand& rlvCmd, ERlvCmdRet e
 	if (fInternal)
 		return;
 
-	std::string strCmd = rlvCmd.asString(), strNotify; ERlvParamType eCmdType = rlvCmd.getParamType();
-	if ( (RLV_TYPE_ADD == eCmdType) || (RLV_TYPE_REMOVE == eCmdType) )
-		strNotify = llformat("/%s=%s", strCmd.c_str(), rlvCmd.getParam().c_str());
-	else if (RLV_TYPE_CLEAR == eCmdType)
-		strNotify = llformat("/%s", strCmd.c_str());
-	else
-		return;
+	switch (rlvCmd.getParamType())
+	{
+		case RLV_TYPE_ADD:
+		case RLV_TYPE_REMOVE:
+			sendNotification(rlvCmd.asString(), "=" + rlvCmd.getParam());
+			break;
+		case RLV_TYPE_CLEAR:
+			sendNotification(rlvCmd.asString());
+			break;
+		default:
+			break;
+	}
+}
 
+// Checked: 2010-09-23 (RLVa-1.2.1e) | Modified: RLVa-1.2.1e
+void RlvBehaviourNotifyHandler::sendNotification(const std::string& strText, const std::string& strSuffix) const
+{
+	// NOTE: notifications have two parts (which are concatenated without token) where only the first part is subject to the filter
 	for (std::multimap<LLUUID, notifyData>::const_iterator itNotify = m_Notifications.begin(); 
 			itNotify != m_Notifications.end(); ++itNotify)
 	{
-		if ( (itNotify->second.strFilter.empty()) || (std::string::npos != strCmd.find(itNotify->second.strFilter)) )
-			RlvUtil::sendChatReply(itNotify->second.nChannel, strNotify);
+		if ( (itNotify->second.strFilter.empty()) || (std::string::npos != strText.find(itNotify->second.strFilter)) )
+			RlvUtil::sendChatReply(itNotify->second.nChannel, "/" + strText + strSuffix);
 	}
 }
 
