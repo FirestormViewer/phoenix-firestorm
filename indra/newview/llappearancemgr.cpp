@@ -1752,7 +1752,7 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 		while (itPendingObjLink != mPendingObjLinks.end())
 		{
 			const LLUUID& idItem = *itPendingObjLink;
-			if (!gAgentAvatarp->isWearingAttachment(idItem))
+			if ( (!gAgentAvatarp->isWearingAttachment(idItem)) || (isLinkInCOF(idItem)) )
 			{
 				itPendingObjLink = mPendingObjLinks.erase(itPendingObjLink);
 				continue;
@@ -2781,9 +2781,14 @@ void LLAppearanceMgr::registerAttachment(const LLUUID& item_id)
 		   // it will trigger gAgentWariables.notifyLoadingFinished()
 		   // But it is not acceptable solution. See EXT-7777
 //		   LLAppearanceMgr::addCOFItemLink(item_id, false);  // Add COF link for item.
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-		   mPendingObjLinks.push_back(item_id);
-		   LLAppearanceMgr::addCOFItemLink(item_id, false, new LLRegisterAttachmentCallback());  // Add COF link for item.
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-24 (Catznip-2.2.0a) | Modified: Catznip-2.2.0a
+		   if (!isLinkInCOF(item_id))
+		   {
+			   mPendingObjLinks.push_back(item_id);
+
+			   LLPointer<LLInventoryCallback> cb = new LLRegisterAttachmentCallback();
+			   LLAppearanceMgr::addCOFItemLink(item_id, false, cb);  // Add COF link for item.
+		   }
 // [/SL:KB]
 	   }
 	   else
