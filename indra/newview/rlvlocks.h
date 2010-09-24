@@ -196,15 +196,18 @@ protected:
 		RlvWearInfo(const LLUUID& itemid, ERlvWearMask wearaction) : idItem(itemid), eWearAction(wearaction)
 			{ tsWear = LLFrameTimer::getElapsedSeconds(); }
 
+		bool isAddLockedAttachPt(S32 idxAttachPt) const;
+		void dumpInstance() const;
+
 		LLUUID       idItem;
 		ERlvWearMask eWearAction;
 		F64          tsWear;
-		std::map<S32, std::list<LLUUID> > attachPts;
+		std::map<S32, uuid_vec_t> attachPts;
 	protected:
 		RlvWearInfo();
 	};
 	typedef std::map<LLUUID, RlvWearInfo> rlv_wear_map_t;
-	rlv_wear_map_t   m_PendingWear;
+	rlv_wear_map_t m_PendingWear;
 
 	class RlvAttachmentLockWatchdogTimer : public LLEventTimer
 	{

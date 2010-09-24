@@ -408,6 +408,59 @@ bool RlvAttachmentLocks::verifyAttachmentLocks()
 // RlvAttachmentLockWatchdog member functions
 //
 
+// Checked: 2010-09-23 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
+bool RlvAttachmentLockWatchdog::RlvWearInfo::isAddLockedAttachPt(S32 idxAttachPt) const
+{
+	// If idxAttachPt has no entry in attachPts then the attachment point wasn't RLV_LOCK_ADD restricted at the time we were instantiated
+	// [See RlvAttachmentLockWatchdog::onWearAttachment()]
+	return (attachPts.find(idxAttachPt) != attachPts.end());
+}
+
+// Checked: 2010-09-23 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
+void RlvAttachmentLockWatchdog::RlvWearInfo::dumpInstance() const
+{
+	const LLViewerInventoryItem* pItem = gInventory.getItem(idItem);
+	std::string strItemId = idItem.asString();
+
+	std::string strTemp = llformat("Wear %s '%s' (%s)", 
+		(RLV_WEAR_ADD == eWearAction) ? "add" : "replace", (pItem) ? pItem->getName().c_str() : "missing", strItemId.c_str());
+	RLV_INFOS << strTemp.c_str() << RLV_ENDL;
+
+	if (!attachPts.empty())
+	{
+		std::string strEmptyAttachPt;
+		for (std::map<S32, uuid_vec_t>::const_iterator itAttachPt = attachPts.begin(); itAttachPt != attachPts.end(); ++itAttachPt)
+		{
+			const LLViewerJointAttachment* pAttachPt =
+				get_if_there(gAgentAvatarp->mAttachmentPoints, itAttachPt->first, (LLViewerJointAttachment*)NULL);
+			if (!itAttachPt->second.empty())
+			{
+				for (uuid_vec_t::const_iterator itAttach = itAttachPt->second.begin(); itAttach != itAttachPt->second.end(); ++itAttach)
+				{
+					pItem = gInventory.getItem(*itAttach);
+					strItemId = (*itAttach).asString();
+
+					strTemp = llformat("  -> %s : %s (%s)",
+						pAttachPt->getName().c_str(), (pItem) ? pItem->getName().c_str() : "missing", strItemId.c_str());
+					RLV_INFOS << strTemp.c_str() << RLV_ENDL;
+				}
+			}
+			else
+			{
+				if (!strEmptyAttachPt.empty())
+					strEmptyAttachPt += ", ";
+				strEmptyAttachPt += pAttachPt->getName();
+			}
+		}
+		if (!strEmptyAttachPt.empty())
+			RLV_INFOS << "  -> " << strEmptyAttachPt << " : empty" << RLV_ENDL;
+	}
+	else
+	{
+		RLV_INFOS << "  -> no attachment point information" << RLV_ENDL;
+	}
+}
+
 // Checked: 2010-07-28 (RLVa-1.2.0i) | Modified: RLVa-1.2.0i
 void RlvAttachmentLockWatchdog::detach(const LLViewerObject* pAttachObj)
 {
@@ -454,7 +507,7 @@ void RlvAttachmentLockWatchdog::detach(S32 idxAttachPt, const LLViewerObject* pA
 	if (!pAttachPt)
 		return;
 
-	std::list<const LLViewerObject*> attachObjs;
+	c_llvo_vec_t attachObjs;
 	for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator itAttachObj = pAttachPt->mAttachedObjects.begin();
 			itAttachObj != pAttachPt->mAttachedObjects.end(); ++itAttachObj)
 	{
@@ -470,8 +523,7 @@ void RlvAttachmentLockWatchdog::detach(S32 idxAttachPt, const LLViewerObject* pA
 		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
 		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
 		
-		for (std::list<const LLViewerObject*>::const_iterator itAttachObj = attachObjs.begin(); 
-				itAttachObj != attachObjs.end(); ++itAttachObj)
+		for (c_llvo_vec_t::const_iterator itAttachObj = attachObjs.begin(); itAttachObj != attachObjs.end(); ++itAttachObj)
 		{
 			const LLViewerObject* pAttachObj = *itAttachObj;
 			gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
@@ -500,7 +552,7 @@ void RlvAttachmentLockWatchdog::detach(S32 idxAttachPt, const LLViewerObject* pA
 	}
 }
 
-// Checked: 2010-07-28 (RLVa-1.2.0i) | Modified: RLVa-1.2.0i
+// Checked: 2010-09-23 (RLVa-1.2.1d) | Modified: RLVa-1.2.1d
 void RlvAttachmentLockWatchdog::onAttach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt)
 {
 	S32 idxAttachPt = RlvAttachPtLookup::getAttachPointIndex(pAttachObj);
@@ -528,18 +580,17 @@ void RlvAttachmentLockWatchdog::onAttach(const LLViewerObject* pAttachObj, const
 		return;
 	}
 
-	// Check if the attach is the result of a user action (="Wear")
+	// Check if the attach was allowed at the time it was requested
 	rlv_wear_map_t::iterator itWear = m_PendingWear.find(idAttachItem);
 	if (itWear != m_PendingWear.end())
 	{
-		// We need to return the attachment point to its previous state if an attachment was added to a non-attachable attachment point
-		if (gRlvAttachmentLocks.isLockedAttachmentPoint(idxAttachPt, RLV_LOCK_ADD))
+		// We'll need to return the attachment point to its previous state if it was non-attachable
+		if (itWear->second.isAddLockedAttachPt(idxAttachPt))
 		{
-			// Get the state of the attachment point at the time the user picked "Wear" (but do nothing if the item itself was worn then)
-			std::map<S32, std::list<LLUUID> >::iterator itAttachPrev = itWear->second.attachPts.find(idxAttachPt);
+			// Get the saved state of the attachment point (but do nothing if the item itself was already worn then)
+			std::map<S32, uuid_vec_t>::iterator itAttachPrev = itWear->second.attachPts.find(idxAttachPt);
 			RLV_ASSERT(itAttachPrev != itWear->second.attachPts.end());
-			if ( (itAttachPrev != itWear->second.attachPts.end()) &&
-				 (std::find(itAttachPrev->second.begin(), itAttachPrev->second.end(), idAttachItem)) == itAttachPrev->second.end())
+			if (std::find(itAttachPrev->second.begin(), itAttachPrev->second.end(), idAttachItem) == itAttachPrev->second.end())
 			{
 				// If it was empty we need to detach everything on the attachment point; if it wasn't we need to restore it to what it was
 				if (itAttachPrev->second.empty())
@@ -549,13 +600,13 @@ void RlvAttachmentLockWatchdog::onAttach(const LLViewerObject* pAttachObj, const
 				else
 				{
 					// Iterate over all the current attachments and force detach any that shouldn't be there
-					std::list<const LLViewerObject*> attachObjs;
+					c_llvo_vec_t attachObjs;
 					for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator itAttachObj = pAttachPt->mAttachedObjects.begin();
 							itAttachObj != pAttachPt->mAttachedObjects.end(); ++itAttachObj)
 					{
 						const LLViewerObject* pAttachObj = *itAttachObj;
 
-						std::list<LLUUID>::iterator itAttach = 
+						uuid_vec_t::iterator itAttach = 
 							std::find(itAttachPrev->second.begin(), itAttachPrev->second.end(), pAttachObj->getAttachmentItemID());
 						if (itAttach == itAttachPrev->second.end())
 							detach(pAttachObj);
@@ -564,7 +615,7 @@ void RlvAttachmentLockWatchdog::onAttach(const LLViewerObject* pAttachObj, const
 					}
 
 					// Whatever is left is something that needs to be reattached
-					for (std::list<LLUUID>::iterator itAttach = itAttachPrev->second.begin(); 
+					for (uuid_vec_t::const_iterator itAttach = itAttachPrev->second.begin(); 
 							itAttach != itAttachPrev->second.end(); ++itAttach)
 					{
 						m_PendingAttach.insert(std::pair<S32, RlvReattachInfo>(idxAttachPt, RlvReattachInfo(*itAttach)));
@@ -721,7 +772,7 @@ void RlvAttachmentLockWatchdog::onWearAttachment(const LLUUID& idItem, ERlvWearM
 		// We only need to know which attachments were present for RLV_LOCK_ADD locked attachment points (and not RLV_LOCK_REM locked ones)
 		if (gRlvAttachmentLocks.isLockedAttachmentPoint(pAttachPt, RLV_LOCK_ADD))
 		{
-			std::list<LLUUID> attachObjs;
+			uuid_vec_t attachObjs;
 			for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator itAttachObj = pAttachPt->mAttachedObjects.begin();
 					itAttachObj != pAttachPt->mAttachedObjects.end(); ++itAttachObj)
 			{
@@ -730,11 +781,14 @@ void RlvAttachmentLockWatchdog::onWearAttachment(const LLUUID& idItem, ERlvWearM
 					continue;	// Exclude attachments that are pending a force-detach
 				attachObjs.push_back(pAttachObj->getAttachmentItemID());
 			}
-			infoWear.attachPts.insert(std::pair<S32, std::list<LLUUID> >(itAttachPt->first, attachObjs));
+			infoWear.attachPts.insert(std::pair<S32, uuid_vec_t>(itAttachPt->first, attachObjs));
 		}
 	}
 
 	m_PendingWear.insert(std::pair<LLUUID, RlvWearInfo>(idItem, infoWear));
+#ifdef RLV_DEBUG
+	infoWear.dumpInstance();
+#endif // RLV_RELEASE
 	startTimer();
 }
 
