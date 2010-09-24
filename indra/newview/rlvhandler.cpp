@@ -978,6 +978,10 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 				RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
 				VERIFY_OPTION_REF( (rlvCmdOption.isEmpty()) || (rlvCmdOption.isWearableType()) );
 
+				// We need to flush any queued force-wear commands before changing the restrictions
+				if (RlvForceWear::instanceExists())
+					RlvForceWear::instance().done();
+
 				ERlvLockMask eLock = (RLV_BHVR_ADDOUTFIT == eBhvr) ? RLV_LOCK_ADD : RLV_LOCK_REMOVE;
 				for (int idxType = 0; idxType < LLWearableType::WT_COUNT; idxType++)
 				{
@@ -1180,6 +1184,10 @@ ERlvCmdRet RlvHandler::onAddRemAttach(const RlvCommand& rlvCmd, bool& fRefCount)
 	if (!isAgentAvatarValid())
 		return RLV_RET_FAILED;
 
+	// We need to flush any queued force-wear commands before changing the restrictions
+	if (RlvForceWear::instanceExists())
+		RlvForceWear::instance().done();
+
 	ERlvLockMask eLock = (RLV_BHVR_REMATTACH == rlvCmd.getBehaviourType()) ? RLV_LOCK_REMOVE : RLV_LOCK_ADD;
 	for (LLVOAvatar::attachment_map_t::const_iterator itAttach = gAgentAvatarp->mAttachmentPoints.begin(); 
 			itAttach != gAgentAvatarp->mAttachmentPoints.end(); ++itAttach)
@@ -1202,6 +1210,10 @@ ERlvCmdRet RlvHandler::onAddRemDetach(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	RLV_ASSERT( (RLV_TYPE_ADD == rlvCmd.getParamType()) || (RLV_TYPE_REMOVE == rlvCmd.getParamType()) );
 	RLV_ASSERT(RLV_BHVR_DETACH == rlvCmd.getBehaviourType());
+
+	// We need to flush any queued force-wear commands before changing the restrictions
+	if (RlvForceWear::instanceExists())
+		RlvForceWear::instance().done();
 
 	if (rlvCmd.getOption().empty())	// @detach=n|y - RLV_LOCK_REMOVE locks an attachment *object*
 	{
