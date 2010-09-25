@@ -334,7 +334,7 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 
 	// Grab a list of all the items we'll be wearing/attaching
 	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
-	RlvWearableItemCollector f(pFolder->getUUID(), eAction, eFlags);
+	RlvWearableItemCollector f(pFolder, eAction, eFlags);
 	gInventory.collectDescendentsIf(pFolder->getUUID(), folders, items, FALSE, f);
 
 	for (S32 idxItem = 0, cntItem = items.count(); idxItem < cntItem; idxItem++)
@@ -357,7 +357,7 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 				{
 					// The check for whether we're replacing a currently worn composite item happens in onWearableArrived()
 					if (!isAddWearable(pItem))
-						addWearable(pRlvItem, eAction);
+						addWearable(pRlvItem, f.getWearAction(pRlvItem->getParentUUID()));
 				}
 				else
 				{
@@ -394,7 +394,7 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 							else
 							#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 							{
-								addAttachment(pRlvItem, eAction);
+								addAttachment(pRlvItem, f.getWearAction(pRlvItem->getParentUUID()));
 							}
 						}
 					}
