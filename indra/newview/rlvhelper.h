@@ -303,7 +303,6 @@ private:
 // RlvBehaviourNotifyObserver
 //
 
-// TODO-RLVa: [RLVa-1.2.1] See about just reintegrating this back into RlvHandler
 class RlvBehaviourNotifyHandler : public LLSingleton<RlvBehaviourNotifyHandler>
 {
 	friend class LLSingleton<RlvBehaviourNotifyHandler>;
@@ -330,6 +329,7 @@ public:
 		if (m_Notifications.empty())
 			delete this;	// Delete ourself if we have nothing to do
 	}
+	void sendNotification(const std::string& strText, const std::string& strSuffix = LLStringUtil::null) const;
 protected:
 	void onCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet, bool fInternal);
 
