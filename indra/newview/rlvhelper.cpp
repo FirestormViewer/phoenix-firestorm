@@ -334,7 +334,7 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 
 	// Grab a list of all the items we'll be wearing/attaching
 	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
-	RlvWearableItemCollector f(pFolder->getUUID(), isWearAction(eAction), (eFlags & FLAG_MATCHALL));
+	RlvWearableItemCollector f(pFolder->getUUID(), eAction, eFlags);
 	gInventory.collectDescendentsIf(pFolder->getUUID(), folders, items, FALSE, f);
 
 	for (S32 idxItem = 0, cntItem = items.count(); idxItem < cntItem; idxItem++)

@@ -183,8 +183,8 @@ protected:
 class RlvWearableItemCollector : public LLInventoryCollectFunctor
 {
 public:
-	RlvWearableItemCollector(const LLUUID& idFolder, bool fAttach, bool fMatchAll)
-		: m_idFolder(idFolder), m_fAttach(fAttach), m_fMatchAll(fMatchAll)
+	RlvWearableItemCollector(const LLUUID& idFolder, RlvForceWear::EWearAction eAction, RlvForceWear::EWearFlags eFlags)
+		: m_idFolder(idFolder), m_eWearAction(eAction), m_eWearFlags(eFlags)
 	{
 		m_Wearable.push_back(idFolder);
 	}
@@ -194,9 +194,9 @@ public:
 
 	const LLUUID& getFoldedParent(const LLUUID& idFolder) const;
 protected:
-	bool         m_fAttach;
-	bool         m_fMatchAll;
-	const LLUUID m_idFolder;
+	const LLUUID              m_idFolder;
+	RlvForceWear::EWearAction m_eWearAction;
+	RlvForceWear::EWearFlags  m_eWearFlags;
 
 	bool onCollectFolder(const LLInventoryCategory* pFolder);
 	bool onCollectItem(const LLInventoryItem* pItem);
