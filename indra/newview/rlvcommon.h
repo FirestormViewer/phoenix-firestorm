@@ -30,6 +30,9 @@
 
 class RlvCommand;
 
+typedef std::vector<LLViewerObject*> llvo_vec_t;
+typedef std::vector<const LLViewerObject*> c_llvo_vec_t;
+
 // ============================================================================
 // RlvSettings
 //
