@@ -37,51 +37,55 @@ typedef std::vector<const LLViewerObject*> c_llvo_vec_t;
 // RlvSettings
 //
 
-inline BOOL rlvGetSettingBOOL(const std::string& strSetting, BOOL fDefault)
+template<typename T> T rlvGetSetting(const std::string& strSetting, const T& defaultValue)
 {
 	RLV_ASSERT_DBG(gSavedSettings.controlExists(strSetting));
-	return (gSavedSettings.controlExists(strSetting)) ? gSavedSettings.getBOOL(strSetting) : fDefault;
+	return (gSavedSettings.controlExists(strSetting)) ? gSavedSettings.get<T>(strSetting) : defaultValue;
 }
-inline BOOL rlvGetPerUserSettingsBOOL(const std::string& strSetting, BOOL fDefault)
+
+template<typename T> T rlvGetPerUserSettings(const std::string& strSetting, const T& defaultValue)
 {
 	RLV_ASSERT_DBG(gSavedPerAccountSettings.controlExists(strSetting));
-	return (gSavedPerAccountSettings.controlExists(strSetting)) ? gSavedPerAccountSettings.getBOOL(strSetting) : fDefault;
+	return (gSavedPerAccountSettings.controlExists(strSetting)) ? gSavedPerAccountSettings.get<T>(strSetting) : defaultValue;
 }
 
 class RlvSettings
 {
 public:
-	static BOOL getDebug()					{ return rlvGetSettingBOOL(RLV_SETTING_DEBUG, FALSE); }
-	static BOOL getForbidGiveToRLV()		{ return rlvGetSettingBOOL(RLV_SETTING_FORBIDGIVETORLV, TRUE); }
-	static BOOL getNoSetEnv()				{ return fNoSetEnv; }
+	static bool getDebug()						{ return rlvGetSetting<bool>(RLV_SETTING_DEBUG, false); }
+	static bool getForbidGiveToRLV()			{ return rlvGetSetting<bool>(RLV_SETTING_FORBIDGIVETORLV, true); }
+	static bool getNoSetEnv()					{ return fNoSetEnv; }
 
-	static BOOL getDebugHideUnsetDup()		{ return rlvGetSettingBOOL(RLV_SETTING_DEBUGHIDEUNSETDUP, FALSE); }
+	static std::string getWearAddPrefix()		{ return rlvGetSetting<std::string>(RLV_SETTING_WEARADDPREFIX, LLStringUtil::null); }
+	static std::string getWearReplacePrefix()	{ return rlvGetSetting<std::string>(RLV_SETTING_WEARREPLACEPREFIX, LLStringUtil::null); }
+
+	static bool getDebugHideUnsetDup()			{ return rlvGetSetting<bool>(RLV_SETTING_DEBUGHIDEUNSETDUP, false); }
 	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-	static BOOL getEnableComposites()		{ return fCompositeFolders; }
+	static BOOL getEnableComposites()			{ return fCompositeFolders; }
 	#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-	static BOOL getEnableLegacyNaming()		{ return fLegacyNaming; }
-	static BOOL getEnableSharedWear()		{ return rlvGetSettingBOOL(RLV_SETTING_ENABLESHAREDWEAR, FALSE); }
-	static BOOL getHideLockedLayers()		{ return rlvGetSettingBOOL(RLV_SETTING_HIDELOCKEDLAYER, FALSE); }		
-	static BOOL getHideLockedAttach()		{ return rlvGetSettingBOOL(RLV_SETTING_HIDELOCKEDATTACH, FALSE); }
-	static BOOL getHideLockedInventory()	{ return rlvGetSettingBOOL(RLV_SETTING_HIDELOCKEDINVENTORY, FALSE); }
-	static BOOL getSharedInvAutoRename()	{ return rlvGetSettingBOOL(RLV_SETTING_SHAREDINVAUTORENAME, TRUE); }
-	static BOOL getShowNameTags()			{ return fShowNameTags; }
+	static bool getEnableLegacyNaming()			{ return fLegacyNaming; }
+	static bool getEnableSharedWear()			{ return rlvGetSetting<bool>(RLV_SETTING_ENABLESHAREDWEAR, false); }
+	static bool getHideLockedLayers()			{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDLAYER, false); }		
+	static bool getHideLockedAttach()			{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDATTACH, false); }
+	static bool getHideLockedInventory()		{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDINVENTORY, false); }
+	static bool getSharedInvAutoRename()		{ return rlvGetSetting<bool>(RLV_SETTING_SHAREDINVAUTORENAME, true); }
+	static bool getShowNameTags()				{ return fShowNameTags; }
 
 	#ifdef RLV_EXTENSION_STARTLOCATION
-	static BOOL getLoginLastLocation()		{ return rlvGetPerUserSettingsBOOL(RLV_SETTING_LOGINLASTLOCATION, TRUE); }
+	static bool getLoginLastLocation()			{ return rlvGetPerUserSettings<bool>(RLV_SETTING_LOGINLASTLOCATION, true); }
 	static void updateLoginLastLocation();
 	#endif // RLV_EXTENSION_STARTLOCATION
 
 	static void initClass();
 protected:
-	static bool onChangedSettingBOOL(const LLSD& sdValue, BOOL* pfSetting);
+	static bool onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting);
 
 	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	static BOOL fCompositeFolders;
 	#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-	static BOOL fLegacyNaming;
-	static BOOL fNoSetEnv;
-	static BOOL fShowNameTags;
+	static bool fLegacyNaming;
+	static bool fNoSetEnv;
+	static bool fShowNameTags;
 };
 
 // ============================================================================

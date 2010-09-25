@@ -77,11 +77,11 @@ void RlvNotifications::onGiveToRLVConfirmation(const LLSD& notification, const L
 //
 
 #ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-BOOL RlvSettings::fCompositeFolders = FALSE;
+bool RlvSettings::fCompositeFolders = FALSE;
 #endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-BOOL RlvSettings::fLegacyNaming = TRUE;
-BOOL RlvSettings::fNoSetEnv = FALSE;
-BOOL RlvSettings::fShowNameTags = FALSE;
+bool RlvSettings::fLegacyNaming = TRUE;
+bool RlvSettings::fNoSetEnv = FALSE;
+bool RlvSettings::fShowNameTags = FALSE;
 
 // Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.1.0i
 void RlvSettings::initClass()
@@ -90,18 +90,18 @@ void RlvSettings::initClass()
 	if (!fInitialized)
 	{
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-		fCompositeFolders = rlvGetSettingBOOL(RLV_SETTING_ENABLECOMPOSITES, FALSE);
+		fCompositeFolders = rlvGetSetting<bool>(RLV_SETTING_ENABLECOMPOSITES, false);
 		if (gSavedSettings.controlExists(RLV_SETTING_ENABLECOMPOSITES))
 			gSavedSettings.getControl(RLV_SETTING_ENABLECOMPOSITES)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fCompositeFolders));
 		#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 
-		fLegacyNaming = rlvGetSettingBOOL(RLV_SETTING_ENABLELEGACYNAMING, TRUE);
+		fLegacyNaming = rlvGetSetting<bool>(RLV_SETTING_ENABLELEGACYNAMING, true);
 		if (gSavedSettings.controlExists(RLV_SETTING_ENABLELEGACYNAMING))
 			gSavedSettings.getControl(RLV_SETTING_ENABLELEGACYNAMING)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fLegacyNaming));
 
-		fNoSetEnv = rlvGetSettingBOOL(RLV_SETTING_NOSETENV, FALSE);
+		fNoSetEnv = rlvGetSetting<bool>(RLV_SETTING_NOSETENV, false);
 
-		fShowNameTags = rlvGetSettingBOOL(RLV_SETTING_SHOWNAMETAGS, FALSE);
+		fShowNameTags = rlvGetSetting<bool>(RLV_SETTING_SHOWNAMETAGS, false);
 		if (gSavedSettings.controlExists(RLV_SETTING_SHOWNAMETAGS))
 			gSavedSettings.getControl(RLV_SETTING_SHOWNAMETAGS)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fShowNameTags));
 
@@ -126,7 +126,7 @@ void RlvSettings::initClass()
 #endif // RLV_EXTENSION_STARTLOCATION
 
 // Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.1.0i
-bool RlvSettings::onChangedSettingBOOL(const LLSD& sdValue, BOOL* pfSetting)
+bool RlvSettings::onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting)
 {
 	if (pfSetting)
 		*pfSetting = sdValue.asBoolean();

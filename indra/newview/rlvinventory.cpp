@@ -29,6 +29,8 @@
 #include "rlvinventory.h"
 #include "rlvhandler.h"
 
+#include "boost/algorithm/string.hpp"
+
 // ============================================================================
 // Static variable initialization
 //
@@ -546,6 +548,23 @@ void RlvGiveToRLVAgentOffer::doneIdle()
 // RlvWearableItemCollector
 //
 
+// Checked: 2010-09-25 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+RlvForceWear::EWearAction RlvWearableItemCollector::getWearActionNormal(const LLInventoryCategory* pFolder)
+{
+	RLV_ASSERT_DBG(!RlvInventory::isFoldedFolder(pFolder, false));
+	if ( (RlvForceWear::ACTION_WEAR_REPLACE == m_eWearAction) && (!m_strWearAddPrefix.empty()) &&
+		 (boost::algorithm::starts_with(pFolder->getName(), m_strWearAddPrefix)))
+	{
+		return RlvForceWear::ACTION_WEAR_ADD;
+	}
+	else if ( (RlvForceWear::ACTION_WEAR_ADD == m_eWearAction) && (!m_strWearReplacePrefix.empty()) &&
+		      (boost::algorithm::starts_with(pFolder->getName(), m_strWearReplacePrefix)) )
+	{
+		return RlvForceWear::ACTION_WEAR_REPLACE;
+	}
+	return (pFolder->getUUID() != m_idFolder) ? getWearAction(pFolder->getParentUUID()) : m_eWearAction;
+}
+
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Added: RLVa-0.2.0e
 const LLUUID& RlvWearableItemCollector::getFoldedParent(const LLUUID& idFolder) const
 {
@@ -556,6 +575,20 @@ const LLUUID& RlvWearableItemCollector::getFoldedParent(const LLUUID& idFolder) 
 		itCur = m_FoldingMap.find(itFolder->second);
 	}
 	return (m_FoldingMap.end() == itFolder) ? idFolder : itFolder->second;
+}
+
+// Checked: 2010-09-25 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+RlvForceWear::EWearAction RlvWearableItemCollector::getWearAction(const LLUUID& idFolder) const
+{
+	std::map<LLUUID, RlvForceWear::EWearAction>::const_iterator itFolder = m_WearActionMap.find(idFolder);
+	while (itFolder == m_WearActionMap.end())
+	{
+		const LLViewerInventoryCategory* pFolder = gInventory.getCategory(idFolder);
+		if ((!pFolder) || (gInventory.getRootFolderID() == pFolder->getParentUUID()))
+			break;
+		itFolder = m_WearActionMap.find(pFolder->getParentUUID());
+	}
+	return (itFolder != m_WearActionMap.end()) ? itFolder->second : m_eWearAction;
 }
 
 // Checked: 2010-03-20 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
@@ -569,15 +602,18 @@ bool RlvWearableItemCollector::onCollectFolder(const LLInventoryCategory* pFolde
 	if (strFolder.empty())														// Shouldn't happen but does... naughty Lindens
 		return false;
 
+	bool fAttach = RlvForceWear::isWearAction(m_eWearAction);
+	bool fMatchAll = (m_eWearFlags | RlvForceWear::FLAG_MATCHALL);
+
 	if (RlvInventory::isFoldedFolder(pFolder, false))							// Check for folder that should get folded under its parent
 	{
-		if ( (!m_fAttach) || (1 == RlvInventory::getDirectDescendentsCount(pFolder, LLAssetType::AT_OBJECT)) )
+		if ( (!fAttach) || (1 == RlvInventory::getDirectDescendentsCount(pFolder, LLAssetType::AT_OBJECT)) )
 		{																		// When attaching there should only be 1 attachment in it
 			m_Folded.push_front(pFolder->getUUID());
 			m_FoldingMap.insert(std::pair<LLUUID, LLUUID>(pFolder->getUUID(), idParent));
 		}
 	}
-	else if ( (RLV_FOLDER_PREFIX_HIDDEN != strFolder[0]) && (m_fMatchAll) )		// Collect from any non-hidden child folder for *all
+	else if ( (RLV_FOLDER_PREFIX_HIDDEN != strFolder[0]) && (fMatchAll) )		// Collect from any non-hidden child folder for *all
 	{
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		if ( (!RlvSettings::getEnableComposites()) ||							// ... if we're not checking composite folders
@@ -587,6 +623,7 @@ bool RlvWearableItemCollector::onCollectFolder(const LLInventoryCategory* pFolde
 		#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		{
 			m_Wearable.push_front(pFolder->getUUID());
+			m_WearActionMap.insert(std::pair<LLUUID, RlvForceWear::EWearAction>(m_idFolder, getWearActionNormal(pFolder)));
 		}
 		return (idParent == m_idFolder);										// (Convenience for @getinvworn)
 	}
@@ -608,8 +645,10 @@ bool RlvWearableItemCollector::onCollectFolder(const LLInventoryCategory* pFolde
 // Checked: 2010-03-20 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
 bool RlvWearableItemCollector::onCollectItem(const LLInventoryItem* pItem)
 {
+	bool fAttach = RlvForceWear::isWearAction(m_eWearAction);
+
 	#ifdef RLV_EXTENSION_FLAG_NOSTRIP
-	if ( (!m_fAttach) && (!RlvForceWear::isStrippable(pItem)) )							// Don't process "nostrip" items on detach
+	if ( (!fAttach) && (!RlvForceWear::isStrippable(pItem)) )							// Don't process "nostrip" items on detach
 		return false;
 	#endif // RLV_EXTENSION_FLAG_NOSTRIP
 
@@ -617,12 +656,12 @@ bool RlvWearableItemCollector::onCollectItem(const LLInventoryItem* pItem)
 	switch (pItem->getType())
 	{
 		case LLAssetType::AT_BODYPART:
-			if (!m_fAttach)
+			if (!fAttach)
 				break;																	// Don't process body parts on detach
 		case LLAssetType::AT_CLOTHING:
 			#ifdef RLV_EXTENSION_FLAG_NOSTRIP
 				fRet = ( (m_Wearable.end() != std::find(m_Wearable.begin(), m_Wearable.end(), idParent)) ||
-						 ( (m_fAttach) && (m_Folded.end() != std::find(m_Folded.begin(), m_Folded.end(), idParent)) &&
+						 ( (fAttach) && (m_Folded.end() != std::find(m_Folded.begin(), m_Folded.end(), idParent)) &&
 						   (RlvForceWear::isStrippable(pItem)) ) );
 			#else
 				fRet = (m_Wearable.end() != std::find(m_Wearable.begin(), m_Wearable.end(), idParent));
@@ -631,7 +670,7 @@ bool RlvWearableItemCollector::onCollectItem(const LLInventoryItem* pItem)
 		case LLAssetType::AT_OBJECT:
 			fRet = ( (m_Wearable.end() != std::find(m_Wearable.begin(), m_Wearable.end(), idParent)) || 
 				     (m_Folded.end() != std::find(m_Folded.begin(), m_Folded.end(), idParent)) ) &&
-				   ( (!m_fAttach) || (RlvAttachPtLookup::hasAttachPointName(pItem)) || (RlvSettings::getEnableSharedWear()) );
+				   ( (!fAttach) || (RlvAttachPtLookup::hasAttachPointName(pItem)) || (RlvSettings::getEnableSharedWear()) );
 			break;
 		#ifdef RLV_EXTENSION_FORCEWEAR_GESTURES
 		case LLAssetType::AT_GESTURE:
