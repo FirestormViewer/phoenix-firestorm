@@ -279,6 +279,8 @@ enum ERlvAttachGroupType
 #define RLV_SETTING_DEBUG				"RestrainedLoveDebug"
 #define RLV_SETTING_NOSETENV			"RestrainedLoveNoSetEnv"
 #define RLV_SETTING_FORBIDGIVETORLV		"RestrainedLoveForbidGiveToRLV"
+#define RLV_SETTING_WEARADDPREFIX       "RestrainedLoveStackWhenFolderBeginsWith"
+#define RLV_SETTING_WEARREPLACEPREFIX   "RestrainedLoveReplaceWhenFolderBeginsWith"
 
 #define RLV_SETTING_DEBUGHIDEUNSETDUP   "RLVaDebugHideUnsetDuplicate"
 #define RLV_SETTING_ENABLECOMPOSITES	"RLVaEnableCompositeFolders"
