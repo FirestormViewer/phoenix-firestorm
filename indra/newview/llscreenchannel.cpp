@@ -882,8 +882,18 @@ LLToast* LLScreenChannel::getToastByNotificationID(LLUUID id)
 	std::vector<ToastElem>::iterator it = find(mStoredToastList.begin(),
 			mStoredToastList.end(), id);
 
+//	if (it == mStoredToastList.end())
+//		return NULL;
+// [SL:KB] - Checked: 2010-04-21 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+	// BUGFIX-SL: we need to get the visible toast in LLOfferHandler::processNotification() whether it's "stored" or not 
 	if (it == mStoredToastList.end())
-		return NULL;
+	{
+		// If we can't find it among the stored toasts then widen it to "all visible toasts"
+		it = find(mToastList.begin(), mToastList.end(), id);
+		if (it == mToastList.end())
+			return NULL;
+	}
+// [/SL:KB]
 
 	return it->toast;
 }

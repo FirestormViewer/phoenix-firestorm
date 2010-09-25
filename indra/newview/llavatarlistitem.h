@@ -98,6 +98,9 @@ public:
 	void setShowPermissions(bool show) { mShowPermissions = show; };
 	void showLastInteractionTime(bool show);
 	void setAvatarIconVisible(bool visible);
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+	void setRlvCheckShowNames(bool fRlvCheckShowNames) { mRlvCheckShowNames = fRlvCheckShowNames; }
+// [/RLVa:KB]
 	
 	const LLUUID& getAvatarId() const;
 	const std::string getAvatarName() const;
@@ -202,6 +205,9 @@ private:
 	//Speaker indicator and avatar name coords are translated accordingly
 	bool mShowInfoBtn;
 	bool mShowProfileBtn;
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+	bool mRlvCheckShowNames;
+// [/RLVa:KB]
 
 	/// indicates whether to show icons representing permissions granted
 	bool mShowPermissions;

@@ -54,7 +54,10 @@ public:
 
 	void addAttachment(const LLUUID& item_id,
 					   const U8 attachment_pt,
-					   const BOOL add);
+//					   const BOOL add);
+// [RLVa:KB] - Checked: 2010-09-13 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+					   const BOOL add, const BOOL fRlvForce = FALSE);
+// [/RLVa:KB]
 	static void onIdle(void *);
 protected:
 	void onIdle();
@@ -64,6 +67,9 @@ private:
 		LLUUID mItemID;
 		U8 mAttachmentPt;
 		BOOL mAdd;
+// [RLVa:KB] - Checked: 2010-09-13 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+		BOOL mRlvForce;
+// [/RLVa:KB]
 	};
 
 	typedef std::vector<AttachmentsInfo> attachments_vec_t;
