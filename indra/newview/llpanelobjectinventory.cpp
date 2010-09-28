@@ -358,8 +358,16 @@ void LLTaskInvFVBridge::previewItem()
 
 BOOL LLTaskInvFVBridge::isItemRenameable() const
 {
-	if(gAgent.isGodlike()) return TRUE;
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
 	LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
+	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
+
+	if(gAgent.isGodlike()) return TRUE;
+//	LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
 	if(object)
 	{
 		LLInventoryItem* item = (LLInventoryItem*)(object->getInventoryObject(mUUID));
@@ -374,7 +382,15 @@ BOOL LLTaskInvFVBridge::isItemRenameable() const
 
 BOOL LLTaskInvFVBridge::renameItem(const std::string& new_name)
 {
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
 	LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
+	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
+
+//	LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
 	if(object)
 	{
 		LLViewerInventoryItem* item = NULL;
@@ -407,7 +423,7 @@ BOOL LLTaskInvFVBridge::isItemMovable() const
 		const LLViewerObject* pObj = gObjectList.findObject(mPanel->getTaskUUID());
 		if (pObj)
 		{
-			if (gRlvAttachmentLocks.isLockedAttachment(pObj))
+			if (gRlvAttachmentLocks.isLockedAttachment(pObj->getRootEdit()))
 			{
 				return FALSE;
 			}
@@ -428,7 +444,7 @@ BOOL LLTaskInvFVBridge::isItemRemovable() const
 // [RLVa:KB] - Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-1.0.5a
 	if ( (object) && (rlv_handler_t::isEnabled()) )
 	{
-		if (gRlvAttachmentLocks.isLockedAttachment(object))
+		if (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit()))
 		{
 			return FALSE;
 		}
@@ -587,6 +603,13 @@ BOOL LLTaskInvFVBridge::startDrag(EDragAndDropType* type, LLUUID* id) const
 				const LLPermissions& perm = inv->getPermissions();
 				bool can_copy = gAgent.allowOperation(PERM_COPY, perm,
 														GP_OBJECT_MANIPULATE);
+// [RLVa:KB] - Checked: 2009-10-10 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
+				// Kind of redundant due to the note below, but in case that ever gets fixed
+				if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+				{
+					return FALSE;
+				}
+// [/RLVa:KB]
 				if (object->isAttachment() && !can_copy)
 				{
                     //RN: no copy contents of attachments cannot be dragged out
@@ -720,14 +743,26 @@ void LLTaskInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 // [/RLVa:KB]
 	}
 	items.push_back(std::string("Task Properties"));
-	if(isItemRenameable())
+//	if(isItemRenameable())
+//	{
+//		items.push_back(std::string("Task Rename"));
+//	}
+//	if(isItemRemovable())
+//	{
+//		items.push_back(std::string("Task Remove"));
+//	}
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
+	items.push_back(std::string("Task Rename"));
+	items.push_back(std::string("Task Remove"));
+	if (!isItemRenameable())
 	{
-		items.push_back(std::string("Task Rename"));
+		disabled_items.push_back(std::string("Task Rename"));
 	}
-	if(isItemRemovable())
+	if (!isItemRemovable())
 	{
-		items.push_back(std::string("Task Remove"));
+		disabled_items.push_back(std::string("Task Remove"));
 	}
+// [/RLVa:KB]
 
 	hide_context_entries(menu, items, disabled_items);
 }

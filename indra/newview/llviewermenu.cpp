@@ -6056,12 +6056,12 @@ private:
 			if (index > 0)
 				attachment_point = get_if_there(gAgentAvatarp->mAttachmentPoints, index, (LLViewerJointAttachment*)NULL);
 
-// [RLVa:KB] - Checked: 2010-03-16 (RLVa-1.2.0e) | Modified: RLVa-1.2.0a
-			// RELEASE-RLVa: [SL-2.1.2] This will need revisiting when LL deprecates the "MultipleAttachment" debug setting
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.2.1f
+			// RELEASE-RLVa: [SL-2.2.0] If 'index != 0' then the object will be "add attached" [see LLSelectMgr::sendAttach()]
 			if ( (rlv_handler_t::isEnabled()) &&
-				 ( ((index == 0) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY))) ||		// Can't wear on default attach point
-				   ((index > 0) && (RLV_WEAR_LOCKED == gRlvAttachmentLocks.canAttach(attachment_point))) ||	// or replace a locked attachment
-				   (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) ) )												// Attach on rezzed object == "Take"
+				 ( ((!index) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY))) ||		    // Can't wear on default
+				   ((index) && ((RLV_WEAR_ADD & gRlvAttachmentLocks.canAttach(attachment_point)) == 0)) ||	// or non-attachable attachpt
+				   (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) ) )											    // Attach on object == "Take"
 			{
 				setObjectSelection(NULL); // Clear the selection or it'll get stuck
 				return true;
@@ -6220,7 +6220,7 @@ class LLAttachmentDrop : public view_listener_t
 				// NOTE: copy/paste of the code in enable_detach()
 				LLObjectSelectionHandle hSelect = LLSelectMgr::getInstance()->getSelection();
 				RlvSelectHasLockedAttach f;
-				if ( (hSelect->isAttachment()) && (hSelect->getFirstRootNode(&f, FALSE)) )
+				if ( (hSelect->isAttachment()) && (hSelect->getFirstRootNode(&f, FALSE) != NULL) )
 					return true;
 			}
 			if (gRlvHandler.hasBehaviour(RLV_BHVR_REZ))
@@ -6284,10 +6284,9 @@ class LLAttachmentDetachFromPoint : public view_listener_t
 
 static bool onEnableAttachmentLabel(LLUICtrl* ctrl, const LLSD& data)
 {
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
-	// RELEASE-RLVa: [2010-02-27] This will need rewriting once multiple attachments can be attached to the same point
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.2.1f
+	// RELEASE-RLVa: [SL-2.2.0] When attaching to a specific point the object will be "add attached" [see LLSelectMgr::sendAttach()]
 	bool fRlvEnable = true;
-	bool fRlvHasLockedAttachment = false;	// Remove once multiple attachments can be attached to the same point
 // [/RLVa:KB]
 	std::string label;
 	LLMenuItemGL* menu = dynamic_cast<LLMenuItemGL*>(ctrl);
@@ -6304,12 +6303,6 @@ static bool onEnableAttachmentLabel(LLUICtrl* ctrl, const LLSD& data)
 				const LLViewerObject* attached_object = (*attachment_iter);
 				if (attached_object)
 				{
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
-					// RELEASE-RLVa: [SL-2.0.0] This will need removing for "ENABLE_MULTIATTACHMENTS"
-					if (rlv_handler_t::isEnabled())
-						fRlvHasLockedAttachment |= gRlvAttachmentLocks.isLockedAttachment(attached_object);
-// [/RLVa:KB]
-
 					LLViewerInventoryItem* itemp = gInventory.getItem(attached_object->getAttachmentItemID());
 					if (itemp)
 					{
@@ -6320,10 +6313,9 @@ static bool onEnableAttachmentLabel(LLUICtrl* ctrl, const LLSD& data)
 			}
 		}
 
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
-		// Remove fHasLockedAttachment once multiple attachments can be attached to the same point
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.2.1f
 		if (rlv_handler_t::isEnabled())
-			fRlvEnable = (!fRlvHasLockedAttachment) && (!gRlvAttachmentLocks.isLockedAttachmentPoint(attachment, RLV_LOCK_ADD));
+			fRlvEnable = (!gRlvAttachmentLocks.isLockedAttachmentPoint(attachment, RLV_LOCK_ADD));
 // [/RLVa:KB]
 
 		menu->setLabel(label);
@@ -6376,7 +6368,7 @@ class LLAttachmentDetach : public view_listener_t
 		{
 			LLObjectSelectionHandle hSelect = LLSelectMgr::getInstance()->getSelection();
 			RlvSelectHasLockedAttach f;
-			if ( (hSelect->isAttachment()) && (hSelect->getFirstRootNode(&f, FALSE)) )
+			if ( (hSelect->isAttachment()) && (hSelect->getFirstRootNode(&f, FALSE) != NULL) )
 				return true;
 		}
 // [/RLVa:KB]
@@ -6498,13 +6490,13 @@ BOOL enable_detach(const LLSD&)
 			// NOTE: this code is reused as-is in LLAttachmentDetach::handleEvent() and LLAttachmentDrop::handleEvent()
 			//       so any changes here should be reflected there as well
 
-			// RELEASE-RLVa: [SL-2.0.0] LLSelectMgr::sendDetach() and LLSelectMgr::sendDropAttachment() call sendListToRegions with
+			// RELEASE-RLVa: [SL-2.2.0] LLSelectMgr::sendDetach() and LLSelectMgr::sendDropAttachment() call sendListToRegions with
 			//                          SEND_ONLY_ROOTS so we only need to examine the roots which saves us time
 			if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_REMOVE)) )
 			{
 				LLObjectSelectionHandle hSelect = LLSelectMgr::getInstance()->getSelection();
 				RlvSelectHasLockedAttach f;
-				if ( (hSelect->isAttachment()) && (hSelect->getFirstRootNode(&f, FALSE)) )
+				if ( (hSelect->isAttachment()) && (hSelect->getFirstRootNode(&f, FALSE) != NULL) )
 					return FALSE;
 			}
 // [/RLVa:KB]
@@ -6532,21 +6524,22 @@ class LLAttachmentEnableDetach : public view_listener_t
 BOOL object_selected_and_point_valid(const LLSD& sdParam)
 // [/RLVa:KB]
 {
-// [RLVa:KB] - Checked: 2010-03-16 (RLVa-1.2.0e) | Modified: RLVa-1.2.0a
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.2.1f
 	if (rlv_handler_t::isEnabled())
 	{
 		if (!isAgentAvatarValid())
 			return FALSE;
 
-		// RELEASE-RLVa: [SL-2.1.1] Look at the caller graph for this function on every new release
+		// RELEASE-RLVa: [SL-2.2.0] Look at the caller graph for this function on every new release
 		//   - object_is_wearable() => dead code [sdParam == 0 => default attach point => OK!]
 		//   - enabler set up in LLVOAvatarSelf::buildMenus() => Rezzed prim / Put On / "Attach To" [sdParam == idxAttachPt]
-		// RELEASE-RLVa: [SL-2.1.2] This will need revisiting when LL deprecates the "MultipleAttachment" debug setting
+		//   - "Object.EnableWear" enable => Rezzed prim / Put On / "Wear" or "Add" [sdParam blank]
+		// RELEASE-RLVa: [SL-2.2.0] If 'idxAttachPt != 0' then the object will be "add attached" [see LLSelectMgr::sendAttach()]
 		const LLViewerJointAttachment* pAttachPt = 
 			get_if_there(gAgentAvatarp->mAttachmentPoints, sdParam.asInteger(), (LLViewerJointAttachment*)NULL);
-		if ( ((!pAttachPt) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY))) ||	// Can't wear on default attach point
-			 ((pAttachPt) && (RLV_WEAR_LOCKED == gRlvAttachmentLocks.canAttach(pAttachPt))) ||	// or replace a locked attachment
-			 (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) )											// Attach on rezzed object == "Take"
+		if ( ((!pAttachPt) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY))) ||		// Can't wear on default attach point
+			 ((pAttachPt) && ((RLV_WEAR_ADD & gRlvAttachmentLocks.canAttach(pAttachPt)) == 0)) ||	// or non-attachable attach point
+			 (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) )												// Attach on object == "Take"
 		{
 			return FALSE;
 		}
