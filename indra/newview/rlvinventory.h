@@ -183,22 +183,7 @@ protected:
 class RlvWearableItemCollector : public LLInventoryCollectFunctor
 {
 public:
-	RlvWearableItemCollector(const LLInventoryCategory* pFolder, RlvForceWear::EWearAction eAction, RlvForceWear::EWearFlags eFlags)
-		: m_idFolder(pFolder->getUUID()), m_eWearAction(eAction), m_eWearFlags(eFlags), 
-		  m_strWearAddPrefix(RlvSettings::getWearAddPrefix()), m_strWearReplacePrefix(RlvSettings::getWearReplacePrefix())
-	{
-		m_Wearable.push_back(m_idFolder);
-
-		// Wear prefixes can't/shouldn't start with '.'
-		if ( (m_strWearAddPrefix.length() > 1) && (RLV_FOLDER_PREFIX_HIDDEN == m_strWearAddPrefix[0]) )
-			m_strWearAddPrefix.clear();
-		if ( (m_strWearReplacePrefix.length() > 1) && (RLV_FOLDER_PREFIX_HIDDEN == m_strWearReplacePrefix[0]) )
-			m_strWearReplacePrefix.clear();
-
-		// If there's a prefix on the "root" folder then it will override what we were passed in the constructor
-		m_eWearAction = getWearActionNormal(pFolder);
-		m_WearActionMap.insert(std::pair<LLUUID, RlvForceWear::EWearAction>(m_idFolder, m_eWearAction));
-	}
+	RlvWearableItemCollector(const LLInventoryCategory* pFolder, RlvForceWear::EWearAction eAction, RlvForceWear::EWearFlags eFlags);
 	virtual ~RlvWearableItemCollector() {}
 
 	virtual bool operator()(LLInventoryCategory* pFolder, LLInventoryItem* pItem);
