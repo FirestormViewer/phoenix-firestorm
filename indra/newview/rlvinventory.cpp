@@ -582,15 +582,15 @@ const LLUUID& RlvWearableItemCollector::getFoldedParent(const LLUUID& idFolder) 
 // Checked: 2010-09-25 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
 RlvForceWear::EWearAction RlvWearableItemCollector::getWearAction(const LLUUID& idFolder) const
 {
-	std::map<LLUUID, RlvForceWear::EWearAction>::const_iterator itFolder = m_WearActionMap.find(idFolder);
-	while (itFolder == m_WearActionMap.end())
+	LLUUID idCurFolder(idFolder); std::map<LLUUID, RlvForceWear::EWearAction>::const_iterator itCurFolder;
+	while ((itCurFolder = m_WearActionMap.find(idCurFolder)) == m_WearActionMap.end())
 	{
-		const LLViewerInventoryCategory* pFolder = gInventory.getCategory(idFolder);
+		const LLViewerInventoryCategory* pFolder = gInventory.getCategory(idCurFolder);
 		if ((!pFolder) || (gInventory.getRootFolderID() == pFolder->getParentUUID()))
 			break;
-		itFolder = m_WearActionMap.find(pFolder->getParentUUID());
+		idCurFolder = pFolder->getParentUUID();
 	}
-	return (itFolder != m_WearActionMap.end()) ? itFolder->second : m_eWearAction;
+	return (itCurFolder != m_WearActionMap.end()) ? itCurFolder->second : m_eWearAction;
 }
 
 // Checked: 2010-03-20 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
@@ -625,7 +625,7 @@ bool RlvWearableItemCollector::onCollectFolder(const LLInventoryCategory* pFolde
 		#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		{
 			m_Wearable.push_front(pFolder->getUUID());
-			m_WearActionMap.insert(std::pair<LLUUID, RlvForceWear::EWearAction>(m_idFolder, getWearActionNormal(pFolder)));
+			m_WearActionMap.insert(std::pair<LLUUID, RlvForceWear::EWearAction>(pFolder->getUUID(), getWearActionNormal(pFolder)));
 		}
 		return (idParent == m_idFolder);										// (Convenience for @getinvworn)
 	}
