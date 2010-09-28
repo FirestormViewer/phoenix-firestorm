@@ -1687,7 +1687,7 @@ EAcceptance LLToolDragAndDrop::dad3dRezObjectOnLand(
 	LLViewerObject* obj, S32 face, MASK mask, BOOL drop)
 {
 // [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
-	// RELEASE-RLVa: [SL-2.0.0] Make sure the code below is the only code path to LLToolDragAndDrop::dad3dRezFromObjectOnLand()
+	// RELEASE-RLVa: [SL-2.2.0] Make sure the code below is the only code path to LLToolDragAndDrop::dad3dRezFromObjectOnLand()
 	if ( (rlv_handler_t::isEnabled()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT))) )
 	{
 		return ACCEPT_NO_LOCKED;
@@ -1758,7 +1758,7 @@ EAcceptance LLToolDragAndDrop::dad3dRezObjectOnObject(
 // [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
 	// NOTE: if (mask & MASK_CONTROL) then it's a drop rather than a rez, so we let that pass through when @rez=n restricted
 	// (but not when @interact=n restricted unless the drop target is a HUD attachment)
-	// RELEASE-RLVa: [SL-2.0.0] Make sure the code below is the only code path to LLToolDragAndDrop::dad3dRezFromObjectOnObject()
+	// RELEASE-RLVa: [SL-2.2.0] Make sure the code below is the only code path to LLToolDragAndDrop::dad3dRezFromObjectOnObject()
 	if ( (rlv_handler_t::isEnabled()) &&
 		 ( ( (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) && ((mask & MASK_CONTROL) == 0) ) ||
 		   ( (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) && (((mask & MASK_CONTROL) == 0) || (!obj->isHUDAttachment())) ) ) )
@@ -1970,10 +1970,12 @@ EAcceptance LLToolDragAndDrop::dad3dWearItem(
 			return ACCEPT_NO;
 		}
 
-// [RLVa:KB] - Checked: 2010-03-20 (RLVa-1.2.0c) | Modified: RLVa-1.2.0a
-		if ( (rlv_handler_t::isEnabled()) && (RLV_WEAR_LOCKED == gRlvWearableLocks.canWear(item)) )
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.2.1f
+		if ( (rlv_handler_t::isEnabled()) && (gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_ANY)) )
 		{
-			return ACCEPT_NO_LOCKED;
+			ERlvWearMask eWearMask = gRlvWearableLocks.canWear(item); bool fReplace = !(mask & MASK_CONTROL);
+			if ( ((!fReplace) && ((RLV_WEAR_ADD & eWearMask) == 0)) || ((fReplace) && ((RLV_WEAR_REPLACE & eWearMask) == 0)) )
+				return ACCEPT_NO_LOCKED;
 		}
 // [/RLVa:KB]
 
