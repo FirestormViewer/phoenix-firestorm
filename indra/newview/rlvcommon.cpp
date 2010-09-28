@@ -77,11 +77,11 @@ void RlvNotifications::onGiveToRLVConfirmation(const LLSD& notification, const L
 //
 
 #ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-bool RlvSettings::fCompositeFolders = FALSE;
+bool RlvSettings::fCompositeFolders = false;
 #endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-bool RlvSettings::fLegacyNaming = TRUE;
-bool RlvSettings::fNoSetEnv = FALSE;
-bool RlvSettings::fShowNameTags = FALSE;
+bool RlvSettings::fLegacyNaming = true;
+bool RlvSettings::fNoSetEnv = false;
+bool RlvSettings::fShowNameTags = false;
 
 // Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.1.0i
 void RlvSettings::initClass()

@@ -37,13 +37,13 @@ typedef std::vector<const LLViewerObject*> c_llvo_vec_t;
 // RlvSettings
 //
 
-template<typename T> T rlvGetSetting(const std::string& strSetting, const T& defaultValue)
+template<typename T> inline T rlvGetSetting(const std::string& strSetting, const T& defaultValue)
 {
 	RLV_ASSERT_DBG(gSavedSettings.controlExists(strSetting));
 	return (gSavedSettings.controlExists(strSetting)) ? gSavedSettings.get<T>(strSetting) : defaultValue;
 }
 
-template<typename T> T rlvGetPerUserSettings(const std::string& strSetting, const T& defaultValue)
+template<typename T> inline T rlvGetPerUserSettings(const std::string& strSetting, const T& defaultValue)
 {
 	RLV_ASSERT_DBG(gSavedPerAccountSettings.controlExists(strSetting));
 	return (gSavedPerAccountSettings.controlExists(strSetting)) ? gSavedPerAccountSettings.get<T>(strSetting) : defaultValue;
