@@ -1648,11 +1648,12 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 		return ACCEPT_NO;
 	}
 
-// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-	// RELEASE-RLVa: [SL-2.0.0] This will need revisiting for "ENABLE_MULTIATTACHMENTS"
-	if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canAttach(item)) )
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.2.1f
+	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 	{
-		return ACCEPT_NO_LOCKED;
+		ERlvWearMask eWearMask = gRlvAttachmentLocks.canAttach(item); bool fReplace = !(mask & MASK_CONTROL);
+		if ( ((!fReplace) && ((RLV_WEAR_ADD & eWearMask) == 0)) || ((fReplace) && ((RLV_WEAR_REPLACE & eWearMask) == 0)) )
+			return ACCEPT_NO_LOCKED;
 	}
 // [/RLVa:KB]
 
@@ -1671,7 +1672,11 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 		}
 		else
 		{
-			rez_attachment(item, 0);
+//			rez_attachment(item, 0);
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-08 (Catznip-2.2.0a) | Added: Catznip-2.2.0a
+			// Make this behave consistent with dad3dWearItem
+			rez_attachment(item, 0, !(mask & MASK_CONTROL));
+// [/SL:KB]
 		}
 	}
 	return ACCEPT_YES_SINGLE;
