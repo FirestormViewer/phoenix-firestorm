@@ -2728,7 +2728,11 @@ void LLAppearanceMgr::dumpItemArray(const LLInventoryModel::item_array_t& items,
 }
 
 LLAppearanceMgr::LLAppearanceMgr():
-	mAttachmentInvLinkEnabled(false),
+//	mAttachmentInvLinkEnabled(false),
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.2.0a) | Added: Catznip-2.2.0a
+	// Really just always needs to be enabled (fixes issue where a relog won't readd attachments that are missing from COF for some reason)
+	mAttachmentInvLinkEnabled(true),
+// [/SL:KB]
 	mOutfitIsDirty(false),
 	mIsInUpdateAppearanceFromCOF(false)
 {
