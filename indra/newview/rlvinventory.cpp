@@ -611,29 +611,31 @@ RlvForceWear::EWearAction RlvWearableItemCollector::getWearAction(const LLUUID& 
 	return (itCurFolder != m_WearActionMap.end()) ? itCurFolder->second : m_eWearAction;
 }
 
-// Checked: 2010-03-20 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
+// Checked: 2010-09-30 (RLVa-1.2.1d) | Modified: RLVa-1.2.1d
 bool RlvWearableItemCollector::onCollectFolder(const LLInventoryCategory* pFolder)
 {
-	const LLUUID& idParent = pFolder->getParentUUID();
-	if (m_Wearable.end() == std::find(m_Wearable.begin(), m_Wearable.end(), idParent))
-		return false;															// Not the child of a wearable folder == skip
+	// We treat folder links differently since they won't exist in the wearable folder list yet and their ancestry isn't relevant
+	bool fLinkedFolder = isLinkedFolder(pFolder->getUUID());
+	if ( (!fLinkedFolder) && (m_Wearable.end() == std::find(m_Wearable.begin(), m_Wearable.end(), pFolder->getParentUUID())) )
+		return false;															// Not a linked folder or the child of a wearable folder
 
 	const std::string& strFolder = pFolder->getName();
 	if (strFolder.empty())														// Shouldn't happen but does... naughty Lindens
 		return false;
 
 	bool fAttach = RlvForceWear::isWearAction(m_eWearAction);
-	bool fMatchAll = (m_eWearFlags | RlvForceWear::FLAG_MATCHALL);
+	bool fMatchAll = (!fLinkedFolder) && (m_eWearFlags | RlvForceWear::FLAG_MATCHALL);
 
-	if (RlvInventory::isFoldedFolder(pFolder, false))							// Check for folder that should get folded under its parent
+	if ( (!fLinkedFolder) && (RlvInventory::isFoldedFolder(pFolder, false)) )	// Check for folder that should get folded under its parent
 	{
 		if ( (!fAttach) || (1 == RlvInventory::getDirectDescendentsCount(pFolder, LLAssetType::AT_OBJECT)) )
 		{																		// When attaching there should only be 1 attachment in it
 			m_Folded.push_front(pFolder->getUUID());
-			m_FoldingMap.insert(std::pair<LLUUID, LLUUID>(pFolder->getUUID(), idParent));
+			m_FoldingMap.insert(std::pair<LLUUID, LLUUID>(pFolder->getUUID(), pFolder->getParentUUID()));
 		}
 	}
-	else if ( (RLV_FOLDER_PREFIX_HIDDEN != strFolder[0]) && (fMatchAll) )		// Collect from any non-hidden child folder for *all
+	else if ( (RLV_FOLDER_PREFIX_HIDDEN != strFolder[0]) && 					// Collect from any non-hidden child folder for *all
+		      ( (fMatchAll) || (fLinkedFolder) ) )								// ... and collect from linked folders
 	{
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		if ( (!RlvSettings::getEnableComposites()) ||							// ... if we're not checking composite folders
@@ -645,7 +647,7 @@ bool RlvWearableItemCollector::onCollectFolder(const LLInventoryCategory* pFolde
 			m_Wearable.push_front(pFolder->getUUID());
 			m_WearActionMap.insert(std::pair<LLUUID, RlvForceWear::EWearAction>(pFolder->getUUID(), getWearActionNormal(pFolder)));
 		}
-		return (idParent == m_idFolder);										// (Convenience for @getinvworn)
+		return (!fLinkedFolder) && (pFolder->getParentUUID() == m_idFolder);	// Convenience for @getinvworn
 	}
 	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	else if ( (RlvSettings::getEnableComposites()) &&
@@ -662,7 +664,7 @@ bool RlvWearableItemCollector::onCollectFolder(const LLInventoryCategory* pFolde
 	return false;
 }
 
-// Checked: 2010-03-20 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
+// Checked: 2010-09-30 (RLVa-1.2.1d) | Modified: RLVa-1.2.1d
 bool RlvWearableItemCollector::onCollectItem(const LLInventoryItem* pItem)
 {
 	bool fAttach = RlvForceWear::isWearAction(m_eWearAction);
@@ -697,6 +699,24 @@ bool RlvWearableItemCollector::onCollectItem(const LLInventoryItem* pItem)
 			fRet = (m_Wearable.end() != std::find(m_Wearable.begin(), m_Wearable.end(), idParent));
 			break;
 		#endif // RLV_EXTENSION_FORCEWEAR_GESTURES
+		#ifdef RLV_EXTENSION_FORCEWEAR_FOLDERLINKS
+		case LLAssetType::AT_CATEGORY:
+			if (LLAssetType::AT_LINK_FOLDER == pItem->getActualType())
+			{
+				const LLUUID& idLinkedFolder = pItem->getLinkedUUID();
+				LLViewerInventoryCategory* pLinkedFolder = gInventory.getCategory(idLinkedFolder);
+				// Link can't point to an outfit folder, or start a second level of indirection, or have the base folder as an ancestor
+				if ( (pLinkedFolder) && (LLFolderType::FT_OUTFIT != pLinkedFolder->getPreferredType()) &&
+					 (gInventory.isObjectDescendentOf(pItem->getUUID(), m_idFolder)) && 
+					 (!gInventory.isObjectDescendentOf(idLinkedFolder, m_idFolder)) )
+				{
+					// Fold the contents of the linked folder under the folder the link is a child of
+					m_FoldingMap.insert(std::pair<LLUUID, LLUUID>(idLinkedFolder, pItem->getParentUUID()));
+					m_Linked.push_front(idLinkedFolder);
+				}
+			}
+			break;
+		#endif // RLV_EXTENSION_FORCEWEAR_FOLDERLINKS
 		default:
 			break;
 	}

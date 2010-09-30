@@ -33,7 +33,7 @@
 #define RLV_EXTENSION_GIVETORLV_A2A			// Allow "Give to #RLV" on avatar-to-avatar inventory offers
 #define RLV_EXTENSION_NOTIFY_BEHAVIOUR		// Provides the option to show a customizable notification whenever a behaviour gets (un)set
 #define RLV_EXTENSION_STARTLOCATION			// Reenables "Start Location" at login if not @tploc=n or @unsit=n restricted at last logoff
-//#define RLV_EXPERIMENTAL					// Enables/disables experimental features en masse
+#define RLV_EXPERIMENTAL					// Enables/disables experimental features en masse
 #define RLV_EXPERIMENTAL_CMDS				// Enables/disables experimental commands en masse
 
 // Experimental features
@@ -41,11 +41,12 @@
 	// Stable (will mature to RLV_EXTENSION_XXX in next release if no bugs are found)
 
 	// Under testing (stable, but requires further testing - safe for public release but may be quirky)
-	#define RLV_EXPERIMENTAL_COMPOSITEFOLDERS
+	#define RLV_EXTENSION_FORCEWEAR_FOLDERLINKS	// @attach*/detach* commands will collect from folder links as well
 
 	// Under development (don't include in public release)
 	#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
-		#define RLV_EXPERIMENTAL_FIRSTUSE				// Enables a number of "first use" popups
+//		#define RLV_EXPERIMENTAL_COMPOSITEFOLDERS
+//		#define RLV_EXPERIMENTAL_FIRSTUSE				// Enables a number of "first use" popups
 	#endif // LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
 #endif // RLV_EXPERIMENTAL
 

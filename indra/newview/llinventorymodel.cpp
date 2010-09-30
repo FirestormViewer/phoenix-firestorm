@@ -495,6 +495,28 @@ void LLInventoryModel::collectDescendentsIf(const LLUUID& id,
 	LLViewerInventoryItem* item = NULL;
 	item_array_t* item_array = get_ptr_in_map(mParentChildItemTree, id);
 
+	// Move onto items
+	if(item_array)
+	{
+		S32 count = item_array->count();
+		for(S32 i = 0; i < count; ++i)
+		{
+			item = item_array->get(i);
+			if(add(NULL, item))
+			{
+				items.put(item);
+			}
+		}
+	}
+
+// [RLVa:KB] - Checked: 2010-09-30 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
+	// The problem is that we want some way for the functor to know that it's being asked to decide on a folder link
+	// but it won't know that until after it has encountered the folder link item (which doesn't happen until *after* 
+	// it has already collected all items from it the way the code was originally laid out)
+	// This breaks the "finish collecting all folders before collecting items (top to bottom and then bottom to top)" 
+	// assumption but no functor is (currently) relying on it (and likely never should since it's an implementation detail?)
+	// [Only LLAppearanceMgr actually ever passes in 'follow_folder_links == TRUE']
+// [/RLVa:KB]
 	// Follow folder links recursively.  Currently never goes more
 	// than one level deep (for current outfit support)
 	// Note: if making it fully recursive, need more checking against infinite loops.
@@ -521,20 +543,6 @@ void LLInventoryModel::collectDescendentsIf(const LLUUID& id,
 					}
 					collectDescendentsIf(linked_cat->getUUID(), cats, items, include_trash, add, FALSE);
 				}
-			}
-		}
-	}
-	
-	// Move onto items
-	if(item_array)
-	{
-		S32 count = item_array->count();
-		for(S32 i = 0; i < count; ++i)
-		{
-			item = item_array->get(i);
-			if(add(NULL, item))
-			{
-				items.put(item);
 			}
 		}
 	}
