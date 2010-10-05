@@ -219,9 +219,10 @@ private:
 
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.2.0a) | Modified: Catznip-2.1.2e
 public:
+	void linkPendingAttachments();
 	void onRegisterAttachmentComplete(const LLUUID& idItem);
 private:
-	uuid_vec_t mPendingObjLinks;
+	uuid_vec_t mPendingAttachLinks;
 // [/SL:KB]
 
 	//////////////////////////////////////////////////////////////////////////////////
