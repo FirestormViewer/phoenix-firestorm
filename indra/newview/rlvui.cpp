@@ -430,13 +430,13 @@ void RlvUIEnabler::onToggleUnsit()
 void RlvUIEnabler::onToggleViewXXX()
 {
 	// If any of the three are still active then we keep filtering
-	bool fEnable = (!gRlvHandler.hasBehaviour(RLV_BHVR_VIEWNOTE)) && 
-		(!gRlvHandler.hasBehaviour(RLV_BHVR_VIEWSCRIPT)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_VIEWTEXTURE));
+	bool fHasViewXXX = (gRlvHandler.hasBehaviour(RLV_BHVR_VIEWNOTE)) ||
+		(gRlvHandler.hasBehaviour(RLV_BHVR_VIEWSCRIPT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_VIEWTEXTURE));
 
 	// Start or stop filtering opening the preview floaters
-	if ( (!fEnable) && (!m_ConnFloaterViewXXX.connected()) )
+	if ( (fHasViewXXX) && (!m_ConnFloaterViewXXX.connected()) )
 		m_ConnFloaterViewXXX = LLFloaterReg::setValidateCallback(boost::bind(&RlvUIEnabler::filterFloaterViewXXX, this, _1, _2));
-	else if ( (fEnable) && (m_ConnFloaterViewXXX.connected()) )
+	else if ( (!fHasViewXXX) && (m_ConnFloaterViewXXX.connected()) )
 		m_ConnFloaterViewXXX.disconnect();
 }
 
@@ -518,9 +518,20 @@ bool RlvUIEnabler::canOpenSidebarTab(ERlvBehaviour eBhvrFilter, const std::strin
 
 // ============================================================================
 
+// Checked: 2010-10-07 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
+void RlvUIEnabler::notifyBlocked(const std::string& strRlvString)
+{
+	LLSD argsNotify;
+	argsNotify["MESSAGE"] = RlvStrings::getString(strRlvString);
+	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
+}
+
 // Checked: 2010-03-01 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
 void RlvUIEnabler::notifyBlockedViewXXX(LLAssetType::EType assetType)
 {
+	if (!RlvStrings::hasString(RLV_STRING_BLOCKED_VIEWXXX))
+		return;
+
 	LLStringUtil::format_map_t argsMsg; std::string strMsg = RlvStrings::getString(RLV_STRING_BLOCKED_VIEWXXX);
 	argsMsg["[TYPE]"] = LLAssetType::lookup(assetType);
 	LLStringUtil::format(strMsg, argsMsg);

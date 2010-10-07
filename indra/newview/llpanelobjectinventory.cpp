@@ -1154,7 +1154,6 @@ void LLTaskLSLBridge::openItem()
 	{
 		return;
 	}
-
 // [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.1.0a
 	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
 	{
@@ -1162,7 +1161,6 @@ void LLTaskLSLBridge::openItem()
 		return;
 	}
 // [/RLVa:KB]
-
 	if (object->permModify() || gAgent.isGodlike())
 	{
 		LLLiveLSLEditor* preview = LLFloaterReg::showTypedInstance<LLLiveLSLEditor>("preview_scriptedit", LLSD(mUUID), TAKE_FOCUS_YES);

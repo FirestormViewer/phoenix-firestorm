@@ -1290,19 +1290,23 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 	switch (rlvCmd.getBehaviourType())
 	{
 		case RLV_BHVR_DETACH:		// @detach[:<option>]=force				- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
+		case RLV_BHVR_REMATTACH:	// @remattach[:<option>]=force
 			{
 				RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
 				if (rlvCmdOption.isSharedFolder())
-					eRet = onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourType());
+					eRet = onForceWear(rlvCmdOption.getSharedFolder(), RLV_BHVR_DETACH);
 				else
 					eRet = onForceRemAttach(rlvCmd);
 			}
 			break;
-		case RLV_BHVR_REMATTACH:	// @remattach[:<option>]=force
-			eRet = onForceRemAttach(rlvCmd);
-			break;
 		case RLV_BHVR_REMOUTFIT:	// @remoutfit[:<option>]=force
-			eRet = onForceRemOutfit(rlvCmd);
+			{
+				RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+				if (rlvCmdOption.isSharedFolder())
+					eRet = onForceWear(rlvCmdOption.getSharedFolder(), RLV_BHVR_DETACH);
+				else
+					eRet = onForceRemOutfit(rlvCmd);
+			}
 			break;
 		case RLV_BHVR_UNSIT:		// @unsit=force							- Checked: 2010-03-18 (RLVa-1.2.0c) | Modified: RLVa-0.2.0g
 			{

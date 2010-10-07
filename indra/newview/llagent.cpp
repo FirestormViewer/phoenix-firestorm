@@ -77,6 +77,7 @@
 #include "llworldmap.h"
 // [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c)
 #include "rlvhandler.h"
+#include "rlvui.h"
 // [/RLVa:KB]
 
 using namespace LLVOAvatarDefines;
@@ -3345,6 +3346,7 @@ void LLAgent::teleportViaLandmark(const LLUUID& landmark_asset_id)
 		                                   : gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC) ) ||
 		   ((gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (isAgentAvatarValid()) && (gAgentAvatarp->isSitting())) ))
 	{
+		RlvUIEnabler::notifyBlockedTeleport();
 		return;
 	}
 // [/RLVa:KB]
@@ -3421,6 +3423,7 @@ void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 		     ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && 
 			   (gRlvHandler.hasBehaviourExcept(RLV_BHVR_UNSIT, gRlvHandler.getCurrentObject()))) )
 		{
+			RlvUIEnabler::notifyBlockedTeleport();
 			return;
 		}
 
@@ -3473,6 +3476,16 @@ void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 // Teleport to global position, but keep facing in the same direction 
 void LLAgent::teleportViaLocationLookAt(const LLVector3d& pos_global)
 {
+// [RLVa:KB] - Checked: 2010-10-07 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
+	// RELEASE-RLVa: [SL-2.2.0] Make sure this isn't used for anything except double-click teleporting
+	if ( (rlv_handler_t::isEnabled()) && (!RlvUtil::isForceTp()) && 
+		 ((gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) || (!gRlvHandler.canStand())) )
+	{
+		RlvUIEnabler::notifyBlockedTeleport();
+		return;
+	}
+// [/RLVa:KB]
+
 	mbTeleportKeepsLookAt = true;
 	gAgentCamera.setFocusOnAvatar(FALSE, ANIMATE);	// detach camera form avatar, so it keeps direction
 	U64 region_handle = to_region_handle(pos_global);
