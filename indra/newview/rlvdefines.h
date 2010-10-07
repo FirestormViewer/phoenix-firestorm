@@ -99,7 +99,7 @@ const S32 RLVa_VERSION_BUILD = 5;
 	// Don't halt execution on errors in release
 	#define RLV_ERRS				LL_WARNS("RLV")
 	// We don't want to check assertions in release builds
-	#ifdef RLV_RELEASE
+	#ifndef RLV_RELEASE
 		#define RLV_ASSERT(f)		RLV_VERIFY(f)
 		#define RLV_ASSERT_DBG(f)
 	#else
