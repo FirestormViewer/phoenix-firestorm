@@ -1455,7 +1455,7 @@ void LLAppearanceMgr::syncCOF(const LLInventoryModel::item_array_t& items, LLAss
 	{
 		const LLInventoryItem* pItem = new_cof_items.get(idxNewItem);
 		link_inventory_item(
-			gAgent.getID(), pItem->getLinkedUUID(), idCOF, pItem->getName(), pItem->getDescription(), LLAssetType::AT_LINK, cb);
+			gAgent.getID(), pItem->getLinkedUUID(), idCOF, pItem->getName(), pItem->LLInventoryItem::getDescription(), LLAssetType::AT_LINK, cb);
 	}
 }
 // [/SL:KB]
