@@ -552,6 +552,32 @@ bool LLSideTray::isTabAttached(const std::string& name)
 	return std::find(mTabs.begin(), mTabs.end(), tab) != mTabs.end();
 }
 
+// [RLVa:KB] - Checked: 2010-09-07 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+void LLSideTray::toggleTabDocked(const std::string& strTabName)
+{
+	if (!isTabAttached(strTabName))
+	{
+		for (child_vector_iter_t itTab = mDetachedTabs.begin(); itTab != mDetachedTabs.end(); ++itTab)
+		{
+			LLSideTrayTab* pTab = *itTab;
+			if (strTabName == pTab->getName())
+			{
+				pTab->toggleTabDocked();
+				return;
+			}
+		}
+	}
+	else
+	{
+		LLSideTrayTab* pTab = getTab(strTabName);
+		if (pTab)
+		{
+			pTab->toggleTabDocked();
+		}
+	}
+}
+// [/RLVa:KB]
+
 bool LLSideTray::hasTabs()
 {
 	// The open/close tab doesn't count.
@@ -580,6 +606,12 @@ LLPanel* LLSideTray::openChildPanel(LLSideTrayTab* tab, const std::string& panel
 	if (!view) return NULL;
 
 	std::string tab_name = tab->getName();
+
+// [RLVa:KB] - Checked: 2010-09-07 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
+	// NOTE: - "panel_name" is a name of a panel *inside* of the tab, not the name of the tab that's being switched to
+	if ( (mValidateSignal) && (!(*mValidateSignal)(tab, LLSD(tab_name))) )
+		return NULL;
+// [/RLVa:KB]
 
 	// Select tab and expand Side Tray only when a tab is attached.
 	if (isTabAttached(tab_name))
@@ -640,6 +672,11 @@ bool LLSideTray::selectTabByName(const std::string& name, bool keep_prev_visible
 	// Bail out if already selected.
 	if (new_tab == mActiveTab)
 		return false;
+
+// [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
+	if ( (mValidateSignal) && (!(*mValidateSignal)(new_tab, LLSD(name))) )
+		return false;
+// [/RLVa:KB]
 
 	//deselect old tab
 	if (mActiveTab)
@@ -1227,3 +1264,9 @@ void	LLSideTray::updateSidetrayVisibility()
 	}
 }
 
+// [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+const LLPanel* LLSideTray::getActiveTab() const
+{
+	return mActiveTab;
+}
+// [/RLVa:KB]
