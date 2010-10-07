@@ -3473,6 +3473,15 @@ void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 // Teleport to global position, but keep facing in the same direction 
 void LLAgent::teleportViaLocationLookAt(const LLVector3d& pos_global)
 {
+// [RLVa:KB] - Checked: 2010-10-07 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
+	// RELEASE-RLVa: [SL-2.2.0] Make sure this isn't used for anything except double-click teleporting
+	if ( (rlv_handler_t::isEnabled()) && (!RlvUtil::isForceTp()) && 
+		 ((gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) || (!gRlvHandler.canStand())) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 	mbTeleportKeepsLookAt = true;
 	gAgentCamera.setFocusOnAvatar(FALSE, ANIMATE);	// detach camera form avatar, so it keeps direction
 	U64 region_handle = to_region_handle(pos_global);
