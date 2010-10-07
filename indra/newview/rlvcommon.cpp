@@ -356,10 +356,10 @@ void RlvUtil::filterNames(std::string& strUTF8Text)
 }
 
 // Checked: 2010-08-29 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
-void RlvUtil::forceTp(const LLVector3d &posDest)
+void RlvUtil::forceTp(const LLVector3d& posDest)
 {
 	m_fForceTp = true;
-	gAgent.teleportViaLocation(posDest);
+	gAgent.teleportViaLocationLookAt(posDest);
 	m_fForceTp = false;
 }
 
