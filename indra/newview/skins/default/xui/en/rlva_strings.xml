@@ -12,6 +12,7 @@
     <string name="blocked_sendim">*** IM blocked by sender's viewer</string>
 
     <!-- Shown as notifications -->
+    <string name="blocked_teleport">Unable to initiate teleport due to RLV restrictions</string>
     <string name="blocked_viewxxx">Unable to open [TYPE] due to RLV restrictions</string>
 
     <!-- Sent as "Busy" messages to the remote party -->

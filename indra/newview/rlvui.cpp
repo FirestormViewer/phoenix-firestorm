@@ -518,6 +518,14 @@ bool RlvUIEnabler::canOpenSidebarTab(ERlvBehaviour eBhvrFilter, const std::strin
 
 // ============================================================================
 
+// Checked: 2010-10-07 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
+void RlvUIEnabler::notifyBlocked(const std::string& strRlvString)
+{
+	LLSD argsNotify;
+	argsNotify["MESSAGE"] = RlvStrings::getString(strRlvString);
+	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
+}
+
 // Checked: 2010-03-01 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
 void RlvUIEnabler::notifyBlockedViewXXX(LLAssetType::EType assetType)
 {
