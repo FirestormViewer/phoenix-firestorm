@@ -82,7 +82,6 @@ public:
 
 	// Returns TRUE if the attachment is RLV_LOCK_REMOVE locked
 	bool isLockedAttachment(const LLViewerObject* pObj) const;
-	bool isLockedAttachment(const LLInventoryItem* pItem) const;
 	// Returns TRUE if the attachment point is RLV_LOCK_REMOVE locked by anything other than idRlvObj
 	bool isLockedAttachmentExcept(const LLViewerObject* pObj, const LLUUID& idRlvObj) const;
 	// Returns TRUE if the attachment point is eLock type locked (RLV_LOCK_ANY = RLV_LOCK_ADD *or* RLV_LOCK_REMOVE)
@@ -113,7 +112,7 @@ public:
 	ERlvWearMask canAttach(const LLViewerJointAttachment* pAttachPt) const;
 
 	// Returns TRUE if the inventory item can be detached by the user
-	bool canDetach(const LLInventoryItem* pItem) const { return !isLockedAttachment(pItem); }
+	bool canDetach(const LLInventoryItem* pItem) const;
 	// Returns TRUE if the attachment point has at least one attachment that can be detached by the user
 	bool canDetach(const LLViewerJointAttachment* pAttachPt, bool fDetachAll = false) const;
 
@@ -240,7 +239,6 @@ public:
 
 	// Returns TRUE if the wearable is RLV_LOCK_REMOVE locked
 	bool isLockedWearable(const LLWearable* pWearable) const;
-	bool isLockedWearable(const LLInventoryItem* pItem) const;
 	// Returns TRUE if the wearable is RLV_LOCK_REMOVE locked by anything other than idRlvObj
 	bool isLockedWearableExcept(const LLWearable* pWearable, const LLUUID& idRlvObj) const;
 
@@ -340,6 +338,14 @@ inline ERlvWearMask RlvAttachmentLocks::canAttach(const LLViewerJointAttachment*
 			: RLV_WEAR_LOCKED);
 }
 
+// Checked: 2010-02-28 (RLVa-1.2.0a) | Added: RLVa-1.0.5a
+inline bool RlvAttachmentLocks::canDetach(const LLInventoryItem* pItem) const
+{
+	const LLViewerObject* pAttachObj = 
+		((pItem) && (isAgentAvatarValid())) ? gAgentAvatarp->getWornAttachment(pItem->getLinkedUUID()) : NULL;
+	return (pAttachObj) && (!isLockedAttachment(pAttachObj));
+}
+
 // Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
 inline bool RlvAttachmentLocks::hasLockedAttachmentPoint(ERlvLockMask eLock) const
 {
@@ -362,14 +368,6 @@ inline bool RlvAttachmentLocks::isLockedAttachment(const LLViewerObject* pObj) c
 		(pObj) && (pObj->isAttachment()) &&
 		( (m_AttachObjRem.find(pObj->getID()) != m_AttachObjRem.end()) || 
 		  (isLockedAttachmentPoint(RlvAttachPtLookup::getAttachPointIndex(pObj), RLV_LOCK_REMOVE)) );
-}
-
-// Checked: 2010-02-28 (RLVa-1.2.0a) | Added: RLVa-1.0.5a
-inline bool RlvAttachmentLocks::isLockedAttachment(const LLInventoryItem* pItem) const
-{
-	const LLViewerObject* pAttachObj = 
-		((pItem) && (isAgentAvatarValid())) ? gAgentAvatarp->getWornAttachment(pItem->getLinkedUUID()) : NULL;
-	return (pAttachObj) && (isLockedAttachment(pAttachObj));
 }
 
 // Checked: 2010-02-28 (RLVa-1.2.0a) | Added: RLVa-1.0.5a
