@@ -337,6 +337,7 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 	RlvWearableItemCollector f(pFolder, eAction, eFlags);
 	gInventory.collectDescendentsIf(pFolder->getUUID(), folders, items, FALSE, f, TRUE);
 
+	EWearAction eCurAction = eAction;
 	for (S32 idxItem = 0, cntItem = items.count(); idxItem < cntItem; idxItem++)
 	{
 		LLViewerInventoryItem* pRlvItem = items.get(idxItem);
@@ -345,6 +346,10 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 		// If it's wearable it should be worn on detach
 //		if ( (ACTION_DETACH == eAction) && (isWearableItem(pItem)) && (!isWearingItem(pItem)) )
 //			continue;
+
+		// Each folder can specify its own EWearAction override
+		if (isWearAction(eAction))
+			eCurAction = f.getWearAction(pRlvItem->getParentUUID());
 
 		//  NOTES: * if there are composite items then RlvWearableItemCollector made sure they can be worn (or taken off depending)
 		//         * some scripts issue @remattach=force,attach:worn-items=force so we need to attach items even if they're currently worn
@@ -371,8 +376,8 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 				if (isWearAction(eAction))
 				{
 					ERlvWearMask eWearMask = gRlvAttachmentLocks.canAttach(pRlvItem);
-					if ( ((ACTION_WEAR_REPLACE == eAction) && (eWearMask & RLV_WEAR_REPLACE)) ||
-						 ((ACTION_WEAR_ADD == eAction) && (eWearMask & RLV_WEAR_ADD)) )
+					if ( ((ACTION_WEAR_REPLACE == eCurAction) && (eWearMask & RLV_WEAR_REPLACE)) ||
+						 ((ACTION_WEAR_ADD == eCurAction) && (eWearMask & RLV_WEAR_ADD)) )
 					{
 						if (!isAddAttachment(pRlvItem))
 						{
@@ -394,7 +399,7 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 							else
 							#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 							{
-								addAttachment(pRlvItem, f.getWearAction(pRlvItem->getParentUUID()));
+								addAttachment(pRlvItem, eCurAction);
 							}
 						}
 					}
