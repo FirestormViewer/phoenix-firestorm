@@ -360,9 +360,14 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 			case LLAssetType::AT_CLOTHING:
 				if (isWearAction(eAction))
 				{
-					// The check for whether we're replacing a currently worn composite item happens in onWearableArrived()
-					if (!isAddWearable(pItem))
-						addWearable(pRlvItem, f.getWearAction(pRlvItem->getParentUUID()));
+					ERlvWearMask eWearMask = gRlvWearableLocks.canWear(pRlvItem);
+					if ( ((ACTION_WEAR_REPLACE == eCurAction) && (eWearMask & RLV_WEAR_REPLACE)) ||
+						 ((ACTION_WEAR_ADD == eCurAction) && (eWearMask & RLV_WEAR_ADD)) )
+					{
+						// The check for whether we're replacing a currently worn composite item happens in onWearableArrived()
+						if (!isAddWearable(pItem))
+							addWearable(pRlvItem, eCurAction);
+					}
 				}
 				else
 				{
