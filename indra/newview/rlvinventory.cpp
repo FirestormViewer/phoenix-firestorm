@@ -669,10 +669,8 @@ bool RlvWearableItemCollector::onCollectItem(const LLInventoryItem* pItem)
 {
 	bool fAttach = RlvForceWear::isWearAction(m_eWearAction);
 
-	#ifdef RLV_EXTENSION_FLAG_NOSTRIP
 	if ( (!fAttach) && (!RlvForceWear::isStrippable(pItem)) )							// Don't process "nostrip" items on detach
 		return false;
-	#endif // RLV_EXTENSION_FLAG_NOSTRIP
 
 	const LLUUID& idParent = pItem->getParentUUID(); bool fRet = false;
 	switch (pItem->getType())
@@ -681,13 +679,9 @@ bool RlvWearableItemCollector::onCollectItem(const LLInventoryItem* pItem)
 			if (!fAttach)
 				break;																	// Don't process body parts on detach
 		case LLAssetType::AT_CLOTHING:
-			#ifdef RLV_EXTENSION_FLAG_NOSTRIP
-				fRet = ( (m_Wearable.end() != std::find(m_Wearable.begin(), m_Wearable.end(), idParent)) ||
-						 ( (fAttach) && (m_Folded.end() != std::find(m_Folded.begin(), m_Folded.end(), idParent)) &&
-						   (RlvForceWear::isStrippable(pItem)) ) );
-			#else
-				fRet = (m_Wearable.end() != std::find(m_Wearable.begin(), m_Wearable.end(), idParent));
-			#endif // RLV_EXTENSION_FLAG_NOSTRIP
+			fRet = ( (m_Wearable.end() != std::find(m_Wearable.begin(), m_Wearable.end(), idParent)) ||
+					 ( (fAttach) && (m_Folded.end() != std::find(m_Folded.begin(), m_Folded.end(), idParent)) &&
+					   (RlvForceWear::isStrippable(pItem)) ) );
 			break;
 		case LLAssetType::AT_OBJECT:
 			fRet = ( (m_Wearable.end() != std::find(m_Wearable.begin(), m_Wearable.end(), idParent)) || 

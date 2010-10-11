@@ -28,7 +28,6 @@
 // Extensions
 #define RLV_EXTENSION_CMD_GETSETDEBUG_EX	// Extends the debug variables accessible through @getdebug_xxx/@setdebug_xxx
 #define RLV_EXTENSION_CMD_FINDFOLDERS		// @findfolders:<option>=<channel> - @findfolder with multiple results
-#define RLV_EXTENSION_FLAG_NOSTRIP			// Layers and attachments marked as "nostrip" are exempt from @detach/@remoutfit
 #define RLV_EXTENSION_FORCEWEAR_GESTURES	// @attach*/detach* commands also (de)activate gestures
 #define RLV_EXTENSION_GIVETORLV_A2A			// Allow "Give to #RLV" on avatar-to-avatar inventory offers
 #define RLV_EXTENSION_NOTIFY_BEHAVIOUR		// Provides the option to show a customizable notification whenever a behaviour gets (un)set
