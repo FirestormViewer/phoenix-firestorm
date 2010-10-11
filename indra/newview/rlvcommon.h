@@ -52,6 +52,7 @@ template<typename T> inline T rlvGetPerUserSettings(const std::string& strSettin
 class RlvSettings
 {
 public:
+	static F32  getAvatarOffsetZ()				{ return rlvGetSetting<F32>(RLV_SETTING_AVATAROFFSET_Z, 0.0); }
 	static bool getDebug()						{ return rlvGetSetting<bool>(RLV_SETTING_DEBUG, false); }
 	static bool getForbidGiveToRLV()			{ return rlvGetSetting<bool>(RLV_SETTING_FORBIDGIVETORLV, true); }
 	static bool getNoSetEnv()					{ return fNoSetEnv; }
@@ -78,6 +79,7 @@ public:
 
 	static void initClass();
 protected:
+	static bool onChangedAvatarOffset(const LLSD& sdValue);
 	static bool onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting);
 
 	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS

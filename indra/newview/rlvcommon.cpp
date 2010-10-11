@@ -105,6 +105,9 @@ void RlvSettings::initClass()
 		if (gSavedSettings.controlExists(RLV_SETTING_SHOWNAMETAGS))
 			gSavedSettings.getControl(RLV_SETTING_SHOWNAMETAGS)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fShowNameTags));
 
+		if (gSavedSettings.controlExists(RLV_SETTING_AVATAROFFSET_Z))
+			gSavedSettings.getControl(RLV_SETTING_AVATAROFFSET_Z)->getSignal()->connect(boost::bind(&onChangedAvatarOffset, _2));
+
 		fInitialized = true;
 	}
 }
@@ -124,6 +127,13 @@ void RlvSettings::initClass()
 		}
 	}
 #endif // RLV_EXTENSION_STARTLOCATION
+
+// Checked: 2010-10-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
+bool RlvSettings::onChangedAvatarOffset(const LLSD& sdValue)
+{
+	gAgent.sendAgentSetAppearance();
+	return true;
+}
 
 // Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.1.0i
 bool RlvSettings::onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting)
