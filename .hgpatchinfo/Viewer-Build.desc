@@ -1,0 +1,5 @@
+[Viewer/Build]
+- changed : compiler options for "Release with Debug" builds
+- changed : compiler and linker options for "Release" builds
+- added   : imported SNOW-788 - Fix boost lib detection with Visual Studio to allow multiple VS versions
+- changed : removed LL's changeset tags and added new (consistent) SL-2.X.Y tags for releases
