@@ -262,7 +262,10 @@ class LLViewerJointAttachment;
 class RezAttachmentCallback : public LLInventoryCallback
 {
 public:
-	RezAttachmentCallback(LLViewerJointAttachment *attachmentp);
+//	RezAttachmentCallback(LLViewerJointAttachment *attachmentp);
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.2.0a) | Added: Catznip-2.2.0a
+	RezAttachmentCallback(LLViewerJointAttachment *attachmentp, bool replace = false);
+// [/SL:KB]
 	void fire(const LLUUID& inv_item);
 
 protected:
@@ -270,6 +273,9 @@ protected:
 
 private:
 	LLViewerJointAttachment* mAttach;
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.2.0a) | Added: Catznip-2.2.0a
+	bool mReplace;
+// [/SL:KB]
 };
 
 class ActivateGestureCallback : public LLInventoryCallback
