@@ -22,6 +22,7 @@ WANTS_PACKAGE=$TRUE
 ###
 
 if [ "$1" == "--rebuild" ] ; then
+	echo "rebuilding..."
 	WANTS_CLEAN=$FALSE
 	WANTS_CONFIG=$FALSE
 fi
