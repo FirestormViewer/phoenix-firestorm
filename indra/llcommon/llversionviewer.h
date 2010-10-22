@@ -32,6 +32,6 @@ const S32 LL_VERSION_MINOR = 2;
 const S32 LL_VERSION_PATCH = 1;
 const S32 LL_VERSION_BUILD = 12;
 
-const char * const LL_CHANNEL = "Firestorme Developer";
+const char * const LL_CHANNEL = "Firestorm Developer";
 
 #endif
