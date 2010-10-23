@@ -31,6 +31,9 @@ fi
 ###  Main Logic
 ### 
 
+if [ ! -d `dirname $LOG` ] ; then
+	mkdir -p `dirname $LOG`
+fi
 
 pushd indra
 if [ $WANTS_CLEAN -eq $TRUE ] ; then
@@ -45,9 +48,16 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 fi
 
 if [ $WANTS_BUILD -eq $TRUE ] ; then
+	echo -n "Updating build version to "
+	buildVer=`grep -o -e "LL_VERSION_BUILD = [0-9]\+" llcommon/llversionviewer.h | cut -f 3 -d " "`
+	echo $((++buildVer))
+	sed -e "s#LL_VERSION_BUILD = [0-9][0-9]*#LL_VERSION_BUILD = ${buildVer}#" llcommon/llversionviewer.h > llcommon/llversionviewer.h1
+	mv llcommon/llversionviewer.h1 llcommon/llversionviewer.h
+	
+
 	echo "Building in progress... Check $LOG for verbose status"
 	# -sdk macosx10.6
-	xcodebuild -project build-darwin-i386/SecondLife.xcodeproj -alltargets -configuration Release GCC_OPTIMIZATION_LEVEL=3 ARCHS=i386 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee $LOG | grep -e "make.*Error "
+	xcodebuild -project build-darwin-i386/SecondLife.xcodeproj -alltargets -configuration Release GCC_OPTIMIZATION_LEVEL=3 ARCHS=i386 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee $LOG | grep -e "[(make.*Error)|(xcodebuild.*Error)] "
 	echo "Complete"
 fi
 popd
