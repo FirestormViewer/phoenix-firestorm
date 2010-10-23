@@ -34,6 +34,9 @@ fi
 export CC=/usr/bin/gcc-4.3
 export CXX=/usr/bin/g++-4.3
 export CMAKE_CXX_FLAGS_RELEASE="-O3 -msse -msse2" 
+if [ ! -d `dirname $LOG` ] ; then
+        mkdir -p `dirname $LOG`
+fi
 
 pushd indra
 if [ $WANTS_CLEAN -eq $TRUE ] ; then
@@ -47,6 +50,13 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 fi
 
 if [ $WANTS_BUILD -eq $TRUE ] ; then
+        echo -n "Updating build version to "
+        buildVer=`grep -o -e "LL_VERSION_BUILD = [0-9]\+" llcommon/llversionviewer.h | cut -f 3 -d " "`
+        echo $((++buildVer))
+        sed -e "s#LL_VERSION_BUILD = [0-9][0-9]*#LL_VERSION_BUILD = ${buildVer}#" llcommon/llversionviewer.h > llcommon/llversionviewer.h1
+        mv llcommon/llversionviewer.h1 llcommon/llversionviewer.h
+
+
 	echo "Building in progress... Check $LOG for verbose status"
 	./develop.py -t release build 2>&1 | tee $LOG | grep -e "make.*Error "
 	echo "Complete"
