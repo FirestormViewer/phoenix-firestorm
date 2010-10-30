@@ -124,6 +124,11 @@ public:
 	static void reshape();
 	static void setDisplayText(BOOL flag) { sDisplayText = flag ; }
 
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Added: RLVa-1.0.0f
+	const std::string& getObjectText() const						{ return mObjText; }
+	void               setObjectText(const std::string &utf8string)	{ mObjText = utf8string; }
+	static void        refreshAllObjectText();
+// [/RLVa:KB]
 protected:
 	LLHUDText(const U8 type);
 
@@ -162,6 +167,9 @@ private:
 	ETextAlignment	mTextAlignment;
 	EVertAlignment	mVertAlignment;
 	BOOL			mHidden;
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Added: RLVa-1.0.0f
+	std::string     mObjText;
+// [/RLVa:KB]
 
 	static BOOL    sDisplayText ;
 	static std::set<LLPointer<LLHUDText> > sTextObjects;
