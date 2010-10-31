@@ -1367,6 +1367,14 @@ Could not find &apos;data&apos; chunk in WAV header:
 
   <notification
    icon="alertmodal.tga"
+   name="SoundFileInvalidChunkSize"
+   type="alertmodal">
+Wrong chunk size in WAV file:
+[FILE]
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="SoundFileInvalidTooLong"
    type="alertmodal">
 Audio file is too long (10 second maximum):
@@ -4926,14 +4934,10 @@ Event Notification:
     <form name="form">
       <button
        index="0"
-       name="Teleport"
-       text="Teleport"/>
+       name="Details"
+       text="Details"/>
       <button
        index="1"
-       name="Description"
-       text="Description"/>
-      <button
-       index="2"
        name="Cancel"
        text="Cancel"/>
     </form>
