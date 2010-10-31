@@ -83,6 +83,9 @@
 #include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llappviewer.h"
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 const std::string HELLO_LSL =
 	"default\n"
@@ -1701,6 +1704,13 @@ void LLLiveLSLEditor::onRunningCheckboxClicked( LLUICtrl*, void* userdata )
 	//self->mRunningCheckbox->get();
 	if( object )
 	{
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
+		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+		{
+			return;
+		}
+// [/RLVa:KB]
+
 		LLMessageSystem* msg = gMessageSystem;
 		msg->newMessageFast(_PREHASH_SetScriptRunning);
 		msg->nextBlockFast(_PREHASH_AgentData);
@@ -1726,6 +1736,13 @@ void LLLiveLSLEditor::onReset(void *userdata)
 	LLViewerObject* object = gObjectList.findObject( self->mObjectUUID );
 	if(object)
 	{
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
+		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+		{
+			return;
+		}
+// [/RLVa:KB]
+
 		LLMessageSystem* msg = gMessageSystem;
 		msg->newMessageFast(_PREHASH_ScriptReset);
 		msg->nextBlockFast(_PREHASH_AgentData);
@@ -2134,6 +2151,15 @@ void LLLiveLSLEditor::onLoad(void* userdata)
 void LLLiveLSLEditor::onSave(void* userdata, BOOL close_after_save)
 {
 	LLLiveLSLEditor* self = (LLLiveLSLEditor*)userdata;
+
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
+	const LLViewerObject* pObject = gObjectList.findObject(self->mObjectUUID);
+	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(pObject->getRootEdit())) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 	self->mCloseAfterSave = close_after_save;
 	self->saveIfNeeded();
 }

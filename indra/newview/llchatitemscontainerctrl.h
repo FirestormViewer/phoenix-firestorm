@@ -46,6 +46,9 @@ protected:
         LLNearbyChatToastPanel()
 		: 
 	mIsDirty(false),
+// [RLVa:KB] - Checked: 2010-04-200 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+	mShowIconTooltip(true),
+// [/RLVa:KB]
 	mSourceType(CHAT_SOURCE_OBJECT)
 	{};
 public:
@@ -89,6 +92,9 @@ private:
 
 
 	bool mIsDirty;
+// [RLVa:KB] - Checked: 2010-04-200 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+	bool mShowIconTooltip;
+// [/RLVa:KB]
 };
 
 

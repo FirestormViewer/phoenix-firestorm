@@ -100,6 +100,9 @@
 #include "lltrans.h"
 #include "llsdutil.h"
 #include "llmediaentry.h"
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 //#define DEBUG_UPDATE_TYPE
 
@@ -1096,6 +1099,12 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					coloru.mV[3] = 255 - coloru.mV[3];
 					mText->setColor(LLColor4(coloru));
 					mText->setString(temp_string);
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Added: RLVa-1.0.0f
+					if (rlv_handler_t::isEnabled())
+					{
+						mText->setObjectText(temp_string);
+					}
+// [/RLVa:KB]
 					
 					if (mDrawable.notNull())
 					{
@@ -1488,6 +1497,12 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					coloru.mV[3] = 255 - coloru.mV[3];
 					mText->setColor(LLColor4(coloru));
 					mText->setString(temp_string);
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Added: RLVa-1.0.0f
+					if (rlv_handler_t::isEnabled())
+					{
+						mText->setObjectText(temp_string);
+					}
+// [/RLVa:KB]
 
 					setChanged(TEXTURE);
 				}
@@ -1658,6 +1673,25 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 								gObjectList.killObject(this);
 								return retval;
 							}
+// [RLVa:KB] - Checked: 2010-03-16 (RLVa-1.1.0k) | Added: RLVa-1.1.0k
+							if ( (rlv_handler_t::isEnabled()) && (sent_parentp->isAvatar()) && (sent_parentp->getID() == gAgent.getID()) )
+							{
+								// Rezzed object that's being worn as an attachment (we're assuming this will be due to llAttachToAvatar())
+								S32 idxAttachPt = ATTACHMENT_ID_FROM_STATE(getState());
+								if (gRlvAttachmentLocks.isLockedAttachmentPoint(idxAttachPt, RLV_LOCK_ADD))
+								{
+									// If this will end up on an "add locked" attachment point then treat the attach as a user action
+									LLNameValue* nvItem = getNVPair("AttachItemID");
+									if (nvItem)
+									{
+										LLUUID idItem(nvItem->getString());
+										// URGENT-RLVa: [RLVa-1.2.0] At the moment llAttachToAvatar always seems to *add*
+										if (idItem.notNull())
+											RlvAttachmentLockWatchdog::instance().onWearAttachment(idItem, RLV_WEAR_ADD);
+									}
+								}
+							}
+// [/RLVa:KB]
 							sent_parentp->addChild(this);
 							// make sure this object gets a non-damped update
 							if (sent_parentp->mDrawable.notNull())
@@ -4907,7 +4941,10 @@ BOOL LLViewerObject::permTransfer() const
 // given you modify rights to.  JC
 BOOL LLViewerObject::allowOpen() const
 {
-	return !flagInventoryEmpty() && (permYouOwner() || permModify());
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.0.0b
+	return !flagInventoryEmpty() && (permYouOwner() || permModify()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT));
+// [/RLVa:KB]
+//	return !flagInventoryEmpty() && (permYouOwner() || permModify());
 }
 
 LLViewerObject::LLInventoryCallbackInfo::~LLInventoryCallbackInfo()
