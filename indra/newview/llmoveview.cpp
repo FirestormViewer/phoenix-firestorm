@@ -545,17 +545,12 @@ LLPanelStandStopFlying::LLPanelStandStopFlying() :
 	mStopFlyingButton(NULL),
 	mAttached(false)
 {
-	// make sure we have the only instance of this class
-	static bool b = true;
-	llassert_always(b);
-	b=false;
-}
+	buildFromFile("panel_stand_stop_flying.xml");
+	setVisible(FALSE);
 
-// static
-inline LLPanelStandStopFlying* LLPanelStandStopFlying::getInstance()
-{
-	static LLPanelStandStopFlying* panel = getStandStopFlyingPanel();
-	return panel;
+	llinfos << "Build LLPanelStandStopFlying panel" << llendl;
+
+	updatePosition();
 }
 
 //static
@@ -692,21 +687,6 @@ void LLPanelStandStopFlying::reparent(LLFloaterMove* move_view)
 //////////////////////////////////////////////////////////////////////////
 // Private Section
 //////////////////////////////////////////////////////////////////////////
-
-//static
-LLPanelStandStopFlying* LLPanelStandStopFlying::getStandStopFlyingPanel()
-{
-	LLPanelStandStopFlying* panel = new LLPanelStandStopFlying();
-	panel->buildFromFile("panel_stand_stop_flying.xml");
-
-	panel->setVisible(FALSE);
-	//LLUI::getRootView()->addChild(panel);
-
-	llinfos << "Build LLPanelStandStopFlying panel" << llendl;
-
-	panel->updatePosition();
-	return panel;
-}
 
 void LLPanelStandStopFlying::onStandButtonClick()
 {

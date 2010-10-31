@@ -38,10 +38,10 @@ if (WINDOWS)
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Od /Zi /MDd /MP"
       CACHE STRING "C++ compiler debug options" FORCE)
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO 
-      "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od /Zi /MD /MP"
+      "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od /Zi /MD /Gm"
       CACHE STRING "C++ compiler release-with-debug options" FORCE)
   set(CMAKE_CXX_FLAGS_RELEASE
-      "${CMAKE_CXX_FLAGS_RELEASE} ${LL_CXX_FLAGS} /O2 /Zi /MD /MP"
+      "${CMAKE_CXX_FLAGS_RELEASE} ${LL_CXX_FLAGS} /O2 /Zi /MD /Oi /Ot /GF /Gy /arch:SSE2"
       CACHE STRING "C++ compiler release options" FORCE)
 
   set(CMAKE_CXX_STANDARD_LIBRARIES "")
@@ -78,6 +78,20 @@ if (WINDOWS)
   # configure win32 API for windows XP+ compatibility
   set(WINVER "0x0501" CACHE STRING "Win32 API Target version (see http://msdn.microsoft.com/en-us/library/aa383745%28v=VS.85%29.aspx)")
   add_definitions("/DWINVER=${WINVER}" "/D_WIN32_WINNT=${WINVER}")
+    
+  # Various libs are compiler specific, generate some variables here we can just use
+  # when we require them instead of reimplementing the test each time.
+  if (MSVC71)
+	set(MSVC_DIR 7.1)
+	set(MSVC_SUFFIX 71)
+  elseif (MSVC80)
+	set(MSVC_DIR 8.0)
+	set(MSVC_SUFFIX 80)
+  elseif (MSVC90)
+	set(MSVC_DIR 9.0)
+	set(MSVC_SUFFIX 90)
+  endif (MSVC71)
+  
 endif (WINDOWS)
 
 
