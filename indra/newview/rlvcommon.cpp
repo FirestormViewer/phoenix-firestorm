@@ -347,13 +347,12 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 	std::vector<LLUUID> idAgents;
 	LLWorld::getInstance()->getAvatars(&idAgents, NULL);
 
-	std::string strAnonym;
 	for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
 	{
 		LLAvatarName avName;
 		if (LLAvatarNameCache::get(idAgents[idxAgent], &avName))
 		{
-			strAnonym = RlvStrings::getAnonym(avName.mDisplayName);
+			const std::string& strAnonym = RlvStrings::getAnonym(avName.mDisplayName);
 
 			rlvStringReplace(strUTF8Text, avName.mDisplayName, strAnonym);
 			if ( (fFilterLegacy) && (!avName.mIsDisplayNameDefault) )
