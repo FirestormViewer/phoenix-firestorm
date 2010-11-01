@@ -940,26 +940,44 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			if (LLAvatarNameCache::useDisplayNames() && 
 				LLAvatarNameCache::get(hover_object->getID(), &av_name))
 			{
-				final_name = av_name.getCompleteName();
+//				final_name = av_name.getCompleteName();
+// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+// [/RLVa:KB]
 			}
 			else
 			{
-				final_name = full_name;
+//				final_name = full_name;
+// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? full_name : RlvStrings::getAnonym(full_name);
+// [/RLVa:KB]
 			}
 
 			// *HACK: We may select this object, so pretend it was clicked
 			mPick = mHoverPick;
-			LLInspector::Params p;
-			p.fillFrom(LLUICtrlFactory::instance().getDefaultParams<LLInspector>());
-			p.message(final_name);
-			p.image.name("Inspector_I");
-			p.click_callback(boost::bind(showAvatarInspector, hover_object->getID()));
-			p.visible_time_near(6.f);
-			p.visible_time_far(3.f);
-			p.delay_time(0.35f);
-			p.wrap(false);
-			
-			LLToolTipMgr::instance().show(p);
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.2a) | Added: RLVa-1.2.0e
+			if ( (!rlv_handler_t::isEnabled()) || 
+				 ( (gRlvHandler.canTouch(hover_object, mHoverPick.mObjectOffset)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ) )
+			{
+// [/RLVa:KB]
+				LLInspector::Params p;
+				p.fillFrom(LLUICtrlFactory::instance().getDefaultParams<LLInspector>());
+				p.message(final_name);
+				p.image.name("Inspector_I");
+				p.click_callback(boost::bind(showAvatarInspector, hover_object->getID()));
+				p.visible_time_near(6.f);
+				p.visible_time_far(3.f);
+				p.delay_time(0.35f);
+				p.wrap(false);
+				
+				LLToolTipMgr::instance().show(p);
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.2a) | Added: RLVa-1.2.0e
+			}
+			else
+			{
+				LLToolTipMgr::instance().show(final_name);
+			}
+// [/RLVa:KB]
 		}
 	}
 	else
