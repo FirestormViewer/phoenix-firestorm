@@ -123,14 +123,14 @@ class RlvUtil
 {
 public:
 	static bool isEmote(const std::string& strUTF8Text);
-	static bool isNearbyAgent(const LLUUID& idAgent);						// @shownames
-	static bool isNearbyRegion(const std::string& strRegion);				// @showloc
+	static bool isNearbyAgent(const LLUUID& idAgent);								// @shownames
+	static bool isNearbyRegion(const std::string& strRegion);						// @showloc
 
-	static void filterLocation(std::string& strUTF8Text);					// @showloc
-	static void filterNames(std::string& strUTF8Text);						// @shownames
+	static void filterLocation(std::string& strUTF8Text);							// @showloc
+	static void filterNames(std::string& strUTF8Text, bool fFilterLegacy = true);	// @shownames
 
 	static bool isForceTp()	{ return m_fForceTp; }
-	static void forceTp(const LLVector3d& posDest);							// Ignores restrictions that might otherwise prevent tp'ing
+	static void forceTp(const LLVector3d& posDest);									// Ignores restrictions that might otherwise prevent tp'ing
 
 	static void notifyFailedAssertion(const char* pstrAssert, const char* pstrFile, int nLine);
 
@@ -140,7 +140,7 @@ public:
 	static bool sendChatReply(const std::string& strChannel, const std::string& strUTF8Text);
 
 protected:
-	static bool m_fForceTp;													// @standtp
+	static bool m_fForceTp;															// @standtp
 };
 
 // ============================================================================

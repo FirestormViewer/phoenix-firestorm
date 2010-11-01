@@ -18,6 +18,7 @@
 #include "llagent.h"
 #include "llagentui.h"
 #include "llappviewer.h"
+#include "llavatarnamecache.h"
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
 #include "lluictrlfactory.h"
@@ -340,18 +341,24 @@ void RlvUtil::filterLocation(std::string& strUTF8Text)
 		rlvStringReplace(strUTF8Text, pParcelMgr->getAgentParcelName(), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
 }
 
-// Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
-void RlvUtil::filterNames(std::string& strUTF8Text)
+// Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 {
 	std::vector<LLUUID> idAgents;
 	LLWorld::getInstance()->getAvatars(&idAgents, NULL);
 
-	std::string strFullName;
+	std::string strAnonym;
 	for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
 	{
-		// LLCacheName::getFullName() will add the UUID to the lookup queue if we don't know it yet
-		if (gCacheName->getFullName(idAgents[idxAgent], strFullName))
-			rlvStringReplace(strUTF8Text, strFullName, RlvStrings::getAnonym(strFullName));
+		LLAvatarName avName;
+		if (LLAvatarNameCache::get(idAgents[idxAgent], &avName))
+		{
+			strAnonym = RlvStrings::getAnonym(avName.mDisplayName);
+
+			rlvStringReplace(strUTF8Text, avName.mDisplayName, strAnonym);
+			if ( (fFilterLegacy) && (!avName.mIsDisplayNameDefault) )
+				rlvStringReplace(strUTF8Text, avName.getLegacyName(), strAnonym);
+		}
 	}
 }
 
