@@ -199,11 +199,7 @@ void LLAvatarListItem::setOnline(bool online)
 
 void LLAvatarListItem::setAvatarName(const std::string& name)
 {
-//	setNameInternal(name, mHighlihtSubstring);
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
-	bool fRlvFilter = (mRlvCheckShowNames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
-	setNameInternal( (!fRlvFilter) ? name : RlvStrings::getAnonym(name), mHighlihtSubstring);
-// [/RLVa:KB]
+	setNameInternal(name, mHighlihtSubstring);
 }
 
 void LLAvatarListItem::setAvatarToolTip(const std::string& tooltip)
@@ -387,11 +383,14 @@ void LLAvatarListItem::setNameInternal(const std::string& name, const std::strin
 
 void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
 {
-	setAvatarName(av_name.mDisplayName);
+//	setAvatarName(av_name.mDisplayName);
 //	setAvatarToolTip(av_name.mUsername);
-// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 	bool fRlvFilter = (mRlvCheckShowNames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
-	setAvatarToolTip( (!fRlvFilter) ? av_name.mUsername : getAvatarName() );
+	setAvatarName( (!fRlvFilter) ? av_name.mDisplayName : RlvStrings::getAnonym(av_name) );
+	setAvatarToolTip( (!fRlvFilter) ? av_name.mUsername : RlvStrings::getAnonym(av_name) );
+	// TODO-RLVa: bit of a hack putting this here. Maybe find a better way?
+	mAvatarIcon->setDrawTooltip(!fRlvFilter);
 // [/RLVa:KB]
 
 	//requesting the list to resort
