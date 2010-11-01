@@ -2766,14 +2766,14 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 	const F32 time_visible = mTimeVisible.getElapsedTimeF32();
 	const F32 NAME_SHOW_TIME = gSavedSettings.getF32("RenderNameShowTime");	// seconds
 	const F32 FADE_DURATION = gSavedSettings.getF32("RenderNameFadeDuration"); // seconds
-// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d) | Added: RLVa-0.2.0b
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.2a) | Added: RLVa-0.2.0b
 	bool fRlvShowNames = gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 // [/RLVa:KB]
 	BOOL visible_avatar = isVisible() || mNeedsAnimUpdate;
 	BOOL visible_chat = gSavedSettings.getBOOL("UseChatBubbles") && (mChats.size() || mTyping);
 	BOOL render_name =	visible_chat ||
 		                (visible_avatar &&
-// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d) | Added: RLVa-1.0.0h
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.2a) | Added: RLVa-1.0.0h
 						( (!fRlvShowNames) || (RlvSettings::getShowNameTags()) ) &&
 // [/RLVa:KB]
 		                ((sRenderName == RENDER_NAME_ALWAYS) ||
@@ -2807,7 +2807,7 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 			new_name = TRUE;
 		}
 		
-// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d) | Added: RLVa-0.2.0b
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.2a) | Added: RLVa-0.2.0b
 		if (fRlvShowNames)
 		{
 			if (mRenderGroupTitles)
@@ -2888,6 +2888,9 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	// Avatars must have a first and last name
 	if (!firstname || !lastname) return;
 
+// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+	bool fRlvShowNames = gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+// [/RLVa:KB]
 	bool is_away = mSignaledAnimations.find(ANIM_AGENT_AWAY)  != mSignaledAnimations.end();
 	bool is_busy = mSignaledAnimations.find(ANIM_AGENT_BUSY) != mSignaledAnimations.end();
 	bool is_appearance = mSignaledAnimations.find(ANIM_AGENT_CUSTOMIZE) != mSignaledAnimations.end();
@@ -2976,7 +2979,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				LLFontGL::getFontSansSerifSmall());
 		}
 
-		if (sRenderGroupTitles
+//		if (sRenderGroupTitles
+// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+		if (sRenderGroupTitles && !fRlvShowNames
+// [/RLVa:KB]
 			&& title && title->getString() && title->getString()[0] != '\0')
 						{
 			std::string title_str = title->getString();
@@ -2998,28 +3004,45 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				LLAvatarNameCache::get(getID(), boost::bind(&LLVOAvatar::invalidateNameTag, _1));
 			}
 
-			// Might be blank if name not available yet, that's OK
-			if (show_display_names)
+// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+			if ( (!fRlvShowNames) || (isSelf()) )
 			{
-				addNameTagLine(av_name.mDisplayName, name_tag_color, LLFontGL::NORMAL,
-					LLFontGL::getFontSansSerif());
-				}
-			// Suppress SLID display if display name matches exactly (ugh)
-			if (show_usernames && !av_name.mIsDisplayNameDefault)
+// [/RLVa:KB]
+				// Might be blank if name not available yet, that's OK
+				if (show_display_names)
 				{
-				// *HACK: Desaturate the color
-				LLColor4 username_color = name_tag_color * 0.83f;
-				addNameTagLine(av_name.mUsername, username_color, LLFontGL::NORMAL,
-					LLFontGL::getFontSansSerifSmall());
+					addNameTagLine(av_name.mDisplayName, name_tag_color, LLFontGL::NORMAL,
+						LLFontGL::getFontSansSerif());
+				}
+				// Suppress SLID display if display name matches exactly (ugh)
+				if (show_usernames && !av_name.mIsDisplayNameDefault)
+				{
+					// *HACK: Desaturate the color
+					LLColor4 username_color = name_tag_color * 0.83f;
+					addNameTagLine(av_name.mUsername, username_color, LLFontGL::NORMAL,
+						LLFontGL::getFontSansSerifSmall());
+				}
+// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 			}
-				}
+			else
+			{
+				addNameTagLine(RlvStrings::getAnonym(av_name), name_tag_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerif());
+			}
+// [/RLVa:KB]
+		}
 		else
-				{
+		{
 			const LLFontGL* font = LLFontGL::getFontSansSerif();
 			std::string full_name =
 				LLCacheName::buildFullName( firstname->getString(), lastname->getString() );
+// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+			if ( (fRlvShowNames) && (!isSelf()) )
+			{
+				full_name = RlvStrings::getAnonym(full_name);
+			}
+// [/RLVa:KB]
 			addNameTagLine(full_name, name_tag_color, LLFontGL::NORMAL, font);
-				}
+		}
 
 				mNameAway = is_away;
 				mNameBusy = is_busy;
