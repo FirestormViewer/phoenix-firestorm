@@ -17,6 +17,7 @@
 #ifndef RLV_COMMON_H
 #define RLV_COMMON_H
 
+#include "llavatarname.h"
 #include "llinventorymodel.h"
 #include "llselectmgr.h"
 #include "llviewercontrol.h"
@@ -97,6 +98,7 @@ class RlvStrings
 public:
 	static void initClass();
 
+	static const std::string& getAnonym(const LLAvatarName& avName);		// @shownames
 	static const std::string& getAnonym(const std::string& strName);		// @shownames
 	static const std::string& getBehaviourNotificationString(ERlvBehaviour eBhvr, ERlvParamType eType);
 	static const std::string& getString(const std::string& strStringName);
@@ -217,6 +219,12 @@ protected:
 // ============================================================================
 // Inlined class member functions
 //
+
+// Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+inline const std::string& RlvStrings::getAnonym(const LLAvatarName& avName)
+{
+	return getAnonym(avName.mDisplayName);
+}
 
 // Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.2a
 inline bool RlvUtil::isEmote(const std::string& strUTF8Text)

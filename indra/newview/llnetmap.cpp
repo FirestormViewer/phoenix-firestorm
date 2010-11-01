@@ -578,10 +578,28 @@ BOOL LLNetMap::handleToolTip( S32 x, S32 y, MASK mask )
 
 	// If the cursor is near an avatar on the minimap, a mini-inspector will be
 	// shown for the avatar, instead of the normal map tooltip.
-	if (handleToolTipAgent(mClosestAgentToCursor))
+//	if (handleToolTipAgent(mClosestAgentToCursor))
+// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+	if ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (handleToolTipAgent(mClosestAgentToCursor)) )
+// [/RLVa:KB]
 	{
 		return TRUE;
 	}
+
+// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+	LLStringUtil::format_map_t args;
+
+	LLAvatarName avName;
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && 
+		 (mClosestAgentToCursor.notNull()) && (LLAvatarNameCache::get(mClosestAgentToCursor, &avName)) )
+	{
+		args["[AGENT]"] = RlvStrings::getAnonym(avName) + "\n";
+	}
+	else
+	{
+		args["[AGENT]"] = "";
+	}
+// [/RLVa:KB]
 
 	LLRect sticky_rect;
 	std::string region_name;
@@ -601,7 +619,7 @@ BOOL LLNetMap::handleToolTip( S32 x, S32 y, MASK mask )
 		}
 	}
 
-	LLStringUtil::format_map_t args;
+//	LLStringUtil::format_map_t args;
 	args["[REGION]"] = region_name;
 	std::string msg = mToolTipMsg;
 	LLStringUtil::format(msg, args);
