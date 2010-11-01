@@ -46,7 +46,7 @@
 #include "llstatusbar.h"
 #include "llmenugl.h"
 #include "pipeline.h"
-// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b)
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.2a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include <boost/tokenizer.hpp>
@@ -276,13 +276,11 @@ void LLHUDText::setString(const std::string &text_utf8)
 {
 	mTextSegments.clear();
 //	addLine(text_utf8, mColor);
-// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.2.0a) | Modified: RLVa-1.0.0f
-	// NOTE: setString() is only called for debug beacons and the floating name tags (which we don't want to censor
-	//       because you'd see "(Region hidden) LastName" if you happen to go to a sim who's name is your first name :p
+// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.2.2a) | Modified: RLVa-1.0.0f
+	// NOTE: setString() is called for debug and map beacons as well
 	if (rlv_handler_t::isEnabled())
 	{
 		std::string text(text_utf8);
-
 		if (gRlvHandler.canShowHoverText(mSourceObject))
 		{
 			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
@@ -294,7 +292,6 @@ void LLHUDText::setString(const std::string &text_utf8)
 		{
 			text = "";
 		}
-
 		addLine(text, mColor);
 	}
 	else
@@ -684,7 +681,7 @@ F32 LLHUDText::LLHUDTextSegment::getWidth(const LLFontGL* font)
 	}
 }
 
-// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Added: RLVa-1.0.0f
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.2a) | Added: RLVa-1.0.0f
 void LLHUDText::refreshAllObjectText()
 {
 	for (TextObjectIterator itText = sTextObjects.begin(); itText != sTextObjects.end(); itText++)
