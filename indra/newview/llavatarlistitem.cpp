@@ -38,7 +38,7 @@
 #include "llavatarnamecache.h"
 #include "llavatariconctrl.h"
 #include "lloutputmonitorctrl.h"
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d)
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -74,7 +74,7 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	mOnlineStatus(E_UNKNOWN),
 	mShowInfoBtn(true),
 	mShowProfileBtn(true),
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	mRlvCheckShowNames(false),
 // [/RLVa:KB]
 	mShowPermissions(false),
@@ -146,7 +146,7 @@ void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 	getChildView("hovered_icon")->setVisible( true);
 //	mInfoBtn->setVisible(mShowInfoBtn);
 //	mProfileBtn->setVisible(mShowProfileBtn);
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
 	mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
 // [/RLVa:KB]
@@ -200,7 +200,7 @@ void LLAvatarListItem::setOnline(bool online)
 void LLAvatarListItem::setAvatarName(const std::string& name)
 {
 //	setNameInternal(name, mHighlihtSubstring);
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	bool fRlvFilter = (mRlvCheckShowNames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
 	setNameInternal( (!fRlvFilter) ? name : RlvStrings::getAnonym(name), mHighlihtSubstring);
 // [/RLVa:KB]
@@ -388,7 +388,11 @@ void LLAvatarListItem::setNameInternal(const std::string& name, const std::strin
 void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
 {
 	setAvatarName(av_name.mDisplayName);
-	setAvatarToolTip(av_name.mUsername);
+//	setAvatarToolTip(av_name.mUsername);
+// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+	bool fRlvFilter = (mRlvCheckShowNames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+	setAvatarToolTip( (!fRlvFilter) ? av_name.mUsername : getAvatarName() );
+// [/RLVa:KB]
 
 	//requesting the list to resort
 	notifyParent(LLSD().with("sort", LLSD()));

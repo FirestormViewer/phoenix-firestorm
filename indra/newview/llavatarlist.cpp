@@ -46,7 +46,7 @@
 #include "lluuid.h"
 #include "llvoiceclient.h"
 #include "llviewercontrol.h"	// for gSavedSettings
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d)
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -142,7 +142,7 @@ LLAvatarList::LLAvatarList(const Params& p)
 , mShowProfileBtn(p.show_profile_btn)
 , mShowSpeakingIndicator(p.show_speaking_indicator)
 , mShowPermissions(p.show_permissions_granted)
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 , mRlvCheckShowNames(false)
 // [/RLVa:KB]
 {
@@ -426,7 +426,7 @@ S32 LLAvatarList::notifyParent(const LLSD& info)
 void LLAvatarList::addNewItem(const LLUUID& id, const std::string& name, BOOL is_online, EAddPosition pos)
 {
 	LLAvatarListItem* item = new LLAvatarListItem();
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	item->setRlvCheckShowNames(mRlvCheckShowNames);
 // [/RLVa:KB]
 	// This sets the name as a side effect
@@ -450,7 +450,7 @@ BOOL LLAvatarList::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	BOOL handled = LLUICtrl::handleRightMouseDown(x, y, mask);
 //	if ( mContextMenu )
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a) | Modified: RLVa-1.2.0d
 	if ( (mContextMenu) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) )
 // [/RLVa:KB]
 	{
@@ -509,30 +509,11 @@ void LLAvatarList::updateLastInteractionTimes()
 void LLAvatarList::onItemDoubleClicked(LLUICtrl* ctrl, S32 x, S32 y, MASK mask)
 {
 //	mItemDoubleClickSignal(ctrl, x, y, mask);
-// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	if ( (!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
 		mItemDoubleClickSignal(ctrl, x, y, mask);
 // [/RLVa:KB]
 }
-
-// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-void LLAvatarList::refreshNames()
-{
-	std::vector<LLPanel*> items;
-	getItems(items);
-
-	std::string strFullName;
-	for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
-	{
-		LLAvatarListItem* pItem = static_cast<LLAvatarListItem*>(*itItem);
-		if (gCacheName->getFullName(pItem->getAvatarId(), strFullName))
-			pItem->setName(strFullName);
-	}
-
-	if (&NAME_COMPARATOR == mItemComparator)
-		sort();
-}
-// [/RLVa:KB]
 
 bool LLAvatarItemComparator::compare(const LLPanel* item1, const LLPanel* item2) const
 {

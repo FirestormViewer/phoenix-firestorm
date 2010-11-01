@@ -371,12 +371,12 @@ void RlvUIEnabler::onToggleShowNames()
 	LLPanelPeople* pPeoplePanel = dynamic_cast<LLPanelPeople*>(LLSideTray::getInstance()->getPanel("panel_people"));
 	RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
 	if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
-		pPeoplePanel->getNearbyList()->refreshNames();
+		pPeoplePanel->getNearbyList()->updateAvatarNames();
 
 	// Refresh the speaker list
 	LLCallFloater* pCallFloater = LLFloaterReg::findTypedInstance<LLCallFloater>("voice_controls");
 	if (pCallFloater)
-		pCallFloater->getAvatarCallerList()->refreshNames();
+		pCallFloater->getAvatarCallerList()->updateAvatarNames();
 }
 
 // Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
