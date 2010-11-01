@@ -571,4 +571,10 @@ BOOL rlvEnableSharedWearEnabler(void* pParam)
 }
 */
 
+// Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+const std::string& rlvGetAnonym(const LLAvatarName& avName)
+{
+	return RlvStrings::getAnonym(avName);
+}
+
 // ============================================================================
