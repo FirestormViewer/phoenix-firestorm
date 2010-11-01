@@ -324,7 +324,7 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 		getChildView("LabelCreatorTitle")->setEnabled(TRUE);
 		getChildView("LabelCreatorName")->setEnabled(FALSE);
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Modified: RLVa-1.0.0e
-		// If the object creator matches the object owner we need to anonimize the creator field as well
+		// If the object creator matches the object owner we need to anonymize the creator field as well
 		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && 
 			( ((perm.isOwned()) && (!perm.isGroupOwned()) && (perm.getOwner() == item->getCreatorUUID()) ) ||
 			  (RlvUtil::isNearbyAgent(item->getCreatorUUID())) ) )

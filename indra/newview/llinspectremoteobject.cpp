@@ -190,7 +190,7 @@ void LLInspectRemoteObject::update()
 	}
 //	else
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	else if (owner.empty()) // If "objectim" was subject to @shownames then we passed an anonimized owner name so use that if available
+	else if (owner.empty()) // If "objectim" was subject to @shownames then we passed an anonymized owner name so use that if available
 // [/RLVa:KB]
 	{
 		owner = LLTrans::getString("Unknown");

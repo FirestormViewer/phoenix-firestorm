@@ -487,7 +487,7 @@ void LLInspectObject::updateCreator(LLSelectNode* nodep)
 		// Objects cannot be created by a group, so use agent URL format
 		LLUUID creator_id = nodep->mPermissions->getCreator();
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
-		// Only anonimize the creator if they're also the owner or if they're a nearby avie
+		// Only anonymize the creator if they're also the owner or if they're a nearby avie
 		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) &&
 			 ((nodep->mPermissions->getOwner() == creator_id) || (RlvUtil::isNearbyAgent(creator_id))) )
 		{

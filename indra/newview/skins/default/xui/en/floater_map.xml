@@ -18,7 +18,7 @@
  left="0"
  top="0"
  width="200">
-    <!-- RLVa shows the anonimized name on the regular tooltip when @shownames=n restricted (rather than show the avatar inspector) --> 
+    <!-- RLVa shows the anonymized name on the regular tooltip when @shownames=n restricted (rather than show the avatar inspector) --> 
     <floater.string
      name="ToolTipMsg">
         [AGENT][REGION](Double-click to open Map, shift-drag to pan)
