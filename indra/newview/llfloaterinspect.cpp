@@ -40,7 +40,7 @@
 #include "llviewercontrol.h"
 #include "llviewerobject.h"
 #include "lluictrlfactory.h"
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b)
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -116,7 +116,7 @@ void LLFloaterInspect::onClickCreatorProfile()
 		if(node)
 		{
 //			LLAvatarActions::showProfile(node->mPermissions->getCreator());
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Modified: RLVa-1.0.0e
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a) | Modified: RLVa-1.0.0e
 			const LLUUID& idCreator = node->mPermissions->getCreator();
 			if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && 
 				 ((node->mPermissions->getOwner() == idCreator) || (RlvUtil::isNearbyAgent(idCreator))) )
@@ -150,7 +150,7 @@ void LLFloaterInspect::onClickOwnerProfile()
 		if(node)
 		{
 			const LLUUID& owner_id = node->mPermissions->getOwner();
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Modified: RLVa-1.0.0e
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a) | Modified: RLVa-1.0.0e
 			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 				return;
 // [/RLVa:KB]
@@ -165,7 +165,7 @@ void LLFloaterInspect::onSelectObject()
 	{
 //		getChildView("button owner")->setEnabled(true);
 //		getChildView("button creator")->setEnabled(true);
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Modified: RLVa-1.0.0e
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a) | Modified: RLVa-1.0.0e
 		getChildView("button owner")->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
 		// TODO-RLVa: [RLVa-1.2.2] Is it worth checking the selected node just to selectively disable this button?
 		getChildView("button creator")->setEnabled(true);
@@ -227,23 +227,24 @@ void LLFloaterInspect::refresh()
 		LLStringUtil::format (timeStr, substitution);
 
 		LLAvatarName av_name;
-		LLAvatarNameCache::get(obj->mPermissions->getOwner(), &av_name);
-		owner_name = av_name.getCompleteName();
-		LLAvatarNameCache::get(obj->mPermissions->getCreator(), &av_name);
-		creator_name = av_name.getCompleteName();
+//		LLAvatarNameCache::get(obj->mPermissions->getOwner(), &av_name);
+//		owner_name = av_name.getCompleteName();
+//		LLAvatarNameCache::get(obj->mPermissions->getCreator(), &av_name);
+//		creator_name = av_name.getCompleteName();
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+		const LLUUID& idOwner = obj->mPermissions->getOwner();
+		LLAvatarNameCache::get(idOwner, &av_name);
+		bool fRlvFilterOwner = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsDummy) && (idOwner != gAgent.getID()) && 
+			(!obj->mPermissions->isGroupOwned());
+		owner_name = (!fRlvFilterOwner) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
 
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Modified: RLVa-1.2.1b
-		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-		{
-			if (!obj->mPermissions->isGroupOwned())
-				owner_name = RlvStrings::getAnonym(owner_name);
-
-			const LLUUID& idCreator = obj->mPermissions->getCreator();
-			if ( (obj->mPermissions->getOwner() == idCreator) || (RlvUtil::isNearbyAgent(idCreator)) )
-				creator_name = RlvStrings::getAnonym(creator_name);
-		}
+		const LLUUID& idCreator = obj->mPermissions->getCreator();
+		LLAvatarNameCache::get(idCreator, &av_name);
+		bool fRlvFilterCreator = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsDummy) && (idCreator != gAgent.getID()) && 
+			( (obj->mPermissions->getOwner() == idCreator) || (RlvUtil::isNearbyAgent(idCreator)) );
+		creator_name = (!fRlvFilterCreator) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
 // [/RLVa:KB]
-		
+
 		row["id"] = obj->getObject()->getID();
 		row["columns"][0]["column"] = "object_name";
 		row["columns"][0]["type"] = "text";
