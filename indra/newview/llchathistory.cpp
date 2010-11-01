@@ -299,9 +299,26 @@ public:
 
 			// Start with blank so sample data from XUI XML doesn't
 			// flash on the screen
-			user_name->setValue( LLSD() );
-			LLAvatarNameCache::get(mAvatarID,
-				boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+//			user_name->setValue( LLSD() );
+//			LLAvatarNameCache::get(mAvatarID,
+//				boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+			if (!chat.mRlvNamesFiltered)
+			{
+				user_name->setValue( LLSD() );
+				LLAvatarNameCache::get(mAvatarID,
+					boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+			}
+			else
+			{
+				// If the agent's chat was subject to @shownames=n we should display their anonimized name
+				mFrom = chat.mFromName;
+				user_name->setValue(mFrom);
+				user_name->setToolTip(mFrom);
+				setToolTip(mFrom);
+				updateMinUserNameWidth();
+			}
+// [/RLVa:KB]
 		}
 		else if (chat.mChatStyle == CHAT_STYLE_HISTORY ||
 				 mSourceType == CHAT_SOURCE_AGENT)
