@@ -2903,7 +2903,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		{
 		is_muted = LLMuteList::getInstance()->isMuted(getID());
 	}
-	bool is_friend = LLAvatarTracker::instance().isBuddy(getID());
+//	bool is_friend = LLAvatarTracker::instance().isBuddy(getID());
+// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+	bool is_friend = (!fRlvShowNames) && (LLAvatarTracker::instance().isBuddy(getID()));
+// [/RLVa:KB]
 	bool is_cloud = getIsCloud();
 
 			if (gSavedSettings.getBOOL("DebugAvatarRezTime"))
