@@ -110,7 +110,7 @@ class LLChatHistoryHeader: public LLPanel
 public:
 	LLChatHistoryHeader()
 	:	LLPanel(),
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 		mShowContextMenu(true), 
 		mShowInfoCtrl(true),
 // [/RLVa:KB]
@@ -236,7 +236,7 @@ public:
 	void showInspector()
 	{
 //		if (mAvatarID.isNull() && CHAT_SOURCE_SYSTEM != mSourceType) return;
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 		// Don't double-click show the inspector if we're not showing the info control
 		if ( (!mShowInfoCtrl) || (mAvatarID.isNull() && CHAT_SOURCE_SYSTEM != mSourceType) ) return;
 // [/RLVa:KB]
@@ -369,7 +369,7 @@ public:
 		if(mSourceType != CHAT_SOURCE_AGENT)
 			icon->setDrawTooltip(false);
 
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 		// Don't show the context menu, info control or avatar icon tooltip if this chat was subject to @shownames=n
 		if ( (chat.mRlvNamesFiltered) && ((CHAT_SOURCE_AGENT == mSourceType) || (CHAT_SOURCE_OBJECT == mSourceType))  )
 		{
@@ -464,7 +464,7 @@ protected:
 
 	void showContextMenu(S32 x,S32 y)
 	{
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 		if (!mShowContextMenu)
 			return;
 // [/RLVa:KB]
@@ -519,7 +519,7 @@ protected:
 	void showInfoCtrl()
 	{
 //		if (mAvatarID.isNull() || mFrom.empty() || SYSTEM_FROM == mFrom) return;
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 		if ( (!mShowInfoCtrl) || (mAvatarID.isNull() || mFrom.empty() || SYSTEM_FROM == mFrom) ) return;
 // [/RLVa:KB]
 				
@@ -590,7 +590,7 @@ protected:
 	EChatSourceType		mSourceType;
 	std::string			mFrom;
 	LLUUID				mSessionID;
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 	bool                mShowContextMenu;
 	bool                mShowInfoCtrl;
 // [/RLVa:KB]
