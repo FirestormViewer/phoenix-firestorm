@@ -612,7 +612,10 @@ BOOL LLNetMap::handleToolTip( S32 x, S32 y, MASK mask )
 		sticky_rect.mRight = sticky_rect.mLeft + 2 * SLOP;
 		sticky_rect.mTop = sticky_rect.mBottom + 2 * SLOP;
 
-		region_name = region->getName();
+//		region_name = region->getName();
+// [RLVa:KB] - Checked: 2010-10-19 (RLVa-1.2.2b) | Modified: RLVa-1.2.2b
+		region_name = ((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? region->getName() : RlvStrings::getString(RLV_STRING_HIDDEN_REGION));
+// [/RLVa:KB]
 		if (!region_name.empty())
 		{
 			region_name += "\n";
