@@ -59,6 +59,9 @@
 #include "llviewerwindow.h"
 #include "llworld.h"
 #include "llworldmapview.h"		// shared draw code
+// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 static LLDefaultChildRegistry::Register<LLNetMap> r1("net_map");
 
@@ -355,7 +358,11 @@ void LLNetMap::draw()
 				BOOL show_as_friend = FALSE;
 				if( i < regionp->mMapAvatarIDs.count())
 				{
-					show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(regionp->mMapAvatarIDs.get(i)) != NULL);
+// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+					show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(regionp->mMapAvatarIDs.get(i)) != NULL) &&
+						(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+// [/RLVa:KB]
+//					show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(regionp->mMapAvatarIDs.get(i)) != NULL);
 				}
 				LLWorldMapView::drawAvatar(
 					pos_map.mV[VX], pos_map.mV[VY], 
@@ -568,14 +575,20 @@ BOOL LLNetMap::handleToolTip( S32 x, S32 y, MASK mask )
 	{
 		return FALSE;
 	}
-
+	
+	// <RLVa AO>
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+	{
+		return FALSE;
+	}
+	// </RLVa>
+		
 	// If the cursor is near an avatar on the minimap, a mini-inspector will be
 	// shown for the avatar, instead of the normal map tooltip.
 	if (handleToolTipAgent(mClosestAgentToCursor))
 	{
 		return TRUE;
 	}
-
 	LLRect sticky_rect;
 	std::string region_name;
 	LLViewerRegion*	region = LLWorld::getInstance()->getRegionFromPosGlobal( viewPosToGlobal( x, y ) );
@@ -586,24 +599,24 @@ BOOL LLNetMap::handleToolTip( S32 x, S32 y, MASK mask )
 		localPointToScreen(x - SLOP, y - SLOP, &(sticky_rect.mLeft), &(sticky_rect.mBottom));
 		sticky_rect.mRight = sticky_rect.mLeft + 2 * SLOP;
 		sticky_rect.mTop = sticky_rect.mBottom + 2 * SLOP;
-
+		
 		region_name = region->getName();
 		if (!region_name.empty())
 		{
 			region_name += "\n";
 		}
 	}
-
+	
 	LLStringUtil::format_map_t args;
 	args["[REGION]"] = region_name;
 	std::string msg = mToolTipMsg;
 	LLStringUtil::format(msg, args);
-
+	
 	LLToolTipMgr::instance().show(LLToolTip::Params()
-		.message(msg)
-		.sticky_rect(sticky_rect));
-		
-	return TRUE;
+								  .message(msg)
+								  .sticky_rect(sticky_rect));
+	
+	return TRUE;	
 }
 
 BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
