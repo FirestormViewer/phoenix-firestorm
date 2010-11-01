@@ -2995,9 +2995,8 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 			{
 				// ...call this function back when the name arrives
 				// and force a rebuild
-				LLAvatarNameCache::get(getID(),
-					boost::bind(&LLVOAvatar::clearNameTag, this));
-					}
+				LLAvatarNameCache::get(getID(), boost::bind(&LLVOAvatar::invalidateNameTag, _1));
+			}
 
 			// Might be blank if name not available yet, that's OK
 			if (show_display_names)
