@@ -35,7 +35,7 @@
 #include "llui.h"
 #include "lluictrl.h"
 #include "llurlaction.h"
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f)
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -71,6 +71,9 @@ private:
 	std::string  mOwnerLegacyName;
 	std::string  mSLurl;
 	std::string  mName;
+// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+	bool         mRlvHideNames;
+// [/RLVa:KB]
 	bool         mGroupOwned;
 };
 
@@ -81,6 +84,9 @@ LLInspectRemoteObject::LLInspectRemoteObject(const LLSD& sd) :
 	mOwnerLegacyName(),
 	mSLurl(""),
 	mName(""),
+// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+	mRlvHideNames(false),
+// [/RLVa:KB]
 	mGroupOwned(false)
 {
 }
@@ -113,14 +119,14 @@ void LLInspectRemoteObject::onOpen(const LLSD& data)
 	mOwnerID    = data["owner_id"].asUUID();
 	mGroupOwned = data["group_owned"].asBoolean();
 	mSLurl      = data["slurl"].asString();
+// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+	if (data.has("rlv_shownames"))
+		mRlvHideNames = data["rlv_shownames"].asBoolean();
+// [/RLVa:KB]
 
 	// work out the owner's name
 	mOwnerLegacyName = "";
-//	if (gCacheName)
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	mOwnerLegacyName = (data.has("owner_name")) ? data["owner_name"].asString() : "";
-	if ( (gCacheName) && (mOwnerID.notNull()) )
-// [/RLVa:KB]
+	if (gCacheName)
 	{
 		gCacheName->get(mOwnerID, mGroupOwned,  // muting
 			boost::bind(&LLInspectRemoteObject::onNameCache, this, _1, _2, _3));
@@ -185,13 +191,13 @@ void LLInspectRemoteObject::update()
 		}
 		else
 		{
-			owner = LLSLURL("agent", mOwnerID, "about").getSLURLString();
+//			owner = LLSLURL("agent", mOwnerID, "about").getSLURLString();
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+			owner = LLSLURL("agent", mOwnerID, (!mRlvHideNames) ? "about" : "rlvanonym").getSLURLString();
+// [/RLVa:KB]
 		}
 	}
-//	else
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	else if (owner.empty()) // If "objectim" was subject to @shownames then we passed an anonymized owner name so use that if available
-// [/RLVa:KB]
+	else
 	{
 		owner = LLTrans::getString("Unknown");
 	}

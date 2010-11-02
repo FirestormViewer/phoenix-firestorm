@@ -2908,12 +2908,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				// NOTE: the chat message itself will be filtered in LLNearbyChatHandler::processChat()
 				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!from_group) && (RlvUtil::isNearbyAgent(from_id)) )
 				{
-					std::string strOwnerName;
-					if (gCacheName->getFullName(from_id, strOwnerName))
-					{
-						query_string["owner"] = LLUUID::null;
-						query_string["owner_name"] = RlvStrings::getAnonym(strOwnerName);
-					}
+					query_string["rlv_shownames"] = TRUE;
 
 					RlvUtil::filterNames(name);
 					chat.mFromName = name;

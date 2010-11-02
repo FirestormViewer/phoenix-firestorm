@@ -92,9 +92,9 @@ public:
 		LLSD payload;
 		payload["object_id"] = object_id;
 		payload["owner_id"] = query_map["owner"];
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-		if (query_map.has("owner_name"))
-			payload["owner_name"] = query_map["owner_name"];
+// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+		if (query_map.has("rlv_shownames"))
+			payload["rlv_shownames"] = query_map["rlv_shownames"];
 // [/RLVa:KB]
 		payload["name"] = query_map["name"];
 		payload["slurl"] = LLWeb::escapeURL(query_map["slurl"]);
