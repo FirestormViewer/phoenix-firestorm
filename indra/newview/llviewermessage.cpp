@@ -3509,25 +3509,18 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			if ( (CHAT_SOURCE_OBJECT == chat.mSourceType) && 
 				 ((gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))) )
 			{
-				LLSD sdQuery; std::string strOwnerName, strQuery;
+				LLSD sdQuery;
 				sdQuery["name"] = chat.mFromName;
-
 				sdQuery["owner"] = owner_id;
-				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && 
-					 (!is_owned_by_me) && (gCacheName->getFullName(owner_id, strOwnerName)) )
-				{
-					sdQuery["owner"] = LLUUID::null;
-					sdQuery["owner_name"] = RlvStrings::getAnonym(strOwnerName);
-				}
+
+				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!is_owned_by_me) )
+					sdQuery["rlv_shownames"] = true;
 
 				const LLViewerRegion* pRegion = LLWorld::getInstance()->getRegionFromPosAgent(chat.mPosAgent);
 				if (pRegion)
-				{
-					sdQuery["slurl"] = LLSLURL(pRegion->getName(), LLVector3d(chat.mPosAgent)).getSLURLString();
-				}
+					sdQuery["slurl"] = LLSLURL(pRegion->getName(), chat.mPosAgent).getLocationString();
 
-				strQuery = LLURI::mapToQueryString(sdQuery);
-				chat.mURL = LLSLURL("objectim", from_id, strQuery).getSLURLString();
+				chat.mURL = LLSLURL("objectim", from_id, LLURI::mapToQueryString(sdQuery)).getSLURLString();
 			}
 		}
 // [/RLVa:KB]
