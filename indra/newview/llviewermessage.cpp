@@ -1958,7 +1958,6 @@ void inventory_offer_handler(LLOfferInfo* info)
 		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(info->mFromID)) )
 		{
 			payload["rlv_shownames"] = TRUE;
-			args["NAME"] = RlvStrings::getAnonym(info->mFromName);
 			args["NAME_SLURL"] = LLSLURL("agent", info->mFromID, "rlvanonym").getSLURLString();
 		}
 // [/RLVa:KB]
@@ -2699,15 +2698,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				bucketp = (struct offer_agent_bucket_t*) &binary_bucket[0];
 				info->mType = (LLAssetType::EType) bucketp->asset_type;
 				info->mObjectID = bucketp->object_id;
-
-// [RLVa:KB] - Checked: 2009-07-08 (RLVa-1.0.0e)
-/*
-				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (gRlvHandler.isAgentNearby(from_id)) )
-				{
-					name = RlvStrings::getAnonym(name);
-				}
-*/
-// [/RLVa:KB]
 			}
 			else
 			{
