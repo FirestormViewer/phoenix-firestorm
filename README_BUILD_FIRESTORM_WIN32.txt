@@ -17,15 +17,14 @@ Open up cygwin and run the following commands one at a time
 	mkdir /cygdrive/c/code
 	cd /cygdrive/c/code
 	hg clone http://hg.phoenixviewer.com/phoenix-firestorm-lpgl
-	cd phoenix-firestorm-lgpl
 
 Make sure to copy fmod.dll into both your indra/ folder and also libraries/i686-win32/Release and libraries/RelWithDebInfo
 
-Open up cygwin and navigate to your code directory. Example:
-	cd /cygdrive/c/my/path/to/phoenix-firestorm
-
 COMMAND LINE BUILDS
 ===================
+
+Open up cygwin and navigate to your code directory. Example:
+        cd /cygdrive/c/my/path/to/phoenix-firestorm-lgpl
 
 Execute the command to build firestorm in the cygwin window:
 
@@ -41,7 +40,8 @@ A log for the build will be placed in logs/build_firestorm_windows.log
 VISUAL STUDIO BUILDS
 ====================
 
-
+0. Open up a regular CMD.exe command window. Navigate to your downloaded source code.
+1. Run the command "develop.py -G vc80 -t Release configure -DLL_TESTS:BOOL=OFF"
 1. Launch Visual Studio and open up <your downloaded phoenix code>\indra\build-vc80\Secondlife.sln
 2. Set the build type to Release
 3. Select the "firestorm-bin" target
