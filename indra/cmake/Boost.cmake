@@ -16,27 +16,30 @@ else (STANDALONE)
 
   if (WINDOWS)
     set(BOOST_VERSION 1_39)
-    if (MSVC71)
-      set(BOOST_PROGRAM_OPTIONS_LIBRARY 
-          optimized libboost_program_options-vc71-mt-s-${BOOST_VERSION}
-          debug libboost_program_options-vc71-mt-sgd-${BOOST_VERSION})
-      set(BOOST_REGEX_LIBRARY
-          optimized libboost_regex-vc71-mt-s-${BOOST_VERSION}
-          debug libboost_regex-vc71-mt-sgd-${BOOST_VERSION})
-      set(BOOST_SIGNALS_LIBRARY 
-          optimized libboost_signals-vc71-mt-s-${BOOST_VERSION}
-          debug libboost_signals-vc71-mt-sgd-${BOOST_VERSION})
-    else (MSVC71)
-      set(BOOST_PROGRAM_OPTIONS_LIBRARY 
-          optimized libboost_program_options-vc80-mt-${BOOST_VERSION}
-          debug libboost_program_options-vc80-mt-gd-${BOOST_VERSION})
-      set(BOOST_REGEX_LIBRARY
-          optimized libboost_regex-vc80-mt-${BOOST_VERSION}
-          debug libboost_regex-vc80-mt-gd-${BOOST_VERSION})
-      set(BOOST_SIGNALS_LIBRARY 
-          optimized libboost_signals-vc80-mt-${BOOST_VERSION}
-          debug libboost_signals-vc80-mt-gd-${BOOST_VERSION})
-    endif (MSVC71)
+   
+	# SNOW-788
+	# 00-Common.cmake alreay sets MSVC_SUFFIX to be correct for the VS we are using eg VC71, VC80, VC90 etc
+	# The precompiled boost libs for VC71 use a different suffix to VS80 and VS90
+	# This code should ensure the cmake rules are valid for any VS being used in future as long as the approprate
+	# boost libs are avaiable - RC.
+	
+	if (MSVC71)
+	    set(BOOST_OPTIM_SUFFIX mt-s)
+	    set(BOOST_DEBUG_SUFFIX mt-sgd)
+	else (MSVC71)
+	    set(BOOST_OPTIM_SUFFIX mt)
+	    set(BOOST_DEBUG_SUFFIX mt-gd)
+	endif (MSVC71)
+		
+    set(BOOST_PROGRAM_OPTIONS_LIBRARY 
+          optimized libboost_program_options-vc${MSVC_SUFFIX}-${BOOST_OPTIM_SUFFIX}-${BOOST_VERSION}
+          debug libboost_program_options-vc${MSVC_SUFFIX}-${BOOST_DEBUG_SUFFIX}-${BOOST_VERSION})
+    set(BOOST_REGEX_LIBRARY
+          optimized libboost_regex-vc${MSVC_SUFFIX}-${BOOST_OPTIM_SUFFIX}-${BOOST_VERSION}
+          debug libboost_regex-vc${MSVC_SUFFIX}-${BOOST_DEBUG_SUFFIX}-${BOOST_VERSION})
+    set(BOOST_SIGNALS_LIBRARY 
+          optimized libboost_signals-vc${MSVC_SUFFIX}-${BOOST_OPTIM_SUFFIX}-${BOOST_VERSION}
+          debug libboost_signals-vc${MSVC_SUFFIX}-${BOOST_DEBUG_SUFFIX}-${BOOST_VERSION})
   elseif (DARWIN)
     set(BOOST_PROGRAM_OPTIONS_LIBRARY boost_program_options-xgcc40-mt)
     set(BOOST_REGEX_LIBRARY boost_regex-xgcc40-mt)
