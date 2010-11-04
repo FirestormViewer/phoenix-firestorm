@@ -1538,7 +1538,12 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 		// MUTE falls through to decline
 	case IOR_DECLINE:
 		{
-			log_message = LLTrans::getString("InvOfferYouDecline") + " " + mDesc + " " + LLTrans::getString("InvOfferFrom") + " " + mFromName +".";
+			{
+				LLStringUtil::format_map_t log_message_args;
+				log_message_args["DESC"] = mDesc;
+				log_message_args["NAME"] = mFromName;
+				log_message = LLTrans::getString("InvOfferDecline", log_message_args);
+			}
 			chat.mText = log_message;
 			if( LLMuteList::getInstance()->isMuted(mFromID ) && ! LLMuteList::getInstance()->isLinden(mFromName) )  // muting for SL-42269
 			{
@@ -1781,18 +1786,21 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 			msg->addBinaryDataFast(_PREHASH_BinaryBucket, EMPTY_BINARY_BUCKET, EMPTY_BINARY_BUCKET_SIZE);
 			// send the message
 			msg->sendReliable(mHost);
-			
-// [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1e) | Added: RLVa-1.2.1e
-			if ( (rlv_handler_t::isEnabled()) && 
-				 (IM_TASK_INVENTORY_OFFERED == mIM) && (LLAssetType::AT_CATEGORY == mType) && (mDesc.find(RLV_PUTINV_PREFIX) == 1) )
 			{
-				std::string::size_type idxToken = mDesc.find("'  ( http://");
-				if (std::string::npos != idxToken)
-					RlvBehaviourNotifyHandler::instance().sendNotification("declined inv_offer " + mDesc.substr(1, idxToken - 1));
-			}
+// [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1e) | Added: RLVa-1.2.1e
+				if ( (rlv_handler_t::isEnabled()) && 
+				 (IM_TASK_INVENTORY_OFFERED == mIM) && (LLAssetType::AT_CATEGORY == mType) && (mDesc.find(RLV_PUTINV_PREFIX) == 1) )
+				{
+					std::string::size_type idxToken = mDesc.find("'  ( http://");
+					if (std::string::npos != idxToken)
+						RlvBehaviourNotifyHandler::instance().sendNotification("declined inv_offer " + mDesc.substr(1, idxToken - 1));
+				}
 // [/RLVa:KB]
-
-			log_message = LLTrans::getString("InvOfferYouDecline") + " " + mDesc + " " + LLTrans::getString("InvOfferFrom") + " " + mFromName +".";
+                                LLStringUtil::format_map_t log_message_args;
+                                log_message_args["DESC"] = mDesc;
+                                log_message_args["NAME"] = mFromName;
+                                log_message = LLTrans::getString("InvOfferDecline", log_message_args);
+			}
 			LLSD args;
 			args["MESSAGE"] = log_message;
 			LLNotificationsUtil::add("SystemMessage", args);

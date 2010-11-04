@@ -31,6 +31,7 @@
 
 #include "llchatmsgbox.h"
 #include "llavatariconctrl.h"
+#include "llcommandhandler.h"
 #include "llfloaterreg.h"
 #include "lllocalcliprect.h"
 #include "lltrans.h"
@@ -47,6 +48,40 @@
 static const S32 msg_left_offset = 10;
 static const S32 msg_right_offset = 10;
 static const S32 msg_height_pad = 5;
+
+//*******************************************************************************************************************
+// LLObjectHandler
+//*******************************************************************************************************************
+
+// handle secondlife:///app/object/<ID>/inspect SLURLs
+class LLObjectHandler : public LLCommandHandler
+{
+public:
+	LLObjectHandler() : LLCommandHandler("object", UNTRUSTED_BLOCK) { }
+
+	bool handle(const LLSD& params, const LLSD& query_map, LLMediaCtrl* web)
+	{
+		if (params.size() < 2) return false;
+
+		LLUUID object_id;
+		if (!object_id.set(params[0], FALSE))
+		{
+			return false;
+		}
+
+		const std::string verb = params[1].asString();
+
+		if (verb == "inspect")
+		{
+			LLFloaterReg::showInstance("inspect_object", LLSD().with("object_id", object_id));
+			return true;
+		}
+
+		return false;
+	}
+};
+
+LLObjectHandler gObjectHandler;
 
 //*******************************************************************************************************************
 //LLNearbyChatToastPanel
@@ -177,17 +212,30 @@ void LLNearbyChatToastPanel::init(LLSD& notification)
 	{
 		std::string str_sender;
 
-		str_sender = "<nolink>"; // disable parsing URLs in object names (STORM-358)
-		str_sender += fromName;
-		str_sender += "</nolink>";
+		str_sender = fromName;
 
 		str_sender+=" ";
 
-		//append user name
+		//append sender name
+		if (mSourceType == CHAT_SOURCE_AGENT || mSourceType == CHAT_SOURCE_OBJECT)
 		{
 			LLStyle::Params style_params_name;
 
 			LLColor4 userNameColor = LLUIColorTable::instance().getColor("ChatToastAgentNameColor");
+			std::string href;
+
+			if (mSourceType == CHAT_SOURCE_AGENT)
+			{
+				//href = LLSLURL("agent", mFromID, "about").getSLURLString();
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Added: RLVa-1.2.0d | Adjusted 11/3/2010 AO
+				if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+                                	href = LLSLURL("agent",mFromID,"about").getSLURLString();
+// [/RLVa:KB]
+			}
+			else
+			{
+				href = LLSLURL("object", mFromID, "inspect").getSLURLString();
+			}
 
 			style_params_name.color(userNameColor);
 
@@ -196,14 +244,15 @@ void LLNearbyChatToastPanel::init(LLSD& notification)
 			style_params_name.font.name(font_name);
 			style_params_name.font.size(font_style_size);
 
-//			style_params_name.link_href = LLSLURL("agent",mFromID,"about").getSLURLString();
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-			if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-				style_params_name.link_href = LLSLURL("agent",mFromID,"about").getSLURLString();
-// [/RLVa:KB]
+			style_params_name.link_href = href;
+			style_params_name.is_link = true;
 
 			msg_text->appendText(str_sender, FALSE, style_params_name);
 
+		}
+		else
+		{
+			msg_text->appendText(str_sender, false);
 		}
 	}
 
