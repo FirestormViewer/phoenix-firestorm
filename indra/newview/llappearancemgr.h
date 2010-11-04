@@ -51,8 +51,16 @@ public:
 	typedef std::vector<LLInventoryModel::item_array_t> wearables_by_type_t;
 
 	void updateAppearanceFromCOF(bool update_base_outfit_ordering = false);
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-02 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+	void updateAppearanceFromInitialWearables(LLInventoryModel::item_array_t& initial_items);
+// [/SL:KB]
 	bool needToSaveCOF();
 	void updateCOF(const LLUUID& category, bool append = false);
+// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+	void updateCOF(LLInventoryModel::item_array_t& body_items_new, LLInventoryModel::item_array_t& wear_items_new,
+				   LLInventoryModel::item_array_t& obj_items_new, LLInventoryModel::item_array_t& gest_items_new,
+				   bool append = false, const LLUUID& idOutfit = LLUUID::null);
+// [/RLVa:KB]
 	void wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append);
 	void wearInventoryCategoryOnAvatar(LLInventoryCategory* category, bool append);
 	void wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append);
@@ -205,6 +213,10 @@ private:
 
 	void setOutfitLocked(bool locked);
 
+// [SL:KB] - Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+	void syncCOF(const LLInventoryModel::item_array_t& items, LLAssetType::EType type, LLPointer<LLInventoryCallback> cb);
+// [/SL:KB]
+
 	bool mAttachmentInvLinkEnabled;
 	bool mOutfitIsDirty;
 	bool mIsInUpdateAppearanceFromCOF; // to detect recursive calls.
@@ -216,6 +228,14 @@ private:
 	bool mOutfitLocked;
 
 	std::auto_ptr<LLOutfitUnLockTimer> mUnlockOutfitTimer;
+
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.2.0a) | Modified: Catznip-2.1.2e
+public:
+	void linkPendingAttachments();
+	void onRegisterAttachmentComplete(const LLUUID& idItem);
+private:
+	uuid_vec_t mPendingAttachLinks;
+// [/SL:KB]
 
 	//////////////////////////////////////////////////////////////////////////////////
 	// Item-specific convenience functions 
@@ -243,6 +263,19 @@ private:
 	bool mUpdateBaseOrder;
 };
 
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
+class LLRegisterAttachmentCallback : public LLInventoryCallback
+{
+public:
+	LLRegisterAttachmentCallback() {}
+	/*virtual*/ ~LLRegisterAttachmentCallback() {}
+
+	/*virtual*/ void fire(const LLUUID& idItem)
+	{
+		LLAppearanceMgr::instance().onRegisterAttachmentComplete(idItem);
+	}
+};
+// [/SL:KB]
 
 #define SUPPORT_ENSEMBLES 0
 
