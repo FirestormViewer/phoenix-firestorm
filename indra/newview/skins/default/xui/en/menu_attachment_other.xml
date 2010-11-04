@@ -9,9 +9,6 @@
         <menu_item_call.on_click
          function="ShowAgentProfile"
          parameter="hit object" />
-        <menu_item_call.on_enable
-         function="RLV.EnableIfNot"
-         parameter="shownames" />
     </menu_item_call>
    <menu_item_call
      enabled="false"
@@ -27,9 +24,6 @@
      name="Send IM...">
         <menu_item_call.on_click
          function="Avatar.SendIM" />
-        <menu_item_call.on_enable
-         function="RLV.EnableIfNot"
-         parameter="shownames" />
     </menu_item_call>
     <menu_item_call
      label="Call"
@@ -42,11 +36,8 @@
       <menu_item_call
          label="Invite to Group"
          name="Invite...">
-        <menu_item_call.on_click
+      <menu_item_call.on_click
          function="Avatar.InviteToGroup" />
-        <menu_item_call.on_enable
-         function="RLV.EnableIfNot"
-         parameter="shownames" />
       </menu_item_call>
    <menu_item_separator />
     <menu_item_call

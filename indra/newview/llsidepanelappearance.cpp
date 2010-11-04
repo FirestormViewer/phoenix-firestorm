@@ -528,15 +528,3 @@ void LLSidepanelAppearance::updateScrollingPanelList()
 		mEditWearable->updateScrollingPanelList();
 	}
 }
-
-// [RLVa:KB] - Checked: 2010-09-16 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
-bool LLSidepanelAppearance::isOutfitEditPanelVisible() const
-{
-	return (mOutfitEdit) && (mOutfitEdit->getVisible());
-}
-
-bool LLSidepanelAppearance::isWearableEditPanelVisible() const
-{
-	return (mEditWearable) && (mEditWearable->getVisible());
-}
-// [/RLVa:KB]

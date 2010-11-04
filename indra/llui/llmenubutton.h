@@ -29,7 +29,7 @@
 
 #include "llbutton.h"
 
-class LLToggleableMenu;
+class LLMenuGL;
 
 class LLMenuButton
 : public LLButton
@@ -42,41 +42,22 @@ public:
 		Optional<std::string>	menu_filename;
 	
 		Params();
-	};
-
-	typedef enum e_menu_position
-	{
-		MP_TOP_LEFT,
-		MP_BOTTOM_LEFT
-	} EMenuPosition;
+	};	
 	
-	boost::signals2::connection setMouseDownCallback( const mouse_signal_t::slot_type& cb );
-
+	void toggleMenu();
+	/*virtual*/ void draw();
 	/*virtual*/ BOOL handleMouseDown(S32 x, S32 y, MASK mask);
 	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask );
-
 	void hideMenu();
-
-	LLToggleableMenu* getMenu();
-	void setMenu(LLToggleableMenu* menu, EMenuPosition position = MP_TOP_LEFT);
-
-	void setMenuPosition(EMenuPosition position) { mMenuPosition = position; }
+	LLMenuGL* getMenu() { return mMenu; }
 
 protected:
 	friend class LLUICtrlFactory;
 	LLMenuButton(const Params&);
 
-	void toggleMenu();
-	void updateMenuOrigin();
-
-	void onMenuVisibilityChange(const LLSD& param);
-
 private:
-	LLHandle<LLView>		mMenuHandle;
-	bool					mIsMenuShown;
-	EMenuPosition			mMenuPosition;
-	S32						mX;
-	S32						mY;
+	LLMenuGL*	mMenu;
+	bool mMenuVisibleLastFrame;
 };
 
 

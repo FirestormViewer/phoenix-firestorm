@@ -50,9 +50,6 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "lltooltip.h"
-// [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 //
 // Constants
@@ -713,14 +710,10 @@ LLPanelStandStopFlying* LLPanelStandStopFlying::getStandStopFlyingPanel()
 
 void LLPanelStandStopFlying::onStandButtonClick()
 {
-// [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
-	if ( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canStand()) )
-	{
-		LLFirstUse::sit(false);
-		LLSelectMgr::getInstance()->deselectAllForStandingUp();
-		gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
-	}
-// [/RLVa:KB]
+	LLFirstUse::sit(false);
+
+	LLSelectMgr::getInstance()->deselectAllForStandingUp();
+	gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
 
 	setFocus(FALSE); // EXT-482
 	mStandButton->setVisible(FALSE); // force visibility changing to avoid seeing Stand & Move buttons at once.

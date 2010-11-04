@@ -972,7 +972,7 @@ std::string LLUrlEntryWorldMap::getLocation(const std::string &url) const
 //
 LLUrlEntryNoLink::LLUrlEntryNoLink()
 {
-	mPattern = boost::regex("<nolink>.*</nolink>",
+	mPattern = boost::regex("<nolink>[^<]*</nolink>",
 							boost::regex::perl|boost::regex::icase);
 }
 
@@ -989,8 +989,7 @@ std::string LLUrlEntryNoLink::getLabel(const std::string &url, const LLUrlLabelC
 
 LLStyle::Params LLUrlEntryNoLink::getStyle() const 
 { 
-	// Don't render as URL (i.e. no context menu or hand cursor).
-	return LLStyle::Params().is_link(false);
+	return LLStyle::Params(); 
 }
 
 

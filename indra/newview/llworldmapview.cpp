@@ -55,9 +55,6 @@
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
 #include "lltrans.h"
-// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 #include "llglheaders.h"
 
@@ -883,10 +880,8 @@ void LLWorldMapView::drawFrustum()
 	F32 half_width_meters = far_clip_meters * tan( horiz_fov / 2 );
 	F32 half_width_pixels = half_width_meters * meters_to_pixels;
 	
-	// Compute the frustum coordinates. Take the UI scale into account.
-	F32 ui_scale_factor = gSavedSettings.getF32("UIScaleFactor");
-	F32 ctr_x = (getLocalRect().getWidth() * 0.5f + sPanX)  * ui_scale_factor;
-	F32 ctr_y = (getLocalRect().getHeight() * 0.5f + sPanY) * ui_scale_factor;
+	F32 ctr_x = getLocalRect().getWidth() * 0.5f + sPanX;
+	F32 ctr_y = getLocalRect().getHeight() * 0.5f + sPanY;
 
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
@@ -997,13 +992,7 @@ void LLWorldMapView::drawTracking(const LLVector3d& pos_global, const LLColor4& 
 	text_x = llclamp(text_x, half_text_width + TEXT_PADDING, getRect().getWidth() - half_text_width - TEXT_PADDING);
 	text_y = llclamp(text_y + vert_offset, TEXT_PADDING + vert_offset, getRect().getHeight() - llround(font->getLineHeight()) - TEXT_PADDING - vert_offset);
 
-//	if (label != "")
-// [RLVa:KB] - Checked: 2009-07-04 (RLVa-1.0.0a) | Added: RLVa-1.0.0a
 	if (label != "")
-/*
-	if ( (label != "") && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) )
-*/
-// [/RLVa:KB]
 	{
 		font->renderUTF8(
 			label, 0,
@@ -1063,12 +1052,7 @@ BOOL LLWorldMapView::handleToolTip( S32 x, S32 y, MASK mask )
 	{
 		LLViewerRegion *region = gAgent.getRegion();
 
-// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
-		std::string message = llformat("%s (%s)", 
-			(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? info->getName().c_str() : RlvStrings::getString(RLV_STRING_HIDDEN_REGION).c_str(), 
-			info->getAccessString().c_str());
-// [/RLVa:KB]
-//		std::string message = llformat("%s (%s)", info->getName().c_str(), info->getAccessString().c_str());
+		std::string message = llformat("%s (%s)", info->getName().c_str(), info->getAccessString().c_str());
 
 		if (!info->isDown())
 		{

@@ -1622,7 +1622,7 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 	style_params.fillFrom(getDefaultStyleParams());
 
 	S32 part = (S32)LLTextParser::WHOLE;
-	if (mParseHTML && !style_params.is_link) // Don't search for URLs inside a link segment (STORM-358).
+	if(mParseHTML)
 	{
 		S32 start=0,end=0;
 		LLUrlMatch match;
@@ -2214,39 +2214,19 @@ bool LLTextBase::scrolledToEnd()
 	return mScroller->isAtBottom();
 }
 
+
 bool LLTextBase::setCursor(S32 row, S32 column)
 {
-	if (row < 0 || column < 0) return false;
-
-	S32 n_lines = mLineInfoList.size();
-	for (S32 line = row; line < n_lines; ++line)
+	if (0 <= row && row < (S32)mLineInfoList.size())
 	{
-		const line_info& li = mLineInfoList[line];
-
-		if (li.mLineNum < row)
-		{
-			continue;
-		}
-		else if (li.mLineNum > row)
-		{
-			break; // invalid column specified
-		}
-
-		// Found the given row.
-		S32 line_length = li.mDocIndexEnd - li.mDocIndexStart;;
-		if (column >= line_length)
-		{
-			column -= line_length;
-			continue;
-		}
-
-		// Found the given column.
+		S32 doc_pos = mLineInfoList[row].mDocIndexStart;
+		column = llclamp(column, 0, mLineInfoList[row].mDocIndexEnd - mLineInfoList[row].mDocIndexStart - 1);
+		doc_pos += column;
 		updateCursorXPos();
-		S32 doc_pos = li.mDocIndexStart + column;
+
 		return setCursorPos(doc_pos);
 	}
-
-	return false; // invalid row or column specified
+	return false;
 }
 
 

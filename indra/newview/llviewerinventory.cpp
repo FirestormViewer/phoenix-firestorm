@@ -941,13 +941,9 @@ void ModifiedCOFCallback::fire(const LLUUID& inv_item)
 	}
 }
 
-//RezAttachmentCallback::RezAttachmentCallback(LLViewerJointAttachment *attachmentp)
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.2.0a) | Added: Catznip-2.2.0a
-RezAttachmentCallback::RezAttachmentCallback(LLViewerJointAttachment *attachmentp, bool replace)
-	: mAttach(attachmentp), mReplace(replace)
-// [/SL:KB]
+RezAttachmentCallback::RezAttachmentCallback(LLViewerJointAttachment *attachmentp)
 {
-//	mAttach = attachmentp;
+	mAttach = attachmentp;
 }
 RezAttachmentCallback::~RezAttachmentCallback()
 {
@@ -961,10 +957,7 @@ void RezAttachmentCallback::fire(const LLUUID& inv_item)
 	LLViewerInventoryItem *item = gInventory.getItem(inv_item);
 	if (item)
 	{
-//		rez_attachment(item, mAttach);
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.2.0a) | Added: Catznip-2.2.0a
-		rez_attachment(item, mAttach, mReplace);
-// [/SL:KB]
+		rez_attachment(item, mAttach);
 	}
 }
 

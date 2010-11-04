@@ -36,7 +36,6 @@ class LLAvatarList;
 class LLAvatarName;
 class LLFilterEditor;
 class LLGroupList;
-class LLMenuButton;
 class LLTabContainer;
 
 class LLPanelPeople 
@@ -54,10 +53,6 @@ public:
 	// Implements LLVoiceClientStatusObserver::onChange() to enable call buttons
 	// when voice is available
 	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
-
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-	LLAvatarList* getNearbyList() { return mNearbyList; }
-// [/RLVa:KB]
 
 	// internals
 	class Updater;
@@ -106,6 +101,10 @@ private:
 	void					onShareButtonClicked();
 	void					onMoreButtonClicked();
 	void					onActivateButtonClicked();
+	void					onRecentViewSortButtonClicked();
+	void					onNearbyViewSortButtonClicked();
+	void					onFriendsViewSortButtonClicked();
+	void					onGroupsViewSortButtonClicked();
 	void					onAvatarListDoubleClicked(LLUICtrl* ctrl);
 	void					onAvatarListCommitted(LLAvatarList* list);
 	void					onGroupPlusButtonClicked();
@@ -156,11 +155,6 @@ private:
 	Updater*				mFriendListUpdater;
 	Updater*				mNearbyListUpdater;
 	Updater*				mRecentListUpdater;
-
-	LLMenuButton*			mNearbyGearButton;
-	LLMenuButton*			mFriendsGearButton;
-	LLMenuButton*			mGroupsGearButton;
-	LLMenuButton*			mRecentGearButton;
 
 	std::string				mFilterSubString;
 	std::string				mFilterSubStringOrig;

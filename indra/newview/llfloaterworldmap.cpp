@@ -75,10 +75,6 @@
 
 #include "llwindow.h"			// copyTextToClipboard()
 
-// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a)
-#include "rlvhandler.h"
-// [/RLVa:KB]
-
 //---------------------------------------------------------------------------
 // Constants
 //---------------------------------------------------------------------------
@@ -437,10 +433,6 @@ void LLFloaterWorldMap::draw()
 //	getChildView("Clear")->setEnabled((BOOL)tracking_status);
 	getChildView("Show Destination")->setEnabled((BOOL)tracking_status || LLWorldMap::getInstance()->isTracking());
 	getChildView("copy_slurl")->setEnabled((mSLURL.isValid()) );
-// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
-	childSetEnabled("Go Home", 
-		(!rlv_handler_t::isEnabled()) || !(gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)));
-// [/RLVa:KB]
 
 	setMouseOpaque(TRUE);
 	getDragHandle()->setMouseOpaque(TRUE);
@@ -643,7 +635,7 @@ void LLFloaterWorldMap::updateTeleportCoordsDisplay( const LLVector3d& pos )
 	// convert global specified position to a local one
 	F32 region_local_x = (F32)fmod( pos.mdV[VX], (F64)REGION_WIDTH_METERS );
 	F32 region_local_y = (F32)fmod( pos.mdV[VY], (F64)REGION_WIDTH_METERS );
-	F32 region_local_z = (F32)llclamp( pos.mdV[VZ], 0.0, (F64)REGION_HEIGHT_METERS );
+	F32 region_local_z = (F32)fmod( pos.mdV[VZ], (F64)REGION_WIDTH_METERS );
 
 	// write in the values
 	childSetValue("teleport_coordinate_x", region_local_x );
@@ -723,16 +715,6 @@ void LLFloaterWorldMap::updateLocation()
 		{	// Empty SLURL will disable the "Copy SLURL to clipboard" button
 			mSLURL = LLSLURL();
 		}
-
-// [RLVa:KB] - Checked: 2009-07-04 (RLVa-1.0.0a)
-/*
-		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
-		{
-			childSetValue("location", RlvStrings::getString(RLV_STRING_HIDDEN_REGION));
-			mSLURL.clear();
-		}
-*/
-// [/RLVa:KB]
 	}
 }
 

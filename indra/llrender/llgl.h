@@ -92,7 +92,6 @@ public:
 	BOOL mHasOcclusionQuery;
 	BOOL mHasPointParameters;
 	BOOL mHasDrawBuffers;
-	BOOL mHasDepthClamp;
 	BOOL mHasTextureRectangle;
 
 	// Other extensions.
@@ -316,11 +315,11 @@ private:
   leaves this class.
   Does not stack.
 */
-class LLGLSquashToFarClip
+class LLGLClampToFarClip
 {
 public:
-	LLGLSquashToFarClip(glh::matrix4f projection);
-	~LLGLSquashToFarClip();
+	LLGLClampToFarClip(glh::matrix4f projection);
+	~LLGLClampToFarClip();
 };
 
 /*

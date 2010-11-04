@@ -37,10 +37,6 @@
 #include "llviewermedia.h"
 #include "llviewermediafocus.h"
 #include "llviewerobjectlist.h"	// to select the requested object
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0c)
-#include "rlvhandler.h"
-#include "lltoolpie.h"
-// [/RLVa:KB]
 
 // Linden libraries
 #include "llbutton.h"			// setLabel(), not virtual!
@@ -51,7 +47,6 @@
 #include "llsafehandle.h"
 #include "llsidetray.h"
 #include "lltextbox.h"			// for description truncation
-#include "lltoggleablemenu.h"
 #include "lltrans.h"
 #include "llui.h"				// positionViewNearMouse()
 #include "lluictrl.h"
@@ -382,15 +377,6 @@ void LLInspectObject::updateSitLabel(LLSelectNode* nodep)
 	{
 		sit_btn->setLabel( getString("Sit") );
 	}
-
-// [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
-	// RELEASE-RLVa: [SL-2.0.0] Make sure we're examining the same object that handle_sit_or_stand() will request a sit for
-	if (rlv_handler_t::isEnabled())
-	{
-		const LLPickInfo& pick = LLToolPie::getInstance()->getPick();
-		sit_btn->setEnabled( (pick.mObjectID.notNull()) && (gRlvHandler.canSit(pick.getObject(), pick.mObjectOffset)) );
-	}
-// [/RLVa:KB]
 }
 
 void LLInspectObject::updateTouchLabel(LLSelectNode* nodep)
@@ -486,26 +472,10 @@ void LLInspectObject::updateCreator(LLSelectNode* nodep)
 		// a clickable link		
 		// Objects cannot be created by a group, so use agent URL format
 		LLUUID creator_id = nodep->mPermissions->getCreator();
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
-		// Only anonimize the creator if they're also the owner or if they're a nearby avie
-		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) &&
-			 ((nodep->mPermissions->getOwner() == creator_id) || (RlvUtil::isNearbyAgent(creator_id))) )
-		{
-			// TODO-RLVa: [RLVa-1.2.2] We need to put a callback here in case the name hasn't previously resolved
-			std::string strFullName;
-			args["[CREATOR]"] = (gCacheName->getFullName(creator_id, strFullName)) ? RlvStrings::getAnonym(strFullName) 
-			                                                                       : LLTrans::getString("Unknown");
-		}
-		else
-		{
-// [/RLVa:KB]
-			std::string creator_url = 
-				LLSLURL("agent", creator_id, "about").getSLURLString();
-			args["[CREATOR]"] = creator_url;
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
-		}
-// [/RLVa:KB]
-
+		std::string creator_url =
+			LLSLURL("agent", creator_id, "about").getSLURLString();
+		args["[CREATOR]"] = creator_url;
+				
 		// created by one user but owned by another
 		std::string owner_url;
 		LLUUID owner_id;
@@ -518,21 +488,7 @@ void LLInspectObject::updateCreator(LLSelectNode* nodep)
 		else
 		{
 			owner_id = nodep->mPermissions->getOwner();
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
-			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-			{
-				// TODO-RLVa: [RLVa-1.2.2] We need to put a callback here in case the name hasn't previously resolved
-				std::string strFullName;
-				owner_url = (gCacheName->getFullName(owner_id, strFullName)) ? RlvStrings::getAnonym(strFullName)
-				                                                             : LLTrans::getString("Unknown");
-			}
-			else
-			{
-// [/RLVa:KB]
-				owner_url = LLSLURL("agent", owner_id, "about").getSLURLString();
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
-			}
-// [/RLVa:KB]
+			owner_url =	LLSLURL("agent", owner_id, "about").getSLURLString();
 		}
 		args["[OWNER]"] = owner_url;
 		
@@ -612,7 +568,7 @@ void LLInspectObject::updateSecureBrowsing()
 // if the gear menu is not open
 void LLInspectObject::onMouseLeave(S32 x, S32 y, MASK mask)
 {
-	LLToggleableMenu* gear_menu = getChild<LLMenuButton>("gear_btn")->getMenu();
+	LLMenuGL* gear_menu = getChild<LLMenuButton>("gear_btn")->getMenu();
 	if ( gear_menu && gear_menu->getVisible() )
 	{
 		return;

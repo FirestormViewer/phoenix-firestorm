@@ -38,13 +38,10 @@
 #include "llavatarnamecache.h"
 #include "llavatariconctrl.h"
 #include "lloutputmonitorctrl.h"
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 bool LLAvatarListItem::sStaticInitialized = false;
 S32 LLAvatarListItem::sLeftPadding = 0;
-S32 LLAvatarListItem::sNameRightPadding = 0;
+S32 LLAvatarListItem::sRightNamePadding = 0;
 S32 LLAvatarListItem::sChildrenWidths[LLAvatarListItem::ALIC_COUNT];
 
 static LLWidgetNameRegistry::StaticRegistrar sRegisterAvatarListItemParams(&typeid(LLAvatarListItem::Params), "avatar_list_item");
@@ -55,8 +52,7 @@ LLAvatarListItem::Params::Params()
 	voice_call_joined_style("voice_call_joined_style"),
 	voice_call_left_style("voice_call_left_style"),
 	online_style("online_style"),
-	offline_style("offline_style"),
-	name_right_pad("name_right_pad", 0)
+	offline_style("offline_style")
 {};
 
 
@@ -75,11 +71,8 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	mOnlineStatus(E_UNKNOWN),
 	mShowInfoBtn(true),
 	mShowProfileBtn(true),
-	mHovered(false),
-//	mShowPermissions(false)
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-	mRlvCheckShowNames(false)
-// [/RLVa:KB]
+	mShowPermissions(false),
+	mHovered(false)
 {
 	if (not_from_ui_factory)
 	{
@@ -126,9 +119,6 @@ BOOL  LLAvatarListItem::postBuild()
 		// so that we can hide and show them again later.
 		initChildrenWidths(this);
 
-		// Right padding between avatar name text box and nearest visible child.
-		sNameRightPadding = LLUICtrlFactory::getDefaultParams<LLAvatarListItem>().name_right_pad;
-
 		sStaticInitialized = true;
 	}
 
@@ -148,12 +138,8 @@ S32 LLAvatarListItem::notifyParent(const LLSD& info)
 void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( true);
-//	mInfoBtn->setVisible(mShowInfoBtn);
-//	mProfileBtn->setVisible(mShowProfileBtn);
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
-	mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
-// [/RLVa:KB]
+	mInfoBtn->setVisible(mShowInfoBtn);
+	mProfileBtn->setVisible(mShowProfileBtn);
 
 	mHovered = true;
 	LLPanel::onMouseEnter(x, y, mask);
@@ -203,11 +189,7 @@ void LLAvatarListItem::setOnline(bool online)
 
 void LLAvatarListItem::setAvatarName(const std::string& name)
 {
-//	setNameInternal(name, mHighlihtSubstring);
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-	bool fRlvFilter = (mRlvCheckShowNames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
-	setNameInternal( (!fRlvFilter) ? name : RlvStrings::getAnonym(name), mHighlihtSubstring);
-// [/RLVa:KB]
+	setNameInternal(name, mHighlihtSubstring);
 }
 
 void LLAvatarListItem::setAvatarToolTip(const std::string& tooltip)
@@ -504,6 +486,7 @@ void LLAvatarListItem::initChildrenWidths(LLAvatarListItem* avatar_item)
 	S32 icon_width = avatar_item->mAvatarName->getRect().mLeft - avatar_item->mAvatarIcon->getRect().mLeft;
 
 	sLeftPadding = avatar_item->mAvatarIcon->getRect().mLeft;
+	sRightNamePadding = avatar_item->mLastInteractionTime->getRect().mLeft - avatar_item->mAvatarName->getRect().mRight;
 
 	S32 index = ALIC_COUNT;
 	sChildrenWidths[--index] = icon_width;
@@ -582,7 +565,7 @@ void LLAvatarListItem::updateChildren()
 
 	// apply paddings
 	name_new_width -= sLeftPadding;
-	name_new_width -= sNameRightPadding;
+	name_new_width -= sRightNamePadding;
 
 	name_view_rect.setLeftTopAndSize(
 		name_new_left,

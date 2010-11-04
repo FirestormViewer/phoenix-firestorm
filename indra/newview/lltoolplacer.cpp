@@ -43,9 +43,6 @@
 #include "llviewerwindow.h"
 #include "llworld.h"
 #include "llui.h"
-// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0a)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 //Headers added for functions moved from viewer.cpp
 #include "llvograss.h"
@@ -125,14 +122,6 @@ BOOL LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, 
 	{
 		return FALSE;
 	}
-
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-0.2.0f
-	// NOTE: don't use surface_pos_global since for prims it will be the center of the prim while we need center + offset
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) && (dist_vec_squared(gAgent.getPositionGlobal(), pick.mPosGlobal) > 1.5f * 1.5f) )
-	{
-		return FALSE;
-	}
-// [/RLVa:KB]
 
 	// Find the sim where the surface lives.
 	LLViewerRegion *regionp = LLWorld::getInstance()->getRegionFromPosGlobal(surface_pos_global);
@@ -251,10 +240,7 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 	{
 		flags |= FLAGS_USE_PHYSICS;
 	}
-//	if (create_selected)
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Added: RLVa-1.0.0b
-	if ( (create_selected) && (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) )
-// [/RLVa:KB]
+	if (create_selected)
 	{
 		flags |= FLAGS_CREATE_SELECTED;
 	}
@@ -512,13 +498,6 @@ BOOL LLToolPlacer::placeObject(S32 x, S32 y, MASK mask)
 {
 	BOOL added = TRUE;
 	
-// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
-	if ( (rlv_handler_t::isEnabled()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT))) )
-	{
-		return TRUE; // Callers seem to expect a "did you handle it?" so we return TRUE rather than FALSE
-	}
-// [/RLVa:KB]
-
 	if (gSavedSettings.getBOOL("CreateToolCopySelection"))
 	{
 		added = addDuplicate(x, y);

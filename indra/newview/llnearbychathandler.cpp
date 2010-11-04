@@ -42,10 +42,6 @@
 #include "llfloaterreg.h"//for LLFloaterReg::getTypedInstance
 #include "llviewerwindow.h"//for screen channel position
 
-// [RLVa:KB] - Checked: 2010-04-21 (RLVa-1.2.0f)
-#include "rlvhandler.h"
-// [/RLVa:KB]
-
 //add LLNearbyChatHandler to LLNotificationsUI namespace
 using namespace LLNotificationsUI;
 
@@ -68,18 +64,6 @@ public:
 	LLNearbyChatScreenChannel(const LLUUID& id):LLScreenChannelBase(id) 
 	{
 		mStopProcessing = false;
-
-		LLControlVariable* ctrl = gSavedSettings.getControl("NearbyToastLifeTime").get();
-		if (ctrl)
-		{
-			ctrl->getSignal()->connect(boost::bind(&LLNearbyChatScreenChannel::updateToastsLifetime, this));
-		}
-
-		ctrl = gSavedSettings.getControl("NearbyToastFadingTime").get();
-		if (ctrl)
-		{
-			ctrl->getSignal()->connect(boost::bind(&LLNearbyChatScreenChannel::updateToastFadingTime, this));
-		}
 	}
 
 	void addNotification	(LLSD& notification);
@@ -125,25 +109,12 @@ protected:
 		if (!toast) return;
 		LL_DEBUGS("NearbyChat") << "Pooling toast" << llendl;
 		toast->setVisible(FALSE);
-		toast->stopFading();
+		toast->stopTimer();
 		toast->setIsHidden(true);
-
-		// Nearby chat toasts that are hidden, not destroyed. They are collected to the toast pool, so that
-		// they can be used next time, this is done for performance. But if the toast lifetime was changed
-		// (from preferences floater (STORY-36)) while it was shown (at this moment toast isn't in the pool yet)
-		// changes don't take affect.
-		// So toast's lifetime should be updated each time it's added to the pool. Otherwise viewer would have
-		// to be restarted so that changes take effect.
-		toast->setLifetime(gSavedSettings.getS32("NearbyToastLifeTime"));
-		toast->setFadingTime(gSavedSettings.getS32("NearbyToastFadingTime"));
 		m_toast_pool.push_back(toast->getHandle());
 	}
 
 	void	createOverflowToast(S32 bottom, F32 timer);
-
-	void 	updateToastsLifetime();
-
-	void	updateToastFadingTime();
 
 	create_toast_panel_callback_t m_create_toast_panel_callback_t;
 
@@ -234,27 +205,6 @@ void LLNearbyChatScreenChannel::onToastFade(LLToast* toast)
 	arrangeToasts();
 }
 
-void LLNearbyChatScreenChannel::updateToastsLifetime()
-{
-	S32 seconds = gSavedSettings.getS32("NearbyToastLifeTime");
-	toast_list_t::iterator it;
-
-	for(it = m_toast_pool.begin(); it != m_toast_pool.end(); ++it)
-	{
-		(*it).get()->setLifetime(seconds);
-	}
-}
-
-void LLNearbyChatScreenChannel::updateToastFadingTime()
-{
-	S32 seconds = gSavedSettings.getS32("NearbyToastFadingTime");
-	toast_list_t::iterator it;
-
-	for(it = m_toast_pool.begin(); it != m_toast_pool.end(); ++it)
-	{
-		(*it).get()->setFadingTime(seconds);
-	}
-}
 
 bool	LLNearbyChatScreenChannel::createPoolToast()
 {
@@ -300,7 +250,7 @@ void LLNearbyChatScreenChannel::addNotification(LLSD& notification)
 			{
 				panel->addMessage(notification);
 				toast->reshapeToPanel();
-				toast->startFading();
+				toast->resetTimer();
 	  
 				arrangeToasts();
 				return;
@@ -345,7 +295,7 @@ void LLNearbyChatScreenChannel::addNotification(LLSD& notification)
 	panel->init(notification);
 
 	toast->reshapeToPanel();
-	toast->startFading();
+	toast->resetTimer();
 	
 	m_active_toasts.push_back(toast->getHandle());
 
@@ -375,9 +325,9 @@ void LLNearbyChatScreenChannel::arrangeToasts()
 
 int sort_toasts_predicate(LLHandle<LLToast> first, LLHandle<LLToast> second)
 {
-	F32 v1 = first.get()->getTimeLeftToLive();
-	F32 v2 = second.get()->getTimeLeftToLive();
-	return v1 > v2;
+	F32 v1 = first.get()->getTimer()->getEventTimer().getElapsedTimeF32();
+	F32 v2 = second.get()->getTimer()->getEventTimer().getElapsedTimeF32();
+	return v1 < v2;
 }
 
 void LLNearbyChatScreenChannel::showToastsBottom()
@@ -481,31 +431,6 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 
 	LLChat& tmp_chat = const_cast<LLChat&>(chat_msg);
 
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
-	if (rlv_handler_t::isEnabled())
-	{
-		// NOTE-RLVa: we can only filter the *message* here since most everything else will already be part of "args" as well
-		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) && (!tmp_chat.mRlvLocFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
-		{
-			RlvUtil::filterLocation(tmp_chat.mText);
-			tmp_chat.mRlvLocFiltered = TRUE;
-		}
-		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!tmp_chat.mRlvNamesFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
-		{
-			RlvUtil::filterNames(tmp_chat.mText);
-			tmp_chat.mRlvNamesFiltered = TRUE;
-		}
-	}
-
-	//	if(chat_msg.mSourceType == CHAT_SOURCE_AGENT && chat_msg.mFromID.notNull())
-	// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	if ( (chat_msg.mSourceType == CHAT_SOURCE_AGENT && chat_msg.mFromID.notNull()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
-		LLRecentPeople::instance().add(chat_msg.mFromID);
-		// [/RLVa:KB]
-	
-	
-// [/RLVa:KB]
-
 	LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
 	{
 		//sometimes its usefull to have no name at all...
@@ -592,10 +517,6 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 		notification["source"] = (S32)chat_msg.mSourceType;
 		notification["chat_type"] = (S32)chat_msg.mChatType;
 		notification["chat_style"] = (S32)chat_msg.mChatStyle;
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-		if (rlv_handler_t::isEnabled())
-			notification["show_icon_tooltip"] = !chat_msg.mRlvNamesFiltered;
-// [/RLVa:KB]
 		
 		std::string r_color_name = "White";
 		F32 r_color_alpha = 1.0f; 

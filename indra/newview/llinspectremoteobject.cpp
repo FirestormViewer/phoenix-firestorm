@@ -35,9 +35,6 @@
 #include "llui.h"
 #include "lluictrl.h"
 #include "llurlaction.h"
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 //////////////////////////////////////////////////////////////////////////////
 // LLInspectRemoteObject
@@ -115,12 +112,8 @@ void LLInspectRemoteObject::onOpen(const LLSD& data)
 	mSLurl      = data["slurl"].asString();
 
 	// work out the owner's name
-	//	mOwnerLegacyName = "";
-	//	if (gCacheName)
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	mOwnerLegacyName = (data.has("owner_name")) ? data["owner_name"].asString() : "";
-	if ( (gCacheName) && (mOwnerID.notNull()) )
-// [/RLVa:KB]
+	mOwnerLegacyName = "";
+	if (gCacheName)
 	{
 		gCacheName->get(mOwnerID, mGroupOwned,  // muting
 			boost::bind(&LLInspectRemoteObject::onNameCache, this, _1, _2, _3));
@@ -188,10 +181,7 @@ void LLInspectRemoteObject::update()
 			owner = LLSLURL("agent", mOwnerID, "about").getSLURLString();
 		}
 	}
-//	else
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	else if (owner.empty()) // If "objectim" was subject to @shownames then we passed an anonimized owner name so use that if available
-// [/RLVa:KB]
+	else
 	{
 		owner = LLTrans::getString("Unknown");
 	}
@@ -210,14 +200,6 @@ void LLInspectRemoteObject::update()
 
 	// disable the Block button if we don't have the owner ID
 	getChild<LLUICtrl>("block_btn")->setEnabled(! mOwnerID.isNull());
-
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	if ( (rlv_handler_t::isEnabled()) && (RlvStrings::getString(RLV_STRING_HIDDEN_REGION) == mSLurl) )
-	{
-		getChild<LLUICtrl>("object_slurl")->setValue(mSLurl);
-		getChild<LLUICtrl>("map_btn")->setEnabled(false);
-	}
-// [/RLVa:KB]
 }
 
 //////////////////////////////////////////////////////////////////////////////

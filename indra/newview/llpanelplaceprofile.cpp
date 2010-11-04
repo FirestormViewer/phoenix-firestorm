@@ -51,9 +51,6 @@
 #include "llviewercontrol.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
-// [RLVa:KB] - Checked: 2010-09-02 (RLVa-1.2.1b)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 static LLRegisterPanelClassWrapper<LLPanelPlaceProfile> t_place_profile("panel_place_profile");
 
@@ -549,10 +546,7 @@ void LLPanelPlaceProfile::displaySelectedParcelInfo(LLParcel* parcel,
 	mLastSelectedRegionID = region->getRegionID();
 	LLPanelPlaceInfo::processParcelInfo(parcel_data);
 
-//	mYouAreHerePanel->setVisible(is_current_parcel);
-// [RLVa:KB] - Checked: 2010-09-02 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
-	mYouAreHerePanel->setVisible(is_current_parcel && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)));
-// [/RLVa:KB]
+	mYouAreHerePanel->setVisible(is_current_parcel);
 	getChild<LLAccordionCtrlTab>("sales_tab")->setVisible(for_sale);
 }
 
@@ -619,9 +613,6 @@ void LLPanelPlaceProfile::updateYouAreHereBanner(void* userdata)
 		BOOL display_banner = gAgent.getRegion()->getRegionID() == self->mLastSelectedRegionID &&
 										LLAgentUI::checkAgentDistance(self->mPosRegion, radius);
 
-//		self->mYouAreHerePanel->setVisible(display_banner);
-// [RLVa:KB] - Checked: 2010-09-02 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
-		self->mYouAreHerePanel->setVisible(display_banner && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)));
-// [/RLVa:KB]
+		self->mYouAreHerePanel->setVisible(display_banner);
 	}
 }

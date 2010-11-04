@@ -42,9 +42,7 @@
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
 #include "llviewerobjectlist.h"
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b)
-#include "rlvhandler.h"
-// [/RLVa:KB]
+
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLItemPropertiesObserver
@@ -70,22 +68,10 @@ private:
 
 void LLItemPropertiesObserver::changed(U32 mask)
 {
-	const std::set<LLUUID>& mChangedItemIDs = gInventory.getChangedIDs();
-	std::set<LLUUID>::const_iterator it;
-
-	const LLUUID& object_id = mFloater->getObjectID();
-
-	for (it = mChangedItemIDs.begin(); it != mChangedItemIDs.end(); it++)
+	// if there's a change we're interested in.
+	if((mask & (LLInventoryObserver::LABEL | LLInventoryObserver::INTERNAL | LLInventoryObserver::REMOVE)) != 0)
 	{
-		// set dirty for 'item profile panel' only if changed item is the item for which 'item profile panel' is shown (STORM-288)
-		if (*it == object_id)
-		{
-			// if there's a change we're interested in.
-			if((mask & (LLInventoryObserver::LABEL | LLInventoryObserver::INTERNAL | LLInventoryObserver::REMOVE)) != 0)
-			{
-				mFloater->dirty();
-			}
-		}
+		mFloater->dirty();
 	}
 }
 
@@ -191,11 +177,6 @@ void LLSidepanelItemInfo::setObjectID(const LLUUID& object_id)
 void LLSidepanelItemInfo::setItemID(const LLUUID& item_id)
 {
 	mItemID = item_id;
-}
-
-const LLUUID& LLSidepanelItemInfo::getObjectID() const
-{
-	return mObjectID;
 }
 
 void LLSidepanelItemInfo::reset()
@@ -339,17 +320,7 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 			LLSLURL("agent", creator_id, "completename").getSLURLString();
 		getChildView("BtnCreator")->setEnabled(TRUE);
 		getChildView("LabelCreatorTitle")->setEnabled(TRUE);
-		getChildView("LabelCreatorName")->setEnabled(TRUE);
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Modified: RLVa-1.0.0e
-		// If the object creator matches the object owner we need to anonimize the creator field as well
-		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && 
-			( ((perm.isOwned()) && (!perm.isGroupOwned()) && (perm.getOwner() == item->getCreatorUUID()) ) ||
-			  (RlvUtil::isNearbyAgent(item->getCreatorUUID())) ) )
-		{
-			childSetEnabled("BtnCreator", FALSE);
-			name = RlvStrings::getAnonym(name);
-		}
-// [/RLVa:KB]
+		getChildView("LabelCreatorName")->setEnabled(FALSE);
 		getChild<LLUICtrl>("LabelCreatorName")->setValue(name);
 	}
 	else
@@ -374,15 +345,8 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 		{
 			LLUUID owner_id = perm.getOwner();
 			name = LLSLURL("agent", owner_id, "completename").getSLURLString();
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Modified: RLVa-1.0.0e
-			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-				name = RlvStrings::getAnonym(name);
-// [/RLVa:KB]
 		}
-//		getChildView("BtnOwner")->setEnabled(TRUE);
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.0.0e
-		getChildView("BtnOwner")->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
-// [/RLVa:KB]
+		getChildView("BtnOwner")->setEnabled(TRUE);
 		getChildView("LabelOwnerTitle")->setEnabled(TRUE);
 		getChildView("LabelOwnerName")->setEnabled(FALSE);
 		getChild<LLUICtrl>("LabelOwnerName")->setValue(name);
@@ -711,17 +675,6 @@ void LLSidepanelItemInfo::onClickCreator()
 	if(!item) return;
 	if(!item->getCreatorUUID().isNull())
 	{
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
-		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-		{
-			const LLPermissions& perm = item->getPermissions();
-			if ( ((perm.isOwned()) && (!perm.isGroupOwned()) && (perm.getOwner() == item->getCreatorUUID()) ) ||
-			     (RlvUtil::isNearbyAgent(item->getCreatorUUID())) )
-			{
-				return;
-			}
-		}
-// [/RLVa:KB]
 		LLAvatarActions::showProfile(item->getCreatorUUID());
 	}
 }
@@ -737,10 +690,6 @@ void LLSidepanelItemInfo::onClickOwner()
 	}
 	else
 	{
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Modified: RLVa-1.0.0e
-		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-			return;
-// [/RLVa:KB]
 		LLAvatarActions::showProfile(item->getPermissions().getOwner());
 	}
 }

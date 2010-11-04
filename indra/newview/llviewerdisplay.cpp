@@ -77,9 +77,6 @@
 #include "llwlparammanager.h"
 #include "llwaterparammanager.h"
 #include "llpostprocess.h"
-// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 extern LLPointer<LLViewerTexture> gStartTexture;
 
@@ -576,8 +573,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		S32 water_clip = 0;
 		if ((LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_ENVIRONMENT) > 1) &&
-			 (gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_WATER) || 
-			  gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_VOIDWATER)))
+			 gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_WATER))
 		{
 			if (LLViewerCamera::getInstance()->cameraUnderWater())
 			{
@@ -925,11 +921,7 @@ void render_hud_attachments()
 	glh::matrix4f current_mod = glh_get_current_modelview();
 
 	// clamp target zoom level to reasonable values
-//	gAgentCamera.mHUDTargetZoom = llclamp(gAgentCamera.mHUDTargetZoom, 0.1f, 1.f);
-// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Modified: RLVa-1.0.0c
-	gAgentCamera.mHUDTargetZoom = llclamp(gAgentCamera.mHUDTargetZoom, (!gRlvAttachmentLocks.hasLockedHUD()) ? 0.1f : 0.85f, 1.f);
-// [/RLVa:KB]
-
+	gAgentCamera.mHUDTargetZoom = llclamp(gAgentCamera.mHUDTargetZoom, 0.1f, 1.f);
 	// smoothly interpolate current zoom level
 	gAgentCamera.mHUDCurZoom = lerp(gAgentCamera.mHUDCurZoom, gAgentCamera.mHUDTargetZoom, LLCriticalDamp::getInterpolant(0.03f));
 

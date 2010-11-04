@@ -369,7 +369,7 @@ void LLScreenChannel::loadStoredToastsToChannel()
 	for(it = mStoredToastList.begin(); it != mStoredToastList.end(); ++it)
 	{
 		(*it).toast->setIsHidden(false);
-		(*it).toast->startFading();
+		(*it).toast->resetTimer();
 		mToastList.push_back((*it));
 	}
 
@@ -394,7 +394,7 @@ void LLScreenChannel::loadStoredToastByNotificationIDToChannel(LLUUID id)
 	}
 
 	toast->setIsHidden(false);
-	toast->startFading();
+	toast->resetTimer();
 	mToastList.push_back((*it));
 
 	redrawToasts();
@@ -477,7 +477,7 @@ void LLScreenChannel::modifyToastByNotificationID(LLUUID id, LLPanel* panel)
 		toast->removeChild(old_panel);
 		delete old_panel;
 		toast->insertPanel(panel);
-		toast->startFading();
+		toast->resetTimer();
 		redrawToasts();
 	}
 }
@@ -588,7 +588,7 @@ void LLScreenChannel::showToastsBottom()
 		mHiddenToastsNum = 0;
 		for(; it != mToastList.rend(); it++)
 		{
-			(*it).toast->stopFading();
+			(*it).toast->stopTimer();
 			(*it).toast->setVisible(FALSE);
 			mHiddenToastsNum++;
 		}
@@ -866,18 +866,8 @@ LLToast* LLScreenChannel::getToastByNotificationID(LLUUID id)
 	std::vector<ToastElem>::iterator it = find(mStoredToastList.begin(),
 			mStoredToastList.end(), id);
 
-//	if (it == mStoredToastList.end())
-//		return NULL;
-// [SL:KB] - Checked: 2010-04-21 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	// BUGFIX-SL: we need to get the visible toast in LLOfferHandler::processNotification() whether it's "stored" or not 
 	if (it == mStoredToastList.end())
-	{
-		// If we can't find it among the stored toasts then widen it to "all visible toasts"
-		it = find(mToastList.begin(), mToastList.end(), id);
-		if (it == mToastList.end())
-			return NULL;
-	}
-// [/SL:KB]
+		return NULL;
 
 	return it->toast;
 }
