@@ -3,3 +3,8 @@ First set up your system as described in the snowstorm linux wiki.
 - We do non-standalone builds
 
 Run ./build_firestorm_linux.sh
+
+NOTE: IF you receive build failures related to libUUID, copy your system libUUID library over the download supplied by SL:
+	cd /your/firestorm/code/tree
+	cp /lib/libuuid.so.1.3.0 libraries/i686-linux/lib_release_client/libuuid.so
+	cp /lib/libuuid.so.1.3.0 libraries/i686-linux/lib_release_client/libuuid.so.1

@@ -1437,7 +1437,7 @@ if (WINDOWS)
     if(MSVC71)
         set(release_flags "/MAP:Release/${VIEWER_BINARY_NAME}.map /MAPINFO:LINES")
     else(MSVC71)
-        set(release_flags "/MAP:Release/${VIEWER_BINARY_NAME}.map /OPT:REF")
+        set(release_flags "/MAP:Release/${VIEWER_BINARY_NAME}.map")
     endif(MSVC71)
     
     set_target_properties(${VIEWER_BINARY_NAME}
@@ -1937,11 +1937,11 @@ if (LL_TESTS)
       llviewernetwork.cpp
   )
 
-
-  LL_ADD_INTEGRATION_TEST(llslurl
-     "${llslurl_test_sources}"
-    "${test_libs}"
-    )
+# RLVa - incompatible
+#  LL_ADD_INTEGRATION_TEST(llslurl
+#     "${llslurl_test_sources}"
+#    "${test_libs}"
+#    )
 
   LL_ADD_INTEGRATION_TEST(llviewernetwork
      llviewernetwork.cpp
