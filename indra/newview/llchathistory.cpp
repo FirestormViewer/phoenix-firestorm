@@ -54,6 +54,7 @@
 #include "llviewertexteditor.h"
 #include "llworld.h"
 #include "lluiconstants.h"
+#include "llstring.h"
 #include "llviewercontrol.h"
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f)
 #include "rlvcommon.h"
@@ -64,6 +65,7 @@
 static LLDefaultChildRegistry::Register<LLChatHistory> r("chat_history");
 
 const static std::string NEW_LINE(rawstr_to_utf8("\n"));
+
 const static std::string SLURL_APP_AGENT = "secondlife:///app/agent/";
 const static std::string SLURL_ABOUT = "/about";
 
@@ -90,9 +92,9 @@ public:
 		LLSD payload;
 		payload["object_id"] = object_id;
 		payload["owner_id"] = query_map["owner"];
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-		if (query_map.has("owner_name"))
-			payload["owner_name"] = query_map["owner_name"];
+// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+		if (query_map.has("rlv_shownames"))
+			payload["rlv_shownames"] = query_map["rlv_shownames"];
 // [/RLVa:KB]
 		payload["name"] = query_map["name"];
 		payload["slurl"] = LLWeb::escapeURL(query_map["slurl"]);
@@ -105,14 +107,13 @@ LLObjectIMHandler gObjectIMHandler;
 
 class LLChatHistoryHeader: public LLPanel
 {
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-//	FIXME - AO
-//	LLChatHistoryHeader() : mShowContextMenu(true), mShowInfoCtrl(true) {}
-// [/RLVa:KB]
-
 public:
 	LLChatHistoryHeader()
 	:	LLPanel(),
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
+		mShowContextMenu(true), 
+		mShowInfoCtrl(true),
+// [/RLVa:KB]
 		mPopupMenuHandleAvatar(),
 		mPopupMenuHandleObject(),
 		mAvatarID(),
@@ -235,7 +236,7 @@ public:
 	void showInspector()
 	{
 //		if (mAvatarID.isNull() && CHAT_SOURCE_SYSTEM != mSourceType) return;
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 		// Don't double-click show the inspector if we're not showing the info control
 		if ( (!mShowInfoCtrl) || (mAvatarID.isNull() && CHAT_SOURCE_SYSTEM != mSourceType) ) return;
 // [/RLVa:KB]
@@ -298,9 +299,26 @@ public:
 
 			// Start with blank so sample data from XUI XML doesn't
 			// flash on the screen
-			user_name->setValue( LLSD() );
-			LLAvatarNameCache::get(mAvatarID,
-				boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+//			user_name->setValue( LLSD() );
+//			LLAvatarNameCache::get(mAvatarID,
+//				boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+			if (!chat.mRlvNamesFiltered)
+			{
+				user_name->setValue( LLSD() );
+				LLAvatarNameCache::get(mAvatarID,
+					boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+			}
+			else
+			{
+				// If the agent's chat was subject to @shownames=n we should display their anonimized name
+				mFrom = chat.mFromName;
+				user_name->setValue(mFrom);
+				user_name->setToolTip(mFrom);
+				setToolTip(mFrom);
+				updateMinUserNameWidth();
+			}
+// [/RLVa:KB]
 		}
 		else {
 			// ...from an object, just use name as given
@@ -317,7 +335,7 @@ public:
 		if(mSourceType != CHAT_SOURCE_AGENT)
 			icon->setDrawTooltip(false);
 
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 		// Don't show the context menu, info control or avatar icon tooltip if this chat was subject to @shownames=n
 		if ( (chat.mRlvNamesFiltered) && ((CHAT_SOURCE_AGENT == mSourceType) || (CHAT_SOURCE_OBJECT == mSourceType))  )
 		{
@@ -410,7 +428,7 @@ protected:
 
 	void showContextMenu(S32 x,S32 y)
 	{
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 		if (!mShowContextMenu)
 			return;
 // [/RLVa:KB]
@@ -465,7 +483,7 @@ protected:
 	void showInfoCtrl()
 	{
 //		if (mAvatarID.isNull() || mFrom.empty() || SYSTEM_FROM == mFrom) return;
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 		if ( (!mShowInfoCtrl) || (mAvatarID.isNull() || mFrom.empty() || SYSTEM_FROM == mFrom) ) return;
 // [/RLVa:KB]
 				
@@ -536,7 +554,7 @@ protected:
 	EChatSourceType		mSourceType;
 	std::string			mFrom;
 	LLUUID				mSessionID;
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 	bool                mShowContextMenu;
 	bool                mShowInfoCtrl;
 // [/RLVa:KB]

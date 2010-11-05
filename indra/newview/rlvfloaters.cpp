@@ -132,7 +132,7 @@ void RlvFloaterBehaviours::refreshAll()
 }
 
 // Checked: 2010-04-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
-void RlvFloaterBehaviours::onAvatarNameLookup(const LLUUID& idAgent, const std::string& full_name, BOOL fGroup)
+void RlvFloaterBehaviours::onAvatarNameLookup(const LLUUID& idAgent, const std::string& strFullname, BOOL fGroup)
 {
 	std::list<LLUUID>::iterator itLookup = std::find(m_PendingLookup.begin(), m_PendingLookup.end(), idAgent);
 	if (itLookup != m_PendingLookup.end())

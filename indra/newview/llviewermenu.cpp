@@ -3192,62 +3192,6 @@ bool enable_freeze_eject(const LLSD& avatar_id)
 }
 
 
-class LLAvatarGiveCard : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		llinfos << "handle_give_card()" << llendl;
-		LLViewerObject* dest = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
-//		if(dest && dest->isAvatar())
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
-		if ( (dest && dest->isAvatar()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
-// [/RLVa:KB]
-		{
-			bool found_name = false;
-			LLSD args;
-			LLSD old_args;
-			LLNameValue* nvfirst = dest->getNVPair("FirstName");
-			LLNameValue* nvlast = dest->getNVPair("LastName");
-			if(nvfirst && nvlast)
-			{
-				args["FIRST"] = nvfirst->getString();
-				args["LAST"] = nvlast->getString();
-				old_args["FIRST"] = nvfirst->getString();
-				old_args["LAST"] = nvlast->getString();
-				found_name = true;
-			}
-			LLViewerRegion* region = dest->getRegion();
-			LLHost dest_host;
-			if(region)
-			{
-				dest_host = region->getHost();
-			}
-			if(found_name && dest_host.isOk())
-			{
-				LLMessageSystem* msg = gMessageSystem;
-				msg->newMessage("OfferCallingCard");
-				msg->nextBlockFast(_PREHASH_AgentData);
-				msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-				msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-				msg->nextBlockFast(_PREHASH_AgentBlock);
-				msg->addUUIDFast(_PREHASH_DestID, dest->getID());
-				LLUUID transaction_id;
-				transaction_id.generate();
-				msg->addUUIDFast(_PREHASH_TransactionID, transaction_id);
-				msg->sendReliable(dest_host);
-				LLNotificationsUtil::add("OfferedCard", args);
-			}
-			else
-			{
-				LLNotificationsUtil::add("CantOfferCallingCard", old_args);
-			}
-		}
-		return true;
-	}
-};
-
-
-
 void login_done(S32 which, void *user)
 {
 	llinfos << "Login done " << which << llendl;
@@ -8659,6 +8603,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLSomethingSelectedNoHUD(), "SomethingSelectedNoHUD");
 	view_listener_t::addMenu(new LLEditableSelected(), "EditableSelected");
 	view_listener_t::addMenu(new LLEditableSelectedMono(), "EditableSelectedMono");
+
 	view_listener_t::addMenu(new LLToggleUIHints(), "ToggleUIHints");
 
 // [RLVa:KB] - Checked: 2010-04-23 (RLVa-1.2.0g) | Added: RLVa-1.2.0

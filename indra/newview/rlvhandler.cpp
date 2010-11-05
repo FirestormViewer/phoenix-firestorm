@@ -18,6 +18,7 @@
 #include "llagentwearables.h"
 #include "llappviewer.h"
 #include "llcallbacklist.h"
+#include "llhudtext.h"
 #include "llviewermessage.h"
 #include "llviewerobjectlist.h"
 #include "llviewerparcelmgr.h"
@@ -1047,12 +1048,9 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 					removeException(rlvCmd.getObjectID(), eBhvr, idException);
 
 				// Clear/restore the object's hover text as needed
-				// FIXME : Need to change how this works - AO
-				//LLViewerObject* pObj = gObjectList.findObject(idException);
-				//if ( (pObj) && (!pObj->mTextSegments.empty()))
-				//	if (RLV_TYPE == eType)
-				//		pObj->clearString();
-				//	pObj->mText->setString( (RLV_TYPE_ADD == eType) ? "" : pObj->mText->getObjectText());
+				LLViewerObject* pObj = gObjectList.findObject(idException);
+				if ( (pObj) && (pObj->mText.notNull()) && (!pObj->mText->getObjectText().empty()) )
+					pObj->mText->setString( (RLV_TYPE_ADD == eType) ? "" : pObj->mText->getObjectText());
 			}
 			break;
 #ifdef RLV_EXTENSION_CMD_TOUCHXXX

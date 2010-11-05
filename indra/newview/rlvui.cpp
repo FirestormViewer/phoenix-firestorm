@@ -19,6 +19,7 @@
 #include "llbottomtray.h"
 #include "llbutton.h"
 #include "llcallfloater.h"
+#include "llhudtext.h"
 #include "llinventorypanel.h"
 #include "llimview.h"					// LLIMMgr
 #include "llmoveview.h"					// Movement panel (contains "Stand" and "Stop Flying" buttons)
@@ -39,7 +40,7 @@
 #include "lltoolmgr.h"
 #include "llviewerparcelmgr.h"
 #include "roles_constants.h"			// Group "powers"
-#include "llhudtext.h"
+
 #include "rlvui.h"
 #include "rlvhandler.h"
 
@@ -370,12 +371,12 @@ void RlvUIEnabler::onToggleShowNames()
 	LLPanelPeople* pPeoplePanel = dynamic_cast<LLPanelPeople*>(LLSideTray::getInstance()->getPanel("panel_people"));
 	RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
 	if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
-		pPeoplePanel->getNearbyList()->refreshNames();
+		pPeoplePanel->getNearbyList()->updateAvatarNames();
 
 	// Refresh the speaker list
 	LLCallFloater* pCallFloater = LLFloaterReg::findTypedInstance<LLCallFloater>("voice_controls");
 	if (pCallFloater)
-		pCallFloater->getAvatarCallerList()->refreshNames();
+		pCallFloater->getAvatarCallerList()->updateAvatarNames();
 }
 
 // Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a

@@ -1398,9 +1398,10 @@ void LLOfferInfo::send_auto_receive_response(void)
 	{
 		// add buddy to recent people list
 //		LLRecentPeople::instance().add(mFromID);
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-		// RELEASE-RLVa: [RLVa-1.2.0] Make sure this stays in sync with the condition in inventory_offer_handler()
-		if ((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) || (!RlvUtil::isNearbyAgent(mFromID)) || (RlvUIEnabler::hasOpenIM(mFromID)))
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
+		// RELEASE-RLVa: [RLVa-1.2.2] Make sure this stays in sync with the condition in inventory_offer_handler()
+		if ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) || (!RlvUtil::isNearbyAgent(mFromID)) || 
+			 (RlvUIEnabler::hasOpenIM(mFromID)) || ((RlvUIEnabler::hasOpenProfile(mFromID))) )
 		{
 			LLRecentPeople::instance().add(mFromID);
 		}
@@ -1654,16 +1655,10 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 		}
 		else
 		{
+/*
 			std::string full_name;
 			if (gCacheName->getFullName(mFromID, full_name))
 			{
-// [RLVa:KB] - Checked: 2010-04-022 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
-				// RELEASE-RLVa: [RLVa-1.2.0] Make sure this stays in sync with the condition in inventory_offer_handler()
-				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(mFromID)) &&
-					 (!RlvUIEnabler::hasOpenIM(mFromID)) )
-				{
-					full_name = RlvStrings::getAnonym(full_name);
-				}
 				from_string = LLTrans::getString("InvOfferAnObjectNamed") + " "+ LLTrans::getString("'") + mFromName 
 					+ LLTrans::getString("'")+" " + LLTrans::getString("InvOfferOwnedBy") + full_name;
 				chatHistory_string = mFromName + " " + LLTrans::getString("InvOfferOwnedBy") + " " + full_name;
@@ -1674,6 +1669,20 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 				+ mFromName + LLTrans::getString("'")+" " + LLTrans::getString("InvOfferOwnedByUnknownUser");
 				chatHistory_string = mFromName + " " + LLTrans::getString("InvOfferOwnedByUnknownUser");
 			}
+*/
+// [SL:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+			std::string name_slurl = LLSLURL("agent", mFromID, "about").getSLURLString();
+
+// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+			// RELEASE-RLVa: [RLVa-1.2.2] Make sure this stays in sync with the condition in inventory_offer_handler()
+			if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(mFromID)) )
+				name_slurl = LLSLURL("agent", mFromID, "rlvanonym").getSLURLString();
+// [/RLVa:KB]
+
+			from_string = LLTrans::getString("InvOfferAnObjectNamed") + " "+ LLTrans::getString("'") + mFromName 
+				+ LLTrans::getString("'")+" " + LLTrans::getString("InvOfferOwnedBy") + name_slurl;
+			chatHistory_string = mFromName + " " + LLTrans::getString("InvOfferOwnedBy") + " " + name_slurl;
+// [/SL:KB]
 		}
 	}
 	else
@@ -1792,7 +1801,13 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 			}
 // [/RLVa:KB]
 
-			log_message = LLTrans::getString("InvOfferYouDecline") + " " + mDesc + " " + LLTrans::getString("InvOfferFrom") + " " + mFromName +".";
+			{
+				LLStringUtil::format_map_t log_message_args;
+				log_message_args["DESC"] = mDesc;
+				log_message_args["NAME"] = mFromName;
+				log_message = LLTrans::getString("InvOfferDecline", log_message_args);
+			}
+
 			LLSD args;
 			args["MESSAGE"] = log_message;
 			LLNotificationsUtil::add("SystemMessage", args);
@@ -1933,12 +1948,12 @@ void inventory_offer_handler(LLOfferInfo* info)
 	// Object -> Agent Inventory Offer
 	if (info->mFromObject)
 	{
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 		// Only filter if the object owner is a nearby agent
 		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(info->mFromID)) )
 		{
 			payload["rlv_shownames"] = TRUE;
-			args["NAME"] = args["NAME_SLURL"] = RlvStrings::getAnonym(info->mFromName);
+			args["NAME_SLURL"] = LLSLURL("agent", info->mFromID, "rlvanonym").getSLURLString();
 		}
 // [/RLVa:KB]
 
@@ -1953,13 +1968,14 @@ void inventory_offer_handler(LLOfferInfo* info)
 	}
 	else // Agent -> Agent Inventory Offer
 	{
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 		// Only filter if the offer is from a nearby agent and if there's no open IM session (doesn't necessarily have to be focused)
 		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(info->mFromID)) &&
 			 (!RlvUIEnabler::hasOpenIM(info->mFromID)) )
 		{
 			payload["rlv_shownames"] = TRUE;
-			args["NAME"] = args["NAME_SLURL"] = RlvStrings::getAnonym(info->mFromName);
+			args["NAME"] = RlvStrings::getAnonym(info->mFromName);
+			args["NAME_SLURL"] = LLSLURL("agent", info->mFromID, "rlvanonym").getSLURLString();
 		}
 // [/RLVa:KB]
 
@@ -2677,15 +2693,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				bucketp = (struct offer_agent_bucket_t*) &binary_bucket[0];
 				info->mType = (LLAssetType::EType) bucketp->asset_type;
 				info->mObjectID = bucketp->object_id;
-
-// [RLVa:KB] - Checked: 2009-07-08 (RLVa-1.0.0e)
-/*
-				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (gRlvHandler.isAgentNearby(from_id)) )
-				{
-					name = RlvStrings::getAnonym(name);
-				}
-*/
-// [/RLVa:KB]
 			}
 			else
 			{
@@ -2736,12 +2743,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 	case IM_INVENTORY_ACCEPTED:
 	{
-//		args["NAME"] = name;
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
-		// Only filter the name if the agent is nearby, there isn't an open IM session to them and their profile isn't open
+//		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();;
+// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+		// Only anonymize the name if the agent is nearby, there isn't an open IM session to them and their profile isn't open
 		bool fRlvFilterName = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(from_id)) && 
 			(!RlvUIEnabler::hasOpenProfile(from_id)) && (!RlvUIEnabler::hasOpenIM(from_id));
-		args["NAME"] = (!fRlvFilterName) ? LLSLURL("agent", from_id, "completename").getSLURLString() : RlvStrings::getAnonym(LLSLURL("agent", from_id, "completename").getSLURLString());
+		args["NAME"] = LLSLURL("agent", from_id, (!fRlvFilterName) ? "completename" : "rlvanonym").getSLURLString();;
 // [/RLVa:KB]
 		LLSD payload;
 		payload["from_id"] = from_id;
@@ -2750,12 +2757,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	}
 	case IM_INVENTORY_DECLINED:
 	{
-//		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
-		// Only filter the name if the agent is nearby, there isn't an open IM session to them and their profile isn't open
+//		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();;
+// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+		// Only anonymize the name if the agent is nearby, there isn't an open IM session to them and their profile isn't open
 		bool fRlvFilterName = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(from_id)) && 
 			(!RlvUIEnabler::hasOpenProfile(from_id)) && (!RlvUIEnabler::hasOpenIM(from_id));
-		args["NAME"] = (!fRlvFilterName) ? LLSLURL("agent", from_id, "completename").getSLURLString() : RlvStrings::getAnonym(LLSLURL("agent", from_id, "completename").getSLURLString());
+		args["NAME"] = LLSLURL("agent", from_id, (!fRlvFilterName) ? "completename" : "rlvanonym").getSLURLString();;
 // [/RLVa:KB]
 		LLSD payload;
 		payload["from_id"] = from_id;
@@ -2886,12 +2893,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				// NOTE: the chat message itself will be filtered in LLNearbyChatHandler::processChat()
 				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!from_group) && (RlvUtil::isNearbyAgent(from_id)) )
 				{
-					std::string strOwnerName;
-					if (gCacheName->getFullName(from_id, strOwnerName))
-					{
-						query_string["owner"] = LLUUID::null;
-						query_string["owner_name"] = RlvStrings::getAnonym(strOwnerName);
-					}
+					query_string["rlv_shownames"] = TRUE;
 
 					RlvUtil::filterNames(name);
 					chat.mFromName = name;
@@ -2911,7 +2913,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				query_string["groupowned"] = "true";
 			}	
 
-			chat.mURL = LLSLURL("objectim", session_id, "").getSLURLString();
+//			chat.mURL = LLSLURL("objectim", session_id, "").getSLURLString();
+// [SL:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+			chat.mURL = LLSLURL("objectim", session_id, LLURI::mapToQueryString(query_string)).getSLURLString();
+// [/SL:KB]
 			chat.mText = message;
 
 			// Note: lie to Nearby Chat, pretending that this is NOT an IM, because
@@ -3475,7 +3480,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			{
 				if (CHAT_SOURCE_AGENT == chat.mSourceType)
 				{
-					chat.mFromName = RlvStrings::getAnonym(from_name);
+					chat.mFromName = RlvStrings::getAnonym(chat.mFromName);
 					chat.mRlvNamesFiltered = TRUE;
 				} 
 				else if ( (!is_owned_by_me) || (!is_attachment) )
@@ -3489,25 +3494,18 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			if ( (CHAT_SOURCE_OBJECT == chat.mSourceType) && 
 				 ((gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))) )
 			{
-				LLSD sdQuery; std::string strOwnerName, strQuery;
+				LLSD sdQuery;
 				sdQuery["name"] = chat.mFromName;
-
 				sdQuery["owner"] = owner_id;
-				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && 
-					 (!is_owned_by_me) && (gCacheName->getFullName(owner_id, strOwnerName)) )
-				{
-					sdQuery["owner"] = LLUUID::null;
-					sdQuery["owner_name"] = RlvStrings::getAnonym(strOwnerName);
-				}
+
+				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!is_owned_by_me) )
+					sdQuery["rlv_shownames"] = true;
 
 				const LLViewerRegion* pRegion = LLWorld::getInstance()->getRegionFromPosAgent(chat.mPosAgent);
 				if (pRegion)
-				{
-					sdQuery["slurl"] = LLSLURL(pRegion->getName(), LLVector3d(chat.mPosAgent)).getSLURLString();
-				}
+					sdQuery["slurl"] = LLSLURL(pRegion->getName(), chat.mPosAgent).getLocationString();
 
-				strQuery = LLURI::mapToQueryString(sdQuery);
-				chat.mURL = LLSLURL("objectim", from_id, strQuery).getSLURLString();
+				chat.mURL = LLSLURL("objectim", from_id, LLURI::mapToQueryString(sdQuery)).getSLURLString();
 			}
 		}
 // [/RLVa:KB]

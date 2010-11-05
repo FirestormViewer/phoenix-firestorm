@@ -16,6 +16,7 @@ WANTS_CLEAN=$TRUE
 WANTS_CONFIG=$TRUE
 WANTS_BUILD=$TRUE
 WANTS_PACKAGE=$TRUE
+WANTS_VERSION=$TRUE
 
 ###
 ### Helper Functions
@@ -25,6 +26,7 @@ if [ "$1" == "--rebuild" ] ; then
 	echo "rebuilding..."
 	WANTS_CLEAN=$FALSE
 	WANTS_CONFIG=$FALSE
+	WANTS_VERSION=$FALSE
 fi
 
 ###
@@ -49,14 +51,15 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 	./develop.py -t release | tee $LOG
 fi
 
-if [ $WANTS_BUILD -eq $TRUE ] ; then
+if [ $WANTS_VERSION -eq $TRUE ] ; then
         echo -n "Updating build version to "
         buildVer=`grep -o -e "LL_VERSION_BUILD = [0-9]\+" llcommon/llversionviewer.h | cut -f 3 -d " "`
         echo $((++buildVer))
         sed -e "s#LL_VERSION_BUILD = [0-9][0-9]*#LL_VERSION_BUILD = ${buildVer}#" llcommon/llversionviewer.h > llcommon/llversionviewer.h1
         mv llcommon/llversionviewer.h1 llcommon/llversionviewer.h
+fi
 
-
+if [ $WANTS_BUILD -eq $TRUE ] ; then
 	echo "Building in progress... Check $LOG for verbose status"
 	./develop.py -t release build 2>&1 | tee $LOG | grep -e "make.*Error "
 	echo "Complete"

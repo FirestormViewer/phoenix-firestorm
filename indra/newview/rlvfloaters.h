@@ -44,7 +44,7 @@ public:
 	 */
 protected:
 	void onRlvCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
-	void onAvatarNameLookup(const LLUUID& idAgent, const std::string& full_name, BOOL fGroup);
+	void onAvatarNameLookup(const LLUUID& idAgent, const std::string& strFullname, BOOL fGroup);
 
 	/*
 	 * Member functions

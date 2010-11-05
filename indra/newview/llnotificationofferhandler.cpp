@@ -101,9 +101,9 @@ bool LLOfferHandler::processNotification(const LLSD& notify)
 
 			LLUUID session_id;
 //			if (LLHandlerUtil::canSpawnIMSession(notification))
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 			// Don't spawn a new IM session for inventory offers if this notification was subject to @shownames=n
-			// RELEASE-RLVa: [SL-2.0.1] Test on every new release to make sure the notification gets routed the way we want it to be
+			// RELEASE-RLVa: [SL-2.3.0] Test on every new release to make sure the notification gets routed the way we want it to be
 			bool fSpawnIM = (LLHandlerUtil::canSpawnIMSession(notification)) && (!notification->getPayload().has("rlv_shownames"));
 			if (fSpawnIM)
 // [/RLVa:KB]
@@ -117,7 +117,7 @@ bool LLOfferHandler::processNotification(const LLSD& notify)
 
 			bool show_toast = LLHandlerUtil::canSpawnToast(notification);
 //			bool add_notid_to_im = LLHandlerUtil::canAddNotifPanelToIM(notification);
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 			// NOTE: add_notid_to_im needs to be FALSE if we suppressed spawning an IM because in that case the notification needs to
 			//       be routed to the "syswell" or the inventory offer floater will dissapear and the user won't be able to accept it
 			bool add_notid_to_im = (fSpawnIM) && (LLHandlerUtil::canAddNotifPanelToIM(notification));
@@ -160,7 +160,7 @@ bool LLOfferHandler::processNotification(const LLSD& notify)
 			if (LLHandlerUtil::canLogToIM(notification))
 			{
 				// log only to file if notif panel can be embedded to IM and IM is opened
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 				if (notification->getPayload().has("rlv_shownames"))
 				{
 					// Log to chat history if this notification was subject to @shownames=n
@@ -191,7 +191,7 @@ bool LLOfferHandler::processNotification(const LLSD& notify)
 		{
 //			if (LLHandlerUtil::canAddNotifPanelToIM(notification)
 //					&& !LLHandlerUtil::isIMFloaterOpened(notification))
-// [SL:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [SL:KB] - Checked: 2010-04-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 			// Repro:
 			//   1) have someone drop you 2 inventory items (new IM session will be spawned)
 			//   2) accept/decline the inventory offers as they come in
@@ -223,7 +223,7 @@ bool LLOfferHandler::processNotification(const LLSD& notify)
 void LLOfferHandler::onDeleteToast(LLToast* toast)
 {
 //	if (!LLHandlerUtil::canAddNotifPanelToIM(toast->getNotification()))
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 	// BUGFIX: LLHandlerUtil::canAddNotifPanelToIM() won't necessarily tell us whether the notification went into an IM or to the syswell
 	if (toast->getCanBeStored())
 // [/RLVa:KB]

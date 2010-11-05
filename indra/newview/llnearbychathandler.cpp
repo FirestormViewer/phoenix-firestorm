@@ -450,14 +450,6 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 			tmp_chat.mRlvNamesFiltered = TRUE;
 		}
 	}
-
-	//	if(chat_msg.mSourceType == CHAT_SOURCE_AGENT && chat_msg.mFromID.notNull())
-	// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	if ( (chat_msg.mSourceType == CHAT_SOURCE_AGENT && chat_msg.mFromID.notNull()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
-		LLRecentPeople::instance().add(chat_msg.mFromID);
-		// [/RLVa:KB]
-	
-	
 // [/RLVa:KB]
 
 	LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());

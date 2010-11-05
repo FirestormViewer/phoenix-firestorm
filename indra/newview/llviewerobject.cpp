@@ -1097,7 +1097,6 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					coloru.mV[3] = 255 - coloru.mV[3];
 					mText->setColor(LLColor4(coloru));
 					mText->setString(temp_string);
-
 // [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Added: RLVa-1.0.0f
 					if (rlv_handler_t::isEnabled())
 					{
