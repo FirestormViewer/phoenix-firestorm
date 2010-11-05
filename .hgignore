@@ -42,6 +42,7 @@ indra/web/doc/asset-upload/plugins/verify-notecard
 indra/web/doc/asset-upload/plugins/verify-texture
 installed.xml
 libraries
+logs
 tarfile_tmp
 ^indra/lib/python/mulib.*
 ^web/locale.*
