@@ -38,7 +38,6 @@ class LLColor4U;
 class LLCoordGL;
 class LLImageRaw;
 class LLViewerTexture;
-class LLFloaterMap;
 
 class LLNetMap : public LLUICtrl
 {
@@ -56,7 +55,6 @@ public:
 protected:
 	LLNetMap (const Params & p);
 	friend class LLUICtrlFactory;
-	friend class LLFloaterMap;
 
 public:
 	virtual ~LLNetMap();

@@ -30,8 +30,13 @@
 #include "llavatarnamecache.h"
 #include "llcachename.h"
 #include "lluuid.h"
-
 #include <string>
+
+// stub for RLVa
+std::string rlvGetAnonym(const LLAvatarName& avName)
+{
+        return "someone";
+}
 
 // Stub for LLAvatarNameCache
 bool LLAvatarNameCache::get(const LLUUID& agent_id, LLAvatarName *av_name)

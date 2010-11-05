@@ -33,8 +33,6 @@
 #include <string>
 #include <vector>
 
-#include <boost/signals2.hpp>
-
 #include "imageids.h"			// IMG_INVISIBLE
 #include "llchat.h"
 #include "lldrawpoolalpha.h"
@@ -73,8 +71,7 @@ class LLVOAvatarSkeletonInfo;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class LLVOAvatar :
 	public LLViewerObject,
-	public LLCharacter,
-	public boost::signals2::trackable
+	public LLCharacter
 {
 public:
 	friend class LLVOAvatarSelf;

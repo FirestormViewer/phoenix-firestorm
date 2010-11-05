@@ -217,10 +217,11 @@ BOOL get_is_item_worn(const LLUUID& id)
 		return FALSE;
 
 	// Consider the item as worn if it has links in COF.
-	if (LLAppearanceMgr::instance().isLinkInCOF(id))
-	{
-		return TRUE;
-	}
+// [SL:KB] - The code below causes problems across the board so it really just needs to go
+//	if (LLAppearanceMgr::instance().isLinkInCOF(id))
+//	{
+//		return TRUE;
+//	}
 
 	switch(item->getType())
 	{
@@ -487,9 +488,12 @@ bool LLInventoryCollectFunctor::itemTransferCommonlyAllowed(const LLInventoryIte
 			return false;
 			break;
 		case LLAssetType::AT_OBJECT:
+			if (isAgentAvatarValid() && !gAgentAvatarp->isWearingAttachment(item->getUUID()))
+				return true;
+			break;
 		case LLAssetType::AT_BODYPART:
 		case LLAssetType::AT_CLOTHING:
-			if (!get_is_item_worn(item->getUUID()))
+			if(!gAgentWearables.isWearingItem(item->getUUID()))
 				return true;
 			break;
 		default:

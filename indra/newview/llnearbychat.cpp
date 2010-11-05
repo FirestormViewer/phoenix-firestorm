@@ -46,8 +46,6 @@
 #include "llchathistory.h"
 #include "llstylemap.h"
 
-#include "llavatarnamecache.h"
-
 #include "lldraghandle.h"
 
 #include "llbottomtray.h"
@@ -181,21 +179,7 @@ void	LLNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 
 	if (gSavedPerAccountSettings.getBOOL("LogNearbyChat"))
 	{
-		std::string from_name = chat.mFromName;
-
-		if (chat.mSourceType == CHAT_SOURCE_AGENT)
-		{
-			// if the chat is coming from an agent, log the complete name
-			LLAvatarName av_name;
-			LLAvatarNameCache::get(chat.mFromID, &av_name);
-
-			if (!av_name.mIsDisplayNameDefault)
-			{
-				from_name = av_name.getCompleteName();
-			}
-		}
-
-		LLLogChat::saveHistory("chat", from_name, chat.mFromID, chat.mText);
+		LLLogChat::saveHistory("chat", chat);
 	}
 }
 
@@ -264,23 +248,11 @@ void LLNearbyChat::processChatHistoryStyleUpdate(const LLSD& newvalue)
 		nearby_chat->updateChatHistoryStyle();
 }
 
-bool isWordsName(const std::string& name)
+bool isTwoWordsName(const std::string& name)
 {
-	// checking to see if it's display name plus username in parentheses 
-	S32 open_paren = name.find(" (", 0);
-	S32 close_paren = name.find(')', 0);
-
-	if (open_paren != std::string::npos &&
-		close_paren == name.length()-1)
-	{
-		return true;
-	}
-	else
-	{
-		//checking for a single space
-		S32 pos = name.find(' ', 0);
-		return std::string::npos != pos && name.rfind(' ', name.length()) == pos && 0 != pos && name.length()-1 != pos;
-	}
+	//checking for a single space
+	S32 pos = name.find(' ', 0);
+	return std::string::npos != pos && name.rfind(' ', name.length()) == pos && 0 != pos && name.length()-1 != pos;
 }
 
 void LLNearbyChat::loadHistory()
@@ -303,10 +275,9 @@ void LLNearbyChat::loadHistory()
 			from_id = msg[IM_FROM_ID].asUUID();
 		}
 		else
- 		{
-			std::string legacy_name = gCacheName->buildLegacyName(from);
- 			gCacheName->getUUID(legacy_name, from_id);
- 		}
+		{
+			gCacheName->getUUID(from, from_id);
+		}
 
 		LLChat chat;
 		chat.mFromName = from;
@@ -315,15 +286,18 @@ void LLNearbyChat::loadHistory()
 		chat.mTimeStr = msg[IM_TIME].asString();
 		chat.mChatStyle = CHAT_STYLE_HISTORY;
 
-		chat.mSourceType = CHAT_SOURCE_AGENT;
-		if (from_id.isNull() && SYSTEM_FROM == from)
+		if (msg.has(IM_SOURCE_TYPE))
+		{
+			S32 source_type = msg[IM_SOURCE_TYPE].asInteger();
+			chat.mSourceType = (EChatSourceType)source_type;
+		}
+		else if (from_id.isNull() && SYSTEM_FROM == from)
 		{	
 			chat.mSourceType = CHAT_SOURCE_SYSTEM;
-			
 		}
 		else if (from_id.isNull())
 		{
-			chat.mSourceType = isWordsName(from) ? CHAT_SOURCE_UNKNOWN : CHAT_SOURCE_OBJECT;
+			chat.mSourceType = isTwoWordsName(from) ? CHAT_SOURCE_UNKNOWN : CHAT_SOURCE_OBJECT;
 		}
 
 		addMessage(chat, true, do_not_log);

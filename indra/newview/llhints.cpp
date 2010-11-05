@@ -109,14 +109,7 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 
-	void onClickClose() 
-	{ 
-		if (!mHidden) 
-		{
-			hide(); 
-			LLNotifications::instance().cancel(mNotification);
-		}
-	}
+	void onClickClose() { hide(); LLNotifications::instance().cancel(mNotification); }
 	void draw();
 	void hide() { if(!mHidden) {mHidden = true; mFadeTimer.reset();} }
 

@@ -61,8 +61,7 @@ const F32 WAVE_STEP_INV	= (1. / WAVE_STEP);
 
 
 LLVOWater::LLVOWater(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp)
-:	LLStaticViewerObject(id, pcode, regionp),
-	mRenderType(LLPipeline::RENDER_TYPE_WATER)
+:	LLStaticViewerObject(id, LL_VO_WATER, regionp)
 {
 	// Terrain must draw during selection passes so it can block objects behind it.
 	mbCanSelect = FALSE;
@@ -115,7 +114,7 @@ LLDrawable *LLVOWater::createDrawable(LLPipeline *pipeline)
 {
 	pipeline->allocDrawable(this);
 	mDrawable->setLit(FALSE);
-	mDrawable->setRenderType(mRenderType);
+	mDrawable->setRenderType(LLPipeline::RENDER_TYPE_WATER);
 
 	LLDrawPoolWater *pool = (LLDrawPoolWater*) gPipeline.getPool(LLDrawPool::POOL_WATER);
 
@@ -269,21 +268,10 @@ U32 LLVOWater::getPartitionType() const
 	return LLViewerRegion::PARTITION_WATER; 
 }
 
-U32 LLVOVoidWater::getPartitionType() const
-{
-	return LLViewerRegion::PARTITION_VOIDWATER;
-}
-
 LLWaterPartition::LLWaterPartition()
 : LLSpatialPartition(0, FALSE, 0)
 {
 	mInfiniteFarClip = TRUE;
 	mDrawableType = LLPipeline::RENDER_TYPE_WATER;
 	mPartitionType = LLViewerRegion::PARTITION_WATER;
-}
-
-LLVoidWaterPartition::LLVoidWaterPartition()
-{
-	mDrawableType = LLPipeline::RENDER_TYPE_VOIDWATER;
-	mPartitionType = LLViewerRegion::PARTITION_VOIDWATER;
 }

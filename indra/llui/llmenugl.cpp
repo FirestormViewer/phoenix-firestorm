@@ -1848,104 +1848,89 @@ BOOL LLMenuGL::isOpen()
 	}
 }
 
-
-
-bool LLMenuGL::scrollItems(EScrollingDirection direction)
+void LLMenuGL::scrollItemsUp()
 {
-	// Slowing down items scrolling when arrow button is held
+	// Slowing down the items scrolling when arrow button is held 
 	if (mScrollItemsTimer.hasExpired() && NULL != mFirstVisibleItem)
 	{
 		mScrollItemsTimer.setTimerExpirySec(.033f);
 	}
 	else
 	{
-		return false;
+		return;
 	}
 
-	switch (direction)
+	item_list_t::iterator cur_item_iter;
+	item_list_t::iterator prev_item_iter;
+	for (cur_item_iter = mItems.begin(), prev_item_iter = mItems.begin(); cur_item_iter != mItems.end(); cur_item_iter++)
 	{
-	case SD_UP:
+		if( (*cur_item_iter) == mFirstVisibleItem)
+		{
+			break;
+		}
+		if ((*cur_item_iter)->getVisible())
+		{
+			prev_item_iter = cur_item_iter;
+		}
+	}
+
+	if ((*prev_item_iter)->getVisible())
 	{
-		item_list_t::iterator cur_item_iter;
-		item_list_t::iterator prev_item_iter;
-		for (cur_item_iter = mItems.begin(), prev_item_iter = mItems.begin(); cur_item_iter != mItems.end(); cur_item_iter++)
-		{
-			if( (*cur_item_iter) == mFirstVisibleItem)
-			{
-				break;
-			}
-			if ((*cur_item_iter)->getVisible())
-			{
-				prev_item_iter = cur_item_iter;
-			}
-		}
-
-		if ((*prev_item_iter)->getVisible())
-		{
-			mFirstVisibleItem = *prev_item_iter;
-		}
-		break;
+		mFirstVisibleItem = *prev_item_iter;
 	}
-	case SD_DOWN:
-	{
-		if (NULL == mFirstVisibleItem)
-		{
-			mFirstVisibleItem = *mItems.begin();
-		}
-
-		item_list_t::iterator cur_item_iter;
-
-		for (cur_item_iter = mItems.begin(); cur_item_iter != mItems.end(); cur_item_iter++)
-		{
-			if( (*cur_item_iter) == mFirstVisibleItem)
-			{
-				break;
-			}
-		}
-
-		item_list_t::iterator next_item_iter;
-
-		if (cur_item_iter != mItems.end())
-		{
-			for (next_item_iter = ++cur_item_iter; next_item_iter != mItems.end(); next_item_iter++)
-			{
-				if( (*next_item_iter)->getVisible())
-				{
-					break;
-				}
-			}
-
-			if (next_item_iter != mItems.end() &&
-				(*next_item_iter)->getVisible())
-			{
-				mFirstVisibleItem = *next_item_iter;
-			}
-		}
-		break;
-	}
-	case SD_BEGIN:
-	{
-		mFirstVisibleItem = *mItems.begin();
-		break;
-	}
-	case SD_END:
-	{
-		item_list_t::reverse_iterator first_visible_item_iter = mItems.rend();
-
-		// Advance by mMaxScrollableItems back from the end of the list
-		// to make the last item visible.
-		std::advance(first_visible_item_iter, mMaxScrollableItems);
-		mFirstVisibleItem = *first_visible_item_iter;
-		break;
-	}
-	default:
-		llwarns << "Unknown scrolling direction: " << direction << llendl;
-	}
-
+	
 	mNeedsArrange = TRUE;
 	arrangeAndClear();
+}
 
-	return true;
+void LLMenuGL::scrollItemsDown()
+{
+	// Slowing down the items scrolling when arrow button is held 
+	if (mScrollItemsTimer.hasExpired())
+	{
+		mScrollItemsTimer.setTimerExpirySec(.033f);
+	}
+	else
+	{
+		return;
+	}
+	
+	if (NULL == mFirstVisibleItem)
+	{
+		mFirstVisibleItem = *mItems.begin();
+	}
+
+	item_list_t::iterator cur_item_iter;
+	
+	for (cur_item_iter = mItems.begin(); cur_item_iter != mItems.end(); cur_item_iter++)
+	{
+		if( (*cur_item_iter) == mFirstVisibleItem)
+		{
+			break;
+		}
+	}
+
+	item_list_t::iterator next_item_iter;
+
+	if (cur_item_iter != mItems.end())
+	{
+		for (next_item_iter = ++cur_item_iter; next_item_iter != mItems.end(); next_item_iter++)
+		{
+			if( (*next_item_iter)->getVisible())
+			{
+				break;
+			}
+		}
+		
+		if (next_item_iter != mItems.end() &&
+		    (*next_item_iter)->getVisible())
+		{
+			mFirstVisibleItem = *next_item_iter;
+		}
+	}
+	
+	mNeedsArrange = TRUE;
+	arrangeAndClear();
 }
 
 // rearrange the child rects so they fit the shape of the menu.
@@ -2177,7 +2162,7 @@ void LLMenuGL::arrange( void )
 					LLMenuScrollItem::Params item_params;
 					item_params.name(ARROW_UP);
 					item_params.arrow_type(LLMenuScrollItem::ARROW_UP);
-					item_params.scroll_callback.function(boost::bind(&LLMenuGL::scrollItems, this, SD_UP));
+					item_params.scroll_callback.function(boost::bind(&LLMenuGL::scrollItemsUp, this));
 
 					mArrowUpItem = LLUICtrlFactory::create<LLMenuScrollItem>(item_params);
 					LLUICtrl::addChild(mArrowUpItem);
@@ -2188,7 +2173,7 @@ void LLMenuGL::arrange( void )
 					LLMenuScrollItem::Params item_params;
 					item_params.name(ARROW_DOWN);
 					item_params.arrow_type(LLMenuScrollItem::ARROW_DOWN);
-					item_params.scroll_callback.function(boost::bind(&LLMenuGL::scrollItems, this, SD_DOWN));
+					item_params.scroll_callback.function(boost::bind(&LLMenuGL::scrollItemsDown, this));
 
 					mArrowDownItem = LLUICtrlFactory::create<LLMenuScrollItem>(item_params);
 					LLUICtrl::addChild(mArrowDownItem);				
@@ -2618,8 +2603,14 @@ LLMenuItemGL* LLMenuGL::highlightNextItem(LLMenuItemGL* cur_item, BOOL skip_disa
 		((LLFloater*)getParent())->setFocus(TRUE);
 	}
 
-	// Current item position in the items list
-	item_list_t::iterator cur_item_iter = std::find(mItems.begin(), mItems.end(), cur_item);
+	item_list_t::iterator cur_item_iter;
+	for (cur_item_iter = mItems.begin(); cur_item_iter != mItems.end(); ++cur_item_iter)
+	{
+		if( (*cur_item_iter) == cur_item)
+		{
+			break;
+		}
+	}
 
 	item_list_t::iterator next_item_iter;
 	if (cur_item_iter == mItems.end())
@@ -2630,37 +2621,9 @@ LLMenuItemGL* LLMenuGL::highlightNextItem(LLMenuItemGL* cur_item, BOOL skip_disa
 	{
 		next_item_iter = cur_item_iter;
 		next_item_iter++;
-
-		// First visible item position in the items list
-		item_list_t::iterator first_visible_item_iter = std::find(mItems.begin(), mItems.end(), mFirstVisibleItem);
-
 		if (next_item_iter == mItems.end())
 		{
 			next_item_iter = mItems.begin();
-
-			// If current item is the last in the list, the menu is scrolled to the beginning
-			// and the first item is highlighted.
-			if (mScrollable && !scrollItems(SD_BEGIN))
-			{
-				return NULL;
-			}
-		}
-		// If current item is the last visible, the menu is scrolled one item down
-		// and the next item is highlighted.
-		else if (mScrollable &&
-				 (U32)std::abs(std::distance(first_visible_item_iter, next_item_iter)) >= mMaxScrollableItems)
-		{
-			// Call highlightNextItem() recursively only if the menu was successfully scrolled down.
-			// If scroll timer hasn't expired yet the menu won't be scrolled and calling
-			// highlightNextItem() will result in an endless recursion.
-			if (scrollItems(SD_DOWN))
-			{
-				return highlightNextItem(cur_item, skip_disabled);
-			}
-			else
-			{
-				return NULL;
-			}
 		}
 	}
 
@@ -2718,8 +2681,14 @@ LLMenuItemGL* LLMenuGL::highlightPrevItem(LLMenuItemGL* cur_item, BOOL skip_disa
 		((LLFloater*)getParent())->setFocus(TRUE);
 	}
 
-	// Current item reverse position from the end of the list
-	item_list_t::reverse_iterator cur_item_iter = std::find(mItems.rbegin(), mItems.rend(), cur_item);
+	item_list_t::reverse_iterator cur_item_iter;
+	for (cur_item_iter = mItems.rbegin(); cur_item_iter != mItems.rend(); ++cur_item_iter)
+	{
+		if( (*cur_item_iter) == cur_item)
+		{
+			break;
+		}
+	}
 
 	item_list_t::reverse_iterator prev_item_iter;
 	if (cur_item_iter == mItems.rend())
@@ -2730,37 +2699,9 @@ LLMenuItemGL* LLMenuGL::highlightPrevItem(LLMenuItemGL* cur_item, BOOL skip_disa
 	{
 		prev_item_iter = cur_item_iter;
 		prev_item_iter++;
-
-		// First visible item reverse position in the items list
-		item_list_t::reverse_iterator first_visible_item_iter = std::find(mItems.rbegin(), mItems.rend(), mFirstVisibleItem);
-
 		if (prev_item_iter == mItems.rend())
 		{
 			prev_item_iter = mItems.rbegin();
-
-			// If current item is the first in the list, the menu is scrolled to the end
-			// and the last item is highlighted.
-			if (mScrollable && !scrollItems(SD_END))
-			{
-				return NULL;
-			}
-		}
-		// If current item is the first visible, the menu is scrolled one item up
-		// and the previous item is highlighted.
-		else if (mScrollable &&
-				 std::distance(first_visible_item_iter, cur_item_iter) <= 0)
-		{
-			// Call highlightNextItem() only if the menu was successfully scrolled up.
-			// If scroll timer hasn't expired yet the menu won't be scrolled and calling
-			// highlightNextItem() will result in an endless recursion.
-			if (scrollItems(SD_UP))
-			{
-				return highlightPrevItem(cur_item, skip_disabled);
-			}
-			else
-			{
-				return NULL;
-			}
 		}
 	}
 
@@ -2931,12 +2872,12 @@ BOOL LLMenuGL::handleScrollWheel( S32 x, S32 y, S32 clicks )
 	if( clicks > 0 )
 	{
 		while( clicks-- )
-			scrollItems(SD_DOWN);
+			scrollItemsDown();
 	}
 	else
 	{
 		while( clicks++ )
-			scrollItems(SD_UP);
+			scrollItemsUp();
 	}
 
 	return TRUE;

@@ -100,7 +100,9 @@
 #include "llspatialpartition.h"
 #include "llmutelist.h"
 #include "lltoolpie.h"
-
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 #ifdef _DEBUG
 // Debug indices is disabled for now for debug performance - djs 4/24/02
@@ -629,14 +631,14 @@ void LLPipeline::allocateScreenBuffer(U32 resX, U32 resY)
 //static
 void LLPipeline::updateRenderDeferred()
 {
-	BOOL deferred = ((gSavedSettings.getBOOL("RenderDeferred") && 
-					 LLRenderTarget::sUseFBO &&
-					 LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
-					 gSavedSettings.getBOOL("VertexShaderEnable") && 
-					 gSavedSettings.getBOOL("RenderAvatarVP") &&
-					 gSavedSettings.getBOOL("WindLightUseAtmosShaders")) ? TRUE : FALSE) &&
-					!gUseWireframe;
-
+	BOOL deferred = (gSavedSettings.getBOOL("RenderDeferred") && 
+		LLRenderTarget::sUseFBO &&
+			 LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
+		gSavedSettings.getBOOL("VertexShaderEnable") && 
+		gSavedSettings.getBOOL("RenderAvatarVP") &&
+			 (gSavedSettings.getBOOL("WindLightUseAtmosShaders")) ? TRUE : FALSE) &&
+		!gUseWireframe;
+	
 	sRenderDeferred = deferred;			
 }
 
@@ -1638,14 +1640,20 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
 
 	camera.disableUserClipPlane();
 
-	if (hasRenderType(LLPipeline::RENDER_TYPE_SKY) && 
-		gSky.mVOSkyp.notNull() && 
-		gSky.mVOSkyp->mDrawable.notNull())
+	if (gSky.mVOSkyp.notNull() && gSky.mVOSkyp->mDrawable.notNull())
 	{
-		gSky.mVOSkyp->mDrawable->setVisible(camera);
-		sCull->pushDrawable(gSky.mVOSkyp->mDrawable);
-		gSky.updateCull();
-		stop_glerror();
+		// Hack for sky - always visible.
+		if (hasRenderType(LLPipeline::RENDER_TYPE_SKY)) 
+		{
+			gSky.mVOSkyp->mDrawable->setVisible(camera);
+			sCull->pushDrawable(gSky.mVOSkyp->mDrawable);
+			gSky.updateCull();
+			stop_glerror();
+		}
+	}
+	else
+	{
+		llinfos << "No sky drawable!" << llendl;
 	}
 
 	if (hasRenderType(LLPipeline::RENDER_TYPE_GROUND) && 
@@ -2215,7 +2223,6 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
 					  LLPipeline::RENDER_TYPE_TERRAIN,
 					  LLPipeline::RENDER_TYPE_TREE,
 					  LLPipeline::RENDER_TYPE_SKY,
-					  LLPipeline::RENDER_TYPE_VOIDWATER,
 					  LLPipeline::RENDER_TYPE_WATER,
 					  LLPipeline::END_RENDER_TYPES))
 	{
@@ -2332,8 +2339,13 @@ void LLPipeline::stateSort(LLDrawable* drawablep, LLCamera& camera)
 	
 	if (LLSelectMgr::getInstance()->mHideSelectedObjects)
 	{
-		if (drawablep->getVObj().notNull() &&
-			drawablep->getVObj()->isSelected())
+//		if (drawablep->getVObj().notNull() &&
+//			drawablep->getVObj()->isSelected())
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.2.1f
+		const LLViewerObject* pObj = drawablep->getVObj();
+		if ( (pObj) && (pObj->isSelected()) && 
+			 ((!rlv_handler_t::isEnabled()) || (!pObj->isHUDAttachment()) || (!gRlvAttachmentLocks.isLockedAttachment(pObj->getRootEdit()))) )
+// [/RVLa:KB]
 		{
 			return;
 		}
@@ -5007,10 +5019,6 @@ void LLPipeline::setLight(LLDrawable *drawablep, BOOL is_light)
 void LLPipeline::toggleRenderType(U32 type)
 {
 	gPipeline.mRenderTypeEnabled[type] = !gPipeline.mRenderTypeEnabled[type];
-	if (type == LLPipeline::RENDER_TYPE_WATER)
-	{
-		gPipeline.mRenderTypeEnabled[LLPipeline::RENDER_TYPE_VOIDWATER] = !gPipeline.mRenderTypeEnabled[LLPipeline::RENDER_TYPE_VOIDWATER];
-	}
 }
 
 //static
@@ -7338,7 +7346,6 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
 				gPipeline.pushRenderTypeMask();
 
 				clearRenderTypeMask(LLPipeline::RENDER_TYPE_WATER,
-									LLPipeline::RENDER_TYPE_VOIDWATER,
 									LLPipeline::RENDER_TYPE_GROUND,
 									LLPipeline::RENDER_TYPE_SKY,
 									LLPipeline::RENDER_TYPE_CLOUDS,
@@ -7391,7 +7398,6 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
 		{
 			camera.setFar(camera_in.getFar());
 			clearRenderTypeMask(LLPipeline::RENDER_TYPE_WATER,
-								LLPipeline::RENDER_TYPE_VOIDWATER,
 								LLPipeline::RENDER_TYPE_GROUND,
 								END_RENDER_TYPES);	
 			stop_glerror();
@@ -7908,7 +7914,6 @@ void LLPipeline::generateGI(LLCamera& camera, LLVector3& lightDir, std::vector<L
 								 LLPipeline::RENDER_TYPE_TREE, 
 								 LLPipeline::RENDER_TYPE_TERRAIN,
 								 LLPipeline::RENDER_TYPE_WATER,
-								 LLPipeline::RENDER_TYPE_VOIDWATER,
 								 LLPipeline::RENDER_TYPE_PASS_ALPHA_SHADOW,
 								 LLPipeline::RENDER_TYPE_AVATAR,
 								 LLPipeline::RENDER_TYPE_PASS_SIMPLE,
@@ -8092,7 +8097,6 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 					LLPipeline::RENDER_TYPE_TREE, 
 					LLPipeline::RENDER_TYPE_TERRAIN,
 					LLPipeline::RENDER_TYPE_WATER,
-					LLPipeline::RENDER_TYPE_VOIDWATER,
 					LLPipeline::RENDER_TYPE_PASS_ALPHA_SHADOW,
 					LLPipeline::RENDER_TYPE_PASS_SIMPLE,
 					LLPipeline::RENDER_TYPE_PASS_BUMP,

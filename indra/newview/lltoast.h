@@ -49,16 +49,14 @@ class LLToast;
 class LLToastLifeTimer: public LLEventTimer
 {
 public:
-	LLToastLifeTimer(LLToast* toast, F32 period);
+	LLToastLifeTimer(LLToast* toast, F32 period) : mToast(toast), LLEventTimer(period){}
 
 	/*virtual*/
 	BOOL tick();
-	void stop();
-	void start();
-	void restart();
-	BOOL getStarted();
-	void setPeriod(F32 period);
-	F32 getRemainingTimeF32();
+	void stop() { mEventTimer.stop(); }
+	void start() { mEventTimer.start(); }
+	void restart() {mEventTimer.reset(); }
+	BOOL getStarted() { return mEventTimer.getStarted(); }
 
 	LLTimer&  getEventTimer() { return mEventTimer;}
 private :
@@ -82,14 +80,8 @@ public:
 		Optional<LLUUID>				notif_id,	 //notification ID
 										session_id;	 //im session ID
 		Optional<LLNotificationPtr>		notification;
-
-		//NOTE: Life time of a toast (i.e. period of time from the moment toast was shown
-		//till the moment when toast was hidden) is the sum of lifetime_secs and fading_time_secs.
-
-		Optional<F32>					lifetime_secs, // Number of seconds while a toast is non-transparent
-										fading_time_secs; // Number of seconds while a toast is transparent
-
-
+		Optional<F32>					lifetime_secs,
+										fading_time_secs; // Number of seconds while a toast is fading
 		Optional<toast_callback_t>		on_delete_toast,
 										on_mouse_enter;
 		Optional<bool>					can_fade,
@@ -133,8 +125,10 @@ public:
 	LLPanel* getPanel() { return mPanel; }
 	// enable/disable Toast's Hide button
 	void setHideButtonEnabled(bool enabled);
+	// 
+	void resetTimer() { mTimer->start(); }
 	//
-	F32 getTimeLeftToLive();
+	void stopTimer() { mTimer->stop(); }
 	//
 	LLToastLifeTimer* getTimer() { return mTimer.get();}
 	//
@@ -149,10 +143,6 @@ public:
 	/*virtual*/ void onFocusLost();
 
 	/*virtual*/ void onFocusReceived();
-
-	void setLifetime(S32 seconds);
-
-	void setFadingTime(S32 seconds);
 
 	/**
 	 * Returns padding between floater top and wrapper_panel top.
@@ -206,9 +196,7 @@ private:
 
 	void onToastMouseLeave();
 
-	void expire();
-
-	void setTransparentState(bool transparent);
+	void	expire();
 
 	LLUUID				mNotificationID;
 	LLUUID				mSessionID;
@@ -234,7 +222,6 @@ private:
 	bool		mHideBtnPressed;
 	bool		mIsHidden;  // this flag is TRUE when a toast has faded or was hidden with (x) button (EXT-1849)
 	bool		mIsTip;
-	bool		mIsTransparent;
 
 	commit_signal_t mToastMouseEnterSignal;
 	commit_signal_t mToastMouseLeaveSignal;

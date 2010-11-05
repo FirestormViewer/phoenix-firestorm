@@ -35,13 +35,6 @@
 
 using namespace LLNotificationsUI;
 
-//--------------------------------------------------------------------------
-LLToastLifeTimer::LLToastLifeTimer(LLToast* toast, F32 period)
-	: mToast(toast),
-	  LLEventTimer(period)
-{
-}
-
 /*virtual*/
 BOOL LLToastLifeTimer::tick()
 {
@@ -50,38 +43,6 @@ BOOL LLToastLifeTimer::tick()
 		mToast->expire();
 	}
 	return FALSE;
-}
-
-void LLToastLifeTimer::stop()
-{
-	mEventTimer.stop();
-}
-
-void LLToastLifeTimer::start()
-{
-	mEventTimer.start();
-}
-
-void LLToastLifeTimer::restart()
-{
-	mEventTimer.reset();
-}
-
-BOOL LLToastLifeTimer::getStarted()
-{
-	return mEventTimer.getStarted();
-}
-
-void LLToastLifeTimer::setPeriod(F32 period)
-{
-	mPeriod = period;
-}
-
-F32 LLToastLifeTimer::getRemainingTimeF32()
-{
-	F32 et = mEventTimer.getElapsedTimeF32();
-	if (!getStarted() || et > mPeriod) return 0.0f;
-	return mPeriod - et;
 }
 
 //--------------------------------------------------------------------------
@@ -112,8 +73,7 @@ LLToast::LLToast(const LLToast::Params& p)
 	mIsHidden(false),
 	mHideBtnPressed(false),
 	mIsTip(p.is_tip),
-	mWrapperPanel(NULL),
-	mIsTransparent(false)
+	mWrapperPanel(NULL)
 {
 	mTimer.reset(new LLToastLifeTimer(this, p.lifetime_secs));
 
@@ -183,7 +143,6 @@ LLToast::~LLToast()
 void LLToast::hide()
 {
 	setVisible(FALSE);
-	setTransparentState(false);
 	mTimer->stop();
 	mIsHidden = true;
 	mOnFadeSignal(this); 
@@ -205,16 +164,6 @@ void LLToast::onFocusReceived()
 		// Lets make wrapper panel behave like a floater
 		setBackgroundOpaque(TRUE);
 	}
-}
-
-void LLToast::setLifetime(S32 seconds)
-{
-	mToastLifetime = seconds;
-}
-
-void LLToast::setFadingTime(S32 seconds)
-{
-	mToastFadingTime = seconds;
 }
 
 S32 LLToast::getTopPad()
@@ -246,46 +195,13 @@ void LLToast::setCanFade(bool can_fade)
 //--------------------------------------------------------------------------
 void LLToast::expire()
 {
-	if (mCanFade)
+	// if toast has fade property - hide it
+	if(mCanFade)
 	{
-		if (mIsTransparent)
-		{
-			hide();
-		}
-		else
-		{
-			setTransparentState(true);
-			mTimer->restart();
-		}
+		hide();
 	}
 }
 
-void LLToast::setTransparentState(bool transparent)
-{
-	setBackgroundOpaque(!transparent);
-	mIsTransparent = transparent;
-
-	if (transparent)
-	{
-		mTimer->setPeriod(mToastFadingTime);
-	}
-	else
-	{
-		mTimer->setPeriod(mToastLifetime);
-	}
-}
-
-F32 LLToast::getTimeLeftToLive()
-{
-	F32 time_to_live = mTimer->getRemainingTimeF32();
-
-	if (!mIsTransparent)
-	{
-		time_to_live += mToastFadingTime;
-	}
-
-	return time_to_live;
-}
 //--------------------------------------------------------------------------
 
 void LLToast::reshapeToPanel()
@@ -329,6 +245,13 @@ void LLToast::draw()
 			drawChild(mHideBtn);
 		}
 	}
+
+	// if timer started and remaining time <= fading time
+	if (mTimer->getStarted() && (mToastLifetime
+			- mTimer->getEventTimer().getElapsedTimeF32()) <= mToastFadingTime)
+	{
+		setBackgroundOpaque(FALSE);
+	}
 }
 
 //--------------------------------------------------------------------------
@@ -341,11 +264,6 @@ void LLToast::setVisible(BOOL show)
 		// (EXT-1849) according to this bug a toast can be resurrected from
 		// invisible state if it faded during a teleportation
 		// then it fades a second time and causes a crash
-		return;
-	}
-
-	if (show && getVisible())
-	{
 		return;
 	}
 
@@ -454,8 +372,7 @@ void LLNotificationsUI::LLToast::stopFading()
 {
 	if(mCanFade)
 	{
-		setTransparentState(false);
-		mTimer->stop();
+		stopTimer();
 	}
 }
 
@@ -463,8 +380,7 @@ void LLNotificationsUI::LLToast::startFading()
 {
 	if(mCanFade)
 	{
-		setTransparentState(false);
-		mTimer->start();
+		resetTimer();
 	}
 }
 

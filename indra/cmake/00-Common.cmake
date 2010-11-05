@@ -35,7 +35,7 @@ if (WINDOWS)
   # Don't build DLLs.
   set(BUILD_SHARED_LIBS OFF)
 
-  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Od /Zi /MDd /MP"
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Od /Zi /MD /MP"
       CACHE STRING "C++ compiler debug options" FORCE)
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO 
       "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od /Zi /MD /MP"
@@ -78,6 +78,7 @@ if (WINDOWS)
   # configure win32 API for windows XP+ compatibility
   set(WINVER "0x0501" CACHE STRING "Win32 API Target version (see http://msdn.microsoft.com/en-us/library/aa383745%28v=VS.85%29.aspx)")
   add_definitions("/DWINVER=${WINVER}" "/D_WIN32_WINNT=${WINVER}")
+    
 endif (WINDOWS)
 
 
@@ -181,7 +182,7 @@ if (LINUX)
   endif (VIEWER)
 
   set(CMAKE_CXX_FLAGS_DEBUG "-fno-inline ${CMAKE_CXX_FLAGS_DEBUG}")
-  set(CMAKE_CXX_FLAGS_RELEASE "-O2 ${CMAKE_CXX_FLAGS_RELEASE}")
+  set(CMAKE_CXX_FLAGS_RELEASE "-O3 ${CMAKE_CXX_FLAGS_RELEASE}")
 endif (LINUX)
 
 

@@ -51,7 +51,7 @@ public:
 	
 	LLDynamicArray(S32 size=0) : std::vector<Type>(size) { if (size < BlockSize) std::vector<Type>::reserve(BlockSize); }
 
-	void reset() { std::vector<Type>::clear(); }
+	void reset() { std::vector<Type>::resize(0); }
 
 	// ACCESSORS
 	const Type& get(S32 index) const	 			{ return std::vector<Type>::operator[](index); }

@@ -50,6 +50,9 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "lltooltip.h"
+// [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 //
 // Constants
@@ -545,17 +548,12 @@ LLPanelStandStopFlying::LLPanelStandStopFlying() :
 	mStopFlyingButton(NULL),
 	mAttached(false)
 {
-	// make sure we have the only instance of this class
-	static bool b = true;
-	llassert_always(b);
-	b=false;
-}
+	buildFromFile("panel_stand_stop_flying.xml");
+	setVisible(FALSE);
 
-// static
-inline LLPanelStandStopFlying* LLPanelStandStopFlying::getInstance()
-{
-	static LLPanelStandStopFlying* panel = getStandStopFlyingPanel();
-	return panel;
+	llinfos << "Build LLPanelStandStopFlying panel" << llendl;
+
+	updatePosition();
 }
 
 //static
@@ -693,27 +691,19 @@ void LLPanelStandStopFlying::reparent(LLFloaterMove* move_view)
 // Private Section
 //////////////////////////////////////////////////////////////////////////
 
-//static
-LLPanelStandStopFlying* LLPanelStandStopFlying::getStandStopFlyingPanel()
-{
-	LLPanelStandStopFlying* panel = new LLPanelStandStopFlying();
-	panel->buildFromFile("panel_stand_stop_flying.xml");
-
-	panel->setVisible(FALSE);
-	//LLUI::getRootView()->addChild(panel);
-
-	llinfos << "Build LLPanelStandStopFlying panel" << llendl;
-
-	panel->updatePosition();
-	return panel;
-}
-
 void LLPanelStandStopFlying::onStandButtonClick()
 {
-	LLFirstUse::sit(false);
+// [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
+	if ( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canStand()) )
+	{
+		LLFirstUse::sit(false);
 
-	LLSelectMgr::getInstance()->deselectAllForStandingUp();
-	gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
+		LLSelectMgr::getInstance()->deselectAllForStandingUp();
+		gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
+	}
+// [/RLVa:KB]
+//	LLSelectMgr::getInstance()->deselectAllForStandingUp();
+//	gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
 
 	setFocus(FALSE); // EXT-482
 	mStandButton->setVisible(FALSE); // force visibility changing to avoid seeing Stand & Move buttons at once.

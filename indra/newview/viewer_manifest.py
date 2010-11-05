@@ -238,7 +238,7 @@ class WindowsManifest(ViewerManifest):
 
         if self.is_packaging_viewer():
             # Find secondlife-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
-            self.path(src='%s/secondlife-bin.exe' % self.args['configuration'], dst=self.final_exe())
+            self.path(src='%s/firestorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
 
         # Plugin host application
         self.path(os.path.join(os.pardir,
@@ -564,7 +564,7 @@ class DarwinManifest(ViewerManifest):
 
     def construct(self):
         # copy over the build result (this is a no-op if run within the xcode script)
-        self.path(self.args['configuration'] + "/Second Life.app", dst="")
+        self.path(self.args['configuration'] + "/Firestorm.app", dst="")
 
         if self.prefix(src="", dst="Contents"):  # everything goes in Contents
             self.path("Info-SecondLife.plist", dst="Info.plist")
@@ -705,20 +705,20 @@ class DarwinManifest(ViewerManifest):
         if ("package" in self.args['actions'] or 
             "unpacked" in self.args['actions']):
             self.run_command('strip -S %(viewer_binary)r' %
-                             { 'viewer_binary' : self.dst_path_of('Contents/MacOS/Second Life')})
+                             { 'viewer_binary' : self.dst_path_of('Contents/MacOS/Firestorm')})
 
 
     def package_finish(self):
-        channel_standin = 'Second Life Viewer 2'  # hah, our default channel is not usable on its own
+        channel_standin = 'Firestorm'  # hah, our default channel is not usable on its own
         if not self.default_channel():
             channel_standin = self.channel()
 
-        imagename="SecondLife_" + '_'.join(self.args['version'])
+        imagename="Firestorm_" + '_'.join(self.args['version'])
 
         # MBW -- If the mounted volume name changes, it breaks the .DS_Store's background image and icon positioning.
         #  If we really need differently named volumes, we'll need to create multiple DS_Store file images, or use some other trick.
 
-        volname="Second Life Installer"  # DO NOT CHANGE without understanding comment above
+        volname="Firestorm Installer"  # DO NOT CHANGE without understanding comment above
 
         if self.default_channel():
             if not self.default_grid():
@@ -821,7 +821,7 @@ class LinuxManifest(ViewerManifest):
             self.path("client-readme.txt","README-linux.txt")
             self.path("client-readme-voice.txt","README-linux-voice.txt")
             self.path("client-readme-joystick.txt","README-linux-joystick.txt")
-            self.path("wrapper.sh","secondlife")
+            self.path("wrapper.sh","firestorm")
             self.path("handle_secondlifeprotocol.sh", "etc/handle_secondlifeprotocol.sh")
             self.path("register_secondlifeprotocol.sh", "etc/register_secondlifeprotocol.sh")
             self.path("refresh_desktop_app_entry.sh", "etc/refresh_desktop_app_entry.sh")
@@ -832,7 +832,7 @@ class LinuxManifest(ViewerManifest):
         # Create an appropriate gridargs.dat for this package, denoting required grid.
         self.put_in_file(self.flags_list(), 'etc/gridargs.dat')
 
-        self.path("secondlife-bin","bin/do-not-directly-run-secondlife-bin")
+        self.path("firestorm-bin","bin/do-not-directly-run-firestorm-bin")
         self.path("../linux_crash_logger/linux-crash-logger","bin/linux-crash-logger.bin")
         self.path("../linux_updater/linux-updater", "bin/linux-updater.bin")
         self.path("../llplugin/slplugin/SLPlugin", "bin/SLPlugin")
