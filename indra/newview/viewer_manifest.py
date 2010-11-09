@@ -746,7 +746,7 @@ class DarwinManifest(ViewerManifest):
             # Copy everything in to the mounted .dmg
 
             if self.default_channel() and not self.default_grid():
-                app_name = "Second Life " + self.args['grid']
+                app_name = "Firestorm " + self.args['grid']
             else:
                 app_name = channel_standin.strip()
 
