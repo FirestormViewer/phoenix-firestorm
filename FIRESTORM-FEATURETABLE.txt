@@ -1,0 +1,5 @@
+Please keep this updated with major user-facing features we add to firestorm beyond LL-snowstorm
+
+FEATURE			LICENSE
+
+RLVa			LGPL
