@@ -44,7 +44,7 @@ fi
 if [ $WANTS_CONFIG -eq $TRUE ] ; then
 	mkdir -p ../logs > /dev/null 2>&1
 	./develop.py -t Release | tee $LOG
-	mkdir -p indra/build-darwin-i386/newview/Release/Firestorm.app  # work around LL bug
+	mkdir -p ./build-darwin-i386/newview/Release/Firestorm.app  # work around LL bug
 fi
 
 if [ $WANTS_BUILD -eq $TRUE ] ; then
