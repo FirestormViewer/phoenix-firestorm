@@ -57,7 +57,7 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
 
 	echo "Building in progress... Check $LOG for verbose status"
 	# -sdk macosx10.6
-	xcodebuild -project build-darwin-i386/SecondLife.xcodeproj -alltargets -configuration Release GCC_OPTIMIZATION_LEVEL=3 ARCHS=i386 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee $LOG | grep -e "[(make.*Error)|(xcodebuild.*Error)] "
+	xcodebuild -project build-darwin-i386/SecondLife.xcodeproj -alltargets -configuration Release GCC_VERSION=4.2 -sdk macosx10.6 GCC_OPTIMIZATION_LEVEL=3 ARCHS=i386 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee $LOG | grep -e "[(make.*Error)|(xcodebuild.*Error)] "
 	echo "Complete"
 fi
 popd
