@@ -198,10 +198,26 @@ protected:
 // Predicates
 //
 
-bool rlvPredIsWearableItem(const LLViewerInventoryItem* pItem);
-bool rlvPredIsNotWearableItem(const LLViewerInventoryItem* pItem);
-bool rlvPredIsRemovableItem(const LLViewerInventoryItem* pItem);
-bool rlvPredIsNotRemovableItem(const LLViewerInventoryItem* pItem);
+bool rlvPredCanWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWearMask);
+bool rlvPredCanNotWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWearMask);
+bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem);
+bool rlvPredCanNotRemoveItem(const LLViewerInventoryItem* pItem);
+
+struct RlvPredCanWearItem
+{
+	RlvPredCanWearItem(ERlvWearMask eWearMask) : m_eWearMask(eWearMask) {}
+	bool operator()(const LLViewerInventoryItem* pItem) { return rlvPredCanWearItem(pItem, m_eWearMask); }
+protected:
+	ERlvWearMask m_eWearMask;
+};
+
+struct RlvPredCanNotWearItem
+{
+	RlvPredCanNotWearItem(ERlvWearMask eWearMask) : m_eWearMask(eWearMask) {}
+	bool operator()(const LLViewerInventoryItem* pItem) { return rlvPredCanNotWearItem(pItem, m_eWearMask); }
+protected:
+	ERlvWearMask m_eWearMask;
+};
 
 struct RlvPredIsEqualOrLinkedItem
 {
