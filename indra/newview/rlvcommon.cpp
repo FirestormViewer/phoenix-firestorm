@@ -400,11 +400,21 @@ bool RlvUtil::isNearbyRegion(const std::string& strRegion)
 	return false;
 }
 
-// Checked: 2010-04-08 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-void RlvUtil::notifyFailedAssertion(const char* pstrAssert, const char* pstrFile, int nLine)
+// Checked: 2010-11-11 (RLVa-1.2.1g) | Added: RLVa-1.2.1g
+void RlvUtil::notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine)
 {
+	static std::string strAssertPrev, strFilePrev; static int nLinePrev;
+	if ( (strAssertPrev == strAssert) && (strFile == strFilePrev) && (nLine == nLinePrev) )
+	{
+		// Don't show the same assertion over and over
+		return;
+	}
+	strAssertPrev = strAssert;
+	strFilePrev = strFile;
+	nLinePrev = nLine;
+
 	LLSD argsNotify;
-	argsNotify["MESSAGE"] = llformat("RLVa assertion failure: %s (%s - %d)", pstrAssert, pstrFile, nLine);
+	argsNotify["MESSAGE"] = llformat("RLVa assertion failure: %s (%s - %d)", strAssert.c_str(), strFile.c_str(), nLine);
 	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
 }
 

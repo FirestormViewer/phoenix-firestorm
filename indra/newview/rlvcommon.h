@@ -134,7 +134,7 @@ public:
 	static bool isForceTp()	{ return m_fForceTp; }
 	static void forceTp(const LLVector3d& posDest);							// Ignores restrictions that might otherwise prevent tp'ing
 
-	static void notifyFailedAssertion(const char* pstrAssert, const char* pstrFile, int nLine);
+	static void notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine);
 
 	static void sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession = LLUUID::null);
 	static bool isValidReplyChannel(S32 nChannel);
