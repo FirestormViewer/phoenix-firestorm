@@ -516,7 +516,7 @@ bool RlvSelectIsSittingOn::apply(LLSelectNode* pNode)
 bool rlvPredIsWearableItem(const LLViewerInventoryItem* pItem)
 {
 	// RELEASE-RLVa: [SL-2.0.0] This will need rewriting for "ENABLE_MULTIATTACHMENTS"
-	if (pItem)
+	if ( (pItem) && (RlvForceWear::isWearableItem(pItem)) )
 	{
 		if (RlvForceWear::isWearingItem(pItem))
 			return true; // Special exception for currently worn items
