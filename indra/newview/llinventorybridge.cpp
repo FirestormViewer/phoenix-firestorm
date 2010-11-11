@@ -3053,8 +3053,9 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 // [RLVa:KB] - Checked: 2010-05-27 (RLVa-1.2.0h) | Added: RLVa-1.2.0h
 		if ( (rlv_handler_t::isEnabled()) && (move_is_into_current_outfit) )
 		{
+			// RELEASE-RLVa: [RLVa-1.2.1] Keep in sync with code below which calls LLAppearanceMgr::wearItemOnAvatar with "replace == true"
 			const LLViewerInventoryItem* pItem = dynamic_cast<const LLViewerInventoryItem*>(inv_item);
-			is_movable = rlvPredIsWearableItem(pItem);
+			is_movable = rlvPredCanWearItem(pItem, RLV_WEAR_REPLACE);
 		}
 // [/RLVa:KB]
 

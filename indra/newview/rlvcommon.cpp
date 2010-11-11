@@ -106,6 +106,9 @@ void RlvSettings::initClass()
 		if (gSavedSettings.controlExists(RLV_SETTING_SHOWNAMETAGS))
 			gSavedSettings.getControl(RLV_SETTING_SHOWNAMETAGS)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fShowNameTags));
 
+		if (gSavedSettings.controlExists(RLV_SETTING_AVATAROFFSET_Z))
+			gSavedSettings.getControl(RLV_SETTING_AVATAROFFSET_Z)->getSignal()->connect(boost::bind(&onChangedAvatarOffset, _2));
+
 		fInitialized = true;
 	}
 }
@@ -125,6 +128,13 @@ void RlvSettings::initClass()
 		}
 	}
 #endif // RLV_EXTENSION_STARTLOCATION
+
+// Checked: 2010-10-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
+bool RlvSettings::onChangedAvatarOffset(const LLSD& sdValue)
+{
+	gAgent.sendAgentSetAppearance();
+	return true;
+}
 
 // Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.1.0i
 bool RlvSettings::onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting)
@@ -396,11 +406,21 @@ bool RlvUtil::isNearbyRegion(const std::string& strRegion)
 	return false;
 }
 
-// Checked: 2010-04-08 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-void RlvUtil::notifyFailedAssertion(const char* pstrAssert, const char* pstrFile, int nLine)
+// Checked: 2010-11-11 (RLVa-1.2.1g) | Added: RLVa-1.2.1g
+void RlvUtil::notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine)
 {
+	static std::string strAssertPrev, strFilePrev; static int nLinePrev;
+	if ( (strAssertPrev == strAssert) && (strFile == strFilePrev) && (nLine == nLinePrev) )
+	{
+		// Don't show the same assertion over and over
+		return;
+	}
+	strAssertPrev = strAssert;
+	strFilePrev = strFile;
+	nLinePrev = nLine;
+
 	LLSD argsNotify;
-	argsNotify["MESSAGE"] = llformat("RLVa assertion failure: %s (%s - %d)", pstrAssert, pstrFile, nLine);
+	argsNotify["MESSAGE"] = llformat("RLVa assertion failure: %s (%s - %d)", strAssert.c_str(), strFile.c_str(), nLine);
 	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
 }
 
@@ -498,11 +518,10 @@ bool RlvSelectIsSittingOn::apply(LLSelectNode* pNode)
 // Predicates
 //
 
-// Checked: 2010-05-14 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
-bool rlvPredIsWearableItem(const LLViewerInventoryItem* pItem)
+// Checked: 2010-11-11 (RLVa-1.2.1g) | Modified: RLVa-1.2.1g
+bool rlvPredCanWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWearMask)
 {
-	// RELEASE-RLVa: [SL-2.0.0] This will need rewriting for "ENABLE_MULTIATTACHMENTS"
-	if (pItem)
+	if ( (pItem) && (RlvForceWear::isWearableItem(pItem)) )
 	{
 		if (RlvForceWear::isWearingItem(pItem))
 			return true; // Special exception for currently worn items
@@ -510,11 +529,11 @@ bool rlvPredIsWearableItem(const LLViewerInventoryItem* pItem)
 		{
 			case LLAssetType::AT_BODYPART:
 				// NOTE: only one body part of each type is allowed so the only way to wear one is if we can replace the current one
-				return (gRlvWearableLocks.canWear(pItem) & RLV_WEAR_REPLACE);
+				return (RLV_WEAR_LOCKED != (gRlvWearableLocks.canWear(pItem) & RLV_WEAR_REPLACE & eWearMask));
 			case LLAssetType::AT_CLOTHING:
-				return (RLV_WEAR_LOCKED != gRlvWearableLocks.canWear(pItem));
+				return (RLV_WEAR_LOCKED != (gRlvWearableLocks.canWear(pItem) & eWearMask));
 			case LLAssetType::AT_OBJECT:
-				return gRlvAttachmentLocks.canAttach(pItem);
+				return (RLV_WEAR_LOCKED != (gRlvAttachmentLocks.canAttach(pItem) & eWearMask));
 			case LLAssetType::AT_GESTURE:
 				return true;
 			default:
@@ -525,15 +544,15 @@ bool rlvPredIsWearableItem(const LLViewerInventoryItem* pItem)
 }
 
 // Checked: 2010-03-22 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
-bool rlvPredIsNotWearableItem(const LLViewerInventoryItem* pItem)
+bool rlvPredCanNotWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWearMask)
 {
-	return !rlvPredIsWearableItem(pItem);
+	return !rlvPredCanWearItem(pItem, eWearMask);
 }
 
 // Checked: 2010-03-22 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
-bool rlvPredIsRemovableItem(const LLViewerInventoryItem* pItem)
+bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem)
 {
-	if (pItem)
+	if ( (pItem) && (RlvForceWear::isWearableItem(pItem)) )
 	{
 		switch (pItem->getType())
 		{
@@ -552,9 +571,9 @@ bool rlvPredIsRemovableItem(const LLViewerInventoryItem* pItem)
 }
 
 // Checked: 2010-03-22 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
-bool rlvPredIsNotRemovableItem(const LLViewerInventoryItem* pItem)
+bool rlvPredCanNotRemoveItem(const LLViewerInventoryItem* pItem)
 {
-	return !rlvPredIsRemovableItem(pItem);
+	return !rlvPredCanRemoveItem(pItem);
 }
 
 // ============================================================================

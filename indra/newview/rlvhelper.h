@@ -442,7 +442,7 @@ inline bool RlvCommand::hasStrictVariant(ERlvBehaviour eBhvr)
 // Checked: 2010-04-05 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
 inline bool RlvForceWear::isWearableItem(const LLInventoryItem* pItem)
 {
-	LLAssetType::EType assetType = pItem->getType();
+	LLAssetType::EType assetType = (pItem) ? pItem->getType() : LLAssetType::AT_NONE;
 	return 
 		(LLAssetType::AT_BODYPART == assetType) || (LLAssetType::AT_CLOTHING == assetType) ||
 		(LLAssetType::AT_OBJECT == assetType) || (LLAssetType::AT_GESTURE == assetType);
