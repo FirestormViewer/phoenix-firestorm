@@ -13,6 +13,7 @@ FALSE=1
 # And then close and restart cygwin
 if [ -z $WINPYTHON ] ; then
 	WINPYTHON="/cygdrive/c/Python26/python.exe"
+fi
 LOG="`pwd`/logs/build_win32.log"
 
 ###
