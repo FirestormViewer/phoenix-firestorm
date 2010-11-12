@@ -32,6 +32,10 @@ if [ "$1" == "--rebuild" ] ; then
 	echo "rebuilding..."
 	WANTS_CLEAN=$FALSE
 	WANTS_CONFIG=$FALSE
+elif [ "$1" == "--config" ] ; then
+	echo "configuring..."
+	WANTS_BUILD=$FALSE
+	WANTS_PACKAGE=$FALSE
 fi
 
 ###
@@ -44,7 +48,7 @@ if [ ! -f "$WINPYTHON" ] ; then
 	exit 1
 fi
 
-pushd indra
+pushd indra > /dev/null
 if [ $WANTS_CLEAN -eq $TRUE ] ; then
 	$WINPYTHON develop.py clean
 	find . -name "*.pyc" -exec rm {} \;
@@ -61,16 +65,19 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 fi
 
 if [ $WANTS_BUILD -eq $TRUE ] ; then
-        echo -n "Updating build version to "
-        buildVer=`grep -o -e "LL_VERSION_BUILD = [0-9]\+" llcommon/llversionviewer.h | cut -f 3 -d " "`
-        echo $((++buildVer))
-        sed -e "s#LL_VERSION_BUILD = [0-9][0-9]*#LL_VERSION_BUILD = ${buildVer}#" llcommon/llversionviewer.h > llcommon/llversionviewer.h1
-        mv llcommon/llversionviewer.h1 llcommon/llversionviewer.h
+	echo -n "Setting build version to "
+	buildVer=`hg summary | grep parent | sed 's/parent: //' | sed 's/:.*//'`
+	echo "$buildVer."
+	cp llcommon/llversionviewer.h llcommon/llversionviewer.h.build
+	trap "mv llcommon/llversionviewer.h.build llcommon/llversionviewer.h" INT TERM EXIT
+	sed -e "s#LL_VERSION_BUILD = [0-9][0-9]*#LL_VERSION_BUILD = ${buildVer}#"\
+		llcommon/llversionviewer.h.build > llcommon/llversionviewer.h
 
 
-	echo "Building in progress... Check $LOG for verbose status"
+	echo "Building in progress. Check $LOG for verbose status."
 	$WINPYTHON develop.py -G vc80 -t Release build  2>&1 | tee -a $LOG | grep Build
+	trap - INT TERM EXIT
+	mv llcommon/llversionviewer.h.build llcommon/llversionviewer.h
 	echo "Complete"
 fi
-popd
-
+popd > /dev/null
