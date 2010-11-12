@@ -10,6 +10,7 @@ particularly with different versions of Visual Studio.
 To get started, follow the snowstorm instructions for setting up a windows build environment at this page:
 http://wiki.secondlife.com/wiki/Viewer_2_Microsoft_Windows_Builds
 
+
 GET THE PHOENIX SOURCE
 ======================
 
@@ -46,3 +47,25 @@ VISUAL STUDIO BUILDS
 2. Set the build type to Release
 3. Select the "firestorm-bin" target
 4. Build.
+5. Your output installer will be in indra/VC80/newview/Release
+
+
+BUILD ERRORS
+============
+
+1. Google Breakpad
+
+If your build fails because of an error in 'dump_syms.exe' download a new version of this executable that is statically linked. 
+http://google-breakpad.googlecode.com/svn-history/r595/trunk/src/tools/windows/binaries/dump_syms.exe
+
+Place this file under libraries/i686-win32/bin/dump_syms.exe
+
+2. "Manifest multiple bindings error"
+
+If your build fails to package with an error like the above, it is because you do not have an up to date C++ runtime library installed. You should enable windows auto-updates and install ALL required updates for your platform to resolve this error.
+
+
+COMMITING CHANGES
+=================
+
+When commiting changes back to the phoenix-firestorm-lgpl repository, you must include the string "lgpl" or "LGPL" somewhere in your most recent commit message. Also, insure all code you commit to this repository is LGPL licensed!
