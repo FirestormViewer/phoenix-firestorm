@@ -1060,8 +1060,9 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			{
 				// We may select this object, so pretend it was clicked
 				mPick = mHoverPick;
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
-				if ( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canTouch(hover_object, mHoverPick.mObjectOffset)) )
+// [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.1g) | Modified: RLVa-1.2.1g
+				if ( (!rlv_handler_t::isEnabled()) || (!gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) ||
+					 (gRlvHandler.canTouch(hover_object, mHoverPick.mObjectOffset)) )
 				{
 // [/RLVa:KB]
 					LLInspector::Params p;
