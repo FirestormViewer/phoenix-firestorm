@@ -28,6 +28,7 @@ if [ "$1" == "--rebuild" ] ; then
 elif [ "$1" == "--config" ] ; then
 	echo "configuring..."
 	WANTS_BUILD=$FALSE
+	WANTS_PACKAGE=$FALSE
 fi
 
 ###
