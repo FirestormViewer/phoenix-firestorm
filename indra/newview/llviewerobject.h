@@ -328,7 +328,10 @@ public:
 
 	void sendShapeUpdate();
 
-	U8 getState()							{ return mState; }
+//	U8 getState()							{ return mState; }
+// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+	U8 getState() const						{ return mState; }
+// [/RLVa:KB]
 
 	F32 getAppAngle() const					{ return mAppAngle; }
 	F32 getPixelArea() const				{ return mPixelArea; }
