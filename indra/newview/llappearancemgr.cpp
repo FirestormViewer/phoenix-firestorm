@@ -2531,6 +2531,12 @@ public:
 
 	virtual ~LLShowCreatedOutfit()
 	{
+		if (!LLApp::isRunning())
+		{
+			llwarns << "called during shutdown, skipping" << llendl;
+			return;
+		}
+
 		LLSD key;
 		
 		//EXT-7727. For new accounts LLShowCreatedOutfit is created during login process
