@@ -346,6 +346,9 @@ RenderTextureMemoryMultiple			1	0.375
 RenderUseImpostors				0	0
 UseOcclusion				0	0
 
+list NVIDIA_GeForce_9600M
+RenderTextureMemoryMultiple		1	1.0
+
 /// tweaked ATI to 96 Draw distance
 
 list ATI_Radeon_9000
