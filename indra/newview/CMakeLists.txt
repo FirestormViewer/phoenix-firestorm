@@ -1938,10 +1938,10 @@ if (LL_TESTS)
   )
 
 # RLVa - incompatible
-#  LL_ADD_INTEGRATION_TEST(llslurl
-#     "${llslurl_test_sources}"
-#    "${test_libs}"
-#    )
+  LL_ADD_INTEGRATION_TEST(llslurl
+     "${llslurl_test_sources}"
+    "${test_libs}"
+    )
 
   LL_ADD_INTEGRATION_TEST(llviewernetwork
      llviewernetwork.cpp
