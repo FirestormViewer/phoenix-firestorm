@@ -9,7 +9,7 @@
  width="802">
     <menu
      create_jump_keys="true"
-     label="Me"
+     label="Viewer"
      tear_off="true"
      name="File">
         <menu_item_call
