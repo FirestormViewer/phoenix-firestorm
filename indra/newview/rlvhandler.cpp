@@ -1777,9 +1777,9 @@ ERlvCmdRet RlvHandler::onGetInvWorn(const RlvCommand& rlvCmd, std::string& strRe
 	// Sanity check - gAgentAvatarp can't be NULL [see RlvForceWear::isWearingItem()]
 	if (!isAgentAvatarValid())
 		return RLV_RET_FAILED;
-	// Sanity check - folder should exist and not be hidden
+	// Sanity check - folder should exist
 	LLViewerInventoryCategory* pFolder = RlvInventory::instance().getSharedFolder(rlvCmd.getOption());
-	if ( (!pFolder) || (pFolder->getName().empty()) || (RLV_FOLDER_PREFIX_HIDDEN == pFolder->getName()[0]) )
+	if (!pFolder)
 		return (RlvInventory::instance().getSharedRoot() != NULL) ? RLV_RET_FAILED_OPTION : RLV_RET_FAILED_NOSHAREDROOT;
 
 	// Collect everything @attachall would be attaching
