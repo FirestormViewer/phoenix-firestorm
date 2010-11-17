@@ -43,6 +43,18 @@
 
 #include <iostream>
 
+//RLVa
+#include "llavatarname.h"
+#include <string>
+
+std::string rlvGetAnonym(const LLAvatarName& avName)
+{
+        return "someone";
+}
+
+
+//</RLVa>
+
 // *TODO: switch to using TUT
 // *TODO: teach Parabuild about this program, run automatically after full builds
 

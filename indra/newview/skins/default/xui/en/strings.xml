@@ -6,9 +6,9 @@
 <strings>
 
 	<!-- Default Args - these arguments will be replaced in all strings -->
-	<string name="SECOND_LIFE">Second Life</string>
-	<string name="APP_NAME">Second Life</string>
-	<string name="CAPITALIZED_APP_NAME">SECOND LIFE</string>
+	<string name="SECOND_LIFE">Firestorm</string>
+	<string name="APP_NAME">Firestorm</string>
+	<string name="CAPITALIZED_APP_NAME">FIRESTORM</string>
 	<string name="SECOND_LIFE_GRID">Second Life Grid</string>
 	<string name="SUPPORT_SITE">Second Life Support Portal</string>
 
@@ -338,7 +338,7 @@
 	<string name="avi_movie_file">AVI Movie File</string>
 	<string name="xaf_animation_file">XAF Anim File</string>
 	<string name="xml_file">XML File</string>
-	<string name="raw_file">RAW File</string>
+	<string name="dot_raw_file">RAW File</string>
 	<string name="compressed_image_files">Compressed Images</string>
 	<string name="load_files">Load Files</string>
 	<string name="choose_the_directory">Choose Directory</string>
@@ -2279,7 +2279,8 @@ Requests name of an avatar.  When data is available the dataserver event will be
 	<string name="InvOfferOwnedBy">owned by</string>
 	<string name="InvOfferOwnedByUnknownUser">owned by an unknown user</string>
 	<string name="InvOfferGaveYou">gave you</string>
-	<string name="InvOfferDecline">You decline [DESC] from &lt;nolink&gt;[NAME]&lt;/nolink&gt;.</string>
+	<string name="InvOfferYouDecline">You decline</string>
+	<string name="InvOfferFrom">from</string>
 
 	<!-- group money -->
 	<string name="GroupMoneyTotal">Total</string>
@@ -3072,6 +3073,9 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
   </string>
   <string name="inventory_item_offered-im">
     Inventory item offered
+  </string>
+  <string name="inventory_item_offered_rlv">
+    Inventory item offered to [NAME]
   </string>
   <string name="share_alert">
     Drag items from inventory here

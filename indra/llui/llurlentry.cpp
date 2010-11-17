@@ -605,6 +605,27 @@ std::string LLUrlEntryAgentUserName::getName(const LLAvatarName& avatar_name)
 	return avatar_name.mUsername.empty() ? avatar_name.getLegacyName() : avatar_name.mUsername;
 }
 
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+
+// Defined in rlvcommon.cpp - redirects to RlvStrings::getAnonym() since we can't really get to that class from here
+extern const std::string& rlvGetAnonym(const LLAvatarName& avName);
+
+//
+// LLUrlEntryAgentRLVAnonymizedName Describes an RLV anonymized agent name Url, e.g.,
+// secondlife:///app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/rlvanonym
+// x-grid-location-info://lincoln.lindenlab.com/app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/rlvanonym
+//
+LLUrlEntryAgentRLVAnonymizedName::LLUrlEntryAgentRLVAnonymizedName()
+{
+	mPattern = boost::regex(APP_HEADER_REGEX "/agent/[\\da-f-]+/rlvanonym", boost::regex::perl|boost::regex::icase);
+}
+
+std::string LLUrlEntryAgentRLVAnonymizedName::getName(const LLAvatarName& avatar_name)
+{
+	return rlvGetAnonym(avatar_name);
+}
+// [/RLVa:KB]
+
 //
 // LLUrlEntryGroup Describes a Second Life group Url, e.g.,
 // secondlife:///app/group/00005ff3-4044-c79f-9de8-fb28ae0df991/about
@@ -978,7 +999,7 @@ std::string LLUrlEntryWorldMap::getLocation(const std::string &url) const
 //
 LLUrlEntryNoLink::LLUrlEntryNoLink()
 {
-	mPattern = boost::regex("<nolink>.*</nolink>",
+	mPattern = boost::regex("<nolink>[^<]*</nolink>",
 							boost::regex::perl|boost::regex::icase);
 }
 
@@ -995,8 +1016,7 @@ std::string LLUrlEntryNoLink::getLabel(const std::string &url, const LLUrlLabelC
 
 LLStyle::Params LLUrlEntryNoLink::getStyle() const 
 { 
-	// Don't render as URL (i.e. no context menu or hand cursor).
-	return LLStyle::Params().is_link(false);
+	return LLStyle::Params(); 
 }
 
 

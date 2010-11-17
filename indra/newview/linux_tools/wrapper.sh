@@ -111,7 +111,7 @@ if [ -n "$LL_TCMALLOC" ]; then
 fi
 
 export SL_ENV='LD_LIBRARY_PATH="`pwd`"/lib:"${LD_LIBRARY_PATH}"'
-export SL_CMD='$LL_WRAPPER bin/do-not-directly-run-secondlife-bin'
+export SL_CMD='$LL_WRAPPER bin/do-not-directly-run-firestorm-bin'
 export SL_OPT="`cat etc/gridargs.dat` $@"
 
 # Run the program
@@ -128,7 +128,7 @@ if [ -n "$LL_RUN_ERR" ]; then
 			cat << EOFMARKER
 You are running the Second Life Viewer on a x86_64 platform.  The
 most common problems when launching the Viewer (particularly
-'bin/do-not-directly-run-secondlife-bin: not found' and 'error while
+'bin/do-not-directly-run-firestorm-bin: not found' and 'error while
 loading shared libraries') may be solved by installing your Linux
 distribution's 32-bit compatibility packages.
 For example, on Ubuntu and other Debian-based Linuxes you might run:

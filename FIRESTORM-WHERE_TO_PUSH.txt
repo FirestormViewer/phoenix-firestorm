@@ -1,0 +1,9 @@
+phoenix-firestorm-gpl	= GPL Contributions
+phoenix-firestorm-lgpl  = LGPL Contributions ONLY!
+phoenix-firestorm-int   = Do not use - for build integration testing 
+			  and upstream merges.
+
+
+If you are working on the -gpl branch, you may merge FROM -lgpl
+
+No changes from -gpl should ever be merged to -lgpl. Code can flow in one direction only.
