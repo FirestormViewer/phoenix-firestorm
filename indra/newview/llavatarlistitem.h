@@ -51,8 +51,6 @@ public:
 									online_style,
 									offline_style;
 
-		Optional<S32>				name_right_pad;
-
 		Params();
 	};
 
@@ -103,6 +101,9 @@ public:
 	void setShowPermissions(bool show) { mShowPermissions = show; };
 	void showLastInteractionTime(bool show);
 	void setAvatarIconVisible(bool visible);
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+	void setRlvCheckShowNames(bool fRlvCheckShowNames) { mRlvCheckShowNames = fRlvCheckShowNames; }
+// [/RLVa:KB]
 	
 	const LLUUID& getAvatarId() const;
 	std::string getAvatarName() const;
@@ -208,6 +209,9 @@ private:
 	//Speaker indicator and avatar name coords are translated accordingly
 	bool mShowInfoBtn;
 	bool mShowProfileBtn;
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+	bool mRlvCheckShowNames;
+// [/RLVa:KB]
 
 	/// indicates whether to show icons representing permissions granted
 	bool mShowPermissions;
@@ -217,7 +221,7 @@ private:
 
 	static bool	sStaticInitialized; // this variable is introduced to improve code readability
 	static S32  sLeftPadding; // padding to first left visible child (icon or name)
-	static S32  sNameRightPadding; // right padding from name to next visible child
+	static S32  sRightNamePadding; // right padding from name to next visible child
 
 	/**
 	 * Contains widths of each child specified by EAvatarListItemChildIndex

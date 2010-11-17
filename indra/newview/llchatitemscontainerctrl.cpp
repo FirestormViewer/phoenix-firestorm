@@ -31,7 +31,6 @@
 
 #include "llchatmsgbox.h"
 #include "llavatariconctrl.h"
-#include "llcommandhandler.h"
 #include "llfloaterreg.h"
 #include "lllocalcliprect.h"
 #include "lltrans.h"
@@ -41,43 +40,13 @@
 
 #include "llslurl.h"
 
+// [RLVa:KB] - Checked: 2010-04-21 (RLVa-1.2.0f)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 static const S32 msg_left_offset = 10;
 static const S32 msg_right_offset = 10;
 static const S32 msg_height_pad = 5;
-
-//*******************************************************************************************************************
-// LLObjectHandler
-//*******************************************************************************************************************
-
-// handle secondlife:///app/object/<ID>/inspect SLURLs
-class LLObjectHandler : public LLCommandHandler
-{
-public:
-	LLObjectHandler() : LLCommandHandler("object", UNTRUSTED_BLOCK) { }
-
-	bool handle(const LLSD& params, const LLSD& query_map, LLMediaCtrl* web)
-	{
-		if (params.size() < 2) return false;
-
-		LLUUID object_id;
-		if (!object_id.set(params[0], FALSE))
-		{
-			return false;
-		}
-
-		const std::string verb = params[1].asString();
-
-		if (verb == "inspect")
-		{
-			LLFloaterReg::showInstance("inspect_object", LLSD().with("object_id", object_id));
-			return true;
-		}
-
-		return false;
-	}
-};
-
-LLObjectHandler gObjectHandler;
 
 //*******************************************************************************************************************
 //LLNearbyChatToastPanel
@@ -176,7 +145,11 @@ void LLNearbyChatToastPanel::init(LLSD& notification)
 	std::string		fromName = notification["from"].asString();	// agent or object name
 	mFromID = notification["from_id"].asUUID();		// agent id or object id
 	mFromName = fromName;
-	
+
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+	mShowIconTooltip = notification.has("show_icon_tooltip") ? notification["show_icon_tooltip"].asBoolean() : true;
+// [/RLVa:KB]
+
 	int sType = notification["source"].asInteger();
     mSourceType = (EChatSourceType)sType;
 	
@@ -204,26 +177,17 @@ void LLNearbyChatToastPanel::init(LLSD& notification)
 	{
 		std::string str_sender;
 
-		str_sender = fromName;
+		str_sender = "<nolink>"; // disable parsing URLs in object names (STORM-358)
+		str_sender += fromName;
+		str_sender += "</nolink>";
 
 		str_sender+=" ";
 
-		//append sender name
-		if (mSourceType == CHAT_SOURCE_AGENT || mSourceType == CHAT_SOURCE_OBJECT)
+		//append user name
 		{
 			LLStyle::Params style_params_name;
 
 			LLColor4 userNameColor = LLUIColorTable::instance().getColor("ChatToastAgentNameColor");
-			std::string href;
-
-			if (mSourceType == CHAT_SOURCE_AGENT)
-			{
-				href = LLSLURL("agent", mFromID, "about").getSLURLString();
-			}
-			else
-			{
-				href = LLSLURL("object", mFromID, "inspect").getSLURLString();
-			}
 
 			style_params_name.color(userNameColor);
 
@@ -232,15 +196,10 @@ void LLNearbyChatToastPanel::init(LLSD& notification)
 			style_params_name.font.name(font_name);
 			style_params_name.font.size(font_style_size);
 
-			style_params_name.link_href = href;
-			style_params_name.is_link = true;
+			style_params_name.link_href = LLSLURL("agent",mFromID,"about").getSLURLString();
 
 			msg_text->appendText(str_sender, FALSE, style_params_name);
 
-		}
-		else
-		{
-			msg_text->appendText(str_sender, false);
 		}
 	}
 
@@ -370,7 +329,10 @@ void LLNearbyChatToastPanel::draw()
 		LLAvatarIconCtrl* icon = getChild<LLAvatarIconCtrl>("avatar_icon", false);
 		if(icon)
 		{
-			icon->setDrawTooltip(mSourceType == CHAT_SOURCE_AGENT);
+//			icon->setDrawTooltip(mSourceType == CHAT_SOURCE_AGENT);
+// [RLVa:KB] - Checked: 2010-04-200 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+			icon->setDrawTooltip( (mShowIconTooltip) && (mSourceType == CHAT_SOURCE_AGENT) );
+// [/RLVa:KB]
 			if(mSourceType == CHAT_SOURCE_OBJECT)
 				icon->setValue(LLSD("OBJECT_Icon"));
 			else if(mSourceType == CHAT_SOURCE_SYSTEM)

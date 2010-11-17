@@ -663,7 +663,7 @@ class WindowsSetup(PlatformSetup):
                           ' --solution ' +
                           os.path.join(build_dir,'SecondLife.sln') +
                           ' --config ' + self.build_type +
-                          ' --startup secondlife-bin')
+                          ' --startup firestorm-bin')
             print 'Running %r in %r' % (vstool_cmd, getcwd())
             self.run(vstool_cmd, name=executable)        
             print >> open(stamp, 'w'), self.build_type
