@@ -10,7 +10,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>RestrainedLoveDebug</key>
     <map>
@@ -341,7 +341,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>AuctionShowFence</key>
     <map>
@@ -418,7 +418,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.5</real>
+      <real>0.3</real>
     </map>
     <key>AudioLevelRolloff</key>
     <map>
@@ -462,7 +462,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.5</real>
+      <real>0.7</real>
     </map>
     <key>AudioLevelWind</key>
     <map>
@@ -473,7 +473,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.5</real>
+      <real>0.0</real>
     </map>
 	<key>AudioStreamingMedia</key>
     <map>
@@ -781,7 +781,7 @@
       <key>Type</key>
       <string>U32</string>
       <key>Value</key>
-      <integer>60</integer>
+      <integer>70</integer>
     </map>
     <key>AvatarBakedLocalTextureUpdateTimeout</key>
     <map>
@@ -1627,7 +1627,7 @@
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>CheesyBeacon</key>
     <map>
@@ -1671,7 +1671,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>CmdLineDisableVoice</key>
     <map>
@@ -3192,7 +3192,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>FindPlacesPictures</key>
     <map>
@@ -3203,7 +3203,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>FirstLoginThisInstall</key>
     <map>
@@ -4843,7 +4843,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>MainloopTimeoutDefault</key>
     <map>
@@ -4920,7 +4920,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>MapShowPeople</key>
     <map>
@@ -5789,7 +5789,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <integer>130</integer>
+      <integer>162</integer>
     </map>
     <key>NextOwnerCopy</key>
     <map>
@@ -5800,7 +5800,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>NextOwnerModify</key>
     <map>
@@ -5811,7 +5811,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>NextOwnerTransfer</key>
     <map>
@@ -5965,7 +5965,7 @@
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>2</integer>
     </map>
     <key>NearbyToastFadingTime</key>
     <map>
@@ -6133,7 +6133,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>OpenDebugStatBasic</key>
     <map>
@@ -6210,7 +6210,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>OpenDebugStatSimTimeDetails</key>
     <map>
@@ -6221,7 +6221,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>OutBandwidth</key>
     <map>
@@ -6654,7 +6654,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>QAMode</key>
     <map>
@@ -8216,7 +8216,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>NameTagShowDisplayNames</key>
     <map>
@@ -8238,7 +8238,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>NameTagShowUsernames</key>
     <map>
@@ -8249,7 +8249,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>RenderInitError</key>
     <map>
@@ -8712,7 +8712,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>ScaleShowAxes</key>
     <map>
@@ -8954,7 +8954,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>ShowCameraButton</key>
     <map>
@@ -8965,7 +8965,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>ShowConsoleWindow</key>
     <map>
@@ -8987,7 +8987,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>NavBarShowParcelProperties</key>
     <map>
@@ -9042,7 +9042,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>ShowGestureButton</key>
     <map>
@@ -9053,7 +9053,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>ShowHoverTips</key>
     <map>
@@ -9086,7 +9086,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>ShowMoveButton</key>
     <map>
@@ -9097,7 +9097,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
 	<key>ShowScriptErrors</key>
     <map>
@@ -9185,7 +9185,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>ShowMiniLocationPanel</key>
     <map>
@@ -9284,7 +9284,7 @@
       <key>Type</key>
       <string>U32</string>
       <key>Value</key>
-      <integer>4</integer>
+      <integer>3</integer>
     </map>
     <key>RecentPeopleSortOrder</key>
     <map>
@@ -9321,7 +9321,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>ShowAdultSearchAll</key>
     <map>
@@ -9360,7 +9360,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>ShowAdultGroups</key>
     <map>
@@ -9399,7 +9399,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>ShowAdultClassifieds</key>
     <map>
@@ -9438,7 +9438,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>ShowAdultEvents</key>
     <map>
@@ -9477,7 +9477,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>ShowAdultLand</key>
     <map>
@@ -9516,7 +9516,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>ShowAdultSims</key>
     <map>
@@ -9650,7 +9650,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>ShowTangentBasis</key>
     <map>
@@ -9694,7 +9694,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>SkinCurrent</key>
     <map>
@@ -11727,7 +11727,7 @@
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>VoiceHost</key>
     <map>

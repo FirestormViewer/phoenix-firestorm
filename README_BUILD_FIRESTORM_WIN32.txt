@@ -5,10 +5,12 @@ Before you start configuring your Windows build system, be aware of our tested c
 		WinXPSP3, 32bit, 2GB RAM, Visual Studio Pro 2005 SP1, latest VC++ runtime installed
 
 If you are not using something that closely matches a tested configuration, you may run into trouble, 
-particularly with different versions of Visual Studio.
+particularly with different versions of Visual Studio. If you are running VS2008, you may be able to build
+the viewer for your local machine, but not package it into an installer.
 
 To get started, follow the snowstorm instructions for setting up a windows build environment at this page:
 http://wiki.secondlife.com/wiki/Viewer_2_Microsoft_Windows_Builds
+
 
 GET THE PHOENIX SOURCE
 ======================
@@ -36,13 +38,37 @@ NOTE: It is normal to see errors about ambiguous include/library paths at this t
 
 A log for the build will be placed in logs/build_firestorm_windows.log
 
+When the build completes, your output installer will be in indra/VC80/newview/Release, look for a <product-build>-Setup.exe file
+
 
 VISUAL STUDIO BUILDS
 ====================
 
 0. Open up a regular CMD.exe command window. Navigate to your downloaded source code.
-1. Run the command "develop.py -G vc80 -t Release configure -DLL_TESTS:BOOL=OFF"
+1. Run the command "develop.py -G vc80 -t Release configure -DLL_TESTS:BOOL=OFF" Change vc80 to vc90 for VS2008
 1. Launch Visual Studio and open up <your downloaded phoenix code>\indra\build-vc80\Secondlife.sln
 2. Set the build type to Release
 3. Select the "firestorm-bin" target
 4. Build.
+5. Your output installer will be in indra/VC80/newview/Release, look for a <product-build>-Setup.exe file
+
+
+BUILD ERRORS
+============
+
+1. Google Breakpad
+
+If your build fails because of an error in 'dump_syms.exe' download a new version of this executable that is statically linked. 
+http://google-breakpad.googlecode.com/svn-history/r595/trunk/src/tools/windows/binaries/dump_syms.exe
+
+Place this file under libraries/i686-win32/bin/dump_syms.exe
+
+2. "Manifest multiple bindings error"
+
+If your build fails to package with an error like the above, it is because you do not have an up to date C++ runtime library installed. You should enable windows auto-updates and install ALL required updates for your platform to resolve this error.
+
+
+COMMITING CHANGES
+=================
+
+When commiting changes back to the phoenix-firestorm-lgpl repository, you must include the string "lgpl" or "LGPL" somewhere in your most recent commit message. Also, insure all code you commit to this repository is LGPL licensed!

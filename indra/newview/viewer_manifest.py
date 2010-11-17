@@ -587,9 +587,9 @@ class DarwinManifest(ViewerManifest):
                 # If we are not using the default channel, use the 'Firstlook
                 # icon' to show that it isn't a stable release.
                 if self.default_channel() and self.default_grid():
-                    self.path("secondlife.icns")
+                    self.path("phoenix_icon.icns")
                 else:
-                    self.path("secondlife_firstlook.icns", "secondlife.icns")
+                    self.path("phoenix_icon.icns", "phoenix_icon.icns") # Does nothing, but we could change it to use a beta icon later. - AO
                 self.path("SecondLife.nib")
                 
                 # Translations

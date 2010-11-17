@@ -30,9 +30,9 @@
 const S32 LL_VERSION_MAJOR = 2;
 const S32 LL_VERSION_MINOR = 4;
 const S32 LL_VERSION_PATCH = 0;
-const S32 LL_VERSION_BUILD = 59;
+const S32 LL_VERSION_BUILD = 13824;
 
-const char * const LL_CHANNEL = "Firestorm Private";
+const char * const LL_CHANNEL = "Firestorm-private-Romana.local";
 
 #if LL_DARWIN
 const char * const LL_VERSION_BUNDLE_ID = "com.secondlife.snowglobe.viewer";

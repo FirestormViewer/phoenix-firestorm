@@ -34,7 +34,7 @@
 #include "llweb.h"
 
                                                             
-const char* DEFAULT_LOGIN_PAGE = "http://secondlife.com/app/login/";
+const char* DEFAULT_LOGIN_PAGE = "http://phoenixviewer.com/app/login/";
 
 const char* SYSTEM_GRID_SLURL_BASE = "secondlife://%s/secondlife/";
 const char* MAIN_GRID_SLURL_BASE = "http://maps.secondlife.com/secondlife/";

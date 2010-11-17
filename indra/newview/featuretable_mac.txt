@@ -55,7 +55,7 @@ WLSkyDetail						1	128
 RenderUseCleverUI				1	1
 Disregard128DefaultDrawDistance	1	1
 Disregard96DefaultDrawDistance	1	1
-RenderTextureMemoryMultiple		1	0.5
+RenderTextureMemoryMultiple		1	1.0
 Disregard128DefaultDrawDistance	1	1
 Disregard96DefaultDrawDistance	1	1
 SkyUseClassicClouds			1	1
@@ -83,6 +83,7 @@ RenderTerrainLODFactor		1	1
 RenderTreeLODFactor			1	0
 RenderUseImpostors			1	1
 RenderVolumeLODFactor		1	0.5
+RenderTextureMemoryMultiple             1       0.5
 RenderWaterReflections		1	0
 VertexShaderEnable			1	0
 WindLightUseAtmosShaders	1	0
@@ -108,6 +109,7 @@ RenderReflectionDetail		1	0
 RenderTerrainDetail			1	1
 RenderTerrainLODFactor		1	1.0
 RenderTreeLODFactor			1	0.5
+RenderTextureMemoryMultiple             1       0.5
 RenderUseImpostors			1	1
 RenderVolumeLODFactor		1	1.125
 RenderWaterReflections		1	0
@@ -345,6 +347,9 @@ list NVIDIA_GeForce_8600
 RenderTextureMemoryMultiple			1	0.375	
 RenderUseImpostors				0	0
 UseOcclusion				0	0
+
+list NVIDIA_GeForce_9600M
+RenderTextureMemoryMultiple		1	1.0
 
 /// tweaked ATI to 96 Draw distance
 

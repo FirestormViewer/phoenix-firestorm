@@ -1145,7 +1145,7 @@ if (DARWIN)
 
   # Add resource files to the project.
   set(viewer_RESOURCE_FILES
-    secondlife.icns
+    phoenix_icon.icns
     macview.r
     gpu_table.txt
     Info-SecondLife.plist
@@ -1768,13 +1768,13 @@ if (DARWIN)
     PROPERTIES
     OUTPUT_NAME "${product}"
     MACOSX_BUNDLE_INFO_STRING "info string - localize me"
-    MACOSX_BUNDLE_ICON_FILE "secondlife.icns"
+    MACOSX_BUNDLE_ICON_FILE "phoenix_icon.icns"
     MACOSX_BUNDLE_GUI_IDENTIFIER "Firestorm"
     MACOSX_BUNDLE_LONG_VERSION_STRING "ververver"
     MACOSX_BUNDLE_BUNDLE_NAME "Firestorm"
     MACOSX_BUNDLE_SHORT_VERSION_STRING "asdf"
     MACOSX_BUNDLE_BUNDLE_VERSION "asdf"
-    MACOSX_BUNDLE_COPYRIGHT "copyright linden lab 2007 - localize me and run me through a legal wringer"
+    MACOSX_BUNDLE_COPYRIGHT "Copyright 2010The Phoenix Viewer Project"
     )
 
   add_custom_command(
@@ -1938,10 +1938,10 @@ if (LL_TESTS)
   )
 
 # RLVa - incompatible
-#  LL_ADD_INTEGRATION_TEST(llslurl
-#     "${llslurl_test_sources}"
-#    "${test_libs}"
-#    )
+  LL_ADD_INTEGRATION_TEST(llslurl
+     "${llslurl_test_sources}"
+    "${test_libs}"
+    )
 
   LL_ADD_INTEGRATION_TEST(llviewernetwork
      llviewernetwork.cpp
