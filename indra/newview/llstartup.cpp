@@ -3047,7 +3047,10 @@ bool process_login_success_response()
 		gAgent.setHomePosRegion(region_handle, position);
 	}
 
-	gAgent.mMOTD.assign(response["message"]);
+	// AO - Kill LL message of the day for now, There's too many unwanted shoe and jewelry adverts.
+	//      We can set it to a more informational, less commercialized feed in the future.
+	//gAgent.mMOTD.assign(response["message"]);
+	gAgent.mMOTD.assign("Welcome to Firestorm");
 
 	// Options...
 	// Each 'option' is an array of submaps. 
