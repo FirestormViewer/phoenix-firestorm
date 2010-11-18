@@ -53,7 +53,7 @@
              name="status_message"
              text_color="white"
              top="10"
-             value="My private notes:"
+             value="Private notes:"
              width="293" />
             <text_editor
              follows="left|top"

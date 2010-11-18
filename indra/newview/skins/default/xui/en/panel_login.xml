@@ -135,11 +135,11 @@ top_pad="0"
 name="start_location_combo"
      width="170">
 <combo_box.item
-label="My last location"
+label="Last location"
 name="MyLastLocation"
          value="last" />
 <combo_box.item
-label="My home"
+label="Home"
 name="MyHome"
          value="home" />
 <combo_box.item

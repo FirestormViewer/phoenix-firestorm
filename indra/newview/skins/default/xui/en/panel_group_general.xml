@@ -147,7 +147,7 @@ Hover your mouse over the options for more help.
          name="active_title_label"
          top_pad="5"
          width="300">
-            My title:
+            Current title:
         </text>
         <combo_box
          follows="left|top|right"

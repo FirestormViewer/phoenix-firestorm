@@ -61,7 +61,7 @@
      scale_image="true"
      left="4"
      layout="topleft"
-     name="Show My Location"
+     name="Show Current Location"
      tool_tip="Center map on my avatar&apos;s location"
      top="6"
      width="24" >
@@ -423,7 +423,7 @@
      tool_tip="Show friends on map"
      width="182">
         <combo_box.item
-         label="My Friends Online"
+         label="Friends Online"
          name="item1"
          value="None" />
 		<combo_box.commit_callback
@@ -444,7 +444,7 @@
      allow_text_entry="true"
      follows="top|right"
      height="23"
-     label="My Landmarks"
+     label="Landmarks"
      layout="topleft"
      top_delta="-3"
      left_pad="7"
@@ -453,7 +453,7 @@
      tool_tip="Landmark to show on map"
      width="182">
         <combo_box.item
-         label="My Landmarks"
+         label="Landmarks"
          name="item1"
          value="None" />
 		<combo_box.commit_callback

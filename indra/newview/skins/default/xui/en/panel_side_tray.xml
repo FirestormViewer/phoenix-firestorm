@@ -26,6 +26,7 @@
     <panel /> <!-- dummy panel, never to actually be seen -->
   </sidetray_tab>
 
+<!-- Disabling because it's redundant and/or unwanted webvertising -AO
   <sidetray_tab
     name="sidebar_home"
     help_topic="sidebar_home"
@@ -43,11 +44,12 @@
         label="home"
       />
   </sidetray_tab>
+-->
 
   <sidetray_tab
     name="sidebar_me"
     help_topic="sidebar_me"
-    tab_title="My Profile"
+    tab_title="Profile"
     description="Edit your public profile and Picks."
     image="TabIcon_Me_Off"
     image_selected="TabIcon_Me_Selected"
@@ -135,7 +137,7 @@
   <sidetray_tab
     name="sidebar_inventory"
     help_topic="sidebar_inventory"
-    tab_title="My Inventory"
+    tab_title="Inventory"
     description="Browse your inventory."
     image="TabIcon_Things_Off"
     image_selected="TabIcon_Things_Selected"
@@ -154,7 +156,7 @@
   <sidetray_tab
     name="sidebar_appearance"
     help_topic="sidebar_appearance"
-    tab_title="My Appearance"
+    tab_title="Appearance"
     description="Change your appearance and current look."
     image="TabIcon_Appearance_Off"
     image_selected="TabIcon_Appearance_Selected"

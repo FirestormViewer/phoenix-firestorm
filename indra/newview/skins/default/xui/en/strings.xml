@@ -1976,8 +1976,8 @@ Requests name of an avatar.  When data is available the dataserver event will be
 	<string name="Since Logoff"  value=" - Since Logoff" />
 
 	<!-- inventory folder -->
-	<string name="InvFolder My Inventory">My Inventory</string>
-	<string name="InvFolder My Favorites">My Favorites</string>
+	<string name="InvFolder My Inventory">Inventory</string>
+	<string name="InvFolder My Favorites">Favorites</string>
 	<string name="InvFolder Library">Library</string>
 	<string name="InvFolder Textures">Textures</string>
 	<string name="InvFolder Sounds">Sounds</string>
@@ -2003,7 +2003,7 @@ Requests name of an avatar.  When data is available the dataserver event will be
 	<string name="InvFolder favorite">Favorites</string>
 	<string name="InvFolder Current Outfit">Current Outfit</string>
 	<string name="InvFolder Initial Outfits">Initial Outfits</string>
-	<string name="InvFolder My Outfits">My Outfits</string>
+	<string name="InvFolder My Outfits">Outfits</string>
 	<string name="InvFolder Accessories">Accessories</string>
 
   <!-- are used for Friends and Friends/All folders in Inventory "Calling cards" folder. See EXT-694-->
@@ -2310,8 +2310,8 @@ Expected .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
   <string name="MuteAvatar">Block</string>
   <string name="UnmuteObject">Unblock</string>
   <string name="UnmuteAvatar">Unblock</string>
-	<string name="AddLandmarkNavBarMenu">Add to My Landmarks...</string>
-	<string name="EditLandmarkNavBarMenu">Edit my Landmark...</string>
+	<string name="AddLandmarkNavBarMenu">Add to Landmarks...</string>
+	<string name="EditLandmarkNavBarMenu">Edit Landmark...</string>
 
 	<!-- menu accelerators -->
 	<string name="accel-mac-control">&#8963;</string>
@@ -2984,10 +2984,10 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
 
   <!-- Navigation bar location input control.
        Strings are here because widget xml is not localizable -->
-  <string name="LocationCtrlAddLandmarkTooltip">Add to My Landmarks</string>
-  <string name="LocationCtrlEditLandmarkTooltip">Edit my Landmark</string>
+  <string name="LocationCtrlAddLandmarkTooltip">Add to Landmarks</string>
+  <string name="LocationCtrlEditLandmarkTooltip">Edit Landmark</string>
   <string name="LocationCtrlInfoBtnTooltip">See more info about the current location</string>
-  <string name="LocationCtrlComboBtnTooltip">My location history</string>
+  <string name="LocationCtrlComboBtnTooltip">Location history</string>
   <string name="LocationCtrlForSaleTooltip">Buy this land</string>
   <string name="LocationCtrlVoiceTooltip">Voice not available here</string>
   <string name="LocationCtrlFlyTooltip">Flying not allowed</string>

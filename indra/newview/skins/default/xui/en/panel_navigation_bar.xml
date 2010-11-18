@@ -176,7 +176,7 @@
                      image_selected="TabIcon_Close_Off"
                      tab_stop="false"
                      follows="left|bottom"
-                     tool_tip="Show more of My Favorites"
+                     tool_tip="Show more favorites"
                      width="15"
 		     top="15"
                      height="15"/>

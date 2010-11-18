@@ -190,11 +190,11 @@
      left="50"
      width="200">
         <combo_box.item
-         label="My Last Location"
+         label="Last Location"
          name="MyLastLocation"
          value="last" />
         <combo_box.item
-         label="My Home"
+         label="Home"
          name="MyHome"
          value="home" />
     </combo_box>
@@ -259,7 +259,7 @@
 	 enabled_control="AvatarNameTagMode"
      control_name="RenderNameShowSelf"
      height="16"
-     label="My name"
+     label="Name"
      layout="topleft"
      left="35"
      name="show_my_name_checkbox1"

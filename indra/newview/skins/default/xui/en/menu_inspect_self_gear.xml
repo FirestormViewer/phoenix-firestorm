@@ -34,7 +34,7 @@
      function="Edit.EnableCustomizeAvatar" />
   </menu_item_call>
   <menu_item_call
-   label="My Profile"
+   label="Profile"
    enabled="true" 
    name="my_profile">
     <menu_item_call.on_click
@@ -42,14 +42,14 @@
      parameter="agent" />
   </menu_item_call>
   <menu_item_call
-   label="My Friends"
+   label="Friends"
    name="my_friends">
     <menu_item_call.on_click
     function="SideTray.PanelPeopleTab"
     parameter="friends_panel" />
   </menu_item_call>
   <menu_item_call
-   label="My Groups"
+   label="Groups"
    name="my_groups">
     <menu_item_call.on_click
      function="SideTray.PanelPeopleTab"

@@ -521,10 +521,10 @@
      height="16"
      layout="topleft"
      left_delta="-70"
-     name="My volume label"
+     name="Volume label"
      top_pad="4"
      width="200">
-        My volume:
+        Volume:
     </text>
       <slider_bar
         control_name="AudioLevelMic"

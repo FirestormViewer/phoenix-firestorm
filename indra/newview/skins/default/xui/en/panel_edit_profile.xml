@@ -206,7 +206,7 @@
              top="10"
             name="second_life_photo_title_text"
              text_color="white"
-             value="[SECOND_LIFE]:"
+             value="Avatar:"
              width="100" />
             <texture_picker
              allow_no_texture="true"
@@ -263,7 +263,7 @@
              top_pad="10"
             name="real_world_photo_title_text"
              text_color="white"
-             value="Real World:"
+             value="More Info:"
              width="100" />
             <texture_picker
              allow_no_texture="true"
@@ -349,7 +349,7 @@
          name="title_acc_status_text"
          text_color="white"
          top_pad="10"
-         value="My Account:"
+         value="Account:"
          width="100" />
         <text_editor
          allow_scroll="false"
@@ -374,7 +374,7 @@
          layout="topleft"
          left="10"
          name="my_account_link"
-         value="[[URL] Go to My Dashboard]"
+         value="[[URL] Go to Account Dashboard]"
          width="200" />
         <text
          follows="left|top"
@@ -386,7 +386,7 @@
          name="title_partner_text"
          text_color="white"
          top_pad="10"
-         value="My Partner:"
+         value="Partner:"
          width="150" />
         <panel
          follows="left|top|right"
