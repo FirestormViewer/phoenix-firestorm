@@ -26,7 +26,6 @@
     <panel /> <!-- dummy panel, never to actually be seen -->
   </sidetray_tab>
 
-<!-- Disabling because it's redundant and/or unwanted webvertising -AO
   <sidetray_tab
     name="sidebar_home"
     help_topic="sidebar_home"
@@ -44,7 +43,6 @@
         label="home"
       />
   </sidetray_tab>
--->
 
   <sidetray_tab
     name="sidebar_me"
