@@ -12,7 +12,7 @@
  save_rect="true"
  save_visibility="true"
  single_instance="false"
- title="MY INVENTORY"
+ title="INVENTORY"
  width="467">
     <panel
      bottom="560"

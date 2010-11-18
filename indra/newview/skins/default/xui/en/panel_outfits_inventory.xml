@@ -40,7 +40,7 @@
            background_visible="true"
            help_topic="my_outfits_tab"
            follows="all"
-           label="MY OUTFITS"
+           label="OUTFITS"
            layout="topleft"
            width="315" />
          <panel

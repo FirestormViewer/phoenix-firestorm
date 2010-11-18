@@ -110,7 +110,7 @@
                name="title_sl_descr_text"
                text_color="white"
                top_delta="0"
-               value="[SECOND_LIFE]:"
+               value="Avatar:"
                width="180" />
               <expandable_text
                follows="left|top|right"
@@ -166,7 +166,7 @@
                name="title_rw_descr_text"
                text_color="white"
                top_delta="0"
-               value="Real World:"
+               value="More Info:"
                width="180" />
               <expandable_text
                follows="left|top|right"
