@@ -1210,7 +1210,6 @@ if (WINDOWS)
         res/arrowcopmulti.cur
         res/arrowdrag.cur
         res/circleandline.cur
-        res/icon1.ico
         res/llarrow.cur
         res/llarrowdrag.cur
         res/llarrowdragmulti.cur
@@ -1230,8 +1229,8 @@ if (WINDOWS)
         res/lltooltranslate.cur
         res/lltoolzoomin.cur
         res/lltoolzoomout.cur
-        res/ll_icon.BMP
-        res/ll_icon.ico
+        res/firetorm_icon.BMP
+        res/firestorm_icon.ico
         res/resource.h
         res/toolpickobject.cur
         res/toolpickobject2.cur
