@@ -51,21 +51,24 @@ def get_HKLM_registry_value(key_str, value_str):
     return value
         
 def find_vc_dir():
+    supported_products = ([(r'VisualStudio', r'VC'), (r'VCExpress', r'VC')])
     supported_versions = (r'8.0', r'9.0')
     value_str = (r'ProductDir')
+    searched = []
     
-    for version in supported_versions:
-        key_str = (r'SOFTWARE\Microsoft\VisualStudio\%s\Setup\VC' %
-                   version)
-        try:
-            return get_HKLM_registry_value(key_str, value_str)
-        except WindowsError, err:
-            x64_key_str = (r'SOFTWARE\Wow6432Node\Microsoft\VisualStudio\%s\Setup\VS' %
-                       version)
+    for product, postfix in supported_products:
+        for version in supported_versions:
+            key_str = (r'SOFTWARE\Microsoft\%s\%s\Setup\%s' % (product, version, postfix))
             try:
-                return get_HKLM_registry_value(x64_key_str, value_str)
-            except:
-                print >> sys.stderr, "Didn't find MS VC version %s " % version
+                return get_HKLM_registry_value(key_str, value_str)
+            except WindowsError, err:
+                x64_key_str = (r'SOFTWARE\Wow6432Node\Microsoft\%s\%s\Setup\%s' %
+                       (product, version, postfix))
+                try:
+                    return get_HKLM_registry_value(x64_key_str, value_str)
+                except WindowsError, err:
+                    searched.append((r"%s %s") % (product, version))
+    print >> sys.stderr, "Couldn't find VC dir for any of:", searched
         
     raise
 
