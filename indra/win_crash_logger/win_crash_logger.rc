@@ -31,7 +31,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_WIN_CRASH_LOGGER    ICON                    "ll_icon.ico"
+IDI_WIN_CRASH_LOGGER    ICON                    "firestorm_icon.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -78,7 +78,7 @@ BEGIN
     CONTROL         "Remember this choice",IDC_CHECK_AUTO,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,106,89,13
     LTEXT           "Sending crash reports is the best way to help us improve the quality of %s.",IDC_STATIC_MOTIVATION,4,43,288,8
     LTEXT           "If you continue to experience this problem, please try:",IDC_STATIC,4,57,251,8
-    LTEXT           "- Contacting support by visiting http://www.secondlife.com/support",IDC_STATIC,4,67,231,8
+    LTEXT           "- Contacting support by visiting http://www.phoenixviewer.com/support",IDC_STATIC,4,67,231,8
 END
 
 IDD_PREVREPORTBOX DIALOGEX 100, 100, 232, 213
@@ -96,9 +96,9 @@ BEGIN
     LTEXT           "logs, all of which are used for debugging purposes only.",IDC_STATIC,4,33,210,8
     LTEXT           "In the space below, please briefly describe what you were doing",IDC_STATIC,3,48,208,8
     LTEXT           "or trying to do just prior to the crash.",IDC_STATIC,3,56,204,8
-    LTEXT           "If you don't wish to send Linden Lab a crash report, press Don't Send.",IDC_STATIC,3,90,223,8
+    LTEXT           "If you don't wish to send a crash report, press Don't Send.",IDC_STATIC,3,90,223,8
     LTEXT           "This report is NOT read by customer support.  If you have billing or",IDC_STATIC,3,68,208,8
-    LTEXT           "other questions, please go to: www.secondlife.com/support",IDC_STATIC,3,76,206,8
+    LTEXT           "other questions, please go to: www.phoenixviewer.com/support",IDC_STATIC,3,76,206,8
     CONTROL         "Remember this choice",IDC_CHECK_AUTO,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,3,193,89,13
 END
 

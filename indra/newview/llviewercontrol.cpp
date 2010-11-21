@@ -677,7 +677,8 @@ void test_cached_control()
 	TEST_LLCC(LLColor4U, LLColor4U(255, 200, 100, 255));
 //There's no LLSD comparsion for LLCC yet. TEST_LLCC(LLSD, test_llsd); 
 
-	if((std::string)test_BrowserHomePage != "http://www.secondlife.com") llerrs << "Fail BrowserHomePage" << llendl;
+	// AO - Phoenixviewer doesn't want to send unecessary noise to secondlife.com
+	// if((std::string)test_BrowserHomePage != "http://www.secondlife.com") llerrs << "Fail BrowserHomePage" << llendl;
 }
 #endif // TEST_CACHED_CONTROL
 

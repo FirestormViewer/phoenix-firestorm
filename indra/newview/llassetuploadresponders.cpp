@@ -114,7 +114,7 @@ void LLAssetUploadResponder::error(U32 statusNum, const std::string& reason)
 		case 400:
 			args["FILE"] = (mFileName.empty() ? mVFileID.asString() : mFileName);
 			args["REASON"] = "Error in upload request.  Please visit "
-				"http://secondlife.com/support for help fixing this problem.";
+				"http://phoenixviewer.com/support for help fixing this problem.";
 			LLNotificationsUtil::add("CannotUploadReason", args);
 			break;
 		case 500:

@@ -1798,12 +1798,12 @@ bool LLAppViewer::initLogging()
 
 	// Remove the last ".old" log file.
 	std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
-							     "SecondLife.old");
+							     "Firestorm.old");
 	LLFile::remove(old_log_file);
 
 	// Rename current log file to ".old"
 	std::string log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
-							     "SecondLife.log");
+							     "Firestorm.log");
 	LLFile::rename(log_file, old_log_file);
 
 	// Set the log file to SecondLife.log
@@ -3459,7 +3459,7 @@ void LLAppViewer::badNetworkHandler()
 		"the issue. \n"
 		" \n"
 		"If the problem continues, see the Tech Support FAQ at: \n"
-		"www.secondlife.com/support";
+		"www.phoenixviewer.com/support";
 	forceDisconnect(message.str());
 	
 	LLApp::instance()->writeMiniDump();
@@ -4507,7 +4507,7 @@ void LLAppViewer::launchUpdater()
 	query_map["channel"] = gSavedSettings.getString("VersionChannelName");
 	// *TODO constantize this guy
 	// *NOTE: This URL is also used in win_setup/lldownloader.cpp
-	LLURI update_url = LLURI::buildHTTP("secondlife.com", 80, "update.php", query_map);
+	LLURI update_url = LLURI::buildHTTP("phoenixviewer.com", 80, "update.php", query_map);
 	
 	if(LLAppViewer::sUpdaterInfo)
 	{
