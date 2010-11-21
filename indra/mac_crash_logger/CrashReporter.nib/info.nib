@@ -3,15 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>IBFramework Version</key>
-	<string>629</string>
+	<string>788</string>
 	<key>IBLastKnownRelativeProjectPath</key>
 	<string>../../build-darwin-i386/SecondLife.xcodeproj</string>
 	<key>IBOldestOS</key>
 	<integer>5</integer>
 	<key>IBOpenObjects</key>
-	<array/>
+	<array>
+		<integer>181</integer>
+	</array>
 	<key>IBSystem Version</key>
-	<string>9E17</string>
+	<string>10H574</string>
 	<key>targetFramework</key>
 	<string>IBCarbonFramework</string>
 </dict>

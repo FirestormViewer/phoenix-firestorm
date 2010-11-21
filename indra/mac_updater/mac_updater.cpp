@@ -337,7 +337,7 @@ int parse_args(int argc, char **argv)
 int main(int argc, char **argv)
 {
 	// We assume that all the logs we're looking for reside on the current drive
-	gDirUtilp->initAppDirs("SecondLife");
+	gDirUtilp->initAppDirs("Firestorm");
 
 	LLError::initForApplication( gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, ""));
 
@@ -370,7 +370,7 @@ int main(int argc, char **argv)
 		}
 		else
 		{
-			gProductName = "Second Life";
+			gProductName = "Firestorm";
 		}
 	}
 	
@@ -463,7 +463,7 @@ int main(int argc, char **argv)
 		err = CreateStandardAlert(
 				kAlertStopAlert,
 				CFSTR("Error"),
-				CFSTR("An error occurred while updating Second Life.  Please download the latest version from www.secondlife.com."),
+				CFSTR("An error occurred while updating Firestorm.  Please download the latest version from www.phoenixviewer.com."),
 				&params,
 				&alert);
 		
@@ -905,7 +905,7 @@ void *updatethreadproc(void*)
 
 #endif // 0 *HACK for DEV-11935
 		
-		strncat(temp, "/SecondLifeUpdate_XXXXXX", (sizeof(temp) - strlen(temp)) - 1);
+		strncat(temp, "/FirestormUpdate_XXXXXX", (sizeof(temp) - strlen(temp)) - 1);
 		if(mkdtemp(temp) == NULL)
 		{
 			throw 0;
@@ -923,7 +923,7 @@ void *updatethreadproc(void*)
 				
 		chdir(tempDir);
 		
-		snprintf(temp, sizeof(temp), "SecondLife.dmg");		
+		snprintf(temp, sizeof(temp), "Firestorm.dmg");		
 		
 		downloadFile = LLFile::fopen(temp, "wb");		/* Flawfinder: ignore */
 		if(downloadFile == NULL)
@@ -970,7 +970,7 @@ void *updatethreadproc(void*)
 		// NOTE: we could add -private at the end of this command line to keep the image from showing up in the Finder,
 		//		but if our cleanup fails, this makes it much harder for the user to unmount the image.
 		std::string mountOutput;
-		FILE* mounter = popen("hdiutil attach SecondLife.dmg -mountpoint mnt", "r");		/* Flawfinder: ignore */
+		FILE* mounter = popen("hdiutil attach Firestorm.dmg -mountpoint mnt", "r");		/* Flawfinder: ignore */
 		
 		if(mounter == NULL)
 		{
