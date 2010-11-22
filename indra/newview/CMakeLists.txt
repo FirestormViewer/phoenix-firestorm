@@ -1229,7 +1229,7 @@ if (WINDOWS)
         res/lltooltranslate.cur
         res/lltoolzoomin.cur
         res/lltoolzoomout.cur
-        res/firetorm_icon.BMP
+        res/firestorm_icon.BMP
         res/firestorm_icon.ico
         res/resource.h
         res/toolpickobject.cur
