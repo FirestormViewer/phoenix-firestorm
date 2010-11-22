@@ -2531,7 +2531,33 @@ bool LLVOAvatarSelf::sendAppearanceMessage(LLMessageSystem *mesgsys) const
 			entry->setID(IMG_DEFAULT_AVATAR);
 		}
 	}
+	
+	
+	// <ClientTag> hack -- Zwagoth
+	llinfos << "Setting clientTag" << llendl;
+	LLTextureEntry* entry = getTE(0);
+	//You edit this to change the tag in your client. Yes.
+	const char* tag_client = "Firestorm";
+	LLUUID client_name;
+	strncpy((char*)&client_name.mData[0], tag_client, UUID_BYTES);
+	static LLCachedControl<LLColor4> tag_color(gSavedSettings, "FirestormTagColor", LLColor4(1,0,1,1));
+	entry->setColor(tag_color);
+	//This glow is used to tell if the tag color is set or not.
+	entry->setGlow(0.1f);
+	entry->setID(client_name);
 
+    // Need to reset these if you turn off the tag system without relogging, they persist otherwise.
+	//
+	//llinfos << "Clearing clientTag" << llendl;
+	//LLTextureEntry* entry = getTE(0);
+	//if(entry->getGlow()>0.f)
+	//{
+	//	entry->setGlow(0.0f);
+	//	entry->setColor(LLColor4::white);
+	//}
+	// </ClientTag>
+
+	
 	bool success = packTEMessage(mesgsys);
 
 	// unpack TEs to make sure we don't re-trigger a bake

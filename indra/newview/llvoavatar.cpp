@@ -113,6 +113,16 @@ extern F32 ANIM_SPEED_MIN;
 
 using namespace LLVOAvatarDefines;
 
+// for macs
+#if LL_DARWIN
+size_t strnlen(const char *s, size_t n)
+{
+  const char *p = (const char *)memchr(s, 0, n);
+  return(p ? p-s : n);
+}
+#endif
+
+
 //-----------------------------------------------------------------------------
 // Global constants
 //-----------------------------------------------------------------------------
@@ -2880,10 +2890,10 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 }
 
 void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
-			{
-		LLNameValue *title = getNVPair("Title");
-		LLNameValue* firstname = getNVPair("FirstName");
-		LLNameValue* lastname = getNVPair("LastName");
+{
+	LLNameValue *title = getNVPair("Title");
+	LLNameValue* firstname = getNVPair("FirstName");
+	LLNameValue* lastname = getNVPair("LastName");
 
 	// Avatars must have a first and last name
 	if (!firstname || !lastname) return;
@@ -2940,7 +2950,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		|| is_away != mNameAway 
 		|| is_busy != mNameBusy 
 		|| is_muted != mNameMute
-				|| is_appearance != mNameAppearance 
+		|| is_appearance != mNameAppearance 
 		|| is_friend != mNameFriend
 		|| is_cloud != mNameCloud)
 				{
@@ -3014,16 +3024,24 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				// Might be blank if name not available yet, that's OK
 				if (show_display_names)
 				{
-					addNameTagLine(av_name.mDisplayName, name_tag_color, LLFontGL::NORMAL,
-						LLFontGL::getFontSansSerif());
+					if (!mClientTag.empty())
+					{
+						lldebugs << "ClientTag is set! mClientTag=" << mClientTag << llendl;
+						LLColor4 name_tag_color = getNameTagColor(is_friend); // could be modified later
+						addNameTagLine(av_name.mDisplayName+" (" + mClientTag + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif());
+					}
+					else
+					{
+						addNameTagLine(av_name.mDisplayName, name_tag_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerif());
+					}
+					
 				}
 				// Suppress SLID display if display name matches exactly (ugh)
 				if (show_usernames && !av_name.mIsDisplayNameDefault)
 				{
 					// *HACK: Desaturate the color
 					LLColor4 username_color = name_tag_color * 0.83f;
-					addNameTagLine(av_name.mUsername, username_color, LLFontGL::NORMAL,
-						LLFontGL::getFontSansSerifSmall());
+					addNameTagLine(av_name.mUsername, username_color, LLFontGL::NORMAL,LLFontGL::getFontSansSerifSmall());
 				}
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 			}
@@ -3033,7 +3051,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 			}
 // [/RLVa:KB]
 		}
-		else
+		
+		
+		
+		else  // DISPLAY NAMES OFF
 		{
 			const LLFontGL* font = LLFontGL::getFontSansSerif();
 			std::string full_name =
@@ -3042,26 +3063,41 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 			if ( (fRlvShowNames) && (!isSelf()) )
 			{
 				full_name = RlvStrings::getAnonym(full_name);
+				addNameTagLine(full_name, name_tag_color, LLFontGL::NORMAL, font);
 			}
 // [/RLVa:KB]
-			addNameTagLine(full_name, name_tag_color, LLFontGL::NORMAL, font);
+			else // Only check for client tags when not RLV anon -AO
+			{
+				if (!mClientTag.empty())
+				{
+					lldebugs << "ClientTag is set! mClientTag=" << mClientTag << llendl;
+					LLColor4 name_tag_color = getNameTagColor(is_friend); // could be modified later
+					addNameTagLine(full_name+" (" + mClientTag + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif());
+				}
+				else
+				{
+					addNameTagLine(full_name, name_tag_color, LLFontGL::NORMAL, font);
+				}
+			}
 		}
 
-				mNameAway = is_away;
-				mNameBusy = is_busy;
-				mNameMute = is_muted;
-				mNameAppearance = is_appearance;
+		mNameAway = is_away;
+		mNameBusy = is_busy;
+		mNameMute = is_muted;
+		mNameAppearance = is_appearance;
 		mNameFriend = is_friend;
-				mNameCloud = is_cloud;
-				mTitle = title ? title->getString() : "";
-				LLStringFn::replace_ascii_controlchars(mTitle,LL_UNKNOWN_CHAR);
-				new_name = TRUE;
-			}
+		mNameCloud = is_cloud;
+		mTitle = title ? title->getString() : "";
+		LLStringFn::replace_ascii_controlchars(mTitle,LL_UNKNOWN_CHAR);
+		new_name = TRUE;
+	}
 
+
+	
 	if (mVisibleChat)
 			{
 				mNameText->setFont(LLFontGL::getFontSansSerif());
-		mNameText->setTextAlignment(LLHUDNameTag::ALIGN_TEXT_LEFT);
+				mNameText->setTextAlignment(LLHUDNameTag::ALIGN_TEXT_LEFT);
 				mNameText->setFadeDistance(CHAT_NORMAL_RADIUS * 2.f, 5.f);
 			
 				char line[MAX_STRING];		/* Flawfinder: ignore */
@@ -3069,7 +3105,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				std::deque<LLChat>::iterator chat_iter = mChats.begin();
 				mNameText->clearString();
 
-		LLColor4 new_chat = LLUIColorTable::instance().getColor( "NameTagChat" );
+				LLColor4 new_chat = LLUIColorTable::instance().getColor( "NameTagChat" );
 				LLColor4 normal_chat = lerp(new_chat, LLColor4(0.8f, 0.8f, 0.8f, 1.f), 0.7f);
 				LLColor4 old_chat = lerp(normal_chat, LLColor4(0.6f, 0.6f, 0.6f, 1.f), 0.7f);
 				if (mTyping && mChats.size() >= MAX_BUBBLE_CHAT_UTTERANCES) 
@@ -6921,6 +6957,27 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 //	dumpAvatarTEs( "PRE  processAvatarAppearance()" );
 	unpackTEMessage(mesgsys, _PREHASH_ObjectData);
 //	dumpAvatarTEs( "POST processAvatarAppearance()" );
+
+	// <clientTags>
+	LLTextureEntry* tex = getTE(0);
+	llinfos << "LLVOAvatar::processAvatarAppearance() Checking Texture " << tex->getID() << llendl;
+	if(tex->getGlow() > 0.0f)
+	{
+		const LLUUID tag_uuid = tex->getID();		
+		U32 tag_len = strnlen((const char*)&tag_uuid.mData[0], UUID_BYTES);
+		mClientTag = std::string((const char*)&tag_uuid.mData[0], tag_len);
+		LLStringFn::replace_ascii_controlchars(mClientTag, LL_UNKNOWN_CHAR);
+		llinfos << "LLVOAvatar::processAvatarAppearance() Detected ClientTag=" << mClientTag << llendl;
+		mNameString.clear();
+	}
+	else
+	{
+		mClientTag = "";
+		mNameString.clear();
+	}
+	// </clientTags>
+	
+
 
 	// prevent the overwriting of valid baked textures with invalid baked textures
 	for (U8 baked_index = 0; baked_index < mBakedTextureDatas.size(); baked_index++)

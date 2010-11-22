@@ -837,6 +837,7 @@ protected:
 	static void		getAnimNames(LLDynamicArray<std::string>* names);	
 private:
 	std::string		mNameString;		// UTF-8 title + name + status
+	std::string		mClientTag;
 	std::string  	mTitle;
 	bool	  		mNameAway;
 	bool	  		mNameBusy;
