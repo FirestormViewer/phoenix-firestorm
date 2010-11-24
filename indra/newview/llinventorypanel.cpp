@@ -263,6 +263,11 @@ void LLInventoryPanel::setShowFolderState(LLInventoryFilter::EFolderShow show)
 	getFilter()->setShowFolderState(show);
 }
 
+void LLInventoryPanel::setWorn(BOOL sl)
+{
+	getFilter()->setFilterWorn(sl);
+}
+
 LLInventoryFilter::EFolderShow LLInventoryPanel::getShowFolderState()
 {
 	return getFilter()->getShowFolderState();
@@ -1014,5 +1019,30 @@ LLInventoryRecentItemsPanel::LLInventoryRecentItemsPanel( const Params& params)
 {
 	// replace bridge builder to have necessary View bridges.
 	mInvFVBridgeBuilder = &RECENT_ITEMS_BUILDER;
+}
+
+/************************************************************************/
+/* Worn Inventory Panel related class                                 */
+/************************************************************************/
+class LLInventoryWornItemsPanel;
+static LLDefaultChildRegistry::Register<LLInventoryWornItemsPanel> t_worn_inventory_panel("worn_inventory_panel");
+
+static const LLWornInventoryBridgeBuilder WORN_ITEMS_BUILDER;
+class LLInventoryWornItemsPanel : public LLInventoryPanel
+{
+public:
+	struct Params :	public LLInitParam::Block<Params, LLInventoryPanel::Params>
+	{};
+
+protected:
+	LLInventoryWornItemsPanel (const Params&);
+	friend class LLUICtrlFactory;
+};
+
+LLInventoryWornItemsPanel::LLInventoryWornItemsPanel( const Params& params)
+: LLInventoryPanel(params)
+{
+	// replace bridge builder to have necessary View bridges.
+	mInvFVBridgeBuilder = &WORN_ITEMS_BUILDER;
 }
 

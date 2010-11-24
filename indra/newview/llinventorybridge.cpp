@@ -5414,5 +5414,66 @@ LLInvFVBridge* LLRecentInventoryBridgeBuilder::createBridge(
 
 }
 
+/************************************************************************/
+/* Worn Inventory Panel related classes                               */
+/************************************************************************/
+void LLWornItemsFolderBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
+{
+	LLFolderBridge::buildContextMenu(menu, flags);
+
+	menuentry_vec_t disabled_items, items = getMenuItems();
+
+	items.erase(std::remove(items.begin(), items.end(), std::string("New Body Parts")), items.end());
+	items.erase(std::remove(items.begin(), items.end(), std::string("New Clothes")), items.end());
+	items.erase(std::remove(items.begin(), items.end(), std::string("New Note")), items.end());
+	items.erase(std::remove(items.begin(), items.end(), std::string("New Gesture")), items.end());
+	items.erase(std::remove(items.begin(), items.end(), std::string("New Script")), items.end());
+	items.erase(std::remove(items.begin(), items.end(), std::string("New Folder")), items.end());
+
+	hide_context_entries(menu, items, disabled_items);
+}
+
+LLInvFVBridge* LLWornInventoryBridgeBuilder::createBridge(
+	LLAssetType::EType asset_type,
+	LLAssetType::EType actual_asset_type,
+	LLInventoryType::EType inv_type,
+	LLInventoryPanel* inventory,
+	LLFolderView* root,
+	const LLUUID& uuid,
+	U32 flags /*= 0x00*/ ) const
+{
+	LLInvFVBridge* new_listener = NULL;
+	switch(asset_type)
+	{
+	case LLAssetType::AT_CATEGORY:
+		if (actual_asset_type == LLAssetType::AT_LINK_FOLDER)
+		{
+			// *TODO: Create a link folder handler instead if it is necessary
+			new_listener = LLInventoryFVBridgeBuilder::createBridge(
+				asset_type,
+				actual_asset_type,
+				inv_type,
+				inventory,
+				root,
+				uuid,
+				flags);
+			break;
+		}
+		new_listener = new LLWornItemsFolderBridge(inv_type, inventory, root, uuid);
+		break;
+	default:
+		new_listener = LLInventoryFVBridgeBuilder::createBridge(
+			asset_type,
+			actual_asset_type,
+			inv_type,
+			inventory,
+			root,
+			uuid,
+			flags);
+	}
+	return new_listener;
+
+}
+
 
 // EOF

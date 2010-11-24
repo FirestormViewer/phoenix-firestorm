@@ -138,6 +138,7 @@ public:
 	void setFilterLinks(U64 filter_links);
 
 	void setShowFolderState(LLInventoryFilter::EFolderShow show);
+	void setWorn(BOOL sl);
 	LLInventoryFilter::EFolderShow getShowFolderState();
 	void setAllowMultiSelect(BOOL allow) { mFolderRoot->setAllowMultiSelect(allow); }
 	// This method is called when something has changed about the inventory.
