@@ -2449,6 +2449,9 @@ void LLFolderBridge::folderOptionsMenu()
 	// BAP change once we're no longer treating regular categories as ensembles.
 	const bool is_ensemble = (type == LLFolderType::FT_NONE ||
 							  LLFolderType::lookupIsEnsembleType(type));
+// [SL:KB] - Checked: 2010-11-24 (Catznip-2.4.0e) | Added: Catznip-2.4.0e
+	const bool is_outfit = (type == LLFolderType::FT_OUTFIT);
+// [/SL:KB]
 
 	// Only enable calling-card related options for non-system folders.
 	if (!is_system_folder)
@@ -2501,7 +2504,11 @@ void LLFolderBridge::folderOptionsMenu()
 		{
 			disabled_items.push_back(std::string("Remove From Outfit"));
 		}
-		if (!LLAppearanceMgr::instance().getCanReplaceCOF(mUUID))
+//		if (!LLAppearanceMgr::instance().getCanReplaceCOF(mUUID))
+// [SL:KB] - Checked: 2010-11-24 (Catznip-2.4.0e) | Added: Catznip-2.4.0e
+		if ( ((is_outfit) && (!LLAppearanceMgr::instance().getCanReplaceCOF(mUUID))) || 
+			 ((!is_outfit) && (gAgentWearables.isCOFChangeInProgress())) )
+// [/SL:KB]
 		{
 			disabled_items.push_back(std::string("Replace Outfit"));
 		}
