@@ -282,7 +282,11 @@ void LLPreviewTexture::reshape(S32 width, S32 height, BOOL called_from_parent)
 {
 	LLPreview::reshape(width, height, called_from_parent);
 
-	LLRect dim_rect(getChildView("dimensions")->getRect());
+	LLRect dim_rect;
+	LLView *pView = findChildView( "dimensions" );
+	
+	if( pView )
+		dim_rect = pView->getRect();
 
 	S32 horiz_pad = 2 * (LLPANEL_BORDER_WIDTH + PREVIEW_PAD) + PREVIEW_RESIZE_HANDLE_SIZE;
 
