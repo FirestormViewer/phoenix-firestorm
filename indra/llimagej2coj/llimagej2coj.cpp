@@ -393,6 +393,63 @@ BOOL LLImageJ2COJ::encodeImpl(LLImageJ2C &base, const LLImageRaw &raw_image, con
 	return TRUE;
 }
 
+inline S32 extractLong4( U8 const *aBuffer, int nOffset )
+{
+	S32 ret = aBuffer[ nOffset ] << 24;
+	ret += aBuffer[ nOffset + 1 ] << 16;
+	ret += aBuffer[ nOffset + 2 ] << 8;
+	ret += aBuffer[ nOffset + 3 ];
+	return ret;
+}
+
+inline S32 extractShort2( U8 const *aBuffer, int nOffset )
+{
+	S32 ret = aBuffer[ nOffset ] << 8;
+	ret += aBuffer[ nOffset + 1 ];
+
+	return ret;
+}
+
+inline bool isSOC( U8 const *aBuffer )
+{
+	return aBuffer[ 0 ] == 0xFF && aBuffer[ 1 ] == 0x4F;
+}
+
+inline bool isSIZ( U8 const *aBuffer )
+{
+	return aBuffer[ 0 ] == 0xFF && aBuffer[ 1 ] == 0x51;
+}
+
+bool getMetadataFast( LLImageJ2C &aImage, S32 &aW, S32 &aH, S32 &aComps )
+{
+	const int J2K_HDR_LEN( 42 );
+	const int J2K_HDR_X1( 8 );
+	const int J2K_HDR_Y1( 12 );
+	const int J2K_HDR_X0( 16 );
+	const int J2K_HDR_Y0( 20 );
+	const int J2K_HDR_NUMCOMPS( 40 );
+
+	if( aImage.getDataSize() < J2K_HDR_LEN )
+		return false;
+
+	U8 const* pBuffer = aImage.getData();
+
+	if( !isSOC( pBuffer ) || !isSIZ( pBuffer+2 ) )
+		return false;
+
+	S32 x1 = extractLong4( pBuffer, J2K_HDR_X1 );
+	S32 y1 = extractLong4( pBuffer, J2K_HDR_Y1 );
+	S32 x0 = extractLong4( pBuffer, J2K_HDR_X0 );
+	S32 y0 = extractLong4( pBuffer, J2K_HDR_Y0 );
+	S32 numComps = extractShort2( pBuffer, J2K_HDR_NUMCOMPS );
+
+	aComps = numComps;
+	aW = x1 - x0;
+	aH = y1 - y0;
+
+	return true;
+}
+
 BOOL LLImageJ2COJ::getMetadata(LLImageJ2C &base)
 {
 	//
@@ -401,6 +458,18 @@ BOOL LLImageJ2COJ::getMetadata(LLImageJ2C &base)
 
 	// Update the raw discard level
 	base.updateRawDiscardLevel();
+
+	S32 width(0);
+	S32 height(0);
+	S32 img_components(0);
+
+	if ( getMetadataFast( base, width, height, img_components ) )
+	{
+		base.setSize(width, height, img_components);
+		return TRUE;
+	}
+
+	// Do it the old and slow way, decode the image with openjpeg
 
 	opj_dparameters_t parameters;	/* decompression parameters */
 	opj_event_mgr_t event_mgr;		/* event manager */
@@ -460,12 +529,11 @@ BOOL LLImageJ2COJ::getMetadata(LLImageJ2C &base)
 	}
 
 	// Copy image data into our raw image format (instead of the separate channel format
-	S32 width = 0;
-	S32 height = 0;
 
-	S32 img_components = image->numcomps;
+	img_components = image->numcomps;
 	width = image->x1 - image->x0;
 	height = image->y1 - image->y0;
+
 	base.setSize(width, height, img_components);
 
 	/* free image data structure */
