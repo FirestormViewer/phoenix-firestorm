@@ -137,6 +137,7 @@ public:
 	static void forceTp(const LLVector3d& posDest);									// Ignores restrictions that might otherwise prevent tp'ing
 
 	static void notifyBlocked(const std::string& strRlvString);
+	static void notifyBlockedGeneric()	{ notifyBlocked(RLV_STRING_BLOCKED_GENERIC); }
 	static void notifyBlockedTeleport()	{ notifyBlocked(RLV_STRING_BLOCKED_TELEPORT); }
 	static void notifyBlockedViewXXX(LLAssetType::EType assetType); 
 	static void notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine);

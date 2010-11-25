@@ -1707,6 +1707,7 @@ void LLLiveLSLEditor::onRunningCheckboxClicked( LLUICtrl*, void* userdata )
 // [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
 		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
 		{
+			RlvUtil::notifyBlockedGeneric();
 			return;
 		}
 // [/RLVa:KB]
@@ -1739,6 +1740,7 @@ void LLLiveLSLEditor::onReset(void *userdata)
 // [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
 		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
 		{
+			RlvUtil::notifyBlockedGeneric();
 			return;
 		}
 // [/RLVa:KB]
@@ -1863,6 +1865,7 @@ void LLLiveLSLEditor::saveIfNeeded()
 // [RLVa:KB] - Checked: 2010-11-25 (RLVa-1.2.2b) | Modified: RLVa-1.2.2b
 	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
 	{
+		RlvUtil::notifyBlockedGeneric();
 		return;
 	}
 // [/RLVa:KB]
