@@ -1860,6 +1860,13 @@ void LLLiveLSLEditor::saveIfNeeded()
 		return;
 	}
 
+// [RLVa:KB] - Checked: 2010-11-25 (RLVa-1.2.2b) | Modified: RLVa-1.2.2b
+	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 	// get the latest info about it. We used to be losing the script
 	// name on save, because the viewer object version of the item,
 	// and the editor version would get out of synch. Here's a good
@@ -2151,14 +2158,6 @@ void LLLiveLSLEditor::onLoad(void* userdata)
 void LLLiveLSLEditor::onSave(void* userdata, BOOL close_after_save)
 {
 	LLLiveLSLEditor* self = (LLLiveLSLEditor*)userdata;
-
-// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
-	const LLViewerObject* pObject = gObjectList.findObject(self->mObjectUUID);
-	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(pObject->getRootEdit())) )
-	{
-		return;
-	}
-// [/RLVa:KB]
 
 	self->mCloseAfterSave = close_after_save;
 	self->saveIfNeeded();
