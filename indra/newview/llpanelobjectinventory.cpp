@@ -359,7 +359,7 @@ BOOL LLTaskInvFVBridge::isItemRenameable() const
 {
 // [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
 	LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
-	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+	if ( (rlv_handler_t::isEnabled()) && (object) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
 	{
 		return FALSE;
 	}
@@ -383,7 +383,7 @@ BOOL LLTaskInvFVBridge::renameItem(const std::string& new_name)
 {
 // [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
 	LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
-	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+	if ( (rlv_handler_t::isEnabled()) && (object) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
 	{
 		return FALSE;
 	}
