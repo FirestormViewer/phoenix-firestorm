@@ -393,6 +393,27 @@ public:
 	virtual BOOL tick();
 };
 
+class RlvCallbackTimerOnce : public LLEventTimer
+{
+public:
+	typedef boost::function<void ()> nullary_func_t;
+public:
+	RlvCallbackTimerOnce(F32 nPeriod, nullary_func_t cb) : LLEventTimer(nPeriod), m_Callback(cb) {}
+	/*virtual*/ BOOL tick()
+	{
+		m_Callback();
+		return TRUE;
+	}
+protected:
+	nullary_func_t m_Callback;
+};
+
+inline void rlvCallbackTimerOnce(F32 nPeriod, RlvCallbackTimerOnce::nullary_func_t cb)
+{
+	// Timer will automatically delete itself after the callback
+	new RlvCallbackTimerOnce(nPeriod, cb);
+}
+
 // ============================================================================
 // Various helper functions
 //
