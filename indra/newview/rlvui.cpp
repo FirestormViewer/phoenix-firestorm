@@ -493,17 +493,17 @@ bool RlvUIEnabler::filterFloaterViewXXX(const std::string& strName, const LLSD&)
 {
 	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_VIEWNOTE)) && ("preview_notecard" == strName) )
 	{
-		notifyBlockedViewXXX(LLAssetType::AT_NOTECARD);
+		RlvUtil::notifyBlockedViewXXX(LLAssetType::AT_NOTECARD);
 		return false;
 	}
 	else if ( (gRlvHandler.hasBehaviour(RLV_BHVR_VIEWSCRIPT)) && (("preview_script" == strName) || ("preview_scriptedit" == strName)) )
 	{
-		notifyBlockedViewXXX(LLAssetType::AT_SCRIPT);
+		RlvUtil::notifyBlockedViewXXX(LLAssetType::AT_SCRIPT);
 		return false;
 	}
 	else if ( (gRlvHandler.hasBehaviour(RLV_BHVR_VIEWTEXTURE)) && ("preview_texture" == strName) )
 	{
-		notifyBlockedViewXXX(LLAssetType::AT_TEXTURE);
+		RlvUtil::notifyBlockedViewXXX(LLAssetType::AT_TEXTURE);
 		return false;
 	}
 	return true;
@@ -515,31 +515,6 @@ bool RlvUIEnabler::filterFloaterViewXXX(const std::string& strName, const LLSD&)
 bool RlvUIEnabler::canOpenSidebarTab(ERlvBehaviour eBhvrFilter, const std::string& strNameFilter, LLUICtrl* pCtrl, const LLSD& sdParam)
 {
 	return (!gRlvHandler.hasBehaviour(eBhvrFilter)) || (strNameFilter != sdParam.asString());
-}
-
-// ============================================================================
-
-// Checked: 2010-10-07 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
-void RlvUIEnabler::notifyBlocked(const std::string& strRlvString)
-{
-	LLSD argsNotify;
-	argsNotify["MESSAGE"] = RlvStrings::getString(strRlvString);
-	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
-}
-
-// Checked: 2010-03-01 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
-void RlvUIEnabler::notifyBlockedViewXXX(LLAssetType::EType assetType)
-{
-	if (!RlvStrings::hasString(RLV_STRING_BLOCKED_VIEWXXX))
-		return;
-
-	LLStringUtil::format_map_t argsMsg; std::string strMsg = RlvStrings::getString(RLV_STRING_BLOCKED_VIEWXXX);
-	argsMsg["[TYPE]"] = LLAssetType::lookup(assetType);
-	LLStringUtil::format(strMsg, argsMsg);
-
-	LLSD argsNotify;
-	argsNotify["MESSAGE"] = strMsg;
-	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
 }
 
 // ============================================================================

@@ -406,6 +406,29 @@ bool RlvUtil::isNearbyRegion(const std::string& strRegion)
 	return false;
 }
 
+// Checked: 2010-10-07 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
+void RlvUtil::notifyBlocked(const std::string& strRlvString)
+{
+	LLSD argsNotify;
+	argsNotify["MESSAGE"] = RlvStrings::getString(strRlvString);
+	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
+}
+
+// Checked: 2010-03-01 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
+void RlvUtil::notifyBlockedViewXXX(LLAssetType::EType assetType)
+{
+	if (!RlvStrings::hasString(RLV_STRING_BLOCKED_VIEWXXX))
+		return;
+
+	LLStringUtil::format_map_t argsMsg; std::string strMsg = RlvStrings::getString(RLV_STRING_BLOCKED_VIEWXXX);
+	argsMsg["[TYPE]"] = LLAssetType::lookup(assetType);
+	LLStringUtil::format(strMsg, argsMsg);
+
+	LLSD argsNotify;
+	argsNotify["MESSAGE"] = strMsg;
+	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
+}
+
 // Checked: 2010-11-11 (RLVa-1.2.1g) | Added: RLVa-1.2.1g
 void RlvUtil::notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine)
 {

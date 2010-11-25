@@ -65,7 +65,6 @@
 #include "llviewermessage.h"
 // [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b)
 #include "rlvhandler.h"
-#include "rlvui.h"
 // [/RLVa:KB]
 
 ///----------------------------------------------------------------------------
@@ -1157,7 +1156,7 @@ void LLTaskLSLBridge::openItem()
 // [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.1.0a
 	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
 	{
-		RlvUIEnabler::notifyBlockedViewXXX(LLAssetType::AT_SCRIPT);
+		RlvUtil::notifyBlockedViewXXX(LLAssetType::AT_SCRIPT);
 		return;
 	}
 // [/RLVa:KB]
@@ -1222,7 +1221,7 @@ void LLTaskNotecardBridge::openItem()
 // [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0b
 	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
 	{
-		RlvUIEnabler::notifyBlockedViewXXX(LLAssetType::AT_NOTECARD);
+		RlvUtil::notifyBlockedViewXXX(LLAssetType::AT_NOTECARD);
 		return;
 	}
 // [/RLVa:KB]

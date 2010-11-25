@@ -80,14 +80,6 @@ protected:
 	boost::signals2::connection m_ConnSidePanelInventory;				// showinv
 
 	/*
-	 * User feedback functions
-	 */
-public:
-	static void notifyBlocked(const std::string& strRlvString);
-	static void notifyBlockedTeleport()	{ notifyBlocked("blocked_teleport"); }
-	static void notifyBlockedViewXXX(LLAssetType::EType assetType); 
-
-	/*
 	 * Helper functions
 	 */
 public:
