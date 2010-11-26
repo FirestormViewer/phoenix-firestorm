@@ -14,7 +14,7 @@
     </floater.string>
 
     <scroll_container
-     color="DkGray2"
+     color="SL-Background"
      opaque="true"
      follows="all"
      height="680"

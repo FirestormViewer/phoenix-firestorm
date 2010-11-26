@@ -214,7 +214,7 @@
     <text
      type="string"
      length="1"
-     text_color="0.7 0.7 0.7 0.5"
+     text_color="SL-MidGray_50"
      follows="top|left"
      layout="topleft"
      halign="right"
@@ -228,7 +228,7 @@
     <text
      type="string"
      length="1"
-     text_color="0.7 0.7 0.7 0.5"
+     text_color="SL-MidGray_50"
      follows="top|left"
      layout="topleft"
      halign="right"
@@ -242,7 +242,7 @@ Re-enter amount to see the latest exchange rate.
     <text
      type="string"
      length="1"
-     text_color="0.7 0.7 0.7 0.5"
+     text_color="SL-MidGray_50"
      follows="top|left"
      layout="topleft"
      halign="right"
@@ -256,7 +256,7 @@ Re-enter amount to see the latest exchange rate.
     <text
      type="string"
      length="1"
-     text_color="0.7 0.7 0.7 0.5"
+     text_color="SL-MidGray_50"
      follows="top|left"
      layout="topleft"
      halign="right"

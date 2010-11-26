@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border="true"
+ follows="left|top|right|bottom"
+ height="408"
+ label="Firestorm"
+ layout="topleft"
+ left="102"
+ name="firestorm"
+ top="1"
+ width="517">
+
+   <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="15"
+     layout="topleft"
+     left="30"
+     name="firestorm"
+     top="10"
+     width="400">
+        Placeholder for Firestorm-specific preferences:
+    </text>
+</panel>

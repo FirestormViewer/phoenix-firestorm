@@ -119,6 +119,20 @@
          layout="topleft"
          help_topic="preferences_advanced1_tab"
          name="advanced1" />
+	<panel
+                 class="panel_preference"
+         filename="panel_preferences_skins.xml"
+         label="Skins"
+         layout="topleft"
+         help_topic="preferences_advanced1.tab"
+         name="skins" /> 
+	<panel
+                 class="panel_preference"
+         filename="panel_preferences_firestorm.xml"
+         label="Firestorm"
+         layout="topleft"
+         help_topic="preferences_advanced1.tab"
+         name="firestorm" />
     </tab_container>
 
 </floater>

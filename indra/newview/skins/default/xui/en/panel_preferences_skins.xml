@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border="true"
+ follows="left|top|right|bottom"
+ height="408"
+ label="Skins"
+ layout="topleft"
+ left="102"
+ name="skins"
+ top="1"
+ width="517">
+
+   <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="15"
+     layout="topleft"
+     left="30"
+     name="skin_selector"
+     top="10"
+     width="400">
+        Choose a skin (active on next restart):
+    </text>
+    <combo_box
+     control_name="SkinSelection"
+     follows="left|top"
+     height="23"
+     layout="topleft"
+     left="50"
+     max_chars="135"
+     name="skin_selection"
+     width="200">
+
+        <combo_box.item
+         label="Default"
+         name="Default"
+         value="default" />
+    </combo_box>
+</panel>
