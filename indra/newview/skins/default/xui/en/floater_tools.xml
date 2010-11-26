@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
+<!-- floater
  legacy_header_height="18"
  follows="left|top|right"
  height="580"
  layout="topleft"
  bg_opaque_image="Window_NoTitle_Foreground"
- bg_alpha_image="Window_NoTitle_Background"
+ bg_alpha_image="Window_NoTitle_Background" -->
+<floater
+ legacy_header_height="18"
+ follows="left|top|right"
+ height="580"
+ layout="topleft"
  name="toolbox floater"
  help_topic="toolbox_floater"
  save_rect="true"
@@ -253,7 +258,7 @@
      height="28"
 	 control_name="EditLinkedParts"
      label="Edit linked"
-     layout="topleft"
+     layout="topleft"     
      name="checkbox edit linked parts"
      top_pad="2">
 		  <check_box.commit_callback
@@ -770,7 +775,7 @@
 	 name="General"
 	 top="16"
 	 width="295">
-	 <panel.string
+<panel.string
 	  name="text deed continued">
 		Deed
 	 </panel.string>
@@ -862,7 +867,6 @@
              height="19"
              layout="topleft"
              name="Creator:"
-             top_pad="7"
              width="90">
                 Creator:
             </text>
@@ -1065,7 +1069,7 @@ even though the user gets a free copy.
          layout="topleft"
          mouse_opaque="false"
          background_visible="true"
-         bg_alpha_color="DkGray"
+         bg_alpha_color="Black_10"
          name="perms_build"
          left="0"
          top_pad="4"
@@ -1279,7 +1283,7 @@ even though the user gets a free copy.
              top_pad="10"
              width="121">
                 Position (meters)
-            </text>
+            </text> 
             <spinner
              follows="left|top"
              height="19"
@@ -1292,7 +1296,7 @@ even though the user gets a free copy.
              max_val="512"
              min_val="-256"
              name="Pos X"
-             text_enabled_color="1 0 0.3 .7"
+             text_enabled_color="Red"
              top_pad="5"
              width="87" />
             <spinner
@@ -1321,7 +1325,7 @@ even though the user gets a free copy.
              left_delta="0"
              max_val="4096"
              name="Pos Z"
-             text_enabled_color="0 0.8 1 .65"
+             text_enabled_color="SL-MidBlue"
              top_pad="3"
              width="87" />
             <text
@@ -1348,7 +1352,7 @@ even though the user gets a free copy.
              max_val="10"
              min_val="0.01"
              name="Scale X"
-             text_enabled_color="1 1 1 1"
+             text_enabled_color="White"
              top_pad="5"
              width="87" />
             <spinner
@@ -1363,7 +1367,7 @@ even though the user gets a free copy.
              max_val="10"
              min_val="0.01"
              name="Scale Y"
-             text_enabled_color="1 1 1 1"
+             text_enabled_color="White"
              top_pad="3"
              width="87" />
             <spinner
@@ -1378,7 +1382,7 @@ even though the user gets a free copy.
              max_val="10"
              min_val="0.01"
              name="Scale Z"
-             text_enabled_color="1 1 1 1"
+             text_enabled_color="White"
              top_pad="3"
              width="87" />
             <text
@@ -1406,7 +1410,7 @@ even though the user gets a free copy.
              max_val="9999"
              min_val="-9999"
              name="Rot X"
-             text_enabled_color="1 1 1 1"
+             text_enabled_color="White"
              top_pad="5"
              width="87" />
             <spinner
@@ -1422,7 +1426,7 @@ even though the user gets a free copy.
              max_val="9999"
              min_val="-9999"
              name="Rot Y"
-             text_enabled_color="1 1 1 1"
+             text_enabled_color="White"
              top_pad="3"
              width="87" />
             <spinner
@@ -1438,7 +1442,7 @@ even though the user gets a free copy.
              max_val="9999"
              min_val="-9999"
              name="Rot Z"
-             text_enabled_color="1 1 1 1"
+             text_enabled_color="White"
              top_pad="3"
              width="87" />
 
@@ -2037,13 +2041,12 @@ even though the user gets a free copy.
              type="string"
              length="1"
              follows="left|top"
-             height="20"
+             height="10"
              layout="topleft"
              left="10"
              name="select_single"
              top="5"
-             width="252"
-             word_wrap="true">
+             width="252">
                 Select only one primitive to edit features.
             </text>
             <text
@@ -2065,7 +2068,7 @@ even though the user gets a free copy.
              left="10"
              name="Flexible1D Checkbox Ctrl"
              tool_tip="Allows object to flex about the Z axis (Client-side only)"
-             top_pad="20"
+             top_pad="10"
              width="121" />
             <spinner
              follows="left|top"
@@ -2186,8 +2189,8 @@ even though the user gets a free copy.
              width="60" />
             <color_swatch
              can_apply_immediately="true"
-             color="0.5 0.5 0.5 1"
-	     border.border_thickness="0"
+             color="SL-MidDkGray"
+	       border.border_thickness="0"
              follows="left|top"
              height="50"
              layout="topleft"
@@ -2286,7 +2289,7 @@ even though the user gets a free copy.
                    name="Light Ambiance"
                    width="120" />
         </panel>
-         <panel
+          <panel
          border="false"
          follows="all"
          height="367"
@@ -2351,7 +2354,7 @@ even though the user gets a free copy.
              initial_value="0"
              layout="topleft"
              left_delta="0"
-             max_val="90"
+             max_val="100"
              name="ColorTrans"
              top_pad="4"
              width="80" />
@@ -2720,7 +2723,7 @@ even though the user gets a free copy.
          layout="topleft"
          mouse_opaque="false"
          background_visible="true"
-         bg_alpha_color="DkGray"
+         bg_alpha_color="Black_10"
          name="Add_Media"
          left="0"
          height="47"

@@ -209,8 +209,8 @@
         </scroll_list>
         <panel
          bevel_style="in"
-         bg_alpha_color="0 0 0 0"
-         bg_opaque_color="0 0 0 0.3"
+         bg_alpha_color="Transparent"
+         bg_opaque_color="Black_25"
          border="true"
          bottom_delta="65"
          follows="left|right|bottom"
@@ -289,8 +289,8 @@
         </panel>
         <panel
          bevel_style="in"
-         bg_alpha_color="0 0 0 0"
-         bg_opaque_color="0 0 0 0.3"
+         bg_alpha_color="Transparent"
+         bg_opaque_color="Black_25"
          border="true"
          bottom_delta="40"
          follows="left|right|bottom"
@@ -373,8 +373,8 @@
          background_opaque="true"
          background_visible="true"
          bevel_style="in"
-         bg_alpha_color="0 0 0 1"
-         bg_opaque_color="1 1 1 1"
+         bg_alpha_color="Black"
+         bg_opaque_color="White"
          border="true"
          follows="top|right|bottom"
          height="600"

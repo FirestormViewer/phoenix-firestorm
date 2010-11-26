@@ -6,3 +6,7 @@ DePatronizedMenus	LGPL
 RLVa			LGPL
 WornItems		LGPL
 VerticalTabIms		LGPL
+CallingCard-avclck	LGPL
+DD_SliderUI		LGPL
+SkinSelector		LGPL
+ViewerTagBroadcast	LGPL

@@ -108,6 +108,41 @@
              function="World.Toggle.CameraControls" />
         </menu_item_check>
         
+        <menu
+         create_jump_keys="true"
+         label="Avatar Health"
+         name="avhealth"
+         tear_off="true">
+   	        <menu_item_call
+	         label="Stop Avatar Animatons"
+	         name="Stop Animating My Avatar">
+	            <menu_item_call.on_click
+	             function="Tools.StopAllAnimations" />
+	        </menu_item_call>
+	        <menu_item_call
+	         label="Force Appearance Update"
+	         name="Rebake Texture">
+	            <menu_item_call.on_click
+	             function="Advanced.RebakeTextures" />
+	        </menu_item_call>
+	        <menu_item_check
+	         label="Show Avatar Rendering Cost"
+	         name="Avatar Rendering Cost">
+	            <menu_item_check.on_check
+	             function="Advanced.CheckInfoDisplay"
+	             parameter="shame" />
+	            <menu_item_check.on_click
+	             function="Advanced.ToggleInfoDisplay"
+	             parameter="shame" />
+	        </menu_item_check>
+	        <menu_item_call
+             label="Lag Meter"
+             name="Lag Meter">
+                <menu_item_call.on_click
+                 function="Floater.Show"
+                 parameter="lagmeter" />
+            </menu_item_call>
+        </menu>
         <menu_item_call
          label="Request Admin Status"
          name="Request Admin Options"
@@ -965,6 +1000,38 @@
         </menu>
     </menu>
     
+    <!-- Content Menu -->
+    
+    <menu
+    	create_jump_keys="true"
+    	label="Content"
+    	name="Content"
+    	tear_off="false">
+    	<menu_item_call
+             label="SL Marketplace"
+             name="SL Marketplace">
+             <menu_item_call.on_click
+             function="PromptShowURL"
+             name="Xstreet_url"
+             parameter="WebLaunchExternalTarget,https://marketplace.secondlife.com/" />
+       </menu_item_call>
+    	<menu_item_call
+             label="Apez Marketplace"
+             name="Apez">
+             <menu_item_call.on_click
+             function="PromptShowURL"
+             name="Apez_url"
+             parameter="WebLaunchExternalTarget,http://apez.biz/" />
+       </menu_item_call>       
+    	<menu_item_call
+             label="Script Library"
+             name="Script Library">
+             <menu_item_call.on_click
+             function="PromptShowURL"
+             name="script_library_url"
+             parameter="WebLaunchExternalTarget,http://wiki.secondlife.com/wiki/LSL_Library" />
+       </menu_item_call> 
+      </menu>   
     
     <!-- Help Menu -->
     
@@ -991,7 +1058,14 @@
         </menu_item_call>-->
 
         <menu_item_separator/>
-
+		<menu_item_call
+             label="Check Grid status"
+             name="Grid Status">
+             <menu_item_call.on_click
+             function="PromptShowURL"
+             name="GridStatus_url"
+             parameter="WebLaunchExternalTarget,http://status.secondlifegrid.net/" />
+        </menu_item_call>
         <menu_item_call
              label="Report Abuse"
              name="Report Abuse">
@@ -1033,12 +1107,6 @@
      name="Advanced"
      tear_off="true"
      visible="false">
-        <menu_item_call
-         label="Stop Animating Me"
-         name="Stop Animating My Avatar">
-            <menu_item_call.on_click
-             function="Tools.StopAllAnimations" />
-        </menu_item_call>
         <menu_item_call
          label="Rebake Textures"
          name="Rebake Texture"

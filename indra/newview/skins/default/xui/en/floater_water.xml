@@ -97,7 +97,7 @@
             </text>
             <color_swatch
              can_apply_immediately="true"
-             color="0.5 0.5 0.5 1"
+             color="SL-MidDkGray"
              follows="left|top"
              height="50"
              layout="topleft"
