@@ -30,7 +30,7 @@
          name="speakers_list_panel"
          user_resize="false">
             <avatar_list
-             color="DkGray2"
+             color="SL-Background"
              follows="all"
              height="130"
              ignore_online_status="true"
