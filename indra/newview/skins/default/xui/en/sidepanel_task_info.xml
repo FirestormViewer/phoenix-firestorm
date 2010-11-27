@@ -98,7 +98,7 @@
          top="45"
          width="313"
    background_visible="true"
-   bg_alpha_color="DkGray2">
+   bg_alpha_color="SL-Background">
 	    	    <text
 		     type="string"
 		     length="1"
@@ -288,7 +288,7 @@
          layout="topleft"
          mouse_opaque="false"
          background_visible="true"
-         bg_alpha_color="DkGray"
+         bg_alpha_color="SL-Background_Light"
          name="perms_inv"
          left="0"
          top_pad="15"

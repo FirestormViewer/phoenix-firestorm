@@ -5,7 +5,7 @@
            allow_text_entry="false"
            follows="left|top">
   <drop_down.combo_button name="Combobox Button"
-                          hover_glow_amount="0.15"
+                          hover_glow_amount="0.25"
                           font="SansSerifSmall"
                           halign="left"
                           scale_image="true"

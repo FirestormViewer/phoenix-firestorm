@@ -13,6 +13,14 @@
  top="19"
  tab_stop="false"
  width="1000">
+  <!-- icon
+    top="0" 
+   scale_image="true"
+   follows="left|right|top|bottom"
+   height="44"
+   image_name="menu_bar.tga"
+   left="0"
+   width="1000" / -->
     <panel.string
      name="packet_loss_tooltip">
         Packet Loss
@@ -51,7 +59,7 @@
      height="18"
      left="0" 
      name="balance"
-     tool_tip="Linden Dollar(L$) Balance"
+     tool_tip="Linden Dollar Balance for this Account"
      v_pad="4"
      top="0"
      wrap="false" 
@@ -92,6 +100,26 @@
      width="145">
         24:00 AM PST
     </text>
+<!-- Draw distance widget here -->
+     <slider
+     control_name="RenderFarClip"
+     decimal_digits="0"
+     follows="right|top"
+     height="15"
+     increment="16"
+     initial_value="64"
+     layout="topleft"
+     tool_tip="Maximum distance away from camera to be rezzed (meters)"
+     top="5"
+     label="Draw:"
+     label_length="40"
+     left_delta="-250"
+     max_val="992"
+     min_val="32"
+     name="drawdistance" 
+     top_delta="0"
+     width="130" />
+<!-- End Draw distance widget here -->
     <button
      follows="right|top"
      height="16"
@@ -100,7 +128,7 @@
      image_pressed="Pause_Press"
      image_pressed_selected="Play_Press"
      is_toggle="true"
-     left_pad="15"
+     left_delta="420"
      top="1"
      name="media_toggle_btn"
      tool_tip="Start/Stop All Media (Music, Video, Web pages)"

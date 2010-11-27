@@ -6,7 +6,7 @@
      label=""
      layout="topleft"
      halign="center"
-     hover_glow_amount="0.15"
+     hover_glow_amount="0.25"
      mouse_opaque="false"
      scale_image="true"
      image_selected="PushButton_Selected_Press"

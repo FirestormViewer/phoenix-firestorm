@@ -5,14 +5,14 @@
            height="23"
            follows="right|top">
   <combo_box.combo_button name="Combobox Button"
-                          hover_glow_amount="0.15"
+                          hover_glow_amount="0.25"
                           font="SansSerifSmall"
                           scale_image="false"
                           image_unselected="ComboButton_Off"
                           image_selected="ComboButton_Selected"
                           image_disabled="ComboButton_Disabled" />
   <combo_box.drop_down_button name="Drop Down Button"
-                              hover_glow_amount="0.15"
+                              hover_glow_amount="0.25"
                               font="SansSerifSmall"
                               scale_image="true"
                               pad_right="24"

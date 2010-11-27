@@ -3,7 +3,7 @@
      help_topic="panel_teleport_history"
      border="false" follows="left|top|right|bottom"
      background_visible="true"
-     bg_alpha_color="DkGray">     
+     bg_alpha_color="SL-Background_66">
     <accordion
      follows="left|top|right|bottom"
      height="373"
@@ -12,7 +12,7 @@
      top="0"
      name="history_accordion"
      background_visible="true"
-     bg_alpha_color="DkGray2"
+     bg_alpha_color="Transparent"
      width="307">
         <no_matched_tabs_text
          name="no_matched_teleports_msg"

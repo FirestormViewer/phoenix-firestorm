@@ -80,7 +80,7 @@
      value="(Inventory)"
      width="275" />
     <scroll_container
-     color="DkGray2"
+     color="SL-Background_66"
      follows="all"
      layout="topleft"
      left="9"
@@ -218,8 +218,8 @@
             left_pad="5"
           name="LabelOwnerName"
           top_delta="6"
-       use_ellipses="true"
-			 width="165">
+          use_ellipses="true"
+	     width="165">
           </text>
              <button
                  follows="top|right"
