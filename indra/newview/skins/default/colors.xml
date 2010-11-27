@@ -4,13 +4,16 @@
 	<!-- Named Colors -->
 	<color
 	 name="EmphasisColor"
-	 value="0.38 0.694 0.573 1" />
+	 value="1.00 0.549 0.267 1" />
 	<color
 	 name="EmphasisColor_13"
-	 value="0.38 0.694 0.573 0.13" />
+	 value="1.00 0.549 0.267 0.13" />
 	<color
 	 name="EmphasisColor_35"
-	 value="0.38 0.694 0.573 0.35" />
+	 value="1.00 0.549 0.267 0.35" />
+	<color
+	 name="white"
+	 value="0 0 0 1" />
 	<color
 	 name="White"
 	 value="1 1 1 1" />
@@ -27,17 +30,23 @@
 	 name="White_50"
 	 value="1 1 1 0.5" />
 	<color
+	 name="White_70"
+	 value="1 1 1 0.7" />
+	<color
 	 name="LtGray"
-	 value="0.75 0.75 0.75 1" />
+	 value="0.90 0.90 0.90 1" />
 	<color
 	 name="LtGray_50"
-	 value="0.75 0.75 0.75 0.50" />
+	 value="0.90 0.90 0.90 0.50" />
 	<color
 	 name="DkGray"
 	 value="0.125 0.125 0.125 1" />
 	<color
 	 name="DkGray_66"
 	 value="0.125 0.125 0.125 .66" />
+	<color
+	 name="DkGray_86"
+	 value="0.125 0.125 0.125 .86" />
 	<color
 	 name="DkGray2"
 	 value="0.169 0.169 0.169 1" />
@@ -47,7 +56,7 @@
 	<color
 	 name="Black"
 	 value="0 0 0 1" />
-	<colork
+	<color
 	 name="Black_10"
 	 value="0 0 0 0.1" />
 	<color
@@ -57,11 +66,14 @@
 	 name="Black_50"
 	 value="0 0 0 0.5" />
 	<color
+	 name="Black_78"
+	 value="0 0 0 0.78" />
+	<color
 	name="FrogGreen"
 	value="0.26 0.345 0.263 1" />
 	<color
 	 name="Red"
-	 value="1 0 0 1" />
+	 value="0.729 0 0.121 1" />
 	<color
 	 name="Blue"
 	 value="0 0 1 1" />
@@ -86,9 +98,89 @@
 	<color
 	name="LtOrange"
 	value="1 .85 .73 1" />
+
+  <!-- Skin and Theme Colors -->
+
+      <color
+	 name="SL-White"
+	 value="1 1 1 1" />
 	<color
-	name="MdBlue"
-	value=".07 .38 .51 1" />
+	 name="SL-Normal"
+	 value="0.25 0.100 0.225 1" />
+	<color
+	 name="SL-Dark"
+	 value="0.150 0.70 0.290 1" />
+	<color
+	 name="SL-Background_Light"
+	 value="0.125 0.125 0.125 1" />
+	<color
+	 name="SL-Background"
+	 value="0.125 0.125 0.125 1" />
+	<color
+	 name="SL-Background_50"
+	 value="0.125 0.125 0.125 0.50" />
+	<color
+	 name="SL-Background_66"
+	 value="0.125 0.125 0.125 0.66" />
+	<color
+	 name="SL-Foreground"
+	 value="0.375 0.120 0.400 1" />
+	<color
+	 name="SL-Foreground_50"
+	 value="0.375 0.120 0.400 0.50" />
+	<color
+	 name="SL-Foreground_66"
+	 value="0.375 0.120 0.400 0.66" />
+	<color
+	 name="SL-Silver"
+	 value="0.75 0.75 0.75 1" />
+	<color
+	 name="SL-MidGray_50"
+	 value="0.7 0.7 0.7 0.50" />
+	<color
+	 name="SL-MidDkGray"
+	 value="0.5 0.5 0.5 1" />
+	<color
+	 name="SL-MidDkGray_50"
+	 value="0.5 0.5 0.5 0.50" />
+	<color
+	 name="SL-Titanium_25"
+	 value="0.25 0.25 0.25 0.25" />
+	<color
+	 name="SL-Titanium"
+	 value="0.3 0.3 0.3 1" />
+	<color
+	 name="SL-DkTitanium"
+	 value="0.24 0.24 0.24 1" />
+	<color
+	 name="SL-TitaniumGray"
+	 value="0.4 0.4 0.4 1" />
+	<color
+	 name="SL-MidBlue"
+	 value="0.3 0.6 0.9 1" />
+	<color
+	 name="Brown"
+	 value="0.225 0.100 0.05 1" />
+	<color
+	 name="BrickBrown"
+	 value="0.6 0 0 1" />
+	<color
+	 name="BrightRed"
+	 value="1 0 0 1" />
+	<color
+	 name="NavyBlue_0"
+	 value="0 0.12 0.24 0" />
+      <color
+       name="MdBlue"
+       value=".07 .38 .51 1" />
+<!-- Colors below transparent in panel_notification.xml -->
+	<color
+	 name="Cerise_0"
+	 value="1 0.3 0.3 0" />
+	<color
+	 name="Titanium_0"
+	 value="0.3 0.3 0.3 0" />
+
 
   <!-- This color name makes potentially unused colors show up bright purple.
   Leave this here until all Unused? are removed below, otherwise
@@ -96,6 +188,96 @@
   <color
 	 name="Unused?"
 	 value=".831 1 0 1" />
+
+
+  <!-- UI Colors only used once - grey shades at top -->
+
+    <color
+     name="GridlineShadowColor"
+     value="0 0 0 0.31" />
+    <color
+     name="GridlineBGColor"
+     value="0.92 0.92 1 0.78" />
+    <color
+     name="TextFgColor"
+     value="0.102 0.102 0.102 1" />
+
+    <color
+     name="ChicletFlashColor"
+     value="0.114 0.65 0.1" />
+    <color
+     name="GroupNotifyBoxColor"
+     value="0.3344 0.5456 0.5159 1" />
+    <color
+     name="GroupOverTierColor"
+     value="0.43 0.06 0.06 1" />
+    <color
+     name="HighlightParentColor"
+     value="0.67 0.83 0.96 1" />
+    <color
+     name="MapAvatarSelfColor"
+     value="0.53125 0 0.498047 1" />
+    <color
+     name="MenuNonProductionGodBgColor"
+     value="0.263 0.325 0.345 1" />
+    <color
+     name="NetMapGroupOwnBelowWater"
+     value="0.78 0 0.78 1" />
+    <color
+     name="NetMapGroupOwnAboveWater"
+     reference="Purple" />
+    <color
+     name="NetMapOtherOwnAboveWater"
+     reference="SL-DkTitanium" />
+<!-- Changed Color -->
+    <color
+     name="NetMapOtherOwnBelowWater"
+     value="DkGray" />
+    <color
+     name="NetMapYouOwnAboveWater"
+     value="0 1 1 1" />
+    <color
+     name="NetMapYouOwnBelowWater"
+     value="0 0.78 0.78 1" />
+    <color
+     name="PieMenuBgColor"
+     value="0.24 0.24 0.24 0.59" />
+    <color
+     name="PieMenuLineColor"
+     value="0 0 0 0.5" />
+    <color
+     name="PieMenuSelectedColor"
+     value="0.72 0.72 0.74 0.3" />
+    <color
+     name="PropertyColorAuction"
+     value="0.5 0 1 0.4" />
+    <color
+     name="PropertyColorAvail"
+     reference="Transparent" />
+    <color
+     name="PropertyColorForSale"
+     value="1 0.5 0 0.4" />
+    <color
+     name="PropertyColorGroup"
+     value="0 0.72 0.72 0.4" />
+    <color
+     name="PropertyColorOther"
+     value="1 0 0 0.4" />
+    <color
+     name="PropertyColorSelf"
+     value="0 1 0 0.4" />
+  <color
+    name="ColorSwatchBorderColor"
+    value="0.45098 0.517647 0.607843 1"/>
+    <color
+     name="TextEmbeddedItemColor"
+     value="0 0 0.5 1" />
+    <color
+     name="ToolTipBgColor"
+     value="Purple" />
+    <color
+     name="ToolTipBorderColor"
+     value="White" />
 
   <!-- UI Definitions -->
 
@@ -107,28 +289,29 @@
      reference="White" />
     <color
      name="AlertBoxColor"
-     value="0.24 0.24 0.24 1" />
+     reference="SL-DkTitanium" />
     <color
      name="AlertCautionBoxColor"
-     value="1 0.82 0.46 1" />
+     reference="LtOrange" />
     <color
      name="AlertCautionTextColor"
      reference="LtYellow" />
     <color
      name="AgentLinkColor"
-     reference="EmphasisColor" />
+     reference="White" />
+<!-- Changed Color -->
     <color
      name="AlertTextColor"
-     value="0.58 0.66 0.84 1" />
+     reference="SL-MidBlue" />
     <color
      name="AvatarListItemIconDefaultColor"
-     reference="White" />
+     reference="SL-White" />
     <color
      name="AvatarListItemIconOnlineColor"
-     reference="White" />
+     reference="SL-White" />
     <color
      name="AvatarListItemIconOfflineColor"
-     value="0.5 0.5 0.5 0.5" />
+     reference="SL-MidDkGray_50" />
     <color
      name="AvatarListItemIconVoiceInvitedColor"
      reference="AvatarListItemIconOfflineColor" />
@@ -140,7 +323,7 @@
      reference="AvatarListItemIconOfflineColor" />
     <color
      name="BackgroundChatColor"
-     reference="DkGray_66" />
+     reference="White" />
     <color
      name="ButtonBorderColor"
      reference="Unused?" />
@@ -153,9 +336,10 @@
     <color
      name="ButtonFlashBgColor"
      reference="Unused?" />
+<!-- Color Changed -->
     <color
      name="ButtonImageColor"
-     reference="White" />
+     reference="SL-White" />
     <color
      name="ButtonLabelColor"
      reference="LtGray" />
@@ -182,13 +366,10 @@
      reference="Unused?" />
     <color
      name="ChatHistoryBgColor"
-     reference="Transparent" />
+     reference="DkGray_66" />
     <color
      name="ChatHistoryTextColor"
      reference="LtGray" />
-    <color
-     name="ChicletFlashColor"
-     value="0.114 0.65 0.1" />
     <color
      name="ColorDropShadow"
      reference="Black_50" />
@@ -197,10 +378,10 @@
      reference="Black" />
     <color
      name="ColorPaletteEntry02"
-     value="0.5 0.5 0.5 1" />
+     reference="SL-MidDkGray" />
     <color
      name="ColorPaletteEntry03"
-     value="0.5 0 0 1" />
+     value="0.3344 0.5456 0.5159 1" />
     <color
      name="ColorPaletteEntry04"
      value="0.5 0.5 0 1" />
@@ -242,7 +423,7 @@
      reference="LtYellow" />
     <color
      name="ColorPaletteEntry17"
-     reference="White" />
+     reference="LtGreen" />
     <color
      name="ColorPaletteEntry18"
      reference="LtGray" />
@@ -251,7 +432,7 @@
      reference="Red" />
     <color
      name="ColorPaletteEntry20"
-     reference="Yellow" />
+     reference=".5 .5 1 0" />
     <color
      name="ColorPaletteEntry21"
      reference="Green" />
@@ -317,19 +498,21 @@
      reference="Black" />
     <color
      name="FilterTextColor"
-     value="0.38 0.69 0.57 1" />
+     reference="EmphasisColor" />
      <color
      name="FloaterButtonImageColor"
      reference="LtGray" />
     <color
      name="FloaterDefaultBackgroundColor"
      reference="DkGray_66" />
+<!-- Changed Color -->
     <color
      name="FloaterFocusBackgroundColor"
-     reference="DkGray2" />
+     reference="SL-Background" />
+<!-- Changed Color -->
     <color
      name="FloaterFocusBorderColor"
-     reference="Black_50" />
+     reference="SL-Background_50" />
     <color
      name="FloaterUnfocusBorderColor"
      reference="Black_50" />
@@ -338,34 +521,22 @@
      reference="EmphasisColor" />
     <color
      name="FolderViewLoadingMessageTextColor"
-     value="0.3344 0.5456 0.5159 1" />
+     reference="EmphasisColor" />
     <color
      name="GridFocusPointColor"
      reference="White_50" />
     <color
-     name="GridlineBGColor"
-     value="0.92 0.92 1 0.78" />
-    <color
      name="GridlineColor"
      reference="White" />
     <color
-     name="GridlineShadowColor"
-     value="0 0 0 0.31" />
-    <color
      name="GroupLinkColor"
      reference="White" />
-    <color
-     name="GroupNotifyBoxColor"
-     value="0.3344 0.5456 0.5159 1" />
     <color
      name="GroupNotifyTextColor"
      reference="White"/>
     <color
      name="GroupNotifyDimmedTextColor"
-     reference="LtGray" />
-    <color
-     name="GroupOverTierColor"
-     value="0.43 0.06 0.06 1" />
+     reference="DkGray" />
     <color
      name="HTMLLinkColor"
      reference="EmphasisColor" />
@@ -395,10 +566,10 @@
      reference="Yellow" />
     <color
      name="HighlightInspectColor"
-     value="1 0 1 1" />
+     reference="Purple" />
     <color
-     name="HighlightParentColor"
-     value="0.67 0.83 0.96 1" />
+     name="IMChatColor"
+     reference="LtGray" />
     <color
      name="IMHistoryBgColor"
      reference="Unused?" />
@@ -413,7 +584,7 @@
      reference="White" />
     <color
      name="InventoryBackgroundColor"
-     reference="DkGray2" />
+     reference="Transparent" />
     <color
      name="InventoryFocusOutlineColor"
      reference="White_25" />
@@ -422,7 +593,7 @@
      reference="White_25" />
     <color
      name="InventoryItemLibraryColor"
-     reference="EmphasisColor" />
+     reference="White" />
     <color
      name="InventoryItemLinkColor"
      reference="LtGray_50" />
@@ -449,13 +620,13 @@
      reference="Unused?" />
     <color
      name="LoginProgressBoxBorderColor"
-     value="0 0.12 0.24 0" />
+     refencee="NavyBlue_0" />
     <color
      name="LoginProgressBoxCenterColor"
-     value="0 0 0 0.78" />
+     reference="Black_78" />
     <color
      name="LoginProgressBoxShadowColor"
-     value="0 0 0 0.78" />
+     reference="Black_78" />
     <color
      name="LoginProgressBoxTextColor"
      reference="White" />
@@ -466,20 +637,19 @@
      name="MapAvatarFriendColor"
      reference="Yellow" />
     <color
-     name="MapAvatarSelfColor"
-     value="0.53125 0 0.498047 1" />
-    <color
      name="MapFrustumColor"
      reference="White_10" />
+<!-- Changed Color -->
     <color
      name="MapFrustumRotatingColor"
-     value="1 1 1 0.2" />
+     reference="White_25" />
     <color
      name="MapTrackColor"
      reference="Red" />
+<!-- Changed Color -->
     <color
      name="MapTrackDisabledColor"
-     value="0.5 0 0 1" />
+     reference="BrickBrown" />
     <color
      name="MenuBarBgColor"
      reference="DkGray" />
@@ -504,9 +674,6 @@
     <color
      name="MenuNonProductionBgColor"
      reference="Black" />
-    <color
-     name="MenuNonProductionGodBgColor"
-     value="0.263 0.325 0.345 1" />
     <color
      name="MenuPopupBgColor"
 	  reference="DkGray2" />
@@ -538,7 +705,7 @@
       value="0 0 0 1" />
     <color
      name="NameTagChat"
-     reference="White" />
+     reference="EmphasisColor" />
     <color
      name="NameTagFriend"
      value="0.447 0.784 0.663 1" />
@@ -550,34 +717,17 @@
      reference="White" />
     <color
      name="NameTagMismatch"
-     reference="White" />
+     reference="LtOrange" />
+<!-- Changed Color -->
     <color
      name="NetMapBackgroundColor"
-     value="0 0 0 1" />
-    <color
-     name="NetMapGroupOwnAboveWater"
-     reference="Purple" />
-    <color
-     name="NetMapGroupOwnBelowWater"
-     value="0.78 0 0.78 1" />
-    <color
-     name="NetMapOtherOwnAboveWater"
-     value="0.24 0.24 0.24 1" />
-    <color
-     name="NetMapOtherOwnBelowWater"
-     value="0.12 0.12 0.12 1" />
-    <color
-     name="NetMapYouOwnAboveWater"
-     value="0 1 1 1" />
-    <color
-     name="NetMapYouOwnBelowWater"
-     value="0 0.78 0.78 1" />
+     reference="Black_25" />
     <color
      name="NotifyBoxColor"
-     value="LtGray" />
+     reference="LtGray" />
     <color
      name="NotifyCautionBoxColor"
-     value="1 0.82 0.46 1" />
+     reference="LtOrange" />
     <color
      name="NotifyCautionWarnColor"
      reference="White" />
@@ -595,46 +745,19 @@
      reference="Red" />
     <color
      name="PanelDefaultBackgroundColor"
-     reference="DkGray" />
+     reference="Transparent" />
     <color
      name="PanelDefaultHighlightLight"
      reference="White_50" />
     <color
      name="PanelFocusBackgroundColor"
-     reference="DkGray2" />
+     reference="Transparent" />
     <color
      name="ParcelHoverColor"
      reference="White" />
     <color
-     name="PieMenuBgColor"
-     value="0.24 0.24 0.24 0.59" />
-    <color
-     name="PieMenuLineColor"
-     value="0 0 0 0.5" />
-    <color
-     name="PieMenuSelectedColor"
-     value="0.72 0.72 0.74 0.3" />
-    <color
-     name="PropertyColorAuction"
-     value="0.5 0 1 0.4" />
-    <color
-     name="PropertyColorAvail"
-     reference="Transparent" />
-    <color
-     name="PropertyColorForSale"
-     value="1 0.5 0 0.4" />
-    <color
-     name="PropertyColorGroup"
-     value="0 0.72 0.72 0.4" />
-    <color
-     name="PropertyColorOther"
-     value="1 0 0 0.4" />
-    <color
-     name="PropertyColorSelf"
-     value="0 1 0 0.4" />
-    <color
      name="ScriptBgReadOnlyColor"
-     value="0.39 0.39 0.39 1" />
+     reference="SL-TitaniumGray" />
     <color
      name="ScriptErrorColor"
      reference="Red" />
@@ -674,9 +797,10 @@
     <color
      name="SelectedOutfitTextColor"
      reference="EmphasisColor" />
+<!-- Color Changed -->
     <color
      name="SilhouetteChildColor"
-     value="0.13 0.42 0.77 1" />
+     reference="SL-MidBlue" />
     <color
      name="SilhouetteParentColor"
      reference="Yellow" />
@@ -714,20 +838,14 @@
      name="TextDefaultColor"
      reference="Black" />
     <color
-     name="TextEmbeddedItemColor"
-     value="0 0 0.5 1" />
-    <color
      name="TextEmbeddedItemReadOnlyColor"
      reference="Unused?" />
-    <color
-     name="TextFgColor"
-     value="0.102 0.102 0.102 1" />
     <color
      name="TextFgReadOnlyColor"
      reference="LtGray" />
     <color
      name="TextFgTentativeColor"
-     value="0.4 0.4 0.4 1" />
+     reference="SL-TitaniumGray" />
     <color
      name="TimeTextColor"
      reference="LtGray" />
@@ -735,14 +853,8 @@
      name="TitleBarFocusColor"
      reference="White_10" />
     <color
-     name="ToolTipBgColor"
-     value="0.937 0.89 0.655 1" />
-    <color
-     name="ToolTipBorderColor"
-     value="0.812 0.753 0.451 1" />
-    <color
      name="ToolTipTextColor"
-     reference="DkGray2" />
+     reference="SL-White" />
     <color
      name="InspectorTipTextColor"
      reference="LtGray" />
@@ -759,13 +871,13 @@
      reference="DkGray2" />
     <color
      name="SysWellItemUnselected"
-     value="0 0 0 0" />
+     reference="Transparent" />
     <color
      name="SysWellItemSelected"
-     value="0.3 0.3 0.3 1.0" />
+     reference="SL-Titanium" />
     <color
-    name="ColorSwatchBorderColor"
-    value="0.45098 0.517647 0.607843 1"/>
+     name="ChatToastAgentNameColor"
+     reference="EmphasisColor" />
     <color
      name="ChatTimestampColor"
      reference="White" />
