@@ -12,3 +12,5 @@ SkinSelector		LGPL
 ViewerTagBroadcast	LGPL
 LargeProfile		LGPL
 ImprovedPrefs		LGPL
+WindlightExtraSettings	LGPL
+WindlightServerProtocol LGPL

@@ -6577,4 +6577,32 @@ Otherwise, you can look at the Map and find places marked &quot;Infohub&quot;.
 You died and have been teleported to your home location.
   </global>
 
+  <notification
+   icon="notify.tga"
+   name="PhoenixWL"
+   type="notify">
+&apos;[PARCEL_NAME]&apos;, owned by &apos;[OWNER_NAME]&apos;, would like to change your Windlight visual environment settings.
+    <form name="form">
+      <button
+       index="0"
+       name="Allow"
+       text="Allow"/>
+      <button
+       index="1"
+       name="Ignore"
+       text="Ignore"/>
+    </form>
+  </notification>
+  
+  <notification
+   icon="notify.tga"
+   name="PhoenixWLClear"
+   type="notify">
+Reset WL settings for &apos;[PARCEL_NAME]&apos; to region default?
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="Yes"/>
+  </notification>
+
 </notifications>
