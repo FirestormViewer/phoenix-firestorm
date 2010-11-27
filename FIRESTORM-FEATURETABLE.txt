@@ -10,3 +10,4 @@ CallingCard-avclck	LGPL
 DD_SliderUI		LGPL
 SkinSelector		LGPL
 ViewerTagBroadcast	LGPL
+LargeProfile		LGPL
