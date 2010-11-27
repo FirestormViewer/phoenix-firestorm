@@ -216,8 +216,10 @@ if [ $WANTS_VERSION -eq $TRUE ] ; then
 	echo -n "Setting build version to "
         buildVer=`hg summary | head -1 | cut -d " "  -f 2 | cut -d : -f 1`
         echo "$buildVer."
-        cp llcommon/llversionviewer.h llcommon/llversionviewer.h.lastBuild
-        sed -e "s#LL_VERSION_BUILD = .*\$#LL_VERSION_BUILD = ${buildVer};#" -e "s#LL_CHANNEL = .*\$#LL_CHANNEL = \"Firestorm-$CHANNEL\";#" llcommon/llversionviewer.h.lastBuild > llcommon/llversionviewer.h
+        cp llcommon/llversionviewer.h llcommon/llversionviewer.h.build
+        sed -e "s#LL_VERSION_BUILD = .*\$#LL_VERSION_BUILD = ${buildVer};#" \
+        	-e "s#LL_CHANNEL = .*\$#LL_CHANNEL = \"Firestorm-$CHANNEL\";#" \
+        	llcommon/llversionviewer.h.build > llcommon/llversionviewer.h
 fi
 
 if [ $WANTS_BUILD -eq $TRUE ] ; then
@@ -230,8 +232,12 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
 		GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee $LOG | \
 		grep -e "[(make.*Error)|(xcodebuild.*Error)] "
 	trap - INT TERM EXIT
-	# Don't move this back, it prevents us from diagnosing llversionviewer.h build breaks.
-	#mv llcommon/llversionviewer.h.build llcommon/llversionviewer.h
+	# Save the .h file we built with in case of errors in compile.
+	# Except during the build process, the .h file should ALWAYS be the
+	# same as existed in the source repository to avoid merge conflicts
+	# during updates.
+	mv llcommon/llversionviewer.h llcommon/llversionviewer.h.built
+	mv llcommon/llversionviewer.h.build llcommon/llversionviewer.h
 	echo "Complete."
 fi
 popd > /dev/null

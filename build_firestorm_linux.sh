@@ -69,6 +69,11 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
 	echo "Building in progress. Check $LOG for verbose status."
 	./develop.py -t release build 2>&1 | tee $LOG | grep -e "make.*Error "
 	trap - INT TERM EXIT
+	# Save the .h file we built with in case of errors in compile.
+	# Except during the build process, the .h file should ALWAYS be the
+	# same as existed in the source repository to avoid merge conflicts
+	# during updates.
+	mv llcommon/llversionviewer.h llcommon/llversionviewer.h.built
 	mv llcommon/llversionviewer.h.build llcommon/llversionviewer.h
 	echo "Complete"
 fi
