@@ -42,14 +42,14 @@
     follows="all"
     layout="topleft"
     name="profile_accordion"
-    height="523"
+    height="500"
     width="313">
      <accordion_tab
       expanded="true"
       layout="topleft"
       name="second_life_tab"
-      title="Second Life"
-      fit_panel="false">
+      title="Avatar"
+      fit_panel="true">
         <scroll_container
          color="SL-Background_66"
          follows="all"
@@ -57,13 +57,13 @@
          left="0"
          name="profile_sl_scroll"
          opaque="true"
-         height="523"
-         width="313"
+         height="650"
+         width="331"
          top="0">
           <panel
            layout="topleft"
            follows="left|top|right"
-           height="523"
+           height="750"
            name="second_life_panel"
            top="0"
            left="0"
@@ -74,23 +74,25 @@
                enabled="false"
                fallback_image="Generic_Person_Large"
                follows="top|left"
-               height="144"
+               height="225"
                layout="topleft"
-               left="0"
+               left="10"
                name="2nd_life_pic"
-               top="10"
-               width="154" />
+               top="0"
+               width="275" />
             <text
+             left="4"
              follows="left|top"
              font.style="BOLD"
              height="10"
              layout="topleft"
-             left_pad="10"
+             left_pad="0"
+             top_pad="0"
              name="title_member_text"
              text_color="White"
              top_delta="0"
              value="Resident Since:"
-             width="120" />
+             width="280" />
             <text_editor
              allow_scroll="false"
              bg_visible="false"
@@ -103,9 +105,10 @@
              translate="false"
              v_pad="0"
              value="05/31/2376"
-             width="120"
+             width="280"
              word_wrap="true" />
             <text
+             left="4"
              follows="left|top"
              font.style="BOLD"
              height="15"
@@ -114,7 +117,7 @@
              text_color="White"
              top_pad="12"
              value="Account Status:"
-             width="120"
+             width="280"
              word_wrap="true" />
             <text_editor
              allow_scroll="false"
@@ -128,12 +131,13 @@
              translate="false"
              top_pad="-2"
              v_pad="0"
-             width="120"
+             width="280"
              word_wrap="true">
               Resident. No payment info on file.
               Linden.
             </text_editor>
             <text
+             left="4"
              follows="left|top"
              font.style="BOLD"
              height="15"
@@ -142,7 +146,7 @@
              text_color="White"
              top_pad="0"
              value="Partner:"
-             width="120" />
+             width="280" />
             <panel
              follows="left|top"
              height="30"
@@ -168,40 +172,14 @@
              height="13"
              layout="topleft"
              left="4"
-             name="About_sl_text"
-             text_color="White"
-             top_pad="0"
-             value="About:"
-             width="309" />
-              <expandable_text
-               follows="left|top|right"
-               height="170"
-               layout="topleft"
-               left="5"
-               textbox.max_length="512"
-               textbox.show_context_menu="true"
-               name="sl_description_edit"
-               top_pad="0"
-               translate="false"
-               width="290"
-               expanded_bg_visible="true"
-               expanded_bg_color="SL-Background_Light">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean viverra orci et justo sagittis aliquet.Nullamma lesuada mauris sit amet ipsum. adipiscing elit. Ae nean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum.
-              </expandable_text>
-            <text
-             follows="left|top"
-             font.style="BOLD"
-             height="13"
-             layout="topleft"
-             left="4"
              name="title_groups_text"
              text_color="White"
-             top_pad="3"
+             top_pad="0"
              value="Groups:"
-             width="309" />
+             width="280" />
             <expandable_text
             follows="all"
-            height="170"
+            height="120"
             layout="topleft"
             left="5"
             name="sl_groups"
@@ -209,19 +187,48 @@
             textbox.show_context_menu="true"
             top_pad="0"
             translate="false"
-            width="290"
+            width="280"
             expanded_bg_visible="true"
+            word_wrap="true"
+            allow_scroll="false"
             expanded_bg_color="SL-Background_Light">
               Lorem ipsum dolor sit amet, consectetur adlkjpiscing elit moose moose. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet. adipiscing elit. Aenean rigviverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet sorbet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. Aenean viverra tulip moosetop. Slan de heelish marfnik tooplod. Sum sum to whop de wompam booster copm.
-            </expandable_text>     
+            </expandable_text>              
+            <text
+             follows="left|top"
+             font.style="BOLD"
+             height="13"
+             layout="topleft"
+             left="4"
+             name="About_sl_text"
+             text_color="White"
+             top_pad="0"
+             value="About:"
+             width="280" />
+            <expandable_text
+               allow_scroll="false"
+               follows="left|top|right"
+               height="300"
+               layout="topleft"
+               left="5"
+               textbox.max_length="512"
+               textbox.show_context_menu="true"
+               name="sl_description_edit"
+               top_pad="3"
+               translate="false"
+               width="280"
+               expanded_bg_visible="true"
+               expanded_bg_color="SL-Background_Light">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean viverra orci et justo sagittis aliquet.Nullamma lesuada mauris sit amet ipsum. adipiscing elit. Ae nean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum.
+              </expandable_text>   
           </panel>
         </scroll_container>
-      </accordion_tab>
+    </accordion_tab>
     <accordion_tab
      expanded="false"
      layout="topleft"
      name="real_world_tab"
-     title="Real World"
+     title="More Info"
      fit_panel="false">
         <scroll_container
          color="SL-Background_66"

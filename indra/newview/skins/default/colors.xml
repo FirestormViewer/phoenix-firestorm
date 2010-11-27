@@ -271,7 +271,7 @@
     value="0.45098 0.517647 0.607843 1"/>
     <color
      name="TextEmbeddedItemColor"
-     value="0 0 0.5 1" />
+     value="1.00 0.549 0.267 1" />
     <color
      name="ToolTipBgColor"
      value="Purple" />
@@ -839,7 +839,7 @@
      reference="Black" />
     <color
      name="TextEmbeddedItemReadOnlyColor"
-     reference="Unused?" />
+     reference="EmphasisColor" />
     <color
      name="TextFgReadOnlyColor"
      reference="LtGray" />

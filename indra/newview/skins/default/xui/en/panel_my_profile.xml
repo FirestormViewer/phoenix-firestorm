@@ -57,13 +57,13 @@
          left="0"
          name="profile_sl_scroll"
          opaque="true"
-         height="605"
+         height="650"
          width="313"
          top="0">
           <panel
             layout="topleft"
             follows="left|top|right"
-            height="605"
+            height="650"
             name="scroll_content_sl_panel"
             top="0"
             left="0"
@@ -108,7 +108,7 @@
              width="280"
              word_wrap="true" />
             <text
-             left="4"
+ 
              follows="left|top"
              font.style="BOLD"
              height="15"
@@ -192,17 +192,19 @@
                expanded_bg_color="SL-Background_Light">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean viverra orci et justo sagittis aliquet.Nullamma lesuada mauris sit amet ipsum. adipiscing elit. Ae nean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum.
               </expandable_text>
-            <!-- text
+            <!--
+            <text
              follows="left|top"
              font.style="BOLD"
              height="13"
              layout="topleft"
              left="4"
              name="title_my_groups_text"
-             text_color="White"
+             text_color="white"
              top_pad="3"
              value="Groups:"
-             width="290" / -->
+             width="290" />
+            -->
             <expandable_text
             follows="all"
             height="150"
