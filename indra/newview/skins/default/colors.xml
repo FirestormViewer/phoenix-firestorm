@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <colors>
 
-	<!-- Named Colors -->
+	<!-- Named Colors  -->
+	<!-- 
+   var. 1 = #8F5B3F = rgb(143,91,63) 0.56 0.36 0.25
+   var. 2 = #7D5540 = rgb(125,85,64) 0.49 0.33 0.25
+   var. 3 = #764227 = rgb(118,66,39)  0.46 .26 0.15
+   var. 4 = #A96641 = rgb(169,102,65) 0.66 0.40 0.25
+   var. 5 = #AB7B61 = rgb(171,123,97) 0.76 0.58 0.49
+
+	-->
 	<color
 	 name="EmphasisColor"
-	 value="1.00 0.549 0.267 1" />
+	 value="0.56 0.36 0.25 1.0" />
+	<color
+	 name="SchemeLightest"
+	 value="0.76 0.58 0.49 1.0" />
+	<color
+	 name="SchemeLightest_35"
+	 value="0.76 0.58 0.49 0.35" />
+	<color 
+	 name="SchemeDark"
+	 value="0.49 0.33 0.25 1.0" />
 	<color
 	 name="EmphasisColor_13"
-	 value="1.00 0.549 0.267 0.13" />
+	 value="0.950 0.412 0.173 0.13" />
 	<color
 	 name="EmphasisColor_35"
-	 value="1.00 0.549 0.267 0.35" />
+	 value="0.950 0.412 0.173 0.35" />
 	<color
 	 name="white"
 	 value="0 0 0 1" />
@@ -204,7 +221,7 @@
 
     <color
      name="ChicletFlashColor"
-     value="0.114 0.65 0.1" />
+     value="SchemeLightest" />
     <color
      name="GroupNotifyBoxColor"
      value="0.3344 0.5456 0.5159 1" />
@@ -539,7 +556,7 @@
      reference="DkGray" />
     <color
      name="HTMLLinkColor"
-     reference="EmphasisColor" />
+     reference="0.75 0.92 0.49 1.0" />
     <color
      name="HealthTextColor"
      reference="White" />
@@ -667,7 +684,7 @@
      reference="LtGray" />
     <color
      name="MenuItemHighlightBgColor"
-     reference="EmphasisColor_35" />
+     reference="SchemeLightest_35" />
     <color
      name="MenuItemHighlightFgColor"
      reference="White" />
@@ -705,10 +722,10 @@
       value="0 0 0 1" />
     <color
      name="NameTagChat"
-     reference="EmphasisColor" />
+     reference="LtGray" />
     <color
      name="NameTagFriend"
-     value="0.447 0.784 0.663 1" />
+     value="0.75 0.92 0.49 1.0" />
     <color
      name="NameTagLegacy"
      reference="White" />
@@ -717,7 +734,7 @@
      reference="White" />
     <color
      name="NameTagMismatch"
-     reference="LtOrange" />
+     reference="LtGray" />
 <!-- Changed Color -->
     <color
      name="NetMapBackgroundColor"
@@ -839,7 +856,7 @@
      reference="Black" />
     <color
      name="TextEmbeddedItemReadOnlyColor"
-     reference="EmphasisColor" />
+     reference="SchemeLightest" />
     <color
      name="TextFgReadOnlyColor"
      reference="LtGray" />
