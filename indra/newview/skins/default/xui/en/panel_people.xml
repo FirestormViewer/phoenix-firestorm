@@ -13,13 +13,13 @@
  width="333">
     <string
      name="no_recent_people"
-     value="No recent people. Looking for people to hang out with? Try [secondlife:///app/search/people Search] or the [secondlife:///app/worldmap World Map]." />
+     value="No recent people. Looking for people to hang out with? Use the search box to find topics or content you might be interested in, then visit those places to meet people with similar interests." />
     <string
      name="no_filtered_recent_people"
      value="Didn't find what you're looking for? Try [secondlife:///app/search/people/[SEARCH_TERM] Search]." />
     <string
      name="no_one_near"
-     value="No one nearby. Looking for people to hang out with? Try [secondlife:///app/search/people Search] or the [secondlife:///app/worldmap World Map]." />
+     value="No one nearby. Looking for people to hang out with? Use the search box to find topics or content you might be interested in, then visit those places to meet people with similar interests." />
     <string
      name="no_one_filtered_near"
      value="Didn't find what you're looking for? Try [secondlife:///app/search/people/[SEARCH_TERM] Search]." />
@@ -32,7 +32,7 @@
     <string
      name="no_friends_msg">
          Find friends using [secondlife:///app/search/people Search] or right-click on a Resident to add them as a friend.
-Looking for people to hang out with? Try the [secondlife:///app/worldmap World Map].
+Looking for people to hang out with? Use the search box to find topics or content you might be interested in, then visit those places to meet people with similar interests.
     </string>
     <string
      name="no_filtered_friends_msg">
@@ -80,10 +80,10 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
      halign="center"
      width="317">
      	<panel
-         background_opaque="true"
-       background_visible="true"
-         bg_alpha_color="DkGray"
-         bg_opaque_color="DkGray"
+         background_opaque="false"
+         background_visible="true"
+         bg_alpha_color="SL-Background_50"
+         bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
          label="NEARBY"
@@ -142,22 +142,28 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                <commit_callback
                   function="People.addFriend" />
              </button>
-             <icon
-             follows="bottom|left|right"
-             height="25"
-             image_name="Toolbar_Right_Off"
-             layout="topleft"
-             left_pad="1"
-             name="dummy_icon"
-             width="241"
-             />
+             <slider
+          control_name="NearMeRange"
+          decimal_digits="0"
+          follows="bottom|left"
+          height="16"
+          increment="2"
+          initial_value="96"
+          label="Range(metres):"
+          label_width="105"
+          layout="topleft"
+          max_val="400"
+          min_val="32"
+          name="NearMeRange"
+          left_pad="10"
+          width="241" />
             </panel>
         </panel>
         <panel
          background_opaque="true"
-       background_visible="true"
-         bg_alpha_color="DkGray"
-         bg_opaque_color="DkGray"
+         background_visible="true"
+         bg_alpha_color="SL-Background_50"
+         bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
          label="FRIENDS"
@@ -169,8 +175,8 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
          width="313">
             <accordion
        		 background_visible="true"
-       		 bg_alpha_color="DkGray2"
-       		 bg_opaque_color="DkGray2"
+       		 bg_alpha_color="Transparent"
+       		 bg_opaque_color="Transparent"
              follows="all"
              height="356"
              layout="topleft"
@@ -372,9 +378,9 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
         </panel>
         <panel
          background_opaque="true"
-       background_visible="true"
-         bg_alpha_color="DkGray"
-         bg_opaque_color="DkGray"
+         background_visible="true"
+         bg_alpha_color="SL-Background_50"
+         bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
          label="GROUPS"
@@ -457,9 +463,9 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
         </panel>
         <panel
          background_opaque="true"
-       background_visible="true"
-         bg_alpha_color="DkGray"
-         bg_opaque_color="DkGray"
+         background_visible="true"
+         bg_alpha_color="SL-Background_50"
+         bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
          label="RECENT"
@@ -499,7 +505,6 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                image_selected="Toolbar_Left_Selected"
                image_unselected="Toolbar_Left_Off"
                layout="topleft"
-               left="3"
                name="recent_viewsort_btn"
                top="1"
                width="31" />

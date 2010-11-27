@@ -50,14 +50,14 @@
      top="21"
      width="658">
         <panel
-	 class="panel_preference"
+	 	 class="panel_preference"
          filename="panel_preferences_general.xml"
          label="General"
          layout="topleft"
          help_topic="preferences_general_tab"
          name="general" />
         <panel
-	 class="panel_preference_graphics"
+	 	 class="panel_preference_graphics"
          filename="panel_preferences_graphics1.xml"
          label="Graphics"
          layout="topleft"
@@ -72,11 +72,11 @@
          name="audio" />
         <panel
 		 class="panel_preference"
-         filename="panel_preferences_chat.xml"
-         label="Chat"
+         filename="panel_preferences_setup.xml"
+         label="Network &amp; Cache"
          layout="topleft"
-         help_topic="preferences_chat_tab"
-         name="chat" />
+         help_topic="preferences_input_tab"
+         name="input" />
         <panel
 		 class="panel_preference"
          filename="panel_preferences_move.xml"
@@ -86,18 +86,18 @@
          name="audio" />
         <panel
 		 class="panel_preference"
+         filename="panel_preferences_chat.xml"
+         label="Chat"
+         layout="topleft"
+         help_topic="preferences_chat_tab"
+         name="chat" />
+        <panel
+		 class="panel_preference"
          filename="panel_preferences_alerts.xml"
-         label="Notifications"
+         label="Pop-Up Alerts"
          layout="topleft"
          help_topic="preferences_msgs_tab"
          name="msgs" />
-        <panel
-		 class="panel_preference"
-         filename="panel_preferences_colors.xml"
-         label="Colors"
-         layout="topleft"
-         help_topic="preferences_im_tab"
-         name="colors" />
         <panel
 		 class="panel_preference"
          filename="panel_preferences_privacy.xml"
@@ -107,27 +107,27 @@
          name="im" />
         <panel
 		 class="panel_preference"
-         filename="panel_preferences_setup.xml"
-         label="Setup"
-         layout="topleft"
-         help_topic="preferences_input_tab"
-         name="input" />
-        <panel
-		 class="panel_preference"
          filename="panel_preferences_advanced.xml"
          label="Advanced"
          layout="topleft"
          help_topic="preferences_advanced1_tab"
          name="advanced1" />
-	<panel
-                 class="panel_preference"
+        <panel
+		 class="panel_preference"
+         filename="panel_preferences_UI.xml"
+         label="UI Extras"
+         layout="topleft"
+         help_topic="preferences_advanced1_tab"
+         name="advanced1" />
+		<panel
+         class="panel_preference"
          filename="panel_preferences_skins.xml"
          label="Skins"
          layout="topleft"
          help_topic="preferences_advanced1.tab"
          name="skins" /> 
-	<panel
-                 class="panel_preference"
+		<panel
+         class="panel_preference"
          filename="panel_preferences_firestorm.xml"
          label="Firestorm"
          layout="topleft"

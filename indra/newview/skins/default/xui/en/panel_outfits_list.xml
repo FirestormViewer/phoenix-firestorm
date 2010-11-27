@@ -12,8 +12,8 @@
    width="312">
     <accordion
      background_visible="true"
-     bg_alpha_color="DkGray2"
-     bg_opaque_color="DkGray2"
+     bg_alpha_color="SL-Background_66"
+     bg_opaque_color="SL_Background_66"
      no_matched_tabs_text.value="Didn't find what you're looking for? Try [secondlife:///app/search/all/[SEARCH_TERM] Search]."
      no_matched_tabs_text.v_pad="10"
      no_visible_tabs_text.value="You don't have any outfits yet. Try [secondlife:///app/search/all/ Search]"

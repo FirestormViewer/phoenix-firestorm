@@ -55,6 +55,17 @@
    show_text="false"
    width="240"
    top_pad="5"/>
+      <check_box
+		control_name="DisableCameraConstraints"
+		height="16"
+		initial_value="true"
+		label="Disable camera Constraints (move it more freely)"
+		layout="topleft"
+		left_delta="0"
+		name="DisableCameraConstraints"
+		tool_tip="Set this to move your camera beyond it's normal bounds and below land level"
+		top_pad="7"
+		width="315"/>
   <text
   follows="left|top"
   type="string"
@@ -96,6 +107,7 @@
    name="appearance_sidebar_positioning"
    tool_tip="Use automatic camera positioning for sidebar"
    width="242" />
+
   <icon
 	 follows="left|top"
 	 height="18"
@@ -149,13 +161,59 @@
    name="invert_mouse"
    top_delta="0"
    width="128" />
-  <check_box
+  
+<text
+		type="string"
+            left="30"
+            top_pad="12"
+		length="1"
+		follows="left|top"
+		height="12"
+		layout="topleft"
+		name="MovementSettings"
+		width="188">
+			Movement:
+		</text>
+		<check_box
+		control_name="DoubleClickTeleport"
+		height="16"
+		initial_value="true"
+		label="Teleport to wherever you double-click in-world"
+		layout="topleft"
+		left="78"
+		name="DoubleClickTeleport"
+		tool_tip="Set this to teleport to a point you double click on in-world"
+		top_pad="12"
+		width="335"/>
+		<check_box
+		control_name="DoubleClickAutoPilot"
+		height="16"
+		initial_value="true"
+		label="Walk or run to wherever you double-click in-world"
+		layout="topleft"
+		left_delta="0"
+		name="DoubleClickAutoPilot"
+		tool_tip="Set this to walk or run your avatar to a point you double click on in-world (teleport on double click over-rides this)"
+		top_pad="7"
+		width="325"/> 
+		<check_box
+		control_name="NumpadControl"
+		height="16"
+		initial_value="true"
+		label="Number keys move avatar (when numlock is off)"
+		layout="topleft"
+		left_delta="0"
+		name="NumpadControl"
+		tool_tip="Set this so that the number keys move your avatar when numlock is not set"
+		top_pad="7"
+		width="256" />
+<check_box
    control_name="ArrowKeysAlwaysMove"
    follows="left|top"
    height="20"
    label="Arrow keys always move me"
    layout="topleft"
-   left="78"
+   left_delta="0"
    name="arrow_keys_move_avatar_check"
    width="237"
    top_pad="1"/>
@@ -168,39 +226,6 @@
    left_delta="0"
    name="tap_tap_hold_to_run"
    width="237"
-   top_pad="0"/>
-  <check_box
-   follows="left|top"
-   height="20"
-   label="Double-Click to:"
-   layout="topleft"
-   left_delta="0"
-   name="double_click_chkbox"
-   width="237"
-   top_pad="0"/>
-  <radio_group
-     height="20"
-     layout="topleft"
-     left_delta="17"
-     top_pad="2"
-     name="double_click_action">
-    <radio_item
-     height="16"
-     label="Teleport"
-     layout="topleft"
-     left="0"
-     name="radio_teleport"
-     top_delta="20"
-     value="0"
-     width="100" />
-    <radio_item
-     height="16"
-     label="Auto-pilot"
-     left_pad="0"
-     layout="topleft"
-     name="radio_autopilot"
-     top_delta="0"
-     value="1"
-     width="75" />
+   top_pad="0"/>		
   </radio_group>
 </panel>

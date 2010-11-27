@@ -166,7 +166,7 @@
     <button
      follows="left|bottom"
      height="23"
-     label="Block list"
+     label="Block / Mute list"
      layout="topleft"
      left="30"
      name="block_list"

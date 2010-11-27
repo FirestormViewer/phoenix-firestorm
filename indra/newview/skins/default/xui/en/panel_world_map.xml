@@ -59,7 +59,7 @@
      label="N"
      layout="topleft"
      name="floater_map_north"
-     text_color="1 1 1 0.7">
+     text_color="White_70">
         N
     </text>
     <text
@@ -68,7 +68,7 @@
      label="E"
      layout="topleft"
      name="floater_map_east"
-     text_color="1 1 1 0.7">
+     text_color="White_70">
         E
     </text>
     <text
@@ -77,7 +77,7 @@
      label="W"
      layout="topleft"
      name="floater_map_west"
-     text_color="1 1 1 0.7">
+     text_color="White_70">
         W
     </text>
     <text
@@ -86,7 +86,7 @@
      label="S"
      layout="topleft"
      name="floater_map_south"
-     text_color="1 1 1 0.7">
+     text_color="White_70">
         S
     </text>
     <text
@@ -95,7 +95,7 @@
      label="SE"
      layout="topleft"
      name="floater_map_southeast"
-     text_color="1 1 1 0.7">
+     text_color="White_70">
         SE
     </text>
     <text
@@ -104,7 +104,7 @@
      label="NE"
      layout="topleft"
      name="floater_map_northeast"
-     text_color="1 1 1 0.7">
+     text_color="White_70">
         NE
     </text>
     <text
@@ -113,7 +113,7 @@
      label="SW"
      layout="topleft"
      name="floater_map_southwest"
-     text_color="1 1 1 0.7">
+     text_color="White_70">
         SW
     </text>
     <text
@@ -122,7 +122,7 @@
      label="NW"
      layout="topleft"
      name="floater_map_northwest"
-     text_color="1 1 1 0.7">
+     text_color="White_70">
         NW
     </text>
 </panel>

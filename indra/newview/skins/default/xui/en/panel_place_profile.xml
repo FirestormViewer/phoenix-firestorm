@@ -154,7 +154,7 @@
      translate="false"
      value="Parcel_DamageNo_Dark" />
     <button
-     follows="top|left"
+     follows="top|right"
      height="24"
      image_hover_unselected="BackButton_Over"
      image_pressed="BackButton_Press"
@@ -179,7 +179,7 @@
      value="Place Profile"
      width="280" />
     <scroll_container
-     color="DkGray2"
+     color="SL-Background_50"
      follows="all"
      height="572"
      layout="topleft"
@@ -189,7 +189,7 @@
      top_pad="10"
      width="310">
         <panel
-         bg_alpha_color="DkGray2"
+         bg_alpha_color="SL-Background_50"
          follows="left|top|right"
          height="580"
          layout="topleft"
@@ -767,8 +767,8 @@
                          value="Covenant:"
                          width="277" />
                         <text_editor
-                         bg_focus_color="DkGray2"
-                         bg_readonly_color="DkGray2"
+                         bg_focus_color="SL-Background"
+                         bg_readonly_color="SL-Background"
                          follows="left|top|right"
                          height="90"
                          layout="topleft"
@@ -908,8 +908,8 @@
                          value="Subdivide/Join ability:"
                          width="277" />
                         <text_editor
-                         bg_focus_color="DkGray2"
-                         bg_readonly_color="DkGray2"
+                         bg_focus_color="SL-Background"
+                         bg_readonly_color="SL-Background"
                          follows="left|top|right"
                          height="45"
                          layout="topleft"
@@ -930,8 +930,8 @@
                          value="ReSale ability:"
                          width="277" />
                         <text_editor
-                         bg_focus_color="DkGray2"
-                         bg_readonly_color="DkGray2"
+                         bg_focus_color="SL-Background"
+                         bg_readonly_color="SL-Background"
                          follows="left|top|right"
                          height="45"
                          layout="topleft"
