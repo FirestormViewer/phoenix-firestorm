@@ -239,6 +239,11 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
 	echo "Building in progress. Check $LOG for verbose status."
 	$WINPYTHON develop.py -G vc80 -t $BTYPE build  2>&1 | tee -a $LOG | grep Build
 	trap - INT TERM EXIT
+        # Save the .h file we built with in case of errors in compile.
+	# Except during the build process, the .h file should ALWAYS be the
+	# same as existed in the source repository to avoid merge conflicts
+	# during updates.
+	mv -f llcommon/llversionviewer.h llcommon/llversionviewer.h.built
 	mv -f llcommon/llversionviewer.h.build llcommon/llversionviewer.h
 	echo "Complete"
 fi
