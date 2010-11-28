@@ -81,6 +81,33 @@
                top="0"
                width="275" />
             <text
+             follows="left|top"
+             font.style="BOLD"
+             height="13"
+             layout="topleft"
+             left="4"
+             name="About_sl_text"
+             text_color="White"
+             top_pad="0"
+             value="About:"
+             width="280" />
+            <expandable_text
+               allow_scroll="true"
+               follows="left|top|right"
+               height="240"
+               layout="topleft"
+               left="5"
+               textbox.max_length="512"
+               textbox.show_context_menu="true"
+               name="sl_description_edit"
+               top_pad="3"
+               translate="false"
+               width="280"
+               expanded_bg_visible="true"
+               expanded_bg_color="SL-Background_Light">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean viverra orci et justo sagittis aliquet.Nullamma lesuada mauris sit amet ipsum. adipiscing elit. Ae nean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum.
+              </expandable_text>              
+            <text
              left="4"
              follows="left|top"
              font.style="BOLD"
@@ -179,7 +206,7 @@
              width="280" />
             <expandable_text
             follows="all"
-            height="120"
+            height="160"
             layout="topleft"
             left="5"
             name="sl_groups"
@@ -193,34 +220,7 @@
             allow_scroll="false"
             expanded_bg_color="SL-Background_Light">
               Lorem ipsum dolor sit amet, consectetur adlkjpiscing elit moose moose. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet. adipiscing elit. Aenean rigviverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet sorbet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. Aenean viverra tulip moosetop. Slan de heelish marfnik tooplod. Sum sum to whop de wompam booster copm.
-            </expandable_text>              
-            <text
-             follows="left|top"
-             font.style="BOLD"
-             height="13"
-             layout="topleft"
-             left="4"
-             name="About_sl_text"
-             text_color="White"
-             top_pad="0"
-             value="About:"
-             width="280" />
-            <expandable_text
-               allow_scroll="false"
-               follows="left|top|right"
-               height="300"
-               layout="topleft"
-               left="5"
-               textbox.max_length="512"
-               textbox.show_context_menu="true"
-               name="sl_description_edit"
-               top_pad="3"
-               translate="false"
-               width="280"
-               expanded_bg_visible="true"
-               expanded_bg_color="SL-Background_Light">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean viverra orci et justo sagittis aliquet.Nullamma lesuada mauris sit amet ipsum. adipiscing elit. Ae nean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum.
-              </expandable_text>   
+            </expandable_text>               
           </panel>
         </scroll_container>
     </accordion_tab>
@@ -254,26 +254,15 @@
                enabled="false"
                fallback_image="Generic_Person_Large"
                follows="top|left"
-               height="144"
+               height="225"
                layout="topleft"
-               left="0"
+               left="10"
                name="real_world_pic"
-               top="10"
-               width="154" />
-            <text
-             follows="left|top"
-             font.style="BOLD"
-             height="13"
-             layout="topleft"
-             left="4"
-             name="About_rl_text"
-             text_color="White"
-             top_pad="-15"
-             value="About:"
-             width="309" />
+               top="00"
+               width="275" />
               <expandable_text
                follows="left|top|right"
-               height="220"
+               height="240"
                layout="topleft"
                left="5"
                top_pad="-3"
@@ -281,7 +270,7 @@
                textbox.show_context_menu="true"
                name="fl_description_edit"
                translate="false"
-               width="290"
+               width="280"
                expanded_bg_visible="true"
                expanded_bg_color="SL-Background_Light">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean viverra orci et justo sagittis aliquet.Nullamma lesuada mauris sit amet ipsum. adipiscing elit. Ae nean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum.
@@ -295,8 +284,8 @@
              name="homepage_text"
              text_color="White"
              top_pad="3"
-             value="Homepage:"
-             width="290" />
+             value="Web page:"
+             width="280" />
               <text
               follows="left|top"
               height="15"
@@ -306,7 +295,7 @@
               top_pad="2"
               translate="false"
               value="blank"
-              width="290"
+              width="280"
               word_wrap="false"
               use_ellipses="true" />
           </panel>
