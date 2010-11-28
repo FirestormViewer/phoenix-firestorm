@@ -1304,7 +1304,7 @@ void LLViewerTextureList::receiveImagePacket(LLMessageSystem *msg, void **user_d
 }
 
 
-// We've been that the asset server does not contain the requested image id.
+// We've been told that the asset server does not contain the requested image id.
 // static
 void LLViewerTextureList::processImageNotInDatabase(LLMessageSystem *msg,void **user_data)
 {
@@ -1315,6 +1315,7 @@ void LLViewerTextureList::processImageNotInDatabase(LLMessageSystem *msg,void **
 	LLViewerFetchedTexture* image = gTextureList.findImage( image_id );
 	if( image )
 	{
+		llinfos << "Discarding image not in asset database" << llendl;
 		image->setIsMissingAsset();
 	}
 }
