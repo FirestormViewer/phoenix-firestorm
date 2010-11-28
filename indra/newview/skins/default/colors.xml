@@ -494,7 +494,7 @@
      reference="Black" />
     <color
      name="ContextSilhouetteColor"
-     reference="EmphasisColor" />
+     reference="Yellow" />
     <color
      name="DefaultHighlightDark"
      reference="White_10" />
