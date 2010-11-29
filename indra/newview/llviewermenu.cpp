@@ -2702,8 +2702,15 @@ bool enable_object_edit()
 	else if (LLSelectMgr::getInstance()->selectGetAllValidAndObjectsFound())
 	{
 //		enable = true;
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
-		enable = !gRlvHandler.hasBehaviour(RLV_BHVR_EDIT);
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+		bool fRlvCanEdit = (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_EDITOBJ));
+		if (!fRlvCanEdit)
+		{
+			LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
+			RlvSelectIsEditable f;
+			fRlvCanEdit = (hSel.notNull()) && ((hSel->getFirstRootNode(&f, TRUE)) == NULL);
+		}
+		enable = fRlvCanEdit;
 // [/RLVa:KB]
 	}
 
@@ -7605,12 +7612,10 @@ class LLViewHighlightTransparent : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.0.0b
-		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) && (!LLDrawPoolAlpha::sShowDebugAlpha))
-			return true;
+//		LLDrawPoolAlpha::sShowDebugAlpha = !LLDrawPoolAlpha::sShowDebugAlpha;
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+		LLDrawPoolAlpha::sShowDebugAlpha = (!LLDrawPoolAlpha::sShowDebugAlpha) && (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT));
 // [/RLVa:KB]
-
-		LLDrawPoolAlpha::sShowDebugAlpha = !LLDrawPoolAlpha::sShowDebugAlpha;
 		return true;
 	}
 };

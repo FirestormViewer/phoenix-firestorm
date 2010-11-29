@@ -3519,15 +3519,16 @@ void LLSelectMgr::convertTransient()
 
 void LLSelectMgr::deselectAllIfTooFar()
 {
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) && (!mSelectedObjects->isEmpty()) )
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+	if ( (!mSelectedObjects->isEmpty()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_EDITOBJ))) )
 	{
-		struct NotTransientOrFocusedMedia : public LLSelectedNodeFunctor
+		struct NotTransientOrFocusedMediaOrEditable : public LLSelectedNodeFunctor
 		{
-			bool apply(LLSelectNode* node)
+			bool apply(LLSelectNode* pNode)
 			{
-				return (node) && (node->getObject()) && 
-					( (!node->isTransient()) && (node->getObject()->getID() != LLViewerMediaFocus::getInstance()->getFocusedObjectID()) );
+				const LLViewerObject* pObj = pNode->getObject();
+				return (!pNode->isTransient()) && (pObj) && (!gRlvHandler.canEdit(pObj)) &&
+					(pObj->getID() != LLViewerMediaFocus::getInstance()->getFocusedObjectID());
 			}
 		} f;
 		if (mSelectedObjects->getFirstRootNode(&f, TRUE))
