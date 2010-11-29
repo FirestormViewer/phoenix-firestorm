@@ -184,6 +184,13 @@ struct RlvSelectHasLockedAttach : public LLSelectedNodeFunctor
 	virtual bool apply(LLSelectNode* pNode);
 };
 
+// Filters out selected objects that can't be editable (i.e. getFirstNode() will return NULL if the selection is fully editable)
+struct RlvSelectIsEditable : public LLSelectedNodeFunctor
+{
+	RlvSelectIsEditable() {}
+	/*virtual*/ bool apply(LLSelectNode* pNode);
+};
+
 struct RlvSelectIsOwnedByOrGroupOwned : public LLSelectedNodeFunctor
 {
 	RlvSelectIsOwnedByOrGroupOwned(const LLUUID& uuid) : m_idAgent(uuid) {}
