@@ -305,6 +305,7 @@ public:
 	// Adds an eLock type lock (held by idRlvObj) for the folder(s) described by lockDescr
 	void addFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock);
 
+	// Returns TRUE if there is at least 1 eLock type locked folder (RLV_LOCK_ANY = RLV_LOCK_ADD *or* RLV_LOCK_REMOVE)
 	bool hasLockedFolder(ERlvLockMask eLock) const;
 	// Returns TRUE if there is at least 1 non-detachable attachment as a result of a RLV_LOCK_REMOVE folder lock
 	bool hasLockedAttachment() const;
@@ -312,8 +313,8 @@ public:
 	bool hasLockedWearable() const;
 	// Returns TRUE if the attachment (specified by inventory item UUID) is non-detachable as a result of a RLV_LOCK_REMOVE folder lock
 	bool isLockedAttachment(const LLUUID& idItem) const;
+	// Returns TRUE if the folder is locked as a result of a RLV_LOCK_REMOVE folder lock
 	bool isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLock) const;
-	bool isLockedFolder(const LLViewerInventoryCategory* pFolder, ERlvLockMask eLock) const;
 	// Returns TRUE if the wearable (specified by inventory item UUID) is non-detachable as a result of a RLV_LOCK_REMOVE folder lock
 	bool isLockedWearable(const LLUUID& idItem) const;
 
@@ -553,6 +554,13 @@ inline bool RlvFolderLocks::hasLockedAttachment() const
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+inline bool RlvFolderLocks::hasLockedFolder(ERlvLockMask eLock) const
+{
+	// Remove locks are more common so check those first
+	return ((eLock & RLV_LOCK_REMOVE) && (!m_FolderRem.empty())) || ((eLock & RLV_LOCK_ADD) && (!m_FolderAdd.empty()));
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
 inline bool RlvFolderLocks::hasLockedWearable() const
 {
 	if (m_fItemsDirty)
@@ -566,6 +574,16 @@ inline bool RlvFolderLocks::isLockedAttachment(const LLUUID& idItem) const
 	if (m_fItemsDirty)
 		refreshLockedItems();
 	return (std::find(m_LockedAttachmentRem.begin(), m_LockedAttachmentRem.end(), idItem) != m_LockedAttachmentRem.end());
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+inline bool RlvFolderLocks::isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLock) const
+{
+	if (m_fItemsDirty)
+		refreshLockedItems();
+	return
+		( (eLock & RLV_LOCK_REMOVE) && (std::find(m_LockedFolderRem.begin(), m_LockedFolderRem.end(), idFolder) != m_LockedFolderRem.end()) ) ||
+		( (eLock & RLV_LOCK_ADD) && (std::find(m_LockedFolderAdd.begin(), m_LockedFolderAdd.end(), idFolder) != m_LockedFolderAdd.end()) );
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b

@@ -1474,7 +1474,11 @@ BOOL LLFolderBridge::isItemMovable() const
 	LLInventoryObject* obj = getInventoryObject();
 	if(obj)
 	{
-		return (!LLFolderType::lookupIsProtectedType(((LLInventoryCategory*)obj)->getPreferredType()));
+//		return (!LLFolderType::lookupIsProtectedType(((LLInventoryCategory*)obj)->getPreferredType()));
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+		return (!LLFolderType::lookupIsProtectedType(((LLInventoryCategory*)obj)->getPreferredType())) &&
+			((!rlv_handler_t::isEnabled()) || (!gRlvFolderLocks.isLockedFolder(obj->getUUID(), RLV_LOCK_ANY)));
+// [/RLVa:KB]
 	}
 	return FALSE;
 }
