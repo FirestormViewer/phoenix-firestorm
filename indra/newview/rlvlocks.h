@@ -23,6 +23,15 @@
 #include "rlvdefines.h"
 #include "rlvcommon.h"
 
+#ifdef LL_WINDOWS
+	#pragma warning (push)
+	#pragma warning (disable : 4702) // warning C4702: unreachable code
+#endif
+#include <boost/variant.hpp>
+#ifdef LL_WINDOWS
+	#pragma warning (pop)
+#endif
+
 // ============================================================================
 // RlvAttachPtLookup class declaration
 //
@@ -276,6 +285,37 @@ protected:
 };
 
 extern RlvWearableLocks gRlvWearableLocks;
+
+// ============================================================================
+// RlvFolderLocks class declaration
+//
+
+class RlvFolderLocks
+{
+public:
+	// Specifies the source of a folder lock (attachment UUID, shared path, attachment point index or wearable type)
+	typedef boost::variant<LLUUID, std::string, S32, LLWearableType::EType> rlv_folderlock_source_t;
+	// Couples the folder lock source with the type of lock (false = folder node ; true = folder subtree)
+	typedef std::pair<rlv_folderlock_source_t, bool> rlv_folderlock_descr_t;
+public:
+	void addFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock);
+	void removeFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock);
+
+	bool hasLockedFolder(ERlvLockMask eLock) const;
+	bool isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLock) const;
+	bool isLockedFolder(const LLViewerInventoryCategory* pFolder, ERlvLockMask eLock) const;
+
+	/*
+	 * Member variables
+	 */
+protected:
+	// Map of folder locks (idRlvObj -> lockDescr)
+	typedef std::multimap<LLUUID, rlv_folderlock_descr_t> rlv_folderlock_map_t;
+	rlv_folderlock_map_t m_FolderAdd;
+	rlv_folderlock_map_t m_FolderRem;
+};
+
+extern RlvFolderLocks gRlvFolderLocks;
 
 // ============================================================================
 // RlvAttachPtLookup inlined member functions

@@ -910,3 +910,62 @@ void RlvWearableLocks::removeWearableTypeLock(LLWearableType::EType eType, const
 }
 
 // ============================================================================
+// RlvFolderLocks member functions
+//
+
+RlvFolderLocks gRlvFolderLocks;
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+void RlvFolderLocks::addFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock)
+{
+/*
+	// Sanity check - make sure it's an object we know about
+	if ( (m_Objects.find(idRlvObj) == m_Objects.end()) || (!idxAttachPt) )
+		return;	// If (idxAttachPt) == 0 then: (pObj == NULL) || (pObj->isAttachment() == FALSE)
+*/
+
+	// NOTE: m_FolderXXX can contain duplicate <idRlvObj, lockDescr> pairs
+	if (eLock & RLV_LOCK_REMOVE)
+		m_FolderRem.insert(std::pair<LLUUID, rlv_folderlock_descr_t>(idRlvObj, lockDescr));
+	if (eLock & RLV_LOCK_ADD)
+		m_FolderAdd.insert(std::pair<LLUUID, rlv_folderlock_descr_t>(idRlvObj, lockDescr));
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+void RlvFolderLocks::removeFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock)
+{
+/*
+	// Sanity check - make sure it's an object we know about
+	if ( (m_Objects.find(idRlvObj) == m_Objects.end()) || (!idxAttachPt) )
+		return;	// If (idxAttachPt) == 0 then: (pObj == NULL) || (pObj->isAttachment() == FALSE)
+*/
+
+	if (eLock & RLV_LOCK_REMOVE)
+	{
+		RLV_ASSERT( m_FolderRem.lower_bound(idRlvObj) != m_FolderRem.upper_bound(idRlvObj) ); // The lock should always exist
+		for (rlv_folderlock_map_t::iterator itFolderLock = m_FolderRem.lower_bound(idRlvObj), 
+				endFolderLock = m_FolderRem.upper_bound(idRlvObj); itFolderLock != endFolderLock; ++itFolderLock)
+		{
+			if (lockDescr == itFolderLock->second)
+			{
+				m_FolderRem.erase(itFolderLock);
+				break;
+			}
+		}
+	}
+	if (eLock & RLV_LOCK_ADD)
+	{
+		RLV_ASSERT( m_FolderAdd.lower_bound(idRlvObj) != m_FolderAdd.upper_bound(idRlvObj) ); // The lock should always exist
+		for (rlv_folderlock_map_t::iterator itFolderLock = m_FolderAdd.lower_bound(idRlvObj), 
+				endFolderLock = m_FolderAdd.upper_bound(idRlvObj); itFolderLock != endFolderLock; ++endFolderLock)
+		{
+			if (lockDescr == itFolderLock->second)
+			{
+				m_FolderAdd.erase(itFolderLock);
+				break;
+			}
+		}
+	}
+}
+
+// ============================================================================
