@@ -311,7 +311,9 @@ public:
 
 public:
 	bool hasLockedAttachment() const;
+	bool hasLockedWearable() const;
 	bool isLockedAttachment(const LLUUID& idItem) const;
+	bool isLockedWearable(const LLUUID& idItem) const;
 protected:
 	bool getLockedFoldersRem(LLInventoryModel::cat_array_t& nodeFolders, LLInventoryModel::cat_array_t& subtreeFolders) const;
 	void refreshLockedItems() const;
@@ -492,15 +494,18 @@ inline bool RlvWearableLocks::hasLockedWearableType(ERlvLockMask eLock) const
 	return ( (eLock & RLV_LOCK_REMOVE) && (!m_WearableTypeRem.empty()) ) || ( (eLock & RLV_LOCK_ADD) && (!m_WearableTypeAdd.empty()) );
 }
 
-// Checked: 2010-03-19 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Modified: RLVa-1.2.0a
 inline bool RlvWearableLocks::isLockedWearable(const LLWearable* pWearable) const
 {
 	// Wearable is locked if:
 	//   - it's specifically marked as non-removable
 	//   - it's worn on a wearable type that is RLV_LOCK_REMOVE locked
+	//   - it's part of a locked folder
 	// TODO-RLVa: [RLVa-1.2.1] We don't have the ability to lock a specific wearable yet so rewrite this when we do
 	RLV_ASSERT(pWearable);
-	return (pWearable) && (isLockedWearableType(pWearable->getType(), RLV_LOCK_REMOVE));
+	return 
+		(pWearable) &&
+		( (isLockedWearableType(pWearable->getType(), RLV_LOCK_REMOVE)) || (gRlvFolderLocks.isLockedWearable(pWearable->getItemID())) );
 }
 
 // Checked: 2010-03-19 (RLVa-1.2.0c) | Added: RLVa-1.2.0a

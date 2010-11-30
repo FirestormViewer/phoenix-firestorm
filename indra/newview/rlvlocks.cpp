@@ -988,11 +988,27 @@ bool RlvFolderLocks::hasLockedAttachment() const
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+bool RlvFolderLocks::hasLockedWearable() const
+{
+	if (m_fItemsDirty)
+		refreshLockedItems();
+	return !m_WearableRem.empty();
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
 bool RlvFolderLocks::isLockedAttachment(const LLUUID& idItem) const
 {
 	if (m_fItemsDirty)
 		refreshLockedItems();
 	return (std::find(m_AttachmentRem.begin(), m_AttachmentRem.end(), idItem) != m_AttachmentRem.end());
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+bool RlvFolderLocks::isLockedWearable(const LLUUID& idItem) const
+{
+	if (m_fItemsDirty)
+		refreshLockedItems();
+	return (std::find(m_WearableRem.begin(), m_WearableRem.end(), idItem) != m_WearableRem.end());
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
