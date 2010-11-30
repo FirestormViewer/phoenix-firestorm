@@ -1875,6 +1875,9 @@ bool LLViewerFetchedTexture::updateFetch()
 				if(mFullWidth > MAX_IMAGE_SIZE || mFullHeight > MAX_IMAGE_SIZE)
 				{ 
 					//discard all oversized textures.
+					llinfos << "Discarding oversized texture, width= "
+						<< mFullWidth << ", height= "
+						<< mFullHeight << llendl;
 					destroyRawImage();
 					setIsMissingAsset();
 					mRawDiscardLevel = INVALID_DISCARD_LEVEL ;
@@ -1905,6 +1908,7 @@ bool LLViewerFetchedTexture::updateFetch()
 				// We finished but received no data
 				if (current_discard < 0)
 				{
+					llinfos << "Discarding image, no data received" << llendl;
 					setIsMissingAsset();
 					desired_discard = -1;
 				}

@@ -14,5 +14,5 @@ ViewerTagBroadcast	LGPL
 LargeProfile		LGPL
 ImprovedPrefs		LGPL
 WindlightExtraSettings	LGPL
-WindlightParcelProtocol LGPL
 UnifiedCommWindow	LGPL
+WindlightParcelSettings	LGPL
