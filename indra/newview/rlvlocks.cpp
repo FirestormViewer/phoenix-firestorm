@@ -20,6 +20,7 @@
 #include "pipeline.h"
 
 #include "rlvhelper.h"
+#include "rlvinventory.h"
 #include "rlvlocks.h"
 
 // ============================================================================
@@ -916,6 +917,12 @@ void RlvWearableLocks::removeWearableTypeLock(LLWearableType::EType eType, const
 RlvFolderLocks gRlvFolderLocks;
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+RlvFolderLocks::RlvFolderLocks()
+	: m_fItemsDirty(true)
+{
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
 void RlvFolderLocks::addFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock)
 {
 /*
@@ -929,6 +936,8 @@ void RlvFolderLocks::addFolderLock(const rlv_folderlock_descr_t& lockDescr, cons
 		m_FolderRem.insert(std::pair<LLUUID, rlv_folderlock_descr_t>(idRlvObj, lockDescr));
 	if (eLock & RLV_LOCK_ADD)
 		m_FolderAdd.insert(std::pair<LLUUID, rlv_folderlock_descr_t>(idRlvObj, lockDescr));
+
+	m_fItemsDirty = true;
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
@@ -963,6 +972,118 @@ void RlvFolderLocks::removeFolderLock(const rlv_folderlock_descr_t& lockDescr, c
 			{
 				m_FolderAdd.erase(itFolderLock);
 				break;
+			}
+		}
+	}
+
+	m_fItemsDirty = true;
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+bool RlvFolderLocks::hasLockedAttachment() const
+{
+	if (m_fItemsDirty)
+		refreshLockedItems();
+	return !m_AttachmentRem.empty();
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+bool RlvFolderLocks::isLockedAttachment(const LLUUID& idItem) const
+{
+	if (m_fItemsDirty)
+		refreshLockedItems();
+	return (std::find(m_AttachmentRem.begin(), m_AttachmentRem.end(), idItem) != m_AttachmentRem.end());
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+bool RlvFolderLocks::getLockedFoldersRem(LLInventoryModel::cat_array_t& nodeFolders, LLInventoryModel::cat_array_t& subtreeFolders) const
+{
+	for (rlv_folderlock_map_t::const_iterator itFolderLock = m_FolderRem.begin(), endFolderLock = m_FolderRem.end(); 
+			itFolderLock != endFolderLock; ++itFolderLock)
+ 	{
+		const rlv_folderlock_descr_t& lockDescr = itFolderLock->second;
+		LLInventoryModel::cat_array_t* pFolders = (lockDescr.second) ? &nodeFolders : &subtreeFolders;
+		if (typeid(LLUUID) == lockDescr.first.type())
+		{
+			const LLViewerObject* pObj = gObjectList.findObject(boost::get<LLUUID>(lockDescr.first));
+			if ( (pObj) && (pObj->isAttachment()) )
+			{
+				const LLViewerInventoryItem* pItem = gInventory.getItem(pObj->getAttachmentItemID());
+				if ( (pItem) && (RlvInventory::instance().isSharedFolder(pItem->getParentUUID())) )
+				{
+					LLViewerInventoryCategory* pParentFolder = gInventory.getCategory(pItem->getParentUUID());
+					if (pParentFolder)
+						pFolders->push_back(pParentFolder);
+				}
+			}
+		}
+		else if (typeid(std::string) == lockDescr.first.type())
+		{
+			LLViewerInventoryCategory* pSharedFolder = RlvInventory::instance().getSharedFolder(boost::get<std::string>(lockDescr.first));
+			if (!pSharedFolder)
+				continue;
+			pFolders->push_back(pSharedFolder);
+		}
+		else
+		{
+			uuid_vec_t idItems;
+			if (typeid(S32) == lockDescr.first.type())
+				RlvCommandOptionGetPath::getItemIDs(RlvAttachPtLookup::getAttachPoint(boost::get<S32>(lockDescr.first)), idItems);
+			else if (typeid(LLWearableType::EType) == lockDescr.first.type())
+				RlvCommandOptionGetPath::getItemIDs(boost::get<LLWearableType::EType>(lockDescr.first), idItems);
+
+			LLInventoryModel::cat_array_t folders;
+			if (RlvInventory::instance().getPath(idItems, folders))
+				pFolders->insert(pFolders->end(), folders.begin(), folders.end());
+		}
+	}
+	return (!nodeFolders.empty()) || (!subtreeFolders.empty());
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+void RlvFolderLocks::refreshLockedItems() const
+{
+	if (m_fItemsDirty)
+	{
+		m_AttachmentRem.clear();
+		m_WearableRem.clear();
+
+		LLInventoryModel::cat_array_t nodeFolders, subtreeFolders;
+		if (getLockedFoldersRem(nodeFolders, subtreeFolders))
+		{
+			// Bit of a hack, but the code is virtually identical for both
+			const LLInventoryModel::cat_array_t* pFoldersType[2] = { &nodeFolders, &subtreeFolders };
+			for (int idxType = 0, cntType = sizeof(pFoldersType) / sizeof(LLInventoryModel::cat_array_t*); idxType < cntType; idxType++)
+			{
+				for (S32 idxFolder = 0, cntFolder = pFoldersType[idxType]->count(); idxFolder < cntFolder; idxFolder++)
+ 				{
+					const LLViewerInventoryCategory* pFolder = pFoldersType[idxType]->get(idxFolder);
+
+					// Grab a list of all the items we would be wearing/attaching
+					LLInventoryModel::cat_array_t foldersAttach; LLInventoryModel::item_array_t itemsAttach;
+					RlvWearableItemCollector f(pFolder, RlvForceWear::ACTION_WEAR_REPLACE, RlvForceWear::FLAG_DEFAULT);
+					gInventory.collectDescendentsIf(pFolder->getUUID(), foldersAttach, itemsAttach, FALSE, f, TRUE);
+
+					for (S32 idxItem = 0, cntItem = itemsAttach.count(); idxItem < cntItem; idxItem++)
+					{
+						const LLViewerInventoryItem* pItem = itemsAttach.get(idxItem);
+						if ( (!pItem) || (!RlvForceWear::isWearingItem(pItem)) )
+							continue;
+
+						switch (pItem->getType())
+						{
+							case LLAssetType::AT_BODYPART:
+							case LLAssetType::AT_CLOTHING:
+								m_WearableRem.push_back(pItem->getLinkedUUID());
+								break;
+							case LLAssetType::AT_OBJECT:
+								m_AttachmentRem.push_back(pItem->getLinkedUUID());
+								break;
+							default:
+								break;
+						}
+					}
+				}
 			}
 		}
 	}

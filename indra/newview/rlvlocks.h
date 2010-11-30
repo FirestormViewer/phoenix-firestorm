@@ -46,12 +46,13 @@
 class RlvAttachPtLookup
 {
 public:
+	static LLViewerJointAttachment* getAttachPoint(S32 idxAttachPt);
 	static LLViewerJointAttachment* getAttachPoint(const std::string& strText);
 	static LLViewerJointAttachment* getAttachPoint(const LLInventoryItem* pItem);
 
 	static S32 getAttachPointIndex(std::string strText);
-	static S32 getAttachPointIndex(const LLViewerObject* pObj);
-	static S32 getAttachPointIndex(const LLViewerJointAttachment* pObj);
+	static S32 getAttachPointIndex(const LLViewerObject* pAttachObj);
+	static S32 getAttachPointIndex(const LLViewerJointAttachment* pAttachPt);
 	static S32 getAttachPointIndex(const LLInventoryCategory* pFolder);
 	static S32 getAttachPointIndex(const LLInventoryItem* pItem, bool fFollowLinks = true);
 
@@ -90,7 +91,7 @@ public:
 	bool hasLockedHUD() const { return m_fHasLockedHUD; }
 
 	// Returns TRUE if the attachment is RLV_LOCK_REMOVE locked
-	bool isLockedAttachment(const LLViewerObject* pObj) const;
+	bool isLockedAttachment(const LLViewerObject* pAttachObj) const;
 	// Returns TRUE if the attachment point is RLV_LOCK_REMOVE locked by anything other than idRlvObj
 	bool isLockedAttachmentExcept(const LLViewerObject* pObj, const LLUUID& idRlvObj) const;
 	// Returns TRUE if the attachment point is eLock type locked (RLV_LOCK_ANY = RLV_LOCK_ADD *or* RLV_LOCK_REMOVE)
@@ -293,6 +294,9 @@ extern RlvWearableLocks gRlvWearableLocks;
 class RlvFolderLocks
 {
 public:
+	RlvFolderLocks();
+
+public:
 	// Specifies the source of a folder lock (attachment UUID, shared path, attachment point index or wearable type)
 	typedef boost::variant<LLUUID, std::string, S32, LLWearableType::EType> rlv_folderlock_source_t;
 	// Couples the folder lock source with the type of lock (false = folder node ; true = folder subtree)
@@ -305,14 +309,26 @@ public:
 	bool isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLock) const;
 	bool isLockedFolder(const LLViewerInventoryCategory* pFolder, ERlvLockMask eLock) const;
 
+public:
+	bool hasLockedAttachment() const;
+	bool isLockedAttachment(const LLUUID& idItem) const;
+protected:
+	bool getLockedFoldersRem(LLInventoryModel::cat_array_t& nodeFolders, LLInventoryModel::cat_array_t& subtreeFolders) const;
+	void refreshLockedItems() const;
+
 	/*
 	 * Member variables
 	 */
 protected:
 	// Map of folder locks (idRlvObj -> lockDescr)
 	typedef std::multimap<LLUUID, rlv_folderlock_descr_t> rlv_folderlock_map_t;
-	rlv_folderlock_map_t m_FolderAdd;
-	rlv_folderlock_map_t m_FolderRem;
+	rlv_folderlock_map_t	m_FolderAdd;
+	rlv_folderlock_map_t	m_FolderRem;
+
+	// Cached item look-up variables
+	mutable bool			m_fItemsDirty;
+	mutable uuid_vec_t		m_AttachmentRem;
+	mutable uuid_vec_t		m_WearableRem;
 };
 
 extern RlvFolderLocks gRlvFolderLocks;
@@ -320,6 +336,12 @@ extern RlvFolderLocks gRlvFolderLocks;
 // ============================================================================
 // RlvAttachPtLookup inlined member functions
 //
+
+// Checked: 2010-11-30 (RLVa-1.4.0b) | Added: RLVa-1.4.0b
+inline LLViewerJointAttachment* RlvAttachPtLookup::getAttachPoint(S32 idxAttachPt)
+{
+	return (isAgentAvatarValid()) ? get_if_there(gAgentAvatarp->mAttachmentPoints, idxAttachPt, (LLViewerJointAttachment*)NULL) : NULL;
+}
 
 // Checked: 2010-03-03 (RLVa-1.2.0a) | Modified: RLVa-0.2.0d
 inline LLViewerJointAttachment* RlvAttachPtLookup::getAttachPoint(const std::string& strText)
@@ -386,28 +408,30 @@ inline bool RlvAttachmentLocks::canDetach(const LLInventoryItem* pItem) const
 	return (pAttachObj) && (!isLockedAttachment(pAttachObj));
 }
 
-// Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Modified: RLVa-1.3.0b
 inline bool RlvAttachmentLocks::hasLockedAttachmentPoint(ERlvLockMask eLock) const
 {
 	// Remove locks are more common so check those first
 	return
-		( (eLock & RLV_LOCK_REMOVE) && ((!m_AttachPtRem.empty()) || (!m_AttachObjRem.empty())) ) || 
-		( (eLock & RLV_LOCK_ADD) && (!m_AttachPtAdd.empty()) );
+		((eLock & RLV_LOCK_REMOVE) && ((!m_AttachPtRem.empty()) || (!m_AttachObjRem.empty()) || (gRlvFolderLocks.hasLockedAttachment()))) || 
+		((eLock & RLV_LOCK_ADD) && (!m_AttachPtAdd.empty()) );
 }
 
-// Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-inline bool RlvAttachmentLocks::isLockedAttachment(const LLViewerObject* pObj) const
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Modified: RLVa-1.3.0b
+inline bool RlvAttachmentLocks::isLockedAttachment(const LLViewerObject* pAttachObj) const
 {
 	// If pObj is valid then it should always specify a root since we store root UUIDs in m_AttachObjRem
-	RLV_ASSERT( (!pObj) || (pObj == pObj->getRootEdit()) );
+	RLV_ASSERT( (!pAttachObj) || (pAttachObj == pAttachObj->getRootEdit()) );
 
 	// Object is locked if:
 	//   - it's specifically marked as non-detachable (ie @detach=n)
 	//   - it's attached to an attachment point that is RLV_LOCK_REMOVE locked (ie @remattach:<attachpt>=n)
+	//   - it's part of a locked folder
 	return 
-		(pObj) && (pObj->isAttachment()) &&
-		( (m_AttachObjRem.find(pObj->getID()) != m_AttachObjRem.end()) || 
-		  (isLockedAttachmentPoint(RlvAttachPtLookup::getAttachPointIndex(pObj), RLV_LOCK_REMOVE)) );
+		(pAttachObj) && (pAttachObj->isAttachment()) &&
+		( (m_AttachObjRem.find(pAttachObj->getID()) != m_AttachObjRem.end()) || 
+		  (isLockedAttachmentPoint(RlvAttachPtLookup::getAttachPointIndex(pAttachObj), RLV_LOCK_REMOVE)) ||
+		  (gRlvFolderLocks.isLockedAttachment(pAttachObj->getAttachmentItemID())) );
 }
 
 // Checked: 2010-02-28 (RLVa-1.2.0a) | Added: RLVa-1.0.5a
