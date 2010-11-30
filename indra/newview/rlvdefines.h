@@ -138,6 +138,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_RECVCHAT,				// "recvchat"
 	RLV_BHVR_RECVCHATFROM,			// "recvchatfrom"
 	RLV_BHVR_RECVEMOTE,				// "recvemote"
+	RLV_BHVR_RECVEMOTEFROM,			// "recvemotefrom"
 	RLV_BHVR_REDIRCHAT,				// "redirchat"
 	RLV_BHVR_REDIREMOTE,			// "rediremote"
 	RLV_BHVR_CHATWHISPER,			// "chatwhisper"

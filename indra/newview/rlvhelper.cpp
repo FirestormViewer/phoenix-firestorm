@@ -131,16 +131,16 @@ void RlvCommand::initLookupTable()
 		std::string arBehaviours[RLV_BHVR_COUNT] =
 			{
 				"detach", "attach", "addattach", "remattach", "addoutfit", "remoutfit", "emote", "sendchat", "recvchat", "recvchatfrom",
-				"recvemote", "redirchat", "rediremote", "chatwhisper", "chatnormal", "chatshout", "sendchannel", "sendim", "sendimto",
-				"recvim", "recvimfrom", "permissive", "notify", "showinv", "showminimap", "showworldmap", "showloc", "shownames",
-				"showhovertext", "showhovertexthud", "showhovertextworld", "showhovertextall", "tplm", "tploc", "tplure", "viewnote",
-				"viewscript", "viewtexture", "acceptpermission", "accepttp", "allowidle", "edit", "editobj", "rez", "fartouch", "interact",
-				"touch", "touchattach", "touchhud", "touchworld", "fly", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv",
-				"detachme", "attachover", "attachthis", "attachthisover", "detachthis", "attachall", "attachallover", "detachall",
-				"attachallthis", "attachallthisover", "detachallthis", "tpto", "version", "versionnew", "versionnum", "getattach",
-				"getattachnames", "getaddattachnames", "getremattachnames", "getoutfit", "getoutfitnames", "getaddoutfitnames",
-				"getremoutfitnames", "findfolder", "findfolders", "getpath", "getpathnew", "getinv", "getinvworn", "getsitid",
-				"getstatus", "getstatusall"
+				"recvemote", "recvemotefrom", "redirchat", "rediremote", "chatwhisper", "chatnormal", "chatshout", "sendchannel", 
+				"sendim", "sendimto", "recvim", "recvimfrom", "permissive", "notify", "showinv", "showminimap", "showworldmap", 
+				"showloc", "shownames", "showhovertext", "showhovertexthud", "showhovertextworld", "showhovertextall", 
+				"tplm", "tploc", "tplure", "viewnote", "viewscript", "viewtexture", "acceptpermission", "accepttp", "allowidle", 
+				"edit", "editobj", "rez", "fartouch", "interact", "touch", "touchattach", "touchhud", "touchworld", "fly", 
+				"unsit", "sit", "sittp", "standtp", "setdebug", "setenv", "detachme", "attachover", "attachthis", "attachthisover", 
+				"detachthis", "attachall", "attachallover", "detachall", "attachallthis", "attachallthisover", "detachallthis", 
+				"tpto", "version", "versionnew", "versionnum", "getattach", "getattachnames", "getaddattachnames", "getremattachnames", 
+				"getoutfit", "getoutfitnames", "getaddoutfitnames", "getremoutfitnames", "findfolder", "findfolders", "getpath", 
+				"getpathnew", "getinv", "getinvworn", "getsitid", "getstatus", "getstatusall"
 			};
 
 		for (int idxBvhr = 0; idxBvhr < RLV_BHVR_COUNT; idxBvhr++)
