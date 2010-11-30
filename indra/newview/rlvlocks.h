@@ -296,33 +296,39 @@ class RlvFolderLocks
 public:
 	RlvFolderLocks();
 
-public:
 	// Specifies the source of a folder lock (attachment UUID, shared path, attachment point index or wearable type)
 	typedef boost::variant<LLUUID, std::string, S32, LLWearableType::EType> rlv_folderlock_source_t;
 	// Couples the folder lock source with the type of lock (false = folder node ; true = folder subtree)
 	typedef std::pair<rlv_folderlock_source_t, bool> rlv_folderlock_descr_t;
+
 public:
+	// Adds an eLock type lock (held by idRlvObj) for the folder(s) described by lockDescr
 	void addFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock);
-	void removeFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock);
 
 	bool hasLockedFolder(ERlvLockMask eLock) const;
+	// Returns TRUE if there is at least 1 non-detachable attachment as a result of a RLV_LOCK_REMOVE folder lock
+	bool hasLockedAttachment() const;
+	// Returns TRUE if there is at least 1 non-removable wearable as a result of a RLV_LOCK_REMOVE folder lock
+	bool hasLockedWearable() const;
+	// Returns TRUE if the attachment (specified by inventory item UUID) is non-detachable as a result of a RLV_LOCK_REMOVE folder lock
+	bool isLockedAttachment(const LLUUID& idItem) const;
 	bool isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLock) const;
 	bool isLockedFolder(const LLViewerInventoryCategory* pFolder, ERlvLockMask eLock) const;
-
-public:
-	bool hasLockedAttachment() const;
-	bool hasLockedWearable() const;
-	bool isLockedAttachment(const LLUUID& idItem) const;
+	// Returns TRUE if the wearable (specified by inventory item UUID) is non-detachable as a result of a RLV_LOCK_REMOVE folder lock
 	bool isLockedWearable(const LLUUID& idItem) const;
-protected:
-	bool getLockedFoldersRem(LLInventoryModel::cat_array_t& nodeFolders, LLInventoryModel::cat_array_t& subtreeFolders) const;
-	void refreshLockedItems() const;
+
+	// Removes an eLock type lock (held by idRlvObj) for the folder(s) described by lockDescr
+	void removeFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock);
 
 	/*
-	 * Event handlers
+	 * Cached item/folder look-up helper functions
 	 */
 protected:
+	void getLockedFolders(const rlv_folderlock_descr_t& lockDescr, LLInventoryModel::cat_array_t& folders) const;
+	bool getLockedFolders(ERlvLockMask eLock, LLInventoryModel::cat_array_t& nodeFolders, LLInventoryModel::cat_array_t& subtreeFolders) const;
 	void onCOFChanged();
+	void refreshLockedItems() const;
+	void refreshLockedItems(ERlvLockMask eLock, LLInventoryModel::cat_array_t lockFolders, bool fMatchAll) const;
 
 	/*
 	 * Member variables
@@ -335,8 +341,10 @@ protected:
 
 	// Cached item look-up variables
 	mutable bool			m_fItemsDirty;
-	mutable uuid_vec_t		m_AttachmentRem;
-	mutable uuid_vec_t		m_WearableRem;
+	mutable uuid_vec_t		m_LockedFolderAdd;
+	mutable uuid_vec_t		m_LockedAttachmentRem;
+	mutable uuid_vec_t		m_LockedFolderRem;
+	mutable uuid_vec_t		m_LockedWearableRem;
 };
 
 extern RlvFolderLocks gRlvFolderLocks;
@@ -541,7 +549,7 @@ inline bool RlvFolderLocks::hasLockedAttachment() const
 {
 	if (m_fItemsDirty)
 		refreshLockedItems();
-	return !m_AttachmentRem.empty();
+	return !m_LockedAttachmentRem.empty();
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
@@ -549,7 +557,7 @@ inline bool RlvFolderLocks::hasLockedWearable() const
 {
 	if (m_fItemsDirty)
 		refreshLockedItems();
-	return !m_WearableRem.empty();
+	return !m_LockedWearableRem.empty();
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
@@ -557,7 +565,7 @@ inline bool RlvFolderLocks::isLockedAttachment(const LLUUID& idItem) const
 {
 	if (m_fItemsDirty)
 		refreshLockedItems();
-	return (std::find(m_AttachmentRem.begin(), m_AttachmentRem.end(), idItem) != m_AttachmentRem.end());
+	return (std::find(m_LockedAttachmentRem.begin(), m_LockedAttachmentRem.end(), idItem) != m_LockedAttachmentRem.end());
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
@@ -565,7 +573,7 @@ inline bool RlvFolderLocks::isLockedWearable(const LLUUID& idItem) const
 {
 	if (m_fItemsDirty)
 		refreshLockedItems();
-	return (std::find(m_WearableRem.begin(), m_WearableRem.end(), idItem) != m_WearableRem.end());
+	return (std::find(m_LockedWearableRem.begin(), m_LockedWearableRem.end(), idItem) != m_LockedWearableRem.end());
 }
 
 // ============================================================================
