@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <colors>
 
-	<!-- Named Colors  -->
+	<!--  Colors in this scheme  -->
 	<!-- 
    var. 1 = #8F5B3F = rgb(143,91,63) 0.56 0.36 0.25
    var. 2 = #7D5540 = rgb(125,85,64) 0.49 0.33 0.25
@@ -11,7 +11,10 @@
 
 	-->
 	<color
-	 name="EmphasisColor"
+	 name="AccentColor"
+	 value="0.75 0.92 0.49 1.0" />
+	<color
+	 name="EmphasisColor"             
 	 value="0.56 0.36 0.25 1.0" />
 	<color
 	 name="SchemeLightest"
@@ -319,7 +322,7 @@
 <!-- Changed Color -->
     <color
      name="AlertTextColor"
-     reference="SL-MidBlue" />
+     reference="AccentColor" />
     <color
      name="AvatarListItemIconDefaultColor"
      reference="SL-White" />
@@ -494,7 +497,7 @@
      reference="Black" />
     <color
      name="ContextSilhouetteColor"
-     reference="Yellow" />
+     reference="SchemeLightest" />
     <color
      name="DefaultHighlightDark"
      reference="White_10" />
