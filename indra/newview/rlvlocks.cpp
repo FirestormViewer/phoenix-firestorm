@@ -1017,12 +1017,13 @@ bool RlvFolderLocks::isLockedWearable(const LLUUID& idItem) const
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
 bool RlvFolderLocks::getLockedFoldersRem(LLInventoryModel::cat_array_t& nodeFolders, LLInventoryModel::cat_array_t& subtreeFolders) const
 {
+	// Iterate over each folder lock and determine which folders it extends to
 	for (rlv_folderlock_map_t::const_iterator itFolderLock = m_FolderRem.begin(), endFolderLock = m_FolderRem.end(); 
 			itFolderLock != endFolderLock; ++itFolderLock)
  	{
 		const rlv_folderlock_descr_t& lockDescr = itFolderLock->second;
 		LLInventoryModel::cat_array_t* pFolders = (lockDescr.second) ? &nodeFolders : &subtreeFolders;
-		if (typeid(LLUUID) == lockDescr.first.type())
+		if (typeid(LLUUID) == lockDescr.first.type())					// Folder lock by attachment UUID
 		{
 			const LLViewerObject* pObj = gObjectList.findObject(boost::get<LLUUID>(lockDescr.first));
 			if ( (pObj) && (pObj->isAttachment()) )
@@ -1036,14 +1037,13 @@ bool RlvFolderLocks::getLockedFoldersRem(LLInventoryModel::cat_array_t& nodeFold
 				}
 			}
 		}
-		else if (typeid(std::string) == lockDescr.first.type())
+		else if (typeid(std::string) == lockDescr.first.type())			// Folder lock by shared path
 		{
 			LLViewerInventoryCategory* pSharedFolder = RlvInventory::instance().getSharedFolder(boost::get<std::string>(lockDescr.first));
-			if (!pSharedFolder)
-				continue;
-			pFolders->push_back(pSharedFolder);
+			if (pSharedFolder)
+				pFolders->push_back(pSharedFolder);
 		}
-		else
+		else															// Folder lock by attachment point or wearable type
 		{
 			uuid_vec_t idItems;
 			if (typeid(S32) == lockDescr.first.type())
@@ -1056,7 +1056,17 @@ bool RlvFolderLocks::getLockedFoldersRem(LLInventoryModel::cat_array_t& nodeFold
 				pFolders->insert(pFolders->end(), folders.begin(), folders.end());
 		}
 	}
-	return (!nodeFolders.empty()) || (!subtreeFolders.empty());
+
+	// Remove any duplicates we may have picked up
+	bool fEmpty = (nodeFolders.empty()) || (subtreeFolders.empty());
+	if (!fEmpty)
+	{
+		std::sort(nodeFolders.begin(), nodeFolders.end());
+		nodeFolders.erase(std::unique(nodeFolders.begin(), nodeFolders.end()), nodeFolders.end());
+		std::sort(subtreeFolders.begin(), subtreeFolders.end());
+		subtreeFolders.erase(std::unique(subtreeFolders.begin(), subtreeFolders.end()), subtreeFolders.end());
+	}
+	return !fEmpty;
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
