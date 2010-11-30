@@ -10,7 +10,7 @@
  name="panel_im"
  top="0"
  can_dock="false"
- can_minimize="true"
+ can_minimize="false"
  can_close="true"
  visible="false"
  width="394"

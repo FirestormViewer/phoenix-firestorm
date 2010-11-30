@@ -35,6 +35,9 @@
 #include "llagent.h"
 #include "lltransientfloatermgr.h"
 
+#include "llnearbychat.h"
+#include "llfloater.h"
+
 //
 // LLIMFloaterContainer
 //
@@ -60,7 +63,19 @@ BOOL LLIMFloaterContainer::postBuild()
 
 void LLIMFloaterContainer::onOpen(const LLSD& key)
 {
+
 	LLMultiFloater::onOpen(key);
+	
+
+	// If we're using multitabs, and we open up for the first time
+	// Add localchat by default if it's not already on the screen somewhere else. -AO	
+	LLFloater* floater = LLNearbyChat::getInstance();
+	if (! LLFloater::isVisible(floater))
+	{
+		LLMultiFloater::showFloater(floater, LLTabContainer::START);
+	}
+	
+	
 /*
 	if (key.isDefined())
 	{

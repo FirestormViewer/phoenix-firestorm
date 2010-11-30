@@ -55,6 +55,12 @@
 #include "llfloaterreg.h"
 #include "lltrans.h"
 
+// IM
+#include "llbutton.h"
+#include "lllayoutstack.h"
+
+#include "llimfloatercontainer.h"
+
 static const S32 RESIZE_BAR_THICKNESS = 3;
 
 LLNearbyChat::LLNearbyChat(const LLSD& key) 
@@ -67,6 +73,7 @@ LLNearbyChat::LLNearbyChat(const LLSD& key)
 LLNearbyChat::~LLNearbyChat()
 {
 }
+
 
 BOOL LLNearbyChat::postBuild()
 {
@@ -84,8 +91,19 @@ BOOL LLNearbyChat::postBuild()
 
 	gSavedSettings.declareS32("nearbychat_showicons_and_names",2,"NearByChat header settings",true);
 
+	/* Imish things */
+	
+	LLButton* slide_left = getChild<LLButton>("slide_left_btn");
+	slide_left->setVisible(false);
+	LLButton* slide_right = getChild<LLButton>("slide_right_btn");
+	slide_right->setVisible(false);
+	
+	/****************/
+	
 	mChatHistory = getChild<LLChatHistory>("chat_history");
-
+	return LLFloater::postBuild();
+	
+	/*
 	if(!LLDockableFloater::postBuild())
 		return false;
 
@@ -104,6 +122,7 @@ BOOL LLNearbyChat::postBuild()
 		mDragHandle->setTitleVisible(TRUE);
 
 	return true;
+	 */
 }
 
 
@@ -218,6 +237,18 @@ bool	LLNearbyChat::onNearbyChatCheckContextMenuItem(const LLSD& userdata)
 	return false;
 }
 
+void	LLNearbyChat::openFloater(const LLSD& key)
+{
+	// We override this to put nearbychat in the IM floater. -AO
+	LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+	if (floater_container)
+	{
+		floater_container->showFloater(this, LLTabContainer::START);
+	}
+	
+	LLFloater::openFloater(key);
+}
+
 void	LLNearbyChat::setVisible(BOOL visible)
 {
 	if(visible)
@@ -228,14 +259,16 @@ void	LLNearbyChat::setVisible(BOOL visible)
 			chat_channel->removeToastsFromChannel();
 		}
 	}
-
 	LLDockableFloater::setVisible(visible);
 }
 
 void	LLNearbyChat::onOpen(const LLSD& key )
 {
+	llinfos << "onOPEN called..." << llendl;
 	LLDockableFloater::onOpen(key);
 }
+
+
 
 void LLNearbyChat::setRect	(const LLRect &rect)
 {

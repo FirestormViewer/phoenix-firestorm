@@ -56,6 +56,7 @@ public:
 	/*virtual*/ void	onOpen	(const LLSD& key);
 
 	/*virtual*/ void	setVisible(BOOL visible);
+	void	openFloater(const LLSD& key);
 
 	virtual void setRect		(const LLRect &rect);
 
