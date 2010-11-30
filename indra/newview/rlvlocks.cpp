@@ -16,6 +16,8 @@
 
 #include "llviewerprecompiledheaders.h"
 #include "llattachmentsmgr.h"
+#include "llinventoryobserver.h"
+#include "lloutfitobserver.h"
 #include "llviewerobjectlist.h"
 #include "pipeline.h"
 
@@ -920,6 +922,7 @@ RlvFolderLocks gRlvFolderLocks;
 RlvFolderLocks::RlvFolderLocks()
 	: m_fItemsDirty(true)
 {
+	LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&RlvFolderLocks::onCOFChanged, this));
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
@@ -1061,6 +1064,7 @@ void RlvFolderLocks::refreshLockedItems() const
 {
 	if (m_fItemsDirty)
 	{
+		m_fItemsDirty = false;
 		m_AttachmentRem.clear();
 		m_WearableRem.clear();
 
@@ -1103,6 +1107,12 @@ void RlvFolderLocks::refreshLockedItems() const
 			}
 		}
 	}
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+void RlvFolderLocks::onCOFChanged()
+{
+	m_fItemsDirty |= (!m_FolderRem.empty());
 }
 
 // ============================================================================

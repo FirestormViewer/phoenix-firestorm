@@ -319,6 +319,12 @@ protected:
 	void refreshLockedItems() const;
 
 	/*
+	 * Event handlers
+	 */
+protected:
+	void onCOFChanged();
+
+	/*
 	 * Member variables
 	 */
 protected:
