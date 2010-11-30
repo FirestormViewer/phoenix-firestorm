@@ -533,5 +533,41 @@ inline void RlvAttachmentLockWatchdog::onWearAttachment(const LLInventoryItem* p
 }
 
 // ============================================================================
+// RlvFolderLocks member functions
+//
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+inline bool RlvFolderLocks::hasLockedAttachment() const
+{
+	if (m_fItemsDirty)
+		refreshLockedItems();
+	return !m_AttachmentRem.empty();
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+inline bool RlvFolderLocks::hasLockedWearable() const
+{
+	if (m_fItemsDirty)
+		refreshLockedItems();
+	return !m_WearableRem.empty();
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+inline bool RlvFolderLocks::isLockedAttachment(const LLUUID& idItem) const
+{
+	if (m_fItemsDirty)
+		refreshLockedItems();
+	return (std::find(m_AttachmentRem.begin(), m_AttachmentRem.end(), idItem) != m_AttachmentRem.end());
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+inline bool RlvFolderLocks::isLockedWearable(const LLUUID& idItem) const
+{
+	if (m_fItemsDirty)
+		refreshLockedItems();
+	return (std::find(m_WearableRem.begin(), m_WearableRem.end(), idItem) != m_WearableRem.end());
+}
+
+// ============================================================================
 
 #endif // RLV_LOCKS_H
