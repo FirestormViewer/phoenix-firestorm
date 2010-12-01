@@ -382,9 +382,9 @@ void LLIMFloater::updateSessionName(const std::string& ui_title,
 void LLIMFloater::onAvatarNameCache(const LLUUID& agent_id,
 									const LLAvatarName& av_name)
 {
-	// Use display name only for labels, as the extended name will be in the
-	// floater title
-	std::string ui_title = av_name.getCompleteName();
+	// Use the display name for titles and tabs, because the full username is already in every line header.
+	// This especially makes vertical tabs IMs more readable. -AO
+	std::string ui_title = av_name.mDisplayName;
 	updateSessionName(ui_title, av_name.mDisplayName);
 	mTypingStart.setArg("[NAME]", ui_title);
 }
