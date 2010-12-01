@@ -10,6 +10,7 @@
  name="nearby_chat"
  title="NEARBY CHAT"
  top="0"
+ can_dock="false"
  can_close="true"
  can_minimize="false"
  single_instance="true"
@@ -59,7 +60,8 @@
         <chat_history
 	 font="SansSerifSmall"
          follows="left|right|top|bottom"
-         height="170"
+         height="155"
+         bottom_pad="20"
          name="chat_history"
          parse_highlights="true"
          parse_urls="true"
