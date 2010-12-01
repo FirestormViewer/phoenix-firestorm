@@ -1006,7 +1006,14 @@
     	create_jump_keys="true"
     	label="Content"
     	name="Content"
-    	tear_off="false">
+    	tear_off="true">
+        <menu_item_call
+             label="Search"
+             name="Search">
+             <menu_item_call.on_click
+                 function="Floater.Show"
+                 parameter="search"/>
+       </menu_item_call>
     	<menu_item_call
              label="SL Marketplace"
              name="SL Marketplace">
