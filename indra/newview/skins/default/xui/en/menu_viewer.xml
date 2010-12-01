@@ -98,6 +98,18 @@
              function="World.Toggle.MovementControls" />
         </menu_item_check>
         
+        <menu_item_call
+             label="Sit Down"
+             layout="topleft"
+             shortcut="alt|shift|S"
+             name="Sit Down Here">
+                <menu_item_call.on_click
+                 function="Self.SitDown"
+                 parameter="" />
+                <menu_item_call.on_enable
+                 function="Self.EnableSitDown" />
+        </menu_item_call>
+        
         <menu_item_check
          label="Camera Controls"
          name="Camera Controls">
@@ -3464,6 +3476,10 @@
              function="IsGodCustomerService" />
         </menu_item_call>
     </menu>
+    
+    
+    <!-- God Menu -->
+    
     <menu
      create_jump_keys="true"
      label="Admin"

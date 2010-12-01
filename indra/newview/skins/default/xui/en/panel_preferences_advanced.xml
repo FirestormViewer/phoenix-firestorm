@@ -44,6 +44,7 @@
    top_pad="-14"
    width="250" />
     <check_box
+     control_name="AllowMultipleViewers"
      follows="top|left"
      height="15"
      label="Allow Multiple Viewer"
@@ -53,6 +54,7 @@
      top_pad="20"
      width="237"/>
     <check_box
+     control_name="ForceShowGrid"
      follows="top|left"
      height="15"
      label="Show Grid Selection at login"
@@ -62,6 +64,7 @@
      top_pad="5"
      width="237"/>
     <check_box
+     control_name="UseDebugMenus"
      follows="top|left"
      height="15"
      label="Show Advanced Menu"
@@ -71,6 +74,7 @@
      top_pad="5"
      width="237"/>
     <check_box
+     control_name="QAMode"
      follows="top|left"
      height="15"
      label="Show Developer Menu"
@@ -79,48 +83,7 @@
      name="show_develop_menu_check"
      top_pad="5"
      width="237"/>         
-    <check_box
-     control_name="UseChatBubbles"
-     follows="left|top"
-     height="16"
-     label="Bubble chat"
-     layout="topleft"
-     left="30"
-     top_pad="20"
-     name="bubble_text_chat"
-     width="150" />
-    <slider
-     control_name="ChatBubbleOpacity"
-     follows="left|top"
-     height="16"
-     increment="0.05"
-     initial_value="1"
-     label="Opacity"
-     layout="topleft"
-     left="80"
-     label_width="156"
-     name="bubble_chat_opacity"
-     top_pad = "10"
-     width="347" />
-    <color_swatch
-     can_apply_immediately="true"
-     color="Black"
-     control_name="BackgroundChatColor"
-     follows="left|top"
-     height="50"
-     layout="topleft"
-     left_pad="30"
-     top="190"
-     name="background"
-     tool_tip="Choose color for bubble chat"
-     width="38">
-        <color_swatch.init_callback
-		     function="Pref.getUIColor"
-		     parameter="BackgroundChatColor" />
-		    <color_swatch.commit_callback
-		     function="Pref.applyUIColor"
-		     parameter="BackgroundChatColor" />
-    </color_swatch>
+    
     <check_box
      control_name="ShowScriptErrors"
      height="20"

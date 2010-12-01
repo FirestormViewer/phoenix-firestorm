@@ -298,51 +298,38 @@
     tool_tip="Highlight the name tags of your friends"
     top_delta="0" />
 
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="15"
-     layout="topleft"
-     left="30"
-     name="effects_color_textbox"
-     top_pad="9"
-     width="200">
-        My effects:
-    </text>
+	<check_box
+	control_name="UseDisplayNames"
+	follows="top|left"
+	height="16"
+	label="View Display Names"
+	layout="topleft"
+	left="70"
+	name="display_names_check"
+	width="237"
+	tool_tip="Check to use display names in chat, IM, name tags, etc."
+	top_pad="5"/>
+
     <text
       type="string"
       length="1"
       follows="left|top"
       height="13"
       layout="topleft"
-      left_pad="5"
+      left="30"
+      top_pad="10"
       name="title_afk_text"
       top_delta="0" 
       width="190">
     Away timeout:
     </text>
-    <color_swatch
-	 can_apply_immediately="true"
-     follows="left|top"
-     height="50"
-     layout="topleft"
-     left="50"
-     name="effect_color_swatch"
-     tool_tip="Click to open Color Picker"
-     width="38">
-		<color_swatch.init_callback
-		 function="Pref.getUIColor"
-		 parameter="EffectColor" />
-		<color_swatch.commit_callback
-		 function="Pref.applyUIColor"
-		 parameter="EffectColor" />
-	</color_swatch>
+
   <combo_box
             height="23"
             layout="topleft"
             control_name="AFKTimeout"
-            left_pad="160"
+            left="40"
+            top_pad="10"
             label="Away timeout:"
             top_delta="0"
             name="afk"
@@ -368,17 +355,7 @@
      name="item4"
      value="0" />
   </combo_box>
-  <check_box
-control_name="UseDisplayNames"
-follows="top|left"
-height="14"
-label="View Display Names"
-layout="topleft"
-left="30"
-name="display_names_check"
-width="237"
-tool_tip="Check to use display names in chat, IM, name tags, etc."
-top_pad="20"/>
+  
     <text
      type="string"
      length="1"

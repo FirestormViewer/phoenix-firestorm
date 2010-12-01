@@ -174,49 +174,17 @@
 		width="188">
 			Movement:
 		</text>
-		<check_box
-		control_name="DoubleClickTeleport"
-		height="16"
-		initial_value="true"
-		label="Teleport to wherever you double-click in-world"
-		layout="topleft"
-		left="78"
-		name="DoubleClickTeleport"
-		tool_tip="Set this to teleport to a point you double click on in-world"
-		top_pad="12"
-		width="335"/>
-		<check_box
-		control_name="DoubleClickAutoPilot"
-		height="16"
-		initial_value="true"
-		label="Walk or run to wherever you double-click in-world"
-		layout="topleft"
-		left_delta="0"
-		name="DoubleClickAutoPilot"
-		tool_tip="Set this to walk or run your avatar to a point you double click on in-world (teleport on double click over-rides this)"
-		top_pad="7"
-		width="325"/> 
-		<check_box
-		control_name="NumpadControl"
-		height="16"
-		initial_value="true"
-		label="Number keys move avatar (when numlock is off)"
-		layout="topleft"
-		left_delta="0"
-		name="NumpadControl"
-		tool_tip="Set this so that the number keys move your avatar when numlock is not set"
-		top_pad="7"
-		width="256" />
+	
 <check_box
    control_name="ArrowKeysAlwaysMove"
    follows="left|top"
    height="20"
    label="Arrow keys always move me"
    layout="topleft"
-   left_delta="0"
+   left_delta="48"
    name="arrow_keys_move_avatar_check"
    width="237"
-   top_pad="1"/>
+   top_pad="10"/>
   <check_box
    control_name="AllowTapTapHoldRun"
    follows="left|top"
@@ -227,5 +195,42 @@
    name="tap_tap_hold_to_run"
    width="237"
    top_pad="0"/>		
-  </radio_group>
+  <check_box
+   follows="left|top"
+   height="20"
+   label="Allow double-clicking a spot to move my avatar:"
+   layout="topleft"
+   left_delta="0"
+   name="double_click_chkbox"
+   width="237"
+   top_pad="0">
+   <check_box.commit_callback
+    function="Pref.CommitDoubleClickChekbox"/>
+  </check_box>
+  
+  <radio_group
+     height="20"
+     layout="topleft"
+     left_delta="17"
+     top_pad="2"
+     name="double_click_action">
+    <radio_item
+     height="16"
+     label="By Teleporting"
+     layout="topleft"
+     left="0"
+     name="radio_teleport"
+     top_delta="20"
+     width="100" />
+    <radio_item
+     height="16"
+     label="By Walking"
+     left_pad="0"
+     layout="topleft"
+     name="radio_autopilot"
+     top_delta="0"
+     width="75" />
+    <radio_group.commit_callback
+	     function="Pref.CommitRadioDoubleClick"/>
+	</radio_group>
 </panel>
