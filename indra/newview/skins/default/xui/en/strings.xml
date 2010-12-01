@@ -2280,6 +2280,7 @@ Requests name of an avatar.  When data is available the dataserver event will be
 	<string name="InvOfferOwnedByUnknownUser">owned by an unknown user</string>
 	<string name="InvOfferGaveYou">gave you</string>
 	<string name="InvOfferYouDecline">You decline</string>
+	<string name="InvOfferDecline">You decline [DESC] from &lt;nolink&gt;[NAME]&lt;/nolink&gt;.</string>
 	<string name="InvOfferFrom">from</string>
 
 	<!-- group money -->
