@@ -329,8 +329,15 @@ public:
 
 
 		setTimeField(chat);
-		
+			
 		LLAvatarIconCtrl* icon = getChild<LLAvatarIconCtrl>("avatar_icon");
+		
+		// Hacky preference to hide avatar icons for people who don't like them by overdrawing them. Will change to disable soon. -AO
+		bool display_mini_icon = gSavedSettings.getBOOL("ShowChatMiniIcons");
+		if (!display_mini_icon)
+		{
+			icon->setColor(LLUIColorTable::instance().getColor("Transparent"));
+		}
 
 		if(mSourceType != CHAT_SOURCE_AGENT ||	mAvatarID.isNull())
 			icon->setDrawTooltip(false);

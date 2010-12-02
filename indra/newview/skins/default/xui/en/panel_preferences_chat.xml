@@ -77,6 +77,16 @@
      name="play_typing_animation"
      top_pad="5"
      width="400" />
+     <check_box
+     control_name="ShowChatMiniIcons"
+     height="16"
+     initial_value="true"
+     label="Show avatar icons within chat history"
+     layout="topleft"
+     left="30"
+     name="ShowChatMiniIcons"
+     top_pad="5"
+     width="400" />
     <check_box
      enabled="false"
      height="16"

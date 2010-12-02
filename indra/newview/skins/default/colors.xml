@@ -343,7 +343,7 @@
      reference="AvatarListItemIconOfflineColor" />
     <color
      name="BackgroundChatColor"
-     reference="White" />
+     reference="DkGray" />
     <color
      name="ButtonBorderColor"
      reference="Unused?" />
@@ -559,7 +559,7 @@
      reference="DkGray" />
     <color
      name="HTMLLinkColor"
-     reference="0.75 0.92 0.49 1.0" />
+     reference="AccentColor" />
     <color
      name="HealthTextColor"
      reference="White" />
@@ -757,6 +757,9 @@
     <color
      name="ObjectBubbleColor"
      reference="DkGray_66" />
+    <color
+     name="ChatNameColor"
+     reference="AccentColor" />
     <color
      name="ObjectChatColor"
      reference="EmphasisColor" />

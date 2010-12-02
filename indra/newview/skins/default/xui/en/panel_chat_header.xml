@@ -32,7 +32,7 @@
       left_pad="5"
       right="-120"
       name="user_name"
-      text_color="white"
+      text_color="ChatNameColor"
       bg_readonly_color="black"
       top="0"
       use_ellipses="true"
