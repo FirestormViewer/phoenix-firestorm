@@ -227,7 +227,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.95</real>
+      <real>0.90</real>
     </map>
     <key>AdvanceSnapshot</key>
     <map>
@@ -1790,7 +1790,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.700</real>
+      <real>0.500</real>
     </map>
     <key>ConsoleBufferSize</key>
     <map>
@@ -8818,7 +8818,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.40000000596</real>
+      <real>0.20000000596</real>
     </map>
     <key>SelectionHighlightAlphaTest</key>
     <map>
