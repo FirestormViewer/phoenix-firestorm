@@ -68,6 +68,20 @@
           image_overlay="TabIcon_Close_Off"
           width="25"
           name="slide_right_btn" />
+          <button
+          height="20"
+          follows="left|top"
+          top="0"
+          left="2"
+          image_overlay="TabIcon_Translate_Off"
+          width="25"
+          control_name="TranslateChat"
+          is_toggle="true"
+          image_pressed="PushButton_Press"
+          image_pressed_selected="PushButton_Selected_Press"
+          image_selected="PushButton_Selected_Press"
+          tool_tip="Use google language translation"
+          name="translate_btn"/>
         <chat_history
 	 font="SansSerifSmall"
          follows="left|right|top|bottom"

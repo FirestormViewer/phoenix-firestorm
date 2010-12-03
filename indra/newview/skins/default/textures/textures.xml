@@ -480,6 +480,7 @@ with the same filename but different name
   <texture name="TabIcon_Me_Off" file_name="taskpanel/TabIcon_Me_Off.png" preload="false" />
   <texture name="TabIcon_Me_Selected" file_name="taskpanel/TabIcon_Me_Selected.png" preload="false" />
   <texture name="TabIcon_Open_Off" file_name="taskpanel/TabIcon_Open_Off.png" preload="false" />
+  <texture name="TabIcon_Translate_Off" file_name="taskpanel/translate_icon_24x24.png" preload="false" />
   <texture name="TabIcon_People_Off" file_name="taskpanel/TabIcon_People_Off.png" preload="false" />
   <texture name="TabIcon_People_Selected" file_name="taskpanel/TabIcon_People_Selected.png" preload="false" />
   <texture name="TabIcon_Places_Large" file_name="taskpanel/TabIcon_Places_Large.png" preload="false" />

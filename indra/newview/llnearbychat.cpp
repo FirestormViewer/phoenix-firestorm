@@ -60,6 +60,7 @@
 #include "lllayoutstack.h"
 
 #include "llimfloatercontainer.h"
+#include "llimfloater.h"
 
 static const S32 RESIZE_BAR_THICKNESS = 3;
 
@@ -91,19 +92,25 @@ BOOL LLNearbyChat::postBuild()
 
 	gSavedSettings.declareS32("nearbychat_showicons_and_names",2,"NearByChat header settings",true);
 
-	/* Imish things */
-	
+	// <vertical tab docking> -AO	
 	LLButton* slide_left = getChild<LLButton>("slide_left_btn");
 	slide_left->setVisible(false);
 	LLButton* slide_right = getChild<LLButton>("slide_right_btn");
 	slide_right->setVisible(false);
+	// </vertical tab docking>
 	
-	/****************/
+	LLButton* transl = getChild<LLButton>("translate_btn");
+	transl->setVisible(true);
+	
+
 	
 	mChatHistory = getChild<LLChatHistory>("chat_history");
-	return LLFloater::postBuild();
 	
-	/*
+	if(LLIMFloater::isChatMultiTab())
+	{
+		return LLFloater::postBuild();
+	}
+	
 	if(!LLDockableFloater::postBuild())
 		return false;
 
@@ -122,9 +129,8 @@ BOOL LLNearbyChat::postBuild()
 		mDragHandle->setTitleVisible(TRUE);
 
 	return true;
-	 */
+	
 }
-
 
 void    LLNearbyChat::applySavedVariables()
 {
