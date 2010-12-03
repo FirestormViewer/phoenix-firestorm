@@ -732,6 +732,7 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	}
 
 	LLColor4 txt_color = LLUIColorTable::instance().getColor("White");
+	LLColor4 header_name_color = LLUIColorTable::instance().getColor("ChatNameColor");
 	LLViewerChat::getChatColor(chat,txt_color);
 	LLFontGL* fontp = LLViewerChat::getChatFont();	
 	std::string font_name = LLFontGL::nameFromFont(fontp);
@@ -839,7 +840,13 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				link_params.link_href = LLSLURL("agent", chat.mFromID, "inspect").getSLURLString();
 
 				// Add link to avatar's inspector and delimiter to message.
+				
+				// reset the style parameter for the header only -AO
+				link_params.color(header_name_color);
+				link_params.readonly_color(header_name_color);
 				mEditor->appendText(chat.mFromName, false, link_params);
+				link_params.color(txt_color);
+				link_params.readonly_color(txt_color);
 				mEditor->appendText(delimiter, false, style_params);
 			}
 			else
@@ -870,7 +877,14 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		}
 		else
 		{
+			// reset the style color parameter for the header only -AO
+			style_params.color(header_name_color);
+			style_params.readonly_color(header_name_color);
 			view = getHeader(chat, style_params);
+			style_params.color(txt_color);
+			style_params.readonly_color(txt_color);
+			
+			
 			if (mEditor->getText().size() == 0)
 				p.top_pad = 0;
 			else
