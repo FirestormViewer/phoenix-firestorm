@@ -314,6 +314,10 @@ BOOL LLIMFloater::postBuild()
 	LLButton* slide_right = getChild<LLButton>("slide_right_btn");
 	slide_right->setVisible(!mControlPanel->getParent()->getVisible());
 	slide_right->setClickedCallback(boost::bind(&LLIMFloater::onSlide, this));
+	
+	// extra icon controls -AO
+	LLButton* transl = getChild<LLButton>("translate_btn");
+	transl->setVisible(true);
 
 	mInputEditor = getChild<LLLineEditor>("chat_editor");
 	mInputEditor->setMaxTextLength(1023);

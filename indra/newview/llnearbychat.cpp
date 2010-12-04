@@ -99,6 +99,7 @@ BOOL LLNearbyChat::postBuild()
 	slide_right->setVisible(false);
 	// </vertical tab docking>
 	
+	// extra icon controls -AO
 	LLButton* transl = getChild<LLButton>("translate_btn");
 	transl->setVisible(true);
 	
