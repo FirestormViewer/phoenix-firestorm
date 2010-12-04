@@ -489,10 +489,10 @@ class WindowsManifest(ViewerManifest):
                 grid_vars_template = """
                 OutFile "%(installer_file)s"
                 !define INSTFLAGS "%(flags)s"
-                !define INSTNAME   "SecondLifeViewer2"
-                !define SHORTCUT   "Second Life Viewer 2"
+                !define INSTNAME   "Firestorm"
+                !define SHORTCUT   "Firestorm"
                 !define URLNAME   "secondlife"
-                Caption "Second Life ${VERSION}"
+                Caption "Firestorm ${VERSION}"
                 """
             else:
                 # beta grid viewer
@@ -500,11 +500,11 @@ class WindowsManifest(ViewerManifest):
                 grid_vars_template = """
                 OutFile "%(installer_file)s"
                 !define INSTFLAGS "%(flags)s"
-                !define INSTNAME   "SecondLife%(grid_caps)s"
-                !define SHORTCUT   "Second Life (%(grid_caps)s)"
+                !define INSTNAME   "Firestorm%(grid_caps)s"
+                !define SHORTCUT   "Firestorm (%(grid_caps)s)"
                 !define URLNAME   "secondlife%(grid)s"
                 !define UNINSTALL_SETTINGS 1
-                Caption "Second Life %(grid)s ${VERSION}"
+                Caption "Firestorm %(grid)s ${VERSION}"
                 """
         else:
             # some other channel on some grid
@@ -512,7 +512,7 @@ class WindowsManifest(ViewerManifest):
             grid_vars_template = """
             OutFile "%(installer_file)s"
             !define INSTFLAGS "%(flags)s"
-            !define INSTNAME   "SecondLife%(channel_oneword)s"
+            !define INSTNAME   "%(channel_oneword)s"
             !define SHORTCUT   "%(channel)s"
             !define URLNAME   "secondlife"
             !define UNINSTALL_SETTINGS 1
