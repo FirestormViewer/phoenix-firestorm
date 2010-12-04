@@ -1707,7 +1707,7 @@ set(ARTWORK_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH
 
 
 if (LINUX)
-  set(product SecondLife-${ARCH}-${viewer_VERSION})
+  set(product Firestorm-${ARCH}-${viewer_VERSION})
 
   add_custom_command(
       OUTPUT ${product}.tar.bz2
@@ -1828,20 +1828,20 @@ endif (INSTALL)
 if (PACKAGE)
   if (WINDOWS)
     set(VIEWER_DIST_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}")
-    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/secondlife-symbols-windows.tar.bz2")
+    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-symbols-windows.tar.bz2")
     set(VIEWER_EXE_GLOBS "${VIEWER_BINARY_NAME}${CMAKE_EXECUTABLE_SUFFIX} slplugin.exe")
     set(VIEWER_LIB_GLOB "*${CMAKE_SHARED_MODULE_SUFFIX}")
     set(VIEWER_COPY_MANIFEST copy_w_viewer_manifest)
   endif (WINDOWS)
   if (DARWIN)
     set(VIEWER_DIST_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${product}.app")
-    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/secondlife-symbols-darwin.tar.bz2")
+    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-symbols-darwin.tar.bz2")
     set(VIEWER_EXE_GLOBS "'Firestorm' SLPlugin")
     set(VIEWER_LIB_GLOB "*.dylib")
   endif (DARWIN)
   if (LINUX)
     set(VIEWER_DIST_DIR "${CMAKE_CURRENT_BINARY_DIR}/packaged")
-    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/secondlife-symbols-linux.tar.bz2")
+    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-symbols-linux.tar.bz2")
     set(VIEWER_EXE_GLOBS "do-not-directly-run-firestorm-bin SLPlugin")
     set(VIEWER_LIB_GLOB "*${CMAKE_SHARED_MODULE_SUFFIX}*")
     set(VIEWER_COPY_MANIFEST copy_l_viewer_manifest)
