@@ -58,8 +58,43 @@
             follows="left|right"
           />
         </layout_panel>
+        <layout_panel
+         auto_resize="false"
+         follows="right"
+         height="28"
+         layout="topleft"
+         min_height="28"
+         min_width="80"
+         mouse_opaque="false"
+         name="gesture_panel"
+         top_delta="0"
+         user_resize="false"
+         width="76">
+            <gesture_combo_list
+             follows="left|right"
+             height="23"
+             label="Gestures"
+             image_overlay="gesture_18"
+             image_pressed="PushButton_Press"
+             image_pressed_selected="PushButton_Selected_Press"
+             image_selected="PushButton_Selected_Press"
+             layout="topleft"
+             left="0"
+             name="Gesture"
+             tool_tip="Shows/hides gestures"
+             top="5"
+             width="76">
+                <combo_button
+                 pad_right="10"
+                 use_ellipses="true" />
+                <combo_list
+                 page_lines="17" />
+            </gesture_combo_list>
+        </layout_panel>
+
+        
         <!--
-        There is resize bar between chatbar and Speak button. It has 2px width (is is set as 2*UIResizeBarOverlap)
+        There is resize bar after the chat bar. It has 2px width (is is set as 2*UIResizeBarOverlap)
         -->
         <layout_panel
          auto_resize="false"
@@ -95,40 +130,11 @@
          height="28"
          layout="topleft"
          min_height="28"
-         min_width="65"
-         mouse_opaque="false"
-         name="gesture_panel"
-         top_delta="0"
-         user_resize="false"
-         width="85">
-            <gesture_combo_list
-             follows="left|right"
-             height="23"
-             label="Gesture"
-             layout="topleft"
-             left="0"
-             name="Gesture"
-             tool_tip="Shows/hides gestures"
-             top="5"
-             width="82">
-                <combo_button
-                 pad_right="10"
-                 use_ellipses="true" />
-                <combo_list
-                 page_lines="17" />
-            </gesture_combo_list>
-        </layout_panel>
-        <layout_panel
-         auto_resize="false"
-         follows="right"
-         height="28"
-         layout="topleft"
-         min_height="28"
-         min_width="52"
+         min_width="40"
          mouse_opaque="false"
          name="movement_panel"
          user_resize="false"
-         width="83">
+         width="40">
             <bottomtray_button
              follows="left|right"
              height="23"
@@ -136,13 +142,13 @@
              image_pressed_selected="PushButton_Selected_Press"
              image_selected="PushButton_Selected_Press"
              is_toggle="true"
-             label="Move"
+             image_overlay="move_18"
              layout="topleft"
              name="movement_btn"
              tool_tip="Shows/hides movement controls"
              top="5"
              use_ellipses="true"
-             width="80">
+             width="36">
                 <init_callback
                  function="Button.SetDockableFloaterToggle"
                  parameter="moveview" />
@@ -155,11 +161,11 @@
          height="28"
          layout="topleft"
          min_height="28"
-         min_width="52"
+         min_width="40"
          mouse_opaque="false"
          name="cam_panel"
          user_resize="false"
-         width="83">
+         width="40">
             <bottomtray_button
              follows="left|right"
              height="23"
@@ -167,14 +173,14 @@
              image_pressed_selected="PushButton_Selected_Press"
              image_selected="PushButton_Selected_Press"
              is_toggle="true"
-             label="View"
+             image_overlay="view_18"
              layout="topleft"
              left="0"
              name="camera_btn"
              tool_tip="Shows/hides camera controls"
              top="5"
              use_ellipses="true"
-             width="80">
+             width="36">
                 <init_callback
                  function="Button.SetDockableFloaterToggle"
                  parameter="camera" />
@@ -189,7 +195,7 @@
          mouse_opaque="false"
          name="snapshot_panel"
          user_resize="false"
-         width="39">
+         width="40">
             <bottomtray_button
              follows="left|right"
              height="23"
@@ -215,11 +221,11 @@
          height="28"
          layout="topleft"
          min_height="28"
-         min_width="52"
+         min_width="40"
          mouse_opaque="false"
          name="build_btn_panel"
          user_resize="false"
-         width="83">
+         width="40">
 <!--*FIX: Build Floater is not opened with default registration. Will be fixed soon.
 Disabled for now.
 -->
@@ -230,14 +236,14 @@ Disabled for now.
              image_pressed_selected="PushButton_Selected_Press"
              image_selected="PushButton_Selected_Press"
              is_toggle="true"
-             label="Build"
+             image_overlay="hammer_18"
              layout="topleft"
              left="0"
              name="build_btn"
              tool_tip="Shows/hides Build Tools"
              top="5"
              use_ellipses="true"
-             width="80">
+             width="36">
                 <commit_callback
                  function="Build.Toggle"
                  parameter="build" />
@@ -249,11 +255,11 @@ Disabled for now.
          height="28"
          layout="topleft"
          min_height="28"
-         min_width="52"
+         min_width="40"
          mouse_opaque="false"
          name="search_btn_panel"
          user_resize="false"
-         width="83">
+         width="40">
             <bottomtray_button
              follows="left|right"
              height="23"
@@ -261,14 +267,14 @@ Disabled for now.
              image_pressed_selected="PushButton_Selected_Press"
              image_selected="PushButton_Selected_Press"
              is_toggle="true"
-             label="Search"
+             image_overlay="search_18"
              layout="topleft"
              left="0"
              name="search_btn"
              tool_tip="Shows/hides Search"
              top="5"
              use_ellipses="true"
-             width="80">
+             width="36">
                 <init_callback
                  function="Button.SetFloaterToggle"
                  parameter="search" />
@@ -280,11 +286,11 @@ Disabled for now.
          height="28"
          layout="topleft"
          min_height="28"
-         min_width="52"
+         min_width="40"
          mouse_opaque="false"
          name="world_map_btn_panel"
          user_resize="false"
-         width="83">
+         width="40">
             <bottomtray_button
              follows="left|right"
              height="23"
@@ -292,14 +298,14 @@ Disabled for now.
              image_pressed_selected="PushButton_Selected_Press"
              image_selected="PushButton_Selected_Press"
              is_toggle="true"
-             label="Map"
+             image_overlay="map_18"
              layout="topleft"
              left="0"
              name="world_map_btn"
              tool_tip="Shows/hides World Map"
              top="5"
              use_ellipses="true"
-             width="80">
+             width="36">
                 <init_callback
                  function="Button.SetFloaterToggle"
                  parameter="world_map" />
@@ -311,11 +317,11 @@ Disabled for now.
          height="28"
          layout="topleft"
          min_height="28"
-         min_width="52"
+         min_width="40"
          mouse_opaque="false"
          name="mini_map_btn_panel"
          user_resize="false"
-         width="83">
+         width="40">
             <bottomtray_button
              follows="left|right"
              height="23"
@@ -323,14 +329,14 @@ Disabled for now.
              image_pressed_selected="PushButton_Selected_Press"
              image_selected="PushButton_Selected_Press"
              is_toggle="true"
-             label="Mini-Map"
+             image_overlay="minimap_18"
              layout="topleft"
              left="0"
              name="mini_map_btn"
              tool_tip="Shows/hides Mini-Map"
              top="5"
              use_ellipses="true"
-             width="80">
+             width="36">
                 <init_callback
                  function="Button.SetFloaterToggle"
                  parameter="mini_map" />
@@ -356,10 +362,10 @@ Disabled for now.
          height="28"
          layout="topleft"
          min_height="28"
-         min_width="49"
+         min_width="40"
          name="inventory_panel"
          user_resize="false"
-         width="80">
+         width="40">
             <button
                  image_selected="PushButton_Selected_Press"
                  image_pressed="PushButton_Press"
@@ -368,13 +374,13 @@ Disabled for now.
              height="23"
              use_ellipses="true"
              is_toggle="true"
-             label="Inventory"
+             image_overlay="inventory_18"
              layout="topleft"
              left="0"
              tool_tip="Shows/hides Inventory"
              top="5"
              name="inventory_btn"
-             width="80">
+             width="36">
                 <button.init_callback
                  function="Button.SetDockableFloaterToggle"
                  parameter="inventory" />
