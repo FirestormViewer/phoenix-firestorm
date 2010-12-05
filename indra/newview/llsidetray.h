@@ -198,7 +198,7 @@ protected:
 	bool		addTab			(LLSideTrayTab* tab); // Used to re-attach tabs
 	bool		hasTabs			();
 
-	const LLSideTrayTab*	getActiveTab() const { return mActiveTab; }
+//	const LLSideTrayTab*	getActiveTab() const { return mActiveTab; }
 	LLSideTrayTab* 			getTab(const std::string& name);
 
 	void		createButtons	();
