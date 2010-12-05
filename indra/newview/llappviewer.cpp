@@ -102,6 +102,8 @@
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 
+#include "llversionviewer.h"
+
 // Third party library includes
 #include <boost/bind.hpp>
 
@@ -2294,7 +2296,7 @@ bool LLAppViewer::initConfiguration()
 	//
 	// Set the name of the window
 	//
-	gWindowTitle = LLTrans::getString("APP_NAME");
+	gWindowTitle = llformat("%s v%d.%d.%d.%d",LL_CHANNEL, LL_VERSION_MAJOR, LL_VERSION_MINOR, LL_VERSION_PATCH, LL_VERSION_BUILD) ;
 #if LL_DEBUG
 	gWindowTitle += std::string(" [DEBUG] ") + gArgs;
 #else
