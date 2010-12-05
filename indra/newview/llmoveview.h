@@ -28,7 +28,6 @@
 #define LL_LLMOVEVIEW_H
 
 // Library includes
-#include "llsingleton.h"
 #include "lltransientdockablefloater.h"
 
 class LLButton;
@@ -118,7 +117,7 @@ private:
 /**
  * This class contains Stand Up and Stop Flying buttons displayed above Move button in bottom tray
  */
-class LLPanelStandStopFlying : public LLPanel, public LLSingleton<LLPanelStandStopFlying>
+class LLPanelStandStopFlying : public LLPanel
 {
 	LOG_CLASS(LLPanelStandStopFlying);
 public:
@@ -127,8 +126,6 @@ public:
 		SSFM_STAND,
 		SSFM_STOP_FLYING
 	} EStandStopFlyingMode;
-
-	LLPanelStandStopFlying();
 
 	/**
 	 * Attach or detach the panel to/from the movement controls floater.
@@ -143,6 +140,7 @@ public:
 	 */
 	void reparent(LLFloaterMove* move_view);
 
+	static LLPanelStandStopFlying* getInstance();
 	static void setStandStopFlyingMode(EStandStopFlyingMode mode);
 	static void clearStandStopFlyingMode(EStandStopFlyingMode mode);
 	/*virtual*/ BOOL postBuild();
@@ -154,7 +152,12 @@ public:
 	/*virtual*/ BOOL handleToolTip(S32 x, S32 y, MASK mask);
 
 
+protected:
+	LLPanelStandStopFlying();
+
+
 private:
+	static LLPanelStandStopFlying* getStandStopFlyingPanel();
 	void onStandButtonClick();
 	void onStopFlyingButtonClick();
 	void updatePosition();
