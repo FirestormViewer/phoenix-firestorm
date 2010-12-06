@@ -104,6 +104,7 @@ BOOL  LLAvatarListItem::postBuild()
 	mIconPermissionMap = getChild<LLIconCtrl>("permission_map_icon");
 	mIconPermissionEditMine = getChild<LLIconCtrl>("permission_edit_mine_icon");
 	mIconPermissionEditTheirs = getChild<LLIconCtrl>("permission_edit_theirs_icon");
+	
 	mIconPermissionOnline->setVisible(false);
 	mIconPermissionMap->setVisible(false);
 	mIconPermissionEditMine->setVisible(false);
@@ -147,14 +148,18 @@ void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 //	mInfoBtn->setVisible(mShowInfoBtn);
 //	mProfileBtn->setVisible(mShowProfileBtn);
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
-	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
-	mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+
+	// AO - V1 UI, icon space is at a premium. Righ-click context is the way we reach extended functions
+	// not mouseover buttons that cause reflow.
+	//mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+	//mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+
 // [/RLVa:KB]
 
 	mHovered = true;
 	LLPanel::onMouseEnter(x, y, mask);
-
-	showPermissions(mShowPermissions);
+	// AO - TODO: wrap always-on showing of perms in preference
+	//showPermissions(mShowPermissions);
 	updateChildren();
 }
 
@@ -167,7 +172,8 @@ void LLAvatarListItem::onMouseLeave(S32 x, S32 y, MASK mask)
 	mHovered = false;
 	LLPanel::onMouseLeave(x, y, mask);
 
-	showPermissions(false);
+	// AO - TODO: wrap always-on showing of perms in preference
+	//showPermissions(false);
 	updateChildren();
 }
 
@@ -179,7 +185,8 @@ void LLAvatarListItem::changed(U32 mask)
 
 	if (mask & LLFriendObserver::POWERS)
 	{
-		showPermissions(mShowPermissions && mHovered);
+		//-AO showPermissions(mShowPermissions && mHovered);
+		showPermissions(true);
 		updateChildren();
 	}
 }
@@ -198,7 +205,7 @@ void LLAvatarListItem::setOnline(bool online)
 }
 
 void LLAvatarListItem::setAvatarName(const std::string& name)
-{
+{	
 	setNameInternal(name, mHighlihtSubstring);
 }
 
@@ -268,6 +275,11 @@ void LLAvatarListItem::setAvatarId(const LLUUID& id, const LLUUID& session_id, b
 		LLAvatarNameCache::get(id,
 			boost::bind(&LLAvatarListItem::onAvatarNameCache, this, _2));
 	}
+	
+	// AO: Always show permissions icons, like in V1. TODO: Wrap this in a preferences check.
+	// we put this here so because it's the nearest update point where we have good av data.
+	showPermissions(true);
+	updateChildren();
 }
 
 void LLAvatarListItem::showLastInteractionTime(bool show)
@@ -618,7 +630,6 @@ bool LLAvatarListItem::showPermissions(bool visible)
 		mIconPermissionEditMine->setVisible(false);
 		mIconPermissionEditTheirs->setVisible(false);
 	}
-
 	return NULL != relation;
 }
 
