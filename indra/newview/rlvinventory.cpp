@@ -624,7 +624,7 @@ bool RlvWearableItemCollector::onCollectFolder(const LLInventoryCategory* pFolde
 		return false;
 
 	bool fAttach = RlvForceWear::isWearAction(m_eWearAction);
-	bool fMatchAll = (!fLinkedFolder) && (m_eWearFlags | RlvForceWear::FLAG_MATCHALL);
+	bool fMatchAll = (!fLinkedFolder) && (m_eWearFlags & RlvForceWear::FLAG_MATCHALL);
 
 	if ( (!fLinkedFolder) && (RlvInventory::isFoldedFolder(pFolder, false)) )	// Check for folder that should get folded under its parent
 	{
