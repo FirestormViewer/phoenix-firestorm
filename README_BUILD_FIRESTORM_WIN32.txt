@@ -1,15 +1,17 @@
 Before you start configuring your Windows build system, be aware of our tested configurations:
 	Memory: You will need at least 2GB RAM
-	CPU: Multiple CPUs are strongly recommended. A build can take over an hour.
+	CPU: Multiple CPUs are strongly recommended. 
+	  A build can take over an hour.
 	Tested Build Environments:
-		WinXPSP3, 32bit, 2GB RAM, Visual Studio Pro 2005 SP1, latest VC++ runtime installed
+	  WinXPSP3, 32bit, 2GB RAM, Visual Studio Pro 2005 SP1, 
+	  latest VC++ runtime installed
 
-If you are not using something that closely matches a tested configuration, you may run into trouble, 
-particularly with different versions of Visual Studio. If you are running VS2008, you may be able to build
-the viewer for your local machine, but not package it into an installer.
+If you are not using something that closely matches a tested configuration, you
+may run into trouble, particularly with different versions of Visual Studio. If you are running VS2008, you may be able to build the viewer for your local machine, but not package it into an installer.
 
-To get started, follow the snowstorm instructions for setting up a windows build environment at this page:
-http://wiki.secondlife.com/wiki/Viewer_2_Microsoft_Windows_Builds
+A free download of VS2005Express can be used to compile firestorm. You can download this at http://download.microsoft.com/download/8/3/a/83aad8f9-38ba-4503-b3cd-ba28c360c27b/ENU/vcsetup.exe
+
+To get started, follow the snowstorm instructions for setting up a windows build environment at this page: http://wiki.secondlife.com/wiki/Viewer_2_Microsoft_Windows_Builds
 
 
 GET THE PHOENIX SOURCE
