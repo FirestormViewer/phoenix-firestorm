@@ -214,8 +214,8 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd)
 // RlvObject
 //
 
-RlvObject::RlvObject(const LLUUID& idObj) : m_UUID(idObj), m_nLookupMisses(0)
-{ 
+RlvObject::RlvObject(const LLUUID& idObj) : m_idObj(idObj), m_nLookupMisses(0)
+{
 	LLViewerObject* pObj = gObjectList.findObject(idObj);
 	m_fLookup = (NULL != pObj);
 	m_idxAttachPt = (pObj) ? ATTACHMENT_ID_FROM_STATE(pObj->getState()) : 0;
