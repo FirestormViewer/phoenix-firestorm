@@ -1034,6 +1034,14 @@
              name="Xstreet_url"
              parameter="WebLaunchExternalTarget,https://marketplace.secondlife.com/" />
        </menu_item_call>
+       <menu_item_call
+             label="L$ Market Data"
+             name="LindenXchange">
+             <menu_item_call.on_click
+             function="PromptShowURL"
+             name="lindenxchange_url"
+             parameter="WebLaunchExternalTarget,https://secure-web30.secondlife.com/my/lindex/market.php" />
+       </menu_item_call>  
     	<menu_item_call
              label="Apez Marketplace"
              name="Apez">
@@ -1041,7 +1049,7 @@
              function="PromptShowURL"
              name="Apez_url"
              parameter="WebLaunchExternalTarget,http://apez.biz/" />
-       </menu_item_call>       
+       </menu_item_call>  
     	<menu_item_call
              label="Script Library"
              name="Script Library">
