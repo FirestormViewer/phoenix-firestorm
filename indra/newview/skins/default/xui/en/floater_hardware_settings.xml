@@ -11,7 +11,7 @@
      type="string"
      length="1"
      follows="left|top"
-     height="12"
+     height="16"
      layout="topleft"
      left="10"
      name="Filtering:"
@@ -32,7 +32,7 @@
      type="string"
      length="1"
      follows="left|top"
-     height="12"
+     height="22"
      layout="topleft"
      left="10"
      name="Antialiasing:"
@@ -48,7 +48,7 @@
      layout="topleft"
      left_pad="10"
      name="fsaa"
-     top_delta="0"
+     top_delta="-4"
      width="130">
         <combo_box.item
          label="Disabled"
@@ -73,17 +73,18 @@
     </combo_box>
    <text
      type="string"
+     top_delta="0"
      length="1"
      follows="left|top"
-     height="12"
+     height="16"
      layout="topleft"
      left_pad="10"
      name="antialiasing restart"
-     top_delta="0"
      width="188">
       (requires viewer restart)
     </text>
     <spinner
+     top_delta="0"
      control_name="RenderGamma"
      decimal_digits="2"
      follows="left|top"
@@ -96,13 +97,13 @@
      left="10"
      max_val="2"
      name="gamma"
-     top_pad="7"
+     top_pad="10"
      width="262" />
     <text
      type="string"
      length="1"
      follows="left|top"
-     height="12"
+     height="16"
      layout="topleft"
      left_pad="10"
      name="(brightness, lower is brighter)"
@@ -132,6 +133,30 @@
      name="vbo"
      tool_tip="Enabling this on modern hardware gives a performance gain.  However, older hardware often has poor implementations of VBOs and you may get crashes when this is enabled."
      width="315" />
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="16"
+     layout="topleft"
+     left="10"
+     name="Enable VBO Stream:"
+     top_pad="10"
+     width="188">
+        Enable VBO Stream:
+    </text>
+
+     <check_box  
+      control_name="RenderUseStreamVBO"
+      height="16" 
+      initial_value="false"
+      label="Enable Streamed VBOs"
+      left_pad="10"
+      name="vbo_stream"
+      tool_tip="Disabling this may improve performance when VBOs are enabled. Disabling produced observable improvement on various AMD GPUs."
+     width="315" />
+
+
     <slider
      control_name="TextureMemory"
      decimal_digits="0"

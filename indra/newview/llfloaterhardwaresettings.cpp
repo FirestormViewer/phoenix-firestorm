@@ -97,7 +97,16 @@ void LLFloaterHardwareSettings::refreshEnabledState()
 		!gGLManager.mHasVertexBufferObject)
 	{
 		getChildView("vbo")->setEnabled(FALSE);
+		getChildView("vbo_stream")->setEnabled(FALSE);
 	}
+	else
+#if LL_DARWIN
+		getChildView("vbo_stream")->setEnabled(FALSE);  //Hardcoded disable on mac
+        getChild<LLUICtrl>("vbo_stream")->setValue((LLSD::Boolean) FALSE);
+#else
+		getChildView("vbo_stream")->setEnabled(LLVertexBuffer::sEnableVBOs);
+#endif
+
 
 	// if no windlight shaders, turn off nighttime brightness, gamma, and fog distance
 	getChildView("gamma")->setEnabled(!gPipeline.canUseWindLightShaders());

@@ -100,6 +100,9 @@
 #include "llspatialpartition.h"
 #include "llmutelist.h"
 #include "lltoolpie.h"
+#if !LL_DARWIN
+#include "llfloaterhardwaresettings.h"
+#endif
 // [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -5322,6 +5325,11 @@ void LLPipeline::setUseVBO(BOOL use_vbo)
 		
 		resetVertexBuffers();
 		LLVertexBuffer::initClass(use_vbo);
+#if !LL_DARWIN
+		if(LLFloaterHardwareSettings::isOpen())
+			LLFloaterHardwareSettings::instance()->refreshEnabledState();
+#endif
+
 	}
 }
 
