@@ -16,6 +16,7 @@
 
 #include "llviewerprecompiledheaders.h"
 #include "llavatarlist.h"				// Avatar list control used by the "Nearby" tab in the "People" sidebar panel
+#include "llavatarnamecache.h"
 #include "llbottomtray.h"
 #include "llbutton.h"
 #include "llcallfloater.h"
@@ -364,9 +365,11 @@ void RlvUIEnabler::onToggleShowMinimap()
 		pBtnView->setEnabled(fEnable);
 }
 
-// Checked: 2010-06-05 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
+// Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
 void RlvUIEnabler::onToggleShowNames()
 {
+	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+
 	// Refresh the nearby people list
 	LLPanelPeople* pPeoplePanel = dynamic_cast<LLPanelPeople*>(LLSideTray::getInstance()->getPanel("panel_people"));
 	RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
@@ -377,6 +380,18 @@ void RlvUIEnabler::onToggleShowNames()
 	LLCallFloater* pCallFloater = LLFloaterReg::findTypedInstance<LLCallFloater>("voice_controls");
 	if (pCallFloater)
 		pCallFloater->getAvatarCallerList()->updateAvatarNames();
+
+	// Force the use of the "display name" cache so we can filter both display and legacy names (or return back to the user's preference)
+	if (!fEnable)
+	{
+		LLAvatarNameCache::setForceDisplayNames(true);
+	}
+	else
+	{
+		LLAvatarNameCache::setForceDisplayNames(false);
+		LLAvatarNameCache::setUseDisplayNames(gSavedSettings.getBOOL("UseDisplayNames"));
+	}
+	LLVOAvatar::invalidateNameTags();	// See handleDisplayNamesOptionChanged()
 }
 
 // Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
