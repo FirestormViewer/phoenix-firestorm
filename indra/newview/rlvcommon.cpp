@@ -351,7 +351,7 @@ void RlvUtil::filterLocation(std::string& strUTF8Text)
 		rlvStringReplace(strUTF8Text, pParcelMgr->getAgentParcelName(), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
 }
 
-// Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+// Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
 void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 {
 	std::vector<LLUUID> idAgents;
@@ -364,9 +364,24 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 		{
 			const std::string& strAnonym = RlvStrings::getAnonym(avName.mDisplayName);
 
-			rlvStringReplace(strUTF8Text, avName.mDisplayName, strAnonym);
-			if ( (fFilterLegacy) && (!avName.mIsDisplayNameDefault) )
-				rlvStringReplace(strUTF8Text, avName.getLegacyName(), strAnonym);
+			// NOTE: if the legacy first and last name are empty we get a legacy name of " " which would replace all spaces in the string
+			std::string strLegacyName;
+			if ( (fFilterLegacy) && (!avName.mIsDisplayNameDefault) && (!avName.mLegacyFirstName.empty()) )
+				strLegacyName = avName.getLegacyName();
+
+			// If the display name is a subset of the legacy name we need to filter that first, otherwise it's the other way around
+			if (std::string::npos != strLegacyName.find(avName.mDisplayName))
+			{
+				if (!strLegacyName.empty())
+					rlvStringReplace(strUTF8Text, strLegacyName, strAnonym);
+				rlvStringReplace(strUTF8Text, avName.mDisplayName, strAnonym);
+			}
+			else
+			{
+				rlvStringReplace(strUTF8Text, avName.mDisplayName, strAnonym);
+				if (!strLegacyName.empty())
+					rlvStringReplace(strUTF8Text, strLegacyName, strAnonym);
+			}
 		}
 	}
 }
