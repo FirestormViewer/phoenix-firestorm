@@ -189,7 +189,8 @@ private:
 
 LLVOVolume::LLVOVolume(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp)
 	: LLViewerObject(id, pcode, regionp),
-	  mVolumeImpl(NULL)
+	  mVolumeImpl(NULL),
+	  mVolumeSurfaceArea(-1.0)
 {
 	mTexAnimMode = 0;
 	mRelativeXform.setIdentity();
@@ -1430,6 +1431,7 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 			LLFastTimer t(FTM_GEN_FLEX);
 			res = mVolumeImpl->doUpdateGeometry(drawable);
 		}
+		mVolumeSurfaceArea = getVolume()->sculptGetSurfaceArea();
 		updateFaceFlags();
 		return res;
 	}
@@ -1510,6 +1512,8 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 		LLFastTimer t(FTM_GEN_TRIANGLES);
 		genBBoxes(FALSE);
 	}
+
+	mVolumeSurfaceArea = getVolume()->sculptGetSurfaceArea();
 
 	// Update face flags
 	updateFaceFlags();
@@ -3399,6 +3403,21 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
 		LLVOVolume* vobj = drawablep->getVOVolume();
 		llassert_always(vobj);
+
+	   	static LLCachedControl<F32> volume_sa_thresh(gSavedSettings,"RenderVolumeSAThreshold");
+    		static LLCachedControl<F32> sculpt_sa_thresh(gSavedSettings, "RenderSculptSAThreshold");
+    		static LLCachedControl<F32> volume_sa_max_frame(gSavedSettings, "RenderVolumeSAFrameMax");
+    		F32 max_for_this_vol = (vobj->isSculpted()) ? sculpt_sa_thresh : volume_sa_thresh;
+
+    		if (vobj->mVolumeSurfaceArea > max_for_this_vol)
+    		{
+      			LLPipeline::sVolumeSAFrame += vobj->mVolumeSurfaceArea;
+      			if(LLPipeline::sVolumeSAFrame > volume_sa_max_frame)
+      			{
+        			continue;
+      			}
+    		}
+
 		vobj->updateTextureVirtualSize();
 		vobj->preRebuild();
 

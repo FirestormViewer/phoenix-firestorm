@@ -1,7 +1,39 @@
 <?xml version="1.0" ?>
 <llsd>
 <map>
-
+  <key>RenderVolumeSAThreshold</key>
+    <map>
+      <key>Comment</key>
+      <string>The surface area at which volumes begin to be considered for being made invisible.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>50.0</real>
+    </map>
+  <key>RenderSculptSAThreshold</key>
+    <map>
+      <key>Comment</key>
+      <string>The surface area at which sculpts begin to be considered for being made invisible.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>115.0</real>
+    </map>
+    <key>RenderVolumeSAFrameMax</key>
+    <map>
+      <key>Comment</key>
+      <string>The limit(per frame) at which the sum of all volumes above the surface area threshold that causes all further sculpts/volumes above the threshold to stop being drawn..</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>500.0</real>
+    </map>
     <key>EnableGroupChatPopups</key>
     <map>
       <key>Comment</key>
