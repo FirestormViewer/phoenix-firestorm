@@ -619,16 +619,16 @@ bool LLAvatarListItem::showPermissions(bool visible)
 	if(relation && visible)
 	{
 		/*
-		 * Change visiibility change from removing the icon to just hiding it.
-		 * This lets the hidden icons fill a position and present reflow
+		 * Change visibility method from removing the icon to just hiding it.
+		 * This lets the hidden icons fill a position and prevent reflow
 		 * Allows for V1-like absolute permission positioning. -AO
 		 *
-		 
-		 mIconPermissionOnline->setVisible(relation->isRightGrantedTo(LLRelationship::GRANT_ONLINE_STATUS));
-		 mIconPermissionMap->setVisible(relation->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION));
-		 mIconPermissionEditMine->setVisible(relation->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS));
-		 mIconPermissionEditTheirs->setVisible(relation->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS));
-		 
+		 * 
+		 * mIconPermissionOnline->setVisible(relation->isRightGrantedTo(LLRelationship::GRANT_ONLINE_STATUS));
+		 * mIconPermissionMap->setVisible(relation->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION));
+		 * mIconPermissionEditMine->setVisible(relation->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS));
+		 * mIconPermissionEditTheirs->setVisible(relation->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS));
+		 *
 		*/ 
 		mIconPermissionOnline->setVisible(true);
 		mIconPermissionMap->setVisible(true);
