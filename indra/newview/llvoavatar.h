@@ -836,6 +836,7 @@ protected:
 	static void		getAnimLabels(LLDynamicArray<std::string>* labels);
 	static void		getAnimNames(LLDynamicArray<std::string>* names);	
 private:
+	void			resolveClient(const LLUUID tag);
 	std::string		mNameString;		// UTF-8 title + name + status
 	std::string		mClientTag;
 	std::string  	mTitle;

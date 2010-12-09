@@ -6917,6 +6917,100 @@ bool LLVOAvatar::visualParamWeightsAreDefault()
 	return rtn;
 }
 
+void LLVOAvatar::resolveClient(const LLUUID tag)
+// looks at a UUID and tries to match it to a known client.
+// hard coded list to be quick and dirty. TODO: Replace with the usual XML file.
+// TODO: turn this into an enumeration-backed switch statement.
+{
+	if(tag == LLUUID("5d9581af-d615-bc16-2667-2f04f8eeefe4"))//green
+	{
+		mClientTag = "Phoenix";
+	}
+	else if(tag == LLUUID("e35f7d40-6071-4b29-9727-5647bdafb5d5"))//white
+	{
+		mClientTag = "Phoenix";
+	}
+	else if(tag == LLUUID("ae4e92fb-023d-23ba-d060-3403f953ab1a"))//pink
+	{
+		mClientTag = "Phoenix";
+	}
+	else if(tag == LLUUID("e71b780e-1a57-400d-4649-959f69ec7d51"))//red
+	{
+		mClientTag = "Phoenix";
+	}
+	else if(tag == LLUUID("c1c189f5-6dab-fc03-ea5a-f9f68f90b018"))//orange
+	{
+		mClientTag = "Phoenix";
+	}
+	else if(tag == LLUUID("8cf0577c-22d3-6a73-523c-15c0a90d6c27")) //purple
+	{
+		mClientTag = "Phoenix";
+	}
+	else if(tag == LLUUID("5f0e7c32-38c3-9214-01f0-fb16a5b40128"))//yellow
+	{
+		mClientTag = "Phoenix";
+	}
+	else if(tag == LLUUID("5bb6e4a6-8e24-7c92-be2e-91419bb0ebcb"))//blue
+	{
+		mClientTag = "Phoenix";
+	}
+	else if(tag == LLUUID("ed63fbd0-589e-fe1d-a3d0-16905efaa96b"))//default (red)
+	{
+		mClientTag = "Phoenix";
+	}
+	
+	else if(tag == LLUUID("c228d1cf-4b5d-4ba8-84f4-899a0796aa97"))//viewer 2.0
+	{
+		mClientTag = "Viewer 2";
+	}
+
+	else if(tag == LLUUID("0bcd5f5d-a4ce-9ea4-f9e8-15132653b3d8"))
+	{
+		mClientTag = "MoyMix";
+	}
+	else if(tag == LLUUID("c58fca06-33b3-827d-d81c-a886a631affc"))
+	{
+		mClientTag = "Whale";
+	}
+	else if(tag == LLUUID("cc7a030f-282f-c165-44d2-b5ee572e72bf"))
+	{
+		mClientTag = "Imprudence";
+	}
+	else if(tag == LLUUID("2a9a406c-f448-68f2-4e38-878f8c46c190"))
+	{
+		mClientTag = "Meerkat";
+	}
+	else if(tag == LLUUID("b6820989-bf42-ff59-ddde-fd3fd3a74fe4"))
+	{
+		mClientTag = "Meerkat";
+	}
+	else if(tag == LLUUID("5aa5c70d-d787-571b-0495-4fc1bdef1500"))
+	{
+		mClientTag = "PAR"; // used to be LGG Proxy, more correct
+	}
+	else if(tag == LLUUID("54d93609-1392-2a93-255c-a9dd429ecca5"))
+	{
+		mClientTag = "Emergence";
+	}
+	else if(tag == LLUUID("8873757c-092a-98fb-1afd-ecd347566fcd"))
+	{
+		mClientTag = "Ascent";
+	}
+	else if(tag == LLUUID("734fed29-4c51-63e5-1648-6589949d7585"))
+	{
+		mClientTag = "Explicit";
+	}
+	else if(tag == LLUUID("b33b69ae-6b6c-b395-0175-ce76a871173b"))
+	{
+		mClientTag = "Nicholas";
+	}
+
+	// Nothing found
+	
+	else 
+		mClientTag = "";
+}
+
 
 //-----------------------------------------------------------------------------
 // processAvatarAppearance()
@@ -6960,10 +7054,19 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 
 	// <clientTags>
 	LLTextureEntry* tex = getTE(0);
+	const LLUUID tag_uuid = tex->getID();
 	llinfos << "LLVOAvatar::processAvatarAppearance() Checking Texture " << tex->getID() << llendl;
-	if(tex->getGlow() > 0.0f)
+	
+	resolveClient(tag_uuid); // sets mClientTag
+	
+	if (mClientTag != "")
 	{
-		const LLUUID tag_uuid = tex->getID();		
+		llinfos << "LLVOAvatar::processAvatarAppearance() Detected ClientTag=" << mClientTag << llendl;
+		mNameString.clear();
+	}	
+	else if(tex->getGlow() > 0.0f)
+	{
+				
 		U32 tag_len = strnlen((const char*)&tag_uuid.mData[0], UUID_BYTES);
 		mClientTag = std::string((const char*)&tag_uuid.mData[0], tag_len);
 		LLStringFn::replace_ascii_controlchars(mClientTag, LL_UNKNOWN_CHAR);
@@ -6972,7 +7075,6 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 	}
 	else
 	{
-		mClientTag = "";
 		mNameString.clear();
 	}
 	// </clientTags>
@@ -7102,9 +7204,9 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 			llinfos << "Re-requesting AvatarAppearance for object: "  << getID() << llendl;
 			LLAvatarPropertiesProcessor::getInstance()->sendAvatarTexturesRequest(getID());
 			mRuthTimer.reset();
-	}
-	else
-	{
+		}
+		else
+		{
 			llinfos << "That's okay, we already have a non-default shape for object: "  << getID() << llendl;
 			// we don't really care.
 		}
