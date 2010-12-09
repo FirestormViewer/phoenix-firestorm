@@ -1043,14 +1043,6 @@
              parameter="WebLaunchExternalTarget,https://secure-web30.secondlife.com/my/lindex/market.php" />
        </menu_item_call>  
     	<menu_item_call
-             label="Apez Marketplace"
-             name="Apez">
-             <menu_item_call.on_click
-             function="PromptShowURL"
-             name="Apez_url"
-             parameter="WebLaunchExternalTarget,http://apez.biz/" />
-       </menu_item_call>  
-    	<menu_item_call
              label="Script Library"
              name="Script Library">
              <menu_item_call.on_click
