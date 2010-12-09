@@ -5329,8 +5329,8 @@ void LLPipeline::setUseVBO(BOOL use_vbo)
 		resetVertexBuffers();
 		LLVertexBuffer::initClass(use_vbo);
 #if !LL_DARWIN
-		if(LLFloaterHardwareSettings::isOpen())
-			LLFloaterHardwareSettings::instance()->refreshEnabledState();
+		if (LLFloaterReg::getTypedInstance<LLFloaterHardwareSettings>("prefs_hardware_settings")->isShown())
+			LLFloaterReg::getTypedInstance<LLFloaterHardwareSettings>("prefs_hardware_settings")->refreshEnabledState();
 #endif
 
 	}
