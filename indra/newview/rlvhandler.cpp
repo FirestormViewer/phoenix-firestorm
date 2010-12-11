@@ -100,7 +100,7 @@ bool RlvHandler::isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varO
 	if (RLV_CHECK_DEFAULT == typeCheck)
 		typeCheck = ( (hasBehaviour(eBhvr)) && (!isPermissive(eBhvr)) ) ? RLV_CHECK_STRICT : RLV_CHECK_PERMISSIVE;
 
-	std::list<LLUUID> objList;
+	uuid_vec_t objList;
 	if (RLV_CHECK_STRICT == typeCheck)
 	{
 		// If we're "strict checking" then we need the UUID of every object that currently has 'eBhvr' restricted
@@ -119,7 +119,7 @@ bool RlvHandler::isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varO
 				return true;
 
 			// For strict checks we don't return until the list is empty (every object with 'eBhvr' restricted also contains the exception)
-			std::list<LLUUID>::iterator itList = std::find(objList.begin(), objList.end(), itException->second.idObject);
+			uuid_vec_t::iterator itList = std::find(objList.begin(), objList.end(), itException->second.idObject);
 			if (itList != objList.end())
 				objList.erase(itList);
 			if (objList.empty())
