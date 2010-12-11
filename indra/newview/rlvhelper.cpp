@@ -33,7 +33,7 @@
 // RlvCommmand
 //
 
-RlvCommand::RlvBhvrTable RlvCommand::m_BhvrMap;
+RlvCommand::bhvr_map_t RlvCommand::m_BhvrMap;
 
 // Checked: 2009-12-27 (RLVa-1.1.0k) | Modified: RLVa-1.1.0k
 RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
@@ -115,10 +115,29 @@ ERlvBehaviour RlvCommand::getBehaviourFromString(const std::string& strBhvr, boo
 		*pfStrict = fStrict;
 
 	RLV_ASSERT(m_BhvrMap.size() > 0);
-	RlvBhvrTable::const_iterator itBhvr = m_BhvrMap.find( (!fStrict) ? strBhvr : strBhvr.substr(0, idxStrict));
+	bhvr_map_t::const_iterator itBhvr = m_BhvrMap.find( (!fStrict) ? strBhvr : strBhvr.substr(0, idxStrict));
 	if ( (itBhvr != m_BhvrMap.end()) && ((!fStrict) || (hasStrictVariant(itBhvr->second))) )
 		return itBhvr->second;
 	return RLV_BHVR_UNKNOWN;
+}
+
+// Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+bool RlvCommand::getCommands(bhvr_map_t& cmdList, const std::string &strMatch)
+{
+	if (strMatch.empty())
+		return false;
+	cmdList.clear();
+
+	RLV_ASSERT(m_BhvrMap.size() > 0);
+	for (bhvr_map_t::const_iterator itBhvr = m_BhvrMap.begin(); itBhvr != m_BhvrMap.end(); ++itBhvr)
+	{
+		std::string strCmd = itBhvr->first; ERlvBehaviour eBhvr = itBhvr->second;
+		if (std::string::npos != strCmd.find(strMatch))
+			cmdList.insert(std::pair<std::string, ERlvBehaviour>(strCmd, eBhvr));
+		if ( (hasStrictVariant(eBhvr)) && (std::string::npos != strCmd.append("_sec").find(strMatch)) )
+			cmdList.insert(std::pair<std::string, ERlvBehaviour>(strCmd, eBhvr));
+	}
+	return (0 != cmdList.size());
 }
 
 // Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.1.0h
@@ -139,7 +158,8 @@ void RlvCommand::initLookupTable()
 				"attachthis", "attachthisover", "detachthis", "attachall", "attachallover", "detachall", "attachallthis", 
 				"attachallthisover", "detachallthis", "tpto", "version", "versionnew", "versionnum", "getattach", "getattachnames",
 				"getaddattachnames", "getremattachnames", "getoutfit", "getoutfitnames", "getaddoutfitnames", "getremoutfitnames", 
-				"findfolder", "findfolders", "getpath", "getpathnew", "getinv", "getinvworn", "getsitid", "getstatus", "getstatusall"
+				"findfolder", "findfolders", "getpath", "getpathnew", "getinv", "getinvworn", "getsitid", "getcommand", 
+				"getstatus", "getstatusall"
 			};
 
 		for (int idxBvhr = 0; idxBvhr < RLV_BHVR_COUNT; idxBvhr++)

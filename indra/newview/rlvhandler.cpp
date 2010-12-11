@@ -1588,6 +1588,16 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 				strReply = idSitObj.asString();
 			}
 			break;
+#ifdef RLV_EXTENSION_CMD_GETCOMMAND
+		case RLV_BHVR_GETCOMMAND:		// @getcommand:<option>=<channel>		- Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+			{
+				RlvCommand::bhvr_map_t cmdList;
+				if (RlvCommand::getCommands(cmdList, rlvCmd.getOption()))
+					for (RlvCommand::bhvr_map_t::const_iterator itCmd = cmdList.begin(); itCmd != cmdList.end(); ++itCmd)
+						strReply.append("/").append(itCmd->first);
+			}
+			break;
+#endif // RLV_EXTENSION_CMD_GETCOMMAND
 		case RLV_BHVR_GETSTATUS:		// @getstatus[:<option>]=<channel>		- Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
 			{
 				// NOTE: specification says response should start with '/' but RLV-1.16.1 returns an empty string when no rules are set

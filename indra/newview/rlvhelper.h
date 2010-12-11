@@ -55,9 +55,11 @@ public:
 	bool               isStrict() const			{ return m_fStrict; }
 	bool               isValid() const			{ return m_fValid; }
 
-	static ERlvBehaviour      getBehaviourFromString(const std::string& strBhvr, bool* pfStrict = NULL);
-	static const std::string& getStringFromBehaviour(ERlvBehaviour eBhvr);
-	static bool               hasStrictVariant(ERlvBehaviour eBhvr);
+	typedef std::map<std::string, ERlvBehaviour> bhvr_map_t;
+	static ERlvBehaviour		getBehaviourFromString(const std::string& strBhvr, bool* pfStrict = NULL);
+	static bool					getCommands(bhvr_map_t& cmdList, const std::string& strMatch);
+	static const std::string&	getStringFromBehaviour(ERlvBehaviour eBhvr);
+	static bool					hasStrictVariant(ERlvBehaviour eBhvr);
 
 	static void initLookupTable();
 protected:
@@ -82,8 +84,7 @@ protected:
 	std::string   m_strParam;
 	ERlvParamType m_eParamType;
 
-	typedef std::map<std::string, ERlvBehaviour> RlvBhvrTable;
-	static RlvBhvrTable m_BhvrMap;
+	static bhvr_map_t m_BhvrMap;
 
 	friend class RlvHandler;
 };
