@@ -1984,6 +1984,9 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 		// fetch failures (should be replaced by new defaults in
 		// lost&found).
 		U32 skip_type = gSavedSettings.getU32("ForceAssetFail");
+// [RLVa:KB] - Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+		U32 missing_type = gSavedSettings.getU32("ForceMissingType");
+// [/RLVa:KB]
 
 		if (item && item->getIsLinkType() && linked_item)
 		{
@@ -1994,6 +1997,12 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 							  linked_item->isWearableType() ? linked_item->getWearableType() : LLWearableType::WT_INVALID
 				);
 
+// [RLVa:KB] - Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+			if (missing_type != LLWearableType::WT_INVALID && missing_type == found.mWearableType)
+			{
+				continue;
+			}
+// [/RLVa:KB]
 			if (skip_type != LLWearableType::WT_INVALID && skip_type == found.mWearableType)
 			{
 				found.mAssetID.generate(); // Replace with new UUID, guaranteed not to exist in DB
