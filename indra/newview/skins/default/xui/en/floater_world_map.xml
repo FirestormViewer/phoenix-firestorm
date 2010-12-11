@@ -541,7 +541,7 @@
       halign="right"
       height="16"
       layout="topleft"
-      left="25"
+      left="10"
       name="events_label"
       top_pad="16"
       width="70">
@@ -587,9 +587,10 @@
         initial_value="128"
         layout="topleft"
         left_delta="47"
-        max_val="255"
+        max_val="5000"
         min_val="0"
-        name="teleport_coordinate_z">
+        name="teleport_coordinate_z"
+		width="59">
         <spinner.commit_callback
           function="WMap.Coordinates" />
       </spinner>
