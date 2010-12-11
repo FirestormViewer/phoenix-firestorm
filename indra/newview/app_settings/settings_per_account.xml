@@ -25,13 +25,13 @@
     <key>BusyModeResponse</key>
         <map>
         <key>Comment</key>
-            <string>Auto response to instant messages while in busy mode.</string>
+            <string>Auto response to instant messages while in unavailable or autorespond mode.</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>
             <string>String</string>
         <key>Value</key>
-            <string>The Resident you messaged is in &apos;busy mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
+            <string>The Resident you messaged is in &apos;unavailable mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
         </map>
     <key>InstantMessageLogPath</key>
         <map>

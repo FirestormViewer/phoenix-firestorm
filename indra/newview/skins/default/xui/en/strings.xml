@@ -202,7 +202,7 @@
 	<!-- llvoavatar. Displayed in the avatar chat bubble -->
 	<string name="AvatarEditingAppearance">(Editing Appearance)</string>
 	<string name="AvatarAway">Away</string>
-	<string name="AvatarBusy">Busy</string>
+	<string name="AvatarBusy">Unavailable</string>
 	<string name="AvatarMuted">Blocked</string>
 
 	<!-- animations -->
@@ -1834,9 +1834,11 @@ Requests name of an avatar.  When data is available the dataserver event will be
   <!-- Avatar busy/away mode -->
 	<string name="AvatarSetNotAway">Not Away</string>
 	<string name="AvatarSetAway">Away</string>
-	<string name="AvatarSetNotBusy">Not Busy</string>
-	<string name="AvatarSetBusy">Busy</string>
-
+	<string name="AvatarSetNotBusy">Available</string>
+	<string name="AvatarSetBusy">Unavailable</string>
+	<string name="AvatarSetNotAutorespond">Autorespond OFF</string>
+	<string name="AvatarSetAutorespond">Autorespond</string>
+	
 	<!-- Wearable Types -->
 	<string name="shape">Shape</string>
 	<string name="skin">Skin</string>
@@ -2239,7 +2241,7 @@ Requests name of an avatar.  When data is available the dataserver event will be
 	<string name="PanelContentsNewScript">New Script</string>	
 
   <!-- panel preferences general -->
-  <string name="BusyModeResponseDefault">The Resident you messaged is in &apos;busy mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
+  <string name="BusyModeResponseDefault">The Resident you messaged is in &apos;unavailable mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
 
 	<!-- Mute -->
 	<string name="MuteByName">(By name)</string>

@@ -359,6 +359,15 @@ public:
 	BOOL			getBusy() const;
 private:
 	BOOL			mIsBusy;
+	//--------------------------------------------------------------------
+	// Autorespond
+	//--------------------------------------------------------------------
+public:
+	void			setAutorespond();
+	void			clearAutorespond();
+	BOOL			getAutorespond() const;
+private:
+	BOOL			mIsAutorespond;
 
 	//--------------------------------------------------------------------
 	// Grab

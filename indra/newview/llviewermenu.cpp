@@ -166,6 +166,7 @@ LLContextMenu* gDetachBodyPartPieMenus[8];
 
 LLMenuItemCallGL* gAFKMenu = NULL;
 LLMenuItemCallGL* gBusyMenu = NULL;
+LLMenuItemCallGL* gAutorespondMenu = NULL;
 
 //
 // Local prototypes
@@ -461,6 +462,7 @@ void init_menus()
 
 	gAFKMenu = gMenuBarView->getChild<LLMenuItemCallGL>("Set Away", TRUE);
 	gBusyMenu = gMenuBarView->getChild<LLMenuItemCallGL>("Set Busy", TRUE);
+	gAutorespondMenu = gMenuBarView->getChild<LLMenuItemCallGL>("Set Autorespond", TRUE);
 	gAttachSubMenu = gMenuBarView->findChildMenuByName("Attach Object", TRUE);
 	gDetachSubMenu = gMenuBarView->findChildMenuByName("Detach Object", TRUE);
 
@@ -5454,6 +5456,24 @@ class LLWorldSetBusy : public view_listener_t
 	}
 };
 
+
+class LLWorldSetAutorespond : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		if (gAgent.getAutorespond())
+		{
+			gAgent.clearAutorespond();
+		}
+		else
+		{
+			gAgent.setAutorespond();
+			LLNotificationsUtil::add("AutorespondModeSet");
+		}
+		return true;
+	}
+};
+
 class LLWorldCreateLandmark : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -8280,6 +8300,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLWorldTeleportHome(), "World.TeleportHome");
 	view_listener_t::addMenu(new LLWorldSetAway(), "World.SetAway");
 	view_listener_t::addMenu(new LLWorldSetBusy(), "World.SetBusy");
+	view_listener_t::addMenu(new LLWorldSetAutorespond(), "World.SetAutorespond");
 
 	view_listener_t::addMenu(new LLWorldEnableCreateLandmark(), "World.EnableCreateLandmark");
 	view_listener_t::addMenu(new LLWorldEnableSetHomeLocation(), "World.EnableSetHomeLocation");

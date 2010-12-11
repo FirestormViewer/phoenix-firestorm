@@ -3070,10 +3070,22 @@ Cannot offer friendship at this time. Please try again in a moment.
    icon="alert.tga"
    name="BusyModeSet"
    type="alert">
-Busy mode is set.
-Chat and instant messages will be hidden. Instant messages will get your Busy mode response. All teleportation offers will be declined. All inventory offers will go to your Trash.
+Unavailable mode is set.
+Chat and instant messages will be hidden. Instant messages will receive your configured autoresponse. All teleportation offers will be declined. All inventory offers will go to your Trash.
     <usetemplate
-     ignoretext="I change my status to Busy mode"
+     ignoretext="I change my status to unavailable mode"
+     name="okignore"
+     yestext="OK"/>
+  </notification>
+  
+    <notification
+   icon="alert.tga"
+   name="AutorespondModeSet"
+   type="alert">
+Autorespond mode is set.
+Incomming instant messages will now receive your configured autoresponse.
+    <usetemplate
+     ignoretext="I change my status to autorespond mode"
      name="okignore"
      yestext="OK"/>
   </notification>
