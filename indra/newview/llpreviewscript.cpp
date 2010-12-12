@@ -311,7 +311,16 @@ BOOL LLFloaterScriptSearch::handleKeyHere(KEY key, MASK mask)
 {
 	if (mEditorCore)
 	{
-		return mEditorCore->handleKeyHere(key, mask);
+		// return mEditorCore->handleKeyHere(key, mask);
+		// VWR-23608 Satomi Ahn
+                if ( KEY_RETURN == key )
+                {
+                        if (getChild<LLUICtrl>("search_text")->hasFocus()) handleBtnSearch();
+                        else if (getChild<LLUICtrl>("replace_text")->hasFocus()) handleBtnReplace();
+                        else return FALSE;
+                        return TRUE;
+                }
+                else return mEditorCore->handleKeyHere(key, mask);
 	}
 
 	return FALSE;
