@@ -2214,21 +2214,31 @@ bool LLTextBase::scrolledToEnd()
 	return mScroller->isAtBottom();
 }
 
-
-bool LLTextBase::setCursor(S32 row, S32 column)
+bool LLTextBase::setCursor(S32 true_row, S32 column)
 {
-	if (0 <= row && row < (S32)mLineInfoList.size())
+	if (0 <= true_row && true_row < (S32)mLineInfoList.size())
 	{
-		S32 doc_pos = mLineInfoList[row].mDocIndexStart;
-		column = llclamp(column, 0, mLineInfoList[row].mDocIndexEnd - mLineInfoList[row].mDocIndexStart - 1);
-		doc_pos += column;
-		updateCursorXPos();
-
-		return setCursorPos(doc_pos);
+		S32 row = true_row;
+		S32 doc_pos;
+		while ( row < (S32)mLineInfoList.size() && mLineInfoList[row].mLineNum < true_row ) row++;
+		while ( row < (S32)mLineInfoList.size() && mLineInfoList[row].mLineNum == true_row )
+		{
+			S32 line_length = mLineInfoList[row].mDocIndexEnd - mLineInfoList[row].mDocIndexStart;
+			if ( column >=  line_length)
+			{
+				column -= line_length;
+				row ++;
+			}
+			else
+			{
+				doc_pos = mLineInfoList[row].mDocIndexStart + column;
+				updateCursorXPos();
+				return setCursorPos(doc_pos);
+			}
+		}
 	}
 	return false;
 }
-
 
 bool LLTextBase::setCursorPos(S32 cursor_pos, bool keep_cursor_offset)
 {
