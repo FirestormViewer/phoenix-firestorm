@@ -536,8 +536,6 @@ void RlvHandler::onIdleStartup(void* pParam)
 // Checked: 2010-03-09 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
 void RlvHandler::onLoginComplete()
 {
-	RlvAttachPtLookup::initLookupTable();
-
 	RlvInventory::instance().fetchWornItems();
 	RlvInventory::instance().fetchSharedInventory();
 
