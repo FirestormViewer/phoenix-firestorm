@@ -165,6 +165,10 @@ LLSideTrayTab::LLSideTrayTab(const Params& p)
 
 LLSideTrayTab::~LLSideTrayTab()
 {
+// [RLVa:KB] - Checked: 2010-12-13 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+	if (LLSideTray::instanceCreated())
+		LLSideTray::getInstance()->onTabDestroy(this);
+// [/RLVa:KB]
 }
 
 bool LLSideTrayTab::addChild(LLView* view, S32 tab_group)
@@ -996,6 +1000,26 @@ void		LLSideTray::onToggleCollapse()
 		collapseSideBar();
 }
 
+// [RLVa:KB] - Checked: 2010-12-13 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+bool LLSideTray::onTabDestroy(const LLSideTrayTab* tab)
+{
+	child_vector_iter_t itDetachedTab = std::find(mDetachedTabs.begin(), mDetachedTabs.end(), tab);
+	if (mDetachedTabs.end() != itDetachedTab)
+	{
+		mDetachedTabs.erase(itDetachedTab);
+		return true;
+	}
+
+	child_vector_iter_t itTab = std::find(mTabs.begin(), mTabs.end(), tab);
+	if (mTabs.end() != itTab)
+	{
+		mTabs.erase(itTab);
+		return true;
+	}
+
+	return false;
+}
+// [/RLVa:KB]
 
 void LLSideTray::reflectCollapseChange()
 {

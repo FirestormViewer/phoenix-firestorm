@@ -215,6 +215,9 @@ protected:
 	LLPanel*	openChildPanel	(LLSideTrayTab* tab, const std::string& panel_name, const LLSD& params);
 
 	void		onTabButtonClick(std::string name);
+// [RLVa:KB] - Checked: 2010-12-13 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+	bool		onTabDestroy	(const LLSideTrayTab* tab);
+// [/RLVa:KB]
 	void		onToggleCollapse();
 
 private:
