@@ -51,7 +51,7 @@ protected:
 	void onToggleFly();													// fly
 	void onToggleRez();													// rez
 	void onToggleSetEnv();												// setenv
-	void onToggleShowInv();												// showinv
+	void onToggleShowInv(bool fQuitting);								// showinv
 	void onToggleShowLoc();												// showloc
 	void onToggleShowMinimap();											// showminimap
 	void onToggleShowNames(bool fQuitting);								// shownames

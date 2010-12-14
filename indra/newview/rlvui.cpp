@@ -71,7 +71,7 @@ RlvUIEnabler::RlvUIEnabler()
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_FLY, boost::bind(&RlvUIEnabler::onToggleFly, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_REZ, boost::bind(&RlvUIEnabler::onToggleRez, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SETENV, boost::bind(&RlvUIEnabler::onToggleSetEnv, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWINV, boost::bind(&RlvUIEnabler::onToggleShowInv, this)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWINV, boost::bind(&RlvUIEnabler::onToggleShowInv, this, _1)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWLOC, boost::bind(&RlvUIEnabler::onToggleShowLoc, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWMINIMAP, boost::bind(&RlvUIEnabler::onToggleShowMinimap, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWNAMES, boost::bind(&RlvUIEnabler::onToggleShowNames, this, _1)));
@@ -207,15 +207,17 @@ void RlvUIEnabler::onToggleSetEnv()
 }
 
 // Checked: 2010-09-07 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
-void RlvUIEnabler::onToggleShowInv()
+void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 {
+	if (fQuitting)
+		return;	// Nothing to do if the viewer is shutting down
+
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV);
 
 	//
 	// Enable/disable the "My Inventory" sidebar tab
 	//
-	LLSideTray* pSideTray = LLSideTray::getInstance(); 
-	RLV_ASSERT(pSideTray);
+	LLSideTray* pSideTray = (LLSideTray::instanceCreated()) ? LLSideTray::getInstance() : NULL;
 	if (pSideTray)
 	{
 		// If the inventory sidebar tab is currently undocked we need to redock it first
@@ -238,12 +240,13 @@ void RlvUIEnabler::onToggleShowInv()
 		if (pInvBtn) 
 			pInvBtn->setEnabled(fEnable);
 
-		// When disabling, switch to the "Home" sidebar tab if "My Inventory" is currently active
+		// When disabling, switch to the first available sidebar tab if "My Inventory" is currently active
 		// NOTE: when collapsed 'isPanelActive' will return FALSE even if the panel is currently active so we have to sidestep that
 		const LLPanel* pActiveTab = pSideTray->getActiveTab();
 		if ( (!fEnable) && (pActiveTab) && ("sidebar_inventory" == pActiveTab->getName()) )
 		{
-			pSideTray->selectTabByName("sidebar_home");	// Using selectTabByName() instead of showPanel() will prevent it from expanding
+			if (!pSideTray->selectTabByIndex(1))		// Try to switch to the first available (docked) tab - open/close = index 0
+				pSideTray->collapseSideBar();			// (or just collapse the sidebar if there's no tab we can switch to)
 			if (pSideTray->getCollapsed())
 				pSideTray->collapseSideBar();			// Fixes a button highlighting glitch when changing the active tab while collapsed
 		}
