@@ -76,13 +76,6 @@ protected:
 	boost::signals2::connection m_ConnFloaterViewXXX;					// viewnote, viewscript, viewtexture
 
 	/*
-	 * Sidebar panel change validation
-	 */
-protected:
-	bool canOpenSidebarTab(ERlvBehaviour, const std::string&, LLUICtrl*, const LLSD&);
-	boost::signals2::connection m_ConnSidePanelInventory;				// showinv
-
-	/*
 	 * Helper functions
 	 */
 public:

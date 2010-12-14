@@ -250,13 +250,6 @@ void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 			if (pSideTray->getCollapsed())
 				pSideTray->collapseSideBar();			// Fixes a button highlighting glitch when changing the active tab while collapsed
 		}
-
-		// Start or stop filtering opening the inventory sidebar tab
-		RLV_ASSERT_DBG( (fEnable) || (!m_ConnSidePanelInventory.connected()) );
-		if (!fEnable)
-			m_ConnSidePanelInventory = pSideTray->setValidateCallback(boost::bind(&RlvUIEnabler::canOpenSidebarTab, this, RLV_BHVR_SHOWINV, "sidebar_inventory", _1, _2));
-		else
-			m_ConnSidePanelInventory.disconnect();
 	}
 
 	//
@@ -550,14 +543,6 @@ bool RlvUIEnabler::filterFloaterViewXXX(const std::string& strName, const LLSD&)
 		return false;
 	}
 	return true;
-}
-
-// ============================================================================
-
-// Checked: 2010-03-01 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
-bool RlvUIEnabler::canOpenSidebarTab(ERlvBehaviour eBhvrFilter, const std::string& strNameFilter, LLUICtrl* pCtrl, const LLSD& sdParam)
-{
-	return (!gRlvHandler.hasBehaviour(eBhvrFilter)) || (strNameFilter != sdParam.asString());
 }
 
 // ============================================================================

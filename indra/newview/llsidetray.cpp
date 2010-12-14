@@ -733,13 +733,8 @@ bool LLSideTray::selectTabByName(const std::string& name, bool keep_prev_visible
 
 // [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
 	// Don't switch to a tab if its tab button is disabled
-	LLButton* pTabBtn = getButtonFromName(new_tab->getName());
+	const LLButton* pTabBtn = getButtonFromName(new_tab->getName());
 	if ( (pTabBtn) && (!pTabBtn->getEnabled()) )
-		return false;
-// [/RLVa:KB]
-
-// [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-	if ( (mValidateSignal) && (!(*mValidateSignal)(new_tab, LLSD(name))) )
 		return false;
 // [/RLVa:KB]
 
