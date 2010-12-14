@@ -254,7 +254,16 @@ void LLSideTrayTab::toggleTabDocked()
 	LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", tab_name);
 	if (!floater_tab) return;
 
-	bool docking = LLFloater::isShown(floater_tab);
+//	bool docking = LLFloater::isShown(floater_tab);
+// [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+	if (floater_tab->isMinimized())
+		floater_tab->setMinimized(FALSE);
+
+	LLSideTray* pSideTray = getSideTray();
+	if (!pSideTray) return;
+
+	bool docking = !pSideTray->isTabAttached(this);
+// [/RLVa:KB]
 
 	// Hide the "Tear Off" button when a tab gets undocked
 	// and show "Dock" button instead.
@@ -580,13 +589,26 @@ LLSideTrayTab* LLSideTray::getTab(const std::string& name)
 	return findChild<LLSideTrayTab>(name,false);
 }
 
+//bool LLSideTray::isTabAttached(const std::string& name)
+//{
+//	LLSideTrayTab* tab = getTab(name);
+//	if (!tab) return false;
+//
+//	return std::find(mTabs.begin(), mTabs.end(), tab) != mTabs.end();
+//}
+
+// [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
 bool LLSideTray::isTabAttached(const std::string& name)
 {
 	LLSideTrayTab* tab = getTab(name);
-	if (!tab) return false;
+	return (tab) ? isTabAttached(tab) : false;
+}
 
+bool LLSideTray::isTabAttached(const LLSideTrayTab* tab)
+{
 	return std::find(mTabs.begin(), mTabs.end(), tab) != mTabs.end();
 }
+// [/RLVa:KB]
 
 // [RLVa:KB] - Checked: 2010-09-07 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
 void LLSideTray::toggleTabDocked(const std::string& strTabName)
@@ -599,7 +621,7 @@ void LLSideTray::toggleTabDocked(const std::string& strTabName)
 			if (strTabName == pTab->getName())
 			{
 				pTab->toggleTabDocked();
-				return;
+				break;
 			}
 		}
 	}

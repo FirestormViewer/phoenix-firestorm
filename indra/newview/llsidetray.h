@@ -186,7 +186,11 @@ public:
 
 	void		handleLoginComplete();
 
+//	bool 		isTabAttached	(const std::string& name);
+// [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
 	bool 		isTabAttached	(const std::string& name);
+	bool 		isTabAttached	(const LLSideTrayTab* tab);
+// [/RLVa:KB]
 
 // [RLVa:KB] - Checked: 2010-09-07 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
 	void 		toggleTabDocked(const std::string& strTabName);
