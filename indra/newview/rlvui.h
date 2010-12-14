@@ -37,7 +37,7 @@ protected:
 	 * Signal callbacks
 	 */
 public:
-	typedef boost::function<void()> behaviour_handler_t;
+	typedef boost::function<void(bool)> behaviour_handler_t;
 	void addBehaviourToggleCallback(ERlvBehaviour eBhvr, behaviour_handler_t cb);
 	void onBehaviour(ERlvBehaviour eBhvr, ERlvParamType eType);			// RlvHandler::rlv_behaviour_signal_t
 
@@ -54,7 +54,7 @@ protected:
 	void onToggleShowInv();												// showinv
 	void onToggleShowLoc();												// showloc
 	void onToggleShowMinimap();											// showminimap
-	void onToggleShowNames();											// shownames
+	void onToggleShowNames(bool fQuitting);								// shownames
 	void onToggleShowWorldMap();										// showworldmap
 	void onToggleTp();													// tploc and tplm
 	void onToggleUnsit();												// unsit

@@ -74,7 +74,7 @@ RlvUIEnabler::RlvUIEnabler()
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWINV, boost::bind(&RlvUIEnabler::onToggleShowInv, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWLOC, boost::bind(&RlvUIEnabler::onToggleShowLoc, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWMINIMAP, boost::bind(&RlvUIEnabler::onToggleShowMinimap, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWNAMES, boost::bind(&RlvUIEnabler::onToggleShowNames, this)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWNAMES, boost::bind(&RlvUIEnabler::onToggleShowNames, this, _1)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWWORLDMAP, boost::bind(&RlvUIEnabler::onToggleShowWorldMap, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_UNSIT, boost::bind(&RlvUIEnabler::onToggleUnsit, this)));
 
@@ -92,6 +92,8 @@ RlvUIEnabler::RlvUIEnabler()
 // Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
 void RlvUIEnabler::onBehaviour(ERlvBehaviour eBhvr, ERlvParamType eType)
 {
+	bool fQuitting = LLApp::isQuitting();
+
 	// We're only interested in behaviour toggles (ie on->off or off->on)
 	if ( ((RLV_TYPE_ADD == eType) && (1 == gRlvHandler.hasBehaviour(eBhvr))) ||
 		 ((RLV_TYPE_REMOVE == eType) && (0 == gRlvHandler.hasBehaviour(eBhvr))) )
@@ -99,7 +101,7 @@ void RlvUIEnabler::onBehaviour(ERlvBehaviour eBhvr, ERlvParamType eType)
 		for (behaviour_handler_map_t::const_iterator itHandler = m_Handlers.lower_bound(eBhvr), endHandler = m_Handlers.upper_bound(eBhvr);
 				itHandler != endHandler; ++itHandler)
 		{
-			itHandler->second();
+			itHandler->second(fQuitting);
 		}
 	}
 }
@@ -386,8 +388,11 @@ void RlvUIEnabler::onToggleShowMinimap()
 }
 
 // Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
-void RlvUIEnabler::onToggleShowNames()
+void RlvUIEnabler::onToggleShowNames(bool fQuitting)
 {
+	if (fQuitting)
+		return;							// Nothing to do if the viewer is shutting down
+
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 
 	// Refresh the nearby people list
