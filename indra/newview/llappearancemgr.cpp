@@ -1997,16 +1997,25 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 							  linked_item->isWearableType() ? linked_item->getWearableType() : LLWearableType::WT_INVALID
 				);
 
-// [RLVa:KB] - Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
-			if (missing_type != LLWearableType::WT_INVALID && missing_type == found.mWearableType)
+// [RLVa:KB] - Checked: 2010-12-15 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
+#ifdef LL_RELEASE_FOR_DOWNLOAD
+			// Don't allow forcing an invalid wearable if the initial wearables aren't set yet, or if any wearable type is currently locked
+			if ( (!rlv_handler_t::isEnabled()) || 
+				 ((gAgentWearables.areInitalWearablesLoaded()) && (!gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_REMOVE))) )
+#endif // LL_RELEASE_FOR_DOWNLOAD
 			{
-				continue;
+				if (missing_type != LLWearableType::WT_INVALID && missing_type == found.mWearableType)
+				{
+					continue;
+				}
+// [/RLVa:KB]
+				if (skip_type != LLWearableType::WT_INVALID && skip_type == found.mWearableType)
+				{
+					found.mAssetID.generate(); // Replace with new UUID, guaranteed not to exist in DB
+				}
+// [RLVa:KB] - Checked: 2010-12-15 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
 			}
 // [/RLVa:KB]
-			if (skip_type != LLWearableType::WT_INVALID && skip_type == found.mWearableType)
-			{
-				found.mAssetID.generate(); // Replace with new UUID, guaranteed not to exist in DB
-			}
 			//pushing back, not front, to preserve order of wearables for LLAgentWearables
 			holder->getFoundList().push_back(found);
 		}
