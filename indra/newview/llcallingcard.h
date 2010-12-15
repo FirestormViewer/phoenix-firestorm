@@ -53,6 +53,7 @@ public:
 		REMOVE = 2,
 		ONLINE = 4,
 		POWERS = 8,
+		PERMS = 16,
 		ALL = 0xffffffff
 	};
 	virtual ~LLFriendObserver() {}
@@ -151,6 +152,11 @@ public:
 	void removeParticularFriendObserver(const LLUUID& buddy_id, LLFriendObserver* observer);
 	void notifyParticularFriendObservers(const LLUUID& buddy_id);
 
+	// AO Custom observers for permission changes, for triggering graphics redraw
+	void addFriendPermissionObserver(const LLUUID& buddy_id, LLFriendObserver* observer);
+	void removeFriendPermissionObserver(const LLUUID& buddy_id, LLFriendObserver* observer);
+	void notifyFriendPermissionObservers(const LLUUID& buddy_id);
+	
 	/**
 	 * Stores flag for change and id of object change applies to
 	 *
@@ -203,6 +209,7 @@ protected:
     typedef std::set<LLFriendObserver*> observer_set_t;
     typedef std::map<LLUUID, observer_set_t> observer_map_t;
     observer_map_t mParticularFriendObserverMap;
+	observer_map_t mFriendPermissionObserverMap;
 
 private:
 	// do not implement

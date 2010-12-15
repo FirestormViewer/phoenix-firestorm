@@ -91,7 +91,10 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 LLAvatarListItem::~LLAvatarListItem()
 {
 	if (mAvatarId.notNull())
+	{
 		LLAvatarTracker::instance().removeParticularFriendObserver(mAvatarId, this);
+		LLAvatarTracker::instance().removeFriendPermissionObserver(mAvatarId, this);
+	}
 }
 
 BOOL  LLAvatarListItem::postBuild()
@@ -145,21 +148,19 @@ S32 LLAvatarListItem::notifyParent(const LLSD& info)
 void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( true);
+	
 //	mInfoBtn->setVisible(mShowInfoBtn);
 //	mProfileBtn->setVisible(mShowProfileBtn);
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
-
-	// AO - V1 UI, icon space is at a premium. Righ-click context is the way we reach extended functions
-	// not mouseover buttons that cause reflow.
+	// AO - V1 UI, icon space is at a premium. Remove the hover-context icons, use right-click context menu instead.
 	//mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
 	//mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
-
 // [/RLVa:KB]
 
 	mHovered = true;
 	LLPanel::onMouseEnter(x, y, mask);
-	// AO - TODO: wrap always-on showing of perms in preference
-	//showPermissions(mShowPermissions);
+
+	showPermissions(mShowPermissions);
 	updateChildren();
 }
 
@@ -172,8 +173,7 @@ void LLAvatarListItem::onMouseLeave(S32 x, S32 y, MASK mask)
 	mHovered = false;
 	LLPanel::onMouseLeave(x, y, mask);
 
-	// AO - TODO: wrap always-on showing of perms in preference
-	//showPermissions(false);
+	//showPermissions(false); AO- persist permissions display
 	updateChildren();
 }
 
@@ -183,10 +183,10 @@ void LLAvatarListItem::changed(U32 mask)
 	// no need to check mAvatarId for null in this case
 	setOnline(LLAvatarTracker::instance().isBuddyOnline(mAvatarId));
 
-	if (mask & LLFriendObserver::POWERS)
+	if ((mask & LLFriendObserver::POWERS) || (mask & LLFriendObserver::PERMS)) 
 	{
-		//-AO showPermissions(mShowPermissions && mHovered);
-		showPermissions(true);
+		//showPermissions(mShowPermissions && mHovered);   AO- Keep icons around persistently.
+		showPermissions(mShowPermissions);
 		updateChildren();
 	}
 }
@@ -258,7 +258,10 @@ void LLAvatarListItem::setState(EItemState item_style)
 void LLAvatarListItem::setAvatarId(const LLUUID& id, const LLUUID& session_id, bool ignore_status_changes/* = false*/, bool is_resident/* = true*/)
 {
 	if (mAvatarId.notNull())
+	{
 		LLAvatarTracker::instance().removeParticularFriendObserver(mAvatarId, this);
+		LLAvatarTracker::instance().removeFriendPermissionObserver(mAvatarId, this);
+	}
 
 	mAvatarId = id;
 	mSpeakingIndicator->setSpeakerId(id, session_id);
@@ -267,6 +270,9 @@ void LLAvatarListItem::setAvatarId(const LLUUID& id, const LLUUID& session_id, b
 	if (!ignore_status_changes && mAvatarId.notNull())
 		LLAvatarTracker::instance().addParticularFriendObserver(mAvatarId, this);
 
+	if (mAvatarId.notNull())
+		LLAvatarTracker::instance().addFriendPermissionObserver(mAvatarId, this);
+	
 	if (is_resident)
 	{
 		mAvatarIcon->setValue(id);

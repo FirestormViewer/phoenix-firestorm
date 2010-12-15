@@ -534,6 +534,48 @@ void LLAvatarTracker::notifyParticularFriendObservers(const LLUUID& buddy_id)
     }
 }
 
+
+void LLAvatarTracker::addFriendPermissionObserver(const LLUUID& buddy_id, LLFriendObserver* observer)
+{
+	if (buddy_id.notNull() && observer)
+	{
+		mFriendPermissionObserverMap[buddy_id].insert(observer);
+	}
+}
+
+void LLAvatarTracker::removeFriendPermissionObserver(const LLUUID& buddy_id, LLFriendObserver* observer)
+{
+	if (buddy_id.isNull() || !observer)
+		return;
+	
+    observer_map_t::iterator obs_it = mFriendPermissionObserverMap.find(buddy_id);
+    if(obs_it == mFriendPermissionObserverMap.end())
+        return;
+	
+    obs_it->second.erase(observer);
+	
+    // purge empty sets from the map
+    if (obs_it->second.size() == 0)
+    	mFriendPermissionObserverMap.erase(obs_it);
+}
+
+void LLAvatarTracker::notifyFriendPermissionObservers(const LLUUID& buddy_id)
+{
+    observer_map_t::iterator obs_it = mFriendPermissionObserverMap.find(buddy_id);
+    if(obs_it == mFriendPermissionObserverMap.end())
+	{
+		llinfos << "Not Found: " << buddy_id << llendl;
+		return;
+	}
+    // Notify observers interested in buddy_id.
+    observer_set_t& obs = obs_it->second;
+    for (observer_set_t::iterator ob_it = obs.begin(); ob_it != obs.end(); ob_it++)
+    {
+		llinfos << "Notified: " << buddy_id << llendl;
+		(*ob_it)->changed(LLFriendObserver::PERMS);
+    }
+}
+
 // store flag for change
 // and id of object change applies to
 void LLAvatarTracker::addChangedMask(U32 mask, const LLUUID& referent)
@@ -619,6 +661,7 @@ void LLAvatarTracker::processChange(LLMessageSystem* msg)
 	{
 		msg->getUUIDFast(_PREHASH_Rights, _PREHASH_AgentRelated, agent_related, i);
 		msg->getS32Fast(_PREHASH_Rights,_PREHASH_RelatedRights, new_rights, i);
+		llinfos << "AO: New rights processed. new_ights=" << new_rights << llendl;
 		if(agent_id == gAgent.getID())
 		{
 			if(mBuddyInfo.find(agent_related) != mBuddyInfo.end())
@@ -653,6 +696,8 @@ void LLAvatarTracker::processChange(LLMessageSystem* msg)
 
 	addChangedMask(LLFriendObserver::POWERS, agent_id);
 	notifyObservers();
+	llinfos << "AO: Notifying observers.." << llendl;
+	notifyFriendPermissionObservers(agent_related);
 }
 
 void LLAvatarTracker::processChangeUserRights(LLMessageSystem* msg, void**)
