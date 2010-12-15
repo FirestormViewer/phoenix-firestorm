@@ -267,7 +267,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 				       height="25"
 				       layout="topleft"
 				       name="add_btn_panel"
-				       width="32">
+				       width="64">
 				          <button
 				           follows="bottom|left"
 				           height="25"
@@ -281,6 +281,22 @@ Looking for people to hang out with? Use the search box to find topics or conten
 				           tool_tip="Offer friendship to a Resident"
 				           top="0"
 				           width="31" />
+						   <button
+							 follows="bottom|left"
+							 height="25"
+							 image_hover_unselected="Toolbar_Middle_Over"
+							 image_overlay="Permission_Visible_Online"
+							 image_pressed="PushButton_Press"
+							 image_pressed_selected="PushButton_Selected_Press"
+                             image_selected="PushButton_Selected_Press"
+							 control_name="GlobalOnlineStatusToggle"
+							 is_toggle="true"
+							 layout="topleft"
+							 left_pad="1"
+							 name="GlobalOnlineStatusToggle"
+							 tool_tip="Toggle Global Visibility"
+							 width="31" />
+				 
 				      </layout_panel>
 				      <layout_panel
 				       auto_resize="true"
@@ -353,7 +369,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              	 left_pad="1"
              	 name="dummy_icon"
              	 width="209"
-             />
+				/>
                 <button
                  follows="bottom|left"
                  height="25"

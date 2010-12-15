@@ -95,6 +95,7 @@ private:
 	void					onViewProfileButtonClicked();
 	void					onAddFriendButtonClicked();
 	void					onAddFriendWizButtonClicked();
+	void					onGlobalVisToggleButtonClicked();
 	void					onDeleteFriendButtonClicked();
 	void					onGroupInfoButtonClicked();
 	void					onChatButtonClicked();

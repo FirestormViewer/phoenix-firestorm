@@ -160,7 +160,7 @@ void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 	mHovered = true;
 	LLPanel::onMouseEnter(x, y, mask);
 
-	showPermissions(mShowPermissions);
+	showPermissions(true);
 	updateChildren();
 }
 
@@ -186,7 +186,8 @@ void LLAvatarListItem::changed(U32 mask)
 	if ((mask & LLFriendObserver::POWERS) || (mask & LLFriendObserver::PERMS)) 
 	{
 		//showPermissions(mShowPermissions && mHovered);   AO- Keep icons around persistently.
-		showPermissions(mShowPermissions);
+		llinfos << "Permissions changed, updating Children." << llendl;
+		showPermissions(true);
 		updateChildren();
 	}
 }
@@ -643,15 +644,23 @@ bool LLAvatarListItem::showPermissions(bool visible)
 		
 		if (!relation->isRightGrantedTo(LLRelationship::GRANT_ONLINE_STATUS))
 			mIconPermissionOnline->setColor(LLUIColorTable::instance().getColor("Transparent"));
+		else 
+			mIconPermissionOnline->setColor(LLUIColorTable::instance().getColor("White"));
 		
 		if (!relation->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION))
 			mIconPermissionMap->setColor(LLUIColorTable::instance().getColor("Transparent"));			
-
+		else
+			mIconPermissionMap->setColor(LLUIColorTable::instance().getColor("White"));
+			
 		if (!relation->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS))
 			mIconPermissionEditMine->setColor(LLUIColorTable::instance().getColor("Transparent"));
+		else
+			mIconPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White"));
 				
 		if (!relation->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS))
 			mIconPermissionEditTheirs->setColor(LLUIColorTable::instance().getColor("Transparent"));
+		else
+			mIconPermissionEditTheirs->setColor(LLUIColorTable::instance().getColor("White"));
 			
 	}
 	else
