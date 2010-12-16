@@ -95,12 +95,13 @@
         <line_editor
          bottom="0"
          follows="left|right|bottom"
-	 font="SansSerifSmall"
+		 font="SansSerifSmall"
          height="20"
          label="To"
          layout="bottomleft"
          name="chat_editor"
          tab_group="3"
+		 max_length_bytes="1024"
          width="249">
         </line_editor>
     </layout_panel>
