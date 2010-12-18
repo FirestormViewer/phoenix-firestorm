@@ -305,7 +305,11 @@ BOOL LLIMFloater::postBuild()
 	}
 
 	mControlPanel->setSessionId(mSessionID);
-	mControlPanel->getParent()->setVisible(gSavedSettings.getBOOL("IMShowControlPanel"));
+	// AO: always show the icon bar for now, because we are hiding the former controls that
+	// can control its visibility.
+	mControlPanel->getParent()->setVisible(true); 
+	
+	//mControlPanel->getParent()->setVisible(gSavedSettings.getBOOL("IMShowControlPanel"));
 
 	LLButton* slide_left = getChild<LLButton>("slide_left_btn");
 	slide_left->setVisible(mControlPanel->getParent()->getVisible());
