@@ -51,6 +51,11 @@
 #include "llclipboard.h"
 #include "llmenugl.h"
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+#include "llhunspell.h"
+#include <boost/algorithm/string/split.hpp>
+// [/SL:KB]
+
 //
 // Imported globals
 //
@@ -86,6 +91,9 @@ LLLineEditor::Params::Params()
 	background_image_focused("background_image_focused"),
 	select_on_focus("select_on_focus", false),
 	revert_on_esc("revert_on_esc", true),
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+	spellcheck("spellcheck", false),
+// [/SL:KB]
 	commit_on_focus_lost("commit_on_focus_lost", true),
 	ignore_tab("ignore_tab", true),
 	cursor_color("cursor_color"),
@@ -129,6 +137,10 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 	mBorderThickness( 0 ),
 	mIgnoreArrowKeys( FALSE ),
 	mIgnoreTab( p.ignore_tab ),
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+	mSpellCheck( p.spellcheck ),
+	mNeedsSpellCheck( FALSE ),
+// [/SL:KB]
 	mDrawAsterixes( FALSE ),
 	mSelectAllonFocusReceived( p.select_on_focus ),
 	mPassDelete(FALSE),
@@ -1704,7 +1716,10 @@ void LLLineEditor::draw()
 		if( (rendered_pixels_right < (F32)mTextRightEdge) && (rendered_text < text_len) )
 		{
 			// unselected, right side
-			mGLFont->render( 
+//			mGLFont->render( 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+			rendered_text += mGLFont->render( 
+// [/SL:KB]
 				mText, mScrollHPos + rendered_text,
 				rendered_pixels_right, text_bottom,
 				text_color,
@@ -1718,7 +1733,10 @@ void LLLineEditor::draw()
 	}
 	else
 	{
-		mGLFont->render( 
+//		mGLFont->render( 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+		rendered_text = mGLFont->render( 
+// [/SL:KB]
 			mText, mScrollHPos, 
 			rendered_pixels_right, text_bottom,
 			text_color,
@@ -1732,6 +1750,83 @@ void LLLineEditor::draw()
 #if 1 // for when we're ready for image art.
 	mBorder->setVisible(FALSE); // no more programmatic art.
 #endif
+
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+	if ( (mSpellCheck) && (!mReadOnly) && (mText.length() > 2) )
+	{
+		// Calculate start and end (character) indices for the first and last visible word
+		S32 idxStart = prevWordPos(mScrollHPos); static S32 idxPrevStart = -1;
+		S32 idxEnd = nextWordPos(mScrollHPos + rendered_text); static S32 idxPrevEnd = -1;
+
+		// Perform spell check if needed
+		if ( (mNeedsSpellCheck) || (idxStart != idxPrevStart) || (idxEnd != idxPrevEnd) )
+		{
+			const LLWString& wstrText = mText.getWString().substr(idxStart, idxEnd);
+			llinfos << "Checking: " << wstring_to_utf8str(wstrText) << llendl;
+
+			S32 idxWordStart = 0, idxWordEnd = 0;
+			mMisspellRanges.clear();
+			while (idxWordStart < (S32)wstrText.length())
+			{
+				// Find the end of the current word (special case handling for "'" when it's used as a contraction)
+				idxWordEnd = idxWordStart + 1;
+				while ( (idxWordEnd < (S32)wstrText.length()) && 
+					    ((LLWStringUtil::isPartOfWord(wstrText[idxWordEnd])) ||
+						 ((L'\'' == wstrText[idxWordEnd]) && 
+						  (LLStringOps::isAlnum(wstrText[idxWordEnd - 1])) && (LLStringOps::isAlnum(wstrText[idxWordEnd + 1])))) )
+				{
+					idxWordEnd++;
+				}
+				if (idxWordEnd > (S32)wstrText.length())
+					break;
+
+				// Don't process words shorter than 3 characters
+				std::string strWord = wstring_to_utf8str(wstrText.substr(idxWordStart, idxWordEnd - idxWordStart));
+				if (strWord.length() >= 3)
+				{
+					bool fCorrect = LLHunspellWrapper::instance().checkSpelling(strWord);
+					if (!fCorrect)
+						mMisspellRanges.push_back(std::pair<S32, S32>(idxWordStart, idxWordEnd));
+					llinfos << " - '" << strWord << ((fCorrect) ? "correct" : "misspelled") << llendl;
+				}
+
+				// Find the start of the next word
+				idxWordStart = idxWordEnd + 1;
+				while ( (idxWordStart < (S32)wstrText.length()) && (!LLWStringUtil::isPartOfWord(wstrText[idxWordStart])) )
+					idxWordStart++;
+			}
+
+			idxPrevStart = idxStart;
+			idxPrevEnd = idxEnd;
+			mNeedsSpellCheck = FALSE;
+		}
+
+		// Draw squiggly lines under any (visible) misspelled words
+		for (std::list<std::pair<S32, S32> >::const_iterator itMisspell = mMisspellRanges.begin(); 
+				itMisspell != mMisspellRanges.end(); ++itMisspell)
+		{
+			// Skip over words that aren't (partially) visible
+			if ( ((itMisspell->first < idxStart) && (itMisspell->second < idxStart)) || (itMisspell->first > idxEnd) )
+				continue;
+
+			S32 pxWidth = getRect().getWidth();
+			S32 pxStart = findPixelNearestPos(idxStart + itMisspell->first - getCursor());
+			if (pxStart > pxWidth)
+				continue;
+			S32 pxEnd = findPixelNearestPos(idxStart + itMisspell->second - getCursor());
+			if (pxEnd > pxWidth)
+				pxEnd = pxWidth;
+
+			gGL.color4ub(255, 0, 0, 200);
+			while (pxStart < pxEnd)
+			{
+				gl_line_2d(pxStart, text_bottom - 2, pxStart + 3, text_bottom + 1);
+				gl_line_2d(pxStart + 3, text_bottom + 1, pxStart + 6, text_bottom - 2);
+				pxStart += 6;
+			}
+		}
+	}
+// [/SL:KB]
 
 	// If we're editing...
 	if( hasFocus())
