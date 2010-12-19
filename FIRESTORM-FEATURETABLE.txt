@@ -24,3 +24,4 @@ NonBusyAutoresponse	LGPL
 V1_Clienttags		LGPL
 AlwaysShowFriendPerms	LGPL
 GlobalFriendVisToggle	LGPL
+IM_IconifiedToolbar	LGPL
