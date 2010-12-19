@@ -102,7 +102,7 @@ void LLAvatarList::showPermissions(bool visible)
 	// Enable or disable showing permissions icons for all existing items.
 	std::vector<LLPanel*> items;
 	getItems(items);
-	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
 	{
 		static_cast<LLAvatarListItem*>(*it)->setShowPermissions(mShowPermissions);
 	}

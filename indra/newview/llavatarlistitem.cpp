@@ -160,7 +160,7 @@ void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 	mHovered = true;
 	LLPanel::onMouseEnter(x, y, mask);
 
-	showPermissions(true);
+	showPermissions(gSavedSettings.getBOOL("FriendsListShowPermissions"));
 	updateChildren();
 }
 
@@ -187,7 +187,7 @@ void LLAvatarListItem::changed(U32 mask)
 	{
 		//showPermissions(mShowPermissions && mHovered);   AO- Keep icons around persistently.
 		llinfos << "Permissions changed, updating Children." << llendl;
-		showPermissions(true);
+		showPermissions(gSavedSettings.getBOOL("FriendsListShowPermissions"));
 		updateChildren();
 	}
 }
@@ -283,9 +283,9 @@ void LLAvatarListItem::setAvatarId(const LLUUID& id, const LLUUID& session_id, b
 			boost::bind(&LLAvatarListItem::onAvatarNameCache, this, _2));
 	}
 	
-	// AO: Always show permissions icons, like in V1. TODO: Wrap this in a preferences check.
+	// AO: Always show permissions icons, like in V1.
 	// we put this here so because it's the nearest update point where we have good av data.
-	showPermissions(true);
+	showPermissions(gSavedSettings.getBOOL("FriendsListShowPermissions"));
 	updateChildren();
 }
 
@@ -622,6 +622,7 @@ void LLAvatarListItem::updateChildren()
 
 bool LLAvatarListItem::showPermissions(bool visible)
 {
+	
 	const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
 	if(relation && visible)
 	{
@@ -637,30 +638,31 @@ bool LLAvatarListItem::showPermissions(bool visible)
 		 * mIconPermissionEditTheirs->setVisible(relation->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS));
 		 *
 		*/ 
-		mIconPermissionOnline->setVisible(true);
-		mIconPermissionMap->setVisible(true);
-		mIconPermissionEditMine->setVisible(true);
-		mIconPermissionEditTheirs->setVisible(true);
 		
 		if (!relation->isRightGrantedTo(LLRelationship::GRANT_ONLINE_STATUS))
-			mIconPermissionOnline->setColor(LLUIColorTable::instance().getColor("Transparent"));
+			mIconPermissionOnline->setColor(LLUIColorTable::instance().getColor("White_10"));
 		else 
 			mIconPermissionOnline->setColor(LLUIColorTable::instance().getColor("White"));
 		
 		if (!relation->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION))
-			mIconPermissionMap->setColor(LLUIColorTable::instance().getColor("Transparent"));			
+			mIconPermissionMap->setColor(LLUIColorTable::instance().getColor("White_10"));			
 		else
 			mIconPermissionMap->setColor(LLUIColorTable::instance().getColor("White"));
 			
 		if (!relation->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS))
-			mIconPermissionEditMine->setColor(LLUIColorTable::instance().getColor("Transparent"));
+			mIconPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White_10"));
 		else
 			mIconPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White"));
 				
 		if (!relation->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS))
-			mIconPermissionEditTheirs->setColor(LLUIColorTable::instance().getColor("Transparent"));
+			mIconPermissionEditTheirs->setColor(LLUIColorTable::instance().getColor("White_10"));
 		else
 			mIconPermissionEditTheirs->setColor(LLUIColorTable::instance().getColor("White"));
+		
+		mIconPermissionOnline->setVisible(true);
+		mIconPermissionMap->setVisible(true);
+		mIconPermissionEditMine->setVisible(true);
+		mIconPermissionEditTheirs->setVisible(true);
 			
 	}
 	else
@@ -670,6 +672,8 @@ bool LLAvatarListItem::showPermissions(bool visible)
 		mIconPermissionEditMine->setVisible(false);
 		mIconPermissionEditTheirs->setVisible(false);
 	}
+	
+	updateChildren();
 	return NULL != relation;
 }
 

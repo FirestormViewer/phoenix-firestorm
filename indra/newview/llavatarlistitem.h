@@ -98,7 +98,7 @@ public:
 	void setShowProfileBtn(bool show);
 	void setShowInfoBtn(bool show);
 	void showSpeakingIndicator(bool show);
-	void setShowPermissions(bool show) { mShowPermissions = show; };
+	void setShowPermissions(bool show) { mShowPermissions = show; showPermissions(show); };
 	void showLastInteractionTime(bool show);
 	void setAvatarIconVisible(bool visible);
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d

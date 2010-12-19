@@ -1158,8 +1158,6 @@ void LLPanelPeople::onGlobalVisToggleButtonClicked()
 	
 	mAllFriendList->showPermissions(true);
 	mOnlineFriendList->showPermissions(true);
-	updateFriendList();
-	//LLAvatarListItem::changed(LLFriendObserver::POWERS);
 }
 
 void LLPanelPeople::onDeleteFriendButtonClicked()

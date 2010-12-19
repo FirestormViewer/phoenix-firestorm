@@ -228,7 +228,7 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
 	# -sdk macosx10.6
 	xcodebuild -project build-darwin-i386/SecondLife.xcodeproj \
 		-alltargets -configuration $BTYPE GCC_VERSION=4.2 \
-		-sdk macosx10.6 GCC_OPTIMIZATION_LEVEL=3 ARCHS=i386 \
+		-sdk macosx10.5 GCC_OPTIMIZATION_LEVEL=3 ARCHS=i386 \
 		GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee $LOG | \
 		grep -e "[(make.*Error)|(xcodebuild.*Error)] "
 	trap - INT TERM EXIT
