@@ -67,6 +67,12 @@ public:
 	void loadHistory();
 
 	static LLNearbyChat* getInstance();
+	
+	static bool isChatMultiTab();
+	
+	void setDocked(bool docked, bool pop_on_undock = true);
+	
+	BOOL getVisible();
 
 private:
 	virtual void    applySavedVariables();

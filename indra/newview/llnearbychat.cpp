@@ -92,24 +92,21 @@ BOOL LLNearbyChat::postBuild()
 
 	gSavedSettings.declareS32("nearbychat_showicons_and_names",2,"NearByChat header settings",true);
 
-	// <vertical tab docking> -AO	
-	LLButton* slide_left = getChild<LLButton>("slide_left_btn");
-	slide_left->setVisible(false);
-	LLButton* slide_right = getChild<LLButton>("slide_right_btn");
-	slide_right->setVisible(false);
-	// </vertical tab docking>
-	
 	// extra icon controls -AO
 	LLButton* transl = getChild<LLButton>("translate_btn");
 	transl->setVisible(true);
 	
-
-	
 	mChatHistory = getChild<LLChatHistory>("chat_history");
 	
-	if(LLIMFloater::isChatMultiTab())
+	// <vertical tab docking> -AO
+	if(isChatMultiTab())
 	{
-		return LLFloater::postBuild();
+			
+		LLButton* slide_left = getChild<LLButton>("slide_left_btn");
+		slide_left->setVisible(false);
+		LLButton* slide_right = getChild<LLButton>("slide_right_btn");
+		slide_right->setVisible(false);
+		return LLDockableFloater::postBuild();
 	}
 	
 	if(!LLDockableFloater::postBuild())
@@ -159,6 +156,8 @@ void    LLNearbyChat::applySavedVariables()
 		}
 	}
 }
+
+
 
 std::string appendTime()
 {
@@ -247,13 +246,16 @@ bool	LLNearbyChat::onNearbyChatCheckContextMenuItem(const LLSD& userdata)
 void	LLNearbyChat::openFloater(const LLSD& key)
 {
 	// We override this to put nearbychat in the IM floater. -AO
-	LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
-	if (floater_container)
+	if(isChatMultiTab())
 	{
-		floater_container->showFloater(this, LLTabContainer::START);
+		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+		if (floater_container)
+		{
+			floater_container->showFloater(this, LLTabContainer::START);
+		}
+		setVisible(TRUE);
+		LLFloater::openFloater(key);
 	}
-	
-	LLFloater::openFloater(key);
 }
 
 void	LLNearbyChat::setVisible(BOOL visible)
@@ -376,6 +378,45 @@ void LLNearbyChat::loadHistory()
 LLNearbyChat* LLNearbyChat::getInstance()
 {
 	return LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+}
+
+bool LLNearbyChat::isChatMultiTab()
+{
+	// Restart is required in order to change chat window type.
+	static bool is_single_window = gSavedSettings.getS32("ChatWindow") == 1;
+	return is_single_window;
+}
+
+void LLNearbyChat::setDocked(bool docked, bool pop_on_undock)
+{
+	if(!isChatMultiTab())
+	{
+		LLDockableFloater::setDocked(docked, pop_on_undock);
+	}
+}
+
+BOOL LLNearbyChat::getVisible()
+{
+	if(isChatMultiTab())
+	{
+		LLIMFloaterContainer* im_container = LLIMFloaterContainer::getInstance();
+		
+		// Treat inactive floater as invisible.
+		bool is_active = im_container->getActiveFloater() == this;
+		
+		//torn off floater is always inactive
+		if (!is_active && getHost() != im_container)
+		{
+			return LLDockableFloater::getVisible();
+		}
+		
+		// getVisible() returns TRUE when Tabbed IM window is minimized.
+		return is_active && !im_container->isMinimized() && im_container->getVisible();
+	}
+	else
+	{
+		return LLDockableFloater::getVisible();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
