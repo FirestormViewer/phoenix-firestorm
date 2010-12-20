@@ -3936,6 +3936,9 @@ void LLContextMenu::hide()
 		mHoverItem->setHighlight( FALSE );
 	}
 	mHoverItem = NULL;
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+	mSpawningViewHandle.markDead();
+// [/SL:KB]
 }
 
 

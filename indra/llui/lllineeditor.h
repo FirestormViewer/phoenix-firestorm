@@ -40,6 +40,9 @@
 #include "llframetimer.h"
 
 #include "lleditmenuhandler.h"
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a)
+#include "llspellcheckmenuhandler.h"
+// [/SL:KB]
 #include "lluictrl.h"
 #include "lluistring.h"
 #include "llviewborder.h"
@@ -54,6 +57,9 @@ class LLContextMenu;
 
 class LLLineEditor
 : public LLUICtrl, public LLEditMenuHandler, protected LLPreeditor
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+, public LLSpellCheckMenuHandler
+// [/SL:KB]
 {
 public:
 
@@ -145,6 +151,24 @@ public:
 
 	virtual void	deselect();
 	virtual BOOL	canDeselect() const;
+
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+	// LLSpellCheckMenuHandler overrides
+	/*virtual*/ bool		useSpellCheck() const;
+
+	/*virtual*/ std::string	getSuggestion(U32 idxSuggestion) const;
+	/*virtual*/ U32			getSuggestionCount() const;
+
+	/*virtual*/ void		addToDictionary();
+	/*virtual*/ bool		canAddToDictionary() const;
+
+	/*virtual*/ void		addToIgnore();
+	/*virtual*/ bool		canAddToIgnore() const;
+
+	// Spell checking helper functions
+	std::string				getMisspelledWord(U32 posCursor) const;
+	bool					isMisspelledWord(U32 posCursor) const;
+// [/SL:KB]
 
 	// view overrides
 	virtual void	draw();
@@ -316,7 +340,8 @@ protected:
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
 	BOOL		mSpellCheck;
 	BOOL		mNeedsSpellCheck;
-	std::list<std::pair<S32, S32> > mMisspellRanges;
+	std::list<std::pair<U32, U32> > mMisspellRanges;
+	std::vector<std::string>		mSuggestionList;
 // [/SL:KB]
 
 	LLFrameTimer mKeystrokeTimer;
