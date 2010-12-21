@@ -564,7 +564,7 @@ std::string LLLineEditor::getMisspelledWord(U32 posCursor) const
 			itMisspell != mMisspellRanges.end(); ++itMisspell)
 	{
 		if ( (itMisspell->first <= posCursor) && (itMisspell->second >= posCursor) )
-			return wstring_to_utf8str(mText.getWString().substr(itMisspell->first, itMisspell->second));
+			return wstring_to_utf8str(mText.getWString().substr(itMisspell->first, itMisspell->second - itMisspell->first));
 	}
 	return LLStringUtil::null;
 }
