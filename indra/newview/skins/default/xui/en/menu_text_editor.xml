@@ -7,10 +7,10 @@
    name="Suggestion 1">
     <menu_item_call.on_click
      function="SpellCheck.ReplaceWithSuggestion"
-     parameter="1" />
+     parameter="0" />
     <menu_item_call.on_visible
      function="SpellCheck.VisibleSuggestion"
-     parameter="1" />
+     parameter="0" />
   </menu_item_call>
   <menu_item_call
    label="(unknown)"
@@ -18,10 +18,10 @@
    name="Suggestion 2">
     <menu_item_call.on_click
      function="SpellCheck.ReplaceWithSuggestion"
-     parameter="2" />
+     parameter="1" />
     <menu_item_call.on_visible
      function="SpellCheck.VisibleSuggestion"
-     parameter="2" />
+     parameter="1" />
   </menu_item_call>
   <menu_item_call
    label="(unknown)"
@@ -29,10 +29,10 @@
    name="Suggestion 3">
     <menu_item_call.on_click
      function="SpellCheck.ReplaceWithSuggestion"
-     parameter="3" />
+     parameter="2" />
     <menu_item_call.on_visible
      function="SpellCheck.VisibleSuggestion"
-     parameter="3" />
+     parameter="2" />
   </menu_item_call>
   <menu_item_call
    label="(unknown)"
@@ -40,10 +40,10 @@
    name="Suggestion 4">
     <menu_item_call.on_click
      function="SpellCheck.ReplaceWithSuggestion"
-     parameter="4" />
+     parameter="3" />
     <menu_item_call.on_visible
      function="SpellCheck.VisibleSuggestion"
-     parameter="4" />
+     parameter="3" />
   </menu_item_call>
   <menu_item_call
    label="(unknown)"
@@ -51,10 +51,10 @@
    name="Suggestion 5">
     <menu_item_call.on_click
      function="SpellCheck.ReplaceWithSuggestion"
-     parameter="5" />
+     parameter="4" />
     <menu_item_call.on_visible
      function="SpellCheck.VisibleSuggestion"
-     parameter="5" />
+     parameter="4" />
   </menu_item_call>
   <menu_item_separator
    layout="topleft"
