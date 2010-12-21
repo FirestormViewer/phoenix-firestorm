@@ -2434,8 +2434,10 @@ void LLLineEditor::showContextMenu(S32 x, S32 y)
 		S32 screen_x, screen_y;
 		localPointToScreen(x, y, &screen_x, &screen_y);
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
-		// Move the cursor to where the user right-clicked
+		// Move the cursor to where the user right-clicked (clear the current selection if the user right-clicked outside of it)
 		setCursorAtLocalPos(x);
+		if ( (mCursorPos < mSelectionStart) || (mCursorPos > mSelectionEnd) )
+			deselect();
 
 		// If the cursor is on a misspelled word, retrieve suggestions for it
 		mSuggestionList.clear();
