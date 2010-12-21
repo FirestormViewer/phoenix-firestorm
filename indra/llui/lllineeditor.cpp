@@ -1846,7 +1846,7 @@ void LLLineEditor::draw()
 				{
 					bool fCorrect = LLHunspellWrapper::instance().checkSpelling(strWord);
 					if (!fCorrect)
-						mMisspellRanges.push_back(std::pair<U32, U32>(idxWordStart, idxWordEnd));
+						mMisspellRanges.push_back(std::pair<U32, U32>(idxStart + idxWordStart, idxStart + idxWordEnd));
 					llinfos << " - '" << strWord << ((fCorrect) ? "correct" : "misspelled") << llendl;
 				}
 
@@ -1870,10 +1870,10 @@ void LLLineEditor::draw()
 				continue;
 
 			S32 pxWidth = getRect().getWidth();
-			S32 pxStart = findPixelNearestPos(idxStart + itMisspell->first - getCursor());
+			S32 pxStart = findPixelNearestPos(itMisspell->first - getCursor());
 			if (pxStart > pxWidth)
 				continue;
-			S32 pxEnd = findPixelNearestPos(idxStart + itMisspell->second - getCursor());
+			S32 pxEnd = findPixelNearestPos(itMisspell->second - getCursor());
 			if (pxEnd > pxWidth)
 				pxEnd = pxWidth;
 
