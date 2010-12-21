@@ -2438,6 +2438,8 @@ void LLLineEditor::showContextMenu(S32 x, S32 y)
 		setCursorAtLocalPos(x);
 		if ( (mCursorPos < mSelectionStart) || (mCursorPos > mSelectionEnd) )
 			deselect();
+		else
+			setCursor(mSelectionEnd);
 
 		bool fUseSpellCheck = useSpellCheck(), fMisspelledWord = false;
 		if (fUseSpellCheck)
