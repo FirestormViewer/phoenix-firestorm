@@ -5111,13 +5111,6 @@ bool spellCheck_EnableAddToIgnore(LLUICtrl* pMenuItemCtrl)
 	const LLSpellCheckMenuHandler* pSpellCheckHandler = (pMenu) ? dynamic_cast<LLSpellCheckMenuHandler*>(pMenu->getSpawningView()) : NULL;
 	return (pSpellCheckHandler) && (pSpellCheckHandler->canAddToIgnore());
 }
-
-bool spellCheck_IsEnabled(LLUICtrl* pMenuItemCtrl)
-{
-	const LLContextMenu* pMenu = dynamic_cast<LLContextMenu*>(pMenuItemCtrl->getParent());
-	const LLSpellCheckMenuHandler* pSpellCheckHandler = (pMenu) ? dynamic_cast<LLSpellCheckMenuHandler*>(pMenu->getSpawningView()) : NULL;
-	return (pSpellCheckHandler) && (pSpellCheckHandler->useSpellCheck());
-}
 // [/SL:KB]
 
 class LLEditEnableDeselect : public view_listener_t
@@ -7836,7 +7829,6 @@ void initialize_edit_menu()
 	enable.add("SpellCheck.EnableAddToDictionary", boost::bind(&spellCheck_EnableAddToDictionary, _1));
 	commit.add("SpellCheck.AddToIgnore", boost::bind(&spellCheck_AddToIgnore, _1));
 	enable.add("SpellCheck.EnableAddToIgnore", boost::bind(&spellCheck_EnableAddToIgnore, _1));
-	enable.add("SpellCheck.IsEnabled", boost::bind(&spellCheck_IsEnabled, _1));
 // [/SL:KB]
 
 	view_listener_t::addMenu(new LLEditUndo(), "Edit.Undo");
