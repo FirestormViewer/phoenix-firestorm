@@ -536,6 +536,31 @@ U32 LLLineEditor::getSuggestionCount() const
 	return mSuggestionList.size();
 }
 
+void LLLineEditor::replaceWithSuggestion(U32 idxSuggestion)
+{
+	for (std::list<std::pair<U32, U32> >::const_iterator itMisspell = mMisspellRanges.begin(); 
+			itMisspell != mMisspellRanges.end(); ++itMisspell)
+	{
+		if ( (itMisspell->first <= (U32)mCursorPos) && (itMisspell->second >= (U32)mCursorPos) )
+		{
+			deselect();
+
+			// Delete the misspelled word
+			mText.erase(itMisspell->first, itMisspell->second - itMisspell->first);
+			setCursor(itMisspell->first);
+
+			// Insert the suggestion in its place
+			LLWString wstrSuggestion = utf8str_to_wstring(mSuggestionList[idxSuggestion]);
+			mText.insert(getCursor(), wstrSuggestion);
+
+			setCursor(mCursorPos + (S32)wstrSuggestion.length());
+
+			break;
+		}
+	}
+	mNeedsSpellCheck = TRUE;
+}
+
 void LLLineEditor::addToDictionary()
 {
 	// TODO: implement this

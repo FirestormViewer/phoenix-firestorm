@@ -5064,6 +5064,16 @@ class LLViewEnableLastChatter : public view_listener_t
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
 void spellCheck_ReplaceWithSuggestion(LLUICtrl* pMenuItemCtrl, const LLSD& sdParam)
 {
+	LLContextMenu* pMenu = dynamic_cast<LLContextMenu*>(pMenuItemCtrl->getParent());
+	LLSpellCheckMenuHandler* pSpellCheckHandler = (pMenu) ? dynamic_cast<LLSpellCheckMenuHandler*>(pMenu->getSpawningView()) : NULL;
+	if ( (!pSpellCheckHandler) || (!pSpellCheckHandler->useSpellCheck()) )
+		return;
+
+	U32 idxSuggestion = 0;
+	if ( (!LLStringUtil::convertToU32(sdParam.asString(), idxSuggestion)) || (idxSuggestion >= pSpellCheckHandler->getSuggestionCount()) )
+		return;
+
+	pSpellCheckHandler->replaceWithSuggestion(idxSuggestion);
 }
 
 bool spellCheck_VisibleSuggestion(LLUICtrl* pMenuItemCtrl, const LLSD& sdParam)

@@ -158,6 +158,7 @@ public:
 
 	/*virtual*/ std::string	getSuggestion(U32 idxSuggestion) const;
 	/*virtual*/ U32			getSuggestionCount() const;
+	/*virtual*/ void		replaceWithSuggestion(U32 idxSuggestion);
 
 	/*virtual*/ void		addToDictionary();
 	/*virtual*/ bool		canAddToDictionary() const;

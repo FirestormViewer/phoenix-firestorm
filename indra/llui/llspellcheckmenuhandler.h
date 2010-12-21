@@ -26,6 +26,7 @@ public:
 
 	virtual std::string	getSuggestion(U32 idxSuggestion) const { return ""; }
 	virtual U32			getSuggestionCount() const	{ return 0; }
+	virtual void		replaceWithSuggestion(U32 idxSuggestion) {}
 
 	virtual void		addToDictionary()			{}
 	virtual bool		canAddToDictionary() const	{ return false; }

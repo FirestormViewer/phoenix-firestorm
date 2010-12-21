@@ -3937,7 +3937,8 @@ void LLContextMenu::hide()
 	}
 	mHoverItem = NULL;
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
-	mSpawningViewHandle.markDead();
+	// NOTE: this should be done *somewhere* but a menu item's onCommit() calls "hideMenus" before it fires the "onCommit" signal
+//	mSpawningViewHandle.markDead();
 // [/SL:KB]
 }
 
