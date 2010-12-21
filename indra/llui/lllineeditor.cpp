@@ -2433,20 +2433,30 @@ void LLLineEditor::showContextMenu(S32 x, S32 y)
 
 		S32 screen_x, screen_y;
 		localPointToScreen(x, y, &screen_x, &screen_y);
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-21 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
 		// Move the cursor to where the user right-clicked (clear the current selection if the user right-clicked outside of it)
 		setCursorAtLocalPos(x);
 		if ( (mCursorPos < mSelectionStart) || (mCursorPos > mSelectionEnd) )
 			deselect();
 
-		// If the cursor is on a misspelled word, retrieve suggestions for it
-		mSuggestionList.clear();
-		if (isMisspelledWord(mCursorPos))
+		bool fUseSpellCheck = useSpellCheck(), fMisspelledWord = false;
+		if (fUseSpellCheck)
 		{
-			std::string strWord = getMisspelledWord(mCursorPos);
-			if (!strWord.empty())
-				LLHunspellWrapper::instance().getSuggestions(strWord, mSuggestionList);
+			// If the cursor is on a misspelled word, retrieve suggestions for it
+			mSuggestionList.clear();
+			if ((fMisspelledWord = isMisspelledWord(mCursorPos)) == true)
+			{
+				std::string strWord = getMisspelledWord(mCursorPos);
+				if (!strWord.empty())
+					LLHunspellWrapper::instance().getSuggestions(strWord, mSuggestionList);
+			}
 		}
+
+		// Show/hide spell checking related menu items
+		menu->setItemVisible("Suggestion Separator", (fUseSpellCheck) && (!mSuggestionList.empty()));
+		menu->setItemVisible("Add to Dictionary", (fUseSpellCheck) && (fMisspelledWord));
+		menu->setItemVisible("Add to Ignore", (fUseSpellCheck) && (fMisspelledWord));
+		menu->setItemVisible("Spellcheck Separator", (fUseSpellCheck) && (fMisspelledWord));
 
 		menu->setSpawningView(getHandle());
 // [/SL:KB]
