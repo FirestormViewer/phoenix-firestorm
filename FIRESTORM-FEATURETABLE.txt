@@ -25,3 +25,4 @@ V1_Clienttags		LGPL
 AlwaysShowFriendPerms	LGPL
 GlobalFriendVisToggle	LGPL
 IM_IconifiedToolbar	LGPL
+GUI_IMTabConfig		LGPL
