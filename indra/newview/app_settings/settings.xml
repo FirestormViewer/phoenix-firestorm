@@ -1,6 +1,19 @@
 <?xml version="1.0" ?>
 <llsd>
 <map>
+    <key>ChatTabDirection</key>
+    <map>
+      <key>Comment</key>
+      <string>Toggles the direction of chat tabs between horisontal and vertica
+l</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+
   <key>GlobalOnlineStatusToggle</key>
     <map>
       <key>Comment</key>

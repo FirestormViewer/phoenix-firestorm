@@ -54,10 +54,18 @@ void LLMultiFloater::buildTabContainer()
 	LLTabContainer::Params p;
 	p.name(std::string("Preview Tabs"));
 	p.rect(LLRect(LLPANEL_BORDER_WIDTH, getRect().getHeight() - floater_header_size, getRect().getWidth() - LLPANEL_BORDER_WIDTH, 0));
-	p.tab_position(mTabPos);
 	p.follows.flags(FOLLOWS_ALL);
 	p.commit_callback.function(boost::bind(&LLMultiFloater::onTabSelected, this));
-
+	p.tab_position(mTabPos);
+	
+	// remove existing tab container
+	if (mTabContainer)
+	{
+		removeChild(mTabContainer);
+		delete mTabContainer;
+		mTabContainer = NULL;
+	}
+	
 	mTabContainer = LLUICtrlFactory::create<LLTabContainer>(p);
 	addChild(mTabContainer);
 	

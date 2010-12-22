@@ -39,6 +39,9 @@
 #include "llfloater.h"
 #include "lltrans.h"
 
+#include "../newview/llviewercontrol.h"
+
+
 //----------------------------------------------------------------------------
 
 // Implementation Notes:
@@ -256,6 +259,22 @@ LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 	mTabIconCtrlPad(p.tab_icon_ctrl_pad),
 	mUseTabEllipses(p.use_ellipses)
 {
+	// AO: Treat the IM tab container specially 
+	if (getName() == "im_box_tab_container")
+	{
+		if (gSavedSettings.getS32("ChatTabDirection") == 1)
+		{
+			mIsVertical = TRUE;
+			mTabPosition = LLTabContainer::BOTTOM;
+			
+		}
+		else
+		{
+			mIsVertical = FALSE;
+			mTabPosition = LLTabContainer::LEFT;
+		}
+	}
+	
 	static LLUICachedControl<S32> tabcntr_vert_tab_min_width ("UITabCntrVertTabMinWidth", 0);
 
 	mDragAndDropDelayTimer.stop();
@@ -880,9 +899,12 @@ void LLTabContainer::update_images(LLTabTuple* tuple, TabParams params, LLTabCon
 		}
 		else if (pos == LLTabContainer::BOTTOM)
 		{
-			tuple->mButton->setImageUnselected(static_cast<LLUIImage*>(params.tab_bottom_image_unselected));
-			tuple->mButton->setImageSelected(static_cast<LLUIImage*>(params.tab_bottom_image_selected));
-			tuple->mButton->setImageFlash(static_cast<LLUIImage*>(params.tab_bottom_image_flash));
+			//tuple->mButton->setImageUnselected(static_cast<LLUIImage*>(params.tab_bottom_image_unselected));
+			//tuple->mButton->setImageSelected(static_cast<LLUIImage*>(params.tab_bottom_image_selected));
+			//tuple->mButton->setImageFlash(static_cast<LLUIImage*>(params.tab_bottom_image_flash));
+			tuple->mButton->setImageUnselected(static_cast<LLUIImage*>(params.tab_left_image_unselected));
+			tuple->mButton->setImageSelected(static_cast<LLUIImage*>(params.tab_left_image_selected));
+			tuple->mButton->setImageFlash(static_cast<LLUIImage*>(params.tab_left_image_flash));
 		}
 		else if (pos == LLTabContainer::LEFT)
 		{
