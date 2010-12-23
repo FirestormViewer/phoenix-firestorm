@@ -51,9 +51,8 @@
 #include "llclipboard.h"
 #include "llmenugl.h"
 
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a)
 #include "llhunspell.h"
-#include <boost/algorithm/string/split.hpp>
 // [/SL:KB]
 
 //
@@ -1847,7 +1846,6 @@ void LLLineEditor::draw()
 		if ( (mNeedsSpellCheck) || (idxStart != idxPrevStart) || (idxEnd != idxPrevEnd) )
 		{
 			const LLWString& wstrText = mText.getWString().substr(idxStart, idxEnd);
-			llinfos << "Checking: " << wstring_to_utf8str(wstrText) << llendl;
 
 			U32 idxWordStart = 0, idxWordEnd = 0;
 			mMisspellRanges.clear();
@@ -1872,7 +1870,6 @@ void LLLineEditor::draw()
 					bool fCorrect = LLHunspellWrapper::instance().checkSpelling(strWord);
 					if (!fCorrect)
 						mMisspellRanges.push_back(std::pair<U32, U32>(idxStart + idxWordStart, idxStart + idxWordEnd));
-					llinfos << " - '" << strWord << ((fCorrect) ? "correct" : "misspelled") << llendl;
 				}
 
 				// Find the start of the next word
