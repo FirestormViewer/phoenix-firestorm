@@ -569,7 +569,7 @@ void LLLineEditor::addToDictionary()
 bool LLLineEditor::canAddToDictionary() const
 {
 	// TODO: implement this
-	return (useSpellCheck()) && (isMisspelledWord(mCursorPos));
+	return false;
 }
 
 void LLLineEditor::addToIgnore()
