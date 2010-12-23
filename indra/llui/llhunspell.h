@@ -23,7 +23,7 @@ class Hunspell;
 
 // ============================================================================
 
-class LL_COMMON_API LLHunspellWrapper : public LLSingleton<LLHunspellWrapper>
+class LLHunspellWrapper : public LLSingleton<LLHunspellWrapper>
 {
 	friend class LLSingleton<LLHunspellWrapper>;
 protected:

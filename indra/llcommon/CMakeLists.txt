@@ -62,7 +62,6 @@ set(llcommon_SOURCE_FILES
     llformat.cpp
     llframetimer.cpp
     llheartbeat.cpp
-    llhunspell.cpp
     llliveappconfig.cpp
     lllivefile.cpp
     lllog.cpp
@@ -172,7 +171,6 @@ set(llcommon_HEADER_FILES
     llhash.h
     llheartbeat.h
     llhttpstatuscodes.h
-    llhunspell.h
     llindexedqueue.h
     llinstancetracker.h
     llkeythrottle.h
