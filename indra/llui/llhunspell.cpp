@@ -62,14 +62,14 @@ LLHunspellWrapper::~LLHunspellWrapper()
 	delete m_pHunspell;
 }
 
-bool LLHunspellWrapper::checkSpelling(const std::string& strWord)
+bool LLHunspellWrapper::checkSpelling(const std::string& strWord) const
 {
 	if ( (!s_fSpellCheck) || (!m_pHunspell) || (strWord.length() < 3) )
 		return true;
 	return m_pHunspell->spell(strWord.c_str());
 }
 
-S32 LLHunspellWrapper::getSuggestions(const std::string& strWord, std::vector<std::string>& strSuggestionList)
+S32 LLHunspellWrapper::getSuggestions(const std::string& strWord, std::vector<std::string>& strSuggestionList) const
 {
 	if ( (!s_fSpellCheck) || (!m_pHunspell) || (strWord.length() < 3) )
 		return 0;

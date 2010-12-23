@@ -31,15 +31,15 @@ protected:
 	~LLHunspellWrapper();
 
 public:
-	bool	checkSpelling(const std::string& strWord);
-	S32		getSuggestions(const std::string& strWord, std::vector<std::string>& strSuggestionList);
+	bool	checkSpelling(const std::string& strWord) const;
+	S32		getSuggestions(const std::string& strWord, std::vector<std::string>& strSuggestionList) const;
 
 	/*
 	 * Dictionary related functions
 	 */
 	const std::string	getCurrentDictionary() const					{ return m_strDictionary; }
 	S32					getDictionaries(std::vector<std::string>& strDictionaryList) const;
-	const std::string&	getDictionaryPath()								{ return m_strDictionaryPath; }
+	const std::string&	getDictionaryPath() const						{ return m_strDictionaryPath; }
 	S32					getInstalledDictionaries(std::vector<std::string>& strDictionaryList) const;
 	bool				setCurrentDictionary(const std::string& strDictionary);
 
