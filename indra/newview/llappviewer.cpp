@@ -2271,9 +2271,10 @@ bool LLAppViewer::initConfiguration()
 		//gDirUtilp->setSkinFolder("default");
     }
 
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
-	LLHunspellWrapper::setDictPath(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "hunspell", ""));
-	LLHunspellWrapper::setUseSpellCheck(true);
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-23 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+	LLHunspellWrapper::setUseSpellCheck(gSavedSettings.getBOOL("SpellCheck"));
+	if (LLHunspellWrapper::useSpellCheck())
+		LLHunspellWrapper::instance().setCurrentDictionary(gSavedSettings.getString("SpellCheckDictionary"));
 // [/SL:KB]
 
     mYieldTime = gSavedSettings.getS32("YieldTime");

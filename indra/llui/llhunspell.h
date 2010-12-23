@@ -30,27 +30,35 @@ protected:
 	LLHunspellWrapper();
 	~LLHunspellWrapper();
 
-	/*
-	 *
-	 */
 public:
 	bool	checkSpelling(const std::string& strWord);
 	S32		getSuggestions(const std::string& strWord, std::vector<std::string>& strSuggestionList);
 
-	static const std::string&	getDictPath()							{ return s_strDictPath; }
-	static void					setDictPath(const std::string& strPath)	{ s_strDictPath = strPath; }
+	/*
+	 * Dictionary related functions
+	 */
+	const std::string	getCurrentDictionary() const					{ return m_strDictionary; }
+	S32					getDictionaries(std::vector<std::string>& strDictionaryList) const;
+	const std::string&	getDictionaryPath()								{ return m_strDictionaryPath; }
+	S32					getInstalledDictionaries(std::vector<std::string>& strDictionaryList) const;
+	bool				setCurrentDictionary(const std::string& strDictionary);
 
-	static bool					useSpellCheck()							{ return s_fSpellCheck; }
-	static void					setUseSpellCheck(bool fSpellCheck);
+	/*
+	 * Static member functions
+	 */
+	static bool			useSpellCheck()									{ return s_fSpellCheck; }
+	static void			setUseSpellCheck(bool fSpellCheck);
 
 	/*
 	 * Member variables
 	 */
 protected:
 	Hunspell*	m_pHunspell;
+	std::string	m_strDictionary;
+	std::string m_strDictionaryPath;
+	LLSD		m_sdDictionaryMap;
 
-	static bool			s_fSpellCheck;
-	static std::string	s_strDictPath;
+	static bool	s_fSpellCheck;
 };
 
 // ============================================================================
