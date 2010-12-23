@@ -28,10 +28,13 @@
 #endif
 
 // ============================================================================
-// Static member variables
+// Static variables
 //
 
 bool LLHunspellWrapper::s_fSpellCheck = false;
+
+static const std::string c_strDictCustomSuffix = "_custom";
+static const std::string c_strDictIgnoreSuffix = "_ignore";
 
 // ============================================================================
 
@@ -54,6 +57,8 @@ LLHunspellWrapper::LLHunspellWrapper()
 		strTempPath = (sdDict.has("name")) ? m_strDictionaryPath + sdDict["name"].asString() : LLStringUtil::null;
 		sdDict["installed"] = 
 			(!strTempPath.empty()) && (gDirUtilp->fileExists(strTempPath + ".aff")) && (gDirUtilp->fileExists(strTempPath + ".dic"));
+		sdDict["has_custom"] = (!strTempPath.empty()) && (gDirUtilp->fileExists(strTempPath + c_strDictCustomSuffix + ".dic"));
+		sdDict["has_ignore"] = (!strTempPath.empty()) && (gDirUtilp->fileExists(strTempPath + c_strDictIgnoreSuffix + ".dic"));
 	}
 }
 
@@ -62,11 +67,24 @@ LLHunspellWrapper::~LLHunspellWrapper()
 	delete m_pHunspell;
 }
 
+// Checked: 2010-12-23 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
 bool LLHunspellWrapper::checkSpelling(const std::string& strWord) const
 {
 	if ( (!s_fSpellCheck) || (!m_pHunspell) || (strWord.length() < 3) )
+	{
 		return true;
-	return m_pHunspell->spell(strWord.c_str());
+	}
+	if (0 != m_pHunspell->spell(strWord.c_str()))
+	{
+		return true;
+	}
+	if (m_IgnoreList.size())
+	{
+		std::string strWordLower(strWord);
+		LLStringUtil::toLower(strWordLower);
+		return (std::find(m_IgnoreList.begin(), m_IgnoreList.end(), strWordLower) != m_IgnoreList.end());
+	}
+	return false;
 }
 
 S32 LLHunspellWrapper::getSuggestions(const std::string& strWord, std::vector<std::string>& strSuggestionList) const
@@ -125,27 +143,55 @@ bool LLHunspellWrapper::setCurrentDictionary(const std::string& strDictionary)
 		delete m_pHunspell;
 		m_pHunspell = NULL;
 		m_strDictionary = strDictionary;
+		m_IgnoreList.clear();
 	}
 
 	if ( (!useSpellCheck()) || (strDictionary.empty()) )
 		return false;
 
-	std::string strDictFile;
+	LLSD sdDictInfo;
 	for (LLSD::array_const_iterator itDictInfo = m_sdDictionaryMap.beginArray(), endDictInfo = m_sdDictionaryMap.endArray();
 			itDictInfo != endDictInfo; ++itDictInfo)
 	{
 		const LLSD& sdDict = *itDictInfo;
 		if ( (sdDict["installed"].asBoolean()) && (strDictionary == sdDict["language"].asString()) )
-			strDictFile = sdDict["name"].asString();
+			sdDictInfo = sdDict;
 	}
 
-	if (!strDictFile.empty())
+	if (sdDictInfo.has("name"))
 	{
-		std::string strPathAff = m_strDictionaryPath + strDictFile + ".aff";
-		std::string strPathDic = m_strDictionaryPath + strDictFile + ".dic";
+		std::string strPathAff = m_strDictionaryPath + sdDictInfo["name"].asString() + ".aff";
+		std::string strPathDic = m_strDictionaryPath + sdDictInfo["name"].asString() + ".dic";
 
 		m_pHunspell = new Hunspell(strPathAff.c_str(), strPathDic.c_str());
 		m_strDictionary = strDictionary;
+
+		// Add the custom dictionary (if there is one)
+		if (sdDictInfo["has_custom"].asBoolean())
+		{
+			std::string strPathCustomDic = m_strDictionaryPath + sdDictInfo["name"].asString() + c_strDictCustomSuffix + ".dic";
+			m_pHunspell->add_dic(strPathCustomDic.c_str());
+		}
+
+		// Load the ignore list (if there is one)
+		if (sdDictInfo["has_ignore"].asBoolean())
+		{
+			llifstream fileDictIgnore(m_strDictionaryPath + sdDictInfo["name"].asString() + c_strDictIgnoreSuffix + ".dic", std::ios::in);
+			if (fileDictIgnore.is_open())
+			{
+				std::string strWord; int idxLine = 0;
+				while (getline(fileDictIgnore, strWord))
+				{
+					// Skip over the first line since that's just a line count
+					if (0 != idxLine)
+					{
+						LLStringUtil::toLower(strWord);
+						m_IgnoreList.push_back(strWord);
+					}
+					idxLine++;
+				}
+			}
+		}
 	}
 
 	return (NULL != m_pHunspell);

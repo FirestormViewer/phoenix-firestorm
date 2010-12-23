@@ -43,6 +43,9 @@ public:
 	S32					getInstalledDictionaries(std::vector<std::string>& strDictionaryList) const;
 	bool				setCurrentDictionary(const std::string& strDictionary);
 
+	void				addToDictionary(const std::string& strWord);
+	void				addToIgnore(const std::string& strWord);
+
 	/*
 	 * Static member functions
 	 */
@@ -53,12 +56,13 @@ public:
 	 * Member variables
 	 */
 protected:
-	Hunspell*	m_pHunspell;
-	std::string	m_strDictionary;
-	std::string m_strDictionaryPath;
-	LLSD		m_sdDictionaryMap;
+	Hunspell*					m_pHunspell;
+	std::string					m_strDictionary;
+	std::string					m_strDictionaryPath;
+	LLSD						m_sdDictionaryMap;
+	std::vector<std::string>	m_IgnoreList;
 
-	static bool	s_fSpellCheck;
+	static bool					s_fSpellCheck;
 };
 
 // ============================================================================
