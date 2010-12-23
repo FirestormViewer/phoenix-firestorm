@@ -142,7 +142,7 @@ bool LLHunspellWrapper::setCurrentDictionary(const std::string& strDictionary)
 	{
 		delete m_pHunspell;
 		m_pHunspell = NULL;
-		m_strDictionary = strDictionary;
+		m_strDictionaryName = m_strDictionaryFile = "";
 		m_IgnoreList.clear();
 	}
 
@@ -160,23 +160,24 @@ bool LLHunspellWrapper::setCurrentDictionary(const std::string& strDictionary)
 
 	if (sdDictInfo.has("name"))
 	{
-		std::string strPathAff = m_strDictionaryPath + sdDictInfo["name"].asString() + ".aff";
-		std::string strPathDic = m_strDictionaryPath + sdDictInfo["name"].asString() + ".dic";
+		m_strDictionaryName = strDictionary;
+		m_strDictionaryFile = sdDictInfo["name"].asString();
 
+		std::string strPathAff = m_strDictionaryPath + m_strDictionaryFile + ".aff";
+		std::string strPathDic = m_strDictionaryPath + m_strDictionaryFile + ".dic";
 		m_pHunspell = new Hunspell(strPathAff.c_str(), strPathDic.c_str());
-		m_strDictionary = strDictionary;
 
 		// Add the custom dictionary (if there is one)
 		if (sdDictInfo["has_custom"].asBoolean())
 		{
-			std::string strPathCustomDic = m_strDictionaryPath + sdDictInfo["name"].asString() + c_strDictCustomSuffix + ".dic";
+			std::string strPathCustomDic = m_strDictionaryPath + m_strDictionaryFile + c_strDictCustomSuffix + ".dic";
 			m_pHunspell->add_dic(strPathCustomDic.c_str());
 		}
 
 		// Load the ignore list (if there is one)
 		if (sdDictInfo["has_ignore"].asBoolean())
 		{
-			llifstream fileDictIgnore(m_strDictionaryPath + sdDictInfo["name"].asString() + c_strDictIgnoreSuffix + ".dic", std::ios::in);
+			llifstream fileDictIgnore(m_strDictionaryPath + m_strDictionaryFile + c_strDictIgnoreSuffix + ".dic", std::ios::in);
 			if (fileDictIgnore.is_open())
 			{
 				std::string strWord; int idxLine = 0;
@@ -195,6 +196,68 @@ bool LLHunspellWrapper::setCurrentDictionary(const std::string& strDictionary)
 	}
 
 	return (NULL != m_pHunspell);
+}
+
+// Checked: 2010-12-23 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+void LLHunspellWrapper::addToCustomDictionary(const std::string& strWord)
+{
+	if (m_pHunspell)
+		m_pHunspell->add(strWord.c_str());
+	addToDictFile(m_strDictionaryPath + m_strDictionaryFile + c_strDictCustomSuffix + ".dic", strWord);
+}
+
+// Checked: 2010-12-23 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+void LLHunspellWrapper::addToIgnoreList(const std::string& strWord)
+{
+	std::string strWordLower(strWord);
+	LLStringUtil::toLower(strWordLower);
+	if (std::find(m_IgnoreList.begin(), m_IgnoreList.end(), strWordLower) == m_IgnoreList.end())
+	{
+		m_IgnoreList.push_back(strWordLower);
+		addToDictFile(m_strDictionaryPath + m_strDictionaryFile + c_strDictIgnoreSuffix + ".dic", strWordLower);
+	}
+}
+
+// Checked: 2010-12-23 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+void LLHunspellWrapper::addToDictFile(const std::string& strDictPath, const std::string& strWord)
+{
+	// TODO-Catznip: has to be a better way to add one word to the end and increment the line count?
+	std::vector<std::string> wordList;
+
+	// Read any existing words
+	if (gDirUtilp->fileExists(strDictPath))
+	{
+		llifstream fileDictIn(strDictPath, std::ios::in);
+		if (fileDictIn.is_open())
+		{
+			std::string strWord; int idxLine = 0;
+			while (getline(fileDictIn, strWord))
+			{
+				// Skip over the first line since that's just a line count
+				if (0 != idxLine)
+					wordList.push_back(strWord);
+				idxLine++;
+			}
+		}
+		else
+		{
+			// TODO-Catznip: show error message?
+			return;
+		}
+	}
+
+	// Add the new word to the end
+	wordList.push_back(strWord);
+
+	// Recreate the file with the new line count and new word added
+	llofstream fileDictOut(strDictPath, std::ios::out | std::ios::trunc);	
+	if (fileDictOut.is_open())
+	{
+		fileDictOut << wordList.size() << std::endl;
+		for (std::vector<std::string>::const_iterator itWord = wordList.begin(); itWord != wordList.end(); ++itWord)
+			fileDictOut << *itWord << std::endl;
+		fileDictOut.close();
+	}
 }
 
 // ============================================================================

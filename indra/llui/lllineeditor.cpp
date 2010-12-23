@@ -563,24 +563,24 @@ void LLLineEditor::replaceWithSuggestion(U32 idxSuggestion)
 
 void LLLineEditor::addToDictionary()
 {
-	// TODO: implement this
+	if (canAddToDictionary())
+		LLHunspellWrapper::instance().addToCustomDictionary(getMisspelledWord(mCursorPos));
 }
 
 bool LLLineEditor::canAddToDictionary() const
 {
-	// TODO: implement this
-	return false;
+	return (useSpellCheck()) && (isMisspelledWord(mCursorPos));
 }
 
 void LLLineEditor::addToIgnore()
 {
-	// TODO: implement this
+	if (canAddToIgnore())
+		LLHunspellWrapper::instance().addToIgnoreList(getMisspelledWord(mCursorPos));
 }
 
 bool LLLineEditor::canAddToIgnore() const
 {
-	// TODO: implement this
-	return false;
+	return (useSpellCheck()) && (isMisspelledWord(mCursorPos));
 }
 
 std::string LLLineEditor::getMisspelledWord(U32 posCursor) const
