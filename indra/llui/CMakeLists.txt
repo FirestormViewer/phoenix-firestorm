@@ -82,7 +82,6 @@ set(llui_SOURCE_FILES
     llsearcheditor.cpp
     llslider.cpp
     llsliderctrl.cpp
-    llspellcheckmenuhandler.cpp
     llspinctrl.cpp
     llstatbar.cpp
     llstatgraph.cpp
