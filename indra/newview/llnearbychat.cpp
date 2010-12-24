@@ -203,6 +203,15 @@ void	LLNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 	{
 		return;
 	}
+	
+	// IF tab mode active, flash our tab
+	if(isChatMultiTab())
+	{
+		LLSD notification;
+		notification["session_id"] = getKey();
+		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+		floater_container->onNewMessageReceived(notification);
+	}
 
 	if (gSavedPerAccountSettings.getBOOL("LogNearbyChat"))
 	{
@@ -231,10 +240,10 @@ void LLNearbyChat::onNearbySpeakers()
 	LLSideTray::getInstance()->showPanel("panel_people",param);
 }
 
-
 void	LLNearbyChat::onNearbyChatContextMenuItemClicked(const LLSD& userdata)
 {
 }
+
 bool	LLNearbyChat::onNearbyChatCheckContextMenuItem(const LLSD& userdata)
 {
 	std::string str = userdata.asString();
@@ -274,6 +283,18 @@ void	LLNearbyChat::setVisible(BOOL visible)
 void	LLNearbyChat::onOpen(const LLSD& key )
 {
 	llinfos << "onOPEN called..." << llendl;
+	// We override this to put nearbychat in the IM floater. -AO
+	if(isChatMultiTab())
+	{
+		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+		if (floater_container)
+		{
+			floater_container->showFloater(this, LLTabContainer::START);
+		}
+		setVisible(TRUE);
+		LLFloater::openFloater(key);
+	}
+	
 	LLDockableFloater::onOpen(key);
 }
 

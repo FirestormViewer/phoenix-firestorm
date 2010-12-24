@@ -58,13 +58,13 @@ public:
 	static LLIMFloaterContainer* getInstance();
 
 	virtual void setMinimized(BOOL b);
+	
+	void onNewMessageReceived(const LLSD& data); // public so nearbychat can call it directly. TODO: handle via callback. -AO
 
 private:
 	typedef std::map<LLUUID,LLFloater*> avatarID_panel_map_t;
 	avatarID_panel_map_t mSessions;
 
-
-	void onNewMessageReceived(const LLSD& data);
 };
 
 #endif // LL_LLIMFLOATERCONTAINER_H
