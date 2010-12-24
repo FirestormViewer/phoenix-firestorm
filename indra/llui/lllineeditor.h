@@ -341,6 +341,7 @@ protected:
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
 	BOOL		mSpellCheck;
 	BOOL		mNeedsSpellCheck;
+	LLTimer		mSpellCheckTimer;
 	std::list<std::pair<U32, U32> > mMisspellRanges;
 	std::vector<std::string>		mSuggestionList;
 // [/SL:KB]
