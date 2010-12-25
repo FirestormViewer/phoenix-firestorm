@@ -292,7 +292,6 @@ void	LLNearbyChat::onOpen(const LLSD& key )
 			floater_container->showFloater(this, LLTabContainer::START);
 		}
 		setVisible(TRUE);
-		LLFloater::openFloater(key);
 	}
 	
 	LLDockableFloater::onOpen(key);
