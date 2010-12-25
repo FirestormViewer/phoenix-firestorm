@@ -196,8 +196,14 @@ function getopt()
 
 getArgs $*
 
-export CC=/usr/bin/gcc-4.3
-export CXX=/usr/bin/g++-4.3
+if [ -z $CC ] ; then
+	export CC=/usr/bin/gcc-4.4
+fi
+
+if [ -z $CXX ] ; then 
+	export CXX=/usr/bin/g++-4.4
+fi
+
 export CMAKE_CXX_FLAGS_RELEASE="-O3 -msse -msse2" 
 if [ ! -d `dirname $LOG` ] ; then
         mkdir -p `dirname $LOG`
