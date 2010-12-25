@@ -1035,6 +1035,14 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 		const LLSD arg = "date";
 		setSortBy(arg);
 	}
+	if (command_name == "sort_system_top")
+	{
+		setSortBy("systemfolderstotop");
+	}
+	if (command_name == "sort_system_normal")
+	{
+		setSortBy("foldersalwaysbyname");
+	}
 	if (command_name == "show_filters")
 	{
 		toggleFindOptions();

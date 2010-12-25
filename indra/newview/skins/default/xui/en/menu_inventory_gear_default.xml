@@ -32,6 +32,16 @@
          function="Inventory.GearDefault.Custom.Action"
          parameter="sort_by_recent" />
     </menu_item_call>
+    
+	<menu_item_call
+     label="Toggle System Folders on top"
+     layout="topleft"
+     name="sort_system_top">
+        <on_click
+         function="Inventory.GearDefault.Custom.Action"
+         parameter="sort_system_top" />
+    </menu_item_call>	
+		
     <menu_item_separator
      layout="topleft" />
     <menu_item_call
