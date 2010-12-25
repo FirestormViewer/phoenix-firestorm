@@ -5,7 +5,7 @@
  can_minimize="true"
  can_close="false"
  follows="bottom"
- height="164"
+ height="124"
  layout="topleft"
  name="camera_floater"
  help_topic="camera_floater"
@@ -13,7 +13,7 @@
  save_visibility="true"
  save_dock_state="true"
  single_instance="true"
- width="228">
+ width="188">
     <floater.string
      name="rotate_tooltip">
         Rotate Camera Around Focus
@@ -46,24 +46,25 @@
      border="false"
      height="123"
      layout="topleft"
-     left="2"
+     left="0"
      top="0"
      mouse_opaque="false"
      name="controls"
-     width="226">
+     width="180">
        <panel
          color="Transparent"
          follows="all"
-         height="102"
+         height="100"
          layout="topleft"
-         left="8"
+         left="10"
          name="preset_views_list"
          opaque="true"
-         top="24"
-         width="212"
+         top="15"
+         width="160"
          visible="false">
         <panel_camera_item
-          name="front_view">
+          name="front_view"
+          height="26">
           <panel_camera_item.mousedown_callback
             function="CameraPresets.ChangeView"
             parameter="front_view" />
@@ -72,13 +73,15 @@
           <panel_camera_item.selected_picture
             image_name="Cam_Preset_Front_On" />
           <panel_camera_item.text
+          	text_color="LtYellow"
             name="front_view_text">
             Front View
           </panel_camera_item.text>
         </panel_camera_item>
         <panel_camera_item
           name="group_view"
-          top_pad="4">
+          height="26"
+          top_pad="1">
           <panel_camera_item.mousedown_callback
             function="CameraPresets.ChangeView"
             parameter="group_view" />
@@ -87,6 +90,7 @@
           <panel_camera_item.selected_picture
             image_name="Cam_Preset_Side_On" />
           <panel_camera_item.text
+          	text_color="LtYellow"
             name="side_view_text">
             Side View
           </panel_camera_item.text>
@@ -94,7 +98,8 @@
         <panel_camera_item
           name="rear_view"
           layout="topleft"
-          top_pad="4">
+          height="26"
+          top_pad="1">
           <panel_camera_item.mousedown_callback
             function="CameraPresets.ChangeView"
             parameter="rear_view" />
@@ -103,7 +108,8 @@
           <panel_camera_item.selected_picture
             image_name="Cam_Preset_Back_On" />
           <panel_camera_item.text
-            name="rear_view_text">
+            name="rear_view_text"
+            text_color="LtYellow">
             Rear View
           </panel_camera_item.text>
         </panel_camera_item>
@@ -114,11 +120,11 @@
           height="68"
           item_pad="4"
           layout="topleft"
-          left="8"
+          left="10"
           name="camera_modes_list"
           opaque="true"
-          top="24"
-          width="212"
+          top="20"
+          width="180"
           visible="false">
         <panel_camera_item
           name="object_view">
@@ -159,15 +165,15 @@
             left="0"
             mouse_opaque="false"
             name="zoom"
-            top="20"
-            width="226">
+            top="0"
+            width="188">
            <joystick_rotate
               follows="top|left"
               height="78"
               image_selected="Cam_Rotate_In"
               image_unselected="Cam_Rotate_Out"
               layout="topleft"
-              left="7"
+              left="0"
               mouse_opaque="false"
               name="cam_rotate_stick"
               quadrant="left"
@@ -184,7 +190,7 @@
               image_selected="AddItem_Press"
               image_unselected="AddItem_Off"
               layout="topleft"
-              left_pad="14" 
+              left_pad="4" 
               name="zoom_plus_btn"
               width="18"
               top="18">
@@ -226,7 +232,7 @@
          image_selected="Cam_Tracking_In"
          image_unselected="Cam_Tracking_Out"
          layout="topleft"
-         left="133"
+         left="105"
          name="cam_track_stick"
          quadrant="left"
          scale_image="false"
@@ -238,17 +244,18 @@
     </panel>
     <panel
      border="false"
-     height="42"
+     height="25"
      layout="topleft"
      left="2"
+     top="87"
      top_pad="0"
      name="buttons"
-     width="226">
+     width="180">
         <button
          height="23"
          label=""
          layout="topleft"
-         left="70"
+         left="53"
          is_toggle="true"
          image_overlay="Cam_Avatar_Off"
          image_selected="PushButton_Selected_Press"

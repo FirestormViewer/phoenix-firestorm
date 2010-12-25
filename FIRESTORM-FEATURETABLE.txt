@@ -26,3 +26,4 @@ AlwaysShowFriendPerms	LGPL
 GlobalFriendVisToggle	LGPL
 IM_IconifiedToolbar	LGPL
 GUI_IMTabConfig		LGPL
+Small_CamControl	LGPL
