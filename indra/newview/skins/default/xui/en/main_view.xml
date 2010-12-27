@@ -84,7 +84,7 @@
                    width="500">
 <!-- first element on rest of screen is top info bar - so is just below nav bar -->
             <panel follows="left|top"
-                   height="19"
+                   height="48"
                    left="0"
                    mouse_opaque="false"
                    name="topinfo_bar_container"
@@ -123,7 +123,7 @@
         mouse_opaque="false"
         name="sidebar"
         orientation="horizontal"
-        top="0"
+        top="30"
         width="1024">
           <layout_panel
            follows="all"

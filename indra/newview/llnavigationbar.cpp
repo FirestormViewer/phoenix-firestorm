@@ -747,83 +747,49 @@ void LLNavigationBar::showNavigationPanel(BOOL visible)
 	LLRect fbRect(fb->getRect());
 
 	navPanel->setVisible(visible);
-
+	
+	// AO- redesigned navigation bars
 	if (visible)
 	{
-		if (fpVisible)
-		{
-			// Navigation Panel must be shown. Favorites Panel is visible.
+		// Navigation Panel must be shown. Favorites Panel is visible.
 
-			nbRect.setLeftTopAndSize(nbRect.mLeft, nbRect.mTop, nbRect.getWidth(), mDefaultNbRect.getHeight());
-			fbRect.setLeftTopAndSize(fbRect.mLeft, mDefaultFpRect.mTop, fbRect.getWidth(), fbRect.getHeight());
-
-			// this is duplicated in 'else' section because it should be called BEFORE fb->reshape
-			reshape(nbRect.getWidth(), nbRect.getHeight());
-			setRect(nbRect);
-			// propagate size to parent container
-			getParent()->reshape(nbRect.getWidth(), nbRect.getHeight());
-
-			fb->reshape(fbRect.getWidth(), fbRect.getHeight());
-			fb->setRect(fbRect);
-		}
-		else
-		{
-			// Navigation Panel must be shown. Favorites Panel is hidden.
-
-			S32 height = mDefaultNbRect.getHeight() - mDefaultFpRect.getHeight() - FAVBAR_TOP_PADDING;
-			nbRect.setLeftTopAndSize(nbRect.mLeft, nbRect.mTop, nbRect.getWidth(), height);
-
-			reshape(nbRect.getWidth(), nbRect.getHeight());
-			setRect(nbRect);
-			getParent()->reshape(nbRect.getWidth(), nbRect.getHeight());
-		}
+		nbRect.setLeftTopAndSize(nbRect.mLeft, 48, nbRect.getWidth(), 61);
+		fbRect.setLeftTopAndSize(fbRect.mLeft, 40, fbRect.getWidth(), 25);
+		
+		reshape(nbRect.getWidth(), nbRect.getHeight());
+		setRect(nbRect);
+		fb->reshape(fbRect.getWidth(), fbRect.getHeight());
+		fb->setRect(fbRect);
+		
+		// propagate size to parent container
+		//getParent()->reshape(nbRect.getWidth(), nbRect.getHeight());
 	}
 	else
 	{
 		if (fpVisible)
 		{
 			// Navigation Panel must be hidden. Favorites Panel is visible.
-
-			S32 fpHeight = mDefaultFpRect.getHeight() + FAVBAR_TOP_PADDING;
-			S32 fpTop = fpHeight - (mDefaultFpRect.getHeight() / 2) + 1;
-
-			nbRect.setLeftTopAndSize(nbRect.mLeft, nbRect.mTop, nbRect.getWidth(), fpHeight);
-			fbRect.setLeftTopAndSize(fbRect.mLeft, fpTop, fbRect.getWidth(), mDefaultFpRect.getHeight());
-
-			// this is duplicated in 'else' section because it should be called BEFORE fb->reshape
+			nbRect.setLeftTopAndSize(nbRect.mLeft, 48, nbRect.getWidth(), 61);
+			fbRect.setLeftTopAndSize(fbRect.mLeft, 60, fbRect.getWidth(), 25);
+			
 			reshape(nbRect.getWidth(), nbRect.getHeight());
 			setRect(nbRect);
-			getParent()->reshape(nbRect.getWidth(), nbRect.getHeight());
-
 			fb->reshape(fbRect.getWidth(), fbRect.getHeight());
 			fb->setRect(fbRect);
 		}
-		else
-		{
-			// Navigation Panel must be hidden. Favorites Panel is hidden.
-
-			nbRect.setLeftTopAndSize(nbRect.mLeft, nbRect.mTop, nbRect.getWidth(), 0);
-
-			reshape(nbRect.getWidth(), nbRect.getHeight());
-			setRect(nbRect);
-			getParent()->reshape(nbRect.getWidth(), nbRect.getHeight());
-		}
 	}
-
-	getChildView("bg_icon")->setVisible( visible && fpVisible);
-	getChildView("bg_icon_no_fav_bevel")->setVisible( visible && !fpVisible);
-	getChildView("bg_icon_no_nav_bevel")->setVisible( !visible && fpVisible);
 }
 
 void LLNavigationBar::showFavoritesPanel(BOOL visible)
 {
-	bool npVisible = gSavedSettings.getBOOL("ShowNavbarNavigationPanel");
+	//bool npVisible = gSavedSettings.getBOOL("ShowNavbarNavigationPanel");
 
 	LLFavoritesBarCtrl* fb = getChild<LLFavoritesBarCtrl>("favorite");
 
-	LLRect nbRect(getRect());
-	LLRect fbRect(fb->getRect());
+	//LLRect nbRect(getRect());
+	//LLRect fbRect(fb->getRect());
 
+	/***** -AO redesigned navbars
 	if (visible)
 	{
 		if (npVisible)
@@ -877,9 +843,11 @@ void LLNavigationBar::showFavoritesPanel(BOOL visible)
 		getParent()->reshape(nbRect.getWidth(), nbRect.getHeight());
 	}
 
+
 	getChildView("bg_icon")->setVisible( npVisible && visible);
 	getChildView("bg_icon_no_fav_bevel")->setVisible( npVisible && !visible);
 	getChildView("bg_icon_no_nav_bevel")->setVisible( !npVisible && visible);
-
+	 */
+	 
 	fb->setVisible(visible);
 }

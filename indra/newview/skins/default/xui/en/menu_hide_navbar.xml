@@ -30,15 +30,28 @@
              function="CheckControl"
              parameter="ShowNavbarFavoritesPanel" />
     </menu_item_check>
-    <menu_item_check
-         label="Show Mini-Location Bar"
-         layout="topleft"
-         name="ShowMiniLocationPanel">
-           <on_click
-             function="ToggleControl"
-             parameter="ShowMiniLocationPanel" />
-             <on_check
-             function="CheckControl"
-             parameter="ShowMiniLocationPanel" />
+	<menu_item_check
+		 label="Show Search Bar"
+		 layout="topleft"
+		 name="ShowSearchTopBar">
+		   <on_click
+			 function="ToggleControl"
+			 parameter="ShowSearchTopBar" /> 
+			 <on_check
+			 function="CheckControl"
+			 parameter="ShowSearchTopBar" />
     </menu_item_check>
+    <!-- AO - remove this option, problematic
+		<menu_item_check
+			 label="Show Mini-Location Bar"
+			 layout="topleft"
+			 name="ShowMiniLocationPanel">
+			   <on_click
+				 function="ToggleControl"
+				 parameter="ShowMiniLocationPanel" />
+				 <on_check
+				 function="CheckControl"
+				 parameter="ShowMiniLocationPanel" />
+		</menu_item_check>
+	-->
 </menu>

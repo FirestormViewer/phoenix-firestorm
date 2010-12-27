@@ -1643,7 +1643,7 @@ void LLViewerWindow::initWorldUI()
 	status_bar_container->setVisible(TRUE);
 
 	// Navigation bar
-	LLPanel* nav_bar_container = getRootView()->getChild<LLPanel>("nav_bar_container");
+	LLPanel* nav_bar_container = getRootView()->getChild<LLPanel>("topinfo_bar_container");
 
 	LLNavigationBar* navbar = LLNavigationBar::getInstance();
 	navbar->setShape(nav_bar_container->getLocalRect());
@@ -1660,6 +1660,11 @@ void LLViewerWindow::initWorldUI()
 	{
 		navbar->showFavoritesPanel(FALSE);
 	}
+	if (!gSavedSettings.getBOOL("ShowSearchTopBar"))
+	{
+		navbar->childSetVisible("search_combo_box",FALSE);
+	}
+	
 
 	// Top Info bar
 	LLPanel* topinfo_bar_container = getRootView()->getChild<LLPanel>("topinfo_bar_container");
