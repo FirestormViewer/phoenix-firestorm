@@ -451,13 +451,15 @@ bool rlvMenuCheckEnabled()
 bool rlvMenuToggleEnabled()
 {
 	gSavedSettings.setBOOL(RLV_SETTING_MAIN, !rlv_handler_t::isEnabled());
+	
+	llinfos << "DEBUG: "<< RLV_SETTING_MAIN << " now " << gSavedSettings.getBOOL(RLV_SETTING_MAIN) << llendl;
 
 	LLSD args;
 	args["MESSAGE"] = 
 		llformat("RestrainedLove Support will be %s after you restart", (rlv_handler_t::isEnabled()) ? "disabled" : "enabled" );
 	LLNotificationsUtil::add("GenericAlert", args);
 	
-	return true;
+	return gSavedSettings.getBOOL(RLV_SETTING_MAIN);
 }
 
 // Checked: 2010-04-23 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g

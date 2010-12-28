@@ -11,6 +11,7 @@
  width="517">
 
     <check_box
+     control_name="RestrainedLove"
      layout="topleft"
      follows="left|top"
      top_pad="20"
@@ -22,7 +23,10 @@
     >
     <check_box.commit_callback
      function="RLV.ToggleEnabled" />
+    <check_box.enabled_callback
+     function="RLV.CheckEnabled" />
     </check_box>
+    
     <text
          layout="topleft"
          follows="left|top"
