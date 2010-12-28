@@ -12,7 +12,7 @@
  save_rect="true"
  save_visibility="true"
  save_dock_state="true"
- width="133">
+ width="103">
     <string
      name="walk_forward_tooltip">
         Walk Forward (press Up Arrow or W)
@@ -91,14 +91,14 @@
     </string>
     <panel
      border="false"
-     height="83"
+     height="78"
      follows="left|top"
      layout="topleft"
      left="0"
      mouse_opaque="false"
      name="panel_actions"
      top="0"
-     width="133">
+     width="103">
         <!-- Buttons in panel are organized in 3 columns to enable their easy vertical adjustment via top_pad-->
         <!-- Left column -->
         <button
@@ -108,11 +108,11 @@
          image_pressed_selected="Movement_TurnLeft_On"
          image_unselected="Movement_TurnLeft_Off"
          layout="topleft"
-         left="30"
+         left="10"
          name="turn left btn"
          scale_image="false"
          tool_tip="Turn left (press Left Arrow or A)"
-         top="34"
+         top="31"
          width="24" />
         <joystick_slide
          follows="left|bottom"
@@ -140,7 +140,7 @@
          name="turn right btn"
          scale_image="false"
          tool_tip="Turn right (press Right Arrow or D)"
-         top="34"
+         top="31"
          width="24" />
         <joystick_slide
          follows="left|bottom"
@@ -164,7 +164,7 @@
          image_pressed_selected="Movement_Forward_On"
          image_unselected="Movement_Forward_Off"
          layout="topleft"
-         left="54"
+         left="31"
          name="forward btn"
          quadrant="up"
          scale_image="false"
@@ -193,12 +193,12 @@
          image_pressed_selected="Movement_Up_On"
          image_unselected="Movement_Up_Off"
          layout="topleft"
-         right="-11"
+         right="-10"
          name="move up btn"
          scale_image="false"
          tool_tip="Fly up (press E)"
-         top="22"
-         width="10" />
+         top="24"
+         width="24" />
         <button
          follows="left|bottom"
          height="19"
@@ -211,7 +211,7 @@
          scale_image="false"
          tool_tip="Fly down (press C)"
          top_pad="10"
-         width="10" />
+         width="24" />
     </panel>
 <!-- Width and height of this panel should be synchronized with panel_stand_stop_flying.xml -->
     <panel
@@ -221,7 +221,7 @@
      left="0"
      name="panel_modes"
      top_pad="0"
-     width="133">
+     width="93">
         <button
          follows="left|bottom"
          height="23"
@@ -230,7 +230,7 @@
 	 label=""
          layout="topleft"
          name="mode_walk_btn"
-         left="20"
+         left="5"
          pad_right="0"
          tool_tip="Walking mode"
          top="2"

@@ -6,27 +6,27 @@
  name="panel_stand_stop_flying"
  mouse_opaque="false"
  visible="true"
- width="133">
+ width="93">
     <button
      follows="left|bottom"
      height="19"
      label="Stand"
      layout="topleft"
-     left="10"
+     left="5"
      name="stand_btn"
      tool_tip="Click here to stand up."
      top="2"
      visible="false"
-     width="113" />
+     width="93" />
     <button
      follows="left|bottom"
      height="19"
      label="Stop Flying"
      layout="topleft"
-     left="10"
+     left="5"
      name="stop_fly_btn"
      tool_tip="Stop flying"
      top="2"
      visible="false"
-     width="113" />
+     width="93" />
 </panel>
