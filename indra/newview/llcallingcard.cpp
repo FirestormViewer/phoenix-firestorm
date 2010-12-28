@@ -661,7 +661,6 @@ void LLAvatarTracker::processChange(LLMessageSystem* msg)
 	{
 		msg->getUUIDFast(_PREHASH_Rights, _PREHASH_AgentRelated, agent_related, i);
 		msg->getS32Fast(_PREHASH_Rights,_PREHASH_RelatedRights, new_rights, i);
-		llinfos << "AO: New rights processed. new_ights=" << new_rights << llendl;
 		if(agent_id == gAgent.getID())
 		{
 			if(mBuddyInfo.find(agent_related) != mBuddyInfo.end())
@@ -696,7 +695,6 @@ void LLAvatarTracker::processChange(LLMessageSystem* msg)
 
 	addChangedMask(LLFriendObserver::POWERS, agent_id);
 	notifyObservers();
-	llinfos << "AO: Notifying observers.." << llendl;
 	notifyFriendPermissionObservers(agent_related);
 }
 

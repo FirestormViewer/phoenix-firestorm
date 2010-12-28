@@ -206,7 +206,6 @@ void LLPanelAvatarNotes::rightsConfirmationCallback(const LLSD& notification,
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if (option == 0)
 	{
-		llinfos << "AO rightsConfirmationCallback. rights= " << rights << llendl;
 		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(
 				getAvatarId(), rights);
 	}
@@ -269,7 +268,6 @@ void LLPanelAvatarNotes::onCommitRights()
 	// only one checkbox can trigger commit, so store the rest of rights
 	else
 	{
-		llinfos << "AO: onCommitRights: New rights should be: " << rights << llendl;
 		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(
 						getAvatarId(), rights);
 	}

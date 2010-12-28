@@ -1123,8 +1123,7 @@ void LLPanelPeople::onAddFriendWizButtonClicked()
 
 void LLPanelPeople::onGlobalVisToggleButtonClicked()
 // Iterate through friends lists, toggling status permission on or off 
-{
-	llinfos << "TOGGLE GLOBAL FRIEND VIS" << llendl;	
+{	
 	bool vis = getChild<LLUICtrl>("GlobalOnlineStatusToggle")->getValue().asBoolean();
 	gSavedSettings.setBOOL("GlobalOnlineStatusToggle", vis);
 	
@@ -1150,14 +1149,16 @@ void LLPanelPeople::onGlobalVisToggleButtonClicked()
 		else
 			new_rights = (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
 
-		llinfos << "TOGGLING " << buddy_id << " " << vis << llendl;
 		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(buddy_id,new_rights);
-		
-
 	}		
 	
 	mAllFriendList->showPermissions(true);
 	mOnlineFriendList->showPermissions(true);
+	
+	LLSD args;
+	args["MESSAGE"] = 
+	llformat("Due to server load, mass toggling visibility can take a while to become effective. Please be patient." );
+	LLNotificationsUtil::add("GenericAlert", args);
 }
 
 void LLPanelPeople::onDeleteFriendButtonClicked()
