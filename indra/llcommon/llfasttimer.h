@@ -128,20 +128,48 @@ inline U32 LLFastTimer::getCPUClockCount32()
 
 
 #if (LL_LINUX || LL_SOLARIS || LL_DARWIN) && (defined(__i386__) || defined(__amd64__))
+// <ND> 64bit comp patch
+
+#ifdef __amd64__
+
+inline void getRDTSC()
+{
+	__asm volatile( "PUSHQ %RDX\n\t"
+					"XOR %RAX, %RAX\n\t"
+					"XOR %RDX, %RDX\n\t"
+					"RDTSC\n\t"
+					"SHL $0x20,%RDX\n\t"
+					"OR %RDX, %RAX\n\t"
+					"POPQ %RDX" );
+}
+
+#else
+
+inline void getRDTSC()
+{
+	__asm volatile( "RDTSC" );
+}
+
+#endif
+
+inline U64 getRDTSCImpl()
+{
+	typedef unsigned long long (*tGetRDTSC)();
+
+	tGetRDTSC pGetRDTSC( (tGetRDTSC)getRDTSC );
+	return (*pGetRDTSC)();
+}
+
 //
 // Mac+Linux+Solaris FAST x86 implementation of CPU clock
 inline U32 LLFastTimer::getCPUClockCount32()
 {
-	U64 x;
-	__asm__ volatile (".byte 0x0f, 0x31": "=A"(x));
-	return (U32)(x >> 8);
+	return (U32)(getRDTSCImpl() >> 8 ); 
 }
 
 inline U64 LLFastTimer::getCPUClockCount64()
 {
-	U64 x;
-	__asm__ volatile (".byte 0x0f, 0x31": "=A"(x));
-	return x;
+	return getRDTSCImpl(); 
 }
 #endif
 
