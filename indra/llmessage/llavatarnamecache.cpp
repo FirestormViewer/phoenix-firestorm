@@ -298,6 +298,16 @@ void LLAvatarNameCache::processName(const LLUUID& agent_id,
 	if (add_to_cache)
 	{
 		sCache[agent_id] = av_name;
+		//  sCache[agent_id] = av_name;
+		// [SL:KB] - Patch: Agent-DisplayNames | Checked: 2010-12-28 (Catznip-2.4.0h) | Added: Catznip-2.4.0h
+		// Don't replace existing entries with dummies
+		cache_t::iterator itName = (av_name.mIsDummy) ? sCache.find(agent_id) : sCache.end();
+		if (sCache.end() != itName)
+		   itName->second.mExpires = av_name.mExpires;
+		else
+		   sCache[agent_id] = av_name;
+		// [/SL:KB]
+
 	}
 
 	sPendingQueue.erase(agent_id);
