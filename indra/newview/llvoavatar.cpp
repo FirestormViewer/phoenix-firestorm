@@ -2886,7 +2886,9 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 				
 	idleUpdateNameTagText(new_name);
 			
-	idleUpdateNameTagAlpha(new_name, alpha);
+	// Wolfspirit: Following thing is already handled in LLHUDNameTag::lineSegmentIntersect
+	// Fixing bubblechat alpha flashing with commenting this out.
+	// idleUpdateNameTagAlpha(new_name, alpha);
 }
 
 void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
