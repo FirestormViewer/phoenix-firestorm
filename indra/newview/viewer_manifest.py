@@ -485,7 +485,7 @@ class WindowsManifest(ViewerManifest):
         if self.default_channel():
             if self.default_grid():
                 # release viewer
-                installer_file = "Firestorm_%(version_dashes)s_Setup.exe"
+                installer_file = "Phoenix_Firestorm_%(version_dashes)s_Setup.exe"
                 grid_vars_template = """
                 OutFile "%(installer_file)s"
                 !define INSTFLAGS "%(flags)s"
@@ -496,7 +496,7 @@ class WindowsManifest(ViewerManifest):
                 """
             else:
                 # beta grid viewer
-                installer_file = "Firestorm_%(version_dashes)s_(%(grid_caps)s)_Setup.exe"
+                installer_file = "Phoenix_Firestorm_%(version_dashes)s_(%(grid_caps)s)_Setup.exe"
                 grid_vars_template = """
                 OutFile "%(installer_file)s"
                 !define INSTFLAGS "%(flags)s"
@@ -508,7 +508,7 @@ class WindowsManifest(ViewerManifest):
                 """
         else:
             # some other channel on some grid
-            installer_file = "%(channel_oneword)s_%(version_dashes)s_Setup.exe"
+            installer_file = "Phoenix_%(channel_oneword)s_%(version_dashes)s_Setup.exe"
             grid_vars_template = """
             OutFile "%(installer_file)s"
             !define INSTFLAGS "%(flags)s"
@@ -716,7 +716,7 @@ class DarwinManifest(ViewerManifest):
         if not self.default_channel():
             channel_standin = self.channel()
 
-        imagename="Firestorm_" + '_'.join(self.args['version'])
+        imagename="Phoenix_Firestorm_" + '_'.join(self.args['version'])
 
         # MBW -- If the mounted volume name changes, it breaks the .DS_Store's background image and icon positioning.
         #  If we really need differently named volumes, we'll need to create multiple DS_Store file images, or use some other trick.
