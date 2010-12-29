@@ -227,12 +227,13 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 fi
 
 if [ $WANTS_VERSION -eq $TRUE ] ; then
-    echo -n "Setting build version to "
-	buildVer=`hg summary | grep parent | sed 's#parent: ##' | sed 's#:.*##'`
-	echo "$buildVer."
-	cp llcommon/llversionviewer.h llcommon/llversionviewer.h.build
-	sed -e "s#LL_VERSION_BUILD = [0-9][0-9]*#LL_VERSION_BUILD = ${buildVer}#"\
-		llcommon/llversionviewer.h.build > llcommon/llversionviewer.h
+	echo -n "Setting build version to "
+    buildVer=`hg summary | head -1 | cut -d " "  -f 2 | cut -d : -f 1`
+    echo "$buildVer."
+    cp llcommon/llversionviewer.h llcommon/llversionviewer.h.build
+    sed -e "s#LL_VERSION_BUILD = .*\$#LL_VERSION_BUILD = ${buildVer};#" \
+        -e "s#LL_CHANNEL = .*\$#LL_CHANNEL = \"Firestorm-$CHANNEL\";#" \
+        llcommon/llversionviewer.h.build > llcommon/llversionviewer.h
 fi
 
 if [ $WANTS_BUILD -eq $TRUE ] ; then
