@@ -16,6 +16,7 @@
 
 #include "llviewerprecompiledheaders.h"
 #include "llagentwearables.h"
+#include "llappearancemgr.h"
 #include "llappviewer.h"
 #include "llcallbacklist.h"
 #include "llhudtext.h"
@@ -358,7 +359,12 @@ void RlvHandler::onSitOrStand(bool fSitting)
 
 	if ( (hasBehaviour(RLV_BHVR_STANDTP)) && (!fSitting) && (!m_posSitSource.isExactlyZero()) )
 	{
-		RlvUtil::forceTp(m_posSitSource);
+		// NOTE: we need to do this due to the way @standtp triggers a forced teleport:
+		//   - when standing we're called from LLVOAvatar::sitDown() which is called from LLVOAvatar::getOffObject()
+		//   -> at the time sitDown() is called the avatar's parent is still the linkset it was sitting on so "isRoot()" on the avatar will
+		//      return FALSE and we will crash in LLVOAvatar::getRenderPosition() when trying to teleport
+		//   -> postponing the teleport until the next idle tick will ensure that everything has all been properly cleaned up
+		doOnIdleOneTime(boost::bind(RlvUtil::forceTp, m_posSitSource));
 		m_posSitSource.setZero();
 	}
 }
