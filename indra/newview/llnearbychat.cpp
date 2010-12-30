@@ -284,7 +284,7 @@ void	LLNearbyChat::onOpen(const LLSD& key )
 {
 	llinfos << "onOPEN called..." << llendl;
 	// We override this to put nearbychat in the IM floater. -AO
-	if(isChatMultiTab())
+	if(isChatMultiTab() && ! isVisible(this))
 	{
 		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
 		if (floater_container)
