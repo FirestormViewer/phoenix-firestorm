@@ -502,6 +502,7 @@ void LLFloaterWorldMap::trackAvatar( const LLUUID& avatar_id, const std::string&
 			mTrackedStatus = LLTracker::TRACKING_AVATAR;
 			mTrackedAvatarName = name;
 			LLTracker::trackAvatar(avatar_id, name);
+			centerOnTarget(TRUE);
 		}
 	}
 	else
