@@ -164,7 +164,7 @@ namespace tut
 					  std::string("https://secondlife.com/helpers/"));
 		ensure_equals("Agni login page is correct",
 					  grid[GRID_LOGIN_PAGE_VALUE].asString(), 
-					  std::string("http://phoenixviewer.com/app/loginFS/"));
+					  std::string("http://phoenixviewer.com/app/login/"));
 		ensure("Agni is a favorite",
 			   grid.has(GRID_IS_FAVORITE_VALUE));
 		ensure("Agni is a system grid", 
@@ -208,7 +208,7 @@ namespace tut
 					  std::string("https://secondlife.com/helpers/"));
 		ensure_equals("Agni login page the same after grid file", 
 					  grid[GRID_LOGIN_PAGE_VALUE].asString(), 
-					  std::string("http://phoenixviewer.com/app/loginFS/"));
+					  std::string("http://phoenixviewer.com/app/login/"));
 		ensure("Agni still a favorite after grid file", 
 			   grid.has(GRID_IS_FAVORITE_VALUE));
 		ensure("Agni system grid still set after grid file", 
@@ -283,7 +283,7 @@ namespace tut
 					  std::string("https://mycustomgridchoice/helpers/"));
 		ensure_equals("Custom Command line grid login page is set",
 					  grid[GRID_LOGIN_PAGE_VALUE].asString(), 
-					  std::string("http://mycustomgridchoice/app/loginFS/"));
+					  std::string("http://mycustomgridchoice/app/login/"));
 	}
 	
 	// validate override of login uri with cmd line
@@ -310,7 +310,7 @@ namespace tut
 					  std::string("http://aditi-secondlife.webdev.lindenlab.com/helpers/"));
 		ensure_equals("Override known grid login uri: login page is not set",
 					  grid[GRID_LOGIN_PAGE_VALUE].asString(), 
-					  std::string("http://phoenixviewer.com/app/loginFS/"));		
+					  std::string("http://phoenixviewer.com/app/login/"));		
 		
 		// Override with loginuri
 		// override custom grid
@@ -331,7 +331,7 @@ namespace tut
 					  std::string("https://mycustomgridchoice/helpers/"));
 		ensure_equals("Override custom grid login uri: Login page is not set",
 					  grid[GRID_LOGIN_PAGE_VALUE].asString(), 
-					  std::string("http://mycustomgridchoice/app/loginFS/"));
+					  std::string("http://mycustomgridchoice/app/login/"));
 	}
 	
 	// validate override of helper uri with cmd line
@@ -359,7 +359,7 @@ namespace tut
 					  std::string("https://my.helper.uri/mycustomhelpers"));
 		ensure_equals("Override known grid helper uri: login page is not changed",
 					  grid[GRID_LOGIN_PAGE_VALUE].asString(), 
-					  std::string("http://phoenixviewer.com/app/loginFS/"));		
+					  std::string("http://phoenixviewer.com/app/login/"));		
 		
 		// Override with helperuri
 		// override custom grid
@@ -380,7 +380,7 @@ namespace tut
 					  std::string("https://my.helper.uri/mycustomhelpers"));
 		ensure_equals("Override custom grid helper uri: login page is not changed",
 					  grid[GRID_LOGIN_PAGE_VALUE].asString(), 
-					  std::string("http://mycustomgridchoice/app/loginFS/"));
+					  std::string("http://mycustomgridchoice/app/login/"));
 	}
 	
 	// validate overriding of login page via cmd line
@@ -451,9 +451,9 @@ namespace tut
 		ensure_equals("getHelperURI", LLGridManager::getInstance()->getHelperURI(), 
 					  std::string("https://secondlife.com/helpers/"));
 		ensure_equals("getLoginPage", LLGridManager::getInstance()->getLoginPage(), 
-					  std::string("http://phoenixviewer.com/app/loginFS/"));
+					  std::string("http://phoenixviewer.com/app/login/"));
 		ensure_equals("getLoginPage2", LLGridManager::getInstance()->getLoginPage("util.agni.lindenlab.com"), 
-					  std::string("http://phoenixviewer.com/app/loginFS/"));
+					  std::string("http://phoenixviewer.com/app/login/"));
 		ensure("Is Agni a production grid", LLGridManager::getInstance()->isInProductionGrid());		
 		std::vector<std::string> uris;
 		LLGridManager::getInstance()->getLoginURIs(uris);
@@ -491,7 +491,7 @@ namespace tut
 					  std::string("https://myaddedgrid/helpers/"));
 		ensure_equals("name based grid has name value", 
 					  grid[GRID_LOGIN_PAGE_VALUE].asString(),
-					  std::string("http://myaddedgrid/app/loginFS/"));
+					  std::string("http://myaddedgrid/app/login/"));
 		ensure("name based grid has array loginuri", 
 			   grid[GRID_LOGIN_URI_VALUE].isArray());
 		ensure_equals("name based grid has single login uri value",
