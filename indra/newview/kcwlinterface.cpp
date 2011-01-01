@@ -160,11 +160,13 @@ void KCWindlightInterface::ApplySkySettings(const LLSD& settings)
 		{
 			S32 lower = (*space_it)["lower"].asInteger();
 			S32 upper = (*space_it)["upper"].asInteger();
-			if ( (z >= lower) && (z <= upper) && (lower != mCurrentSpace) )
+			if ( (z >= lower) && (z <= upper) )
+			{
+				if (lower != mCurrentSpace) //workaround: only apply once
 			{
 				mCurrentSpace = lower; //use lower as an id
-				//llinfos << "WL set : " << z << " " << lower << "-" << upper << " : " << (*space_it)["preset"] << llendl;
 				ApplyWindLightPreset((*space_it)["preset"].asString());
+				}
 				return;
 			}
 		}
@@ -384,7 +386,7 @@ bool KCWindlightInterface::ParsePacelForWLSettings(const std::string& desc, LLSD
 						}
 					}
 				}
-				else if (match[3].matched)
+				else if (match[4].matched)
 				{
 					std::string preset(match[5]);
 					//llinfos << "got water: " << preset << llendl;
