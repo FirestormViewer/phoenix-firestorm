@@ -1,104 +1,38 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  border="false"
- follows="left|top"
- height="20"
+ follows="all"
+ height="215"
  name="panel_im_control_panel"
- width="44">
+ width="150">
     <layout_stack
      mouse_opaque="false"
      border_size="0"
      clip="false"
      follows="all"
-     height="20"
+     height="215"
      layout="topleft"
-     left="2"
+     left="3"
      name="vertical_stack"
-     orientation="horizontal"
+     orientation="vertical"
      top="0"
-     width="44">
-        
-        <layout_panel
-         auto_resize="false"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         width="20"
-         left="2"
-         name="call_btn_panel"
-         user_resize="false">
-            <button
-             follows="left|top"
-             height="20"
-	         image_overlay="call_icon_24x24"
-	         image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Voice call this entire group"
-             name="call_btn"
-             top="0"
-             left="2"
-             width="20" />
-        </layout_panel>
-        
-        <layout_panel
-         auto_resize="false"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         width="20"
-         name="end_call_btn_panel"
-         user_resize="false"
-         visible="false">
-            <button
-             follows="left|top"
-             height="20"
-             image_overlay="call_end_icon_24x24"
-             image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="End Voice Call"
-             name="end_call_btn"
-             top="0"
-             width="20" />
-        </layout_panel>
-        
-        <layout_panel
-         auto_resize="false"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         width="20"
-         name="voice_ctrls_btn_panel"
-         user_resize="false"
-         visible="false">
-            <button
-             follows="left|top"
-             height="20"
-             image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Voice Properties"
-             image_overlay="VoicePTT_Off"
-             name="voice_ctrls_btn"
-             top="0"
-             width="20" />
-        </layout_panel>
-        
-        <!--
+     width="147">
         <layout_panel
          auto_resize="true"
-         follows="left|top"
-         height="20"
-         layout="topleft""
-         width="20"
+         follows="top|left"
+         height="130"
+         layout="topleft"
+         left="0"
+         min_height="0"
+         mouse_opaque="false"
+         width="147"
          top="0"
          name="speakers_list_panel"
          user_resize="false">
             <avatar_list
-             color="SL-Background"
+             color="DkGray2"
              follows="all"
-             height="20"
+             height="130"
              ignore_online_status="true"
              layout="topleft"
              name="speakers_list"
@@ -106,9 +40,7 @@
              show_info_btn="true"
              show_profile_btn="false"
              show_speaking_indicator="false"
-             width="20" />
+             width="147" />
         </layout_panel>
-        -->
     </layout_stack>
 </panel>
-

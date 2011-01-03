@@ -1,223 +1,37 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  border="false"
- height="20"
+ height="300"
  name="panel_im_control_panel"
- width="200">
-
+ width="150">
+    <avatar_icon
+     follows="left|top"
+     height="105"
+     left_delta="20"
+     name="avatar_icon"
+     top="-5"
+     width="114"/>
     <layout_stack
      mouse_opaque="false"
      border_size="0"
      clip="false"
      follows="all"
-     height="20"
+     height="183"
      layout="topleft"
-     left="2"
+     left="5"
      name="button_stack"
-     orientation="horizontal"
-     top_pad="0"
-     width="200">
-     
-     
-        <layout_panel
-         auto_resize="false"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         left="2" 
-         width="20"
-         name="view_profile_btn_panel"
-         top="0" 
-         user_resize="false">
-            <button
-             follows="left|top"
-             height="20"
-             image_overlay="profile_icon_24x24"
-	         image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Show this resident's profile"
-             name="view_profile_btn"
-             top="0"
-             left="2"
-             width="20" />
-        </layout_panel>
-        
-        
-        <layout_panel
-         auto_resize="false"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         width="20"
-         name="add_friend_btn_panel"
-         user_resize="false">
-            <button
-             follows="left|top"
-             height="20"
-             top="0"
-             image_overlay="friends_icon_24x24"
-	         image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Add this resident as a friend"
-             name="add_friend_btn"
-             width="20" />
-        </layout_panel>
-        
-        <layout_panel
-         auto_resize="false"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         width="20"
-         name="teleport_btn_panel"
-         user_resize="false">
-        <button
-             auto_resize="false"
-             follows="left|top"
-             height="20"
-	         image_overlay="teleport_icon_24x24"
-	         image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Summon / Teleport this resident"
-             name="teleport_btn"
-             top="0"
-             width="20" />
-        </layout_panel>
-        
-        <layout_panel
-         auto_resize="false"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         width="20"
-         name="share_btn_panel"
-         user_resize="false">
-           <button
-             auto_resize="true"
-             follows="left|top"
-             height="20"
-	         image_overlay="gift_icon_24x24"
-	         image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Send an item to this resident"
-             name="share_btn"
-             top="0"
-             width="20" />
-        </layout_panel>
-        
-        <layout_panel
-         auto_resize="false"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         width="20"
-         name="pay_btn_panel"
-         user_resize="false">
-           <button
-             auto_resize="true"
-             follows="left|top"
-             height="20"
-	         image_overlay="sale_icon_24x24"
-	         image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Send money to this resident"
-             name="pay_btn"
-             top="0"
-             width="20" />
-        </layout_panel>
-        
-        <layout_panel
-         auto_resize="false"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         width="20"
-         name="voice_ctrls_btn_panel"
-         user_resize="false"
-         visible="true">
-             <button
-	          height="20"
-	          follows="left|top"
-	          top="0"
-	          image_overlay="TabIcon_Translate_Off"
-	          width="20"
-	          control_name="TranslateChat"
-	          is_toggle="true"
-	          image_pressed="PushButton_Press"
-	          image_pressed_selected="PushButton_Selected_Press"
-	          image_selected="PushButton_Selected_Press"
-	          tool_tip="Use google language translation"
-              name="translate_btn"/>
-        </layout_panel>
-        
-        <layout_panel
-         auto_resize="false"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         width="20"
-         name="call_btn_panel"
-         user_resize="false">
-            <button
-             follows="left|top"
-             height="20"
-	         image_overlay="call_icon_24x24"
-	         image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Voice call this resident"
-             name="call_btn"
-             top="0"
-             width="20" />
-        </layout_panel>
-        
-        <layout_panel
-         auto_resize="false"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         width="20"
-         name="end_call_btn_panel"
-         user_resize="false"
-         visible="false">
-            <button
-             follows="left|top"
-             height="20"
-             image_overlay="call_end_icon_24x24"
-             image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="End Voice Call"
-             name="end_call_btn"
-             top="0"
-             width="20" />
-        </layout_panel>
-        
-        <layout_panel
-         auto_resize="false"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         width="20"
-         name="voice_ctrls_btn_panel"
-         user_resize="false"
-         visible="false">
-            <button
-             follows="left|top"
-             height="20"
-             image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Voice Properties"
-             image_overlay="VoicePTT_Off"
-             name="voice_ctrls_btn"
-             top="0"
-             width="20" />
-        </layout_panel>
+     orientation="vertical"
+     top_pad="5"
+     width="145">
+      <layout_panel
+       mouse_opaque="false"
+       auto_resize="true"
+       follows="top|left"
+       height="0"
+       layout="topleft"
+       min_height="0"
+       width="140"
+       name="spacer"
+       user_resize="false" />
     </layout_stack>
 </panel>

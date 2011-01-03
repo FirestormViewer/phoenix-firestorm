@@ -57,6 +57,11 @@
 #include "llspeakers.h"
 #include "llsidetray.h"
 
+//AO: For moving callbacks from control panel into this class
+#include "llavataractions.h"
+#include "llgroupactions.h"
+#include "llvoicechannel.h"
+
 // [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -286,8 +291,135 @@ void LLIMFloater::sendMsg()
 
 LLIMFloater::~LLIMFloater()
 {
-	LLTransientFloaterMgr::getInstance()->removeControlView(LLTransientFloaterMgr::IM, this);
+	LLTransientFloaterMgr::getInstance()->removeControlView(LLTransientFloaterMgr::IM, (LLView*)this);
+	mVoiceChannelStateChangeConnection.disconnect();
+	if(LLVoiceClient::instanceExists())
+	{
+		LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
+	}
 }
+
+// <AO> Callbacks previously in llcontrol_panel, moved to this floater.
+
+void LLIMFloater::onViewProfileButtonClicked()
+{
+	LLAvatarActions::showProfile(mOtherParticipantUUID);
+}
+void LLIMFloater::onAddFriendButtonClicked()
+{
+	LLAvatarIconCtrl* avatar_icon = getChild<LLAvatarIconCtrl>("avatar_icon");
+	std::string full_name = avatar_icon->getFullName();
+	LLAvatarActions::requestFriendshipDialog(mOtherParticipantUUID, full_name);
+}
+void LLIMFloater::onShareButtonClicked()
+{
+	LLAvatarActions::share(mOtherParticipantUUID);
+}
+void LLIMFloater::onTeleportButtonClicked()
+{
+	LLAvatarActions::offerTeleport(mOtherParticipantUUID);
+}
+void LLIMFloater::onPayButtonClicked()
+{
+	LLAvatarActions::pay(mOtherParticipantUUID);
+}
+void LLIMFloater::onGroupInfoButtonClicked()
+{
+	LLGroupActions::show(mSessionID);
+}
+void LLIMFloater::onCallButtonClicked()
+{
+	gIMMgr->startCall(mSessionID);
+}
+void LLIMFloater::onEndCallButtonClicked()
+{
+	gIMMgr->endCall(mSessionID);
+}
+void LLIMFloater::onOpenVoiceControlsClicked()
+{
+	LLFloaterReg::showInstance("voice_controls");
+}
+void LLIMFloater::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state)
+{
+	updateButtons(new_state >= LLVoiceChannel::STATE_CALL_STARTED);
+}
+
+void LLIMFloater::onChange(EStatusType status, const std::string &channelURI, bool proximal)
+{
+	if(status == STATUS_JOINING || status == STATUS_LEFT_CHANNEL)
+	{
+		return;
+	}
+	
+	updateCallButton();
+}
+
+void LLIMFloater::updateCallButton()
+{
+	// hide/show call button
+	bool voice_enabled = LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
+	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSessionID);
+	
+	if (!session) 
+	{
+		getChild<LLButton>("call_btn")->setEnabled(false);
+		return;
+	}
+	
+	bool session_initialized = session->mSessionInitialized;
+	bool callback_enabled = session->mCallBackEnabled;
+	
+	BOOL enable_connect = session_initialized
+	&& voice_enabled
+	&& callback_enabled;
+	getChild<LLButton>("call_btn")->setEnabled(enable_connect);
+}
+
+void LLIMFloater::updateButtons(bool is_call_started)
+{
+	getChild<LLLayoutStack>("ls_control_panel")->reshape(240,20,true);
+	getChildView("end_call_btn_panel")->setVisible( is_call_started);
+	getChildView("voice_ctrls_btn_panel")->setVisible( is_call_started);
+	getChildView("call_btn_panel")->setVisible( ! is_call_started);
+	updateCallButton();
+	
+	// AO: force resize the widget because llpanels don't resize properly on vis change.
+	LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
+	switch (pIMSession->mSessionType)
+	{
+		case LLIMModel::LLIMSession::P2P_SESSION:	// One-on-one IM
+		{
+			getChild<LLLayoutStack>("ls_control_panel")->reshape(200,20,true);
+			break;
+		}
+		case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat
+		{
+			getChild<LLLayoutStack>("ls_control_panel")->reshape(140,20,true);
+			break;
+		}
+		case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat
+		{
+			getChild<LLLayoutStack>("ls_control_panel")->reshape(120,20,true);
+			break;
+		}
+		default:
+			break;
+	}
+	
+}
+
+void LLIMFloater::changed(U32 mask)
+{
+	getChild<LLButton>("call_btn")->setEnabled(!LLAvatarActions::isFriend(mOtherParticipantUUID));
+	
+	// Disable "Teleport" button if friend is offline
+	if(LLAvatarActions::isFriend(mOtherParticipantUUID))
+	{
+		getChild<LLButton>("teleport_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID));
+	}
+}
+
+// </AO> Callbacks for llimcontrol panel, merged into this floater
 
 //virtual
 BOOL LLIMFloater::postBuild()
@@ -305,9 +437,9 @@ BOOL LLIMFloater::postBuild()
 	}
 
 	mControlPanel->setSessionId(mSessionID);
-	// AO: always show the icon bar for now, because we are hiding the former controls that
-	// can control its visibility.
-	mControlPanel->getParent()->setVisible(true); 
+	
+	// AO: always hide the control panel to start.
+	mControlPanel->getParent()->setVisible(false); 
 	
 	//mControlPanel->getParent()->setVisible(gSavedSettings.getBOOL("IMShowControlPanel"));
 
@@ -319,9 +451,107 @@ BOOL LLIMFloater::postBuild()
 	slide_right->setVisible(!mControlPanel->getParent()->getVisible());
 	slide_right->setClickedCallback(boost::bind(&LLIMFloater::onSlide, this));
 	
+	LLButton* view_profile  = getChild<LLButton>("view_profile_btn");
+	view_profile->setClickedCallback(boost::bind(&LLIMFloater::onViewProfileButtonClicked, this));
+	
+	LLButton* group_profile = getChild<LLButton>("group_info_btn");
+	group_profile->setClickedCallback(boost::bind(&LLIMFloater::onGroupInfoButtonClicked, this));
+	
+	LLButton* call = getChild<LLButton>("call_btn");
+	call->setClickedCallback(boost::bind(&LLIMFloater::onCallButtonClicked, this));
+	
+	LLButton* endcall = getChild<LLButton>("end_call_btn");
+	endcall->setClickedCallback(boost::bind(&LLIMFloater::onEndCallButtonClicked, this));
+	
+	LLButton* voicectrl = getChild<LLButton>("voice_ctrls_btn");
+	voicectrl->setClickedCallback(boost::bind(&LLIMFloater::onOpenVoiceControlsClicked, this));
+	
+	LLButton* share = getChild<LLButton>("share_btn");
+	share->setClickedCallback(boost::bind(&LLIMFloater::onShareButtonClicked, this));
+	
+	LLButton* tp = getChild<LLButton>("teleport_btn");
+	tp->setClickedCallback(boost::bind(&LLIMFloater::onTeleportButtonClicked, this));
+	
+	LLButton* pay = getChild<LLButton>("pay_btn");
+	pay->setClickedCallback(boost::bind(&LLIMFloater::onPayButtonClicked, this));
+	
+	LLButton* add_friend = getChild<LLButton>("add_friend_btn");
+	add_friend->setClickedCallback(boost::bind(&LLIMFloater::onAddFriendButtonClicked, this));
+	
 	// extra icon controls -AO
 	LLButton* transl = getChild<LLButton>("translate_btn");
 	transl->setVisible(true);
+	
+	// type-specfic controls
+	LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
+	if (pIMSession)
+	{
+		switch (pIMSession->mSessionType)
+		{
+			case LLIMModel::LLIMSession::P2P_SESSION:	// One-on-one IM
+			{
+				getChild<LLLayoutPanel>("slide_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("gprofile_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
+				getChild<LLLayoutStack>("ls_control_panel")->reshape(180,20,true);
+				
+				
+				LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
+				LLAvatarTracker::instance().addParticularFriendObserver(mOtherParticipantUUID, this);
+				// Disable "Add friend" button for friends.
+				getChild<LLButton>("add_friend_btn")->setEnabled(!LLAvatarActions::isFriend(mOtherParticipantUUID));
+				
+				// Disable "Teleport" button if friend is offline
+				if(LLAvatarActions::isFriend(mOtherParticipantUUID))
+				{
+					getChild<LLButton>("teleport_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID));
+				}
+				break;
+			}
+			case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat
+			{
+				getChild<LLLayoutPanel>("profile_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("friend_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("tp_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("share_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
+				getChild<LLLayoutStack>("ls_control_panel")->reshape(120,20,true);
+				break;
+			}
+			case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat
+			{
+				getChild<LLLayoutPanel>("profile_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("gprofile_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("friend_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("tp_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("share_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
+				getChild<LLLayoutStack>("ls_control_panel")->reshape(100,20,true);
+				break;
+			}
+			default:
+				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);		
+				break;
+		}
+	}
+	LLVoiceChannel* voice_channel = LLIMModel::getInstance()->getVoiceChannel(mSessionID);
+	if(voice_channel)
+	{
+		mVoiceChannelStateChangeConnection = voice_channel->setStateChangedCallback(boost::bind(&LLIMFloater::onVoiceChannelStateChanged, this, _1, _2));
+		
+		//call (either p2p, group or ad-hoc) can be already in started state
+		updateButtons(voice_channel->getState() >= LLVoiceChannel::STATE_CALL_STARTED);
+	}
+	LLVoiceClient::getInstance()->addObserver((LLVoiceClientStatusObserver*)this);
+	
+	// </AO>
+	
 
 	mInputEditor = getChild<LLLineEditor>("chat_editor");
 	mInputEditor->setMaxTextLength(1023);
