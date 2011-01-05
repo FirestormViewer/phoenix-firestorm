@@ -17,8 +17,7 @@
     <key>ChatTabDirection</key>
     <map>
       <key>Comment</key>
-      <string>Toggles the direction of chat tabs between horisontal and vertica
-l</string>
+      <string>Toggles the direction of chat tabs between horisontal and vertical</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -9233,7 +9232,18 @@ l</string>
       <key>Value</key>
       <integer>0</integer>
     </map>
-	<key>ShowScriptErrors</key>
+     <key>ShowProfileFloaters</key>
+    <map>
+      <key>Comment</key>
+      <string>Shows resident profiles in a floater rather than the side tray</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>   
+    <key>ShowScriptErrors</key>
     <map>
       <key>Comment</key>
       <string>Show script errors</string>

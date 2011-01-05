@@ -35,6 +35,9 @@
 
 #include "llavatarpropertiesprocessor.h"
 #include "llcallingcard.h"
+// [SL:KB] - Patch : UI-ProfileGroupFloater 
+#include "llfloater.h"
+// [/SL:KB]
 #include "llpanelavatar.h"
 #include "llpanelpicks.h"
 #include "llpanelprofile.h"
@@ -129,8 +132,37 @@ BOOL LLPanelProfileView::postBuild()
 	mStatusText = getChild<LLTextBox>("status");
 	mStatusText->setVisible(false);
 
-	childSetCommitCallback("back",boost::bind(&LLPanelProfileView::onBackBtnClick,this),NULL);
+//	childSetCommitCallback("back",boost::bind(&LLPanelProfileView::onBackBtnClick,this),NULL);
 	childSetCommitCallback("copy_to_clipboard",boost::bind(&LLPanelProfileView::onCopyToClipboard,this),NULL);
+// [SL:KB] - Patch : UI-ProfileGroupFloater 
+	LLFloater* pParentView = dynamic_cast<LLFloater*>(getParent());
+	if (!pParentView)
+	{
+		childSetCommitCallback("back", boost::bind(&LLPanelProfileView::onBackBtnClick,this),NULL);
+	}
+	else
+	{
+		pParentView->setTitle(getLabel());
+		childSetVisible("back", false);
+		// -TT - we might want to remove this. Maybe.
+		// HACK-Catznip: we got rid of the back button so we want to line up the name controls with the rest
+		LLUICtrl* pCtrls[] = 
+			{
+				getChild<LLUICtrl>("user_name", FALSE),
+				getChild<LLUICtrl>("display_name_label", FALSE),
+				getChild<LLUICtrl>("solo_username_label", FALSE),
+				getChild<LLUICtrl>("user_name_small", FALSE),
+				getChild<LLUICtrl>("user_label", FALSE),
+				getChild<LLUICtrl>("user_slid", FALSE)
+			};
+		int dX = (NULL != pCtrls[0]) ? 10 - pCtrls[0]->getRect().mLeft : 0;
+		for (int idxCtrl = 0; idxCtrl < sizeof(pCtrls) / sizeof(LLUICtrl*); idxCtrl++)
+		{
+			if (pCtrls[idxCtrl])
+				pCtrls[idxCtrl]->translate(dX, 0);
+		}
+	}
+// [/SL:KB]
 		
 	return TRUE;
 }
@@ -242,6 +274,11 @@ void LLPanelProfileView::onAvatarNameCache(const LLUUID& agent_id,
 		getChild<LLUICtrl>("copy_to_clipboard")->setEnabled( false );
 		getChild<LLUICtrl>("solo_username_label")->setVisible( true );
 	}
+// [SL:KB] - Patch : UI-ProfileGroupFloater 
+	LLFloater* pParentView = dynamic_cast<LLFloater*>(getParent());
+	if (pParentView)
+		pParentView->setTitle(av_name.getCompleteName() + " - " + getLabel());
+// [/SL:KB]
 }
 
 // EOF
