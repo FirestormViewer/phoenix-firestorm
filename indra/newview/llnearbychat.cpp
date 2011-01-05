@@ -102,10 +102,25 @@ BOOL LLNearbyChat::postBuild()
 	if(isChatMultiTab())
 	{
 			
+		llinfos << "nearbychat postBuild multitab" << llendl;
 		LLButton* slide_left = getChild<LLButton>("slide_left_btn");
 		slide_left->setVisible(false);
 		LLButton* slide_right = getChild<LLButton>("slide_right_btn");
 		slide_right->setVisible(false);
+		
+		
+		if (getDockControl() == NULL)
+		{
+			llinfos << "adding to multitab" << llendl;
+			LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+			LLTabContainer::eInsertionPoint i_pt = LLTabContainer::START;
+			if (floater_container)
+			{
+				floater_container->addFloater(this, TRUE, i_pt);
+			}
+		}
+		
+		
 		return LLDockableFloater::postBuild();
 	}
 	
