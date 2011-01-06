@@ -32,6 +32,9 @@
 #include "llavatarpropertiesprocessor.h"
 #include "llagent.h"
 #include "lltooldraganddrop.h"
+// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-09-08 (Catznip-2.1.2c) | Added: Catznip-2.1.2c
+#include "llfloater.h"
+// [/SL:KB]
 
 class LLAvatarName;
 class LLPanelProfile;
@@ -64,8 +67,11 @@ public:
 						   void *cargo_data, EAcceptance *accept,
 						   std::string& tooltip_msg)
 	{
-		LLToolDragAndDrop::handleGiveDragAndDrop(getAvatarId(), gAgent.getSessionID(), drop,
-				 cargo_type, cargo_data, accept);
+//		LLToolDragAndDrop::handleGiveDragAndDrop(getAvatarId(), gAgent.getSessionID(), drop,
+//				 cargo_type, cargo_data, accept);
+// [SL:KB] - Patch : UI-ProfileGroupFloater 
+		LLToolDragAndDrop::handleGiveDragAndDrop(getAvatarId(), LLUUID::null, drop, cargo_type, cargo_data, accept);
+// [/SL:KB]
 
 		return TRUE;
 	}
@@ -105,4 +111,20 @@ private:
 	AvatarStatusObserver* mAvatarStatusObserver;
 };
 
+// [SL:KB] - Patch : UI-ProfileGroupFloater 
+class LLFloaterProfileView : public LLFloater
+{
+public:
+	LLFloaterProfileView(const LLSD& seed) : LLFloater(seed) {}
+	~LLFloaterProfileView() {}
+	
+	void onOpen(const LLSD& key)
+	{
+		LLPanel* panel = findChild<LLPanel>("panel_profile_view");
+		if(panel)
+			panel->onOpen(key);
+	}
+
+};
+// [/SL:KB]
 #endif //LL_LLPANELPROFILEVIEW_H

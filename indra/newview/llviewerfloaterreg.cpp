@@ -112,6 +112,9 @@
 #include "llnearbychat.h"
 #include "llpanelblockedlist.h"
 #include "llpanelclassified.h"
+// [SL:KB] - Patch : UI-ProfileGroupFloater 
+#include "llpanelprofileview.h"
+// [/SL:KB]
 #include "llpreviewanim.h"
 #include "llpreviewgesture.h"
 #include "llpreviewnotecard.h"
@@ -158,7 +161,10 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("env_windlight", "floater_windlight_options.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterWindLight>);
 
 	LLFloaterReg::add("event", "floater_event.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterEvent>);
-	
+
+// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-09-08 (Catznip-2.1.2c) | Added: Catznip-2.1.2c
+	LLFloaterReg::add("floater_profile_view", "floater_profile_view.xml",&LLFloaterReg::build<LLFloaterProfileView>);
+// [/SL:KB]
 	LLFloaterReg::add("font_test", "floater_font_test.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterFontTest>);
 
 	LLFloaterReg::add("gestures", "floater_gesture.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterGesture>);

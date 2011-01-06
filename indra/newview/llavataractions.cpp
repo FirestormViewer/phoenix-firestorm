@@ -59,7 +59,9 @@
 #include "llrecentpeople.h"
 #include "llsidetray.h"
 #include "lltrans.h"
-#include "llviewerobjectlist.h"
+// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-09-08 (Catznip-2.1.2c) | Added: Catznip-2.1.2c
+#include "llviewercontrol.h"
+// [/SL:KB]#include "llviewerobjectlist.h"
 #include "llviewermessage.h"	// for handle_lure
 #include "llviewerregion.h"
 #include "llimfloater.h"
@@ -302,20 +304,31 @@ void LLAvatarActions::showProfile(const LLUUID& id)
 {
 	if (id.notNull())
 	{
-		LLSD params;
-		params["id"] = id;
-		params["open_tab_name"] = "panel_profile";
-
-		//Show own profile
-		if(gAgent.getID() == id)
+// [SL:KB] - Patch : UI-ProfileGroupFloater | 
+		if ( (!gSavedSettings.getBOOL("ShowProfileFloaters")) || ((gAgent.getID() == id)) )
 		{
-			LLSideTray::getInstance()->showPanel("panel_me", params);
+// [/SL:KB]		
+			LLSD params;
+			params["id"] = id;
+			params["open_tab_name"] = "panel_profile";
+
+			//Show own profile
+			if(gAgent.getID() == id)
+			{
+				LLSideTray::getInstance()->showPanel("panel_me", params);
+			}
+			//Show other user profile
+			else
+			{
+				LLSideTray::getInstance()->showPanel("panel_profile_view", params);
+			}
+// [SL:KB] - Patch : UI-ProfileGroupFloater 
 		}
-		//Show other user profile
 		else
 		{
-			LLSideTray::getInstance()->showPanel("panel_profile_view", params);
+			LLFloaterReg::showInstance("floater_profile_view", LLSD().with("id", id));
 		}
+// [/SL:KB] 
 	}
 }
 

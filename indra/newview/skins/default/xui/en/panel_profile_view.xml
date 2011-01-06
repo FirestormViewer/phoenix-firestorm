@@ -6,6 +6,7 @@
  layout="topleft"
  min_height="350"
  name="panel_target_profile"
+ label="Profile View"
  left="0"
  width="333">
   <string

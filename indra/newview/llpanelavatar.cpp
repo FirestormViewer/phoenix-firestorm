@@ -340,11 +340,17 @@ LLPanelAvatarNotes::~LLPanelAvatarNotes()
 	if(getAvatarId().notNull())
 	{
 		LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
-		if(LLVoiceClient::instanceExists())
-		{
-			LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
-		}
+		//if(LLVoiceClient::instanceExists())
+		//{
+		//	LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
+		//}
 	}
+// [SL:KB] - Patch : UI-ProfileGroupFloater 
+	if(LLVoiceClient::instanceExists())
+	{
+		LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
+	}
+// [/SL:KB]
 }
 
 // virtual, called by LLAvatarTracker
@@ -774,11 +780,17 @@ LLPanelAvatarProfile::~LLPanelAvatarProfile()
 	if(getAvatarId().notNull())
 	{
 		LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
-		if(LLVoiceClient::instanceExists())
-		{
-			LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
-		}
+		//if(LLVoiceClient::instanceExists())
+		//{
+		//	LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
+		//}
 	}
+// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-11-26 (Catznip-2.4.0f) | Added: Catznip-2.4.0f
+	if(LLVoiceClient::instanceExists())
+	{
+		LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
+	}
+// [/SL:KB]
 }
 
 // virtual, called by LLAvatarTracker
