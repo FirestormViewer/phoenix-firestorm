@@ -3320,4 +3320,8 @@ Abuse Report</string>
 
   <string name="EmptyOutfitText">There are no items in this outfit</string>
 
+  <!-- Menu strings - AO -->
+  <string name="P">P</string>
+  <string name="Q">Q</string>
+  <string name="F1">F1</string>
   </strings>
