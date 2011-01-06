@@ -127,11 +127,11 @@
          help_topic="preferences_advanced1_tab"
          name="starlightUI1" />
 		<panel
-         class="panel_preference"
+         class="panel_preference_skins"
          filename="panel_preferences_skins.xml"
          label="Skins"
          layout="topleft"
-         help_topic="preferences_advanced1.tab"
+         help_topic="preferences_skins_tab"
          name="skins" /> 
 		<panel
          class="panel_preference"

@@ -281,6 +281,12 @@ const std::string &LLDir::getSkinDir() const
 	return mSkinDir;
 }
 
+// [SL:KB] - Catznip: Viewer-Skins | Checked: 2010-10-20 (Catznip-2.2.0c) | Added: Catznip-2.2.0c
+const std::string& LLDir::getSkinThemeDir() const
+{
+	return mSkinThemeDir;
+}
+
 const std::string &LLDir::getUserSkinDir() const
 {
 	return mUserSkinDir;
@@ -377,6 +383,11 @@ std::string LLDir::getExpandedFilename(ELLPath location, const std::string& subd
 		prefix = getSkinDir();
 		break;
 
+	// [SL:KB] - Catznip Viewer-Skins 
+	case LL_PATH_TOP_SKINTHEME:
+		prefix = getSkinThemeDir();
+		break;
+			
 	case LL_PATH_DEFAULT_SKIN:
 		prefix = getDefaultSkinDir();
 		break;
@@ -512,6 +523,7 @@ std::string LLDir::findSkinnedFilename(const std::string &subdir1, const std::st
 	std::vector<std::string> search_paths;
 	
 	search_paths.push_back(getUserSkinDir() + subdirs);		// first look in user skin override
+	search_paths.push_back(getSkinThemeDir() + subdirs);	// KB - Catznip Viewer-skins per-theme colors
 	search_paths.push_back(getSkinDir() + subdirs);			// then in current skin
 	search_paths.push_back(getDefaultSkinDir() + subdirs);  // then default skin
 	search_paths.push_back(getCacheDir() + subdirs);		// and last in preload directory
@@ -619,6 +631,7 @@ void LLDir::setSkinFolder(const std::string &skin_folder)
 	mSkinDir = getSkinBaseDir();
 	mSkinDir += mDirDelimiter;
 	mSkinDir += skin_folder;
+	setSkinThemeFolder("default"); // KB: Catznip Viewer-Skins
 
 	// user modifications to current skin
 	// e.g. c:\documents and settings\users\username\application data\second life\skins\dazzle
@@ -634,6 +647,17 @@ void LLDir::setSkinFolder(const std::string &skin_folder)
 	mDefaultSkinDir += mDirDelimiter;	
 	mDefaultSkinDir += "default";
 }
+
+// [KB] - Catznip: Viewer-Skins
+void LLDir::setSkinThemeFolder(const std::string& theme_folder)
+{
+	mSkinThemeDir = mSkinDir;
+	mSkinThemeDir += mDirDelimiter;
+	mSkinThemeDir += "themes";
+	mSkinThemeDir += mDirDelimiter;
+	mSkinThemeDir += theme_folder;
+}
+
 
 bool LLDir::setCacheDir(const std::string &path)
 {

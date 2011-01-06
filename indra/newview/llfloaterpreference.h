@@ -43,6 +43,7 @@ class LLScrollListCtrl;
 class LLSliderCtrl;
 class LLSD;
 class LLTextBox;
+class LLComboBox;
 
 typedef enum
 	{
@@ -204,5 +205,29 @@ protected:
 	void resetDirtyChilds();
 	
 };
+
+// [SL:KB] - Catznip Viewer-Skins
+class LLPanelPreferenceSkins : public LLPanelPreference
+{
+public:
+	LLPanelPreferenceSkins();
+	
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ void apply();
+	/*virtual*/ void cancel();
+protected:
+	void onSkinChanged();
+	void onSkinThemeChanged();
+	void refreshSkinList();
+	void refreshSkinThemeList();
+	
+protected:
+	std::string m_Skin;
+	LLComboBox* m_pSkinCombo;
+	std::string m_SkinTheme;
+	LLComboBox* m_pSkinThemeCombo;
+	LLSD        m_SkinsInfo;
+};
+
 
 #endif  // LL_LLPREFERENCEFLOATER_H

@@ -107,6 +107,8 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
+#include "llsdserialize.h" // KB: SkinsSelector
+
 #include "lllogininstance.h"        // to check if logged in yet
 
 const F32 MAX_USER_FAR_CLIP = 512.f;
@@ -305,8 +307,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.WebClearCache",			boost::bind(&LLFloaterPreference::onClickBrowserClearCache, this));
 	mCommitCallbackRegistrar.add("Pref.SetCache",				boost::bind(&LLFloaterPreference::onClickSetCache, this));
 	mCommitCallbackRegistrar.add("Pref.ResetCache",				boost::bind(&LLFloaterPreference::onClickResetCache, this));
-	mCommitCallbackRegistrar.add("Pref.ClickSkin",				boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
-	mCommitCallbackRegistrar.add("Pref.SelectSkin",				boost::bind(&LLFloaterPreference::onSelectSkin, this));
+//	mCommitCallbackRegistrar.add("Pref.ClickSkin",				boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
+//	mCommitCallbackRegistrar.add("Pref.SelectSkin",				boost::bind(&LLFloaterPreference::onSelectSkin, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetKey",			boost::bind(&LLFloaterPreference::onClickSetKey, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetMiddleMouse",	boost::bind(&LLFloaterPreference::onClickSetMiddleMouse, this));
 //	mCommitCallbackRegistrar.add("Pref.ClickSkipDialogs",		boost::bind(&LLFloaterPreference::onClickSkipDialogs, this));
@@ -329,7 +331,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	
 	
 
-	sSkin = gSavedSettings.getString("SkinCurrent");
+//	sSkin = gSavedSettings.getString("SkinCurrent");
 	
 	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
 	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
@@ -416,12 +418,14 @@ void LLFloaterPreference::saveSettings()
 void LLFloaterPreference::apply()
 {
 	LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
-	if (sSkin != gSavedSettings.getString("SkinCurrent"))
+/*
+ if (sSkin != gSavedSettings.getString("SkinCurrent"))
 	{
 		LLNotificationsUtil::add("ChangeSkin");
 		refreshSkin(this);
 	}
-	// Call apply() on all panels that derive from LLPanelPreference
+*/
+ // Call apply() on all panels that derive from LLPanelPreference
 	for (child_list_t::const_iterator iter = tabcontainer->getChildList()->begin();
 		 iter != tabcontainer->getChildList()->end(); ++iter)
 	{
@@ -516,7 +520,7 @@ void LLFloaterPreference::cancel()
 	}
 	
 	// reverts any changes to current skin
-	gSavedSettings.setString("SkinCurrent", sSkin);
+	//gSavedSettings.setString("SkinCurrent", sSkin);
 	
 	if (mDoubleClickActionDirty)
 	{
@@ -777,6 +781,7 @@ void LLFloaterPreference::onClickResetCache()
 	gSavedSettings.setString("CacheLocationTopFolder", top_folder);
 }
 
+/*
 void LLFloaterPreference::onClickSkin(LLUICtrl* ctrl, const LLSD& userdata)
 {
 	gSavedSettings.setString("SkinCurrent", userdata.asString());
@@ -795,7 +800,7 @@ void LLFloaterPreference::refreshSkin(void* data)
 	sSkin = gSavedSettings.getString("SkinCurrent");
 	self->getChild<LLRadioGroup>("skin_selection", true)->setValue(sSkin);
 }
-
+*/
 
 void LLFloaterPreference::buildPopupLists()
 {
@@ -1460,7 +1465,7 @@ BOOL LLPanelPreference::postBuild()
 	}
 	
 	//////////////////////PanelSkins ///////////////////
-	
+	/*
 	if (hasChild("skin_selection"))
 	{
 		LLFloaterPreference::refreshSkin(this);
@@ -1473,6 +1478,7 @@ BOOL LLPanelPreference::postBuild()
 		}
 
 	}
+	 */
 
 	if(hasChild("online_visibility") && hasChild("send_im_to_email"))
 	{
@@ -1683,3 +1689,114 @@ void LLPanelPreferenceGraphics::setHardwareDefaults()
 	resetDirtyChilds();
 	LLPanelPreference::setHardwareDefaults();
 }
+
+// <KB> - Catznip Viewer-Skins 
+
+static LLRegisterPanelClassWrapper<LLPanelPreferenceSkins> t_pref_skins("panel_preference_skins");
+
+
+LLPanelPreferenceSkins::LLPanelPreferenceSkins() : LLPanelPreference(), m_pSkinCombo(NULL), m_pSkinThemeCombo(NULL)
+{
+	m_Skin = gSavedSettings.getString("SkinCurrent");
+	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme");
+	llinfos << "AO: SKINS: LLPanelPreferenceSkins, launching" << llendl;
+	const std::string strSkinsPath = gDirUtilp->getSkinBaseDir() + gDirUtilp->getDirDelimiter() + "skins.xml";
+	llifstream fileSkins(strSkinsPath, std::ios::binary);
+	if (fileSkins.is_open())
+	{
+		LLSDSerialize::fromXMLDocument(m_SkinsInfo, fileSkins);	
+	}
+}
+
+
+BOOL LLPanelPreferenceSkins::postBuild()
+{
+
+	m_pSkinCombo = getChild<LLComboBox>("skin_combobox");
+	if (m_pSkinCombo)
+		m_pSkinCombo->setCommitCallback(boost::bind(&LLPanelPreferenceSkins::onSkinChanged, this));
+		
+	m_pSkinThemeCombo = getChild<LLComboBox>("theme_combobox");
+	if (m_pSkinThemeCombo)
+		m_pSkinThemeCombo->setCommitCallback(boost::bind(&LLPanelPreferenceSkins::onSkinThemeChanged, this));
+			
+	refreshSkinList();
+
+	return LLPanelPreference::postBuild();	
+}
+
+void LLPanelPreferenceSkins::apply()
+{
+	if ( (m_Skin != gSavedSettings.getString("SkinCurrent")) || (m_SkinTheme != gSavedSettings.getString("SkinCurrentTheme")) )
+	{
+		gSavedSettings.setString("SkinCurrent", m_Skin);
+		gSavedSettings.setString("SkinCurrentTheme", m_SkinTheme);
+
+		LLNotificationsUtil::add("ChangeSkin");	
+	}
+}
+
+
+void LLPanelPreferenceSkins::cancel()
+{
+	m_Skin = gSavedSettings.getString("SkinCurrent");
+	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme");
+	refreshSkinList();	
+}
+
+void LLPanelPreferenceSkins::onSkinChanged()
+{
+	m_Skin = (m_pSkinCombo) ? m_pSkinCombo->getSelectedValue().asString() : "default";
+	m_SkinTheme = "default";
+	refreshSkinThemeList();
+}
+
+void LLPanelPreferenceSkins::onSkinThemeChanged()
+{
+	m_SkinTheme = (m_pSkinThemeCombo) ? m_pSkinThemeCombo->getSelectedValue().asString() : "default";
+}
+
+void LLPanelPreferenceSkins::refreshSkinList()
+{
+	if (!m_pSkinCombo)
+		return;
+	
+	m_pSkinCombo->clearRows();
+
+	for (LLSD::array_const_iterator itSkinInfo = m_SkinsInfo.beginArray(), endSkinInfo = m_SkinsInfo.endArray();
+		 itSkinInfo != endSkinInfo; ++itSkinInfo)		
+	{
+		const LLSD& sdSkin = *itSkinInfo;
+		m_pSkinCombo->add(sdSkin["name"].asString(), sdSkin["folder"]);	
+	}
+	
+	m_pSkinCombo->setSelectedByValue(m_Skin, TRUE);
+	refreshSkinThemeList();
+}
+
+void LLPanelPreferenceSkins::refreshSkinThemeList()
+{
+	if (!m_pSkinThemeCombo)
+		return;
+
+	m_pSkinThemeCombo->clearRows();
+	for (LLSD::array_const_iterator itSkinInfo = m_SkinsInfo.beginArray(), endSkinInfo = m_SkinsInfo.endArray(); 
+		 itSkinInfo != endSkinInfo; ++itSkinInfo)
+	{
+		const LLSD& sdSkin = *itSkinInfo;
+		if (sdSkin["folder"].asString() == m_Skin)
+		{
+			const LLSD& sdThemes = sdSkin["themes"];
+			for (LLSD::array_const_iterator itTheme = sdThemes.beginArray(), endTheme = sdThemes.endArray(); itTheme != endTheme; ++itTheme)
+			{
+				const LLSD& sdTheme = *itTheme;
+				m_pSkinThemeCombo->add(sdTheme["name"].asString(), sdTheme["folder"]);
+			}
+			
+			break;
+		}	
+	}
+	
+	m_pSkinThemeCombo->setSelectedByValue(m_SkinTheme, TRUE);
+}
+// </KB>

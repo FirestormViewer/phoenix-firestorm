@@ -2,6 +2,20 @@
 <llsd>
 <map>
 
+	
+
+    <key>SkinCurrentTheme</key>
+    <map>
+      <key>Comment</key>
+      <string>The selected theme for the current skin.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>default</string>
+    </map>
+
     <key>ShowSearchTopBar</key>
     <map>
       <key>Comment</key>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border="true"
+ follows="left|top|right|bottom"
+ height="408"
+ label="Rendering"
+ layout="topleft"
+ left="102"
+ name="Graphics rendering panel"
+ top="1"
+ width="517">
+
+    <panel
+     border="false"
+     follows="top|left"
+     height="312"
+     label="RenderingGraphics"
+     layout="topleft"
+     left="5"
+     name="RenderingPanel"
+     top="16"
+     width="485">
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="12"
+		layout="topleft"
+		left="5"
+		name="World Updating"
+		top_pad="12"
+		width="308">
+			World Updating:
+		</text>
+<!-- world pauser -->
+		<check_box
+		control_name="AgentPause"
+		height="16"
+		initial_value="false"
+		label="Freeze updates to World (pause everything)"
+		tool_tip="Set this to freeze all updates from the server - stops all actions in-world but does not affect chat, IMs or voice"                           
+		layout="topleft"
+		left_delta="10"
+		name="WorldPause"
+		top_pad="12"
+		width="256"/>
+
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="12"
+		layout="topleft"
+		left="5"
+		name="Texture Rendering"
+		top_pad="20"
+		width="308">
+			Texture rendering:
+		</text>
+<!-- texture disabler
+		<check_box
+		control_name="TextureDisable"
+		height="16"
+		initial_value="false"
+		label="Minimal texture loading" 
+		tool_tip="This sets the 'TextureDisable' parameter - but still seems to load some textures, but slowly"                          
+		layout="topleft"
+		left_delta="10"
+		name="TexturesLoaded"
+		top_pad="12"
+		width="256"/>  -->
+<!-- texture disabler -->
+		<check_box
+		control_name="TextureLoadFullRes"
+		height="16"
+		initial_value="false"
+		label="Always Load Textures at full resolution" 
+		tool_tip="Set this to always load textures at their highest possible settings"                          
+		layout="topleft"
+		left_delta="10"
+		name="TexturesLoadAtFullRes"
+		top_pad="12"
+		width="256"/>
+<!-- HTTP textures -->
+		<check_box
+		control_name="ImagePipelineUseHTTP"
+		height="16"
+		label="Use HTTP Textures" 
+		tool_tip="Set this to load textures using the HTTP protocol - unset it if you are having rendering problems and wish to load textures as they were done before July 2010 and on Viewer 1"                          
+		layout="topleft"
+		left_delta="0"
+		name="TexturesHTTP"
+		top_pad="7"
+		width="256"/>
+
+<!-- New Texture detail 5 is lowest, 0 is highest -->
+     <text
+    type="string"
+    length="1"
+    top_pad="20"
+    follows="top|left"
+    height="18"
+    width="180"
+    word_wrap="true"
+    layout="topleft"
+    left="5"
+    name="shadows_label">
+        Texture Details Loaded:
+      </text>
+      <combo_box
+      control_name="TextureDiscardLevel"
+      height="23"
+      layout="topleft"
+      left="10"
+      top_pad="0" 
+      name="TextureDetail"
+      width="150">
+        <combo_box.item
+        label="Normal"
+        name="0"
+        value="0"/>
+        <combo_box.item
+        label="Minimal"
+        name="3"
+        value="3"/>
+        <combo_box.item
+        label="None"
+        name="5"
+        value="5"/>
+      </combo_box>
+
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="12"
+		layout="topleft"
+		left="5"
+		name="Miscellaneous Rendering"
+		top_pad="20"
+		width="308">
+			Miscellaneous Rendering:
+		</text>
+
+		<check_box
+		control_name="RenderUIinSnapshot"
+		height="16"
+		initial_value="false"
+		label="Render the User Interface in snapshots" 
+		tool_tip="When ticked this makes the User Interface appear in snapshots"                          
+		layout="topleft"
+		left_delta="10"
+		name="UIinSnapshot"
+		top_pad="12"
+		width="256"/>
+		<check_box
+		control_name="RenderUnloadedAvatars"
+		height="16"
+		initial_value="false"
+		label="Show avatars that haven't finished loading"                           
+		layout="topleft"
+		left_delta="0"
+		name="RenderUnloadedAvatars"
+		top_pad="7"
+		width="256"/>
+		<check_box
+		control_name="EffectScriptChatParticles"
+		height="16"
+		initial_value="false"
+		label="Show scripted lights"
+		tool_tip="When unticked turns off scripted particles and lights"                           
+		layout="topleft"
+		left_delta="0"
+		name="EffectScriptChatParticles"
+		top_pad="7"
+		width="256"/>
+   </panel>
+</panel>
+

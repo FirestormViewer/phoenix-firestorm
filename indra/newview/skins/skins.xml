@@ -1,0 +1,47 @@
+<llsd>
+    <array>
+        <map>
+        <key>name</key>
+            <string>Firestorm Sky</string>
+        <key>folder</key>
+            <string>default</string>
+        <key>themes</key>
+            <array>
+                <map>
+                <key>name</key>
+                    <string>AppalachianSky</string>
+                <key>folder</key>
+                    <string>default</string>
+                </map>
+            </array>
+        </map>
+        <map>
+        <key>name</key>
+            <string>StarLight</string>
+        <key>folder</key>
+            <string>starlight</string>
+        <key>themes</key>
+            <array>
+                <map>
+                <key>name</key>
+                    <string>Nostalgia Blue</string>
+                <key>folder</key>
+                    <string>nostalgia_blue</string>
+                </map>
+                <map>
+                <key>name</key>
+                    <string>Original Orange</string>
+                <key>folder</key>
+                    <string>original_orange</string>
+                </map>
+                <map>
+                <key>name</key>
+                    <string>Original Teal</string>
+                <key>folder</key>
+                    <string>original_teal</string>
+                </map>
+            </array>
+        </map>
+    </array>
+</llsd>
+

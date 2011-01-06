@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border="true"
+ follows="left|top|right|bottom"
+ height="408"
+ label="World"
+ layout="topleft"
+ left="102"
+ name="Display panel"
+ top="1"
+ width="517">
+
+    <panel
+     border="false"
+     follows="top|left"
+     height="392"
+     label="WorldPrefs"
+     layout="topleft"
+     left="5"
+     name="World prefs Panel"
+     top="9"
+     width="485">
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="12"
+		layout="topleft"
+		left="5"
+		name="Out-World Settings"
+		top="3"
+		width="190">
+			Out-World Settings:
+		</text>
+		<check_box
+		control_name="AllowMultipleViewers"
+		height="16"
+		initial_value="true"
+		label="Allow multiple viewers (requires restart)"
+		layout="topleft"
+		left_delta="10"
+		name="Allow Multiple Viewers"
+		tool_tip="Set this so you can use multiple viewers to access Second Life at the same time (requires restart)"
+		top_pad="12"
+		width="256" />
+		<check_box
+		control_name="ForceShowGrid"
+		height="16"
+		initial_value="true"
+		label="Show grid selection at login"
+		layout="topleft"
+		left_delta="0"
+		name="ForceShowGrid"
+		tool_tip="Set this to show and select from all available grids in Second Life - not just the main grid (Agni). You may need permission to access to other grids."
+		top_pad="7"
+		width="315"/>
+		<check_box
+		control_name="AskedAboutCrashReports"
+		height="16"
+		initial_value="true"
+		label="Ask me whether to send crash reports"
+		layout="topleft"
+		left_delta="0"
+		name="AskedAboutCrashReports"
+		tool_tip="Set this to be asked if you want to send a crash report to Linden Labs when you crash"
+		top_pad="7"
+		width="256"/>
+		<text
+		type="string"
+            left="5"
+            top_pad="12"
+		length="1"
+		follows="left|top"
+		height="12"
+		layout="topleft"
+		name="MovementSettings"
+		width="188">
+			Movement:
+		</text>
+		<check_box
+		control_name="DoubleClickTeleport"
+		height="16"
+		initial_value="true"
+		label="Teleport to wherever you double-click in-world"
+		layout="topleft"
+		left_delta="10"
+		name="DoubleClickTeleport"
+		tool_tip="Set this to teleport to a point you double click on in-world"
+		top_pad="12"
+		width="335"/>
+		<check_box
+		control_name="DoubleClickAutoPilot"
+		height="16"
+		initial_value="true"
+		label="Walk or run to wherever you double-click in-world"
+		layout="topleft"
+		left_delta="0"
+		name="DoubleClickAutoPilot"
+		tool_tip="Set this to walk or run your avatar to a point you double click on in-world (teleport on double click over-rides this)"
+		top_pad="7"
+		width="325"/> 
+		<check_box
+		control_name="NumpadControl"
+		height="16"
+		initial_value="true"
+		label="Number keys move avatar (when numlock is off)"
+		layout="topleft"
+		left_delta="0"
+		name="NumpadControl"
+		tool_tip="Set this so that the number keys move your avatar when numlock is not set"
+		top_pad="7"
+		width="256" />
+		<check_box
+		control_name="DisableCameraConstraints"
+		height="16"
+		initial_value="true"
+		label="Disable camera Constraints (move it more freely)"
+		layout="topleft"
+		left_delta="0"
+		name="DisableCameraConstraints"
+		tool_tip="Set this to move your camera beyond it's normal bounds and below land level"
+		top_pad="7"
+		width="315"/>
+		<check_box
+		control_name="LimitSelectDistance"
+		height="16"
+		initial_value="true"
+		label="Limit the distance that I can select objects at"
+		layout="topleft"
+		left_delta="0"
+		name="LimitSelectDistance"
+		tool_tip="Set this to limit the distance that you can select objects by clicking on them"
+		top_pad="7"
+		width="315"/>  
+
+		<slider
+		control_name="MaxSelectDistance"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="1"
+		initial_value="200"
+		label="Maximum distance to select objects at:"
+		label_width="300"
+            tool_tip="Indicates the distance away (in meters) up to which you can normally select an object"
+		layout="topleft"
+		left="15"
+		max_val="256"
+	      min_val="1"
+		name="MaxSelectDistance"
+		top_pad="7"
+		width="471" />
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left_delta="466"
+		name="MaxSelectDistanceText"
+		top_delta="0"
+		width="50">
+			meters
+		</text>   
+		<slider
+		control_name="MaxDragDistance"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="1"
+		initial_value="200"
+		label="Maximum distance to drag objects in one move:"
+            tool_tip="Indicates the maximum number of meters that an object can be dragged in one movement"
+		label_width="300"
+		layout="topleft"
+		left="15"
+		max_val="256"
+	      min_val="1"
+		name="MaxDragDistance"
+		top_pad="5"
+		width="471" />
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left_delta="466"
+		name="MaxDragDistanceText"
+		top_delta="0"
+		width="50">
+			meters
+
+		</text>
+		<text
+		type="string"
+            left="5"
+            top_pad="12"
+		length="1"
+		follows="left|top"
+		height="12"
+		layout="topleft"
+		name="MiscPrefsSettings"
+		width="188">
+			Miscellaneous:
+		</text>
+		<slider
+		control_name="MiniMapPrimMaxRadius"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="1"
+		initial_value="130"
+		label="Radius of largest prim to be shown on the Mini-Map:"
+            tool_tip="Radius of largest prim to be shown on the Mini-Map"
+		label_width="300"
+		layout="topleft"
+		left_delta="10"
+		max_val="256"
+	      min_val="1"
+		name="MiniMapPrimMaxRadius"
+		top_pad="12"
+		width="471" />
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left_delta="466"
+		name="MiniMapPrimMaxRadiusText"
+		top_delta="0"
+		width="50">
+			meters
+		</text>
+		<slider
+		control_name="PrecachingDelay"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="1"
+		initial_value="200"
+		label="Time to delay while pre-caching before showing world:"
+            tool_tip="How long to delay before showing world to you after you show as being online to others (default is 6 seconds)"
+		label_width="300"
+		layout="topleft"
+		left="15"
+		max_val="15"
+	      min_val="1"
+		name="PrecachingDelay"
+		top_pad="5"
+		width="465" />
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left_delta="466"
+		name="PrecachingDelayText"
+		top_delta="0"
+		width="50">
+			seconds
+		</text>
+
+	</panel>
+</panel>
+
