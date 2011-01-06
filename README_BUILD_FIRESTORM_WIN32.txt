@@ -47,7 +47,8 @@ VISUAL STUDIO BUILDS
 ====================
 
 0. Open up a regular CMD.exe command window. Navigate to your downloaded source code.
-1. Run the command "develop.py -G vc80 -t Release configure -DLL_TESTS:BOOL=OFF" Change vc80 to vc90 for VS2008
+1. Run the command "develop.py -G vc80 -t Release configure -DLL_TESTS:BOOL=OFF" Change vc80 to vc90 for VS2008 or to VC100 for VS2010
+	(*as of Jan 1st 2011, VS2008 and VS2010 do not work, however, LL is working on supporting VS2010 in the future.) 
 1. Launch Visual Studio and open up <your downloaded phoenix code>\indra\build-vc80\Secondlife.sln
 2. Set the build type to Release
 3. Select the "firestorm-bin" target
