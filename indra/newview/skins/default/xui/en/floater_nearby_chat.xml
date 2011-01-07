@@ -83,6 +83,17 @@
          width="249"
 		 value="test1">
         </chat_history>
+      <line_editor
+         bottom="0"
+         follows="left|right|bottom"
+	 font="SansSerifSmall"
+         height="20"
+         label="In Progress"
+         layout="bottomleft"
+         name="chat_box"
+         tab_group="3"
+         width="249">
+      </line_editor>
     </layout_panel>
   </layout_stack>
 
