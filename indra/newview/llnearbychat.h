@@ -33,6 +33,7 @@
 
 class LLResizeBar;
 class LLChatHistory;
+class LLLineEditor;
 
 class LLNearbyChat: public LLDockableFloater
 {
@@ -73,6 +74,8 @@ public:
 	void setDocked(bool docked, bool pop_on_undock = true);
 	
 	BOOL getVisible();
+	static void onSendMsg( LLUICtrl*, void*);
+	void sendMsg();
 
 private:
 	virtual void    applySavedVariables();
@@ -81,12 +84,17 @@ private:
 
 	void	onNearbySpeakers	();
 	
+	void	setTyping(bool typing);
+	static void		onInputEditorFocusReceived( LLFocusableElement* caller, void* userdata );
+	static void		onInputEditorFocusLost(LLFocusableElement* caller, void* userdata);
+	static void		onInputEditorKeystroke(LLLineEditor* caller, void* userdata);
 
 private:
 	LLHandle<LLView>	mPopupMenuHandle;
 	LLChatHistory*		mChatHistory;
-
+	
 	std::vector<LLChat> mMessageArchive;
+	LLLineEditor* mInputEditor;
 };
 
 #endif

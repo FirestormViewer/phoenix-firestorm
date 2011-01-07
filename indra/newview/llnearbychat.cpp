@@ -61,6 +61,7 @@
 
 #include "llimfloatercontainer.h"
 #include "llimfloater.h"
+#include "lllineeditor.h"
 
 static const S32 RESIZE_BAR_THICKNESS = 3;
 
@@ -144,6 +145,23 @@ BOOL LLNearbyChat::postBuild()
 	return true;
 	
 }
+	mInputEditor = getChild<LLLineEditor>("chat_box");
+	mInputEditor->setMaxTextLength(1023);
+	// enable line history support for instant message bar
+	mInputEditor->setEnableLineHistory(TRUE);
+	
+	
+	mInputEditor->setFocusReceivedCallback( boost::bind(onInputEditorFocusReceived, _1, this) );
+	mInputEditor->setFocusLostCallback( boost::bind(onInputEditorFocusLost, _1, this) );
+	mInputEditor->setKeystrokeCallback( onInputEditorKeystroke, this );
+	mInputEditor->setCommitOnFocusLost( FALSE );
+	mInputEditor->setRevertOnEsc( FALSE );
+	mInputEditor->setReplaceNewlinesWithSpaces( FALSE );
+	mInputEditor->setPassDelete( TRUE );
+
+	childSetCommitCallback("chat_box", onSendMsg, this);
+	
+	mTypingStart = LLTrans::getString("IM_typing_start_string");
 
 void    LLNearbyChat::applySavedVariables()
 {
@@ -359,7 +377,35 @@ bool isWordsName(const std::string& name)
 		return std::string::npos != pos && name.rfind(' ', name.length()) == pos && 0 != pos && name.length()-1 != pos;
 	}
 }
-
+void LLNearbyChat::onInputEditorFocusReceived( LLFocusableElement* caller, void* userdata )
+{
+	 LLNearbyChat* self= (LLNearbyChat*) userdata;
+}
+void LLNearbyChat::onInputEditorFocusLost(LLFocusableElement* caller, void* userdata)
+{
+	LLNearbyChat* self = (LLNearbyChat*) userdata;
+	self->setTyping(false);
+}
+void LLNearbyChat::onInputEditorKeystroke(LLLineEditor* caller, void* userdata)
+{
+	LLNearbyChat* self = (LLNearbyChat*)userdata;
+	std::string text = self->mInputEditor->getText();
+	if (!text.empty())
+	{
+		self->setTyping(true);
+	}
+	else
+	{
+		// Deleting all text counts as stopping typing.
+		self->setTyping(false);
+	}
+}
+void LLNearbyChat::onSendMsg( LLUICtrl* ctrl, void* userdata )
+{
+	LLNearbyChat* self = (LLNearbyChat*) userdata;
+	llinfos << "DEBUG: Sending message" << llendl;
+	self->setTyping(false);
+}
 void LLNearbyChat::loadHistory()
 {
 	LLSD do_not_log;
