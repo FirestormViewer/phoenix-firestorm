@@ -1245,10 +1245,10 @@ if (WINDOWS)
     set_source_files_properties(${viewer_RESOURCE_FILES}
                                 PROPERTIES HEADER_FILE_ONLY TRUE)
 
-    set(viewer_RESOURCE_FILES 
+	configure_files(viewer_GENERATED_RESOURCE_FILES
         res/viewerRes.rc 
-        ${viewer_RESOURCE_FILES}
         )
+    list(APPEND viewer_RESOURCE_FILES ${viewer_GENERATED_RESOURCE_FILES})
 
     SOURCE_GROUP("Resource Files" FILES ${viewer_RESOURCE_FILES})
 
