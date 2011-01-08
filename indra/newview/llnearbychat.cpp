@@ -68,6 +68,8 @@ static const S32 RESIZE_BAR_THICKNESS = 3;
 LLNearbyChat::LLNearbyChat(const LLSD& key) 
 	: LLDockableFloater(NULL, false, false, key)
 	,mChatHistory(NULL)
+	,mInputEditor(NULL)
+	,mTypingStart()
 {
 	
 }
@@ -141,10 +143,8 @@ BOOL LLNearbyChat::postBuild()
 	//chrome="true" hides floater caption 
 	if (mDragHandle)
 		mDragHandle->setTitleVisible(TRUE);
-
-	return true;
 	
-}
+
 	mInputEditor = getChild<LLLineEditor>("chat_box");
 	mInputEditor->setMaxTextLength(1023);
 	// enable line history support for instant message bar
@@ -162,7 +162,8 @@ BOOL LLNearbyChat::postBuild()
 	childSetCommitCallback("chat_box", onSendMsg, this);
 	
 	mTypingStart = LLTrans::getString("IM_typing_start_string");
-
+	return true;
+}
 void    LLNearbyChat::applySavedVariables()
 {
 	if (mRectControl.size() > 1)
@@ -379,7 +380,7 @@ bool isWordsName(const std::string& name)
 }
 void LLNearbyChat::onInputEditorFocusReceived( LLFocusableElement* caller, void* userdata )
 {
-	 LLNearbyChat* self= (LLNearbyChat*) userdata;
+	 //LLNearbyChat* self= (LLNearbyChat*) userdata;
 }
 void LLNearbyChat::onInputEditorFocusLost(LLFocusableElement* caller, void* userdata)
 {
@@ -406,6 +407,11 @@ void LLNearbyChat::onSendMsg( LLUICtrl* ctrl, void* userdata )
 	llinfos << "DEBUG: Sending message" << llendl;
 	self->setTyping(false);
 }
+
+void LLNearbyChat::setTyping(bool typingStatus)
+{
+}
+
 void LLNearbyChat::loadHistory()
 {
 	LLSD do_not_log;
