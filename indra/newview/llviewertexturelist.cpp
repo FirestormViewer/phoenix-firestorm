@@ -1130,6 +1130,28 @@ void LLViewerTextureList::updateMaxResidentTexMem(S32 mem)
 	// currently max(12MB, VRAM/4) assumed...
 	
 	S32 vb_mem = mem;
+	
+	// Note: On Windows Vista/7 DirectX will report far more total graphics
+	// memory than actually is physically installed on the card -> "Feature",
+	// but apparently seems to have worked so far on all viewers
+	S32 total_mem = gGLManager.mVRAM;
+
+	// Set the limit the same way as in LLViewerImageList::getMaxVideoRamSetting
+	S32 system_ram = (S32)BYTES_TO_MEGA_BYTES(gSysMemory.getPhysicalMemoryClamped()); // In MB
+	S32 limit_mem = llmin(total_mem, (S32)(system_ram/2));
+
+	// It's one third here because the total memory will be sliced into
+	// 4 slices: 1 will be used for the framebuffer and 3 for the texture
+	// memory. As vb_mem until now contains the minium of desired texture
+	// memory size set by the user and physically available graphics memory,
+	// from which the framebuffer memory is not deducted yet, we need to
+	// increase the maximum total memory by the value for the framebuffer.
+	if ((vb_mem / 3) > VIDEO_CARD_FRAMEBUFFER_MEM) vb_mem = vb_mem * 4 / 3;
+	else vb_mem += VIDEO_CARD_FRAMEBUFFER_MEM;
+
+	// Limit desired maxium memory to what we actually have
+	if (vb_mem > limit_mem) vb_mem = limit_mem;
+
 	S32 fb_mem = llmax(VIDEO_CARD_FRAMEBUFFER_MEM, vb_mem/4);
 	mMaxResidentTexMemInMegaBytes = (vb_mem - fb_mem) ; //in MB
 	
