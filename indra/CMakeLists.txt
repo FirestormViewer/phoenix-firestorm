@@ -20,6 +20,10 @@ project(${ROOT_PROJECT_NAME})
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 include(Variables)
+include(Utils)
+
+# Load version data and build data
+load_version_data()
 
 if (DARWIN)
   cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)

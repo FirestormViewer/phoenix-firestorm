@@ -76,6 +76,7 @@ set(cmake_SOURCE_FILES
     UI.cmake
     UnixInstall.cmake
     Variables.cmake
+    Versions.cmake
     XmlRpcEpi.cmake
     ZLIB.cmake
     )

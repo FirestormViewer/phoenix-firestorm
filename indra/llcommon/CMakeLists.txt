@@ -231,7 +231,7 @@ set(llcommon_HEADER_FILES
     lluuid.h
     lluuidhashmap.h
     llversionserver.h
-    llversionviewer.h
+#    llversionviewer.h
     llworkerthread.h
     ll_template_cast.h
     metaclass.h
@@ -254,6 +254,14 @@ set_source_files_properties(${llcommon_HEADER_FILES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)
 
 list(APPEND llcommon_SOURCE_FILES ${llcommon_HEADER_FILES})
+
+configure_files(llcommon_GENERATED_HEADER_FILES
+    llversionviewer.h
+    )
+set_source_files_properties(${llcommon_GENERATED_HEADER_FILES}
+                            PROPERTIES HEADER_FILE_ONLY TRUE)
+
+list(APPEND llcommon_SOURCE_FILES ${llcommon_GENERATED_HEADER_FILES})
 
 if(LLCOMMON_LINK_SHARED)
   add_library (llcommon SHARED ${llcommon_SOURCE_FILES})

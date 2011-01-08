@@ -4,7 +4,6 @@ project(viewer)
 
 include(00-Common)
 include(Boost)
-include(BuildVersion)
 include(DBusGlib)
 include(DirectX)
 include(OpenSSL)
@@ -1700,7 +1699,6 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${GOOGLE_PERFTOOLS_LIBRARIES}
     )
 
-build_version(viewer)
 
 set(ARTWORK_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH
     "Path to artwork files.")
