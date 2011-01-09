@@ -736,6 +736,21 @@ int LLNavigationBar::getDefFavBarHeight()
 	return mDefaultFpRect.getHeight();
 }
 
+// AO, used to calculate the size of the top bars, so we don't overlap them.
+int LLNavigationBar::getVisHeight()
+{
+	int h = 0;
+	//LLFavoritesBarCtrl* fb = getChild<LLFavoritesBarCtrl>("favorite");
+	bool fbVisible = gSavedSettings.getBOOL("ShowNavbarFavoritesPanel");
+	bool nbVisible = gSavedSettings.getBOOL("ShowNavbarNavigationPanel");
+	// TODO: Make this introspect controls to get the dynamic size.
+	if (fbVisible)
+		h += 15;
+	if (nbVisible)
+		h += 35;
+	return h;
+}
+
 void LLNavigationBar::showNavigationPanel(BOOL visible)
 {
 	bool fpVisible = gSavedSettings.getBOOL("ShowNavbarFavoritesPanel");
