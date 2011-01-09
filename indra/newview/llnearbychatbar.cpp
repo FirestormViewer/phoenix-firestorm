@@ -50,6 +50,7 @@
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b)
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "chatbar_as_cmdline.h"
 
 S32 LLNearbyChatBar::sLastSpecialChatChannel = 0;
 
@@ -639,7 +640,7 @@ void LLNearbyChatBar::sendChat( EChatType type )
 
 			type = processChatTypeTriggers(type, utf8_revised_text);
 
-			if (!utf8_revised_text.empty())
+			if (!utf8_revised_text.empty() && cmd_line_chat(utf8_revised_text, type))
 			{
 				// Chat with animation
 				sendChatFromViewer(utf8_revised_text, type, TRUE);

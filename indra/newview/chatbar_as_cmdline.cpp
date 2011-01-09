@@ -63,7 +63,9 @@
 
 #include <float.h>
 
-#include "llchat.h"
+
+#include "llnotificationmanager.h"
+#include "llfloaterreg.h"
 
 #include "llfloaterchat.h"
 #include "llviewerparcelmgr.h"
@@ -77,10 +79,12 @@
 
 #include "rlvhandler.h"
 
+#include "llagentcamera.h"
+
 
 void cmdline_printchat(std::string message);
 void cmdline_rezplat(bool use_saved_value = true, F32 visual_radius = 30.0);
-void cmdline_tp2name(std::string target);
+//void cmdline_tp2name(std::string target);
 
 LLUUID cmdline_partial_name2key(std::string name);
 
@@ -175,7 +179,7 @@ JCZdrop *zdrop;
 class ZdCleanup: public LLEventTimer
 {
 public:
-	ZdCleanup() : LLEventTimer(0.2) //Don't really need this long of a timer, but it can't be to short or tick() below may get called before the packager's tick() returns to the timer system. Things get ugly otherwise.
+	ZdCleanup() : LLEventTimer(0.2f) //Don't really need this long of a timer, but it can't be to short or tick() below may get called before the packager's tick() returns to the timer system. Things get ugly otherwise.
 	{
 	}
 	~ZdCleanup()
@@ -198,7 +202,7 @@ class JCZtake : public LLEventTimer
 public:
 	BOOL mRunning;
 
-	JCZtake(const LLUUID& target, bool package = false, LLUUID destination = LLUUID::null, std::string dtarget = "") : LLEventTimer(0.66), mTarget(target), mRunning(FALSE), mCountdown(5), mPackage(package), mPackageDest(destination)
+	JCZtake(const LLUUID& target, bool package = false, LLUUID destination = LLUUID::null, std::string dtarget = "") : LLEventTimer(0.66f), mTarget(target), mRunning(FALSE), mCountdown(5), mPackage(package), mPackageDest(destination)
 	{
 		mFolderName = dtarget;
 		if(mPackage)
@@ -316,7 +320,7 @@ JCZtake *ztake;
 class LOZtCleanup: public LLEventTimer
 {
 public:
-	LOZtCleanup() : LLEventTimer(0.2) //Don't really need this long of a timer, but it can't be to short or tick() below may get called before the packager's tick() returns to the timer system. Things get ugly otherwise.
+	LOZtCleanup() : LLEventTimer(0.2f) //Don't really need this long of a timer, but it can't be to short or tick() below may get called before the packager's tick() returns to the timer system. Things get ugly otherwise.
 	{
 	}
 	~LOZtCleanup()
@@ -342,7 +346,7 @@ public:
 	BOOL mRunning;
 
 
-	TMZtake(const LLUUID& target) : LLEventTimer(0.33), mTarget(target), mRunning(FALSE), mCountdown(5)
+	TMZtake(const LLUUID& target) : LLEventTimer(0.33f), mTarget(target), mRunning(FALSE), mCountdown(5)
 	{
 		cmdline_printchat("Mtake activated. Taking selected in-world objects into inventory in: ");
 	}
@@ -445,7 +449,7 @@ void invrepair()
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
 	//ObjectContentNameMatches objectnamematches(ifolder);
-	gInventory.collectDescendents(gAgent.getInventoryRootID(),cats,items,FALSE);//,objectnamematches);
+	gInventory.collectDescendents(gInventory.getRootFolderID(),cats,items,FALSE);//,objectnamematches);
 }
 
 /*static BOOL *sPhoenixCmdLine;
@@ -490,34 +494,34 @@ std::map<std::string, int> get_gsaved_calls();
 
 bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 {
-	static BOOL *sPhoenixCmdLine = rebind_llcontrol<BOOL>("PhoenixCmdLine", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLinePos = rebind_llcontrol<std::string>("PhoenixCmdLinePos", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLineDrawDistance = rebind_llcontrol<std::string>("PhoenixCmdLineDrawDistance", &gSavedSettings, true);
-	static std::string *sPhoenixCmdTeleportToCam = rebind_llcontrol<std::string>("PhoenixCmdTeleportToCam", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLineAO = rebind_llcontrol<std::string>("PhoenixCmdLineAO", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLineKeyToName = rebind_llcontrol<std::string>("PhoenixCmdLineKeyToName", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLineOfferTp = rebind_llcontrol<std::string>("PhoenixCmdLineOfferTp", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLineGround = rebind_llcontrol<std::string>("PhoenixCmdLineGround", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLineHeight = rebind_llcontrol<std::string>("PhoenixCmdLineHeight", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLineTeleportHome = rebind_llcontrol<std::string>("PhoenixCmdLineTeleportHome", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLineRezPlatform = rebind_llcontrol<std::string>("PhoenixCmdLineRezPlatform", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLineMapTo = rebind_llcontrol<std::string>("PhoenixCmdLineMapTo", &gSavedSettings, true);
-	static BOOL *sPhoenixCmdLineMapToKeepPos = rebind_llcontrol<BOOL>("PhoenixCmdLineMapToKeepPos", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLineCalc = rebind_llcontrol<std::string>("PhoenixCmdLineCalc", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLineTP2 = rebind_llcontrol<std::string>("PhoenixCmdLineTP2", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLineClearChat = rebind_llcontrol<std::string>("PhoenixCmdLineClearChat", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLineMedia = rebind_llcontrol<std::string>("PhoenixCmdLineMedia", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLineMusic = rebind_llcontrol<std::string>("PhoenixCmdLineMusic", &gSavedSettings, true);
-	static std::string *sPhoenixCmdLineAutocorrect = rebind_llcontrol<std::string>("PhoenixCmdLineAutocorrect", &gSavedSettings, true);
+	static LLCachedControl<bool> sPhoenixCmdLine(gSavedSettings, "PhoenixCmdLine");
+	static LLCachedControl<std::string> sPhoenixCmdLinePos(gSavedSettings,  "PhoenixCmdLinePos");
+	static LLCachedControl<std::string> sPhoenixCmdLineDrawDistance(gSavedSettings,  "PhoenixCmdLineDrawDistance");
+	static LLCachedControl<std::string> sPhoenixCmdTeleportToCam(gSavedSettings,  "PhoenixCmdTeleportToCam");
+	static LLCachedControl<std::string> sPhoenixCmdLineAO(gSavedSettings,  "PhoenixCmdLineAO");
+	static LLCachedControl<std::string> sPhoenixCmdLineKeyToName(gSavedSettings,  "PhoenixCmdLineKeyToName");
+	static LLCachedControl<std::string> sPhoenixCmdLineOfferTp(gSavedSettings,  "PhoenixCmdLineOfferTp");
+	static LLCachedControl<std::string> sPhoenixCmdLineGround(gSavedSettings,  "PhoenixCmdLineGround");
+	static LLCachedControl<std::string> sPhoenixCmdLineHeight(gSavedSettings,  "PhoenixCmdLineHeight");
+	static LLCachedControl<std::string> sPhoenixCmdLineTeleportHome(gSavedSettings,  "PhoenixCmdLineTeleportHome");
+	static LLCachedControl<std::string> sPhoenixCmdLineRezPlatform(gSavedSettings,  "PhoenixCmdLineRezPlatform");
+	static LLCachedControl<std::string> sPhoenixCmdLineMapTo(gSavedSettings,  "PhoenixCmdLineMapTo");
+	static LLCachedControl<bool> sPhoenixCmdLineMapToKeepPos(gSavedSettings, "PhoenixCmdLineMapToKeepPos");
+	static LLCachedControl<std::string> sPhoenixCmdLineCalc(gSavedSettings,  "PhoenixCmdLineCalc");
+	static LLCachedControl<std::string> sPhoenixCmdLineTP2(gSavedSettings,  "PhoenixCmdLineTP2");
+	static LLCachedControl<std::string> sPhoenixCmdLineClearChat(gSavedSettings,  "PhoenixCmdLineClearChat");
+	static LLCachedControl<std::string> sPhoenixCmdLineMedia(gSavedSettings,  "PhoenixCmdLineMedia");
+	static LLCachedControl<std::string> sPhoenixCmdLineMusic(gSavedSettings,  "PhoenixCmdLineMusic");
+	static LLCachedControl<std::string> sPhoenixCmdLineAutocorrect(gSavedSettings,  "PhoenixCmdLineAutocorrect");
 	
-	if(*sPhoenixCmdLine)
+	if(sPhoenixCmdLine)
 	{
 		std::istringstream i(revised_text);
 		std::string command;
 		i >> command;
 		if(command != "")
 		{
-			if(command == *sPhoenixCmdLinePos)
+			if(command == std::string(sPhoenixCmdLinePos))
 			{
 				F32 x,y,z;
 				if (i >> x)
@@ -540,7 +544,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					}
 				}
 			}
-			else if(command == *sPhoenixCmdLineDrawDistance)
+			else if(command == std::string(sPhoenixCmdLineDrawDistance))
 			{
 				if(from_gesture)
 				{
@@ -552,19 +556,17 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
                 if(i >> drawDist)
                 {
                     gSavedSettings.setF32("RenderFarClip", drawDist);
-                    gAgent.mDrawDistance=drawDist;
-                    char buffer[DB_IM_MSG_BUF_SIZE * 2]; 
-                    snprintf(buffer,sizeof(buffer),"Draw distance set to: %dm",drawDist);
-					cmdline_printchat(std::string(buffer));
+                    gAgentCamera.mDrawDistance=drawDist;
+					cmdline_printchat(std::string(llformat("Draw distance set to: %dm",drawDist)));
 					return false;
                 }
 			}
-			else if(command == *sPhoenixCmdTeleportToCam)
+			else if(command == std::string(sPhoenixCmdTeleportToCam))
             {
-				gAgent.teleportViaLocation(gAgent.getCameraPositionGlobal());
+				gAgent.teleportViaLocation(gAgentCamera.getCameraPositionGlobal());
 				return false;
             }
-			else if(command == *sPhoenixCmdLineMedia)
+			else if(command == std::string(sPhoenixCmdLineMedia))
 			{
 				std::string url;
 				std::string type;
@@ -582,7 +584,8 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					}
 				}
 			}
-			else if(command == *sPhoenixCmdLineMusic)
+#if 0
+			else if(command == std::string(sPhoenixCmdLineMusic))
 			{
 				std::string status;
 				if(i >> status)
@@ -595,7 +598,9 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					return false;
 				}
 			}
-			else if(command == *sPhoenixCmdLineAO)
+#endif
+#ifdef LL_LLFLOATERAO_H
+			else if(command == std::string(sPhoenixCmdLineAO))
             {
 				std::string status;
                 if(i >> status)
@@ -618,7 +623,8 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 				return false;
             }
-			else if(command == *sPhoenixCmdLineKeyToName)
+#endif
+			else if(command == std::string(sPhoenixCmdLineKeyToName))
             {
                 LLUUID targetKey;
                 if(i >> targetKey)
@@ -733,7 +739,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 				return false;
             }
-			else if(command == *sPhoenixCmdLineOfferTp)
+			else if(command == std::string(sPhoenixCmdLineOfferTp))
             {
                 std::string avatarKey;
 //				llinfos << "CMD DEBUG 0 " << command << " " << avatarName << llendl;
@@ -769,7 +775,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
                 }
             }
 			
-			else if(command == *sPhoenixCmdLineGround)
+			else if(command == std::string(sPhoenixCmdLineGround))
 			{
 				LLVector3 agentPos = gAgent.getPositionAgent();
 				U64 agentRegion = gAgent.getRegion()->getHandle();
@@ -779,7 +785,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				gAgent.teleportViaLocation(pos_global);
 				return false;
 			}
-			else if(command == *sPhoenixCmdLineHeight)
+			else if(command == std::string(sPhoenixCmdLineHeight))
 			{
 				F32 z;
 				if(i >> z)
@@ -793,12 +799,12 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					return false;
 				}
 			}
-			else if(command == *sPhoenixCmdLineTeleportHome)
+			else if(command == std::string(sPhoenixCmdLineTeleportHome))
 			{
 				gAgent.teleportHome();
 				return false;
             }
-			else if(command == *sPhoenixCmdLineRezPlatform)
+			else if(command == std::string(sPhoenixCmdLineRezPlatform))
             {
 				if(!(gRlvHandler.hasBehaviour(RLV_BHVR_REZ)))
 				{
@@ -808,7 +814,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 				return false;
 			}
-			else if(command == *sPhoenixCmdLineMapTo)
+			else if(command == std::string(sPhoenixCmdLineMapTo))
 			{
 				if (revised_text.length() > command.length() + 1) //Typing this command with no argument was causing a crash. -Madgeek
 				{
@@ -819,7 +825,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					std::string region_name = LLWeb::escapeURL(revised_text.substr(command.length()+1));
 					std::string url;
 
-					if(!*sPhoenixCmdLineMapToKeepPos)
+					if(!sPhoenixCmdLineMapToKeepPos)
 					{
 						agent_x = 128;
 						agent_y = 128;
@@ -863,7 +869,8 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 			}
 #endif
-			else if(command == *sPhoenixCmdLineTP2)
+#if 0
+			else if(command == std::string(sPhoenixCmdLineTP2))
 			{
 				if (revised_text.length() > command.length() + 1) //Typing this command with no argument was causing a crash. -Madgeek
 				{
@@ -872,6 +879,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 				return false;
 			}
+#endif
 			else if (revised_text == "xyzzy")
 			{
 				//Zwag: I wonder how many people will actually get this?
@@ -884,21 +892,22 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				cmdline_printchat("Pimps can't code.");
 				return true;//dont block chat
 			}
+#ifdef LGG_AUTO_CORRECT
 			else if(revised_text == "/ac")
 			{
 				lggAutoCorrectFloaterStart::show(TRUE,NULL);
 				cmdline_printchat("Displaying Auto Correction Floater.");
 				return false;
 			}
-			else if(command == *sPhoenixCmdLineAutocorrect)
+			else if(command == std::string(sPhoenixCmdLineAutocorrect))
 			{
-				std::string info = revised_text.substr((*sPhoenixCmdLineAutocorrect).length()+1);
+				std::string info = revised_text.substr(std::string(sPhoenixCmdLineAutocorrect).length()+1);
 				//addac list name|wrong word|right word
 				int bar = info.find("|");
 				if (bar==std::string::npos)
 				{
 					cmdline_printchat("Wrong usage, correct usage is"+
-				*sPhoenixCmdLineAutocorrect+" list Name|wrong word|right word.");
+						std::string(sPhoenixCmdLineAutocorrect)+" list Name|wrong word|right word.");
 					return false;
 				}
 				
@@ -910,7 +919,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				if (bar==std::string::npos)
 				{
 					cmdline_printchat("Wrong usage, correct usage is"+
-						*sPhoenixCmdLineAutocorrect+" list Name|wrong word|right word.");
+						std::string(sPhoenixCmdLineAutocorrect)+" list Name|wrong word|right word.");
 					return false;
 				}
 
@@ -924,7 +933,9 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 
  			}
-			else if(command == *sPhoenixCmdLineClearChat)
+#endif
+#if 0 //Uh, what do i do here? LGG can you help me here?
+			else if(command == std::string(sPhoenixCmdLineClearChat))
 			{
 				LLFloaterChat* chat = LLFloaterChat::getInstance(LLSD());
 				if(chat)
@@ -936,6 +947,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					return false;
 				}
 			}
+#endif
 			else if(command == "zdrop")
 			{
 				std::string setting;
@@ -1237,6 +1249,8 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 //case insensitive search for avatar in draw distance
 //TODO: make this use the avatar list floaters list so we have EVERYONE
 // even if they are out of draw distance.
+//TODO: re-hock this to the new radar system
+#if 0
 LLUUID cmdline_partial_name2key(std::string partial_name)
 {
 	std::vector<LLUUID> avatars;
@@ -1274,7 +1288,6 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
 	}
 	return LLUUID::null;
 }
-					
 
 
 void cmdline_tp2name(std::string target)
@@ -1305,6 +1318,8 @@ void cmdline_tp2name(std::string target)
 	}
 }
 
+#endif
+
 void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat() will still work... just will use the saved value
 {
     LLVector3 agentPos = gAgent.getPositionAgent()+(gAgent.getVelocity()*(F32)0.333);
@@ -1323,7 +1338,7 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 
     LLVolumeParams    volume_params;
 
-    volume_params.setType( LL_PCODE_PROFILE_CIRCLE, LL_PCODE_PATH_CIRCLE_33 );
+    volume_params.setType( LL_PCODE_PROFILE_CIRCLE, 0x21 ); //TODO: make this use LL_PCODE_PATH_CIRCLE_33 again instead of the hardcoded value
     volume_params.setRatio( 2, 2 );
     volume_params.setShear( 0, 0 );
     volume_params.setTaper(2.0f,2.0f);
@@ -1335,9 +1350,9 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
     LLQuaternion rotation;
     rotation.setQuat(90.f * DEG_TO_RAD, LLVector3::y_axis);
 
-	static F32 *sPhoenixCmdLinePlatformSize = rebind_llcontrol<F32>("PhoenixCmdLinePlatformSize", &gSavedSettings, true);
+	static LLCachedControl<F32> sPhoenixCmdLinePlatformSize(gSavedSettings,  "PhoenixCmdLinePlatformSize");
 
-	if (use_saved_value) visual_radius = *sPhoenixCmdLinePlatformSize;
+	if (use_saved_value) visual_radius = sPhoenixCmdLinePlatformSize;
 	F32 realsize = visual_radius / 3.0f;
 	if (realsize < 0.01f) realsize = 0.01f;
 	else if (realsize > 10.0f) realsize = 10.0f;
@@ -1355,8 +1370,21 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 
 void cmdline_printchat(std::string message)
 {
-    LLChat chat;
+	
+	LLChat chat;
     chat.mText = message;
 	chat.mSourceType = CHAT_SOURCE_SYSTEM;
-    LLFloaterChat::addChat(chat, FALSE, FALSE);
+	LLSD args;
+	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+	/*LLNearbyChatHandler* handle = dynamic_cast<LLNearbyChatHandler*>(mNotifyHandlers["nearbychat"].get());
+	if(handle)
+	{
+		handle->processChat(chat, LLSD());
+	}
+	LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+	if(nearby_chat)
+	{
+		nearby_chat->addMessage(chat);
+	}*/
 }
