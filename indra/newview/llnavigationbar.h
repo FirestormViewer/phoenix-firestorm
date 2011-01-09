@@ -27,8 +27,8 @@
 #ifndef LL_LLNAVIGATIONBAR_H
 #define LL_LLNAVIGATIONBAR_H
 
-#include "llpanel.h"
-#include "llbutton.h"
+#include "../llui/llpanel.h"
+#include "../llui/llbutton.h"
 
 class LLLocationInputCtrl;
 class LLMenuGL;
@@ -91,7 +91,7 @@ public:
 	virtual ~LLNavigationBar();
 	
 	/*virtual*/ void	draw();
-	/*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+	/*virtual*/ BOOL	handleRightMouseDown(S32 x, S32 y, MASK mask);
 	/*virtual*/ BOOL	postBuild();
 	/*virtual*/ void	setVisible(BOOL visible);
 
@@ -103,6 +103,7 @@ public:
 
 	int getDefNavBarHeight();
 	int getDefFavBarHeight();
+	int getVisHeight(); // AO - total vertical pixels in use, for insuring new windows don't overlap.
 	
 private:
 	// the distance between navigation panel and favorites panel in pixels

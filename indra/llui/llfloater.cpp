@@ -57,6 +57,7 @@
 #include "llhelp.h"
 #include "llmultifloater.h"
 #include "llsdutil.h"
+#include "../newview/llnavigationbar.h"
 
 // use this to control "jumping" behavior when Ctrl-Tabbing
 const S32 TABBED_FLOATER_OFFSET = 0;
@@ -2361,7 +2362,11 @@ void LLFloaterView::getMinimizePosition(S32 *left, S32 *bottom)
 		col < snap_rect_local.getWidth() - minimized_width;
 		col += minimized_width)
 	{	
-		for(S32 row = snap_rect_local.mTop - floater_header_size;
+		
+		int offset;
+		LLNavigationBar* navbar = LLNavigationBar::getInstance();
+		offset = navbar->getVisHeight(); // AO, don't obscure the navbar
+		for(S32 row = snap_rect_local.mTop - (floater_header_size + offset);
 		row > floater_header_size;
 		row -= floater_header_size ) //loop rows
 		{

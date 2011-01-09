@@ -30,3 +30,4 @@ Small_CamControl	LGPL
 Small_MoveControl	LGPL
 Floating_Topbar		LGPL
 Profile_Floaters	LGPL
+Floater_NearbyChatEntry LGPL

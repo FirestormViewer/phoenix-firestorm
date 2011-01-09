@@ -670,6 +670,11 @@ void LLNearbyChatBar::onChatBoxCommit()
 	gAgent.stopTyping();
 }
 
+void LLNearbyChatBar::setText(const LLStringExplicit &new_text)
+{
+	mChatBox->setText(new_text);
+}
+
 void LLNearbyChatBar::displaySpeakingIndicator()
 {
 	LLSpeakerMgr::speaker_list_t speaker_list;
