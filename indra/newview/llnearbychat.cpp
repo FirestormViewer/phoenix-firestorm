@@ -40,6 +40,7 @@
 #include "llviewermenu.h"//for gMenuHolder
 
 #include "llnearbychathandler.h"
+#include "llnearbychatbar.h"
 #include "llchannelmanager.h"
 
 #include "llagent.h" 			// gAgent
@@ -63,13 +64,29 @@
 #include "llimfloater.h"
 #include "lllineeditor.h"
 
+//AO - includes for textentry
+#include "rlvhandler.h"
+#include "llcommandhandler.h"
+#include "llkeyboard.h"
+#include "llgesturemgr.h"
+#include "llmultigesture.h"
+
 static const S32 RESIZE_BAR_THICKNESS = 3;
+
+struct LLChatTypeTrigger {
+	std::string name;
+	EChatType type;
+};
+
+static LLChatTypeTrigger sChatTypeTriggers[] = {
+	{ "/whisper"	, CHAT_TYPE_WHISPER},
+	{ "/shout"	, CHAT_TYPE_SHOUT}
+};
 
 LLNearbyChat::LLNearbyChat(const LLSD& key) 
 	: LLDockableFloater(NULL, false, false, key)
 	,mChatHistory(NULL)
 	,mInputEditor(NULL)
-	,mTypingStart()
 {
 	
 }
@@ -95,6 +112,23 @@ BOOL LLNearbyChat::postBuild()
 
 	gSavedSettings.declareS32("nearbychat_showicons_and_names",2,"NearByChat header settings",true);
 
+	// Text Entry - relay to llnearbychatbar
+	mInputEditor = getChild<LLLineEditor>("chat_box");
+	//mInputEditor->setMaxTextLength(1023);
+	mInputEditor->setFocusReceivedCallback( boost::bind(onInputEditorFocusReceived, _1, this) );
+	mInputEditor->setFocusLostCallback( boost::bind(onInputEditorFocusLost, _1, this) );
+	mInputEditor->setKeystrokeCallback( onInputEditorKeystroke, this );
+	childSetCommitCallback("chat_box", onSendMsg, this);
+	mInputEditor->setEnableLineHistory(TRUE);
+	mInputEditor->setIgnoreArrowKeys( FALSE );
+	mInputEditor->setCommitOnFocusLost( FALSE );
+	mInputEditor->setRevertOnEsc( FALSE );
+	mInputEditor->setIgnoreTab( TRUE );
+	mInputEditor->setReplaceNewlinesWithSpaces( FALSE );
+	mInputEditor->setPassDelete( TRUE );
+	mInputEditor->setEnabled(TRUE);
+	
+	
 	// extra icon controls -AO
 	LLButton* transl = getChild<LLButton>("translate_btn");
 	transl->setVisible(true);
@@ -104,8 +138,6 @@ BOOL LLNearbyChat::postBuild()
 	// <vertical tab docking> -AO
 	if(isChatMultiTab())
 	{
-			
-		llinfos << "nearbychat postBuild multitab" << llendl;
 		LLButton* slide_left = getChild<LLButton>("slide_left_btn");
 		slide_left->setVisible(false);
 		LLButton* slide_right = getChild<LLButton>("slide_right_btn");
@@ -114,7 +146,6 @@ BOOL LLNearbyChat::postBuild()
 		
 		if (getDockControl() == NULL)
 		{
-			llinfos << "adding to multitab" << llendl;
 			LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
 			LLTabContainer::eInsertionPoint i_pt = LLTabContainer::START;
 			if (floater_container)
@@ -144,24 +175,6 @@ BOOL LLNearbyChat::postBuild()
 	if (mDragHandle)
 		mDragHandle->setTitleVisible(TRUE);
 	
-
-	mInputEditor = getChild<LLLineEditor>("chat_box");
-	mInputEditor->setMaxTextLength(1023);
-	// enable line history support for instant message bar
-	mInputEditor->setEnableLineHistory(TRUE);
-	
-	
-	mInputEditor->setFocusReceivedCallback( boost::bind(onInputEditorFocusReceived, _1, this) );
-	mInputEditor->setFocusLostCallback( boost::bind(onInputEditorFocusLost, _1, this) );
-	mInputEditor->setKeystrokeCallback( onInputEditorKeystroke, this );
-	mInputEditor->setCommitOnFocusLost( FALSE );
-	mInputEditor->setRevertOnEsc( FALSE );
-	mInputEditor->setReplaceNewlinesWithSpaces( FALSE );
-	mInputEditor->setPassDelete( TRUE );
-
-	childSetCommitCallback("chat_box", onSendMsg, this);
-	
-	mTypingStart = LLTrans::getString("IM_typing_start_string");
 	return true;
 }
 void    LLNearbyChat::applySavedVariables()
@@ -316,7 +329,6 @@ void	LLNearbyChat::setVisible(BOOL visible)
 
 void	LLNearbyChat::onOpen(const LLSD& key )
 {
-	llinfos << "onOPEN called..." << llendl;
 	// We override this to put nearbychat in the IM floater. -AO
 	if(isChatMultiTab() && ! isVisible(this))
 	{
@@ -380,36 +392,98 @@ bool isWordsName(const std::string& name)
 }
 void LLNearbyChat::onInputEditorFocusReceived( LLFocusableElement* caller, void* userdata )
 {
-	 //LLNearbyChat* self= (LLNearbyChat*) userdata;
+	LLNearbyChatBar::getInstance()->onChatBoxFocusReceived();
 }
 void LLNearbyChat::onInputEditorFocusLost(LLFocusableElement* caller, void* userdata)
 {
-	LLNearbyChat* self = (LLNearbyChat*) userdata;
-	self->setTyping(false);
+	LLNearbyChatBar::getInstance()->onChatBoxFocusLost(caller, userdata);
 }
 void LLNearbyChat::onInputEditorKeystroke(LLLineEditor* caller, void* userdata)
 {
 	LLNearbyChat* self = (LLNearbyChat*)userdata;
 	std::string text = self->mInputEditor->getText();
-	if (!text.empty())
+	
+	LLWString raw_text = self->mInputEditor->getWText();
+	LLNearbyChatBar* masterBar = LLNearbyChatBar::getInstance();
+	masterBar->setText(self->mInputEditor->getText());
+	
+	// Can't trim the end, because that will cause autocompletion
+	// to eat trailing spaces that might be part of a gesture.
+	LLWStringUtil::trimHead(raw_text);
+	S32 length = raw_text.length();
+	
+	//	if( (length > 0) && (raw_text[0] != '/') )  // forward slash is used for escape (eg. emote) sequences
+	// [RLVa:KB] - Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.0d
+	if ( (length > 0) && (raw_text[0] != '/') && (!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT)) )
+		// [/RLVa:KB]
 	{
-		self->setTyping(true);
+		gAgent.startTyping();
 	}
 	else
 	{
-		// Deleting all text counts as stopping typing.
-		self->setTyping(false);
+		gAgent.stopTyping();
+	}
+	
+	KEY key = gKeyboard->currentKey();
+	
+	// Ignore "special" keys, like backspace, arrows, etc.
+	if (length > 1 
+		&& raw_text[0] == '/'
+		&& key < KEY_SPECIAL)
+	{
+		// we're starting a gesture, attempt to autocomplete
+		
+		std::string utf8_trigger = wstring_to_utf8str(raw_text);
+		std::string utf8_out_str(utf8_trigger);
+		
+		if (LLGestureMgr::instance().matchPrefix(utf8_trigger, &utf8_out_str))
+		{
+			std::string rest_of_match = utf8_out_str.substr(utf8_trigger.size());
+			self->mInputEditor->setText(utf8_trigger + rest_of_match); // keep original capitalization for user-entered part
+			masterBar->setText(self->mInputEditor->getText());
+			S32 outlength = self->mInputEditor->getLength(); // in characters
+			
+			// Select to end of line, starting from the character
+			// after the last one the user typed.
+			self->mInputEditor->setSelection(length, outlength);
+		}
+		else if (matchChatTypeTrigger(utf8_trigger, &utf8_out_str))
+		{
+			std::string rest_of_match = utf8_out_str.substr(utf8_trigger.size());
+			self->mInputEditor->setText(utf8_trigger + rest_of_match + " "); // keep original capitalization for user-entered part
+			masterBar->setText(self->mInputEditor->getText());
+			self->mInputEditor->setCursorToEnd();
+		}
 	}
 }
 void LLNearbyChat::onSendMsg( LLUICtrl* ctrl, void* userdata )
 {
-	LLNearbyChat* self = (LLNearbyChat*) userdata;
-	llinfos << "DEBUG: Sending message" << llendl;
-	self->setTyping(false);
+	LLNearbyChat* self = (LLNearbyChat*)userdata;
+	LLNearbyChatBar::getInstance()->onChatBoxCommit();
+	self->mInputEditor->setText(LLStringExplicit(""));
 }
 
-void LLNearbyChat::setTyping(bool typingStatus)
+BOOL LLNearbyChat::matchChatTypeTrigger(const std::string& in_str, std::string* out_str)
 {
+	U32 in_len = in_str.length();
+	S32 cnt = sizeof(sChatTypeTriggers) / sizeof(*sChatTypeTriggers);
+	
+	for (S32 n = 0; n < cnt; n++)
+	{
+		if (in_len > sChatTypeTriggers[n].name.length())
+			continue;
+		
+		std::string trigger_trunc = sChatTypeTriggers[n].name;
+		LLStringUtil::truncate(trigger_trunc, in_len);
+		
+		if (!LLStringUtil::compareInsensitive(in_str, trigger_trunc))
+		{
+			*out_str = sChatTypeTriggers[n].name;
+			return TRUE;
+		}
+	}
+	
+	return FALSE;
 }
 
 void LLNearbyChat::loadHistory()
