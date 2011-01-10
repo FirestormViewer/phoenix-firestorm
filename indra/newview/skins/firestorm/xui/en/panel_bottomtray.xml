@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  background_visible="true"
- bg_alpha_color="DkGray"
- bg_opaque_color="DkGray"
+ bg_alpha_color="ltgrey123"
+ bg_opaque_color="drkgrey123"
  chrome="true"
  follows="left|bottom|right"
  height="33"
@@ -344,6 +344,37 @@ Disabled for now.
                 <init_callback
                  function="Button.SetFloaterToggle"
                  parameter="mini_map" />
+            </bottomtray_button>
+        </layout_panel>
+		<layout_panel
+         mouse_opaque="false"
+         auto_resize="false"
+         follows="left|right"
+         height="28"
+         layout="topleft"
+         min_height="28"
+         min_width="52"
+         name="inventory_panel"
+         user_resize="false"
+         width="83">
+            <bottomtray_button
+                 image_selected="PushButton_Selected_Press"
+                 image_pressed="PushButton_Press"
+                 image_pressed_selected="PushButton_Selected_Press"
+             follows="left|right"
+             height="23"
+             use_ellipses="true"
+             is_toggle="true"
+             label="Inventory"
+             layout="topleft"
+             left="0"
+             tool_tip="Shows/hides Inventory"
+             top="5"
+             name="inventory_btn"
+             width="80">
+                <init_callback
+                 function="Button.SetFloaterToggle"
+                 parameter="inventory" />
             </bottomtray_button>
         </layout_panel>
         <layout_panel

@@ -10,6 +10,18 @@
    var. 5 = #AB7B61 = rgb(171,123,97) 0.76 0.58 0.49
 
 	-->
+	 <color
+	 name="ltgrey123"
+	 value="0.33333  0.33333  0.33333 1.0" />
+	 <color
+	 name="drkgrey123"
+	 value="0.24314  0.24314  0.24314 1.0" />
+	 <color
+	 name="btncolordisabled123"
+	 value="0.00392  0.17647  0.31765 1.0" />
+	 <color
+	 name="btncolor123"
+	 value="0.26667  0.17647  0.98039 1.0" />
 	<color
 	 name="AccentColor"
 	 value="0.75 0.92 0.49 1.0" />
@@ -359,10 +371,10 @@
 <!-- Color Changed -->
     <color
      name="ButtonImageColor"
-     reference="SL-White" />
+     reference="White" />
     <color
      name="ButtonLabelColor"
-     reference="LtGray" />
+     reference="White" />
     <color
      name="ButtonLabelDisabledColor"
      reference="White_25" />
@@ -374,7 +386,7 @@
      reference="White_25" />
     <color
      name="ButtonSelectedBgColor"
-     reference="Unused?" />
+     reference="DkGray" />
     <color
      name="ButtonSelectedColor"
      reference="Unused?" />
@@ -389,7 +401,7 @@
      reference="DkGray_66" />
     <color
      name="ChatHistoryTextColor"
-     reference="LtGray" />
+     reference="White_25" />
     <color
      name="ColorDropShadow"
      reference="Black_50" />
