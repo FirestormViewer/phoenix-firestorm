@@ -362,6 +362,14 @@ std::string LLFloaterReg::getVisibilityControlName(const std::string& name)
 }
 
 //static
+std::string LLFloaterReg::getMinimizedStateControlName(const std::string& name)
+{
+	std::string res = std::string("floater_minimized_") + name;
+	LLStringUtil::replaceChar( res, ' ', '_' );
+	return res;
+}
+
+//static
 std::string LLFloaterReg::declareVisibilityControl(const std::string& name)
 {
 	std::string controlname = getVisibilityControlName(name);
@@ -372,14 +380,25 @@ std::string LLFloaterReg::declareVisibilityControl(const std::string& name)
 }
 
 //static
+std::string LLFloaterReg::declareMinimizeStateControl(const std::string& name)
+{
+	std::string controlname = getMinimizedStateControlName(name);
+	LLFloater::getControlGroup()->declareBOOL(controlname, FALSE,
+												 llformat("Window Minimized state for %s", name.c_str()),
+												 TRUE);
+	return controlname;
+
+}
+
+//static
 std::string LLFloaterReg::declareDockStateControl(const std::string& name)
 {
 	std::string controlname = getDockStateControlName(name);
 	LLFloater::getControlGroup()->declareBOOL(controlname, TRUE,
-												 llformat("Window Docking state for %s", name.c_str()),
-												 TRUE);
+											  llformat("Window Docking state for %s", name.c_str()),
+											  TRUE);
 	return controlname;
-
+	
 }
 
 //static

@@ -293,9 +293,11 @@ protected:
 
 	void			applyRectControl();
 	void			applyDockState();
+	void			applyMinimizedState();
 	void			storeRectControl();
 	void			storeVisibilityControl();
 	void			storeDockStateControl();
+	void			storeMinimizeStateControl();
 
 	void		 	setKey(const LLSD& key);
 	void		 	setInstanceName(const std::string& name);
@@ -359,6 +361,8 @@ protected:
 	std::string		mRectControl;
 	std::string		mVisibilityControl;
 	std::string		mDocStateControl;
+	std::string		mMinimizeStateControl;
+	
 	LLSD			mKey;				// Key used for retrieving instances; set (for now) by LLFLoaterReg
 
 	LLDragHandle*	mDragHandle;

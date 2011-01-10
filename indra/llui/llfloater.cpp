@@ -511,6 +511,9 @@ LLFloater::~LLFloater()
 	// This is important so that floaters with persistent rects (i.e., those
 	// created with rect control rather than an LLRect) are restored in their
 	// correct, non-minimized positions.
+	
+	// AO - persist minimizing
+	storeMinimizeStateControl();
 	setMinimized( FALSE );
 
 	sFloaterMap.erase(mHandle);
@@ -526,7 +529,6 @@ LLFloater::~LLFloater()
 	setVisible(false); // We're not visible if we're destroyed
 	storeVisibilityControl();
 	storeDockStateControl();
-
 	delete mMinimizeSignal;
 }
 
@@ -552,6 +554,14 @@ void LLFloater::storeDockStateControl()
 	{
 		getControlGroup()->setBOOL( mDocStateControl, isDocked() );
 	}
+}
+
+void LLFloater::storeMinimizeStateControl()
+{
+	if( !sQuitting && mMinimizeStateControl.size() > 1 )
+	{
+		getControlGroup()->setBOOL( mMinimizeStateControl, mMinimized );
+	}	
 }
 
 LLRect LLFloater::getSavedRect() const
@@ -667,7 +677,7 @@ void LLFloater::openFloater(const LLSD& key)
 	}
 	else
 	{
-		setMinimized(FALSE);
+		// AO setMinimized(FALSE);
 		setVisibleAndFrontmost(mAutoFocus);
 	}
 
@@ -834,6 +844,7 @@ void    LLFloater::applySavedVariables()
 {
 	applyRectControl();
 	applyDockState();
+	applyMinimizedState();
 }
 
 void LLFloater::applyRectControl()
@@ -867,6 +878,15 @@ void LLFloater::applyDockState()
 		setDocked(dockState);
 	}
 
+}
+
+void LLFloater::applyMinimizedState()
+{
+	if (mMinimizeStateControl.size() > 1)
+	{
+		bool minimized = getControlGroup()->getBOOL(mMinimizeStateControl);
+		setMinimized(minimized);
+	}
 }
 
 void LLFloater::applyTitle()
@@ -1025,7 +1045,7 @@ void LLFloater::handleReshape(const LLRect& new_rect, bool by_user)
 }
 
 void LLFloater::setMinimized(BOOL minimize)
-{
+{	
 	const LLFloater::Params& default_params = LLFloater::getDefaultParams();
 	S32 floater_header_size = default_params.header_height;
 	static LLUICachedControl<S32> minimized_width ("UIMinimizedWidth", 0);
@@ -1155,10 +1175,13 @@ void LLFloater::setMinimized(BOOL minimize)
 		// Reshape *after* setting mMinimized
 		reshape( mExpandedRect.getWidth(), mExpandedRect.getHeight(), TRUE );
 	}
-
+	
 	make_ui_sound("UISndWindowClose");
 	updateTitleButtons();
 	applyTitle ();
+	
+	// AO - persist minimizing if true
+	storeMinimizeStateControl();
 }
 
 void LLFloater::setFocus( BOOL b )
@@ -2252,7 +2275,7 @@ void LLFloaterView::bringToFront(LLFloater* child, BOOL give_focus)
 		// always unminimize dependee, but allow dependents to stay minimized
 		if (!floaterp->isDependent())
 		{
-			floaterp->setMinimized(FALSE);
+			//floaterp->setMinimized(FALSE);
 		}
 	}
 	floaters_to_move.clear();
@@ -2278,7 +2301,8 @@ void LLFloaterView::bringToFront(LLFloater* child, BOOL give_focus)
 	{
 		sendChildToFront(child);
 	}
-	child->setMinimized(FALSE);
+	
+	//child->setMinimized(FALSE);
 	if (give_focus && !gFocusMgr.childHasKeyboardFocus(child))
 	{
 		child->setFocus(TRUE);
@@ -2763,6 +2787,10 @@ void LLFloater::setInstanceName(const std::string& name)
 		{
 			mDocStateControl = LLFloaterReg::declareDockStateControl(ctrl_name);
 		}
+		if(!mMinimizeStateControl.empty())
+		{
+			mMinimizeStateControl = LLFloaterReg::declareMinimizeStateControl(ctrl_name);
+		}
 
 	}
 }
@@ -2841,6 +2869,8 @@ void LLFloater::initFromParams(const LLFloater::Params& p)
 	{
 		mDocStateControl = "t"; // flag to build mDocStateControl name once mInstanceName is set
 	}
+	
+	mMinimizeStateControl = "t"; // AO: flag to save minimize state. TODO: make this param-optional.
 	
 	// open callback 
 	if (p.open_callback.isProvided())
@@ -2943,6 +2973,7 @@ bool LLFloater::initFloaterXML(LLXMLNodePtr node, LLView *parent, const std::str
 	moveResizeHandlesToFront();
 
 	applyDockState();
+	applyMinimizedState();
 
 	return true; // *TODO: Error checking
 }
