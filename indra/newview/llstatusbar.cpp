@@ -792,7 +792,7 @@ void LLStatusBar::layoutParcelIcons()
 {
 	// TODO: remove hard-coded values and read them as xml parameters
 	static const int FIRST_ICON_HPAD = 16;
-	static const int LAST_ICON_HPAD = 11;
+	// Kadah - not needed static const int LAST_ICON_HPAD = 11;
 
 	S32 left = mParcelInfoText->getRect().mRight + FIRST_ICON_HPAD;
 
