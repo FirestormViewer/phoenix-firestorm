@@ -2,7 +2,7 @@
     <array>
         <map>
         <key>name</key>
-            <string>Firestorm Sky</string>
+            <string>Default</string>
         <key>folder</key>
             <string>default</string>
         <key>themes</key>
@@ -15,22 +15,40 @@
                 </map>
             </array>
         </map>
-		<map>
+
+	<map>
         <key>name</key>
-            <string>JL</string>
+            <string>Firestorm</string>
         <key>folder</key>
-            <string>JLTest</string>
+            <string>firestorm</string>
         <key>themes</key>
             <array>
                 <map>
                 <key>name</key>
-                    <string>JLTest1</string>
+                    <string>Grey</string>
                 <key>folder</key>
-                    <string>JLTest</string>
+                    <string>greyt</string>
                 </map>
             </array>
         </map>
+
         <map>
+        <key>name</key>
+            <string>MetaHarper Modern</string>
+        <key>folder</key>
+            <string>metaharper</string>
+        <key>themes</key>
+            <array>
+                <map>
+                <key>name</key>
+                    <string>AppalachianSky</string>
+                <key>folder</key>
+                    <string>appalachian_sky</string>
+                </map>
+            </array>
+        </map>
+
+	<map>
         <key>name</key>
             <string>StarLight</string>
         <key>folder</key>
