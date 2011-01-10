@@ -1722,9 +1722,9 @@ void LLFloater::draw()
 			{
 				static LLUIColor titlebar_focus_color = LLUIColorTable::instance().getColor("TitleBarFocusColor");
 				
-				const LLFontGL* font = LLFontGL::getFontSansSerif();
+				//const LLFontGL* font = LLFontGL::getFontSansSerif();
 				LLRect r = getRect();
-				gl_rect_2d_offset_local(0, r.getHeight(), r.getWidth(), r.getHeight() - (S32)font->getLineHeight() - 1, 
+				gl_rect_2d_offset_local(0, r.getHeight(), r.getWidth(), r.getHeight() - mHeaderHeight, 
 					titlebar_focus_color % mCurrentTransparency, 0, TRUE);
 			}
 		}

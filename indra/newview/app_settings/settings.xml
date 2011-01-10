@@ -10597,7 +10597,7 @@
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <real>7</real>
+      <real>4</real>
     </map>
     <key>UIImgDefaultEyesUUID</key>
     <map>
@@ -12567,6 +12567,226 @@
       <key>Value</key>
       <real>300.0</real>
     </map>
+  <key>PhoenixCmdLine</key>
+		<map>
+			<key>Comment</key>
+			<string>Enable usage of chat bar as a command line</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>1</integer>
+		</map>
+		<key>PhoenixCmdLineMapToKeepPos</key>
+		<map>
+			<key>Comment</key>
+			<string>Whether to use current local pos on tp to the new sim</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
+		</map>
+		<key>PhoenixCmdLineAO</key>
+		<map>
+			<key>Comment</key>
+			<string>Turn AO on/off</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>cao</string>
+		</map>
+		<key>PhoenixCmdLineAutocorrect</key>
+		<map>
+			<key>Comment</key>
+			<string>Command for adding new entries to autocorrect</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>/addac</string>
+		</map>
+		<key>PhoenixCmdLineMedia</key>
+		<map>
+			<key>Comment</key>
+			<string>Chat command for setting a media url</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>/media</string>
+		</map>
+		<key>PhoenixCmdLineMusic</key>
+		<map>
+			<key>Comment</key>
+			<string>Chat command for setting a music url</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>/music</string>
+		</map>
+		<key>PhoenixCmdLineClearChat</key>
+		<map>
+			<key>Comment</key>
+			<string>Clear chat hsitory to stop lag from chat spam</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>clrchat</string>
+		</map>
+		<key>PhoenixCmdLineHeight</key>
+		<map>
+			<key>Comment</key>
+			<string>Teleport to height function command</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>gth</string>
+		</map>
+		<key>PhoenixCmdLinePos</key>
+		<map>
+			<key>Comment</key>
+			<string>Teleport to position function command</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>gtp</string>
+		</map>
+		<key>PhoenixCmdLineGround</key>
+		<map>
+			<key>Comment</key>
+			<string>Teleport to ground function command</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>flr</string>
+		</map>
+		<key>PhoenixCmdLineTeleportHome</key>
+		<map>
+			<key>Comment</key>
+			<string>Teleport to home function command</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>tph</string>
+		</map>
+		<key>PhoenixCmdLineRezPlatform</key>
+		<map>
+			<key>Comment</key>
+			<string>Rez a platform underneath you</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>rezplat</string>
+		</map>
+		<key>PhoenixCmdLinePlatformSize</key>
+		<map>
+			<key>Comment</key>
+			<string>How wide the rezzed platform will appear to be.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>F32</string>
+			<key>Value</key>
+			<real>30</real>
+		</map>
+		<key>PhoenixCmdLineMapTo</key>
+		<map>
+			<key>Comment</key>
+			<string>Teleport to a region by name rapidly</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>mapto</string>
+		</map>
+		<key>PhoenixCmdLineDrawDistance</key>
+		<map>
+			<key>Comment</key>
+			<string>Change draw distance quickly</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>dd</string>
+		</map>
+		<key>PhoenixCmdTeleportToCam</key>
+		<map>
+			<key>Comment</key>
+			<string>Teleport to your camera</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>tp2cam</string>
+		</map>
+		<key>PhoenixCmdLineKeyToName</key>
+		<map>
+			<key>Comment</key>
+			<string>Use a fast key to name query</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>key2name</string>
+		</map>
+		<key>PhoenixCmdLineOfferTp</key>
+		<map>
+			<key>Comment</key>
+			<string>Offer a teleport to target avatar</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>offertp</string>
+		</map>
+		<key>PhoenixCmdLineCalc</key>
+		<map>
+			<key>Comment</key>
+			<string>Calculates an expression</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>calc</string>
+		</map>
+		<key>PhoenixCmdLineTP2</key>
+		<map>
+			<key>Comment</key>
+			<string>Teleport to a person by name, partials work.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>tp2</string>
+		</map>
 		<key>PhoenixWLParcelEnabled</key>
 		<map>
 			<key>Comment</key>
