@@ -29,9 +29,8 @@
     top="1"
     follows="left|top" 
     name="parcel_info_panel" 
-    bg_visible="true"
-    background_opaque="true" 
-    bg_opaque_image="bevel_background">
+    bg_visible="false"
+    background_opaque="false">
    <button
     follows="left|top"
     height="16"
@@ -46,7 +45,6 @@
     width="16"/>
    <text
      follows="left|top|right"
-     font="DejaVu"
      height="16"
      layout="topleft"
      left_pad="11"
