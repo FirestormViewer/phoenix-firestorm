@@ -31,3 +31,7 @@ Small_MoveControl	LGPL
 Floating_Topbar		LGPL
 Profile_Floaters	LGPL
 Floater_NearbyChatEntry LGPL
+Persist_Minimized	LGPL
+FirestormGrey_skin	LGPL
+TopMenu_Navbar		LGPL
+Cmd_chatbar		LGPL
