@@ -18,7 +18,7 @@ WANTS_BUILD=$FALSE
 WANTS_PACKAGE=$FALSE
 WANTS_VERSION=$FALSE
 BTYPE="Release"
-CHANNEL="private-`hostname`"
+CHANNEL="private-`hostname -s`"
 
 ###
 ### Helper Functions
@@ -41,15 +41,6 @@ showUsage()
 getArgs()
 # $* = the options passed in from main
 {
-        if [ $# -eq 0 ] ; then
-              WANTS_CLEAN=$TRUE
-              WANTS_CONFIG=$TRUE
-              WANTS_BUILD=$TRUE
-              WANTS_VERSION=$TRUE
-              WANTS_PACKAGE=$TRUE
-              return
-        fi
-        
         while getoptex "clean config version rebuild help chan: btype:" "$@" ; do
         
             case "$OPTOPT" in
@@ -71,6 +62,17 @@ getArgs()
         shift $[OPTIND-1]
         if [ $OPTIND -le 1 ] ; then
             showUsage && exit 1
+        fi
+
+        if (( $WANTS_CLEAN + $WANTS_CONFIG + $WANTS_BUILD + \
+        	$WANTS_VERSION + $WANTS_PACKAGE )) ; then
+        # the user didn't say what to do, so assume he wants to do everything
+              WANTS_CLEAN=$TRUE
+              WANTS_CONFIG=$TRUE
+              WANTS_BUILD=$TRUE
+              WANTS_VERSION=$TRUE
+              WANTS_PACKAGE=$TRUE
+              return
         fi
 }
 
