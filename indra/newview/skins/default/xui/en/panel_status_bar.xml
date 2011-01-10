@@ -22,6 +22,16 @@
    left="0"
    width="1000" / -->
    
+   <panel
+    height="18"
+    left="500"
+    width="95"
+    top="1"
+    follows="left|top" 
+    name="parcel_info_panel" 
+    bg_visible="true"
+    background_opaque="true" 
+    bg_opaque_image="bevel_background">
    <button
     follows="left|top"
     height="16"
@@ -30,7 +40,7 @@
     image_disabled_selected="Info_Off"
     image_selected="Info_Off"
     image_unselected="Info_Off"
-    left="500"
+    left="0"
     name="place_info_btn"
     top="2"
     width="16"/>
@@ -111,6 +121,7 @@
     visible="false"
     width="35"
     />
+  </panel>
 	
     <panel.string
      name="packet_loss_tooltip">

@@ -35,3 +35,4 @@ Persist_Minimized	LGPL
 FirestormGrey_skin	LGPL
 TopMenu_Navbar		LGPL
 Cmd_chatbar		LGPL
+Menubar_location	LGPL
