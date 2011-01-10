@@ -64,6 +64,8 @@
 #include "llfavoritesbar.h"
 #include "llagentui.h"
 
+#include "llstatusbar.h"
+
 #include <boost/regex.hpp>
 
 //-- LLTeleportHistoryMenuItem -----------------------------------------------
@@ -710,6 +712,7 @@ void LLNavigationBar::handleLoginComplete()
 {
 	LLTeleportHistory::getInstance()->handleLoginComplete();
 	LLPanelTopInfoBar::instance().handleLoginComplete();
+	gStatusBar->handleLoginComplete();
 	mCmbLocation->handleLoginComplete();
 }
 

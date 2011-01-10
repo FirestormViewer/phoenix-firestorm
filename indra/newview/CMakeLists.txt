@@ -66,6 +66,7 @@ include_directories(
     )
 
 set(viewer_SOURCE_FILES
+    chatbar_as_cmdline.cpp
     kcwlinterface.cpp
     llagent.cpp
     llagentaccess.cpp
@@ -605,6 +606,7 @@ endif (LINUX)
 set(viewer_HEADER_FILES
     CMakeLists.txt
     ViewerInstall.cmake
+	chatbar_as_cmdline.h
     kcwlinterface.h
     llagent.h
     llagentaccess.h
