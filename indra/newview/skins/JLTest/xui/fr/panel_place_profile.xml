@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="place_profile">
+	<string name="on" value="Activé"/>
+	<string name="off" value="Désactivé"/>
+	<string name="anyone" value="Tout le monde"/>
+	<string name="available" value="disponible"/>
+	<string name="allocated" value="affecté"/>
+	<string name="title_place" value="Profil du lieu"/>
+	<string name="title_teleport_history" value="Historique des téléportations"/>
+	<string name="not_available" value="(s/o)"/>
+	<string name="unknown" value="(inconnu)"/>
+	<string name="public" value="(public)"/>
+	<string name="none_text" value="(aucun)"/>
+	<string name="sale_pending_text" value="(vente en cours)"/>
+	<string name="group_owned_text" value="(propriété du groupe)"/>
+	<string name="price_text" value="L$"/>
+	<string name="area_text" value="m²"/>
+	<string name="all_residents_text" value="Tous les résidents"/>
+	<string name="group_text" value="Groupe"/>
+	<string name="can_resell">
+		Le terrain acheté dans la région peut être revendu.
+	</string>
+	<string name="can_not_resell">
+		Le terrain acheté dans la région ne peut pas être revendu.
+	</string>
+	<string name="can_change">
+		Le terrain acheté dans la région peut être fusionné ou divisé.
+	</string>
+	<string name="can_not_change">
+		Le terrain acheté dans la région ne peut être fusionné ou divisé.
+	</string>
+	<string name="server_update_text">
+		Les informations sur le lieu ne sont pas disponibles sans mise à jour du serveur.
+	</string>
+	<string name="server_error_text">
+		Aucune information sur ce lieu n&apos;est disponible actuellement, veuillez réessayer ultérieurement.
+	</string>
+	<string name="server_forbidden_text">
+		Les informations sur ce lieu ne sont pas disponibles car l&apos;accès y est restreint.  Veuillez vérifier vos droits auprès du propriétaire de la parcelle.
+	</string>
+	<string name="acquired_date">
+		[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
+	</string>
+	<button name="back_btn" tool_tip="Précédent"/>
+	<text name="title" value="Profil du lieu"/>
+	<scroll_container name="place_scroll">
+		<panel name="scrolling_panel">
+			<text name="region_title" value="Exemple de région"/>
+			<text name="parcel_title" value="SampleParcel, Name Long (145, 228, 26)"/>
+			<expandable_text name="description" value="Du waltz die spritz"/>
+			<text name="owner_label" value="Propriétaire :"/>
+			<text name="owner_value" value="Alex Superduperlongenamenton"/>
+			<text name="maturity_value" value="(inconnu)"/>
+			<accordion name="advanced_info_accordion">
+				<accordion_tab name="parcel_characteristics_tab" title="Parcelle">
+					<panel name="parcel_characteristics_panel">
+						<text name="rating_label" value="Catégorie :"/>
+						<text name="rating_value" value="inconnu"/>
+						<text name="voice_label" value="Voix :"/>
+						<text name="voice_value" value="Activé"/>
+						<text name="fly_label" value="Voler :"/>
+						<text name="fly_value" value="Activé"/>
+						<text name="push_label" value="Pousser :"/>
+						<text name="push_value" value="Désactivé"/>
+						<text name="build_label" value="Construire :"/>
+						<text name="build_value" value="Activé"/>
+						<text name="scripts_label" value="Scripts :"/>
+						<text name="scripts_value" value="Activé"/>
+						<text name="damage_label" value="Dégâts :"/>
+						<text name="damage_value" value="Désactivé"/>
+						<button label="À propos du terrain" name="about_land_btn"/>
+					</panel>
+				</accordion_tab>
+				<accordion_tab name="region_information_tab" title="Région">
+					<panel name="region_information_panel">
+						<text name="region_name_label" value="Région :"/>
+						<text name="region_name" value="Pays des orignaux"/>
+						<text name="region_type_label" value="Type :"/>
+						<text name="region_type" value="Orignal"/>
+						<text name="region_rating_label" value="Catégorie :"/>
+						<text name="region_rating" value="Adulte"/>
+						<text name="region_owner_label" value="Propriétaire :"/>
+						<text name="region_owner" value="moose Van Moose extra long name moose"/>
+						<text name="region_group_label" value="Groupe :"/>
+						<text name="region_group">
+							Le puissant orignal d’Orignalville
+						</text>
+						<button label="Région/Domaine" name="region_info_btn"/>
+					</panel>
+				</accordion_tab>
+				<accordion_tab name="estate_information_tab" title="Domaine">
+					<panel name="estate_information_panel">
+						<text name="estate_name_label" value="Domaine :"/>
+						<text name="estate_rating_label" value="Catégorie :"/>
+						<text name="estate_owner_label" value="Propriétaire :"/>
+						<text name="estate_owner" value="Testing owner name length with long name"/>
+						<text name="covenant_label" value="Règlement :"/>
+					</panel>
+				</accordion_tab>
+				<accordion_tab name="sales_tab" title="À vendre">
+					<panel name="sales_panel">
+						<text name="sales_price_label" value="Prix :"/>
+						<text name="area_label" value="Surface :"/>
+						<text name="traffic_label" value="Trafic :"/>
+						<text name="primitives_label" value="Prims :"/>
+						<text name="parcel_scripts_label" value="Scripts :"/>
+						<text name="terraform_limits_label" value="Limites de terraformage :"/>
+						<text name="subdivide_label" value="Possibilité de sous-division/fusion :"/>
+						<text name="resale_label" value="Possibilité de revente :"/>
+						<text name="sale_to_label" value="À vendre à :"/>
+					</panel>
+				</accordion_tab>
+			</accordion>
+		</panel>
+	</scroll_container>
+</panel>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Preferences" title="PREFERÊNCIAS">
+	<button label="OK" label_selected="OK" name="OK"/>
+	<button label="Cancelar" label_selected="Cancelar" name="Cancel"/>
+	<tab_container name="pref core">
+		<panel label="Geral" name="general"/>
+		<panel label="Vídeo" name="display"/>
+		<panel label="Privacidade" name="im"/>
+		<panel label="Som e mídia" name="audio"/>
+		<panel label="Bate-papo" name="chat"/>
+		<panel label="Notificações" name="msgs"/>
+		<panel label="Configurações" name="input"/>
+		<panel label="Avançado" name="advanced1"/>
+	</tab_container>
+</floater>

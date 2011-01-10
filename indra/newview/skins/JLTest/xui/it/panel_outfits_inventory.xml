@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Cose" name="Outfits">
+	<panel.string name="wear_outfit_tooltip">
+		Indossa il vestiario selezionato
+	</panel.string>
+	<panel.string name="wear_items_tooltip">
+		Indossa capi selezionati
+	</panel.string>
+	<tab_container name="appearance_tabs">
+		<panel label="I MIEI ABITI" name="outfitslist_tab"/>
+		<panel label="INDOSSA" name="cof_tab"/>
+	</tab_container>
+	<panel name="bottom_panel">
+		<layout_stack name="bottom_panel_ls">
+			<layout_panel name="save_btn_lp">
+				<button label="Salva con nome" name="save_btn"/>
+			</layout_panel>
+			<layout_panel name="wear_btn_lp">
+				<button label="Indossa" name="wear_btn"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

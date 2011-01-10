@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="incoming call" title="Ligação para você">
+	<floater.string name="lifetime">
+		5
+	</floater.string>
+	<floater.string name="localchat">
+		Bate-papo local
+	</floater.string>
+	<floater.string name="anonymous">
+		anônimo
+	</floater.string>
+	<floater.string name="VoiceInviteP2P">
+		está ligando.
+	</floater.string>
+	<floater.string name="VoiceInviteAdHoc">
+		entrou numa ligação de voz via conferência.
+	</floater.string>
+	<floater.string name="VoiceInviteGroup">
+		chegou ao canal de voz do &apos;[GROUP]&apos;.
+	</floater.string>
+	<floater.string name="VoiceInviteQuestionGroup">
+		Deseja sair do [CURRENT_CHAT] e entrar na ligação de &apos;[GROUP]&apos;?
+	</floater.string>
+	<floater.string name="VoiceInviteQuestionDefault">
+		Sair do [CURRENT_CHAT] e entrar neste bate-papo de voz?
+	</floater.string>
+	<text name="question">
+		Sair do [CURRENT_CHAT] e entrar neste bate-papo?
+	</text>
+	<button label="Aceitar" label_selected="Aceitar" name="Accept"/>
+	<button label="Rejeitar" label_selected="Rejeitar" name="Reject"/>
+	<button label="Enviar MI" name="Start IM"/>
+</floater>

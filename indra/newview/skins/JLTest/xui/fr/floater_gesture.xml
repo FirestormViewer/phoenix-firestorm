@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater label="Lieux" name="gestures" title="GESTES">
+	<floater.string name="loading">
+		Chargement...
+	</floater.string>
+	<floater.string name="playing">
+		(lecture en cours)
+	</floater.string>
+	<floater.string name="copy_name">
+		Copie de [COPY_NAME]
+	</floater.string>
+	<scroll_list name="gesture_list">
+		<scroll_list.columns label="Nom" name="name"/>
+		<scroll_list.columns label="Chat" name="trigger"/>
+		<scroll_list.columns label="" name="key"/>
+		<scroll_list.columns label="Touche" name="shortcut"/>
+	</scroll_list>
+	<panel label="bottom_panel" name="bottom_panel">
+		<menu_button name="gear_btn" tool_tip="Plus d&apos;options"/>
+		<button name="new_gesture_btn" tool_tip="Faire un nouveau geste"/>
+		<button name="activate_btn" tool_tip="Activer/désactiver le geste sélectionné"/>
+		<button name="del_btn" tool_tip="Supprimer ce geste"/>
+	</panel>
+	<button label="Modifier" name="edit_btn"/>
+	<button label="Lire" name="play_btn"/>
+	<button label="Stop" name="stop_btn"/>
+</floater>

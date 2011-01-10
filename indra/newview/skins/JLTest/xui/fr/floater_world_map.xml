@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="worldmap" title="CARTE DU MONDE">
+	<panel name="layout_panel_1">
+		<text name="events_label">
+			Légende
+		</text>
+	</panel>
+	<panel name="layout_panel_2">
+		<button name="Show My Location" tool_tip="Centrer la carte sur l’emplacement de mon avatar"/>
+		<text name="me_label">
+			Moi
+		</text>
+		<text name="person_label">
+			Résident
+		</text>
+		<text name="infohub_label">
+			Infohub
+		</text>
+		<text name="land_sale_label">
+			Vente de terrains
+		</text>
+		<text name="auction_label">
+			enchères
+		</text>
+		<text name="by_owner_label">
+			propriétaire
+		</text>
+		<button name="Go Home" tool_tip="Me téléporter jusqu’à mon domicile"/>
+		<text name="Home_label">
+			Domicile
+		</text>
+		<text name="events_label">
+			Événements :
+		</text>
+		<text name="pg_label">
+			Général
+		</text>
+		<check_box initial_value="true" name="events_mature_chk"/>
+		<text name="events_mature_label">
+			Modéré
+		</text>
+		<text name="events_adult_label">
+			Adulte
+		</text>
+	</panel>
+	<panel name="layout_panel_3">
+		<text name="find_on_map_label">
+			Situer sur la carte
+		</text>
+	</panel>
+	<panel name="layout_panel_4">
+		<combo_box label="Amis connectés" name="friend combo" tool_tip="Afficher les amis sur la carte">
+			<combo_box.item label="Mes amis connectés" name="item1"/>
+		</combo_box>
+		<combo_box label="Mes repères" name="landmark combo" tool_tip="Repère à afficher sur la carte">
+			<combo_box.item label="Mes repères" name="item1"/>
+		</combo_box>
+		<search_editor label="Régions par nom" name="location" tool_tip="Tapez le nom d&apos;une région"/>
+		<button label="Trouver" name="DoSearch" tool_tip="Rechercher une région"/>
+		<button name="Clear" tool_tip="Effacer les lignes de suivi et réinitialiser la carte"/>
+		<text name="events_label">
+			Endroit :
+		</text>
+		<button label="Téléporter" name="Teleport" tool_tip="Me téléporter à l&apos;emplacement sélectionné"/>
+		<button label="Copier la SLurl" name="copy_slurl" tool_tip="Copie l’emplacement actuel sous la forme d’une SLurl à utiliser sur le Web."/>
+		<button label="Afficher la sélection" name="Show Destination" tool_tip="Centrer la carte sur l&apos;emplacement sélectionné"/>
+	</panel>
+	<panel name="layout_panel_5">
+		<text name="zoom_label">
+			Zoomer
+		</text>
+	</panel>
+</floater>

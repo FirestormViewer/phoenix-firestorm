@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border="true"
+ follows="left|top|right|bottom"
+ height="408"
+ label="Graphics"
+ layout="topleft"
+ left="102"
+ name="Display panel"
+ top="1"
+ width="517">
+
+    <panel
+     border="false"
+	 follows="top|left"
+     height="392"
+     label="User Interface"
+     layout="topleft"
+     left="5"
+     name="UI Prefs Panel"
+     top="16"
+     width="485">
+		<text
+		type="string"
+            left="5"
+            top_pad="5"
+		length="1"
+		follows="left|top"
+		height="12"
+		layout="topleft"
+		name="HoverTipText"
+		width="100">
+			Hover Tips:
+		</text>
+
+          <check_box
+          control_name="ShowHoverTips"
+          height="16"
+          initial_value="true"
+          label="Basic Hover Tips (set this first)"
+          layout="topleft"
+          left_delta="10"
+          name="ShowHoverTips"
+          tool_tip="Set this to show hover tips on avatars and some other things - set this one first"
+          top_pad="12"
+          width="256" />
+          <check_box
+          control_name="ShowAllObjectHoverTip"
+          height="16"
+          initial_value="true"
+          label="on All Objects"
+          tool_tip="Set this to show hover tips on in-world objects"
+          layout="topleft"
+          left_delta="0"
+          name="ShowAllHoverTips"
+          top_pad="7"
+          width="256" />
+          <check_box
+          control_name="ShowLandHoverTip"
+          height="16"
+          initial_value="true"
+          label="on Land"
+          tool_tip="Sst this to show hover tips on land"
+          layout="topleft"
+          left_delta="0"
+          name="ShowLandHoverTips"
+          top_pad="7"
+          width="256" />
+
+		<text
+		type="string"
+            left="5"
+            top_pad="160"
+		length="1"
+		follows="left|top"
+		height="12"
+		layout="topleft"
+		name="ButtonFlashing"
+		width="128">
+			Flashing Buttons:
+		</text>    
+		<slider
+		control_name="ButtonFlashCount"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="1"
+		label="Number of times IM buttons flash:"
+            tool_tip="Number of times buttons flash (used for IM notifications)"
+		label_width="300"
+		layout="topleft"
+            left="15"
+            min_val="0"
+		max_val="16"
+		name="ButtonsFlashCount"
+		top_pad="12"
+		width="471" />
+		<slider
+		control_name="ButtonFlashRate"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="0.25"
+		label="Rate button flashes at:"
+            tool_tip="Rate buttons flash at (in Hz) - used for IM notifications"
+		label_width="300"
+		layout="topleft"
+            left="15"
+            min_val="0"
+		max_val="4"
+		name="ButtonFlashRate"
+		top_pad="5"
+		width="467" />
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left="475"
+		name="ButtonFlashRateText"
+		top_delta="0"
+		width="50">
+			Hz
+		</text> 
+
+		<text
+		type="string"
+            left="5"
+            top_pad="12"
+		length="1"
+		follows="left|top"
+		height="12"
+		layout="topleft"
+		name="HeadMovement"
+		width="408">
+			Amount that Avatar's head Follows Mouse (set to '0' for no movement):
+		</text>    
+		<slider
+		control_name="PitchFromMousePosition"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="15"
+		label="Vertical range that avatar's head follows mouse :"
+            tool_tip="Vertical range that avatar's head follows mouse (pitch) in degrees"
+		label_width="300"
+		layout="topleft"
+            left="15"
+            min_val="0"
+		max_val="120"
+		name="PitchFromMousePositionSlider"
+		top_pad="12"
+		width="471" />
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left="475"
+		name="PitchFromMousePositionText"
+		top_delta="0"
+		width="50">
+			degrees
+		</text>
+		<slider
+		control_name="YawFromMousePosition"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="5"
+		label="Horizontal range that avatar's head follows mouse :"
+            tool_tip="Horizontal range that avatar's head follows mouse (yaw) in degrees"
+		label_width="300"
+		layout="topleft"
+            left="15"
+            min_val="0"
+		max_val="120"
+		name="YawFromMousePositionSlider"
+		top_pad="5"
+		width="471" />
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left="475"
+		name="YawFromMousePositionText"
+		top_delta="0"
+		width="50">
+			degrees
+		</text>
+
+		<text
+		type="string"
+            left="200"
+            top="5"
+		length="1"
+		follows="left|top"
+		height="12"
+		layout="topleft"
+		name="ToastSettings"
+		width="330">
+			Notification Toast Settings (popups at bottom-right):
+		</text>
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="10"
+		layout="topleft"
+		left="210"
+		name="ToastSpaceText"
+		top_pad="7"
+		width="145">
+			Space between lowest
+		</text>
+		<slider
+		control_name="ChannelBottomPanelMargin"
+		decimal_digits="0"
+		follows="left|top"
+		height="10"
+		increment="1"
+		label="Toast and bottom:"
+            tool_tip="Space in pixels between the bottom of the UI and the bottom toast"
+		label_width="155"
+		layout="topleft"
+		left="210"
+            min_val="0"
+		max_val="250"
+		name="ToastSpace"
+		top_pad="1"
+		width="273" />
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="10"
+		layout="topleft"
+		left_delta="269"
+		name="ToastSpaceText"
+		top_delta="0"
+		width="50">
+			pixels
+		</text>    
+		<slider
+		control_name="NotificationToastLifeTime"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="1"
+		initial_value="5"
+		label="Notification Toast life:"
+            tool_tip="Number of seconds that a notification toast is displayed before fading"
+		label_width="155"
+		layout="topleft"
+		left="210"
+		max_val="30"
+		name="ToastLifetime"
+		top_pad="7"
+		width="266" />
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left_delta="269"
+		name="ToastLifetimeText"
+		top_delta="0"
+		width="50">
+			seconds
+		</text>
+		<slider
+		control_name="NotificationTipToastLifeTime"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="1"
+		initial_value="5"
+		label="Tip Toast life:"
+            tool_tip="Number of seconds that a tip toast is displayed before fading"
+		label_width="155"
+		layout="topleft"
+		left="210"
+		max_val="30"
+		name="TipToastLifetime"
+		top_pad="7"
+		width="266" />
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left_delta="269"
+		name="TipToastLifetimeText"
+		top_delta="0"
+		width="50">
+			seconds
+		</text>
+		<slider
+		control_name="NearbyToastLifeTime"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="1"
+		initial_value="5"
+		label="Nearby Chat Toast life:"
+            tool_tip="Number of seconds that a nearby chat toast is displayed before fading"
+		label_width="155"
+		layout="topleft"
+		left="210"
+		max_val="30"
+		name="NearbyToastLifetime"
+		top_pad="7"
+		width="266" />
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left_delta="269"
+		name="NearbyToastLifetimeText"
+		top_delta="0"
+		width="50">
+			seconds
+		</text>
+		<slider
+		control_name="StartupToastLifeTime"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="1"
+		initial_value="5"
+		label="Startup Toast life:"
+            tool_tip="Number of seconds that a toast is shown on startup before fading"
+		label_width="155"
+		layout="topleft"
+		left="210"
+		max_val="30"
+		name="StartupToastLifetime"
+		top_pad="7"
+		width="266" />
+	      <text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left_delta="269"
+		name="StartupToastLifetimeText"
+		top_delta="0"
+		width="50">
+			seconds
+		</text>
+		<slider
+		control_name="NearbyToastFadingTime"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="1"
+		label="Nearby Chat Toast fade time:"
+            tool_tip="Number of seconds that a nearby chat toast is displayed before fading"
+		label_width="155"
+		layout="topleft"
+		left="210"
+		max_val="10"
+		name="NearbyToastFadingTime"
+		top_pad="7"
+		width="266" />
+	      <text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left_delta="269"
+		name="NearbyToastFadingTimeText"
+		top_delta="0"
+		width="50">
+			seconds
+		</text>
+		<slider
+		control_name="ToastFadingTime"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="1"
+		label="Normal Toast fade time:"
+            tool_tip="Number of seconds that a normal toast is displayed before fading"
+		label_width="155"
+		layout="topleft"
+		left="210"
+		max_val="10"
+		name="ToastFadingTime"
+		top_pad="7"
+		width="266" />
+	      <text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left_delta="269"
+		name="ToastFadingTimeText"
+		top_delta="0"
+		width="50">
+			seconds
+		</text>
+		<slider
+		control_name="ToastGap"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="1"
+		initial_value="5"
+		label="Gap between Toasts:"
+            tool_tip="Gap between adjacent toasts in pixels"
+		label_width="155"
+		layout="topleft"
+		left="210"
+		max_val="30"
+		name="ToastGap"
+		top_pad="7"
+		width="266" />
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left_delta="269"
+		name="ToastGapText"
+		top_delta="0"
+		width="50">
+			pixels
+		</text>
+		<slider
+		control_name="OverflowToastHeight"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="1"
+		label="Height of Overflow Toast:"
+            tool_tip="Height of an overflow toast in pixels"
+		label_width="155"
+		layout="topleft"
+		left="210"
+		max_val="250"
+		name="OverflowToastHeight"
+		top_pad="7"
+		width="272" />
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left_delta="269"
+		name="OverflowToastHeightText"
+		top_delta="0"
+		width="50">
+			pixels
+		</text>
+	</panel>
+</panel>
+

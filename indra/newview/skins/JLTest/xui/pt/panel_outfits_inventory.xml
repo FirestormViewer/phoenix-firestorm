@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Coisas" name="Outfits">
+	<panel.string name="wear_outfit_tooltip">
+		Vestir look selecionado
+	</panel.string>
+	<panel.string name="wear_items_tooltip">
+		Vestir itens selecionados
+	</panel.string>
+	<tab_container name="appearance_tabs">
+		<panel label="MEUS LOOKS" name="outfitslist_tab"/>
+		<panel label="EM USO" name="cof_tab"/>
+	</tab_container>
+	<panel name="bottom_panel">
+		<layout_stack name="bottom_panel_ls">
+			<layout_panel name="save_btn_lp">
+				<button label="Salvar como" name="save_btn"/>
+			</layout_panel>
+			<layout_panel name="wear_btn_lp">
+				<button label="Vestir" name="wear_btn"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

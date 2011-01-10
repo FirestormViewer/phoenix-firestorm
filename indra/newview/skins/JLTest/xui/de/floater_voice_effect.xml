@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater label="Orte" name="voice_effects" title="VOICE MORPHING">
+	<string name="no_voice_effect">
+		(Kein Voice-Morphing)
+	</string>
+	<string name="active_voice_effect">
+		(Aktiv)
+	</string>
+	<string name="unsubscribed_voice_effect">
+		(nicht abonniert)
+	</string>
+	<string name="new_voice_effect">
+		(Neu!)
+	</string>
+	<text name="preview_text">
+		Zur Vorschau
+	</text>
+	<text name="status_text">
+		Stimme aufnehmen und auf einen Effekt klicken, um diesen auf Ihre Stimme anzuwenden.
+	</text>
+	<button label="Aufnehmen" name="record_btn" tool_tip="Nehmen Sie Ihre Stimme auf."/>
+	<button label="Stopp" name="record_stop_btn"/>
+	<text name="voice_morphing_link">
+		[[URL] Jetzt abonnieren]
+	</text>
+	<scroll_list name="voice_effect_list" tool_tip="Nehmen Sie Ihre Stimme auf und klicken Sie dann auf einen Effekt, um diesen auszuprobieren.">
+		<scroll_list.columns label="Bezeichnung" name="name"/>
+		<scroll_list.columns label="Gültig bis" name="expires"/>
+	</scroll_list>
+</floater>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview notecard" title="NOTE:">
+	<floater.string name="no_object">
+		Kunne ikke finde objekt som indeholder denne note.
+	</floater.string>
+	<floater.string name="not_allowed">
+		Du har ikke rettigheder til at se denne note.
+	</floater.string>
+	<floater.string name="Title">
+		Note: [NAME]
+	</floater.string>
+	<text name="desc txt">
+		Beskrivelse:
+	</text>
+	<text_editor name="Notecard Editor">
+		Indlæser...
+	</text_editor>
+	<button label="Gem" label_selected="Gem" name="Save"/>
+	<button label="Slet" label_selected="Slet" name="Delete"/>
+</floater>

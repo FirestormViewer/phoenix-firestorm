@@ -15,6 +15,21 @@
                 </map>
             </array>
         </map>
+		<map>
+        <key>name</key>
+            <string>JL</string>
+        <key>folder</key>
+            <string>JLTest</string>
+        <key>themes</key>
+            <array>
+                <map>
+                <key>name</key>
+                    <string>JLTest1</string>
+                <key>folder</key>
+                    <string>JLTest</string>
+                </map>
+            </array>
+        </map>
         <map>
         <key>name</key>
             <string>StarLight</string>

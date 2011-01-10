@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Tekst chat" name="chat">
+	<text name="font_size">
+		Skriftstørrelse:
+	</text>
+	<radio_group name="chat_font_size">
+		<radio_item label="Lille" name="radio" value="0"/>
+		<radio_item label="Mellem" name="radio2" value="1"/>
+		<radio_item label="Stor" name="radio3" value="2"/>
+	</radio_group>
+	<text name="font_colors">
+		Skriftfarve:
+	</text>
+	<color_swatch label="Dig" name="user"/>
+	<text name="text_box1">
+		Dig
+	</text>
+	<color_swatch label="Andre" name="agent"/>
+	<text name="text_box2">
+		Andre
+	</text>
+	<color_swatch label="IM" name="im"/>
+	<text name="text_box3">
+		IM
+	</text>
+	<color_swatch label="System" name="system"/>
+	<text name="text_box4">
+		System
+	</text>
+	<color_swatch label="Fejl" name="script_error"/>
+	<text name="text_box5">
+		Fejl
+	</text>
+	<color_swatch label="Objekter" name="objects"/>
+	<text name="text_box6">
+		Objekter
+	</text>
+	<color_swatch label="Ejer" name="owner"/>
+	<text name="text_box7">
+		Ejer
+	</text>
+	<color_swatch label="URL&apos;er" name="links"/>
+	<text name="text_box9">
+		URL&apos;er
+	</text>
+	<check_box initial_value="true" label="Afspil skrive animation ved chat" name="play_typing_animation"/>
+	<check_box label="Send e-mail til mig når jeg modtager IM og er offline" name="send_im_to_email"/>
+	<check_box label="Åben for almindelig tekst i IM og chat historik" name="plain_text_chat_history"/>
+	<text name="show_ims_in_label">
+		Vis IM&apos;er i:
+	</text>
+	<text name="requires_restart_label">
+		(kræver genstart)
+	</text>
+	<radio_group name="chat_window" tool_tip="Vise dine personlige beskeder i separate vinduer, eller i ét vindue med flere faner (Kræver genstart)">
+		<radio_item label="Separate vinduer" name="radio" value="0"/>
+		<radio_item label="Faner" name="radio2" value="1"/>
+	</radio_group>
+	<check_box label="Benyt maskin-oversættelse ved chat (håndteret af Google)" name="translate_chat_checkbox"/>
+	<text name="translate_language_text" width="110">
+		Oversæt chat til :
+	</text>
+	<combo_box name="translate_language_combobox" width="146">
+		<combo_box.item label="System standard" name="System Default Language"/>
+		<combo_box.item label="English (Engelsk)" name="English"/>
+		<combo_box.item label="Dansk" name="Danish"/>
+		<combo_box.item label="Deutsch (Tysk)" name="German"/>
+		<combo_box.item label="Español (Spansk)" name="Spanish"/>
+		<combo_box.item label="Français (Fransk)" name="French"/>
+		<combo_box.item label="Italiano (Italiensk)" name="Italian"/>
+		<combo_box.item label="Magyar (Ungarsk)" name="Hungarian"/>
+		<combo_box.item label="Nederlands (Hollandsk)" name="Dutch"/>
+		<combo_box.item label="Polski (Polsk)" name="Polish"/>
+		<combo_box.item label="Português (Portugisisk)" name="Portugese"/>
+		<combo_box.item label="Русский (Russisk)" name="Russian"/>
+		<combo_box.item label="Türkçe (Tyrkisk)" name="Turkish"/>
+		<combo_box.item label="Українська (Ukrainsk)" name="Ukrainian"/>
+		<combo_box.item label="中文 (简体) (Kinesisk)" name="Chinese"/>
+		<combo_box.item label="日本語 (Japansk)" name="Japanese"/>
+		<combo_box.item label="한국어 (Koreansk)" name="Korean"/>
+	</combo_box>
+</panel>

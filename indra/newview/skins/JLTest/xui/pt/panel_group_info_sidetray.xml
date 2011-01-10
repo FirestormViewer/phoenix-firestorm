@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Perfil do grupo" name="GroupInfo">
+	<panel.string name="default_needs_apply_text">
+		Algumas modificações não foram salvas
+	</panel.string>
+	<panel.string name="want_apply_text">
+		Deseja salvar essas mudanças?
+	</panel.string>
+	<panel.string name="group_join_btn">
+		Entrar (L$[AMOUNT])
+	</panel.string>
+	<panel.string name="group_join_free">
+		Grátis
+	</panel.string>
+	<panel name="group_info_top">
+		<text_editor name="group_name" value="Carregando..."/>
+		<line_editor label="Digite o nome do grupo novo aqui" name="group_name_editor"/>
+	</panel>
+	<layout_stack name="layout">
+		<layout_panel name="group_accordions">
+			<accordion name="groups_accordion">
+				<accordion_tab name="group_general_tab" title="Geral"/>
+				<accordion_tab name="group_roles_tab" title="Cargos"/>
+				<accordion_tab name="group_notices_tab" title="Avisos"/>
+				<accordion_tab name="group_land_tab" title="Terrenos/Bens"/>
+			</accordion>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="button_row_ls">
+		<layout_panel name="btn_chat_lp">
+			<button label="Bate-papo" name="btn_chat"/>
+		</layout_panel>
+		<layout_panel name="call_btn_lp">
+			<button label="Ligar para o grupo" name="btn_call" tool_tip="Ligar para este grupo"/>
+		</layout_panel>
+		<layout_panel name="btn_apply_lp">
+			<button label="Salvar" label_selected="Salvar" name="btn_apply"/>
+			<button label="Criar grupo" name="btn_create" tool_tip="Criar um grupo novo"/>
+		</layout_panel>
+	</layout_stack>
+</panel>

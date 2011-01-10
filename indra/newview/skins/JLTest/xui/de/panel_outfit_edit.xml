@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Side tray Outfit Edit panel -->
+<panel label="Outfit bearbeiten" name="outfit_edit">
+	<string name="No Outfit" value="Kein Outfit"/>
+	<string name="unsaved_changes" value="Ungespeicherte Änderungen"/>
+	<string name="now_editing" value="Wird bearbeitet"/>
+	<panel.string name="not_available">
+		k.A.
+	</panel.string>
+	<panel.string name="unknown">
+		(unbekannt)
+	</panel.string>
+	<string name="Filter.All" value="Alle"/>
+	<string name="Filter.Clothes/Body" value="Kleider/Körper"/>
+	<string name="Filter.Objects" value="Objekte"/>
+	<string name="Filter.Clothing" value="Kleidung"/>
+	<string name="Filter.Bodyparts" value="Körperteile"/>
+	<string name="replace_body_part" value="Klicken, um Ihre aktuelle Form zu ersetzen"/>
+	<text name="title" value="Outfit bearbeiten"/>
+	<panel label="bottom_panel" name="header_panel">
+		<panel label="bottom_panel" name="outfit_name_and_status">
+			<text name="status" value="Wird bearbeitet..."/>
+			<text name="curr_outfit_name" value="[Aktuelles Outfit]"/>
+		</panel>
+	</panel>
+	<layout_stack name="im_panels">
+		<layout_panel label="IM Steuerkonsole" name="outfit_wearables_panel">
+			<layout_stack name="filter_panels">
+				<layout_panel name="add_button_and_combobox">
+					<button label="Mehr hinzufügen" name="show_add_wearables_btn" tool_tip="Öffnen/Schließen"/>
+				</layout_panel>
+				<layout_panel name="filter_panel">
+					<filter_editor label="Tragbare Inventarobjekte filtern" name="look_item_filter"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="add_wearables_panel">
+			<button label="Objekt anziehen" name="plus_btn"/>
+		</layout_panel>
+	</layout_stack>
+	<panel name="no_add_wearables_button_bar">
+		<button name="shop_btn_1" tool_tip="Besuchen Sie den Marktplatz. Sie können auch einen Teil Ihres Outfits auswählen, und dann hier klicken, um ähnliche Artikel anzuzeigen."/>
+	</panel>
+	<panel name="add_wearables_button_bar">
+		<button name="shop_btn_2" tool_tip="Besuchen Sie den Marktplatz. Sie können auch einen Teil Ihres Outfits auswählen, und dann hier klicken, um ähnliche Artikel anzuzeigen."/>
+	</panel>
+	<panel name="save_revert_button_bar">
+		<layout_stack name="button_bar_ls">
+			<layout_panel name="save_btn_lp">
+				<button label="Speichern" name="save_btn"/>
+			</layout_panel>
+			<layout_panel name="revert_btn_lp">
+				<button label="Änderungen rückgängig machen" name="revert_btn" tool_tip="Zur zuletzt gespeicherten Version zurückkehren"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

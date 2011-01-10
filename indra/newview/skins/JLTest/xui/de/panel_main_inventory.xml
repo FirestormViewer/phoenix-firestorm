@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Sonstiges" name="main inventory panel">
+	<panel.string name="ItemcountFetching">
+		Inventar ([ITEM_COUNT] Artikel werden abgerufen... [FILTER]
+	</panel.string>
+	<panel.string name="ItemcountCompleted">
+		[ITEM_COUNT] Objekte [FILTER]
+	</panel.string>
+	<text name="ItemcountText">
+		Objekte:
+	</text>
+	<filter_editor label="Inventar filtern" name="inventory search editor"/>
+	<tab_container name="inventory filter tabs">
+		<inventory_panel label="MEIN INVENTAR" name="All Items"/>
+		<recent_inventory_panel label="AKTUELL" name="Recent Items"/>
+	</tab_container>
+	<layout_stack name="bottom_panel">
+		<layout_panel name="options_gear_btn_panel">
+			<button name="options_gear_btn" tool_tip="Zusätzliche Optionen anzeigen"/>
+		</layout_panel>
+		<layout_panel name="add_btn_panel">
+			<button name="add_btn" tool_tip="Neues Objekt hinzufügen"/>
+		</layout_panel>
+		<layout_panel name="trash_btn_panel">
+			<dnd_button name="trash_btn" tool_tip="Auswahl löschen"/>
+		</layout_panel>
+	</layout_stack>
+</panel>

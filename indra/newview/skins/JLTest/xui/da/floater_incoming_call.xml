@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="incoming call" title="UKENDT PERSON KALDER OP">
+	<floater.string name="lifetime">
+		5
+	</floater.string>
+	<floater.string name="localchat">
+		Stemme chat nærved
+	</floater.string>
+	<floater.string name="anonymous">
+		anonym
+	</floater.string>
+	<floater.string name="VoiceInviteP2P">
+		kalder op.
+	</floater.string>
+	<floater.string name="VoiceInviteAdHoc">
+		har sluttet sig til stemme chat opkald med en konference chat.
+	</floater.string>
+	<floater.string name="VoiceInviteGroup">
+		netop tilsuttet stemme kanal for &apos;[GROUP]&apos;.
+	</floater.string>
+	<floater.string name="VoiceInviteQuestionGroup">
+		Ønsker du at forlade [CURRENT_CHAT] og tilsutte dig kald med &apos;[GROUP]&apos;?
+	</floater.string>
+	<floater.string name="VoiceInviteQuestionDefault">
+		Ønsker du at forlade [CURRENT_CHAT] og tilslutte dig denne stemmechat?
+	</floater.string>
+	<text name="question">
+		Ønsker du at forlade [CURRENT_CHAT] og slutte dig til denne stemme chat?
+	</text>
+	<button label="Acceptér" label_selected="Acceptér" name="Accept"/>
+	<button label="Afvis" label_selected="Afvis" name="Reject"/>
+	<button label="Start IM" name="Start IM"/>
+</floater>

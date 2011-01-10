@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="もの" name="main inventory panel">
+	<panel.string name="ItemcountFetching">
+		[ITEM_COUNT] 個のアイテムを取得中です... [FILTER]
+	</panel.string>
+	<panel.string name="ItemcountCompleted">
+		[ITEM_COUNT] 個のアイテム　[FILTER]
+	</panel.string>
+	<text name="ItemcountText">
+		アイテム：
+	</text>
+	<filter_editor label="持ち物をフィルター" name="inventory search editor"/>
+	<tab_container name="inventory filter tabs">
+		<inventory_panel label="持ち物" name="All Items"/>
+		<recent_inventory_panel label="最新" name="Recent Items"/>
+	</tab_container>
+	<layout_stack name="bottom_panel">
+		<layout_panel name="options_gear_btn_panel">
+			<button name="options_gear_btn" tool_tip="オプションを表示します"/>
+		</layout_panel>
+		<layout_panel name="add_btn_panel">
+			<button name="add_btn" tool_tip="新しいアイテムを追加します"/>
+		</layout_panel>
+		<layout_panel name="trash_btn_panel">
+			<dnd_button name="trash_btn" tool_tip="選択したアイテムを削除します"/>
+		</layout_panel>
+	</layout_stack>
+</panel>
