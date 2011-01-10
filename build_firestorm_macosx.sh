@@ -64,8 +64,9 @@ getArgs()
             showUsage && exit 1
         fi
 
-        if (( $WANTS_CLEAN + $WANTS_CONFIG + $WANTS_BUILD + \
-        	$WANTS_VERSION + $WANTS_PACKAGE )) ; then
+        if [ $WANTS_CLEAN -ne $TRUE ] && [ $WANTS_CONFIG -ne $TRUE ] && \
+        	[ $WANTS_BUILD -ne $TRUE ] && [ $WANTS_VERSION -ne $TRUE ] && \
+        	[ $WANTS_PACKAGE -ne $TRUE ] ; then
         # the user didn't say what to do, so assume he wants to do everything
               WANTS_CLEAN=$TRUE
               WANTS_CONFIG=$TRUE
