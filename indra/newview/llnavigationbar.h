@@ -103,7 +103,6 @@ public:
 
 	int getDefNavBarHeight();
 	int getDefFavBarHeight();
-	int getVisHeight(); // AO - total vertical pixels in use, for insuring new windows don't overlap.
 	
 private:
 	// the distance between navigation panel and favorites panel in pixels
