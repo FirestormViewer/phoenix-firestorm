@@ -43,17 +43,8 @@ showUsage()
 getArgs()
 # $* = the options passed in from main
 {
-        if [ $# -eq 0 ] ; then
-              WANTS_CLEAN=$TRUE
-              WANTS_CONFIG=$TRUE
-              WANTS_BUILD=$TRUE
-              WANTS_VERSION=$TRUE
-              WANTS_PACKAGE=$TRUE
-              return
-        fi
-        
         while getoptex "clean config version rebuild help chan: btype:" "$@" ; do
-        
+
             case "$OPTOPT" in
             clean)    WANTS_CLEAN=$TRUE;;
             config)   WANTS_CONFIG=$TRUE;;
@@ -63,18 +54,30 @@ getArgs()
                       WANTS_PACKAGE=$TRUE;;
             chan)     CHANNEL="$OPTARG";;
             btype)    BTYPE="$OPTARG";;
-            
+
             help)     showUsage && exit 0;;
-            
+
             -*)       showUsage && exit 1;;
-            *)        showUsage && exit 1;;            
+            *)        showUsage && exit 1;;
             esac
         done
         shift $[OPTIND-1]
         if [ $OPTIND -le 1 ] ; then
             showUsage && exit 1
         fi
+
+        if [ $WANTS_CLEAN -ne $TRUE ] && [ $WANTS_CONFIG -ne $TRUE ] && \
+                [ $WANTS_BUILD -ne $TRUE ] && [ $WANTS_VERSION -ne $TRUE ] && \
+                [ $WANTS_PACKAGE -ne $TRUE ] ; then
+        # the user didn't say what to do, so assume he wants to do everything
+              WANTS_CLEAN=$TRUE
+              WANTS_CONFIG=$TRUE
+              WANTS_BUILD=$TRUE
+              WANTS_VERSION=$TRUE
+              WANTS_PACKAGE=$TRUE
+        fi
 }
+
 
 function getoptex()
 {
@@ -217,17 +220,20 @@ fi
 
 if [ $WANTS_CONFIG -eq $TRUE ] ; then
 	mkdir -p ../logs > /dev/null 2>&1
-	./develop.py -t $BTYPE configure -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=ON -DVIEWER_CHANNEL:STRING=Firestorm-$CHANN
-EL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
-	./develop.py -t release | tee $LOG
+	./develop.py -t $BTYPE configure -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=ON -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
 fi
 
 if [ $WANTS_VERSION -eq $TRUE ] ; then
-        echo -n "Setting build version to "
         buildVer=`hg summary | head -1 | cut -d " "  -f 2 | cut -d : -f 1`
-        echo "$buildVer."
-        cp llcommon/llversionviewer.h llcommon/llversionviewer.h.lastBuild        
-	sed -e "s#LL_VERSION_BUILD = .*\$#LL_VERSION_BUILD = ${buildVer};#" -e "s#LL_CHANNEL = .*\$#LL_CHANNEL = \"Firestorm-$CHANNEL\";#" llcommon/llversionviewer.h.lastBuild > llcommon/llversionviewer.h
+	majorVer=`cat Version | cut -d "=" -f 2 | cut -d "." -f 1`
+	minorVer=`cat Version | cut -d "=" -f 2 | cut -d "." -f 2`
+	patchVer=`cat Version | cut -d "=" -f 2 | cut -d "." -f 3`
+	echo "Building $CHANN- ${majorVer}.${minorVer}.${patchVer}.${buildVer}"
+	sed -e "s#LL_VERSION_BUILD = .*\$#LL_VERSION_BUILD = ${buildVer};#" \
+	    -e "s#LL_VERSION_MAJOR = .*\$#LL_VERSION_MAJOR = ${majorVer};#" \
+	    -e "s#LL_VERSION_MINOR = .*\$#LL_VERSION_MINOR = ${minorVer};#" \
+            -e "s#LL_VERSION_PATCH = .*\$#LL_VERSION_PATCH = ${patchVer};#" \
+	    -e "s#LL_CHANNEL = .*\$#LL_CHANNEL = \"Firestorm-$CHANNEL\";#" llcommon/llversionviewer.h.in > llcommon/llversionviewer.h
 fi
 
 
@@ -235,7 +241,6 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
 	echo "Building in progress. Check $LOG for verbose status."
 	./develop.py -t $BTYPE build 2>&1 | tee -a "$LOG"
 	trap - INT TERM EXIT
-	mv llcommon/llversionviewer.h.lastBuild llcommon/llversionviewer.h
 	echo "Complete"
 fi
 popd > /dev/null

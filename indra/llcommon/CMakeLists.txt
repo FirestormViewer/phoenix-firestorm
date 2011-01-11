@@ -255,9 +255,12 @@ set_source_files_properties(${llcommon_HEADER_FILES}
 
 list(APPEND llcommon_SOURCE_FILES ${llcommon_HEADER_FILES})
 
+if (WINDOWS)
 configure_files(llcommon_GENERATED_HEADER_FILES
     llversionviewer.h
     )
+endif(WINDOWS)
+
 set_source_files_properties(${llcommon_GENERATED_HEADER_FILES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)
 

@@ -3,6 +3,7 @@
 project(viewer)
 
 include(00-Common)
+include(BuildVersion)
 include(Boost)
 include(DBusGlib)
 include(DirectX)
@@ -1701,6 +1702,9 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${GOOGLE_PERFTOOLS_LIBRARIES}
     )
 
+if (LINUX)
+	build_version(viewer)
+endif(LINUX)
 
 set(ARTWORK_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH
     "Path to artwork files.")
