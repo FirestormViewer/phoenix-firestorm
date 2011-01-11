@@ -73,7 +73,6 @@ getArgs()
               WANTS_BUILD=$TRUE
               WANTS_VERSION=$TRUE
               WANTS_PACKAGE=$TRUE
-              return
         fi
 }
 
@@ -208,21 +207,25 @@ if [ $WANTS_CLEAN -eq $TRUE ] ; then
 	find . -name "*.pyc" -exec rm {} \;
 fi
 
+if [ $WANTS_VERSION -eq $TRUE ] ; then
+        buildVer=`hg summary | head -1 | cut -d " "  -f 2 | cut -d : -f 1`
+        majorVer=`cat Version | cut -d "=" -f 2 | cut -d "." -f 1`
+        minorVer=`cat Version | cut -d "=" -f 2 | cut -d "." -f 2`
+        patchVer=`cat Version | cut -d "=" -f 2 | cut -d "." -f 3`
+        echo "Building $CHANN- ${majorVer}.${minorVer}.${patchVer}.${buildVer}"
+        sed -e "s#LL_VERSION_BUILD = .*\$#LL_VERSION_BUILD = ${buildVer};#" \
+            -e "s#LL_VERSION_MAJOR = .*\$#LL_VERSION_MAJOR = ${majorVer};#" \
+            -e "s#LL_VERSION_MINOR = .*\$#LL_VERSION_MINOR = ${minorVer};#" \
+            -e "s#LL_VERSION_PATCH = .*\$#LL_VERSION_PATCH = ${patchVer};#" \
+            -e "s#LL_CHANNEL = .*\$#LL_CHANNEL = \"Firestorm-$CHANNEL\";#" llcommon/llversionviewer.h.in > llcommon/llversionviewer.h
+fi
+
+
 if [ $WANTS_CONFIG -eq $TRUE ] ; then
 	mkdir -p ../logs > /dev/null 2>&1
 	./develop.py -t $BTYPE configure -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=OFF -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
 	# LL build wants this directory to exist, but doesn't make it itself.
 	mkdir -p ./build-darwin-i386/newview/Release/Firestorm.app
-fi
-
-if [ $WANTS_VERSION -eq $TRUE ] ; then
-	echo -n "Setting build version to "
-        buildVer=`hg summary | head -1 | cut -d " "  -f 2 | cut -d : -f 1`
-        echo "$buildVer."
-        cp llcommon/llversionviewer.h llcommon/llversionviewer.h.build
-        sed -e "s#LL_VERSION_BUILD = .*\$#LL_VERSION_BUILD = ${buildVer};#" \
-        	-e "s#LL_CHANNEL = .*\$#LL_CHANNEL = \"Firestorm-$CHANNEL\";#" \
-        	llcommon/llversionviewer.h.build > llcommon/llversionviewer.h
 fi
 
 if [ $WANTS_BUILD -eq $TRUE ] ; then
@@ -235,12 +238,6 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
 		GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee $LOG | \
 		grep -e "[(make.*Error)|(xcodebuild.*Error)] "
 	trap - INT TERM EXIT
-	# Save the .h file we built with in case of errors in compile.
-	# Except during the build process, the .h file should ALWAYS be the
-	# same as existed in the source repository to avoid merge conflicts
-	# during updates.
-	mv llcommon/llversionviewer.h llcommon/llversionviewer.h.built
-	mv llcommon/llversionviewer.h.build llcommon/llversionviewer.h
 	echo "Complete."
 fi
 popd > /dev/null

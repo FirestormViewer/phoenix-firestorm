@@ -1702,9 +1702,9 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${GOOGLE_PERFTOOLS_LIBRARIES}
     )
 
-if (LINUX OR FIRECYG)
+if (LINUX OR FIRECYG OR DARWIN)
 	build_version(viewer)
-endif (LINUX OR FIRECYG)
+endif (LINUX OR FIRECYG OR DARWIN)
 
 set(ARTWORK_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH
     "Path to artwork files.")
