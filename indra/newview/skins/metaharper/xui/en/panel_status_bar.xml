@@ -22,6 +22,16 @@
    left="0"
    width="1000" / -->
    
+   <panel
+    height="18"
+    left="500"
+    width="95"
+    top="1"
+    follows="left|top" 
+    name="parcel_info_panel" 
+    bg_visible="false"
+    visible="false"
+    background_opaque="false">
    <button
     follows="left|top"
     height="16"
@@ -30,13 +40,12 @@
     image_disabled_selected="Info_Off"
     image_selected="Info_Off"
     image_unselected="Info_Off"
-    left="500"
+    left="0"
     name="place_info_btn"
     top="2"
     width="16"/>
    <text
      follows="left|top|right"
-     font="DejaVu"
      height="16"
      layout="topleft"
      left_pad="11"
@@ -111,6 +120,29 @@
     visible="false"
     width="35"
     />
+  </panel>
+
+<!-- Draw distance widget here -->
+    <slider
+    control_name="RenderFarClip"
+    decimal_digits="0"
+    follows="right|top"
+    height="15"
+    increment="16"
+    initial_value="64"
+    layout="topleft"
+    tool_tip="Maximum distance away from camera to be rezzed (meters)"
+    top="5"
+    label="Draw:"
+    label_length="40"
+    right="720"
+    max_val="992"
+    min_val="32"
+    name="drawdistance" 
+    top_delta="0"
+    width="130" />
+<!-- End Draw distance widget here -->
+
 	
     <panel.string
      name="packet_loss_tooltip">

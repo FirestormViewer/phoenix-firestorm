@@ -54,4 +54,15 @@
 				 parameter="ShowMiniLocationPanel" />
 		</menu_item_check>
 	-->
+    <menu_item_check
+         label="Show Menu Bar Location"
+         layout="topleft"
+         name="ShowMenuBarLocation">
+           <on_click
+             function="ToggleControl"
+             parameter="ShowMenuBarLocation" /> 
+             <on_check
+             function="CheckControl"
+             parameter="ShowMenuBarLocation" />
+    </menu_item_check>
 </menu>
