@@ -220,7 +220,7 @@ fi
 
 if [ $WANTS_CONFIG -eq $TRUE ] ; then
 	mkdir -p ../logs > /dev/null 2>&1
-	./develop.py -t $BTYPE configure -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=ON -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
+	./develop.py -t $BTYPE configure -DFIRECYG:BOOL=ON -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=ON -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
 fi
 
 if [ $WANTS_VERSION -eq $TRUE ] ; then
