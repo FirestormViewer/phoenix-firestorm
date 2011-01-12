@@ -231,6 +231,34 @@ with the same filename but different name
   <texture name="Inv_Undershirt" file_name="icons/Inv_Undershirt.png" preload="false" />
   <texture name="Inv_Link" file_name="icons/Inv_Link.png" preload="false" />
   <texture name="Inv_Invalid" file_name="icons/Inv_Invalid.png" preload="false" />
+  <texture name="Inv_TexturesOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_TexturesClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_SoundOpen"			file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_SoundClosed"		file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_CallingCardOpen"	file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_CallingCardClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_LandmarksOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_LandmarksClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_ClothingOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_ClothingClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_ObjectsOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_ObjectsClosed"		file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_NotecardsOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_NotecardsClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_ScriptsOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_ScriptsClosed"		file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_BodyPartsOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_BodyPartsClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_SnapshotsOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_SnapshotsClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_AnimationsOpen"	file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_AnimationsClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_GesturesOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_GesturesClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_FavoritesOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_FavoritesClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_InboxOpen"			file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_InboxClosed"		file_name="icons/Inv_SysClosed.png" />
   
   <texture name="Linden_Dollar_Alert" file_name="widgets/Linden_Dollar_Alert.png"/>
   <texture name="Linden_Dollar_Background" file_name="widgets/Linden_Dollar_Background.png"/>
