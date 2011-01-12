@@ -498,7 +498,7 @@ void LLFloaterMove::enableInstance(BOOL bEnable)
 
 void LLFloaterMove::onOpen(const LLSD& key)
 {
-	LLButton *anchor_panel = LLBottomTray::getInstance()->getChild<LLButton>("movement_btn");
+	
 
 	if (gAgent.getFlying())
 	{
@@ -512,9 +512,11 @@ void LLFloaterMove::onOpen(const LLSD& key)
 		showModeButtons(FALSE);
 	}
 
-	setDockControl(new LLDockControl(
-		anchor_panel, this,
-		getDockTongue(), LLDockControl::TOP));
+	// AO: no dock control to save titlebar space
+	//LLButton *anchor_panel = LLBottomTray::getInstance()->getChild<LLButton>("movement_btn");
+	//setDockControl(new LLDockControl(
+	//	anchor_panel, this,
+	//	getDockTongue(), LLDockControl::TOP));
 
 	sUpdateFlyingStatus();
 }
@@ -522,7 +524,7 @@ void LLFloaterMove::onOpen(const LLSD& key)
 //virtual
 void LLFloaterMove::setDocked(bool docked, bool pop_on_undock/* = true*/)
 {
-	LLTransientDockableFloater::setDocked(docked, pop_on_undock);
+	//LLTransientDockableFloater::setDocked(docked, pop_on_undock);
 }
 
 void LLFloaterMove::setModeButtonToggleState(const EMovementMode mode)
