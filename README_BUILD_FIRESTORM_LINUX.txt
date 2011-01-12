@@ -1,6 +1,8 @@
 First set up your system as described in the snowstorm linux wiki.
-- Additionally, make sure gcc-4.3 ang g++-4.3 are installed.
-- We do non-standalone builds
+Note: You must manually install fmod as described there.
+
+- Additionally, make sure gcc-4.4 ang g++-4.4 are installed.
+- You should do non-standalone builds. If you try standalone, you will most likely run into trouble.
 
 Run ./build_firestorm_linux.sh
 
