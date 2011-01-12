@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  legacy_header_height="18"
- can_dock="true"
- can_minimize="true"
+ can_dock="false"
+ can_minimize="false"
  can_close="false"
+ title=""
  follows="bottom"
- height="110"
+ height="72"
  layout="topleft"
  name="move_floater"
- help_topic="move_floater"
+ help_topic=""
  save_rect="true"
  save_visibility="true"
- save_dock_state="true"
- width="103">
+ width="83">
     <string
      name="walk_forward_tooltip">
         Walk Forward (press Up Arrow or W)
@@ -79,19 +79,16 @@
     </string>
     <string
      name="walk_title">
-        Walk
     </string>
     <string
      name="run_title">
-        Run
     </string>
     <string
      name="fly_title">
-        Fly
     </string>
     <panel
      border="false"
-     height="78"
+     height="47"
      follows="left|top"
      layout="topleft"
      left="0"
@@ -108,11 +105,11 @@
          image_pressed_selected="Movement_TurnLeft_On"
          image_unselected="Movement_TurnLeft_Off"
          layout="topleft"
-         left="10"
+         left="2"
          name="turn left btn"
          scale_image="false"
          tool_tip="Turn left (press Left Arrow or A)"
-         top="31"
+         top="0"
          width="24" />
         <joystick_slide
          follows="left|bottom"
@@ -121,7 +118,7 @@
          image_pressed_selected="Movement_Left_On"
          image_unselected="Movement_Left_Off"
          layout="topleft"
-         left_delta="4"
+         left_delta="0"
          name="move left btn"
          quadrant="left"
          scale_image="false"
@@ -136,11 +133,11 @@
          image_pressed_selected="Movement_TurnRight_On"
          image_unselected="Movement_TurnRight_Off"
          layout="topleft"
-         right="-30"
+         right="-38"
          name="turn right btn"
          scale_image="false"
          tool_tip="Turn right (press Right Arrow or D)"
-         top="31"
+         top="0"
          width="24" />
         <joystick_slide
          follows="left|bottom"
@@ -164,12 +161,12 @@
          image_pressed_selected="Movement_Forward_On"
          image_unselected="Movement_Forward_Off"
          layout="topleft"
-         left="31"
+         left="21"
          name="forward btn"
          quadrant="up"
          scale_image="false"
          tool_tip="Walk forward (press up arrow or W)"
-         top="20"
+         top="0"
          width="24" />
         <joystick_turn
          follows="left|bottom"
@@ -193,11 +190,11 @@
          image_pressed_selected="Movement_Up_On"
          image_unselected="Movement_Up_Off"
          layout="topleft"
-         right="-10"
+         right="-20"
          name="move up btn"
          scale_image="false"
          tool_tip="Fly up (press E)"
-         top="24"
+         top="5"
          width="24" />
         <button
          follows="left|bottom"
@@ -216,28 +213,28 @@
 <!-- Width and height of this panel should be synchronized with panel_stand_stop_flying.xml -->
     <panel
      border="false"
-     height="27"
+     height="21"
      layout="topleft"
-     left="0"
+     left="2"
      name="panel_modes"
-     top_pad="0"
-     width="93">
+     top_pad="2"
+     width="78">
         <button
          follows="left|bottom"
-         height="23"
+         height="19"
          image_overlay="Move_Walk_Off"
          image_selected="PushButton_Selected_Press"
 	 label=""
          layout="topleft"
          name="mode_walk_btn"
-         left="5"
+         left="1"
          pad_right="0"
          tool_tip="Walking mode"
          top="2"
-         width="31" />
+         width="26" />
         <button
          follows="left|bottom"
-         height="23"
+         height="19"
          image_overlay="Move_Run_Off"
          image_selected="PushButton_Selected_Press"
 	 label=""
@@ -248,10 +245,10 @@
          pad_right="0"
          tool_tip="Running mode"
          top="2"
-         width="31" />
+         width="26" />
         <button
          follows="left|bottom"
-         height="23"
+         height="19"
          image_overlay="Move_Fly_Off"
          image_selected="PushButton_Selected_Press"
 	 label=""
@@ -262,6 +259,6 @@
          pad_right="0"
          tool_tip="Flying mode"
          top="2"
-         width="31" />
+         width="26" />
     </panel>
 </floater>
