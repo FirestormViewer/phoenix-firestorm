@@ -138,9 +138,9 @@
               name="side_bar_tabs"
               tab_stop="false"
               user_resize="true"
-              right="0"
+              right="1"
               top="0"
-              width="32"/>
+              width="0"/>
            </layout_panel>
            <layout_panel auto_resize="false"
             follows="all"

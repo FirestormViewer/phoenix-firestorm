@@ -108,6 +108,7 @@ public:
 	 */
     LLPanel*	getPanel		(const std::string& panel_name);
     LLPanel*	getActivePanel	();
+    std::string		getActivePanelName ();
     bool		isPanelActive	(const std::string& panel_name);
 
 	/*

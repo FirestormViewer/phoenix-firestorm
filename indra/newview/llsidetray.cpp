@@ -1185,6 +1185,8 @@ void LLSideTray::reshape(S32 width, S32 height, BOOL called_from_parent)
  */
 LLPanel*	LLSideTray::showPanel		(const std::string& panel_name, const LLSD& params)
 {
+	llinfos << "AO: show panel " << panel_name << llendl;
+	
 	// Look up the tab in the list of detached tabs.
 	child_vector_const_iter_t child_it;
 	for ( child_it = mDetachedTabs.begin(); child_it != mDetachedTabs.end(); ++child_it)
@@ -1282,6 +1284,15 @@ LLPanel*	LLSideTray::getActivePanel()
 		return mActiveTab->getPanel();
 	}
 	return NULL;
+}
+
+std::string	LLSideTray::getActivePanelName()
+{
+	if (mActiveTab && !mCollapsed)
+	{
+		return mActiveTab->getPanel()->getName();
+	}
+	return "";
 }
 
 bool		LLSideTray::isPanelActive(const std::string& panel_name)

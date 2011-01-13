@@ -427,6 +427,7 @@ private:
 	 */
 	resize_state_vec_t mButtonsOrder;
 
+
 protected:
 
 	LLBottomTray(const LLSD& key = LLSD());
@@ -435,6 +436,7 @@ protected:
 
 	void updateContextMenu(S32 x, S32 y, MASK mask);
 	void onContextMenuItemClicked(const LLSD& userdata);
+	void showSidebarPanel(const std::string& panel_name);
 	bool onContextMenuItemEnabled(const LLSD& userdata);
 
 	// Either default or saved after user's manual resize width of nearby chat.

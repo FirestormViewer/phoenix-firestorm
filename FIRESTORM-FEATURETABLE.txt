@@ -26,7 +26,7 @@ AlwaysShowFriendPerms	LGPL
 GlobalFriendVisToggle	LGPL
 IM_IconifiedToolbar	LGPL
 GUI_IMTabConfig		LGPL
-Small_CamControl	LGPL
+VerySmall_CamControl	LGPL
 Small_MoveControl	LGPL
 Floating_Topbar		LGPL
 Profile_Floaters	LGPL
@@ -36,3 +36,6 @@ FirestormGrey_skin	LGPL
 TopMenu_Navbar		LGPL
 Cmd_chatbar		LGPL
 Menubar_location	LGPL
+No_Sidebar		LGPL
+Collapsable_Nearbychat	LGPL
+

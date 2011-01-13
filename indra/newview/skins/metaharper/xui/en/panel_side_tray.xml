@@ -63,7 +63,7 @@
     background_visible="true"
   >
     <panel_container
-      name="panel_container"
+      name="panel_container_me"
       default_panel_name="panel_me"
       width="333"
     >
@@ -88,7 +88,7 @@
     background_visible="true"
   >
     <panel_container
-      name="panel_container"
+      name="panel_container_people"
       default_panel_name="panel_people"
       width="333"
     >

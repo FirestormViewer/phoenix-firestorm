@@ -135,10 +135,10 @@
     top="5"
     label="Draw:"
     label_length="40"
-    right="720"
+    right="745"
     max_val="992"
     min_val="32"
-    name="drawdistance" 
+    name="TopDDSlider" 
     top_delta="0"
     width="130" />
 <!-- End Draw distance widget here -->

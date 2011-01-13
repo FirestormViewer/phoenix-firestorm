@@ -49,7 +49,7 @@
 #include "llsyswellwindow.h"
 #include "lltoolmgr.h"
 #include "llviewerparcelmgr.h"
-
+#include "llsidetray.h"
 #include "llviewerwindow.h"
 #include "llsdserialize.h"
 
@@ -220,7 +220,7 @@ LLBottomTray::LLBottomTray(const LLSD&)
 	buildFromFile("panel_bottomtray.xml");
 
 	LLUICtrl::CommitCallbackRegistry::defaultRegistrar().add("CameraPresets.ChangeView", boost::bind(&LLFloaterCamera::onClickCameraItem, _2));
-
+	
 	//this is to fix a crash that occurs because LLBottomTray is a singleton
 	//and thus is deleted at the end of the viewers lifetime, but to be cleanly
 	//destroyed LLBottomTray requires some subsystems that are long gone
@@ -521,7 +521,6 @@ void LLBottomTray::toggleCameraControls()
 
 BOOL LLBottomTray::postBuild()
 {
-
 	LLUICtrl::CommitCallbackRegistry::currentRegistrar().add("NearbyChatBar.Action", boost::bind(&LLBottomTray::onContextMenuItemClicked, this, _2));
 	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("NearbyChatBar.EnableMenuItem", boost::bind(&LLBottomTray::onContextMenuItemEnabled, this, _2));
 
@@ -571,7 +570,13 @@ BOOL LLBottomTray::postBuild()
 	loadButtonsOrder();
 
 	LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(boost::bind(&update_build_button_enable_state));
-
+	
+	// Explicitly wire up buttons for sidebar callbacks
+	getChild<LLUICtrl>("sidebar_home_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "panel_home"));
+	getChild<LLUICtrl>("sidebar_me_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "panel_me"));
+	getChild<LLUICtrl>("sidebar_people_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "panel_people"));
+	getChild<LLUICtrl>("sidebar_places_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "panel_places"));
+	getChild<LLUICtrl>("sidebar_appearance_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "sidepanel_appearance"));
 	return TRUE;
 }
 
@@ -841,6 +846,78 @@ bool LLBottomTray::onContextMenuItemEnabled(const LLSD& userdata)
 	return true;
 }
 
+
+// used to manage the bottom bar icons specific to sidebar panels.
+// AO: A bit hacky and might be better in another place.
+void LLBottomTray::showSidebarPanel(const std::string& panel_name)
+{
+	LLSD param;
+	LLSideTray* sb = LLSideTray::getInstance();
+	LLButton* btn = NULL;
+	std::string tab_name = "";
+	std::string master_panel_name = panel_name;
+	
+
+	// map buttons to specific values that are useful for detection & comparisons
+	if (panel_name == "panel_people")
+	{
+		param["people_panel_tab_name"] = "nearby_panel";
+		tab_name = "sidebar_people";
+		btn = getChild<LLButton>("sidebar_people_btn");
+		master_panel_name = "panel_container_people";
+	}
+	else if (panel_name == "panel_me")
+	{
+		tab_name = "sidebar_me";
+		btn = getChild<LLButton>("sidebar_me_btn");
+		master_panel_name = "panel_container_me";
+	}
+	else if (panel_name == "panel_home")
+	{
+		tab_name = "sidebar_home";
+		btn = getChild<LLButton>("sidebar_home_btn");
+	}
+	else if (panel_name == "panel_places")
+	{
+		tab_name = "sidebar_places";
+		btn = getChild<LLButton>("sidebar_places_btn");
+	}
+	else if (panel_name == "sidepanel_appearance")
+	{
+		tab_name = "sidebar_appearance";
+		btn = getChild<LLButton>("sidebar_appearance_btn");
+	}
+	
+	// toggle minimization undocked
+	LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", tab_name);
+	if (LLFloater::isShown(floater_tab)) 
+	{
+		if (floater_tab->isMinimized())
+		{
+			if (btn)
+				btn->setForcePressedState(true);
+			floater_tab->setMinimized(false);
+		}
+		else
+		{
+			if (btn)
+				btn->setForcePressedState(false);
+			floater_tab->setMinimized(true);
+		}
+	}
+	// toggle collapsing sidebar if active & docked
+	else 
+	{
+		if (sb->isPanelActive(master_panel_name))
+		{
+			sb->collapseSideBar();
+		}
+		else 
+		{
+			sb->showPanel(panel_name, param);
+		}
+	}
+}
 
 void LLBottomTray::onContextMenuItemClicked(const LLSD& userdata)
 {
