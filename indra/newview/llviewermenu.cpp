@@ -319,6 +319,8 @@ static LLMenuParcelObserver* gMenuParcelObserver = NULL;
 
 static LLUIListener sUIListener;
 
+void cmdline_printchat(std::string message);
+
 LLMenuParcelObserver::LLMenuParcelObserver()
 {
 	LLViewerParcelMgr::getInstance()->addObserver(this);
@@ -621,7 +623,7 @@ class LLAdvancedToggleHUDInfo : public view_listener_t
 		}
 		else if ("badge" == info_type)
 		{
-			gDisplayBadge = !(gDisplayBadge);
+			cmdline_printchat("hippos!");
 		}
 		return true;
 	}
@@ -644,10 +646,6 @@ class LLAdvancedCheckHUDInfo : public view_listener_t
 		else if ("fov" == info_type)
 		{
 			new_value = gDisplayFOV;
-		}
-		else if ("badge" == info_type)
-		{
-			new_value = gDisplayBadge;
 		}
 		return new_value;
 	}
