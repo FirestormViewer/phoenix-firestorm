@@ -41,27 +41,29 @@ showUsage()
 getArgs()
 # $* = the options passed in from main
 {
-        while getoptex "clean config version rebuild help chan: btype:" "$@" ; do
+        if [ $# -gt 0 ]; then
+          while getoptex "clean config version rebuild help chan: btype:" "$@" ; do
         
-            case "$OPTOPT" in
-            clean)    WANTS_CLEAN=$TRUE;;
-            config)   WANTS_CONFIG=$TRUE;;
-            version)  WANTS_VERSION=$TRUE;;
-            rebuild)  WANTS_BUILD=$TRUE
-                      WANTS_VERSION=$TRUE
-                      WANTS_PACKAGE=$TRUE;;
-            chan)     CHANNEL="$OPTARG";;
-            btype)    BTYPE="$OPTARG";;
+              case "$OPTOPT" in
+              clean)    WANTS_CLEAN=$TRUE;;
+              config)   WANTS_CONFIG=$TRUE;;
+              version)  WANTS_VERSION=$TRUE;;
+              rebuild)  WANTS_BUILD=$TRUE
+                        WANTS_VERSION=$TRUE
+                        WANTS_PACKAGE=$TRUE;;
+              chan)     CHANNEL="$OPTARG";;
+              btype)    BTYPE="$OPTARG";;
             
-            help)     showUsage && exit 0;;
+              help)     showUsage && exit 0;;
             
-            -*)       showUsage && exit 1;;
-            *)        showUsage && exit 1;;            
-            esac
-        done
-        shift $[OPTIND-1]
-        if [ $OPTIND -le 1 ] ; then
-            showUsage && exit 1
+              -*)       showUsage && exit 1;;
+              *)        showUsage && exit 1;;            
+              esac
+          done
+          shift $[OPTIND-1]
+          if [ $OPTIND -le 1 ] ; then
+              showUsage && exit 1
+          fi
         fi
 
         if [ $WANTS_CLEAN -ne $TRUE ] && [ $WANTS_CONFIG -ne $TRUE ] && \
