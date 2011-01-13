@@ -2145,9 +2145,6 @@
              label="Badge"
              name="Badge"
 			 shortcut="alt|control|shift|h">
-                <menu_item_check.on_check
-                 function="Advanced.CheckHUDInfo"
-                 parameter="badge" />
                 <menu_item_check.on_click
                  function="Advanced.ToggleHUDInfo"
                  parameter="badge" />

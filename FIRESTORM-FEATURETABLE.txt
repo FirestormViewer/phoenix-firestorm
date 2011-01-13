@@ -38,4 +38,5 @@ Cmd_chatbar		LGPL
 Menubar_location	LGPL
 No_Sidebar		LGPL
 Collapsable_Nearbychat	LGPL
-
+InvFolderType_Icons	LGPL
+Hippos!			LGPL
