@@ -48,7 +48,7 @@ public:
 	{
 		Optional<LLUIImage*>	image;
 		Optional<LLUIColor>		color;
-		Ignored					scale_image;
+		Optional<bool>			scale_image;
 		Params();
 	};
 protected:
@@ -69,6 +69,9 @@ public:
 	void			setColor(const LLColor4& color) { mColor = color; }
 	void			setImage(LLPointer<LLUIImage> image) { mImagep = image; }
 	
+	void			setScaleImage(BOOL scale)			{ mScaleImage = scale; }
+	BOOL			getScaleImage() const				{ return mScaleImage; }
+	
 private:
 	void setIconImageDrawSize() ;
 
@@ -82,6 +85,7 @@ protected:
 private:
 	LLUIColor mColor;
 	LLPointer<LLUIImage> mImagep;
+	BOOL mScaleImage;
 };
 
 #endif

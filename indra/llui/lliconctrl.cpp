@@ -41,7 +41,7 @@ static LLDefaultChildRegistry::Register<LLIconCtrl> r("icon");
 LLIconCtrl::Params::Params()
 :	image("image_name"),
 	color("color"),
-	scale_image("scale_image")
+	scale_image("scale_image", true)
 {
 	tab_stop = false;
 	mouse_opaque = false;
@@ -51,6 +51,7 @@ LLIconCtrl::LLIconCtrl(const LLIconCtrl::Params& p)
 :	LLUICtrl(p),
 	mColor(p.color()),
 	mImagep(p.image),
+	mScaleImage(p.scale_image),
 	mPriority(0),
 	mDrawWidth(0),
 	mDrawHeight(0)
@@ -71,7 +72,14 @@ void LLIconCtrl::draw()
 {
 	if( mImagep.notNull() )
 	{
-		mImagep->draw(getLocalRect(), mColor.get() % getDrawContext().mAlpha );
+		if ( mScaleImage )
+		{
+			mImagep->draw(getLocalRect(), mColor.get() % getDrawContext().mAlpha );
+		}
+		else
+		{
+			mImagep->draw(0, 0, mColor.get() % getDrawContext().mAlpha );
+		}
 	}
 
 	LLUICtrl::draw();
