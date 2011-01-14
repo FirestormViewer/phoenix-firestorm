@@ -194,6 +194,7 @@ with the same filename but different name
   <texture name="Inv_Animation" file_name="icons/Inv_Animation.png" preload="false" />
   <texture name="Inv_BodyShape" file_name="icons/Inv_BodyShape.png" preload="false" />
   <texture name="Inv_CallingCard" file_name="icons/Inv_CallingCard.png" preload="false" />
+  <texture name="Inv_CallingCardOffline" file_name="icons/Inv_CallingCard.png" preload="false" />
   <texture name="Inv_Clothing" file_name="icons/Inv_Clothing.png" preload="false" />
   <texture name="Inv_Eye" file_name="icons/Inv_Eye.png" preload="false" />
   <texture name="Inv_FolderClosed" file_name="icons/Inv_FolderClosed.png" preload="false" />
@@ -209,6 +210,7 @@ with the same filename but different name
   <texture name="Inv_LostClosed" file_name="icons/Inv_LostClosed.png" preload="false" />
   <texture name="Inv_LostOpen" file_name="icons/Inv_LostOpen.png" preload="false" />
   <texture name="Inv_Landmark" file_name="icons/Inv_Landmark.png" preload="false" />
+  <texture name="Inv_LandmarkVisited" file_name="icons/Inv_Landmark.png" preload="false" />
   <texture name="Inv_Notecard" file_name="icons/Inv_Notecard.png" preload="false" />
   <texture name="Inv_Object" file_name="icons/Inv_Object.png" preload="false" />
   <texture name="Inv_Object_Multi" file_name="icons/Inv_Object_Multi.png" preload="false" />
