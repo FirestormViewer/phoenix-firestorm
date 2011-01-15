@@ -872,17 +872,15 @@ class LinuxManifest(ViewerManifest):
         self.path("featuretable_linux.txt")
 
     def package_finish(self):
-        if 'installer_name' in self.args:
-            installer_name = self.args['installer_name']
-        else:
-            installer_name_components = ['SecondLife_', self.args.get('arch')]
-            installer_name_components.extend(self.args['version'])
-            installer_name = "_".join(installer_name_components)
-            if self.default_channel():
-                if not self.default_grid():
-                    installer_name += '_' + self.args['grid'].upper()
-            else:
-                installer_name += '_' + self.channel_oneword().upper()
+        # a standard map of strings for replacing in the templates
+        installer_name_components = ['Phoenix',self.channel_oneword(),self.args.get('arch'),'.'.join(self.args['version'])]
+        installer_name = "_".join(installer_name_components)
+        #if self.default_channel():
+        #    if not self.default_grid():
+        #        installer_name += '_' + self.args['grid'].upper()
+        #else:
+        #    installer_name += '_' + self.channel_oneword().upper()
+	print "installer name=%s" % installer_name
 
         if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
             print "* Going strip-crazy on the packaged binaries, since this is a RELEASE build"
