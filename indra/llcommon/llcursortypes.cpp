@@ -68,6 +68,7 @@ ECursorType getCursorFromString(const std::string& cursor_string)
 		cursor_string_table["UI_CURSOR_PIPETTE"] = UI_CURSOR_PIPETTE;
 		cursor_string_table["UI_CURSOR_TOOLSIT"] = UI_CURSOR_TOOLSIT;
 		cursor_string_table["UI_CURSOR_TOOLBUY"] = UI_CURSOR_TOOLBUY;
+		cursor_string_table["UI_CURSOR_TOOLPAY"] = UI_CURSOR_TOOLPAY;
 		cursor_string_table["UI_CURSOR_TOOLOPEN"] = UI_CURSOR_TOOLOPEN;
 	}
 

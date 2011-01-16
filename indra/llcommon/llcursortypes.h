@@ -64,6 +64,7 @@ enum ECursorType {
 	UI_CURSOR_PIPETTE,
 	UI_CURSOR_TOOLSIT,
 	UI_CURSOR_TOOLBUY,
+	UI_CURSOR_TOOLPAY,
 	UI_CURSOR_TOOLOPEN,
 	UI_CURSOR_COUNT			// Number of elements in this enum (NOT a cursor)
 };

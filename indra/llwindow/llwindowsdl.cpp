@@ -187,7 +187,7 @@ LLWindowSDL::LLWindowSDL(LLWindowCallbacks* callbacks,
 			 S32 height, U32 flags,
 			 BOOL fullscreen, BOOL clearBg,
 			 BOOL disable_vsync, BOOL use_gl,
-			 BOOL ignore_pixel_depth, U32 fsaa_samples)
+			 BOOL ignore_pixel_depth, U32 fsaa_samples, BOOL use_legacy_cursors)
 	: LLWindow(callbacks, fullscreen, flags),
 	  Lock_Display(NULL),
 	  Unlock_Display(NULL), mGamma(1.0f)
@@ -233,7 +233,7 @@ LLWindowSDL::LLWindowSDL(LLWindowCallbacks* callbacks,
 		gGLManager.initGL();
 
 		//start with arrow cursor
-		initCursors();
+		initCursors(use_legacy_cursors);
 		setCursor( UI_CURSOR_ARROW );
 	}
 
@@ -2023,7 +2023,7 @@ void LLWindowSDL::setCursor(ECursorType cursor)
 	}
 }
 
-void LLWindowSDL::initCursors()
+void LLWindowSDL::initCursors(BOOL use_legacy_cursors)
 {
 	int i;
 	// Blank the cursor pointer array for those we may miss.
@@ -2068,9 +2068,19 @@ void LLWindowSDL::initCursors()
 	mSDLCursors[UI_CURSOR_TOOLPAUSE] = makeSDLCursorFromBMP("toolpause.BMP",0,0);
 	mSDLCursors[UI_CURSOR_TOOLMEDIAOPEN] = makeSDLCursorFromBMP("toolmediaopen.BMP",0,0);
 	mSDLCursors[UI_CURSOR_PIPETTE] = makeSDLCursorFromBMP("lltoolpipette.BMP",2,28);
-	mSDLCursors[UI_CURSOR_TOOLSIT] = makeSDLCursorFromBMP("toolsit.BMP",20,15);
-	mSDLCursors[UI_CURSOR_TOOLBUY] = makeSDLCursorFromBMP("toolbuy.BMP",20,15);
-	mSDLCursors[UI_CURSOR_TOOLOPEN] = makeSDLCursorFromBMP("toolopen.BMP",20,15);
+	if (use_legacy_cursors) {
+		mSDLCursors[UI_CURSOR_TOOLSIT] = makeSDLCursorFromBMP("toolsit-legacy.BMP",20,15);
+		mSDLCursors[UI_CURSOR_TOOLBUY] = makeSDLCursorFromBMP("toolbuy-legacy.BMP",20,15);
+		mSDLCursors[UI_CURSOR_TOOLOPEN] = makeSDLCursorFromBMP("toolopen-legacy.BMP",20,15);
+		mSDLCursors[UI_CURSOR_TOOLPAY] = makeSDLCursorFromBMP("toolpay-legacy.BMP",20,15);
+	}
+	else
+	{
+		mSDLCursors[UI_CURSOR_TOOLSIT] = makeSDLCursorFromBMP("toolsit.BMP",20,15);
+		mSDLCursors[UI_CURSOR_TOOLBUY] = makeSDLCursorFromBMP("toolbuy.BMP",20,15);
+		mSDLCursors[UI_CURSOR_TOOLOPEN] = makeSDLCursorFromBMP("toolopen.BMP",20,15);
+		mSDLCursors[UI_CURSOR_TOOLPAY] = makeSDLCursorFromBMP("toolbuy.BMP",20,15);
+	}
 
 	if (getenv("LL_ATI_MOUSE_CURSOR_BUG") != NULL) {
 		llinfos << "Disabling cursor updating due to LL_ATI_MOUSE_CURSOR_BUG" << llendl;

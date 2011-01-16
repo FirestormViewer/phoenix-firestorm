@@ -123,10 +123,11 @@ protected:
 		const std::string& title, const std::string& name, int x, int y, int width, int height, U32 flags,
 		BOOL fullscreen, BOOL clearBg, BOOL disable_vsync, BOOL use_gl,
 		BOOL ignore_pixel_depth,
-		U32 fsaa_samples);
+		U32 fsaa_samples,
+		BOOL use_legacy_cursors);
 	~LLWindowMacOSX();
 
-	void	initCursors();
+	void	initCursors(BOOL use_legacy_cursors = TRUE);
 	BOOL	isValid();
 	void	moveWindow(const LLCoordScreen& position,const LLCoordScreen& size);
 

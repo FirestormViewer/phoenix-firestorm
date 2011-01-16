@@ -118,10 +118,10 @@ protected:
 	LLWindowWin32(LLWindowCallbacks* callbacks,
 		const std::string& title, const std::string& name, int x, int y, int width, int height, U32 flags, 
 		BOOL fullscreen, BOOL clearBg, BOOL disable_vsync, BOOL use_gl,
-		BOOL ignore_pixel_depth, U32 fsaa_samples);
+		BOOL ignore_pixel_depth, U32 fsaa_samples, BOOL use_legacy_cursors);
 	~LLWindowWin32();
 
-	void	initCursors();
+	void	initCursors(BOOL use_legacy_cursors = TRUE);
 	void	initInputDevices();
 	HCURSOR loadColorCursor(LPCTSTR name);
 	BOOL	isValid();

@@ -363,7 +363,8 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 							 BOOL fullscreen, BOOL clearBg,
 							 BOOL disable_vsync, BOOL use_gl,
 							 BOOL ignore_pixel_depth,
-							 U32 fsaa_samples)
+							 U32 fsaa_samples,
+							 BOOL use_legacy_cursors)
 	: LLWindow(callbacks, fullscreen, flags)
 {
 	mFSAASamples = fsaa_samples;
@@ -612,7 +613,7 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 	}
 	
 	//start with arrow cursor
-	initCursors();
+	initCursors(use_legacy_cursors);
 	setCursor( UI_CURSOR_ARROW );
 
 	// Initialize (boot strap) the Language text input management,
@@ -1504,7 +1505,7 @@ HCURSOR LLWindowWin32::loadColorCursor(LPCTSTR name)
 }
 
 
-void LLWindowWin32::initCursors()
+void LLWindowWin32::initCursors(BOOL use_legacy_cursors)
 {
 	mCursor[ UI_CURSOR_ARROW ]		= LoadCursor(NULL, IDC_ARROW);
 	mCursor[ UI_CURSOR_WAIT ]		= LoadCursor(NULL, IDC_WAIT);
@@ -1538,9 +1539,20 @@ void LLWindowWin32::initCursors()
 	mCursor[ UI_CURSOR_TOOLZOOMIN ] = LoadCursor(module, TEXT("TOOLZOOMIN"));
 	mCursor[ UI_CURSOR_TOOLPICKOBJECT3 ] = LoadCursor(module, TEXT("TOOLPICKOBJECT3"));
 	mCursor[ UI_CURSOR_PIPETTE ] = LoadCursor(module, TEXT("TOOLPIPETTE"));
-	mCursor[ UI_CURSOR_TOOLSIT ]	= LoadCursor(module, TEXT("TOOLSIT"));
-	mCursor[ UI_CURSOR_TOOLBUY ]	= LoadCursor(module, TEXT("TOOLBUY"));
-	mCursor[ UI_CURSOR_TOOLOPEN ]	= LoadCursor(module, TEXT("TOOLOPEN"));
+	if (use_legacy_cursors)
+	{
+		mCursor[ UI_CURSOR_TOOLSIT ]	= LoadCursor(module, TEXT("TOOLSIT-LEGACY"));
+		mCursor[ UI_CURSOR_TOOLBUY ]	= LoadCursor(module, TEXT("TOOLBUY-LEGACY"));
+		mCursor[ UI_CURSOR_TOOLOPEN ]	= LoadCursor(module, TEXT("TOOLOPEN-LEGACY"));
+		mCursor[ UI_CURSOR_TOOLPAY ]	= LoadCursor(module, TEXT("TOOLPAY-LEGACY"));
+	}
+	else
+	{
+		mCursor[ UI_CURSOR_TOOLSIT ]	= LoadCursor(module, TEXT("TOOLSIT"));
+		mCursor[ UI_CURSOR_TOOLBUY ]	= LoadCursor(module, TEXT("TOOLBUY"));
+		mCursor[ UI_CURSOR_TOOLOPEN ]	= LoadCursor(module, TEXT("TOOLOPEN"));
+		mCursor[ UI_CURSOR_TOOLPAY ]	= LoadCursor(module, TEXT("TOOLBUY"));
+	}
 
 	// Color cursors
 	mCursor[ UI_CURSOR_TOOLPLAY ]		= loadColorCursor(TEXT("TOOLPLAY"));

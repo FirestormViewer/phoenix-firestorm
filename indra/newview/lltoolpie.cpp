@@ -450,7 +450,7 @@ ECursorType cursor_from_object(LLViewerObject* object)
 		if ((object && object->flagTakesMoney())
 			|| (parent && parent->flagTakesMoney()))
 		{
-			cursor = UI_CURSOR_TOOLBUY;
+			cursor = UI_CURSOR_TOOLPAY;
 		}
 		break;
 	case CLICK_ACTION_ZOOM:
