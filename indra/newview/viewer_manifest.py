@@ -729,20 +729,20 @@ class DarwinManifest(ViewerManifest):
         if not self.default_channel():
             channel_standin = self.channel()
 
-        imagename="Phoenix_Firestorm_" + '_'.join(self.args['version'])
+        imagename="Phoenix_" + self.channel_oneword() + '_' + '_'.join(self.args['version'])
 
         # MBW -- If the mounted volume name changes, it breaks the .DS_Store's background image and icon positioning.
         #  If we really need differently named volumes, we'll need to create multiple DS_Store file images, or use some other trick.
 
         volname="Firestorm Installer"  # DO NOT CHANGE without understanding comment above
 
-        if self.default_channel():
-            if not self.default_grid():
-                # beta case
-                imagename = imagename + '_' + self.args['grid'].upper()
-        else:
-            # first look, etc
-            imagename = imagename + '_' + self.channel_oneword().upper()
+        #if self.default_channel():
+        #    if not self.default_grid():
+        #        # beta case
+        #        imagename = imagename + '_' + self.args['grid'].upper()
+        #else:
+        #    # first look, etc
+        #    imagename = imagename + '_' + self.channel_oneword().upper()
 
         sparsename = imagename + ".sparseimage"
         finalname = imagename + ".dmg"
