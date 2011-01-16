@@ -1149,6 +1149,7 @@ void LLAgent::setAFK()
 
 	if (!(mControlFlags & AGENT_CONTROL_AWAY))
 	{
+		llinfos << "AFK DEBUG: Setting AFK" << llendl;
 		sendAnimationRequest(ANIM_AGENT_AWAY, ANIM_REQUEST_START);
 		setControlFlags(AGENT_CONTROL_AWAY | AGENT_CONTROL_STOP);
 		gAwayTimer.start();

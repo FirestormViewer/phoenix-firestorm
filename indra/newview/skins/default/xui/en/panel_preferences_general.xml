@@ -320,8 +320,21 @@
       top_pad="10"
       name="title_afk_text"
       top_delta="0" 
-      width="190">
+      width="150">
     Away timeout:
+    </text>
+    
+        <text
+      type="string"
+      length="1"
+      follows="left|top"
+      height="13"
+      layout="topleft"
+      left_pad="50"
+      top_delta="0"
+      name="title_afk_quit_text" 
+      width="190">
+    Log out after being away:
     </text>
 
   <combo_box
@@ -352,6 +365,37 @@
      value="1800" />
     <combo_box.item
      label="never"
+     name="item4"
+     value="0" />
+  </combo_box>
+  
+    <combo_box
+            height="23"
+            layout="topleft"
+            control_name="QuitAfterSecondsOfAFK"
+            left_pad="70"
+            top_delta="0"
+            label="Logout after being away:"
+            name="quitafk"
+            width="160">
+    <combo_box.item
+     label="2 minutes"
+     name="item0"
+     value="120" />
+    <combo_box.item
+     label="5 minutes"
+     name="item1"
+     value="300" />
+    <combo_box.item
+     label="10 minutes"
+     name="item2"
+     value="600" />
+    <combo_box.item
+     label="30 minutes"
+     name="item3"
+     value="1800" />
+    <combo_box.item
+     label="Never Logout"
      name="item4"
      value="0" />
   </combo_box>

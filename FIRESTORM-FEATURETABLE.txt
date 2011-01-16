@@ -40,3 +40,5 @@ No_Sidebar		LGPL
 Collapsable_Nearbychat	LGPL
 InvFolderType_Icons	LGPL
 Hippos!			LGPL
+V1_MouseCursors		LGPL
+AFK_ExtraControls	LGPL

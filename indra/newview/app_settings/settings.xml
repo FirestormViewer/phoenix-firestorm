@@ -6847,6 +6847,19 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+
+    <key>QuitAfterSecondsOfAFK</key>
+    <map>
+      <key>Comment</key>
+      <string>The duration allowed after being AFK before quitting.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1800.0</real>
+    </map>
+
     <key>QuitAfterSeconds</key>
     <map>
       <key>Comment</key>

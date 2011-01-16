@@ -341,6 +341,16 @@ LLAppViewer::LLUpdaterInfo *LLAppViewer::sUpdaterInfo = NULL ;
 
 void idle_afk_check()
 {
+        // check idle timers
+        if (gSavedSettings.getS32("AFKTimeout") && (gAwayTriggerTimer.getElapsedTimeF32() > gSavedSettings.getS32("AFKTimeout")))
+        {
+                gAgent.setAFK();
+        }
+}
+
+/*
+void idle_afk_check()
+{
 	// check idle timers
 //	if (gSavedSettings.getS32("AFKTimeout") && (gAwayTriggerTimer.getElapsedTimeF32() > gSavedSettings.getS32("AFKTimeout")))
 // [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
@@ -356,6 +366,7 @@ void idle_afk_check()
 		gAgent.setAFK();
 	}
 }
+*/
 
 // A callback set in LLAppViewer::init()
 static void ui_audio_callback(const LLUUID& uuid)
@@ -3605,7 +3616,21 @@ void LLAppViewer::idle()
 	{
 		if (gRenderStartTime.getElapsedTimeF32() > qas)
 		{
+			llinfos << "Logout, QuitAfterSeconds expired." << llendl;
 			LLAppViewer::instance()->forceQuit();
+		}
+	}
+
+	// debug setting to quit after N seconds of being AFK - 0 to never do this
+	F32 qas_afk = gSavedSettings.getF32("QuitAfterSecondsOfAFK");
+	if (qas_afk > 0.f)
+	{
+		// idle time is more than setting
+		if ( gAwayTriggerTimer.getElapsedTimeF32() > qas_afk )
+		{
+                        // go ahead and just quit gracefully
+			llinfos << "Logout, QuitAfterSecondsAFK expired." << llendl;
+                        LLAppViewer::instance()->requestQuit();
 		}
 	}
 
@@ -3734,6 +3759,7 @@ void LLAppViewer::idle()
 	    	        
 
 		// Check for away from keyboard, kick idle agents.
+		// be sane and only check for afk 1nce 
 		idle_afk_check();
 
 		//  Update statistics for this frame
