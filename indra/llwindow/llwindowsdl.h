@@ -147,7 +147,6 @@ protected:
 		const std::string& title, int x, int y, int width, int height, U32 flags,
 		BOOL fullscreen, BOOL clearBg, BOOL disable_vsync, BOOL use_gl,
 		BOOL ignore_pixel_depth, U32 fsaa_samples, BOOL use_legacy_cursors);
-		BOOL ignore_pixel_depth, U32 fsaa_samples, BOOL use_legacy_cursors);
 	~LLWindowSDL();
 
 	/*virtual*/ BOOL	isValid();
