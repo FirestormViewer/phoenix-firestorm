@@ -377,9 +377,50 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
 	// LLDialog can spawn only one instance, LLLoadURL and LLGiveInventory can spawn unlimited number of instances
 	if(OBJ_SCRIPT == obj_type)
 	{
-		// If an Object spawns more-than-one floater, only the newest one is shown. 
-		// The previous is automatically closed.
-		script_notification_map_t::const_iterator it = findUsingObjectId(object_id);
+//		// If an Object spawns more-than-one floater, only the newest one is shown. 
+//		// The previous is automatically closed.
+//		script_notification_map_t::const_iterator it = findUsingObjectId(object_id);
+// [SL:KB] - Patch: UI-ScriptDialog | Checked: 2011-01-17 (Catznip-2.4.0h) | Added: Catznip-2.4.0h
+		script_notification_map_t::const_iterator it = mNotifications.end();
+		switch (gSavedSettings.getS32("ScriptDialogPerObject"))
+		{
+			case 0:			// One script dialog per object (viewer 2 default)
+				{
+					// If an Object spawns more-than-one floater, only the newest one is shown.
+					// The previous is automatically closed.
+					it = findUsingObjectId(object_id);
+				}
+				break;
+			case 1:			// One script dialog per reply channel per object
+				{
+					// We'll allow an object to have more than one script dialog floater open, but we'll limit it to one per chat channel
+					// (in practice a lot of objects open a new listen channel for each new dialog but it still reduces chiclets somewhat)
+					LLNotificationPtr newNotif = LLNotifications::instance().find(notification_id);
+					if (newNotif)
+					{
+						S32 nNewChannel = newNotif->getPayload()["chat_channel"].asInteger();
+						for (it = mNotifications.begin(); it != mNotifications.end(); ++it)
+						{
+							if (it->second == object_id)
+							{
+								LLNotificationPtr curNotif = LLNotifications::instance().find(it->first);
+								if (curNotif)
+								{
+									S32 nCurChannel = curNotif->getPayload()["chat_channel"].asInteger();
+									if (nNewChannel == nCurChannel)
+										break;
+								}
+							}
+						}
+					}
+				}
+				break;
+			case 2:			// Unconstrained
+			default:
+				break;
+		}
+// [/SL:KB]
+
 		if(it != mNotifications.end())
 		{
 			LLIMChiclet* chiclet = LLBottomTray::getInstance()->getChicletPanel()->findChiclet<LLIMChiclet>(it->first);

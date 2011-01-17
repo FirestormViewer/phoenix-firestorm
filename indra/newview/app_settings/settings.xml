@@ -11212,6 +11212,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>ScriptDialogPerObject</key>
+    <map>
+      <key>Comment</key>
+      <string>Controls how script dialogs from the same object are handled (0 = one dialog per object, 1 = one dialog per channel per object, 2 = unconstrained)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>ScriptHelpFollowsCursor</key>
     <map>
       <key>Comment</key>
