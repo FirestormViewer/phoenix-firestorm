@@ -113,7 +113,7 @@
          width="24" />
         <joystick_slide
          follows="left|bottom"
-         height="10"
+         height="20"
          image_selected="Movement_Left_On"
          image_pressed_selected="Movement_Left_On"
          image_unselected="Movement_Left_Off"
@@ -123,7 +123,7 @@
          quadrant="left"
          scale_image="false"
          tool_tip="Walk left (press Shift + Left Arrow or A)"
-         top_pad="10"
+         top_pad="5"
          width="19" />
         <!-- Right column -->
         <button
@@ -141,7 +141,7 @@
          width="24" />
         <joystick_slide
          follows="left|bottom"
-         height="10"
+         height="20"
          image_selected="Movement_Right_On"
          image_pressed_selected="Movement_Right_On"
          image_unselected="Movement_Right_Off"
@@ -151,7 +151,7 @@
          right_delta="4"
          scale_image="false"
          tool_tip="Walk right (press Shift + Right Arrow or D)"
-         top_pad="10"
+         top_pad="5"
          width="19" />
         <!-- Middle column -->
         <joystick_turn
