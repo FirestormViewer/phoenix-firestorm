@@ -140,7 +140,9 @@ public:
 	void			onOpen		(const LLSD& key);
 	
 	void			toggleTabDocked();
-
+//-TT - Patch : MinimizeSidetabs
+	void			minimizeTab();
+//-TT	
 	LLPanel *getPanel();
 private:
 	std::string mTabTitle;
@@ -188,6 +190,7 @@ BOOL LLSideTrayTab::postBuild()
 
 	getChild<LLButton>("undock")->setCommitCallback(boost::bind(&LLSideTrayTab::toggleTabDocked, this));
 	getChild<LLButton>("dock")->setCommitCallback(boost::bind(&LLSideTrayTab::toggleTabDocked, this));
+	getChild<LLButton>("minimize")->setCommitCallback(boost::bind(&LLSideTrayTab::minimizeTab, this));
 
 	return true;
 }
@@ -242,6 +245,23 @@ LLSideTray* LLSideTrayTab::getSideTray()
 
 	return side_tray;
 }
+
+//-TT - Patch : MinimizeSidetabs
+void LLSideTrayTab::minimizeTab()
+{
+	LLSideTray* side_tray = LLSideTray::getInstance();
+	if (side_tray->isTabAttached(getName()))
+	{
+		side_tray->collapseSideBar();
+	}
+	else
+	{
+		llinfos << "Trying to minimize floater " << getName() << llendl;
+		LLFloater* floater_tab = (LLFloater*)getParent();
+		floater_tab->setMinimized(true);
+	}
+}
+//-TT
 
 void LLSideTrayTab::toggleTabDocked()
 {
@@ -326,7 +346,7 @@ void LLSideTrayTab::undock(LLFloater* floater_tab)
 	}
 
 	floater_tab->addChild(this);
-	floater_tab->setTitle(mTabTitle);
+	//floater_tab->setTitle(mTabTitle); AO: Don't set the title, it just wastes space
 	floater_tab->setName(getName());
 
 	// Resize handles get obscured by added panel so move them to front.

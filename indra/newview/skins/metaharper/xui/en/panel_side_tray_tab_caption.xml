@@ -19,6 +19,7 @@
      top="4"
      value="Side Panel"
      width="255" />
+ 
      <button
      follows="right|top"
      height="16"
@@ -31,6 +32,7 @@
      right="-28"
      width="16"
      tool_tip="Undock" />
+     
      <button
      follows="right|top"
      height="16"
@@ -44,18 +46,21 @@
      width="16"
      tool_tip="Dock"
      visible="false" />
+     
      <button
-     follows="right|top"
-     height="16"
-     image_selected="Icon_Help_Press"
-     image_unselected="Icon_Help_Foreground"
-     image_disabled="Icon_Help_Press"
-     layout="topleft"
-     name="show_help"
-     top="10"
-     right="-11"
-     width="16"
-     tool_tip="Show Help">
+      follows="right|top"
+      height="16"
+      image_selected="Icon_Close_Press"
+      image_unselected="Icon_Close_Foreground"
+      image_disabled="Icon_Close_Press"
+      layout="topleft"
+      name="minimize"
+      top="10"
+      right="-11"
+      width="16"
+      tool_tip="Collapse"
+      visible="true" />    
+      
         <button.commit_callback
          function="Button.ShowHelp" />
     </button>
