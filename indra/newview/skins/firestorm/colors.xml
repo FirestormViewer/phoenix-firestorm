@@ -355,7 +355,7 @@
      reference="AvatarListItemIconOfflineColor" />
     <color
      name="BackgroundChatColor"
-     reference="DkGray" />
+     reference="ltgrey123" />
     <color
      name="ButtonBorderColor"
      reference="Unused?" />
@@ -367,7 +367,7 @@
      reference="Unused?" />
     <color
      name="ButtonFlashBgColor"
-     reference="Unused?" />
+     reference="White" />
 <!-- Color Changed -->
     <color
      name="ButtonImageColor"
