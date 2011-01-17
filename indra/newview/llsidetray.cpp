@@ -40,6 +40,7 @@
 #include "llfocusmgr.h"
 #include "llrootview.h"
 #include "llnavigationbar.h"
+#include "llsidetraytab.h"
 
 #include "llaccordionctrltab.h"
 
@@ -89,69 +90,6 @@ bool	LLSideTray::instanceCreated	()
 	return sInstance!=0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// LLSideTrayTab
-// Represents a single tab in the side tray, only used by LLSideTray
-//////////////////////////////////////////////////////////////////////////////
-
-class LLSideTrayTab: public LLPanel
-{
-	friend class LLUICtrlFactory;
-	friend class LLSideTray;
-public:
-	
-	struct Params 
-	:	public LLInitParam::Block<Params, LLPanel::Params>
-	{
-		// image name
-		Optional<std::string>		image;
-		Optional<std::string>		image_selected;
-		Optional<std::string>		tab_title;
-		Optional<std::string>		description;
-		Params()
-		:	image("image"),
-			image_selected("image_selected"),
-			tab_title("tab_title","no title"),
-			description("description","no description")
-		{};
-	};
-protected:
-	LLSideTrayTab(const Params& params);
-	
-	void			dock();
-	void			undock(LLFloater* floater_tab);
-
-	LLSideTray*		getSideTray();
-	
-public:
-	virtual ~LLSideTrayTab();
-	
-    /*virtual*/ BOOL	postBuild	();
-	/*virtual*/ bool	addChild	(LLView* view, S32 tab_group);
-	
-	
-	void			reshape		(S32 width, S32 height, BOOL called_from_parent = TRUE);
-	
-	static LLSideTrayTab*  createInstance	();
-	
-	const std::string& getDescription () const { return mDescription;}
-	const std::string& getTabTitle() const { return mTabTitle;}
-	
-	void			onOpen		(const LLSD& key);
-	
-	void			toggleTabDocked();
-//-TT - Patch : MinimizeSidetabs
-	void			minimizeTab();
-//-TT	
-	LLPanel *getPanel();
-private:
-	std::string mTabTitle;
-	std::string mImage;
-	std::string mImageSelected;
-	std::string	mDescription;
-	
-	LLView*	mMainPanel;
-};
 
 LLSideTrayTab::LLSideTrayTab(const Params& p)
 :	LLPanel(),
@@ -261,7 +199,7 @@ void LLSideTrayTab::minimizeTab()
 		floater_tab->setMinimized(true);
 	}
 }
-//-TT
+
 
 void LLSideTrayTab::toggleTabDocked()
 {
@@ -323,6 +261,7 @@ static void on_minimize(LLSidepanelAppearance* panel, LLSD minimized)
 
 void LLSideTrayTab::undock(LLFloater* floater_tab)
 {
+	
 	LLSideTray* side_tray = getSideTray();
 	if (!side_tray) return;
 

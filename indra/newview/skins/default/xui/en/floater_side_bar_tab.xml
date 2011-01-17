@@ -2,12 +2,11 @@
 <floater
  can_close="false"
  can_minimize="false"
- legacy_header_height="0"
- header_height="0"
  can_resize="true"
- min_width="333"
- min_height="440"
+ min_width="100"
+ min_height="100"
  save_rect="true"
  save_visibility="true"
+ header_height="20"
  >
 </floater>
