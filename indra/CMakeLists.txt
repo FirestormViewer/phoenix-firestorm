@@ -26,7 +26,10 @@ include(Utils)
 load_version_data()
 
 if (DARWIN)
-  cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
+  # 2.6.4 fixes a Mac bug in get_target_property(... "SLPlugin" LOCATION):
+  # before that version it returns "pathname/SLPlugin", whereas the correct
+  # answer is "pathname/SLPlugin.app/Contents/MacOS/SLPlugin".
+  cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)
 endif (DARWIN)
 
 if (NOT CMAKE_BUILD_TYPE)

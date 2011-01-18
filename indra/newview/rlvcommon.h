@@ -53,6 +53,7 @@ template<typename T> inline T rlvGetPerUserSettings(const std::string& strSettin
 class RlvSettings
 {
 public:
+	static F32  getAvatarOffsetZ()				{ return rlvGetSetting<F32>(RLV_SETTING_AVATAROFFSET_Z, 0.0); }
 	static bool getDebug()						{ return rlvGetSetting<bool>(RLV_SETTING_DEBUG, false); }
 	static bool getForbidGiveToRLV()			{ return rlvGetSetting<bool>(RLV_SETTING_FORBIDGIVETORLV, true); }
 	static bool getNoSetEnv()					{ return fNoSetEnv; }
@@ -79,6 +80,7 @@ public:
 
 	static void initClass();
 protected:
+	static bool onChangedAvatarOffset(const LLSD& sdValue);
 	static bool onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting);
 
 	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
@@ -134,7 +136,11 @@ public:
 	static bool isForceTp()	{ return m_fForceTp; }
 	static void forceTp(const LLVector3d& posDest);									// Ignores restrictions that might otherwise prevent tp'ing
 
-	static void notifyFailedAssertion(const char* pstrAssert, const char* pstrFile, int nLine);
+	static void notifyBlocked(const std::string& strRlvString);
+	static void notifyBlockedGeneric()	{ notifyBlocked(RLV_STRING_BLOCKED_GENERIC); }
+	static void notifyBlockedTeleport()	{ notifyBlocked(RLV_STRING_BLOCKED_TELEPORT); }
+	static void notifyBlockedViewXXX(LLAssetType::EType assetType); 
+	static void notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine);
 
 	static void sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession = LLUUID::null);
 	static bool isValidReplyChannel(S32 nChannel);
@@ -198,10 +204,26 @@ protected:
 // Predicates
 //
 
-bool rlvPredIsWearableItem(const LLViewerInventoryItem* pItem);
-bool rlvPredIsNotWearableItem(const LLViewerInventoryItem* pItem);
-bool rlvPredIsRemovableItem(const LLViewerInventoryItem* pItem);
-bool rlvPredIsNotRemovableItem(const LLViewerInventoryItem* pItem);
+bool rlvPredCanWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWearMask);
+bool rlvPredCanNotWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWearMask);
+bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem);
+bool rlvPredCanNotRemoveItem(const LLViewerInventoryItem* pItem);
+
+struct RlvPredCanWearItem
+{
+	RlvPredCanWearItem(ERlvWearMask eWearMask) : m_eWearMask(eWearMask) {}
+	bool operator()(const LLViewerInventoryItem* pItem) { return rlvPredCanWearItem(pItem, m_eWearMask); }
+protected:
+	ERlvWearMask m_eWearMask;
+};
+
+struct RlvPredCanNotWearItem
+{
+	RlvPredCanNotWearItem(ERlvWearMask eWearMask) : m_eWearMask(eWearMask) {}
+	bool operator()(const LLViewerInventoryItem* pItem) { return rlvPredCanNotWearItem(pItem, m_eWearMask); }
+protected:
+	ERlvWearMask m_eWearMask;
+};
 
 struct RlvPredIsEqualOrLinkedItem
 {

@@ -28,7 +28,6 @@
 // Extensions
 #define RLV_EXTENSION_CMD_GETSETDEBUG_EX	// Extends the debug variables accessible through @getdebug_xxx/@setdebug_xxx
 #define RLV_EXTENSION_CMD_FINDFOLDERS		// @findfolders:<option>=<channel> - @findfolder with multiple results
-#define RLV_EXTENSION_FLAG_NOSTRIP			// Layers and attachments marked as "nostrip" are exempt from @detach/@remoutfit
 #define RLV_EXTENSION_FORCEWEAR_GESTURES	// @attach*/detach* commands also (de)activate gestures
 #define RLV_EXTENSION_GIVETORLV_A2A			// Allow "Give to #RLV" on avatar-to-avatar inventory offers
 #define RLV_EXTENSION_NOTIFY_BEHAVIOUR		// Provides the option to show a customizable notification whenever a behaviour gets (un)set
@@ -53,9 +52,11 @@
 // Experimental commands (not part of the RLV API spec, disabled on public releases)
 #ifdef RLV_EXPERIMENTAL_CMDS
 	#define RLV_EXTENSION_CMD_ALLOWIDLE		// Forces "Away" status when idle (effect is the same as setting AllowIdleAFK to TRUE)
+	#define RLV_EXTENSION_CMD_GETCOMMAND	// @getcommand:<option>=<channel>
 //	#define RLV_EXTENSION_CMD_GETXXXNAMES	// @get[add|rem]attachnames:<option>=<channel> and @get[add|rem]outfitnames=<channel>
 	#define RLV_EXTENSION_CMD_INTERACT		// @interact=n
 	#define RLV_EXTENSION_CMD_TOUCHXXX		// @touch:uuid=n|y, @touchworld[:<uuid>]=n|y, @touchattach[:<uuid>]=n|y, @touchud[:<uuid>]=n|y
+	#define RLV_EXTENSION_CMD_DISPLAYNAME	// @displayname=n
 #endif // RLV_EXPERIMENTAL_CMDS
 
 // ============================================================================
@@ -66,13 +67,13 @@
 const S32 RLV_VERSION_MAJOR = 2;
 const S32 RLV_VERSION_MINOR = 2;
 const S32 RLV_VERSION_PATCH = 0;
-const S32 RLV_VERSION_BUILD = 0;
+const S32 RLV_VERSION_BUILD = 1;
 
 // Implementation version
 const S32 RLVa_VERSION_MAJOR = 1;
 const S32 RLVa_VERSION_MINOR = 2;
 const S32 RLVa_VERSION_PATCH = 2;
-const S32 RLVa_VERSION_BUILD = 0;
+const S32 RLVa_VERSION_BUILD = 2;
 
 // Uncomment before a final release
 //#define RLV_RELEASE
@@ -94,7 +95,11 @@ const S32 RLVa_VERSION_BUILD = 0;
 	// Make sure we halt execution on errors
 	#define RLV_ERRS				LL_ERRS("RLV")
 	// Keep our asserts separate from LL's
-	#define RLV_ASSERT(f)			if (!(f)) { RLV_ERRS << "ASSERT (" << #f << ")" << RLV_ENDL; }
+	#ifdef LL_WINDOWS
+		#define RLV_ASSERT(f)			if (!(f)) { if (IsDebuggerPresent()) DebugBreak(); else { RLV_ERRS << "ASSERT (" << #f << ")" << RLV_ENDL; } }
+	#else
+		#define RLV_ASSERT(f)			if (!(f)) { RLV_ERRS << "ASSERT (" << #f << ")" << RLV_ENDL; }
+	#endif // LL_WINDOWS
 	#define RLV_ASSERT_DBG(f)		RLV_ASSERT(f)
 #else
 	// Don't halt execution on errors in release
@@ -162,6 +167,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_ACCEPTPERMISSION,		// "acceptpermission"
 	RLV_BHVR_ACCEPTTP,				// "accepttp"
 	RLV_BHVR_ALLOWIDLE,				// "allowidle"
+	RLV_BHVR_DISPLAYNAME,			// "displayname"
 	RLV_BHVR_EDIT,					// "edit"
 	RLV_BHVR_REZ,					// "rez"
 	RLV_BHVR_FARTOUCH,				// "fartouch"
@@ -207,6 +213,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_GETINV,				// "getinv"
 	RLV_BHVR_GETINVWORN,			// "getinvworn"
 	RLV_BHVR_GETSITID,				// "getsitid"
+	RLV_BHVR_GETCOMMAND,			// "getcommand"
 	RLV_BHVR_GETSTATUS,				// "getstatus"
 	RLV_BHVR_GETSTATUSALL,			// "getstatusall"
 
@@ -278,8 +285,9 @@ enum ERlvAttachGroupType
 
 #define RLV_SETTING_MAIN				"RestrainedLove"
 #define RLV_SETTING_DEBUG				"RestrainedLoveDebug"
-#define RLV_SETTING_NOSETENV			"RestrainedLoveNoSetEnv"
+#define RLV_SETTING_AVATAROFFSET_Z		"RestrainedLoveOffsetAvatarZ"
 #define RLV_SETTING_FORBIDGIVETORLV		"RestrainedLoveForbidGiveToRLV"
+#define RLV_SETTING_NOSETENV			"RestrainedLoveNoSetEnv"
 #define RLV_SETTING_WEARADDPREFIX       "RestrainedLoveStackWhenFolderBeginsWith"
 #define RLV_SETTING_WEARREPLACEPREFIX   "RestrainedLoveReplaceWhenFolderBeginsWith"
 
@@ -305,11 +313,13 @@ enum ERlvAttachGroupType
 #define RLV_STRING_HIDDEN_PARCEL			"hidden_parcel"
 #define RLV_STRING_HIDDEN_REGION			"hidden_region"
 
+#define RLV_STRING_BLOCKED_GENERIC			"blocked_generic"
 #define RLV_STRING_BLOCKED_RECVIM			"blocked_recvim"
 #define RLV_STRING_BLOCKED_RECVIM_REMOTE	"blocked_recvim_remote"
 #define RLV_STRING_BLOCKED_SENDIM			"blocked_sendim"
-#define RLV_STRING_BLOCKED_VIEWXXX			"blocked_viewxxx"
+#define RLV_STRING_BLOCKED_TELEPORT			"blocked_teleport"
 #define RLV_STRING_BLOCKED_TPLURE_REMOTE	"blocked_tplure_remote"
+#define RLV_STRING_BLOCKED_VIEWXXX			"blocked_viewxxx"
 
 // ============================================================================
 

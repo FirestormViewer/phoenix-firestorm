@@ -56,7 +56,6 @@
 #include "llparcel.h"
 #include "llrendersphere.h"
 #include "llsdutil.h"
-#include "llsidetray.h"
 #include "llsky.h"
 #include "llsmoothstep.h"
 #include "llstartup.h"
@@ -1789,9 +1788,6 @@ void LLAgent::endAnimationUpdateUI()
 
 		LLBottomTray::getInstance()->onMouselookModeOut();
 
-		LLSideTray::getInstance()->getButtonsPanel()->setVisible(TRUE);
-		LLSideTray::getInstance()->updateSidetrayVisibility();
-
 		LLPanelStandStopFlying::getInstance()->setVisible(TRUE);
 
 		LLToolMgr::getInstance()->setCurrentToolset(gBasicToolset);
@@ -1890,9 +1886,6 @@ void LLAgent::endAnimationUpdateUI()
 		LLPanelTopInfoBar::getInstance()->setVisible(FALSE);
 
 		LLBottomTray::getInstance()->onMouselookModeIn();
-
-		LLSideTray::getInstance()->getButtonsPanel()->setVisible(FALSE);
-		LLSideTray::getInstance()->updateSidetrayVisibility();
 
 		LLPanelStandStopFlying::getInstance()->setVisible(FALSE);
 
@@ -3400,7 +3393,7 @@ void LLAgent::teleportViaLandmark(const LLUUID& landmark_asset_id)
 		                                   : gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC) ) ||
 		   ((gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (isAgentAvatarValid()) && (gAgentAvatarp->isSitting())) ))
 	{
-		RlvUIEnabler::notifyBlockedTeleport();
+		RlvUtil::notifyBlockedTeleport();
 		return;
 	}
 // [/RLVa:KB]
@@ -3477,7 +3470,7 @@ void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 		     ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && 
 			   (gRlvHandler.hasBehaviourExcept(RLV_BHVR_UNSIT, gRlvHandler.getCurrentObject()))) )
 		{
-			RlvUIEnabler::notifyBlockedTeleport();
+			RlvUtil::notifyBlockedTeleport();
 			return;
 		}
 
@@ -3535,7 +3528,7 @@ void LLAgent::teleportViaLocationLookAt(const LLVector3d& pos_global)
 	if ( (rlv_handler_t::isEnabled()) && (!RlvUtil::isForceTp()) && 
 		 ((gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) || (!gRlvHandler.canStand())) )
 	{
-		RlvUIEnabler::notifyBlockedTeleport();
+		RlvUtil::notifyBlockedTeleport();
 		return;
 	}
 // [/RLVa:KB]
@@ -3728,7 +3721,11 @@ void LLAgent::sendAgentSetAppearance()
 	// NOTE -- when we start correcting all of the other Havok geometry 
 	// to compensate for the COLLISION_TOLERANCE ugliness we will have 
 	// to tweak this number again
-	const LLVector3 body_size = gAgentAvatarp->mBodySize;
+//	const LLVector3 body_size = gAgentAvatarp->mBodySize;
+// [RLVa:KB] - Checked: 2010-10-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
+ 	LLVector3 body_size = gAgentAvatarp->mBodySize;
+ 	body_size.mV[VZ] += RlvSettings::getAvatarOffsetZ();
+ // [/RLVa:KB]
 	msg->addVector3Fast(_PREHASH_Size, body_size);	
 
 	// To guard against out of order packets

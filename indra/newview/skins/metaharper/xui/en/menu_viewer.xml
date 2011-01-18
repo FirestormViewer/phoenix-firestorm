@@ -97,8 +97,14 @@
             <menu_item_check.on_click
              function="World.Toggle.MovementControls" />
         </menu_item_check>
-        
-        <menu_item_call
+   
+	<menu
+             create_jump_keys="true"
+             label="Movement"
+             name="Movement"
+             tear_off="true">
+`     
+          <menu_item_call
              label="Sit Down"
              layout="topleft"
              shortcut="alt|shift|S"
@@ -108,7 +114,28 @@
                  parameter="" />
                 <menu_item_call.on_enable
                  function="Self.EnableSitDown" />
-        </menu_item_call>
+           </menu_item_call>
+           <menu_item_check
+             label="Fly"
+             name="Fly"
+             shortcut="Home">
+                <menu_item_check.on_check
+                 function="Agent.getFlying" />
+                <menu_item_check.on_click
+                 function="Agent.toggleFlying" />
+                <menu_item_check.on_enable
+                 function="Agent.enableFlying" />
+            </menu_item_check>
+            <menu_item_check
+             label="Always Run"
+             name="Always Run"
+             shortcut="control|R">
+                <menu_item_check.on_check
+                 function="World.CheckAlwaysRun" />
+                <menu_item_check.on_click
+                 function="World.AlwaysRun" />
+            </menu_item_check>
+	</menu>
         
         <menu_item_check
          label="Camera Controls"
@@ -2145,9 +2172,6 @@
              label="Badge"
              name="Badge"
 			 shortcut="alt|control|shift|h">
-                <menu_item_check.on_check
-                 function="Advanced.CheckHUDInfo"
-                 parameter="badge" />
                 <menu_item_check.on_click
                  function="Advanced.ToggleHUDInfo"
                  parameter="badge" />

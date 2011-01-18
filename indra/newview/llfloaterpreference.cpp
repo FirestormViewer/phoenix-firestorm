@@ -288,6 +288,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	: LLFloater(key),
 	mGotPersonalInfo(false),
 	mOriginalIMViaEmail(false),
+	mLanguageChanged(false),
 	mDoubleClickActionDirty(false)
 {
 	//Build Floater is now Called from 	LLFloaterReg::add("preferences", "floater_preferences.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterPreference>);
@@ -326,10 +327,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.getUIColor",				boost::bind(&LLFloaterPreference::getUIColor, this ,_1, _2));
 	mCommitCallbackRegistrar.add("Pref.MaturitySettings",		boost::bind(&LLFloaterPreference::onChangeMaturity, this));
 	mCommitCallbackRegistrar.add("Pref.BlockList",				boost::bind(&LLFloaterPreference::onClickBlockList, this));
-	mCommitCallbackRegistrar.add("Pref.CommitDoubleClickChekbox",   boost::bind(&LLFloaterPreference::onDoubleClickCheckBox, this,_1));
-	mCommitCallbackRegistrar.add("Pref.CommitRadioDoubleClick",     boost::bind(&LLFloaterPreference::onDoubleClickRadio, this));
-	
-	
+	mCommitCallbackRegistrar.add("Pref.CommitDoubleClickChekbox",	boost::bind(&LLFloaterPreference::onDoubleClickCheckBox, this, _1));
+	mCommitCallbackRegistrar.add("Pref.CommitRadioDoubleClick",	boost::bind(&LLFloaterPreference::onDoubleClickRadio, this));
 
 //	sSkin = gSavedSettings.getString("SkinCurrent");
 	
@@ -354,9 +353,13 @@ BOOL LLFloaterPreference::postBuild()
 	
 	updateDoubleClickControls();
 
+	updateDoubleClickControls();
+
 	getChild<LLUICtrl>("cache_location")->setEnabled(FALSE); // make it read-only but selectable (STORM-227)
 	std::string cache_location = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "");
 	setCacheLocation(cache_location);
+
+	getChild<LLComboBox>("language_combobox")->setCommitCallback(boost::bind(&LLFloaterPreference::onLanguageChange, this));
 
 	// if floater is opened before login set default localized busy message
 	if (LLStartUp::getStartupState() < STATE_STARTED)
@@ -489,12 +492,12 @@ void LLFloaterPreference::apply()
 			gAgent.sendAgentUpdateUserInfo(new_im_via_email,mDirectoryVisibility);
 		}
 	}
-	
+
 	if (mDoubleClickActionDirty)
 	{
 		updateDoubleClickSettings();
 		mDoubleClickActionDirty = false;
-	}	
+	}
 }
 
 void LLFloaterPreference::cancel()
@@ -526,7 +529,7 @@ void LLFloaterPreference::cancel()
 	{
 		updateDoubleClickControls();
 		mDoubleClickActionDirty = false;
-	}	
+	}
 }
 
 void LLFloaterPreference::onOpen(const LLSD& key)
@@ -578,6 +581,9 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 		getChild<LLUICtrl>("maturity_desired_textbox")->setValue(maturity_combo->getSelectedItemLabel());
 		getChildView("maturity_desired_combobox")->setVisible( false);
 	}
+
+	// Forget previous language changes.
+	mLanguageChanged = false;
 
 	// Display selected maturity icons.
 	onChangeMaturity();
@@ -734,6 +740,18 @@ void LLFloaterPreference::refreshEnabledGraphics()
 void LLFloaterPreference::onClickBrowserClearCache()
 {
 	LLNotificationsUtil::add("ConfirmClearBrowserCache", LLSD(), LLSD(), callback_clear_browser_cache);
+}
+
+// Called when user changes language via the combobox.
+void LLFloaterPreference::onLanguageChange()
+{
+	// Let the user know that the change will only take effect after restart.
+	// Do it only once so that we're not too irritating.
+	if (!mLanguageChanged)
+	{
+		LLNotificationsUtil::add("ChangeLanguage");
+		mLanguageChanged = true;
+	}
 }
 
 void LLFloaterPreference::onClickSetCache()
@@ -1384,7 +1402,7 @@ void LLFloaterPreference::updateDoubleClickSettings()
 	LLCheckBoxCtrl* double_click_action_cb = getChild<LLCheckBoxCtrl>("double_click_chkbox");
 	if (!double_click_action_cb) return;
 	bool enable = double_click_action_cb->getValue().asBoolean();
-	
+
 	LLRadioGroup* radio_double_click_action = getChild<LLRadioGroup>("double_click_action");
 	if (!radio_double_click_action) return;
 	
@@ -1424,7 +1442,6 @@ void LLFloaterPreference::updateDoubleClickControls()
 	// select button in radio-group depending on setting
 	double_click_action_radio->setSelectedIndex(gSavedSettings.getBOOL("DoubleClickAutoPilot"));
 }
-
 
 void LLFloaterPreference::applyUIColor(LLUICtrl* ctrl, const LLSD& param)
 {

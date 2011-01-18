@@ -20,6 +20,7 @@
      left="0"
      name="normal_background"
      top="17"
+     use_draw_context_alpha="false"
      width="350" />
    <text
      type="string"
@@ -114,7 +115,7 @@
     </text>
     <line_editor
      type="string"
-     max_length="10"
+     max_length_bytes="10"
      halign="right"
      font="SansSerifMedium"
      select_on_focus="true"
@@ -214,7 +215,7 @@
     <text
      type="string"
      length="1"
-     text_color="SL-MidGray_50"
+     text_color="0.7 0.7 0.7 0.5"
      follows="top|left"
      layout="topleft"
      halign="right"
@@ -228,7 +229,7 @@
     <text
      type="string"
      length="1"
-     text_color="SL-MidGray_50"
+     text_color="0.7 0.7 0.7 0.5"
      follows="top|left"
      layout="topleft"
      halign="right"
@@ -242,7 +243,7 @@ Re-enter amount to see the latest exchange rate.
     <text
      type="string"
      length="1"
-     text_color="SL-MidGray_50"
+     text_color="0.7 0.7 0.7 0.5"
      follows="top|left"
      layout="topleft"
      halign="right"
@@ -256,7 +257,7 @@ Re-enter amount to see the latest exchange rate.
     <text
      type="string"
      length="1"
-     text_color="SL-MidGray_50"
+     text_color="0.7 0.7 0.7 0.5"
      follows="top|left"
      layout="topleft"
      halign="right"
@@ -292,6 +293,7 @@ Re-enter amount to see the latest exchange rate.
      left="0"
      name="error_background"
      top="15"
+     use_draw_context_alpha="false"
      width="350"/>
     <text
      type="string"

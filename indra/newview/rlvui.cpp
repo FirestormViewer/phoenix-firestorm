@@ -16,6 +16,7 @@
 
 #include "llviewerprecompiledheaders.h"
 #include "llavatarlist.h"				// Avatar list control used by the "Nearby" tab in the "People" sidebar panel
+#include "llavatarnamecache.h"
 #include "llbottomtray.h"
 #include "llbutton.h"
 #include "llcallfloater.h"
@@ -65,14 +66,15 @@ RlvUIEnabler::RlvUIEnabler()
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_VIEWTEXTURE, boost::bind(&RlvUIEnabler::onToggleViewXXX, this)));
 
 	// onToggleXXX
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_DISPLAYNAME, boost::bind(&RlvUIEnabler::onToggleDisplayName, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_EDIT, boost::bind(&RlvUIEnabler::onToggleEdit, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_FLY, boost::bind(&RlvUIEnabler::onToggleFly, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_REZ, boost::bind(&RlvUIEnabler::onToggleRez, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SETENV, boost::bind(&RlvUIEnabler::onToggleSetEnv, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWINV, boost::bind(&RlvUIEnabler::onToggleShowInv, this)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWINV, boost::bind(&RlvUIEnabler::onToggleShowInv, this, _1)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWLOC, boost::bind(&RlvUIEnabler::onToggleShowLoc, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWMINIMAP, boost::bind(&RlvUIEnabler::onToggleShowMinimap, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWNAMES, boost::bind(&RlvUIEnabler::onToggleShowNames, this)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWNAMES, boost::bind(&RlvUIEnabler::onToggleShowNames, this, _1)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWWORLDMAP, boost::bind(&RlvUIEnabler::onToggleShowWorldMap, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_UNSIT, boost::bind(&RlvUIEnabler::onToggleUnsit, this)));
 
@@ -90,6 +92,8 @@ RlvUIEnabler::RlvUIEnabler()
 // Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
 void RlvUIEnabler::onBehaviour(ERlvBehaviour eBhvr, ERlvParamType eType)
 {
+	bool fQuitting = LLApp::isQuitting();
+
 	// We're only interested in behaviour toggles (ie on->off or off->on)
 	if ( ((RLV_TYPE_ADD == eType) && (1 == gRlvHandler.hasBehaviour(eBhvr))) ||
 		 ((RLV_TYPE_REMOVE == eType) && (0 == gRlvHandler.hasBehaviour(eBhvr))) )
@@ -97,7 +101,7 @@ void RlvUIEnabler::onBehaviour(ERlvBehaviour eBhvr, ERlvParamType eType)
 		for (behaviour_handler_map_t::const_iterator itHandler = m_Handlers.lower_bound(eBhvr), endHandler = m_Handlers.upper_bound(eBhvr);
 				itHandler != endHandler; ++itHandler)
 		{
-			itHandler->second();
+			itHandler->second(fQuitting);
 		}
 	}
 }
@@ -109,6 +113,25 @@ void RlvUIEnabler::onRefreshHoverText()
 {
 	// Refresh all hover text each time any of the monitored behaviours get set or unset
 	LLHUDText::refreshAllObjectText();
+}
+
+// Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+void RlvUIEnabler::onToggleDisplayName()
+{
+	static const char cstrFloaterChangeDisplayName[] = "display_name";
+
+	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_DISPLAYNAME);
+	if (!fEnable)
+	{
+		// Hide the "Change Display Name" floater if it's currently visible
+		if (LLFloaterReg::floaterInstanceVisible(cstrFloaterChangeDisplayName))
+			LLFloaterReg::hideInstance(cstrFloaterChangeDisplayName);
+	}
+
+	if (!fEnable)
+		addGenericFloaterFilter(cstrFloaterChangeDisplayName);
+	else
+		removeGenericFloaterFilter(cstrFloaterChangeDisplayName);
 }
 
 // Checked: 2010-03-17 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
@@ -184,15 +207,17 @@ void RlvUIEnabler::onToggleSetEnv()
 }
 
 // Checked: 2010-09-07 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
-void RlvUIEnabler::onToggleShowInv()
+void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 {
+	if (fQuitting)
+		return;	// Nothing to do if the viewer is shutting down
+
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV);
 
 	//
 	// Enable/disable the "My Inventory" sidebar tab
 	//
-	LLSideTray* pSideTray = LLSideTray::getInstance(); 
-	RLV_ASSERT(pSideTray);
+	LLSideTray* pSideTray = (LLSideTray::instanceCreated()) ? LLSideTray::getInstance() : NULL;
 	if (pSideTray)
 	{
 		// If the inventory sidebar tab is currently undocked we need to redock it first
@@ -215,22 +240,16 @@ void RlvUIEnabler::onToggleShowInv()
 		if (pInvBtn) 
 			pInvBtn->setEnabled(fEnable);
 
-		// When disabling, switch to the "Home" sidebar tab if "My Inventory" is currently active
+		// When disabling, switch to the first available sidebar tab if "My Inventory" is currently active
 		// NOTE: when collapsed 'isPanelActive' will return FALSE even if the panel is currently active so we have to sidestep that
 		const LLPanel* pActiveTab = pSideTray->getActiveTab();
 		if ( (!fEnable) && (pActiveTab) && ("sidebar_inventory" == pActiveTab->getName()) )
 		{
-			pSideTray->selectTabByName("sidebar_home");	// Using selectTabByName() instead of showPanel() will prevent it from expanding
+			if (!pSideTray->selectTabByIndex(1))		// Try to switch to the first available (docked) tab - open/close = index 0
+				pSideTray->collapseSideBar();			// (or just collapse the sidebar if there's no tab we can switch to)
 			if (pSideTray->getCollapsed())
 				pSideTray->collapseSideBar();			// Fixes a button highlighting glitch when changing the active tab while collapsed
 		}
-
-		// Start or stop filtering opening the inventory sidebar tab
-		RLV_ASSERT_DBG( (fEnable) || (!m_ConnSidePanelInventory.connected()) );
-		if (!fEnable)
-			m_ConnSidePanelInventory = pSideTray->setValidateCallback(boost::bind(&RlvUIEnabler::canOpenSidebarTab, this, RLV_BHVR_SHOWINV, "sidebar_inventory", _1, _2));
-		else
-			m_ConnSidePanelInventory.disconnect();
 	}
 
 	//
@@ -364,9 +383,14 @@ void RlvUIEnabler::onToggleShowMinimap()
 		pBtnView->setEnabled(fEnable);
 }
 
-// Checked: 2010-06-05 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
-void RlvUIEnabler::onToggleShowNames()
+// Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
+void RlvUIEnabler::onToggleShowNames(bool fQuitting)
 {
+	if (fQuitting)
+		return;							// Nothing to do if the viewer is shutting down
+
+	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+
 	// Refresh the nearby people list
 	LLPanelPeople* pPeoplePanel = dynamic_cast<LLPanelPeople*>(LLSideTray::getInstance()->getPanel("panel_people"));
 	RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
@@ -377,6 +401,18 @@ void RlvUIEnabler::onToggleShowNames()
 	LLCallFloater* pCallFloater = LLFloaterReg::findTypedInstance<LLCallFloater>("voice_controls");
 	if (pCallFloater)
 		pCallFloater->getAvatarCallerList()->updateAvatarNames();
+
+	// Force the use of the "display name" cache so we can filter both display and legacy names (or return back to the user's preference)
+	if (!fEnable)
+	{
+		LLAvatarNameCache::setForceDisplayNames(true);
+	}
+	else
+	{
+		LLAvatarNameCache::setForceDisplayNames(false);
+		LLAvatarNameCache::setUseDisplayNames(gSavedSettings.getBOOL("UseDisplayNames"));
+	}
+	LLVOAvatar::invalidateNameTags();	// See handleDisplayNamesOptionChanged()
 }
 
 // Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
@@ -493,53 +529,20 @@ bool RlvUIEnabler::filterFloaterViewXXX(const std::string& strName, const LLSD&)
 {
 	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_VIEWNOTE)) && ("preview_notecard" == strName) )
 	{
-		notifyBlockedViewXXX(LLAssetType::AT_NOTECARD);
+		RlvUtil::notifyBlockedViewXXX(LLAssetType::AT_NOTECARD);
 		return false;
 	}
 	else if ( (gRlvHandler.hasBehaviour(RLV_BHVR_VIEWSCRIPT)) && (("preview_script" == strName) || ("preview_scriptedit" == strName)) )
 	{
-		notifyBlockedViewXXX(LLAssetType::AT_SCRIPT);
+		RlvUtil::notifyBlockedViewXXX(LLAssetType::AT_SCRIPT);
 		return false;
 	}
 	else if ( (gRlvHandler.hasBehaviour(RLV_BHVR_VIEWTEXTURE)) && ("preview_texture" == strName) )
 	{
-		notifyBlockedViewXXX(LLAssetType::AT_TEXTURE);
+		RlvUtil::notifyBlockedViewXXX(LLAssetType::AT_TEXTURE);
 		return false;
 	}
 	return true;
-}
-
-// ============================================================================
-
-// Checked: 2010-03-01 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
-bool RlvUIEnabler::canOpenSidebarTab(ERlvBehaviour eBhvrFilter, const std::string& strNameFilter, LLUICtrl* pCtrl, const LLSD& sdParam)
-{
-	return (!gRlvHandler.hasBehaviour(eBhvrFilter)) || (strNameFilter != sdParam.asString());
-}
-
-// ============================================================================
-
-// Checked: 2010-10-07 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
-void RlvUIEnabler::notifyBlocked(const std::string& strRlvString)
-{
-	LLSD argsNotify;
-	argsNotify["MESSAGE"] = RlvStrings::getString(strRlvString);
-	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
-}
-
-// Checked: 2010-03-01 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
-void RlvUIEnabler::notifyBlockedViewXXX(LLAssetType::EType assetType)
-{
-	if (!RlvStrings::hasString(RLV_STRING_BLOCKED_VIEWXXX))
-		return;
-
-	LLStringUtil::format_map_t argsMsg; std::string strMsg = RlvStrings::getString(RLV_STRING_BLOCKED_VIEWXXX);
-	argsMsg["[TYPE]"] = LLAssetType::lookup(assetType);
-	LLStringUtil::format(strMsg, argsMsg);
-
-	LLSD argsNotify;
-	argsNotify["MESSAGE"] = strMsg;
-	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
 }
 
 // ============================================================================

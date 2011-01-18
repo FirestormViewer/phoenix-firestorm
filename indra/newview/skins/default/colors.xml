@@ -588,9 +588,6 @@
      name="HighlightInspectColor"
      reference="Purple" />
     <color
-     name="IMChatColor"
-     reference="LtGray" />
-    <color
      name="IMHistoryBgColor"
      reference="Unused?" />
     <color

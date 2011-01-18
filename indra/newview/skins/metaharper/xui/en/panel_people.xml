@@ -114,7 +114,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              name="bottom_panel"
              top_pad="0"
              width="313">
-             <button
+             <menu_button
              follows="bottom|left"
              height="25"
              image_hover_unselected="Toolbar_Left_Over"
@@ -247,8 +247,9 @@ Looking for people to hang out with? Use the search box to find topics or conten
 				       height="25"
 				       layout="topleft"
 				       name="options_gear_btn_panel"
+				       user_resize="false"
 				       width="32">
-				          <button
+				          <menu_button
 				           follows="bottom|left"
 				           tool_tip="Show additional options"
 				           height="25"
@@ -267,6 +268,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 				       height="25"
 				       layout="topleft"
 				       name="add_btn_panel"
+				       user_resize="false"
 				       width="64">
 				          <button
 				           follows="bottom|left"
@@ -303,6 +305,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 				       height="25"
 				       layout="topleft"
 				       name="dummy_panel"
+				       user_resize="false"
 				       width="212">
 				          <icon
 				           follows="bottom|left|right"
@@ -319,6 +322,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 				       height="25"
 				       layout="topleft"
 				       name="trash_btn_panel"
+				       user_resize="false"
 				       width="31">
 				          <dnd_button
 				           follows="bottom|left"
@@ -329,7 +333,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 				           image_unselected="Toolbar_Right_Off"
 				           left="0"
 				           layout="topleft"
-				           name="trash_btn"
+				           name="del_btn"
 				           tool_tip="Remove selected person from your Friends list"
 				           top="0"
 				           width="31"/>
@@ -512,7 +516,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              name="bottom_panel"
              top_pad="0"
              width="313">
-               <button
+               <menu_button
                follows="bottom|left"
                tool_tip="Options"
                height="25"

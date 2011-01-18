@@ -37,6 +37,8 @@ protected:
 	 * Signal callbacks
 	 */
 public:
+	typedef boost::function<void(bool)> behaviour_handler_t;
+	void addBehaviourToggleCallback(ERlvBehaviour eBhvr, behaviour_handler_t cb);
 	void onBehaviour(ERlvBehaviour eBhvr, ERlvParamType eType);			// RlvHandler::rlv_behaviour_signal_t
 
 	/*
@@ -44,14 +46,15 @@ public:
 	 */
 protected:
 	void onRefreshHoverText();											// showloc, shownames, showhovertext(all|world|hud)
+	void onToggleDisplayName();											// displayname
 	void onToggleEdit();												// edit
 	void onToggleFly();													// fly
 	void onToggleRez();													// rez
 	void onToggleSetEnv();												// setenv
-	void onToggleShowInv();												// showinv
+	void onToggleShowInv(bool fQuitting);								// showinv
 	void onToggleShowLoc();												// showloc
 	void onToggleShowMinimap();											// showminimap
-	void onToggleShowNames();											// shownames
+	void onToggleShowNames(bool fQuitting);								// shownames
 	void onToggleShowWorldMap();										// showworldmap
 	void onToggleTp();													// tploc and tplm
 	void onToggleUnsit();												// unsit
@@ -73,21 +76,6 @@ protected:
 	boost::signals2::connection m_ConnFloaterViewXXX;					// viewnote, viewscript, viewtexture
 
 	/*
-	 * Sidebar panel change validation
-	 */
-protected:
-	bool canOpenSidebarTab(ERlvBehaviour, const std::string&, LLUICtrl*, const LLSD&);
-	boost::signals2::connection m_ConnSidePanelInventory;				// showinv
-
-	/*
-	 * User feedback functions
-	 */
-public:
-	static void notifyBlocked(const std::string& strRlvString);
-	static void notifyBlockedTeleport()	{ notifyBlocked("blocked_teleport"); }
-	static void notifyBlockedViewXXX(LLAssetType::EType assetType); 
-
-	/*
 	 * Helper functions
 	 */
 public:
@@ -101,12 +89,20 @@ public:
 	 * Member variables
 	 */
 protected:
-	typedef boost::function<void()> behaviour_handler_t;
 	typedef std::multimap<ERlvBehaviour, behaviour_handler_t> behaviour_handler_map_t;
 	behaviour_handler_map_t m_Handlers;
 
 	std::multiset<std::string> m_FilteredFloaters;
 };
+
+// ============================================================================
+// Inlined member functions
+
+// Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+inline void RlvUIEnabler::addBehaviourToggleCallback(ERlvBehaviour eBhvr, behaviour_handler_t cb)
+{
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(eBhvr, cb));
+}
 
 // ============================================================================
 

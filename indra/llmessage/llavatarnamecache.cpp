@@ -47,6 +47,11 @@ namespace LLAvatarNameCache
 	// supports it.
 	bool sUseDisplayNames = true;
 
+// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+	// RLVa override for display names
+	bool sForceDisplayNames = false;
+// [/RLVa:KB]
+
 	// Cache starts in a paused state until we can determine if the
 	// current region supports display names.
 	bool sRunning = false;
@@ -298,16 +303,6 @@ void LLAvatarNameCache::processName(const LLUUID& agent_id,
 	if (add_to_cache)
 	{
 		sCache[agent_id] = av_name;
-		//  sCache[agent_id] = av_name;
-		// [SL:KB] - Patch: Agent-DisplayNames | Checked: 2010-12-28 (Catznip-2.4.0h) | Added: Catznip-2.4.0h
-		// Don't replace existing entries with dummies
-		cache_t::iterator itName = (av_name.mIsDummy) ? sCache.find(agent_id) : sCache.end();
-		if (sCache.end() != itName)
-		   itName->second.mExpires = av_name.mExpires;
-		else
-		   sCache[agent_id] = av_name;
-		// [/SL:KB]
-
 	}
 
 	sPendingQueue.erase(agent_id);
@@ -685,9 +680,28 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 	}
 }
 
+// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+bool LLAvatarNameCache::getForceDisplayNames()
+{
+	return sForceDisplayNames;
+}
+
+void LLAvatarNameCache::setForceDisplayNames(bool force)
+{
+	sForceDisplayNames = force;
+	if ( (!sUseDisplayNames) && (force) )
+	{
+		setUseDisplayNames(true);
+	}
+}
+// [/RLVa:KB]
 
 void LLAvatarNameCache::setUseDisplayNames(bool use)
 {
+// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+	// We need to force the use of the "display names" cache when @shownames=n restricted (and disallow toggling it)
+	use |= getForceDisplayNames();
+// [/RLVa:KB]
 	if (use != sUseDisplayNames)
 	{
 		sUseDisplayNames = use;

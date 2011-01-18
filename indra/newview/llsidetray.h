@@ -40,6 +40,8 @@ class LLSideTray : public LLPanel, private LLDestroyClass<LLSideTray>
 {
 	friend class LLUICtrlFactory;
 	friend class LLDestroyClass<LLSideTray>;
+	friend class LLSideTrayTab;
+	friend class LLSideTrayButton;
 public:
 
 	LOG_CLASS(LLSideTray);
@@ -129,10 +131,9 @@ public:
 	/*
 	 * get currently active tab
 	 */
-//    const LLSideTrayTab*	getActiveTab() const { return mActiveTab; }
 // [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
 	// *sighs* LLSideTrayTab is defined in llsidetray.cpp... we can make do with an LLPanel* though 
-    const LLPanel*	getActiveTab() const;
+	const LLPanel*	getActiveTab() const;
 // [/RLVa:KB]
 
 	/*
@@ -175,35 +176,35 @@ public:
 
     virtual BOOL postBuild();
 
-	void		onTabButtonClick(std::string name);
-	void		onToggleCollapse();
-
-	bool		addChild		(LLView* view, S32 tab_group);
-	bool		removeTab		(LLSideTrayTab* tab); // Used to detach tabs temporarily
-	bool		addTab			(LLSideTrayTab* tab); // Used to re-attach tabs
-
 	BOOL		handleMouseDown	(S32 x, S32 y, MASK mask);
 	
 	void		reshape			(S32 width, S32 height, BOOL called_from_parent = TRUE);
 
-	void		processTriState ();
-	
+
 	void		updateSidetrayVisibility();
 
 	commit_signal_t& getCollapseSignal() { return mCollapseSignal; }
 
 	void		handleLoginComplete();
 
-	LLSideTrayTab* getTab		(const std::string& name);
-
+//	bool 		isTabAttached	(const std::string& name);
+// [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
 	bool 		isTabAttached	(const std::string& name);
+	bool 		isTabAttached	(const LLSideTrayTab* tab);
+// [/RLVa:KB]
 
 // [RLVa:KB] - Checked: 2010-09-07 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
 	void 		toggleTabDocked(const std::string& strTabName);
 // [/RLVa:KB]
 
 protected:
+	bool		addChild		(LLView* view, S32 tab_group);
+	bool		removeTab		(LLSideTrayTab* tab); // Used to detach tabs temporarily
+	bool		addTab			(LLSideTrayTab* tab); // Used to re-attach tabs
 	bool		hasTabs			();
+
+//	const LLSideTrayTab*	getActiveTab() const { return mActiveTab; }
+	LLSideTrayTab* 			getTab(const std::string& name);
 
 	void		createButtons	();
 
@@ -212,10 +213,17 @@ protected:
 	void		arrange			();
 	void		detachTabs		();
 	void		reflectCollapseChange();
+	void		processTriState ();
 
 	void		toggleTabButton	(LLSideTrayTab* tab);
 
 	LLPanel*	openChildPanel	(LLSideTrayTab* tab, const std::string& panel_name, const LLSD& params);
+
+	void		onTabButtonClick(std::string name);
+// [RLVa:KB] - Checked: 2010-12-13 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+	bool		onTabDestroy	(const LLSideTrayTab* tab);
+// [/RLVa:KB]
+	void		onToggleCollapse();
 
 private:
 	// Implementation of LLDestroyClass<LLSideTray>

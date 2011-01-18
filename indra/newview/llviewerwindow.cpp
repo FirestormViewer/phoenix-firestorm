@@ -2278,7 +2278,7 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 			LLBottomTray::getInstance()->getNearbyChatBar()->startChat(NULL);
 			return TRUE;
 		}
-	}	
+	}
 
 	// give menus a chance to handle unmodified accelerator keys
 	if ((gMenuBarView && gMenuBarView->handleAcceleratorKey(key, mask))

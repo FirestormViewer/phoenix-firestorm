@@ -541,8 +541,15 @@ bool LLIMModel::LLIMSession::isOtherParticipantAvaline()
 
 void LLIMModel::LLIMSession::onAvatarNameCache(const LLUUID& avatar_id, const LLAvatarName& av_name)
 {
-	// if username is empty, display names isn't enabled, use the display name
-	mHistoryFileName = av_name.mUsername.empty() ? av_name.mDisplayName : av_name.mUsername;
+	if (av_name.mUsername.empty())
+	{
+		// display names is off, use mDisplayName which will be the legacy name
+		mHistoryFileName = LLCacheName::buildUsername(av_name.mDisplayName);
+	}
+	else
+	{  
+		mHistoryFileName = av_name.mUsername;
+	}
 }
 
 void LLIMModel::LLIMSession::buildHistoryFileName()
@@ -552,7 +559,12 @@ void LLIMModel::LLIMSession::buildHistoryFileName()
 	//ad-hoc requires sophisticated chat history saving schemes
 	if (isAdHoc())
 	{
-		//in case of outgoing ad-hoc sessions
+		/* in case of outgoing ad-hoc sessions we need to make specilized names
+		* if this naming system is ever changed then the filtering definitions in 
+		* lllogchat.cpp need to be change acordingly so that the filtering for the
+		* date stamp code introduced in STORM-102 will work properly and not add
+		* a date stamp to the Ad-hoc conferences.
+		*/
 		if (mInitialTargetIDs.size())
 		{
 			std::set<LLUUID> sorted_uuids(mInitialTargetIDs.begin(), mInitialTargetIDs.end());

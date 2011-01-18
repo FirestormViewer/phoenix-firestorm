@@ -4,11 +4,8 @@
  name="floater" 
  background_visible="true"
  background_opaque="false"
- 
  bg_opaque_color="DkGray"
- 
  bg_alpha_color="DkGray"
- 
  header_height="20"
  close_image="Icon_Close_Foreground"
  restore_image="Icon_Restore_Foreground"

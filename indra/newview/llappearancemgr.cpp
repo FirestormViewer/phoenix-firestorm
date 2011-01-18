@@ -1567,7 +1567,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 // [RLVa:KB] - Checked: 2010-03-19 (RLVa-1.2.0c) | Modified: RLVa-1.2.0b
 	// Filter out any new body parts that can't be worn before adding them
 	if ( (rlv_handler_t::isEnabled()) && (gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_ANY)) )
-		body_items_new.erase(std::remove_if(body_items_new.begin(), body_items_new.end(), rlvPredIsNotWearableItem), body_items_new.end());
+		body_items_new.erase(std::remove_if(body_items_new.begin(), body_items_new.end(), RlvPredCanNotWearItem(RLV_WEAR_REPLACE)), body_items_new.end());
 	body_items.insert(body_items.end(), body_items_new.begin(), body_items_new.end());
 // [/RLVa:KB]
 	// NOTE-RLVa: we don't actually want to favour COF body parts over the folder's body parts (if only because it breaks force wear)
@@ -1588,14 +1588,14 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	{
 		// Make sure that all currently locked clothing layers remain in COF when replacing
 		getDescendentsOfAssetType(cof, wear_items, LLAssetType::AT_CLOTHING, false);
-		wear_items.erase(std::remove_if(wear_items.begin(), wear_items.end(), rlvPredIsRemovableItem), wear_items.end());
+		wear_items.erase(std::remove_if(wear_items.begin(), wear_items.end(), rlvPredCanRemoveItem), wear_items.end());
 	}
 // [/RLVa:KB]
 //	getDescendentsOfAssetType(category, wear_items, LLAssetType::AT_CLOTHING, false);
 // [RLVa:KB] - Checked: 2010-03-19 (RLVa-1.2.0c) | Modified: RLVa-1.2.0b
 	// Filter out any new wearables that can't be worn before adding them
 	if ( (rlv_handler_t::isEnabled()) && (gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_ANY)) )
-		wear_items_new.erase(std::remove_if(wear_items_new.begin(), wear_items_new.end(), rlvPredIsNotWearableItem), wear_items_new.end());
+		wear_items_new.erase(std::remove_if(wear_items_new.begin(), wear_items_new.end(), RlvPredCanNotWearItem(RLV_WEAR)), wear_items_new.end());
 	wear_items.insert(wear_items.end(), wear_items_new.begin(), wear_items_new.end());
 // [/RLVa:KB]
 	// Reduce wearables to max of one per type.
@@ -1613,14 +1613,14 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	{
 		// Make sure that all currently locked attachments remain in COF when replacing
 		getDescendentsOfAssetType(cof, obj_items, LLAssetType::AT_OBJECT, false);
-		obj_items.erase(std::remove_if(obj_items.begin(), obj_items.end(), rlvPredIsRemovableItem), obj_items.end());
+		obj_items.erase(std::remove_if(obj_items.begin(), obj_items.end(), rlvPredCanRemoveItem), obj_items.end());
 	}
 // [/RLVa:KB]
 //	getDescendentsOfAssetType(category, obj_items, LLAssetType::AT_OBJECT, false);
 // [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0z) | Modified: RLVa-1.2.0b
 	// Filter out any new attachments that can't be worn before adding them
 	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
-		obj_items_new.erase(std::remove_if(obj_items_new.begin(), obj_items_new.end(), rlvPredIsNotWearableItem), obj_items_new.end());
+		obj_items_new.erase(std::remove_if(obj_items_new.begin(), obj_items_new.end(), RlvPredCanNotWearItem(RLV_WEAR)), obj_items_new.end());
 	obj_items.insert(obj_items.end(), obj_items_new.begin(), obj_items_new.end());
 // [/RLVa:KB]
 	removeDuplicateItems(obj_items);
@@ -1916,6 +1916,13 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 	remove_non_link_items(wear_items);
 	remove_non_link_items(obj_items);
 	remove_non_link_items(gest_items);
+// [SL:KB] - Patch: Apperance-Misc | Checked: 2010-11-24 (Catznip-2.4.0f) | Added: Catzip-2.4.0f
+	// Since we're following folder links we might have picked up new duplicates, or exceeded MAX_CLOTHING_PER_TYPE
+	removeDuplicateItems(wear_items);
+	removeDuplicateItems(obj_items);
+	removeDuplicateItems(gest_items);
+	filterWearableItems(wear_items, LLAgentWearables::MAX_CLOTHING_PER_TYPE);
+// [/SL:KB]
 
 	dumpItemArray(wear_items,"asset_dump: wear_item");
 	dumpItemArray(obj_items,"asset_dump: obj_item");
@@ -1977,6 +1984,9 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 		// fetch failures (should be replaced by new defaults in
 		// lost&found).
 		U32 skip_type = gSavedSettings.getU32("ForceAssetFail");
+// [RLVa:KB] - Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+		U32 missing_type = gSavedSettings.getU32("ForceMissingType");
+// [/RLVa:KB]
 
 		if (item && item->getIsLinkType() && linked_item)
 		{
@@ -1987,10 +1997,25 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 							  linked_item->isWearableType() ? linked_item->getWearableType() : LLWearableType::WT_INVALID
 				);
 
-			if (skip_type != LLWearableType::WT_INVALID && skip_type == found.mWearableType)
+// [RLVa:KB] - Checked: 2010-12-15 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
+#ifdef LL_RELEASE_FOR_DOWNLOAD
+			// Don't allow forcing an invalid wearable if the initial wearables aren't set yet, or if any wearable type is currently locked
+			if ( (!rlv_handler_t::isEnabled()) || 
+				 ((gAgentWearables.areInitalWearablesLoaded()) && (!gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_REMOVE))) )
+#endif // LL_RELEASE_FOR_DOWNLOAD
 			{
-				found.mAssetID.generate(); // Replace with new UUID, guaranteed not to exist in DB
+				if (missing_type != LLWearableType::WT_INVALID && missing_type == found.mWearableType)
+				{
+					continue;
+				}
+// [/RLVa:KB]
+				if (skip_type != LLWearableType::WT_INVALID && skip_type == found.mWearableType)
+				{
+					found.mAssetID.generate(); // Replace with new UUID, guaranteed not to exist in DB
+				}
+// [RLVa:KB] - Checked: 2010-12-15 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
 			}
+// [/RLVa:KB]
 			//pushing back, not front, to preserve order of wearables for LLAgentWearables
 			holder->getFoundList().push_back(found);
 		}
@@ -2475,12 +2500,11 @@ void LLAppearanceMgr::updateIsDirty()
 		base_outfit = catp->getUUID();
 	}
 
-	if(base_outfit.isNull())
-	{
-		// no outfit link found, display "unsaved outfit"
-		mOutfitIsDirty = true;
-	}
-	else
+	// Set dirty to "false" if no base outfit found to disable "Save"
+	// and leave only "Save As" enabled in My Outfits.
+	mOutfitIsDirty = false;
+
+	if (base_outfit.notNull())
 	{
 		LLIsOfAssetType collector = LLIsOfAssetType(LLAssetType::AT_LINK);
 
@@ -2519,8 +2543,6 @@ void LLAppearanceMgr::updateIsDirty()
 				return;
 			}
 		}
-
-		mOutfitIsDirty = false;
 	}
 }
 
@@ -2931,6 +2953,7 @@ void LLAppearanceMgr::dumpItemArray(const LLInventoryModel::item_array_t& items,
 LLAppearanceMgr::LLAppearanceMgr():
 	mAttachmentInvLinkEnabled(false),
 	mOutfitIsDirty(false),
+	mOutfitLocked(false),
 	mIsInUpdateAppearanceFromCOF(false)
 {
 	LLOutfitObserver& outfit_observer = LLOutfitObserver::instance();

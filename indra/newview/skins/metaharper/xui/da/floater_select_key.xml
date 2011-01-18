@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="modal container" title="">
-	<button label="Annullér" label_selected="Annullér" name="Cancel"/>
-	<text name="Save item as:">
-		Tryk en taste for at angive trigger til at tale.
-	</text>
-</floater>

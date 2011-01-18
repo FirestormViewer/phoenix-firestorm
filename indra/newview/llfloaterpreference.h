@@ -84,6 +84,7 @@ protected:
 	void		onBtnApply();
 
 	void		onClickBrowserClearCache();
+	void		onLanguageChange();
 
 	// set value of "BusyResponseChanged" in account settings depending on whether busy response
 	// string differs from default after user changes.
@@ -104,7 +105,6 @@ protected:
 	void updateDoubleClickSettings();
 	// updates double-click action controls depending on values from settings.xml
 	void updateDoubleClickControls();
-	
 	
 	// This function squirrels away the current values of the controls so that
 	// cancel() can restore them.	
@@ -157,9 +157,10 @@ private:
 	static std::string sSkin;
 	// set true if state of double-click action checkbox or radio-group was changed by user
 	// (reset back to false on apply or cancel)
-	bool mDoubleClickActionDirty;	
+	bool mDoubleClickActionDirty;
 	bool mGotPersonalInfo;
 	bool mOriginalIMViaEmail;
+	bool mLanguageChanged;
 	
 	bool mOriginalHideOnlineStatus;
 	std::string mDirectoryVisibility;

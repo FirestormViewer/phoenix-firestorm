@@ -2907,7 +2907,6 @@ ECursorType LLWindowMacOSX::getCursor() const
 
 void LLWindowMacOSX::initCursors(BOOL use_legacy_cursors)
 {
-{
 	initPixmapCursor(UI_CURSOR_NO, 8, 8);
 	initPixmapCursor(UI_CURSOR_WORKING, 1, 1);
 	initPixmapCursor(UI_CURSOR_TOOLGRAB, 2, 14);
@@ -2938,7 +2937,6 @@ void LLWindowMacOSX::initCursors(BOOL use_legacy_cursors)
 	initPixmapCursor(UI_CURSOR_SIZENESW, 10, 10);
 	initPixmapCursor(UI_CURSOR_SIZEWE, 10, 10);
 	initPixmapCursor(UI_CURSOR_SIZENS, 10, 10);
-
 }
 
 void LLWindowMacOSX::captureMouse()

@@ -77,6 +77,7 @@ public:
 protected:
 	BOOL mUseTexture;
 	BOOL mIsEdgePatch;
+	S32  mRenderType;
 };
 
 #endif // LL_VOSURFACEPATCH_H

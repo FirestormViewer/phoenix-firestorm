@@ -48,7 +48,8 @@ public:
 	{
 		Optional<LLUIImage*>	image;
 		Optional<LLUIColor>		color;
-		Optional<bool>			scale_image;
+		Optional<bool>			use_draw_context_alpha;
+		Ignored					scale_image;
 		Params();
 	};
 protected:
@@ -81,6 +82,10 @@ protected:
 	//the output size of the icon image if set.
 	S32 mDrawWidth ;
 	S32 mDrawHeight ;
+
+	// If set to true (default), use the draw context transparency.
+	// If false, will use transparency returned by getCurrentTransparency(). See STORM-698.
+	bool mUseDrawContextAlpha;
 
 private:
 	LLUIColor mColor;

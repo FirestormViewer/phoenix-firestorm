@@ -498,7 +498,6 @@ void LLFloaterMove::enableInstance(BOOL bEnable)
 
 void LLFloaterMove::onOpen(const LLSD& key)
 {
-	
 
 	if (gAgent.getFlying())
 	{
@@ -511,12 +510,11 @@ void LLFloaterMove::onOpen(const LLSD& key)
 		setSittingMode(TRUE);
 		showModeButtons(FALSE);
 	}
-
-	// AO: no dock control to save titlebar space
-	//LLButton *anchor_panel = LLBottomTray::getInstance()->getChild<LLButton>("movement_btn");
-	//setDockControl(new LLDockControl(
-	//	anchor_panel, this,
-	//	getDockTongue(), LLDockControl::TOP));
+// AO: no dock control to save titlebar space
+//      LLButton *anchor_panel = LLBottomTray::getInstance()->getChild<LLButton>("movement_btn");
+//	setDockControl(new LLDockControl(
+//		anchor_panel, this,
+//		getDockTongue(), LLDockControl::TOP));
 
 	sUpdateFlyingStatus();
 }
@@ -525,6 +523,7 @@ void LLFloaterMove::onOpen(const LLSD& key)
 void LLFloaterMove::setDocked(bool docked, bool pop_on_undock/* = true*/)
 {
 	//LLTransientDockableFloater::setDocked(docked, pop_on_undock);
+	return;
 }
 
 void LLFloaterMove::setModeButtonToggleState(const EMovementMode mode)
@@ -550,12 +549,17 @@ LLPanelStandStopFlying::LLPanelStandStopFlying() :
 	mStopFlyingButton(NULL),
 	mAttached(false)
 {
-	buildFromFile("panel_stand_stop_flying.xml");
-	setVisible(FALSE);
+	// make sure we have the only instance of this class
+	static bool b = true;
+	llassert_always(b);
+	b=false;
+}
 
-	llinfos << "Build LLPanelStandStopFlying panel" << llendl;
-
-	updatePosition();
+// static
+LLPanelStandStopFlying* LLPanelStandStopFlying::getInstance()
+{
+	static LLPanelStandStopFlying* panel = getStandStopFlyingPanel();
+	return panel;
 }
 
 //static
@@ -692,6 +696,21 @@ void LLPanelStandStopFlying::reparent(LLFloaterMove* move_view)
 //////////////////////////////////////////////////////////////////////////
 // Private Section
 //////////////////////////////////////////////////////////////////////////
+
+//static
+LLPanelStandStopFlying* LLPanelStandStopFlying::getStandStopFlyingPanel()
+{
+	LLPanelStandStopFlying* panel = new LLPanelStandStopFlying();
+	panel->buildFromFile("panel_stand_stop_flying.xml");
+
+	panel->setVisible(FALSE);
+	//LLUI::getRootView()->addChild(panel);
+
+	llinfos << "Build LLPanelStandStopFlying panel" << llendl;
+
+	panel->updatePosition();
+	return panel;
+}
 
 void LLPanelStandStopFlying::onStandButtonClick()
 {

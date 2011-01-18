@@ -62,9 +62,6 @@ getArgs()
             esac
         done
         shift $[OPTIND-1]
-        if [ $OPTIND -le 1 ] ; then
-            showUsage && exit 1
-        fi
 
         if [ $WANTS_CLEAN -ne $TRUE ] && [ $WANTS_CONFIG -ne $TRUE ] && \
                 [ $WANTS_BUILD -ne $TRUE ] && [ $WANTS_VERSION -ne $TRUE ] && \
@@ -218,11 +215,6 @@ if [ $WANTS_CLEAN -eq $TRUE ] ; then
 	find . -name "*.pyc" -exec rm {} \;
 fi
 
-if [ $WANTS_CONFIG -eq $TRUE ] ; then
-	mkdir -p ../logs > /dev/null 2>&1
-	./develop.py -t $BTYPE configure -DFIRECYG:BOOL=ON -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=ON -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
-fi
-
 if [ $WANTS_VERSION -eq $TRUE ] ; then
         buildVer=`hg summary | head -1 | cut -d " "  -f 2 | cut -d : -f 1`
 	majorVer=`cat Version | cut -d "=" -f 2 | cut -d "." -f 1`
@@ -234,6 +226,11 @@ if [ $WANTS_VERSION -eq $TRUE ] ; then
 	    -e "s#LL_VERSION_MINOR = .*\$#LL_VERSION_MINOR = ${minorVer};#" \
             -e "s#LL_VERSION_PATCH = .*\$#LL_VERSION_PATCH = ${patchVer};#" \
 	    -e "s#LL_CHANNEL = .*\$#LL_CHANNEL = \"Firestorm-$CHANNEL\";#" llcommon/llversionviewer.h.in > llcommon/llversionviewer.h
+fi
+
+if [ $WANTS_CONFIG -eq $TRUE ] ; then
+        mkdir -p ../logs > /dev/null 2>&1
+        ./develop.py -t $BTYPE configure -DFIRECYG:BOOL=ON -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=OFF -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
 fi
 
 
