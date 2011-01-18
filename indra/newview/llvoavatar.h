@@ -45,6 +45,7 @@
 #include "lltexglobalcolor.h"
 #include "lldriverparam.h"
 #include "material_codes.h"		// LL_MCODE_END
+#include <boost/signals2.hpp>
 
 extern const LLUUID ANIM_AGENT_BODY_NOISE;
 extern const LLUUID ANIM_AGENT_BREATHE_ROT;
@@ -71,7 +72,8 @@ class LLVOAvatarSkeletonInfo;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class LLVOAvatar :
 	public LLViewerObject,
-	public LLCharacter
+	public LLCharacter,
+	public boost::signals2::trackable
 {
 public:
 	friend class LLVOAvatarSelf;

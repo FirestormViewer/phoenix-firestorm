@@ -838,7 +838,8 @@ void RlvForceWear::done()
 	if ( (!addBodyParts.empty()) || (!addClothing.empty()) || (!m_addGestures.empty()) )
 	{
 		LLInventoryModel::item_array_t addAttachments;
-		pAppearanceMgr->updateCOF(addBodyParts, addClothing, addAttachments, m_addGestures, true);
+		//AO: uncomment asap
+		//pAppearanceMgr->updateCOF(addBodyParts, addClothing, addAttachments, m_addGestures, true);
 
 		m_addGestures.clear();
 	}
