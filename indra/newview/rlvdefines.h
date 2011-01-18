@@ -172,7 +172,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_REZ,					// "rez"
 	RLV_BHVR_FARTOUCH,				// "fartouch"
 	RLV_BHVR_INTERACT,				// "interact"
-	RLV_BHVR_TOUCH,					// "touch"
+	RLV_BHVR_TOUCHOBJ,				// "touchobj"
 	RLV_BHVR_TOUCHATTACH,			// "touchattach"
 	RLV_BHVR_TOUCHHUD,				// "touchhud"
 	RLV_BHVR_TOUCHWORLD,			// "touchworld"

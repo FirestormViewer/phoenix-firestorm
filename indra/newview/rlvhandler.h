@@ -278,7 +278,7 @@ inline bool RlvHandler::canTouch(const LLViewerObject* pObj, const LLVector3& po
 {
 #ifdef RLV_EXTENSION_CMD_TOUCHXXX
 	bool fCanTouch = (pObj) && 
-		( (!hasBehaviour(RLV_BHVR_TOUCH)) || (!isException(RLV_BHVR_TOUCH, pObj->getRootEdit()->getID(), RLV_CHECK_PERMISSIVE)) );
+		( (!hasBehaviour(RLV_BHVR_TOUCHOBJ)) || (!isException(RLV_BHVR_TOUCHOBJ, pObj->getRootEdit()->getID(), RLV_CHECK_PERMISSIVE)) );
 
 	if (fCanTouch)
 	{

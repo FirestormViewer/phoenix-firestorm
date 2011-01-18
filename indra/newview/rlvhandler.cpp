@@ -1057,7 +1057,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 			}
 			break;
 #ifdef RLV_EXTENSION_CMD_TOUCHXXX
-		case RLV_BHVR_TOUCH:				// @touch:<uuid>=n					- Checked: 2010-01-01 (RLVa-1.1.0l) | Added: RLVa-1.1.0l
+		case RLV_BHVR_TOUCHOBJ:				// @touchobj:<uuid>=n				- Checked: 2011-01-18 (RLVa-1.3.0e) | Modified: RLVa-1.3.0e
 			{
 				// There should be an option and it should specify a valid UUID
 				LLUUID idException(strOption);
