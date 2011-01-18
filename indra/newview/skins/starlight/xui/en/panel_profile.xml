@@ -42,7 +42,7 @@
     follows="all"
     layout="topleft"
     name="profile_accordion"
-    height="525"
+    height="523"
     width="313">
      <accordion_tab
       expanded="true"
@@ -57,13 +57,13 @@
          left="0"
          name="profile_sl_scroll"
          opaque="true"
-         height="525"
+         height="523"
          width="313"
          top="0">
           <panel
            layout="topleft"
            follows="left|top|right"
-           height="525"
+           height="523"
            name="second_life_panel"
            top="0"
            left="0"
@@ -87,7 +87,7 @@
              layout="topleft"
              left_pad="10"
              name="title_member_text"
-             text_color="white"
+             text_color="White"
              top_delta="0"
              value="Resident Since:"
              width="120" />
@@ -111,7 +111,7 @@
              height="15"
              layout="topleft"
              name="title_acc_status_text"
-             text_color="white"
+             text_color="White"
              top_pad="12"
              value="Account Status:"
              width="120"
@@ -139,7 +139,7 @@
              height="15"
              layout="topleft"
              name="title_partner_text"
-             text_color="white"
+             text_color="White"
              top_pad="0"
              value="Partner:"
              width="120" />
@@ -150,16 +150,17 @@
              name="partner_data_panel"
              top_pad="-2"
              width="120">
-              <name_box
+              <text
                follows="left|top"
-               height="28"
+               height="10"
                initial_value="(retrieving)"
                layout="topleft"
+               left="0"
                link="true"
                name="partner_text"
                top="0"
-               width="120"
-               word_wrap="true"/>
+               use_ellipses="true"
+           width="300" />
             </panel>
             <text
              follows="left|top"
@@ -168,7 +169,7 @@
              layout="topleft"
              left="4"
              name="About_sl_text"
-             text_color="white"
+             text_color="White"
              top_pad="0"
              value="About:"
              width="309" />
@@ -259,7 +260,7 @@
              layout="topleft"
              left="4"
              name="About_rl_text"
-             text_color="white"
+             text_color="White"
              top_pad="-15"
              value="About:"
              width="309" />
@@ -285,7 +286,7 @@
              layout="topleft"
              left="4"
              name="homepage_text"
-             text_color="white"
+             text_color="White"
              top_pad="3"
              value="Homepage:"
              width="290" />
@@ -314,7 +315,7 @@
      left="2"
      top_pad="1"
      height="30"
-     width="311"
+     width="309"
      border_size="0">
       <layout_panel
        follows="bottom|left"
@@ -323,7 +324,7 @@
        name="profile_buttons_panel"
        top="0"
        auto_resize="false"
-       width="311">
+       width="309">
            <layout_stack
 	     	follows="bottom|left|right"
 			height="23"
@@ -332,7 +333,7 @@
 			left="0"
 			orientation="horizontal"
 			top_pad="5"
-			width="311">
+			width="309">
 	
 				<layout_panel
 				follows="bottom|left|right"
@@ -353,7 +354,7 @@
 			         name="add_friend"
 			         tool_tip="Offer friendship to the Resident"
 			         top="0"
-			         width="104" />	
+			         width="103" />	
 				</layout_panel>
 				
 				<layout_panel
@@ -374,7 +375,7 @@
 			         tool_tip="Open instant message session"
 			         top="0"
 			         left="1"
-			         width="31" />		
+			         width="30" />		
 				</layout_panel>
 				
 				<layout_panel
@@ -396,7 +397,7 @@
 			         left="1"
 			         top="0"
 			         use_ellipses="true"
-			         width="47" />		
+			         width="46" />		
 				</layout_panel>
 				
 				<layout_panel
@@ -407,7 +408,7 @@
 				name="chat_btn_lp"
 			    user_resize="false" 
 			    auto_resize="true"
-				width="89">
+				width="88">
 					<button
 			         follows="bottom|left|right"
 			         height="23"
@@ -418,7 +419,7 @@
 			         left="1"
 			         top="0"
 			         use_ellipses="true"
-			         width="88" />
+			         width="86" />
 				</layout_panel>
 				
 				<layout_panel
@@ -430,7 +431,7 @@
 			    user_resize="false" 
 			    auto_resize="false"
 				width="24">
-                           <button
+                           <menu_button
                             follows="bottom|left|right"
                             height="23"
                             image_overlay="OptionsMenu_Off"

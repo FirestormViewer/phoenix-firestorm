@@ -22,7 +22,7 @@
     height="28"
     layout="topleft"
     follows="right|left"
-    text_color="white"
+    text_color="White"
     use_ellipses="true"
     word_wrap="true"
     mouse_opaque="false"

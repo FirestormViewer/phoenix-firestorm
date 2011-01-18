@@ -110,6 +110,7 @@ with the same filename but different name
   <texture name="ComboButton_Off" file_name="widgets/ComboButton_Off.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_UpOff" file_name="widgets/ComboButton_UpOff.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="Container" file_name="containers/Container.png" preload="false" />
+  <texture name="Copy" file_name="icons/Copy.png" preload="false" />
 
   <texture name="DisclosureArrow_Opened_Off" file_name="widgets/DisclosureArrow_Opened_Off.png" preload="true" />
 
@@ -364,12 +365,14 @@ with the same filename but different name
   <texture name="Permission_Visible_Map" file_name="icons/see_on_map.png" preload="false" />
   <texture name="Permission_Edit_Objects_Mine" file_name="icons/edit_mine.png" preload="false" />
   <texture name="Permission_Edit_Objects_Theirs" file_name="icons/edit_theirs.png" preload="false" />
+  <texture name="Person_Check" file_name="icons/Person_Check.png" preload="false" />
+  <texture name="Person_Star" file_name="icons/Person_Star.png" preload="false" />
 
   <texture name="Play_Off" file_name="icons/Play_Off.png" preload="false" />
   <texture name="Play_Over" file_name="icons/Play_Over.png" preload="false" />
   <texture name="Play_Press" file_name="icons/Play_Press.png" preload="false" />
 
-  <texture name="ProgressBar" file_name="widgets/ProgressBar.png" preload="true" scale.left="4" scale.top="10" scale.right="48" scale.bottom="2" />
+  <texture name="ProgressBar" file_name="widgets/ProgressBar.png" preload="true" scale.left="4" scale.top="11" scale.right="48" scale.bottom="3" />
   <texture name="ProgressTrack" file_name="widgets/ProgressTrack.png" preload="true" scale.left="4" scale.top="13" scale.right="148" scale.bottom="2" />
 
   <texture name="PushButton_Disabled" file_name="widgets/PushButton_Disabled.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
@@ -393,6 +396,7 @@ with the same filename but different name
 
   <texture name="Resize_Corner" file_name="windows/Resize_Corner.png" preload="true" />
 
+ <texture name="Rounded_Rect"	file_name="Rounded_Rect.png" preload="true" scale.left="6" scale.top="24" scale.right="58" scale.bottom="6" />
   <texture name="Rounded_Square"	file_name="rounded_square.j2c" preload="true" scale.left="16" scale.top="16" scale.right="112" scale.bottom="16" />
   <texture name="Row_Selection" file_name="navbar/Row_Selection.png" preload="false" />
 
@@ -456,8 +460,6 @@ with the same filename but different name
   <texture name="Unknown_Icon" file_name="icons/unknown_icon.png" preload="true" />
 
   <texture name="Snapshot_Off" file_name="bottomtray/Snapshot_Off.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
-  <texture name="Button_Build" file_name="bottomtray/Button_Build.png" preload="true" />
-  <texture name="Button_Search" file_name="bottomtray/Button_Search.png" preload="true" />
 
   <texture name="startup_logo"  file_name="windows/startup_logo.png" preload="true" />
 
@@ -676,4 +678,14 @@ with the same filename but different name
   <texture name="SpeakBtn_Left_Off" file_name="widgets/SpeakBtn_Left_Off.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
   <texture name="SpeakBtn_Right_Selected_Press" file_name="widgets/SpeakBtn_Right_Selected_Press.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
   <texture name="SpeakBtn_Right_Off" file_name="widgets/SpeakBtn_Right_Off.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
+
+  <texture name="StarLight_Move" file_name="bottomtray/starlight_move.png" preload="true" />
+  <texture name="StarLight_Snapshot" file_name="bottomtray/starlight_snapshot.png" preload="true" />
+  <texture name="StarLight_Camera" file_name="bottomtray/starlight_camera.png" preload="true" />
+  <texture name="StarLight_Map" file_name="bottomtray/starlight_map.png" preload="true" />
+  <texture name="StarLight_Minimap" file_name="bottomtray/starlight_minimap.png" preload="true" />
+  <texture name="StarLight_Search" file_name="bottomtray/starlight_search.png" preload="true" />
+  <texture name="StarLight_Build" file_name="bottomtray/starlight_build.png" preload="true" />
+  <texture name="StarLight_Gesture" file_name="bottomtray/starlight_gesture.png" preload="true" />
+  
 </textures>

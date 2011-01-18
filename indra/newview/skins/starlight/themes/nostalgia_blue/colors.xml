@@ -12,9 +12,6 @@
 	 name="EmphasisColor_35"
 	 value="0.420 0.478 0.757 0.35" />
 	<color
-	 name="white"
-	 value="0 0 0 1" />
-	<color
 	 name="White"
 	 value="1 1 1 1" />
 	<color
@@ -104,6 +101,9 @@
       <color
 	 name="SL-White"
 	 value="1 1 1 1" />
+      <color
+	 name="SL-Black"
+	 value="0 0 0 1" />
 	<color
 	 name="SL-Normal"
 	 value="0.25 0.100 0.225 1" />
@@ -322,9 +322,6 @@
      name="AvatarListItemIconVoiceLeftColor"
      reference="AvatarListItemIconOfflineColor" />
     <color
-     name="BackgroundChatColor"
-     reference="White" />
-    <color
      name="ButtonBorderColor"
      reference="Unused?" />
     <color
@@ -477,7 +474,7 @@
      reference="Black" />
     <color
      name="ContextSilhouetteColor"
-     reference="EmphasisColor" />
+     reference="Yellow" />
     <color
      name="DefaultHighlightDark"
      reference="White_10" />
@@ -504,7 +501,7 @@
      reference="LtGray" />
     <color
      name="FloaterDefaultBackgroundColor"
-     reference="DkGray_66" />
+     reference="SL-Background" />
 <!-- Changed Color -->
     <color
      name="FloaterFocusBackgroundColor"
@@ -567,9 +564,6 @@
     <color
      name="HighlightInspectColor"
      reference="Purple" />
-    <color
-     name="IMChatColor"
-     reference="LtGray" />
     <color
      name="IMHistoryBgColor"
      reference="Unused?" />
@@ -711,10 +705,10 @@
      value="0.447 0.784 0.663 1" />
     <color
      name="NameTagLegacy"
-     reference="White" />
+     reference="SL-White" />
     <color
      name="NameTagMatch"
-     reference="White" />
+     reference="SL-White" />
     <color
      name="NameTagMismatch"
      reference="LtOrange" />
@@ -875,9 +869,6 @@
     <color
      name="SysWellItemSelected"
      reference="SL-Titanium" />
-    <color
-     name="ChatToastAgentNameColor"
-     reference="EmphasisColor" />
     <color
      name="ChatTimestampColor"
      reference="White" />

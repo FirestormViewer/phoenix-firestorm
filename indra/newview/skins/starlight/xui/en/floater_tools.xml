@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
+<!-- floater
  legacy_header_height="18"
  follows="left|top|right"
  height="580"
  layout="topleft"
  bg_opaque_image="Window_NoTitle_Foreground"
- bg_alpha_image="Window_NoTitle_Background"
+ bg_alpha_image="Window_NoTitle_Background" -->
+<floater
+ legacy_header_height="18"
+ follows="left|top|right"
+ height="580"
+ layout="topleft"
  name="toolbox floater"
  help_topic="toolbox_floater"
  save_rect="true"
@@ -160,7 +165,7 @@
      layout="topleft"
      left="10"
       height="70"
-      top="54"
+      top="59"
      name="focus_radio_group">
         <radio_item
          top_pad="6"
@@ -197,7 +202,7 @@
    <radio_group
       left="10"
       height="70"
-      top="54"
+      top="59"
      layout="topleft"
      name="move_radio_group">
         <radio_item
@@ -230,25 +235,20 @@
 		 layout="topleft"
 		 name="radio position" />
         <radio_item
-		 top_pad="5"
+		 top_pad="6"
          label="Rotate (Ctrl)"
          layout="topleft"
          name="radio rotate" />
         <radio_item
-		 top_pad="5"
+		 top_pad="6"
          label="Stretch (Ctrl+Shift)"
          layout="topleft"
          name="radio stretch" />
         <radio_item
-		 top_pad="5"
+		 top_pad="6"
          label="Select Face"
          layout="topleft"
          name="radio select face" />
-        <radio_item
-		 top_pad="5"
-         label="Align"
-         layout="topleft"
-         name="radio align" />
 			<radio_group.commit_callback
 			function="BuildTool.commitRadioEdit"/>
     </radio_group>
@@ -260,7 +260,7 @@
      label="Edit linked"
      layout="topleft"     
      name="checkbox edit linked parts"
-     top_pad="0">
+     top_pad="2">
 		  <check_box.commit_callback
 			function="BuildTool.selectComponent"/>
 	</check_box>
@@ -272,7 +272,7 @@
    left="13"
    name="RenderingCost"
    tool_tip="Shows the rendering cost calculated for this object"
-   top_pad="2"
+   top_pad="0"
    type="string"
    width="100">
    þ: [COUNT]
@@ -737,7 +737,7 @@
      layout="topleft"
      right="-10"
      name="obj_count"
-     top_pad="5"
+     top_pad="7"
      width="143">
         Objects: [COUNT]
     </text>
@@ -763,7 +763,7 @@
      tab_min_width="40"
      tab_position="top"
      tab_height="25"
-     top="170"
+     top="173"
      width="295">
 	<panel
 	 border="false"
@@ -836,7 +836,7 @@
              follows="left|top|right"
              height="19"
              left_pad="0"
-             max_length="63"
+             max_length_bytes="63"
              name="Object Name"
              select_on_focus="true"
              top_delta="0"
@@ -854,7 +854,7 @@
              follows="left|top|right"
              height="19"
              left_pad="0"
-             max_length="127"
+             max_length_bytes="127"
              name="Object Description"
              select_on_focus="true"
              top_delta="0"
@@ -867,19 +867,23 @@
              height="19"
              layout="topleft"
              name="Creator:"
+             top_pad="7"
              width="90">
                 Creator:
             </text>
+            <!-- *NOTE: Intentionally wide for long names -->
             <text
              type="string"
              length="1"
              follows="left|top"
              left_pad="0"
-             height="19"
+             height="30"
              layout="topleft"
              name="Creator Name"
-             width="175">
-                Esbee Linden
+             top_delta="0"
+             width="190"
+             word_wrap="true">
+                Mrs. Esbee Linden (esbee.linden)
             </text>
             <text
              type="string"
@@ -889,19 +893,23 @@
              height="19"
              layout="topleft"
              name="Owner:"
+             top_pad="3"
              width="90">
                 Owner:
             </text>
+            <!-- *NOTE: Intentionally wide for long names -->
             <text
              type="string"
              length="1"
              follows="left|top"
-             height="19"
+             height="30"
              layout="topleft"
              name="Owner Name"
              left_pad="0"
-             width="175">
-                Erica Linden
+             top_delta="0"
+             width="190"
+             word_wrap="true">
+                Mrs. Erica "Moose" Linden (erica.linden)
             </text>
            <text
              type="string"
@@ -911,7 +919,7 @@
              left="10"
              height="18"
              name="Group:"
-             top_pad="4"
+             top_pad="7"
              width="75">
                 Group:
             </text>
@@ -923,12 +931,12 @@
              left_pad="23"
              name="Group Name Proxy"
              width="142" />
-            <button
+                 <button
 			 follows="top|left"
 			 height="23"
 			 image_overlay="Edit_Wrench"
 			 layout="topleft"
-			 left_pad="3"
+			 left_pad="13"
 			 name="button set group"
 			 tab_stop="false"
 			 tool_tip="Choose a group to share this object's permissions"
@@ -941,7 +949,7 @@
              name="checkbox share with group"
              tool_tip="Allow all members of the set group to share your modify permissions for this object. You must Deed to enable role restrictions."
              top_pad="10"
-             left="106"
+             left="100"
              width="87" />
             <button
              follows="top|left"
@@ -950,7 +958,7 @@
              label_selected="Deed"
              layout="topleft"
              name="button deed"
-             left_pad="3"
+             left_pad="19"
              tool_tip="Deeding gives this item away with next owner permissions. Group shared objects can be deeded by a group officer."
              width="80" />
             <text
@@ -962,7 +970,7 @@
              top_pad="10"
              left="10"
              name="label click action"
-             width="98">
+             width="118">
                 Click to:
             </text>
             <combo_box
@@ -970,8 +978,8 @@
              height="23"
              layout="topleft"
              name="clickaction"
-             width="168"
-             left_pad="0">
+             width="148"
+             left_pad="10">
                 <combo_box.item
                  label="Touch  (default)"
                  name="Touch/grab(default)"
@@ -1006,7 +1014,7 @@
              width="100" />
 <!-- NEW SALE TYPE COMBO BOX -->
       <combo_box
-            left_pad="0"
+            left_pad="10"
             layout="topleft"
             follows="left|top"
             allow_text_entry="false"
@@ -1038,7 +1046,7 @@ even though the user gets a free copy.
         decimal_digits="0"
         increment="1"
         top_pad="8"
-        left="108"
+        left="118"
         control_name="Edit Cost"
         name="Edit Cost"
         label="Price: L$"
@@ -1062,11 +1070,11 @@ even though the user gets a free copy.
          layout="topleft"
          mouse_opaque="false"
          background_visible="true"
-         bg_alpha_color="DkGray"
+         bg_alpha_color="Black_10"
          name="perms_build"
          left="0"
-         top="241"
-         height="130"
+         top_pad="4"
+         height="105"
          width="290">
             <text
              type="string"
@@ -1137,14 +1145,16 @@ even though the user gets a free copy.
              top_delta="0"
              tool_tip="Next owner can give away or resell this object"
              width="100" />
+<!-- *NOTE: These "B/O/G/E/N/F fields may overlap "perm_modify" above, 
+     but that's OK, this is used only for debugging. -->
             <text
              type="string"
              text_color="EmphasisColor"
              length="1"
-             top_pad="5"
+             top="9"
              follows="left|top"
              layout="topleft"
-             left="10"
+             left="230"
              name="B:"
              height="10"
              width="80">
@@ -1156,7 +1166,8 @@ even though the user gets a free copy.
              length="1"
              follows="left|top"
              layout="topleft"
-             left_pad="0"
+             left_delta="0"
+             top_pad="2"
              name="O:"
              height="10"
              width="80">
@@ -1168,7 +1179,8 @@ even though the user gets a free copy.
              length="1"
              follows="left|top"
              layout="topleft"
-             left_pad="0"
+             left_delta="0"
+             top_pad="2"
              name="G:"
              height="10"
              width="80">
@@ -1179,7 +1191,7 @@ even though the user gets a free copy.
              text_color="White"
              length="1"
              follows="left|top"
-             left="10"
+             left_delta="0"
              top_pad="2"
              layout="topleft"
              name="E:"
@@ -1193,7 +1205,8 @@ even though the user gets a free copy.
              length="1"
              follows="left|top"
              layout="topleft"
-             left_pad="0"
+             left_delta="0"
+             top_pad="2"
              name="N:"
              height="10"
              width="80">
@@ -1205,7 +1218,8 @@ even though the user gets a free copy.
              length="1"
              follows="left|top"
              layout="topleft"
-             left_pad="0"
+             left_delta="0"
+             top_pad="2"
              name="F:"
              height="10"
              width="80">
@@ -1213,6 +1227,7 @@ even though the user gets a free copy.
             </text>
         </panel>
       </panel>
+      <!-- Object tab -->
       <panel
          border="false"
          follows="all"
@@ -1269,7 +1284,7 @@ even though the user gets a free copy.
              top_pad="10"
              width="121">
                 Position (meters)
-            </text>
+            </text> 
             <spinner
              follows="left|top"
              height="19"
@@ -1282,7 +1297,7 @@ even though the user gets a free copy.
              max_val="512"
              min_val="-256"
              name="Pos X"
-             text_enabled_color="1 0 0.3 .7"
+             text_enabled_color="Red"
              top_pad="5"
              width="87" />
             <spinner
@@ -1311,7 +1326,7 @@ even though the user gets a free copy.
              left_delta="0"
              max_val="4096"
              name="Pos Z"
-             text_enabled_color="0 0.8 1 .65"
+             text_enabled_color="SL-MidBlue"
              top_pad="3"
              width="87" />
             <text
@@ -1338,7 +1353,7 @@ even though the user gets a free copy.
              max_val="10"
              min_val="0.01"
              name="Scale X"
-             text_enabled_color="1 1 1 1"
+             text_enabled_color="White"
              top_pad="5"
              width="87" />
             <spinner
@@ -1353,7 +1368,7 @@ even though the user gets a free copy.
              max_val="10"
              min_val="0.01"
              name="Scale Y"
-             text_enabled_color="1 1 1 1"
+             text_enabled_color="White"
              top_pad="3"
              width="87" />
             <spinner
@@ -1368,7 +1383,7 @@ even though the user gets a free copy.
              max_val="10"
              min_val="0.01"
              name="Scale Z"
-             text_enabled_color="1 1 1 1"
+             text_enabled_color="White"
              top_pad="3"
              width="87" />
             <text
@@ -1396,7 +1411,7 @@ even though the user gets a free copy.
              max_val="9999"
              min_val="-9999"
              name="Rot X"
-             text_enabled_color="1 1 1 1"
+             text_enabled_color="White"
              top_pad="5"
              width="87" />
             <spinner
@@ -1412,7 +1427,7 @@ even though the user gets a free copy.
              max_val="9999"
              min_val="-9999"
              name="Rot Y"
-             text_enabled_color="1 1 1 1"
+             text_enabled_color="White"
              top_pad="3"
              width="87" />
             <spinner
@@ -1428,7 +1443,7 @@ even though the user gets a free copy.
              max_val="9999"
              min_val="-9999"
              name="Rot Z"
-             text_enabled_color="1 1 1 1"
+             text_enabled_color="White"
              top_pad="3"
              width="87" />
 
@@ -2027,13 +2042,12 @@ even though the user gets a free copy.
              type="string"
              length="1"
              follows="left|top"
-             height="20"
+             height="10"
              layout="topleft"
              left="10"
              name="select_single"
              top="5"
-             width="252"
-             word_wrap="true">
+             width="252">
                 Select only one primitive to edit features.
             </text>
             <text
@@ -2055,7 +2069,7 @@ even though the user gets a free copy.
              left="10"
              name="Flexible1D Checkbox Ctrl"
              tool_tip="Allows object to flex about the Z axis (Client-side only)"
-             top_pad="20"
+             top_pad="10"
              width="121" />
             <spinner
              follows="left|top"
@@ -2176,8 +2190,8 @@ even though the user gets a free copy.
              width="60" />
             <color_swatch
              can_apply_immediately="true"
-             color="0.5 0.5 0.5 1"
-	     border.border_thickness="0"
+             color="SL-MidDkGray"
+	       border.border_thickness="0"
              follows="left|top"
              height="50"
              layout="topleft"
@@ -2276,7 +2290,7 @@ even though the user gets a free copy.
                    name="Light Ambiance"
                    width="120" />
         </panel>
-         <panel
+          <panel
          border="false"
          follows="all"
          height="367"
@@ -2710,7 +2724,7 @@ even though the user gets a free copy.
          layout="topleft"
          mouse_opaque="false"
          background_visible="true"
-         bg_alpha_color="DkGray"
+         bg_alpha_color="Black_10"
          name="Add_Media"
          left="0"
          height="47"
@@ -2980,4 +2994,5 @@ even though the user gets a free copy.
          top_pad="4"
          width="125" />
  </panel>
+<!-- end of tabs -->
 </floater>

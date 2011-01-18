@@ -372,7 +372,7 @@ with the same filename but different name
   <texture name="Play_Over" file_name="icons/Play_Over.png" preload="false" />
   <texture name="Play_Press" file_name="icons/Play_Press.png" preload="false" />
 
-  <texture name="ProgressBar" file_name="widgets/ProgressBar.png" preload="true" scale.left="4" scale.top="10" scale.right="48" scale.bottom="2" />
+  <texture name="ProgressBar" file_name="widgets/ProgressBar.png" preload="true" scale.left="4" scale.top="11" scale.right="48" scale.bottom="3" />
   <texture name="ProgressTrack" file_name="widgets/ProgressTrack.png" preload="true" scale.left="4" scale.top="13" scale.right="148" scale.bottom="2" />
 
   <texture name="PushButton_Disabled" file_name="widgets/PushButton_Disabled.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
@@ -679,6 +679,13 @@ with the same filename but different name
   <texture name="SpeakBtn_Right_Selected_Press" file_name="widgets/SpeakBtn_Right_Selected_Press.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
   <texture name="SpeakBtn_Right_Off" file_name="widgets/SpeakBtn_Right_Off.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
 
-
+  <texture name="StarLight_Move" file_name="bottomtray/starlight_move.png" preload="true" />
+  <texture name="StarLight_Snapshot" file_name="bottomtray/starlight_snapshot.png" preload="true" />
+  <texture name="StarLight_Camera" file_name="bottomtray/starlight_camera.png" preload="true" />
+  <texture name="StarLight_Map" file_name="bottomtray/starlight_map.png" preload="true" />
+  <texture name="StarLight_Minimap" file_name="bottomtray/starlight_minimap.png" preload="true" />
+  <texture name="StarLight_Search" file_name="bottomtray/starlight_search.png" preload="true" />
+  <texture name="StarLight_Build" file_name="bottomtray/starlight_build.png" preload="true" />
+  <texture name="StarLight_Gesture" file_name="bottomtray/starlight_gesture.png" preload="true" />
   
 </textures>

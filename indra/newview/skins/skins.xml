@@ -1,21 +1,5 @@
 <llsd>
     <array>
-        <map>
-        <key>name</key>
-            <string>Default</string>
-        <key>folder</key>
-            <string>default</string>
-        <key>themes</key>
-            <array>
-                <map>
-                <key>name</key>
-                    <string>AppalachianSky</string>
-                <key>folder</key>
-                    <string>default</string>
-                </map>
-            </array>
-        </map>
-
 	<map>
         <key>name</key>
             <string>Firestorm</string>
@@ -27,7 +11,7 @@
                 <key>name</key>
                     <string>Grey</string>
                 <key>folder</key>
-                    <string>greyt</string>
+                    <string>grey</string>
                 </map>
             </array>
         </map>
@@ -73,6 +57,19 @@
                 <key>folder</key>
                     <string>original_teal</string>
                 </map>
+                <map>
+                <key>name</key>
+                    <string>Silver Blue</string>
+                <key>folder</key>
+                    <string>silver_blue</string>
+                </map>
+                <map>
+                <key>name</key>
+                    <string>Silver Pink</string>
+                <key>folder</key>
+                    <string>silver_pink</string>
+                </map>
+
             </array>
         </map>
     </array>

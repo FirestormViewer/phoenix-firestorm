@@ -147,7 +147,8 @@
      pad_left="24"
      tool_tip="Return to Edit Outfit"
      top="3"
-     width="30" />
+     width="30"
+     use_draw_context_alpha="false" />
     <text
      follows="top|left|right"
      font="SansSerifHugeBold"
@@ -155,7 +156,7 @@
      layout="topleft"
      left_pad="8"
      name="edit_wearable_title"
-     text_color="white"
+     text_color="White"
      top="3"
      value="Editing Shape"
      use_ellipses="true"
@@ -181,7 +182,7 @@
          layout="topleft"
          left="10"
          name="description_text"
-         text_color="white"
+         text_color="White"
          top="10"
          value="Shape:"
          width="150" />
@@ -241,11 +242,11 @@
          height="23"
          layout="topleft"
          left="10"
-         max_length="63"
+         max_length_bytes="63"
          name="description"
          prevalidate_callback="ascii"
          select_on_focus="true"
-         text_color="black"
+         text_color="Black"
          top_pad="3"
          width="290" />
     </panel>
@@ -463,9 +464,10 @@
                  height="23"
                  label="Undo Changes"
                  layout="topleft"
-                 left_pad="7"
+                 left="1"
                  name="revert_button"
-                 width="152" />
+                 top="0"
+                 width="148" />
             </layout_panel>
         </layout_stack>
     </panel>

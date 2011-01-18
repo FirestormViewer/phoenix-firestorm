@@ -24,7 +24,8 @@
      left="10"
      tab_stop="false"
      top="2"
-     width="30" />
+     width="30"
+     use_draw_context_alpha="false" />
     <text
      follows="top|left|right"
      font="SansSerifHugeBold"
@@ -81,7 +82,7 @@
          top_pad="10"
          name="pick_name"
          read_only="true"
-         text_color="white"
+         text_color="White"
          v_pad="0"
          value="[name]"
          use_ellipses="true" />
@@ -112,7 +113,7 @@
          max_length="1023"
          name="pick_desc"
          read_only="true"
-         text_readonly_color="white"
+         text_readonly_color="White"
          value="[description]"
          wrap="true" />
     </panel>

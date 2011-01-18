@@ -68,7 +68,8 @@
      tool_tip="Back"
      tab_stop="false"
      top="4"
-     width="30" />
+     width="30"
+     use_draw_context_alpha="false" />
     <text
      follows="top|left|right"
      font="SansSerifHugeBold"
@@ -118,7 +119,7 @@
              layout="topleft"
              left="10"
              name="region_title"
-             text_color="white"
+             text_color="White"
              top_pad="10"
              use_ellipses="true"
              value="SampleRegion"
@@ -141,7 +142,9 @@
              name="description"
              top_pad="10"
              value="Du waltz die spritz"
-             width="280" />
+             width="280"
+             expanded_bg_visible="true"
+             expanded_bg_color="SL-Background_Light" />
             <icon
              follows="top|left"
              height="16"
@@ -184,7 +187,8 @@
                  left="70"
                  name="owner"
                  top_delta="0"
-                 width="200" />
+                 use_ellipses="true" 
+                 width="215" />
                 <text
                  follows="left|top"
                  height="15"
@@ -200,7 +204,8 @@
                  left="70"
                  name="creator"
                  top_delta="0"
-                 width="200" />
+                 use_ellipses="true" 
+                 width="215" />
                 <text
                  follows="left|top"
                  height="15"
@@ -241,7 +246,7 @@
                  layout="topleft"
                  left="0"
                  name="title_value"
-                 text_color="white"
+                 text_color="White"
                  top_pad="5"
                  use_ellipses="true"
                  width="290" /> 
@@ -250,10 +255,10 @@
                  height="22"
                  layout="topleft"
                  left="0"
-                 max_length="63"
+                 max_length_bytes="63"
                  name="title_editor"
                  prevalidate_callback="ascii"
-                 text_readonly_color="white"
+                 text_readonly_color="White"
                  top_delta="0"
                  width="290" />
                 <text

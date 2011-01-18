@@ -30,7 +30,7 @@ bg_opaque_color="SL-Background_66"
  <accordion
   fit_parent="true" 
   follows="all"
-  height="485"
+  height="483"
   layout="topleft"
   left="0"
   name="accordion"
@@ -39,7 +39,7 @@ bg_opaque_color="SL-Background_66"
   width="313">
     <accordion_tab
      layout="topleft"
-     height="235"
+     height="483"
      min_height="150"
      name="tab_picks"
      title="Picks"
@@ -56,7 +56,7 @@ bg_opaque_color="SL-Background_66"
     </accordion_tab>
     <accordion_tab
      layout="topleft"
-     height="235"
+     height="483"
      name="tab_classifieds"
      title="Classifieds"
      visible="false">
@@ -195,7 +195,7 @@ bg_opaque_color="SL-Background_66"
 		  name="buttons_cucks_ls"
 		  orientation="horizontal"
 		  top="0"
-		  width="313">
+		  width="309">
 		  	  
 		  <layout_panel
 			  follows="bottom|left|right"
@@ -258,7 +258,7 @@ bg_opaque_color="SL-Background_66"
 		         name="show_on_map_btn"
 		         tab_stop="false"
 		         tool_tip="Show the corresponding area on the World Map"
-		         width="88" />
+		         width="90" />
 		  </layout_panel>
 	</layout_stack>
 	</panel>

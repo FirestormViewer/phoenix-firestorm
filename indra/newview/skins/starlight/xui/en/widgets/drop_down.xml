@@ -15,6 +15,6 @@
                           image_disabled_selected="PushButton_Disabled_Selected"
                           image_overlay="Combobox_Over"
                           image_overlay_alignment="right" />
-  <drop_down.combo_list bg_writeable_color="white" />
+  <drop_down.combo_list bg_writeable_color="White" />
   <drop_down.combo_editor name="Combo Text Entry" visible="false" select_on_focus="true" />
 </drop_down>

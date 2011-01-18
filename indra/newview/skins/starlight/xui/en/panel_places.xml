@@ -54,7 +54,7 @@ background_visible="true"
      name="panel_place_profile"
      top="5"
      visible="false"
-     width="315" />
+     width="313" />
     <panel
      class="panel_landmark_info"
      filename="panel_landmark_info.xml"
@@ -66,14 +66,14 @@ background_visible="true"
      name="panel_landmark_info"
      top="5"
      visible="false"
-     width="315" />
+     width="313" />
     <panel
      follows="bottom|left|right"
      height="23"
      layout="topleft"
-     left="4"
+     left="2"
      name="button_panel"
-     width="315">
+     width="313">
      
        <layout_stack
      	follows="bottom|left|right"
@@ -81,10 +81,10 @@ background_visible="true"
 		layout="topleft"
 		mouse_opaque="false"
 		name="bottom_bar_ls0"
-		left="4"
+		left="1"
 		orientation="horizontal"
 		top="0"
-		width="315">	
+		width="311">	
 			<layout_panel
 			follows="bottom|left|right"
 			height="23"
@@ -94,7 +94,7 @@ background_visible="true"
 			name="lp1"
 		    user_resize="false" 
 		    auto_resize="true"
-			width="193">
+			width="200">
 			
 		<!--*********************** Teleport, Map buttons ***********************-->
      	
@@ -107,7 +107,7 @@ background_visible="true"
 				left="0"
 				orientation="horizontal"
 				top="0"
-				width="193">	
+				width="200">	
 					<layout_panel
 					follows="bottom|left|right"
 					height="23"
@@ -163,7 +163,7 @@ background_visible="true"
 			name="lp2"
 		    user_resize="false" 
 		    auto_resize="true"
-			width="116">
+			width="111">
 			
 		<!--*********************** Edit, Options buttons ***********************-->		
 		
@@ -176,7 +176,7 @@ background_visible="true"
 				left="0"
 				orientation="horizontal"
 				top="0"
-				width="120">
+				width="111">
 		
 					<layout_panel
 					follows="bottom|left|right"
@@ -211,7 +211,7 @@ background_visible="true"
 				      user_resize="false" 
 				      auto_resize="true"
 					width="24">
-						<button
+						<menu_button
 				         follows="bottom|left|right"
 				         height="23"
                                  image_overlay="OptionsMenu_Off"
@@ -236,7 +236,7 @@ background_visible="true"
 				left="0"
 				orientation="horizontal"
 				top="0"
-				width="118">		
+				width="111">		
 					<layout_panel
 					follows="bottom|left|right"
 					height="23"
@@ -246,7 +246,7 @@ background_visible="true"
 					name="profile_btn_lp"
 				    user_resize="false" 
 				    auto_resize="true"
-					width="111">
+					width="108">
 						<button
 				         follows="bottom|left|right"
 				         height="23"
@@ -257,7 +257,7 @@ background_visible="true"
 				         left="1"
 				         tool_tip="Show place profile"
 				         top="0"
-				         width="110" />		
+				         width="107" />		
 					</layout_panel>
 				</layout_stack>
 		

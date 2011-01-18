@@ -101,6 +101,9 @@
       <color
 	 name="SL-White"
 	 value="1 1 1 1" />
+      <color
+	 name="SL-Black"
+	 value="0 0 0 1" />
 	<color
 	 name="SL-Normal"
 	 value="0.25 0.100 0.225 1" />
@@ -301,9 +304,6 @@
      name="AlertTextColor"
      reference="SL-MidBlue" />
     <color
-     name="AvatarNameColor"
-     reference="SL-White" />
-    <color
      name="AvatarListItemIconDefaultColor"
      reference="SL-White" />
     <color
@@ -321,9 +321,6 @@
     <color
      name="AvatarListItemIconVoiceLeftColor"
      reference="AvatarListItemIconOfflineColor" />
-    <color
-     name="BackgroundChatColor"
-     reference="White" />
     <color
      name="ButtonBorderColor"
      reference="Unused?" />
@@ -504,7 +501,7 @@
      reference="LtGray" />
     <color
      name="FloaterDefaultBackgroundColor"
-     reference="DkGray_66" />
+     reference="SL-Background" />
 <!-- Changed Color -->
     <color
      name="FloaterFocusBackgroundColor"
@@ -567,9 +564,6 @@
     <color
      name="HighlightInspectColor"
      reference="Purple" />
-    <color
-     name="IMChatColor"
-     reference="LtGray" />
     <color
      name="IMHistoryBgColor"
      reference="Unused?" />
@@ -695,6 +689,29 @@
     <color
      name="MultiSliderTriangleColor"
      reference="Unused?" />
+  <!--
+    <color
+      name="NameTagBackground"
+      value="0.85 0.85 0.85 0.80" />
+      -->
+    <color
+      name="NameTagBackground"
+      value="0 0 0 1" />
+    <color
+     name="NameTagChat"
+     reference="EmphasisColor" />
+    <color
+     name="NameTagFriend"
+     value="0.447 0.784 0.663 1" />
+    <color
+     name="NameTagLegacy"
+     reference="SL-White" />
+    <color
+     name="NameTagMatch"
+     reference="SL-White" />
+    <color
+     name="NameTagMismatch"
+     reference="LtOrange" />
 <!-- Changed Color -->
     <color
      name="NetMapBackgroundColor"
@@ -711,6 +728,9 @@
     <color
      name="NotifyTextColor"
      reference="White" />
+    <color
+     name="ObjectBubbleColor"
+     reference="DkGray_66" />
     <color
      name="ObjectChatColor"
      reference="EmphasisColor" />
@@ -849,9 +869,6 @@
     <color
      name="SysWellItemSelected"
      reference="SL-Titanium" />
-    <color
-     name="ChatToastAgentNameColor"
-     reference="EmphasisColor" />
     <color
      name="ChatTimestampColor"
      reference="White" />

@@ -14,10 +14,11 @@
  tab_stop="false"
  width="1000">
   <icon
-   top="0" 
+    top="0" 
    scale_image="true"
    follows="left|right|top|bottom"
    height="44"
+   image_name="menu_bar.tga"
    left="0"
    width="1000" />
     <panel.string

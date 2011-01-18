@@ -56,7 +56,7 @@ bg_opaque_color="SL-Background_66"
      left="110"
      name="picture_name"
      parse_urls="false"
-     text_color="white"
+     text_color="White"
      top="9"
      use_ellipses="true"
      width="193"
@@ -72,8 +72,10 @@ bg_opaque_color="SL-Background_66"
      textbox.show_context_menu="false" 
      top_pad="0"
      width="178"
-     word_wrap="true" />
-         <button
+     word_wrap="true"
+     expanded_bg_visible="true"
+     expanded_bg_color="SL-Background_Light" />
+    <button
      follows="right"
      height="20"
      image_overlay="ForwardArrow_Off"

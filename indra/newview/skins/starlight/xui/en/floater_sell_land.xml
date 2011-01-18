@@ -75,7 +75,7 @@
      height="24"
      left="16"
      name="info_action"
-     text_color="white"
+     text_color="White"
      top="195"
      width="200">
         To sell this parcel:
@@ -164,7 +164,7 @@
      left_delta="0"
      name="sell_to_agent"
      top_pad="4"
-     width="130" />
+     width="170" />
     <button
      height="20"
      label="Select"

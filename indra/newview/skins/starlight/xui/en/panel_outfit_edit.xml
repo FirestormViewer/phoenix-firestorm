@@ -72,7 +72,8 @@
      left="5"
      tab_stop="false"
      top="1"
-     width="30" />
+     width="30"
+     use_draw_context_alpha="false" />
     <text
      follows="top|left|right"
      font="SansSerifHugeBold"
@@ -286,7 +287,7 @@ It is calculated as border_size + 2*UIResizeBarOverlap
 		             height="25"
 		             name="look_item_filter"
 		             search_button_visible="true"
-		             text_color="black"
+		             text_color="Black"
 		             visible="true"/>
                     
                 </layout_panel>
@@ -380,7 +381,7 @@ It is calculated as border_size + 2*UIResizeBarOverlap
      name="no_add_wearables_button_bar"
      top_pad="0"
      width="313">
-        <button
+        <menu_button
          follows="bottom|left"
          height="25"
          image_hover_unselected="Toolbar_Left_Over"
@@ -428,7 +429,7 @@ It is calculated as border_size + 2*UIResizeBarOverlap
      top_delta="0"
      visible="false"
      width="313">
-        <button
+        <menu_button
          follows="bottom|left"
          height="25"
          image_hover_unselected="Toolbar_Left_Over"

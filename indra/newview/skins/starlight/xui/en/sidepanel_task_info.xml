@@ -55,7 +55,7 @@
                 Mixed Sale
             </panel.string>
     <button
-     follows="top|right"
+     follows="top"
      height="24"
      image_hover_unselected="BackButton_Over"
      image_pressed="BackButton_Press"
@@ -65,7 +65,8 @@
      name="back_btn"
      tab_stop="false"
      top="0"
-     width="30" />
+     width="30"
+     use_draw_context_alpha="false" />
         <text
      follows="top|left|right"
      font="SansSerifHuge"
@@ -87,18 +88,29 @@
      text_color="LtGray_50"
      value="(Inworld)"
      width="150" />
+    <scroll_container
+     color="SL-Background_66"
+     follows="all"
+     layout="topleft"
+     left="9"
+     name="item_profile_scroll"
+     opaque="true"
+     height="490"
+     width="313"
+     top="45">
 	<panel
-         follows="all"
+         follows="left|top|right"
+         auto_resize="true"
          height="490"
          label=""
          layout="topleft"
-         left="10"
+         left="0"
          help_topic=""
          name="properties_panel"
-         top="45"
-         width="313"
-   background_visible="true"
-   bg_alpha_color="SL-Background">
+         top="0"
+         width="295"
+         background_visible="true"
+         bg_alpha_color="SL-Background">
 	    	    <text
 		     type="string"
 		     length="1"
@@ -118,10 +130,10 @@
 		     height="20"
 		     layout="topleft"
 	    	 left_delta="78"
-		     max_length="63"
+		     max_length_bytes="63"
              name="Object Name"
 	    	 top_delta="0"
-		     width="225" />
+		     width="210" />
 	    <text
 	    type="string"
 	    length="1"
@@ -143,9 +155,9 @@
              name="Object Description"
              select_on_focus="true"
     		 left_delta="78"
-		     max_length="127"
+		     max_length_bytes="127"
 	    	 top_delta="-5"
-	    	 width="225"/>
+	    	 width="210"/>
 	    <text
 		     type="string"
 		     length="1"
@@ -167,7 +179,8 @@
      left_pad="0"
              name="Creator Name"
 		     top_delta="0"
-		     width="140">
+         use_ellipses="true" 
+		     width="225">
 	        Erica Linden
 	     </text>
 	    <text
@@ -191,7 +204,8 @@
 			    left_pad="0"
 			    name="Owner Name"
 			    top_delta="0"
-			    width="140">
+          use_ellipses="true" 
+			    width="210">
 			    Erica Linden
 	     </text>
 	    	    <text
@@ -249,7 +263,7 @@
              top_pad="5"
              left="5"
              name="label click action"
-             width="280">
+             width="260">
                 Click to:
             </text>
             <combo_box
@@ -291,7 +305,7 @@
          left="0"
          top_pad="15"
          height="135"
-         width="313">
+         width="295">
 	  <text
              type="string"
              length="1"
@@ -314,7 +328,7 @@
 			 left="10"
                name="Anyone can:"
 			 top_pad="8"
-			 width="100">
+			 width="90">
 			Anyone:
 	    </text>
 	    <check_box
@@ -341,7 +355,7 @@
 			 left="10"
 			 name="GroupLabel"
 			 top_pad="8"
-			 width="100">
+			 width="90">
 			Group:
     	</text>
 			    <check_box
@@ -388,7 +402,7 @@
 			 left_pad="0"
              name="checkbox next owner can transfer"
 			 tool_tip="Next owner can give away or resell this object"
-			 width="106" />
+			 width="90" />
 	    </panel>
 	    <check_box
 			 height="23"
@@ -451,7 +465,7 @@
              left="10"
              name="B:"
              height="10"
-             width="50">
+             width="45">
                 B:
             </text>
             <text
@@ -463,7 +477,7 @@
              left_pad="0"
              name="O:"
              height="10"
-             width="50">
+             width="45">
                 O:
             </text>
             <text
@@ -475,7 +489,7 @@
              left_pad="0"
              name="G:"
              height="10"
-             width="50">
+             width="45">
                 G:
             </text>
             <text
@@ -487,7 +501,7 @@
              layout="topleft"
              name="E:"
              height="10"
-             width="50">
+             width="45">
                 E:
             </text>
             <text
@@ -499,7 +513,7 @@
              left_pad="0"
              name="N:"
              height="10"
-             width="50">
+             width="45">
                 N:
             </text>
             <text
@@ -511,54 +525,83 @@
              left_pad="0"
              name="F:"
              height="10"
-             width="50">
+             width="45">
                 F:
             </text>
 		</panel>
-    <panel
-		 height="25"
-		 layout="bottomright"
-		 name="button_panel"
-		 left="5"
-		 bottom="5"
-		 width="313">
-        <button
-		     follows="bottom|left"
+    </scroll_container>
+
+      <layout_stack
+		  follows="bottom|left|right"
+		  height="28"
+		  layout="topleft"
+		  left="5"
+		  name="buttons_ls"
+		  orientation="horizontal"
+		  botom="0"
+		  width="311">
+      <layout_panel
+	  follows="bottom|left"
+       auto_resize="false"
+       height="25"
+       layout="topleft"
+       name="open_btn_panel"
+       width="100">
+                <button
+		     follows="top|left|right"
 		     height="23"
 		     label="Open"
+             auto_resize="true"
 		     layout="topleft"
-		     left="5"
 		     name="open_btn"
-		     top="0"
 		     width="100" />
-	    <button
-		     follows="bottom|left"
+      </layout_panel>
+      <layout_panel
+	  follows="bottom|left"
+       auto_resize="false"
+       height="25"
+       layout="topleft"
+       name="pay_btn_panel"
+       width="100">
+	          <button
+		     follows="top|left|right"
 		     height="23"
 		     label="Pay"
 		     layout="topleft"
-		     left_pad="5"
 		     name="pay_btn"
-		     top="0"
 		     width="100" />
-	    <button
-		     follows="bottom|left"
+      </layout_panel>
+      <layout_panel
+	  follows="bottom|left"
+       auto_resize="false"
+       height="25"
+       layout="topleft"
+       name="buy_btn_panel"
+       width="100">
+	          <button
+		     follows="top|left|right"
 		     height="23"
 		     label="Buy"
 		     layout="topleft"
-		     left_pad="5"
 		     name="buy_btn"
-		     top="0"
 		     width="100" />
-        <button
-		     follows="bottom|left"
+      </layout_panel>
+      <layout_panel
+	  follows="bottom|left"
+       auto_resize="false"
+       height="25"
+       layout="topleft"
+       name="details_btn_panel"
+       width="100">
+                <button
+		     follows="top|left|right"
 		     height="23"
 		     label="Details"
 		     layout="topleft"
-		     left="5"
 		     name="details_btn"
-		     top="0"
 		     width="100"
 			 visible="false" />
 
-	</panel>
+	    </layout_panel>
+      </layout_stack>
 </panel>

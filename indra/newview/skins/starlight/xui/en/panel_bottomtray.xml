@@ -4,7 +4,7 @@
  bg_alpha_color="SL-Background_Light"
  bg_opaque_color="SL-Background_Light"
  chrome="true"
- follows="left|bottom|right"
+ follows="left|bottom|right" 
  height="33"
  layout="topleft"
  left="0"
@@ -38,7 +38,7 @@
      orientation="horizontal"
      top="0"
      width="1310">
-        <layout_panel
+      <layout_panel
          auto_resize="false"
          user_resize="false" 
          min_width="2"
@@ -140,25 +140,25 @@
          height="28"
          layout="topleft"
          min_height="28"
-         min_width="40"
+         min_width="52"
          mouse_opaque="false"
          name="movement_panel"
          user_resize="false"
-         width="39">
+         width="83">
             <bottomtray_button
              follows="left|right"
              height="23"
-             image_overlay="Move_Walk_Off"
              image_pressed="PushButton_Press"
              image_pressed_selected="PushButton_Selected_Press"
              image_selected="PushButton_Selected_Press"
              is_toggle="true"
+             label="Move"
              layout="topleft"
              name="movement_btn"
              tool_tip="Shows/hides movement controls"
              top="5"
              use_ellipses="true"
-             width="36">
+             width="80">
                 <init_callback
                  function="Button.SetDockableFloaterToggle"
                  parameter="moveview" />
@@ -170,26 +170,26 @@
          height="28"
          layout="topleft"
          min_height="28"
-         min_width="40"
+         min_width="52"
          mouse_opaque="false"
          name="cam_panel"
          user_resize="false"
-         width="39">
+         width="83">
             <bottomtray_button
              follows="left|right"
              height="23"
-             image_overlay="Cam_FreeCam_Off"
              image_pressed="PushButton_Press"
              image_pressed_selected="PushButton_Selected_Press"
              image_selected="PushButton_Selected_Press"
              is_toggle="true"
+             label="View"
              layout="topleft"
              left="0"
              name="camera_btn"
              tool_tip="Shows/hides camera controls"
              top="5"
              use_ellipses="true"
-             width="36">
+             width="80">
                 <init_callback
                  function="Button.SetDockableFloaterToggle"
                  parameter="camera" />
@@ -200,59 +200,30 @@
          follows="left|right"
          height="28"
          layout="topleft"
-         min_width="40"
-         mouse_opaque="false"
-         name="snapshot_panel"
-         user_resize="false"
-         width="39">
-            <bottomtray_button
-             follows="left|right"
-             height="23"
-             image_overlay="Snapshot_Off"
-             image_pressed="PushButton_Press"
-             image_pressed_selected="PushButton_Selected_Press"
-             image_selected="PushButton_Selected_Press"
-             is_toggle="true"
-             layout="topleft"
-             left="0"
-             name="snapshots"
-             tool_tip="Take snapshot"
-             top="5"
-             width="36">
-                <init_callback
-                 function="Button.SetFloaterToggle"
-                 parameter="snapshot" />
-            </bottomtray_button>
-        </layout_panel>
-        <layout_panel
-         auto_resize="false"
-         follows="left|right"
-         height="28"
-         layout="topleft"
          min_height="28"
-         min_width="40"
+         min_width="52"
          mouse_opaque="false"
          name="build_btn_panel"
          user_resize="false"
-         width="39">
+         width="83">
 <!--*FIX: Build Floater is not opened with default registration. Will be fixed soon.
 Disabled for now.
 -->
             <bottomtray_button
              follows="left|right"
              height="23"
-             image_overlay="Button_Build"
              image_pressed="PushButton_Press"
              image_pressed_selected="PushButton_Selected_Press"
              image_selected="PushButton_Selected_Press"
              is_toggle="true"
+             label="Build"
              layout="topleft"
              left="0"
              name="build_btn"
              tool_tip="Shows/hides Build Tools"
              top="5"
              use_ellipses="true"
-             width="36">
+             width="80">
                 <commit_callback
                  function="Build.Toggle"
                  parameter="build" />
@@ -264,26 +235,26 @@ Disabled for now.
          height="28"
          layout="topleft"
          min_height="28"
-         min_width="40"
+         min_width="52"
          mouse_opaque="false"
          name="search_btn_panel"
          user_resize="false"
-         width="39">
+         width="83">
             <bottomtray_button
              follows="left|right"
              height="23"
-             image_overlay="Button_Search"
              image_pressed="PushButton_Press"
              image_pressed_selected="PushButton_Selected_Press"
              image_selected="PushButton_Selected_Press"
              is_toggle="true"
+             label="Search"
              layout="topleft"
              left="0"
              name="search_btn"
              tool_tip="Shows/hides Search"
              top="5"
              use_ellipses="true"
-             width="36">
+             width="80">
                 <init_callback
                  function="Button.SetFloaterToggle"
                  parameter="search" />
@@ -395,6 +366,35 @@ Disabled for now.
          top="0"
          width="3"/>
         <layout_panel
+         auto_resize="false"
+         follows="left|right"
+         height="28"
+         layout="topleft"
+         min_width="40"
+         mouse_opaque="false"
+         name="snapshot_panel"
+         user_resize="false"
+         width="39">
+            <bottomtray_button
+             follows="left|right"
+             height="23"
+             image_overlay="Snapshot_Off"
+             image_pressed="PushButton_Press"
+             image_pressed_selected="PushButton_Selected_Press"
+             image_selected="PushButton_Selected_Press"
+             is_toggle="true"
+             layout="topleft"
+             left="0"
+             name="snapshots"
+             tool_tip="Take snapshot"
+             top="5"
+             width="36">
+                <init_callback
+                 function="Button.SetFloaterToggle"
+                 parameter="snapshot" />
+            </bottomtray_button>
+        </layout_panel>
+        <layout_panel
          follows="left|right"
          height="30"
          layout="topleft"
@@ -453,10 +453,11 @@ as for parent layout_panel (chiclet_list_panel) to resize bottom tray properly. 
                  width="7" />
             </chiclet_panel>
         </layout_panel>
-        <layout_panel auto_resize="false"
-                      user_resize="false" 
-                      width="4"
-                      min_width="4"/>
+        <layout_panel
+         auto_resize="false"
+         user_resize="false" 
+         width="4"
+         min_width="4"/>
         <layout_panel
          auto_resize="false"
          follows="right"
@@ -537,7 +538,7 @@ image_pressed_selected  "Lit" + "Selected" - there are new messages and the Well
                  image_pressed="WellButton_Lit"
                  image_pressed_selected="WellButton_Lit_Selected"
                  image_selected="PushButton_Press"
-                 label_color="Black"
+                 label_color="SL-Black"
                  left="0"
                  name="Unread"
                  tool_tip="Notifications"
