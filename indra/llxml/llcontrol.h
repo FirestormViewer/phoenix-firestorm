@@ -327,7 +327,7 @@ public:
 	{
 		if(!group.controlExists(name))
 		{
-			llerrs << "Control named " << name << "not found." << llendl;
+			llerrs << "Control named \"" << name << "\" not found." << llendl;
 		}
 
 		bindToControl(group, name);
