@@ -338,8 +338,7 @@ LLWindow* LLWindowManager::createWindow(
 	BOOL disable_vsync,
 	BOOL use_gl,
 	BOOL ignore_pixel_depth,
-	U32 fsaa_samples,
-	BOOL use_legacy_cursors)
+	U32 fsaa_samples)
 {
 	LLWindow* new_window;
 
@@ -352,15 +351,15 @@ LLWindow* LLWindowManager::createWindow(
 #elif LL_SDL
 		new_window = new LLWindowSDL(callbacks,
 			title, x, y, width, height, flags, 
-			fullscreen, clearBg, disable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, use_legacy_cursors);
+			fullscreen, clearBg, disable_vsync, use_gl, ignore_pixel_depth, fsaa_samples);
 #elif LL_WINDOWS
 		new_window = new LLWindowWin32(callbacks,
 			title, name, x, y, width, height, flags, 
-			fullscreen, clearBg, disable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, use_legacy_cursors);
+			fullscreen, clearBg, disable_vsync, use_gl, ignore_pixel_depth, fsaa_samples);
 #elif LL_DARWIN
 		new_window = new LLWindowMacOSX(callbacks,
 			title, name, x, y, width, height, flags, 
-			fullscreen, clearBg, disable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, use_legacy_cursors);
+			fullscreen, clearBg, disable_vsync, use_gl, ignore_pixel_depth, fsaa_samples);
 #endif
 	}
 	else

@@ -84,7 +84,7 @@
      follows="left|top"
      height="16"
      initial_value="true"
-     label="Use Legacy Cursors"
+     label="Use Viewer 1 style cursors"
      layout="topleft"
      left="30"
      top_pad="20"

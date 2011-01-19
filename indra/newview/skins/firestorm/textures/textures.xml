@@ -76,7 +76,7 @@
 	<texture name="Parcel_DamageNo_Dark"	file_name="icons/Parcel_DamageNo_Dark.png" />
 	<texture name="Parcel_Fly_Dark"			file_name="legacy/status_fly.png" />
 	<texture name="Parcel_FlyNo_Dark"		file_name="legacy/status_no_fly.tga" />
-	<texture name="Parcel_Health_Dark"		file_name="legacy/ status_health.tga" />
+	<texture name="Parcel_Health_Dark"		file_name="legacy/status_health.tga" />
 	<texture name="Parcel_Push_Dark"		file_name="legacy/status_push.png" />
 	<texture name="Parcel_PushNo_Dark"		file_name="legacy/status_no_push.tga" />
 	<texture name="Parcel_Scripts_Dark"		file_name="legacy/status_scripts.png" />

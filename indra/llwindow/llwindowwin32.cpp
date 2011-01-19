@@ -41,6 +41,7 @@
 #include "llgl.h"
 #include "llstring.h"
 #include "lldir.h"
+#include "../newview/llviewercontrol.h"
 
 // System includes
 #include <commdlg.h>
@@ -363,8 +364,7 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 							 BOOL fullscreen, BOOL clearBg,
 							 BOOL disable_vsync, BOOL use_gl,
 							 BOOL ignore_pixel_depth,
-							 U32 fsaa_samples,
-							 BOOL use_legacy_cursors)
+							 U32 fsaa_samples)
 	: LLWindow(callbacks, fullscreen, flags)
 {
 	mFSAASamples = fsaa_samples;
@@ -613,7 +613,7 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 	}
 	
 	//start with arrow cursor
-	initCursors(use_legacy_cursors);
+	initCursors();
 	setCursor( UI_CURSOR_ARROW );
 
 	// Initialize (boot strap) the Language text input management,
@@ -1505,7 +1505,7 @@ HCURSOR LLWindowWin32::loadColorCursor(LPCTSTR name)
 }
 
 
-void LLWindowWin32::initCursors(BOOL use_legacy_cursors)
+void LLWindowWin32::initCursors()
 {
 	mCursor[ UI_CURSOR_ARROW ]		= LoadCursor(NULL, IDC_ARROW);
 	mCursor[ UI_CURSOR_WAIT ]		= LoadCursor(NULL, IDC_WAIT);
@@ -1539,7 +1539,7 @@ void LLWindowWin32::initCursors(BOOL use_legacy_cursors)
 	mCursor[ UI_CURSOR_TOOLZOOMIN ] = LoadCursor(module, TEXT("TOOLZOOMIN"));
 	mCursor[ UI_CURSOR_TOOLPICKOBJECT3 ] = LoadCursor(module, TEXT("TOOLPICKOBJECT3"));
 	mCursor[ UI_CURSOR_PIPETTE ] = LoadCursor(module, TEXT("TOOLPIPETTE"));
-	if (use_legacy_cursors)
+	if (gSavedSettings.getBOOL("UseLegacyCursors"))
 	{
 		mCursor[ UI_CURSOR_TOOLSIT ]	= LoadCursor(module, TEXT("TOOLSIT-LEGACY"));
 		mCursor[ UI_CURSOR_TOOLBUY ]	= LoadCursor(module, TEXT("TOOLBUY-LEGACY"));
