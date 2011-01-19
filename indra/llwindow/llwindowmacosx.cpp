@@ -38,6 +38,7 @@
 #include "llstring.h"
 #include "lldir.h"
 #include "indra_constants.h"
+#include "../newview/llviewercontrol.h"
 
 #include <Carbon/Carbon.h>
 #include <OpenGL/OpenGL.h>
@@ -217,8 +218,7 @@ LLWindowMacOSX::LLWindowMacOSX(LLWindowCallbacks* callbacks,
 							   BOOL fullscreen, BOOL clearBg,
 							   BOOL disable_vsync, BOOL use_gl,
 							   BOOL ignore_pixel_depth,
-							   U32 fsaa_samples,
-							   BOOL use_legacy_cursors)
+							   U32 fsaa_samples)
 	: LLWindow(NULL, fullscreen, flags)
 {
 	// *HACK: During window construction we get lots of OS events for window
@@ -320,7 +320,7 @@ LLWindowMacOSX::LLWindowMacOSX(LLWindowCallbacks* callbacks,
 		}
 
 		//start with arrow cursor
-		initCursors(use_legacy_cursors);
+		initCursors();
 		setCursor( UI_CURSOR_ARROW );
 	}
 
@@ -2740,8 +2740,9 @@ OSStatus LLWindowMacOSX::eventHandler (EventHandlerCallRef myHandler, EventRef e
 	return result;
 }
 
-const char* cursorIDToName(int id, BOOL use_legacy_cursors)
+const char* cursorIDToName(int id)
 {
+	BOOL use_legacy_cursors = gSavedSettings.getBOOL("UseLegacyCursors");
 	switch (id)
 	{
 		case UI_CURSOR_ARROW:			return "UI_CURSOR_ARROW";
@@ -2776,7 +2777,7 @@ const char* cursorIDToName(int id, BOOL use_legacy_cursors)
 		case UI_CURSOR_TOOLPLAY:		return "UI_CURSOR_TOOLPLAY";
 		case UI_CURSOR_TOOLPAUSE:		return "UI_CURSOR_TOOLPAUSE";
 		case UI_CURSOR_TOOLMEDIAOPEN:	return "UI_CURSOR_TOOLMEDIAOPEN";
-		case UI_CURSOR_PIPETTE:			return "UI_CURSOR_PIPETTE";		
+		case UI_CURSOR_PIPETTE:			return "UI_CURSOR_PIPETTE";
 		case UI_CURSOR_TOOLSIT:			if (use_legacy_cursors) return "UI_CURSOR_TOOLSIT_LEGACY"; else return "UI_CURSOR_TOOLSIT";
 		case UI_CURSOR_TOOLBUY:			if (use_legacy_cursors) return "UI_CURSOR_TOOLBUY_LEGACY"; else return "UI_CURSOR_TOOLBUY";
 		case UI_CURSOR_TOOLOPEN:		if (use_legacy_cursors) return "UI_CURSOR_TOOLOPEN_LEGACY"; else return "UI_CURSOR_TOOLOPEN";
@@ -2791,14 +2792,14 @@ const char* cursorIDToName(int id, BOOL use_legacy_cursors)
 static CursorRef gCursors[UI_CURSOR_COUNT];
 
 
-static void initPixmapCursor(int cursorid, int hotspotX, int hotspotY, BOOL use_legacy_cursors = TRUE)
+static void initPixmapCursor(int cursorid, int hotspotX, int hotspotY)
 {
 	// cursors are in <Application Bundle>/Contents/Resources/cursors_mac/UI_CURSOR_FOO.tif
 	std::string fullpath = gDirUtilp->getAppRODataDir();
 	fullpath += gDirUtilp->getDirDelimiter();
 	fullpath += "cursors_mac";
 	fullpath += gDirUtilp->getDirDelimiter();
-	fullpath += cursorIDToName(cursorid, use_legacy_cursors);
+	fullpath += cursorIDToName(cursorid);
 	fullpath += ".tif";
 	
 	gCursors[cursorid] = createImageCursor(fullpath.c_str(), hotspotX, hotspotY);
@@ -2905,7 +2906,7 @@ ECursorType LLWindowMacOSX::getCursor() const
 	return mCurrentCursor;
 }
 
-void LLWindowMacOSX::initCursors(BOOL use_legacy_cursors)
+void LLWindowMacOSX::initCursors()
 {
 	initPixmapCursor(UI_CURSOR_NO, 8, 8);
 	initPixmapCursor(UI_CURSOR_WORKING, 1, 1);
@@ -2928,10 +2929,10 @@ void LLWindowMacOSX::initCursors(BOOL use_legacy_cursors)
 	initPixmapCursor(UI_CURSOR_TOOLPLAY, 1, 1);
 	initPixmapCursor(UI_CURSOR_TOOLPAUSE, 1, 1);
 	initPixmapCursor(UI_CURSOR_TOOLMEDIAOPEN, 1, 1);
-	initPixmapCursor(UI_CURSOR_TOOLSIT, 20, 15, use_legacy_cursors);
-	initPixmapCursor(UI_CURSOR_TOOLBUY, 20, 15, use_legacy_cursors);
-	initPixmapCursor(UI_CURSOR_TOOLOPEN, 20, 15, use_legacy_cursors);
-	initPixmapCursor(UI_CURSOR_TOOLPAY, 20, 15, use_legacy_cursors);
+	initPixmapCursor(UI_CURSOR_TOOLSIT, 20, 15);
+	initPixmapCursor(UI_CURSOR_TOOLBUY, 20, 15);
+	initPixmapCursor(UI_CURSOR_TOOLOPEN, 20, 15);
+	initPixmapCursor(UI_CURSOR_TOOLPAY, 20, 15);
 
 	initPixmapCursor(UI_CURSOR_SIZENWSE, 10, 10);
 	initPixmapCursor(UI_CURSOR_SIZENESW, 10, 10);
