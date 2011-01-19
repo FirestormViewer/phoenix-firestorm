@@ -34,7 +34,7 @@ Floater_NearbyChatEntry LGPL
 Persist_Minimized	LGPL
 FirestormGrey_skin	LGPL
 TopMenu_Navbar		LGPL
-Cmd_chatbar		LGPL
+Cmd_chatbar		BSD
 Menubar_location	LGPL
 No_Sidebar		LGPL
 Collapsable_Nearbychat	LGPL
