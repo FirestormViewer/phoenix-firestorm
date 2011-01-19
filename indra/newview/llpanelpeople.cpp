@@ -35,6 +35,9 @@
 #include "llfiltereditor.h"
 #include "lltabcontainer.h"
 #include "lluictrlfactory.h"
+#include "llmenubutton.h"
+#include "lltoggleablemenu.h"
+
 
 #include "llpanelpeople.h"
 
@@ -468,7 +471,12 @@ LLPanelPeople::LLPanelPeople()
 		mAllFriendList(NULL),
 		mNearbyList(NULL),
 		mRecentList(NULL),
-		mGroupList(NULL)
+		mGroupList(NULL),
+ 		mNearbyGearButton(NULL),
+ 		mFriendsGearButton(NULL),
+ 		mGroupsGearButton(NULL),
+ 		mRecentGearButton(NULL)
+
 {
 	mFriendListUpdater = new LLFriendListUpdater(boost::bind(&LLPanelPeople::updateFriendList,	this));
 	mNearbyListUpdater = new LLNearbyListUpdater(boost::bind(&LLPanelPeople::updateNearbyList,	this));
@@ -632,24 +640,40 @@ BOOL LLPanelPeople::postBuild()
 	enable_registrar.add("People.Recent.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onRecentViewSortMenuItemCheck,	this, _2));
 	enable_registrar.add("People.Nearby.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onNearbyViewSortMenuItemCheck,	this, _2));
 
+        mNearbyGearButton = getChild<LLMenuButton>("nearby_view_sort_btn");
+        mFriendsGearButton = getChild<LLMenuButton>("friends_viewsort_btn");
+        mGroupsGearButton = getChild<LLMenuButton>("groups_viewsort_btn");
+        mRecentGearButton = getChild<LLMenuButton>("recent_viewsort_btn");
+
 	LLMenuGL* plus_menu  = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_group_plus.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	mGroupPlusMenuHandle  = plus_menu->getHandle();
 
-	LLMenuGL* nearby_view_sort  = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_people_nearby_view_sort.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	LLToggleableMenu* nearby_view_sort  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_people_nearby_view_sort.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if(nearby_view_sort)
+	{
 		mNearbyViewSortMenuHandle  = nearby_view_sort->getHandle();
-
-	LLMenuGL* friend_view_sort  = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_people_friends_view_sort.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+		mNearbyGearButton->setMenu(nearby_view_sort);
+	}
+	LLToggleableMenu* friend_view_sort  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_people_friends_view_sort.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if(friend_view_sort)
+	{
 		mFriendsViewSortMenuHandle  = friend_view_sort->getHandle();
+		mFriendsGearButton->setMenu(friend_view_sort);
+	}
 
-	LLMenuGL* group_view_sort  = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_people_groups_view_sort.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	LLToggleableMenu* group_view_sort  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_people_groups_view_sort.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if(group_view_sort)
+	{
 		mGroupsViewSortMenuHandle  = group_view_sort->getHandle();
+		mGroupsGearButton->setMenu(group_view_sort);
+	}
 
-	LLMenuGL* recent_view_sort  = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_people_recent_view_sort.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	LLToggleableMenu* recent_view_sort  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_people_recent_view_sort.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if(recent_view_sort)
+	{
 		mRecentViewSortMenuHandle  = recent_view_sort->getHandle();
+		mRecentGearButton->setMenu(recent_view_sort);
+	}
 
 	LLVoiceClient::getInstance()->addObserver(this);
 

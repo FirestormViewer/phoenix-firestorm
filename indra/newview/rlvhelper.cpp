@@ -33,7 +33,7 @@
 // RlvCommmand
 //
 
-RlvCommand::RlvBhvrTable RlvCommand::m_BhvrMap;
+RlvCommand::bhvr_map_t RlvCommand::m_BhvrMap;
 
 // Checked: 2009-12-27 (RLVa-1.1.0k) | Modified: RLVa-1.1.0k
 RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
@@ -115,10 +115,29 @@ ERlvBehaviour RlvCommand::getBehaviourFromString(const std::string& strBhvr, boo
 		*pfStrict = fStrict;
 
 	RLV_ASSERT(m_BhvrMap.size() > 0);
-	RlvBhvrTable::const_iterator itBhvr = m_BhvrMap.find( (!fStrict) ? strBhvr : strBhvr.substr(0, idxStrict));
+	bhvr_map_t::const_iterator itBhvr = m_BhvrMap.find( (!fStrict) ? strBhvr : strBhvr.substr(0, idxStrict));
 	if ( (itBhvr != m_BhvrMap.end()) && ((!fStrict) || (hasStrictVariant(itBhvr->second))) )
 		return itBhvr->second;
 	return RLV_BHVR_UNKNOWN;
+}
+
+// Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+bool RlvCommand::getCommands(bhvr_map_t& cmdList, const std::string &strMatch)
+{
+	if (strMatch.empty())
+		return false;
+	cmdList.clear();
+
+	RLV_ASSERT(m_BhvrMap.size() > 0);
+	for (bhvr_map_t::const_iterator itBhvr = m_BhvrMap.begin(); itBhvr != m_BhvrMap.end(); ++itBhvr)
+	{
+		std::string strCmd = itBhvr->first; ERlvBehaviour eBhvr = itBhvr->second;
+		if (std::string::npos != strCmd.find(strMatch))
+			cmdList.insert(std::pair<std::string, ERlvBehaviour>(strCmd, eBhvr));
+		if ( (hasStrictVariant(eBhvr)) && (std::string::npos != strCmd.append("_sec").find(strMatch)) )
+			cmdList.insert(std::pair<std::string, ERlvBehaviour>(strCmd, eBhvr));
+	}
+	return (0 != cmdList.size());
 }
 
 // Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.1.0h
@@ -134,12 +153,13 @@ void RlvCommand::initLookupTable()
 				"redirchat", "rediremote", "chatwhisper", "chatnormal", "chatshout", "sendchannel", "sendim", "recvim", "permissive",
 				"notify", "showinv", "showminimap", "showworldmap", "showloc", "shownames", "showhovertext", "showhovertexthud",
 				"showhovertextworld", "showhovertextall", "tplm", "tploc", "tplure", "viewnote", "viewscript", "viewtexture", 
-				"acceptpermission", "accepttp", "allowidle", "edit", "rez", "fartouch", "interact", "touch", "touchattach", "touchhud", 
-				"touchworld", "fly", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv", "detachme", "attachover", "attachthis",
-				"attachthisover", "detachthis", "attachall", "attachallover", "detachall", "attachallthis", "attachallthisover",
-				"detachallthis", "tpto", "version", "versionnew", "versionnum", "getattach", "getattachnames", 	"getaddattachnames", 
-				"getremattachnames", "getoutfit", "getoutfitnames", "getaddoutfitnames", "getremoutfitnames", "findfolder", "findfolders", 
-				"getpath", "getpathnew", "getinv", "getinvworn", "getsitid", "getstatus", "getstatusall"
+				"acceptpermission", "accepttp", "allowidle", "displayname", "edit", "rez", "fartouch", "interact", "touch", "touchattach", 
+				"touchhud", "touchworld", "fly", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv", "detachme", "attachover", 
+				"attachthis", "attachthisover", "detachthis", "attachall", "attachallover", "detachall", "attachallthis", 
+				"attachallthisover", "detachallthis", "tpto", "version", "versionnew", "versionnum", "getattach", "getattachnames",
+				"getaddattachnames", "getremattachnames", "getoutfit", "getoutfitnames", "getaddoutfitnames", "getremoutfitnames", 
+				"findfolder", "findfolders", "getpath", "getpathnew", "getinv", "getinvworn", "getsitid", "getcommand", 
+				"getstatus", "getstatusall"
 			};
 
 		for (int idxBvhr = 0; idxBvhr < RLV_BHVR_COUNT; idxBvhr++)
@@ -214,8 +234,8 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd)
 // RlvObject
 //
 
-RlvObject::RlvObject(const LLUUID& idObj) : m_UUID(idObj), m_nLookupMisses(0)
-{ 
+RlvObject::RlvObject(const LLUUID& idObj) : m_idObj(idObj), m_nLookupMisses(0)
+{
 	LLViewerObject* pObj = gObjectList.findObject(idObj);
 	m_fLookup = (NULL != pObj);
 	m_idxAttachPt = (pObj) ? ATTACHMENT_ID_FROM_STATE(pObj->getState()) : 0;
@@ -453,9 +473,7 @@ bool RlvForceWear::isForceDetachable(const LLViewerObject* pAttachObj, bool fChe
 	    (pAttachObj) && (pAttachObj->isAttachment())
 		&& ( (idExcept.isNull()) ? (!gRlvAttachmentLocks.isLockedAttachment(pAttachObj))
 								 : (!gRlvAttachmentLocks.isLockedAttachmentExcept(pAttachObj, idExcept)) )
-		#ifdef RLV_EXTENSION_FLAG_NOSTRIP
 		&& (isStrippable(pAttachObj->getAttachmentItemID()))
-		#endif // RLV_EXTENSION_FLAG_NOSTRIP
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		&& ( (!fCheckComposite) || (!RlvSettings::getEnableComposites()) || 
 		     (!gRlvHandler.getCompositeInfo(pAttachPt->getItemID(), NULL, &pFolder)) || (gRlvHandler.canTakeOffComposite(pFolder)) )
@@ -528,9 +546,7 @@ bool RlvForceWear::isForceRemovable(const LLWearable* pWearable, bool fCheckComp
 		(pWearable) && (LLAssetType::AT_CLOTHING == pWearable->getAssetType()) 
 		&& ( (idExcept.isNull()) ? !gRlvWearableLocks.isLockedWearable(pWearable)
 		                         : !gRlvWearableLocks.isLockedWearableExcept(pWearable, idExcept) )
-		#ifdef RLV_EXTENSION_FLAG_NOSTRIP
 		&& (isStrippable(pWearable->getItemID()))
-		#endif // RLV_EXTENSION_FLAG_NOSTRIP
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		&& ( (!fCheckComposite) || (!RlvSettings::getEnableComposites()) || 
 		     (!gRlvHandler.getCompositeInfo(pWearable->getItemID(), NULL, &pFolder)) || (gRlvHandler.canTakeOffComposite(pFolder)) )
@@ -581,7 +597,6 @@ void RlvForceWear::forceRemove(LLWearableType::EType wtType)
 		forceRemove(gAgentWearables.getWearable(wtType, idxWearable));
 }
 
-#ifdef RLV_EXTENSION_FLAG_NOSTRIP
 // Checked: 2010-03-19 (RLVa-1.2.0c) | Modified: RLVa-1.2.0a
 bool RlvForceWear::isStrippable(const LLInventoryItem* pItem)
 {
@@ -614,7 +629,6 @@ bool RlvForceWear::isStrippable(const LLInventoryItem* pItem)
 	}
 	return true;
 }
-#endif // RLV_EXTENSION_FLAG_NOSTRIP
 
 // Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 void RlvForceWear::addAttachment(const LLViewerInventoryItem* pItem, EWearAction eAction)
@@ -838,8 +852,7 @@ void RlvForceWear::done()
 	if ( (!addBodyParts.empty()) || (!addClothing.empty()) || (!m_addGestures.empty()) )
 	{
 		LLInventoryModel::item_array_t addAttachments;
-		//AO: uncomment asap
-		//pAppearanceMgr->updateCOF(addBodyParts, addClothing, addAttachments, m_addGestures, true);
+		pAppearanceMgr->updateCOF(addBodyParts, addClothing, addAttachments, m_addGestures, true);
 
 		m_addGestures.clear();
 	}

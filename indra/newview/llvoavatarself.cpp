@@ -166,6 +166,10 @@ void LLVOAvatarSelf::initInstance()
 		mDebugBakedTextureTimes[i][1] = -1.0f;
 	}
 
+// [RLVa:KB] - Checked: 2010-12-12 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+ 	RlvAttachPtLookup::initLookupTable();
+// [/RLVa:KB]
+
 	status &= buildMenus();
 	if (!status)
 	{

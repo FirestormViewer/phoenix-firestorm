@@ -311,16 +311,16 @@ BOOL LLFloaterScriptSearch::handleKeyHere(KEY key, MASK mask)
 {
 	if (mEditorCore)
 	{
-		// return mEditorCore->handleKeyHere(key, mask);
-		// VWR-23608 Satomi Ahn
-                if ( KEY_RETURN == key )
-                {
-                        if (getChild<LLUICtrl>("search_text")->hasFocus()) handleBtnSearch();
-                        else if (getChild<LLUICtrl>("replace_text")->hasFocus()) handleBtnReplace();
-                        else return FALSE;
-                        return TRUE;
-                }
-                else return mEditorCore->handleKeyHere(key, mask);
+ 		// return mEditorCore->handleKeyHere(key, mask);
+ 		// VWR-23608 Satomi Ahn
+                 if ( KEY_RETURN == key )
+                 {
+                         if (getChild<LLUICtrl>("search_text")->hasFocus()) handleBtnSearch();
+                         else if (getChild<LLUICtrl>("replace_text")->hasFocus()) handleBtnReplace();
+                         else return FALSE;
+                         return TRUE;
+                 }
+                 else return mEditorCore->handleKeyHere(key, mask);
 	}
 
 	return FALSE;
@@ -1781,6 +1781,7 @@ void LLLiveLSLEditor::onRunningCheckboxClicked( LLUICtrl*, void* userdata )
 // [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
 		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
 		{
+			RlvUtil::notifyBlockedGeneric();
 			return;
 		}
 // [/RLVa:KB]
@@ -1813,6 +1814,7 @@ void LLLiveLSLEditor::onReset(void *userdata)
 // [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
 		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
 		{
+			RlvUtil::notifyBlockedGeneric();
 			return;
 		}
 // [/RLVa:KB]
@@ -1932,6 +1934,14 @@ void LLLiveLSLEditor::saveIfNeeded(bool sync)
 		LLNotificationsUtil::add("SaveScriptFailObjectNotFound");
 		return;
 	}
+
+// [RLVa:KB] - Checked: 2010-11-25 (RLVa-1.2.2b) | Modified: RLVa-1.2.2b
+	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+	{
+		RlvUtil::notifyBlockedGeneric();
+		return;
+	}
+// [/RLVa:KB]
 
 	// get the latest info about it. We used to be losing the script
 	// name on save, because the viewer object version of the item,
@@ -2281,14 +2291,6 @@ void LLLiveLSLEditor::onLoad(void* userdata)
 void LLLiveLSLEditor::onSave(void* userdata, BOOL close_after_save)
 {
 	LLLiveLSLEditor* self = (LLLiveLSLEditor*)userdata;
-
-// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
-	const LLViewerObject* pObject = gObjectList.findObject(self->mObjectUUID);
-	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(pObject->getRootEdit())) )
-	{
-		return;
-	}
-// [/RLVa:KB]
 
 	self->mCloseAfterSave = close_after_save;
 	self->saveIfNeeded();

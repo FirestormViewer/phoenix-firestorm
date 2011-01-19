@@ -55,9 +55,11 @@ public:
 	bool               isStrict() const			{ return m_fStrict; }
 	bool               isValid() const			{ return m_fValid; }
 
-	static ERlvBehaviour      getBehaviourFromString(const std::string& strBhvr, bool* pfStrict = NULL);
-	static const std::string& getStringFromBehaviour(ERlvBehaviour eBhvr);
-	static bool               hasStrictVariant(ERlvBehaviour eBhvr);
+	typedef std::map<std::string, ERlvBehaviour> bhvr_map_t;
+	static ERlvBehaviour		getBehaviourFromString(const std::string& strBhvr, bool* pfStrict = NULL);
+	static bool					getCommands(bhvr_map_t& cmdList, const std::string& strMatch);
+	static const std::string&	getStringFromBehaviour(ERlvBehaviour eBhvr);
+	static bool					hasStrictVariant(ERlvBehaviour eBhvr);
 
 	static void initLookupTable();
 protected:
@@ -82,8 +84,7 @@ protected:
 	std::string   m_strParam;
 	ERlvParamType m_eParamType;
 
-	typedef std::map<std::string, ERlvBehaviour> RlvBhvrTable;
-	static RlvBhvrTable m_BhvrMap;
+	static bhvr_map_t m_BhvrMap;
 
 	friend class RlvHandler;
 };
@@ -193,13 +194,15 @@ public:
 
 	const rlv_command_list_t* getCommandList() const { return &m_Commands; }
 
+	const LLUUID&		getObjectID() const	{ return m_idObj; }
+
 	/*
 	 * Member variables
 	 */
 protected:
-	LLUUID             m_UUID;				// The object's UUID
 	S32                m_idxAttachPt;		// The object's attachment point (or 0 if it's not an attachment)
-	LLUUID             m_idRoot;			// The UUID of the object's root (may or may not be different from m_UUID)
+	LLUUID             m_idObj;				// The object's UUID
+	LLUUID             m_idRoot;			// The UUID of the object's root (may or may not be different from m_idObj)
 	bool               m_fLookup;			// TRUE if the object existed in gObjectList at one point in time
 	S16                m_nLookupMisses;		// Count of unsuccessful lookups in gObjectList by the GC
 	rlv_command_list_t m_Commands;			// List of behaviours held by this object (in the order they were received)
@@ -390,6 +393,27 @@ public:
 	virtual BOOL tick();
 };
 
+class RlvCallbackTimerOnce : public LLEventTimer
+{
+public:
+	typedef boost::function<void ()> nullary_func_t;
+public:
+	RlvCallbackTimerOnce(F32 nPeriod, nullary_func_t cb) : LLEventTimer(nPeriod), m_Callback(cb) {}
+	/*virtual*/ BOOL tick()
+	{
+		m_Callback();
+		return TRUE;
+	}
+protected:
+	nullary_func_t m_Callback;
+};
+
+inline void rlvCallbackTimerOnce(F32 nPeriod, RlvCallbackTimerOnce::nullary_func_t cb)
+{
+	// Timer will automatically delete itself after the callback
+	new RlvCallbackTimerOnce(nPeriod, cb);
+}
+
 // ============================================================================
 // Various helper functions
 //
@@ -442,7 +466,7 @@ inline bool RlvCommand::hasStrictVariant(ERlvBehaviour eBhvr)
 // Checked: 2010-04-05 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
 inline bool RlvForceWear::isWearableItem(const LLInventoryItem* pItem)
 {
-	LLAssetType::EType assetType = pItem->getType();
+	LLAssetType::EType assetType = (pItem) ? pItem->getType() : LLAssetType::AT_NONE;
 	return 
 		(LLAssetType::AT_BODYPART == assetType) || (LLAssetType::AT_CLOTHING == assetType) ||
 		(LLAssetType::AT_OBJECT == assetType) || (LLAssetType::AT_GESTURE == assetType);

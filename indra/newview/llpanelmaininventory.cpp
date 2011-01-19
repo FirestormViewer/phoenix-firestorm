@@ -39,12 +39,14 @@
 #include "llinventorypanel.h"
 #include "llfiltereditor.h"
 #include "llfloaterreg.h"
+#include "llmenubutton.h"
 #include "lloutfitobserver.h"
 #include "llpreviewtexture.h"
 #include "llresmgr.h"
 #include "llscrollcontainer.h"
 #include "llsdserialize.h"
 #include "llspinctrl.h"
+#include "lltoggleablemenu.h"
 #include "lltooldraganddrop.h"
 #include "llviewermenu.h"
 #include "llviewertexturelist.h"
@@ -172,6 +174,7 @@ BOOL LLPanelMainInventory::postBuild()
 		worn_items_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, worn_items_panel, _1, _2));
 	}
 
+
 	// Now load the stored settings from disk, if available.
 	std::ostringstream filterSaveName;
 	filterSaveName << gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, FILTERS_FILENAME);
@@ -195,16 +198,15 @@ BOOL LLPanelMainInventory::postBuild()
 			}
 		}
 
-		if(worn_items_panel)
-		{
-			if(savedFilterState.has(worn_items_panel->getFilter()->getName()))
-			{
-				LLSD worn_items = savedFilterState.get(
-					worn_items_panel->getFilter()->getName());
-				worn_items_panel->getFilter()->fromLLSD(worn_items);
-			}
-		}
-
+               if(worn_items_panel)
+               {
+                       if(savedFilterState.has(worn_items_panel->getFilter()->getName()))
+                       {
+                               LLSD worn_items = savedFilterState.get(
+                                       worn_items_panel->getFilter()->getName());
+                               worn_items_panel->getFilter()->fromLLSD(worn_items);
+                       }
+               }
 	}
 
 	mFilterEditor = getChild<LLFilterEditor>("inventory search editor");
@@ -212,6 +214,8 @@ BOOL LLPanelMainInventory::postBuild()
 	{
 		mFilterEditor->setCommitCallback(boost::bind(&LLPanelMainInventory::onFilterEdit, this, _2));
 	}
+
+	mGearMenuButton = getChild<LLMenuButton>("options_gear_btn");
 
 	initListCommandsHandlers();
 
@@ -254,17 +258,18 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
 		}
 	}
 
-	LLInventoryPanel* worn_items_panel = getChild<LLInventoryPanel>("Worn Items");
-	if (worn_items_panel)
-	{
-		LLInventoryFilter* filter = recent_items_panel->getFilter();
-		if (filter)
-		{
-			LLSD filterState;
-			filter->toLLSD(filterState);
-			filterRoot[filter->getName()] = filterState;
-		}
-	}
+        LLInventoryPanel* worn_items_panel = getChild<LLInventoryPanel>("Worn Items");
+        if (worn_items_panel)
+        {
+                LLInventoryFilter* filter = recent_items_panel->getFilter();
+                if (filter)
+                {
+                        LLSD filterState;
+                        filter->toLLSD(filterState);
+                        filterRoot[filter->getName()] = filterState;
+                }
+        }
+
 
 	std::ostringstream filterSaveName;
 	filterSaveName << gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, FILTERS_FILENAME);
@@ -535,8 +540,8 @@ void LLPanelMainInventory::onFilterSelected()
 		return;
 	}
 
-	BOOL main_active = ("Recent Items" != mActivePanel->getName()) && ("Worn Items" != mActivePanel->getName());
-	getChildView("add_btn_panel")->setVisible( main_active);
+        BOOL main_active = ("Recent Items" != mActivePanel->getName()) && ("Worn Items" != mActivePanel->getName());
+        getChildView("add_btn_panel")->setVisible( main_active);
 
 	setFilterSubString(mFilterSubString);
 	LLInventoryFilter* filter = mActivePanel->getFilter();
@@ -944,7 +949,6 @@ void LLFloaterInventoryFinder::selectNoTypes(void* user_data)
 
 void LLPanelMainInventory::initListCommandsHandlers()
 {
-	childSetAction("options_gear_btn", boost::bind(&LLPanelMainInventory::onGearButtonClick, this));
 	childSetAction("trash_btn", boost::bind(&LLPanelMainInventory::onTrashButtonClick, this));
 	childSetAction("add_btn", boost::bind(&LLPanelMainInventory::onAddButtonClick, this));
 
@@ -958,7 +962,8 @@ void LLPanelMainInventory::initListCommandsHandlers()
 	mCommitCallbackRegistrar.add("Inventory.GearDefault.Custom.Action", boost::bind(&LLPanelMainInventory::onCustomAction, this, _2));
 	mEnableCallbackRegistrar.add("Inventory.GearDefault.Check", boost::bind(&LLPanelMainInventory::isActionChecked, this, _2));
 	mEnableCallbackRegistrar.add("Inventory.GearDefault.Enable", boost::bind(&LLPanelMainInventory::isActionEnabled, this, _2));
-	mMenuGearDefault = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_inventory_gear_default.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	mMenuGearDefault = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_inventory_gear_default.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	mGearMenuButton->setMenu(mMenuGearDefault);
 	mMenuAdd = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_inventory_add.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 
 	// Update the trash button when selected item(s) get worn or taken off.
@@ -970,11 +975,6 @@ void LLPanelMainInventory::updateListCommands()
 	bool trash_enabled = isActionEnabled("delete");
 
 	mTrashButton->setEnabled(trash_enabled);
-}
-
-void LLPanelMainInventory::onGearButtonClick()
-{
-	showActionMenu(mMenuGearDefault,"options_gear_btn");
 }
 
 void LLPanelMainInventory::onAddButtonClick()
@@ -1046,14 +1046,10 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 		const LLSD arg = "date";
 		setSortBy(arg);
 	}
-	if (command_name == "sort_system_top")
+	if (command_name == "sort_system_folders_to_top")
 	{
 		const LLSD arg = "systemfolderstotop";
 		setSortBy(arg);
-	}
-	if (command_name == "sort_system_normal")
-	{
-		setSortBy("foldersalwaysbyname");
 	}
 	if (command_name == "show_filters")
 	{

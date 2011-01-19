@@ -51,6 +51,8 @@ public:
 									online_style,
 									offline_style;
 
+		Optional<S32>				name_right_pad;
+
 		Params();
 	};
 
@@ -98,7 +100,7 @@ public:
 	void setShowProfileBtn(bool show);
 	void setShowInfoBtn(bool show);
 	void showSpeakingIndicator(bool show);
-	void setShowPermissions(bool show) { mShowPermissions = show; showPermissions(show); };
+	void setShowPermissions(bool show) { mShowPermissions = show; };
 	void showLastInteractionTime(bool show);
 	void setAvatarIconVisible(bool visible);
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
@@ -221,7 +223,7 @@ private:
 
 	static bool	sStaticInitialized; // this variable is introduced to improve code readability
 	static S32  sLeftPadding; // padding to first left visible child (icon or name)
-	static S32  sRightNamePadding; // right padding from name to next visible child
+	static S32  sNameRightPadding; // right padding from name to next visible child
 
 	/**
 	 * Contains widths of each child specified by EAvatarListItemChildIndex
