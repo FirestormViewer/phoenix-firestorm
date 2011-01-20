@@ -391,6 +391,14 @@ with the same filename but different name
   <texture name="Pause_Over" file_name="icons/Pause_Over.png" preload="false" />
   <texture name="Pause_Press" file_name="icons/Pause_Press.png" preload="false" />
 
+	<texture name="Contacts_Online_Status_Button"			file_name="legacy/ff_online_status_button.tga" />
+	<texture name="Permission_Visible_Online_Mine_Button"	file_name="legacy/ff_visible_online_button.tga" />
+	<texture name="Permission_Visible_Online_Theirs_Button"	file_name="legacy/ff_visible_online_button_theirs.tga" />
+	<texture name="Permission_Visible_Map_Mine_Button"		file_name="legacy/ff_visible_map_button.tga" />
+	<texture name="Permission_Visible_Map_Theirs_Button"	file_name="legacy/ff_visible_map_button_theirs.tga" />
+	<texture name="Permission_Edit_Objects_Mine_Button"		file_name="legacy/ff_edit_mine_button.tga" />
+	<texture name="Permission_Edit_Objects_Theirs_Button"	file_name="legacy/ff_edit_theirs_button.tga" />
+
   <texture name="Permission_Visible_Online" file_name="icons/see_me_online.png" preload="false" />
   <texture name="Permission_Visible_Map" file_name="icons/see_on_map.png" preload="false" />
   <texture name="Permission_Edit_Objects_Mine" file_name="icons/edit_mine.png" preload="false" />
