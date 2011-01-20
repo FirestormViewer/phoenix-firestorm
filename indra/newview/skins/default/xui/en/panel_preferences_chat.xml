@@ -80,7 +80,7 @@
      <check_box
      control_name="ShowChatMiniIcons"
      height="16"
-     initial_value="true"
+     initial_value="false"
      label="Show avatar icons within chat history"
      layout="topleft"
      left="30"
@@ -97,7 +97,7 @@
      top_pad="5"
      width="400" />
     <check_box
-     enabled="false"
+     enabled="true"
      height="16"
      label="Enable plain text IM and chat history"
      layout="topleft"
