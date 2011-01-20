@@ -44,19 +44,19 @@
     </floater.string>
     <panel
      border="false"
-     height="123"
+     height="101"
      layout="topleft"
      left="0"
      top="0"
      mouse_opaque="false"
      name="controls"
-     width="180">
+     width="170">
        <panel
          color="Transparent"
          follows="all"
          height="100"
          layout="topleft"
-         left="10"
+         left="5"
          name="preset_views_list"
          opaque="true"
          top="15"
@@ -120,11 +120,11 @@
           height="68"
           item_pad="4"
           layout="topleft"
-          left="10"
+          left="5"
           name="camera_modes_list"
           opaque="true"
           top="20"
-          width="180"
+          width="170"
           visible="false">
         <panel_camera_item
           name="object_view">
@@ -247,7 +247,7 @@
      height="69"
      layout="topleft"
      left="186"
-     top="28"
+     top="20"
      top_pad="0"
      name="buttons"
      width="25">
@@ -269,7 +269,7 @@
          height="23"
          label=""
          layout="topleft"
-         top_pad="1"
+         top_pad="5"
          is_toggle="true"
          image_overlay="PanOrbit_Off"
          image_selected="PushButton_Selected_Press"
@@ -282,7 +282,7 @@
          height="23"
          label=""
          layout="topleft"
-         top_pad="1"
+         top_pad="5"
          image_overlay="Cam_FreeCam_Off"
          image_selected="PushButton_Selected_Press"
          name="avatarview_btn"
