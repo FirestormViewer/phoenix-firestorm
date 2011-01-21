@@ -31,6 +31,7 @@
 #include "llagent.h"
 #include "llagentui.h"
 #include "llclipboard.h"
+#include "llfloaterreg.h"
 #include "lllandmarkactions.h"
 #include "lllocationinputctrl.h"
 #include "llnotificationsutil.h"
@@ -439,5 +440,6 @@ void LLPanelTopInfoBar::onContextMenuItemClicked(const LLSD::String& item)
 
 void LLPanelTopInfoBar::onInfoButtonClicked()
 {
-	LLSideTray::getInstance()->showPanel("panel_places", LLSD().with("type", "agent"));
+	//LLSideTray::getInstance()->showPanel("panel_places", LLSD().with("type", "agent"));
+	LLFloaterReg::showInstance("about_land");
 }

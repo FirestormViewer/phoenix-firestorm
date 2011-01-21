@@ -146,13 +146,13 @@ protected:
 	LLWindowSDL(LLWindowCallbacks* callbacks,
 		const std::string& title, int x, int y, int width, int height, U32 flags,
 		BOOL fullscreen, BOOL clearBg, BOOL disable_vsync, BOOL use_gl,
-		BOOL ignore_pixel_depth, U32 fsaa_samples, BOOL use_legacy_cursors);
+		BOOL ignore_pixel_depth, U32 fsaa_samples);
 	~LLWindowSDL();
 
 	/*virtual*/ BOOL	isValid();
 	/*virtual*/ LLSD    getNativeKeyData();
 
-	void	initCursors(BOOL use_legacy_cursors = TRUE);
+	void	initCursors();
 	void	quitCursors();
 	void	moveWindow(const LLCoordScreen& position,const LLCoordScreen& size);
 

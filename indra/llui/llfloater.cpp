@@ -1892,6 +1892,8 @@ void LLFloater::updateTitleButtons()
 				enabled = false;
 			}
 		}
+		
+#if 0		//KC: don't do this, see below
 		if (i == BUTTON_CLOSE && mButtonScale != 1.f)
 		{
 			//*HACK: always render close button for hosted floaters so
@@ -1899,10 +1901,14 @@ void LLFloater::updateTitleButtons()
 			//closing multiple windows in the chatterbox
 			enabled = true;
 		}
+#endif
 
 		mButtons[i]->setEnabled(enabled);
 
-		if (enabled)
+		if (enabled
+		//KC: don't explictly force enable close button on
+		//hosted floaters instead drawing a disabled one
+		|| (i == BUTTON_CLOSE && mButtonScale != 1.f))
 		{
 			button_count++;
 
