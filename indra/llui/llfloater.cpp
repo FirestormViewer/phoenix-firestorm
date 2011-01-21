@@ -1055,6 +1055,13 @@ void LLFloater::setMinimized(BOOL minimize)
 
 	if (minimize)
 	{
+		// AO Pseudo-hide minimized sidebar floaters. We get into trouble if they are actually not-visible,
+		// so fake invisibility with offscreen location.
+		bool isSideTrayTab = false;
+		LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", getName());
+		if (LLFloater::isShown(floater_tab))  
+			isSideTrayTab = true;
+		
 		// minimized flag should be turned on before release focus
 		mMinimized = TRUE;
 
@@ -1070,8 +1077,16 @@ void LLFloater::setMinimized(BOOL minimize)
 		else
 		{
 			S32 left, bottom;
-			gFloaterView->getMinimizePosition(&left, &bottom);
-			setOrigin( left, bottom );
+			
+			if (isSideTrayTab)
+			{
+				setOrigin( -9999, -9999 );
+			}
+			else 
+			{
+				gFloaterView->getMinimizePosition(&left, &bottom);
+				setOrigin( left, bottom );
+			}
 		}
 
 		if (mButtonsEnabled[BUTTON_MINIMIZE])
@@ -1120,7 +1135,11 @@ void LLFloater::setMinimized(BOOL minimize)
 		}
 		
 		// Reshape *after* setting mMinimized
-		reshape( minimized_width, floater_header_size, TRUE);
+		if (isSideTrayTab)
+			reshape( 0, 0, TRUE);
+		else 
+			reshape( minimized_width, floater_header_size, TRUE);
+
 	}
 	else
 	{
@@ -2413,7 +2432,6 @@ void LLFloaterView::getMinimizePosition(S32 *left, S32 *bottom)
 		col < snap_rect_local.getWidth() - minimized_width;
 		col += minimized_width)
 	{	
-		
 		// AO: offset minimized windows to not obscure title bars. Yes, this is a quick and dirty hack.
 		int offset = 0;
 		//LLFavoritesBarCtrl* fb = getChild<LLFavoritesBarCtrl>("favorite");
@@ -2421,9 +2439,9 @@ void LLFloaterView::getMinimizePosition(S32 *left, S32 *bottom)
 		bool nbVisible = gSavedSettings.getBOOL("ShowNavbarNavigationPanel");
 		// TODO: Make this introspect controls to get the dynamic size.
 		if (fbVisible)
-			offset += 15;
+			offset += 20;
 		if (nbVisible)
-			offset += 35;
+			offset += 30;
 		
 		for(S32 row = snap_rect_local.mTop - (floater_header_size + offset);
 		row > floater_header_size;
@@ -2437,7 +2455,7 @@ void LLFloaterView::getMinimizePosition(S32 *left, S32 *bottom)
 			{
 				// Examine minimized children.
 				LLFloater* floater = (LLFloater*)((LLView*)*child_it);
-				if(floater->isMinimized()) 
+				if(floater->isMinimized() && (LLFloaterReg::getInstance("side_bar_tab", floater->getName()) != floater)) 
 				{
 					LLRect r = floater->getRect();
 					if((r.mBottom < (row + floater_header_size))
