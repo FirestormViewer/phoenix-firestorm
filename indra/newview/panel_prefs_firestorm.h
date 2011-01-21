@@ -19,5 +19,6 @@ protected:
 	LLLineEditor* m_tp2LineEditor;
 	LLLineEditor* m_clearchatLineEditor;
 	LLLineEditor* m_musicLineEditor;
+	LLLineEditor* m_aoLineEditor;
 };
 #endif
