@@ -36,6 +36,7 @@
 #include "lltransientfloatermgr.h"
 
 #include "llnearbychat.h"
+#include "fscontactsfloater.h"
 #include "llfloater.h"
 
 //
@@ -55,6 +56,9 @@ LLIMFloaterContainer::~LLIMFloaterContainer()
 
 BOOL LLIMFloaterContainer::postBuild()
 {
+	
+	addFloater(LLFloaterContacts::getInstance(), TRUE);
+
 	LLIMModel::instance().mNewMsgSignal.connect(boost::bind(&LLIMFloaterContainer::onNewMessageReceived, this, _1));
 	// Do not call base postBuild to not connect to mCloseSignal to not close all floaters via Close button
 	// mTabContainer will be initialized in LLMultiFloater::addChild()
@@ -98,6 +102,19 @@ void LLIMFloaterContainer::addFloater(LLFloater* floaterp,
 	if (floaterp->getHost() == this)
 	{
 		openFloater(floaterp->getKey());
+		return;
+	}
+	
+	if (floaterp->getName() == "imcontacts")
+	{
+		S32 num_locked_tabs = mTabContainer->getNumLockedTabs();
+		mTabContainer->unlockTabs();
+		// add contacts window as first tab
+		LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
+		// make sure first two tabs are now locked
+		mTabContainer->lockTabs(num_locked_tabs + 1);
+		//gSavedSettings.setBOOL("ContactsTornOff", FALSE);
+		floaterp->setCanClose(FALSE);
 		return;
 	}
 
