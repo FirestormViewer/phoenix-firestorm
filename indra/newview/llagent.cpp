@@ -110,6 +110,7 @@ LLAgent gAgent;
 //
 
 const F32 LLAgent::TYPING_TIMEOUT_SECS = 5.f;
+BOOL LLAgent::ignorePrejump = 0;
 
 std::map<std::string, std::string> LLAgent::sTeleportErrorMessages;
 std::map<std::string, std::string> LLAgent::sTeleportProgressMessages;
@@ -236,6 +237,11 @@ LLAgent::LLAgent() :
 	mMoveTimer.stop();
 }
 
+void LLAgent::updateIgnorePrejump(const LLSD &data)
+{
+	ignorePrejump = data.asBoolean();
+}
+
 // Requires gSavedSettings to be initialized.
 //-----------------------------------------------------------------------------
 // init()
@@ -255,6 +261,8 @@ void LLAgent::init()
 
 	gSavedSettings.getControl("PreferredMaturity")->getValidateSignal()->connect(boost::bind(&LLAgent::validateMaturity, this, _2));
 	gSavedSettings.getControl("PreferredMaturity")->getSignal()->connect(boost::bind(&LLAgent::handleMaturity, this, _2));
+	ignorePrejump = gSavedSettings.getBOOL("PhoenixIgnoreFinishAnimation");
+	gSavedSettings.getControl("PhoenixIgnoreFinishAnimation")->getSignal()->connect(boost::bind(&LLAgent::updateIgnorePrejump, this, _2));
 	
 	mInitialized = TRUE;
 }
@@ -1072,7 +1080,11 @@ LLQuaternion LLAgent::getQuat() const
 //-----------------------------------------------------------------------------
 U32 LLAgent::getControlFlags()
 {
-	return mControlFlags;
+	//return mControlFlags;
+	if(LLAgent::ignorePrejump)
+		return mControlFlags | AGENT_CONTROL_FINISH_ANIM;
+	else
+		return mControlFlags;
 }
 
 //-----------------------------------------------------------------------------

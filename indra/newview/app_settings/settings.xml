@@ -116,7 +116,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
 
     <key>RestrainedLove</key>
@@ -12936,6 +12936,17 @@
 		<map>
 			<key>Comment</key>
 			<string>Allow all land for Phoenix WL sharing</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
+		</map>
+		<key>PhoenixIgnoreFinishAnimation</key>
+		<map>
+			<key>Comment</key>
+			<string>Disable the wait for pre-jump or landing. Credit to Zwagoth Klaar for coding this.</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
