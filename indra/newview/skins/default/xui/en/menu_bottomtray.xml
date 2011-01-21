@@ -107,6 +107,28 @@
          function="CheckControl"
          parameter="ShowHomeButton" />
     </menu_item_check>
+    <menu_item_check
+     label="Profile Button"
+     layout="topleft"
+     name="ShowMeButton">
+        <menu_item_check.on_click
+         function="ToggleControl"
+         parameter="ShowMeButton" />
+        <menu_item_check.on_check
+         function="CheckControl"
+         parameter="ShowMeButton" />
+    </menu_item_check>
+    <menu_item_check
+     label="Places Button"
+     layout="topleft"
+     name="ShowPlacesButton">
+        <menu_item_check.on_click
+         function="ToggleControl"
+         parameter="ShowPlacesButton" />
+        <menu_item_check.on_check
+         function="CheckControl"
+         parameter="ShowPlacesButton" />
+    </menu_item_check>
     <menu_item_separator
      name="Separator" />
     <menu_item_call

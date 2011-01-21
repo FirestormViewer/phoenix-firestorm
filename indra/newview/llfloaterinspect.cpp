@@ -234,13 +234,13 @@ void LLFloaterInspect::refresh()
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 		const LLUUID& idOwner = obj->mPermissions->getOwner();
 		LLAvatarNameCache::get(idOwner, &av_name);
-		bool fRlvFilterOwner = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsDummy) && (idOwner != gAgent.getID()) && 
+		bool fRlvFilterOwner = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idOwner != gAgent.getID()) && 
 			(!obj->mPermissions->isGroupOwned());
 		owner_name = (!fRlvFilterOwner) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
 
 		const LLUUID& idCreator = obj->mPermissions->getCreator();
 		LLAvatarNameCache::get(idCreator, &av_name);
-		bool fRlvFilterCreator = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsDummy) && (idCreator != gAgent.getID()) && 
+		bool fRlvFilterCreator = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idCreator != gAgent.getID()) && 
 			( (obj->mPermissions->getOwner() == idCreator) || (RlvUtil::isNearbyAgent(idCreator)) );
 		creator_name = (!fRlvFilterCreator) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
 // [/RLVa:KB]

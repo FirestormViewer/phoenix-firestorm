@@ -153,11 +153,13 @@ void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( true);
 	
+	llinfos << "ENTERING AVLIST ITEM Parent= " << getParent()->getName() << llendl;
+	
 //	mInfoBtn->setVisible(mShowInfoBtn);
 //	mProfileBtn->setVisible(mShowProfileBtn);
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	// AO - V1 UI, icon space is at a premium. Remove the hover-context icons, use right-click context menu instead.
-	//mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
 	//mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
 // [/RLVa:KB]
 

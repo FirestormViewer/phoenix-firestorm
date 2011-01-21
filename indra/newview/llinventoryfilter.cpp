@@ -409,16 +409,20 @@ void LLInventoryFilter::setFilterSubString(const std::string& string)
 {
 	if (mFilterSubString != string)
 	{
+		std::string filterSubStringNew = string;
+		LLStringUtil::trimHead(filterSubStringNew);
+		mFilterSubStringOrig = filterSubStringNew;
+		LLStringUtil::toUpper(filterSubStringNew);
+
 		// hitting BACKSPACE, for example
-		const BOOL less_restrictive = mFilterSubString.size() >= string.size() && !mFilterSubString.substr(0, string.size()).compare(string);
+		const BOOL less_restrictive = mFilterSubString.size() >= filterSubStringNew.size()
+		&& !mFilterSubString.substr(0, filterSubStringNew.size()).compare(filterSubStringNew);
 
 		// appending new characters
-		const BOOL more_restrictive = mFilterSubString.size() < string.size() && !string.substr(0, mFilterSubString.size()).compare(mFilterSubString);
+		const BOOL more_restrictive = mFilterSubString.size() < filterSubStringNew.size()
+		&& !filterSubStringNew.substr(0, mFilterSubString.size()).compare(mFilterSubString);
 
-		mFilterSubStringOrig = string;
-		LLStringUtil::trimHead(mFilterSubStringOrig);
-		mFilterSubString = mFilterSubStringOrig;
-		LLStringUtil::toUpper(mFilterSubString);
+		mFilterSubString = filterSubStringNew;
 		if (less_restrictive)
 		{
 			setModified(FILTER_LESS_RESTRICTIVE);
