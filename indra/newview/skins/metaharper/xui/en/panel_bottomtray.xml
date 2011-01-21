@@ -220,7 +220,7 @@
          min_height="28"
          min_width="40"
          mouse_opaque="false"
-         name="bottom_sbhome"
+         name="bottom_sbplaces"
          user_resize="false"
          width="40">
             <bottomtray_button
@@ -250,7 +250,7 @@
          min_height="28"
          min_width="40"
          mouse_opaque="false"
-         name="bottom_sbhome"
+         name="bottom_sbappearance"
          user_resize="false"
          width="40">
             <bottomtray_button

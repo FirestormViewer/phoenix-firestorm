@@ -154,7 +154,7 @@ private:
 		, RS_BUTTON_SEARCH		= 0x0400
 		, RS_BUTTON_WORLD_MAP	= 0x0800
 		, RS_BUTTON_MINI_MAP	= 0x1000
-		, RS_BUTTON_HOME		= 0x0000
+		, RS_BUTTON_HOME		= 0x2000
 
 		/*
 		Once new button that can be hidden on resize is added don't forget to update related places:
