@@ -153,8 +153,9 @@ void RlvCommand::initLookupTable()
 				"redirchat", "rediremote", "chatwhisper", "chatnormal", "chatshout", "sendchannel", "sendim", "recvim", "permissive",
 				"notify", "showinv", "showminimap", "showworldmap", "showloc", "shownames", "showhovertext", "showhovertexthud",
 				"showhovertextworld", "showhovertextall", "tplm", "tploc", "tplure", "viewnote", "viewscript", "viewtexture", 
-				"acceptpermission", "accepttp", "allowidle", "displayname", "edit", "rez", "fartouch", "interact", "touchobj", "touchattach", 
-				"touchhud", "touchworld", "fly", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv", "detachme", "attachover", 
+				"acceptpermission", "accepttp", "allowidle", "displayname", "edit", "rez", "fartouch", "interact", 
+				"touchobj", "touchattach", "touchattachself", "touchattachother", "touchhud", "touchworld", "touchall"
+				"fly", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv", "detachme", "attachover", 
 				"attachthis", "attachthisover", "detachthis", "attachall", "attachallover", "detachall", "attachallthis", 
 				"attachallthisover", "detachallthis", "tpto", "version", "versionnew", "versionnum", "getattach", "getattachnames",
 				"getaddattachnames", "getremattachnames", "getoutfit", "getoutfitnames", "getaddoutfitnames", "getremoutfitnames", 
