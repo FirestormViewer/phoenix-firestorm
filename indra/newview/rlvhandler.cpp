@@ -567,6 +567,43 @@ void RlvHandler::onTeleportFinished(const LLVector3d& posArrival)
 // String/chat censoring functions
 //
 
+// Checked: 2010-01-21 (RLVa-1.3.0e) | Modified: RLVa-1.3.0e
+bool RlvHandler::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/) const
+{
+	const LLUUID& idRoot = (pObj) ? pObj->getRootEdit()->getID() : LLUUID::null;
+#ifdef RLV_EXTENSION_CMD_TOUCHXXX
+	bool fCanTouch = (idRoot.notNull()) && 
+		((!hasBehaviour(RLV_BHVR_TOUCHOBJ)) || (!isException(RLV_BHVR_TOUCHOBJ, idRoot, RLV_CHECK_PERMISSIVE)));
+#else
+	bool fCanTouch = (idRoot.notNull());
+#endif // RLV_EXTENSION_CMD_TOUCHXXX
+
+	if (fCanTouch)
+	{
+		if ( (!pObj->isAttachment()) || (!pObj->permYouOwner()) )
+		{
+			// Rezzed prim or attachment worn by another avie
+			fCanTouch = 
+				( (!hasBehaviour(RLV_BHVR_TOUCHWORLD)) || (isException(RLV_BHVR_TOUCHWORLD, idRoot, RLV_CHECK_PERMISSIVE)) ) &&
+				( (!hasBehaviour(RLV_BHVR_FARTOUCH)) || 
+				  (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= 1.5f * 1.5f) );
+		}
+		else if (!pObj->isHUDAttachment())
+		{
+			// Regular attachment worn by this avie
+			fCanTouch = (!hasBehaviour(RLV_BHVR_TOUCHATTACH)) || (isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE));
+		}
+#ifdef RLV_EXTENSION_CMD_TOUCHXXX
+		else
+		{
+			// HUD attachment
+			fCanTouch = (!hasBehaviour(RLV_BHVR_TOUCHHUD)) || (isException(RLV_BHVR_TOUCHHUD, idRoot, RLV_CHECK_PERMISSIVE));
+		}
+#endif // RLV_EXTENSION_CMD_TOUCHXXX
+	}
+	return fCanTouch;
+}
+
 size_t utf8str_strlen(const std::string& utf8)
 {
 	const char* pUTF8 = utf8.c_str(); size_t length = 0;

@@ -273,49 +273,6 @@ inline bool RlvHandler::canTeleportViaLure(const LLUUID& idAgent) const
 	return ((!hasBehaviour(RLV_BHVR_TPLURE)) || (isException(RLV_BHVR_TPLURE, idAgent))) && (canStand());
 }
 
-// Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
-inline bool RlvHandler::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/) const
-{
-#ifdef RLV_EXTENSION_CMD_TOUCHXXX
-	bool fCanTouch = (pObj) && 
-		( (!hasBehaviour(RLV_BHVR_TOUCHOBJ)) || (!isException(RLV_BHVR_TOUCHOBJ, pObj->getRootEdit()->getID(), RLV_CHECK_PERMISSIVE)) );
-
-	if (fCanTouch)
-	{
-		if ( (!pObj->isAttachment()) || (!pObj->permYouOwner()) )
-		{
-			// Rezzed prim or attachment worn by another avie
-			fCanTouch = 
-				( (!hasBehaviour(RLV_BHVR_TOUCHWORLD)) ||
-				  (isException(RLV_BHVR_TOUCHWORLD, pObj->getRootEdit()->getID(), RLV_CHECK_PERMISSIVE)) ) &&
-				( (!hasBehaviour(RLV_BHVR_FARTOUCH)) || 
-				  (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= 1.5f * 1.5f) );
-		}
-		else if (pObj->isHUDAttachment())
-		{
-			// HUD attachment
-			fCanTouch = (!hasBehaviour(RLV_BHVR_TOUCHHUD)) || 
-				(isException(RLV_BHVR_TOUCHHUD, pObj->getRootEdit()->getID(), RLV_CHECK_PERMISSIVE));
-		}
-		else
-		{
-			// Regular attachment worn by this avie
-			fCanTouch = 
-				( (!hasBehaviour(RLV_BHVR_TOUCHATTACH)) || 
-				  (isException(RLV_BHVR_TOUCHATTACH, pObj->getRootEdit()->getID(), RLV_CHECK_PERMISSIVE)) );
-		}
-	}
-	return fCanTouch;
-#else
-	return (pObj) &&
-	  (
-		((pObj->isAttachment()) && (pObj->permYouOwner())) ||
-		( (!hasBehaviour(RLV_BHVR_FARTOUCH)) || 
-		  (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= 1.5f * 1.5f) )
-	  );
-#endif // RLV_EXTENSION_CMD_TOUCHXXX
-}
-
 inline bool RlvHandler::hasBehaviour(ERlvBehaviour eBehaviour, const std::string& strOption) const
 {
 	return hasBehaviourExcept(eBehaviour, strOption, LLUUID::null);
