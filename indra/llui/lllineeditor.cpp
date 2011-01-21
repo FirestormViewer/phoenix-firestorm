@@ -1308,6 +1308,7 @@ BOOL LLLineEditor::handleSpecialKey(KEY key, MASK mask)
 		{
 			if( mCurrentHistoryLine > mLineHistory.begin() )
 			{
+				(*mCurrentHistoryLine).assign(getText());
 				mText.assign( *(--mCurrentHistoryLine) );
 				setCursorToEnd();
 			}
