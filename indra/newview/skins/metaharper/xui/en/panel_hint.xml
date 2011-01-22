@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  width="205"
+ background_visible="true"
+ background_opaque="false"
+ bg_alpha_color="DkGray"
  height="100">
   <text name="hint_title"
         font="SansSerifMedium" 
@@ -9,7 +12,7 @@
         top="8"
         bottom="20"
         follows="left|right|top"
-        text_color="Black"
+        text_color="White"
         wrap="false"/>
   <text name="hint_text"
         left="8"
@@ -17,7 +20,7 @@
         top="26"
         bottom="92"
         follows="all" 
-        text_color="Black"
+        text_color="HintText"
         wrap="true"/>
   <button right="197" 
           top="8"

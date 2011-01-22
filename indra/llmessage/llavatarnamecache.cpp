@@ -38,7 +38,7 @@
 
 #include <map>
 #include <set>
-#include <unistd.h>
+//#include <unistd.h> AO: Breaks win32 at the moment
 
 namespace LLAvatarNameCache
 {
