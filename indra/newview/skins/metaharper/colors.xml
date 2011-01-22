@@ -224,15 +224,15 @@
      name="TextFgColor"
      value="0.102 0.102 0.102 1" />
      
-	<color
+  	<color
 	 name="HintTitle"
-	 value="EmphasisColor" />
+	 reference="SchemeLightest" />
 	<color
 	 name="HintText"
-	 value="SchemeLightest" />
+	 reference="LtGray" />
 	<color
 	 name="HintBg"
-	 value="SL-Background" />
+	 reference="Black" />
 
     <color
      name="ChicletFlashColor"

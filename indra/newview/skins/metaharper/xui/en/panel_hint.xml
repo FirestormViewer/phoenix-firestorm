@@ -3,7 +3,7 @@
  width="205"
  background_visible="true"
  background_opaque="false"
- bg_alpha_color="DkGray"
+ bg_alpha_color="HintBg"
  height="100">
   <text name="hint_title"
         font="SansSerifMedium" 
@@ -12,7 +12,7 @@
         top="8"
         bottom="20"
         follows="left|right|top"
-        text_color="White"
+        text_color="HintTitle"
         wrap="false"/>
   <text name="hint_text"
         left="8"
@@ -28,7 +28,7 @@
           height="16"
           name="close" 
           follows="right|top" 
-          image_color="DkGray" 
+          image_color="LtGray" 
           image_unselected="Icon_Close_Foreground"
           image_selected="Icon_Close_Press"/>
 </panel>
