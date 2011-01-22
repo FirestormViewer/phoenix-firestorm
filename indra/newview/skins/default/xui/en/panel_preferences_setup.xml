@@ -342,7 +342,7 @@
    top_delta="0"
    width="145" />
 
-  <check_box
+  <!--<check_box
     top_delta="2"
     enabled="false"
     follows="left|top"
@@ -355,6 +355,6 @@
     name="updater_service_active"
     radio_style="false"
     width="400"
-    top_pad="10"/>
+    top_pad="10"/>-->
 
 </panel>

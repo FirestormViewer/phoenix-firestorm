@@ -1358,8 +1358,7 @@ LLViewerWindow::LLViewerWindow(
 		gSavedSettings.getBOOL("DisableVerticalSync"),
 		!gNoRender,
 		ignore_pixel_depth,
-		gSavedSettings.getBOOL("RenderUseFBO") ? 0 : gSavedSettings.getU32("RenderFSAASamples"), //don't use window level anti-aliasing if FBOs are enabled
-		gSavedSettings.getBOOL("UseLegacyCursors"));
+		gSavedSettings.getBOOL("RenderUseFBO") ? 0 : gSavedSettings.getU32("RenderFSAASamples")); //don't use window level anti-aliasing if FBOs are enabled
 
 	if (!LLAppViewer::instance()->restoreErrorTrap())
 	{
@@ -1420,6 +1419,11 @@ LLViewerWindow::LLViewerWindow(
 	{
 		LLFeatureManager::getInstance()->applyRecommendedSettings();
 		gSavedSettings.setBOOL("ProbeHardwareOnStartup", FALSE);
+	}
+	
+	if (!gGLManager.mHasDepthClamp)
+	{
+ 		LL_INFOS("RenderInit") << "Missing feature GL_ARB_depth_clamp. Void water might disappear in rare cases." << LL_ENDL;
 	}
 
 	// If we crashed while initializng GL stuff last time, disable certain features

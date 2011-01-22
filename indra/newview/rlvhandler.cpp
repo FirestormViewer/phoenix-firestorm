@@ -88,7 +88,7 @@ RlvHandler::~RlvHandler()
 bool RlvHandler::hasBehaviourExcept(ERlvBehaviour eBehaviour, const std::string& strOption, const LLUUID& idObj) const
 {
 	for (rlv_object_map_t::const_iterator itObj = m_Objects.begin(); itObj != m_Objects.end(); ++itObj)
-		if ( (idObj != itObj->second.m_UUID) && (itObj->second.hasBehaviour(eBehaviour, strOption, false)) )
+		if ( (idObj != itObj->second.getObjectID()) && (itObj->second.hasBehaviour(eBehaviour, strOption, false)) )
 			return true;
 	return false;
 }
@@ -100,7 +100,7 @@ bool RlvHandler::isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varO
 	if (RLV_CHECK_DEFAULT == typeCheck)
 		typeCheck = ( (hasBehaviour(eBhvr)) && (!isPermissive(eBhvr)) ) ? RLV_CHECK_STRICT : RLV_CHECK_PERMISSIVE;
 
-	std::list<LLUUID> objList;
+	uuid_vec_t objList;
 	if (RLV_CHECK_STRICT == typeCheck)
 	{
 		// If we're "strict checking" then we need the UUID of every object that currently has 'eBhvr' restricted
@@ -119,7 +119,7 @@ bool RlvHandler::isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varO
 				return true;
 
 			// For strict checks we don't return until the list is empty (every object with 'eBhvr' restricted also contains the exception)
-			std::list<LLUUID>::iterator itList = std::find(objList.begin(), objList.end(), itException->second.idObject);
+			uuid_vec_t::iterator itList = std::find(objList.begin(), objList.end(), itException->second.idObject);
 			if (itList != objList.end())
 				objList.erase(itList);
 			if (objList.empty())
@@ -190,7 +190,7 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 	}
 
 	// Using a stack for executing commands solves a few problems:
-	//   - if we passed RlvObject::m_UUID for idObj somewhere and process a @clear then idObj points to invalid/cleared memory at the end
+	//   - if we passed RlvObject::m_idObj for idObj somewhere and process a @clear then idObj points to invalid/cleared memory at the end
 	//   - if command X triggers command Y along the way then getCurrentCommand()/getCurrentObject() still return Y even when finished
 	m_CurCommandStack.push(&rlvCmd); m_CurObjectStack.push(rlvCmd.getObjectID());
 	const LLUUID& idCurObj = m_CurObjectStack.top();
@@ -389,7 +389,7 @@ void RlvHandler::onAttach(const LLViewerObject* pAttachObj, const LLViewerJointA
 
 				// We need to check this object for an active "@detach=n" and actually lock it down now that it's been attached somewhere
 				if (itObj->second.hasBehaviour(RLV_BHVR_DETACH, false))
-					gRlvAttachmentLocks.addAttachmentLock(pAttachObj->getID(), itObj->second.m_UUID);
+					gRlvAttachmentLocks.addAttachmentLock(pAttachObj->getID(), itObj->second.getObjectID());
 			}
 		}
 	}
@@ -429,7 +429,7 @@ void RlvHandler::onDetach(const LLViewerObject* pAttachObj, const LLViewerJointA
 
 				// If this object has an active "@detach=n" then we need to release the attachment lock since it's no longer attached
 				if (itObj->second.hasBehaviour(RLV_BHVR_DETACH, false))
-					gRlvAttachmentLocks.removeAttachmentLock(pAttachObj->getID(), itObj->second.m_UUID);
+					gRlvAttachmentLocks.removeAttachmentLock(pAttachObj->getID(), itObj->second.getObjectID());
 			}
 		}
 	}
@@ -449,7 +449,7 @@ void RlvHandler::onDetach(const LLViewerObject* pAttachObj, const LLViewerJointA
 			if (itCurObj->second.m_idRoot == pAttachObj->getID())
 			{
 				RLV_INFOS << "Clearing " << itCurObj->first.asString() << ":" << RLV_ENDL;
-				processCommand(itCurObj->second.m_UUID, "clear", true);
+				processCommand(itCurObj->second.getObjectID(), "clear", true);
 				RLV_INFOS << "\t-> done" << RLV_ENDL;
 			}
 		}
@@ -468,7 +468,10 @@ bool RlvHandler::onGC()
 		RLV_ASSERT(itObj);
 #endif // RLV_DEBUG
 
-		const LLViewerObject* pObj = gObjectList.findObject(itCurObj->second.m_UUID);
+		// Temporary sanity check
+		RLV_ASSERT(itCurObj->first == itCurObj->second.getObjectID());
+
+		const LLViewerObject* pObj = gObjectList.findObject(itCurObj->second.getObjectID());
 		if (!pObj)
 		{
 			// If the RlvObject once existed in gObjectList and now doesn't then expire it right away
@@ -497,7 +500,7 @@ bool RlvHandler::onGC()
 				//	-> if it does run it likely means that there's a @detach=n in a *child* prim that we couldn't look up in onAttach()
 				//  -> since RLV doesn't currently support @detach=n from child prims it's actually not such a big deal right now but still
 				if ( (pObj->isAttachment()) && (itCurObj->second.hasBehaviour(RLV_BHVR_DETACH, false)) )
-					gRlvAttachmentLocks.addAttachmentLock(pObj->getID(), itCurObj->second.m_UUID);
+					gRlvAttachmentLocks.addAttachmentLock(pObj->getID(), itCurObj->second.getObjectID());
 			}
 		}
 	}
@@ -533,8 +536,6 @@ void RlvHandler::onIdleStartup(void* pParam)
 // Checked: 2010-03-09 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
 void RlvHandler::onLoginComplete()
 {
-	RlvAttachPtLookup::initLookupTable();
-
 	RlvInventory::instance().fetchWornItems();
 	RlvInventory::instance().fetchSharedInventory();
 
@@ -1092,6 +1093,9 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 #ifdef RLV_EXTENSION_CMD_ALLOWIDLE
 		case RLV_BHVR_ALLOWIDLE:			// @allowidle=n|y					- Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.1.0h
 #endif // RLV_EXTENSION_CMD_ALLOWIDLE
+#ifdef RLV_EXTENSION_CMD_DISPLAYNAME
+		case RLV_BHVR_DISPLAYNAME:			// @displayname=n|y					- Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+#endif // RLV_EXTENSION_CMD_DISPLAYNAME
 		case RLV_BHVR_EDIT:					// @edit=n|y						- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
 		case RLV_BHVR_REZ:					// @rez=n|y							- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
 		case RLV_BHVR_FARTOUCH:				// @fartouch=n|y					- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
@@ -1582,6 +1586,16 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 				strReply = idSitObj.asString();
 			}
 			break;
+#ifdef RLV_EXTENSION_CMD_GETCOMMAND
+		case RLV_BHVR_GETCOMMAND:		// @getcommand:<option>=<channel>		- Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+			{
+				RlvCommand::bhvr_map_t cmdList;
+				if (RlvCommand::getCommands(cmdList, rlvCmd.getOption()))
+					for (RlvCommand::bhvr_map_t::const_iterator itCmd = cmdList.begin(); itCmd != cmdList.end(); ++itCmd)
+						strReply.append("/").append(itCmd->first);
+			}
+			break;
+#endif // RLV_EXTENSION_CMD_GETCOMMAND
 		case RLV_BHVR_GETSTATUS:		// @getstatus[:<option>]=<channel>		- Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
 			{
 				// NOTE: specification says response should start with '/' but RLV-1.16.1 returns an empty string when no rules are set
@@ -1777,9 +1791,9 @@ ERlvCmdRet RlvHandler::onGetInvWorn(const RlvCommand& rlvCmd, std::string& strRe
 	// Sanity check - gAgentAvatarp can't be NULL [see RlvForceWear::isWearingItem()]
 	if (!isAgentAvatarValid())
 		return RLV_RET_FAILED;
-	// Sanity check - folder should exist and not be hidden
+	// Sanity check - folder should exist
 	LLViewerInventoryCategory* pFolder = RlvInventory::instance().getSharedFolder(rlvCmd.getOption());
-	if ( (!pFolder) || (pFolder->getName().empty()) || (RLV_FOLDER_PREFIX_HIDDEN == pFolder->getName()[0]) )
+	if (!pFolder)
 		return (RlvInventory::instance().getSharedRoot() != NULL) ? RLV_RET_FAILED_OPTION : RLV_RET_FAILED_NOSHAREDROOT;
 
 	// Collect everything @attachall would be attaching

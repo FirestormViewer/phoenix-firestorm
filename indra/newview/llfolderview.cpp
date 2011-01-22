@@ -1974,8 +1974,12 @@ void LLFolderView::scrollToShowSelection()
 	// However we allow scrolling for folder views with mAutoSelectOverride
 	// (used in Places SP) as an exception because the selection in them
 	// is not reset during items filtering. See STORM-133.
-	if ( (!LLInventoryModelBackgroundFetch::instance().backgroundFetchActive() || mAutoSelectOverride)
-			&& mSelectedItems.size() )
+	//if ( (!LLInventoryModelBackgroundFetch::instance().backgroundFetchActive() || mAutoSelectOverride)
+	
+	//FIRE-251 - Satomi Ah: Try to mitigate scrolling while fetch is in progress, users don't want it.
+	//		&& mSelectedItems.size() )
+	if ( (!LLInventoryModelBackgroundFetch::instance().backgroundFetchActive() || mAutoSelectOverride
+          || mFilter->isModified()) && mSelectedItems.size() )
 	{
 		mNeedsScroll = TRUE;
 	}

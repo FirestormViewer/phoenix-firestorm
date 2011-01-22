@@ -41,6 +41,10 @@
 
 #include "llslurl.h"
 
+// [RLVa:KB] - Checked: 2010-04-21 (RLVa-1.2.0f)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 static const S32 msg_left_offset = 10;
 static const S32 msg_right_offset = 10;
 static const S32 msg_height_pad = 5;
@@ -176,7 +180,11 @@ void LLNearbyChatToastPanel::init(LLSD& notification)
 	std::string		fromName = notification["from"].asString();	// agent or object name
 	mFromID = notification["from_id"].asUUID();		// agent id or object id
 	mFromName = fromName;
-	
+
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+	mShowIconTooltip = notification.has("show_icon_tooltip") ? notification["show_icon_tooltip"].asBoolean() : true;
+// [/RLVa:KB]
+
 	int sType = notification["source"].asInteger();
     mSourceType = (EChatSourceType)sType;
 	
@@ -213,7 +221,6 @@ void LLNearbyChatToastPanel::init(LLSD& notification)
 		{
 			LLStyle::Params style_params_name;
 
-			LLColor4 userNameColor = LLUIColorTable::instance().getColor("ChatToastAgentNameColor");
 			std::string href;
 
 			if (mSourceType == CHAT_SOURCE_AGENT)
@@ -225,7 +232,7 @@ void LLNearbyChatToastPanel::init(LLSD& notification)
 				href = LLSLURL("object", mFromID, "inspect").getSLURLString();
 			}
 
-			style_params_name.color(userNameColor);
+			style_params_name.color(textColor);
 
 			std::string font_name = LLFontGL::nameFromFont(messageFont);
 			std::string font_style_size = LLFontGL::sizeFromFont(messageFont);
@@ -370,7 +377,10 @@ void LLNearbyChatToastPanel::draw()
 		LLAvatarIconCtrl* icon = getChild<LLAvatarIconCtrl>("avatar_icon", false);
 		if(icon)
 		{
-			icon->setDrawTooltip(mSourceType == CHAT_SOURCE_AGENT);
+//			icon->setDrawTooltip(mSourceType == CHAT_SOURCE_AGENT);
+// [RLVa:KB] - Checked: 2010-04-200 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+			icon->setDrawTooltip( (mShowIconTooltip) && (mSourceType == CHAT_SOURCE_AGENT) );
+// [/RLVa:KB]
 			if(mSourceType == CHAT_SOURCE_OBJECT)
 				icon->setValue(LLSD("OBJECT_Icon"));
 			else if(mSourceType == CHAT_SOURCE_SYSTEM)

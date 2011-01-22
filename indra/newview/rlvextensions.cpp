@@ -90,6 +90,8 @@ bool RlvExtGetSet::processCommand(const RlvCommand& rlvCmd, ERlvCmdRet& eRet)
 			{
 				if (!gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETDEBUG, rlvCmd.getObjectID()))
 					eRet = onSetDebug(strSetting, rlvCmd.getOption());
+				else
+					eRet = RLV_RET_FAILED_LOCK;
 				return true;
 			}
 		}
@@ -105,6 +107,8 @@ bool RlvExtGetSet::processCommand(const RlvCommand& rlvCmd, ERlvCmdRet& eRet)
 			{
 				if (!gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETENV, rlvCmd.getObjectID()))
 					eRet = onSetEnv(strSetting, rlvCmd.getOption());
+				else
+					eRet = RLV_RET_FAILED_LOCK;
 				return true;
 			}
 		}
@@ -127,7 +131,9 @@ bool RlvExtGetSet::processCommand(const RlvCommand& rlvCmd, ERlvCmdRet& eRet)
 			eRet = RLV_RET_SUCCESS;
 		}
 		else
+		{
 			eRet = RLV_RET_FAILED_OPTION;
+		}
 		return true;
 	}
 	return false;

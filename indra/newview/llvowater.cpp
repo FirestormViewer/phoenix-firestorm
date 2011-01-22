@@ -117,7 +117,7 @@ LLDrawable *LLVOWater::createDrawable(LLPipeline *pipeline)
 {
 	pipeline->allocDrawable(this);
 	mDrawable->setLit(FALSE);
-	mDrawable->setRenderType(LLPipeline::RENDER_TYPE_WATER);
+	mDrawable->setRenderType(mRenderType);
 
 	LLDrawPoolWater *pool = (LLDrawPoolWater*) gPipeline.getPool(LLDrawPool::POOL_WATER);
 
@@ -277,10 +277,21 @@ U32 LLVOWater::getPartitionType() const
 	return LLViewerRegion::PARTITION_WATER; 
 }
 
+U32 LLVOVoidWater::getPartitionType() const
+{
+	return LLViewerRegion::PARTITION_VOIDWATER;
+}
+
 LLWaterPartition::LLWaterPartition()
 : LLSpatialPartition(0, FALSE, 0)
 {
 	mInfiniteFarClip = TRUE;
 	mDrawableType = LLPipeline::RENDER_TYPE_WATER;
 	mPartitionType = LLViewerRegion::PARTITION_WATER;
+}
+
+LLVoidWaterPartition::LLVoidWaterPartition()
+{
+	mDrawableType = LLPipeline::RENDER_TYPE_VOIDWATER;
+	mPartitionType = LLViewerRegion::PARTITION_VOIDWATER;
 }

@@ -3591,6 +3591,7 @@ void LLAppViewer::loadNameCache()
 	// display names cache
 	std::string filename =
 		gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "avatar_name_cache.xml");
+	LL_INFOS("AvNameCache") << filename << LL_ENDL;
 	llifstream name_cache_stream(filename);
 	if(name_cache_stream.is_open())
 	{
@@ -4688,6 +4689,8 @@ void LLAppViewer::launchUpdater()
 	LLAppViewer::sUpdaterInfo->mUpdateExePath += update_url.asString();
 	LLAppViewer::sUpdaterInfo->mUpdateExePath += "\" -name \"";
 	LLAppViewer::sUpdaterInfo->mUpdateExePath += LLAppViewer::instance()->getSecondLifeTitle();
+        LLAppViewer::sUpdaterInfo->mUpdateExePath += "\" -bundleid \"";
+        LLAppViewer::sUpdaterInfo->mUpdateExePath += LL_VERSION_BUNDLE_ID;
 	LLAppViewer::sUpdaterInfo->mUpdateExePath += "\" &";
 
 	LL_DEBUGS("AppInit") << "Calling updater: " << LLAppViewer::sUpdaterInfo->mUpdateExePath << LL_ENDL;

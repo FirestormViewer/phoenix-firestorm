@@ -1564,6 +1564,9 @@ void LLBottomTray::initResizeStateContainers()
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_SEARCH, getChild<LLPanel>("search_btn_panel")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_WORLD_MAP, getChild<LLPanel>("world_map_btn_panel")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_MINI_MAP, getChild<LLPanel>("mini_map_btn_panel")));
+	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_HOME, getChild<LLPanel>("bottom_sbhome")));
+	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_ME, getChild<LLPanel>("bottom_sbme")));
+	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_PLACES, getChild<LLPanel>("bottom_sbplaces")));
 
 	// init an order of processed buttons
 	mButtonsProcessOrder.push_back(RS_BUTTON_GESTURES);
@@ -1574,6 +1577,9 @@ void LLBottomTray::initResizeStateContainers()
 	mButtonsProcessOrder.push_back(RS_BUTTON_SEARCH);
 	mButtonsProcessOrder.push_back(RS_BUTTON_WORLD_MAP);
 	mButtonsProcessOrder.push_back(RS_BUTTON_MINI_MAP);
+	mButtonsProcessOrder.push_back(RS_BUTTON_HOME);
+	mButtonsProcessOrder.push_back(RS_BUTTON_ME);
+	mButtonsProcessOrder.push_back(RS_BUTTON_PLACES);
 
 	mButtonsOrder.push_back(RS_BUTTON_SPEAK);
 	mButtonsOrder.insert(mButtonsOrder.end(), mButtonsProcessOrder.begin(), mButtonsProcessOrder.end());
@@ -1612,6 +1618,9 @@ void LLBottomTray::initButtonsVisibility()
 	setVisibleAndFitWidths(RS_BUTTON_SEARCH, gSavedSettings.getBOOL("ShowSearchButton"));
 	setVisibleAndFitWidths(RS_BUTTON_WORLD_MAP, gSavedSettings.getBOOL("ShowWorldMapButton"));
 	setVisibleAndFitWidths(RS_BUTTON_MINI_MAP, gSavedSettings.getBOOL("ShowMiniMapButton"));
+	setVisibleAndFitWidths(RS_BUTTON_HOME, gSavedSettings.getBOOL("ShowHomeButton"));
+	setVisibleAndFitWidths(RS_BUTTON_ME, gSavedSettings.getBOOL("ShowMeButton"));
+	setVisibleAndFitWidths(RS_BUTTON_PLACES, gSavedSettings.getBOOL("ShowPlacesButton"));
 }
 
 void LLBottomTray::setButtonsControlsAndListeners()
@@ -1624,6 +1633,9 @@ void LLBottomTray::setButtonsControlsAndListeners()
 	gSavedSettings.getControl("ShowSearchButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_SEARCH, _2));
 	gSavedSettings.getControl("ShowWorldMapButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_WORLD_MAP, _2));
 	gSavedSettings.getControl("ShowMiniMapButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_MINI_MAP, _2));
+	gSavedSettings.getControl("ShowHomeButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_HOME, _2));
+	gSavedSettings.getControl("ShowMeButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_ME, _2));
+	gSavedSettings.getControl("ShowPlacesButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_PLACES, _2));
 
 
 	LLButton* build_btn = getChild<LLButton>("build_btn");

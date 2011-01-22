@@ -34,7 +34,7 @@ void RlvAttachPtLookup::initLookupTable()
 	static bool fInitialized = false;
 	if (!fInitialized)
 	{
-		if (isAgentAvatarValid())
+		if ( (gAgentAvatarp) && (gAgentAvatarp->mAttachmentPoints.size() > 0) )
 		{
 			std::string strAttachPtName;
 			for (LLVOAvatar::attachment_map_t::const_iterator itAttach = gAgentAvatarp->mAttachmentPoints.begin(); 

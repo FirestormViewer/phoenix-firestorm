@@ -95,7 +95,8 @@ public:
 	bool canShowHoverText(LLViewerObject* pObj) const;											// @showhovertext* command family
 	bool canSit(LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;
 	bool canStand() const;
-	bool canTouch(LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;	// @touch
+	bool canTeleportViaLure(const LLUUID& idAgent) const;
+	bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;	// @touch
 	void filterChat(std::string& strUTF8Text, bool fFilterEmote) const;							// @sendchat, @recvchat and @redirchat
 	bool redirectChatOrEmote(const std::string& strUTF8Test) const;								// @redirchat and @rediremote
 
@@ -266,8 +267,14 @@ inline bool RlvHandler::canStand() const
 	return (!hasBehaviour(RLV_BHVR_UNSIT)) || ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting()));
 }
 
+// Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+inline bool RlvHandler::canTeleportViaLure(const LLUUID& idAgent) const
+{
+	return ((!hasBehaviour(RLV_BHVR_TPLURE)) || (isException(RLV_BHVR_TPLURE, idAgent))) && (canStand());
+}
+
 // Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
-inline bool RlvHandler::canTouch(LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/) const
+inline bool RlvHandler::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/) const
 {
 #ifdef RLV_EXTENSION_CMD_TOUCHXXX
 	bool fCanTouch = (pObj) && 

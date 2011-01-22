@@ -165,7 +165,7 @@
      right="-5"
      top_delta="0"
      width="35" />
-	<menu_button
+  <menu_button
      follows="top|left"
      height="20"
      image_overlay="OptionsMenu_Off"

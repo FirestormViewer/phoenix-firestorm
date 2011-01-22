@@ -258,8 +258,7 @@ public:
 		BOOL disable_vsync = TRUE,
 		BOOL use_gl = TRUE,
 		BOOL ignore_pixel_depth = FALSE,
-		U32 fsaa_samples = 0,
-		BOOL use_legacy_cursors = TRUE);
+		U32 fsaa_samples = 0);
 	static BOOL destroyWindow(LLWindow* window);
 	static BOOL isWindowValid(LLWindow *window);
 };

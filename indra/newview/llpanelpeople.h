@@ -37,6 +37,7 @@ class LLAvatarName;
 class LLFilterEditor;
 class LLGroupList;
 class LLTabContainer;
+class LLMenuButton;
 
 class LLPanelPeople 
 	: public LLPanel
@@ -160,6 +161,11 @@ private:
 	Updater*				mFriendListUpdater;
 	Updater*				mNearbyListUpdater;
 	Updater*				mRecentListUpdater;
+
+ 	LLMenuButton*			mNearbyGearButton;
+ 	LLMenuButton*			mFriendsGearButton;
+	LLMenuButton*			mGroupsGearButton;
+	LLMenuButton*			mRecentGearButton;
 
 	std::string				mFilterSubString;
 	std::string				mFilterSubStringOrig;

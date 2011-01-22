@@ -51,6 +51,7 @@
 #include "llsafehandle.h"
 #include "llsidetray.h"
 #include "lltextbox.h"			// for description truncation
+#include "lltoggleablemenu.h"
 #include "lltrans.h"
 #include "llui.h"				// positionViewNearMouse()
 #include "lluictrl.h"
@@ -352,6 +353,10 @@ void LLInspectObject::updateButtons(LLSelectNode* nodep)
 		|| (parent && parent->flagHandleTouch()))
 	{
 		getChild<LLUICtrl>("touch_btn")->setVisible(true);
+// [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.1g) | Added: RLVa-1.2.1g
+		if (rlv_handler_t::isEnabled())
+			getChild<LLUICtrl>("touch_btn")->setEnabled(gRlvHandler.canTouch(object));
+// [/RLVa:KB]
 		updateTouchLabel(nodep);
 	}
 	else if ( enable_object_open() )
@@ -592,7 +597,7 @@ void LLInspectObject::updateSecureBrowsing()
 // if the gear menu is not open
 void LLInspectObject::onMouseLeave(S32 x, S32 y, MASK mask)
 {
-	LLMenuGL* gear_menu = getChild<LLMenuButton>("gear_btn")->getMenu();
+	LLToggleableMenu* gear_menu = getChild<LLMenuButton>("gear_btn")->getMenu();
 	if ( gear_menu && gear_menu->getVisible() )
 	{
 		return;

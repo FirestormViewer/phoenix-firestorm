@@ -404,6 +404,8 @@ private:
 	U32				mControlFlags;					// Replacement for the mFooKey's
 	BOOL 			mbFlagsDirty;
 	BOOL 			mbFlagsNeedReset;				// ! HACK ! For preventing incorrect flags sent when crossing region boundaries
+	static BOOL ignorePrejump;
+	void updateIgnorePrejump(const LLSD &data);
 	
 	//--------------------------------------------------------------------
 	// Animations
