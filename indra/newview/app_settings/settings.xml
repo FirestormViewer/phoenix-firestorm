@@ -2,9 +2,7 @@
 <llsd>
 <map>
 
-	
-
-    <key>SkinCurrentTheme</key>
+  <key>SkinCurrentTheme</key>
     <map>
       <key>Comment</key>
       <string>The selected theme for the current skin.</string>
@@ -116,7 +114,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
 
     <key>RestrainedLove</key>
@@ -356,7 +354,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.90</real>
+      <real>1.0</real>
     </map>
     <key>AdvanceSnapshot</key>
     <map>
@@ -400,7 +398,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>AllowTapTapHoldRun</key>
     <map>
@@ -4021,7 +4019,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>ForceMandatoryUpdate</key>
     <map>
@@ -6845,7 +6843,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>QAModeEventHostPort</key>
     <map>
@@ -11600,7 +11598,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>UseDefaultColorPicker</key>
     <map>
