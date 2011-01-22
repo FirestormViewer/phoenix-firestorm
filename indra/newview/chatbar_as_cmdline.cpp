@@ -1377,14 +1377,4 @@ void cmdline_printchat(std::string message)
 	LLSD args;
 	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
 	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
-	/*LLNearbyChatHandler* handle = dynamic_cast<LLNearbyChatHandler*>(mNotifyHandlers["nearbychat"].get());
-	if(handle)
-	{
-		handle->processChat(chat, LLSD());
-	}
-	LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
-	if(nearby_chat)
-	{
-		nearby_chat->addMessage(chat);
-	}*/
 }
