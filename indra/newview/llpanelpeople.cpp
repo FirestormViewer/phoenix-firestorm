@@ -68,6 +68,7 @@
 // [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "fscontactsfloater.h"
 
 #define FRIEND_LIST_UPDATE_TIMEOUT	0.5
 #define NEARBY_LIST_UPDATE_INTERVAL 1
@@ -683,6 +684,10 @@ BOOL LLPanelPeople::postBuild()
 	mOnlineFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
 	mAllFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
 
+	FSFloaterContacts* fs_contacts = FSFloaterContacts::getInstance();
+	//fs_contacts->mFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
+	fs_contacts->mFriendsTab->setVisibleCallback(boost::bind(&Updater::setActive, mFriendListUpdater, _2));
+	
 	return TRUE;
 }
 
@@ -721,6 +726,8 @@ void LLPanelPeople::updateFriendList()
 	if (!mOnlineFriendList || !mAllFriendList)
 		return;
 
+	static FSFloaterContacts* fs_contacts = FSFloaterContacts::getInstance();
+	
 	// get all buddies we know about
 	const LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
 	LLAvatarTracker::buddy_map_t all_buddies;
@@ -741,6 +748,12 @@ void LLPanelPeople::updateFriendList()
 	{
 		lldebugs << "Friends Cards were found, count: " << listMap.begin()->second.size() << llendl;
 		all_friendsp = listMap.begin()->second;
+		if (fs_contacts->mFriendList)
+		{
+			uuid_vec_t& contact_friendsp = fs_contacts->mFriendList->getIDs();
+			contact_friendsp.clear();
+			contact_friendsp = listMap.begin()->second;
+		}
 	}
 	else
 	{
@@ -762,6 +775,8 @@ void LLPanelPeople::updateFriendList()
 	 */
 	mOnlineFriendList->setDirty(true, !mOnlineFriendList->filterHasMatches());// do force update if list do NOT have items
 	mAllFriendList->setDirty(true, !mAllFriendList->filterHasMatches());
+	if (fs_contacts->mFriendList)
+		fs_contacts->mFriendList->setDirty(true, !fs_contacts->mFriendList->filterHasMatches());
 	//update trash and other buttons according to a selected item
 	updateButtons();
 	showFriendsAccordionsIfNeeded();
