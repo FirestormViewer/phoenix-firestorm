@@ -12,6 +12,9 @@
  single_instance="true"
  title="CONTACTS"
  width="395">
+ 	<string
+	 name="no_friends"
+	 value="No friends" />
     <tab_container
      follows="all"
      height="390"

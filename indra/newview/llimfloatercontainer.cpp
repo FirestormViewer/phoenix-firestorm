@@ -57,7 +57,7 @@ LLIMFloaterContainer::~LLIMFloaterContainer()
 BOOL LLIMFloaterContainer::postBuild()
 {
 	
-	addFloater(LLFloaterContacts::getInstance(), TRUE);
+	addFloater(FSFloaterContacts::getInstance(), TRUE);
 
 	LLIMModel::instance().mNewMsgSignal.connect(boost::bind(&LLIMFloaterContainer::onNewMessageReceived, this, _1));
 	// Do not call base postBuild to not connect to mCloseSignal to not close all floaters via Close button

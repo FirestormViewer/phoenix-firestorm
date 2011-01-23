@@ -31,27 +31,88 @@
 #include "llfloaterreg.h"
 #include "llfloater.h"
 
+#include "llavatarlist.h"
+#include "llavatarlistitem.h"
+#include "llcallingcard.h"			// for LLAvatarTracker
+#include "llfriendcard.h"
+#include "llpanelpeople.h"
+#include "llsidetray.h"
+
+
+/** Compares avatar items by online status, then by name */
+class LLAvatarItemStatusComparator : public LLAvatarItemComparator
+{
+public:
+	LLAvatarItemStatusComparator() {};
+
+protected:
+	/**
+	 * @return true if item1 < item2, false otherwise
+	 */
+	virtual bool doCompare(const LLAvatarListItem* item1, const LLAvatarListItem* item2) const
+	{
+		LLAvatarTracker& at = LLAvatarTracker::instance();
+		bool online1 = at.isBuddyOnline(item1->getAvatarId());
+		bool online2 = at.isBuddyOnline(item2->getAvatarId());
+
+		if (online1 == online2)
+		{
+			std::string name1 = item1->getAvatarName();
+			std::string name2 = item2->getAvatarName();
+
+			LLStringUtil::toUpper(name1);
+			LLStringUtil::toUpper(name2);
+
+			return name1 < name2;
+		}
+		
+		return online1 > online2; 
+	}
+};
+
+static const LLAvatarItemStatusComparator STATUS_COMPARATOR;
+
+
 //
-// LLFloaterContacts
+// FSFloaterContacts
 //
 
-LLFloaterContacts::LLFloaterContacts(const LLSD& seed)
-	: LLFloater(seed)
+FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
+	: LLFloater(seed),
+	mFriendList(NULL)
 {
-	//mFactoryMap["friends_panel"] = LLCallbackMap(LLFloaterContacts::createFriendsPanel, NULL);
-	//mFactoryMap["groups_panel"] = LLCallbackMap(LLFloaterContacts::createGroupsPanel, NULL);
+	//mFriendListUpdater = new LLPanelPeople::LLFriendListUpdater(boost::bind(&LLPanelPeople::updateFriendList,	this));
+
+	//mFactoryMap["friends_panel"] = LLCallbackMap(FSFloaterContacts::createFriendsPanel, NULL);
+	//mFactoryMap["groups_panel"] = LLCallbackMap(FSFloaterContacts::createGroupsPanel, NULL);
 }
 
-LLFloaterContacts::~LLFloaterContacts()
+FSFloaterContacts::~FSFloaterContacts()
 {
+	//delete mFriendListUpdater;
 }
 
-BOOL LLFloaterContacts::postBuild()
+BOOL FSFloaterContacts::postBuild()
 {
+	mFriendsTab = getChild<LLPanel>("friends_panel");
+	// updater is active only if panel is visible to user.
+	//friends_tab->setVisibleCallback(boost::bind(&LLPanelPeople::Updater::setActive, LLPanelPeople::mFriendListUpdater, _2));
+	mFriendList = mFriendsTab->getChild<LLAvatarList>("avatars_all");
+	mFriendList->setNoItemsCommentText(getString("no_friends"));
+	mFriendList->setShowIcons("FriendsListShowIcons");
+	mFriendList->showPermissions(TRUE);
+	mFriendList->setComparator(&STATUS_COMPARATOR);
+	mFriendList->sort();
+	
+	//LLPanelPeople* pPeoplePanel = dynamic_cast<LLPanelPeople*>(LLSideTray::getInstance()->getPanel("panel_people"));
+	//pPeoplePanel->setContactsFriendList(friends_tab, mFriendList);
+	
+	//mFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
+	
 	return TRUE;
 }
 
-void LLFloaterContacts::onOpen(const LLSD& key)
+void FSFloaterContacts::onOpen(const LLSD& key)
 {
 	if (key.asString() == "friends")
 	{
@@ -64,28 +125,28 @@ void LLFloaterContacts::onOpen(const LLSD& key)
 }
 
 //static
-void* LLFloaterContacts::createFriendsPanel(void* data)
+void* FSFloaterContacts::createFriendsPanel(void* data)
 {
-	//return new LLPanelPeople();
+	//return new FSPanelFriends();
 	return NULL;
 }
 
 //static
-void* LLFloaterContacts::createGroupsPanel(void* data)
+void* FSFloaterContacts::createGroupsPanel(void* data)
 {
 	//return new LLPanelGroups();
 	return NULL;
 }
 
 //static
-LLFloaterContacts* LLFloaterContacts::findInstance()
+FSFloaterContacts* FSFloaterContacts::findInstance()
 {
-	return LLFloaterReg::findTypedInstance<LLFloaterContacts>("imcontacts");
+	return LLFloaterReg::findTypedInstance<FSFloaterContacts>("imcontacts");
 }
 
-LLFloaterContacts* LLFloaterContacts::getInstance()
+FSFloaterContacts* FSFloaterContacts::getInstance()
 {
-	return LLFloaterReg::getTypedInstance<LLFloaterContacts>("imcontacts");
+	return LLFloaterReg::getTypedInstance<FSFloaterContacts>("imcontacts");
 }
 
 // EOF

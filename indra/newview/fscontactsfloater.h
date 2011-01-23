@@ -32,21 +32,32 @@
 #include <vector>
 
 #include "llfloater.h"
+#include "llpanelpeople.h"
 
-class LLFloaterContacts : public LLFloater
+class LLAvatarList;
+class LLPanel;
+class LLPanel;
+
+class FSFloaterContacts : public LLFloater
 {
 public:
-	LLFloaterContacts(const LLSD& seed);
-	virtual ~LLFloaterContacts();
+	friend class LLPanelPeople;
+	FSFloaterContacts(const LLSD& seed);
+	virtual ~FSFloaterContacts();
 
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 
-	static LLFloaterContacts* getInstance();
-	static LLFloaterContacts* findInstance();
+	static FSFloaterContacts* getInstance();
+	static FSFloaterContacts* findInstance();
 	
 	static void* createFriendsPanel(void* data);
 	static void* createGroupsPanel(void* data);
+
+private:
+	LLAvatarList*			mFriendList;
+	LLPanel*				mFriendsTab;
 };
+
 
 #endif // LL_FSCONTACTSFLOATER_H
