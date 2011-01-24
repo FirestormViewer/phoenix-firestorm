@@ -44,3 +44,7 @@ V1_MouseCursors		LGPL/Creative Commons Attribution-Share Alike 3.0
 V1_Icons			Creative Commons Attribution-Share Alike 3.0
 AFK_ExtraControls	LGPL
 IgnoreFinishAnimation	BSD/PD
+Comm_Contacts_Tab	LGPL
+QuickAdditionalInv	LGPL
+UpdatedLibCURL		Curl (MIT/X11)
+UpdatedWebKit		LGPL
