@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ bottom="-371"
+ height="300"
+ left="280"
+ mouse_opaque="true"
+ name="groups"
+ width="350">
+	<group_list
+	 allow_select="true"
+	 bottom="10"
+	 follows="left|top|right|bottom"
+	 left="10"
+	 name="group_list"
+	 top="-10"
+	 width="240" />
+	<!--<scroll_list
+	 background_visible="true"
+	 bottom="45"
+	 column_padding="5"
+	 draw_heading="false"
+	 draw_stripes="true"
+	 enabled="true"
+	 follows="left|top|right|bottom"
+	 left="10"
+	 mouse_opaque="true"
+	 multi_select="false"
+	 name="group list"
+	 tab_stop="true"
+	 top="-10"
+	 width="240">
+		<scroll_list.column label="" name="name" width="248" />
+	</scroll_list>-->
+	<!--<text type="string" length="1" bg_visible="false" border_drop_shadow_visible="false" border_visible="false"
+	     bottom="22" drop_shadow_visible="true" enabled="true" follows="left|bottom"
+	     font="SansSerifSmall" h_pad="0" halign="left" height="16" left="12"
+	     mouse_opaque="false" name="groupdesc" v_pad="0" width="248">
+		Your currently active group is displayed in bold.
+	</text>
+	<text type="string" length="1" bg_visible="false" border_drop_shadow_visible="false" border_visible="false"
+	     bottom="5" drop_shadow_visible="true" enabled="true" follows="left|bottom"
+	     font="SansSerifSmall" h_pad="0" halign="left" height="16" left="12"
+	     mouse_opaque="false" name="groupcount" v_pad="0" width="248">
+		You belong to [COUNT] groups (of [MAX] maximum).
+	</text>-->
+
+	<button
+	 top="-10"
+	 follows="top|right"
+	 height="22"
+	 label="IM/Call"
+	 right="-10"
+	 name="chat_btn"
+	 tool_tip="Open Instant Message session"
+	 width="80" />
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Info"
+	 name="info_btn"
+	 width="80" />
+	<!--<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Titles..."
+	 name="titles_btn"
+	 width="80" />-->
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Activate"
+	 name="activate_btn"
+	 width="80" />
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Leave"
+	 name="leave_btn"
+	 width="80" />
+	<button
+	 bottom_delta="-35"
+	 follows="top|right"
+	 height="22"
+	 label="Create..."
+	 name="create_btn"
+	 width="80" />
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Search..."
+	 name="search_btn"
+	 width="80" />
+	<!--<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 font="SansSerif"
+	 height="22"
+	 label="Invite..."
+	 name="invite_btn"
+	 width="80" />-->
+</panel>

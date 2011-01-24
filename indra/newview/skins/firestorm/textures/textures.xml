@@ -92,4 +92,11 @@
 	<texture name="Parcel_Voice_Light"		file_name="legacy/status_voice.png" />
 	<texture name="Parcel_VoiceNo_Light"	file_name="legacy/status_no_voice.png" />
 
+	<texture name="Contacts_Online_Status_Button"			file_name="legacy/ff_online_status_button.tga" />
+	<texture name="Permission_Visible_Online_Mine_Button"	file_name="legacy/ff_visible_online_button.tga" />
+	<texture name="Permission_Visible_Online_Theirs_Button"	file_name="legacy/ff_visible_online_button_theirs.tga" />
+	<texture name="Permission_Visible_Map_Mine_Button"		file_name="legacy/ff_visible_map_button.tga" />
+	<texture name="Permission_Visible_Map_Theirs_Button"	file_name="legacy/ff_visible_map_button_theirs.tga" />
+	<texture name="Permission_Edit_Objects_Mine_Button"		file_name="legacy/ff_edit_mine_button.tga" />
+	<texture name="Permission_Edit_Objects_Theirs_Button"	file_name="legacy/ff_edit_theirs_button.tga" />
 </textures>
