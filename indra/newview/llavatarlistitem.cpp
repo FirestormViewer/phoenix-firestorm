@@ -153,13 +153,16 @@ void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( true);
 	
-	llinfos << "ENTERING AVLIST ITEM Parent= " << getParent()->getName() << llendl;
-	
+	// AO: behave differently based on which avlist we are. Should move this into XUI or subclasses.
+	std::string listName = getParent()->getParent()->getName();	
 //	mInfoBtn->setVisible(mShowInfoBtn);
 //	mProfileBtn->setVisible(mShowProfileBtn);
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+	
 	// AO - V1 UI, icon space is at a premium. Remove the hover-context icons, use right-click context menu instead.
-	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+	if ( listName == "speakers_list" )
+		mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+	
 	//mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
 // [/RLVa:KB]
 
@@ -412,7 +415,8 @@ void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
 //	setAvatarToolTip(av_name.mUsername);
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 	bool fRlvFilter = (mRlvCheckShowNames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
-	setAvatarName( (!fRlvFilter) ? av_name.mDisplayName : RlvStrings::getAnonym(av_name) );
+	//setAvatarName( (!fRlvFilter) ? av_name.mDisplayName : RlvStrings::getAnonym(av_name) );
+	setAvatarName( (!fRlvFilter) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
 	setAvatarToolTip( (!fRlvFilter) ? av_name.mUsername : RlvStrings::getAnonym(av_name) );
 	// TODO-RLVa: bit of a hack putting this here. Maybe find a better way?
 	mAvatarIcon->setDrawTooltip(!fRlvFilter);

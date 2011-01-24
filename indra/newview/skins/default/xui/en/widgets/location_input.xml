@@ -56,10 +56,9 @@
     name="for_sale_btn"
     image_unselected="Parcel_ForSale_Light"
     image_selected="Parcel_ForSale_Light"
-    width="22"
+    width="18"
     height="18"
     follows="right|top"
-    scale_image="false"
     top="21"
     />
   <voice_icon

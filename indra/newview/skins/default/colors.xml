@@ -211,17 +211,7 @@
 
 
   <!-- UI Colors only used once - grey shades at top -->
-
-    <color
-     name="GridlineShadowColor"
-     value="0 0 0 0.31" />
-    <color
-     name="GridlineBGColor"
-     value="0.92 0.92 1 0.78" />
-    <color
-     name="TextFgColor"
-     value="0.102 0.102 0.102 1" />
-
+  
     <color
      name="ChicletFlashColor"
      value="SchemeLightest" />
@@ -300,7 +290,15 @@
      value="White" />
 
   <!-- UI Definitions -->
-
+  	<color
+	 name="HintTitle"
+	 reference="SchemeLightest" />
+	<color
+	 name="HintText"
+	 reference="LtGray" />
+	<color
+	 name="HintBg"
+	 reference="Black" />
     <color
      name="AccordionHeaderTextColor"
      reference="LtGray" />

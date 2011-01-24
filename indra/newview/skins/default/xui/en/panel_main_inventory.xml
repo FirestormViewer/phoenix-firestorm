@@ -34,7 +34,7 @@
     		 left="12"
 		     name="ItemcountText"
 		     font="SansSerifMedium"
-		     text_color="EmphasisColor"
+		     text_color="SchemeLightest"
 		     top_pad="0"
 		     width="300">
     Items:
@@ -118,25 +118,25 @@
 	 show_item_link_overlays="true"
      width="290" />
   </tab_container>
-  <layout_stack
-   animate="false"
-   border_size="0"
+  <panel
    follows="left|right|bottom"
+   auto_resize="true"
    height="25"
    layout="topleft"
-   orientation="horizontal"
-   top_pad="0"
-   left="10"
+   top_pad="-3"
+   left="9"
    name="bottom_panel"
-   width="307">
-      <layout_panel
+   width="315">
+      <panel
        auto_resize="false"
+       follows="top|left"
        height="25"
+       left="0"
        layout="topleft"
        name="options_gear_btn_panel"
        width="32">
           <menu_button
-           follows="bottom|left"
+           follows="top|left"
            tool_tip="Show additional options"
            height="25"
            image_hover_unselected="Toolbar_Left_Over"
@@ -148,15 +148,17 @@
            name="options_gear_btn"
            top="0"
            width="31" />
-      </layout_panel>
-      <layout_panel
+      </panel>
+      <panel
+       follows="top|left"
        auto_resize="false"
        height="25"
        layout="topleft"
+       left_pad="0"
        name="add_btn_panel"
        width="32">
           <button
-           follows="bottom|left"
+           follows="top|left"
            height="25"
            image_hover_unselected="Toolbar_Middle_Over"
            image_overlay="AddItem_Off"
@@ -168,31 +170,61 @@
            tool_tip="Add new item"
            top="0"
            width="31" />
-      </layout_panel>
-      <layout_panel
-       auto_resize="true"
+      </panel>
+      <panel
+       follows="top|left"
+       auto_resize="false"
        height="25"
        layout="topleft"
+       left_pad="0"
+       name="new_inventory_panel"
+       width="32">
+          <button
+           follows="top|left"
+           height="25"
+           image_hover_unselected="Toolbar_Middle_Over"
+           image_overlay="inventory_18"
+           image_selected="Toolbar_Middle_Selected"
+           image_unselected="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           name="new_inv_btn"
+           tool_tip="Additional Inventory Window"
+           top="0"
+           width="31">
+           <button.init_callback
+                 function="Button.SetDockableFloaterToggle"
+                 parameter="inventory" />
+           </button>
+      </panel>
+      <panel
+       follows="top|left|right"
+       auto_resize="true"
+       height="25"
+       left_pad="0"
+       layout="topleft"
        name="dummy_panel"
-       width="212">
+       width="183">
           <icon
-           follows="bottom|left|right"
+           follows="top|left|right"
            height="25"
            image_name="Toolbar_Middle_Off"
            layout="topleft"
            left="0"
            top="0"
            name="dummy_icon"
-           width="211" />
-      </layout_panel>
-      <layout_panel
+           width="182" />
+      </panel>
+      <panel
        auto_resize="false"
+       follows="top|right"
        height="25"
+       left_pad="0"
        layout="topleft"
        name="trash_btn_panel"
-       width="31">
+       width="32">
           <dnd_button
-           follows="bottom|left"
+           follows="top|right"
            height="25"
            image_hover_unselected="Toolbar_Right_Over"
            image_overlay="TrashItem_Off"
@@ -204,6 +236,6 @@
            tool_tip="Remove selected item"
            top="0"
            width="31"/>
-      </layout_panel>
-  </layout_stack>
+       </panel>
+	</panel>
 </panel>

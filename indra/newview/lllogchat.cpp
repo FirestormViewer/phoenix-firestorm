@@ -53,6 +53,7 @@
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/local_time_adjustor.hpp>
+#include "llstartup.h"
 
 const S32 LOG_RECALL_SIZE = 2048;
 
@@ -272,6 +273,10 @@ void LLLogChat::saveHistory(const std::string& filename,
 			    const LLUUID& from_id,
 			    const std::string& line)
 {
+	if(LLStartUp::getStartupState() != STATE_LOGIN_CLEANUP)
+	{
+		return;
+	}
 	std::string tmp_filename = filename;
 	LLStringUtil::trim(tmp_filename);
 	if (tmp_filename.empty())
