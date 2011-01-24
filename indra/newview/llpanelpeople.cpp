@@ -685,7 +685,6 @@ BOOL LLPanelPeople::postBuild()
 	mAllFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
 
 	FSFloaterContacts* fs_contacts = FSFloaterContacts::getInstance();
-	//fs_contacts->mFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
 	fs_contacts->mFriendsTab->setVisibleCallback(boost::bind(&Updater::setActive, mFriendListUpdater, _2));
 	
 	return TRUE;

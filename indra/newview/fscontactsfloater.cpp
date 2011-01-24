@@ -28,16 +28,23 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fscontactsfloater.h"
+
+// libs
+#include "llavatarname.h"
 #include "llfloaterreg.h"
 #include "llfloater.h"
+#include "lltabcontainer.h"
 
+#include "llavataractions.h"
 #include "llavatarlist.h"
 #include "llavatarlistitem.h"
 #include "llcallingcard.h"			// for LLAvatarTracker
+#include "llfloateravatarpicker.h"
 #include "llfriendcard.h"
-#include "llpanelpeople.h"
 #include "llsidetray.h"
 
+static const std::string FRIENDS_TAB_NAME	= "friends_panel";
+static const std::string GROUP_TAB_NAME		= "groups_panel";
 
 /** Compares avatar items by online status, then by name */
 class LLAvatarItemStatusComparator : public LLAvatarItemComparator
@@ -79,24 +86,20 @@ static const LLAvatarItemStatusComparator STATUS_COMPARATOR;
 
 FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	: LLFloater(seed),
+	mTabContainer(NULL),
 	mFriendList(NULL)
 {
-	//mFriendListUpdater = new LLPanelPeople::LLFriendListUpdater(boost::bind(&LLPanelPeople::updateFriendList,	this));
-
-	//mFactoryMap["friends_panel"] = LLCallbackMap(FSFloaterContacts::createFriendsPanel, NULL);
-	//mFactoryMap["groups_panel"] = LLCallbackMap(FSFloaterContacts::createGroupsPanel, NULL);
 }
 
 FSFloaterContacts::~FSFloaterContacts()
 {
-	//delete mFriendListUpdater;
 }
 
 BOOL FSFloaterContacts::postBuild()
 {
-	mFriendsTab = getChild<LLPanel>("friends_panel");
-	// updater is active only if panel is visible to user.
-	//friends_tab->setVisibleCallback(boost::bind(&LLPanelPeople::Updater::setActive, LLPanelPeople::mFriendListUpdater, _2));
+	mTabContainer = getChild<LLTabContainer>("friends_and_groups");
+
+	mFriendsTab = getChild<LLPanel>(FRIENDS_TAB_NAME);
 	mFriendList = mFriendsTab->getChild<LLAvatarList>("avatars_all");
 	mFriendList->setNoItemsCommentText(getString("no_friends"));
 	mFriendList->setShowIcons("FriendsListShowIcons");
@@ -104,10 +107,16 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendList->setComparator(&STATUS_COMPARATOR);
 	mFriendList->sort();
 	
-	//LLPanelPeople* pPeoplePanel = dynamic_cast<LLPanelPeople*>(LLSideTray::getInstance()->getPanel("panel_people"));
-	//pPeoplePanel->setContactsFriendList(friends_tab, mFriendList);
+	mFriendList->setItemDoubleClickCallback(boost::bind(&FSFloaterContacts::onAvatarListDoubleClicked, this, _1));
+	mFriendList->setReturnCallback(boost::bind(&FSFloaterContacts::onImButtonClicked, this));
 	
-	//mFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
+	mFriendsTab->childSetAction("im_btn", boost::bind(&FSFloaterContacts::onImButtonClicked, this));
+	mFriendsTab->childSetAction("profile_btn", boost::bind(&FSFloaterContacts::onViewProfileButtonClicked, this));
+	mFriendsTab->childSetAction("offer_teleport_btn", boost::bind(&FSFloaterContacts::onTeleportButtonClicked, this));
+	mFriendsTab->childSetAction("pay_btn", boost::bind(&FSFloaterContacts::onPayButtonClicked, this));
+	
+	mFriendsTab->childSetAction("remove_btn", boost::bind(&FSFloaterContacts::onDeleteFriendButtonClicked, this));
+	mFriendsTab->childSetAction("add_btn", boost::bind(&FSFloaterContacts::onAddFriendWizButtonClicked, this));
 	
 	return TRUE;
 }
@@ -124,19 +133,144 @@ void FSFloaterContacts::onOpen(const LLSD& key)
 	}
 }
 
-//static
-void* FSFloaterContacts::createFriendsPanel(void* data)
+
+void FSFloaterContacts::onImButtonClicked()
 {
-	//return new FSPanelFriends();
-	return NULL;
+	uuid_vec_t selected_uuids;
+	getCurrentItemIDs(selected_uuids);
+	if ( selected_uuids.size() == 1 )
+	{
+		// if selected only one person then start up IM
+		LLAvatarActions::startIM(selected_uuids.at(0));
+	}
+	else if ( selected_uuids.size() > 1 )
+	{
+		// for multiple selection start up friends conference
+		LLAvatarActions::startConference(selected_uuids);
+	}
 }
 
-//static
-void* FSFloaterContacts::createGroupsPanel(void* data)
+void FSFloaterContacts::onViewProfileButtonClicked()
 {
-	//return new LLPanelGroups();
-	return NULL;
+	LLUUID id = getCurrentItemID();
+	LLAvatarActions::showProfile(id);
 }
+
+void FSFloaterContacts::onTeleportButtonClicked()
+{
+	uuid_vec_t selected_uuids;
+	getCurrentItemIDs(selected_uuids);
+	LLAvatarActions::offerTeleport(selected_uuids);
+}
+
+void FSFloaterContacts::onPayButtonClicked()
+{
+	LLUUID id = getCurrentItemID();
+	LLAvatarActions::pay(id);
+}
+
+void FSFloaterContacts::onDeleteFriendButtonClicked()
+{
+	uuid_vec_t selected_uuids;
+	getCurrentItemIDs(selected_uuids);
+
+	if (selected_uuids.size() == 1)
+	{
+		LLAvatarActions::removeFriendDialog( selected_uuids.front() );
+	}
+	else if (selected_uuids.size() > 1)
+	{
+		LLAvatarActions::removeFriendsDialog( selected_uuids );
+	}
+}
+
+bool FSFloaterContacts::isItemsFreeOfFriends(const uuid_vec_t& uuids)
+{
+	const LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
+	for ( uuid_vec_t::const_iterator
+			  id = uuids.begin(),
+			  id_end = uuids.end();
+		  id != id_end; ++id )
+	{
+		if (av_tracker.isBuddy (*id))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+void FSFloaterContacts::onAddFriendWizButtonClicked()
+{
+	// Show add friend wizard.
+	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&FSFloaterContacts::onAvatarPicked, _1, _2), FALSE, TRUE);
+	// Need to disable 'ok' button when friend occurs in selection
+	if (picker)	picker->setOkBtnEnableCb(boost::bind(&FSFloaterContacts::isItemsFreeOfFriends, this, _1));
+	LLFloater* root_floater = gFloaterView->getParentFloater(this);
+	if (root_floater)
+	{
+		root_floater->addDependentFloater(picker);
+	}
+}
+
+
+std::string FSFloaterContacts::getActiveTabName() const
+{
+	return mTabContainer->getCurrentPanel()->getName();
+}
+
+LLUUID FSFloaterContacts::getCurrentItemID() const
+{
+	std::string cur_tab = getActiveTabName();
+
+	if (cur_tab == FRIENDS_TAB_NAME)
+		return mFriendList->getSelectedUUID();
+
+	// if (cur_tab == GROUP_TAB_NAME)
+		// return mGroupList->getSelectedUUID();
+
+	llassert(0 && "unknown tab selected");
+	return LLUUID::null;
+}
+
+void FSFloaterContacts::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
+{
+	std::string cur_tab = getActiveTabName();
+
+	if (cur_tab == FRIENDS_TAB_NAME)
+		mFriendList->getSelectedUUIDs(selected_uuids);
+	// else if (cur_tab == GROUP_TAB_NAME)
+		// mGroupList->getSelectedUUIDs(selected_uuids);
+	else
+		llassert(0 && "unknown tab selected");
+
+}
+
+void FSFloaterContacts::onAvatarListDoubleClicked(LLUICtrl* ctrl)
+{
+	LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(ctrl);
+	if(!item)
+	{
+		return;
+	}
+
+	LLUUID clicked_id = item->getAvatarId();
+	
+#if 0 // SJB: Useful for testing, but not currently functional or to spec
+	LLAvatarActions::showProfile(clicked_id);
+#else // spec says open IM window
+	LLAvatarActions::startIM(clicked_id);
+#endif
+}
+
+
+// static
+void FSFloaterContacts::onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names)
+{
+	if (!names.empty() && !ids.empty())
+		LLAvatarActions::requestFriendshipDialog(ids[0], names[0].getCompleteName());
+}
+
 
 //static
 FSFloaterContacts* FSFloaterContacts::findInstance()

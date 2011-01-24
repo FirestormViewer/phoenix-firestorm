@@ -32,16 +32,15 @@
 #include <vector>
 
 #include "llfloater.h"
-#include "llpanelpeople.h"
 
 class LLAvatarList;
+class LLAvatarName;
 class LLPanel;
-class LLPanel;
+class LLTabContainer;
 
 class FSFloaterContacts : public LLFloater
 {
 public:
-	friend class LLPanelPeople;
 	FSFloaterContacts(const LLSD& seed);
 	virtual ~FSFloaterContacts();
 
@@ -51,12 +50,29 @@ public:
 	static FSFloaterContacts* getInstance();
 	static FSFloaterContacts* findInstance();
 	
-	static void* createFriendsPanel(void* data);
-	static void* createGroupsPanel(void* data);
+	LLPanel*				mFriendsTab;
+	LLAvatarList*			mFriendList;
 
 private:
-	LLAvatarList*			mFriendList;
-	LLPanel*				mFriendsTab;
+	std::string				getActiveTabName() const;
+	LLUUID					getCurrentItemID() const;
+	void					getCurrentItemIDs(uuid_vec_t& selected_uuids) const;
+	void					onAvatarListDoubleClicked(LLUICtrl* ctrl);
+	
+	bool					isItemsFreeOfFriends(const uuid_vec_t& uuids);
+	
+	// misc callbacks
+	static void				onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
+	
+	void					onViewProfileButtonClicked();
+	void					onImButtonClicked();
+	void					onTeleportButtonClicked();
+	void					onPayButtonClicked();
+	void					onDeleteFriendButtonClicked();
+	void					onAddFriendWizButtonClicked();
+	
+	LLTabContainer*			mTabContainer;
+	
 };
 
 
