@@ -45,3 +45,6 @@ V1_Icons		Creative Commons Attribution-Share Alike 3.0
 AFK_ExtraControls	LGPL
 IgnoreFinishAnimation	BSD/PD
 V1_Contacts		LGPL
+QuickAdditionalInv	LGPL
+UpdatedLibCURL		Curl (MIT/X11)
+UpdatedWebKit		LGPL
