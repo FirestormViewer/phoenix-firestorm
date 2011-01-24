@@ -35,6 +35,7 @@
 
 class LLAvatarList;
 class LLAvatarName;
+class LLGroupList;
 class LLPanel;
 class LLTabContainer;
 
@@ -52,6 +53,8 @@ public:
 	
 	LLPanel*				mFriendsTab;
 	LLAvatarList*			mFriendList;
+	LLPanel*				mGroupsTab;
+	LLGroupList*			mGroupList;
 
 private:
 	std::string				getActiveTabName() const;
@@ -64,12 +67,21 @@ private:
 	// misc callbacks
 	static void				onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
 	
+	// friend buttons
 	void					onViewProfileButtonClicked();
 	void					onImButtonClicked();
 	void					onTeleportButtonClicked();
 	void					onPayButtonClicked();
 	void					onDeleteFriendButtonClicked();
 	void					onAddFriendWizButtonClicked();
+	
+	// group buttons
+	void					onGroupChatButtonClicked();
+	void					onGroupInfoButtonClicked();
+	void					onGroupActivateButtonClicked();
+	void					onGroupLeaveButtonClicked();
+	void					onGroupCreateButtonClicked();
+	void					onGroupSearchButtonClicked();
 	
 	LLTabContainer*			mTabContainer;
 	

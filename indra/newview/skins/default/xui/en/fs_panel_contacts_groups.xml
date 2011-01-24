@@ -6,7 +6,15 @@
  mouse_opaque="true"
  name="groups"
  width="350">
-	<scroll_list
+	<group_list
+	 allow_select="true"
+	 bottom="10"
+	 follows="left|top|right|bottom"
+	 left="10"
+	 name="group_list"
+	 top="-10"
+	 width="240" />
+	<!--<scroll_list
 	 background_visible="true"
 	 bottom="45"
 	 column_padding="5"
@@ -22,8 +30,8 @@
 	 top="-10"
 	 width="240">
 		<scroll_list.column label="" name="name" width="248" />
-	</scroll_list>
-	<text type="string" length="1" bg_visible="false" border_drop_shadow_visible="false" border_visible="false"
+	</scroll_list>-->
+	<!--<text type="string" length="1" bg_visible="false" border_drop_shadow_visible="false" border_visible="false"
 	     bottom="22" drop_shadow_visible="true" enabled="true" follows="left|bottom"
 	     font="SansSerifSmall" h_pad="0" halign="left" height="16" left="12"
 	     mouse_opaque="false" name="groupdesc" v_pad="0" width="248">
@@ -34,7 +42,7 @@
 	     font="SansSerifSmall" h_pad="0" halign="left" height="16" left="12"
 	     mouse_opaque="false" name="groupcount" v_pad="0" width="248">
 		You belong to [COUNT] groups (of [MAX] maximum).
-	</text>
+	</text>-->
 
 	<button
 	 top="-10"
@@ -42,7 +50,7 @@
 	 height="22"
 	 label="IM/Call"
 	 right="-10"
-	 name="IM"
+	 name="chat_btn"
 	 tool_tip="Open Instant Message session"
 	 width="80" />
 	<button
@@ -50,49 +58,49 @@
 	 follows="top|right"
 	 height="22"
 	 label="Info"
-	 name="Info"
+	 name="info_btn"
 	 width="80" />
-	<button
+	<!--<button
 	 bottom_delta="-25"
 	 follows="top|right"
 	 height="22"
 	 label="Titles..."
-	 name="Titles..."
-	 width="80" />
+	 name="titles_btn"
+	 width="80" />-->
 	<button
 	 bottom_delta="-25"
 	 follows="top|right"
 	 height="22"
 	 label="Activate"
-	 name="Activate"
+	 name="activate_btn"
 	 width="80" />
 	<button
 	 bottom_delta="-25"
 	 follows="top|right"
 	 height="22"
 	 label="Leave"
-	 name="Leave"
+	 name="leave_btn"
 	 width="80" />
 	<button
 	 bottom_delta="-35"
 	 follows="top|right"
 	 height="22"
 	 label="Create..."
-	 name="Create"
+	 name="create_btn"
 	 width="80" />
 	<button
 	 bottom_delta="-25"
 	 follows="top|right"
 	 height="22"
 	 label="Search..."
-	 name="Search..."
+	 name="search_btn"
 	 width="80" />
-	<button
+	<!--<button
 	 bottom_delta="-25"
 	 follows="top|right"
 	 font="SansSerif"
 	 height="22"
 	 label="Invite..."
-	 name="Invite..."
-	 width="80" />
+	 name="invite_btn"
+	 width="80" />-->
 </panel>

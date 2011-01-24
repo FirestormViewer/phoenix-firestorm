@@ -41,6 +41,8 @@
 #include "llcallingcard.h"			// for LLAvatarTracker
 #include "llfloateravatarpicker.h"
 #include "llfriendcard.h"
+#include "llgroupactions.h"
+#include "llgrouplist.h"
 #include "llsidetray.h"
 
 static const std::string FRIENDS_TAB_NAME	= "friends_panel";
@@ -87,7 +89,8 @@ static const LLAvatarItemStatusComparator STATUS_COMPARATOR;
 FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	: LLFloater(seed),
 	mTabContainer(NULL),
-	mFriendList(NULL)
+	mFriendList(NULL),
+	mGroupList(NULL)
 {
 }
 
@@ -118,6 +121,23 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsTab->childSetAction("remove_btn", boost::bind(&FSFloaterContacts::onDeleteFriendButtonClicked, this));
 	mFriendsTab->childSetAction("add_btn", boost::bind(&FSFloaterContacts::onAddFriendWizButtonClicked, this));
 	
+	mGroupsTab = getChild<LLPanel>(GROUP_TAB_NAME);
+	mGroupList = mGroupsTab->getChild<LLGroupList>("group_list");
+	mGroupList->setNoItemsMsg(getString("no_groups_msg"));
+	mGroupList->setNoFilteredItemsMsg(getString("no_filtered_groups_msg"));
+	
+	mGroupList->setDoubleClickCallback(boost::bind(&FSFloaterContacts::onGroupChatButtonClicked, this));
+	// mGroupList->setCommitCallback(boost::bind(&FSFloaterContacts::updateButtons, this));
+	mGroupList->setReturnCallback(boost::bind(&FSFloaterContacts::onGroupChatButtonClicked, this));
+	
+	
+	mGroupsTab->childSetAction("chat_btn", boost::bind(&FSFloaterContacts::onGroupChatButtonClicked,	this));
+	mGroupsTab->childSetAction("info_btn", boost::bind(&FSFloaterContacts::onGroupInfoButtonClicked,	this));
+	mGroupsTab->childSetAction("activate_btn", boost::bind(&FSFloaterContacts::onGroupActivateButtonClicked,	this));
+	mGroupsTab->childSetAction("leave_btn",	boost::bind(&FSFloaterContacts::onGroupLeaveButtonClicked,	this));
+	mGroupsTab->childSetAction("create_btn",	boost::bind(&FSFloaterContacts::onGroupCreateButtonClicked,	this));
+	mGroupsTab->childSetAction("search_btn",	boost::bind(&FSFloaterContacts::onGroupSearchButtonClicked,	this));
+	
 	return TRUE;
 }
 
@@ -133,6 +153,27 @@ void FSFloaterContacts::onOpen(const LLSD& key)
 	}
 }
 
+
+//
+// Friend actions
+//
+
+void FSFloaterContacts::onAvatarListDoubleClicked(LLUICtrl* ctrl)
+{
+	LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(ctrl);
+	if(!item)
+	{
+		return;
+	}
+
+	LLUUID clicked_id = item->getAvatarId();
+	
+#if 0 // SJB: Useful for testing, but not currently functional or to spec
+	LLAvatarActions::showProfile(clicked_id);
+#else // spec says open IM window
+	LLAvatarActions::startIM(clicked_id);
+#endif
+}
 
 void FSFloaterContacts::onImButtonClicked()
 {
@@ -166,7 +207,8 @@ void FSFloaterContacts::onTeleportButtonClicked()
 void FSFloaterContacts::onPayButtonClicked()
 {
 	LLUUID id = getCurrentItemID();
-	LLAvatarActions::pay(id);
+	if (id.notNull())
+		LLAvatarActions::pay(id);
 }
 
 void FSFloaterContacts::onDeleteFriendButtonClicked()
@@ -213,6 +255,45 @@ void FSFloaterContacts::onAddFriendWizButtonClicked()
 	}
 }
 
+//
+// Group actions
+//
+
+void FSFloaterContacts::onGroupChatButtonClicked()
+{
+	LLUUID group_id = getCurrentItemID();
+	if (group_id.notNull())
+		LLGroupActions::startIM(group_id);
+}
+
+void FSFloaterContacts::onGroupInfoButtonClicked()
+{
+	LLGroupActions::show(getCurrentItemID());
+}
+
+void FSFloaterContacts::onGroupActivateButtonClicked()
+{
+	LLGroupActions::activate(mGroupList->getSelectedUUID());
+}
+
+void FSFloaterContacts::onGroupLeaveButtonClicked()
+{
+	LLUUID group_id = getCurrentItemID();
+	if (group_id.notNull())
+		LLGroupActions::leave(group_id);
+}
+
+void FSFloaterContacts::onGroupCreateButtonClicked()
+{
+	LLGroupActions::createGroup();
+}
+
+void FSFloaterContacts::onGroupSearchButtonClicked()
+{
+	LLGroupActions::search();
+}
+
+
 
 std::string FSFloaterContacts::getActiveTabName() const
 {
@@ -226,8 +307,8 @@ LLUUID FSFloaterContacts::getCurrentItemID() const
 	if (cur_tab == FRIENDS_TAB_NAME)
 		return mFriendList->getSelectedUUID();
 
-	// if (cur_tab == GROUP_TAB_NAME)
-		// return mGroupList->getSelectedUUID();
+	if (cur_tab == GROUP_TAB_NAME)
+		return mGroupList->getSelectedUUID();
 
 	llassert(0 && "unknown tab selected");
 	return LLUUID::null;
@@ -239,29 +320,13 @@ void FSFloaterContacts::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 
 	if (cur_tab == FRIENDS_TAB_NAME)
 		mFriendList->getSelectedUUIDs(selected_uuids);
-	// else if (cur_tab == GROUP_TAB_NAME)
-		// mGroupList->getSelectedUUIDs(selected_uuids);
+	else if (cur_tab == GROUP_TAB_NAME)
+		mGroupList->getSelectedUUIDs(selected_uuids);
 	else
 		llassert(0 && "unknown tab selected");
 
 }
 
-void FSFloaterContacts::onAvatarListDoubleClicked(LLUICtrl* ctrl)
-{
-	LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(ctrl);
-	if(!item)
-	{
-		return;
-	}
-
-	LLUUID clicked_id = item->getAvatarId();
-	
-#if 0 // SJB: Useful for testing, but not currently functional or to spec
-	LLAvatarActions::showProfile(clicked_id);
-#else // spec says open IM window
-	LLAvatarActions::startIM(clicked_id);
-#endif
-}
 
 
 // static
