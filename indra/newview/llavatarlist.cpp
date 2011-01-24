@@ -293,7 +293,8 @@ void LLAvatarList::refresh()
 				// *NOTE: If you change the UI to show a different string,
 				// be sure to change the filter code below.
 				addNewItem(buddy_id, 
-					       av_name.mDisplayName.empty() ? waiting_str : av_name.mDisplayName, 
+					       //av_name.mDisplayName.empty() ? waiting_str : av_name.mDisplayName,
+					       av_name.getCompleteName(),
 						   LLAvatarTracker::instance().isBuddyOnline(buddy_id));
 				modified = true;
 				nadded++;
@@ -319,7 +320,7 @@ void LLAvatarList::refresh()
 			const LLUUID& buddy_id = it->asUUID();
 			LLAvatarName av_name;
 			have_names &= LLAvatarNameCache::get(buddy_id, &av_name);
-			if (!findInsensitive(av_name.mDisplayName, mNameFilter))
+			if (!findInsensitive(av_name.getCompleteName(), mNameFilter))
 			{
 				removeItemByUUID(buddy_id);
 				modified = true;
