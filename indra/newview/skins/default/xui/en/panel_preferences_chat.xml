@@ -81,7 +81,7 @@
      control_name="ShowChatMiniIcons"
      height="16"
      initial_value="false"
-     label="Show avatar icons within chat history"
+     label="Show icons in chat headers"
      layout="topleft"
      left="30"
      name="ShowChatMiniIcons"
@@ -99,7 +99,7 @@
     <check_box
      enabled="true"
      height="16"
-     label="Enable plain text IM and chat history"
+     label="Remove chat headers (V1 Style)"
      layout="topleft"
      left_delta="0"
      name="plain_text_chat_history"
