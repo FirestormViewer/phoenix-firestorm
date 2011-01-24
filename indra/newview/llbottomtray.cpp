@@ -577,6 +577,7 @@ BOOL LLBottomTray::postBuild()
 	getChild<LLUICtrl>("sidebar_people_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "panel_people"));
 	getChild<LLUICtrl>("sidebar_places_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "panel_places"));
 	getChild<LLUICtrl>("sidebar_appearance_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "sidepanel_appearance"));
+	getChild<LLUICtrl>("sidebar_inv_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "sidepanel_inventory"));
 	return TRUE;
 }
 
@@ -886,6 +887,11 @@ void LLBottomTray::showSidebarPanel(const std::string& panel_name)
 	{
 		tab_name = "sidebar_appearance";
 		btn = getChild<LLButton>("sidebar_appearance_btn");
+	}
+	else if (panel_name == "sidepanel_inventory")
+	{
+		tab_name = "sidebar_inventory";
+		btn = getChild<LLButton>("sidebar_inv_btn");
 	}
 	
 	// toggle minimization undocked

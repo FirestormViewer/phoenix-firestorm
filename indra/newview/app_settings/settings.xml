@@ -114,7 +114,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
 
     <key>RestrainedLove</key>
@@ -4019,7 +4019,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>ForceMandatoryUpdate</key>
     <map>
@@ -6843,7 +6843,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>QAModeEventHostPort</key>
     <map>
@@ -11598,7 +11598,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>UseDefaultColorPicker</key>
     <map>

@@ -222,6 +222,7 @@
     </button>
     <button
      follows="right|top"
+     control="MuteAudio"
      height="16"
      image_selected="AudioMute_Off"
      image_pressed="Audio_Press"
