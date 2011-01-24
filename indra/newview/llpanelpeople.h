@@ -38,6 +38,7 @@ class LLFilterEditor;
 class LLGroupList;
 class LLTabContainer;
 class LLMenuButton;
+class LLMenuGL;
 
 class LLPanelPeople 
 	: public LLPanel
