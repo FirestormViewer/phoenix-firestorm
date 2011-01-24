@@ -102,11 +102,11 @@
                      user_resize="false" 
                      auto_resize="true"
                      width="102">
-                    <button
+                     <button
                          enabled="true"
                          follows="bottom|left|right"
                          height="23"
-                         label="Shop"
+                         label="Marketplace"
                          layout="topleft"
                          left="0"
                          name="shop_btn"
