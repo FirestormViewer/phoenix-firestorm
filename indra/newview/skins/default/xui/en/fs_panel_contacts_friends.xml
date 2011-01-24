@@ -16,65 +16,6 @@
 	 show_permissions_granted="true"
 	 top="-10"
 	 width="240" />
-	<!--<scroll_list
-	 background_visible="true"
-	 bottom="10"
-	 column_padding="5"
-	 draw_heading="true"
-	 heading_height="20"
-	 draw_stripes="true"
-	 enabled="true"
-	 follows="left|top|right|bottom"
-	 left="10"
-	 mouse_opaque="true"
-	 multi_select="false"
-	 name="friend_list"
-	 tab_stop="true"
-	 top="-10"
-	 width="240">
-		<scroll_list.columns
-		 image="Contacts_Online_Status_Button"
-		 name="icon_online_status"
-		 tool_tip="Online status"
-		 width="18" />
-		<scroll_list.columns
-		 dynamicwidth="true" label="Name"
-		 name="friend_name" tool_tip="Name" />
-		<scroll_list.columns
-		 image="Permission_Visible_Online_Mine_Button"
-		 name="icon_visible_online"
-		 tool_tip="Friend can see when you&apos;re online"
-		 width="18" />
-		<scroll_list.columns
-		 image="Permission_Visible_Map_Mine_Button"
-		 name="icon_visible_map"
-		 tool_tip="Friend can locate you on the map"
-		 width="18" />
-		<scroll_list.columns
-		 image="Permission_Edit_Objects_Mine_Button"
-		 name="icon_edit_mine"
-		 tool_tip="Friend can edit, delete or take objects"
-		 width="18" />
-		<scroll_list.columns
-		 image="Permission_Visible_Online_Theirs_Button"
-		 name="icon_visible_online_theirs"
-		 tool_tip="You can see when they are online (only updates on login)"
-		 width="18" />
-		<scroll_list.columns
-		 image="Permission_Visible_Map_Theirs_Button"
-		 name="icon_visible_map_theirs"
-		 tool_tip="You can locate them on the map"
-		 width="18" />
-		<scroll_list.columns
-		 image="Permission_Edit_Objects_Theirs_Button"
-		 name="icon_edit_theirs"
-		 tool_tip="You can edit this friend&apos;s objects"
-		 width="18" />
-		<scroll_list.columns
-		 name="friend_last_update_generation"
-		 width="0" />
-	</scroll_list>-->
-
 	<button
 	 top="-10"
 	 follows="top|right"
