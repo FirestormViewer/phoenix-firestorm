@@ -13005,7 +13005,7 @@
 			<key>Type</key>
 			<string>Boolean</string>
 			<key>Value</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</map>
 		<key>PhoenixDisableLogoutScreens</key>
 		<map>
@@ -13016,7 +13016,7 @@
 			<key>Type</key>
 			<string>Boolean</string>
 			<key>Value</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</map>
 		<key>PhoenixDisableTeleportScreens</key>
 		<map>
@@ -13027,7 +13027,7 @@
 			<key>Type</key>
 			<string>Boolean</string>
 			<key>Value</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</map>
 </map>
 </llsd>
