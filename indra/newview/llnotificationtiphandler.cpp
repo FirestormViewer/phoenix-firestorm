@@ -109,8 +109,11 @@ bool LLTipHandler::processNotification(const LLSD& notify)
 		LLUUID from_id = notification->getPayload()["from_id"];
 		if (LLHandlerUtil::canLogToIM(notification))
 		{
-			LLHandlerUtil::logToIM(IM_NOTHING_SPECIAL, session_name, name,
-					notification->getMessage(), from_id, from_id);
+//			LLHandlerUtil::logToIM(IM_NOTHING_SPECIAL, session_name, name,
+//					notification->getMessage(), from_id, from_id);
+// [SL:KB] - Patch: Chat-Logs | Checked: 2010-11-18 (Catznip-2.4.0c) | Added: Catznip-2.4.0c
+			LLHandlerUtil::logToIMP2P(notification, false);
+// [/SL:KB]
 		}
 
 		if (LLHandlerUtil::canSpawnIMSession(notification))
