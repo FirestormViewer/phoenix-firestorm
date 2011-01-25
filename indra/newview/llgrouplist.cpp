@@ -65,20 +65,28 @@ public:
 
 static const LLGroupComparator GROUP_COMPARATOR;
 
+LLGroupList::Params::Params()
+: for_agent("for_agent", true)
+{
+}
 
 LLGroupList::LLGroupList(const Params& p)
-:	LLFlatListViewEx(p)
+:	LLFlatListViewEx(p),
+	mForAgent(p.for_agent)
 	, mDirty(true) // to force initial update
 {
 	// Listen for agent group changes.
-	gAgent.addListener(this, "new group");
+	if (mForAgent) gAgent.addListener(this, "new group");
 
-	mShowIcons = gSavedSettings.getBOOL("GroupListShowIcons");
+	mShowIcons = mForAgent && gSavedSettings.getBOOL("GroupListShowIcons");
 	setCommitOnSelectionChange(true);
 
 	// Set default sort order.
 	setComparator(&GROUP_COMPARATOR);
 
+
+	if (mForAgent)
+	{
 	// Set up context menu.
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
@@ -90,11 +98,12 @@ LLGroupList::LLGroupList(const Params& p)
 			gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if(context_menu)
 		mContextMenuHandle = context_menu->getHandle();
+	}
 }
 
 LLGroupList::~LLGroupList()
 {
-	gAgent.removeListener(this);
+	if (mForAgent) gAgent.removeListener(this);
 	LLView::deleteViewByHandle(mContextMenuHandle);
 }
 
@@ -112,12 +121,15 @@ BOOL LLGroupList::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	BOOL handled = LLUICtrl::handleRightMouseDown(x, y, mask);
 
+	if (mForAgent)
+	{
 	LLMenuGL* context_menu = (LLMenuGL*)mContextMenuHandle.get();
 	if (context_menu && size() > 0)
 	{
 		context_menu->buildDrawLabels();
 		context_menu->updateParent(LLMenuGL::sMenuContainer);
 		LLMenuGL::showPopup(this, context_menu, x, y);
+	}
 	}
 
 	return handled;
@@ -146,6 +158,8 @@ static bool findInsensitive(std::string haystack, const std::string& needle_uppe
 
 void LLGroupList::refresh()
 {
+	if (mForAgent)
+	{
 	const LLUUID& 		highlight_id	= gAgent.getGroupID();
 	S32					count			= gAgent.mGroups.count();
 	LLUUID				id;
@@ -174,6 +188,19 @@ void LLGroupList::refresh()
 	}
 
 	selectItemByUUID(highlight_id);
+	}
+	else
+	{
+		clear();
+
+		for (group_map_t::iterator it = mGroups.begin(); it != mGroups.end(); ++it)
+		{
+			addNewItem(it->second, it->first, LLUUID::null, ADD_BOTTOM);
+		}
+
+		// Sort the list.
+		sort();
+	}
 
 	setDirty(false);
 	onCommit();
@@ -192,6 +219,12 @@ void LLGroupList::toggleIcons()
 	{
 		static_cast<LLGroupListItem*>(*it)->setGroupIconVisible(mShowIcons);
 	}
+}
+
+void LLGroupList::setGroups(const std::map< std::string,LLUUID> group_list)
+{
+	mGroups = group_list;
+	setDirty(true);
 }
 
 //////////////////////////////////////////////////////////////////////////

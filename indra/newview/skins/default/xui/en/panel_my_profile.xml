@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  follows="all"
- height="532"
+ height="552"
  label="Profile"
  layout="topleft"
  left="0"
@@ -42,14 +42,14 @@
     follows="all"
     layout="topleft"
     name="profile_accordion"
-    height="505"
+    height="500"
     width="313">
      <accordion_tab
       expanded="true"
       layout="topleft"
       name="second_life_tab"
       title="Avatar"
-      fit_panel="false">
+      fit_panel="true">
         <scroll_container
          color="SL-Background_66"
          follows="all"
@@ -58,16 +58,16 @@
          name="profile_sl_scroll"
          opaque="true"
          height="650"
-         width="313"
+         width="331"
          top="0">
           <panel
-            layout="topleft"
-            follows="left|top|right"
-            height="650"
-            name="scroll_content_sl_panel"
-            top="0"
-            left="0"
-            width="313">
+           layout="topleft"
+           follows="left|top|right"
+           height="800"
+           name="second_life_panel"
+           top="0"
+           left="0"
+           width="313">
               <texture_picker
                allow_no_texture="true"
                default_image_name="None"
@@ -79,19 +79,20 @@
                left="10"
                name="2nd_life_pic"
                top="0"
-               width="275" />           
-             <text
+               width="275" />
+            <text
              follows="left|top"
              font.style="BOLD"
              height="13"
              layout="topleft"
              left="4"
              name="About_sl_text"
-             text_color="white"
+             text_color="White"
              top_pad="0"
              value="About:"
-             width="100" />
-              <expandable_text
+             width="280" />
+            <expandable_text
+               allow_scroll="true"
                follows="left|top|right"
                height="240"
                layout="topleft"
@@ -99,8 +100,7 @@
                textbox.max_length="512"
                textbox.show_context_menu="true"
                name="sl_description_edit"
-               top_pad="0"
-               allow_scroll="true"
+               top_pad="3"
                translate="false"
                width="280"
                expanded_bg_visible="true"
@@ -116,7 +116,7 @@
              left_pad="0"
              top_pad="0"
              name="title_member_text"
-             text_color="white"
+             text_color="White"
              top_delta="0"
              value="Resident Since:"
              width="280" />
@@ -144,7 +144,7 @@
              top_pad="12"
              value="Account Status:"
              width="280"
-             word_wrap="true" /> 
+             word_wrap="true" />
             <text_editor
              allow_scroll="false"
              bg_visible="false"
@@ -169,7 +169,7 @@
              height="15"
              layout="topleft"
              name="title_partner_text"
-             text_color="white"
+             text_color="White"
              top_pad="0"
              value="Partner:"
              width="280" />
@@ -189,26 +189,33 @@
                link="true"
                name="partner_text"
                top="0"
-               use_ellipses="true" 
-               width="300" />
+               use_ellipses="true"
+		       width="300" />
             </panel>
-
-            <!--
             <text
              follows="left|top"
              font.style="BOLD"
              height="13"
              layout="topleft"
              left="4"
-             name="title_my_groups_text"
-             text_color="white"
-             top_pad="3"
+             name="title_groups_text"
+             text_color="White"
+             top_pad="0"
              value="Groups:"
-             width="290" />
-            -->
+             width="280" />
+			<group_list
+			 for_agent="true"
+			 allow_select="true"
+             height="162"
+             follows="all"
+			 left="5"
+			 name="group_list"
+             top_pad="0"
+			 width="280" />
+<!--
             <expandable_text
             follows="all"
-            height="150"
+            height="160"
             layout="topleft"
             left="5"
             name="sl_groups"
@@ -218,12 +225,15 @@
             translate="false"
             width="280"
             expanded_bg_visible="true"
+            word_wrap="true"
+            allow_scroll="false"
             expanded_bg_color="SL-Background_Light">
               Lorem ipsum dolor sit amet, consectetur adlkjpiscing elit moose moose. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet. adipiscing elit. Aenean rigviverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet sorbet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. Aenean viverra tulip moosetop. Slan de heelish marfnik tooplod. Sum sum to whop de wompam booster copm.
-            </expandable_text>     
-          </panel>        
+            </expandable_text>
+-->
+          </panel>
         </scroll_container>
-      </accordion_tab>
+    </accordion_tab>
     <accordion_tab
      expanded="false"
      layout="topleft"
@@ -283,7 +293,7 @@
              layout="topleft"
              left="4"
              name="homepage_text"
-             text_color="white"
+             text_color="White"
              top_pad="3"
              value="Web page:"
              width="280" />
@@ -299,7 +309,7 @@
               width="280"
               word_wrap="false"
               use_ellipses="true" />
-            </panel>
+          </panel>
         </scroll_container>
       </accordion_tab>
     </accordion>
