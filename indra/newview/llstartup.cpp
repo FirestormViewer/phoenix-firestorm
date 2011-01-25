@@ -198,6 +198,9 @@
 #include "lldxhardware.h"
 #endif
 
+#include "llnotificationmanager.h"
+
+
 //
 // exported globals
 //
@@ -2672,6 +2675,11 @@ void reset_login()
 	}
 
 	// Hide any other stuff
+	LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLUUID(gSavedSettings.getString("NearByChatChannelUUID")));
+	if(chat_channel)
+	{
+		chat_channel->removeToastsFromChannel();
+	}
 	LLFloaterReg::hideVisibleInstances();
 }
 
