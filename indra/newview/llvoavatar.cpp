@@ -5237,6 +5237,7 @@ BOOL LLVOAvatar::loadAvatar()
 	}
 
 	// Uncomment to enable avatar_lad.xml debugging. 
+#if 0
 	std::ofstream file;
 	file.open("avatar_lad.log");
 	for( LLViewerVisualParam* param = (LLViewerVisualParam*) getFirstVisualParam(); 
@@ -5248,6 +5249,7 @@ BOOL LLVOAvatar::loadAvatar()
 	}
 
 	file.close();
+#endif
 	
 	return TRUE;
 }

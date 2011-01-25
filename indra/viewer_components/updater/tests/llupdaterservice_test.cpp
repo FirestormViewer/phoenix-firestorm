@@ -85,6 +85,7 @@ void LLDir::setChatLogsDir(const std::string &path){}
 void LLDir::setPerAccountChatLogsDir(const std::string &username){}
 void LLDir::setLindenUserDir(const std::string &username){}		
 void LLDir::setSkinFolder(const std::string &skin_folder){}
+void LLDir::setSkinThemeFolder(const std::string& theme_folder){}
 bool LLDir::setCacheDir(const std::string &path){ return true; }
 void LLDir::dumpCurrentDirectories() {}
 

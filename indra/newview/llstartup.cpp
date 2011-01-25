@@ -265,6 +265,7 @@ void trust_cert_done(const LLSD& notification, const LLSD& response);
 void apply_udp_blacklist(const std::string& csv);
 bool process_login_success_response();
 void transition_back_to_login_panel(const std::string& emsg);
+void cmdline_printchat(std::string message);
 
 void callback_cache_name(const LLUUID& id, const std::string& full_name, bool is_group)
 {
@@ -949,7 +950,7 @@ bool idle_startup()
 		}
 
 		// Display the startup progress bar.
-		gViewerWindow->setShowProgress(TRUE);
+		gViewerWindow->setShowProgress(!gSavedSettings.getBOOL("PhoenixDisableLoginScreens"));
 		gViewerWindow->setProgressCancelButtonVisible(TRUE, LLTrans::getString("Quit"));
 
 		// Poke the VFS, which could potentially block for a while if
@@ -2132,10 +2133,26 @@ bool first_run_dialog_callback(const LLSD& notification, const LLSD& response)
 
 void set_startup_status(const F32 frac, const std::string& string, const std::string& msg)
 {
-	gViewerWindow->setProgressPercent(frac*100);
-	gViewerWindow->setProgressString(string);
+	if(gSavedSettings.getBOOL("PhoenixDisableLoginScreens"))
+	{
+		static std::string last_d;
+		std::string new_d = string;
+		if(new_d != last_d)
+		{
+			last_d = new_d;
+			cmdline_printchat(new_d);
+			if(new_d == LLTrans::getString("LoginWaitingForRegionHandshake"))
+			{
+				cmdline_printchat(msg);
+			}
+		}
+	}else
+	{
+		gViewerWindow->setProgressPercent(frac*100);
+		gViewerWindow->setProgressString(string);
 
-	gViewerWindow->setProgressMessage(msg);
+		gViewerWindow->setProgressMessage(msg);
+	}
 }
 
 bool login_alert_status(const LLSD& notification, const LLSD& response)

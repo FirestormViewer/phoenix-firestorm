@@ -48,3 +48,4 @@ V1_Contacts		LGPL
 QuickAdditionalInv	LGPL
 UpdatedLibCURL		Curl (MIT/X11)
 UpdatedWebKit		LGPL
+Progress_screens	LGPL

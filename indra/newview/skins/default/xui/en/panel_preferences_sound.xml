@@ -299,6 +299,7 @@
 		value="true"
 		follows="left|bottom|right"
 		height="15"
+    bottom_delta="10" 
 		tool_tip="Check this to let media auto-play if it wants"
 		label="Allow Media to auto-play"
 		top_pad="1"
@@ -323,7 +324,7 @@
      left="25"
      name="voice_chat_settings"
      width="180"
-     top_pad="7">
+     top_pad="40">
 	  Voice Chat Settings
     </text>
     <text
