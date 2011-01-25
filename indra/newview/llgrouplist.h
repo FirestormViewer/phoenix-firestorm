@@ -45,6 +45,11 @@ class LLGroupList: public LLFlatListViewEx, public LLOldEvents::LLSimpleListener
 {
 	LOG_CLASS(LLGroupList);
 public:
+	struct Params : public LLInitParam::Block<Params, LLFlatListViewEx::Params>
+	{
+		Optional<bool>	for_agent;
+		Params();
+	};
 
 	LLGroupList(const Params& p);
 	virtual ~LLGroupList();
@@ -55,6 +60,7 @@ public:
 	void setNameFilter(const std::string& filter);
 	void toggleIcons();
 	bool getIconsVisible() const { return mShowIcons; }
+	void setGroups(const std::map< std::string,LLUUID> group_list);
 
 private:
 	void setDirty(bool val = true)		{ mDirty = val; }
@@ -70,6 +76,10 @@ private:
 	bool mShowIcons;
 	bool mDirty;
 	std::string mNameFilter;
+
+	bool mForAgent;
+	typedef std::map< std::string,LLUUID>	group_map_t;
+	group_map_t 			mGroups;
 };
 
 class LLButton;

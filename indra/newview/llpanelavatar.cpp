@@ -46,6 +46,8 @@
 #include "llvoiceclient.h"
 #include "lltextbox.h"
 #include "lltrans.h"
+#include "llgroupactions.h"
+#include "llgrouplist.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLDropTarget
@@ -506,6 +508,10 @@ BOOL LLPanelAvatarProfile::postBuild()
 	enable.add("Profile.EnableBlock", boost::bind(&LLPanelAvatarProfile::enableBlock, this));
 	enable.add("Profile.EnableUnblock", boost::bind(&LLPanelAvatarProfile::enableUnblock, this));
 
+	LLGroupList* group_list = getChild<LLGroupList>("group_list");
+	group_list->setDoubleClickCallback(boost::bind(&LLPanelAvatarProfile::openGroupProfile, this));
+	group_list->setReturnCallback(boost::bind(&LLPanelAvatarProfile::openGroupProfile, this));
+
 	mProfileMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_profile_overflow.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 
 	LLVoiceClient::getInstance()->addObserver((LLVoiceClientStatusObserver*)this);
@@ -542,7 +548,6 @@ void LLPanelAvatarProfile::resetControls()
 	getChildView("status_panel")->setVisible( true);
 	getChildView("profile_buttons_panel")->setVisible( true);
 	getChildView("title_groups_text")->setVisible( true);
-	getChildView("sl_groups")->setVisible( true);
 	getChildView("add_friend")->setEnabled(true);
 
 	getChildView("status_me_panel")->setVisible( false);
@@ -559,7 +564,6 @@ void LLPanelAvatarProfile::resetData()
 	getChild<LLUICtrl>("status_message")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("sl_description_edit")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("fl_description_edit")->setValue(LLStringUtil::null);
-	getChild<LLUICtrl>("sl_groups")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("homepage_edit")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("register_date")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("acc_status_text")->setValue(LLStringUtil::null);
@@ -597,6 +601,12 @@ void LLPanelAvatarProfile::processProfileProperties(const LLAvatarData* avatar_d
 
 void LLPanelAvatarProfile::processGroupProperties(const LLAvatarGroups* avatar_groups)
 {
+	//KC: the group_list ctrl can handle all this for us on our own profile
+	if (getAvatarId() == gAgent.getID())
+		return;
+
+	LLGroupList* group_list = getChild<LLGroupList>("group_list");
+
 	// *NOTE dzaporozhan
 	// Group properties may arrive in two callbacks, we need to save them across
 	// different calls. We can't do that in textbox as textbox may change the text.
@@ -610,22 +620,13 @@ void LLPanelAvatarProfile::processGroupProperties(const LLAvatarGroups* avatar_g
 		mGroups[group_data.group_name] = group_data.group_id;
 	}
 
-	// Creating string, containing group list
-	std::string groups = "";
-	for (group_map_t::iterator it = mGroups.begin(); it != mGroups.end(); ++it)
-	{
-		if (it != mGroups.begin())
-			groups += ", ";
+	group_list->setGroups(mGroups);
+}
 
-		std::string group_name = LLURI::escape(it->first);
-		std::string group_url= it->second.notNull()
-				? "[secondlife:///app/group/" + it->second.asString() + "/about " + group_name + "]"
-						: getString("no_group_text");
-
-		groups += group_url;
-	}
-
-	getChild<LLUICtrl>("sl_groups")->setValue(groups);
+void LLPanelAvatarProfile::openGroupProfile()
+{
+	LLUUID group_id = getChild<LLGroupList>("group_list")->getSelectedUUID();
+	LLGroupActions::show(group_id);
 }
 
 void LLPanelAvatarProfile::fillCommonData(const LLAvatarData* avatar_data)
@@ -863,7 +864,6 @@ void LLPanelMyProfile::resetControls()
 	getChildView("status_panel")->setVisible( false);
 	getChildView("profile_buttons_panel")->setVisible( false);
 	getChildView("title_groups_text")->setVisible( false);
-	getChildView("sl_groups")->setVisible( false);
 	getChildView("status_me_panel")->setVisible( true);
 	getChildView("profile_me_buttons_panel")->setVisible( true);
 }
