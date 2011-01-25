@@ -1766,6 +1766,7 @@ void LLPanelPreferenceSkins::onSkinChanged()
 	m_Skin = (m_pSkinCombo) ? m_pSkinCombo->getSelectedValue().asString() : "default";
 	m_SkinTheme = "default";
 	refreshSkinThemeList();
+	onSkinThemeChanged(); // make sure we initialize a theme for our new skin
 }
 
 void LLPanelPreferenceSkins::onSkinThemeChanged()
