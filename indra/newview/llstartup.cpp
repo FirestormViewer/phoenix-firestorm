@@ -779,6 +779,11 @@ bool idle_startup()
 		gViewerWindow->setNormalControlsVisible( FALSE );	
 		gLoginMenuBarView->setVisible( TRUE );
 		gLoginMenuBarView->setEnabled( TRUE );
+		LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLUUID(gSavedSettings.getString("NearByChatChannelUUID")));
+		if(chat_channel)
+		{
+			chat_channel->removeToastsFromChannel();
+		}
 
 		// Hide the splash screen
 		LLSplashScreen::hide();
