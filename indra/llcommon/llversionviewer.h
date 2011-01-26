@@ -35,7 +35,7 @@ LL_COMMON_API extern const S32 LL_VERSION_BUILD;
 const char * const LL_CHANNEL = "Firestorm-private";
 
 #if LL_DARWIN
-const char * const LL_VERSION_BUNDLE_ID = "com.secondlife.firestorm.viewer";
+const char * const LL_VERSION_BUNDLE_ID = "com.phoenixviewer.firestorm.viewer";
 #endif
 
 #endif
