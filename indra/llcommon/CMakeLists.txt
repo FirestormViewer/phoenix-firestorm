@@ -264,7 +264,7 @@ configure_files(llcommon_GENERATED_SOURCE_FILES
     )
 endif(WINDOWS AND NOT FIRECYG)
 
-list(APPEND llcommon_SOURCE_FILES ${llcommon_GENERATED_SOURCE_FILES})
+list(APPEND llcommon_SOURCE_FILES ${llcommon_GENERATED_SOURCE_FILES} llversionviewer.cpp)
 
 if(LLCOMMON_LINK_SHARED)
   add_library (llcommon SHARED ${llcommon_SOURCE_FILES})
