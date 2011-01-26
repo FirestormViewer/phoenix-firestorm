@@ -3,6 +3,7 @@
 
 project(llcommon)
 
+
 include(00-Common)
 include(LLCommon)
 include(Linking)
@@ -233,7 +234,7 @@ set(llcommon_HEADER_FILES
     lluuid.h
     lluuidhashmap.h
     llversionserver.h
-#    llversionviewer.h
+    llversionviewer.h
     llworkerthread.h
     ll_template_cast.h
     metaclass.h
@@ -258,15 +259,12 @@ set_source_files_properties(${llcommon_HEADER_FILES}
 list(APPEND llcommon_SOURCE_FILES ${llcommon_HEADER_FILES})
 
 if (WINDOWS AND NOT FIRECYG)
-configure_files(llcommon_GENERATED_HEADER_FILES
-    llversionviewer.h
+configure_files(llcommon_GENERATED_SOURCE_FILES
+    llversionviewer.cpp
     )
 endif(WINDOWS AND NOT FIRECYG)
 
-set_source_files_properties(${llcommon_GENERATED_HEADER_FILES}
-                            PROPERTIES HEADER_FILE_ONLY TRUE)
-
-list(APPEND llcommon_SOURCE_FILES ${llcommon_GENERATED_HEADER_FILES})
+list(APPEND llcommon_SOURCE_FILES ${llcommon_GENERATED_SOURCE_FILES})
 
 if(LLCOMMON_LINK_SHARED)
   add_library (llcommon SHARED ${llcommon_SOURCE_FILES})

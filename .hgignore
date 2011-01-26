@@ -19,8 +19,8 @@ indra/lib/mono/indra/*.dll
 indra/lib/mono/indra/*.exe
 indra/lib/mono/indra/*.pdb
 indra/lib/python/eventlet/
-indra/llcommon/llversionviewer.h
-indra/llcommon/llversionviewer.h.built
+indra/llcommon/llversionviewer.cpp
+indra/llcommon/llversionviewer.cpp.built
 indra/llwindow/glh/glh_linear.h
 indra/newview/app_settings/mozilla
 indra/newview/app_settings/mozilla-runtime-*

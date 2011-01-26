@@ -228,7 +228,7 @@ if [ $WANTS_VERSION -eq $TRUE ] ; then
 	    -e "s#LL_VERSION_MAJOR = .*\$#LL_VERSION_MAJOR = ${majorVer};#" \
 	    -e "s#LL_VERSION_MINOR = .*\$#LL_VERSION_MINOR = ${minorVer};#" \
             -e "s#LL_VERSION_PATCH = .*\$#LL_VERSION_PATCH = ${patchVer};#" \
-	    -e "s#LL_CHANNEL = .*\$#LL_CHANNEL = \"Firestorm-$CHANNEL\";#" llcommon/llversionviewer.h.in > llcommon/llversionviewer.h
+	    -e "s#LL_CHANNEL = .*\$#LL_CHANNEL = \"Firestorm-$CHANNEL\";#" llcommon/llversionviewer.cpp.in > llcommon/llversionviewer.cpp
 fi
 
 if [ $WANTS_CONFIG -eq $TRUE ] ; then
