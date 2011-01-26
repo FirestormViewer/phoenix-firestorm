@@ -4,7 +4,7 @@
  background_visible="true"
  default_tab_group="1"
  follows="all"
- height="300"
+ height="350"
  layout="topleft"
  left="0"
  name="nearby_chat"
@@ -23,7 +23,7 @@
    animate="false" 
    default_tab_group="2"
   follows="all"
-  height="300"
+  height="320"
   width="394"
   layout="topleft"
   orientation="horizontal"
@@ -37,7 +37,7 @@
        left="0"
        tab_group="2"
        top="0"
-       height="300"
+       height="200"
 	     width="254"
        user_resize="true">
         <button
@@ -74,14 +74,26 @@
         <chat_history
 	 font="SansSerifSmall"
          follows="left|right|top|bottom"
-         height="255"
+         height="155"
+         bottom_pad="20"
          name="chat_history"
          parse_highlights="true"
          parse_urls="true"
          left="1"
-         width="250"
+         width="249"
 		 value="test1">
         </chat_history>
+      <line_editor
+         bottom="0"
+         follows="left|right|bottom"
+	 font="SansSerifSmall"
+         height="20"
+         label="To local chat"
+         layout="bottomleft"
+         name="chat_box"
+         tab_group="3"
+         width="249">
+      </line_editor>
     </layout_panel>
   </layout_stack>
 
