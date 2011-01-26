@@ -46,7 +46,7 @@
       left="24"
       height="12"
       name="tab_direction_label"
-      width="120"
+      width="150"
       top_pad="10">
       Chat Tab Mode Orientation:
     </text>
@@ -55,7 +55,7 @@
      follows="left|top"
      layout="topleft"
      top_delta="0"
-     left="150"
+     left="180"
         height="20"
           width="130"
      text_color="White_25">
@@ -90,7 +90,28 @@
        width="150" />
     </radio_group>
 
-    <check_box bottom_delta="-30" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Teleport Screens" left_delta="-20" mouse_opaque="true" name="tp_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableTeleportScreens" tool_tip="Disables the black teleport screen during all teleports."/>
+    <check_box
+     layout="topleft"
+     follows="left|top"
+     bottom_delta="30"
+     left_delta="-10"
+     width="50"
+     height="16"
+     control_name="PhoenixNearbyChatbar"
+     label="Add a chatbar in the Nearby Chat window"/>
+    <text
+     name="requires_restart_label"
+     follows="left|bottom"
+     layout="topleft"
+     top_delta="0"
+     left_delta="250"
+        height="18"
+          width="130"
+     text_color="White_25">
+      (requires restart)
+    </text>
+
+    <check_box bottom_delta="-30" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Teleport Screens" left="15" mouse_opaque="true" name="tp_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableTeleportScreens" tool_tip="Disables the black teleport screen during all teleports."/>
     <check_box bottom_delta="-20" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Login Progress Screen" left_delta="0" mouse_opaque="true" name="login_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableLoginScreens" tool_tip="Disables the black login progress Screen"/>
     <check_box bottom_delta="-20" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Logout Progress Screen" left_delta="0" mouse_opaque="true" name="logout_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableLogoutScreens" tool_tip="Disables the black Logout progress screen."/>
   

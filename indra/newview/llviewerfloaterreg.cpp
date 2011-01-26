@@ -152,7 +152,14 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("bumps", "floater_bumps.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterBump>);
 
 	LLFloaterReg::add("camera", "floater_camera.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCamera>);
+	if (gSavedSettings.getBOOL("PhoenixNearbyChatbar")) 	// xml toggle for chatbar in nearby chat -WoLf
+	{
+	LLFloaterReg::add("nearby_chat", "floater_nearby_chat-cb.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLNearbyChat>);
+	}
+	else
+	{
 	LLFloaterReg::add("nearby_chat", "floater_nearby_chat.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLNearbyChat>);
+	}
 
 	LLFloaterReg::add("compile_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCompileQueue>);
 
