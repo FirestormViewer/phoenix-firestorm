@@ -502,6 +502,7 @@ void LLAvatarTracker::addParticularFriendObserver(const LLUUID& buddy_id, LLFrie
 {
 	if (buddy_id.notNull() && observer)
 		mParticularFriendObserverMap[buddy_id].insert(observer);
+	llinfos << "AO DEBUG: postAdd: ob_it->second.size=" << mParticularFriendObserverMap[buddy_id].size() << llendl;
 }
 
 void LLAvatarTracker::removeParticularFriendObserver(const LLUUID& buddy_id, LLFriendObserver* observer)
@@ -511,12 +512,19 @@ void LLAvatarTracker::removeParticularFriendObserver(const LLUUID& buddy_id, LLF
 
     observer_map_t::iterator obs_it = mParticularFriendObserverMap.find(buddy_id);
     if(obs_it == mParticularFriendObserverMap.end())
-        return;
-
+	{
+        llinfos << "AO DEBUG: preremove: no observers found, skipping." << llendl;
+		return;
+	}
+	
+	llinfos << "AO DEBUG: preremove: ob_it->second.size=" << obs_it->second.size() << llendl;
     obs_it->second.erase(observer);
+	llinfos << "AO DEBUG: postremove: ob_it->second.size=" << obs_it->second.size() << llendl;
 
     // purge empty sets from the map
-    if (obs_it->second.size() == 0)
+	// AO: Remove below check as last resort to resolve a crash from dangling pointer.
+	// TODO: clean up all observers and don't leave dangling pointers here.
+	if (obs_it->second.size() == 0) 
     	mParticularFriendObserverMap.erase(obs_it);
 }
 
@@ -528,6 +536,7 @@ void LLAvatarTracker::notifyParticularFriendObservers(const LLUUID& buddy_id)
 
     // Notify observers interested in buddy_id.
     observer_set_t& obs = obs_it->second;
+	llinfos << "AO DEBUG: notifying particularFriends, size=" << obs_it->second.size() << llendl;
     for (observer_set_t::iterator ob_it = obs.begin(); ob_it != obs.end(); ob_it++)
     {
 		if (*ob_it)

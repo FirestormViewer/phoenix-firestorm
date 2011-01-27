@@ -178,6 +178,7 @@ public:
 	std::string		getTitle() const;
 	void			setShortTitle( const std::string& short_title );
 	std::string		getShortTitle() const;
+	void			setHideOnMinimize(bool hide);
 	void			setTitleVisible(bool visible);
 	virtual void	setMinimized(BOOL b);
 	void			moveResizeHandlesToFront();
@@ -389,6 +390,7 @@ private:
 	BOOL			mDragOnLeft;
 	BOOL			mResizable;
 	bool			mOpenCentered;
+	bool			mHideOnMinimize;
 	
 	S32				mMinWidth;
 	S32				mMinHeight;
