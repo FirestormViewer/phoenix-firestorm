@@ -546,8 +546,8 @@ void AlignThread::run()
 		}
 	}
 
-	S32 axis = QToolAlign::getInstance1()->mHighlightedAxis;
-	F32 direction = QToolAlign::getInstance1()->mHighlightedDirection;
+	S32 axis = QToolAlign::getInstance()->mHighlightedAxis;
+	F32 direction = QToolAlign::getInstance()->mHighlightedDirection;
 
 	// sort them into positional order for proper packing
 	BBoxCompare compare(axis, direction, original_bboxes);
@@ -559,7 +559,7 @@ void AlignThread::run()
 	// find new positions
 	for (U32 i = 0; i < objects.size(); i++)
 	{
-		LLBBox target_bbox = QToolAlign::getInstance1()->mBBox;
+		LLBBox target_bbox = QToolAlign::getInstance()->mBBox;
 		LLVector3 target_corner = target_bbox.getCenterAgent() - 
 			direction * target_bbox.getExtentLocal() / 2.0;
 	
@@ -595,7 +595,7 @@ void AlignThread::run()
 				llwarns << "i=" << i << " j=" << j << llendl;
 			}
 			
-			if (!QToolAlign::getInstance1()->mForce) // well, don't check if in force mode
+			if (!QToolAlign::getInstance()->mForce) // well, don't check if in force mode
 			{
 				for (U32 k = 0; k < i; k++)
 				{
@@ -656,7 +656,7 @@ void AlignThread::run()
 	
 	
 	LLSelectMgr::getInstance()->sendMultipleUpdate(UPD_POSITION);
-	QToolAlign::getInstance1()->aligndone();
+	QToolAlign::getInstance()->aligndone();
 }
 
 void AlignThread::shutdown()
