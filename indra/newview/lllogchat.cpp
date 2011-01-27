@@ -273,7 +273,7 @@ void LLLogChat::saveHistory(const std::string& filename,
 			    const LLUUID& from_id,
 			    const std::string& line)
 {
-	if(LLStartUp::getStartupState() != STATE_LOGIN_CLEANUP)
+	if(LLStartUp::getStartupState() <= STATE_LOGIN_CLEANUP)
 	{
 		return;
 	}
