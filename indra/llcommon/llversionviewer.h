@@ -32,7 +32,7 @@ LL_COMMON_API extern const S32 LL_VERSION_MINOR;
 LL_COMMON_API extern const S32 LL_VERSION_PATCH;
 LL_COMMON_API extern const S32 LL_VERSION_BUILD;
 
-const char * const LL_CHANNEL = "Firestorm-private";
+LL_COMMON_API extern const char * const LL_CHANNEL;
 
 #if LL_DARWIN
 const char * const LL_VERSION_BUNDLE_ID = "com.phoenixviewer.firestorm.viewer";
