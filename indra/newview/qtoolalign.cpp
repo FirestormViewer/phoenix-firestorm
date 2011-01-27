@@ -31,14 +31,12 @@ const F32 MANIPULATOR_SELECT_SIZE = 20.0;
 
 
 
-QToolAlign* QToolAlign::sInstance = NULL;
 AlignThread* AlignThread::sInstance = NULL;
 void cmdline_printchat(std::string message);
 
 QToolAlign::QToolAlign()
 :	LLTool(std::string("Align"))
 {
-	sInstance = this;
 }
 
 
