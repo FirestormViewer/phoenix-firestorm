@@ -32,6 +32,7 @@
 #include "llfloater.h"
 #include "llmultifloater.h"
 #include "llfloaterreglistener.h"
+#include <string>
 
 //*******************************************************
 
@@ -135,6 +136,15 @@ LLFloater* LLFloaterReg::getInstance(const std::string& name, const LLSD& key)
 				// Note: key should eventually be a non optional LLFloater arg; for now, set mKey to be safe
 				res->mKey = key;
 				res->setInstanceName(name);
+				
+				// handle restored undocked sidebar tabs specially
+				llinfos << "trying to restore variables for name: " << name << llendl;
+				std::string pat = "side_bar_tab";
+				size_t found = name.find(pat);
+				if (found!=std::string::npos)
+					res->setHideOnMinimize(true);
+				
+				
 				res->applySavedVariables(); // Can't apply rect and dock state until setting instance name
 				if (res->mAutoTile && !res->getHost() && index > 0)
 				{

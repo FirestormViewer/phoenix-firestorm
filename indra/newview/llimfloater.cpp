@@ -155,6 +155,22 @@ void LLIMFloater::onClose(bool app_quitting)
 	//
 	// Last change:
 	// EXT-3516 X Button should end IM session, _ button should hide
+	
+	
+	// AO: Make sure observers are removed on close
+	mVoiceChannelStateChangeConnection.disconnect();
+	if(LLVoiceClient::instanceExists())
+	{
+		LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
+	}
+	
+	LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
+	if ((pIMSession) && (pIMSession->mSessionType == LLIMModel::LLIMSession::P2P_SESSION))
+	{
+		llinfos << "AO: Cleaning up stray particularFriendObservers" << llendl;
+		LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
+	}
+	
 	gIMMgr->leaveSession(mSessionID);
 }
 
@@ -297,6 +313,13 @@ LLIMFloater::~LLIMFloater()
 	if(LLVoiceClient::instanceExists())
 	{
 		LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
+	}
+	
+	LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
+	if ((pIMSession) && (pIMSession->mSessionType == LLIMModel::LLIMSession::P2P_SESSION))
+	{
+		llinfos << "AO: Cleaning up stray particularFriendObservers" << llendl;
+		LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
 	}
 }
 
@@ -519,9 +542,10 @@ BOOL LLIMFloater::postBuild()
 				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
 				getChild<LLLayoutStack>("ls_control_panel")->reshape(180,20,true);
 				
-				
+				llinfos << "AO: adding llimfloater removing/adding particularfriendobserver" << llendl;
 				LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
 				LLAvatarTracker::instance().addParticularFriendObserver(mOtherParticipantUUID, this);
+				
 				// Disable "Add friend" button for friends.
 				llinfos << "add_friend_btn check start" << llendl;
 				getChild<LLButton>("add_friend_btn")->setEnabled(!LLAvatarActions::isFriend(mOtherParticipantUUID));

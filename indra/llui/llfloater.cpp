@@ -248,6 +248,7 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	mHasBeenDraggedWhileMinimized(FALSE),
 	mPreviousMinimizedBottom(0),
 	mPreviousMinimizedLeft(0),
+	mHideOnMinimize(false),
 	mMinimizeSignal(NULL)
 //	mNotificationContext(NULL)
 {
@@ -918,6 +919,12 @@ void LLFloater::setTitle( const std::string& title )
 	applyTitle();
 }
 
+void LLFloater::setHideOnMinimize(bool hide)
+{
+		mHideOnMinimize = hide;
+}
+
+
 std::string LLFloater::getTitle() const
 {
 	if (mTitle.empty())
@@ -1057,10 +1064,13 @@ void LLFloater::setMinimized(BOOL minimize)
 	{
 		// AO Pseudo-hide minimized sidebar floaters. We get into trouble if they are actually not-visible,
 		// so fake invisibility with offscreen location.
-		bool isSideTrayTab = false;
 		LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", getName());
-		if (LLFloater::isShown(floater_tab))  
-			isSideTrayTab = true;
+		if (LLFloater::isShown(floater_tab))
+		{
+				mHideOnMinimize = true;
+				llinfos << "SideTray minimized floater " << getName() << " detected, hiding." << llendl;
+		}
+		
 		
 		// minimized flag should be turned on before release focus
 		mMinimized = TRUE;
@@ -1078,8 +1088,9 @@ void LLFloater::setMinimized(BOOL minimize)
 		{
 			S32 left, bottom;
 			
-			if (isSideTrayTab)
+			if (mHideOnMinimize)
 			{
+				llinfos << "mHideOnMinize: setting origin off screen" << llendl;
 				setOrigin( -9999, -9999 );
 			}
 			else 
@@ -1135,11 +1146,18 @@ void LLFloater::setMinimized(BOOL minimize)
 		}
 		
 		// Reshape *after* setting mMinimized
-		if (isSideTrayTab)
-			reshape( 0, 0, TRUE);
-		else 
+		if (mHideOnMinimize)
+		{
+			llinfos << "mHideOnMinize - reshaping to be hidden" << llendl;
+			//LLPanel::reshape(width, height, called_from_parent);
+			//reshape( 1, 1, TRUE);
+			reshape( 1, floater_header_size, TRUE);
+		}
+		else
+		{
+			llinfos << "AO: reshaping to minimized bar" << llendl;
 			reshape( minimized_width, floater_header_size, TRUE);
-
+		}
 	}
 	else
 	{

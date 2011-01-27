@@ -107,20 +107,21 @@ void LLPanelChatControlPanel::updateButtons(bool is_call_started)
 
 LLPanelChatControlPanel::~LLPanelChatControlPanel()
 {
-	mVoiceChannelStateChangeConnection.disconnect();
-	if(LLVoiceClient::instanceExists())
-	{
-		LLVoiceClient::getInstance()->removeObserver(this);
-	}
+	// AO: Now handled by main im floater
+	//mVoiceChannelStateChangeConnection.disconnect();
+	//if(LLVoiceClient::instanceExists())
+	//{
+	//	LLVoiceClient::getInstance()->removeObserver(this);
+	//}
 }
 
 BOOL LLPanelChatControlPanel::postBuild()
 {
-	childSetAction("call_btn", boost::bind(&LLPanelChatControlPanel::onCallButtonClicked, this));
-	childSetAction("end_call_btn", boost::bind(&LLPanelChatControlPanel::onEndCallButtonClicked, this));
-	childSetAction("voice_ctrls_btn", boost::bind(&LLPanelChatControlPanel::onOpenVoiceControlsClicked, this));
-
-	LLVoiceClient::getInstance()->addObserver(this);
+	// AO: Now handled by main im floater
+	//childSetAction("call_btn", boost::bind(&LLPanelChatControlPanel::onCallButtonClicked, this));
+	//childSetAction("end_call_btn", boost::bind(&LLPanelChatControlPanel::onEndCallButtonClicked, this));
+	//childSetAction("voice_ctrls_btn", boost::bind(&LLPanelChatControlPanel::onOpenVoiceControlsClicked, this));
+	//LLVoiceClient::getInstance()->addObserver(this);
 
 	return TRUE;
 }
@@ -129,14 +130,16 @@ void LLPanelChatControlPanel::setSessionId(const LLUUID& session_id)
 {
 	//Method is called twice for AdHoc and Group chat. Second time when server init reply received
 	mSessionId = session_id;
-	LLVoiceChannel* voice_channel = LLIMModel::getInstance()->getVoiceChannel(mSessionId);
-	if(voice_channel)
-	{
-		mVoiceChannelStateChangeConnection = voice_channel->setStateChangedCallback(boost::bind(&LLPanelChatControlPanel::onVoiceChannelStateChanged, this, _1, _2));
-		
-		//call (either p2p, group or ad-hoc) can be already in started state
-		updateButtons(voice_channel->getState() >= LLVoiceChannel::STATE_CALL_STARTED);
-	}
+	
+	// AO: Now handled by main im floater
+	//LLVoiceChannel* voice_channel = LLIMModel::getInstance()->getVoiceChannel(mSessionId);
+	//if(voice_channel)
+	//{
+	//	mVoiceChannelStateChangeConnection = voice_channel->setStateChangedCallback(boost::bind(&LLPanelChatControlPanel::onVoiceChannelStateChanged, this, _1, _2));
+	//	
+	//	//call (either p2p, group or ad-hoc) can be already in started state
+	//	updateButtons(voice_channel->getState() >= LLVoiceChannel::STATE_CALL_STARTED);
+	//}
 }
 
 LLPanelIMControlPanel::LLPanelIMControlPanel()
@@ -145,18 +148,19 @@ LLPanelIMControlPanel::LLPanelIMControlPanel()
 
 LLPanelIMControlPanel::~LLPanelIMControlPanel()
 {
-	LLAvatarTracker::instance().removeParticularFriendObserver(mAvatarID, this);
+	// AO: Now handled by main im floater
+	//LLAvatarTracker::instance().removeParticularFriendObserver(mAvatarID, this);
 }
 
 BOOL LLPanelIMControlPanel::postBuild()
 {
-	childSetAction("view_profile_btn", boost::bind(&LLPanelIMControlPanel::onViewProfileButtonClicked, this));
-	childSetAction("add_friend_btn", boost::bind(&LLPanelIMControlPanel::onAddFriendButtonClicked, this));
-
-	childSetAction("share_btn", boost::bind(&LLPanelIMControlPanel::onShareButtonClicked, this));
-	childSetAction("teleport_btn", boost::bind(&LLPanelIMControlPanel::onTeleportButtonClicked, this));
-	childSetAction("pay_btn", boost::bind(&LLPanelIMControlPanel::onPayButtonClicked, this));
-	getChildView("add_friend_btn")->setEnabled(!LLAvatarActions::isFriend(getChild<LLAvatarIconCtrl>("avatar_icon")->getAvatarId()));
+	// AO: Now handled by main im floater
+	//childSetAction("view_profile_btn", boost::bind(&LLPanelIMControlPanel::onViewProfileButtonClicked, this));
+	//childSetAction("add_friend_btn", boost::bind(&LLPanelIMControlPanel::onAddFriendButtonClicked, this));
+	//childSetAction("share_btn", boost::bind(&LLPanelIMControlPanel::onShareButtonClicked, this));
+	//childSetAction("teleport_btn", boost::bind(&LLPanelIMControlPanel::onTeleportButtonClicked, this));
+	//childSetAction("pay_btn", boost::bind(&LLPanelIMControlPanel::onPayButtonClicked, this));
+	//getChildView("add_friend_btn")->setEnabled(!LLAvatarActions::isFriend(getChild<LLAvatarIconCtrl>("avatar_icon")->getAvatarId()));
 
 	setFocusReceivedCallback(boost::bind(&LLPanelIMControlPanel::onFocusReceived, this));
 	
@@ -204,43 +208,44 @@ void LLPanelIMControlPanel::setSessionId(const LLUUID& session_id)
 
 	LLIMModel& im_model = LLIMModel::instance();
 
-	LLAvatarTracker::instance().removeParticularFriendObserver(mAvatarID, this);
+	// AO: Now handled by main im floater
+	//LLAvatarTracker::instance().removeParticularFriendObserver(mAvatarID, this);
 	mAvatarID = im_model.getOtherParticipantID(session_id);
-	LLAvatarTracker::instance().addParticularFriendObserver(mAvatarID, this);
+	//LLAvatarTracker::instance().addParticularFriendObserver(mAvatarID, this);
 
 	// Disable "Add friend" button for friends.
-	getChildView("add_friend_btn")->setEnabled(!LLAvatarActions::isFriend(mAvatarID));
+	//getChildView("add_friend_btn")->setEnabled(!LLAvatarActions::isFriend(mAvatarID));
 	
 	// Disable "Teleport" button if friend is offline
-	if(LLAvatarActions::isFriend(mAvatarID))
-	{
-		getChildView("teleport_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mAvatarID));
-	}
+	//if(LLAvatarActions::isFriend(mAvatarID))
+	//{
+	//	getChildView("teleport_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mAvatarID));
+	//}
 
-	getChild<LLAvatarIconCtrl>("avatar_icon")->setValue(mAvatarID);
+	//getChild<LLAvatarIconCtrl>("avatar_icon")->setValue(mAvatarID);
 
 	// Disable most profile buttons if the participant is
 	// not really an SL avatar (e.g., an Avaline caller).
-	LLIMModel::LLIMSession* im_session =
-		im_model.findIMSession(session_id);
-	if( im_session && !im_session->mOtherParticipantIsAvatar )
-	{
-		getChildView("view_profile_btn")->setEnabled(FALSE);
-		getChildView("add_friend_btn")->setEnabled(FALSE);
+	//LLIMModel::LLIMSession* im_session =
+	//	im_model.findIMSession(session_id);
+	//if( im_session && !im_session->mOtherParticipantIsAvatar )
+	//{
+	//	getChildView("view_profile_btn")->setEnabled(FALSE);
+	//	getChildView("add_friend_btn")->setEnabled(FALSE);
 
-		getChildView("share_btn")->setEnabled(FALSE);
-		getChildView("teleport_btn")->setEnabled(FALSE);
-		getChildView("pay_btn")->setEnabled(FALSE);
+	//	getChildView("share_btn")->setEnabled(FALSE);
+	//	getChildView("teleport_btn")->setEnabled(FALSE);
+	//	getChildView("pay_btn")->setEnabled(FALSE);
 
-        getChild<LLTextBox>("avatar_name")->setValue(im_session->mName);
-        getChild<LLTextBox>("avatar_name")->setToolTip(im_session->mName);
-	}
-	else
-	{
-		// If the participant is an avatar, fetch the currect name
-		gCacheName->get(mAvatarID, false,
-			boost::bind(&LLPanelIMControlPanel::onNameCache, this, _1, _2, _3));
-	}
+    //    getChild<LLTextBox>("avatar_name")->setValue(im_session->mName);
+    //    getChild<LLTextBox>("avatar_name")->setToolTip(im_session->mName);
+	//}
+	//else
+	//{
+	//	// If the participant is an avatar, fetch the currect name
+	//	gCacheName->get(mAvatarID, false,
+	//		boost::bind(&LLPanelIMControlPanel::onNameCache, this, _1, _2, _3));
+	//}
 }
 
 //virtual
@@ -272,7 +277,7 @@ mParticipantList(NULL)
 
 BOOL LLPanelGroupControlPanel::postBuild()
 {
-	childSetAction("group_info_btn", boost::bind(&LLPanelGroupControlPanel::onGroupInfoButtonClicked, this));
+	//childSetAction("group_info_btn", boost::bind(&LLPanelGroupControlPanel::onGroupInfoButtonClicked, this));
 
 	return LLPanelChatControlPanel::postBuild();
 }
