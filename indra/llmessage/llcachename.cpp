@@ -532,8 +532,22 @@ std::string LLCacheName::buildUsername(const std::string& full_name)
 		return "(\?\?\?)";
 	}
 	
-	std::string::size_type index = full_name.find(' ');
+// [SL:KB] - Patch: Chat-Logs | Checked: 2010-11-18 (Catznip-2.4.0c) | Added: Catznip-2.4.0c
+	// regexp doesn't play nice with unicode, chop off the display name
+	S32 open_paren = full_name.rfind(" (");
+	if (open_paren != std::string::npos)
+	{
+		std::string username = full_name.substr(open_paren + 2, full_name.length() - open_paren - 3);
+		boost::regex complete_name_regex("^[a-z0-9]+(\\.[a-z]+)?$");
+		boost::match_results<std::string::const_iterator> name_results;
+		if (boost::regex_match(username, name_results, complete_name_regex))
+		{
+			return username;
+		}
+	}
+// [/SL:KB]
 
+	std::string::size_type index = full_name.find(' ');
 	if (index != std::string::npos)
 	{
 		std::string username;
