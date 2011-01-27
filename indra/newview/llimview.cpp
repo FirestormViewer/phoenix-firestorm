@@ -567,7 +567,7 @@ void LLIMModel::LLIMSession::onAvatarNameCache(const LLUUID& avatar_id, const LL
 //		mHistoryFileName = av_name.mUsername;
 //	}
 // [SL:KB] - Patch: Chat-Logs | Checked: 2011-01-16 (Catznip-2.4.0h) | Modified: Catznip-2.4.0h
-	if (!av_name.mIsDummy)
+	if (!av_name.mIsTemporaryName)
 	{
 		LLIMModel::buildIMP2PLogFilename(avatar_id, mName, mHistoryFileName);
 
@@ -822,7 +822,7 @@ bool LLIMModel::buildIMP2PLogFilename(const LLUUID& idAgent, const std::string& 
 
 	// If we have the name cached then we can simply return the username
 	LLAvatarName avName;
-	if ( (LLAvatarNameCache::get(idAgent, &avName)) && (!avName.mIsDummy) )
+	if ( (LLAvatarNameCache::get(idAgent, &avName)) && (!avName.mIsTemporaryName) )
 	{
 		if (!fLegacyFilenames)
 		{
