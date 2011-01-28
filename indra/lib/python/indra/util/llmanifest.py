@@ -90,7 +90,7 @@ def get_default_version(srctree):
 
 def get_channel(srctree):
     # look up llversionserver.h and parse out the version info
-    paths = [os.path.join(srctree, x, 'llversionviewer.h') for x in ['llcommon', '../llcommon', '../../indra/llcommon.h']]
+    paths = [os.path.join(srctree, x, 'llversionviewer.cpp') for x in ['llcommon', '../llcommon', '../../indra/llcommon.h']]
     for p in paths:
         if os.path.exists(p):
             contents = open(p, 'r').read()

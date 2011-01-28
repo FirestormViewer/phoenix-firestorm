@@ -39,7 +39,6 @@ public:
 
 	static void pickCallback(const LLPickInfo& pick_info);
 	static void aligndone();
-	static QToolAlign* getInstance(){ return sInstance; }
 
 	LLBBox          mBBox;
 	F32             mManipulatorSize;
@@ -48,7 +47,6 @@ public:
 	BOOL            mForce;
 
 private:
-	static QToolAlign* sInstance;
 	void            align();
 	void            computeManipulatorSize();
 	void            renderManipulators();
