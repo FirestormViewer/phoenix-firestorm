@@ -137,13 +137,17 @@ LLFloater* LLFloaterReg::getInstance(const std::string& name, const LLSD& key)
 				res->mKey = key;
 				res->setInstanceName(name);
 				
-				// handle restored undocked sidebar tabs specially
+				// AO: Mark certain floaters (sidebar tab floaters) as needing to be pseudo-hidden on minimization.
+				// At the moment we flag this pseudo hiding with the presence of a dummy control in floater_side_bar_tab.xml
+				// and the name of the floater window. This should be refactored into a floater attribute.
 				llinfos << "trying to restore variables for name: " << name << llendl;
 				std::string pat = "side_bar_tab";
 				size_t found = name.find(pat);
 				if (found!=std::string::npos)
-					res->setHideOnMinimize(true);
-				
+				{
+					if (!res->hasChild("showMinimized"))
+						res->setHideOnMinimize(true);
+				}
 				
 				res->applySavedVariables(); // Can't apply rect and dock state until setting instance name
 				if (res->mAutoTile && !res->getHost() && index > 0)
