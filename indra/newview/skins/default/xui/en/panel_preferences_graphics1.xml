@@ -175,16 +175,16 @@
 		width="128">
 			Shaders:
 		</text>
-                <check_box
-                control_name="RenderTransparentWater"
-                height="16"
-                initial_value="true"
-                label="Transparent Water"
-                layout="topleft"
-                left_delta="0"
-                name="TransparentWater"
-                top_pad="7"
-                width="256" />
+    <check_box
+    control_name="RenderTransparentWater"
+    height="16"
+    initial_value="true"
+    label="Transparent Water"
+    layout="topleft"
+    left_delta="0"
+    name="TransparentWater"
+    top_pad="7"
+    width="256" />
 
 		<check_box
 		control_name="RenderObjectBump"
@@ -249,6 +249,19 @@
 		width="256">
       <check_box.commit_callback
 			function="Pref.VertexShaderEnable" />
+    </check_box>
+    <check_box
+    control_name="RenderDeferredGI"
+		height="16"
+		initial_value="true"
+    label="Global Illumination (experimental)"
+		layout="topleft"
+		left_delta="0"
+		name="UseGI"
+		top_pad="1"
+		width="256">
+      <check_box.commit_callback
+      function="Pref.VertexShaderEnable" />
     </check_box>
 
      <text
@@ -372,21 +385,21 @@
 		increment="8"
 		initial_value="160"
 		label="Draw distance:"
-		label_width="185"
+		label_width="170"
 		layout="topleft"
-		left="200"
+		left="215"
 		max_val="1024"
 		min_val="32"
 		name="DrawDistance"
 		top="0"
-		width="303" />
+		width="288" />
 		<text
 		type="string"
 		length="1"
 		follows="left|top"
 		height="12"
 		layout="topleft"
-		left_delta="295"
+		left_delta="280"
 		name="DrawDistanceMeterText2"
 		top_delta="0"
 		width="128">
@@ -399,14 +412,14 @@
 		height="15"
 		increment="256"
 		initial_value="4096"
-		label="Max. particle count:"
-		label_width="185"
+		label="Max particle count:"
+		label_width="170"
 		layout="topleft"
-		left="200"
+		left_delta="-280"
 		max_val="8192"
 		name="MaxParticleCount"
 		top_pad="7"
-		width="303" />
+		width="288" />
     <slider
     control_name="RenderAvatarMaxVisible"
     decimal_digits="0"
@@ -414,15 +427,15 @@
     height="15"
     increment="1"
     initial_value="12"
-    label="Max. # of non-impostor avatars:"
-    label_width="185"
+    label="Max # of non-impostor avatars:"
+    label_width="170"
     layout="topleft"
     left_delta="0"
     max_val="65"
     min_val="1"
     name="MaxNumberAvatarDrawn"
     top_pad="4"
-    width="290" />
+    width="275" />
 		<slider
 		control_name="RenderGlowResolutionPow"
 		decimal_digits="0"
@@ -431,15 +444,15 @@
 		increment="1"
 		initial_value="8"
 		label="Post process quality:"
-		label_width="185"
+		label_width="170"
 		layout="topleft"
-		left="200"
+		left_delta="0"
 		max_val="9"
 		min_val="8"
 		name="RenderPostProcess"
 		show_text="false"
 		top_pad="4"
-		width="264">
+		width="249">
 			<slider.commit_callback
 			function="Pref.UpdateSliderText"
 			parameter="PostProcessText" />
@@ -453,7 +466,7 @@
 		left_delta="0"
 		name="MeshDetailText"
 		top_pad="5"
-		width="128">
+		width="100">
 			Mesh detail:
 		</text>
 		<slider
@@ -462,15 +475,15 @@
 		height="15"
 		increment="0.125"
 		initial_value="160"
-		label="  Objects:"
-		label_width="185"
+		label="Objects:"
+		label_width="160"
 		layout="topleft"
-		left_delta="0"
+		left_delta="10"
 		max_val="4"
 		name="ObjectMeshDetail"
 		show_text="false"
 		top_pad="6"
-		width="264">
+		width="239">
 			<slider.commit_callback
 			function="Pref.UpdateSliderText"
 			parameter="ObjectMeshDetailText" />
@@ -480,14 +493,14 @@
 		follows="left|top"
 		height="15"
 		initial_value="160"
-		label="  Flexiprims:"
-		label_width="185"
+		label="Flexiprims:"
+		label_width="160"
 		layout="topleft"
 		left_delta="0"
 		name="FlexibleMeshDetail"
 		show_text="false"
 		top_pad="4"
-		width="264">
+		width="239">
 			<slider.commit_callback
 			function="Pref.UpdateSliderText"
 			parameter="FlexibleMeshDetailText" />
@@ -498,14 +511,14 @@
         height="15"
         increment="0.125"
         initial_value="160"
-        label="  Trees:"
-        label_width="185"
+        label="Trees:"
+        label_width="160"
         layout="topleft"
         left_delta="0"
         name="TreeMeshDetail"
         show_text="false"
         top_pad="4"
-        width="264">
+        width="239">
            <slider.commit_callback
             function="Pref.UpdateSliderText"
             parameter="TreeMeshDetailText" />
@@ -516,14 +529,14 @@
         height="15"
         increment="0.125"
         initial_value="160"
-        label="  Avatars:"
-        label_width="185"
+        label="Avatars:"
+        label_width="160"
         layout="topleft"
         left_delta="0"
         name="AvatarMeshDetail"
         show_text="false"
         top_pad="4"
-        width="264">
+        width="239">
            <slider.commit_callback
             function="Pref.UpdateSliderText"
             parameter="AvatarMeshDetailText" />
@@ -534,8 +547,8 @@
         height="15"
         increment="0.125"
         initial_value="160"
-        label="  Terrain:"
-        label_width="185"
+        label="Terrain:"
+        label_width="160"
         layout="topleft"
         left_delta="0"
         max_val="2"
@@ -543,7 +556,7 @@
         name="TerrainMeshDetail"
         show_text="false"
         top_pad="4"
-        width="264">
+        width="239">
            <slider.commit_callback
             function="Pref.UpdateSliderText"
             parameter="TerrainMeshDetailText" />
@@ -556,8 +569,8 @@
         height="15"
         increment="8"
         initial_value="160"
-        label="  Sky:"
-        label_width="185"
+        label="Sky:"
+        label_width="160"
         layout="topleft"
         left_delta="0"
         max_val="128"
@@ -565,7 +578,7 @@
         name="SkyMeshDetail"
         show_text="false"
         top_pad="4"
-        width="264">
+        width="239">
            <slider.commit_callback
             function="Pref.UpdateSliderText"
             parameter="SkyMeshDetailText" />
