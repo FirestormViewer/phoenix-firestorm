@@ -231,8 +231,60 @@ void LLIMFloater::sendMsg()
 		LLWString text = mInputEditor->getConvertedText();
 		if(!text.empty())
 		{
-			// Truncate and convert to UTF8 for transport
+			// Convert to UTF8 for transport
 			std::string utf8_text = wstring_to_utf8str(text);
+//-TT Patch MU_OOC from Satomi Ahn
+			if (gSavedSettings.getBOOL("AutoCloseOOC"))
+			{
+				// Try to find any unclosed OOC chat (i.e. an opening
+				// double parenthesis without a matching closing double
+				// parenthesis.
+				if (utf8_text.find("(( ") != -1 && utf8_text.find("))") == -1)
+				{
+					// add the missing closing double parenthesis.
+					utf8_text += " ))";
+				}
+				else if (utf8_text.find("((") != -1 && utf8_text.find("))") == -1)
+				{
+					if (utf8_text.at(utf8_text.length() - 1) == ')')
+					{
+						// cosmetic: add a space first to avoid a closing triple parenthesis
+						utf8_text += " ";
+					}
+					// add the missing closing double parenthesis.
+					utf8_text += "))";
+				}
+				else if (utf8_text.find("[[ ") != -1 && utf8_text.find("]]") == -1)
+				{
+					// add the missing closing double parenthesis.
+					utf8_text += " ]]";
+				}
+				else if (utf8_text.find("[[") != -1 && utf8_text.find("]]") == -1)
+				{
+					if (utf8_text.at(utf8_text.length() - 1) == ']')
+					{
+						// cosmetic: add a space first to avoid a closing triple parenthesis
+						utf8_text += " ";
+					}
+						// add the missing closing double parenthesis.
+					utf8_text += "]]";
+				}
+			}
+			// Convert MU*s style poses into IRC emotes here.
+			if (gSavedSettings.getBOOL("AllowMUpose") && utf8_text.find(":") == 0 && utf8_text.length() > 3)
+			{
+				if (utf8_text.find(":'") == 0)
+				{
+					utf8_text.replace(0, 1, "/me");
+ 				}
+				else if (isalpha(utf8_text.at(1)))	// Do not prevent smileys and such.
+				{
+					utf8_text.replace(0, 1, "/me ");
+				}
+			}
+//-TT /Patch MU_OOC from Satomi Ahn
+
+			// Truncate for transport
 			utf8_text = utf8str_truncate(utf8_text, MAX_MSG_BUF_SIZE - 1);
 			
 // [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e

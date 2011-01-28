@@ -37,6 +37,28 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
+  <key>AllowMUpose</key>
+    <map>
+      <key>Comment</key>
+      <string>Allow MU* pose style in chat and IM (with ':' as a synonymous to '/me ')</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+  <key>AutoCloseOOC</key>
+    <map>
+      <key>Comment</key>
+      <string>Auto-close OOC chat (i.e. add \"))\" if not found and \"((\" was used)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
 
   <key>GlobalOnlineStatusToggle</key>
     <map>
@@ -9334,7 +9356,18 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-     <key>ShowProfileFloaters</key>
+    <key>ShowInventoryButton</key>
+    <map>
+      <key>Comment</key>
+      <string>Show/Hide Inventory button in the bottom tray.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+  </map>
+  <key>ShowProfileFloaters</key>
     <map>
       <key>Comment</key>
       <string>Shows resident profiles in a floater rather than the side tray</string>
