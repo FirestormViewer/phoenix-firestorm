@@ -2141,7 +2141,7 @@ bool first_run_dialog_callback(const LLSD& notification, const LLSD& response)
 
 void set_startup_status(const F32 frac, const std::string& string, const std::string& msg)
 {
-	if(gSavedSettings.getBOOL("PhoenixDisableLoginScreens"))
+	if(gSavedSettings.getBOOL("PhoenixDisableLoginScreens") && LLStartUp::getStartupState() > STATE_BROWSER_INIT)
 	{
 		static std::string last_d;
 		std::string new_d = string;
