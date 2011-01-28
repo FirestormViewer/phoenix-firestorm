@@ -142,8 +142,10 @@ LLFloater* LLFloaterReg::getInstance(const std::string& name, const LLSD& key)
 				std::string pat = "side_bar_tab";
 				size_t found = name.find(pat);
 				if (found!=std::string::npos)
-					res->setHideOnMinimize(true);
-				
+				{
+					if (!res->getChild<LLPanel>("showMinimized"))
+						res->setHideOnMinimize(true);
+				}
 				
 				res->applySavedVariables(); // Can't apply rect and dock state until setting instance name
 				if (res->mAutoTile && !res->getHost() && index > 0)

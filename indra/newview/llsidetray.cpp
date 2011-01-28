@@ -303,6 +303,8 @@ void LLSideTrayTab::undock(LLFloater* floater_tab)
 
 	floater_tab->addChild(this);
 	//floater_tab->setTitle(mTabTitle); AO: Don't set the title, it just wastes space
+	floater_tab->setShortTitle(mTabTitle);
+	
 	floater_tab->setName(getName());
 
 	// Resize handles get obscured by added panel so move them to front.
