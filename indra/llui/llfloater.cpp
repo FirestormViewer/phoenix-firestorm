@@ -1062,10 +1062,13 @@ void LLFloater::setMinimized(BOOL minimize)
 
 	if (minimize)
 	{
-		// AO Pseudo-hide minimized sidebar floaters. We get into trouble if they are actually not-visible,
-		// so fake invisibility with offscreen location.
+		// AO: Pseudo-hide minimized sidebar floaters. We get into trouble if they are actually not visible,
+		// so fake invisibility with tiny sizign and out of the way location.
+		// At the moment we flag this pseudo hiding with the presence of a dummy control in floater_side_bar_tab.xml
+		// this should be refactored into a floater attribute.
 		LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", getName());
-		if (LLFloater::isShown(floater_tab) && (!getChild<LLPanel>("showMinimized")))
+		llinfos << "Minimizing " << floater_tab << ". showMinimizedPanel= " << hasChild("showMinimized", false) << llendl;
+		if (LLFloater::isShown(floater_tab) && !hasChild("showMinimized", false))
 		{
 				mHideOnMinimize = true;
 				llinfos << "SideTray minimized floater " << getName() << " detected, hiding." << llendl;
