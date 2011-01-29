@@ -58,6 +58,7 @@
             follows="left|right"
           />
         </layout_panel>
+
         <layout_panel
          auto_resize="false"
          follows="right"
@@ -92,10 +93,6 @@
             </gesture_combo_list>
         </layout_panel>
 
-        
-        <!--
-        There is resize bar after the chat bar. It has 2px width (is is set as 2*UIResizeBarOverlap)
-        -->
         <layout_panel
          auto_resize="false"
          follows="right"
@@ -124,7 +121,6 @@
                 </show_button>
             </talk_button>
         </layout_panel>
-
 
         <layout_panel
          auto_resize="false"
@@ -276,39 +272,6 @@
             </bottomtray_button>
         </layout_panel>
 
-
-
-        <layout_panel
-         auto_resize="false"
-         follows="right"
-         height="28"
-         layout="topleft"
-         min_height="28"
-         min_width="40"
-         mouse_opaque="false"
-         name="movement_panel"
-         user_resize="false"
-         width="40">
-            <bottomtray_button
-             follows="left|right"
-             height="23"
-             image_pressed="PushButton_Press"
-             image_pressed_selected="PushButton_Selected_Press"
-             image_selected="PushButton_Selected_Press"
-             is_toggle="true"
-             image_overlay="move_18"
-             layout="topleft"
-             name="movement_btn"
-             tool_tip="Shows/hides movement controls"
-             top="5"
-             use_ellipses="true"
-             width="36">
-                <init_callback
-                 function="Button.SetDockableFloaterToggle"
-                 parameter="moveview" />
-            </bottomtray_button>
-
-        </layout_panel>
         <layout_panel
          auto_resize="false"
          follows="left|right"
@@ -340,6 +303,7 @@
                  parameter="camera" />
             </bottomtray_button>
         </layout_panel>
+
         <layout_panel
          auto_resize="false"
          follows="left|right"
@@ -369,6 +333,38 @@
                  parameter="snapshot" />
             </bottomtray_button>
         </layout_panel>
+
+        <layout_panel
+         auto_resize="false"
+         follows="right"
+         height="28"
+         layout="topleft"
+         min_height="28"
+         min_width="40"
+         mouse_opaque="false"
+         name="movement_panel"
+         user_resize="false"
+         width="40">
+            <bottomtray_button
+             follows="left|right"
+             height="23"
+             image_pressed="PushButton_Press"
+             image_pressed_selected="PushButton_Selected_Press"
+             image_selected="PushButton_Selected_Press"
+             is_toggle="true"
+             image_overlay="move_18"
+             layout="topleft"
+             name="movement_btn"
+             tool_tip="Shows/hides movement controls"
+             top="5"
+             use_ellipses="true"
+             width="36">
+                <init_callback
+                 function="Button.SetFloaterToggle"
+                 parameter="moveview" />
+            </bottomtray_button>
+        </layout_panel>
+
         <layout_panel
          auto_resize="false"
          follows="left|right"
@@ -380,7 +376,6 @@
          name="build_btn_panel"
          user_resize="false"
          width="40">
-
             <bottomtray_button
              follows="left|right"
              height="23"
@@ -494,8 +489,9 @@
                  parameter="mini_map" />
             </bottomtray_button>
         </layout_panel>
+        
 
-<!--        
+        <!--
          <layout_panel
          mouse_opaque="false"
          auto_resize="false"
@@ -527,8 +523,8 @@
                  parameter="inventory" />
             </button>
         </layout_panel>
--->
-
+        -->
+        
         <layout_panel
          auto_resize="false"
          follows="left|right"
@@ -568,7 +564,7 @@
          layout="topleft"
          left="0"
          min_width="3"
-         name="after_inventory_button"
+         name="before_chicklets_spacer"
          top="0"
          width="3"/>        
         
