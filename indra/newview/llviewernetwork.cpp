@@ -89,116 +89,116 @@ void LLGridManager::initialize(const std::string& grid_file)
 	
 
 
-  	addSystemGrid("Agni",                                                                                             
+  	addSystemGrid("Main Grid (Agni)",                                                                                             
 				  MAINGRID,                                               
 				  "https://login.agni.lindenlab.com/cgi-bin/login.cgi",                    
 				  "https://secondlife.com/helpers/",     
 				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Aditi",                                                                                             
+	addSystemGrid("Beta Grid (Aditi)",                                                                                             
 				  "util.aditi.lindenlab.com",                                              
 				  "https://login.aditi.lindenlab.com/cgi-bin/login.cgi",                   
 				  "http://aditi-secondlife.webdev.lindenlab.com/helpers/",
 				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Aruna",                                                                                            
-				  "util.aruna.lindenlab.com",                                              
-				  "https://login.aruna.lindenlab.com/cgi-bin/login.cgi",                   
-				  "http://aruna-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Bharati",                                                                                            
-				  "util.bharati.lindenlab.com",                                              
-				  "https://login.bharati.lindenlab.com/cgi-bin/login.cgi",                   
-				  "http://bharati-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Chandra",                                                                                            
-				  "util.chandra.lindenlab.com",                                              
-				  "https://login.chandra.lindenlab.com/cgi-bin/login.cgi",                   
-				  "http://chandra-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Damballah",                                                                                            
-				  "util.damballah.lindenlab.com",                                              
-				  "https://login.damballah.lindenlab.com/cgi-bin/login.cgi",                   
-				  "http://damballah-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Danu",                                                                                            
-				  "util.danu.lindenlab.com",                                              
-				  "https://login.danu.lindenlab.com/cgi-bin/login.cgi",                   
-				  "http://danu-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Durga",                                                                                            
-				  "util.durga.lindenlab.com",                                              
-				  "https://login.durga.lindenlab.com/cgi-bin/login.cgi",                   
-				  "http://durga-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Ganga",                                                                                            
-				  "util.ganga.lindenlab.com",                                              
-				  "https://login.ganga.lindenlab.com/cgi-bin/login.cgi",                   
-				  "http://ganga-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Mitra",                                                                                            
-				  "util.mitra.lindenlab.com",                                              
-				  "https://login.mitra.lindenlab.com/cgi-bin/login.cgi",                   
-				  "http://mitra-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Mohini",                                                                                           
-				  "util.mohini.lindenlab.com",                                             
-				  "https://login.mohini.lindenlab.com/cgi-bin/login.cgi",                  
-				  "http://mohini-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Nandi",                                                                                            
-				  "util.nandi.lindenlab.com",                                              
-				  "https://login.nandi.lindenlab.com/cgi-bin/login.cgi",                   
-				  "http://nandi-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Parvati",                                                                                            
-				  "util.parvati.lindenlab.com",                                              
-				  "https://login.parvati.lindenlab.com/cgi-bin/login.cgi",                   
-				  "http://parvati-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Radha",                                                                                            
-				  "util.radha.lindenlab.com",                                              
-				  "https://login.radha.lindenlab.com/cgi-bin/login.cgi",                   
-				  "http://radha-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Ravi",                                                                                             
-				  "util.ravi.lindenlab.com",                                               
-				  "https://login.ravi.lindenlab.com/cgi-bin/login.cgi",                    
-				  "http://ravi-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Siva",                                                                                             
-				  "util.siva.lindenlab.com",                                               
-				  "https://login.siva.lindenlab.com/cgi-bin/login.cgi",                    
-				  "http://siva-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Shakti",                                                                                           
-				  "util.shakti.lindenlab.com",                                             
-				  "https://login.shakti.lindenlab.com/cgi-bin/login.cgi",                  
-				  "http://shakti-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Soma",                                                                                             
-				  "util.soma.lindenlab.com",                                               
-				  "https://login.soma.lindenlab.com/cgi-bin/login.cgi",                    
-				  "http://soma-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Uma",                                                                                              
-				  "util.uma.lindenlab.com",                                                
-				  "https://login.uma.lindenlab.com/cgi-bin/login.cgi",                     
-				  "http://uma-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Vaak",                                                                                             
-				  "util.vaak.lindenlab.com",                                               
-				  "https://login.vaak.lindenlab.com/cgi-bin/login.cgi",                    
-				  "http://vaak-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Yami",                                                                                             
-				  "util.yami.lindenlab.com",                                               
-				  "https://login.yami.lindenlab.com/cgi-bin/login.cgi",                    
-				  "http://yami-secondlife.webdev.lindenlab.com/helpers/",
-				  DEFAULT_LOGIN_PAGE);
-	addSystemGrid("Local (Linden)",                                                                                    
-				  "localhost",                                                             
-				  "https://login.dmz.lindenlab.com/cgi-bin/login.cgi",                     
-				  "",
-				  DEFAULT_LOGIN_PAGE); 
+	//addSystemGrid("Aruna",                                                                                            
+	//			  "util.aruna.lindenlab.com",                                              
+	//			  "https://login.aruna.lindenlab.com/cgi-bin/login.cgi",                   
+	//			  "http://aruna-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Bharati",                                                                                            
+	//			  "util.bharati.lindenlab.com",                                              
+	//			  "https://login.bharati.lindenlab.com/cgi-bin/login.cgi",                   
+	//			  "http://bharati-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Chandra",                                                                                            
+	//			  "util.chandra.lindenlab.com",                                              
+	//			  "https://login.chandra.lindenlab.com/cgi-bin/login.cgi",                   
+	//			  "http://chandra-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Damballah",                                                                                            
+	//			  "util.damballah.lindenlab.com",                                              
+	//			  "https://login.damballah.lindenlab.com/cgi-bin/login.cgi",                   
+	//			  "http://damballah-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Danu",                                                                                            
+	//			  "util.danu.lindenlab.com",                                              
+	//			  "https://login.danu.lindenlab.com/cgi-bin/login.cgi",                   
+	//			  "http://danu-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Durga",                                                                                            
+	//			  "util.durga.lindenlab.com",                                              
+	//			  "https://login.durga.lindenlab.com/cgi-bin/login.cgi",                   
+	//			  "http://durga-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Ganga",                                                                                            
+	//			  "util.ganga.lindenlab.com",                                              
+	//			  "https://login.ganga.lindenlab.com/cgi-bin/login.cgi",                   
+	//			  "http://ganga-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Mitra",                                                                                            
+	//			  "util.mitra.lindenlab.com",                                              
+	//			  "https://login.mitra.lindenlab.com/cgi-bin/login.cgi",                   
+	//			  "http://mitra-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Mohini",                                                                                           
+	//			  "util.mohini.lindenlab.com",                                             
+	//			  "https://login.mohini.lindenlab.com/cgi-bin/login.cgi",                  
+	//			  "http://mohini-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Nandi",                                                                                            
+	//			  "util.nandi.lindenlab.com",                                              
+	//			  "https://login.nandi.lindenlab.com/cgi-bin/login.cgi",                   
+	//			  "http://nandi-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Parvati",                                                                                            
+	//			  "util.parvati.lindenlab.com",                                              
+	//			  "https://login.parvati.lindenlab.com/cgi-bin/login.cgi",                   
+	//			  "http://parvati-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Radha",                                                                                            
+	//			  "util.radha.lindenlab.com",                                              
+	//			  "https://login.radha.lindenlab.com/cgi-bin/login.cgi",                   
+	//			  "http://radha-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Ravi",                                                                                             
+	//			  "util.ravi.lindenlab.com",                                               
+	//			  "https://login.ravi.lindenlab.com/cgi-bin/login.cgi",                    
+	//			  "http://ravi-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Siva",                                                                                             
+	//			  "util.siva.lindenlab.com",                                               
+	//			  "https://login.siva.lindenlab.com/cgi-bin/login.cgi",                    
+	//			  "http://siva-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Shakti",                                                                                           
+	//			  "util.shakti.lindenlab.com",                                             
+	//			  "https://login.shakti.lindenlab.com/cgi-bin/login.cgi",                  
+	//			  "http://shakti-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Soma",                                                                                             
+	//			  "util.soma.lindenlab.com",                                               
+	//			  "https://login.soma.lindenlab.com/cgi-bin/login.cgi",                    
+	//			  "http://soma-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Uma",                                                                                              
+	//			  "util.uma.lindenlab.com",                                                
+	//			  "https://login.uma.lindenlab.com/cgi-bin/login.cgi",                     
+	//			  "http://uma-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Vaak",                                                                                             
+	//			  "util.vaak.lindenlab.com",                                               
+	//			  "https://login.vaak.lindenlab.com/cgi-bin/login.cgi",                    
+	//			  "http://vaak-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Yami",                                                                                             
+	//			  "util.yami.lindenlab.com",                                               
+	//			  "https://login.yami.lindenlab.com/cgi-bin/login.cgi",                    
+	//			  "http://yami-secondlife.webdev.lindenlab.com/helpers/",
+	//			  DEFAULT_LOGIN_PAGE);
+	//addSystemGrid("Local (Linden)",                                                                                    
+	//			  "localhost",                                                             
+	//			  "https://login.dmz.lindenlab.com/cgi-bin/login.cgi",                     
+	//			  "",
+	//			  DEFAULT_LOGIN_PAGE); 
 
 	
 	LLSD other_grids;
