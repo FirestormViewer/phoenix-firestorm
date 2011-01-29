@@ -1,3 +1,8 @@
-Make sure xcode is installed, with the GCC 4.0 option.
+Make sure xcode is installed, it's a free download from apple.
+Make sure cmake is installed, use at least a 2.8.x version.
 - Additionally, patch your source directory with fmodmacapi per the older snowglobe instructions.
 - run ./build_firestorm_macosx.sh
+
+By default your build will be set to use channel private-(your build machine). If you want to change this, 
+you can use pass the option "--chan private-SomeNameYouPrefer" to the build command above.
+

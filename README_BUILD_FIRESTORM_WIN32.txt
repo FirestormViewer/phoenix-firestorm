@@ -36,6 +36,9 @@ Execute the command to build firestorm in the cygwin window:
 
 This will do a clean compile. Rebuilds should be possible by specifying --rebuild. 
 
+By default your build will be set to use channel private-(your build machine). If you want to change this, 
+you can use pass the option "--chan private-SomeNameYouPrefer" to the build command above.
+
 NOTE: It is normal to see errors about ambiguous include/library paths at this time. It will not cause the build to fail
 
 A log for the build will be placed in logs/build_firestorm_windows.log
