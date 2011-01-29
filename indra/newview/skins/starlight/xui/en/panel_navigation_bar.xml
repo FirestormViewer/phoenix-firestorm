@@ -8,31 +8,35 @@
  layout="topleft"
  name="navigation_bar"
  chrome="true"
- width="600">
+ auto_resize="false"
+ width="1024">
 	<icon
 	 follows="all"
+	 auto_resize="false"
 	 image_name="NavBar_BG"
 	 mouse_opaque="false"
 	 name="bg_icon"
-	 scale_image="true"
-	 visible="true"
-	 left="0"
-	 top="0"
-	 height="60"
-	 width="600"/>
-	<icon
-	 follows="all"
-	 image_name="NavBar_BG_NoFav_Bevel"
-	 mouse_opaque="false"
-	 name="bg_icon_no_fav_bevel"
 	 scale_image="true"
 	 visible="false"
 	 left="0"
 	 top="0"
 	 height="60"
-	 width="600"/>
+	 width="1024"/>
 	<icon
 	 follows="all"
+	 auto_resize="false"
+	 image_name="NavBar_BG_NoFav_Bevel"
+	 mouse_opaque="false"
+	 name="bg_icon_no_fav_bevel"
+	 scale_image="true"
+	 visible="true"
+	 left="0"
+	 top="0"
+	 height="75"
+	 width="1024"/>
+	<icon
+	 follows="all"
+	 auto_resize="false"
 	 image_name="NavBar_BG_NoNav_Bevel"
 	 mouse_opaque="false"
 	 name="bg_icon_no_nav_bevel"
@@ -41,15 +45,15 @@
 	 left="0"
 	 top="0"
 	 height="60"
-	 width="600"/>
+	 width="1024"/>
 	<panel
-	 background_visible="false"
+	 background_visible="true"
 	 follows="left|top|right"
 	 top="3"
 	 height="23"
 	 layout="topleft"
 	 name="navigation_panel"
-	 width="600">
+	 width="1024">
 	     <pull_button
 	     follows="left|top"
 	     direction="down"
@@ -162,6 +166,7 @@
 	</panel>
     <favorites_bar
      follows="left|right|top"
+     background_visible="true"
      font="SansSerifSmall"
      height="15"
      layout="topleft"

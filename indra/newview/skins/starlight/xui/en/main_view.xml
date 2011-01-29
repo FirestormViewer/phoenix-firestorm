@@ -21,6 +21,7 @@
                   height="60"
                   mouse_opaque="false"
                   name="nav_bar_container"
+                  follows="left|top|right"
                   tab_stop="false"
                   width="1024"
                   user_resize="false" 
@@ -83,7 +84,7 @@
                 name="hud container"
                    width="500">
 <!-- first element on rest of screen is top info bar - so is just below nav bar -->
-            <panel follows="left|top"
+            <panel follows="left|top|right"
                    height="19"
                    left="0"
                    mouse_opaque="false"
@@ -123,7 +124,7 @@
         mouse_opaque="false"
         name="sidebar"
         orientation="horizontal"
-        top="0"
+        top="30"
         width="1024">
           <layout_panel
            follows="all"
