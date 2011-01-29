@@ -1232,7 +1232,9 @@ void LLPanelEditWearable::updateTypeSpecificControls(LLWearableType::EType type)
 	if (type == LLWearableType::WT_SHAPE)
 	{
 		// Update avatar height
-		F32 new_size = gAgentAvatarp->mBodySize.mV[VZ];
+		// The .195 is a fudge factor derived by measuring against
+		//  prims inworld, and carried forward from Phoenix. -- TS
+		F32 new_size = gAgentAvatarp->mBodySize.mV[VZ] + .195;
 		if (gSavedSettings.getBOOL("HeightUnits") == FALSE)
 		{
 			// convert meters to feet
