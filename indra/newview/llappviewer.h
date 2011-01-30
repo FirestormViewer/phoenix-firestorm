@@ -225,6 +225,9 @@ private:
 	std::string mLogoutMarkerFileName;
 	apr_file_t* mLogoutMarkerFile; // A file created to indicate the app is running.
 
+	//-TT The skin and theme we are using at startup. might want to make them static.
+	std::string mCurrentSkin;
+	std::string mCurrentSkinTheme;
 	
 	LLOSInfo mSysOSInfo; 
 	bool mReportedCrash;

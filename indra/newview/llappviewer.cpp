@@ -1587,6 +1587,17 @@ bool LLAppViewer::cleanup()
 	
 	LLUIColorTable::instance().saveUserSettings();
 
+//-TT This is a really horrible hack for the preview - we wipe out the color settings for the old skin 
+//if you change to another. 
+//TODO:FIXME and whatever other tags so that this gets fixed ASAP
+	std::string skinSaved = gSavedSettings.getString("SkinCurrent");
+	std::string themeSaved = gSavedSettings.getString("SkinCurrentTheme");
+	if ((skinSaved != mCurrentSkin) || (themeSaved != mCurrentSkinTheme))
+	{
+		const std::string& filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "colors.xml");
+		LLFile::remove(filename);
+	}
+//-TT
 	// PerAccountSettingsFile should be empty if no user has been logged on.
 	// *FIX:Mani This should get really saved in a "logoff" mode. 
 	if (gSavedSettings.getString("PerAccountSettingsFile").empty())
@@ -2264,7 +2275,10 @@ bool LLAppViewer::initConfiguration()
 		LLSLURL start_slurl(clp.getOption("slurl")[0]);
 		LLStartUp::setStartSLURL(start_slurl);
     }
-
+//-TT Hacking to save the skin and theme for future use.
+	mCurrentSkin = gSavedSettings.getString("SkinCurrent");
+	mCurrentSkinTheme = gSavedSettings.getString("SkinCurrentTheme");
+//-TT
     const LLControlVariable* skinfolder = gSavedSettings.getControl("SkinCurrent");
     if(skinfolder && LLStringUtil::null != skinfolder->getValue().asString())
     {   
@@ -4107,7 +4121,7 @@ void LLAppViewer::idleShutdown()
 		static S32 total_uploads = 0;
 		// Sometimes total upload count can change during logout.
 		total_uploads = llmax(total_uploads, pending_uploads);
-		gViewerWindow->setShowProgress(TRUE);
+		gViewerWindow->setShowProgress(!gSavedSettings.getBOOL("PhoenixDisableLogoutScreens"));
 		S32 finished_uploads = total_uploads - pending_uploads;
 		F32 percent = 100.f * finished_uploads / total_uploads;
 		gViewerWindow->setProgressPercent(percent);
@@ -4121,7 +4135,7 @@ void LLAppViewer::idleShutdown()
 		sendLogoutRequest();
 
 		// Wait for a LogoutReply message
-		gViewerWindow->setShowProgress(TRUE);
+		gViewerWindow->setShowProgress(!gSavedSettings.getBOOL("PhoenixDisableLogoutScreens"));
 		gViewerWindow->setProgressPercent(100.f);
 		gViewerWindow->setProgressString(LLTrans::getString("LoggingOut"));
 		return;

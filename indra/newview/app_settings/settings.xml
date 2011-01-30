@@ -37,6 +37,28 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
+  <key>AllowMUpose</key>
+    <map>
+      <key>Comment</key>
+      <string>Allow MU* pose style in chat and IM (with ':' as a synonymous to '/me ')</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+  <key>AutoCloseOOC</key>
+    <map>
+      <key>Comment</key>
+      <string>Auto-close OOC chat (i.e. add \"))\" if not found and \"((\" was used)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
 
   <key>GlobalOnlineStatusToggle</key>
     <map>
@@ -2159,7 +2181,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>DebugShowRenderInfo</key>
     <map>
@@ -2183,10 +2205,21 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>DebugShowTextureInfo</key>
+    <map>
+      <key>Comment</key>
+      <string>Show inertested texture info</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
   <key>DebugShowTime</key>
     <map>
       <key>Comment</key>
-      <string>Show depth buffer contents</string>
+      <string>Show time info</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -9334,7 +9367,18 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-     <key>ShowProfileFloaters</key>
+    <key>ShowInventoryButton</key>
+    <map>
+      <key>Comment</key>
+      <string>Show/Hide Inventory button in the bottom tray.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+  </map>
+  <key>ShowProfileFloaters</key>
     <map>
       <key>Comment</key>
       <string>Shows resident profiles in a floater rather than the side tray</string>
@@ -9389,7 +9433,7 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
-     <key>ShowSpeakButton</key>
+    <key>ShowSpeakButton</key>
     <map>
       <key>Comment</key>
       <string>Shows/Hides Speak button in the bottom tray.</string>
@@ -9399,8 +9443,8 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
-    </map>
-    <key>ShowObjectRenderingCost</key>                
+  </map>
+  <key>ShowObjectRenderingCost</key>                
     <map>
       <key>Comment</key>
       <string>Show the object rendering cost  in  build tools</string>
@@ -11666,6 +11710,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>UseLegacyIMLogNames</key>
+    <map>
+      <key>Comment</key>
+      <string>Use legacy filenames for P2P IMs logs</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>UseOcclusion</key>
     <map>
       <key>Comment</key>
@@ -13006,6 +13061,50 @@
 		  <string>Boolean</string>
 		  <key>Value</key>
 		  <integer>0</integer>
+		</map>
+		<key>PhoenixDisableLoginScreens</key>
+		<map>
+			<key>Comment</key>
+			<string>Disable login screen progress bar</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
+		</map>
+		<key>PhoenixDisableLogoutScreens</key>
+		<map>
+			<key>Comment</key>
+			<string>Disable logout screen progress bar</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
+		</map>
+		<key>PhoenixDisableTeleportScreens</key>
+		<map>
+			<key>Comment</key>
+			<string>Disable teleport screens</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
+		</map>
+		<key>PhoenixNearbyChatbar</key>
+		<map>
+			<key>Comment</key>
+			<string>Set to true to add a chatbar to the Nearby Chat window</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>1</integer>
 		</map>
 </map>
 </llsd>

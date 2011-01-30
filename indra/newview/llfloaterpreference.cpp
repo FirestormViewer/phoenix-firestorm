@@ -1750,6 +1750,7 @@ void LLPanelPreferenceSkins::apply()
 		gSavedSettings.setString("SkinCurrentTheme", m_SkinTheme);
 
 		LLNotificationsUtil::add("ChangeSkin");	
+
 	}
 }
 
