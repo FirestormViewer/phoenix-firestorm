@@ -214,6 +214,8 @@ private:
 	typedef std::map< std::string,LLUUID>	group_map_t;
 	group_map_t 			mGroups;
 
+	void					openGroupProfile();
+
 	LLToggleableMenu*		mProfileMenu;
 };
 
