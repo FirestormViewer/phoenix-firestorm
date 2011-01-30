@@ -704,6 +704,82 @@
          show_bar="false"
          show_mean="false" >
         </stat_bar>
+        <!--2nd level time blocks under 'Details' second-->
+          <stat_view
+ 			     name="timedetails"
+			     label="Time Details (ms)"
+			     show_label="true">
+            <stat_bar
+             name="simsimphysicsstepmsec"
+             label="  Physics Step"
+             stat="simsimphysicsstepmsec"
+             unit_label="ms"
+             precision="1"
+             bar_min="0.f"
+             bar_max="40.f"
+             tick_spacing="10.f"
+             label_spacing="20.f"
+             show_per_sec="false"
+             show_bar="false"
+             show_mean="false" >
+            </stat_bar>
+            <stat_bar
+             name="simsimphysicsshapeupdatemsec"
+             label="  Update Physics Shapes"
+             stat="simsimphysicsshapeupdatemsec"
+             unit_label="ms"
+             precision="1"
+             bar_min="0.f"
+             bar_max="40.f"
+             tick_spacing="10.f"
+             label_spacing="20.f"
+             show_per_sec="false"
+             show_bar="false"
+             show_mean="false" >
+            </stat_bar>
+            <stat_bar
+             name="simsimphysicsothermsec"
+             label="  Physics Other"
+             stat="simsimphysicsothermsec"
+             unit_label="ms"
+             precision="1"
+             bar_min="0.f"
+             bar_max="40.f"
+             tick_spacing="10.f"
+             label_spacing="20.f"
+             show_per_sec="false"
+             show_bar="false"
+             show_mean="false" >
+            </stat_bar>
+            <stat_bar
+             name="simsleepmsec"
+             label="  Sleep Time"
+             stat="simsleepmsec"
+             unit_label="ms"
+             precision="1"
+             bar_min="0.f"
+             bar_max="40.f"
+             tick_spacing="10.f"
+             label_spacing="20.f"
+             show_per_sec="false"
+             show_bar="false"
+             show_mean="false" >
+            </stat_bar>
+            <stat_bar
+             name="simpumpiomsec"
+             label="  Pump IO"
+             stat="simpumpiomsec"
+             unit_label="ms"
+             precision="1"
+             bar_min="0.f"
+             bar_max="40.f"
+             tick_spacing="10.f"
+             label_spacing="20.f"
+             show_per_sec="false"
+             show_bar="false"
+             show_mean="false" >
+            </stat_bar>
+			</stat_view>
 			</stat_view>
 		  </stat_view>
 		</container_view>
