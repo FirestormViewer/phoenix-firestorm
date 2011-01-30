@@ -312,7 +312,15 @@
      value="White" />
 
   <!-- UI Definitions -->
-
+  	<color
+	 name="HintTitle"
+	 reference="SchemeLightest" />
+	<color
+	 name="HintText"
+	 reference="LtGray" />
+	<color
+	 name="HintBg"
+	 reference="Black" />
     <color
      name="AccordionHeaderTextColor"
      reference="LtGray" />
@@ -367,7 +375,7 @@
      reference="Unused?" />
     <color
      name="ButtonFlashBgColor"
-     reference="Unused?" />
+     reference="White" />
 <!-- Color Changed -->
     <color
      name="ButtonImageColor"
