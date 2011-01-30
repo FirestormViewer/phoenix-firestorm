@@ -1816,6 +1816,8 @@ void LLPanelPreferenceSkins::refreshSkinThemeList()
 		}	
 	}
 	
-	m_pSkinThemeCombo->setSelectedByValue(m_SkinTheme, TRUE);
+	bool foundTheme = m_pSkinThemeCombo->setSelectedByValue(m_SkinTheme, TRUE);
+	if (!foundTheme)
+		m_pSkinThemeCombo->selectFirstItem();
 }
 // </KB>
