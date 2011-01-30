@@ -30,6 +30,7 @@
 #include "fscontactsfloater.h"
 
 // libs
+#include "llagent.h"
 #include "llavatarname.h"
 #include "llfloaterreg.h"
 #include "llfloater.h"
@@ -44,6 +45,7 @@
 #include "llgroupactions.h"
 #include "llgrouplist.h"
 #include "llsidetray.h"
+#include "llstartup.h"
 
 static const std::string FRIENDS_TAB_NAME	= "friends_panel";
 static const std::string GROUP_TAB_NAME		= "groups_panel";
@@ -127,9 +129,8 @@ BOOL FSFloaterContacts::postBuild()
 	mGroupList->setNoFilteredItemsMsg(getString("no_filtered_groups_msg"));
 	
 	mGroupList->setDoubleClickCallback(boost::bind(&FSFloaterContacts::onGroupChatButtonClicked, this));
-	// mGroupList->setCommitCallback(boost::bind(&FSFloaterContacts::updateButtons, this));
+	mGroupList->setCommitCallback(boost::bind(&FSFloaterContacts::updateButtons, this));
 	mGroupList->setReturnCallback(boost::bind(&FSFloaterContacts::onGroupChatButtonClicked, this));
-	
 	
 	mGroupsTab->childSetAction("chat_btn", boost::bind(&FSFloaterContacts::onGroupChatButtonClicked,	this));
 	mGroupsTab->childSetAction("info_btn", boost::bind(&FSFloaterContacts::onGroupInfoButtonClicked,	this));
@@ -141,6 +142,15 @@ BOOL FSFloaterContacts::postBuild()
 	return TRUE;
 }
 
+void FSFloaterContacts::updateButtons()
+{
+	std::vector<LLPanel*> items;
+	mGroupList->getItems(items);
+
+	mGroupsTab->getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d", gAgent.mGroups.count())); //  items.end()));//
+	mGroupsTab->getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d", gMaxAgentGroups));
+}
+
 void FSFloaterContacts::onOpen(const LLSD& key)
 {
 	if (key.asString() == "friends")
@@ -150,6 +160,8 @@ void FSFloaterContacts::onOpen(const LLSD& key)
 	else if (key.asString() == "groups")
 	{
 		childShowTab("friends_and_groups", "groups_panel");
+		mGroupsTab->getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d", gAgent.mGroups.count())); //  items.end()));//
+		mGroupsTab->getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d", gMaxAgentGroups));
 	}
 }
 
