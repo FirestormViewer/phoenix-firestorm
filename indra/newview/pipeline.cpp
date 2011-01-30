@@ -1407,15 +1407,18 @@ void LLPipeline::updateMovedList(LLDrawable::drawable_vector_t& moved_list)
 		LLDrawable::drawable_vector_t::iterator curiter = iter++;
 		LLDrawable *drawablep = *curiter;
 		BOOL done = TRUE;
-		if (!drawablep->isDead() && (!drawablep->isState(LLDrawable::EARLY_MOVE)))
+		if(drawablep)
 		{
-			done = drawablep->updateMove();
-		}
-		drawablep->clearState(LLDrawable::EARLY_MOVE | LLDrawable::MOVE_UNDAMPED);
-		if (done)
-		{
-			drawablep->clearState(LLDrawable::ON_MOVE_LIST);
-			iter = moved_list.erase(curiter);
+			if (!drawablep->isDead() && (!drawablep->isState(LLDrawable::EARLY_MOVE)))
+			{
+				done = drawablep->updateMove();
+			}
+			drawablep->clearState(LLDrawable::EARLY_MOVE | LLDrawable::MOVE_UNDAMPED);
+			if (done)
+			{
+				drawablep->clearState(LLDrawable::ON_MOVE_LIST);
+				iter = moved_list.erase(curiter);
+			}
 		}
 	}
 }
