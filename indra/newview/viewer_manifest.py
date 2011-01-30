@@ -335,6 +335,7 @@ class WindowsManifest(ViewerManifest):
         self.path(src="licenses-win32.txt", dst="licenses.txt")
         self.path("featuretable.txt")
         self.path("featuretable_xp.txt")
+        self.path("VivoxAUP.txt")
 
         # For use in crash reporting (generates minidumps)
         self.path("dbghelp.dll")
@@ -603,6 +604,7 @@ class DarwinManifest(ViewerManifest):
                 self.path("licenses-mac.txt", dst="licenses.txt")
                 self.path("featuretable_mac.txt")
                 self.path("SecondLife.nib")
+		self.path("VivoxAUP.txt")
 
                 # If we are not using the default channel, use the 'Firstlook
                 # icon' to show that it isn't a stable release.
@@ -846,6 +848,7 @@ class LinuxManifest(ViewerManifest):
     def construct(self):
         super(LinuxManifest, self).construct()
         self.path("licenses-linux.txt","licenses.txt")
+        self.path("VivoxAUP.txt")
         self.path("res/firestorm_icon.png","secondlife_icon.png")
         if self.prefix("linux_tools", dst=""):
             self.path("client-readme.txt","README-linux.txt")
