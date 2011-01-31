@@ -322,8 +322,19 @@ BOOL LLNavigationBar::postBuild()
 	mTeleportFailedConnection = LLViewerParcelMgr::getInstance()->
 		setTeleportFailedCallback(boost::bind(&LLNavigationBar::onTeleportFailed, this));
 	
-	mDefaultNbRect = getRect();
-	mDefaultFpRect = getChild<LLFavoritesBarCtrl>("favorite")->getRect();
+	LLFavoritesBarCtrl* fp = getChild<LLFavoritesBarCtrl>("favorite");
+	LLPanel* np = getChild<LLPanel>("navigation_panel");
+	
+	mDefaultNavContainerRect = getRect();
+	mDefaultFpRect = fp->getRect();
+	mDefaultNpRect = np->getRect();
+	
+	mDefaultNavContainerRect.set(mDefaultNavContainerRect.mLeft, mDefaultNpRect.mTop,mDefaultNavContainerRect.mRight, mDefaultFpRect.mBottom);
+	setRect(mDefaultNavContainerRect);
+	np->setRect(mDefaultNpRect);
+	fp->setRect(mDefaultFpRect);
+	llinfos << "Container heights initialized with navHeight=" << mDefaultNavContainerRect.getHeight() << llendl;
+	llinfos << "Navpanel heights initialized with navHeight=" << mDefaultNpRect.getHeight() << " fpHeight=" << mDefaultFpRect.getHeight() << llendl;
 
 	// we'll be notified on teleport history changes
 	LLTeleportHistory::getInstance()->setHistoryChangedCallback(
@@ -732,25 +743,44 @@ void LLNavigationBar::clearHistoryCache()
 
 int LLNavigationBar::getDefNavBarHeight()
 {
-	return mDefaultNbRect.getHeight();
+	return mDefaultNpRect.getHeight();
 }
 int LLNavigationBar::getDefFavBarHeight()
 {
 	return mDefaultFpRect.getHeight();
 }
 
-void LLNavigationBar::showNavigationPanel(BOOL visible)
+void LLNavigationBar::showNavigationPanel(BOOL npVisible)
 {
-	bool fpVisible = gSavedSettings.getBOOL("ShowNavbarFavoritesPanel");
-
-	LLFavoritesBarCtrl* fb = getChild<LLFavoritesBarCtrl>("favorite");
-	LLPanel* navPanel = getChild<LLPanel>("navigation_panel");
-
-	LLRect nbRect(getRect());
-	LLRect fbRect(fb->getRect());
-
-	navPanel->setVisible(visible);
+	/* The following is work in progress. I'm still experimenting with the interactions between main view, topinfo panel, navbar, nav panel, and favourites panel.
+	 */
 	
+	
+	//bool fpVisible = gSavedSettings.getBOOL("ShowNavbarFavoritesPanel");
+	LLFavoritesBarCtrl* fp = getChild<LLFavoritesBarCtrl>("favorite");
+	LLPanel* np = getChild<LLPanel>("navigation_panel");
+	llinfos << "showing navpanel :" << npVisible << llendl;
+	llinfos << "DEBUG: mDefaultNpRect = mLeft,mTop,mRight,mBottom = " << mDefaultNpRect.mLeft << "," << mDefaultNpRect.mTop << "," << mDefaultNpRect.mRight << "," << mDefaultNpRect.mBottom << llendl;
+	LLRect r;
+	
+	if (npVisible)
+	{
+		setRect(r.set(mDefaultNavContainerRect.mLeft, mDefaultNavContainerRect.mTop,mDefaultNavContainerRect.mRight, mDefaultNavContainerRect.mBottom+2));
+		np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop,mDefaultNpRect.mRight, mDefaultNpRect.mBottom));
+		fp->setRect(r.set(mDefaultFpRect.mLeft, mDefaultFpRect.mTop,mDefaultFpRect.mRight, mDefaultFpRect.mBottom));
+
+	}
+	else 
+	{
+		setRect(r.set(mDefaultNavContainerRect.mLeft, mDefaultNavContainerRect.mTop,mDefaultNavContainerRect.mRight, mDefaultNavContainerRect.mBottom+30));
+		np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop,mDefaultNpRect.mRight, mDefaultNpRect.mBottom));
+		fp->setRect(r.set(mDefaultFpRect.mLeft, mDefaultFpRect.mTop,mDefaultFpRect.mRight, mDefaultFpRect.mBottom));
+	}
+	
+	np->setVisible(npVisible);			
+	return;
+	
+	/*
 	// AO- redesigned navigation bars
 	if (visible)
 	{
@@ -781,13 +811,16 @@ void LLNavigationBar::showNavigationPanel(BOOL visible)
 			fb->setRect(fbRect);
 		}
 	}
+	*/
 }
 
 void LLNavigationBar::showFavoritesPanel(BOOL visible)
 {
+	
 	//bool npVisible = gSavedSettings.getBOOL("ShowNavbarNavigationPanel");
 
 	LLFavoritesBarCtrl* fb = getChild<LLFavoritesBarCtrl>("favorite");
+	fb->setVisible(visible);
 
 	//LLRect nbRect(getRect());
 	//LLRect fbRect(fb->getRect());
@@ -852,5 +885,5 @@ void LLNavigationBar::showFavoritesPanel(BOOL visible)
 	getChildView("bg_icon_no_nav_bevel")->setVisible( !npVisible && visible);
 	 */
 	 
-	fb->setVisible(visible);
+	
 }

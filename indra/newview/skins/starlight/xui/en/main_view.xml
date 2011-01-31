@@ -17,9 +17,10 @@
                 orientation="vertical"
                 top="19">
 <!-- navigation bar is top element of menu stack containing menu and favorites bars -->
-    <layout_panel auto_resize="false"
-                  height="60"
+    <layout_panel auto_resize="true"
+                  height="0"
                   mouse_opaque="false"
+                  show_background="false"
                   name="nav_bar_container"
                   follows="left|top|right"
                   tab_stop="false"
@@ -85,13 +86,18 @@
                    width="500">
 <!-- first element on rest of screen is top info bar - so is just below nav bar -->
             <panel follows="left|top|right"
-                   height="19"
+                   height="55"
+					background_opaque="true"
+					background_visible="false"
+					bg_opaque_color="red"
+					bg_alpha_color="red"
+					color="red"
                    left="0"
                    mouse_opaque="false"
                    name="topinfo_bar_container"
                    tab_stop="false"
                    top="0"
-                   visible="false"
+                   visible="true"
                    width="1024"/>
 <!-- second element on rest of screen is stand/stop/flying container - only really contains a button -->
               <panel bottom="500"
