@@ -13,12 +13,6 @@
                 <key>folder</key>
                     <string>grey</string>
                 </map>
-				<map>
-                <key>name</key>
-                    <string>Clear</string>
-                <key>folder</key>
-                    <string>clear</string>
-                </map>
             </array>
         </map>
 		
@@ -34,6 +28,28 @@
                     <string>Grey</string>
                 <key>folder</key>
                     <string>grey</string>
+                </map>
+				<map>
+                <key>name</key>
+                    <string>Clear</string>
+                <key>folder</key>
+                    <string>clear</string>
+                </map>
+            </array>
+        </map>
+
+		<map>
+        <key>name</key>
+            <string>Firestorm Clear</string>
+        <key>folder</key>
+            <string>firestormclear</string>
+        <key>themes</key>
+            <array>
+                <map>
+                <key>name</key>
+                    <string>Clear</string>
+                <key>folder</key>
+                    <string>clear</string>
                 </map>
             </array>
         </map>
