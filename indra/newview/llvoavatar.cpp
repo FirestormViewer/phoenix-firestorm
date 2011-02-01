@@ -7011,6 +7011,11 @@ void LLVOAvatar::resolveClient(const LLUUID tag)
 	{
 		mClientTag = "Nicholas";
 	}
+	else if(tag == LLUUID("f25263b7-6167-4f34-a4ef-af65213b2e39"))
+	{
+		mClientTag = "Singularity";
+	}
+
 
 	// Nothing found
 	
