@@ -84,14 +84,15 @@
                    width="500">
 <!-- first element on rest of screen is top info bar - so is just below nav bar -->
             <panel follows="left|top"
-                   height="48"
+                   height="50"
                    left="0"
                    mouse_opaque="false"
                    name="topinfo_bar_container"
                    tab_stop="false"
-                   top="0"
+                   top="5"
                    visible="false"
                    width="1024"/>
+
 <!-- second element on rest of screen is stand/stop/flying container - only really contains a button -->
               <panel bottom="500"
                      follows="left|right|bottom"

@@ -1,55 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  background_opaque="true"
- background_visible="true"
- bg_opaque_color="MouseGray"
- follows="left|top|right"
- height="60"
+ background_visible="false"
+ bg_opaque_color="green"
+ bg_alpha_color="green"
+ follows="left|bottom|right"
+ height="50"
+ bottom="5"
  layout="topleft"
  name="navigation_bar"
  chrome="true"
- width="600">
-	<icon
-	 follows="all"
-	 image_name="NavBar_BG"
-	 mouse_opaque="false"
-	 name="bg_icon"
-	 scale_image="true"
-	 visible="true"
-	 left="0"
-	 top="0"
-	 height="60"
-	 width="600"/>
-	<icon
-	 follows="all"
-	 image_name="NavBar_BG_NoFav_Bevel"
-	 mouse_opaque="false"
-	 name="bg_icon_no_fav_bevel"
-	 scale_image="true"
-	 visible="false"
-	 left="0"
-	 top="0"
-	 height="60"
-	 width="600"/>
-	<icon
-	 follows="all"
-	 image_name="NavBar_BG_NoNav_Bevel"
-	 mouse_opaque="false"
-	 name="bg_icon_no_nav_bevel"
-	 scale_image="true"
-	 visible="false"
-	 left="0"
-	 top="0"
-	 height="60"
-	 width="600"/>
+ width="1024">
+
 	<panel
-	 background_visible="false"
+	 background_visible="true"
+	 bg_opaque_color="DkGray"
+	 bg_alpha_color="DkGray"
+	 background_opaque="true"
 	 follows="left|top|right"
-	 top="3"
-	 height="23"
+	 height="30"
+	 top="0"
 	 layout="topleft"
 	 name="navigation_panel"
-	 width="600">
+	 width="2054">
 	     <pull_button
 	     follows="left|top"
 	     direction="down"
@@ -82,7 +55,7 @@
 	     layout="topleft"
 	     left_pad="7"
 	     name="home_btn"
-	     tool_tip="Teleport to my home location"
+	     tool_tip="Teleport to home location"
 	     top_delta="0"
 	     width="32" />
           <!-- About Land Button here -->         
@@ -123,7 +96,7 @@
 
 
 	    <location_input
-	     follows="left|right|top"
+	     follows="left|top|right"
 	     halign="right"
 	     height="23"
 	     label="Location"
@@ -133,24 +106,24 @@
 	     mouse_opaque="false"
 	     name="location_combo"
 	     top_delta="0"
-	     width="170">
+	     width="80">
 	    </location_input>
          <combo_list
          mouse_wheel_opaque="true"/>
         <search_combo_box
-	     follows="right|top"
 	     halign="right"
+	     follows="top|right"
 	     height="23"
 	     label="Search"
 	     layout="topleft"
-	     right="-10"
 	     mouse_opaque="false"
 	     name="search_combo_box"
 	     tool_tip="Search"
 	     top_delta="0"
+	     right="480"
 	     width="200" >
          <combo_editor
-          label="Search [SECOND_LIFE]"
+          label="Search MetaVerse"
           name="search_combo_editor"/>
          <combo_list
           draw_border="true"
@@ -160,17 +133,22 @@
           border.shadow_dark_color="FocusColor"/>
         </search_combo_box>
 	</panel>
-    <favorites_bar
-     follows="left|right|top"
+  <favorites_bar
+  	 auto_resize="true"
+	 background_visible="true"
+	 bg_opaque_color="green"
+	 bg_alpha_color="green"
+	 background_opaque="true"
+     follows="left|top|right"
+     top_pad="3"
      font="SansSerifSmall"
      height="15"
      layout="topleft"
      left="0"
      name="favorite"
      image_drag_indication="Accordion_ArrowOpened_Off"
-     bottom="55"
      tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
-               width="590">
+     width="1024">
         <label
          follows="left|top"
          height="15"
@@ -179,18 +157,16 @@
          name="favorites_bar_label"
          text_color="LtGray"
          tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
-         top="12"
          width="102">
           Favorites Bar
         </label>
-    <chevron_button name=">>"
-                     image_unselected="TabIcon_Close_Off"
-                     image_selected="TabIcon_Close_Off"
-                     tab_stop="false"
-                     follows="left|bottom"
-                     tool_tip="Show more of My Favorites"
-                     width="15"
-		     top="15"
-                     height="15"/>
+        <chevron_button name=">>"
+             image_unselected="TabIcon_Close_Off"
+             image_selected="TabIcon_Close_Off"
+             tab_stop="false"
+             follows="left|bottom"
+             tool_tip="Show more of My Favorites"
+             width="15"
+             height="15"/>
   </favorites_bar>
 </panel>

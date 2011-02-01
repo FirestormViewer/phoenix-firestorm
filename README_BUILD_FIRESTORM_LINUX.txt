@@ -6,6 +6,9 @@ Note: You must manually install fmod as described there.
 
 Run ./build_firestorm_linux.sh
 
+By default your build will be set to use channel private-(your build machine). If you want to change this, 
+you can use pass the option "--chan private-SomeNameYouPrefer" to the build command above.
+
 NOTE: IF you receive build failures related to libUUID, copy your system libUUID library over the download supplied by SL:
 	cd /your/firestorm/code/tree
 	cp /lib/libuuid.so.1.3.0 libraries/i686-linux/lib_release_client/libuuid.so
