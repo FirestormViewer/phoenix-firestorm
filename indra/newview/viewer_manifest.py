@@ -800,6 +800,7 @@ class DarwinManifest(ViewerManifest):
             for s,d in {self.get_dst_prefix():app_name + ".app",
                         os.path.join(dmg_template, "_VolumeIcon.icns"): ".VolumeIcon.icns",
                         os.path.join(dmg_template, "background.jpg"): "background.jpg",
+			os.path.join(dmg_template, "VivoxAUP.txt"): "Vivox (Voice Services) Usage Policy.txt",
                         os.path.join(dmg_template, "_DS_Store"): ".DS_Store"}.items():
                 print "Copying to dmg", s, d
                 self.copy_action(self.src_path_of(s), os.path.join(volpath, d))
@@ -968,6 +969,9 @@ class Linux_i686Manifest(LinuxManifest):
             self.path("libuuid.so.1")
             self.path("libSDL-1.2.so.0")
             self.path("libELFIO.so")
+	    #self.path("libopenjpeg.so.1.4.0","libopenjpeg.so.1.4.0")
+            #self.path("libopenjpeg.so.1.4", "libopenjpeg.so.1.4")
+	    #self.path("libopenjpeg.so.1", "libopenjpeg.so.1")
             self.path("libopenjpeg.so.1.3.0", "libopenjpeg.so.1.3")
             self.path("libalut.so")
             self.path("libopenal.so", "libopenal.so.1")

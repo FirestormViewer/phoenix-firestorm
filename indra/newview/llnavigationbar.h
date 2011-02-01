@@ -147,7 +147,8 @@ private:
 	LLButton*					mBtnHome;
 	LLSearchComboBox*			mSearchComboBox;
 	LLLocationInputCtrl*		mCmbLocation;
-	LLRect						mDefaultNbRect;
+	LLRect						mDefaultNpRect;
+	LLRect						mDefaultNavContainerRect;
 	LLRect						mDefaultFpRect;
 	boost::signals2::connection	mTeleportFailedConnection;
 	boost::signals2::connection	mTeleportFinishConnection;
