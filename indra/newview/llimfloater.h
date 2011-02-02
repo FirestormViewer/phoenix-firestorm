@@ -150,6 +150,9 @@ private:
 	BOOL inviteToSession(const uuid_vec_t& agent_ids);
 	
 	static void		onInputEditorFocusReceived( LLFocusableElement* caller, void* userdata );
+	static void		onSlideLeftFocusReceived( LLFocusableElement* caller, void* userdata );
+	static void		onSlideRightFocusReceived( LLFocusableElement* caller, void* userdata );
+	static void		onViewProfileFocusReceived( LLFocusableElement* caller, void* userdata );
 	static void		onInputEditorFocusLost(LLFocusableElement* caller, void* userdata);
 	static void		onInputEditorKeystroke(LLLineEditor* caller, void* userdata);
 	
