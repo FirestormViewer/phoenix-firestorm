@@ -77,6 +77,8 @@ public:
 	virtual void		hideToastsFromScreen() {};
 	// removes all toasts from a channel
 	virtual void		removeToastsFromChannel() {};
+	// show toasts that were hidden by hideToastsFromScreen()
+	virtual void		showToastsOnScreen() {};
 	
 	// show all toasts in a channel
 	virtual void		redrawToasts() {};
@@ -169,6 +171,8 @@ public:
 	void		hideToastsFromScreen();
 	// hide toast by notification id
 	void		hideToast(const LLUUID& notification_id);
+	// show toasts that were hidden by hideToastsFromScreen()
+	void		showToastsOnScreen();
 
 	/**
 	 * Closes hidden matched toasts from channel.
