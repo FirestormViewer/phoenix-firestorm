@@ -976,6 +976,12 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		case RLV_BHVR_REMATTACH:			// @addattach[:<option>]=n|y
 			eRet = onAddRemAttach(rlvCmd, fRefCount);
 			break;
+		case RLV_BHVR_ATTACHTHIS:			// @attachthis[:<option>]=n|y
+		case RLV_BHVR_DETACHTHIS:			// @detachthis[:<option>]=n|y
+		case RLV_BHVR_ATTACHALLTHIS:		// @attachtallhis[:<option>]=n|y
+		case RLV_BHVR_DETACHALLTHIS:		// @detachallthis[:<option>]=n|y
+			eRet = onAddRemFolderLock(rlvCmd, fRefCount);
+			break;
 		case RLV_BHVR_SETENV:				// @setenv=n|y
 			eRet = onAddRemSetEnv(rlvCmd, fRefCount);
 			break;
@@ -1256,6 +1262,48 @@ ERlvCmdRet RlvHandler::onAddRemDetach(const RlvCommand& rlvCmd, bool& fRefCount)
 	}
 
 	fRefCount = false;	// Don't reference count @detach[:<option>]=n
+	return RLV_RET_SUCCESS;
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCount)
+{
+	RlvFolderLocks::rlv_folderlock_source_t lockSource;
+
+	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+
+	if (rlvCmdOption.isEmpty())
+	{
+		lockSource = rlvCmd.getObjectID();
+	}
+	else if (rlvCmdOption.isSharedFolder())
+	{
+		lockSource = rlvCmd.getOption();
+	}
+	else if (rlvCmdOption.isAttachmentPoint())
+	{
+		lockSource = RlvAttachPtLookup::getAttachPointIndex(rlvCmdOption.getAttachmentPoint());
+	}
+	else if (rlvCmdOption.isWearableType())
+	{
+		lockSource = rlvCmdOption.getWearableType();
+	}
+	else
+	{
+		fRefCount = false;	// Don't reference count failure
+		return RLV_RET_FAILED_OPTION;
+	}
+
+	ERlvBehaviour eBhvr = rlvCmd.getBehaviourType();
+
+ 	ERlvLockMask eLock = ((RLV_BHVR_ATTACHTHIS == eBhvr) || (RLV_BHVR_ATTACHALLTHIS == eBhvr)) ? RLV_LOCK_ADD : RLV_LOCK_REMOVE;
+	RlvFolderLocks::rlv_folderlock_descr_t lockDescr(lockSource, ((RLV_BHVR_ATTACHALLTHIS == eBhvr) || (RLV_BHVR_DETACHALLTHIS == eBhvr)));
+	if (RLV_TYPE_ADD == rlvCmd.getParamType())
+		gRlvFolderLocks.addFolderLock(lockDescr, rlvCmd.getObjectID(), eLock);
+	else
+		gRlvFolderLocks.removeFolderLock(lockDescr, rlvCmd.getObjectID(), eLock);
+
+	fRefCount = true;
 	return RLV_RET_SUCCESS;
 }
 

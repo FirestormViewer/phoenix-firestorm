@@ -157,6 +157,7 @@ protected:
 	ERlvCmdRet processAddRemCommand(const RlvCommand& rlvCmd);
 	ERlvCmdRet onAddRemAttach(const RlvCommand& rlvCmd, bool& fRefCount);
 	ERlvCmdRet onAddRemDetach(const RlvCommand& rlvCmd, bool& fRefCount);
+	ERlvCmdRet onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCount);
 	ERlvCmdRet onAddRemSetEnv(const RlvCommand& rlvCmd, bool& fRefCount);
 	// Command handlers (RLV_TYPE_FORCE)
 	ERlvCmdRet processForceCommand(const RlvCommand& rlvCmd) const;

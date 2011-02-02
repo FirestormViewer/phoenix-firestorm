@@ -16,10 +16,13 @@
 
 #include "llviewerprecompiledheaders.h"
 #include "llattachmentsmgr.h"
+#include "llinventoryobserver.h"
+#include "lloutfitobserver.h"
 #include "llviewerobjectlist.h"
 #include "pipeline.h"
 
 #include "rlvhelper.h"
+#include "rlvinventory.h"
 #include "rlvlocks.h"
 
 // ============================================================================
@@ -907,6 +910,244 @@ void RlvWearableLocks::removeWearableTypeLock(LLWearableType::EType eType, const
 			}
 		}
 	}
+}
+
+// ============================================================================
+// RlvFolderLocks member functions
+//
+
+RlvFolderLocks gRlvFolderLocks;
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+RlvFolderLocks::RlvFolderLocks()
+	: m_fItemsDirty(true)
+{
+	LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&RlvFolderLocks::onCOFChanged, this));
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+void RlvFolderLocks::addFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock)
+{
+/*
+	// Sanity check - make sure it's an object we know about
+	if ( (m_Objects.find(idRlvObj) == m_Objects.end()) || (!idxAttachPt) )
+		return;	// If (idxAttachPt) == 0 then: (pObj == NULL) || (pObj->isAttachment() == FALSE)
+*/
+
+	// NOTE: m_FolderXXX can contain duplicate <idRlvObj, lockDescr> pairs
+	if (eLock & RLV_LOCK_REMOVE)
+		m_FolderRem.insert(std::pair<LLUUID, rlv_folderlock_descr_t>(idRlvObj, lockDescr));
+	if (eLock & RLV_LOCK_ADD)
+		m_FolderAdd.insert(std::pair<LLUUID, rlv_folderlock_descr_t>(idRlvObj, lockDescr));
+
+	m_fItemsDirty = true;
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+void RlvFolderLocks::removeFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock)
+{
+/*
+	// Sanity check - make sure it's an object we know about
+	if ( (m_Objects.find(idRlvObj) == m_Objects.end()) || (!idxAttachPt) )
+		return;	// If (idxAttachPt) == 0 then: (pObj == NULL) || (pObj->isAttachment() == FALSE)
+*/
+
+	if (eLock & RLV_LOCK_REMOVE)
+	{
+		RLV_ASSERT( m_FolderRem.lower_bound(idRlvObj) != m_FolderRem.upper_bound(idRlvObj) ); // The lock should always exist
+		for (rlv_folderlock_map_t::iterator itFolderLock = m_FolderRem.lower_bound(idRlvObj), 
+				endFolderLock = m_FolderRem.upper_bound(idRlvObj); itFolderLock != endFolderLock; ++itFolderLock)
+		{
+			if (lockDescr == itFolderLock->second)
+			{
+				m_FolderRem.erase(itFolderLock);
+				break;
+			}
+		}
+	}
+	if (eLock & RLV_LOCK_ADD)
+	{
+		RLV_ASSERT( m_FolderAdd.lower_bound(idRlvObj) != m_FolderAdd.upper_bound(idRlvObj) ); // The lock should always exist
+		for (rlv_folderlock_map_t::iterator itFolderLock = m_FolderAdd.lower_bound(idRlvObj), 
+				endFolderLock = m_FolderAdd.upper_bound(idRlvObj); itFolderLock != endFolderLock; ++endFolderLock)
+		{
+			if (lockDescr == itFolderLock->second)
+			{
+				m_FolderAdd.erase(itFolderLock);
+				break;
+			}
+		}
+	}
+
+	m_fItemsDirty = true;
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+void RlvFolderLocks::getLockedFolders(const rlv_folderlock_descr_t& lockDescr, LLInventoryModel::cat_array_t& lockFolders) const
+{
+	if (typeid(LLUUID) == lockDescr.first.type())					// Folder lock by attachment UUID
+	{
+		const LLViewerObject* pObj = gObjectList.findObject(boost::get<LLUUID>(lockDescr.first));
+		if ( (pObj) && (pObj->isAttachment()) )
+		{
+			const LLViewerInventoryItem* pItem = gInventory.getItem(pObj->getAttachmentItemID());
+			if ( (pItem) && (RlvInventory::instance().isSharedFolder(pItem->getParentUUID())) )
+			{
+				LLViewerInventoryCategory* pParentFolder = gInventory.getCategory(pItem->getParentUUID());
+				if (pParentFolder)
+					lockFolders.push_back(pParentFolder);
+			}
+		}
+	}
+	else if (typeid(std::string) == lockDescr.first.type())			// Folder lock by shared path
+	{
+		LLViewerInventoryCategory* pSharedFolder = RlvInventory::instance().getSharedFolder(boost::get<std::string>(lockDescr.first));
+		if (pSharedFolder)
+			lockFolders.push_back(pSharedFolder);
+	}
+	else															// Folder lock by attachment point or wearable type
+	{
+		uuid_vec_t idItems;
+		if (typeid(S32) == lockDescr.first.type())
+			RlvCommandOptionGetPath::getItemIDs(RlvAttachPtLookup::getAttachPoint(boost::get<S32>(lockDescr.first)), idItems);
+		else if (typeid(LLWearableType::EType) == lockDescr.first.type())
+			RlvCommandOptionGetPath::getItemIDs(boost::get<LLWearableType::EType>(lockDescr.first), idItems);
+
+		LLInventoryModel::cat_array_t folders;
+		if (RlvInventory::instance().getPath(idItems, folders))
+			lockFolders.insert(lockFolders.end(), folders.begin(), folders.end());
+	}
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+bool RlvFolderLocks::getLockedFolders(ERlvLockMask eLock, LLInventoryModel::cat_array_t& nodeFolders, LLInventoryModel::cat_array_t& subtreeFolders) const
+{
+	nodeFolders.clear();
+	subtreeFolders.clear();
+
+	// Bit of a hack, but the code is identical for both
+	const rlv_folderlock_map_t* pLockMaps[2] = { 0 };
+	if (eLock & RLV_LOCK_REMOVE)
+		pLockMaps[0] = &m_FolderRem;
+	if (eLock & RLV_LOCK_ADD)
+		pLockMaps[1] = &m_FolderAdd;
+
+	for (int idxLockMap = 0, cntLockMap = sizeof(pLockMaps) / sizeof(rlv_folderlock_map_t*); idxLockMap < cntLockMap; idxLockMap++)
+	{
+		if (!pLockMaps[idxLockMap])
+			continue;
+
+		// Iterate over each folder lock and determine which folders it affects
+		for (rlv_folderlock_map_t::const_iterator itFolderLock = pLockMaps[idxLockMap]->begin(), endFolderLock = pLockMaps[idxLockMap]->end(); 
+				itFolderLock != endFolderLock; ++itFolderLock)
+ 		{
+			const rlv_folderlock_descr_t& lockDescr = itFolderLock->second;
+			getLockedFolders(lockDescr, (!lockDescr.second) ? nodeFolders : subtreeFolders);
+		}
+	}
+
+	// Remove any duplicates we may have picked up
+	bool fEmpty = (nodeFolders.empty()) && (subtreeFolders.empty());
+	if (!fEmpty)
+	{
+		std::sort(nodeFolders.begin(), nodeFolders.end());
+		nodeFolders.erase(std::unique(nodeFolders.begin(), nodeFolders.end()), nodeFolders.end());
+		std::sort(subtreeFolders.begin(), subtreeFolders.end());
+		subtreeFolders.erase(std::unique(subtreeFolders.begin(), subtreeFolders.end()), subtreeFolders.end());
+	}
+	return !fEmpty;
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+void RlvFolderLocks::refreshLockedItems(ERlvLockMask eLock, LLInventoryModel::cat_array_t lockFolders, bool fMatchAll) const
+{
+	// Sanity check - eLock can be RLV_LOCK_REMOVE or RLV_LOCK_ADD but not both
+	uuid_vec_t* pLockedFolders = (RLV_LOCK_REMOVE == eLock) ? &m_LockedFolderRem : ((RLV_LOCK_ADD == eLock) ? &m_LockedFolderAdd : NULL);
+	if (!pLockedFolders)
+		return;
+
+	// Mimick an @attach:<folder>=force for each folder lock and keep track of every folder that has an item that would get worn
+	for (S32 idxFolder = 0, cntFolder = lockFolders.count(); idxFolder < cntFolder; idxFolder++)
+	{
+		const LLViewerInventoryCategory* pFolder = lockFolders.get(idxFolder);
+
+		// Grab a list of all the items we would be wearing/attaching
+		LLInventoryModel::cat_array_t foldersAttach; LLInventoryModel::item_array_t itemsAttach;
+		RlvWearableItemCollector f(pFolder, RlvForceWear::ACTION_WEAR_REPLACE, 
+			(fMatchAll) ? RlvForceWear::FLAG_MATCHALL : RlvForceWear::FLAG_NONE);
+		gInventory.collectDescendentsIf(pFolder->getUUID(), foldersAttach, itemsAttach, FALSE, f, TRUE);
+
+		for (S32 idxItem = 0, cntItem = itemsAttach.count(); idxItem < cntItem; idxItem++)
+		{
+			const LLViewerInventoryItem* pItem = itemsAttach.get(idxItem);
+			if ( (!pItem) || ((RLV_LOCK_REMOVE != eLock) || (!RlvForceWear::isWearingItem(pItem))) )
+				continue;
+
+			// NOTE: this won't keep track of every folder we need to (i.e. some may not have any wearable items) but our move/delete logic
+			//       will take care of any we miss here
+			pLockedFolders->push_back(pItem->getParentUUID());
+
+			// Only keep track of items when it's a RLV_LOCK_REMOVE folder lock
+			if (RLV_LOCK_REMOVE == eLock)
+			{
+				switch (pItem->getType())
+				{
+					case LLAssetType::AT_BODYPART:
+					case LLAssetType::AT_CLOTHING:
+						m_LockedWearableRem.push_back(pItem->getLinkedUUID());
+						break;
+					case LLAssetType::AT_OBJECT:
+						m_LockedAttachmentRem.push_back(pItem->getLinkedUUID());
+						break;
+					default:
+						break;
+				}
+			}
+		}
+	}
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+void RlvFolderLocks::refreshLockedItems() const
+{
+	if (m_fItemsDirty)
+	{
+		// Clear any previously cached items or folders
+		m_fItemsDirty = false;
+		m_LockedFolderAdd.clear();
+		m_LockedAttachmentRem.clear();
+		m_LockedFolderRem.clear();
+		m_LockedWearableRem.clear();
+
+		LLInventoryModel::cat_array_t nodeFolders, subtreeFolders;
+		if (getLockedFolders(RLV_LOCK_REMOVE, nodeFolders, subtreeFolders))
+		{
+			// Process node and subtree folder locks
+			refreshLockedItems(RLV_LOCK_REMOVE, nodeFolders, false);	// @detachthis[:<option>]=n
+			refreshLockedItems(RLV_LOCK_REMOVE, subtreeFolders, true);	// @detachallthis[:<option>]=n
+
+			// Remove any duplicates we may have picked up
+			std::sort(m_LockedFolderRem.begin(), m_LockedFolderRem.end());
+			m_LockedFolderRem.erase(std::unique(m_LockedFolderRem.begin(), m_LockedFolderRem.end()), m_LockedFolderRem.end());
+		}
+		if (getLockedFolders(RLV_LOCK_ADD, nodeFolders, subtreeFolders))
+		{
+			// Process node and subtree folder locks
+			refreshLockedItems(RLV_LOCK_ADD, nodeFolders, false);		// @attachthis[:<option>]=n
+			refreshLockedItems(RLV_LOCK_ADD, subtreeFolders, true);		// @attachallthis[:<option>]=n
+
+			// Remove any duplicates we may have picked up
+			std::sort(m_LockedFolderAdd.begin(), m_LockedFolderAdd.end());
+			m_LockedFolderAdd.erase(std::unique(m_LockedFolderAdd.begin(), m_LockedFolderAdd.end()), m_LockedFolderAdd.end());
+		}
+	}
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+void RlvFolderLocks::onCOFChanged()
+{
+	// NOTE: when removeFolderLock() removes the last folder lock we still want to refresh everything so mind the conditional OR assignment
+	m_fItemsDirty |= (!m_FolderAdd.empty()) || (!m_FolderRem.empty());
 }
 
 // ============================================================================
