@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
+ autofocus="false"
  legacy_header_height="18"
  background_visible="true"
  default_tab_group="1"
@@ -334,6 +335,7 @@
         <line_editor
          bottom="0"
          follows="left|right|bottom"
+	 select_on_focus="true"
 	 font="SansSerifSmall"
          height="20"
          label="To"
