@@ -321,15 +321,7 @@ void	LLNearbyChat::setVisible(BOOL visible)
 		LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLUUID(gSavedSettings.getString("NearByChatChannelUUID")));
 		if(chat_channel)
 		{
-			chat_channel->hideToastsFromScreen();
-		}
-	}
-	else
-	{
-		LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLUUID(gSavedSettings.getString("NearByChatChannelUUID")));
-		if(chat_channel)
-		{
-			chat_channel->showToastsOnScreen();
+			chat_channel->removeToastsFromChannel();
 		}
 	}
 	LLDockableFloater::setVisible(visible);
