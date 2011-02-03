@@ -3226,10 +3226,12 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
 
 //	if (facep->getViewerObject()->isSelected() && LLSelectMgr::getInstance()->mHideSelectedObjects)
-// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.2.1f
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
 	const LLViewerObject* pObj = facep->getViewerObject();
 	if ( (pObj->isSelected() && LLSelectMgr::getInstance()->mHideSelectedObjects) && 
-		 ((!rlv_handler_t::isEnabled()) || (!pObj->isHUDAttachment()) || (!gRlvAttachmentLocks.isLockedAttachment(pObj->getRootEdit()))) )
+		 ( (!rlv_handler_t::isEnabled()) || 
+		   ( ((!pObj->isHUDAttachment()) || (!gRlvAttachmentLocks.isLockedAttachment(pObj->getRootEdit()))) && 
+		     (gRlvHandler.canEdit(pObj)) ) ) )
 // [/RVLa:KB]
 	{
 		return;
