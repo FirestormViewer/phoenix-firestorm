@@ -41,7 +41,6 @@ include(LLKDU)
 include(ViewerMiscLibs)
 include(LLLogin)
 include(CMakeCopyIfDifferent)
-include(Growl)
 
 include_directories(
     ${DBUSGLIB_INCLUDE_DIRS}
@@ -66,15 +65,12 @@ include_directories(
     ${LSCRIPT_INCLUDE_DIRS}/lscript_compile
     ${LLLOGIN_INCLUDE_DIRS}
     ${UPDATER_INCLUDE_DIRS}
-    ${GROWL_INCLUDE_DIRS}
     )
 
 set(viewer_SOURCE_FILES
     chatbar_as_cmdline.cpp
     kcwlinterface.cpp
 	fscontactsfloater.cpp
-	growlmanager.cpp
-	growlnotifier.cpp
     llagent.cpp
     llagentaccess.cpp
     llagentcamera.cpp
@@ -620,8 +616,6 @@ set(viewer_HEADER_FILES
 	chatbar_as_cmdline.h
     kcwlinterface.h
 	fscontactsfloater.h
-	growlmanager.h
-	growlnotifier.h
     llagent.h
     llagentaccess.h
     llagentcamera.h
@@ -1150,11 +1144,6 @@ source_group("CMake Rules" FILES ViewerInstall.cmake)
 
 if (DARWIN)
   LIST(APPEND viewer_SOURCE_FILES llappviewermacosx.cpp)
-  LIST(APPEND viewer_HEADER_FILES growlnotifiermacosx-objc.h)
-  LIST(APPEND viewer_SOURCE_FILES growlnotifiermacosx-objc.mm)
-  LIST(APPEND viewer_SOURCE_FILES growlnotifiermacosx.h)
-  LIST(APPEND viewer_SOURCE_FILES growlnotifiermacosx.cpp)
-
 
   find_library(AGL_LIBRARY AGL)
   find_library(APPKIT_LIBRARY AppKit)
@@ -1196,8 +1185,6 @@ endif (DARWIN)
 if (LINUX)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux.cpp)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux_api_dbus.cpp)
-    LIST(APPEND viewer_HEADER_FILES desktopnotifierlinux.h)
-    LIST(APPEND viewer_SOURCE_FILES desktopnotifierlinux.cpp)
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
 
     set(viewer_LIBRARIES
@@ -1207,13 +1194,11 @@ endif (LINUX)
 
 if (WINDOWS)
     list(APPEND viewer_SOURCE_FILES
-         growlnotifierwin.cpp
          llappviewerwin32.cpp
          llwindebug.cpp
          )
 
     list(APPEND viewer_HEADER_FILES
-         growlnotifierwin.h
          llappviewerwin32.h
          llwindebug.h
          )
@@ -1581,7 +1566,6 @@ if (WINDOWS)
       ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qjpcodecsd4.dll
       ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qkrcodecsd4.dll
       ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qtwcodecsd4.dll
-	  ${ARCH_PREBUILT_DIRS_RELEASE}/lgggrowl.dll
       SLPlugin
       media_plugin_quicktime
       media_plugin_webkit
@@ -1734,7 +1718,6 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${CRYPTO_LIBRARIES}
     ${LLLOGIN_LIBRARIES}
     ${GOOGLE_PERFTOOLS_LIBRARIES}
-    ${GROWL_LIBRARY}
     )
 
 if (LINUX OR FIRECYG OR DARWIN)
