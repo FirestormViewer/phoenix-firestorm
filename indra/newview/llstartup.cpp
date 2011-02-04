@@ -199,7 +199,6 @@
 #endif
 
 #include "llnotificationmanager.h"
-#include "growlmanager.h"
 
 
 //
@@ -375,8 +374,6 @@ bool idle_startup()
 		//
 		// Initialize stuff that doesn't need data from simulators
 		//
-
-		GrowlManager::InitiateManager();
 
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-0.2.1d
 		if ( (gSavedSettings.controlExists(RLV_SETTING_MAIN)) && (gSavedSettings.getBOOL(RLV_SETTING_MAIN)) )

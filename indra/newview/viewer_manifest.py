@@ -341,12 +341,6 @@ class WindowsManifest(ViewerManifest):
         self.path("dbghelp.dll")
 
         self.enable_no_crt_manifest_check()
-		
-		#"G:\firestorm\lgpl\growl\libraries\i686-win32\lib\release\lgggrowl.dll"
-        if self.prefix(src=os.path.join(os.pardir, os.pardir, 'libraries', 'i686-win32', 'lib', 'release'),dst="./"):
-            self.path("lgggrowl.dll")
-            self.path("lgggrowl++.dll")
-            self.end_prefix()
         
         # Media plugins - QuickTime
         if self.prefix(src='../media_plugins/quicktime/%s' % self.args['configuration'], dst="llplugin"):
@@ -598,9 +592,6 @@ class DarwinManifest(ViewerManifest):
             self.path("../../libraries/universal-darwin/lib_release/libndofdev.dylib", dst="MacOS/libndofdev.dylib")
 
             self.path("../viewer_components/updater/scripts/darwin/update_install", "MacOS/update_install")
-
-            # Growl library
-            self.path("../../libraries/universal-darwin/lib_release/libgrowl.dylib", "Frameworks/Growl.framework/Versions/A/Growl");
 
             # most everything goes in the Resources directory
             if self.prefix(src="", dst="Resources"):
@@ -985,7 +976,6 @@ class Linux_i686Manifest(LinuxManifest):
             self.path("libalut.so")
             self.path("libopenal.so", "libopenal.so.1")
             self.path("libopenal.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
-            self.path("libnotify.so.1.1.2", "libnotify.so.1")
             try:
                     self.path("libkdu.so")
                     pass
