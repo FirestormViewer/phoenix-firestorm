@@ -30,7 +30,6 @@
     follows="left|top" 
     name="parcel_info_panel" 
     bg_visible="false"
-    visible="false"
     background_opaque="false">
    <button
     follows="left|top"
