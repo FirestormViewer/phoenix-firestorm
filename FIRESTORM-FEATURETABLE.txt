@@ -49,4 +49,5 @@ QuickAdditionalInv	LGPL
 UpdatedLibCURL		Curl (MIT/X11)
 UpdatedWebKit		LGPL
 Progress_screens	LGPL
-Prim_align_tool		third party viewers (imprudence, Kirsten’s, etc, etc, etc) please feel free to include this code into yours.
+Prim_align_tool		third party viewers (imprudence, Kirsten's, etc, etc, etc) please feel free to include this code into yours.
+Temp_Uploads		LGPL (from Dolphin Viewer 2.4)
