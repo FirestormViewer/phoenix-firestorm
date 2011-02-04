@@ -29,12 +29,6 @@
                 <key>folder</key>
                     <string>grey</string>
                 </map>
-				<map>
-                <key>name</key>
-                    <string>Clear</string>
-                <key>folder</key>
-                    <string>clear</string>
-                </map>
             </array>
         </map>
 
@@ -56,16 +50,16 @@
 
 		<map>
         <key>name</key>
-            <string>Firestorm Clear</string>
+            <string>MetaHarper w/SideTabs</string>
         <key>folder</key>
-            <string>firestormclear</string>
+            <string>metaharpersidetabs</string>
         <key>themes</key>
             <array>
                 <map>
                 <key>name</key>
-                    <string>Clear</string>
+                    <string>AppalachianSky</string>
                 <key>folder</key>
-                    <string>clear</string>
+                    <string>appalachian_sky</string>
                 </map>
             </array>
         </map>
