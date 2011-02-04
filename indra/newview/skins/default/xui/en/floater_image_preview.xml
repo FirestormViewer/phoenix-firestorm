@@ -130,6 +130,11 @@ Try saving image as 24 bit Targa (.tga).
      name="lossless_check"
      top_pad="162"
      width="280" />
+     <check_box
+      control_name="TemporaryUpload" enabled="true"
+      follows="bottom|left" height="16" initial_value="false"
+      left_delta="155" name="temp_check" width="280" label="Temporary (Free)"
+       tooltip="Sets the asset to be temporary, meaning its free, but in return, only good for a short time before it ceases to exist." />
     <button
      follows="bottom|right"
      height="20"
