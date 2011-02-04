@@ -72,7 +72,7 @@ left_delta="0"
 name="username_edit"
 prevalidate_callback="ascii" 
 select_on_focus="true"
-tool_tip="The username you chose when you registered, like bobsmith12 or Steller Sunshine"
+tool_tip="The account name you chose when you registered, like bobsmith12 or Steller Sunshine"
 top_pad="0"
 width="150" />
 <text
@@ -208,7 +208,8 @@ name="login_help"
 top_pad="2"
 right="-10"
     width="200">
-       Need help logging in?   </text>
+       Need help logging in?   
+</text>
 <!--  <text
     follows="right|bottom"
     font="SansSerifSmall"

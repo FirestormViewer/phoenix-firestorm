@@ -5835,7 +5835,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>256.0</real>
+      <real>16.0</real>
     </map>
     <key>MiniMapRotate</key>
     <map>
