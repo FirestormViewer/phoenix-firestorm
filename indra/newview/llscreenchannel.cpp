@@ -725,6 +725,13 @@ void LLScreenChannel::hideToastsFromScreen()
 }
 
 //--------------------------------------------------------------------------
+void LLScreenChannel::showToastsOnScreen()
+{
+	for(std::vector<ToastElem>::iterator it = mToastList.begin(); it != mToastList.end(); it++)
+		(*it).toast->setVisible(TRUE);
+}
+
+//--------------------------------------------------------------------------
 void LLScreenChannel::hideToast(const LLUUID& notification_id)
 {
 	std::vector<ToastElem>::iterator it = find(mToastList.begin(), mToastList.end(), notification_id);

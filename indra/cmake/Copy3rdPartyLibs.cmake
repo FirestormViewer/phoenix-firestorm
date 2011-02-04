@@ -38,6 +38,8 @@ if(WINDOWS)
         libapr-1.dll
         libaprutil-1.dll
         libapriconv-1.dll
+        lgggrowl++.dll
+        lgggrowl.dll
         )
 
     # *TODO - update this to use LIBS_PREBUILT_DIR and LL_ARCH_DIR variables
@@ -48,6 +50,8 @@ if(WINDOWS)
         libapr-1.dll
         libaprutil-1.dll
         libapriconv-1.dll
+        lgggrowl++.dll
+        lgggrowl.dll
         )
 
     if(USE_GOOGLE_PERFTOOLS)
@@ -169,6 +173,7 @@ elseif(DARWIN)
         libllqtwebkit.dylib
         libndofdev.dylib
         libexception_handler.dylib
+		libgrowl.dylib
        )
 
     # fmod is statically linked on darwin
@@ -236,6 +241,7 @@ elseif(LINUX)
         libtcmalloc.so
         libuuid.so.1
         libssl.so.0.9.7
+		libnotify.so
        )
 
     if (FMOD)
