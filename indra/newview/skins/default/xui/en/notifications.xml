@@ -4473,11 +4473,11 @@ Unable to start a new chat session with [RECIPIENT].
   </notification>
 
   <notification
-   icon="alertmodal.tga"
+   icon="notifytip.tga"
    name="ChatterBoxSessionEventError"
-   type="alertmodal">
+   type="notifytip">
 [EVENT]
-[REASON]
+<!--[REASON]-->
     <usetemplate
      name="okbutton"
      yestext="OK"/>

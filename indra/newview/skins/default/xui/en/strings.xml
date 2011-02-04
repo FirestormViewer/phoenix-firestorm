@@ -3144,10 +3144,12 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
   In case of the EXT-3562 issue 'message' is passed into the gIMMgr::showSessionStartError as a string name.
   So, let add string with name="message" with the same value as "message_session_event" -->
   <string name="message">
-    Unable to send your message to the chat session with [RECIPIENT].
+    The message sent to [RECIPIENT] is still being processed.
+    If the message does not appear in the next few minuets, it may have been droped by the server.
   </string>  
   <string name="message_session_event">
-    Unable to send your message to the chat session with [RECIPIENT].
+    The message sent to [RECIPIENT] is still being processed.
+    If the message does not appear in the next few minuets, it may have been droped by the server.
   </string>
   <string name="mute">
     Error while moderating.
