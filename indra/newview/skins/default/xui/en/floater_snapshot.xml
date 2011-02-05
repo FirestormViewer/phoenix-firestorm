@@ -4,7 +4,7 @@
  can_minimize="false"
  can_close="true"
  follows="left|top"
- height="520"
+ height="540"
  layout="topleft"
  name="Snapshot"
  help_topic="snapshot"
@@ -400,4 +400,7 @@
      top_pad="8"
      width="180"
      name="auto_snapshot_check" />
+	<check_box top_pad="8" follows="left|top" control_name="TemporaryUpload" enabled="true"
+	     initial_value="false" label="Temporary Image (Free)" left="10"
+	     name="temp_check" tooltip="Sets the asset to be temporary, meaning its free, but in return, only good for a short time before it ceases to exist." />
 </floater>

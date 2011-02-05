@@ -30,6 +30,7 @@
 #include "llfoldertype.h"
 #include "llassetstorage.h"
 #include "llinventorytype.h"
+#include "llinventorydefines.h"
 
 class LLTransactionID;
 
