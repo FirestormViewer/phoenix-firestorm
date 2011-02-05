@@ -1489,18 +1489,7 @@
       <string>String</string>
       <key>Value</key>
       <string />
-    </map>	
-    <key>CacheLocationTopFolder</key>
-    <map>
-      <key>Comment</key>
-      <string>Controls the location of the local disk cache</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string />
-    </map>	
+    </map>		
     <key>CacheNumberOfRegionsForObjects</key>
     <map>
       <key>Comment</key>
