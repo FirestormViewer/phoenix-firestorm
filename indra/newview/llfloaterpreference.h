@@ -117,6 +117,7 @@ public:
 
 	void onClickSetCache();
 	void onClickResetCache();
+	void onClickClearCache();
 	void onClickSkin(LLUICtrl* ctrl,const LLSD& userdata);
 	void onSelectSkin();
 	void onClickSetKey();
