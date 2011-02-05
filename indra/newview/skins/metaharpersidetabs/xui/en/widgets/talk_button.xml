@@ -25,7 +25,7 @@
     is_toggle="true"
                  image_selected="SpeakBtn_Right_Selected_Press"
                  image_unselected="SpeakBtn_Right_Off"
-		 image_pressed="SpeakBtn_Right_Press"
+		 image_pressed="SpeakBtn_Right_Selected_Press"
 		 image_pressed_selected="SpeakBtn_Right_Selected_Press"
 		 image_overlay="Arrow_Small_Up"
     />
