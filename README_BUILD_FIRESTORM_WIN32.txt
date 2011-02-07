@@ -20,7 +20,7 @@ GET THE PHOENIX SOURCE
 Open up cygwin and run the following commands one at a time
 	mkdir /cygdrive/c/code
 	cd /cygdrive/c/code
-	hg clone http://hg.phoenixviewer.com/phoenix-firestorm-lpgl
+	hg clone http://hg.phoenixviewer.com/phoenix-firestorm-lgpl/
 
 Make sure to copy fmod.dll into both your indra/ folder and also libraries/i686-win32/Release and libraries/RelWithDebInfo
 
