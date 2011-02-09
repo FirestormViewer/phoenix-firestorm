@@ -336,22 +336,27 @@
              top_delta="0"
              value="unknown"
              width="268" />
-            <accordion
-             fit_parent="true"
-             follows="all"
-             height="268"
-             layout="topleft"
-             single_expansion="true"
-             left="0"
+
+            <tab_container
              name="advanced_info_accordion"
-             top_pad="5"
+             fit_parent="true"
+             layout="topleft"
+             follows="all"
+             halign="center"
+             tab_position="top"
+             tab_width="80"
+             top_pad="15"
+             left="0"
+             height="268"
              width="313">
-                <accordion_tab
+
+                <panel
                  fit_panel="false"
                  height="175"
                  layout="topleft"
                  name="parcel_characteristics_tab"
                  title="Parcel">
+<!--
                     <panel
                      follows="all"
                      height="175"
@@ -360,6 +365,7 @@
                      name="parcel_characteristics_panel"
                      top="0"
                      width="275">
+//-->
                         <icon
                          follows="top|left"
                          height="16"
@@ -367,7 +373,7 @@
                          layout="topleft"
                          left="10"
                          name="rating_icon"
-                         top="0"
+                         top="10"
                          width="18" />
                         <text
                          follows="left|top"
@@ -544,28 +550,29 @@
                          value="Off"
                          width="60" />
                         <button
-                         follows="bottom|right"
+                         follows="top|left"
                          height="23"
                          label="About Land"
                          layout="topleft"
                          name="about_land_btn"
-                         right="-5"
                          tab_stop="false"
-                         top_pad="2"
+                         top_pad="15"
+                         left="10"
                          width="140">
                             <click_callback
                              function="Floater.Show"
                              parameter="about_land" />
                         </button>
-                    </panel>
-                </accordion_tab>
-                <accordion_tab
-                 expanded="false"
+<!--                    </panel>  -->
+                </panel>
+
+                <panel
                  fit_panel="false"
-                 height="125"
+                 height="175"
                  layout="topleft"
-                 name="region_information_tab"
+                 name="region_characteristics_tab"
                  title="Region">
+<!--
                     <panel
                      follows="all"
                      height="125"
@@ -574,6 +581,7 @@
                      name="region_information_panel"
                      top="0"
                      width="290">
+//-->
                         <text
                          follows="left|top"
                          height="15"
@@ -675,28 +683,29 @@
                             The Mighty Moose of mooseville soundvillemoose
                         </text>
                         <button
-                         follows="bottom|right"
+                         follows="top|left"
                          height="23"
                          label="Region/Estate"
                          layout="topleft"
                          name="region_info_btn"
-                         right="-5"
                          tab_stop="false"
-                         top_pad="2"
+                         top_pad="10"
+                         left="10"
                          width="180">
                             <click_callback
                              function="Floater.Show"
                              parameter="region_info" />
                         </button>
-                    </panel>
-                </accordion_tab>
-                <accordion_tab
-                 expanded="false"
+<!--                    </panel> -->
+                </panel>
+
+                <panel
                  fit_panel="false"
-                 height="180"
+                 height="175"
                  layout="topleft"
                  name="estate_information_tab"
                  title="Estate">
+<!--
                     <panel
                      follows="all"
                      height="180"
@@ -705,6 +714,7 @@
                      name="estate_information_panel"
                      top="0"
                      width="290">
+//-->
                         <text
                          follows="left|top"
                          height="15"
@@ -780,15 +790,18 @@
                          top_pad="0"
                          width="277"
                          word_wrap="true" />
-                    </panel>
-                </accordion_tab>
-                <accordion_tab
-                 expanded="false"
+<!--                    </panel> -->
+                </panel>
+
+
+                <panel
                  fit_panel="false"
-                 height="290"
+                 height="175"
                  layout="topleft"
                  name="sales_tab"
                  title="For Sale">
+
+<!--
                     <panel
                      follows="all"
                      height="290"
@@ -797,6 +810,7 @@
                      name="sales_panel"
                      top="0"
                      width="290">
+//-->
                         <text
                          follows="left|top"
                          height="15"
@@ -960,9 +974,9 @@
                          name="sale_to"
                          top_delta="0"
                          width="187" />
-                    </panel>
-                </accordion_tab>
-            </accordion>
+<!--                    </panel> -->
+                </panel>
+            </tab_container>
         </panel>
     </scroll_container>
 </panel>

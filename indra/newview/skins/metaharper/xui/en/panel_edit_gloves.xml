@@ -15,12 +15,12 @@
       background_visible="true"
       background_opaque="true"
 	  follows="top|left|right"
-	  height="90" 
-	  left="10" 
-	  layout="topleft" 
+	  height="180"
+	  left="0"
+	  layout="topleft"
 	  name="avatar_gloves_color_panel"
-	  top="0"
-	  width="313" >
+	  top="80"
+	  width="80" >
        <texture_picker
         can_apply_immediately="true"
         default_image_name="Default"
@@ -28,10 +28,10 @@
         height="80"
         label="Fabric"
         layout="topleft"
-        left="10"
+        left="5"
         name="Fabric"
         tool_tip="Click to choose a picture"
-        top="10"
+        top="0"
         width="64" >
          <texture_picker.commit_callback
              function="TexturePicker.Commit" />
@@ -42,53 +42,68 @@
         height="80"
         label="Color/Tint"
         layout="topleft"
-        left_pad="20"
+        top_pad="5"
         name="Color/Tint"
         tool_tip="Click to open color picker"
-        top="10"
+        left="5"
         width="64" >
          <color_swatch.commit_callback
              function="ColorSwatch.Commit" />
        </color_swatch>
      </panel>
-     <panel
-         border="false"
-         bg_alpha_color="DkGray2"
-         bg_opaque_color="DkGray2"
-         background_visible="true"
-         background_opaque="true"
-         follows="all"
-         height="300"
-         layout="topleft"
-         left="10"
-         name="accordion_panel"
-         top_pad="10"
-         width="313">
-     <accordion
-        fit_parent="true"
-        follows="all"
-        height ="300"
-        layout="topleft"
-        left="0"
-        name="wearable_accordion"
-        single_expansion="true"
-        top="0"
-        width="313">
-		<accordion_tab
-			layout="topleft"
-            fit_panel="false"
-			min_height="150"
-			name="gloves_main_tab"
-			title="Gloves">
-			<scrolling_panel_list
-				follows="all"
-                layout="topleft"
-				left="0"
-				name="gloves_main_param_list"
-				top="0"
-				width="303" />
-		</accordion_tab>
-	</accordion>
-    </panel>
+
+     <tab_container
+       name="wearable_accordion"
+       fit_parent="true"
+       layout="topleft"
+       follows="all"
+       halign="left"
+       tab_position="left"
+       tab_width="80"
+       top="0"
+       height="385"
+       width="333">
+
+      <!-- Begin Gloves Panel -->
+      <panel
+       name="gloves_main_tab_holder"
+       title="Gloves"
+       layout="topleft"
+       fit_parent="false"
+       follows="left"
+       height="385"
+       width="333">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="385"
+       left="0"
+       name="gloves_main_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="333">
+      <accordion_tab
+       layout="topleft"
+       min_height="150"
+       name="gloves_main_tab"
+       fit_panel="false"
+       title="Gloves">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="10"
+       name="gloves_main_param_list"
+       top="10"
+       height="385"
+       width="333" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Gloves Panel -->
+
+    </tab_container>
 </panel>
 
