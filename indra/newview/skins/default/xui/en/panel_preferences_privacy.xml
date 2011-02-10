@@ -150,7 +150,7 @@
      top_pad="5"
      width="250"/>
     <button
-	 enabled="false"
+	 enabled="true"
      follows="right|bottom"
      height="23"
      label="Browse"

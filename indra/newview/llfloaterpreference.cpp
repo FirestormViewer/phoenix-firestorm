@@ -307,6 +307,9 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 //	mCommitCallbackRegistrar.add("Pref.ClearCache",				boost::bind(&LLFloaterPreference::onClickClearCache, this));
 	mCommitCallbackRegistrar.add("Pref.WebClearCache",			boost::bind(&LLFloaterPreference::onClickBrowserClearCache, this));
 	mCommitCallbackRegistrar.add("Pref.SetCache",				boost::bind(&LLFloaterPreference::onClickSetCache, this));
+	mCommitCallbackRegistrar.add("Pref.BrowseCache",			boost::bind(&LLFloaterPreference::onClickBrowseCache, this));
+	mCommitCallbackRegistrar.add("Pref.BrowseCrashLogs",		boost::bind(&LLFloaterPreference::onClickBrowseCrashLogs, this));
+	mCommitCallbackRegistrar.add("Pref.BrowseSettingsDir",		boost::bind(&LLFloaterPreference::onClickBrowseSettingsDir, this));
 	mCommitCallbackRegistrar.add("Pref.ResetCache",				boost::bind(&LLFloaterPreference::onClickResetCache, this));
 	mCommitCallbackRegistrar.add("Pref.ClearCache",				boost::bind(&LLFloaterPreference::onClickClearCache, this));
 	//	mCommitCallbackRegistrar.add("Pref.ClickSkin",				boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
@@ -784,7 +787,18 @@ void LLFloaterPreference::onClickSetCache()
 		gSavedSettings.setString("CacheLocationTopFolder", top_folder);
 	}
 }
-
+void LLFloaterPreference::onClickBrowseCache()
+{
+	//todo: add window open (JL)
+}
+void LLFloaterPreference::onClickBrowseCrashLogs()
+{
+	//todo: add window open (JL)
+}
+void LLFloaterPreference::onClickBrowseSettingsDir()
+{
+	//todo: add window open (JL)
+}
 void LLFloaterPreference::onClickResetCache()
 {
 	if (!gSavedSettings.getString("CacheLocation").empty())

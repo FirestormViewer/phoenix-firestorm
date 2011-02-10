@@ -171,7 +171,7 @@
    top_delta="-1"
    width="45">
     <button.commit_callback
-     function="Pref.OpenCache" />
+     function="Pref.BrowseCache" />
   </button>
   <button
    follows="left|top"
@@ -245,11 +245,11 @@
    label_selected="Browse"
    layout="topleft"
    left_pad="5"
-   name="open_logpath"
+   name="log_path_button"
    top_delta="-1"
    width="45">
     <button.commit_callback
-     function="Pref.OpenLogPath" />
+     function="Pref.LogPath" />
   </button>
   <button
   enabled="false"
@@ -287,11 +287,11 @@
     label_selected="Browse Crash Logs"
     layout="topleft"
     left="20"
-    name="open_crashlogs"
+    name="browse_crashlogs"
     top_delta="30"
     width="120">
     <button.commit_callback
-     function="Pref.OpenCrashLogs" />
+     function="Pref.BrowseCrashLogs" />
   </button>
   <button
   enabled="false"
@@ -301,11 +301,11 @@
     label_selected="Browse Settings folder"
     layout="topleft"
     left_pad="10"
-    name="open_settingsdir"
+    name="browse_settingsdir"
     top_delta="0"
     width="140">
     <button.commit_callback
-     function="Pref.OpenSettingsDir" />
+     function="Pref.BrowseSettingsDir" />
   </button>
   <text
          type="string"
