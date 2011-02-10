@@ -160,7 +160,7 @@
    top_pad="5"
    width="270" />
   <button
-  enabled="false"
+  enabled="true"
    follows="left|top"
    height="23"
    label="Browse"
@@ -238,7 +238,7 @@
    top_pad="5"
    width="270"/>
   <button
-  enabled="false"
+  enabled="true"
    follows="left|top"
    height="23"
    label="Browse"
@@ -249,7 +249,7 @@
    top_delta="-1"
    width="45">
     <button.commit_callback
-     function="Pref.LogPath" />
+     function="Pref.BrowseLogPath" />
   </button>
   <button
   enabled="false"
@@ -280,7 +280,7 @@
      function="Pref.ResetLogPath" />
   </button>
   <button
-  enabled="false"
+  enabled="true"
     follows="left|top"
     height="23"
     label="Browse Crash Logs"
@@ -294,7 +294,7 @@
      function="Pref.BrowseCrashLogs" />
   </button>
   <button
-  enabled="false"
+  enabled="true"
     follows="left|top"
     height="23"
     label="Browse Settings folder"

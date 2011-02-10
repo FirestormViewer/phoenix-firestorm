@@ -118,6 +118,7 @@ public:
 	void onClickSetCache();
 	void onClickBrowseCache();
 	void onClickBrowseCrashLogs();
+	void onClickBrowseChatLogDir();
 	void onClickResetCache();
 	void onClickClearCache();
 	void onClickBrowseSettingsDir();
