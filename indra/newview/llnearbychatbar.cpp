@@ -892,7 +892,8 @@ LLWString LLNearbyChatBar::stripChannelNumber(const LLWString &mesg, S32* channe
 	else if (mesg[0] == '/'
 			 && mesg[1]
 			 && ( LLStringOps::isDigit(mesg[1])
-				 || mesg[1] == '-'))
+				 || (mesg[1] == '-'
+				 	&& LLStringOps::isDigit(mesg[2]))))
 	{
 		// This a special "/20" speak on a channel
 		S32 pos = 0;
