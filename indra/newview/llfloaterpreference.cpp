@@ -361,6 +361,8 @@ BOOL LLFloaterPreference::postBuild()
 	updateDoubleClickControls();
 
 	getChild<LLUICtrl>("cache_location")->setEnabled(FALSE); // make it read-only but selectable (STORM-227)
+	getChildView("log_path_string")->setEnabled(FALSE);// do the same for chat logs path
+	getChildView("log_path_string-panelsetup")->setEnabled(FALSE);// and the redundant instance -WoLf
 	std::string cache_location = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "");
 	setCacheLocation(cache_location);
 
@@ -1331,8 +1333,11 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	getChildView("log_nearby_chat")->setEnabled(TRUE);
 	getChildView("log_instant_messages")->setEnabled(TRUE);
 	getChildView("show_timestamps_check_im")->setEnabled(TRUE);
-	getChildView("log_path_string")->setEnabled(FALSE);// LineEditor becomes readonly in this case.
+//	getChildView("log_path_string")->setEnabled(FALSE);// LineEditor becomes readonly in this case. || Moved to PostBuild to disable on not logged in state  -WoLf
 	getChildView("log_path_button")->setEnabled(TRUE);
+	getChildView("open_log_path_button")->setEnabled(TRUE);
+	getChildView("log_path_button-panelsetup")->setEnabled(TRUE);// second set of controls for panel_preferences_setup  -WoLf
+	getChildView("open_log_path_button-panelsetup")->setEnabled(TRUE);
 	childEnable("logfile_name_datestamp");	
 	std::string display_email(email);
 	getChild<LLUICtrl>("email_address")->setValue(display_email);

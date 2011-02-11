@@ -150,16 +150,30 @@
      top_pad="5"
      width="250"/>
     <button
-	 enabled="true"
+	 enabled="false"
      follows="right|bottom"
      height="23"
-     label="Browse"
-     label_selected="Browse"
+     label="Open"
+     label_selected="Open"
+     layout="topleft"
+     left_pad="5"
+     name="open_log_path_button"
+     top_delta="0"
+     width="40">
+        <button.commit_callback
+         function="Pref.BrowseLogPath" />
+    </button>
+    <button
+	 enabled="false"
+     follows="right|bottom"
+     height="23"
+     label="Set"
+     label_selected="Set"
      layout="topleft"
      left_pad="5"
      name="log_path_button"
      top_delta="0"
-     width="145">
+     width="40">
         <button.commit_callback
          function="Pref.LogPath" />
     </button>
