@@ -113,6 +113,8 @@ void LLTracker::stopTracking(void* userdata)
 // static virtual
 void LLTracker::drawHUDArrow()
 {
+	if (!gSavedSettings.getBOOL("RenderTrackerBeacon")) return;
+
 	static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
 	
 	/* tracking autopilot destination has been disabled 
@@ -159,7 +161,7 @@ void LLTracker::drawHUDArrow()
 // static 
 void LLTracker::render3D()
 {
-	if (!gFloaterWorldMap)
+	if (!gFloaterWorldMap || !gSavedSettings.getBOOL("RenderTrackerBeacon"))
 	{
 		return;
 	}
