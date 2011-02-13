@@ -5,7 +5,7 @@
  mouse_opaque="false"
  name="profile_overflow_menu"
  width="120">
-    <menu_item_call
+    <!--<menu_item_call
      label="Map"
      layout="topleft"
      name="show_on_map">
@@ -20,7 +20,7 @@
      name="pay">
         <menu_item_call.on_click
          function="Profile.Pay" />
-    </menu_item_call>
+    </menu_item_call>-->
     <menu_item_call
      label="Share"
      layout="topleft"
@@ -28,7 +28,7 @@
         <menu_item_call.on_click
          function="Profile.Share" />
     </menu_item_call>
-   <menu_item_call
+   <!--<menu_item_call
    label="Block"
    name="block">
     <menu_item_call.on_click
@@ -43,7 +43,7 @@
      function="Profile.BlockUnblock"/>
     <menu_item_call.on_visible
      function="Profile.EnableUnblock" />
-  </menu_item_call>
+  </menu_item_call>-->
   <menu_item_call
    label="Kick"
    layout="topleft"

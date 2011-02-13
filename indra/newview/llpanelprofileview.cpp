@@ -48,6 +48,7 @@ static LLRegisterPanelClassWrapper<LLPanelProfileView> t_panel_target_profile("p
 static std::string PANEL_NOTES = "panel_notes";
 static const std::string PANEL_PROFILE = "panel_profile";
 static const std::string PANEL_PICKS = "panel_picks";
+static std::string PANEL_FIRST = "panel_profile_firstlife";
 
 
 class AvatarStatusObserver : public LLAvatarPropertiesObserver
@@ -105,8 +106,9 @@ void LLPanelProfileView::onOpen(const LLSD& key)
 		setAvatarId(id);
 
 		// clear name fields, which might have old data
+		getChild<LLUICtrl>("complete_name")->setValue( LLSD() );
+		getChild<LLUICtrl>("display_name")->setValue( LLSD() );
 		getChild<LLUICtrl>("user_name")->setValue( LLSD() );
-		getChild<LLUICtrl>("user_slid")->setValue( LLSD() );
 	}
 
 	// Update the avatar name.
@@ -124,6 +126,7 @@ BOOL LLPanelProfileView::postBuild()
 	LLPanelProfile::postBuild();
 
 	getTabContainer()[PANEL_NOTES] = findChild<LLPanelAvatarNotes>(PANEL_NOTES);
+	getTabContainer()[PANEL_FIRST] = findChild<LLPanelAvatarFirst>(PANEL_FIRST);
 	
 	//*TODO remove this, according to style guide we don't use status combobox
 	getTabContainer()[PANEL_PROFILE]->getChildView("online_me_status_text")->setVisible( FALSE);
@@ -148,12 +151,13 @@ BOOL LLPanelProfileView::postBuild()
 		// HACK-Catznip: we got rid of the back button so we want to line up the name controls with the rest
 		LLUICtrl* pCtrls[] = 
 			{
+				getChild<LLUICtrl>("complete_name", FALSE),
+				getChild<LLUICtrl>("display_name", FALSE),
 				getChild<LLUICtrl>("user_name", FALSE),
 				getChild<LLUICtrl>("display_name_label", FALSE),
 				getChild<LLUICtrl>("solo_username_label", FALSE),
 				getChild<LLUICtrl>("user_name_small", FALSE),
-				getChild<LLUICtrl>("user_label", FALSE),
-				getChild<LLUICtrl>("user_slid", FALSE)
+				getChild<LLUICtrl>("user_label", FALSE)
 			};
 		int dX = (NULL != pCtrls[0]) ? 10 - pCtrls[0]->getRect().mLeft : 0;
 		for (int idxCtrl = 0; idxCtrl < sizeof(pCtrls) / sizeof(LLUICtrl*); idxCtrl++)
@@ -185,7 +189,7 @@ void LLPanelProfileView::onBackBtnClick()
 
 void LLPanelProfileView::onCopyToClipboard()
 {
-	std::string name = getChild<LLUICtrl>("user_name")->getValue().asString() + " (" + getChild<LLUICtrl>("user_slid")->getValue().asString() + ")";
+	std::string name = getChild<LLUICtrl>("display_name")->getValue().asString() + " (" + getChild<LLUICtrl>("user_name")->getValue().asString() + ")";
 	gClipboard.copyFromString(utf8str_to_wstring(name));
 }
 
@@ -240,6 +244,11 @@ void LLPanelProfileView::processOnlineStatus(bool online)
 void LLPanelProfileView::onAvatarNameCache(const LLUUID& agent_id,
 										   const LLAvatarName& av_name)
 {
+	getChild<LLUICtrl>("complete_name")->setValue( av_name.getCompleteName() );
+	getChild<LLUICtrl>("display_name")->setValue( av_name.mDisplayName );
+	getChild<LLUICtrl>("user_name")->setValue( av_name.mUsername );
+
+#if 0
 	getChild<LLUICtrl>("user_name")->setValue( av_name.mDisplayName );
 	getChild<LLUICtrl>("user_name_small")->setValue( av_name.mDisplayName );
 	getChild<LLUICtrl>("user_slid")->setValue( av_name.mUsername );
@@ -255,11 +264,12 @@ void LLPanelProfileView::onAvatarNameCache(const LLUUID& agent_id,
 		getChild<LLUICtrl>("user_name_small")->setVisible( false );
 		getChild<LLUICtrl>("user_name")->setVisible( true );
 	}
+#endif
 
 	if (LLAvatarNameCache::useDisplayNames())
 	{
 		getChild<LLUICtrl>("user_label")->setVisible( true );
-		getChild<LLUICtrl>("user_slid")->setVisible( true );
+		getChild<LLUICtrl>("user_name")->setVisible( true );
 		getChild<LLUICtrl>("display_name_label")->setVisible( true );
 		getChild<LLUICtrl>("copy_to_clipboard")->setVisible( true );
 		getChild<LLUICtrl>("copy_to_clipboard")->setEnabled( true );
@@ -268,7 +278,7 @@ void LLPanelProfileView::onAvatarNameCache(const LLUUID& agent_id,
 	else
 	{
 		getChild<LLUICtrl>("user_label")->setVisible( false );
-		getChild<LLUICtrl>("user_slid")->setVisible( false );
+		getChild<LLUICtrl>("user_name")->setVisible( false );
 		getChild<LLUICtrl>("display_name_label")->setVisible( false );
 		getChild<LLUICtrl>("copy_to_clipboard")->setVisible( false );
 		getChild<LLUICtrl>("copy_to_clipboard")->setEnabled( false );

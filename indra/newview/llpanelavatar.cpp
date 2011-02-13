@@ -123,6 +123,7 @@ static LLDefaultChildRegistry::Register<LLDropTarget> r("drop_target");
 static LLRegisterPanelClassWrapper<LLPanelAvatarProfile> t_panel_profile("panel_profile");
 static LLRegisterPanelClassWrapper<LLPanelMyProfile> t_panel_my_profile("panel_my_profile");
 static LLRegisterPanelClassWrapper<LLPanelAvatarNotes> t_panel_notes("panel_notes");
+static LLRegisterPanelClassWrapper<LLPanelAvatarFirst> t_panel_profile_firstlife("panel_profile_firstlife");
 
 //-----------------------------------------------------------------------------
 // LLPanelAvatarNotes()
@@ -465,6 +466,12 @@ void LLPanelProfileTab::updateButtons()
 			       is_agent_mappable(getAvatarId()))
 		|| gAgent.isGodlike();
 	getChildView("show_on_map_btn")->setEnabled(enable_map_btn);
+	
+	bool enable_block_btn = LLAvatarActions::canBlock(getAvatarId()) && !LLAvatarActions::isBlocked(getAvatarId());
+	getChildView("block")->setVisible(enable_block_btn);
+	
+	bool enable_unblock_btn = LLAvatarActions::isBlocked(getAvatarId());
+	getChildView("unblock")->setVisible(enable_unblock_btn);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -491,6 +498,9 @@ BOOL LLPanelAvatarProfile::postBuild()
 	childSetCommitCallback("share",(boost::bind(&LLPanelAvatarProfile::onShareButtonClick,this)),NULL);
 	childSetCommitCallback("show_on_map_btn", (boost::bind(
 			&LLPanelAvatarProfile::onMapButtonClick, this)), NULL);
+	childSetCommitCallback("pay",(boost::bind(&LLPanelAvatarProfile::pay,this)),NULL);
+	childSetCommitCallback("block",(boost::bind(&LLPanelAvatarProfile::toggleBlock,this)),NULL);
+	childSetCommitCallback("unblock",(boost::bind(&LLPanelAvatarProfile::toggleBlock,this)),NULL);
 
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 	registrar.add("Profile.ShowOnMap",  boost::bind(&LLPanelAvatarProfile::onMapButtonClick, this));
@@ -559,12 +569,12 @@ void LLPanelAvatarProfile::resetData()
 {
 	mGroups.clear();
 	getChild<LLUICtrl>("2nd_life_pic")->setValue(LLUUID::null);
-	getChild<LLUICtrl>("real_world_pic")->setValue(LLUUID::null);
+	//getChild<LLUICtrl>("real_world_pic")->setValue(LLUUID::null);
 	getChild<LLUICtrl>("online_status")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("status_message")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("sl_description_edit")->setValue(LLStringUtil::null);
-	getChild<LLUICtrl>("fl_description_edit")->setValue(LLStringUtil::null);
-	getChild<LLUICtrl>("homepage_edit")->setValue(LLStringUtil::null);
+	//getChild<LLUICtrl>("fl_description_edit")->setValue(LLStringUtil::null);
+	//getChild<LLUICtrl>("homepage_edit")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("register_date")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("acc_status_text")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("partner_text")->setValue(LLStringUtil::null);
@@ -644,10 +654,10 @@ void LLPanelAvatarProfile::fillCommonData(const LLAvatarData* avatar_data)
 	std::string register_date = getString("RegisterDateFormat", args);
 	getChild<LLUICtrl>("register_date")->setValue(register_date );
 	getChild<LLUICtrl>("sl_description_edit")->setValue(avatar_data->about_text);
-	getChild<LLUICtrl>("fl_description_edit")->setValue(avatar_data->fl_about_text);
+	//getChild<LLUICtrl>("fl_description_edit")->setValue(avatar_data->fl_about_text);
 	getChild<LLUICtrl>("2nd_life_pic")->setValue(avatar_data->image_id);
-	getChild<LLUICtrl>("real_world_pic")->setValue(avatar_data->fl_image_id);
-	getChild<LLUICtrl>("homepage_edit")->setValue(avatar_data->profile_url);
+	//getChild<LLUICtrl>("real_world_pic")->setValue(avatar_data->fl_image_id);
+	//getChild<LLUICtrl>("homepage_edit")->setValue(avatar_data->profile_url);
 
 	// Hide home page textbox if no page was set to fix "homepage URL appears clickable without URL - EXT-4734"
 	getChildView("homepage_edit")->setVisible( !avatar_data->profile_url.empty());
@@ -691,6 +701,12 @@ void LLPanelAvatarProfile::share()
 void LLPanelAvatarProfile::toggleBlock()
 {
 	LLAvatarActions::toggleBlock(getAvatarId());
+	
+	bool enable_block_btn = LLAvatarActions::canBlock(getAvatarId()) && !LLAvatarActions::isBlocked(getAvatarId());
+	getChildView("block")->setVisible(enable_block_btn);
+	
+	bool enable_unblock_btn = LLAvatarActions::isBlocked(getAvatarId());
+	getChildView("unblock")->setVisible(enable_unblock_btn);
 }
 
 bool LLPanelAvatarProfile::enableShowOnMap()
@@ -872,4 +888,103 @@ void LLPanelMyProfile::resetControls()
 void LLPanelMyProfile::onStatusMessageChanged()
 {
 	updateData();
+}
+
+
+//-----------------------------------------------------------------------------
+// LLPanelAvatarFirst()
+//-----------------------------------------------------------------------------
+LLPanelAvatarFirst::LLPanelAvatarFirst()
+: LLPanelProfileTab()
+{
+}
+
+void LLPanelAvatarFirst::updateData()
+{
+	if (getAvatarId().notNull())
+	{
+		LLAvatarPropertiesProcessor::getInstance()->
+			sendAvatarPropertiesRequest(getAvatarId());
+	}
+}
+
+BOOL LLPanelAvatarFirst::postBuild()
+{
+	resetControls();
+	resetData();
+
+	return TRUE;
+}
+
+void LLPanelAvatarFirst::onOpen(const LLSD& key)
+{
+	LLPanelProfileTab::onOpen(key);
+}
+
+void LLPanelAvatarFirst::processProperties(void* data, EAvatarProcessorType type)
+{
+	if(APT_PROPERTIES == type)
+	{
+		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
+		if(avatar_data && getAvatarId() == avatar_data->avatar_id)
+		{
+			getChild<LLUICtrl>("fl_description_edit")->setValue(avatar_data->fl_about_text);
+			getChild<LLUICtrl>("real_world_pic")->setValue(avatar_data->fl_image_id);
+			getChild<LLUICtrl>("homepage_edit")->setValue(avatar_data->profile_url);
+
+			LLAvatarPropertiesProcessor::getInstance()->removeObserver(getAvatarId(),this);
+		}
+	}
+}
+
+void LLPanelAvatarFirst::resetData()
+{
+	getChild<LLUICtrl>("real_world_pic")->setValue(LLUUID::null);
+	getChild<LLUICtrl>("fl_description_edit")->setValue(LLStringUtil::null);
+	getChild<LLUICtrl>("homepage_edit")->setValue(LLStringUtil::null);
+}
+
+void LLPanelAvatarFirst::resetControls()
+{
+}
+
+LLPanelAvatarFirst::~LLPanelAvatarFirst()
+{
+	if(getAvatarId().notNull())
+	{
+		LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
+		//if(LLVoiceClient::instanceExists())
+		//{
+		//	LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
+		//}
+	}
+// [SL:KB] - Patch : UI-ProfileGroupFloater 
+	if(LLVoiceClient::instanceExists())
+	{
+		LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
+	}
+// [/SL:KB]
+}
+
+// virtual, called by LLAvatarTracker
+void LLPanelAvatarFirst::changed(U32 mask)
+{
+}
+
+// virtual
+void LLPanelAvatarFirst::onChange(EStatusType status, const std::string &channelURI, bool proximal)
+{
+}
+
+void LLPanelAvatarFirst::setAvatarId(const LLUUID& id)
+{
+	if(id.notNull())
+	{
+		if(getAvatarId().notNull())
+		{
+			LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
+		}
+		LLPanelProfileTab::setAvatarId(id);
+		LLAvatarTracker::instance().addParticularFriendObserver(getAvatarId(), this);
+	}
 }

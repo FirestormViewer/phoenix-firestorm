@@ -298,4 +298,43 @@ protected:
 	void enableCheckboxes(bool enable);
 };
 
+/**
+ * Panel for displaying Avatar's firstlist profile.
+ */
+class LLPanelAvatarFirst 
+	: public LLPanelProfileTab
+	, public LLFriendObserver
+	, public LLVoiceClientStatusObserver
+{
+public:
+	LLPanelAvatarFirst();
+	/*virtual*/ ~LLPanelAvatarFirst();
+
+	virtual void setAvatarId(const LLUUID& id);
+
+	/** 
+	 * LLFriendObserver trigger
+	 */
+	virtual void changed(U32 mask);
+
+	// Implements LLVoiceClientStatusObserver::onChange() to enable the call
+	// button when voice is available
+	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
+
+	/*virtual*/ void onOpen(const LLSD& key);
+
+	/*virtual*/ BOOL postBuild();
+
+	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+
+	/*virtual*/ void updateData();
+
+protected:
+
+	/*virtual*/ void resetControls();
+
+	/*virtual*/ void resetData();
+
+};
+
 #endif // LL_LLPANELAVATAR_H
