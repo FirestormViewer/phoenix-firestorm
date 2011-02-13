@@ -6,6 +6,14 @@
  mouse_opaque="true"
  name="groups"
  width="350">
+	<view_border
+	 top="-9"
+	 bottom="9"
+	 left="9"
+	 width="241"
+	 follows="left|top|right|bottom"
+	 bevel_style="in"
+	 name="info_border" />
 	<group_list
 	 allow_select="true"
 	 bottom="10"
