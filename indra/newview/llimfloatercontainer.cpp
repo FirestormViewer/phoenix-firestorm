@@ -92,6 +92,21 @@ void LLIMFloaterContainer::onOpen(const LLSD& key)
 */
 }
 
+void LLIMFloaterContainer::removeFloater(LLFloater* floaterp)
+{
+	if (floaterp->getName() == "nearby_chat")
+	{
+		// only my friends floater now locked
+		mTabContainer->lockTabs(mTabContainer->getNumLockedTabs() - 1);
+	}
+	else if (floaterp->getName() == "imcontacts")
+	{
+		// only chat floater now locked
+		mTabContainer->lockTabs(mTabContainer->getNumLockedTabs() - 1);
+	}
+	LLMultiFloater::removeFloater(floaterp);
+}
+
 void LLIMFloaterContainer::addFloater(LLFloater* floaterp, 
 									BOOL select_added_floater, 
 									LLTabContainer::eInsertionPoint insertion_point)
@@ -105,12 +120,15 @@ void LLIMFloaterContainer::addFloater(LLFloater* floaterp,
 		return;
 	}
 	
-	if (floaterp->getName() == "imcontacts")
+	if (floaterp->getName() == "imcontacts" || floaterp->getName() == "nearby_chat")
 	{
 		S32 num_locked_tabs = mTabContainer->getNumLockedTabs();
 		mTabContainer->unlockTabs();
 		// add contacts window as first tab
-		LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
+		if (floaterp->getName() == "imcontacts")
+			LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
+		else
+			LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::RIGHT_OF_CURRENT);
 		// make sure first two tabs are now locked
 		mTabContainer->lockTabs(num_locked_tabs + 1);
 		//gSavedSettings.setBOOL("ContactsTornOff", FALSE);
