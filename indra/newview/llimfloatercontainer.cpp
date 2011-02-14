@@ -38,7 +38,6 @@
 #include "llnearbychat.h"
 #include "fscontactsfloater.h"
 #include "llfloater.h"
-#include "llviewercontrol.h"
 
 //
 // LLIMFloaterContainer
@@ -77,18 +76,7 @@ void LLIMFloaterContainer::onOpen(const LLSD& key)
 	LLFloater* floater = LLNearbyChat::getInstance();
 	if (! LLFloater::isVisible(floater))
 	{
-		if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
-		{
-			// add then remove to set up relationship for re-attach
-			addFloater(floater, FALSE);
-			removeFloater(floater);
-			// reparent to floater view
-			gFloaterView->addChild(floater);
-		}
-		else
-		{
-			addFloater(floater, FALSE);
-		}
+		LLMultiFloater::showFloater(floater, LLTabContainer::START);
 	}
 	
 	
@@ -110,8 +98,6 @@ void LLIMFloaterContainer::removeFloater(LLFloater* floaterp)
 	{
 		// only my friends floater now locked
 		mTabContainer->lockTabs(mTabContainer->getNumLockedTabs() - 1);
-		gSavedSettings.setBOOL("ChatHistoryTornOff", TRUE);
-		floaterp->setCanClose(TRUE);
 	}
 	else if (floaterp->getName() == "imcontacts")
 	{
@@ -140,28 +126,12 @@ void LLIMFloaterContainer::addFloater(LLFloater* floaterp,
 		mTabContainer->unlockTabs();
 		// add contacts window as first tab
 		if (floaterp->getName() == "imcontacts")
-		{
 			LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
-		}
 		else
-		{
-			// add chat history as second tab if contact window is present, first tab otherwise
-			if (getChildView("imcontacts"))
-			{
-				// assuming contacts window is first tab, select it
-				mTabContainer->selectFirstTab();
-				// and add ourselves after
-				LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::RIGHT_OF_CURRENT);
-			}
-			else
-			{
-				LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
-			}
-			gSavedSettings.setBOOL("ChatHistoryTornOff", FALSE);
-		}
+			LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::RIGHT_OF_CURRENT);
 		// make sure first two tabs are now locked
 		mTabContainer->lockTabs(num_locked_tabs + 1);
-		
+		//gSavedSettings.setBOOL("ContactsTornOff", FALSE);
 		floaterp->setCanClose(FALSE);
 		return;
 	}
