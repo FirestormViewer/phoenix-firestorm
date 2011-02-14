@@ -1,261 +1,236 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <link rel="icon" href="/phoenix-firestorm-lgpl/static/hgicon.png" type="image/png" />
-    <meta name="robots" content="index, nofollow"/>
-    <link rel="stylesheet" href="/phoenix-firestorm-lgpl/static/style-monoblue.css" type="text/css" />
-
-<title>phoenix-firestorm-lgpl: diff indra/newview/skins/default/xui/en/panel_notes.xml</title>
-    <link rel="alternate" type="application/atom+xml" href="/phoenix-firestorm-lgpl/atom-log" title="Atom feed for phoenix-firestorm-lgpl"/>
-    <link rel="alternate" type="application/rss+xml" href="/phoenix-firestorm-lgpl/rss-log" title="RSS feed for phoenix-firestorm-lgpl"/>
-</head>
-
-<body>
-<div id="container">
-    <div class="page-header">
-        <h1><a href="/phoenix-firestorm-lgpl/summary">phoenix-firestorm-lgpl</a> / file diff</h1>
-
-        <form action="/phoenix-firestorm-lgpl/log">
-            
-            <dl class="search">
-                <dt><label>Search: </label></dt>
-                <dd><input type="text" name="rev" /></dd>
-            </dl>
-        </form>
-
-        <ul class="page-nav">
-            <li><a href="/phoenix-firestorm-lgpl/summary">summary</a></li>
-            <li><a href="/phoenix-firestorm-lgpl/shortlog">shortlog</a></li>
-            <li><a href="/phoenix-firestorm-lgpl/log">changelog</a></li>
-            <li><a href="/phoenix-firestorm-lgpl/graph/f918402b0df0">graph</a></li>
-            <li><a href="/phoenix-firestorm-lgpl/tags">tags</a></li>
-            <li><a href="/phoenix-firestorm-lgpl/branches">branches</a></li>
-            <li><a href="/phoenix-firestorm-lgpl/file/f918402b0df0">files</a></li>
-        </ul>
-    </div>
-
-    <ul class="submenu">
-        <li><a href="/phoenix-firestorm-lgpl/file/f918402b0df0/indra/newview/skins/default/xui/en/panel_notes.xml">file</a></li>
-        <li><a href="/phoenix-firestorm-lgpl/log/f918402b0df0/indra/newview/skins/default/xui/en/panel_notes.xml">revisions</a></li>
-        <li><a href="/phoenix-firestorm-lgpl/annotate/f918402b0df0/indra/newview/skins/default/xui/en/panel_notes.xml">annotate</a></li>
-        <li class="current">diff</li>
-        <li><a href="/phoenix-firestorm-lgpl/raw-diff/f918402b0df0/indra/newview/skins/default/xui/en/panel_notes.xml">raw</a></li>
-    </ul>
-
-    <h2 class="no-link no-border">diff: indra/newview/skins/default/xui/en/panel_notes.xml</h2>
-    <h3 class="changeset">indra/newview/skins/default/xui/en/panel_notes.xml</h3>
-
-    <dl class="overview">
-        
-        <dt>changeset 14643</dt>
-        <dd><a href="/phoenix-firestorm-lgpl/rev/f918402b0df0">f918402b0df0</a></dd>
-        
-<dt>parent 13826</dt>
-<dd><a href="/phoenix-firestorm-lgpl/diff/0cdf7e7a2466/indra/newview/skins/default/xui/en/panel_notes.xml">0cdf7e7a2466</a></dd>
-        
-    </dl>
-
-    <div class="diff">
-    <pre><span style="color:#cc0000;"><a class="linenr" href="#l1.1" id="l1.1">     1.1</a> --- a/indra/newview/skins/default/xui/en/panel_notes.xml	Wed Nov 17 19:13:17 2010 -0500
-</span><span style="color:#008800;"><a class="linenr" href="#l1.2" id="l1.2">     1.2</a> +++ b/indra/newview/skins/default/xui/en/panel_notes.xml	Sat Feb 12 20:21:57 2011 -0800
-</span><span style="color:#990099;"><a class="linenr" href="#l1.3" id="l1.3">     1.3</a> @@ -1,7 +1,7 @@
-</span><span><a class="linenr" href="#l1.4" id="l1.4">     1.4</a>  &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;yes&quot; ?&gt;
-</span><span><a class="linenr" href="#l1.5" id="l1.5">     1.5</a>  &lt;panel
-</span><span><a class="linenr" href="#l1.6" id="l1.6">     1.6</a>   follows=&quot;all&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.7" id="l1.7">     1.7</a> - height=&quot;515&quot;
-</span><span style="color:#008800;"><a class="linenr" href="#l1.8" id="l1.8">     1.8</a> + height=&quot;480&quot;
-</span><span><a class="linenr" href="#l1.9" id="l1.9">     1.9</a>   label=&quot;Notes &amp;amp; Privacy&quot;
-</span><span><a class="linenr" href="#l1.10" id="l1.10">    1.10</a>   layout=&quot;topleft&quot;
-</span><span><a class="linenr" href="#l1.11" id="l1.11">    1.11</a>   left=&quot;0&quot;
-</span><span style="color:#990099;"><a class="linenr" href="#l1.12" id="l1.12">    1.12</a> @@ -16,7 +16,7 @@
-</span><span><a class="linenr" href="#l1.13" id="l1.13">    1.13</a>       layout=&quot;topleft&quot;
-</span><span><a class="linenr" href="#l1.14" id="l1.14">    1.14</a>       left=&quot;0&quot;
-</span><span><a class="linenr" href="#l1.15" id="l1.15">    1.15</a>       top=&quot;0&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.16" id="l1.16">    1.16</a> -     height=&quot;517&quot;
-</span><span style="color:#008800;"><a class="linenr" href="#l1.17" id="l1.17">    1.17</a> +     height=&quot;380&quot;
-</span><span><a class="linenr" href="#l1.18" id="l1.18">    1.18</a>       width=&quot;313&quot;
-</span><span><a class="linenr" href="#l1.19" id="l1.19">    1.19</a>       border_size=&quot;0&quot;&gt;
-</span><span><a class="linenr" href="#l1.20" id="l1.20">    1.20</a>        &lt;layout_panel
-</span><span style="color:#990099;"><a class="linenr" href="#l1.21" id="l1.21">    1.21</a> @@ -25,7 +25,7 @@
-</span><span><a class="linenr" href="#l1.22" id="l1.22">    1.22</a>         layout=&quot;topleft&quot;
-</span><span><a class="linenr" href="#l1.23" id="l1.23">    1.23</a>         top=&quot;0&quot;
-</span><span><a class="linenr" href="#l1.24" id="l1.24">    1.24</a>         left=&quot;0&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.25" id="l1.25">    1.25</a> -       height=&quot;450&quot;
-</span><span style="color:#008800;"><a class="linenr" href="#l1.26" id="l1.26">    1.26</a> +       height=&quot;370&quot;
-</span><span><a class="linenr" href="#l1.27" id="l1.27">    1.27</a>         width=&quot;313&quot;&gt;
-</span><span><a class="linenr" href="#l1.28" id="l1.28">    1.28</a>          &lt;scroll_container
-</span><span><a class="linenr" href="#l1.29" id="l1.29">    1.29</a>           color=&quot;DkGray2&quot;
-</span><span style="color:#990099;"><a class="linenr" href="#l1.30" id="l1.30">    1.30</a> @@ -34,11 +34,11 @@
-</span><span><a class="linenr" href="#l1.31" id="l1.31">    1.31</a>           left=&quot;0&quot;
-</span><span><a class="linenr" href="#l1.32" id="l1.32">    1.32</a>           name=&quot;profile_scroll&quot;
-</span><span><a class="linenr" href="#l1.33" id="l1.33">    1.33</a>           opaque=&quot;true&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.34" id="l1.34">    1.34</a> -         height=&quot;450&quot;
-</span><span style="color:#008800;"><a class="linenr" href="#l1.35" id="l1.35">    1.35</a> +         height=&quot;370&quot;
-</span><span><a class="linenr" href="#l1.36" id="l1.36">    1.36</a>           width=&quot;313&quot;
-</span><span><a class="linenr" href="#l1.37" id="l1.37">    1.37</a>           top=&quot;0&quot;&gt;
-</span><span><a class="linenr" href="#l1.38" id="l1.38">    1.38</a>            &lt;panel
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.39" id="l1.39">    1.39</a> -           height=&quot;450&quot;
-</span><span style="color:#008800;"><a class="linenr" href="#l1.40" id="l1.40">    1.40</a> +           height=&quot;370&quot;
-</span><span><a class="linenr" href="#l1.41" id="l1.41">    1.41</a>             layout=&quot;topleft&quot;
-</span><span><a class="linenr" href="#l1.42" id="l1.42">    1.42</a>             name=&quot;profile_scroll_panel&quot;
-</span><span><a class="linenr" href="#l1.43" id="l1.43">    1.43</a>             top=&quot;0&quot;
-</span><span style="color:#990099;"><a class="linenr" href="#l1.44" id="l1.44">    1.44</a> @@ -104,133 +104,5 @@
-</span><span><a class="linenr" href="#l1.45" id="l1.45">    1.45</a>            &lt;/panel&gt;
-</span><span><a class="linenr" href="#l1.46" id="l1.46">    1.46</a>          &lt;/scroll_container&gt;
-</span><span><a class="linenr" href="#l1.47" id="l1.47">    1.47</a>        &lt;/layout_panel&gt;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.48" id="l1.48">    1.48</a> -      &lt;layout_panel
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.49" id="l1.49">    1.49</a> -       follows=&quot;bottom|left&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.50" id="l1.50">    1.50</a> -       height=&quot;30&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.51" id="l1.51">    1.51</a> -         layout=&quot;topleft&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.52" id="l1.52">    1.52</a> -         left=&quot;0&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.53" id="l1.53">    1.53</a> -         name=&quot;notes_buttons_panel&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.54" id="l1.54">    1.54</a> -         auto_resize=&quot;false&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.55" id="l1.55">    1.55</a> -         width=&quot;313&quot;&gt;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.56" id="l1.56">    1.56</a> -         
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.57" id="l1.57">    1.57</a> -         &lt;layout_stack
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.58" id="l1.58">    1.58</a> -	     	follows=&quot;bottom|left|right&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.59" id="l1.59">    1.59</a> -			height=&quot;23&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.60" id="l1.60">    1.60</a> -			layout=&quot;topleft&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.61" id="l1.61">    1.61</a> -			name=&quot;bottom_bar_ls&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.62" id="l1.62">    1.62</a> -			left=&quot;2&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.63" id="l1.63">    1.63</a> -			orientation=&quot;horizontal&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.64" id="l1.64">    1.64</a> -			top_pad=&quot;5&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.65" id="l1.65">    1.65</a> -			width=&quot;309&quot;&gt;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.66" id="l1.66">    1.66</a> -	
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.67" id="l1.67">    1.67</a> -				&lt;layout_panel
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.68" id="l1.68">    1.68</a> -				follows=&quot;bottom|left|right&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.69" id="l1.69">    1.69</a> -				height=&quot;23&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.70" id="l1.70">    1.70</a> -				layout=&quot;bottomleft&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.71" id="l1.71">    1.71</a> -				left=&quot;0&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.72" id="l1.72">    1.72</a> -				name=&quot;add_friend_btn_lp&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.73" id="l1.73">    1.73</a> -			    user_resize=&quot;false&quot; 
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.74" id="l1.74">    1.74</a> -			    auto_resize=&quot;true&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.75" id="l1.75">    1.75</a> -				width=&quot;118&quot;&gt;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.76" id="l1.76">    1.76</a> -					&lt;button
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.77" id="l1.77">    1.77</a> -			         follows=&quot;bottom|left|right&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.78" id="l1.78">    1.78</a> -			         height=&quot;23&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.79" id="l1.79">    1.79</a> -			         label=&quot;Add Friend&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.80" id="l1.80">    1.80</a> -			         layout=&quot;topleft&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.81" id="l1.81">    1.81</a> -			         left=&quot;1&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.82" id="l1.82">    1.82</a> -			         mouse_opaque=&quot;false&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.83" id="l1.83">    1.83</a> -			         name=&quot;add_friend&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.84" id="l1.84">    1.84</a> -			         tool_tip=&quot;Offer friendship to the Resident&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.85" id="l1.85">    1.85</a> -			         top=&quot;0&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.86" id="l1.86">    1.86</a> -			         width=&quot;117&quot; /&gt;	
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.87" id="l1.87">    1.87</a> -				&lt;/layout_panel&gt;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.88" id="l1.88">    1.88</a> -				
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.89" id="l1.89">    1.89</a> -				&lt;layout_panel
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.90" id="l1.90">    1.90</a> -				follows=&quot;bottom|left|right&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.91" id="l1.91">    1.91</a> -				height=&quot;23&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.92" id="l1.92">    1.92</a> -				layout=&quot;bottomleft&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.93" id="l1.93">    1.93</a> -				left_pad=&quot;3&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.94" id="l1.94">    1.94</a> -				name=&quot;im_btn_lp&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.95" id="l1.95">    1.95</a> -			    user_resize=&quot;false&quot; 
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.96" id="l1.96">    1.96</a> -			    auto_resize=&quot;true&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.97" id="l1.97">    1.97</a> -				width=&quot;22&quot;&gt;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.98" id="l1.98">    1.98</a> -					&lt;button
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.99" id="l1.99">    1.99</a> -			         follows=&quot;bottom|left|right&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.100" id="l1.100">   1.100</a> -			         height=&quot;23&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.101" id="l1.101">   1.101</a> -			         label=&quot;IM&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.102" id="l1.102">   1.102</a> -			         layout=&quot;topleft&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.103" id="l1.103">   1.103</a> -			         name=&quot;im&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.104" id="l1.104">   1.104</a> -			         tool_tip=&quot;Open instant message session&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.105" id="l1.105">   1.105</a> -			         top=&quot;0&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.106" id="l1.106">   1.106</a> -			         left=&quot;1&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.107" id="l1.107">   1.107</a> -			         width=&quot;21&quot; /&gt;		
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.108" id="l1.108">   1.108</a> -				&lt;/layout_panel&gt;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.109" id="l1.109">   1.109</a> -				
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.110" id="l1.110">   1.110</a> -				&lt;layout_panel
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.111" id="l1.111">   1.111</a> -				follows=&quot;bottom|left|right&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.112" id="l1.112">   1.112</a> -				height=&quot;23&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.113" id="l1.113">   1.113</a> -				layout=&quot;bottomleft&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.114" id="l1.114">   1.114</a> -				left_pad=&quot;3&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.115" id="l1.115">   1.115</a> -				name=&quot;call_btn_lp&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.116" id="l1.116">   1.116</a> -			    user_resize=&quot;false&quot; 
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.117" id="l1.117">   1.117</a> -			    auto_resize=&quot;true&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.118" id="l1.118">   1.118</a> -				width=&quot;52&quot;&gt;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.119" id="l1.119">   1.119</a> -					&lt;button
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.120" id="l1.120">   1.120</a> -			         follows=&quot;bottom|left|right&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.121" id="l1.121">   1.121</a> -			         height=&quot;23&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.122" id="l1.122">   1.122</a> -			         label=&quot;Call&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.123" id="l1.123">   1.123</a> -			         layout=&quot;topleft&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.124" id="l1.124">   1.124</a> -			         name=&quot;call&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.125" id="l1.125">   1.125</a> -			         tool_tip=&quot;Call this Resident&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.126" id="l1.126">   1.126</a> -			         left=&quot;1&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.127" id="l1.127">   1.127</a> -			         top=&quot;0&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.128" id="l1.128">   1.128</a> -			         use_ellipses=&quot;true&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.129" id="l1.129">   1.129</a> -			         width=&quot;51&quot; /&gt;		
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.130" id="l1.130">   1.130</a> -				&lt;/layout_panel&gt;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.131" id="l1.131">   1.131</a> -				
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.132" id="l1.132">   1.132</a> -				&lt;layout_panel
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.133" id="l1.133">   1.133</a> -				follows=&quot;bottom|left|right&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.134" id="l1.134">   1.134</a> -				height=&quot;23&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.135" id="l1.135">   1.135</a> -				layout=&quot;bottomleft&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.136" id="l1.136">   1.136</a> -				left_pad=&quot;3&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.137" id="l1.137">   1.137</a> -				name=&quot;show_on_map_btn_lp&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.138" id="l1.138">   1.138</a> -			    user_resize=&quot;false&quot; 
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.139" id="l1.139">   1.139</a> -			    auto_resize=&quot;true&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.140" id="l1.140">   1.140</a> -				width=&quot;46&quot;&gt;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.141" id="l1.141">   1.141</a> -					&lt;button
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.142" id="l1.142">   1.142</a> -			         enabled=&quot;false&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.143" id="l1.143">   1.143</a> -			         follows=&quot;bottom|left|right&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.144" id="l1.144">   1.144</a> -			         height=&quot;23&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.145" id="l1.145">   1.145</a> -			         label=&quot;Map&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.146" id="l1.146">   1.146</a> -			         layout=&quot;topleft&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.147" id="l1.147">   1.147</a> -			         name=&quot;show_on_map_btn&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.148" id="l1.148">   1.148</a> -			         tool_tip=&quot;Show the Resident on the map&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.149" id="l1.149">   1.149</a> -			         top=&quot;0&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.150" id="l1.150">   1.150</a> -			         left=&quot;1&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.151" id="l1.151">   1.151</a> -			         width=&quot;45&quot; /&gt;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.152" id="l1.152">   1.152</a> -				&lt;/layout_panel&gt;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.153" id="l1.153">   1.153</a> -				
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.154" id="l1.154">   1.154</a> -				&lt;layout_panel
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.155" id="l1.155">   1.155</a> -				follows=&quot;bottom|left|right&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.156" id="l1.156">   1.156</a> -				height=&quot;23&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.157" id="l1.157">   1.157</a> -				layout=&quot;bottomleft&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.158" id="l1.158">   1.158</a> -				left_pad=&quot;3&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.159" id="l1.159">   1.159</a> -				name=&quot;teleport_btn_lp&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.160" id="l1.160">   1.160</a> -			    user_resize=&quot;false&quot; 
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.161" id="l1.161">   1.161</a> -			    auto_resize=&quot;true&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.162" id="l1.162">   1.162</a> -				width=&quot;81&quot;&gt;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.163" id="l1.163">   1.163</a> -					&lt;button
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.164" id="l1.164">   1.164</a> -			         follows=&quot;bottom|left|right&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.165" id="l1.165">   1.165</a> -			         height=&quot;23&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.166" id="l1.166">   1.166</a> -			         label=&quot;Teleport&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.167" id="l1.167">   1.167</a> -			         layout=&quot;topleft&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.168" id="l1.168">   1.168</a> -			         name=&quot;teleport&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.169" id="l1.169">   1.169</a> -			         tool_tip=&quot;Offer teleport&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.170" id="l1.170">   1.170</a> -			         left=&quot;1&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.171" id="l1.171">   1.171</a> -			         top=&quot;0&quot;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.172" id="l1.172">   1.172</a> -			         width=&quot;80&quot; /&gt;	
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.173" id="l1.173">   1.173</a> -				&lt;/layout_panel&gt;
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.174" id="l1.174">   1.174</a> -		&lt;/layout_stack&gt;     
-</span><span style="color:#cc0000;"><a class="linenr" href="#l1.175" id="l1.175">   1.175</a> -        &lt;/layout_panel&gt;
-</span><span><a class="linenr" href="#l1.176" id="l1.176">   1.176</a>      &lt;/layout_stack&gt;
-</span><span><a class="linenr" href="#l1.177" id="l1.177">   1.177</a>  &lt;/panel&gt;
-</span></pre>
-    </div>
-
-    <div class="page-footer">
-        <p>Mercurial Repository: phoenix-firestorm-lgpl</p>
-        <ul class="rss-logo">
-            <li><a href="/phoenix-firestorm-lgpl/rss-log">RSS</a></li>
-            <li><a href="/phoenix-firestorm-lgpl/atom-log">Atom</a></li>
-        </ul>
-        
-    </div>
-
-    <div id="powered-by">
-        <p><a href="http://mercurial.selenic.com/" title="Mercurial"><img src="/phoenix-firestorm-lgpl/static/hglogo.png" width=75 height=90 border=0 alt="mercurial"></a></p>
-    </div>
-
-    <div id="corner-top-left"></div>
-    <div id="corner-top-right"></div>
-    <div id="corner-bottom-left"></div>
-    <div id="corner-bottom-right"></div>
-
-</div>
-
-</body>
-</html>
-
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ follows="all"
+ height="515"
+ label="Notes &amp; Privacy"
+ layout="topleft"
+ left="0"
+ name="panel_notes"
+ top="0"
+ width="313"
+>
+    <layout_stack
+     name="layout"
+     orientation="vertical"
+     follows="all"
+     layout="topleft"
+     left="0"
+     top="0"
+     height="517"
+     width="313"
+     border_size="0">
+      <layout_panel
+       name="notes_stack"
+       follows="all"
+       layout="topleft"
+       top="0"
+       left="0"
+       height="450"
+       width="313">
+        <scroll_container
+         color="DkGray2"
+         follows="all"
+         layout="topleft"
+         left="0"
+         name="profile_scroll"
+         opaque="true"
+         height="450"
+         width="313"
+         top="0">
+          <panel
+           height="450"
+           layout="topleft"
+           name="profile_scroll_panel"
+           top="0"
+           left="0"
+           width="303">
+            <text
+             follows="left|top"
+         font.style="BOLD"
+             height="16"
+             layout="topleft"
+             left="11"
+             name="status_message"
+             text_color="white"
+             top="10"
+             value="Private notes:"
+             width="293" />
+            <text_editor
+             follows="left|top"
+             height="120"
+             layout="topleft"
+             left="12"
+             max_length="1000"
+             name="notes_edit"
+             text_color="DkGray"
+             top_pad="3"
+             width="288"
+             word_wrap="true" />
+            <text
+             follows="left|top"
+         font.style="BOLD"
+             height="16"
+             layout="topleft"
+             left="11"
+             name="status_message2"
+             text_color="white"
+             top_pad="20"
+             value="Allow this person to:"
+             width="293" />
+            <check_box
+             enabled="false"
+             height="16"
+             label="See my online status"
+             layout="topleft"
+             left="10"
+             name="status_check"
+             width="293" />
+            <check_box
+             enabled="false"
+             height="16"
+             label="See me on the map"
+             layout="topleft"
+             left="10"
+             name="map_check"
+             width="293" />
+            <check_box
+             enabled="false"
+             height="16"
+             label="Edit, delete or take my objects"
+             layout="topleft"
+             left="10"
+             name="objects_check"
+             width="293" />
+          </panel>
+        </scroll_container>
+      </layout_panel>
+      <layout_panel
+       follows="bottom|left"
+       height="30"
+         layout="topleft"
+         left="0"
+         name="notes_buttons_panel"
+         auto_resize="false"
+         width="313">
+         
+         <layout_stack
+	     	follows="bottom|left|right"
+			height="23"
+			layout="topleft"
+			name="bottom_bar_ls"
+			left="2"
+			orientation="horizontal"
+			top_pad="5"
+			width="309">
+	
+				<layout_panel
+				follows="bottom|left|right"
+				height="23"
+				layout="bottomleft"
+				left="0"
+				name="add_friend_btn_lp"
+			    user_resize="false" 
+			    auto_resize="true"
+				width="118">
+					<button
+			         follows="bottom|left|right"
+			         height="23"
+			         label="Add Friend"
+			         layout="topleft"
+			         left="1"
+			         mouse_opaque="false"
+			         name="add_friend"
+			         tool_tip="Offer friendship to the Resident"
+			         top="0"
+			         width="117" />	
+				</layout_panel>
+				
+				<layout_panel
+				follows="bottom|left|right"
+				height="23"
+				layout="bottomleft"
+				left_pad="3"
+				name="im_btn_lp"
+			    user_resize="false" 
+			    auto_resize="true"
+				width="22">
+					<button
+			         follows="bottom|left|right"
+			         height="23"
+			         label="IM"
+			         layout="topleft"
+			         name="im"
+			         tool_tip="Open instant message session"
+			         top="0"
+			         left="1"
+			         width="21" />		
+				</layout_panel>
+				
+				<layout_panel
+				follows="bottom|left|right"
+				height="23"
+				layout="bottomleft"
+				left_pad="3"
+				name="call_btn_lp"
+			    user_resize="false" 
+			    auto_resize="true"
+				width="52">
+					<button
+			         follows="bottom|left|right"
+			         height="23"
+			         label="Call"
+			         layout="topleft"
+			         name="call"
+			         tool_tip="Call this Resident"
+			         left="1"
+			         top="0"
+			         use_ellipses="true"
+			         width="51" />		
+				</layout_panel>
+				
+				<layout_panel
+				follows="bottom|left|right"
+				height="23"
+				layout="bottomleft"
+				left_pad="3"
+				name="show_on_map_btn_lp"
+			    user_resize="false" 
+			    auto_resize="true"
+				width="46">
+					<button
+			         enabled="false"
+			         follows="bottom|left|right"
+			         height="23"
+			         label="Map"
+			         layout="topleft"
+			         name="show_on_map_btn"
+			         tool_tip="Show the Resident on the map"
+			         top="0"
+			         left="1"
+			         width="45" />
+				</layout_panel>
+				
+				<layout_panel
+				follows="bottom|left|right"
+				height="23"
+				layout="bottomleft"
+				left_pad="3"
+				name="teleport_btn_lp"
+			    user_resize="false" 
+			    auto_resize="true"
+				width="81">
+					<button
+			         follows="bottom|left|right"
+			         height="23"
+			         label="Teleport"
+			         layout="topleft"
+			         name="teleport"
+			         tool_tip="Offer teleport"
+			         left="1"
+			         top="0"
+			         width="80" />	
+				</layout_panel>
+		</layout_stack>     
+        </layout_panel>
+    </layout_stack>
+</panel>
