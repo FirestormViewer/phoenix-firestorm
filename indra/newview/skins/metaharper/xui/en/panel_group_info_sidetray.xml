@@ -149,7 +149,7 @@ background_visible="true"
     </tab_container>
    </layout_panel>
   </layout_stack>
-   
+
    		   <layout_stack
 	     	follows="bottom|left|right"
 			height="25"
@@ -166,7 +166,7 @@ background_visible="true"
 				layout="bottomleft"
 				left="0"
 				name="btn_refresh_lp"
-			    user_resize="false" 
+			    user_resize="false"
 			    auto_resize="false"
 				width="24">
 					<button
@@ -179,33 +179,33 @@ background_visible="true"
 				     name="btn_refresh"
 				     width="23" />
 				</layout_panel>
-				
+
 				<layout_panel
 				follows="bottom|left|right"
 				height="23"
 				layout="bottomleft"
 				left_pad="3"
 				name="btn_chat_lp"
-			    user_resize="false" 
+			    user_resize="false"
 			    auto_resize="true"
 				width="91">
 					<button
 				     follows="bottom|left|right"
 				     label="Chat"
 				     name="btn_chat"
-				     left="1"     
+				     left="1"
 				     height="23"
 				     top="0"
-				     width="90" />		
+				     width="90" />
 				</layout_panel>
-				
+
 				<layout_panel
 				follows="bottom|left|right"
 				height="23"
 				layout="bottomleft"
 				left_pad="3"
 				name="call_btn_lp"
-			    user_resize="false" 
+			    user_resize="false"
 			    auto_resize="true"
 				width="91">
 					<button
@@ -217,16 +217,16 @@ background_visible="true"
 			         layout="topleft"
 			         tool_tip="Call this group"
 			         top="0"
-			         width="90" />		
+			         width="90" />
 				</layout_panel>
-				
+
 				<layout_panel
 				follows="bottom|left|right"
 				height="23"
 				layout="bottomleft"
 				left_pad="3"
 				name="btn_apply_lp"
-			    user_resize="false" 
+			    user_resize="false"
 			    auto_resize="true"
 				width="91">
 					<button
@@ -248,8 +248,8 @@ background_visible="true"
      				 name="btn_create"
                		 visible="true"
                  	 tool_tip="Create a new Group"
-                 	 width="90" />	
+                 	 width="90" />
 				</layout_panel>
 		   </layout_stack>
-  
+
 </panel>

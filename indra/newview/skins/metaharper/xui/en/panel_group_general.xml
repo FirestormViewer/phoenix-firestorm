@@ -328,6 +328,7 @@ Hover your mouse over the options for more help.
          layout="topleft">
          Group Setup
         </text>
+
         <check_box
          name="open_enrollement"
          label="Anyone can join"
