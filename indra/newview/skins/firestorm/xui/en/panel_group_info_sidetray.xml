@@ -2,14 +2,14 @@
 <panel
 background_visible="true"
  follows="all"
- height="570"
+ height="480"
  label="Group Profile"
  layout="topleft"
  min_height="350"
  left="0"
  top="20"
  name="GroupInfo"
- width="313">
+ width="500">
     <panel.string
      name="default_needs_apply_text">
         There are unsaved changes
@@ -32,7 +32,7 @@ background_visible="true"
       top="0"
       left="0"
       height="29"
-      width="313"
+      width="320"
       layout="topleft">
     <button
      follows="top|right"
@@ -85,8 +85,8 @@ background_visible="true"
       follows="all"
      left="8"
      top_pad="0"
-     height="506"
-     width="292"
+     height="415"
+     right="-1"
      border_size="0">
    <layout_panel
        bg_alpha_color="SL-Background_66"
@@ -98,7 +98,7 @@ background_visible="true"
        layout="topleft"
        auto_resize="true"
        height="513"
-       width="313">
+       right="-1">
    <tab_container
      left="0"
      top="0"
@@ -107,56 +107,49 @@ background_visible="true"
      layout="topleft"
      name="groups_accordion"
      height="513"
-     width="313">
-                   <panel
-                      border="false"
-                      class="panel_group_general"
-                      filename="panel_group_general.xml"
-                      layout="topleft"
-                      left="0"
-                      follows="left|top|right"
-                      help_topic="group_general_tab"
-                      name="group_general_tab_panel"
-                      top="0" />
-                <panel
-                   border="false"
-                   class="panel_group_roles"
-                   filename="panel_group_roles.xml"
-                   follows="left|top|right"
-                   layout="topleft"
-                   left="0"
-                   name="group_roles_tab_panel"
-                   top="0" />
-         </accordion_tab>
-         <accordion_tab
-            expanded="false"
-            layout="topleft"
-            name="group_notices_tab"
-            title="Notices"
-            fit_panel="false">
-                <panel
-                    border="false"
-                    class="panel_group_notices"
-                    filename="panel_group_notices.xml"
-                    follows="left|top|right"
-                    layout="topleft"
-                    left="0"
-                    help_topic="group_notices_tab"
-                    name="group_notices_tab_panel"
-                    top="0" />
-                 <panel
-					 border="false"
-                     class="panel_group_land_money"
-                     filename="panel_group_land_money.xml"
-                     follows="left|top|right"
-                     layout="topleft"
-                     left="0"
-                     name="group_land_tab_panel"
-                     top="0" />
-        </tab_container>
+     right="-1">
+     <panel
+        border="false"
+        class="panel_group_general"
+        filename="panel_group_general.xml"
+        layout="topleft"
+        left="0"
+        follows="left|top|right"
+        help_topic="group_general_tab"
+        name="group_general_tab_panel"
+        top="0" />
+     <panel
+        border="false"
+        class="panel_group_roles"
+        filename="panel_group_roles.xml"
+        follows="left|top|right"
+        layout="topleft"
+        left="0"
+        name="group_roles_tab_panel"
+        top="0" />
+    <panel
+        border="false"
+        class="panel_group_notices"
+        filename="panel_group_notices.xml"
+        follows="left|top|right"
+        layout="topleft"
+        left="0"
+        help_topic="group_notices_tab"
+        name="group_notices_tab_panel"
+        top="0" />
+    <panel
+        border="false"
+        class="panel_group_land_money"
+        filename="panel_group_land_money.xml"
+        follows="left|top|right"
+        layout="topleft"
+        left="0"
+        name="group_land_tab_panel"
+        top="0" />
+    </tab_container>
    </layout_panel>
   </layout_stack>
-   
+
    		   <layout_stack
 	     	follows="bottom|left|right"
 			height="25"
@@ -165,15 +158,15 @@ background_visible="true"
 			left="6"
 			orientation="horizontal"
 			top_pad="5"
-			width="297">
-	
+			width="475">
+
 				<layout_panel
 				follows="bottom|left|right"
 				height="23"
 				layout="bottomleft"
 				left="0"
 				name="btn_refresh_lp"
-			    user_resize="false" 
+			    user_resize="false"
 			    auto_resize="false"
 				width="24">
 					<button
@@ -186,33 +179,33 @@ background_visible="true"
 				     name="btn_refresh"
 				     width="23" />
 				</layout_panel>
-				
+
 				<layout_panel
 				follows="bottom|left|right"
 				height="23"
 				layout="bottomleft"
 				left_pad="3"
 				name="btn_chat_lp"
-			    user_resize="false" 
+			    user_resize="false"
 			    auto_resize="true"
 				width="91">
 					<button
 				     follows="bottom|left|right"
 				     label="Chat"
 				     name="btn_chat"
-				     left="1"     
+				     left="1"
 				     height="23"
 				     top="0"
-				     width="90" />		
+				     width="90" />
 				</layout_panel>
-				
+
 				<layout_panel
 				follows="bottom|left|right"
 				height="23"
 				layout="bottomleft"
 				left_pad="3"
 				name="call_btn_lp"
-			    user_resize="false" 
+			    user_resize="false"
 			    auto_resize="true"
 				width="91">
 					<button
@@ -224,16 +217,16 @@ background_visible="true"
 			         layout="topleft"
 			         tool_tip="Call this group"
 			         top="0"
-			         width="90" />		
+			         width="90" />
 				</layout_panel>
-				
+
 				<layout_panel
 				follows="bottom|left|right"
 				height="23"
 				layout="bottomleft"
 				left_pad="3"
 				name="btn_apply_lp"
-			    user_resize="false" 
+			    user_resize="false"
 			    auto_resize="true"
 				width="91">
 					<button
@@ -255,8 +248,8 @@ background_visible="true"
      				 name="btn_create"
                		 visible="true"
                  	 tool_tip="Create a new Group"
-                 	 width="90" />	
+                 	 width="90" />
 				</layout_panel>
 		   </layout_stack>
-  
+
 </panel>
