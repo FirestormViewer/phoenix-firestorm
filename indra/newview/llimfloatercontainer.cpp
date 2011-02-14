@@ -80,14 +80,14 @@ void LLIMFloaterContainer::onOpen(const LLSD& key)
 		if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
 			// add then remove to set up relationship for re-attach
-			addFloater(floater, FALSE);
+			LLMultiFloater::showFloater(floater);
 			removeFloater(floater);
 			// reparent to floater view
 			gFloaterView->addChild(floater);
 		}
 		else
 		{
-			addFloater(floater, FALSE);
+			LLMultiFloater::showFloater(floater);
 		}
 	}
 	
