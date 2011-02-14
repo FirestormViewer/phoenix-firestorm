@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <link rel="icon" href="/phoenix-firestorm-lgpl/static/hgicon.png" type="image/png" />
+    <meta name="robots" content="index, nofollow"/>
+    <link rel="stylesheet" href="/phoenix-firestorm-lgpl/static/style-monoblue.css" type="text/css" />
+
+<title>phoenix-firestorm-lgpl: diff indra/newview/skins/default/xui/en/panel_profile_firstlife.xml</title>
+    <link rel="alternate" type="application/atom+xml" href="/phoenix-firestorm-lgpl/atom-log" title="Atom feed for phoenix-firestorm-lgpl"/>
+    <link rel="alternate" type="application/rss+xml" href="/phoenix-firestorm-lgpl/rss-log" title="RSS feed for phoenix-firestorm-lgpl"/>
+</head>
+
+<body>
+<div id="container">
+    <div class="page-header">
+        <h1><a href="/phoenix-firestorm-lgpl/summary">phoenix-firestorm-lgpl</a> / file diff</h1>
+
+        <form action="/phoenix-firestorm-lgpl/log">
+            
+            <dl class="search">
+                <dt><label>Search: </label></dt>
+                <dd><input type="text" name="rev" /></dd>
+            </dl>
+        </form>
+
+        <ul class="page-nav">
+            <li><a href="/phoenix-firestorm-lgpl/summary">summary</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/shortlog">shortlog</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/log">changelog</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/graph/f918402b0df0">graph</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/tags">tags</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/branches">branches</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/file/f918402b0df0">files</a></li>
+        </ul>
+    </div>
+
+    <ul class="submenu">
+        <li><a href="/phoenix-firestorm-lgpl/file/f918402b0df0/indra/newview/skins/default/xui/en/panel_profile_firstlife.xml">file</a></li>
+        <li><a href="/phoenix-firestorm-lgpl/log/f918402b0df0/indra/newview/skins/default/xui/en/panel_profile_firstlife.xml">revisions</a></li>
+        <li><a href="/phoenix-firestorm-lgpl/annotate/f918402b0df0/indra/newview/skins/default/xui/en/panel_profile_firstlife.xml">annotate</a></li>
+        <li class="current">diff</li>
+        <li><a href="/phoenix-firestorm-lgpl/raw-diff/f918402b0df0/indra/newview/skins/default/xui/en/panel_profile_firstlife.xml">raw</a></li>
+    </ul>
+
+    <h2 class="no-link no-border">diff: indra/newview/skins/default/xui/en/panel_profile_firstlife.xml</h2>
+    <h3 class="changeset">indra/newview/skins/default/xui/en/panel_profile_firstlife.xml</h3>
+
+    <dl class="overview">
+        
+        <dt>changeset 14643</dt>
+        <dd><a href="/phoenix-firestorm-lgpl/rev/f918402b0df0">f918402b0df0</a></dd>
+        
+        
+    </dl>
+
+    <div class="diff">
+    <pre><span style="color:#cc0000;"><a class="linenr" href="#l1.1" id="l1.1">     1.1</a> --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
+</span><span style="color:#008800;"><a class="linenr" href="#l1.2" id="l1.2">     1.2</a> +++ b/indra/newview/skins/default/xui/en/panel_profile_firstlife.xml	Sat Feb 12 20:21:57 2011 -0800
+</span><span style="color:#990099;"><a class="linenr" href="#l1.3" id="l1.3">     1.3</a> @@ -0,0 +1,82 @@
+</span><span style="color:#008800;"><a class="linenr" href="#l1.4" id="l1.4">     1.4</a> +&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;yes&quot; ?&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.5" id="l1.5">     1.5</a> +&lt;panel
+</span><span style="color:#008800;"><a class="linenr" href="#l1.6" id="l1.6">     1.6</a> + follows=&quot;all&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.7" id="l1.7">     1.7</a> + height=&quot;480&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.8" id="l1.8">     1.8</a> + label=&quot;Profile&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.9" id="l1.9">     1.9</a> + layout=&quot;topleft&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.10" id="l1.10">    1.10</a> + left=&quot;0&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.11" id="l1.11">    1.11</a> + name=&quot;panel_profile_firstlife&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.12" id="l1.12">    1.12</a> + top=&quot;0&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.13" id="l1.13">    1.13</a> + width=&quot;430&quot;&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.14" id="l1.14">    1.14</a> +          &lt;panel
+</span><span style="color:#008800;"><a class="linenr" href="#l1.15" id="l1.15">    1.15</a> +           layout=&quot;topleft&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.16" id="l1.16">    1.16</a> +           follows=&quot;left|top|right|bottom&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.17" id="l1.17">    1.17</a> +           height=&quot;480&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.18" id="l1.18">    1.18</a> +           name=&quot;first_life_panel&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.19" id="l1.19">    1.19</a> +           top=&quot;0&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.20" id="l1.20">    1.20</a> +           left=&quot;0&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.21" id="l1.21">    1.21</a> +           width=&quot;430&quot;&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.22" id="l1.22">    1.22</a> +		   
+</span><span style="color:#008800;"><a class="linenr" href="#l1.23" id="l1.23">    1.23</a> +              &lt;texture_picker
+</span><span style="color:#008800;"><a class="linenr" href="#l1.24" id="l1.24">    1.24</a> +               allow_no_texture=&quot;true&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.25" id="l1.25">    1.25</a> +               default_image_name=&quot;None&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.26" id="l1.26">    1.26</a> +               enabled=&quot;false&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.27" id="l1.27">    1.27</a> +               fallback_image=&quot;Generic_Person_Large&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.28" id="l1.28">    1.28</a> +               follows=&quot;top|left&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.29" id="l1.29">    1.29</a> +               height=&quot;225&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.30" id="l1.30">    1.30</a> +               layout=&quot;topleft&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.31" id="l1.31">    1.31</a> +               left=&quot;10&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.32" id="l1.32">    1.32</a> +               name=&quot;real_world_pic&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.33" id="l1.33">    1.33</a> +               top=&quot;10&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.34" id="l1.34">    1.34</a> +               width=&quot;275&quot; /&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.35" id="l1.35">    1.35</a> +
+</span><span style="color:#008800;"><a class="linenr" href="#l1.36" id="l1.36">    1.36</a> +			&lt;view_border
+</span><span style="color:#008800;"><a class="linenr" href="#l1.37" id="l1.37">    1.37</a> +			 left=&quot;5&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.38" id="l1.38">    1.38</a> +			 top_pad=&quot;-3&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.39" id="l1.39">    1.39</a> +			 bevel_style=&quot;in&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.40" id="l1.40">    1.40</a> +			 follows=&quot;left|top&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.41" id="l1.41">    1.41</a> +			 name=&quot;info_border&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.42" id="l1.42">    1.42</a> +			 height=&quot;139&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.43" id="l1.43">    1.43</a> +			 width=&quot;326&quot; /&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.44" id="l1.44">    1.44</a> +			&lt;text_editor
+</span><span style="color:#008800;"><a class="linenr" href="#l1.45" id="l1.45">    1.45</a> +			 left=&quot;5&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.46" id="l1.46">    1.46</a> +			 top_delta=&quot;1&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.47" id="l1.47">    1.47</a> +			 height=&quot;137&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.48" id="l1.48">    1.48</a> +			 width=&quot;324&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.49" id="l1.49">    1.49</a> +			 enabled=&quot;false&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.50" id="l1.50">    1.50</a> +			 follows=&quot;left|top&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.51" id="l1.51">    1.51</a> +			 layout=&quot;topleft&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.52" id="l1.52">    1.52</a> +			 max_length=&quot;512&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.53" id="l1.53">    1.53</a> +			 name=&quot;fl_description_edit&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.54" id="l1.54">    1.54</a> +			 word_wrap=&quot;true&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.55" id="l1.55">    1.55</a> +			 parse_urls=&quot;true&quot; /&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.56" id="l1.56">    1.56</a> +
+</span><span style="color:#008800;"><a class="linenr" href="#l1.57" id="l1.57">    1.57</a> +            &lt;text
+</span><span style="color:#008800;"><a class="linenr" href="#l1.58" id="l1.58">    1.58</a> +             follows=&quot;left|top&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.59" id="l1.59">    1.59</a> +             font.style=&quot;BOLD&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.60" id="l1.60">    1.60</a> +             height=&quot;13&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.61" id="l1.61">    1.61</a> +             layout=&quot;topleft&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.62" id="l1.62">    1.62</a> +             left=&quot;4&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.63" id="l1.63">    1.63</a> +             name=&quot;homepage_text&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.64" id="l1.64">    1.64</a> +             text_color=&quot;White&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.65" id="l1.65">    1.65</a> +             top_pad=&quot;20&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.66" id="l1.66">    1.66</a> +             value=&quot;Web page:&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.67" id="l1.67">    1.67</a> +             width=&quot;280&quot; /&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.68" id="l1.68">    1.68</a> +            &lt;text
+</span><span style="color:#008800;"><a class="linenr" href="#l1.69" id="l1.69">    1.69</a> +              follows=&quot;left|top&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.70" id="l1.70">    1.70</a> +              height=&quot;15&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.71" id="l1.71">    1.71</a> +              layout=&quot;topleft&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.72" id="l1.72">    1.72</a> +              left=&quot;4&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.73" id="l1.73">    1.73</a> +              name=&quot;homepage_edit&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.74" id="l1.74">    1.74</a> +              top_pad=&quot;2&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.75" id="l1.75">    1.75</a> +              translate=&quot;false&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.76" id="l1.76">    1.76</a> +              value=&quot;blank&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.77" id="l1.77">    1.77</a> +              width=&quot;280&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.78" id="l1.78">    1.78</a> +              word_wrap=&quot;false&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.79" id="l1.79">    1.79</a> +              use_ellipses=&quot;true&quot; /&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.80" id="l1.80">    1.80</a> +          &lt;/panel&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.81" id="l1.81">    1.81</a> +        &lt;/scroll_container&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.82" id="l1.82">    1.82</a> +      &lt;/accordion_tab&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.83" id="l1.83">    1.83</a> +    &lt;/accordion&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.84" id="l1.84">    1.84</a> +&lt;/panel&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.85" id="l1.85">    1.85</a> +
+</span></pre>
+    </div>
+
+    <div class="page-footer">
+        <p>Mercurial Repository: phoenix-firestorm-lgpl</p>
+        <ul class="rss-logo">
+            <li><a href="/phoenix-firestorm-lgpl/rss-log">RSS</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/atom-log">Atom</a></li>
+        </ul>
+        
+    </div>
+
+    <div id="powered-by">
+        <p><a href="http://mercurial.selenic.com/" title="Mercurial"><img src="/phoenix-firestorm-lgpl/static/hglogo.png" width=75 height=90 border=0 alt="mercurial"></a></p>
+    </div>
+
+    <div id="corner-top-left"></div>
+    <div id="corner-top-right"></div>
+    <div id="corner-bottom-left"></div>
+    <div id="corner-bottom-right"></div>
+
+</div>
+
+</body>
+</html>
+

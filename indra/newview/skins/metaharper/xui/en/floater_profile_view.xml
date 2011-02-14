@@ -1,18 +1,106 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<floater
- height="600"
- layout="topleft"
- min_height="350"
- width="343"
- can_close="true"
- can_resize="true">
-    <panel
-     background_visible="false"
-     top="5"
-     height="590"
-     left="5"
-     class="panel_profile_view"
-     name="panel_profile_view"
-     filename="panel_profile_view.xml"
-    />
-</floater>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <link rel="icon" href="/phoenix-firestorm-lgpl/static/hgicon.png" type="image/png" />
+    <meta name="robots" content="index, nofollow"/>
+    <link rel="stylesheet" href="/phoenix-firestorm-lgpl/static/style-monoblue.css" type="text/css" />
+
+<title>phoenix-firestorm-lgpl: diff indra/newview/skins/default/xui/en/floater_profile_view.xml</title>
+    <link rel="alternate" type="application/atom+xml" href="/phoenix-firestorm-lgpl/atom-log" title="Atom feed for phoenix-firestorm-lgpl"/>
+    <link rel="alternate" type="application/rss+xml" href="/phoenix-firestorm-lgpl/rss-log" title="RSS feed for phoenix-firestorm-lgpl"/>
+</head>
+
+<body>
+<div id="container">
+    <div class="page-header">
+        <h1><a href="/phoenix-firestorm-lgpl/summary">phoenix-firestorm-lgpl</a> / file diff</h1>
+
+        <form action="/phoenix-firestorm-lgpl/log">
+            
+            <dl class="search">
+                <dt><label>Search: </label></dt>
+                <dd><input type="text" name="rev" /></dd>
+            </dl>
+        </form>
+
+        <ul class="page-nav">
+            <li><a href="/phoenix-firestorm-lgpl/summary">summary</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/shortlog">shortlog</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/log">changelog</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/graph/f918402b0df0">graph</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/tags">tags</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/branches">branches</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/file/f918402b0df0">files</a></li>
+        </ul>
+    </div>
+
+    <ul class="submenu">
+        <li><a href="/phoenix-firestorm-lgpl/file/f918402b0df0/indra/newview/skins/default/xui/en/floater_profile_view.xml">file</a></li>
+        <li><a href="/phoenix-firestorm-lgpl/log/f918402b0df0/indra/newview/skins/default/xui/en/floater_profile_view.xml">revisions</a></li>
+        <li><a href="/phoenix-firestorm-lgpl/annotate/f918402b0df0/indra/newview/skins/default/xui/en/floater_profile_view.xml">annotate</a></li>
+        <li class="current">diff</li>
+        <li><a href="/phoenix-firestorm-lgpl/raw-diff/f918402b0df0/indra/newview/skins/default/xui/en/floater_profile_view.xml">raw</a></li>
+    </ul>
+
+    <h2 class="no-link no-border">diff: indra/newview/skins/default/xui/en/floater_profile_view.xml</h2>
+    <h3 class="changeset">indra/newview/skins/default/xui/en/floater_profile_view.xml</h3>
+
+    <dl class="overview">
+        
+        <dt>changeset 14643</dt>
+        <dd><a href="/phoenix-firestorm-lgpl/rev/f918402b0df0">f918402b0df0</a></dd>
+        
+<dt>parent 14405</dt>
+<dd><a href="/phoenix-firestorm-lgpl/diff/89ca95359542/indra/newview/skins/default/xui/en/floater_profile_view.xml">89ca95359542</a></dd>
+        
+    </dl>
+
+    <div class="diff">
+    <pre><span style="color:#cc0000;"><a class="linenr" href="#l1.1" id="l1.1">     1.1</a> --- a/indra/newview/skins/default/xui/en/floater_profile_view.xml	Thu Jan 20 00:07:36 2011 -0800
+</span><span style="color:#008800;"><a class="linenr" href="#l1.2" id="l1.2">     1.2</a> +++ b/indra/newview/skins/default/xui/en/floater_profile_view.xml	Sat Feb 12 20:21:57 2011 -0800
+</span><span style="color:#990099;"><a class="linenr" href="#l1.3" id="l1.3">     1.3</a> @@ -1,15 +1,14 @@
+</span><span><a class="linenr" href="#l1.4" id="l1.4">     1.4</a>  &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;
+</span><span><a class="linenr" href="#l1.5" id="l1.5">     1.5</a>  &lt;floater
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.6" id="l1.6">     1.6</a> - height=&quot;600&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.7" id="l1.7">     1.7</a> + height=&quot;480&quot;
+</span><span><a class="linenr" href="#l1.8" id="l1.8">     1.8</a>   layout=&quot;topleft&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.9" id="l1.9">     1.9</a> - min_height=&quot;350&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.10" id="l1.10">    1.10</a> - width=&quot;343&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.11" id="l1.11">    1.11</a> + width=&quot;430&quot;
+</span><span><a class="linenr" href="#l1.12" id="l1.12">    1.12</a>   can_close=&quot;true&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.13" id="l1.13">    1.13</a> - can_resize=&quot;true&quot;&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.14" id="l1.14">    1.14</a> + can_resize=&quot;false&quot;&gt;
+</span><span><a class="linenr" href="#l1.15" id="l1.15">    1.15</a>      &lt;panel
+</span><span><a class="linenr" href="#l1.16" id="l1.16">    1.16</a>       background_visible=&quot;false&quot;
+</span><span><a class="linenr" href="#l1.17" id="l1.17">    1.17</a>       top=&quot;5&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.18" id="l1.18">    1.18</a> -     height=&quot;590&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.19" id="l1.19">    1.19</a> +     height=&quot;525&quot;
+</span><span><a class="linenr" href="#l1.20" id="l1.20">    1.20</a>       left=&quot;5&quot;
+</span><span><a class="linenr" href="#l1.21" id="l1.21">    1.21</a>       class=&quot;panel_profile_view&quot;
+</span><span><a class="linenr" href="#l1.22" id="l1.22">    1.22</a>       name=&quot;panel_profile_view&quot;
+</span></pre>
+    </div>
+
+    <div class="page-footer">
+        <p>Mercurial Repository: phoenix-firestorm-lgpl</p>
+        <ul class="rss-logo">
+            <li><a href="/phoenix-firestorm-lgpl/rss-log">RSS</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/atom-log">Atom</a></li>
+        </ul>
+        
+    </div>
+
+    <div id="powered-by">
+        <p><a href="http://mercurial.selenic.com/" title="Mercurial"><img src="/phoenix-firestorm-lgpl/static/hglogo.png" width=75 height=90 border=0 alt="mercurial"></a></p>
+    </div>
+
+    <div id="corner-top-left"></div>
+    <div id="corner-top-right"></div>
+    <div id="corner-bottom-left"></div>
+    <div id="corner-bottom-right"></div>
+
+</div>
+
+</body>
+</html>
+

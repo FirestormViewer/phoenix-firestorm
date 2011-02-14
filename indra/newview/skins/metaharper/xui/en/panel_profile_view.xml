@@ -1,161 +1,253 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- background_visible="true"
- follows="all"
- height="570"
- layout="topleft"
- min_height="350"
- name="panel_target_profile"
- label="Profile View"
- left="0"
- width="333">
-  <string
-   name="status_online">
-    Online
-  </string>
-  <string
-   name="status_offline">
-    Offline
-  </string>
-  <button
-   follows="top|left"
-   height="24"
-   image_hover_unselected="BackButton_Over"
-   image_pressed="BackButton_Press"
-   image_unselected="BackButton_Off"
-   layout="topleft"
-   name="back"
-   left="10"
-   tab_stop="false"
-   top="2"
-   width="30"
-   use_draw_context_alpha="false" />
-  <text
-   top="10"
-   follows="top|left"
-   height="13"
-   layout="topleft"
-   left="45"
-   name="display_name_label"
-   text_color="LtGray"
-   value="Display Name:"
-   width="80" />
-  <text
-   top_delta="0"
-   follows="top|left"
-   height="13"
-   layout="topleft"
-   left="45"
-   name="solo_username_label"
-   text_color="LtGray"
-   value="Username:"
-   visible="false" 
-   width="80" />
-  <text
-   follows="top|right"
-   halign="right"
-   height="13"
-   layout="topleft"
-   right="-15"
-   name="status"
-   text_color="LtGray_50"
-   top_delta="0"
-   value="Online"
-   width="150" />
-  <text
-   follows="top|left|right"
-   font="SansSerifBigBold"
-   height="29"
-   layout="topleft"
-   left="45"
-   name="user_name_small"
-   text_color="LtGray"
-   top="22"
-   value="Jack oh look at me this is a super duper long name"
-   use_ellipses="true"
-   word_wrap="true"
-   visible="false"
-   width="255" />
-  <text
-   follows="top|left|right"
-   font="SansSerifHugeBold"
-   height="27"
-   layout="topleft"
-   left="45"
-   name="user_name"
-   text_color="LtGray"
-   top="25"
-   value="Jack Linden"
-   visible="true"
-   use_ellipses="true"
-   width="258" /> 
-  <button
-         name="copy_to_clipboard"
-         layout="topleft"
-         follows="top|right"
-         image_overlay="Copy"
-         top_delta="0"
-         right="-15"
-         height="21"
-         width="21"
-         tab_stop="false" 
-         tool_tip="Copy to Clipboard"/>
-  <text
-   follows="top|left"
-   height="13"
-   layout="topleft"
-   left="45"
-   name="user_label"
-   text_color="LtGray"
-   top_pad="10" 
-   value="Username:"
-   width="70" />
-  <text
-   follows="top|left"
-   height="20"
-   layout="topleft"
-   left_pad="0"
-   name="user_slid"
-   text_color="EmphasisColor"
-   font="SansSerifBold"
-   top_delta="-2"
-   use_ellipses="true"
-   value="jack.linden"
-   width="195" 
-   wrap="true "/>
-  <tab_container
-   follows="all"
-   height="489"
-   halign="center"
-   layout="topleft"
-   left="5"
-   min_width="333"
-   name="tabs"
-   tab_min_width="80"
-   tab_height="30"
-   tab_position="top"
-   top_pad="5"
-   width="317">
-    <panel
-     class="panel_profile"
-     filename="panel_profile.xml"
-     label="PROFILE"
-     layout="topleft"
-     help_topic="profile_profile_tab"
-     name="panel_profile" />
-    <panel
-     class="panel_picks"
-     filename="panel_picks.xml"
-     label="PICKS"
-     layout="topleft"
-     help_topic="profile_picks_tab"
-     name="panel_picks" />
-    <panel
-     class="panel_notes"
-     filename="panel_notes.xml"
-     label="NOTES &amp; PRIVACY"
-     layout="topleft"
-     help_topic="profile_notes_tab"
-     name="panel_notes" />
-  </tab_container>
-</panel>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <link rel="icon" href="/phoenix-firestorm-lgpl/static/hgicon.png" type="image/png" />
+    <meta name="robots" content="index, nofollow"/>
+    <link rel="stylesheet" href="/phoenix-firestorm-lgpl/static/style-monoblue.css" type="text/css" />
+
+<title>phoenix-firestorm-lgpl: diff indra/newview/skins/default/xui/en/panel_profile_view.xml</title>
+    <link rel="alternate" type="application/atom+xml" href="/phoenix-firestorm-lgpl/atom-log" title="Atom feed for phoenix-firestorm-lgpl"/>
+    <link rel="alternate" type="application/rss+xml" href="/phoenix-firestorm-lgpl/rss-log" title="RSS feed for phoenix-firestorm-lgpl"/>
+</head>
+
+<body>
+<div id="container">
+    <div class="page-header">
+        <h1><a href="/phoenix-firestorm-lgpl/summary">phoenix-firestorm-lgpl</a> / file diff</h1>
+
+        <form action="/phoenix-firestorm-lgpl/log">
+            
+            <dl class="search">
+                <dt><label>Search: </label></dt>
+                <dd><input type="text" name="rev" /></dd>
+            </dl>
+        </form>
+
+        <ul class="page-nav">
+            <li><a href="/phoenix-firestorm-lgpl/summary">summary</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/shortlog">shortlog</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/log">changelog</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/graph/f918402b0df0">graph</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/tags">tags</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/branches">branches</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/file/f918402b0df0">files</a></li>
+        </ul>
+    </div>
+
+    <ul class="submenu">
+        <li><a href="/phoenix-firestorm-lgpl/file/f918402b0df0/indra/newview/skins/default/xui/en/panel_profile_view.xml">file</a></li>
+        <li><a href="/phoenix-firestorm-lgpl/log/f918402b0df0/indra/newview/skins/default/xui/en/panel_profile_view.xml">revisions</a></li>
+        <li><a href="/phoenix-firestorm-lgpl/annotate/f918402b0df0/indra/newview/skins/default/xui/en/panel_profile_view.xml">annotate</a></li>
+        <li class="current">diff</li>
+        <li><a href="/phoenix-firestorm-lgpl/raw-diff/f918402b0df0/indra/newview/skins/default/xui/en/panel_profile_view.xml">raw</a></li>
+    </ul>
+
+    <h2 class="no-link no-border">diff: indra/newview/skins/default/xui/en/panel_profile_view.xml</h2>
+    <h3 class="changeset">indra/newview/skins/default/xui/en/panel_profile_view.xml</h3>
+
+    <dl class="overview">
+        
+        <dt>changeset 14643</dt>
+        <dd><a href="/phoenix-firestorm-lgpl/rev/f918402b0df0">f918402b0df0</a></dd>
+        
+<dt>parent 14384</dt>
+<dd><a href="/phoenix-firestorm-lgpl/diff/5918d89c135c/indra/newview/skins/default/xui/en/panel_profile_view.xml">5918d89c135c</a></dd>
+        
+    </dl>
+
+    <div class="diff">
+    <pre><span style="color:#cc0000;"><a class="linenr" href="#l1.1" id="l1.1">     1.1</a> --- a/indra/newview/skins/default/xui/en/panel_profile_view.xml	Tue Jan 18 00:50:43 2011 -0500
+</span><span style="color:#008800;"><a class="linenr" href="#l1.2" id="l1.2">     1.2</a> +++ b/indra/newview/skins/default/xui/en/panel_profile_view.xml	Sat Feb 12 20:21:57 2011 -0800
+</span><span style="color:#990099;"><a class="linenr" href="#l1.3" id="l1.3">     1.3</a> @@ -2,13 +2,14 @@
+</span><span><a class="linenr" href="#l1.4" id="l1.4">     1.4</a>  &lt;panel
+</span><span><a class="linenr" href="#l1.5" id="l1.5">     1.5</a>   background_visible=&quot;true&quot;
+</span><span><a class="linenr" href="#l1.6" id="l1.6">     1.6</a>   follows=&quot;all&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.7" id="l1.7">     1.7</a> - height=&quot;570&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.8" id="l1.8">     1.8</a> + height=&quot;480&quot;
+</span><span><a class="linenr" href="#l1.9" id="l1.9">     1.9</a>   layout=&quot;topleft&quot;
+</span><span><a class="linenr" href="#l1.10" id="l1.10">    1.10</a>   min_height=&quot;350&quot;
+</span><span><a class="linenr" href="#l1.11" id="l1.11">    1.11</a>   name=&quot;panel_target_profile&quot;
+</span><span><a class="linenr" href="#l1.12" id="l1.12">    1.12</a>   label=&quot;Profile View&quot;
+</span><span><a class="linenr" href="#l1.13" id="l1.13">    1.13</a>   left=&quot;0&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.14" id="l1.14">    1.14</a> - width=&quot;333&quot;&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.15" id="l1.15">    1.15</a> + width=&quot;430&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.16" id="l1.16">    1.16</a> + fit_panel=&quot;true&quot;&gt;
+</span><span><a class="linenr" href="#l1.17" id="l1.17">    1.17</a>    &lt;string
+</span><span><a class="linenr" href="#l1.18" id="l1.18">    1.18</a>     name=&quot;status_online&quot;&gt;
+</span><span><a class="linenr" href="#l1.19" id="l1.19">    1.19</a>      Online
+</span><span style="color:#990099;"><a class="linenr" href="#l1.20" id="l1.20">    1.20</a> @@ -17,129 +18,22 @@
+</span><span><a class="linenr" href="#l1.21" id="l1.21">    1.21</a>     name=&quot;status_offline&quot;&gt;
+</span><span><a class="linenr" href="#l1.22" id="l1.22">    1.22</a>      Offline
+</span><span><a class="linenr" href="#l1.23" id="l1.23">    1.23</a>    &lt;/string&gt;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.24" id="l1.24">    1.24</a> -  &lt;button
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.25" id="l1.25">    1.25</a> -   follows=&quot;top|left&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.26" id="l1.26">    1.26</a> -   height=&quot;24&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.27" id="l1.27">    1.27</a> -   image_hover_unselected=&quot;BackButton_Over&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.28" id="l1.28">    1.28</a> -   image_pressed=&quot;BackButton_Press&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.29" id="l1.29">    1.29</a> -   image_unselected=&quot;BackButton_Off&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.30" id="l1.30">    1.30</a> -   layout=&quot;topleft&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.31" id="l1.31">    1.31</a> -   name=&quot;back&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.32" id="l1.32">    1.32</a> -   left=&quot;10&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.33" id="l1.33">    1.33</a> -   tab_stop=&quot;false&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.34" id="l1.34">    1.34</a> -   top=&quot;2&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.35" id="l1.35">    1.35</a> -   width=&quot;30&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.36" id="l1.36">    1.36</a> -   use_draw_context_alpha=&quot;false&quot; /&gt;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.37" id="l1.37">    1.37</a> -  &lt;text
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.38" id="l1.38">    1.38</a> -   top=&quot;10&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.39" id="l1.39">    1.39</a> -   follows=&quot;top|left&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.40" id="l1.40">    1.40</a> -   height=&quot;13&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.41" id="l1.41">    1.41</a> -   layout=&quot;topleft&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.42" id="l1.42">    1.42</a> -   left=&quot;45&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.43" id="l1.43">    1.43</a> -   name=&quot;display_name_label&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.44" id="l1.44">    1.44</a> -   text_color=&quot;LtGray&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.45" id="l1.45">    1.45</a> -   value=&quot;Display Name:&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.46" id="l1.46">    1.46</a> -   width=&quot;80&quot; /&gt;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.47" id="l1.47">    1.47</a> -  &lt;text
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.48" id="l1.48">    1.48</a> -   top_delta=&quot;0&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.49" id="l1.49">    1.49</a> -   follows=&quot;top|left&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.50" id="l1.50">    1.50</a> -   height=&quot;13&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.51" id="l1.51">    1.51</a> -   layout=&quot;topleft&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.52" id="l1.52">    1.52</a> -   left=&quot;45&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.53" id="l1.53">    1.53</a> -   name=&quot;solo_username_label&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.54" id="l1.54">    1.54</a> -   text_color=&quot;LtGray&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.55" id="l1.55">    1.55</a> -   value=&quot;Username:&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.56" id="l1.56">    1.56</a> -   visible=&quot;false&quot; 
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.57" id="l1.57">    1.57</a> -   width=&quot;80&quot; /&gt;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.58" id="l1.58">    1.58</a> -  &lt;text
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.59" id="l1.59">    1.59</a> -   follows=&quot;top|right&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.60" id="l1.60">    1.60</a> -   halign=&quot;right&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.61" id="l1.61">    1.61</a> -   height=&quot;13&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.62" id="l1.62">    1.62</a> -   layout=&quot;topleft&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.63" id="l1.63">    1.63</a> -   right=&quot;-15&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.64" id="l1.64">    1.64</a> -   name=&quot;status&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.65" id="l1.65">    1.65</a> -   text_color=&quot;LtGray_50&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.66" id="l1.66">    1.66</a> -   top_delta=&quot;0&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.67" id="l1.67">    1.67</a> -   value=&quot;Online&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.68" id="l1.68">    1.68</a> -   width=&quot;150&quot; /&gt;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.69" id="l1.69">    1.69</a> -  &lt;text
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.70" id="l1.70">    1.70</a> -   follows=&quot;top|left|right&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.71" id="l1.71">    1.71</a> -   font=&quot;SansSerifBigBold&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.72" id="l1.72">    1.72</a> -   height=&quot;29&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.73" id="l1.73">    1.73</a> -   layout=&quot;topleft&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.74" id="l1.74">    1.74</a> -   left=&quot;45&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.75" id="l1.75">    1.75</a> -   name=&quot;user_name_small&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.76" id="l1.76">    1.76</a> -   text_color=&quot;LtGray&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.77" id="l1.77">    1.77</a> -   top=&quot;22&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.78" id="l1.78">    1.78</a> -   value=&quot;Jack oh look at me this is a super duper long name&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.79" id="l1.79">    1.79</a> -   use_ellipses=&quot;true&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.80" id="l1.80">    1.80</a> -   word_wrap=&quot;true&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.81" id="l1.81">    1.81</a> -   visible=&quot;false&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.82" id="l1.82">    1.82</a> -   width=&quot;255&quot; /&gt;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.83" id="l1.83">    1.83</a> -  &lt;text
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.84" id="l1.84">    1.84</a> -   follows=&quot;top|left|right&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.85" id="l1.85">    1.85</a> -   font=&quot;SansSerifHugeBold&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.86" id="l1.86">    1.86</a> -   height=&quot;27&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.87" id="l1.87">    1.87</a> -   layout=&quot;topleft&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.88" id="l1.88">    1.88</a> -   left=&quot;45&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.89" id="l1.89">    1.89</a> -   name=&quot;user_name&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.90" id="l1.90">    1.90</a> -   text_color=&quot;LtGray&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.91" id="l1.91">    1.91</a> -   top=&quot;25&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.92" id="l1.92">    1.92</a> -   value=&quot;Jack Linden&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.93" id="l1.93">    1.93</a> -   visible=&quot;true&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.94" id="l1.94">    1.94</a> -   use_ellipses=&quot;true&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.95" id="l1.95">    1.95</a> -   width=&quot;258&quot; /&gt; 
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.96" id="l1.96">    1.96</a> -  &lt;button
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.97" id="l1.97">    1.97</a> -         name=&quot;copy_to_clipboard&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.98" id="l1.98">    1.98</a> -         layout=&quot;topleft&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.99" id="l1.99">    1.99</a> -         follows=&quot;top|right&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.100" id="l1.100">   1.100</a> -         image_overlay=&quot;Copy&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.101" id="l1.101">   1.101</a> -         top_delta=&quot;0&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.102" id="l1.102">   1.102</a> -         right=&quot;-15&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.103" id="l1.103">   1.103</a> -         height=&quot;21&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.104" id="l1.104">   1.104</a> -         width=&quot;21&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.105" id="l1.105">   1.105</a> -         tab_stop=&quot;false&quot; 
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.106" id="l1.106">   1.106</a> -         tool_tip=&quot;Copy to Clipboard&quot;/&gt;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.107" id="l1.107">   1.107</a> -  &lt;text
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.108" id="l1.108">   1.108</a> -   follows=&quot;top|left&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.109" id="l1.109">   1.109</a> -   height=&quot;13&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.110" id="l1.110">   1.110</a> -   layout=&quot;topleft&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.111" id="l1.111">   1.111</a> -   left=&quot;45&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.112" id="l1.112">   1.112</a> -   name=&quot;user_label&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.113" id="l1.113">   1.113</a> -   text_color=&quot;LtGray&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.114" id="l1.114">   1.114</a> -   top_pad=&quot;10&quot; 
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.115" id="l1.115">   1.115</a> -   value=&quot;Username:&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.116" id="l1.116">   1.116</a> -   width=&quot;70&quot; /&gt;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.117" id="l1.117">   1.117</a> -  &lt;text
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.118" id="l1.118">   1.118</a> -   follows=&quot;top|left&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.119" id="l1.119">   1.119</a> -   height=&quot;20&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.120" id="l1.120">   1.120</a> -   layout=&quot;topleft&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.121" id="l1.121">   1.121</a> -   left_pad=&quot;0&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.122" id="l1.122">   1.122</a> -   name=&quot;user_slid&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.123" id="l1.123">   1.123</a> -   text_color=&quot;EmphasisColor&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.124" id="l1.124">   1.124</a> -   font=&quot;SansSerifBold&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.125" id="l1.125">   1.125</a> -   top_delta=&quot;-2&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.126" id="l1.126">   1.126</a> -   use_ellipses=&quot;true&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.127" id="l1.127">   1.127</a> -   value=&quot;jack.linden&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.128" id="l1.128">   1.128</a> -   width=&quot;195&quot; 
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.129" id="l1.129">   1.129</a> -   wrap=&quot;true &quot;/&gt;
+</span><span><a class="linenr" href="#l1.130" id="l1.130">   1.130</a>    &lt;tab_container
+</span><span><a class="linenr" href="#l1.131" id="l1.131">   1.131</a>     follows=&quot;all&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.132" id="l1.132">   1.132</a> -   height=&quot;489&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.133" id="l1.133">   1.133</a> +   height=&quot;520&quot;
+</span><span><a class="linenr" href="#l1.134" id="l1.134">   1.134</a>     halign=&quot;center&quot;
+</span><span><a class="linenr" href="#l1.135" id="l1.135">   1.135</a>     layout=&quot;topleft&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.136" id="l1.136">   1.136</a> -   left=&quot;5&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.137" id="l1.137">   1.137</a> -   min_width=&quot;333&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.138" id="l1.138">   1.138</a> +   left=&quot;0&quot;
+</span><span><a class="linenr" href="#l1.139" id="l1.139">   1.139</a>     name=&quot;tabs&quot;
+</span><span><a class="linenr" href="#l1.140" id="l1.140">   1.140</a>     tab_min_width=&quot;80&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.141" id="l1.141">   1.141</a> -   tab_height=&quot;30&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.142" id="l1.142">   1.142</a> +   tab_height=&quot;16&quot;
+</span><span><a class="linenr" href="#l1.143" id="l1.143">   1.143</a>     tab_position=&quot;top&quot;
+</span><span><a class="linenr" href="#l1.144" id="l1.144">   1.144</a>     top_pad=&quot;5&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.145" id="l1.145">   1.145</a> -   width=&quot;317&quot;&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.146" id="l1.146">   1.146</a> +   width=&quot;420&quot;&gt;
+</span><span><a class="linenr" href="#l1.147" id="l1.147">   1.147</a>      &lt;panel
+</span><span><a class="linenr" href="#l1.148" id="l1.148">   1.148</a>       class=&quot;panel_profile&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.149" id="l1.149">   1.149</a> -     filename=&quot;panel_profile.xml&quot;
+</span><span style="color:#cc0000;"><a class="linenr" href="#l1.150" id="l1.150">   1.150</a> -     label=&quot;PROFILE&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.151" id="l1.151">   1.151</a> +     filename=&quot;panel_profile_secondlife.xml&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.152" id="l1.152">   1.152</a> +     label=&quot;2nd Life&quot;
+</span><span><a class="linenr" href="#l1.153" id="l1.153">   1.153</a>       layout=&quot;topleft&quot;
+</span><span><a class="linenr" href="#l1.154" id="l1.154">   1.154</a>       help_topic=&quot;profile_profile_tab&quot;
+</span><span><a class="linenr" href="#l1.155" id="l1.155">   1.155</a>       name=&quot;panel_profile&quot; /&gt;
+</span><span style="color:#990099;"><a class="linenr" href="#l1.156" id="l1.156">   1.156</a> @@ -151,6 +45,13 @@
+</span><span><a class="linenr" href="#l1.157" id="l1.157">   1.157</a>       help_topic=&quot;profile_picks_tab&quot;
+</span><span><a class="linenr" href="#l1.158" id="l1.158">   1.158</a>       name=&quot;panel_picks&quot; /&gt;
+</span><span><a class="linenr" href="#l1.159" id="l1.159">   1.159</a>      &lt;panel
+</span><span style="color:#008800;"><a class="linenr" href="#l1.160" id="l1.160">   1.160</a> +     class=&quot;panel_profile_firstlife&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.161" id="l1.161">   1.161</a> +     filename=&quot;panel_profile_firstlife.xml&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.162" id="l1.162">   1.162</a> +     label=&quot;1st Life&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.163" id="l1.163">   1.163</a> +     layout=&quot;topleft&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.164" id="l1.164">   1.164</a> +     help_topic=&quot;profile_profile_tab&quot;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.165" id="l1.165">   1.165</a> +     name=&quot;panel_profile_firstlife&quot; /&gt;
+</span><span style="color:#008800;"><a class="linenr" href="#l1.166" id="l1.166">   1.166</a> +    &lt;panel
+</span><span><a class="linenr" href="#l1.167" id="l1.167">   1.167</a>       class=&quot;panel_notes&quot;
+</span><span><a class="linenr" href="#l1.168" id="l1.168">   1.168</a>       filename=&quot;panel_notes.xml&quot;
+</span><span><a class="linenr" href="#l1.169" id="l1.169">   1.169</a>       label=&quot;NOTES &amp;amp; PRIVACY&quot;
+</span></pre>
+    </div>
+
+    <div class="page-footer">
+        <p>Mercurial Repository: phoenix-firestorm-lgpl</p>
+        <ul class="rss-logo">
+            <li><a href="/phoenix-firestorm-lgpl/rss-log">RSS</a></li>
+            <li><a href="/phoenix-firestorm-lgpl/atom-log">Atom</a></li>
+        </ul>
+        
+    </div>
+
+    <div id="powered-by">
+        <p><a href="http://mercurial.selenic.com/" title="Mercurial"><img src="/phoenix-firestorm-lgpl/static/hglogo.png" width=75 height=90 border=0 alt="mercurial"></a></p>
+    </div>
+
+    <div id="corner-top-left"></div>
+    <div id="corner-top-right"></div>
+    <div id="corner-bottom-left"></div>
+    <div id="corner-bottom-right"></div>
+
+</div>
+
+</body>
+</html>
+
