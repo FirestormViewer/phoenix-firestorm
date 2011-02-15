@@ -45,6 +45,9 @@
 class LLFloater;
 
 typedef boost::function<LLFloater* (const LLSD& key)> LLFloaterBuildFunc;
+// [SL:KB] - Patch: UI-Base | Checked: 2010-12-01 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+typedef boost::function<const std::string& (void)> LLFloaterFileFunc;
+// [/SL:KB]
 
 class LLFloaterReg
 {
@@ -59,6 +62,9 @@ public:
 	struct BuildData
 	{
 		LLFloaterBuildFunc mFunc;
+// [SL:KB] - Patch: UI-Base | Checked: 2010-12-01 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+		LLFloaterFileFunc mFileFunc;
+// [/SL:KB]
 		std::string mFile;
 	};
 	typedef std::map<std::string, BuildData> build_map_t;
@@ -88,6 +94,11 @@ public:
 	
 	static void add(const std::string& name, const std::string& file, const LLFloaterBuildFunc& func,
 					const std::string& groupname = LLStringUtil::null);
+
+// [SL:KB] - Patch: UI-Base | Checked: 2010-12-01 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+	static void addWithFileCallback(const std::string& name, const LLFloaterFileFunc& fileFunc, const LLFloaterBuildFunc& func,
+					const std::string& groupname = LLStringUtil::null);
+// [/SL:KB]
 
 	// Helpers
 	static LLRect getFloaterRect(const std::string& name);
