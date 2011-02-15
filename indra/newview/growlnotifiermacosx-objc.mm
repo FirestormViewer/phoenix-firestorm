@@ -31,7 +31,12 @@
 #import <Cocoa/Cocoa.h>
 #import "Growl/Growl.h"
 
+// Make a happy delegate (that does nothing)
 @interface FirestormBridge : NSObject <GrowlApplicationBridgeDelegate>
+@end
+
+@implementation FirestormBridge
+@end
 
 void growlApplicationBridgeNotify(const std::string& withTitle, const std::string& description, const std::string& notificationName, 
                                 void *iconData, unsigned int iconDataSize, int priority, bool isSticky) {
@@ -49,7 +54,8 @@ void growlApplicationBridgeNotify(const std::string& withTitle, const std::strin
 
 void growlApplicationBridgeInit() {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-//    [GrowlApplicationBridge setGrowlDelegate:@""];
+    FirestormBridge *delegate = [[[FirestormBridge alloc] init] autorelease];
+    [GrowlApplicationBridge setGrowlDelegate:delegate];
     [pool release];
 }
 
@@ -65,14 +71,12 @@ void growlApplicationBridgeRegister(const std::string& appname, const std::set<s
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSMutableArray *notificationArray = [[[NSMutableArray alloc] init] autorelease];
     for(std::set<std::string>::iterator itr = notifications.begin(); itr != notifications.end(); ++itr) {
-        [notificationArray addObject:[NSString stringWithCString:itr->c_str()]];
+        [notificationArray addObject:[NSString stringWithCString:itr->c_str() encoding:NSUTF8StringEncoding]];
     }
     [GrowlApplicationBridge registerWithDictionary:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                    [NSString stringWithCString:appname.c_str()], GROWL_APP_NAME,
+                                                    [NSString stringWithCString:appname.c_str() encoding:NSUTF8StringEncoding], GROWL_APP_NAME,
                                                     notificationArray, GROWL_NOTIFICATIONS_ALL,
                                                     notificationArray, GROWL_NOTIFICATIONS_DEFAULT,
                                                     nil]];
     [pool release];
 }
-
-@end

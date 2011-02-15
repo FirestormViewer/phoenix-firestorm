@@ -33,6 +33,8 @@
 #include "lleventtimer.h"
 #include <map>
 
+class LLNotficationPtr;
+
 struct GrowlNotification
 {
 	std::string growlName;
@@ -45,6 +47,7 @@ struct GrowlNotification
 const U64 GROWL_THROTTLE_TIME = 1000000; // Maximum spam rate (in microseconds).
 const F32 GROWL_THROTTLE_CLEANUP_PERIOD = 300; // How often we clean up the list (in seconds).
 const int GROWL_MAX_BODY_LENGTH = 255; // Arbitrary.
+const std::string GROWL_IM_MESSAGE_TYPE = "Instant Message received";
 
 class GrowlManager : public LLEventTimer
 {
@@ -63,6 +66,8 @@ private:
 	
 	void loadConfig();
 	static bool onLLNotification(const LLSD& notice);
+	static bool filterOldNotifications(LLNotificationPtr pNotification);
+	static void onInstantMessage(const LLSD& im);
 	static inline bool shouldNotify();
 };
 

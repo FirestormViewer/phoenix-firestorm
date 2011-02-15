@@ -74,7 +74,6 @@ set(viewer_SOURCE_FILES
     kcwlinterface.cpp
 	fscontactsfloater.cpp
 	growlmanager.cpp
-	growlnotifier.cpp
     llagent.cpp
     llagentaccess.cpp
     llagentcamera.cpp
@@ -1379,6 +1378,7 @@ set(viewer_APPSETTINGS_FILES
     app_settings/viewerart.xml
     ${CMAKE_SOURCE_DIR}/../etc/message.xml
     ${CMAKE_SOURCE_DIR}/../scripts/messages/message_template.msg
+    app_settings/growl_notifications.xml
     )
 
 source_group("App Settings" FILES ${viewer_APPSETTINGS_FILES})

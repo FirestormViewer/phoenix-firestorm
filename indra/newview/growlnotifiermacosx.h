@@ -37,7 +37,6 @@ class GrowlNotifierMacOSX : public GrowlNotifier
 {
 public:	
 	GrowlNotifierMacOSX();
-	~GrowlNotifierMacOSX(){}
 
 	void showNotification(const std::string& notification_title, const std::string& notification_message, const std::string& notificationTypes);
 	bool isUsable();

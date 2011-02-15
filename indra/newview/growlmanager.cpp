@@ -29,19 +29,22 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "llagentdata.h"
+#include "llappviewer.h"
 #include "lldir.h"
 #include "llfile.h"
+#include "llfocusmgr.h"
+#include "llimview.h"
 #include "llnotifications.h"
 #include "llsd.h"
 #include "llsdserialize.h"
 #include "llstartup.h"
 #include "llviewercontrol.h"
 #include "llviewerwindow.h"
+#include "llwindow.h"
 
 #include "growlmanager.h"
 #include "growlnotifier.h"
-#include "llwindow.h"
-#include "llfocusmgr.h"
 
 // Platform-specific includes
 #ifdef LL_DARWIN
@@ -81,9 +84,11 @@ GrowlManager::GrowlManager() : LLEventTimer(GROWL_THROTTLE_CLEANUP_PERIOD)
 
 	// Hook into LLNotifications...
 	// We hook into all of them, even though (at the time of writing) nothing uses "alert", so more notifications can be added easily.
-	LLNotificationChannel::buildChannel("GrowlNotifications", "Visible", LLNotificationFilters::includeEverything);
-	
-	LLNotifications::instance().getChannel("GrowlNotifications")->connectChanged(&GrowlManager::onLLNotification);
+	LLNotificationChannel::buildChannel("GrowlNotifications", "Visible", &filterOldNotifications);
+	LLNotifications::instance().getChannel("GrowlNotifications")->connectChanged(&onLLNotification);
+
+	// Also hook into IM notifications.
+	LLIMModel::instance().mNewMsgSignal.connect(&GrowlManager::onInstantMessage);
 	this->loadConfig();
 }
 
@@ -100,7 +105,7 @@ void GrowlManager::loadConfig()
 	LLSD notificationLLSD;
 	std::set<std::string> notificationTypes;
 	notificationTypes.insert("Keyword Alert");
-	notificationTypes.insert("Instant Message received");
+	notificationTypes.insert(GROWL_IM_MESSAGE_TYPE);
 	if(configs.is_open())
 	{
 		LLSDSerialize::fromXML(notificationLLSD, configs);
@@ -213,6 +218,28 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 	}
 	return false;
 }
+
+bool GrowlManager::filterOldNotifications(LLNotificationPtr pNotification)
+{
+// *HACK: I don't see any better way to avoid getting old, persisted messages...
+return (pNotification->getDate().secondsSinceEpoch() >= LLDate::now().secondsSinceEpoch() - 10);
+}
+
+void GrowlManager::onInstantMessage(const LLSD& im)
+{
+	// Don't show messages from ourselves or the system.
+	LLUUID from_id = im["from_id"];
+	if(from_id == LLUUID::null || from_id == gAgentID)
+		return;
+	std::string message = im["message"];
+	std::string prefix = message.substr(0, 4);
+	if(prefix == "/me " || prefix == "/me'")
+	{
+		message = message.substr(3);
+	}
+	gGrowlManager->notify(im["from"], message, GROWL_IM_MESSAGE_TYPE);
+}
+
 
 bool GrowlManager::shouldNotify()
 {

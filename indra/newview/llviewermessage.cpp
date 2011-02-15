@@ -117,8 +117,6 @@
 
 #include "llnotificationmanager.h" //
 
-#include "growlmanager.h"
-
 #if LL_MSVC
 // disable boost::lexical_cast warning
 #pragma warning (disable:4702)
@@ -2489,13 +2487,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					region_id,
 					position,
 					true);
-
-
-				// Notifications!
-				if(offline != IM_OFFLINE)
-				{
-					gGrowlManager->notify(name, message, "Instant Message received");
-				}
 			}
 			else
 			{
@@ -2962,7 +2953,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			params.payload = payload;
 
 			LLPostponedNotification::add<LLPostponedServerObjectNotification>(params, from_id, from_group);
-			gGrowlManager->notify(name, message, "Instant Message received");
 		}
 		break;
 	case IM_FROM_TASK_AS_ALERT:
