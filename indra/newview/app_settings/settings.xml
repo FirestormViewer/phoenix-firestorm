@@ -13117,5 +13117,27 @@
 			<key>Value</key>
 			<integer>1</integer>
 		</map>
+		<key>PhoenixDisableMinZoomDist</key>
+		<map>
+			<key>Comment</key>
+			<string>Disable the constraint on the closest distance the camera is allowed to get to an object.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
+		</map>
+		<key>PhoenixIgnoreSimulatorCameraConstraints</key>
+		<map>
+			<key>Comment</key>
+			<string>Ignores the 'push' the simulator applies to your camera to keep it out of objects.(Requires restart to work correctly)</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
+		</map>
 </map>
 </llsd>
