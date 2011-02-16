@@ -111,7 +111,7 @@ Maximum 200 per group daily
      bottom="-1"
      width="470"
      height="234"
-     visible="true"
+     visible="false"
      follows="all"
      layout="topleft">
 
@@ -168,7 +168,7 @@ Maximum 200 per group daily
         </text>
 
         <text_editor
-         height="112"
+         height="89"
          left_pad="0"
          max_length="511"
          name="create_message"
@@ -192,14 +192,40 @@ Maximum 200 per group daily
         </text>
 
         <line_editor
-         left_pad="0"
-         width="168"
+         left_pad="1"
+         width="371"
          height="19"
          enabled="false"
          max_length="90"
          mouse_opaque="false"
          name="create_inventory_name"
          follows="bottom|left|right"
+         layout="topleft" />
+
+        <text
+         name="drag_and_drop_help"
+         left="4"
+         top_pad="4"
+         width="91"
+         height="50"
+         text_color="EmphasisColor"
+         type="string"
+         halign="right"
+         word_wrap="true"
+         follows="bottom|left"
+         layout="topleft">
+        Drag and drop item here to attach it:
+        </text>
+
+        <icon
+         left_pad="4"
+         top_pad="-50"
+         height="72"
+         image_name="DropTarget"
+         mouse_opaque="true"
+         name="drop_icon"
+         width="72"
+         follows="bottom|left"
          layout="topleft" />
 
         <button
@@ -209,36 +235,11 @@ Maximum 200 per group daily
          image_disabled="TrashItem_Disabled"
          tool_tip="Remove attachment from your notification"
          left_pad="4"
+         top_pad="-72"
          width="19"
          height="19"
-         follows="bottom|right"
+         follows="bottom|left"
          layout="topleft" />
-
-        <icon
-         top_pad="-19"
-         left_pad="4"
-         height="72"
-         image_name="DropTarget"
-         mouse_opaque="true"
-         name="drop_icon"
-         width="72"
-         follows="bottom|right"
-         layout="topleft" />
-
-        <text
-         name="drag_and_drop_help"
-         top_pad="-50"
-         left="95"
-         width="191"
-         height="50"
-         text_color="EmphasisColor"
-         type="string"
-         halign="right"
-         word_wrap="true"
-         follows="left|bottom|right"
-         layout="topleft">
-        Drag and drop item here to attach it:
-        </text>
 
         <button
          name="open_inventory"
@@ -270,9 +271,10 @@ Maximum 200 per group daily
          tool_tip="Drag an inventory item onto this target box to send it with this notice. You must have permission to copy and transfer the item in order to attach it."
          left="4"
          bottom="-4"
-         width="375"
-         height="114"
+         width="360"
+         height="94"
          border="true"
+         follows="bottom|left|right"
          layout="topleft" />
 
     </panel>
@@ -323,8 +325,8 @@ Maximum 200 per group daily
          layout="topleft"
          left_delta="0"
          name="lbl3"
-         top_pad="15"
-         visible="false"
+         top_pad="8"
+         visible="true"
          follows="top|left"
          width="70">
         Subject:
@@ -340,7 +342,7 @@ Maximum 200 per group daily
          max_length="63"
          name="view_subject"
          top_delta="-1"
-         visible="false"
+         visible="true"
          follows="left|right|top"
          />
         <text
@@ -351,7 +353,7 @@ Maximum 200 per group daily
          left="10"
          name="lbl4"
          top_pad="4"
-         visible="false"
+         visible="true"
          follows="top|left"
          width="70">
         Message:
@@ -387,14 +389,15 @@ Maximum 200 per group daily
          max_length="63"
          mouse_opaque="false"
          name="view_inventory_name"
-         width="236"
+         width="380"
          follows="bottom|left|right" />
+
         <button
-         follows="bottom|right"
+         follows="bottom|left"
          height="23"
          label="Open Attachment"
          layout="topleft"
-         left_pad="4"
+         top_pad="4"
          name="open_attachment"
          width="140" />
         </panel>

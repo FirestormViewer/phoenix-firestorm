@@ -22,15 +22,6 @@ Hover your mouse over the options for more help.
         Retrieving member data
     </panel.string>
 
-
-<!--
-    bg_opaque_color="DkGray2"
-    bg_visible="true"
-    background_opaque="true"
-    border="true"
-    bevel_style="in"
-//-->
-
    <panel
     name="group_general_panel"
     left="8"
@@ -87,35 +78,12 @@ Hover your mouse over the options for more help.
     <text
      name="founder_name"
      left_pad="4"
-     width="188"
+     right="-1"
      height="20"
      initial_value="(loading ...)"
      type="string"
      use_ellipses="true"
      follows="top|left|right"
-     layout="topleft" />
-
-    <text
-     name="join_cost_text"
-     left_pad="4"
-     width="86"
-     height="20"
-     halign="right"
-     type="string"
-     visible="true"
-     follows="top|right"
-     layout="topleft">
-    Join (L$00000)
-    </text>
-
-    <button
-     name="btn_join"
-     left_pad="4"
-     right="-1"
-     height="20"
-     label="JOIN NOW!"
-     visible="true"
-     follows="top|right"
      layout="topleft" />
 
     <texture_picker
@@ -134,8 +102,9 @@ Hover your mouse over the options for more help.
     <text_editor
      name="charter"
      left_pad="4"
+     top_pad="-109"
      right="-1"
-     height="110"
+     height="86"
      type="string"
      follows="left|top|right"
      max_length="511"
@@ -143,6 +112,29 @@ Hover your mouse over the options for more help.
      layout="topleft">
     Group Charter
     </text_editor>
+
+    <text
+     name="join_cost_text"
+     width="246"
+     top_pad="4"
+     height="20"
+     halign="right"
+     type="string"
+     visible="true"
+     follows="top|right"
+     layout="topleft">
+    Join (L$00000)
+    </text>
+
+    <button
+     name="btn_join"
+     left_pad="4"
+     right="-1"
+     height="20"
+     label="JOIN NOW!"
+     visible="true"
+     follows="top|right"
+     layout="topleft" />
 
 <!--
     removing layouts due to bugs or strange side-effects with name_list and scroll_list
@@ -167,7 +159,7 @@ Hover your mouse over the options for more help.
     <name_list
      left="0"
      top_pad="4"
-     height="117"
+     height="112"
      column_padding="0"
      draw_heading="true"
      heading_height="23"
@@ -199,14 +191,15 @@ Hover your mouse over the options for more help.
      auto_resize="false"
      follows="top|left|right"
      layout="topleft">
+//-->
 
     <layout_stack
      name="group_preferences_layout"
      top_pad="4"
      right="-1"
-     height="111"
+     height="131"
      orientation="horizontal"
-     follows="all"
+     follows="bottom|left|right"
      layout="topleft">
 
     <layout_panel
@@ -214,20 +207,8 @@ Hover your mouse over the options for more help.
      name="user_preferences_container"
      bevel_style="in"
      border="true"
-     user_resize="false"
+     user_resize="true"
      follows="top|left|right"
-     layout="topleft">
-
-    using normal panels now
-//-->
-
-    <panel
-     left="0"
-     bottom="-1"
-     width="226"
-     height="120"
-     name="user_preferences_container"
-     follows="bottom|left"
      layout="topleft">
 
         <text
@@ -267,7 +248,7 @@ Hover your mouse over the options for more help.
          <text
          name="active_title_label"
          left="0"
-         top_pad="10"
+         top_pad="30"
          width="200"
          height="12"
          type="string"
@@ -286,7 +267,6 @@ Hover your mouse over the options for more help.
          tool_tip="Sets the title that appears in your avatar's name tag when this group is active."
          top_pad="2" />
 
-<!--
     </layout_panel>
 
     <layout_panel
@@ -303,19 +283,10 @@ Hover your mouse over the options for more help.
      width="228"
      bevel_style="in"
      border="true"
-     user_resize="false"
+     user_resize="true"
      follows="top|left|right"
      layout="topleft">
-//-->
-    </panel>
-    <panel
-     bottom="-1"
-     left="230"
-     width="226"
-     height="120"
-     name="group_preferences_container"
-     follows="bottom|right"
-     layout="topleft">
+
 
         <text
          follows="left|top|right"
@@ -330,6 +301,17 @@ Hover your mouse over the options for more help.
         </text>
 
         <check_box
+         name="show_in_group_list"
+         tool_tip="Let people see this group in search results"
+         label="Show in search"
+         left="0"
+         top_pad="4"
+         width="10"
+         height="16"
+         initial_value="true"
+         layout="topleft" />
+
+        <check_box
          name="open_enrollement"
          label="Anyone can join"
          tool_tip="Sets whether this group allows new members to join without being invited."
@@ -339,6 +321,7 @@ Hover your mouse over the options for more help.
          width="10"
          layout="topleft" />
 
+<!--
         <layout_stack
          name="enrollment_fee_layout"
          top_pad="4"
@@ -355,16 +338,17 @@ Hover your mouse over the options for more help.
          auto_resize="false"
          user_resize="false"
          layout="topleft">
-
+//-->
         <check_box
          name="check_enrollment_fee"
          tool_tip="Sets whether to require an enrollment fee to join the group"
          label="Cost to join"
-         left="0"
-         top="0"
+         top_pad="4"
          width="10"
          height="16"
          layout="topleft" />
+
+<!--
         </layout_panel>
 
         <layout_panel
@@ -372,42 +356,30 @@ Hover your mouse over the options for more help.
          width="114"
          user_resize="false"
          layout="topleft">
-
+//-->
         <spinner
          name="spin_enrollment_fee"
          tool_tip="New members must pay this fee to join the group when Enrollment Fee is checked."
-         left="0"
-         top="0"
-         right="-1"
+         top_pad="0"
+         left_pad="14"
+         right="-6"
          height="16"
-         label="         L$"
-         label_width="50"
+         label="L$"
+         label_width="20"
          decimal_digits="0"
-         halign="right"
          increment="1"
          max_val="99999"
-         follows="top|right"
+         follows="top|left|right"
          layout="topleft" />
-
+<!--
         </layout_panel>
         </layout_stack>
-
-        <check_box
-         name="show_in_group_list"
-         tool_tip="Let people see this group in search results"
-         label="Show in search"
-         left="0"
-         top_pad="4"
-         width="10"
-         height="16"
-         initial_value="true"
-         layout="topleft" />
-
+//-->
         <combo_box
          name="group_mature_check"
          tool_tip="Sets whether your group contains information rated as Moderate"
          left="0"
-         top_pad="4"
+         top_pad="8"
          right="-1"
          height="23"
          follows="left|right|top"
@@ -424,12 +396,11 @@ Hover your mouse over the options for more help.
              name="pg"
              value="Not Mature" />
         </combo_box>
+    </layout_panel>
+    </layout_stack>
 <!--
     </layout_panel>
     </layout_stack>
-    </layout_panel>
-    </layout_stack>
 //-->
-    </panel>
     </panel>
 </panel>
