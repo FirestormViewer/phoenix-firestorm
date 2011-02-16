@@ -40,6 +40,11 @@ LLImageDecodeThread::LLImageDecodeThread(bool threaded)
 
 // MAIN THREAD
 // virtual
+LLImageDecodeThread::~LLImageDecodeThread()
+{
+	delete mCreationMutex ;
+}
+
 S32 LLImageDecodeThread::update(U32 max_time_ms)
 {
 	LLMutexLock lock(mCreationMutex);

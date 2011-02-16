@@ -540,13 +540,16 @@ BOOL LLIMFloater::postBuild()
 	LLButton* slide_left = getChild<LLButton>("slide_left_btn");
 	slide_left->setVisible(mControlPanel->getParent()->getVisible());
 	slide_left->setClickedCallback(boost::bind(&LLIMFloater::onSlide, this));
+	slide_left->setFocusReceivedCallback(boost::bind(&LLIMFloater::onSlideLeftFocusReceived, _1, this) );
 
 	LLButton* slide_right = getChild<LLButton>("slide_right_btn");
 	slide_right->setVisible(!mControlPanel->getParent()->getVisible());
 	slide_right->setClickedCallback(boost::bind(&LLIMFloater::onSlide, this));
+	slide_right->setFocusReceivedCallback(boost::bind(&LLIMFloater::onSlideRightFocusReceived, _1, this) );
 	
 	LLButton* view_profile  = getChild<LLButton>("view_profile_btn");
 	view_profile->setClickedCallback(boost::bind(&LLIMFloater::onViewProfileButtonClicked, this));
+	view_profile->setFocusReceivedCallback(boost::bind(&LLIMFloater::onViewProfileFocusReceived, _1, this) );
 	
 	LLButton* group_profile = getChild<LLButton>("group_info_btn");
 	group_profile->setClickedCallback(boost::bind(&LLIMFloater::onGroupInfoButtonClicked, this));
@@ -952,8 +955,12 @@ void LLIMFloater::setVisible(BOOL visible)
 	{
 		//only if floater was construced and initialized from xml
 		updateMessages();
+		LLIMFloaterContainer* im_container = LLIMFloaterContainer::getInstance();
+		
 		//prevent stealing focus when opening a background IM tab (EXT-5387, checking focus for EXT-6781)
-		if (!isChatMultiTab() || hasFocus())
+		// If this is docked, is the selected tab, and the im container has focus, put focus in the input ctrl -KC
+		bool is_active = im_container->getActiveFloater() == this && im_container->hasFocus();
+		if (!isChatMultiTab() || is_active || hasFocus())
 		{
 			mInputEditor->setFocus(TRUE);
 		}
@@ -1173,6 +1180,33 @@ void LLIMFloater::onInputEditorFocusReceived( LLFocusableElement* caller, void* 
 		//in disconnected state IM input editor should be disabled
 		self->mInputEditor->setEnabled(!gDisconnected);
 	}
+}
+
+// static
+void LLIMFloater::onSlideLeftFocusReceived(LLFocusableElement* caller, void* userdata)
+{
+	LLIMFloater* self= (LLIMFloater*) userdata;
+	LLLineEditor* inputEditor =
+		self->getChild<LLLineEditor>("chat_editor");
+	inputEditor->setFocus(TRUE);
+}
+
+// static
+void LLIMFloater::onSlideRightFocusReceived(LLFocusableElement* caller, void* userdata)
+{
+	LLIMFloater* self= (LLIMFloater*) userdata;
+	LLLineEditor* inputEditor = 
+		self->getChild<LLLineEditor>("chat_editor");
+	inputEditor->setFocus(TRUE);
+}
+
+// static
+void LLIMFloater::onViewProfileFocusReceived(LLFocusableElement* caller, void* userdata)
+{
+	LLIMFloater* self= (LLIMFloater*) userdata;
+	LLLineEditor* inputEditor = 
+		self->getChild<LLLineEditor>("chat_editor");
+	inputEditor->setFocus(TRUE);
 }
 
 // static

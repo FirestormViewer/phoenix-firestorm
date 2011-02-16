@@ -20,7 +20,7 @@ GET THE PHOENIX SOURCE
 Open up cygwin and run the following commands one at a time
 	mkdir /cygdrive/c/code
 	cd /cygdrive/c/code
-	hg clone http://hg.phoenixviewer.com/phoenix-firestorm-lpgl
+	hg clone http://hg.phoenixviewer.com/phoenix-firestorm-lgpl/
 
 Make sure to copy fmod.dll into both your indra/ folder and also libraries/i686-win32/Release and libraries/RelWithDebInfo
 
@@ -35,6 +35,9 @@ Execute the command to build firestorm in the cygwin window:
 	./build_firestorm_win32.sh
 
 This will do a clean compile. Rebuilds should be possible by specifying --rebuild. 
+
+By default your build will be set to use channel private-(your build machine). If you want to change this, 
+you can use pass the option "--chan private-SomeNameYouPrefer" to the build command above.
 
 NOTE: It is normal to see errors about ambiguous include/library paths at this time. It will not cause the build to fail
 

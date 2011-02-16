@@ -58,6 +58,7 @@
 #include "llappviewer.h"
 #include "lluploaddialog.h"
 #include "lltrans.h"
+#include "llimfloatercontainer.h"
 
 
 // linden libraries
@@ -355,6 +356,41 @@ class LLFileCloseWindow : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
+		// If the IM container is focused, try to close the selected tab instead of the container -KC
+		LLIMFloaterContainer* im_container = LLIMFloaterContainer::getInstance();
+		if (im_container && im_container->hasFocus())
+		{
+			LLFloater* floater = im_container->getActiveFloater();
+			// is user closeable and is system closeable
+			if (floater && floater->canClose())
+			{
+				if (floater->isCloseable())
+				{
+					floater->closeFloater();
+					// and return focus back to the container
+					im_container->setFocus(TRUE);
+				}
+				else
+				{
+					// close the im container if selected tab is not closable (ie. contacts or nerby chat) -KC
+					im_container->closeFloater();
+
+					// if nothing took focus after closing focused floater
+					// give it to next floater (to allow closing multiple windows via keyboard in rapid succession)
+					if (gFocusMgr.getKeyboardFocus() == NULL)
+					{
+						// HACK: use gFloaterView directly in case we are using Ctrl-W to close snapshot window
+						// which sits in gSnapshotFloaterView, and needs to pass focus on to normal floater view
+						gFloaterView->focusFrontFloater();
+					}
+				}
+				
+				
+				
+				return true;
+			}
+		}
+		
 		LLFloater::closeFocusedFloater();
 
 		return true;
@@ -896,6 +932,44 @@ void upload_done_callback(const LLUUID& uuid, void* user_data, S32 result, LLExt
 	}
 }
 
+void temp_upload_done_callback(const LLUUID& uuid, void* user_data, S32 result, LLExtStat ext_status)
+{
+	LLResourceData* data = (LLResourceData*)user_data;
+	if (result >= 0)
+	{
+		LLFolderType::EType dest_loc = (data->mPreferredLocation == LLFolderType::FT_NONE) ? LLFolderType::assetTypeToFolderType(data->mAssetInfo.mType) : data->mPreferredLocation;
+		LLUUID folder_id(gInventory.findCategoryUUIDForType(dest_loc));
+		LLUUID item_id;
+		item_id.generate();
+		LLPermissions perm;
+		perm.init(gAgentID, gAgentID, gAgentID, gAgentID);
+		perm.setMaskBase(PERM_ALL);
+		perm.setMaskOwner(PERM_ALL);
+		perm.setMaskEveryone(PERM_ALL);
+		perm.setMaskGroup(PERM_ALL);
+		LLPointer<LLViewerInventoryItem> item = new LLViewerInventoryItem(item_id, folder_id, perm,
+													data->mAssetInfo.mTransactionID.makeAssetID(gAgent.getSecureSessionID()),
+													data->mAssetInfo.mType, data->mInventoryType, data->mAssetInfo.getName(),
+													"Temporary asset", LLSaleInfo::DEFAULT, LLInventoryItemFlags::II_FLAGS_NONE,
+													time_corrected());
+		item->updateServer(TRUE);
+		gInventory.updateItem(item);
+		gInventory.notifyObservers();
+		LLFloaterReg::showInstance("preview_texture", LLSD(item_id), TRUE);
+//		open_texture(item_id, std::string("Texture: ") + item->getName(), TRUE, LLUUID::null, FALSE);
+	}
+	else
+	{
+		LLSD args;
+		args["FILE"] = LLInventoryType::lookupHumanReadable(data->mInventoryType);
+		args["REASON"] = std::string(LLAssetStorage::getErrorString(result));
+		LLNotificationsUtil::add("CannotUploadReason", args);
+	}
+
+	LLUploadDialog::modalUploadFinished();
+	delete data;
+}
+
 void upload_new_resource(const LLTransactionID &tid, LLAssetType::EType asset_type,
 			 std::string name,
 			 std::string desc, S32 compression_info,
@@ -915,6 +989,7 @@ void upload_new_resource(const LLTransactionID &tid, LLAssetType::EType asset_ty
 	}
 
 	LLAssetID uuid = tid.makeAssetID(gAgent.getSecureSessionID());
+	BOOL temp_upload = FALSE;
 	
 	if( LLAssetType::AT_SOUND == asset_type )
 	{
@@ -924,6 +999,12 @@ void upload_new_resource(const LLTransactionID &tid, LLAssetType::EType asset_ty
 	if( LLAssetType::AT_TEXTURE == asset_type )
 	{
 		LLViewerStats::getInstance()->incStat(LLViewerStats::ST_UPLOAD_TEXTURE_COUNT );
+		temp_upload = gSavedSettings.getBOOL("TemporaryUpload");
+		if (temp_upload)
+		{
+			name = "[temp] " + name;
+		}
+		gSavedSettings.setBOOL("TemporaryUpload", FALSE);
 	}
 	else
 	if( LLAssetType::AT_ANIMATION == asset_type)
@@ -960,7 +1041,7 @@ void upload_new_resource(const LLTransactionID &tid, LLAssetType::EType asset_ty
 	lldebugs << "Folder: " << gInventory.findCategoryUUIDForType((destination_folder_type == LLFolderType::FT_NONE) ? LLFolderType::assetTypeToFolderType(asset_type) : destination_folder_type) << llendl;
 	lldebugs << "Asset Type: " << LLAssetType::lookup(asset_type) << llendl;
 	std::string url = gAgent.getRegion()->getCapability("NewFileAgentInventory");
-	if (!url.empty())
+	if (!url.empty() && !temp_upload)
 	{
 		llinfos << "New Agent Inventory via capability" << llendl;
 		LLSD body;
@@ -982,6 +1063,8 @@ void upload_new_resource(const LLTransactionID &tid, LLAssetType::EType asset_ty
 	}
 	else
 	{
+		if (!temp_upload)
+		{
 		llinfos << "NewAgentInventory capability not found, new agent inventory via asset system." << llendl;
 		// check for adequate funds
 		// TODO: do this check on the sim
@@ -1000,6 +1083,7 @@ void upload_new_resource(const LLTransactionID &tid, LLAssetType::EType asset_ty
 				return;
 			}
 		}
+		}
 
 		LLResourceData* data = new LLResourceData;
 		data->mAssetInfo.mTransactionID = tid;
@@ -1014,7 +1098,7 @@ void upload_new_resource(const LLTransactionID &tid, LLAssetType::EType asset_ty
 		data->mAssetInfo.setDescription(desc);
 		data->mPreferredLocation = destination_folder_type;
 
-		LLAssetStorage::LLStoreAssetCallback asset_callback = &upload_done_callback;
+		LLAssetStorage::LLStoreAssetCallback asset_callback = temp_upload ? &temp_upload_done_callback : &upload_done_callback;
 		if (callback)
 		{
 			asset_callback = callback;
@@ -1022,7 +1106,9 @@ void upload_new_resource(const LLTransactionID &tid, LLAssetType::EType asset_ty
 		gAssetStorage->storeAssetData(data->mAssetInfo.mTransactionID, data->mAssetInfo.mType,
 										asset_callback,
 										(void*)data,
-										FALSE);
+										temp_upload,
+										TRUE,
+										temp_upload);
 	}
 }
 

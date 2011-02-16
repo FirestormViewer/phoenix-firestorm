@@ -482,6 +482,7 @@ public:
 		AlignThread::sInstance->shutdown();
 		delete AlignThread::sInstance;
 		AlignThread::sInstance = NULL;
+		LLSelectMgr::getInstance()->sendMultipleUpdate(UPD_POSITION);
 		cmdline_printchat("The align tool is finished.");
 		return TRUE;
 	}
@@ -653,7 +654,6 @@ void AlignThread::run()
 	}
 	
 	
-	LLSelectMgr::getInstance()->sendMultipleUpdate(UPD_POSITION);
 	QToolAlign::getInstance()->aligndone();
 }
 

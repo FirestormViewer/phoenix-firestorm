@@ -1,16 +1,16 @@
 <?xml version="1.0" ?><notifications>
     <global name="skipnexttime">
 
-		Don&apos;t show me this again
+		Do not show me this again.
   </global>
 
   <global name="alwayschoose">
 
-		Always choose this option
+		Always choose this option.
   </global>
 
   <global name="implicitclosebutton">
-		Close
+		Close.
   </global>
 
   <template name="okbutton">
@@ -101,7 +101,7 @@
    name="MissingAlert"
    label="Unknown Notification Message"
    type="alertmodal">
-Your version of [APP_NAME] does not know how to display the notification it just received.  Please verify that you have the latest Viewer installed.
+Your version of [APP_NAME] does not know how to display the notification it just received.  Please verify that you have the latest version of [APP_NAME] installed.
 
 Error details: The notification called &apos;[_NAME]&apos; was not found in notifications.xml.
     <usetemplate
@@ -153,7 +153,7 @@ No tutorial is currently available.
    icon="alertmodal.tga"
    name="BadInstallation"
    type="alertmodal">
- An error occurred while updating [APP_NAME].  Please [http://get.secondlife.com download the latest version] of the Viewer.
+ An error occurred while updating [APP_NAME].  Please [http://get.secondlife.com download the latest version] of the viewer.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -255,7 +255,7 @@ Save all changes to clothing/body parts?
    icon="alertmodal.tga"
    name="GrantModifyRights"
    type="alertmodal">
-Granting modify rights to another Resident allows them to change, delete or take ANY objects you may have in-world. Be VERY careful when handing out this permission.
+Granting modify rights to another resident allows them to change, delete or take ANY objects you may have in-world. Be VERY careful when handing out this permission.
 Do you want to grant modify rights for [NAME]?
     <usetemplate
      name="okcancelbuttons"
@@ -267,8 +267,8 @@ Do you want to grant modify rights for [NAME]?
    icon="alertmodal.tga"
    name="GrantModifyRightsMultiple"
    type="alertmodal">
-Granting modify rights to another Resident allows them to change ANY objects you may have in-world. Be VERY careful when handing out this permission.
-Do you want to grant modify rights for the selected Residents?
+Granting modify rights to another resident allows them to change ANY objects you may have in-world. Be VERY careful when handing out this permission.
+Do you want to grant modify rights for the selected residents?
     <usetemplate
      name="okcancelbuttons"
      notext="No"
@@ -290,7 +290,7 @@ Do you want to revoke modify rights for [NAME]?
    icon="alertmodal.tga"
    name="RevokeModifyRightsMultiple"
    type="alertmodal">
-Do you want to revoke modify rights for the selected Residents?
+Do you want to revoke modify rights for the selected residents?
     <usetemplate
      name="okcancelbuttons"
      notext="No"
@@ -353,9 +353,9 @@ Are you sure you want to continue?
 You are about to add the Ability &apos;[ACTION_NAME]&apos; to the Role &apos;[ROLE_NAME]&apos;.
 
  *WARNING*
- Any Member in a Role with this Ability can assign themselves -- and any other member -- to Roles that have more powers than they  currently have, potentially elevating themselves to near-Owner power. Be sure you know what you&apos;re doing before assigning this Ability.
+ Any Member in a role with this ability can assign themselves -- and any other member -- to roles that have more powers than they  currently have, potentially elevating themselves to near-Owner power. Be sure you know what you are doing before assigning this ability.
 
-Add this Ability to &apos;[ROLE_NAME]&apos;?
+Add this ability to &apos;[ROLE_NAME]&apos;?
     <usetemplate
      name="okcancelbuttons"
      notext="No"
@@ -366,12 +366,12 @@ Add this Ability to &apos;[ROLE_NAME]&apos;?
    icon="alertmodal.tga"
    name="AssignDangerousAbilityWarning"
    type="alertmodal">
-You are about to add the Ability &apos;[ACTION_NAME]&apos; to the Role &apos;[ROLE_NAME]&apos;.
+You are about to add the ability &apos;[ACTION_NAME]&apos; to the role &apos;[ROLE_NAME]&apos;.
 
  *WARNING*
- Any Member in a Role with this Ability can assign themselves -- and any other member -- all Abilities, elevating themselves to near-Owner power.
+ Any Member in a role with this ability can assign themselves -- and any other member -- all abilities, elevating themselves to near-Owner power.
 
-Add this Ability to &apos;[ROLE_NAME]&apos;?
+Add this ability to &apos;[ROLE_NAME]&apos;?
     <usetemplate
      name="okcancelbuttons"
      notext="No"
@@ -473,7 +473,7 @@ Your selling price will be L$[SALE_PRICE] and will be authorized for sale to [NA
    icon="alertmodal.tga"
    name="ConfirmLandSaleToAnyoneChange"
    type="alertmodal">
-ATTENTION: Clicking &apos;sell to anyone&apos; makes your land available to the entire [SECOND_LIFE] community, even those not in this region.
+ATTENTION: Clicking &apos;Sell to anyone&apos; makes your land available to the entire [SECOND_LIFE] community, even those not in this region.
 
 The selected [LAND_SIZE] m² land is being set for sale.
 Your selling price will be L$[SALE_PRICE] and will be authorized for sale to [NAME].
@@ -502,7 +502,7 @@ Objects: [N]
    icon="alertmodal.tga"
    name="ReturnObjectsOwnedByUser"
    type="alertmodal">
-Are you sure you want to return all objects owned by the Resident &apos;[NAME]&apos; on this parcel of land back to their inventory?
+Are you sure you want to return all objects owned by the resident &apos;[NAME]&apos; on this parcel of land back to their inventory?
 
 Objects: [N]
     <usetemplate
@@ -528,7 +528,7 @@ Objects: [N]
    icon="alertmodal.tga"
    name="ReturnObjectsNotOwnedBySelf"
    type="alertmodal">
-Are you sure you want to return all objects NOT owned by you on this parcel of land back to their owner&apos;s inventory?
+Are you sure you want to return all objects *NOT* owned by you on this parcel of land back to their owner&apos;s inventory?
 Transferable objects deeded to a group will be returned to their previous owners.
 
 *WARNING* This will delete the non-transferable objects deeded to the group!
@@ -544,7 +544,7 @@ Objects: [N]
    icon="alertmodal.tga"
    name="ReturnObjectsNotOwnedByUser"
    type="alertmodal">
-Are you sure you want to return all objects NOT owned by [NAME] on this parcel of land back to their owner&apos;s inventory?
+Are you sure you want to return all objects *NOT* owned by [NAME] on this parcel of land back to their owner&apos;s inventory?
 Transferable objects deeded to a group will be returned to their previous owners.
 
 *WARNING* This will delete the non-transferable objects deeded to the group!
@@ -582,7 +582,7 @@ Are you sure you want to disable all objects in this region?
    icon="alertmodal.tga"
    name="ReturnObjectsNotOwnedByGroup"
    type="alertmodal">
-Return the objects on this parcel of land that are NOT shared with the group [NAME] back to their owners?
+Return the objects on this parcel of land that are *NOT* shared with the group [NAME] back to their owners?
 
 Objects: [N]
     <usetemplate
@@ -595,7 +595,7 @@ Objects: [N]
    icon="alertmodal.tga"
    name="UnableToDisableOutsideScripts"
    type="alertmodal">
-Can not disable scripts.
+Cannot disable scripts.
 This entire region is damage enabled.
 Scripts must be allowed to run for weapons to work.
   </notification>
@@ -606,7 +606,7 @@ Scripts must be allowed to run for weapons to work.
    type="alertmodal">
 Multiple faces are currently selected.
 If you continue this action, separate instances of media will be set on multiple faces of the object.
-To place the media on only one face, choose Select Face and click on the desired face of that object then click Add.
+To place the media on only one face, choose Select Face and click on the desired face of that object then click &apos;Add&apos;.
     <usetemplate
       ignoretext="Media will be set on multiple selected faces"
       name="okcancelignore"
@@ -618,7 +618,7 @@ To place the media on only one face, choose Select Face and click on the desired
    icon="alertmodal.tga"
    name="MustBeInParcel"
    type="alertmodal">
-You must be standing inside the land parcel to set its Landing Point.
+You must be standing inside the land parcel to set its landing point.
   </notification>
 
   <notification
@@ -650,7 +650,7 @@ Email snapshot with the default subject or message?
    icon="alertmodal.tga"
    name="ErrorProcessingSnapshot"
    type="alertmodal">
-Error processing snapshot data
+Error processing snapshot data.
   </notification>
 
   <notification
@@ -693,7 +693,7 @@ The outfit folder contains no clothing, body parts, or attachments.
    icon="alertmodal.tga"
    name="CannotWearTrash"
    type="alertmodal">
-You can not wear clothes or body parts that are in the trash
+You cannot wear clothes or body parts that are in the trash.
   </notification>
 
   <notification
@@ -708,14 +708,13 @@ Exceeds the attachments limit of [MAX_ATTACHMENTS] objects. Please detach anothe
    icon="alertmodal.tga"
    name="CannotWearInfoNotComplete"
    type="alertmodal">
-You can not wear that item because it has not yet loaded. Please try again in a minute.
+You cannot wear this item because it has not yet loaded. Please try again in a minute.
   </notification>
 
   <notification
    icon="alertmodal.tga"
    name="MustHaveAccountToLogIn"
    type="alertmodal">
-Oops! Something was left blank.
 You need to enter the Username name of your avatar.
 
 You need an account to enter [SECOND_LIFE]. Would you like to create one now?
@@ -736,7 +735,7 @@ You need an account to enter [SECOND_LIFE]. Would you like to create one now?
    icon="alertmodal.tga"
    name="InvalidCredentialFormat"
    type="alertmodal">
-You need to enter either the Username or both the First and Last name of your avatar into the Username field, then login again.
+You need to enter either the username or both the first and last name of your account into the Username field, then login again.
   </notification>
   
 
@@ -746,7 +745,7 @@ You need to enter either the Username or both the First and Last name of your av
    type="alertmodal">
 Classified ads appear in the &apos;Classified&apos; section of the Search directory and on [http://secondlife.com/community/classifieds secondlife.com] for one week.
 Fill out your ad, then click &apos;Publish...&apos; to add it to the directory.
-You&apos;ll be asked for a price to pay when clicking Publish.
+You will be asked for a price to pay when clicking Publish.
 Paying more makes your ad appear higher in the list, and also appear higher when people search for keywords.
     <usetemplate
      ignoretext="How to create a new Classified ad"
@@ -859,7 +858,7 @@ Please select a history item to view.
    icon="alertmodal.tga"
    name="ResetShowNextTimeDialogs"
    type="alertmodal">
-Would you like to re-enable all these popups, which you previously indicated &apos;Don&apos;t show me again&apos;?
+Would you like to re-enable all these popups, which you previously indicated &apos;Do not show me again&apos;?
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
@@ -882,36 +881,36 @@ Would you like to disable all popups which can be skipped?
    icon="alertmodal.tga"
    name="CacheWillClear"
    type="alertmodal">
-Cache will be cleared after you restart [APP_NAME].
+Cache will be cleared after restarting [APP_NAME].
   </notification>
 
   <notification
    icon="alertmodal.tga"
    name="CacheWillBeMoved"
    type="alertmodal">
-Cache will be moved after you restart [APP_NAME].
-Note: This will clear the cache.
+Cache will be moved after restarting [APP_NAME].
+Note: This will also clear the cache.
   </notification>
 
   <notification
    icon="alertmodal.tga"
    name="ChangeConnectionPort"
    type="alertmodal">
-Port settings take effect after you restart [APP_NAME].
+Port settings take effect after restarting [APP_NAME].
   </notification>
 
   <notification
    icon="alertmodal.tga"
    name="ChangeSkin"
    type="alertmodal">
-The new skin will appear after you restart [APP_NAME].
+The new skin will appear after restarting [APP_NAME].
   </notification>
 
   <notification
    icon="alertmodal.tga"
    name="ChangeLanguage"
    type="alertmodal">
-Changing language will take effect after you restart [APP_NAME].
+The selected language will be applied after restarting [APP_NAME].
   </notification>
 
   <notification
@@ -1026,8 +1025,8 @@ There was a problem saving a compiled script due to the following reason: [REASO
    icon="alertmodal.tga"
    name="StartRegionEmpty"
    type="alertmodal">
-Oops, Your Start Region is not defined.
-Please type the Region name in Start Location box or choose My Last Location or My Home as your Start Location.
+Your start region is not defined.
+Please type a region name in the Start Location box, or choose &apos;My Last Location&apos; or &apos;My Home&apos; as your start location.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -1059,7 +1058,7 @@ Unable to write file [[FILE]]
    icon="alertmodal.tga"
    name="UnsupportedHardware"
    type="alertmodal">
-Just so you know, your computer does not meet [APP_NAME]&apos;s minimum system requirements. You may experience poor performance. Unfortunately, the [SUPPORT_SITE] can't provide technical support for unsupported system configurations.
+Just so you know, your computer may not meet [APP_NAME]&apos;s minimum system requirements. You may experience poor performance. Unfortunately, the [SUPPORT_SITE] can't provide technical support for unsupported system configurations.
 
 Visit [_URL] for more information?
     <url option="0" name="url">
@@ -1078,7 +1077,7 @@ Visit [_URL] for more information?
    name="UnknownGPU"
    type="alertmodal">
 Your system contains a graphics card that [APP_NAME] doesn't recognize.
-This is often the case with new hardware that hasn&apos;t been tested yet with [APP_NAME].  It will probably be ok, but you may need to adjust your graphics settings.
+This is often the case with new hardware that has not been tested yet with [APP_NAME].  It will probably be ok, but you may need to adjust your graphics settings.
 (Me &gt; Preferences &gt; Graphics).
     <form name="form">
       <ignore name="ignore"
@@ -1228,7 +1227,7 @@ Eject [AVATAR_NAME] from your land?
    name="EjectAvatarFromGroup"
    persist="true"
    type="notify">
-You ejected [AVATAR_NAME] from group [GROUP_NAME]
+You ejected [AVATAR_NAME] from group [GROUP_NAME].
   </notification>
 
   <notification
@@ -1282,7 +1281,7 @@ You can only link complete sets of objects, and must select more than one object
    icon="alertmodal.tga"
    name="CannotLinkModify"
    type="alertmodal">
-Unable to link because you don&apos;t have modify permission on all the objects.
+Unable to link because you do not have modify permission on all the objects.
 
 Please make sure none are locked, and that you own all of them.
   </notification>
@@ -1309,8 +1308,8 @@ Please make sure the file has a correct file extension.
    icon="alertmodal.tga"
    name="InvalidFileExtension"
    type="alertmodal">
-Invalid file extension [EXTENSION]
-Expected [VALIDS]
+Invalid file extension [EXTENSION].
+Expected [VALIDS].
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -1320,7 +1319,7 @@ Expected [VALIDS]
    icon="alertmodal.tga"
    name="CannotUploadSoundFile"
    type="alertmodal">
-Couldn&apos;t open uploaded sound file for reading:
+Could not open uploaded sound file for reading:
 [FILE]
   </notification>
 
@@ -1393,7 +1392,7 @@ Problem with file [FILE]:
    icon="alertmodal.tga"
    name="CannotOpenTemporarySoundFile"
    type="alertmodal">
-Couldn&apos;t open temporary compressed sound file for writing: [FILE]
+Could not open temporary compressed sound file for writing: [FILE]
   </notification>
 
   <notification
@@ -1414,8 +1413,7 @@ Unable to encode file: [FILE]
    icon="alertmodal.tga"
    name="CorruptedProtectedDataStore"
    type="alertmodal">
-   We can't fill in your username and password.  This may happen when you change network setup
-
+   We cannot fill in your username and password.  This may happen when you change network setup.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -1478,7 +1476,7 @@ You already have a landmark for this location.
    icon="alertmodal.tga"
    name="CannotCreateLandmarkNotOwner"
    type="alertmodal">
-You cannot create a landmark here because the owner of the land doesn&apos;t allow it.
+You cannot create a landmark here because the owner of the land does not allow it.
   </notification>
 
   <notification
@@ -1672,7 +1670,7 @@ Unable to force land ownership because selection spans multiple regions. Please 
    icon="alertmodal.tga"
    name="ForceOwnerAuctionWarning"
    type="alertmodal">
-This parcel is up for auction. Forcing ownership will cancel the auction and potentially make some Residents unhappy if bidding has begun.
+This parcel is up for auction. Forcing ownership will cancel the auction and potentially make some residents unhappy if bidding has begun.
 Force ownership?
     <usetemplate
      name="okcancelbuttons"
@@ -1812,7 +1810,7 @@ Please select a single parcel.
    name="CannotReleaseLandDontOwn"
    type="alertmodal">
 Unable to abandon land:
-You don&apos;t have permission to release this parcel.
+You do not have permission to release this parcel.
 Parcels you own appear in green.
   </notification>
 
@@ -1972,7 +1970,7 @@ Copy this item to your inventory?
    icon="alertmodal.tga"
    name="ResolutionSwitchFail"
    type="alertmodal">
-Failed to switch resolution to [RESX] by [RESY]
+Failed to switch resolution to [RESX] by [RESY].
   </notification>
 
   <notification
@@ -2008,7 +2006,7 @@ This is usually a temporary failure. Please customize and save the wearable agai
    icon="alertmodal.tga"
    name="YouHaveBeenLoggedOut"
    type="alertmodal">
-Darn. You have been logged out of [SECOND_LIFE]
+You have been logged out of [SECOND_LIFE].
             [MESSAGE]
     <usetemplate
      name="okcancelbuttons"
@@ -2120,7 +2118,7 @@ Would you be my friend?
    icon="alertmodal.tga"
    name="RemoveFromFriends"
    type="alertmodal">
-Do you want to remove [NAME] from your Friends List?
+Are you sure you want to remove [NAME] from your Friends List?
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
@@ -2131,7 +2129,7 @@ Do you want to remove [NAME] from your Friends List?
    icon="alertmodal.tga"
    name="RemoveMultipleFromFriends"
    type="alertmodal">
-Do you want to remove multiple friends from your Friends list?
+Are you sure you want to remove multiple friends from your Friends list?
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
@@ -2144,7 +2142,7 @@ Do you want to remove multiple friends from your Friends list?
    type="alertmodal">
 Are you sure you want to delete all scripted objects owned by
 ** [AVATAR_NAME] **
-on all others land in this sim?
+on all others land in this region?
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
@@ -2157,7 +2155,7 @@ on all others land in this sim?
    type="alertmodal">
 Are you sure you want to DELETE ALL scripted objects owned by
 ** [AVATAR_NAME] **
-on ALL LAND in this sim?
+on ALL LAND in this region?
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
@@ -2170,7 +2168,7 @@ on ALL LAND in this sim?
    type="alertmodal">
 Are you sure you want to DELETE ALL objects (scripted or not) owned by
 ** [AVATAR_NAME] **
-on ALL LAND in this sim?
+on ALL LAND in this region?
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
@@ -2437,7 +2435,7 @@ You may want to set a new home location.
    name="ClothingLoading"
    type="alertmodal">
 Your clothing is still downloading.
-You can use [SECOND_LIFE] normally and other people will see you correctly.
+You can use [APP_NAME] normally and other people will see you correctly.
     <form name="form">
       <ignore name="ignore"
        text="Clothing is taking a long time to download"/>
@@ -2463,7 +2461,7 @@ Return to [http://join.secondlife.com secondlife.com] to create a new account?
    icon="alertmodal.tga"
    name="LoginPacketNeverReceived"
    type="alertmodal">
-We&apos;re having trouble connecting. There may be a problem with your Internet connection or the [SECOND_LIFE_GRID].
+We are having trouble connecting. There may be a problem with your Internet connection or the [SECOND_LIFE_GRID].
 
 You can either check your Internet connection and try again in a few minutes, click Help to view the [SUPPORT_SITE], or click Teleport to attempt to teleport home.
     <url option="1" name="url">
@@ -2557,7 +2555,7 @@ Would you like to trust this authority?
    icon="alertmodal.tga"
    name="NotEnoughCurrency"
    type="alertmodal">
-[NAME] L$ [PRICE] You don&apos;t have enough L$ to do that.
+[NAME] L$ [PRICE] You do not have enough L$ to do that.
   </notification>
 
   <notification
@@ -2573,7 +2571,7 @@ Would you like to trust this authority?
    name="RevokedModifyRights"
    persist="true"
    type="notify">
-Your privilege to modify [NAME]&apos;s objects has been revoked
+Your privilege to modify [NAME]&apos;s objects has been revoked.
   </notification>
 
   <notification
@@ -2612,7 +2610,7 @@ Please select only one object and try again.
    icon="alertmodal.tga"
    name="KickUsersFromRegion"
    type="alertmodal">
-Teleport all Residents in this region home?
+Teleport all residents in this region home?
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
@@ -2634,7 +2632,7 @@ Are you sure you want to return objects owned by [USER_NAME]?
    icon="alertmodal.tga"
    name="InvalidTerrainBitDepth"
    type="alertmodal">
-Couldn&apos;t set region textures:
+Could not set region textures:
 Terrain texture [TEXTURE_NUM] has an invalid bit depth of [TEXTURE_BIT_DEPTH].
 
 Replace texture [TEXTURE_NUM] with a 24-bit 512x512 or smaller image then click &quot;Apply&quot; again.
@@ -2644,7 +2642,7 @@ Replace texture [TEXTURE_NUM] with a 24-bit 512x512 or smaller image then click 
    icon="alertmodal.tga"
    name="InvalidTerrainSize"
    type="alertmodal">
-Couldn&apos;t set region textures:
+Could not set region textures:
 Terrain texture [TEXTURE_NUM] is too large at [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y].
 
 Replace texture [TEXTURE_NUM] with a 24-bit 512x512 or smaller image then click &quot;Apply&quot; again.
@@ -2661,7 +2659,7 @@ Upload started. It may take up to two minutes, depending on your connection spee
    icon="alertmodal.tga"
    name="ConfirmBakeTerrain"
    type="alertmodal">
-Do you really want to bake the current terrain, make it the center for terrain raise/lower limits and the default for the &apos;Revert&apos; tool?
+Do you really want to bake the current terrain, make it the center for terrain raise/lower limits, and the default for the &apos;Revert&apos; tool?
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
@@ -2672,14 +2670,14 @@ Do you really want to bake the current terrain, make it the center for terrain r
    icon="alertmodal.tga"
    name="MaxAllowedAgentOnRegion"
    type="alertmodal">
-You can only have [MAX_AGENTS] Allowed Residents.
+You can only have [MAX_AGENTS] allowed residents.
   </notification>
 
   <notification
    icon="alertmodal.tga"
    name="MaxBannedAgentsOnRegion"
    type="alertmodal">
-You can only have [MAX_BANNED] Banned Residents.
+You can only have [MAX_BANNED] banned residents.
   </notification>
 
   <notification
@@ -2694,7 +2692,7 @@ Exceeds the [MAX_AGENTS] [LIST_TYPE] limit by [NUM_EXCESS].
    icon="alertmodal.tga"
    name="MaxAllowedGroupsOnRegion"
    type="alertmodal">
-You can only have [MAX_GROUPS] Allowed Groups.
+You can only have [MAX_GROUPS] groups.
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
@@ -2705,21 +2703,21 @@ You can only have [MAX_GROUPS] Allowed Groups.
    icon="alertmodal.tga"
    name="MaxManagersOnRegion"
    type="alertmodal">
-You can only have [MAX_MANAGER] Estate Managers.
+You can only have [MAX_MANAGER] estate managers.
   </notification>
 
   <notification
    icon="alertmodal.tga"
    name="OwnerCanNotBeDenied"
    type="alertmodal">
-Can&apos;t add estate owner to estate &apos;Banned Resident&apos; list.
+Cannot add estate owner to estate &apos;Banned resident&apos; list.
   </notification>
 
   <notification
    icon="alertmodal.tga"
    name="CanNotChangeAppearanceUntilLoaded"
    type="alertmodal">
-Can&apos;t change appearance until clothing and shape are loaded.
+Cannot change appearance until clothing and shape are loaded.
   </notification>
 
   <notification
@@ -2733,7 +2731,7 @@ The name of your classified must start with a letter from A to Z or a number.  N
    icon="alertmodal.tga"
    name="CantSetBuyObject"
    type="alertmodal">
-Can&apos;t set Buy Object, because the object is not for sale.
+Cannot set &apos;Buy Object&apos; because the object is not for sale.
 Please set the object for sale and try again.
   </notification>
 
@@ -2905,6 +2903,7 @@ Deeding this object will cause the group to:
    name="WebLaunchExternalTarget"
    type="alertmodal">
 Do you want to open your Web browser to view this content?
+Opening webpages from an unknown source may place your computer at risk.
     <usetemplate
      ignoretext="Launch my browser to view a web page"
      name="okcancelignore"
@@ -3026,7 +3025,7 @@ Leave Group?
    icon="alert.tga"
    name="ConfirmKick"
    type="alert">
-Do you REALLY want to kick all Residents off the grid?
+Do you REALLY want to kick all residents off the grid?
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
@@ -3109,7 +3108,7 @@ Chat and instant messages will be hidden. Instant messages will receive your con
    name="AutorespondModeSet"
    type="alert">
 Autorespond mode is set.
-Incomming instant messages will now receive your configured autoresponse.
+Incoming instant messages will now receive your configured autoresponse.
     <usetemplate
      ignoretext="I change my status to autorespond mode"
      name="okignore"
@@ -3142,7 +3141,7 @@ You have reached your maximum number of groups. Please leave some group before j
    icon="alert.tga"
    name="KickUser"
    type="alert">
-Kick this Resident with what message?
+Kick this resident with what message?
     <form name="form">
       <input name="message" type="text">
 An administrator has logged you off.
@@ -3184,7 +3183,7 @@ An administrator has logged you off.
    icon="alert.tga"
    name="FreezeUser"
    type="alert">
-Freeze this Resident with what message?
+Freeze this resident with what message?
     <form name="form">
       <input name="message" type="text">
 You have been frozen. You cannot move or chat. An administrator will contact you via instant message (IM).
@@ -3205,7 +3204,7 @@ You have been frozen. You cannot move or chat. An administrator will contact you
    icon="alert.tga"
    name="UnFreezeUser"
    type="alert">
-Unfreeze this Resident with what message?
+Unfreeze this resident with what message?
     <form name="form">
       <input name="message" type="text">
 You are no longer frozen.
@@ -3235,7 +3234,7 @@ Just like in real life, it takes a while for everyone to learn about a new name.
  icon="alertmodal.tga"
  name="SetDisplayNameBlocked"
  type="alert">
-Sorry, you cannot change your display name. If you feel this is in error, please contact support.
+Sorry, you cannot change your display name. If you feel this is in error, please contact Linden Lab support.
   </notification>
 
   <notification
@@ -3329,7 +3328,7 @@ Join me in [REGION]
    icon="alertmodal.tga"
    name="OfferTeleportFromGod"
    type="alertmodal">
-God summon Resident to your location?
+God summon this resident to your location?
     <form name="form">
       <input name="message" type="text">
 Join me in [REGION]
@@ -3421,7 +3420,7 @@ Type a short announcement which will be sent to everyone currently in your estat
    type="alert">
 You are about to change a Linden owned estate (mainland, teen grid, orientation, etc.).
 
-This is EXTREMELY DANGEROUS because it can fundamentally affect the Resident experience.  On the mainland, it will change thousands of regions and make the spaceserver hiccup.
+This is EXTREMELY DANGEROUS because it can fundamentally affect the resident experience.  On the mainland, it will change thousands of regions and make the spaceserver hiccup.
 
 Proceed?
     <usetemplate
@@ -3437,7 +3436,7 @@ Proceed?
    type="alert">
 You are about to change the access list for a Linden owned estate (mainland, teen grid, orientation, etc.).
 
-This is DANGEROUS and should only be done to invoke the hack allowing objects/L$ to be transfered in/out of a grid.
+This is DANGEROUS and should only be done to invoke the hack allowing objects/L$ to be transferred in/out of a grid.
 It will change thousands of regions and make the spaceserver hiccup.
     <usetemplate
      name="okcancelbuttons"
@@ -3515,7 +3514,7 @@ Deny access for this estate only or for [ALL_ESTATES]?
    label="Select estate"
    name="EstateBannedAgentRemove"
    type="alert">
-Remove this Resident from the ban list for  access for this estate only or for [ALL_ESTATES]?
+Remove this resident from the ban list for access for this estate only or for [ALL_ESTATES]?
     <usetemplate
      canceltext="Cancel"
      name="yesnocancelbuttons"
@@ -3565,7 +3564,7 @@ Kick [EVIL_USER] from this estate?
    icon="alertmodal.tga"
    name="EstateChangeCovenant"
    type="alertmodal">
-Are you sure you want to change the Estate Covenant?
+Are you sure you want to change the estate covenant?
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
@@ -3576,9 +3575,9 @@ Are you sure you want to change the Estate Covenant?
    icon="alertmodal.tga"
    name="RegionEntryAccessBlocked"
    type="alertmodal">
-You are not allowed in that Region due to your maturity Rating. This may be a result of a lack of information validating your age.
+You are not allowed in that region due to your maturity rating. This may be a result of a lack of information validating your age.
 
-Please verify you have the latest Viewer installed, and go to the Knowledge Base for details on accessing areas with this maturity rating.
+Please verify you have the latest viewer installed, and go to the Knowledge Base for details on accessing areas with this maturity rating.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -3588,9 +3587,9 @@ Please verify you have the latest Viewer installed, and go to the Knowledge Base
    icon="alertmodal.tga"
    name="RegionEntryAccessBlocked_KB"
    type="alertmodal">
-You are not allowed in that region due to your maturity Rating.
+You are not allowed in that region due to your maturity rating.
 
-Go to the Knowledge Base for more information about maturity Ratings?
+Go to the Knowledge Base for more information about maturity ratings?
     <url option="0" name="url">
 		http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
     </url>
@@ -3598,23 +3597,23 @@ Go to the Knowledge Base for more information about maturity Ratings?
      name="okcancelignore"
      yestext="Go to Knowledge Base"
 	 notext="Close"
-	 ignoretext="I can&apos;t enter this Region, due to restrictions of the maturity Rating"/>
+	 ignoretext="I cannot enter this Region, due to restrictions of the maturity Rating"/>
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="RegionEntryAccessBlocked_Notify"
    type="notifytip">
-You are not allowed in that region due to your maturity Rating.
+You are not allowed in that region due to your maturity rating.
   </notification>
 
   <notification
    icon="alertmodal.tga"
    name="RegionEntryAccessBlocked_Change"
    type="alertmodal">
-You are not allowed in that Region due to your maturity Rating preference.
+You are not allowed in that region due to your maturity rating preference.
 
-To enter the desired region, please change your maturity Rating preference. This will allow you to search for and access [REGIONMATURITY] content. To undo any changes, go to Me &gt; Preferences &gt; General.
+To enter the desired region, please change your maturity rating preference. This will allow you to search for and access [REGIONMATURITY] content. To undo any changes, go to Me &gt; Preferences &gt; General.
 	 <form name="form">
       <button
        index="0"
@@ -3633,16 +3632,16 @@ To enter the desired region, please change your maturity Rating preference. This
    icon="notifytip.tga"
    name="PreferredMaturityChanged"
    type="notifytip">
-Your maturity Rating preference is now [RATING].
+Your maturity rating preference is now [RATING].
   </notification>
 
   <notification
    icon="alertmodal.tga"
    name="LandClaimAccessBlocked"
    type="alertmodal">
-You cannot claim this land due to your maturity Rating. This may be a result of a lack of information validating your age.
+You cannot claim this land due to your maturity rating. This may be a result of a lack of information validating your age.
 
-Please verify you have the latest Viewer installed, and go to the Knowledge Base for details on accessing areas with this maturity rating.
+Please verify you have the latest viewer installed, and go to the Knowledge Base for details on accessing areas with this maturity rating.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -3652,9 +3651,9 @@ Please verify you have the latest Viewer installed, and go to the Knowledge Base
    icon="alertmodal.tga"
    name="LandClaimAccessBlocked_KB"
    type="alertmodal">
-You cannot claim this land due to your maturity Rating.
+You cannot claim this land due to your maturity rating.
 
-Go to the Knowledge Base for more information about maturity Ratings?
+Go to the Knowledge Base for more information about maturity ratings?
     <url option="0" name="url">
 		http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
     </url>
@@ -3662,23 +3661,23 @@ Go to the Knowledge Base for more information about maturity Ratings?
      name="okcancelignore"
      yestext="Go to Knowledge Base"
 	 notext="Close"
-	 ignoretext="I can&apos;t claim this Land, due to restrictions of the maturity Rating"/>
+	 ignoretext="I cannot claim this Land, due to restrictions of the maturity Rating"/>
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="LandClaimAccessBlocked_Notify"
    type="notifytip">
-You cannot claim this land due to your maturity Rating.
+You cannot claim this land due to your maturity rating.
   </notification>
 
   <notification
    icon="alertmodal.tga"
    name="LandClaimAccessBlocked_Change"
    type="alertmodal">
-You cannot claim this land due to your maturity Rating preference.
+You cannot claim this land due to your maturity rating preference.
 
-You can click &apos;Change Preference&apos; to raise your maturity Rating preference now and allow you to enter. You will be able to search and access [REGIONMATURITY] content from now on. If you later want to change this setting back, go to Me &gt; Preferences &gt; General.
+You can click &apos;Change Preference&apos; to raise your maturity rating preference now and allow you to enter. You will be able to search and access [REGIONMATURITY] content from now on. If you later want to change this setting back, go to Me &gt; Preferences &gt; General.
     <usetemplate
      name="okcancelignore"
      yestext="Change Preference"
@@ -3690,9 +3689,9 @@ You can click &apos;Change Preference&apos; to raise your maturity Rating prefer
    icon="alertmodal.tga"
    name="LandBuyAccessBlocked"
    type="alertmodal">
-You cannot buy this land due to your maturity Rating. This may be a result of a lack of information validating your age.
+You cannot buy this land due to your maturity rating. This may be a result of a lack of information validating your age.
 
-Please verify you have the latest Viewer installed, and go to the Knowledge Base for details on accessing areas with this maturity rating.
+Please verify you have the latest viewer installed, and go to the Knowledge Base for details on accessing areas with this maturity rating.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -3702,9 +3701,9 @@ Please verify you have the latest Viewer installed, and go to the Knowledge Base
    icon="alertmodal.tga"
    name="LandBuyAccessBlocked_KB"
    type="alertmodal">
-You cannot buy this land due to your maturity Rating.
+You cannot buy this land due to your maturity rating.
 
-Go to the Knowledge Base for more information about maturity Ratings?
+Go to the Knowledge Base for more information about maturity ratings?
     <url option="0" name="url">
 		http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
     </url>
@@ -3712,23 +3711,23 @@ Go to the Knowledge Base for more information about maturity Ratings?
      name="okcancelignore"
      yestext="Go to Knowledge Base"
 	 notext="Close"
-	 ignoretext="I can&apos;t buy this Land, due to restrictions of the maturity Rating"/>
+	 ignoretext="I cannot buy this Land, due to restrictions of the maturity Rating"/>
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="LandBuyAccessBlocked_Notify"
    type="notifytip">
-You cannot buy this land due to your maturity Rating.
+You cannot buy this land due to your maturity rating.
   </notification>
 
   <notification
    icon="alertmodal.tga"
    name="LandBuyAccessBlocked_Change"
    type="alertmodal">
-You cannot buy this land due to your maturity Rating preference.
+You cannot buy this land due to your maturity rating preference.
 
-You can click &apos;Change Preference&apos; to raise your maturity Rating preference now and allow you to enter. You will be able to search and access [REGIONMATURITY] content from now on. If you later want to change this setting back, go to Me &gt; Preferences &gt; General.
+You can click &apos;Change Preference&apos; to raise your maturity rating preference now and allow you to enter. You will be able to search and access [REGIONMATURITY] content from now on. If you later want to change this setting back, go to Me &gt; Preferences &gt; General.
     <usetemplate
      name="okcancelignore"
      yestext="Change Preference"
@@ -3740,7 +3739,7 @@ You can click &apos;Change Preference&apos; to raise your maturity Rating prefer
 	  icon="alertmodal.tga"
 	  name="TooManyPrimsSelected"
 	  type="alertmodal">
-There are too many prims selected.  Please select [MAX_PRIM_COUNT] or fewer prims and try again
+There are too many prims selected.  Please select [MAX_PRIM_COUNT] or fewer prims and try again.
 		<usetemplate
 		 name="okbutton"
 		 yestext="OK"/>
@@ -3877,7 +3876,7 @@ Type a short announcement which will be sent to everyone in this region.
 The maturity rating for this region has been updated.
 It may take some time for the change to be reflected on the map.
 
-To enter Adult regions, Residents must be Account Verified, either by age-verification or payment-verification.
+To enter Adult regions, residents must be Account Verified, either by age-verification or payment-verification.
   </notification>
 
   <notification
@@ -3885,12 +3884,12 @@ To enter Adult regions, Residents must be Account Verified, either by age-verifi
    label="Voice Version Mismatch"
    name="VoiceVersionMismatch"
    type="alertmodal">
-This version of [APP_NAME] is not compatible with the Voice Chat feature in this region. In order for Voice Chat to function correctly you will need to update [APP_NAME].
+This version of [APP_NAME] is not compatible with the voice chat feature in this region. In order for voice chat to function correctly you will need to update [APP_NAME].
   </notification>
 
   <notification
    icon="alertmodal.tga"
-   label="Can&apos;t Buy Objects"
+   label="Cannot Buy Objects"
    name="BuyObjectOneOwner"
    type="alertmodal">
 Cannot buy objects from different owners at the same time.
@@ -3899,7 +3898,7 @@ Please select only one object and try again.
 
   <notification
    icon="alertmodal.tga"
-   label="Can&apos;t Buy Contents"
+   label="Cannot Buy Contents"
    name="BuyContentsOneOnly"
    type="alertmodal">
 Unable to buy the contents of more than one object at a time.
@@ -3908,7 +3907,7 @@ Please select only one object and try again.
 
   <notification
    icon="alertmodal.tga"
-   label="Can&apos;t Buy Contents"
+   label="Cannot Buy Contents"
    name="BuyContentsOneOwner"
    type="alertmodal">
 Cannot buy objects from different owners at the same time.
@@ -4122,7 +4121,7 @@ Are you sure you want to quit?
     <usetemplate
      ignoretext="Confirm before I quit"
      name="okcancelignore"
-     notext="Don&apos;t Quit"
+     notext="Do not Quit"
      yestext="Quit"/>
   </notification>
 
@@ -4198,7 +4197,7 @@ Dear Resident,
 
 You appear to be reporting intellectual property infringement. Please make sure you are reporting it correctly:
 
-(1) The Abuse Process. You may submit an abuse report if you believe a Resident is exploiting the [SECOND_LIFE] permissions system, for example, by using CopyBot or similar copying tools, to infringe intellectual property rights. The Abuse Team investigates and issues appropriate disciplinary action for behavior that violates the [SECOND_LIFE] [http://secondlife.com/corporate/tos.php Terms of Service] or [http://secondlife.com/corporate/cs.php Community Standards]. However, the Abuse Team does not handle and will not respond to requests to remove content from the [SECOND_LIFE] world.
+(1) The Abuse Process. You may submit an abuse report if you believe a resident is exploiting the [SECOND_LIFE] permissions system, for example, by using CopyBot or similar copying tools, to infringe intellectual property rights. The Abuse Team investigates and issues appropriate disciplinary action for behavior that violates the [SECOND_LIFE] [http://secondlife.com/corporate/tos.php Terms of Service] or [http://secondlife.com/corporate/cs.php Community Standards]. However, the Abuse Team does not handle and will not respond to requests to remove content from the [SECOND_LIFE] world.
 
 (2) The DMCA or Content Removal Process. To request removal of content from [SECOND_LIFE], you MUST submit a valid notification of infringement as provided in our [http://secondlife.com/corporate/dmca.php DMCA Policy].
 
@@ -4391,7 +4390,7 @@ This day cycle file references a missing sky file: [SKY].
    icon="alertmodal.tga"
    name="PPSaveEffectAlert"
    type="alertmodal">
-PostProcess Effect exists. Do you still wish overwrite it?
+Postprocess effect exists. Do you still wish to overwrite it?
     <usetemplate
      name="okcancelbuttons"
      notext="No"
@@ -4402,7 +4401,7 @@ PostProcess Effect exists. Do you still wish overwrite it?
    icon="alert.tga"
    name="NewSkyPreset"
    type="alert">
-Give me a name for the new sky.
+Specify a name for the new sky.
     <form name="form">
       <input name="message" type="text">
 New Preset
@@ -4430,7 +4429,7 @@ Preset already exists!
    icon="alert.tga"
    name="NewWaterPreset"
    type="alert">
-Give me a name for the new water preset.
+Specify a name for the new water preset.
     <form name="form">
       <input name="message" type="text">
 New Preset
@@ -4473,11 +4472,11 @@ Unable to start a new chat session with [RECIPIENT].
   </notification>
 
   <notification
-   icon="alertmodal.tga"
+   icon="notifytip.tga"
    name="ChatterBoxSessionEventError"
-   type="alertmodal">
+   type="notifytip">
 [EVENT]
-[REASON]
+<!--[REASON]-->
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -4498,7 +4497,7 @@ Your chat session with [NAME] must close.
    icon="alertmodal.tga"
    name="Cannot_Purchase_an_Attachment"
    type="alertmodal">
-You can&apos;t buy an object while it is attached.
+You cannot buy an object while it is attached.
   </notification>
 
   <notification
@@ -4564,7 +4563,7 @@ You must have payment information on file to visit this area.  Do you want to go
    icon="alertmodal.tga"
    name="MissingString"
    type="alertmodal">
-The string [STRING_NAME] is missing from strings.xml
+The string [STRING_NAME] is missing from strings.xml.
   </notification>
 
   <notification
@@ -4585,21 +4584,21 @@ The string [STRING_NAME] is missing from strings.xml
    icon="notifytip.tga"
    name="Cancelled"
    type="notifytip">
-Cancelled
+Cancelled.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="CancelledSit"
    type="notifytip">
-Cancelled Sit
+Cancelled Sit.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="CancelledAttach"
    type="notifytip">
-Cancelled Attach
+Cancelled Attach.
   </notification>
 
   <notification
@@ -4621,28 +4620,28 @@ Topic: [SUBJECT], Message: [MESSAGE]
    icon="notifytip.tga"
    name="FriendOnline"
    type="notifytip">
-[NAME] is Online
+[NAME] is online.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="FriendOffline"
    type="notifytip">
-[NAME] is Offline
+[NAME] is offline.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="AddSelfFriend"
    type="notifytip">
-Although you&apos;re very nice, you can&apos;t add yourself as a friend.
+You cannot add yourself as a friend.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="UploadingAuctionSnapshot"
    type="notifytip">
-Uploading in-world and web site snapshots...
+Uploading in-world and web site snapshots.
 (Takes about 5 minutes.)
   </notification>
 
@@ -4665,21 +4664,21 @@ Web site snapshot upload done.
    icon="notifytip.tga"
    name="UploadSnapshotDone"
    type="notifytip">
-In-world snapshot upload done
+In-world snapshot upload is done.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="TerrainDownloaded"
    type="notifytip">
-Terrain.raw downloaded
+Terrain.raw downloaded.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="GestureMissing"
    type="notifytip">
-Hmm. Gesture [NAME] is missing from the database.
+Gesture [NAME] is missing from the database.
   </notification>
 
   <notification
@@ -4693,14 +4692,14 @@ Unable to load gesture [NAME].
    icon="notifytip.tga"
    name="LandmarkMissing"
    type="notifytip">
-Landmark is missing from database.
+Landmark is missing from the database.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="UnableToLoadLandmark"
    type="notifytip">
-Unable to load landmark.  Please try again.
+Unable to load the landmark.  Please try again.
   </notification>
 
   <notification
@@ -4715,28 +4714,28 @@ This might affect your password.
    icon="notifytip.tga"
    name="NotecardMissing"
    type="notifytip">
-Notecard is missing from database.
+Notecard is missing from the database.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="NotecardNoPermissions"
    type="notifytip">
-You don&apos;t have permission to view this notecard.
+You do not have permission to view this notecard.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="RezItemNoPermissions"
    type="notifytip">
-Insufficient permissions to rez object.
+Insufficient permissions to rez the object(s).
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="UnableToLoadNotecard"
    type="notifytip">
-Unable to load notecard.
+Unable to load the notecard.
 Please try again.
   </notification>
 
@@ -4744,28 +4743,28 @@ Please try again.
    icon="notifytip.tga"
    name="ScriptMissing"
    type="notifytip">
-Script is missing from database.
+Script is missing from the database.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="ScriptNoPermissions"
    type="notifytip">
-Insufficient permissions to view script.
+Insufficient permissions to view the script.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="UnableToLoadScript"
    type="notifytip">
-Unable to load script.  Please try again.
+Unable to load the script.  Please try again.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="IncompleteInventory"
    type="notifytip">
-The complete contents you are offering are not yet locally available. Please try offering those items again in a minute.
+Some of the contents are you trying to share cannot be given/transferred just yet. Please try offering these items again in a bit.
   </notification>
 
   <notification
@@ -4831,7 +4830,7 @@ Now leaving god mode, level [LEVEL]
    icon="notifytip.tga"
    name="CopyFailed"
    type="notifytip">
-You don&apos;t have permission to copy this.
+You do not have permission to copy this.
   </notification>
 
   <notification
@@ -4882,8 +4881,8 @@ Click on any landmark to select it, then click &apos;Teleport&apos; at the botto
    icon="notifytip.tga"
    name="TeleportToPerson"
    type="notifytip">
-You can contact Residents like &apos;[NAME]&apos; by opening the People panel on the right side of your screen.
-Select the Resident from the list, then click &apos;IM&apos; at the bottom of the panel.
+You can contact residents like &apos;[NAME]&apos; by opening the People panel on the right side of your screen.
+Select the resident from the list, then click &apos;IM&apos; at the bottom of the panel.
 (You can also double-click on their name in the list, or right-click and choose &apos;IM&apos;).
   </notification>
 
@@ -4891,8 +4890,7 @@ Select the Resident from the list, then click &apos;IM&apos; at the bottom of th
    icon="notifytip.tga"
    name="CantSelectLandFromMultipleRegions"
    type="notifytip">
-Can&apos;t select land across server boundaries.
-Try selecting a smaller piece of land.
+Selected land is not all in the same region.
   </notification>
 
   <notification
@@ -5051,7 +5049,7 @@ The objects on the selected parcel of land that is owned by [NAME] have been ret
    name="OtherObjectsReturned2"
    persist="true"
    type="notify">
-The objects on the selected parcel of land owned by the Resident &apos;[NAME]&apos; have been returned to their owner.
+The objects on the selected parcel of land owned by the resident &apos;[NAME]&apos; have been returned to their owner.
   </notification>
 
   <notification
@@ -5069,7 +5067,7 @@ Non-transferable objects that are deeded to the group have been deleted.
    name="UnOwnedObjectsReturned"
    persist="true"
    type="notify">
-The objects on the selected parcel that are NOT owned by you have been returned to their owners.
+The objects on the selected parcel that are *NOT* owned by you have been returned to their owners.
   </notification>
 
   <notification
@@ -5098,7 +5096,7 @@ You can be hurt here. If you die, you will be teleported to your home location.
    type="notify"
    unique="true">
 This area has flying disabled.
-You can&apos;t fly here.
+You cannot fly here.
   </notification>
 
   <notification
@@ -5107,7 +5105,7 @@ You can&apos;t fly here.
    persist="true"
    type="notify"
    unique="true">
-This area does not allow pushing. You can&apos;t push others here unless you own the land.
+This area does not allow pushing. You cannot push others here unless you own the land.
   </notification>
 
   <notification
@@ -5116,7 +5114,7 @@ This area does not allow pushing. You can&apos;t push others here unless you own
    persist="true"
    type="notify"
    unique="true">
-This area has voice chat disabled. You won&apos;t be able to hear anyone talking.
+This area has voice chat disabled. You will not be able to use voice chat here.
   </notification>
 
   <notification
@@ -5125,7 +5123,7 @@ This area has voice chat disabled. You won&apos;t be able to hear anyone talking
    persist="true"
    type="notify"
    unique="true">
-This area has building disabled. You can&apos;t build or rez objects here.
+This area has building disabled. You cannot build or rez objects here.
   </notification>
 
   <notification
@@ -5159,7 +5157,7 @@ No scripts will work here except those belonging to the land owner.
    name="ClaimPublicLand"
    persist="true"
    type="notify">
-You can only claim public land in the Region you&apos;re in.
+You can only claim public land that is in the same region as you.
   </notification>
 
   <notification
@@ -5167,9 +5165,9 @@ You can only claim public land in the Region you&apos;re in.
    name="RegionTPAccessBlocked"
    persist="true"
    type="notify">
-You aren&apos;t allowed in that Region due to your maturity Rating. You may need to validate your age and/or install the latest Viewer.
+You are not allowed in that Region due to your maturity rating. You may need to validate your age and/or install the latest viewer.
 
-Please go to the Knowledge Base for details on accessing areas with this maturity Rating.
+Please go to the Knowledge Base for details on accessing areas with this maturity rating.
   </notification>
 
   <notification
@@ -5177,7 +5175,7 @@ Please go to the Knowledge Base for details on accessing areas with this maturit
 	name="URBannedFromRegion"
    persist="true"
 	type="notify">
-You are banned from the region.
+You are banned from this region.
   </notification>
 
   <notification
@@ -5249,7 +5247,7 @@ You have been redirected to a telehub.
 	name="CouldntTPCloser"
    persist="true"
 	type="notify">
-Could not teleport closer to destination.
+Could not teleport closer to the destination.
   </notification>
 
   <notification
@@ -5464,7 +5462,7 @@ An object named &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; owned by [NAME_SLU
    icon="notify.tga"
    name="TeleportOfferSent"
    type="offer">
-	Teleport offer sent to [TO_NAME]
+	Teleport offer sent to [TO_NAME].
   </notification>
 
 
@@ -5570,7 +5568,7 @@ Friendship offer declined.
    persist="true"
    type="notify">
 [NAME] is offering their calling card.
-This will add a bookmark in your inventory so you can quickly IM this Resident.
+This will add a bookmark in your inventory so you can quickly IM this resident.
     <form name="form">
       <button
        index="0"
@@ -5591,7 +5589,7 @@ This will add a bookmark in your inventory so you can quickly IM this Resident.
    persist="true"
    type="notify">
 This region will restart in [MINUTES] minutes.
-If you stay in this region you will be logged out.
+If you stay in this region when it shuts down, you will be logged out.
   </notification>
 
   <notification
@@ -5602,7 +5600,7 @@ If you stay in this region you will be logged out.
    persist="true"
    type="notify">
 This region will restart in [SECONDS] seconds.
-If you stay in this region you will be logged out.
+If you stay in this region when it shuts down, you will be logged out.
   </notification>
 
   <notification
@@ -5631,7 +5629,7 @@ From object: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, owner: [NAME]?
    name="FailedToFindWearableUnnamed"
    persist="true"
    type="notify">
-Failed to find [TYPE] in database.
+Failed to find [TYPE] in the database.
   </notification>
 
   <notification
@@ -5639,7 +5637,7 @@ Failed to find [TYPE] in database.
    name="FailedToFindWearable"
    persist="true"
    type="notify">
-Failed to find [TYPE] named [DESC] in database.
+Failed to find [TYPE] named [DESC] in the database.
   </notification>
 
   <notification
@@ -5647,7 +5645,7 @@ Failed to find [TYPE] named [DESC] in database.
    name="InvalidWearable"
    persist="true"
    type="notify">
-The item you are trying to wear uses a feature that your Viewer can&apos;t read. Please upgrade your version of [APP_NAME] to wear this item.
+The item you are trying to wear uses a feature that your viewer cannot read. Please upgrade your version of [APP_NAME] to wear this item.
   </notification>
 
   <notification
@@ -5845,7 +5843,7 @@ When you are done, press &apos;Save All&apos;.
 This is your Inventory, which contains items you own.
 
 * To wear something, drag it onto yourself.
-* To rez something inworld, drag it onto the ground.
+* To rez something in-world, drag it onto the ground.
 * To read a notecard, double-click it.
   </notification>
 -->
@@ -5855,9 +5853,9 @@ This is your Inventory, which contains items you own.
    name="FirstSandbox"
    persist="true"
    type="notify">
-This is a sandbox area, and is meant to help Residents learn how to build.
+This is a sandbox area, and is meant to help residents learn how to build.
 
-Things you build here will be deleted after you leave, so don&apos;t forget to right-click and choose &apos;Take&apos; to move your creation to your Inventory.
+Things you build here will be deleted after you leave, so do not forget to right-click you items and choose &apos;Take&apos; to move your creation into your inventory.
   </notification>
 
 <!--
@@ -5866,7 +5864,7 @@ Things you build here will be deleted after you leave, so don&apos;t forget to r
    name="FirstFlexible"
    persist="true"
    type="notify">
-This object is flexible. Flexis must be phantom and not physical.
+This object is flexible, therefor it must be phantom and not physical.
   </notification>
 
   <notification
@@ -5887,7 +5885,7 @@ To toggle this menu,
    name="FirstSculptedPrim"
    persist="true"
    type="notify">
-You are editing a Sculpted prim. Sculpties require a special texture to define their shape.
+You are editing a Sculpted prim. Sculpts require a special texture to define their shape.
   </notification>
 -->
 
@@ -6048,7 +6046,7 @@ The voice call you are trying to join, [VOICE_CHANNEL_NAME], has reached maximum
    name="ProximalVoiceChannelFull"
    type="notifytip"
    unique="true">
-We&apos;re sorry.  This area has reached maximum capacity for voice conversations.  Please try to use voice in another area.
+This area has reached maximum capacity for voice conversations.  Please try to use voice in a different area.
   </notification>
 
   <notification
@@ -6274,7 +6272,7 @@ Server Error: Media update or get failed.
  icon="alertmodal.tga"
  name="TextChatIsMutedByModerator"
  type="alertmodal">
-Your text chat has been muted by moderator.
+Your text chat has been muted by a moderator.
         <usetemplate
          name="okbutton"
          yestext="OK"/>
@@ -6284,7 +6282,7 @@ Your text chat has been muted by moderator.
  icon="alertmodal.tga"
  name="VoiceIsMutedByModerator"
  type="alertmodal">
-Your voice has been muted by moderator.
+Your voice has been muted by a moderator.
         <usetemplate
          name="okbutton"
          yestext="OK"/>
@@ -6305,7 +6303,7 @@ Are you sure you want to delete your teleport history?
    icon="alert.tga"
    name="BottomTrayButtonCanNotBeShown"
    type="alert">
-Selected button can not be shown right now.
+Selected button cannot be shown right now.
 The button will be shown when there is enough space for it.
   </notification>
 
@@ -6323,7 +6321,7 @@ Are you sure you want to share the following items:
 
 [ITEMS]
 
-With the following Residents:
+With the following residents:
 
 [RESIDENTS]
 	<usetemplate

@@ -338,6 +338,7 @@
          height="20"
          label="To"
          layout="bottomleft"
+	 select_on_focus="true"
          name="chat_editor"
          tab_group="3"
          width="249">

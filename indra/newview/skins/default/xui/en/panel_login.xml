@@ -50,8 +50,8 @@ auto_resize="false"
 follows="left|bottom"
 name="login"
 layout="topleft"
-width="695"
-min_width="695"
+width="720"
+min_width="720"
 user_resize="false"
 height="80">
 <text
@@ -72,7 +72,7 @@ left_delta="0"
 name="username_edit"
 prevalidate_callback="ascii" 
 select_on_focus="true"
-tool_tip="The username you chose when you registered, like bobsmith12 or Steller Sunshine"
+tool_tip="The account name you chose when you registered, like bobsmith12 or Steller Sunshine"
 top_pad="0"
 width="150" />
 <text
@@ -109,7 +109,7 @@ label="Remember password"
   label="Log In"
   label_color="White"
   layout="topleft"
-  left_pad="10"
+  left_pad="8"
   name="connect_btn"
   top="35"
   width="90" />
@@ -117,10 +117,10 @@ label="Remember password"
   follows="left|bottom"
   font="SansSerifSmall"
   height="15"
-  left_pad="18"
+  left_pad="8"
   name="start_location_text"
 top="20"
-  width="130">
+  width="170">
        Start at:
  </text>
 <combo_box
@@ -144,6 +144,16 @@ name="MyHome"
 label="&lt;Type region name&gt;"
 name="Typeregionname"   value="" />
 </combo_box>
+  <text
+follows="left|bottom"
+font="SansSerifSmall"
+height="15"
+left_pad="8"
+name="grid_selection_text"
+top="20"
+width="100">
+    Log onto Grid:
+  </text>
 <combo_box
 allow_text_entry="true"
 font="SansSerifSmall"
@@ -151,9 +161,9 @@ font="SansSerifSmall"
    height="23"
    max_chars="256"
 layout="topleft"
-top_pad="2"
+top_pad="0"
 name="server_combo"
-width="135"
+width="120"
   visible="false" />
 </layout_panel>
 <layout_panel
@@ -198,7 +208,8 @@ name="login_help"
 top_pad="2"
 right="-10"
     width="200">
-       Need help logging in?   </text>
+       Need help logging in?   
+</text>
 <!--  <text
     follows="right|bottom"
     font="SansSerifSmall"

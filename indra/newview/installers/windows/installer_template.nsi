@@ -42,6 +42,8 @@ RequestExecutionLevel admin	; on Vista we must be admin because we write to Prog
 !include "%%SOURCE%%\installers\windows\lang_pt-br.nsi"
 !include "%%SOURCE%%\installers\windows\lang_zh.nsi"
 
+;;!include "%%SOURCE%%\installers\windowsMUI.nsh"
+
 # *TODO: Move these into the language files themselves
 LangString LanguageCode ${LANG_DANISH}   "da"
 LangString LanguageCode ${LANG_GERMAN}   "de"
@@ -69,7 +71,10 @@ LangString LanguageCode ${LANG_SIMPCHINESE}  "zh"
 
 Name ${INSTNAME}
 
-SubCaption 0 $(LicenseSubTitleSetup)	; override "license agreement" text
+LicenseText "Vivox Voice System License Agreement"
+LicenseData "VivoxAUP.txt"
+
+;SubCaption 0 $(LicenseSubTitleSetup)	; override "license agreement" text
 
 BrandingText " "						; bottom of window text
 Icon          %%SOURCE%%\installers\windows\firestorm_icon.ico
@@ -85,6 +90,8 @@ AutoCloseWindow true					; after all files install, close window
 InstallDir "$PROGRAMFILES\${INSTNAME}"
 InstallDirRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Viewer Project\${INSTNAME}" ""
 DirText $(DirectoryChooseTitle) $(DirectoryChooseSetup)
+
+Page license
 Page directory dirPre
 Page instfiles
 

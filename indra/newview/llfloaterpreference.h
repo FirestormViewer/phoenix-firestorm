@@ -116,7 +116,12 @@ public:
 	void setCacheLocation(const LLStringExplicit& location);
 
 	void onClickSetCache();
+	void onClickBrowseCache();
+	void onClickBrowseCrashLogs();
+	void onClickBrowseChatLogDir();
 	void onClickResetCache();
+	void onClickClearCache();
+	void onClickBrowseSettingsDir();
 	void onClickSkin(LLUICtrl* ctrl,const LLSD& userdata);
 	void onSelectSkin();
 	void onClickSetKey();

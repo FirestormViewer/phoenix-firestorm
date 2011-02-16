@@ -375,7 +375,7 @@
      reference="Unused?" />
     <color
      name="ButtonFlashBgColor"
-     reference="Unused?" />
+     reference="White" />
 <!-- Color Changed -->
     <color
      name="ButtonImageColor"

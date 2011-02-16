@@ -32,6 +32,22 @@
             </array>
         </map>
 
+		<map>
+        <key>name</key>
+            <string>Firestorm Clear</string>
+        <key>folder</key>
+            <string>firestormclear</string>
+        <key>themes</key>
+            <array>
+                <map>
+                <key>name</key>
+                    <string>Clear</string>
+                <key>folder</key>
+                    <string>clear</string>
+                </map>
+            </array>
+        </map>
+
         <map>
         <key>name</key>
             <string>MetaHarper Modern</string>
@@ -48,7 +64,23 @@
             </array>
         </map>
 
-	<map>
+        <map>
+        <key>name</key>
+            <string>MetaHarper w/SideTabs</string>
+        <key>folder</key>
+            <string>metaharpersidetabs</string>
+        <key>themes</key>
+            <array>
+                <map>
+                <key>name</key>
+                    <string>AppalachianSky</string>
+                <key>folder</key>
+                    <string>appalachian_sky</string>
+                </map>
+            </array>
+        </map>
+        
+        <map>
         <key>name</key>
             <string>StarLight</string>
         <key>folder</key>

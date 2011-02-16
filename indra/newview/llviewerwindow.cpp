@@ -299,14 +299,16 @@ private:
 	line_list_t mLineList;
 	LLColor4 mTextColor;
 	
-public:
-	LLDebugText(LLViewerWindow* window) : mWindow(window) {}
-	
 	void addText(S32 x, S32 y, const std::string &text) 
 	{
 		mLineList.push_back(Line(text, x, y));
 	}
 
+	void clearText() { mLineList.clear(); }
+
+public:
+	LLDebugText(LLViewerWindow* window) : mWindow(window) {}
+	
 	void update()
 	{
 		static LLCachedControl<bool> log_texture_traffic(gSavedSettings,"LogTextureNetworkTraffic") ;
@@ -325,6 +327,8 @@ public:
 		U32 xpos = mWindow->getWindowWidthScaled() - 350;
 		U32 ypos = 64;
 		const U32 y_inc = 20;
+
+		clearText();
 
 		if (gSavedSettings.getBOOL("DebugShowTime"))
 		{
@@ -597,6 +601,50 @@ public:
 			{
 				addText(xpos, ypos, "Network traffic for textures:");
 				ypos += y_inc;
+			}
+		}
+		
+		if (gSavedSettings.getBOOL("DebugShowTextureInfo"))
+		{
+			LLViewerObject* objectp = NULL ;
+			//objectp = = gAgentCamera.getFocusObject();
+			
+			LLSelectNode* nodep = LLSelectMgr::instance().getHoverNode();
+			if (nodep)
+			{
+				objectp = nodep->getObject();			
+			}
+			if (objectp && !objectp->isDead())
+			{
+				S32 num_faces = objectp->mDrawable->getNumFaces() ;
+				
+				for(S32 i = 0 ; i < num_faces; i++)
+				{
+					LLFace* facep = objectp->mDrawable->getFace(i) ;
+					if(facep)
+					{
+						//addText(xpos, ypos, llformat("ts_min: %.3f ts_max: %.3f tt_min: %.3f tt_max: %.3f", facep->mTexExtents[0].mV[0], facep->mTexExtents[1].mV[0],
+						//		facep->mTexExtents[0].mV[1], facep->mTexExtents[1].mV[1]));
+						//ypos += y_inc;
+						
+						addText(xpos, ypos, llformat("v_size: %.3f:  p_size: %.3f", facep->getVirtualSize(), facep->getPixelArea()));
+						ypos += y_inc;
+						
+						//const LLTextureEntry *tep = facep->getTextureEntry();
+						//if(tep)
+						//{
+						//	addText(xpos, ypos, llformat("scale_s: %.3f:  scale_t: %.3f", tep->mScaleS, tep->mScaleT)) ;
+						//	ypos += y_inc;
+						//}
+						
+						LLViewerTexture* tex = facep->getTexture() ;
+						if(tex)
+						{
+							addText(xpos, ypos, llformat("ID: %s v_size: %.3f", tex->getID().asString().c_str(), tex->getMaxVirtualSize()));
+							ypos += y_inc;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -1683,7 +1731,7 @@ void LLViewerWindow::initWorldUI()
 	{
 		LLRect hud_rect = full_window;
 		hud_rect.mBottom += 50;
-		if (gMenuBarView)
+		if (gMenuBarView && gMenuBarView->isInVisibleChain())
 		{
 			hud_rect.mTop -= gMenuBarView->getRect().getHeight();
 		}
@@ -2978,18 +3026,20 @@ void LLViewerWindow::updateKeyboardFocus()
 
 			LLUICtrl* parent = cur_focus->getParentUICtrl();
 			const LLUICtrl* focus_root = cur_focus->findRootMostFocusRoot();
+			bool new_focus_found = false;
 			while(parent)
 			{
-				if (parent->isCtrl() && 
-					(parent->hasTabStop() || parent == focus_root) && 
-					!parent->getIsChrome() && 
-					parent->isInVisibleChain() && 
-					parent->isInEnabledChain())
+				if (parent->isCtrl() 
+					&& (parent->hasTabStop() || parent == focus_root) 
+					&& !parent->getIsChrome() 
+					&& parent->isInVisibleChain() 
+					&& parent->isInEnabledChain())
 				{
 					if (!parent->focusFirstItem())
 					{
 						parent->setFocus(TRUE);
 					}
+					new_focus_found = true;
 					break;
 				}
 				parent = parent->getParentUICtrl();
@@ -2998,7 +3048,7 @@ void LLViewerWindow::updateKeyboardFocus()
 			// if we didn't find a better place to put focus, just release it
 			// hasFocus() will return true if and only if we didn't touch focus since we
 			// are only moving focus higher in the hierarchy
-			if (cur_focus->hasFocus())
+			if (!new_focus_found)
 			{
 				cur_focus->setFocus(FALSE);
 			}

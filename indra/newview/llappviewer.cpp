@@ -1587,6 +1587,17 @@ bool LLAppViewer::cleanup()
 	
 	LLUIColorTable::instance().saveUserSettings();
 
+//-TT This is a really horrible hack for the preview - we wipe out the color settings for the old skin 
+//if you change to another. 
+//TODO:FIXME and whatever other tags so that this gets fixed ASAP
+	std::string skinSaved = gSavedSettings.getString("SkinCurrent");
+	std::string themeSaved = gSavedSettings.getString("SkinCurrentTheme");
+	if ((skinSaved != mCurrentSkin) || (themeSaved != mCurrentSkinTheme))
+	{
+		const std::string& filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "colors.xml");
+		LLFile::remove(filename);
+	}
+//-TT
 	// PerAccountSettingsFile should be empty if no user has been logged on.
 	// *FIX:Mani This should get really saved in a "logoff" mode. 
 	if (gSavedSettings.getString("PerAccountSettingsFile").empty())
@@ -2264,7 +2275,10 @@ bool LLAppViewer::initConfiguration()
 		LLSLURL start_slurl(clp.getOption("slurl")[0]);
 		LLStartUp::setStartSLURL(start_slurl);
     }
-
+//-TT Hacking to save the skin and theme for future use.
+	mCurrentSkin = gSavedSettings.getString("SkinCurrent");
+	mCurrentSkinTheme = gSavedSettings.getString("SkinCurrentTheme");
+//-TT
     const LLControlVariable* skinfolder = gSavedSettings.getControl("SkinCurrent");
     if(skinfolder && LLStringUtil::null != skinfolder->getValue().asString())
     {   
@@ -3034,6 +3048,13 @@ void LLAppViewer::requestQuit()
 	
 	if( (LLStartUp::getStartupState() < STATE_STARTED) || !region )
 	{
+		// If we have a region, make some attempt to send a logout request first.
+		// This prevents the halfway-logged-in avatar from hanging around inworld for a couple minutes.
+		if(region)
+		{
+			sendLogoutRequest();
+		}
+
 		// Quit immediately
 		forceQuit();
 		return;
@@ -4151,7 +4172,10 @@ void LLAppViewer::sendLogoutRequest()
 		gLogoutMaxTime = LOGOUT_REQUEST_TIME;
 		mLogoutRequestSent = TRUE;
 		
-		LLVoiceClient::getInstance()->leaveChannel();
+		if(LLVoiceClient::instanceExists())
+		{
+			LLVoiceClient::getInstance()->leaveChannel();
+		}
 
 		//Set internal status variables and marker files
 		gLogoutInProgress = TRUE;

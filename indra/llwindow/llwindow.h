@@ -155,6 +155,7 @@ public:
 	virtual void updateLanguageTextInputArea() {}
 	virtual void interruptLanguageTextInput() {}
 	virtual void spawnWebBrowser(const std::string& escaped_url, bool async) {};
+	virtual void openFile(const std::string& file_name) {};
 
 	static std::vector<std::string> getDynamicFallbackFontList();
 	

@@ -307,8 +307,13 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 //	mCommitCallbackRegistrar.add("Pref.ClearCache",				boost::bind(&LLFloaterPreference::onClickClearCache, this));
 	mCommitCallbackRegistrar.add("Pref.WebClearCache",			boost::bind(&LLFloaterPreference::onClickBrowserClearCache, this));
 	mCommitCallbackRegistrar.add("Pref.SetCache",				boost::bind(&LLFloaterPreference::onClickSetCache, this));
+	mCommitCallbackRegistrar.add("Pref.BrowseCache",			boost::bind(&LLFloaterPreference::onClickBrowseCache, this));
+	mCommitCallbackRegistrar.add("Pref.BrowseCrashLogs",		boost::bind(&LLFloaterPreference::onClickBrowseCrashLogs, this));
+	mCommitCallbackRegistrar.add("Pref.BrowseSettingsDir",		boost::bind(&LLFloaterPreference::onClickBrowseSettingsDir, this));
+	mCommitCallbackRegistrar.add("Pref.BrowseLogPath",			boost::bind(&LLFloaterPreference::onClickBrowseChatLogDir, this));
 	mCommitCallbackRegistrar.add("Pref.ResetCache",				boost::bind(&LLFloaterPreference::onClickResetCache, this));
-//	mCommitCallbackRegistrar.add("Pref.ClickSkin",				boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
+	mCommitCallbackRegistrar.add("Pref.ClearCache",				boost::bind(&LLFloaterPreference::onClickClearCache, this));
+	//	mCommitCallbackRegistrar.add("Pref.ClickSkin",				boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
 //	mCommitCallbackRegistrar.add("Pref.SelectSkin",				boost::bind(&LLFloaterPreference::onSelectSkin, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetKey",			boost::bind(&LLFloaterPreference::onClickSetKey, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetMiddleMouse",	boost::bind(&LLFloaterPreference::onClickSetMiddleMouse, this));
@@ -356,6 +361,8 @@ BOOL LLFloaterPreference::postBuild()
 	updateDoubleClickControls();
 
 	getChild<LLUICtrl>("cache_location")->setEnabled(FALSE); // make it read-only but selectable (STORM-227)
+	getChildView("log_path_string")->setEnabled(FALSE);// do the same for chat logs path
+	getChildView("log_path_string-panelsetup")->setEnabled(FALSE);// and the redundant instance -WoLf
 	std::string cache_location = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "");
 	setCacheLocation(cache_location);
 
@@ -783,7 +790,22 @@ void LLFloaterPreference::onClickSetCache()
 		gSavedSettings.setString("CacheLocationTopFolder", top_folder);
 	}
 }
-
+void LLFloaterPreference::onClickBrowseCache()
+{
+	gViewerWindow->getWindow()->openFile(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,""));
+}
+void LLFloaterPreference::onClickBrowseCrashLogs()
+{
+	gViewerWindow->getWindow()->openFile(gDirUtilp->getExpandedFilename(LL_PATH_LOGS,""));
+}
+void LLFloaterPreference::onClickBrowseSettingsDir()
+{
+	gViewerWindow->getWindow()->openFile(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,""));
+}
+void LLFloaterPreference::onClickBrowseChatLogDir()
+{
+	gViewerWindow->getWindow()->openFile(gDirUtilp->getExpandedFilename(LL_PATH_CHAT_LOGS,""));
+}
 void LLFloaterPreference::onClickResetCache()
 {
 	if (!gSavedSettings.getString("CacheLocation").empty())
@@ -797,6 +819,11 @@ void LLFloaterPreference::onClickResetCache()
 	gSavedSettings.setString("CacheLocation", cache_location);
 	std::string top_folder(gDirUtilp->getBaseFileName(cache_location));
 	gSavedSettings.setString("CacheLocationTopFolder", top_folder);
+}
+void LLFloaterPreference::onClickClearCache()
+{
+	gSavedSettings.setBOOL("PurgeCacheOnNextStartup", TRUE);
+	LLNotificationsUtil::add("CacheWillClear");
 }
 
 /*
@@ -1306,8 +1333,11 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	getChildView("log_nearby_chat")->setEnabled(TRUE);
 	getChildView("log_instant_messages")->setEnabled(TRUE);
 	getChildView("show_timestamps_check_im")->setEnabled(TRUE);
-	getChildView("log_path_string")->setEnabled(FALSE);// LineEditor becomes readonly in this case.
+//	getChildView("log_path_string")->setEnabled(FALSE);// LineEditor becomes readonly in this case. || Moved to PostBuild to disable on not logged in state  -WoLf
 	getChildView("log_path_button")->setEnabled(TRUE);
+	getChildView("open_log_path_button")->setEnabled(TRUE);
+	getChildView("log_path_button-panelsetup")->setEnabled(TRUE);// second set of controls for panel_preferences_setup  -WoLf
+	getChildView("open_log_path_button-panelsetup")->setEnabled(TRUE);
 	childEnable("logfile_name_datestamp");	
 	std::string display_email(email);
 	getChild<LLUICtrl>("email_address")->setValue(display_email);
@@ -1750,6 +1780,7 @@ void LLPanelPreferenceSkins::apply()
 		gSavedSettings.setString("SkinCurrentTheme", m_SkinTheme);
 
 		LLNotificationsUtil::add("ChangeSkin");	
+
 	}
 }
 
@@ -1815,6 +1846,8 @@ void LLPanelPreferenceSkins::refreshSkinThemeList()
 		}	
 	}
 	
-	m_pSkinThemeCombo->setSelectedByValue(m_SkinTheme, TRUE);
+	bool foundTheme = m_pSkinThemeCombo->setSelectedByValue(m_SkinTheme, TRUE);
+	if (!foundTheme)
+		m_pSkinThemeCombo->selectFirstItem();
 }
 // </KB>

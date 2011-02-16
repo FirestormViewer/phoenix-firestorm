@@ -83,8 +83,8 @@
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
 ///----------------------------------------------------------------------------
-S32 LLFloaterSnapshot::sUIWinHeightLong = 530 ;
-S32 LLFloaterSnapshot::sUIWinHeightShort = LLFloaterSnapshot::sUIWinHeightLong - 240 ;
+S32 LLFloaterSnapshot::sUIWinHeightLong = 550 ;
+S32 LLFloaterSnapshot::sUIWinHeightShort = LLFloaterSnapshot::sUIWinHeightLong - 260 ;
 S32 LLFloaterSnapshot::sUIWinWidth = 215 ;
 
 LLSnapshotFloaterView* gSnapshotFloaterView = NULL;
@@ -1335,6 +1335,12 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshot* floater)
 	floater->getChildView("keep_aspect_check")->setEnabled(shot_type != LLSnapshotLivePreview::SNAPSHOT_TEXTURE && !floater->impl.mAspectRatioCheckOff);
 	floater->getChildView("layer_types")->setEnabled(shot_type == LLSnapshotLivePreview::SNAPSHOT_LOCAL);
 
+	if (shot_type != LLSnapshotLivePreview::SNAPSHOT_TEXTURE)
+	{
+		floater->childSetValue("temp_check", false);
+	}
+	floater->childSetEnabled("temp_check",			shot_type == LLSnapshotLivePreview::SNAPSHOT_TEXTURE);
+
 	BOOL is_advance = gSavedSettings.getBOOL("AdvanceSnapshot");
 	BOOL is_local = shot_type == LLSnapshotLivePreview::SNAPSHOT_LOCAL;
 	BOOL show_slider = (shot_type == LLSnapshotLivePreview::SNAPSHOT_POSTCARD ||
@@ -1376,6 +1382,7 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshot* floater)
 		LLResMgr::getInstance()->getIntegerString(bytes_string, (previewp->getDataSize()) >> 10 );
 	}
 	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+	floater->childSetVisible("temp_check", is_advance && upload_cost > 0);
 	floater->getChild<LLUICtrl>("texture")->setLabelArg("[AMOUNT]", llformat("%d",upload_cost));
 	floater->getChild<LLUICtrl>("upload_btn")->setLabelArg("[AMOUNT]", llformat("%d",upload_cost));
 	floater->getChild<LLUICtrl>("file_size_label")->setTextArg("[SIZE]", got_snap ? bytes_string : floater->getString("unknown"));
@@ -2150,6 +2157,8 @@ BOOL LLFloaterSnapshot::postBuild()
 	// make sure preview is below snapshot floater
 	parent_view->addChild(previewp);
 	parent_view->addChild(gSnapshotFloaterView);
+	
+	gSavedSettings.setBOOL("TemporaryUpload", FALSE);
 	
 	//move snapshot floater to special purpose snapshotfloaterview
 	gFloaterView->removeChild(this);

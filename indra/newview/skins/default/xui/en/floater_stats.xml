@@ -56,6 +56,7 @@
 			   bar_max="5000"
 			   tick_spacing="500"
 			   label_spacing="1000"
+				 precision="1"
 			   show_bar="true"
 			   show_history="false">
 			</stat_bar>
@@ -68,7 +69,7 @@
 			   bar_max="5"
 			   tick_spacing="0.5"
 			   label_spacing="1"
-			   precision="1"
+			   precision="3"
 			   show_per_sec="false"
 			   show_bar="false"
 			   show_mean="true">
@@ -82,6 +83,7 @@
 			   bar_max="5000"
 			   tick_spacing="500"
 			   label_spacing="1000"
+				 precision="0"
 			   show_bar="false"
 			   show_per_sec="false"
 			   show_mean="false">
@@ -107,7 +109,7 @@
 				 bar_max="10000"
 				 tick_spacing="1000"
 				 label_spacing="2000"
-				 precision="1"
+				 precision="0"
 				 show_per_sec="false">
 			  </stat_bar>
 			  <stat_bar
@@ -119,7 +121,7 @@
 				 bar_max="200000"
 				 tick_spacing="20000"
 				 label_spacing="40000"
-				 precision="1">
+				 precision="0">
 			  </stat_bar>
 			  <stat_bar
 				 name="objs"
@@ -130,7 +132,7 @@
 				 bar_max="50000"
 				 tick_spacing="5000"
 				 label_spacing="10000"
-				 precision="1"
+				 precision="0"
 				 show_per_sec="false"
 				 show_bar="false">
 			  </stat_bar>
@@ -235,6 +237,11 @@
 				 label="Packets In"
 				 stat="packetsinstat"
 				 unit_label="/sec" 
+         bar_min="0.f"
+				 bar_max="1024.f" 
+				 tick_spacing="128.f"
+				 label_spacing="256.f" 
+				 precision="1"
 				 show_bar="false">
 			  </stat_bar>
 
@@ -242,7 +249,12 @@
 				 name="packetsoutstat"
 				 label="Packets Out"
 				 stat="packetsoutstat"
-				 unit_label="/sec" 
+				 unit_label="/sec"  
+         bar_min="0.f"
+				 bar_max="1024.f" 
+				 tick_spacing="128.f"
+				 label_spacing="256.f" 
+				 precision="1"
 				 show_bar="false" >
 			  </stat_bar>
 
@@ -250,7 +262,12 @@
 				 name="objectkbitstat"
 				 label="Objects"
 				 stat="objectkbitstat"
-				 unit_label="kbps"
+         unit_label="kbps"
+         bar_min="0.f"
+         bar_max="1024.f"
+         tick_spacing="128.f"
+         label_spacing="256.f"
+         precision="1"
 				 show_bar="false" >
 			  </stat_bar>
 
@@ -258,7 +275,12 @@
 				 name="texturekbitstat"
 				 label="Texture"
 				 stat="texturekbitstat"
-				 unit_label="kbps"
+         unit_label="kbps"
+         bar_min="0.f"
+         bar_max="1024.f"
+         tick_spacing="128.f"
+         label_spacing="256.f"
+         precision="1"
 				 show_bar="false" >
 			  </stat_bar>
 
@@ -266,7 +288,12 @@
 				 name="assetkbitstat"
 				 label="Asset"
 				 stat="assetkbitstat"
-				 unit_label="kbps"
+         unit_label="kbps"
+         bar_min="0.f"
+         bar_max="1024.f"
+         tick_spacing="128.f"
+         label_spacing="256.f"
+         precision="1"
 				 show_bar="false" >
 			  </stat_bar>
 
@@ -274,7 +301,12 @@
 				 name="layerskbitstat"
 				 label="Layers"
 				 stat="layerskbitstat"
-				 unit_label="kbps"
+         unit_label="kbps"
+         bar_min="0.f"
+         bar_max="1024.f"
+         tick_spacing="128.f"
+         label_spacing="256.f"
+         precision="1"
 				 show_bar="false" >
 			  </stat_bar>
 
@@ -282,11 +314,12 @@
 				 name="actualinkbitstat"
 				 label="Actual In"
 				 stat="actualinkbitstat"
-				 unit_label="kbps"
-				 bar_min="0.f"
-				 bar_max="1024.f" 
-				 tick_spacing="128.f"
-				 label_spacing="256.f" 
+         unit_label="kbps"
+         bar_min="0.f"
+         bar_max="1024.f"
+         tick_spacing="128.f"
+         label_spacing="256.f"
+         precision="1"
 				 show_bar="true"
 				 show_history="false" >
 			  </stat_bar>
@@ -295,20 +328,21 @@
 				 name="actualoutkbitstat"
 				 label="Actual Out"
 				 stat="actualoutkbitstat"
-				 unit_label="kbps"
-				 bar_min="0.f"
-				 bar_max="512.f" 
-				 tick_spacing="128.f"
-				 label_spacing="256.f" 
+         unit_label="kbps"
+         bar_min="0.f"
+         bar_max="1024.f"
+         tick_spacing="128.f"
+         label_spacing="256.f"
+         precision="1"
 				 show_bar="true"
 				 show_history="false">
 			  </stat_bar>
 
 			  <stat_bar
 				 name="vfspendingoperations"
-				 label="VFS Pending Ops"
+				 label="VFS Pending Operations"
 				 stat="vfspendingoperations"
-				 unit_label=" "
+				 unit_label=" Ops."
 				 show_per_sec="false"
 				 show_bar="false" >
 			  </stat_bar>
@@ -324,7 +358,7 @@
 			   name="simtimedilation"
 			   label="Time Dilation"
 			   stat="simtimedilation"
-			   precision="2"
+			   precision="3"
 			   bar_min="0.f"
 			   bar_max="1.f" 
 			   tick_spacing="0.16666f"
@@ -338,6 +372,7 @@
 			   name="simfps"
 			   label="Sim FPS"
 			   stat="simfps"
+			   precision="1"
 			   bar_min="0.f"
 			   bar_max="45.f" 
 			   tick_spacing="7.5f"
@@ -372,8 +407,8 @@
 				 precision="0" 
 				 bar_min="0.f"
 				 bar_max="500.f" 
-				 tick_spacing="10.f"
-				 label_spacing="40.f" 
+				 tick_spacing="50.f"
+				 label_spacing="100.f" 
 				 show_per_sec="false"
 				 show_bar="false"
 				 show_mean="false" >
@@ -386,8 +421,8 @@
 				 precision="0"
 				 bar_min="0.f"
 				 bar_max="500.f" 
-				 tick_spacing="10.f"
-				 label_spacing="40.f" 
+				 tick_spacing="50.f"
+				 label_spacing="100.f" 
 				 show_per_sec="false"
 				 show_bar="false"
 				 show_mean="false" >
@@ -398,7 +433,7 @@
 				 label="Memory Allocated"
 				 stat="physicsmemoryallocated"
 				 unit_label="MB"
-				 precision="0"
+				 precision="1"
 				 bar_min="0.f"
 				 bar_max="1024.f" 
 				 tick_spacing="128.f"
@@ -571,7 +606,7 @@
 			   label="Total Unacked Bytes"
 			   stat="simtotalunackedbytes"
 			   unit_label="kb"
-			   precision="0"
+			   precision="1"
 			   bar_min="0.f"
 			   bar_max="100000.f" 
 			   tick_spacing="25000.f"
@@ -590,7 +625,7 @@
 				 label="Total Frame Time"
 				 stat="simframemsec"
 				 unit_label="ms"
-				 precision="1"
+				 precision="3"
 				 bar_min="0.f"
 				 bar_max="40.f" 
 				 tick_spacing="10.f"
@@ -605,7 +640,7 @@
 				 label="Net Time"
 				 stat="simnetmsec"
 				 unit_label="ms"
-				 precision="1"
+				 precision="3"
 				 bar_min="0.f"
 				 bar_max="40.f" 
 				 tick_spacing="10.f"
@@ -620,7 +655,7 @@
 				 label="Physics Time"
 				 stat="simsimphysicsmsec"
 				 unit_label="ms"
-				 precision="1"
+				 precision="3"
 				 bar_min="0.f"
 				 bar_max="40.f" 
 				 tick_spacing="10.f"
@@ -635,7 +670,7 @@
 				 label="Simulation Time"
 				 stat="simsimothermsec"
 				 unit_label="ms"
-				 precision="1"
+				 precision="3"
 				 bar_min="0.f"
 				 bar_max="40.f" 
 				 tick_spacing="10.f"
@@ -650,7 +685,7 @@
 				 label="Agent Time"
 				 stat="simagentmsec"
 				 unit_label="ms"
-				 precision="1"
+				 precision="3"
 				 bar_min="0.f"
 				 bar_max="40.f" 
 				 tick_spacing="10.f"
@@ -665,7 +700,7 @@
 				 label="Images Time"
 				 stat="simimagesmsec"
 				 unit_label="ms"
-				 precision="1"
+				 precision="3"
 				 bar_min="0.f"
 				 bar_max="40.f" 
 				 tick_spacing="10.f"
@@ -680,7 +715,7 @@
 				 label="Script Time"
 				 stat="simscriptmsec"
 				 unit_label="ms"
-				 precision="1"
+				 precision="3"
 				 bar_min="0.f"
 				 bar_max="40.f" 
 				 tick_spacing="10.f"
@@ -695,7 +730,7 @@
          label="Spare Time"
          stat="simsparemsec"
          unit_label="ms"
-         precision="1"
+         precision="3"
          bar_min="0.f"
          bar_max="40.f"
          tick_spacing="10.f"
@@ -704,6 +739,82 @@
          show_bar="false"
          show_mean="false" >
         </stat_bar>
+        <!--2nd level time blocks under 'Details' second-->
+          <stat_view
+ 			     name="timedetails"
+			     label="Time Details (ms)"
+			     show_label="true">
+            <stat_bar
+             name="simsimphysicsstepmsec"
+             label="  Physics Step"
+             stat="simsimphysicsstepmsec"
+             unit_label="ms"
+             precision="3"
+             bar_min="0.f"
+             bar_max="40.f"
+             tick_spacing="10.f"
+             label_spacing="20.f"
+             show_per_sec="false"
+             show_bar="false"
+             show_mean="false" >
+            </stat_bar>
+            <stat_bar
+             name="simsimphysicsshapeupdatemsec"
+             label="  Update Physics Shapes"
+             stat="simsimphysicsshapeupdatemsec"
+             unit_label="ms"
+             precision="3"
+             bar_min="0.f"
+             bar_max="40.f"
+             tick_spacing="10.f"
+             label_spacing="20.f"
+             show_per_sec="false"
+             show_bar="false"
+             show_mean="false" >
+            </stat_bar>
+            <stat_bar
+             name="simsimphysicsothermsec"
+             label="  Physics Other"
+             stat="simsimphysicsothermsec"
+             unit_label="ms"
+             precision="3"
+             bar_min="0.f"
+             bar_max="40.f"
+             tick_spacing="10.f"
+             label_spacing="20.f"
+             show_per_sec="false"
+             show_bar="false"
+             show_mean="false" >
+            </stat_bar>
+            <stat_bar
+             name="simsleepmsec"
+             label="  Sleep Time"
+             stat="simsleepmsec"
+             unit_label="ms"
+             precision="3"
+             bar_min="0.f"
+             bar_max="40.f"
+             tick_spacing="10.f"
+             label_spacing="20.f"
+             show_per_sec="false"
+             show_bar="false"
+             show_mean="false" >
+            </stat_bar>
+            <stat_bar
+             name="simpumpiomsec"
+             label="  Pump IO"
+             stat="simpumpiomsec"
+             unit_label="ms"
+             precision="3"
+             bar_min="0.f"
+             bar_max="40.f"
+             tick_spacing="10.f"
+             label_spacing="20.f"
+             show_per_sec="false"
+             show_bar="false"
+             show_mean="false" >
+            </stat_bar>
+			</stat_view>
 			</stat_view>
 		  </stat_view>
 		</container_view>

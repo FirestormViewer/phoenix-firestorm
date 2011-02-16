@@ -671,11 +671,32 @@ void LLVOVolume::updateTextures()
 	}
 }
 
+BOOL LLVOVolume::isVisible() const 
+{
+	if(mDrawable.notNull() && mDrawable->isVisible())
+	{
+		return TRUE ;
+	}
+
+	if(isAttachment())
+	{
+		LLViewerObject* objp = (LLViewerObject*)getParent() ;
+		while(objp && !objp->isAvatar())
+		{
+			objp = (LLViewerObject*)objp->getParent() ;
+		}
+
+		return objp && objp->mDrawable.notNull() && objp->mDrawable->isVisible() ;
+	}
+
+	return FALSE ;
+}
+
 void LLVOVolume::updateTextureVirtualSize()
 {
 	// Update the pixel area of all faces
 
-	if(mDrawable.isNull() || !mDrawable->isVisible())
+	if(!isVisible())
 	{
 		return ;
 	}
@@ -2149,7 +2170,7 @@ void LLVOVolume::removeMediaImpl(S32 texture_index)
 	}
 
 	//make the face referencing to mMediaImplList[texture_index] to point back to the old texture.
-	if(mDrawable)
+	if(mDrawable && texture_index < mDrawable->getNumFaces())
 	{
 		LLFace* facep = mDrawable->getFace(texture_index) ;
 		if(facep)
@@ -2745,14 +2766,7 @@ void LLVOVolume::updateRadius()
 
 BOOL LLVOVolume::isAttachment() const
 {
-	if (mState == 0)
-	{
-		return FALSE;
-	}
-	else
-	{
-		return TRUE;
-	}
+	return mState != 0 ;
 }
 
 BOOL LLVOVolume::isHUDAttachment() const

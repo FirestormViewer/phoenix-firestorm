@@ -891,11 +891,14 @@ LLWString LLNearbyChatBar::stripChannelNumber(const LLWString &mesg, S32* channe
 	}
 	else if (mesg[0] == '/'
 			 && mesg[1]
-			 && LLStringOps::isDigit(mesg[1]))
+			 && ( LLStringOps::isDigit(mesg[1])
+				 || (mesg[1] == '-'
+				 	&& LLStringOps::isDigit(mesg[2]))))
 	{
 		// This a special "/20" speak on a channel
 		S32 pos = 0;
-
+		if(mesg[1] == '-')
+			pos++;
 		// Copy the channel number into a string
 		LLWString channel_string;
 		llwchar c;
@@ -917,6 +920,8 @@ LLWString LLNearbyChatBar::stripChannelNumber(const LLWString &mesg, S32* channe
 		}
 		
 		sLastSpecialChatChannel = strtol(wstring_to_utf8str(channel_string).c_str(), NULL, 10);
+		if(mesg[1] == '-')
+			sLastSpecialChatChannel = -sLastSpecialChatChannel;
 		*channel = sLastSpecialChatChannel;
 		return mesg.substr(pos, mesg.length() - pos);
 	}
@@ -980,14 +985,29 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 // [/RLVa:KB]
 
 	LLMessageSystem* msg = gMessageSystem;
-	msg->newMessageFast(_PREHASH_ChatFromViewer);
-	msg->nextBlockFast(_PREHASH_AgentData);
-	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-	msg->nextBlockFast(_PREHASH_ChatData);
-	msg->addStringFast(_PREHASH_Message, utf8_out_text);
-	msg->addU8Fast(_PREHASH_Type, type);
-	msg->addS32("Channel", channel);
+	if(channel >= 0)
+	{
+		msg->newMessageFast(_PREHASH_ChatFromViewer);
+		msg->nextBlockFast(_PREHASH_AgentData);
+		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		msg->nextBlockFast(_PREHASH_ChatData);
+		msg->addStringFast(_PREHASH_Message, utf8_out_text);
+		msg->addU8Fast(_PREHASH_Type, type);
+		msg->addS32("Channel", channel);
+	}
+	else
+	{
+		msg->newMessage("ScriptDialogReply");
+		msg->nextBlock("AgentData");
+		msg->addUUID("AgentID", gAgent.getID());
+		msg->addUUID("SessionID", gAgent.getSessionID());
+		msg->nextBlock("Data");
+		msg->addUUID("ObjectID", gAgent.getID());
+		msg->addS32("ChatChannel", channel);
+		msg->addS32("ButtonIndex", 0);
+		msg->addString("ButtonLabel", utf8_out_text);
+	}
 
 	gAgent.sendReliableMessage();
 

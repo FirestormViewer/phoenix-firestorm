@@ -21,7 +21,7 @@
      layout="topleft"
      left="30"
      name="clear_cache"
-     top="1"
+     top="10"
      width="145">
         <button.commit_callback
          function="Pref.WebClearCache" />
@@ -34,8 +34,8 @@
      layout="topleft"
      left_pad="10"
      mouse_opaque="false"
-     name="cache_size_label_l"
-     top_delta="35"
+     name="cache_size_label"
+     top_delta="3"
      text_color="LtGray_50"
      width="300">
        (Locations, images, web, search history)
@@ -153,13 +153,27 @@
 	 enabled="false"
      follows="right|bottom"
      height="23"
-     label="Browse"
-     label_selected="Browse"
+     label="Open"
+     label_selected="Open"
+     layout="topleft"
+     left_pad="5"
+     name="open_log_path_button"
+     top_delta="0"
+     width="40">
+        <button.commit_callback
+         function="Pref.BrowseLogPath" />
+    </button>
+    <button
+	 enabled="false"
+     follows="right|bottom"
+     height="23"
+     label="Set"
+     label_selected="Set"
      layout="topleft"
      left_pad="5"
      name="log_path_button"
-     top_delta="-30"
-     width="145">
+     top_delta="0"
+     width="40">
         <button.commit_callback
          function="Pref.LogPath" />
     </button>

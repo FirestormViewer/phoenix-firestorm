@@ -112,16 +112,30 @@ Packets Lost: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number
        width="435"
        word_wrap="true">
 
-Firestorm is a community development project to improve the SecondLife(tm) Viewer2 experience. We package contributions from various community developers along with code from Linden Labs and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team. Firestorm is a part of The Phoenix Viewer Project, a non profit organization.
+Firestorm is a community development project to improve the SecondLife(tm)
+Viewer2 experience.  We package contributions from various community
+developers along with code from Linden Labs and ourselves to bring you a
+quality, feature-rich viewer experience backed up by a large volunteer
+support team.  Firestorm is brought to you by The Phoenix Viewer Project,
+Inc., a non-profit organization.
 
-Contributors include:
-Kitty Barnett, Zwagoth, Hitomi Tiponi, Satomi Ahn, Arrehn Oberlander, Tonya Souther, Spirit Magic, Nicky Dasmijn, Tankmaster Finesmith, Tozh Taurog, Chalice Yao, Shyotl Kuhr, Mobius Ryba, Wolfspirit, Jessica Lyon, Liny Odell, Kadah Coba, Thickbrick, Armin WeatherHax, Ansariel Hiller  [Placeholder for other Phoenix and TPV devs]
+The Firestorm development team:
+LordGreggreg Back, Kitty Barnett, Kadah Coba, Tankmaster Finesmith, Wolf
+Loonie, Techwolf Lupindo, Jessica Lyon, Wolfspirit Magic, Arrehn Oberlander,
+Liny Odell, Mobius Ryba, Tonya Souther, and Tozh Taurog.
 
-Starlight UI additional contributors: Alexandrea Fride, psi Merlin, Hugh Helendale, Digital Scribe, Naomah Beaumont, Nadin, KirstenLee Cinquetti
+Starlight UI by Hitomi Tiponi and: Alexandrea Fride, psi Merlin, Hugh
+Helendale, Digital Scribe, Naomah Beaumont, Nadin, KirstenLee Cinquetti
+
+Additional code contributed by:
+Satomi Ahn, Lance Corrimal, Nicki Dasmijn, Ansariel Hiller, Zwagoth Klaar,
+Shyotl Kuhr, Thickbrick Sleaford, Hitomi Tiponi, Armin WeatherHax, Chalice
+Yao, and others.
 
 Additional Artists:
-Some icons by Sammie Bennoir, some icons by Joseph Wain / glyphish.com
-Viewer 1 icons, cursors and misc art by Linden Lab
+New icons by Joseph Wain / glyphish.com
+Sammie Bennoir, Mobius Ryba 
+Viewer 1 icons, cursors and other art by Linden Lab
 
 Firestorm would not be possible without the decision from Linden Labs to make their Second Life viewer source code available.
 

@@ -906,6 +906,10 @@ void LLAgentCamera::cameraZoomIn(const F32 fraction)
 	F32 current_distance = (F32)camera_offset_unit.normalize();
 	F32 new_distance = current_distance * fraction;
 
+	// Freeing the camera movement some more -KC
+	static LLCachedControl<bool> disable_minconstraints(gSavedSettings,"PhoenixDisableMinZoomDist");
+	if (!disable_minconstraints)
+	{
 	// Don't move through focus point
 	if (mFocusObject)
 	{
@@ -921,13 +925,16 @@ void LLAgentCamera::cameraZoomIn(const F32 fraction)
 		}
 	}
 
-	new_distance = llmax(new_distance, min_zoom); 
+	new_distance = llmax(new_distance, min_zoom);
+	}	
 
 	// Don't zoom too far back
 	const F32 DIST_FUDGE = 16.f; // meters
-	F32 max_distance = llmin(mDrawDistance - DIST_FUDGE, 
+	// Freeing the camera movement some more... ok, a lot -KC
+	static LLCachedControl<bool> disable_constraints(gSavedSettings,"DisableCameraConstraints");
+	F32 max_distance = disable_constraints ? INT_MAX : llmin(mDrawDistance - DIST_FUDGE, 
 							 LLWorld::getInstance()->getRegionWidthInMeters() - DIST_FUDGE );
-
+	
 	if (new_distance > max_distance)
 	{
 		new_distance = max_distance;
@@ -974,6 +981,11 @@ void LLAgentCamera::cameraOrbitIn(const F32 meters)
 		LLVector3d	camera_offset_unit(mCameraFocusOffsetTarget);
 		F32 current_distance = (F32)camera_offset_unit.normalize();
 		F32 new_distance = current_distance - meters;
+		
+		// Freeing the camera movement some more -KC
+		static LLCachedControl<bool> disable_minconstraints(gSavedSettings,"PhoenixDisableMinZoomDist");
+		if (!disable_minconstraints)
+        {
 		F32 min_zoom = LAND_MIN_ZOOM;
 		
 		// Don't move through focus point
@@ -990,16 +1002,19 @@ void LLAgentCamera::cameraOrbitIn(const F32 meters)
 		}
 
 		new_distance = llmax(new_distance, min_zoom);
+		}
 
 		// Don't zoom too far back
 		const F32 DIST_FUDGE = 16.f; // meters
-		F32 max_distance = llmin(mDrawDistance - DIST_FUDGE, 
+		// Freeing the camera movement some more... ok, a lot -KC
+		static LLCachedControl<bool> disable_constraints(gSavedSettings,"DisableCameraConstraints");
+		F32 max_distance = disable_constraints ? INT_MAX : llmin(mDrawDistance - DIST_FUDGE, 
 								 LLWorld::getInstance()->getRegionWidthInMeters() - DIST_FUDGE );
 
 		if (new_distance > max_distance)
 		{
 			// Unless camera is unlocked
-			if (!gSavedSettings.getBOOL("DisableCameraConstraints"))
+			if (!disable_constraints)
 			{
 				return;
 			}
@@ -1663,7 +1678,10 @@ F32	LLAgentCamera::calcCameraFOVZoomFactor()
 		// don't FOV zoom on mostly transparent objects
 		LLVector3 focus_offset = mFocusObjectOffset;
 		F32 obj_min_dist = 0.f;
-		calcCameraMinDistance(obj_min_dist);
+		// Freeing the camera movement some more -KC
+		static LLCachedControl<bool> disable_minconstraints(gSavedSettings,"PhoenixDisableMinZoomDist");
+		if (!disable_minconstraints)
+			calcCameraMinDistance(obj_min_dist);
 		F32 current_distance = llmax(0.001f, camera_offset_dir.magVec());
 
 		mFocusObjectDist = obj_min_dist - current_distance;
@@ -1921,19 +1939,19 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 //
 //				isConstrained = TRUE;
 //			}
+	
+
+		// Don't let camera go underground
+		F32 camera_min_off_ground = getCameraMinOffGround();
+
+		camera_land_height = LLWorld::getInstance()->resolveLandHeightGlobal(camera_position_global);
+
+		if (camera_position_global.mdV[VZ] < camera_land_height + camera_min_off_ground)
+		{
+			camera_position_global.mdV[VZ] = camera_land_height + camera_min_off_ground;
+			isConstrained = TRUE;
+		}
 	}
-
-	// Don't let camera go underground
-	F32 camera_min_off_ground = getCameraMinOffGround();
-
-	camera_land_height = LLWorld::getInstance()->resolveLandHeightGlobal(camera_position_global);
-
-	if (camera_position_global.mdV[VZ] < camera_land_height + camera_min_off_ground)
-	{
-		camera_position_global.mdV[VZ] = camera_land_height + camera_min_off_ground;
-		isConstrained = TRUE;
-	}
-
 
 	if (hit_limit)
 	{
