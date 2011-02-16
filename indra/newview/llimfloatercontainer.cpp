@@ -74,8 +74,9 @@ void LLIMFloaterContainer::onOpen(const LLSD& key)
 
 	// If we're using multitabs, and we open up for the first time
 	// Add localchat by default if it's not already on the screen somewhere else. -AO	
+	// But only if it hasnt been already so we can reopen it to the same tab -KC
 	LLFloater* floater = LLNearbyChat::getInstance();
-	if (! LLFloater::isVisible(floater))
+	if (! LLFloater::isVisible(floater) && (floater->getHost() != this))
 	{
 		if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
