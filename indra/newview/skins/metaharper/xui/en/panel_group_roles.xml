@@ -355,8 +355,8 @@ things in this group. There&apos;s a broad variety of Abilities.
      name="members_footer"
      top="192"
      left="4"
-     right="-4"
-     height="226"
+     right="-2"
+     height="224"
      background_visible="false"
      bg_alpha_color="FloaterUnfocusBorderColor"
      follows="all"
@@ -382,26 +382,17 @@ things in this group. There&apos;s a broad variety of Abilities.
      follows="all"
      layout="topleft">
 
-    we need to use <panel> for now
 //-->
-    <panel
-     name="group_roles_layout_panel"
-     left="0"
-     top="0"
-     width="178"
-     height="226"
-     follows="top|bottom|left"
-     layout="topleft">
 
         <text
          name="assigned_roles_label"
-         left="4"
-         width="170"
+         left="0"
+         right="-1"
          top_pad="4"
          height="16"
          type="string"
          text_color="EmphasisColor"
-         follows="left|top"
+         follows="left|top|right"
          layout="topleft">
         Assigned Roles
         </text>
@@ -409,10 +400,10 @@ things in this group. There&apos;s a broad variety of Abilities.
         <scroll_list
          name="member_assigned_roles"
          top_pad="0"
-         width="170"
-         height="206"
+         right="-1"
+         height="93"
          draw_stripes="true"
-         follows="all"
+         follows="top|left|right"
          layout="topleft">
             <scroll_list.columns
              label=""
@@ -436,24 +427,12 @@ things in this group. There&apos;s a broad variety of Abilities.
      layout="topleft">
 
 //-->
-
-    </panel>
-
-    <panel
-     name="group_roles_layout_panel"
-     left_pad="0"
-     top="0"
-     width="282"
-     height="226"
-     follows="all"
-     layout="topleft">
-
         <text
          type="string"
          top_pad="4"
-         width="222"
+         right="-1"
          height="16"
-         follows="left|top"
+         follows="left|top|right"
          text_color="EmphasisColor"
          name="static2"
          layout="topleft">
@@ -462,9 +441,9 @@ things in this group. There&apos;s a broad variety of Abilities.
 
         <scroll_list
          tool_tip="For details of each allowed ability see the abilities tab"
-         width="282"
+         right="-1"
          top_pad="0"
-         height="206"
+         height="93"
          draw_stripes="true"
          name="member_allowed_actions"
          search_column="2"
@@ -487,7 +466,6 @@ things in this group. There&apos;s a broad variety of Abilities.
     </layout_panel>
     </layout_stack>
 //-->
-    </panel>
     </panel>
 
 <!-- ROLES footer -->
@@ -525,11 +503,11 @@ things in this group. There&apos;s a broad variety of Abilities.
          top="0"
          height="16"
          label="Reveal members"
-         left="75"
+         left="2"
          layout="topleft"
          name="role_visible_in_list"
          tool_tip="Sets whether members of this role are visible in the General tab to people outside of the group."
-         width="300" />
+         width="16" />
 
         <text
          name="role_name_label"
@@ -637,19 +615,19 @@ things in this group. There&apos;s a broad variety of Abilities.
      name="group_roles_layout_panel"
      left="0"
      top="61"
-     width="178"
-     height="165"
-     follows="top|bottom|left"
+     right="-1"
+     height="105"
+     follows="top|left|right"
      layout="topleft">
 
         <text
          name="assigned_members_label"
          left="0"
          top_pad="0"
-         width="174"
+         right="-1"
          height="16"
          type="string"
-         follows="left|top"
+         follows="left|top|right"
          text_color="EmphasisColor"
          layout="topleft">
         Assigned Members
@@ -659,8 +637,8 @@ things in this group. There&apos;s a broad variety of Abilities.
          name="role_assigned_members"
          left="0"
          top_pad="0"
-         width="174"
-         height="149"
+         right="-1"
+         height="89"
          draw_stripes="true"
          follows="all"
          layout="topleft" />
@@ -679,10 +657,9 @@ things in this group. There&apos;s a broad variety of Abilities.
 //-->
     <panel
      name="group_roles_layout_panel"
-     left_pad="0"
-     top="61"
-     width="282"
-     height="165"
+     top_pad="4"
+     right="-1"
+     height="56"
      follows="all"
      layout="topleft">
 
@@ -690,11 +667,11 @@ things in this group. There&apos;s a broad variety of Abilities.
          name="allowed_abilities_label"
          left="0"
          top_pad="0"
-         width="282"
+         right="-1"
          height="16"
          type="string"
          text_color="EmphasisColor"
-         follows="left|top"
+         follows="left|top|right"
          layout="topleft">
         Allowed Abilities
         </text>
@@ -703,8 +680,8 @@ things in this group. There&apos;s a broad variety of Abilities.
          name="role_allowed_actions"
          tool_tip="For details of each allowed ability see the abilities tab"
          top_pad="0"
-         width="282"
-         height="149"
+         right="-1"
+         height="40"
          draw_stripes="true"
          search_column="2"
          follows="all"
@@ -746,6 +723,16 @@ things in this group. There&apos;s a broad variety of Abilities.
      follows="all"
      layout="topleft">
 
+        <panel
+         top="0"
+         left="0"
+         right="-1"
+         height="60"
+         border="true"
+         bevel_style="in"
+         follows="left|top|right"
+         layout="topleft">
+
         <text_editor
          name="action_description"
          top="0"
@@ -754,7 +741,6 @@ things in this group. There&apos;s a broad variety of Abilities.
          height="60"
          halign="left"
          bg_readonly_color="Transparent"
-         text_readonly_color="EmphasisColor"
          font="SansSerifSmall"
          type="string"
          enabled="false"
@@ -765,6 +751,7 @@ things in this group. There&apos;s a broad variety of Abilities.
         This Ability is &apos;Eject Members from this Group&apos;. Only an Owner can eject another Owner.
         </text_editor>
 
+    </panel>
 <!--
         <layout_stack
          name="abilities_members_actions_layout_stack"
@@ -781,26 +768,17 @@ things in this group. There&apos;s a broad variety of Abilities.
          user_resize="true"
          follows="top"
          layout="topleft">
-
-        we need to use <panel> for now
 //-->
-        <panel
-         name="abilities_members_layout_panel"
-         left="0"
-         top="61"
-         width="178"
-         height="165"
-         follows="top|bottom|left"
-         layout="topleft">
 
         <text
          name="action_roles_label"
          left="0"
          top_pad="0"
-         width="174"
+         right="-1"
          height="16"
          type="string"
-         follows="left|top"
+         text_color="EmphasisColor"
+         follows="left|top|right"
          layout="topleft">
         Roles with this ability
         </text>
@@ -808,9 +786,9 @@ things in this group. There&apos;s a broad variety of Abilities.
         <scroll_list
          name="action_roles"
          top_pad="0"
-         width="174"
-         height="149"
-         follows="all"
+         right="-1"
+         height="90"
+         follows="left|top|right"
          layout="topleft" />
 <!--
         </layout_panel>
@@ -821,23 +799,14 @@ things in this group. There&apos;s a broad variety of Abilities.
          follows="top"
          layout="topleft">
 //-->
-        </panel>
-        <panel
-         name="abilities_actions_layout_panel"
-         left_pad="0"
-         top="61"
-         width="283"
-         height="165"
-         follows="all"
-         layout="topleft">
 
         <text
          name="action_members_label"
-         left="0"
          top_pad="0"
-         width="283"
+         right="-1"
          height="16"
          type="string"
+         text_color="EmphasisColor"
          follows="top|left|right"
          layout="topleft">
         Members with this ability
@@ -847,25 +816,14 @@ things in this group. There&apos;s a broad variety of Abilities.
          name="action_members"
          left="0"
          top_pad="0"
-         width="283"
-         height="149"
+         right="-1"
+         height="46"
          follows="all"
-         layout="topleft">
-
-        <row name="y01" value="01" />
-        <row name="y02" value="02" />
-        <row name="y03" value="03" />
-        <row name="y04" value="04" />
-        <row name="y05" value="05" />
-        <row name="y06" value="06" />
-        <row name="y07" value="07" />
-
-         </name_list>
+         layout="topleft" />
 <!--
         </layout_panel>
         </layout_stack>
 //-->
-    </panel>
     </panel>
 <!--
 	</layout_panel>
