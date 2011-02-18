@@ -41,15 +41,22 @@ public:
 	int	startStream();
 	bool stopStream(); // Returns true if the stream was successfully stopped.
 	bool ready();
+	bool hasNewMetadata();
+        std::string getCurrentArtist();
+        std::string getCurrentTitle();
 
 	const std::string& getURL() 	{ return mInternetStreamURL; }
 
 	int getOpenState();
 protected:
+	static signed char F_CALLBACKAPI metadataCallback(char *name, char *value, void *userdata);
 	FSOUND_STREAM* mInternetStream;
 	bool mReady;
 
 	std::string mInternetStreamURL;
+	std::string mArtist;
+	std::string mTitle;
+	bool mHaveNewMetadata;
 };
 
 
@@ -271,6 +278,29 @@ void LLStreamingAudio_FMOD::setGain(F32 vol)
 	}
 }
 
+bool LLStreamingAudio_FMOD::hasNewMetadata()
+{
+	if(mCurrentInternetStreamp) 
+		return mCurrentInternetStreamp->hasNewMetadata();
+        
+	return false;
+}
+
+std::string LLStreamingAudio_FMOD::getCurrentTitle()
+{
+	if(mCurrentInternetStreamp)
+		return mCurrentInternetStreamp->getCurrentTitle();
+ 
+	return "";
+}
+ 
+std::string LLStreamingAudio_FMOD::getCurrentArtist()
+{
+	if(mCurrentInternetStreamp)
+		return mCurrentInternetStreamp->getCurrentArtist();
+
+	return "";
+}
 
 ///////////////////////////////////////////////////////
 // manager of possibly-multiple internet audio streams
@@ -304,6 +334,7 @@ int LLAudioStreamManagerFMOD::startStream()
 
 	// Make sure the stream is set to 2D mode.
 	FSOUND_Stream_SetMode(mInternetStream, FSOUND_2D);
+	FSOUND_Stream_Net_SetMetadataCallback(mInternetStream, metadataCallback, this);
 
 	return FSOUND_Stream_PlayEx(FSOUND_FREE, mInternetStream, NULL, true);
 }
@@ -354,3 +385,40 @@ int LLAudioStreamManagerFMOD::getOpenState()
 	int open_state = FSOUND_Stream_GetOpenState(mInternetStream);
 	return open_state;
 }
+
+bool LLAudioStreamManagerFMOD::hasNewMetadata()
+{
+	bool ret = mHaveNewMetadata;
+	mHaveNewMetadata = false;
+	return ret;
+}
+
+std::string LLAudioStreamManagerFMOD::getCurrentArtist()
+{
+	return mArtist;
+}
+
+std::string LLAudioStreamManagerFMOD::getCurrentTitle()
+{
+	return mTitle;
+}
+
+signed char F_CALLBACKAPI LLAudioStreamManagerFMOD::metadataCallback(char *name, char *value, void *userdata)
+{
+	LLAudioStreamManagerFMOD* self = (LLAudioStreamManagerFMOD*)userdata;
+	if(!strcmp("ARTIST", name))
+	{
+		self->mArtist = std::string(value);
+		self->mHaveNewMetadata = true;
+		return true;
+	}
+
+	if (!strcmp("TITLE", name))
+	{
+		self->mTitle = std::string(value);
+		self->mHaveNewMetadata = true;
+		return true;
+	}
+	return true;
+}
+

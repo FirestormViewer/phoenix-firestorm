@@ -200,6 +200,7 @@
 
 #include "llnotificationmanager.h"
 
+#include "streamtitledisplay.h"
 
 //
 // exported globals
@@ -2701,6 +2702,9 @@ void LLStartUp::multimediaInit()
 
 	// LLViewerMedia::initClass();
 	LLViewerParcelMedia::initClass();
+
+	// Also initialise the stream titles.
+	new StreamTitleDisplay();
 }
 
 void LLStartUp::fontInit()
