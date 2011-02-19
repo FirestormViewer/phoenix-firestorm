@@ -80,6 +80,9 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llwearablelist.h"
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 BOOL LLInventoryState::sWearNewClothing = FALSE;
 LLUUID LLInventoryState::sWearNewClothingTransactionID;
@@ -360,6 +363,13 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 		return FALSE;
 	}
 
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+	if ( (rlv_handler_t::isEnabled()) && (gRlvFolderLocks.isLockedFolder(id, RLV_LOCK_ANY)) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
+
 	if (!isAgentAvatarValid()) return FALSE;
 
 	const LLInventoryCategory* category = model->getCategory(id);
@@ -394,6 +404,14 @@ BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 	{
 		return FALSE;
 	}
+
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+	if ( (rlv_handler_t::isEnabled()) && (gRlvFolderLocks.isLockedFolder(id, RLV_LOCK_ANY)) && 
+		 (model->isObjectDescendentOf(id, gInventory.getRootFolderID())) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
 
 	LLViewerInventoryCategory* cat = model->getCategory(id);
 
