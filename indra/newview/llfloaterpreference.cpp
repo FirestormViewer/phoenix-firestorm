@@ -1001,11 +1001,14 @@ void LLFloaterPreference::refreshEnabledState()
 		ctrl_deferred->setEnabled(enabled);
 	
 		LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
+		LLCheckBoxCtrl* ctrl_UseGI = getChild<LLCheckBoxCtrl>("UseGI");
 		LLComboBox* ctrl_shadow = getChild<LLComboBox>("ShadowDetail");
 
 		enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO") && (ctrl_deferred->get() ? TRUE : FALSE);
 		
 		ctrl_ssao->setEnabled(enabled);
+		
+		ctrl_UseGI->setEnabled(enabled);
 
 		enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail");
 
@@ -1030,6 +1033,7 @@ void LLFloaterPreference::disableUnavailableSettings()
 	LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
+	LLCheckBoxCtrl* ctrl_UseGI = getChild<LLCheckBoxCtrl>("UseGI");
 
 	// if vertex shaders off, disable all shader related products
 	if(!LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable"))
@@ -1055,6 +1059,9 @@ void LLFloaterPreference::disableUnavailableSettings()
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
 
+		ctrl_UseGI->setEnabled(FALSE);
+		ctrl_UseGI->setValue(FALSE);
+
 		ctrl_deferred->setEnabled(FALSE);
 		ctrl_deferred->setValue(FALSE);
 	}
@@ -1072,6 +1079,9 @@ void LLFloaterPreference::disableUnavailableSettings()
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
 
+		ctrl_UseGI->setEnabled(FALSE);
+		ctrl_UseGI->setValue(FALSE);
+
 		ctrl_deferred->setEnabled(FALSE);
 		ctrl_deferred->setValue(FALSE);
 	}
@@ -1085,6 +1095,9 @@ void LLFloaterPreference::disableUnavailableSettings()
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
 
+		ctrl_UseGI->setEnabled(FALSE);
+		ctrl_UseGI->setValue(FALSE);
+
 		ctrl_deferred->setEnabled(FALSE);
 		ctrl_deferred->setValue(FALSE);
 	}
@@ -1094,6 +1107,9 @@ void LLFloaterPreference::disableUnavailableSettings()
 	{
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
+
+		ctrl_UseGI->setEnabled(FALSE);
+		ctrl_UseGI->setValue(FALSE);
 	}
 	
 	// disabled deferred shadows
@@ -1125,6 +1141,9 @@ void LLFloaterPreference::disableUnavailableSettings()
 		
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
+		
+		ctrl_UseGI->setEnabled(FALSE);
+		ctrl_UseGI->setValue(FALSE);
 
 		ctrl_deferred->setEnabled(FALSE);
 		ctrl_deferred->setValue(FALSE);
