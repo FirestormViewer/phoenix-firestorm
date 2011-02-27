@@ -452,13 +452,36 @@ void LLWorldMapView::draw()
 		{
 			LLFontGL* font = LLFontGL::getFont(LLFontDescriptor("SansSerif", "Small", LLFontGL::BOLD));
 			std::string mesg;
-			if (info->isDown())
+// [RLVa:KB]
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+			{
+				mesg = RlvStrings::getString(RLV_STRING_HIDDEN);
+			}
+			else if (info->isDown())
+			//if (info->isDown())
+// [/RLVa:KB]
 			{
 				mesg = llformat( "%s (%s)", info->getName().c_str(), sStringsMap["offline"].c_str());
 			}
 			else
 			{
+				S32 agent_count = info->getAgentCount();
+				LLViewerRegion *region = gAgent.getRegion();
+
+				if (region && region->getHandle() == info->getHandle())
+				{
+					++agent_count; // Bump by 1 if we're in this region
+				}
+
 				mesg = info->getName();
+
+				if (agent_count > 0)
+				{
+					mesg += llformat(" (%d)",agent_count);
+				}
+				if (info->isPG()) mesg += " (General)";
+				else if (info->isMature()) mesg += " (Moderate)";
+				else if (info->isAdult()) mesg += " (Adult)";
 			}
 			if (!mesg.empty())
 			{
