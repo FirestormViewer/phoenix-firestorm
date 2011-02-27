@@ -82,7 +82,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
 			 enabled="false"
 			 follows="left|top"
 			 max_length="254"
-			 name="key_"
+			 name="user_key"
 			 value="b33c0d4e-704c-4726-97a3-5956cf349336" />
 
 			<text

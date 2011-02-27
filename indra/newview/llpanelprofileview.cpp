@@ -109,6 +109,7 @@ void LLPanelProfileView::onOpen(const LLSD& key)
 		getChild<LLUICtrl>("complete_name")->setValue( LLSD() );
 		getChild<LLUICtrl>("display_name")->setValue( LLSD() );
 		getChild<LLUICtrl>("user_name")->setValue( LLSD() );
+		getChild<LLUICtrl>("user_key")->setValue( LLSD() );
 	}
 
 	// Update the avatar name.
@@ -154,6 +155,7 @@ BOOL LLPanelProfileView::postBuild()
 				getChild<LLUICtrl>("complete_name", FALSE),
 				getChild<LLUICtrl>("display_name", FALSE),
 				getChild<LLUICtrl>("user_name", FALSE),
+				getChild<LLUICtrl>("user_key", FALSE),
 				getChild<LLUICtrl>("display_name_label", FALSE),
 				getChild<LLUICtrl>("solo_username_label", FALSE),
 				getChild<LLUICtrl>("user_name_small", FALSE),
@@ -247,6 +249,7 @@ void LLPanelProfileView::onAvatarNameCache(const LLUUID& agent_id,
 	getChild<LLUICtrl>("complete_name")->setValue( av_name.getCompleteName() );
 	getChild<LLUICtrl>("display_name")->setValue( av_name.mDisplayName );
 	getChild<LLUICtrl>("user_name")->setValue( av_name.mUsername );
+	getChild<LLUICtrl>("user_key")->setValue( agent_id.asString() );
 
 #if 0
 	getChild<LLUICtrl>("user_name")->setValue( av_name.mDisplayName );
