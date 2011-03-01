@@ -6,7 +6,7 @@
 		</text>
 	</panel>
 	<panel name="layout_panel_2">
-		<button name="Show My Location" tool_tip="Centra la mappa sulla posizione del mio avatar"/>
+		<button name="Show Current Location" tool_tip="Centra la mappa sulla posizione del mio avatar"/>
 		<text name="me_label">
 			Io
 		</text>
