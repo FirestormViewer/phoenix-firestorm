@@ -17,6 +17,7 @@ WANTS_CONFIG=$FALSE
 WANTS_BUILD=$FALSE
 WANTS_PACKAGE=$FALSE
 WANTS_VERSION=$FALSE
+WANTS_FMOD=$FALSE
 BTYPE="Release"
 CHANNEL="private-`hostname`"
 
@@ -38,12 +39,13 @@ showUsage()
         echo "  --rebuild   : Build, reusing unchanged projects to save time"
         echo "  --chan [Release|Beta|Private] : Private is the default, sets channel"
         echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
+	echo "  --fmod	    : Build with fmod"
 }
 
 getArgs()
 # $* = the options passed in from main
 {
-        while getoptex "clean config version rebuild help chan: btype:" "$@" ; do
+        while getoptex "clean config version fmod rebuild help chan: btype:" "$@" ; do
 
             case "$OPTOPT" in
             clean)    WANTS_CLEAN=$TRUE;;
@@ -54,6 +56,7 @@ getArgs()
                       WANTS_PACKAGE=$TRUE;;
             chan)     CHANNEL="$OPTARG";;
             btype)    BTYPE="$OPTARG";;
+	    fmod)     WANTS_FMOD=$TRUE;;
 
             help)     showUsage && exit 0;;
 
@@ -229,8 +232,13 @@ if [ $WANTS_VERSION -eq $TRUE ] ; then
 fi
 
 if [ $WANTS_CONFIG -eq $TRUE ] ; then
+	if [ $WANTS_FMOD -eq $TRUE ] ; then
+		FMOD="-DFMOD:BOOL=ON"
+        else
+		FMOD="-DFMOD:BOOL=OFF"
+	fi
         mkdir -p ../logs > /dev/null 2>&1
-        ./develop.py -t $BTYPE configure -DFIRECYG:BOOL=ON -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=OFF -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
+        ./develop.py -t $BTYPE configure $FMOD -DFIRECYG:BOOL=ON -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=OFF -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
 fi
 
 
