@@ -389,12 +389,12 @@ BOOL LLInvFVBridge::isClipboardPasteable() const
 	{
 		const LLUUID &item_id = objects.get(i);
 
-		// Can't paste folders
-		const LLInventoryCategory *cat = model->getCategory(item_id);
-		if (cat)
-		{
-			return FALSE;
-		}
+		// Can't paste folders   <-- why not?
+// 		const LLInventoryCategory *cat = model->getCategory(item_id);
+// 		if (cat)
+// 		{
+// 			return FALSE;
+// 		}
 
 		const LLInventoryItem *item = model->getItem(item_id);
 		if (item)
@@ -571,6 +571,7 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 			{
 				disabled_items.push_back(std::string("Copy"));
 			}
+			items.push_back(std::string("Cut"));
 		}
 	}
 
@@ -1056,6 +1057,11 @@ void LLItemBridge::performAction(LLInventoryModel* model, std::string action)
 	else if ("copy" == action)
 	{
 		copyToClipboard();
+		return;
+	}
+	else if ("cut" == action)
+	{
+		cutToClipboard();
 		return;
 	}
 	else if ("paste" == action)
@@ -2175,6 +2181,11 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 		copyToClipboard();
 		return;
 	}
+	else if ("cut" == action)
+	{
+		cutToClipboard();
+		return;
+	}
 	else if ("removefromoutfit" == action)
 	{
 		LLInventoryModel* model = getInventoryModel();
@@ -2404,6 +2415,31 @@ void LLFolderBridge::pasteFromClipboard()
 						LLPointer<LLInventoryCallback>(NULL));
 				}
 			}
+
+			LLInventoryCategory *cat = model->getCategory(item_id);
+			if (cat)
+			{
+				if (move_is_into_current_outfit || move_is_into_outfit)
+				{
+				      // do something clever to add folder to outfit
+				}
+				else if(LLInventoryClipboard::instance().isCutMode())
+				{
+					// move_inventory_item() is not enough,
+					//we have to update inventory locally too
+					LLViewerInventoryCategory* vicat = dynamic_cast<LLViewerInventoryCategory*>(cat);
+					llassert(vicat);
+					if (vicat)
+					{
+						changeCategoryParent(model, vicat, parent_id, FALSE);
+					}
+				}
+				else
+				{
+					// implemement copy_inventory_category
+				}
+			}
+
 		}
 	}
 }
