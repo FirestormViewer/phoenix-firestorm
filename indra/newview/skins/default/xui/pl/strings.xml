@@ -648,6 +648,9 @@
 	<string name="worldmap_results_none_found">
 		Miejsce nieodnalezione.
 	</string>
+	<string name="worldmap_agent_position">
+		Jesteś tutaj
+	</string>
 	<string name="Ok">
 		OK
 	</string>
