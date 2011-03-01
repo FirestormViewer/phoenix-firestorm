@@ -660,6 +660,9 @@
 	<string name="worldmap_results_none_found">
 		見つかりませんでした。
 	</string>
+	<string name="worldmap_agent_position">
+		あなたが現在いる場所
+	</string>
 	<string name="Ok">
 		OK
 	</string>

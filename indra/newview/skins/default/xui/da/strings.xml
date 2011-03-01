@@ -648,6 +648,9 @@
 	<string name="worldmap_results_none_found">
 		Ingen fundet.
 	</string>
+	<string name="worldmap_agent_position">
+		Du er her
+	</string>
 	<string name="Ok">
 		OK
 	</string>

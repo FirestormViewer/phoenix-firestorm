@@ -663,6 +663,9 @@
 	<string name="worldmap_results_none_found">
 		Nicht gefunden.
 	</string>
+	<string name="worldmap_agent_position">
+		Sie sind hier
+	</string>
 	<string name="Ok">
 		OK
 	</string>
