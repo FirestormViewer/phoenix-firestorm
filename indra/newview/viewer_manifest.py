@@ -288,7 +288,7 @@ class WindowsManifest(ViewerManifest):
 
             # Get fmod dll, continue if missing
             try:
-                self.path("../../../../fmodapi375win/api/fmod.dll", "fmod.dll")
+                self.path("fmod.dll")
             except:
                 print "Skipping fmod.dll"
 
@@ -983,7 +983,7 @@ class Linux_i686Manifest(LinuxManifest):
                     print "Skipping libkdu.so - not found"
                     pass
             try:
-                    self.path("../../../fmodapi375linux/api/libfmod-3.75.so", "libfmod-3.75.so")
+                    self.path("libfmod-3.75.so")
                     pass
             except:
                     print "Skipping libfmod-3.75.so - not found"
