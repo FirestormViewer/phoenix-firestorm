@@ -83,7 +83,6 @@ except ImportError:
 
 from indra.base import llsd
 from indra.util import helpformatter
-from indra.util import zipfile
 
 class InstallFile(object):
     "This is just a handy way to throw around details on a file in memory."
@@ -549,47 +548,28 @@ windows/i686/vs/2003 -- specify a windows visual studio 2003 package"""
 
     def _install(self, to_install, install_dir):
         for ifile in to_install:
-            if ifile.filename.endswith("zip"):
-                zip = zipfile.ZipFile(ifile.filename, 'r')
-                print "Extracting",ifile.filename,"to",install_dir
-                if not self._dryrun:
-                    zip.extractall(install_dir)
-                if ifile.pkgname in self._installed:
-                    self._installed[ifile.pkgname].add_files(
-                        ifile.url,
-                        zip.namelist())
-                    self._installed[ifile.pkgname].set_md5sum(
-                        ifile.url,
-                        ifile.md5sum)
-                else:
-                    # *HACK: this understands the installed package syntax.
-                    definition = { ifile.url :
-                                  {'files': zip.namelist(),
-                                   'md5sum' : ifile.md5sum } }
-                    self._installed[ifile.pkgname] = InstalledPackage(definition)
+            tar = tarfile.open(ifile.filename, 'r')
+            print "Extracting",ifile.filename,"to",install_dir
+            if not self._dryrun:
+                # *NOTE: try to call extractall, which first appears
+                # in python 2.5. Phoenix 2008-01-28
+                try:
+                    tar.extractall(path=install_dir)
+                except AttributeError:
+                    _extractall(tar, path=install_dir)
+            if ifile.pkgname in self._installed:
+                self._installed[ifile.pkgname].add_files(
+                    ifile.url,
+                    tar.getnames())
+                self._installed[ifile.pkgname].set_md5sum(
+                    ifile.url,
+                    ifile.md5sum)
             else:
-                tar = tarfile.open(ifile.filename, 'r')
-                print "Extracting",ifile.filename,"to",install_dir
-                if not self._dryrun:
-                    # *NOTE: try to call extractall, which first appears
-                    # in python 2.5. Phoenix 2008-01-28
-                    try:
-                        tar.extractall(path=install_dir)
-                    except AttributeError:
-                        _extractall(tar, path=install_dir)
-                if ifile.pkgname in self._installed:
-                    self._installed[ifile.pkgname].add_files(
-                        ifile.url,
-                        tar.getnames())
-                    self._installed[ifile.pkgname].set_md5sum(
-                        ifile.url,
-                        ifile.md5sum)
-                else:
-                    # *HACK: this understands the installed package syntax.
-                    definition = { ifile.url :
-                                   {'files': tar.getnames(),
-                                    'md5sum' : ifile.md5sum } }
-                    self._installed[ifile.pkgname] = InstalledPackage(definition)
+                # *HACK: this understands the installed package syntax.
+                definition = { ifile.url :
+                               {'files': tar.getnames(),
+                                'md5sum' : ifile.md5sum } }
+                self._installed[ifile.pkgname] = InstalledPackage(definition)
             self._installed_changed = True
 
     def install(self, installables, platform, install_dir, cache_dir):

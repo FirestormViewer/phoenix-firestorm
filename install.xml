@@ -366,23 +366,23 @@
           <key>darwin</key>
           <map>
             <key>md5sum</key>
-            <string>69011586de5725de08c10611b1a0289a</string>
+            <string>261bcd3387066cf0a1d46549400052b5</string>
             <key>url</key>
-            <uri>http://www.fmod.org/files/fmod3/fmodapi375mac.zip</uri>
+            <uri>scp:install-packages.lindenlab.com:/local/www/install-packages/doc/fmod-3.75-darwin-20101007.tar.bz2</uri>
           </map>
           <key>linux</key>
           <map>
             <key>md5sum</key>
-            <string>4fbd42fb8187c37ea454cc66186a1dfa</string>
+            <string>8490d97430c12c2e1ac19ff80a8d4db4</string>
             <key>url</key>
-            <uri>http://www.fmod.org/files/fmod3/fmodapi375linux.tar.gz</uri>
+            <uri>scp:install-packages.lindenlab.com:/local/www/install-packages/doc/fmod-3.75-linux-20101007.tar.bz2</uri>
           </map>
           <key>windows</key>
           <map>
             <key>md5sum</key>
-            <string>4d28a685a92557c0dac06f9ab2567203</string>
+            <string>bab1babcb01ff9849b7f072d352e1ecd</string>
             <key>url</key>
-            <uri>http://www.fmod.org/files/fmod3/fmodapi375win.zip</uri>
+            <uri>scp:install-packages.lindenlab.com:/local/www/install-packages/doc/fmod-3.75-windows-20101007.tar.bz2</uri>
           </map>
         </map>
       </map>
