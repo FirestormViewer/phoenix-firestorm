@@ -54,3 +54,4 @@ Temp_Uploads		LGPL (from Dolphin Viewer 2.4)
 StreamTitles		BSD
 LessCameraConstraints	LGPL
 TabbedOutfits&Shape	LGPL
+MediaFilter		LGPL

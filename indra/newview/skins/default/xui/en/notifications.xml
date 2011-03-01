@@ -1769,6 +1769,22 @@ Try selecting a single parcel.
 
   <notification
    icon="alertmodal.tga"
+   name="ParcelCanPlayMedia"
+   type="alertmodal">   
+This location can play streaming media.
+Streaming media requires a fast Internet connection.
+
+Play streaming media when available?
+(You can change this option later under Preferences &gt; Sound &amp; Media.)
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Disable"
+     yestext="Play Media"/>
+  </notification>
+
+
+  <notification
+   icon="alertmodal.tga"
    name="CannotDeedLandWaitingForServer"
    type="alertmodal">
 Unable to deed land:
@@ -4564,6 +4580,60 @@ You must have payment information on file to visit this area.  Do you want to go
    name="MissingString"
    type="alertmodal">
 The string [STRING_NAME] is missing from strings.xml.
+  </notification>
+
+  <notification
+   icon="alert.tga"  
+   name="MediaAlert"
+   type="alert"> 
+The owner of this parcel has requested media at the following location to be loaded by your viewer:
+
+[MEDIAURL]
+   <form name="form">
+    <button
+         index="0"
+         name="Allow"
+         text="Allow"/>
+        <button
+         index="1"
+         name="Deny"  
+         text="Deny"/>
+        <button
+         index="2"   
+     name="Blacklist"
+         text="Blacklist"/>
+        <button
+         index="3"
+         name="Whitelist"
+         text="Whitelist"/>
+   </form>
+  </notification>
+
+  <notification
+   icon="alert.tga"  
+   name="AudioAlert"
+   type="alert"> 
+The owner of this parcel has requested music at the following location to be played by your viewer:
+
+[AUDIOURL]
+   <form name="form">
+    <button
+         index="0"
+         name="Allow"
+         text="Allow"/>
+        <button
+         index="1"
+         name="Deny"  
+         text="Deny"/>
+        <button
+         index="2"   
+     name="Blacklist"
+         text="Blacklist"/>
+        <button
+         index="3"
+         name="Whitelist"
+         text="Whitelist"/>
+   </form>
   </notification>
 
   <notification

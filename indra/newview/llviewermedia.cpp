@@ -1002,7 +1002,14 @@ void LLViewerMedia::setAllMediaEnabled(bool val)
 	{
 		if (!LLViewerMedia::isParcelMediaPlaying() && LLViewerMedia::hasParcelMedia())
 		{	
-			LLViewerParcelMedia::play(LLViewerParcelMgr::getInstance()->getAgentParcel());
+			if (gSavedSettings.getBOOL("MediaEnableFilter"))
+			{
+				LLViewerParcelMedia::filterMediaUrl(LLViewerParcelMgr::getInstance()->getAgentParcel());
+			}
+			else
+			{
+				LLViewerParcelMedia::play(LLViewerParcelMgr::getInstance()->getAgentParcel());
+			}
 		}
 		
 		if (gSavedSettings.getBOOL("AudioStreamingMusic") &&
@@ -1010,7 +1017,14 @@ void LLViewerMedia::setAllMediaEnabled(bool val)
 			gAudiop && 
 			LLViewerMedia::hasParcelAudio())
 		{
-			gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
+			if (gSavedSettings.getBOOL("MediaEnableFilter"))
+			{
+				LLViewerParcelMedia::filterAudioUrl(LLViewerMedia::getParcelAudioURL());
+			}
+			else
+			{
+				gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
+			}
 		}
 	}
 	else {

@@ -790,7 +790,14 @@ void LLPanelNearByMedia::onClickEnableParcelMedia()
 {	
 	if ( ! LLViewerMedia::isParcelMediaPlaying() )
 	{
-		LLViewerParcelMedia::play(LLViewerParcelMgr::getInstance()->getAgentParcel());
+		if (gSavedSettings.getBOOL("MediaEnableFilter"))
+		{
+			LLViewerParcelMedia::filterMediaUrl(LLViewerParcelMgr::getInstance()->getAgentParcel());
+		}
+		else
+		{
+			LLViewerParcelMedia::play(LLViewerParcelMgr::getInstance()->getAgentParcel());
+		}
 	}
 }
 
@@ -843,7 +850,14 @@ void LLPanelNearByMedia::onZoomMedia(void* user_data)
 
 void LLPanelNearByMedia::onClickParcelMediaPlay()
 {
-	LLViewerParcelMedia::play(LLViewerParcelMgr::getInstance()->getAgentParcel());
+	if (gSavedSettings.getBOOL("MediaEnableFilter"))
+	{
+		LLViewerParcelMedia::filterMediaUrl(LLViewerParcelMgr::getInstance()->getAgentParcel());
+	}
+	else
+	{
+		LLViewerParcelMedia::play(LLViewerParcelMgr::getInstance()->getAgentParcel());
+	}
 }
 
 void LLPanelNearByMedia::onClickParcelMediaStop()
@@ -869,8 +883,15 @@ void LLPanelNearByMedia::onClickParcelAudioStart()
 		
 	if (!gAudiop)
 		return;
-	
-	gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
+
+	if (gSavedSettings.getBOOL("MediaEnableFilter"))
+	{
+		LLViewerParcelMedia::filterAudioUrl(LLViewerMedia::getParcelAudioURL());
+	}
+	else
+	{
+		gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
+	}
 }
 
 void LLPanelNearByMedia::onClickParcelAudioPlay()
@@ -888,7 +909,14 @@ void LLPanelNearByMedia::onClickParcelAudioPlay()
 		gAudiop->pauseInternetStream(false);
 	}
 	else {
-		gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
+		if (gSavedSettings.getBOOL("MediaEnableFilter"))
+		{
+			LLViewerParcelMedia::filterAudioUrl(LLViewerMedia::getParcelAudioURL());
+		}
+		else
+		{
+			gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
+		}
 	}
 }
 
@@ -1122,7 +1150,14 @@ void LLPanelNearByMedia::onClickSelectedMediaPlay()
 			}
 			else if (impl->isParcelMedia())
 			{
-				LLViewerParcelMedia::play(LLViewerParcelMgr::getInstance()->getAgentParcel());
+				if (gSavedSettings.getBOOL("MediaEnableFilter"))
+				{
+					LLViewerParcelMedia::filterMediaUrl(LLViewerParcelMgr::getInstance()->getAgentParcel());
+				}
+				else
+				{
+					LLViewerParcelMedia::play(LLViewerParcelMgr::getInstance()->getAgentParcel());
+				}
 			}
 		}
 	}	
