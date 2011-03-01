@@ -1801,8 +1801,15 @@ void optionally_start_music(const std::string& music_url)
 		     gSavedSettings.getBOOL(LLViewerMedia::AUTO_PLAY_MEDIA_SETTING) &&
 			 gSavedSettings.getBOOL("MediaTentativeAutoPlay")))
 		{
-			llinfos << "Starting parcel music " << music_url << llendl;
-			gAudiop->startInternetStream(music_url);
+			if (gSavedSettings.getBOOL("MediaEnableFilter"))
+			{
+				LLViewerParcelMedia::filterAudioUrl(music_url);
+			}
+			else
+			{
+				llinfos << "Starting parcel music " << music_url << llendl;
+				gAudiop->startInternetStream(music_url);
+			}
 		}
 	}
 }

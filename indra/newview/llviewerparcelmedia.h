@@ -50,6 +50,14 @@ class LLViewerParcelMedia : public LLViewerMediaObserver
 
 		static void play(LLParcel* parcel);
 			// user clicked play button in media transport controls
+                static void filterMediaUrl(LLParcel* parcel);
+                        // user has media filter enabled and play requested
+                static void filterAudioUrl(std::string media_url);
+                        // user has media filter enabled and play requested
+                static std::string extractDomain(std::string url);
+                        // helper function to extract domain from url and conve
+                static bool loadDomainFilterList();
+                static bool saveDomainFilterList();
 
 		static void stop();
 			// user clicked stop button in media transport controls
@@ -81,6 +89,11 @@ class LLViewerParcelMedia : public LLViewerMediaObserver
 		static LLUUID sMediaRegionID;
 		// HACK: this will change with Media on a Prim
 		static viewer_media_t sMediaImpl;
+                static LLSD sMediaFilterList;
+                static std::string sMediaLastURL;
+                static bool sMediaLastActionPlay;
+                static std::string sAudioLastURL;
+                static bool sAudioLastActionPlay;
 };
 
 
