@@ -76,9 +76,29 @@ LLHUDEffectBeam::~LLHUDEffectBeam()
 
 void LLHUDEffectBeam::packData(LLMessageSystem *mesgsys)
 {
-	if (!mSourceObject)
+	LLViewerObject* source_object = (LLViewerObject*)mSourceObject; 
+	if (!source_object) 
+	{ 
+		markDead(); 
+		return; 
+	} 
+	else if (!source_object->isAvatar()) 
 	{
-		llwarns << "Missing source object!" << llendl;
+		LL_DEBUGS("HUDEffect")<<"Non-Avatar HUDEffectBeam message for ID: "  
+		<<  source_object->getID().asString()<< LL_ENDL; 
+		markDead(); 
+		return; 
+	} 
+	else  
+	{ 
+		LLVOAvatar* source_avatar = (LLVOAvatar*)source_object; 
+		if (!source_avatar->isSelf()) 
+		{ 
+			LL_DEBUGS("HUDEffect")<<"Non-self HUDEffectBeam message for ID: "  
+			<< source_avatar->getID().asString()<< LL_ENDL; 
+			markDead(); 
+			return; 
+		}
 	}
 
 	// Pack the default data

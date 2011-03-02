@@ -42,7 +42,7 @@
 
 
 #include "llxmltree.h"
-
+#include "llviewercontrol.h"
 
 BOOL LLHUDEffectLookAt::sDebugLookAt = FALSE;
 
@@ -262,36 +262,70 @@ LLHUDEffectLookAt::~LLHUDEffectLookAt()
 //-----------------------------------------------------------------------------
 void LLHUDEffectLookAt::packData(LLMessageSystem *mesgsys)
 {
-	// Pack the default data
-	LLHUDEffect::packData(mesgsys);
-
-	// Pack the type-specific data.  Uses a fun packed binary format.  Whee!
-	U8 packed_data[PKT_SIZE];
-	memset(packed_data, 0, PKT_SIZE);
+	// pack both target object and position 
+	// position interpreted as offset if target object is non-null 
+	ELookAtType  target_type     = mTargetType; 
+	LLVector3d  target_offset_global   = mTargetOffsetGlobal; 
+	LLViewerObject* target_object    = (LLViewerObject*)mTargetObject; 
+	LLViewerObject* source_object = (LLViewerObject*)mSourceObject; 
+	LLVOAvatar* source_avatar = NULL; 
+	if (!source_object)//kokua TODO: find out why this happens at all and fix there 
+	{ 
+		LL_DEBUGS("HUDEffect")<<"NULL-Object HUDEffectLookAt message" <<  LL_ENDL; 
+		markDead(); 
+		return; 
+	} 
+	if (source_object->isAvatar()) 
+	{ 
+		source_avatar = (LLVOAvatar*)source_object; 
+	} 
+	else //kokua TODO: find out why this happens at all and fix there 
+	{ 
+		LL_DEBUGS("HUDEffect")<<"Non-Avatar HUDEffectLookAt message for ID: " <<  source_object->getID().asString()<< LL_ENDL; 
+		markDead(); 
+		return; 
+	} 
+	bool is_self = source_avatar->isSelf(); 
+	bool is_private = gSavedSettings.getBOOL("PrivateLookAtTarget"); 
+	if (!is_self) //kokua TODO: find out why this happens at all and fix there 
+	{ 
+		LL_DEBUGS("HUDEffect")<< "Non-self Avatar HUDEffectLookAt message for ID: " << source_avatar->getID().asString() << LL_ENDL; 
+		markDead(); 
+		return; 
+	} 
+	else if (is_private && target_type != LOOKAT_TARGET_AUTO_LISTEN) 
+	{ 
+		//this mimicks "do nothing" 
+		target_type = LOOKAT_TARGET_AUTO_LISTEN; 
+		target_offset_global.setVec(2.5, 0.0, 0.0); 
+		target_object = mSourceObject; 
+	} 
+		// Pack the default data
+		LLHUDEffect::packData(mesgsys);
+		// Pack the type-specific data.  Uses a fun packed binary format.  Whee!
+		U8 packed_data[PKT_SIZE];
+		memset(packed_data, 0, PKT_SIZE);
 
 	if (mSourceObject)
 	{
 		htonmemcpy(&(packed_data[SOURCE_AVATAR]), mSourceObject->mID.mData, MVT_LLUUID, 16);
 	}
-	else
+	else //um ... we already returned ... how's that the case?
 	{
 		htonmemcpy(&(packed_data[SOURCE_AVATAR]), LLUUID::null.mData, MVT_LLUUID, 16);
 	}
-
-	// pack both target object and position
-	// position interpreted as offset if target object is non-null
 	if (mTargetObject)
 	{
-		htonmemcpy(&(packed_data[TARGET_OBJECT]), mTargetObject->mID.mData, MVT_LLUUID, 16);
+		htonmemcpy(&(packed_data[TARGET_OBJECT]), target_object->mID.mData, MVT_LLUUID, 16);
 	}
 	else
 	{
 		htonmemcpy(&(packed_data[TARGET_OBJECT]), LLUUID::null.mData, MVT_LLUUID, 16);
 	}
 
-	htonmemcpy(&(packed_data[TARGET_POS]), mTargetOffsetGlobal.mdV, MVT_LLVector3d, 24);
+	htonmemcpy(&(packed_data[TARGET_POS]), target_offset_global.mdV, MVT_LLVector3d, 24);
 
-	U8 lookAtTypePacked = (U8)mTargetType;
+	U8 lookAtTypePacked = (U8)target_type;
 	
 	htonmemcpy(&(packed_data[LOOKAT_TYPE]), &lookAtTypePacked, MVT_U8, 1);
 
@@ -358,11 +392,17 @@ void LLHUDEffectLookAt::unpackData(LLMessageSystem *mesgsys, S32 blocknum)
 	{
 		//llwarns << "Could not find target object for lookat effect" << llendl;
 	}
-
 	U8 lookAtTypeUnpacked = 0;
 	htonmemcpy(&lookAtTypeUnpacked, &(packed_data[LOOKAT_TYPE]), MVT_U8, 1);
-	mTargetType = (ELookAtType)lookAtTypeUnpacked;
-
+	if ((U8)LOOKAT_NUM_TARGETS > lookAtTypeUnpacked) 
+	{ 
+		mTargetType = (ELookAtType)lookAtTypeUnpacked; 
+	} 
+	else 
+	{ 
+		mTargetType = LOOKAT_TARGET_NONE; 
+		LL_DEBUGS("HUDEffect") << "Invalid target type: " << lookAtTypeUnpacked << LL_ENDL; 
+	} 
 	if (mTargetType == LOOKAT_TARGET_NONE)
 	{
 		clearLookAtTarget();
