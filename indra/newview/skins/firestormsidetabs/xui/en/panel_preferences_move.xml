@@ -196,6 +196,16 @@
    width="237"
    top_pad="0"/>		
   <check_box
+   control_name="AutomaticFly"
+   follows="left|top"
+   height="20"
+   label="Fly/land on holding up/down"
+   layout="topleft"
+   left_delta="0"
+   name="automatic_fly"
+   width="237"
+   top_pad="0"/>
+  <check_box
    follows="left|top"
    height="20"
    label="Allow double-clicking a spot to move my avatar:"
