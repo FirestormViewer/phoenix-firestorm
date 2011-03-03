@@ -934,14 +934,17 @@ bool LLViewerParcelMedia::loadDomainFilterList()
 
 std::string LLViewerParcelMedia::extractDomain(std::string url)
 {
+	// First, find and strip any protocol prefix.
 	size_t pos = url.find("//");
 
 	if (pos != std::string::npos)
 	{
-		S32 count = url.size()- pos+2;
+		S32 count = url.size()-pos+2;
 		url = url.substr(pos+2, count);
 	}
 
+	// Now, look for a / marking a local part; if there is one,
+	//  strip it and anything after.
 	pos = url.find("/");
 
 	if (pos != std::string::npos)
@@ -949,6 +952,18 @@ std::string LLViewerParcelMedia::extractDomain(std::string url)
 		url = url.substr(0, pos);
 	}
 
+	// If there's a user{,:password}@ part, remove it,
+	pos = url.find("@");
+
+	if (pos != std::string::npos)
+	{
+		S32 count = url.size()-pos+1;
+		url = url.substr(pos+1, count);
+	}
+
+	// Finally, find and strip away any port number. This has to be done
+	//  after the previous step, or else the extra : for the password,
+	//  if supplied, will confuse things.
 	pos = url.find(":");  
 
 	if (pos != std::string::npos)
@@ -956,6 +971,8 @@ std::string LLViewerParcelMedia::extractDomain(std::string url)
 		url = url.substr(0, pos);
 	}
 	
+	// Now map the whole thing to lowercase, since domain names aren't
+	//  case sensitive.
 	std::transform(url.begin(), url.end(),url.begin(), ::tolower);
 
 	return url;
