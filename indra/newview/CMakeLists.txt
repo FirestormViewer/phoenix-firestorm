@@ -70,6 +70,7 @@ include_directories(
 set(viewer_SOURCE_FILES
     chatbar_as_cmdline.cpp
     kcwlinterface.cpp
+    floatermedialists.cpp
     fscontactsfloater.cpp
     llagent.cpp
     llagentaccess.cpp
@@ -616,6 +617,7 @@ set(viewer_HEADER_FILES
     ViewerInstall.cmake
     chatbar_as_cmdline.h
     kcwlinterface.h
+    floatermedialists.h
     fscontactsfloater.h
     llagent.h
     llagentaccess.h

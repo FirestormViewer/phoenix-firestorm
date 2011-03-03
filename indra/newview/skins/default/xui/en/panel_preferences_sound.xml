@@ -323,6 +323,18 @@
 		label="Enable media filter (increased security)"
 		left="25"
     width="230"/>
+    <button
+     layout="topleft"
+     follows="top|left"
+     height="23"
+     label="Edit lists..."
+     left_pad="5"
+     name="edit_media_lists_button"
+     width="100">
+      <button.commit_callback
+      function="Floater.Show"
+      parameter="media_lists" />
+    </button>
 
     <text
      type="string"

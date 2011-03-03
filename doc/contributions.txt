@@ -635,6 +635,9 @@ SignpostMarv Martin
 	VWR-8357
 Simon Nolan
 	VWR-409
+Sione Lomu
+	PHOE-2514
+	PHOE-2547
 SpacedOut Frye
 	VWR-34
 	VWR-45
