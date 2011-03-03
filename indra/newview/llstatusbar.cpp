@@ -81,6 +81,9 @@
 #include "llappviewer.h"
 #include "lltrans.h"
 
+
+#include "kcwlinterface.h"
+
 // library includes
 #include "imageids.h"
 #include "llfloaterreg.h"
@@ -285,6 +288,9 @@ BOOL LLStatusBar::postBuild()
 
 	mParcelInfoText = getChild<LLTextBox>("parcel_info_text");
 	mDamageText = getChild<LLTextBox>("damage_text");
+
+	mPWLBtn = getChild<LLButton>("status_wl_btn");
+	mPWLBtn->setClickedCallback(boost::bind(&LLStatusBar::onParcelWLClicked, this));
 
 	initParcelIcons();
 
@@ -748,6 +754,7 @@ void LLStatusBar::updateParcelIcons()
 		bool allow_build	= vpm->allowAgentBuild(current_parcel); // true when anyone is allowed to build. See EXT-4610.
 		bool allow_scripts	= vpm->allowAgentScripts(agent_region, current_parcel);
 		bool allow_damage	= vpm->allowAgentDamage(agent_region, current_parcel);
+		bool has_pwl		= KCWindlightInterface::instance().WLset;
 
 		// Most icons are "block this ability"
 		mParcelIcon[VOICE_ICON]->setVisible(   !allow_voice );
@@ -757,6 +764,8 @@ void LLStatusBar::updateParcelIcons()
 		mParcelIcon[SCRIPTS_ICON]->setVisible( !allow_scripts );
 		mParcelIcon[DAMAGE_ICON]->setVisible(  allow_damage );
 		mDamageText->setVisible(allow_damage);
+		mPWLBtn->setVisible(has_pwl);
+		mPWLBtn->setEnabled(has_pwl);
 
 		layoutParcelIcons();
 	}
@@ -802,6 +811,8 @@ void LLStatusBar::layoutParcelIcons()
 	{
 		left = layoutWidget(mParcelIcon[i], left);
 	}
+
+	layoutWidget(mPWLBtn, left);
 }
 
 S32 LLStatusBar::layoutWidget(LLUICtrl* ctrl, S32 left)
@@ -899,4 +910,9 @@ void LLStatusBar::onInfoButtonClicked()
 {
 	//LLSideTray::getInstance()->showPanel("panel_places", LLSD().with("type", "agent"));
 	LLFloaterReg::showInstance("about_land");
+}
+
+void LLStatusBar::onParcelWLClicked()
+{
+	KCWindlightInterface::instance().onClickWLStatusButton();
 }

@@ -53,6 +53,7 @@ private:
 	bool AllowedLandOwners(const LLUUID& agent_id);
 	LLUUID getOwnerID(LLParcel *parcel);
 	std::string getOwnerName(LLParcel *parcel);
+	void setWL_Status(bool pwl_status);
 
 protected:
 	std::set<LLUUID> mAllowedLand;

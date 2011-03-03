@@ -28,6 +28,7 @@
 #include "llagent.h"
 #include "llcallingcard.h" // isBuddy
 #include "llstartup.h"
+#include "llstatusbar.h"
 #include "llparcel.h"
 #include "llviewercontrol.h" // gSavedSettings, gSavedPerAccountSettings
 #include "llviewermenu.h" // is_agent_friend
@@ -78,7 +79,7 @@ void KCWindlightInterface::ParcelChange()
 		mLastParcelDesc = desc;
 		mCurrentSpace = -2.f;
 		mCurrentSettings.clear();
-		WLset = false; //clear the status bar icon
+		setWL_Status(false); //clear the status bar icon
 		const LLVector3& agent_pos_region = gAgent.getPositionAgent();
 		mLastZ = lltrunc( agent_pos_region.mV[VZ] );
 
@@ -140,7 +141,7 @@ void KCWindlightInterface::ApplySettings(const LLSD& settings)
 		if (settings.has("water"))
 		{
 			LLWaterParamManager::instance()->loadPreset(settings["water"].asString(), true);
-			WLset = true;
+			setWL_Status(true);
 		}
 	}
 }
@@ -199,7 +200,7 @@ void KCWindlightInterface::ApplyWindLightPreset(const std::string& preset)
 		wlprammgr->mAnimator.mIsRunning = false;
 		wlprammgr->mAnimator.mUseLindenTime = false;
 		wlprammgr->loadPreset(preset);
-		WLset = true;
+		setWL_Status(true);
 		mWeChangedIt = true;
 	}
 	else
@@ -209,7 +210,7 @@ void KCWindlightInterface::ApplyWindLightPreset(const std::string& preset)
 		wlprammgr->loadPreset("Default", true);
 		//KC: reset last to Default
 		gSavedPerAccountSettings.setString("PhoenixLastWLsetting", "Default");
-		WLset = false;
+		setWL_Status(false);
 		mWeChangedIt = false;
 	}
 }
@@ -525,3 +526,9 @@ default
     }
 }
 */
+
+void KCWindlightInterface::setWL_Status(bool pwl_status)
+{
+	WLset = pwl_status;
+	gStatusBar->updateParcelIcons();
+}

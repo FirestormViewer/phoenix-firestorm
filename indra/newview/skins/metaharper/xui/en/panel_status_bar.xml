@@ -25,7 +25,7 @@
    <panel
     height="18"
     left="500"
-    width="95"
+    width="800"
     top="1"
     follows="left|top" 
     name="parcel_info_panel" 
@@ -100,6 +100,18 @@
     visible="false"
     width="22"
     />
+   <button
+    follows="right|top"
+    height="16"
+    hover_glow_amount="0.15"
+    image_disabled="Parcel_Windlight"
+    image_disabled_selected="Parcel_Windlight"
+    image_selected="Parcel_Windlight"
+    image_unselected="Parcel_Windlight"
+    name="status_wl_btn"
+    top="1"
+    tool_tip="Parcel has WL settings" 
+    width="16"/>
   <icon
     follows="right|top"
     height="13"
