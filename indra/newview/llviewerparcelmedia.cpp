@@ -996,7 +996,16 @@ std::string mungeURL(std::string url)
 		}
 		else
 		{
-			work_url += whatshere;
+			if (whatshere == '%')
+			{
+				// Escape % to %25 so showing it as a URL
+				//  won't break.
+				work_url += "%25";
+			}
+			else
+			{
+				work_url += whatshere;
+			}
 		}
 	}
 
