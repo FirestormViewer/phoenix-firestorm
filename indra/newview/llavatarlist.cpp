@@ -67,16 +67,19 @@ bool LLAvatarList::contains(const LLUUID& id)
 
 void LLAvatarList::toggleIcons()
 {
-	// Save the new value for new items to use.
-	mShowIcons = !mShowIcons;
-	gSavedSettings.setBOOL(mIconParamName, mShowIcons);
-	
-	// Show/hide icons for all existing items.
-	std::vector<LLPanel*> items;
-	getItems(items);
-	for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
+	if (!mIgnoreGlobalIcons)
 	{
-		static_cast<LLAvatarListItem*>(*it)->setAvatarIconVisible(mShowIcons);
+		// Save the new value for new items to use.
+		mShowIcons = !mShowIcons;
+		gSavedSettings.setBOOL(mIconParamName, mShowIcons);
+		
+		// Show/hide icons for all existing items.
+		std::vector<LLPanel*> items;
+		getItems(items);
+		for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
+		{
+			static_cast<LLAvatarListItem*>(*it)->setAvatarIconVisible(mShowIcons);
+		}
 	}
 }
 
@@ -107,6 +110,91 @@ void LLAvatarList::showPermissions(bool visible)
 		static_cast<LLAvatarListItem*>(*it)->setShowPermissions(mShowPermissions);
 	}
 }
+
+void LLAvatarList::showRange(bool visible)
+{
+	mShowRange = visible;
+	// Enable or disable showing distance field for all detected avatars.
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		static_cast<LLAvatarListItem*>(*it)->showRange(mShowRange);
+	}	
+}
+
+void LLAvatarList::showFirstSeen(bool visible)
+{
+	mShowFirstSeen = visible;
+	// Enable or disable showing time since noticed, for all detected avatars.
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		static_cast<LLAvatarListItem*>(*it)->showFirstSeen(visible);
+	}	
+}
+
+void LLAvatarList::showStatusFlags(bool visible)
+{
+	mShowStatusFlags = visible;
+	// Enable or disable showing movement flags for all detected avatars.
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		static_cast<LLAvatarListItem*>(*it)->showStatusFlags(visible);
+	}	
+}
+
+
+void LLAvatarList::showDisplayName(bool visible)
+{
+	mShowDisplayName = visible;
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		static_cast<LLAvatarListItem*>(*it)->showDisplayName(visible);
+	}
+	mNeedUpdateNames = true;
+}
+
+void LLAvatarList::showUsername(bool visible)
+{
+	mShowUsername = visible;
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		static_cast<LLAvatarListItem*>(*it)->showUsername(visible);
+	}
+	mNeedUpdateNames = true;
+}
+
+void LLAvatarList::showAvatarAge(bool visible)
+{
+	mShowAge = visible;
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		static_cast<LLAvatarListItem*>(*it)->showAvatarAge(visible);
+	}
+}
+
+void LLAvatarList::showPaymentStatus(bool visible)
+{
+	mShowPaymentStatus = visible;
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		static_cast<LLAvatarListItem*>(*it)->showPaymentStatus(visible);
+	}
+	mNeedUpdateNames = true;
+}
+
 
 static bool findInsensitive(std::string haystack, const std::string& needle_upper)
 {
@@ -142,8 +230,15 @@ LLAvatarList::LLAvatarList(const Params& p)
 , mShowProfileBtn(p.show_profile_btn)
 , mShowSpeakingIndicator(p.show_speaking_indicator)
 , mShowPermissions(p.show_permissions_granted)
+, mShowRange(false)
+, mShowStatusFlags(false)
+, mShowUsername(true)
+, mShowDisplayName(true)
+, mIgnoreGlobalIcons(false)
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 , mRlvCheckShowNames(false)
+, mShowAge(false)
+, mShowPaymentStatus(false)
 // [/RLVa:KB]
 {
 	setCommitOnSelectionChange(true);
@@ -175,8 +270,26 @@ LLAvatarList::~LLAvatarList()
 
 void LLAvatarList::setShowIcons(std::string param_name)
 {
-	mIconParamName= param_name;
-	mShowIcons = gSavedSettings.getBOOL(mIconParamName);
+	if (!mIgnoreGlobalIcons)
+	{
+		mIconParamName= param_name;
+		mShowIcons = gSavedSettings.getBOOL(mIconParamName);
+	}
+}
+
+// AO: This can be used to disable icon display on a particular list, without affecting the global preference.
+void LLAvatarList::showMiniProfileIcons(bool visible)
+{
+	mShowIcons = visible;
+	mIgnoreGlobalIcons = true;
+	// Show/hide icons for all existing items.
+	
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
+	{
+		static_cast<LLAvatarListItem*>(*it)->setAvatarIconVisible(mShowIcons);
+	}
 }
 
 // virtual
@@ -440,6 +553,13 @@ void LLAvatarList::addNewItem(const LLUUID& id, const std::string& name, BOOL is
 	item->setShowProfileBtn(mShowProfileBtn);
 	item->showSpeakingIndicator(mShowSpeakingIndicator);
 	item->setShowPermissions(mShowPermissions);
+	item->showUsername(mShowUsername);
+	item->showDisplayName(mShowDisplayName);
+	item->showRange(mShowRange);
+	item->showFirstSeen(mShowFirstSeen);
+	item->showStatusFlags(mShowStatusFlags);
+	item->showPaymentStatus(mShowPaymentStatus);
+	item->showAvatarAge(mShowAge);
 
 	item->setDoubleClickCallback(boost::bind(&LLAvatarList::onItemDoubleClicked, this, _1, _2, _3, _4));
 

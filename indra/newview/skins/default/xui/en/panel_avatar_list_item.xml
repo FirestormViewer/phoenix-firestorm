@@ -61,9 +61,53 @@
      left_pad="5"
      name="avatar_name"
      top="6"
+     clip_partial="true"
      use_ellipses="true"
      value="Unknown"
-     width="180" />
+     width="40" />
+    <icon
+     height="16"
+     follows="right"
+     image_name="payment_info_used.tga"
+     layout="topleft"
+     right="-114"
+     name="payment_info"
+     tool_tip="Payment info on file"
+     top="0"
+     width="16" />  
+    <text
+     follows="right"
+     font="SansSerifSmall"
+     height="15"
+     layout="topleft"
+     left_pad="5"
+     right="-70"
+     name="avatar_age"
+     text_color="LtGray_50"
+     value="0000"
+     width="40" />  
+    <text
+     follows="right"
+     font="SansSerifSmall"
+     height="15"
+     layout="topleft"
+     left_pad="5"
+     right="-30"
+     name="first_seen"
+     text_color="LtGray_50"
+     value="0000"
+     width="40" />  
+    <text
+     follows="right"
+     font="SansSerifSmall"
+     height="15"
+     layout="topleft"
+     left_pad="5"
+     right="-80"
+     name="radar_range"
+     text_color="LtGray_50"
+     value="12345678901234567890W"
+     width="30" />
     <text
      follows="right"
      font="SansSerifSmall"

@@ -31,6 +31,9 @@
 
 #include "llcallingcard.h" // for avatar tracker
 #include "llvoiceclient.h"
+#include "llavatarnamecache.h"
+#include <map>
+#include <time.h>
 
 class LLAvatarList;
 class LLAvatarName;
@@ -78,6 +81,7 @@ private:
 	void					updateFriendList();
 	void					updateNearbyList();
 	void					updateRecentList();
+	void					updateNearbyRange();
 
 	bool					isItemsFreeOfFriends(const uuid_vec_t& uuids);
 
@@ -90,6 +94,7 @@ private:
 	void					buttonSetAction(const std::string& btn_name, const commit_signal_t::slot_type& cb);
 	void					showGroupMenu(LLMenuGL* menu);
 	void					setSortOrder(LLAvatarList* list, ESortOrder order, bool save = true);
+	void					reportToNearbyChat(std::string message);
 
 	// UI callbacks
 	void					onFilterEdit(const std::string& search_string);
@@ -170,6 +175,16 @@ private:
 
 	std::string				mFilterSubString;
 	std::string				mFilterSubStringOrig;
+	
+	struct radarFields 
+	{
+		std::string avName;
+		F32 lastDistance;
+		LLUUID lastRegion;
+		time_t firstSeen;
+		S32 lastStatus;
+	}; 
+	std::map < LLUUID, radarFields > lastRadarSweep;
 };
 
 #endif //LL_LLPANELPEOPLE_H

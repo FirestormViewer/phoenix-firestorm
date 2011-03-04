@@ -79,6 +79,14 @@ public:
 	void toggleIcons();
 	void setSpeakingIndicatorsVisible(bool visible);
 	void showPermissions(bool visible);
+	void showRange(bool visible);
+	void showFirstSeen(bool visible);
+	void showStatusFlags(bool visible);
+	void showPaymentStatus(bool visible);
+	void showMiniProfileIcons(bool visible);
+	void showDisplayName(bool visible);
+	void showAvatarAge(bool visible);
+	void showUsername(bool visible);
 	void sortByName();
 	void setShowIcons(std::string param_name);
 	bool getIconsVisible() const { return mShowIcons; }
@@ -127,6 +135,15 @@ private:
 	bool mShowProfileBtn;
 	bool mShowSpeakingIndicator;
 	bool mShowPermissions;
+	bool mShowRange;
+	bool mShowFirstSeen;
+	bool mShowStatusFlags;
+	bool mShowPaymentStatus;
+	bool mShowAge;
+	bool mShowDisplayName;
+	bool mShowUsername;
+	bool mIgnoreGlobalIcons;
+	
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	bool mRlvCheckShowNames;
 // [/RLVa:KB]
