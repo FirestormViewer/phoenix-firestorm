@@ -299,8 +299,18 @@
 		value="true"
 		follows="left|bottom|right"
 		height="15"
-		tool_tip="Check this to let media auto-play if it wants"
-		label="Allow Media to auto-play"
+		tool_tip="Check this to automatically start media when you log in or change regions."
+		label="Allow Media to auto-play when entering a region"
+		top_pad="1"
+		left="25"/>
+	<check_box
+		name="media_allowscript_btn"
+		control_name="PermAllowScriptedMedia"
+		value="true"
+		follows="left|bottom|right"
+		height="15"
+		tool_tip="This settings allows / disallows scripted prims from controlling your media connections"
+		label="Allow resident scripts to play media"
 		top_pad="1"
 		left="25"/>
  	<check_box

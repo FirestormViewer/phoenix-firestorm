@@ -2280,13 +2280,22 @@ void LLViewerMediaImpl::navigateTo(const std::string& url, const std::string& mi
 		
 		return;
 	}
-
+	
 	navigateInternal();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 void LLViewerMediaImpl::navigateInternal()
 {
+	
+	//AO: Disallow scripted media option
+	if (( !gSavedSettings.getBOOL("PermAllowScriptedMedia")) && (!gSavedSettings.getBOOL("TempAllowScriptedMedia")))
+	{
+		llinfos << "Disallowing scripted media= " << mTextureId << " url=" << mMediaURL << " mime_type=" << mMimeType << llendl;
+		return;
+	}
+	
+	
 	// Helpful to have media urls in log file. Shouldn't be spammy.
 	llinfos << "media id= " << mTextureId << " url=" << mMediaURL << " mime_type=" << mMimeType << llendl;
 
