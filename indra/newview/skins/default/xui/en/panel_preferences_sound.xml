@@ -297,7 +297,7 @@
 		name="media_auto_play_btn"
 		control_name="ParcelMediaAutoPlayEnable"
 		value="true"
-		follows="left|bottom|right"
+		layout="topleft"
 		height="15"
 		tool_tip="Check this to automatically start media when you log in or change regions."
 		label="Allow Media to auto-play when entering a region"
@@ -312,17 +312,41 @@
 		tool_tip="This settings allows / disallows scripted prims from controlling your media connections"
 		label="Allow resident scripts to play media"
 		top_pad="1"
+		width="250"
 		left="25"/>
+ 	<check_box
+		name="media_filter"
+		control_name="MediaEnableFilter"
+		value="true"
+		layout="topleft"
+		height="15"
+		top_delta="0"
+		tool_tip="Check this to enable the filter that allows you to choose whether to play media from a specific host"
+		label="Enable media filter (increased security)"
+		left_pad="1" />
  	<check_box
 		name="media_show_on_others_btn"
 		control_name="MediaShowOnOthers"
 		value="true"
-		follows="left|bottom|right"
+		layout="topleft"
 		height="15"
 		tool_tip="Uncheck this to hide media attached to other avatars nearby"
 		label="Play media attached to other avatars"
-		left="25"
-    width="230"/>
+		top_pad="1"
+		width="250"
+		left="25"/>
+    <button
+     layout="topleft"
+     height="23"
+     label="Edit lists..."
+     top_delta="0"
+     left_pad="1"
+     name="edit_media_lists_button"
+     width="100">
+      <button.commit_callback
+      function="Floater.Show"
+      parameter="media_lists" />
+    </button>
 
     <text
      type="string"

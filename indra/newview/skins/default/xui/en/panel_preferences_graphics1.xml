@@ -719,10 +719,10 @@
         follows="left|top"
         height="12"
         layout="topleft"
-        left="358"
+        left="420"
         left_pad="-30"
         name="TerrainDetailText"
-        top="226"
+        top="220"
         width="155">
            Terrain detail:
         </text>

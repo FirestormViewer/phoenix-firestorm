@@ -1365,7 +1365,14 @@ static void handle_click_action_play()
 			break;
 
 		default:
-			LLViewerParcelMedia::play(parcel);
+			if (gSavedSettings.getBOOL("MediaEnableFilter"))
+			{
+				LLViewerParcelMedia::filterMediaUrl(parcel);
+			}
+			else
+			{
+				LLViewerParcelMedia::play(parcel);
+			}
 			break;
 	}
 }

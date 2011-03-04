@@ -1769,6 +1769,22 @@ Try selecting a single parcel.
 
   <notification
    icon="alertmodal.tga"
+   name="ParcelCanPlayMedia"
+   type="alertmodal">   
+This location can play streaming media.
+Streaming media requires a fast Internet connection.
+
+Play streaming media when available?
+(You can change this option later under Preferences &gt; Sound &amp; Media.)
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Disable"
+     yestext="Play Media"/>
+  </notification>
+
+
+  <notification
+   icon="alertmodal.tga"
    name="CannotDeedLandWaitingForServer"
    type="alertmodal">
 Unable to deed land:
@@ -4567,6 +4583,60 @@ The string [STRING_NAME] is missing from strings.xml.
   </notification>
 
   <notification
+   icon="alert.tga"  
+   name="MediaAlert"
+   type="alert"> 
+The owner of this parcel has requested media at the following location to be loaded by your viewer:
+
+[MEDIAURL]
+   <form name="form">
+    <button
+         index="0"
+         name="Allow"
+         text="Allow"/>
+        <button
+         index="1"
+         name="Deny"  
+         text="Deny"/>
+        <button
+         index="2"   
+     name="Blacklist"
+         text="Blacklist"/>
+        <button
+         index="3"
+         name="Whitelist"
+         text="Whitelist"/>
+   </form>
+  </notification>
+
+  <notification
+   icon="alert.tga"  
+   name="AudioAlert"
+   type="alert"> 
+The owner of this parcel has requested music at the following location to be played by your viewer:
+
+[AUDIOURL]
+   <form name="form">
+    <button
+         index="0"
+         name="Allow"
+         text="Allow"/>
+        <button
+         index="1"
+         name="Deny"  
+         text="Deny"/>
+        <button
+         index="2"   
+     name="Blacklist"
+         text="Blacklist"/>
+        <button
+         index="3"
+         name="Whitelist"
+         text="Whitelist"/>
+   </form>
+  </notification>
+
+  <notification
    icon="notifytip.tga"
    name="SystemMessageTip"
    type="notifytip">
@@ -4765,6 +4835,13 @@ Unable to load the script.  Please try again.
    name="IncompleteInventory"
    type="notifytip">
 Some of the contents are you trying to share cannot be given/transferred just yet. Please try offering these items again in a bit.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="IncompleteInventoryItem"
+   type="notifytip">
+The item you are accessing is not yet locally available. Please try again in a minute.
   </notification>
 
   <notification

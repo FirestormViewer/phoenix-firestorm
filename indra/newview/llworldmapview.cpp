@@ -140,7 +140,9 @@ void LLWorldMapView::initClass()
 	sForSaleAdultImage =    LLUI::getUIImage("icon_for_sale_adult.tga");
 	
 	sStringsMap["loading"] = LLTrans::getString("texture_loading");
-	sStringsMap["offline"] = LLTrans::getString("worldmap_offline");
+	
+	// Missing translation for agent position
+	sStringsMap["agent_position"] = LLTrans::getString("worldmap_agent_position");
 }
 
 // static
@@ -452,13 +454,35 @@ void LLWorldMapView::draw()
 		{
 			LLFontGL* font = LLFontGL::getFont(LLFontDescriptor("SansSerif", "Small", LLFontGL::BOLD));
 			std::string mesg;
-			if (info->isDown())
+// [RLVa:KB]
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 			{
-				mesg = llformat( "%s (%s)", info->getName().c_str(), sStringsMap["offline"].c_str());
+				mesg = RlvStrings::getString(RLV_STRING_HIDDEN);
 			}
+// [/RLVa:KB]
 			else
 			{
 				mesg = info->getName();
+
+				// Only show agent count when region is online
+				if (!info->isDown())
+				{
+					S32 agent_count = info->getAgentCount();
+					LLViewerRegion *region = gAgent.getRegion();
+					if (region && region->getHandle() == info->getHandle())
+					{
+						++agent_count; // Bump by 1 if we're in this region
+					}
+					if (agent_count > 0)
+					{
+						mesg += llformat(" (%d)", agent_count);
+					}
+				}
+				
+				// Let the LLSimInfo instance do the translation;
+				// it knows everything needed for this, including
+				// offline status!
+				mesg += llformat(" (%s)", info->getAccessString().c_str());
 			}
 			if (!mesg.empty())
 			{
@@ -514,7 +538,7 @@ void LLWorldMapView::draw()
 		drawTracking(pos_global,
 					 lerp(LLColor4::yellow, LLColor4::orange, 0.4f),
 					 TRUE,
-					 "You are here",
+					 sStringsMap["agent_position"].c_str(),
 					 "",
 					 llround(LLFontGL::getFontSansSerifSmall()->getLineHeight())); // offset vertically by one line, to avoid overlap with target tracking
 	}

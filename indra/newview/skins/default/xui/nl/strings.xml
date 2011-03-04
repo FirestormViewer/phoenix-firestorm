@@ -548,6 +548,9 @@
 	<string name="worldmap_results_none_found">
 		Geen gevonden.
 	</string>
+	<string name="worldmap_agent_position">
+		U bent hier
+	</string>
 	<string name="Ok">
 		OK
 	</string>

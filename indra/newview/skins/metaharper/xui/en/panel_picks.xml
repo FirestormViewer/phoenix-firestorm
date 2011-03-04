@@ -4,13 +4,13 @@ bg_opaque_color="SL-Background_66"
        background_visible="true"
        background_opaque="false"
  follows="all"
- height="545"
+ height="480"
  label="Picks"
  layout="topleft"
  left="0"
  name="panel_picks"
  top="0"
- width="313">
+ width="430">
  <string
   name="no_picks"
   value="No Picks" />
@@ -20,26 +20,26 @@ bg_opaque_color="SL-Background_66"
  <text
   type="string"
   follows="all"
-  height="535"
+  height="475"
   layout="topleft"
   left="6"
   name="picks_panel_text"
   wrap="true"
   top="10"
-  width="313"/>
+  width="430"/>
  <accordion
   fit_parent="true" 
   follows="all"
-  height="483"
+  height="350"
   layout="topleft"
   left="0"
   name="accordion"
   top="0"
   single_expansion="true"
-  width="313">
+  width="430">
     <accordion_tab
      layout="topleft"
-     height="483"
+     height="350"
      min_height="150"
      name="tab_picks"
      title="Picks"
@@ -56,7 +56,7 @@ bg_opaque_color="SL-Background_66"
     </accordion_tab>
     <accordion_tab
      layout="topleft"
-     height="483"
+     height="350"
      name="tab_classifieds"
      title="Classifieds"
      visible="false">
@@ -82,7 +82,7 @@ bg_opaque_color="SL-Background_66"
          label="bottom_panel"
          layout="bottom"
          name="edit_panel"
-         top_pad="-2"
+         bottom_delta="4"
          width="313">
          
   <!-- Replaces LLs button panel as they had not put buttons in -->

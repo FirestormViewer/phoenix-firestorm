@@ -200,6 +200,7 @@
 
 #include "llnotificationmanager.h"
 
+#include "streamtitledisplay.h"
 
 //
 // exported globals
@@ -1983,6 +1984,8 @@ bool idle_startup()
 	{
 		set_startup_status(1.0, "", "");
 
+		LLViewerParcelMedia::loadDomainFilterList();
+
 		// Let the map know about the inventory.
 		LLFloaterWorldMap* floater_world_map = LLFloaterWorldMap::getInstance();
 		if(floater_world_map)
@@ -2701,6 +2704,9 @@ void LLStartUp::multimediaInit()
 
 	// LLViewerMedia::initClass();
 	LLViewerParcelMedia::initClass();
+
+	// Also initialise the stream titles.
+	new StreamTitleDisplay();
 }
 
 void LLStartUp::fontInit()

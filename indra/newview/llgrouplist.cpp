@@ -233,7 +233,7 @@ void LLGroupList::setGroups(const std::map< std::string,LLUUID> group_list)
 
 void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos)
 {
-	LLGroupListItem* item = new LLGroupListItem();
+	LLGroupListItem* item = new LLGroupListItem(mForAgent);
 
 	item->setGroupID(id);
 	item->setName(name, mNameFilter);
@@ -309,14 +309,17 @@ bool LLGroupList::onContextMenuItemEnable(const LLSD& userdata)
 /*          LLGroupListItem implementation                              */
 /************************************************************************/
 
-LLGroupListItem::LLGroupListItem()
+LLGroupListItem::LLGroupListItem(bool for_agent)
 :	LLPanel(),
 mGroupIcon(NULL),
 mGroupNameBox(NULL),
 mInfoBtn(NULL),
 mGroupID(LLUUID::null)
 {
-	buildFromFile( "panel_group_list_item.xml");
+	if (for_agent)
+		buildFromFile( "panel_group_list_item.xml");
+	else
+		buildFromFile( "panel_group_list_item_short.xml");
 
 	// Remember group icon width including its padding from the name text box,
 	// so that we can hide and show the icon again later.

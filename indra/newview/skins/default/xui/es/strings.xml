@@ -4,9 +4,6 @@
      For example, the strings used in avatar chat bubbles, and strings
      that are returned from one component and may appear in many places-->
 <strings>
-	<string name="CAPITALIZED_APP_NAME">
-		SECOND LIFE
-	</string>
 	<string name="SUPPORT_SITE">
 		Portal de Soporte de Second Life
 	</string>
@@ -653,6 +650,9 @@
 	</string>
 	<string name="worldmap_results_none_found">
 		No se ha encontrado.
+	</string>
+	<string name="worldmap_agent_position">
+		Usted está aquí
 	</string>
 	<string name="Ok">
 		OK

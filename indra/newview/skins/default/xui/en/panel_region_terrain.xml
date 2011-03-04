@@ -42,7 +42,7 @@
      max_val="100"
      name="water_height_spin"
      top="40"
-     width="180" />
+     width="200" />
     <spinner
      follows="left|top"
      height="20"
@@ -54,7 +54,7 @@
      max_val="100"
      name="terrain_raise_spin"
      top="60"
-     width="180" />
+     width="200" />
     <spinner
      follows="left|top"
      height="20"
@@ -67,7 +67,7 @@
      min_val="-100"
      name="terrain_lower_spin"
      top="80"
-     width="180" />
+     width="200" />
     <check_box
      height="20"
      label="Use Estate Sun"

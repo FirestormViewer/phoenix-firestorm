@@ -593,6 +593,13 @@ void LLAvatarNameCache::buildLegacyName(const std::string& full_name,
 	av_name->mIsDisplayNameDefault = true;
 	av_name->mIsTemporaryName = true;
 	av_name->mExpires = F64_MAX; // not used because these are not cached
+	
+	// Port from Phoenix: Also fill mLegacyFirstName and mLegacyLastName
+	// in case we need it later (would have to parse mDisplayName manually
+	// if not done here).
+	std::istringstream fname(full_name);
+	fname >> av_name->mLegacyFirstName >> av_name->mLegacyLastName;
+	
 	LL_DEBUGS("AvNameCache") << "LLAvatarNameCache::buildLegacyName "
 							 << full_name
 							 << LL_ENDL;

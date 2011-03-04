@@ -311,8 +311,7 @@ void LLMediaDataClient::serviceQueue()
 	if (!url.empty())
 	{
 		const LLSD &sd_payload = request->getPayload();
-		//Gah! Kill spammy message.
-		//LL_INFOS("LLMediaDataClient") << "Sending request for " << *request << LL_ENDL;
+		LL_INFOS("LLMediaDataClient") << "Sending request for " << *request << LL_ENDL;
 		
 		// Add this request to the non-queued tracking list
 		trackRequest(request);

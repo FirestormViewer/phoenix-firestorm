@@ -6,7 +6,7 @@
 		</text>
 	</panel>
 	<panel name="layout_panel_2">
-		<button name="Show My Location" tool_tip="Wyśrodkuj mapę w miejscu, gdzie znajduje się mój awatar"/>
+		<button name="Show Current Location" tool_tip="Wyśrodkuj mapę w miejscu, gdzie znajduje się mój awatar"/>
 		<text name="me_label">
 			Ja
 		</text>

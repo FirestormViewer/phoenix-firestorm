@@ -549,7 +549,40 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>ArrowKeysAlwaysMove</key>
+  <key>UploadAnimationPreviewUseDummy</key>
+    <map>
+      <key>Comment</key>
+      <string>Uploading an animation preview on dummy if set to true, preview on self if false. Both plays only on the local machine.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>PrivateLookAtTarget</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, viewer shows simulated look-at behavior to others.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>PrivatePointAtTarget</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, viewer won't show the editing arm motion.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>ArrowKeysAlwaysMove</key>
     <map>
       <key>Comment</key>
       <string>While cursor is in chat entry box, arrow keys still control your avatar</string>
@@ -5732,6 +5765,33 @@
     <string>Boolean</string>
     <key>Value</key>
     <integer>0</integer>
+  </map>
+  <key>MediaEnableFilter</key>
+  <map>
+    <key>Comment</key>   
+    <string>Enable media domain filtering</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>MediaListRect</key>    
+  <map>
+    <key>Comment</key>
+    <string>Rectangle for Media List window</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Rect</string>
+    <key>Value</key>
+    <array>
+       <integer>0</integer>
+       <integer>100</integer>
+       <integer>100</integer>
+       <integer>100</integer>
+    </array>
   </map>
   <key>MediaOnAPrimUI</key>
   <map>
@@ -13177,6 +13237,28 @@
 			<string>Boolean</string>
 			<key>Value</key>
 			<integer>1</integer>
+		</map>
+		<key>PhoenixDisableMinZoomDist</key>
+		<map>
+			<key>Comment</key>
+			<string>Disable the constraint on the closest distance the camera is allowed to get to an object.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
+		</map>
+		<key>PhoenixIgnoreSimulatorCameraConstraints</key>
+		<map>
+			<key>Comment</key>
+			<string>Ignores the 'push' the simulator applies to your camera to keep it out of objects.(Requires restart to work correctly)</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
 		</map>
 </map>
 </llsd>

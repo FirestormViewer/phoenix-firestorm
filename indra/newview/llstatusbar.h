@@ -168,6 +168,11 @@ private:
 	void onInfoButtonClicked();
 
 	/**
+	 * Handles clicks on the parcel wl info button.
+	 */
+	void onParcelWLClicked();
+
+	/**
 	 * Called when agent changes the parcel.
 	 */
 	void onAgentParcelChange();
@@ -192,10 +197,14 @@ private:
 	 */
 	void updateParcelInfoText();
 
+public:
+
 	/**
 	 * Updates parcel icons (mParcelIcon[]).
 	 */
 	void updateParcelIcons();
+
+private:
 
 	/**
 	 * Updates health information (mDamageText).
@@ -252,6 +261,7 @@ private:
 	LLTextBox* 				mDamageText;
 	LLIconCtrl*				mParcelIcon[ICON_COUNT];
 	LLParcelChangeObserver*	mParcelChangedObserver;
+	LLButton* 				mPWLBtn;
 
 	boost::signals2::connection	mParcelPropsCtrlConnection;
 	boost::signals2::connection	mShowCoordsCtrlConnection;

@@ -6,7 +6,7 @@
     <menu_item_check label="L$-Markt-Kurse" name="LindenXchange"/>
     <menu_item_check label="Script-Datenbank" name="Script Library"/>
   </menu>
-	<menu label="Ich" name="Me">
+	<menu label="Avatar" name="Me">
 		<menu_item_call label="Einstellungen" name="Preferences"/>
 		<menu_item_call label="Meine Startseite" name="Manage My Account">
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=de"/>
@@ -30,7 +30,7 @@
 		</menu>
 		<menu_item_call label="Admin-Status anfordern" name="Request Admin Options"/>
 		<menu_item_call label="Admin-Status verlassen" name="Leave Admin Options"/>
-		<menu_item_call label="[APP_NAME] schließen" name="Quit"/>
+		<menu_item_call label="[APP_NAME] beenden" name="Quit"/>
 	</menu>
 	<menu label="Unterhalten" name="Communicate">
 		<menu_item_call label="Meine Freunde" name="My Friends"/>
@@ -54,7 +54,7 @@
 			<menu_item_check label="Bewegungssteuerung" name="Movement Controls"/>
 			<menu_item_check label="Ansichtsteuerung" name="Camera Controls"/>
 			<menu_item_check label="Bannlinien" name="Ban Lines"/>
-			<menu_item_check label="Strahlen" name="beacons"/>
+			<menu_item_check label="Leuchtmarkierung" name="beacons"/>
 			<menu_item_check label="Grundstücksgrenzen" name="Property Lines"/>
 			<menu_item_check label="Landeigentümer" name="Land Owners"/>
 			<menu_item_check label="Koordinaten" name="Coordinates"/>
@@ -63,13 +63,13 @@
 		</menu>
 		<menu_item_call label="Teleport nach Hause" name="Teleport Home"/>
 		<menu_item_call label="Hier als Zuhause wählen" name="Set Home to Here"/>
+		<menu_item_call label="Umwelt-Editor" name="Environment Editor"/>
 		<menu label="Sonne" name="Environment Settings">
 			<menu_item_call label="Sonnenaufgang" name="Sunrise"/>
 			<menu_item_call label="Mittag" name="Noon"/>
 			<menu_item_call label="Sonnenuntergang" name="Sunset"/>
 			<menu_item_call label="Mitternacht" name="Midnight"/>
 			<menu_item_call label="Grundbesitzzeit" name="Revert to Region Default"/>
-			<menu_item_call label="Umwelt-Editor" name="Environment Editor"/>
 		</menu>
 	</menu>
 	<menu label="Bauen" name="BuildTools">
@@ -150,7 +150,7 @@
 			<menu_item_check label="Avatar-Darstellungskosten anzeigen" name="Avatar Rendering Cost"/>
 		</menu>
 		<menu label="Hervorhebung und Sichtbarkeit" name="Highlighting and Visibility">
-			<menu_item_check label="Pulsierender Strahl" name="Cheesy Beacon"/>
+			<menu_item_check label="Pulsierende Leuchtmarkierung" name="Cheesy Beacon"/>
 			<menu_item_check label="Partikel ausblenden" name="Hide Particles"/>
 			<menu_item_check label="Auswahl ausblenden" name="Hide Selected"/>
 			<menu_item_check label="Durchsichtig hervorheben" name="Highlight Transparent"/>
@@ -309,7 +309,7 @@
 		</menu>
 		<menu label="Welt" name="World">
 			<menu_item_check label="Sonnen-Override für Sim" name="Sim Sun Override"/>
-			<menu_item_check label="Pulsierender Strahl" name="Cheesy Beacon"/>
+			<menu_item_check label="Pulsierende Leuchtmarkierung" name="Cheesy Beacon"/>
 			<menu_item_check label="Festgelegtes Wetter" name="Fixed Weather"/>
 			<menu_item_call label="Regionsobjekt-Cache ausgeben" name="Dump Region Object Cache"/>
 		</menu>
@@ -397,7 +397,7 @@
 		</menu>
 		<menu_item_call label="Gott-Werkzeuge" name="God Tools"/>
 	</menu>
-	<menu label="Admin" name="Deprecated">
+	<menu label="Veraltet" name="Deprecated">
 		<menu label="Objekt anhängen" name="Attach Object"/>
 		<menu label="Objekt abnehmen" name="Detach Object"/>
 		<menu label="Kleider ausziehen" name="Take Off Clothing">
@@ -422,7 +422,7 @@
 				<menu_item_call label="Hilfe zum Allgemeinen Probleme-Tracker" name="Publc Issue Tracker Help"/>
 				<menu_item_call label="Fehlermeldungs-1x1" name="Bug Reporing 101"/>
 				<menu_item_call label="Sicherheitsfragen" name="Security Issues"/>
-				<menu_item_call label="QA-Wiki" name="QA Wiki"/>
+				<menu_item_call label="QA-Wiki" name="QA Wiki" />
 			</menu>
 		</menu>
 	</menu>

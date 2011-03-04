@@ -147,10 +147,20 @@ BOOL LLNearbyChat::postBuild()
 		if (getDockControl() == NULL)
 		{
 			LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
-			LLTabContainer::eInsertionPoint i_pt = LLTabContainer::START;
 			if (floater_container)
 			{
-				floater_container->addFloater(this, TRUE, i_pt);
+				if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
+				{
+					// add then remove to set up relationship for re-attach
+					floater_container->addFloater(this, FALSE);
+					floater_container->removeFloater(this);
+					// reparent to floater view
+					gFloaterView->addChild(this);
+				}
+				else
+				{
+					floater_container->addFloater(this, FALSE);
+				}
 			}
 		}
 		

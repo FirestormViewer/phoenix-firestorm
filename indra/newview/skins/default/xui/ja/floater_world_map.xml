@@ -6,7 +6,7 @@
 		</text>
 	</panel>
 	<panel name="layout_panel_2">
-		<button label="現在地を表示" label_selected="現在地を表示" name="Show My Location" tool_tip="アバターの位置を地図の中心に表示します"/>
+		<button label="現在地を表示" label_selected="現在地を表示" name="Show Current Location" tool_tip="アバターの位置を地図の中心に表示します"/>
 		<text name="me_label">
 			自分
 		</text>

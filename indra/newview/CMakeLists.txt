@@ -70,7 +70,8 @@ include_directories(
 set(viewer_SOURCE_FILES
     chatbar_as_cmdline.cpp
     kcwlinterface.cpp
-	fscontactsfloater.cpp
+    floatermedialists.cpp
+    fscontactsfloater.cpp
     llagent.cpp
     llagentaccess.cpp
     llagentcamera.cpp
@@ -582,7 +583,7 @@ set(viewer_SOURCE_FILES
     llxmlrpctransaction.cpp
     noise.cpp
     pipeline.cpp
-	qtoolalign.cpp
+    qtoolalign.cpp
     rlvhandler.cpp
     rlvhelper.cpp
     rlvcommon.cpp
@@ -591,6 +592,7 @@ set(viewer_SOURCE_FILES
     rlvextensions.cpp
     rlvfloaters.cpp
     rlvui.cpp
+    streamtitledisplay.cpp
     )
 
 set(VIEWER_BINARY_NAME "firestorm-bin" CACHE STRING
@@ -613,9 +615,10 @@ endif (LINUX)
 set(viewer_HEADER_FILES
     CMakeLists.txt
     ViewerInstall.cmake
-	chatbar_as_cmdline.h
+    chatbar_as_cmdline.h
     kcwlinterface.h
-	fscontactsfloater.h
+    floatermedialists.h
+    fscontactsfloater.h
     llagent.h
     llagentaccess.h
     llagentcamera.h
@@ -1126,7 +1129,7 @@ set(viewer_HEADER_FILES
     macmain.h
     noise.h
     pipeline.h
-	qtoolalign.h
+    qtoolalign.h
     rlvdefines.h
     rlvhandler.h
     rlvhelper.h
@@ -1136,6 +1139,7 @@ set(viewer_HEADER_FILES
     rlvextensions.h
     rlvfloaters.h
     rlvui.h
+    streamtitledisplay.h
     VertexCache.h
     VorbisFramework.h
     )

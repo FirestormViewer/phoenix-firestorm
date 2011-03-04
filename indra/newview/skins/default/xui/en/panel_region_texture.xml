@@ -147,7 +147,7 @@
      left="51"
      name="height_text_lbl6"
      top="185"
-     width="100">
+     width="110">
         Northwest
     </text>
     <text
@@ -157,7 +157,7 @@
      left_pad="10"
      name="height_text_lbl7"
      top_delta="0"
-     width="100">
+     width="110">
         Northeast
     </text>
 <!--  northwest low-->
@@ -173,7 +173,7 @@
       min_val="-500"
       name="height_start_spin_1"
       top_delta="15"
-      width="100" />  
+      width="110" />  
 <!--    northeast low-->
       <spinner
        follows="left|top"
@@ -187,7 +187,7 @@
        min_val="-500"
        name="height_start_spin_3"
        top_delta="0"
-       width="100" />
+       width="110" />
 <!--  northwest high-->
      <spinner
       follows="left|top"
@@ -201,7 +201,7 @@
       min_val="-500"
       name="height_range_spin_1"
       top_delta="20"
-      width="100" />
+      width="110" />
 <!--  northeast high-->
     <spinner
        follows="left|top"
@@ -215,7 +215,7 @@
        min_val="-500"
        name="height_range_spin_3"
        top_delta="0"
-       width="100" />
+       width="110" />
     <text
      follows="left|top"
      height="20"
@@ -223,7 +223,7 @@
      left="51"
      name="height_text_lbl8"
      top_pad="10"
-     width="100">
+     width="110">
         Southwest
     </text>
     <text
@@ -233,7 +233,7 @@
      left_pad="10"
      name="height_text_lbl9"
      top_delta="0"
-     width="100">
+     width="110">
         Southeast
     </text>
 <!--  southwest low-->
@@ -249,7 +249,7 @@
      min_val="-500"
      name="height_start_spin_0"
      top_delta="15"
-     width="100" />
+     width="110" />
 <!--  southeast low-->
     <spinner
      follows="left|top"
@@ -263,7 +263,7 @@
      min_val="-500"
      name="height_start_spin_2"
      top_delta="0"
-     width="100" />
+     width="110" />
 <!--southwest high-->
     <spinner
      follows="left|top"
@@ -277,7 +277,7 @@
      min_val="-500"
      name="height_range_spin_0"
      top_delta="20"
-     width="100" />
+     width="110" />
 <!--  southeast high-->
     <spinner
      follows="left|top"
@@ -291,7 +291,7 @@
      min_val="-500"
      name="height_range_spin_2"
      top_delta="0"
-     width="100" />
+     width="110" />
     <text
      follows="left|top"
      height="20"
