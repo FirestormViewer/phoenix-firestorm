@@ -798,7 +798,7 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 		// We haven't been told what to do, and no alert is already
 		//  active, so put up the alert and note the fact.
 		LLSD args;
-		args["MEDIAURL"] = media_url;
+		args["MEDIAURL"] = munged_url;
 		LLViewerParcelMedia::sMediaFilterAlertActive = true;
 		LLViewerParcelMedia::sCurrentAlertMedia = *parcel;
 		LLParcel* pParcel = &LLViewerParcelMedia::sCurrentAlertMedia;
