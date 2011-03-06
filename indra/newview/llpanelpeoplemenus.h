@@ -43,6 +43,7 @@ private:
 	bool enableContextMenuItem(const LLSD& userdata);
 	bool checkContextMenuItem(const LLSD& userdata);
 	void offerTeleport();
+	void teleportToAvatar();
 };
 
 extern NearbyMenu gNearbyMenu;

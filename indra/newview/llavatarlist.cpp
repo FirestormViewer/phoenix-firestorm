@@ -239,6 +239,7 @@ LLAvatarList::LLAvatarList(const Params& p)
 , mRlvCheckShowNames(false)
 , mShowAge(false)
 , mShowPaymentStatus(false)
+, mItemHeight(0)
 // [/RLVa:KB]
 {
 	setCommitOnSelectionChange(true);
@@ -298,7 +299,8 @@ void LLAvatarList::draw()
 	// *NOTE dzaporozhan
 	// Call refresh() after draw() to avoid flickering of avatar list items.
 
-	LLFlatListViewEx::draw();
+	// AO: skip llflatlistview's implementation to better manage mSelectedItemsBorder.
+	LLScrollContainer::draw();
 
 	if (mNeedUpdateNames)
 	{
@@ -336,6 +338,37 @@ void LLAvatarList::setNameFilter(const std::string& filter)
 		updateNoItemsMessage(filter);
 		setDirty();
 	}
+}
+
+void LLAvatarList::setItemHeight(S32 height)
+// AO: Adjust some parameters that need to be changed when we adjust item spacing form the .xml default
+// If you change these, also change addNewItem()
+{
+	mItemHeight = height;
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		LLAvatarListItem* avItem = static_cast<LLAvatarListItem*>(*it);
+		if (mItemHeight != 0)
+		{
+			S32 width = avItem->getRect().getWidth();
+			avItem->reshape(width,mItemHeight);
+			LLIconCtrl* highlight = avItem->getChild<LLIconCtrl>("hovered_icon");
+			LLIconCtrl* select = avItem->getChild<LLIconCtrl>("selected_icon");
+			highlight->setOrigin(0,24-height); // temporary hack to be in the right ballpark.
+			highlight->reshape(width,mItemHeight);
+			select->setOrigin(0,24-height);
+			select->reshape(width,mItemHeight);
+		}
+	}
+	mNeedUpdateNames = true;
+}
+
+void LLAvatarList::onFocusReceived()
+// AO: Override this from base class to bypass highlighting border. It has issues with resized item spacing.
+{
+	gEditMenuHandler = this;
 }
 
 void LLAvatarList::sortByName()
@@ -540,6 +573,21 @@ S32 LLAvatarList::notifyParent(const LLSD& info)
 void LLAvatarList::addNewItem(const LLUUID& id, const std::string& name, BOOL is_online, EAddPosition pos)
 {
 	LLAvatarListItem* item = new LLAvatarListItem();
+	
+	// AO: Adjust some parameters that need to be changed when we adjust item spacing form the .xml default
+	// If you change these, also change setLineHeight()
+	if (mItemHeight != 0)
+	{
+		S32 width = item->getRect().getWidth();
+		item->reshape(width,mItemHeight);
+		LLIconCtrl* highlight = item->getChild<LLIconCtrl>("hovered_icon");
+		LLIconCtrl* select = item->getChild<LLIconCtrl>("selected_icon");
+		highlight->setOrigin(0,24-mItemHeight); // temporary hack to be in the right ballpark.
+		highlight->reshape(width,mItemHeight);
+		select->setOrigin(0,24-mItemHeight);
+		select->reshape(width,mItemHeight);
+	}
+	
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	item->setRlvCheckShowNames(mRlvCheckShowNames);
 // [/RLVa:KB]

@@ -93,16 +93,69 @@ Looking for people to hang out with? Use the search box to find topics or conten
          name="nearby_panel"
          top="0"
          width="313">
+         	<panel
+	         height="15"
+	         width="307"
+	         label="nearby_header"
+	         left="0"
+	         top="0"
+	         follows="left|right|top">
+
+			    <text
+			     follows="left"
+			     font="SansSerifSmall"
+			     height="15"
+			     layout="topleft"
+			     left_pad="5"
+			     name="header_name"
+			     top="2"
+			     left="5"
+			     width="100">NAME</text>
+			    <text
+			     follows="right"
+			     font="SansSerifSmall"
+			     height="15"
+			     layout="topleft"
+			     left_pad="5"
+			     name="header_age"
+			     top="2"
+			     right="-77"
+			     width="30">AGE</text>
+			    <text
+			     follows="right"
+			     font="SansSerifSmall"
+			     height="15"
+			     layout="topleft"
+			     left_pad="5"
+			     name="header_seen"
+			     top="2"
+			     right="-35"
+			     width="40">SEEN</text>
+			    <text
+			     follows="right"
+			     font="SansSerifSmall"
+			     height="15"
+			     layout="topleft"
+			     left_pad="5"
+			     name="header_range"
+			     right="-1"
+			     top="2"
+			     value=" RANGE"
+			     width="40"/>
+			         
+			</panel>
             <avatar_list
              allow_select="true"
              follows="all"
              height="356"
+             border_size="0"
+             draw_border="false"
              ignore_online_status="true"
              layout="topleft"
              left="3"
              multi_select="true"
              name="avatar_list"
-             top="0"
+             top="15"
              width="307" />
             <panel
              background_visible="true"

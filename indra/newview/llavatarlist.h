@@ -78,6 +78,7 @@ public:
 
 	void toggleIcons();
 	void setSpeakingIndicatorsVisible(bool visible);
+	void setItemHeight(S32 height);
 	void showPermissions(bool visible);
 	void showRange(bool visible);
 	void showFirstSeen(bool visible);
@@ -122,6 +123,7 @@ protected:
 	void updateLastInteractionTimes();	
 	void rebuildNames();
 	void onItemDoubleClicked(LLUICtrl* ctrl, S32 x, S32 y, MASK mask);
+	virtual void onFocusReceived();
 //	void updateAvatarNames();
 
 private:
@@ -143,6 +145,7 @@ private:
 	bool mShowDisplayName;
 	bool mShowUsername;
 	bool mIgnoreGlobalIcons;
+	S32  mItemHeight;
 	
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	bool mRlvCheckShowNames;

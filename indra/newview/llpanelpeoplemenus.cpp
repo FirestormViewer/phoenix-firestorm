@@ -38,6 +38,8 @@
 #include "llavataractions.h"
 #include "llcallingcard.h"			// for LLAvatarTracker
 #include "llviewermenu.h"			// for gMenuHolder
+#include "llsidetray.h"
+#include "llpanelpeople.h"
 
 namespace LLPanelPeopleMenus
 {
@@ -67,6 +69,7 @@ LLContextMenu* NearbyMenu::createMenu()
 		registrar.add("Avatar.Share",			boost::bind(&LLAvatarActions::share,					id));
 		registrar.add("Avatar.Pay",				boost::bind(&LLAvatarActions::pay,						id));
 		registrar.add("Avatar.BlockUnblock",	boost::bind(&LLAvatarActions::toggleBlock,				id));
+		registrar.add("Nearby.People.TeleportToAvatar", boost::bind(&NearbyMenu::teleportToAvatar,	this));
 
 		enable_registrar.add("Avatar.EnableItem", boost::bind(&NearbyMenu::enableContextMenuItem,	this, _2));
 		enable_registrar.add("Avatar.CheckItem",  boost::bind(&NearbyMenu::checkContextMenuItem,	this, _2));
@@ -192,6 +195,14 @@ void NearbyMenu::offerTeleport()
 	// boost::bind cannot recognize overloaded method LLAvatarActions::offerTeleport(),
 	// so we have to use a wrapper.
 	LLAvatarActions::offerTeleport(mUUIDs);
+}
+	
+void NearbyMenu::teleportToAvatar()
+// AO: wrapper for functionality managed by LLPanelPeople, because it manages the nearby avatar list.
+// Will only work for avatars within radar range.
+{
+	LLPanelPeople* peoplePanel = dynamic_cast<LLPanelPeople*>(LLSideTray::getInstance()->getPanel("panel_people"));
+	peoplePanel->teleportToAvatar(mUUIDs.front());
 }
 
 } // namespace LLPanelPeopleMenus

@@ -1083,7 +1083,9 @@ void LLFlatListView::setNoItemsCommentVisible(bool visible) const
 {
 	if (mNoItemsCommentTextbox)
 	{
-		mSelectedItemsBorder->setVisible(!visible);
+	//  AO: mSelectedItemsBorder doesn't behave correctly when item spacing changes dynamically.
+	//  disable it for now.
+	//	mSelectedItemsBorder->setVisible(!visible);
 		mNoItemsCommentTextbox->setVisible(visible);
 	}
 }

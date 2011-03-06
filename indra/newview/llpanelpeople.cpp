@@ -556,7 +556,7 @@ BOOL LLPanelPeople::postBuild()
 	mNearbyList->setNoItemsMsg(getString("no_one_near"));
 	mNearbyList->setNoFilteredItemsMsg(getString("no_one_filtered_near"));
 	mNearbyList->setShowIcons("NearbyListShowIcons");
-	mNearbyList->showRange(true); // AO: TODO: use gsavedsetting
+	mNearbyList->showRange(true); 
 	mNearbyList->showFirstSeen(true);
 	mNearbyList->showAvatarAge(true);
 	mNearbyList->showStatusFlags(true);
@@ -564,6 +564,7 @@ BOOL LLPanelPeople::postBuild()
 	mNearbyList->showPaymentStatus(true);
 	mNearbyList->showMiniProfileIcons(false);
 	mNearbyList->showPermissions(false);
+	mNearbyList->setItemHeight(20); // AO: Radar item spacing should be more compressed to use less screen space
 	
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	mNearbyList->setRlvCheckShowNames(true);
@@ -829,6 +830,7 @@ void LLPanelPeople::updateNearbyList()
 		
 		rf.firstSeen = av->getFirstSeen();
 		rf.lastStatus = av->getAvStatus();
+		rf.lastGlobalPos = av->getPosition();
 		
 		lastRadarSweep[av->getAvatarId()] = rf;
 	}	
@@ -1349,6 +1351,25 @@ void LLPanelPeople::onChatButtonClicked()
 	LLUUID group_id = getCurrentItemID();
 	if (group_id.notNull())
 		LLGroupActions::startIM(group_id);
+}
+
+void LLPanelPeople::teleportToAvatar(LLUUID targetAv)
+// Teleports user to last scanned location of nearby avatar
+// Note: currently teleportViaLocation is disrupted by enforced landing points set on a parcel.
+{
+	llinfos << "AO: Trying to teleport to avatar: " << targetAv << llendl;
+	std::vector<LLPanel*> items;
+	mNearbyList->getItems(items);
+	for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
+	{
+		LLAvatarListItem* av = static_cast<LLAvatarListItem*>(*itItem);
+		if (av->getAvatarId() == targetAv)
+		{
+			llinfos << "avatar found, teleporting." << llendl;
+			gAgent.teleportViaLocation(av->getPosition());
+			return;
+		}
+	}
 }
 
 void LLPanelPeople::onImButtonClicked()

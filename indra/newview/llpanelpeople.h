@@ -55,6 +55,7 @@ public:
 	/*virtual*/ BOOL 	postBuild();
 	/*virtual*/ void	onOpen(const LLSD& key);
 	/*virtual*/ bool	notifyChildren(const LLSD& info);
+	void	teleportToAvatar(LLUUID targetAv);
 	// Implements LLVoiceClientStatusObserver::onChange() to enable call buttons
 	// when voice is available
 	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
@@ -180,6 +181,7 @@ private:
 	{
 		std::string avName;
 		F32 lastDistance;
+		LLVector3d lastGlobalPos;
 		LLUUID lastRegion;
 		time_t firstSeen;
 		S32 lastStatus;
