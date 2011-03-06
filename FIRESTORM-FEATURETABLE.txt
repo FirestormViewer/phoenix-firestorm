@@ -54,4 +54,12 @@ Temp_Uploads		LGPL (from Dolphin Viewer 2.4)
 StreamTitles		BSD
 LessCameraConstraints	LGPL
 TabbedOutfits&Shape	LGPL
-MediaFilter		LGPL
+MediaFirewall		LGPL
+ResizableCamaeraControl	LGPL
+FolderStyleOutfits	LGPL
+TabLayerEditorLayout	LGPL
+TabShapeEditorLayout	LGPL
+PrivateLookat		LGPL (from ArminW/Kokua)
+PreviewAnimations	LGPL (from ARminW/Kokua)
+LSLmediaToggle		LGPL
+ImprovedRadar		LGPL
