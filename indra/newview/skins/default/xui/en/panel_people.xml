@@ -149,7 +149,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             <avatar_list
              allow_select="true"
              follows="all"
-             height="356"
+             height="341"
              ignore_online_status="true"
              layout="topleft"
              left="3"
