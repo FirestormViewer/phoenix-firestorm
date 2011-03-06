@@ -191,7 +191,7 @@ void LLViewerParcelMedia::update(LLParcel* parcel)
 // static
 void LLViewerParcelMedia::play(LLParcel* parcel)
 {
-	lldebugs << "LLViewerParcelMedia::play" << llendl;
+	llinfos << "LLViewerParcelMedia::play" << llendl;
 
 	if (!parcel) return;
 
@@ -409,15 +409,23 @@ void LLViewerParcelMedia::processParcelMediaCommandMessage( LLMessageSystem *msg
 			}
 			else
 			{
-				LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
-				if (gSavedSettings.getBOOL("MediaEnableFilter"))
+				//AO: Disallow scripted media option
+				if (( !gSavedSettings.getBOOL("PermAllowScriptedMedia")) && (!gSavedSettings.getBOOL("TempAllowScriptedMedia")))
 				{
-					llinfos << "PARCEL_MEDIA_COMMAND_PLAY: Filtering media URL." << llendl;
-					filterMediaUrl(parcel);
+					llinfos << "Disallowing scripted media." <<llendl;
 				}
-				else
+				else 
 				{
-					play(parcel);
+					LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+					if (gSavedSettings.getBOOL("MediaEnableFilter"))
+					{
+						llinfos << "PARCEL_MEDIA_COMMAND_PLAY: Filtering media URL." << llendl;
+						filterMediaUrl(parcel);
+					}
+					else
+					{
+						play(parcel);
+					}
 				}
 			}
 		}
@@ -433,15 +441,23 @@ void LLViewerParcelMedia::processParcelMediaCommandMessage( LLMessageSystem *msg
 	{
 		if(sMediaImpl.isNull())
 		{
-			LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
-			if (gSavedSettings.getBOOL("MediaEnableFilter"))
+			//AO: Disallow scripted media option
+			if (( !gSavedSettings.getBOOL("PermAllowScriptedMedia")) && (!gSavedSettings.getBOOL("TempAllowScriptedMedia")))
 			{
-				llinfos << "PARCEL_MEDIA_COMMAND_TIME: Filtering media URL." << llendl;
-				filterMediaUrl(parcel);
+				llinfos << "Disallowing scripted media." << llendl;
 			}
-			else
+			else 
 			{
-				play(parcel);
+				LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+				if (gSavedSettings.getBOOL("MediaEnableFilter"))
+				{
+					llinfos << "PARCEL_MEDIA_COMMAND_TIME: Filtering media URL." << llendl;
+					filterMediaUrl(parcel);
+				}
+				else
+				{
+					play(parcel);
+				}
 			}
 		}
 		seek(time);

@@ -372,7 +372,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 	// Try to find media with the same media ID
 	viewer_media_t media_impl = getMediaImplFromTextureID(media_entry->getMediaID());
 	
-	lldebugs << "called, current URL is \"" << media_entry->getCurrentURL() 
+	llinfos << "called, current URL is \"" << media_entry->getCurrentURL() 
 			<< "\", previous URL is \"" << previous_url 
 			<< "\", update_from_self is " << (update_from_self?"true":"false")
 			<< llendl;
@@ -407,7 +407,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 				// The current media URL is now empty.  Unload the media source.
 				media_impl->unload();
 			
-				lldebugs << "Unloading media instance (new current URL is empty)." << llendl;
+				llinfos << "Unloading media instance (new current URL is empty)." << llendl;
 			}
 		}
 		else
@@ -421,7 +421,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 				needs_navigate = url_changed;
 			}
 			
-			lldebugs << "was_loaded is " << (was_loaded?"true":"false") 
+			llinfos << "was_loaded is " << (was_loaded?"true":"false") 
 					<< ", auto_play is " << (auto_play?"true":"false") 
 					<< ", needs_navigate is " << (needs_navigate?"true":"false") << llendl;
 		}
@@ -449,7 +449,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 		if(needs_navigate)
 		{
 			media_impl->navigateTo(media_impl->mMediaEntryURL, "", true, true);
-			lldebugs << "navigating to URL " << media_impl->mMediaEntryURL << llendl;
+			llinfos << "navigating to URL " << media_impl->mMediaEntryURL << llendl;
 		}
 		else if(!media_impl->mMediaURL.empty() && (media_impl->mMediaURL != media_impl->mMediaEntryURL))
 		{
@@ -459,7 +459,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 			// If this causes a navigate at some point (such as after a reload), it should be considered server-driven so it isn't broadcast.
 			media_impl->mNavigateServerRequest = true;
 
-			lldebugs << "updating URL in the media impl to " << media_impl->mMediaEntryURL << llendl;
+			llinfos << "updating URL in the media impl to " << media_impl->mMediaEntryURL << llendl;
 		}
 	}
 	
@@ -2301,15 +2301,6 @@ void LLViewerMediaImpl::navigateTo(const std::string& url, const std::string& mi
 //////////////////////////////////////////////////////////////////////////////////////////
 void LLViewerMediaImpl::navigateInternal()
 {
-	
-	//AO: Disallow scripted media option
-	if (( !gSavedSettings.getBOOL("PermAllowScriptedMedia")) && (!gSavedSettings.getBOOL("TempAllowScriptedMedia")))
-	{
-		llinfos << "Disallowing scripted media= " << mTextureId << " url=" << mMediaURL << " mime_type=" << mMimeType << llendl;
-		return;
-	}
-	
-	
 	// Helpful to have media urls in log file. Shouldn't be spammy.
 	llinfos << "media id= " << mTextureId << " url=" << mMediaURL << " mime_type=" << mMimeType << llendl;
 
