@@ -94,6 +94,17 @@ class LLViewerParcelMedia : public LLViewerMediaObserver
                 static bool sMediaLastActionPlay;
                 static std::string sAudioLastURL;
                 static bool sAudioLastActionPlay;
+
+		static bool sMediaFilterAlertActive;
+
+		static LLParcel sQueuedMedia;
+		static std::string sQueuedMusic;
+		static LLParcel sCurrentMedia;
+		static LLParcel sCurrentAlertMedia;
+		static std::string sCurrentMusic;
+		static bool sMediaQueueEmpty;
+		static bool sMusicQueueEmpty;
+
 };
 
 
