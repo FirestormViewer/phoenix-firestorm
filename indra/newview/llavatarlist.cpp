@@ -65,7 +65,8 @@ bool LLAvatarList::contains(const LLUUID& id)
 	return std::find(ids.begin(), ids.end(), id) != ids.end();
 }
 
-void LLAvatarList::toggleIcons()
+void LLAvatarList::toggleIcons() 
+// Togggles the display of Avatar icons
 {
 	if (!mIgnoreGlobalIcons)
 	{
@@ -73,7 +74,7 @@ void LLAvatarList::toggleIcons()
 		mShowIcons = !mShowIcons;
 		gSavedSettings.setBOOL(mIconParamName, mShowIcons);
 		
-		// Show/hide icons for all existing items.
+		// Show/hide avatar icons for all existing items.
 		std::vector<LLPanel*> items;
 		getItems(items);
 		for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)

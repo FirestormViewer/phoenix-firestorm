@@ -838,6 +838,7 @@ void LLPanelPeople::updateNearbyList()
 	// Fetch new list of surrounding Avs
 	std::vector<LLVector3d> positions;
 	LLWorld::getInstance()->getAvatars(&mNearbyList->getIDs(), &positions, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
+	mNearbyList->setDirty();
 	DISTANCE_COMPARATOR.updateAvatarsPositions(positions, mNearbyList->getIDs());
 	
 	//Compare new list with last radar cache, updating fields and processing changes

@@ -118,7 +118,7 @@ public:
 	void showPaymentStatus(bool show);
 	void updateFirstSeen();
 	void showUsername(bool show);
-	void setShowPermissions(bool show) { mShowPermissions = show; };
+	void setShowPermissions(bool show);
 	void showLastInteractionTime(bool show);
 	void setAvatarIconVisible(bool visible);
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d

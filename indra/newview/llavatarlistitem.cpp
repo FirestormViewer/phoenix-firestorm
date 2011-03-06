@@ -793,6 +793,12 @@ void LLAvatarListItem::updateChildren()
 	LL_DEBUGS("AvatarItemReshape") << "name rect after: " << name_view_rect << LL_ENDL;
 }
 
+void LLAvatarListItem::setShowPermissions(bool show)
+{
+	mShowPermissions=show;
+	showPermissions(show);
+}
+
 bool LLAvatarListItem::showPermissions(bool visible)
 {
 	
