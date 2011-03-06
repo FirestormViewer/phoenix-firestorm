@@ -68,9 +68,6 @@ getArgs()
             esac
         done
         shift $[OPTIND-1]
-        if [ $OPTIND -le 1 ] ; then
-            showUsage && exit 1
-        fi
 
         if [ $WANTS_CLEAN -ne $TRUE ] && [ $WANTS_CONFIG -ne $TRUE ] && \
                 [ $WANTS_BUILD -ne $TRUE ] && [ $WANTS_VERSION -ne $TRUE ] && \
