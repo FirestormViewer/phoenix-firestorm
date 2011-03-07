@@ -63,6 +63,8 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
+#include "lltrans.h"
+
 static LLDefaultChildRegistry::Register<LLNetMap> r1("net_map");
 
 const F32 LLNetMap::MAP_SCALE_MIN = 32;
@@ -319,7 +321,7 @@ void LLNetMap::draw()
 		LLUI::getMousePositionLocal(this, &local_mouse_x, &local_mouse_y);
 		mClosestAgentToCursor.setNull();
 		F32 closest_dist = F32_MAX;
-		F32 min_pick_dist = mDotRadius * MIN_PICK_SCALE; 
+		F32 min_pick_dist = mDotRadius * MIN_PICK_SCALE;
 
 		// Draw avatars
 		for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
@@ -375,6 +377,7 @@ void LLNetMap::draw()
 				{
 					closest_dist = dist_to_cursor;
 					mClosestAgentToCursor = regionp->mMapAvatarIDs.get(i);
+					mClosestAgentPosition = pos_global;
 				}
 			}
 		}
@@ -650,7 +653,26 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 	{
 		LLInspector::Params p;
 		p.fillFrom(LLUICtrlFactory::instance().getDefaultParams<LLInspector>());
-		p.message(av_name.getCompleteName());
+		
+		// Add distance to avatars in hovertip for minimap
+		if (avatar_id != gAgent.getID())
+		{
+			LLVector3d myPosition = gAgent.getPositionGlobal();
+			LLVector3d otherPosition = mClosestAgentPosition;
+			LLVector3d delta = otherPosition - myPosition;
+			F32 distance = (F32)delta.magVec();
+
+			LLStringUtil::format_map_t args;
+			args["DISTANCE"] = llformat("%.02f", distance);
+			std::string distanceLabel = LLTrans::getString("minimap_distance");
+			LLStringUtil::format(distanceLabel, args);
+			p.message(av_name.getCompleteName() + "\n" + distanceLabel);
+		}
+		else
+		{
+			p.message(av_name.getCompleteName());
+		}
+		
 		p.image.name("Inspector_I");
 		p.click_callback(boost::bind(showAvatarInspector, avatar_id));
 		p.visible_time_near(6.f);

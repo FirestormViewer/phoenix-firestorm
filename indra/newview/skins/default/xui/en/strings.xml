@@ -282,6 +282,9 @@
 	<string name="worldmap_item_tooltip_format">[AREA] m² L$[PRICE]</string>
 	<string name="worldmap_results_none_found">None found.</string>
 	<string name="worldmap_agent_position">You are here</string>
+	
+	<!-- mini map -->
+	<string name="minimap_distance">(Distance: [DISTANCE] m)</string>
 
 	<!-- animations uploading status codes -->
 	<string name="Ok">OK</string>

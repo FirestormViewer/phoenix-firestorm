@@ -666,6 +666,9 @@
 	<string name="worldmap_agent_position">
 		Vous êtes ici
 	</string>
+	<string name="minimap_distance">
+		(Distance: [DISTANCE] m)
+	</string>
 	<string name="Ok">
 		OK
 	</string>
