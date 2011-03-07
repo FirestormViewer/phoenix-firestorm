@@ -382,7 +382,11 @@ void LLAvatarListItem::showStatusFlags(bool show)
 
 void LLAvatarListItem::updateFirstSeen()
 {
-	mFirstSeenDisplay->setValue(llformat("%d", time(NULL) - mFirstSeen));
+	S32 seentime = (S32)difftime(time(NULL), mFirstSeen);
+	S32 hours = (S32)(seentime / 3600);
+	S32 mins = (S32)((seentime - hours * 3600) / 60);
+	S32 secs = (S32)((seentime - hours * 3600 - mins * 60));
+	mFirstSeenDisplay->setValue(llformat("%d:%02d:%02d", hours, mins, secs));
 	updateChildren();
 }
 

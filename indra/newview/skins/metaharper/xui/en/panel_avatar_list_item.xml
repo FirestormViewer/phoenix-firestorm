@@ -72,7 +72,7 @@
      follows="right"
      image_name="payment_info_used.tga"
      layout="topleft"
-     right="-114"
+     right="-134"
      name="payment_info"
      tool_tip="Payment info on file"
      top="0"
@@ -84,7 +84,7 @@
      top="5"
      layout="topleft"
      left_pad="5"
-     right="-70"
+     right="-90"
      name="avatar_age"
      text_color="LtGray_50"
      value="0000"
@@ -100,7 +100,7 @@
      name="first_seen"
      text_color="LtGray_50"
      value="0000"
-     width="40" />  
+     width="60" />  
     <text
      follows="right"
      font="SansSerifSmall"
