@@ -189,6 +189,7 @@ public:
 private:
 	//for "Only friends and groups can call or IM me"
 	static void showFriendsOnlyWarning(LLUICtrl*, const LLSD&);
+	static void showCustomPortWarning(LLUICtrl*, const LLSD&); // -WoLf
 
 	typedef std::map<LLControlVariable*, LLSD> control_values_map_t;
 	control_values_map_t mSavedValues;

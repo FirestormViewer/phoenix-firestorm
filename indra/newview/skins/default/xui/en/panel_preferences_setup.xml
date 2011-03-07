@@ -112,11 +112,7 @@
    left_pad="50"
    name="connection_port_enabled"
    top_pad="-35"
-   width="256">
-    <check_box.commit_callback
-     function="Notification.Show"
- parameter="ChangeConnectionPort" />
-  </check_box>
+   width="256"/>
   <spinner
    control_name="ConnectionPort"
    enabled_control="ConnectionPortEnabled"

@@ -1583,7 +1583,12 @@ BOOL LLPanelPreference::postBuild()
 			getChild<LLUICtrl>("modifier_combo")->setValue(getString("middle_mouse"));
 		}
 	}
-
+	// Panel Setup (Network) -WoLf
+	if (hasChild("connection_port_enabled"))
+	{
+		getChild<LLCheckBoxCtrl>("connection_port_enabled")->setCommitCallback(boost::bind(&showCustomPortWarning, _1, _2));
+	} 
+	// [/WoLf]
 	apply();
 	return true;
 }
@@ -1639,6 +1644,12 @@ void LLPanelPreference::showFriendsOnlyWarning(LLUICtrl* checkbox, const LLSD& v
 		LLNotificationsUtil::add("FriendsAndGroupsOnly");
 	}
 }
+// Manage the custom port alert, fixes Cant Close bug. -WoLf
+void LLPanelPreference::showCustomPortWarning(LLUICtrl* checkbox, const LLSD& value)
+{
+		LLNotificationsUtil::add("ChangeConnectionPort");
+}
+// [/WoLf]
 
 void LLPanelPreference::cancel()
 {
