@@ -4195,6 +4195,12 @@ void LLObjectBridge::performAction(LLInventoryModel* model, std::string action)
 	{
 		LLAppearanceMgr::instance().wearItemOnAvatar(mUUID, true, false); // Don't replace if adding.
 	}
+// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-08-25 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
+	else if ("edit" == action)
+	{
+		handle_attachment_edit(mUUID);
+	}
+// [/SL:KB]
 	else if (isRemoveAction(action))
 	{
 		LLInventoryItem* item = gInventory.getItem(mUUID);
@@ -4391,6 +4397,10 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 			if( get_is_item_worn( mUUID ) )
 			{
 				items.push_back(std::string("Wearable And Object Separator"));
+// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-08-25 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
+				// TOOD-Catznip: should really be "Wearable And Object Edit" if we ever plan on pushing this upstream
+				items.push_back(std::string("Wearable Edit"));
+// [/SL:KB]
 				items.push_back(std::string("Detach From Yourself"));
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
 				if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canDetach(item)) )
