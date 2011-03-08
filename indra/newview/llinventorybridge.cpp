@@ -4701,14 +4701,14 @@ void wear_inventory_category_on_avatar(LLInventoryCategory* category, LLFolderVi
 			//}
 					////figure out where we added it
 					std::string attachment_point_name = gAgentAvatarp->getAttachedPointName(obj_item->getUUID());
-					std::string attachment_point_name2 = gAgentAvatarp->getAttachedPointName(obj_item->getAssetUUID);
+					//std::string attachment_point_name2 = gAgentAvatarp->getAttachedPointName(obj_item->getAssetUUID);
 					////S32 iCnt = gAgentAvatarp->getAttachmentCount();
 					////LLUUID attID = gAgentAvatarp->getAttachmentItemID();
-					//LLViewerJointAttachment *attPoint = gAgentAvatarp->getWornAttachmentPoint(obj_item->getUUID());
-					//std::string attName = attPoint->getName();
+					LLViewerJointAttachment *attPoint = gAgentAvatarp->getWornAttachmentPoint(obj_item->getUUID());
+					std::string attName = attPoint->getName();
 					//
 					////check if there are other things on same point already
-					//S32 numCnt = attPoint->getNumObjects();
+					S32 numCnt = attPoint->getNumObjects();
 					//if (numCnt > 1)
 					//{
 					//	//attPoint->
@@ -4717,13 +4717,13 @@ void wear_inventory_category_on_avatar(LLInventoryCategory* category, LLFolderVi
 					//}
 					////if any of those things aren't in our list - remove them
 
-					//if (attachment_point_name == LLStringUtil::null) // Error condition, invalid attach point
-					//{
-					//	attachment_point_name = "Invalid Attachment";
-					//}
-					//llinfos << "attachment_point_name" << attachment_point_name << llendl;
-					//llinfos << "attName" << attName << llendl;
-					//llinfos << "numCnt" << numCnt << llendl;
+					if (attachment_point_name == LLStringUtil::null) // Error condition, invalid attach point
+					{
+						attachment_point_name = "Invalid Attachment";
+					}
+					llinfos << "attachment_point_name" << attachment_point_name << llendl;
+					llinfos << "attName" << attName << llendl;
+					llinfos << "numCnt" << numCnt << llendl;
 					////// e.g. "(worn on ...)" / "(attached to ...)"
 					////LLStringUtil::format_map_t args;
 					////args["[ATTACHMENT_POINT]"] =  LLTrans::getString(attachment_point_name);
