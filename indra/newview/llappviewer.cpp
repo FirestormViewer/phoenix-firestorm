@@ -3821,10 +3821,13 @@ void LLAppViewer::idle()
 		}
 
 		// Print the object debugging stats
+		// ...well, reset the stats, anyway. What good are the spammy
+		//  messages if we can't do anything about them? Bah. -- TS
 		static LLFrameTimer object_debug_timer;
 		if (object_debug_timer.getElapsedTimeF32() > 5.f)
 		{
 			object_debug_timer.reset();
+#if 0
 			if (gObjectList.mNumDeadObjectUpdates)
 			{
 				llinfos << "Dead object updates: " << gObjectList.mNumDeadObjectUpdates << llendl;
@@ -3840,6 +3843,11 @@ void LLAppViewer::idle()
 				llinfos << "Unknown object updates: " << gObjectList.mNumUnknownUpdates << llendl;
 				gObjectList.mNumUnknownUpdates = 0;
 			}
+#else
+			gObjectList.mNumDeadObjectUpdates = 0;
+			gObjectList.mNumUnknownKills = 0;
+			gObjectList.mNumUnknownUpdates = 0;
+#endif
 		}
 	}
 
