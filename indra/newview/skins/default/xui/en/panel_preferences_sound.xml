@@ -318,9 +318,8 @@
 		name="media_filter"
 		control_name="MediaEnableFilter"
 		value="true"
-		layout="topleft"
+		follows="left|bottom|right"
 		height="15"
-		top_delta="0"
 		tool_tip="Check this to enable the filter that allows you to choose whether to play media from a specific host"
 		label="Enable media filter (increased security)"
 		left_pad="1" />
@@ -338,8 +337,8 @@
      layout="topleft"
      height="23"
      label="Edit lists..."
-     top_delta="0"
-     left_pad="1"
+     top_delta="-23"
+     left_pad="5"
      name="edit_media_lists_button"
      width="100">
       <button.commit_callback
@@ -356,7 +355,7 @@
      left="25"
      name="voice_chat_settings"
      width="180"
-     top_pad="40">
+     top_pad="60">
 	  Voice Chat Settings
     </text>
     <text
