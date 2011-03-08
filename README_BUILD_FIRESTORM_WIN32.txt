@@ -14,14 +14,7 @@ A free download of VS2005Express can be used to compile firestorm. You can downl
 To get started, follow the snowstorm instructions for setting up a windows build environment at this page: http://wiki.secondlife.com/wiki/Viewer_2_Microsoft_Windows_Builds
 
 
-MAKE SURE EDITBIN.EXE IS IN YOUR SYSTEM PATH
-============================================
-
-This utility ships with visual studio and is used in final installer packaging
-to make the firestorm-bin.exe binary large address aware. It is normally found
-in c:\program files\microsoft visual studio 8\VC\bin for VS2005. If you don't have this in your system path, command line builds may fail to create an installer. 
-
-GET THE FIRESTORM SOURCE
+GET THE PHOENIX SOURCE
 ======================
 
 Open up cygwin and run the following commands one at a time
