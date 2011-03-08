@@ -21,7 +21,7 @@
      layout="topleft"
      left="30"
      name="clear_cache"
-     top="10"
+     top="1"
      width="145">
         <button.commit_callback
          function="Pref.WebClearCache" />
@@ -35,7 +35,7 @@
      left_pad="10"
      mouse_opaque="false"
      name="cache_size_label"
-     top_delta="3"
+     top_delta="35"
      text_color="LtGray_50"
      width="300">
        (Locations, images, web, search history)
@@ -158,7 +158,7 @@
      layout="topleft"
      left_pad="5"
      name="open_log_path_button"
-     top_delta="0"
+     top_delta="-30"
      width="40">
         <button.commit_callback
          function="Pref.BrowseLogPath" />
@@ -200,7 +200,7 @@
      left_pad="10"
      mouse_opaque="false"
      name="block_list_label"
-     top_delta="3"
+     top_delta="35"
      text_color="LtGray_50"
      width="300">
        (People and/or Objects you have blocked)

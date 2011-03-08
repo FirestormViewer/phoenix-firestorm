@@ -309,18 +309,17 @@
 		value="true"
 		follows="left|bottom|right"
 		height="15"
+		bottom_delta="10"
 		tool_tip="This settings allows / disallows scripted prims from controlling your media connections"
 		label="Allow resident scripts to play media"
 		top_pad="1"
-		width="250"
 		left="25"/>
  	<check_box
 		name="media_filter"
 		control_name="MediaEnableFilter"
 		value="true"
-		layout="topleft"
+		follows="left|bottom|right"
 		height="15"
-		top_delta="0"
 		tool_tip="Check this to enable the filter that allows you to choose whether to play media from a specific host"
 		label="Enable media filter (increased security)"
 		left_pad="1" />
@@ -328,19 +327,18 @@
 		name="media_show_on_others_btn"
 		control_name="MediaShowOnOthers"
 		value="true"
-		layout="topleft"
+		follows="left|bottom|right"
 		height="15"
 		tool_tip="Uncheck this to hide media attached to other avatars nearby"
 		label="Play media attached to other avatars"
-		top_pad="1"
-		width="250"
+		width="230"
 		left="25"/>
     <button
      layout="topleft"
      height="23"
      label="Edit lists..."
-     top_delta="0"
-     left_pad="1"
+     top_delta="-23"
+     left_pad="5"
      name="edit_media_lists_button"
      width="100">
       <button.commit_callback
@@ -357,7 +355,7 @@
      left="25"
      name="voice_chat_settings"
      width="180"
-     top_pad="7">
+     top_pad="60">
 	  Voice Chat Settings
     </text>
     <text
