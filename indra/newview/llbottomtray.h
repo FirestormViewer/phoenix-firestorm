@@ -111,6 +111,7 @@ public:
 
 	void showBottomTrayContextMenu(S32 x, S32 y, MASK mask);
 
+	//void showVoiceButton(BOOL visible);
 	void showGestureButton(BOOL visible);
 	void showMoveButton(BOOL visible);
 	void showCameraButton(BOOL visible);

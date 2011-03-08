@@ -494,6 +494,10 @@ void LLBottomTray::updateContextMenu(S32 x, S32 y, MASK mask)
 	mBottomTrayContextMenu->setItemVisible("NearbyChatBar_Delete", in_edit_box);
 	mBottomTrayContextMenu->setItemVisible("NearbyChatBar_Select_All", in_edit_box);
 }
+//void  LLBottomTray::showVoiceButton(BOOL visible)
+//{
+//	setTrayButtonVisibleIfPossible(RS_BUTTON_SPEAK, visible);
+//}
 
 void LLBottomTray::showGestureButton(BOOL visible)
 {
