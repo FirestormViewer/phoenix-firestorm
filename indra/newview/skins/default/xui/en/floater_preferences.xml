@@ -3,7 +3,7 @@
  legacy_header_height="18"
  open_centered="true"
  default_tab_group="1"
- height="460"
+ height="500"
  layout="topleft"
  name="Preferences"
  help_topic="preferences"
@@ -18,7 +18,7 @@
      layout="topleft"
      right="-105"
      name="OK"
-     top="433"
+     top="467"
      width="90">
         <button.commit_callback
          function="Pref.OK" />
@@ -39,7 +39,7 @@
     <tab_container
      follows="all"
      halign="left"
-     height="410"
+     height="440"
      layout="topleft"
      left="0"
      name="pref core"
@@ -134,7 +134,7 @@
          help_topic="preferences_skins_tab"
          name="skins" /> 
 		<panel
-         class="panel_preference"
+         class="panel_preference_firestorm"
          filename="panel_preferences_firestorm.xml"
          label="Firestorm"
          layout="topleft"
