@@ -49,6 +49,7 @@
 #include "llbutton.h"
 #include "llinventoryobserver.h"
 #include "llinventorymodel.h"
+#include "llnotificationmanager.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llresmgr.h"
@@ -798,6 +799,16 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	LLUUID session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, agent_id);
 	std::string notify_msg = notification->getMessage();
 	LLIMModel::instance().proccessOnlineOfflineNotification(session_id, notify_msg);
+
+	// If desired, also send it to nearby chat, this allows friends'
+	// online/offline times to be referenced in chat & logged.
+	if (gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat")) {
+		LLChat chat;
+		chat.mText = notify_msg;
+		chat.mSourceType = CHAT_SOURCE_SYSTEM;
+		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+	}
 }
 
 void LLAvatarTracker::formFriendship(const LLUUID& id)
