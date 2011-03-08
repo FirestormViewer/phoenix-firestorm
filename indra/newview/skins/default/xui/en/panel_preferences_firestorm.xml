@@ -118,9 +118,12 @@
             value="1"
             width="150" />
         </radio_group>
+		<check_box bottom_delta="-30" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Teleport Screens" left="15" mouse_opaque="true" name="tp_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableTeleportScreens" tool_tip="Disables the black teleport screen during all teleports."/>
+		<check_box bottom_delta="-20" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Login Progress Screen" left_delta="0" mouse_opaque="true" name="login_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableLoginScreens" tool_tip="Disables the black login progress Screen"/>
+		<check_box bottom_delta="-20" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Logout Progress Screen" left_delta="0" mouse_opaque="true" name="logout_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableLogoutScreens" tool_tip="Disables the black Logout progress screen."/>
       </panel>
       <panel
-        border="true"
+	    border="true"
         bottom="-500"
         follows="left|top|right|bottom"
         height="500"
@@ -133,7 +136,7 @@
           name="chat_and_in_enhancements"
           follows="left|top"
           layout="topleft"
-          top_delta="30"
+          top_pad="20"
           left="24"
           height="10"
           width="180">
@@ -157,6 +160,15 @@
           left="30"
           height="20"
           width="400" />
+		<check_box
+          control_name="OnlineOfflinetoNearbyChat"
+          name="OnlineOfflinetoNearbyChat"
+          label="Friend on/off-line notices to Nearby Chat"
+          layout="topleft"
+          top_delta="18"
+          left="30"
+          height="20"
+          width="400" />
         <check_box
           layout="topleft"
           follows="left|top"
@@ -168,9 +180,9 @@
           label="Add a chatbar in the Nearby Chat window"/>
         <text
           name="requires_restart_label"
-          follows="left|bottom"
+          follows="left|top"
           layout="topleft"
-          top_delta="0"
+          top_delta="2"
           left_delta="250"
           height="18"
           width="130"

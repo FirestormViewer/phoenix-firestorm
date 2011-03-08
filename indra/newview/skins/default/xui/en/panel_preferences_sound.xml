@@ -320,6 +320,8 @@
 		value="true"
 		follows="left|bottom|right"
 		height="15"
+		bottom_delta="-0"
+		left_delta="245"
 		tool_tip="Check this to enable the filter that allows you to choose whether to play media from a specific host"
 		label="Enable media filter (increased security)"
 		left_pad="1" />
@@ -335,9 +337,11 @@
 		left="25"/>
     <button
      layout="topleft"
+	 follows="left|bottom|right"
      height="23"
      label="Edit lists..."
-     top_delta="-23"
+     top_delta="-3"
+	 left="-245"
      left_pad="5"
      name="edit_media_lists_button"
      width="100">
