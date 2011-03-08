@@ -61,13 +61,17 @@
 #include "lltrans.h"
 // [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-09-08 (Catznip-2.1.2c) | Added: Catznip-2.1.2c
 #include "llviewercontrol.h"
-// [/SL:KB]#include "llviewerobjectlist.h"
+// [/SL:KB]
+#include "llviewerobjectlist.h"
 #include "llviewermessage.h"	// for handle_lure
 #include "llviewerregion.h"
 #include "llimfloater.h"
 #include "lltrans.h"
 #include "llcallingcard.h"
 #include "llslurl.h"			// IDEVO
+#include "llviewercontrol.h"
+#include "llfloaterreporter.h"
+#include "llviewermenu.h"
 
 // static
 void LLAvatarActions::requestFriendshipDialog(const LLUUID& id, const std::string& name)
@@ -963,4 +967,14 @@ bool LLAvatarActions::canBlock(const LLUUID& id)
 	bool is_linden = (full_name.find("Linden") != std::string::npos);
 	bool is_self = id == gAgentID;
 	return !is_self && !is_linden;
+}
+
+bool LLAvatarActions::canZoomIn(const LLUUID& idAgent)
+{
+    return gObjectList.findObject(idAgent);
+}
+
+void LLAvatarActions::zoomIn(const LLUUID& idAgent)
+{
+    handle_zoom_to_object(idAgent);
 }

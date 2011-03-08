@@ -194,6 +194,9 @@ public:
 	 */
 	static bool canShareSelectedItems(LLInventoryPanel* inv_panel = NULL);
 
+        static bool canZoomIn(const LLUUID& idAgent);
+        static void zoomIn(const LLUUID& idAgent);
+
 private:
 	static bool callbackAddFriendWithMessage(const LLSD& notification, const LLSD& response);
 	static bool handleRemove(const LLSD& notification, const LLSD& response);

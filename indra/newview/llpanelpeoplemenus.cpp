@@ -71,6 +71,8 @@ LLContextMenu* NearbyMenu::createMenu()
 		registrar.add("Avatar.BlockUnblock",	boost::bind(&LLAvatarActions::toggleBlock,				id));
 		registrar.add("Nearby.People.TeleportToAvatar", boost::bind(&NearbyMenu::teleportToAvatar,	this));
 
+		registrar.add("Avatar.ZoomIn",                        boost::bind(&LLAvatarActions::zoomIn,                id));
+                enable_registrar.add("Avatar.VisibleZoomIn",        boost::bind(&LLAvatarActions::canZoomIn,            id));
 		enable_registrar.add("Avatar.EnableItem", boost::bind(&NearbyMenu::enableContextMenuItem,	this, _2));
 		enable_registrar.add("Avatar.CheckItem",  boost::bind(&NearbyMenu::checkContextMenuItem,	this, _2));
 
