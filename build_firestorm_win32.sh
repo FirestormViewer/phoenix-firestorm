@@ -233,6 +233,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 	$WINPYTHON develop.py -G vc80 -t $BTYPE configure -DFIRECYG:BOOL=ON -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=OFF -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
 	mkdir -p build-vc80/sharedlibs/RelWithDebInfo
 	mkdir -p build-vc80/sharedlibs/Release
+	cp -f ../libraries/i686-win32/lib/release/fmod.dll . 
 	cp fmod.dll ./build-vc80/sharedlibs/RelWithDebInfo
 	cp fmod.dll ./build-vc80/sharedlibs/Release
 fi
