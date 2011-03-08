@@ -249,6 +249,8 @@ class WindowsManifest(ViewerManifest):
 
         self.enable_crt_manifest_check()
 
+	os.system("editbin.exe /LARGEADDRESSAWARE %s\\firestorm-bin.exe" % self.args['configuration'])
+
         if self.is_packaging_viewer():
             # Find secondlife-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
             self.path(src='%s/firestorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
