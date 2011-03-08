@@ -22,6 +22,7 @@ LOG="`pwd`/logs/build_win32.log"
 
 WANTS_CLEAN=$FALSE
 WANTS_CONFIG=$FALSE
+WANTS_LAA=$TRUE
 WANTS_BUILD=$FALSE
 WANTS_PACKAGE=$FALSE
 WANTS_VERSION=$FALSE
@@ -44,12 +45,14 @@ showUsage()
         echo "  --rebuild   : Build, reusing unchanged projects to save time"
         echo "  --chan [Release|Beta|Private] : Private is the default, sets channel"
         echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
+        echo "  --laa [on|off] : Default is on, enables the viewer to use more than 2 GB ram"
 }
 
 getArgs()
 # $* = the options passed in from main
 {
-        while getoptex "clean config version rebuild help chan: btype:" "$@" ; do
+        local WANTS_LAAinp="on"
+        while getoptex "clean config version rebuild help chan: btype: laa:" "$@" ; do
 
             case "$OPTOPT" in
             clean)    WANTS_CLEAN=$TRUE;;
@@ -60,6 +63,7 @@ getArgs()
                       WANTS_PACKAGE=$TRUE;;
             chan)     CHANNEL="$OPTARG";;
             btype)    BTYPE="$OPTARG";;
+            laa)      WANTS_LAAinp="$OPTARG";;
 
             help)     showUsage && exit 0;;
 
@@ -68,6 +72,11 @@ getArgs()
             esac
         done
         shift $[OPTIND-1]
+		
+        if [ $$WANTS_LAAinp == "off"] ; then $WANTS_LAA = $FALSE; 
+        elif [ $$WANTS_LAAinp == "on"] ; then $WANTS_LAA = $TRUE;
+        else  showUsage() && exit 1
+        fi
 
         if [ $WANTS_CLEAN -ne $TRUE ] && [ $WANTS_CONFIG -ne $TRUE ] && \
                 [ $WANTS_BUILD -ne $TRUE ] && [ $WANTS_VERSION -ne $TRUE ] && \
@@ -230,7 +239,7 @@ fi
 
 if [ $WANTS_CONFIG -eq $TRUE ] ; then
 	mkdir -p ../logs > /dev/null 2>&1
-	$WINPYTHON develop.py -G vc80 -t $BTYPE configure -DFIRECYG:BOOL=ON -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=OFF -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
+	$WINPYTHON develop.py -G vc80 -t $BTYPE configure -DFIRECYG:BOOL=ON -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=OFF -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL -DLAA:BOOL=$WANTS_LAA 2>&1 | tee $LOG
 	mkdir -p build-vc80/sharedlibs/RelWithDebInfo
 	mkdir -p build-vc80/sharedlibs/Release
 	cp -f ../libraries/i686-win32/lib/release/fmod.dll . 
