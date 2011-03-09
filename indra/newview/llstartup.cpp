@@ -2144,26 +2144,11 @@ bool first_run_dialog_callback(const LLSD& notification, const LLSD& response)
 
 void set_startup_status(const F32 frac, const std::string& string, const std::string& msg)
 {
-	if(gSavedSettings.getBOOL("PhoenixDisableLoginScreens") && LLStartUp::getStartupState() > STATE_BROWSER_INIT)
-	{
-		static std::string last_d;
-		std::string new_d = string;
-		if(new_d != last_d)
-		{
-			last_d = new_d;
-			cmdline_printchat(new_d);
-			if(new_d == LLTrans::getString("LoginWaitingForRegionHandshake"))
-			{
-				cmdline_printchat(msg);
-			}
-		}
-	}else
-	{
-		gViewerWindow->setProgressPercent(frac*100);
-		gViewerWindow->setProgressString(string);
-
-		gViewerWindow->setProgressMessage(msg);
-	}
+	// AO: We don't print chat yet because chatting too early disables the voice control.
+	
+	gViewerWindow->setProgressPercent(frac*100);
+	gViewerWindow->setProgressString(string);
+	gViewerWindow->setProgressMessage(msg);
 }
 
 bool login_alert_status(const LLSD& notification, const LLSD& response)
