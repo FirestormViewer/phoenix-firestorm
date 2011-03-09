@@ -519,10 +519,14 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 		}
 
 
+		// Gah, why bother spamming the log with messages we can't do
+		//  anything about?! -- TS
+#if 0
 		if (objectp->isDead())
 		{
 			llwarns << "Dead object " << objectp->mID << " in UUID map 1!" << llendl;
 		}
+#endif
 
 		if (compressed)
 		{

@@ -291,6 +291,9 @@ protected:
 	BOOL checkFolderForContentsOfType(LLInventoryModel* model, LLInventoryCollectFunctor& typeToCheck);
 
 	void modifyOutfit(BOOL append);
+//-TT Patch: ReplaceWornItemsOnly
+	void modifyOutfit(BOOL append, BOOL replace);
+//-TT 
 	void determineFolderType();
 
 	menuentry_vec_t getMenuItems() { return mItems; } // returns a copy of current menu items

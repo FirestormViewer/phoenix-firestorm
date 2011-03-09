@@ -81,6 +81,7 @@ void LLViewerParcelMedia::initClass()
 	msg->setHandlerFunc("ParcelMediaCommandMessage", processParcelMediaCommandMessage );
 	msg->setHandlerFunc("ParcelMediaUpdate", processParcelMediaUpdate );
 	LLViewerParcelMediaAutoPlay::initClass();
+	loadDomainFilterList();
 }
 
 //static 

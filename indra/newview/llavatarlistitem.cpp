@@ -717,7 +717,7 @@ void LLAvatarListItem::initChildrenWidths(LLAvatarListItem* avatar_item)
 	sChildrenWidths[--index] = info_btn_width;
 	sChildrenWidths[--index] = profile_btn_width;
 	sChildrenWidths[--index] = speaking_indicator_width;
-	llassert(index == 0);
+	//llassert(index == 0);
 }
 
 void LLAvatarListItem::updateChildren()

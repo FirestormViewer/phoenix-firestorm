@@ -2121,6 +2121,12 @@ void LLAppearanceMgr::getUserDescendents(const LLUUID& category,
 }
 
 void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append)
+//-TT Patch: ReplaceWornItemsOnly
+{
+	wearInventoryCategory(category, copy, append, false);
+}
+void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append, bool replace)
+//-TT
 {
 	if(!category) return;
 
@@ -2132,9 +2138,26 @@ void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool 
 	callAfterCategoryFetch(category->getUUID(),boost::bind(&LLAppearanceMgr::wearCategoryFinal,
 														   &LLAppearanceMgr::instance(),
 														   category->getUUID(), copy, append));
+//-TT Patch: ReplaceWornItemsOnly
+														   //category->getUUID(), copy, append, replace));
+//-TT 
 }
+//-TT Patch: ReplaceWornItemsOnly
+void LLAppearanceMgr::replaceCategoryInCurrentOutfit(const LLUUID& cat_id)
+{
+	LLViewerInventoryCategory* cat = gInventory.getCategory(cat_id);
+	wearInventoryCategory(cat, false, true);
+}
+//-TT
 
 void LLAppearanceMgr::wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append)
+//-TT Patch: ReplaceWornItemsOnly
+{
+	wearCategoryFinal(cat_id, copy_items, append, false);
+}
+
+void LLAppearanceMgr::wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append, bool replace)
+//-TT 
 {
 	llinfos << "starting" << llendl;
 	
