@@ -664,10 +664,10 @@
      reference="White" />
     <color
      name="MapAvatarColor"
-     reference="Green" />
+     reference="Red" />
     <color
      name="MapAvatarFriendColor"
-     reference="Yellow" />
+     reference="Green" />
     <color
      name="MapFrustumColor"
      reference="White_10" />
