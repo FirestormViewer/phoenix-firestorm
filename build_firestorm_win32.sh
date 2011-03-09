@@ -51,7 +51,6 @@ showUsage()
 getArgs()
 # $* = the options passed in from main
 {
-        local WANTS_LAAinp="on"
         while getoptex "clean config version rebuild help chan: btype: laa:" "$@" ; do
 
             case "$OPTOPT" in
@@ -63,7 +62,13 @@ getArgs()
                       WANTS_PACKAGE=$TRUE;;
             chan)     CHANNEL="$OPTARG";;
             btype)    BTYPE="$OPTARG";;
-            laa)      WANTS_LAAinp="$OPTARG";;
+            laa)      if [ "$OPTARG" == "on" ] ; then
+                        WANTS_LAA=$TRUE
+                      elif [ "$OPTARG" == "off" ] ; then
+                        WANTS_LAA=$FALSE
+                      else
+                        showUsage && exit 1
+                      fi;;
 
             help)     showUsage && exit 0;;
 
@@ -73,11 +78,6 @@ getArgs()
         done
         shift $[OPTIND-1]
 		
-        if [ $$WANTS_LAAinp == "off"] ; then $WANTS_LAA = $FALSE; 
-        elif [ $$WANTS_LAAinp == "on"] ; then $WANTS_LAA = $TRUE;
-        else  showUsage() && exit 1
-        fi
-
         if [ $WANTS_CLEAN -ne $TRUE ] && [ $WANTS_CONFIG -ne $TRUE ] && \
                 [ $WANTS_BUILD -ne $TRUE ] && [ $WANTS_VERSION -ne $TRUE ] && \
                 [ $WANTS_PACKAGE -ne $TRUE ] ; then
