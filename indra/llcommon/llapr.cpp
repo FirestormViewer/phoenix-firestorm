@@ -639,7 +639,7 @@ bool LLAPRFile::remove(const std::string& filename, LLVolatileAPRPool* pool)
 
 	if (s != APR_SUCCESS)
 	{
-		if (!APR_STATUS_IS_ENOENT)
+		if (!APR_STATUS_IS_ENOENT(s))
 		{
 			// We only care about the error if it's not because
 			//  the file doesn't exist.
