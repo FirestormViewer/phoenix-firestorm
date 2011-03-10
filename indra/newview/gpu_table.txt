@@ -310,7 +310,7 @@ NVIDIA GeForce 7600				.*NVIDIA.*GeForce 76.*				2		1
 NVIDIA GeForce 7800				.*NVIDIA.*GeForce.*78.*				2		1
 NVIDIA GeForce 7900				.*NVIDIA.*GeForce.*79.*				2		1
 NVIDIA GeForce 8100				.*NVIDIA.*GeForce 81.*				1		1
-NVIDIA GeForce 8200M			.*NVIDIA.*GeForce 8200M.*				1		1
+NVIDIA GeForce 8200M			.*NVIDIA.*GeForce 8200M.*			1		1
 NVIDIA GeForce 8200				.*NVIDIA.*GeForce 82.*				1		1
 NVIDIA GeForce 8300				.*NVIDIA.*GeForce 83.*				1		1
 NVIDIA GeForce 8400M			.*NVIDIA.*GeForce 8400M.*			1		1
@@ -391,6 +391,7 @@ NVIDIA Quadro2					.*Quadro2.*							0		1
 NVIDIA Quadro4					.*Quadro4.*							0		1
 NVIDIA Quadro DCC				.*Quadro DCC.*						0		1
 NVIDIA Quadro FX 4500			.*Quadro.*FX.*4500.*				3		1
+NVIDIA Quadro FX 880M			.*Quadro.*FX 880M.*					3		1
 NVIDIA Quadro FX				.*Quadro FX.*						1		1
 NVIDIA Quadro NVS				.*Quadro NVS.*						0		1
 NVIDIA RIVA TNT					.*RIVA TNT.*						0		0
@@ -403,4 +404,4 @@ XGI								XGI.*								0		0
 VIA								VIA.*								0		0
 Apple Generic					Apple.*Generic.*					0		0
 Apple Software Renderer			Apple.*Software Renderer.*			0		0
-Microsoft RemoteFX Graphics Device - WDDM		Microsoft.*RemoteFX.*	0		0
+Microsoft Graphics Device		Microsoft.							0		0
