@@ -80,7 +80,7 @@
 #include "rlvhandler.h"
 #include "rlvui.h"
 // [/RLVa:KB]
-+#include "kcwlinterface.h"
+#include "kcwlinterface.h"
 
 using namespace LLVOAvatarDefines;
 
