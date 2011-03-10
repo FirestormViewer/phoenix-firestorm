@@ -88,13 +88,13 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				Propietario:
 			</text>
 			<text name="OwnerText">
-				Leyla Linden
+				Loading...
 			</text>
 			<text name="Group:">
 				Grupo:
 			</text>
 			<text name="GroupText">
-				Leyla Linden
+				Loading...
 			</text>
 			<button label="Configurar" name="Set..."/>
 			<check_box label="Permitir transferir al grupo" name="check deed" tool_tip="Un oficial del grupo puede transferir este terreno al grupo. El terreno será apoyado por el grupo en sus asignaciones de terreno."/>

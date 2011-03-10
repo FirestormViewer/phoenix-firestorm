@@ -222,7 +222,7 @@
              name="OwnerText"
              use_ellipses="true" 
              width="360">
-                Leyla Linden
+                Loading...
             </text>
              <button
      follows="right"
@@ -262,7 +262,7 @@
              layout="topleft"
              name="GroupText"
              width="240">
-Leyla Linden               </text>
+Loading...               </text>
                  <button
      follows="right"
      height="23"
@@ -687,7 +687,7 @@ Leyla Linden               </text>
              mouse_opaque="false"
              name="region_name_text"
              width="150">
-                EricaVille
+                Loading...
             </text>
             <text
              type="string"
