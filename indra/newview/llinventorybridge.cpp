@@ -4632,18 +4632,6 @@ void wear_inventory_category_on_avatar(LLInventoryCategory* category, LLFolderVi
 					&& !get_is_item_worn(item->getUUID())
 					)
 				{
-/*
-// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0c) | Modified: RLVa-0.2.2a
-					if ( (rlv_handler_t::isEnabled()) && (!gRlvWearableLocks.canRemove(item)) )
-						continue;
-// [/RLVa:KB]
-					LLWearableList::instance().getAsset(item->getAssetUUID(),
-														item->getName(),
-														item->getType(),
-														LLWearableBridge::onRemoveFromAvatarArrived,
-														new OnRemoveStruct(item->getLinkedUUID()));
-*/
-// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-2.2.0a) | Added: Catznip-2.1.1d
 					aTypes[iType]++;
 					if (aTypes[iType] == 1) //first occurence of type, remove first
 					{
@@ -4677,74 +4665,63 @@ void wear_inventory_category_on_avatar(LLInventoryCategory* category, LLFolderVi
 		if (obj_count > 0)
 		{
 			//all attachment points
-			//int oTypes[LLWearableType::WT_COUNT] = {0};
-			LLVOAvatar::attachment_map_t attachment_map;
-			//LLVector3 oTypes[obj_count] = {NULL};
+			bool oTypes[100] = {false};
 
 			for(i = 0; i  < obj_count; ++i)
 			{
 				LLViewerInventoryItem *obj_item = obj_item_array.get(i);
 
-				//rez_attachment(item, NULL, true); // Replace if "Wear"ing.
-				////LLFolderViewItem* folder_item = fView->getItemByID(obj_item->getLinkedUUID());
-				////if(!folder_item) continue;
-				////LLInvFVBridge* bridge = (LLInvFVBridge*)folder_item->getListener();
-				//////LLInvFVBridge* bridge = (LLInvFVBridge*)obj_item->getListener();
-				////if(!bridge) continue;
-				////bridge->performAction(&gInventory, "wear");
-
 				if (!get_is_item_worn(obj_item->getUUID()))
 				{
 					// first add the item without removing others
-					LLAppearanceMgr::instance().wearItemOnAvatar(obj_item->getUUID(), true, true);
-				//}
-			//}
-					////figure out where we added it
-					std::string attachment_point_name = gAgentAvatarp->getAttachedPointName(obj_item->getUUID());
-					//std::string attachment_point_name2 = gAgentAvatarp->getAttachedPointName(obj_item->getAssetUUID);
-					////S32 iCnt = gAgentAvatarp->getAttachmentCount();
-					////LLUUID attID = gAgentAvatarp->getAttachmentItemID();
+					//LLAppearanceMgr::instance().wearItemOnAvatar(obj_item->getUUID(), true, false);
+					LLViewerInventoryItem* item_to_wear = gInventory.getItem(obj_item->getUUID());
+					rez_attachment(item_to_wear, NULL, true);
+
+					//figure out where we added it
 					LLViewerJointAttachment *attPoint = gAgentAvatarp->getWornAttachmentPoint(obj_item->getUUID());
-					std::string attName = attPoint->getName();
-					//
-					////check if there are other things on same point already
-					S32 numCnt = attPoint->getNumObjects();
-					//if (numCnt > 1)
-					//{
-					//	//attPoint->
-					//	//gAgentAvatarp->clampAttachmentPositions();
-					//	//LLVOAvatarSelf::detachAttachmentIntoInventory(obj_item->getLinkedUUID());
-					//}
-					////if any of those things aren't in our list - remove them
-
-					if (attachment_point_name == LLStringUtil::null) // Error condition, invalid attach point
+					LLViewerObject *object = gObjectList.findObject(obj_item->getUUID());
+					if (attPoint == NULL)
 					{
-						attachment_point_name = "Invalid Attachment";
+						//desperate measures...
+						if (object != NULL)
+						attPoint = gAgentAvatarp->getTargetAttachmentPoint(object);
 					}
-					llinfos << "attachment_point_name" << attachment_point_name << llendl;
-					llinfos << "attName" << attName << llendl;
-					llinfos << "numCnt" << numCnt << llendl;
-					////// e.g. "(worn on ...)" / "(attached to ...)"
-					////LLStringUtil::format_map_t args;
-					////args["[ATTACHMENT_POINT]"] =  LLTrans::getString(attachment_point_name);
 
-					//LLVOAvatarSelf::detachAttachmentIntoInventory(obj_item->getLinkedUUID());
-					//LLVOAvatarSelf::attachObject(obj_item);
+					if (attPoint != NULL)
+					{
+						int jNum = attPoint->getJointNum();
+						// we have not encountered this attach point yet
+						if (oTypes[jNum] == false) 
+						{
+							S32 numCnt = attPoint->getNumObjects();
+							//check if there are other things on same point already
+							if (numCnt > 1)
+							{
+								for (LLViewerJointAttachment::attachedobjs_vec_t::iterator iter = attPoint->mAttachedObjects.begin();
+									 iter != attPoint->mAttachedObjects.end();
+									 ++iter)
+								{
+									LLViewerObject* attached_object = (*iter);
+									LLUUID att_id = attached_object->getAttachmentItemID();
+
+									//if any of those things aren't in our list - remove them
+									for(int j = 0; j  < obj_count; ++j)
+									{
+										LLViewerInventoryItem *fold_item = obj_item_array.get(j);
+										if (att_id == fold_item->getUUID())
+										{
+											oTypes[jNum] = true;
+											continue;
+										}
+									}
+									LLVOAvatarSelf::detachAttachmentIntoInventory(att_id);
+								}
+							}
+						}
+					}
 				}
 			}
-
-			////ok, this is a kludge, but can we wait for the item to get attached 
-			////in order to query where it got attached? 
-			//for(i = 0; i  < obj_count; ++i)
-			//{
-			//	LLViewerInventoryItem *obj_item = obj_item_array.get(i);
-			//	if (!get_is_item_worn(obj_item->getUUID()))
-			//	{
-			//		// first add the item without removing others
-			//		LLAppearanceMgr::instance().wearItemOnAvatar(obj_item->getUUID(), true, false);
-			//	}
-			//}
-
 		}
 
 		if (gest_count > 0)
