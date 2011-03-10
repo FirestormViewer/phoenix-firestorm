@@ -93,6 +93,13 @@ void KCWindlightInterface::ParcelChange()
 		
 		mEventTimer.reset();
 		mEventTimer.start();
+		
+		// Apply new WL settings instantly on TP
+		if (mTPing)
+		{
+			mTPing = false;
+			tick();
+		}
 	}
 }
 

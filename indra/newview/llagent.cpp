@@ -80,6 +80,7 @@
 #include "rlvhandler.h"
 #include "rlvui.h"
 // [/RLVa:KB]
++#include "kcwlinterface.h"
 
 using namespace LLVOAvatarDefines;
 
@@ -3356,6 +3357,9 @@ bool LLAgent::teleportCore(bool is_local)
 
 		//release geometry from old location
 		gPipeline.resetVertexBuffers();
+		
+		// bit of a hack -KC
+		KCWindlightInterface::instance().setTPing(true);
 	}
 	make_ui_sound("UISndTeleportOut");
 	

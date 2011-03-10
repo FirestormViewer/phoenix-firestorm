@@ -46,6 +46,7 @@ public:
 	bool ParsePacelForWLSettings(const std::string& desc, LLSD& settings);
 	void onClickWLStatusButton();
 	bool WLset; //display the status bar icon?
+	void setTPing(bool value) { mTPing = value; }
 	
 private:
 	bool callbackParcelWL(const LLSD& notification, const LLSD& response);
@@ -65,4 +66,5 @@ protected:
 	LLSD mCurrentSettings;
 	S32 mLastZ;
 	bool mWeChangedIt; //dont reset anything if we didnt do it
+	bool mTPing; //agent just TP'd (hack, might be better way)
 };
