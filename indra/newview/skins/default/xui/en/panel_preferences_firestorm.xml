@@ -21,17 +21,6 @@
     tab_position="top"
     width="517"
     bg_opaque_color="0,0,0,0.0">
-    <tab_container
-      label="Page 1"
-      bottom="0"
-      height="500"
-      left="0"
-      mouse_opaque="false"
-      name="page1"
-      tab_min_width="50"
-      tab_position="top"
-      width="517"
-      bg_opaque_color="0,0,0,0.0">
       <panel
         border="true"
         bottom="-500"
@@ -233,28 +222,4 @@
         <line_editor bevel_style="in" border_style="line" border_thickness="1" bottom_delta="-20" follows="left|top" font="SansSerifSmall" height="20" left_delta="0" max_length="256" mouse_opaque="true" tool_tip="sets and plays your music stream to the entered url" name="PhoenixCmdLineMusic" control_name="PhoenixCmdLineMusic" width="200"/>
       </panel>
     </tab_container>
-    <tab_container
-      label="Page 2"
-      bottom="0"
-      height="400"
-      left="0"
-      mouse_opaque="false"
-      name="page2"
-      tab_min_width="50"
-      tab_position="top"
-      width="500"
-      bg_opaque_color="0,0,0,0.0">
-      <panel
-          border="true"
-          bottom="-400"
-          follows="left|top|right|bottom"
-          height="400"
-          label="Tab2-1"
-          left="1"
-          mouse_opaque="true"
-          name="tab2-1"
-          width="517">
-      </panel>
-    </tab_container>
-  </tab_container>
 </panel>
