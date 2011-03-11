@@ -269,13 +269,13 @@ public:
 	LLViewerInventoryItem* getLinkedItem(const LLUUID& object_id) const;
 
 //-TT Patch: ReplaceWornItemsOnly
-	void LLInventoryModel::wearItemsOnAvatar(LLInventoryCategory* category);
-	void LLInventoryModel::wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object, const LLViewerJointAttachment *attachment);
+	void wearItemsOnAvatar(LLInventoryCategory* category);
+	void wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object, const LLViewerJointAttachment *attachment);
 
 private:
-	void LLInventoryModel::wearWearablesOnAvatar(LLUUID category_id);
-	void LLInventoryModel::wearAttachmentsOnAvatar(LLUUID category_id);
-	void LLInventoryModel::wearGesturesOnAvatar(LLUUID category_id);
+	void wearWearablesOnAvatar(LLUUID category_id);
+	void wearAttachmentsOnAvatar(LLUUID category_id);
+	void wearGesturesOnAvatar(LLUUID category_id);
 //-TT
 private:
 	mutable LLPointer<LLViewerInventoryItem> mLastItem; // cache recent lookups	
