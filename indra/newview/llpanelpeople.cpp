@@ -483,7 +483,9 @@ LLPanelPeople::LLPanelPeople()
  		mNearbyGearButton(NULL),
  		mFriendsGearButton(NULL),
  		mGroupsGearButton(NULL),
- 		mRecentGearButton(NULL)
+ 		mRecentGearButton(NULL),
+		mChatRadius(20.0),
+		mDrawRadius(0.0)
 
 {
 	mFriendListUpdater = new LLFriendListUpdater(boost::bind(&LLPanelPeople::updateFriendList,	this));
@@ -531,6 +533,7 @@ void LLPanelPeople::onFriendsAccordionExpandedCollapsed(LLUICtrl* ctrl, const LL
 
 BOOL LLPanelPeople::postBuild()
 {
+	mDrawRadius = gSavedSettings.getF32("RenderFarClip");
 	mFilterEditor = getChild<LLFilterEditor>("filter_input");
 	mFilterEditor->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
 
@@ -804,36 +807,8 @@ void LLPanelPeople::updateNearbyList()
 	if (!mNearbyList)
 		return;
 
-	// Dump existing list of avs into our radar cache
-	lastRadarSweep.clear();
 	std::vector<LLPanel*> items;
-	mNearbyList->getItems(items);
-	for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
-	{
-		LLAvatarListItem* av = static_cast<LLAvatarListItem*>(*itItem);
-		radarFields rf;
-		rf.avName = av->getAvatarName();
-		rf.lastDistance = av->getRange();
-		if (av->getPosition() != LLVector3d(0.0f,0.0f,0.0f))
-		{
-			LLViewerRegion* r = LLWorld::getInstance()->getRegionFromPosGlobal(av->getPosition());
-			if (r)
-			{
-				rf.lastRegion = r->getRegionID();
-			}
-			
-		}
-		else 
-		{
-			rf.lastRegion = LLUUID(0);
-		}
-		
-		rf.firstSeen = av->getFirstSeen();
-		rf.lastStatus = av->getAvStatus();
-		rf.lastGlobalPos = av->getPosition();
-		
-		lastRadarSweep[av->getAvatarId()] = rf;
-	}	
+	mNearbyList->getItems(items);	
 	
 	// Fetch new list of surrounding Avs
 	std::vector<LLVector3d> positions;
@@ -848,18 +823,35 @@ void LLPanelPeople::updateNearbyList()
 	{
 		LLAvatarListItem* av = static_cast<LLAvatarListItem*>(*itItem);
 		LLUUID avId = av->getAvatarId();
+		
 		if (lastRadarSweep.count(avId) > 0)
 		{
 			av->setFirstSeen(lastRadarSweep[avId].firstSeen);
 			av->updateFirstSeen();
-			if ((av->getRange() <= 20.0) && (lastRadarSweep[avId].lastDistance > 20.0))
+
+			if (gSavedSettings.getBOOL("RadarReportChatRange"))
 			{
-				llinfos << av->getName() << " entered chat range" << llendl;
+				if ((av->getRange() <= mChatRadius) && (lastRadarSweep[avId].lastDistance > mChatRadius))
+				{
+					reportToNearbyChat(av->getAvatarName() + " entered chat range.");
+				}
+				else if ((av->getRange() > mChatRadius) && (lastRadarSweep[avId].lastDistance <= mChatRadius))
+				{
+					reportToNearbyChat(av->getAvatarName() + " left chat range.");
+				}
 			}
-			else if ((av->getRange() > 20.0) && (lastRadarSweep[avId].lastDistance <= 20.0))
+			if (gSavedSettings.getBOOL("RadarReportDrawRange"))
 			{
-				llinfos << av->getName() << " left chat range" << llendl;
+				if ((av->getRange() <= mDrawRadius) && (lastRadarSweep[avId].lastDistance > mDrawRadius))
+				{
+					reportToNearbyChat(av->getAvatarName() + " entered draw distance.");
+				}
+				else if ((av->getRange() > mDrawRadius) && (lastRadarSweep[avId].lastDistance <= mDrawRadius))
+				{
+					reportToNearbyChat(av->getAvatarName() + " left draw distance.");
+				}			
 			}
+			
 			lastRadarSweep.erase(avId);
 			// TODO Alert if we entered the sim
 			// TODO Alert if we changed status
@@ -867,10 +859,22 @@ void LLPanelPeople::updateNearbyList()
 		else 
 		{
 			av->setFirstSeen(time(NULL));
-			if (av->getRange() <= 20.0)
-			{
-				llinfos << av->getName() << " entered chat range" << llendl;
+			
+			if (gSavedSettings.getBOOL("RadarReportChatRange"))
+			{			
+				if (av->getRange() <= mChatRadius)
+				{
+					reportToNearbyChat(av->getAvatarName() + " entered chat range.");
+				}
 			}
+			if (gSavedSettings.getBOOL("RadarReportDrawRange"))
+			{
+				if (av->getRange() <= mDrawRadius)
+				{
+					reportToNearbyChat(av->getAvatarName() + " entered draw distance.");
+				}
+			}				
+				
 			// TODO Alert if we entered the sim
 		}
 	}
@@ -878,10 +882,50 @@ void LLPanelPeople::updateNearbyList()
 	for (std::map <LLUUID, radarFields>::const_iterator i = lastRadarSweep.begin(); i != lastRadarSweep.end(); ++i)
 	{
 		radarFields rf = i->second;
-		if (rf.lastDistance <= 20.0)
+		
+		if (gSavedSettings.getBOOL("RadarReportChatRange"))
 		{
-			llinfos << rf.avName << " left chat range" << llendl;
-		}// TODO Alert if we left the sim
+			if (rf.lastDistance <= mChatRadius)
+			{
+				reportToNearbyChat(rf.avName + " left chat range.");
+			}
+		}
+		if (gSavedSettings.getBOOL("RadarReportDrawRange"))
+		{
+			if (rf.lastDistance <= mDrawRadius)
+			{
+				reportToNearbyChat(rf.avName + " left draw distance.");
+			}
+		}			
+		// TODO Alert if we left the sim
+	}
+	
+	// Reset our radar cache from the scanned data.
+	lastRadarSweep.clear();
+	for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
+	{
+		LLAvatarListItem* av = static_cast<LLAvatarListItem*>(*itItem);
+		radarFields rf;
+		rf.avName = av->getAvatarName();
+		rf.lastDistance = av->getRange();
+		if (av->getPosition() != LLVector3d(0.0f,0.0f,0.0f))
+		{
+			LLViewerRegion* r = LLWorld::getInstance()->getRegionFromPosGlobal(av->getPosition());
+			if (r)
+			{
+				rf.lastRegion = r->getRegionID();
+			}
+		}
+		else 
+		{
+			rf.lastRegion = LLUUID(0);
+		}
+		
+		rf.firstSeen = av->getFirstSeen();
+		rf.lastStatus = av->getAvStatus();
+		rf.lastGlobalPos = av->getPosition();
+		
+		lastRadarSweep[av->getAvatarId()] = rf;
 	}
 	
 	// Update various display fields
