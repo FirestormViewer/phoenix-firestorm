@@ -37,16 +37,21 @@ showUsage()
         echo "  --config    : General a new architecture-specific config"
         echo "  --version   : Update version number"
         echo "  --rebuild   : Build, reusing unchanged projects to save time"
-        echo "  --chan [Release|Beta|Private] : Private is the default, sets channel"
+        echo "  --chan  [Release|Beta|Private] : Private is the default, sets channel"
         echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
-	echo "  --fmod	    : Build with fmod"
+	echo "  --fmod      : Build with fmod"
 }
 
 getArgs()
 # $* = the options passed in from main
 {
-        while getoptex "clean config version fmod rebuild help chan: btype:" "$@" ; do
+	# Make sure options are valid
+        if [ \( -z "$OPTOPT"  \) -a \( $# -gt 0 \) ] ; then
+                showUsage
+                exit 1
+        fi
 
+        while getoptex "clean config version fmod rebuild help chan: btype:" "$@" ; do
             case "$OPTOPT" in
             clean)    WANTS_CLEAN=$TRUE;;
             config)   WANTS_CONFIG=$TRUE;;
@@ -58,10 +63,13 @@ getArgs()
             btype)    BTYPE="$OPTARG";;
 	    fmod)     WANTS_FMOD=$TRUE;;
 
-            help)     showUsage && exit 0;;
+            help)     showUsage  
+		      exit 0;;
 
-            -*)       showUsage && exit 1;;
-            *)        showUsage && exit 1;;
+            -*)       showUsage
+		      exit 1;;
+            *)        showUsage
+		      exit 1;;
             esac
         done
         shift $[OPTIND-1]
@@ -157,6 +165,8 @@ function getoptex()
           fi
         done
         echo "$0: error: invalid option: $o"
+	showUsage
+	exit 1
   fi; fi
   OPTOPT="?"
   unset OPTARG

@@ -51,6 +51,12 @@ showUsage()
 getArgs()
 # $* = the options passed in from main
 {
+	# Make sure options are valid
+        if [ \( -z "$OPTOPT"  \) -a \( $# -gt 0 \) ] ; then
+                showUsage
+                exit 1
+        fi
+
         while getoptex "clean config version rebuild help chan: btype: laa:" "$@" ; do
 
             case "$OPTOPT" in
@@ -169,6 +175,8 @@ function getoptex()
           fi
         done
         echo "$0: error: invalid option: $o"
+	showUsage
+	exit 1
   fi; fi
   OPTOPT="?"
   unset OPTARG
