@@ -45,34 +45,37 @@ showUsage()
 getArgs()
 # $* = the options passed in from main
 {
-	# Make sure options are valid
-        if [ \( -z "$OPTOPT"  \) -a \( $# -gt 0 \) ] ; then
+        if [ $# -gt 0 ]; then
+          while getoptex "clean config version fmod rebuild help chan: btype:" "$@" ; do
+
+              #insure options are valid
+              if [  -z "$OPTOPT"  ] ; then
                 showUsage
                 exit 1
+              fi
+
+              case "$OPTOPT" in
+              clean)    WANTS_CLEAN=$TRUE;;
+              config)   WANTS_CONFIG=$TRUE;;
+              version)  WANTS_VERSION=$TRUE;;
+              rebuild)  WANTS_BUILD=$TRUE
+                        WANTS_VERSION=$TRUE
+                        WANTS_PACKAGE=$TRUE;;
+              chan)     CHANNEL="$OPTARG";;
+              btype)    BTYPE="$OPTARG";;
+              fmod)     WANTS_FMOD=$TRUE;;
+
+              help)     showUsage && exit 0;;
+
+              -*)       showUsage && exit 1;;
+              *)        showUsage && exit 1;;
+              esac
+          done
+          shift $[OPTIND-1]
+          if [ $OPTIND -le 1 ] ; then
+              showUsage && exit 1
+          fi
         fi
-
-        while getoptex "clean config version fmod rebuild help chan: btype:" "$@" ; do
-            case "$OPTOPT" in
-            clean)    WANTS_CLEAN=$TRUE;;
-            config)   WANTS_CONFIG=$TRUE;;
-            version)  WANTS_VERSION=$TRUE;;
-            rebuild)  WANTS_BUILD=$TRUE
-                      WANTS_VERSION=$TRUE
-                      WANTS_PACKAGE=$TRUE;;
-            chan)     CHANNEL="$OPTARG";;
-            btype)    BTYPE="$OPTARG";;
-	    fmod)     WANTS_FMOD=$TRUE;;
-
-            help)     showUsage  
-		      exit 0;;
-
-            -*)       showUsage
-		      exit 1;;
-            *)        showUsage
-		      exit 1;;
-            esac
-        done
-        shift $[OPTIND-1]
 
         if [ $WANTS_CLEAN -ne $TRUE ] && [ $WANTS_CONFIG -ne $TRUE ] && \
                 [ $WANTS_BUILD -ne $TRUE ] && [ $WANTS_VERSION -ne $TRUE ] && \
