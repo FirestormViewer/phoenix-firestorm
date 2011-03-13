@@ -399,12 +399,31 @@ BOOL LLInvFVBridge::isClipboardPasteable() const
 // 			return FALSE;
 // 		}
 
-		const LLInventoryItem *item = model->getItem(item_id);
+//		const LLInventoryItem *item = model->getItem(item_id);
+		const LLViewerInventoryItem *item = model->getItem(item_id);
 		if (item)
 		{
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+			// Can't copy worn objects. DEV-15183 [see P-JIRA: http://jira.secondlife.com/browse/VWR-6110]
+			// TODO-Catznip: [SL-2.2.0] I don't think preventing copying worn items would prevent the bug that actually occurred?
+//			if ( (!item->getIsLinkType()) && (get_is_item_worn(item->getUUID())) )
+//			{
+//				return FALSE;
+//			}
+// [/SL:KB]
+
 			if (!item->getPermissions().allowCopyBy(agent_id))
 			{
-				return FALSE;
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+				// We allow copy/pasting of links as long as their target is available
+				// (and disallow if the user is trying to paste a folder link pointing to the current folder)
+				if ( (!item->getIsLinkType()) || (!item->getLinkedItem()) ||
+					 ((LLAssetType::AT_LINK_FOLDER == item->getActualType()) && (item->getLinkedUUID() == mUUID)) )
+				{
+					return FALSE;
+				}
+// [/SL:KB]
+//				return FALSE;
 			}
 		}
 	}
@@ -567,6 +586,7 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 					disabled_items.push_back(std::string("Copy Asset UUID"));
 				}
 			}
+/*
 			items.push_back(std::string("Copy Separator"));
 			
 			items.push_back(std::string("Copy"));
@@ -574,9 +594,21 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 			{
 				disabled_items.push_back(std::string("Copy"));
 			}
+*/
 			items.push_back(std::string("Cut"));
 		}
 	}
+
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+	items.push_back(std::string("Copy Separator"));
+	
+	items.push_back(std::string("Copy"));
+	if (!isItemCopyable())
+	{
+		disabled_items.push_back(std::string("Copy"));
+	}
+// [/SL:KB]
+
 
 	// Don't allow items to be pasted directly into the COF.
 	if (!isCOFFolder())
@@ -1355,7 +1387,10 @@ BOOL LLItemBridge::removeItem()
 	// we can't do this check because we may have items in a folder somewhere that is
 	// not yet in memory, so we don't want false negatives.  (If disabled, then we 
 	// know we only have links in the Outfits folder which we explicitly fetch.)
-	if (!gSavedSettings.getBOOL("InventoryLinking"))
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-06-01 (Catznip-2.2.0a) | Added: Catznip-2.0.1a
+	// Users move folders around and reuse links that way... if we know something has links then it's just bad not to warn them :|
+// [/SL:KB]
+//	if (!gSavedSettings.getBOOL("InventoryLinking"))
 	{
 		if (!item->getIsLinkType())
 		{
@@ -1410,14 +1445,23 @@ BOOL LLItemBridge::isItemCopyable() const
 	LLViewerInventoryItem* item = getItem();
 	if (item)
 	{
+/*
 		// Can't copy worn objects. DEV-15183
 		if(get_is_item_worn(mUUID))
 		{
 			return FALSE;
 		}
 
-		// You can never copy a link.
-		if (item->getIsLinkType())
+*/
+
+//		// You can never copy a link.
+//		if (item->getIsLinkType())
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+		// We'll allow copying a link if:
+		//   - its target is available
+		//   - it doesn't point to another link [see LLViewerInventoryItem::getLinkedItem() which returns NULL in that case]
+		if ( (item->getIsLinkType()) && (!item->getLinkedItem()) )
+// [/SL:KB]
 		{
 			return FALSE;
 		}
@@ -1425,7 +1469,14 @@ BOOL LLItemBridge::isItemCopyable() const
 		// All items can be copied in god mode since you can
 		// at least paste-as-link the item, though you 
 		// still may not be able paste the item.
-		return TRUE;
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+		// User can copy the item if:
+		//   - the item (or its target in the case of a link) is "copy"
+		//   - and/or if the item (or its target in the case of a link) has a linkable asset type
+		// NOTE: we do *not* want to return TRUE on everything like LL seems to do in SL-2.1.0 because not all types are "linkable"
+		return (item->getPermissions().allowCopyBy(gAgent.getID())) || (LLAssetType::lookupCanLink(item->getType()));
+// [/SL:KB]
+//		return TRUE;
 		// return (item->getPermissions().allowCopyBy(gAgent.getID()));
 	}
 	return FALSE;
@@ -2422,13 +2473,31 @@ void LLFolderBridge::pasteFromClipboard()
 				}
 				else
 				{
-					copy_inventory_item(
-						gAgent.getID(),
-						item->getPermissions().getOwner(),
-						item->getUUID(),
-						parent_id,
-						std::string(),
-						LLPointer<LLInventoryCallback>(NULL));
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+					if (item->getPermissions().allowCopyBy(gAgent.getID()))
+					{
+// [/SL:KB]
+						copy_inventory_item(
+							gAgent.getID(),
+							item->getPermissions().getOwner(),
+							item->getUUID(),
+							parent_id,
+							std::string(),
+							LLPointer<LLInventoryCallback>(NULL));
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+					}
+					else if (LLAssetType::lookupIsLinkType(item->getActualType()))
+					{
+						link_inventory_item(
+							gAgent.getID(),
+							item->getLinkedUUID(),
+							parent_id,
+							item->getName(),
+							item->getDescription(),
+							item->getActualType(),
+							LLPointer<LLInventoryCallback>(NULL));
+					}
+// [/SL:KB]
 				}
 			}
 
