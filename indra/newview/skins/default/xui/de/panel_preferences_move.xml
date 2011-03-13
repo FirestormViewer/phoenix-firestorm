@@ -2,6 +2,7 @@
 <panel label="Bewegen" name="move_panel">
 	<slider label="Sichtwinkel" name="camera_fov"/>
 	<slider label="Abstand" name="camera_offset_scale"/>
+    <check_box label="Kamerabeschränkungen aufheben (Kamera freier bewegen)" name="DisableCameraConstraints" tool_tip="Erlaubt die Bewegungen der Kamera außerhalb der normalen Grenzen und der Erdoberfläche" />
 	<text name="heading2">
 		Automatische Position für:
 	</text>
@@ -9,12 +10,16 @@
 	<check_box label="Aussehen" name="appearance_camera_movement" tool_tip="Automatische Kamerapositionierung im Bearbeitenmodus verwenden"/>
 	<check_box initial_value="true" label="Seitenleiste" name="appearance_sidebar_positioning" tool_tip="Automatische Kameraposition für Seitenleiste verwenden"/>
 	<check_box label="Mich im Mouselook anzeigen" name="first_person_avatar_visible"/>
-	<text name=" Mouse Sensitivity">
+	<text name=" Mouse Sensitivity" width="195">
 		Mausempfindlichkeit für Mouselook:
 	</text>
 	<check_box label="Umkehren" name="invert_mouse"/>
+	<text name="MovementSettings">
+		Bewegung:
+	</text>
 	<check_box label="Mit Pfeiltasten bewegen" name="arrow_keys_move_avatar_check"/>
 	<check_box label="Drücken-drücken-halten, um zu rennen" name="tap_tap_hold_to_run"/>
+	<check_box label="Fliegen/Landen beim Drücken von auf/ab" name="automatic_fly" />
 	<check_box label="Doppelklicken:" name="double_click_chkbox"/>
 	<radio_group name="double_click_action">
 		<radio_item label="Teleportieren" name="radio_teleport"/>

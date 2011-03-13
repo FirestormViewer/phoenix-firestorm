@@ -7,7 +7,7 @@
 		<panel label="Grafik" name="display"/>
 		<panel label="Sound &amp; Medien" name="audio"/>
 		<panel label="Chat" name="chat"/>
-		<panel label="Bewegen und anzeigen" name="move"/>
+		<panel label="Bewegen/Anzeigen" name="move"/>
 		<panel label="Meldungen" name="msgs"/>
 		<panel label="Farben" name="colors"/>
 		<panel label="Privatsphäre" name="im"/>
