@@ -83,13 +83,13 @@
                    name="hud container"
                    width="500">
 <!-- first element on rest of screen is top info bar - so is just below nav bar -->
-            <panel follows="left|top"
-                   height="50"
+            <panel follows="left|top|right"
+                   height="42"
                    left="0"
                    mouse_opaque="false"
                    name="topinfo_bar_container"
                    tab_stop="false"
-                   top="5"
+                   top="0"
                    visible="false"
                    width="1024"/>
 <!-- second element on rest of screen is stand/stop/flying container - only really contains a button -->
@@ -118,22 +118,22 @@
 
        <layout_stack border_size="0"
         follows="all"
-        height="410"
+        height="425"
         left="0"
         mouse_opaque="false"
         name="sidebar"
         orientation="horizontal"
-        top="46"
+        top="42"
         width="1024">
           <layout_panel
            follows="all"
-           height="400"
+           height="425"
            right="0"
            mouse_opaque="false"
            user_resize="true"
            name="sidebar_lp">
 		 <panel follows="right|top|bottom"
-              height="400"
+              height="425"
               mouse_opaque="false"
               name="side_bar_tabs"
               tab_stop="false"
@@ -144,7 +144,7 @@
            </layout_panel>
            <layout_panel auto_resize="false"
             follows="all"
-            height="400"
+            height="425"
             right="10"
             user_resize="true"
             mouse_opaque="true"
