@@ -9570,7 +9570,7 @@
     <key>ShowSnapshotButton</key>
     <map>
       <key>Comment</key>
-      <string>Shows/Hides Snapshot button button in the bottom tray.</string>
+      <string>Shows/Hides Snapshot button in the bottom tray.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -9592,7 +9592,7 @@
   <key>ShowObjectRenderingCost</key>                
     <map>
       <key>Comment</key>
-      <string>Show the object rendering cost  in  build tools</string>
+      <string>Show the object rendering cost in  build tools</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
