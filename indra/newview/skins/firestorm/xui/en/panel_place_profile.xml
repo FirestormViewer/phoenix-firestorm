@@ -179,91 +179,35 @@
      use_ellipses="true"
      value="Place Profile"
      width="280" />
-    <scroll_container
-     color="SL-Background_50"
-     follows="all"
-     height="572"
+    <texture_picker
+     enabled="false"
+     fallback_image="default_land_picture.j2c"
+     follows="left|top|right"
+     height="197"
      layout="topleft"
-     left="9"
-     name="place_scroll"
-     opaque="true"
-     top_pad="10"
-     width="310">
-        <panel
-         bg_alpha_color="SL-Background_50"
-         follows="left|top|right"
-         height="580"
-         layout="topleft"
-         left="0"
-         min_height="300"
-         name="scrolling_panel"
-         top="0"
-         width="310">
-            <texture_picker
-             enabled="false"
-             fallback_image="default_land_picture.j2c"
-             follows="left|top|right"
-             height="197"
-             layout="topleft"
-             left="11"
-             name="logo"
-             top="10"
-             width="290" />
-            <layout_stack
-             border_size="0"
-             clip="false"
-             follows="left|top|right"
+     left="11"
+     name="logo"
+     top_pad="2"
+     width="290" />
+            <icon
+             follows="top|left"
              height="50"
+             image_name="YouAreHere_Badge"
              layout="topleft"
-             mouse_opaque="false"
-             name="panel_stack"
-             orientation="horizontal"
-             top_pad="-65"
-             width="100">
-                <layout_panel
-                 follows="left|right"
-                 height="50"
-                 layout="topleft"
-                 left="0"
-                 min_height="50"
-                 min_width="50"
-                 mouse_opaque="false"
-                 name="here_panel"
-                 top="0"
-                 user_resize="false"
-                 width="60">
-                    <icon
-                     follows="top|left"
-                     height="50"
-                     image_name="YouAreHere_Badge"
-                     layout="topleft"
-                     left="0"
-                     name="icon_you_are_here"
-                     top="0"
-                     width="50" />
-                </layout_panel>
-                <layout_panel
-                 follows="left|right"
-                 height="60"
-                 layout="topleft"
-                 min_height="50"
-                 min_width="60"
-                 mouse_opaque="false"
-                 name="for_sale_panel"
-                 top="0"
-                 user_resize="false"
-                 width="60">
-                    <icon
-                     follows="top|left"
-                     height="50"
-                     image_name="ForSale_Badge"
-                     layout="topleft"
-                     left="10"
-                     name="icon_for_sale"
-                     top="0"
-                     width="50" />
-                </layout_panel>
-            </layout_stack>
+             left="0"
+             visible="false"
+             name="icon_you_are_here"
+             top_pad="-50"
+             width="50" />
+            <icon
+             follows="top|left"
+             height="50"
+             image_name="ForSale_Badge"
+             layout="topleft"
+             visible="false"
+             left_pad="10"
+             name="icon_for_sale"
+             width="50" />
             <text
              parse_urls="false"
              follows="left|top|right"
@@ -305,6 +249,7 @@
              name="owner_label"
              text_color="White"
              top_pad="0"
+             visible="false"
              value="Owner:"
              width="90" />
          <!--TODO: HOOK THIS NAME UP WITH AN INSPECTOR  -->
@@ -315,6 +260,7 @@
              left_pad="1"
              name="owner_value"
              top_delta="0"
+             visible="false"
              value="Alex Superduperlongenamenton"
              use_ellipses="true"
              width="200" />
@@ -339,22 +285,25 @@
 
             <tab_container
              name="advanced_info_accordion"
-             fit_parent="true"
+             visible="false"
              layout="topleft"
              follows="all"
              halign="center"
              tab_position="top"
-             tab_width="80"
-             top_pad="15"
-             left="0"
-             height="268"
+             top_pad="4"
+             left="8"
+             height="258"
              width="313">
 
+<!-- Parcel Panel -->
+
                 <panel
-                 fit_panel="false"
-                 height="175"
+                 bottom="-1"
                  layout="topleft"
                  name="parcel_characteristics_tab"
+                 background_visible="true"
+                 background_opaque="true"
+                 bg_opaque_color="DkGray2"
                  title="Parcel">
 <!--
                     <panel
@@ -367,188 +316,181 @@
                      width="275">
 //-->
                         <icon
+                         left="8"
+                         top_pad="10"
+                         width="22"
+                         height="18"
                          follows="top|left"
-                         height="16"
                          image_name="Parcel_PG_Dark"
                          layout="topleft"
-                         left="10"
-                         name="rating_icon"
-                         top="10"
-                         width="18" />
+                         name="rating_icon" />
                         <text
-                         follows="left|top"
+                         left_pad="4"
+                         width="66"
                          height="16"
-                         layout="topleft"
-                         left_pad="12"
-                         name="rating_label"
-                         value="Rating:"
-                         width="90" />
-                        <text
-                         follows="left|right|top"
-                         height="16"
-                         layout="topleft"
-                         left_pad="0"
-                         name="rating_value"
-                         top_delta="0"
-                         value="unknown"
-                         width="60" />
-                        <icon
                          follows="top|left"
+                         layout="topleft"
+                         name="rating_label"
+                         value="Rating:" />
+                        <text
+                         left_pad="0"
+                         width="60"
+                         height="16"
+                         follows="top|left"
+                         layout="topleft"
+                         name="rating_value"
+                         value="unknown" />
+                        <icon
+                         left_pad="5"
+                         width="22"
                          height="18"
+                         follows="top|left"
                          image_name="Parcel_Voice_Dark"
                          layout="topleft"
-                         left="10"
-                         name="voice_icon"
-                         top_pad="5"
-                         width="22" />
+                         name="voice_icon" />
                         <text
-                         follows="left|top"
-                         height="18"
-                         layout="topleft"
-                         left_pad="8"
-                         name="voice_label"
-                         top_delta="0"
-                         value="Voice:"
-                         width="90" />
-                        <text
-                         follows="left|right|top"
-                         height="18"
-                         layout="topleft"
-                         left_pad="0"
-                         name="voice_value"
-                         top_delta="0"
-                         value="On"
-                         width="60" />
-                        <icon
+                         left_pad="4"
+                         width="66"
+                         height="16"
                          follows="top|left"
+                         layout="topleft"
+                         name="voice_label"
+                         value="Voice:" />
+                        <text
+                         left_pad="0"
+                         width="60"
+                         height="16"
+                         follows="top|left"
+                         layout="topleft"
+                         name="voice_value"
+                         value="On" />
+
+                        <icon
+                         left="8"
+                         top_pad="2"
+                         width="22"
                          height="18"
+                         follows="top|left"
                          image_name="Parcel_Fly_Dark"
                          layout="topleft"
-                         left="10"
-                         name="fly_icon"
-                         top_pad="3"
-                         width="22" />
+                         name="fly_icon" />
                         <text
-                         follows="left|top"
+                         left_pad="4"
+                         width="66"
                          height="16"
-                         layout="topleft"
-                         left_pad="8"
-                         name="fly_label"
-                         value="Fly:"
-                         width="90" />
-                        <text
-                         follows="left|right|top"
-                         height="16"
-                         layout="topleft"
-                         left_pad="0"
-                         name="fly_value"
-                         top_delta="0"
-                         value="On"
-                         width="60" />
-                        <icon
                          follows="top|left"
+                         layout="topleft"
+                         name="fly_label"
+                         value="Fly:" />
+                        <text
+                         left_pad="0"
+                         width="60"
+                         height="16"
+                         follows="top|left"
+                         layout="topleft"
+                         name="fly_value"
+                         value="On" />
+                        <icon
+                         left_pad="5"
+                         width="22"
                          height="18"
+                         follows="top|left"
                          image_name="Parcel_Push_Dark"
                          layout="topleft"
-                         left="10"
-                         name="push_icon"
-                         top_pad="3"
-                         width="22" />
+                         name="push_icon" />
                         <text
-                         follows="left|top"
-                         height="14"
-                         layout="topleft"
-                         left_pad="8"
-                         name="push_label"
-                         value="Push:"
-                         width="90" />
-                        <text
-                         follows="left|right|top"
-                         height="14"
-                         layout="topleft"
-                         left_pad="0"
-                         name="push_value"
-                         top_delta="0"
-                         value="Off"
-                         width="60" />
-                        <icon
+                         left_pad="4"
+                         width="66"
+                         height="16"
                          follows="top|left"
+                         layout="topleft"
+                         name="push_label"
+                         value="Push:" />
+                        <text
+                         left_pad="0"
+                         width="60"
+                         height="16"
+                         follows="top|left"
+                         layout="topleft"
+                         name="push_value"
+                         value="Off" />
+
+                        <icon
+                         left="8"
+                         top_pad="2"
+                         width="22"
                          height="18"
+                         follows="top|left"
                          image_name="Parcel_Build_Dark"
                          layout="topleft"
-                         left="10"
-                         name="build_icon"
-                         top_pad="3"
-                         width="22" />
+                         name="build_icon" />
                         <text
-                         follows="left|top"
-                         height="14"
-                         layout="topleft"
-                         left_pad="8"
-                         name="build_label"
-                         value="Build:"
-                         width="90" />
-                        <text
-                         follows="left|right|top"
-                         height="15"
-                         layout="topleft"
-                         left_pad="0"
-                         name="build_value"
-                         top_delta="0"
-                         value="On"
-                         width="60" />
-                        <icon
+                         left_pad="4"
+                         width="66"
+                         height="16"
                          follows="top|left"
+                         layout="topleft"
+                         name="build_label"
+                         value="Build:" />
+                        <text
+                         left_pad="0"
+                         width="60"
+                         height="16"
+                         follows="top|left"
+                         layout="topleft"
+                         name="build_value"
+                         value="On" />
+                        <icon
+                         left_pad="5"
+                         width="22"
                          height="18"
+                         follows="top|left"
                          image_name="Parcel_Scripts_Dark"
                          layout="topleft"
-                         left="10"
-                         name="scripts_icon"
-                         top_pad="3"
-                         width="22" />
+                         name="scripts_icon" />
                         <text
-                         follows="left|top"
-                         height="14"
-                         layout="topleft"
-                         left_pad="8"
-                         name="scripts_label"
-                         value="Scripts:"
-                         width="90" />
-                        <text
-                         follows="left|right|top"
-                         height="14"
-                         layout="topleft"
-                         left_pad="0"
-                         name="scripts_value"
-                         top_delta="0"
-                         value="On"
-                         width="60" />
-                        <icon
+                         left_pad="4"
+                         width="66"
+                         height="16"
                          follows="top|left"
+                         layout="topleft"
+                         name="scripts_label"
+                         value="Scripts:" />
+                        <text
+                         left_pad="0"
+                         width="60"
+                         height="16"
+                         follows="top|left"
+                         layout="topleft"
+                         name="scripts_value"
+                         value="On" />
+
+                        <icon
+                         left="8"
+                         top_pad="2"
+                         width="22"
                          height="18"
+                         follows="top|left"
                          image_name="Parcel_Damage_Dark"
                          layout="topleft"
-                         left="10"
-                         name="damage_icon"
-                         top_pad="7"
-                         width="22" />
+                         name="damage_icon" />
                         <text
-                         follows="left|top"
-                         height="14"
+                         left_pad="4"
+                         width="66"
+                         height="16"
+                         follows="top|left"
                          layout="topleft"
-                         left_pad="8"
                          name="damage_label"
-                         value="Damage:"
-                         width="90" />
+                         value="Damage:" />
                         <text
-                         follows="left|right|top"
-                         height="14"
-                         layout="topleft"
                          left_pad="0"
+                         width="60"
+                         height="16"
+                         follows="top|left"
+                         layout="topleft"
                          name="damage_value"
-                         top_delta="0"
-                         value="Off"
-                         width="60" />
+                         value="Off" />
+
                         <button
                          follows="top|left"
                          height="23"
@@ -566,9 +508,14 @@
 <!--                    </panel>  -->
                 </panel>
 
+<!-- Region Panel -->
+
                 <panel
                  fit_panel="false"
                  height="175"
+                 background_visible="true"
+                 background_opaque="true"
+                 bg_opaque_color="DkGray2"
                  layout="topleft"
                  name="region_characteristics_tab"
                  title="Region">
@@ -588,7 +535,7 @@
                          layout="topleft"
                          left="10"
                          name="region_name_label"
-                         top_pad="5"
+                         top_pad="10"
                          value="Region:"
                          width="90" />
                         <text
@@ -599,14 +546,14 @@
                          name="region_name"
                          top_delta="0"
                          value="Mooseland"
-                         width="187" />
+                         width="203" />
                         <text
                          follows="left|top"
                          height="15"
                          layout="topleft"
                          left="10"
                          name="region_type_label"
-                         top_pad="5"
+                         top_pad="4"
                          value="Type:"
                          width="90" />
                         <text
@@ -617,14 +564,14 @@
                          name="region_type"
                          top_delta="0"
                          value="Moose"
-                         width="187" />
+                         width="203" />
                         <text
                          follows="left|top"
                          height="15"
                          layout="topleft"
                          left="10"
                          name="region_rating_label"
-                         top_pad="7"
+                         top_pad="4"
                          value="Rating:"
                          width="90" />
                         <icon
@@ -642,14 +589,14 @@
                          left_pad="10"
                          name="region_rating"
                          value="Adult"
-                         width="159" />
+                         width="175" />
                         <text
                          follows="left|top"
                          height="15"
                          layout="topleft"
                          left="10"
                          name="region_owner_label"
-                         top_pad="5"
+                         top_pad="4"
                          value="Owner:"
                          width="90" />
                         <text
@@ -661,14 +608,14 @@
                          top_delta="0"
                          value="moose Van Moose extra long name moose"
                          use_ellipses="true"
-                         width="187" />
+                         width="203" />
                         <text
                          follows="left|top"
                          height="15"
                          layout="topleft"
                          left="10"
                          name="region_group_label"
-                         top_pad="5"
+                         top_pad="4"
                          value="Group:"
                          width="90" />
                         <text
@@ -679,7 +626,7 @@
                          name="region_group"
                          top_delta="0"
                          use_ellipses="true"
-                         width="187">
+                         width="203">
                             The Mighty Moose of mooseville soundvillemoose
                         </text>
                         <button
@@ -699,9 +646,14 @@
 <!--                    </panel> -->
                 </panel>
 
+<!-- Estate Panel -->
+
                 <panel
                  fit_panel="false"
                  height="175"
+                 background_visible="true"
+                 background_opaque="true"
+                 bg_opaque_color="DkGray2"
                  layout="topleft"
                  name="estate_information_tab"
                  title="Estate">
@@ -721,7 +673,7 @@
                          layout="topleft"
                          left="10"
                          name="estate_name_label"
-                         top_pad="5"
+                         top_pad="10"
                          value="Estate:"
                          width="80" />
                         <text
@@ -731,7 +683,7 @@
                          left_pad="0"
                          name="estate_name"
                          top_delta="0"
-                         width="187" />
+                         width="213" />
                         <text
                          follows="left|top"
                          height="15"
@@ -748,7 +700,7 @@
                          left_pad="0"
                          name="estate_rating"
                          top_delta="0"
-                         width="187" />
+                         width="213" />
                         <text
                          follows="left|top"
                          height="15"
@@ -767,36 +719,40 @@
                          value="Testing owner name length with long name"
                          top_delta="0"
                          use_ellipses="true"
-                         width="190" />
+                         width="213" />
                         <text
-                         follows="left|top"
+                         follows="left|top|right"
                          height="15"
                          layout="topleft"
                          left="10"
                          name="covenant_label"
                          top_pad="5"
                          value="Covenant:"
-                         width="277" />
+                         width="293" />
                         <text_editor
                          bg_focus_color="SL-Background"
                          bg_readonly_color="SL-Background"
-                         follows="left|top|right"
-                         height="90"
+                         follows="all"
+                         height="144"
                          layout="topleft"
                          left="10"
                          max_length="65535"
                          name="covenant"
                          read_only="true"
                          top_pad="0"
-                         width="277"
+                         width="293"
                          word_wrap="true" />
 <!--                    </panel> -->
                 </panel>
 
+<!-- For Sale Panel -->
 
                 <panel
                  fit_panel="false"
                  height="175"
+                 background_visible="true"
+                 background_opaque="true"
+                 bg_opaque_color="DkGray2"
                  layout="topleft"
                  name="sales_tab"
                  title="For Sale">
@@ -817,34 +773,34 @@
                          layout="topleft"
                          left="10"
                          name="sales_price_label"
-                         top_pad="5"
+                         top_pad="10"
                          value="Price:"
                          width="90" />
                         <text
-                         follows="left|top|right"
+                         follows="left|top"
                          height="15"
                          layout="topleft"
                          left_pad="0"
                          name="sales_price"
                          top_delta="0"
-                         width="187" />
+                         width="70" />
                         <text
                          follows="left|top"
                          height="15"
                          layout="topleft"
-                         left="10"
+                         left_pad="4"
                          name="area_label"
-                         top_pad="5"
                          value="Area:"
-                         width="90" />
+                         width="60" />
                         <text
-                         follows="left|top|right"
+                         follows="left|top"
                          height="15"
                          layout="topleft"
                          left_pad="0"
                          name="area"
                          top_delta="0"
-                         width="187" />
+                         width="70" />
+
                         <text
                          follows="left|top"
                          height="15"
@@ -855,47 +811,30 @@
                          value="Traffic:"
                          width="90" />
                         <text
-                         follows="left|top|right"
+                         follows="left|top"
                          height="15"
                          layout="topleft"
                          left_pad="0"
                          name="traffic"
                          top_delta="0"
-                         width="187" />
+                         width="70" />
                         <text
                          follows="left|top"
                          height="15"
                          layout="topleft"
-                         left="10"
                          name="primitives_label"
-                         top_pad="5"
+                         left_pad="4"
                          value="Primitives:"
-                         width="90" />
+                         width="60" />
                         <text
-                         follows="left|top|right"
+                         follows="left|top"
                          height="15"
                          layout="topleft"
                          left_pad="0"
                          name="primitives"
                          top_delta="0"
-                         width="187" />
-                        <text
-                         follows="left|top"
-                         height="15"
-                         layout="topleft"
-                         left="10"
-                         name="parcel_scripts_label"
-                         top_pad="5"
-                         value="Scripts:"
-                         width="90" />
-                        <text
-                         follows="left|top|right"
-                         height="15"
-                         layout="topleft"
-                         left_pad="0"
-                         name="parcel_scripts"
-                         top_delta="0"
-                         width="187" />
+                         width="70" />
+
                         <text
                          follows="left|top"
                          height="15"
@@ -906,22 +845,39 @@
                          value="Terraform limits:"
                          width="90" />
                         <text
-                         follows="left|top|right"
+                         follows="left|top"
                          height="15"
                          layout="topleft"
                          left_pad="0"
                          name="terraform_limits"
                          top_delta="0"
-                         width="187" />
+                         width="70" />
                         <text
                          follows="left|top"
+                         height="15"
+                         layout="topleft"
+                         name="parcel_scripts_label"
+                         left_pad="4"
+                         value="Scripts:"
+                         width="60" />
+                        <text
+                         follows="left|top"
+                         height="15"
+                         layout="topleft"
+                         left_pad="0"
+                         name="parcel_scripts"
+                         top_delta="0"
+                         width="70" />
+
+                        <text
+                         follows="left|top|right"
                          height="15"
                          layout="topleft"
                          left="10"
                          name="subdivide_label"
                          top_pad="5"
                          value="Subdivide/Join ability:"
-                         width="277" />
+                         width="293" />
                         <text_editor
                          bg_focus_color="SL-Background"
                          bg_readonly_color="SL-Background"
@@ -933,17 +889,17 @@
                          name="subdivide"
                          read_only="true"
                          top_pad="5"
-                         width="277"
+                         width="293"
                          word_wrap="true" />
                         <text
-                         follows="left|top"
+                         follows="left|top|right"
                          height="15"
                          layout="topleft"
                          left="10"
                          name="resale_label"
                          top_pad="5"
                          value="ReSale ability:"
-                         width="277" />
+                         width="293" />
                         <text_editor
                          bg_focus_color="SL-Background"
                          bg_readonly_color="SL-Background"
@@ -955,7 +911,7 @@
                          name="resale"
                          read_only="true"
                          top_pad="5"
-                         width="277"
+                         width="293"
                          word_wrap="true" />
                         <text
                          follows="left|top"
@@ -973,10 +929,8 @@
                          left_pad="0"
                          name="sale_to"
                          top_delta="0"
-                         width="187" />
+                         width="203" />
 <!--                    </panel> -->
                 </panel>
             </tab_container>
-        </panel>
-    </scroll_container>
 </panel>
