@@ -340,6 +340,32 @@ void FSFloaterContacts::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 }
 
 
+void FSFloaterContacts::updateFriendList()
+{
+	if (!mFriendList)
+		return;
+
+	uuid_vec_t& contact_friendsp = mFriendList->getIDs();
+	contact_friendsp.clear();
+	
+	// Cause inv fails so very much, lets just load the contacts floater from
+	// the avatar tracker instead of from calling cards, which are fail
+	// This should resolve part or all of FIRE-565 -KC
+	
+	const LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
+	LLAvatarTracker::buddy_map_t all_buddies;
+	av_tracker.copyBuddyList(all_buddies);
+
+	LLAvatarTracker::buddy_map_t::const_iterator buddy_it = all_buddies.begin();
+	for (; buddy_it != all_buddies.end(); ++buddy_it)
+	{
+		LLUUID buddy_id = buddy_it->first;
+		contact_friendsp.push_back(buddy_id);
+	}
+
+	mFriendList->setDirty(true, !mFriendList->filterHasMatches());
+}
+
 
 // static
 void FSFloaterContacts::onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names)
