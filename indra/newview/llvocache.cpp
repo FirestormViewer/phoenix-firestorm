@@ -70,6 +70,7 @@ LLVOCacheEntry::LLVOCacheEntry()
 }
 
 LLVOCacheEntry::LLVOCacheEntry(LLAPRFile* apr_file)
+	: mBuffer(NULL)
 {
 	S32 size = -1;
 	BOOL success;
@@ -134,7 +135,10 @@ LLVOCacheEntry::LLVOCacheEntry(LLAPRFile* apr_file)
 
 LLVOCacheEntry::~LLVOCacheEntry()
 {
-	delete [] mBuffer;
+	if(mBuffer)
+	{
+		delete[] mBuffer;
+	}
 }
 
 
