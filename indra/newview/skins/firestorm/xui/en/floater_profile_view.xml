@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<floater
+ height="470"
+ layout="topleft"
+ width="430"
+ can_close="true"
+ can_resize="true">
+    <panel
+     background_visible="false"
+     top="5"
+     height="460"
+     left="5"
+     width="420"
+     class="panel_profile_view"
+     name="panel_profile_view"
+     filename="panel_profile_view.xml"
+    />
+</floater>
