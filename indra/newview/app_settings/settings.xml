@@ -103,7 +103,7 @@
     <key>ChatTabDirection</key>
     <map>
       <key>Comment</key>
-      <string>Toggles the direction of chat tabs between horisontal and vertical</string>
+      <string>Toggles the direction of chat tabs between horizontal and vertical</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -466,7 +466,7 @@
     <key>AdvanceSnapshot</key>
     <map>
       <key>Comment</key>
-      <string>Display advanced parameter settings in snaphot interface</string>
+      <string>Display advanced parameter settings in snapshot interface</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -653,7 +653,7 @@
     <key>AudioLevelDoppler</key>
     <map>
       <key>Comment</key>
-      <string>Scale of doppler effect on moving audio sources (1.0 = normal, &lt;1.0 = diminished doppler effect, &gt;1.0 = enhanced doppler effect)</string>
+      <string>Scale of Doppler effect on moving audio sources (1.0 = normal, &lt;1.0 = diminished Doppler effect, &gt;1.0 = enhanced Doppler effect)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -675,7 +675,7 @@
     <key>AudioLevelMedia</key>
     <map>
       <key>Comment</key>
-      <string>Audio level of Quicktime movies</string>
+      <string>Audio level of QuickTime movies</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -785,7 +785,7 @@
   <key>AuditTexture</key>
   <map>
     <key>Comment</key>
-    <string>Enable texture auditting.</string>
+    <string>Enable texture auditing.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -1060,7 +1060,7 @@
     <key>AvatarBakedTextureUploadTimeout</key>
     <map>
       <key>Comment</key>
-      <string>Specifes the maximum time in seconds to wait before sending your baked textures for avatar appearance.  Set to 0 to disable and wait until all baked textures are at highest resolution.</string>
+      <string>Specifies the maximum time in seconds to wait before sending your baked textures for avatar appearance.  Set to 0 to disable and wait until all baked textures are at highest resolution.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -1138,7 +1138,7 @@
     <key>BlockSomeAvatarAppearanceVisualParams</key>
         <map>
         <key>Comment</key>
-            <string>Drop around 50% of VisualParam occurances in appearance messages (for simulating Ruth)</string>
+            <string>Drop around 50% of VisualParam occurrences in appearance messages (for simulating Ruth)</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>
@@ -1644,7 +1644,7 @@
     <key>CameraMouseWheelZoom</key>
     <map>
       <key>Comment</key>
-      <string>Camera zooms in and out with mousewheel</string>
+      <string>Camera zooms in and out with mouse wheel</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -1807,7 +1807,7 @@
     <key>LetterKeysFocusChatBar</key>
     <map>
       <key>Comment</key>
-      <string>When printable characters keys (possibly with Shift held) are pressed, the chatbar takes focus</string>
+      <string>When printable characters keys (possibly with Shift held) are pressed, the chat bar takes focus</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -2106,7 +2106,7 @@
     <key>BrowserJavascriptEnabled</key>
     <map>
       <key>Comment</key>
-      <string>Enable Javascript in the built-in Web browser?</string>
+      <string>Enable JavaScript in the built-in Web browser?</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -2315,7 +2315,7 @@
   <key>DebugShowTextureInfo</key>
     <map>
       <key>Comment</key>
-      <string>Show inertested texture info</string>
+      <string>Show interested texture info</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -3130,7 +3130,7 @@
     <key>DisplayTimecode</key>
     <map>
       <key>Comment</key>
-      <string>Display timecode on screen</string>
+      <string>Display time code on screen</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -3438,7 +3438,7 @@
     <key>FilterItemsPerFrame</key>
     <map>
       <key>Comment</key>
-      <string>Maximum number of inventory items to match against search filter every frame (lower to increase framerate while searching, higher to improve search speed)</string>
+      <string>Maximum number of inventory items to match against search filter every frame (lower to increase frame rate while searching, higher to improve search speed)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -3526,7 +3526,7 @@
     <key>FirstPersonAvatarVisible</key>
     <map>
       <key>Comment</key>
-      <string>Display avatar and attachments below neck while in mouselook</string>
+      <string>Display avatar and attachments below neck while in mouse look</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -4197,7 +4197,7 @@
     <key>FullScreenAspectRatio</key>
     <map>
       <key>Comment</key>
-      <string>Aspect ratio of fullscreen display (width / height)</string>
+      <string>Aspect ratio of full screen display (width / height)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -4681,7 +4681,7 @@
     <key>JoystickInitialized</key>
     <map>
       <key>Comment</key>
-      <string>Whether or not a joystick has been detected and initiailized.</string>
+      <string>Whether or not a joystick has been detected and initialized.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -4692,7 +4692,7 @@
     <key>JoystickMouselookYaw</key>
     <map>
       <key>Comment</key>
-        <string>Pass joystick yaw to scripts in Mouselook.</string>
+        <string>Pass joystick yaw to scripts in mouse look.</string>
       <key>Persist</key>
         <integer>1</integer>
       <key>Type</key>
@@ -4725,7 +4725,7 @@
     <key>LandBrushSize</key>
     <map>
       <key>Comment</key>
-        <string>Size of affected region when using teraform tool</string>
+        <string>Size of affected region when using terraform tool</string>
       <key>Persist</key>
         <integer>1</integer>
       <key>Type</key>
@@ -4780,7 +4780,7 @@
     <key>Language</key>
     <map>
       <key>Comment</key>
-      <string>Language specifier (for UI)</string>
+      <string>Specifies language (for UI)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -5166,7 +5166,7 @@
     <key>MainloopTimeoutDefault</key>
     <map>
       <key>Comment</key>
-      <string>Timeout duration for mainloop lock detection, in seconds.</string>
+      <string>Timeout duration for main loop lock detection, in seconds.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -5782,7 +5782,7 @@
   <key>MediaEnablePopups</key>
   <map>
     <key>Comment</key>
-    <string>If true, enable targeted links and javascript in media to open new media browser windows without a prompt.</string>
+    <string>If true, enable targeted links and JavaScript in media to open new media browser windows without a prompt.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -6337,7 +6337,7 @@
     <key>StartUpToastLifeTime</key>
     <map>
       <key>Comment</key>
-      <string>Number of seconds while a StartUp toast exist</string>
+      <string>Number of seconds while a Startup toast exist</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -6360,9 +6360,9 @@
     <map>
       <key>Comment</key>
       <string>Default width of buttons in the toast. 
-      Notes:
-      If required width will be less then this one, a button will be reshaped to default size , otherwise to required
-      Change of this parameter will affect the layout of buttons in notification toast.</string>
+Notes:
+If required width will be less than this one, a button will be reshaped to default size , otherwise to required. 
+Change of this parameter will affect the layout of buttons in notification toast.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -7105,7 +7105,7 @@
     <key>MediaBrowserWindowLimit</key>
     <map>
       <key>Comment</key>
-      <string>Maximum number of media brower windows that can be open at once (0 for no limit)</string>
+      <string>Maximum number of media browser windows that can be open at once (0 for no limit)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -7127,7 +7127,7 @@
   <key>MediaRollOffMin</key>
   <map>
     <key>Comment</key>
-    <string>Adjusts the distance at which media attentuation starts</string>
+    <string>Adjusts the distance at which media attenuation starts</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -10134,7 +10134,7 @@
     <key>ShowVoiceVisualizersInCalls</key>
     <map>
       <key>Comment</key>
-      <string>Enables in-world voice visualizers, voice gestures and lip-sync while in group or P2P calls.</string>
+      <string>Enables in-world voice visuals, voice gestures and lip-sync while in group or P2P calls.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10549,7 +10549,7 @@
     <key>TexturePickerShowFolders</key>
     <map>
       <key>Comment</key>
-      <string>Show folders with no texures in texture picker</string>
+      <string>Show folders with no textures in texture picker</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10604,7 +10604,7 @@
     <key>ToolTipVisibleTimeFar</key>
     <map>
       <key>Comment</key>
-      <string>Fade tooltip after after time passes (seconds) while mouse not near tooltip</string>
+      <string>Fade tooltip after time passes (seconds) while mouse not near tooltip</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10615,7 +10615,7 @@
     <key>ToolTipVisibleTimeNear</key>
     <map>
       <key>Comment</key>
-      <string>Fade tooltip after after time passes (seconds) while mouse near tooltip or original position</string>
+      <string>Fade tooltip after time passes (seconds) while mouse near tooltip or original position</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10626,7 +10626,7 @@
     <key>ToolTipVisibleTimeOver</key>
     <map>
       <key>Comment</key>
-      <string>Fade tooltip after after time passes (seconds) while mouse over tooltip</string>
+      <string>Fade tooltip after time passes (seconds) while mouse over tooltip</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10659,7 +10659,7 @@
     <key>TranslateLanguage</key>
     <map>
       <key>Comment</key>
-      <string>Translate Language specifier</string>
+      <string>Translate specified language</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -11979,7 +11979,7 @@
     <key>UserLoginInfo</key>
     <map>
       <key>Comment</key>
-      <string>Users loging data.</string>
+      <string>Users logging data.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -12750,7 +12750,7 @@
     <key>LogTextureDownloadsToSimulator</key>
     <map>
       <key>Comment</key>
-      <string>Send a digest of texture info to the sim</string>
+      <string>Send a digest of texture info to the region</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -12761,7 +12761,7 @@
     <key>TextureLoggingThreshold</key>
     <map>
       <key>Comment</key>
-      <string>Specifies the byte threshold at which texture download data should be sent to the sim.</string>
+      <string>Specifies the byte threshold at which texture download data should be sent to the region.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -12935,7 +12935,7 @@
 		<key>PhoenixCmdLineMapToKeepPos</key>
 		<map>
 			<key>Comment</key>
-			<string>Whether to use current local pos on tp to the new sim</string>
+			<string>Whether to use current local position on teleport to the new region</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
@@ -12990,7 +12990,7 @@
 		<key>PhoenixCmdLineClearChat</key>
 		<map>
 			<key>Comment</key>
-			<string>Clear chat hsitory to stop lag from chat spam</string>
+			<string>Clear chat history to stop lag from chat spam</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
@@ -13254,7 +13254,7 @@
 		<key>PhoenixNearbyChatbar</key>
 		<map>
 			<key>Comment</key>
-			<string>Set to true to add a chatbar to the Nearby Chat window</string>
+			<string>Set to true to add a chat bar to the Nearby Chat window</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
