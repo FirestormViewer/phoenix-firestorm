@@ -51,6 +51,8 @@ public:
 	static FSFloaterContacts* getInstance();
 	static FSFloaterContacts* findInstance();
 	
+	void					updateFriendList();
+
 	LLPanel*				mFriendsTab;
 	LLAvatarList*			mFriendList;
 	LLPanel*				mGroupsTab;

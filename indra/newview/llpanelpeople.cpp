@@ -745,8 +745,6 @@ void LLPanelPeople::updateFriendList()
 {
 	if (!mOnlineFriendList || !mAllFriendList)
 		return;
-
-	static FSFloaterContacts* fs_contacts = FSFloaterContacts::getInstance();
 	
 	// get all buddies we know about
 	const LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
@@ -768,17 +766,16 @@ void LLPanelPeople::updateFriendList()
 	{
 		lldebugs << "Friends Cards were found, count: " << listMap.begin()->second.size() << llendl;
 		all_friendsp = listMap.begin()->second;
-		if (fs_contacts->mFriendList)
-		{
-			uuid_vec_t& contact_friendsp = fs_contacts->mFriendList->getIDs();
-			contact_friendsp.clear();
-			contact_friendsp = listMap.begin()->second;
-		}
 	}
 	else
 	{
-		lldebugs << "Friends Cards were not found" << llendl;
+		llwarns << "Friends Cards failed to load" << llendl;
 	}
+
+	// update the contacts floater as well -KC
+	static FSFloaterContacts* fs_contacts = FSFloaterContacts::getInstance();
+	if (fs_contacts)
+		fs_contacts->updateFriendList();
 
 	LLAvatarTracker::buddy_map_t::const_iterator buddy_it = all_buddies.begin();
 	for (; buddy_it != all_buddies.end(); ++buddy_it)
@@ -795,8 +792,6 @@ void LLPanelPeople::updateFriendList()
 	 */
 	mOnlineFriendList->setDirty(true, !mOnlineFriendList->filterHasMatches());// do force update if list do NOT have items
 	mAllFriendList->setDirty(true, !mAllFriendList->filterHasMatches());
-	if (fs_contacts->mFriendList)
-		fs_contacts->mFriendList->setDirty(true, !fs_contacts->mFriendList->filterHasMatches());
 	//update trash and other buttons according to a selected item
 	updateButtons();
 	showFriendsAccordionsIfNeeded();
