@@ -76,8 +76,20 @@
         <scroll_list.columns
          label="Hidden"
          name="hidden"
-         width="47" />
+         width="-1" />
     </scroll_list>
+    <button
+     right="-4"
+     width="60"
+     top_pad="2"
+     height="23"
+     label="Map"
+     label_selected="Map"
+     name="map_button"
+     enabled="false"
+     follows="top|right"
+     layout="topleft" />
+
     <text
      type="string"
      follows="left|top"
@@ -86,7 +98,7 @@
      layout="topleft"
      left="0"
      name="total_land_in_use_label"
-     top_pad="0"
+     top_pad="-23"
      width="110">
         Total land in use:
     </text>
@@ -108,7 +120,8 @@
      halign="right"
      height="16"
      layout="topleft"
-     left_pad="0"
+     left="0"
+     top_pad="2"
      name="land_available_label"
      width="110">
         Land available:
@@ -132,6 +145,7 @@
      height="16"
      layout="topleft"
      left="0"
+     top_pad="2"
      name="total_contributed_land_label"
      width="110">
         Total contribution:
@@ -154,7 +168,8 @@
      halign="right"
      height="16"
      layout="topleft"
-     left_pad="0"
+     left="0"
+     top_pad="2"
      name="your_contribution_label"
      width="110">
         Your contribution:
@@ -227,21 +242,10 @@
      width="313">
         More land credits are needed to support land in use
     </text>
-    <button
-     right="-4"
-     width="60"
-     top_pad="-16"
-     height="23"
-     label="Map"
-     label_selected="Map"
-     name="map_button"
-     enabled="false"
-     follows="top|right"
-     layout="topleft" />
 
     <tab_container
      follows="all"
-     height="181"
+     height="152"
      halign="center"
      layout="topleft"
      left="0"
@@ -250,6 +254,9 @@
      tab_position="top"
      top_pad="2"
      width="313">
+
+<!-- PLANNING panel -->
+
         <panel
          border="false"
          follows="all"
@@ -264,18 +271,21 @@
              enabled="false"
              type="string"
              follows="all"
-             height="200"
              layout="topleft"
              left="0"
              max_length="4096"
              name="group_money_planning_text"
              top="2"
+             bottom="-1"
              width="313"
              word_wrap="true">
                 Loading...
             </text_editor>
         </panel>
-      <panel
+
+<!-- DETAILS panel -->
+
+        <panel
          border="false"
          follows="all"
          label="DETAILS"
@@ -285,41 +295,44 @@
          name="group_money_details_tab"
          top="0"
          width="313">
-          <text_editor
-             enabled="false"
-             type="string"
-             follows="all"
-             height="185"
-             layout="topleft"
-             left="0"
-             max_length="4096"
-             name="group_money_details_text"
-             top="2"
-             width="313"
-             word_wrap="true">
-                Loading...
-            </text_editor>
-            <button
-         follows="left|top"
+        <text_editor
+         enabled="false"
+         type="string"
+         follows="all"
+         bottom="-1"
+         layout="topleft"
+         left="0"
+         max_length="4096"
+         name="group_money_details_text"
+         top="2"
+         width="313"
+         word_wrap="true">
+         Loading...
+        </text_editor>
+        <button
+         follows="bottom|right"
          height="18"
          image_overlay="Arrow_Left_Off"
          layout="topleft"
          name="earlier_details_button"
          tool_tip="Back"
-             left="200"
-             top_pad="0"
+         right="-25"
+         bottom="-1"
          width="25" />
-             <button
-         follows="left|top"
+        <button
+         follows="bottom|right"
          height="18"
          image_overlay="Arrow_Right_Off"
          layout="topleft"
-       name="later_details_button"
+         name="later_details_button"
          tool_tip="Next"
-             left_pad="15"
+         left_pad="0"
          width="25" />
         </panel>
-      <panel
+
+<!-- SALES panel -->
+
+        <panel
          border="false"
          follows="all"
          label="SALES"
@@ -329,38 +342,38 @@
          name="group_money_sales_tab"
          top="0"
          width="313">
-            <text_editor
-             enabled="false"
-             type="string"
-             follows="all"
-             height="185"
-             layout="topleft"
-             left="0"
-             max_length="4096"
-             name="group_money_sales_text"
-             top="2"
-             width="313"
-             word_wrap="true">
-                Loading...
-            </text_editor>
-           <button
-         follows="left|top"
+        <text_editor
+         enabled="false"
+         type="string"
+         follows="all"
+         bottom="-1"
+         layout="topleft"
+         left="0"
+         max_length="4096"
+         name="group_money_sales_text"
+         top="2"
+         width="313"
+         word_wrap="true">
+         Loading...
+        </text_editor>
+        <button
+         follows="bottom|right"
          height="18"
          image_overlay="Arrow_Left_Off"
          layout="topleft"
          name="earlier_sales_button"
          tool_tip="Back"
-             left="200"
-             top_pad="0"
+         right="-25"
+         bottom="-1"
          width="25" />
-             <button
-         follows="left|top"
+        <button
+         follows="bottom|right"
          height="18"
          image_overlay="Arrow_Right_Off"
          layout="topleft"
-         left_pad="15"
          name="later_sales_button"
          tool_tip="Next"
+         left_pad="0"
          width="25" />
         </panel>
     </tab_container>
