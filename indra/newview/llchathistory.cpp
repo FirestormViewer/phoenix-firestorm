@@ -691,10 +691,8 @@ void LLChatHistory::clear()
 
 void LLChatHistory::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
-	llinfos << "AO: Updating name cache" << llendl;
 	mDisplayName = av_name.mDisplayName;
-	if (gSavedSettings.getBOOL("NameTagShowUsernames"))
-		mDisplayName_Username = mDisplayName + " ("+av_name.mUsername+")";
+	mDisplayName_Username = mDisplayName + " ("+av_name.mUsername+")";
 }
 
 void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LLStyle::Params& input_append_params)
@@ -706,7 +704,7 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	if (use_plain_text_chat_history)
 	{
 		// resolve display names if necessary		
-		if (gSavedSettings.getBOOL("NameTagShowDisplayNames"))
+		if (gSavedSettings.getBOOL("UseDisplayNames"))
 		{
 			mDisplayName=chat.mFromName;
 			mDisplayName_Username=chat.mFromName;
@@ -863,12 +861,18 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				// reset the style parameter for the header only -AO
 				link_params.color(header_name_color);
 				link_params.readonly_color(header_name_color);
-				if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("NameTagShowDisplayNames")))
+				if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
+				{
 					mEditor->appendText(mDisplayName_Username, false, link_params);
-				else if (gSavedSettings.getBOOL("NameTagShowDisplayNames"))
+				}
+				else if (gSavedSettings.getBOOL("UseDisplayNames"))
+				{
 					mEditor->appendText(mDisplayName, false, link_params);
+				}
 				else
+				{
 					mEditor->appendText(chat.mFromName, false, link_params);
+				}
 				link_params.color(txt_color);
 				link_params.readonly_color(txt_color);
 				mEditor->appendText(delimiter, false, style_params);
