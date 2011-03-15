@@ -2,6 +2,8 @@
 <panel
  top="0"
  background_visible="true"
+ background_opaque="true"
+ bg_opaque_color="TitleBarFocusColor"
  follows="left|top|right"
  height="20"
  width="333"

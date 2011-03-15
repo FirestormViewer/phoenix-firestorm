@@ -59,7 +59,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
              height="16"
              left="6"
              name="Key:"
-             width="30"
+             width="40"
              value="Key:" />
 
             <view_border
@@ -81,7 +81,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
              enabled="false"
              follows="left|top|right"
              max_length="254"
-             name="key_"
+             name="user_key"
              value="(loading...)" />
 
             <text
@@ -91,7 +91,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
              height="16"
              left="6"
              name="Name:"
-             width="30"
+             width="40"
              value="Name:" />
 
             <view_border

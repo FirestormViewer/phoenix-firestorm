@@ -62,7 +62,13 @@ mNumButtons(0),
 mAddedDefaultBtn(false),
 mCloseNotificationOnDestroy(true)
 {
-	buildFromFile( "panel_notification.xml");
+	// is it a script dialog?
+	mIsScriptDialog = (notification->getName() == "ScriptDialog" || notification->getName() == "ScriptDialogGroup");
+
+	if (mIsScriptDialog)
+		buildFromFile( "panel_notification_script.xml");
+	else
+		buildFromFile( "panel_notification.xml");
 	if(rect != LLRect::null)
 	{
 		this->setShape(rect);
@@ -73,8 +79,6 @@ mCloseNotificationOnDestroy(true)
 	// customize panel's attributes
 	// is it intended for displaying a tip?
 	mIsTip = notification->getType() == "notifytip";
-	// is it a script dialog?
-	mIsScriptDialog = (notification->getName() == "ScriptDialog" || notification->getName() == "ScriptDialogGroup");
 	// is it a caution?
 	//
 	// caution flag can be set explicitly by specifying it in the notification payload, or it can be set implicitly if the

@@ -44,7 +44,7 @@ Hover your mouse over the options for more help.
     </text>
 
     <line_editor
-     name="phoenix_guuid-pre"
+     name="group_key"
      label="Group Key:"
      left_pad="0"
      top="0"
@@ -116,7 +116,7 @@ Hover your mouse over the options for more help.
     <text
      name="join_cost_text"
      width="246"
-     top_pad="4"
+     top_pad="8"
      height="20"
      halign="right"
      type="string"
@@ -128,6 +128,7 @@ Hover your mouse over the options for more help.
 
     <button
      name="btn_join"
+     top_delta="-4"
      left_pad="4"
      right="-1"
      height="20"
@@ -362,14 +363,14 @@ Hover your mouse over the options for more help.
          tool_tip="New members must pay this fee to join the group when Enrollment Fee is checked."
          top_pad="0"
          left_pad="14"
-         right="-6"
+         width="100"
          height="16"
          label="L$"
          label_width="20"
          decimal_digits="0"
          increment="1"
          max_val="99999"
-         follows="top|left|right"
+         follows="top|left"
          layout="topleft" />
 <!--
         </layout_panel>
