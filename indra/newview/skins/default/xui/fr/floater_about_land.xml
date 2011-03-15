@@ -89,13 +89,13 @@
 				Propriétaire :
 			</text>
 			<text name="OwnerText">
-				Leyla Linden
+				Loading...
 			</text>
 			<text name="Group:">
 				Groupe :
 			</text>
 			<text name="GroupText">
-				Leyla Linden
+				Loading...
 			</text>
 			<button label="Choisir" label_selected="Définir..." name="Set..."/>
 			<check_box label="Autoriser la cession au groupe" name="check deed" tool_tip="Un officier du groupe peut céder ce terrain à ce groupe, afin qu&apos;il soit pris en charge par l&apos;allocation de terrains du groupe."/>
@@ -185,7 +185,7 @@ ou divisé.
 				Région :
 			</text>
 			<text name="region_name_text">
-				EricaVille
+				Loading...
 			</text>
 			<text name="region_landtype_lbl">
 				Type :

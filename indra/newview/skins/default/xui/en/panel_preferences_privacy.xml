@@ -40,6 +40,8 @@
      width="300">
        (Locations, images, web, search history)
     </text>
+    
+    
     <check_box
 	 height="16"
 	 enabled="false"
@@ -49,6 +51,7 @@
      name="online_visibility"
      top_pad="30"
      width="350" />
+     
     <check_box
      enabled_control="EnableVoiceChat"
      control_name="VoiceCallsFriendsOnly"
@@ -57,8 +60,9 @@
      layout="topleft"
      left="30"
      name="voice_call_friends_only_check"
-     top_pad="10"
+     top_pad="4"
      width="350" />
+     
     <check_box
      enabled_control="EnableVoiceChat"
      control_name="AutoDisengageMic"
@@ -67,12 +71,34 @@
      layout="topleft"
      left="30"
      name="auto_disengage_mic_check"
-     top_pad="10"
+     top_pad="4"
      width="350" />
+     
+    <check_box
+     control_name="PrivateLookAtTarget"
+     height="16"
+     label="Don't send my camera target hints"
+     layout="topleft"
+     left="30"
+     name="privatelookat"
+     top_pad="4"
+     width="350" />
+  
+    <check_box
+     control_name="PrivatePointAtTarget"
+     height="16"
+     label="Don't send my selection target hints"
+     layout="topleft"
+     left="30"
+     name="privatepointat"
+     top_pad="4"
+     width="350" />   
+     
+     
 	<text
-      type="string"
-    length="1"
-    follows="left|top"
+     type="string"
+     length="1"
+     follows="left|top"
      height="10"
      layout="topleft"
      left="30"
@@ -86,7 +112,7 @@
 	 enabled="false"
      control_name="LogNearbyChat"
      height="16"
-     label="Save nearby chat logs on my computer"
+     label="Save nearby chat logs on my computer (may cause lag)"
      layout="topleft"
      left="30"
      name="log_nearby_chat"
@@ -101,7 +127,7 @@
      layout="topleft"
      left="30"
      name="log_instant_messages"
-     top_pad="10"
+     top_pad="4"
      width="350">
     </check_box>
     <check_box
@@ -112,7 +138,7 @@
      layout="topleft"
      left_delta="0"
      name="show_timestamps_check_im"
-     top_pad="10"
+     top_pad="4"
      width="237" />
 	<check_box
      control_name="LogFileNamewithDate"
@@ -122,61 +148,9 @@
      layout="topleft"
      left_detla="5"
      name="logfile_name_datestamp"
-     top_pad="10"
+     top_pad="4"
      width="350"/>
-	<text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left_delta="0"
-     mouse_opaque="false"
-     name="log_path_desc"
-     top_pad="30"
-     width="128">
-        Location of logs:
-    </text>    
-    <line_editor
-     bottom="366"
-     control_name="InstantMessageLogPath"
-     follows="top|left|right"
-     halign="right"
-     height="23"
-     layout="topleft"
-     left_delta="0"
-     mouse_opaque="false"
-     name="log_path_string"
-     top_pad="5"
-     width="250"/>
-    <button
-	 enabled="false"
-     follows="right|bottom"
-     height="23"
-     label="Open"
-     label_selected="Open"
-     layout="topleft"
-     left_pad="5"
-     name="open_log_path_button"
-     top_delta="-30"
-     width="40">
-        <button.commit_callback
-         function="Pref.BrowseLogPath" />
-    </button>
-    <button
-	 enabled="false"
-     follows="right|bottom"
-     height="23"
-     label="Set"
-     label_selected="Set"
-     layout="topleft"
-     left_pad="5"
-     name="log_path_button"
-     top_delta="0"
-     width="40">
-        <button.commit_callback
-         function="Pref.LogPath" />
-    </button>
+
     <button
      follows="left|bottom"
      height="23"

@@ -51,33 +51,47 @@ showUsage()
 getArgs()
 # $* = the options passed in from main
 {
-        while getoptex "clean config version rebuild help chan: btype: laa:" "$@" ; do
 
-            case "$OPTOPT" in
-            clean)    WANTS_CLEAN=$TRUE;;
-            config)   WANTS_CONFIG=$TRUE;;
-            version)  WANTS_VERSION=$TRUE;;
-            rebuild)  WANTS_BUILD=$TRUE
-                      WANTS_VERSION=$TRUE
-                      WANTS_PACKAGE=$TRUE;;
-            chan)     CHANNEL="$OPTARG";;
-            btype)    BTYPE="$OPTARG";;
-            laa)      if [ "$OPTARG" == "on" ] ; then
-                        WANTS_LAA=$TRUE
-                      elif [ "$OPTARG" == "off" ] ; then
-                        WANTS_LAA=$FALSE
-                      else
-                        showUsage && exit 1
-                      fi;;
+        if [ $# -gt 0 ]; then
+          while getoptex "clean config version fmod rebuild help chan: btype: laa:" "$@" ; do
 
-            help)     showUsage && exit 0;;
+              #insure options are valid
+              if [  -z "$OPTOPT"  ] ; then
+                showUsage
+                exit 1
+              fi
 
-            -*)       showUsage && exit 1;;
-            *)        showUsage && exit 1;;
-            esac
-        done
-        shift $[OPTIND-1]
-		
+              case "$OPTOPT" in
+              clean)    WANTS_CLEAN=$TRUE;;
+              config)   WANTS_CONFIG=$TRUE;;
+              version)  WANTS_VERSION=$TRUE;;
+              rebuild)  WANTS_BUILD=$TRUE
+                        WANTS_VERSION=$TRUE
+                        WANTS_PACKAGE=$TRUE;;
+              chan)     CHANNEL="$OPTARG";;
+              btype)    BTYPE="$OPTARG";;
+              fmod)     WANTS_FMOD=$TRUE;;
+              laa)      if [ "$OPTARG" == "on" ] ; then
+                          WANTS_LAA=$TRUE
+                        elif [ "$OPTARG" == "off" ] ; then
+                          WANTS_LAA=$FALSE
+                        else
+                          showUsage && exit 1
+                        fi;;
+
+
+              help)     showUsage && exit 0;;
+
+              -*)       showUsage && exit 1;;
+              *)        showUsage && exit 1;;
+              esac
+          done
+          shift $[OPTIND-1]
+          if [ $OPTIND -le 1 ] ; then
+              showUsage && exit 1
+          fi
+        fi
+
         if [ $WANTS_CLEAN -ne $TRUE ] && [ $WANTS_CONFIG -ne $TRUE ] && \
                 [ $WANTS_BUILD -ne $TRUE ] && [ $WANTS_VERSION -ne $TRUE ] && \
                 [ $WANTS_PACKAGE -ne $TRUE ] ; then
@@ -169,6 +183,8 @@ function getoptex()
           fi
         done
         echo "$0: error: invalid option: $o"
+	showUsage
+	exit 1
   fi; fi
   OPTOPT="?"
   unset OPTARG

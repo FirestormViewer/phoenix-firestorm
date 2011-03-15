@@ -306,8 +306,7 @@ public:
 			if (!chat.mRlvNamesFiltered)
 			{
 				user_name->setValue( LLSD() );
-				LLAvatarNameCache::get(mAvatarID,
-					boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+				LLAvatarNameCache::get(mAvatarID, boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
 			}
 			else
 			{
@@ -690,10 +689,31 @@ void LLChatHistory::clear()
 	mLastFromID = LLUUID::null;
 }
 
+void LLChatHistory::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
+{
+	llinfos << "AO: Updating name cache" << llendl;
+	mDisplayName = av_name.mDisplayName;
+	if (gSavedSettings.getBOOL("NameTagShowUsernames"))
+		mDisplayName_Username = mDisplayName + " ("+av_name.mUsername+")";
+}
+
 void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LLStyle::Params& input_append_params)
 {
+	
 	bool use_plain_text_chat_history = args["use_plain_text_chat_history"].asBoolean();
-
+	// AO: Do any display name lookups in plaintext chat headers as early as possible to give the cache maximal 
+	//time to get an answer back before it's needed.
+	if (use_plain_text_chat_history)
+	{
+		// resolve display names if necessary		
+		if (gSavedSettings.getBOOL("NameTagShowDisplayNames"))
+		{
+			mDisplayName=chat.mFromName;
+			mDisplayName_Username=chat.mFromName;
+			LLAvatarNameCache::get(chat.mFromID,boost::bind(&LLChatHistory::onAvatarNameCache, this, _1, _2));
+		}
+	}
+	
 	llassert(mEditor);
 	if (!mEditor)
 	{
@@ -777,7 +797,7 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	}
 
 	if (use_plain_text_chat_history)
-	{
+	{		
 		LLStyle::Params timestamp_style(style_params);
 		if (!message_from_log)
 		{
@@ -829,8 +849,7 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				link_params.is_link = true;
 				link_params.link_href = url;
 
-				mEditor->appendText(chat.mFromName + delimiter,
-									false, link_params);
+				mEditor->appendText(chat.mFromName +delimiter, false, link_params);
 			}
 //			else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log)
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
@@ -844,7 +863,12 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				// reset the style parameter for the header only -AO
 				link_params.color(header_name_color);
 				link_params.readonly_color(header_name_color);
-				mEditor->appendText(chat.mFromName, false, link_params);
+				if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("NameTagShowDisplayNames")))
+					mEditor->appendText(mDisplayName_Username, false, link_params);
+				else if (gSavedSettings.getBOOL("NameTagShowDisplayNames"))
+					mEditor->appendText(mDisplayName, false, link_params);
+				else
+					mEditor->appendText(chat.mFromName, false, link_params);
 				link_params.color(txt_color);
 				link_params.readonly_color(txt_color);
 				mEditor->appendText(delimiter, false, style_params);

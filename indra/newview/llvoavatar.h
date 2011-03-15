@@ -669,8 +669,11 @@ public:
 	virtual const LLViewerJointAttachment* attachObject(LLViewerObject *viewer_object);
 	virtual BOOL 		detachObject(LLViewerObject *viewer_object);
 	static LLVOAvatar*  findAvatarFromAttachment(LLViewerObject* obj);
-protected:
+//-TT Patch: ReplaceWornItemsOnly
 	LLViewerJointAttachment* getTargetAttachmentPoint(LLViewerObject* viewer_object);
+//-TT
+protected:
+	//LLViewerJointAttachment* getTargetAttachmentPoint(LLViewerObject* viewer_object);
 	void 				lazyAttach();
 
 	//--------------------------------------------------------------------

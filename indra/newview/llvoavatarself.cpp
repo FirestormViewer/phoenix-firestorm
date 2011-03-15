@@ -1162,8 +1162,9 @@ const LLViewerJointAttachment *LLVOAvatarSelf::attachObject(LLViewerObject *view
 				gRlvAttachmentLocks.updateLockedHUD();
 		}
 // [/RLVa:KB]
+		gInventory.wearAttachmentsOnAvatarCheckRemove(viewer_object, attachment);
 	}
-
+	
 	return attachment;
 }
 

@@ -88,13 +88,13 @@ Vai al menu Mondo &gt; Informazioni sul terreno oppure seleziona un altro appezz
 				Proprietario:
 			</text>
 			<text left="119" name="OwnerText" width="227">
-				Leyla Linden
+				Loading...
 			</text>
 			<text name="Group:">
 				Gruppo:
 			</text>
 			<text left="119" name="GroupText" width="227">
-				Leyla Linden
+				Loading...
 			</text>
 			<button label="Imposta" name="Set..."/>
 			<check_box label="Permetti cessione al gruppo" left="119" name="check deed" tool_tip="Un funzionario del gruppo può cedere questa terra al gruppo stesso cosicchè essa sarà  supportata  dalle terre del gruppo."/>

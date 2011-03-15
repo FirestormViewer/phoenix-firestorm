@@ -43,6 +43,12 @@ getArgs()
 {
         if [ $# -gt 0 ]; then
           while getoptex "clean config version rebuild help chan: btype:" "$@" ; do
+
+	      #insure options are valid
+	      if [  -z "$OPTOPT"  ] ; then
+                showUsage
+                exit 1
+              fi
         
               case "$OPTOPT" in
               clean)    WANTS_CLEAN=$TRUE;;
@@ -157,6 +163,8 @@ function getoptex()
           fi
         done
         echo "$0: error: invalid option: $o"
+	showUsage
+	exit 1
   fi; fi
   OPTOPT="?"
   unset OPTARG

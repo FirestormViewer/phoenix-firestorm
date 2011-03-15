@@ -324,17 +324,18 @@ BOOL LLNavigationBar::postBuild()
 	
 	LLFavoritesBarCtrl* fp = getChild<LLFavoritesBarCtrl>("favorite");
 	LLPanel* np = getChild<LLPanel>("navigation_panel");
+	LLPanel* navFrame = getChild<LLPanel>("navigation_bar");
 	
 	mDefaultNavContainerRect = getRect();
 	mDefaultFpRect = fp->getRect();
 	mDefaultNpRect = np->getRect();
+	mDefaultFrameRect = navFrame->getRect();
 	
 	mDefaultNavContainerRect.set(mDefaultNavContainerRect.mLeft, mDefaultNpRect.mTop,mDefaultNavContainerRect.mRight, mDefaultFpRect.mBottom);
 	setRect(mDefaultNavContainerRect);
+	navFrame->setRect(mDefaultFrameRect);
 	np->setRect(mDefaultNpRect);
 	fp->setRect(mDefaultFpRect);
-	llinfos << "Container heights initialized with navHeight=" << mDefaultNavContainerRect.getHeight() << llendl;
-	llinfos << "Navpanel heights initialized with navHeight=" << mDefaultNpRect.getHeight() << " fpHeight=" << mDefaultFpRect.getHeight() << llendl;
 
 	// we'll be notified on teleport history changes
 	LLTeleportHistory::getInstance()->setHistoryChangedCallback(
@@ -751,139 +752,81 @@ int LLNavigationBar::getDefFavBarHeight()
 }
 
 void LLNavigationBar::showNavigationPanel(BOOL npVisible)
+// AO: Rewrite for transparency
 {
-	/* The following is work in progress. I'm still experimenting with the interactions between main view, topinfo panel, navbar, nav panel, and favourites panel.
-	 */
-	
-	
-	//bool fpVisible = gSavedSettings.getBOOL("ShowNavbarFavoritesPanel");
-	LLFavoritesBarCtrl* fp = getChild<LLFavoritesBarCtrl>("favorite");
+	bool fpVisible = gSavedSettings.getBOOL("ShowNavbarFavoritesPanel");
 	LLPanel* np = getChild<LLPanel>("navigation_panel");
 	llinfos << "showing navpanel :" << npVisible << llendl;
 	llinfos << "DEBUG: mDefaultNpRect = mLeft,mTop,mRight,mBottom = " << mDefaultNpRect.mLeft << "," << mDefaultNpRect.mTop << "," << mDefaultNpRect.mRight << "," << mDefaultNpRect.mBottom << llendl;
 	LLRect r;
+	LLRect curRect = getRect();
 	
 	if (npVisible)
 	{
-		setRect(r.set(mDefaultNavContainerRect.mLeft, mDefaultNavContainerRect.mTop,mDefaultNavContainerRect.mRight, mDefaultNavContainerRect.mBottom+2));
-		np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop,mDefaultNpRect.mRight, mDefaultNpRect.mBottom));
-		fp->setRect(r.set(mDefaultFpRect.mLeft, mDefaultFpRect.mTop,mDefaultFpRect.mRight, mDefaultFpRect.mBottom));
-
+		if (fpVisible) // Show both panels
+		{
+			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom));
+		}
+		else // NavPanel only 
+		{
+			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom + mDefaultFpRect.getHeight()));
+			np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop - mDefaultFpRect.getHeight() + 5,curRect.mRight, mDefaultNpRect.mBottom - mDefaultFpRect.getHeight() + 5));
+		}
 	}
 	else 
 	{
-		setRect(r.set(mDefaultNavContainerRect.mLeft, mDefaultNavContainerRect.mTop,mDefaultNavContainerRect.mRight, mDefaultNavContainerRect.mBottom+30));
-		np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop,mDefaultNpRect.mRight, mDefaultNpRect.mBottom));
-		fp->setRect(r.set(mDefaultFpRect.mLeft, mDefaultFpRect.mTop,mDefaultFpRect.mRight, mDefaultFpRect.mBottom));
+		if (fpVisible) // Show favorite bar only
+		{
+			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom+mDefaultNpRect.getHeight()+4));
+		}
+		else // show nothing
+		{
+			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop+5,curRect.mRight, mDefaultNavContainerRect.mTop+5));
+		}
 	}
 	
 	np->setVisible(npVisible);			
 	return;
-	
-	/*
-	// AO- redesigned navigation bars
-	if (visible)
-	{
-		// Navigation Panel must be shown. Favorites Panel is visible.
-
-		nbRect.setLeftTopAndSize(nbRect.mLeft, 48, nbRect.getWidth(), 61);
-		fbRect.setLeftTopAndSize(fbRect.mLeft, 40, fbRect.getWidth(), 25);
-		
-		reshape(nbRect.getWidth(), nbRect.getHeight());
-		setRect(nbRect);
-		fb->reshape(fbRect.getWidth(), fbRect.getHeight());
-		fb->setRect(fbRect);
-		
-		// propagate size to parent container
-		//getParent()->reshape(nbRect.getWidth(), nbRect.getHeight());
-	}
-	else
-	{
-		if (fpVisible)
-		{
-			// Navigation Panel must be hidden. Favorites Panel is visible.
-			nbRect.setLeftTopAndSize(nbRect.mLeft, 48, nbRect.getWidth(), 61);
-			fbRect.setLeftTopAndSize(fbRect.mLeft, 60, fbRect.getWidth(), 25);
-			
-			reshape(nbRect.getWidth(), nbRect.getHeight());
-			setRect(nbRect);
-			fb->reshape(fbRect.getWidth(), fbRect.getHeight());
-			fb->setRect(fbRect);
-		}
-	}
-	*/
 }
 
 void LLNavigationBar::showFavoritesPanel(BOOL visible)
+// AO: Rewrite for transparency
 {
 	
-	//bool npVisible = gSavedSettings.getBOOL("ShowNavbarNavigationPanel");
+	bool npVisible = gSavedSettings.getBOOL("ShowNavbarNavigationPanel");
 
 	LLFavoritesBarCtrl* fb = getChild<LLFavoritesBarCtrl>("favorite");
+	LLPanel* np = getChild<LLPanel>("navigation_panel");
+	LLRect curRect = getRect();
+	LLRect r = getRect();
+	
 	fb->setVisible(visible);
-
-	//LLRect nbRect(getRect());
-	//LLRect fbRect(fb->getRect());
-
-	/***** -AO redesigned navbars
+	
 	if (visible)
 	{
-		if (npVisible)
+		if (npVisible) // NavBar + FavBar
 		{
-			// Favorites Panel must be shown. Navigation Panel is visible.
-
-			S32 fbHeight = fbRect.getHeight();
-			S32 newHeight = nbRect.getHeight() + fbHeight + FAVBAR_TOP_PADDING;
-
-			nbRect.setLeftTopAndSize(nbRect.mLeft, nbRect.mTop, nbRect.getWidth(), newHeight);
-			fbRect.setLeftTopAndSize(mDefaultFpRect.mLeft, mDefaultFpRect.mTop, fbRect.getWidth(), fbRect.getHeight());
+			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom));
+			np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop + 5,curRect.mRight, mDefaultNpRect.mBottom + 5));
 		}
-		else
+		else 
 		{
-			// Favorites Panel must be shown. Navigation Panel is hidden.
-
-			S32 fpHeight = mDefaultFpRect.getHeight() + FAVBAR_TOP_PADDING;
-			S32 fpTop = fpHeight - (mDefaultFpRect.getHeight() / 2) + 1;
-
-			nbRect.setLeftTopAndSize(nbRect.mLeft, nbRect.mTop, nbRect.getWidth(), fpHeight);
-			fbRect.setLeftTopAndSize(fbRect.mLeft, fpTop, fbRect.getWidth(), mDefaultFpRect.getHeight());
+			// Show FavBar Only
+			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom+mDefaultNpRect.getHeight()+4));
 		}
-
-		reshape(nbRect.getWidth(), nbRect.getHeight());
-		setRect(nbRect);
-		getParent()->reshape(nbRect.getWidth(), nbRect.getHeight());
-
-		fb->reshape(fbRect.getWidth(), fbRect.getHeight());
-		fb->setRect(fbRect);
 	}
-	else
+	else 
 	{
-		if (npVisible)
+		if (npVisible) // NavBar
 		{
-			// Favorites Panel must be hidden. Navigation Panel is visible.
-
-			S32 fbHeight = fbRect.getHeight();
-			S32 newHeight = nbRect.getHeight() - fbHeight - FAVBAR_TOP_PADDING;
-
-			nbRect.setLeftTopAndSize(nbRect.mLeft, nbRect.mTop, nbRect.getWidth(), newHeight);
-		}
-		else
-		{
-			// Favorites Panel must be hidden. Navigation Panel is hidden.
-
-			nbRect.setLeftTopAndSize(nbRect.mLeft, nbRect.mTop, nbRect.getWidth(), 0);
-		}
-
-		reshape(nbRect.getWidth(), nbRect.getHeight());
-		setRect(nbRect);
-		getParent()->reshape(nbRect.getWidth(), nbRect.getHeight());
-	}
-
-
-	getChildView("bg_icon")->setVisible( npVisible && visible);
-	getChildView("bg_icon_no_fav_bevel")->setVisible( npVisible && !visible);
-	getChildView("bg_icon_no_nav_bevel")->setVisible( !npVisible && visible);
-	 */
-	 
+			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom + mDefaultFpRect.getHeight()));
+			np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop - mDefaultFpRect.getHeight() + 5,curRect.mRight, mDefaultNpRect.mBottom - mDefaultFpRect.getHeight() + 5));
 	
+		}
+		else 
+		{
+			// show nothing
+			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop+5,curRect.mRight, mDefaultNavContainerRect.mTop+5));
+		}
+	}
 }

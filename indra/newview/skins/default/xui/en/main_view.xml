@@ -83,13 +83,13 @@
                 name="hud container"
                    width="500">
 <!-- first element on rest of screen is top info bar - so is just below nav bar -->
-            <panel follows="left|top"
-                   height="50"
+            <panel follows="left|top|right"
+                   height="42"
                    left="0"
                    mouse_opaque="false"
                    name="topinfo_bar_container"
                    tab_stop="false"
-                   top="5"
+                   top="0"
                    visible="false"
                    width="1024"/>
 

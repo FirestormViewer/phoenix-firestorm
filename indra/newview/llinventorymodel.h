@@ -40,6 +40,10 @@
 #include <set>
 #include <string>
 #include <vector>
+//-TT Patch: ReplaceWornItemsOnly
+#include "llviewerobjectlist.h"
+#include "llvoavatarself.h"
+//-TT
 
 class LLInventoryObserver;
 class LLInventoryObject;
@@ -128,6 +132,12 @@ private:
 	LLUUID mRootFolderID;
 	LLUUID mLibraryRootFolderID;
 	LLUUID mLibraryOwnerID;	
+
+//-TT Patch: ReplaceWornItemsOnly
+	item_array_t mItemArray;
+	item_array_t mObjArray;
+	LLDynamicArray<std::string> mAttPoints;
+//-TT
 	
 	//--------------------------------------------------------------------
 	// Structure
@@ -257,6 +267,16 @@ public:
 	// Get the inventoryID or item that this item points to, else just return object_id
 	const LLUUID& getLinkedItemID(const LLUUID& object_id) const;
 	LLViewerInventoryItem* getLinkedItem(const LLUUID& object_id) const;
+
+//-TT Patch: ReplaceWornItemsOnly
+	void wearItemsOnAvatar(LLInventoryCategory* category);
+	void wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object, const LLViewerJointAttachment *attachment);
+
+private:
+	void wearWearablesOnAvatar(LLUUID category_id);
+	void wearAttachmentsOnAvatar(LLUUID category_id);
+	void wearGesturesOnAvatar(LLUUID category_id);
+//-TT
 private:
 	mutable LLPointer<LLViewerInventoryItem> mLastItem; // cache recent lookups	
 

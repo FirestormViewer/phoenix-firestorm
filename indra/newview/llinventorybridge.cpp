@@ -105,7 +105,7 @@ void dec_busy_count()
 void remove_inventory_category_from_avatar(LLInventoryCategory* category);
 void remove_inventory_category_from_avatar_step2( BOOL proceed, LLUUID category_id);
 //-TT Patch: ReplaceWornItemsOnly
-void wear_inventory_category_on_avatar(LLInventoryCategory* category, LLFolderView *fView);
+void wear_inventory_category_on_avatar(LLInventoryCategory* category);
 //-TT
 bool move_task_inventory_callback(const LLSD& notification, const LLSD& response, LLMoveInv*);
 bool confirm_attachment_rez(const LLSD& notification, const LLSD& response);
@@ -399,12 +399,31 @@ BOOL LLInvFVBridge::isClipboardPasteable() const
 // 			return FALSE;
 // 		}
 
-		const LLInventoryItem *item = model->getItem(item_id);
+//		const LLInventoryItem *item = model->getItem(item_id);
+		const LLViewerInventoryItem *item = model->getItem(item_id);
 		if (item)
 		{
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+			// Can't copy worn objects. DEV-15183 [see P-JIRA: http://jira.secondlife.com/browse/VWR-6110]
+			// TODO-Catznip: [SL-2.2.0] I don't think preventing copying worn items would prevent the bug that actually occurred?
+//			if ( (!item->getIsLinkType()) && (get_is_item_worn(item->getUUID())) )
+//			{
+//				return FALSE;
+//			}
+// [/SL:KB]
+
 			if (!item->getPermissions().allowCopyBy(agent_id))
 			{
-				return FALSE;
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+				// We allow copy/pasting of links as long as their target is available
+				// (and disallow if the user is trying to paste a folder link pointing to the current folder)
+				if ( (!item->getIsLinkType()) || (!item->getLinkedItem()) ||
+					 ((LLAssetType::AT_LINK_FOLDER == item->getActualType()) && (item->getLinkedUUID() == mUUID)) )
+				{
+					return FALSE;
+				}
+// [/SL:KB]
+//				return FALSE;
 			}
 		}
 	}
@@ -567,6 +586,7 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 					disabled_items.push_back(std::string("Copy Asset UUID"));
 				}
 			}
+/*
 			items.push_back(std::string("Copy Separator"));
 			
 			items.push_back(std::string("Copy"));
@@ -574,9 +594,21 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 			{
 				disabled_items.push_back(std::string("Copy"));
 			}
+*/
 			items.push_back(std::string("Cut"));
 		}
 	}
+
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+	items.push_back(std::string("Copy Separator"));
+	
+	items.push_back(std::string("Copy"));
+	if (!isItemCopyable())
+	{
+		disabled_items.push_back(std::string("Copy"));
+	}
+// [/SL:KB]
+
 
 	// Don't allow items to be pasted directly into the COF.
 	if (!isCOFFolder())
@@ -1355,7 +1387,10 @@ BOOL LLItemBridge::removeItem()
 	// we can't do this check because we may have items in a folder somewhere that is
 	// not yet in memory, so we don't want false negatives.  (If disabled, then we 
 	// know we only have links in the Outfits folder which we explicitly fetch.)
-	if (!gSavedSettings.getBOOL("InventoryLinking"))
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-06-01 (Catznip-2.2.0a) | Added: Catznip-2.0.1a
+	// Users move folders around and reuse links that way... if we know something has links then it's just bad not to warn them :|
+// [/SL:KB]
+//	if (!gSavedSettings.getBOOL("InventoryLinking"))
 	{
 		if (!item->getIsLinkType())
 		{
@@ -1410,14 +1445,23 @@ BOOL LLItemBridge::isItemCopyable() const
 	LLViewerInventoryItem* item = getItem();
 	if (item)
 	{
+/*
 		// Can't copy worn objects. DEV-15183
 		if(get_is_item_worn(mUUID))
 		{
 			return FALSE;
 		}
 
-		// You can never copy a link.
-		if (item->getIsLinkType())
+*/
+
+//		// You can never copy a link.
+//		if (item->getIsLinkType())
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+		// We'll allow copying a link if:
+		//   - its target is available
+		//   - it doesn't point to another link [see LLViewerInventoryItem::getLinkedItem() which returns NULL in that case]
+		if ( (item->getIsLinkType()) && (!item->getLinkedItem()) )
+// [/SL:KB]
 		{
 			return FALSE;
 		}
@@ -1425,7 +1469,14 @@ BOOL LLItemBridge::isItemCopyable() const
 		// All items can be copied in god mode since you can
 		// at least paste-as-link the item, though you 
 		// still may not be able paste the item.
-		return TRUE;
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+		// User can copy the item if:
+		//   - the item (or its target in the case of a link) is "copy"
+		//   - and/or if the item (or its target in the case of a link) has a linkable asset type
+		// NOTE: we do *not* want to return TRUE on everything like LL seems to do in SL-2.1.0 because not all types are "linkable"
+		return (item->getPermissions().allowCopyBy(gAgent.getID())) || (LLAssetType::lookupCanLink(item->getType()));
+// [/SL:KB]
+//		return TRUE;
 		// return (item->getPermissions().allowCopyBy(gAgent.getID()));
 	}
 	return FALSE;
@@ -2187,8 +2238,7 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 		LLViewerInventoryCategory* cat = getCategory();
 		if(!cat) return;
 
-		wear_inventory_category_on_avatar ( cat, mRoot );
-
+		gInventory.wearItemsOnAvatar(cat);
 		//		modifyOutfit(TRUE, TRUE);
 		return;
 	}
@@ -2423,13 +2473,31 @@ void LLFolderBridge::pasteFromClipboard()
 				}
 				else
 				{
-					copy_inventory_item(
-						gAgent.getID(),
-						item->getPermissions().getOwner(),
-						item->getUUID(),
-						parent_id,
-						std::string(),
-						LLPointer<LLInventoryCallback>(NULL));
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+					if (item->getPermissions().allowCopyBy(gAgent.getID()))
+					{
+// [/SL:KB]
+						copy_inventory_item(
+							gAgent.getID(),
+							item->getPermissions().getOwner(),
+							item->getUUID(),
+							parent_id,
+							std::string(),
+							LLPointer<LLInventoryCallback>(NULL));
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+					}
+					else if (LLAssetType::lookupIsLinkType(item->getActualType()))
+					{
+						link_inventory_item(
+							gAgent.getID(),
+							item->getLinkedUUID(),
+							parent_id,
+							item->getName(),
+							item->getDescription(),
+							item->getActualType(),
+							LLPointer<LLInventoryCallback>(NULL));
+					}
+// [/SL:KB]
 				}
 			}
 
@@ -4568,201 +4636,6 @@ LLWearableBridge::LLWearableBridge(LLInventoryPanel* inventory,
 {
 	mInvType = inv_type;
 }
-
-//-TT Patch: ReplaceWornItemsOnly
-// Collect all wearables, objects and gestures in the subtree, then wear them, 
-// replacing only relevant layers and attachment points
-void wear_inventory_category_on_avatar(LLInventoryCategory* category, LLFolderView *fView)
-{
-	if(!category) return;
-	llinfos << "ReplaceWornItemsOnly wear_inventory_category_on_avatar( " << category->getName()
-			 << " )" << llendl;
-
-	LLUUID category_id = category->getUUID();
-
-	// Find all the wearables that are in the category's subtree.
-	llinfos << "ReplaceWornItemsOnly find all wearables" << llendl;
-
-		LLInventoryModel::cat_array_t cat_array;
-		LLInventoryModel::item_array_t item_array;
-		LLFindWearables is_wearable;
-		gInventory.collectDescendentsIf(category_id,
-										cat_array,
-										item_array,
-										LLInventoryModel::EXCLUDE_TRASH,
-										is_wearable);
-		S32 i;
-		S32 wearable_count = item_array.count();
-
-		LLInventoryModel::cat_array_t	obj_cat_array;
-		LLInventoryModel::item_array_t	obj_item_array;
-		LLIsType is_object( LLAssetType::AT_OBJECT );
-		gInventory.collectDescendentsIf(category_id,
-										obj_cat_array,
-										obj_item_array,
-										LLInventoryModel::EXCLUDE_TRASH,
-										is_object);
-		S32 obj_count = obj_item_array.count();
-
-		// Find all gestures in this folder
-		LLInventoryModel::cat_array_t	gest_cat_array;
-		LLInventoryModel::item_array_t	gest_item_array;
-		LLIsType is_gesture( LLAssetType::AT_GESTURE );
-		gInventory.collectDescendentsIf(category_id,
-										gest_cat_array,
-										gest_item_array,
-										LLInventoryModel::EXCLUDE_TRASH,
-										is_gesture);
-		S32 gest_count = gest_item_array.count();
-
-		if (wearable_count > 0)	//Loop through wearables. 
-		{
-			//llinfos << "ReplaceWornItemsOnly wearable_count" << wearable_count << llendl;
-			int aTypes[LLWearableType::WT_COUNT] = {0};
-			
-			for(i = 0; i  < wearable_count; ++i)
-			{
-				//llinfos << "ReplaceWornItemsOnly wearable_count loop, i=" << i << llendl;
-				LLViewerInventoryItem *item = item_array.get(i);
-				int iType = (int)item->getWearableType();
-				//llinfos << "ReplaceWornItemsOnly wearable_count loop, iType=" << iType << llendl;
-				if (item->isWearableType() 
-					&& iType != LLWearableType::WT_INVALID 
-					&& iType != LLWearableType::WT_NONE 
-					&& !get_is_item_worn(item->getUUID())
-					)
-				{
-/*
-// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0c) | Modified: RLVa-0.2.2a
-					if ( (rlv_handler_t::isEnabled()) && (!gRlvWearableLocks.canRemove(item)) )
-						continue;
-// [/RLVa:KB]
-					LLWearableList::instance().getAsset(item->getAssetUUID(),
-														item->getName(),
-														item->getType(),
-														LLWearableBridge::onRemoveFromAvatarArrived,
-														new OnRemoveStruct(item->getLinkedUUID()));
-*/
-// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-2.2.0a) | Added: Catznip-2.1.1d
-					aTypes[iType]++;
-					if (aTypes[iType] == 1) //first occurence of type, remove first
-					{
-						U32 count = gAgentWearables.getWearableCount((LLWearableType::EType)iType);
-						//llinfos << "Type: " << iType << " count " << count << llendl;
-
-						for (U32 j=0; j<count; j++) //remove all
-						{
-							//take the first one from the list, since the list is diminishing.
-							LLWearable* wearable = gAgentWearables.getWearable((LLWearableType::EType)iType,0);
-							//if the item is from our folder - don't remove it
-							//for (LLViewerInventoryItem *item = item_array.get(i); 
-							if (item_array.find((LLViewerInventoryItem *)wearable) == -1)
-								LLAppearanceMgr::instance().removeItemFromAvatar(wearable->getItemID());
-							//llinfos << "Removing wearable name: " << wearable->getName() << llendl;
-						}
-						//now add the first item (replace just in case)
-						LLAppearanceMgr::instance().wearItemOnAvatar(item->getUUID(), true, true);
-						//llinfos << " Wearing item: " << item->getName() << " with replace=true" << llendl;
-					}
-					else // just add - unless it's body
-					{
-						if (!(iType == LLWearableType::WT_SHAPE) && !(iType == LLWearableType::WT_SKIN) && 
-							!(iType == LLWearableType::WT_HAIR) && !(iType == LLWearableType::WT_EYES))
-								LLAppearanceMgr::instance().wearItemOnAvatar(item->getUUID(), true, false);
-					}
-				}
-			}
-		}
-
-		if (obj_count > 0)
-		{
-			//all attachment points
-			//int oTypes[LLWearableType::WT_COUNT] = {0};
-			LLVOAvatar::attachment_map_t attachment_map;
-			//LLVector3 oTypes[obj_count] = {NULL};
-
-			for(i = 0; i  < obj_count; ++i)
-			{
-				LLViewerInventoryItem *obj_item = obj_item_array.get(i);
-
-				//rez_attachment(item, NULL, true); // Replace if "Wear"ing.
-				////LLFolderViewItem* folder_item = fView->getItemByID(obj_item->getLinkedUUID());
-				////if(!folder_item) continue;
-				////LLInvFVBridge* bridge = (LLInvFVBridge*)folder_item->getListener();
-				//////LLInvFVBridge* bridge = (LLInvFVBridge*)obj_item->getListener();
-				////if(!bridge) continue;
-				////bridge->performAction(&gInventory, "wear");
-
-				if (!get_is_item_worn(obj_item->getUUID()))
-				{
-					// first add the item without removing others
-					LLAppearanceMgr::instance().wearItemOnAvatar(obj_item->getUUID(), true, true);
-				//}
-			//}
-					////figure out where we added it
-					std::string attachment_point_name = gAgentAvatarp->getAttachedPointName(obj_item->getUUID());
-					//std::string attachment_point_name2 = gAgentAvatarp->getAttachedPointName(obj_item->getAssetUUID);
-					////S32 iCnt = gAgentAvatarp->getAttachmentCount();
-					////LLUUID attID = gAgentAvatarp->getAttachmentItemID();
-					LLViewerJointAttachment *attPoint = gAgentAvatarp->getWornAttachmentPoint(obj_item->getUUID());
-					std::string attName = attPoint->getName();
-					//
-					////check if there are other things on same point already
-					S32 numCnt = attPoint->getNumObjects();
-					//if (numCnt > 1)
-					//{
-					//	//attPoint->
-					//	//gAgentAvatarp->clampAttachmentPositions();
-					//	//LLVOAvatarSelf::detachAttachmentIntoInventory(obj_item->getLinkedUUID());
-					//}
-					////if any of those things aren't in our list - remove them
-
-					if (attachment_point_name == LLStringUtil::null) // Error condition, invalid attach point
-					{
-						attachment_point_name = "Invalid Attachment";
-					}
-					llinfos << "attachment_point_name" << attachment_point_name << llendl;
-					llinfos << "attName" << attName << llendl;
-					llinfos << "numCnt" << numCnt << llendl;
-					////// e.g. "(worn on ...)" / "(attached to ...)"
-					////LLStringUtil::format_map_t args;
-					////args["[ATTACHMENT_POINT]"] =  LLTrans::getString(attachment_point_name);
-
-					//LLVOAvatarSelf::detachAttachmentIntoInventory(obj_item->getLinkedUUID());
-					//LLVOAvatarSelf::attachObject(obj_item);
-				}
-			}
-
-			////ok, this is a kludge, but can we wait for the item to get attached 
-			////in order to query where it got attached? 
-			//for(i = 0; i  < obj_count; ++i)
-			//{
-			//	LLViewerInventoryItem *obj_item = obj_item_array.get(i);
-			//	if (!get_is_item_worn(obj_item->getUUID()))
-			//	{
-			//		// first add the item without removing others
-			//		LLAppearanceMgr::instance().wearItemOnAvatar(obj_item->getUUID(), true, false);
-			//	}
-			//}
-
-		}
-
-		if (gest_count > 0)
-		{
-			for(i = 0; i  < gest_count; ++i)
-			{
-				LLViewerInventoryItem *gest_item = gest_item_array.get(i);
-				if (get_is_item_worn(gest_item->getUUID()))
-				{
-					LLGestureMgr::instance().activateGesture( gest_item->getLinkedUUID() );
-					gInventory.updateItem( gest_item );
-					gInventory.notifyObservers();
-				}
-			}
-		}
-}
-//-TT
-
 
 void remove_inventory_category_from_avatar( LLInventoryCategory* category )
 {
