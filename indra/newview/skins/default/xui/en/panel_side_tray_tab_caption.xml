@@ -63,5 +63,4 @@
       
         <button.commit_callback
          function="Button.ShowHelp" />
-    </button>
 </panel>
