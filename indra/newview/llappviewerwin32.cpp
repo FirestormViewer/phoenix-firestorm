@@ -317,7 +317,8 @@ void create_console()
 	h_con_handle = _open_osfhandle(l_std_handle, _O_TEXT);
 	fp = _fdopen( h_con_handle, "w" );
 	*stderr = *fp;
-	setvbuf( stderr, NULL, _IONBF, 0 );
+	setvbuf( stderr, NULL, _IOFBF, 1024 );  //Assigning a buffer improves speed a LOT, esp on vista/win7
+											//_IOLBF is borked. 
 }
 
 LLAppViewerWin32::LLAppViewerWin32(const char* cmd_line) :

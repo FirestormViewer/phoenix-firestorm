@@ -154,6 +154,9 @@ namespace {
 				}
 			}
 			fprintf(stderr, "%s\n", message.c_str());
+#if LL_WINDOWS 
+	fflush(stderr); //Now using a buffer. flush is required. 
+#endif 
 			if (ANSI_YES == mUseANSI) colorANSI("0"); // reset
 		}
 	

@@ -106,7 +106,7 @@ LLDir_Win32::LLDir_Win32()
 	}
 	else
 	{
-		fprintf(stderr, "Couldn't get APP path, assuming current directory!");
+		LL_WARNS("AppInit") << "Couldn't get APP path, assuming current directory!\n" << LL_ENDL;
 		GetCurrentDirectory(MAX_PATH, w_str);
 		mExecutableDir = utf16str_to_utf8str(llutf16string(w_str));
 		// Assume it's the current directory
