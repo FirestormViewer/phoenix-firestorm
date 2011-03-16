@@ -185,19 +185,15 @@ void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( true);
 	
-	
-//	mInfoBtn->setVisible(mShowInfoBtn);
-//	mProfileBtn->setVisible(mShowProfileBtn);
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
-	
 	// AO: behave differently based on which avlist we are. Should move this into XUI or subclasses.
 	std::string listName = getParent()->getParent()->getName();	
-	// AO - V1 UI, icon space is at a premium. Remove the hover-context icons, use right-click context menu instead.
 	if ( listName == "speakers_list" )
+	{
+		//LLButton* b1 = getChild<LLButton>("info_btn");
+		//b1->setVisible(TRUE);
+		
 		mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
-	
-	//mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
-// [/RLVa:KB]
+	}
 
 	mHovered = true;
 	LLPanel::onMouseEnter(x, y, mask);
@@ -209,9 +205,8 @@ void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 void LLAvatarListItem::onMouseLeave(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( false);
-	mInfoBtn->setVisible(false);
-	mProfileBtn->setVisible(false);
 
+	mInfoBtn->setVisible(false);
 	mHovered = false;
 	LLPanel::onMouseLeave(x, y, mask);
 	updateChildren();
@@ -668,16 +663,17 @@ LLAvatarListItem::icon_color_map_t& LLAvatarListItem::getItemIconColorMap()
 // static
 void LLAvatarListItem::initChildrenWidths(LLAvatarListItem* avatar_item)
 {
+
 	//speaking indicator width + padding
 	//S32 speaking_indicator_width = avatar_item->getRect().getWidth() - avatar_item->mSpeakingIndicator->getRect().mLeft;
-	S32 speaking_indicator_width = 18;
+	S32 speaking_indicator_width = 20;
 
 	//profile btn width + padding
 	//S32 profile_btn_width = avatar_item->mSpeakingIndicator->getRect().mLeft - avatar_item->mProfileBtn->getRect().mLeft;
-	S32 profile_btn_width = 0;
+	S32 profile_btn_width = 18;
 	
 	//info btn width + padding
-	S32 info_btn_width = avatar_item->mProfileBtn->getRect().mLeft - avatar_item->mInfoBtn->getRect().mLeft;
+	S32 info_btn_width = 40;
 	
 	// online permission icon width + padding
 	//S32 permission_online_width = avatar_item->mInfoBtn->getRect().mLeft - avatar_item->mIconPermissionOnline->getRect().mLeft;
@@ -718,6 +714,7 @@ void LLAvatarListItem::initChildrenWidths(LLAvatarListItem* avatar_item)
 	sChildrenWidths[--index] = profile_btn_width;
 	sChildrenWidths[--index] = speaking_indicator_width;
 	//llassert(index == 0);
+	
 }
 
 void LLAvatarListItem::updateChildren()
