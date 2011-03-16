@@ -782,10 +782,16 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
     
 	for(S32 i = 0;i<(S32)sMediaFilterList.size();i++)
 	{
-		if (sMediaFilterList[i]["domain"].asString() == domain)
+		std::string listed_domain = sMediaFilterList[i]["domain"].asString();
+		if (domain.length() >= listed_domain.length())
 		{
-			media_action = sMediaFilterList[i]["action"].asString();
-			break;
+			size_t pos = domain.rfind(listed_domain);
+			if ((pos != std::string::npos) && 
+				(pos == domain.length()-listed_domain.length()))
+			{
+				media_action = sMediaFilterList[i]["action"].asString();
+				break;
+			}
 		}
 	}
 	if (media_action=="allow")
@@ -977,10 +983,16 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
     
 	for(S32 i = 0;i<(S32)sMediaFilterList.size();i++)
 	{
-		if (sMediaFilterList[i]["domain"].asString() == domain)
+		std::string listed_domain = sMediaFilterList[i]["domain"].asString();
+		if (domain.length() >= listed_domain.length())
 		{
-			media_action = sMediaFilterList[i]["action"].asString();
-			break;
+			size_t pos = domain.rfind(listed_domain);
+			if ((pos != std::string::npos) && 
+				(pos == domain.length()-listed_domain.length()))
+			{
+				media_action = sMediaFilterList[i]["action"].asString();
+				break;
+			}
 		}
 	}
 	if (media_action=="allow")
