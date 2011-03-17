@@ -55,16 +55,22 @@ void StreamTitleDisplay::checkMetadata()
 		std::string title = gAudiop->getStreamingAudioImpl()->getCurrentTitle();
 		std::string artist = gAudiop->getStreamingAudioImpl()->getCurrentArtist();
 		// Sometimes we get blanks...
+		chat.mText = "";
+		if(artist.length() > 0)
+		{
+			chat.mText = artist;
+		}
 		if(title.length() > 0)
 		{
-			if(artist.length() > 0)
+			if (chat.mText.length() > 0)
 			{
-				chat.mText = "Now playing: " + artist + " - " + title;
+				chat.mText += " - ";
 			}
-			else
-			{
-				chat.mText = "Now playing: " + title;
-			}
+			chat.mText += title;
+		}
+		if (chat.mText.length() > 0)
+		{
+			chat.mText = "Now playing: " + chat.mText;
 			chat.mSourceType = CHAT_SOURCE_SYSTEM;
 			LLSD args;
 			args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
