@@ -120,7 +120,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 			     left_pad="5"
 			     name="header_age"
 			     top="2"
-			     right="-97"
+			     right="-117"
 			     width="30">AGE</text>
 			    <text
 			     follows="right"
@@ -130,7 +130,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 			     left_pad="5"
 			     name="header_seen"
 			     top="2"
-			     right="-35"
+			     right="-56"
 			     width="50">SEEN</text>
 			    <text
 			     follows="right"
@@ -139,7 +139,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 			     layout="topleft"
 			     left_pad="5"
 			     name="header_range"
-			     right="-1"
+			     right="-14"
 			     top="2"
 			     value=" RANGE"
 			     width="40"/>
