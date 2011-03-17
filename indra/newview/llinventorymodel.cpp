@@ -2960,6 +2960,7 @@ void LLInventoryModel::wearWearablesOnAvatar(LLUUID category_id)
 {
 	LLInventoryModel::cat_array_t cat_array;
 
+	mItemArray.clear();
 	LLFindWearables is_wearable;
 	gInventory.collectDescendentsIf(category_id,
 									cat_array,
