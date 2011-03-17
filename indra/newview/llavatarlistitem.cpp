@@ -673,7 +673,7 @@ void LLAvatarListItem::initChildrenWidths(LLAvatarListItem* avatar_item)
 	S32 profile_btn_width = 18;
 	
 	//info btn width + padding
-	S32 info_btn_width = 40;
+	S32 info_btn_width = 20;
 	
 	// online permission icon width + padding
 	//S32 permission_online_width = avatar_item->mInfoBtn->getRect().mLeft - avatar_item->mIconPermissionOnline->getRect().mLeft;
@@ -892,9 +892,6 @@ LLView* LLAvatarListItem::getItemChildView(EAvatarListItemChildIndex child_view_
 		break;
 	case ALIC_PROFILE_BUTTON:
 		child_view = mProfileBtn;
-		break;
-	case ALIC_RANGE:
-		child_view = mNearbyRange;
 		break;
 	default:
 		LL_WARNS("AvatarItemReshape") << "Unexpected child view index is passed: " << child_view_index << LL_ENDL;
