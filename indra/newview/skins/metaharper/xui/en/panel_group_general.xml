@@ -42,16 +42,28 @@ Hover your mouse over the options for more help.
      layout="topleft">
     Group Key:
     </text>
-
-    <line_editor
-     name="phoenix_guuid-pre"
-     label="Group Key:"
+     
+    <view_border
      left_pad="0"
      top="0"
      width="282"
+     height="18"
+     bevel_style="in"
+     follows="left|top|right"
+     name="info_border" />
+    <text_editor
+     name="group_key"
+     label="Group Key:"
+     left_delta="0"
+     top_delta="0"
+     width="282"
      height="20"
-     initial_value="(loading ...)"
+     h_pad="4"
+     v_pad="3"
+     bg_visible="false"
      enabled="false"
+     allow_scroll="false"
+     initial_value="(loading ...)"
      follows="top|left|right"
      layout="topleft" />
 
@@ -61,6 +73,7 @@ Hover your mouse over the options for more help.
      right="-1"
      height="20"
      label="Copy URI"
+     enabled="false"
      follows="top|right" />
 
     <text
