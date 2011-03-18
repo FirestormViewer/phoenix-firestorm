@@ -43,14 +43,14 @@ Hover your mouse over the options for more help.
     Group Key:
     </text>
 
-    <line_editor
+<line_editor
      name="group_key"
      label="Group Key:"
      left_pad="0"
      top="0"
      width="282"
      height="20"
-     initial_value="(loading ...)"
+     initial_value="(Feature in progress...)"
      enabled="false"
      follows="top|left|right"
      layout="topleft" />
@@ -61,6 +61,7 @@ Hover your mouse over the options for more help.
      right="-1"
      height="20"
      label="Copy URI"
+     enabled="false"
      follows="top|right" />
 
     <text
