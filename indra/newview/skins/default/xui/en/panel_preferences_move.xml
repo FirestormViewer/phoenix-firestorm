@@ -59,11 +59,11 @@
 		control_name="DisableCameraConstraints"
 		height="16"
 		initial_value="true"
-		label="Disable camera Constraints (move it more freely)"
+		label="Allow greater camera freedom"
 		layout="topleft"
 		left_delta="0"
 		name="DisableCameraConstraints"
-		tool_tip="Set this to move your camera beyond it's normal bounds and below land level"
+		tool_tip="Set this to move your camera beyond its normal bounds and below land level. If you are not good at moving the camera, more of your shots may be at bad angles."
 		top_pad="7"
 		width="315"/>
   <text
@@ -73,9 +73,9 @@
   height="10"
   left="80"
   name="heading2"
-  width="270"
+  width="300"
   top_pad="5">
-    Automatic set your avatar pose during (select any number):
+    Automatically pose avatar during (select one or more):
   </text>
   <check_box
      control_name="EditCameraMovement"

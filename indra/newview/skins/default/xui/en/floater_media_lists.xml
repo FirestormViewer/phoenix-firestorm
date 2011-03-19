@@ -3,7 +3,7 @@
 	can_close="true"
 	can_drag_on_left="false"
 	can_minimize="true"
-    can_resize="false"
+    can_resize="true"
 	enabled="true"
 	height="300"
     name="floatermedialists"
@@ -11,165 +11,246 @@
     width="460"
 	rect_control="MediaListRect">
 
+	<layout_stack
+		name="lists_layout_stack"
+		left="10"
+		top="10"
+		right="-10"
+		height="230"
+		follows="all"
+		orientation="horizontal"
+		layout="topleft">
+
+	<layout_panel
+		name="whitelist_layout_panel"
+		width="220"
+		height="200"
+		auto_resize="true"
+		follows="all"
+		layout="topleft">
+
 	<text
-		bottom="40"
+		left="0"
+		top="0"
+		right="-5"
+		height="16"
 		enabled="true"
 		follows="left|right|top"
 		font="SansSerifSmall"
-		height="16"
-		initial_value="false"
-		left="20"
 		mouse_opaque="true"
-		name="whitelist_text"
-		radio_style="false"
-		width="195">
-		Whitelist Domains
+		name="whitelist_text">
+		Whitelist Domains:
 	</text>
 
 	<scroll_list
+		left_delta="0"
+		top_pad="4"
+		right="-5"
+		height="160"
+		follows="all"
 		background_visible="true"
-		bottom="210"
 		column_padding="5"
 		draw_border="true"
 	    draw_heading="false"
-		height="160"
-		left="20"
 		mouse_opaque="true"
 	    multi_select="false"
-		name="whitelist_list"
-		width="195">
+		name="whitelist_list">
 		<column label="Whitelist" name="whitelist_col" width="195" />
 	</scroll_list>
 
+	<layout_stack
+		name="whitelist_buttons_layout_stack"
+		left="0"
+		top_pad="4"
+		height="16"
+		follows="left|right|bottom"
+		orientation="horizontal"
+		layout="topleft">
+
+	<layout_panel
+		name="whitelist_buttons_panel_add"
+		width="110"
+		height="16"
+		user_resize="false"
+		auto_resize="true"
+		follows="all"
+		layout="topleft">
+
 	<button
-		bottom_delta="20"
+		top="0"
+		left="0"
+		height="16"
+		right="-2"
 		enabled="true"
-		follows="bottom"
+		follows="all"
 		font="SansSerifSmall"
 		halign="center"
-		height="16"
 		label="Add..."
 		label_selected="Add..."
-		left_delta="5"
 		mouse_opaque="true"
-		name="add_whitelist"
-		scale_image="true"
-		width="80" />
+		name="add_whitelist" />
+
+	</layout_panel>
+	<layout_panel
+		name="whitelist_buttons_panel_remove"
+		width="110"
+		height="16"
+		auto_resize="true"
+		follows="all"
+		layout="topleft">
 
 	<button
-		bottom_delta="0"
+		top="0"
+		left="2"
+		height="16"
+		right="-1"
 		enabled="true"
-		follows="bottom"
+		follows="all"
 		font="SansSerifSmall"
 		halign="center"
-		height="16"
 		label="Remove"
 		label_selected="Remove"
-		left_delta="100"
 		mouse_opaque="true"
-		name="remove_whitelist"
-		scale_image="true"
-		width="80" />
+		name="remove_whitelist" />
+
+	</layout_panel>
+	</layout_stack>
+
+	</layout_panel>
+
+	<layout_panel
+		name="blacklist_layout_panel"
+		width="220"
+		height="200"
+		auto_resize="true"
+		follows="all"
+		layout="topleft">
 
 	<text
-		bottom="40"
+		left="5"
+		top="0"
+		right="-1"
+		height="16"
 		enabled="true"
 		follows="left|right|top"
 		font="SansSerifSmall"
-		height="16"
-		initial_value="false"
-		left="240"
 		mouse_opaque="true"
-		name="blacklist_text"
-		radio_style="false"
-		width="195">
-		Blacklist Domains
+		name="blacklist_text">
+		Blacklist Domains:
 	</text>
 
 	<scroll_list
+		left_delta="0"
+		top_pad="4"
+		right="-1"
+		height="160"
+		follows="all"
 		background_visible="true"
-		bottom="210"
 		column_padding="5"
 		draw_border="true"
 	    draw_heading="false"
-		height="160"
-		left="240"
 		mouse_opaque="true"
 	    multi_select="false"
-		name="blacklist_list"
-		width="195">
+		name="blackelist_list">
 		<column label="Blacklist" name="blacklist_col" width="195" />
 	</scroll_list>
 
+	<layout_stack
+		name="blacklist_buttons_layout_stack"
+		left="0"
+		top_pad="4"
+		height="16"
+		follows="left|right|bottom"
+		orientation="horizontal"
+		layout="topleft">
+
+	<layout_panel
+		name="blacklist_buttons_panel_add"
+		width="110"
+		height="16"
+		user_resize="false"
+		auto_resize="true"
+		follows="all"
+		layout="topleft">
+
 	<button
-		bottom_delta="20"
+		top="0"
+		left="0"
+		height="16"
+		right="-2"
 		enabled="true"
-		follows="bottom"
+		follows="all"
 		font="SansSerifSmall"
 		halign="center"
-		height="16"
 		label="Add..."
 		label_selected="Add..."
-		left_delta="5"
 		mouse_opaque="true"
-		name="add_blacklist"
-		scale_image="true"
-		width="80" />
+		name="add_blacklist" />
+
+	</layout_panel>
+	<layout_panel
+		name="blacklist_buttons_panel_remove"
+		width="110"
+		height="16"
+		auto_resize="true"
+		follows="all"
+		layout="topleft">
 
 	<button
-		bottom_delta="0"
+		top="0"
+		left="2"
+		height="16"
+		right="-1"
 		enabled="true"
-		follows="bottom"
+		follows="all"
 		font="SansSerifSmall"
 		halign="center"
-		height="16"
 		label="Remove"
 		label_selected="Remove"
-		left_delta="100"
 		mouse_opaque="true"
-		name="remove_blacklist"
-		scale_image="true"
-		width="80" />
+		name="remove_blacklist" />
 
+	</layout_panel>
+	</layout_stack>
+
+	</layout_panel>
+	</layout_stack>
+
+<!-- This text will be replaced accordingly to ast for a URL/Domain to add to white-/blacklist -->
 	<text
 		bottom="250"
 		enabled="true"
-		follows="left|right|top"
+		follows="left|right|bottom"
 		font="SansSerifSmall"
 		height="16"
-		initial_value="false"
-		left="20"
+		initial_value="Enter URL here:"
+		top_pad="8"
 		mouse_opaque="true"
 		name="add_text"
-		radio_style="false"
-		width="300"
 		visible="false" />
-
 
 	<line_editor
 		visible="false"
 		bevel_style="in"
 		border_style="line"
 		border_thickness="1"
-		bottom_delta="20"
-		follows="left|top|right"
+		top_pad="4"
+		follows="left|bottom|right"
 		font="SansSerifSmall"
 		height="16"
-		left="20"
-		max_length="255"
 		name="input_domain"
-		right="-120"
+		right="-94"
 		select_all_on_focus_received="true"
 		select_on_focus="true"/>
 
 	<button
 		visible="false"
-		bottom_delta="0"
 		enabled="true"
-		follows="bottom"
+		follows="bottom|right"
 		font="SansSerifSmall"
 		halign="center"
 		height="16"
+		left_pad="4"
 		label="Add"
 		label_selected="Add"
 		left_delta="326"
@@ -177,5 +258,6 @@
 		name="commit_domain"
 		scale_image="true"
 		width="80" />
+
 
 </floater>

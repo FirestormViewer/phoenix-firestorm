@@ -2,7 +2,7 @@
 <panel
  background_visible="true"
  follows="all"
- height="480"
+ height="460"
  layout="topleft"
  min_height="350"
  name="panel_target_profile"
@@ -20,20 +20,18 @@
   </string>
   <tab_container
    follows="all"
-   height="520"
+   height="460"
    halign="center"
    layout="topleft"
    left="0"
    name="tabs"
-   tab_min_width="80"
-   tab_height="16"
    tab_position="top"
    top_pad="5"
    width="420">
     <panel
      class="panel_profile"
      filename="panel_profile_secondlife.xml"
-     label="2nd Life"
+     label="AVATAR"
      layout="topleft"
      help_topic="profile_profile_tab"
      name="panel_profile" />
@@ -47,7 +45,7 @@
     <panel
      class="panel_profile_firstlife"
      filename="panel_profile_firstlife.xml"
-     label="1st Life"
+     label="MORE INFO"
      layout="topleft"
      help_topic="profile_profile_tab"
      name="panel_profile_firstlife" />

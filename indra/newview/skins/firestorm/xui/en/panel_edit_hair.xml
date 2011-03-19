@@ -12,12 +12,12 @@
 	 <panel
 	  border="false"
 	  follows="top|left|right"
-	  height="90"
+	  height="80"
 	  left="0"
 	  layout="topleft"
 	  name="avatar_hair_color_panel"
-	  top="120"
-	  width="80" >
+	  top="0"
+	  width="333" >
             <texture_picker
              can_apply_immediately="true"
              default_image_name="Default"
@@ -28,7 +28,7 @@
              left="5"
              name="Texture"
              tool_tip="Click to choose a picture"
-             top="0"
+             top="5"
              width="64" >
               <texture_picker.commit_callback
                   function="TexturePicker.Commit" />
@@ -40,11 +40,10 @@
        fit_parent="true"
        layout="topleft"
        follows="all"
-       halign="left"
-       tab_position="left"
-       tab_width="80"
-       top="0"
-       height="385"
+       tab_position="top"
+       top_pad="0"
+       left="0"
+       height="320"
        width="333">
 
       <!-- Begin Color Panel -->
@@ -54,13 +53,13 @@
        layout="topleft"
        fit_parent="false"
        follows="left"
-       height="385"
+       height="320"
        width="333">
       <!-- Viewer demands an accordion here, so we provide one -->
       <accordion
        layout="topleft"
        follows="all"
-       height ="385"
+       height ="320"
        left="0"
        name="hair_color_accordion"
        top="0"
@@ -77,10 +76,10 @@
       <scrolling_panel_list
        layout="topleft"
        follows="all"
-       left="10"
+       left="0"
        name="hair_color_param_list"
-       top="10"
-       height="385"
+       top="0"
+       height="266"
        width="333" />
       </accordion_tab>
       </accordion>
@@ -94,13 +93,13 @@
        layout="topleft"
        fit_parent="false"
        follows="left"
-       height="385"
+       height="320"
        width="333">
       <!-- Viewer demands an accordion here, so we provide one -->
       <accordion
        layout="topleft"
        follows="all"
-       height ="385"
+       height ="320"
        left="0"
        name="hair_style_accordion"
        top="0"
@@ -117,10 +116,10 @@
       <scrolling_panel_list
        layout="topleft"
        follows="all"
-       left="10"
+       left="0"
        name="hair_style_param_list"
-       top="10"
-       height="385"
+       top="0"
+       height="266"
        width="333" />
       </accordion_tab>
       </accordion>
@@ -134,13 +133,13 @@
        layout="topleft"
        fit_parent="false"
        follows="left"
-       height="385"
+       height="320"
        width="333">
       <!-- Viewer demands an accordion here, so we provide one -->
       <accordion
        layout="topleft"
        follows="all"
-       height ="385"
+       height ="320"
        left="0"
        name="hair_eyebrows_accordion"
        top="0"
@@ -157,10 +156,10 @@
       <scrolling_panel_list
        layout="topleft"
        follows="all"
-       left="10"
+       left="0"
        name="hair_eyebrows_param_list"
-       top="10"
-       height="385"
+       top="0"
+       height="266"
        width="333" />
       </accordion_tab>
       </accordion>
@@ -174,13 +173,13 @@
        layout="topleft"
        fit_parent="false"
        follows="left"
-       height="385"
+       height="320"
        width="333">
       <!-- Viewer demands an accordion here, so we provide one -->
       <accordion
        layout="topleft"
        follows="all"
-       height ="385"
+       height ="320"
        left="0"
        name="hair_facial_accordion"
        top="0"
@@ -197,10 +196,10 @@
       <scrolling_panel_list
        layout="topleft"
        follows="all"
-       left="10"
+       left="0"
        name="hair_facial_param_list"
-       top="10"
-       height="385"
+       top="0"
+       height="266"
        width="333" />
       </accordion_tab>
       </accordion>

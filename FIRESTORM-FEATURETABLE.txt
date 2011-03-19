@@ -57,9 +57,8 @@ TabbedOutfits&Shape	LGPL
 MediaFilter		LGPL
 ResizableCamaeraControl	LGPL
 FolderStyleOutfits	LGPL
-TabLayerEditorLayout	LGPL
-TabShapeEditorLayout	LGPL
 PrivateLookat		LGPL (from ArminW/Kokua)
 PreviewAnimations	LGPL (from ARminW/Kokua)
 LSLmediaToggle		LGPL
 ImprovedRadar		LGPL
+Resizable_Profiles	LGPL
