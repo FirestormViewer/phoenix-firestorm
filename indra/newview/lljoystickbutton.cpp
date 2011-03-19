@@ -527,7 +527,7 @@ void LLJoystickCameraRotate::draw()
 {
 	LLGLSUIDefault gls_ui;
 
-	getImageUnselected()->draw( 0, 0 );
+  getImageUnselected()->draw( getLocalRect() );
 	LLPointer<LLUIImage> image = getImageSelected();
 
 	if( mInTop )
@@ -579,17 +579,20 @@ void LLJoystickCameraRotate::drawRotatedImage( LLPointer<LLUIImage> image, S32 r
 	
 	gGL.begin(LLRender::QUADS);
 	{
+    S32 scaledWidth = getLocalRect().getWidth();
+    S32 scaledHeight = getLocalRect().getHeight();
+
 		gGL.texCoord2fv( uv[ (rotations + 0) % 4]);
-		gGL.vertex2i(width, height );
+    gGL.vertex2i(scaledWidth, scaledHeight );
 
 		gGL.texCoord2fv( uv[ (rotations + 1) % 4]);
-		gGL.vertex2i(0, height );
+    gGL.vertex2i(0, scaledHeight );
 
 		gGL.texCoord2fv( uv[ (rotations + 2) % 4]);
 		gGL.vertex2i(0, 0);
 
 		gGL.texCoord2fv( uv[ (rotations + 3) % 4]);
-		gGL.vertex2i(width, 0);
+    gGL.vertex2i(scaledWidth, 0);
 	}
 	gGL.end();
 }
