@@ -22,7 +22,7 @@
          left="0"
          name="avatar_height"
          top="0"
-         width="310">
+         width="333">
      </text>
 
     <tab_container
@@ -30,26 +30,26 @@
        fit_parent="true"
        layout="topleft"
        follows="all"
-       halign="left"
-       tab_position="left"
-       tab_width="80"
-       height="385"
+       tab_position="top"
+       height="384"
        width="333">
 
       <!-- Begin Body Panel -->
       <panel
        name="shape_body_tab_holder"
        title="Body"
+       top_pad="0"
+       left="0"
        layout="topleft"
        fit_parent="false"
-       follows="left"
-       height="385"
+       follows="all"
+       height="384"
        width="333">
       <!-- Viewer demands an accordion here, so we provide one -->
       <accordion
        layout="topleft"
        follows="all"
-       height ="385"
+       height ="384"
        left="0"
        name="shape_body_accordion"
        top="0"
@@ -65,11 +65,11 @@
       <!-- Viewer will replace things here with tiled editing views -->
 	  <scrolling_panel_list
        layout="topleft"
-	   follows="all"
-       left="10"
+	     follows="all"
+       left="0"
        name="shape_body_param_list"
-       top="10"
-       height="385"
+       top="0"
+       height="330"
        width="333" />
       </accordion_tab>
       </accordion>
@@ -80,16 +80,18 @@
       <panel
        name="shape_head_tab_holder"
        title="Head"
+       top_pad="0"
+       left="0"
        layout="topleft"
        fit_parent="false"
-       follows="left"
-       height="385"
+       follows="all"
+       height="384"
        width="333">
       <!-- Viewer demands an accordion here, so we provide one -->
       <accordion
        layout="topleft"
        follows="all"
-       height ="385"
+       height ="384"
        left="0"
        name="shape_head_accordion"
        top="0"
@@ -106,10 +108,10 @@
       <scrolling_panel_list
        layout="topleft"
        follows="all"
-       left="10"
+       left="0"
        name="shape_head_param_list"
-       top="10"
-       height="385"
+       top="0"
+       height="330"
        width="333" />
       </accordion_tab>
       </accordion>
@@ -120,16 +122,18 @@
       <panel
        name="shape_eyes_tab_holder"
        title="Eyes"
+       top_pad="0"
+       left="0"
        layout="topleft"
        fit_parent="false"
-       follows="left"
-       height="385"
+       follows="all"
+       height="384"
        width="333">
       <!-- Viewer demands an accordion here, so we provide one -->
       <accordion
        layout="topleft"
        follows="all"
-       height ="385"
+       height ="384"
        left="0"
        name="shape_eyes_accordion"
        top="0"
@@ -146,10 +150,10 @@
       <scrolling_panel_list
        layout="topleft"
        follows="all"
-       left="10"
+       left="0"
        name="shape_eyes_param_list"
-       top="10"
-       height="385"
+       top="0"
+       height="330"
        width="333" />
       </accordion_tab>
       </accordion>
@@ -160,16 +164,18 @@
       <panel
        name="shape_ears_tab_holder"
        title="Ears"
+       top_pad="0"
+       left="0"
        layout="topleft"
        fit_parent="false"
-       follows="left"
-       height="385"
+       follows="all"
+       height="384"
        width="333">
       <!-- Viewer demands an accordion here, so we provide one -->
       <accordion
        layout="topleft"
        follows="all"
-       height ="385"
+       height ="384"
        left="0"
        name="shape_ears_accordion"
        top="0"
@@ -186,10 +192,10 @@
       <scrolling_panel_list
        layout="topleft"
        follows="all"
-       left="10"
+       left="0"
        name="shape_ears_param_list"
-       top="10"
-       height="385"
+       top="0"
+       height="330"
        width="333" />
       </accordion_tab>
       </accordion>
@@ -200,16 +206,18 @@
       <panel
        name="shape_nose_tab_holder"
        title="Nose"
+       top_pad="0"
+       left="0"
        layout="topleft"
        fit_parent="false"
-       follows="left"
-       height="385"
+       follows="all"
+       height="384"
        width="333">
       <!-- Viewer demands an accordion here, so we provide one -->
       <accordion
        layout="topleft"
        follows="all"
-       height ="385"
+       height ="384"
        left="0"
        name="shape_nose_accordion"
        top="0"
@@ -226,10 +234,10 @@
       <scrolling_panel_list
        layout="topleft"
        follows="all"
-       left="10"
+       left="0"
        name="shape_nose_param_list"
-       top="10"
-       height="385"
+       top="0"
+       height="330"
        width="333" />
       </accordion_tab>
       </accordion>
@@ -240,16 +248,18 @@
       <panel
        name="shape_mouth_tab_holder"
        title="Mouth"
+       top_pad="0"
+       left="0"
        layout="topleft"
        fit_parent="false"
-       follows="left"
-       height="385"
+       follows="all"
+       height="384"
        width="333">
       <!-- Viewer demands an accordion here, so we provide one -->
       <accordion
        layout="topleft"
        follows="all"
-       height ="385"
+       height ="384"
        left="0"
        name="shape_mouth_accordion"
        top="0"
@@ -266,10 +276,10 @@
       <scrolling_panel_list
        layout="topleft"
        follows="all"
-       left="10"
+       left="0"
        name="shape_mouth_param_list"
-       top="10"
-       height="385"
+       top="0"
+       height="330"
        width="333" />
       </accordion_tab>
       </accordion>
@@ -280,16 +290,18 @@
       <panel
        name="shape_chin_tab_holder"
        title="Chin"
+       top_pad="0"
+       left="0"
        layout="topleft"
        fit_parent="false"
-       follows="left"
-       height="385"
+       follows="all"
+       height="384"
        width="333">
       <!-- Viewer demands an accordion here, so we provide one -->
       <accordion
        layout="topleft"
        follows="all"
-       height ="385"
+       height ="384"
        left="0"
        name="shape_chin_accordion"
        top="0"
@@ -306,10 +318,10 @@
       <scrolling_panel_list
        layout="topleft"
        follows="all"
-       left="10"
+       left="0"
        name="shape_chin_param_list"
-       top="10"
-       height="385"
+       top="0"
+       height="330"
        width="333" />
       </accordion_tab>
       </accordion>
@@ -320,16 +332,18 @@
       <panel
        name="shape_torso_tab_holder"
        title="Torso"
+       top_pad="0"
+       left="0"
        layout="topleft"
        fit_parent="false"
-       follows="left"
-       height="385"
+       follows="all"
+       height="384"
        width="333">
       <!-- Viewer demands an accordion here, so we provide one -->
       <accordion
        layout="topleft"
        follows="all"
-       height ="385"
+       height ="384"
        left="0"
        name="shape_torso_accordion"
        top="0"
@@ -346,10 +360,10 @@
       <scrolling_panel_list
        layout="topleft"
        follows="all"
-       left="10"
+       left="0"
        name="shape_torso_param_list"
-       top="10"
-       height="385"
+       top="0"
+       height="330"
        width="333" />
       </accordion_tab>
       </accordion>
@@ -360,16 +374,18 @@
       <panel
        name="shape_legs_tab_holder"
        title="Legs"
+       top_pad="0"
+       left="0"
        layout="topleft"
        fit_parent="false"
-       follows="left"
-       height="385"
+       follows="all"
+       height="384"
        width="333">
       <!-- Viewer demands an accordion here, so we provide one -->
       <accordion
        layout="topleft"
        follows="all"
-       height ="385"
+       height ="384"
        left="0"
        name="shape_legs_accordion"
        top="0"
@@ -386,10 +402,10 @@
       <scrolling_panel_list
        layout="topleft"
        follows="all"
-       left="10"
+       left="0"
        name="shape_legs_param_list"
-       top="10"
-       height="385"
+       top="0"
+       height="330"
        width="333" />
       </accordion_tab>
       </accordion>
