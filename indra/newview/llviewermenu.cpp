@@ -2397,6 +2397,35 @@ void cleanup_menus()
 // Object pie menu
 //-----------------------------------------------------------------------------
 
+// Andromeda Rage:  Derender functionality, inspired by Phoenix.  TODO: RLVa stuff
+class LLObjectDerender : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        LLViewerObject* slct = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
+        if(!slct)return true;
+        LLUUID id = slct->getID();
+        LLObjectSelectionHandle selection = LLSelectMgr::getInstance()->getSelection();
+        LLUUID root_key;
+        LLSelectNode* node = selection->getFirstRootNode();
+        if(node)root_key = node->getObject()->getID();
+        if(root_key.notNull())
+        {
+            id = root_key;
+        }
+        LLSelectMgr::getInstance()->removeObjectFromSelections(id);
+
+        if (!(id == gAgentID))
+        {
+            LLViewerObject *objectp = gObjectList.findObject(id);
+            {
+                gObjectList.killObject(objectp);
+            }
+        }
+        return true;
+    }
+};
+
 class LLObjectReportAbuse : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -8617,7 +8646,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLObjectReturn(), "Object.Return");
 	view_listener_t::addMenu(new LLObjectReportAbuse(), "Object.ReportAbuse");
 	view_listener_t::addMenu(new LLObjectMute(), "Object.Mute");
-
+    view_listener_t::addMenu(new LLObjectDerender(), "Object.Derender");
+    
 	enable.add("Object.VisibleTake", boost::bind(&visible_take_object));
 	enable.add("Object.VisibleBuy", boost::bind(&visible_buy_object));
 
