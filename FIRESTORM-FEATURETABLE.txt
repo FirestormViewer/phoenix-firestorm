@@ -62,3 +62,4 @@ PreviewAnimations	LGPL (from ARminW/Kokua)
 LSLmediaToggle		LGPL
 ImprovedRadar		LGPL
 Resizable_Profiles	LGPL
+Derender		LGPL
