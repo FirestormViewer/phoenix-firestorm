@@ -380,9 +380,6 @@
      name="build_btn_panel"
      user_resize="false"
      width="40">
-      <!--*FIX: Build Floater is not opened with default registration. Will be fixed soon.
-Disabled for now.
--->
       <bottomtray_button
        follows="left|right"
        height="23"
