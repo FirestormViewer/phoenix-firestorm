@@ -237,30 +237,11 @@
              height="78"
              width="78">
 
-            <!-- Fake control icon to simulate the joystick widget -->
-            <icon
-             follows="all"
-             height="78"
-             image_name="Cam_Rotate_Out"
-             layout="topleft"
-             left="0"
-             name="icon_cam_rotate_stick"
-             scale_image="true"
-             sound_flags="3"
-             visible="true"
-             top="0"
-             width="78" />
-
-<!--
-              image_selected="Cam_Rotate_In"
-              image_unselected="Cam_Rotate_Out"
-//-->
-
             <joystick_rotate
              follows="all"
              height="78"
-             image_selected="Blank"
-             image_unselected="Blank"
+             image_selected="Cam_Rotate_In"
+             image_unselected="Cam_Rotate_Out"
              layout="topleft"
              left="0"
              mouse_opaque="false"
@@ -338,30 +319,11 @@
              height="78"
              width="78">
 
-            <!-- Fake control icon to simulate the joystick widget -->
-            <icon
-             follows="all"
-             height="78"
-             image_name="Cam_Tracking_Out"
-             layout="topleft"
-             left="0"
-             name="icon_cam_track_stick"
-             scale_image="true"
-             sound_flags="3"
-             visible="true"
-             top="0"
-             width="78" />
-
-<!--
-         image_selected="Cam_Tracking_In"
-         image_unselected="Cam_Tracking_Out"
-//-->
-
             <joystick_track
              follows="all"
              height="78"
-             image_selected="Blank"
-             image_unselected="Blank"
+             image_selected="Cam_Tracking_In"
+             image_unselected="Cam_Tracking_Out"
              layout="topleft"
              left="0"
              name="cam_track_stick"
