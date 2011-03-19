@@ -3,7 +3,7 @@
    name="Landmarks"
    top="0"
    height="400"
-   layout="topleft" 
+   layout="topleft"
    left="0"
    width="313"
    help_topic="panel_landmarks"
@@ -11,82 +11,98 @@
    background_visible="true"
    bg_alpha_color="DkGray"
    follows="all">
-    <accordion
+    <tab_container
+     name="landmarks_accordion"
      background_visible="true"
      bg_alpha_color="DkGray2"
      bg_opaque_color="DkGray2"
-     follows="all"
-     height="373"
+     fit_parent="true"
      layout="topleft"
+     follows="all"
+     halign="center"
+     tab_position="top"
+     tab_width="80"
      left="3"
-     name="landmarks_accordion"
      top="0"
+     height="373"
      width="307">
-        <accordion_tab
+        <panel
+         follows="all"
          layout="topleft"
          name="tab_favorites"
-         title="Favorites bar">
+         title="Favorites"
+         height="373"
+         width="307">
             <places_inventory_panel
              allow_multi_select="true"
              border="false"
-             bottom="0"
              follows="all"
-             height="126"
-             left="0"
              mouse_opaque="true"
              name="favorites_list"
              start_folder="Favorites"
+             top="0"
+             left="0"
+             height="373"
              width="307"/>
-        </accordion_tab>
-        <accordion_tab
+        </panel>
+        <panel
+         follows="all"
          layout="topleft"
          name="tab_landmarks"
-         title="Landmarks">
+         title="Landmarks"
+         height="373"
+         width="307">
             <places_inventory_panel
              allow_multi_select="true"
              border="false"
-             bottom="0"
              follows="all"
-             height="126"
-             left="0"
              mouse_opaque="true"
              name="landmarks_list"
              start_folder="Landmarks"
+             top="0"
+             left="0"
+             height="373"
              width="307"/>
-        </accordion_tab>
-        <accordion_tab
+        </panel>
+        <panel
+         follows="all"
          layout="topleft"
          name="tab_inventory"
-         title="Inventory">
+         title="Inventory"
+         height="373"
+         width="307">
             <places_inventory_panel
              allow_multi_select="true"
              border="false"
-             bottom="0"
              follows="all"
-             height="126"
-             left="0"
              mouse_opaque="true"
              name="my_inventory_list"
              start_folder="My Inventory"
+             top="0"
+             left="0"
+             height="373"
              width="307"/>
-          </accordion_tab>
-          <accordion_tab
-           layout="topleft"
-           name="tab_library"
-           title="Library">
+        </panel>
+        <panel
+         follows="all"
+         layout="topleft"
+         name="tab_library"
+         title="Library"
+         height="373"
+         width="307">
             <places_inventory_panel
              allow_multi_select="true"
              border="false"
-             bottom="0"
              follows="all"
-             height="126"
-             left="0"
              mouse_opaque="true"
              name="library_list"
              start_folder="LIBRARY"
-             width="313"/>
-        </accordion_tab>
-    </accordion>
+             top="0"
+             left="0"
+             height="373"
+             width="307"/>
+        </panel>
+    </tab_container>
     <panel
        background_visible="true"
      bevel_style="none"
@@ -97,7 +113,7 @@
      left="3"
      name="bottom_panel"
      width="313">
-     	
+
      	  <layout_stack
 		   animate="false"
 		   border_size="0"
