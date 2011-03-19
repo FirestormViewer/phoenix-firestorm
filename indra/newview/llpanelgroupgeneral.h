@@ -62,6 +62,9 @@ public:
 
 	virtual void setupCtrls	(LLPanel* parent);
 
+protected:
+    void onCopyURI();
+
 private:
 	void	reset();
 
