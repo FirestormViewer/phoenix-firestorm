@@ -1214,12 +1214,15 @@ void LLViewerFetchedTexture::cleanup()
 
 void LLViewerFetchedTexture::setForSculpt()
 {
+	static const S32 MAX_INTERVAL = 8 ; //frames
+
 	mForSculpt = TRUE ;
 	if(isForSculptOnly() && !getBoundRecently())
 	{
 		destroyGLTexture() ; //sculpt image does not need gl texture.
 	}
 	checkCachedRawSculptImage() ;
+	setMaxVirtualSizeResetInterval(MAX_INTERVAL) ;
 }
 
 BOOL LLViewerFetchedTexture::isForSculptOnly() const
@@ -2688,12 +2691,10 @@ void LLViewerFetchedTexture::saveRawImage()
 	mLastReferencedSavedRawImageTime = sCurrentTime ;
 }
 
-void LLViewerFetchedTexture::forceToSaveRawImage(S32 desired_discard, bool from_callback) 
+void LLViewerFetchedTexture::forceToSaveRawImage(S32 desired_discard) 
 { 
 	if(!mForceToSaveRawImage || mDesiredSavedRawDiscardLevel < 0 || mDesiredSavedRawDiscardLevel > desired_discard)
 	{
-		llassert_always(from_callback || mBoostLevel == LLViewerTexture::BOOST_PREVIEW) ;
-
 		mForceToSaveRawImage = TRUE ;
 		mDesiredSavedRawDiscardLevel = desired_discard ;
 	
