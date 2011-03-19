@@ -25,7 +25,7 @@
    <panel
     height="18"
     left="500"
-    width="800"
+    width="95"
     top="0"
     follows="left|top"
     name="parcel_info_panel"
@@ -41,7 +41,7 @@
     image_unselected="Info_Off"
     left="0"
     name="place_info_btn"
-    top="1"
+    top="2"
     width="16"/>
    <text
      follows="left|top|right"
@@ -50,7 +50,7 @@
      left_pad="11"
      length="1"
      name="parcel_info_text"
-     top="2"
+     top="5"
      value="(loading...)"
      type="string"
      width="100"/>
@@ -120,7 +120,7 @@
     image_unselected="Parcel_Windlight"
     left="226"
     name="status_wl_btn"
-    top="1"
+    top="2"
     tool_tip="Parcel has WL settings" 
     width="16"/>
   <icon
@@ -183,7 +183,7 @@
      left="0"
      name="balance"
      tool_tip="Linden Dollar Balance for this Account"
-     v_pad="2"
+     v_pad="5"
      top="0"
      wrap="false"
      value="L$???"
@@ -203,9 +203,9 @@
      label_shadow="true"
      name="buyL"
      pad_right="0"
-     pad_bottom="2"
+     pad_bottom="3"
      tool_tip="Click to buy more L$"
-     top="1"
+     top="2"
      width="55" />
   </panel>
     <text
@@ -215,7 +215,7 @@
      follows="right|top"
      halign="right"
      height="16"
-     top="2"
+     top="5"
      layout="topleft"
      left_pad="0"
      name="TimeText"
