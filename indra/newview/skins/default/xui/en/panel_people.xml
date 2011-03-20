@@ -73,13 +73,11 @@ Looking for people to hang out with? Use the search box to find topics or conten
      left="5"
      name="tabs"
      tab_group="1"
-     tab_min_width="70"
-     tab_height="30"
      tab_position="top"
      top_pad="10"
      halign="center"
      width="317">
-     	<panel
+         <panel
          background_opaque="false"
          background_visible="true"
          bg_alpha_color="SL-Background_50"
@@ -93,69 +91,71 @@ Looking for people to hang out with? Use the search box to find topics or conten
          name="nearby_panel"
          top="0"
          width="313">
-         
-            <panel
-	         height="15"
-	         width="307"
-	         label="nearby_header"
-	         left="0"
-	         top="0"
-	         follows="left|right|top">
 
-			    <text
-			     follows="left"
-			     font="SansSerifSmall"
-			     height="15"
-			     layout="topleft"
-			     left_pad="5"
-			     name="header_name"
-			     top="2"
-			     left="5"
-			     width="100">NAME</text>
-			    <text
-			     follows="right"
-			     font="SansSerifSmall"
-			     height="15"
-			     layout="topleft"
-			     left_pad="5"
-			     name="header_age"
-			     top="2"
-			     right="-117"
-			     width="30">AGE</text>
-			    <text
-			     follows="right"
-			     font="SansSerifSmall"
-			     height="15"
-			     layout="topleft"
-			     left_pad="5"
-			     name="header_seen"
-			     top="2"
-			     right="-56"
-			     width="50">SEEN</text>
-			    <text
-			     follows="right"
-			     font="SansSerifSmall"
-			     height="15"
-			     layout="topleft"
-			     left_pad="5"
-			     name="header_range"
-			     right="-14"
-			     top="2"
-			     value=" RANGE"
-			     width="40"/>
-			         
-			</panel>
-         
+
+             <panel
+             height="15"
+             right="-1"
+             label="nearby_header"
+             left="0"
+             top="0"
+             follows="left|right|top">
+
+                <text
+                 follows="left"
+                 font="SansSerifSmall"
+                 height="15"
+                 layout="topleft"
+                 left="10"
+                 name="header_name"
+                 width="100">NAME</text>
+                <text
+                 follows="right"
+                 font="SansSerifSmall"
+                 height="15"
+                 layout="topleft"
+                 name="header_age"
+                 top_delta="0"
+                 right="-111"
+                 width="40">AGE</text>
+                <text
+                 follows="right"
+                 font="SansSerifSmall"
+                 height="15"
+                 layout="topleft"
+                 left_pad="0"
+                 name="header_seen"
+                 width="53">SEEN</text>
+                <text
+                 follows="right"
+                 font="SansSerifSmall"
+                 height="15"
+                 layout="topleft"
+                 name="header_range"
+                 left_pad="0"
+                 value=" RANGE"
+                 width="40"/>
+                     
+            </panel>
+
+             <view_border
+             height="1"
+             right="-1"
+             label="header_separator"
+             left="0"
+             top_pad="1"
+             follows="left|right|top" />
+
             <avatar_list
              allow_select="true"
              follows="all"
-             height="341"
+             height="336"
              ignore_online_status="true"
              layout="topleft"
              left="3"
              multi_select="true"
              name="avatar_list"
-             top="15"
+             top="20"
              width="307" />
             <panel
              background_visible="true"
@@ -184,9 +184,9 @@ Looking for people to hang out with? Use the search box to find topics or conten
                  follows="bottom|left"
                  height="25"
                  image_hover_unselected="Toolbar_Middle_Over"
-             	 image_overlay="AddItem_Off"
+                  image_overlay="AddItem_Off"
                  image_selected="Toolbar_Middle_Selected"
-             	 image_unselected="Toolbar_Middle_Off"
+                  image_unselected="Toolbar_Middle_Off"
                  layout="topleft"
                  left_pad="1"
                  name="add_friend_btn"
@@ -226,10 +226,11 @@ Looking for people to hang out with? Use the search box to find topics or conten
          name="friends_panel"
          top="0"
          width="313">
+<!--
             <accordion
-       		 background_visible="true"
-       		 bg_alpha_color="Transparent"
-       		 bg_opaque_color="Transparent"
+                background_visible="true"
+                bg_alpha_color="Transparent"
+                bg_opaque_color="Transparent"
              follows="all"
              height="356"
              layout="topleft"
@@ -243,6 +244,31 @@ Looking for people to hang out with? Use the search box to find topics or conten
                  min_height="150"
                  name="tab_online"
                  title="Online">
+//-->
+            <tab_container
+             name="friends_accordion"
+             follows="all"
+             background_visible="true"
+             bg_alpha_color="Transparent"
+             bg_opaque_color="Transparent"
+             height="356"
+             layout="topleft"
+             left="3"
+             tab_group="1"
+             tab_position="top"
+             top="0"
+             halign="center"
+             width="307">
+
+                <panel
+                 layout="topleft"
+                 height="356"
+                 width="307"
+                 name="tab_online"
+                 follows="all"
+                 title="Online">
+
+
                         <avatar_list
                          allow_select="true"
                          follows="all"
@@ -254,12 +280,23 @@ Looking for people to hang out with? Use the search box to find topics or conten
                          show_permissions_granted="true"
                          top="0"
                          width="307" />
+<!--
                 </accordion_tab>
                 <accordion_tab
                  layout="topleft"
                  height="173"
                  name="tab_all"
                  title="All">
+//-->
+                </panel>
+                <panel
+                 layout="topleft"
+                 height="356"
+                 width="307"
+                 name="tab_all"
+                 follows="all"
+                 title="All">
+
                         <avatar_list
                          allow_select="true"
                          follows="all"
@@ -271,8 +308,13 @@ Looking for people to hang out with? Use the search box to find topics or conten
                          show_permissions_granted="true"
                          top="0"
                          width="307" />
+<!--
                 </accordion_tab>
             </accordion>
+//-->
+                </panel>
+            </tab_container>
+
             <panel
              background_visible="true"
              follows="left|right|bottom"
@@ -283,116 +325,116 @@ Looking for people to hang out with? Use the search box to find topics or conten
              name="bottom_panel"
              top_pad="0"
              width="313">
-             
-             	  <layout_stack
-				   animate="false"
-				   border_size="0"
-				   follows="left|right|bottom"
-				   height="25"
-				   layout="topleft"
-				   orientation="horizontal"
-				   top_pad="1"
-				   left="0"
-				   name="bottom_panel"
-				   width="305">
-				      <layout_panel
-				       auto_resize="false"
-				       height="25"
-				       layout="topleft"
-				       name="options_gear_btn_panel"
-				       user_resize="false"
-				       width="32">
-				          <menu_button
-				           follows="bottom|left"
-				           tool_tip="Show additional options"
-				           height="25"
-				           image_hover_unselected="Toolbar_Left_Over"
-				           image_overlay="OptionsMenu_Off"
-				           image_selected="Toolbar_Left_Selected"
-				           image_unselected="Toolbar_Left_Off"
-				           layout="topleft"
-				           left="0"
-				           name="friends_viewsort_btn"
-				           top="0"
-				           width="31" />
-				      </layout_panel>
-				      <layout_panel
-				       auto_resize="false"
-				       height="25"
-				       layout="topleft"
-				       name="add_btn_panel"
-				       user_resize="false"
-				       width="64">
-				          <button
-				           follows="bottom|left"
-				           height="25"
-				           image_hover_unselected="Toolbar_Middle_Over"
-				           image_overlay="AddItem_Off"
-				           image_selected="Toolbar_Middle_Selected"
-				           image_unselected="Toolbar_Middle_Off"
-				           layout="topleft"
-				           left="0"
-				           name="add_btn"
-				           tool_tip="Offer friendship to a Resident"
-				           top="0"
-				           width="31" />
-						   <button
-							 follows="bottom|left"
-							 height="25"
-							 image_hover_unselected="Toolbar_Middle_Over"
-							 image_overlay="Permission_Visible_Online"
-							 image_pressed="PushButton_Press"
-							 image_pressed_selected="PushButton_Selected_Press"
+
+                   <layout_stack
+                   animate="false"
+                   border_size="0"
+                   follows="left|right|bottom"
+                   height="25"
+                   layout="topleft"
+                   orientation="horizontal"
+                   top_pad="1"
+                   left="0"
+                   name="bottom_panel"
+                   width="305">
+                      <layout_panel
+                       auto_resize="false"
+                       height="25"
+                       layout="topleft"
+                       name="options_gear_btn_panel"
+                       user_resize="false"
+                       width="32">
+                          <menu_button
+                           follows="bottom|left"
+                           tool_tip="Show additional options"
+                           height="25"
+                           image_hover_unselected="Toolbar_Left_Over"
+                           image_overlay="OptionsMenu_Off"
+                           image_selected="Toolbar_Left_Selected"
+                           image_unselected="Toolbar_Left_Off"
+                           layout="topleft"
+                           left="0"
+                           name="friends_viewsort_btn"
+                           top="0"
+                           width="31" />
+                      </layout_panel>
+                      <layout_panel
+                       auto_resize="false"
+                       height="25"
+                       layout="topleft"
+                       name="add_btn_panel"
+                       user_resize="false"
+                       width="64">
+                          <button
+                           follows="bottom|left"
+                           height="25"
+                           image_hover_unselected="Toolbar_Middle_Over"
+                           image_overlay="AddItem_Off"
+                           image_selected="Toolbar_Middle_Selected"
+                           image_unselected="Toolbar_Middle_Off"
+                           layout="topleft"
+                           left="0"
+                           name="add_btn"
+                           tool_tip="Offer friendship to a Resident"
+                           top="0"
+                           width="31" />
+                           <button
+                             follows="bottom|left"
+                             height="25"
+                             image_hover_unselected="Toolbar_Middle_Over"
+                             image_overlay="Permission_Visible_Online"
+                             image_pressed="PushButton_Press"
+                             image_pressed_selected="PushButton_Selected_Press"
                              image_selected="PushButton_Selected_Press"
-							 control_name="GlobalOnlineStatusToggle"
-							 is_toggle="true"
-							 layout="topleft"
-							 left_pad="1"
-							 name="GlobalOnlineStatusToggle"
-							 tool_tip="Toggle Global Visibility"
-							 width="31" />
-				 
-				      </layout_panel>
-				      <layout_panel
-				       auto_resize="true"
-				       height="25"
-				       layout="topleft"
-				       name="dummy_panel"
-				       user_resize="false"
-				       width="212">
-				          <icon
-				           follows="bottom|left|right"
-				           height="25"
-				           image_name="Toolbar_Middle_Off"
-				           layout="topleft"
-				           left="0"
-				           top="0"
-				           name="dummy_icon"
-				           width="211" />
-				      </layout_panel>
-				      <layout_panel
-				       auto_resize="false"
-				       height="25"
-				       layout="topleft"
-				       name="trash_btn_panel"
-				       user_resize="false"
-				       width="31">
-				          <dnd_button
-				           follows="bottom|left"
-				           height="25"
-				           image_hover_unselected="Toolbar_Right_Over"
-				           image_overlay="TrashItem_Off"
-				           image_selected="Toolbar_Right_Selected"
-				           image_unselected="Toolbar_Right_Off"
-				           left="0"
-				           layout="topleft"
-				           name="del_btn"
-				           tool_tip="Remove selected person from your Friends list"
-				           top="0"
-				           width="31"/>
-				      </layout_panel>
-				  </layout_stack><!--
-             
+                             control_name="GlobalOnlineStatusToggle"
+                             is_toggle="true"
+                             layout="topleft"
+                             left_pad="1"
+                             name="GlobalOnlineStatusToggle"
+                             tool_tip="Toggle Global Visibility"
+                             width="31" />
+
+                      </layout_panel>
+                      <layout_panel
+                       auto_resize="true"
+                       height="25"
+                       layout="topleft"
+                       name="dummy_panel"
+                       user_resize="false"
+                       width="212">
+                          <icon
+                           follows="bottom|left|right"
+                           height="25"
+                           image_name="Toolbar_Middle_Off"
+                           layout="topleft"
+                           left="0"
+                           top="0"
+                           name="dummy_icon"
+                           width="211" />
+                      </layout_panel>
+                      <layout_panel
+                       auto_resize="false"
+                       height="25"
+                       layout="topleft"
+                       name="trash_btn_panel"
+                       user_resize="false"
+                       width="31">
+                          <dnd_button
+                           follows="bottom|left"
+                           height="25"
+                           image_hover_unselected="Toolbar_Right_Over"
+                           image_overlay="TrashItem_Off"
+                           image_selected="Toolbar_Right_Selected"
+                           image_unselected="Toolbar_Right_Off"
+                           left="0"
+                           layout="topleft"
+                           name="del_btn"
+                           tool_tip="Remove selected person from your Friends list"
+                           top="0"
+                           width="31"/>
+                      </layout_panel>
+                  </layout_stack><!--
+
                <button
                follows="bottom|left"
                tool_tip="Options"
@@ -410,23 +452,23 @@ Looking for people to hang out with? Use the search box to find topics or conten
                  follows="bottom|left"
                  height="25"
                  image_hover_unselected="Toolbar_Middle_Over"
-             	 image_overlay="AddItem_Off"
-             	 image_selected="Toolbar_Middle_Selected"
-             	 image_unselected="Toolbar_Middle_Off"
+                  image_overlay="AddItem_Off"
+                  image_selected="Toolbar_Middle_Selected"
+                  image_unselected="Toolbar_Middle_Off"
                  layout="topleft"
                  left_pad="1"
                  name="add_btn"
                  tool_tip="Offer friendship to a Resident"
                  width="31" />
                 <icon
-             	 follows="bottom|left|right"
-             	 height="25"
-             	 image_name="Toolbar_Middle_Off"
-             	 layout="topleft"
-             	 left_pad="1"
-             	 name="dummy_icon"
-             	 width="209"
-				/>
+                  follows="bottom|left|right"
+                  height="25"
+                  image_name="Toolbar_Middle_Off"
+                  layout="topleft"
+                  left_pad="1"
+                  name="dummy_icon"
+                  width="209"
+                />
                 <button
                  follows="bottom|left"
                  height="25"
@@ -445,7 +487,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              height="450"
              left="13"
              name="no_friends_help_text"
-             top="10"
+             top="50"
              width="293"
              wrap="true" />
         </panel>
@@ -468,7 +510,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
      Values are set from appropriate strings at the top of file via LLPeoplePanel::postBuild()
     -->
             <group_list
-             allow_select="true" 
+             allow_select="true"
              follows="all"
              height="356"
              layout="topleft"
@@ -524,13 +566,13 @@ Looking for people to hang out with? Use the search box to find topics or conten
                  tool_tip="Activate selected group"
                  width="31" />
                  <icon
-             	 follows="bottom|left|right"
-             	 height="25"
-             	 image_name="Toolbar_Right_Off"
-             	 layout="topleft"
-             	 left_pad="1"
-             	 name="dummy_icon"
-             	 width="209"
+                  follows="bottom|left|right"
+                  height="25"
+                  image_name="Toolbar_Right_Off"
+                  layout="topleft"
+                  left_pad="1"
+                  name="dummy_icon"
+                  width="209"
              />
             </panel>
         </panel>
@@ -578,6 +620,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                image_selected="Toolbar_Left_Selected"
                image_unselected="Toolbar_Left_Off"
                layout="topleft"
+               left="3"
                name="recent_viewsort_btn"
                top="1"
                width="31" />
@@ -597,13 +640,13 @@ Looking for people to hang out with? Use the search box to find topics or conten
                    function="People.addFriend" />
               </button>
               <icon
-             	 follows="bottom|left|right"
-             	 height="25"
-             	 image_name="Toolbar_Right_Off"
-             	 layout="topleft"
-             	 left_pad="1"
-             	 name="dummy_icon"
-             	 width="241"
+                  follows="bottom|left|right"
+                  height="25"
+                  image_name="Toolbar_Right_Off"
+                  layout="topleft"
+                  left_pad="1"
+                  name="dummy_icon"
+                  width="241"
              />
             </panel>
         </panel>
@@ -617,202 +660,202 @@ Looking for people to hang out with? Use the search box to find topics or conten
      name="button_bar"
      width="313">
 
-<!--********************************Profile; IM; Call, Share, Teleport********************************--> 	
-     	<layout_stack
-     	follows="bottom|left|right"
-		height="23"
-		layout="topleft"
-		name="bottom_bar_ls"
-		left="0"
-		orientation="horizontal"
-		top_pad="0"
-		width="313">
+<!--********************************Profile; IM; Call, Share, Teleport********************************-->
+         <layout_stack
+         follows="bottom|left|right"
+        height="23"
+        layout="topleft"
+        name="bottom_bar_ls"
+        left="0"
+        orientation="horizontal"
+        top_pad="0"
+        width="313">
 
-			<layout_panel
-			follows="bottom|left|right"
-			height="23"
-			layout="bottomleft"
-			left="0"
-			name="view_profile_btn_lp"
-		    user_resize="false" 
-		    auto_resize="true"
-			width="68">
-				<button
-		         follows="bottom|left|right"
-		         height="23"
-		         label="Profile"
-		         layout="topleft"
-		         left="1"
-		         name="view_profile_btn"
-		         tool_tip="Show picture, groups, and other Residents information"
-		         top="0"
-		         width="67" />	
-			</layout_panel>
-			
-			<layout_panel
-			follows="bottom|left|right"
-			height="23"
-			layout="bottomleft"
-			left_pad="3"
-			name="chat_btn_lp"
-		    user_resize="false" 
-		    auto_resize="true"
-			width="41">
-				<button
-		         follows="bottom|left|right"
-		         left="1"
-		         height="23"
-		         label="IM"
-		         layout="topleft"
-		         name="im_btn"
-		         tool_tip="Open instant message session"
-		         top="0"
-		         width="40" />			
-			</layout_panel>
-			
-			<layout_panel
-			follows="bottom|left|right"
-			height="23"
-			layout="bottomleft"
-			left_pad="3"
-			name="chat_btn_lp"
-		    user_resize="false" 
-		    auto_resize="true"
-			width="52">
-				<button
-		         follows="bottom|left|right"
-		         left="1"
-		         height="23"
-		         label="Call"
-		         layout="topleft"
-		         name="call_btn"
-		         tool_tip="Call this Resident"
-		         top="0"
-		         width="51" />		
-			</layout_panel>
-			
-			<layout_panel
-			follows="bottom|left|right"
-			height="23"
-			layout="bottomleft"
-			left_pad="3"
-			name="chat_btn_lp"
-		    user_resize="false" 
-		    auto_resize="true"
-			width="66">
-				<button
-		         follows="bottom|left|right"
-		         left="1"
-		         height="23"
-		         label="Share"
-		         layout="topleft"
-		         name="share_btn"
-		         tool_tip="Share an inventory item"
-		         top="0"
-		         width="65" />	
-			</layout_panel>
-			
-			<layout_panel
-			follows="bottom|left|right"
-			height="23"
-			layout="bottomleft"
-			left_pad="3"
-			name="chat_btn_lp"
-		    user_resize="false" 
-		    auto_resize="true"
-			width="77">
-				<button
-		         follows="bottom|left|right"
-		         left="1"
-		         height="23"
-		         label="Teleport"
-		         layout="topleft"
-		         name="teleport_btn"
-		         tool_tip="Offer teleport"
-		         top="0"
-		         width="76" />		
-			</layout_panel>
-		</layout_stack>
-		
-<!--********************************Group Profile; Group Chat; Group Call buttons************************-->			
-		<layout_stack
-     	follows="bottom|left|right"
-		height="23"
-		layout="topleft"
-		mouse_opaque="false"
-		name="bottom_bar_ls1"
-		left="0"
-		orientation="horizontal"
-		top="0"
-		width="313">	
-			<layout_panel
-			follows="bottom|left|right"
-			height="23"
-			layout="bottomleft"
-			left="0"			
-			mouse_opaque="false"
-			name="group_info_btn_lp"
-		    user_resize="false" 
-		    auto_resize="true"
-			width="108">
-				<button
-		        follows="bottom|left|right"
-		        left="1"
-		        height="23"
-		        label="Group Profile"
-		        layout="topleft"
-				mouse_opaque="false"
-		        name="group_info_btn"
-		        tool_tip="Show group information"
-		        top="0"
-		        width="107" />		
-			</layout_panel>
-			
-			<layout_panel
-			follows="bottom|left|right"
-			height="23"
-			layout="bottomleft"
-			left_pad="3"
-			mouse_opaque="false"
-			name="chat_btn_lp"
-		    user_resize="false" 
-		    auto_resize="true"
-			width="101">
-				<button
-		        follows="bottom|left|right"
-		        left="1"
-		        height="23"
-		        label="Group Chat"
-		        layout="topleft"
-				mouse_opaque="false"
-		        name="chat_btn"
-		        tool_tip="Open chat session"
-		        top="0"
-		        width="100" />			
-			</layout_panel>
-		
-			<layout_panel
-			follows="bottom|left|right"
-			height="23"
-			layout="bottomleft"
-			left_pad="3"
-			mouse_opaque="false"
-			name="group_call_btn_lp"
-		    user_resize="false" 
-		    auto_resize="true"
-			width="96">
-				<button
-				follows="bottom|left|right"
-				left="1"
-				height="23"
-         		label="Group Call"
-         		layout="topleft"
-				mouse_opaque="false"
-         		name="group_call_btn"
-         		tool_tip="Call this group"
-		        top="0"
-         		width="95" />			
-			</layout_panel>		
-		</layout_stack>
+            <layout_panel
+            follows="bottom|left|right"
+            height="23"
+            layout="bottomleft"
+            left="0"
+            name="view_profile_btn_lp"
+            user_resize="false"
+            auto_resize="true"
+            width="68">
+                <button
+                 follows="bottom|left|right"
+                 height="23"
+                 label="Profile"
+                 layout="topleft"
+                 left="1"
+                 name="view_profile_btn"
+                 tool_tip="Show picture, groups, and other Residents information"
+                 top="0"
+                 width="67" />
+            </layout_panel>
+
+            <layout_panel
+            follows="bottom|left|right"
+            height="23"
+            layout="bottomleft"
+            left_pad="3"
+            name="chat_btn_lp"
+            user_resize="false"
+            auto_resize="true"
+            width="41">
+                <button
+                 follows="bottom|left|right"
+                 left="1"
+                 height="23"
+                 label="IM"
+                 layout="topleft"
+                 name="im_btn"
+                 tool_tip="Open instant message session"
+                 top="0"
+                 width="40" />
+            </layout_panel>
+
+            <layout_panel
+            follows="bottom|left|right"
+            height="23"
+            layout="bottomleft"
+            left_pad="3"
+            name="chat_btn_lp"
+            user_resize="false"
+            auto_resize="true"
+            width="52">
+                <button
+                 follows="bottom|left|right"
+                 left="1"
+                 height="23"
+                 label="Call"
+                 layout="topleft"
+                 name="call_btn"
+                 tool_tip="Call this Resident"
+                 top="0"
+                 width="51" />
+            </layout_panel>
+
+            <layout_panel
+            follows="bottom|left|right"
+            height="23"
+            layout="bottomleft"
+            left_pad="3"
+            name="chat_btn_lp"
+            user_resize="false"
+            auto_resize="true"
+            width="66">
+                <button
+                 follows="bottom|left|right"
+                 left="1"
+                 height="23"
+                 label="Share"
+                 layout="topleft"
+                 name="share_btn"
+                 tool_tip="Share an inventory item"
+                 top="0"
+                 width="65" />
+            </layout_panel>
+
+            <layout_panel
+            follows="bottom|left|right"
+            height="23"
+            layout="bottomleft"
+            left_pad="3"
+            name="chat_btn_lp"
+            user_resize="false"
+            auto_resize="true"
+            width="77">
+                <button
+                 follows="bottom|left|right"
+                 left="1"
+                 height="23"
+                 label="Teleport"
+                 layout="topleft"
+                 name="teleport_btn"
+                 tool_tip="Offer teleport"
+                 top="0"
+                 width="76" />
+            </layout_panel>
+        </layout_stack>
+
+<!--********************************Group Profile; Group Chat; Group Call buttons************************-->
+        <layout_stack
+         follows="bottom|left|right"
+        height="23"
+        layout="topleft"
+        mouse_opaque="false"
+        name="bottom_bar_ls1"
+        left="0"
+        orientation="horizontal"
+        top="0"
+        width="313">
+            <layout_panel
+            follows="bottom|left|right"
+            height="23"
+            layout="bottomleft"
+            left="0"
+            mouse_opaque="false"
+            name="group_info_btn_lp"
+            user_resize="false"
+            auto_resize="true"
+            width="108">
+                <button
+                follows="bottom|left|right"
+                left="1"
+                height="23"
+                label="Group Profile"
+                layout="topleft"
+                mouse_opaque="false"
+                name="group_info_btn"
+                tool_tip="Show group information"
+                top="0"
+                width="107" />
+            </layout_panel>
+
+            <layout_panel
+            follows="bottom|left|right"
+            height="23"
+            layout="bottomleft"
+            left_pad="3"
+            mouse_opaque="false"
+            name="chat_btn_lp"
+            user_resize="false"
+            auto_resize="true"
+            width="101">
+                <button
+                follows="bottom|left|right"
+                left="1"
+                height="23"
+                label="Group Chat"
+                layout="topleft"
+                mouse_opaque="false"
+                name="chat_btn"
+                tool_tip="Open chat session"
+                top="0"
+                width="100" />
+            </layout_panel>
+
+            <layout_panel
+            follows="bottom|left|right"
+            height="23"
+            layout="bottomleft"
+            left_pad="3"
+            mouse_opaque="false"
+            name="group_call_btn_lp"
+            user_resize="false"
+            auto_resize="true"
+            width="96">
+                <button
+                follows="bottom|left|right"
+                left="1"
+                height="23"
+                 label="Group Call"
+                 layout="topleft"
+                mouse_opaque="false"
+                 name="group_call_btn"
+                 tool_tip="Call this group"
+                top="0"
+                 width="95" />
+            </layout_panel>
+        </layout_stack>
     </panel>
 </panel>
