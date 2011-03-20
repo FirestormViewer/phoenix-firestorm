@@ -111,6 +111,9 @@ public:
 	/*virtual*/ void spawnWebBrowser(const std::string& escaped_url, bool async);
 				void openFile(const std::string& file_name);
 
+//-TT Window Title Access
+	/*virtual*/ void setTitle(const std::string& win_title);
+//-TT
 	LLWindowCallbacks::DragNDropResult completeDragNDropRequest( const LLCoordGL gl_coord, const MASK mask, LLWindowCallbacks::DragNDropAction action, const std::string url );
 
 	static std::vector<std::string> getDynamicFallbackFontList();

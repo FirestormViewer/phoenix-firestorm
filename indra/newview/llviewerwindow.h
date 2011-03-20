@@ -379,6 +379,9 @@ public:
 	const LLVector2& getDisplayScale() const { return mDisplayScale; }
 	void			calcDisplayScale();
 	static LLRect 	calcScaledRect(const LLRect & rect, const LLVector2& display_scale);
+//-TT Window Title Access
+	void			setTitle(const std::string& win_title);
+//-TT
 
 private:
 	bool                    shouldShowToolTipFor(LLMouseHandler *mh);

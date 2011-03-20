@@ -2853,6 +2853,23 @@ void LLWindowWin32::swapBuffers()
 	SwapBuffers(mhDC);
 }
 
+//-TT Window Title Access
+void LLWindowWin32::setTitle(const std::string& win_title)
+{
+	// Set the window title
+	if (win_title.empty())
+	{
+		wsprintf(mWindowTitle, L"OpenGL Window");
+	}
+	else
+	{
+		mbstowcs(mWindowTitle, win_title.c_str(), 255);
+		mWindowTitle[255] = 0;
+	}
+
+	SetWindowText(mWindowHandle, mWindowTitle);
+}
+//-TT
 
 //
 // LLSplashScreenImp

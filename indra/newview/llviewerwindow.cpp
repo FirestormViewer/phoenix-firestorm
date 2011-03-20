@@ -2184,6 +2184,14 @@ void LLViewerWindow::draw()
 //#endif
 }
 
+
+//-TT Window Title Access
+void LLViewerWindow::setTitle(const std::string& win_title)
+{
+	mWindow->setTitle(win_title);
+}
+//-TT
+
 // Takes a single keydown event, usually when UI is visible
 BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 {
