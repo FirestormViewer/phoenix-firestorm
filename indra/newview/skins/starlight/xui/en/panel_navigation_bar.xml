@@ -17,7 +17,7 @@
 	 bg_alpha_color="DkGray"
 	 background_opaque="true"
 	 follows="left|top|right"
-	 height="27"
+	 height="22"
 	 top_delta="0"
          top_pad="0"
 	 layout="topleft"
@@ -134,12 +134,11 @@
         </search_combo_box>
 	</panel>
   <favorites_bar
-  	 auto_resize="true"
          background_visible="true"
          bg_opaque_color="DkGray"
          bg_alpha_color="DkGray"
      follows="left|top|right"
-     top_pad="3"
+     top_pad="2"
      font="SansSerifSmall"
      height="15"
      layout="topleft"
