@@ -113,6 +113,20 @@
 		<check_box bottom_delta="-30" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Teleport Screens" left="15" mouse_opaque="true" name="tp_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableTeleportScreens" tool_tip="Disables the black teleport screen during all teleports."/>
 		<check_box bottom_delta="-20" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Login Progress Screen" left_delta="0" mouse_opaque="true" name="login_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableLoginScreens" tool_tip="Disables the black login progress Screen"/>
 		<check_box bottom_delta="-20" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Logout Progress Screen" left_delta="0" mouse_opaque="true" name="logout_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableLogoutScreens" tool_tip="Disables the black Logout progress screen."/>
+        <check_box bottom_delta="-30"
+      enabled="true"
+      follows="left|top"
+      font="SansSerifSmall"
+      height="16"
+      initial_value="false"
+      label="Always rez objects under the land group if possible"
+      left="15"
+      mouse_opaque="true"
+      name="grouplandrez"
+      radio_style="false"
+      width="270"
+      control_name="RezUnderLandGroup"
+      tool_tip="Attempts to rez objects under the land group if you're in the land group regardless of which current group tag you're wearing."/>
       </panel>
 	  
 	  
