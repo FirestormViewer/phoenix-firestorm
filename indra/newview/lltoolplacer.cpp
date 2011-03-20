@@ -34,11 +34,13 @@
 #include "llviewercontrol.h"
 //#include "llfirstuse.h"
 #include "llfloatertools.h"
+#include "llparcel.h"
 #include "llselectmgr.h"
 #include "llstatusbar.h"
 #include "lltoolcomp.h"
 #include "lltoolmgr.h"
 #include "llviewerobject.h"
+#include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
 #include "llworld.h"
@@ -63,6 +65,7 @@
 
 // linden library headers
 #include "llprimitive.h"
+#include "roles_constants.h"
 #include "llwindow.h"			// incBusyCount()
 #include "material_codes.h"
 
@@ -242,7 +245,20 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
 	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-	gMessageSystem->addUUIDFast(_PREHASH_GroupID, gAgent.getGroupID());
+	LLUUID group_id = gAgent.getGroupID();
+	LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+	if (gSavedSettings.getBOOL("RezUnderLandGroup"))
+	{
+		if (gAgent.isInGroup(parcel->getGroupID()))
+		{
+			group_id = parcel->getGroupID();
+		}
+		else if (gAgent.isInGroup(parcel->getOwnerID()))
+		{
+			group_id = parcel->getOwnerID();
+		}
+	}
+	gMessageSystem->addUUIDFast(_PREHASH_GroupID, group_id);
 	gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 	gMessageSystem->addU8Fast(_PREHASH_Material,	material);
 
