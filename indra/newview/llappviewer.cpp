@@ -1677,8 +1677,8 @@ bool LLAppViewer::cleanup()
 
 	// Delete workers first
 	// shotdown all worker threads before deleting them in case of co-dependencies
-	sTextureCache->shutdown();
 	sTextureFetch->shutdown();
+	sTextureCache->shutdown();	
 	sImageDecodeThread->shutdown();
 	
 	sTextureFetch->shutDownTextureCacheThread() ;
@@ -1847,7 +1847,7 @@ void errorCallback(const std::string &error_string)
 	gLLErrorActivated = true;
 	
 //	LLError::crashAndLoop(error_string);
-// [SL:KB] - Patch: Viewer-Build | Checked: 2010-12-04 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+// [SL:KB] - Patch: Viewer-Build | Checked: 2010-12-04 (Catznip-2.5.0a) | Added: Catznip-2.4.0g
 #if !LL_RELEASE_FOR_DOWNLOAD && LL_WINDOWS
 	DebugBreak();
 #else
