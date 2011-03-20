@@ -72,7 +72,6 @@ bool LLViewerParcelMedia::sMusicQueueEmpty = TRUE;
 bool callback_play_media(const LLSD& notification, const LLSD& response, LLParcel* parcel);
 void callback_media_alert(const LLSD& notification, const LLSD& response, LLParcel* parcel);
 void callback_audio_alert(const LLSD& notification, const LLSD& response, std::string media_url);
-std::string mungeURL(std::string url);
 
 // static
 void LLViewerParcelMedia::initClass()
@@ -780,7 +779,6 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 
 	std::string media_action;
 	std::string domain = extractDomain(media_url);
-	std::string munged_url = mungeURL(media_url);
     
 	for(S32 i = 0;i<(S32)sMediaFilterList.size();i++)
 	{
@@ -815,7 +813,7 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 		// We haven't been told what to do, and no alert is already
 		//  active, so put up the alert and note the fact.
 		LLSD args;
-		args["MEDIAURL"] = munged_url;
+		args["MEDIAURL"] = media_url;
 		LLViewerParcelMedia::sMediaFilterAlertActive = true;
 		LLViewerParcelMedia::sCurrentAlertMedia = *parcel;
 		LLParcel* pParcel = &LLViewerParcelMedia::sCurrentAlertMedia;
@@ -976,7 +974,6 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 
 	std::string media_action;
 	std::string domain = extractDomain(media_url);
-	std::string munged_url = mungeURL(media_url);
     
 	for(S32 i = 0;i<(S32)sMediaFilterList.size();i++)
 	{
@@ -1010,7 +1007,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 	else
 	{
 		LLSD args;
-		args["AUDIOURL"] = munged_url;
+		args["AUDIOURL"] = media_url;
 		LLViewerParcelMedia::sMediaFilterAlertActive = true;
 		LLNotifications::instance().add("AudioAlert", args,LLSD(),boost::bind(callback_audio_alert, _1, _2, media_url));
 	}
@@ -1174,57 +1171,6 @@ std::string LLViewerParcelMedia::extractDomain(std::string url)
 	std::transform(url.begin(), url.end(),url.begin(), ::tolower);
 
 	return url;
-}
-
-std::string mungeURL(std::string url)
-{
-	std::string domain = LLViewerParcelMedia::extractDomain(url);
-
-	size_t llserver_pos = domain.find("lindenlab.com");
-	if (llserver_pos != std::string::npos)
-	{
-		// Don't munge LL servers, since they don't provide media or
-		// audio streams.  This makes it more obvious that something
-		// fishy is going on.
-		return url;
-	}
-
-	size_t prefix = url.find(domain);
-	size_t pos = domain.size() + prefix;
-	std::string work_url;
-	if (prefix > 0)
-	{
-		work_url = url.substr(0,prefix);
-	}
-	else
-	{
-		work_url = "";
-	}
-	work_url += domain;
-
-	for ( ; pos < url.size(); pos++)
-	{
-		char whatshere = url[pos];
-		if (isalnum(whatshere))
-		{
-			work_url += '.';
-		}
-		else
-		{
-			if (whatshere == '%')
-			{
-				// Escape % to %25 so showing it as a URL
-				//  won't break.
-				work_url += "%25";
-			}
-			else
-			{
-				work_url += whatshere;
-			}
-		}
-	}
-
-	return work_url;
 }
 
 // TODO: observer
