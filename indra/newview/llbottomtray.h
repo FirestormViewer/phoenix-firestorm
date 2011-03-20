@@ -445,7 +445,10 @@ protected:
 
 	void updateContextMenu(S32 x, S32 y, MASK mask);
 	void onContextMenuItemClicked(const LLSD& userdata);
-	void showSidebarPanel(const std::string& panel_name);
+	//void showSidebarPanel(std::string &panel_name);
+//-TT Toggle sidebar panels with buttons
+	void showSidebarPanel(const LLSD& panel_name);
+//-TT 
 	bool onContextMenuItemEnabled(const LLSD& userdata);
 
 	// Either default or saved after user's manual resize width of nearby chat.

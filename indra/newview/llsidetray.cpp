@@ -190,17 +190,18 @@ LLSideTray* LLSideTrayTab::getSideTray()
 //-TT - Patch : MinimizeSidetabs
 void LLSideTrayTab::minimizeTab()
 {
-	LLSideTray* side_tray = LLSideTray::getInstance();
-	if (side_tray->isTabAttached(getName()))
-	{
-		side_tray->collapseSideBar();
-	}
-	else
-	{
-		llinfos << "Trying to minimize floater " << getName() << llendl;
-		LLFloater* floater_tab = (LLFloater*)getParent();
-		floater_tab->setMinimized(true);
-	}
+	LLSideTrayTab::toggleSidebarTabInstance(getName());
+	////LLSideTray* side_tray = LLSideTray::getInstance();
+	////if (side_tray->isTabAttached(getName()))
+	////{
+	////	side_tray->collapseSideBar();
+	////}
+	////else
+	////{
+	////	llinfos << "Trying to minimize floater " << getName() << llendl;
+	////	LLFloater* floater_tab = (LLFloater*)getParent();
+	////	floater_tab->setMinimized(true);
+	////}
 }
 
 
@@ -242,6 +243,28 @@ void LLSideTrayTab::toggleTabDocked()
 	// so that it doesn't receive redundant visibility change notifications.
 	LLFloaterReg::toggleInstance("side_bar_tab", tab_name);
 }
+//-TT Toggle sidebar panels with buttons
+void LLSideTrayTab::toggleSidebarTabInstance(std::string sdname)
+{
+	LLSideTray* side_tray = LLSideTray::getInstance();
+	if (side_tray->isTabAttached(sdname))
+	{
+		side_tray->collapseSideBar();
+	}
+	else
+	{
+		llinfos << "Trying to minimize floater " << sdname << llendl;
+		//LLFloater* floater_tab = (LLFloater*)getParent();
+		LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", sdname);
+		floater_tab->setMinimized(true);
+	}
+
+	//if (floater_tab) 
+	//	return !(floater_tab->isMinimized());
+	//else
+	//	return side_tray->isTabAttached(sdname);
+}
+//-TT
 
 void LLSideTrayTab::dock(LLFloater* floater_tab)
 {
@@ -1242,10 +1265,28 @@ void LLSideTray::togglePanel(LLPanel* &sub_panel, const std::string& panel_name,
 
 	// If a panel is visible and attached to Side Tray (has LLSideTray among its ancestors)
 	// it should be toggled off by collapsing Side Tray.
-	if (sub_panel->isInVisibleChain() && sub_panel->hasAncestor(this))
-	{
-		LLSideTray::getInstance()->collapseSideBar();
-	}
+	//if (sub_panel->isInVisibleChain() && sub_panel->hasAncestor(this))
+	//{
+	//        LLSideTray::getInstance()->collapseSideBar();
+	//}	
+
+//-TT Toggle sidebar panels with buttons
+	if (sub_panel->isInVisibleChain())
+		if (sub_panel->hasAncestor(this))
+		{
+			LLSideTray::getInstance()->collapseSideBar();
+		}
+		else
+		{
+			LLSideTrayTab *tab = getTabByPanel(panel_name);
+			if(tab)
+			{
+				LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", tab->getName());
+				floater_tab->setMinimized(!(floater_tab->isMinimized()));
+				//tab->minimizeTab();
+			}
+		}
+//-TT
 	else
 	{
 		LLSideTray::getInstance()->showPanel(panel_name, params);
@@ -1283,6 +1324,44 @@ LLPanel *findChildPanel(LLPanel *panel, const std::string& name, bool recurse)
 	}
 	return NULL;
 }
+
+//-TT Toggle sidebar panels and floaters
+LLSideTrayTab* LLSideTray::getTabByPanel(const std::string& panel_name)
+{
+	// Look up the panel in the list of detached tabs.
+	for ( child_vector_const_iter_t child_it = mDetachedTabs.begin(); child_it != mDetachedTabs.end(); ++child_it)
+	{
+		LLPanel *panel = findChildPanel(*child_it,panel_name,true);
+		if(panel)
+		{
+			return *child_it;
+		}
+	}
+
+	// Look up the panel in the list of attached tabs.
+	for ( child_vector_const_iter_t child_it = mTabs.begin(); child_it != mTabs.end(); ++child_it)
+	{
+		LLPanel *panel = findChildPanel(*child_it,panel_name,true);
+		if(panel)
+		{
+			return *child_it;
+		}
+	}
+	return NULL;
+}
+//-TT
+//-TT Toggle sidebar panels and floaters
+bool LLSideTray::isFloaterPanelVisible(const std::string& panel_name)
+{
+	LLSideTrayTab *tab = LLSideTray::getInstance()->getTabByPanel(panel_name);
+	if(tab)
+	{
+		LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", tab->getName());
+		return !(floater_tab->isMinimized());
+	}
+	return false;
+}
+//-TT
 
 LLPanel* LLSideTray::getPanel(const std::string& panel_name)
 {
@@ -1323,6 +1402,7 @@ bool		LLSideTray::isPanelActive(const std::string& panel_name)
 	if (!panel) return false;
 	return (panel->getName() == panel_name);
 }
+
 
 void	LLSideTray::updateSidetrayVisibility()
 {

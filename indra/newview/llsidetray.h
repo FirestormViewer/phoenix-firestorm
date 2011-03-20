@@ -197,6 +197,10 @@ public:
 	void 		toggleTabDocked(const std::string& strTabName);
 // [/RLVa:KB]
 
+//-TT Toggle sidebar panels with buttons
+static bool		isFloaterPanelVisible(const std::string& panel_name);
+//-TT
+
 protected:
 	bool		addChild		(LLView* view, S32 tab_group);
 	bool		removeTab		(LLSideTrayTab* tab); // Used to detach tabs temporarily
@@ -224,7 +228,9 @@ protected:
 	bool		onTabDestroy	(const LLSideTrayTab* tab);
 // [/RLVa:KB]
 	void		onToggleCollapse();
-
+//-TT Toggle sidebar panels with buttons
+	LLSideTrayTab* getTabByPanel(const std::string& panel_name);
+//-TT
 private:
 	// Implementation of LLDestroyClass<LLSideTray>
 	static void destroyClass()

@@ -5923,6 +5923,7 @@ class LLSidetrayPanelVisible : public view_listener_t
 		std::string panel_name = userdata.asString();
 		// Toggle the panel
 		if (LLSideTray::getInstance()->isPanelActive(panel_name))
+			//|| LLSideTray::getInstance()->isFloaterPanelVisible(panel_name))
 		{
 			return true;
 		}

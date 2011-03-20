@@ -69,6 +69,9 @@ public:
     /*virtual*/ BOOL	postBuild	();
 	/*virtual*/ bool	addChild	(LLView* view, S32 tab_group);
 	
+//-TT Toggle sidebar panels with buttons
+	static void		toggleSidebarTabInstance(std::string sdname);
+//-TT
 	
 	void			reshape		(S32 width, S32 height, BOOL called_from_parent = TRUE);
 	

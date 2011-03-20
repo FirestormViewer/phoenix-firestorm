@@ -57,7 +57,9 @@
 #include "rlvhandler.h"
 #include "rlvui.h"
 // [/RLVa:KB]
-
+//-TT Toggle sidebar panels and floaters
+#include "llsidetraytab.h"
+//-TT
 // Distance from mouse down on which drag'n'drop should be started.
 #define DRAG_START_DISTANCE 3
 
@@ -866,7 +868,7 @@ bool LLBottomTray::onContextMenuItemEnabled(const LLSD& userdata)
 
 // used to manage the bottom bar icons specific to sidebar panels.
 // AO: A bit hacky and might be better in another place.
-void LLBottomTray::showSidebarPanel(const std::string& panel_name)
+void LLBottomTray::showSidebarPanel(const LLSD& panel_name)
 {
 	LLSD param;
 	LLSideTray* sb = LLSideTray::getInstance();
@@ -876,35 +878,35 @@ void LLBottomTray::showSidebarPanel(const std::string& panel_name)
 	
 
 	// map buttons to specific values that are useful for detection & comparisons
-	if (panel_name == "panel_people")
+	if (master_panel_name == "panel_people")
 	{
 		param["people_panel_tab_name"] = "nearby_panel";
 		tab_name = "sidebar_people";
 		btn = getChild<LLButton>("sidebar_people_btn");
 		master_panel_name = "panel_container_people";
 	}
-	else if (panel_name == "panel_me")
+	else if (master_panel_name == "panel_me")
 	{
 		tab_name = "sidebar_me";
 		btn = getChild<LLButton>("sidebar_me_btn");
 		master_panel_name = "panel_container_me";
 	}
-	else if (panel_name == "panel_home")
+	else if (master_panel_name == "panel_home")
 	{
 		tab_name = "sidebar_home";
 		btn = getChild<LLButton>("sidebar_home_btn");
 	}
-	else if (panel_name == "panel_places")
+	else if (master_panel_name == "panel_places")
 	{
 		tab_name = "sidebar_places";
 		btn = getChild<LLButton>("sidebar_places_btn");
 	}
-	else if (panel_name == "sidepanel_appearance")
+	else if (master_panel_name == "sidepanel_appearance")
 	{
 		tab_name = "sidebar_appearance";
 		btn = getChild<LLButton>("sidebar_appearance_btn");
 	}
-	else if (panel_name == "sidepanel_inventory")
+	else if (master_panel_name == "sidepanel_inventory")
 	{
 		tab_name = "sidebar_inventory";
 		btn = getChild<LLButton>("sidebar_inv_btn");
@@ -914,18 +916,17 @@ void LLBottomTray::showSidebarPanel(const std::string& panel_name)
 	LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", tab_name);
 	if (LLFloater::isShown(floater_tab)) 
 	{
-		if (floater_tab->isMinimized())
+//-TT Toggle sidebar panels and floaters - added state toggle and combined the cases
+		bool isMinimized = floater_tab->isMinimized();
+		if (btn)
 		{
-			if (btn)
-				btn->setForcePressedState(true);
-			floater_tab->setMinimized(false);
+			//btn->setToggleState(isMinimized);
+			btn->setForcePressedState(isMinimized);
+			//const LLSD& sdName(tab_name);
+			//// Set the clicked callback to toggle the floater
+			//btn->setClickedCallback(boost::bind(&LLFloaterReg::toggleFloaterInstance, sdName));
 		}
-		else
-		{
-			if (btn)
-				btn->setForcePressedState(false);
-			floater_tab->setMinimized(true);
-		}
+		floater_tab->setMinimized(!isMinimized);
 	}
 	// toggle collapsing sidebar if active & docked
 	else 
@@ -933,12 +934,29 @@ void LLBottomTray::showSidebarPanel(const std::string& panel_name)
 		if (sb->isPanelActive(master_panel_name))
 		{
 			sb->collapseSideBar();
+			//btn->setToggleState(false);
 		}
 		else 
 		{
 			sb->showPanel(panel_name, param);
+			//btn->setToggleState(true);
+		}
+//-TT Toggle sidebar panels with buttons
+		if (btn)
+		{
+			// Set the clicked callback to toggle the sidebar
+			//btn->setClickedCallback(boost::bind(&LLSideTrayTab::toggleSidebarTabInstance, sdName));
 		}
 	}
+
+	//const LLSD& sdName(panel_name);
+	//std::string vis_control_name = LLSideTrayTab::declareVisibilityControl(sdname.asString());
+	// Set the button control value (toggle state) to the floater visibility control (Sets the value as well)
+	//btn->setControlVariable(LLSideTray::getInstance()->getPanel(sdName));
+	// Set the clicked callback to toggle the floater
+	//btn->setClickedCallback(boost::bind(&LLSideTrayTab::toggleSidebarTabInstance, sdName));
+	//btn->toggleState();
+//-TT
 }
 
 void LLBottomTray::onContextMenuItemClicked(const LLSD& userdata)
