@@ -654,10 +654,10 @@ void LLPanelAvatarProfile::fillCommonData(const LLAvatarData* avatar_data)
 	std::string register_date = getString("RegisterDateFormat", args);
 	getChild<LLUICtrl>("register_date")->setValue(register_date );
 	getChild<LLUICtrl>("sl_description_edit")->setValue(avatar_data->about_text);
-	//getChild<LLUICtrl>("fl_description_edit")->setValue(avatar_data->fl_about_text);
+	getChild<LLUICtrl>("fl_description_edit")->setValue(avatar_data->fl_about_text);
 	getChild<LLUICtrl>("2nd_life_pic")->setValue(avatar_data->image_id);
-	//getChild<LLUICtrl>("real_world_pic")->setValue(avatar_data->fl_image_id);
-	//getChild<LLUICtrl>("homepage_edit")->setValue(avatar_data->profile_url);
+	getChild<LLUICtrl>("real_world_pic")->setValue(avatar_data->fl_image_id);
+	getChild<LLUICtrl>("homepage_edit")->setValue(avatar_data->profile_url);
 
 	// Hide home page textbox if no page was set to fix "homepage URL appears clickable without URL - EXT-4734"
 	getChildView("homepage_edit")->setVisible( !avatar_data->profile_url.empty());
