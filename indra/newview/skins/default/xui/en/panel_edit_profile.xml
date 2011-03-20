@@ -198,7 +198,7 @@
             <texture_picker
              allow_no_texture="true"
              default_image_name="None"
-             enabled="false"
+             enabled="true"
              fallback_image="Generic_Person_Large"
              follows="top|left"
              height="225"
@@ -379,7 +379,7 @@
             <texture_picker
              allow_no_texture="true"
              default_image_name="None"
-             enabled="false"
+             enabled="true"
              fallback_image="Generic_Person_Large"
              follows="top|left"
              height="225"
