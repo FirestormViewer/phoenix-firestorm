@@ -86,7 +86,7 @@
                    width="500">
 <!-- first element on rest of screen is top info bar - so is just below nav bar -->
             <panel follows="left|top|right"
-                   height="55"
+                   height="42"
 					background_opaque="true"
 					background_visible="false"
 					bg_opaque_color="red"

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
- background_opaque="true"
- background_visible="false"
- bg_opaque_color="green"
- bg_alpha_color="green"
+ background_visible="true"
+ bg_opaque_color="DkGray"
+ bg_alpha_color="DkGray"
  follows="left|bottom|right"
- height="50"
+ height="37"
  bottom="5"
  layout="topleft"
  name="navigation_bar"
@@ -18,8 +17,9 @@
 	 bg_alpha_color="DkGray"
 	 background_opaque="true"
 	 follows="left|top|right"
-	 height="30"
-	 top="0"
+	 height="22"
+	 top_delta="0"
+         top_pad="0"
 	 layout="topleft"
 	 name="navigation_panel"
 	 width="2054">
@@ -134,13 +134,11 @@
         </search_combo_box>
 	</panel>
   <favorites_bar
-  	 auto_resize="true"
-	 background_visible="true"
-	 bg_opaque_color="green"
-	 bg_alpha_color="green"
-	 background_opaque="true"
+         background_visible="true"
+         bg_opaque_color="DkGray"
+         bg_alpha_color="DkGray"
      follows="left|top|right"
-     top_pad="3"
+     top_pad="2"
      font="SansSerifSmall"
      height="15"
      layout="topleft"
