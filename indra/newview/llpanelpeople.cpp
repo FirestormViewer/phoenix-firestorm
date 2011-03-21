@@ -603,7 +603,7 @@ BOOL LLPanelPeople::postBuild()
 
 	mOnlineFriendList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
 	mAllFriendList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
-	mNearbyList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
+	mNearbyList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onNearbyListDoubleClicked, this, _1));
 	mRecentList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
 
 	mOnlineFriendList->setCommitCallback(boost::bind(&LLPanelPeople::onAvatarListCommitted, this, mOnlineFriendList));
@@ -1262,9 +1262,20 @@ void LLPanelPeople::onAvatarListDoubleClicked(LLUICtrl* ctrl)
 #if 0 // SJB: Useful for testing, but not currently functional or to spec
 	LLAvatarActions::showProfile(clicked_id);
 #else // spec says open IM window, but we override to cam target (Andromeda)
-	//LLAvatarActions::startIM(clicked_id);
-	LLAvatarActions::zoomIn(clicked_id);
+	LLAvatarActions::startIM(clicked_id);
 #endif
+}
+
+void LLPanelPeople::onNearbyListDoubleClicked(LLUICtrl* ctrl)
+{
+	LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(ctrl);
+	if(!item)
+	{
+		return;
+	}
+	
+	LLUUID clicked_id = item->getAvatarId();
+	LLAvatarActions::zoomIn(clicked_id);
 }
 
 void LLPanelPeople::onAvatarListCommitted(LLAvatarList* list)
