@@ -283,7 +283,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
             <text
              left="6"
              top_pad="8"
-             follows="left|top"
+             follows="left|bottom"
              halign="right"
              height="16"
              name="Groups:"
@@ -297,7 +297,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
             right="-6"
             border_visible="true"
             for_agent="false"
-            follows="left|top|right"
+            follows="left|bottom|right"
             name="group_list" />
 
             <!--<button follows="left|top" left="15"  top="240" height="20" halign="center"

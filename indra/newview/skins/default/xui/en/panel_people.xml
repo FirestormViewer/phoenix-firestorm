@@ -272,7 +272,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                         <avatar_list
                          allow_select="true"
                          follows="all"
-                         height="172"
+                         height="356"
                          layout="topleft"
                          left="0"
                          multi_select="true"
@@ -300,7 +300,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                         <avatar_list
                          allow_select="true"
                          follows="all"
-                         height="173"
+                         height="356"
                          layout="topleft"
                          left="0"
                          multi_select="true"
