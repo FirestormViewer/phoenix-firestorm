@@ -695,6 +695,19 @@ void LLChatHistory::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName
 	mDisplayName_Username = mDisplayName + " ("+av_name.mUsername+")";
 }
 
+//-TT Display names timing in chat
+void LLChatHistory::lookupDisplayNames(const LLChat& chat)
+{
+	// resolve display names if necessary		
+	if (gSavedSettings.getBOOL("UseDisplayNames"))
+	{
+		mDisplayName=chat.mFromName;
+		mDisplayName_Username=chat.mFromName;
+		LLAvatarNameCache::get(chat.mFromID,boost::bind(&LLChatHistory::onAvatarNameCache, this, _1, _2));
+	}
+}
+//-TT
+
 void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LLStyle::Params& input_append_params)
 {
 	
@@ -703,13 +716,15 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	//time to get an answer back before it's needed.
 	if (use_plain_text_chat_history)
 	{
-		// resolve display names if necessary		
-		if (gSavedSettings.getBOOL("UseDisplayNames"))
-		{
-			mDisplayName=chat.mFromName;
-			mDisplayName_Username=chat.mFromName;
-			LLAvatarNameCache::get(chat.mFromID,boost::bind(&LLChatHistory::onAvatarNameCache, this, _1, _2));
-		}
+		lookupDisplayNames(chat);
+		//ms_sleep(250);
+		//// resolve display names if necessary		
+		//if (gSavedSettings.getBOOL("UseDisplayNames"))
+		//{
+		//	mDisplayName=chat.mFromName;
+		//	mDisplayName_Username=chat.mFromName;
+		//	LLAvatarNameCache::get(chat.mFromID,boost::bind(&LLChatHistory::onAvatarNameCache, this, _1, _2));
+		//}
 	}
 	
 	llassert(mEditor);
@@ -863,10 +878,12 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				link_params.readonly_color(header_name_color);
 				if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
 				{
+					checkDisplayName();
 					mEditor->appendText(mDisplayName_Username, false, link_params);
 				}
 				else if (gSavedSettings.getBOOL("UseDisplayNames"))
 				{
+					checkDisplayName();
 					mEditor->appendText(mDisplayName, false, link_params);
 				}
 				else
@@ -1042,6 +1059,18 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	{
 		mEditor->setCursorAndScrollToEnd();
 	}
+}
+
+bool LLChatHistory::checkDisplayName()
+{
+	for (int i = 0; i <=20; i++)
+	{
+		if (mDisplayName.empty())
+			ms_sleep(50);
+		else
+			return true;
+	}
+	return false;
 }
 
 void LLChatHistory::draw()
