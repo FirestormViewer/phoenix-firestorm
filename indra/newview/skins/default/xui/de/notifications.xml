@@ -2505,13 +2505,13 @@ In Ihrem Inventar wird ein Lesezeichen erstellt, damit Sie diesem Einwohner schn
 		</form>
 	</notification>
 	<notification name="RegionRestartMinutes">
-		Diese Region wird in [MINUTES] neu gestartet.
-Wenn Sie in dieser Region bleiben, werden Sie abgemeldet.
-	</notification>
+    Diese Region wird in [MINUTES] Minuten neu gestartet.
+    Wenn Sie in dieser Region bleiben, werden Sie abgemeldet.
+  </notification>
 	<notification name="RegionRestartSeconds">
-		Diese Region wird in [SECONDS] neu gestartet.
-Wenn Sie in dieser Region bleiben, werden Sie abgemeldet.
-	</notification>
+    Diese Region wird in [SECONDS] Sekunden neu gestartet.
+    Wenn Sie in dieser Region bleiben, werden Sie abgemeldet.
+  </notification>
 	<notification name="LoadWebPage">
 		Webseite [URL] laden?
 
