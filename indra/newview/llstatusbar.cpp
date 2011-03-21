@@ -548,9 +548,12 @@ void LLStatusBar::onMouseEnterVolume()
 {
 	LLButton* volbtn =  getChild<LLButton>( "volume_btn" );
 	LLRect vol_btn_rect = volbtn->getRect();
+	LLPanel* media_panel = getChild<LLPanel>("time_and_media_bg");
+	LLRect media_panel_rect = media_panel->getRect();
 	LLRect volume_pulldown_rect = mPanelVolumePulldown->getRect();
-	volume_pulldown_rect.setLeftTopAndSize(vol_btn_rect.mLeft -
-	     (volume_pulldown_rect.getWidth() - vol_btn_rect.getWidth())/2,
+	volume_pulldown_rect.setLeftTopAndSize(
+		(vol_btn_rect.mLeft + media_panel_rect.mLeft) -
+		(volume_pulldown_rect.getWidth() - vol_btn_rect.getWidth())/2,
 			       vol_btn_rect.mBottom,
 			       volume_pulldown_rect.getWidth(),
 			       volume_pulldown_rect.getHeight());
