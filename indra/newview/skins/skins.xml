@@ -32,6 +32,7 @@
             </array>
         </map>
 
+<!-- Removed for end-users, per Dev meeting Mar 20 2011
 		<map>
         <key>name</key>
             <string>Firestorm Clear</string>
@@ -47,7 +48,7 @@
                 </map>
             </array>
         </map>
-
+-->
         <map>
         <key>name</key>
             <string>MetaHarper Modern</string>

@@ -1707,9 +1707,15 @@ void LLViewerWindow::initWorldUI()
 	{
 		navbar->showFavoritesPanel(FALSE);
 	}
+
 	if (!gSavedSettings.getBOOL("ShowSearchTopBar"))
 	{
 		navbar->childSetVisible("search_combo_box",FALSE);
+	}
+
+	if (!gSavedSettings.getBOOL("ShowMenuBarLocation"))
+	{
+		gStatusBar->childSetVisible("parcel_info_panel",FALSE);
 	}
 	
 
