@@ -58,8 +58,9 @@ MediaFilter		LGPL
 ResizableCamaeraControl	LGPL
 FolderStyleOutfits	LGPL
 PrivateLookat		LGPL (from ArminW/Kokua)
-PreviewAnimations	LGPL (from ARminW/Kokua)
+PreviewAnimations	LGPL (from ArminW/Kokua)
 LSLmediaToggle		LGPL
 ImprovedRadar		LGPL
 Resizable_Profiles	LGPL
 Derender		LGPL
+RezUnderLandGroup	LGPL

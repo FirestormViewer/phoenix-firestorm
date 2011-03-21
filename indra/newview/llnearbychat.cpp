@@ -261,13 +261,15 @@ void	LLNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 		return;
 	}
 	
-	// IF tab mode active, flash our tab
+	// AO: IF tab mode active, flash our tab
 	if(isChatMultiTab())
 	{
-		LLSD notification;
-		notification["session_id"] = getKey();
-		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
-		floater_container->onNewMessageReceived(notification);
+		LLMultiFloater* hostp = getHost();
+		if( !isInVisibleChain()
+		   && hostp)
+		{
+			hostp->setFloaterFlashing(this, TRUE);
+		}
 	}
 
 	if (gSavedPerAccountSettings.getBOOL("LogNearbyChat"))

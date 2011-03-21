@@ -21,12 +21,15 @@
     tab_position="top"
     width="517"
     bg_opaque_color="0,0,0,0.0">
-      <panel
+      
+	  
+	  <!--Tab1-1-->
+	  <panel
         border="true"
         bottom="-500"
         follows="left|top|right|bottom"
         height="500"
-        label="Tab1-1"
+        label="General"
         left="1"
         mouse_opaque="true"
         name="tab1-1"
@@ -110,13 +113,30 @@
 		<check_box bottom_delta="-30" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Teleport Screens" left="15" mouse_opaque="true" name="tp_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableTeleportScreens" tool_tip="Disables the black teleport screen during all teleports."/>
 		<check_box bottom_delta="-20" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Login Progress Screen" left_delta="0" mouse_opaque="true" name="login_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableLoginScreens" tool_tip="Disables the black login progress Screen"/>
 		<check_box bottom_delta="-20" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Logout Progress Screen" left_delta="0" mouse_opaque="true" name="logout_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableLogoutScreens" tool_tip="Disables the black Logout progress screen."/>
+        <check_box bottom_delta="-30"
+      enabled="true"
+      follows="left|top"
+      font="SansSerifSmall"
+      height="16"
+      initial_value="false"
+      label="Always rez objects under the land group if possible"
+      left="15"
+      mouse_opaque="true"
+      name="grouplandrez"
+      radio_style="false"
+      width="270"
+      control_name="RezUnderLandGroup"
+      tool_tip="Attempts to rez objects under the land group if you're in the land group regardless of which current group tag you're wearing."/>
       </panel>
+	  
+	  
+	   <!--Tab1-2-->
       <panel
 	    border="true"
         bottom="-500"
         follows="left|top|right|bottom"
         height="500"
-        label="Tab1-2"
+        label="Chat"
         left="1"
         mouse_opaque="true"
         name="tab1-2"
@@ -197,6 +217,8 @@
           (requires restart)
         </text>
       </panel>
+	  
+	  
       <!--CmdLine-->
       <panel border="true" bottom="-580" follows="left|top|right|bottom" height="525" label="CmdLine" left="1" mouse_opaque="true" name="tab1-3" width="517">
         <button bottom="-25" follows="left|top" font="SansSerifSmall" height="18" label="?" name="PhoenixHelp_CmdLine" tool_tip="Click here for help regarding the settings in this page." right="490" width="18"/>
@@ -239,5 +261,30 @@
         <text bottom_delta="-18" follows="left|top" font="SansSerifSmall" height="16" left_delta="0" name="loltxt15" width="512">Set the music stream url (usage: cmd url)</text>
         <line_editor bevel_style="in" border_style="line" border_thickness="1" bottom_delta="-20" follows="left|top" font="SansSerifSmall" height="20" left_delta="0" max_length="256" mouse_opaque="true" tool_tip="sets and plays your music stream to the entered url" name="PhoenixCmdLineMusic" control_name="PhoenixCmdLineMusic" width="200"/>
       </panel>
+	  
+	  
+	  <!--Windlight-->
+      <panel
+	    border="true"
+        bottom="-500"
+        follows="left|top|right|bottom"
+        height="500"
+        label="Windlight"
+        left="1"
+        mouse_opaque="true"
+        name="WindlightTab"
+        width="517">
+           <!--Todo:KC
+           <text bottom="-25" left="10" type="string" length="1" bg_visible="false" border_drop_shadow_visible="false" border_visible="false" drop_shadow_visible="true" enabled="true" follows="left|top" font="SansSerifSmall" h_pad="0" halign="left" height="12" mouse_opaque="true" name="TextText" v_pad="0" width="128">General</text>
+           <check_box bottom_delta="-25" left_delta="0" label="Save Windlight settings on logout" control_name="PhoenixRestoreLastWLsettingsOnLogin" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="true" mouse_opaque="true" name="PhoenixRestoreLastWLsettingsOnLogin" radio_style="false" width="256" />
+           -->
+		
+           <text bottom_delta="-25" left="10" type="string" length="1" bg_visible="false" border_drop_shadow_visible="false" border_visible="false" drop_shadow_visible="true" enabled="true" follows="left|top" font="SansSerifSmall" h_pad="0" halign="left" height="12" mouse_opaque="true" name="TextText" v_pad="0" width="200">Phoenix WL Share (Experimental)</text>
+           <check_box bottom_delta="-25" left_delta="0" label="Use Phoenix Parcel Windlight Sharing (Experimental)" control_name="PhoenixWLParcelEnabled" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="true" mouse_opaque="true" name="PhoenixWLParcelEnabled" radio_style="false" width="256" />
+           <check_box bottom_delta="-20" left_delta="5" label="Auto apply WL settings from friend's land" control_name="PhoenixWLWhitelistFriends" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="true" mouse_opaque="true" name="PhoenixWLWhitelistFriends" radio_style="false" width="256" />
+           <check_box bottom_delta="-17" left_delta="0" label="Auto apply WL settings from my groups' land" control_name="PhoenixWLWhitelistGroups" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="true" mouse_opaque="true" name="PhoenixWLWhitelistGroups" radio_style="false" width="256" />
+           <check_box bottom_delta="-17" left_delta="0" label="Auto apply WL settings from any parcel" control_name="PhoenixWLWhitelistAll" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="true" mouse_opaque="true" name="PhoenixWLWhitelistAll" radio_style="false" width="256" />
+      </panel>
+	  
     </tab_container>
 </panel>
