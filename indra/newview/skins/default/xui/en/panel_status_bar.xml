@@ -174,7 +174,10 @@
     width="95"
     top="0"
     follows="right|top"
-    name="balance_bg">
+    name="balance_bg"
+    background_opaque="true"
+    background_visible="true"
+    bg_opaque_color="MouseGray">
     <text
      halign="center"
      font="SansSerifSmall"
@@ -208,6 +211,17 @@
      top="2"
      width="55" />
   </panel>
+  
+  <panel
+    height="18"
+    left_pad="0"
+    width="130"
+    top="0"
+    follows="right|top"
+    name="time_and_media_bg"
+    background_opaque="true"
+    background_visible="true"
+    bg_opaque_color="MouseGray">
     <text
      type="string"
      font="SansSerifSmall"
@@ -217,7 +231,7 @@
      height="16"
      top="5"
      layout="topleft"
-     left_pad="0"
+     left="0"
      name="TimeText"
      tool_tip="Current time (Pacific)"
      width="80">
@@ -249,4 +263,5 @@
      name="volume_btn"
      tool_tip="Global Volume Control"
      width="16" />
+  </panel>
 </panel>

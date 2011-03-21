@@ -286,6 +286,7 @@ BOOL LLStatusBar::postBuild()
 	mInfoBtn = getChild<LLButton>("place_info_btn");
 	mInfoBtn->setClickedCallback(boost::bind(&LLStatusBar::onInfoButtonClicked, this));
 
+	mParcelInfoPanel = getChild<LLPanel>("parcel_info_panel");
 	mParcelInfoText = getChild<LLTextBox>("parcel_info_text");
 	mDamageText = getChild<LLTextBox>("damage_text");
 
@@ -363,6 +364,11 @@ void LLStatusBar::refresh()
 	if (MENU_RIGHT != gMenuBarView->getRect().getWidth())
 	{
 		gMenuBarView->reshape(MENU_RIGHT, gMenuBarView->getRect().getHeight());
+	}
+	// also update the parcel info panel pos -KC
+	if ((MENU_RIGHT + MENU_PARCEL_SPACING) != mParcelInfoPanel->getRect().mLeft)
+	{
+		updateParcelPanel();
 	}
 
 	mSGBandwidth->setVisible(net_stats_visible);
@@ -703,6 +709,18 @@ void LLStatusBar::update()
 	setParcelInfoText(new_text);
 
 	updateParcelIcons();
+	updateParcelPanel();
+}
+
+void LLStatusBar::updateParcelPanel()
+{
+	const S32 MENU_RIGHT = gMenuBarView->getRightmostMenuEdge();
+	S32 left = MENU_RIGHT + MENU_PARCEL_SPACING;
+	LLRect rect = mParcelInfoPanel->getRect();
+	rect.mRight = left + rect.getWidth();
+	rect.mLeft = left;
+	
+	mParcelInfoPanel->setRect(rect);
 }
 
 void LLStatusBar::updateParcelInfoText()
@@ -915,4 +933,12 @@ void LLStatusBar::onInfoButtonClicked()
 void LLStatusBar::onParcelWLClicked()
 {
 	KCWindlightInterface::instance().onClickWLStatusButton();
+}
+
+// hack -KC
+void LLStatusBar::setBackgroundColor( const LLColor4& color )
+{
+	LLPanel::setBackgroundColor(color);
+	getChild<LLPanel>("balance_bg")->setBackgroundColor(color);
+	getChild<LLPanel>("time_and_media_bg")->setBackgroundColor(color);
 }

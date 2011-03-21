@@ -45,6 +45,7 @@ class LLPanelVolumePulldown;
 class LLPanelNearByMedia;
 class LLIconCtrl;
 class LLParcelChangeObserver;
+class LLPanel;
 
 
 class LLRegionDetails
@@ -125,6 +126,8 @@ public:
 	LLRegionDetails mRegionDetails;
 
 	LLPanelNearByMedia* getNearbyMediaPanel() { return mPanelNearByMedia; }
+	
+	void setBackgroundColor( const LLColor4& color );
 
 private:
 	
@@ -200,6 +203,11 @@ private:
 public:
 
 	/**
+	 * Updates parcel panel pos (mParcelPanel).
+	 */
+	void updateParcelPanel();
+
+	/**
 	 * Updates parcel icons (mParcelIcon[]).
 	 */
 	void updateParcelIcons();
@@ -256,6 +264,7 @@ private:
 	LLPanelVolumePulldown* mPanelVolumePulldown;
 	LLPanelNearByMedia*	mPanelNearByMedia;
 	
+	LLPanel* 				mParcelInfoPanel;
 	LLButton* 				mInfoBtn;
 	LLTextBox* 				mParcelInfoText;
 	LLTextBox* 				mDamageText;
