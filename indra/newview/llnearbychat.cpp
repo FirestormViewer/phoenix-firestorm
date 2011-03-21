@@ -235,11 +235,11 @@ std::string appendTime()
 void	LLNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 {
 	LLChat& tmp_chat = const_cast<LLChat&>(chat);
-	bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
 
 	if(tmp_chat.mTimeStr.empty())
 		tmp_chat.mTimeStr = appendTime();
 
+	bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
 	
 	if (!chat.mMuted)
 	{
