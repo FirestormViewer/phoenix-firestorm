@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- legacy_header_height="14"
+ legacy_header_height="20"
  background_visible="true"
-
-
-  background_opaque="true"
-      border_visible="false"
-  bg_alpha_color="ScriptDialog"
-  bg_opaque_color="ScriptDialog"
-
-
-follows="left|top|right|bottom"
+ background_opaque="true"
+ border_visible="false"
+ bg_alpha_color="ScriptDialog"
+ bg_opaque_color="ScriptDialog"
+ follows="left|top|right|bottom"
  height="250"
  layout="topleft"
  left="0"
@@ -21,7 +17,7 @@ follows="left|top|right|bottom"
  visible="false"
  width="310"
  can_resize="false"
- header_height="14"
+ header_height="20"
  min_width="310"
  min_height="200">
 </floater>
