@@ -81,8 +81,6 @@ const S32 MOUSE_DRAG_SLOP = 2;		// How far the mouse needs to move before we thi
 LLNetMap::LLNetMap (const Params & p)
 :	LLUICtrl (p),
 	mBackgroundColor (p.bg_color()),
-	mScale( MAP_SCALE_MID ),
-	mPixelsPerMeter( MAP_SCALE_MID / REGION_WIDTH_METERS ),
 	mObjectMapTPM(0.f),
 	mObjectMapPixels(0.f),
 	mTargetPan(0.f, 0.f),
@@ -98,6 +96,8 @@ LLNetMap::LLNetMap (const Params & p)
 	mClosestAgentAtLastRightClick(),
 	mToolTipMsg()
 {
+	mScale = gSavedSettings.getF32("MiniMapScale");
+	mPixelsPerMeter = mScale / REGION_WIDTH_METERS;
 	mDotRadius = llmax(DOT_SCALE * mPixelsPerMeter, MIN_DOT_RADIUS);
 }
 
@@ -110,6 +110,8 @@ void LLNetMap::setScale( F32 scale )
 	scale = llclamp(scale, MAP_SCALE_MIN, MAP_SCALE_MAX);
 	mCurPan *= scale / mScale;
 	mScale = scale;
+
+	gSavedSettings.setF32("MiniMapScale", mScale);
 	
 	if (mObjectImagep.notNull())
 	{
