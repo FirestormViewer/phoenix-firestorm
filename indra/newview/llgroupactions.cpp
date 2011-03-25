@@ -40,6 +40,8 @@
 #include "llsidetray.h"
 #include "llstatusbar.h"	// can_afford_transaction()
 #include "llimfloater.h"
+//-TT - Patch : ShowGroupFloaters
+#include "llpanelgroup.h"
 
 //
 // Globals
@@ -241,6 +243,36 @@ static bool isGroupUIVisible()
 	return panel->isInVisibleChain();
 }
 
+//-TT - Patch : ShowGroupFloaters
+static bool isGroupVisible(const LLUUID& group_id)
+{
+	static LLPanelGroup* panel = 0;
+	LLSideTray *sidetray = LLSideTray::getInstance();
+	if(!panel)
+	{
+		//if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
+		//{
+			panel = sidetray->getPanel<LLPanelGroup>("panel_group_info_sidetray");
+			if (panel->getID() != group_id)
+				return false;
+		//}
+		//else
+		//{
+		//	LLFloater *floater = LLFloaterReg::getInstance("floater_group_view", LLSD().with("group_id", group_id));
+
+		//	panel = floater->findChild<LLPanel>("panel_group_info_sidetray");
+		//}
+	}
+	if(!panel)
+		return false;
+
+	if (sidetray->isTabAttached("sidebar_people"))
+		return panel->isInVisibleChain();
+	else
+		return sidetray->isFloaterPanelVisible("panel_group_info_sidetray");
+}
+//-TT
+
 // static 
 void LLGroupActions::inspect(const LLUUID& group_id)
 {
@@ -262,7 +294,10 @@ void LLGroupActions::show(const LLUUID& group_id)
 
 void LLGroupActions::refresh_notices()
 {
-	if(!isGroupUIVisible())
+	//if(!isGroupUIVisible())
+	//	return;
+
+	if(!isGroupVisible(LLUUID::null))
 		return;
 
 	LLSD params;
@@ -276,7 +311,10 @@ void LLGroupActions::refresh_notices()
 //static 
 void LLGroupActions::refresh(const LLUUID& group_id)
 {
-	if(!isGroupUIVisible())
+	//if(!isGroupUIVisible())
+	//	return;
+
+	if(!isGroupVisible(group_id))
 		return;
 
 	LLSD params;
@@ -301,7 +339,10 @@ void LLGroupActions::createGroup()
 //static
 void LLGroupActions::closeGroup(const LLUUID& group_id)
 {
-	if(!isGroupUIVisible())
+	//if(!isGroupUIVisible())
+	//	return;
+
+	if(!isGroupVisible(group_id))
 		return;
 
 	LLSD params;
