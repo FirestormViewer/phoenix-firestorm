@@ -104,6 +104,8 @@ class LLViewerParcelMedia : public LLViewerMediaObserver
 		static std::string sCurrentMusic;
 		static bool sMediaQueueEmpty;
 		static bool sMusicQueueEmpty;
+		static U32 sMediaCommandQueue;
+		static F32 sMediaCommandTime;
 
 };
 

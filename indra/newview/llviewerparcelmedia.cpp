@@ -67,6 +67,8 @@ LLParcel LLViewerParcelMedia::sCurrentMedia;
 LLParcel LLViewerParcelMedia::sCurrentAlertMedia;
 bool LLViewerParcelMedia::sMediaQueueEmpty = TRUE;
 bool LLViewerParcelMedia::sMusicQueueEmpty = TRUE;
+U32 LLViewerParcelMedia::sMediaCommandQueue = 0;
+F32 LLViewerParcelMedia::sMediaCommandTime = 0;
 
 // Local functions
 bool callback_play_media(const LLSD& notification, const LLSD& response, LLParcel* parcel);
@@ -399,13 +401,29 @@ void LLViewerParcelMedia::processParcelMediaCommandMessage( LLMessageSystem *msg
 		// stop
 		if( command == PARCEL_MEDIA_COMMAND_STOP )
 		{
-			stop();
+			if (LLViewerParcelMedia::sMediaFilterAlertActive == false)
+			{
+				stop();
+			}
+			else
+			{
+				llinfos << "Queueing PARCEL_MEDIA_STOP command." << llendl;
+				sMediaCommandQueue = PARCEL_MEDIA_COMMAND_STOP;
+			}
 		}
 		else
 		// pause
 		if( command == PARCEL_MEDIA_COMMAND_PAUSE )
 		{
-			pause();
+			if (LLViewerParcelMedia::sMediaFilterAlertActive == false)
+			{
+				pause();
+			}
+			else
+			{
+				llinfos << "Queueing PARCEL_MEDIA_PAUSE command." << llendl;
+				sMediaCommandQueue = PARCEL_MEDIA_COMMAND_PAUSE;
+			}
 		}
 		else
 		// play
@@ -442,7 +460,15 @@ void LLViewerParcelMedia::processParcelMediaCommandMessage( LLMessageSystem *msg
 		// unload
 		if( command == PARCEL_MEDIA_COMMAND_UNLOAD )
 		{
-			stop();
+			if (LLViewerParcelMedia::sMediaFilterAlertActive == false)
+			{
+				stop();
+			}
+			else
+			{
+				llinfos << "Queueing PARCEL_MEDIA_UNLOAD command." << llendl;
+				sMediaCommandQueue = PARCEL_MEDIA_COMMAND_UNLOAD;
+			}
 		}
 	}
 
@@ -469,7 +495,16 @@ void LLViewerParcelMedia::processParcelMediaCommandMessage( LLMessageSystem *msg
 				}
 			}
 		}
-		seek(time);
+		if (LLViewerParcelMedia::sMediaFilterAlertActive == false)
+		{
+			seek(time);
+		}
+		else
+		{
+			llinfos << "Queueing PARCEL_MEDIA_TIME command." << llendl;
+			sMediaCommandQueue = PARCEL_MEDIA_COMMAND_TIME;
+			sMediaCommandTime = time;
+		}
 	}
 }
 
@@ -730,6 +765,7 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 				sQueuedMedia = *parcel;
 				sMediaQueueEmpty = false;
 			}
+			sMediaCommandQueue = 0;
 			return;
 		}
 		else
@@ -740,6 +776,7 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 				sQueuedMedia = *parcel;
 				sMediaQueueEmpty = false;
 			}
+			sMediaCommandQueue = 0;
 			return;
 		}
 	}
@@ -892,6 +929,31 @@ void callback_media_alert(const LLSD &notification, const LLSD &response, LLParc
 		// There's a queued media stream. Ask about it.
 		LLParcel* pParcel = &LLViewerParcelMedia::sQueuedMedia;
 		LLViewerParcelMedia::filterMediaUrl(pParcel);
+	}
+	else if (LLViewerParcelMedia::sMediaCommandQueue != 0)
+	{
+		// There's a queued media command. Process it.
+		if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_STOP)
+		{
+			llinfos << "Executing Queued PARCEL_MEDIA_STOP command." << llendl;
+			LLViewerParcelMedia::stop();
+		}
+		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_PAUSE)
+		{
+			llinfos << "Executing Queued PARCEL_MEDIA_PAUSE command." << llendl;
+			LLViewerParcelMedia::pause();
+		}
+		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_UNLOAD)
+		{
+			llinfos << "Executing Queued PARCEL_MEDIA_UNLOAD command." << llendl;
+			LLViewerParcelMedia::stop();
+		}
+		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_TIME)
+		{
+			llinfos << "Executing Queued PARCEL_MEDIA_TIME command." << llendl;
+			LLViewerParcelMedia::seek(LLViewerParcelMedia::sMediaCommandTime);
+		}
+		LLViewerParcelMedia::sMediaCommandQueue = 0;
 	}
 
 	
@@ -1097,10 +1159,35 @@ void callback_audio_alert(const LLSD &notification, const LLSD &response, std::s
 	{
 		LLViewerParcelMedia::filterAudioUrl(LLViewerParcelMedia::sQueuedMusic);
 	}
-	else
+	else if (LLViewerParcelMedia::sMediaQueueEmpty == false)
 	{
 		LLParcel* pParcel = &LLViewerParcelMedia::sQueuedMedia;
 		LLViewerParcelMedia::filterMediaUrl(pParcel);
+	}
+	else if (LLViewerParcelMedia::sMediaCommandQueue != 0)
+	{
+		// There's a queued media command. Process it.
+		if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_STOP)
+		{
+			llinfos << "Executing Queued PARCEL_MEDIA_STOP command." << llendl;
+			LLViewerParcelMedia::stop();
+		}
+		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_PAUSE)
+		{
+			llinfos << "Executing Queued PARCEL_MEDIA_PAUSE command." << llendl;
+			LLViewerParcelMedia::pause();
+		}
+		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_UNLOAD)
+		{
+			llinfos << "Executing Queued PARCEL_MEDIA_UNLOAD command." << llendl;
+			LLViewerParcelMedia::stop();
+		}
+		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_TIME)
+		{
+			llinfos << "Executing Queued PARCEL_MEDIA_TIME command." << llendl;
+			LLViewerParcelMedia::seek(LLViewerParcelMedia::sMediaCommandTime);
+		}
+		LLViewerParcelMedia::sMediaCommandQueue = 0;
 	}
 }
 
