@@ -233,6 +233,7 @@ void LLGroupActions::activate(const LLUUID& group_id)
 	gAgent.sendReliableMessage();
 }
 
+#if 0
 static bool isGroupUIVisible()
 {
 	static LLPanel* panel = 0;
@@ -242,6 +243,7 @@ static bool isGroupUIVisible()
 		return false;
 	return panel->isInVisibleChain();
 }
+#endif
 
 //-TT - Patch : ShowGroupFloaters
 static bool isGroupVisible(const LLUUID& group_id)
