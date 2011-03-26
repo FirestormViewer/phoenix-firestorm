@@ -39,7 +39,7 @@
 		font="SansSerifSmall"
 		mouse_opaque="true"
 		name="whitelist_text">
-		Whitelist Domains:
+		Allowed Domains:
 	</text>
 
 	<scroll_list
@@ -136,7 +136,7 @@
 		font="SansSerifSmall"
 		mouse_opaque="true"
 		name="blacklist_text">
-		Blacklist Domains:
+		Blocked Domains:
 	</text>
 
 	<scroll_list
@@ -151,13 +151,13 @@
 	    draw_heading="false"
 		mouse_opaque="true"
 	    multi_select="false"
-		name="blackelist_list">
+		name="blacklist_list">
 		<column label="Blacklist" name="blacklist_col" width="195" />
 	</scroll_list>
 
 	<layout_stack
 		name="blacklist_buttons_layout_stack"
-		left="0"
+		left="5"
 		top_pad="4"
 		height="16"
 		follows="left|right|bottom"

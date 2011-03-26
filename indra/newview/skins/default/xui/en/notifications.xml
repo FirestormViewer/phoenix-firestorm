@@ -1771,15 +1771,24 @@ Try selecting a single parcel.
    icon="alertmodal.tga"
    name="ParcelCanPlayMedia"
    type="alertmodal">   
-This location can play streaming media.
-Streaming media requires a fast Internet connection.
+This location provides streaming media, which may require more of your network bandwidth.
 
 Play streaming media when available?
 (You can change this option later under Preferences &gt; Sound &amp; Media.)
-    <usetemplate
-     name="okcancelbuttons"
-     notext="Disable"
-     yestext="Play Media"/>
+   <form name="form">
+    <button
+         index="0"
+         name="Play Media Now"
+         text="Play Media Now"/>
+        <button
+         index="1"
+         name="Always Play Media"  
+         text="Always Play Media"/>
+        <button
+         index="2"   
+         name="Do Not Pley Media"
+         text="Do Not Play Media"/>
+   </form>
   </notification>
 
 
@@ -4584,11 +4593,32 @@ The string [STRING_NAME] is missing from strings.xml.
 
   <notification
    icon="alert.tga"  
+   name="EnableMediaFilter"
+   type="alert"> 
+Playing media or music can expose your identity to sites outside Second Life. You can enable a filter that will allow you to select which sites will receive media requests, and give you better control over your privacy.
+
+Enable the media filter?
+(You can change this option later under Preferences &gt; Sound &amp; Media.)
+   <form name="form">
+    <button
+         index="0"
+         name="Enable"
+         text="Enable"/>
+        <button
+         index="1"
+         name="Disable"
+         text="Disable"/>
+   </form>
+  </notification>
+
+  <notification
+   icon="alert.tga"  
    name="MediaAlert"
    type="alert"> 
-The owner of this parcel has requested media at the following location to be loaded by your viewer:
+This parcel provides media from:
 
-[MEDIAURL]
+Domain: [MEDIADOMAIN]
+URL: [MEDIAURL]
    <form name="form">
     <button
          index="0"
@@ -4596,16 +4626,32 @@ The owner of this parcel has requested media at the following location to be loa
          text="Allow"/>
         <button
          index="1"
-         name="Deny"  
+         name="Deny"
          text="Deny"/>
+   </form>
+  </notification>
+
+  <notification
+   icon="alert.tga"  
+   name="MediaAlert2"
+   type="alert"> 
+Do you want to remember your choice and [LCONDITION] allow media from this source?
+
+Domain: [MEDIADOMAIN]
+URL: [MEDIAURL]
+   <form name="form">
+    <button
+         index="0"
+         name="Do Now"
+         text="[ACTION] Now"/>
         <button
-         index="2"   
-     name="Blacklist"
-         text="Blacklist"/>
+         index="1"   
+         name="RememberDomain"
+         text="[CONDITION] Allow This Domain"/>
         <button
-         index="3"
-         name="Whitelist"
-         text="Whitelist"/>
+         index="2"
+         name="RememberURL"
+         text="[CONDITION] Allow This URL"/>
    </form>
   </notification>
 
@@ -4613,9 +4659,10 @@ The owner of this parcel has requested media at the following location to be loa
    icon="alert.tga"  
    name="AudioAlert"
    type="alert"> 
-The owner of this parcel has requested music at the following location to be played by your viewer:
+This parcel provides music from:
 
-[AUDIOURL]
+Domain: [AUDIODOMAIN]
+URL: [AUDIOURL]
    <form name="form">
     <button
          index="0"
@@ -4623,16 +4670,32 @@ The owner of this parcel has requested music at the following location to be pla
          text="Allow"/>
         <button
          index="1"
-         name="Deny"  
+         name="Deny"
          text="Deny"/>
+   </form>
+  </notification>
+
+  <notification
+   icon="alert.tga"  
+   name="AudioAlert2"
+   type="alert"> 
+Do you want to remember your choice and [LCONDITION] allow music from this source?
+
+Domain: [AUDIODOMAIN]
+URL: [AUDIOURL]
+   <form name="form">
+    <button
+         index="0"
+         name="Do Now"
+         text="[ACTION] Now"/>
         <button
-         index="2"   
-     name="Blacklist"
-         text="Blacklist"/>
+         index="1"   
+         name="RememberDomain"
+         text="[CONDITION] Allow This Domain"/>
         <button
-         index="3"
-         name="Whitelist"
-         text="Whitelist"/>
+         index="2"
+         name="RememberURL"
+         text="[CONDITION] Allow This URL"/>
    </form>
   </notification>
 

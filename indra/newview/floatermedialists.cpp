@@ -107,7 +107,7 @@ void FloaterMediaLists::onWhitelistAdd( void* data )
 	self->getChildView("input_domain")->setVisible(true);
 	self->getChildView("commit_domain")->setVisible(true);
 	self->getChild<LLUICtrl>("add_text")->
-		setValue(std::string("Enter domain/url to add to domain whitelist:"));
+	setValue(std::string("Enter domain or URL to always allow:"));
 	self->getChildView("add_text")->setVisible(true);
 	sIsWhitelist = true;
 }
@@ -127,6 +127,11 @@ void FloaterMediaLists::onWhitelistRemove( void* data )
 			{
 				LLViewerParcelMedia::sMediaFilterList.erase(i);
 				LLViewerParcelMedia::saveDomainFilterList();
+				//HACK: should really see if the URL being deleted
+				//  is the same as the saved one
+				LLViewerParcelMedia::sMediaLastURL = "";
+				LLViewerParcelMedia::sAudioLastURL = "";
+				LLViewerParcelMedia::sMediaReFilter = true;
 				break;
 			}
 		}
@@ -147,7 +152,7 @@ void FloaterMediaLists::onBlacklistAdd( void* data )
 	self->getChildView("input_domain")->setVisible(true);
 	self->getChildView("commit_domain")->setVisible(true);
 	self->getChild<LLUICtrl>("add_text")->
-		setValue(std::string("Enter domain/url to add to domain blacklist:"));
+	setValue(std::string("Enter domain or URL to never allow:"));
 	self->getChildView("add_text")->setVisible(true);
 	self->sIsWhitelist = false;
 }
@@ -167,6 +172,11 @@ void FloaterMediaLists::onBlacklistRemove( void* data )
 			{
 				LLViewerParcelMedia::sMediaFilterList.erase(i);
 				LLViewerParcelMedia::saveDomainFilterList();
+				//HACK: should really see if the URL being deleted
+				//  is the same as the saved one
+				LLViewerParcelMedia::sMediaLastURL = "";
+				LLViewerParcelMedia::sAudioLastURL = "";
+				LLViewerParcelMedia::sMediaReFilter = true;
 				break;
 			}
 		}
