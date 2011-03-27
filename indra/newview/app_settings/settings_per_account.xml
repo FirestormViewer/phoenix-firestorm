@@ -183,5 +183,19 @@
             <integer>0</integer>
         </map>
     <!-- End of back compatibility settings -->
+    
+    <!-- Firestorm settings -->
+    <key>DebugLookAt</key>
+        <map>
+        <key>Comment</key>
+            <string>Show Debug LookAt targets</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
+    <!-- End of Firestorm settings -->
     </map>
 </llsd>

@@ -1662,7 +1662,9 @@ class LLAdvancedToggleShowLookAt : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		LLHUDEffectLookAt::sDebugLookAt = !(LLHUDEffectLookAt::sDebugLookAt);
+		//LLHUDEffectLookAt::sDebugLookAt = !(LLHUDEffectLookAt::sDebugLookAt);
+		bool value = !gSavedPerAccountSettings.getBOOL("DebugLookAt");
+		gSavedPerAccountSettings.setBOOL("DebugLookAt",value);
 		return true;
 	}
 };
@@ -1671,7 +1673,8 @@ class LLAdvancedCheckShowLookAt : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		bool new_value = LLHUDEffectLookAt::sDebugLookAt;
+		//bool new_value = LLHUDEffectLookAt::sDebugLookAt;
+		bool new_value = gSavedPerAccountSettings.getBOOL("DebugLookAt");
 		return new_value;
 	}
 };

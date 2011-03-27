@@ -48,7 +48,7 @@
 #include "llxmltree.h"
 #include "llviewercontrol.h"
 
-BOOL LLHUDEffectLookAt::sDebugLookAt = FALSE;
+//BOOL LLHUDEffectLookAt::sDebugLookAt = FALSE;
 
 // packet layout
 const S32 SOURCE_AVATAR = 0;
@@ -245,7 +245,8 @@ static BOOL loadAttentions()
 LLHUDEffectLookAt::LLHUDEffectLookAt(const U8 type) : 
 	LLHUDEffect(type), 
 	mKillTime(0.f),
-	mLastSendTime(0.f)
+	mLastSendTime(0.f),
+	mDebugLookAt( LLCachedControl<bool>(gSavedPerAccountSettings, "DebugLookAt", FALSE))
 {
 	clearLookAtTarget();
 	// parse the default sets
@@ -537,7 +538,7 @@ void LLHUDEffectLookAt::setSourceObject(LLViewerObject* objectp)
 //-----------------------------------------------------------------------------
 void LLHUDEffectLookAt::render()
 {
-	if (sDebugLookAt && mSourceObject.notNull())
+	if (mDebugLookAt && mSourceObject.notNull())
 	{
 		LLVector3 target = mTargetPos + ((LLVOAvatar*)(LLViewerObject*)mSourceObject)->mHeadp->getWorldPosition();
 
@@ -630,7 +631,7 @@ void LLHUDEffectLookAt::update()
 		}
 	}
 
-	if (sDebugLookAt)
+	if (mDebugLookAt)
 	{
 		((LLVOAvatar*)(LLViewerObject*)mSourceObject)->addDebugText((*mAttentions)[mTargetType].mName);
 	}
