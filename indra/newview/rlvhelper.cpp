@@ -156,11 +156,12 @@ void RlvCommand::initLookupTable()
 				"tplm", "tploc", "tplure", "viewnote", "viewscript", "viewtexture", "acceptpermission", "accepttp", "allowidle", 
 				"displayname", "edit", "editobj", "rez", "fartouch", "interact", "touchobj", "touchattach", "touchattachself", 
 				"touchattachother", "touchhud", "touchworld", "touchall", "fly", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv", 
-				"detachme", "attachover", "attachthis", "attachthisover", "detachthis", "attachall", "attachallover", "detachall", 
-				"attachallthis", "attachallthisover", "detachallthis", "tpto", "version", "versionnew", "versionnum", "getattach", 
-				"getattachnames", "getaddattachnames", "getremattachnames", "getoutfit", "getoutfitnames", "getaddoutfitnames", 
-				"getremoutfitnames", "findfolder", "findfolders", "getpath", "getpathnew", "getinv", "getinvworn", "getsitid", 
-				"getcommand", "getstatus", "getstatusall"
+				"detachme", "attachover", "attachthis", "attachthisover", "attachthis_except", "detachthis", "detachthis_except",
+				"attachall", "attachallover", "detachall", "attachallthis", "attachallthis_except", "attachallthisover", 
+				"detachallthis", "detachallthis_except", "tpto", "version", "versionnew", "versionnum", "getattach", "getattachnames", 
+				"getaddattachnames", "getremattachnames", "getoutfit", "getoutfitnames", "getaddoutfitnames", "getremoutfitnames", 
+				"findfolder", "findfolders", "getpath", "getpathnew", "getinv", "getinvworn", "getsitid", "getcommand", 
+				"getstatus", "getstatusall"
 			};
 
 		for (int idxBvhr = 0; idxBvhr < RLV_BHVR_COUNT; idxBvhr++)

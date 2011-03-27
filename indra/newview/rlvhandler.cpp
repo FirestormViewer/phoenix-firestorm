@@ -1022,6 +1022,12 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		case RLV_BHVR_DETACHALLTHIS:		// @detachallthis[:<option>]=n|y
 			eRet = onAddRemFolderLock(rlvCmd, fRefCount);
 			break;
+		case RLV_BHVR_ATTACHTHISEXCEPT:		// @attachthisexcept[:<option>]=n|y
+		case RLV_BHVR_DETACHTHISEXCEPT:		// @detachthisexcept[:<option>]=n|y
+		case RLV_BHVR_ATTACHALLTHISEXCEPT:	// @attachallthisexcept[:<option>]=n|y
+		case RLV_BHVR_DETACHALLTHISEXCEPT:	// @detachallthisexcept[:<option>]=n|y
+			eRet = onAddRemFolderLockException(rlvCmd, fRefCount);
+			break;
 		case RLV_BHVR_SETENV:				// @setenv=n|y
 			eRet = onAddRemSetEnv(rlvCmd, fRefCount);
 			break;
@@ -1356,6 +1362,35 @@ ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCo
 	RlvFolderLocks::ELockPermission eLockPermission = RlvFolderLocks::PERM_DENY;
 	RlvFolderLocks::ELockScope eLockScope = 
 		((RLV_BHVR_ATTACHALLTHIS == eBhvr) || (RLV_BHVR_DETACHALLTHIS == eBhvr)) ? RlvFolderLocks::SCOPE_SUBTREE : RlvFolderLocks::SCOPE_NODE;
+
+	RlvFolderLocks::folderlock_descr_t lockDescr(rlvCmd.getOption(), RlvFolderLocks::folderlock_options_t(eLockPermission, eLockScope));
+	if (RLV_TYPE_ADD == rlvCmd.getParamType())
+		gRlvFolderLocks.addFolderLock(lockDescr, rlvCmd.getObjectID(), eLockType);
+	else
+		gRlvFolderLocks.removeFolderLock(lockDescr, rlvCmd.getObjectID(), eLockType);
+
+	fRefCount = true;
+	return RLV_RET_SUCCESS;
+}
+
+// Checked: 2011-03-27 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+ERlvCmdRet RlvHandler::onAddRemFolderLockException(const RlvCommand& rlvCmd, bool& fRefCount)
+{
+	// Sanity check - the option should specify a shared folder path
+	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+	if (!rlvCmdOption.isSharedFolder())
+		return RLV_RET_FAILED_OPTION;
+
+	ERlvBehaviour eBhvr = rlvCmd.getBehaviourType();
+
+	// Determine the lock type
+ 	ERlvLockMask eLockType = 
+		((RLV_BHVR_ATTACHTHISEXCEPT == eBhvr) || (RLV_BHVR_ATTACHALLTHISEXCEPT == eBhvr)) ? RLV_LOCK_ADD : RLV_LOCK_REMOVE;
+
+	// Determine the folder lock options from the issued behaviour
+	RlvFolderLocks::ELockPermission eLockPermission = RlvFolderLocks::PERM_ALLOW;
+	RlvFolderLocks::ELockScope eLockScope = 
+		((RLV_BHVR_ATTACHALLTHISEXCEPT == eBhvr) || (RLV_BHVR_DETACHALLTHISEXCEPT == eBhvr)) ? RlvFolderLocks::SCOPE_SUBTREE : RlvFolderLocks::SCOPE_NODE;
 
 	RlvFolderLocks::folderlock_descr_t lockDescr(rlvCmd.getOption(), RlvFolderLocks::folderlock_options_t(eLockPermission, eLockScope));
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
