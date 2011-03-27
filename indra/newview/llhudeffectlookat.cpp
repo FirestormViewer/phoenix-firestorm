@@ -48,6 +48,10 @@
 #include "llxmltree.h"
 #include "llviewercontrol.h"
 
+// [RLVa:KC] - Firestrom specific
+#include "rlvhandler.h"
+// [/RLVa:KC]
+
 //BOOL LLHUDEffectLookAt::sDebugLookAt = FALSE;
 
 // packet layout
@@ -546,22 +550,25 @@ void LLHUDEffectLookAt::render()
 			return;
 
 		LLVector3 target = mTargetPos + ((LLVOAvatar*)(LLViewerObject*)mSourceObject)->mHeadp->getWorldPosition();
+		LLColor3 lookAtColor = (*mAttentions)[mTargetType].mColor;
 
-		// render name for crosshair
-		const LLFontGL* fontp=LLFontGL::getFont(LLFontDescriptor("SansSerif","Small",LLFontGL::BOLD));
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		LLVector3 position=target+LLVector3(0.f,0.f,0.3f);
-		LLColor3 lookAtColor=(*mAttentions)[mTargetType].mColor;
+		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+		{
+			// render name for crosshair
+			const LLFontGL* fontp=LLFontGL::getFont(LLFontDescriptor("SansSerif","Small",LLFontGL::BOLD));
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+			LLVector3 position=target+LLVector3(0.f,0.f,0.3f);
 
-		LLAvatarName nameBuffer;
-		LLAvatarNameCache::get(((LLVOAvatar*)(LLViewerObject*)mSourceObject)->getID(), &nameBuffer);
-		std::string name=nameBuffer.getCompleteName();
+			LLAvatarName nameBuffer;
+			LLAvatarNameCache::get(((LLVOAvatar*)(LLViewerObject*)mSourceObject)->getID(), &nameBuffer);
+			std::string name=nameBuffer.getCompleteName();
 
-		gViewerWindow->setup3DRender();
-		hud_render_utf8text(name,position,*fontp,LLFontGL::NORMAL,LLFontGL::NO_SHADOW,-0.5*fontp->getWidthF32(name),3.0,lookAtColor,FALSE);
+			gViewerWindow->setup3DRender();
+			hud_render_utf8text(name,position,*fontp,LLFontGL::NORMAL,LLFontGL::NO_SHADOW,-0.5*fontp->getWidthF32(name),3.0,lookAtColor,FALSE);
 
-		glPopMatrix();
+			glPopMatrix();
+		}
 
 		// render crosshair
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
