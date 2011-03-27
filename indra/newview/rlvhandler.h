@@ -168,6 +168,7 @@ protected:
 	ERlvCmdRet processForceCommand(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceRemAttach(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceRemOutfit(const RlvCommand& rlvCmd) const;
+	ERlvCmdRet onForceGroup(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceSit(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceWear(const LLViewerInventoryCategory* pFolder, ERlvBehaviour eBhvr) const;
 	// Command handlers (RLV_TYPE_REPLY)

@@ -19,6 +19,7 @@
 #include "llappearancemgr.h"
 #include "llappviewer.h"
 #include "llcallbacklist.h"
+#include "llgroupactions.h"
 #include "llhudtext.h"
 #include "llviewermessage.h"
 #include "llviewerobjectlist.h"
@@ -30,6 +31,8 @@
 #include "rlvlocks.h"
 #include "rlvui.h"
 #include "rlvextensions.h"
+
+#include <boost/algorithm/string.hpp>
 
 // ============================================================================
 // Static variable initialization
@@ -1143,6 +1146,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		case RLV_BHVR_TOUCHATTACHOTHER:		// @touchattachother=n|y			- Checked: 2011-01-21 (RLVa-1.3.0e) | Added: RLVa-1.3.0e
 		case RLV_BHVR_TOUCHALL:				// @touchall=n|y					- Checked: 2011-01-21 (RLVa-1.3.0e) | Added: RLVa-1.3.0e
 		case RLV_BHVR_FLY:					// @fly=n|y							- Checked: 2010-03-02 (RLVa-1.2.0a)
+		case RLV_BHVR_SETGROUP:				// @setgroup=n|y					- Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
 		case RLV_BHVR_UNSIT:				// @unsit=n|y						- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
 		case RLV_BHVR_SIT:					// @sit=n|y							- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
 		case RLV_BHVR_SITTP:				// @sittp=n|y						- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
@@ -1421,6 +1425,9 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 					eRet = onForceRemOutfit(rlvCmd);
 			}
 			break;
+		case RLV_BHVR_SETGROUP:		// @setgroup:<uuid|name>=force			- Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+			eRet = onForceGroup(rlvCmd);
+			break;
 		case RLV_BHVR_UNSIT:		// @unsit=force							- Checked: 2010-03-18 (RLVa-1.2.0c) | Modified: RLVa-0.2.0g
 			{
 				VERIFY_OPTION(rlvCmd.getOption().empty());
@@ -1558,6 +1565,31 @@ ERlvCmdRet RlvHandler::onForceRemOutfit(const RlvCommand& rlvCmd) const
 	return RLV_RET_SUCCESS;
 }
 
+// Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+ERlvCmdRet RlvHandler::onForceGroup(const RlvCommand& rlvCmd) const
+{
+	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption()); 
+
+	LLUUID idGroup; bool fValid = false;
+	if (rlvCmdOption.isUUID())
+	{
+		idGroup = rlvCmdOption.getUUID();
+		fValid = (idGroup.isNull()) || (gAgent.isInGroup(idGroup, true));
+	}
+	else if (rlvCmdOption.isString())
+	{
+		for (S32 idxGroup = 0, cntGroup = gAgent.mGroups.count(); (idxGroup < cntGroup) && (idGroup.isNull()); idxGroup++)
+			if (boost::iequals(gAgent.mGroups.get(idxGroup).mName, rlvCmd.getOption()))
+				idGroup = gAgent.mGroups.get(idxGroup).mID;
+		fValid = (idGroup.notNull()) || ("none" == rlvCmd.getOption());
+	}
+
+	if (fValid)
+		LLGroupActions::activate(idGroup);
+
+	return (fValid) ? RLV_RET_SUCCESS : RLV_RET_FAILED_OPTION;
+}
+
 // Checked: 2010-03-18 (RLVa-1.2.0c) | Modified: RLVa-1.1.0j
 ERlvCmdRet RlvHandler::onForceSit(const RlvCommand& rlvCmd) const
 {
@@ -1680,6 +1712,9 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 			break;
 		case RLV_BHVR_GETINVWORN:		// @getinvworn[:<path>]=<channel>
 			eRet = onGetInvWorn(rlvCmd, strReply);
+			break;
+		case RLV_BHVR_GETGROUP:			// @getgroup=<channel>					- Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+			strReply = (gAgent.getGroupID().notNull()) ? gAgent.getGroupName() : "none";
 			break;
 		case RLV_BHVR_GETSITID:			// @getsitid=<channel>					- Checked: 2010-03-09 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
 			{
