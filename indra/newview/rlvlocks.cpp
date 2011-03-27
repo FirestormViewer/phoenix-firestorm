@@ -926,7 +926,7 @@ RlvFolderLocks::RlvFolderLocks()
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
-void RlvFolderLocks::addFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock)
+void RlvFolderLocks::addFolderLock(const folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock)
 {
 /*
 	// Sanity check - make sure it's an object we know about
@@ -936,15 +936,15 @@ void RlvFolderLocks::addFolderLock(const rlv_folderlock_descr_t& lockDescr, cons
 
 	// NOTE: m_FolderXXX can contain duplicate <idRlvObj, lockDescr> pairs
 	if (eLock & RLV_LOCK_REMOVE)
-		m_FolderRem.insert(std::pair<LLUUID, rlv_folderlock_descr_t>(idRlvObj, lockDescr));
+		m_FolderRem.insert(std::pair<LLUUID, folderlock_descr_t>(idRlvObj, lockDescr));
 	if (eLock & RLV_LOCK_ADD)
-		m_FolderAdd.insert(std::pair<LLUUID, rlv_folderlock_descr_t>(idRlvObj, lockDescr));
+		m_FolderAdd.insert(std::pair<LLUUID, folderlock_descr_t>(idRlvObj, lockDescr));
 
 	m_fItemsDirty = true;
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
-void RlvFolderLocks::removeFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock)
+void RlvFolderLocks::removeFolderLock(const folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock)
 {
 /*
 	// Sanity check - make sure it's an object we know about
@@ -955,7 +955,7 @@ void RlvFolderLocks::removeFolderLock(const rlv_folderlock_descr_t& lockDescr, c
 	if (eLock & RLV_LOCK_REMOVE)
 	{
 		RLV_ASSERT( m_FolderRem.lower_bound(idRlvObj) != m_FolderRem.upper_bound(idRlvObj) ); // The lock should always exist
-		for (rlv_folderlock_map_t::iterator itFolderLock = m_FolderRem.lower_bound(idRlvObj), 
+		for (folderlock_map_t::iterator itFolderLock = m_FolderRem.lower_bound(idRlvObj), 
 				endFolderLock = m_FolderRem.upper_bound(idRlvObj); itFolderLock != endFolderLock; ++itFolderLock)
 		{
 			if (lockDescr == itFolderLock->second)
@@ -968,7 +968,7 @@ void RlvFolderLocks::removeFolderLock(const rlv_folderlock_descr_t& lockDescr, c
 	if (eLock & RLV_LOCK_ADD)
 	{
 		RLV_ASSERT( m_FolderAdd.lower_bound(idRlvObj) != m_FolderAdd.upper_bound(idRlvObj) ); // The lock should always exist
-		for (rlv_folderlock_map_t::iterator itFolderLock = m_FolderAdd.lower_bound(idRlvObj), 
+		for (folderlock_map_t::iterator itFolderLock = m_FolderAdd.lower_bound(idRlvObj), 
 				endFolderLock = m_FolderAdd.upper_bound(idRlvObj); itFolderLock != endFolderLock; ++endFolderLock)
 		{
 			if (lockDescr == itFolderLock->second)
@@ -983,7 +983,7 @@ void RlvFolderLocks::removeFolderLock(const rlv_folderlock_descr_t& lockDescr, c
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
-void RlvFolderLocks::getLockedFolders(const rlv_folderlock_descr_t& lockDescr, LLInventoryModel::cat_array_t& lockFolders) const
+void RlvFolderLocks::getLockedFolders(const folderlock_descr_t& lockDescr, LLInventoryModel::cat_array_t& lockFolders) const
 {
 	if (typeid(LLUUID) == lockDescr.first.type())					// Folder lock by attachment UUID
 	{
@@ -1026,23 +1026,24 @@ bool RlvFolderLocks::getLockedFolders(ERlvLockMask eLock, LLInventoryModel::cat_
 	subtreeFolders.clear();
 
 	// Bit of a hack, but the code is identical for both
-	const rlv_folderlock_map_t* pLockMaps[2] = { 0 };
+	const folderlock_map_t* pLockMaps[2] = { 0 };
 	if (eLock & RLV_LOCK_REMOVE)
 		pLockMaps[0] = &m_FolderRem;
 	if (eLock & RLV_LOCK_ADD)
 		pLockMaps[1] = &m_FolderAdd;
 
-	for (int idxLockMap = 0, cntLockMap = sizeof(pLockMaps) / sizeof(rlv_folderlock_map_t*); idxLockMap < cntLockMap; idxLockMap++)
+	for (int idxLockMap = 0, cntLockMap = sizeof(pLockMaps) / sizeof(folderlock_map_t*); idxLockMap < cntLockMap; idxLockMap++)
 	{
 		if (!pLockMaps[idxLockMap])
 			continue;
 
 		// Iterate over each folder lock and determine which folders it affects
-		for (rlv_folderlock_map_t::const_iterator itFolderLock = pLockMaps[idxLockMap]->begin(), endFolderLock = pLockMaps[idxLockMap]->end(); 
+		for (folderlock_map_t::const_iterator itFolderLock = pLockMaps[idxLockMap]->begin(), endFolderLock = pLockMaps[idxLockMap]->end(); 
 				itFolderLock != endFolderLock; ++itFolderLock)
  		{
-			const rlv_folderlock_descr_t& lockDescr = itFolderLock->second;
-			getLockedFolders(lockDescr, (!lockDescr.second) ? nodeFolders : subtreeFolders);
+			const folderlock_descr_t& lockDescr = itFolderLock->second;
+			if (PERM_DENY == lockDescr.second.eLockPermission)
+				getLockedFolders(lockDescr, (SCOPE_NODE == lockDescr.second.eLockScope) ? nodeFolders : subtreeFolders);
 		}
 	}
 

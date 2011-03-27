@@ -297,13 +297,26 @@ public:
 	RlvFolderLocks();
 
 	// Specifies the source of a folder lock (attachment UUID, shared path, attachment point index or wearable type)
-	typedef boost::variant<LLUUID, std::string, S32, LLWearableType::EType> rlv_folderlock_source_t;
-	// Couples the folder lock source with the type of lock (false = folder node ; true = folder subtree)
-	typedef std::pair<rlv_folderlock_source_t, bool> rlv_folderlock_descr_t;
+	typedef boost::variant<LLUUID, std::string, S32, LLWearableType::EType> folderlock_source_t;
+	// Specifies options for the folder lock
+	enum ELockPermission { PERM_ALLOW, PERM_DENY };
+	enum ELockScope	{ SCOPE_NODE, SCOPE_SUBTREE } ;
+	struct folderlock_options_t
+	{
+		ELockPermission	eLockPermission;
+		ELockScope		eLockScope;
+
+		folderlock_options_t(ELockPermission permission, ELockScope scope) : eLockPermission(permission), eLockScope(scope) {}
+		friend bool operator ==(const folderlock_options_t& lhs, const folderlock_options_t& rhs);
+	protected:
+		folderlock_options_t();
+	};
+	// Couples the folder lock source with the lock options into a "lock description"
+	typedef std::pair<folderlock_source_t, folderlock_options_t> folderlock_descr_t;
 
 public:
 	// Adds an eLock type lock (held by idRlvObj) for the folder(s) described by lockDescr
-	void addFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock);
+	void addFolderLock(const folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock);
 
 	// Returns TRUE if there is at least 1 eLock type locked folder (RLV_LOCK_ANY = RLV_LOCK_ADD *or* RLV_LOCK_REMOVE)
 	bool hasLockedFolder(ERlvLockMask eLock) const;
@@ -319,13 +332,13 @@ public:
 	bool isLockedWearable(const LLUUID& idItem) const;
 
 	// Removes an eLock type lock (held by idRlvObj) for the folder(s) described by lockDescr
-	void removeFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock);
+	void removeFolderLock(const folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock);
 
 	/*
 	 * Cached item/folder look-up helper functions
 	 */
 protected:
-	void getLockedFolders(const rlv_folderlock_descr_t& lockDescr, LLInventoryModel::cat_array_t& folders) const;
+	void getLockedFolders(const folderlock_descr_t& lockDescr, LLInventoryModel::cat_array_t& folders) const;
 	bool getLockedFolders(ERlvLockMask eLock, LLInventoryModel::cat_array_t& nodeFolders, LLInventoryModel::cat_array_t& subtreeFolders) const;
 	void onCOFChanged();
 	void refreshLockedItems() const;
@@ -336,17 +349,22 @@ protected:
 	 */
 protected:
 	// Map of folder locks (idRlvObj -> lockDescr)
-	typedef std::multimap<LLUUID, rlv_folderlock_descr_t> rlv_folderlock_map_t;
-	rlv_folderlock_map_t	m_FolderAdd;
-	rlv_folderlock_map_t	m_FolderRem;
+	typedef std::multimap<LLUUID, folderlock_descr_t> folderlock_map_t;
+	folderlock_map_t	m_FolderAdd;
+	folderlock_map_t	m_FolderRem;
 
 	// Cached item look-up variables
-	mutable bool			m_fItemsDirty;
-	mutable uuid_vec_t		m_LockedFolderAdd;
-	mutable uuid_vec_t		m_LockedAttachmentRem;
-	mutable uuid_vec_t		m_LockedFolderRem;
-	mutable uuid_vec_t		m_LockedWearableRem;
+	mutable bool		m_fItemsDirty;
+	mutable uuid_vec_t	m_LockedFolderAdd;
+	mutable uuid_vec_t	m_LockedAttachmentRem;
+	mutable uuid_vec_t	m_LockedFolderRem;
+	mutable uuid_vec_t	m_LockedWearableRem;
 };
+
+inline bool operator ==(const RlvFolderLocks::folderlock_options_t& lhs, const RlvFolderLocks::folderlock_options_t& rhs)
+{
+	return (lhs.eLockPermission == rhs.eLockPermission) && (lhs.eLockScope == rhs.eLockScope);
+}
 
 extern RlvFolderLocks gRlvFolderLocks;
 

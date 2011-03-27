@@ -1322,10 +1322,9 @@ ERlvCmdRet RlvHandler::onAddRemDetach(const RlvCommand& rlvCmd, bool& fRefCount)
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
 ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCount)
 {
-	RlvFolderLocks::rlv_folderlock_source_t lockSource;
-
 	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
 
+	RlvFolderLocks::folderlock_source_t lockSource;
 	if (rlvCmdOption.isEmpty())
 	{
 		lockSource = rlvCmd.getObjectID();
@@ -1350,12 +1349,19 @@ ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCo
 
 	ERlvBehaviour eBhvr = rlvCmd.getBehaviourType();
 
- 	ERlvLockMask eLock = ((RLV_BHVR_ATTACHTHIS == eBhvr) || (RLV_BHVR_ATTACHALLTHIS == eBhvr)) ? RLV_LOCK_ADD : RLV_LOCK_REMOVE;
-	RlvFolderLocks::rlv_folderlock_descr_t lockDescr(lockSource, ((RLV_BHVR_ATTACHALLTHIS == eBhvr) || (RLV_BHVR_DETACHALLTHIS == eBhvr)));
+	// Determine the lock type
+ 	ERlvLockMask eLockType = ((RLV_BHVR_ATTACHTHIS == eBhvr) || (RLV_BHVR_ATTACHALLTHIS == eBhvr)) ? RLV_LOCK_ADD : RLV_LOCK_REMOVE;
+
+	// Determine the folder lock options from the issued behaviour
+	RlvFolderLocks::ELockPermission eLockPermission = RlvFolderLocks::PERM_DENY;
+	RlvFolderLocks::ELockScope eLockScope = 
+		((RLV_BHVR_ATTACHALLTHIS == eBhvr) || (RLV_BHVR_DETACHALLTHIS == eBhvr)) ? RlvFolderLocks::SCOPE_SUBTREE : RlvFolderLocks::SCOPE_NODE;
+
+	RlvFolderLocks::folderlock_descr_t lockDescr(rlvCmd.getOption(), RlvFolderLocks::folderlock_options_t(eLockPermission, eLockScope));
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
-		gRlvFolderLocks.addFolderLock(lockDescr, rlvCmd.getObjectID(), eLock);
+		gRlvFolderLocks.addFolderLock(lockDescr, rlvCmd.getObjectID(), eLockType);
 	else
-		gRlvFolderLocks.removeFolderLock(lockDescr, rlvCmd.getObjectID(), eLock);
+		gRlvFolderLocks.removeFolderLock(lockDescr, rlvCmd.getObjectID(), eLockType);
 
 	fRefCount = true;
 	return RLV_RET_SUCCESS;
