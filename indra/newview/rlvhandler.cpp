@@ -1363,11 +1363,10 @@ ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCo
 	RlvFolderLocks::ELockScope eLockScope = 
 		((RLV_BHVR_ATTACHALLTHIS == eBhvr) || (RLV_BHVR_DETACHALLTHIS == eBhvr)) ? RlvFolderLocks::SCOPE_SUBTREE : RlvFolderLocks::SCOPE_NODE;
 
-	RlvFolderLocks::folderlock_descr_t lockDescr(rlvCmd.getOption(), RlvFolderLocks::folderlock_options_t(eLockPermission, eLockScope));
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
-		gRlvFolderLocks.addFolderLock(lockDescr, rlvCmd.getObjectID(), eLockType);
+		gRlvFolderLocks.addFolderLock(lockSource, eLockPermission, eLockScope, rlvCmd.getObjectID(), eLockType);
 	else
-		gRlvFolderLocks.removeFolderLock(lockDescr, rlvCmd.getObjectID(), eLockType);
+		gRlvFolderLocks.removeFolderLock(lockSource, eLockPermission, eLockScope, rlvCmd.getObjectID(), eLockType);
 
 	fRefCount = true;
 	return RLV_RET_SUCCESS;
@@ -1392,11 +1391,10 @@ ERlvCmdRet RlvHandler::onAddRemFolderLockException(const RlvCommand& rlvCmd, boo
 	RlvFolderLocks::ELockScope eLockScope = 
 		((RLV_BHVR_ATTACHALLTHISEXCEPT == eBhvr) || (RLV_BHVR_DETACHALLTHISEXCEPT == eBhvr)) ? RlvFolderLocks::SCOPE_SUBTREE : RlvFolderLocks::SCOPE_NODE;
 
-	RlvFolderLocks::folderlock_descr_t lockDescr(rlvCmd.getOption(), RlvFolderLocks::folderlock_options_t(eLockPermission, eLockScope));
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
-		gRlvFolderLocks.addFolderLock(lockDescr, rlvCmd.getObjectID(), eLockType);
+		gRlvFolderLocks.addFolderLock(rlvCmd.getOption(), eLockPermission, eLockScope, rlvCmd.getObjectID(), eLockType);
 	else
-		gRlvFolderLocks.removeFolderLock(lockDescr, rlvCmd.getObjectID(), eLockType);
+		gRlvFolderLocks.removeFolderLock(rlvCmd.getOption(), eLockPermission, eLockScope, rlvCmd.getObjectID(), eLockType);
 
 	fRefCount = true;
 	return RLV_RET_SUCCESS;
