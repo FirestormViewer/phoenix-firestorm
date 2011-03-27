@@ -40,6 +40,10 @@
 #include "llselectmgr.h"
 #include "llglheaders.h"
 
+#include "llhudrender.h"
+#include "llresmgr.h"
+#include "llviewerwindow.h"
+#include "llavatarnamecache.h"
 
 #include "llxmltree.h"
 #include "llviewercontrol.h"
@@ -535,17 +539,34 @@ void LLHUDEffectLookAt::render()
 {
 	if (sDebugLookAt && mSourceObject.notNull())
 	{
-		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-
 		LLVector3 target = mTargetPos + ((LLVOAvatar*)(LLViewerObject*)mSourceObject)->mHeadp->getWorldPosition();
+
+		// render name for crosshair
+		const LLFontGL* fontp=LLFontGL::getFont(LLFontDescriptor("SansSerif","Small",LLFontGL::BOLD));
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		LLVector3 position=target+LLVector3(0.f,0.f,0.3f);
+		LLColor3 lookAtColor=(*mAttentions)[mTargetType].mColor;
+
+		LLAvatarName nameBuffer;
+		LLAvatarNameCache::get(((LLVOAvatar*)(LLViewerObject*)mSourceObject)->getID(), &nameBuffer);
+		std::string name=nameBuffer.getCompleteName();
+
+		gViewerWindow->setup3DRender();
+		hud_render_utf8text(name,position,*fontp,LLFontGL::NORMAL,LLFontGL::NO_SHADOW,-0.5*fontp->getWidthF32(name),3.0,lookAtColor,FALSE);
+
+		glPopMatrix();
+
+		// render crosshair
+		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 		glMatrixMode(GL_MODELVIEW);
 		gGL.pushMatrix();
+
 		gGL.translatef(target.mV[VX], target.mV[VY], target.mV[VZ]);
 		glScalef(0.3f, 0.3f, 0.3f);
 		gGL.begin(LLRender::LINES);
 		{
-			LLColor3 color = (*mAttentions)[mTargetType].mColor;
-			gGL.color3f(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE]);
+			gGL.color3f(lookAtColor.mV[VRED], lookAtColor.mV[VGREEN], lookAtColor.mV[VBLUE]);
 			gGL.vertex3f(-1.f, 0.f, 0.f);
 			gGL.vertex3f(1.f, 0.f, 0.f);
 
