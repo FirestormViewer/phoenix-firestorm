@@ -546,13 +546,14 @@ void LLHUDEffectLookAt::render()
 	{
 		static LLCachedControl<bool> hide_own(gSavedPerAccountSettings, "DebugLookAtHideOwn", false);
 		static LLCachedControl<bool> is_private(gSavedSettings, "PrivateLookAtTarget", false);
-		if ((hide_own || is_private) && (gAgent.getID() == ((LLVOAvatar*)(LLViewerObject*)mSourceObject)->getID()))
+		if ((hide_own || is_private) && ((LLVOAvatar*)(LLViewerObject*)mSourceObject)->isSelf())
 			return;
 
 		LLVector3 target = mTargetPos + ((LLVOAvatar*)(LLViewerObject*)mSourceObject)->mHeadp->getWorldPosition();
 		LLColor3 lookAtColor = (*mAttentions)[mTargetType].mColor;
 
-		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+		static LLCachedControl<U32> show_names(gSavedSettings, "DebugLookAtShowNames");
+		if ((show_names > 0) && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 		{
 			// render name for crosshair
 			const LLFontGL* fontp=LLFontGL::getFont(LLFontDescriptor("SansSerif","Small",LLFontGL::BOLD));
@@ -562,7 +563,22 @@ void LLHUDEffectLookAt::render()
 
 			LLAvatarName nameBuffer;
 			LLAvatarNameCache::get(((LLVOAvatar*)(LLViewerObject*)mSourceObject)->getID(), &nameBuffer);
-			std::string name=nameBuffer.getCompleteName();
+			std::string name;
+			switch (show_names)
+			{
+				case 1: // Display Name (user.name)
+					name = nameBuffer.getCompleteName();
+					break;
+				case 2: // Display Name
+					name = nameBuffer.mDisplayName;
+					break;
+				case 3: // First Last
+					name = nameBuffer.getLegacyName();
+					break;
+				default: //user.name
+					name = nameBuffer.mUsername;
+					break;
+			}
 
 			gViewerWindow->setup3DRender();
 			hud_render_utf8text(name,position,*fontp,LLFontGL::NORMAL,LLFontGL::NO_SHADOW,-0.5*fontp->getWidthF32(name),3.0,lookAtColor,FALSE);
