@@ -2074,6 +2074,7 @@ Requests name of an avatar.  When data is available the dataserver event will be
   <string name="WeeksOld">[AGEWEEKS] old</string>
   <string name="DaysOld">[AGEDAYS] old</string>
   <string name="TodayOld">Joined today</string>
+  <string name="TotalDaysOld">; [AGEDAYSTOTAL]</string>
 
   <!-- AgeYearsA = singular,
        AgeYearsB = plural,

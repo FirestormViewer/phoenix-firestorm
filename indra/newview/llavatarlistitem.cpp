@@ -537,7 +537,7 @@ void LLAvatarListItem::processProperties(void* data, EAvatarProcessorType type)
 		&& type == APT_PROPERTIES)
 	{
 		LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
-		mAvatarAge = ((time(NULL) - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
+		mAvatarAge = ((LLDate::now().secondsSinceEpoch()  - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
 		mAvatarAgeDisplay->setValue(mAvatarAge);
 
 		if (mShowPaymentStatus)
