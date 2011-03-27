@@ -217,7 +217,7 @@ if [ $WANTS_CLEAN -eq $TRUE ] ; then
 	find . -name "*.pyc" -exec rm {} \;
 fi
 
-if [ $WANTS_VERSION -eq $TRUE ] ; then
+if [ \( $WANTS_VERSION -eq $TRUE \) -o \( $WANTS_CONFIG -eq $TRUE \) ] ; then
         buildVer=`hg summary | head -1 | cut -d " "  -f 2 | cut -d : -f 1`
         majorVer=`cat Version | cut -d "=" -f 2 | cut -d "." -f 1`
         minorVer=`cat Version | cut -d "=" -f 2 | cut -d "." -f 2`
