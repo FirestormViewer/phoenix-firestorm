@@ -291,7 +291,7 @@ void LLHUDEffectLookAt::packData(LLMessageSystem *mesgsys)
 		return; 
 	} 
 	bool is_self = source_avatar->isSelf(); 
-	bool is_private = gSavedSettings.getBOOL("PrivateLookAtTarget"); 
+	static LLCachedControl<bool> is_private(gSavedSettings, "PrivateLookAtTarget", false);
 	if (!is_self) //kokua TODO: find out why this happens at all and fix there 
 	{ 
 		LL_DEBUGS("HUDEffect")<< "Non-self Avatar HUDEffectLookAt message for ID: " << source_avatar->getID().asString() << LL_ENDL; 
@@ -540,6 +540,11 @@ void LLHUDEffectLookAt::render()
 {
 	if (mDebugLookAt && mSourceObject.notNull())
 	{
+		static LLCachedControl<bool> hide_own(gSavedPerAccountSettings, "DebugLookAtHideOwn", false);
+		static LLCachedControl<bool> is_private(gSavedSettings, "PrivateLookAtTarget", false);
+		if ((hide_own || is_private) && (gAgent.getID() == ((LLVOAvatar*)(LLViewerObject*)mSourceObject)->getID()))
+			return;
+
 		LLVector3 target = mTargetPos + ((LLVOAvatar*)(LLViewerObject*)mSourceObject)->mHeadp->getWorldPosition();
 
 		// render name for crosshair
