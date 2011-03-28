@@ -70,7 +70,32 @@
 		<text
 		type="string"
             left="5"
-            top_pad="160"
+            top_pad="5"
+		length="1"
+		follows="left|top"
+		height="12"
+		layout="topleft"
+		name="HoverTipText"
+		width="100">
+			Other Options:
+		</text>
+
+          <check_box
+          control_name="ShowScriptDialogsTopRight"
+          height="16"
+          initial_value="true"
+          label="Script Dialogs in Top Right"
+          layout="topleft"
+          left_delta="10"
+          name="ShowHoverTips"
+          tool_tip="Set this to move script dialog notifications to the top right corner of the screen (Classic V1.x behavior)."
+          top_pad="12"
+          width="256" />
+
+		<text
+		type="string"
+            left="5"
+            top_pad="110"
 		length="1"
 		follows="left|top"
 		height="12"

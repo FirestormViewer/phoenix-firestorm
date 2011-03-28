@@ -1,6 +1,17 @@
 <?xml version="1.0" ?>
 <llsd>
 <map>
+		<key>ShowScriptDialogsTopRight</key>
+		<map>
+			<key>Comment</key>
+			<string>Show script llDialog floaters always in the top right corner of the screen.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>1</integer>
+		</map>
 
   <key>RadarReportChatRange</key>
     <map>

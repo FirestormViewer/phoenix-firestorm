@@ -111,6 +111,21 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	if(LLScriptFloaterManager::OBJ_SCRIPT == LLScriptFloaterManager::getObjectType(notification_id))
 	{
 		floater->setSavePosition(true);
+		if(gSavedSettings.getBOOL("ShowScriptDialogsTopRight"))
+		{
+			// undock the dialog
+			floater->setDocked(false,true);
+			LLRect pos=floater->getRect();
+
+			S32 width=pos.getWidth();
+			S32 height=pos.getHeight();
+			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthRaw()-width,
+								 gViewerWindow->getWorldViewHeightRaw()-height,
+								 width,height);
+			floater->setRect(pos);
+			floater->savePosition();
+		}
+
 		floater->restorePosition();
 	}
 	else
