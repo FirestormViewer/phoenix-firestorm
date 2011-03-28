@@ -154,7 +154,7 @@ void RlvCommand::initLookupTable()
 				"sendim", "sendimto", "recvim", "recvimfrom", "permissive", "notify", "showinv", "showminimap", "showworldmap", 
 				"showloc", "shownames", "showhovertext", "showhovertexthud", "showhovertextworld", "showhovertextall", 
 				"tplm", "tploc", "tplure", "viewnote", "viewscript", "viewtexture", "acceptpermission", "accepttp", "allowidle", 
-				"displayname", "edit", "editobj", "rez", "fartouch", "interact", "touchobj", "touchattach", "touchattachself", 
+				"displayname", "edit", "editobj", "rez", "fartouch", "interact", "touchthis", "touchattach", "touchattachself", 
 				"touchattachother", "touchhud", "touchworld", "touchall", "fly", "setgroup", "unsit", "sit", "sittp", "standtp", 
 				"setdebug", "setenv", "detachme", "attachover", "attachthis", "attachthisover", "detachthis", "attachall", 
 				"attachallover", "detachall", "attachallthis", "attachallthisover", "detachallthis", "tpto", "version", "versionnew", 
