@@ -733,6 +733,12 @@ void LLInventoryPanel::openAllFolders()
 	mFolderRoot->arrangeAll();
 }
 
+void LLInventoryPanel::closeAllFolders()
+{
+	mFolderRoot->setOpenArrangeRecursively(FALSE, LLFolderViewFolder::RECURSE_DOWN);
+	mFolderRoot->arrangeAll();
+}
+
 void LLInventoryPanel::setSelection(const LLUUID& obj_id, BOOL take_keyboard_focus)
 {
 	// Don't select objects in COF (e.g. to prevent refocus when items are worn).

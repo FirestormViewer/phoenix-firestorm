@@ -84,6 +84,8 @@ protected:
 	void 						onPlayButtonClicked();
 	void 						onTeleportButtonClicked();
 	void 						onOverflowButtonClicked();
+	void 						onCollapseButtonClicked();
+	void 						onExpandButtonClicked();
 	void 						onBackButtonClicked();
 private:
 	LLButton*					mInfoBtn;
@@ -92,6 +94,8 @@ private:
 	LLButton*					mPlayBtn;
 	LLButton*					mTeleportBtn;
 	LLButton*					mOverflowBtn;
+	LLButton*					mCollapseBtn;
+	LLButton*					mExpandBtn;
 	LLButton*					mShopBtn;
 
 };

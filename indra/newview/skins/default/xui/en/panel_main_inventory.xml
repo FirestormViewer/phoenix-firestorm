@@ -36,6 +36,26 @@
    name="inventory search editor"
    top_pad="4"
    width="322" />
+
+  <button
+   name="collapse_btn"
+   label="Collapse"
+   width="80"
+   height="16"
+   left="4"
+   top_pad="4"
+   follows="top|left"
+   layout="topleft"/>
+
+  <button
+   name="expand_btn"
+   label="Expand"
+   width="80"
+   height="16"
+   left_pad="4"
+   follows="top|left"
+   layout="topleft" />
+
   <tab_container
      bg_alpha_color="DkGray"
      bg_opaque_color="DkGray"
@@ -43,7 +63,7 @@
      background_opaque="true"
      follows="all"
      halign="center"
-     height="360"
+     height="340"
      layout="topleft"
      left="4"
      name="inventory filter tabs"
