@@ -404,7 +404,7 @@ inline S32 RlvAttachPtLookup::getAttachPointIndex(const LLViewerObject* pObj)
 // RlvAttachmentLocks inlined member functions
 //
 
-// Checked: 2010-08-07 (RLVa-1.2.0i) | Modified: RLVa-1.2.0i
+// Checked: 2011-03-27 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
 inline ERlvWearMask RlvAttachmentLocks::canAttach(const LLInventoryItem* pItem, LLViewerJointAttachment** ppAttachPtOut /*=NULL*/) const
 {
 	// The specified item can be attached if:
@@ -413,7 +413,8 @@ inline ERlvWearMask RlvAttachmentLocks::canAttach(const LLInventoryItem* pItem, 
 	LLViewerJointAttachment* pAttachPt = RlvAttachPtLookup::getAttachPoint(pItem);
 	if (ppAttachPtOut)
 		*ppAttachPtOut = pAttachPt;
-	return (!pAttachPt) ? RLV_WEAR : canAttach(pAttachPt);
+	return ((pItem) && (!gRlvFolderLocks.isLockedFolder(pItem->getParentUUID(), RLV_LOCK_ADD)))
+		? ((!pAttachPt) ? RLV_WEAR : canAttach(pAttachPt)) : RLV_WEAR_LOCKED;
 }
 
 // Checked: 2010-08-07 (RLVa-1.2.0i) | Modified: RLVa-1.2.0i
@@ -491,12 +492,13 @@ inline bool RlvWearableLocks::canRemove(const LLInventoryItem* pItem) const
 	return (pWearable) && (!isLockedWearable(pWearable));
 }
 
-// Checked: 2010-05-14 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
+// Checked: 2011-03-27 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
 inline ERlvWearMask RlvWearableLocks::canWear(const LLViewerInventoryItem* pItem) const
 {
 	// The specified item can be worn if the wearable type it specifies can be worn on
 	RLV_ASSERT( (pItem) && (LLInventoryType::IT_WEARABLE == pItem->getInventoryType()) );
-	return (pItem) ? canWear(pItem->getWearableType()) : RLV_WEAR_LOCKED;
+	return ((pItem) && (!gRlvFolderLocks.isLockedFolder(pItem->getParentUUID(), RLV_LOCK_ADD))) 
+		? canWear(pItem->getWearableType()) : RLV_WEAR_LOCKED;
 }
 
 // Checked: 2010-05-14 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
