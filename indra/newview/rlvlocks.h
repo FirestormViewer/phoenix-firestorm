@@ -297,7 +297,7 @@ public:
 	RlvFolderLocks();
 
 	// Specifies the source of a folder lock
-	enum ELockSourceType { ST_ATTACHMENT, ST_ATTACHMENTPOINT, ST_SHAREDPATH, ST_WEARABLETYPE };
+	enum ELockSourceType { ST_ATTACHMENT, ST_ATTACHMENTPOINT, ST_FOLDER, ST_SHAREDPATH, ST_WEARABLETYPE };
 	typedef boost::variant<LLUUID, std::string, S32, LLWearableType::EType> lock_source_t;
 	typedef std::pair<ELockSourceType, lock_source_t> folderlock_source_t;
 	// Specifies options for the folder lock
@@ -328,7 +328,7 @@ public:
 	bool hasLockedWearable() const;
 	// Returns TRUE if the attachment (specified by item UUID) is non-detachable as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
 	bool isLockedAttachment(const LLUUID& idItem) const;
-	// Returns TRUE if the folder is locked as a result of a RLV_LOCK_REMOVE folder lock
+	// Returns TRUE if the folder is locked as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
 	bool isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLock) const;
 	// Returns TRUE if the wearable (specified by item UUID) is non-removable as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
 	bool isLockedWearable(const LLUUID& idItem) const;
@@ -341,7 +341,7 @@ public:
 	 */
 protected:
 	bool getLockedFolders(const folderlock_source_t& lockSource, LLInventoryModel::cat_array_t& lockFolders) const;
-	bool getLockedItems(const LLUUID& idFolder, LLInventoryModel::item_array_t& lockItems) const;
+	bool getLockedItems(const LLUUID& idFolder, LLInventoryModel::item_array_t& lockItems, bool fFollowLinks) const;
 	void onCOFChanged();
 	void refreshLockedLookups() const;
 
@@ -358,6 +358,7 @@ protected:
 	// Cached item look-up variables
 	typedef std::multimap<LLUUID, const folderlock_descr_t*> folderlock_map_t;
 	mutable bool				m_fLookupDirty;
+	mutable bool				m_fLockedRoot;
 	mutable uuid_vec_t			m_LockedAttachmentRem;
 	mutable folderlock_map_t	m_LockedFolderMap;
 	mutable uuid_vec_t			m_LockedWearableRem;

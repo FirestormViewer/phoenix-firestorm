@@ -15,6 +15,7 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include "llappearancemgr.h"
 #include "llattachmentsmgr.h"
 #include "llinventoryobserver.h"
 #include "lloutfitobserver.h"
@@ -918,9 +919,9 @@ void RlvWearableLocks::removeWearableTypeLock(LLWearableType::EType eType, const
 
 RlvFolderLocks gRlvFolderLocks;
 
-// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+// Checked: 2011-03-28 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
 RlvFolderLocks::RlvFolderLocks()
-	: m_fLookupDirty(false)
+	: m_fLookupDirty(false), m_fLockedRoot(false)
 {
 	LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&RlvFolderLocks::onCOFChanged, this));
 }
@@ -967,6 +968,14 @@ bool RlvFolderLocks::getLockedFolders(const folderlock_source_t& lockSource, LLI
 				}
 			}
 			break;
+		case ST_FOLDER:
+			{
+				RLV_ASSERT(typeid(LLUUID) == lockSource.second.type())
+				LLViewerInventoryCategory* pFolder = gInventory.getCategory(boost::get<LLUUID>(lockSource.second));
+				if (pFolder)
+					lockFolders.push_back(pFolder);
+			}
+			break;
 		case ST_SHAREDPATH:
 			{
 				RLV_ASSERT(typeid(std::string) == lockSource.second.type())
@@ -999,7 +1008,7 @@ bool RlvFolderLocks::getLockedFolders(const folderlock_source_t& lockSource, LLI
 }
 
 // Checked: 2011-03-27 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
-bool RlvFolderLocks::getLockedItems(const LLUUID& idFolder, LLInventoryModel::item_array_t& lockItems) const
+bool RlvFolderLocks::getLockedItems(const LLUUID& idFolder, LLInventoryModel::item_array_t& lockItems, bool fFollowLinks) const
 {
 	S32 cntItems = lockItems.count();
 
@@ -1011,6 +1020,8 @@ bool RlvFolderLocks::getLockedItems(const LLUUID& idFolder, LLInventoryModel::it
 	for (S32 idxItem = 0, cntItem = items.count(); idxItem < cntItem; idxItem++)
 	{
 		LLViewerInventoryItem* pItem = items.get(idxItem);
+		if ( (fFollowLinks) && (LLAssetType::AT_LINK == pItem->getActualType()) )
+			pItem = pItem->getLinkedItem();
 		if (!pItem)
 			continue;
 		if (pItem->getParentUUID() != idPrev)
@@ -1067,7 +1078,8 @@ bool RlvFolderLocks::isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLockTy
 		const LLViewerInventoryCategory* pParent = gInventory.getCategory(idFolderCur);
 		idFolderCur = (pParent) ? pParent->getParentUUID() : idFolderRoot;
 	}
-	return false;
+	// If we didn't encounter an explicit deny lock with no exception then the folder is locked if the entire inventory is locked down
+	return (m_fLockedRoot) && (idsRlvObjRem.empty()) && (idsRlvObjAdd.empty());
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
@@ -1083,43 +1095,48 @@ void RlvFolderLocks::refreshLockedLookups() const
 	//
 	// Refresh locked folders
 	//
+	m_fLockedRoot = false;
 	m_LockedFolderMap.clear();
 	for (folderlock_list_t::const_iterator itFolderLock = m_FolderLocks.begin(); itFolderLock != m_FolderLocks.end(); ++itFolderLock)
 	{
 		const folderlock_descr_t* pLockDescr = *itFolderLock;
 
-		LLInventoryModel::cat_array_t lockedFolders;
+		LLInventoryModel::cat_array_t lockedFolders; const LLUUID& idFolderRoot = gInventory.getRootFolderID();
 		if (getLockedFolders(pLockDescr->lockSource, lockedFolders))
 		{
 			for (S32 idxFolder = 0, cntFolder = lockedFolders.count(); idxFolder < cntFolder; idxFolder++)
-				m_LockedFolderMap.insert(std::pair<LLUUID, const folderlock_descr_t*>(lockedFolders.get(idxFolder)->getUUID(), pLockDescr));
+			{
+				const LLViewerInventoryCategory* pFolder = lockedFolders.get(idxFolder);
+				if (idFolderRoot != pFolder->getUUID())
+					m_LockedFolderMap.insert(std::pair<LLUUID, const folderlock_descr_t*>(pFolder->getUUID(), pLockDescr));
+				else
+					m_fLockedRoot |= (SCOPE_SUBTREE == pLockDescr->eLockScope);
+			}
 		}
 	}
 	m_fLookupDirty = false;
 
 	//
-	// Refresh locked items (iterate over all locked folders and collect all worn items residing in a RLV_LOCK_REMOVE locked PERM_DENY folder)
+	// Refresh locked items (iterate over COF and filter out any items residing in a RLV_LOCK_REMOVE locked PERM_DENY folder)
 	//
 	m_LockedAttachmentRem.clear();
 	m_LockedWearableRem.clear();
-	for (folderlock_map_t::const_iterator itFolderLock = m_LockedFolderMap.begin(); itFolderLock != m_LockedFolderMap.end(); ++itFolderLock)
+
+	LLInventoryModel::item_array_t lockedItems;
+	if (getLockedItems(LLAppearanceMgr::instance().getCOF(), lockedItems, true))
 	{
-		LLInventoryModel::item_array_t lockedItems;
-		if (getLockedItems(itFolderLock->first, lockedItems))
+		for (S32 idxItem = 0, cntItem = lockedItems.count(); idxItem < cntItem; idxItem++)
 		{
-			for (S32 idxItem = 0, cntItem = lockedItems.count(); idxItem < cntItem; idxItem++)
+			const LLViewerInventoryItem* pItem = lockedItems.get(idxItem);
+			switch (pItem->getType())
 			{
-				const LLViewerInventoryItem* pItem = lockedItems.get(idxItem);
-				switch (pItem->getType())
-				{
-					case LLAssetType::AT_BODYPART:
-					case LLAssetType::AT_CLOTHING:
-						m_LockedWearableRem.push_back(pItem->getLinkedUUID());
-						break;
-					case LLAssetType::AT_OBJECT:
-						m_LockedAttachmentRem.push_back(pItem->getLinkedUUID());
-						break;
-				}
+				case LLAssetType::AT_BODYPART:
+				case LLAssetType::AT_CLOTHING:
+					m_LockedWearableRem.push_back(pItem->getLinkedUUID());
+					break;
+				case LLAssetType::AT_OBJECT:
+					m_LockedAttachmentRem.push_back(pItem->getLinkedUUID());
+					break;
 			}
 		}
 	}
