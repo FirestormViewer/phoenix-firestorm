@@ -275,6 +275,18 @@ RlvCommandOptionAdjustHeight::RlvCommandOptionAdjustHeight(const RlvCommand& rlv
 	}
 }
 
+// Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+RlvCommandOptionTpTo::RlvCommandOptionTpTo(const RlvCommand &rlvCmd)
+	: m_fValid(false)
+{
+	std::vector<std::string> cmdTokens;
+	boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of("/"));
+
+	m_fValid = (3 == cmdTokens.size());
+	for (int idxAxis = 0; (idxAxis < 3) && (m_fValid); idxAxis++)
+		m_fValid &= (bool)LLStringUtil::convertToF64(cmdTokens[idxAxis], m_posGlobal[idxAxis]);
+}
+
 // =========================================================================
 // RlvObject
 //

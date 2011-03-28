@@ -1447,26 +1447,11 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 				}
 			}
 			break;
-		case RLV_BHVR_TPTO:			// @tpto:<option>=force					- Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.0.0h
+		case RLV_BHVR_TPTO:			// @tpto:<option>=force					- Checked: 2011-03-28 (RLVa-1.3.0f) | Modified: RLVa-1.3.0f
 			{
-				eRet = RLV_RET_FAILED_OPTION;
-				if ( (!rlvCmd.getOption().empty()) && (std::string::npos == rlvCmd.getOption().find_first_not_of("0123456789/.")) )
-				{
-					LLVector3d posGlobal;
-
-					boost_tokenizer tokens(rlvCmd.getOption(), boost::char_separator<char>("/", "", boost::keep_empty_tokens)); int idx = 0;
-					for (boost_tokenizer::const_iterator itToken = tokens.begin(); itToken != tokens.end(); ++itToken)
-					{
-						if (idx < 3)
-							LLStringUtil::convertToF64(*itToken, posGlobal[idx++]);
-					}
-
-					if (idx == 3)
-					{
-						gAgent.teleportViaLocation(posGlobal);
-						eRet = RLV_RET_SUCCESS;
-					}
-				}
+				RlvCommandOptionTpTo rlvCmdOption(rlvCmd);
+				VERIFY_OPTION( (rlvCmdOption.m_fValid) && (!rlvCmdOption.m_posGlobal.isNull()) );
+				gAgent.teleportViaLocation(rlvCmdOption.m_posGlobal);
 			}
 			break;
 		case RLV_BHVR_ATTACH:
