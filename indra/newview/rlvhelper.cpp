@@ -173,7 +173,7 @@ void RlvCommand::initLookupTable()
 }
 
 // ============================================================================
-// RlvCommandOption
+// RlvCommandOption structures
 //
 
 // Checked: 2010-09-28 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
@@ -197,14 +197,15 @@ RlvCommandOptionGeneric::RlvCommandOptionGeneric(const std::string& strOption)
 		else
 			m_varOption = strOption;															// ... or it might just be a string
 	}
+	m_fValid = true;
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Modified: RLVa-1.3.0b
 RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd)
-	: m_fValid(true)							// Assume the option will be a valid one until we find out otherwise
 {
-	// @getpath[:<option>]=<channel> => <option> is transformed to a list of inventory item UUIDs to get the path of
+	m_fValid = true;	// Assume the option will be a valid one until we find out otherwise
 
+	// @getpath[:<option>]=<channel> => <option> is transformed to a list of inventory item UUIDs to get the path of
 	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
 	if (rlvCmdOption.isWearableType())			// <option> can be a clothing layer
 	{
@@ -258,14 +259,14 @@ bool RlvCommandOptionGetPath::getItemIDs(LLWearableType::EType wtType, uuid_vec_
 
 // Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
 RlvCommandOptionAdjustHeight::RlvCommandOptionAdjustHeight(const RlvCommand& rlvCmd)
-	: m_fValid(false), m_nPelvisToFoot(0.0f), m_nPelvisToFootDeltaMult(1.0f), m_nPelvisToFootOffset(0.0f)
+	: m_nPelvisToFoot(0.0f), m_nPelvisToFootDeltaMult(0.0f), m_nPelvisToFootOffset(0.0f)
 {
 	std::vector<std::string> cmdTokens;
 	boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of(";"));
 	if (1 == cmdTokens.size())
 	{
 		m_fValid = (LLStringUtil::convertToF32(cmdTokens[0], m_nPelvisToFootOffset));
-		m_nPelvisToFoot = llclamp<F32>(m_nPelvisToFootOffset / 100, -1.0f, 1.0f);
+		m_nPelvisToFootOffset = llclamp<F32>(m_nPelvisToFootOffset / 100, -1.0f, 1.0f);
 	}
 	else if ( (2 <= cmdTokens.size()) && (cmdTokens.size() <= 3) )
 	{
@@ -277,7 +278,6 @@ RlvCommandOptionAdjustHeight::RlvCommandOptionAdjustHeight(const RlvCommand& rlv
 
 // Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
 RlvCommandOptionTpTo::RlvCommandOptionTpTo(const RlvCommand &rlvCmd)
-	: m_fValid(false)
 {
 	std::vector<std::string> cmdTokens;
 	boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of("/"));

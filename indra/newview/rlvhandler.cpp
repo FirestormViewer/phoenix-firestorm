@@ -1437,12 +1437,12 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 			break;
 		case RLV_BHVR_ADJUSTHEIGHT:	// @adjustheight:<options>=force		- Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
 			{
-				RlvCommandOptionAdjustHeight rlvOption(rlvCmd);
-				VERIFY_OPTION( (rlvOption.m_fValid) && (0.0f != rlvOption.m_nPelvisToFootDeltaMult) );
+				RlvCommandOptionAdjustHeight rlvCmdOption(rlvCmd);
+				VERIFY_OPTION(rlvCmdOption.isValid());
 				if (isAgentAvatarValid())
 				{
-					F32 nValue = (rlvOption.m_nPelvisToFoot - gAgentAvatarp->getPelvisToFoot()) * rlvOption.m_nPelvisToFootDeltaMult;
-					nValue += rlvOption.m_nPelvisToFootOffset;
+					F32 nValue = (rlvCmdOption.m_nPelvisToFoot - gAgentAvatarp->getPelvisToFoot()) * rlvCmdOption.m_nPelvisToFootDeltaMult;
+					nValue += rlvCmdOption.m_nPelvisToFootOffset;
 					gSavedSettings.setF32(RLV_SETTING_AVATAROFFSET_Z, llclamp<F32>(nValue, -1.0f, 1.0f));
 				}
 			}
@@ -1450,7 +1450,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 		case RLV_BHVR_TPTO:			// @tpto:<option>=force					- Checked: 2011-03-28 (RLVa-1.3.0f) | Modified: RLVa-1.3.0f
 			{
 				RlvCommandOptionTpTo rlvCmdOption(rlvCmd);
-				VERIFY_OPTION( (rlvCmdOption.m_fValid) && (!rlvCmdOption.m_posGlobal.isNull()) );
+				VERIFY_OPTION( (rlvCmdOption.isValid()) && (!rlvCmdOption.m_posGlobal.isNull()) );
 				gAgent.teleportViaLocation(rlvCmdOption.m_posGlobal);
 			}
 			break;
