@@ -1333,19 +1333,19 @@ ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCo
 	RlvFolderLocks::folderlock_source_t lockSource;
 	if (rlvCmdOption.isEmpty())
 	{
-		lockSource = rlvCmd.getObjectID();
+		lockSource = RlvFolderLocks::folderlock_source_t(RlvFolderLocks::ST_ATTACHMENT, rlvCmd.getObjectID());
 	}
 	else if (rlvCmdOption.isSharedFolder())
 	{
-		lockSource = rlvCmd.getOption();
+		lockSource = RlvFolderLocks::folderlock_source_t(RlvFolderLocks::ST_SHAREDPATH, rlvCmd.getOption());
 	}
 	else if (rlvCmdOption.isAttachmentPoint())
 	{
-		lockSource = RlvAttachPtLookup::getAttachPointIndex(rlvCmdOption.getAttachmentPoint());
+		lockSource = RlvFolderLocks::folderlock_source_t(RlvFolderLocks::ST_ATTACHMENTPOINT, RlvAttachPtLookup::getAttachPointIndex(rlvCmdOption.getAttachmentPoint()));
 	}
 	else if (rlvCmdOption.isWearableType())
 	{
-		lockSource = rlvCmdOption.getWearableType();
+		lockSource = RlvFolderLocks::folderlock_source_t(RlvFolderLocks::ST_WEARABLETYPE, rlvCmdOption.getWearableType());
 	}
 	else
 	{
@@ -1391,10 +1391,11 @@ ERlvCmdRet RlvHandler::onAddRemFolderLockException(const RlvCommand& rlvCmd, boo
 	RlvFolderLocks::ELockScope eLockScope = 
 		((RLV_BHVR_ATTACHALLTHISEXCEPT == eBhvr) || (RLV_BHVR_DETACHALLTHISEXCEPT == eBhvr)) ? RlvFolderLocks::SCOPE_SUBTREE : RlvFolderLocks::SCOPE_NODE;
 
+	RlvFolderLocks::folderlock_source_t lockSource(RlvFolderLocks::ST_SHAREDPATH, rlvCmd.getOption());
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
-		gRlvFolderLocks.addFolderLock(rlvCmd.getOption(), eLockPermission, eLockScope, rlvCmd.getObjectID(), eLockType);
+		gRlvFolderLocks.addFolderLock(lockSource, eLockPermission, eLockScope, rlvCmd.getObjectID(), eLockType);
 	else
-		gRlvFolderLocks.removeFolderLock(rlvCmd.getOption(), eLockPermission, eLockScope, rlvCmd.getObjectID(), eLockType);
+		gRlvFolderLocks.removeFolderLock(lockSource, eLockPermission, eLockScope, rlvCmd.getObjectID(), eLockType);
 
 	fRefCount = true;
 	return RLV_RET_SUCCESS;

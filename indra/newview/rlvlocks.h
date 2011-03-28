@@ -296,8 +296,10 @@ class RlvFolderLocks
 public:
 	RlvFolderLocks();
 
-	// Specifies the source of a folder lock (attachment UUID, shared path, attachment point index or wearable type)
-	typedef boost::variant<LLUUID, std::string, S32, LLWearableType::EType> folderlock_source_t;
+	// Specifies the source of a folder lock
+	enum ELockSourceType { ST_ATTACHMENT, ST_ATTACHMENTPOINT, ST_SHAREDPATH, ST_WEARABLETYPE };
+	typedef boost::variant<LLUUID, std::string, S32, LLWearableType::EType> lock_source_t;
+	typedef std::pair<ELockSourceType, lock_source_t> folderlock_source_t;
 	// Specifies options for the folder lock
 	enum ELockPermission { PERM_ALLOW, PERM_DENY };
 	enum ELockScope	{ SCOPE_NODE, SCOPE_SUBTREE } ;

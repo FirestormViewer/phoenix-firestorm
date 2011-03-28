@@ -945,44 +945,56 @@ void RlvFolderLocks::addFolderLock(const folderlock_source_t& lockSource, ELockP
 	m_fLookupDirty = true;
 }
 
-// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+// Checked: 2011-03-28 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
 bool RlvFolderLocks::getLockedFolders(const folderlock_source_t& lockSource, LLInventoryModel::cat_array_t& lockFolders) const
 {
 	S32 cntFolders = lockFolders.count();
-	if (typeid(LLUUID) == lockSource.type())					// Folder lock by attachment UUID
+	switch (lockSource.first)
 	{
-		const LLViewerObject* pObj = gObjectList.findObject(boost::get<LLUUID>(lockSource));
-		if ( (pObj) && (pObj->isAttachment()) )
-		{
-			const LLViewerInventoryItem* pItem = gInventory.getItem(pObj->getAttachmentItemID());
-			if ( (pItem) && (RlvInventory::instance().isSharedFolder(pItem->getParentUUID())) )
+		case ST_ATTACHMENT:
 			{
-				LLViewerInventoryCategory* pItemFolder = gInventory.getCategory(pItem->getParentUUID());
-				if (pItemFolder)
-					lockFolders.push_back(pItemFolder);
+				RLV_ASSERT(typeid(LLUUID) == lockSource.second.type())
+				const LLViewerObject* pObj = gObjectList.findObject(boost::get<LLUUID>(lockSource.second));
+				if ( (pObj) && (pObj->isAttachment()) )
+				{
+					const LLViewerInventoryItem* pItem = gInventory.getItem(pObj->getAttachmentItemID());
+					if ( (pItem) && (RlvInventory::instance().isSharedFolder(pItem->getParentUUID())) )
+					{
+						LLViewerInventoryCategory* pItemFolder = gInventory.getCategory(pItem->getParentUUID());
+						if (pItemFolder)
+							lockFolders.push_back(pItemFolder);
+					}
+				}
 			}
-		}
-	}
-	else if (typeid(std::string) == lockSource.type())			// Folder lock by shared path
-	{
-		LLViewerInventoryCategory* pSharedFolder = RlvInventory::instance().getSharedFolder(boost::get<std::string>(lockSource));
-		if (pSharedFolder)
-			lockFolders.push_back(pSharedFolder);
-	}
-	else														// Folder lock by attachment point or wearable type
-	{
-		uuid_vec_t idItems;
-		if (typeid(S32) == lockSource.type())
-			RlvCommandOptionGetPath::getItemIDs(RlvAttachPtLookup::getAttachPoint(boost::get<S32>(lockSource)), idItems);
-		else if (typeid(LLWearableType::EType) == lockSource.type())
-			RlvCommandOptionGetPath::getItemIDs(boost::get<LLWearableType::EType>(lockSource), idItems);
-		else
-			return false;
+			break;
+		case ST_SHAREDPATH:
+			{
+				RLV_ASSERT(typeid(std::string) == lockSource.second.type())
+				LLViewerInventoryCategory* pSharedFolder = RlvInventory::instance().getSharedFolder(boost::get<std::string>(lockSource.second));
+				if (pSharedFolder)
+					lockFolders.push_back(pSharedFolder);
+			}
+			break;
+		case ST_ATTACHMENTPOINT:
+		case ST_WEARABLETYPE:
+			{
+				RLV_ASSERT( ((ST_ATTACHMENTPOINT == lockSource.first) && (typeid(S32) == lockSource.second.type())) || 
+					        ((ST_WEARABLETYPE == lockSource.first) && (typeid(LLWearableType::EType) == lockSource.second.type())) );
 
-		LLInventoryModel::cat_array_t itemFolders;
-		if (RlvInventory::instance().getPath(idItems, itemFolders))
-			lockFolders.insert(lockFolders.end(), itemFolders.begin(), itemFolders.end());
-	}
+				uuid_vec_t idItems;
+				if (ST_ATTACHMENTPOINT == lockSource.first)
+					RlvCommandOptionGetPath::getItemIDs(RlvAttachPtLookup::getAttachPoint(boost::get<S32>(lockSource.second)), idItems);
+				else if (ST_WEARABLETYPE == lockSource.first)
+					RlvCommandOptionGetPath::getItemIDs(boost::get<LLWearableType::EType>(lockSource.second), idItems);
+
+				LLInventoryModel::cat_array_t itemFolders;
+				if (RlvInventory::instance().getPath(idItems, itemFolders))
+					lockFolders.insert(lockFolders.end(), itemFolders.begin(), itemFolders.end());
+			}
+			break;
+		default:
+			return false;
+	};
 	return cntFolders != lockFolders.count();
 }
 
