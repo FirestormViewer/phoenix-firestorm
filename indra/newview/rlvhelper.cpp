@@ -29,6 +29,8 @@
 #include "rlvhandler.h"
 #include "rlvinventory.h"
 
+#include <boost/algorithm/string.hpp>
+
 // ============================================================================
 // RlvCommmand
 //
@@ -157,10 +159,10 @@ void RlvCommand::initLookupTable()
 				"displayname", "edit", "editobj", "rez", "fartouch", "interact", "touchthis", "touchattach", "touchattachself", 
 				"touchattachother", "touchhud", "touchworld", "touchall", "fly", "setgroup", "unsit", "sit", "sittp", "standtp", 
 				"setdebug", "setenv", "detachme", "attachover", "attachthis", "attachthisover", "detachthis", "attachall", 
-				"attachallover", "detachall", "attachallthis", "attachallthisover", "detachallthis", "tpto", "version", "versionnew", 
-				"versionnum", "getattach", "getattachnames", "getaddattachnames", "getremattachnames", "getoutfit", "getoutfitnames", 
-				"getaddoutfitnames", "getremoutfitnames", "findfolder", "findfolders", "getpath", "getpathnew", "getinv", "getinvworn", 
-				"getgroup", "getsitid", "getcommand", "getstatus", "getstatusall"
+				"attachallover", "detachall", "attachallthis", "attachallthisover", "detachallthis", "adjustheight", "tpto", 
+				"version", "versionnew", "versionnum", "getattach", "getattachnames", "getaddattachnames", "getremattachnames", 
+				"getoutfit", "getoutfitnames", "getaddoutfitnames", "getremoutfitnames", "findfolder", "findfolders", 
+				"getpath", "getpathnew", "getinv", "getinvworn", "getgroup", "getsitid", "getcommand", "getstatus", "getstatusall"
 			};
 
 		for (int idxBvhr = 0; idxBvhr < RLV_BHVR_COUNT; idxBvhr++)
@@ -252,6 +254,25 @@ bool RlvCommandOptionGetPath::getItemIDs(LLWearableType::EType wtType, uuid_vec_
 		idItems.push_back(gAgentWearables.getWearableItemID(wtType, idxWearable));
 	}
 	return (cntItemsPrev != idItems.size());
+}
+
+// Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+RlvCommandOptionAdjustHeight::RlvCommandOptionAdjustHeight(const RlvCommand& rlvCmd)
+	: m_fValid(false), m_nPelvisToFoot(0.0f), m_nPelvisToFootDeltaMult(1.0f), m_nPelvisToFootOffset(0.0f)
+{
+	std::vector<std::string> cmdTokens;
+	boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of(";"));
+	if (1 == cmdTokens.size())
+	{
+		m_fValid = (LLStringUtil::convertToF32(cmdTokens[0], m_nPelvisToFootOffset));
+		m_nPelvisToFoot = llclamp<F32>(m_nPelvisToFootOffset / 100, -1.0f, 1.0f);
+	}
+	else if ( (2 <= cmdTokens.size()) && (cmdTokens.size() <= 3) )
+	{
+		m_fValid = (LLStringUtil::convertToF32(cmdTokens[0], m_nPelvisToFoot)) &&
+			 (LLStringUtil::convertToF32(cmdTokens[1], m_nPelvisToFootDeltaMult)) && 
+			 ( (2 == cmdTokens.size()) || (LLStringUtil::convertToF32(cmdTokens[2], m_nPelvisToFootOffset)) );
+	}
 }
 
 // =========================================================================

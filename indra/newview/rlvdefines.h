@@ -203,6 +203,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_ATTACHALLTHIS,			// "attachallthis"
 	RLV_BHVR_ATTACHALLTHISOVER,		// "attachallthisover"
 	RLV_BHVR_DETACHALLTHIS,			// "detachallthis"
+	RLV_BHVR_ADJUSTHEIGHT,			// "adjustheight"
 	RLV_BHVR_TPTO,					// "tpto"
 	RLV_BHVR_VERSION,				// "version"
 	RLV_BHVR_VERSIONNEW,			// "versionnew"

@@ -175,6 +175,16 @@ protected:
 	uuid_vec_t m_idItems;
 };
 
+struct RlvCommandOptionAdjustHeight
+{
+	RlvCommandOptionAdjustHeight(const RlvCommand& rlvCmd);
+
+	bool	m_fValid;
+	F32		m_nPelvisToFoot;
+	F32		m_nPelvisToFootDeltaMult;
+	F32		m_nPelvisToFootOffset;
+};
+
 // ============================================================================
 // RlvObject
 //
