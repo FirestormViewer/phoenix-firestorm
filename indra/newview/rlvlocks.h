@@ -348,6 +348,8 @@ protected:
 	 * canXXX helper functions (note that a more approriate name might be userCanXXX)
 	 */
 public:
+	bool canMove(const LLUUID& idFolder, const LLUUID& idDest = LLUUID::null) const;
+	bool canRemove(const LLUUID& idFolder) const;
 	bool canRename(const LLUUID& idFolder) const;
 
 	/*
@@ -589,6 +591,20 @@ inline bool RlvFolderLocks::folderlock_descr_t::operator ==(const folderlock_des
 {
 	return (idRlvObj == rhs.idRlvObj) && (eLockType == rhs.eLockType) && (lockSource == rhs.lockSource) && 
 		(eLockPermission == rhs.eLockPermission) && (eLockScope == rhs.eLockScope);
+}
+
+// Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+inline bool RlvFolderLocks::canMove(const LLUUID& idFolder, const LLUUID& idDest) const
+{
+	// Block moving a folder if the folder (or one of its descendents) is explicitly locked
+	return !hasLockedFolderDescendent(idFolder, ST_NONE, PERM_ANY, RLV_LOCK_ANY, true);
+}
+
+// Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+inline bool RlvFolderLocks::canRemove(const LLUUID& idFolder) const
+{
+	// Block removing a folder if the folder (or one of its descendents) is explicitly locked
+	return !hasLockedFolderDescendent(idFolder, ST_NONE, PERM_ANY, RLV_LOCK_ANY, true);
 }
 
 // Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g

@@ -358,17 +358,13 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 		return FALSE;
 	}
 
-	if (!model->isObjectDescendentOf(id, gInventory.getRootFolderID()))
-	{
-		return FALSE;
-	}
-
-// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
-	if ( (rlv_handler_t::isEnabled()) && (gRlvFolderLocks.isLockedFolder(id, RLV_LOCK_ANY)) )
-	{
-		return FALSE;
-	}
+//	if (!model->isObjectDescendentOf(id, gInventory.getRootFolderID()))
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+	if ( (!model->isObjectDescendentOf(id, gInventory.getRootFolderID())) || ((rlv_handler_t::isEnabled()) && (!gRlvFolderLocks.canRemove(id))) )
 // [/RLVa:KB]
+	{
+		return FALSE;
+	}
 
 	if (!isAgentAvatarValid()) return FALSE;
 
@@ -402,7 +398,7 @@ BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 {
 //	if (!model)
 // [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
-	if ( (!model) || ((rlv_handler_t::isEnabled()) && (model == &gInventory) && (gRlvFolderLocks.canRename(id))) )
+	if ( (!model) || ((rlv_handler_t::isEnabled()) && (model == &gInventory) && (!gRlvFolderLocks.canRename(id))) )
 // [/RLVa:KB]
 	{
 		return FALSE;

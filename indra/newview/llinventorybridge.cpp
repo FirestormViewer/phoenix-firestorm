@@ -1475,11 +1475,7 @@ BOOL LLFolderBridge::isItemMovable() const
 	LLInventoryObject* obj = getInventoryObject();
 	if(obj)
 	{
-//		return (!LLFolderType::lookupIsProtectedType(((LLInventoryCategory*)obj)->getPreferredType()));
-// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
-		return (!LLFolderType::lookupIsProtectedType(((LLInventoryCategory*)obj)->getPreferredType())) &&
-			((!rlv_handler_t::isEnabled()) || (!gRlvFolderLocks.isLockedFolder(obj->getUUID(), RLV_LOCK_ANY)));
-// [/RLVa:KB]
+		return (!LLFolderType::lookupIsProtectedType(((LLInventoryCategory*)obj)->getPreferredType()));
 	}
 	return FALSE;
 }
@@ -1730,6 +1726,13 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 				}
 			}
 		}
+
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+		if ( (is_movable) && (rlv_handler_t::isEnabled()) )
+		{
+			is_movable = gRlvFolderLocks.canMove(cat_id, mUUID);
+		}
+// [/RLVa:KB]
 
 		// 
 		//--------------------------------------------------------------------------------
