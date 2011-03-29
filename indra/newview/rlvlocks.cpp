@@ -917,6 +917,21 @@ void RlvWearableLocks::removeWearableTypeLock(LLWearableType::EType eType, const
 // RlvFolderLocks member functions
 //
 
+class RlvLockedDescendentsCollector : public LLInventoryCollectFunctor
+{
+public:
+	RlvLockedDescendentsCollector(RlvFolderLocks::ELockSourceType eSourceType, ERlvLockMask eLockTypeMask) 
+		: m_eSourceType(eSourceType), m_eLockTypeMask(eLockTypeMask) {}
+	/*virtual*/ ~RlvLockedDescendentsCollector() {}
+	/*virtual*/ bool operator()(LLInventoryCategory* pFolder, LLInventoryItem* pItem)
+	{
+		return (pFolder) && (gRlvFolderLocks.isLockedFolderEntry(pFolder->getUUID(), m_eSourceType, RlvFolderLocks::PERM_DENY, m_eLockTypeMask));
+	}
+protected:
+	RlvFolderLocks::ELockSourceType	m_eSourceType;
+	ERlvLockMask m_eLockTypeMask;
+};
+
 RlvFolderLocks gRlvFolderLocks;
 
 // Checked: 2011-03-28 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
@@ -1035,6 +1050,35 @@ bool RlvFolderLocks::getLockedItems(const LLUUID& idFolder, LLInventoryModel::it
 	}
 
 	return cntItems != lockItems.count();
+}
+
+// Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+bool RlvFolderLocks::hasLockedFolderDescendent(const LLUUID& idFolder, ELockSourceType eSourceType, ERlvLockMask eLockTypeMask) const
+{
+	// Sanity check - if there are no folder locks then we don't have to actually do anything
+	if (!hasLockedFolder(eLockTypeMask))
+		return false;
+
+	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
+	RlvLockedDescendentsCollector f(eSourceType, eLockTypeMask);
+	gInventory.collectDescendentsIf(idFolder, folders, items, FALSE, f, FALSE);
+	return !folders.empty();
+}
+
+// Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+bool RlvFolderLocks::isLockedFolderEntry(const LLUUID& idFolder, ELockSourceType eSourceType, ELockPermission ePerm, ERlvLockMask eLockTypeMask) const
+{
+	for (folderlock_map_t::const_iterator itFolderLock = m_LockedFolderMap.lower_bound(idFolder), 
+			endFolderLock = m_LockedFolderMap.upper_bound(idFolder); itFolderLock != endFolderLock; ++itFolderLock)
+	{
+		const folderlock_descr_t* pLockDescr = itFolderLock->second;
+		if ( ((ST_NONE == eSourceType) || (pLockDescr->lockSource.first == eSourceType)) && 
+			 (pLockDescr->eLockPermission == ePerm) && (pLockDescr->eLockType & eLockTypeMask) )
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 // Checked: 2011-03-27 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
