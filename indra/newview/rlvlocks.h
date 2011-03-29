@@ -302,7 +302,7 @@ public:
 	typedef boost::variant<LLUUID, std::string, S32, LLWearableType::EType> lock_source_t;
 	typedef std::pair<ELockSourceType, lock_source_t> folderlock_source_t;
 	// Specifies options for the folder lock
-	enum ELockPermission { PERM_ALLOW, PERM_DENY };
+	enum ELockPermission { PERM_ALLOW, PERM_DENY, PERM_ANY };
 	enum ELockScope	{ SCOPE_NODE, SCOPE_SUBTREE } ;
 protected:
 	struct folderlock_descr_t
@@ -326,7 +326,8 @@ public:
 	// Returns TRUE if there is at least 1 eLock type PERM_DENY locked folder (RLV_LOCK_ANY = RLV_LOCK_ADD *or* RLV_LOCK_REMOVE)
 	bool hasLockedFolder(ERlvLockMask eLockTypeMask) const;
 	// Returns TRUE if the folder has a descendent folder lock with the specified charateristics
-	bool hasLockedFolderDescendent(const LLUUID& idFolder, ELockSourceType eSourceType, ERlvLockMask eLockTypeMask) const;
+	bool hasLockedFolderDescendent(const LLUUID& idFolder, ELockSourceType eSourceType, ELockPermission ePerm, 
+	                               ERlvLockMask eLockTypeMask, bool fCheckSelf) const;
 	// Returns TRUE if there is at least 1 non-removable wearable as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
 	bool hasLockedWearable() const;
 	// Returns TRUE if the attachment (specified by item UUID) is non-detachable as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
@@ -593,11 +594,8 @@ inline bool RlvFolderLocks::folderlock_descr_t::operator ==(const folderlock_des
 // Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
 inline bool RlvFolderLocks::canRename(const LLUUID& idFolder) const
 {
-	// Block renaming a folder only if the folder (or one of its descendents) is explicitly locked by a "shared path" lock source
-	return 
-		(hasLockedFolder(RLV_LOCK_ANY)) && 
-		( (isLockedFolderEntry(idFolder, ST_SHAREDPATH, PERM_DENY, RLV_LOCK_ANY)) || 
-		  (hasLockedFolderDescendent(idFolder, ST_SHAREDPATH, RLV_LOCK_ANY)) );
+	// Block renaming a folder if the folder (or one of its descendents) is explicitly locked by a "shared path" lock source
+	return !hasLockedFolderDescendent(idFolder, ST_SHAREDPATH, PERM_ANY, RLV_LOCK_ANY, true);
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0g) | Added: RLVa-1.3.0b

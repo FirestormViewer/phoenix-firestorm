@@ -920,14 +920,15 @@ void RlvWearableLocks::removeWearableTypeLock(LLWearableType::EType eType, const
 class RlvLockedDescendentsCollector : public LLInventoryCollectFunctor
 {
 public:
-	RlvLockedDescendentsCollector(RlvFolderLocks::ELockSourceType eSourceType, ERlvLockMask eLockTypeMask) 
-		: m_eSourceType(eSourceType), m_eLockTypeMask(eLockTypeMask) {}
+	RlvLockedDescendentsCollector(RlvFolderLocks::ELockSourceType eSourceType, RlvFolderLocks::ELockPermission ePerm, ERlvLockMask eLockTypeMask) 
+		: m_eSourceType(eSourceType), m_ePerm(ePerm), m_eLockTypeMask(eLockTypeMask) {}
 	/*virtual*/ ~RlvLockedDescendentsCollector() {}
 	/*virtual*/ bool operator()(LLInventoryCategory* pFolder, LLInventoryItem* pItem)
 	{
-		return (pFolder) && (gRlvFolderLocks.isLockedFolderEntry(pFolder->getUUID(), m_eSourceType, RlvFolderLocks::PERM_DENY, m_eLockTypeMask));
+		return (pFolder) && (gRlvFolderLocks.isLockedFolderEntry(pFolder->getUUID(), m_eSourceType, m_ePerm, m_eLockTypeMask));
 	}
 protected:
+	RlvFolderLocks::ELockPermission m_ePerm;
 	RlvFolderLocks::ELockSourceType	m_eSourceType;
 	ERlvLockMask m_eLockTypeMask;
 };
@@ -1053,14 +1054,16 @@ bool RlvFolderLocks::getLockedItems(const LLUUID& idFolder, LLInventoryModel::it
 }
 
 // Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
-bool RlvFolderLocks::hasLockedFolderDescendent(const LLUUID& idFolder, ELockSourceType eSourceType, ERlvLockMask eLockTypeMask) const
+bool RlvFolderLocks::hasLockedFolderDescendent(const LLUUID& idFolder, ELockSourceType eSourceType, ELockPermission ePerm, 
+											   ERlvLockMask eLockTypeMask, bool fCheckSelf) const
 {
-	// Sanity check - if there are no folder locks then we don't have to actually do anything
 	if (!hasLockedFolder(eLockTypeMask))
 		return false;
+	if ( (fCheckSelf) && (isLockedFolderEntry(idFolder, eSourceType, ePerm, RLV_LOCK_ANY)) )
+		return true;
 
 	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
-	RlvLockedDescendentsCollector f(eSourceType, eLockTypeMask);
+	RlvLockedDescendentsCollector f(eSourceType, ePerm, eLockTypeMask);
 	gInventory.collectDescendentsIf(idFolder, folders, items, FALSE, f, FALSE);
 	return !folders.empty();
 }
@@ -1073,7 +1076,7 @@ bool RlvFolderLocks::isLockedFolderEntry(const LLUUID& idFolder, ELockSourceType
 	{
 		const folderlock_descr_t* pLockDescr = itFolderLock->second;
 		if ( ((ST_NONE == eSourceType) || (pLockDescr->lockSource.first == eSourceType)) && 
-			 (pLockDescr->eLockPermission == ePerm) && (pLockDescr->eLockType & eLockTypeMask) )
+			 ((PERM_ANY == ePerm) || (pLockDescr->eLockPermission == ePerm)) && (pLockDescr->eLockType & eLockTypeMask) )
 		{
 			return true;
 		}
