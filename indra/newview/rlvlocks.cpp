@@ -923,7 +923,8 @@ RlvFolderLocks gRlvFolderLocks;
 RlvFolderLocks::RlvFolderLocks()
 	: m_fLookupDirty(false), m_fLockedRoot(false)
 {
-	LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&RlvFolderLocks::onCOFChanged, this));
+	LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&RlvFolderLocks::onNeedsLookupRefresh, this));
+	RlvInventory::instance().addSharedRootIDChangedCallback(boost::bind(&RlvFolderLocks::onNeedsLookupRefresh, this));
 }
 
 // Checked: 2011-03-27 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
@@ -1083,7 +1084,7 @@ bool RlvFolderLocks::isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLockTy
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
-void RlvFolderLocks::onCOFChanged()
+void RlvFolderLocks::onNeedsLookupRefresh()
 {
 	// NOTE: when removeFolderLock() removes the last folder lock we still want to refresh everything so mind the conditional OR assignment
 	m_fLookupDirty |= !m_FolderLocks.empty();

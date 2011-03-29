@@ -82,8 +82,13 @@ void RlvInventory::changed(U32 mask)
 	const LLInventoryModel::changed_items_t& idsChanged = gInventory.getChangedIDs();
 	if (std::find(idsChanged.begin(), idsChanged.end(), m_idRlvRoot) != idsChanged.end())
 	{
-		m_idRlvRoot.setNull();
 		gInventory.removeObserver(this);
+
+		LLUUID idRlvRootPrev = m_idRlvRoot;
+		m_idRlvRoot.setNull();
+
+		if (idRlvRootPrev != getSharedRootID())
+			m_OnSharedRootIDChanged();
 	}
 }
 
