@@ -100,7 +100,7 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	// [Ansariel: Colorful radar]
 	mUseRangeColors(false),
 	// [Ansariel: Colorful radar]
-	mDistance(99999.9) // arbitary large number to insure new avatars are considered outside close range until we know for sure.
+	mDistance(99999.9f) // arbitary large number to insure new avatars are considered outside close range until we know for sure.
 {
 	if (not_from_ui_factory)
 	{
