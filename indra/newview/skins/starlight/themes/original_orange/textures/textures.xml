@@ -164,7 +164,7 @@ with the same filename but different name
   <texture name="Icon_Dock_Foreground" file_name="windows/Icon_Dock_Foreground.png" preload="true" />
   <texture name="Icon_Dock_Press" file_name="windows/Icon_Dock_Press.png" preload="true" />
 
-  <texture name="Icon_For_Sale" file_name="icons/Ion_For_Sale.png" preload="false" />
+  <texture name="Icon_For_Sale" file_name="icons/Icon_For_Sale.png" preload="false" />
 
   <texture name="Icon_Gear_Background" file_name="windows/Icon_Gear_Background.png" preload="false" />
   <texture name="Icon_Gear_Foreground" file_name="windows/Icon_Gear_Foreground.png" preload="false" />
