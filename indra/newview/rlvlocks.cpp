@@ -920,17 +920,17 @@ void RlvWearableLocks::removeWearableTypeLock(LLWearableType::EType eType, const
 class RlvLockedDescendentsCollector : public LLInventoryCollectFunctor
 {
 public:
-	RlvLockedDescendentsCollector(RlvFolderLocks::ELockSourceType eSourceType, RlvFolderLocks::ELockPermission ePerm, ERlvLockMask eLockTypeMask) 
-		: m_eSourceType(eSourceType), m_ePerm(ePerm), m_eLockTypeMask(eLockTypeMask) {}
+	RlvLockedDescendentsCollector(int eSourceTypeMask, RlvFolderLocks::ELockPermission ePermMask, ERlvLockMask eLockTypeMask) 
+		: m_eSourceTypeMask(eSourceTypeMask), m_ePermMask(ePermMask), m_eLockTypeMask(eLockTypeMask) {}
 	/*virtual*/ ~RlvLockedDescendentsCollector() {}
 	/*virtual*/ bool operator()(LLInventoryCategory* pFolder, LLInventoryItem* pItem)
 	{
-		return (pFolder) && (gRlvFolderLocks.isLockedFolderEntry(pFolder->getUUID(), m_eSourceType, m_ePerm, m_eLockTypeMask));
+		return (pFolder) && (gRlvFolderLocks.isLockedFolderEntry(pFolder->getUUID(), m_eSourceTypeMask, m_ePermMask, m_eLockTypeMask));
 	}
 protected:
-	RlvFolderLocks::ELockPermission m_ePerm;
-	RlvFolderLocks::ELockSourceType	m_eSourceType;
-	ERlvLockMask m_eLockTypeMask;
+	RlvFolderLocks::ELockPermission m_ePermMask;
+	int				m_eSourceTypeMask;
+	ERlvLockMask	m_eLockTypeMask;
 };
 
 RlvFolderLocks gRlvFolderLocks;
@@ -989,6 +989,13 @@ bool RlvFolderLocks::getLockedFolders(const folderlock_source_t& lockSource, LLI
 			{
 				RLV_ASSERT(typeid(LLUUID) == lockSource.second.type())
 				LLViewerInventoryCategory* pFolder = gInventory.getCategory(boost::get<LLUUID>(lockSource.second));
+				if (pFolder)
+					lockFolders.push_back(pFolder);
+			}
+			break;
+		case ST_ROOTFOLDER:
+			{
+				LLViewerInventoryCategory* pFolder = gInventory.getCategory(gInventory.getRootFolderID());
 				if (pFolder)
 					lockFolders.push_back(pFolder);
 			}
@@ -1054,31 +1061,31 @@ bool RlvFolderLocks::getLockedItems(const LLUUID& idFolder, LLInventoryModel::it
 }
 
 // Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
-bool RlvFolderLocks::hasLockedFolderDescendent(const LLUUID& idFolder, ELockSourceType eSourceType, ELockPermission ePerm, 
+bool RlvFolderLocks::hasLockedFolderDescendent(const LLUUID& idFolder, int eSourceTypeMask, ELockPermission ePermMask, 
 											   ERlvLockMask eLockTypeMask, bool fCheckSelf) const
 {
 	if (!hasLockedFolder(eLockTypeMask))
 		return false;
 	if (m_fLookupDirty)
 		refreshLockedLookups();
-	if ( (fCheckSelf) && (isLockedFolderEntry(idFolder, eSourceType, ePerm, RLV_LOCK_ANY)) )
+	if ( (fCheckSelf) && (isLockedFolderEntry(idFolder, eSourceTypeMask, ePermMask, RLV_LOCK_ANY)) )
 		return true;
 
 	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
-	RlvLockedDescendentsCollector f(eSourceType, ePerm, eLockTypeMask);
+	RlvLockedDescendentsCollector f(eSourceTypeMask, ePermMask, eLockTypeMask);
 	gInventory.collectDescendentsIf(idFolder, folders, items, FALSE, f, FALSE);
 	return !folders.empty();
 }
 
 // Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
-bool RlvFolderLocks::isLockedFolderEntry(const LLUUID& idFolder, ELockSourceType eSourceType, ELockPermission ePerm, ERlvLockMask eLockTypeMask) const
+bool RlvFolderLocks::isLockedFolderEntry(const LLUUID& idFolder, int eSourceTypeMask, ELockPermission ePermMask, ERlvLockMask eLockTypeMask) const
 {
 	for (folderlock_map_t::const_iterator itFolderLock = m_LockedFolderMap.lower_bound(idFolder), 
 			endFolderLock = m_LockedFolderMap.upper_bound(idFolder); itFolderLock != endFolderLock; ++itFolderLock)
 	{
 		const folderlock_descr_t* pLockDescr = itFolderLock->second;
-		if ( ((ST_NONE == eSourceType) || (pLockDescr->lockSource.first == eSourceType)) && 
-			 ((PERM_ANY == ePerm) || (pLockDescr->eLockPermission == ePerm)) && (pLockDescr->eLockType & eLockTypeMask) )
+		if ( (pLockDescr->lockSource.first & eSourceTypeMask) && (pLockDescr->eLockPermission & ePermMask) && 
+			 (pLockDescr->eLockType & eLockTypeMask) )
 		{
 			return true;
 		}
@@ -1087,7 +1094,7 @@ bool RlvFolderLocks::isLockedFolderEntry(const LLUUID& idFolder, ELockSourceType
 }
 
 // Checked: 2011-03-27 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
-bool RlvFolderLocks::isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLockTypeMask) const
+bool RlvFolderLocks::isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLockTypeMask, folderlock_source_t* plockSource /*=NULL*/) const
 {
 	// Sanity check - if there are no folder locks then we don't have to actually do anything
 	if (!hasLockedFolder(eLockTypeMask))
@@ -1119,9 +1126,15 @@ bool RlvFolderLocks::isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLockTy
 			}
 
 			if (PERM_DENY == pLockDescr->eLockPermission)
+			{
+				if (plockSource)
+					*plockSource = pLockDescr->lockSource;
 				return true;									// Folder is explicitly denied, indicate locked folder to our caller
+			}
 			else if (PERM_ALLOW == pLockDescr->eLockPermission)
+			{
 				pidRlvObjList->push_back(pLockDescr->idRlvObj);	// Folder is explicitly allowed, save the owner so we can skip it from now on
+			}
 		}
 
 		// Move up to the folder tree
