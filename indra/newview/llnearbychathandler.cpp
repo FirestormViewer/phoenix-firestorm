@@ -67,6 +67,7 @@ public:
 
 	LLNearbyChatScreenChannel(const LLUUID& id):LLScreenChannelBase(id) 
 	{
+		mWorldViewRectConnection = gViewerWindow->setOnWorldViewRectUpdated(boost::bind(&LLNearbyChatScreenChannel::updateSize, this, _1, _2));
 		mStopProcessing = false;
 
 		LLControlVariable* ctrl = gSavedSettings.getControl("NearbyToastLifeTime").get();
@@ -145,7 +146,11 @@ protected:
 
 	void	updateToastFadingTime();
 
+	void	reshapePanel(LLToastPanelBase* panel);
+	virtual void		updateSize(LLRect old_world_rect, LLRect new_world_rect);
+
 	create_toast_panel_callback_t m_create_toast_panel_callback_t;
+	boost::signals2::connection mWorldViewRectConnection;
 
 	bool	createPoolToast();
 	
@@ -189,6 +194,32 @@ private:
 //-----------------------------------------------------------------------------------------------
 // LLNearbyChatScreenChannel
 //-----------------------------------------------------------------------------------------------
+
+void LLNearbyChatScreenChannel::reshapePanel(LLToastPanelBase* panel)
+{
+	S32 percentage=gSavedSettings.getS32("NearbyToastWidth");
+	panel->reshape(gViewerWindow->getWindowWidthRaw()*percentage/100,panel->getRect().getHeight(),TRUE);
+}
+
+void LLNearbyChatScreenChannel::updateSize(LLRect old_world_rect, LLRect new_world_rect)
+{
+	for(toast_vec_t::iterator it = m_active_toasts.begin(); it != m_active_toasts.end(); ++it)
+	{
+		LLToast* toast = it->get();
+
+		if (toast)
+		{
+			LLNearbyChatToastPanel* panel = dynamic_cast<LLNearbyChatToastPanel*>(toast->getPanel());
+
+			if(panel)
+			{
+				reshapePanel(panel);
+				toast->reshapeToPanel();
+			}
+		}
+	}
+	arrangeToasts();
+}
 
 void LLNearbyChatScreenChannel::deactivateToast(LLToast* toast)
 {
@@ -277,7 +308,7 @@ bool	LLNearbyChatScreenChannel::createPoolToast()
 	p.fading_time_secs = gSavedSettings.getS32("NearbyToastFadingTime");
 
 	LLToast* toast = new LLNearbyChatToast(p, this);
-	
+	reshapePanel(panel);
 	
 	toast->setOnFadeCallback(boost::bind(&LLNearbyChatScreenChannel::onToastFade, this, _1));
 
@@ -308,6 +339,7 @@ void LLNearbyChatScreenChannel::addNotification(LLSD& notification)
 			if(panel && panel->messageID() == fromID && panel->getFromName() == from && panel->canAddText())
 			{
 				panel->addMessage(notification);
+				reshapePanel(panel);
 				toast->reshapeToPanel();
 				toast->startFading();
 	  
@@ -353,6 +385,7 @@ void LLNearbyChatScreenChannel::addNotification(LLSD& notification)
 		return;
 	panel->init(notification);
 
+	reshapePanel(panel);
 	toast->reshapeToPanel();
 	toast->startFading();
 	

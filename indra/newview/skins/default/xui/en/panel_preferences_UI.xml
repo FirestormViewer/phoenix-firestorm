@@ -491,6 +491,34 @@
 		width="50">
 			pixels
 		</text>
+		<slider
+		control_name="NearbyToastWidth"
+		decimal_digits="0"
+		follows="left|top"
+		height="16"
+		increment="1"
+		label="Width of Nearby Chat Toast:"
+                tool_tip="Width of a the nearby chat toasts in percent of screen width"
+		label_width="155"
+		layout="topleft"
+		left="210"
+		min_val="1"
+		max_val="90"
+		name="OverflowToastHeight"
+		top_pad="7"
+		width="272" />
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		left_delta="269"
+		name="OverflowToastHeightText"
+		top_delta="0"
+		width="50">
+			%
+		</text>
 	</panel>
 </panel>
 
