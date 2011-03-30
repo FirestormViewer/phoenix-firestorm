@@ -421,7 +421,6 @@ void LLAvatarList::addAvalineItem(const LLUUID& item_id, const LLUUID& session_i
 //////////////////////////////////////////////////////////////////////////
 void LLAvatarList::refresh()
 {
-	llinfos << "AO: refreshing" << llendl;
 	bool have_names			= TRUE;
 	bool add_limit_exceeded	= false;
 	bool modified			= false;
