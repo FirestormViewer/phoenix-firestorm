@@ -65,7 +65,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
             <view_border
              left_pad="4"
              height="16"
-             right="-6"
+             right="-86"
              bevel_style="in"
              follows="left|top|right"
              name="info_border" />
@@ -73,7 +73,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
              left_delta="3"
              bottom_delta="2"
              height="16"
-             right="-6"
+             right="-86"
              h_pad="0"
              v_pad="0"
              allow_scroll="false"
@@ -83,6 +83,15 @@ KC: I used view_border's around text_editor's due to text render issues with bor
              max_length="254"
              name="user_key"
              value="(loading...)" />
+
+            <button
+             name="copy_uri"
+             left_pad="4"
+             right="-6"
+             height="20"
+             label="Copy URI"
+             enabled="false"
+             follows="top|right" />
 
             <text
              top_pad="2"

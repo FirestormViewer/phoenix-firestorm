@@ -139,6 +139,10 @@ BOOL LLPanelProfileView::postBuild()
 //	childSetCommitCallback("back",boost::bind(&LLPanelProfileView::onBackBtnClick,this),NULL);
 	childSetCommitCallback("copy_to_clipboard",boost::bind(&LLPanelProfileView::onCopyToClipboard,this),NULL);
 // [SL:KB] - Patch : UI-ProfileGroupFloater 
+
+	// set up callback for copy URI button
+	childSetCommitCallback("copy_uri",boost::bind(&LLPanelProfileView::onCopyURI,this),NULL);
+
 	LLFloater* pParentView = dynamic_cast<LLFloater*>(getParent());
 	if (!pParentView)
 	{
@@ -250,6 +254,7 @@ void LLPanelProfileView::onAvatarNameCache(const LLUUID& agent_id,
 	getChild<LLUICtrl>("display_name")->setValue( av_name.mDisplayName );
 	getChild<LLUICtrl>("user_name")->setValue( av_name.mUsername );
 	getChild<LLUICtrl>("user_key")->setValue( agent_id.asString() );
+	getChild<LLUICtrl>("copy_uri")->setEnabled( true );
 
 #if 0
 	getChild<LLUICtrl>("user_name")->setValue( av_name.mDisplayName );
@@ -292,6 +297,13 @@ void LLPanelProfileView::onAvatarNameCache(const LLUUID& agent_id,
 	if (pParentView)
 		pParentView->setTitle(av_name.getCompleteName() + " - " + getLabel());
 // [/SL:KB]
+}
+
+// Copy URI button callback
+void LLPanelProfileView::onCopyURI()
+{
+    std::string name = "secondlife:///app/agent/"+getChild<LLUICtrl>("user_key")->getValue().asString()+"/about";
+    gClipboard.copyFromString(utf8str_to_wstring(name));
 }
 
 // EOF

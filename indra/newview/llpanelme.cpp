@@ -34,6 +34,7 @@
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llagentwearables.h"
+#include "llclipboard.h"
 #include "llfirstuse.h"
 #include "llfloaterreg.h"
 #include "llhints.h"
@@ -71,7 +72,13 @@ BOOL LLPanelMe::postBuild()
 {
 	LLPanelProfile::postBuild();
 
+	// set up callback for copy URI button
+	childSetCommitCallback("copy_uri",boost::bind(&LLPanelMe::onCopyURI,this),NULL);
+
 	getTabContainer()[PANEL_PROFILE]->childSetAction("edit_profile_btn", boost::bind(&LLPanelMe::onEditProfileClicked, this), this);
+	getChild<LLUICtrl>("copy_uri")->setEnabled( true );
+	// fill in user key
+	getChild<LLUICtrl>("user_key")->setValue(getAvatarId().asString());
 
 	return TRUE;
 }
@@ -169,6 +176,14 @@ void LLPanelMe::onCancelClicked()
 {
 	togglePanel(mEditPanel); // close
 }
+
+// Copy URI button callback
+void LLPanelMe::onCopyURI()
+{
+    std::string name = "secondlife:///app/agent/"+getChild<LLUICtrl>("user_key")->getValue().asString()+"/about";
+    gClipboard.copyFromString(utf8str_to_wstring(name));
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////

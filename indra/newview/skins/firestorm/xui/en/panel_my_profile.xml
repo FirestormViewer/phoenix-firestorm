@@ -71,9 +71,51 @@
              width="275" />
 
             <text
+             top_pad="-13"
+             follows="left|top"
+             height="16"
+             left="4"
+             name="Key:"
+             width="30"
+             value="Key:" />
+
+            <view_border
+             left_pad="4"
+             top_delta="-2"
+             right="-86"
+             height="16"
+             bevel_style="in"
+             follows="left|top|right"
+             name="info_border" />
+            <text_editor
+             name="user_key"
+             label="Your Key:"
+             left_delta="3"
+             top_delta="2"
+             right="-86"
+             height="16"
+             h_pad="0"
+             v_pad="0"
+             bg_visible="false"
+             enabled="false"
+             allow_scroll="false"
+             initial_value="(loading ...)"
+             follows="top|left|right"
+             layout="topleft" />
+
+            <button
+             name="copy_uri"
+             left_pad="4"
+             right="-4"
+             height="20"
+             label="Copy URI"
+             enabled="false"
+             follows="top|right" />
+
+            <text
              name="About_sl_text"
              value="About:"
-             top_pad="-15"
+             top_pad="4"
              left="4"
              right="-4"
              height="13"
@@ -83,7 +125,7 @@
             <view_border
              top_pad="2"
              right="-4"
-             height="100"
+             height="78"
              bevel_style="in"
              follows="top|left|right" />
 
@@ -91,7 +133,7 @@
              left_delta="0"
              top_delta="0"
              right="-4"
-             height="100"
+             height="78"
              textbox.max_length="512"
              textbox.show_context_menu="true"
              name="sl_description_edit"
