@@ -93,6 +93,10 @@ public:
 	bool getIconsVisible() const { return mShowIcons; }
 	const std::string getIconParamName() const{return mIconParamName;}
 	virtual BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+	
+	// [Ansariel: Colorful radar]
+	void setUseRangeColors(bool UseRangeColors);
+	// [/Ansariel: Colorful radar]
 
 	// Return true if filter has at least one match.
 	bool filterHasMatches();
@@ -146,6 +150,10 @@ private:
 	bool mShowUsername;
 	bool mIgnoreGlobalIcons;
 	S32  mItemHeight;
+	
+	// [Ansariel: Colorful radar]
+	bool mUseRangeColors;
+	// [/Ansariel: Colorful radar]
 	
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	bool mRlvCheckShowNames;

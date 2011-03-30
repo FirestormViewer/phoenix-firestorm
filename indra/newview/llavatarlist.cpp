@@ -242,6 +242,9 @@ LLAvatarList::LLAvatarList(const Params& p)
 , mShowPaymentStatus(false)
 , mItemHeight(0)
 // [/RLVa:KB]
+// [Ansariel: Colorful radar]
+, mUseRangeColors(false)
+// [Ansariel: Colorful radar]
 {
 	setCommitOnSelectionChange(true);
 
@@ -293,6 +296,20 @@ void LLAvatarList::showMiniProfileIcons(bool visible)
 		static_cast<LLAvatarListItem*>(*it)->setAvatarIconVisible(mShowIcons);
 	}
 }
+
+// [Ansariel: Colorful radar]
+void LLAvatarList::setUseRangeColors(bool UseRangeColors)
+{
+	mUseRangeColors = UseRangeColors;
+
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
+	{
+		static_cast<LLAvatarListItem*>(*it)->setUseRangeColors(mUseRangeColors);
+	}
+}
+// [Ansariel: Colorful radar]
 
 // virtual
 void LLAvatarList::draw()
@@ -404,6 +421,7 @@ void LLAvatarList::addAvalineItem(const LLUUID& item_id, const LLUUID& session_i
 //////////////////////////////////////////////////////////////////////////
 void LLAvatarList::refresh()
 {
+	llinfos << "AO: refreshing" << llendl;
 	bool have_names			= TRUE;
 	bool add_limit_exceeded	= false;
 	bool modified			= false;
@@ -609,6 +627,13 @@ void LLAvatarList::addNewItem(const LLUUID& id, const std::string& name, BOOL is
 	item->showStatusFlags(mShowStatusFlags);
 	item->showPaymentStatus(mShowPaymentStatus);
 	item->showAvatarAge(mShowAge);
+	
+	// [Ansariel: Colorful radar]
+	item->setUseRangeColors(mUseRangeColors);
+	LLUIColorTable* colorTable = &LLUIColorTable::instance();
+	item->setShoutRangeColor(colorTable->getColor("AvatarListItemShoutRange", LLColor4::yellow));
+	item->setBeyondShoutRangeColor(colorTable->getColor("AvatarListItemBeyondShoutRange", LLColor4::red));
+	// [/Ansariel: Colorful radar]
 
 	item->setDoubleClickCallback(boost::bind(&LLAvatarList::onItemDoubleClicked, this, _1, _2, _3, _4));
 

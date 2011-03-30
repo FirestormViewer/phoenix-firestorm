@@ -133,7 +133,11 @@ public:
 	void onProfileBtnClick();
 	
 	//Radar state-specific
-	
+	// [Ansariel: Colorful radar]
+	void setUseRangeColors(bool UseRangeColors);
+	void setShoutRangeColor(const LLUIColor& shoutRangeColor);
+	void setBeyondShoutRangeColor(const LLUIColor& beyondShoutRangeColor);
+	// [/Ansariel: Colorful radar]
 
 	/*virtual*/ BOOL handleDoubleClick(S32 x, S32 y, MASK mask);
 
@@ -159,6 +163,12 @@ protected:
 	bool mShowDisplayName;
 	bool mShowUsername;
 	bool mShowFirstSeen;
+	
+	// [Ansariel: Colorful radar]
+	bool mUseRangeColors;
+	LLUIColor mShoutRangeColor;
+	LLUIColor mBeyondShoutRangeColor;
+	// [/Ansariel: Colorful radar]
 
 private:
 
@@ -237,9 +247,10 @@ private:
 
 	LLUUID	mAvatarId;
 	time_t	mFirstSeen;
-	S32	    mAvStatus;
+	S32	mAvStatus;
 	LLVector3d mAvPosition;
-	S32	    mAvatarAge;
+	S32	mAvatarAge;
+	F32 mDistance;
 	
 	std::string mHighlihtSubstring; // substring to highlight
 	EOnlineStatus mOnlineStatus;

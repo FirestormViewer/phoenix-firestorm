@@ -483,9 +483,7 @@ LLPanelPeople::LLPanelPeople()
  		mNearbyGearButton(NULL),
  		mFriendsGearButton(NULL),
  		mGroupsGearButton(NULL),
- 		mRecentGearButton(NULL),
-		mChatRadius(20.0),
-		mDrawRadius(0.0)
+ 		mRecentGearButton(NULL)
 
 {
 	mFriendListUpdater = new LLFriendListUpdater(boost::bind(&LLPanelPeople::updateFriendList,	this));
@@ -533,7 +531,6 @@ void LLPanelPeople::onFriendsAccordionExpandedCollapsed(LLUICtrl* ctrl, const LL
 
 BOOL LLPanelPeople::postBuild()
 {
-	mDrawRadius = gSavedSettings.getF32("RenderFarClip");
 	mFilterEditor = getChild<LLFilterEditor>("filter_input");
 	mFilterEditor->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
 
@@ -553,7 +550,7 @@ BOOL LLPanelPeople::postBuild()
 	mAllFriendList->showPermissions(true);
 
 	LLPanel* nearby_tab = getChild<LLPanel>(NEARBY_TAB_NAME);
-	nearby_tab->setVisibleCallback(boost::bind(&Updater::setActive, mNearbyListUpdater, _2));
+	
 	mNearbyList = nearby_tab->getChild<LLAvatarList>("avatar_list");
 	mNearbyList->setNoItemsCommentText(getString("no_one_near"));
 	mNearbyList->setNoItemsMsg(getString("no_one_near"));
@@ -568,11 +565,16 @@ BOOL LLPanelPeople::postBuild()
 	mNearbyList->showMiniProfileIcons(false);
 	mNearbyList->showPermissions(false);
 	mNearbyList->setItemHeight(20); // AO: Radar item spacing should be more compressed to use less screen space
-	
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+	// [Ansariel: Colorful radar]
+	mNearbyList->setUseRangeColors(true);
+	// [/Ansariel: Colorful radar]
+	// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	mNearbyList->setRlvCheckShowNames(true);
-// [/RLVa:KB]
+	// [/RLVa:KB]
 
+	//nearby_tab->setVisibleCallback(boost::bind(&Updater::setActive, mNearbyListUpdater, _2));
+	mNearbyListUpdater->setActive(true); // AO: always keep radar active, for chat and channel integration
+	
 	mRecentList = getChild<LLPanel>(RECENT_TAB_NAME)->getChild<LLAvatarList>("avatar_list");
 	mRecentList->setNoItemsCommentText(getString("no_recent_people"));
 	mRecentList->setNoItemsMsg(getString("no_recent_people"));
@@ -800,15 +802,18 @@ void LLPanelPeople::updateFriendList()
 void LLPanelPeople::updateNearbyList()
 {
 	if (!mNearbyList)
+	{
 		return;
+	}
 
 	std::vector<LLPanel*> items;
+	F32 drawRadius = gSavedSettings.getF32("RenderFarClip");
 	mNearbyList->getItems(items);	
 	
 	// Fetch new list of surrounding Avs
 	std::vector<LLVector3d> positions;
 	LLWorld::getInstance()->getAvatars(&mNearbyList->getIDs(), &positions, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
-	mNearbyList->setDirty();
+	mNearbyList->setDirty(true,true); // AO: These optional arguements force updating even when we're not a visible window.
 	DISTANCE_COMPARATOR.updateAvatarsPositions(positions, mNearbyList->getIDs());
 	
 	//Compare new list with last radar cache, updating fields and processing changes
@@ -818,6 +823,7 @@ void LLPanelPeople::updateNearbyList()
 	{
 		LLAvatarListItem* av = static_cast<LLAvatarListItem*>(*itItem);
 		LLUUID avId = av->getAvatarId();
+		F32 r = av->getRange();
 		
 		if (lastRadarSweep.count(avId) > 0)
 		{
@@ -826,22 +832,22 @@ void LLPanelPeople::updateNearbyList()
 
 			if (gSavedSettings.getBOOL("RadarReportChatRange"))
 			{
-				if ((av->getRange() <= mChatRadius) && (lastRadarSweep[avId].lastDistance > mChatRadius))
+				if ((r <= CHAT_NORMAL_RADIUS) && (lastRadarSweep[avId].lastDistance > CHAT_NORMAL_RADIUS))
 				{
 					reportToNearbyChat(av->getAvatarName() + " entered chat range.");
 				}
-				else if ((av->getRange() > mChatRadius) && (lastRadarSweep[avId].lastDistance <= mChatRadius))
+				else if ((r > CHAT_NORMAL_RADIUS) && (lastRadarSweep[avId].lastDistance <= CHAT_NORMAL_RADIUS))
 				{
 					reportToNearbyChat(av->getAvatarName() + " left chat range.");
 				}
 			}
 			if (gSavedSettings.getBOOL("RadarReportDrawRange"))
 			{
-				if ((av->getRange() <= mDrawRadius) && (lastRadarSweep[avId].lastDistance > mDrawRadius))
+				if ((r <= drawRadius) && (lastRadarSweep[avId].lastDistance > drawRadius))
 				{
 					reportToNearbyChat(av->getAvatarName() + " entered draw distance.");
 				}
-				else if ((av->getRange() > mDrawRadius) && (lastRadarSweep[avId].lastDistance <= mDrawRadius))
+				else if ((r > drawRadius) && (lastRadarSweep[avId].lastDistance <= drawRadius))
 				{
 					reportToNearbyChat(av->getAvatarName() + " left draw distance.");
 				}			
@@ -851,23 +857,19 @@ void LLPanelPeople::updateNearbyList()
 			// TODO Alert if we entered the sim
 			// TODO Alert if we changed status
 		}
+		
+		// Handle new entries
 		else 
 		{
 			av->setFirstSeen(time(NULL));
 			
-			if (gSavedSettings.getBOOL("RadarReportChatRange"))
+			if (gSavedSettings.getBOOL("RadarReportChatRange") && (r <= CHAT_NORMAL_RADIUS))
 			{			
-				if (av->getRange() <= mChatRadius)
-				{
-					reportToNearbyChat(av->getAvatarName() + " entered chat range.");
-				}
+				reportToNearbyChat(av->getAvatarName()+llformat(" entered chat range (%3.2f m)\n",r));
 			}
-			if (gSavedSettings.getBOOL("RadarReportDrawRange"))
+			if (gSavedSettings.getBOOL("RadarReportDrawRange") && (r <= drawRadius))
 			{
-				if (av->getRange() <= mDrawRadius)
-				{
-					reportToNearbyChat(av->getAvatarName() + " entered draw distance.");
-				}
+				reportToNearbyChat(av->getAvatarName()+llformat(" entered draw distance (%3.2f m)\n",r));
 			}				
 				
 			// TODO Alert if we entered the sim
@@ -878,19 +880,13 @@ void LLPanelPeople::updateNearbyList()
 	{
 		radarFields rf = i->second;
 		
-		if (gSavedSettings.getBOOL("RadarReportChatRange"))
+		if (gSavedSettings.getBOOL("RadarReportChatRange") && (rf.lastDistance <= CHAT_NORMAL_RADIUS))
 		{
-			if (rf.lastDistance <= mChatRadius)
-			{
-				reportToNearbyChat(rf.avName + " left chat range.");
-			}
+			reportToNearbyChat(rf.avName + " left chat range.");
 		}
-		if (gSavedSettings.getBOOL("RadarReportDrawRange"))
+		if (gSavedSettings.getBOOL("RadarReportDrawRange") && (rf.lastDistance <= drawRadius))
 		{
-			if (rf.lastDistance <= mDrawRadius)
-			{
-				reportToNearbyChat(rf.avName + " left draw distance.");
-			}
+			reportToNearbyChat(rf.avName + " left draw distance.");
 		}			
 		// TODO Alert if we left the sim
 	}
@@ -1409,7 +1405,6 @@ void LLPanelPeople::teleportToAvatar(LLUUID targetAv)
 // Teleports user to last scanned location of nearby avatar
 // Note: currently teleportViaLocation is disrupted by enforced landing points set on a parcel.
 {
-	llinfos << "AO: Trying to teleport to avatar: " << targetAv << llendl;
 	std::vector<LLPanel*> items;
 	mNearbyList->getItems(items);
 	for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
@@ -1417,7 +1412,6 @@ void LLPanelPeople::teleportToAvatar(LLUUID targetAv)
 		LLAvatarListItem* av = static_cast<LLAvatarListItem*>(*itItem);
 		if (av->getAvatarId() == targetAv)
 		{
-			llinfos << "avatar found, teleporting." << llendl;
 			gAgent.teleportViaLocation(av->getPosition());
 			return;
 		}

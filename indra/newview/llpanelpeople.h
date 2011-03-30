@@ -178,9 +178,6 @@ private:
 	std::string				mFilterSubString;
 	std::string				mFilterSubStringOrig;
 	
-	F32						mChatRadius;
-	F32						mDrawRadius;
-	
 	struct radarFields 
 	{
 		std::string avName;
