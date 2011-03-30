@@ -503,7 +503,6 @@ void LLAvatarTracker::addParticularFriendObserver(const LLUUID& buddy_id, LLFrie
 {
 	if (buddy_id.notNull() && observer)
 		mParticularFriendObserverMap[buddy_id].insert(observer);
-	llinfos << "AO DEBUG: postAdd: ob_it->second.size=" << mParticularFriendObserverMap[buddy_id].size() << llendl;
 }
 
 void LLAvatarTracker::removeParticularFriendObserver(const LLUUID& buddy_id, LLFriendObserver* observer)
@@ -514,13 +513,10 @@ void LLAvatarTracker::removeParticularFriendObserver(const LLUUID& buddy_id, LLF
     observer_map_t::iterator obs_it = mParticularFriendObserverMap.find(buddy_id);
     if(obs_it == mParticularFriendObserverMap.end())
 	{
-        llinfos << "AO DEBUG: preremove: no observers found, skipping." << llendl;
 		return;
 	}
 	
-	llinfos << "AO DEBUG: preremove: ob_it->second.size=" << obs_it->second.size() << llendl;
     obs_it->second.erase(observer);
-	llinfos << "AO DEBUG: postremove: ob_it->second.size=" << obs_it->second.size() << llendl;
 
     // purge empty sets from the map
 	// AO: Remove below check as last resort to resolve a crash from dangling pointer.
@@ -537,7 +533,6 @@ void LLAvatarTracker::notifyParticularFriendObservers(const LLUUID& buddy_id)
 
     // Notify observers interested in buddy_id.
     observer_set_t& obs = obs_it->second;
-	llinfos << "AO DEBUG: notifying particularFriends, size=" << obs_it->second.size() << llendl;
     for (observer_set_t::iterator ob_it = obs.begin(); ob_it != obs.end(); ob_it++)
     {
 		if (*ob_it)
@@ -577,14 +572,12 @@ void LLAvatarTracker::notifyFriendPermissionObservers(const LLUUID& buddy_id)
     observer_map_t::iterator obs_it = mFriendPermissionObserverMap.find(buddy_id);
     if(obs_it == mFriendPermissionObserverMap.end())
 	{
-		llinfos << "Not Found: " << buddy_id << llendl;
 		return;
 	}
     // Notify observers interested in buddy_id.
     observer_set_t& obs = obs_it->second;
     for (observer_set_t::iterator ob_it = obs.begin(); ob_it != obs.end(); ob_it++)
     {
-		llinfos << "Notified: " << buddy_id << llendl;
 		(*ob_it)->changed(LLFriendObserver::PERMS);
     }
 }

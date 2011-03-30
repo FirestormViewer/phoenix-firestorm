@@ -689,7 +689,6 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 				 */
 					// ...name already exists in cache, fire callback now
 					fireSignal(agent_id, slot, av_name);
-					llinfos << "AO: namelookup cache hit: " << agent_id << llendl;
 					return;
 				/*
 				}
