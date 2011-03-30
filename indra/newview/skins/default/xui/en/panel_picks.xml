@@ -18,24 +18,13 @@ background_opaque="false"
   name="no_classifieds"
   value="No Classifieds" />
 
-<text
-  type="string"
-  follows="all"
-  height="430"
-  layout="topleft"
-  left="0"
-  name="picks_panel_text"
-  wrap="true"
-  top="10"
-  right="-6"/>
-
 <tab_container
   follows="all"
   height="385"
   layout="topleft"
   left="0"
   name="accordion"
-  top="0"
+  top="4"
   right="-6">
     <panel
      layout="topleft"
@@ -264,4 +253,17 @@ background_opaque="false"
           </layout_panel>
     </layout_stack>
     </panel>
+
+    <text
+	 type="string"
+     follows="all"
+     height="185"
+     layout="topleft"
+     left="10"
+     name="picks_panel_text"
+     wrap="true"
+     top="60"
+     mouse_opaque="false"
+     right="-16"/>
+
 </panel>
