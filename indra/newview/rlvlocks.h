@@ -337,7 +337,7 @@ public:
 	// Returns TRUE if the attachment (specified by item UUID) is non-detachable as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
 	bool isLockedAttachment(const LLUUID& idItem) const;
 	// Returns TRUE if the folder is locked as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
-	bool isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLock, folderlock_source_t* plockSource = NULL) const;
+	bool isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLock, int eSourceTypeMask = ST_MASK_ANY, folderlock_source_t* plockSource = NULL) const;
 	// Returns TRUE if the wearable (specified by item UUID) is non-removable as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
 	bool isLockedWearable(const LLUUID& idItem) const;
 
@@ -352,9 +352,12 @@ protected:
 	 * canXXX helper functions (note that a more approriate name might be userCanXXX)
 	 */
 public:
-	bool canMove(const LLUUID& idFolder, const LLUUID& idFolderDest) const;
-	bool canRemove(const LLUUID& idFolder) const;
-	bool canRename(const LLUUID& idFolder) const;
+	bool canMoveFolder(const LLUUID& idFolder, const LLUUID& idFolderDest) const;
+	bool canRemoveFolder(const LLUUID& idFolder) const;
+	bool canRenameFolder(const LLUUID& idFolder) const;
+	bool canMoveItem(const LLUUID& idItem, const LLUUID& idFolderDest) const;
+	bool canRemoveItem(const LLUUID& idItem) const;
+	bool canRenameItem(const LLUUID& idItem) const;
 
 	/*
 	 * Cached item/folder look-up helper functions
@@ -598,7 +601,7 @@ inline bool RlvFolderLocks::folderlock_descr_t::operator ==(const folderlock_des
 }
 
 // Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
-inline bool RlvFolderLocks::canMove(const LLUUID& idFolder, const LLUUID& idFolderDest) const
+inline bool RlvFolderLocks::canMoveFolder(const LLUUID& idFolder, const LLUUID& idFolderDest) const
 {
 	// Block moving the folder to destination if:
 	//   - the folder (or one of its descendents) is explicitly locked
@@ -611,21 +614,24 @@ inline bool RlvFolderLocks::canMove(const LLUUID& idFolder, const LLUUID& idFold
 	//		=> so the above becomes (isLockedFolder(A) == isLockedFolder(B)) && (lockA == lockB)
 	folderlock_source_t lockSource(ST_NONE, 0), lockSourceDest(ST_NONE, 0);
 	return 
-		(!hasLockedFolder(RLV_LOCK_ANY)) ||
-		( (!hasLockedFolderDescendent(idFolder, ST_MASK_ANY, PERM_MASK_ANY, RLV_LOCK_ANY, true)) &&
-		  ( (isLockedFolder(idFolder, RLV_LOCK_ANY, &lockSource) == isLockedFolder(idFolderDest, RLV_LOCK_ANY, &lockSourceDest)) && 
-		    (lockSource == lockSourceDest) ) );
+		(!hasLockedFolderDescendent(idFolder, ST_MASK_ANY, PERM_MASK_ANY, RLV_LOCK_ANY, true)) &&
+		( (isLockedFolder(idFolder, RLV_LOCK_ANY, ST_MASK_ANY, &lockSource) == isLockedFolder(idFolderDest, RLV_LOCK_ANY, ST_MASK_ANY, &lockSourceDest)) && 
+		  (lockSource == lockSourceDest) );
 }
 
 // Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
-inline bool RlvFolderLocks::canRemove(const LLUUID& idFolder) const
+inline bool RlvFolderLocks::canRemoveFolder(const LLUUID& idFolder) const
 {
-	// Block removing a folder if the folder (or one of its descendents) is explicitly locked
-	return !hasLockedFolderDescendent(idFolder, ST_MASK_ANY, PERM_MASK_ANY, RLV_LOCK_ANY, true);
+	// Block removing a folder if:
+	//   - the folder (or one of its descendents) is explicitly locked
+	//   - the folder itself is locked (but disregard root folder locks)
+	return 
+		(!hasLockedFolderDescendent(idFolder, ST_MASK_ANY, PERM_MASK_ANY, RLV_LOCK_ANY, true)) && 
+		(!isLockedFolder(idFolder, RLV_LOCK_ANY, ST_MASK_ANY & ~ST_ROOTFOLDER));
 }
 
 // Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
-inline bool RlvFolderLocks::canRename(const LLUUID& idFolder) const
+inline bool RlvFolderLocks::canRenameFolder(const LLUUID& idFolder) const
 {
 	// Block renaming a folder if:
 	//   - the folder (or one of its descendents) is explicitly locked by:
@@ -634,6 +640,35 @@ inline bool RlvFolderLocks::canRename(const LLUUID& idFolder) const
 	//		-> an attachment        |--> renaming the folder to a "dot" (=invisible) folder would invalidate the lock
 	//		-> a wearable type     /
 	return !hasLockedFolderDescendent(idFolder, ST_SHAREDPATH | ST_ATTACHMENT | ST_ATTACHMENTPOINT | ST_WEARABLETYPE, PERM_MASK_ANY, RLV_LOCK_ANY, true);
+}
+
+// Checked: 2011-03-30 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+inline bool RlvFolderLocks::canMoveItem(const LLUUID& idItem, const LLUUID& idFolderDest) const
+{
+	// Block moving the folder to destination if:
+	//   - folder and destination are subject to different locks [see canMoveFolder() for more details]
+	const LLViewerInventoryItem* pItem = gInventory.getItem(idItem); const LLUUID& idFolder = (pItem) ? pItem->getParentUUID() : LLUUID::null;
+	int maskSource = ST_MASK_ANY & ~ST_ROOTFOLDER; folderlock_source_t lockSource(ST_NONE, 0), lockSourceDest(ST_NONE, 0);
+	return 
+		(idFolder.notNull()) && 
+		(isLockedFolder(idFolder, RLV_LOCK_ANY, maskSource, &lockSource) == isLockedFolder(idFolderDest, RLV_LOCK_ANY, maskSource, &lockSourceDest)) && 
+		(lockSource == lockSourceDest);
+}
+
+// Checked: 2011-03-30 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+inline bool RlvFolderLocks::canRemoveItem(const LLUUID& idItem) const
+{
+	// Block removing items from locked folders (but disregard root folder locks)
+	const LLViewerInventoryItem* pItem = gInventory.getItem(idItem); const LLUUID& idFolder = (pItem) ? pItem->getParentUUID() : LLUUID::null;
+	int maskSource = ST_MASK_ANY & ~ST_ROOTFOLDER;
+	return (idFolder.notNull()) && (!isLockedFolder(idFolder, RLV_LOCK_ANY, maskSource));
+}
+
+// Checked: 2011-03-30 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+inline bool RlvFolderLocks::canRenameItem(const LLUUID& idItem) const
+{
+	// Items can always be renamed, regardless of folder locks
+	return true;
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0g) | Added: RLVa-1.3.0b

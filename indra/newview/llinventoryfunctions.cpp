@@ -335,6 +335,13 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 		}
 	}
 
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+	if ( (rlv_handler_t::isEnabled()) && (gRlvFolderLocks.hasLockedFolder(RLV_LOCK_ANY)) && (!gRlvFolderLocks.canRemoveItem(id)) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
+
 	const LLInventoryObject *obj = model->getItem(id);
 	if (obj && obj->getIsLinkType())
 	{
@@ -358,13 +365,17 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 		return FALSE;
 	}
 
-//	if (!model->isObjectDescendentOf(id, gInventory.getRootFolderID()))
-// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
-	if ( (!model->isObjectDescendentOf(id, gInventory.getRootFolderID())) || ((rlv_handler_t::isEnabled()) && (!gRlvFolderLocks.canRemove(id))) )
-// [/RLVa:KB]
+	if (!model->isObjectDescendentOf(id, gInventory.getRootFolderID()))
 	{
 		return FALSE;
 	}
+
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+	if ( ((rlv_handler_t::isEnabled()) && (gRlvFolderLocks.hasLockedFolder(RLV_LOCK_ANY)) && (!gRlvFolderLocks.canRemoveFolder(id))) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
 
 	if (!isAgentAvatarValid()) return FALSE;
 
@@ -396,13 +407,17 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 
 BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 {
-//	if (!model)
-// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
-	if ( (!model) || ((rlv_handler_t::isEnabled()) && (model == &gInventory) && (!gRlvFolderLocks.canRename(id))) )
-// [/RLVa:KB]
+	if (!model)
 	{
 		return FALSE;
 	}
+
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+	if ( (rlv_handler_t::isEnabled()) && (model == &gInventory) && (!gRlvFolderLocks.canRenameFolder(id)) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
 
 	LLViewerInventoryCategory* cat = model->getCategory(id);
 

@@ -1290,6 +1290,13 @@ BOOL LLItemBridge::isItemRenameable() const
 			return FALSE;
 		}
 
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+		if ( (rlv_handler_t::isEnabled()) && (!gRlvFolderLocks.canRenameItem(mUUID)) )
+		{
+			return FALSE;
+		}
+// [/RLVa:KB]
+
 		return (item->getPermissions().allowModifyBy(gAgent.getID()));
 	}
 	return FALSE;
@@ -1728,9 +1735,9 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 		}
 
 // [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
-		if ( (is_movable) && (rlv_handler_t::isEnabled()) )
+		if ( (is_movable) && (rlv_handler_t::isEnabled()) && (gRlvFolderLocks.hasLockedFolder(RLV_LOCK_ANY)) )
 		{
-			is_movable = gRlvFolderLocks.canMove(cat_id, mUUID);
+			is_movable = gRlvFolderLocks.canMoveFolder(cat_id, mUUID);
 		}
 // [/RLVa:KB]
 
@@ -3088,12 +3095,19 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 			is_movable = FALSE;
 		}
 		
-// [RLVa:KB] - Checked: 2010-05-27 (RLVa-1.2.0h) | Added: RLVa-1.2.0h
-		if ( (rlv_handler_t::isEnabled()) && (move_is_into_current_outfit) )
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+		if ( (rlv_handler_t::isEnabled()) && (is_movable) )
 		{
-			// RELEASE-RLVa: [RLVa-1.2.1] Keep in sync with code below which calls LLAppearanceMgr::wearItemOnAvatar with "replace == true"
-			const LLViewerInventoryItem* pItem = dynamic_cast<const LLViewerInventoryItem*>(inv_item);
-			is_movable = rlvPredCanWearItem(pItem, RLV_WEAR_REPLACE);
+			if (move_is_into_current_outfit)
+			{
+				// RELEASE-RLVa: [RLVa-1.3.0] Keep sync'ed with code below => LLAppearanceMgr::wearItemOnAvatar() with "replace == true"
+				const LLViewerInventoryItem* pItem = dynamic_cast<const LLViewerInventoryItem*>(inv_item);
+				is_movable = rlvPredCanWearItem(pItem, RLV_WEAR_REPLACE);
+			}
+			if (is_movable)
+			{
+				is_movable = (gRlvFolderLocks.hasLockedFolder(RLV_LOCK_ANY)) && (gRlvFolderLocks.canMoveItem(inv_item->getUUID(), mUUID));
+			}
 		}
 // [/RLVa:KB]
 

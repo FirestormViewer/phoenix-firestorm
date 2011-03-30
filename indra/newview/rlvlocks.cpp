@@ -1094,7 +1094,7 @@ bool RlvFolderLocks::isLockedFolderEntry(const LLUUID& idFolder, int eSourceType
 }
 
 // Checked: 2011-03-27 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
-bool RlvFolderLocks::isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLockTypeMask, folderlock_source_t* plockSource /*=NULL*/) const
+bool RlvFolderLocks::isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLockTypeMask, int eSourceTypeMask, folderlock_source_t* plockSource) const
 {
 	// Sanity check - if there are no folder locks then we don't have to actually do anything
 	if (!hasLockedFolder(eLockTypeMask))
@@ -1117,10 +1117,12 @@ bool RlvFolderLocks::isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLockTy
 			//   - the current lock type doesn't match eLockTypeMask
 			//   - it's a node lock and the current folder doesn't match
 			//   - we encountered a PERM_ALLOW lock from the current lock owner before which supercedes any subsequent locks
+			//   - the lock source type doesn't match the mask passed in eSourceTypeMask
 			ERlvLockMask eCurLockType = (ERlvLockMask)(pLockDescr->eLockType & eLockTypeMask);
 			std::list<LLUUID>* pidRlvObjList = (RLV_LOCK_REMOVE == eCurLockType) ? &idsRlvObjRem : &idsRlvObjAdd;
 			if ( (0 == eCurLockType) || ((SCOPE_NODE == pLockDescr->eLockScope) && (idFolder != idFolderCur)) ||
-				 (pidRlvObjList->end() != std::find(pidRlvObjList->begin(), pidRlvObjList->end(), pLockDescr->idRlvObj)) )
+				 (pidRlvObjList->end() != std::find(pidRlvObjList->begin(), pidRlvObjList->end(), pLockDescr->idRlvObj)) ||
+				 (0 == (pLockDescr->eLockType & eSourceTypeMask)) )
 			{
 				continue;
 			}
