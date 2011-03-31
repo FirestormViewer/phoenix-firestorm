@@ -328,7 +328,7 @@ public:
 		if (m_Notifications.empty())
 			delete this;	// Delete ourself if we have nothing to do
 	}
-	void sendNotification(const std::string& strText, const std::string& strSuffix = LLStringUtil::null) const;
+	static void sendNotification(const std::string& strText, const std::string& strSuffix = LLStringUtil::null);
 protected:
 	void onCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet, bool fInternal);
 

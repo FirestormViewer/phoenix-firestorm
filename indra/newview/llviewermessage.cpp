@@ -1744,7 +1744,7 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 			{
 				std::string::size_type idxToken = mDesc.find("'  ( http://");
 				if (std::string::npos != idxToken)
-					RlvBehaviourNotifyHandler::instance().sendNotification("accepted_in_inv inv_offer " + mDesc.substr(1, idxToken - 1));
+					RlvBehaviourNotifyHandler::sendNotification("accepted_in_inv inv_offer " + mDesc.substr(1, idxToken - 1));
 			}
 // [/RLVa:KB]
 
@@ -1802,7 +1802,7 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 			{
 				std::string::size_type idxToken = mDesc.find("'  ( http://");
 				if (std::string::npos != idxToken)
-					RlvBehaviourNotifyHandler::instance().sendNotification("declined inv_offer " + mDesc.substr(1, idxToken - 1));
+					RlvBehaviourNotifyHandler::sendNotification("declined inv_offer " + mDesc.substr(1, idxToken - 1));
 			}
 // [/RLVa:KB]
 
