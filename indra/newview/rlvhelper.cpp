@@ -67,6 +67,9 @@ RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
 		return;
 	}
 
+	// HACK: all those @*overorreplace synonyms are rather tedious (and error-prone) to deal with so replace them their equivalent
+	if ( (RLV_TYPE_FORCE == m_eParamType) && (m_strBehaviour.length() - 13 == m_strBehaviour.rfind("overorreplace")) )
+		m_strBehaviour.erase(m_strBehaviour.length() - 13, 13);
 	// HACK: all those @addoutfit* synonyms are rather tedious (and error-prone) to deal with so replace them their @attach* equivalent
 	if ( (RLV_TYPE_FORCE == m_eParamType) && (0 == m_strBehaviour.find("addoutfit")) )
 		m_strBehaviour.replace(0, 9, "attach");
