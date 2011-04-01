@@ -29,6 +29,7 @@
 
 #include "llagent.h"
 #include "llaudioengine.h"
+#include "llmediadataclient.h"
 #include "llmimetypes.h"
 #include "llviewercontrol.h"
 #include "llviewermedia.h"
@@ -58,6 +59,8 @@ bool LLViewerParcelMedia::sMediaLastActionPlay = FALSE;
 std::string LLViewerParcelMedia::sMediaLastURL = "";
 bool LLViewerParcelMedia::sAudioLastActionPlay = FALSE;
 std::string LLViewerParcelMedia::sAudioLastURL = "";
+bool LLViewerParcelMedia::sMOAPLastActionPlay = FALSE;
+std::string LLViewerParcelMedia::sMOAPLastURL = "";
 bool LLViewerParcelMedia::sMediaReFilter = FALSE;
 
 bool LLViewerParcelMedia::sMediaFilterAlertActive = FALSE;
@@ -66,8 +69,14 @@ std::string LLViewerParcelMedia::sCurrentMusic = "";
 LLParcel LLViewerParcelMedia::sQueuedMedia;
 LLParcel LLViewerParcelMedia::sCurrentMedia;
 LLParcel LLViewerParcelMedia::sCurrentAlertMedia;
+std::string LLViewerParcelMedia::sQueuedMOAPUrl = "";
+LLMediaDataClientObject *LLViewerParcelMedia::sQueuedMOAPObject;
+LLObjectMediaNavigateClient *LLViewerParcelMedia::sQueuedMOAPNavObject;
+U8 LLViewerParcelMedia::sQueuedMOAPTextureIndex;
+std::string LLViewerParcelMedia::sCurrentMOAP = "";
 bool LLViewerParcelMedia::sMediaQueueEmpty = TRUE;
 bool LLViewerParcelMedia::sMusicQueueEmpty = TRUE;
+bool LLViewerParcelMedia::sMOAPQueueEmpty = TRUE;
 U32 LLViewerParcelMedia::sMediaCommandQueue = 0;
 F32 LLViewerParcelMedia::sMediaCommandTime = 0;
 
@@ -79,6 +88,9 @@ void callback_media_alert2(const LLSD& notification, const LLSD& response, LLPar
 bool callback_enable_audio_filter(const LLSD& notification, const LLSD& response, std::string media_url);
 void callback_audio_alert(const LLSD& notification, const LLSD& response, std::string media_url);
 void callback_audio_alert2(const LLSD& notification, const LLSD& response, std::string media_url, bool allow);
+bool callback_enable_MOAP_filter(const LLSD& notification, const LLSD& response, LLMediaDataClientObject *object, LLObjectMediaNavigateClient *nav_object, U8 texture_index, std::string media_url);
+void callback_MOAP_alert(const LLSD& notification, const LLSD& response, LLMediaDataClientObject *object, LLObjectMediaNavigateClient *nav_object, U8 texture_index, std::string media_url);
+void callback_MOAP_alert2(const LLSD& notification, const LLSD& response, LLMediaDataClientObject *object, LLObjectMediaNavigateClient *nav_object, U8 texture_index, std::string media_url, bool allow);
 
 // static
 void LLViewerParcelMedia::initClass()
@@ -1030,6 +1042,12 @@ void callback_media_alert2(const LLSD &notification, const LLSD &response, LLPar
 		LLParcel* pParcel = &LLViewerParcelMedia::sQueuedMedia;
 		LLViewerParcelMedia::filterMediaUrl(pParcel);
 	}
+	else if (LLViewerParcelMedia::sMOAPQueueEmpty == false)
+	{
+		LLMediaDataClientObject* pObject = LLViewerParcelMedia::sQueuedMOAPObject;
+		LLObjectMediaNavigateClient* pNavObject = LLViewerParcelMedia::sQueuedMOAPNavObject;
+		LLViewerParcelMedia::filterMOAPUrl(pObject, pNavObject, LLViewerParcelMedia::sQueuedMOAPTextureIndex, LLViewerParcelMedia::sQueuedMOAPUrl);
+	}
 	else if (LLViewerParcelMedia::sMediaCommandQueue != 0)
 	{
 		// There's a queued media command. Process it.
@@ -1365,6 +1383,319 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 	{
 		LLParcel* pParcel = &LLViewerParcelMedia::sQueuedMedia;
 		LLViewerParcelMedia::filterMediaUrl(pParcel);
+	}
+	else if (LLViewerParcelMedia::sMOAPQueueEmpty == false)
+	{
+		LLMediaDataClientObject* pObject = LLViewerParcelMedia::sQueuedMOAPObject;
+		LLObjectMediaNavigateClient* pNavObject = LLViewerParcelMedia::sQueuedMOAPNavObject;
+		LLViewerParcelMedia::filterMOAPUrl(pObject, pNavObject, LLViewerParcelMedia::sQueuedMOAPTextureIndex, LLViewerParcelMedia::sQueuedMOAPUrl);
+	}
+	else if (LLViewerParcelMedia::sMediaCommandQueue != 0)
+	{
+		// There's a queued media command. Process it.
+		if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_STOP)
+		{
+			llinfos << "Executing Queued PARCEL_MEDIA_STOP command." << llendl;
+			LLViewerParcelMedia::stop();
+		}
+		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_PAUSE)
+		{
+			llinfos << "Executing Queued PARCEL_MEDIA_PAUSE command." << llendl;
+			LLViewerParcelMedia::pause();
+		}
+		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_UNLOAD)
+		{
+			llinfos << "Executing Queued PARCEL_MEDIA_UNLOAD command." << llendl;
+			LLViewerParcelMedia::stop();
+		}
+		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_TIME)
+		{
+			llinfos << "Executing Queued PARCEL_MEDIA_TIME command." << llendl;
+			LLViewerParcelMedia::seek(LLViewerParcelMedia::sMediaCommandTime);
+		}
+		LLViewerParcelMedia::sMediaCommandQueue = 0;
+	}
+}
+
+bool callback_enable_MOAP_filter(const LLSD& notification, const LLSD& response, LLMediaDataClientObject *object, LLObjectMediaNavigateClient *nav_object, U8 texture_index, std::string media_url)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	gWarningSettings.setBOOL("FirstMediaFilter", FALSE);
+	if (option == 0)
+	{
+		LLViewerParcelMedia::filterMOAPUrl(object, nav_object, texture_index, media_url);
+	}
+	else // option == 1
+	{
+		gSavedSettings.setBOOL("MediaEnableFilter", FALSE);
+		nav_object->doNavigate(object, texture_index, media_url);
+	}
+	return false;
+}
+
+void LLViewerParcelMedia::filterMOAPUrl(LLMediaDataClientObject *object, LLObjectMediaNavigateClient *nav_object, U8 texture_index, std::string media_url)
+{
+	// First use dialog
+	if(gWarningSettings.getBOOL("FirstMediaFilter"))
+	{
+		LLNotifications::instance().add("EnableMediaFilter", LLSD(), LLSD(), 
+			boost::bind(callback_enable_MOAP_filter, _1, _2, object, nav_object, texture_index, media_url));
+		return;
+	}
+
+	// If there is no alert active, filter the media and flag the MOAP
+	//  queue empty.
+	if (LLViewerParcelMedia::sMediaFilterAlertActive == false)
+	{
+		if ((media_url == sCurrentMOAP) && (!sMediaReFilter))
+		{
+			llinfos << "MOAP URL filter: no active alert, same URL as previous: " + media_url << llendl;
+			// The media hasn't changed, so keep playing if we were.
+			if (sMOAPLastActionPlay)
+			{
+				nav_object->doNavigate(object, texture_index, media_url);
+			}
+			sMOAPQueueEmpty = true;
+			return;
+		}
+		// New MOAP, so flag the queue empty and filter it.
+		llinfos << "MOAP URL filter: no active alert, filtering new URL: " + media_url << llendl;
+		sMOAPQueueEmpty = true;
+	}
+	// If an alert is active, place the media url in the MOAP queue
+	//  if not the same as previous request.
+	else
+	{
+		if (sMOAPQueueEmpty == false)
+		{
+			if (media_url != sQueuedMOAPUrl)
+			{
+				llinfos << "MOAP URL filter: active alert, replacing existing queue with: " + media_url << llendl;
+				sQueuedMOAPUrl = media_url;
+				sQueuedMOAPObject = object;
+				sQueuedMOAPNavObject = nav_object;
+				sQueuedMOAPTextureIndex = texture_index;
+				sMOAPQueueEmpty = false;
+			}
+			
+			return;
+		}
+		else
+		{
+			if (media_url != sCurrentMOAP)
+			{
+				llinfos << "MOAP URL filter: active alert, nothing queued, adding queue with: " + media_url << llendl;
+				sQueuedMOAPUrl = media_url;
+				sQueuedMOAPObject = object;
+				sQueuedMOAPNavObject = nav_object;
+				sQueuedMOAPTextureIndex = texture_index;
+				sMOAPQueueEmpty = false;
+			}
+
+			return;
+		}
+	}	
+
+	sCurrentMOAP = media_url;
+
+	// If the new URL is empty, just play it.
+	if (media_url.empty())
+	{
+		// Treat it as allowed; it'll get stopped elsewhere
+		nav_object->doNavigate(object, texture_index, media_url);
+		return;
+	}
+
+	// If this is the same as the last one we asked about, don't bug the
+	//  user with it again.
+	if (media_url == sMOAPLastURL)
+	{
+		if (sMOAPLastActionPlay)
+		{
+			nav_object->doNavigate(object, texture_index, media_url);
+		}
+		return;
+	}
+
+	sMOAPLastURL = media_url;
+
+	std::string media_action;
+	std::string domain = extractDomain(media_url);
+    
+	for(S32 i = 0;i<(S32)sMediaFilterList.size();i++)
+	{
+		bool found = false;
+		std::string listed_domain = sMediaFilterList[i]["domain"].asString();
+		if (media_url == listed_domain)
+		{
+			found = true;
+		}
+		else if (domain.length() >= listed_domain.length())
+		{
+			size_t pos = domain.rfind(listed_domain);
+			if ((pos != std::string::npos) && 
+				(pos == domain.length()-listed_domain.length()))
+			{
+				found = true;
+			}
+		}
+		if (found)
+		{
+			media_action = sMediaFilterList[i]["action"].asString();
+			break;
+		}
+	}
+	if (media_action=="allow")
+	{
+		llinfos << "MOAP filter: URL allowed by whitelist" << llendl;
+		nav_object->doNavigate(object, texture_index, media_url);
+		sMOAPLastActionPlay = true;
+	}
+	else if (media_action=="deny")
+	{
+		LLChat chat;
+		chat.mText = "Shared media from the domain "+domain+" has been blocked.";
+		chat.mSourceType = CHAT_SOURCE_SYSTEM;
+		LLSD args;
+		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+		//LLOverlayBar::audioFilterStop();
+		sAudioLastActionPlay = false;
+	}
+	else
+	{
+		LLSD args;
+		args["MOAPURL"] = media_url;
+		args["MOAPDOMAIN"] = domain;
+		//TODO: get object and owner names from the object's UUID.
+//		args["OBJECT"] = object->getName();   ...wish it was this simple...
+//		args["OWNER"] = LLSLURL("agent", mOwnerID, "about").getSLURLString();
+// [RLVa:KB] - Kitty, what goes here?
+//		args["OWNER"] = LLSLURL("agent", object, (!mRlvHideNames) ? "about" : "rlvanonym").getSLURLString();
+// [/RLVa:KB]
+		LLViewerParcelMedia::sMediaFilterAlertActive = true;
+		LLNotifications::instance().add("MOAPAlert", args,LLSD(),boost::bind(callback_MOAP_alert, _1, _2, object, nav_object, texture_index, media_url));
+	}
+
+	// No need to refilter now.
+	sMediaReFilter = false;
+}
+
+void callback_MOAP_alert(const LLSD &notification, const LLSD &response, LLMediaDataClientObject *object, LLObjectMediaNavigateClient *nav_object, U8 texture_index, std::string media_url)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+
+	LLSD args;
+	bool allow;
+	std::string domain = LLViewerParcelMedia::extractDomain(media_url);
+	if (option == 0) // allow
+	{
+		args["ACTION"] = "Allow";
+		args["CONDITION"] = "Always";
+		args["LCONDITION"] = "always";
+		allow = true;
+	}
+	else
+	{
+		args["ACTION"] = "Deny";
+		args["CONDITION"] = "Never";
+		args["LCONDITION"] = "never";
+		allow = false;
+	}
+	args["MOAPURL"] = media_url;
+	args["MOAPDOMAIN"] = domain;
+	LLNotifications::instance().add("MOAPAlert2", args,LLSD(),boost::bind(callback_MOAP_alert2, _1, _2, object, nav_object, texture_index, media_url, allow));
+}
+
+void callback_MOAP_alert2(const LLSD &notification, const LLSD &response, LLMediaDataClientObject *object, LLObjectMediaNavigateClient *nav_object, U8 texture_index, std::string media_url, bool allow)
+{
+	LLViewerParcelMedia::sMediaFilterAlertActive = true;
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	std::string domain = LLViewerParcelMedia::extractDomain(media_url);
+
+	LLChat chat;
+	chat.mSourceType = CHAT_SOURCE_SYSTEM;
+	LLSD args;
+	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+
+	if ((option== 0) && allow) // allow now
+	{
+		nav_object->doNavigate(object, texture_index, media_url);
+		LLViewerParcelMedia::sCurrentMOAP = media_url;
+		LLViewerParcelMedia::sMOAPLastActionPlay = true;
+	}
+	else if ((option==0) && !allow) //deny now
+	{
+		LLViewerParcelMedia::sCurrentMOAP = "";
+		LLViewerParcelMedia::sMOAPLastActionPlay = false;
+	}
+	else if ((option== 1) && allow) // Whitelist domain
+	{
+		LLSD newmedia;
+		newmedia["domain"] = domain;
+		newmedia["action"] = "allow";
+		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
+		LLViewerParcelMedia::saveDomainFilterList();
+		chat.mText = "Shared media from domain "+domain+" will always be played.";
+		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+		nav_object->doNavigate(object, texture_index, media_url);
+		LLViewerParcelMedia::sCurrentMOAP = media_url;
+		LLViewerParcelMedia::sMOAPLastActionPlay = true;
+	}
+	else if ((option== 1) && !allow) //Blacklist domain
+	{
+		LLSD newmedia;
+		newmedia["domain"] = domain;
+		newmedia["action"] = "deny";
+		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
+		LLViewerParcelMedia::saveDomainFilterList();
+		chat.mText = "Shared media from domain "+domain+" will never be played.";
+		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+		LLViewerParcelMedia::sCurrentMOAP = "";
+		LLViewerParcelMedia::sMOAPLastActionPlay = false;
+	}
+	else if ((option== 2) && allow) // Whitelist URL
+	{
+		LLSD newmedia;
+		newmedia["domain"] = media_url;
+		newmedia["action"] = "allow";
+		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
+		LLViewerParcelMedia::saveDomainFilterList();
+		chat.mText = "Shared media from location "+media_url+" will always be played.";
+		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+		nav_object->doNavigate(object, texture_index, media_url);
+		LLViewerParcelMedia::sCurrentMOAP = media_url;
+		LLViewerParcelMedia::sMOAPLastActionPlay = true;
+	}
+	else if ((option== 2) && !allow) //Blacklist URL
+	{
+		LLSD newmedia;
+		newmedia["domain"] = media_url;
+		newmedia["action"] = "deny";
+		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
+		LLViewerParcelMedia::saveDomainFilterList();
+		chat.mText = "Shared media from location "+media_url+" will never be played.";
+		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+		LLViewerParcelMedia::sCurrentMOAP = "";
+		LLViewerParcelMedia::sMOAPLastActionPlay = false;
+	}
+	LLViewerParcelMedia::sMediaFilterAlertActive = false;
+	
+	// Check for queues 
+	if (LLViewerParcelMedia::sMusicQueueEmpty == false)
+	{
+		LLViewerParcelMedia::filterAudioUrl(LLViewerParcelMedia::sQueuedMusic);
+	}
+	else if (LLViewerParcelMedia::sMediaQueueEmpty == false)
+	{
+		LLParcel* pParcel = &LLViewerParcelMedia::sQueuedMedia;
+		LLViewerParcelMedia::filterMediaUrl(pParcel);
+	}
+	else if (LLViewerParcelMedia::sMOAPQueueEmpty == false)
+	{
+		LLMediaDataClientObject* pObject = LLViewerParcelMedia::sQueuedMOAPObject;
+		LLObjectMediaNavigateClient* pNavObject = LLViewerParcelMedia::sQueuedMOAPNavObject;
+		LLViewerParcelMedia::filterMOAPUrl(pObject, pNavObject, LLViewerParcelMedia::sQueuedMOAPTextureIndex, LLViewerParcelMedia::sQueuedMOAPUrl);
 	}
 	else if (LLViewerParcelMedia::sMediaCommandQueue != 0)
 	{
