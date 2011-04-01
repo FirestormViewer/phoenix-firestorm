@@ -1003,6 +1003,36 @@ void RlvBehaviourNotifyHandler::sendNotification(const std::string& strText, con
 	}
 }
 
+// Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+void RlvBehaviourNotifyHandler::onWear(LLWearableType::EType eType, bool fAllowed)
+{
+	sendNotification(llformat("worn %s %s", (fAllowed) ? "legally" : "illegally", LLWearableType::getTypeName(eType).c_str()));
+}
+
+// Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+void RlvBehaviourNotifyHandler::onTakeOff(LLWearableType::EType eType, bool fAllowed)
+{
+	sendNotification(llformat("unworn %s %s", (fAllowed) ? "legally" : "illegally", LLWearableType::getTypeName(eType).c_str()));
+}
+
+// Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+void RlvBehaviourNotifyHandler::onAttach(const LLViewerJointAttachment* pAttachPt, bool fAllowed)
+{
+	sendNotification(llformat("attached %s %s", (fAllowed) ? "legally" : "illegally", pAttachPt->getName().c_str()));
+}
+
+// Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+void RlvBehaviourNotifyHandler::onDetach(const LLViewerJointAttachment* pAttachPt, bool fAllowed)
+{
+	sendNotification(llformat("detached %s %s", (fAllowed) ? "legally" : "illegally", pAttachPt->getName().c_str()));
+}
+
+// Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+void RlvBehaviourNotifyHandler::onReattach(const LLViewerJointAttachment* pAttachPt, bool fAllowed)
+{
+	sendNotification(llformat("reattached %s %s", (fAllowed) ? "legally" : "illegally", pAttachPt->getName().c_str()));
+}
+
 // ============================================================================
 // RlvWLSnapshot
 //
