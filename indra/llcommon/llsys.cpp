@@ -315,12 +315,15 @@ LLOSInfo::LLOSInfo() :
 	std::string compatibility_mode;
 	if(got_shell32_version)
 	{
-		if(osvi.dwMajorVersion != shell32_major || osvi.dwMinorVersion != shell32_minor)
+		if(shell32_build > 4000)
 		{
-			compatibility_mode = llformat(" compatibility mode. real ver: %d.%d (Build %d)", 
-											shell32_major,
-											shell32_minor,
-											shell32_build);
+			if(osvi.dwMajorVersion != shell32_major || osvi.dwMinorVersion != shell32_minor )
+			{
+				compatibility_mode = llformat(" compatibility mode. Real version: %d.%d (Build %d)", 
+												shell32_major,
+												shell32_minor,
+												shell32_build);
+			}
 		}
 	}
 	mOSString += compatibility_mode;
