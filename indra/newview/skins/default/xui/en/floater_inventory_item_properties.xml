@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  auto_tile="true"
- height="340"
+ height="350"
  layout="topleft"
  name="item properties"
  help_topic="item_properties"
@@ -253,7 +253,7 @@
      layout="topleft"
      left_pad="5"
      name="CheckShareWithGroup"
-     top_delta="5"
+     top_delta="0"
      width="106" />
     <text
      type="string"
@@ -336,24 +336,12 @@
         height="15"
         follows="left|top"
         layout="topleft"
-        left_delta="82"
+        left_delta="83"
         name="CurrencySymbol"
-        top_delta="1"
+        top_delta="5"
         width="18">
       L$
     </text>
-
-    <line_editor
-     border_style="line"
-     border_thickness="1"
-     follows="left|top|right"
-     height="16"
-     layout="topleft"
-     left_pad="5"
-     max_length="25"
-     name="EditPrice"
-     top_delta="0"
-     width="242" />
 
     <text
      type="string"
@@ -415,19 +403,6 @@
      width="90">
         N:
     </text>
-        <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left="10"
-     name="SaleLabel"
-     top_pad="5"
-     width="330">
-        Mark Item:
-    </text>
-
 
     <radio_group
      draw_border="false"
@@ -455,18 +430,5 @@
          top_delta="0"
          width="70" />
     </radio_group>
-
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="16"
-     layout="topleft"
-     left="10"
-     name="TextPrice"
-     top_pad="5"
-     width="78">
-        Price: L$
-    </text>
 
 </floater>

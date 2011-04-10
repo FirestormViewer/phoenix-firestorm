@@ -512,7 +512,7 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		getChildView("CheckNextOwnerTransfer")->setEnabled((next_owner_mask & PERM_COPY) && !cannot_restrict_permissions);
 
 		getChildView("RadioSaleType")->setEnabled(is_complete && is_for_sale);
-		getChildView("TextPrice")->setEnabled(is_complete && is_for_sale);
+//		getChildView("TextPrice")->setEnabled(is_complete && is_for_sale);
 		getChildView("Edit Cost")->setEnabled(is_complete && is_for_sale);
 	}
 	else
@@ -526,7 +526,7 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		getChildView("CheckNextOwnerTransfer")->setEnabled(FALSE);
 
 		getChildView("RadioSaleType")->setEnabled(FALSE);
-		getChildView("TextPrice")->setEnabled(FALSE);
+//		getChildView("TextPrice")->setEnabled(FALSE);
 		getChildView("Edit Cost")->setEnabled(FALSE);
 	}
 
