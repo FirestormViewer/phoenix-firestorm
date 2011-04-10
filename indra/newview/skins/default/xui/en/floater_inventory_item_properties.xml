@@ -343,7 +343,7 @@
       L$
     </text>
 
-    <!--line_editor
+    <line_editor
      border_style="line"
      border_thickness="1"
      follows="left|top|right"
@@ -353,9 +353,9 @@
      max_length="25"
      name="EditPrice"
      top_delta="0"
-     width="242" /-->
+     width="242" />
 
-    <!--text
+    <text
      type="string"
      length="1"
      follows="left|top"
@@ -414,8 +414,8 @@
      top_delta="0"
      width="90">
         N:
-    </text-->
-        <!--text
+    </text>
+        <text
      type="string"
      length="1"
      follows="left|top"
@@ -426,10 +426,10 @@
      top_pad="5"
      width="330">
         Mark Item:
-    </text-->
+    </text>
 
 
-    <!--radio_group
+    <radio_group
      draw_border="false"
      follows="left|top|right"
      height="16"
@@ -454,9 +454,9 @@
          name="radio2"
          top_delta="0"
          width="70" />
-    </radio_group-->
+    </radio_group>
 
-    <!--text
+    <text
      type="string"
      length="1"
      follows="left|top"
@@ -467,6 +467,6 @@
      top_pad="5"
      width="78">
         Price: L$
-    </text-->
+    </text>
 
 </floater>
