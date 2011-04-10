@@ -39,6 +39,8 @@
 #include "llsdutil.h"
 #include "llmediaentry.h"
 #include "lltextureentry.h"
+#include "llviewercontrol.h"
+#include "llviewerparcelmedia.h"
 #include "llviewerregion.h"
 
 //
@@ -974,9 +976,23 @@ void LLObjectMediaNavigateClient::enqueue(Request *request)
 
 void LLObjectMediaNavigateClient::navigate(LLMediaDataClientObject *object, U8 texture_index, const std::string &url)
 {
+	LL_INFOS("LLMediaDataClient") << "navigate() initiated: url='" << url << "', object=" << object->getID() << LL_ENDL;
 
-//	LL_INFOS("LLMediaDataClient") << "navigate() initiated: " << ll_print_sd(sd_payload) << LL_ENDL;
-	
+	if (gSavedSettings.getBOOL("MediaEnableFilter"))
+	{
+		// Media filter is active, so filter it.
+		LLViewerParcelMedia::filterMOAPUrl(object, this, texture_index, url);
+	}
+	else
+	{
+		// Create a get request and put it in the queue.
+		enqueue(new RequestNavigate(object, this, texture_index, url));
+	}
+}
+
+// called if the media filter passes the request
+void LLObjectMediaNavigateClient::doNavigate(LLMediaDataClientObject *object, U8 texture_index, const std::string &url)
+{
 	// Create a get request and put it in the queue.
 	enqueue(new RequestNavigate(object, this, texture_index, url));
 }
