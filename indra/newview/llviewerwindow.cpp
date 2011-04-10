@@ -303,12 +303,12 @@ private:
 	{
 		mLineList.push_back(Line(text, x, y));
 	}
+	
+public:
+	LLDebugText(LLViewerWindow* window) : mWindow(window) {}
 
 	void clearText() { mLineList.clear(); }
 
-public:
-	LLDebugText(LLViewerWindow* window) : mWindow(window) {}
-	
 	void update()
 	{
 		static LLCachedControl<bool> log_texture_traffic(gSavedSettings,"LogTextureNetworkTraffic") ;
@@ -329,7 +329,7 @@ public:
 		const U32 y_inc = 20;
 
 		clearText();
-
+		
 		if (gSavedSettings.getBOOL("DebugShowTime"))
 		{
 			const U32 y_inc2 = 15;
@@ -354,6 +354,14 @@ public:
 			addText(xpos, ypos, llformat("Time: %d:%02d:%02d", hours,mins,secs)); ypos += y_inc;
 		}
 		
+#if LL_WINDOWS
+		if (gSavedSettings.getBOOL("DebugShowMemory"))
+		{
+			addText(xpos, ypos, llformat("Memory: %d (KB)", LLMemory::getWorkingSetSize() / 1024)); 
+			ypos += y_inc;
+		}
+#endif
+
 		if (gDisplayCameraPos)
 		{
 			std::string camera_view_text;
@@ -1413,6 +1421,15 @@ LLViewerWindow::LLViewerWindow(
 		LL_WARNS("Window") << " Someone took over my signal/exception handler (post createWindow)!" << LL_ENDL;
 	}
 
+	LLCoordScreen scr;
+    mWindow->getSize(&scr);
+
+    if(fullscreen && ( scr.mX!=width || scr.mY!=height))
+    {
+		llwarns << "Fullscreen has forced us in to a different resolution now using "<<scr.mX<<" x "<<scr.mY<<llendl;
+		gSavedSettings.setS32("FullScreenWidth",scr.mX);
+		gSavedSettings.setS32("FullScreenHeight",scr.mY);
+    }
 
 	if (NULL == mWindow)
 	{
@@ -1424,7 +1441,7 @@ LLViewerWindow::LLViewerWindow(
 		LL_WARNS("Window") << "Unable to create window, be sure screen is set at 32-bit color in Control Panels->Display->Settings"
 				<< LL_ENDL;
 #endif
-        LLAppViewer::instance()->forceExit(1);
+        LLAppViewer::instance()->fastQuit(1);
 	}
 	
 	// Get the real window rect the window was created with (since there are various OS-dependent reasons why
@@ -1458,7 +1475,7 @@ LLViewerWindow::LLViewerWindow(
 	{
 		gSavedSettings.setBOOL("RenderVBOEnable", FALSE);
 	}
-	LLVertexBuffer::initClass(gSavedSettings.getBOOL("RenderVBOEnable"));
+	LLVertexBuffer::initClass(gSavedSettings.getBOOL("RenderVBOEnable"), gSavedSettings.getBOOL("RenderVBOMappingDisable"));
 
 	if (LLFeatureManager::getInstance()->isSafe()
 		|| (gSavedSettings.getS32("LastFeatureVersion") != LLFeatureManager::getInstance()->getVersion())
@@ -1591,8 +1608,9 @@ void LLViewerWindow::initBase()
 	mWorldViewPlaceholder = main_view->getChildView("world_view_rect")->getHandle();
 	mNonSideTrayView = main_view->getChildView("non_side_tray_view")->getHandle();
 	mFloaterViewHolder = main_view->getChildView("floater_view_holder")->getHandle();
-	mPopupView = main_view->findChild<LLPopupView>("popup_holder");
+	mPopupView = main_view->getChild<LLPopupView>("popup_holder");
 	mHintHolder = main_view->getChild<LLView>("hint_holder")->getHandle();
+	mLoginPanelHolder = main_view->getChild<LLView>("login_panel_holder")->getHandle();
 
 	// Constrain floaters to inside the menu and status bar regions.
 	gFloaterView = main_view->getChild<LLFloaterView>("Floater View");
@@ -1766,6 +1784,20 @@ void LLViewerWindow::initWorldUI()
 	buttons_panel->setShape(buttons_panel_container->getLocalRect());
 	buttons_panel->setFollowsAll();
 	buttons_panel_container->addChild(buttons_panel);
+
+	LLView* avatar_picker_destination_guide_container = gViewerWindow->getRootView()->getChild<LLView>("avatar_picker_and_destination_guide_container");
+	LLMediaCtrl* destinations = avatar_picker_destination_guide_container->findChild<LLMediaCtrl>("destination_guide_contents");
+	LLMediaCtrl* avatar_picker = avatar_picker_destination_guide_container->findChild<LLMediaCtrl>("avatar_picker_contents");
+	if (destinations)
+	{
+		destinations->navigateTo(gSavedSettings.getString("DestinationGuideURL"), "text/html");
+	}
+
+	if (avatar_picker)
+	{
+		avatar_picker->navigateTo(gSavedSettings.getString("AvatarPickerURL"), "text/html");
+	}
+
 }
 
 // Destroy the UI
@@ -2544,6 +2576,10 @@ void LLViewerWindow::updateUI()
 		if (gLoggedInTime.getElapsedTimeF32() > gSavedSettings.getF32("DestinationGuideHintTimeout"))
 		{
 			LLFirstUse::notUsingDestinationGuide();
+		}
+		if (gLoggedInTime.getElapsedTimeF32() > gSavedSettings.getF32("AvatarPickerHintTimeout"))
+		{
+			LLFirstUse::notUsingAvatarPicker();
 		}
 		if (gLoggedInTime.getElapsedTimeF32() > gSavedSettings.getF32("SidePanelHintTimeout"))
 		{
@@ -4016,18 +4052,26 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 		LLPipeline::sShowHUDAttachments = FALSE;
 	}
 
+	// if not showing ui, use full window to render world view
+	updateWorldViewRect(!show_ui);
+
 	// Copy screen to a buffer
 	// crop sides or top and bottom, if taking a snapshot of different aspect ratio
 	// from window
-	S32 snapshot_width = mWindowRectRaw.getWidth();
-	S32 snapshot_height =  mWindowRectRaw.getHeight();
-	// SNAPSHOT
-	S32 window_width = mWindowRectRaw.getWidth();
-	S32 window_height = mWindowRectRaw.getHeight();	
-	LLRect window_rect = mWindowRectRaw;
-	BOOL use_fbo = FALSE;
+	LLRect window_rect = show_ui ? getWindowRectRaw() : getWorldViewRectRaw(); 
 
-	LLRenderTarget target;
+	S32 snapshot_width = window_rect.getWidth();
+	S32 snapshot_height = window_rect.getHeight();
+	// SNAPSHOT
+	S32 window_width = snapshot_width;
+	S32 window_height = snapshot_height;
+	
+	if (show_ui)
+	{
+		image_width = llmin(image_width, window_width);
+		image_height = llmin(image_height, window_height);
+	}
+
 	F32 scale_factor = 1.0f ;
 	if(!keep_window_aspect) //image cropping
 	{		
@@ -4040,45 +4084,24 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 	{
 		if(image_width > window_width || image_height > window_height) //need to enlarge the scene
 		{
-			if (!LLPipeline::sRenderDeferred && gGLManager.mHasFramebufferObject && !show_ui)
-			{
-				GLint max_size = 0;
-				glGetIntegerv(GL_MAX_RENDERBUFFER_SIZE_EXT, &max_size);
-		
-				if (image_width <= max_size && image_height <= max_size) //re-project the scene
-				{
-					use_fbo = TRUE;
-					
-					snapshot_width = image_width;
-					snapshot_height = image_height;
-					target.allocate(snapshot_width, snapshot_height, GL_RGBA, TRUE, TRUE, LLTexUnit::TT_RECT_TEXTURE, TRUE);
-					window_width = snapshot_width;
-					window_height = snapshot_height;
-					scale_factor = 1.f;
-					mWindowRectRaw.set(0, snapshot_height, snapshot_width, 0);
-					target.bindTarget();			
-				}
-			}
-
-			if(!use_fbo) //no re-projection, so tiling the scene
-			{
-				F32 ratio = llmin( (F32)window_width / image_width , (F32)window_height / image_height) ;
-				snapshot_width = (S32)(ratio * image_width) ;
-				snapshot_height = (S32)(ratio * image_height) ;
-				scale_factor = llmax(1.0f, 1.0f / ratio) ;	
-			}
+			F32 ratio = llmin( (F32)window_width / image_width , (F32)window_height / image_height) ;
+			snapshot_width = (S32)(ratio * image_width) ;
+			snapshot_height = (S32)(ratio * image_height) ;
+			scale_factor = llmax(1.0f, 1.0f / ratio) ;	
 		}
-		//else: keep the current scene scale, re-scale it if necessary after reading out.
 	}
 	
-	// if not showing ui, use full window to render world view
-	updateWorldViewRect(!show_ui);
+	if (show_ui && scale_factor > 1.f)
+	{
+		llwarns << "over scaling UI not supported." << llendl;
+	}
 
 	S32 buffer_x_offset = llfloor(((window_width - snapshot_width) * scale_factor) / 2.f);
 	S32 buffer_y_offset = llfloor(((window_height - snapshot_height) * scale_factor) / 2.f);
 
 	S32 image_buffer_x = llfloor(snapshot_width*scale_factor) ;
 	S32 image_buffer_y = llfloor(snapshot_height *scale_factor) ;
+
 	if(image_buffer_x > max_size || image_buffer_y > max_size) //boundary check to avoid memory overflow
 	{
 		scale_factor *= llmin((F32)max_size / image_buffer_x, (F32)max_size / image_buffer_y) ;
@@ -4087,7 +4110,7 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 	}
 	if(image_buffer_x > 0 && image_buffer_y > 0)
 	{
-	raw->resize(image_buffer_x, image_buffer_y, 3);
+		raw->resize(image_buffer_x, image_buffer_y, 3);
 	}
 	else
 	{
@@ -4099,12 +4122,13 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 	}
 
 	BOOL high_res = scale_factor >= 2.f; // Font scaling is slow, only do so if rez is much higher
-	if (high_res)
+	if (high_res && show_ui)
 	{
-		send_agent_pause();
+		llwarns << "High res UI snapshot not supported. " << llendl;
+		/*send_agent_pause();
 		//rescale fonts
 		initFonts(scale_factor);
-		LLHUDObject::reshapeAll();
+		LLHUDObject::reshapeAll();*/
 	}
 
 	S32 output_buffer_offset_y = 0;
@@ -4200,12 +4224,6 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 		output_buffer_offset_y += subimage_y_offset;
 	}
 
-	if (use_fbo)
-	{
-		mWindowRectRaw = window_rect;
-		target.flush();
-		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-	}
 	gDisplaySwapBuffers = FALSE;
 	gDepthDirty = TRUE;
 
@@ -4220,11 +4238,11 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 		LLPipeline::sShowHUDAttachments = TRUE;
 	}
 
-	if (high_res)
+	/*if (high_res)
 	{
 		initFonts(1.f);
 		LLHUDObject::reshapeAll();
-	}
+	}*/
 
 	// Pre-pad image to number of pixels such that the line length is a multiple of 4 bytes (for BMP encoding)
 	// Note: this formula depends on the number of components being 3.  Not obvious, but it's correct.	
@@ -4382,17 +4400,8 @@ void LLViewerWindow::setup3DRender()
 
 void LLViewerWindow::setup3DViewport(S32 x_offset, S32 y_offset)
 {
-	if (LLRenderTarget::getCurrentBoundTarget() != NULL)
-	{
-		// don't use translation component of mWorldViewRectRaw, as we are already in a properly sized render target
-		gGLViewport[0] = x_offset;
-		gGLViewport[1] = y_offset;
-	}
-	else
-	{
-		gGLViewport[0] = mWorldViewRectRaw.mLeft + x_offset;
-		gGLViewport[1] = mWorldViewRectRaw.mBottom + y_offset;
-	}
+	gGLViewport[0] = mWorldViewRectRaw.mLeft + x_offset;
+	gGLViewport[1] = mWorldViewRectRaw.mBottom + y_offset;
 	gGLViewport[2] = mWorldViewRectRaw.getWidth();
 	gGLViewport[3] = mWorldViewRectRaw.getHeight();
 	glViewport(gGLViewport[0], gGLViewport[1], gGLViewport[2], gGLViewport[3]);

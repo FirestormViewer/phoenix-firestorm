@@ -612,16 +612,16 @@ F32 LLVOAvatar::sRenderDistance = 256.f;
 S32	LLVOAvatar::sNumVisibleAvatars = 0;
 S32	LLVOAvatar::sNumLODChangesThisFrame = 0;
 
-const LLUUID LLVOAvatar::sStepSoundOnLand = LLUUID("e8af4a28-aa83-4310-a7c4-c047e15ea0df");
+const LLUUID LLVOAvatar::sStepSoundOnLand("e8af4a28-aa83-4310-a7c4-c047e15ea0df");
 const LLUUID LLVOAvatar::sStepSounds[LL_MCODE_END] =
 {
-	LLUUID(SND_STONE_RUBBER),
-	LLUUID(SND_METAL_RUBBER),
-	LLUUID(SND_GLASS_RUBBER),
-	LLUUID(SND_WOOD_RUBBER),
-	LLUUID(SND_FLESH_RUBBER),
-	LLUUID(SND_RUBBER_PLASTIC),
-	LLUUID(SND_RUBBER_RUBBER)
+	SND_STONE_RUBBER,
+	SND_METAL_RUBBER,
+	SND_GLASS_RUBBER,
+	SND_WOOD_RUBBER,
+	SND_FLESH_RUBBER,
+	SND_RUBBER_PLASTIC,
+	SND_RUBBER_RUBBER
 };
 
 S32 LLVOAvatar::sRenderName = RENDER_NAME_ALWAYS;
@@ -2119,31 +2119,6 @@ void LLVOAvatar::computeBodySize()
 			gAgent.sendAgentSetAppearance();
 		}
 	}
-
-/* debug spam
-	std::cout << "skull = " << skull << std::endl;				// adebug
-	std::cout << "head = " << head << std::endl;				// adebug
-	std::cout << "head_scale = " << head_scale << std::endl;	// adebug
-	std::cout << "neck = " << neck << std::endl;				// adebug
-	std::cout << "neck_scale = " << neck_scale << std::endl;	// adebug
-	std::cout << "chest = " << chest << std::endl;				// adebug
-	std::cout << "chest_scale = " << chest_scale << std::endl;	// adebug
-	std::cout << "torso = " << torso << std::endl;				// adebug
-	std::cout << "torso_scale = " << torso_scale << std::endl;	// adebug
-	std::cout << std::endl;	// adebug
-
-	std::cout << "pelvis_scale = " << pelvis_scale << std::endl;// adebug
-	std::cout << std::endl;	// adebug
-
-	std::cout << "hip = " << hip << std::endl;					// adebug
-	std::cout << "hip_scale = " << hip_scale << std::endl;		// adebug
-	std::cout << "ankle = " << ankle << std::endl;				// adebug
-	std::cout << "ankle_scale = " << ankle_scale << std::endl;	// adebug
-	std::cout << "foot = " << foot << std::endl;				// adebug
-	std::cout << "mBodySize = " << mBodySize << std::endl;		// adebug
-	std::cout << "mPelvisToFoot = " << mPelvisToFoot << std::endl;	// adebug
-	std::cout << std::endl;		// adebug
-*/
 }
 
 //------------------------------------------------------------------------
@@ -2346,8 +2321,19 @@ BOOL LLVOAvatar::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
 
 void LLVOAvatar::idleUpdateVoiceVisualizer(bool voice_enabled)
 {
-	// disable voice visualizer when in mouselook
-	mVoiceVisualizer->setVoiceEnabled( voice_enabled && !(isSelf() && gAgentCamera.cameraMouselook()) );
+	bool render_visualizer = voice_enabled;
+	
+	// Don't render the user's own voice visualizer when in mouselook, or when opening the mic is disabled.
+	if(isSelf())
+	{
+		if(gAgentCamera.cameraMouselook() || gSavedSettings.getBOOL("VoiceDisableMic"))
+		{
+			render_visualizer = false;
+		}
+	}
+	
+	mVoiceVisualizer->setVoiceEnabled(render_visualizer);
+	
 	if ( voice_enabled )
 	{		
 		//----------------------------------------------------------------
@@ -3043,7 +3029,8 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				{
 					// *HACK: Desaturate the color
 					LLColor4 username_color = name_tag_color * 0.83f;
-					addNameTagLine(av_name.mUsername, username_color, LLFontGL::NORMAL,LLFontGL::getFontSansSerifSmall());
+					addNameTagLine(av_name.mUsername, username_color, LLFontGL::NORMAL,
+						LLFontGL::getFontSansSerifSmall());
 				}
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 			}
@@ -5802,7 +5789,7 @@ LLViewerJointAttachment* LLVOAvatar::getTargetAttachmentPoint(LLViewerObject* vi
 			llwarns << "Object attachment point invalid: " << attachmentID << llendl;
 		}
 //		attachment = get_if_there(mAttachmentPoints, 1, (LLViewerJointAttachment*)NULL); // Arbitrary using 1 (chest)
-// [SL:KB] - Patch: Appearance-LegacyMultiAttachment | Checked: 2010-08-28 (Catznip-2.2.0a) | Added: Catznip2.1.2a
+// [SL:KB] - Patch: Appearance-LegacyMultiAttachment | Checked: 2010-08-28 (Catznip-2.5.0a) | Added: Catznip-2.1.2a
 		S32 idxAttachPt = 1;
 		if ( (!isSelf()) && (gSavedSettings.getBOOL("LegacyMultiAttachmentSupport")) && (attachmentID > 38) && (attachmentID <= 68) )
 			idxAttachPt = attachmentID - 38;
@@ -6271,7 +6258,7 @@ BOOL LLVOAvatar::isFullyLoaded() const
 //		return TRUE;
 //	else
 //		return mFullyLoaded;
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.2.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.5.0a) | Added: Catznip-2.2.0a
 	// Changes to LLAppearanceMgr::updateAppearanceFromCOF() expect this function to actually return mFullyLoaded for gAgentAvatarp
 	if ( (!isSelf()) && (gSavedSettings.getBOOL("RenderUnloadedAvatar")) )
 		return TRUE;

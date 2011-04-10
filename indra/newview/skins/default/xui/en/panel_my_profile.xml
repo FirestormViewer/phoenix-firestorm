@@ -37,7 +37,14 @@
 	 name="RegisterDateFormat">
 	 [REG_DATE] ([AGE])
 	</string>
-
+    <string
+      name="name_text_args">
+      [NAME]
+    </string>
+    <string
+      name="display_name_text_args">
+      [DISPLAY_NAME]
+    </string>
     <tab_container
      left="0"
      top="4"
@@ -356,5 +363,4 @@
          width="152" />
 
  	</panel>
-
 </panel>

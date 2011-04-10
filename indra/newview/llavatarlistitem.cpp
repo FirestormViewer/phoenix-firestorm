@@ -196,9 +196,17 @@ void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 	{
 		//LLButton* b1 = getChild<LLButton>("info_btn");
 		//b1->setVisible(TRUE);
-		
+		//[RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d	
 		mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
 	}
+
+// AO: We normally show the hover-over items because of space contraints and ease of access through better known context menu.
+//	mInfoBtn->setVisible(mShowInfoBtn);
+//	mProfileBtn->setVisible(mShowProfileBtn);
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+//	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+//	mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+// [/RLVa:KB]
 
 	mHovered = true;
 	LLPanel::onMouseEnter(x, y, mask);
@@ -594,10 +602,10 @@ void LLAvatarListItem::setNameInternal(const std::string& name, const std::strin
 }
 
 void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
-{	
-
+{
+//	setAvatarName(av_name.mDisplayName);
+//	setAvatarToolTip(av_name.mUsername);
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-	
 	bool fRlvFilter = (mRlvCheckShowNames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
 	if (mShowDisplayName && !mShowUsername)
 		setAvatarName( (!fRlvFilter) ? av_name.mDisplayName : RlvStrings::getAnonym(av_name) );

@@ -212,6 +212,8 @@ public:
 	 */
 	void updateParcelIcons();
 
+	static void onClickBalance(void* data);
+
 private:
 
 	/**
@@ -251,6 +253,7 @@ private:
 	LLStatGraph *mSGPacketLoss;
 
 	LLButton	*mBtnVolume;
+	LLTextBox	*mBoxBalance;
 	LLButton	*mMediaToggle;
 	LLView*		mScriptOut;
 	LLFrameTimer	mClockUpdateTimer;

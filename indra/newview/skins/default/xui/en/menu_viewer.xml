@@ -1061,6 +1061,29 @@
                  parameter="perm_prefs" />
             </menu_item_call>
         </menu>
+        <menu_item_separator/>
+        <menu_item_call
+         enabled="false"
+         label="Undo"
+         name="Undo"
+         shortcut="control|Z">
+            <on_click
+             function="Edit.Undo"
+             userdata="" />
+            <on_enable
+             function="Edit.EnableUndo" />
+        </menu_item_call>
+        <menu_item_call
+         enabled="false"
+         label="Redo"
+         name="Redo"
+         shortcut="control|Y">
+            <on_click
+             function="Edit.Redo"
+             userdata="" />
+            <on_enable
+             function="Edit.EnableRedo" />
+        </menu_item_call>        
     </menu>
     
     <!-- Content Menu -->
@@ -1120,6 +1143,14 @@
              name="script_library_url"
              parameter="WebLaunchExternalTarget,http://wiki.phoenixviewer.com/doku.php?id=firestorm" />
        </menu_item_call>
+       <menu_item_call
+         label="Viewer Help"
+         name="Second Life Help"
+         shortcut="F1">
+            <menu_item_call.on_click
+             function="ShowHelp"
+             parameter="f1_help" />
+        </menu_item_call>
 <!--        <menu_item_call
          label="Tutorial"
          name="Tutorial">
@@ -2230,6 +2261,16 @@
                  function="ToggleControl"
                  parameter="DebugShowRenderInfo" />
             </menu_item_check>
+			<menu_item_check
+             label="Show Texture Info"
+             name="Show Texture Info">
+                <menu_item_check.on_check
+                 function="CheckControl"
+                 parameter="DebugShowTextureInfo" />
+                <menu_item_check.on_click
+                 function="ToggleControl"
+                 parameter="DebugShowTextureInfo" />
+            </menu_item_check>
             <menu_item_check
              label="Show Matrices"
              name="Show Matrices">
@@ -2249,6 +2290,16 @@
                 <menu_item_check.on_click
                  function="ToggleControl"
                  parameter="DebugShowColor" />
+            </menu_item_check>
+            <menu_item_check
+               label="Show Memory"
+               name="Show Memory">
+              <menu_item_check.on_check
+               function="CheckControl"
+               parameter="DebugShowMemory" />
+              <menu_item_check.on_click
+               function="ToggleControl"
+               parameter="DebugShowMemory" />
             </menu_item_check>
 
             <menu_item_separator/>
@@ -2421,6 +2472,16 @@
           <menu_item_check.on_click
            function="Advanced.ToggleInfoDisplay"
            parameter="render batches" />
+        </menu_item_check>
+        <menu_item_check
+         label="Update Type"
+         name="Update Type">
+          <menu_item_check.on_check
+           function="Advanced.CheckInfoDisplay"
+           parameter="update type" />
+          <menu_item_check.on_click
+           function="Advanced.ToggleInfoDisplay"
+           parameter="update type" />
         </menu_item_check>
         <menu_item_check
          label="Texture Anim"
@@ -2916,13 +2977,21 @@
                  parameter="BottomPanelNew" />
             </menu_item_check>-->
             <menu_item_call
-             label="Web Browser Test"
+             label="Media Browser Test"
              name="Web Browser Test">
                 <menu_item_call.on_click
                  function="Advanced.WebBrowserTest"
                  parameter="http://secondlife.com/app/search/slurls.html"/>
             </menu_item_call>
-            <menu_item_call
+          <menu_item_call
+           label="Web Content Browser"
+           name="Web Content Browser"
+           shortcut="control|alt|W">
+            <menu_item_call.on_click
+             function="Advanced.WebContentTest"
+             parameter="http://google.com"/>
+          </menu_item_call>
+          <menu_item_call
              label="Dump SelectMgr"
              name="Dump SelectMgr">
                 <menu_item_call.on_click

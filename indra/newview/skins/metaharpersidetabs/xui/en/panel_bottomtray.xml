@@ -3,6 +3,7 @@
  background_visible="true"
  bg_alpha_color="Transparent"
  bg_opaque_color="DkGray"
+ focus_root="true"
  chrome="true"
  follows="left|bottom|right"
  height="33"

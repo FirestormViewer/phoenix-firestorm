@@ -56,6 +56,7 @@
 #include "llgroupactions.h"
 #include "llgrouplist.h"
 #include "llinventoryobserver.h"
+#include "llnetmap.h"
 #include "llpanelpeoplemenus.h"
 #include "llsidetray.h"
 #include "llsidetraypanelcontainer.h"
@@ -244,12 +245,36 @@ public:
 	virtual void setActive(bool) {}
 
 protected:
-	void updateList()
+	void update()
 	{
 		mCallback();
 	}
 
 	callback_t		mCallback;
+};
+
+/**
+ * Update buttons on changes in our friend relations (STORM-557).
+ */
+class LLButtonsUpdater : public LLPanelPeople::Updater, public LLFriendObserver
+{
+public:
+	LLButtonsUpdater(callback_t cb)
+	:	LLPanelPeople::Updater(cb)
+	{
+		LLAvatarTracker::instance().addObserver(this);
+	}
+
+	~LLButtonsUpdater()
+	{
+		LLAvatarTracker::instance().removeObserver(this);
+	}
+
+	/*virtual*/ void changed(U32 mask)
+	{
+		(void) mask;
+		update();
+	}
 };
 
 class LLAvatarListUpdater : public LLPanelPeople::Updater, public LLEventTimer
@@ -319,7 +344,7 @@ public:
 
 		if (mMask & (LLFriendObserver::ADD | LLFriendObserver::REMOVE | LLFriendObserver::ONLINE))
 		{
-			updateList();
+			update();
 		}
 
 		// Stop updates.
@@ -434,7 +459,7 @@ public:
 		if (val)
 		{
 			// update immediately and start regular updates
-			updateList();
+			update();
 			mEventTimer.start(); 
 		}
 		else
@@ -446,7 +471,7 @@ public:
 
 	/*virtual*/ BOOL tick()
 	{
-		updateList();
+		update();
 		return FALSE;
 	}
 private:
@@ -463,7 +488,7 @@ public:
 	LLRecentListUpdater(callback_t cb)
 	:	LLAvatarListUpdater(cb, 0)
 	{
-		LLRecentPeople::instance().setChangedCallback(boost::bind(&LLRecentListUpdater::updateList, this));
+		LLRecentPeople::instance().setChangedCallback(boost::bind(&LLRecentListUpdater::update, this));
 	}
 };
 
@@ -483,17 +508,19 @@ LLPanelPeople::LLPanelPeople()
  		mNearbyGearButton(NULL),
  		mFriendsGearButton(NULL),
  		mGroupsGearButton(NULL),
- 		mRecentGearButton(NULL)
-
+		mRecentGearButton(NULL),
+		mMiniMap(NULL)
 {
 	mFriendListUpdater = new LLFriendListUpdater(boost::bind(&LLPanelPeople::updateFriendList,	this));
 	mNearbyListUpdater = new LLNearbyListUpdater(boost::bind(&LLPanelPeople::updateNearbyList,	this));
 	mRecentListUpdater = new LLRecentListUpdater(boost::bind(&LLPanelPeople::updateRecentList,	this));
+	mButtonsUpdater = new LLButtonsUpdater(boost::bind(&LLPanelPeople::updateButtons, this));
 	mCommitCallbackRegistrar.add("People.addFriend", boost::bind(&LLPanelPeople::onAddFriendButtonClicked, this));
 }
 
 LLPanelPeople::~LLPanelPeople()
 {
+	delete mButtonsUpdater;
 	delete mNearbyListUpdater;
 	delete mFriendListUpdater;
 	delete mRecentListUpdater;
@@ -570,7 +597,10 @@ BOOL LLPanelPeople::postBuild()
 	// [/Ansariel: Colorful radar]
 	// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	mNearbyList->setRlvCheckShowNames(true);
-	// [/RLVa:KB]
+// [/RLVa:KB]
+	mMiniMap = (LLNetMap*)getChildView("Net Map",true);
+	mMiniMap->setToolTipMsg(gSavedSettings.getBOOL("DoubleClickTeleport") ? 
+		getString("AltMiniMapToolTipMsg") :	getString("MiniMapToolTipMsg"));
 
 	//nearby_tab->setVisibleCallback(boost::bind(&Updater::setActive, mNearbyListUpdater, _2));
 	mNearbyListUpdater->setActive(true); // AO: always keep radar active, for chat and channel integration
@@ -1276,6 +1306,12 @@ void LLPanelPeople::onNearbyListDoubleClicked(LLUICtrl* ctrl)
 
 void LLPanelPeople::onAvatarListCommitted(LLAvatarList* list)
 {
+	if (getActiveTabName() == NEARBY_TAB_NAME)
+	{
+		uuid_vec_t selected_uuids;
+		getCurrentItemIDs(selected_uuids);
+		mMiniMap->setSelected(selected_uuids);
+	} else
 	// Make sure only one of the friends lists (online/all) has selection.
 	if (getActiveTabName() == FRIENDS_TAB_NAME)
 	{

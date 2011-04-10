@@ -26,6 +26,7 @@ viewer-development.show_changes_since = last_sprint
 
 # Build Settings
 viewer-development_coverity.coverity_product = viewer
+viewer-development_coverity.run_tests = false
 viewer-development.build_debug_release_separately = true
 
 # Notifications - to configure email notices, add a setting like this:
@@ -55,6 +56,12 @@ viewer-release.login_channel = "Second Life Release"
 viewer-release.build_debug_release_separately = true
 viewer-release.build_viewer_update_version_manager = true
 viewer-release.release-viewer.jira = DRTVWR-13
+
+viewer-pre-release.viewer_channel = "Second Life Release"
+viewer-pre-release.login_channel = "Second Life Release"
+viewer-pre-release.build_debug_release_separately = true
+viewer-pre-release.build_viewer_update_version_manager = true
+#viewer-pre-release.release-viewer.jira = DRTVWR-13
 
 # ========================================
 # aimee
@@ -208,6 +215,30 @@ tofu_viewer-development-staging.email = tofu.linden@lindenlab.com
 viewer-tut-teamcity.email = enus@lindenlab.com
 viewer-tut-teamcity.build_server = false
 viewer-tut-teamcity.build_server_tests = false
+
+# ========================================
+# experience
+# ========================================
+viewer-experience.public_build = false
+viewer-experience.viewer_channel = "Second Life SkyLight Viewer"
+viewer-experience.login_channel = "Second Life SkyLight Viewer"
+
+# =================================================================
+# asset delivery 2010 projects
+# =================================================================
+viewer-asset-delivery.viewer_channel = "Second Life Development"
+viewer-asset-delivery.login_channel = "Second Life Development"
+viewer-asset-delivery.build_viewer_update_version_manager = false
+viewer-asset-delivery.email = monty@lindenlab.com
+viewer-asset-delivery.build_server = false
+viewer-asset-delivery.build_server_tests = false
+
+viewer-asset-delivery-metrics.viewer_channel = "Second Life Development"
+viewer-asset-delivery-metrics.login_channel = "Second Life Development"
+viewer-asset-delivery-metrics.build_viewer_update_version_manager = false
+viewer-asset-delivery-metrics.email = monty@lindenlab.com
+viewer-asset-delivery-metrics.build_server = false
+viewer-asset-delivery-metrics.build_server_tests = false
 
 
 # eof

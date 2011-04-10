@@ -57,6 +57,8 @@ public:
 	// Adds or removes an exception for the specified behaviour
 	void addException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption);
 	void removeException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption);
+	// Returns TRUE if the specified behaviour has an added exception 
+	bool hasException(ERlvBehaviour eBhvr) const;
 	// Returns TRUE if the specified option was added as an exception for the specified behaviour
 	bool isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varOption, ERlvExceptionCheck typeCheck = RLV_CHECK_DEFAULT) const;
 	// Returns TRUE if the specified behaviour should behave "permissive" (rather than "strict"/"secure")
@@ -92,7 +94,10 @@ public:
 	void              setSitSource(const LLVector3d& posSource)	{ m_posSitSource = posSource; }	// @standtp
 
 	// Command specific helper functions
-	bool canShowHoverText(LLViewerObject* pObj) const;											// @showhovertext* command family
+	bool canEdit(const LLViewerObject* pObj) const;												// @edit and @editobj
+	bool canReceiveIM(const LLUUID& idSender) const;											// @recvim and @recvimfrom
+	bool canShowHoverText(const LLViewerObject* pObj) const;									// @showhovertext* command family
+	bool canSendIM(const LLUUID& idRecipient) const;											// @sendim and @sendimto
 	bool canSit(LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;
 	bool canStand() const;
 	bool canTeleportViaLure(const LLUUID& idAgent) const;
@@ -157,6 +162,7 @@ protected:
 	ERlvCmdRet processAddRemCommand(const RlvCommand& rlvCmd);
 	ERlvCmdRet onAddRemAttach(const RlvCommand& rlvCmd, bool& fRefCount);
 	ERlvCmdRet onAddRemDetach(const RlvCommand& rlvCmd, bool& fRefCount);
+	ERlvCmdRet onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCount);
 	ERlvCmdRet onAddRemSetEnv(const RlvCommand& rlvCmd, bool& fRefCount);
 	// Command handlers (RLV_TYPE_FORCE)
 	ERlvCmdRet processForceCommand(const RlvCommand& rlvCmd) const;
@@ -230,8 +236,42 @@ inline void RlvHandler::addException(const LLUUID& idObj, ERlvBehaviour eBhvr, c
 	m_Exceptions.insert(std::pair<ERlvBehaviour, RlvException>(eBhvr, RlvException(idObj, eBhvr, varOption)));
 }
 
+// Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
+inline bool RlvHandler::canEdit(const LLViewerObject* pObj) const
+{
+	// The specified object can be edited if:
+	//   - not generally restricted from editing (or the object's root is an exception)
+	//   - not specifically restricted from editing this object's root
+	return 
+		(pObj) &&
+		((!hasBehaviour(RLV_BHVR_EDIT)) || (isException(RLV_BHVR_EDIT, pObj->getRootEdit()->getID()))) &&
+		((!hasBehaviour(RLV_BHVR_EDITOBJ)) || (!isException(RLV_BHVR_EDITOBJ, pObj->getRootEdit()->getID())));
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
+inline bool RlvHandler::canReceiveIM(const LLUUID& idSender) const
+{
+	// User can receive an IM from "sender" (could be an agent or a group) if:
+	//   - not generally restricted from receiving IMs (or the sender is an exception)
+	//   - not specifically restricted from receiving an IM from the sender
+	return 
+		( (!hasBehaviour(RLV_BHVR_RECVIM)) || (isException(RLV_BHVR_RECVIM, idSender)) ) &&
+		( (!hasBehaviour(RLV_BHVR_RECVIMFROM)) || (!isException(RLV_BHVR_RECVIMFROM, idSender)) );
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
+inline bool RlvHandler::canSendIM(const LLUUID& idRecipient) const
+{
+	// User can send an IM to "recipient" (could be an agent or a group) if:
+	//   - not generally restricted from sending IMs (or the recipient is an exception)
+	//   - not specifically restricted from sending an IM to the recipient
+	return 
+		( (!hasBehaviour(RLV_BHVR_SENDIM)) || (isException(RLV_BHVR_SENDIM, idRecipient)) ) &&
+		( (!hasBehaviour(RLV_BHVR_SENDIMTO)) || (!isException(RLV_BHVR_SENDIMTO, idRecipient)) );
+}
+
 // Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.0.0f
-inline bool RlvHandler::canShowHoverText(LLViewerObject *pObj) const
+inline bool RlvHandler::canShowHoverText(const LLViewerObject *pObj) const
 {
 	return ( (!pObj) || (LL_PCODE_VOLUME != pObj->getPCode()) ||
 		    !( (hasBehaviour(RLV_BHVR_SHOWHOVERTEXTALL)) ||
@@ -273,49 +313,6 @@ inline bool RlvHandler::canTeleportViaLure(const LLUUID& idAgent) const
 	return ((!hasBehaviour(RLV_BHVR_TPLURE)) || (isException(RLV_BHVR_TPLURE, idAgent))) && (canStand());
 }
 
-// Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
-inline bool RlvHandler::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/) const
-{
-#ifdef RLV_EXTENSION_CMD_TOUCHXXX
-	bool fCanTouch = (pObj) && 
-		( (!hasBehaviour(RLV_BHVR_TOUCH)) || (!isException(RLV_BHVR_TOUCH, pObj->getRootEdit()->getID(), RLV_CHECK_PERMISSIVE)) );
-
-	if (fCanTouch)
-	{
-		if ( (!pObj->isAttachment()) || (!pObj->permYouOwner()) )
-		{
-			// Rezzed prim or attachment worn by another avie
-			fCanTouch = 
-				( (!hasBehaviour(RLV_BHVR_TOUCHWORLD)) ||
-				  (isException(RLV_BHVR_TOUCHWORLD, pObj->getRootEdit()->getID(), RLV_CHECK_PERMISSIVE)) ) &&
-				( (!hasBehaviour(RLV_BHVR_FARTOUCH)) || 
-				  (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= 1.5f * 1.5f) );
-		}
-		else if (pObj->isHUDAttachment())
-		{
-			// HUD attachment
-			fCanTouch = (!hasBehaviour(RLV_BHVR_TOUCHHUD)) || 
-				(isException(RLV_BHVR_TOUCHHUD, pObj->getRootEdit()->getID(), RLV_CHECK_PERMISSIVE));
-		}
-		else
-		{
-			// Regular attachment worn by this avie
-			fCanTouch = 
-				( (!hasBehaviour(RLV_BHVR_TOUCHATTACH)) || 
-				  (isException(RLV_BHVR_TOUCHATTACH, pObj->getRootEdit()->getID(), RLV_CHECK_PERMISSIVE)) );
-		}
-	}
-	return fCanTouch;
-#else
-	return (pObj) &&
-	  (
-		((pObj->isAttachment()) && (pObj->permYouOwner())) ||
-		( (!hasBehaviour(RLV_BHVR_FARTOUCH)) || 
-		  (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= 1.5f * 1.5f) )
-	  );
-#endif // RLV_EXTENSION_CMD_TOUCHXXX
-}
-
 inline bool RlvHandler::hasBehaviour(ERlvBehaviour eBehaviour, const std::string& strOption) const
 {
 	return hasBehaviourExcept(eBehaviour, strOption, LLUUID::null);
@@ -324,6 +321,12 @@ inline bool RlvHandler::hasBehaviour(ERlvBehaviour eBehaviour, const std::string
 inline bool RlvHandler::hasBehaviourExcept(ERlvBehaviour eBehaviour, const LLUUID& idObj) const
 {
 	return hasBehaviourExcept(eBehaviour, std::string(), idObj);
+}
+
+// Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
+inline bool RlvHandler::hasException(ERlvBehaviour eBhvr) const
+{
+	return (m_Exceptions.find(eBhvr) != m_Exceptions.end());
 }
 
 inline bool RlvHandler::isPermissive(ERlvBehaviour eBhvr) const

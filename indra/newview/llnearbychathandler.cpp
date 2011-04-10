@@ -126,7 +126,7 @@ protected:
 		if (!toast) return;
 		LL_DEBUGS("NearbyChat") << "Pooling toast" << llendl;
 		toast->setVisible(FALSE);
-		toast->stopFading();
+		toast->stopTimer();
 		toast->setIsHidden(true);
 
 		// Nearby chat toasts that are hidden, not destroyed. They are collected to the toast pool, so that
@@ -174,20 +174,11 @@ public:
 	:	LLToast(p),
 	 	mNearbyChatScreenChannelp(nc_channelp)
 	{
-		updateTransparency();
-		setMouseEnterCallback(boost::bind(&LLNearbyChatToast::updateTransparency, this));
-		setMouseLeaveCallback(boost::bind(&LLNearbyChatToast::updateTransparency, this));
 	}
 
 	/*virtual*/ void onClose(bool app_quitting);
-	/*virtual*/ void setBackgroundOpaque(BOOL b);
-
-protected:
-	/*virtual*/ void setTransparentState(bool transparent);
 
 private:
-	void updateTransparency();
-
 	LLNearbyChatScreenChannel*	mNearbyChatScreenChannelp;
 };
 
@@ -341,7 +332,7 @@ void LLNearbyChatScreenChannel::addNotification(LLSD& notification)
 				panel->addMessage(notification);
 				reshapePanel(panel);
 				toast->reshapeToPanel();
-				toast->startFading();
+				toast->startTimer();
 	  
 				arrangeToasts();
 				return;
@@ -387,7 +378,7 @@ void LLNearbyChatScreenChannel::addNotification(LLSD& notification)
 
 	reshapePanel(panel);
 	toast->reshapeToPanel();
-	toast->startFading();
+	toast->startTimer();
 	
 	m_active_toasts.push_back(toast->getHandle());
 
@@ -428,7 +419,10 @@ void LLNearbyChatScreenChannel::showToastsBottom()
 		return;
 
 	LLRect	toast_rect;	
-	S32		bottom = getRect().mBottom;
+	updateBottom();
+	S32 channel_bottom = getRect().mBottom;
+
+	S32		bottom = channel_bottom;
 	S32		margin = gSavedSettings.getS32("ToastGap");
 
 	//sort active toasts
@@ -577,9 +571,18 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 	}
 
 	nearby_chat->addMessage(chat_msg, true, args);
+
+	if(chat_msg.mSourceType == CHAT_SOURCE_AGENT 
+		&& chat_msg.mFromID.notNull() 
+		&& chat_msg.mFromID != gAgentID)
+	{
+ 		LLFirstUse::otherAvatarChatFirst();
+	}
+
 	if( nearby_chat->getVisible()
 		|| ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
-			&& gSavedSettings.getBOOL("UseChatBubbles") ) )
+			&& gSavedSettings.getBOOL("UseChatBubbles") )
+		|| !mChannel->getShowToasts() ) // to prevent toasts in Busy mode
 		return;//no need in toast if chat is visible or if bubble chat is enabled
 
 	// Handle irc styled messages for toast panel
@@ -640,13 +643,7 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 		notification["font_size"] = (S32)LLViewerChat::getChatFontSize() ;
 		channel->addNotification(notification);	
 	}
-	
-	if(chat_msg.mSourceType == CHAT_SOURCE_AGENT 
-		&& chat_msg.mFromID.notNull() 
-		&& chat_msg.mFromID != gAgentID)
-	{
- 		LLFirstUse::otherAvatarChatFirst();
-	}
+
 }
 
 void LLNearbyChatHandler::onDeleteToast(LLToast* toast)
@@ -662,36 +659,6 @@ void LLNearbyChatHandler::onDeleteToast(LLToast* toast)
 void LLNearbyChatToast::onClose(bool app_quitting)
 {
 	mNearbyChatScreenChannelp->onToastDestroyed(this, app_quitting);
-}
-
-// virtual
-void LLNearbyChatToast::setBackgroundOpaque(BOOL b)
-{
-	// We don't want background changes: transparency is handled differently.
-	LLToast::setBackgroundOpaque(TRUE);
-}
-
-// virtual
-void LLNearbyChatToast::setTransparentState(bool transparent)
-{
-	LLToast::setTransparentState(transparent);
-	updateTransparency();
-}
-
-void LLNearbyChatToast::updateTransparency()
-{
-	ETypeTransparency transparency_type;
-
-	if (isHovered())
-	{
-		transparency_type = TT_ACTIVE;
-	}
-	else
-	{
-		transparency_type = getTransparentState() ? TT_FADING : TT_INACTIVE;
-	}
-
-	LLFloater::updateTransparency(transparency_type);
 }
 
 // EOF

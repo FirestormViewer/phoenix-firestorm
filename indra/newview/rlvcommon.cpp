@@ -543,6 +543,13 @@ bool RlvSelectHasLockedAttach::apply(LLSelectNode* pNode)
 	return (pNode->getObject()) ? gRlvAttachmentLocks.isLockedAttachment(pNode->getObject()->getRootEdit()) : false;
 }
 
+// Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
+bool RlvSelectIsEditable::apply(LLSelectNode* pNode)
+{
+	const LLViewerObject* pObj = pNode->getObject();
+	return (pObj) && (!gRlvHandler.canEdit(pObj));
+}
+
 // Checked: 2009-07-05 (RLVa-1.0.0b) | Modified: RLVa-0.2.0f
 bool RlvSelectIsOwnedByOrGroupOwned::apply(LLSelectNode* pNode)
 {

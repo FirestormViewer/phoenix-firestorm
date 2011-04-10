@@ -297,14 +297,6 @@ void LLToolMgr::toggleBuildMode()
 			}
 		}
 
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.0.0b
-		// TODO-RLVa: [RLVa-1.2.1] Does this code actually still ever trigger?
-		if (gRlvHandler.hasBehaviour(RLV_BHVR_EDIT))
-		{
-			LLSelectMgr::getInstance()->deselectAll();
-		}
-// [/RLVa:KB]
-
 		setCurrentToolset(gBasicToolset);
 		getCurrentToolset()->selectTool( LLToolCompCreate::getInstance() );
 

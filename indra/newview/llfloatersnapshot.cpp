@@ -908,8 +908,6 @@ BOOL LLSnapshotLivePreview::onIdle( void* snapshot_preview )
 			previewp->mPosTakenGlobal = gAgentCamera.getCameraPositionGlobal();
 			previewp->mShineCountdown = 4; // wait a few frames to avoid animation glitch due to readback this frame
 		}
-
-		gViewerWindow->playSnapshotAnimAndSound();
 	}
 	previewp->getWindow()->decBusyCount();
 	// only show fullscreen preview when in freeze frame mode
@@ -1006,6 +1004,7 @@ void LLSnapshotLivePreview::saveTexture()
 				    LLFloaterPerms::getEveryonePerms(),
 				    "Snapshot : " + pos_string,
 				    callback, expected_upload_cost, userdata);
+		gViewerWindow->playSnapshotAnimAndSound();
 	}
 	else
 	{
@@ -1027,6 +1026,10 @@ BOOL LLSnapshotLivePreview::saveLocal()
 	mDataSize = 0;
 	updateSnapshot(FALSE, FALSE);
 
+	if(success)
+	{
+		gViewerWindow->playSnapshotAnimAndSound();
+	}
 	return success;
 }
 
@@ -1046,6 +1049,8 @@ void LLSnapshotLivePreview::saveWeb()
 
 	LLLandmarkActions::getRegionNameAndCoordsFromPosGlobal(gAgentCamera.getCameraPositionGlobal(),
 		boost::bind(&LLSnapshotLivePreview::regionNameCallback, this, jpg, metadata, _1, _2, _3, _4));
+
+	gViewerWindow->playSnapshotAnimAndSound();
 }
 
 void LLSnapshotLivePreview::regionNameCallback(LLImageJPEG* snapshot, LLSD& metadata, const std::string& name, S32 x, S32 y, S32 z)
@@ -1364,6 +1369,36 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshot* floater)
 	floater->getChildView("auto_snapshot_check")->setVisible(		is_advance);
 	floater->getChildView("image_quality_slider")->setVisible(	is_advance && show_slider);
 
+	if (gSavedSettings.getBOOL("RenderUIInSnapshot") || gSavedSettings.getBOOL("RenderHUDInSnapshot"))
+	{ //clamp snapshot resolution to window size when showing UI or HUD in snapshot
+
+		LLSpinCtrl* width_ctrl = floater->getChild<LLSpinCtrl>("snapshot_width");
+		LLSpinCtrl* height_ctrl = floater->getChild<LLSpinCtrl>("snapshot_height");
+
+		S32 width = gViewerWindow->getWindowWidthRaw();
+		S32 height = gViewerWindow->getWindowHeightRaw();
+
+		width_ctrl->setMaxValue(width);
+		
+		height_ctrl->setMaxValue(height);
+
+		if (width_ctrl->getValue().asInteger() > width)
+		{
+			width_ctrl->forceSetValue(width);
+		}
+		if (height_ctrl->getValue().asInteger() > height)
+		{
+			height_ctrl->forceSetValue(height);
+		}
+	}
+	else
+	{ 
+		LLSpinCtrl* width = floater->getChild<LLSpinCtrl>("snapshot_width");
+		width->setMaxValue(6016);
+		LLSpinCtrl* height = floater->getChild<LLSpinCtrl>("snapshot_height");
+		height->setMaxValue(6016);
+	}
+		
 	LLSnapshotLivePreview* previewp = getPreviewView(floater);
 	BOOL got_bytes = previewp && previewp->getDataSize() > 0;
 	BOOL got_snap = previewp && previewp->getSnapshotUpToDate();
@@ -1812,6 +1847,13 @@ void LLFloaterSnapshot::Impl::updateResolution(LLUICtrl* ctrl, void* data, BOOL 
 
 		previewp->getSize(width, height);
 	
+		if (gSavedSettings.getBOOL("RenderUIInSnapshot") || gSavedSettings.getBOOL("RenderHUDInSnapshot"))
+		{ //clamp snapshot resolution to window size when showing UI or HUD in snapshot
+			width = llmin(width, gViewerWindow->getWindowWidthRaw());
+			height = llmin(height, gViewerWindow->getWindowHeightRaw());
+		}
+
+		
 		if(checkImageSize(previewp, width, height, TRUE, previewp->getMaxImageSize()))
 		{
 			resetSnapshotSizeOnUI(view, width, height) ;

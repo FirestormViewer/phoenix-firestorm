@@ -169,7 +169,8 @@
      left_pad="0"
              name="Creator Name"
 		     top_delta="0"
-         use_ellipses="true"
+		     translate="false"
+         use_ellipses="true" 
 		     width="225">
 	        (loading ...)
 	     </text>
@@ -194,7 +195,8 @@
 			    left_pad="0"
 			    name="Owner Name"
 			    top_delta="0"
-          use_ellipses="true"
+			    translate="false"
+          use_ellipses="true" 
 			    width="225">
 			    (loading ...)
 	     </text>
@@ -527,42 +529,41 @@
          bottom="5"
          width="313">
         <button
-             follows="bottom|left"
-             height="23"
-             label="Open"
-             layout="topleft"
-             left="5"
-             name="open_btn"
-             top="0"
-             width="100" />
+		     follows="bottom|left"
+		     height="23"
+		     label="Open"
+		     layout="topleft"
+		     left="5"
+		     name="open_btn"
+		     top="0"
+		     width="73" />
+	    <button
+		     follows="bottom|left"
+		     height="23"
+		     label="Pay"
+		     layout="topleft"
+		     left_pad="5"
+		     name="pay_btn"
+		     top="0"
+		     width="73" />
+	    <button
+		     follows="bottom|left"
+		     height="23"
+		     label="Buy"
+		     layout="topleft"
+		     left_pad="5"
+		     name="buy_btn"
+		     top="0"
+		     width="73" />
         <button
-             follows="bottom|left"
-             height="23"
-             label="Pay"
-             layout="topleft"
-             left_pad="5"
-             name="pay_btn"
-             top="0"
-             width="100" />
-        <button
-             follows="bottom|left"
-             height="23"
-             label="Buy"
-             layout="topleft"
-             left_pad="5"
-             name="buy_btn"
-             top="0"
-             width="100" />
-        <button
-             follows="bottom|left"
-             height="23"
-             label="Details"
-             layout="topleft"
-             left="5"
-             name="details_btn"
-             top="0"
-             width="100"
-             visible="false" />
+		     follows="bottom|left"
+		     height="23"
+		     label="Details"
+		     layout="topleft"
+		     left_pad="5"
+		     name="details_btn"
+		     top="0"
+		     width="74" />
 
     </panel>
 </panel>

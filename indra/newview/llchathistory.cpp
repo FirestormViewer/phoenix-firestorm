@@ -306,6 +306,31 @@ public:
 			if (!chat.mRlvNamesFiltered)
 			{
 				user_name->setValue( LLSD() );
+				LLAvatarNameCache::get(mAvatarID,
+					boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+			}
+			else
+			{
+				// If the agent's chat was subject to @shownames=n we should display their anonimized name
+				mFrom = chat.mFromName;
+				user_name->setValue(mFrom);
+				user_name->setToolTip(mFrom);
+				setToolTip(mFrom);
+				updateMinUserNameWidth();
+			}
+// [/RLVa:KB]
+		}
+		else if (chat.mChatStyle == CHAT_STYLE_HISTORY ||
+				 mSourceType == CHAT_SOURCE_AGENT)
+		{
+			//if it's an avatar name with a username add formatting
+			S32 username_start = chat.mFromName.rfind(" (");
+			S32 username_end = chat.mFromName.rfind(')');
+			
+			if (username_start != std::string::npos &&
+				username_end == (chat.mFromName.length() - 1))
+			{
+				user_name->setValue( LLSD() );
 				LLAvatarNameCache::get(mAvatarID, boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
 			}
 			else
@@ -607,7 +632,7 @@ void LLChatHistory::initFromParams(const LLChatHistory::Params& p)
 	LLLayoutStack::Params layout_p;
 	layout_p.rect = stack_rect;
 	layout_p.follows.flags = FOLLOWS_ALL;
-	layout_p.orientation = "vertical";
+	layout_p.orientation = LLLayoutStack::VERTICAL;
 	layout_p.mouse_opaque = false;
 	
 	LLLayoutStack* stackp = LLUICtrlFactory::create<LLLayoutStack>(layout_p, this);
@@ -995,30 +1020,13 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				}
 			}
 
-			LLTextEditor* text_editor = notify_box->getChild<LLTextEditor>("text_editor_box", TRUE);
-			S32 text_heigth = 0;
-			if(text_editor != NULL)
-			{
-				text_heigth = text_editor->getTextBoundingRect().getHeight();
-			}
-
 			//Prepare the rect for the view
 			LLRect target_rect = mEditor->getDocumentView()->getRect();
 			// squeeze down the widget by subtracting padding off left and right
 			target_rect.mLeft += mLeftWidgetPad + mEditor->getHPad();
 			target_rect.mRight -= mRightWidgetPad;
-			notify_box->reshape(target_rect.getWidth(),
-					notify_box->getRect().getHeight());
+			notify_box->reshape(target_rect.getWidth(),	notify_box->getRect().getHeight());
 			notify_box->setOrigin(target_rect.mLeft, notify_box->getRect().mBottom);
-
-			if (text_editor != NULL)
-			{
-				S32 text_heigth_delta =
-						text_editor->getTextBoundingRect().getHeight()
-								- text_heigth;
-				notify_box->reshape(target_rect.getWidth(),
-								notify_box->getRect().getHeight() + text_heigth_delta);
-			}
 
 			LLInlineViewSegment::Params params;
 			params.view = notify_box;

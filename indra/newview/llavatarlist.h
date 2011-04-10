@@ -132,6 +132,8 @@ protected:
 
 private:
 
+	bool isAvalineItemSelected();
+
 	bool mIgnoreOnlineStatus;
 	bool mShowLastInteractionTime;
 	bool mDirty;

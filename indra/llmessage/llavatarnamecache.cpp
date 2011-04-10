@@ -38,7 +38,6 @@
 
 #include <map>
 #include <set>
-//#include <unistd.h> AO: Breaks win32 at the moment
 
 namespace LLAvatarNameCache
 {
@@ -218,67 +217,65 @@ public:
 				av_name.mDisplayName = av_name.mUsername;
 			}
 
-                       LL_DEBUGS("AvNameCache") << "LLAvatarNameResponder::result for " << agent_id << " "
-                                                                        << "user '" << av_name.mUsername << "' "
-                                                                        << "display '" << av_name.mDisplayName << "' "
-                                                                        << "expires in " << expires - now << " seconds"
-                                                                        << LL_ENDL;
-
+			LL_DEBUGS("AvNameCache") << "LLAvatarNameResponder::result for " << agent_id << " "
+									 << "user '" << av_name.mUsername << "' "
+									 << "display '" << av_name.mDisplayName << "' "
+									 << "expires in " << expires - now << " seconds"
+									 << LL_ENDL;
+			
 			// cache it and fire signals
 			LLAvatarNameCache::processName(agent_id, av_name, true);
 		}
 
 		// Same logic as error response case
 		LLSD unresolved_agents = content["bad_ids"];
-                S32  num_unresolved = unresolved_agents.size();
-                if (num_unresolved > 0)
+		S32  num_unresolved = unresolved_agents.size();
+		if (num_unresolved > 0)
 		{
-             		LL_WARNS("AvNameCache") << "LLAvatarNameResponder::result " << num_unresolved << " unresolved ids; "
-                                     << "expires in " << expires - now << " seconds"
-                                     << LL_ENDL;
-
+            LL_WARNS("AvNameCache") << "LLAvatarNameResponder::result " << num_unresolved << " unresolved ids; "
+                                    << "expires in " << expires - now << " seconds"
+                                    << LL_ENDL;
 			it = unresolved_agents.beginArray();
 			for ( ; it != unresolved_agents.endArray(); ++it)
 			{
 				const LLUUID& agent_id = *it;
 
-                                LL_WARNS("AvNameCache") << "LLAvatarNameResponder::result "
+				LL_WARNS("AvNameCache") << "LLAvatarNameResponder::result "
                                         << "failed id " << agent_id
                                         << LL_ENDL;
 
-                	 	LLAvatarNameCache::handleAgentError(agent_id);
+                LLAvatarNameCache::handleAgentError(agent_id);
 			}
 		}
-		LL_DEBUGS("AvNameCache") << "LLAvatarNameResponder::result " 
+        LL_DEBUGS("AvNameCache") << "LLAvatarNameResponder::result " 
                                  << LLAvatarNameCache::sCache.size() << " cached names"
                                  << LL_ENDL;
+    }
 
+	/*virtual*/ void error(U32 status, const std::string& reason)
+	{
+		// If there's an error, it might be caused by PeopleApi,
+		// or when loading textures on startup and using a very slow 
+		// network, this query may time out.
+		// What we should do depends on whether or not we have a cached name
+		LL_WARNS("AvNameCache") << "LLAvatarNameResponder::error " << status << " " << reason
+								<< LL_ENDL;
+
+		// Add dummy records for any agent IDs in this request that we do not have cached already
+		std::vector<LLUUID>::const_iterator it = mAgentIDs.begin();
+		for ( ; it != mAgentIDs.end(); ++it)
+		{
+			const LLUUID& agent_id = *it;
+			LLAvatarNameCache::handleAgentError(agent_id);
+		}
 	}
-
-        /*virtual*/ void error(U32 status, const std::string& reason)
-        {
-                // If there's an error, it might be caused by PeopleApi,
-                // or when loading textures on startup and using a very slow 
-                // network, this query may time out.
-                // What we should do depends on whether or not we have a cached name
-                LL_WARNS("AvNameCache") << "LLAvatarNameResponder::error " << status << " " << reason
-                                                               << LL_ENDL;
- 
-                // Add dummy records for any agent IDs in this request that we do not have cached already
-                std::vector<LLUUID>::const_iterator it = mAgentIDs.begin();
-                for ( ; it != mAgentIDs.end(); ++it)
-                {
-                        const LLUUID& agent_id = *it;
-                        LLAvatarNameCache::handleAgentError(agent_id);
-                }
-        }
 };
 
 // Provide some fallback for agents that return errors
 void LLAvatarNameCache::handleAgentError(const LLUUID& agent_id)
 {
-       std::map<LLUUID,LLAvatarName>::iterator existing = sCache.find(agent_id);
-       if (existing == sCache.end())
+	std::map<LLUUID,LLAvatarName>::iterator existing = sCache.find(agent_id);
+	if (existing == sCache.end())
     {
         // there is no existing cache entry, so make a temporary name from legacy
         LL_WARNS("AvNameCache") << "LLAvatarNameCache get legacy for agent "
@@ -287,7 +284,7 @@ void LLAvatarNameCache::handleAgentError(const LLUUID& agent_id)
                         boost::bind(&LLAvatarNameCache::legacyNameCallback,
                                     _1, _2, _3));
     }
-       else
+	else
     {
         // we have a chached (but probably expired) entry - since that would have
         // been returned by the get method, there is no need to signal anyone
@@ -304,7 +301,6 @@ void LLAvatarNameCache::handleAgentError(const LLUUID& agent_id)
                                  << LL_ENDL;
     }
 }
-
 
 void LLAvatarNameCache::processName(const LLUUID& agent_id,
 									const LLAvatarName& av_name,
@@ -374,11 +370,10 @@ void LLAvatarNameCache::requestNamesViaCapability()
 
 		if (url.size() > NAME_URL_SEND_THRESHOLD)
 		{
-                        LL_DEBUGS("AvNameCache") << "LLAvatarNameCache::requestNamesViaCapability first "
-                                                                         << ids << " ids"
-                                                                         << LL_ENDL;
-                        LLHTTPClient::get(url, new LLAvatarNameResponder(agent_ids));
-
+			LL_DEBUGS("AvNameCache") << "LLAvatarNameCache::requestNamesViaCapability first "
+									 << ids << " ids"
+									 << LL_ENDL;
+			LLHTTPClient::get(url, new LLAvatarNameResponder(agent_ids));
 			url.clear();
 			agent_ids.clear();
 		}
@@ -386,11 +381,10 @@ void LLAvatarNameCache::requestNamesViaCapability()
 
 	if (!url.empty())
 	{
-               LL_DEBUGS("AvNameCache") << "LLAvatarNameCache::requestNamesViaCapability all "
-                                                                << ids << " ids"
-                                                                << LL_ENDL;
-               LLHTTPClient::get(url, new LLAvatarNameResponder(agent_ids));
-
+		LL_DEBUGS("AvNameCache") << "LLAvatarNameCache::requestNamesViaCapability all "
+								 << ids << " ids"
+								 << LL_ENDL;
+		LLHTTPClient::get(url, new LLAvatarNameResponder(agent_ids));
 		url.clear();
 		agent_ids.clear();
 	}
@@ -593,13 +587,6 @@ void LLAvatarNameCache::buildLegacyName(const std::string& full_name,
 	av_name->mIsDisplayNameDefault = true;
 	av_name->mIsTemporaryName = true;
 	av_name->mExpires = F64_MAX; // not used because these are not cached
-	
-	// Port from Phoenix: Also fill mLegacyFirstName and mLegacyLastName
-	// in case we need it later (would have to parse mDisplayName manually
-	// if not done here).
-	std::istringstream fname(full_name);
-	fname >> av_name->mLegacyFirstName >> av_name->mLegacyLastName;
-	
 	LL_DEBUGS("AvNameCache") << "LLAvatarNameCache::buildLegacyName "
 							 << full_name
 							 << LL_ENDL;
@@ -678,23 +665,14 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 			std::map<LLUUID,LLAvatarName>::iterator it = sCache.find(agent_id);
 			if (it != sCache.end())
 			{
-				LLAvatarName& av_name = it->second;
+				const LLAvatarName& av_name = it->second;
 				
-				//AO: this is broken, it comes up as expired prematurely.
-				//disable the expire test as a temp workaround.
-				
-				/*
 				if (av_name.mExpires > LLFrameTimer::getTotalSeconds())
 				{
-				 */
 					// ...name already exists in cache, fire callback now
 					fireSignal(agent_id, slot, av_name);
 					return;
-				/*
 				}
-				else
-					llinfos << "AO: namelookup expired, re-requesting: " << agent_id << llendl;
-				 */
 			}
 		}
 		else

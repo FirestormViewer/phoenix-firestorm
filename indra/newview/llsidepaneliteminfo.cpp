@@ -202,6 +202,7 @@ const LLUUID& LLSidepanelItemInfo::getItemID() const
 {
 	return mItemID;
 }
+
 void LLSidepanelItemInfo::reset()
 {
 	LLSidepanelInventorySubpanel::reset();

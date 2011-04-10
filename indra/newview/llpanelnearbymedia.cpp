@@ -986,7 +986,7 @@ void LLPanelNearByMedia::onAdvancedButtonClick()
 
 void LLPanelNearByMedia::onMoreLess()
 {
-	bool is_more = getChild<LLUICtrl>("more_btn")->getVisible();
+	bool is_more = getChild<LLButton>("more_btn")->getToggleState();
 	mNearbyMediaPanel->setVisible(is_more);
 
 	// enable resizing when expanded
@@ -997,8 +997,7 @@ void LLPanelNearByMedia::onMoreLess()
 
 	setShape(new_rect);
 
-	getChild<LLUICtrl>("more_btn")->setVisible(!is_more);
-	getChild<LLUICtrl>("less_btn")->setVisible(is_more);
+	getChild<LLUICtrl>("more_btn")->setVisible(true);
 }
 
 void LLPanelNearByMedia::updateControls()

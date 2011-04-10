@@ -5,6 +5,7 @@
  bg_opaque_color="DkGray"
  chrome="true"
  follows="left|bottom|right"
+ focus_root="true" 
  height="33"
  layout="topleft"
  left="0"
@@ -125,6 +126,159 @@
       </talk_button>
     </layout_panel>
 
+
+    <layout_panel
+     auto_resize="false"
+     follows="left|right"
+     height="28"
+     layout="topleft"
+     min_height="28"
+     min_width="40"
+     mouse_opaque="false"
+     name="bottom_sbhome"
+     user_resize="false"
+     width="40">
+      <bottomtray_button
+       follows="left|right"
+       height="23"
+       image_pressed="PushButton_Press"
+       image_pressed_selected="PushButton_Selected_Press"
+       image_selected="PushButton_Selected_Press"
+       is_toggle="false"
+       image_overlay="TabIcon_Home_Selected"
+       layout="topleft"
+       left="0"
+       name="sidebar_home_btn"
+       tool_tip="Shows/hides sidebar home"
+       top="5"
+       enabled="true"
+       use_ellipses="true"
+       width="36">
+      </bottomtray_button>
+    </layout_panel>
+
+    <layout_panel
+     auto_resize="false"
+     follows="left|right"
+     height="28"
+     layout="topleft"
+     min_height="28"
+     min_width="40"
+     mouse_opaque="false"
+     name="bottom_sbme"
+     user_resize="false"
+     width="40">
+      <bottomtray_button
+       follows="left|right"
+       height="23"
+       image_pressed="PushButton_Press"
+       image_pressed_selected="PushButton_Selected_Press"
+       image_selected="PushButton_Selected_Press"
+       is_toggle="false"
+       image_overlay="TabIcon_Me_Selected"
+       layout="topleft"
+       left="0"
+       name="sidebar_me_btn"
+       tool_tip="Shows/hides avatar profile"
+       top="5"
+       enabled="true"
+       use_ellipses="true"
+       width="36">
+      </bottomtray_button>
+    </layout_panel>
+
+    <layout_panel
+     auto_resize="false"
+     follows="left|right"
+     height="28"
+     layout="topleft"
+     min_height="28"
+     min_width="40"
+     mouse_opaque="false"
+     name="bottom_sbpeople"
+     user_resize="false"
+     width="40">
+      <bottomtray_button
+       follows="left|right"
+       height="23"
+       image_pressed="PushButton_Press"
+       image_pressed_selected="PushButton_Selected_Press"
+       image_selected="PushButton_Selected_Press"
+       is_toggle="false"
+       image_overlay="TabIcon_People_Selected"
+       layout="topleft"
+       left="0"
+       name="sidebar_people_btn"
+       tool_tip="Shows/hides people panel"
+       top="5"
+       enabled="true"
+       use_ellipses="true"
+       width="36">
+      </bottomtray_button>
+    </layout_panel>
+
+    <layout_panel
+     auto_resize="false"
+     follows="left|right"
+     height="28"
+     layout="topleft"
+     min_height="28"
+     min_width="40"
+     mouse_opaque="false"
+     name="bottom_sbplaces"
+     user_resize="false"
+     width="40">
+      <bottomtray_button
+       follows="left|right"
+       height="23"
+       image_pressed="PushButton_Press"
+       image_pressed_selected="PushButton_Selected_Press"
+       image_selected="PushButton_Selected_Press"
+       is_toggle="false"
+       image_overlay="TabIcon_Places_Selected"
+       layout="topleft"
+       left="0"
+       name="sidebar_places_btn"
+       tool_tip="Shows/hides places panel"
+       top="5"
+       enabled="true"
+       use_ellipses="true"
+       width="36">
+      </bottomtray_button>
+    </layout_panel>
+
+    <layout_panel
+     auto_resize="false"
+     follows="left|right"
+     height="28"
+     layout="topleft"
+     min_height="28"
+     min_width="40"
+     mouse_opaque="false"
+     name="bottom_sbappearance"
+     user_resize="false"
+     width="40">
+      <bottomtray_button
+       follows="left|right"
+       height="23"
+       image_pressed="PushButton_Press"
+       image_pressed_selected="PushButton_Selected_Press"
+       image_selected="PushButton_Selected_Press"
+       is_toggle="false"
+       image_overlay="TabIcon_Appearance_Selected"
+       layout="topleft"
+       left="0"
+       name="sidebar_appearance_btn"
+       tool_tip="Shows/hides appearance panel"
+       top="5"
+       enabled="true"
+       use_ellipses="true"
+       width="36">
+      </bottomtray_button>
+    </layout_panel>
+
+
+
     <layout_panel
      auto_resize="false"
      follows="right"
@@ -227,9 +381,6 @@
      name="build_btn_panel"
      user_resize="false"
      width="40">
-      <!--*FIX: Build Floater is not opened with default registration. Will be fixed soon.
-Disabled for now.
--->
       <bottomtray_button
        follows="left|right"
        height="23"
@@ -343,20 +494,43 @@ Disabled for now.
          parameter="mini_map" />
       </bottomtray_button>
     </layout_panel>
-    <icon
-     auto_resize="false"
-     color="Transparent"
-     follows="left|right"
-     height="10"
-     image_name="spacer24.tga"
-     layout="topleft"
-     left="0"
-     min_width="3"
-     name="after_inventory_button"
-     top="0"
-     width="3"/>
 
-    <layout_panel
+
+        <!--
+         <layout_panel
+         mouse_opaque="false"
+         auto_resize="false"
+         follows="left|right"
+         height="28"
+         layout="topleft"
+         min_height="28"
+         min_width="40"
+         name="inventory_panel"
+         user_resize="false"
+         width="40">
+            <button
+                 image_selected="PushButton_Selected_Press"
+                 image_pressed="PushButton_Press"
+                 image_pressed_selected="PushButton_Selected_Press"
+             follows="left|right"
+             height="23"
+             use_ellipses="true"
+             is_toggle="true"
+             image_overlay="inventory_18"
+             layout="topleft"
+             left="0"
+             tool_tip="Shows/hides Inventory"
+             top="5"
+             name="inventory_btn"
+             width="36">
+                <button.init_callback
+                 function="Button.SetDockableFloaterToggle"
+                 parameter="inventory" />
+            </button>
+        </layout_panel>
+        -->
+        
+        <layout_panel
          auto_resize="false"
          follows="left|right"
          height="28"
@@ -386,7 +560,18 @@ Disabled for now.
             </bottomtray_button>
         </layout_panel>
 
-
+    <icon
+     auto_resize="false"
+     color="Transparent"
+     follows="left|right"
+     height="10"
+     image_name="spacer24.tga"
+     layout="topleft"
+     left="0"
+     min_width="3"
+     name="after_inventory_button"
+     top="0"
+     width="3"/>
 
     <layout_panel
      follows="left|right"

@@ -392,10 +392,12 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 				// There's something bogus in the data that we're unpacking.
 				dp->dumpBufferToLog();
 				llwarns << "Flushing cache files" << llendl;
-				std::string mask;
-				mask = gDirUtilp->getDirDelimiter() + "*.slc";
-				gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,""), mask);
-// 				llerrs << "Bogus TE data in " << getID() << ", crashing!" << llendl;
+
+				if(LLVOCache::hasInstance() && getRegion())
+				{
+					LLVOCache::getInstance()->removeEntry(getRegion()->getHandle()) ;
+				}
+				
 				llwarns << "Bogus TE data in " << getID() << llendl;
 			}
 			else 
@@ -3244,10 +3246,12 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
 
 //	if (facep->getViewerObject()->isSelected() && LLSelectMgr::getInstance()->mHideSelectedObjects)
-// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.2.1f
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
 	const LLViewerObject* pObj = facep->getViewerObject();
 	if ( (pObj->isSelected() && LLSelectMgr::getInstance()->mHideSelectedObjects) && 
-		 ((!rlv_handler_t::isEnabled()) || (!pObj->isHUDAttachment()) || (!gRlvAttachmentLocks.isLockedAttachment(pObj->getRootEdit()))) )
+		 ( (!rlv_handler_t::isEnabled()) || 
+		   ( ((!pObj->isHUDAttachment()) || (!gRlvAttachmentLocks.isLockedAttachment(pObj->getRootEdit()))) && 
+		     (gRlvHandler.canEdit(pObj)) ) ) )
 // [/RVLa:KB]
 	{
 		return;

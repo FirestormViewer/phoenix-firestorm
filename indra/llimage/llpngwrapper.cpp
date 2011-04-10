@@ -109,10 +109,11 @@ void LLPngWrapper::writeFlush(png_structp png_ptr)
 }
 
 // Read the PNG file using the libpng.  The low-level interface is used here
-// because we want to do various transformations (including applying gamma)
-// which can't be done with the high-level interface.  The scanline also
-// begins at the bottom of the image (per SecondLife conventions) instead of
-// at the top, so we must assign row-pointers in "reverse" order.
+// because we want to do various transformations (including applying gama)
+// which can't be done with the high-level interface.
+// The scanline also begins at the bottom of
+// the image (per SecondLife conventions) instead of at the top, so we
+// must assign row-pointers in "reverse" order.
 BOOL LLPngWrapper::readPng(U8* src, LLImageRaw* rawImage, ImageInfo *infop)
 {
 	try

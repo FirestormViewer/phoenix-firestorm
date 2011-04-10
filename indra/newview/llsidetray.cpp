@@ -98,8 +98,6 @@ LLSideTrayTab::LLSideTrayTab(const Params& p)
 	mDescription(p.description),
 	mMainPanel(NULL)
 {
-	// Necessary for focus movement among child controls
-	setFocusRoot(TRUE);
 }
 
 LLSideTrayTab::~LLSideTrayTab()
@@ -266,6 +264,15 @@ void LLSideTrayTab::toggleSidebarTabInstance(std::string sdname)
 }
 //-TT
 
+BOOL LLSideTrayTab::handleScrollWheel(S32 x, S32 y, S32 clicks)
+{
+	// Let children handle the event
+	LLUICtrl::handleScrollWheel(x, y, clicks);
+
+	// and then eat it to prevent in-world scrolling (STORM-351).
+	return TRUE;
+}
+
 void LLSideTrayTab::dock(LLFloater* floater_tab)
 {
 	LLSideTray* side_tray = getSideTray();
@@ -296,7 +303,11 @@ static void on_minimize(LLSidepanelAppearance* panel, LLSD minimized)
 {
 	if (!panel) return;
 	bool visible = !minimized.asBoolean();
-	panel->updateToVisibility(LLSD(visible));	
+	LLSD visibility;
+	visibility["visible"] = visible;
+	// Do not reset accordion state on minimize (STORM-375)
+	visibility["reset_accordion"] = false;
+	panel->updateToVisibility(visibility);
 }
 
 void LLSideTrayTab::undock(LLFloater* floater_tab)
@@ -494,8 +505,8 @@ private:
 
 LLSideTray::Params::Params()
 :	collapsed("collapsed",false),
-	tab_btn_image_normal("tab_btn_image",LLUI::getUIImage("sidebar_tab_left.tga")),
-	tab_btn_image_selected("tab_btn_image_selected",LLUI::getUIImage("button_enabled_selected_32x128.tga")),
+	tab_btn_image_normal("tab_btn_image",LLUI::getUIImage("taskpanel/TaskPanel_Tab_Off.png")),
+	tab_btn_image_selected("tab_btn_image_selected",LLUI::getUIImage("taskpanel/TaskPanel_Tab_Selected.png")),
 	default_button_width("tab_btn_width",32),
 	default_button_height("tab_btn_height",32),
 	default_button_margin("tab_btn_margin",0)
@@ -557,7 +568,7 @@ BOOL LLSideTray::postBuild()
 	{
 		if ((*it).channel)
 		{
-			getCollapseSignal().connect(boost::bind(&LLScreenChannelBase::resetPositionAndSize, (*it).channel, _2));
+			setVisibleWidthChangeCallback(boost::bind(&LLScreenChannelBase::resetPositionAndSize, (*it).channel));
 		}
 	}
 
@@ -968,7 +979,6 @@ void	LLSideTray::createButtons	()
 		}
 	}
 	LLHints::registerHintTarget("inventory_btn", mTabButtons["sidebar_inventory"]->getHandle());
-	LLHints::registerHintTarget("dest_guide_btn", mTabButtons["sidebar_places"]->getHandle());
 }
 
 void		LLSideTray::processTriState ()
@@ -1054,9 +1064,6 @@ void LLSideTray::reflectCollapseChange()
 	}
 
 	gFloaterView->refresh();
-	
-	LLSD new_value = mCollapsed;
-	mCollapseSignal(this,new_value);
 }
 
 void LLSideTray::arrange()
@@ -1407,9 +1414,20 @@ bool		LLSideTray::isPanelActive(const std::string& panel_name)
 void	LLSideTray::updateSidetrayVisibility()
 {
 	// set visibility of parent container based on collapsed state
-	if (getParent())
+	LLView* parent = getParent();
+	if (parent)
 	{
-		getParent()->setVisible(!mCollapsed && !gAgentCamera.cameraMouselook());
+		bool old_visibility = parent->getVisible();
+		bool new_visibility = !mCollapsed && !gAgentCamera.cameraMouselook();
+
+		if (old_visibility != new_visibility)
+		{
+			parent->setVisible(new_visibility);
+
+			// Signal change of visible width.
+			llinfos << "Visible: " << new_visibility << llendl;
+			mVisibleWidthChangeSignal(this, new_visibility);
+		}
 	}
 }
 
@@ -1422,6 +1440,15 @@ std::string	LLSideTray::getActivePanelName()
 	return "";
 }
 
+S32 LLSideTray::getVisibleWidth()
+{
+	return (isInVisibleChain() && !mCollapsed) ? getRect().getWidth() : 0;
+}
+
+void LLSideTray::setVisibleWidthChangeCallback(const commit_signal_t::slot_type& cb)
+{
+	mVisibleWidthChangeSignal.connect(cb);
+}
 
 // [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
 const LLPanel* LLSideTray::getActiveTab() const

@@ -64,6 +64,7 @@
 #include "lltool.h"
 #include "lltoolmgr.h"
 #include "lltrans.h"
+#include "llurlentry.h"
 #include "llviewercontrol.h"
 #include "llviewerdisplay.h"
 #include "llviewerjoystick.h"
@@ -78,7 +79,6 @@
 #include "llworldmap.h"
 // [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c)
 #include "rlvhandler.h"
-#include "rlvui.h"
 // [/RLVa:KB]
 #include "kcwlinterface.h"
 
@@ -225,7 +225,10 @@ LLAgent::LLAgent() :
 	mFirstLogin(FALSE),
 	mGenderChosen(FALSE),
 
-	mAppearanceSerialNum(0)
+	mAppearanceSerialNum(0),
+
+	mMouselookModeInSignal(NULL),
+	mMouselookModeOutSignal(NULL)
 {
 	for (U32 i = 0; i < TOTAL_CONTROLS; i++)
 	{
@@ -282,6 +285,9 @@ void LLAgent::cleanup()
 LLAgent::~LLAgent()
 {
 	cleanup();
+
+	delete mMouselookModeInSignal;
+	delete mMouselookModeOutSignal;
 
 	// *Note: this is where LLViewerCamera::getInstance() used to be deleted.
 }
@@ -668,8 +674,15 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
 			// Update all of the regions.
 			LLWorld::getInstance()->updateAgentOffset(mAgentOriginGlobal);
 		}
+
+		// Pass new region along to metrics components that care about this level of detail.
+		LLAppViewer::metricsUpdateRegion(regionp->getHandle());
 	}
 	mRegionp = regionp;
+
+	// Pass the region host to LLUrlEntryParcel to resolve parcel name
+	// with a server request.
+	LLUrlEntryParcel::setRegionHost(getRegionHost());
 
 	// Must shift hole-covering water object locations because local
 	// coordinate frame changed.
@@ -1807,6 +1820,11 @@ void LLAgent::endAnimationUpdateUI()
 
 		LLFloaterCamera::onLeavingMouseLook();
 
+		if (mMouselookModeOutSignal)
+		{
+			(*mMouselookModeOutSignal)();
+		}
+
 		// Only pop if we have pushed...
 		if (TRUE == mViewsPushed)
 		{
@@ -1912,6 +1930,11 @@ void LLAgent::endAnimationUpdateUI()
 
 		mViewsPushed = TRUE;
 
+		if (mMouselookModeInSignal)
+		{
+			(*mMouselookModeInSignal)();
+		}
+
 		// hide all floaters except the mini map
 
 #if 0 // Use this once all floaters are registered
@@ -1971,7 +1994,6 @@ void LLAgent::endAnimationUpdateUI()
 				}
 			}
 		}
-
 	}
 	else if (gAgentCamera.getCameraMode() == CAMERA_MODE_CUSTOMIZE_AVATAR)
 	{
@@ -2001,6 +2023,18 @@ void LLAgent::endAnimationUpdateUI()
 	// Don't let this be called more than once if the camera
 	// mode hasn't changed.  --JC
 	gAgentCamera.updateLastCamera();
+}
+
+boost::signals2::connection LLAgent::setMouselookModeInCallback( const camera_signal_t::slot_type& cb )
+{
+	if (!mMouselookModeInSignal) mMouselookModeInSignal = new camera_signal_t();
+	return mMouselookModeInSignal->connect(cb);
+}
+
+boost::signals2::connection LLAgent::setMouselookModeOutCallback( const camera_signal_t::slot_type& cb )
+{
+	if (!mMouselookModeOutSignal) mMouselookModeOutSignal = new camera_signal_t();
+	return mMouselookModeOutSignal->connect(cb);
 }
 
 //-----------------------------------------------------------------------------
@@ -3739,9 +3773,9 @@ void LLAgent::sendAgentSetAppearance()
 	// to tweak this number again
 //	const LLVector3 body_size = gAgentAvatarp->mBodySize;
 // [RLVa:KB] - Checked: 2010-10-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
- 	LLVector3 body_size = gAgentAvatarp->mBodySize;
- 	body_size.mV[VZ] += RlvSettings::getAvatarOffsetZ();
- // [/RLVa:KB]
+	LLVector3 body_size = gAgentAvatarp->mBodySize;
+	body_size.mV[VZ] += RlvSettings::getAvatarOffsetZ();
+// [/RLVa:KB]
 	msg->addVector3Fast(_PREHASH_Size, body_size);	
 
 	// To guard against out of order packets

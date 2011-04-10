@@ -549,6 +549,7 @@ public:
 	static void onReject(void* user_data);
 	static void onStartIM(void* user_data);
 
+	static void processCallResponse(S32 response, const LLSD& payload);
 private:
 	void setCallerName(const std::string& ui_title,
 		const std::string& ui_label,
@@ -558,7 +559,6 @@ private:
 		const std::string& call_type);
 
 	/*virtual*/ void onLifetimeExpired();
-	void processCallResponse(S32 response);
 };
 
 class LLOutgoingCallDialog : public LLCallDialog

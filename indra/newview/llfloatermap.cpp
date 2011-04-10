@@ -81,7 +81,8 @@ LLFloaterMap::~LLFloaterMap()
 BOOL LLFloaterMap::postBuild()
 {
 	mMap = getChild<LLNetMap>("Net Map");
-	mMap->setToolTipMsg(getString("ToolTipMsg"));	
+	mMap->setToolTipMsg(gSavedSettings.getBOOL("DoubleClickTeleport") ? 
+		getString("AltToolTipMsg") : getString("ToolTipMsg"));
 	sendChildToBack(mMap);
 	
 	mTextBoxNorth = getChild<LLTextBox> ("floater_map_north");
@@ -260,7 +261,16 @@ void LLFloaterMap::handleZoom(const LLSD& userdata)
 	std::string level = userdata.asString();
 	
 	F32 scale = 0.0f;
-	if (level == std::string("close"))
+	if (level == std::string("default"))
+	{
+		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
+		if(pvar)
+		{
+			pvar->resetToDefault();
+			scale = gSavedSettings.getF32("MiniMapScale");
+		}
+	}
+	else if (level == std::string("close"))
 		scale = LLNetMap::MAP_SCALE_MAX;
 	else if (level == std::string("medium"))
 		scale = LLNetMap::MAP_SCALE_MID;

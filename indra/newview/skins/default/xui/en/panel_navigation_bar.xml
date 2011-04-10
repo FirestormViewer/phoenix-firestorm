@@ -4,6 +4,7 @@
  bg_alpha_color="Transparent"
  color="Transparent"
  follows="left|bottom|right"
+ focus_root="true"
  height="37"
  layout="topleft"
  name="navigation_bar"

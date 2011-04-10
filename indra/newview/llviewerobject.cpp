@@ -213,7 +213,6 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mLastInterpUpdateSecs(0.f),
 	mLastMessageUpdateSecs(0.f),
 	mLatestRecvPacketID(0),
-	mCircuitPacketCount(0),
 	mData(NULL),
 	mAudioSourcep(NULL),
 	mAudioGain(1.f),
@@ -237,7 +236,9 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mState(0),
 	mMedia(NULL),
 	mClickAction(0),
-	mAttachmentItemID(LLUUID::null)
+	mAttachmentItemID(LLUUID::null),
+	mLastUpdateType(OUT_UNKNOWN),
+	mLastUpdateCached(FALSE)
 {
 	if (!is_global)
 	{
@@ -479,7 +480,6 @@ void LLViewerObject::initVOClasses()
 	llinfos << "Viewer Object size: " << sizeof(LLViewerObject) << llendl;
 	LLVOGrass::initClass();
 	LLVOWater::initClass();
-	LLVOSky::initClass();
 	LLVOVolume::initClass();
 }
 
@@ -519,20 +519,23 @@ void LLViewerObject::setNameValueList(const std::string& name_value_list)
 
 // This method returns true if the object is over land owned by the
 // agent.
-BOOL LLViewerObject::isOverAgentOwnedLand() const
+bool LLViewerObject::isReturnable()
 {
-	return mRegionp
-		&& mRegionp->getParcelOverlay()
-		&& mRegionp->getParcelOverlay()->isOwnedSelf(getPositionRegion());
-}
+	if (isAttachment())
+	{
+		return false;
+	}
+	std::vector<LLBBox> boxes;
+	boxes.push_back(LLBBox(getPositionRegion(), getRotationRegion(), getScale() * -0.5f, getScale() * 0.5f).getAxisAligned());
+	for (child_list_t::iterator iter = mChildList.begin();
+		 iter != mChildList.end(); iter++)
+	{
+		LLViewerObject* child = *iter;
+		boxes.push_back(LLBBox(child->getPositionRegion(), child->getRotationRegion(), child->getScale() * -0.5f, child->getScale() * 0.5f).getAxisAligned());
+	}
 
-// This method returns true if the object is over land owned by the
-// agent.
-BOOL LLViewerObject::isOverGroupOwnedLand() const
-{
-	return mRegionp 
-		&& mRegionp->getParcelOverlay()
-		&& mRegionp->getParcelOverlay()->isOwnedGroup(getPositionRegion());
+	return mRegionp
+		&& mRegionp->objectIsReturnable(getPositionRegion(), boxes);
 }
 
 BOOL LLViewerObject::setParent(LLViewerObject* parent)
@@ -1913,7 +1916,6 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 	}
 
 	mLatestRecvPacketID = packet_id;
-	mCircuitPacketCount = 0;
 
 	// Set the change flags for scale
 	if (new_scale != getScale())
@@ -2236,7 +2238,8 @@ void LLViewerObject::interpolateLinearMotion(const F64 & time, const F32 & dt)
 		LLVector3 new_pos = (vel + (0.5f * (dt-PHYSICS_TIMESTEP)) * accel) * dt;	
 		LLVector3 new_v = accel * dt;
 
-		if (time_since_last_update > sPhaseOutUpdateInterpolationTime)
+		if (time_since_last_update > sPhaseOutUpdateInterpolationTime &&
+			sPhaseOutUpdateInterpolationTime > 0.0)
 		{	// Haven't seen a viewer update in a while, check to see if the ciruit is still active
 			if (mRegionp)
 			{	// The simulator will NOT send updates if the object continues normally on the path
@@ -2245,9 +2248,12 @@ void LLViewerObject::interpolateLinearMotion(const F64 & time, const F32 & dt)
 				LLCircuitData *cdp = gMessageSystem->mCircuitInfo.findCircuit( mRegionp->getHost() );
 				if (cdp)
 				{
+					// Find out how many seconds since last packet arrived on the circuit
+					F64 time_since_last_packet = LLMessageSystem::getMessageTimeSeconds() - cdp->getLastPacketInTime();
+
 					if (!cdp->isAlive() ||		// Circuit is dead or blocked
 						 cdp->isBlocked() ||	// or doesn't seem to be getting any packets
-						 (mCircuitPacketCount > 0 && mCircuitPacketCount == cdp->getPacketsIn()))
+						 (time_since_last_packet > sPhaseOutUpdateInterpolationTime))
 					{
 						// Start to reduce motion interpolation since we haven't seen a server update in a while
 						F64 time_since_last_interpolation = time - mLastInterpUpdateSecs;
@@ -2278,9 +2284,6 @@ void LLViewerObject::interpolateLinearMotion(const F64 & time, const F32 & dt)
 						new_pos = new_pos * ((F32) phase_out);
 						new_v = new_v * ((F32) phase_out);
 					}
-
-					// Save current circuit packet count to see if it changes 
-					mCircuitPacketCount = cdp->getPacketsIn();
 				}
 			}
 		}
@@ -3039,6 +3042,8 @@ void LLViewerObject::setScale(const LLVector3 &scale, BOOL damped)
 		{
 			if (!mOnMap)
 			{
+				llassert_always(LLWorld::getInstance()->getRegionFromHandle(getRegion()->getHandle()));
+
 				gObjectList.addToMap(this);
 				mOnMap = TRUE;
 			}
@@ -3566,8 +3571,8 @@ void LLViewerObject::setPositionParent(const LLVector3 &pos_parent, BOOL damped)
 	// Set position relative to parent, if no parent, relative to region
 	if (!isRoot())
 	{
-		LLViewerObject::setPosition(pos_parent);
-		updateDrawable(damped);
+		LLViewerObject::setPosition(pos_parent, damped);
+		//updateDrawable(damped);
 	}
 	else
 	{
@@ -3608,6 +3613,7 @@ void LLViewerObject::setPositionEdit(const LLVector3 &pos_edit, BOOL damped)
 		LLVector3 position_offset = getPosition() * getParent()->getRotation();
 
 		((LLViewerObject *)getParent())->setPositionEdit(pos_edit - position_offset);
+		updateDrawable(damped);
 	}
 	else if (isJointChild())
 	{
@@ -3616,15 +3622,14 @@ void LLViewerObject::setPositionEdit(const LLVector3 &pos_edit, BOOL damped)
 		LLQuaternion inv_parent_rot = parent->getRotation();
 		inv_parent_rot.transQuat();
 		LLVector3 pos_parent = (pos_edit - parent->getPositionRegion()) * inv_parent_rot;
-		LLViewerObject::setPosition(pos_parent);
+		LLViewerObject::setPosition(pos_parent, damped);
 	}
 	else
 	{
-		LLViewerObject::setPosition(pos_edit);
+		LLViewerObject::setPosition(pos_edit, damped);
 		mPositionRegion = pos_edit;
 		mPositionAgent = mRegionp->getPosAgentFromRegion(mPositionRegion);
-	}
-	updateDrawable(damped);
+	}	
 }
 
 
@@ -5079,8 +5084,8 @@ BOOL LLViewerObject::permTransfer() const
 // given you modify rights to.  JC
 BOOL LLViewerObject::allowOpen() const
 {
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.0.0b
-	return !flagInventoryEmpty() && (permYouOwner() || permModify()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT));
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+	return !flagInventoryEmpty() && (permYouOwner() || permModify()) && ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canEdit(this)));
 // [/RLVa:KB]
 //	return !flagInventoryEmpty() && (permYouOwner() || permModify());
 }
@@ -5137,7 +5142,6 @@ void LLViewerObject::setRegion(LLViewerRegion *regionp)
 	}
 	
 	mLatestRecvPacketID = 0;
-	mCircuitPacketCount = 0;
 	mRegionp = regionp;
 
 	for (child_list_t::iterator i = mChildList.begin(); i != mChildList.end(); ++i)
@@ -5435,6 +5439,26 @@ const LLUUID &LLViewerObject::getAttachmentItemID() const
 void LLViewerObject::setAttachmentItemID(const LLUUID &id)
 {
 	mAttachmentItemID = id;
+}
+
+EObjectUpdateType LLViewerObject::getLastUpdateType() const
+{
+	return mLastUpdateType;
+}
+
+void LLViewerObject::setLastUpdateType(EObjectUpdateType last_update_type)
+{
+	mLastUpdateType = last_update_type;
+}
+
+BOOL LLViewerObject::getLastUpdateCached() const
+{
+	return mLastUpdateCached;
+}
+
+void LLViewerObject::setLastUpdateCached(BOOL last_update_cached)
+{
+	mLastUpdateCached = last_update_cached;
 }
 
 const LLUUID &LLViewerObject::extractAttachmentItemID()

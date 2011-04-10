@@ -63,7 +63,7 @@
      top="5"
      clip_partial="true"
      use_ellipses="true"
-     value="Unknown"
+     value="(loading)"
      width="40" />
     <icon
      height="16"
@@ -181,7 +181,7 @@
     <button
      follows="right"
      height="20"
-     image_overlay="ForwardArrow_Off"
+     image_overlay="Web_Profile_Off"
      layout="topleft"
      left_pad="5"
      right="-28"

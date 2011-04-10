@@ -410,6 +410,9 @@ void LLAvatarList::addAvalineItem(const LLUUID& item_id, const LLUUID& session_i
 	LLAvalineListItem* item = new LLAvalineListItem(/*hide_number=*/false);
 	item->setAvatarId(item_id, session_id, true, false);
 	item->setName(item_name);
+	item->showLastInteractionTime(mShowLastInteractionTime);
+	item->showSpeakingIndicator(mShowSpeakingIndicator);
+	item->setOnline(false);
 
 	addItem(item, item_id);
 	mIDs.push_back(item_id);
@@ -459,7 +462,7 @@ void LLAvatarList::refresh()
 				addNewItem(buddy_id, 
 					       //av_name.mDisplayName.empty() ? waiting_str : av_name.mDisplayName,
 					       av_name.getCompleteName(),
-						   LLAvatarTracker::instance().isBuddyOnline(buddy_id));
+					       LLAvatarTracker::instance().isBuddyOnline(buddy_id));
 				modified = true;
 				nadded++;
 			}
@@ -653,6 +656,21 @@ BOOL LLAvatarList::handleRightMouseDown(S32 x, S32 y, MASK mask)
 		mContextMenu->show(this, selected_uuids, x, y);
 	}
 	return handled;
+}
+
+bool LLAvatarList::isAvalineItemSelected()
+{
+	std::vector<LLPanel*> selected_items;
+	getSelectedItems(selected_items);
+	std::vector<LLPanel*>::iterator it = selected_items.begin();
+	
+	for(; it != selected_items.end(); ++it)
+	{
+		if (dynamic_cast<LLAvalineListItem*>(*it))
+			return true;
+	}
+
+	return false;
 }
 
 void LLAvatarList::setVisible(BOOL visible)

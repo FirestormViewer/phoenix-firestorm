@@ -106,10 +106,10 @@
 // [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
-
 #include "llsdserialize.h" // KB: SkinsSelector
 
 #include "lllogininstance.h"        // to check if logged in yet
+#include "llsdserialize.h"
 
 const F32 MAX_USER_FAR_CLIP = 512.f;
 const F32 MIN_USER_FAR_CLIP = 64.f;
@@ -289,8 +289,10 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mGotPersonalInfo(false),
 	mOriginalIMViaEmail(false),
 	mLanguageChanged(false),
-	mDoubleClickActionDirty(false)
+	mDoubleClickActionDirty(false),
+	mFavoritesRecordMayExist(false)
 {
+	
 	//Build Floater is now Called from 	LLFloaterReg::add("preferences", "floater_preferences.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterPreference>);
 	
 	static bool registered_dialog = false;
@@ -333,15 +335,60 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.getUIColor",				boost::bind(&LLFloaterPreference::getUIColor, this ,_1, _2));
 	mCommitCallbackRegistrar.add("Pref.MaturitySettings",		boost::bind(&LLFloaterPreference::onChangeMaturity, this));
 	mCommitCallbackRegistrar.add("Pref.BlockList",				boost::bind(&LLFloaterPreference::onClickBlockList, this));
+	
+	sSkin = gSavedSettings.getString("SkinCurrent");
+
 	mCommitCallbackRegistrar.add("Pref.CommitDoubleClickChekbox",	boost::bind(&LLFloaterPreference::onDoubleClickCheckBox, this, _1));
 	mCommitCallbackRegistrar.add("Pref.CommitRadioDoubleClick",	boost::bind(&LLFloaterPreference::onDoubleClickRadio, this));
-
 //	sSkin = gSavedSettings.getString("SkinCurrent");
-	
 	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
 	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
 	gSavedSettings.getControl("UseDisplayNames")->getCommitSignal()->connect(boost::bind(&handleDisplayNamesOptionChanged,  _2));
+
+	LLAvatarPropertiesProcessor::getInstance()->addObserver( gAgent.getID(), this );
 }
+
+void LLFloaterPreference::processProperties( void* pData, EAvatarProcessorType type )
+{
+	if ( APT_PROPERTIES == type )
+	{
+		const LLAvatarData* pAvatarData = static_cast<const LLAvatarData*>( pData );
+		if( pAvatarData && gAgent.getID() == pAvatarData->avatar_id )
+		{
+			storeAvatarProperties( pAvatarData );
+			processProfileProperties( pAvatarData );
+		}
+	}	
+}
+
+void LLFloaterPreference::storeAvatarProperties( const LLAvatarData* pAvatarData )
+{
+	mAvatarProperties.avatar_id		= gAgent.getID();
+	mAvatarProperties.image_id		= pAvatarData->image_id;
+	mAvatarProperties.fl_image_id   = pAvatarData->fl_image_id;
+	mAvatarProperties.about_text	= pAvatarData->about_text;
+	mAvatarProperties.fl_about_text = pAvatarData->fl_about_text;
+	mAvatarProperties.profile_url   = pAvatarData->profile_url;
+	mAvatarProperties.flags		    = pAvatarData->flags;
+	mAvatarProperties.allow_publish	= pAvatarData->flags & AVATAR_ALLOW_PUBLISH;
+}
+
+void LLFloaterPreference::processProfileProperties(const LLAvatarData* pAvatarData )
+{
+	getChild<LLUICtrl>("online_searchresults")->setValue( (bool)(pAvatarData->flags & AVATAR_ALLOW_PUBLISH) );	
+}
+
+void LLFloaterPreference::saveAvatarProperties( void )
+{
+	mAvatarProperties.allow_publish = getChild<LLUICtrl>("online_searchresults")->getValue();
+	if ( mAvatarProperties.allow_publish )
+	{
+		mAvatarProperties.flags |= AVATAR_ALLOW_PUBLISH;
+	}
+	
+	LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesUpdate( &mAvatarProperties );
+}
+
 
 BOOL LLFloaterPreference::postBuild()
 {
@@ -352,6 +399,8 @@ BOOL LLFloaterPreference::postBuild()
 	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2));
 
 	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLNearbyChat::processChatHistoryStyleUpdate, _2));
+
+	gSavedSettings.getControl("ChatBubbleOpacity")->getSignal()->connect(boost::bind(&LLFloaterPreference::onNameTagOpacityChange, this, _2));
 
 	LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
 	if (!tabcontainer->selectTab(gSavedSettings.getS32("LastPrefTab")))
@@ -428,6 +477,8 @@ void LLFloaterPreference::saveSettings()
 
 void LLFloaterPreference::apply()
 {
+	LLAvatarPropertiesProcessor::getInstance()->addObserver( gAgent.getID(), this );
+	
 	LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
 /*
  if (sSkin != gSavedSettings.getString("SkinCurrent"))
@@ -501,11 +552,41 @@ void LLFloaterPreference::apply()
 		}
 	}
 
+	saveAvatarProperties();
+
 	if (mDoubleClickActionDirty)
 	{
 		updateDoubleClickSettings();
 		mDoubleClickActionDirty = false;
 	}
+
+	if (mFavoritesRecordMayExist && !gSavedPerAccountSettings.getBOOL("ShowFavoritesOnLogin"))
+	{
+		removeFavoritesRecordOfUser();		
+	}
+}
+
+void LLFloaterPreference::removeFavoritesRecordOfUser()
+{
+	mFavoritesRecordMayExist = false;
+	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
+	LLSD fav_llsd;
+	llifstream file;
+	file.open(filename);
+	if (!file.is_open()) return;
+	LLSDSerialize::fromXML(fav_llsd, file);
+	
+	LLAvatarName av_name;
+	LLAvatarNameCache::get( gAgentID, &av_name );
+	if (fav_llsd.has(av_name.getLegacyName()))
+	{
+		fav_llsd.erase(av_name.getLegacyName());
+	}
+	
+	llofstream out_file;
+	out_file.open(filename);
+	LLSDSerialize::toPrettyXML(fav_llsd, out_file);
+
 }
 
 void LLFloaterPreference::cancel()
@@ -542,6 +623,7 @@ void LLFloaterPreference::cancel()
 
 void LLFloaterPreference::onOpen(const LLSD& key)
 {
+	
 	// this variable and if that follows it are used to properly handle busy mode response message
 	static bool initialized = FALSE;
 	// if user is logged in and we haven't initialized busy_response yet, do it
@@ -568,7 +650,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 		(gAgent.isMature() || gAgent.isGodlike());
 	
 	LLComboBox* maturity_combo = getChild<LLComboBox>("maturity_desired_combobox");
-	
+	LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest( gAgent.getID() );
 	if (can_choose_maturity)
 	{		
 		// if they're not adult or a god, they shouldn't see the adult selection, so delete it
@@ -588,6 +670,11 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	{
 		getChild<LLUICtrl>("maturity_desired_textbox")->setValue(maturity_combo->getSelectedItemLabel());
 		getChildView("maturity_desired_combobox")->setVisible( false);
+	}
+
+	if (LLStartUp::getStartupState() == STATE_STARTED)
+	{
+		mFavoritesRecordMayExist = gSavedPerAccountSettings.getBOOL("ShowFavoritesOnLogin");
 	}
 
 	// Forget previous language changes.
@@ -759,6 +846,16 @@ void LLFloaterPreference::onLanguageChange()
 	{
 		LLNotificationsUtil::add("ChangeLanguage");
 		mLanguageChanged = true;
+	}
+}
+
+void LLFloaterPreference::onNameTagOpacityChange(const LLSD& newvalue)
+{
+	LLColorSwatchCtrl* color_swatch = findChild<LLColorSwatchCtrl>("background");
+	if (color_swatch)
+	{
+		LLColor4 new_color = color_swatch->get();
+		color_swatch->set( new_color.setAlpha(newvalue.asReal()) );
 	}
 }
 
@@ -1350,6 +1447,7 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	
 //	getChild<LLUICtrl>("busy_response")->setValue(gSavedSettings.getString("BusyModeResponse2"));
 	
+	getChildView("favorites_on_login_check")->setEnabled(TRUE);
 	getChildView("log_nearby_chat")->setEnabled(TRUE);
 	getChildView("log_instant_messages")->setEnabled(TRUE);
 	getChildView("show_timestamps_check_im")->setEnabled(TRUE);
@@ -1517,6 +1615,7 @@ LLPanelPreference::LLPanelPreference()
 : LLPanel()
 {
 	mCommitCallbackRegistrar.add("Pref.setControlFalse",	boost::bind(&LLPanelPreference::setControlFalse,this, _2));
+	mCommitCallbackRegistrar.add("Pref.updateMediaAutoPlayCheckbox",	boost::bind(&LLPanelPreference::updateMediaAutoPlayCheckbox, this, _1));
 }
 
 //virtual
@@ -1572,6 +1671,10 @@ BOOL LLPanelPreference::postBuild()
 	if (hasChild("voice_call_friends_only_check"))
 	{
 		getChild<LLCheckBoxCtrl>("voice_call_friends_only_check")->setCommitCallback(boost::bind(&showFriendsOnlyWarning, _1, _2));
+	}
+	if (hasChild("favorites_on_login_check"))
+	{
+		getChild<LLCheckBoxCtrl>("favorites_on_login_check")->setCommitCallback(boost::bind(&showFavoritesOnLoginWarning, _1, _2));
 	}
 
 	// Panel Advanced
@@ -1651,6 +1754,14 @@ void LLPanelPreference::showCustomPortWarning(LLUICtrl* checkbox, const LLSD& va
 }
 // [/WoLf]
 
+void LLPanelPreference::showFavoritesOnLoginWarning(LLUICtrl* checkbox, const LLSD& value)
+{
+	if (checkbox && checkbox->getValue())
+	{
+		LLNotificationsUtil::add("FavoritesOnLogin");
+	}
+}
+
 void LLPanelPreference::cancel()
 {
 	for (control_values_map_t::iterator iter =  mSavedValues.begin();
@@ -1680,6 +1791,21 @@ void LLPanelPreference::setControlFalse(const LLSD& user_data)
 	
 	if (control)
 		control->set(LLSD(FALSE));
+}
+
+void LLPanelPreference::updateMediaAutoPlayCheckbox(LLUICtrl* ctrl)
+{
+	std::string name = ctrl->getName();
+
+	// Disable "Allow Media to auto play" only when both
+	// "Streaming Music" and "Media" are unchecked. STORM-513.
+	if ((name == "enable_music") || (name == "enable_media"))
+	{
+		bool music_enabled = getChild<LLCheckBoxCtrl>("enable_music")->get();
+		bool media_enabled = getChild<LLCheckBoxCtrl>("enable_media")->get();
+
+		getChild<LLCheckBoxCtrl>("media_auto_play_btn")->setEnabled(music_enabled || media_enabled);
+	}
 }
 
 static LLRegisterPanelClassWrapper<LLPanelPreferenceGraphics> t_pref_graph("panel_preference_graphics");

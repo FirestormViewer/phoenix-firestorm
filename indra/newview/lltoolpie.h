@@ -83,6 +83,7 @@ private:
 	BOOL useClickAction		(MASK mask, LLViewerObject* object,LLViewerObject* parent);
 	
 	void showVisualContextMenuEffect();
+	ECursorType cursorFromObject(LLViewerObject* object);
 
 	bool handleMediaClick(const LLPickInfo& info);
 	bool handleMediaHover(const LLPickInfo& info);
@@ -99,8 +100,8 @@ private:
 	LLPointer<LLViewerObject> mClickActionObject;
 	U8					mClickAction;
 	LLSafeHandle<LLObjectSelection> mLeftClickSelection;
-
+	BOOL				mClickActionBuyEnabled;
+	BOOL				mClickActionPayEnabled;
 };
-
 
 #endif

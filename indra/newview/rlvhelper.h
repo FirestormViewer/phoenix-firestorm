@@ -167,6 +167,9 @@ public:
 	/*virtual*/ bool  isValid() const	 { return m_fValid; }
 	const uuid_vec_t& getItemIDs() const { return m_idItems; }
 
+	static bool getItemIDs(const LLViewerJointAttachment* pAttachPt, uuid_vec_t& idItems, bool fClear = true);
+	static bool getItemIDs(LLWearableType::EType wtType, uuid_vec_t& idItems, bool fClear = true);
+
 protected:
 	bool       m_fValid;
 	uuid_vec_t m_idItems;

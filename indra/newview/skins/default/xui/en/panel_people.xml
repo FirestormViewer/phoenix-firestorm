@@ -54,7 +54,13 @@ Looking for people to hang out with? Use the search box to find topics or conten
     <string
      name="no_groups_msg"
      value="Looking for Groups to join? Try [secondlife:///app/search/groups Search]." />
-    <filter_editor
+	<string
+	 name="MiniMapToolTipMsg"
+	 value="[REGION](Double-click to open Map, shift-drag to pan)"/>
+	<string
+	 name="AltMiniMapToolTipMsg"
+	 value="[REGION](Double-click to teleport, shift-drag to pan)"/>
+	<filter_editor
      follows="left|top|right"
      height="23"
      layout="topleft"
@@ -73,6 +79,8 @@ Looking for people to hang out with? Use the search box to find topics or conten
      left="5"
      name="tabs"
      tab_group="1"
+     tab_min_width="70"
+     tab_height="30"
      tab_position="top"
      top_pad="10"
      halign="center"
@@ -92,13 +100,23 @@ Looking for people to hang out with? Use the search box to find topics or conten
          top="0"
          width="313">
 
+             <net_map
+             bg_color="NetMapBackgroundColor"
+             follows="top|left|right"
+             layout="topleft"
+             left="3"
+             mouse_opaque="false"
+             name="Net Map"
+             width="307"
+             height="140"
+             top="0"/>
 
              <panel
              height="15"
              right="-1"
              label="nearby_header"
              left="0"
-             top="0"
+             top_pad="0"
              follows="left|right|top">
 
                 <text
@@ -155,7 +173,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              left="3"
              multi_select="true"
              name="avatar_list"
-             top="20"
+             top_pad="0"
              width="307" />
             <panel
              background_visible="true"
@@ -197,7 +215,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              </button>
              <slider
           control_name="NearMeRange"
-          decimal_digits="0"
+          decimal_digits="2"
           follows="bottom|left"
           height="16"
           increment="2"
@@ -528,7 +546,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              name="bottom_panel"
              top_pad="0"
              width="313">
-               <button
+               <menu_button
                follows="bottom|left"
                tool_tip="Options"
                height="25"

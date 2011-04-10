@@ -85,6 +85,8 @@ public:
 	void			toggleTabDocked();
 	void			minimizeTab();
 
+	BOOL                    handleScrollWheel(S32 x, S32 y, S32 clicks);
+
 	LLPanel *getPanel();
 private:
 	std::string mTabTitle;

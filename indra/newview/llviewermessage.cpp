@@ -2377,9 +2377,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		}
 // [/RLVa:KB]
 //		else if (offline == IM_ONLINE && !is_linden && is_busy && name != SYSTEM_FROM)
-// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0a) | Modified: RLVa-1.0.0g
-		else if ( (offline == IM_ONLINE && !is_linden && (is_busy || is_autorespond) && name != SYSTEM_FROM) &&
-			      ( (!gRlvHandler.hasBehaviour(RLV_BHVR_RECVIM)) || (gRlvHandler.isException(RLV_BHVR_RECVIM, from_id))) )
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+		//else if ( (offline == IM_ONLINE && !is_linden && is_busy && name != SYSTEM_FROM) && (gRlvHandler.canReceiveIM(from_id)) )
+		//AO Autorespond
+		else if ( (offline == IM_ONLINE && !is_linden && (is_busy || is_autorespond) && name != SYSTEM_FROM) && (gRlvHandler.canReceiveIM(from_id)) )
 // [/RLVa:KB]
 		{
 			// return a standard "busy" message, but only do it to online IM 
@@ -2445,10 +2446,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				mute_im = true;
 			}
 
-// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Modified: RLVa-1.2.0a
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
 			// Don't block offline IMs, or IMs from Lindens
-			if ( (rlv_handler_t::isEnabled()) && (offline != IM_OFFLINE) && (!is_linden) &&
-				 (gRlvHandler.hasBehaviour(RLV_BHVR_RECVIM)) && (!gRlvHandler.isException(RLV_BHVR_RECVIM, from_id)) )
+			if ( (rlv_handler_t::isEnabled()) && (offline != IM_OFFLINE) && (!is_linden) && (!gRlvHandler.canReceiveIM(from_id)) )
 			{
 				if (!mute_im)
 					RlvUtil::sendBusyMessage(from_id, RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM_REMOTE), session_id);
@@ -2788,13 +2788,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 		// Only show messages if we have a session open (which
 		// should happen after you get an "invitation"
-/*
-		if ( !gIMMgr->hasSession(session_id) )
-		{
-			return;
-		}
-*/
-// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Modified: RLVa-1.2.0a
+//		if ( !gIMMgr->hasSession(session_id) )
+//		{
+//			return;
+//		}
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
 		LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(session_id);
 		if (!pIMSession)
 		{
@@ -2811,6 +2809,25 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					break;
 				case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat: allow if the sender is a sendim exception
 					if ( (from_id != gAgent.getID()) && (!gRlvHandler.isException(RLV_BHVR_RECVIM, from_id)) )
+						message = RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM);
+					break;
+				default:
+					RLV_ASSERT(false);
+					return;
+			}
+		}
+// [/RLVa:KB]
+
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_RECVIM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_RECVIMFROM)) )
+		{
+			switch (pIMSession->mSessionType)
+			{
+				case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat
+					if ( (from_id != gAgent.getID()) && (!gRlvHandler.canReceiveIM(session_id)) )
+						return;
+					break;
+				case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat
+					if ( (from_id != gAgent.getID()) && (!gRlvHandler.canReceiveIM(from_id)) )
 						message = RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM);
 					break;
 				default:
@@ -2925,6 +2942,14 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				LLSD args;
 				args["slurl"] = location;
 				args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+
+				// Look for IRC-style emotes here so object name formatting is correct
+				std::string prefix = message.substr(0, 4);
+				if (prefix == "/me " || prefix == "/me'")
+				{
+					chat.mChatStyle = CHAT_STYLE_IRC;
+				}
+
 				LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 			}
 
@@ -3028,9 +3053,8 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 						return;
 					}
 
-					// Censor lure message if: 1) @revcim=n restricted (and sender isn't an exception), or 2) @showloc=n restricted
-					if ( ( (gRlvHandler.hasBehaviour(RLV_BHVR_RECVIM)) && (!gRlvHandler.isException(RLV_BHVR_RECVIM, from_id)) ) ||
-						 (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) )
+					// Censor lure message if: 1) restricted from receiving IMs from the sender, or 2) @showloc=n restricted
+					if ( (!gRlvHandler.canReceiveIM(from_id)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) )
 					{
 						message = RlvStrings::getString(RLV_STRING_HIDDEN);
 					}
@@ -3473,10 +3497,14 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			{
 				if (!RlvUtil::isEmote(mesg))
 				{
-					if ( (gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHAT)) && (!gRlvHandler.isException(RLV_BHVR_RECVCHAT, from_id)) )
+					if ( ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHAT)) && (!gRlvHandler.isException(RLV_BHVR_RECVCHAT, from_id))) &&
+						 ((!gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHATFROM)) || (gRlvHandler.isException(RLV_BHVR_RECVCHATFROM, from_id))) )
+					{
 						gRlvHandler.filterChat(mesg, false);
+					}
 				}
-				else if ( (gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTE)) && (!gRlvHandler.isException(RLV_BHVR_RECVEMOTE, from_id)) )
+				else if ( ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTE)) && (!gRlvHandler.isException(RLV_BHVR_RECVEMOTE, from_id))) &&
+					      ((!gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTEFROM)) || (gRlvHandler.isException(RLV_BHVR_RECVEMOTEFROM, from_id))) )
 				{
 					mesg = "/me ...";
 				}
@@ -3754,6 +3782,8 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 // then this info is news to us.
 void process_teleport_start(LLMessageSystem *msg, void**)
 {
+	// on teleport, don't tell them about destination guide anymore
+	LLFirstUse::notUsingDestinationGuide(false);
 	U32 teleport_flags = 0x0;
 	msg->getU32("Info", "TeleportFlags", teleport_flags);
 
@@ -4232,37 +4262,6 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 	if (gLastVersionChannel == version_channel)
 	{
 		return;
-	}
-
-	if (!gLastVersionChannel.empty())
-	{
-		// work out the URL for this server's Release Notes
-		std::string url ="http://wiki.secondlife.com/wiki/Release_Notes/";
-		std::string server_version = version_channel;
-		std::vector<std::string> s_vect;
-		boost::algorithm::split(s_vect, server_version, isspace);
-		for(U32 i = 0; i < s_vect.size(); i++)
-		{
-			if (i != (s_vect.size() - 1))
-			{
-				if(i != (s_vect.size() - 2))
-				{
-				   url += s_vect[i] + "_";
-				}
-				else
-				{
-					url += s_vect[i] + "/";
-				}
-			}
-			else
-			{
-				url += s_vect[i].substr(0,4);
-			}
-		}
-
-		LLSD args;
-		args["URL"] = url;
-		LLNotificationsUtil::add("ServerVersionChanged", args);
 	}
 
 	gLastVersionChannel = version_channel;
@@ -6722,14 +6721,14 @@ bool handle_lure_callback(const LLSD& notification, const LLSD& response)
 
 	if(0 == option)
 	{
-// [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e) | Modified: RLVa-0.2.0b
-		if (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM))
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIMTO)) )
 		{
-			// Filter the teleport offer text unless everyone is a sendim exception
+			// Filter the lure message if one of the recipients of the lure can't be sent an IM to
 			for (LLSD::array_const_iterator it = notification["payload"]["ids"].beginArray(); 
 					it != notification["payload"]["ids"].endArray(); ++it)
 			{
-				if (!gRlvHandler.isException(RLV_BHVR_SENDIM, it->asUUID()))
+				if (!gRlvHandler.canSendIM(it->asUUID()))
 				{
 					text = RlvStrings::getString(RLV_STRING_HIDDEN);
 					break;
@@ -6768,6 +6767,9 @@ bool handle_lure_callback(const LLSD& notification, const LLSD& response)
 				payload["from_id"] = target_id;
 				payload["SUPPRESS_TOAST"] = true;
 				LLNotificationsUtil::add("TeleportOfferSent", args, payload);
+
+				// Add the recepient to the recent people list.
+				LLRecentPeople::instance().add(target_id);
 			}
 		}
 		gAgent.sendReliableMessage();
@@ -7166,6 +7168,8 @@ void process_initiate_download(LLMessageSystem* msg, void**)
 
 void process_script_teleport_request(LLMessageSystem* msg, void**)
 {
+	if (!gSavedSettings.getBOOL("ScriptsCanShowUI")) return;
+
 	std::string object_name;
 	std::string sim_name;
 	LLVector3 pos;

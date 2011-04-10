@@ -37,7 +37,14 @@
 	 name="RegisterDateFormat">
 	 [REG_DATE] ([AGE])
 	</string>
-
+    <string
+      name="name_text_args">
+      [NAME]
+    </string>
+    <string
+      name="display_name_text_args">
+      [DISPLAY_NAME]
+    </string>
     <tab_container
      left="0"
      top="4"
@@ -83,7 +90,7 @@
             <view_border
              top_pad="2"
              right="-4"
-             height="100"
+             height="200"
              bevel_style="in"
              follows="top|left|right" />
 
@@ -91,7 +98,7 @@
              left_delta="0"
              top_delta="0"
              right="-4"
-             height="100"
+             height="200"
              textbox.max_length="512"
              textbox.show_context_menu="true"
              name="sl_description_edit"
@@ -350,5 +357,4 @@
          width="152" />
 
  	</panel>
-
 </panel>

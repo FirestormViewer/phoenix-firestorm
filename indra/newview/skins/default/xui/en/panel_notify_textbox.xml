@@ -46,7 +46,7 @@
      height="50"
      layout="topleft"
      left="10"
-     max_length="1024"
+     max_length="250"
      name="message"
      parse_highlights="true"
      read_only="false"

@@ -1535,7 +1535,11 @@ BOOL LLFolderBridge::isItemMovable() const
 	LLInventoryObject* obj = getInventoryObject();
 	if(obj)
 	{
-		return (!LLFolderType::lookupIsProtectedType(((LLInventoryCategory*)obj)->getPreferredType()));
+//		return (!LLFolderType::lookupIsProtectedType(((LLInventoryCategory*)obj)->getPreferredType()));
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+		return (!LLFolderType::lookupIsProtectedType(((LLInventoryCategory*)obj)->getPreferredType())) &&
+			((!rlv_handler_t::isEnabled()) || (!gRlvFolderLocks.isLockedFolder(obj->getUUID(), RLV_LOCK_ANY)));
+// [/RLVa:KB]
 	}
 	return FALSE;
 }
@@ -2611,7 +2615,7 @@ void LLFolderBridge::folderOptionsMenu()
 	// BAP change once we're no longer treating regular categories as ensembles.
 	const bool is_ensemble = (type == LLFolderType::FT_NONE ||
 							  LLFolderType::lookupIsEnsembleType(type));
-// [SL:KB] - Checked: 2010-11-24 (Catznip-2.4.0e) | Added: Catznip-2.4.0e
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-11-24 (Catznip-2.5.0a) | Added: Catznip-2.4.0e
 	const bool is_outfit = (type == LLFolderType::FT_OUTFIT);
 // [/SL:KB]
 
@@ -2670,7 +2674,7 @@ void LLFolderBridge::folderOptionsMenu()
 			disabled_items.push_back(std::string("Remove From Outfit"));
 		}
 //		if (!LLAppearanceMgr::instance().getCanReplaceCOF(mUUID))
-// [SL:KB] - Checked: 2010-11-24 (Catznip-2.4.0e) | Added: Catznip-2.4.0e
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-11-24 (Catznip-2.5.0a) | Added: Catznip-2.4.0e
 		if ( ((is_outfit) && (!LLAppearanceMgr::instance().getCanReplaceCOF(mUUID))) || 
 			 ((!is_outfit) && (gAgentWearables.isCOFChangeInProgress())) )
 // [/SL:KB]
@@ -3395,7 +3399,10 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 	}
 	else if(LLToolDragAndDrop::SOURCE_NOTECARD == source)
 	{
-		accept = TRUE;
+		// Don't allow placing an original item from a notecard to Current Outfit or an outfit folder
+		// because they must contain only links to wearable items.
+		accept = !(move_is_into_current_outfit || move_is_into_outfit);
+
 		if(drop)
 		{
 			copy_inventory_from_notecard(LLToolDragAndDrop::getInstance()->getObjectID(),
@@ -4724,7 +4731,7 @@ void remove_inventory_category_from_avatar_step2( BOOL proceed, LLUUID category_
 														LLWearableBridge::onRemoveFromAvatarArrived,
 														new OnRemoveStruct(item->getLinkedUUID()));
 */
-// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-2.2.0a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-2.5.0a) | Added: Catznip-2.1.1d
 					LLAppearanceMgr::instance().removeItemFromAvatar(item->getUUID());
 // [/SL:KB]
 				}
@@ -5134,7 +5141,7 @@ void LLWearableBridge::removeAllClothesFromAvatar()
 			continue;
 
 //		for (S32 index = gAgentWearables.getWearableCount(itype)-1; index >= 0 ; --index)
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-04 (Catznip-2.5.0a) | Added: Catznip-2.1.2a
 		for (S32 index = gAgentWearables.getWearableCount((LLWearableType::EType)itype)-1; index >= 0 ; --index)
 // [/SL:KB]
 		{
@@ -5177,7 +5184,7 @@ void LLWearableBridge::removeItemFromAvatar(LLViewerInventoryItem *item)
 											LLWearableBridge::onRemoveFromAvatarArrived,
 											new OnRemoveStruct(item->getUUID()));
 */
-// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-2.2.0a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-2.5.0a) | Added: Catznip-2.1.1d
 		LLAppearanceMgr::instance().removeItemFromAvatar(item->getUUID());
 // [/SL:KB]
 	}
@@ -5619,11 +5626,6 @@ void LLRecentItemsFolderBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 
 	menuentry_vec_t disabled_items, items = getMenuItems();
 
-	items.erase(std::remove(items.begin(), items.end(), std::string("New Body Parts")), items.end());
-	items.erase(std::remove(items.begin(), items.end(), std::string("New Clothes")), items.end());
-	items.erase(std::remove(items.begin(), items.end(), std::string("New Note")), items.end());
-	items.erase(std::remove(items.begin(), items.end(), std::string("New Gesture")), items.end());
-	items.erase(std::remove(items.begin(), items.end(), std::string("New Script")), items.end());
 	items.erase(std::remove(items.begin(), items.end(), std::string("New Folder")), items.end());
 
 	hide_context_entries(menu, items, disabled_items);

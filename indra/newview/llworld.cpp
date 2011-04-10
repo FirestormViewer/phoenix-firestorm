@@ -279,6 +279,7 @@ void LLWorld::removeRegion(const LLHost &host)
 
 	//double check all objects of this region are removed.
 	gObjectList.clearAllMapObjectsInRegion(regionp) ;
+	//llassert_always(!gObjectList.hasMapObjectInRegion(regionp)) ;
 }
 
 

@@ -101,10 +101,18 @@ S32 LLDir::deleteFilesInDir(const std::string &dirname, const std::string &mask)
 		{
 			if (0 != LLFile::remove(fullpath))
 			{
+				retry_count++;
 				result = errno;
 				llwarns << "Problem removing " << fullpath << " - errorcode: "
 						<< result << " attempt " << retry_count << llendl;
-				ms_sleep(1000);
+
+				if(retry_count >= 5)
+				{
+					llwarns << "Failed to remove " << fullpath << llendl ;
+					return count ;
+				}
+
+				ms_sleep(100);
 			}
 			else
 			{
@@ -113,8 +121,7 @@ S32 LLDir::deleteFilesInDir(const std::string &dirname, const std::string &mask)
 					llwarns << "Successfully removed " << fullpath << llendl;
 				}
 				break;
-			}
-			retry_count++;
+			}			
 		}
 		count++;
 	}
@@ -393,11 +400,7 @@ std::string LLDir::getExpandedFilename(ELLPath location, const std::string& subd
 		break;
 
 	case LL_PATH_USER_SKIN:
-		prefix = getOSUserAppDir();
-		prefix += mDirDelimiter;
-		prefix += "user_settings";
-		prefix += mDirDelimiter;
-		prefix += "skins";
+		prefix = getUserSkinDir();
 		break;
 
 	case LL_PATH_SKINS:
@@ -637,9 +640,11 @@ void LLDir::setSkinFolder(const std::string &skin_folder)
 	// e.g. c:\documents and settings\users\username\application data\second life\skins\dazzle
 	mUserSkinDir = getOSUserAppDir();
 	mUserSkinDir += mDirDelimiter;
+	mUserSkinDir += "user_settings"; //AO: Used by KB viewer-skins
+        mUserSkinDir += mDirDelimiter;
 	mUserSkinDir += "skins";
 	mUserSkinDir += mDirDelimiter;	
-	mUserSkinDir += skin_folder;
+	//mUserSkinDir += skin_folder;
 
 	// base skin which is used as fallback for all skinned files
 	// e.g. c:\program files\secondlife\skins\default

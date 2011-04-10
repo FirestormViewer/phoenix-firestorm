@@ -31,6 +31,7 @@
          function="RLV.EnableIfNot"
          parameter="shownames" />
     </menu_item_call>
+<!-- Starlight add calling card -->
     <menu_item_call
      label="Add Calling Card"
      name="Add Calling Card">

@@ -138,6 +138,7 @@
        left="0"
        layout="topleft"
        name="options_gear_btn_panel"
+       user_resize="false"
        width="32">
           <menu_button
            follows="top|left"
@@ -160,6 +161,7 @@
        layout="topleft"
        left_pad="0"
        name="add_btn_panel"
+       user_resize="false"
        width="32">
           <button
            follows="top|left"

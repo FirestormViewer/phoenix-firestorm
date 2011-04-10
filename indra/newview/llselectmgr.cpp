@@ -66,6 +66,7 @@
 #include "llmenugl.h"
 #include "llmutelist.h"
 #include "llparcel.h"
+#include "llnotificationsutil.h"
 #include "llsidepaneltaskinfo.h"
 #include "llslurl.h"
 #include "llstatusbar.h"
@@ -565,6 +566,122 @@ BOOL LLSelectMgr::removeObjectFromSelections(const LLUUID &id)
 	}
 
 	return object_found;
+}
+
+bool LLSelectMgr::linkObjects()
+{
+	if (!LLSelectMgr::getInstance()->selectGetAllRootsValid())
+	{
+		LLNotificationsUtil::add("UnableToLinkWhileDownloading");
+		return true;
+	}
+
+	S32 object_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
+	if (object_count > MAX_CHILDREN_PER_TASK + 1)
+	{
+		LLSD args;
+		args["COUNT"] = llformat("%d", object_count);
+		int max = MAX_CHILDREN_PER_TASK+1;
+		args["MAX"] = llformat("%d", max);
+		LLNotificationsUtil::add("UnableToLinkObjects", args);
+		return true;
+	}
+
+	if (LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() < 2)
+	{
+		LLNotificationsUtil::add("CannotLinkIncompleteSet");
+		return true;
+	}
+
+	if (!LLSelectMgr::getInstance()->selectGetRootsModify())
+	{
+		LLNotificationsUtil::add("CannotLinkModify");
+		return true;
+	}
+
+	LLUUID owner_id;
+	std::string owner_name;
+	if (!LLSelectMgr::getInstance()->selectGetOwner(owner_id, owner_name))
+	{
+		// we don't actually care if you're the owner, but novices are
+		// the most likely to be stumped by this one, so offer the
+		// easiest and most likely solution.
+		LLNotificationsUtil::add("CannotLinkDifferentOwners");
+		return true;
+	}
+
+	LLSelectMgr::getInstance()->sendLink();
+
+	return true;
+}
+
+bool LLSelectMgr::unlinkObjects()
+{
+	LLSelectMgr::getInstance()->sendDelink();
+	return true;
+}
+
+// in order to link, all objects must have the same owner, and the
+// agent must have the ability to modify all of the objects. However,
+// we're not answering that question with this method. The question
+// we're answering is: does the user have a reasonable expectation
+// that a link operation should work? If so, return true, false
+// otherwise. this allows the handle_link method to more finely check
+// the selection and give an error message when the uer has a
+// reasonable expectation for the link to work, but it will fail.
+bool LLSelectMgr::enableLinkObjects()
+{
+	bool new_value = false;
+	// check if there are at least 2 objects selected, and that the
+	// user can modify at least one of the selected objects.
+
+	// in component mode, can't link
+	if (!gSavedSettings.getBOOL("EditLinkedParts"))
+	{
+		if(LLSelectMgr::getInstance()->selectGetAllRootsValid() && LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() >= 2)
+		{
+			struct f : public LLSelectedObjectFunctor
+			{
+				virtual bool apply(LLViewerObject* object)
+				{
+					return object->permModify();
+				}
+			} func;
+			const bool firstonly = true;
+			new_value = LLSelectMgr::getInstance()->getSelection()->applyToRootObjects(&func, firstonly);
+		}
+	}
+// [RLVa:KB] - Checked: 2011-03-19 (RLVa-1.3.0f) | Modified: RLVa-0.2.0g
+	if ( (new_value) && ((rlv_handler_t::isEnabled()) && (!gRlvHandler.canStand())) )
+	{
+		// Allow only if the avie isn't sitting on any of the selected objects
+		LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
+		RlvSelectIsSittingOn f(gAgentAvatarp->getRoot());
+		if (hSel->getFirstRootNode(&f, TRUE) != NULL)
+			new_value = false;
+	}
+// [/RLVa:KB]
+	return new_value;
+}
+
+bool LLSelectMgr::enableUnlinkObjects()
+{
+	LLViewerObject* first_editable_object = LLSelectMgr::getInstance()->getSelection()->getFirstEditableObject();
+
+	bool new_value = LLSelectMgr::getInstance()->selectGetAllRootsValid() &&
+		first_editable_object &&
+		!first_editable_object->isAttachment();
+// [RLVa:KB] - Checked: 2011-03-19 (RLVa-1.3.0f) | Modified: RLVa-0.2.0g
+	if ( (new_value) && ((rlv_handler_t::isEnabled()) && (!gRlvHandler.canStand())) )
+	{
+		// Allow only if the avie isn't sitting on any of the selected objects
+		LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
+		RlvSelectIsSittingOn f(gAgentAvatarp->getRoot());
+		if (hSel->getFirstRootNode(&f, TRUE) != NULL)
+			new_value = false;
+	}
+// [/RLVa:KB]
+	return new_value;
 }
 
 void LLSelectMgr::deselectObjectAndFamily(LLViewerObject* object, BOOL send_to_sim, BOOL include_entire_object)
@@ -3534,15 +3651,16 @@ void LLSelectMgr::convertTransient()
 
 void LLSelectMgr::deselectAllIfTooFar()
 {
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) && (!mSelectedObjects->isEmpty()) )
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+	if ( (!mSelectedObjects->isEmpty()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_EDITOBJ))) )
 	{
-		struct NotTransientOrFocusedMedia : public LLSelectedNodeFunctor
+		struct NotTransientOrFocusedMediaOrEditable : public LLSelectedNodeFunctor
 		{
-			bool apply(LLSelectNode* node)
+			bool apply(LLSelectNode* pNode)
 			{
-				return (node) && (node->getObject()) && 
-					( (!node->isTransient()) && (node->getObject()->getID() != LLViewerMediaFocus::getInstance()->getFocusedObjectID()) );
+				const LLViewerObject* pObj = pNode->getObject();
+				return (!pNode->isTransient()) && (pObj) && (!gRlvHandler.canEdit(pObj)) &&
+					(pObj->getID() != LLViewerMediaFocus::getInstance()->getFocusedObjectID());
 			}
 		} f;
 		if (mSelectedObjects->getFirstRootNode(&f, TRUE))

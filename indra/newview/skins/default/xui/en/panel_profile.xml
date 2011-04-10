@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  follows="all"
- height="552"
+ height="530"
  label="Profile"
  layout="topleft"
  left="0"
  name="panel_profile"
  top="0"
- width="313">
+ width="317">
     <string
      name="CaptionTextAcctInfo">
         [ACCTTYPE]
@@ -34,6 +34,36 @@
 	 name="RegisterDateFormat">
 	 [REG_DATE] ([AGE])
 	</string>
+  <string
+  name="name_text_args">
+    [NAME]
+  </string>
+  <string
+    name="display_name_text_args">
+    [DISPLAY_NAME]
+  </string>
+
+<!--
+    <layout_stack
+     name="layout"
+     orientation="vertical"
+     follows="all"
+     layout="topleft"
+     left="0"
+     top="0"
+     height="400"
+     width="317"
+     border_size="0">
+      <layout_panel
+         name="profile_stack"
+         follows="all"
+         layout="topleft"
+         top="0"
+         left="0"
+         height="650"
+         width="331">
+
+-->
    <accordion
     left="0"
     top="0"
@@ -50,6 +80,7 @@
       name="second_life_tab"
       title="Avatar"
       fit_panel="true">
+
         <scroll_container
          color="SL-Background_66"
          follows="all"
@@ -57,17 +88,18 @@
          left="0"
          name="profile_sl_scroll"
          opaque="true"
-         height="650"
-         width="331"
+         height="750"
+         width="321"
          top="0">
           <panel
-           layout="topleft"
-           follows="left|top|right"
-           height="800"
-           name="second_life_panel"
-           top="0"
-           left="0"
-           width="313">
+                layout="topleft"
+         	follows="left|top|right"
+                height="750"
+		min_height="505"
+                name="profile_scroll_panel"
+                top="0"
+                left="0"
+                width="313">
               <texture_picker
                allow_no_texture="true"
                default_image_name="None"
@@ -76,25 +108,25 @@
                follows="top|left"
                height="225"
                layout="topleft"
-               left="10"
+               left="0"
                name="2nd_life_pic"
-               top="0"
+               top="10"
                width="275" />
-            <text
-             follows="left|top"
-             font.style="BOLD"
-             height="13"
-             layout="topleft"
-             left="4"
-             name="About_sl_text"
-             text_color="White"
-             top_pad="0"
-             value="About:"
-             width="280" />
-            <expandable_text
+              <text
+               follows="left|top"
+               font.style="BOLD"
+               height="15"
+               layout="topleft"
+               left="4"
+               name="title_sl_descr_text"
+               text_color="white"
+               top_pad="0"
+               value="About:"
+               width="280" />
+              <expandable_text
                allow_scroll="true"
                follows="left|top|right"
-               height="240"
+               height="160"
                layout="topleft"
                left="5"
                textbox.max_length="512"
@@ -107,6 +139,7 @@
                expanded_bg_color="SL-Background_Light">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean viverra orci et justo sagittis aliquet.Nullamma lesuada mauris sit amet ipsum. adipiscing elit. Ae nean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum.
               </expandable_text>
+
             <text
              left="4"
              follows="left|top"
@@ -231,7 +264,13 @@
               Lorem ipsum dolor sit amet, consectetur adlkjpiscing elit moose moose. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet. adipiscing elit. Aenean rigviverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet sorbet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. Aenean viverra tulip moosetop. Slan de heelish marfnik tooplod. Sum sum to whop de wompam booster copm.
             </expandable_text>
 -->
+
+
           </panel>
+<!--
+      </layout_panel>
+</layout_stack>
+-->
         </scroll_container>
     </accordion_tab>
     <accordion_tab
@@ -247,13 +286,13 @@
          left="0"
          name="profile_rl_scroll"
          opaque="true"
-         height="420"
+         height="380"
          width="313"
          top="0">
            <panel
             layout="topleft"
             follows="left|top|right"
-            height="420"
+            height="380"
             name="profile_rl_scroll_panel"
             top="0"
             left="0"
@@ -313,7 +352,9 @@
       </accordion_tab>
     </accordion>
 
-    <layout_stack
+
+
+	<layout_stack
      name="layout_verb_buttons"
      orientation="horizontal"
      follows="bottom|left|right"
@@ -323,14 +364,14 @@
      height="30"
      width="309"
      border_size="0">
-      <layout_panel
-       follows="bottom|left"
-       height="30"
-       layout="topleft"
-       name="profile_buttons_panel"
-       top="0"
-       auto_resize="false"
-       width="309">
+     	<layout_panel
+         follows="bottom|left"
+         height="30"
+         layout="topleft"
+         name="profile_buttons_panel"
+         top="0"
+         auto_resize="false"
+         width="309">
            <layout_stack
 	     	follows="bottom|left|right"
 			height="23"
@@ -425,7 +466,7 @@
 			         left="1"
 			         top="0"
 			         use_ellipses="true"
-			         width="86" />
+			         width="92" />
 				</layout_panel>
 				
 				<layout_panel
@@ -434,30 +475,29 @@
 				layout="bottomleft"
 				left_pad="3"
 				name="overflow_btn_lp"
-			    user_resize="false" 
-			    auto_resize="false"
+			        user_resize="false" 
+			        auto_resize="false"
 				width="24">
-                           <button
-                            follows="bottom|left|right"
-                            height="23"
-                            image_overlay="OptionsMenu_Off"
-                            layout="topleft"
-                            name="overflow_btn"
-                            tool_tip="Pay money to or share inventory with the Resident"
-                            left="1"
-                            top="0"
-                            width="23" />
-                          </layout_panel>
+					<menu_button
+			         follows="bottom|left|right"
+			         height="23"
+			         label="▼"
+			         layout="topleft"
+			         name="overflow_btn"
+			         tool_tip="Pay money to or share inventory with the Resident"
+			         left="1"
+			         top="0"
+			         width="23" />		
+				</layout_panel>
 		</layout_stack>
       </layout_panel>
-
       <layout_panel
-       follows="bottom|left"
-       height="30"
-       layout="topleft"
-       name="profile_me_buttons_panel"
-       visible="false"
-       width="313">
+         follows="bottom|left"
+         height="30"
+         layout="topleft"
+         name="profile_me_buttons_panel"
+         visible="false"
+	       width="313">
         <button
          follows="bottom|right"
          height="23"
@@ -466,8 +506,8 @@
          label="Edit Profile"
          name="edit_profile_btn"
          tool_tip="Edit your personal information"
-         width="130"/>
+         width="130" />
         </layout_panel>
-</layout_stack>
-</panel>
+     </layout_stack>
 
+</panel>

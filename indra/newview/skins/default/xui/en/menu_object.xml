@@ -100,7 +100,7 @@
          name="Object Attach HUD" />
    </context_menu>
    <context_menu
-         label="Remove"
+         label="Manage"
          name="Remove">
    <menu_item_call
          enabled="false"
@@ -120,6 +120,15 @@
              <menu_item_call.on_enable
               function="Object.EnableMute" />
    </menu_item_call>
+<!-- Derender -->
+    <menu_item_call
+      enabled="true"
+      label="Derender"
+      name="Derender">
+    <menu_item_call.on_click
+      function="Object.Derender" />
+    </menu_item_call>
+<!-- /Derender -->
    <menu_item_call
       enabled="false"
       label="Return"
@@ -129,22 +138,6 @@
          <menu_item_call.on_enable
           function="Object.EnableReturn" />
      </menu_item_call>
-     <menu_item_call
-   enabled="false"
-   label="Delete"
-   name="Delete">
-      <menu_item_call.on_click
-       function="Object.Delete" />
-      <menu_item_call.on_enable
-       function="Object.EnableDelete" />
-    </menu_item_call>
-    <menu_item_call
-      enabled="true"
-      label="Derender"
-      name="Derender">
-    <menu_item_call.on_click
-      function="Object.Derender" />
-    </menu_item_call>
     </context_menu>
    <menu_item_separator layout="topleft" />
    <menu_item_call
@@ -183,12 +176,13 @@
       <menu_item_call.on_enable
        function="Object.EnableBuy" />
    </menu_item_call>
-   <menu_item_separator layout="topleft" />
    <menu_item_call
-      label="Inspect"
-      name="Object Inspect">
-        <menu_item_call.on_click
-         function="Floater.Show"
-         parameter="inspect" />
-   </menu_item_call>
+     enabled="false"
+     label="Delete"
+     name="Delete">
+      <menu_item_call.on_click
+       function="Object.Delete" />
+      <menu_item_call.on_enable
+       function="Object.EnableDelete" />
+  </menu_item_call>
 </context_menu>

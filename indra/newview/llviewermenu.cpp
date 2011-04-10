@@ -45,7 +45,7 @@
 #include "llconsole.h"
 #include "lldebugview.h"
 #include "llfilepicker.h"
-//#include "llfirstuse.h"
+#include "llfirstuse.h"
 #include "llfloaterbuy.h"
 #include "llfloaterbuycontents.h"
 #include "llbuycurrencyhtml.h"
@@ -196,6 +196,8 @@ BOOL is_selection_buy_not_take();
 S32 selection_price();
 BOOL enable_take();
 void handle_take();
+void handle_object_show_inspector();
+void handle_avatar_show_inspector();
 bool confirm_take(const LLSD& notification, const LLSD& response);
 
 void handle_buy_object(LLSaleInfo sale_info);
@@ -565,7 +567,7 @@ class LLAdvancedCheckConsole : public view_listener_t
 			new_value = get_visibility( (void*)gDebugView->mMemoryView );
 		}
 #endif
-
+		
 		return new_value;
 	}
 };
@@ -847,6 +849,35 @@ class LLAdvancedCheckFeature : public view_listener_t
 }
 };
 
+void LLDestinationAndAvatarShow(const LLSD& value)
+{
+	S32 panel_idx = value.isDefined() ? value.asInteger() : -1;
+	LLView* container = gViewerWindow->getRootView()->getChildView("avatar_picker_and_destination_guide_container");
+	LLMediaCtrl* destinations = container->findChild<LLMediaCtrl>("destination_guide_contents");
+	LLMediaCtrl* avatar_picker = container->findChild<LLMediaCtrl>("avatar_picker_contents");
+
+	switch(panel_idx)
+	{
+	case 0:
+		container->setVisible(true);
+		destinations->setVisible(true);
+		avatar_picker->setVisible(false);
+		LLFirstUse::notUsingDestinationGuide(false);
+		break;
+	case 1:
+		container->setVisible(true);
+		destinations->setVisible(false);
+		avatar_picker->setVisible(true);
+		LLFirstUse::notUsingAvatarPicker(false);
+		break;
+	default:
+		container->setVisible(false);
+		destinations->setVisible(false);
+		avatar_picker->setVisible(false);
+		break;
+	}
+};
+
 
 //////////////////
 // INFO DISPLAY //
@@ -880,6 +911,10 @@ U32 info_display_from_string(std::string info_display)
 	else if ("render batches" == info_display)
 	{
 		return LLPipeline::RENDER_DEBUG_BATCH_SIZE;
+	}
+	else if ("update type" == info_display)
+	{
+		return LLPipeline::RENDER_DEBUG_UPDATE_TYPE;
 	}
 	else if ("texture anim" == info_display)
 	{
@@ -2538,6 +2573,13 @@ bool enable_object_touch(LLUICtrl* ctrl)
 	LLViewerObject* obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
 
 	bool new_value = obj && obj->flagHandleTouch();
+// [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.1g) | Added: RLVa-1.2.1g
+	if ( (rlv_handler_t::isEnabled()) && (new_value) )
+	{
+		// RELEASE-RLVa: [RLVa-1.2.1] Make sure this stays in sync with handle_object_touch()
+		new_value = gRlvHandler.canTouch(obj, LLToolPie::getInstance()->getPick().mObjectOffset);
+	}
+// [/RLVa:KB]
 
 	std::string item_name = ctrl->getName();
 	init_default_item_label(item_name);
@@ -2821,8 +2863,15 @@ bool enable_object_edit()
 	else if (LLSelectMgr::getInstance()->selectGetAllValidAndObjectsFound())
 	{
 //		enable = true;
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
-		enable = !gRlvHandler.hasBehaviour(RLV_BHVR_EDIT);
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+		bool fRlvCanEdit = (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_EDITOBJ));
+		if (!fRlvCanEdit)
+		{
+			LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
+			RlvSelectIsEditable f;
+			fRlvCanEdit = (hSel.notNull()) && ((hSel->getFirstRootNode(&f, TRUE)) == NULL);
+		}
+		enable = fRlvCanEdit;
 // [/RLVa:KB]
 	}
 
@@ -2959,7 +3008,7 @@ class LLObjectMute : public view_listener_t
 		}
 		
 		LLMute mute(id, name, type);
-		if (LLMuteList::getInstance()->isMuted(mute.mID, mute.mName))
+		if (LLMuteList::getInstance()->isMuted(mute.mID))
 		{
 			LLMuteList::getInstance()->remove(mute);
 		}
@@ -4385,9 +4434,9 @@ class LLObjectEnableReturn : public view_listener_t
 					{
 						virtual bool apply(LLViewerObject* obj)
 						{
-							return (obj->isOverAgentOwnedLand() ||
-									obj->isOverGroupOwnedLand() ||
-									obj->permModify());
+							return 
+								obj->permModify() ||
+								obj->isReturnable();
 						}
 					} func;
 					const bool firstonly = true;
@@ -4518,6 +4567,33 @@ void handle_take()
 		LLNotifications::instance().forceResponse(params, 0);
 	}
 }
+
+void handle_object_show_inspector()
+{
+	LLObjectSelectionHandle selection = LLSelectMgr::getInstance()->getSelection();
+	LLViewerObject* objectp = selection->getFirstRootObject(TRUE);
+ 	if (!objectp)
+ 	{
+ 		return;
+ 	}
+
+	LLSD params;
+	params["object_id"] = objectp->getID();
+	LLFloaterReg::showInstance("inspect_object", params);
+}
+
+void handle_avatar_show_inspector()
+{
+	LLVOAvatar* avatar = find_avatar_from_object( LLSelectMgr::getInstance()->getSelection()->getPrimaryObject() );
+	if(avatar)
+	{
+		LLSD params;
+		params["avatar_id"] = avatar->getID();
+		LLFloaterReg::showInstance("inspect_avatar", params);
+	}
+}
+
+
 
 bool confirm_take(const LLSD& notification, const LLSD& response)
 {
@@ -4946,131 +5022,6 @@ class LLToolsSelectNextPart : public view_listener_t
 		return true;
 	}
 };
-
-// in order to link, all objects must have the same owner, and the
-// agent must have the ability to modify all of the objects. However,
-// we're not answering that question with this method. The question
-// we're answering is: does the user have a reasonable expectation
-// that a link operation should work? If so, return true, false
-// otherwise. this allows the handle_link method to more finely check
-// the selection and give an error message when the uer has a
-// reasonable expectation for the link to work, but it will fail.
-class LLToolsEnableLink : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		bool new_value = false;
-		// check if there are at least 2 objects selected, and that the
-		// user can modify at least one of the selected objects.
-
-		// in component mode, can't link
-		if (!gSavedSettings.getBOOL("EditLinkedParts"))
-		{
-			if(LLSelectMgr::getInstance()->selectGetAllRootsValid() && LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() >= 2)
-			{
-				struct f : public LLSelectedObjectFunctor
-				{
-					virtual bool apply(LLViewerObject* object)
-					{
-						return object->permModify();
-					}
-				} func;
-				const bool firstonly = true;
-				new_value = LLSelectMgr::getInstance()->getSelection()->applyToRootObjects(&func, firstonly);
-			}
-		}
-		return new_value;
-	}
-};
-
-class LLToolsLink : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		if(!LLSelectMgr::getInstance()->selectGetAllRootsValid())
-		{
-			LLNotificationsUtil::add("UnableToLinkWhileDownloading");
-			return true;
-		}
-
-		S32 object_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
-		if (object_count > MAX_CHILDREN_PER_TASK + 1)
-		{
-			LLSD args;
-			args["COUNT"] = llformat("%d", object_count);
-			int max = MAX_CHILDREN_PER_TASK+1;
-			args["MAX"] = llformat("%d", max);
-			LLNotificationsUtil::add("UnableToLinkObjects", args);
-			return true;
-		}
-
-		if(LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() < 2)
-		{
-			LLNotificationsUtil::add("CannotLinkIncompleteSet");
-			return true;
-		}
-		if(!LLSelectMgr::getInstance()->selectGetRootsModify())
-		{
-			LLNotificationsUtil::add("CannotLinkModify");
-			return true;
-		}
-		LLUUID owner_id;
-		std::string owner_name;
-		if(!LLSelectMgr::getInstance()->selectGetOwner(owner_id, owner_name))
-		{
-			// we don't actually care if you're the owner, but novices are
-			// the most likely to be stumped by this one, so offer the
-			// easiest and most likely solution.
-			LLNotificationsUtil::add("CannotLinkDifferentOwners");
-			return true;
-		}
-		LLSelectMgr::getInstance()->sendLink();
-		return true;
-	}
-};
-
-class LLToolsEnableUnlink : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		LLViewerObject* first_editable_object = LLSelectMgr::getInstance()->getSelection()->getFirstEditableObject();
-		bool new_value = LLSelectMgr::getInstance()->selectGetAllRootsValid() &&
-			first_editable_object &&
-			!first_editable_object->isAttachment();
-// [RLVa:KB] - Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.0g
-		if ( (new_value) && ((rlv_handler_t::isEnabled()) && (!gRlvHandler.canStand())) )
-		{
-			// Allow only if the avie isn't sitting on any of the selected objects
-			LLObjectSelectionHandle handleSel = LLSelectMgr::getInstance()->getSelection();
-			RlvSelectIsSittingOn f(gAgentAvatarp->getRoot());
-			if (handleSel->getFirstRootNode(&f, TRUE) != NULL)
-				new_value = false;
-		}
-// [/RLVa:KB]
-		return new_value;
-	}
-};
-
-class LLToolsUnlink : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-// [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c) | Modified: RLVa-0.2.0g
-		if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStand()) )
-		{
-			// Allow only if the avie isn't sitting on any of the selected objects
-			LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
-			RlvSelectIsSittingOn f(gAgentAvatarp->getRoot());
-			if ( (hSel.notNull()) && (hSel->getFirstRootNode(&f, TRUE)) )
-				return true;
-		}
-// [/RLVa:KB]
-
-		LLSelectMgr::getInstance()->sendDelink();
-		return true;
-	}
-};
-
 
 class LLToolsStopAllAnimations : public view_listener_t
 {
@@ -7705,6 +7656,12 @@ void handle_web_browser_test(const LLSD& param)
 	LLWeb::loadURLInternal(url);
 }
 
+void handle_web_content_test(const LLSD& param)
+{
+	std::string url = param.asString();
+	LLWeb::loadWebURLInternal(url);
+}
+
 void handle_buy_currency_test(void*)
 {
 	std::string url =
@@ -7766,12 +7723,10 @@ class LLViewHighlightTransparent : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.0.0b
-		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) && (!LLDrawPoolAlpha::sShowDebugAlpha))
-			return true;
+//		LLDrawPoolAlpha::sShowDebugAlpha = !LLDrawPoolAlpha::sShowDebugAlpha;
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+		LLDrawPoolAlpha::sShowDebugAlpha = (!LLDrawPoolAlpha::sShowDebugAlpha) && (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT));
 // [/RLVa:KB]
-
-		LLDrawPoolAlpha::sShowDebugAlpha = !LLDrawPoolAlpha::sShowDebugAlpha;
 		return true;
 	}
 };
@@ -8413,8 +8368,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLToolsSnapObjectXY(), "Tools.SnapObjectXY");
 	view_listener_t::addMenu(new LLToolsUseSelectionForGrid(), "Tools.UseSelectionForGrid");
 	view_listener_t::addMenu(new LLToolsSelectNextPart(), "Tools.SelectNextPart");
-	view_listener_t::addMenu(new LLToolsLink(), "Tools.Link");
-	view_listener_t::addMenu(new LLToolsUnlink(), "Tools.Unlink");
+	commit.add("Tools.Link", boost::bind(&LLSelectMgr::linkObjects, LLSelectMgr::getInstance()));
+	commit.add("Tools.Unlink", boost::bind(&LLSelectMgr::unlinkObjects, LLSelectMgr::getInstance()));
 	view_listener_t::addMenu(new LLToolsStopAllAnimations(), "Tools.StopAllAnimations");
 	view_listener_t::addMenu(new LLToolsReleaseKeys(), "Tools.ReleaseKeys");
 	view_listener_t::addMenu(new LLToolsEnableReleaseKeys(), "Tools.EnableReleaseKeys");	
@@ -8427,8 +8382,8 @@ void initialize_menus()
 
 	view_listener_t::addMenu(new LLToolsEnableToolNotPie(), "Tools.EnableToolNotPie");
 	view_listener_t::addMenu(new LLToolsEnableSelectNextPart(), "Tools.EnableSelectNextPart");
-	view_listener_t::addMenu(new LLToolsEnableLink(), "Tools.EnableLink");
-	view_listener_t::addMenu(new LLToolsEnableUnlink(), "Tools.EnableUnlink");
+	enable.add("Tools.EnableLink", boost::bind(&LLSelectMgr::enableLinkObjects, LLSelectMgr::getInstance()));
+	enable.add("Tools.EnableUnlink", boost::bind(&LLSelectMgr::enableUnlinkObjects, LLSelectMgr::getInstance()));
 	view_listener_t::addMenu(new LLToolsEnableBuyOrTake(), "Tools.EnableBuyOrTake");
 	enable.add("Tools.EnableTakeCopy", boost::bind(&enable_object_take_copy));
 	enable.add("Tools.VisibleBuyObject", boost::bind(&tools_visible_buy_object));
@@ -8494,7 +8449,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAdvancedDumpRegionObjectCache(), "Advanced.DumpRegionObjectCache");
 
 	// Advanced > UI
-	commit.add("Advanced.WebBrowserTest", boost::bind(&handle_web_browser_test, _2));
+	commit.add("Advanced.WebBrowserTest", boost::bind(&handle_web_browser_test,	_2));	// sigh! this one opens the MEDIA browser
+	commit.add("Advanced.WebContentTest", boost::bind(&handle_web_content_test, _2));	// this one opens the Web Content floater
 	view_listener_t::addMenu(new LLAdvancedBuyCurrencyTest(), "Advanced.BuyCurrencyTest");
 	view_listener_t::addMenu(new LLAdvancedDumpSelectMgr(), "Advanced.DumpSelectMgr");
 	view_listener_t::addMenu(new LLAdvancedDumpInventory(), "Advanced.DumpInventory");
@@ -8629,6 +8585,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAvatarVisibleDebug(), "Avatar.VisibleDebug");
 	view_listener_t::addMenu(new LLAvatarInviteToGroup(), "Avatar.InviteToGroup");
 	commit.add("Avatar.Eject", boost::bind(&handle_avatar_eject, LLSD()));
+	commit.add("Avatar.ShowInspector", boost::bind(&handle_avatar_show_inspector));
 	view_listener_t::addMenu(new LLAvatarSendIM(), "Avatar.SendIM");
 	view_listener_t::addMenu(new LLAvatarCall(), "Avatar.Call");
 //	enable.add("Avatar.EnableCall", boost::bind(&LLAvatarActions::canCall));
@@ -8660,6 +8617,7 @@ void initialize_menus()
 	commit.add("Object.Inspect", boost::bind(&handle_object_inspect));
 	commit.add("Object.Open", boost::bind(&handle_object_open));
 	commit.add("Object.Take", boost::bind(&handle_take));
+	commit.add("Object.ShowInspector", boost::bind(&handle_object_show_inspector));
 	enable.add("Object.EnableOpen", boost::bind(&enable_object_open));
 	enable.add("Object.EnableTouch", boost::bind(&enable_object_touch, _1));
 	enable.add("Object.EnableDelete", boost::bind(&enable_object_delete));
@@ -8722,6 +8680,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLEditableSelectedMono(), "EditableSelectedMono");
 
 	view_listener_t::addMenu(new LLToggleUIHints(), "ToggleUIHints");
+
+	commit.add("DestinationAndAvatar.show", boost::bind(&LLDestinationAndAvatarShow, _2));
 
 // [RLVa:KB] - Checked: 2010-04-23 (RLVa-1.2.0g) | Added: RLVa-1.2.0
 	commit.add("RLV.ToggleEnabled", boost::bind(&rlvMenuToggleEnabled));

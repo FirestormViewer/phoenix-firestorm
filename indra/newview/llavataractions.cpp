@@ -56,6 +56,7 @@
 #include "llmutelist.h"
 #include "llnotificationsutil.h"	// for LLNotificationsUtil
 #include "llpaneloutfitedit.h"
+#include "llpanelprofile.h"
 #include "llrecentpeople.h"
 #include "llsidetray.h"
 #include "lltrans.h"
@@ -326,13 +327,39 @@ void LLAvatarActions::showProfile(const LLUUID& id)
 			{
 				LLSideTray::getInstance()->showPanel("panel_profile_view", params);
 			}
-// [SL:KB] - Patch : UI-ProfileGroupFloater 
 		}
 		else
 		{
-			LLFloaterReg::showInstance("floater_profile_view", LLSD().with("id", id));
+			/* AO: Ignore web profile
+			// PROFILES: open in webkit window
+			std::string full_name;
+			if (gCacheName->getFullName(id,full_name))
+			{
+				std::string agent_name = LLCacheName::buildUsername(full_name);
+				llinfos << "opening web profile for " << agent_name << llendl;		
+				std::string url = getProfileURL(agent_name);
+				LLWeb::loadWebURLInternal(url);
+			}
+			else
+			{
+				llwarns << "no name info for agent id " << id << llendl;
+			}
+			*/
+			
+			LLSD params;
+                        params["id"] = id;
+                        params["open_tab_name"] = "panel_profile";
+			//Show own profile
+			if(gAgent.getID() == id)
+			{
+				LLSideTray::getInstance()->showPanel("panel_me", params);
+			}
+			else
+			{
+				// [SL:KB] - Patch : UI-ProfileGroupFloater
+				LLFloaterReg::showInstance("floater_profile_view", LLSD().with("id", id));
+			}
 		}
-// [/SL:KB] 
 	}
 }
 

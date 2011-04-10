@@ -1954,7 +1954,7 @@ Requests name of an avatar.  When data is available the dataserver event will be
 
 	<!-- Gestures labels -->
     <!-- use value="" because they have preceding spaces -->
-    <string name="Chat"          value=" Chat : " />
+    <string name="Chat Message"  value=" Chat : " />
     <string name="Sound"         value=" Sound : " />
 	<string name="Wait"          value=" --- Wait : " />
 	<string name="AnimFlagStop"  value=" Stop Animation :    " />
@@ -2329,9 +2329,6 @@ Expected .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="accel-win-control">Ctrl+</string>
 	<string name="accel-win-alt">Alt+</string>
 	<string name="accel-win-shift">Shift+</string>
-
-	<string name="Esc">Esc</string>
-	<string name="Home">Home</string>
 
 	<!-- Previews -->
 	<string name="FileSaved">File Saved</string>

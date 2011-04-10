@@ -57,11 +57,6 @@ INCLUDE(GoogleMock)
     ${CMAKE_SOURCE_DIR}/test/test.h
     )
 
-  # Use the default flags
-  if (LINUX)
-    SET(CMAKE_EXE_LINKER_FLAGS "")
-  endif (LINUX)
-
   # start the source test executable definitions
   SET(${project}_TEST_OUTPUT "")
   FOREACH (source ${sources})
@@ -205,6 +200,9 @@ FUNCTION(LL_ADD_INTEGRATION_TEST
   endif(TEST_DEBUG)
   ADD_EXECUTABLE(INTEGRATION_TEST_${testname} ${source_files})
   SET_TARGET_PROPERTIES(INTEGRATION_TEST_${testname} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${EXE_STAGING_DIR}")
+  if(STANDALONE)
+    SET_TARGET_PROPERTIES(INTEGRATION_TEST_${testname} PROPERTIES COMPILE_FLAGS -I"${TUT_INCLUDE_DIR}")
+  endif(STANDALONE)
 
   # Add link deps to the executable
   if(TEST_DEBUG)

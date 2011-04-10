@@ -111,6 +111,7 @@ public:
 
 	void resetVertexBuffers(LLDrawable* drawable);
 	void setUseVBO(BOOL use_vbo);
+	void setDisableVBOMapping(BOOL no_vbo_mapping);
 	void generateImpostor(LLVOAvatar* avatar);
 	void bindScreenToTexture();
 	void renderBloom(BOOL for_snapshot, F32 zoom_factor = 1.f, int subfield = 0);
@@ -424,6 +425,7 @@ public:
 		RENDER_DEBUG_AVATAR_VOLUME      = 0x0100000,
 		RENDER_DEBUG_BUILD_QUEUE		= 0x0200000,
 		RENDER_DEBUG_AGENT_TARGET       = 0x0400000,
+		RENDER_DEBUG_UPDATE_TYPE		= 0x0800000,
 	};
 
 public:

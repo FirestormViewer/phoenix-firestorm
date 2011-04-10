@@ -287,8 +287,8 @@ void LLIMFloater::sendMsg()
 			// Truncate for transport
 			utf8_text = utf8str_truncate(utf8_text, MAX_MSG_BUF_SIZE - 1);
 			
-// [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
-			if (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM))
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+			if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIMTO)) )
 			{
 				LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
 				RLV_ASSERT(pIMSession);
@@ -298,13 +298,13 @@ void LLIMFloater::sendMsg()
 				{
 					switch (pIMSession->mSessionType)
 					{
-						case LLIMModel::LLIMSession::P2P_SESSION:	// One-on-one IM: allow if recipient is a sendim exception
-							fRlvFilter = !gRlvHandler.isException(RLV_BHVR_SENDIM, mOtherParticipantUUID);
+						case LLIMModel::LLIMSession::P2P_SESSION:	// One-on-one IM
+							fRlvFilter = !gRlvHandler.canSendIM(mOtherParticipantUUID);
 							break;
-						case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat: allow if group is a sendim exception
-							fRlvFilter = !gRlvHandler.isException(RLV_BHVR_SENDIM, mSessionID);
+						case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat
+							fRlvFilter = !gRlvHandler.canSendIM(mSessionID);
 							break;
-						case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat: allow if all participants are sendim exceptions
+						case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat: allow if all participants can be sent an IM
 							{
 								if (!pIMSession->mSpeakers)
 								{
@@ -318,7 +318,7 @@ void LLIMFloater::sendMsg()
 										itSpeaker != speakers.end(); ++itSpeaker)
 								{
 									const LLSpeaker* pSpeaker = *itSpeaker;
-									if ( (gAgent.getID() != pSpeaker->mID) && (!gRlvHandler.isException(RLV_BHVR_SENDIM, pSpeaker->mID)) )
+									if ( (gAgent.getID() != pSpeaker->mID) && (!gRlvHandler.canSendIM(pSpeaker->mID)) )
 									{
 										fRlvFilter = true;
 										break;
@@ -874,7 +874,7 @@ LLIMFloater* LLIMFloater::show(const LLUUID& session_id)
 }
 
 //static
-bool LLIMFloater::resetAllowedRectPadding(const LLSD& newvalue)
+bool LLIMFloater::resetAllowedRectPadding()
 {
 	//reset allowed rect right padding if "SidebarCameraMovement" option 
 	//or sidebar state changed
@@ -886,10 +886,10 @@ void LLIMFloater::getAllowedRect(LLRect& rect)
 {
 	if (sAllowedRectRightPadding == RECT_PADDING_NOT_INIT) //wasn't initialized
 	{
-		gSavedSettings.getControl("SidebarCameraMovement")->getSignal()->connect(boost::bind(&LLIMFloater::resetAllowedRectPadding, _2));
+		gSavedSettings.getControl("SidebarCameraMovement")->getSignal()->connect(boost::bind(&LLIMFloater::resetAllowedRectPadding));
 
 		LLSideTray*	side_bar = LLSideTray::getInstance();
-		side_bar->getCollapseSignal().connect(boost::bind(&LLIMFloater::resetAllowedRectPadding, _2));
+		side_bar->setVisibleWidthChangeCallback(boost::bind(&LLIMFloater::resetAllowedRectPadding));
 		sAllowedRectRightPadding = RECT_PADDING_NEED_RECALC;
 	}
 
@@ -904,10 +904,7 @@ void LLIMFloater::getAllowedRect(LLRect& rect)
 
 		if (gSavedSettings.getBOOL("SidebarCameraMovement") == FALSE)
 		{
-			LLSideTray*	side_bar = LLSideTray::getInstance();
-
-			if (side_bar->getVisible() && !side_bar->getCollapsed())
-				sAllowedRectRightPadding += side_bar->getRect().getWidth();
+			sAllowedRectRightPadding += LLSideTray::getInstance()->getVisibleWidth();
 		}
 	}
 	rect.mRight -= sAllowedRectRightPadding;

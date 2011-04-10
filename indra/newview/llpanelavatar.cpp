@@ -34,6 +34,7 @@
 #include "llcombobox.h"
 #include "lldateutil.h"			// ageFromDate()
 #include "llimview.h"
+#include "llmenubutton.h"
 #include "llnotificationsutil.h"
 #include "lltexteditor.h"
 #include "lltexturectrl.h"
@@ -343,10 +344,11 @@ LLPanelAvatarNotes::~LLPanelAvatarNotes()
 	if(getAvatarId().notNull())
 	{
 		LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
-		//if(LLVoiceClient::instanceExists())
-		//{
-		//	LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
-		//}
+	}
+
+	if(LLVoiceClient::instanceExists())
+	{
+		LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
 	}
 // [SL:KB] - Patch : UI-ProfileGroupFloater 
 	if(LLVoiceClient::instanceExists())
@@ -490,11 +492,11 @@ LLPanelAvatarProfile::LLPanelAvatarProfile()
 
 BOOL LLPanelAvatarProfile::postBuild()
 {
+	childSetCommitCallback("see_profile_btn",(boost::bind(&LLPanelAvatarProfile::onSeeProfileBtnClick,this)),NULL);
 	childSetCommitCallback("add_friend",(boost::bind(&LLPanelAvatarProfile::onAddFriendButtonClick,this)),NULL);
 	childSetCommitCallback("im",(boost::bind(&LLPanelAvatarProfile::onIMButtonClick,this)),NULL);
 	childSetCommitCallback("call",(boost::bind(&LLPanelAvatarProfile::onCallButtonClick,this)),NULL);
 	childSetCommitCallback("teleport",(boost::bind(&LLPanelAvatarProfile::onTeleportButtonClick,this)),NULL);
-	childSetCommitCallback("overflow_btn", boost::bind(&LLPanelAvatarProfile::onOverflowButtonClicked, this), NULL);
 	childSetCommitCallback("share",(boost::bind(&LLPanelAvatarProfile::onShareButtonClick,this)),NULL);
 	childSetCommitCallback("show_on_map_btn", (boost::bind(
 			&LLPanelAvatarProfile::onMapButtonClick, this)), NULL);
@@ -522,7 +524,8 @@ BOOL LLPanelAvatarProfile::postBuild()
 	group_list->setDoubleClickCallback(boost::bind(&LLPanelAvatarProfile::openGroupProfile, this));
 	group_list->setReturnCallback(boost::bind(&LLPanelAvatarProfile::openGroupProfile, this));
 
-	mProfileMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_profile_overflow.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	LLToggleableMenu* profile_menu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_profile_overflow.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+        getChild<LLMenuButton>("overflow_btn")->setMenu(profile_menu, LLMenuButton::MP_TOP_RIGHT);
 
 	LLVoiceClient::getInstance()->addObserver((LLVoiceClientStatusObserver*)this);
 
@@ -569,12 +572,12 @@ void LLPanelAvatarProfile::resetData()
 {
 	mGroups.clear();
 	getChild<LLUICtrl>("2nd_life_pic")->setValue(LLUUID::null);
-	//getChild<LLUICtrl>("real_world_pic")->setValue(LLUUID::null);
+	getChild<LLUICtrl>("real_world_pic")->setValue(LLUUID::null);
 	getChild<LLUICtrl>("online_status")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("status_message")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("sl_description_edit")->setValue(LLStringUtil::null);
-	//getChild<LLUICtrl>("fl_description_edit")->setValue(LLStringUtil::null);
-	//getChild<LLUICtrl>("homepage_edit")->setValue(LLStringUtil::null);
+	getChild<LLUICtrl>("fl_description_edit")->setValue(LLStringUtil::null);
+	getChild<LLUICtrl>("homepage_edit")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("register_date")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("acc_status_text")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("partner_text")->setValue(LLStringUtil::null);
@@ -639,6 +642,40 @@ void LLPanelAvatarProfile::openGroupProfile()
 	LLGroupActions::show(group_id);
 }
 
+static void got_full_name_callback( LLHandle<LLPanel> profile_panel_handle, const std::string& full_name )
+{
+	if (profile_panel_handle.isDead() ) return;
+
+	LLPanelAvatarProfile* profile_panel = dynamic_cast<LLPanelAvatarProfile*>(profile_panel_handle.get());
+	if ( ! profile_panel ) return;
+
+	LLStringUtil::format_map_t args;
+
+	std::string name;
+	if (LLAvatarNameCache::useDisplayNames())
+	{
+		name = LLCacheName::buildUsername(full_name);
+	}
+	else
+	{
+		name = full_name;
+	}
+
+	args["[NAME]"] = name;
+
+	std::string linden_name = profile_panel->getString("name_text_args", args);
+	profile_panel->getChild<LLUICtrl>("name_descr_text")->setValue(linden_name);
+}
+
+void LLPanelAvatarProfile::onNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
+{
+	LLStringUtil::format_map_t args;
+	args["[DISPLAY_NAME]"] = av_name.mDisplayName;
+
+	std::string display_name = getString("display_name_text_args", args);
+	getChild<LLUICtrl>("display_name_descr_text")->setValue(display_name);
+}
+
 void LLPanelAvatarProfile::fillCommonData(const LLAvatarData* avatar_data)
 {
 	//remove avatar id from cache to get fresh info
@@ -650,6 +687,25 @@ void LLPanelAvatarProfile::fillCommonData(const LLAvatarData* avatar_data)
 		LLStringUtil::format(birth_date, LLSD().with("datetime", (S32) avatar_data->born_on.secondsSinceEpoch()));
 		args["[REG_DATE]"] = birth_date;
 	}
+
+	// ask (asynchronously) for the avatar name
+	LLHandle<LLPanel> profile_panel_handle = getHandle();
+	std::string full_name;
+	if (gCacheName->getFullName(avatar_data->agent_id, full_name))
+	{
+		// name in cache, call callback directly
+		got_full_name_callback( profile_panel_handle, full_name );
+	}
+	else
+	{
+		// not in cache, lookup name 
+		gCacheName->get(avatar_data->agent_id, false, boost::bind( got_full_name_callback, profile_panel_handle, _2 ));
+	}
+
+	// get display name
+	LLAvatarNameCache::get(avatar_data->avatar_id,
+		boost::bind(&LLPanelAvatarProfile::onNameCache, this, _1, _2));
+
 	args["[AGE]"] = LLDateUtil::ageFromDate( avatar_data->born_on, LLDate::now());
 	std::string register_date = getString("RegisterDateFormat", args);
 	getChild<LLUICtrl>("register_date")->setValue(register_date );
@@ -755,6 +811,11 @@ void LLPanelAvatarProfile::onAddFriendButtonClick()
 	LLAvatarActions::requestFriendshipDialog(getAvatarId());
 }
 
+void LLPanelAvatarProfile::onSeeProfileBtnClick()
+{
+	LLAvatarActions::showProfile(getAvatarId());
+}
+
 void LLPanelAvatarProfile::onIMButtonClick()
 {
 	LLAvatarActions::startIM(getAvatarId());
@@ -775,32 +836,16 @@ void LLPanelAvatarProfile::onShareButtonClick()
 	//*TODO not implemented
 }
 
-void LLPanelAvatarProfile::onOverflowButtonClicked()
-{
-	if (!mProfileMenu->toggleVisibility())
-		return;
-
-	LLView* btn = getChild<LLView>("overflow_btn");
-
-	if (mProfileMenu->getButtonRect().isEmpty())
-	{
-		mProfileMenu->setButtonRect(btn);
-	}
-	mProfileMenu->updateParent(LLMenuGL::sMenuContainer);
-
-	LLRect rect = btn->getRect();
-	LLMenuGL::showPopup(this, mProfileMenu, rect.mRight, rect.mTop);
-}
-
 LLPanelAvatarProfile::~LLPanelAvatarProfile()
 {
 	if(getAvatarId().notNull())
 	{
 		LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
-		//if(LLVoiceClient::instanceExists())
-		//{
-		//	LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
-		//}
+	}
+
+	if(LLVoiceClient::instanceExists())
+	{
+		LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
 	}
 // [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-11-26 (Catznip-2.4.0f) | Added: Catznip-2.4.0f
 	if(LLVoiceClient::instanceExists())

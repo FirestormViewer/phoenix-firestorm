@@ -71,9 +71,9 @@ const S32 RLV_VERSION_BUILD = 1;
 
 // Implementation version
 const S32 RLVa_VERSION_MAJOR = 1;
-const S32 RLVa_VERSION_MINOR = 2;
-const S32 RLVa_VERSION_PATCH = 2;
-const S32 RLVa_VERSION_BUILD = 2;
+const S32 RLVa_VERSION_MINOR = 3;
+const S32 RLVa_VERSION_PATCH = 0;
+const S32 RLVa_VERSION_BUILD = 4;
 
 // Uncomment before a final release
 //#define RLV_RELEASE
@@ -138,7 +138,9 @@ enum ERlvBehaviour {
 	RLV_BHVR_EMOTE,					// "emote"
 	RLV_BHVR_SENDCHAT,				// "sendchat"
 	RLV_BHVR_RECVCHAT,				// "recvchat"
+	RLV_BHVR_RECVCHATFROM,			// "recvchatfrom"
 	RLV_BHVR_RECVEMOTE,				// "recvemote"
+	RLV_BHVR_RECVEMOTEFROM,			// "recvemotefrom"
 	RLV_BHVR_REDIRCHAT,				// "redirchat"
 	RLV_BHVR_REDIREMOTE,			// "rediremote"
 	RLV_BHVR_CHATWHISPER,			// "chatwhisper"
@@ -146,7 +148,9 @@ enum ERlvBehaviour {
 	RLV_BHVR_CHATSHOUT,				// "chatshout"
 	RLV_BHVR_SENDCHANNEL,			// "sendchannel"
 	RLV_BHVR_SENDIM,				// "sendim"
+	RLV_BHVR_SENDIMTO,				// "sendimto"
 	RLV_BHVR_RECVIM,				// "recvim"
+	RLV_BHVR_RECVIMFROM,			// "recvimfrom"
 	RLV_BHVR_PERMISSIVE,			// "permissive"
 	RLV_BHVR_NOTIFY,				// "notify"
 	RLV_BHVR_SHOWINV,				// "showinv"
@@ -169,13 +173,17 @@ enum ERlvBehaviour {
 	RLV_BHVR_ALLOWIDLE,				// "allowidle"
 	RLV_BHVR_DISPLAYNAME,			// "displayname"
 	RLV_BHVR_EDIT,					// "edit"
+	RLV_BHVR_EDITOBJ,				// "editobj"
 	RLV_BHVR_REZ,					// "rez"
 	RLV_BHVR_FARTOUCH,				// "fartouch"
 	RLV_BHVR_INTERACT,				// "interact"
-	RLV_BHVR_TOUCH,					// "touch"
+	RLV_BHVR_TOUCHOBJ,				// "touchobj"
 	RLV_BHVR_TOUCHATTACH,			// "touchattach"
+	RLV_BHVR_TOUCHATTACHSELF,		// "touchattachself"
+	RLV_BHVR_TOUCHATTACHOTHER,		// "touchattachother"
 	RLV_BHVR_TOUCHHUD,				// "touchhud"
 	RLV_BHVR_TOUCHWORLD,			// "touchworld"
+	RLV_BHVR_TOUCHALL,				// "touchall"
 	RLV_BHVR_FLY,					// "fly"
 	RLV_BHVR_UNSIT,					// "unsit"
 	RLV_BHVR_SIT,					// "sit"

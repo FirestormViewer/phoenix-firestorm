@@ -186,8 +186,8 @@
          right="-4"
          />
 
-        <panel
-         name="sl_image_panel"
+      <panel
+       name="lifes_images_panel"
          follows="left|top|right"
          height="225"
          top="47"

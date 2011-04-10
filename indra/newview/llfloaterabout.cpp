@@ -281,7 +281,7 @@ LLSD LLFloaterAbout::getInfo()
 	}
 	
 	// TODO: Implement media plugin version query
-	info["QT_WEBKIT_VERSION"] = "4.7.1 (win and Mac); 4.6 (Linux)";
+	info["QT_WEBKIT_VERSION"] = "4.7.1 (version number hard-coded)";
 
 	if (gPacketsIn > 0)
 	{

@@ -107,6 +107,7 @@ with the same filename but different name
   <texture name="ComboButton_Selected" file_name="widgets/ComboButton_Selected.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_UpSelected" file_name="widgets/ComboButton_UpSelected.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_Up_On_Selected" file_name="widgets/ComboButton_Up_On_Selected.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
+  <texture name="ComboButton_On" file_name="widgets/ComboButton_On.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_Off" file_name="widgets/ComboButton_Off.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_UpOff" file_name="widgets/ComboButton_UpOff.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="Container" file_name="containers/Container.png" preload="false" />
@@ -400,7 +401,7 @@ with the same filename but different name
   <texture name="Play_Over" file_name="icons/Play_Over.png" preload="false" />
   <texture name="Play_Press" file_name="icons/Play_Press.png" preload="false" />
 
-  <texture name="ProgressBar" file_name="widgets/ProgressBar.png" preload="true" scale.left="4" scale.top="10" scale.right="48" scale.bottom="2" />
+  <texture name="ProgressBar" file_name="widgets/ProgressBar.png" preload="true" scale.left="4" scale.top="11" scale.right="48" scale.bottom="3" />
   <texture name="ProgressTrack" file_name="widgets/ProgressTrack.png" preload="true" scale.left="4" scale.top="13" scale.right="148" scale.bottom="2" />
 
   <texture name="PushButton_Disabled" file_name="widgets/PushButton_Disabled.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
@@ -420,7 +421,7 @@ with the same filename but different name
   <texture name="RadioButton_On_Disabled" file_name="widgets/RadioButton_On_Disabled.png" preload="true" />
 
 
-  <texture name="Refresh_Off" file_name="icons/Refresh_Off.png" preload="false" />
+  <texture name="Refresh_Off" file_name="icons/Refresh_Off.png" preload="true" />
 
   <texture name="Resize_Corner" file_name="windows/Resize_Corner.png" preload="true" />
 
@@ -496,7 +497,7 @@ with the same filename but different name
   <texture name="Stepper_Up_Off" file_name="widgets/Stepper_Up_Off.png" preload="false" />
   <texture name="Stepper_Up_Press" file_name="widgets/Stepper_Up_Press.png" preload="false" />
 
-  <texture name="Stop_Off" file_name="icons/Stop_Off.png" preload="false" />
+  <texture name="Stop_Off" file_name="icons/Stop_Off.png" preload="true" />
   <texture name="StopReload_Off" file_name="icons/StopReload_Off.png" preload="false" />
   <texture name="StopReload_Over" file_name="icons/StopReload_Over.png" preload="false" />
 
@@ -592,6 +593,7 @@ with the same filename but different name
 
   <texture name="Wearables_Divider" file_name="windows/Wearables_Divider.png" preload="false" />
 
+  <texture name="Web_Profile_Off" file_name="icons/Web_Profile_Off.png" preload="false" />
   <texture name="WellButton_Lit" file_name="bottomtray/WellButton_Lit.png"  preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
   <texture name="WellButton_Lit_Selected" file_name="bottomtray/WellButton_Lit_Selected.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
 

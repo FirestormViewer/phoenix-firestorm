@@ -149,17 +149,18 @@ void RlvCommand::initLookupTable()
 		// NOTE: keep this matched with the enumeration at all times
 		std::string arBehaviours[RLV_BHVR_COUNT] =
 			{
-				"detach", "attach", "addattach", "remattach", "addoutfit", "remoutfit", "emote", "sendchat", "recvchat", "recvemote",
-				"redirchat", "rediremote", "chatwhisper", "chatnormal", "chatshout", "sendchannel", "sendim", "recvim", "permissive",
-				"notify", "showinv", "showminimap", "showworldmap", "showloc", "shownames", "showhovertext", "showhovertexthud",
-				"showhovertextworld", "showhovertextall", "tplm", "tploc", "tplure", "viewnote", "viewscript", "viewtexture", 
-				"acceptpermission", "accepttp", "allowidle", "displayname", "edit", "rez", "fartouch", "interact", "touch", "touchattach", 
-				"touchhud", "touchworld", "fly", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv", "detachme", "attachover", 
-				"attachthis", "attachthisover", "detachthis", "attachall", "attachallover", "detachall", "attachallthis", 
-				"attachallthisover", "detachallthis", "tpto", "version", "versionnew", "versionnum", "getattach", "getattachnames",
-				"getaddattachnames", "getremattachnames", "getoutfit", "getoutfitnames", "getaddoutfitnames", "getremoutfitnames", 
-				"findfolder", "findfolders", "getpath", "getpathnew", "getinv", "getinvworn", "getsitid", "getcommand", 
-				"getstatus", "getstatusall"
+				"detach", "attach", "addattach", "remattach", "addoutfit", "remoutfit", "emote", "sendchat", "recvchat", "recvchatfrom", 
+				"recvemote", "recvemotefrom", "redirchat", "rediremote", "chatwhisper", "chatnormal", "chatshout", "sendchannel", 
+				"sendim", "sendimto", "recvim", "recvimfrom", "permissive", "notify", "showinv", "showminimap", "showworldmap", 
+				"showloc", "shownames", "showhovertext", "showhovertexthud", "showhovertextworld", "showhovertextall", 
+				"tplm", "tploc", "tplure", "viewnote", "viewscript", "viewtexture", "acceptpermission", "accepttp", "allowidle", 
+				"displayname", "edit", "editobj", "rez", "fartouch", "interact", "touchobj", "touchattach", "touchattachself", 
+				"touchattachother", "touchhud", "touchworld", "touchall", "fly", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv", 
+				"detachme", "attachover", "attachthis", "attachthisover", "detachthis", "attachall", "attachallover", "detachall", 
+				"attachallthis", "attachallthisover", "detachallthis", "tpto", "version", "versionnew", "versionnum", "getattach", 
+				"getattachnames", "getaddattachnames", "getremattachnames", "getoutfit", "getoutfitnames", "getaddoutfitnames", 
+				"getremoutfitnames", "findfolder", "findfolders", "getpath", "getpathnew", "getinv", "getinvworn", "getsitid", 
+				"getcommand", "getstatus", "getstatusall"
 			};
 
 		for (int idxBvhr = 0; idxBvhr < RLV_BHVR_COUNT; idxBvhr++)
@@ -196,7 +197,7 @@ RlvCommandOptionGeneric::RlvCommandOptionGeneric(const std::string& strOption)
 	}
 }
 
-// Checked: 2010-09-28 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Modified: RLVa-1.3.0b
 RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd)
 	: m_fValid(true)							// Assume the option will be a valid one until we find out otherwise
 {
@@ -205,18 +206,11 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd)
 	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
 	if (rlvCmdOption.isWearableType())			// <option> can be a clothing layer
 	{
-		LLWearableType::EType wtType = rlvCmdOption.getWearableType();
-		for (S32 idxWearable = 0, cntWearable = gAgentWearables.getWearableCount(wtType); idxWearable < cntWearable; idxWearable++)
-			m_idItems.push_back(gAgentWearables.getWearableItemID(wtType, idxWearable));
+		getItemIDs(rlvCmdOption.getWearableType(), m_idItems, false);
 	}
 	else if (rlvCmdOption.isAttachmentPoint())	// ... or it can specify an attachment point
 	{
-		const LLViewerJointAttachment* pAttachPt = rlvCmdOption.getAttachmentPoint();
-		for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator itAttachObj = pAttachPt->mAttachedObjects.begin();
-				itAttachObj != pAttachPt->mAttachedObjects.end(); ++itAttachObj)
-		{
-			m_idItems.push_back((*itAttachObj)->getAttachmentItemID());
-		}
+		getItemIDs(rlvCmdOption.getAttachmentPoint(), m_idItems, false);
 	}
 	else if (rlvCmdOption.isEmpty())			// ... or it can be empty (in which case we act on the object that issued the command)
 	{
@@ -228,6 +222,36 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd)
 	{
 		m_fValid = false;
 	}
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Modified: RLVa-1.3.0b
+bool RlvCommandOptionGetPath::getItemIDs(const LLViewerJointAttachment* pAttachPt, uuid_vec_t& idItems, bool fClear)
+{
+	if (fClear)
+		idItems.clear();
+	uuid_vec_t::size_type cntItemsPrev = idItems.size();
+	if (pAttachPt)
+	{
+		for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator itAttachObj = pAttachPt->mAttachedObjects.begin();
+				itAttachObj != pAttachPt->mAttachedObjects.end(); ++itAttachObj)
+		{
+			idItems.push_back((*itAttachObj)->getAttachmentItemID());
+		}
+	}
+	return (cntItemsPrev != idItems.size());
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0b) | Modified: RLVa-1.3.0b
+bool RlvCommandOptionGetPath::getItemIDs(LLWearableType::EType wtType, uuid_vec_t& idItems, bool fClear)
+{
+	if (fClear)
+		idItems.clear();
+	uuid_vec_t::size_type cntItemsPrev = idItems.size();
+	for (S32 idxWearable = 0, cntWearable = gAgentWearables.getWearableCount(wtType); idxWearable < cntWearable; idxWearable++)
+	{
+		idItems.push_back(gAgentWearables.getWearableItemID(wtType, idxWearable));
+	}
+	return (cntItemsPrev != idItems.size());
 }
 
 // =========================================================================
