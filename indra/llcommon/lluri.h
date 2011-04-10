@@ -135,6 +135,28 @@ public:
 	static std::string escape(const std::string& str);
 
 	/**
+	 * @brief The same as escape, but also does not escape:
+	 *  :@!$'()*+,=
+	 *
+	 * @see http://www.ietf.org/rfc/rfc1738.txt
+	 *
+	 * @param str The raw URI to escape.
+	 * @return Returns the escaped uri or an empty string.
+	 */
+	static std::string escapeQueryValue(const std::string& str);
+
+	/**
+	 * @brief The same as escape, but also does not escape:
+	 *  :@!$'()*+,
+	 *
+	 * @see http://www.ietf.org/rfc/rfc1738.txt
+	 *
+	 * @param str The raw URI to escape.
+	 * @return Returns the escaped uri or an empty string.
+	 */
+	static std::string escapeQueryVariable(const std::string& str);
+
+	/**
 	 * @brief Escape a string with a specified set of allowed characters.
 	 *
 	 * Escape a string by urlencoding all the characters that aren't

@@ -50,6 +50,12 @@
          layout="topleft"
          name="local"
          top_pad="2" />
+        <radio_item
+         height="16"
+         label="Upload to Flickr"
+         layout="topleft"
+         name="flickr"
+         top_pad="2" />
     </radio_group>
   <ui_ctrl 
     height="90"
@@ -95,7 +101,7 @@
     <button
      follows="left|top"
      height="23"
-     label="Save (L$[AMOUNT])"
+     label="Upload"
      layout="topleft"
      right="-5"
      name="upload_btn"
@@ -275,7 +281,7 @@
      label="Format"
      layout="topleft"
      left_pad="5"
-     name="local_format_combo"
+     name="format_combo"
      width="70">
         <combo_box.item
          label="PNG"
@@ -283,9 +289,12 @@
         <combo_box.item
          label="JPEG"
          name="JPEG" />
+<!--
+        Disabled until someone convinces me that BMP support is actually useful.
         <combo_box.item
          label="BMP"
          name="BMP" />
+-->
     </combo_box>
     <spinner
      allow_text_entry="false"

@@ -77,6 +77,23 @@ BOOL LLXmlTree::parseFile(const std::string &path, BOOL keep_contents)
 	return success;
 }
 
+
+BOOL LLXmlTree::parseString(const std::string &string, BOOL keep_contents)
+{
+	delete mRoot;
+	mRoot = NULL;
+	
+	LLXmlTreeParser parser(this);
+	BOOL success = parser.parseString( string, &mRoot, keep_contents );
+	if( !success )
+	{
+		S32 line_number = parser.getCurrentLineNumber();
+		const char* error =  parser.getErrorString();
+		llwarns << "LLXmlTree parse failed.  Line " << line_number << ": " << error << llendl;
+	}
+	return success;
+}
+
 void LLXmlTree::dump()
 {
 	if( mRoot )
@@ -517,14 +534,35 @@ BOOL LLXmlTreeParser::parseFile(const std::string &path, LLXmlTreeNode** root, B
 {
 	llassert( !mRoot );
 	llassert( !mCurrent );
-
+	
 	mKeepContents = keep_contents;
-
+	
 	BOOL success = LLXmlParser::parseFile(path);
-
+	
 	*root = mRoot;
 	mRoot = NULL;
+	
+	if( success )
+	{
+		llassert( !mCurrent );
+	}
+	mCurrent = NULL;
+	
+	return success;
+}
 
+BOOL LLXmlTreeParser::parseString(const std::string &string, LLXmlTreeNode** root, BOOL keep_contents)
+{
+	llassert( !mRoot );
+	llassert( !mCurrent );
+	
+	mKeepContents = keep_contents;
+	
+	BOOL success = LLXmlParser::parse(string.c_str(), string.length(), true);
+	
+	*root = mRoot;
+	mRoot = NULL;
+	
 	if( success )
 	{
 		llassert( !mCurrent );

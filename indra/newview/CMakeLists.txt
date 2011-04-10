@@ -66,6 +66,7 @@ include_directories(
     ${LSCRIPT_INCLUDE_DIRS}/lscript_compile
     ${LLLOGIN_INCLUDE_DIRS}
     ${UPDATER_INCLUDE_DIRS}
+    ${CMAKE_BINARY_DIR}/newview
     )
 
 set(viewer_SOURCE_FILES
@@ -591,6 +592,9 @@ set(viewer_SOURCE_FILES
     noise.cpp
 	panel_prefs_firestorm.cpp
     pipeline.cpp
+    kvflickr.cpp
+    kvfloaterflickrauth.cpp
+    kvfloaterflickrupload.cpp
     qtoolalign.cpp
     rlvhandler.cpp
     rlvhelper.cpp
@@ -1155,8 +1159,18 @@ set(viewer_HEADER_FILES
     streamtitledisplay.h
     VertexCache.h
     VorbisFramework.h
+    kvflickr.h
+    kvfloaterflickrauth.h
+    kvfloaterflickrupload.h
     )
 
+# Generate the Flickr Keys header
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/kvflickrkeys.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/kvflickrkeys.h
+  @ONLY
+)
+list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/kvflickrkeys.h)
 source_group("CMake Rules" FILES ViewerInstall.cmake)
 
 if (DARWIN)
