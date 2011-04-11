@@ -787,6 +787,20 @@ public:
  **                                                                            **
  *******************************************************************************/
 
+/********************************************************************************
+ **                                                                            **
+ **                    Firestorm
+ **/
+
+public:
+	void		togglePhantom()		{ mPhantom = !mPhantom; }
+	bool		getPhantom() const 	{ return mPhantom; }
+private:
+	BOOL		mPhantom;
+
+/**                    Firestorm
+ **                                                                            **
+ *******************************************************************************/
 };
 
 extern LLAgent gAgent;

@@ -228,7 +228,9 @@ LLAgent::LLAgent() :
 	mAppearanceSerialNum(0),
 
 	mMouselookModeInSignal(NULL),
-	mMouselookModeOutSignal(NULL)
+	mMouselookModeOutSignal(NULL),
+	
+	mPhantom(FALSE)
 {
 	for (U32 i = 0; i < TOTAL_CONTROLS; i++)
 	{

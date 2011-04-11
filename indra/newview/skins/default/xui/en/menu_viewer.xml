@@ -135,17 +135,26 @@
                 <menu_item_check.on_click
                  function="World.AlwaysRun" />
             </menu_item_check>
-          <menu_item_call
+          <menu_item_check
              label="Force Ground Sit"
-             layout="topleft"
              shortcut="control|alt|S"
              name="Force Toggle Sitting">
-                <menu_item_call.on_click
-                 function="Self.ForceSit"
-                 parameter="" />
-                <menu_item_call.on_enable
+                <menu_item_check.on_check
+                 function="Self.getForceSit" />
+                <menu_item_check.on_click
+                 function="Self.ForceSit"/>
+                <menu_item_check.on_enable
                  function="Self.EnableForceSit" />
-           </menu_item_call>
+           </menu_item_check>
+		   <menu_item_check
+			 label="Phantom"
+             shortcut="control|alt|P"
+			 name="Avatar Phantom">
+                <menu_item_check.on_check
+                   function="Self.getPhantom" />
+                <menu_item_check.on_click
+                   function="Self.togglePhantom" />
+			</menu_item_check>
 	</menu>
         
         <menu_item_check

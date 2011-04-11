@@ -3550,7 +3550,7 @@ bool enable_sitdown_self()
 }
 
 // Force sit -KC
-class LLSelfForceSit : public view_listener_t
+class FSSelfForceSit : public view_listener_t
     {
         bool handleEvent(const LLSD& userdata)
         {
@@ -3569,6 +3569,35 @@ bool enable_forcesit_self()
 		((!gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT)) || 
 		(gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)));
 }
+
+class FSSelfCheckForceSit : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool new_value = gAgentAvatarp->isSitting();
+		return new_value;
+	}
+};
+
+// Phantom mode -KC
+class FSSelfTogglePhantom : public view_listener_t
+    {
+        bool handleEvent(const LLSD& userdata)
+        {
+			gAgent.togglePhantom();
+			//TODO: feedback to local chat
+            return true;
+        }
+    };
+
+class FSSelfCheckPhantom : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool new_value = gAgent.getPhantom();
+		return new_value;
+	}
+};
 
 // Used from the login screen to aid in UI work on side tray
 void handle_show_side_tray()
@@ -8590,8 +8619,11 @@ void initialize_menus()
 	enable.add("Self.EnableStandUp", boost::bind(&enable_standup_self));
 	view_listener_t::addMenu(new LLSelfSitDown(), "Self.SitDown");
 	enable.add("Self.EnableSitDown", boost::bind(&enable_sitdown_self));
-	view_listener_t::addMenu(new LLSelfForceSit(), "Self.ForceSit"); //KC
+	view_listener_t::addMenu(new FSSelfForceSit(), "Self.ForceSit"); //KC
 	enable.add("Self.EnableForceSit", boost::bind(&enable_forcesit_self)); //KC
+	view_listener_t::addMenu(new FSSelfCheckForceSit(), "Self.getForceSit"); //KC
+	view_listener_t::addMenu(new FSSelfTogglePhantom(), "Self.togglePhantom"); //KC
+	view_listener_t::addMenu(new FSSelfCheckPhantom(), "Self.getPhantom"); //KC
 	view_listener_t::addMenu(new LLSelfRemoveAllAttachments(), "Self.RemoveAllAttachments");
 
 	view_listener_t::addMenu(new LLSelfEnableRemoveAllAttachments(), "Self.EnableRemoveAllAttachments");
