@@ -65,11 +65,11 @@ public:
 private:
 	void results();
 	void checkRegion();
-	void cancel(void* data);
-	void search(void* data);
+	void cancel();
+	void search();
 	void onCommitLine(class LLLineEditor* line, void* user_data);
 	void requestIfNeeded(class LLViewerObject *objectp);
-	void onDoubleClick(void *userdata);
+	void onDoubleClick();
 
 	enum OBJECT_COLUMN_ORDER
 	{

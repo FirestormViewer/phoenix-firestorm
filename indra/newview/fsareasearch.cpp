@@ -123,10 +123,9 @@ void FSAreaSearch::checkRegion()
 	}
 }
 
-void FSAreaSearch::onDoubleClick(void *userdata)
+void FSAreaSearch::onDoubleClick()
 {
-	FSAreaSearch *self = (FSAreaSearch*)userdata;
- 	LLScrollListItem *item = self->mResultList->getFirstSelected();
+ 	LLScrollListItem *item = mResultList->getFirstSelected();
 	if (!item) return;
 	LLUUID object_id = item->getUUID();
 	LLViewerObject* objectp = gObjectList.findObject(object_id);
@@ -136,7 +135,7 @@ void FSAreaSearch::onDoubleClick(void *userdata)
 	}
 }
 
-void FSAreaSearch::cancel(void* data)
+void FSAreaSearch::cancel()
 {
 	checkRegion();
 	closeFloater();
@@ -147,7 +146,7 @@ void FSAreaSearch::cancel(void* data)
 	mSearchedGroup = "";
 }
 
-void FSAreaSearch::search(void* data)
+void FSAreaSearch::search()
 {
 	checkRegion();
 	results();
