@@ -26,6 +26,7 @@ WANTS_LAA=$TRUE
 WANTS_BUILD=$FALSE
 WANTS_PACKAGE=$FALSE
 WANTS_VERSION=$FALSE
+WANTS_KDU=$FALSE
 BTYPE="Release"
 CHANNEL="private-`hostname`"
 
@@ -43,6 +44,7 @@ showUsage()
         echo "  --config    : General a new architecture-specific config"
         echo "  --version   : Update version number"
         echo "  --rebuild   : Build, reusing unchanged projects to save time"
+        echo "  --kdu       : Build with KDU"
         echo "  --chan [Release|Beta|Private] : Private is the default, sets channel"
         echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
         echo "  --laa [on|off] : Default is on, enables the viewer to use more than 2 GB ram"
@@ -53,7 +55,7 @@ getArgs()
 {
 
         if [ $# -gt 0 ]; then
-          while getoptex "clean config version fmod rebuild help chan: btype: laa:" "$@" ; do
+          while getoptex "clean config version kdu fmod rebuild help chan: btype: laa:" "$@" ; do
 
               #insure options are valid
               if [  -z "$OPTOPT"  ] ; then
@@ -71,6 +73,7 @@ getArgs()
               chan)     CHANNEL="$OPTARG";;
               btype)    BTYPE="$OPTARG";;
               fmod)     WANTS_FMOD=$TRUE;;
+              kdu)      WANTS_KDU=$TRUE;;
               laa)      if [ "$OPTARG" == "on" ] ; then
                           WANTS_LAA=$TRUE
                         elif [ "$OPTARG" == "off" ] ; then
@@ -255,7 +258,9 @@ fi
 
 if [ $WANTS_CONFIG -eq $TRUE ] ; then
 	mkdir -p ../logs > /dev/null 2>&1
-	$WINPYTHON develop.py -G vc80 -t $BTYPE configure -DFIRECYG:BOOL=ON -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=OFF -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL -DLAA:BOOL=$WANTS_LAA 2>&1 | tee $LOG
+	if [ $WANTS_LAA -eq $TRUE ] ; then LAA=ON ; else LAA=OFF ; fi
+    if [ $WANTS_KDU -eq $TRUE ] ; then KDU=ON ; else KDU=OFF ; fi
+    $WINPYTHON develop.py -G vc80 -t $BTYPE configure -DFIRECYG:BOOL=ON -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=OFF -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL -DLAA:BOOL=$LAA -DUSE_KDU:BOOL=$KDU 2>&1 | tee $LOG
 	mkdir -p build-vc80/sharedlibs/RelWithDebInfo
 	mkdir -p build-vc80/sharedlibs/Release
 	cp -f ../libraries/i686-win32/lib/release/fmod.dll . 
