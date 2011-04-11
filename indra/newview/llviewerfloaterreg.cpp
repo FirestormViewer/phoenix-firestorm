@@ -131,6 +131,7 @@
 // [/RLVa:KB]
 #include "fscontactsfloater.h"
 #include "floatermedialists.h"
+#include "fsareasearch.h"
 
 void LLViewerFloaterReg::registerFloaters()
 {
@@ -138,6 +139,7 @@ void LLViewerFloaterReg::registerFloaters()
 
 	LLFloaterAboutUtil::registerFloater();
 	LLFloaterReg::add("about_land", "floater_about_land.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLand>);
+	LLFloaterReg::add("area_search", "floater_fs_area_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSAreaSearch>);
 	LLFloaterReg::add("auction", "floater_auction.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterAuction>);
 	LLFloaterReg::add("avatar_picker", "floater_avatar_picker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterAvatarPicker>);
 	LLFloaterReg::add("avatar_textures", "floater_avatar_textures.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterAvatarTextures>);
