@@ -8,7 +8,8 @@ if (INSTALL_PROPRIETARY AND NOT STANDALONE)
 endif (INSTALL_PROPRIETARY AND NOT STANDALONE)
 
 if (USE_KDU)
-  use_prebuilt_binary(kdu)
+  # AO: Don't download KDU, assume it is provisioned out of band locally.
+  #use_prebuilt_binary(kdu)
   if (WINDOWS)
     set(KDU_LIBRARY kdu.lib)
   else (WINDOWS)

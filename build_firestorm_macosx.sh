@@ -17,6 +17,7 @@ WANTS_CONFIG=$FALSE
 WANTS_BUILD=$FALSE
 WANTS_PACKAGE=$FALSE
 WANTS_VERSION=$FALSE
+WANTS_KDU=$FALSE
 BTYPE="Release"
 CHANNEL="private-`hostname -s`"
 
@@ -36,13 +37,14 @@ showUsage()
         echo "  --rebuild   : Build, reusing unchanged projects to save time"
         echo "  --chan [Release|Beta|Private] : Private is the default, sets channel"
         echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
+        echo "  --kdu       : Build with KDU"
 }
 
 getArgs()
 # $* = the options passed in from main
 {
         if [ $# -gt 0 ]; then
-          while getoptex "clean config version rebuild help chan: btype:" "$@" ; do
+          while getoptex "clean config version kdu rebuild help chan: btype:" "$@" ; do
 
 	      #insure options are valid
 	      if [  -z "$OPTOPT"  ] ; then
@@ -59,6 +61,7 @@ getArgs()
                         WANTS_PACKAGE=$TRUE;;
               chan)     CHANNEL="$OPTARG";;
               btype)    BTYPE="$OPTARG";;
+              kdu)      WANTS_KDU=$TRUE;;
             
               help)     showUsage && exit 0;;
             
@@ -233,7 +236,12 @@ fi
 
 if [ $WANTS_CONFIG -eq $TRUE ] ; then
 	mkdir -p ../logs > /dev/null 2>&1
-	./develop.py -t $BTYPE configure -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=OFF -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
+        if [ $WANTS_KDU -eq $TRUE ] ; then
+		KDU="-DUSE_KDU:BOOL=ON"
+	else
+		KDU=""
+	fi
+	./develop.py -t $BTYPE configure $KDU -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=OFF -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
 	# LL build wants this directory to exist, but doesn't make it itself.
 	mkdir -p ./build-darwin-i386/newview/Release/Firestorm.app
 fi
