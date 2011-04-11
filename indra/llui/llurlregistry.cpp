@@ -145,11 +145,17 @@ static bool stringHasUrl(const std::string &text)
 	// to avoid lots of costly regex calls, BUT it needs to be
 	// kept in sync with the LLUrlEntry regexes we support.
 	return (text.find("://") != std::string::npos ||
-			text.find("www.") != std::string::npos ||
-			text.find(".com") != std::string::npos ||
-			text.find(".net") != std::string::npos ||
-			text.find(".edu") != std::string::npos ||
-			text.find(".org") != std::string::npos ||
+			// text.find("www.") != std::string::npos ||
+			// text.find(".com") != std::string::npos ||
+			// text.find(".net") != std::string::npos ||
+			// text.find(".edu") != std::string::npos ||
+			// text.find(".org") != std::string::npos ||
+			// allow ALLCAPS urls -KC
+			boost::ifind_first(text, "www.") ||
+			boost::ifind_first(text, ".com") ||
+			boost::ifind_first(text, ".net") ||
+			boost::ifind_first(text, ".edu") ||
+			boost::ifind_first(text, ".org") ||
 			text.find("<nolink>") != std::string::npos ||
 			text.find("<icon") != std::string::npos);
 }
