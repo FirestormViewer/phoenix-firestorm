@@ -1943,6 +1943,9 @@ void inventory_offer_handler(LLOfferInfo* info)
 	}
 	else
 	{
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+		args["NAME_LABEL"] = LLSLURL("agent", info->mFromID, "completename").getSLURLString();
+// [/SL:KB]
 		args["NAME_SLURL"] = LLSLURL("agent", info->mFromID, "about").getSLURLString();
 	}
 	std::string verb = "select?name=" + LLURI::escape(msg);
@@ -3041,6 +3044,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 				LLSD args;
 				// *TODO: Translate -> [FIRST] [LAST] (maybe)
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+				args["NAME_LABEL"] = LLSLURL("agent", from_id, "completename").getSLURLString();
+// [/SL:KB]
 				args["NAME_SLURL"] = LLSLURL("agent", from_id, "about").getSLURLString();
 				args["MESSAGE"] = message;
 				args["MATURITY_STR"] = region_access_str;
@@ -3127,6 +3133,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			}
 			else
 			{
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+				args["NAME_LABEL"] = LLSLURL("agent", from_id, "completename").getSLURLString();
+// [/SL:KB]
 				args["NAME_SLURL"] = LLSLURL("agent", from_id, "about").getSLURLString();
 				if(message.empty())
 				{
