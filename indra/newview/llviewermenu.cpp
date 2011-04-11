@@ -3549,6 +3549,27 @@ bool enable_sitdown_self()
 //    return isAgentAvatarValid() && !gAgentAvatarp->isSitting() && !gAgent.getFlying();
 }
 
+// Force sit -KC
+class LLSelfForceSit : public view_listener_t
+    {
+        bool handleEvent(const LLSD& userdata)
+        {
+			if (!gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT))
+				gAgent.sitDown();
+			else if (gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT))
+				gAgent.standUp();
+
+            return true;
+        }
+    };
+
+bool enable_forcesit_self()
+{
+	return isAgentAvatarValid() &&
+		((!gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT)) || 
+		(gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)));
+}
+
 // Used from the login screen to aid in UI work on side tray
 void handle_show_side_tray()
 {
@@ -8569,6 +8590,8 @@ void initialize_menus()
 	enable.add("Self.EnableStandUp", boost::bind(&enable_standup_self));
 	view_listener_t::addMenu(new LLSelfSitDown(), "Self.SitDown");
 	enable.add("Self.EnableSitDown", boost::bind(&enable_sitdown_self));
+	view_listener_t::addMenu(new LLSelfForceSit(), "Self.ForceSit"); //KC
+	enable.add("Self.EnableForceSit", boost::bind(&enable_forcesit_self)); //KC
 	view_listener_t::addMenu(new LLSelfRemoveAllAttachments(), "Self.RemoveAllAttachments");
 
 	view_listener_t::addMenu(new LLSelfEnableRemoveAllAttachments(), "Self.EnableRemoveAllAttachments");
