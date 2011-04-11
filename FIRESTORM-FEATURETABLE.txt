@@ -65,3 +65,4 @@ Resizable_Profiles	LGPL
 Derender		LGPL
 RezUnderLandGroup	LGPL
 JiraLinkParsing	LGPL
+AreaSearch		BSD (from Emerald/CoolVL/Phoenix)

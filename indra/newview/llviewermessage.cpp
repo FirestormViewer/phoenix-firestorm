@@ -112,6 +112,8 @@
 #include "rlvui.h"
 // [/RLVa:KB]
 
+#include "fsareasearch.h"
+
 #include <boost/algorithm/string/split.hpp> //
 #include <boost/regex.hpp>
 
@@ -4668,6 +4670,17 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 		}
 	}
 }
+
+//ObjectPropertiesFamily  -KC
+void process_object_properties_family(LLMessageSystem *msg, void**user_data)
+{
+	// Send the result to the corresponding requesters.
+	LLSelectMgr::processObjectPropertiesFamily(msg, user_data);
+	
+	FSAreaSearch* area_search_floater = dynamic_cast<FSAreaSearch*>(LLFloaterReg::getInstance("area_search"));
+	area_search_floater->processObjectPropertiesFamily(msg);
+}
+
 
 void process_time_synch(LLMessageSystem *mesgsys, void **user_data)
 {
