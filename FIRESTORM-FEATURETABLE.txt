@@ -64,3 +64,4 @@ ImprovedRadar		LGPL
 Resizable_Profiles	LGPL
 Derender		LGPL
 RezUnderLandGroup	LGPL
+JiraLinkParsing	LGPL

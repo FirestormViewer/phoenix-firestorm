@@ -38,6 +38,8 @@
 #include "lluicolortable.h"
 #include "message.h"
 
+#include <boost/algorithm/string/find.hpp> //for boost::ifind_first -KC
+
 #define APP_HEADER_REGEX "((x-grid-location-info://[-\\w\\.]+/app)|(secondlife:///app))"
 
 // Utility functions
@@ -1206,4 +1208,39 @@ std::string LLUrlEntryIcon::getIcon(const std::string &url)
 		: LLStringUtil::null;
 	LLStringUtil::trim(mIcon);
 	return mIcon;
+}
+
+//
+// LLUrlEntryJira Describes Jira issue names -KC
+//
+LLUrlEntryJira::LLUrlEntryJira()
+{
+	mPattern = boost::regex("((?:ECC|SH|SOCIAL|LEAP|DN|MISC|SNOW|LLSD|CTS|PYO|STORM|PLAT|ER|VWR|SVC|WEB|SEC|ARVD|OPEN|SCR|PHOE|FIRE|SPOT)-\\d+)",
+				boost::regex::perl|boost::regex::icase);
+	mMenuName = "menu_url_http.xml";
+	mTooltip = LLTrans::getString("TooltipHttpUrl");
+}
+
+std::string LLUrlEntryJira::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
+{
+	return unescapeUrl(url);
+}
+
+std::string LLUrlEntryJira::getTooltip(const std::string &string) const
+{
+	return getUrl(string);
+}
+
+std::string LLUrlEntryJira::getUrl(const std::string &string) const
+{
+	if (boost::ifind_first(string, "PHOE") ||
+		boost::ifind_first(string, "FIRE") ||
+		boost::ifind_first(string, "SPOT"))
+	{
+		return llformat("http://jira.phoenixviewer.com/browse/%s", string.c_str());
+	}
+	else
+	{
+		return llformat("https://jira.secondlife.com/browse/%s", string.c_str());
+	}
 }
