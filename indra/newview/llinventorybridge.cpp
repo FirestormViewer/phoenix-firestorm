@@ -3660,11 +3660,14 @@ void LLCallingCardBridge::performAction(LLInventoryModel* model, std::string act
 			{
 				callingcard_name = av_name.mDisplayName + " (" + av_name.mUsername + ")";
 			}
-			LLUUID session_id = gIMMgr->addSession(callingcard_name, IM_NOTHING_SPECIAL, item->getCreatorUUID());
-			if (session_id != LLUUID::null)
-			{
-				LLIMFloater::show(session_id);
-			}
+//			LLUUID session_id = gIMMgr->addSession(callingcard_name, IM_NOTHING_SPECIAL, item->getCreatorUUID());
+//			if (session_id != LLUUID::null)
+//			{
+//				LLIMFloater::show(session_id);
+//			}
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+			LLAvatarActions::startIM(item->getCreatorUUID());
+// [/RLVa:KB]
 		}
 	}
 	else if ("lure" == action)
