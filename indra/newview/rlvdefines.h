@@ -186,6 +186,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_TOUCHHUD,				// "touchhud"
 	RLV_BHVR_TOUCHWORLD,			// "touchworld"
 	RLV_BHVR_TOUCHALL,				// "touchall"
+	RLV_BHVR_TOUCHME,				// "touchme"
 	RLV_BHVR_FLY,					// "fly"
 	RLV_BHVR_UNSIT,					// "unsit"
 	RLV_BHVR_SIT,					// "sit"

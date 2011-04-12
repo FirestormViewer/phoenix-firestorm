@@ -86,10 +86,19 @@ RlvHandler::~RlvHandler()
 // Behaviour related functions
 //
 
-bool RlvHandler::hasBehaviourExcept(ERlvBehaviour eBehaviour, const std::string& strOption, const LLUUID& idObj) const
+bool RlvHandler::hasBehaviourExcept(ERlvBehaviour eBhvr, const std::string& strOption, const LLUUID& idObj) const
 {
 	for (rlv_object_map_t::const_iterator itObj = m_Objects.begin(); itObj != m_Objects.end(); ++itObj)
-		if ( (idObj != itObj->second.getObjectID()) && (itObj->second.hasBehaviour(eBehaviour, strOption, false)) )
+		if ( (idObj != itObj->second.getObjectID()) && (itObj->second.hasBehaviour(eBhvr, strOption, false)) )
+			return true;
+	return false;
+}
+
+// Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+bool RlvHandler::hasBehaviourRoot(const LLUUID& idObjRoot, ERlvBehaviour eBhvr, const std::string& strOption) const
+{
+	for (rlv_object_map_t::const_iterator itObj = m_Objects.begin(); itObj != m_Objects.end(); ++itObj)
+		if ( (idObjRoot == itObj->second.getRootID()) && (itObj->second.hasBehaviour(eBhvr, strOption, false)) )
 			return true;
 	return false;
 }
@@ -571,7 +580,7 @@ void RlvHandler::onTeleportFinished(const LLVector3d& posArrival)
 // String/chat censoring functions
 //
 
-// Checked: 2010-01-21 (RLVa-1.3.0e) | Modified: RLVa-1.3.0e
+// Checked: 2010-04-11 (RLVa-1.3.0h) | Modified: RLVa-1.3.0h
 bool RlvHandler::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/) const
 {
 	const LLUUID& idRoot = (pObj) ? pObj->getRootEdit()->getID() : LLUUID::null;
@@ -608,6 +617,8 @@ bool RlvHandler::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset
 		}
 #endif // RLV_EXTENSION_CMD_TOUCHXXX
 	}
+	if ( (!fCanTouch) && (hasBehaviour(RLV_BHVR_TOUCHME)) )
+		fCanTouch = hasBehaviourRoot(idRoot, RLV_BHVR_TOUCHME);
 	return fCanTouch;
 }
 
@@ -1142,6 +1153,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		case RLV_BHVR_TOUCHATTACHSELF:		// @touchattachself=n|y				- Checked: 2011-01-21 (RLVa-1.3.0e) | Added: RLVa-1.3.0e
 		case RLV_BHVR_TOUCHATTACHOTHER:		// @touchattachother=n|y			- Checked: 2011-01-21 (RLVa-1.3.0e) | Added: RLVa-1.3.0e
 		case RLV_BHVR_TOUCHALL:				// @touchall=n|y					- Checked: 2011-01-21 (RLVa-1.3.0e) | Added: RLVa-1.3.0e
+		case RLV_BHVR_TOUCHME:				// @touchme=n|y						- Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
 		case RLV_BHVR_FLY:					// @fly=n|y							- Checked: 2010-03-02 (RLVa-1.2.0a)
 		case RLV_BHVR_UNSIT:				// @unsit=n|y						- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
 		case RLV_BHVR_SIT:					// @sit=n|y							- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
