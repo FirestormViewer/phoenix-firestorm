@@ -922,7 +922,15 @@ RlvFolderLocks gRlvFolderLocks;
 RlvFolderLocks::RlvFolderLocks()
 	: m_fItemsDirty(true)
 {
-	LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&RlvFolderLocks::onCOFChanged, this));
+	//LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&RlvFolderLocks::onCOFChanged, this));
+}
+
+// static
+void RlvFolderLocks::initClass()
+{
+	// this can not be called from constructor because its instance is global and is created too early.
+	// Subscribe to "COF is Saved" signal to notify observers about this (Loading indicator for ex.).
+	LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&RlvFolderLocks::onCOFChanged, &gRlvFolderLocks));
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
