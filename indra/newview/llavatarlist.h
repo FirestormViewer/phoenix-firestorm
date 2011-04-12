@@ -71,6 +71,7 @@ public:
 	void setDirty(bool val = true, bool force_refresh = false);
 	uuid_vec_t& getIDs() 							{ return mIDs; }
 	bool contains(const LLUUID& id);
+	LLAvatarListItem* getAvatarListItem(const LLUUID& id);
 
 	void setContextMenu(LLListContextMenu* menu) { mContextMenu = menu; }
 	void setSessionID(const LLUUID& session_id) { mSessionID = session_id; }

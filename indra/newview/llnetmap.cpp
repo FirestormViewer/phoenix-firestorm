@@ -65,6 +65,12 @@
 // [/RLVa:KB]
 #include "lltrans.h"
 
+// Ansariel: For accessing the radar data
+#include "llavatarlist.h"
+#include "llavatarlistitem.h"
+#include "llpanelpeople.h"
+#include "llsidetray.h"
+
 static LLDefaultChildRegistry::Register<LLNetMap> r1("net_map");
 
 const F32 LLNetMap::MAP_SCALE_MIN = 32;
@@ -720,6 +726,19 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 			LLVector3d otherPosition = mClosestAgentPosition;
 			LLVector3d delta = otherPosition - myPosition;
 			F32 distance = (F32)delta.magVec();
+
+			// Ansariel: Try to get distance from the nearby people panel
+			//           aka radar. This usually contains better data,
+			//           especially when above 1024m.
+			LLPanel* panel_people = LLSideTray::getInstance()->getPanel("panel_people");
+			if (panel_people != NULL)
+			{
+				LLAvatarListItem* avatar_list_item = ((LLPanelPeople*)panel_people)->getNearbyList()->getAvatarListItem(avatar_id);
+				if (avatar_list_item != NULL)
+				{
+					distance = avatar_list_item->getRange();
+				}
+			}
 
 			LLStringUtil::format_map_t args;
 			args["DISTANCE"] = llformat("%.02f", distance);

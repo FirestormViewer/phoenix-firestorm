@@ -65,6 +65,11 @@ bool LLAvatarList::contains(const LLUUID& id)
 	return std::find(ids.begin(), ids.end(), id) != ids.end();
 }
 
+LLAvatarListItem* LLAvatarList::getAvatarListItem(const LLUUID& id)
+{
+	return (LLAvatarListItem*)getItemByValue(id);
+}
+
 void LLAvatarList::toggleIcons() 
 // Togggles the display of Avatar icons
 {
