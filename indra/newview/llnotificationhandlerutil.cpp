@@ -34,6 +34,9 @@
 #include "llfloaterreg.h"
 #include "llnearbychat.h"
 #include "llimfloater.h"
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 using namespace LLNotificationsUI;
 
@@ -167,11 +170,18 @@ bool LLHandlerUtil::canSpawnIMSession(const LLNotificationPtr& notification)
 //			|| USER_GIVE_ITEM == notification->getName()
 //			|| TELEPORT_OFFERED == notification->getName();
 // [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+//	return 
+//		(canEmbedNotificationInIM(notification)) && 
+//		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
+//		  (TELEPORT_OFFERED == notification->getName()) );
+// [/SL:KB]
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
 	return 
 		(canEmbedNotificationInIM(notification)) && 
+		( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canStartIM(notification->getPayload()["from_id"].asUUID())) ) &&
 		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
 		  (TELEPORT_OFFERED == notification->getName()) );
-// [/SL:KB]
+// [/RLVa:KB]
 }
 
 // [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a

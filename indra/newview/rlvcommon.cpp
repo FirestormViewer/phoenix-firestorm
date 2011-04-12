@@ -421,27 +421,15 @@ bool RlvUtil::isNearbyRegion(const std::string& strRegion)
 	return false;
 }
 
-// Checked: 2010-10-07 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
-void RlvUtil::notifyBlocked(const std::string& strRlvString)
+// Checked: 2011-04-11 (RLVa-1.3.0h) | Modified: RLVa-1.3.0h
+void RlvUtil::notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs)
 {
-	LLSD argsNotify;
-	argsNotify["MESSAGE"] = RlvStrings::getString(strRlvString);
-	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
-}
+	std::string strMsg = RlvStrings::getString(strNotifcation);
+	LLStringUtil::format(strMsg, sdArgs);
 
-// Checked: 2010-03-01 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
-void RlvUtil::notifyBlockedViewXXX(LLAssetType::EType assetType)
-{
-	if (!RlvStrings::hasString(RLV_STRING_BLOCKED_VIEWXXX))
-		return;
-
-	LLStringUtil::format_map_t argsMsg; std::string strMsg = RlvStrings::getString(RLV_STRING_BLOCKED_VIEWXXX);
-	argsMsg["[TYPE]"] = LLAssetType::lookup(assetType);
-	LLStringUtil::format(strMsg, argsMsg);
-
-	LLSD argsNotify;
-	argsNotify["MESSAGE"] = strMsg;
-	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
+	LLSD sdNotify;
+	sdNotify["MESSAGE"] = strMsg;
+	LLNotificationsUtil::add("SystemMessageTip", sdNotify);
 }
 
 // Checked: 2010-11-11 (RLVa-1.2.1g) | Added: RLVa-1.2.1g

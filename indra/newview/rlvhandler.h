@@ -99,6 +99,7 @@ public:
 	bool canShowHoverText(const LLViewerObject* pObj) const;									// @showhovertext* command family
 	bool canSendIM(const LLUUID& idRecipient) const;											// @sendim and @sendimto
 	bool canSit(LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;
+	bool canStartIM(const LLUUID& idRecipient) const;											// @startim and @startimto
 	bool canStand() const;
 	bool canTeleportViaLure(const LLUUID& idAgent) const;
 	bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;	// @touch
@@ -298,6 +299,16 @@ inline bool RlvHandler::canSit(LLViewerObject* pObj, const LLVector3& posOffset 
 			? ((!hasBehaviour(RLV_BHVR_SITTP)) && (!hasBehaviour(RLV_BHVR_FARTOUCH)))	// [regular sit]
 			: (!hasBehaviourExcept(RLV_BHVR_SITTP, getCurrentObject()))) ||				// [force sit]
 		  (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) < 1.5f * 1.5f) );
+}
+
+inline bool RlvHandler::canStartIM(const LLUUID& idRecipient) const
+{
+	// User can start an IM session with "recipient" (could be an agent or a group) if:
+	//   - not generally restricted from starting IM sessions (or the recipient is an exception)
+	//   - not specifically restricted from starting an IM session with the recipient
+	return 
+		( (!hasBehaviour(RLV_BHVR_STARTIM)) || (isException(RLV_BHVR_STARTIM, idRecipient)) ) &&
+		( (!hasBehaviour(RLV_BHVR_STARTIMTO)) || (!isException(RLV_BHVR_STARTIMTO, idRecipient)) );
 }
 
 // Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
