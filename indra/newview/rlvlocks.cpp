@@ -916,8 +916,6 @@ void RlvWearableLocks::removeWearableTypeLock(LLWearableType::EType eType, const
 // RlvFolderLocks member functions
 //
 
-RlvFolderLocks gRlvFolderLocks;
-
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
 RlvFolderLocks::RlvFolderLocks()
 	: m_fItemsDirty(true)
