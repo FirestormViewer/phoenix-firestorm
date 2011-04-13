@@ -137,6 +137,9 @@ BOOL LLChatBar::postBuild()
 
 	mIsBuilt = TRUE;
 
+	PhoenixPlayChatAnimation = gSavedSettings.getBOOL("PhoenixPlayChatAnimation");
+	gSavedSettings.getControl("PhoenixPlayChatAnimation")->getSignal()->connect(boost::bind(&LLChatBar::updatePhoenixPlayChatAnimation, this, _2));
+
 	return TRUE;
 }
 
@@ -155,6 +158,18 @@ BOOL LLChatBar::handleKeyHere( KEY key, MASK mask )
 		{
 			// shout
 			sendChat(CHAT_TYPE_SHOUT);
+			handled = TRUE;
+		}
+		else if (mask == MASK_SHIFT)
+		{
+			// whisper
+			sendChat(CHAT_TYPE_WHISPER);
+			handled = TRUE;
+		}
+		else if (mask == MASK_ALT)
+		{
+			// OOC
+			sendChat(CHAT_TYPE_OOC);
 			handled = TRUE;
 		}
 		else if (mask == MASK_NONE)
@@ -356,6 +371,10 @@ LLWString LLChatBar::stripChannelNumber(const LLWString &mesg, S32* channel)
 	}
 }
 
+void LLChatBar::updatePhoenixPlayChatAnimation(const LLSD &data)
+{
+	PhoenixPlayChatAnimation = data.asBoolean();
+}
 
 void LLChatBar::sendChat( EChatType type )
 {
@@ -364,6 +383,14 @@ void LLChatBar::sendChat( EChatType type )
 		LLWString text = mInputEditor->getConvertedText();
 		if (!text.empty())
 		{
+			if(type == CHAT_TYPE_OOC)
+			{
+				std::string tempText = mInputEditor->getText();
+				tempText = gSavedSettings.getString("PhoenixOOCPrefix") + " " + tempText + " " + gSavedSettings.getString("PhoenixOOCPostfix");
+				mInputEditor->setText(tempText);
+				text = utf8str_to_wstring(tempText);
+			}
+
 			// store sent line in history, duplicates will get filtered
 			if (mInputEditor) mInputEditor->updateHistory();
 			// Check if this is destined for another channel
@@ -437,10 +464,16 @@ void LLChatBar::sendChat( EChatType type )
 
 			utf8_revised_text = utf8str_trim(utf8_revised_text);
 
+			EChatType nType;
+			if(type == CHAT_TYPE_OOC)
+				nType = CHAT_TYPE_NORMAL;
+			else
+				nType = type;
+
 			if (!utf8_revised_text.empty())
 			{
 				// Chat with animation
-				sendChatFromViewer(utf8_revised_text, type, TRUE);
+				sendChatFromViewer(utf8_revised_text, nType, PhoenixPlayChatAnimation);
 			}
 		}
 	}

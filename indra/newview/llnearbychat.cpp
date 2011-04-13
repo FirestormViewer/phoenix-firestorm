@@ -471,8 +471,49 @@ void LLNearbyChat::onInputEditorKeystroke(LLLineEditor* caller, void* userdata)
 void LLNearbyChat::onSendMsg( LLUICtrl* ctrl, void* userdata )
 {
 	LLNearbyChat* self = (LLNearbyChat*)userdata;
-	LLNearbyChatBar::getInstance()->onChatBoxCommit();
+	LLNearbyChatBar::getInstance()->sendChat(CHAT_TYPE_NORMAL);
 	self->mInputEditor->setText(LLStringExplicit(""));
+}
+
+// virtual
+BOOL LLNearbyChat::handleKeyHere( KEY key, MASK mask )
+{
+	BOOL handled = FALSE;
+
+	if( KEY_RETURN == key )
+	{
+		if (mask == MASK_CONTROL)
+		{
+			// shout
+			LLNearbyChatBar::getInstance()->sendChat(CHAT_TYPE_SHOUT);
+			handled = TRUE;
+		}
+		else if (mask == MASK_SHIFT)
+		{
+			// whisper
+			LLNearbyChatBar::getInstance()->sendChat(CHAT_TYPE_WHISPER);
+			handled = TRUE;
+		}
+		else if (mask == MASK_ALT)
+		{
+			// OOC
+			LLNearbyChatBar::getInstance()->sendChat(CHAT_TYPE_OOC);
+			handled = TRUE;
+		}
+		// Ansariel: For some reason we don't get an unmasked return here.
+		//           So we use the child commit callback that invokes
+		//           LLNearbyChat::onSendMsg() to handle this case.
+		//else if (mask == MASK_NONE)
+		//{
+		//	// say
+		//	LLNearbyChatBar::getInstance()->sendChat(CHAT_TYPE_NORMAL);
+		//	handled = TRUE;
+		//}
+	}
+
+	if (handled == TRUE) mInputEditor->setText(LLStringExplicit(""));
+
+	return handled;	
 }
 
 BOOL LLNearbyChat::matchChatTypeTrigger(const std::string& in_str, std::string* out_str)

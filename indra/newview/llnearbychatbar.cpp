@@ -433,6 +433,9 @@ BOOL LLNearbyChatBar::postBuild()
 	mOutputMonitor = getChild<LLOutputMonitorCtrl>("chat_zone_indicator");
 	mOutputMonitor->setVisible(FALSE);
 
+	PhoenixPlayChatAnimation = gSavedSettings.getBOOL("PhoenixPlayChatAnimation");
+	gSavedSettings.getControl("PhoenixPlayChatAnimation")->getSignal()->connect(boost::bind(&LLNearbyChatBar::updatePhoenixPlayChatAnimation, this, _2));
+
 	return TRUE;
 }
 
@@ -464,20 +467,33 @@ BOOL LLNearbyChatBar::handleKeyHere( KEY key, MASK mask )
 {
 	BOOL handled = FALSE;
 
-	if( KEY_RETURN == key && mask == MASK_CONTROL)
+	if( KEY_RETURN == key )
 	{
-		// shout
-		sendChat(CHAT_TYPE_SHOUT);
-		handled = TRUE;
+		if (mask == MASK_CONTROL)
+		{
+			// shout
+			sendChat(CHAT_TYPE_SHOUT);
+			handled = TRUE;
+		}
+		else if (mask == MASK_SHIFT)
+		{
+			// whisper
+			sendChat(CHAT_TYPE_WHISPER);
+			handled = TRUE;
+		}
+		else if (mask == MASK_ALT)
+		{
+			// OOC
+			sendChat(CHAT_TYPE_OOC);
+			handled = TRUE;
+		}
+		else if (mask == MASK_NONE)
+		{
+			// say
+			sendChat( CHAT_TYPE_NORMAL );
+			handled = TRUE;
+		}
 	}
-//-TT Satomi Ahn - Patch MU_OOC	
-	else if( KEY_RETURN == key && mask == MASK_SHIFT)
-	{
-		// whisper
-		sendChat(CHAT_TYPE_WHISPER);
-		handled = TRUE;
-	}
-//-TT Satomi Ahn - Patch MU_OOC	
 
 	return handled;
 }
@@ -626,6 +642,11 @@ EChatType LLNearbyChatBar::processChatTypeTriggers(EChatType type, std::string &
 	return type;
 }
 
+void LLNearbyChatBar::updatePhoenixPlayChatAnimation(const LLSD &data)
+{
+	PhoenixPlayChatAnimation = data.asBoolean();
+}
+
 void LLNearbyChatBar::sendChat( EChatType type )
 {
 	if (mChatBox)
@@ -633,6 +654,14 @@ void LLNearbyChatBar::sendChat( EChatType type )
 		LLWString text = mChatBox->getConvertedText();
 		if (!text.empty())
 		{
+			if(type == CHAT_TYPE_OOC)
+			{
+				std::string tempText = mChatBox->getText();
+				tempText = gSavedSettings.getString("PhoenixOOCPrefix") + " " + tempText + " " + gSavedSettings.getString("PhoenixOOCPostfix");
+				mChatBox->setText(tempText);
+				text = utf8str_to_wstring(tempText);
+			}
+
 			// store sent line in history, duplicates will get filtered
 			mChatBox->updateHistory();
 			// Check if this is destined for another channel
@@ -705,12 +734,18 @@ void LLNearbyChatBar::sendChat( EChatType type )
 
 			utf8_revised_text = utf8str_trim(utf8_revised_text);
 
-			type = processChatTypeTriggers(type, utf8_revised_text);
+			EChatType nType;
+			if(type == CHAT_TYPE_OOC)
+				nType = CHAT_TYPE_NORMAL;
+			else
+				nType = type;
+
+			type = processChatTypeTriggers(nType, utf8_revised_text);
 
 			if (!utf8_revised_text.empty() && cmd_line_chat(utf8_revised_text, type))
 			{
 				// Chat with animation
-				sendChatFromViewer(utf8_revised_text, type, TRUE);
+				sendChatFromViewer(utf8_revised_text, type, PhoenixPlayChatAnimation);
 			}
 		}
 
