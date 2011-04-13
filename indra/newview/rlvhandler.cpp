@@ -1353,9 +1353,9 @@ ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCo
  	ERlvLockMask eLock = ((RLV_BHVR_ATTACHTHIS == eBhvr) || (RLV_BHVR_ATTACHALLTHIS == eBhvr)) ? RLV_LOCK_ADD : RLV_LOCK_REMOVE;
 	RlvFolderLocks::rlv_folderlock_descr_t lockDescr(lockSource, ((RLV_BHVR_ATTACHALLTHIS == eBhvr) || (RLV_BHVR_DETACHALLTHIS == eBhvr)));
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
-		gRlvFolderLocks.addFolderLock(lockDescr, rlvCmd.getObjectID(), eLock);
+		RlvFolderLocks::instance().addFolderLock(lockDescr, rlvCmd.getObjectID(), eLock);
 	else
-		gRlvFolderLocks.removeFolderLock(lockDescr, rlvCmd.getObjectID(), eLock);
+		RlvFolderLocks::instance().removeFolderLock(lockDescr, rlvCmd.getObjectID(), eLock);
 
 	fRefCount = true;
 	return RLV_RET_SUCCESS;

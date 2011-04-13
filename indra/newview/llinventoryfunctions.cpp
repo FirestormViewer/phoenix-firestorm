@@ -364,7 +364,7 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 	}
 
 // [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
-	if ( (rlv_handler_t::isEnabled()) && (gRlvFolderLocks.isLockedFolder(id, RLV_LOCK_ANY)) )
+	if ( (rlv_handler_t::isEnabled()) && (RlvFolderLocks::instance().isLockedFolder(id, RLV_LOCK_ANY)) )
 	{
 		return FALSE;
 	}
@@ -406,7 +406,7 @@ BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 	}
 
 // [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
-	if ( (rlv_handler_t::isEnabled()) && (gRlvFolderLocks.isLockedFolder(id, RLV_LOCK_ANY)) && 
+	if ( (rlv_handler_t::isEnabled()) && (RlvFolderLocks::instance().isLockedFolder(id, RLV_LOCK_ANY)) && 
 		 (model->isObjectDescendentOf(id, gInventory.getRootFolderID())) )
 	{
 		return FALSE;

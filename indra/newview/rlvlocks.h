@@ -291,7 +291,7 @@ extern RlvWearableLocks gRlvWearableLocks;
 // RlvFolderLocks class declaration
 //
 
-class RlvFolderLocks
+class RlvFolderLocks : public LLSingleton<RlvFolderLocks>
 {
 public:
 	RlvFolderLocks();
@@ -346,9 +346,9 @@ protected:
 	mutable uuid_vec_t		m_LockedAttachmentRem;
 	mutable uuid_vec_t		m_LockedFolderRem;
 	mutable uuid_vec_t		m_LockedWearableRem;
+private:
+	friend class LLSingleton<RlvFolderLocks>;
 };
-
-extern RlvFolderLocks gRlvFolderLocks;
 
 // ============================================================================
 // RlvAttachPtLookup inlined member functions
@@ -430,7 +430,7 @@ inline bool RlvAttachmentLocks::hasLockedAttachmentPoint(ERlvLockMask eLock) con
 {
 	// Remove locks are more common so check those first
 	return
-		((eLock & RLV_LOCK_REMOVE) && ((!m_AttachPtRem.empty()) || (!m_AttachObjRem.empty()) || (gRlvFolderLocks.hasLockedAttachment()))) || 
+		((eLock & RLV_LOCK_REMOVE) && ((!m_AttachPtRem.empty()) || (!m_AttachObjRem.empty()) || (RlvFolderLocks::instance().hasLockedAttachment()))) || 
 		((eLock & RLV_LOCK_ADD) && (!m_AttachPtAdd.empty()) );
 }
 
@@ -448,7 +448,7 @@ inline bool RlvAttachmentLocks::isLockedAttachment(const LLViewerObject* pAttach
 		(pAttachObj) && (pAttachObj->isAttachment()) &&
 		( (m_AttachObjRem.find(pAttachObj->getID()) != m_AttachObjRem.end()) || 
 		  (isLockedAttachmentPoint(RlvAttachPtLookup::getAttachPointIndex(pAttachObj), RLV_LOCK_REMOVE)) ||
-		  (gRlvFolderLocks.isLockedAttachment(pAttachObj->getAttachmentItemID())) );
+		  (RlvFolderLocks::instance().isLockedAttachment(pAttachObj->getAttachmentItemID())) );
 }
 
 // Checked: 2010-02-28 (RLVa-1.2.0a) | Added: RLVa-1.0.5a
@@ -520,7 +520,7 @@ inline bool RlvWearableLocks::isLockedWearable(const LLWearable* pWearable) cons
 	RLV_ASSERT(pWearable);
 	return 
 		(pWearable) &&
-		( (isLockedWearableType(pWearable->getType(), RLV_LOCK_REMOVE)) || (gRlvFolderLocks.isLockedWearable(pWearable->getItemID())) );
+		( (isLockedWearableType(pWearable->getType(), RLV_LOCK_REMOVE)) || (RlvFolderLocks::instance().isLockedWearable(pWearable->getItemID())) );
 }
 
 // Checked: 2010-03-19 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
