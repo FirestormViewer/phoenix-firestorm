@@ -18,6 +18,7 @@ WANTS_BUILD=$FALSE
 WANTS_PACKAGE=$FALSE
 WANTS_VERSION=$FALSE
 WANTS_FMOD=$FALSE
+WANTS_KDU=$FALSE
 BTYPE="Release"
 CHANNEL="private-`hostname`"
 
@@ -40,13 +41,14 @@ showUsage()
         echo "  --chan  [Release|Beta|Private] : Private is the default, sets channel"
         echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
 	echo "  --fmod      : Build with fmod"
+        echo "  --kdu       : Build with kdu"
 }
 
 getArgs()
 # $* = the options passed in from main
 {
         if [ $# -gt 0 ]; then
-          while getoptex "clean config version fmod rebuild help chan: btype:" "$@" ; do
+          while getoptex "clean config version fmod kdu rebuild help chan: btype:" "$@" ; do
 
               #insure options are valid
               if [  -z "$OPTOPT"  ] ; then
@@ -64,6 +66,7 @@ getArgs()
               chan)     CHANNEL="$OPTARG";;
               btype)    BTYPE="$OPTARG";;
               fmod)     WANTS_FMOD=$TRUE;;
+              kdu)      WANTS_KDU=$TRUE;;
 
               help)     showUsage && exit 0;;
 
@@ -245,13 +248,11 @@ if [ $WANTS_VERSION -eq $TRUE ] ; then
 fi
 
 if [ $WANTS_CONFIG -eq $TRUE ] ; then
-	if [ $WANTS_FMOD -eq $TRUE ] ; then
-		FMOD="-DFMOD:BOOL=ON"
-        else
-		FMOD="-DFMOD:BOOL=OFF"
-	fi
+	if [ $WANTS_FMOD -eq $TRUE ] ; then FMOD="-DFMOD:BOOL=ON" ; else FMOD="-DFMOD:BOOL=OFF" ; fi
+        if [ $WANTS_KDU -eq $TRUE ] ; then KDU="-DUSE_KDU:BOOL=ON" ; else KDU="-DUSE_KDU:BOOL=OFF" ; fi
         mkdir -p ../logs > /dev/null 2>&1
-        ./develop.py -t $BTYPE configure $FMOD -DFIRECYG:BOOL=ON -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=OFF -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
+        ./develop.py -t $BTYPE configure $KDU $FMOD -DFIRECYG:BOOL=ON -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=OFF -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
+	./develop.py -t $BTYPE cmake $KDU $FMOD -DFIRECYG:BOOL=ON -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=OFF -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
 fi
 
 
