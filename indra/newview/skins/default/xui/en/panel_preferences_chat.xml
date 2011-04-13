@@ -77,6 +77,16 @@
      name="play_typing_animation"
      top_pad="5"
      width="400" />
+    <check_box
+     control_name="PhoenixPlayChatAnimation"
+     follows="left|top"
+     height="16"
+     label="Play avatar animations, e.g. for shouting"
+     layout="topleft"
+     left_delta="0"
+     top_pad="5"
+     name="play_avatar_animations"
+     width="400" /> 
      <check_box
      control_name="ShowChatMiniIcons"
      height="16"

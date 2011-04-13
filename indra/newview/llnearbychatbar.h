@@ -123,12 +123,13 @@ public:
 	void onChatBoxCommit();
 	void setText(const LLStringExplicit &new_text);
 
+	void sendChat( EChatType type );
+	void updatePhoenixPlayChatAnimation(const LLSD &data);
+
 protected:
 	static BOOL matchChatTypeTrigger(const std::string& in_str, std::string* out_str);
 	static void onChatBoxKeystroke(LLLineEditor* caller, void* userdata);
 
-
-	void sendChat( EChatType type );
 
 	static LLWString stripChannelNumber(const LLWString &mesg, S32* channel);
 	EChatType processChatTypeTriggers(EChatType type, std::string &str);
@@ -141,6 +142,8 @@ protected:
 	LLLineEditor*		mChatBox;
 	LLOutputMonitorCtrl* mOutputMonitor;
 	LLLocalSpeakerMgr*  mSpeakerMgr;
+
+	BOOL			PhoenixPlayChatAnimation;
 };
 
 #endif

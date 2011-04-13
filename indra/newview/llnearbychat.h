@@ -91,6 +91,8 @@ private:
 	static void		onInputEditorKeystroke(LLLineEditor* caller, void* userdata);
 	static BOOL		matchChatTypeTrigger(const std::string& in_str, std::string* out_str);
 
+	virtual BOOL handleKeyHere( KEY key, MASK mask );
+
 private:
 	LLHandle<LLView>	mPopupMenuHandle;
 	LLChatHistory*		mChatHistory;

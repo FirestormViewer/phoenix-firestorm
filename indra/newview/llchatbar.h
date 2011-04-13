@@ -89,6 +89,8 @@ public:
 	static void startChat(const char* line);
 	static void stopChat();
 
+	void updatePhoenixPlayChatAnimation(const LLSD &data);
+
 protected:
 	void sendChat(EChatType type);
 	void updateChat();
@@ -105,6 +107,8 @@ protected:
 	LLComboBox*		mGestureCombo;
 
 	LLChatBarGestureObserver* mObserver;
+
+	BOOL			PhoenixPlayChatAnimation;
 };
 
 extern LLChatBar *gChatBar;
