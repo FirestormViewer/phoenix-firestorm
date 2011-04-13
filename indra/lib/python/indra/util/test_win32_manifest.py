@@ -65,8 +65,7 @@ def find_vc_dir():
             try:
                 return get_HKLM_registry_value(key_str, value_str)
             except WindowsError, err:
-                x64_key_str = (r'SOFTWARE\Wow6432Node\Microsoft\VisualStudio\%s\Setup\VS' %
-                        version)
+                x64_key_str = (r'SOFTWARE\Wow6432Node\Microsoft\%s\%s\Setup\VC' % (product, version))
                 try:
                     return get_HKLM_registry_value(x64_key_str, value_str)
                 except:
