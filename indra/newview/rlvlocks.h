@@ -291,7 +291,7 @@ extern RlvWearableLocks gRlvWearableLocks;
 // RlvFolderLocks class declaration
 //
 
-class RlvFolderLocks: public LLInitClass<RlvFolderLocks>
+class RlvFolderLocks
 {
 public:
 	RlvFolderLocks();
@@ -300,8 +300,6 @@ public:
 	typedef boost::variant<LLUUID, std::string, S32, LLWearableType::EType> rlv_folderlock_source_t;
 	// Couples the folder lock source with the type of lock (false = folder node ; true = folder subtree)
 	typedef std::pair<rlv_folderlock_source_t, bool> rlv_folderlock_descr_t;
-
-	static void initClass();
 
 public:
 	// Adds an eLock type lock (held by idRlvObj) for the folder(s) described by lockDescr
