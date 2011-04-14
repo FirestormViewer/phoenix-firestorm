@@ -3012,9 +3012,8 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				// Might be blank if name not available yet, that's OK
 				if (show_display_names)
 				{
-					if (!mClientTag.empty())
+					if (!mClientTag.empty() && gSavedSettings.getBOOL("ShowViewerIDsOnNameTag"))
 					{
-						lldebugs << "ClientTag is set! mClientTag=" << mClientTag << llendl;
 						LLColor4 name_tag_color = getNameTagColor(is_friend); // could be modified later
 						addNameTagLine(av_name.mDisplayName+" (" + mClientTag + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif());
 					}
@@ -3057,7 +3056,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 // [/RLVa:KB]
 			else // Only check for client tags when not RLV anon -AO
 			{
-				if (!mClientTag.empty())
+				if (!mClientTag.empty() && gSavedSettings.getBOOL("ShowViewerIDsOnNameTag"))
 				{
 					lldebugs << "ClientTag is set! mClientTag=" << mClientTag << llendl;
 					LLColor4 name_tag_color = getNameTagColor(is_friend); // could be modified later
@@ -7054,13 +7053,11 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 	// <clientTags>
 	LLTextureEntry* tex = getTE(0);
 	const LLUUID tag_uuid = tex->getID();
-	llinfos << "LLVOAvatar::processAvatarAppearance() Checking Texture " << tex->getID() << llendl;
-	
 	resolveClient(tag_uuid); // sets mClientTag
 	
 	if (mClientTag != "")
 	{
-		llinfos << "LLVOAvatar::processAvatarAppearance() Detected ClientTag=" << mClientTag << llendl;
+		//llinfos << "LLVOAvatar::processAvatarAppearance() Detected ClientTag=" << mClientTag << llendl;
 		mNameString.clear();
 	}	
 	else if(tex->getGlow() > 0.0f)
@@ -7069,7 +7066,7 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 		U32 tag_len = strnlen((const char*)&tag_uuid.mData[0], UUID_BYTES);
 		mClientTag = std::string((const char*)&tag_uuid.mData[0], tag_len);
 		LLStringFn::replace_ascii_controlchars(mClientTag, LL_UNKNOWN_CHAR);
-		llinfos << "LLVOAvatar::processAvatarAppearance() Detected ClientTag=" << mClientTag << llendl;
+		//llinfos << "LLVOAvatar::processAvatarAppearance() Detected ClientTag=" << mClientTag << llendl;
 		mNameString.clear();
 	}
 	else

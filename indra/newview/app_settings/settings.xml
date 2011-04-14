@@ -3,53 +3,65 @@
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
 
-	<key>PhoenixOOCPrefix</key>
-	<map>
-		<key>Comment</key>
-		<string>Prefix to mark OOC chat</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>String</string>
-		<key>Value</key>
-		<string>((</string>
-	</map>
-	<key>PhoenixOOCPostfix</key>
-	<map>
-		<key>Comment</key>
-		<string>Postfix to mark OOC chat</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>String</string>
-		<key>Value</key>
-		<string>))</string>
-	</map>
+  <key>ShowViewerIDsOnNameTag</key>
+    <map>
+      <key>Comment</key>
+      <string>Show viewer identification when display hovertext names over avatars</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <string>1</string>
+    </map>
 
+  <key>PhoenixOOCPrefix</key>
+    <map>
+      <key>Comment</key>
+      <string>Prefix to mark OOC chat</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>((</string>
+    </map>
+
+  <key>PhoenixOOCPostfix</key>
+    <map>
+      <key>Comment</key>
+      <string>Postfix to mark OOC chat</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>))</string>
+    </map>
 
   <key>PhoenixPlayChatAnimation</key>
-  <map>
-    <key>Comment</key>
-    <string>Play the avatar chat animations, e.g. shouting</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <string>1</string>
-  </map>  
+    <map>
+      <key>Comment</key>
+      <string>Play the avatar chat animations, e.g. shouting</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <string>1</string>
+    </map>  
 
-	<key>ShowScriptDialogsTopRight</key>
-	<map>
-		<key>Comment</key>
-		<string>Show script llDialog floaters always in the top right corner of the screen.</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>Boolean</string>
-		<key>Value</key>
-		<integer>1</integer>
-	</map>
+  <key>ShowScriptDialogsTopRight</key>
+    <map>
+      <key>Comment</key>
+      <string>Show script llDialog floaters always in the top right corner of the screen.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
 
   <key>RadarReportChatRange</key>
     <map>
