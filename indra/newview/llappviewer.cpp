@@ -318,10 +318,30 @@ BOOL gLogoutInProgress = FALSE;
 ////////////////////////////////////////////////////////////
 // Internal globals... that should be removed.
 
-const std::string MARKER_FILE_NAME("SecondLife.exec_marker");
-const std::string ERROR_MARKER_FILE_NAME("SecondLife.error_marker");
-const std::string LLERROR_MARKER_FILE_NAME("SecondLife.llerror_marker");
-const std::string LOGOUT_MARKER_FILE_NAME("SecondLife.logout_marker");
+// Like LLLogChat::cleanFileName() and LLDir::getScrubbedFileName() but replaces spaces also.
+std::string SafeFileName(std::string filename)
+{
+	std::string invalidChars = "\"\'\\/?*:.<>| ";
+	S32 position = filename.find_first_of(invalidChars);
+	while (position != filename.npos)
+	{
+		filename[position] = '_';
+		position = filename.find_first_of(invalidChars, position);
+	}
+	return filename;
+}
+// contruct unique filename prefix so we only report crashes for US and not other viewers.
+const std::string SAFE_FILE_NAME_PREFIX(SafeFileName(llformat("%s %d.%d.%d.%d",
+							      LL_CHANNEL,
+							      LL_VERSION_MAJOR,
+							      LL_VERSION_MINOR,
+							      LL_VERSION_PATCH,
+							      LL_VERSION_BUILD )));
+
+const std::string MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".exec_marker");
+const std::string ERROR_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".error_marker");
+const std::string LLERROR_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".llerror_marker");
+const std::string LOGOUT_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".logout_marker");
 static BOOL gDoDisconnect = FALSE;
 static std::string gLaunchFileOnQuit;
 
