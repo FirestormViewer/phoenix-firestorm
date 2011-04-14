@@ -13,6 +13,9 @@
     -> normal-drop : replace wear
     -> Ctrl-drop   : add wear
 - fixed   : LLAppearanceMgr::registerAttachment() fails to (re)add a link for worn attachments that aren't linked to in COF at log-on
+- fixed   : LLViewerObject::getAttachmentItemID() sometimes returns the NULL UUID for the avatar's own attachments
+- fixed   : LLAppearanceMgr::updateAppearanceFromCOF() doesn't properly filter items collected from folder links
+    -> create an outfit with a folder link + "Replace Outfit" == wearables that exist in both COF and the linked folder will end up worn multiple times
 - changed : deprecated removeItemFromAvatar() in favour of having LLAppearanceMgr::removeItemFromAvatar() handle it directly/correctly
     -> wearables can't be worn/removed in 2.X without the viewer already having an LLWearable instance for it anyway
 - changed : enable "Replace Current Outfit" on the base outfit if it's marked dirty
