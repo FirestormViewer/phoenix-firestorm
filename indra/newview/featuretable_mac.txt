@@ -62,6 +62,7 @@ Disregard96DefaultDrawDistance	1	1
 SkyUseClassicClouds			1	1
 WatchdogDisabled				1	1
 RenderUseFBO				1	1
+RenderDeferred				1	0
 
 //
 // Low Graphics Settings
