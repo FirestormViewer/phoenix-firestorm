@@ -94,7 +94,7 @@ bool LLImageDimensionsInfo::getImageDimensionsBmp()
 	}
 
 	// Read image dimensions.
-	mInfile.seek(APR_CUR, 16);
+	mInfile.seek(APR_CUR, 16); // BMP header (14) + DIB header size (4) - signature (2)
 	mWidth = read_reverse_s32();
 	mHeight = read_reverse_s32();
 
