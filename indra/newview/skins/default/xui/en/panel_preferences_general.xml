@@ -418,10 +418,6 @@
      label="30 minutes"
      name="item3"
      value="1800" />
-    <combo_box.item
-     label="Never Logout"
-     name="item4"
-     value="999999999" />
   </combo_box>
   
       <check_box
