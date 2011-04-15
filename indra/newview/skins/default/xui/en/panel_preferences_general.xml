@@ -188,7 +188,7 @@
      layout="topleft"
      name="start_location_combo"
      left="35"
-     width="100">
+     width="150">
         <combo_box.item
          label="My Last Location"
          name="MyLastLocation"
@@ -204,7 +204,7 @@
      initial_value="true"
      label="Show on login"
      layout="topleft"
-     left_pad="5"
+     left_pad="20"
      name="show_location_checkbox"
      top_delta="5"
      width="256" />
@@ -351,23 +351,23 @@
       follows="left|top"
       height="13"
       layout="topleft"
-      left_pad="50"
+      left_pad="5"
       top_delta="0"
       name="title_afk_quit_text" 
       width="190">
-    Log out after being away:
+    Log out after being marked away:
     </text>
-
+    
   <combo_box
             height="23"
             layout="topleft"
             control_name="AFKTimeout"
-            left="35"
+            left="25"
             top_pad="10"
             label="Away timeout:"
             top_delta="0"
             name="afk"
-            width="150">
+            width="120">
     <combo_box.item
      label="2 minutes"
      name="item0"
@@ -394,11 +394,14 @@
             height="23"
             layout="topleft"
             control_name="QuitAfterSecondsOfAFK"
-            left_pad="70"
+            left_pad="30"
             top_delta="0"
-            label="Logout after being away:"
             name="quitafk"
-            width="150">
+            width="120">
+    <combo_box.item
+     label="Immediately"
+     name="item5"
+     value="0" />
     <combo_box.item
      label="2 minutes"
      name="item0"
@@ -418,9 +421,20 @@
     <combo_box.item
      label="Never Logout"
      name="item4"
-     value="0" />
+     value="999999999" />
   </combo_box>
   
+      <check_box
+        control_name="AvatarSitOnAway"
+        name="AvatarSitOnAway"
+        follows="top|left"
+        height="16"
+        label="Sit when away"
+        layout="topleft"
+        left_pad="50"
+        top_delta="5"
+        width="50"/>
+        
     <text
      type="string"
      length="1"
@@ -430,7 +444,7 @@
      left="30"
      mouse_opaque="false"
      name="text_box3"
-     top_pad="10"
+     top_pad="20"
      width="400">
        Autoresponse response (for busy and autorespond online status):
     </text>
@@ -444,6 +458,7 @@
      height="42"
      layout="topleft"
      left="50"
+     top_pad="10"
      name="busy_response"
      width="450"
      word_wrap="true">

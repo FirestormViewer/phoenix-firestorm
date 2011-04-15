@@ -1176,7 +1176,7 @@ void LLAgent::setAFK()
 
 	if (!(mControlFlags & AGENT_CONTROL_AWAY))
 	{
-		llinfos << "AFK DEBUG: Setting AFK" << llendl;
+		llinfos << "Setting AFK" << llendl;
 		sendAnimationRequest(ANIM_AGENT_AWAY, ANIM_REQUEST_START);
 		setControlFlags(AGENT_CONTROL_AWAY | AGENT_CONTROL_STOP);
 		gAwayTimer.start();
@@ -1184,6 +1184,14 @@ void LLAgent::setAFK()
 		{
 			gAFKMenu->setLabel(LLTrans::getString("AvatarSetNotAway"));
 		}
+
+		// <AO> Gsit on away, antigrief protection
+		if (gSavedSettings.getBOOL("AvatarSitOnAway") == TRUE)
+		{
+			if (!gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT))
+    				gAgent.sitDown();
+		}
+		// </AO>
 	}
 }
 
@@ -1206,6 +1214,15 @@ void LLAgent::clearAFK()
 		{
 			gAFKMenu->setLabel(LLTrans::getString("AvatarSetAway"));
 		}
+
+                // <AO> if we sat while away, stand back up on clear
+                if (gSavedSettings.getBOOL("AvatarSitOnAway") == TRUE)
+                {
+                        if (gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT))
+                                gAgent.standUp();
+                }
+		// </AO>
+
 	}
 }
 
