@@ -252,7 +252,7 @@ void LLAgent::updateIgnorePrejump(const LLSD &data)
 void LLAgent::updatePhoenixForceFly(const LLSD &data)
 {
 	PhoenixForceFly = data.asBoolean();
-	if (PhoenixForceFly == true) 
+	if (PhoenixForceFly == TRUE) 
 	{
 		llinfos << "AO: Enabling Fly Override" << llendl;
 		if (gSavedSettings.getBOOL("FirstUseFlyOverride") == TRUE)
