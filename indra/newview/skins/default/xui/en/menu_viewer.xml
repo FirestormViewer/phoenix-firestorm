@@ -1280,7 +1280,7 @@
              function="ToggleControl"
              parameter="DisableCameraConstraints" />
         </menu_item_check>
-
+        
         <menu_item_separator/>
 
         <menu_item_check
@@ -2072,6 +2072,18 @@
         </menu> <!--Shortcuts-->
 
         <menu_item_separator/>
+
+        <menu_item_check
+         label="Fly Override"
+         name="Fly Override">
+            <menu_item_check.on_check
+             function="CheckControl"
+             parameter="PhoenixAlwaysFly" />
+            <menu_item_check.on_click
+             function="ToggleControl" 
+             parameter="PhoenixAlwaysFly" />
+        </menu_item_check>
+
         <menu_item_check
            label="RestrainedLove API"
            name="RLV API">

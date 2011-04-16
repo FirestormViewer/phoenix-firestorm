@@ -407,8 +407,10 @@ private:
 	BOOL 			mbFlagsDirty;
 	BOOL 			mbFlagsNeedReset;				// ! HACK ! For preventing incorrect flags sent when crossing region boundaries
 	static BOOL ignorePrejump;
+	static BOOL PhoenixForceFly;
 	void updateIgnorePrejump(const LLSD &data);
-	
+	void updatePhoenixForceFly(const LLSD &data);
+
 	//--------------------------------------------------------------------
 	// Animations
 	//--------------------------------------------------------------------

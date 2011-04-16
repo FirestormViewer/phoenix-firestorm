@@ -112,6 +112,7 @@ LLAgent gAgent;
 
 const F32 LLAgent::TYPING_TIMEOUT_SECS = 5.f;
 BOOL LLAgent::ignorePrejump = 0;
+BOOL LLAgent::PhoenixForceFly;
 
 std::map<std::string, std::string> LLAgent::sTeleportErrorMessages;
 std::map<std::string, std::string> LLAgent::sTeleportProgressMessages;
@@ -248,6 +249,23 @@ void LLAgent::updateIgnorePrejump(const LLSD &data)
 	ignorePrejump = data.asBoolean();
 }
 
+void LLAgent::updatePhoenixForceFly(const LLSD &data)
+{
+	PhoenixForceFly = data.asBoolean();
+	if (PhoenixForceFly == true) 
+	{
+		llinfos << "AO: Enabling Fly Override" << llendl;
+		if (gSavedSettings.getBOOL("FirstUseFlyOverride") == TRUE)
+    		{
+			LLSD args;
+    			args["MESSAGE"] = 
+    			llformat("Caution: Use the Fly Override responsibily! Using the Fly Override without the land owner's permission may result in your avatar being banned from the parcel you are flying." );
+    			LLNotificationsUtil::add("GenericAlert", args);
+			gSavedSettings.setBOOL("FirstUseFlyOverride",FALSE);
+		}
+	}
+}
+
 // Requires gSavedSettings to be initialized.
 //-----------------------------------------------------------------------------
 // init()
@@ -269,7 +287,9 @@ void LLAgent::init()
 	gSavedSettings.getControl("PreferredMaturity")->getSignal()->connect(boost::bind(&LLAgent::handleMaturity, this, _2));
 	ignorePrejump = gSavedSettings.getBOOL("PhoenixIgnoreFinishAnimation");
 	gSavedSettings.getControl("PhoenixIgnoreFinishAnimation")->getSignal()->connect(boost::bind(&LLAgent::updateIgnorePrejump, this, _2));
-	
+	PhoenixForceFly = gSavedSettings.getBOOL("PhoenixAlwaysFly");
+	gSavedSettings.getControl("PhoenixAlwaysFly")->getSignal()->connect(boost::bind(&LLAgent::updatePhoenixForceFly, this, _2));
+
 	mInitialized = TRUE;
 }
 
@@ -495,7 +515,8 @@ BOOL LLAgent::canFly()
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_FLY)) return FALSE;
 // [/RLVa:KB]
 	if (isGodlike()) return TRUE;
-
+	//LGG always fly code
+	if(PhoenixForceFly) return TRUE;
 	LLViewerRegion* regionp = getRegion();
 	if (regionp && regionp->getBlockFly()) return FALSE;
 	
