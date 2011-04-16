@@ -127,7 +127,7 @@ set(VIEWER_LOGIN_CHANNEL ${VIEWER_CHANNEL} CACHE STRING "Fake login channel for 
 
 # Flickr API keys.
 set(FLICKR_API_KEY "daaabff93a967e0f37fa18863bb43b29")
-set(FLICKR_API_SECRET "846f0958020b553e")
+set(FLICKR_API_SECRET "846f0958020b553e") 
 
 set(STANDALONE OFF CACHE BOOL "Do not use Linden-supplied prebuilt libraries.")
 
