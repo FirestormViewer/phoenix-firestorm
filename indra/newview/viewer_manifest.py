@@ -31,6 +31,12 @@ import os.path
 import re
 import tarfile
 import time
+#AO
+import os
+import shlex
+import subprocess
+#/AO
+
 viewer_dir = os.path.dirname(__file__)
 # add llmanifest library to our path so we don't have to muck with PYTHONPATH
 sys.path.append(os.path.join(viewer_dir, '../lib/python/indra/util'))
@@ -537,6 +543,14 @@ class WindowsManifest(ViewerManifest):
         substitution_strings['installer_file'] = installer_file
 
         tempfile = "secondlife_setup_tmp.nsi"
+        
+        #AO: Try to sign original executable first, if we can, using best available signing cert.
+        try:
+            subprocess.check_call(["signtool.exe","sign","/a","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\firestorm-bin.exe"])
+            subprocess.check_call(["signtool.exe","sign","/a","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\"+self.final_exe()])
+        except Exception, e:
+            print "Couldn't sign final binary. Tried to sign %s" % self.args['configuration']+"\\"+self.final_exe()
+            
         # the following replaces strings in the nsi template
         # it also does python-style % substitution
         self.replace_in("installers/windows/installer_template.nsi", tempfile, {
@@ -555,19 +569,31 @@ class WindowsManifest(ViewerManifest):
             NSIS_path = os.path.expandvars('${ProgramFiles(x86)}\\NSIS\\Unicode\\makensis.exe')
         self.run_command('"' + proper_windows_path(NSIS_path) + '" ' + self.dst_path_of(tempfile))
         # self.remove(self.dst_path_of(tempfile))
-        # If we're on a build machine, sign the code using our Authenticode certificate. JC
-        sign_py = os.path.expandvars("${SIGN}")
-        if not sign_py or sign_py == "${SIGN}":
-            sign_py = 'C:\\buildscripts\\code-signing\\sign.py'
-        else:
-            sign_py = sign_py.replace('\\', '\\\\\\\\')
-        python = os.path.expandvars("${PYTHON}")
-        if not python or python == "${PYTHON}":
-            python = 'python'
-        if os.path.exists(sign_py):
-            self.run_command("%s %s %s" % (python, sign_py, self.dst_path_of(installer_file).replace('\\', '\\\\\\\\')))
-        else:
-            print "Skipping code signing,", sign_py, "does not exist"
+
+        #AO: Try to sign installer next, if we can, using best available signing cert.
+        try:
+            subprocess.check_call(["signtool.exe","sign","/a","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\"+substitution_strings['installer_file']])
+        except Exception, e:
+            print "Working directory: %s" % os.getcwd()
+            print "Couldn't sign windows installer. Tried to sign %s" % self.args['configuration']+"\\"+substitution_strings['installer_file']
+
+
+# If we're on a build machine, sign the code using our Authenticode certificate. JC
+ 
+#        sign_py = os.path.expandvars("${SIGN}")
+#        if not sign_py or sign_py == "${SIGN}":
+#            sign_py = 'C:\\buildscripts\\code-signing\\sign.py'
+#        else:
+#            sign_py = sign_py.replace('\\', '\\\\\\\\')
+#        python = os.path.expandvars("${PYTHON}")
+#        if not python or python == "${PYTHON}":
+#            python = 'python'
+#        if os.path.exists(sign_py):
+#            self.run_command("%s %s %s" % (python, sign_py, self.dst_path_of(installer_file).replace('\\', '\\\\\\\\')))
+#        else:
+#            print "Skipping code signing,", sign_py, "does not exist"
+
+
         self.created_path(self.dst_path_of(installer_file))
         self.package_file = installer_file
 
