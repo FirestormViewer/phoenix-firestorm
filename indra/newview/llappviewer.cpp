@@ -361,16 +361,6 @@ static bool app_metrics_qa_mode = false;
 
 void idle_afk_check()
 {
-        // check idle timers
-        if (gSavedSettings.getS32("AFKTimeout") && (gAwayTriggerTimer.getElapsedTimeF32() > gSavedSettings.getS32("AFKTimeout")))
-        {
-                gAgent.setAFK();
-        }
-}
-
-/*
-void idle_afk_check()
-{
 	// check idle timers
 //	if (gSavedSettings.getS32("AFKTimeout") && (gAwayTriggerTimer.getElapsedTimeF32() > gSavedSettings.getS32("AFKTimeout")))
 // [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
@@ -386,7 +376,7 @@ void idle_afk_check()
 		gAgent.setAFK();
 	}
 }
-*/
+
 
 // A callback set in LLAppViewer::init()
 static void ui_audio_callback(const LLUUID& uuid)
@@ -3921,14 +3911,14 @@ void LLAppViewer::idle()
 		}
 	}
 
-	// debug setting to quit after N seconds of being AFK - 0 to never do this
+	// AO: setting to quit after N seconds of being AFK. Note: Server will time us out after 30m regardless
 	F32 qas_afk = gSavedSettings.getF32("QuitAfterSecondsOfAFK");
-	if (qas_afk > 0.f)
+	if ((qas_afk > 0.f) && (gAgent.getAFK()))
 	{
 		// idle time is more than setting
-		if ( gAwayTriggerTimer.getElapsedTimeF32() > qas_afk )
+		if (gAwayTimer.getElapsedTimeF32() > qas_afk )
 		{
-                        // go ahead and just quit gracefully
+			// go ahead and just quit gracefully
 			llinfos << "Logout, QuitAfterSecondsAFK expired." << llendl;
                         LLAppViewer::instance()->requestQuit();
 		}

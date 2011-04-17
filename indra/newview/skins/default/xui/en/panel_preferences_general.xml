@@ -399,10 +399,6 @@
             name="quitafk"
             width="120">
     <combo_box.item
-     label="Immediately"
-     name="item5"
-     value="0" />
-    <combo_box.item
      label="2 minutes"
      name="item0"
      value="120" />
