@@ -217,6 +217,8 @@ LLSD LLFloaterAbout::getInfo()
 	info["BUILD_DATE"] = __DATE__;
 	info["BUILD_TIME"] = __TIME__;
 	info["CHANNEL"] = LLVersionInfo::getChannel();
+	info["SKIN"] = gSavedSettings.getString("SkinCurrent");
+	info["THEME"] = gSavedSettings.getString("SkinCurrentTheme");
 
 	info["VIEWER_RELEASE_NOTES_URL"] = get_viewer_release_notes_url();
 
