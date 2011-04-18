@@ -587,6 +587,17 @@ void LLAvatarNameCache::buildLegacyName(const std::string& full_name,
 	av_name->mIsDisplayNameDefault = true;
 	av_name->mIsTemporaryName = true;
 	av_name->mExpires = F64_MAX; // not used because these are not cached
+
+	// Ansariel: Please leave this when merging! In case no display names
+	//           are used, you would have to retrieve mDisplayName to get
+	//           the legacy name - something that absolutely makes no
+	//           sense. And getLegacyName(), which is supposed to return
+	//           the legacy name, returns an empty string. By adding the
+	//           next two lines, getLegacyName() will function properly
+	//           in either display name or no display name case.
+	std::istringstream fname(full_name);
+	fname >> av_name->mLegacyFirstName >> av_name->mLegacyLastName;
+
 	LL_DEBUGS("AvNameCache") << "LLAvatarNameCache::buildLegacyName "
 							 << full_name
 							 << LL_ENDL;
