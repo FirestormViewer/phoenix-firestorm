@@ -717,7 +717,7 @@ void LLChatHistory::clear()
 void LLChatHistory::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
 	mDisplayName = av_name.mDisplayName;
-	mDisplayName_Username = mDisplayName + " ("+av_name.mUsername+")";
+	mDisplayName_Username = av_name.getCompleteName();
 }
 
 //-TT Display names timing in chat
