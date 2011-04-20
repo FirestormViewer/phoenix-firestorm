@@ -213,7 +213,7 @@ void FloaterAO::onSelectSet()
 
 void FloaterAO::onClickActivate()
 {
-	llwarns << "Set activated: " << mSetSelector->getSelectedItemLabel() << llendl;
+	lldebugs << "Set activated: " << mSetSelector->getSelectedItemLabel() << llendl;
 	AOEngine::instance().selectSet(mSelectedSet);
 }
 
@@ -371,7 +371,7 @@ void FloaterAO::onCheckDisableStands()
 void FloaterAO::onChangeAnimationSelection()
 {
 	std::vector<LLScrollListItem*> list=mAnimationList->getAllSelected();
-	llwarns << "Selection count: " << list.size() << llendl;
+	lldebugs << "Selection count: " << list.size() << llendl;
 
 	BOOL resortEnable=FALSE;
 	BOOL trashEnable=FALSE;
@@ -490,7 +490,6 @@ BOOL FloaterAO::handleDragAndDrop(S32 x,S32 y,MASK mask,BOOL drop,EDragAndDropTy
 		*accept=ACCEPT_YES_SINGLE;
 		if(item && drop)
 		{
-			llwarns << item->getUUID() << llendl;
 			if(AOEngine::instance().importNotecard(item))
 			{
 				enableSetControls(FALSE);

@@ -38,7 +38,7 @@ AOSet::AOSet(const LLUUID inventoryID)
 	mDirty(FALSE),
 	mCurrentMotion(LLUUID())
 {
-	llwarns << "Creating new AO set: " << this << llendl;
+	lldebugs << "Creating new AO set: " << this << llendl;
 
 	// keep number and order in sync with the enum in the declaration
 	const std::string stateNames[AOSTATES_MAX]=
@@ -114,7 +114,7 @@ AOSet::AOSet(const LLUUID inventoryID)
 
 AOSet::~AOSet()
 {
-	llwarns << "Set deleted: " << this << llendl;
+	lldebugs << "Set deleted: " << this << llendl;
 }
 
 AOSet::AOState* AOSet::getState(S32 eName)
@@ -156,14 +156,14 @@ LLUUID AOSet::getAnimationForState(AOState* state)
 			if(state->mRandom)
 			{
 				state->mCurrentAnimation=ll_frand()*numOfAnimations;
-				llwarns << "randomly chosen " << state->mCurrentAnimation << " of " << numOfAnimations << llendl;
+				lldebugs << "randomly chosen " << state->mCurrentAnimation << " of " << numOfAnimations << llendl;
 			}
 			else
 			{
 				state->mCurrentAnimation++;
 				if(state->mCurrentAnimation>=state->mAnimations.size())
 					state->mCurrentAnimation=0;
-				llwarns << "cycle " << state->mCurrentAnimation << " of " << numOfAnimations << llendl;
+				lldebugs << "cycle " << state->mCurrentAnimation << " of " << numOfAnimations << llendl;
 			}
 			return state->mAnimations[state->mCurrentAnimation].mAssetUUID;
 		}
