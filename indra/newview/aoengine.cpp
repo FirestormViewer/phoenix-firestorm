@@ -256,10 +256,7 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 
 	// we don't distinguish between these two
 	if(motion==ANIM_AGENT_SIT_GROUND_CONSTRAINED)
-	{
-		llwarns << "Mapping ground sit constrained to ground sit" << llendl;
 		motion=ANIM_AGENT_SIT_GROUND;
-	}
 
 	AOSet::AOState* state=mCurrentSet->getStateByRemapID(motion);
 	if(!state)
@@ -300,7 +297,7 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 		}
 
 		// do not remember typing as set-wide motion
-		if(motion!=ANIM_AGENT_TYPE && motion!=ANIM_AGENT_SIT_GROUND)
+		if(motion!=ANIM_AGENT_TYPE)
 			mCurrentSet->setMotion(motion);
 
 		animation=mCurrentSet->getAnimationForState(state);
@@ -318,9 +315,12 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 
 		if(motion==ANIM_AGENT_SIT)
 			mSitCancelTimer.oneShot();
+		// special treatment for ground sit, because the viewer needs the Linden animation to show "Stand Up"
 		else if(motion==ANIM_AGENT_SIT_GROUND)
-			gAgentAvatarp->mPlayingAnimations[pMotion]=TRUE;
-//			gAgent.sendAnimationRequest(pMotion,ANIM_REQUEST_START);
+		{
+			gAgent.sendAnimationRequest(animation,ANIM_REQUEST_START);
+			return LLUUID::null;
+		}
 	}
 	else
 	{
@@ -331,12 +331,6 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 		if(motion==ANIM_AGENT_TYPE)
 			return animation;
 
-		if(motion==ANIM_AGENT_SIT_GROUND)
-		{
-			gAgent.sendAnimationRequest(pMotion,ANIM_REQUEST_STOP);
-			return animation;
-		}
-
 		if(motion!=mCurrentSet->getMotion())
 		{
 			llwarns << "trying to stop-override motion " <<  gAnimLibrary.animStateToString(motion)
@@ -345,6 +339,13 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 		}
 
 		mCurrentSet->setMotion(LLUUID::null);
+
+		// again, special treatment for ground sit to make sure our own animation gets stopped properly
+		if(motion==ANIM_AGENT_SIT_GROUND)
+		{
+			gAgent.sendAnimationRequest(animation,ANIM_REQUEST_STOP);
+			return LLUUID::null;
+		}
 
 		// stop the underlying Linden Lab motion, in case it's still running.
 		// frequently happens with sits, so we keep it only for those currently.
