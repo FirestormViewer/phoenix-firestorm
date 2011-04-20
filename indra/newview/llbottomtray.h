@@ -471,6 +471,7 @@ protected:
 	LLButton*			mCamButton;
 	LLButton*			mMovementButton;
 	LLBottomTrayLite*   mBottomTrayLite;
+	LLButton*			mAOToggleButton;			// ## Zi: Animation Overrider
 	bool                mIsInLiteMode;
 
 	// Drag'n'Drop

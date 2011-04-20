@@ -39,6 +39,7 @@
 #include "llinventoryobserver.h"
 #include "llstring.h"
 #include "llvfs.h"
+#include "llviewercontrol.h"
 #include "llviewerinventory.h"
 
 // is there a global define for this folder somewhere?
@@ -392,10 +393,14 @@ void AOEngine::cycle(eCycleMode cycleMode)
 {
 	LLUUID motion=mCurrentSet->getMotion();
 
-	if(motion==ANIM_AGENT_SIT && !mCurrentSet->getSitOverride())
+	// assume stand if no motion is registered, happens after login when the avatar hasn't moved at all yet
+	if(motion.isNull())
+		motion=ANIM_AGENT_STAND;
+	// do not cycle if we're sitting and sit-override is off
+	else if(motion==ANIM_AGENT_SIT && !mCurrentSet->getSitOverride())
 		return;
-
-	if(motion==ANIM_AGENT_STAND && mCurrentSet->getMouselookDisable() && mInMouselook)
+	// do not cycle if we're standing and mouselook stand override is disabled while being in mouselook
+	else if(motion==ANIM_AGENT_STAND && mCurrentSet->getMouselookDisable() && mInMouselook)
 		return;
 
 	AOSet::AOState* state=mCurrentSet->getStateByRemapID(motion);
@@ -817,17 +822,16 @@ void AOEngine::update()
 
 	if(allComplete)
 	{
+		mEnabled=gSavedPerAccountSettings.getBOOL("UseAO");
+
 		if(!mCurrentSet && !mSets.empty())
 		{
 			llwarns << "No default set defined, choosing the first in the list." << llendl;
-			mCurrentSet=mSets[0];
+			selectSet(mSets[0]);
 		}
+
 		mTimerCollection.enableInventoryTimer(FALSE);
 		mTimerCollection.enableSettingsTimer(TRUE);
-
-		// this should be a preferences option
-		mEnabled=TRUE;
-		selectSet(mCurrentSet);
 
 		llwarns << "sending update signal" << llendl;
 		mUpdatedSignal();
@@ -884,13 +888,14 @@ void AOEngine::selectSet(AOSet* set)
 {
 	BOOL wasEnabled=mEnabled;
 	if(wasEnabled)
+	{
 		enable(FALSE);
+		gAgent.stopCurrentAnimations();
+	}
 
-	gAgent.stopCurrentAnimations();
 	mLastOverriddenMotion=ANIM_AGENT_STAND;
 
 	mCurrentSet=set;
-	llwarns << "Selected AO set " << set->getName() << llendl;
 
 	if(wasEnabled)
 		enable(TRUE);

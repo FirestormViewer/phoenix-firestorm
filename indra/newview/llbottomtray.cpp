@@ -543,7 +543,9 @@ void LLBottomTray::toggleCameraControls()
 // ## Zi: Animation Overrider
 void LLBottomTray::toggleAO()
 {
-	AOEngine::getInstance()->enable(getChild<LLButton>("ao_toggle_btn")->getToggleState());
+	BOOL yes=mAOToggleButton->getToggleState();
+	AOEngine::getInstance()->enable(yes);
+	gSavedPerAccountSettings.setBOOL("UseAO",yes);
 }
 // ## Zi: Animation Overrider
 
@@ -615,10 +617,9 @@ BOOL LLBottomTray::postBuild()
 	getChild<LLUICtrl>("sidebar_appearance_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "sidepanel_appearance"));
 	getChild<LLUICtrl>("sidebar_inv_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "sidepanel_inventory"));
 	// ## Zi: Animation Overrider
-	LLButton* aoToggleButton=getChild<LLButton>("ao_toggle_btn");
-	aoToggleButton->setCommitCallback(boost::bind(&LLBottomTray::toggleAO,this));
-	// this needs to become a preferences option
-	aoToggleButton->setToggleState(TRUE);
+	mAOToggleButton=getChild<LLButton>("ao_toggle_btn");
+	mAOToggleButton->setCommitCallback(boost::bind(&LLBottomTray::toggleAO,this));
+	mAOToggleButton->setToggleState(gSavedPerAccountSettings.getBOOL("UseAO"));
 	// ## Zi: Animation Overrider
 	return TRUE;
 }
