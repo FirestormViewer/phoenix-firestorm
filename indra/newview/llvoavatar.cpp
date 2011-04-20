@@ -42,6 +42,7 @@
 #include "noise.h"
 #include "sound_ids.h"
 
+#include "aoengine.h"			// ## Zi: Animation Overrider
 #include "llagent.h" //  Get state values from here
 #include "llagentcamera.h"
 #include "llagentwearables.h"
@@ -4794,7 +4795,19 @@ BOOL LLVOAvatar::startMotion(const LLUUID& id, F32 time_offset)
 
 	lldebugs << "motion requested " << id.asString() << " " << gAnimLibrary.animationName(id) << llendl;
 
-	LLUUID remap_id = remapMotionID(id);
+	// ## Zi: Animation Overrider
+	LLUUID remap_id;
+	if(isSelf())
+	{
+		remap_id=AOEngine::getInstance()->override(id,TRUE);
+		if(remap_id.isNull())
+			remap_id=remapMotionID(id);
+		else
+			gAgent.sendAnimationRequest(remap_id,ANIM_REQUEST_START);
+	}
+	else
+		remap_id=remapMotionID(id);
+	// ## Zi: Animation Overrider
 
 	if (remap_id != id)
 	{
@@ -4816,8 +4829,20 @@ BOOL LLVOAvatar::stopMotion(const LLUUID& id, BOOL stop_immediate)
 {
 	lldebugs << "motion requested " << id.asString() << " " << gAnimLibrary.animationName(id) << llendl;
 
-	LLUUID remap_id = remapMotionID(id);
-	
+	// ## Zi: Animation Overrider
+	LLUUID remap_id;
+	if(isSelf())
+	{
+		remap_id=AOEngine::getInstance()->override(id,FALSE);
+		if(remap_id.isNull())
+			remap_id=remapMotionID(id);
+		else
+			gAgent.sendAnimationRequest(remap_id,ANIM_REQUEST_STOP);
+	}
+	else
+		remap_id=remapMotionID(id);
+	// ## Zi: Animation Overrider
+
 	if (remap_id != id)
 	{
 		lldebugs << "motion resultant " << remap_id.asString() << " " << gAnimLibrary.animationName(remap_id) << llendl;

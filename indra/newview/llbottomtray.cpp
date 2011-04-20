@@ -38,6 +38,7 @@
 #include "lltexteditor.h"
 
 // newview includes
+#include "aoengine.h"		// ## Zi: Animation Overrider
 #include "llagentcamera.h"
 #include "llchiclet.h"
 #include "llfloatercamera.h"
@@ -539,6 +540,13 @@ void LLBottomTray::toggleCameraControls()
 		mCamButton->onCommit();
 }
 
+// ## Zi: Animation Overrider
+void LLBottomTray::toggleAO()
+{
+	AOEngine::getInstance()->enable(getChild<LLButton>("ao_toggle_btn")->getToggleState());
+}
+// ## Zi: Animation Overrider
+
 BOOL LLBottomTray::postBuild()
 {
 	LLHints::registerHintTarget("bottom_tray", LLView::getHandle());
@@ -606,6 +614,12 @@ BOOL LLBottomTray::postBuild()
 	getChild<LLUICtrl>("sidebar_places_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "panel_places"));
 	getChild<LLUICtrl>("sidebar_appearance_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "sidepanel_appearance"));
 	getChild<LLUICtrl>("sidebar_inv_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "sidepanel_inventory"));
+	// ## Zi: Animation Overrider
+	LLButton* aoToggleButton=getChild<LLButton>("ao_toggle_btn");
+	aoToggleButton->setCommitCallback(boost::bind(&LLBottomTray::toggleAO,this));
+	// this needs to become a preferences option
+	aoToggleButton->setToggleState(TRUE);
+	// ## Zi: Animation Overrider
 	return TRUE;
 }
 

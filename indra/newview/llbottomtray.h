@@ -124,6 +124,7 @@ public:
 
 	void toggleMovementControls();
 	void toggleCameraControls();
+	void toggleAO();		// ## Zi: Animation Overrider
 
 	void onMouselookModeIn();
 	void onMouselookModeOut();
