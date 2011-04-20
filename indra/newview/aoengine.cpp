@@ -313,7 +313,7 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 		if(timeout>0.0f)
 			mCurrentSet->startTimer(timeout);
 
-		if(motion==ANIM_AGENT_SIT)
+		if(motion==ANIM_AGENT_SIT && mCurrentSet->getSmart())
 			mSitCancelTimer.oneShot();
 		// special treatment for ground sit, because the viewer needs the Linden animation to show "Stand Up"
 		else if(motion==ANIM_AGENT_SIT_GROUND)
@@ -745,6 +745,8 @@ void AOEngine::update()
 				llwarns << "Unknown AO set option " << params[num] << llendl;
 			else if(params[num]=="SO")
 				newSet->setSitOverride(TRUE);
+			else if(params[num]=="SM")
+				newSet->setSmart(TRUE);
 			else if(params[num]=="DM")
 				newSet->setMouselookDisable(TRUE);
 			else if(params[num]=="**")
@@ -919,6 +921,8 @@ void AOEngine::saveSet(const AOSet* set)
 	std::string setParams=set->getName();
 	if(set->getSitOverride())
 		setParams+=":SO";
+	if(set->getSmart())
+		setParams+=":SM";
 	if(set->getMouselookDisable())
 		setParams+=":DM";
 	if(set==mDefaultSet)
@@ -1034,6 +1038,9 @@ void AOEngine::setOverrideSits(AOSet* set,BOOL yes)
 	set->setSitOverride(yes);
 	set->setDirty(TRUE);
 
+	if(mCurrentSet!=set)
+		return;
+
 	if(mLastMotion!=ANIM_AGENT_SIT)
 		return;
 
@@ -1056,11 +1063,20 @@ void AOEngine::setOverrideSits(AOSet* set,BOOL yes)
 	}
 }
 
+void AOEngine::setSmart(AOSet* set,BOOL yes)
+{
+	set->setSmart(yes);
+	set->setDirty(TRUE);
+}
+
 void AOEngine::setDisableStands(AOSet* set,BOOL yes)
 {
 	set->setMouselookDisable(yes);
 	set->setDirty(TRUE);
 	llwarns << "disable stands in mouselook now " << yes << llendl;
+
+	if(mCurrentSet!=set)
+		return;
 
 	// make sure an update happens if needed
 	mInMouselook=!gAgentCamera.cameraMouselook();

@@ -53,10 +53,12 @@ FloaterAO::~FloaterAO()
 void FloaterAO::updateSetParameters()
 {
 	mOverrideSitsCheckBox->setValue(mSelectedSet->getSitOverride());
+	mSmartCheckBox->setValue(mSelectedSet->getSmart());
 	mDisableMouselookCheckBox->setValue(mSelectedSet->getMouselookDisable());
 	BOOL isDefault=(mSelectedSet==AOEngine::instance().getDefaultSet()) ? TRUE : FALSE;
 	mDefaultCheckBox->setValue(isDefault);
 	mDefaultCheckBox->setEnabled(!isDefault);
+	updateSmart();
 }
 
 void FloaterAO::updateAnimationList()
@@ -128,6 +130,7 @@ BOOL FloaterAO::postBuild()
 	mRemoveButton=aoPanel->getChild<LLButton>("ao_remove");
 	mDefaultCheckBox=aoPanel->getChild<LLCheckBoxCtrl>("ao_default");
 	mOverrideSitsCheckBox=aoPanel->getChild<LLCheckBoxCtrl>("ao_sit_override");
+	mSmartCheckBox=aoPanel->getChild<LLCheckBoxCtrl>("ao_smart");
 	mDisableMouselookCheckBox=aoPanel->getChild<LLCheckBoxCtrl>("ao_disable_stands_in_mouselook");
 
 	mStateSelector=aoPanel->getChild<LLComboBox>("ao_state_selection_combo");
@@ -145,6 +148,7 @@ BOOL FloaterAO::postBuild()
 	mRemoveButton->setCommitCallback(boost::bind(&FloaterAO::onClickRemove,this));
 	mDefaultCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckDefault,this));
 	mOverrideSitsCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckOverrideSits,this));
+	mSmartCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckSmart,this));
 	mDisableMouselookCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckDisableStands,this));
 
 	mAnimationList->setCommitOnSelectionChange(TRUE);
@@ -156,6 +160,8 @@ BOOL FloaterAO::postBuild()
 	mTrashButton->setCommitCallback(boost::bind(&FloaterAO::onClickTrash,this));
 	mRandomizeCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckRandomize,this));
 	mCycleTimeSpinner->setCommitCallback(boost::bind(&FloaterAO::onChangeCycleTime,this));
+
+	updateSmart();
 
 	aoPanel->getChild<LLButton>("ao_reload")->setCommitCallback(boost::bind(&FloaterAO::onClickReload,this));
 	aoPanel->getChild<LLButton>("ao_previous")->setCommitCallback(boost::bind(&FloaterAO::onClickPrevious,this));
@@ -342,6 +348,18 @@ void FloaterAO::onCheckOverrideSits()
 {
 	if(mSelectedSet)
 		AOEngine::instance().setOverrideSits(mSelectedSet,mOverrideSitsCheckBox->getValue().asBoolean());
+	updateSmart();
+}
+
+void FloaterAO::updateSmart()
+{
+	mSmartCheckBox->setEnabled(mOverrideSitsCheckBox->getValue());
+}
+
+void FloaterAO::onCheckSmart()
+{
+	if(mSelectedSet)
+		AOEngine::instance().setSmart(mSelectedSet,mSmartCheckBox->getValue().asBoolean());
 }
 
 void FloaterAO::onCheckDisableStands()

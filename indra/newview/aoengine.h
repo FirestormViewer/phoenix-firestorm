@@ -135,6 +135,7 @@ class AOEngine
 
 		void setDefaultSet(AOSet* set);
 		void setOverrideSits(AOSet* set,BOOL yes);
+		void setSmart(AOSet* set,BOOL yes);
 		void setDisableStands(AOSet* set,BOOL yes);
 		void setRandomize(AOSet::AOState* state,BOOL yes);
 		void setCycleTime(AOSet::AOState* state,F32 time);

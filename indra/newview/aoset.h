@@ -95,6 +95,9 @@ class AOSet
 		BOOL getSitOverride() const;
 		void setSitOverride(BOOL yes);
 
+		BOOL getSmart() const;
+		void setSmart(BOOL yes);
+
 		BOOL getMouselookDisable() const;
 		void setMouselookDisable(BOOL yes);
 
@@ -123,6 +126,7 @@ class AOSet
 
 		std::string mName;
 		BOOL mSitOverride;
+		BOOL mSmart;
 		BOOL mMouselookDisable;
 		BOOL mComplete;
 		LLUUID mCurrentMotion;

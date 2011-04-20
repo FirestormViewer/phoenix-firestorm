@@ -32,6 +32,7 @@ AOSet::AOSet(const LLUUID inventoryID)
 	mInventoryID(inventoryID),
 	mName("** New AO Set **"),
 	mSitOverride(FALSE),
+	mSmart(FALSE),
 	mMouselookDisable(FALSE),
 	mComplete(FALSE),
 	mDirty(FALSE),
@@ -220,6 +221,16 @@ BOOL AOSet::getSitOverride() const
 void AOSet::setSitOverride(BOOL yes)
 {
 	mSitOverride=yes;
+}
+
+BOOL AOSet::getSmart() const
+{
+	return mSmart;
+}
+
+void AOSet::setSmart(BOOL yes)
+{
+	mSmart=yes;
 }
 
 BOOL AOSet::getMouselookDisable() const

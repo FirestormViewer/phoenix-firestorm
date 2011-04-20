@@ -89,9 +89,20 @@
 		layout="topleft" />
 
 	<check_box
+		name="ao_smart"
+		label="Be smart"
+		tool_tip="Smart mode tries to determine if the sit override would clash with the object's own animation and disables the overrider temporarily."
+		left_pad="4"
+		right="-1"
+		height="16"
+		follows="left|top"
+		layout="topleft" />
+
+	<check_box
 		name="ao_disable_stands_in_mouselook"
 		label="Disable Stands in Mouselook"
 		tool_tip="If you need to preserve your custom stand animation in mouselook, check this box."
+		left="0"
 		top_pad="4"
 		width="100"
 		height="16"

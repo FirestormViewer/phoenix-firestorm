@@ -70,6 +70,7 @@ class FloaterAO
 		void onClickActivate();
 		void onCheckDefault();
 		void onCheckOverrideSits();
+		void onCheckSmart();
 		void onCheckDisableStands();
 		void onClickMoveUp();
 		void onClickMoveDown();
@@ -78,6 +79,8 @@ class FloaterAO
 		void onChangeCycleTime();
 		void onClickPrevious();
 		void onClickNext();
+
+		void updateSmart();
 
 		void enableSetControls(BOOL yes);
 		void enableStateControls(BOOL yes);
@@ -95,6 +98,7 @@ class FloaterAO
 		LLButton* mRemoveButton;
 		LLCheckBoxCtrl* mDefaultCheckBox;
 		LLCheckBoxCtrl* mOverrideSitsCheckBox;
+		LLCheckBoxCtrl* mSmartCheckBox;
 		LLCheckBoxCtrl* mDisableMouselookCheckBox;
 
 		LLComboBox* mStateSelector;
