@@ -6,6 +6,7 @@
 	can_close="false"
 	height="352"
 	min_height="320"
+	min_width="200"
 	layout="topleft"
 	name="animation_overrider"
 	help_topic="animation_overrider"

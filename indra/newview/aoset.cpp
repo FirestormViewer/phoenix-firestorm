@@ -168,7 +168,7 @@ LLUUID AOSet::getAnimationForState(AOState* state)
 			return state->mAnimations[state->mCurrentAnimation].mAssetUUID;
 		}
 		else
-			llwarns << "animation state has no animations assigned" << llendl;
+			lldebugs << "animation state has no animations assigned" << llendl;
 	}
 	return LLUUID();
 }
