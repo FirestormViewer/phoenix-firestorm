@@ -472,6 +472,13 @@ void AOEngine::updateSortOrder(AOSet::AOState* state)
 
 LLUUID AOEngine::addSet(const std::string name,BOOL reload)
 {
+	if(mAOFolder.isNull())
+	{
+		llwarns << ROOT_AO_FOLDER << " folder not there yet. Requesting recreation." << llendl;
+		tick();
+		return LLUUID::null;
+	}
+
 	lldebugs << "adding set folder " << name << llendl;
 	LLUUID newUUID=gInventory.createNewCategory(mAOFolder,LLFolderType::FT_NONE,name);
 
@@ -842,8 +849,9 @@ void AOEngine::reload()
 	mLastOverriddenMotion=ANIM_AGENT_STAND;
 
 	clear();
+	mAOFolder.setNull();
 	mTimerCollection.enableInventoryTimer(TRUE);
-	update();
+	tick();
 
 	if(wasEnabled)
 		enable(TRUE);
@@ -1095,6 +1103,7 @@ void AOEngine::tick()
 	{
 		llwarns << "no " << ROOT_FIRESTORM_FOLDER << " folder yet. Creating ..." << llendl;
 		gInventory.createNewCategory(gInventory.getRootFolderID(),LLFolderType::FT_NONE,ROOT_FIRESTORM_FOLDER);
+		mAOFolder.setNull();
 	}
 	else
 	{
