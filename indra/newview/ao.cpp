@@ -480,8 +480,10 @@ BOOL FloaterAO::handleDragAndDrop(S32 x,S32 y,MASK mask,BOOL drop,EDragAndDropTy
 			{
 				addAnimation(item->getName());
 
-				enableSetControls(FALSE);
-				enableStateControls(FALSE);
+				// TODO: this would be the right thing to do, but it blocks multi drop
+				// so for now, don't do it, but before final release this must be resolved
+//				enableSetControls(FALSE);
+//				enableStateControls(FALSE);
 			}
 		}
 	}
