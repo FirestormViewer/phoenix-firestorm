@@ -217,9 +217,11 @@ void AOEngine::enable(BOOL yes)
 	}
 }
 
-const LLUUID AOEngine::override(const LLUUID motion,BOOL start)
+const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 {
 	LLUUID animation;
+
+	LLUUID motion=pMotion;
 
 	if(!mEnabled)
 	{
@@ -250,6 +252,13 @@ const LLUUID AOEngine::override(const LLUUID motion,BOOL start)
 	{
 		lldebugs << "No current AO set chosen. Skipping overrider." << llendl;
 		return animation;
+	}
+
+	// we don't distinguish between these two
+	if(motion==ANIM_AGENT_SIT_GROUND_CONSTRAINED)
+	{
+		llwarns << "Mapping ground sit constrained to ground sit" << llendl;
+		motion=ANIM_AGENT_SIT_GROUND;
 	}
 
 	AOSet::AOState* state=mCurrentSet->getStateByRemapID(motion);
@@ -291,7 +300,7 @@ const LLUUID AOEngine::override(const LLUUID motion,BOOL start)
 		}
 
 		// do not remember typing as set-wide motion
-		if(motion!=ANIM_AGENT_TYPE)
+		if(motion!=ANIM_AGENT_TYPE && motion!=ANIM_AGENT_SIT_GROUND)
 			mCurrentSet->setMotion(motion);
 
 		animation=mCurrentSet->getAnimationForState(state);
@@ -309,6 +318,9 @@ const LLUUID AOEngine::override(const LLUUID motion,BOOL start)
 
 		if(motion==ANIM_AGENT_SIT)
 			mSitCancelTimer.oneShot();
+		else if(motion==ANIM_AGENT_SIT_GROUND)
+			gAgentAvatarp->mPlayingAnimations[pMotion]=TRUE;
+//			gAgent.sendAnimationRequest(pMotion,ANIM_REQUEST_START);
 	}
 	else
 	{
@@ -318,6 +330,12 @@ const LLUUID AOEngine::override(const LLUUID motion,BOOL start)
 		// for typing animaiton, just return the stored animation and don't memorize anything else
 		if(motion==ANIM_AGENT_TYPE)
 			return animation;
+
+		if(motion==ANIM_AGENT_SIT_GROUND)
+		{
+			gAgent.sendAnimationRequest(pMotion,ANIM_REQUEST_STOP);
+			return animation;
+		}
 
 		if(motion!=mCurrentSet->getMotion())
 		{
