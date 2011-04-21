@@ -116,6 +116,7 @@ class FloaterAO
 		LLButton* mNextButton;
 
 		BOOL mCanDragAndDrop;
+		BOOL mImportRunning;
 };
 
 #endif // AO_H

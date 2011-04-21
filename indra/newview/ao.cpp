@@ -42,7 +42,8 @@ FloaterAO::FloaterAO(const LLSD& key)
 	mSetList(0),
 	mSelectedSet(0),
 	mSelectedState(0),
-	mCanDragAndDrop(FALSE)
+	mCanDragAndDrop(FALSE),
+	mImportRunning(FALSE)
 {
 }
 
@@ -92,6 +93,9 @@ void FloaterAO::updateAnimationList()
 
 void FloaterAO::updateList()
 {
+	mReloadButton->setEnabled(TRUE);
+	mImportRunning=FALSE;
+
 	std::string currentSetName=mSetSelector->getSelectedItemLabel();
 	if(currentSetName.empty())
 		currentSetName=AOEngine::instance().getCurrentSetName();
@@ -484,16 +488,34 @@ void FloaterAO::onClickNext()
 BOOL FloaterAO::handleDragAndDrop(S32 x,S32 y,MASK mask,BOOL drop,EDragAndDropType type,void* data,
 									EAcceptance* accept,std::string& tooltipMsg)
 {
-	if(!mSelectedSet || !mSelectedState || !mCanDragAndDrop)
-	{
-		*accept=ACCEPT_NO;
-		return TRUE;
-	}
-
 	LLInventoryItem* item=(LLInventoryItem*) data;
 
-	if(type==DAD_ANIMATION)
+	if(type==DAD_NOTECARD)
 	{
+		if(mImportRunning)
+		{
+			*accept=ACCEPT_NO;
+			return TRUE;
+		}
+		*accept=ACCEPT_YES_SINGLE;
+		if(item && drop)
+		{
+			if(AOEngine::instance().importNotecard(item))
+			{
+				mImportRunning=TRUE;
+				enableSetControls(FALSE);
+				enableStateControls(FALSE);
+				mReloadButton->setEnabled(FALSE);
+			}
+		}
+	}
+	else if(type==DAD_ANIMATION)
+	{
+		if(!mSelectedSet || !mSelectedState || !mCanDragAndDrop)
+		{
+			*accept=ACCEPT_NO;
+			return TRUE;
+		}
 		*accept=ACCEPT_YES_MULTI;
 		if(item && drop)
 		{
@@ -503,18 +525,6 @@ BOOL FloaterAO::handleDragAndDrop(S32 x,S32 y,MASK mask,BOOL drop,EDragAndDropTy
 
 				// TODO: this would be the right thing to do, but it blocks multi drop
 				// before final release this must be resolved
-				enableSetControls(FALSE);
-				enableStateControls(FALSE);
-			}
-		}
-	}
-	else if(type==DAD_NOTECARD)
-	{
-		*accept=ACCEPT_YES_SINGLE;
-		if(item && drop)
-		{
-			if(AOEngine::instance().importNotecard(item))
-			{
 				enableSetControls(FALSE);
 				enableStateControls(FALSE);
 			}
