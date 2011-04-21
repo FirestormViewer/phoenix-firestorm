@@ -82,7 +82,7 @@ class AOSet
 			BOOL mRandom;
 			S32 mCycleTime;
 			std::vector<AOAnimation> mAnimations;
-			S32 mCurrentAnimation;
+			U32 mCurrentAnimation;
 			LLUUID mCurrentAnimationID;
 			LLUUID mInventoryUUID;
 			BOOL mDirty;

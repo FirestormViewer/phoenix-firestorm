@@ -76,7 +76,7 @@ void FloaterAO::updateAnimationList()
 		return;
 	}
 
-	for(S32 index=0;index<mSelectedSet->mStateNames.size();index++)
+	for(U32 index=0;index<mSelectedSet->mStateNames.size();index++)
 	{
 		std::string stateName=mSelectedSet->mStateNames[index];
 		AOSet::AOState* state=mSelectedSet->getStateByName(stateName);
@@ -114,7 +114,7 @@ void FloaterAO::updateList()
 		return;
 	}
 
-	for(S32 index=0;index<mSetList.size();index++)
+	for(U32 index=0;index<mSetList.size();index++)
 	{
 		std::string setName=mSetList[index]->getName();
 		mSetSelector->add(setName,&mSetList[index],ADD_BOTTOM,TRUE);
@@ -286,7 +286,7 @@ void FloaterAO::onSelectState()
 
 	mAnimationList->setEnabled(TRUE);
 	mSelectedState=(AOSet::AOState*) mStateSelector->getCurrentUserdata();
-	for(S32 index=0;index<mSelectedState->mAnimations.size();index++)
+	for(U32 index=0;index<mSelectedState->mAnimations.size();index++)
 	{
 		LLScrollListItem* item=addAnimation(mSelectedState->mAnimations[index].mName);
 		if(item)

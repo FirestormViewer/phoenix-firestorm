@@ -438,9 +438,10 @@ void AOEngine::cycle(eCycleMode cycleMode)
 	{
 		if(cycleMode==CyclePrevious)
 		{
-			state->mCurrentAnimation--;
-			if(state->mCurrentAnimation<0)
+			if(state->mCurrentAnimation==0)
 				state->mCurrentAnimation=state->mAnimations.size()-1;
+			else
+				state->mCurrentAnimation--;
 		}
 		else if(cycleMode==CycleNext)
 		{
@@ -458,9 +459,9 @@ void AOEngine::cycle(eCycleMode cycleMode)
 
 void AOEngine::updateSortOrder(AOSet::AOState* state)
 {
-	for(S32 index=0;index<state->mAnimations.size();index++)
+	for(U32 index=0;index<state->mAnimations.size();index++)
 	{
-		S32 sortOrder=state->mAnimations[index].mSortOrder;
+		U32 sortOrder=state->mAnimations[index].mSortOrder;
 
 		if(sortOrder!=index)
 		{
@@ -702,7 +703,7 @@ void AOEngine::reloadStateAnimations(AOSet::AOState* state)
 		else
 		{
 			BOOL inserted=FALSE;
-			for(S32 index=0;index<state->mAnimations.size();index++)
+			for(U32 index=0;index<state->mAnimations.size();index++)
 			{
 				if(state->mAnimations[index].mSortOrder>sortOrder)
 				{
@@ -762,7 +763,7 @@ void AOEngine::update()
 		}
 		allComplete=FALSE;
 
-		for(S32 num=1;num<params.size();num++)
+		for(U32 num=1;num<params.size();num++)
 		{
 			if(params[num].size()!=2)
 				llwarns << "Unknown AO set option " << params[num] << llendl;
@@ -804,7 +805,7 @@ void AOEngine::update()
 				lldebugs << "Reading state " << stateName << llendl;
 
 				state->mInventoryUUID=stateCategories->get(index)->getUUID();
-				for(S32 num=1;num<params.size();num++)
+				for(U32 num=1;num<params.size();num++)
 				{
 					if(params[num]=="CY")
 					{
@@ -885,7 +886,7 @@ void AOEngine::reload()
 AOSet* AOEngine::getSetByName(const std::string name)
 {
 	AOSet* found=0;
-	for(S32 index=0;index<mSets.size();index++)
+	for(U32 index=0;index<mSets.size();index++)
 	{
 		if(mSets[index]->getName().compare(name)==0)
 		{
@@ -991,7 +992,7 @@ void AOEngine::saveState(const AOSet::AOState* state)
 
 void AOEngine::saveSettings()
 {
-	for(S32 index=0;index<mSets.size();index++)
+	for(U32 index=0;index<mSets.size();index++)
 	{
 		AOSet* set=mSets[index];
 		if(set->getDirty())
@@ -1057,7 +1058,7 @@ void AOEngine::inMouselook(BOOL yes)
 void AOEngine::setDefaultSet(AOSet* set)
 {
 	mDefaultSet=set;
-	for(S32 index=0;index<mSets.size();index++)
+	for(U32 index=0;index<mSets.size();index++)
 		mSets[index]->setDirty(TRUE);
 }
 
@@ -1262,7 +1263,7 @@ void AOEngine::parseNotecard(const char* buffer)
 	LLStringUtil::getTokens(text,lines,"\n");
 
 	S32 found=-1;
-	for(S32 index=0;index<lines.size();index++)
+	for(U32 index=0;index<lines.size();index++)
 	{
 		if(lines[index].find("Text length ")==0)
 		{
@@ -1295,7 +1296,7 @@ void AOEngine::parseNotecard(const char* buffer)
 	LLInventoryModel::item_array_t* items;
 
 	gInventory.getDirectDescendentsOf(mImportSet->getInventoryUUID(),dummy,items);
-	for(S32 index=0;index<items->size();index++)
+	for(U32 index=0;index<items->size();index++)
 	{
 		animationMap[items->get(index)->getName()]=items->get(index)->getUUID();
 		lldebugs	<<	"animation " << items->get(index)->getName() <<
@@ -1303,7 +1304,7 @@ void AOEngine::parseNotecard(const char* buffer)
 	}
 
 	// [ State ]Anim1|Anim2|Anim3
-	for(S32 index=found+1;index<lines.size();index++)
+	for(U32 index=found+1;index<lines.size();index++)
 	{
 		std::string line=lines[index];
 
@@ -1318,7 +1319,7 @@ void AOEngine::parseNotecard(const char* buffer)
 			continue;
 		}
 
-		S32 endTag=line.find("]");
+		U32 endTag=line.find("]");
 		if(endTag==std::string::npos)
 		{
 			llwarns << "line " << index << " has no valid ] delimiter" << llendl;
@@ -1339,7 +1340,7 @@ void AOEngine::parseNotecard(const char* buffer)
 		std::vector<std::string> animationList;
 		LLStringUtil::getTokens(animationLine,animationList,"|");
 
-		for(S32 animIndex=0;animIndex<animationList.size();animIndex++)
+		for(U32 animIndex=0;animIndex<animationList.size();animIndex++)
 		{
 			AOSet::AOAnimation animation;
 			animation.mName=animationList[animIndex];
