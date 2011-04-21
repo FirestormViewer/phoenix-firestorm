@@ -102,6 +102,8 @@ void FloaterAO::updateList()
 
 	mSetList=AOEngine::instance().getSetList();
 	mSetSelector->removeall();
+	mSetSelector->clear();
+	mAnimationList->deleteAllItems();
 
 	if(mSetList.empty())
 	{
@@ -347,6 +349,9 @@ BOOL FloaterAO::removeSetCallback(const LLSD& notification,const LLSD& response)
 		{
 			// to prevent snapping back to deleted set
 			mSetSelector->removeall();
+			// visually indicate there are no items left
+			mSetSelector->clear();
+			mAnimationList->deleteAllItems();
 			enableSetControls(FALSE);
 			enableStateControls(FALSE);
 			return TRUE;
