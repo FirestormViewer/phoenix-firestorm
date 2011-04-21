@@ -101,8 +101,8 @@ void FloaterAO::updateList()
 
 	if(mSetList.empty())
 	{
-		mSetSelector->setEnabled(FALSE);
-		mSetSelector->add("no_sets_loaded"); //             getString("no_sets_loaded"));
+		lldebugs << "empty set list" << llendl;
+		enableSetControls(FALSE);
 		return;
 	}
 
@@ -184,9 +184,12 @@ void FloaterAO::enableSetControls(BOOL yes)
 {
 	mSetSelector->setEnabled(yes);
 	mActivateSetButton->setEnabled(yes);
+	mRemoveButton->setEnabled(yes);
 	mDefaultCheckBox->setEnabled(yes);
 	mOverrideSitsCheckBox->setEnabled(yes);
 	mDisableMouselookCheckBox->setEnabled(yes);
+	if(!yes)
+		enableStateControls(yes);
 }
 
 void FloaterAO::enableStateControls(BOOL yes)
@@ -321,6 +324,9 @@ BOOL FloaterAO::newSetCallback(const LLSD& notification,const LLSD& response)
 
 void FloaterAO::onClickRemove()
 {
+	if(!mSelectedSet)
+		return;
+
 	LLSD args;
 	args["AO_SET_NAME"]=mSelectedSet->getName();
 	LLNotificationsUtil::add("RemoveAOSet",args,LLSD(),boost::bind(&FloaterAO::removeSetCallback,this,_1,_2));
