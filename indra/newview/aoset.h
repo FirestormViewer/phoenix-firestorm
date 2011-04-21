@@ -46,6 +46,7 @@ class AOSet
 			Crouching,
 			CrouchWalking,
 			Landing,
+			SoftLanding,
 			StandingUp,
 			Falling,
 			FlyingDown,

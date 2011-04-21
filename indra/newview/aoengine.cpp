@@ -312,8 +312,12 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 
 		if(motion==ANIM_AGENT_SIT && mCurrentSet->getSmart())
 			mSitCancelTimer.oneShot();
-		// special treatment for ground sit, because the viewer needs the Linden animation to show "Stand Up"
-		else if(motion==ANIM_AGENT_SIT_GROUND)
+		// special treatment for "transient animations" because the viewer needs the Linden animation to know the agent's state
+		else if(motion==ANIM_AGENT_SIT_GROUND ||
+				motion==ANIM_AGENT_PRE_JUMP ||
+				motion==ANIM_AGENT_STANDUP ||
+				motion==ANIM_AGENT_LAND ||
+				motion==ANIM_AGENT_MEDIUM_LAND)
 		{
 			gAgent.sendAnimationRequest(animation,ANIM_REQUEST_START);
 			return LLUUID::null;
@@ -337,8 +341,12 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 
 		mCurrentSet->setMotion(LLUUID::null);
 
-		// again, special treatment for ground sit to make sure our own animation gets stopped properly
-		if(motion==ANIM_AGENT_SIT_GROUND)
+		// again, special treatment for "transient" animations to make sure our own animation gets stopped properly
+		if(	motion==ANIM_AGENT_SIT_GROUND ||
+			motion==ANIM_AGENT_PRE_JUMP ||
+			motion==ANIM_AGENT_STANDUP ||
+			motion==ANIM_AGENT_LAND ||
+			motion==ANIM_AGENT_MEDIUM_LAND)
 		{
 			gAgent.sendAnimationRequest(animation,ANIM_REQUEST_STOP);
 			return LLUUID::null;
