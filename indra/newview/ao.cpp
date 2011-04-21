@@ -67,6 +67,8 @@ void FloaterAO::updateAnimationList()
 	S32 currentStateSelected=mStateSelector->getCurrentIndex();
 
 	mStateSelector->removeall();
+	onChangeAnimationSelection();
+
 	if(!mSelectedSet)
 	{
 		mStateSelector->setEnabled(FALSE);
@@ -181,6 +183,7 @@ BOOL FloaterAO::postBuild()
 	AOEngine::instance().setReloadCallback(boost::bind(&FloaterAO::updateList,this));
 
 	enableSetControls(FALSE);
+	onChangeAnimationSelection();
 
 	updateList();
 	return LLDockableFloater::postBuild();
