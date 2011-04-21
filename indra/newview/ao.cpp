@@ -142,6 +142,10 @@ BOOL FloaterAO::postBuild()
 	mCycleTimeTextLabel=aoPanel->getChild<LLTextBox>("ao_cycle_time_seconds_label");
 	mCycleTimeSpinner=aoPanel->getChild<LLSpinCtrl>("ao_cycle_time");
 
+	mPreviousButton=aoPanel->getChild<LLButton>("ao_previous");
+	mNextButton=aoPanel->getChild<LLButton>("ao_next");
+	mReloadButton=aoPanel->getChild<LLButton>("ao_reload");
+
 	mSetSelector->setCommitCallback(boost::bind(&FloaterAO::onSelectSet,this));
 	mActivateSetButton->setCommitCallback(boost::bind(&FloaterAO::onClickActivate,this));
 	mAddButton->setCommitCallback(boost::bind(&FloaterAO::onClickAdd,this));
@@ -150,6 +154,9 @@ BOOL FloaterAO::postBuild()
 	mOverrideSitsCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckOverrideSits,this));
 	mSmartCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckSmart,this));
 	mDisableMouselookCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckDisableStands,this));
+
+	mPreviousButton->setCommitCallback(boost::bind(&FloaterAO::onClickPrevious,this));
+	mNextButton->setCommitCallback(boost::bind(&FloaterAO::onClickNext,this));
 
 	mAnimationList->setCommitOnSelectionChange(TRUE);
 
@@ -163,9 +170,7 @@ BOOL FloaterAO::postBuild()
 
 	updateSmart();
 
-	aoPanel->getChild<LLButton>("ao_reload")->setCommitCallback(boost::bind(&FloaterAO::onClickReload,this));
-	aoPanel->getChild<LLButton>("ao_previous")->setCommitCallback(boost::bind(&FloaterAO::onClickPrevious,this));
-	aoPanel->getChild<LLButton>("ao_next")->setCommitCallback(boost::bind(&FloaterAO::onClickNext,this));
+	mReloadButton->setCommitCallback(boost::bind(&FloaterAO::onClickReload,this));
 
 	AOEngine::instance().setReloadCallback(boost::bind(&FloaterAO::updateList,this));
 
@@ -191,6 +196,8 @@ void FloaterAO::enableStateControls(BOOL yes)
 	mRandomizeCheckBox->setEnabled(yes);
 	mCycleTimeTextLabel->setEnabled(yes);
 	mCycleTimeSpinner->setEnabled(yes);
+	mPreviousButton->setEnabled(yes);
+	mNextButton->setEnabled(yes);
 	mCanDragAndDrop=yes;
 }
 

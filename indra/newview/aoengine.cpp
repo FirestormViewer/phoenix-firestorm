@@ -387,6 +387,12 @@ void AOEngine::cycleTimeout(const AOSet* set)
 
 void AOEngine::cycle(eCycleMode cycleMode)
 {
+	if(!mCurrentSet)
+	{
+		lldebugs << "cycle without set." << llendl;
+		return;
+	}
+
 	LLUUID motion=mCurrentSet->getMotion();
 
 	// assume stand if no motion is registered, happens after login when the avatar hasn't moved at all yet
@@ -403,6 +409,12 @@ void AOEngine::cycle(eCycleMode cycleMode)
 	if(!state)
 	{
 		lldebugs << "cycle without state." << llendl;
+		return;
+	}
+
+	if(!state->mAnimations.size())
+	{
+		lldebugs << "cycle without animations in state." << llendl;
 		return;
 	}
 

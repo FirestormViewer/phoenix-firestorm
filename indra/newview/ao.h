@@ -110,6 +110,11 @@ class FloaterAO
 		LLTextBox* mCycleTimeTextLabel;
 		LLSpinCtrl* mCycleTimeSpinner;
 
+		LLButton* mReloadButton;
+
+		LLButton* mPreviousButton;
+		LLButton* mNextButton;
+
 		BOOL mCanDragAndDrop;
 };
 
