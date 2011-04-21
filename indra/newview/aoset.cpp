@@ -105,6 +105,7 @@ AOSet::AOSet(const LLUUID inventoryID)
 		mStates[index].mName=stateNames[index];
 		mStates[index].mRemapID=stateUUIDs[index];
 		mStates[index].mInventoryUUID=LLUUID::null;
+		mStates[index].mCurrentAnimation=0;
 		mStates[index].mCurrentAnimationID=LLUUID::null;
 		mStates[index].mCycle=FALSE;
 		mStates[index].mRandom=FALSE;
