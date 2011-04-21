@@ -47,7 +47,7 @@
 #define ROOT_AO_FOLDER			"#AO"
 #include <boost/graph/graph_concepts.hpp>
 
-const F32 INVENTORY_POLLING_INTERVAL=5.0;
+const F32 INVENTORY_POLLING_INTERVAL=5.0f;
 
 AOEngine::AOEngine() :
 	LLSingleton<AOEngine>(),
@@ -1434,7 +1434,7 @@ void AOEngine::processImport()
 // ----------------------------------------------------
 
 AOSitCancelTimer::AOSitCancelTimer()
-:	LLEventTimer(0.1),
+:	LLEventTimer(0.1f),
 	mTickCount(0)
 {
 	mEventTimer.stop();
