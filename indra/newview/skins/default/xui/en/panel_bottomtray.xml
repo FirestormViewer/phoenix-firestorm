@@ -604,7 +604,7 @@
         is_toggle="true"
         tab_stop="true">
         <init_callback
-         function="Button.SetFloaterToggle"
+         function="Button.SetDockableFloaterToggle"
          parameter="animation_overrider" />
       </bottomtray_button>
         </layout_panel>
