@@ -806,7 +806,12 @@ void AOEngine::update()
 				state->mInventoryUUID=stateCategories->get(index)->getUUID();
 				for(S32 num=1;num<params.size();num++)
 				{
-					if(params[num]=="RN")
+					if(params[num]=="CY")
+					{
+						state->mCycle=TRUE;
+						lldebugs << "Cycle on" << llendl;
+					}
+					else if(params[num]=="RN")
 					{
 						state->mRandom=TRUE;
 						lldebugs << "Random on" << llendl;
@@ -976,6 +981,8 @@ void AOEngine::saveState(const AOSet::AOState* state)
 		timeStr << ":CT" << state->mCycleTime;
 		stateParams+=timeStr.str();
 	}
+	if(state->mCycle)
+		stateParams+=":CY";
 	if(state->mRandom)
 		stateParams+=":RN";
 
@@ -1101,6 +1108,12 @@ void AOEngine::setDisableStands(AOSet* set,BOOL yes)
 	// make sure an update happens if needed
 	mInMouselook=!gAgentCamera.cameraMouselook();
 	inMouselook(!mInMouselook);
+}
+
+void AOEngine::setCycle(AOSet::AOState* state,BOOL yes)
+{
+	state->mCycle=yes;
+	state->mDirty=TRUE;
 }
 
 void AOEngine::setRandomize(AOSet::AOState* state,BOOL yes)

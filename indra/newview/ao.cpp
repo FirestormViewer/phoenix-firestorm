@@ -146,6 +146,7 @@ BOOL FloaterAO::postBuild()
 	mMoveUpButton=aoPanel->getChild<LLButton>("ao_move_up");
 	mMoveDownButton=aoPanel->getChild<LLButton>("ao_move_down");
 	mTrashButton=aoPanel->getChild<LLButton>("ao_trash");
+	mCycleCheckBox=aoPanel->getChild<LLCheckBoxCtrl>("ao_cycle");
 	mRandomizeCheckBox=aoPanel->getChild<LLCheckBoxCtrl>("ao_randomize");
 	mCycleTimeTextLabel=aoPanel->getChild<LLTextBox>("ao_cycle_time_seconds_label");
 	mCycleTimeSpinner=aoPanel->getChild<LLSpinCtrl>("ao_cycle_time");
@@ -173,6 +174,7 @@ BOOL FloaterAO::postBuild()
 	mMoveUpButton->setCommitCallback(boost::bind(&FloaterAO::onClickMoveUp,this));
 	mMoveDownButton->setCommitCallback(boost::bind(&FloaterAO::onClickMoveDown,this));
 	mTrashButton->setCommitCallback(boost::bind(&FloaterAO::onClickTrash,this));
+	mCycleCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckCycle,this));
 	mRandomizeCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckRandomize,this));
 	mCycleTimeSpinner->setCommitCallback(boost::bind(&FloaterAO::onChangeCycleTime,this));
 
@@ -205,9 +207,15 @@ void FloaterAO::enableStateControls(BOOL yes)
 {
 	mStateSelector->setEnabled(yes);
 	mAnimationList->setEnabled(yes);
-	mRandomizeCheckBox->setEnabled(yes);
-	mCycleTimeTextLabel->setEnabled(yes);
-	mCycleTimeSpinner->setEnabled(yes);
+	mCycleCheckBox->setEnabled(yes);
+	if(yes)
+		updateCycleParameters();
+	else
+	{
+		mRandomizeCheckBox->setEnabled(yes);
+		mCycleTimeTextLabel->setEnabled(yes);
+		mCycleTimeSpinner->setEnabled(yes);
+	}
 	mPreviousButton->setEnabled(yes);
 	mNextButton->setEnabled(yes);
 	mCanDragAndDrop=yes;
@@ -285,8 +293,11 @@ void FloaterAO::onSelectState()
 			item->setUserdata(&mSelectedState->mAnimations[index].mInventoryUUID);
 	}
 
+	mCycleCheckBox->setValue(mSelectedState->mCycle);
 	mRandomizeCheckBox->setValue(mSelectedState->mRandom);
 	mCycleTimeSpinner->setValue(mSelectedState->mCycleTime);
+
+	updateCycleParameters();
 }
 
 void FloaterAO::onClickReload()
@@ -468,6 +479,24 @@ void FloaterAO::onClickTrash()
 		AOEngine::instance().removeAnimation(mSelectedSet,mSelectedState,mAnimationList->getItemIndex(list[index]));
 
 	mAnimationList->deleteSelectedItems();
+}
+
+void FloaterAO::updateCycleParameters()
+{
+	BOOL yes=mCycleCheckBox->getValue().asBoolean();
+	mRandomizeCheckBox->setEnabled(yes);
+	mCycleTimeTextLabel->setEnabled(yes);
+	mCycleTimeSpinner->setEnabled(yes);
+}
+
+void FloaterAO::onCheckCycle()
+{
+	if(mSelectedState)
+	{
+		BOOL yes=mCycleCheckBox->getValue().asBoolean();
+		AOEngine::instance().setCycle(mSelectedState,yes);
+		updateCycleParameters();
+	}
 }
 
 void FloaterAO::onCheckRandomize()

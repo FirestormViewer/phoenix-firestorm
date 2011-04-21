@@ -106,8 +106,9 @@ AOSet::AOSet(const LLUUID inventoryID)
 		mStates[index].mRemapID=stateUUIDs[index];
 		mStates[index].mInventoryUUID=LLUUID::null;
 		mStates[index].mCurrentAnimationID=LLUUID::null;
-		mStates[index].mCycleTime=0.0f;
+		mStates[index].mCycle=FALSE;
 		mStates[index].mRandom=FALSE;
+		mStates[index].mCycleTime=0.0f;
 		mStates[index].mDirty=FALSE;
 		mStateNames.push_back(stateNames[index]);
 	}
@@ -155,24 +156,27 @@ LLUUID AOSet::getAnimationForState(AOState* state)
 		S32 numOfAnimations=state->mAnimations.size();
 		if(numOfAnimations)
 		{
-			if(state->mRandom)
+			if(state->mCycle)
 			{
-				state->mCurrentAnimation=ll_frand()*numOfAnimations;
-				lldebugs << "randomly chosen " << state->mCurrentAnimation << " of " << numOfAnimations << llendl;
-			}
-			else
-			{
-				state->mCurrentAnimation++;
-				if(state->mCurrentAnimation>=state->mAnimations.size())
-					state->mCurrentAnimation=0;
-				lldebugs << "cycle " << state->mCurrentAnimation << " of " << numOfAnimations << llendl;
+				if(state->mRandom)
+				{
+					state->mCurrentAnimation=ll_frand()*numOfAnimations;
+					lldebugs << "randomly chosen " << state->mCurrentAnimation << " of " << numOfAnimations << llendl;
+				}
+				else
+				{
+					state->mCurrentAnimation++;
+					if(state->mCurrentAnimation>=state->mAnimations.size())
+						state->mCurrentAnimation=0;
+					lldebugs << "cycle " << state->mCurrentAnimation << " of " << numOfAnimations << llendl;
+				}
 			}
 			return state->mAnimations[state->mCurrentAnimation].mAssetUUID;
 		}
 		else
 			lldebugs << "animation state has no animations assigned" << llendl;
 	}
-	return LLUUID();
+	return LLUUID::null;
 }
 
 void AOSet::startTimer(F32 timeout)

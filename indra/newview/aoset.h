@@ -78,6 +78,7 @@ class AOSet
 		{
 			std::string mName;
 			LLUUID mRemapID;
+			BOOL mCycle;
 			BOOL mRandom;
 			S32 mCycleTime;
 			std::vector<AOAnimation> mAnimations;

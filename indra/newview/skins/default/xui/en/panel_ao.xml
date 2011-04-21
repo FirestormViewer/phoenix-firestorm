@@ -170,11 +170,21 @@
 	</panel>
 
 	<check_box
+		name="ao_cycle"
+		label="Cycle"
+		tool_tip="Play a different animation from the list every time the animation state is called.."
+		left="0"
+		top_pad="4"
+		width="55"
+		height="16"
+		follows="left|bottom"
+		layout="topleft" />
+
+	<check_box
 		name="ao_randomize"
 		label="Randomize order"
 		tool_tip="Randomize order of animations in cycle mode."
-		left="0"
-		top_pad="4"
+		left_pad="4"
 		width="100"
 		height="16"
 		follows="left|bottom"
@@ -183,6 +193,7 @@
 	<text
 		name="ao_cycle_time_seconds_label"
 		value="Cycle time (seconds):"
+		left="0"
 		top_pad="4"
 		width="120"
 		follows="left|right|bottom"

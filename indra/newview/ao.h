@@ -75,12 +75,14 @@ class FloaterAO
 		void onClickMoveUp();
 		void onClickMoveDown();
 		void onClickTrash();
+		void onCheckCycle();
 		void onCheckRandomize();
 		void onChangeCycleTime();
 		void onClickPrevious();
 		void onClickNext();
 
 		void updateSmart();
+		void updateCycleParameters();
 
 		void enableSetControls(BOOL yes);
 		void enableStateControls(BOOL yes);
@@ -106,6 +108,7 @@ class FloaterAO
 		LLButton* mMoveUpButton;
 		LLButton* mMoveDownButton;
 		LLButton* mTrashButton;
+		LLCheckBoxCtrl* mCycleCheckBox;
 		LLCheckBoxCtrl* mRandomizeCheckBox;
 		LLTextBox* mCycleTimeTextLabel;
 		LLSpinCtrl* mCycleTimeSpinner;
