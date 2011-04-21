@@ -376,7 +376,15 @@ void FloaterAO::onChangeAnimationSelection()
 	BOOL resortEnable=FALSE;
 	BOOL trashEnable=FALSE;
 
-	if(list.size()>0)
+	// Linden Lab bug: scroll lists still select the first item when you click on them, even when they are disabled.
+	// The control does not memorize it's enabled/disabled state, so mAnimationList->mEnabled() doesn't seem to work.
+	// So we need to safeguard against it.
+	if(!mCanDragAndDrop)
+	{
+		mAnimationList->deselectAllItems();
+		lldebugs << "Selection count now: " << list.size() << llendl;
+	}
+	else if(list.size()>0)
 	{
 		if(list.size()==1)
 			resortEnable=TRUE;
