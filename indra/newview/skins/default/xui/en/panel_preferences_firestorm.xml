@@ -225,7 +225,6 @@
           control_name="PhoenixUseNearbyChatConsole"
           label="Use console for chat popups instead of floating toasts (Viewer 1.x style)"/>
         <check_box
-	  enabled="false"
           layout="topleft"
           follows="left|top"
           top_delta="18"
