@@ -51,6 +51,13 @@ FloaterAO::~FloaterAO()
 {
 }
 
+void FloaterAO::reloading(BOOL yes)
+{
+	mReloadCoverPanel->setVisible(yes);
+	enableSetControls(!yes);
+	enableStateControls(!yes);
+}
+
 void FloaterAO::updateSetParameters()
 {
 	mOverrideSitsCheckBox->setValue(mSelectedSet->getSitOverride());
@@ -127,11 +134,15 @@ void FloaterAO::updateList()
 		}
 	}
 	enableSetControls(TRUE);
+	reloading(FALSE);
 }
 
 BOOL FloaterAO::postBuild()
 {
 	LLPanel* aoPanel=getChild<LLPanel>("animation_overrider_panel");
+
+	mReloadCoverPanel=aoPanel->getChild<LLPanel>("ao_reload_cover");
+
 	mSetSelector=aoPanel->getChild<LLComboBox>("ao_set_selection_combo");
 	mActivateSetButton=aoPanel->getChild<LLButton>("ao_activate");
 	mAddButton=aoPanel->getChild<LLButton>("ao_add");
@@ -302,8 +313,7 @@ void FloaterAO::onSelectState()
 
 void FloaterAO::onClickReload()
 {
-	enableSetControls(FALSE);
-	enableStateControls(FALSE);
+	reloading(TRUE);
 
 	mSelectedSet=0;
 	mSelectedState=0;
@@ -334,8 +344,7 @@ BOOL FloaterAO::newSetCallback(const LLSD& notification,const LLSD& response)
 	{
 		if(AOEngine::instance().addSet(newSetName).notNull())
 		{
-			enableSetControls(FALSE);
-			enableStateControls(FALSE);
+			reloading(TRUE);
 			return TRUE;
 		}
 	}
@@ -361,13 +370,12 @@ BOOL FloaterAO::removeSetCallback(const LLSD& notification,const LLSD& response)
 	{
 		if(AOEngine::instance().removeSet(mSelectedSet))
 		{
+			reloading(TRUE);
 			// to prevent snapping back to deleted set
 			mSetSelector->removeall();
 			// visually indicate there are no items left
 			mSetSelector->clear();
 			mAnimationList->deleteAllItems();
-			enableSetControls(FALSE);
-			enableStateControls(FALSE);
 			return TRUE;
 		}
 	}
@@ -539,10 +547,9 @@ BOOL FloaterAO::handleDragAndDrop(S32 x,S32 y,MASK mask,BOOL drop,EDragAndDropTy
 		{
 			if(AOEngine::instance().importNotecard(item))
 			{
-				mImportRunning=TRUE;
-				enableSetControls(FALSE);
-				enableStateControls(FALSE);
+				reloading(TRUE);
 				mReloadButton->setEnabled(FALSE);
+				mImportRunning=TRUE;
 			}
 		}
 	}
@@ -562,8 +569,7 @@ BOOL FloaterAO::handleDragAndDrop(S32 x,S32 y,MASK mask,BOOL drop,EDragAndDropTy
 
 				// TODO: this would be the right thing to do, but it blocks multi drop
 				// before final release this must be resolved
-				enableSetControls(FALSE);
-				enableStateControls(FALSE);
+				reloading(TRUE);
 			}
 		}
 	}

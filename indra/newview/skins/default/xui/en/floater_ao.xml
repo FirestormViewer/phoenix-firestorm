@@ -30,10 +30,10 @@
 	<panel
 		name="animation_overrider_panel"
 		filename="panel_ao.xml"
-		left="10"
-		top="20"
-		width="180"
-		height="330"
+		left="0"
+		top="16"
+		width="200"
+		height="334"
 		follows="all"
 		layout="topleft">
 	</panel>

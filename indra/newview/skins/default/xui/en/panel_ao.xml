@@ -1,11 +1,20 @@
 <panel
-	name="animation_overrider_panel"
-	left="10"
-	top="4"
-	width="180"
-	height="306"
+	name="animation_overrider_outer panel"
+	left="0"
+	top="0"
+	width="200"
+	height="314"
 	follows="all"
 	layout="topleft">
+
+	<panel
+		name="animation_overrider_panel"
+		left="10"
+		top="4"
+		width="180"
+		height="306"
+		follows="all"
+		layout="topleft">
 
 	<combo_box
 		name="ao_set_selection_combo"
@@ -277,4 +286,94 @@
 	</layout_panel>
 	</layout_stack>
 
+	</panel>
+
+	<panel
+		name="ao_reload_cover"
+		left="0"
+		top="0"
+		width="200"
+		height="315"
+		follows="all"
+		visible="true"
+		bg_alpha_color="Black_50"
+		bg_opaque_color="Black_50"
+		background_visible="true"
+		background_opaque="true"
+		mouse_opaque="true"
+		layout="topleft">
+	<panel
+		name="ao_reload_text_panel"
+		left="30"
+		top="110"
+		right="-30"
+		bottom="-110"
+		bg_alpha_color="Black_50"
+		bg_opaque_color="Black_50"
+		background_visible="true"
+		background_opaque="true"
+		follows="left|right|top">
+	<view_border
+		name="ao_reload_view_border"
+		left="0"
+		top="0"
+		right="-1"
+		bottom="-1"
+		follows="all" />
+	<text
+		left_delta="0"
+		top_delta="16"
+		halign="center"
+		valign="center"
+		follows="all">
+		Reloading Config
+	</text>
+	<text
+		v_pad="-4"
+		bottom="-16"
+		halign="center"
+		valign="center"
+		follows="all">
+		Please Wait
+	</text>
+
+	<layout_stack
+		name="ao_reload_indicator_layout_stack"
+		left="0"
+		top="31"
+		right="-1"
+		height="32"
+		orientation="horizontal"
+		follows="top|left|right">
+	<layout_panel
+		name="ao_reload_indicator_left_layout_panel"
+		width="160"
+		height="32"
+		user_resize="false">
+	</layout_panel>
+	<layout_panel
+		name="ao_reload_indicator_layout_panel"
+		width="32"
+		height="32"
+		auto_resize="false"
+		user_resize="false">
+	<loading_indicator
+		left="0"
+		top="0"
+		width="32"
+		height="32"
+		follows="right|top"
+		name="ao_reload_indicator" />
+	</layout_panel>
+	<layout_panel
+		name="ao_reload_indicator_right_layout_panel"
+		width="160"
+		height="32"
+		user_resize="false">
+	</layout_panel>
+	</layout_stack>
+
+	</panel>
+
+	</panel>
 </panel>

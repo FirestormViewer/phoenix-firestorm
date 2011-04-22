@@ -81,6 +81,8 @@ class FloaterAO
 		void onClickPrevious();
 		void onClickNext();
 
+		void reloading(BOOL yes);
+
 		void updateSmart();
 		void updateCycleParameters();
 
@@ -94,6 +96,7 @@ class FloaterAO
 		AOSet* mSelectedSet;
 		AOSet::AOState* mSelectedState;
 
+		LLPanel* mReloadCoverPanel;
 		LLComboBox* mSetSelector;
 		LLButton* mActivateSetButton;
 		LLButton* mAddButton;
