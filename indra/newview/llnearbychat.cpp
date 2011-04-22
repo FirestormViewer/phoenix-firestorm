@@ -71,6 +71,8 @@
 #include "llgesturemgr.h"
 #include "llmultigesture.h"
 
+#include "llconsole.h"
+
 static const S32 RESIZE_BAR_THICKNESS = 3;
 
 struct LLChatTypeTrigger {
@@ -93,6 +95,25 @@ LLNearbyChat::LLNearbyChat(const LLSD& key)
 
 LLNearbyChat::~LLNearbyChat()
 {
+}
+
+void LLNearbyChat::updatePhoenixUseNearbyChatConsole(const LLSD &data)
+{
+	PhoenixUseNearbyChatConsole = data.asBoolean();
+
+	if (PhoenixUseNearbyChatConsole)
+	{
+		LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLUUID(gSavedSettings.getString("NearByChatChannelUUID")));
+		if(chat_channel)
+		{
+			chat_channel->removeToastsFromChannel();
+		}
+		gConsole->setVisible(!getVisible());
+	}
+	else
+	{
+		gConsole->setVisible(FALSE);		
+	}
 }
 
 
@@ -163,7 +184,9 @@ BOOL LLNearbyChat::postBuild()
 				}
 			}
 		}
-		
+
+		PhoenixUseNearbyChatConsole = gSavedSettings.getBOOL("PhoenixUseNearbyChatConsole");
+		gSavedSettings.getControl("PhoenixUseNearbyChatConsole")->getSignal()->connect(boost::bind(&LLNearbyChat::updatePhoenixUseNearbyChatConsole, this, _2));
 		
 		return LLDockableFloater::postBuild();
 	}
@@ -337,6 +360,11 @@ void	LLNearbyChat::setVisible(BOOL visible)
 		}
 	}
 	LLDockableFloater::setVisible(visible);
+	
+	if (PhoenixUseNearbyChatConsole)
+	{
+		gConsole->setVisible(!visible);
+	}
 }
 
 void	LLNearbyChat::onOpen(const LLSD& key )

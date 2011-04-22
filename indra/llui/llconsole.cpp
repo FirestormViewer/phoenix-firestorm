@@ -238,6 +238,42 @@ void LLConsole::draw()
 	}
 }
 
+void LLConsole::addConsoleLine(const std::string& utf8line, const LLColor4 &color)
+{
+	LLWString wline = utf8str_to_wstring(utf8line);
+	addConsoleLine(wline, color);
+}
+
+void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color)
+{
+	if (wline.empty())
+	{
+		return;
+	}
+
+	removeExtraLines();
+
+	mMutex.lock() ;
+	mLines.push_back(wline);
+	mLineLengths.push_back((S32)wline.length());
+	mAddTimes.push_back(mTimer.getElapsedTimeF32());
+	mLineColors.push_back(color);
+	mMutex.unlock() ;
+}
+
+void LLConsole::clear()
+{
+	llinfos << "Clearing Console..." << llendflush;
+	mMutex.lock() ;
+	mLines.clear();
+	mAddTimes.clear();
+	mLineLengths.clear();
+	mLineColors.clear();
+	mMutex.unlock() ;
+
+	mTimer.reset();
+}
+
 //Generate highlight color segments for this paragraph.  Pass in default color of paragraph.
 void LLConsole::Paragraph::makeParagraphColorSegments (const LLColor4 &color) 
 {
@@ -388,11 +424,13 @@ void LLConsole::update()
 		{
 			mParagraphs.push_back(
 				Paragraph(	mLines.front(), 
-							LLColor4::white, 
+							(!mLineColors.empty() ? mLineColors.front() : LLColor4::white),
 							mTimer.getElapsedTimeF32(), 
 							mFont, 
 							(F32)getRect().getWidth()));
 			mLines.pop_front();
+			if (!mLineColors.empty())
+				mLineColors.pop_front();
 		}
 	}
 

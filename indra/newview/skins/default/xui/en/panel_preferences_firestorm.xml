@@ -127,10 +127,9 @@
       width="270"
       control_name="RezUnderLandGroup"
       tool_tip="Attempts to rez objects under the land group if you're in the land group regardless of which current group tag you're wearing."/>
-      </panel>
-	  
-	  
-	   <!--Tab1-2-->
+    </panel>
+
+    <!--Tab1-2-->
       <panel
 	    border="true"
         bottom="-500"
@@ -209,14 +208,79 @@
           name="requires_restart_label"
           follows="left|top"
           layout="topleft"
-          top_delta="2"
+          top_delta="0"
           left_delta="250"
           height="18"
           width="130"
           text_color="White_25">
           (requires restart)
         </text>
-      </panel>
+        <check_box
+          layout="topleft"
+          follows="left|top"
+          top_delta="18"
+          left="20"
+          width="400"
+          height="20"
+          control_name="PhoenixUseNearbyChatConsole"
+          label="Use console for chat output (Viewer 1.x mode)"/>
+        <check_box
+	  enabled="false"
+          layout="topleft"
+          follows="left|top"
+          top_delta="18"
+          left_delta="10"
+          width="50"
+          height="20"
+          control_name="PhoenixLogImToChatConsole"
+          label="Show IMs in chat console"/>
+        <check_box
+          layout="topleft"
+          follows="left|top"
+          top_delta="18"
+          left_delta="0"
+          width="50"
+          height="20"
+          control_name="ChatFullWidth"
+          label="Use full screen width for console"/>
+        <text
+          name="requires_restart_label2"
+          follows="left|top"
+          layout="topleft"
+          top_delta="2"
+          left_delta="200"
+          height="18"
+          width="130"
+          text_color="White_25">
+          (requires restart)
+        </text>
+
+		<spinner top_delta="25" control_name="ChatPersistTime" decimal_digits="0"
+			enabled="true" follows="left|top" height="20" increment="1"
+			initial_val="10" label="Fade chat after" label_width="90" left="35"
+			max_val="60" min_val="2" mouse_opaque="true" name="fade_chat_time"
+			width="130" />
+		<text type="string" length="1" bg_visible="false" border_drop_shadow_visible="false" border_visible="false"
+			bottom_delta="0" drop_shadow_visible="true" enabled="true"
+			follows="left|top" font="SansSerifSmall" h_pad="0" halign="left"
+			height="20" left_delta="140" mouse_opaque="false" name="text_box4" v_pad="0"
+			width="80">
+			(seconds)
+		</text>
+		<spinner bottom_delta="0" decimal_digits="0" control_name="ConsoleMaxLines"
+			enabled="true" follows="left|top" height="20" increment="1"
+			initial_val="10" left="230" max_val="50" min_val="1" mouse_opaque="true"
+			name="max_chat_count" width="60" />
+		<text type="string" length="1" bg_visible="false" border_drop_shadow_visible="false" border_visible="false"
+			bottom_delta="0" drop_shadow_visible="true" enabled="true"
+			follows="left|top" font="SansSerifSmall" h_pad="0" halign="left"
+			height="20" left="295" mouse_opaque="false" name="text_box5" v_pad="0"
+			width="60">
+			(# lines)
+		</text>
+		
+
+	</panel>
 	  
 	  
       <!--CmdLine-->

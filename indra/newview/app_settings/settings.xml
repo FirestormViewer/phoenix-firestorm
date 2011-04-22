@@ -27,6 +27,31 @@
       <integer>1</integer>
     </map>
 
+  <key>PhoenixUseNearbyChatConsole</key>
+  <map>
+    <key>Comment</key>
+    <string>Display popup chat embedded into the read-only world console (v1-style) instead of overlayed floaters (v2-style)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>PhoenixLogImToChatConsole</key>
+    <map>
+      <key>Comment</key>
+      <string>Defines if (group) IM notifications should be sent to the nearby chat console (v1-style) or toasts (v2-style).</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+
+
   <key>PhoenixOOCPrefix</key>
     <map>
       <key>Comment</key>

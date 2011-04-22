@@ -1596,6 +1596,20 @@ void LLViewerWindow::initBase()
 
 	// Create global views
 
+	// Ansariel: Move console further down in the view hierarchy to not float
+	//           in front of floaters!
+	// Console
+	llassert( !gConsole );
+	LLConsole::Params cp;
+	cp.name("console");
+	cp.max_lines(gSavedSettings.getS32("ConsoleBufferSize"));
+	cp.rect(getChatConsoleRect());
+	cp.persist_time(gSavedSettings.getF32("ChatPersistTime"));
+	cp.font_size_index(gSavedSettings.getS32("ChatFontSize"));
+	cp.follows.flags(FOLLOWS_LEFT | FOLLOWS_RIGHT | FOLLOWS_BOTTOM);
+	gConsole = LLUICtrlFactory::create<LLConsole>(cp);
+	getRootView()->addChild(gConsole);
+
 	// Create the floater view at the start so that other views can add children to it. 
 	// (But wait to add it as a child of the root view so that it will be in front of the 
 	// other views.)
@@ -1616,19 +1630,6 @@ void LLViewerWindow::initBase()
 	gFloaterView = main_view->getChild<LLFloaterView>("Floater View");
 	gSnapshotFloaterView = main_view->getChild<LLSnapshotFloaterView>("Snapshot Floater View");
 	
-
-	// Console
-	llassert( !gConsole );
-	LLConsole::Params cp;
-	cp.name("console");
-	cp.max_lines(gSavedSettings.getS32("ConsoleBufferSize"));
-	cp.rect(getChatConsoleRect());
-	cp.persist_time(gSavedSettings.getF32("ChatPersistTime"));
-	cp.font_size_index(gSavedSettings.getS32("ChatFontSize"));
-	cp.follows.flags(FOLLOWS_LEFT | FOLLOWS_RIGHT | FOLLOWS_BOTTOM);
-	gConsole = LLUICtrlFactory::create<LLConsole>(cp);
-	getRootView()->addChild(gConsole);
-
 	// optionally forward warnings to chat console/chat floater
 	// for qa runs and dev builds
 #if  !LL_RELEASE_FOR_DOWNLOAD

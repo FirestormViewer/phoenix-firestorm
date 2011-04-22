@@ -36,6 +36,8 @@
 #include "llinstantmessage.h"
 #include "llnotificationptr.h"
 
+#include "llavatarname.h"
+
 class LLIMFloater;
 
 namespace LLNotificationsUI
@@ -154,10 +156,19 @@ public:
 
 	// base interface functions
 	virtual bool processNotification(const LLSD& notify);
+	
+	void updatePhoenixLogImToChatConsole(const LLSD &data);
 
 protected:
 	virtual void onDeleteToast(LLToast* toast);
 	virtual void initChannel();
+
+	void lookupDisplayNames(const LLUUID& agent_id);
+	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+	bool checkDisplayName();
+
+	BOOL PhoenixLogImToChatConsole;
+	LLAvatarName mAvatarName;
 };
 
 /**
@@ -200,7 +211,6 @@ protected:
 	void onRejectToast(LLUUID& id);
 };
 
-
 /**
  * Handler for group system notices.
  */
@@ -213,12 +223,21 @@ public:
 	// base interface functions
 	virtual bool processNotification(const LLSD& notify);
 
+	void updatePhoenixLogImToChatConsole(const LLSD &data);
+
 protected:
 	virtual void onDeleteToast(LLToast* toast);
 	virtual void initChannel();
 
 	// own handlers
 	void onRejectToast(LLUUID& id);
+
+	void lookupDisplayNames(const LLUUID& agent_id);
+	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+	bool checkDisplayName();
+
+	BOOL PhoenixLogImToChatConsole;
+	LLAvatarName mAvatarName;
 };
 
 /**

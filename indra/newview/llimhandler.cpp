@@ -34,6 +34,12 @@
 #include "lltoastimpanel.h"
 #include "llviewerwindow.h"
 
+#include "llavatarnamecache.h"
+#include "llconsole.h"
+#include "llfloaterreg.h"
+#include "llnearbychat.h"
+#include "rlvhandler.h"
+
 using namespace LLNotificationsUI;
 
 //--------------------------------------------------------------------------
@@ -43,6 +49,9 @@ LLIMHandler::LLIMHandler(e_notification_type type, const LLSD& id)
 
 	// Getting a Channel for our notifications
 	mChannel = LLChannelManager::getInstance()->createNotificationChannel();
+
+	PhoenixLogImToChatConsole = gSavedSettings.getBOOL("PhoenixLogImToChatConsole");
+	gSavedSettings.getControl("PhoenixLogImToChatConsole")->getSignal()->connect(boost::bind(&LLIMHandler::updatePhoenixLogImToChatConsole, this, _2));
 }
 
 //--------------------------------------------------------------------------
@@ -58,6 +67,35 @@ void LLIMHandler::initChannel()
 	mChannel->init(channel_right_bound - channel_width, channel_right_bound);
 }
 
+void LLIMHandler::updatePhoenixLogImToChatConsole(const LLSD &data)
+{
+	PhoenixLogImToChatConsole = data.asBoolean();
+}
+
+
+void LLIMHandler::lookupDisplayNames(const LLUUID& agent_id)
+{
+	LLAvatarNameCache::get(agent_id, boost::bind(&LLIMHandler::onAvatarNameCache, this, _1, _2));
+}
+
+void LLIMHandler::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
+{
+	mAvatarName = av_name;
+}
+
+bool LLIMHandler::checkDisplayName()
+{
+	for (int i = 0; i <=20; i++)
+	{
+		if (mAvatarName.mDisplayName.empty())
+			ms_sleep(50);
+		else
+			return true;
+	}
+	return false;
+}
+
+
 //--------------------------------------------------------------------------
 bool LLIMHandler::processNotification(const LLSD& notify)
 {
@@ -71,49 +109,100 @@ bool LLIMHandler::processNotification(const LLSD& notify)
 	if(!notification)
 		return false;
 
-	// arrange a channel on a screen
-	if(!mChannel->getVisible())
+	if (PhoenixLogImToChatConsole && gSavedSettings.getBOOL("PhoenixUseNearbyChatConsole"))
 	{
-		initChannel();
+		if(notify["sigtype"].asString() == "add" || notify["sigtype"].asString() == "change")
+		{
+			LLSD substitutions = notification->getSubstitutions();
+			lookupDisplayNames(LLUUID(substitutions["FROM_ID"].asString()));
+
+			std::string senderName;
+			std::string message(substitutions["MESSAGE"].asString());
+			std::string delimiter = ": ";
+			std::string prefix = message.substr(0, 4);
+			LLStringUtil::toLower(prefix);
+
+			// irc styled messages
+			if (prefix == "/me " || prefix == "/me'")
+			{
+				delimiter = LLStringUtil::null;
+				message = message.substr(3);
+			}
+
+			if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
+			{
+				checkDisplayName();
+				senderName = mAvatarName.getCompleteName();
+			}
+			else if (gSavedSettings.getBOOL("UseDisplayNames"))
+			{
+				checkDisplayName();
+				senderName = mAvatarName.mDisplayName;
+			}
+			else
+			{
+				checkDisplayName();
+				senderName = mAvatarName.getLegacyName();
+			}
+
+			if (rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+			{
+				senderName = RlvStrings::getAnonym(senderName);
+			}
+
+			gConsole->addConsoleLine("IM: " + senderName + delimiter + message, LLUIColorTable::instance().getColor("AgentChatColor"));
+
+			LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+			gConsole->setVisible(!nearby_chat->getVisible());
+		}
 	}
 
-	if(notify["sigtype"].asString() == "add" || notify["sigtype"].asString() == "change")
+	else
 	{
-		LLSD substitutions = notification->getSubstitutions();
+		// arrange a channel on a screen
+		if(!mChannel->getVisible())
+		{
+			initChannel();
+		}
 
-		// According to comments in LLIMMgr::addMessage(), if we get message
-		// from ourselves, the sender id is set to null. This fixes EXT-875.
-		LLUUID avatar_id = substitutions["FROM_ID"].asUUID();
-		if (avatar_id.isNull())
-			avatar_id = gAgentID;
+		if(notify["sigtype"].asString() == "add" || notify["sigtype"].asString() == "change")
+		{
+			LLSD substitutions = notification->getSubstitutions();
 
-		LLToastIMPanel::Params im_p;
-		im_p.notification = notification;
-		im_p.avatar_id = avatar_id;
-		im_p.from = substitutions["FROM"].asString();
-		im_p.time = substitutions["TIME"].asString();
-		im_p.message = substitutions["MESSAGE"].asString();
-		im_p.session_id = substitutions["SESSION_ID"].asUUID();
+			// According to comments in LLIMMgr::addMessage(), if we get message
+			// from ourselves, the sender id is set to null. This fixes EXT-875.
+			LLUUID avatar_id = substitutions["FROM_ID"].asUUID();
+			if (avatar_id.isNull())
+				avatar_id = gAgentID;
 
-		LLToastIMPanel* im_box = new LLToastIMPanel(im_p);
+			LLToastIMPanel::Params im_p;
+			im_p.notification = notification;
+			im_p.avatar_id = avatar_id;
+			im_p.from = substitutions["c"].asString();
+			im_p.time = substitutions["TIME"].asString();
+			im_p.message = substitutions["MESSAGE"].asString();
+			im_p.session_id = substitutions["SESSION_ID"].asUUID();
 
-		LLToast::Params p;
-		p.notif_id = notification->getID();
-		p.session_id = im_p.session_id;
-		p.notification = notification;
-		p.panel = im_box;
-		p.can_be_stored = false;
-		p.on_delete_toast = boost::bind(&LLIMHandler::onDeleteToast, this, _1);
-		LLScreenChannel* channel = dynamic_cast<LLScreenChannel*>(mChannel);
-		if(channel)
-			channel->addToast(p);
+			LLToastIMPanel* im_box = new LLToastIMPanel(im_p);
 
-		// send a signal to the counter manager;
-		mNewNotificationSignal();
-	}
-	else if (notify["sigtype"].asString() == "delete")
-	{
-		mChannel->killToastByNotificationID(notification->getID());
+			LLToast::Params p;
+			p.notif_id = notification->getID();
+			p.session_id = im_p.session_id;
+			p.notification = notification;
+			p.panel = im_box;
+			p.can_be_stored = false;
+			p.on_delete_toast = boost::bind(&LLIMHandler::onDeleteToast, this, _1);
+			LLScreenChannel* channel = dynamic_cast<LLScreenChannel*>(mChannel);
+			if(channel)
+				channel->addToast(p);
+
+			// send a signal to the counter manager;
+			mNewNotificationSignal();
+		}
+		else if (notify["sigtype"].asString() == "delete")
+		{
+			mChannel->killToastByNotificationID(notification->getID());
+		}
 	}
 	return false;
 }
