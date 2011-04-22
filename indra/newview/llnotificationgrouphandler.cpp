@@ -113,6 +113,9 @@ bool LLGroupHandler::processNotification(const LLSD& notify)
 
 	if (PhoenixLogImToChatConsole && gSavedSettings.getBOOL("PhoenixUseNearbyChatConsole"))
 	{
+		// AO: For checking to see if we're blocking on IM-to-Console calls. Should be removed before release
+		llinfos << "AO DEBUG: IM2Console" << llendl;
+
 		if(notify["sigtype"].asString() == "add" || notify["sigtype"].asString() == "change")
 		{
 			LLSD substitutions = notification->getSubstitutions();
