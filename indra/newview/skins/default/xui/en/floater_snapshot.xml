@@ -289,12 +289,10 @@
         <combo_box.item
          label="JPEG"
          name="JPEG" />
-<!--
-        Disabled until someone convinces me that BMP support is actually useful.
+<!-- BMP still useful for forcing no compression and maximum compatibility with editors -->
         <combo_box.item
          label="BMP"
          name="BMP" />
--->
     </combo_box>
     <spinner
      allow_text_entry="false"
