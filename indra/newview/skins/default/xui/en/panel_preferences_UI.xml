@@ -228,7 +228,7 @@
 		layout="topleft"
 		name="ToastSettings"
 		width="330">
-			Notification Toast Settings (popups at bottom-right):
+			Notification Display Settings (popups,console,toasts):
 		</text>
 		<text
 		type="string"
@@ -334,7 +334,7 @@
 		increment="1"
 		initial_value="5"
 		label="Nearby Chat Toast life:"
-            tool_tip="Number of seconds that a nearby chat toast is displayed before fading"
+            tool_tip="Number of seconds that a nearby chat popup is displayed before fading"
 		label_width="155"
 		layout="topleft"
 		left="210"
@@ -389,7 +389,7 @@
 		height="16"
 		increment="1"
 		label="Nearby Chat Toast fade time:"
-            tool_tip="Number of seconds that a nearby chat toast is displayed before fading"
+            tool_tip="Number of seconds that a nearby chat popup takes to fade completely"
 		label_width="155"
 		layout="topleft"
 		left="210"
@@ -498,7 +498,7 @@
 		height="16"
 		increment="1"
 		label="Width of Nearby Chat Toast:"
-                tool_tip="Width of a the nearby chat toasts in percent of screen width"
+                tool_tip="Width of a the nearby chat popups in percent of screen width"
 		label_width="155"
 		layout="topleft"
 		left="210"

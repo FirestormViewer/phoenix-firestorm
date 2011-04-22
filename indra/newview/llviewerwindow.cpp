@@ -1604,7 +1604,11 @@ void LLViewerWindow::initBase()
 	cp.name("console");
 	cp.max_lines(gSavedSettings.getS32("ConsoleBufferSize"));
 	cp.rect(getChatConsoleRect());
-	cp.persist_time(gSavedSettings.getF32("ChatPersistTime"));
+	// AO, have console respect/reuse NearbyToastLifeTime for the length popup chat messages are displayed.
+	//cp.persist_time(gSavedSettings.getF32("ChatPersistTime"));
+	cp.persist_time((F32)gSavedSettings.getS32("NearbyToastLifeTime"));
+	// /AO
+
 	cp.font_size_index(gSavedSettings.getS32("ChatFontSize"));
 	cp.follows.flags(FOLLOWS_LEFT | FOLLOWS_RIGHT | FOLLOWS_BOTTOM);
 	gConsole = LLUICtrlFactory::create<LLConsole>(cp);
@@ -4803,7 +4807,12 @@ LLRect LLViewerWindow::getChatConsoleRect()
 	{
 		// Make console rect somewhat narrow so having inventory open is
 		// less of a problem.
-		console_rect.mRight  = console_rect.mLeft + 2 * getWindowWidthScaled() / 3;
+
+		//AO, Have console reuse/respect the desired nearby popup width set in NearbyToastWidth
+		//console_rect.mRight  = console_rect.mLeft + 2 * getWindowWidthScaled() / 3;
+		F32 percentage=gSavedSettings.getS32("NearbyToastWidth") / 100.0;
+		console_rect.mRight = S32((console_rect.mRight - CONSOLE_PADDING_RIGHT ) * percentage);
+		//</AO>
 	}
 
 	return console_rect;

@@ -223,7 +223,7 @@
           width="400"
           height="20"
           control_name="PhoenixUseNearbyChatConsole"
-          label="Use console for chat output (Viewer 1.x mode)"/>
+          label="Use console for chat popups instead of floating toasts (Viewer 1.x style)"/>
         <check_box
 	  enabled="false"
           layout="topleft"
@@ -255,7 +255,7 @@
           (requires restart)
         </text>
 
-		<spinner top_delta="25" control_name="ChatPersistTime" decimal_digits="0"
+		<spinner top_delta="25" control_name="NearbyToastLifeTime" decimal_digits="0"
 			enabled="true" follows="left|top" height="20" increment="1"
 			initial_val="10" label="Fade chat after" label_width="90" left="35"
 			max_val="60" min_val="2" mouse_opaque="true" name="fade_chat_time"
