@@ -638,12 +638,12 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 			{
 				if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
 				{
-					checkDisplayName();
+					if (!chat_msg.mFromName.empty()) checkDisplayName();
 					senderName = mDisplayName_Username;
 				}
 				else if (gSavedSettings.getBOOL("UseDisplayNames"))
 				{
-					checkDisplayName();
+					if (!chat_msg.mFromName.empty()) checkDisplayName();
 					senderName = mDisplayName;
 				}
 			}

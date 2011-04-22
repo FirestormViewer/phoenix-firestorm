@@ -114,6 +114,10 @@ bool LLIMHandler::processNotification(const LLSD& notify)
 		if(notify["sigtype"].asString() == "add" || notify["sigtype"].asString() == "change")
 		{
 			LLSD substitutions = notification->getSubstitutions();
+
+			// Filter notifications with empty ID and empty message
+			if (substitutions["FROM_ID"].asString() == "" && substitutions["MESSAGE"].asString() == "") return false;
+
 			lookupDisplayNames(LLUUID(substitutions["FROM_ID"].asString()));
 
 			std::string senderName;
