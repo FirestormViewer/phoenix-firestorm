@@ -223,21 +223,12 @@ public:
 	// base interface functions
 	virtual bool processNotification(const LLSD& notify);
 
-	void updatePhoenixLogImToChatConsole(const LLSD &data);
-
 protected:
 	virtual void onDeleteToast(LLToast* toast);
 	virtual void initChannel();
 
 	// own handlers
 	void onRejectToast(LLUUID& id);
-
-	void lookupDisplayNames(const LLUUID& agent_id);
-	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
-	bool checkDisplayName();
-
-	BOOL PhoenixLogImToChatConsole;
-	LLAvatarName mAvatarName;
 };
 
 /**
