@@ -66,3 +66,14 @@ Derender		LGPL
 RezUnderLandGroup	LGPL
 JiraLinkParsing	LGPL
 AreaSearch		BSD (from Emerald/CoolVL/Phoenix)
+ConsoleChat		LGPL
+SitOnAway		LGPL
+FlikrUploadsSupport	LGPL (from Katharine Berry)
+ImprovedTextureRepeats  LGPL
+Fly Override		LGPL
+KDU decoder support	Kakadu
+ForceGroundSit		LGPL
+PhantomMode		LGPL
+AdjustableToastWidth	LGPL
+Collapse/ExpandInv	LGPL
+
