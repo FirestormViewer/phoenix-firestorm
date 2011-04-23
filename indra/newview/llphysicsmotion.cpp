@@ -123,7 +123,7 @@ protected:
         }
         void setParamValue(LLViewerVisualParam *param,
                            const F32 new_value_local,
-						   F32 behavior_maxeffect);
+                                                   F32 behavior_maxeffect);
 
         F32 toLocal(const LLVector3 &world);
         F32 calculateVelocity_local();
