@@ -308,22 +308,12 @@
 	<check_box
      control_name="ScaleUniform"
      height="19"
-     label=""
+     label="Stretch Both Sides"
      layout="topleft"
      left="143"
      name="checkbox uniform"
 	 top="50"
      width="20" />
-    <text
-     height="19"
-     label="Stretch Both Sides"
-     left="163"
-     name="checkbox uniform label"
-     top="55"
-     width="120"
-     wrap="true">
-     	Stretch Both Sides
-    </text>
     <check_box
      control_name="ScaleStretchTextures"
      height="19"

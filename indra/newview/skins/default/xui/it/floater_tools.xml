@@ -67,10 +67,7 @@
 	<text name="RenderingCost" tool_tip="Mostra il costo di rendering calcolato per questo oggetto">
 		þ: [COUNT]
 	</text>
-	<check_box label="" name="checkbox uniform"/>
-	<text label="Allunga entrambi i lati" name="checkbox uniform label">
-		Allunga entrambi i lati
-	</text>
+	<check_box label="Stendi ambedue lati" name="checkbox uniform"/>
 	<check_box initial_value="true" label="Ridimensiona le texture" name="checkbox stretch textures"/>
 	<check_box initial_value="true" label="Posiziona nella griglia" name="checkbox snap to grid"/>
 	<combo_box name="combobox grid mode" tool_tip="Scegli il tipo di righello per posizionare l&apos;oggetto">

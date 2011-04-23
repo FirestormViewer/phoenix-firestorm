@@ -144,9 +144,10 @@ public:
 	LLCheckBoxCtrl*	mCheckStretchUniform;
 	LLCheckBoxCtrl*	mCheckStretchTexture;
 
+	// Ansariel: Reverted the hack because then when clicking the label it
+	//           doesn't check the checkbox anymore!
 	// !HACK! Replacement of mCheckStretchUniform label because LLCheckBoxCtrl
 	//  doesn't support word_wrap of its label. Need to fix truncation bug EXT-6658
-	LLTextBox*		mCheckStretchUniformLabel;
 
 	LLButton	*mBtnRotateLeft;
 	LLButton	*mBtnRotateReset;
