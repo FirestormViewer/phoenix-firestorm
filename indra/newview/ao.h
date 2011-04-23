@@ -62,6 +62,7 @@ class FloaterAO
 		LLScrollListItem* addAnimation(const std::string name);
 
 		void onSelectSet();
+		void onSelectSetSmall();
 		void onSelectState();
 		void onChangeAnimationSelection();
 		void onClickReload();
@@ -70,6 +71,7 @@ class FloaterAO
 		void onClickActivate();
 		void onCheckDefault();
 		void onCheckOverrideSits();
+		void onCheckOverrideSitsSmall();
 		void onCheckSmart();
 		void onCheckDisableStands();
 		void onClickMoveUp();
@@ -80,6 +82,9 @@ class FloaterAO
 		void onChangeCycleTime();
 		void onClickPrevious();
 		void onClickNext();
+
+		void onClickMore();
+		void onClickLess();
 
 		void reloading(BOOL yes);
 
@@ -97,6 +102,11 @@ class FloaterAO
 		AOSet::AOState* mSelectedState;
 
 		LLPanel* mReloadCoverPanel;
+
+		// Full interface
+
+		LLPanel* mMainInterfacePanel;
+
 		LLComboBox* mSetSelector;
 		LLButton* mActivateSetButton;
 		LLButton* mAddButton;
@@ -120,9 +130,21 @@ class FloaterAO
 
 		LLButton* mPreviousButton;
 		LLButton* mNextButton;
+		LLButton* mLessButton;
+
+		// Small interface
+
+		LLPanel* mSmallInterfacePanel;
+
+		LLComboBox* mSetSelectorSmall;
+		LLButton* mMoreButton;
+		LLButton* mPreviousButtonSmall;
+		LLButton* mNextButtonSmall;
+		LLCheckBoxCtrl* mOverrideSitsCheckBoxSmall;
 
 		BOOL mCanDragAndDrop;
 		BOOL mImportRunning;
+		BOOL mMore;
 };
 
 #endif // AO_H

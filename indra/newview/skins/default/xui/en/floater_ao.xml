@@ -28,7 +28,7 @@
 	</floater.string>
 
 	<panel
-		name="animation_overrider_panel"
+		name="animation_overrider_outer_panel"
 		filename="panel_ao.xml"
 		left="0"
 		top="16"

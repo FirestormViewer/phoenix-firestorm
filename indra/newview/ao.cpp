@@ -35,6 +35,7 @@
 #include "llcombobox.h"
 #include "llnotificationsutil.h"
 #include "llspinctrl.h"
+#include "llviewercontrol.h"
 #include "llviewerinventory.h"
 
 FloaterAO::FloaterAO(const LLSD& key)
@@ -43,7 +44,8 @@ FloaterAO::FloaterAO(const LLSD& key)
 	mSelectedSet(0),
 	mSelectedState(0),
 	mCanDragAndDrop(FALSE),
-	mImportRunning(FALSE)
+	mImportRunning(FALSE),
+	mMore(TRUE)
 {
 }
 
@@ -61,6 +63,7 @@ void FloaterAO::reloading(BOOL yes)
 void FloaterAO::updateSetParameters()
 {
 	mOverrideSitsCheckBox->setValue(mSelectedSet->getSitOverride());
+	mOverrideSitsCheckBoxSmall->setValue(mSelectedSet->getSitOverride());
 	mSmartCheckBox->setValue(mSelectedSet->getSmart());
 	mDisableMouselookCheckBox->setValue(mSelectedSet->getMouselookDisable());
 	BOOL isDefault=(mSelectedSet==AOEngine::instance().getDefaultSet()) ? TRUE : FALSE;
@@ -111,8 +114,12 @@ void FloaterAO::updateList()
 
 	mSetList=AOEngine::instance().getSetList();
 	mSetSelector->removeall();
+	mSetSelectorSmall->removeall();
 	mSetSelector->clear();
+	mSetSelectorSmall->clear();
+
 	mAnimationList->deleteAllItems();
+	reloading(FALSE);
 
 	if(mSetList.empty())
 	{
@@ -125,46 +132,55 @@ void FloaterAO::updateList()
 	{
 		std::string setName=mSetList[index]->getName();
 		mSetSelector->add(setName,&mSetList[index],ADD_BOTTOM,TRUE);
+		mSetSelectorSmall->add(setName,&mSetList[index],ADD_BOTTOM,TRUE);
 		if(setName.compare(currentSetName)==0)
 		{
 			mSelectedSet=AOEngine::instance().selectSetByName(currentSetName);
 			mSetSelector->selectNthItem(index);
+			mSetSelectorSmall->selectNthItem(index);
 			updateSetParameters();
 			updateAnimationList();
 		}
 	}
 	enableSetControls(TRUE);
-	reloading(FALSE);
 }
 
 BOOL FloaterAO::postBuild()
 {
-	LLPanel* aoPanel=getChild<LLPanel>("animation_overrider_panel");
-
+	LLPanel* aoPanel=getChild<LLPanel>("animation_overrider_outer_panel");
+	mMainInterfacePanel=aoPanel->getChild<LLPanel>("animation_overrider_panel");
+	mSmallInterfacePanel=aoPanel->getChild<LLPanel>("animation_overrider_panel_small");
 	mReloadCoverPanel=aoPanel->getChild<LLPanel>("ao_reload_cover");
 
-	mSetSelector=aoPanel->getChild<LLComboBox>("ao_set_selection_combo");
-	mActivateSetButton=aoPanel->getChild<LLButton>("ao_activate");
-	mAddButton=aoPanel->getChild<LLButton>("ao_add");
-	mRemoveButton=aoPanel->getChild<LLButton>("ao_remove");
-	mDefaultCheckBox=aoPanel->getChild<LLCheckBoxCtrl>("ao_default");
-	mOverrideSitsCheckBox=aoPanel->getChild<LLCheckBoxCtrl>("ao_sit_override");
-	mSmartCheckBox=aoPanel->getChild<LLCheckBoxCtrl>("ao_smart");
-	mDisableMouselookCheckBox=aoPanel->getChild<LLCheckBoxCtrl>("ao_disable_stands_in_mouselook");
+	mSetSelector=mMainInterfacePanel->getChild<LLComboBox>("ao_set_selection_combo");
+	mActivateSetButton=mMainInterfacePanel->getChild<LLButton>("ao_activate");
+	mAddButton=mMainInterfacePanel->getChild<LLButton>("ao_add");
+	mRemoveButton=mMainInterfacePanel->getChild<LLButton>("ao_remove");
+	mDefaultCheckBox=mMainInterfacePanel->getChild<LLCheckBoxCtrl>("ao_default");
+	mOverrideSitsCheckBox=mMainInterfacePanel->getChild<LLCheckBoxCtrl>("ao_sit_override");
+	mSmartCheckBox=mMainInterfacePanel->getChild<LLCheckBoxCtrl>("ao_smart");
+	mDisableMouselookCheckBox=mMainInterfacePanel->getChild<LLCheckBoxCtrl>("ao_disable_stands_in_mouselook");
 
-	mStateSelector=aoPanel->getChild<LLComboBox>("ao_state_selection_combo");
-	mAnimationList=aoPanel->getChild<LLScrollListCtrl>("ao_state_animation_list");
-	mMoveUpButton=aoPanel->getChild<LLButton>("ao_move_up");
-	mMoveDownButton=aoPanel->getChild<LLButton>("ao_move_down");
-	mTrashButton=aoPanel->getChild<LLButton>("ao_trash");
-	mCycleCheckBox=aoPanel->getChild<LLCheckBoxCtrl>("ao_cycle");
-	mRandomizeCheckBox=aoPanel->getChild<LLCheckBoxCtrl>("ao_randomize");
-	mCycleTimeTextLabel=aoPanel->getChild<LLTextBox>("ao_cycle_time_seconds_label");
-	mCycleTimeSpinner=aoPanel->getChild<LLSpinCtrl>("ao_cycle_time");
+	mStateSelector=mMainInterfacePanel->getChild<LLComboBox>("ao_state_selection_combo");
+	mAnimationList=mMainInterfacePanel->getChild<LLScrollListCtrl>("ao_state_animation_list");
+	mMoveUpButton=mMainInterfacePanel->getChild<LLButton>("ao_move_up");
+	mMoveDownButton=mMainInterfacePanel->getChild<LLButton>("ao_move_down");
+	mTrashButton=mMainInterfacePanel->getChild<LLButton>("ao_trash");
+	mCycleCheckBox=mMainInterfacePanel->getChild<LLCheckBoxCtrl>("ao_cycle");
+	mRandomizeCheckBox=mMainInterfacePanel->getChild<LLCheckBoxCtrl>("ao_randomize");
+	mCycleTimeTextLabel=mMainInterfacePanel->getChild<LLTextBox>("ao_cycle_time_seconds_label");
+	mCycleTimeSpinner=mMainInterfacePanel->getChild<LLSpinCtrl>("ao_cycle_time");
 
-	mPreviousButton=aoPanel->getChild<LLButton>("ao_previous");
-	mNextButton=aoPanel->getChild<LLButton>("ao_next");
-	mReloadButton=aoPanel->getChild<LLButton>("ao_reload");
+	mReloadButton=mMainInterfacePanel->getChild<LLButton>("ao_reload");
+	mPreviousButton=mMainInterfacePanel->getChild<LLButton>("ao_previous");
+	mNextButton=mMainInterfacePanel->getChild<LLButton>("ao_next");
+	mLessButton=mMainInterfacePanel->getChild<LLButton>("ao_less");
+
+	mSetSelectorSmall=mSmallInterfacePanel->getChild<LLComboBox>("ao_set_selection_combo_small");
+	mMoreButton=mSmallInterfacePanel->getChild<LLButton>("ao_more");
+	mPreviousButtonSmall=mSmallInterfacePanel->getChild<LLButton>("ao_previous_small");
+	mNextButtonSmall=mSmallInterfacePanel->getChild<LLButton>("ao_next_small");
+	mOverrideSitsCheckBoxSmall=mSmallInterfacePanel->getChild<LLCheckBoxCtrl>("ao_sit_override_small");
 
 	mSetSelector->setCommitCallback(boost::bind(&FloaterAO::onSelectSet,this));
 	mActivateSetButton->setCommitCallback(boost::bind(&FloaterAO::onClickActivate,this));
@@ -174,9 +190,6 @@ BOOL FloaterAO::postBuild()
 	mOverrideSitsCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckOverrideSits,this));
 	mSmartCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckSmart,this));
 	mDisableMouselookCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckDisableStands,this));
-
-	mPreviousButton->setCommitCallback(boost::bind(&FloaterAO::onClickPrevious,this));
-	mNextButton->setCommitCallback(boost::bind(&FloaterAO::onClickNext,this));
 
 	mAnimationList->setCommitOnSelectionChange(TRUE);
 
@@ -189,16 +202,28 @@ BOOL FloaterAO::postBuild()
 	mRandomizeCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckRandomize,this));
 	mCycleTimeSpinner->setCommitCallback(boost::bind(&FloaterAO::onChangeCycleTime,this));
 
-	updateSmart();
-
 	mReloadButton->setCommitCallback(boost::bind(&FloaterAO::onClickReload,this));
+	mPreviousButton->setCommitCallback(boost::bind(&FloaterAO::onClickPrevious,this));
+	mNextButton->setCommitCallback(boost::bind(&FloaterAO::onClickNext,this));
+	mLessButton->setCommitCallback(boost::bind(&FloaterAO::onClickLess,this));
+	mOverrideSitsCheckBoxSmall->setCommitCallback(boost::bind(&FloaterAO::onCheckOverrideSitsSmall,this));
+
+	mSetSelectorSmall->setCommitCallback(boost::bind(&FloaterAO::onSelectSetSmall,this));
+	mMoreButton->setCommitCallback(boost::bind(&FloaterAO::onClickMore,this));
+	mPreviousButtonSmall->setCommitCallback(boost::bind(&FloaterAO::onClickPrevious,this));
+	mNextButtonSmall->setCommitCallback(boost::bind(&FloaterAO::onClickNext,this));
+
+	updateSmart();
 
 	AOEngine::instance().setReloadCallback(boost::bind(&FloaterAO::updateList,this));
 
-	enableSetControls(FALSE);
 	onChangeAnimationSelection();
+	mMainInterfacePanel->setVisible(TRUE);
+	mSmallInterfacePanel->setVisible(FALSE);
+	reloading(TRUE);
 
 	updateList();
+
 	return LLDockableFloater::postBuild();
 }
 
@@ -242,6 +267,16 @@ void FloaterAO::onOpen(const LLSD& key)
 void FloaterAO::onSelectSet()
 {
 	mSelectedSet=AOEngine::instance().getSetByName(mSetSelector->getSelectedItemLabel());
+	if(mSelectedSet)
+	{
+		updateSetParameters();
+		updateAnimationList();
+	}
+}
+
+void FloaterAO::onSelectSetSmall()
+{
+	mSelectedSet=AOEngine::instance().getSetByName(mSetSelectorSmall->getSelectedItemLabel());
 	if(mSelectedSet)
 	{
 		updateSetParameters();
@@ -373,8 +408,10 @@ BOOL FloaterAO::removeSetCallback(const LLSD& notification,const LLSD& response)
 			reloading(TRUE);
 			// to prevent snapping back to deleted set
 			mSetSelector->removeall();
+			mSetSelectorSmall->removeall();
 			// visually indicate there are no items left
 			mSetSelector->clear();
+			mSetSelectorSmall->clear();
 			mAnimationList->deleteAllItems();
 			return TRUE;
 		}
@@ -390,9 +427,16 @@ void FloaterAO::onCheckDefault()
 
 void FloaterAO::onCheckOverrideSits()
 {
+	mOverrideSitsCheckBoxSmall->setValue(mOverrideSitsCheckBox->getValue());
 	if(mSelectedSet)
 		AOEngine::instance().setOverrideSits(mSelectedSet,mOverrideSitsCheckBox->getValue().asBoolean());
 	updateSmart();
+}
+
+void FloaterAO::onCheckOverrideSitsSmall()
+{
+	mOverrideSitsCheckBox->setValue(mOverrideSitsCheckBoxSmall->getValue());
+	onCheckOverrideSits();
 }
 
 void FloaterAO::updateSmart()
@@ -529,10 +573,50 @@ void FloaterAO::onClickNext()
 	AOEngine::instance().cycle(AOEngine::CycleNext);
 }
 
+void FloaterAO::onClickMore()
+{
+	LLRect fullSize=gSavedPerAccountSettings.getRect("floater_rect_animation_overrider");
+	LLRect smallSize=getRect();
+
+	mMore=TRUE;
+
+	mSmallInterfacePanel->setVisible(FALSE);
+	mMainInterfacePanel->setVisible(TRUE);
+	setCanResize(TRUE);
+
+	reshape(getRect().getWidth(),fullSize.getHeight());
+}
+
+void FloaterAO::onClickLess()
+{
+	LLRect fullSize=getRect();
+	LLRect smallSize=mSmallInterfacePanel->getRect();
+	smallSize.setLeftTopAndSize(0,0,smallSize.getWidth(),smallSize.getHeight()+getHeaderHeight());
+
+	mMore=FALSE;
+
+	mSmallInterfacePanel->setVisible(TRUE);
+	mMainInterfacePanel->setVisible(FALSE);
+	setCanResize(FALSE);
+
+	reshape(getRect().getWidth(),smallSize.getHeight());
+
+	// save current size and position
+	gSavedPerAccountSettings.setRect("floater_rect_animation_overrider",fullSize);
+}
+
 // virtual
 BOOL FloaterAO::handleDragAndDrop(S32 x,S32 y,MASK mask,BOOL drop,EDragAndDropType type,void* data,
 									EAcceptance* accept,std::string& tooltipMsg)
 {
+	// no drag & drop on small interface
+	if(!mMore)
+	{
+		tooltipMsg="ao_dnd_only_on_full_interface";
+		*accept=ACCEPT_NO;
+		return TRUE;
+	}
+
 	LLInventoryItem* item=(LLInventoryItem*) data;
 
 	if(type==DAD_NOTECARD)
