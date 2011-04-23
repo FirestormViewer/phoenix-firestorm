@@ -1530,7 +1530,7 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 			log_message = chatHistory_string + " " + LLTrans::getString("InvOfferGaveYou") + " " + mDesc + LLTrans::getString(".");
 			LLSD args;
 			args["MESSAGE"] = log_message;
-			LLNotificationsUtil::add("SystemMessage", args);
+			LLNotificationsUtil::add("SystemMessageTip", args);
 		}
 		break;
 
@@ -1756,7 +1756,7 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 				log_message = chatHistory_string + " " + LLTrans::getString("InvOfferGaveYou") + " " + mDesc + LLTrans::getString(".");
 				LLSD args;
 				args["MESSAGE"] = log_message;
-				LLNotificationsUtil::add("SystemMessage", args);
+				LLNotificationsUtil::add("SystemMessageTip", args);
 			}
 			
 			// we will want to open this item when it comes back.
