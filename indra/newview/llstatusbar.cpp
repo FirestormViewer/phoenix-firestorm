@@ -690,8 +690,13 @@ void LLStatusBar::onNavBarShowParcelPropertiesCtrlChanged()
 
 void LLStatusBar::buildLocationString(std::string& loc_str, bool show_coords)
 {
-	LLAgentUI::ELocationFormat format =
-		(show_coords ? LLAgentUI::LOCATION_FORMAT_FULL : LLAgentUI::LOCATION_FORMAT_NO_COORDS);
+	// Ansariel: Use V1 layout for location string in status bar so
+	//           that the most important information dont't get lost:
+	//           First region name, followed by location, maturity
+	//           rating and at the end the parcel description.
+	//LLAgentUI::ELocationFormat format =
+	//	(show_coords ? LLAgentUI::LOCATION_FORMAT_FULL : LLAgentUI::LOCATION_FORMAT_NO_COORDS);
+	LLAgentUI::ELocationFormat format = LLAgentUI::LOCATION_FORMAT_V1_STATUSBAR;
 
 	if (!LLAgentUI::buildLocationString(loc_str, format))
 	{
@@ -711,19 +716,19 @@ void LLStatusBar::setParcelInfoText(const std::string& new_text)
 
 	mParcelInfoText->reshape(rect.getWidth(), rect.getHeight(), TRUE);
 	mParcelInfoText->setRect(rect);
-	layoutParcelIcons();
 }
 
 void LLStatusBar::update()
 {
 	std::string new_text;
 
+	updateParcelIcons();
+
 	// don't need to have separate show_coords variable; if user requested the coords to be shown
 	// they will be added during the next call to the draw() method.
 	buildLocationString(new_text, false);
 	setParcelInfoText(new_text);
 
-	updateParcelIcons();
 	updateParcelPanel();
 }
 
@@ -833,10 +838,13 @@ void LLStatusBar::updateHealth()
 void LLStatusBar::layoutParcelIcons()
 {
 	// TODO: remove hard-coded values and read them as xml parameters
-	static const int FIRST_ICON_HPAD = 16;
+	static const int FIRST_ICON_HPAD = 2; // 2 padding; See also ICON_HEAD
 	// Kadah - not needed static const int LAST_ICON_HPAD = 11;
 
-	S32 left = mParcelInfoText->getRect().mRight + FIRST_ICON_HPAD;
+	// Ansariel: Changed order to be more Viewer 1 like and keep important
+	//           information visible: Parcel power icons first, then parcel
+	//           info text!
+	S32 left = mInfoBtn->getRect().mRight + FIRST_ICON_HPAD;
 
 	left = layoutWidget(mDamageText, left);
 
@@ -844,8 +852,11 @@ void LLStatusBar::layoutParcelIcons()
 	{
 		left = layoutWidget(mParcelIcon[i], left);
 	}
-
 	layoutWidget(mPWLBtn, left);
+
+	LLRect infoTextRect = mParcelInfoText->getRect();
+	infoTextRect.mLeft = left;
+	mParcelInfoText->setRect(infoTextRect);
 }
 
 S32 LLStatusBar::layoutWidget(LLUICtrl* ctrl, S32 left)

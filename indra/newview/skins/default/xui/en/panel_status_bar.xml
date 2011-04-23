@@ -43,17 +43,6 @@
     name="place_info_btn"
     top="2"
     width="16"/>
-   <text
-     follows="left|top|right"
-     height="16"
-     layout="topleft"
-     left_pad="11"
-     length="1"
-     name="parcel_info_text"
-     top="5"
-     value="(loading...)"
-     type="string"
-     width="100"/>
   <icon
     enabled="true"
     follows="right|top"
@@ -61,7 +50,7 @@
     image_name="Parcel_VoiceNo_Dark"
     name="voice_icon"
     top="0"
-    left="100"
+    left="16"
     visible="true"
     width="22"
 	scale_image="false"
@@ -72,7 +61,7 @@
     image_name="Parcel_FlyNo_Dark"
     name="fly_icon"
     top="0"
-    left="122"
+    left="38"
     visible="true"
     width="22"
 	scale_image="false"
@@ -83,7 +72,7 @@
     image_name="Parcel_PushNo_Dark"
     name="push_icon"
     top="0"
-    left="144"
+    left="60"
     visible="true"
     width="22"
 	scale_image="false"
@@ -94,7 +83,7 @@
     image_name="Parcel_BuildNo_Dark"
     name="build_icon"
     top="0"
-    left="166"
+    left="82"
     visible="true"
     width="22"
 	scale_image="false"
@@ -105,7 +94,7 @@
     image_name="Parcel_ScriptsNo_Dark"
     name="scripts_icon"
     top="0"
-    left="188"
+    left="104"
     visible="true"
     width="22"
 	scale_image="false"
@@ -118,7 +107,7 @@
     image_disabled_selected="Parcel_Windlight"
     image_selected="Parcel_Windlight"
     image_unselected="Parcel_Windlight"
-    left="226"
+    left="126"
     name="status_wl_btn"
     top="2"
     tool_tip="Parcel has WL settings" 
@@ -129,7 +118,7 @@
     image_name="Parcel_Health_Dark"
     name="damage_icon"
     top="4"
-    left="210"
+    left="142"
     visible="true"
     width="14"
 	scale_image="false"
@@ -141,12 +130,23 @@
     height="18"
     name="damage_text"
     value="100%"
-    top="3"
-    left="224"
+    top="5"
+    left="156"
     visible="true"
     width="35"
     />
-  </panel>
+     <text
+       follows="left|top|right"
+       height="16"
+       layout="topleft"
+       left="195"
+       length="1"
+       name="parcel_info_text"
+       top="5"
+       value="(loading...)"
+       type="string"
+       width="100"/>
+   </panel>
 
     <panel.string
      name="packet_loss_tooltip">
