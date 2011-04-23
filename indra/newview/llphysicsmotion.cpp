@@ -43,7 +43,7 @@
 typedef std::map<std::string, std::string> controller_map_t;
 typedef std::map<std::string, F32> default_controller_map_t;
 
-#define MIN_REQUIRED_PIXEL_AREA_BREAST_MOTION 0.f;
+#define MIN_REQUIRED_PIXEL_AREA_AVATAR_PHYSICS_MOTION 0.f;
 
 inline F64 llsgn(const F64 a)
 {
@@ -364,7 +364,7 @@ void LLPhysicsMotionController::addMotion(LLPhysicsMotion *motion)
 
 F32 LLPhysicsMotionController::getMinPixelArea() 
 {
-        return MIN_REQUIRED_PIXEL_AREA_BREAST_MOTION;
+        return MIN_REQUIRED_PIXEL_AREA_AVATAR_PHYSICS_MOTION;
 }
 
 // Local space means "parameter space".
@@ -446,7 +446,14 @@ BOOL LLPhysicsMotion::onUpdate(F32 time)
         //
 
         const F32 time_delta = time - mLastTime;
-        if (time_delta > 3.0 || time_delta <= 0.01)
+
+	// Don't update too frequently, to avoid precision errors from small time slices.
+	if (time_delta <= .01)
+	{
+		return FALSE;
+	}
+	
+        if (time_delta > 3.0)
         {
                 mLastTime = time;
                 return FALSE;
@@ -643,7 +650,7 @@ BOOL LLPhysicsMotion::onUpdate(F32 time)
         if ((pixel_area > area_for_this_setting) || is_self)
         {
                 const F32 position_diff_local = llabs(mPositionLastUpdate_local-position_new_local_clamped);
-                const F32 min_delta = (1.01f-lod_factor)*0.4f;
+                const F32 min_delta = (1.0001f-lod_factor)*0.4f;
                 if (llabs(position_diff_local) > min_delta)
                 {
                         update_visuals = TRUE;
