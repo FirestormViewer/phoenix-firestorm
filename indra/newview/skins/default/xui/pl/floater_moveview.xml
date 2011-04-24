@@ -49,13 +49,10 @@
 		Crouch (naciśnij C)
 	</string>
 	<string name="walk_title">
-		Idź
 	</string>
 	<string name="run_title">
-		Biegnij
 	</string>
 	<string name="fly_title">
-		Lataj
 	</string>
 	<panel name="panel_actions">
 		<button label="" label_selected="" name="move up btn" tool_tip="Leć do góry (naciśnij E)"/>

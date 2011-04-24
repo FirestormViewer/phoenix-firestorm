@@ -49,13 +49,10 @@
 		S&apos;accroupir (touche C)
 	</string>
 	<string name="walk_title">
-		Marcher
 	</string>
 	<string name="run_title">
-		Courir
 	</string>
 	<string name="fly_title">
-		Voler
 	</string>
 	<panel name="panel_actions">
 		<button label="" label_selected="" name="move up btn" tool_tip="Voler vers le haut (touche E)"/>
