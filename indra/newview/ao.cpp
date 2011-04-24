@@ -639,7 +639,7 @@ BOOL FloaterAO::handleDragAndDrop(S32 x,S32 y,MASK mask,BOOL drop,EDragAndDropTy
 	}
 	else if(type==DAD_ANIMATION)
 	{
-		if(!mSelectedSet || !mSelectedState || !mCanDragAndDrop)
+		if(!drop && (!mSelectedSet || !mSelectedState || !mCanDragAndDrop))
 		{
 			*accept=ACCEPT_NO;
 			return TRUE;
