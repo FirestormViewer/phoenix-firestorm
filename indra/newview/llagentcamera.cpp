@@ -2767,7 +2767,7 @@ BOOL LLAgentCamera::setPointAt(EPointAtType target_type, LLViewerObject *object,
 {
 	// disallow pointing at attachments and avatars
 	//this is the editing arm motion
-	static LLCachedControl<bool> private_pointat(gSavedSettings, "PrivateLookAtTarget", false);
+	static LLCachedControl<bool> private_pointat(gSavedSettings, "PrivatePointAtTarget", false);
 	if (object && (object->isAttachment() || object->isAvatar() || private_pointat))
 	{
 		return FALSE;
