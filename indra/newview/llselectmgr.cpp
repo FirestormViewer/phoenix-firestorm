@@ -3729,20 +3729,32 @@ void LLSelectMgr::deselectAllIfTooFar()
 void LLSelectMgr::selectionSetObjectName(const std::string& name)
 {
 	// we only work correctly if 1 object is selected.
-	if(mSelectedObjects->getRootObjectCount() == 1)
+// FIRE-777
+	if(mSelectedObjects->getRootObjectCount() >= 1)
+//	if(mSelectedObjects->getRootObjectCount() == 1)
+// /FIRE-777
 	{
 		sendListToRegions("ObjectName",
 						  packAgentAndSessionID,
 						  packObjectName,
-						  (void*)(new std::string(name)),
+// FIRE-777 - allocation in heap should not be necessary (callback function is immediately called)
+						  (void*)(&name),
+//						  (void*)(new std::string(name)),
+// /FIRE-777
 						  SEND_ONLY_ROOTS);
 	}
-	else if(mSelectedObjects->getObjectCount() == 1)
+// FIRE-777
+	else if(mSelectedObjects->getObjectCount() >= 1)
+//	else if(mSelectedObjects->getObjectCount() == 1)
+// /FIRE-777
 	{
 		sendListToRegions("ObjectName",
 						  packAgentAndSessionID,
 						  packObjectName,
-						  (void*)(new std::string(name)),
+// FIRE-777 - allocation in heap should not be necessary (callback function is immediately called)
+						  (void*)(&name),
+//						  (void*)(new std::string(name)),
+// /FIRE-777
 						  SEND_INDIVIDUALS);
 	}
 }
@@ -3750,20 +3762,32 @@ void LLSelectMgr::selectionSetObjectName(const std::string& name)
 void LLSelectMgr::selectionSetObjectDescription(const std::string& desc)
 {
 	// we only work correctly if 1 object is selected.
-	if(mSelectedObjects->getRootObjectCount() == 1)
+// FIRE-777
+	if(mSelectedObjects->getRootObjectCount() >= 1)
+//	if(mSelectedObjects->getRootObjectCount() == 1)
+// /FIRE-777
 	{
 		sendListToRegions("ObjectDescription",
 						  packAgentAndSessionID,
 						  packObjectDescription,
-						  (void*)(new std::string(desc)),
+// FIRE-777 - allocation in heap should not be necessary (callback function is immediately called)
+						  (void*)(&desc),
+//						  (void*)(new std::string(desc)),
+// /FIRE-777
 						  SEND_ONLY_ROOTS);
 	}
-	else if(mSelectedObjects->getObjectCount() == 1)
+// FIRE-777
+	else if(mSelectedObjects->getObjectCount() >= 1)
+//	else if(mSelectedObjects->getObjectCount() == 1)
+// /FIRE-777
 	{
 		sendListToRegions("ObjectDescription",
 						  packAgentAndSessionID,
 						  packObjectDescription,
-						  (void*)(new std::string(desc)),
+// FIRE-777 - allocation in heap should not be necessary (callback function is immediately called)
+						  (void*)(&desc),
+//						  (void*)(new std::string(desc)),
+// /FIRE-777
 						  SEND_INDIVIDUALS);
 	}
 }
@@ -4274,7 +4298,9 @@ void LLSelectMgr::packObjectName(LLSelectNode* node, void* user_data)
 		gMessageSystem->addU32Fast(_PREHASH_LocalID, node->getObject()->getLocalID());
 		gMessageSystem->addStringFast(_PREHASH_Name, *name);
 	}
-	delete name;
+// FIRE-777  now the caller takes care of this
+//	delete name;
+// /FIRE-777
 }
 
 // static

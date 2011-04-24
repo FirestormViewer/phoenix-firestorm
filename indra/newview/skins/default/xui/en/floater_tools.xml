@@ -841,6 +841,10 @@
              name="Sale Mixed">
                 Mixed Sale
             </panel.string>
+            <panel.string
+             name="multiple selection">
+                Multiple selection
+            </panel.string>
             <text
              follows="left|top"
              height="10"

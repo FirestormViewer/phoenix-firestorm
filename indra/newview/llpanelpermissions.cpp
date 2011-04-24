@@ -431,13 +431,30 @@ void LLPanelPermissions::refresh()
 	}
 	else
 	{
-		getChild<LLUICtrl>("Object Name")->setValue(LLStringUtil::null);
-		LineEditorObjectDesc->setText(LLStringUtil::null);
+// FIRE-777: allow batch edit for name and description
+//		getChild<LLUICtrl>("Object Name")->setValue(LLStringUtil::null);
+//		LineEditorObjectDesc->setText(LLStringUtil::null);
+		if (keyboard_focus_view != LineEditorObjectName)
+		{
+			getChild<LLUICtrl>("Object Name")->setValue(getString("multiple selection"));
+		}
+
+		if (LineEditorObjectDesc)
+		{
+			if (keyboard_focus_view != LineEditorObjectDesc)
+			{
+				LineEditorObjectDesc->setText(getString("multiple selection"));
+			}
+		}
+// /FIRE-777
 	}
 
 	// figure out the contents of the name, description, & category
 	BOOL edit_name_desc = FALSE;
-	if (is_one_object && objectp->permModify())
+// FIRE-777: allow batch edit for name and description
+//	if (is_one_object && objectp->permModify())
+	if (objectp->permModify())
+// /FIRE-777
 	{
 		edit_name_desc = TRUE;
 	}
