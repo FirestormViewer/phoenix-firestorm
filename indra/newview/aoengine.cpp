@@ -1326,7 +1326,7 @@ void AOEngine::parseNotecard(const char* buffer)
 			continue;
 		}
 
-		std::string stateName=line.substr(1,endTag-2);
+		std::string stateName=line.substr(1,endTag-1);
 		LLStringUtil::trim(stateName);
 
 		AOSet::AOState* newState=mImportSet->getStateByName(stateName);
@@ -1338,7 +1338,7 @@ void AOEngine::parseNotecard(const char* buffer)
 
 		std::string animationLine=line.substr(endTag+1);
 		std::vector<std::string> animationList;
-		LLStringUtil::getTokens(animationLine,animationList,"|");
+		LLStringUtil::getTokens(animationLine,animationList,"|,");
 
 		for(U32 animIndex=0;animIndex<animationList.size();animIndex++)
 		{

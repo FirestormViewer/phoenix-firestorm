@@ -77,6 +77,7 @@ class AOSet
 		struct AOState
 		{
 			std::string mName;
+			std::vector<std::string> mAlternateNames;
 			LLUUID mRemapID;
 			BOOL mCycle;
 			BOOL mRandom;

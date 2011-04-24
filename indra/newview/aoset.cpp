@@ -40,34 +40,35 @@ AOSet::AOSet(const LLUUID inventoryID)
 {
 	lldebugs << "Creating new AO set: " << this << llendl;
 
+	// ZHAO names first, alternate names following, separated by | characters
 	// keep number and order in sync with the enum in the declaration
 	const std::string stateNames[AOSTATES_MAX]=
 	{
-		"Standing",
-		"Walking",
+		"Standing|Stand.1|Stand.2|Stand.3",
+		"Walking|Walk.N",
 		"Running",
-		"Sitting",
-		"Sitting On Ground",
-		"Crouching",
-		"Crouch Walking",
-		"Landing",
+		"Sitting|Sit.N",
+		"Sitting On Ground|Sit.G",
+		"Crouching|Crouch",
+		"Crouch Walking|Walk.C",
+		"Landing|Land.N",
 		"Soft Landing",
-		"Standing Up",
+		"Standing Up|Stand.U",
 		"Falling",
-		"Flying Down",
-		"Flying Up",
-		"Flying",
+		"Flying Down|Hover.D",
+		"Flying Up|Hover.U",
+		"Flying|Fly.N",
 		"Flying Slow",
-		"Hovering",
-		"Jumping",
-		"Pre Jumping",
-		"Turning Right",
-		"Turning Left",
+		"Hovering|Hover.N",
+		"Jumping|Jump.N",
+		"Pre Jumping|Jump.P",
+		"Turning Right|Turn.R",
+		"Turning Left|Turn.L",
 		"Typing",
-		"Floating",
-		"Swimming Forward",
-		"Swimming Up",
-		"Swimming Down"
+		"Floating|Swim.H",
+		"Swimming Forward|Swim.N",
+		"Swimming Up|Swim.U",
+		"Swimming Down|Swim.D"
 	};
 
 	// keep number and order in sync with the enum in the declaration
@@ -102,7 +103,11 @@ AOSet::AOSet(const LLUUID inventoryID)
 
 	for(S32 index=0;index<AOSTATES_MAX;index++)
 	{
-		mStates[index].mName=stateNames[index];
+		std::vector<std::string> stateNameList;
+		LLStringUtil::getTokens(stateNames[index],stateNameList,"|");
+
+		mStates[index].mName=stateNameList[0];			// for quick reference
+		mStates[index].mAlternateNames=stateNameList;	// to get all possible names, including mName
 		mStates[index].mRemapID=stateUUIDs[index];
 		mStates[index].mInventoryUUID=LLUUID::null;
 		mStates[index].mCurrentAnimation=0;
@@ -111,7 +116,7 @@ AOSet::AOSet(const LLUUID inventoryID)
 		mStates[index].mRandom=FALSE;
 		mStates[index].mCycleTime=0.0f;
 		mStates[index].mDirty=FALSE;
-		mStateNames.push_back(stateNames[index]);
+		mStateNames.push_back(stateNameList[0]);
 	}
 	stopTimer();
 }
@@ -130,9 +135,13 @@ AOSet::AOState* AOSet::getStateByName(const std::string name)
 {
 	for(S32 index=0;index<AOSTATES_MAX;index++)
 	{
-		if(mStates[index].mName.compare(name)==0)
+		AOState* state=&mStates[index];
+		for(U32 names=0;names<state->mAlternateNames.size();names++)
 		{
-			return &mStates[index];
+			if(state->mAlternateNames[names].compare(name)==0)
+			{
+				return state;
+			}
 		}
 	}
 	return NULL;
