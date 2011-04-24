@@ -165,7 +165,7 @@ LLFloater::Params::Params()
 	save_rect("save_rect", false),
 	save_visibility("save_visibility", false),
 	can_dock("can_dock", false),
-	open_centered("open_centered", false),
+	open_centered("open_centered", true),
 	header_height("header_height", 0),
 	legacy_header_height("legacy_header_height", 0),
 	close_image("close_image"),
