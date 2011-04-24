@@ -10,9 +10,12 @@
 		Objekte:
 	</text>
 	<filter_editor label="Inventar filtern" name="inventory search editor"/>
+	<button name="collapse_btn" label="Einklappen" />
+	<button name="expand_btn" label="Ausklappen" />
 	<tab_container name="inventory filter tabs">
 		<inventory_panel label="MEIN INVENTAR" name="All Items"/>
 		<recent_inventory_panel label="AKTUELL" name="Recent Items"/>
+		<worn_inventory_panel label="ANGEZOGEN" name="Worn Items"/>		
 	</tab_container>
 	<layout_stack name="bottom_panel">
 		<layout_panel name="options_gear_btn_panel">
