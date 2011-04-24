@@ -50,7 +50,7 @@ public:
 LLIconDictionary::LLIconDictionary()
 {
 	addEntry(LLInventoryIcon::ICONNAME_TEXTURE, 				new IconEntry("Inv_Texture"));
-	addEntry(LLInventoryIcon::ICONNAME_SOUND, 					new IconEntry("Inv_Texture"));
+	addEntry(LLInventoryIcon::ICONNAME_SOUND, 					new IconEntry("Inv_Sound"));
 	addEntry(LLInventoryIcon::ICONNAME_CALLINGCARD_ONLINE, 		new IconEntry("Inv_CallingCard"));
 	addEntry(LLInventoryIcon::ICONNAME_CALLINGCARD_OFFLINE, 	new IconEntry("Inv_CallingCardOffline"));
 	addEntry(LLInventoryIcon::ICONNAME_LANDMARK, 				new IconEntry("Inv_Landmark"));
