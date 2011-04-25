@@ -111,6 +111,7 @@ class AOEngine
 		BOOL addAnimation(const AOSet* set,AOSet::AOState* state,const LLInventoryItem* item,BOOL reload=TRUE);
 		BOOL removeAnimation(const AOSet* set,AOSet::AOState* state,S32 index);
 		void checkSitCancel();
+		void checkBelowWater(BOOL yes);
 
 		BOOL importNotecard(const LLInventoryItem* item);
 		void processImport();
@@ -156,6 +157,7 @@ class AOEngine
 		void stopAllSitVariants();
 
 		BOOL foreignAnimations();
+		LLUUID mapSwimming(LLUUID motion);
 
 		void updateSortOrder(AOSet::AOState* state);
 		void saveSet(const AOSet* set);
@@ -175,9 +177,12 @@ class AOEngine
 
 		BOOL mEnabled;
 		BOOL mInMouselook;
+		BOOL mUnderWater;
+
 		LLUUID mAOFolder;
 		LLUUID mLastMotion;
 		LLUUID mLastOverriddenMotion;
+
 		std::vector<AOSet*> mSets;
 		AOSet* mCurrentSet;
 		AOSet* mDefaultSet;

@@ -3296,7 +3296,12 @@ void LLVOAvatar::idleUpdateBelowWater()
 	F32 water_height;
 	water_height = getRegion()->getWaterHeight();
 
+	BOOL wasBelowWater = mBelowWater;			// ## Zi: Animation Overrider
 	mBelowWater =  avatar_height < water_height;
+	// ## Zi: Animation Overrider
+	if (wasBelowWater != mBelowWater)
+		AOEngine::instance().checkBelowWater(mBelowWater);
+	// ## Zi: Animation Overrider
 }
 
 void LLVOAvatar::slamPosition()

@@ -55,6 +55,7 @@ AOEngine::AOEngine() :
 	mDefaultSet(0),
 	mEnabled(FALSE),
 	mInMouselook(FALSE),
+	mUnderWater(FALSE),
 	mImportSet(0),
 	mImportCategory(LLUUID::null),
 	mAOFolder(LLUUID::null),
@@ -131,6 +132,37 @@ BOOL AOEngine::foreignAnimations()
 			return TRUE;
 	}
 	return FALSE;
+}
+
+LLUUID AOEngine::mapSwimming(LLUUID motion)
+{
+	S32 stateNum;
+llwarns << __LINE__ << llendl;
+	if(motion==ANIM_AGENT_HOVER)
+		stateNum=AOSet::Floating;
+	else if(motion==ANIM_AGENT_FLY)
+		stateNum=AOSet::SwimmingForward;
+	else if(motion==ANIM_AGENT_HOVER_UP)
+		stateNum=AOSet::SwimmingUp;
+	else if(motion==ANIM_AGENT_HOVER_DOWN)
+		stateNum=AOSet::SwimmingDown;
+	else
+		return LLUUID::null;
+llwarns << __LINE__ << " " << stateNum << llendl;
+
+	AOSet::AOState* state=mCurrentSet->getState(stateNum);
+llwarns << __LINE__ << " " << state->mName << llendl;
+	return mCurrentSet->getAnimationForState(state);
+}
+
+void AOEngine::checkBelowWater(BOOL yes)
+{
+	if(mUnderWater==yes)
+		return;
+
+	gAgent.sendAnimationRequest(override(mLastOverriddenMotion,FALSE),ANIM_REQUEST_STOP);
+	mUnderWater=yes;
+	gAgent.sendAnimationRequest(override(mLastOverriddenMotion,TRUE),ANIM_REQUEST_START);
 }
 
 void AOEngine::enable(BOOL yes)
@@ -297,7 +329,13 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 		if(motion!=ANIM_AGENT_TYPE)
 			mCurrentSet->setMotion(motion);
 
-		animation=mCurrentSet->getAnimationForState(state);
+		mUnderWater=gAgentAvatarp->mBelowWater;
+		if(mUnderWater)
+			animation=mapSwimming(motion);
+
+		if(animation.isNull())
+			animation=mCurrentSet->getAnimationForState(state);
+
 		state->mCurrentAnimationID=animation;
 		lldebugs	<< "overriding " <<  gAnimLibrary.animStateToString(motion)
 					<< " with " << animation
