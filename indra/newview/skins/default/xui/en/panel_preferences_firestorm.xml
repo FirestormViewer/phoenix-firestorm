@@ -162,7 +162,7 @@
         <check_box
           control_name="AutoCloseOOC"
           name="AutoCloseOOC"
-          label="Auto-close ((OOC)) parenthesis"
+          label="Auto-close ((OOC)) parentheses"
           layout="topleft"
           top_delta="22"
           left="30"
@@ -277,6 +277,15 @@
 			width="60">
 			(# lines)
 		</text>
+        <check_box
+          layout="topleft"
+          follows="left|top"
+          top_delta="25"
+          left="20"
+          width="50"
+          height="20"
+          control_name="PhoenixBoldGroupMods"
+          label="Show group moderator messages in bold"/>
 		
 
 	</panel>
