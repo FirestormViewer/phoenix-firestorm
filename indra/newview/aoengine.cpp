@@ -259,11 +259,11 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 			if(state)
 			{
 				setLastMotion(motion);
-				lldebugs << "(disabled AO) setting last motion id to " <<  gAnimLibrary.animStateToString(mLastMotion) << llendl;
+				lldebugs << "(disabled AO) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << llendl;
 				if(!state->mAnimations.empty())
 				{
 					setLastOverriddenMotion(motion);
-					lldebugs << "(disabled AO) setting last overridden motion id to " <<  gAnimLibrary.animStateToString(mLastOverriddenMotion) << llendl;
+					lldebugs << "(disabled AO) setting last overridden motion id to " <<  gAnimLibrary.animationName(mLastOverriddenMotion) << llendl;
 				}
 			}
 		}
@@ -289,7 +289,7 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 	AOSet::AOState* state=mCurrentSet->getStateByRemapID(motion);
 	if(!state)
 	{
-		lldebugs << "No current AO state for motion " << gAnimLibrary.animStateToString(motion) << " - Skipping overrider." << llendl;
+		lldebugs << "No current AO state for motion " << motion << " (" << gAnimLibrary.animationName(motion) << "). Skipping overrider." << llendl;
 		return animation;
 	}
 
@@ -302,7 +302,7 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 			mInMouselook)
 		{
 			setLastMotion(motion);
-			lldebugs << "(enabled AO, mouselook stand stopped) setting last motion id to " <<  gAnimLibrary.animStateToString(mLastMotion) << llendl;
+			lldebugs << "(enabled AO, mouselook stand stopped) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << llendl;
 			return animation;
 		}
 
@@ -310,17 +310,17 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 		if(!mCurrentSet->getSitOverride() && motion==ANIM_AGENT_SIT)
 		{
 			setLastMotion(motion);
-			lldebugs << "(enabled AO, sit override stopped) setting last motion id to " <<  gAnimLibrary.animStateToString(mLastMotion) << llendl;
+			lldebugs << "(enabled AO, sit override stopped) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << llendl;
 			return animation;
 		}
 
 		setLastMotion(motion);
-		lldebugs << "(enabled AO) setting last motion id to " <<  gAnimLibrary.animStateToString(mLastMotion) << llendl;
+		lldebugs << "(enabled AO) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << llendl;
 
 		if(!state->mAnimations.empty())
 		{
 			setLastOverriddenMotion(motion);
-			lldebugs << "(enabled AO) setting last overridden motion id to " <<  gAnimLibrary.animStateToString(mLastOverriddenMotion) << llendl;
+			lldebugs << "(enabled AO) setting last overridden motion id to " <<  gAnimLibrary.animationName(mLastOverriddenMotion) << llendl;
 		}
 
 		// do not remember typing as set-wide motion
@@ -335,7 +335,7 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 			animation=mCurrentSet->getAnimationForState(state);
 
 		state->mCurrentAnimationID=animation;
-		lldebugs	<< "overriding " <<  gAnimLibrary.animStateToString(motion)
+		lldebugs	<< "overriding " <<  gAnimLibrary.animationName(motion)
 					<< " with " << animation
 					<< " in state " << state->mName
 					<< " of set " << mCurrentSet->getName()
@@ -370,8 +370,8 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 
 		if(motion!=mCurrentSet->getMotion())
 		{
-			llwarns << "trying to stop-override motion " <<  gAnimLibrary.animStateToString(motion)
-					<< " but the current set has motion " <<  gAnimLibrary.animStateToString(mCurrentSet->getMotion()) << llendl;
+			llwarns << "trying to stop-override motion " <<  gAnimLibrary.animationName(motion)
+					<< " but the current set has motion " <<  gAnimLibrary.animationName(mCurrentSet->getMotion()) << llendl;
 			return animation;
 		}
 
@@ -393,7 +393,7 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 		if(mLastMotion==ANIM_AGENT_SIT)
 			stopAllSitVariants();
 
-		lldebugs << "stopping cycle timer for motion " <<  gAnimLibrary.animStateToString(motion) <<
+		lldebugs << "stopping cycle timer for motion " <<  gAnimLibrary.animationName(motion) <<
 					" using animation " << animation <<
 					" in state " << state->mName << llendl;
 	}
