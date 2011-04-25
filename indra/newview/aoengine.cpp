@@ -137,7 +137,7 @@ BOOL AOEngine::foreignAnimations()
 LLUUID AOEngine::mapSwimming(LLUUID motion)
 {
 	S32 stateNum;
-llwarns << __LINE__ << llendl;
+
 	if(motion==ANIM_AGENT_HOVER)
 		stateNum=AOSet::Floating;
 	else if(motion==ANIM_AGENT_FLY)
@@ -148,10 +148,8 @@ llwarns << __LINE__ << llendl;
 		stateNum=AOSet::SwimmingDown;
 	else
 		return LLUUID::null;
-llwarns << __LINE__ << " " << stateNum << llendl;
 
 	AOSet::AOState* state=mCurrentSet->getState(stateNum);
-llwarns << __LINE__ << " " << state->mName << llendl;
 	return mCurrentSet->getAnimationForState(state);
 }
 
