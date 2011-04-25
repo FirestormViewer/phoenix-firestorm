@@ -3475,6 +3475,14 @@ bool LLAppViewer::initCache()
 			gSavedSettings.setBOOL("PurgeCacheOnNextStartup", false);
 		mPurgeCache = true;
 		}
+		
+		// If the J2C has changed since the last run, clear the cache
+		const std::string j2c_info = LLImageJ2C::getEngineInfo();
+		if (j2c_info != gSavedSettings.getString("LastJ2CVersion"))
+		{
+			mPurgeCache = true;
+		}
+		gSavedSettings.setString("LastJ2CVersion", j2c_info);
 	
 		// We have moved the location of the cache directory over time.
 		migrateCacheDirectory();
