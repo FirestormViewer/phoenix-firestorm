@@ -833,6 +833,12 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		style_params.color(LLColor4::grey);
 		style_params.readonly_color(LLColor4::grey);
 	}
+	
+	// Bold group moderators' chat -KC 
+	if (chat.mChatStyle == CHAT_STYLE_MODERATOR)
+	{
+		style_params.font.style = irc_me ? "ITALICBOLD" : "BOLD";
+	}
 
 	if (use_plain_text_chat_history)
 	{		

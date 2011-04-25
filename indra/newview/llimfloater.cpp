@@ -1070,6 +1070,7 @@ void LLIMFloater::sessionInitReplyReceived(const LLUUID& im_session_id)
 void LLIMFloater::updateMessages()
 {
 	bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
+	bool bold_mods_chat = gSavedSettings.getBOOL("PhoenixBoldGroupMods");
 
 	std::list<LLSD> messages;
 
@@ -1087,6 +1088,9 @@ void LLIMFloater::updateMessages()
 	{
 		LLSD chat_args;
 		chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
+		
+		LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
+		RLV_ASSERT(pIMSession);
 
 		std::ostringstream message;
 		std::list<LLSD>::const_reverse_iterator iter = messages.rbegin();
@@ -1107,6 +1111,16 @@ void LLIMFloater::updateMessages()
 			chat.mFromName = from;
 			chat.mTimeStr = time;
 			chat.mChatStyle = is_history ? CHAT_STYLE_HISTORY : chat.mChatStyle;
+			
+			// Bold group moderators' chat -KC
+			if (!is_history && bold_mods_chat && pIMSession && pIMSession->mSpeakers)
+			{
+				LLPointer<LLSpeaker> speakerp = pIMSession->mSpeakers->findSpeaker(from_id);
+				if (speakerp && speakerp->mIsModerator)
+				{
+					chat.mChatStyle = CHAT_STYLE_MODERATOR;
+				}
+			}
 
 			// process offer notification
 			if (msg.has("notification_id"))

@@ -64,7 +64,8 @@ typedef enum e_chat_style
 {
 	CHAT_STYLE_NORMAL,
 	CHAT_STYLE_IRC,
-	CHAT_STYLE_HISTORY
+	CHAT_STYLE_HISTORY,
+	CHAT_STYLE_MODERATOR
 }EChatStyle;
 
 // A piece of chat
