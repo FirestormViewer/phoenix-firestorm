@@ -569,11 +569,11 @@
          height="28"
          layout="topleft"
          min_height="28"
-         min_width="40"
+         min_width="56"
          mouse_opaque="false"
          name="ao_btn_panel"
          user_resize="false"
-         width="40">
+         width="56">
             <bottomtray_button
              name="ao_toggle_btn"
              tool_tip="Enables/Disables Animation Overrider"
