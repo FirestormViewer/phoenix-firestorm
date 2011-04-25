@@ -1,4 +1,7 @@
 Make sure xcode is installed, it's a free download from apple.
+
+Insure you use Xcode version 3, and not version 4. You make need to use xcode-select to change the version number.
+
 Make sure cmake is installed, use at least a 2.8.x version.
 - Additionally, patch your source directory with fmodmacapi per the older snowglobe instructions.
 - run ./build_firestorm_macosx.sh
