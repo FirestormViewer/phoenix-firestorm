@@ -73,6 +73,7 @@
 #include "llcombobox.h"
 #include "llstatusbar.h"
 #include "llupdaterservice.h"
+#include "lltexturefetch.h"
 
 #ifdef TOGGLE_HACKED_GODLIKE_VIEWER
 BOOL 				gHackGodmode = FALSE;
@@ -549,6 +550,12 @@ void toggle_updater_service_active(LLControlVariable* control, const LLSD& new_v
     }
 }
 
+static bool handleImagePipelineHTTPMaxFailCountFallback(const LLSD& newvalue)
+{
+	LLAppViewer::getTextureFetch()->setMaxHttpFailCountBeforeFallback(newvalue.asInteger());
+	return true;
+}
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -704,6 +711,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("UpdaterServiceSetting")->getSignal()->connect(&toggle_updater_service_active);
 	gSavedSettings.getControl("ForceShowGrid")->getSignal()->connect(boost::bind(&handleForceShowGrid, _2));
 	gSavedSettings.getControl("RenderTransparentWater")->getSignal()->connect(boost::bind(&handleRenderTransparentWaterChanged, _2));
+	gSavedSettings.getControl("ImagePipelineHTTPMaxFailCountFallback")->getSignal()->connect(boost::bind(&handleImagePipelineHTTPMaxFailCountFallback, _2));
 }
 
 #if TEST_CACHED_CONTROL

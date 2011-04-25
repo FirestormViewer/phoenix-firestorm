@@ -1018,7 +1018,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 			else
 				region = LLWorld::getInstance()->getRegion(mHost);
 
-			if (region)
+			if (region && !LLAppViewer::getTextureFetch()->isHttpFailLimitReached())
 			{
 				std::string http_url = region->getHttpUrl() ;
 				if (!http_url.empty())
@@ -1134,14 +1134,15 @@ bool LLTextureFetchWorker::doWork(S32 param)
 	
 	if (mState == SEND_HTTP_REQ)
 	{
-		if(mCanUseHTTP)
+		if(mCanUseHTTP && !LLAppViewer::getTextureFetch()->isHttpFailLimitReached())
 		{
 			//NOTE:
 			//control the number of the http requests issued for:
 			//1, not openning too many file descriptors at the same time;
 			//2, control the traffic of http so udp gets bandwidth.
 			//
-			static const S32 MAX_NUM_OF_HTTP_REQUESTS_IN_QUEUE = 8 ;
+			//static const S32 MAX_NUM_OF_HTTP_REQUESTS_IN_QUEUE = 8 ;
+			static LLCachedControl<S32> MAX_NUM_OF_HTTP_REQUESTS_IN_QUEUE(gSavedSettings, "ImagePipelineUseHTTPFetchMaxRequests");
 			if(mFetcher->getNumHTTPRequests() > MAX_NUM_OF_HTTP_REQUESTS_IN_QUEUE)
 			{
 				return false ; //wait.
@@ -1213,7 +1214,15 @@ bool LLTextureFetchWorker::doWork(S32 param)
 		}
 		else //can not use http fetch.
 		{
-			return true ; //abort
+			// Ansariel: roll back to try UDP
+			if(mCanUseNET)
+			{
+				mState = INIT ;
+				mCanUseHTTP = false ;
+				setPriority(LLWorkerThread::PRIORITY_HIGH | mWorkPriority);
+				return false ;
+			}
+			else return true ; //abort
 		}
 	}
 	
@@ -1245,7 +1254,13 @@ bool LLTextureFetchWorker::doWork(S32 param)
 					// for a short time (~1s) to ease server load? Ideally the server would queue
 					// requests instead of returning 503... we already limit the number pending.
 					++mHTTPFailCount;
-					max_attempts = mHTTPFailCount+1; // Keep retrying
+
+					// Ansariel: Just increase the normal counter. We're gonna fallback to UDP
+					//           if problem continues.
+					//max_attempts = mHTTPFailCount+1; // Keep retrying
+					const S32 HTTP_MAX_RETRY_COUNT = 3;
+					max_attempts = HTTP_MAX_RETRY_COUNT + 1;
+					LLAppViewer::getTextureFetch()->addHttpFailCount();
 					LL_INFOS_ONCE("Texture") << "Texture server busy (503): " << mUrl << LL_ENDL;
 				}
 				else
@@ -1253,6 +1268,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 					const S32 HTTP_MAX_RETRY_COUNT = 3;
 					max_attempts = HTTP_MAX_RETRY_COUNT + 1;
 					++mHTTPFailCount;
+					LLAppViewer::getTextureFetch()->addHttpFailCount();
 					llinfos << "HTTP GET failed for: " << mUrl
 							<< " Status: " << mGetStatus << " Reason: '" << mGetReason << "'"
 							<< " Attempt:" << mHTTPFailCount+1 << "/" << max_attempts << llendl;
@@ -1269,9 +1285,22 @@ bool LLTextureFetchWorker::doWork(S32 param)
 					}
 					else
 					{
-						resetFormattedData();
-						mState = DONE;
-						return true; // failed
+						// Ansariel: What's this? On any other HTTP failure except
+						//           not found we simply give up? No way! Let's
+						//           try UDP as fallback!
+						if (mCanUseNET)
+						{
+							mState = INIT;
+							mCanUseHTTP = false;
+							setPriority(LLWorkerThread::PRIORITY_HIGH | mWorkPriority);
+							return false;
+						}
+						else
+						{
+							resetFormattedData();
+							mState = DONE;
+							return true; // failed
+						}
 					}
 				}
 				else
@@ -1824,11 +1853,14 @@ LLTextureFetch::LLTextureFetch(LLTextureCache* cache, LLImageDecodeThread* image
 	  mHTTPTextureBits(0),
 	  mTotalHTTPRequests(0),
 	  mCurlGetRequest(NULL),
-	  mQAMode(qa_mode)
+	  mQAMode(qa_mode),
+	  mTotalHttpFailCount(0),
+	  mHttpFailMutex(NULL)
 {
 	mCurlPOSTRequestCount = 0;
 	mMaxBandwidth = gSavedSettings.getF32("ThrottleBandwidthKBPS");
 	mTextureInfo.setUpLogging(gSavedSettings.getBOOL("LogTextureDownloadsToViewerLog"), gSavedSettings.getBOOL("LogTextureDownloadsToSimulator"), gSavedSettings.getU32("TextureLoggingThreshold"));
+	mMaxHttpFailCountBeforeFallback = gSavedSettings.getU32("ImagePipelineHTTPMaxFailCountFallback");
 }
 
 LLTextureFetch::~LLTextureFetch()
@@ -1894,7 +1926,6 @@ bool LLTextureFetch::createRequest(const std::string& url, const LLUUID& id, con
 		desired_size = TEXTURE_CACHE_ENTRY_SIZE;
 		desired_discard = MAX_DISCARD_LEVEL;
 	}
-
 	
 	if (worker)
 	{
@@ -2803,6 +2834,30 @@ void LLTextureFetch::cmdDoWork()
 	}
 }
 
+void LLTextureFetch::addHttpFailCount()
+{
+	LLMutexLock lock(&mHttpFailMutex);
+	++mTotalHttpFailCount;
+	llwarns << "Increasing HTTP GET fail count to: " << mTotalHttpFailCount << llendl;
+}
+
+void LLTextureFetch::processRegionChanged()
+{
+	llinfos << "Region changed. Resetting HTTP GET failure counter." << llendl;
+	LLMutexLock lock(&mHttpFailMutex);
+	mTotalHttpFailCount = 0;
+}
+
+void LLTextureFetch::setMaxHttpFailCountBeforeFallback(U32 maxFailCount)
+{
+	llinfos << "Setting max failure count before fallback for HTTP GET to " << maxFailCount << llendl;
+	mMaxHttpFailCountBeforeFallback = maxFailCount;
+}
+
+bool LLTextureFetch::isHttpFailLimitReached()
+{
+	return mTotalHttpFailCount >= mMaxHttpFailCountBeforeFallback;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 

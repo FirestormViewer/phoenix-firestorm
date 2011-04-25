@@ -119,6 +119,8 @@
 
 #include "llnotificationmanager.h" //
 
+#include "lltexturefetch.h"
+
 #if LL_MSVC
 // disable boost::lexical_cast warning
 #pragma warning (disable:4702)
@@ -4021,6 +4023,9 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 	// Viewer trusts the simulator.
 	gMessageSystem->enableCircuit(sim_host, TRUE);
 	LLViewerRegion* regionp =  LLWorld::getInstance()->addRegion(region_handle, sim_host);
+	
+	// Ansariel: New region -> reset fail counter for texture fetcher
+	LLAppViewer::getTextureFetch()->processRegionChanged();
 
 /*
 	// send camera update to new region
@@ -4299,6 +4304,9 @@ void process_crossed_region(LLMessageSystem* msg, void**)
 
 	LLViewerRegion* regionp = LLWorld::getInstance()->addRegion(region_handle, sim_host);
 	regionp->setSeedCapability(seedCap);
+	
+	// Ansariel: New region -> reset fail counter for texture fetcher
+	LLAppViewer::getTextureFetch()->processRegionChanged();
 }
 
 

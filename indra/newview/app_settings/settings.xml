@@ -13563,5 +13563,27 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>1</integer>
   </map>
+  <key>ImagePipelineUseHTTPFetchMaxRequests</key>
+  <map>
+    <key>Comment</key>
+    <string>Max number of simultaneous textures to request when using HTTP texture fetch. Changing this setting above 8 will most likely cause texture loading problems, setting above 32 *WILL* cause loading failures.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>8</integer>
+  </map>
+  <key>ImagePipelineHTTPMaxFailCountFallback</key>
+    <map>
+      <key>Comment</key>
+      <string>Maximum failures during HTTP GET texture fetch per region before fallback to UDP fetch occurs.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>25</integer>
+    </map>
 </map>
 </llsd>

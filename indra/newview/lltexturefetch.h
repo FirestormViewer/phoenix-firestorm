@@ -106,6 +106,11 @@ public:
 	inline void incrCurlPOSTCount()		{ mCurlPOSTRequestCount++; }
 	inline void decrCurlPOSTCount()		{ mCurlPOSTRequestCount--; }
 
+	void addHttpFailCount();
+	bool isHttpFailLimitReached();
+	void processRegionChanged();
+	void setMaxHttpFailCountBeforeFallback(U32 maxFailCount);
+
 protected:
 	void addToNetworkQueue(LLTextureFetchWorker* worker);
 	void removeFromNetworkQueue(LLTextureFetchWorker* worker, bool cancel);
@@ -161,6 +166,11 @@ public:
 	S32 mBadPacketCount;
 	
 private:
+	LLMutex mHttpFailMutex;
+	U32 mTotalHttpFailCount;
+	U32 mMaxHttpFailCountBeforeFallback;
+
+
 	LLMutex mQueueMutex;        //to protect mRequestMap and mCommands only
 	LLMutex mNetworkQueueMutex; //to protect mNetworkQueue, mHTTPTextureQueue and mCancelQueue.
 
