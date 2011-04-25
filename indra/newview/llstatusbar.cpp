@@ -852,7 +852,7 @@ void LLStatusBar::layoutParcelIcons()
 	{
 		left = layoutWidget(mParcelIcon[i], left);
 	}
-	layoutWidget(mPWLBtn, left);
+	left = layoutWidget(mPWLBtn, left);
 
 	LLRect infoTextRect = mParcelInfoText->getRect();
 	infoTextRect.mLeft = left;
