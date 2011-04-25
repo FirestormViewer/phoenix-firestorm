@@ -230,10 +230,12 @@ BOOL FloaterAO::postBuild()
 void FloaterAO::enableSetControls(BOOL yes)
 {
 	mSetSelector->setEnabled(yes);
+	mSetSelectorSmall->setEnabled(yes);
 	mActivateSetButton->setEnabled(yes);
 	mRemoveButton->setEnabled(yes);
 	mDefaultCheckBox->setEnabled(yes);
 	mOverrideSitsCheckBox->setEnabled(yes);
+	mOverrideSitsCheckBoxSmall->setEnabled(yes);
 	mDisableMouselookCheckBox->setEnabled(yes);
 	if(!yes)
 		enableStateControls(yes);
@@ -253,7 +255,9 @@ void FloaterAO::enableStateControls(BOOL yes)
 		mCycleTimeSpinner->setEnabled(yes);
 	}
 	mPreviousButton->setEnabled(yes);
+	mPreviousButtonSmall->setEnabled(yes);
 	mNextButton->setEnabled(yes);
+	mNextButtonSmall->setEnabled(yes);
 	mCanDragAndDrop=yes;
 }
 
