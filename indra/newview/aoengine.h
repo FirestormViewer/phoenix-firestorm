@@ -152,6 +152,7 @@ class AOEngine
 
 		void setLastMotion(LLUUID motion);
 		void setLastOverriddenMotion(LLUUID motion);
+		void setStateCycleTimer(const AOSet::AOState* state);
 
 		void stopAllStandVariants();
 		void stopAllSitVariants();

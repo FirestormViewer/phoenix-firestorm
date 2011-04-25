@@ -247,6 +247,14 @@ void AOEngine::enable(BOOL yes)
 	}
 }
 
+void AOEngine::setStateCycleTimer(const AOSet::AOState* state)
+{
+	F32 timeout=state->mCycleTime;
+	lldebugs << "Setting cycle timeout for state " << state->mName << " of " << timeout << llendl;
+	if(timeout>0.0f)
+		mCurrentSet->startTimer(timeout);
+}
+
 const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 {
 	LLUUID animation;
@@ -358,10 +366,7 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 					<< " of set " << mCurrentSet->getName()
 					<< " (" << mCurrentSet << ")" << llendl;
 
-		F32 timeout=state->mCycleTime;
-		lldebugs << "Setting cycle timeout for state " << state->mName << " of " << timeout << llendl;
-		if(timeout>0.0f)
-			mCurrentSet->startTimer(timeout);
+		setStateCycleTimer(state);
 
 		if(motion==ANIM_AGENT_SIT && mCurrentSet->getSmart())
 			mSitCancelTimer.oneShot();
@@ -381,9 +386,14 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 		animation=state->mCurrentAnimationID;
 		state->mCurrentAnimationID.setNull();
 		
-		// for typing animaiton, just return the stored animation and don't memorize anything else
+		// for typing animaiton, just return the stored animation, reset the state timer, and don't memorize anything else
 		if(motion==ANIM_AGENT_TYPE)
+		{
+			AOSet::AOState* previousState=mCurrentSet->getStateByRemapID(mLastMotion);
+			if(previousState)
+				setStateCycleTimer(previousState);
 			return animation;
+		}
 
 		if(motion!=mCurrentSet->getMotion())
 		{
@@ -403,6 +413,7 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 		{
 			gAgent.sendAnimationRequest(animation,ANIM_REQUEST_STOP);
 			gAgentAvatarp->LLCharacter::stopMotion(animation);
+			setStateCycleTimer(state);
 			return LLUUID::null;
 		}
 
@@ -983,6 +994,7 @@ void AOEngine::selectSet(AOSet* set)
 		gAgent.stopCurrentAnimations();
 	}
 
+	mLastMotion=ANIM_AGENT_STAND;
 	mLastOverriddenMotion=ANIM_AGENT_STAND;
 
 	mCurrentSet=set;
