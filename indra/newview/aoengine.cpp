@@ -232,6 +232,8 @@ void AOEngine::enable(BOOL yes)
 				{
 					lldebugs << "Stopping leftover animation from state " << index << llendl;
 					gAgent.sendAnimationRequest(animation,ANIM_REQUEST_STOP);
+					gAgentAvatarp->LLCharacter::stopMotion(animation);
+					state->mCurrentAnimationID.setNull();
 				}
 			}
 			else
@@ -290,6 +292,12 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 	if(!state)
 	{
 		lldebugs << "No current AO state for motion " << motion << " (" << gAnimLibrary.animationName(motion) << "). Skipping overrider." << llendl;
+		if(!gAnimLibrary.animStateToString(motion) && !start)
+		{
+			lldebugs << "Requested AO for unknown motion ID " << motion << " - Stopping UUID just in case." << llendl;
+			gAgent.sendAnimationRequest(motion,ANIM_REQUEST_STOP);
+			gAgentAvatarp->LLCharacter::stopMotion(motion);
+		}
 		return animation;
 	}
 
@@ -333,6 +341,15 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 
 		if(animation.isNull())
 			animation=mCurrentSet->getAnimationForState(state);
+
+		if(state->mCurrentAnimationID.notNull())
+		{
+			lldebugs	<< "Previous animation for state "
+						<< gAnimLibrary.animationName(motion)
+						<< " was not stopped, but we were asked to start a new one. Killing old animation." << llendl;
+			gAgent.sendAnimationRequest(state->mCurrentAnimationID,ANIM_REQUEST_STOP);
+			gAgentAvatarp->LLCharacter::stopMotion(state->mCurrentAnimationID);
+		}
 
 		state->mCurrentAnimationID=animation;
 		lldebugs	<< "overriding " <<  gAnimLibrary.animationName(motion)
@@ -385,6 +402,7 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 			motion==ANIM_AGENT_MEDIUM_LAND)
 		{
 			gAgent.sendAnimationRequest(animation,ANIM_REQUEST_STOP);
+			gAgentAvatarp->LLCharacter::stopMotion(animation);
 			return LLUUID::null;
 		}
 
@@ -410,6 +428,7 @@ void AOEngine::checkSitCancel()
 		{
 			lldebugs << "Stopping sit animation due to foreign animations running" << llendl;
 			gAgent.sendAnimationRequest(animation,ANIM_REQUEST_STOP);
+			gAgentAvatarp->LLCharacter::stopMotion(animation);
 			mSitCancelTimer.stop();
 		}
 	}
@@ -462,9 +481,19 @@ void AOEngine::cycle(eCycleMode cycleMode)
 		return;
 	}
 
+	if(!state->mCycle)
+	{
+		lldebugs << "cycle timeout, but state is set to not cycling." << llendl;
+		return;
+	}
+
 	LLUUID animation=state->mCurrentAnimationID;
 	if(!animation.isNull())
+	{
 		gAgent.sendAnimationRequest(animation,ANIM_REQUEST_STOP);
+		gAgentAvatarp->LLCharacter::stopMotion(animation);
+		state->mCurrentAnimationID.setNull();
+	}
 
 	if(cycleMode==CycleAny)
 	{
@@ -486,9 +515,9 @@ void AOEngine::cycle(eCycleMode cycleMode)
 				state->mCurrentAnimation=0;
 		}
 		animation=state->mAnimations[state->mCurrentAnimation].mAssetUUID;
-		state->mCurrentAnimationID=animation;
 	}
 
+	state->mCurrentAnimationID=animation;
 	if(!animation.isNull())
 		gAgent.sendAnimationRequest(animation,ANIM_REQUEST_START);
 }
@@ -1080,6 +1109,8 @@ void AOEngine::inMouselook(BOOL yes)
 		if(!animation.isNull())
 		{
 			gAgent.sendAnimationRequest(animation,ANIM_REQUEST_STOP);
+			gAgentAvatarp->LLCharacter::stopMotion(animation);
+			state->mCurrentAnimationID.setNull();
 			lldebugs << " stopped animation " << animation << " in state " << state->mName << llendl;
 		}
 		gAgent.sendAnimationRequest(ANIM_AGENT_STAND,ANIM_REQUEST_START);
@@ -1122,7 +1153,11 @@ void AOEngine::setOverrideSits(AOSet* set,BOOL yes)
 
 		LLUUID animation=state->mCurrentAnimationID;
 		if(!animation.isNull())
+		{
 			gAgent.sendAnimationRequest(animation,ANIM_REQUEST_STOP);
+			gAgentAvatarp->LLCharacter::stopMotion(animation);
+			state->mCurrentAnimationID.setNull();
+		}
 
 		gAgent.sendAnimationRequest(ANIM_AGENT_SIT,ANIM_REQUEST_START);
 	}
