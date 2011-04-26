@@ -987,8 +987,7 @@ const AOSet* AOEngine::getDefaultSet() const
 
 void AOEngine::selectSet(AOSet* set)
 {
-	BOOL wasEnabled=mEnabled;
-	if(wasEnabled)
+	if(mEnabled && mCurrentSet)
 	{
 		AOSet::AOState* state=mCurrentSet->getStateByRemapID(mLastOverriddenMotion);
 		if(state)
@@ -1001,7 +1000,7 @@ void AOEngine::selectSet(AOSet* set)
 
 	mCurrentSet=set;
 
-	if(wasEnabled)
+	if(mEnabled)
 	{
 		mLastMotion=mLastOverriddenMotion;
 		lldebugs << "enabling with motion " << gAnimLibrary.animationName(mLastOverriddenMotion) << llendl;
@@ -1531,6 +1530,11 @@ void AOEngine::processImport()
 		mImportCategory.setNull();
 		reload();
 	}
+}
+
+const LLUUID AOEngine::getAOFolder()
+{
+	return mAOFolder;
 }
 
 // ----------------------------------------------------

@@ -105,6 +105,8 @@ class AOEngine
 		void reloadStateAnimations(AOSet::AOState* state);
 		void clear();
 
+		const LLUUID getAOFolder();
+
 		LLUUID addSet(const std::string name,BOOL reload=TRUE);
 		BOOL removeSet(AOSet* set);
 
