@@ -108,9 +108,13 @@ void LLConsole::setFontSize(S32 size_index)
 	}
 	else if (0 == size_index)
 	{
-		mFont = LLFontGL::getFontSansSerif();
+		mFont = LLFontGL::getFontSansSerifSmall();
 	}
 	else if (1 == size_index)
+	{
+		mFont = LLFontGL::getFontSansSerif();
+	}
+	else if (2 == size_index)
 	{
 		mFont = LLFontGL::getFontSansSerifBig();
 	}
