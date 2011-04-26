@@ -3070,7 +3070,7 @@ void LLInventoryModel::wearGesturesOnAvatar(LLUUID category_id)
 		for(i = 0; i  < gest_count; ++i)
 		{
 			LLViewerInventoryItem *gest_item = gest_item_array.get(i);
-			if (get_is_item_worn(gest_item->getUUID()))
+			if (!get_is_item_worn(gest_item->getUUID()))
 			{
 				LLGestureMgr::instance().activateGesture( gest_item->getLinkedUUID() );
 				gInventory.updateItem( gest_item );
