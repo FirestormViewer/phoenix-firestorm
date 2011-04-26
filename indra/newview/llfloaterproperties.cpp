@@ -36,6 +36,7 @@
 #include "llagent.h"
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
+#include "llcombobox.h"
 #include "llavataractions.h"
 #include "llinventorydefines.h"
 #include "llinventoryobserver.h"
@@ -146,7 +147,7 @@ BOOL LLFloaterProperties::postBuild()
 	getChild<LLUICtrl>("CheckNextOwnerTransfer")->setCommitCallback(boost::bind(&LLFloaterProperties::onCommitPermissions, this));
 	// Mark for sale or not, and sale info
 	getChild<LLUICtrl>("CheckPurchase")->setCommitCallback(boost::bind(&LLFloaterProperties::onCommitSaleInfo, this));
-	getChild<LLUICtrl>("RadioSaleType")->setCommitCallback(boost::bind(&LLFloaterProperties::onCommitSaleType, this));
+	getChild<LLUICtrl>("ComboSaleType")->setCommitCallback(boost::bind(&LLFloaterProperties::onCommitSaleType, this));
 	// "Price" label for edit
 	getChild<LLUICtrl>("Edit Cost")->setCommitCallback(boost::bind(&LLFloaterProperties::onCommitSaleInfo, this));
 	// The UI has been built, now fill in all the values
@@ -191,7 +192,7 @@ void LLFloaterProperties::refresh()
 			"CheckNextOwnerCopy",
 			"CheckNextOwnerTransfer",
 			"CheckPurchase",
-			"RadioSaleType",
+			"ComboSaleType",
 			"Edit Cost"
 		};
 		for(size_t t=0; t<LL_ARRAY_SIZE(enableNames); ++t)
@@ -511,8 +512,7 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		getChildView("CheckNextOwnerCopy")->setEnabled((base_mask & PERM_COPY) && !cannot_restrict_permissions);
 		getChildView("CheckNextOwnerTransfer")->setEnabled((next_owner_mask & PERM_COPY) && !cannot_restrict_permissions);
 
-		getChildView("RadioSaleType")->setEnabled(is_complete && is_for_sale);
-//		getChildView("TextPrice")->setEnabled(is_complete && is_for_sale);
+		getChildView("ComboSaleType")->setEnabled(is_complete && is_for_sale);
 		getChildView("Edit Cost")->setEnabled(is_complete && is_for_sale);
 	}
 	else
@@ -525,30 +525,27 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		getChildView("CheckNextOwnerCopy")->setEnabled(FALSE);
 		getChildView("CheckNextOwnerTransfer")->setEnabled(FALSE);
 
-		getChildView("RadioSaleType")->setEnabled(FALSE);
-//		getChildView("TextPrice")->setEnabled(FALSE);
+		getChildView("ComboSaleType")->setEnabled(FALSE);
 		getChildView("Edit Cost")->setEnabled(FALSE);
 	}
 
 	// Set values.
 	getChild<LLUICtrl>("CheckPurchase")->setValue(is_for_sale);
-	getChildView("combobox sale copy")->setEnabled(is_for_sale);
-	getChildView("Edit Cost")->setEnabled(is_for_sale);
 	getChild<LLUICtrl>("CheckNextOwnerModify")->setValue(LLSD(BOOL(next_owner_mask & PERM_MODIFY)));
 	getChild<LLUICtrl>("CheckNextOwnerCopy")->setValue(LLSD(BOOL(next_owner_mask & PERM_COPY)));
 	getChild<LLUICtrl>("CheckNextOwnerTransfer")->setValue(LLSD(BOOL(next_owner_mask & PERM_TRANSFER)));
 
-	LLRadioGroup* radioSaleType = getChild<LLRadioGroup>("RadioSaleType");
+	LLComboBox* comboSaleType = getChild<LLComboBox>("ComboSaleType");
 	if (is_for_sale)
 	{
-		radioSaleType->setSelectedIndex((S32)sale_info.getSaleType() - 1);
+		comboSaleType->setCurrentByIndex((S32)sale_info.getSaleType() - 1);
 		S32 numerical_price;
 		numerical_price = sale_info.getSalePrice();
 		getChild<LLUICtrl>("Edit Cost")->setValue(llformat("%d",numerical_price));
 	}
 	else
 	{
-		radioSaleType->setSelectedIndex(-1);
+		comboSaleType->setCurrentByIndex(-1);
 		getChild<LLUICtrl>("Edit Cost")->setValue(llformat("%d",0));
 	}
 }
@@ -793,10 +790,10 @@ void LLFloaterProperties::updateSaleInfo()
 		// turn on sale info
 		LLSaleInfo::EForSale sale_type = LLSaleInfo::FS_COPY;
 	
-		LLRadioGroup* RadioSaleType = getChild<LLRadioGroup>("RadioSaleType");
-		if(RadioSaleType)
+		LLComboBox* ComboSaleType = getChild<LLComboBox>("ComboSaleType");
+		if(ComboSaleType)
 		{
-			switch (RadioSaleType->getSelectedIndex())
+			switch (ComboSaleType->getCurrentIndex())
 			{
 			case 0:
 				sale_type = LLSaleInfo::FS_ORIGINAL;
