@@ -2856,7 +2856,8 @@ void LLTextureFetch::setMaxHttpFailCountBeforeFallback(U32 maxFailCount)
 
 bool LLTextureFetch::isHttpFailLimitReached()
 {
-	return mTotalHttpFailCount >= mMaxHttpFailCountBeforeFallback;
+	return (mMaxHttpFailCountBeforeFallback > 0) &&
+		(mTotalHttpFailCount >= mMaxHttpFailCountBeforeFallback);
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -13577,7 +13577,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>ImagePipelineHTTPMaxFailCountFallback</key>
     <map>
       <key>Comment</key>
-      <string>Maximum failures during HTTP GET texture fetch per region before fallback to UDP fetch occurs.</string>
+      <string>Maximum failures during HTTP GET texture fetch per region before fallback to UDP fetch occurs. Set to 0 to disable automatic fallback.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
