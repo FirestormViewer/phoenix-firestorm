@@ -5532,7 +5532,14 @@ class LLWearableBridgeAction: public LLInvFVBridgeAction
 public:
 	virtual void doIt()
 	{
-		wearOnAvatar();
+		// TODO: investigate wearables may not be loaded at this point EXT-8231
+
+		LLViewerInventoryItem* item = getItem();
+		if(item)
+		{
+			if ( get_is_item_worn(mUUID) ) LLAppearanceMgr::instance().removeItemFromAvatar(mUUID);
+			else LLAppearanceMgr::instance().wearItemOnAvatar(mUUID /*item->getUUID()*/, true, true);
+		}
 	}
 	virtual ~LLWearableBridgeAction(){}
 protected:
@@ -5541,7 +5548,6 @@ protected:
 	// return true if the item is in agent inventory. if false, it
 	// must be lost or in the inventory library.
 	BOOL isAgentInventory() const;
-	void wearOnAvatar();
 };
 
 BOOL LLWearableBridgeAction::isItemInTrash() const
@@ -5556,17 +5562,6 @@ BOOL LLWearableBridgeAction::isAgentInventory() const
 	if(!mModel) return FALSE;
 	if(gInventory.getRootFolderID() == mUUID) return TRUE;
 	return mModel->isObjectDescendentOf(mUUID, gInventory.getRootFolderID());
-}
-
-void LLWearableBridgeAction::wearOnAvatar()
-{
-	// TODO: investigate wearables may not be loaded at this point EXT-8231
-
-	LLViewerInventoryItem* item = getItem();
-	if(item)
-	{
-		LLAppearanceMgr::instance().wearItemOnAvatar(item->getUUID(), true, true);
-	}
 }
 
 LLInvFVBridgeAction* LLInvFVBridgeAction::createAction(LLAssetType::EType asset_type,
