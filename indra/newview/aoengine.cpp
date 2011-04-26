@@ -1002,9 +1002,8 @@ void AOEngine::selectSet(AOSet* set)
 
 	if(mEnabled)
 	{
-		mLastMotion=mLastOverriddenMotion;
-		lldebugs << "enabling with motion " << gAnimLibrary.animationName(mLastOverriddenMotion) << llendl;
-		gAgent.sendAnimationRequest(override(mLastOverriddenMotion,TRUE),ANIM_REQUEST_START);
+		lldebugs << "enabling with motion " << gAnimLibrary.animationName(mLastMotion) << llendl;
+		gAgent.sendAnimationRequest(override(mLastMotion,TRUE),ANIM_REQUEST_START);
 	}
 }
 
