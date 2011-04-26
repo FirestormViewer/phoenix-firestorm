@@ -230,7 +230,7 @@ void AOEngine::enable(BOOL yes)
 				LLUUID animation=state->mCurrentAnimationID;
 				if(animation.notNull())
 				{
-					lldebugs << "Stopping leftover animation from state " << index << llendl;
+					lldebugs << "Stopping leftover animation from state " << state->mName << llendl;
 					gAgent.sendAnimationRequest(animation,ANIM_REQUEST_STOP);
 					gAgentAvatarp->LLCharacter::stopMotion(animation);
 					state->mCurrentAnimationID.setNull();
@@ -990,17 +990,23 @@ void AOEngine::selectSet(AOSet* set)
 	BOOL wasEnabled=mEnabled;
 	if(wasEnabled)
 	{
-		enable(FALSE);
-		gAgent.stopCurrentAnimations();
+		AOSet::AOState* state=mCurrentSet->getStateByRemapID(mLastOverriddenMotion);
+		if(state)
+		{
+			gAgent.sendAnimationRequest(state->mCurrentAnimationID,ANIM_REQUEST_STOP);
+			state->mCurrentAnimationID.setNull();
+			mCurrentSet->stopTimer();
+		}
 	}
-
-	mLastMotion=ANIM_AGENT_STAND;
-	mLastOverriddenMotion=ANIM_AGENT_STAND;
 
 	mCurrentSet=set;
 
 	if(wasEnabled)
-		enable(TRUE);
+	{
+		mLastMotion=mLastOverriddenMotion;
+		lldebugs << "enabling with motion " << gAnimLibrary.animationName(mLastOverriddenMotion) << llendl;
+		gAgent.sendAnimationRequest(override(mLastOverriddenMotion,TRUE),ANIM_REQUEST_START);
+	}
 }
 
 AOSet* AOEngine::selectSetByName(const std::string name)
