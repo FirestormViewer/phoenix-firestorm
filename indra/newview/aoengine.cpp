@@ -1047,6 +1047,19 @@ void AOEngine::saveSet(const AOSet* set)
 	gInventory.notifyObservers();
 */
 	rename_category(&gInventory,set->getInventoryUUID(),setParams);
+
+	llwarns << "sending update signal" << llendl;
+	mUpdatedSignal();
+}
+
+BOOL AOEngine::renameSet(AOSet* set,const std::string name)
+{
+	if(name.empty() || name.find(":")!=std::string::npos)
+		return FALSE;
+	set->setName(name);
+	set->setDirty(TRUE);
+
+	return TRUE;
 }
 
 void AOEngine::saveState(const AOSet::AOState* state)

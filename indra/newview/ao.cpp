@@ -37,6 +37,7 @@
 #include "llspinctrl.h"
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
+#include <boost/graph/graph_concepts.hpp>
 
 FloaterAO::FloaterAO(const LLSD& key)
 :	LLTransientDockableFloater(NULL,true,key),
@@ -270,12 +271,17 @@ void FloaterAO::onOpen(const LLSD& key)
 
 void FloaterAO::onSelectSet()
 {
-	mSelectedSet=AOEngine::instance().getSetByName(mSetSelector->getSelectedItemLabel());
-	if(mSelectedSet)
+	AOSet* set=AOEngine::instance().getSetByName(mSetSelector->getSelectedItemLabel());
+	if(!set)
 	{
-		updateSetParameters();
-		updateAnimationList();
+		onRenameSet();
+		return;
 	}
+	
+	mSelectedSet=set;
+
+	updateSetParameters();
+	updateAnimationList();
 }
 
 void FloaterAO::onSelectSetSmall()
@@ -286,6 +292,37 @@ void FloaterAO::onSelectSetSmall()
 		updateSetParameters();
 		updateAnimationList();
 	}
+}
+
+void FloaterAO::onRenameSet()
+{
+	if(!mSelectedSet)
+	{
+		llwarns << "Rename AO set without set selected." << llendl;
+		return;
+	}
+
+	std::string name=mSetSelector->getSimple();
+	LLStringUtil::trim(name);
+
+	if(!name.empty())
+	{
+		if(name.find_first_of(":|")==std::string::npos)
+		{
+			if(AOEngine::instance().renameSet(mSelectedSet,name))
+			{
+				reloading(TRUE);
+				return;
+			}
+		}
+		else
+		{
+			LLSD args;
+			args["AO_SET_NAME"]=name;
+			LLNotificationsUtil::add("RenameAOCantContainColon",args);
+		}
+	}
+	mSetSelector->setSimple(mSelectedSet->getName());
 }
 
 void FloaterAO::onClickActivate()
@@ -371,11 +408,15 @@ BOOL FloaterAO::newSetCallback(const LLSD& notification,const LLSD& response)
 	std::string newSetName=response["message"].asString();
 	S32 option=LLNotificationsUtil::getSelectedOption(notification,response);
 
-	if(newSetName=="")
+	LLStringUtil::trim(newSetName);
+
+	if(newSetName.empty())
 		return FALSE;
-	else if(newSetName.find(":")!=std::string::npos)
+	else if(newSetName.find_first_of(":|")!=std::string::npos)
 	{
-		LLNotificationsUtil::add("NewAOCantContainColon",LLSD());
+		LLSD args;
+		args["AO_SET_NAME"]=newSetName;
+		LLNotificationsUtil::add("NewAOCantContainColon",args);
 		return FALSE;
 	}
 

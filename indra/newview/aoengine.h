@@ -133,6 +133,7 @@ class AOEngine
 		const std::vector<AOSet*> getSetList() const;
 		const std::string getCurrentSetName() const;
 		const AOSet* getDefaultSet() const;
+		BOOL renameSet(AOSet* set,const std::string name);
 
 		void setDefaultSet(AOSet* set);
 		void setOverrideSits(AOSet* set,BOOL yes);

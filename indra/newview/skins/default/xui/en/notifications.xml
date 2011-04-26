@@ -7032,7 +7032,7 @@ Reset WL settings for &apos;[PARCEL_NAME]&apos; to region default?
    name="NewAOSet"
    type="alertmodal">
 Specify a name for the new AO set:
-(The name may not contain a : character)
+(The name may not contain a ":" or "|" character)
     <form name="form">
       <input name="message" type="text">
 New AO Set
@@ -7053,8 +7053,19 @@ New AO Set
    icon="alertmodal.tga"
    name="NewAOCantContainColon"
    type="alertmodal">
-Could not create new AO set.
-The name may not contain ":" characters.
+Could not create new AO set "[AO_SET_NAME]".
+The name may not contain ":" or "|" characters.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="RenameAOCantContainColon"
+   type="alertmodal">
+Could not rename new AO set to "[AO_SET_NAME]".
+The name may not contain ":" or "|" characters.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -7064,7 +7075,7 @@ The name may not contain ":" characters.
    icon="alertmodal.tga"
    name="RemoveAOSet"
    type="alertmodal">
-Remove AO set [AO_SET_NAME] from the list?
+Remove AO set "[AO_SET_NAME]" from the list?
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"

@@ -63,6 +63,7 @@ class FloaterAO
 
 		void onSelectSet();
 		void onSelectSetSmall();
+		void onRenameSet();
 		void onSelectState();
 		void onChangeAnimationSelection();
 		void onClickReload();
