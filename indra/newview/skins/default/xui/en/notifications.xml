@@ -5662,6 +5662,7 @@ No valid parcel could be found.
    type="offer">
 An object named &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; owned by [NAME_SLURL] has given you this [OBJECTTYPE]:
 [ITEM_SLURL]
+Do you want to keep it? "Block" will block any more offers or messages from [NAME_SLURL].
     <form name="form">
       <button
        index="0"
@@ -5684,6 +5685,7 @@ An object named &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; owned by [NAME_SLU
    type="offer">
 [NAME_SLURL] has given you this [OBJECTTYPE]:
 [ITEM_SLURL]
+Do you want to keep it? "Block" will block any more offers or messages from [NAME_SLURL].
     <form name="form">
       <button
        index="4"
