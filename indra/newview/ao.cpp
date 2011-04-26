@@ -291,11 +291,17 @@ void FloaterAO::onSelectSet()
 
 void FloaterAO::onSelectSetSmall()
 {
+	// sync main set selector with small set selector
+	mSetSelector->selectNthItem(mSetSelectorSmall->getCurrentIndex());
+
 	mSelectedSet=AOEngine::instance().getSetByName(mSetSelectorSmall->getSelectedItemLabel());
 	if(mSelectedSet)
 	{
 		updateSetParameters();
 		updateAnimationList();
+
+		// small selector activates the selected set immediately
+		onClickActivate();
 	}
 }
 
@@ -332,6 +338,9 @@ void FloaterAO::onRenameSet()
 
 void FloaterAO::onClickActivate()
 {
+	// sync small set selector with main set selector
+	mSetSelectorSmall->selectNthItem(mSetSelector->getCurrentIndex());
+
 	lldebugs << "Set activated: " << mSetSelector->getSelectedItemLabel() << llendl;
 	AOEngine::instance().selectSet(mSelectedSet);
 }
