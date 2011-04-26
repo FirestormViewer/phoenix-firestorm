@@ -225,6 +225,11 @@ BOOL FloaterAO::postBuild()
 
 	updateList();
 
+	if(gSavedPerAccountSettings.getBOOL("UseFullAOInterface"))
+		onClickMore();
+	else
+		onClickLess();
+
 	return LLDockableFloater::postBuild();
 }
 
@@ -620,14 +625,22 @@ void FloaterAO::onClickNext()
 
 void FloaterAO::onClickMore()
 {
-	LLRect fullSize=gSavedPerAccountSettings.getRect("floater_rect_animation_overrider");
+	LLRect fullSize=gSavedPerAccountSettings.getRect("floater_rect_animation_overrider_full");
 	LLRect smallSize=getRect();
+
+	if(fullSize.getHeight()<getMinHeight())
+		fullSize.setOriginAndSize(fullSize.mLeft,fullSize.mBottom,fullSize.getWidth(),getRect().getHeight());
+
+	if(fullSize.getWidth()<getMinWidth())
+		fullSize.setOriginAndSize(fullSize.mLeft,fullSize.mBottom,getRect().getWidth(),fullSize.getHeight());
 
 	mMore=TRUE;
 
 	mSmallInterfacePanel->setVisible(FALSE);
 	mMainInterfacePanel->setVisible(TRUE);
 	setCanResize(TRUE);
+
+	gSavedPerAccountSettings.setBOOL("UseFullAOInterface",TRUE);
 
 	reshape(getRect().getWidth(),fullSize.getHeight());
 }
@@ -638,16 +651,20 @@ void FloaterAO::onClickLess()
 	LLRect smallSize=mSmallInterfacePanel->getRect();
 	smallSize.setLeftTopAndSize(0,0,smallSize.getWidth(),smallSize.getHeight()+getHeaderHeight());
 
+	gSavedPerAccountSettings.setRect("floater_rect_animation_overrider_full",fullSize);
+
 	mMore=FALSE;
 
 	mSmallInterfacePanel->setVisible(TRUE);
 	mMainInterfacePanel->setVisible(FALSE);
 	setCanResize(FALSE);
 
+	gSavedPerAccountSettings.setBOOL("UseFullAOInterface",FALSE);
+
 	reshape(getRect().getWidth(),smallSize.getHeight());
 
 	// save current size and position
-	gSavedPerAccountSettings.setRect("floater_rect_animation_overrider",fullSize);
+	gSavedPerAccountSettings.setRect("floater_rect_animation_overrider_full",fullSize);
 }
 
 // virtual

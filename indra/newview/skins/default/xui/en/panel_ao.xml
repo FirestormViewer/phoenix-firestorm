@@ -390,7 +390,7 @@
 		left="10"
 		top="4"
 		width="180"
-		height="45"
+		height="52"
 		visible="false"
 		follows="left|right|top"
 		layout="topleft">
