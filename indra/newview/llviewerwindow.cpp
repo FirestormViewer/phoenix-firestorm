@@ -1609,7 +1609,7 @@ void LLViewerWindow::initBase()
 	cp.persist_time((F32)gSavedSettings.getS32("NearbyToastLifeTime"));
 	// /AO
 
-	cp.font_size_index(gSavedSettings.getS32("ChatFontSize"));
+	cp.font_size_index(gSavedSettings.getS32("ChatConsoleFontSize"));
 	cp.follows.flags(FOLLOWS_LEFT | FOLLOWS_RIGHT | FOLLOWS_BOTTOM);
 	gConsole = LLUICtrlFactory::create<LLConsole>(cp);
 	getRootView()->addChild(gConsole);

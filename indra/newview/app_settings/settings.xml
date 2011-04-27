@@ -1952,13 +1952,24 @@
     <key>ChatFontSize</key>
     <map>
       <key>Comment</key>
-      <string>Size of chat text in chat console (0 = small, 1 = big)</string>
+      <string>Size of chat text in chat floater (0 to 2, small to large)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>ChatConsoleFontSize</key>
+    <map>
+      <key>Comment</key>
+      <string>Size of chat text in chat console (0 to 2, small to large)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>2</integer>
     </map>
     <key>ChatFullWidth</key>
     <map>
