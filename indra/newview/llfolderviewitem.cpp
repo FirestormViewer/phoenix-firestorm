@@ -28,6 +28,7 @@
 #include "llfolderviewitem.h"
 
 // viewer includes
+#include "aoengine.h"			// ## Zi: Animation Overrider
 #include "llfolderview.h"		// Items depend extensively on LLFolderViews
 #include "llfoldervieweventlistener.h"
 #include "llinventorybridge.h"	// for LLItemBridge in LLInventorySort::operator()
@@ -1063,6 +1064,19 @@ void LLFolderViewItem::draw()
 						 S32_MAX, S32_MAX, &right_x, FALSE);
 	}
 
+	// ## Zi: Animation Overrider
+	//--------------------------------------------------------------------------------//
+	// Draw "protected" indicator
+	//
+	if(mListener->getUUID()==AOEngine::instance().getAOFolder())
+	{
+//		std::string locked_string = " ( " + LLTrans::getString("ProtectedAOFolder") + " ) ";
+		std::string locked_string = " (protected) ";
+		font->renderUTF8(locked_string, 0, right_x, y, LLColor4(1.0,0.0,0.0,1.0),
+						 LLFontGL::LEFT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, 
+						 S32_MAX, S32_MAX, &right_x, FALSE);
+	}
+	// ## Zi: Animation Overrider
 	//--------------------------------------------------------------------------------//
 	// Draw label suffix
 	//
