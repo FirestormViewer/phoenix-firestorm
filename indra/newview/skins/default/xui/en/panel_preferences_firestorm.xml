@@ -127,9 +127,24 @@
       width="270"
       control_name="RezUnderLandGroup"
       tool_tip="Attempts to rez objects under the land group if you're in the land group regardless of which current group tag you're wearing."/>
-    </panel>
 
-    <!--Tab1-2-->
+        <check_box bottom_delta="-30"
+      follows="left|top"
+      font="SansSerifSmall"
+      height="16"
+      initial_value="false"
+      label="Turn avatar around when walking backwards"
+      left="15"
+      mouse_opaque="true"
+      name="backwardsturnavatar"
+      radio_style="false"
+      width="270"
+      control_name="TurnAroundWhenWalkingBackwards"
+      tool_tip="Turns your avatar around to face the camera when you are walking backwards."/>
+      </panel>
+	  
+	  
+	   <!--Tab1-2-->
       <panel
 	    border="true"
         bottom="-500"

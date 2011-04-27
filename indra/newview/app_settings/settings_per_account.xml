@@ -251,6 +251,44 @@
         <key>Value</key>
             <integer>1</integer>
         </map>
+    <key>UseAO</key>
+        <map>
+        <key>Comment</key>
+            <string>Use the viewer side Animation Overrider</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
+    <key>UseFullAOInterface</key>
+        <map>
+        <key>Comment</key>
+            <string>Use the full Animation Overrider interface (TRUE) or the small, reduced interface (FALSE).</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
+    <key>floater_rect_animation_overrider_full</key>
+        <map>
+        <key>Comment</key>
+            <string>Position and size for the full Animation Overrider interface. The defaults are just dummy values.</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Rect</string>
+        <key>Value</key>
+            <array>
+                <integer>0</integer>
+                <integer>0</integer>
+                <integer>0</integer>
+                <integer>0</integer>
+            </array>
+        </map>
     <!-- End of Firestorm settings -->
     </map>
 </llsd>

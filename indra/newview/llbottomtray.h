@@ -124,6 +124,7 @@ public:
 
 	void toggleMovementControls();
 	void toggleCameraControls();
+	void toggleAO();		// ## Zi: Animation Overrider
 
 	void onMouselookModeIn();
 	void onMouselookModeOut();
@@ -167,6 +168,7 @@ private:
 		, RS_BUTTON_HOME		= 0x2000
 		, RS_BUTTON_ME			= 0x4000
 		, RS_BUTTON_PLACES		= 0x8000
+		, RS_BUTTON_AO			= 0x10000		// ## Zi: Animation Overrider
 
 		/*
 		Once new button that can be hidden on resize is added don't forget to update related places:
@@ -181,7 +183,7 @@ private:
 		 */
 		, RS_BUTTONS_CAN_BE_HIDDEN = RS_BUTTON_SNAPSHOT | RS_BUTTON_CAMERA | RS_BUTTON_MOVEMENT | RS_BUTTON_GESTURES
 									| RS_BUTTON_BUILD | RS_BUTTON_SEARCH | RS_BUTTON_WORLD_MAP | RS_BUTTON_MINI_MAP | RS_BUTTON_HOME
-									| RS_BUTTON_ME | RS_BUTTON_PLACES
+									| RS_BUTTON_ME | RS_BUTTON_PLACES | RS_BUTTON_AO	// ## Zi: Animation Overrider
 	}EResizeState;
 
 	// Below are three methods that were introduced to handle drag'n'drop
@@ -470,6 +472,7 @@ protected:
 	LLButton*			mCamButton;
 	LLButton*			mMovementButton;
 	LLBottomTrayLite*   mBottomTrayLite;
+	LLButton*			mAOToggleButton;			// ## Zi: Animation Overrider
 	bool                mIsInLiteMode;
 
 	// Drag'n'Drop

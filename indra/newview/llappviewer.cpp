@@ -29,6 +29,7 @@
 #include "llappviewer.h"
 
 // Viewer includes
+#include "aoengine.h"			// ## Zi: Animation Overrider
 #include "llversioninfo.h"
 #include "llfeaturemanager.h"
 #include "lluictrlfactory.h"
@@ -1017,7 +1018,10 @@ bool LLAppViewer::init()
 
 	LLAgentLanguage::init();
 
-
+	// ## Zi: Animation Overrider
+	setOnLoginCompletedCallback(boost::bind(&AOEngine::onLoginComplete));
+	llwarns << "AO on login callback set up." << llendl;
+	// ## Zi: Animation Overrider
 
 	return true;
 }

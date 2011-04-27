@@ -70,6 +70,9 @@ include_directories(
     )
 
 set(viewer_SOURCE_FILES
+    ao.cpp
+    aoengine.cpp
+    aoset.cpp
     chatbar_as_cmdline.cpp
     kcwlinterface.cpp
     floatermedialists.cpp
@@ -629,6 +632,9 @@ endif (LINUX)
 set(viewer_HEADER_FILES
     CMakeLists.txt
     ViewerInstall.cmake
+    ao.h
+    aoengine.h
+    aoset.h
     chatbar_as_cmdline.h
     kcwlinterface.h
     floatermedialists.h

@@ -38,6 +38,7 @@
 #include "lltexteditor.h"
 
 // newview includes
+#include "aoengine.h"		// ## Zi: Animation Overrider
 #include "llagentcamera.h"
 #include "llchiclet.h"
 #include "llfloatercamera.h"
@@ -539,6 +540,15 @@ void LLBottomTray::toggleCameraControls()
 		mCamButton->onCommit();
 }
 
+// ## Zi: Animation Overrider
+void LLBottomTray::toggleAO()
+{
+	BOOL yes=mAOToggleButton->getToggleState();
+	AOEngine::getInstance()->enable(yes);
+	gSavedPerAccountSettings.setBOOL("UseAO",yes);
+}
+// ## Zi: Animation Overrider
+
 BOOL LLBottomTray::postBuild()
 {
 	LLHints::registerHintTarget("bottom_tray", LLView::getHandle());
@@ -606,6 +616,11 @@ BOOL LLBottomTray::postBuild()
 	getChild<LLUICtrl>("sidebar_places_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "panel_places"));
 	getChild<LLUICtrl>("sidebar_appearance_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "sidepanel_appearance"));
 	getChild<LLUICtrl>("sidebar_inv_btn")->setCommitCallback(boost::bind(&LLBottomTray::showSidebarPanel, this, "sidepanel_inventory"));
+	// ## Zi: Animation Overrider
+	mAOToggleButton=getChild<LLButton>("ao_toggle_btn");
+	mAOToggleButton->setCommitCallback(boost::bind(&LLBottomTray::toggleAO,this));
+	mAOToggleButton->setToggleState(gSavedPerAccountSettings.getBOOL("UseAO"));
+	// ## Zi: Animation Overrider
 	return TRUE;
 }
 
@@ -1628,6 +1643,7 @@ void LLBottomTray::initResizeStateContainers()
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_HOME, getChild<LLPanel>("bottom_sbhome")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_ME, getChild<LLPanel>("bottom_sbme")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_PLACES, getChild<LLPanel>("bottom_sbplaces")));
+	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_AO, getChild<LLPanel>("ao_btn_panel")));		// ## Zi: Animation Overrider
 
 	// init an order of processed buttons
 // [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
@@ -1644,6 +1660,7 @@ void LLBottomTray::initResizeStateContainers()
 	mButtonsProcessOrder.push_back(RS_BUTTON_HOME);
 	mButtonsProcessOrder.push_back(RS_BUTTON_ME);
 	mButtonsProcessOrder.push_back(RS_BUTTON_PLACES);
+	mButtonsProcessOrder.push_back(RS_BUTTON_AO);		// ## Zi: Animation Overrider
 
 	mButtonsOrder.push_back(RS_BUTTON_SPEAK);
 	mButtonsOrder.insert(mButtonsOrder.end(), mButtonsProcessOrder.begin(), mButtonsProcessOrder.end());
@@ -1687,6 +1704,7 @@ void LLBottomTray::initButtonsVisibility()
 	setVisibleAndFitWidths(RS_BUTTON_HOME, gSavedSettings.getBOOL("ShowHomeButton"));
 	setVisibleAndFitWidths(RS_BUTTON_ME, gSavedSettings.getBOOL("ShowMeButton"));
 	setVisibleAndFitWidths(RS_BUTTON_PLACES, gSavedSettings.getBOOL("ShowPlacesButton"));
+	setVisibleAndFitWidths(RS_BUTTON_AO, gSavedSettings.getBOOL("ShowAOButton"));	// ## Zi: Animation Overrider
 }
 
 void LLBottomTray::setButtonsControlsAndListeners()
@@ -1705,6 +1723,7 @@ void LLBottomTray::setButtonsControlsAndListeners()
 	gSavedSettings.getControl("ShowHomeButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_HOME, _2));
 	gSavedSettings.getControl("ShowMeButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_ME, _2));
 	gSavedSettings.getControl("ShowPlacesButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_PLACES, _2));
+	gSavedSettings.getControl("ShowAOButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_AO, _2));			// ## Zi: Animation Overrider
 
 
 	LLButton* build_btn = getChild<LLButton>("build_btn");
