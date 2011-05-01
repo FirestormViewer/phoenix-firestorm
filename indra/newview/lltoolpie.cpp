@@ -48,6 +48,7 @@
 #include "llmediaentry.h"
 #include "llmenugl.h"
 #include "llmutelist.h"
+#include "llpiemenu.h"	// ## Zi: Pie menu
 #include "llresmgr.h"  // getMonetaryString
 #include "llselectmgr.h"
 #include "lltoolfocus.h"
@@ -1619,6 +1620,11 @@ BOOL LLToolPie::pickRightMouseDownCallback()
 	{
 		LLParcelSelectionHandle selection = LLViewerParcelMgr::getInstance()->selectParcelAt( mPick.mPosGlobal );
 		gMenuHolder->setParcelSelection(selection);
+		// ## Zi: Pie menu
+		if(gSavedPerAccountSettings.getBOOL("UsePieMenu"))
+			gPieMenuLand->show(x, y);
+		// ## Zi: Pie menu
+		else
 		gMenuLand->show(x, y);
 
 		showVisualContextMenuEffect();
@@ -1626,6 +1632,21 @@ BOOL LLToolPie::pickRightMouseDownCallback()
 	}
 	else if (mPick.mObjectID == gAgent.getID() )
 	{
+		// ## Zi: Pie menu
+		if(gSavedPerAccountSettings.getBOOL("UsePieMenu"))
+		{
+			if(!gPieMenuAvatarSelf)
+			{
+				//either at very early startup stage or at late quitting stage,
+				//this event is ignored.
+				return TRUE ;
+			}
+
+			gPieMenuAvatarSelf->show(x, y);
+		}
+		// ## Zi: Pie menu
+		else
+		{
 		if(!gMenuAvatarSelf) 
 		{
 			//either at very early startup stage or at late quitting stage,
@@ -1634,6 +1655,7 @@ BOOL LLToolPie::pickRightMouseDownCallback()
 		}
 
 		gMenuAvatarSelf->show(x, y);
+	}
 	}
 	else if (object)
 	{
@@ -1677,11 +1699,21 @@ BOOL LLToolPie::pickRightMouseDownCallback()
 				if (is_other_attachment)
 				{
 					gMenuAttachmentOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
+					// ## Zi: Pie menu
+					if(gSavedPerAccountSettings.getBOOL("UsePieMenu"))
+						gPieMenuAttachmentOther->show(x, y);
+					// ## Zi: Pie menu
+					else
 					gMenuAttachmentOther->show(x, y);
 				}
 				else
 				{
 					gMenuAvatarOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
+					// ## Zi: Pie menu
+					if(gSavedPerAccountSettings.getBOOL("UsePieMenu"))
+						gPieMenuAvatarOther->show(x, y);
+					// ## Zi: Pie menu
+					else
 					gMenuAvatarOther->show(x, y);
 				}
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
@@ -1694,6 +1726,11 @@ BOOL LLToolPie::pickRightMouseDownCallback()
 		}
 		else if (object->isAttachment())
 		{
+			// ## Zi: Pie menu
+			if(gSavedPerAccountSettings.getBOOL("UsePieMenu"))
+				gPieMenuAttachmentSelf->show(x, y);
+			// ## Zi: Pie menu
+			else
 			gMenuAttachmentSelf->show(x, y);
 		}
 		else
@@ -1723,6 +1760,11 @@ BOOL LLToolPie::pickRightMouseDownCallback()
 			{
 // [/RLVa:KB]
 				gMenuHolder->getChild<LLUICtrl>("Object Mute")->setValue(mute_msg);
+				// ## Zi: Pie menu
+				if(gSavedPerAccountSettings.getBOOL("UsePieMenu"))
+					gPieMenuObject->show(x, y);
+				// ## Zi: Pie menu
+				else
 				gMenuObject->show(x, y);
 
 				showVisualContextMenuEffect();
