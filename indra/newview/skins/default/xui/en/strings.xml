@@ -142,6 +142,9 @@
 	<!-- Indicates something is being loaded. Maybe should be merged with RetrievingData -->
 	<string name="LoadingData">Loading...</string>
 
+	<!-- Indicates a protected Inventory folder. ## Zi: Animation Overrider -->
+	<string name="ProtectedFolder">protected</string>
+
 
 	<!-- namecache -->
 	<!-- Avatar name: text shown for LLUUID::null -->

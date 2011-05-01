@@ -879,6 +879,7 @@ void LLFolderViewItem::draw()
 	static LLUIColor sLibraryColor = LLUIColorTable::instance().getColor("InventoryItemLibraryColor", DEFAULT_WHITE);
 	static LLUIColor sLinkColor = LLUIColorTable::instance().getColor("InventoryItemLinkColor", DEFAULT_WHITE);
 	static LLUIColor sSearchStatusColor = LLUIColorTable::instance().getColor("InventorySearchStatusColor", DEFAULT_WHITE);
+	static LLUIColor sProtectedColor = LLUIColorTable::instance().getColor("InventoryProtectedColor", DEFAULT_WHITE);		// ## Zi: Animation Overrider
 
 	const Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
 	const S32 TOP_PAD = default_params.item_top_pad;
@@ -1068,15 +1069,15 @@ void LLFolderViewItem::draw()
 	//--------------------------------------------------------------------------------//
 	// Draw "protected" indicator
 	//
-	if(mListener->getUUID()==AOEngine::instance().getAOFolder())
+	if(mListener->getUUID()==AOEngine::instance().getAOFolder() && gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
 	{
-//		std::string locked_string = " ( " + LLTrans::getString("ProtectedAOFolder") + " ) ";
-		std::string locked_string = " (protected) ";
-		font->renderUTF8(locked_string, 0, right_x, y, LLColor4(1.0,0.0,0.0,1.0),
+		std::string locked_string = " (" + LLTrans::getString("ProtectedFolder") + ") ";
+		font->renderUTF8(locked_string, 0, right_x, y, sProtectedColor,
 						 LLFontGL::LEFT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, 
 						 S32_MAX, S32_MAX, &right_x, FALSE);
 	}
 	// ## Zi: Animation Overrider
+
 	//--------------------------------------------------------------------------------//
 	// Draw label suffix
 	//

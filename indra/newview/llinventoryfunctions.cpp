@@ -43,6 +43,7 @@
 #include "message.h"
 
 // newview includes
+#include "aoengine.h"			// ## Zi: Animation Overrider
 #include "llappearancemgr.h"
 #include "llappviewer.h"
 //#include "llfirstuse.h"
@@ -115,6 +116,12 @@ void change_item_parent(LLInventoryModel* model,
 {
 	if (item->getParentUUID() != new_parent_id)
 	{
+		// ## Zi: Animation Overrider
+		if(model->isObjectDescendentOf(item->getUUID(),AOEngine::instance().getAOFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+			return;
+		// ## Zi: Animation Overrider
+
 		LLInventoryModel::update_list_t update;
 		LLInventoryModel::LLCategoryUpdate old_folder(item->getParentUUID(),-1);
 		update.push_back(old_folder);
@@ -145,6 +152,12 @@ void change_category_parent(LLInventoryModel* model,
 	{
 		return;
 	}
+
+	// ## Zi: Animation Overrider
+	if(model->isObjectDescendentOf(cat->getUUID(),AOEngine::instance().getAOFolder())
+		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+		return;
+	// ## Zi: Animation Overrider
 
 	LLInventoryModel::update_list_t update;
 	LLInventoryModel::LLCategoryUpdate old_folder(cat->getParentUUID(), -1);
@@ -325,6 +338,12 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 		return FALSE;
 	}
 
+	// ## Zi: Animation Overrider
+	if(model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder())
+		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+		return FALSE;
+	// ## Zi: Animation Overrider
+
 	// Disable delete from COF folder; have users explicitly choose "detach/take off",
 	// unless the item is not worn but in the COF (i.e. is bugged).
 	if (LLAppearanceMgr::instance().getIsProtectedCOFItem(id))
@@ -370,6 +389,12 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 	}
 // [/RLVa:KB]
 
+	// ## Zi: Animation Overrider
+	if((id==AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder()))
+		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+		return FALSE;
+	// ## Zi: Animation Overrider
+
 	if (!isAgentAvatarValid()) return FALSE;
 
 	const LLInventoryCategory* category = model->getCategory(id);
@@ -412,6 +437,12 @@ BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 		return FALSE;
 	}
 // [/RLVa:KB]
+
+	// ## Zi: Animation Overrider
+	if((id==AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder()))
+		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+		return FALSE;
+	// ## Zi: Animation Overrider
 
 	LLViewerInventoryCategory* cat = model->getCategory(id);
 

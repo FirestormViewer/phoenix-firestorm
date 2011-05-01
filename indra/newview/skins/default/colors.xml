@@ -631,6 +631,9 @@
      name="InventorySearchStatusColor"
      reference="EmphasisColor" />
     <color
+     name="InventoryProtectedColor"
+     reference="EmphasisColor" />
+    <color
      name="LabelDisabledColor"
 	 reference="White_25" />
     <color

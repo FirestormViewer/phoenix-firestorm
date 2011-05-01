@@ -273,6 +273,15 @@
         <key>Value</key>
             <integer>0</integer>
         </map>
+    <key>ProtectAOFolders</key>
+        <map>
+        <key>Comment</key>
+            <string>Keep the AO folders in Inventory safe from manual changes.</string>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>1</integer>
+        </map>
     <key>floater_rect_animation_overrider_full</key>
         <map>
         <key>Comment</key>
