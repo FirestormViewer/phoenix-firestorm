@@ -158,8 +158,4 @@
 	     comment="Size of small font (points, or 1/72 of an inch)"
 	     size="7.6"
 	     />
-  <font_size name="Pie"
-	     comment="Size of pie menu font (points, or 1/72 of an inch)"
-	     size="6.5"
-	     />
 </fonts>

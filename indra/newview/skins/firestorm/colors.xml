@@ -272,6 +272,15 @@
      name="NetMapYouOwnBelowWater"
      value="0 0.78 0.78 1" />
     <color
+     name="PieMenuBgColor"
+     value="0.24 0.24 0.24 0.59" />
+    <color
+     name="PieMenuLineColor"
+     value="0 0 0 0.5" />
+    <color
+     name="PieMenuSelectedColor"
+     value="0.72 0.72 0.74 0.3" />
+    <color
      name="PropertyColorAuction"
      value="0.5 0 1 0.4" />
     <color

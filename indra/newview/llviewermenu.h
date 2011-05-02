@@ -37,7 +37,6 @@ class LLView;
 class LLParcelSelection;
 class LLObjectSelection;
 class LLSelectNode;
-class LLPieMenu;			// ## Zi: Pie Menu
 
 void initialize_edit_menu();
 void init_menus();
@@ -181,34 +180,11 @@ extern LLContextMenu* gDetachPieMenu;
 extern LLContextMenu* gAttachBodyPartPieMenus[8];
 extern LLContextMenu* gDetachBodyPartPieMenus[8];
 
-// ## Zi: Pie Menu
-// Pie menus in 3D scene
-extern LLPieMenu			*gPieMenuAvatarSelf;
-extern LLPieMenu			*gPieMenuAvatarOther;
-extern LLPieMenu			*gPieMenuObject;
-extern LLPieMenu			*gPieMenuAttachmentSelf;
-extern LLPieMenu			*gPieMenuAttachmentOther;
-extern LLPieMenu			*gPieMenuLand;
-
-// Needed to build pie menus when attachment site list available
-extern LLPieMenu* gPieAttachScreenMenu;
-extern LLPieMenu* gPieDetachScreenMenu;
-extern LLPieMenu* gPieAttachMenu;
-extern LLPieMenu* gPieDetachMenu;
-extern LLPieMenu* gPieAttachBodyPartMenus[8];
-extern LLPieMenu* gPieDetachBodyPartMenus[8];
-// ## Zi: Pie Menu
-
 extern LLMenuItemCallGL* gAFKMenu;
 extern LLMenuItemCallGL* gBusyMenu;
 extern LLMenuItemCallGL* gAutorespondMenu;
-
-/*
-// ## Zi: Dead code?
 extern LLMenuItemCallGL* gMutePieMenu;
 extern LLMenuItemCallGL* gMuteObjectPieMenu;
 extern LLMenuItemCallGL* gBuyPassPieMenu;
-// ## Zi: Dead code?
-*/
 
 #endif

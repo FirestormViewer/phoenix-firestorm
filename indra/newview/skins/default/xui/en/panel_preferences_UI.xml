@@ -92,22 +92,10 @@
           top_pad="12"
           width="256" />
 
-          <check_box
-          control_name="UsePieMenu"
-          height="16"
-          initial_value="true"
-          label="Use Pie Menu"
-          layout="topleft"
-          left_delta="0"
-          name="ShowHoverTips"
-          tool_tip="Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments."
-          top_pad="7"
-          width="256" />
-
 		<text
 		type="string"
             left="5"
-            top_pad="97"
+            top_pad="110"
 		length="1"
 		follows="left|top"
 		height="12"
