@@ -259,8 +259,11 @@
      name="PieMenuLineColor"
      value="0 0 0 0.5" />
     <color
+     name="PieMenuTextColor"
+     reference="SL-White" />
+    <color
      name="PieMenuSelectedColor"
-     value="0.72 0.72 0.74 0.3" />
+     reference="EmphasisColor_35" />
     <color
      name="PropertyColorAuction"
      value="0.5 0 1 0.4" />
