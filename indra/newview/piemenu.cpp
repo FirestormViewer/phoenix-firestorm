@@ -393,7 +393,8 @@ void PieMenu::draw( void )
 							itemColor,
 							LLFontGL::HCENTER,
 							LLFontGL::VCENTER,
-							LLFontGL::NORMAL);
+							LLFontGL::NORMAL,
+							LLFontGL::DROP_SHADOW_SOFT);
 		// next slice
 		num++;
 	}
