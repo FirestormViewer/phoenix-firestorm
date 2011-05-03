@@ -421,7 +421,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
              enabled_callback.function="Profile.EnableUnblock"
              follows="left|top|right" />
 
-            <button
+            <menu_button
              left_pad="4"
              height="20"
              image_overlay="OptionsMenu_Off"
