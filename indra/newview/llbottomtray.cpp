@@ -390,14 +390,14 @@ void LLBottomTray::onChange(EStatusType status, const std::string &channelURI, b
 		mSpeakBtn->setFlyoutBtnEnabled(LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking());
 	}
 }
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-11-26 (Catznip-2.4.0f) | Modified: Catznip-2.4.0f changeset/e6f3f304e04e
+
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-11-26 (Catznip-2.4.0f) | Modified: Catznip-2.4.0f
 bool LLBottomTray::handleVoiceEnabledToggle(const LLSD& newvalue)
 {
 	gSavedSettings.setBOOL("ShowSpeakButton", newvalue.asBoolean());
 	return true;
 }
 // [/SL:KB]
-
 
 void LLBottomTray::onMouselookModeOut()
 {
@@ -586,8 +586,7 @@ BOOL LLBottomTray::postBuild()
 
 	// Registering Chat Bar to receive Voice client status change notifications.
 	LLVoiceClient::getInstance()->addObserver(this);
-
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b
 	gSavedSettings.getControl("EnableVoiceChat")->getSignal()->connect(boost::bind(&LLBottomTray::handleVoiceEnabledToggle,  _2));
 // [/SL:KB]
 
@@ -718,7 +717,10 @@ void LLBottomTray::updateButtonsOrdersAfterDnD()
 	// Speak button is currently the only draggable button not in mStateProcessedObjectMap,
 	// so if dragged_state is not found in that map, it should be RS_BUTTON_SPEAK. Change this code if any other
 	// exclusions from mStateProcessedObjectMap will become draggable.
-	EResizeState dragged_state = RS_BUTTON_SPEAK;
+//	EResizeState dragged_state = RS_BUTTON_SPEAK;
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-12-02 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+	EResizeState dragged_state = RS_NORESIZE;
+// [/SL:KB]
 	EResizeState landing_state = RS_NORESIZE;
 	bool landing_state_found = false;
 	// Find states for dragged item and landing tab
@@ -743,23 +745,26 @@ void LLBottomTray::updateButtonsOrdersAfterDnD()
 	}
 	else
 	{
-		if (!landing_state_found) landing_state = RS_BUTTON_SPEAK;
+//		if (!landing_state_found) landing_state = RS_BUTTON_SPEAK;
 		mButtonsOrder.insert(std::find(mButtonsOrder.begin(), mButtonsOrder.end(), landing_state), dragged_state);
 	}
 	// Synchronize button process order with their order
-	resize_state_vec_t::const_iterator it1 = mButtonsOrder.begin();
-	const resize_state_vec_t::const_iterator it_end1 = mButtonsOrder.end();
-	resize_state_vec_t::iterator it2 = mButtonsProcessOrder.begin();
-	for (; it1 != it_end1; ++it1)
-	{
-		// Skip Speak because it is not in mButtonsProcessOrder(it's the reason why mButtonsOrder was introduced).
-		// If any other draggable items will be added to bottomtray later, they should also be skipped here.
-		if (*it1 != RS_BUTTON_SPEAK)
-		{
-			*it2 = *it1;
-			++it2;
-		}
-	}
+//	resize_state_vec_t::const_iterator it1 = mButtonsOrder.begin();
+//	const resize_state_vec_t::const_iterator it_end1 = mButtonsOrder.end();
+//	resize_state_vec_t::iterator it2 = mButtonsProcessOrder.begin();
+//	for (; it1 != it_end1; ++it1)
+//	{
+//		// Skip Speak because it is not in mButtonsProcessOrder(it's the reason why mButtonsOrder was introduced).
+//		// If any other draggable items will be added to bottomtray later, they should also be skipped here.
+//		if (*it1 != RS_BUTTON_SPEAK)
+//		{
+//			*it2 = *it1;
+//			++it2;
+//		}
+//	}
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-12-02 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+	mButtonsProcessOrder = mButtonsOrder;
+// [/SL:KB]
 
 	saveButtonsOrder();
 }
@@ -807,11 +812,14 @@ void LLBottomTray::loadButtonsOrder()
 		std::string str = llformat("%d", i);
 		EResizeState state = (EResizeState)settings_llsd[str].asInteger();
 		mButtonsOrder.push_back(state);
-		// RS_BUTTON_SPEAK is skipped, because it shouldn't be in mButtonsProcessOrder (it does not hide or shrink).
-		if (state != RS_BUTTON_SPEAK)
-		{
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-12-02 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
 			mButtonsProcessOrder.push_back(state);
-		}		
+// [/SL:KB]
+//		// RS_BUTTON_SPEAK is skipped, because it shouldn't be in mButtonsProcessOrder (it does not hide or shrink).
+//		if (state != RS_BUTTON_SPEAK)
+//		{
+//			mButtonsProcessOrder.push_back(state);
+//		}		
 	}
 
 	// There are other panels in layout stack order of which is not saved. Also, panels order of which is saved,
@@ -822,7 +830,10 @@ void LLBottomTray::loadButtonsOrder()
 	// placing panels in layout stack according to button order which we loaded in previous for
 	for (resize_state_vec_t::const_reverse_iterator it = mButtonsOrder.rbegin(); it != it_end; ++it, ++i)
 	{
-		LLPanel* panel_to_move = *it == RS_BUTTON_SPEAK ? mSpeakPanel : mStateProcessedObjectMap[*it];
+//		LLPanel* panel_to_move = *it == RS_BUTTON_SPEAK ? mSpeakPanel : mStateProcessedObjectMap[*it];
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-12-02 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+		LLPanel* panel_to_move = mStateProcessedObjectMap[*it];
+// [/SL:KB]
 		mToolbarStack->movePanel(panel_to_move, NULL, true); // prepend 		
 	}
 	// Nearbychat is not stored in order settings file, but it must be the first of the panels, so moving it
@@ -1412,7 +1423,7 @@ void LLBottomTray::processShrinkButtons(S32& required_width, S32& buttons_freed_
 	}
 
 	// then shrink Speak button
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b
 	if ( (mSpeakPanel->getVisible()) && (mObjectDefaultWidthMap[RS_BUTTON_SPEAK] > mSpeakPanel->getRect().getWidth()) )
 	{
 		mSpeakBtn->setLabelVisible(false);
@@ -1523,11 +1534,18 @@ void LLBottomTray::processExtendButtons(S32& available_width)
 		processExtendButton(*it, available_width);
 	}
 
-	const S32 chiclet_panel_width = mChicletPanel->getParent()->getRect().getWidth();
-	static const S32 chiclet_panel_min_width = mChicletPanel->getMinWidth();
-	const S32 available_width_chiclet = chiclet_panel_width - chiclet_panel_min_width;
+//	const S32 chiclet_panel_width = mChicletPanel->getParent()->getRect().getWidth();
+//	static const S32 chiclet_panel_min_width = mChicletPanel->getMinWidth();
+//	const S32 available_width_chiclet = chiclet_panel_width - chiclet_panel_min_width;
 
 	// then try to extend Speak button
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b
+	if ( (mSpeakPanel->getVisible()) && (mObjectDefaultWidthMap[RS_BUTTON_SPEAK] <= mSpeakPanel->getRect().getWidth()) )
+	{
+		mSpeakBtn->setLabelVisible(true);
+	}
+// [/SL:KB]
+/*
 	if (available_width > 0 || available_width_chiclet > 0)
 	{
 		S32 panel_max_width = mObjectDefaultWidthMap[RS_BUTTON_SPEAK];
@@ -1556,6 +1574,7 @@ void LLBottomTray::processExtendButtons(S32& available_width)
 				<< llendl;
 		}
 	}
+*/
 }
 
 void LLBottomTray::processExtendButton(EResizeState processed_object_type, S32& available_width)
@@ -1629,7 +1648,7 @@ bool LLBottomTray::canButtonBeShown(EResizeState processed_object_type) const
 void LLBottomTray::initResizeStateContainers()
 {
 	// init map with objects should be processed for each type
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_SPEAK, getChild<LLPanel>("speak_panel")));
 // [/SL:KB]
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_GESTURES, getChild<LLPanel>("gesture_panel")));
@@ -1646,7 +1665,7 @@ void LLBottomTray::initResizeStateContainers()
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_AO, getChild<LLPanel>("ao_btn_panel")));		// ## Zi: Animation Overrider
 
 	// init an order of processed buttons
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b
 	mButtonsProcessOrder.push_back(RS_BUTTON_SPEAK);
 // [/SL:KB]
 	mButtonsProcessOrder.push_back(RS_BUTTON_GESTURES);
@@ -1662,8 +1681,11 @@ void LLBottomTray::initResizeStateContainers()
 	mButtonsProcessOrder.push_back(RS_BUTTON_PLACES);
 	mButtonsProcessOrder.push_back(RS_BUTTON_AO);		// ## Zi: Animation Overrider
 
-	mButtonsOrder.push_back(RS_BUTTON_SPEAK);
-	mButtonsOrder.insert(mButtonsOrder.end(), mButtonsProcessOrder.begin(), mButtonsProcessOrder.end());
+//	mButtonsOrder.push_back(RS_BUTTON_SPEAK);
+//	mButtonsOrder.insert(mButtonsOrder.end(), mButtonsProcessOrder.begin(), mButtonsProcessOrder.end());
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-12-02 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+	mButtonsOrder = mButtonsProcessOrder;
+// [/SL:KB]
 
 	// init default widths
 
@@ -1683,14 +1705,15 @@ void LLBottomTray::initResizeStateContainers()
 	}
 
 	// ... and add Speak button because it also can be shrunk.
-	mObjectDefaultWidthMap[RS_BUTTON_SPEAK]	   = mSpeakPanel->getRect().getWidth();
+//	mObjectDefaultWidthMap[RS_BUTTON_SPEAK]	   = mSpeakPanel->getRect().getWidth();
+
 }
 
 // this method must be called before restoring of the chat entry field on startup
 // because it resets chatbar's width according to resize logic.
 void LLBottomTray::initButtonsVisibility()
 {
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b
 	setVisibleAndFitWidths(RS_BUTTON_SPEAK, gSavedSettings.getBOOL("ShowSpeakButton"));
 // [/SL:KB]
 	setVisibleAndFitWidths(RS_BUTTON_GESTURES, gSavedSettings.getBOOL("ShowGestureButton"));
@@ -1709,7 +1732,7 @@ void LLBottomTray::initButtonsVisibility()
 
 void LLBottomTray::setButtonsControlsAndListeners()
 {
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b
 	gSavedSettings.getControl("ShowSpeakButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_SPEAK, _2));
 // [/SL:KB]
 	gSavedSettings.getControl("ShowGestureButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_GESTURES, _2));
@@ -1754,7 +1777,7 @@ void LLBottomTray::setTrayButtonVisible(EResizeState shown_object_type, bool vis
 
 	panel->setVisible(visible);
 
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b
 	S32 posChatBarEnd = mNearbyChatBar->getRect().mRight;
 	S32 posBtnStart = -1; std::string strBtnName;
 
@@ -1830,7 +1853,7 @@ bool LLBottomTray::setVisibleAndFitWidths(EResizeState object_type, bool visible
 
 //			S32 sum_of_min_widths = get_panel_min_width(mToolbarStack, mSpeakPanel);
 //			S32 sum_of_curr_widths = get_curr_width(mSpeakPanel);
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b
 			S32 sum_of_min_widths = 0;
 			S32 sum_of_curr_widths = 0;
 // [/SL:KB]
