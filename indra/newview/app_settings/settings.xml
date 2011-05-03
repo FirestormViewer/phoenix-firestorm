@@ -9768,8 +9768,8 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
-  </map>
-  <key>ShowObjectRenderingCost</key>                
+    </map>
+    <key>ShowObjectRenderingCost</key>                
     <map>
       <key>Comment</key>
       <string>Show the object rendering cost in  build tools</string>

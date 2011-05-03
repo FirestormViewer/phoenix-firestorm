@@ -110,7 +110,7 @@ public:
 	// button when voice is available
 	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
 
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-11-26 (Catznip-2.4.0f) | Modified: Catznip-2.4.0f changeset/e6f3f304e04e
+// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-11-26 (Catznip-2.4.0f) | Modified: Catznip-2.4.0f
 	static bool handleVoiceEnabledToggle(const LLSD& newvalue);
 // [/SL:KB]
 
