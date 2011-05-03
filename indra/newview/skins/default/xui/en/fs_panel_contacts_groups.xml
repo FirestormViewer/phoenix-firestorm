@@ -8,7 +8,7 @@
  width="350">
 	<view_border
 	 top="-9"
-	 bottom="9"
+	 bottom="25"
 	 left="9"
 	 width="241"
 	 follows="left|top|right|bottom"
@@ -16,12 +16,23 @@
 	 name="info_border" />
 	<group_list
 	 allow_select="true"
-	 bottom="10"
+	 bottom="26"
 	 follows="left|top|right|bottom"
 	 left="10"
 	 name="group_list"
 	 top="-10"
 	 width="240" />
+    <text
+     type="string"
+     length="1"
+     bottom="296"
+     follows="left|bottom"
+     height="14"
+     layout="topleft"
+     right="-10"
+     name="groupcount">
+You belong to [COUNT] out of [MAX] groups.
+    </text>
 	<button
 	 top="-10"
 	 follows="top|right"
@@ -60,7 +71,7 @@
 	 name="leave_btn"
 	 width="80" />
 	<button
-	 bottom_delta="-35"
+	 bottom_delta="-25"
 	 follows="top|right"
 	 height="22"
 	 label="Create..."
@@ -81,20 +92,6 @@
 	 label="Invite..."
 	 name="invite_btn"
 	 width="80" />-->
-  <text
-     type="string"
-     length="1"
-	   bottom_delta="35"
-     follows="top|right"
-     height="26"
-     layout="topleft"
-     right="-10"
-     name="groupcount"
-     width="80">
-You belong to 
-[COUNT] out of 
-[MAX] groups. 
-</text>
   <!--  <text
    type="string"
    length="1"
