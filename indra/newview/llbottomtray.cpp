@@ -381,14 +381,6 @@ void LLBottomTray::onChange(EStatusType status, const std::string &channelURI, b
 		mSpeakBtn->setFlyoutBtnEnabled(LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking());
 	}
 }
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-11-26 (Catznip-2.4.0f) | Modified: Catznip-2.4.0f changeset/e6f3f304e04e
-bool LLBottomTray::handleVoiceEnabledToggle(const LLSD& newvalue)
-{
-	gSavedSettings.setBOOL("ShowSpeakButton", newvalue.asBoolean());
-	return true;
-}
-// [/SL:KB]
-
 
 void LLBottomTray::onMouselookModeOut()
 {
@@ -560,10 +552,6 @@ BOOL LLBottomTray::postBuild()
 
 	// Registering Chat Bar to receive Voice client status change notifications.
 	LLVoiceClient::getInstance()->addObserver(this);
-
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
-	gSavedSettings.getControl("EnableVoiceChat")->getSignal()->connect(boost::bind(&LLBottomTray::handleVoiceEnabledToggle,  _2));
-// [/SL:KB]
 
 	mNearbyChatBar->getChatBox()->setContextMenu(NULL);
 
@@ -1365,13 +1353,6 @@ void LLBottomTray::processShrinkButtons(S32& required_width, S32& buttons_freed_
 	}
 
 	// then shrink Speak button
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
-	if ( (mSpeakPanel->getVisible()) && (mObjectDefaultWidthMap[RS_BUTTON_SPEAK] > mSpeakPanel->getRect().getWidth()) )
-	{
-		mSpeakBtn->setLabelVisible(false);
-	}
-// [/SL:KB]
-/*
 	if (required_width < 0)
 	{
 
@@ -1406,7 +1387,6 @@ void LLBottomTray::processShrinkButtons(S32& required_width, S32& buttons_freed_
 			}
 		}
 	}
-*/
 }
 
 void LLBottomTray::processShrinkButton(EResizeState processed_object_type, S32& required_width)
@@ -1582,9 +1562,6 @@ bool LLBottomTray::canButtonBeShown(EResizeState processed_object_type) const
 void LLBottomTray::initResizeStateContainers()
 {
 	// init map with objects should be processed for each type
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
-	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_SPEAK, getChild<LLPanel>("speak_panel")));
-// [/SL:KB]
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_GESTURES, getChild<LLPanel>("gesture_panel")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_MOVEMENT, getChild<LLPanel>("movement_panel")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_CAMERA, getChild<LLPanel>("cam_panel")));
@@ -1598,9 +1575,6 @@ void LLBottomTray::initResizeStateContainers()
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_PLACES, getChild<LLPanel>("bottom_sbplaces")));
 
 	// init an order of processed buttons
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
-	mButtonsProcessOrder.push_back(RS_BUTTON_SPEAK);
-// [/SL:KB]
 	mButtonsProcessOrder.push_back(RS_BUTTON_GESTURES);
 	mButtonsProcessOrder.push_back(RS_BUTTON_MOVEMENT);
 	mButtonsProcessOrder.push_back(RS_BUTTON_CAMERA);
@@ -1635,15 +1609,13 @@ void LLBottomTray::initResizeStateContainers()
 
 	// ... and add Speak button because it also can be shrunk.
 	mObjectDefaultWidthMap[RS_BUTTON_SPEAK]	   = mSpeakPanel->getRect().getWidth();
+
 }
 
 // this method must be called before restoring of the chat entry field on startup
 // because it resets chatbar's width according to resize logic.
 void LLBottomTray::initButtonsVisibility()
 {
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
-	setVisibleAndFitWidths(RS_BUTTON_SPEAK, gSavedSettings.getBOOL("ShowSpeakButton"));
-// [/SL:KB]
 	setVisibleAndFitWidths(RS_BUTTON_GESTURES, gSavedSettings.getBOOL("ShowGestureButton"));
 	setVisibleAndFitWidths(RS_BUTTON_MOVEMENT, gSavedSettings.getBOOL("ShowMoveButton"));
 	setVisibleAndFitWidths(RS_BUTTON_CAMERA, gSavedSettings.getBOOL("ShowCameraButton"));
@@ -1659,9 +1631,6 @@ void LLBottomTray::initButtonsVisibility()
 
 void LLBottomTray::setButtonsControlsAndListeners()
 {
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
-	gSavedSettings.getControl("ShowSpeakButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_SPEAK, _2));
-// [/SL:KB]
 	gSavedSettings.getControl("ShowGestureButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_GESTURES, _2));
 	gSavedSettings.getControl("ShowMoveButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_MOVEMENT, _2));
 	gSavedSettings.getControl("ShowCameraButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_CAMERA, _2));
@@ -1702,29 +1671,6 @@ void LLBottomTray::setTrayButtonVisible(EResizeState shown_object_type, bool vis
 	}
 
 	panel->setVisible(visible);
-
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
-	S32 posChatBarEnd = mNearbyChatBar->getRect().mRight;
-	S32 posBtnStart = -1; std::string strBtnName;
-
-	for (state_object_map_t::iterator it = mStateProcessedObjectMap.begin(); it != mStateProcessedObjectMap.end(); ++it)
-	{
-		LLPanel* pBtnPanel = it->second;
-		if ( (pBtnPanel) && (pBtnPanel->getVisible()) )
-		{
-			S32 dist = pBtnPanel->getRect().mLeft - posChatBarEnd;
-			if ( (dist > 0) && ((-1 == posBtnStart) || (posBtnStart > dist)) )
-			{
-				posBtnStart = dist;
-				strBtnName = pBtnPanel->getName();
-			}
-			mToolbarStack->setPanelUserResize(pBtnPanel->getName(), FALSE);
-		}
-	}
-
-	if (!strBtnName.empty())
-		mToolbarStack->setPanelUserResize(strBtnName, TRUE);
-// [/SL:KB]
 }
 
 void LLBottomTray::setTrayButtonVisibleIfPossible(EResizeState shown_object_type, bool visible, bool raise_notification)
@@ -1777,12 +1723,8 @@ bool LLBottomTray::setVisibleAndFitWidths(EResizeState object_type, bool visible
 			const S32 chatbar_shrunk_width =
 				mChatBarContainer->getRect().getWidth() - get_panel_min_width(mToolbarStack, mChatBarContainer);
 
-//			S32 sum_of_min_widths = get_panel_min_width(mToolbarStack, mSpeakPanel);
-//			S32 sum_of_curr_widths = get_curr_width(mSpeakPanel);
-// [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b changeset/175f98cb1dc4
-			S32 sum_of_min_widths = 0;
-			S32 sum_of_curr_widths = 0;
-// [/SL:KB]
+			S32 sum_of_min_widths = get_panel_min_width(mToolbarStack, mSpeakPanel);
+			S32 sum_of_curr_widths = get_curr_width(mSpeakPanel);
 
 			resize_state_vec_t::const_iterator it = mButtonsProcessOrder.begin();
 			const resize_state_vec_t::const_iterator it_end = mButtonsProcessOrder.end();
