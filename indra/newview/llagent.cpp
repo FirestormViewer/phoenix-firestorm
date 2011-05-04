@@ -3879,16 +3879,21 @@ void LLAgent::sendAgentSetAppearance()
 		gMessageSystem->addBinaryDataFast(_PREHASH_TextureEntry, NULL, 0);
 	}
 
-
+	BOOL send_v1_message = gSavedSettings.getBOOL("FSDontSendAvPhysicsParms");
 	S32 transmitted_params = 0;
 	for (LLViewerVisualParam* param = (LLViewerVisualParam*)gAgentAvatarp->getFirstVisualParam();
 		 param;
 		 param = (LLViewerVisualParam*)gAgentAvatarp->getNextVisualParam())
 	{
-		if (param->getGroup() == VISUAL_PARAM_GROUP_TWEAKABLE) // do not transmit params of group VISUAL_PARAM_GROUP_TWEAKABLE_NO_TRANSMIT
+		// Do not transmit params of group
+		//  VISUAL_PARAM_GROUP_TWEAKABLE_NO_TRANSMIT. If we're
+		//  sending the version 1 compatible message, then strip out
+		//  V2-only parameters that have IDs of 1100 or higher.
+		if ((param->getGroup() == VISUAL_PARAM_GROUP_TWEAKABLE) &&
+			((param->getID() < 1100) || (!send_v1_message)))
 		{
 			msg->nextBlockFast(_PREHASH_VisualParam );
-			
+
 			// We don't send the param ids.  Instead, we assume that the receiver has the same params in the same sequence.
 			const F32 param_value = param->getWeight();
 			const U8 new_weight = F32_to_U8(param_value, param->getMinWeight(), param->getMaxWeight());
@@ -3897,7 +3902,7 @@ void LLAgent::sendAgentSetAppearance()
 		}
 	}
 
-//	llinfos << "Avatar XML num VisualParams transmitted = " << transmitted_params << llendl;
+	llinfos << "Avatar XML num VisualParams transmitted = " << transmitted_params << llendl;
 	sendReliableMessage();
 }
 
