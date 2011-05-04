@@ -126,6 +126,14 @@ BOOL LLPanelMainInventory::postBuild()
 {
 	gInventory.addObserver(this);
 	
+	// ## Zi: Inventory Collapse and Expand Buttons
+	mCollapseBtn = getChild<LLButton>("collapse_btn");
+	mCollapseBtn->setClickedCallback(boost::bind(&LLPanelMainInventory::onCollapseButtonClicked, this));
+
+	mExpandBtn = getChild<LLButton>("expand_btn");
+	mExpandBtn->setClickedCallback(boost::bind(&LLPanelMainInventory::onExpandButtonClicked, this));
+	// ## Zi: Inventory Collapse and Expand Buttons
+
 	mFilterTabs = getChild<LLTabContainer>("inventory filter tabs");
 	mFilterTabs->setCommitCallback(boost::bind(&LLPanelMainInventory::onFilterSelected, this));
 	
@@ -902,6 +910,20 @@ void LLFloaterInventoryFinder::selectNoTypes(void* user_data)
 	self->getChild<LLUICtrl>("check_texture")->setValue(FALSE);
 	self->getChild<LLUICtrl>("check_snapshot")->setValue(FALSE);
 }
+
+// ## Zi: Inventory Collapse and Expand Buttons
+void LLPanelMainInventory::onCollapseButtonClicked()
+{
+//	mFilterEditor->clear();
+	onFilterEdit("");
+	getPanel()->closeAllFolders();
+}
+
+void LLPanelMainInventory::onExpandButtonClicked()
+{
+	getPanel()->openAllFolders();
+}
+// ## Zi: Inventory Collapse and Expand Buttons
 
 //////////////////////////////////////////////////////////////////////////////////
 // List Commands                                                                //

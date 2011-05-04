@@ -114,6 +114,11 @@ protected:
 	bool isSaveTextureEnabled(const LLSD& userdata);
 	void updateItemcountText();
 
+	// ## Zi: Inventory Collapse and Expand Buttons
+	void onCollapseButtonClicked();
+	void onExpandButtonClicked();
+	// ## Zi: Inventory Collapse and Expand Buttons
+
 private:
 	LLFloaterInventoryFinder* getFinder();
 
@@ -148,6 +153,11 @@ private:
 	LLToggleableMenu*			mMenuGearDefault;
 	LLMenuGL*					mMenuAdd;
 	LLMenuButton*				mGearMenuButton;
+
+	// ## Zi: Inventory Collapse and Expand Buttons
+	LLButton*					mCollapseBtn;
+	LLButton*					mExpandBtn;
+	// ## Zi: Inventory Collapse and Expand Buttons
 
 	bool						mNeedUploadCost;
 	// List Commands                                                              //

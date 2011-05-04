@@ -85,12 +85,6 @@ BOOL LLSidepanelInventory::postBuild()
 		mOverflowBtn = mInventoryPanel->getChild<LLButton>("overflow_btn");
 		mOverflowBtn->setClickedCallback(boost::bind(&LLSidepanelInventory::onOverflowButtonClicked, this));
 		
-		mCollapseBtn = mInventoryPanel->getChild<LLButton>("collapse_btn");
-		mCollapseBtn->setClickedCallback(boost::bind(&LLSidepanelInventory::onCollapseButtonClicked, this));
-
-		mExpandBtn = mInventoryPanel->getChild<LLButton>("expand_btn");
-		mExpandBtn->setClickedCallback(boost::bind(&LLSidepanelInventory::onExpandButtonClicked, this));
-
 		mPanelMainInventory = mInventoryPanel->findChild<LLPanelMainInventory>("panel_main_inventory");
 		mPanelMainInventory->setSelectCallback(boost::bind(&LLSidepanelInventory::onSelectionChange, this, _1, _2));
 		LLTabContainer* tabs = mPanelMainInventory->getChild<LLTabContainer>("inventory filter tabs");
@@ -236,18 +230,6 @@ void LLSidepanelInventory::onTeleportButtonClicked()
 
 void LLSidepanelInventory::onOverflowButtonClicked()
 {
-}
-
-void LLSidepanelInventory::onCollapseButtonClicked()
-{
-	LLPanelMainInventory *panel_main_inventory = mInventoryPanel->findChild<LLPanelMainInventory>("panel_main_inventory");
-	panel_main_inventory->getPanel()->closeAllFolders();
-}
-
-void LLSidepanelInventory::onExpandButtonClicked()
-{
-	LLPanelMainInventory *panel_main_inventory = mInventoryPanel->findChild<LLPanelMainInventory>("panel_main_inventory");
-	panel_main_inventory->getPanel()->openAllFolders();
 }
 
 void LLSidepanelInventory::onBackButtonClicked()
