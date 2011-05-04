@@ -269,7 +269,7 @@ void FloaterAO::enableStateControls(BOOL yes)
 
 void FloaterAO::onOpen(const LLSD& key)
 {
-	LLButton* anchor_panel=LLBottomTray::instance().getChild<LLButton>("ao_toggle_btn");
+	LLButton* anchor_panel=LLBottomTray::instance().getChild<LLButton>("ao_btn");
 	if(anchor_panel)
 		setDockControl(new LLDockControl(anchor_panel,this,getDockTongue(),LLDockControl::TOP));
 }
