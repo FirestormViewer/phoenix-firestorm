@@ -102,6 +102,9 @@ protected:
 	LLInventoryPanel(const Params&);
 	void initFromParams(const Params&);
 	friend class LLUICtrlFactory;
+	// remembers the last inventory panel that got focus
+	static LLInventoryPanel* sActiveInventoryPanel;
+
 public:
 	virtual ~LLInventoryPanel();
 

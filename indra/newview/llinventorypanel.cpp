@@ -54,6 +54,8 @@ const std::string LLInventoryPanel::RECENTITEMS_SORT_ORDER = std::string("Recent
 const std::string LLInventoryPanel::INHERIT_SORT_ORDER = std::string("");
 static const LLInventoryFVBridgeBuilder INVENTORY_BRIDGE_BUILDER;
 
+// remembers the last inventory panel that got focus
+LLInventoryPanel* LLInventoryPanel::sActiveInventoryPanel = NULL;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLInventoryPanelObserver
@@ -151,6 +153,8 @@ LLInventoryPanel::LLInventoryPanel(const LLInventoryPanel::Params& p) :
 	{
 		mBuildDefaultHierarchy = false;
 	}
+
+	sActiveInventoryPanel = this;
 }
 
 void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
@@ -246,6 +250,11 @@ LLInventoryPanel::~LLInventoryPanel()
 	delete mCompletionObserver;
 
 	mScroller = NULL;
+
+	// make sure to clear the last active inventory floater pointer, so we don't crash after
+	// closing this one and later referencing it.
+	if(sActiveInventoryPanel == this)
+		sActiveInventoryPanel = NULL;
 }
 
 void LLInventoryPanel::draw()
@@ -781,6 +790,8 @@ void LLInventoryPanel::onFocusLost()
 
 void LLInventoryPanel::onFocusReceived()
 {
+	// this floater got focus last
+	sActiveInventoryPanel = this;
 	// inventory now handles cut/copy/paste/delete
 	LLEditMenuHandler::gEditMenuHandler = mFolderRoot;
 
@@ -1000,6 +1011,10 @@ BOOL is_inventorysp_active()
 // static
 LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 {
+	// in case we know the last floater that got focus, return this immediately.
+	if (sActiveInventoryPanel)
+		return sActiveInventoryPanel;
+
 	S32 z_min = S32_MAX;
 	LLInventoryPanel* res = NULL;
 	LLFloater* active_inv_floaterp = NULL;
