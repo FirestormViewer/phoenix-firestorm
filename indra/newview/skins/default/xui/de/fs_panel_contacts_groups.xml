@@ -44,11 +44,8 @@
 	 name="invite_btn"
 	 width="80" />-->
   <text
-     name="groupcount"
-	 width="85">
-Du bist Mitglied 
-bei [COUNT] Gruppen  
-von max [MAX]. 
+     name="groupcount">
+Du bist Mitglied bei [COUNT] Gruppen von max [MAX]. 
 </text>
   <!--  <text
    type="string"
