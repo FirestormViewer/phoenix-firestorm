@@ -608,7 +608,7 @@ class DarwinManifest(ViewerManifest):
         self.path(self.args['configuration'] + "/Firestorm.app", dst="")
 
         if self.prefix(src="", dst="Contents"):  # everything goes in Contents
-            self.path("Info-SecondLife.plist", dst="Info.plist")
+            self.path("Info-Firestorm.plist", dst="Info.plist")
 
             # copy additional libs in <bundle>/Contents/MacOS/
             self.path("../../libraries/universal-darwin/lib_release/libndofdev.dylib", dst="MacOS/libndofdev.dylib")
@@ -625,7 +625,7 @@ class DarwinManifest(ViewerManifest):
 
                 self.path("licenses-mac.txt", dst="licenses.txt")
                 self.path("featuretable_mac.txt")
-                self.path("SecondLife.nib")
+                self.path("Firestorm.nib")
 		self.path("VivoxAUP.txt")
 
                 # If we are not using the default channel, use the 'Firstlook
@@ -634,7 +634,7 @@ class DarwinManifest(ViewerManifest):
                     self.path("phoenix_icon.icns")
                 else:
                     self.path("phoenix_icon.icns", "phoenix_icon.icns") # Does nothing, but we could change it to use a beta icon later. - AO
-                self.path("SecondLife.nib")
+                self.path("Firestorm.nib")
                 
                 # Translations
                 self.path("English.lproj")
