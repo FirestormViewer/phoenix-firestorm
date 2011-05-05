@@ -33,6 +33,8 @@ indra/newview/mozilla-theme
 indra/newview/mozilla-universal-darwin.tgz
 indra/newview/res-sdl
 indra/newview/vivox-runtime
+indra/newview/English.lproj/InfoPlist.strings
+indra/newview/Info-Firestorm.plist
 indra/server-linux-*
 indra/temp
 indra/test/linden_file.dat
