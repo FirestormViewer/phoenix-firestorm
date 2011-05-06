@@ -172,16 +172,21 @@ BOOL LLNearbyChat::postBuild()
 			{
 				if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
 				{
-					// add then remove to set up relationship for re-attach
-					floater_container->addFloater(this, FALSE);
-					floater_container->removeFloater(this);
-					// reparent to floater view
+					// first set the tear-off host to this floater
+					setHost(floater_container);
+					// clear the tear-off host right after, the "last host used" will still stick
+					setHost(NULL);
+					// reparent the floater to the main view
 					gFloaterView->addChild(this);
+					// and remember we are torn off
+					setTornOff(TRUE);
 				}
 				else
 				{
+					setTornOff(FALSE);
 					floater_container->addFloater(this, FALSE);
 				}
+				floater_container->setVisible(FALSE);
 			}
 		}
 
@@ -210,34 +215,6 @@ BOOL LLNearbyChat::postBuild()
 	
 	return true;
 }
-void    LLNearbyChat::applySavedVariables()
-{
-	if (mRectControl.size() > 1)
-	{
-		const LLRect& rect = LLFloater::getControlGroup()->getRect(mRectControl);
-		if(!rect.isEmpty() && rect.isValid())
-		{
-			reshape(rect.getWidth(), rect.getHeight());
-			setRect(rect);
-		}
-	}
-
-
-	if(!LLFloater::getControlGroup()->controlExists(mDocStateControl))
-	{
-		setDocked(true);
-	}
-	else
-	{
-		if (mDocStateControl.size() > 1)
-		{
-			bool dockState = LLFloater::getControlGroup()->getBOOL(mDocStateControl);
-			setDocked(dockState);
-		}
-	}
-}
-
-
 
 std::string appendTime()
 {
@@ -340,7 +317,8 @@ void	LLNearbyChat::openFloater(const LLSD& key)
 	if(isChatMultiTab())
 	{
 		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
-		if (floater_container)
+		// only show the floater container if we are actually attached -Zi
+		if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
 			floater_container->showFloater(this, LLTabContainer::START);
 		}
@@ -373,7 +351,8 @@ void	LLNearbyChat::onOpen(const LLSD& key )
 	if(isChatMultiTab() && ! isVisible(this))
 	{
 		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
-		if (floater_container)
+		// only show the floater container if we are actually attached -Zi
+		if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
 			floater_container->showFloater(this, LLTabContainer::START);
 		}

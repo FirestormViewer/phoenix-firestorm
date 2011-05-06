@@ -828,8 +828,19 @@ LLIMFloater* LLIMFloater::show(const LLUUID& session_id)
 	{
 		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
 
+		if (gSavedSettings.getBOOL("ContactsTornOff"))
+		{
+			// first set the tear-off host to the conversations container
+			floater->setHost(floater_container);
+			// clear the tear-off host right after, the "last host used" will still stick
+			floater->setHost(NULL);
+			// reparent to floater view
+			gFloaterView->addChild(floater);
+			// and remember we are torn off
+			floater->setTornOff(TRUE);
+		}
 		// do not add existed floaters to avoid adding torn off instances
-		if (!exist)
+		else if (!exist)
 		{
 			//		LLTabContainer::eInsertionPoint i_pt = user_initiated ? LLTabContainer::RIGHT_OF_CURRENT : LLTabContainer::END;
 			// TODO: mantipov: use LLTabContainer::RIGHT_OF_CURRENT if it exists
@@ -867,8 +878,8 @@ LLIMFloater* LLIMFloater::show(const LLUUID& session_id)
 		}
 
 		// window is positioned, now we can show it.
+		floater->setVisible(TRUE);
 	}
-	floater->setVisible(TRUE);
 
 	return floater;
 }

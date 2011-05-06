@@ -75,19 +75,24 @@ void LLIMFloaterContainer::onOpen(const LLSD& key)
 	// If we're using multitabs, and we open up for the first time
 	// Add localchat by default if it's not already on the screen somewhere else. -AO	
 	// But only if it hasnt been already so we can reopen it to the same tab -KC
+	// Improved handling to leave most of the work to the LL tear-off code -Zi
 	LLFloater* floater = LLNearbyChat::getInstance();
 	if (! LLFloater::isVisible(floater) && (floater->getHost() != this))
 	{
 		if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
-			// add then remove to set up relationship for re-attach
-			LLMultiFloater::showFloater(floater);
-			removeFloater(floater);
+			// first set the tear-off host to this floater
+			floater->setHost(this);
+			// clear the tear-off host right after, the "last host used" will still stick
+			floater->setHost(NULL);
 			// reparent to floater view
 			gFloaterView->addChild(floater);
+			// and remember we are torn off
+			floater->setTornOff(TRUE);
 		}
 		else
 		{
+			floater->setTornOff(FALSE);
 			LLMultiFloater::showFloater(floater);
 		}
 	}
@@ -118,6 +123,7 @@ void LLIMFloaterContainer::removeFloater(LLFloater* floaterp)
 	{
 		// only chat floater now locked
 		mTabContainer->lockTabs(mTabContainer->getNumLockedTabs() - 1);
+		gSavedSettings.setBOOL("ContactsTornOff", TRUE);
 	}
 	LLMultiFloater::removeFloater(floaterp);
 }
@@ -143,6 +149,7 @@ void LLIMFloaterContainer::addFloater(LLFloater* floaterp,
 		if (floaterp->getName() == "imcontacts")
 		{
 			LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
+			gSavedSettings.setBOOL("ContactsTornOff", FALSE);
 		}
 		else
 		{

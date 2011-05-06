@@ -245,7 +245,7 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	mAutoFocus(TRUE), // automatically take focus when opened
 	mCanDock(false),
 	mDocked(false),
-	mTornOff(false),
+	mTornOff(true),
 	mHasBeenDraggedWhileMinimized(FALSE),
 	mPreviousMinimizedBottom(0),
 	mPreviousMinimizedLeft(0),
@@ -529,7 +529,8 @@ LLFloater::~LLFloater()
 
 void LLFloater::storeRectControl()
 {
-	if( mRectControl.size() > 1 )
+	// do not store rect when attached to another floater -Zi
+	if( mTornOff && mRectControl.size() > 1 )
 	{
 		getControlGroup()->setRect( mRectControl, getRect() );
 	}
@@ -851,7 +852,8 @@ void LLFloater::applyRectControl()
 	}
 
 	// override center if we have saved rect control
-	if (mRectControl.size() > 1)
+	// only if we are torn off -Zi
+	if (mTornOff && mRectControl.size() > 1)
 	{
 		const LLRect& rect = getControlGroup()->getRect(mRectControl);
 		if (rect.getWidth() > 0 && rect.getHeight() > 0)
@@ -1585,8 +1587,19 @@ void LLFloater::onClickTearOff(LLFloater* self)
 		// only force position for floaters that don't have that data saved
 		if (self->mRectControl.size() <= 1)
 		{
-			new_rect.setLeftTopAndSize(host_floater->getRect().mLeft + 5, host_floater->getRect().mTop - floater_header_size - 5, self->getRect().getWidth(), self->getRect().getHeight());
-			self->setRect(new_rect);
+			// restore old size and position -Zi
+			new_rect=self->getExpandedRect();
+			if(new_rect.isEmpty())
+			{
+				llwarns << "no rect saved yet, so reshape the floater" << llendl;
+				new_rect.setLeftTopAndSize(host_floater->getRect().mLeft + 5, host_floater->getRect().mTop - floater_header_size - 5, self->getRect().getWidth(), self->getRect().getHeight());
+			}
+			self->setShape(new_rect);
+			self->storeRectControl();
+		}
+		else
+		{
+			self->setShape(self->getSavedRect(),FALSE);
 		}
 		gFloaterView->adjustToFitScreen(self, FALSE);
 		// give focus to new window to keep continuity for the user
@@ -1595,6 +1608,12 @@ void LLFloater::onClickTearOff(LLFloater* self)
 	}
 	else  //Attach to parent.
 	{
+		self->storeRectControl();
+		// save the current size and position -Zi
+		self->setExpandedRect(self->getRect());
+		// reset torn off before showing the floater in the new host, so the rect change
+		// doesn't overwrite our remembered rect. -Zi
+		self->setTornOff(false);
 		LLMultiFloater* new_host = (LLMultiFloater*)self->mLastHostHandle.get();
 		if (new_host)
 		{
@@ -1603,7 +1622,6 @@ void LLFloater::onClickTearOff(LLFloater* self)
 			// make sure host is visible
 			new_host->openFloater(new_host->getKey());
 		}
-		self->setTornOff(false);
 	}
 	self->updateTitleButtons();
 }
