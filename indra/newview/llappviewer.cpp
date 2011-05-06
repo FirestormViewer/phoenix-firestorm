@@ -317,7 +317,6 @@ BOOL gLogoutInProgress = FALSE;
 
 ////////////////////////////////////////////////////////////
 // Internal globals... that should be removed.
-static std::string gArgs;
 
 const std::string MARKER_FILE_NAME("SecondLife.exec_marker");
 const std::string ERROR_MARKER_FILE_NAME("SecondLife.error_marker");
@@ -2414,9 +2413,7 @@ bool LLAppViewer::initConfiguration()
 	gWindowTitle = llformat("Phoenix %s v%d.%d.%d.%d",LL_CHANNEL, LL_VERSION_MAJOR, LL_VERSION_MINOR, 
 		LL_VERSION_PATCH, LL_VERSION_BUILD) ;
 #if LL_DEBUG
-	gWindowTitle += std::string(" [DEBUG] ") + gArgs;
-#else
-	gWindowTitle += std::string(" ") + gArgs;
+	gWindowTitle += std::string(" [DEBUG]");
 #endif
 	LLStringUtil::truncate(gWindowTitle, 255);
 
