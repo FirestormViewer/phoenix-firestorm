@@ -164,40 +164,33 @@ BOOL LLNearbyChat::postBuild()
 		LLButton* slide_right = getChild<LLButton>("slide_right_btn");
 		slide_right->setVisible(false);
 		
-		llwarns << __LINE__ << llendl;
+		
 		if (getDockControl() == NULL)
 		{
-		llwarns << __LINE__ << llendl;
 			LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
 			if (floater_container)
 			{
-		llwarns << __LINE__ << llendl;
 				if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
 				{
-		llwarns << __LINE__ << llendl;
-					
-//					BOOL visible=LLFloater::isVisible(floater_container);
-					// add then remove to set up relationship for re-attach
-//					floater_container->addFloater(this, FALSE);
-//					floater_container->removeFloater(this);
-					// reparent to floater view 
-
+					// first set the tear-off host to this floater
 					setHost(floater_container);
+					// clear the tear-off host right after, the "last host used" will still stick
+					setHost(NULL);
+					// reparent the floater to the main view
 					gFloaterView->addChild(this);
-//					setTornOff(TRUE);
+					// and remember we are torn off
+					setTornOff(TRUE);
 				}
 				else
 				{
-		llwarns << __LINE__ << llendl;
 					setTornOff(FALSE);
 					floater_container->addFloater(this, FALSE);
 				}
-		llwarns << __LINE__ << llendl;
 				floater_container->setVisible(FALSE);
 			}
 		}
 
-PhoenixUseNearbyChatConsole = gSavedSettings.getBOOL("PhoenixUseNearbyChatConsole");
+		PhoenixUseNearbyChatConsole = gSavedSettings.getBOOL("PhoenixUseNearbyChatConsole");
 		gSavedSettings.getControl("PhoenixUseNearbyChatConsole")->getSignal()->connect(boost::bind(&LLNearbyChat::updatePhoenixUseNearbyChatConsole, this, _2));
 		
 		return LLDockableFloater::postBuild();
@@ -222,36 +215,6 @@ PhoenixUseNearbyChatConsole = gSavedSettings.getBOOL("PhoenixUseNearbyChatConsol
 	
 	return true;
 }
-
-/*
-void    LLNearbyChat::applySavedVariables()
-{
-	if (mRectControl.size() > 1)
-	{
-		const LLRect& rect = LLFloater::getControlGroup()->getRect(mRectControl);
-		if(!rect.isEmpty() && rect.isValid())
-		{
-			reshape(rect.getWidth(), rect.getHeight());
-			setRect(rect);
-		}
-	}
-
-	if(!LLFloater::getControlGroup()->controlExists(mDocStateControl))
-	{
-		setDocked(true);
-	}
-	else
-	{
-		if (mDocStateControl.size() > 1)
-		{
-			bool dockState = LLFloater::getControlGroup()->getBOOL(mDocStateControl);
-			setDocked(dockState);
-		}
-	}
-}
-*/
-
-
 
 std::string appendTime()
 {
@@ -354,6 +317,7 @@ void	LLNearbyChat::openFloater(const LLSD& key)
 	if(isChatMultiTab())
 	{
 		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+		// only show the floater container if we are actually attached -Zi
 		if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
 			floater_container->showFloater(this, LLTabContainer::START);
@@ -387,6 +351,7 @@ void	LLNearbyChat::onOpen(const LLSD& key )
 	if(isChatMultiTab() && ! isVisible(this))
 	{
 		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+		// only show the floater container if we are actually attached -Zi
 		if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
 			floater_container->showFloater(this, LLTabContainer::START);

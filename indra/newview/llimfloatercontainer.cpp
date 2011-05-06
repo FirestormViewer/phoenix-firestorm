@@ -71,37 +71,31 @@ void LLIMFloaterContainer::onOpen(const LLSD& key)
 
 	LLMultiFloater::onOpen(key);
 	
-		llwarns << __LINE__ << llendl;
 
 	// If we're using multitabs, and we open up for the first time
 	// Add localchat by default if it's not already on the screen somewhere else. -AO	
 	// But only if it hasnt been already so we can reopen it to the same tab -KC
+	// Improved handling to leave most of the work to the LL tear-off code -Zi
 	LLFloater* floater = LLNearbyChat::getInstance();
-		llwarns << __LINE__ << llendl;
 	if (! LLFloater::isVisible(floater) && (floater->getHost() != this))
 	{
-		llwarns << __LINE__ << llendl;
 		if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
-		llwarns << __LINE__ << llendl;
-//			const LLRect rect=floater->getRect();
+			// first set the tear-off host to this floater
 			floater->setHost(this);
-			// add then remove to set up relationship for re-attach
-//			LLMultiFloater::showFloater(floater);
-//			removeFloater(floater);
+			// clear the tear-off host right after, the "last host used" will still stick
+			floater->setHost(NULL);
 			// reparent to floater view
 			gFloaterView->addChild(floater);
+			// and remember we are torn off
 			floater->setTornOff(TRUE);
-//			floater->setShape(rect);
 		}
 		else
 		{
-		llwarns << __LINE__ << llendl;
 			floater->setTornOff(FALSE);
 			LLMultiFloater::showFloater(floater);
 		}
 	}
-		llwarns << __LINE__ << llendl;
 	
 	
 /*
@@ -159,7 +153,6 @@ void LLIMFloaterContainer::addFloater(LLFloater* floaterp,
 		}
 		else
 		{
-			llwarns << floaterp->getName() << " adding with rect " << floaterp->getRect() << llendl;
 			// add chat history as second tab if contact window is present, first tab otherwise
 			if (getChildView("imcontacts"))
 			{
@@ -172,7 +165,6 @@ void LLIMFloaterContainer::addFloater(LLFloater* floaterp,
 			{
 				LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
 			}
-			llwarns << floaterp->getName() << " added. rect now " << floaterp->getRect() << llendl;
 			gSavedSettings.setBOOL("ChatHistoryTornOff", FALSE);
 		}
 		// make sure first two tabs are now locked
