@@ -3003,7 +3003,11 @@ void LLWindowMacOSX::hideCursorUntilMouseMove()
 	}
 }
 
-
+void LLWindowMacOSX::setTitle(const std::string &title)
+{
+	CFStringRef string = CFStringCreateWithCString(NULL, title.c_str(), kCFStringEncodingUTF8);
+	SetWindowTitleWithCFString(mWindow, string);
+}
 
 //
 // LLSplashScreenMacOSX

@@ -580,7 +580,7 @@ BOOL LLViewerShaderMgr::loadBasicShaders()
 	// Load basic dependency shaders first
 	// All of these have to load for any shaders to function
 	
-#if LL_DARWIN // Mac can't currently handle all 8 lights, 
+#if 0 && LL_DARWIN // Mac couldn't handle all 8 lights before but can now
 	S32 sum_lights_class = 2;
 #else 
 	S32 sum_lights_class = 3;

@@ -142,6 +142,54 @@
       control_name="TurnAroundWhenWalkingBackwards"
       tool_tip="Turns your avatar around to face the camera when you are walking backwards."/>
 	  
+	     <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="15"
+     layout="topleft"
+     left="30"
+     name="lookatshownames"
+     top_delta="25"
+     width="200">
+        Show names for look at target:
+    </text>	  
+    <combo_box
+     control_name="DebugLookAtShowNames"
+     follows="left|top"
+     height="23"
+     layout="topleft"
+     left_delta="200"
+     max_chars="135"
+     name="lookatshownames_combobox"
+     width="150">
+        <combo_box.item
+         enabled="true"
+         label="None"
+         name="None"
+         value="0" />
+        <combo_box.item
+         enabled="true"
+         label="Complete name"
+         name="Complete_Name"
+         value="1" />
+        <combo_box.item
+         enabled="true"
+         label="Display name"
+         name="Display_Name"
+         value="2" />
+        <combo_box.item
+         enabled="true"
+         label="Legacy name"
+         name="Legacy_Name"
+         value="3" />
+        <combo_box.item
+         enabled="true"
+         label="Username"
+         name="User_Name"
+         value="4" />
+	  </combo_box>
+	  
         <check_box bottom_delta="-30"
       follows="left|top"
       font="SansSerifSmall"

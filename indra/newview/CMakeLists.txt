@@ -1199,13 +1199,19 @@ if (DARWIN)
     ${COREAUDIO_LIBRARY}
     )
 
+  # Fix the version numbers!
+  configure_files(viewer_GENERATED_PLISTS
+    Info-Firestorm.plist
+    English.lproj/InfoPlist.strings
+  )
+
   # Add resource files to the project.
   set(viewer_RESOURCE_FILES
     phoenix_icon.icns
     macview.r
     gpu_table.txt
-    Info-SecondLife.plist
-    SecondLife.nib/
+    Info-Firestorm.plist
+    Firestorm.nib/
     # CMake doesn't seem to support Xcode language variants well just yet
     English.lproj/InfoPlist.strings
     English.lproj/language.txt
