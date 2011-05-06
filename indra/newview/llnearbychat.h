@@ -81,7 +81,7 @@ public:
 	void updatePhoenixUseNearbyChatConsole(const LLSD &data);
 
 private:
-	virtual void    applySavedVariables();
+	// virtual void    applySavedVariables();
 
 	void	getAllowedRect		(LLRect& rect);
 

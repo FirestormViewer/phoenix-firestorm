@@ -109,7 +109,7 @@ LLFloaterChatterBox::~LLFloaterChatterBox()
 BOOL LLFloaterChatterBox::postBuild()
 {
 	setVisibleCallback(boost::bind(&LLFloaterChatterBox::onVisibilityChange, this, _2));
-	
+	llwarns << __LINE__ << llendl;
 	if (gSavedSettings.getBOOL("ContactsTornOff"))
 	{
 		LLFloaterMyFriends* floater_contacts = LLFloaterMyFriends::getInstance();

@@ -164,28 +164,40 @@ BOOL LLNearbyChat::postBuild()
 		LLButton* slide_right = getChild<LLButton>("slide_right_btn");
 		slide_right->setVisible(false);
 		
-		
+		llwarns << __LINE__ << llendl;
 		if (getDockControl() == NULL)
 		{
+		llwarns << __LINE__ << llendl;
 			LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
 			if (floater_container)
 			{
+		llwarns << __LINE__ << llendl;
 				if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
 				{
+		llwarns << __LINE__ << llendl;
+					
+//					BOOL visible=LLFloater::isVisible(floater_container);
 					// add then remove to set up relationship for re-attach
-					floater_container->addFloater(this, FALSE);
-					floater_container->removeFloater(this);
-					// reparent to floater view
+//					floater_container->addFloater(this, FALSE);
+//					floater_container->removeFloater(this);
+					// reparent to floater view 
+
+					setHost(floater_container);
 					gFloaterView->addChild(this);
+//					setTornOff(TRUE);
 				}
 				else
 				{
+		llwarns << __LINE__ << llendl;
+					setTornOff(FALSE);
 					floater_container->addFloater(this, FALSE);
 				}
+		llwarns << __LINE__ << llendl;
+				floater_container->setVisible(FALSE);
 			}
 		}
 
-		PhoenixUseNearbyChatConsole = gSavedSettings.getBOOL("PhoenixUseNearbyChatConsole");
+PhoenixUseNearbyChatConsole = gSavedSettings.getBOOL("PhoenixUseNearbyChatConsole");
 		gSavedSettings.getControl("PhoenixUseNearbyChatConsole")->getSignal()->connect(boost::bind(&LLNearbyChat::updatePhoenixUseNearbyChatConsole, this, _2));
 		
 		return LLDockableFloater::postBuild();
@@ -210,6 +222,8 @@ BOOL LLNearbyChat::postBuild()
 	
 	return true;
 }
+
+/*
 void    LLNearbyChat::applySavedVariables()
 {
 	if (mRectControl.size() > 1)
@@ -221,7 +235,6 @@ void    LLNearbyChat::applySavedVariables()
 			setRect(rect);
 		}
 	}
-
 
 	if(!LLFloater::getControlGroup()->controlExists(mDocStateControl))
 	{
@@ -236,6 +249,7 @@ void    LLNearbyChat::applySavedVariables()
 		}
 	}
 }
+*/
 
 
 
@@ -340,7 +354,7 @@ void	LLNearbyChat::openFloater(const LLSD& key)
 	if(isChatMultiTab())
 	{
 		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
-		if (floater_container)
+		if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
 			floater_container->showFloater(this, LLTabContainer::START);
 		}
@@ -373,7 +387,7 @@ void	LLNearbyChat::onOpen(const LLSD& key )
 	if(isChatMultiTab() && ! isVisible(this))
 	{
 		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
-		if (floater_container)
+		if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
 			floater_container->showFloater(this, LLTabContainer::START);
 		}

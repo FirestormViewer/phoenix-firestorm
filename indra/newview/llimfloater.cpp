@@ -828,6 +828,14 @@ LLIMFloater* LLIMFloater::show(const LLUUID& session_id)
 	{
 		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
 
+		if (gSavedSettings.getBOOL("ContactsTornOff"))
+		{
+			floater->setHost(floater_container);
+			gFloaterView->addChild(floater);
+			floater->setTornOff(TRUE);
+		}
+		else
+
 		// do not add existed floaters to avoid adding torn off instances
 		if (!exist)
 		{
@@ -867,8 +875,8 @@ LLIMFloater* LLIMFloater::show(const LLUUID& session_id)
 		}
 
 		// window is positioned, now we can show it.
+		floater->setVisible(TRUE);
 	}
-	floater->setVisible(TRUE);
 
 	return floater;
 }

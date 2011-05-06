@@ -245,7 +245,7 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	mAutoFocus(TRUE), // automatically take focus when opened
 	mCanDock(false),
 	mDocked(false),
-	mTornOff(false),
+	mTornOff(true),
 	mHasBeenDraggedWhileMinimized(FALSE),
 	mPreviousMinimizedBottom(0),
 	mPreviousMinimizedLeft(0),
@@ -529,9 +529,11 @@ LLFloater::~LLFloater()
 
 void LLFloater::storeRectControl()
 {
-	if( mRectControl.size() > 1 )
+	llwarns << getName() << " LLFloater::storeRectControl() " << mTornOff << " " << getHost() << llendl;
+	if( mTornOff && mRectControl.size() > 1 )
 	{
 		getControlGroup()->setRect( mRectControl, getRect() );
+		llwarns << getName() << " stored " << getRect() << llendl;
 	}
 }
 
@@ -561,12 +563,15 @@ void LLFloater::storeMinimizeStateControl()
 
 LLRect LLFloater::getSavedRect() const
 {
+	llwarns << getName() << " LLFloater::getSavedRect()" << llendl;
 	LLRect rect;
 
 	if (mRectControl.size() > 1)
 	{
 		rect = getControlGroup()->getRect(mRectControl);
 	}
+
+	llwarns << getName() << " rect " << rect << llendl;
 
 	return rect;
 }
@@ -851,7 +856,7 @@ void LLFloater::applyRectControl()
 	}
 
 	// override center if we have saved rect control
-	if (mRectControl.size() > 1)
+	if (mTornOff && mRectControl.size() > 1)
 	{
 		const LLRect& rect = getControlGroup()->getRect(mRectControl);
 		if (rect.getWidth() > 0 && rect.getHeight() > 0)
@@ -1575,26 +1580,44 @@ void LLFloater::onClickTearOff(LLFloater* self)
 	LLMultiFloater* host_floater = self->getHost();
 	if (host_floater) //Tear off
 	{
+		llwarns << self->getName() << " tear off" << llendl;
 		LLRect new_rect;
 		host_floater->removeFloater(self);
 		// reparent to floater view
 		gFloaterView->addChild(self);
 
 		self->openFloater(self->getKey());
-		
+
 		// only force position for floaters that don't have that data saved
 		if (self->mRectControl.size() <= 1)
+//		if (self->getRect().isEmpty())
 		{
-			new_rect.setLeftTopAndSize(host_floater->getRect().mLeft + 5, host_floater->getRect().mTop - floater_header_size - 5, self->getRect().getWidth(), self->getRect().getHeight());
-			self->setRect(new_rect);
+			new_rect=self->getExpandedRect();
+			if(new_rect.isEmpty())
+			{
+				llwarns << "no rect saved yet, so reshape the floater" << llendl;
+				new_rect.setLeftTopAndSize(host_floater->getRect().mLeft + 5, host_floater->getRect().mTop - floater_header_size - 5, self->getRect().getWidth(), self->getRect().getHeight());
+			}
+			self->setShape(new_rect);
+			self->storeRectControl();
+		}
+		else
+		{
+			self->setShape(self->getSavedRect(),FALSE);
+			llwarns <<self->getName() << " restored rect: " << self->getSavedRect() << llendl;
 		}
 		gFloaterView->adjustToFitScreen(self, FALSE);
 		// give focus to new window to keep continuity for the user
 		self->setFocus(TRUE);
 		self->setTornOff(true);
+
 	}
 	else  //Attach to parent.
 	{
+		self->storeRectControl();
+		self->setExpandedRect(self->getRect());
+		llwarns << self->getName() << " stored rect " << self->getRect() << llendl;
+		self->setTornOff(false);
 		LLMultiFloater* new_host = (LLMultiFloater*)self->mLastHostHandle.get();
 		if (new_host)
 		{
@@ -1603,7 +1626,6 @@ void LLFloater::onClickTearOff(LLFloater* self)
 			// make sure host is visible
 			new_host->openFloater(new_host->getKey());
 		}
-		self->setTornOff(false);
 	}
 	self->updateTitleButtons();
 }

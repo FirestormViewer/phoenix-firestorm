@@ -71,26 +71,37 @@ void LLIMFloaterContainer::onOpen(const LLSD& key)
 
 	LLMultiFloater::onOpen(key);
 	
+		llwarns << __LINE__ << llendl;
 
 	// If we're using multitabs, and we open up for the first time
 	// Add localchat by default if it's not already on the screen somewhere else. -AO	
 	// But only if it hasnt been already so we can reopen it to the same tab -KC
 	LLFloater* floater = LLNearbyChat::getInstance();
+		llwarns << __LINE__ << llendl;
 	if (! LLFloater::isVisible(floater) && (floater->getHost() != this))
 	{
+		llwarns << __LINE__ << llendl;
 		if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
+		llwarns << __LINE__ << llendl;
+//			const LLRect rect=floater->getRect();
+			floater->setHost(this);
 			// add then remove to set up relationship for re-attach
-			LLMultiFloater::showFloater(floater);
-			removeFloater(floater);
+//			LLMultiFloater::showFloater(floater);
+//			removeFloater(floater);
 			// reparent to floater view
 			gFloaterView->addChild(floater);
+			floater->setTornOff(TRUE);
+//			floater->setShape(rect);
 		}
 		else
 		{
+		llwarns << __LINE__ << llendl;
+			floater->setTornOff(FALSE);
 			LLMultiFloater::showFloater(floater);
 		}
 	}
+		llwarns << __LINE__ << llendl;
 	
 	
 /*
@@ -118,6 +129,7 @@ void LLIMFloaterContainer::removeFloater(LLFloater* floaterp)
 	{
 		// only chat floater now locked
 		mTabContainer->lockTabs(mTabContainer->getNumLockedTabs() - 1);
+		gSavedSettings.setBOOL("ContactsTornOff", TRUE);
 	}
 	LLMultiFloater::removeFloater(floaterp);
 }
@@ -143,9 +155,11 @@ void LLIMFloaterContainer::addFloater(LLFloater* floaterp,
 		if (floaterp->getName() == "imcontacts")
 		{
 			LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
+			gSavedSettings.setBOOL("ContactsTornOff", FALSE);
 		}
 		else
 		{
+			llwarns << floaterp->getName() << " adding with rect " << floaterp->getRect() << llendl;
 			// add chat history as second tab if contact window is present, first tab otherwise
 			if (getChildView("imcontacts"))
 			{
@@ -158,6 +172,7 @@ void LLIMFloaterContainer::addFloater(LLFloater* floaterp,
 			{
 				LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
 			}
+			llwarns << floaterp->getName() << " added. rect now " << floaterp->getRect() << llendl;
 			gSavedSettings.setBOOL("ChatHistoryTornOff", FALSE);
 		}
 		// make sure first two tabs are now locked
