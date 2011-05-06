@@ -120,6 +120,8 @@ public:
 	/*virtual*/ void bringToFront();
 
 	/*virtual*/ void spawnWebBrowser(const std::string& escaped_url, bool async);
+
+        /*virtual*/ void setTitle(const std::string& title);
 	
 	static std::vector<std::string> getDynamicFallbackFontList();
 
