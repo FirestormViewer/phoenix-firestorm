@@ -231,6 +231,14 @@ if [ \( $WANTS_VERSION -eq $TRUE \) -o \( $WANTS_CONFIG -eq $TRUE \) ] ; then
             -e "s#LL_VERSION_MINOR = .*\$#LL_VERSION_MINOR = ${minorVer};#" \
             -e "s#LL_VERSION_PATCH = .*\$#LL_VERSION_PATCH = ${patchVer};#" \
             -e "s#LL_CHANNEL = .*\$#LL_CHANNEL = \"Firestorm-$CHANNEL\";#" llcommon/llversionviewer.cpp.in > llcommon/llversionviewer.cpp
+        sed -e "s/@VERSION_VIEWER_MAJOR@/${majorVer}/" \
+            -e "s/@VERSION_VIEWER_MINOR@/${minorVer}/" \
+            -e "s/@VERSION_VIEWER_PATCH@/${patchVer}/" \
+            -e "s/@VERSION_BUILD@/${buildVer}/" newview/Info-Firestorm.plist.in > newview/info-Firestorm.plist
+        sed -e "s/@VERSION_VIEWER_MAJOR@/${majorVer}/" \
+            -e "s/@VERSION_VIEWER_MINOR@/${minorVer}/" \
+            -e "s/@VERSION_VIEWER_PATCH@/${patchVer}/" \
+            -e "s/@VERSION_BUILD@/${buildVer}/" newview/English.lproj/InfoPlist.strings.in > newview/English.lproj/InfoPlist.strings
 fi
 
 
