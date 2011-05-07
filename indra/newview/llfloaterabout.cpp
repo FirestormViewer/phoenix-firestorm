@@ -148,7 +148,8 @@ BOOL LLFloaterAbout::postBuild()
 			else
 			{
 				// don't forget to render value asString()
-				args[ii->first] = ii->second.asString();
+				// NOTE: the default string conversion for LLSD real is "%g" so we'll convert those ourselves
+				args[ii->first] = (!ii->second.isReal()) ? ii->second.asString() : llformat("%f", ii->second.asReal());
 			}
 		}
 		else
@@ -156,7 +157,7 @@ BOOL LLFloaterAbout::postBuild()
 			// array value: build KEY_0, KEY_1 etc. entries
 			for (LLSD::Integer n(0), size(ii->second.size()); n < size; ++n)
 			{
-				args[STRINGIZE(ii->first << '_' << n)] = ii->second[n].asString();
+				args[STRINGIZE(ii->first << '_' << n)] = (!ii->second[n].isReal()) ? ii->second[n].asString() : llformat("%f", ii->second[n].asReal());
 			}
 		}
 	}
