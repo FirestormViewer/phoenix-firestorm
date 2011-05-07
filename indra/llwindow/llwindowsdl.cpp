@@ -2506,6 +2506,10 @@ void LLWindowSDL::spawnWebBrowser(const std::string& escaped_url, bool async)
 	llinfos << "spawn_web_browser returning." << llendl;
 }
 
+void LLWindowSDL::openFile(const std::string& file_name)
+{
+	spawnWebBrowser(file_name,TRUE);
+}
 
 void *LLWindowSDL::getPlatformWindow()
 {
