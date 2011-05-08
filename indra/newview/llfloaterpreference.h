@@ -256,6 +256,20 @@ protected:
 	LLComboBox* m_pSkinThemeCombo;
 	LLSD        m_SkinsInfo;
 };
+// [/SL:KB]
 
+// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-10-21 (Catznip-2.6.0a) | Added: Catznip-2.2.0c
+class LLPanelPreferenceCrashReports : public LLPanelPreference
+{
+public:
+	LLPanelPreferenceCrashReports();
+
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ void apply();
+	/*virtual*/ void cancel();
+
+	void refresh();
+};
+// [/SL:KB]
 
 #endif  // LL_LLPREFERENCEFLOATER_H

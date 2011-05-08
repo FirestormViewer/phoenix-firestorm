@@ -227,7 +227,15 @@ public:
 	 * DO NOT call this method if your application has specialized
 	 * error handling code.
 	 */
-	void setupErrorHandling();
+// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-12 (Catznip-2.6.0a) | Added: Catznip-2.4.0a
+	typedef enum minidump_type_t {
+		MINIDUMP_MINIMAL = 0,
+		MINIDUMP_NORMAL = 1,
+		MINIDUMP_EXTENDED = 2
+	} EMiniDumpType;
+
+	void setupErrorHandling(EMiniDumpType minidump_type = MINIDUMP_NORMAL);
+// [/SL:KB]
 
 	void setErrorHandler(LLAppErrorHandler handler);
 	static void runErrorHandler(); // run shortly after we detect an error, ran in the relatively robust context of the LLErrorThread - preferred.
