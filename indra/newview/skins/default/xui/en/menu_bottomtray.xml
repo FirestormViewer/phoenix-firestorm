@@ -153,6 +153,40 @@
          parameter="ShowAOButton" />
     </menu_item_check>
     <!-- ## Zi: Animation Overrider -->
+    <menu_item_check
+     label="People button"
+     layout="topleft"
+     name="ShowPeopleButton">
+        <menu_item_check.on_click
+         function="ToggleControl"
+         parameter="ShowPeopleButton" />
+        <menu_item_check.on_check
+         function="CheckControl"
+         parameter="ShowPeopleButton" />
+    </menu_item_check>
+    <menu_item_check
+     label="Appearance button"
+     layout="topleft"
+     name="ShowAppearanceButton">
+        <menu_item_check.on_click
+         function="ToggleControl"
+         parameter="ShowAppearanceButton" />
+        <menu_item_check.on_check
+         function="CheckControl"
+         parameter="ShowAppearanceButton" />
+    </menu_item_check>
+    <menu_item_check
+     label="Inventory button"
+     layout="topleft"
+     name="ShowInventoryButton">
+        <menu_item_check.on_click
+         function="ToggleControl"
+         parameter="ShowInventoryButton" />
+        <menu_item_check.on_check
+         function="CheckControl"
+         parameter="ShowInventoryButton" />
+    </menu_item_check>
+
     <menu_item_separator
      name="Separator" />
     <menu_item_call

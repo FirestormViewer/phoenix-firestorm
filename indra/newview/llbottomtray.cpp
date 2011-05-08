@@ -738,7 +738,14 @@ void LLBottomTray::updateButtonsOrdersAfterDnD()
 	}
 	
 	// Update order of buttons according to drag'n'drop
-	mButtonsOrder.erase(std::find(mButtonsOrder.begin(), mButtonsOrder.end(), dragged_state));
+	// Make sure to check if the button we want to move is actually known to the system -Zi
+	resize_state_vec_t::iterator position=std::find(mButtonsOrder.begin(), mButtonsOrder.end(), dragged_state);
+	if(position==mButtonsOrder.end())
+	{
+		llwarns << "Could not find " << dragged_state << " in mButtonsOrder!" << llendl;
+		return;
+	}
+	mButtonsOrder.erase(position);
 	if (!landing_state_found && mLandingTab == getChild<LLPanel>(PANEL_CHICLET_NAME))
 	{
 		mButtonsOrder.push_back(dragged_state);
@@ -801,8 +808,7 @@ void LLBottomTray::loadButtonsOrder()
 	
 	LLSDSerialize::fromXML(settings_llsd, file);
 	
-
-	mButtonsOrder.clear();
+	// clear out one of the two internal lists, the second will be used to compare the buttons later -Zi
 	mButtonsProcessOrder.clear();
 	int i = 0;
 	// getting button order from file
@@ -811,16 +817,25 @@ void LLBottomTray::loadButtonsOrder()
 	{
 		std::string str = llformat("%d", i);
 		EResizeState state = (EResizeState)settings_llsd[str].asInteger();
-		mButtonsOrder.push_back(state);
 // [SL:KB] - Patch: UI-BottomTray | Checked: 2010-12-02 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
 			mButtonsProcessOrder.push_back(state);
 // [/SL:KB]
-//		// RS_BUTTON_SPEAK is skipped, because it shouldn't be in mButtonsProcessOrder (it does not hide or shrink).
-//		if (state != RS_BUTTON_SPEAK)
-//		{
-//			mButtonsProcessOrder.push_back(state);
-//		}		
+
+		// remove button from internal list to remember we found the button in the XML file -Zi
+		resize_state_vec_t::iterator position=std::find(mButtonsOrder.begin(), mButtonsOrder.end(), state);
+		if(position!=mButtonsOrder.end())
+			mButtonsOrder.erase(position);
 	}
+
+	// add buttons that are missing in the XML file to the second internal list -Zi
+	while(mButtonsOrder.size())
+	{
+		mButtonsProcessOrder.push_back(*(mButtonsOrder.end()-1));
+		mButtonsOrder.pop_back();
+	}
+
+	// copy the second internal list to the first -Zi
+	mButtonsOrder=mButtonsProcessOrder;
 
 	// There are other panels in layout stack order of which is not saved. Also, panels order of which is saved,
 	// are already in layout stack but in wrong order. The most convenient way to place them is moving them 
@@ -1664,6 +1679,11 @@ void LLBottomTray::initResizeStateContainers()
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_PLACES, getChild<LLPanel>("bottom_sbplaces")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_AO, getChild<LLPanel>("ao_btn_panel")));		// ## Zi: Animation Overrider
 
+	// since we added the sidebar buttons to the bottom bar, wen also need to make them reorderable. -Zi
+	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_PEOPLE, getChild<LLPanel>("bottom_sbpeople")));
+	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_APPEARANCE, getChild<LLPanel>("bottom_sbappearance")));
+	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_INVENTORY, getChild<LLPanel>("bottom_sbinv")));
+
 	// init an order of processed buttons
 // [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b
 	mButtonsProcessOrder.push_back(RS_BUTTON_SPEAK);
@@ -1680,6 +1700,11 @@ void LLBottomTray::initResizeStateContainers()
 	mButtonsProcessOrder.push_back(RS_BUTTON_ME);
 	mButtonsProcessOrder.push_back(RS_BUTTON_PLACES);
 	mButtonsProcessOrder.push_back(RS_BUTTON_AO);		// ## Zi: Animation Overrider
+
+	// since we added the sidebar buttons to the bottom bar, wen also need to make them reorderable. -Zi
+	mButtonsProcessOrder.push_back(RS_BUTTON_PEOPLE);
+	mButtonsProcessOrder.push_back(RS_BUTTON_APPEARANCE);
+	mButtonsProcessOrder.push_back(RS_BUTTON_INVENTORY);
 
 //	mButtonsOrder.push_back(RS_BUTTON_SPEAK);
 //	mButtonsOrder.insert(mButtonsOrder.end(), mButtonsProcessOrder.begin(), mButtonsProcessOrder.end());
@@ -1728,6 +1753,10 @@ void LLBottomTray::initButtonsVisibility()
 	setVisibleAndFitWidths(RS_BUTTON_ME, gSavedSettings.getBOOL("ShowMeButton"));
 	setVisibleAndFitWidths(RS_BUTTON_PLACES, gSavedSettings.getBOOL("ShowPlacesButton"));
 	setVisibleAndFitWidths(RS_BUTTON_AO, gSavedSettings.getBOOL("ShowAOButton"));	// ## Zi: Animation Overrider
+	// take care of additional sidebar button visibility -Zi
+	setVisibleAndFitWidths(RS_BUTTON_PEOPLE, gSavedSettings.getBOOL("ShowPeopleButton"));
+	setVisibleAndFitWidths(RS_BUTTON_APPEARANCE, gSavedSettings.getBOOL("ShowAppearanceButton"));
+	setVisibleAndFitWidths(RS_BUTTON_INVENTORY, gSavedSettings.getBOOL("ShowInventoryButton"));
 }
 
 void LLBottomTray::setButtonsControlsAndListeners()
@@ -1747,6 +1776,10 @@ void LLBottomTray::setButtonsControlsAndListeners()
 	gSavedSettings.getControl("ShowMeButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_ME, _2));
 	gSavedSettings.getControl("ShowPlacesButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_PLACES, _2));
 	gSavedSettings.getControl("ShowAOButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_AO, _2));			// ## Zi: Animation Overrider
+	// take care of additional sidebar button visibility -Zi
+	gSavedSettings.getControl("ShowPeopleButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_PEOPLE, _2));
+	gSavedSettings.getControl("ShowAppearanceButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_APPEARANCE, _2));
+	gSavedSettings.getControl("ShowInventoryButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_INVENTORY, _2));
 
 
 	LLButton* build_btn = getChild<LLButton>("build_btn");
