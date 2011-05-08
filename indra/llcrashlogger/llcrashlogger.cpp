@@ -381,6 +381,16 @@ bool LLCrashLogger::runCrashLogPost(std::string host, LLSD data, std::string msg
 		std::ostringstream body;
 
 		/*
+		 * Send viewer information for the upload handler's benefit
+		 */
+		if (mDebugLog.has("ClientInfo"))
+		{
+			body << getFormDataField("viewer_channel", mDebugLog["ClientInfo"]["Name"], BOUNDARY);
+			body << getFormDataField("viewer_version", mDebugLog["ClientInfo"]["Version"], BOUNDARY);
+			body << getFormDataField("viewer_platform", mDebugLog["ClientInfo"]["Platform"], BOUNDARY);
+		}
+
+		/*
 		 * Include crash analysis pony
 		 */
 		body << getFormDataField("crash_module_name", mCrashLookup->getModuleName(), BOUNDARY);
