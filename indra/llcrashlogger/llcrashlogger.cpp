@@ -223,12 +223,6 @@ void LLCrashLogger::gatherFiles()
 		// Crash log receiver has been manually configured.
 		mCrashHost = mDebugLog["CrashHostUrl"].asString();
 	}
-// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-03-24 (Catznip-2.6.0a) | Modified: Catznip-2.6.0a
-	else
-	{
-		mCrashHost = "http://catznip.com/viewer/crash/report/2.6/";
-	}
-// [/SL:KB]
 /*
 	else if(mDebugLog.has("CurrentSimHost"))
 	{
@@ -474,7 +468,7 @@ bool LLCrashLogger::sendCrashLogs()
 //															   "SecondLifeCrashReport");
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-14 (Catznip-2.6.0a) | Added: Catznip-2.4.0a
 	std::string dump_path = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
-															   "CatznipCrashReport");
+															   "FirestormCrashReport");
 // [/SL:KB]
 	std::string report_file = dump_path + ".log";
 
@@ -538,7 +532,7 @@ bool LLCrashLogger::init()
 	LLCurl::initClass();
 
 	// We assume that all the logs we're looking for reside on the current drive
-	gDirUtilp->initAppDirs("SecondLife");
+	gDirUtilp->initAppDirs("Firestorm");
 
 	// Default to the product name "Second Life" (this is overridden by the -name argument)
 	mProductName = "Second Life";
