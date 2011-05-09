@@ -82,8 +82,7 @@
          parse_highlights="true"
          parse_urls="true"
          left="1"
-         width="250"
-		 value="test1">
+         width="250">
         </chat_history>
     </layout_panel>
   </layout_stack>
