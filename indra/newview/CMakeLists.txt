@@ -596,6 +596,9 @@ set(viewer_SOURCE_FILES
     llxmlrpctransaction.cpp
     noise.cpp
 	panel_prefs_firestorm.cpp
+    piemenu.cpp
+    pieseparator.cpp
+    pieslice.cpp
     pipeline.cpp
     kvflickr.cpp
     kvfloaterflickrauth.cpp
@@ -1155,6 +1158,9 @@ set(viewer_HEADER_FILES
     macmain.h
     noise.h
 	panel_prefs_firestorm.h
+    piemenu.h
+    pieseparator.h
+    pieslice.h
     pipeline.h
     qtoolalign.h
     rlvdefines.h
