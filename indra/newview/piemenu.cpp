@@ -25,6 +25,7 @@
  * $/LicenseInfo$
  */
 
+#include "llviewerprecompiledheaders.h"
 #include "linden_common.h"
 
 #include "piemenu.h"
@@ -35,8 +36,8 @@
 
 // copied from LLMenuGL - Remove these lines over there when finished
 const S32 PIE_INNER_SIZE=20;		// radius of the inner pie circle
-const F32 PIE_POPUP_FACTOR=1.7;		// pie menu size factor on popup
-const F32 PIE_POPUP_TIME=0.25;		// time to shrink from popup size to regular size
+const F32 PIE_POPUP_FACTOR=(F32)1.7;		// pie menu size factor on popup
+const F32 PIE_POPUP_TIME=(F32)0.25;		// time to shrink from popup size to regular size
 const S32 PIE_OUTER_SIZE=96;		// radius of the outer pie circle
 
 // register the pie menu globally as child widget
@@ -236,7 +237,7 @@ void PieMenu::draw( void )
 	LLColor4 selectedColor=LLUIColorTable::instance().getColor("PieMenuSelectedColor");
 	LLColor4 textColor=LLUIColorTable::instance().getColor("PieMenuTextColor");
 	LLColor4 bgColor=LLUIColorTable::instance().getColor("PieMenuBgColor");
-	LLColor4 borderColor=bgColor % 0.3;
+	LLColor4 borderColor=bgColor % (F32)0.3;
 	// on first click, make the menu fade out to indicate "borderless" operation
 	if(mFirstClick)
 		borderColor%=0.0;
@@ -353,7 +354,7 @@ void PieMenu::draw( void )
 				{
 					lldebugs << label << " is disabled" << llendl;
 					// fade the item color alpha to mark the item as disabled
-					itemColor%=0.3;
+					itemColor%=(F32)0.3;
 				}
 			}
 			// if it's a submenu just get the label

@@ -25,7 +25,9 @@
  * $/LicenseInfo$
  */
 
+#include "llviewerprecompiledheaders.h"
 #include "pieslice.h"
+
 
 // create a new slice and memorize the XUI parameters
 PieSlice::PieSlice(const PieSlice::Params& p) :
