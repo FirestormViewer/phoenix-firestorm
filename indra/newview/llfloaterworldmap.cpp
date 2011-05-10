@@ -926,11 +926,28 @@ void LLFloaterWorldMap::buildLandmarkIDLists()
 									is_landmark);
 	
 	std::sort(items.begin(), items.end(), LLViewerInventoryItem::comparePointers());
-	
+	std::list<LLInventoryItem*> usedLMs;
+
+	BOOL filterLandmarks = gSavedSettings.getBOOL("WorldmapFilterDuplicateLandmarks");
 	S32 count = items.count();
 	for(S32 i = 0; i < count; ++i)
 	{
 		LLInventoryItem* item = items.get(i);
+
+		if (filterLandmarks)
+		{
+			bool skip = false;
+			for (std::list<LLInventoryItem*>::iterator it = usedLMs.begin(); it != usedLMs.end(); ++it)
+			{
+				if ((*it)->getAssetUUID() == item->getAssetUUID())
+				{
+					skip = true;
+					break;
+				}
+			}
+			if (skip) continue;
+			usedLMs.push_front(item);
+		}
 		
 		list->addSimpleElement(item->getName(), ADD_BOTTOM, item->getUUID());
 		

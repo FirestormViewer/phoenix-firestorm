@@ -128,6 +128,20 @@
       control_name="RezUnderLandGroup"
       tool_tip="Attempts to rez objects under the land group if you're in the land group regardless of which current group tag you're wearing."/>
 
+	  <check_box bottom_delta="-30"
+      follows="left|top"
+      font="SansSerifSmall"
+      height="16"
+      initial_value="false"
+      label="Filter duplicate Landmarks on World Map"
+      left="15"
+      mouse_opaque="true"
+      name="WorldmapFilterDuplicateLandmarks"
+      radio_style="false"
+      width="270"
+      control_name="WorldmapFilterDuplicateLandmarks"
+      tool_tip="Filters duplicate Landmark entries in the Landmark list on the World Map."/>
+
         <check_box bottom_delta="-30"
       follows="left|top"
       font="SansSerifSmall"
