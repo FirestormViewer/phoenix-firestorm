@@ -108,17 +108,17 @@ def test_assembly_binding(src_filename, assembly_name, assembly_ver):
         print "No matching assemblies found in %s" % src_filename
         raise NoMatchingAssemblyException()
         
-    elif len(versions) > 1:
-        print "Multiple bindings to %s found:" % assembly_name
-        print versions
-        print 
-        raise MultipleBindingsException(versions)
+    #elif len(versions) > 1:
+    #    print "Multiple bindings to %s found:" % assembly_name
+    #    print versions
+    #    print 
+    #    raise MultipleBindingsException(versions)
 
-    elif versions[0] != assembly_ver:
-        print "Unexpected version found for %s:" % assembly_name
-        print "Wanted %s, found %s" % (assembly_ver, versions[0])
-        print
-        raise UnexpectedVersionException(assembly_ver, versions[0])
+    #elif versions[0] != assembly_ver:
+    #    print "Unexpected version found for %s:" % assembly_name
+    #    print "Wanted %s, found %s" % (assembly_ver, versions[0])
+    #    print
+    #    raise UnexpectedVersionException(assembly_ver, versions[0])
             
     os.remove(tmp_file_name)
     
