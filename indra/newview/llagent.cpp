@@ -171,7 +171,10 @@ LLAgent::LLAgent() :
 	mDoubleTapRunMode(DOUBLETAP_NONE),
 
 	mbAlwaysRun(false),
-	mbRunning(false),
+//	mbRunning(false),
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+	mbTempRun(false),
+// [/RLVa:KB]
 	mbTeleportKeepsLookAt(false),
 
 	mAgentAccess(gSavedSettings),
@@ -2602,7 +2605,36 @@ void LLAgent::sendAnimationRequest(const LLUUID &anim_id, EAnimRequest request)
 	sendReliableMessage();
 }
 
-void LLAgent::sendWalkRun(bool running)
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+void LLAgent::setAlwaysRun()
+{
+	mbAlwaysRun = (!rlv_handler_t::isEnabled()) || (!gRlvHandler.hasBehaviour(RLV_BHVR_ALWAYSRUN));
+	sendWalkRun();
+}
+
+void LLAgent::setTempRun()
+{
+	mbTempRun = (!rlv_handler_t::isEnabled()) || (!gRlvHandler.hasBehaviour(RLV_BHVR_TEMPRUN));
+	sendWalkRun();
+}
+
+void LLAgent::clearAlwaysRun()
+{
+	mbAlwaysRun = false;
+	sendWalkRun();
+}
+
+void LLAgent::clearTempRun()
+{
+	mbTempRun = false;
+	sendWalkRun();
+}
+// [/RLVa:KB]
+
+//void LLAgent::sendWalkRun(bool running)
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+void LLAgent::sendWalkRun()
+// [/RLVa:KB]
 {
 	LLMessageSystem* msgsys = gMessageSystem;
 	if (msgsys)
@@ -2611,7 +2643,10 @@ void LLAgent::sendWalkRun(bool running)
 		msgsys->nextBlockFast(_PREHASH_AgentData);
 		msgsys->addUUIDFast(_PREHASH_AgentID, getID());
 		msgsys->addUUIDFast(_PREHASH_SessionID, getSessionID());
-		msgsys->addBOOLFast(_PREHASH_AlwaysRun, BOOL(running) );
+//		msgsys->addBOOLFast(_PREHASH_AlwaysRun, BOOL(running) );
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+		msgsys->addBOOLFast(_PREHASH_AlwaysRun, BOOL(getRunning()) );
+// [/RLVa:KB]
 		sendReliableMessage();
 	}
 }

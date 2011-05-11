@@ -5317,16 +5317,16 @@ class LLWorldAlwaysRun : public view_listener_t
 		if (gAgent.getAlwaysRun())
 		{
 			gAgent.clearAlwaysRun();
-			gAgent.clearRunning();
+//			gAgent.clearRunning();
 		}
 		else
 		{
 			gAgent.setAlwaysRun();
-			gAgent.setRunning();
+//			gAgent.setRunning();
 		}
 
 		// tell the simulator.
-		gAgent.sendWalkRun(gAgent.getAlwaysRun());
+//		gAgent.sendWalkRun(gAgent.getAlwaysRun());
 
 		// Update Movement Controls according to AlwaysRun mode
 		LLFloaterMove::setAlwaysRunMode(gAgent.getAlwaysRun());

@@ -4233,7 +4233,10 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 	}
 	
 	// send walk-vs-run status
-	gAgent.sendWalkRun(gAgent.getRunning() || gAgent.getAlwaysRun());
+//	gAgent.sendWalkRun(gAgent.getRunning() || gAgent.getAlwaysRun());
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+	gAgent.sendWalkRun();
+// [/RLVa:KB]
 
 	// If the server version has changed, display an info box and offer
 	// to display the release notes, unless this is the initial log in.
