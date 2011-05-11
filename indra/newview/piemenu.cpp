@@ -142,8 +142,9 @@ void PieMenu::show(S32 x,S32 y)
 
 	// move the mouse pointer into the center of the menu
 	LLUI::setMousePositionLocal(getParent(),x,y);
-	// set our drawing origin to the center of the menu
-	setOrigin(x-PIE_OUTER_SIZE,y-PIE_OUTER_SIZE);
+	// set our drawing origin to the center of the menu, taking UI scale into account
+	LLVector2 scale=gViewerWindow->getDisplayScale();
+	setOrigin(x-PIE_OUTER_SIZE/scale.mV[VX],y-PIE_OUTER_SIZE/scale.mV[VY]);
 	// grab mouse control
 	gFocusMgr.setMouseCapture(this);
 
@@ -242,26 +243,26 @@ void PieMenu::draw( void )
 	if(mFirstClick)
 		borderColor%=0.0;
 
-	// get the current mouse pointer position
-	S32 mouseX=gViewerWindow->getCurrentMouseX();
-	S32 mouseY=gViewerWindow->getCurrentMouseY();
-
 	// initially, the current segment is marked as invalid
 	S32 currentSegment=-1;
 
-	// find the center of the pie menu
-	LLVector2 centerVector(r.getCenterX(),r.getCenterY());
-	// calculate the distance of the mouse from the center
-	LLVector2 mouseVector(mouseX,mouseY);
-	LLVector2 distanceVector(mouseVector-centerVector);
-	S32 distance=distanceVector.length();
+	// get the current mouse pointer position local to the pie
+	S32 x,y;
+	LLUI::getMousePositionLocal(this,&x,&y);
+	// remember to take the UI scaling into account
+	LLVector2 scale=gViewerWindow->getDisplayScale();
+	// move mouse coordinates to be relative to the pie center
+	LLVector2 mouseVector(x-PIE_OUTER_SIZE/scale.mV[VX],y-PIE_OUTER_SIZE/scale.mV[VY]);
+
+	// get the distance from the center point
+	S32 distance=mouseVector.length();
 	// check if our mouse pointer is within the pie slice area
 	if(distance>PIE_INNER_SIZE && (distance<(PIE_OUTER_SIZE*factor) || mFirstClick))
 	{
 		// get the angle of the mouse pointer from the center in radians
-		F32 angle=acos(distanceVector.mV[0]/distance);
+		F32 angle=acos(mouseVector.mV[VX]/distance);
 		// if the mouse is below the middle of the pie, reverse the angle
-		if(distanceVector.mV[1]<0)
+		if(mouseVector.mV[VY]<0)
 			angle=F_PI*2-angle;
 		// rotate the angle slightly so the slices' centers are aligned correctly
 		angle+=F_PI/8;
