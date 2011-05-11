@@ -119,8 +119,8 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 
 			S32 width=pos.getWidth();
 			S32 height=pos.getHeight();
-			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthRaw()-width,
-								 gViewerWindow->getWorldViewHeightRaw()-height,
+			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width,
+								 gViewerWindow->getWorldViewHeightScaled()-height,
 								 width,height);
 			floater->setRect(pos);
 			floater->savePosition();
