@@ -13,7 +13,7 @@
 	</text>
 	<button label="Tag nyt foto" name="new_snapshot_btn"/>
 	<button label="Send" name="send_btn"/>
-	<button label="Gem (L$[AMOUNT])" name="upload_btn"/>
+	<button label="Gem" name="upload_btn"/>
 	<flyout_button label="Gem" name="save_btn" tool_tip="Gem billede til en fil">
 		<flyout_button.item label="Gem" name="save_item"/>
 		<flyout_button.item label="Gem som..." name="saveas_item"/>
