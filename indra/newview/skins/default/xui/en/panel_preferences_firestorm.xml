@@ -23,7 +23,7 @@
     bg_opaque_color="0,0,0,0.0">
       
 	  
-	  <!--Tab1-1-->
+	  <!--General-->
 	  <panel
         border="true"
         bottom="-500"
@@ -220,7 +220,7 @@
       </panel>
 	  
 	  
-	   <!--Tab1-2-->
+	   <!--Chat-->
       <panel
 	    border="true"
         bottom="-500"
