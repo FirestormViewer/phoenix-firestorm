@@ -35,7 +35,7 @@
 class LLViewerChat 
 {
 public:
-	static void getChatColor(const LLChat& chat, LLColor4& r_color);
+	static void getChatColor(const LLChat& chat, LLColor4& r_color, bool is_local = true);
 	static void getChatColor(const LLChat& chat, std::string& r_color_name, F32& r_color_alpha);
 	static LLFontGL* getChatFont();
 	static S32 getChatFontSize();

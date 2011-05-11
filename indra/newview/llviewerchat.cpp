@@ -32,11 +32,12 @@
 #include "lluicolortable.h"
 #include "llviewercontrol.h" // gSavedSettings
 #include "llinstantmessage.h" //SYSTEM_FROM
+#include "fskeywords.h"
 
 // LLViewerChat
 
 //static 
-void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color)
+void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_local)
 {
 	if(chat.mMuted)
 	{
@@ -82,6 +83,17 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color)
 				break;
 			default:
 				r_color.setToWhite();
+		}
+		
+		//Keyword alerts -KC
+		if ((gAgentID != chat.mFromID) && FSKeywords::getInstance()->chatContainsKeyword(chat, is_local))
+		{
+			static LLCachedControl<bool> sPhoenixKeywordChangeColor(gSavedPerAccountSettings, "PhoenixKeywordChangeColor");
+			if (sPhoenixKeywordChangeColor)
+			{
+				static LLCachedControl<LLColor4> sPhoenixKeywordColor(gSavedPerAccountSettings, "PhoenixKeywordColor");
+				r_color = sPhoenixKeywordColor;
+			}
 		}
 		
 		if (!chat.mPosAgent.isExactlyZero())

@@ -791,7 +791,7 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 	LLColor4 txt_color = LLUIColorTable::instance().getColor("White");
 	LLColor4 header_name_color = LLUIColorTable::instance().getColor("ChatNameColor");
-	LLViewerChat::getChatColor(chat,txt_color);
+	LLViewerChat::getChatColor(chat,txt_color,false);
 	LLFontGL* fontp = LLViewerChat::getChatFont();	
 	std::string font_name = LLFontGL::nameFromFont(fontp);
 	std::string font_size = LLFontGL::sizeFromFont(fontp);	

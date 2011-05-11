@@ -78,6 +78,7 @@ set(viewer_SOURCE_FILES
     floatermedialists.cpp
     fscontactsfloater.cpp
     fsareasearch.cpp
+    fskeywords.cpp
     llagent.cpp
     llagentaccess.cpp
     llagentcamera.cpp
@@ -640,6 +641,7 @@ set(viewer_HEADER_FILES
     floatermedialists.h
     fscontactsfloater.h
     fsareasearch.h
+    fskeywords.h
     llagent.h
     llagentaccess.h
     llagentcamera.h
