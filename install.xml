@@ -1123,16 +1123,16 @@ anguage Infrstructure (CLI) international standard</string>
           <key>linux64</key>
           <map>
             <key>md5sum</key>
-            <string>e4dbe52e07e5582a3b1be1f66667d750</string>
+            <string>b4cbeacdd56486076942a9aba79a63be</string>
             <key>url</key>
-            <uri>http://downloads.phoenixviewer.com/ogg_vorbis-1.2.2-1.3.2-windows-20110510-fs.tar.bz2</uri>
+            <uri>http://downloads.phoenixviewer.com/ogg_vorbis-1.2.2-1.3.2-linux-20110511-fs.tar.bz2</uri>
           </map>
           <key>windows</key>
           <map>
             <key>md5sum</key>
-            <string>946bab72f6774220eaf139ce378ba671</string>
+            <string>e4dbe52e07e5582a3b1be1f66667d750</string>
             <key>url</key>
-            <uri>http://downloads.phoenixviewer.com/ogg-vorbis-1.2.2-1.3.2-windows-20110511.tar.bz2</uri>
+            <uri>http://downloads.phoenixviewer.com/ogg_vorbis-1.2.2-1.3.2-windows-20110510-fs.tar.bz2</uri>
           </map>
         </map>
       </map>
