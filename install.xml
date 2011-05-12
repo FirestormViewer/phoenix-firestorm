@@ -1130,9 +1130,9 @@ anguage Infrstructure (CLI) international standard</string>
           <key>windows</key>
           <map>
             <key>md5sum</key>
-            <string>9bf1fea65e66b2cd3075e6ffd7eb57ad</string>
+            <string>946bab72f6774220eaf139ce378ba671</string>
             <key>url</key>
-            <uri>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/ogg-vorbis-1.1.3-1.2.0-windows-20080723.tar.bz2</uri>
+            <uri>http://downloads.phoenixviewer.com/ogg-vorbis-1.2.2-1.3.2-windows-20110511.tar.bz2</uri>
           </map>
         </map>
       </map>
