@@ -5562,6 +5562,28 @@
       <key>Value</key>
       <string>http://marketplace.secondlife.com/trampoline/viewer21/jacket_mens</string>
     </map>
+    <key>MarketplaceURL_physicsFemale</key>
+    <map>
+      <key>Comment</key>
+      <string>URL to the Marketplace Bodyparts Female</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>http://marketplace.secondlife.com</string>
+    </map>
+    <key>MarketplaceURL_physicsMale</key>
+    <map>
+      <key>Comment</key>
+      <string>URL to the Marketplace Bodyparts Male</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>http://marketplace.secondlife.com/</string>
+    </map>
     <key>MarketplaceURL_shirtFemale</key>
     <map>
       <key>Comment</key>
