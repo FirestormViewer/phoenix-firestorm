@@ -110,8 +110,8 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendList->setShowIcons("FriendsListShowIcons");
 	mFriendList->showPermissions(TRUE);
 	mFriendList->setComparator(&STATUS_COMPARATOR);
-	mFriendList->sort();
 	
+	mFriendList->setRefreshCompleteCallback(boost::bind(&FSFloaterContacts::onFriendListRefreshComplete, this));
 	mFriendList->setItemDoubleClickCallback(boost::bind(&FSFloaterContacts::onAvatarListDoubleClicked, this, _1));
 	mFriendList->setReturnCallback(boost::bind(&FSFloaterContacts::onImButtonClicked, this));
 	
@@ -165,6 +165,11 @@ void FSFloaterContacts::onOpen(const LLSD& key)
 	}
 }
 
+// as soon as the avatar list widget tells us all names are loaded, do another sort on the list -Zi
+void FSFloaterContacts::onFriendListRefreshComplete()
+{
+	mFriendList->sort();
+}
 
 //
 // Friend actions

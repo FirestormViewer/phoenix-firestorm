@@ -67,6 +67,7 @@ private:
 	bool					isItemsFreeOfFriends(const uuid_vec_t& uuids);
 	
 	// misc callbacks
+	void					onFriendListRefreshComplete();
 	static void				onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
 	
 	// friend buttons
