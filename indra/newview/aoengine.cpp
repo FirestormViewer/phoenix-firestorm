@@ -299,12 +299,20 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 	AOSet::AOState* state=mCurrentSet->getStateByRemapID(motion);
 	if(!state)
 	{
-		lldebugs << "No current AO state for motion " << motion << " (" << gAnimLibrary.animationName(motion) << "). Skipping overrider." << llendl;
+		lldebugs << "No current AO state for motion " << motion << " (" << gAnimLibrary.animationName(motion) << ")." << llendl;
 		if(!gAnimLibrary.animStateToString(motion) && !start)
 		{
-			lldebugs << "Requested AO for unknown motion ID " << motion << " - Stopping UUID just in case." << llendl;
-			gAgent.sendAnimationRequest(motion,ANIM_REQUEST_STOP);
-			gAgentAvatarp->LLCharacter::stopMotion(motion);
+			state=mCurrentSet->getStateByRemapID(mLastOverriddenMotion);
+			if(state && state->mCurrentAnimationID==motion)
+			{
+				lldebugs << "Stop requested for current overridden animation UUID " << motion << " - Skipping." << llendl;
+			}
+			else
+			{
+				lldebugs << "Stop requested for unknown UUID " << motion << " - Stopping it just in case." << llendl;
+				gAgent.sendAnimationRequest(motion,ANIM_REQUEST_STOP);
+				gAgentAvatarp->LLCharacter::stopMotion(motion);
+			}
 		}
 		return animation;
 	}
