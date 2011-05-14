@@ -2582,10 +2582,6 @@ void LLViewerWindow::updateUI()
 		{
 			LLFirstUse::notUsingDestinationGuide();
 		}
-		if (gLoggedInTime.getElapsedTimeF32() > gSavedSettings.getF32("AvatarPickerHintTimeout"))
-		{
-			LLFirstUse::notUsingAvatarPicker();
-		}
 		if (gLoggedInTime.getElapsedTimeF32() > gSavedSettings.getF32("SidePanelHintTimeout"))
 		{
 			LLFirstUse::notUsingSidePanel();
