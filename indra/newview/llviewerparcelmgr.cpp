@@ -1793,8 +1793,7 @@ void optionally_start_music(const std::string& music_url)
 		// only play music when you enter a new parcel if the UI control for this
 		// was not *explicitly* stopped by the user. (part of SL-4878)
 		LLPanelNearByMedia* nearby_media_panel = gStatusBar->getNearbyMediaPanel();;
-		if ((nearby_media_panel &&
-		     nearby_media_panel->getParcelAudioAutoStart()) ||
+		if (gStatusBar->getAudioStreamEnabled() || 	// ## Zi: Media/Stream separation
 		    // or they have expressed no opinion in the UI, but have autoplay on...
 		    (!nearby_media_panel &&
 		     gSavedSettings.getBOOL(LLViewerMedia::AUTO_PLAY_MEDIA_SETTING) &&

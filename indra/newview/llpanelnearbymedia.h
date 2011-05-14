@@ -55,11 +55,11 @@ public:
 	// this is part of the nearby media *dialog* so we can track whether
 	// the user *implicitly* wants audio on or off via their *explicit*
 	// interaction with our buttons.
-	bool getParcelAudioAutoStart();
+//	bool getParcelAudioAutoStart();	// ## Zi: Media/Stream separation
 
 	// callback for when the auto play media preference changes
 	// to update mParcelAudioAutoStart
-	void handleMediaAutoPlayChanged(const LLSD& newvalue);
+//	void handleMediaAutoPlayChanged(const LLSD& newvalue);	// ## Zi: Media/Stream separation
 
 	LLPanelNearByMedia();
 	virtual ~LLPanelNearByMedia();
@@ -113,10 +113,13 @@ private:
 	void onClickParcelMediaPlay();
 	void onClickParcelMediaStop();
 	void onClickParcelMediaPause();
+	/* ## Zi: Media/Stream separation
 	void onClickParcelAudioPlay();
 	void onClickParcelAudioStop();
 	void onClickParcelAudioStart();
 	void onClickParcelAudioPause();
+	## Zi: Media/Stream separation
+	*/
 	void onCheckAutoPlay();
 	void onAdvancedButtonClick();	
 	void onMoreLess();	
@@ -166,17 +169,17 @@ private:
 	
 	bool				mAllMediaDisabled;
 	bool				mDebugInfoVisible;
-	bool				mParcelAudioAutoStart;
+//	bool				mParcelAudioAutoStart;	// ## Zi: Media/Stream separation
 	std::string			mEmptyNameString;
 	std::string			mPlayingString;
 	std::string			mParcelMediaName;
-	std::string			mParcelAudioName;
+//	std::string			mParcelAudioName;	// ## Zi: Media/Stream separation
 	
 	LLRect				mMoreRect;
 	LLRect				mLessRect;
 	LLFrameTimer		mHoverTimer;
 	LLScrollListItem*	mParcelMediaItem;
-	LLScrollListItem*	mParcelAudioItem;
+//	LLScrollListItem*	mParcelAudioItem;	// ## Zi: Media/Stream separation
 };
 
 

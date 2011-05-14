@@ -170,7 +170,7 @@
     </panel.string>
   <panel
     height="18"
-    left="-225"
+    left="-236"
     width="95"
     top="0"
     follows="right|top"
@@ -240,12 +240,26 @@
     <button
      follows="right|top"
      height="16"
+     image_selected="Music_Off"
+     image_unselected="Pause_Off"
+     image_pressed="Pause_Press"
+     image_pressed_selected="Music_Press"
+     is_toggle="true"
+     left_delta="85"
+     top="1"
+     name="stream_toggle_btn"
+     tool_tip="Start/Stop Parcel Audio Stream"
+     width="16" >
+    </button>
+    <button
+     follows="right|top"
+     height="16"
      image_selected="Play_Off"
      image_unselected="Pause_Off"
      image_pressed="Pause_Press"
      image_pressed_selected="Play_Press"
      is_toggle="true"
-     left_delta="85"
+     left_pad="2"
      top="1"
      name="media_toggle_btn"
      tool_tip="Start/Stop All Media (Music, Video, Web pages)"

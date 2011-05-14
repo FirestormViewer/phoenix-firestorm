@@ -126,6 +126,7 @@ public:
 	LLRegionDetails mRegionDetails;
 
 	LLPanelNearByMedia* getNearbyMediaPanel() { return mPanelNearByMedia; }
+	BOOL getAudioStreamEnabled() const;
 	
 	void setBackgroundColor( const LLColor4& color );
 
@@ -138,6 +139,7 @@ private:
 	void onMouseEnterNearbyMedia();
 	void onClickScreen(S32 x, S32 y);
 
+	static void onClickStreamToggle(void* data);		// ## Zi: Media/Stream separation
 	static void onClickMediaToggle(void* data);
 	
 	class LLParcelChangeObserver;
@@ -254,6 +256,7 @@ private:
 
 	LLButton	*mBtnVolume;
 	LLTextBox	*mBoxBalance;
+	LLButton	*mStreamToggle;		// ## Zi: Media/Stream separation
 	LLButton	*mMediaToggle;
 	LLView*		mScriptOut;
 	LLFrameTimer	mClockUpdateTimer;
@@ -262,6 +265,7 @@ private:
 	S32				mHealth;
 	S32				mSquareMetersCredit;
 	S32				mSquareMetersCommitted;
+	BOOL			mAudioStreamEnabled;
 	LLFrameTimer*	mBalanceTimer;
 	LLFrameTimer*	mHealthTimer;
 	LLPanelVolumePulldown* mPanelVolumePulldown;

@@ -31,6 +31,7 @@
 // viewer includes
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "llaudioengine.h"
 #include "llbutton.h"
 #include "llcommandhandler.h"
 #include "llfirstuse.h"
@@ -52,6 +53,7 @@
 #include "llsd.h"
 #include "lltextbox.h"
 #include "llui.h"
+#include "llviewerparcelmedia.h"
 #include "llviewerparceloverlay.h"
 #include "llviewerregion.h"
 #include "llviewerstats.h"
@@ -147,7 +149,8 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mBalance(0),
 	mHealth(100),
 	mSquareMetersCredit(0),
-	mSquareMetersCommitted(0)
+	mSquareMetersCommitted(0),
+	mAudioStreamEnabled(FALSE)	// ## Zi: Media/Stream separation
 {
 	setRect(rect);
 	
@@ -229,6 +232,11 @@ BOOL LLStatusBar::postBuild()
 	mBtnVolume = getChild<LLButton>( "volume_btn" );
 	mBtnVolume->setClickedCallback( onClickVolume, this );
 	mBtnVolume->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterVolume, this));
+
+	// ## Zi: Media/Stream separation
+	mStreamToggle = getChild<LLButton>("stream_toggle_btn");
+	mStreamToggle->setClickedCallback( &LLStatusBar::onClickStreamToggle, this );
+	// ## Zi: Media/Stream separation
 
 	mMediaToggle = getChild<LLButton>("media_toggle_btn");
 	mMediaToggle->setClickedCallback( &LLStatusBar::onClickMediaToggle, this );
@@ -385,14 +393,21 @@ void LLStatusBar::refresh()
 	
 	// Disable media toggle if there's no media, parcel media, and no parcel audio
 	// (or if media is disabled)
-	bool button_enabled = (gSavedSettings.getBOOL("AudioStreamingMusic")||gSavedSettings.getBOOL("AudioStreamingMedia")) && 
-						  (LLViewerMedia::hasInWorldMedia() || LLViewerMedia::hasParcelMedia() || LLViewerMedia::hasParcelAudio());
+	bool button_enabled = (gSavedSettings.getBOOL("AudioStreamingMedia")) && 	// ## Zi: Media/Stream separation
+						  (LLViewerMedia::hasInWorldMedia() || LLViewerMedia::hasParcelMedia()	// || LLViewerMedia::hasParcelAudio()	// ## Zi: Media/Stream separation
+						  );
 	mMediaToggle->setEnabled(button_enabled);
 	// Note the "sense" of the toggle is opposite whether media is playing or not
 	bool any_media_playing = (LLViewerMedia::isAnyMediaShowing() || 
-							  LLViewerMedia::isParcelMediaPlaying() ||
-							  LLViewerMedia::isParcelAudioPlaying());
+							  LLViewerMedia::isParcelMediaPlaying());
 	mMediaToggle->setValue(!any_media_playing);
+
+	// ## Zi: Media/Stream separation
+	button_enabled = (gSavedSettings.getBOOL("AudioStreamingMusic") && LLViewerMedia::hasParcelAudio());
+
+	mStreamToggle->setEnabled(button_enabled);
+	mStreamToggle->setValue(!LLViewerMedia::isParcelAudioPlaying());
+	// ## Zi: Media/Stream separation
 }
 
 void LLStatusBar::setVisibleForMouselook(bool visible)
@@ -401,6 +416,7 @@ void LLStatusBar::setVisibleForMouselook(bool visible)
 	getChild<LLUICtrl>("balance_bg")->setVisible(visible);
 	mBoxBalance->setVisible(visible);
 	mBtnVolume->setVisible(visible);
+	mStreamToggle->setVisible(visible);		// ## Zi: Media/Stream separation
 	mMediaToggle->setVisible(visible);
 	mSGBandwidth->setVisible(visible);
 	mSGPacketLoss->setVisible(visible);
@@ -619,6 +635,48 @@ void LLStatusBar::onClickMediaToggle(void* data)
 	bool enable = ! status_bar->mMediaToggle->getValue();
 	LLViewerMedia::setAllMediaEnabled(enable);
 }
+
+// ## Zi: Media/Stream separation
+// static
+void LLStatusBar::onClickStreamToggle(void* data)
+{
+	if (!gAudiop)
+		return;
+
+	LLStatusBar *status_bar = (LLStatusBar*)data;
+	bool enable = ! status_bar->mStreamToggle->getValue();
+
+	if(enable)
+	{
+		if (LLAudioEngine::AUDIO_PAUSED == gAudiop->isInternetStreamPlaying())
+		{
+			// 'false' means unpause
+			gAudiop->pauseInternetStream(false);
+		}
+		else {
+			if (gSavedSettings.getBOOL("MediaEnableFilter"))
+			{
+				LLViewerParcelMedia::filterAudioUrl(LLViewerMedia::getParcelAudioURL());
+			}
+			else
+			{
+				gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
+			}
+		}
+	}
+	else
+	{
+		gAudiop->stopInternetStream();
+	}
+
+	status_bar->mAudioStreamEnabled = enable;
+}
+
+BOOL LLStatusBar::getAudioStreamEnabled() const
+{
+	return mAudioStreamEnabled;
+}
+// ## Zi: Media/Stream separation
 
 BOOL can_afford_transaction(S32 cost)
 {

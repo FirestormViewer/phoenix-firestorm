@@ -1023,7 +1023,7 @@ void LLViewerMedia::setAllMediaEnabled(bool val)
 				LLViewerParcelMedia::play(LLViewerParcelMgr::getInstance()->getAgentParcel());
 			}
 		}
-		
+		/* ## Zi: Media/Stream separation
 		if (gSavedSettings.getBOOL("AudioStreamingMusic") &&
 			!LLViewerMedia::isParcelAudioPlaying() &&
 			gAudiop && 
@@ -1038,11 +1038,13 @@ void LLViewerMedia::setAllMediaEnabled(bool val)
 				gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
 			}
 		}
+		## Zi: Media/Stream separation
+		*/
 	}
 	else {
 		// This actually unloads the impl, as opposed to "stop"ping the media
 		LLViewerParcelMedia::stop();
-		if (gAudiop) gAudiop->stopInternetStream();
+//		if (gAudiop) gAudiop->stopInternetStream();	// ## Zi: Media/Stream separation
 	}
 }
 
