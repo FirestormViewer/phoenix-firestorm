@@ -131,6 +131,9 @@ public:
 
 	void onInfoBtnClick();
 	void onProfileBtnClick();
+	void onPermissionOnlineClick();
+	void onPermissionEditMineClick();
+	void onPermissionMapClick();
 	
 	//Radar state-specific
 	// [Ansariel: Colorful radar]
@@ -150,11 +153,11 @@ protected:
 	LLAvatarIconCtrl* mAvatarIcon;
 
 	/// Indicator for permission to see me online.
-	LLIconCtrl* mIconPermissionOnline;
+	LLButton* mBtnPermissionOnline;
 	/// Indicator for permission to see my position on the map.
-	LLIconCtrl* mIconPermissionMap;
+	LLButton* mBtnPermissionMap;
 	/// Indicator for permission to edit my objects.
-	LLIconCtrl* mIconPermissionEditMine;
+	LLButton* mBtnPermissionEditMine;
 	/// Indicator for permission to edit their objects.
 	LLIconCtrl* mIconPermissionEditTheirs;
 	
@@ -202,6 +205,7 @@ private:
 	void setNameInternal(const std::string& name, const std::string& highlight);
 	void onAvatarNameCache(const LLAvatarName& av_name);
 	void processProperties(void* data, EAvatarProcessorType type);
+
 
 	std::string formatSeconds(U32 secs);
 

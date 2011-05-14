@@ -70,9 +70,9 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	mAvatarIcon(NULL),
 	mAvatarName(NULL),
 	mLastInteractionTime(NULL),
-	mIconPermissionOnline(NULL),
-	mIconPermissionMap(NULL),
-	mIconPermissionEditMine(NULL),
+	mBtnPermissionOnline(NULL),
+	mBtnPermissionMap(NULL),
+	mBtnPermissionEditMine(NULL),
 	mIconPermissionEditTheirs(NULL),
 	mSpeakingIndicator(NULL),
 	mInfoBtn(NULL),
@@ -126,15 +126,26 @@ BOOL  LLAvatarListItem::postBuild()
 	mAvatarName = getChild<LLTextBox>("avatar_name");
 	mLastInteractionTime = getChild<LLTextBox>("last_interaction");
 
-	mIconPermissionOnline = getChild<LLIconCtrl>("permission_online_icon");
-	mIconPermissionMap = getChild<LLIconCtrl>("permission_map_icon");
-	mIconPermissionEditMine = getChild<LLIconCtrl>("permission_edit_mine_icon");
+	// permissions
+	mBtnPermissionOnline = getChild<LLButton>("permission_online_btn");
+	mBtnPermissionMap = getChild<LLButton>("permission_map_btn");
+	mBtnPermissionEditMine = getChild<LLButton>("permission_edit_mine_btn");
 	mIconPermissionEditTheirs = getChild<LLIconCtrl>("permission_edit_theirs_icon");
 	
-	mIconPermissionOnline->setVisible(false);
-	mIconPermissionMap->setVisible(false);
-	mIconPermissionEditMine->setVisible(false);
+	mBtnPermissionOnline->setClickedCallback(boost::bind(&LLAvatarListItem::onPermissionOnlineClick, this));
+	mBtnPermissionMap->setClickedCallback(boost::bind(&LLAvatarListItem::onPermissionMapClick, this));
+	mBtnPermissionEditMine->setClickedCallback(boost::bind(&LLAvatarListItem::onPermissionEditMineClick, this));
+	
+	mBtnPermissionOnline->setVisible(false);
+	mBtnPermissionOnline->setIsChrome(TRUE);
+	mBtnPermissionMap->setVisible(false);
+	mBtnPermissionMap->setIsChrome(TRUE);
+	mBtnPermissionEditMine->setVisible(false);
+	mBtnPermissionEditMine->setIsChrome(TRUE);
 	mIconPermissionEditTheirs->setVisible(false);
+	
+	
+	
 	
 	// radar
 	mNearbyRange = getChild<LLTextBox>("radar_range");
@@ -200,7 +211,7 @@ void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 		mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
 	}
 
-// AO: We normally show the hover-over items because of space contraints and ease of access through better known context menu.
+// AO: We normally do not show the hover-over items because of space contraints and ease of access through better known context menu.
 //	mInfoBtn->setVisible(mShowInfoBtn);
 //	mProfileBtn->setVisible(mShowProfileBtn);
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
@@ -211,7 +222,10 @@ void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 	mHovered = true;
 	LLPanel::onMouseEnter(x, y, mask);
 
-	showPermissions(mShowPermissions && gSavedSettings.getBOOL("FriendsListShowPermissions"));
+//  AO don't update these on-hover, because we want to give users instant feedback when they change a permission state, even if the
+//  process takes n-seconds to complete. Hover-reprocessing can confuse the user if it takes place before the async permissions change
+//  goes through, appearing to mysteriously erase the user's choice.
+//	showPermissions(mShowPermissions && gSavedSettings.getBOOL("FriendsListShowPermissions"));
 	updateChildren();
 }
 
@@ -707,6 +721,8 @@ LLAvatarListItem::icon_color_map_t& LLAvatarListItem::getItemIconColorMap()
 	return item_icon_color_map;
 }
 
+
+
 // static
 void LLAvatarListItem::initChildrenWidths(LLAvatarListItem* avatar_item)
 {
@@ -867,42 +883,109 @@ bool LLAvatarListItem::showPermissions(bool visible)
 		*/ 
 		
 		if (!relation->isRightGrantedTo(LLRelationship::GRANT_ONLINE_STATUS))
-			mIconPermissionOnline->setColor(LLUIColorTable::instance().getColor("White_10"));
+			mBtnPermissionOnline->setColor(LLUIColorTable::instance().getColor("White_10"));
 		else 
-			mIconPermissionOnline->setColor(LLUIColorTable::instance().getColor("White"));
+			mBtnPermissionOnline->setColor(LLUIColorTable::instance().getColor("White"));
 		
 		if (!relation->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION))
-			mIconPermissionMap->setColor(LLUIColorTable::instance().getColor("White_10"));			
+			mBtnPermissionMap->setColor(LLUIColorTable::instance().getColor("White_10"));			
 		else
-			mIconPermissionMap->setColor(LLUIColorTable::instance().getColor("White"));
+			mBtnPermissionMap->setColor(LLUIColorTable::instance().getColor("White"));
 			
 		if (!relation->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS))
-			mIconPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White_10"));
+			mBtnPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White_10"));
 		else
-			mIconPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White"));
+			mBtnPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White"));
 				
 		if (!relation->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS))
 			mIconPermissionEditTheirs->setColor(LLUIColorTable::instance().getColor("White_10"));
 		else
 			mIconPermissionEditTheirs->setColor(LLUIColorTable::instance().getColor("White"));
 		
-		mIconPermissionOnline->setVisible(true);
-		mIconPermissionMap->setVisible(true);
-		mIconPermissionEditMine->setVisible(true);
+		mBtnPermissionOnline->setVisible(true);
+		mBtnPermissionMap->setVisible(true);
+		mBtnPermissionEditMine->setVisible(true);
 		mIconPermissionEditTheirs->setVisible(true);
 			
 	}
 	else
 	{
-		mIconPermissionOnline->setVisible(false);
-		mIconPermissionMap->setVisible(false);
-		mIconPermissionEditMine->setVisible(false);
+		mBtnPermissionOnline->setVisible(false);
+		mBtnPermissionMap->setVisible(false);
+		mBtnPermissionEditMine->setVisible(false);
 		mIconPermissionEditTheirs->setVisible(false);
 	}
 	
 	updateChildren();
 	return NULL != relation;
 }
+
+void LLAvatarListItem::onPermissionOnlineClick()
+{
+	const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
+	if(relation)
+	{
+		S32 cur_rights = relation->getRightsGrantedTo();
+		S32 new_rights = 0;
+		if (!relation->isRightGrantedTo(LLRelationship::GRANT_ONLINE_STATUS))
+		{
+			new_rights = LLRelationship::GRANT_ONLINE_STATUS + (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
+			mBtnPermissionOnline->setColor(LLUIColorTable::instance().getColor("White"));
+		}
+		else
+		{
+			new_rights = (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
+			mBtnPermissionOnline->setColor(LLUIColorTable::instance().getColor("White_10"));
+		}
+		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(),new_rights);
+		mBtnPermissionOnline->setFocus(FALSE);
+	}
+}
+
+void LLAvatarListItem::onPermissionMapClick()
+{
+	const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
+	if(relation)
+	{
+		S32 cur_rights = relation->getRightsGrantedTo();
+		S32 new_rights = 0;
+		if (!relation->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION))
+		{
+			new_rights = LLRelationship::GRANT_MAP_LOCATION + (cur_rights &  LLRelationship::GRANT_ONLINE_STATUS) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
+			mBtnPermissionMap->setColor(LLUIColorTable::instance().getColor("White"));
+		}
+		else 
+		{
+			new_rights = (cur_rights &  LLRelationship::GRANT_ONLINE_STATUS) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
+			mBtnPermissionMap->setColor(LLUIColorTable::instance().getColor("White_10"));
+		}
+		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(),new_rights);
+		mBtnPermissionMap->setFocus(FALSE);
+	}
+}
+
+void LLAvatarListItem::onPermissionEditMineClick()
+{
+	const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
+	if(relation)
+	{
+		S32 cur_rights = relation->getRightsGrantedTo();
+		S32 new_rights = 0;
+		if (!relation->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS))
+		{
+			new_rights = LLRelationship::GRANT_MODIFY_OBJECTS + (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_ONLINE_STATUS);
+			mBtnPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White"));
+		}
+		else
+		{
+			new_rights = (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_ONLINE_STATUS);
+			mBtnPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White_10"));
+		}
+		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(),new_rights);
+		mBtnPermissionEditMine->setFocus(FALSE);
+	}
+}
+
 
 LLView* LLAvatarListItem::getItemChildView(EAvatarListItemChildIndex child_view_index)
 {
@@ -923,13 +1006,13 @@ LLView* LLAvatarListItem::getItemChildView(EAvatarListItemChildIndex child_view_
 		child_view = mSpeakingIndicator;
 		break;
 	case ALIC_PERMISSION_ONLINE:
-		child_view = mIconPermissionOnline;
+		child_view = mBtnPermissionOnline;
 		break;
 	case ALIC_PERMISSION_MAP:
-		child_view = mIconPermissionMap;
+		child_view = mBtnPermissionMap;
 		break;
 	case ALIC_PERMISSION_EDIT_MINE:
-		child_view = mIconPermissionEditMine;
+		child_view = mBtnPermissionEditMine;
 		break;
 	case ALIC_PERMISSION_EDIT_THEIRS:
 		child_view = mIconPermissionEditTheirs;

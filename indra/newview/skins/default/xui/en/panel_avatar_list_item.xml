@@ -133,36 +133,39 @@
      tool_tip="You can edit this friend&apos;s objects"
      top="4"
      width="16" />
-    <icon
+    <button
      height="16"
      follows="right"
-     image_name="Permission_Edit_Objects_Mine"
+     image_pressed="Permission_Edit_Objects_Mine"
+     image_unselected="Permission_Edit_Objects_Mine"
      layout="topleft"
      left_pad="3"
      right="-110"
-     name="permission_edit_mine_icon"
+     name="permission_edit_mine_btn"
      tool_tip="This friend can edit, delete or take your objects"
      top_delta="0"
      width="16" />
-    <icon
+    <button
      height="16"
      follows="right"
-     image_name="Permission_Visible_Map"
+     image_pressed="Permission_Visible_Map"
+     image_unselected="Permission_Visible_Map"
      layout="topleft"
      left_pad="3"
      tool_tip="This friend can locate you on the map"
      right="-91"
-     name="permission_map_icon"
+     name="permission_map_btn"
      top_delta="0"
      width="16" />
-    <icon
+    <button
      height="16"
      follows="right"
-     image_name="Permission_Visible_Online"
+     image_pressed="Permission_Visible_Online"
+     image_unselected="Permission_Visible_Online"
      layout="topleft"
      left_pad="3"
      right="-72"
-     name="permission_online_icon"
+     name="permission_online_btn"
      tool_tip="This friend can see when you&apos;re online"
      top_delta="0"
      width="16" />
