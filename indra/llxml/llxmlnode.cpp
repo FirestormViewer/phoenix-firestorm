@@ -710,7 +710,13 @@ LLXMLNodePtr LLXMLNode::replaceNode(LLXMLNodePtr node, LLXMLNodePtr update_node)
 bool LLXMLNode::parseFile(const std::string& filename, LLXMLNodePtr& node, LLXMLNode* defaults_tree)
 {
 	// Read file
-	LL_DEBUGS("XMLNode") << "parsing XML file: " << filename << LL_ENDL;
+#ifdef LL_RELEASE_WITH_DEBUG_INFO
+		LL_INFOS("XMLNode") << "parsing XML file: " << filename << LL_ENDL;
+#elif defined LL_DEBUG
+		LL_INFOS("XMLNode") << "parsing XML file: " << filename << LL_ENDL;
+#else
+		LL_DEBUGS("XMLNode") << "parsing XML file: " << filename << LL_ENDL;
+#endif //LL_RELEASE_WITH_DEBUG_INFO
 	LLFILE* fp = LLFile::fopen(filename, "rb");		/* Flawfinder: ignore */
 	if (fp == NULL)
 	{
@@ -754,7 +760,14 @@ bool LLXMLNode::parseBuffer(
 	// Do the parsing
 	if (XML_Parse(my_parser, (const char *)buffer, length, TRUE) != XML_STATUS_OK)
 	{
-		llwarns << "Error parsing xml error code: "
+#ifdef LL_RELEASE_WITH_DEBUG_INFO
+		llerrs;
+#elif defined LL_DEBUG
+		llerrs;
+#else
+		llwarns;
+#endif //LL_RELEASE_WITH_DEBUG_INFO
+		llcont << "Error parsing xml error code: "
 				<< XML_ErrorString(XML_GetErrorCode(my_parser))
 				<< " on line " << XML_GetCurrentLineNumber(my_parser)
 				<< llendl;
