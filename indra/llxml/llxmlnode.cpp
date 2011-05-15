@@ -761,11 +761,11 @@ bool LLXMLNode::parseBuffer(
 	if (XML_Parse(my_parser, (const char *)buffer, length, TRUE) != XML_STATUS_OK)
 	{
 #ifdef LL_RELEASE_WITH_DEBUG_INFO
-		llerrs;
+		llerrs << "";
 #elif defined LL_DEBUG
-		llerrs;
+		llerrs << "";
 #else
-		llwarns;
+		llwarns << "";
 #endif //LL_RELEASE_WITH_DEBUG_INFO
 		llcont << "Error parsing xml error code: "
 				<< XML_ErrorString(XML_GetErrorCode(my_parser))
