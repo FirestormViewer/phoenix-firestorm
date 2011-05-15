@@ -46,6 +46,7 @@
 #include "lldateutil.h"
 #include "llavatarconstants.h"
 #include "indra_constants.h"
+#include "llnotificationsutil.h"
 
 bool LLAvatarListItem::sStaticInitialized = false;
 S32 LLAvatarListItem::sLeftPadding = 0;
@@ -973,19 +974,50 @@ void LLAvatarListItem::onPermissionEditMineClick()
 		S32 new_rights = 0;
 		if (!relation->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS))
 		{
-			new_rights = LLRelationship::GRANT_MODIFY_OBJECTS + (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_ONLINE_STATUS);
-			mBtnPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White"));
+			new_rights = LLRelationship::GRANT_MODIFY_OBJECTS + (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_ONLINE_STATUS);			
+			confirmModifyRights(true, new_rights);
 		}
 		else
 		{
 			new_rights = (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_ONLINE_STATUS);
 			mBtnPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White_10"));
+			LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(),new_rights);
 		}
-		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(),new_rights);
+		
 		mBtnPermissionEditMine->setFocus(FALSE);
 	}
 }
 
+void LLAvatarListItem::confirmModifyRights(bool grant, S32 rights)
+// Same as llpanelavatar::confirmModifyRights
+{
+	LLSD args;
+	args["NAME"] = LLSLURL("agent", getAvatarId(), "displayname").getSLURLString();
+	
+	if (grant)
+	{
+		LLNotificationsUtil::add("GrantModifyRights", args, LLSD(),
+								 boost::bind(&LLAvatarListItem::rightsConfirmationCallback, this,
+											 _1, _2, rights));
+	}
+	else
+	{
+		LLNotificationsUtil::add("RevokeModifyRights", args, LLSD(),
+								 boost::bind(&LLAvatarListItem::rightsConfirmationCallback, this,
+											 _1, _2, rights));
+	}
+}
+
+void LLAvatarListItem::rightsConfirmationCallback(const LLSD& notification,
+													const LLSD& response, S32 rights)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option == 0)
+	{
+		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(), rights);
+		mBtnPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White"));
+	}
+}
 
 LLView* LLAvatarListItem::getItemChildView(EAvatarListItemChildIndex child_view_index)
 {

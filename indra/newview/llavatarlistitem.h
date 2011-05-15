@@ -160,6 +160,9 @@ protected:
 	LLButton* mBtnPermissionEditMine;
 	/// Indicator for permission to edit their objects.
 	LLIconCtrl* mIconPermissionEditTheirs;
+	void confirmModifyRights(bool grant, S32 rights);
+	void rightsConfirmationCallback(const LLSD& notification,
+									const LLSD& response, S32 rights);
 	
 	//radar_specific
 	LLTextBox* mNearbyRange;
