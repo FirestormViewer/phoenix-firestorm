@@ -258,6 +258,17 @@ set_source_files_properties(${llcommon_HEADER_FILES}
 
 list(APPEND llcommon_SOURCE_FILES ${llcommon_HEADER_FILES})
 
+if(WINDOWS)
+  # Add resource files to the project.
+  set(llcommon_RESOURCE_FILES
+      res/llcommon.rc 
+      )
+
+  SOURCE_GROUP("Resource Files" FILES ${llcommon_RESOURCE_FILES})
+
+  list(APPEND llcommon_SOURCE_FILES ${llcommon_RESOURCE_FILES})
+endif(WINDOWS)
+
 if (WINDOWS AND NOT FIRECYG)
 configure_files(llcommon_GENERATED_SOURCE_FILES
     llversionviewer.cpp
