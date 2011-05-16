@@ -302,16 +302,81 @@
    width="95">
     URLs
   </text>
+   
+   
+     <color_swatch
+   can_apply_immediately="true"
+   color="DialogColorBg"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="40"
+   name="DialogColorBg"
+   top_pad="22"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="ScriptDialog" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="ScriptDialog" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="ScriptDialogBgLabel"
+   top_delta="5"
+   width="95">
+    Script Dialog Bg
+  </text>
+  <color_swatch
+   can_apply_immediately="true"
+   color="DialogColorFg"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="190"
+   name="ScriptDialogFb"
+   top_pad="-15"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="ScriptDialogFg" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="ScriptDialogFg" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="ScriptDialogFgLabel"
+   top_delta="5"
+   width="95">
+    Script Dialog Fg
+  </text>
+  
   <text
    follows="left|top"
    layout="topleft"
    left="30"
    height="12"
    name="bubble_chat"
-   top_pad="20"
+   top_pad="30"
    width="450"
    >
-    Name tag background color (also affects Bubble Chat):
+    Name tag/Bubble Chat/Console opacity:
   </text>
   <color_swatch
    can_apply_immediately="true"
@@ -322,7 +387,7 @@
    label_height="0"
    layout="topleft"
    left_delta="10"
-   top_pad="5"
+   top_pad="10"
    name="background"
    tool_tip="Choose name tag color"
    width="44">
