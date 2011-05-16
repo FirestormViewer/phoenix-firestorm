@@ -149,6 +149,9 @@ LLFrameTimer gThrottleTimer;
 const U32 OFFER_THROTTLE_MAX_COUNT=5; //number of items per time period
 const F32 OFFER_THROTTLE_TIME=10.f; //time period in seconds
 
+// no name object substitute name -KC
+const static std::string NO_NAME_OBJECT = "(no name)";
+
 //script permissions
 const std::string SCRIPT_QUESTIONS[SCRIPT_PERMISSION_EOF] = 
 	{ 
@@ -3424,7 +3427,17 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 	}
 	else
 	{
-		chat.mFromName = from_name;
+		//chat.mFromName = from_name;
+		// objects with no name get renamed to NO_NAME_OBJECT so the object profile is still accessable - KC
+		static const boost::regex whitespace_exp("\\s*");
+		if (chat.mSourceType == CHAT_SOURCE_OBJECT && boost::regex_search(from_name, whitespace_exp))
+		{
+			chat.mFromName = NO_NAME_OBJECT;
+		}
+		else
+		{
+			chat.mFromName = from_name;
+		}
 	}
 
 	BOOL is_busy = gAgent.getBusy();
