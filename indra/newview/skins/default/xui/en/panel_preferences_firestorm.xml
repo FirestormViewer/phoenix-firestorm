@@ -231,6 +231,30 @@
         mouse_opaque="true"
         name="tab1-2"
         width="517">
+		
+		<tab_container
+			label="Firestorm Prefs"
+			top="-70" 
+			height="420"
+			left="0"
+			mouse_opaque="false"
+			name="tabs"
+			tab_min_width="50"
+			tab_position="top"
+			width="517"
+			bg_opaque_color="0,0,0,0.0">
+
+			<panel
+				border="true"
+				bottom="-450"
+				follows="left|top|right|bottom"
+				height="450"
+				label="General"
+				left="1"
+				mouse_opaque="true"
+				name="ChatGeneral"
+				width="517">
+
         <text
           name="chat_and_in_enhancements"
           follows="left|top"
@@ -377,8 +401,136 @@
           height="20"
           control_name="PhoenixBoldGroupMods"
           label="Show group moderator messages in bold"/>
-		
 
+		</panel>
+
+		<!--Keyword Alerts-->
+		<panel
+			border="true"
+			bottom="-450"
+			follows="left|top|right|bottom"
+			height="450"
+			label="Keyword Alerts"
+			left="1"
+			mouse_opaque="true"
+			name="ChatKeywordAlerts"
+			width="517">
+
+			<check_box
+			  layout="topleft"
+			  follows="left|top"
+			  top="10"
+			  left="20"
+			  width="50"
+			  height="20"
+			  control_name="PhoenixKeywordOn"
+			  label="Enable Keyword Alerts"/>
+			<check_box
+			  layout="topleft"
+			  follows="left|top"
+			  top_delta="25"
+			  left="20"
+			  width="50"
+			  height="20"
+			  control_name="PhoenixKeywordInChat"
+			  label="Look for Keywords In Chat"/>
+			<check_box
+			  layout="topleft"
+			  follows="left|top"
+			  top_delta="25"
+			  left="20"
+			  width="50"
+			  height="20"
+			  control_name="PhoenixKeywordInIM"
+			  label="Look for Keywords In IMs and Group Local Chat"/>
+
+			<text
+				layout="topleft"
+				follows="left|top"
+				top_delta="30"
+				left="20"
+				height="20"
+				width="120"
+				name="textPhoenixKeywords">
+			  Keywords (separated by commas):
+			</text>
+			<line_editor
+			  bevel_style="in"
+			  border_style="line"
+			  border_thickness="1"
+			  follows="left|top"
+			  font="SansSerifSmall"
+			  top_delta="25"
+			  left="20"
+			  height="20"
+			  max_length="256"
+			  mouse_opaque="true"
+			  tool_tip=""
+			  name="PhoenixKeywords"
+			  control_name="PhoenixKeywords"
+			  width="450"/>
+
+			<check_box
+			  layout="topleft"
+			  follows="left|top"
+			  top_delta="25"
+			  left="20"
+			  width="50"
+			  height="20"
+			  control_name="PhoenixKeywordChangeColor"
+			  label="Enable Color Alert"/>
+
+			<color_swatch
+			  control_name="PhoenixKeywordColor"
+			  border.border_thickness="0"
+			  label_height="0"
+			  layout="topleft"
+			  follows="left|top"
+			  top_delta="0"
+			  left="150"
+			  height="15"
+			  width="15"
+			  name="colorswatch"
+			  tool_tip="Click to open color picker"/>
+
+			<check_box
+			  layout="topleft"
+			  follows="left|top"
+			  top_delta="25"
+			  left="20"
+			  width="50"
+			  height="20"
+			  control_name="PhoenixKeywordPlaySound"
+			  label="PhoenixKeywordPlaySound"/>
+			
+			<text
+				layout="topleft"
+				follows="left|top"
+				top_delta="30"
+				left="20"
+				height="20"
+				width="120"
+				name="textPhoenixKeywordSound">
+			  Alert Sound UUID:
+			</text>
+			<line_editor
+			  bevel_style="in"
+			  border_style="line"
+			  border_thickness="1"
+			  follows="left|top"
+			  font="SansSerifSmall"
+			  bottom_delta="5"
+			  left="125"
+			  height="20"
+			  max_length="256"
+			  mouse_opaque="true"
+			  tool_tip=""
+			  name="PhoenixKeywordSound"
+			  control_name="PhoenixKeywordSound"
+			  width="250"/>
+
+	</panel>
+	</tab_container>
 	</panel>
 	  
 	  
