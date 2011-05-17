@@ -233,7 +233,7 @@ void LLGroupActions::activate(const LLUUID& group_id)
 	gAgent.sendReliableMessage();
 }
 
-#if 0
+/*
 static bool isGroupUIVisible()
 {
 	static LLPanel* panel = 0;
@@ -243,20 +243,21 @@ static bool isGroupUIVisible()
 		return false;
 	return panel->isInVisibleChain();
 }
-#endif
+*/
 
 //-TT - Patch : ShowGroupFloaters
 static bool isGroupVisible(const LLUUID& group_id)
 {
 	static LLPanelGroup* panel = 0;
 	LLSideTray *sidetray = LLSideTray::getInstance();
-	if(!panel)
-	{
+	
+	//if(!panel)
+	//{
 		//if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
 		//{
-			panel = sidetray->getPanel<LLPanelGroup>("panel_group_info_sidetray");
-			if (panel->getID() != group_id)
-				return false;
+		//	panel = sidetray->getPanel<LLPanelGroup>("panel_group_info_sidetray");
+		//	if (panel->getID() != group_id)
+		//		return false;
 		//}
 		//else
 		//{
@@ -264,14 +265,22 @@ static bool isGroupVisible(const LLUUID& group_id)
 
 		//	panel = floater->findChild<LLPanel>("panel_group_info_sidetray");
 		//}
-	}
+	//}
+
+	//AO reworked logic for only updated profiles that are already visible.
+    panel = sidetray->getPanel<LLPanelGroup>("panel_group_info_sidetray");
 	if(!panel)
 		return false;
-
+    if (panel->getID() != group_id)
+		return false;
 	if (sidetray->isTabAttached("sidebar_people"))
+	{
 		return panel->isInVisibleChain();
+	}
 	else
+	{
 		return sidetray->isFloaterPanelVisible("panel_group_info_sidetray");
+	}
 }
 //-TT
 
