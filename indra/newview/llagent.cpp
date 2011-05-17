@@ -2862,7 +2862,9 @@ void LLAgent::processAgentDropGroup(LLMessageSystem *msg, void **)
 
 		LLGroupMgr::getInstance()->clearGroupData(group_id);
 		// close the floater for this group, if any.
-		LLGroupActions::closeGroup(group_id);
+		
+		// AO: Don't assume that because we drop a group, we want floaters to change.
+		//LLGroupActions::closeGroup(group_id);
 	}
 	else
 	{
@@ -2965,7 +2967,7 @@ LLHTTPRegistration<LLAgentDropGroupViewerNode>
 
 // static
 void LLAgent::processAgentGroupDataUpdate(LLMessageSystem *msg, void **)
-{
+{	
 	LLUUID	agent_id;
 
 	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, agent_id );
@@ -3019,7 +3021,7 @@ class LLAgentGroupDataUpdateViewerNode : public LLHTTPNode
 		if(body.has("body"))
 			body = body["body"];
 		LLUUID agent_id = body["AgentData"][0]["AgentID"].asUUID();
-
+		
 		if (agent_id != gAgentID)
 		{
 			llwarns << "processAgentGroupDataUpdate for agent other than me" << llendl;
@@ -3062,7 +3064,7 @@ class LLAgentGroupDataUpdateViewerNode : public LLHTTPNode
 				gAgent.mGroups.put(group);
 			}
 			if (need_floater_update)
-			{
+			{			
 				update_group_floaters(group.mID);
 			}
 		}
@@ -3102,7 +3104,6 @@ void LLAgent::processAgentDataUpdate(LLMessageSystem *msg, void **)
 		gAgent.mGroupPowers = 0;
 		gAgent.mGroupName.clear();
 	}		
-
 	update_group_floaters(active_id);
 }
 
@@ -3435,7 +3436,8 @@ bool LLAgent::teleportCore(bool is_local)
 		// bit of a hack -KC
 		KCWindlightInterface::instance().setTPing(true);
 	}
-	make_ui_sound("UISndTeleportOut");
+	if (gSavedSettings.getBOOL("PlayTeleportSound") == TRUE) //AO
+		make_ui_sound("UISndTeleportOut");
 	
 	// MBW -- Let the voice client know a teleport has begun so it can leave the existing channel.
 	// This was breaking the case of teleporting within a single sim.  Backing it out for now.
