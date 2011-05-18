@@ -5919,15 +5919,29 @@ class LLShowSidetrayPanel : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
 		std::string panel_name = userdata.asString();
-		// Toggle the panel
-		if (!LLSideTray::getInstance()->isPanelActive(panel_name))
+		std::string udock_name = userdata.asString();
+		if (panel_name == "sidepanel_inventory")
+			udock_name = "sidebar_inventory";
+
+		// AO: Proper behavior if tab is undocked
+		LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab",udock_name);
+		if (LLFloater::isShown(floater_tab))
 		{
-			// LLFloaterInventory::showAgentInventory();
-			LLSideTray::getInstance()->showPanel(panel_name, LLSD());
+			bool isMinimized = floater_tab->isMinimized();
+			floater_tab->setMinimized(!isMinimized);
 		}
-		else
+		else // Toggle docked sidetray
 		{
-			LLSideTray::getInstance()->collapseSideBar();
+			// Toggle the panel
+			if (!LLSideTray::getInstance()->isPanelActive(panel_name))
+			{
+				// LLFloaterInventory::showAgentInventory();
+				LLSideTray::getInstance()->showPanel(panel_name, LLSD());
+			}
+			else
+			{
+				LLSideTray::getInstance()->collapseSideBar();
+			}
 		}
 		return true;
 	}
