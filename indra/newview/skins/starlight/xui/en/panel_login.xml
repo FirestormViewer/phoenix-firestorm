@@ -5,6 +5,7 @@ height="600"
 layout="topleft"
 left="0"
 name="panel_login"
+focus_root="true" 
 top="600"
  width="996">
 <panel.string
@@ -13,7 +14,7 @@ top="600"
 </panel.string>
 <panel.string
      name="real_url" translate="false">
-       http://secondlife.com/app/login/
+       http://phoenixviewer.com/app/loginFS/
 </panel.string>
     <string name="reg_in_client_url" translate="false">
      http://secondlife.eniac15.lindenlab.com/reg-in-client/
@@ -26,7 +27,7 @@ top="600"
 <web_browser
   tab_stop="false" 
 trusted_content="true" 
-bg_opaque_color="SL-Background_Light"
+bg_opaque_color="Black"
 border_visible="false"
 bottom="600"
 follows="all"
@@ -50,8 +51,8 @@ auto_resize="false"
 follows="left|bottom"
 name="login"
 layout="topleft"
-width="695"
-min_width="695"
+width="720"
+min_width="720"
 user_resize="false"
 height="80">
 <text
@@ -59,38 +60,43 @@ follows="left|bottom"
 font="SansSerifSmall"
 height="16"
 name="username_text"
-top="16"
+top="20"
 left="20"
 width="150">
 Username:
 </text>
-<line_editor
+<combo_box
+allow_text_entry="true"
 follows="left|bottom"
 height="22"
-label="bobsmith12 or Steller Sunshine"
 left_delta="0"
-max_length_bytes="63"
-name="username_edit"
-prevalidate_callback="ascii" 
+max_chars="128"
+prevalidate_callback="ascii"
 select_on_focus="true"
-tool_tip="The username you chose when you registered, like bobsmith12 or Steller Sunshine"
+tool_tip="The account name you chose when you registered, like bobsmith12 or Steller Sunshine"
 top_pad="0"
-width="150" />
+name="username_combo"
+width="178">
+  <combo_box.combo_button
+   visible ="false"/>
+  <combo_box.drop_down_button
+   visible ="false"/>
+</combo_box>
 <text
 follows="left|bottom"
 font="SansSerifSmall"
 height="15"
-left_pad="8"
+left_pad="-19"
 name="password_text"
-top="16"
+top="20"
     width="150">
        Password:
 </text>
 <line_editor
 follows="left|bottom"
   height="22"
-  max_length_bytes="16"
 name="password_edit"
+is_password="true" 
 select_on_focus="true"
   top_pad="0"
   width="135" />
@@ -111,18 +117,18 @@ label="Remember password"
   label="Log In"
   label_color="White"
   layout="topleft"
-  left_pad="10"
+  left_pad="8"
   name="connect_btn"
-  top="31"
+  top="35"
   width="90" />
   <text
   follows="left|bottom"
   font="SansSerifSmall"
   height="15"
-  left_pad="18"
+  left_pad="8"
   name="start_location_text"
-top="16"
-  width="130">
+top="20"
+  width="170">
        Start at:
  </text>
 <combo_box
@@ -135,17 +141,27 @@ top_pad="0"
 name="start_location_combo"
      width="170">
 <combo_box.item
-label="My last location"
+label=" My Last location"
 name="MyLastLocation"
          value="last" />
 <combo_box.item
-label="My home"
+label="My Home"
 name="MyHome"
          value="home" />
 <combo_box.item
 label="&lt;Type region name&gt;"
 name="Typeregionname"   value="" />
 </combo_box>
+  <text
+follows="left|bottom"
+font="SansSerifSmall"
+height="15"
+left_pad="8"
+name="grid_selection_text"
+top="20"
+width="100">
+    Log onto Grid:
+  </text>
 <combo_box
 allow_text_entry="true"
 font="SansSerifSmall"
@@ -153,9 +169,9 @@ font="SansSerifSmall"
    height="23"
    max_chars="256"
 layout="topleft"
-top_pad="2"
+top_pad="0"
 name="server_combo"
-width="135"
+width="120"
   visible="false" />
 </layout_panel>
 <layout_panel
@@ -200,7 +216,8 @@ name="login_help"
 top_pad="2"
 right="-10"
     width="200">
-       Need help logging in?   </text>
+       Need help logging in?   
+</text>
 <!--  <text
     follows="right|bottom"
     font="SansSerifSmall"

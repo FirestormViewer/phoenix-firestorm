@@ -22,7 +22,7 @@
    top="0"
    width="305">    
     <text_editor
-     bg_readonly_color="0.0 0.0 0.0 0"
+     bg_readonly_color="SL-Background"
      enabled="false"
      follows="left|right|top|bottom"
      font="SansSerif"

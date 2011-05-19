@@ -179,9 +179,10 @@
      left_pad="0"
              name="Creator Name"
 		     top_delta="0"
+		     translate="false"
          use_ellipses="true" 
 		     width="225">
-	        Erica Linden
+	        TestString PleaseIgnore
 	     </text>
 	    <text
 			 type="string"
@@ -204,9 +205,10 @@
 			    left_pad="0"
 			    name="Owner Name"
 			    top_delta="0"
+			    translate="false"
           use_ellipses="true" 
-			    width="210">
-			    Erica Linden
+			    width="225">
+			    TestString PleaseIgnore
 	     </text>
 	    	    <text
 			 type="string"
@@ -546,7 +548,7 @@
        height="25"
        layout="topleft"
        name="open_btn_panel"
-       width="100">
+       width="73">
                 <button
 		     follows="top|left|right"
 		     height="23"
@@ -554,52 +556,55 @@
              auto_resize="true"
 		     layout="topleft"
 		     name="open_btn"
-		     width="100" />
+		     width="73" />
       </layout_panel>
       <layout_panel
 	  follows="bottom|left"
        auto_resize="false"
        height="25"
+       left_pad="5"
        layout="topleft"
        name="pay_btn_panel"
-       width="100">
+       width="73">
 	          <button
 		     follows="top|left|right"
 		     height="23"
 		     label="Pay"
 		     layout="topleft"
 		     name="pay_btn"
-		     width="100" />
+		     width="73" />
       </layout_panel>
       <layout_panel
 	  follows="bottom|left"
        auto_resize="false"
        height="25"
+       left_pad="5"
        layout="topleft"
        name="buy_btn_panel"
-       width="100">
+       width="73">
 	          <button
 		     follows="top|left|right"
 		     height="23"
 		     label="Buy"
 		     layout="topleft"
 		     name="buy_btn"
-		     width="100" />
+		     width="73" />
       </layout_panel>
       <layout_panel
 	  follows="bottom|left"
        auto_resize="false"
        height="25"
+       left_pad="5"
        layout="topleft"
        name="details_btn_panel"
-       width="100">
+       width="74">
                 <button
 		     follows="top|left|right"
 		     height="23"
 		     label="Details"
 		     layout="topleft"
 		     name="details_btn"
-		     width="100"
+		     width="74"
 			 visible="false" />
 
 	    </layout_panel>

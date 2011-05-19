@@ -8,7 +8,4 @@
  save_rect="true"
  save_visibility="true"
  >
-  <!-- AO: Hack, used to flag whether we should minimize to visible bars or not -->
-  <panel
-	name="showMinimized" />
 </floater>
