@@ -7114,4 +7114,17 @@ Remove AO set "[AO_SET_NAME]" from the list?
 
 <!-- ## Zi: Animation Overrider -->
 
+<notification
+   icon="alertmodal.tga"
+   name="SendSysinfoToIM"
+   type="alertmodal">
+This will send the following information to the current IM session:
+
+[SYSINFO]
+    <usetemplate
+     name="okcancelbuttons"
+     yestext="Send"
+     notext="Cancel" />
+  </notification>
+
 </notifications>

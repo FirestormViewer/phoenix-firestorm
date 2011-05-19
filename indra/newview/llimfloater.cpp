@@ -37,6 +37,8 @@
 #include "llbottomtray.h"
 #include "llchannelmanager.h"
 #include "llchiclet.h"
+#include "stringize.h"			// for STRINGIZE -Zi
+#include "llfloaterabout.h"		// for sysinfo button -Zi
 #include "llfloaterreg.h"
 #include "llimfloatercontainer.h" // to replace separate IM Floaters with multifloater container
 #include "llinventoryfunctions.h"
@@ -430,6 +432,60 @@ void LLIMFloater::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_s
 	updateButtons(new_state >= LLVoiceChannel::STATE_CALL_STARTED);
 }
 
+// support sysinfo button -Zi
+void LLIMFloater::onSysinfoButtonClicked()
+{
+	LLSD info=LLFloaterAbout::getInfo();
+
+	std::ostringstream support;
+	support <<
+		info["CHANNEL"] << " " << info["VIEWER_VERSION_STR"] << "\n" <<
+		"Sim: " << info["HOSTNAME"] << "(" << info["HOSTIP"] << ") " << info["SERVER_VERSION"] << "\n" <<
+		"Packet loss: " << info["PACKETS_PCT"].asReal() << "% (" << info["PACKETS_IN"].asReal() << "/" << info["PACKETS_LOST"].asReal() << ")\n" <<
+		"CPU: " << info["CPU"] << "\n" <<
+		"Memory: " << info["MEMORY_MB"] << "\n" <<
+		"OS: " << info["OS_VERSION"] << "\n" <<
+		"GPU: " << info["GRAPHICS_CARD_VENDOR"] << " " << info["GRAPHICS_CARD"] << "\n" <<
+		"OpenGL: " << info["OPENGL_VERSION"] << "\n" <<
+		"Skin: " << info["SKIN"] << "(" << info["THEME"] << ")\n" <<
+		"RLV: " << info["RLV_VERSION"] << "\n" <<
+		"Curl: " << info ["LIBCURL_VERSION"] << "\n" <<
+		"J2C: " << info["J2C_VERSION"] << "\n" <<
+		"Audio: " << info["AUDIO_DRIVER_VERSION"] << "\n" <<
+		"Webkit: " << info["QT_WEBKIT_VERSION"] << "\n" <<
+		"Voice: " << info["VOICE_VERSION"] << "\n" <<
+		"Compiler: " << info["COMPILER"] << " Version " << info["COMPILER_VERSION"].asInteger() << "\n"
+		;
+
+	LLSD args;
+	args["SYSINFO"]=support.str();
+	LLNotificationsUtil::add("SendSysinfoToIM",args,LLSD(),boost::bind(&LLIMFloater::onSendSysinfo,this,_1,_2));
+}
+
+BOOL LLIMFloater::onSendSysinfo(const LLSD& notification, const LLSD& response)
+{
+	llwarns << "callback returned" << llendl;
+
+	S32 option=LLNotificationsUtil::getSelectedOption(notification,response);
+
+	if(option==0)
+	{
+		std::string text=notification["substitutions"]["SYSINFO"];
+		if (mSessionInitialized)
+		{
+			LLIMModel::sendMessage(text, mSessionID,mOtherParticipantUUID,mDialog);
+		}
+		else
+		{
+			//queue up the message to send once the session is initialized
+			mQueuedMsgsForInit.append(text);
+		}
+		return TRUE;
+	}
+	return FALSE;
+}
+// support sysinfo button -Zi
+
 void LLIMFloater::onChange(EStatusType status, const std::string &channelURI, bool proximal)
 {
 	llinfos << "LLIMFloater::onChange" << llendl;
@@ -575,6 +631,10 @@ BOOL LLIMFloater::postBuild()
 	LLButton* add_friend = getChild<LLButton>("add_friend_btn");
 	add_friend->setClickedCallback(boost::bind(&LLIMFloater::onAddFriendButtonClicked, this));
 	
+	// support sysinfo button -Zi
+	LLButton* sysinfo = getChild<LLButton>("send_sysinfo_btn");
+	sysinfo->setClickedCallback(boost::bind(&LLIMFloater::onSysinfoButtonClicked, this));
+
 	// extra icon controls -AO
 	LLButton* transl = getChild<LLButton>("translate_btn");
 //TT
