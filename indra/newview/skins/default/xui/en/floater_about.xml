@@ -120,6 +120,10 @@ Kitty Barnett, Kadah Coba, Tankmaster Finesmith, WoLf Loonie, Techwolf Lupindo, 
 Additional code contributed by:
 Satomi Ahn, Katharine Berry, Alexie Birman, Lance Corrimal, Nicki Dasmijn, Ansariel Hiller, Zwagoth Klaar, Shyotl Kuhr, Sione Lomu, Peyton Menges, Andromeda Rage, Mysty Saunders, Thickbrick Sleaford, Hitomi Tiponi, Shin Wasp, Armin WeatherHax, Chalice Yao, Nogardrevlis Lectar, and others.
 
+Firestorm includes Starlight 2.6.0440, modified for Firestorm, an alternative set of skins for Viewer 2 and associated TPVs.  It is provided by residents for residents, with the intention of providing an alternative, brighter, and hopefully easier to use interface.  For further details see https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight.
+
+The Starlight design and creation is the responsibility of Hitomi Tiponi, and it also utilises the work of various Second Life residents especially the following: KirstenLee Cinquetti, Alexandrea Fride, psi Merlin, Hugh Helendale, samm florian, Digital Scribe, Naomah Beaumont, Nadin.
+
 Additional Artists:
 New icons by Joseph Wain / glyphish.com
 Sammie Bennoir, Mobius Ryba, DarkAgent Baphomet
@@ -179,33 +183,5 @@ All rights reserved.  See licenses.txt for details.
 Voice chat Audio coding: Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
       </text_editor>
       </panel>
-
-    <panel
-      border="true"
-      label="Starlight Skins"
-      help_topic="about_licenses_tab"
-      name="starlight_skin_panel">
-      <text_editor
-       enabled="false"
-       follows="left|top"
-       height="375"
-       bg_readonly_color="Transparent"
-       left="5"
-       max_length="65536"
-       name="skin_editor"
-       top="5"
-       width="435"
-       word_wrap="true">
-Starlight 2.6.0440 modified for Firestorm
-
-Firestorm includes Starlight, an alternative skin for Viewer 2 and associated TPVs.  It is provided by residents for residents, with the intention of providing an alternative, brighter, and hopefully easier to use interface.  For further details see https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight.
-
-The Starlight design and creation is the responsibility of Hitomi Tiponi, and it also utilises the work of various Second Life residents especially the following: KirstenLee Cinquetti, Alexandrea Fride, psi Merlin, Hugh Helendale, samm florian, Digital Scribe, Naomah Beaumont, Nadin.
-
-In addition the following residents have assisted with testing and in other ways:
-Kitty Barnett, Free Xue, BearTrap Rodas, Avi Arrow, Kishta Aluveaux, Linda Haber, Adeon Writer, Naomah Beaumont, Darien Caldwell, Moon Metty, Beebo Brinks, Sami Galewind, Zena Juran.
-      </text_editor>
-      </panel>      
-    
     </tab_container>
 </floater>
