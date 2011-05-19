@@ -648,6 +648,19 @@
       </bottomtray_button>
         </layout_panel>
 <!-- ## Zi: AO button -->      
+
+        <icon
+         auto_resize="false"
+         color="Transparent"
+         follows="left|right"
+         height="10"
+         image_name="spacer24.tga"
+         layout="topleft"
+         left="0"
+         min_width="3"
+         name="after_inventory_button"
+         top="0"
+         width="3"/> 
         
         <layout_panel
          follows="left|right"
