@@ -346,12 +346,12 @@
      layout="topleft"
 	 follows="left|bottom|right"
      height="23"
-     label="Edit lists..."
+     label="Manage Media Sites"
      top_delta="-3"
 	 left="-245"
      left_pad="5"
      name="edit_media_lists_button"
-     width="100">
+     width="150">
       <button.commit_callback
       function="Floater.Show"
       parameter="media_lists" />
@@ -366,7 +366,7 @@
      left="25"
      name="voice_chat_settings"
      width="180"
-     top_pad="45">
+     top_pad="40">
 	  Voice Chat Settings
     </text>
     <text
@@ -495,10 +495,10 @@
    follows="left|top"
    height="23"
    is_toggle="true"
-   label="Input/Output devices"
+   label="Audio Device Settings"
    layout="topleft"
    left="20"
-   top_pad="6"
+   top_pad="11"
    name="device_settings_btn"
    width="190">
   </button>

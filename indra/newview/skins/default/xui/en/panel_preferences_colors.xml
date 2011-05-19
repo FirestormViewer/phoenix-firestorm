@@ -19,7 +19,7 @@
    name="effects_color_textbox"
    top_pad="10"
    width="200">
-    Selection effects (particle beam):
+    Selection Effects (Particle Beam):
   </text>
   <color_swatch
 	 can_apply_immediately="true"
@@ -49,7 +49,7 @@
    top_pad="20"
    width="120"
    >
-    Chat font colors:
+    UI Text Colors:
   </text>
   <color_swatch
    can_apply_immediately="true"
@@ -376,7 +376,7 @@
    top_pad="30"
    width="450"
    >
-    Name tag/Bubble Chat/Console opacity:
+    Name Tag / Bubble Chat / Console Opacity:
   </text>
   <color_swatch
    can_apply_immediately="true"
@@ -421,7 +421,7 @@
    top_pad="15"
    width="120"
    >
-    Floater Opacity:
+    Floating Window Opacity:
   </text>
  <slider
    can_edit_text="false"

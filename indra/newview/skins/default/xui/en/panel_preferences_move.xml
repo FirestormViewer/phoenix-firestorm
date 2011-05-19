@@ -123,7 +123,7 @@
    control_name="FirstPersonAvatarVisible"
    follows="left|top"
    height="20"
-   label="Show me in Mouselook"
+   label="Show avatar in Mouselook"
    layout="topleft"
    left_pad="30"
    name="first_person_avatar_visible"
@@ -136,7 +136,7 @@
    layout="topleft"
    left_delta="3"
    name=" Mouse Sensitivity"
-   top_pad="10"
+   top_pad="5"
    width="160">
     Mouselook mouse sensitivity:
   </text>
@@ -253,4 +253,16 @@
     <radio_group.commit_callback
 	     function="Pref.CommitRadioDoubleClick"/>
 	</radio_group>
+	
+	<button
+ height="23"
+ label="3D Joystick Settings"
+ left="30"
+ name="joystick_setup_button"
+ top_pad="10"
+ width="155">
+    <button.commit_callback
+     function="Floater.Show"
+     parameter="pref_joystick" />
+  </button>
 </panel>

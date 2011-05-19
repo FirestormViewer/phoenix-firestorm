@@ -66,18 +66,58 @@
           name="ShowLandHoverTips"
           top_pad="7"
           width="256" />
+          
+          <text
+    type="string"
+    length="1"
+    follows="left|top"
+    height="16"
+    layout="topleft"
+    left="5"
+    name="tooltip_textbox"
+    top_pad="10"
+    width="400">
+       Hovertip Trigger Delay:
+   </text>
+  <combo_box
+            height="23"
+            layout="topleft"
+    follows="left|top"
+            control_name="ToolTipDelay"
+            left="17"
+            top_pad="5"
+            name="Tooltipdelay"
+            width="160">
+    <combo_box.item
+     label="0.7 seconds"
+     name="tt_item1"
+     value="0.7" />
+    <combo_box.item
+     label="1.5 seconds"
+     name="tt_item2"
+     value="1.5" />
+    <combo_box.item
+     label="3 seconds"
+     name="tt_item3"
+     value="3.0" />
+    <combo_box.item
+     label="6 seconds"
+     name="tt_item4"
+     value="6.0" />
+  </combo_box>
+
 
 		<text
 		type="string"
             left="5"
-            top_pad="5"
+            top_pad="10"
 		length="1"
 		follows="left|top"
 		height="12"
 		layout="topleft"
 		name="HoverTipText"
-		width="100">
-			Other Options:
+		width="140">
+			Script Dialog Placement:
 		</text>
 
           <check_box
@@ -95,7 +135,7 @@
 		<text
 		type="string"
             left="5"
-            top_pad="110"
+            top_pad="80"
 		length="1"
 		follows="left|top"
 		height="12"
