@@ -3430,7 +3430,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 	{
 		//chat.mFromName = from_name;
 		// objects with no name get renamed to NO_NAME_OBJECT so the object profile is still accessable - KC
-		static const boost::regex whitespace_exp("\\s*");
+		static const boost::regex whitespace_exp("^\\s*$");
 		if (chat.mSourceType == CHAT_SOURCE_OBJECT && boost::regex_search(from_name, whitespace_exp))
 		{
 			chat.mFromName = NO_NAME_OBJECT;

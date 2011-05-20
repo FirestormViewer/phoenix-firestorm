@@ -163,6 +163,12 @@ private:
 	void onTeleportButtonClicked();
 	void onPayButtonClicked();
 	void onGroupInfoButtonClicked();
+
+	// support sysinfo button -Zi
+	void onSysinfoButtonClicked();
+	BOOL onSendSysinfo(const LLSD& notification,const LLSD& response);
+	// support sysinfo button -Zi
+
 	// connection to voice channel state change signal
 	boost::signals2::connection mVoiceChannelStateChangeConnection;
 	
