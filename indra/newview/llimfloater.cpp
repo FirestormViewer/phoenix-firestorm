@@ -37,7 +37,6 @@
 #include "llbottomtray.h"
 #include "llchannelmanager.h"
 #include "llchiclet.h"
-#include "stringize.h"			// for STRINGIZE -Zi
 #include "llfloaterabout.h"		// for sysinfo button -Zi
 #include "llfloaterreg.h"
 #include "llimfloatercontainer.h" // to replace separate IM Floaters with multifloater container
@@ -464,8 +463,6 @@ void LLIMFloater::onSysinfoButtonClicked()
 
 BOOL LLIMFloater::onSendSysinfo(const LLSD& notification, const LLSD& response)
 {
-	llwarns << "callback returned" << llendl;
-
 	S32 option=LLNotificationsUtil::getSelectedOption(notification,response);
 
 	if(option==0)
@@ -483,6 +480,11 @@ BOOL LLIMFloater::onSendSysinfo(const LLSD& notification, const LLSD& response)
 		return TRUE;
 	}
 	return FALSE;
+}
+
+void LLIMFloater::onSysinfoButtonVisibilityChanged(const LLSD& yes)
+{
+	mSysinfoButton->setVisible(yes.asBoolean() /* && mIsSupportIM */);
 }
 // support sysinfo button -Zi
 
@@ -631,10 +633,6 @@ BOOL LLIMFloater::postBuild()
 	LLButton* add_friend = getChild<LLButton>("add_friend_btn");
 	add_friend->setClickedCallback(boost::bind(&LLIMFloater::onAddFriendButtonClicked, this));
 	
-	// support sysinfo button -Zi
-	LLButton* sysinfo = getChild<LLButton>("send_sysinfo_btn");
-	sysinfo->setClickedCallback(boost::bind(&LLIMFloater::onSysinfoButtonClicked, this));
-
 	// extra icon controls -AO
 	LLButton* transl = getChild<LLButton>("translate_btn");
 //TT
@@ -671,6 +669,16 @@ BOOL LLIMFloater::postBuild()
 					llinfos << "LLAvatarActions::isFriend - tp button" << llendl;
 					getChild<LLButton>("teleport_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID));
 				}
+
+				// support sysinfo button -Zi
+				mSysinfoButton=getChild<LLButton>("send_sysinfo_btn");
+				mSysinfoButton->setClickedCallback(boost::bind(&LLIMFloater::onSysinfoButtonClicked, this));
+				// this needs to be extended to fsdata awareness, once we have it. -Zi
+				// mIsSupportIM=fsdata(partnerUUID).isSupport(); // pseudocode something like this
+				onSysinfoButtonVisibilityChanged(gSavedSettings.getBOOL("SysinfoButtonInIM"));
+				gSavedSettings.getControl("SysinfoButtonInIM")->getCommitSignal()->connect(boost::bind(&LLIMFloater::onSysinfoButtonVisibilityChanged,this,_2));
+				// support sysinfo button -Zi
+
 				break;
 			}
 			case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat

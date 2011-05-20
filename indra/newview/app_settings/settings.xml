@@ -10694,6 +10694,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>fss.txt</string>
     </map>
+    <key>SysinfoButtonInIM</key>
+    <map>
+      <key>Comment</key>
+      <string>Shows or hides the system info button in IM floaters. Used to send your system information to a support helper in IM.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>SystemLanguage</key>
     <map>
       <key>Comment</key>
