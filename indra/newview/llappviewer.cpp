@@ -3687,7 +3687,7 @@ bool LLAppViewer::initCache()
 
 void LLAppViewer::purgeCache()
 {
-	LL_INFOS("AppCache") << "Purging Cache and Texture Cache..." << llendl;
+	LL_INFOS("AppCache") << "Purging Cache and Texture Cache..." << llendl;	
 	LLAppViewer::getTextureCache()->purgeCache(LL_PATH_CACHE);
 	LLVOCache::getInstance()->removeCache(LL_PATH_CACHE);
 	std::string mask = gDirUtilp->getDirDelimiter() + "*.*";
@@ -4802,6 +4802,16 @@ void LLAppViewer::handleLoginComplete()
 //-TT
 
 	writeDebugInfo();
+	
+	//AO : Warn users cache purge will affect usability
+	if (mPurgeCache)
+	{
+		LLSD args;
+		args["MESSAGE"] = llformat("Your viewer cache is currently empty. Please be aware that you may experience slow framerates and inventory loading for a short time while new content downloads." );
+		LLNotificationsUtil::add("GenericAlert", args);
+	}
+	// </AO>
+	
 }
 
 // *TODO - generalize this and move DSO wrangling to a helper class -brad
