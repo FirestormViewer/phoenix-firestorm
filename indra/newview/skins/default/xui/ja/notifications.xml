@@ -115,7 +115,7 @@
 	</notification>
 	<notification name="GrantModifyRights">
 		他人に修正権限を与えると、権限を与えられた人はあなたが所有するインワールドのオブジェクトを変更、削除、持ち帰ることができます。 この権限を与える際には十分に注意してください。
-[FIRST_NAME] [LAST_NAME] に修正権限を与えますか？
+[NAME] に修正権限を与えますか？
 		<usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい"/>
 	</notification>
 	<notification name="GrantModifyRightsMultiple">
@@ -124,7 +124,7 @@
 		<usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい"/>
 	</notification>
 	<notification name="RevokeModifyRights">
-		[FIRST_NAME] [LAST_NAME] に対して変更権限を取り消しますか？
+		[NAME] に対して変更権限を取り消しますか？
 		<usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい"/>
 	</notification>
 	<notification name="RevokeModifyRightsMultiple">
@@ -999,7 +999,7 @@ L$ は返金されません。
 		</form>
 	</notification>
 	<notification name="RemoveFromFriends">
-		[FIRST_NAME] [LAST_NAME] をフレンドリストから削除しますか？
+		[NAME] をフレンドリストから削除しますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="RemoveMultipleFromFriends">
@@ -1124,7 +1124,7 @@ L$ は返金されません。
 	<notification name="DeedLandToGroupWithContribution">
 		この区画の譲渡に際しては、このグループが十分な土地クレジットを保有および維持している必要があります。
 この譲渡により、
-「 [FIRST_NAME] [LAST_NAME] 」から
+「 [NAME] 」から
 グループに対して土地が同時に提供されます。
 土地の購入価格は、所有者には返金されません。
 譲渡された区画が売れると、売上金額はグループメンバーに均等に分配されます。
