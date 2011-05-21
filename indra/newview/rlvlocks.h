@@ -293,59 +293,98 @@ extern RlvWearableLocks gRlvWearableLocks;
 
 class RlvFolderLocks : public LLSingleton<RlvFolderLocks>
 {
+	friend class RlvLockedDescendentsCollector;
 public:
 	RlvFolderLocks();
 
-	// Specifies the source of a folder lock (attachment UUID, shared path, attachment point index or wearable type)
-	typedef boost::variant<LLUUID, std::string, S32, LLWearableType::EType> rlv_folderlock_source_t;
-	// Couples the folder lock source with the type of lock (false = folder node ; true = folder subtree)
-	typedef std::pair<rlv_folderlock_source_t, bool> rlv_folderlock_descr_t;
+	// Specifies the source of a folder lock
+	enum ELockSourceType
+	{ 
+		ST_ATTACHMENT = 0x01, ST_ATTACHMENTPOINT = 0x02, ST_FOLDER = 0x04, ST_ROOTFOLDER = 0x08,
+		ST_SHAREDPATH = 0x10, ST_WEARABLETYPE = 0x20, ST_NONE= 0x00, ST_MASK_ANY = 0xFF
+	};
+	typedef boost::variant<LLUUID, std::string, S32, LLWearableType::EType> lock_source_t;
+	typedef std::pair<ELockSourceType, lock_source_t> folderlock_source_t;
+	// Specifies options for the folder lock
+	enum ELockPermission { PERM_ALLOW = 0x1, PERM_DENY = 0x2, PERM_MASK_ANY = 0x3 };
+	enum ELockScope	{ SCOPE_NODE, SCOPE_SUBTREE } ;
+protected:
+	struct folderlock_descr_t
+	{
+		LLUUID				idRlvObj;
+		ERlvLockMask		eLockType;
+		folderlock_source_t	lockSource;
+		ELockPermission		eLockPermission;
+		ELockScope			eLockScope;
+
+		folderlock_descr_t(const LLUUID& rlvObj, ERlvLockMask lockType, folderlock_source_t source, ELockPermission perm, ELockScope scope);
+		bool operator ==(const folderlock_descr_t& rhs) const;
+	};
 
 public:
-	// Adds an eLock type lock (held by idRlvObj) for the folder(s) described by lockDescr
-	void addFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock);
+	// Adds an eLock type lock (held by idRlvObj) for the specified folder source (with ePerm and eScope lock options)
+	void addFolderLock(const folderlock_source_t& lockSource, ELockPermission ePerm, ELockScope eScope, const LLUUID& idRlvObj, ERlvLockMask eLockType);
 
-	// Returns TRUE if there is at least 1 eLock type locked folder (RLV_LOCK_ANY = RLV_LOCK_ADD *or* RLV_LOCK_REMOVE)
-	bool hasLockedFolder(ERlvLockMask eLock) const;
-	// Returns TRUE if there is at least 1 non-detachable attachment as a result of a RLV_LOCK_REMOVE folder lock
+	// Returns TRUE if there is at least 1 non-detachable attachment as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
 	bool hasLockedAttachment() const;
-	// Returns TRUE if there is at least 1 non-removable wearable as a result of a RLV_LOCK_REMOVE folder lock
+	// Returns TRUE if there is at least 1 eLock type PERM_DENY locked folder (RLV_LOCK_ANY = RLV_LOCK_ADD *or* RLV_LOCK_REMOVE)
+	bool hasLockedFolder(ERlvLockMask eLockTypeMask) const;
+	// Returns TRUE if the folder has a descendent folder lock with the specified charateristics
+	bool hasLockedFolderDescendent(const LLUUID& idFolder, int eSourceTypeMask, ELockPermission ePermMask, 
+	                               ERlvLockMask eLockTypeMask, bool fCheckSelf) const;
+	// Returns TRUE if there is at least 1 non-removable wearable as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
 	bool hasLockedWearable() const;
-	// Returns TRUE if the attachment (specified by inventory item UUID) is non-detachable as a result of a RLV_LOCK_REMOVE folder lock
+	// Returns TRUE if the attachment (specified by item UUID) is non-detachable as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
 	bool isLockedAttachment(const LLUUID& idItem) const;
-	// Returns TRUE if the folder is locked as a result of a RLV_LOCK_REMOVE folder lock
-	bool isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLock) const;
-	// Returns TRUE if the wearable (specified by inventory item UUID) is non-detachable as a result of a RLV_LOCK_REMOVE folder lock
+	// Returns TRUE if the folder is locked as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
+	bool isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLock, int eSourceTypeMask = ST_MASK_ANY, folderlock_source_t* plockSource = NULL) const;
+	// Returns TRUE if the wearable (specified by item UUID) is non-removable as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
 	bool isLockedWearable(const LLUUID& idItem) const;
 
-	// Removes an eLock type lock (held by idRlvObj) for the folder(s) described by lockDescr
-	void removeFolderLock(const rlv_folderlock_descr_t& lockDescr, const LLUUID& idRlvObj, ERlvLockMask eLock);
+	// Removes an eLock type lock (held by idRlvObj) for the specified folder source (with ePerm and eScope lock options)
+	void removeFolderLock(const folderlock_source_t& lockSource, ELockPermission ePerm, ELockScope eScope, const LLUUID& idRlvObj, ERlvLockMask eLockType);
+
+protected:
+	// Returns TRUE if the folder has an explicit folder lock entry with the specified charateristics
+	bool isLockedFolderEntry(const LLUUID& idFolder, int eSourceTypeMask, ELockPermission ePermMask, ERlvLockMask eLockTypeMask) const;
+
+	/*
+	 * canXXX helper functions (note that a more approriate name might be userCanXXX)
+	 */
+public:
+	bool canMoveFolder(const LLUUID& idFolder, const LLUUID& idFolderDest) const;
+	bool canRemoveFolder(const LLUUID& idFolder) const;
+	bool canRenameFolder(const LLUUID& idFolder) const;
+	bool canMoveItem(const LLUUID& idItem, const LLUUID& idFolderDest) const;
+	bool canRemoveItem(const LLUUID& idItem) const;
+	bool canRenameItem(const LLUUID& idItem) const;
 
 	/*
 	 * Cached item/folder look-up helper functions
 	 */
 protected:
-	void getLockedFolders(const rlv_folderlock_descr_t& lockDescr, LLInventoryModel::cat_array_t& folders) const;
-	bool getLockedFolders(ERlvLockMask eLock, LLInventoryModel::cat_array_t& nodeFolders, LLInventoryModel::cat_array_t& subtreeFolders) const;
-	void onCOFChanged();
-	void refreshLockedItems() const;
-	void refreshLockedItems(ERlvLockMask eLock, LLInventoryModel::cat_array_t lockFolders, bool fMatchAll) const;
+	bool getLockedFolders(const folderlock_source_t& lockSource, LLInventoryModel::cat_array_t& lockFolders) const;
+	bool getLockedItems(const LLUUID& idFolder, LLInventoryModel::item_array_t& lockItems, bool fFollowLinks) const;
+	void onNeedsLookupRefresh();
+	void refreshLockedLookups() const;
 
 	/*
 	 * Member variables
 	 */
 protected:
 	// Map of folder locks (idRlvObj -> lockDescr)
-	typedef std::multimap<LLUUID, rlv_folderlock_descr_t> rlv_folderlock_map_t;
-	rlv_folderlock_map_t	m_FolderAdd;
-	rlv_folderlock_map_t	m_FolderRem;
+	typedef std::list<const folderlock_descr_t*> folderlock_list_t;
+	folderlock_list_t	m_FolderLocks;			// List of add and remove locked folder descriptions
+	S32					m_cntLockAdd;			// Number of RLV_LOCK_ADD locked folders in m_FolderLocks
+	S32					m_cntLockRem;			// Number of RLV_LOCK_REMOVE locked folders in m_FolderLocks
 
 	// Cached item look-up variables
-	mutable bool			m_fItemsDirty;
-	mutable uuid_vec_t		m_LockedFolderAdd;
-	mutable uuid_vec_t		m_LockedAttachmentRem;
-	mutable uuid_vec_t		m_LockedFolderRem;
-	mutable uuid_vec_t		m_LockedWearableRem;
+	typedef std::multimap<LLUUID, const folderlock_descr_t*> folderlock_map_t;
+	mutable bool				m_fLookupDirty;
+	mutable bool				m_fLockedRoot;
+	mutable uuid_vec_t			m_LockedAttachmentRem;
+	mutable folderlock_map_t	m_LockedFolderMap;
+	mutable uuid_vec_t			m_LockedWearableRem;
 private:
 	friend class LLSingleton<RlvFolderLocks>;
 };
@@ -391,7 +430,7 @@ inline S32 RlvAttachPtLookup::getAttachPointIndex(const LLViewerObject* pObj)
 // RlvAttachmentLocks inlined member functions
 //
 
-// Checked: 2010-08-07 (RLVa-1.2.0i) | Modified: RLVa-1.2.0i
+// Checked: 2011-03-27 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
 inline ERlvWearMask RlvAttachmentLocks::canAttach(const LLInventoryItem* pItem, LLViewerJointAttachment** ppAttachPtOut /*=NULL*/) const
 {
 	// The specified item can be attached if:
@@ -400,7 +439,8 @@ inline ERlvWearMask RlvAttachmentLocks::canAttach(const LLInventoryItem* pItem, 
 	LLViewerJointAttachment* pAttachPt = RlvAttachPtLookup::getAttachPoint(pItem);
 	if (ppAttachPtOut)
 		*ppAttachPtOut = pAttachPt;
-	return (!pAttachPt) ? RLV_WEAR : canAttach(pAttachPt);
+	return ((pItem) && (!RlvFolderLocks::instance().isLockedFolder(pItem->getParentUUID(), RLV_LOCK_ADD)))
+		? ((!pAttachPt) ? RLV_WEAR : canAttach(pAttachPt)) : RLV_WEAR_LOCKED;
 }
 
 // Checked: 2010-08-07 (RLVa-1.2.0i) | Modified: RLVa-1.2.0i
@@ -478,12 +518,13 @@ inline bool RlvWearableLocks::canRemove(const LLInventoryItem* pItem) const
 	return (pWearable) && (!isLockedWearable(pWearable));
 }
 
-// Checked: 2010-05-14 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
+// Checked: 2011-03-27 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
 inline ERlvWearMask RlvWearableLocks::canWear(const LLViewerInventoryItem* pItem) const
 {
 	// The specified item can be worn if the wearable type it specifies can be worn on
 	RLV_ASSERT( (pItem) && (LLInventoryType::IT_WEARABLE == pItem->getInventoryType()) );
-	return (pItem) ? canWear(pItem->getWearableType()) : RLV_WEAR_LOCKED;
+	return ((pItem) && (!RlvFolderLocks::instance().isLockedFolder(pItem->getParentUUID(), RLV_LOCK_ADD))) 
+		? canWear(pItem->getWearableType()) : RLV_WEAR_LOCKED;
 }
 
 // Checked: 2010-05-14 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
@@ -545,52 +586,127 @@ inline void RlvAttachmentLockWatchdog::onWearAttachment(const LLInventoryItem* p
 // RlvFolderLocks member functions
 //
 
-// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+// Checked: 2011-03-27 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+inline RlvFolderLocks::folderlock_descr_t::folderlock_descr_t(const LLUUID& rlvObj, ERlvLockMask lockType, folderlock_source_t source, 
+															  ELockPermission perm, ELockScope scope)
+	: idRlvObj(rlvObj), eLockType(lockType), lockSource(source), eLockPermission(perm), eLockScope(scope)
+{
+}
+
+// Checked: 2011-03-27 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+inline bool RlvFolderLocks::folderlock_descr_t::operator ==(const folderlock_descr_t& rhs) const
+{
+	return (idRlvObj == rhs.idRlvObj) && (eLockType == rhs.eLockType) && (lockSource == rhs.lockSource) && 
+		(eLockPermission == rhs.eLockPermission) && (eLockScope == rhs.eLockScope);
+}
+
+// Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+inline bool RlvFolderLocks::canMoveFolder(const LLUUID& idFolder, const LLUUID& idFolderDest) const
+{
+	// Block moving the folder to destination if:
+	//   - the folder (or one of its descendents) is explicitly locked
+	//   - folder and destination are subject to different locks
+	//		-> Possible combinations:
+	//			* folder   locked + destination unlocked => block move
+	//			* folder unlocked + destination   locked => block move
+	//			* folder   locked + destination   locked => allow move only if both are subject to the same folder lock
+	//			* folder unlocked + destination unlocked => allow move (special case of above since both locks are equal when there is none)
+	//		=> so the above becomes (isLockedFolder(A) == isLockedFolder(B)) && (lockA == lockB)
+	folderlock_source_t lockSource(ST_NONE, 0), lockSourceDest(ST_NONE, 0);
+	return 
+		(!hasLockedFolderDescendent(idFolder, ST_MASK_ANY, PERM_MASK_ANY, RLV_LOCK_ANY, true)) &&
+		( (isLockedFolder(idFolder, RLV_LOCK_ANY, ST_MASK_ANY, &lockSource) == isLockedFolder(idFolderDest, RLV_LOCK_ANY, ST_MASK_ANY, &lockSourceDest)) && 
+		  (lockSource == lockSourceDest) );
+}
+
+// Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+inline bool RlvFolderLocks::canRemoveFolder(const LLUUID& idFolder) const
+{
+	// Block removing a folder if:
+	//   - the folder (or one of its descendents) is explicitly locked
+	//   - the folder itself is locked (but disregard root folder locks)
+	return 
+		(!hasLockedFolderDescendent(idFolder, ST_MASK_ANY, PERM_MASK_ANY, RLV_LOCK_ANY, true)) && 
+		(!isLockedFolder(idFolder, RLV_LOCK_ANY, ST_MASK_ANY & ~ST_ROOTFOLDER));
+}
+
+// Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+inline bool RlvFolderLocks::canRenameFolder(const LLUUID& idFolder) const
+{
+	// Block renaming a folder if:
+	//   - the folder (or one of its descendents) is explicitly locked by:
+	//		-> a "shared path" => renaming the folder would change the shared path and hence invalidate the lock
+	//		-> an attachment point \
+	//		-> an attachment        |--> renaming the folder to a "dot" (=invisible) folder would invalidate the lock
+	//		-> a wearable type     /
+	return !hasLockedFolderDescendent(idFolder, ST_SHAREDPATH | ST_ATTACHMENT | ST_ATTACHMENTPOINT | ST_WEARABLETYPE, PERM_MASK_ANY, RLV_LOCK_ANY, true);
+}
+
+// Checked: 2011-03-30 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+inline bool RlvFolderLocks::canMoveItem(const LLUUID& idItem, const LLUUID& idFolderDest) const
+{
+	// Block moving the folder to destination if:
+	//   - folder and destination are subject to different locks [see canMoveFolder() for more details]
+	const LLViewerInventoryItem* pItem = gInventory.getItem(idItem); const LLUUID& idFolder = (pItem) ? pItem->getParentUUID() : LLUUID::null;
+	int maskSource = ST_MASK_ANY & ~ST_ROOTFOLDER; folderlock_source_t lockSource(ST_NONE, 0), lockSourceDest(ST_NONE, 0);
+	return 
+		(idFolder.notNull()) && 
+		(isLockedFolder(idFolder, RLV_LOCK_ANY, maskSource, &lockSource) == isLockedFolder(idFolderDest, RLV_LOCK_ANY, maskSource, &lockSourceDest)) && 
+		(lockSource == lockSourceDest);
+}
+
+// Checked: 2011-03-30 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+inline bool RlvFolderLocks::canRemoveItem(const LLUUID& idItem) const
+{
+	// Block removing items from locked folders (but disregard root folder locks)
+	const LLViewerInventoryItem* pItem = gInventory.getItem(idItem); const LLUUID& idFolder = (pItem) ? pItem->getParentUUID() : LLUUID::null;
+	int maskSource = ST_MASK_ANY & ~ST_ROOTFOLDER;
+	return (idFolder.notNull()) && (!isLockedFolder(idFolder, RLV_LOCK_ANY, maskSource));
+}
+
+// Checked: 2011-03-30 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+inline bool RlvFolderLocks::canRenameItem(const LLUUID& idItem) const
+{
+	// Items can always be renamed, regardless of folder locks
+	return true;
+}
+
+// Checked: 2010-11-30 (RLVa-1.3.0g) | Added: RLVa-1.3.0b
 inline bool RlvFolderLocks::hasLockedAttachment() const
 {
-	if (m_fItemsDirty)
-		refreshLockedItems();
+	if (m_fLookupDirty)
+		refreshLockedLookups();
 	return !m_LockedAttachmentRem.empty();
 }
 
-// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+// Checked: 2011-03-27 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
 inline bool RlvFolderLocks::hasLockedFolder(ERlvLockMask eLock) const
 {
 	// Remove locks are more common so check those first
-	return ((eLock & RLV_LOCK_REMOVE) && (!m_FolderRem.empty())) || ((eLock & RLV_LOCK_ADD) && (!m_FolderAdd.empty()));
+	return ((eLock & RLV_LOCK_REMOVE) && (m_cntLockRem)) || ((eLock & RLV_LOCK_ADD) && (m_cntLockAdd));
 }
 
-// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+// Checked: 2010-11-30 (RLVa-1.3.0g) | Added: RLVa-1.3.0b
 inline bool RlvFolderLocks::hasLockedWearable() const
 {
-	if (m_fItemsDirty)
-		refreshLockedItems();
+	if (m_fLookupDirty)
+		refreshLockedLookups();
 	return !m_LockedWearableRem.empty();
 }
 
-// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+// Checked: 2010-11-30 (RLVa-1.3.0g) | Added: RLVa-1.3.0b
 inline bool RlvFolderLocks::isLockedAttachment(const LLUUID& idItem) const
 {
-	if (m_fItemsDirty)
-		refreshLockedItems();
+	if (m_fLookupDirty)
+		refreshLockedLookups();
 	return (std::find(m_LockedAttachmentRem.begin(), m_LockedAttachmentRem.end(), idItem) != m_LockedAttachmentRem.end());
 }
 
-// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
-inline bool RlvFolderLocks::isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLock) const
-{
-	if (m_fItemsDirty)
-		refreshLockedItems();
-	return
-		( (eLock & RLV_LOCK_REMOVE) && (std::find(m_LockedFolderRem.begin(), m_LockedFolderRem.end(), idFolder) != m_LockedFolderRem.end()) ) ||
-		( (eLock & RLV_LOCK_ADD) && (std::find(m_LockedFolderAdd.begin(), m_LockedFolderAdd.end(), idFolder) != m_LockedFolderAdd.end()) );
-}
-
-// Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
+// Checked: 2010-11-30 (RLVa-1.3.0g) | Added: RLVa-1.3.0b
 inline bool RlvFolderLocks::isLockedWearable(const LLUUID& idItem) const
 {
-	if (m_fItemsDirty)
-		refreshLockedItems();
+	if (m_fLookupDirty)
+		refreshLockedLookups();
 	return (std::find(m_LockedWearableRem.begin(), m_LockedWearableRem.end(), idItem) != m_LockedWearableRem.end());
 }
 

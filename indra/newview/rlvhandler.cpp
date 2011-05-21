@@ -1032,6 +1032,12 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		case RLV_BHVR_DETACHALLTHIS:		// @detachallthis[:<option>]=n|y
 			eRet = onAddRemFolderLock(rlvCmd, fRefCount);
 			break;
+		case RLV_BHVR_ATTACHTHISEXCEPT:		// @attachthisexcept[:<option>]=n|y
+		case RLV_BHVR_DETACHTHISEXCEPT:		// @detachthisexcept[:<option>]=n|y
+		case RLV_BHVR_ATTACHALLTHISEXCEPT:	// @attachallthisexcept[:<option>]=n|y
+		case RLV_BHVR_DETACHALLTHISEXCEPT:	// @detachallthisexcept[:<option>]=n|y
+			eRet = onAddRemFolderLockException(rlvCmd, fRefCount);
+			break;
 		case RLV_BHVR_SETENV:				// @setenv=n|y
 			eRet = onAddRemSetEnv(rlvCmd, fRefCount);
 			break;
@@ -1057,6 +1063,44 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 							gRlvWearableLocks.removeWearableTypeLock((LLWearableType::EType)idxType, rlvCmd.getObjectID(), eLock);
 					}
 				}
+			}
+			break;
+		case RLV_BHVR_SHAREDWEAR:			// @sharedwear=n|y					- Checked: 2011-03-28 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+		case RLV_BHVR_SHAREDUNWEAR:			// @sharedunwear=n|y				- Checked: 2011-03-28 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+			{
+				VERIFY_OPTION_REF(strOption.empty());
+
+				RlvFolderLocks::folderlock_source_t lockSource(RlvFolderLocks::ST_SHAREDPATH, LLStringUtil::null);
+				RlvFolderLocks::ELockScope eLockScope = RlvFolderLocks::SCOPE_SUBTREE;
+				ERlvLockMask eLockType = (RLV_BHVR_SHAREDUNWEAR == eBhvr) ? RLV_LOCK_REMOVE : RLV_LOCK_ADD;
+
+				if (RLV_TYPE_ADD == eType)
+					RlvFolderLocks::instance().addFolderLock(lockSource, RlvFolderLocks::PERM_DENY, eLockScope, rlvCmd.getObjectID(), eLockType);
+				else
+					RlvFolderLocks::instance().removeFolderLock(lockSource, RlvFolderLocks::PERM_DENY, eLockScope, rlvCmd.getObjectID(), eLockType);
+			}
+			break;
+		case RLV_BHVR_UNSHAREDWEAR:			// @unsharedwear=n|y				- Checked: 2011-03-28 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+		case RLV_BHVR_UNSHAREDUNWEAR:		// @unsharedunwear=n|y				- Checked: 2011-03-28 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+			{
+				VERIFY_OPTION_REF(strOption.empty());
+
+				// Lock down the inventory root
+				RlvFolderLocks::folderlock_source_t lockSource(RlvFolderLocks::ST_ROOTFOLDER, 0);
+				RlvFolderLocks::ELockScope eLockScope = RlvFolderLocks::SCOPE_SUBTREE;
+				ERlvLockMask eLockType = (RLV_BHVR_UNSHAREDUNWEAR == eBhvr) ? RLV_LOCK_REMOVE : RLV_LOCK_ADD;
+
+				if (RLV_TYPE_ADD == eType)
+					RlvFolderLocks::instance().addFolderLock(lockSource, RlvFolderLocks::PERM_DENY, eLockScope, rlvCmd.getObjectID(), eLockType);
+				else
+					RlvFolderLocks::instance().removeFolderLock(lockSource, RlvFolderLocks::PERM_DENY, eLockScope, rlvCmd.getObjectID(), eLockType);
+
+				// Add the #RLV shared folder as an exception
+				lockSource = RlvFolderLocks::folderlock_source_t(RlvFolderLocks::ST_SHAREDPATH, LLStringUtil::null);
+				if (RLV_TYPE_ADD == eType)
+					RlvFolderLocks::instance().addFolderLock(lockSource, RlvFolderLocks::PERM_ALLOW, eLockScope, rlvCmd.getObjectID(), eLockType);
+				else
+					RlvFolderLocks::instance().removeFolderLock(lockSource, RlvFolderLocks::PERM_ALLOW, eLockScope, rlvCmd.getObjectID(), eLockType);
 			}
 			break;
 		case RLV_BHVR_REDIRCHAT:			// @redirchat:<channel>=n|y			- Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.1.0h
@@ -1350,25 +1394,24 @@ ERlvCmdRet RlvHandler::onAddRemDetach(const RlvCommand& rlvCmd, bool& fRefCount)
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
 ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCount)
 {
-	RlvFolderLocks::rlv_folderlock_source_t lockSource;
-
 	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
 
+	RlvFolderLocks::folderlock_source_t lockSource;
 	if (rlvCmdOption.isEmpty())
 	{
-		lockSource = rlvCmd.getObjectID();
+		lockSource = RlvFolderLocks::folderlock_source_t(RlvFolderLocks::ST_ATTACHMENT, rlvCmd.getObjectID());
 	}
 	else if (rlvCmdOption.isSharedFolder())
 	{
-		lockSource = rlvCmd.getOption();
+		lockSource = RlvFolderLocks::folderlock_source_t(RlvFolderLocks::ST_SHAREDPATH, rlvCmd.getOption());
 	}
 	else if (rlvCmdOption.isAttachmentPoint())
 	{
-		lockSource = RlvAttachPtLookup::getAttachPointIndex(rlvCmdOption.getAttachmentPoint());
+		lockSource = RlvFolderLocks::folderlock_source_t(RlvFolderLocks::ST_ATTACHMENTPOINT, RlvAttachPtLookup::getAttachPointIndex(rlvCmdOption.getAttachmentPoint()));
 	}
 	else if (rlvCmdOption.isWearableType())
 	{
-		lockSource = rlvCmdOption.getWearableType();
+		lockSource = RlvFolderLocks::folderlock_source_t(RlvFolderLocks::ST_WEARABLETYPE, rlvCmdOption.getWearableType());
 	}
 	else
 	{
@@ -1378,12 +1421,47 @@ ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCo
 
 	ERlvBehaviour eBhvr = rlvCmd.getBehaviourType();
 
- 	ERlvLockMask eLock = ((RLV_BHVR_ATTACHTHIS == eBhvr) || (RLV_BHVR_ATTACHALLTHIS == eBhvr)) ? RLV_LOCK_ADD : RLV_LOCK_REMOVE;
-	RlvFolderLocks::rlv_folderlock_descr_t lockDescr(lockSource, ((RLV_BHVR_ATTACHALLTHIS == eBhvr) || (RLV_BHVR_DETACHALLTHIS == eBhvr)));
+	// Determine the lock type
+ 	ERlvLockMask eLockType = ((RLV_BHVR_ATTACHTHIS == eBhvr) || (RLV_BHVR_ATTACHALLTHIS == eBhvr)) ? RLV_LOCK_ADD : RLV_LOCK_REMOVE;
+
+	// Determine the folder lock options from the issued behaviour
+	RlvFolderLocks::ELockPermission eLockPermission = RlvFolderLocks::PERM_DENY;
+	RlvFolderLocks::ELockScope eLockScope = 
+		((RLV_BHVR_ATTACHALLTHIS == eBhvr) || (RLV_BHVR_DETACHALLTHIS == eBhvr)) ? RlvFolderLocks::SCOPE_SUBTREE : RlvFolderLocks::SCOPE_NODE;
+
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
-		RlvFolderLocks::instance().addFolderLock(lockDescr, rlvCmd.getObjectID(), eLock);
+		RlvFolderLocks::instance().addFolderLock(lockSource, eLockPermission, eLockScope, rlvCmd.getObjectID(), eLockType);
 	else
-		RlvFolderLocks::instance().removeFolderLock(lockDescr, rlvCmd.getObjectID(), eLock);
+		RlvFolderLocks::instance().removeFolderLock(lockSource, eLockPermission, eLockScope, rlvCmd.getObjectID(), eLockType);
+
+	fRefCount = true;
+	return RLV_RET_SUCCESS;
+}
+
+// Checked: 2011-03-27 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+ERlvCmdRet RlvHandler::onAddRemFolderLockException(const RlvCommand& rlvCmd, bool& fRefCount)
+{
+	// Sanity check - the option should specify a shared folder path
+	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+	if (!rlvCmdOption.isSharedFolder())
+		return RLV_RET_FAILED_OPTION;
+
+	ERlvBehaviour eBhvr = rlvCmd.getBehaviourType();
+
+	// Determine the lock type
+ 	ERlvLockMask eLockType = 
+		((RLV_BHVR_ATTACHTHISEXCEPT == eBhvr) || (RLV_BHVR_ATTACHALLTHISEXCEPT == eBhvr)) ? RLV_LOCK_ADD : RLV_LOCK_REMOVE;
+
+	// Determine the folder lock options from the issued behaviour
+	RlvFolderLocks::ELockPermission eLockPermission = RlvFolderLocks::PERM_ALLOW;
+	RlvFolderLocks::ELockScope eLockScope = 
+		((RLV_BHVR_ATTACHALLTHISEXCEPT == eBhvr) || (RLV_BHVR_DETACHALLTHISEXCEPT == eBhvr)) ? RlvFolderLocks::SCOPE_SUBTREE : RlvFolderLocks::SCOPE_NODE;
+
+	RlvFolderLocks::folderlock_source_t lockSource(RlvFolderLocks::ST_SHAREDPATH, rlvCmd.getOption());
+	if (RLV_TYPE_ADD == rlvCmd.getParamType())
+		RlvFolderLocks::instance().addFolderLock(lockSource, eLockPermission, eLockScope, rlvCmd.getObjectID(), eLockType);
+	else
+		RlvFolderLocks::instance().removeFolderLock(lockSource, eLockPermission, eLockScope, rlvCmd.getObjectID(), eLockType);
 
 	fRefCount = true;
 	return RLV_RET_SUCCESS;

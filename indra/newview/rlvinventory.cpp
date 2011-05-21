@@ -63,6 +63,35 @@ public:
 // RlvInventory member functions
 //
 
+// Checked: 2011-03-28 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+RlvInventory::RlvInventory()
+	: m_fFetchStarted(false), m_fFetchComplete(false)
+{
+}
+
+// Checked: 2011-03-28 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+RlvInventory::~RlvInventory()
+{
+	if (gInventory.containsObserver(this))
+		gInventory.removeObserver(this);
+}
+
+// Checked: 2011-03-28 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+void RlvInventory::changed(U32 mask)
+{
+	const LLInventoryModel::changed_items_t& idsChanged = gInventory.getChangedIDs();
+	if (std::find(idsChanged.begin(), idsChanged.end(), m_idRlvRoot) != idsChanged.end())
+	{
+		gInventory.removeObserver(this);
+
+		LLUUID idRlvRootPrev = m_idRlvRoot;
+		m_idRlvRoot.setNull();
+
+		if (idRlvRootPrev != getSharedRootID())
+			m_OnSharedRootIDChanged();
+	}
+}
+
 // Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.0.0h
 void RlvInventory::fetchSharedInventory()
 {
@@ -213,25 +242,29 @@ bool RlvInventory::getPath(const uuid_vec_t& idItems, LLInventoryModel::cat_arra
 	return (folders.count() != 0);
 }
 
-// Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.0.0h
-LLViewerInventoryCategory* RlvInventory::getSharedRoot() const
+// Checked: 2011-03-28 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+const LLUUID& RlvInventory::getSharedRootID() const
 {
-	if (gInventory.isInventoryUsable())
+	if ( (m_idRlvRoot.isNull()) && (gInventory.isInventoryUsable()) )
 	{
 		LLInventoryModel::cat_array_t* pFolders; LLInventoryModel::item_array_t* pItems;
 		gInventory.getDirectDescendentsOf(gInventory.getRootFolderID(), pFolders, pItems);
 		if (pFolders)
 		{
 			// NOTE: we might have multiple #RLV folders so we'll just go with the first one we come across
-			LLViewerInventoryCategory* pFolder;
+			const LLViewerInventoryCategory* pFolder;
 			for (S32 idxFolder = 0, cntFolder = pFolders->count(); idxFolder < cntFolder; idxFolder++)
 			{
-				if ( ((pFolder = pFolders->get(idxFolder)) != NULL) && (RlvInventory::cstrSharedRoot == pFolder->getName()) )
-					return pFolder;
+				if ( ((pFolder = pFolders->get(idxFolder)) != NULL) && (cstrSharedRoot == pFolder->getName()) )
+				{
+					if (!gInventory.containsObserver((RlvInventory*)this))
+						gInventory.addObserver((RlvInventory*)this);
+					m_idRlvRoot = pFolder->getUUID();
+				}
 			}
 		}
 	}
-	return NULL;
+	return m_idRlvRoot;
 }
 
 // Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.0.1a

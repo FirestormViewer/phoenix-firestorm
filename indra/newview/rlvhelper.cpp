@@ -154,18 +154,20 @@ void RlvCommand::initLookupTable()
 		// NOTE: keep this matched with the enumeration at all times
 		std::string arBehaviours[RLV_BHVR_COUNT] =
 			{
-				"detach", "attach", "addattach", "remattach", "addoutfit", "remoutfit", "emote", "sendchat", "recvchat", "recvchatfrom", 
-				"recvemote", "recvemotefrom", "redirchat", "rediremote", "chatwhisper", "chatnormal", "chatshout", "sendchannel", 
-				"sendim", "sendimto", "recvim", "recvimfrom", "startim", "startimto", "permissive", "notify", "showinv", "showminimap", 
-				"showworldmap", "showloc", "shownames", "showhovertext", "showhovertexthud", "showhovertextworld", "showhovertextall", 
-				"tplm", "tploc", "tplure", "viewnote", "viewscript", "viewtexture", "acceptpermission", "accepttp", "allowidle", 
-				"displayname", "edit", "editobj", "rez", "fartouch", "interact", "touchthis", "touchattach", "touchattachself", 
-				"touchattachother", "touchhud", "touchworld", "touchall", "touchme", "fly", "setgroup", "unsit", "sit", "sittp", "standtp", 
-				"setdebug", "setenv", "alwaysrun", "temprun", "detachme", "attachover", "attachthis", "attachthisover", "detachthis",
-				"attachall", "attachallover", "detachall", "attachallthis", "attachallthisover", "detachallthis", "adjustheight", "tpto",
-				"version", "versionnew", "versionnum", "getattach", "getattachnames", "getaddattachnames", "getremattachnames", "getoutfit",
-				"getoutfitnames", "getaddoutfitnames", "getremoutfitnames", "findfolder", "findfolders", "getpath", "getpathnew", "getinv",
-				"getinvworn", "getgroup", "getsitid", "getcommand", "getstatus", "getstatusall"
+				"detach", "attach", "addattach", "remattach", "addoutfit", "remoutfit", "sharedwear", "sharedunwear", 
+				"unsharedwear", "unsharedunwear", "emote", "sendchat", "recvchat", "recvchatfrom", "recvemote", "recvemotefrom", 
+				"redirchat", "rediremote", "chatwhisper", "chatnormal", "chatshout", "sendchannel", "sendim", "sendimto", 
+				"recvim", "recvimfrom", "startim", "startimto", "permissive", "notify", "showinv", "showminimap", "showworldmap", "showloc", 
+				"shownames", "showhovertext", "showhovertexthud", "showhovertextworld", "showhovertextall", "tplm", "tploc", "tplure", 
+				"viewnote", "viewscript", "viewtexture", "acceptpermission", "accepttp", "allowidle", "displayname", "edit", "editobj", 
+				"rez", "fartouch", "interact", "touchthis", "touchattach", "touchattachself", "touchattachother", "touchhud", "touchworld", 
+				"touchall", "touchme", "fly", "setgroup", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv", "alwaysrun", "temprun", 
+				"detachme", "attachover", "attachthis", "attachthisover", "attachthisexcept", "detachthis", "detachthisexcept", "attachall", 
+				"attachallover", "detachall", "attachallthis", "attachallthisexcept", "attachallthisover", "detachallthis", 
+				"detachallthisexcept", "adjustheight", "tpto", "version", "versionnew", "versionnum", "getattach", "getattachnames", 
+				"getaddattachnames", "getremattachnames", "getoutfit", "getoutfitnames", "getaddoutfitnames", "getremoutfitnames", 
+				"findfolder", "findfolders", "getpath", "getpathnew", "getinv", "getinvworn", "getgroup", "getsitid", "getcommand", 
+				"getstatus", "getstatusall"
 			};
 
 		for (int idxBvhr = 0; idxBvhr < RLV_BHVR_COUNT; idxBvhr++)

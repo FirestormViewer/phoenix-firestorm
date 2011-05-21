@@ -244,6 +244,12 @@ protected:
 	const LLViewerInventoryItem* m_pItem;
 };
 
+template<typename T> struct RlvPredValuesEqual
+{
+	bool operator()(const T* pT2) const { return (pT1) && (pT2) && (*pT1 == *pT2); }
+	const T* pT1;
+};
+
 // ============================================================================
 // Inlined class member functions
 //
