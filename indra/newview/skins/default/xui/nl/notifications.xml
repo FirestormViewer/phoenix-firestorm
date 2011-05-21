@@ -142,7 +142,7 @@ Kies alstublieft slechts één item en probeer het opnieuw.
 	</notification>
 	<notification name="GrantModifyRights">
 		Het geven van wijzigingsrechten aan een andere inwoner, maakt het voor hun mogelijk om elk willekeurig object te wijzigen, te verwijderen of om WILLEKEURIGE objecten die u in wereld heeft terug te nemen. Wees HEEL voorzichtig met het uitgeven van dit recht.
-Wilt u wijzigingsrechten aan [FIRST_NAME] [LAST_NAME] geven?
+Wilt u wijzigingsrechten aan [NAME] geven?
 		<usetemplate name="okcancelbuttons" notext="Nee" yestext="Ja"/>
 	</notification>
 	<notification name="GrantModifyRightsMultiple">
@@ -151,7 +151,7 @@ Wilt u wijzigingsrechten aan de geselecteerde inwoners geven?
 		<usetemplate name="okcancelbuttons" notext="Nee" yestext="Ja"/>
 	</notification>
 	<notification name="RevokeModifyRights">
-		Wilt u de wijzigingsrechten voor [FIRST_NAME] [LAST_NAME] terugnemen?
+		Wilt u de wijzigingsrechten voor [NAME] terugnemen?
 		<usetemplate name="okcancelbuttons" notext="Nee" yestext="Ja"/>
 	</notification>
 	<notification name="RevokeModifyRightsMultiple">
@@ -985,7 +985,7 @@ Vriendschap aanbieden aan [NAME]?
 		</form>
 	</notification>
 	<notification name="RemoveFromFriends">
-		Wilt u [FIRST_NAME] [LAST_NAME] van uw Vriend lijst verwijderen?
+		Wilt u [NAME] van uw Vriend lijst verwijderen?
 		<usetemplate name="okcancelbuttons" notext="Annuleren" yestext="OK"/>
 	</notification>
 	<notification name="RemoveMultipleFromFriends">
@@ -1102,7 +1102,7 @@ Deze [AREA] m² land overdragen aan de groep &apos;[GROUP_NAME]&apos;?
 	</notification>
 	<notification name="DeedLandToGroupWithContribution">
 		Voor het overdragen van dit perceel zal de groep voldoen land gebruikscredit moeten hebben en onderhouden.
-De overdracht zal een simultane land contributie verlangen van de groep van &apos;[FIRST_NAME] [LAST_NAME]&apos;.
+De overdracht zal een simultane land contributie verlangen van de groep van &apos;[NAME]&apos;.
 Het aankoop bedrag zal niet naar de eigenaar worden terug gestort.
 Indien een overgedragen perceel wordt verkocht, zal het verkoop bedrag gelijkmatig over de groepsleden worden verdeeld.
 
@@ -1159,10 +1159,10 @@ Kies alstublieft een mannelijk of vrouwelijke avatar. U kunt later nog van gedac
 		[NAME] L$ [PRICE] U heeft niet genoeg L$ om dit te doen.
 	</notification>
 	<notification name="GrantedModifyRights">
-		U heeft het recht verkregen om objecten van [FIRST_NAME] [LAST_NAME] te wijzigen.
+		U heeft het recht verkregen om objecten van [NAME] te wijzigen.
 	</notification>
 	<notification name="RevokedModifyRights">
-		Uw recht om objecten van [FIRST_NAME] [LAST_NAME] is ingetrokken.
+		Uw recht om objecten van [NAME] is ingetrokken.
 	</notification>
 	<notification name="FlushMapVisibilityCaches">
 		Dit zal de Kaart cache van deze regio opschonen.
@@ -2409,10 +2409,10 @@ Wilt u de [SECOND_LIFE] website bezoeken om dit in te stellen?
 		Onderwerp: [SUBJECT], Bericht: [MESSAGE]
 	</notification>
 	<notification name="FriendOnline">
-		[FIRST] [LAST] is Online
+		[NAME] is Online
 	</notification>
 	<notification name="FriendOffline">
-		[FIRST] [LAST] is Offline
+		[NAME] is Offline
 	</notification>
 	<notification name="AddSelfFriend">
 		U kunt uzelf niet als vriend toevoegen.
@@ -2571,7 +2571,7 @@ Indien u streaming media wilt zien op percelen die dit ondersteunen, dient u naa
 		De objecten die uw eigendom zijn op het geselecteerde perceel zijn geretourneerd naar uw inventaris.
 	</notification>
 	<notification name="OtherObjectsReturned">
-		De objecten op het geselecteerde perceel dat het eigendom is van [FIRST] [LAST], zijn geretourneerd naar zijn of haar inventaris.
+		De objecten op het geselecteerde perceel dat het eigendom is van [NAME], zijn geretourneerd naar zijn of haar inventaris.
 	</notification>
 	<notification name="OtherObjectsReturned2">
 		De objecten op het geselecteerde perceel dat het eigendom is van inwoner &apos;[NAME]&apos;, zijn geretourneerd naar hun eigenaar.
@@ -2698,7 +2698,7 @@ Probeer het alstublieft opnieuw over enkele ogenblikken.
 		Geen geldig perceel kon gevonden worden.
 	</notification>
 	<notification name="ObjectGiveItem">
-		Een object genaamd [OBJECTFROMNAME], eigendom van [FIRST] [LAST], heeft u een [OBJECTTYPE] genaamd [OBJECTNAME] gegeven.
+		Een object genaamd [OBJECTFROMNAME], eigendom van [NAME_SLURL], heeft u een [OBJECTTYPE] genaamd [OBJECTNAME] gegeven.
 		<form name="form">
 			<button name="Keep" text="Behouden"/>
 			<button name="Discard" text="Afwijzen"/>
@@ -2837,7 +2837,7 @@ Dit verzoek inwilligen?
 		</form>
 	</notification>
 	<notification name="ScriptDialog">
-		[FIRST] [LAST]&apos;s &apos;[TITLE]&apos;
+		[NAME]&apos;s &apos;[TITLE]&apos;
 [MESSAGE]
 		<form name="form">
 			<button name="Ignore" text="Negeren"/>
@@ -2938,13 +2938,13 @@ Klik Accepteren om deel te nemen aan dit gesprek of Afwijzen om de uitnodiging a
 		</form>
 	</notification>
 	<notification name="AutoUnmuteByIM">
-		Er is een instant message naar [FIRST] [LAST] gestuurd, waardoor deze automatisch van de negeerlijst is gehaald.
+		Er is een instant message naar [NAME] gestuurd, waardoor deze automatisch van de negeerlijst is gehaald.
 	</notification>
 	<notification name="AutoUnmuteByMoney">
-		Er is geld gegeven aan [FIRST] [LAST], waardoor deze automatisch van de negeerlijst is gehaald.
+		Er is geld gegeven aan [NAME], waardoor deze automatisch van de negeerlijst is gehaald.
 	</notification>
 	<notification name="AutoUnmuteByInventory">
-		Er is inventaris aangeboden aan [FIRST] [LAST], waardoor deze automatisch van de negeerlijst is gehaald.
+		Er is inventaris aangeboden aan [NAME], waardoor deze automatisch van de negeerlijst is gehaald.
 	</notification>
 	<notification name="VoiceInviteGroup">
 		[NAME] doet nu mee met een Voice chat gesprek binnen de groep [GROUP].
