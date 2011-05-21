@@ -73,7 +73,7 @@ const S32 RLV_VERSION_BUILD = 1;
 const S32 RLVa_VERSION_MAJOR = 1;
 const S32 RLVa_VERSION_MINOR = 3;
 const S32 RLVa_VERSION_PATCH = 0;
-const S32 RLVa_VERSION_BUILD = 7;
+const S32 RLVa_VERSION_BUILD = 8;
 
 // Uncomment before a final release
 //#define RLV_RELEASE
@@ -195,6 +195,8 @@ enum ERlvBehaviour {
 	RLV_BHVR_STANDTP,				// "standtp"
 	RLV_BHVR_SETDEBUG,				// "setdebug"
 	RLV_BHVR_SETENV,				// "setenv"
+	RLV_BHVR_ALWAYSRUN,				// "alwaysrun"
+	RLV_BHVR_TEMPRUN,				// "temprun"
 	RLV_BHVR_DETACHME,				// "detachme"
 	RLV_BHVR_ATTACHOVER,			// "attachover"
 	RLV_BHVR_ATTACHTHIS,			// "attachthis"
