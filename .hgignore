@@ -10,6 +10,8 @@ syntax: glob
 #OSX image cache file
 *.DS_Store
 LICENSES
+scripts/install.cache.*
+indra/newview/res/viewerRes.rc
 indra/.distcc
 indra/build-darwin-*
 indra/build-vc[0-9]*
