@@ -48,11 +48,13 @@ public:
 	//       - to check exceptions   -> isException()
 public:
 	// Returns TRUE is at least one object contains the specified behaviour (and optional option)
-	bool hasBehaviour(ERlvBehaviour eBehaviour) const { return (eBehaviour < RLV_BHVR_COUNT) ? (0 != m_Behaviours[eBehaviour]) : false; }
-	bool hasBehaviour(ERlvBehaviour eBehaviour, const std::string& strOption) const;
+	bool hasBehaviour(ERlvBehaviour eBhvr) const { return (eBhvr < RLV_BHVR_COUNT) ? (0 != m_Behaviours[eBhvr]) : false; }
+	bool hasBehaviour(ERlvBehaviour eBhvr, const std::string& strOption) const;
 	// Returns TRUE if at least one object (except the specified one) contains the specified behaviour (and optional option)
-	bool hasBehaviourExcept(ERlvBehaviour eBehaviour, const LLUUID& idObj) const;
-	bool hasBehaviourExcept(ERlvBehaviour eBehaviour, const std::string& strOption, const LLUUID& idObj) const;
+	bool hasBehaviourExcept(ERlvBehaviour eBhvr, const LLUUID& idObj) const;
+	bool hasBehaviourExcept(ERlvBehaviour eBhvr, const std::string& strOption, const LLUUID& idObj) const;
+	// Returns TRUE if at least one object in the linkset with specified root ID contains the specified behaviour (and optional option)
+	bool hasBehaviourRoot(const LLUUID& idObjRoot, ERlvBehaviour eBhvr, const std::string& strOption = LLStringUtil::null) const;
 
 	// Adds or removes an exception for the specified behaviour
 	void addException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption);
@@ -99,6 +101,7 @@ public:
 	bool canShowHoverText(const LLViewerObject* pObj) const;									// @showhovertext* command family
 	bool canSendIM(const LLUUID& idRecipient) const;											// @sendim and @sendimto
 	bool canSit(LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;
+	bool canStartIM(const LLUUID& idRecipient) const;											// @startim and @startimto
 	bool canStand() const;
 	bool canTeleportViaLure(const LLUUID& idAgent) const;
 	bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;	// @touch
@@ -301,6 +304,16 @@ inline bool RlvHandler::canSit(LLViewerObject* pObj, const LLVector3& posOffset 
 		  (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) < 1.5f * 1.5f) );
 }
 
+inline bool RlvHandler::canStartIM(const LLUUID& idRecipient) const
+{
+	// User can start an IM session with "recipient" (could be an agent or a group) if:
+	//   - not generally restricted from starting IM sessions (or the recipient is an exception)
+	//   - not specifically restricted from starting an IM session with the recipient
+	return 
+		( (!hasBehaviour(RLV_BHVR_STARTIM)) || (isException(RLV_BHVR_STARTIM, idRecipient)) ) &&
+		( (!hasBehaviour(RLV_BHVR_STARTIMTO)) || (!isException(RLV_BHVR_STARTIMTO, idRecipient)) );
+}
+
 // Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
 inline bool RlvHandler::canStand() const
 {
@@ -314,14 +327,14 @@ inline bool RlvHandler::canTeleportViaLure(const LLUUID& idAgent) const
 	return ((!hasBehaviour(RLV_BHVR_TPLURE)) || (isException(RLV_BHVR_TPLURE, idAgent))) && (canStand());
 }
 
-inline bool RlvHandler::hasBehaviour(ERlvBehaviour eBehaviour, const std::string& strOption) const
+inline bool RlvHandler::hasBehaviour(ERlvBehaviour eBhvr, const std::string& strOption) const
 {
-	return hasBehaviourExcept(eBehaviour, strOption, LLUUID::null);
+	return hasBehaviourExcept(eBhvr, strOption, LLUUID::null);
 }
 
-inline bool RlvHandler::hasBehaviourExcept(ERlvBehaviour eBehaviour, const LLUUID& idObj) const
+inline bool RlvHandler::hasBehaviourExcept(ERlvBehaviour eBhvr, const LLUUID& idObj) const
 {
-	return hasBehaviourExcept(eBehaviour, std::string(), idObj);
+	return hasBehaviourExcept(eBhvr, LLStringUtil::null, idObj);
 }
 
 // Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c

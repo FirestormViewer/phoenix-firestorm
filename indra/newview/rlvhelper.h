@@ -191,6 +191,7 @@ public:
 	const rlv_command_list_t* getCommandList() const { return &m_Commands; }
 
 	const LLUUID&		getObjectID() const	{ return m_idObj; }
+	const LLUUID&		getRootID() const	{ return m_idRoot; }
 
 	/*
 	 * Member variables

@@ -5946,6 +5946,17 @@
       <key>Value</key>
       <integer>305</integer>
     </map>
+    <key>NotificationCanEmbedInIM</key>
+    <map>
+      <key>Comment</key>
+      <string>Controls notification panel embedding in IMs (0 = default, 1 = focused, 2 = never)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>2</integer>
+    </map>
     <key>NotificationToastLifeTime</key>
     <map>
       <key>Comment</key>

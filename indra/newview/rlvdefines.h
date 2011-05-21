@@ -73,7 +73,7 @@ const S32 RLV_VERSION_BUILD = 1;
 const S32 RLVa_VERSION_MAJOR = 1;
 const S32 RLVa_VERSION_MINOR = 3;
 const S32 RLVa_VERSION_PATCH = 0;
-const S32 RLVa_VERSION_BUILD = 5;
+const S32 RLVa_VERSION_BUILD = 7;
 
 // Uncomment before a final release
 //#define RLV_RELEASE
@@ -151,6 +151,8 @@ enum ERlvBehaviour {
 	RLV_BHVR_SENDIMTO,				// "sendimto"
 	RLV_BHVR_RECVIM,				// "recvim"
 	RLV_BHVR_RECVIMFROM,			// "recvimfrom"
+	RLV_BHVR_STARTIM,				// "startim"
+	RLV_BHVR_STARTIMTO,				// "startimto"
 	RLV_BHVR_PERMISSIVE,			// "permissive"
 	RLV_BHVR_NOTIFY,				// "notify"
 	RLV_BHVR_SHOWINV,				// "showinv"
@@ -184,6 +186,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_TOUCHHUD,				// "touchhud"
 	RLV_BHVR_TOUCHWORLD,			// "touchworld"
 	RLV_BHVR_TOUCHALL,				// "touchall"
+	RLV_BHVR_TOUCHME,				// "touchme"
 	RLV_BHVR_FLY,					// "fly"
 	RLV_BHVR_SETGROUP,				// "setgroup"
 	RLV_BHVR_UNSIT,					// "unsit"
@@ -328,6 +331,8 @@ enum ERlvAttachGroupType
 #define RLV_STRING_BLOCKED_RECVIM			"blocked_recvim"
 #define RLV_STRING_BLOCKED_RECVIM_REMOTE	"blocked_recvim_remote"
 #define RLV_STRING_BLOCKED_SENDIM			"blocked_sendim"
+#define RLV_STRING_BLOCKED_STARTCONF		"blocked_startconf"
+#define RLV_STRING_BLOCKED_STARTIM			"blocked_startim"
 #define RLV_STRING_BLOCKED_TELEPORT			"blocked_teleport"
 #define RLV_STRING_BLOCKED_TPLURE_REMOTE	"blocked_tplure_remote"
 #define RLV_STRING_BLOCKED_VIEWXXX			"blocked_viewxxx"

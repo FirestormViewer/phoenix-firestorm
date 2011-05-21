@@ -136,10 +136,9 @@ public:
 	static bool isForceTp()	{ return m_fForceTp; }
 	static void forceTp(const LLVector3d& posDest);									// Ignores restrictions that might otherwise prevent tp'ing
 
-	static void notifyBlocked(const std::string& strRlvString);
+	static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD());
 	static void notifyBlockedGeneric()	{ notifyBlocked(RLV_STRING_BLOCKED_GENERIC); }
-	static void notifyBlockedTeleport()	{ notifyBlocked(RLV_STRING_BLOCKED_TELEPORT); }
-	static void notifyBlockedViewXXX(LLAssetType::EType assetType); 
+	static void notifyBlockedViewXXX(LLAssetType::EType assetType) { notifyBlocked(RLV_STRING_BLOCKED_VIEWXXX, LLSD().with("[TYPE]", LLAssetType::lookup(assetType))); }
 	static void notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine);
 
 	static void sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession = LLUUID::null);

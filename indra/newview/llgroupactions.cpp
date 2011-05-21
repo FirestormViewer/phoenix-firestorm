@@ -129,6 +129,15 @@ void LLGroupActions::startCall(const LLUUID& group_id)
 		return;
 	}
 
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(group_id)) && (!gIMMgr->hasSession(group_id)) )
+	{
+		make_ui_sound("UISndInvalidOp");
+		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("group", group_id, "about").getSLURLString()));
+		return;
+	}
+// [/RLVa:KB]
+
 	LLUUID session_id = gIMMgr->addSession(gdata.mName, IM_SESSION_GROUP_START, group_id, true);
 	if (session_id == LLUUID::null)
 	{
@@ -330,6 +339,15 @@ void LLGroupActions::startIM(const LLUUID& group_id)
 {
 	if (group_id.isNull())
 		return;
+
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(group_id)) && (!gIMMgr->hasSession(group_id)) )
+	{
+		make_ui_sound("UISndInvalidOp");
+		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("group", group_id, "about").getSLURLString()));
+		return;
+	}
+// [/RLVa:KB]
 
 	LLGroupData group_data;
 	if (gAgent.getGroupData(group_id, group_data))
