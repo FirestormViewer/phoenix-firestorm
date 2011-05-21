@@ -175,6 +175,7 @@ private:
 	bool mGotPersonalInfo;
 	bool mOriginalIMViaEmail;
 	bool mLanguageChanged;
+	bool mAvatarDataInitialized;
 	
 	bool mOriginalHideOnlineStatus;
 	// Record of current user's favorites may be stored in file on disk.
