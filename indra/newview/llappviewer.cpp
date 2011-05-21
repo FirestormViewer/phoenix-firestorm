@@ -4797,8 +4797,8 @@ void LLAppViewer::handleLoginComplete()
 	mOnLoginCompleted();
 
 //-TT Window Title Access
-	gWindowTitle += std::string(" - ") + gAgentAvatarp->getFullname();
-	gViewerWindow->setTitle(gWindowTitle);
+//	gWindowTitle += std::string(" - ") + gAgentAvatarp->getFullname();
+//	gViewerWindow->setTitle(gWindowTitle);
 //-TT
 
 	writeDebugInfo();
