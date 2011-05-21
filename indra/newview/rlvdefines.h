@@ -21,15 +21,10 @@
 // Extensions
 //
 
-// Provides access to "advanced" features through the RLVa debug menu
-#define RLV_EXTENSION_FLOATER_RESTRICTIONS	// Enables the Advanced / RLVa / Restrictions... floater
-#define RLV_EXTENSION_HIDELOCKED			// "Hide locked layers", "Hide locked attachments" and "Hide locked inventory"
-
 // Extensions
 #define RLV_EXTENSION_CMD_GETSETDEBUG_EX	// Extends the debug variables accessible through @getdebug_xxx/@setdebug_xxx
 #define RLV_EXTENSION_CMD_FINDFOLDERS		// @findfolders:<option>=<channel> - @findfolder with multiple results
 #define RLV_EXTENSION_FORCEWEAR_GESTURES	// @attach*/detach* commands also (de)activate gestures
-#define RLV_EXTENSION_GIVETORLV_A2A			// Allow "Give to #RLV" on avatar-to-avatar inventory offers
 #define RLV_EXTENSION_NOTIFY_BEHAVIOUR		// Provides the option to show a customizable notification whenever a behaviour gets (un)set
 #define RLV_EXTENSION_STARTLOCATION			// Reenables "Start Location" at login if not @tploc=n or @unsit=n restricted at last logoff
 #define RLV_EXPERIMENTAL					// Enables/disables experimental features en masse
@@ -45,7 +40,6 @@
 	// Under development (don't include in public release)
 	#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
 //		#define RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-//		#define RLV_EXPERIMENTAL_FIRSTUSE				// Enables a number of "first use" popups
 	#endif // LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
 #endif // RLV_EXPERIMENTAL
 
@@ -53,7 +47,7 @@
 #ifdef RLV_EXPERIMENTAL_CMDS
 	#define RLV_EXTENSION_CMD_ALLOWIDLE		// Forces "Away" status when idle (effect is the same as setting AllowIdleAFK to TRUE)
 	#define RLV_EXTENSION_CMD_GETCOMMAND	// @getcommand:<option>=<channel>
-//	#define RLV_EXTENSION_CMD_GETXXXNAMES	// @get[add|rem]attachnames:<option>=<channel> and @get[add|rem]outfitnames=<channel>
+	#define RLV_EXTENSION_CMD_GETXXXNAMES	// @get[add|rem]attachnames:<option>=<channel> and @get[add|rem]outfitnames=<channel>
 	#define RLV_EXTENSION_CMD_INTERACT		// @interact=n
 	#define RLV_EXTENSION_CMD_TOUCHXXX		// @touch:uuid=n|y, @touchworld[:<uuid>]=n|y, @touchattach[:<uuid>]=n|y, @touchud[:<uuid>]=n|y
 	#define RLV_EXTENSION_CMD_DISPLAYNAME	// @displayname=n
@@ -65,9 +59,9 @@
 
 // Version of the specifcation we support
 const S32 RLV_VERSION_MAJOR = 2;
-const S32 RLV_VERSION_MINOR = 2;
+const S32 RLV_VERSION_MINOR = 7;
 const S32 RLV_VERSION_PATCH = 0;
-const S32 RLV_VERSION_BUILD = 1;
+const S32 RLV_VERSION_BUILD = 0;
 
 // Implementation version
 const S32 RLVa_VERSION_MAJOR = 1;
@@ -77,10 +71,6 @@ const S32 RLVa_VERSION_BUILD = 8;
 
 // Uncomment before a final release
 //#define RLV_RELEASE
-
-// The official viewer version we're patching against
-#define RLV_MAKE_TARGET(x, y, z)	((x << 16) | (y << 8) | z)
-#define RLV_TARGET					RLV_MAKE_TARGET(2, 1, 2)
 
 // Defining these makes it easier if we ever need to change our tag
 #define RLV_WARNS		LL_WARNS("RLV")
@@ -255,12 +245,12 @@ enum ERlvParamType {
 };
 
 enum ERlvCmdRet {
-	RLV_RET_UNKNOWN     = 0x0000,	// Unknown error (should only be used internally)
+	RLV_RET_UNKNOWN		= 0x0000,	// Unknown error (should only be used internally)
 	RLV_RET_RETAINED,				// Command was retained
-	RLV_RET_SUCCESS     = 0x0100,	// Command executed succesfully
+	RLV_RET_SUCCESS		= 0x0100,	// Command executed succesfully
 	RLV_RET_SUCCESS_UNSET,			// Command executed succesfully (RLV_TYPE_REMOVE for an unrestricted behaviour)
 	RLV_RET_SUCCESS_DUPLICATE,		// Command executed succesfully (RLV_TYPE_ADD for an already restricted behaviour)
-	RLV_RET_FAILED      = 0x0200,	// Command failed (general failure)
+	RLV_RET_FAILED		= 0x0200,	// Command failed (general failure)
 	RLV_RET_FAILED_SYNTAX,			// Command failed (syntax error)
 	RLV_RET_FAILED_OPTION,			// Command failed (invalid option)
 	RLV_RET_FAILED_PARAM,			// Command failed (invalid param)
@@ -279,17 +269,17 @@ enum ERlvExceptionCheck
 
 enum ERlvLockMask
 {
-	RLV_LOCK_ADD    = 0x01,
-	RLV_LOCK_REMOVE = 0x02,
-	RLV_LOCK_ANY    = RLV_LOCK_ADD | RLV_LOCK_REMOVE
+	RLV_LOCK_ADD	= 0x01,
+	RLV_LOCK_REMOVE	= 0x02,
+	RLV_LOCK_ANY	= RLV_LOCK_ADD | RLV_LOCK_REMOVE
 };
 
 enum ERlvWearMask
 {
-	RLV_WEAR_LOCKED  = 0x00,		// User can not wear the item at all
-	RLV_WEAR_ADD     = 0x01,		// User can wear the item in addition to what's already worn
+	RLV_WEAR_LOCKED	 = 0x00,		// User can not wear the item at all
+	RLV_WEAR_ADD	 = 0x01,		// User can wear the item in addition to what's already worn
 	RLV_WEAR_REPLACE = 0x02,		// User can wear the item and replace what's currently worn
-	RLV_WEAR         = 0x03			// Convenience: combines RLV_WEAR_ADD and RLV_WEAR_REPLACE
+	RLV_WEAR		 = 0x03			// Convenience: combines RLV_WEAR_ADD and RLV_WEAR_REPLACE
 };
 
 enum ERlvAttachGroupType
@@ -330,7 +320,7 @@ enum ERlvAttachGroupType
 #define RLV_SETTING_FIRSTUSE_GIVETORLV	RLV_SETTING_FIRSTUSE_PREFIX"GiveToRLV"
 
 // ============================================================================
-// Strings
+// Strings (see rlva_strings.xml)
 //
 
 #define RLV_STRING_HIDDEN					"hidden_generic"

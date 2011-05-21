@@ -1477,7 +1477,6 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 				// end has already copied the items into your inventory,
 				// so we can fetch it out of our inventory.
 // [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
-#ifdef RLV_EXTENSION_GIVETORLV_A2A
 				if ( (rlv_handler_t::isEnabled()) && (!RlvSettings::getForbidGiveToRLV()) && (LLAssetType::AT_CATEGORY == mType) && 
 					 (RlvInventory::instance().getSharedRoot()) && (mDesc.find(RLV_PUTINV_PREFIX) == 0) )
 				{
@@ -1488,7 +1487,6 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 					else
 						gInventory.addObserver(pOfferObserver);
 				}
-#endif // RLV_EXTENSION_GIVETORLV_A2A
 // [/RLVa:KB]
 
 				LLOpenAgentOffer* open_agent_offer = new LLOpenAgentOffer(mObjectID, from_string);

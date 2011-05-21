@@ -1783,7 +1783,7 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 		case RLV_BHVR_GETATTACHNAMES:	// @getattachnames[:<grp>]=<channel>
 		case RLV_BHVR_GETADDATTACHNAMES:// @getaddattachnames[:<grp>]=<channel>
 		case RLV_BHVR_GETREMATTACHNAMES:// @getremattachnames[:<grp>]=<channel>
-			eRet = onGetAttachNames(idObj, rlvCmd, strReply);
+			eRet = onGetAttachNames(rlvCmd, strReply);
 			break;
 #endif // RLV_EXTENSION_CMD_GETXXXNAMES
 		case RLV_BHVR_GETOUTFIT:		// @getoutfit[:<layer>]=<channel>
@@ -1793,7 +1793,7 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 		case RLV_BHVR_GETOUTFITNAMES:	// @getoutfitnames=<channel>
 		case RLV_BHVR_GETADDOUTFITNAMES:// @getaddoutfitnames=<channel>
 		case RLV_BHVR_GETREMOUTFITNAMES:// @getremoutfitnames=<channel>
-			eRet = onGetOutfitNames(idObj, rlvCmd, strReply);
+			eRet = onGetOutfitNames(rlvCmd, strReply);
 			break;
 #endif // RLV_EXTENSION_CMD_GETXXXNAMES
 		case RLV_BHVR_FINDFOLDER:		// @findfolder:<criteria>=<channel>
