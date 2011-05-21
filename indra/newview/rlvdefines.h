@@ -73,7 +73,7 @@ const S32 RLV_VERSION_BUILD = 1;
 const S32 RLVa_VERSION_MAJOR = 1;
 const S32 RLVa_VERSION_MINOR = 3;
 const S32 RLVa_VERSION_PATCH = 0;
-const S32 RLVa_VERSION_BUILD = 4;
+const S32 RLVa_VERSION_BUILD = 5;
 
 // Uncomment before a final release
 //#define RLV_RELEASE
@@ -177,7 +177,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_REZ,					// "rez"
 	RLV_BHVR_FARTOUCH,				// "fartouch"
 	RLV_BHVR_INTERACT,				// "interact"
-	RLV_BHVR_TOUCHOBJ,				// "touchobj"
+	RLV_BHVR_TOUCHTHIS,				// "touchthis"
 	RLV_BHVR_TOUCHATTACH,			// "touchattach"
 	RLV_BHVR_TOUCHATTACHSELF,		// "touchattachself"
 	RLV_BHVR_TOUCHATTACHOTHER,		// "touchattachother"
@@ -185,6 +185,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_TOUCHWORLD,			// "touchworld"
 	RLV_BHVR_TOUCHALL,				// "touchall"
 	RLV_BHVR_FLY,					// "fly"
+	RLV_BHVR_SETGROUP,				// "setgroup"
 	RLV_BHVR_UNSIT,					// "unsit"
 	RLV_BHVR_SIT,					// "sit"
 	RLV_BHVR_SITTP,					// "sittp"
@@ -202,6 +203,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_ATTACHALLTHIS,			// "attachallthis"
 	RLV_BHVR_ATTACHALLTHISOVER,		// "attachallthisover"
 	RLV_BHVR_DETACHALLTHIS,			// "detachallthis"
+	RLV_BHVR_ADJUSTHEIGHT,			// "adjustheight"
 	RLV_BHVR_TPTO,					// "tpto"
 	RLV_BHVR_VERSION,				// "version"
 	RLV_BHVR_VERSIONNEW,			// "versionnew"
@@ -220,6 +222,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_GETPATHNEW,			// "getpathnew"
 	RLV_BHVR_GETINV,				// "getinv"
 	RLV_BHVR_GETINVWORN,			// "getinvworn"
+	RLV_BHVR_GETGROUP,				// "getgroup"
 	RLV_BHVR_GETSITID,				// "getsitid"
 	RLV_BHVR_GETCOMMAND,			// "getcommand"
 	RLV_BHVR_GETSTATUS,				// "getstatus"

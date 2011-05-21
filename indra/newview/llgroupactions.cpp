@@ -40,6 +40,9 @@
 #include "llsidetray.h"
 #include "llstatusbar.h"	// can_afford_transaction()
 #include "llimfloater.h"
+// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 //
 // Globals
@@ -199,8 +202,12 @@ bool LLGroupActions::onJoinGroup(const LLSD& notification, const LLSD& response)
 // static
 void LLGroupActions::leave(const LLUUID& group_id)
 {
-	if (group_id.isNull())
+//	if (group_id.isNull())
+//		return;
+// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+	if ( (group_id.isNull()) || ((gAgent.getGroupID() == group_id) && (gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP))) )
 		return;
+// [/RLVa:KB]
 
 	S32 count = gAgent.mGroups.count();
 	S32 i;
@@ -222,6 +229,11 @@ void LLGroupActions::leave(const LLUUID& group_id)
 // static
 void LLGroupActions::activate(const LLUUID& group_id)
 {
+// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP))
+		return;
+// [/RLVa:KB]
+
 	LLMessageSystem* msg = gMessageSystem;
 	msg->newMessageFast(_PREHASH_ActivateGroup);
 	msg->nextBlockFast(_PREHASH_AgentData);

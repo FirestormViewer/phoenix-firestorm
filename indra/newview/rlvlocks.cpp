@@ -574,17 +574,21 @@ void RlvAttachmentLockWatchdog::onAttach(const LLViewerObject* pAttachObj, const
 			if (idAttachItem == itAttach->second.idItem)
 			{
 				fPendingReattach = true;
+				RlvBehaviourNotifyHandler::onReattach(pAttachPt, true);
 				m_PendingAttach.erase(itAttach);
 				break;
 			}
 		}
 		if (!fPendingReattach)
+		{
 			detach(pAttachObj);
+			RlvBehaviourNotifyHandler::onAttach(pAttachPt, false);
+		}
 		return;
 	}
 
 	// Check if the attach was allowed at the time it was requested
-	rlv_wear_map_t::iterator itWear = m_PendingWear.find(idAttachItem);
+	rlv_wear_map_t::iterator itWear = m_PendingWear.find(idAttachItem); bool fAttachAllowed = true;
 	if (itWear != m_PendingWear.end())
 	{
 		// We'll need to return the attachment point to its previous state if it was non-attachable
@@ -624,26 +628,27 @@ void RlvAttachmentLockWatchdog::onAttach(const LLViewerObject* pAttachObj, const
 						m_PendingAttach.insert(std::pair<S32, RlvReattachInfo>(idxAttachPt, RlvReattachInfo(*itAttach)));
 					}
 				}
+				fAttachAllowed = false;
 			}
 		}
 		else if (RLV_WEAR_REPLACE == itWear->second.eWearAction)
 		{
 			// Now that we know where this attaches to check if we can actually perform a "replace"
-			bool fCanReplace = true;
 			for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator itAttachObj = pAttachPt->mAttachedObjects.begin();
-					((itAttachObj != pAttachPt->mAttachedObjects.end()) && (fCanReplace)); ++itAttachObj)
+					((itAttachObj != pAttachPt->mAttachedObjects.end()) && (fAttachAllowed)); ++itAttachObj)
 			{
 				if (pAttachObj != *itAttachObj)
-					fCanReplace &= !gRlvAttachmentLocks.isLockedAttachment(*itAttachObj);
+					fAttachAllowed &= !gRlvAttachmentLocks.isLockedAttachment(*itAttachObj);
 			}
 
-			if (fCanReplace)
+			if (fAttachAllowed)
 				detach(idxAttachPt, pAttachObj);	// Replace == allowed: detach everything except the new attachment
 			else
 				detach(pAttachObj);					// Replace != allowed: detach the new attachment
 		}
 		m_PendingWear.erase(itWear); // No need to start the timer since it should be running already if '!m_PendingWear.empty()'
 	}
+	RlvBehaviourNotifyHandler::onAttach(pAttachPt, fAttachAllowed);
 }
 
 // Checked: 2010-07-28 (RLVa-1.2.0i) | Modified: RLVa-1.2.0i
@@ -660,10 +665,12 @@ void RlvAttachmentLockWatchdog::onDetach(const LLViewerObject* pAttachObj, const
 	if (itDetach != m_PendingDetach.end())
 	{
 		m_PendingDetach.erase(itDetach);
+		RlvBehaviourNotifyHandler::onDetach(pAttachPt, true);
 		return;
 	}
 
 	// If the attachment is currently "remove locked" then we should reattach it (unless it's already pending reattach)
+	bool fDetachAllowed = true;
 	if (gRlvAttachmentLocks.isLockedAttachment(pAttachObj))
 	{
 		bool fPendingAttach = false;
@@ -684,7 +691,9 @@ void RlvAttachmentLockWatchdog::onDetach(const LLViewerObject* pAttachObj, const
 			m_PendingAttach.insert(std::pair<S32, RlvReattachInfo>(idxAttachPt, RlvReattachInfo(idAttachItem)));
 			startTimer();
 		}
+		fDetachAllowed = false;
 	}
+	RlvBehaviourNotifyHandler::onDetach(pAttachPt, fDetachAllowed);
 }
 
 // Checked: 2010-03-05 (RLVa-1.2.0a) | Modified: RLVa-1.0.5b

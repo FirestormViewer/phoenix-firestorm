@@ -94,85 +94,78 @@ typedef std::list<RlvCommand> rlv_command_list_t;
 // RlvCommandOption (and derived classed)
 //
 
-class RlvCommandOption
+struct RlvCommandOption
 {
 protected:
-	RlvCommandOption() {}
+	RlvCommandOption() : m_fValid(false) {}
 public:
 	virtual ~RlvCommandOption() {}
 
 public:
-	virtual bool isAttachmentPoint() const		{ return false; }
-	virtual bool isAttachmentPointGroup() const	{ return false; }
-	virtual bool isEmpty() const = 0;
-	virtual bool isSharedFolder() const			{ return false; }
-	virtual bool isString() const				{ return false; }
-	virtual bool isUUID() const					{ return false; }
-	virtual bool isValid() const = 0;
-	virtual bool isWearableType() const			{ return false; }
-
-	virtual LLViewerJointAttachment*   getAttachmentPoint() const		{ return NULL; }
-	virtual ERlvAttachGroupType        getAttachmentPointGroup() const	{ return RLV_ATTACHGROUP_INVALID; }
-	virtual LLViewerInventoryCategory* getSharedFolder() const			{ return NULL; }
-	virtual const std::string&         getString() const				{ return LLStringUtil::null; }
-	virtual const LLUUID&              getUUID() const					{ return LLUUID::null; }
-	virtual LLWearableType::EType      getWearableType() const			{ return LLWearableType::WT_INVALID; }
+	virtual bool isEmpty() const { return false; }
+	virtual bool isValid() const { return m_fValid; }
+protected:
+	bool m_fValid;
 };
 
-class RlvCommandOptionGeneric : public RlvCommandOption
+struct RlvCommandOptionGeneric : public RlvCommandOption
 {
-public:
 	explicit RlvCommandOptionGeneric(const std::string& strOption);
-	RlvCommandOptionGeneric(LLViewerJointAttachment* pAttachPt) : m_fEmpty(false)	{ m_varOption = pAttachPt; }
-	RlvCommandOptionGeneric(LLViewerInventoryCategory* pFolder) : m_fEmpty(false)	{ m_varOption = pFolder; }
-	RlvCommandOptionGeneric(const LLUUID& idOption) : m_fEmpty(false)				{ m_varOption = idOption; }
-	RlvCommandOptionGeneric(LLWearableType::EType wtType) : m_fEmpty(false)			{ m_varOption = wtType; }
-	/*virtual*/ ~RlvCommandOptionGeneric() {}
 
-public:
-	/*virtual*/ bool isAttachmentPoint() const		{ return (!isEmpty()) && (typeid(LLViewerJointAttachment*) == m_varOption.type()); }
-	/*virtual*/ bool isAttachmentPointGroup() const	{ return (!isEmpty()) && (typeid(ERlvAttachGroupType) == m_varOption.type()); }
-	/*virtual*/ bool isEmpty() const				{ return m_fEmpty; }
-	/*virtual*/ bool isSharedFolder() const			{ return (!isEmpty()) && (typeid(LLViewerInventoryCategory*) == m_varOption.type()); }
-	/*virtual*/ bool isString() const				{ return (!isEmpty()) && (typeid(std::string) == m_varOption.type()); }
-	/*virtual*/ bool isUUID() const					{ return (!isEmpty()) && (typeid(LLUUID) == m_varOption.type()); }
-	/*virtual*/ bool isValid() const				{ return true; } // This doesn't really have any significance for the generic class
-	/*virtual*/ bool isWearableType() const			{ return (!isEmpty()) && (typeid(LLWearableType::EType) == m_varOption.type()); }
+	bool isAttachmentPoint() const		{ return (!isEmpty()) && (typeid(LLViewerJointAttachment*) == m_varOption.type()); }
+	bool isAttachmentPointGroup() const	{ return (!isEmpty()) && (typeid(ERlvAttachGroupType) == m_varOption.type()); }
+	bool isEmpty() const				{ return m_fEmpty; }
+	bool isSharedFolder() const			{ return (!isEmpty()) && (typeid(LLViewerInventoryCategory*) == m_varOption.type()); }
+	bool isString() const				{ return (!isEmpty()) && (typeid(std::string) == m_varOption.type()); }
+	bool isUUID() const					{ return (!isEmpty()) && (typeid(LLUUID) == m_varOption.type()); }
+	bool isWearableType() const			{ return (!isEmpty()) && (typeid(LLWearableType::EType) == m_varOption.type()); }
 
-	/*virtual*/ LLViewerJointAttachment*   getAttachmentPoint() const
-		{ return (isAttachmentPoint()) ? boost::get<LLViewerJointAttachment*>(m_varOption) : RlvCommandOption::getAttachmentPoint(); }
-	/*virtual*/ ERlvAttachGroupType        getAttachmentPointGroup() const
-		{ return (isAttachmentPointGroup()) ? boost::get<ERlvAttachGroupType>(m_varOption) : RlvCommandOption::getAttachmentPointGroup(); }
-	/*virtual*/ LLViewerInventoryCategory* getSharedFolder() const
-		{ return (isSharedFolder()) ? boost::get<LLViewerInventoryCategory*>(m_varOption) : RlvCommandOption::getSharedFolder(); }
-	/*virtual*/ const std::string&         getString() const
-		{ return (isString()) ? boost::get<std::string>(m_varOption) : RlvCommandOption::getString(); }
-	/*virtual*/ const LLUUID&              getUUID() const
-		{ return (isUUID()) ? boost::get<LLUUID>(m_varOption) : RlvCommandOption::getUUID(); }
-	/*virtual*/ LLWearableType::EType      getWearableType() const
-		{ return (isWearableType()) ? boost::get<LLWearableType::EType>(m_varOption) : RlvCommandOption::getWearableType(); }
+	LLViewerJointAttachment*   getAttachmentPoint() const
+		{ return (isAttachmentPoint()) ? boost::get<LLViewerJointAttachment*>(m_varOption) : NULL; }
+	ERlvAttachGroupType        getAttachmentPointGroup() const
+		{ return (isAttachmentPointGroup()) ? boost::get<ERlvAttachGroupType>(m_varOption) : RLV_ATTACHGROUP_INVALID; }
+	LLViewerInventoryCategory* getSharedFolder() const
+		{ return (isSharedFolder()) ? boost::get<LLViewerInventoryCategory*>(m_varOption) : NULL; }
+	const std::string&         getString() const
+		{ return (isString()) ? boost::get<std::string>(m_varOption) : LLStringUtil::null; }
+	const LLUUID&              getUUID() const
+		{ return (isUUID()) ? boost::get<LLUUID>(m_varOption) : LLUUID::null; }
+	LLWearableType::EType      getWearableType() const
+		{ return (isWearableType()) ? boost::get<LLWearableType::EType>(m_varOption) : LLWearableType::WT_INVALID; }
 
 protected:
 	bool m_fEmpty;
 	boost::variant<LLViewerJointAttachment*, ERlvAttachGroupType, LLViewerInventoryCategory*, std::string, LLUUID, LLWearableType::EType> m_varOption;
 };
 
-class RlvCommandOptionGetPath : public RlvCommandOption
+struct RlvCommandOptionGetPath : public RlvCommandOption
 {
-public:
 	RlvCommandOptionGetPath(const RlvCommand& rlvCmd);
-	/*virtual*/ ~RlvCommandOptionGetPath() {}
 
 	/*virtual*/ bool  isEmpty() const	 { return m_idItems.empty(); }
-	/*virtual*/ bool  isValid() const	 { return m_fValid; }
 	const uuid_vec_t& getItemIDs() const { return m_idItems; }
 
 	static bool getItemIDs(const LLViewerJointAttachment* pAttachPt, uuid_vec_t& idItems, bool fClear = true);
 	static bool getItemIDs(LLWearableType::EType wtType, uuid_vec_t& idItems, bool fClear = true);
 
 protected:
-	bool       m_fValid;
 	uuid_vec_t m_idItems;
+};
+
+struct RlvCommandOptionAdjustHeight : public RlvCommandOption
+{
+	RlvCommandOptionAdjustHeight(const RlvCommand& rlvCmd);
+
+	F32 m_nPelvisToFoot;
+	F32 m_nPelvisToFootDeltaMult;
+	F32 m_nPelvisToFootOffset;
+};
+
+struct RlvCommandOptionTpTo : public RlvCommandOption
+{
+	RlvCommandOptionTpTo(const RlvCommand& rlvCmd);
+
+	LLVector3d m_posGlobal;
 };
 
 // ============================================================================
@@ -335,9 +328,19 @@ public:
 		if (m_Notifications.empty())
 			delete this;	// Delete ourself if we have nothing to do
 	}
-	void sendNotification(const std::string& strText, const std::string& strSuffix = LLStringUtil::null) const;
+	static void sendNotification(const std::string& strText, const std::string& strSuffix = LLStringUtil::null);
+
+	/*
+	 * Event handlers
+	 */
+public:
+	static void	onWear(LLWearableType::EType eType, bool fAllowed);
+	static void	onTakeOff(LLWearableType::EType eType, bool fAllowed);
+	static void	onAttach(const LLViewerJointAttachment* pAttachPt, bool fAllowed);
+	static void	onDetach(const LLViewerJointAttachment* pAttachPt, bool fAllowed);
+	static void	onReattach(const LLViewerJointAttachment* pAttachPt, bool fAllowed);
 protected:
-	void onCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet, bool fInternal);
+	void		onCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet, bool fInternal);
 
 protected:
 	struct notifyData

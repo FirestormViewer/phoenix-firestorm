@@ -945,6 +945,30 @@ const LLUUID LLAgentWearables::getWearableItemID(LLWearableType::EType type, U32
 		return LLUUID();
 }
 
+// [RLVa:KB] - Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+void LLAgentWearables::getWearableItemIDs(uuid_vec_t& idItems) const
+{
+	for (wearableentry_map_t::const_iterator itWearableType = mWearableDatas.begin(); 
+			itWearableType != mWearableDatas.end(); ++itWearableType)
+	{
+		getWearableItemIDs(itWearableType->first, idItems);
+	}
+}
+
+void LLAgentWearables::getWearableItemIDs(LLWearableType::EType eType, uuid_vec_t& idItems) const
+{
+	wearableentry_map_t::const_iterator itWearableType = mWearableDatas.find(eType);
+	if (mWearableDatas.end() != itWearableType)
+	{
+		for (wearableentry_vec_t::const_iterator itWearable = itWearableType->second.begin(), endWearable = itWearableType->second.end();
+				itWearable != endWearable; ++itWearable)
+		{
+			idItems.push_back((*itWearable)->getItemID());
+		}
+	}
+}
+// [/RLVa:KB]
+
 const LLUUID LLAgentWearables::getWearableAssetID(LLWearableType::EType type, U32 index) const
 {
 	const LLWearable *wearable = getWearable(type,index);

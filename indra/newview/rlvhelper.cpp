@@ -29,6 +29,8 @@
 #include "rlvhandler.h"
 #include "rlvinventory.h"
 
+#include <boost/algorithm/string.hpp>
+
 // ============================================================================
 // RlvCommmand
 //
@@ -65,6 +67,9 @@ RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
 		return;
 	}
 
+	// HACK: all those @*overorreplace synonyms are rather tedious (and error-prone) to deal with so replace them their equivalent
+	if ( (RLV_TYPE_FORCE == m_eParamType) && (m_strBehaviour.length() - 13 == m_strBehaviour.rfind("overorreplace")) )
+		m_strBehaviour.erase(m_strBehaviour.length() - 13, 13);
 	// HACK: all those @addoutfit* synonyms are rather tedious (and error-prone) to deal with so replace them their @attach* equivalent
 	if ( (RLV_TYPE_FORCE == m_eParamType) && (0 == m_strBehaviour.find("addoutfit")) )
 		m_strBehaviour.replace(0, 9, "attach");
@@ -154,13 +159,13 @@ void RlvCommand::initLookupTable()
 				"sendim", "sendimto", "recvim", "recvimfrom", "permissive", "notify", "showinv", "showminimap", "showworldmap", 
 				"showloc", "shownames", "showhovertext", "showhovertexthud", "showhovertextworld", "showhovertextall", 
 				"tplm", "tploc", "tplure", "viewnote", "viewscript", "viewtexture", "acceptpermission", "accepttp", "allowidle", 
-				"displayname", "edit", "editobj", "rez", "fartouch", "interact", "touchobj", "touchattach", "touchattachself", 
-				"touchattachother", "touchhud", "touchworld", "touchall", "fly", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv", 
-				"detachme", "attachover", "attachthis", "attachthisover", "detachthis", "attachall", "attachallover", "detachall", 
-				"attachallthis", "attachallthisover", "detachallthis", "tpto", "version", "versionnew", "versionnum", "getattach", 
-				"getattachnames", "getaddattachnames", "getremattachnames", "getoutfit", "getoutfitnames", "getaddoutfitnames", 
-				"getremoutfitnames", "findfolder", "findfolders", "getpath", "getpathnew", "getinv", "getinvworn", "getsitid", 
-				"getcommand", "getstatus", "getstatusall"
+				"displayname", "edit", "editobj", "rez", "fartouch", "interact", "touchthis", "touchattach", "touchattachself", 
+				"touchattachother", "touchhud", "touchworld", "touchall", "fly", "setgroup", "unsit", "sit", "sittp", "standtp", 
+				"setdebug", "setenv", "detachme", "attachover", "attachthis", "attachthisover", "detachthis", "attachall", 
+				"attachallover", "detachall", "attachallthis", "attachallthisover", "detachallthis", "adjustheight", "tpto", 
+				"version", "versionnew", "versionnum", "getattach", "getattachnames", "getaddattachnames", "getremattachnames", 
+				"getoutfit", "getoutfitnames", "getaddoutfitnames", "getremoutfitnames", "findfolder", "findfolders", 
+				"getpath", "getpathnew", "getinv", "getinvworn", "getgroup", "getsitid", "getcommand", "getstatus", "getstatusall"
 			};
 
 		for (int idxBvhr = 0; idxBvhr < RLV_BHVR_COUNT; idxBvhr++)
@@ -171,7 +176,7 @@ void RlvCommand::initLookupTable()
 }
 
 // ============================================================================
-// RlvCommandOption
+// RlvCommandOption structures
 //
 
 // Checked: 2010-09-28 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
@@ -195,14 +200,15 @@ RlvCommandOptionGeneric::RlvCommandOptionGeneric(const std::string& strOption)
 		else
 			m_varOption = strOption;															// ... or it might just be a string
 	}
+	m_fValid = true;
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Modified: RLVa-1.3.0b
 RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd)
-	: m_fValid(true)							// Assume the option will be a valid one until we find out otherwise
 {
-	// @getpath[:<option>]=<channel> => <option> is transformed to a list of inventory item UUIDs to get the path of
+	m_fValid = true;	// Assume the option will be a valid one until we find out otherwise
 
+	// @getpath[:<option>]=<channel> => <option> is transformed to a list of inventory item UUIDs to get the path of
 	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
 	if (rlvCmdOption.isWearableType())			// <option> can be a clothing layer
 	{
@@ -252,6 +258,36 @@ bool RlvCommandOptionGetPath::getItemIDs(LLWearableType::EType wtType, uuid_vec_
 		idItems.push_back(gAgentWearables.getWearableItemID(wtType, idxWearable));
 	}
 	return (cntItemsPrev != idItems.size());
+}
+
+// Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+RlvCommandOptionAdjustHeight::RlvCommandOptionAdjustHeight(const RlvCommand& rlvCmd)
+	: m_nPelvisToFoot(0.0f), m_nPelvisToFootDeltaMult(0.0f), m_nPelvisToFootOffset(0.0f)
+{
+	std::vector<std::string> cmdTokens;
+	boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of(";"));
+	if (1 == cmdTokens.size())
+	{
+		m_fValid = (LLStringUtil::convertToF32(cmdTokens[0], m_nPelvisToFootOffset));
+		m_nPelvisToFootOffset = llclamp<F32>(m_nPelvisToFootOffset / 100, -1.0f, 1.0f);
+	}
+	else if ( (2 <= cmdTokens.size()) && (cmdTokens.size() <= 3) )
+	{
+		m_fValid = (LLStringUtil::convertToF32(cmdTokens[0], m_nPelvisToFoot)) &&
+			 (LLStringUtil::convertToF32(cmdTokens[1], m_nPelvisToFootDeltaMult)) && 
+			 ( (2 == cmdTokens.size()) || (LLStringUtil::convertToF32(cmdTokens[2], m_nPelvisToFootOffset)) );
+	}
+}
+
+// Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+RlvCommandOptionTpTo::RlvCommandOptionTpTo(const RlvCommand &rlvCmd)
+{
+	std::vector<std::string> cmdTokens;
+	boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of("/"));
+
+	m_fValid = (3 == cmdTokens.size());
+	for (int idxAxis = 0; (idxAxis < 3) && (m_fValid); idxAxis++)
+		m_fValid &= (bool)LLStringUtil::convertToF64(cmdTokens[idxAxis], m_posGlobal[idxAxis]);
 }
 
 // =========================================================================
@@ -953,16 +989,51 @@ void RlvBehaviourNotifyHandler::onCommand(const RlvCommand& rlvCmd, ERlvCmdRet e
 	}
 }
 
-// Checked: 2010-09-23 (RLVa-1.2.1e) | Modified: RLVa-1.2.1e
-void RlvBehaviourNotifyHandler::sendNotification(const std::string& strText, const std::string& strSuffix) const
+// Checked: 2011-03-31 (RLVa-1.3.0f) | Modify: RLVa-1.3.0f
+void RlvBehaviourNotifyHandler::sendNotification(const std::string& strText, const std::string& strSuffix)
 {
-	// NOTE: notifications have two parts (which are concatenated without token) where only the first part is subject to the filter
-	for (std::multimap<LLUUID, notifyData>::const_iterator itNotify = m_Notifications.begin(); 
-			itNotify != m_Notifications.end(); ++itNotify)
+	if (instanceExists())
 	{
-		if ( (itNotify->second.strFilter.empty()) || (std::string::npos != strText.find(itNotify->second.strFilter)) )
-			RlvUtil::sendChatReply(itNotify->second.nChannel, "/" + strText + strSuffix);
+		RlvBehaviourNotifyHandler* pThis = getInstance();
+
+		// NOTE: notifications have two parts (which are concatenated without token) where only the first part is subject to the filter
+		for (std::multimap<LLUUID, notifyData>::const_iterator itNotify = pThis->m_Notifications.begin(); 
+				itNotify != pThis->m_Notifications.end(); ++itNotify)
+		{
+			if ( (itNotify->second.strFilter.empty()) || (std::string::npos != strText.find(itNotify->second.strFilter)) )
+				RlvUtil::sendChatReply(itNotify->second.nChannel, "/" + strText + strSuffix);
+		}
 	}
+}
+
+// Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+void RlvBehaviourNotifyHandler::onWear(LLWearableType::EType eType, bool fAllowed)
+{
+	sendNotification(llformat("worn %s %s", (fAllowed) ? "legally" : "illegally", LLWearableType::getTypeName(eType).c_str()));
+}
+
+// Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+void RlvBehaviourNotifyHandler::onTakeOff(LLWearableType::EType eType, bool fAllowed)
+{
+	sendNotification(llformat("unworn %s %s", (fAllowed) ? "legally" : "illegally", LLWearableType::getTypeName(eType).c_str()));
+}
+
+// Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+void RlvBehaviourNotifyHandler::onAttach(const LLViewerJointAttachment* pAttachPt, bool fAllowed)
+{
+	sendNotification(llformat("attached %s %s", (fAllowed) ? "legally" : "illegally", pAttachPt->getName().c_str()));
+}
+
+// Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+void RlvBehaviourNotifyHandler::onDetach(const LLViewerJointAttachment* pAttachPt, bool fAllowed)
+{
+	sendNotification(llformat("detached %s %s", (fAllowed) ? "legally" : "illegally", pAttachPt->getName().c_str()));
+}
+
+// Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+void RlvBehaviourNotifyHandler::onReattach(const LLViewerJointAttachment* pAttachPt, bool fAllowed)
+{
+	sendNotification(llformat("reattached %s %s", (fAllowed) ? "legally" : "illegally", pAttachPt->getName().c_str()));
 }
 
 // ============================================================================
