@@ -67,7 +67,7 @@ template<typename T> inline T rlvGetSetting(const std::string& strSetting, const
 	return (gSavedSettings.controlExists(strSetting)) ? gSavedSettings.get<T>(strSetting) : defaultValue;
 }
 
-template<typename T> inline T rlvGetPerUserSettings(const std::string& strSetting, const T& defaultValue)
+template<typename T> inline T rlvGetPerUserSetting(const std::string& strSetting, const T& defaultValue)
 {
 	RLV_ASSERT_DBG(gSavedPerAccountSettings.controlExists(strSetting));
 	return (gSavedPerAccountSettings.controlExists(strSetting)) ? gSavedPerAccountSettings.get<T>(strSetting) : defaultValue;
@@ -97,7 +97,7 @@ public:
 	static bool getShowNameTags()				{ return fShowNameTags; }
 
 	#ifdef RLV_EXTENSION_STARTLOCATION
-	static bool getLoginLastLocation()			{ return rlvGetPerUserSettings<bool>(RLV_SETTING_LOGINLASTLOCATION, true); }
+	static bool getLoginLastLocation()			{ return rlvGetPerUserSetting<bool>(RLV_SETTING_LOGINLASTLOCATION, true); }
 	static void updateLoginLastLocation();
 	#endif // RLV_EXTENSION_STARTLOCATION
 
@@ -136,10 +136,6 @@ public:
 protected:
 	static std::vector<std::string> m_Anonyms;
 	static std::map<std::string, std::string> m_StringMap;
-	#ifdef RLV_EXTENSION_NOTIFY_BEHAVIOUR
-	static std::map<ERlvBehaviour, std::string> m_BhvrAddMap;
-	static std::map<ERlvBehaviour, std::string> m_BhvrRemMap;
-	#endif // RLV_EXTENSION_NOTIFY_BEHAVIOUR
 };
 
 // ============================================================================

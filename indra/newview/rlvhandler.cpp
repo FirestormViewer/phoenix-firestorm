@@ -1375,16 +1375,6 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		}
 
 		m_OnBehaviour(eBhvr, eType);
-
-		// Show an - optional - notification on every global behaviour change
-		#ifdef RLV_EXTENSION_NOTIFY_BEHAVIOUR
-/*
-		if ( ((RLV_TYPE_ADD == eType) && (1 == m_Behaviours[eBhvr])) || (0 == m_Behaviours[eBhvr]) )
-		{
-			RlvNotifications::notifyBehaviour(eBhvr, eType);
-		}
-*/
-		#endif // RLV_EXTENSION_NOTIFY_BEHAVIOUR
 	}
 
 	return eRet;
