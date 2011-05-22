@@ -29,7 +29,7 @@
 
 // ============================================================================
 
-class RlvHandler
+class RlvHandler : public LLOldEvents::LLSimpleListener
 {
 public:
 	RlvHandler();
@@ -145,6 +145,7 @@ protected:
 
 	// Externally invoked event handlers
 public:
+	bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& sdUserdata);			// Implementation of public LLSimpleListener
 	void onAttach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
 	void onDetach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
 	bool onGC();
@@ -212,8 +213,9 @@ protected:
 
 	static BOOL			  m_fEnabled;				// Use setEnabled() to toggle this
 
-	bool                  m_fCanCancelTp;			// @accepttp and @tpto
-	mutable LLVector3d    m_posSitSource;			// @standtp (mutable because onForceXXX handles are all declared as const)
+	bool				m_fCanCancelTp;				// @accepttp=n and @tpto=force
+	mutable LLVector3d	m_posSitSource;				// @standtp=n (mutable because onForceXXX handles are all declared as const)
+	LLUUID				m_idAgentGroup;				// @setgroup=n
 
 	friend class RlvSharedRootFetcher;				// Fetcher needs access to m_fFetchComplete
 	friend class RlvGCTimer;						// Timer clear its own point at destruction

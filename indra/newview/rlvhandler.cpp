@@ -74,6 +74,8 @@ static bool rlvParseNotifyOption(const std::string& strOption, S32& nChannel, st
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.0.1d
 RlvHandler::RlvHandler() : m_fCanCancelTp(true), m_posSitSource(), m_pGCTimer(NULL), m_pWLSnapshot(NULL)
 {
+	gAgent.addListener(this, "new group");
+
 	// Array auto-initialization to 0 is non-standard? (Compiler warning in VC-8.0)
 	memset(m_Behaviours, 0, sizeof(S16) * RLV_BHVR_COUNT);
 }
@@ -81,6 +83,8 @@ RlvHandler::RlvHandler() : m_fCanCancelTp(true), m_posSitSource(), m_pGCTimer(NU
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.0.1d
 RlvHandler::~RlvHandler()
 {
+	gAgent.removeListener(this);
+
 	//delete m_pGCTimer;	// <- deletes itself
 	delete m_pWLSnapshot;	// <- delete on NULL is harmless
 }
@@ -358,6 +362,25 @@ ERlvCmdRet RlvHandler::processClearCommand(const RlvCommand& rlvCmd)
 // ============================================================================
 // Externally invoked event handlers
 //
+
+// Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& sdUserdata)
+{
+	// If the user managed to change their active group (= newly joined or created group) we need to reactivate the previous one
+	if ( (hasBehaviour(RLV_BHVR_SETGROUP)) && ("new group" == event->desc()) && (m_idAgentGroup != gAgent.getGroupID()) )
+	{
+		// [Copy/paste from LLGroupActions::activate()]
+		LLMessageSystem* msg = gMessageSystem;
+		msg->newMessageFast(_PREHASH_ActivateGroup);
+		msg->nextBlockFast(_PREHASH_AgentData);
+		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		msg->addUUIDFast(_PREHASH_GroupID, m_idAgentGroup);
+		gAgent.sendReliableMessage();
+		return true;
+	}
+	return false;
+}
 
 // Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 void RlvHandler::onSitOrStand(bool fSitting)
@@ -1143,6 +1166,14 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 					RlvBehaviourNotifyHandler::getInstance()->removeNotify(rlvCmd.getObjectID(), nChannel, strFilter);
 			}
 			break;
+		case RLV_BHVR_SETGROUP:				// @setgroup=n|y					- Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+			{
+				VERIFY_OPTION_REF(strOption.empty());
+
+				// Save the currently active group UUID since we'll need it when the user joins (or creates) a new group
+				m_idAgentGroup = gAgent.getGroupID();
+			}
+			break;
 		case RLV_BHVR_SHOWHOVERTEXT:		// @showhovertext:<uuid>=n|y		- Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.1.0h
 			{
 				// There should be an option and it should specify a valid UUID
@@ -1214,7 +1245,6 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		case RLV_BHVR_TOUCHALL:				// @touchall=n|y					- Checked: 2011-01-21 (RLVa-1.3.0e) | Added: RLVa-1.3.0e
 		case RLV_BHVR_TOUCHME:				// @touchme=n|y						- Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
 		case RLV_BHVR_FLY:					// @fly=n|y							- Checked: 2010-03-02 (RLVa-1.2.0a)
-		case RLV_BHVR_SETGROUP:				// @setgroup=n|y					- Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
 		case RLV_BHVR_UNSIT:				// @unsit=n|y						- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
 		case RLV_BHVR_SIT:					// @sit=n|y							- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
 		case RLV_BHVR_SITTP:				// @sittp=n|y						- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
