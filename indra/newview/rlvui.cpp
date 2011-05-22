@@ -358,18 +358,18 @@ void RlvUIEnabler::onToggleShowLoc()
 		m_ConnFloaterShowLoc.disconnect();
 }
 
-// Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
+// Checked: 2011-05-22 (RLVa-1.3.1b) | Modified: RLVa-1.3.1b
 void RlvUIEnabler::onToggleShowMinimap()
 {
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWMINIMAP);
 
-	// Start or stop filtering opening the mini-map
+	// Start or stop filtering showing the mini-map floater
 	if (!fEnable)
 		addGenericFloaterFilter("mini_map");
 	else
 		removeGenericFloaterFilter("mini_map");
 
-	// Hide the mini-map if it's currently visible (or restore it if it was previously visible)
+	// Hide the mini-map floater if it's currently visible (or restore it if it was previously visible)
 	static bool fPrevVisibile = false;
 	if ( (!fEnable) && ((fPrevVisibile = LLFloaterReg::floaterInstanceVisible("mini_map"))) )
 		LLFloaterReg::hideFloaterInstance("mini_map");
@@ -381,6 +381,18 @@ void RlvUIEnabler::onToggleShowMinimap()
 	LLView* pBtnView = (pTray) ? pTray->getChildView("mini_map_btn") : NULL;
 	if (pBtnView)
 		pBtnView->setEnabled(fEnable);
+
+	// Break/reestablish the visibility connection for the nearby people panel embedded minimap instance
+	LLPanel* pPeoplePanel = LLSideTray::getInstance()->getPanel("panel_people");
+	LLPanel* pNetMapPanel = (pPeoplePanel) ? pPeoplePanel->getChild<LLPanel>("Net Map Panel", 1) : NULL;
+	RLV_ASSERT( (pPeoplePanel) && (pNetMapPanel) );
+	if (pNetMapPanel)
+	{
+		pNetMapPanel->setMakeVisibleControlVariable( (fEnable) ? gSavedSettings.getControl("NearbyListShowMap") : NULL);
+		// Reestablishing the visiblity connection will show the panel if needed so we only need to take care of hiding it when needed
+		if ( (!fEnable) && (pNetMapPanel->getVisible()) )
+			pNetMapPanel->setVisible(false);
+	}
 }
 
 // Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
