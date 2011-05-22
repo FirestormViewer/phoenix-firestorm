@@ -32,6 +32,8 @@
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 
+#include <boost/algorithm/string.hpp>
+
 // ============================================================================
 // RlvNotifications
 //
@@ -336,27 +338,23 @@ bool RlvUtil::m_fForceTp = false;
 // Checked: 2009-07-04 (RLVa-1.0.0a) | Modified: RLVa-1.0.0a
 void RlvUtil::filterLocation(std::string& strUTF8Text)
 {
-	// TODO-RLVa: if either the region or parcel name is a simple word such as "a" or "the" then confusion will ensue?
-	//            -> not sure how you would go about preventing this though :|...
-
 	// Filter any mention of the surrounding region names
 	LLWorld::region_list_t regions = LLWorld::getInstance()->getRegionList();
 	const std::string& strHiddenRegion = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
 	for (LLWorld::region_list_t::const_iterator itRegion = regions.begin(); itRegion != regions.end(); ++itRegion)
-		rlvStringReplace(strUTF8Text, (*itRegion)->getName(), strHiddenRegion);
+		boost::ireplace_all(strUTF8Text, (*itRegion)->getName(), strHiddenRegion);
 
 	// Filter any mention of the parcel name
 	LLViewerParcelMgr* pParcelMgr = LLViewerParcelMgr::getInstance();
 	if (pParcelMgr)
-		rlvStringReplace(strUTF8Text, pParcelMgr->getAgentParcelName(), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
+		boost::ireplace_all(strUTF8Text, pParcelMgr->getAgentParcelName(), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
 }
 
 // Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
 void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 {
-	std::vector<LLUUID> idAgents;
+	uuid_vec_t idAgents;
 	LLWorld::getInstance()->getAvatars(&idAgents, NULL);
-
 	for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
 	{
 		LLAvatarName avName;
@@ -370,17 +368,17 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 				strLegacyName = avName.getLegacyName();
 
 			// If the display name is a subset of the legacy name we need to filter that first, otherwise it's the other way around
-			if (std::string::npos != strLegacyName.find(avName.mDisplayName))
+			if (boost::icontains(strLegacyName, avName.mDisplayName))
 			{
 				if (!strLegacyName.empty())
-					rlvStringReplace(strUTF8Text, strLegacyName, strAnonym);
-				rlvStringReplace(strUTF8Text, avName.mDisplayName, strAnonym);
+					boost::ireplace_all(strUTF8Text, strLegacyName, strAnonym);
+				boost::ireplace_all(strUTF8Text, avName.mDisplayName, strAnonym);
 			}
 			else
 			{
-				rlvStringReplace(strUTF8Text, avName.mDisplayName, strAnonym);
+				boost::ireplace_all(strUTF8Text, avName.mDisplayName, strAnonym);
 				if (!strLegacyName.empty())
-					rlvStringReplace(strUTF8Text, strLegacyName, strAnonym);
+					boost::ireplace_all(strUTF8Text, strLegacyName, strAnonym);
 			}
 		}
 	}

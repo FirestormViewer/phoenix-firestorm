@@ -432,7 +432,6 @@ ERlvAttachGroupType rlvAttachGroupFromString(const std::string& strGroup);
 
 std::string rlvGetFirstParenthesisedText(const std::string& strText, std::string::size_type* pidxMatch = NULL);
 std::string rlvGetLastParenthesisedText(const std::string& strText, std::string::size_type* pidxStart = NULL);
-void        rlvStringReplace(std::string& strText, std::string strFrom, const std::string& strTo);
 
 // ============================================================================
 // Inlined class member functions

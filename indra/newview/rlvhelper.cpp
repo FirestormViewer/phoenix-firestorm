@@ -1157,28 +1157,6 @@ ERlvAttachGroupType rlvAttachGroupFromString(const std::string& strGroup)
 // String helper functions
 //
 
-// Checked: 2009-07-04 (RLVa-1.0.0a)
-void rlvStringReplace(std::string& strText, std::string strFrom, const std::string& strTo)
-{
-	if (strFrom.empty())
-		return;
-
-	size_t lenFrom = strFrom.length();
-	size_t lenTo = strTo.length();
-
-	std::string strTemp(strText);
-	LLStringUtil::toLower(strTemp);
-	LLStringUtil::toLower(strFrom);
-
-	std::string::size_type idxCur, idxStart = 0, idxOffset = 0;
-	while ( (idxCur = strTemp.find(strFrom, idxStart)) != std::string::npos)
-	{
-		strText.replace(idxCur + idxOffset, lenFrom, strTo);
-		idxStart = idxCur + lenFrom;
-		idxOffset += lenTo - lenFrom;
-	}
-}
-
 // Checked: 2009-07-29 (RLVa-1.0.1b) | Added: RLVa-1.0.1b
 std::string rlvGetFirstParenthesisedText(const std::string& strText, std::string::size_type* pidxMatch /*=NULL*/)
 {
