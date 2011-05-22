@@ -204,6 +204,21 @@ void RlvAttachmentLocks::addAttachmentPointLock(S32 idxAttachPt, const LLUUID& i
 		m_AttachPtAdd.insert(std::pair<S32, LLUUID>(idxAttachPt, idRlvObj));
 }
 
+// Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+bool RlvAttachmentLocks::canAttach() const
+{
+	if (isAgentAvatarValid())
+	{
+		for (LLVOAvatar::attachment_map_t::const_iterator itAttachPt = gAgentAvatarp->mAttachmentPoints.begin(); 
+				itAttachPt != gAgentAvatarp->mAttachmentPoints.end(); ++itAttachPt)
+		{
+			if (!isLockedAttachmentPoint(itAttachPt->first, RLV_LOCK_ADD))
+				return true;
+		}
+	}
+	return false;
+}
+
 // Checked: 2010-08-07 (RLVa-1.2.0i) | Modified: RLVa-1.2.0i
 bool RlvAttachmentLocks::canDetach(const LLViewerJointAttachment* pAttachPt, bool fDetachAll /*=false*/) const
 {
