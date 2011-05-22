@@ -17,8 +17,10 @@
 #ifndef RLV_LOCKS_H
 #define RLV_LOCKS_H
 
+#include "llagentconstants.h"
 #include "llagentwearables.h"
 #include "lleventtimer.h"
+#include "llvoavatarself.h"
 
 #include "rlvdefines.h"
 #include "rlvcommon.h"
@@ -26,13 +28,6 @@
 // ============================================================================
 // RlvAttachPtLookup class declaration
 //
-
-#include "llagent.h"
-#include "llviewerjointattachment.h"
-#include "llviewerobject.h"
-#include "llvoavatarself.h"
-
-#include "rlvdefines.h"
 
 class RlvAttachPtLookup
 {

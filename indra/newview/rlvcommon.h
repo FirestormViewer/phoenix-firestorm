@@ -43,6 +43,7 @@ class LLInventoryItem;
 class LLViewerInventoryCategory;
 class LLViewerInventoryItem;
 class LLViewerJointAttachment;
+class LLWearable;
 
 //
 // RLVa-specific

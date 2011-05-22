@@ -15,11 +15,11 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include "llagent.h"
 #include "llagentwearables.h"
 #include "llappearancemgr.h"
 #include "llattachmentsmgr.h"
 #include "llgesturemgr.h"
-#include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llviewerobject.h"
 #include "llviewerobjectlist.h"

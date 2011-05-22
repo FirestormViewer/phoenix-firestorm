@@ -15,6 +15,7 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include "llagent.h"
 #include "llappearancemgr.h"
 #include "llattachmentsmgr.h"
 #include "llinventoryobserver.h"
@@ -22,9 +23,9 @@
 #include "llviewerobjectlist.h"
 #include "pipeline.h"
 
+#include "rlvlocks.h"
 #include "rlvhelper.h"
 #include "rlvinventory.h"
-#include "rlvlocks.h"
 
 // ============================================================================
 // RlvAttachPtLookup member functions

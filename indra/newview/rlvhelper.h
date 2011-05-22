@@ -20,6 +20,7 @@
 #include "lleventtimer.h"
 #include "llinventorymodel.h"
 #include "llviewerinventory.h"
+#include "llwearabletype.h"
 #include "llwlparamset.h"
 
 #include "rlvdefines.h"

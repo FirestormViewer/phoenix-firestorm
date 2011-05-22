@@ -17,7 +17,6 @@
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
 #include "llagentui.h"
-#include "llappviewer.h"
 #include "llavatarnamecache.h"
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"

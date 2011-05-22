@@ -15,10 +15,9 @@
  */
 
 #include "llviewerprecompiledheaders.h"
-#include "llagentwearables.h"
+#include "llagent.h"
 #include "llappearancemgr.h"
 #include "llappviewer.h"
-#include "llcallbacklist.h"
 #include "llgroupactions.h"
 #include "llhudtext.h"
 #include "llstartup.h"
