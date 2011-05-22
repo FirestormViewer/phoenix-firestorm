@@ -29,6 +29,7 @@
 #include "llworld.h"
 
 #include "rlvcommon.h"
+#include "rlvhelper.h"
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 
@@ -522,6 +523,32 @@ bool rlvMenuEnableIfNot(const LLSD& sdParam)
 // Selection functors
 //
 
+// Checked: 2010-04-11 (RLVa-1.2.0b) | Modified: RLVa-0.2.0g
+bool rlvCanDeleteOrReturn()
+{
+	bool fIsAllowed = true;
+
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_REZ))
+	{
+		// We'll allow if none of the prims are owned by the avie or group owned
+		LLObjectSelectionHandle handleSel = LLSelectMgr::getInstance()->getSelection();
+		RlvSelectIsOwnedByOrGroupOwned f(gAgent.getID());
+		if ( (handleSel.notNull()) && ((0 == handleSel->getRootObjectCount()) || (NULL != handleSel->getFirstRootNode(&f, FALSE))) )
+			fIsAllowed = false;
+	}
+	
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (isAgentAvatarValid()) )
+	{
+		// We'll allow if the avie isn't sitting on any of the selected objects
+		LLObjectSelectionHandle handleSel = LLSelectMgr::getInstance()->getSelection();
+		RlvSelectIsSittingOn f(gAgentAvatarp->getRoot());
+		if ( (handleSel.notNull()) && (handleSel->getFirstRootNode(&f, TRUE)) )
+			fIsAllowed = false;
+	}
+
+	return fIsAllowed;
+}
+
 // Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-0.2.0f
 bool RlvSelectHasLockedAttach::apply(LLSelectNode* pNode)
 {
@@ -607,6 +634,18 @@ bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem)
 bool rlvPredCanNotRemoveItem(const LLViewerInventoryItem* pItem)
 {
 	return !rlvPredCanRemoveItem(pItem);
+}
+
+// Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+RlvPredIsEqualOrLinkedItem::RlvPredIsEqualOrLinkedItem(const LLUUID& idItem)
+{
+	m_pItem = gInventory.getItem(idItem);
+}
+
+// Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+bool RlvPredIsEqualOrLinkedItem::operator()(const LLViewerInventoryItem* pItem) const
+{
+	return (m_pItem) && (pItem) && (m_pItem->getLinkedUUID() == pItem->getLinkedUUID());
 }
 
 // ============================================================================

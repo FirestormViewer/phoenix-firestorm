@@ -33,8 +33,9 @@
 #include "llviewerinventory.h"
 #include "llviewerregion.h"
 #include "message.h"
-// [RLVa:KB] - Checked: 2010-09-13 (RLVa-1.2.1c)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
 
 LLAttachmentsMgr::LLAttachmentsMgr()

@@ -23,15 +23,6 @@
 #include "rlvdefines.h"
 #include "rlvcommon.h"
 
-#ifdef LL_WINDOWS
-	#pragma warning (push)
-	#pragma warning (disable : 4702) // warning C4702: unreachable code
-#endif
-#include <boost/variant.hpp>
-#ifdef LL_WINDOWS
-	#pragma warning (pop)
-#endif
-
 // ============================================================================
 // RlvAttachPtLookup class declaration
 //

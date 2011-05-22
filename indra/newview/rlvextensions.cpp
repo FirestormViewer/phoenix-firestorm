@@ -15,15 +15,15 @@
  */
 
 #include "llviewerprecompiledheaders.h"
-//#include "llagent.h"
+#include "llagent.h"
 #include "llagentcamera.h"
 #include "llviewercontrol.h"
-//#include "llviewerwindow.h"
-//#include "llvoavatar.h"
+#include "llvoavatarself.h"
 #include "llwlparammanager.h"
 
 #include "rlvextensions.h"
 #include "rlvhandler.h"
+#include "rlvhelper.h"
 
 // ============================================================================
 

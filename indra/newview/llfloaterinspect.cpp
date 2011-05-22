@@ -40,8 +40,9 @@
 #include "llviewercontrol.h"
 #include "llviewerobject.h"
 #include "lluictrlfactory.h"
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "llagent.h"
 // [/RLVa:KB]
 
 //LLFloaterInspect* LLFloaterInspect::sInstance = NULL;

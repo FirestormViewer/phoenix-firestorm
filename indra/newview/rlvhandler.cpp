@@ -21,6 +21,7 @@
 #include "llcallbacklist.h"
 #include "llgroupactions.h"
 #include "llhudtext.h"
+#include "llstartup.h"
 #include "llviewermessage.h"
 #include "llviewerobjectlist.h"
 #include "llviewerparcelmgr.h"
@@ -106,6 +107,16 @@ bool RlvHandler::hasBehaviourRoot(const LLUUID& idObjRoot, ERlvBehaviour eBhvr, 
 	return false;
 }
 
+// ============================================================================
+// Behaviour exception handling
+//
+
+// Checked: 2009-10-04 (RLVa-1.0.4a) | Modified: RLVa-1.0.4a
+void RlvHandler::addException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption)
+{
+	m_Exceptions.insert(std::pair<ERlvBehaviour, RlvException>(eBhvr, RlvException(idObj, eBhvr, varOption)));
+}
+
 // Checked: 2009-10-04 (RLVa-1.0.4c) | Modified: RLVa-1.0.4c
 bool RlvHandler::isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varOption, ERlvExceptionCheck typeCheck) const
 {
@@ -140,6 +151,28 @@ bool RlvHandler::isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varO
 		}
 	}
 	return false;
+}
+
+// Checked: 2009-10-04 (RLVa-1.0.4a) | Modified: RLVa-1.0.4a
+bool RlvHandler::isPermissive(ERlvBehaviour eBhvr) const
+{
+	return (RlvCommand::hasStrictVariant(eBhvr)) 
+		? !((hasBehaviour(RLV_BHVR_PERMISSIVE)) || (isException(RLV_BHVR_PERMISSIVE, eBhvr, RLV_CHECK_PERMISSIVE)))
+		: true;
+}
+
+// Checked: 2009-10-04 (RLVa-1.0.4a) | Modified: RLVa-1.0.4a
+void RlvHandler::removeException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption)
+{
+	for (rlv_exception_map_t::iterator itException = m_Exceptions.lower_bound(eBhvr), 
+			endException = m_Exceptions.upper_bound(eBhvr); itException != endException; ++itException)
+	{
+		if ( (itException->second.idObject == idObj) && (itException->second.varOption == varOption) )
+		{
+			m_Exceptions.erase(itException);
+			break;
+		}
+	}
 }
 
 // ============================================================================
@@ -306,6 +339,17 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 
 	m_CurCommandStack.pop(); m_CurObjectStack.pop();
 	return eRet;
+}
+
+// Checked: 2009-11-25 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
+ERlvCmdRet RlvHandler::processCommand(const LLUUID& idObj, const std::string& strCommand, bool fFromObj)
+{
+	if (STATE_STARTED != LLStartUp::getStartupState())
+	{
+		m_Retained.push_back(RlvCommand(idObj, strCommand));
+		return RLV_RET_RETAINED;
+	}
+	return processCommand(RlvCommand(idObj, strCommand), fFromObj);
 }
 
 // Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
@@ -583,6 +627,33 @@ void RlvHandler::onTeleportFinished(const LLVector3d& posArrival)
 // String/chat censoring functions
 //
 
+// Checked: 2010-03-06 (RLVa-1.2.0c) | Added: RLVa-1.1.0j
+bool RlvHandler::canSit(LLViewerObject* pObj, const LLVector3& posOffset /*= LLVector3::zero*/) const
+{
+	// The user can sit on the specified object if:
+	//   - not prevented from sitting
+	//   - not prevented from standing up or not currently sitting
+	//   - not standtp restricted or not currently sitting (if the user is sitting and tried to sit elsewhere the tp would just kick in)
+	//   - [regular sit] not @sittp=n or @fartouch=n restricted or if they clicked on a point within 1.5m of the avie's current position
+	//   - [force sit] not @sittp=n restricted by a *different* object than the one that issued the command or the object is within 1.5m
+	return
+		( (pObj) && (LL_PCODE_VOLUME == pObj->getPCode()) ) &&
+		(!hasBehaviour(RLV_BHVR_SIT)) && 
+		( ((!hasBehaviour(RLV_BHVR_UNSIT)) && (!hasBehaviour(RLV_BHVR_STANDTP))) || 
+		  ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting())) ) &&
+		( ((NULL == getCurrentCommand() || (RLV_BHVR_SIT != getCurrentCommand()->getBehaviourType()))
+			? ((!hasBehaviour(RLV_BHVR_SITTP)) && (!hasBehaviour(RLV_BHVR_FARTOUCH)))	// [regular sit]
+			: (!hasBehaviourExcept(RLV_BHVR_SITTP, getCurrentObject()))) ||				// [force sit]
+		  (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) < 1.5f * 1.5f) );
+}
+
+// Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
+bool RlvHandler::canStand() const
+{
+	// NOTE: return FALSE only if we're @unsit=n restricted and the avie is currently sitting on something and TRUE for everything else
+	return (!hasBehaviour(RLV_BHVR_UNSIT)) || ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting()));
+}
+
 // Checked: 2010-04-11 (RLVa-1.3.0h) | Modified: RLVa-1.3.0h
 bool RlvHandler::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/) const
 {
@@ -684,6 +755,12 @@ void RlvHandler::filterChat(std::string& strUTF8Text, bool fFilterEmote) const
 	{
 		strUTF8Text = "...";						// Regular chat (not OOC)
 	}
+}
+
+// Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
+bool RlvHandler::hasException(ERlvBehaviour eBhvr) const
+{
+	return (m_Exceptions.find(eBhvr) != m_Exceptions.end());
 }
 
 // Checked: 2010-02-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0a

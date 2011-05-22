@@ -18,21 +18,44 @@
 #define RLV_COMMON_H
 
 #include "llavatarname.h"
-#include "llinventorymodel.h"
 #include "llselectmgr.h"
 #include "llviewercontrol.h"
-#include "llviewerinventory.h"
 
 #include "rlvdefines.h"
+
+#ifdef LL_WINDOWS
+	#pragma warning (push)
+	#pragma warning (disable : 4702) // warning C4702: unreachable code
+#endif
+#include <boost/variant.hpp>
+#ifdef LL_WINDOWS
+	#pragma warning (pop)
+#endif
 
 // ============================================================================
 // Forward declarations
 //
 
-class RlvCommand;
+//
+// General viewer source
+//
+class LLInventoryItem;
+class LLViewerInventoryCategory;
+class LLViewerInventoryItem;
+class LLViewerJointAttachment;
 
-typedef std::vector<LLViewerObject*> llvo_vec_t;
-typedef std::vector<const LLViewerObject*> c_llvo_vec_t;
+//
+// RLVa-specific
+//
+class RlvCommand;
+typedef std::list<RlvCommand> rlv_command_list_t;
+class RlvObject;
+
+struct RlvException;
+typedef boost::variant<std::string, LLUUID, S32, ERlvBehaviour> RlvExceptionOption;
+
+class RlvGCTimer;
+class RlvWLSnapshot;
 
 // ============================================================================
 // RlvSettings
@@ -177,6 +200,8 @@ bool rlvMenuEnableIfNot(const LLSD& sdParam);
 // Selection functors
 //
 
+bool rlvCanDeleteOrReturn();
+
 struct RlvSelectHasLockedAttach : public LLSelectedNodeFunctor
 {
 	RlvSelectHasLockedAttach() {}
@@ -234,12 +259,8 @@ protected:
 struct RlvPredIsEqualOrLinkedItem
 {
 	RlvPredIsEqualOrLinkedItem(const LLViewerInventoryItem* pItem) : m_pItem(pItem) {}
-	RlvPredIsEqualOrLinkedItem(const LLUUID& idItem) { m_pItem = gInventory.getItem(idItem); }
-
-	bool operator()(const LLViewerInventoryItem* pItem) const
-	{
-		return (m_pItem) && (pItem) && (m_pItem->getLinkedUUID() == pItem->getLinkedUUID());
-	}
+	RlvPredIsEqualOrLinkedItem(const LLUUID& idItem);
+	bool operator()(const LLViewerInventoryItem* pItem) const;
 protected:
 	const LLViewerInventoryItem* m_pItem;
 };

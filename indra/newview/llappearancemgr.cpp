@@ -49,8 +49,10 @@
 #include "llvoavatarself.h"
 #include "llviewerregion.h"
 #include "llwearablelist.h"
-// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0b)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvhelper.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
 
 // RAII thingy to guarantee that a variable gets reset when the Setter

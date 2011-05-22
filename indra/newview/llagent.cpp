@@ -77,8 +77,9 @@
 #include "llwindow.h"
 #include "llworld.h"
 #include "llworldmap.h"
-// [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvhelper.h"
 // [/RLVa:KB]
 
 using namespace LLVOAvatarDefines;

@@ -68,8 +68,9 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llwearablelist.h"
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
 
 typedef std::pair<LLUUID, LLUUID> two_uuids_t;

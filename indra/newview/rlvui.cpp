@@ -15,6 +15,7 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include "llagent.h"
 #include "llavatarlist.h"				// Avatar list control used by the "Nearby" tab in the "People" sidebar panel
 #include "llavatarnamecache.h"
 #include "llbottomtray.h"
@@ -40,6 +41,7 @@
 #include "llteleporthistorystorage.h"
 #include "lltoolmgr.h"
 #include "llviewerparcelmgr.h"
+#include "llvoavatar.h"
 #include "roles_constants.h"			// Group "powers"
 
 #include "rlvui.h"
