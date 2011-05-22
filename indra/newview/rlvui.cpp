@@ -68,7 +68,6 @@ RlvUIEnabler::RlvUIEnabler()
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_VIEWTEXTURE, boost::bind(&RlvUIEnabler::onToggleViewXXX, this)));
 
 	// onToggleXXX
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_DISPLAYNAME, boost::bind(&RlvUIEnabler::onToggleDisplayName, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_EDIT, boost::bind(&RlvUIEnabler::onToggleEdit, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_FLY, boost::bind(&RlvUIEnabler::onToggleFly, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_REZ, boost::bind(&RlvUIEnabler::onToggleRez, this)));
@@ -115,25 +114,6 @@ void RlvUIEnabler::onRefreshHoverText()
 {
 	// Refresh all hover text each time any of the monitored behaviours get set or unset
 	LLHUDText::refreshAllObjectText();
-}
-
-// Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-void RlvUIEnabler::onToggleDisplayName()
-{
-	static const char cstrFloaterChangeDisplayName[] = "display_name";
-
-	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_DISPLAYNAME);
-	if (!fEnable)
-	{
-		// Hide the "Change Display Name" floater if it's currently visible
-		if (LLFloaterReg::floaterInstanceVisible(cstrFloaterChangeDisplayName))
-			LLFloaterReg::hideInstance(cstrFloaterChangeDisplayName);
-	}
-
-	if (!fEnable)
-		addGenericFloaterFilter(cstrFloaterChangeDisplayName);
-	else
-		removeGenericFloaterFilter(cstrFloaterChangeDisplayName);
 }
 
 // Checked: 2010-03-17 (RLVa-1.2.0a) | Added: RLVa-1.2.0a

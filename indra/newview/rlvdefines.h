@@ -49,7 +49,6 @@
 	#define RLV_EXTENSION_CMD_GETXXXNAMES	// @get[add|rem]attachnames:<option>=<channel> and @get[add|rem]outfitnames=<channel>
 	#define RLV_EXTENSION_CMD_INTERACT		// @interact=n
 	#define RLV_EXTENSION_CMD_TOUCHXXX		// @touch:uuid=n|y, @touchworld[:<uuid>]=n|y, @touchattach[:<uuid>]=n|y, @touchud[:<uuid>]=n|y
-	#define RLV_EXTENSION_CMD_DISPLAYNAME	// @displayname=n
 #endif // RLV_EXPERIMENTAL_CMDS
 
 // ============================================================================
@@ -166,7 +165,6 @@ enum ERlvBehaviour {
 	RLV_BHVR_ACCEPTPERMISSION,		// "acceptpermission"
 	RLV_BHVR_ACCEPTTP,				// "accepttp"
 	RLV_BHVR_ALLOWIDLE,				// "allowidle"
-	RLV_BHVR_DISPLAYNAME,			// "displayname"
 	RLV_BHVR_EDIT,					// "edit"
 	RLV_BHVR_EDITOBJ,				// "editobj"
 	RLV_BHVR_REZ,					// "rez"

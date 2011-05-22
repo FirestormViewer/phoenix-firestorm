@@ -40,10 +40,6 @@
 #include "llsidetray.h"
 #include "llviewercontrol.h"
 #include "llviewerdisplayname.h"
-// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a)
-#include "rlvhandler.h"
-#include "rlvui.h"
-// [/RLVa:KB]
 
 // Linden libraries
 #include "llavatarnamecache.h"		// IDEVO
@@ -184,9 +180,6 @@ LLPanelMyProfileEdit::LLPanelMyProfileEdit()
 	setAvatarId(gAgent.getID());
 
 	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&LLPanelMyProfileEdit::onAvatarNameChanged, this));
-// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.1a
-	RlvUIEnabler::instance().addBehaviourToggleCallback(RLV_BHVR_DISPLAYNAME, boost::bind(&LLPanelMyProfileEdit::onAvatarNameChanged, this));
-// [/RLVa:KB]
 }
 
 void LLPanelMyProfileEdit::onOpen(const LLSD& key)
@@ -220,10 +213,7 @@ void LLPanelMyProfileEdit::onOpen(const LLSD& key)
 		getChild<LLUICtrl>("user_slid")->setVisible( true );
 		getChild<LLUICtrl>("display_name_label")->setVisible( true );
 		getChild<LLUICtrl>("set_name")->setVisible( true );
-//		getChild<LLUICtrl>("set_name")->setEnabled( true );
-// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.1a
-		getChild<LLUICtrl>("set_name")->setEnabled( !gRlvHandler.hasBehaviour(RLV_BHVR_DISPLAYNAME) );
-// [/RLVa:KB]
+		getChild<LLUICtrl>("set_name")->setEnabled( true );
 		getChild<LLUICtrl>("solo_user_name")->setVisible( false );
 		getChild<LLUICtrl>("solo_username_label")->setVisible( false );
 	}
@@ -295,10 +285,7 @@ void LLPanelMyProfileEdit::onNameCache(const LLUUID& agent_id, const LLAvatarNam
 		getChild<LLUICtrl>("user_slid")->setVisible( true );
 		getChild<LLUICtrl>("display_name_label")->setVisible( true );
 		getChild<LLUICtrl>("set_name")->setVisible( true );
-//		getChild<LLUICtrl>("set_name")->setEnabled( true );
-// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.1a
-		getChild<LLUICtrl>("set_name")->setEnabled( !gRlvHandler.hasBehaviour(RLV_BHVR_DISPLAYNAME) );
-// [/RLVa:KB]
+		getChild<LLUICtrl>("set_name")->setEnabled( true );
 
 		getChild<LLUICtrl>("solo_user_name")->setVisible( false );
 		getChild<LLUICtrl>("solo_username_label")->setVisible( false );
