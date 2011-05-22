@@ -83,11 +83,7 @@ const S32 RLVa_VERSION_BUILD = 0;
 	// Make sure we halt execution on errors
 	#define RLV_ERRS				LL_ERRS("RLV")
 	// Keep our asserts separate from LL's
-	#ifdef LL_WINDOWS
-		#define RLV_ASSERT(f)			if (!(f)) { if (IsDebuggerPresent()) DebugBreak(); else { RLV_ERRS << "ASSERT (" << #f << ")" << RLV_ENDL; } }
-	#else
-		#define RLV_ASSERT(f)			if (!(f)) { RLV_ERRS << "ASSERT (" << #f << ")" << RLV_ENDL; }
-	#endif // LL_WINDOWS
+	#define RLV_ASSERT(f)			if (!(f)) { RLV_ERRS << "ASSERT (" << #f << ")" << RLV_ENDL; }
 	#define RLV_ASSERT_DBG(f)		RLV_ASSERT(f)
 #else
 	// Don't halt execution on errors in release
