@@ -633,6 +633,10 @@ BOOL LLIMFloater::postBuild()
 	LLButton* add_friend = getChild<LLButton>("add_friend_btn");
 	add_friend->setClickedCallback(boost::bind(&LLIMFloater::onAddFriendButtonClicked, this));
 	
+	// support sysinfo button -Zi
+	mSysinfoButton=getChild<LLButton>("send_sysinfo_btn");
+	onSysinfoButtonVisibilityChanged(FALSE);
+
 	// extra icon controls -AO
 	LLButton* transl = getChild<LLButton>("translate_btn");
 //TT
@@ -671,7 +675,6 @@ BOOL LLIMFloater::postBuild()
 				}
 
 				// support sysinfo button -Zi
-				mSysinfoButton=getChild<LLButton>("send_sysinfo_btn");
 				mSysinfoButton->setClickedCallback(boost::bind(&LLIMFloater::onSysinfoButtonClicked, this));
 				// this needs to be extended to fsdata awareness, once we have it. -Zi
 				// mIsSupportIM=fsdata(partnerUUID).isSupport(); // pseudocode something like this
