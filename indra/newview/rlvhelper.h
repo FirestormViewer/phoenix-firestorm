@@ -52,6 +52,7 @@ public:
 	const std::string& getOption() const		{ return m_strOption; }
 	const std::string& getParam() const			{ return m_strParam; }
 	ERlvParamType      getParamType() const		{ return m_eParamType; }
+	bool               hasOption() const		{ return !m_strOption.empty(); }
 	bool               isStrict() const			{ return m_fStrict; }
 	bool               isValid() const			{ return m_fValid; }
 

@@ -36,28 +36,23 @@ private:
 	 * LLFloater overrides
 	 */
 public:
-	virtual void onOpen(const LLSD& sdKey);
-	virtual void onClose(bool fQuitting);
-
-	/*
-	 * Event handlers
-	 */
-protected:
-	void onRlvCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
-	void onAvatarNameLookup(const LLUUID& idAgent, const std::string& strFullname, BOOL fGroup);
+	/*virtual*/ void onOpen(const LLSD& sdKey);
+	/*virtual*/ void onClose(bool fQuitting);
 
 	/*
 	 * Member functions
 	 */
 protected:
+	void onAvatarNameLookup(const LLUUID& idAgent, const LLAvatarName& avName);
+	void onCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
 	void refreshAll();
 
 	/*
 	 * Member variables
 	 */
 protected:
-	boost::signals2::connection m_ConnRlvCommand;
-	std::list<LLUUID>           m_PendingLookup;
+	boost::signals2::connection	m_ConnRlvCommand;
+	uuid_vec_t 					m_PendingLookup;
 };
 
 // ============================================================================

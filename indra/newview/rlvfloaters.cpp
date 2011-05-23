@@ -15,6 +15,7 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include "llavatarnamecache.h"
 #include "llscrolllistctrl.h"
 #include "llviewerjointattachment.h"
 #include "llviewerobjectlist.h"
@@ -46,43 +47,68 @@ std::string rlvGetItemNameFromObjID(const LLUUID& idObj, bool fIncludeAttachPt =
 	return llformat("%s (%s, %s)", strItemName.c_str(), strAttachPtName.c_str(), (pObj == pObjRoot) ? "root" : "child");
 }
 
+// Checked: 2011-05-23 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
+bool rlvGetShowException(ERlvBehaviour eBhvr)
+{
+	switch (eBhvr)
+	{
+		case RLV_BHVR_RECVCHAT:
+		case RLV_BHVR_RECVEMOTE:
+		case RLV_BHVR_SENDIM:
+		case RLV_BHVR_RECVIM:
+		case RLV_BHVR_STARTIM:
+		case RLV_BHVR_TPLURE:
+		case RLV_BHVR_ACCEPTTP:
+			return true;
+		default:
+			return false;
+	}
+}
+
 // ============================================================================
-// RlvFloaterLocks member functions
+// RlvFloaterBehaviours member functions
 //
 
-// Checked: 2010-04-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
+// Checked: 2010-04-18 (RLVa-1.3.1c) | Modified: RLVa-1.2.0e
 void RlvFloaterBehaviours::onOpen(const LLSD& sdKey)
 {
-	m_ConnRlvCommand = gRlvHandler.setCommandCallback(boost::bind(&RlvFloaterBehaviours::onRlvCommand, this, _1, _2));
+	m_ConnRlvCommand = gRlvHandler.setCommandCallback(boost::bind(&RlvFloaterBehaviours::onCommand, this, _1, _2));
 
 	refreshAll();
 }
 
-// Checked: 2010-04-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
+// Checked: 2010-04-18 (RLVa-1.3.1c) | Modified: RLVa-1.2.0e
 void RlvFloaterBehaviours::onClose(bool fQuitting)
 {
 	m_ConnRlvCommand.disconnect();
-
-	// LLFloaterPay::~LLFloaterPay(): Name callbacks will be automatically disconnected since LLFloater is trackable <- how does that work?
 }
 
-// Checked: 2010-04-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
-void RlvFloaterBehaviours::onRlvCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet)
+// Checked: 2010-04-18 (RLVa-1.3.1c) | Modified: RLVa-1.2.0e
+void RlvFloaterBehaviours::onAvatarNameLookup(const LLUUID& idAgent, const LLAvatarName& avName)
 {
-	// Refresh on any successful @XXX=y|n command
-	if ( (RLV_RET_SUCCESS == eRet) && ((RLV_TYPE_ADD == rlvCmd.getParamType()) || (RLV_TYPE_REMOVE == rlvCmd.getParamType())) )
-	{
+	uuid_vec_t::iterator itLookup = std::find(m_PendingLookup.begin(), m_PendingLookup.end(), idAgent);
+	if (itLookup != m_PendingLookup.end())
+		m_PendingLookup.erase(itLookup);
+	if (getVisible())
 		refreshAll();
-	}
 }
 
-// Checked: 2010-04-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
+// Checked: 2011-05-23 (RLVa-1.3.1c) | Modified: RLVa-1.3.1c
+void RlvFloaterBehaviours::onCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet)
+{
+	if ( (RLV_TYPE_ADD == rlvCmd.getParamType()) || (RLV_TYPE_REMOVE == rlvCmd.getParamType()) )
+		refreshAll();
+}
+
+// Checked: 2011-05-23 (RLVa-1.3.1c) | Modified: RLVa-1.3.1c
 void RlvFloaterBehaviours::refreshAll()
 {
 	LLCtrlListInterface* pBhvrList = childGetListInterface("behaviour_list");
-	if (!pBhvrList)
+	LLCtrlListInterface* pExceptList = childGetListInterface("exception_list");
+	if ( (!pBhvrList) || (!pExceptList) )
 		return;
 	pBhvrList->operateOnAll(LLCtrlListInterface::OP_DELETE);
+	pExceptList->operateOnAll(LLCtrlListInterface::OP_DELETE);
 
 	if (!isAgentAvatarValid())
 		return;
@@ -90,56 +116,59 @@ void RlvFloaterBehaviours::refreshAll()
 	//
 	// Set-up a row we can just reuse
 	//
-	LLSD sdRow;
-	LLSD& sdColumns = sdRow["columns"];
-	sdColumns[0]["column"] = "behaviour";   sdColumns[0]["type"] = "text";
-	sdColumns[1]["column"] = "name"; sdColumns[1]["type"] = "text";
+	LLSD sdBhrRow; LLSD& sdBhvrColumns = sdBhrRow["columns"];
+	sdBhvrColumns[0] = LLSD().with("column", "behaviour").with("type", "text");
+	sdBhvrColumns[1] = LLSD().with("column", "issuer").with("type", "text");
+
+	LLSD sdExceptRow; LLSD& sdExceptColumns = sdExceptRow["columns"];
+	sdExceptColumns[0] = LLSD().with("column", "behaviour").with("type", "text");
+	sdExceptColumns[1] = LLSD().with("column", "option").with("type", "text");
+	sdExceptColumns[2] = LLSD().with("column", "issuer").with("type", "text");
 
 	//
 	// List behaviours
 	//
-	const RlvHandler::rlv_object_map_t* pRlvObjects = gRlvHandler.getObjectMap();
-	for (RlvHandler::rlv_object_map_t::const_iterator itObj = pRlvObjects->begin(), endObj = pRlvObjects->end(); itObj != endObj; ++itObj)
+	const RlvHandler::rlv_object_map_t* pObjects = gRlvHandler.getObjectMap();
+	for (RlvHandler::rlv_object_map_t::const_iterator itObj = pObjects->begin(), endObj = pObjects->end(); itObj != endObj; ++itObj)
 	{
-		sdColumns[1]["value"] = rlvGetItemNameFromObjID(itObj->first);
+		const std::string strIssuer = rlvGetItemNameFromObjID(itObj->first);
 
 		const rlv_command_list_t* pCommands = itObj->second.getCommandList();
 		for (rlv_command_list_t::const_iterator itCmd = pCommands->begin(), endCmd = pCommands->end(); itCmd != endCmd; ++itCmd)
 		{
-			std::string strBhvr = itCmd->asString();
-			
-			LLUUID idOption(itCmd->getOption());
-			if (idOption.notNull())
+			LLUUID idOption;
+			if ( (itCmd->hasOption()) && (idOption.set(itCmd->getOption(), FALSE)) && (rlvGetShowException(itCmd->getBehaviourType())) )
 			{
-				std::string strLookup;
-				if ( (gCacheName->getFullName(idOption, strLookup)) || (gCacheName->getGroupName(idOption, strLookup)) )
+				std::string strOption; LLAvatarName avName;
+				if (LLAvatarNameCache::get(idOption, &avName))
 				{
-					if (strLookup.find("???") == std::string::npos)
-						strBhvr.assign(itCmd->getBehaviour()).append(":").append(strLookup);
+					strOption = (!avName.mUsername.empty()) ? avName.mUsername : avName.mDisplayName;
 				}
-				else if (m_PendingLookup.end() == std::find(m_PendingLookup.begin(), m_PendingLookup.end(), idOption))
+				else if (!gCacheName->getGroupName(idOption, strOption))
 				{
-					gCacheName->get(idOption, FALSE, boost::bind(&RlvFloaterBehaviours::onAvatarNameLookup, this, _1, _2, _3));
-					m_PendingLookup.push_back(idOption);
+					if (m_PendingLookup.end() == std::find(m_PendingLookup.begin(), m_PendingLookup.end(), idOption))
+					{
+						LLAvatarNameCache::get(idOption, boost::bind(&RlvFloaterBehaviours::onAvatarNameLookup, this, _1, _2));
+						m_PendingLookup.push_back(idOption);
+					}
+					strOption = itCmd->getOption();
 				}
+
+				// List under the "Exception" tab
+				sdExceptColumns[0]["value"] = itCmd->getBehaviour();
+				sdExceptColumns[1]["value"] = strOption;
+				sdExceptColumns[2]["value"] = strIssuer;
+				pExceptList->addElement(sdExceptRow, ADD_BOTTOM);
 			}
-
-			sdColumns[0]["value"] = strBhvr;
-
-			pBhvrList->addElement(sdRow, ADD_BOTTOM);
+			else
+			{
+				// List under the "Restrictions" tab
+				sdBhvrColumns[0]["value"] = itCmd->asString();
+				sdBhvrColumns[1]["value"] = strIssuer;
+				pBhvrList->addElement(sdBhrRow, ADD_BOTTOM);
+			}
 		}
 	}
-}
-
-// Checked: 2010-04-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
-void RlvFloaterBehaviours::onAvatarNameLookup(const LLUUID& idAgent, const std::string& strFullname, BOOL fGroup)
-{
-	std::list<LLUUID>::iterator itLookup = std::find(m_PendingLookup.begin(), m_PendingLookup.end(), idAgent);
-	if (itLookup != m_PendingLookup.end())
-		m_PendingLookup.erase(itLookup);
-
-	if (getVisible())
-		refreshAll();
 }
 
 // ============================================================================
