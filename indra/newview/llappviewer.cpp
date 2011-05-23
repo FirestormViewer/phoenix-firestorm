@@ -4798,7 +4798,7 @@ void LLAppViewer::handleLoginComplete()
 
 //-TT Window Title Access
         std::string full_name = gAgentAvatarp->getFullname();
-        if (!full_name.empty)
+        if (!full_name.empty())
         {
         	gWindowTitle += std::string(" - ") + full_name;
         	gViewerWindow->setTitle(gWindowTitle);
