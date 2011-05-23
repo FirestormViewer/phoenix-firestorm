@@ -136,11 +136,15 @@ void RlvFloaterBehaviours::refreshAll()
 		const rlv_command_list_t* pCommands = itObj->second.getCommandList();
 		for (rlv_command_list_t::const_iterator itCmd = pCommands->begin(), endCmd = pCommands->end(); itCmd != endCmd; ++itCmd)
 		{
-			LLUUID idOption;
-			if ( (itCmd->hasOption()) && (idOption.set(itCmd->getOption(), FALSE)) && (rlvGetShowException(itCmd->getBehaviourType())) )
+			std::string strOption; LLUUID idOption;
+			if ( (itCmd->hasOption()) && (idOption.set(itCmd->getOption(), FALSE)) )
 			{
-				std::string strOption; LLAvatarName avName;
-				if (LLAvatarNameCache::get(idOption, &avName))
+				LLAvatarName avName;
+				if (gObjectList.findObject(idOption))
+				{
+					strOption = rlvGetItemNameFromObjID(idOption, false);
+				}
+				else if (LLAvatarNameCache::get(idOption, &avName))
 				{
 					strOption = (!avName.mUsername.empty()) ? avName.mUsername : avName.mDisplayName;
 				}
@@ -153,7 +157,10 @@ void RlvFloaterBehaviours::refreshAll()
 					}
 					strOption = itCmd->getOption();
 				}
+			}
 
+			if ( (itCmd->hasOption()) && (rlvGetShowException(itCmd->getBehaviourType())) )
+			{
 				// List under the "Exception" tab
 				sdExceptColumns[0]["value"] = itCmd->getBehaviour();
 				sdExceptColumns[1]["value"] = strOption;
