@@ -219,6 +219,7 @@ LLPointer<LLViewerTexture> gStartTexture;
 //
 extern S32 gStartImageWidth;
 extern S32 gStartImageHeight;
+extern std::string gWindowTitle;
 
 //
 // local globals
@@ -861,7 +862,21 @@ bool idle_startup()
 		}
 		gSavedSettings.setBOOL("RememberPassword", gRememberPassword);                                                 
 		LL_INFOS("AppInit") << "Attempting login as: " << userid << LL_ENDL;                                           
-		gDebugInfo["LoginName"] = userid;                                                                              
+		gDebugInfo["LoginName"] = userid;
+		// We don't save this version of the title because it'll
+		//  be replaced later, we hope. -- TS
+		size_t underscore_pos = userid.find_first_of('_');
+		std::string display_id = userid.substr(0,underscore_pos);
+		if ((underscore_pos != std::string::npos) &&
+			(underscore_pos < userid.length()-1))
+		{
+			std::string id_last = userid.substr(underscore_pos+1);
+			if (id_last.compare("Resident") != 0)
+			{
+				display_id = display_id + " " + id_last;
+			}
+		}
+		gViewerWindow->setTitle(gWindowTitle+" - "+display_id);
          
 		// create necessary directories
 		// *FIX: these mkdir's should error check
