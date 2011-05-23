@@ -116,7 +116,7 @@ void RlvFloaterBehaviours::refreshAll()
 	//
 	// Set-up a row we can just reuse
 	//
-	LLSD sdBhrRow; LLSD& sdBhvrColumns = sdBhrRow["columns"];
+	LLSD sdBhvrRow; LLSD& sdBhvrColumns = sdBhvrRow["columns"];
 	sdBhvrColumns[0] = LLSD().with("column", "behaviour").with("type", "text");
 	sdBhvrColumns[1] = LLSD().with("column", "issuer").with("type", "text");
 
@@ -162,6 +162,7 @@ void RlvFloaterBehaviours::refreshAll()
 			if ( (itCmd->hasOption()) && (rlvGetShowException(itCmd->getBehaviourType())) )
 			{
 				// List under the "Exception" tab
+				sdExceptRow["enabled"] = gRlvHandler.isException(itCmd->getBehaviourType(), idOption);
 				sdExceptColumns[0]["value"] = itCmd->getBehaviour();
 				sdExceptColumns[1]["value"] = strOption;
 				sdExceptColumns[2]["value"] = strIssuer;
@@ -170,9 +171,10 @@ void RlvFloaterBehaviours::refreshAll()
 			else
 			{
 				// List under the "Restrictions" tab
-				sdBhvrColumns[0]["value"] = itCmd->asString();
+				sdBhvrRow["enabled"] = (RLV_BHVR_UNKNOWN != itCmd->getBehaviourType());
+				sdBhvrColumns[0]["value"] = (strOption.empty()) ? itCmd->asString() : itCmd->getBehaviour() + ":" + strOption;
 				sdBhvrColumns[1]["value"] = strIssuer;
-				pBhvrList->addElement(sdBhrRow, ADD_BOTTOM);
+				pBhvrList->addElement(sdBhvrRow, ADD_BOTTOM);
 			}
 		}
 	}
