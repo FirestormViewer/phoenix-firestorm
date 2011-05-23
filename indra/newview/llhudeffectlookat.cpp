@@ -556,7 +556,7 @@ void LLHUDEffectLookAt::render()
 		if ((show_names > 0) && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 		{
 			// render name for crosshair
-			const LLFontGL* fontp=LLFontGL::getFont(LLFontDescriptor("SansSerif","Small",LLFontGL::BOLD));
+			const LLFontGL* fontp=LLFontGL::getFont(LLFontDescriptor("SansSerif","Small",LLFontGL::NORMAL));
 			glMatrixMode(GL_MODELVIEW);
 			glPushMatrix();
 			LLVector3 position=target+LLVector3(0.f,0.f,0.3f);
@@ -581,7 +581,7 @@ void LLHUDEffectLookAt::render()
 			}
 
 			gViewerWindow->setup3DRender();
-			hud_render_utf8text(name,position,*fontp,LLFontGL::NORMAL,LLFontGL::NO_SHADOW,-0.5*fontp->getWidthF32(name),3.0,lookAtColor,FALSE);
+			hud_render_utf8text(name,position,*fontp,LLFontGL::NORMAL,LLFontGL::DROP_SHADOW,-0.5*fontp->getWidthF32(name),3.0,lookAtColor,FALSE);
 
 			glPopMatrix();
 		}
