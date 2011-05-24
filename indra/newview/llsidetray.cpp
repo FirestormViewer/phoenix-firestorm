@@ -53,6 +53,8 @@
 
 #include "llsidepanelappearance.h"
 
+#include "llsidetraylistener.h"
+
 //#include "llscrollcontainer.h"
 
 using namespace std;
@@ -70,6 +72,8 @@ static const std::string TAB_PANEL_CAPTION_NAME = "sidetray_tab_panel";
 static const std::string TAB_PANEL_CAPTION_TITLE_BOX = "sidetray_tab_title";
 
 LLSideTray* LLSideTray::sInstance = 0;
+
+static LLSideTrayListener sSideTrayListener(LLSideTray::getInstance);
 
 // static
 LLSideTray* LLSideTray::getInstance()
@@ -96,6 +100,7 @@ bool	LLSideTray::instanceCreated	()
 
 class LLSideTrayTab: public LLPanel
 {
+	LOG_CLASS(LLSideTrayTab);
 	friend class LLUICtrlFactory;
 	friend class LLSideTray;
 public:
@@ -139,7 +144,9 @@ public:
 	
 	void			onOpen		(const LLSD& key);
 	
-	void			toggleTabDocked();
+	void			toggleTabDocked(bool toggle_floater = true);
+	void			setDocked(bool dock);
+	bool			isDocked() const;
 
 	BOOL			handleScrollWheel(S32 x, S32 y, S32 clicks);
 
@@ -186,8 +193,8 @@ BOOL LLSideTrayTab::postBuild()
 	
 	title_panel->getChild<LLTextBox>(TAB_PANEL_CAPTION_TITLE_BOX)->setValue(mTabTitle);
 
-	getChild<LLButton>("undock")->setCommitCallback(boost::bind(&LLSideTrayTab::toggleTabDocked, this));
-	getChild<LLButton>("dock")->setCommitCallback(boost::bind(&LLSideTrayTab::toggleTabDocked, this));
+	getChild<LLButton>("undock")->setCommitCallback(boost::bind(&LLSideTrayTab::setDocked, this, false));
+	getChild<LLButton>("dock")->setCommitCallback(boost::bind(&LLSideTrayTab::setDocked, this, true));
 
 	return true;
 }
@@ -243,14 +250,16 @@ LLSideTray* LLSideTrayTab::getSideTray()
 	return side_tray;
 }
 
-void LLSideTrayTab::toggleTabDocked()
+void LLSideTrayTab::toggleTabDocked(bool toggle_floater /* = true */)
 {
+	// *FIX: Calling this method twice per frame would crash the viewer.
+
 	std::string tab_name = getName();
 
 	LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", tab_name);
 	if (!floater_tab) return;
 
-	bool docking = LLFloater::isShown(floater_tab);
+	bool docking = !isDocked();
 
 	// Hide the "Tear Off" button when a tab gets undocked
 	// and show "Dock" button instead.
@@ -268,7 +277,27 @@ void LLSideTrayTab::toggleTabDocked()
 
 	// Open/close the floater *after* we reparent the tab panel,
 	// so that it doesn't receive redundant visibility change notifications.
-	LLFloaterReg::toggleInstance("side_bar_tab", tab_name);
+	if (toggle_floater)
+	{
+		LLFloaterReg::toggleInstance("side_bar_tab", tab_name);
+	}
+}
+
+// Same as toggleTabDocked() apart from making sure that we do exactly what we want.
+void LLSideTrayTab::setDocked(bool dock)
+{
+	if (isDocked() == dock)
+	{
+		llwarns << "Tab " << getName() << " is already " << (dock ? "docked" : "undocked") << llendl;
+		return;
+	}
+
+	toggleTabDocked();
+}
+
+bool LLSideTrayTab::isDocked() const
+{
+	return dynamic_cast<LLSideTray*>(getParent()) != NULL;
 }
 
 BOOL LLSideTrayTab::handleScrollWheel(S32 x, S32 y, S32 clicks)
@@ -417,6 +446,11 @@ LLSideTrayTab*  LLSideTrayTab::createInstance	()
 	return tab;
 }
 
+// Now that we know the definition of LLSideTrayTab, we can implement
+// tab_cast.
+template <>
+LLPanel* tab_cast<LLPanel*>(LLSideTrayTab* tab) { return tab; }
+
 //////////////////////////////////////////////////////////////////////////////
 // LLSideTrayButton
 // Side Tray tab button with "tear off" handling.
@@ -464,7 +498,7 @@ public:
 			LLSideTrayTab* tab = side_tray->getTab(getName());
 			if (!tab) return FALSE;
 
-			tab->toggleTabDocked();
+			tab->setDocked(false);
 
 			LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", tab->getName());
 			if (!floater_tab) return FALSE;
@@ -530,6 +564,8 @@ LLSideTray::LLSideTray(const Params& params)
 	// register handler function to process data from the xml. 
 	// panel_name should be specified via "parameter" attribute.
 	commit.add("SideTray.ShowPanel", boost::bind(&LLSideTray::showPanel, this, _2, LLUUID::null));
+	commit.add("SideTray.Toggle", boost::bind(&LLSideTray::onToggleCollapse, this));
+	commit.add("SideTray.Collapse", boost::bind(&LLSideTray::collapseSideBar, this));
 	LLTransientFloaterMgr::getInstance()->addControlView(this);
 	LLView* side_bar_tabs  = gViewerWindow->getRootView()->getChildView("side_bar_tabs");
 	if (side_bar_tabs != NULL)
@@ -629,8 +665,16 @@ LLPanel* LLSideTray::openChildPanel(LLSideTrayTab* tab, const std::string& panel
 
 	std::string tab_name = tab->getName();
 
+	bool tab_attached = isTabAttached(tab_name);
+
+	if (tab_attached && LLUI::sSettingGroups["config"]->getBOOL("OpenSidePanelsInFloaters"))
+	{
+		tab->setDocked(false);
+		tab_attached = false;
+	}
+
 	// Select tab and expand Side Tray only when a tab is attached.
-	if (isTabAttached(tab_name))
+	if (tab_attached)
 	{
 		selectTabByName(tab_name);
 		if (mCollapsed)
@@ -641,14 +685,7 @@ LLPanel* LLSideTray::openChildPanel(LLSideTrayTab* tab, const std::string& panel
 		LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", tab_name);
 		if (!floater_tab) return NULL;
 
-		// Restore the floater if it was minimized.
-		if (floater_tab->isMinimized())
-		{
-			floater_tab->setMinimized(FALSE);
-		}
-
-		// Send the floater to the front.
-		floater_tab->setFrontmost();
+		floater_tab->openFloater(tab_name);
 	}
 
 	LLSideTrayPanelContainer* container = dynamic_cast<LLSideTrayPanelContainer*>(view->getParent());
@@ -979,16 +1016,7 @@ void LLSideTray::reflectCollapseChange()
 {
 	updateSidetrayVisibility();
 
-	if(mCollapsed)
-	{
-		gFloaterView->setSnapOffsetRight(0);
-		setFocus(FALSE);
-	}
-	else
-	{
-		gFloaterView->setSnapOffsetRight(getRect().getWidth());
-		setFocus(TRUE);
-	}
+	setFocus(!mCollapsed);
 
 	gFloaterView->refresh();
 }
@@ -1062,7 +1090,7 @@ void LLSideTray::detachTabs()
 		if (!is_visible) continue;
 
 		llassert(isTabAttached(tab->getName()));
-		tab->toggleTabDocked();
+		tab->setDocked(false);
 	}
 }
 
@@ -1152,49 +1180,6 @@ void LLSideTray::reshape(S32 width, S32 height, BOOL called_from_parent)
 	arrange();
 }
 
-/**
- * Activate tab with "panel_name" panel
- * if no such tab - return false, otherwise true.
- * TODO* In some cases a pointer to a panel of
- * a specific class may be needed so this method
- * would need to use templates.
- */
-LLPanel*	LLSideTray::showPanel		(const std::string& panel_name, const LLSD& params)
-{
-	// Look up the tab in the list of detached tabs.
-	child_vector_const_iter_t child_it;
-	for ( child_it = mDetachedTabs.begin(); child_it != mDetachedTabs.end(); ++child_it)
-	{
-		LLPanel* panel = openChildPanel(*child_it, panel_name, params);
-		if (panel) return panel;
-			}
-
-	// Look up the tab in the list of attached tabs.
-	for ( child_it = mTabs.begin(); child_it != mTabs.end(); ++child_it)
-			{
-		LLPanel* panel = openChildPanel(*child_it, panel_name, params);
-		if (panel) return panel;
-	}
-	return NULL;
-}
-
-void LLSideTray::togglePanel(LLPanel* &sub_panel, const std::string& panel_name, const LLSD& params)
-{
-	if(!sub_panel)
-		return;
-
-	// If a panel is visible and attached to Side Tray (has LLSideTray among its ancestors)
-	// it should be toggled off by collapsing Side Tray.
-	if (sub_panel->isInVisibleChain() && sub_panel->hasAncestor(this))
-	{
-		LLSideTray::getInstance()->collapseSideBar();
-	}
-	else
-	{
-		LLSideTray::getInstance()->showPanel(panel_name, params);
-	}
-}
-
 // This is just LLView::findChildView specialized to restrict the search to LLPanels.
 // Optimization for EXT-4068 to avoid searching down to the individual item level
 // when inventories are large.
@@ -1225,6 +1210,96 @@ LLPanel *findChildPanel(LLPanel *panel, const std::string& name, bool recurse)
 		}
 	}
 	return NULL;
+}
+
+/**
+ * Activate tab with "panel_name" panel
+ * if no such tab - return false, otherwise true.
+ * TODO* In some cases a pointer to a panel of
+ * a specific class may be needed so this method
+ * would need to use templates.
+ */
+LLPanel*	LLSideTray::showPanel		(const std::string& panel_name, const LLSD& params)
+{
+	LLPanel* new_panel = NULL;
+
+	// Look up the tab in the list of detached tabs.
+	child_vector_const_iter_t child_it;
+	for ( child_it = mDetachedTabs.begin(); child_it != mDetachedTabs.end(); ++child_it)
+	{
+		new_panel = openChildPanel(*child_it, panel_name, params);
+		if (new_panel) break;
+	}
+
+	// Look up the tab in the list of attached tabs.
+	for ( child_it = mTabs.begin(); child_it != mTabs.end(); ++child_it)
+	{
+		new_panel = openChildPanel(*child_it, panel_name, params);
+		if (new_panel) break;
+	}
+
+	return new_panel;
+}
+
+bool LLSideTray::hidePanel(const std::string& panel_name)
+{
+	bool panelHidden = false;
+	
+	LLPanel* panelp = getPanel(panel_name);
+
+	if (panelp)
+	{
+		LLView* parentp = panelp->getParent();
+		
+		// Collapse the side bar if the panel or the panel's parent is an attached tab
+		if (isTabAttached(panel_name) || (parentp && isTabAttached(parentp->getName())))
+		{
+			collapseSideBar();
+			panelHidden = true;
+		}
+		else
+		{
+			panelHidden = LLFloaterReg::hideInstance("side_bar_tab", panel_name);
+			
+			if (!panelHidden)
+			{
+				// Look up the panel in the list of detached tabs.
+				for (child_vector_const_iter_t child_it = mDetachedTabs.begin(); child_it != mDetachedTabs.end(); ++child_it)
+				{
+					LLPanel *detached_panel = dynamic_cast<LLPanel*>(*child_it);
+					
+					if (detached_panel)
+					{
+						// Hide this detached panel if it is a parent of our panel
+						if (findChildPanel(detached_panel, panel_name, true) != NULL)
+						{
+							panelHidden = LLFloaterReg::hideInstance("side_bar_tab", detached_panel->getName());
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	return panelHidden;
+}
+
+void LLSideTray::togglePanel(LLPanel* &sub_panel, const std::string& panel_name, const LLSD& params)
+{
+	if(!sub_panel)
+		return;
+
+	// If a panel is visible and attached to Side Tray (has LLSideTray among its ancestors)
+	// it should be toggled off by collapsing Side Tray.
+	if (sub_panel->isInVisibleChain() && sub_panel->hasAncestor(this))
+	{
+		LLSideTray::getInstance()->collapseSideBar();
+	}
+	else
+	{
+		LLSideTray::getInstance()->showPanel(panel_name, params);
+	}
 }
 
 LLPanel* LLSideTray::getPanel(const std::string& panel_name)
@@ -1266,6 +1341,35 @@ bool		LLSideTray::isPanelActive(const std::string& panel_name)
 	if (!panel) return false;
 	return (panel->getName() == panel_name);
 }
+
+void LLSideTray::setTabDocked(const std::string& tab_name, bool dock, bool toggle_floater /* = true*/)
+{
+	// Lookup tab by name.
+	LLSideTrayTab* tab = getTab(tab_name);
+	if (!tab)
+	{	// not a docked tab, look through detached tabs
+		for(child_vector_iter_t tab_it = mDetachedTabs.begin(), tab_end_it = mDetachedTabs.end();
+			tab_it != tab_end_it;
+			++tab_it)
+		{
+			if ((*tab_it)->getName() == tab_name)
+			{
+				tab = *tab_it;
+				break;
+			}
+		}
+
+	}
+
+	llassert(tab != NULL);
+
+	// Toggle its dock state.
+	if (tab && tab->isDocked() != dock)
+	{
+		tab->toggleTabDocked(toggle_floater);
+	}
+}
+
 
 void	LLSideTray::updateSidetrayVisibility()
 {

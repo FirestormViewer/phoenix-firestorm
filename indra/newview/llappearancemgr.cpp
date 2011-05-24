@@ -110,6 +110,12 @@ public:
 	{
 		// support secondlife:///app/appearance/show, but for now we just
 		// make all secondlife:///app/appearance SLapps behave this way
+		if (!LLUI::sSettingGroups["config"]->getBOOL("EnableAppearance"))
+		{
+			LLNotificationsUtil::add("NoAppearance", LLSD(), LLSD(), std::string("SwitchToStandardSkinAndQuit"));
+			return true;
+		}
+
 		LLSideTray::getInstance()->showPanel("sidepanel_appearance", LLSD());
 		return true;
 	}
@@ -1868,7 +1874,7 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 	}
 }
 
-// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-02 (Catznip-2.5.0a) | Added: Catznip-2.0.0a
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-02 (Catznip-2.6.0a) | Added: Catznip-2.0.0a
 void LLAppearanceMgr::updateAppearanceFromInitialWearables(LLInventoryModel::item_array_t& initial_items)
 {
 	const LLUUID& idCOF = getCOF();
@@ -3151,6 +3157,9 @@ public:
 			// *TODOw: This may not be necessary if initial outfit is chosen already -- josh
 			gAgent.setGenderChosen(TRUE);
 		}
+
+		// release avatar picker keyboard focus
+		gFocusMgr.setKeyboardFocus( NULL );
 
 		return true;
 	}

@@ -484,9 +484,6 @@ bool LLInventoryCollectFunctor::itemTransferCommonlyAllowed(const LLInventoryIte
 
 	switch(item->getType())
 	{
-		case LLAssetType::AT_CALLINGCARD:
-			return false;
-			break;
 		case LLAssetType::AT_OBJECT:
 		case LLAssetType::AT_BODYPART:
 		case LLAssetType::AT_CLOTHING:
