@@ -50,6 +50,9 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "lltooltip.h"
+// [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 //
 // Constants
@@ -323,23 +326,32 @@ void LLFloaterMove::setMovementMode(const EMovementMode mode)
 	{
 	case MM_RUN:
 		gAgent.setAlwaysRun();
-		gAgent.setRunning();
+//		gAgent.setRunning();
 		break;
 	case MM_WALK:
 		gAgent.clearAlwaysRun();
-		gAgent.clearRunning();
+//		gAgent.clearRunning();
 		break;
 	default:
 		//do nothing for other modes (MM_FLY)
 		break;
 	}
 	// tell the simulator.
-	gAgent.sendWalkRun(gAgent.getAlwaysRun());
-	
-	updateButtonsWithMovementMode(mode);
+//	gAgent.sendWalkRun(gAgent.getAlwaysRun());
+//	
+//	updateButtonsWithMovementMode(mode);
+//
+//	bool bHideModeButtons = MM_FLY == mode
+//		|| (isAgentAvatarValid() && gAgentAvatarp->isSitting());
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+	// Running may have been restricted so update walk-vs-run from the agent's actual running state
+	if ( (MM_WALK == mode) || (MM_RUN == mode) )
+		mCurrentMode = (gAgent.getRunning()) ? MM_RUN : MM_WALK;
 
-	bool bHideModeButtons = MM_FLY == mode
-		|| (isAgentAvatarValid() && gAgentAvatarp->isSitting());
+	updateButtonsWithMovementMode(mCurrentMode);
+
+	bool bHideModeButtons = (MM_FLY == mCurrentMode) || (isAgentAvatarValid() && gAgentAvatarp->isSitting());
+// [/RLVa:KB]
 
 	showModeButtons(!bHideModeButtons);
 
@@ -714,10 +726,17 @@ LLPanelStandStopFlying* LLPanelStandStopFlying::getStandStopFlyingPanel()
 
 void LLPanelStandStopFlying::onStandButtonClick()
 {
-	LLFirstUse::sit(false);
+// [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
+	if ( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canStand()) )
+	{
+		LLFirstUse::sit(false);
 
-	LLSelectMgr::getInstance()->deselectAllForStandingUp();
-	gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
+		LLSelectMgr::getInstance()->deselectAllForStandingUp();
+		gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
+	}
+// [/RLVa:KB]
+//	LLSelectMgr::getInstance()->deselectAllForStandingUp();
+//	gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
 
 	setFocus(FALSE); // EXT-482
 	mStandButton->setVisible(FALSE); // force visibility changing to avoid seeing Stand & Move buttons at once.

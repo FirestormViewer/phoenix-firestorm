@@ -69,6 +69,9 @@
 #include "lltrans.h"
 #include "llcallingcard.h"
 #include "llslurl.h"			// IDEVO
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 // static
 void LLAvatarActions::requestFriendshipDialog(const LLUUID& id, const std::string& name)
@@ -192,6 +195,19 @@ void LLAvatarActions::startIM(const LLUUID& id)
 	if (id.isNull())
 		return;
 
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(id)) )
+	{
+		LLUUID idSession = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL, id);
+		if ( (idSession.notNull()) && (!gIMMgr->hasSession(idSession)) )
+		{
+			make_ui_sound("UISndInvalidOp");
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
+			return;
+		}
+	}
+// [/RLVa:KB]
+
 	LLAvatarNameCache::get(id,
 		boost::bind(&on_avatar_name_cache_start_im, _1, _2));
 }
@@ -228,6 +244,20 @@ void LLAvatarActions::startCall(const LLUUID& id)
 	{
 		return;
 	}
+
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(id)) )
+	{
+		LLUUID idSession = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL, id);
+		if ( (idSession.notNull()) && (!gIMMgr->hasSession(idSession)) )
+		{
+			make_ui_sound("UISndInvalidOp");
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
+			return;
+		}
+	}
+// [/RLVa:KB]
+
 	LLAvatarNameCache::get(id,
 		boost::bind(&on_avatar_name_cache_start_call, _1, _2));
 }
@@ -244,7 +274,17 @@ void LLAvatarActions::startAdhocCall(const uuid_vec_t& ids)
 	LLDynamicArray<LLUUID> id_array;
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
-		id_array.push_back(*it);
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+		const LLUUID& idAgent = *it;
+		if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(idAgent)) )
+		{
+			make_ui_sound("UISndInvalidOp");
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF, LLSD().with("RECIPIENT", LLSLURL("agent", idAgent, "completename").getSLURLString()));
+			return;
+		}
+		id_array.push_back(idAgent);
+// [/RLVa:KB]
+//		id_array.push_back(*it);
 	}
 
 	// create the new ad hoc voice session
@@ -289,7 +329,17 @@ void LLAvatarActions::startConference(const uuid_vec_t& ids)
 	LLDynamicArray<LLUUID> id_array;
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
-		id_array.push_back(*it);
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+		const LLUUID& idAgent = *it;
+		if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(idAgent)) )
+		{
+			make_ui_sound("UISndInvalidOp");
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF, LLSD().with("RECIPIENT", LLSLURL("agent", idAgent, "completename").getSLURLString()));
+			return;
+		}
+		id_array.push_back(idAgent);
+// [/RLVa:KB]
+//		id_array.push_back(*it);
 	}
 	const std::string title = LLTrans::getString("conference-title");
 	LLUUID session_id = gIMMgr->addSession(title, IM_SESSION_CONFERENCE_START, ids[0], id_array);
