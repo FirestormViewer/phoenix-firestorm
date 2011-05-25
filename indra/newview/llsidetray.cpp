@@ -52,6 +52,7 @@
 #include "llwindow.h"//for SetCursor
 #include "lltransientfloatermgr.h"
 #include "llsidepanelappearance.h"
+#include "llsidepanelinventory.h"
 
 //#include "llscrollcontainer.h"
 
@@ -310,6 +311,18 @@ static void on_minimize(LLSidepanelAppearance* panel, LLSD minimized)
 	panel->updateToVisibility(visibility);
 }
 
+//-- TS: FIRE-766
+static void on_minimize_inv(LLSidepanelInventory* panel, LLSD minimized)
+{
+	// Reset the current object selection.
+	if (minimized.asBoolean())
+	{
+		llinfos << "Resetting the object selection." << llendl;
+		panel->onBackButtonClicked();
+	}
+}
+//-- TS: FIRE-766
+
 void LLSideTrayTab::undock(LLFloater* floater_tab)
 {
 	
@@ -384,6 +397,20 @@ void LLSideTrayTab::undock(LLFloater* floater_tab)
 			floater_tab->setMinimizeCallback(boost::bind(&on_minimize, panel_appearance, _2));
 		}
 	}
+
+//-- TS: FIRE-766
+	// When minimizing the inventory sidebar, need to deselect any object
+	// whose profile we're displaying. Set callback here.
+	if (getName() == "sidebar_inventory")
+	{
+		llinfos << "Registering inventory sidetray minimize callback." << llendl;
+		LLSidepanelInventory* panel_inventory = dynamic_cast<LLSidepanelInventory*>(getPanel());
+		if(panel_inventory)
+		{
+			floater_tab->setMinimizeCallback(boost::bind(&on_minimize_inv, panel_inventory, _2));
+		}
+	}
+//-- TS: FIRE-766
 
 	if (!side_tray->getCollapsed())
 	{
