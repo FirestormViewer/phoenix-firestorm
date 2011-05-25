@@ -633,6 +633,10 @@ BOOL LLIMFloater::postBuild()
 	LLButton* add_friend = getChild<LLButton>("add_friend_btn");
 	add_friend->setClickedCallback(boost::bind(&LLIMFloater::onAddFriendButtonClicked, this));
 	
+	// support sysinfo button -Zi
+	mSysinfoButton=getChild<LLButton>("send_sysinfo_btn");
+	onSysinfoButtonVisibilityChanged(FALSE);
+
 	// extra icon controls -AO
 	LLButton* transl = getChild<LLButton>("translate_btn");
 //TT
@@ -671,7 +675,6 @@ BOOL LLIMFloater::postBuild()
 				}
 
 				// support sysinfo button -Zi
-				mSysinfoButton=getChild<LLButton>("send_sysinfo_btn");
 				mSysinfoButton->setClickedCallback(boost::bind(&LLIMFloater::onSysinfoButtonClicked, this));
 				// this needs to be extended to fsdata awareness, once we have it. -Zi
 				// mIsSupportIM=fsdata(partnerUUID).isSupport(); // pseudocode something like this
@@ -896,19 +899,8 @@ LLIMFloater* LLIMFloater::show(const LLUUID& session_id)
 	{
 		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
 
-		if (gSavedSettings.getBOOL("ContactsTornOff"))
-		{
-			// first set the tear-off host to the conversations container
-			floater->setHost(floater_container);
-			// clear the tear-off host right after, the "last host used" will still stick
-			floater->setHost(NULL);
-			// reparent to floater view
-			gFloaterView->addChild(floater);
-			// and remember we are torn off
-			floater->setTornOff(TRUE);
-		}
 		// do not add existed floaters to avoid adding torn off instances
-		else if (!exist)
+		if (!exist)
 		{
 			//		LLTabContainer::eInsertionPoint i_pt = user_initiated ? LLTabContainer::RIGHT_OF_CURRENT : LLTabContainer::END;
 			// TODO: mantipov: use LLTabContainer::RIGHT_OF_CURRENT if it exists

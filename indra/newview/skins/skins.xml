@@ -90,12 +90,6 @@
             <array>
                 <map>
                 <key>name</key>
-                    <string>Nostalgia Blue</string>
-                <key>folder</key>
-                    <string>nostalgia_blue</string>
-                </map>
-                <map>
-                <key>name</key>
                     <string>Original Orange</string>
                 <key>folder</key>
                     <string>original_orange</string>
@@ -105,6 +99,12 @@
                     <string>Original Teal</string>
                 <key>folder</key>
                     <string>original_teal</string>
+                </map>
+                <map>
+                <key>name</key>
+                    <string>Nostalgia Blue</string>
+                <key>folder</key>
+                    <string>nostalgia_blue</string>
                 </map>
                 <map>
                 <key>name</key>

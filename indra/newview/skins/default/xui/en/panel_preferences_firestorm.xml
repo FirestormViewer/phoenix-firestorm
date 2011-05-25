@@ -155,7 +155,21 @@
       width="270"
       control_name="TurnAroundWhenWalkingBackwards"
       tool_tip="Turns your avatar around to face the camera when you are walking backwards."/>
-	  
+
+        <check_box bottom_delta="-20"
+      follows="left|top"
+      font="SansSerifSmall"
+      height="16"
+      initial_value="false"
+      label="Clicking your avatar keeps camera position"
+      left="15"
+      mouse_opaque="true"
+      name="backwardsturnavatar"
+      radio_style="false"
+      width="270"
+      control_name="ClickOnAvatarKeepsCamera"
+      tool_tip="Normally, clicking on your avatar resets the camera position. This option removes this behavior."/>
+
 	     <text
      type="string"
      length="1"

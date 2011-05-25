@@ -44,8 +44,10 @@
 #include "llfriendcard.h"
 #include "llgroupactions.h"
 #include "llgrouplist.h"
+#include "llimfloatercontainer.h"
 #include "llsidetray.h"
 #include "llstartup.h"
+#include "llviewercontrol.h"
 
 static const std::string FRIENDS_TAB_NAME	= "friends_panel";
 static const std::string GROUP_TAB_NAME		= "groups_panel";
@@ -153,6 +155,19 @@ void FSFloaterContacts::updateButtons()
 
 void FSFloaterContacts::onOpen(const LLSD& key)
 {
+	if (gSavedSettings.getBOOL("ContactsTornOff"))
+	{
+		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+		// first set the tear-off host to the conversations container
+		setHost(floater_container);
+		// clear the tear-off host right after, the "last host used" will still stick
+		setHost(NULL);
+		// reparent to floater view
+		gFloaterView->addChild(this);
+		// and remember we are torn off
+		setTornOff(TRUE);
+	}
+
 	if (key.asString() == "friends")
 	{
 		childShowTab("friends_and_groups", "friends_panel");

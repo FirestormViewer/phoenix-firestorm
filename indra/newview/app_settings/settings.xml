@@ -2293,6 +2293,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>ClickOnAvatarKeepsCamera</key>
+    <map>
+      <key>Comment</key>
+      <string>Normally, clicking on your avatar resets the camera position. This option removes this behavior..</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>CreateToolCopyCenters</key>
     <map>
       <key>Comment</key>
