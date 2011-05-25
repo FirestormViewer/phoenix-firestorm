@@ -187,6 +187,7 @@
    </text>
     <radio_group
      control_name="LetterKeysFocusChatBar" 
+     width="310"
      height="16"
      layout="topleft"
      left_delta="120"
@@ -234,7 +235,7 @@
      control_name="ChatWindow"
      name="chat_window"
      tool_tip="Show your Instant Messages in separate floaters, or in one floater with many tabs (Requires restart)"
-     width="110">
+     width="180">
      <radio_item
       height="16"
       label="Separate windows"
@@ -257,7 +258,7 @@
      name="req_restart"
      follows="left|top"
      layout="topleft"
-     left_pad="100"
+     left_pad="10"
      top_delta="0"
      text_color="White_50"
      height="16"
