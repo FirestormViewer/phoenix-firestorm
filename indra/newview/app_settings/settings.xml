@@ -2296,7 +2296,7 @@
     <key>ClickOnAvatarKeepsCamera</key>
     <map>
       <key>Comment</key>
-      <string>Normally, clicking on your avatar resets the camera position. This option removes this behavior..</string>
+      <string>Normally, clicking on your avatar resets the camera position. This option removes this behavior.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
