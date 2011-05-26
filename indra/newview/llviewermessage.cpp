@@ -2807,25 +2807,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			return;
 		}
 
-		if (gRlvHandler.hasBehaviour(RLV_BHVR_RECVIM))
-		{
-			switch (pIMSession->mSessionType)
-			{
-				case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat: allow if group is a sendim exception
-					if ( (from_id != gAgent.getID()) && (!gRlvHandler.isException(RLV_BHVR_RECVIM, session_id)) )
-						return;
-					break;
-				case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat: allow if the sender is a sendim exception
-					if ( (from_id != gAgent.getID()) && (!gRlvHandler.isException(RLV_BHVR_RECVIM, from_id)) )
-						message = RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM);
-					break;
-				default:
-					RLV_ASSERT(false);
-					return;
-			}
-		}
-// [/RLVa:KB]
-
 		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_RECVIM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_RECVIMFROM)) )
 		{
 			switch (pIMSession->mSessionType)
