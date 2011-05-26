@@ -60,19 +60,22 @@ protected:
 	void onToggleViewXXX();												// viewnote, viewscript, viewtexture
 	void onUpdateLoginLastLocation();									// tploc and unsit
 
-	/*
-	 * Floater validation callbacks
+ 	/*
+	 * Floater and sidebar validation callbacks
 	 */
 protected:
 	void addGenericFloaterFilter(const std::string& strFloaterName);
 	void removeGenericFloaterFilter(const std::string& strFloaterName);
+
 	bool filterFloaterGeneric(const std::string&, const LLSD&);
 	boost::signals2::connection m_ConnFloaterGeneric;
-
 	bool filterFloaterShowLoc(const std::string&, const LLSD& );
 	boost::signals2::connection m_ConnFloaterShowLoc;					// showloc
 	bool filterFloaterViewXXX(const std::string&, const LLSD&);
 	boost::signals2::connection m_ConnFloaterViewXXX;					// viewnote, viewscript, viewtexture
+
+	bool canOpenSidebarTab(ERlvBehaviour, const std::string&, LLUICtrl*, const LLSD&);
+	boost::signals2::connection m_ConnSidePanelInventory;				// showinv
 
 	/*
 	 * Helper functions

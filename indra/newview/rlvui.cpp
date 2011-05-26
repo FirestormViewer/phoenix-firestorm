@@ -273,11 +273,20 @@ void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 			(*itFloater)->closeFloater();
 	}
 
-	// Filter out (or stop filtering) newly spawned old style inventory floaters
+	//
+	// Filter (or stop filtering) opening the inventory sidebar tab and spawning old style inventory floaters
+	//
+	RLV_ASSERT_DBG( (fEnable) || (!m_ConnSidePanelInventory.connected()) );
 	if (!fEnable)
+	{
+		m_ConnSidePanelInventory = pSideTray->setValidateCallback(boost::bind(&RlvUIEnabler::canOpenSidebarTab, this, RLV_BHVR_SHOWINV, "sidebar_inventory", _1, _2));
 		addGenericFloaterFilter("inventory");
+	}
 	else
+	{
+		m_ConnSidePanelInventory.disconnect();
 		removeGenericFloaterFilter("inventory");
+	}
 }
 
 // Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
@@ -525,6 +534,13 @@ bool RlvUIEnabler::filterFloaterViewXXX(const std::string& strName, const LLSD&)
 		return false;
 	}
 	return true;
+}
+
+// Checked: 2010-03-01 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
+bool RlvUIEnabler::canOpenSidebarTab(ERlvBehaviour eBhvrFilter, const std::string& strNameFilter, LLUICtrl* pCtrl, const LLSD& sdParam)
+{
+	// NOTE: pCtrl->getName() is the name of the sidebar tab and sdParam is the name of the child panel being activated (can be omitted)
+	return (!gRlvHandler.hasBehaviour(eBhvrFilter)) || (strNameFilter != pCtrl->getName());
 }
 
 // ============================================================================

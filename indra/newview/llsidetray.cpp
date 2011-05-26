@@ -724,8 +724,8 @@ LLPanel* LLSideTray::openChildPanel(LLSideTrayTab* tab, const std::string& panel
 	if ( (pTabBtn) && (!pTabBtn->getEnabled()) )
 		return NULL;
 
-	// NOTE: - "panel_name" is a name of a panel *inside* of the tab, not the name of the tab that's being switched to
-	if ( (mValidateSignal) && (!(*mValidateSignal)(tab, LLSD(tab_name))) )
+	// NOTE: "panel_name" is a name of a panel *inside* of the tab, not the name of the tab that's being switched to
+	if ( (mValidateSignal) && (!(*mValidateSignal)(tab, LLSD(panel_name))) )
 		return NULL;
 // [/RLVa:KB]
 
@@ -790,10 +790,14 @@ bool LLSideTray::selectTabByName(const std::string& name, bool keep_prev_visible
 	if (new_tab == mActiveTab)
 		return false;
 
-// [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+// [RLVa:KB] - Checked: 2011-05-26 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
 	// Don't switch to a tab if its tab button is disabled
 	const LLButton* pTabBtn = getButtonFromName(new_tab->getName());
 	if ( (pTabBtn) && (!pTabBtn->getEnabled()) )
+		return false;
+
+	// Fire the validation signal to see if anyone objects to this tab being selected
+	if ( (mValidateSignal) && (!(*mValidateSignal)(new_tab, LLSD())) )
 		return false;
 // [/RLVa:KB]
 
