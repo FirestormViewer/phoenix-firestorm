@@ -62,9 +62,9 @@
         <scroll_list.columns
           label="Restriction"
           name="behaviour"
-          width="170" />
+          width="70" />
         <scroll_list.columns
-          label="Restriction"
+          label="Option"
           name="option"
           width="170" />
         <scroll_list.columns
@@ -77,11 +77,11 @@
 
   <button
     follows="bottom|left"
-    label="Copy to Clipboard"
-    name="copy_btn"
-    left="10"
-    top_pad="5"
     height="25"
+    label="Copy to Clipboard"
+    left="10"
+    name="copy_btn"
+    top_pad="5"
     width="180" />
 
 </floater>

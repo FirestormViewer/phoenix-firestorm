@@ -38,12 +38,14 @@ private:
 public:
 	/*virtual*/ void onOpen(const LLSD& sdKey);
 	/*virtual*/ void onClose(bool fQuitting);
+	/*virtual*/ BOOL postBuild();
 
 	/*
 	 * Member functions
 	 */
 protected:
 	void onAvatarNameLookup(const LLUUID& idAgent, const LLAvatarName& avName);
+	void onBtnCopyToClipboard();
 	void onCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
 	void refreshAll();
 

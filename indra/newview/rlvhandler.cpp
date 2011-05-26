@@ -245,6 +245,7 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 					if (!m_pGCTimer)
 						m_pGCTimer = new RlvGCTimer();
 					eRet = processAddRemCommand(rlvCmd);
+					m_Objects.find(idCurObj)->second.setCommandRet(rlvCmd, eRet);	// HACK-RLVa: find a better way of doing this
 //					notifyBehaviourObservers(rlvCmd, !fFromObj);
 				}
 				else

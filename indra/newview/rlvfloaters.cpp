@@ -16,6 +16,7 @@
 
 #include "llviewerprecompiledheaders.h"
 #include "llavatarnamecache.h"
+#include "llclipboard.h"
 #include "llscrolllistctrl.h"
 #include "llviewerjointattachment.h"
 #include "llviewerobjectlist.h"
@@ -44,7 +45,7 @@ std::string rlvGetItemNameFromObjID(const LLUUID& idObj, bool fIncludeAttachPt =
 	const LLViewerJointAttachment* pAttachPt = 
 		get_if_there(gAgentAvatarp->mAttachmentPoints, RlvAttachPtLookup::getAttachPointIndex(pObjRoot), (LLViewerJointAttachment*)NULL);
 	std::string strAttachPtName = (pAttachPt) ? pAttachPt->getName() : std::string("Unknown");
-	return llformat("%s (%s, %s)", strItemName.c_str(), strAttachPtName.c_str(), (pObj == pObjRoot) ? "root" : "child");
+	return llformat("%s (%s%s)", strItemName.c_str(), strAttachPtName.c_str(), (pObj == pObjRoot) ? "" : ", child");
 }
 
 // Checked: 2011-05-23 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
@@ -93,11 +94,57 @@ void RlvFloaterBehaviours::onAvatarNameLookup(const LLUUID& idAgent, const LLAva
 		refreshAll();
 }
 
+// Checked: 2011-05-26 (RLVa-1.3.1c) | Added: RLVa-1.3.1c
+void RlvFloaterBehaviours::onBtnCopyToClipboard()
+{
+	std::ostringstream strRestrictions;
+
+	strRestrictions << RlvStrings::getVersion() << "\n";
+
+	const RlvHandler::rlv_object_map_t* pObjects = gRlvHandler.getObjectMap();
+	for (RlvHandler::rlv_object_map_t::const_iterator itObj = pObjects->begin(), endObj = pObjects->end(); itObj != endObj; ++itObj)
+	{
+		strRestrictions << "\n" << rlvGetItemNameFromObjID(itObj->first) << ":\n";
+
+		const rlv_command_list_t* pCommands = itObj->second.getCommandList();
+		for (rlv_command_list_t::const_iterator itCmd = pCommands->begin(), endCmd = pCommands->end(); itCmd != endCmd; ++itCmd)
+		{
+			std::string strOption; LLUUID idOption;
+			if ( (itCmd->hasOption()) && (idOption.set(itCmd->getOption(), FALSE)) && (idOption.notNull()) )
+			{
+				LLAvatarName avName;
+				if (gObjectList.findObject(idOption))
+					strOption = rlvGetItemNameFromObjID(idOption, true);
+				else if (LLAvatarNameCache::get(idOption, &avName))
+					strOption = (!avName.mUsername.empty()) ? avName.mUsername : avName.mDisplayName;
+				else if (!gCacheName->getGroupName(idOption, strOption))
+					strOption = itCmd->getOption();
+			}
+
+			strRestrictions << "  -> " << itCmd->asString();
+			if ( (!strOption.empty()) && (strOption != itCmd->getOption()) )
+				strRestrictions << "  [" << strOption << "]";
+			if (RLV_RET_SUCCESS != itCmd->getReturnType())
+				strRestrictions << "  (" << RlvStrings::getStringFromReturnCode(itCmd->getReturnType()) << ")";
+			strRestrictions << "\n";
+		}
+	}
+
+	gClipboard.copyFromString(utf8str_to_wstring(strRestrictions.str()));
+}
+
 // Checked: 2011-05-23 (RLVa-1.3.1c) | Modified: RLVa-1.3.1c
 void RlvFloaterBehaviours::onCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet)
 {
 	if ( (RLV_TYPE_ADD == rlvCmd.getParamType()) || (RLV_TYPE_REMOVE == rlvCmd.getParamType()) )
 		refreshAll();
+}
+
+// Checked: 2011-05-23 (RLVa-1.3.1c) | Added: RLVa-1.3.1c
+BOOL RlvFloaterBehaviours::postBuild()
+{
+	getChild<LLUICtrl>("copy_btn")->setCommitCallback(boost::bind(&RlvFloaterBehaviours::onBtnCopyToClipboard, this));
+	return TRUE;
 }
 
 // Checked: 2011-05-23 (RLVa-1.3.1c) | Modified: RLVa-1.3.1c
@@ -137,12 +184,12 @@ void RlvFloaterBehaviours::refreshAll()
 		for (rlv_command_list_t::const_iterator itCmd = pCommands->begin(), endCmd = pCommands->end(); itCmd != endCmd; ++itCmd)
 		{
 			std::string strOption; LLUUID idOption;
-			if ( (itCmd->hasOption()) && (idOption.set(itCmd->getOption(), FALSE)) )
+			if ( (itCmd->hasOption()) && (idOption.set(itCmd->getOption(), FALSE)) && (idOption.notNull()) )
 			{
 				LLAvatarName avName;
 				if (gObjectList.findObject(idOption))
 				{
-					strOption = rlvGetItemNameFromObjID(idOption, false);
+					strOption = rlvGetItemNameFromObjID(idOption, true);
 				}
 				else if (LLAvatarNameCache::get(idOption, &avName))
 				{
@@ -171,7 +218,7 @@ void RlvFloaterBehaviours::refreshAll()
 			else
 			{
 				// List under the "Restrictions" tab
-				sdBhvrRow["enabled"] = (RLV_BHVR_UNKNOWN != itCmd->getBehaviourType());
+				sdBhvrRow["enabled"] = (RLV_RET_SUCCESS == itCmd->getReturnType());
 				sdBhvrColumns[0]["value"] = (strOption.empty()) ? itCmd->asString() : itCmd->getBehaviour() + ":" + strOption;
 				sdBhvrColumns[1]["value"] = strIssuer;
 				pBhvrList->addElement(sdBhvrRow, ADD_BOTTOM);
