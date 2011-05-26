@@ -718,7 +718,12 @@ LLPanel* LLSideTray::openChildPanel(LLSideTrayTab* tab, const std::string& panel
 
 	std::string tab_name = tab->getName();
 
-// [RLVa:KB] - Checked: 2010-09-07 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
+// [RLVa:KB] - Checked: 2011-05-26 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
+	// Don't open a child panel if the tab it belongs to has its tab button disabled
+	const LLButton* pTabBtn = getButtonFromName(tab->getName());
+	if ( (pTabBtn) && (!pTabBtn->getEnabled()) )
+		return NULL;
+
 	// NOTE: - "panel_name" is a name of a panel *inside* of the tab, not the name of the tab that's being switched to
 	if ( (mValidateSignal) && (!(*mValidateSignal)(tab, LLSD(tab_name))) )
 		return NULL;
