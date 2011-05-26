@@ -436,6 +436,10 @@ void LLIMFloater::onSysinfoButtonClicked()
 {
 	LLSD info=LLFloaterAbout::getInfo();
 
+	std::string driver;
+	if(info.has("GRAPHICS_DRIVER_VERSION"))
+		driver="Driver: "+info["GRAPHICS_DRIVER_VERSION"]+std::string("\n");
+
 	std::ostringstream support;
 	support <<
 		info["CHANNEL"] << " " << info["VIEWER_VERSION_STR"] << "\n" <<
@@ -445,6 +449,7 @@ void LLIMFloater::onSysinfoButtonClicked()
 		"Memory: " << info["MEMORY_MB"] << "\n" <<
 		"OS: " << info["OS_VERSION"] << "\n" <<
 		"GPU: " << info["GRAPHICS_CARD_VENDOR"] << " " << info["GRAPHICS_CARD"] << "\n" <<
+		driver <<
 		"OpenGL: " << info["OPENGL_VERSION"] << "\n" <<
 		"Skin: " << info["SKIN"] << "(" << info["THEME"] << ")\n" <<
 		"RLV: " << info["RLV_VERSION"] << "\n" <<
