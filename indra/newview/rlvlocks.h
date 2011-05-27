@@ -102,6 +102,8 @@ protected:
 	 * canAttach/canDetach trivial helper functions (note that a more approriate name might be userCanAttach/userCanDetach)
 	 */
 public:
+	// Returns TRUE if there is at least one attachment point that can be attached to
+	bool         canAttach() const;
 	// Returns TRUE if the inventory item can be attached by the user (and optionally provides the attachment point - which may be NULL)
 	ERlvWearMask canAttach(const LLInventoryItem* pItem, LLViewerJointAttachment** ppAttachPtOut = NULL) const;
 	// Returns TRUE if the attachment point can be attached to by the user
@@ -416,16 +418,16 @@ inline S32 RlvAttachPtLookup::getAttachPointIndex(const LLViewerObject* pObj)
 // RlvAttachmentLocks inlined member functions
 //
 
-// Checked: 2011-03-27 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+// Checked: 2011-05-22 (RLVa-1.3.1b) | Modified: RLVa-1.3.1b
 inline ERlvWearMask RlvAttachmentLocks::canAttach(const LLInventoryItem* pItem, LLViewerJointAttachment** ppAttachPtOut /*=NULL*/) const
 {
 	// The specified item can be attached if:
-	//   - it doesn't specify an attachment point
+	//   - it doesn't specify an attachment point and there is at least one attachment point that can be attached to
 	//   - the attachment point it specifies can be attached to
 	LLViewerJointAttachment* pAttachPt = RlvAttachPtLookup::getAttachPoint(pItem);
 	if (ppAttachPtOut)
 		*ppAttachPtOut = pAttachPt;
-	return ((pItem) && (!RlvFolderLocks::instance().isLockedFolder(pItem->getParentUUID(), RLV_LOCK_ADD)))
+	return ((canAttach()) && (pItem) && (!RlvFolderLocks::instance().isLockedFolder(pItem->getParentUUID(), RLV_LOCK_ADD)))
 		? ((!pAttachPt) ? RLV_WEAR : canAttach(pAttachPt)) : RLV_WEAR_LOCKED;
 }
 

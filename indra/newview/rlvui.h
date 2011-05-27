@@ -37,7 +37,7 @@ protected:
 	 * Signal callbacks
 	 */
 public:
-	void onBehaviour(ERlvBehaviour eBhvr, ERlvParamType eType);			// RlvHandler::rlv_behaviour_signal_t
+	void onBehaviourToggle(ERlvBehaviour eBhvr, ERlvParamType eType);	// RlvHandler::rlv_behaviour_signal_t
 
 	/*
 	 * Behaviour handlers

@@ -46,6 +46,8 @@ public:
 	const std::string& getOption() const		{ return m_strOption; }
 	const std::string& getParam() const			{ return m_strParam; }
 	ERlvParamType      getParamType() const		{ return m_eParamType; }
+	ERlvCmdRet         getReturnType() const	{ return m_eRet; }
+	bool               hasOption() const		{ return !m_strOption.empty(); }
 	bool               isStrict() const			{ return m_fStrict; }
 	bool               isValid() const			{ return m_fValid; }
 
@@ -77,10 +79,12 @@ protected:
 	std::string   m_strOption;
 	std::string   m_strParam;
 	ERlvParamType m_eParamType;
+	ERlvCmdRet    m_eRet;
 
 	static bhvr_map_t m_BhvrMap;
 
 	friend class RlvHandler;
+	friend class RlvObject;
 };
 
 // ============================================================================
@@ -176,6 +180,7 @@ public:
 public:
 	bool addCommand(const RlvCommand& rlvCmd);
 	bool removeCommand(const RlvCommand& rlvCmd);
+	void setCommandRet(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
 
 	std::string getStatusString(const std::string& strMatch) const;
 	bool        hasBehaviour(ERlvBehaviour eBehaviour, bool fStrictOnly) const;
@@ -421,7 +426,6 @@ ERlvAttachGroupType rlvAttachGroupFromString(const std::string& strGroup);
 
 std::string rlvGetFirstParenthesisedText(const std::string& strText, std::string::size_type* pidxMatch = NULL);
 std::string rlvGetLastParenthesisedText(const std::string& strText, std::string::size_type* pidxStart = NULL);
-void        rlvStringReplace(std::string& strText, std::string strFrom, const std::string& strTo);
 
 // ============================================================================
 // Inlined class member functions

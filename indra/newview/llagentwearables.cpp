@@ -2008,9 +2008,11 @@ void LLAgentWearables::userRemoveAllAttachments()
 
 void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_array_t& obj_item_array)
 {
-// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-	// RELEASE-RLVa: [SL-2.0.0] Check our callers and verify that erasing elements from the passed vector won't break random things
-	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+	static bool sInitialAttachmentsRequested = false;
+
+	// RELEASE-RLVa: [SL-2.5.2] Check our callers and verify that erasing elements from the passed vector won't break random things
+	if ( (rlv_handler_t::isEnabled()) && (sInitialAttachmentsRequested) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 	{
 		// Fall-back code: everything should really already have been pruned before we get this far
 		for (S32 idxItem = obj_item_array.count() - 1; idxItem >= 0; idxItem--)
@@ -2062,8 +2064,8 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 		msg->addUUIDFast(_PREHASH_ItemID, item->getLinkedUUID());
 		msg->addUUIDFast(_PREHASH_OwnerID, item->getPermissions().getOwner());
 		msg->addU8Fast(_PREHASH_AttachmentPt, 0 | ATTACHMENT_ADD);	// Wear at the previous or default attachment point
-// [RLVa:KB] - Checked: 2010-07-28 (RLVa-1.2.0i) | Added: RLVa-1.2.0i
-		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+		if ( (rlv_handler_t::isEnabled()) && (sInitialAttachmentsRequested) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 		{
 			RlvAttachmentLockWatchdog::instance().onWearAttachment(item, RLV_WEAR_ADD);
 		}
@@ -2078,6 +2080,10 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 			msg->sendReliable( gAgent.getRegion()->getHost() );
 		}
 	}
+
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+	sInitialAttachmentsRequested = true;
+// [/RLVa:KB]
 }
 
 void LLAgentWearables::checkWearablesLoaded() const

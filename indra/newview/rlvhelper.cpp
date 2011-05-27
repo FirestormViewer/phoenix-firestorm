@@ -39,7 +39,7 @@ RlvCommand::bhvr_map_t RlvCommand::m_BhvrMap;
 
 // Checked: 2009-12-27 (RLVa-1.1.0k) | Modified: RLVa-1.1.0k
 RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
-	: m_idObj(idObj), m_eBehaviour(RLV_BHVR_UNKNOWN), m_fStrict(false), m_eParamType(RLV_TYPE_UNKNOWN)
+	: m_fValid(false), m_idObj(idObj), m_eBehaviour(RLV_BHVR_UNKNOWN), m_fStrict(false), m_eParamType(RLV_TYPE_UNKNOWN), m_eRet(RLV_RET_UNKNOWN)
 {
 	if ((m_fValid = parseCommand(strCommand, m_strBehaviour, m_strOption, m_strParam)))
 	{
@@ -339,6 +339,19 @@ bool RlvObject::removeCommand(const RlvCommand& rlvCmd)
 		}
 	}
 	return false;	// Command was never added so nothing to remove now
+}
+
+// Checked: 2011-05-23 (RLVa-1.3.1c) | Added: RLVa-1.3.1c
+void RlvObject::setCommandRet(const RlvCommand& rlvCmd, ERlvCmdRet eRet)
+{
+	for (rlv_command_list_t::iterator itCmd = m_Commands.begin(); itCmd != m_Commands.end(); ++itCmd)
+	{
+		if (*itCmd == rlvCmd)
+		{
+			itCmd->m_eRet = eRet;
+			break;
+		}
+	}
 }
 
 bool RlvObject::hasBehaviour(ERlvBehaviour eBehaviour, bool fStrictOnly) const
@@ -1130,28 +1143,6 @@ ERlvAttachGroupType rlvAttachGroupFromString(const std::string& strGroup)
 // =========================================================================
 // String helper functions
 //
-
-// Checked: 2009-07-04 (RLVa-1.0.0a)
-void rlvStringReplace(std::string& strText, std::string strFrom, const std::string& strTo)
-{
-	if (strFrom.empty())
-		return;
-
-	size_t lenFrom = strFrom.length();
-	size_t lenTo = strTo.length();
-
-	std::string strTemp(strText);
-	LLStringUtil::toLower(strTemp);
-	LLStringUtil::toLower(strFrom);
-
-	std::string::size_type idxCur, idxStart = 0, idxOffset = 0;
-	while ( (idxCur = strTemp.find(strFrom, idxStart)) != std::string::npos)
-	{
-		strText.replace(idxCur + idxOffset, lenFrom, strTo);
-		idxStart = idxCur + lenFrom;
-		idxOffset += lenTo - lenFrom;
-	}
-}
 
 // Checked: 2009-07-29 (RLVa-1.0.1b) | Added: RLVa-1.0.1b
 std::string rlvGetFirstParenthesisedText(const std::string& strText, std::string::size_type* pidxMatch /*=NULL*/)
