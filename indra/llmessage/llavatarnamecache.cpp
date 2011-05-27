@@ -47,7 +47,7 @@ namespace LLAvatarNameCache
 	// supports it.
 	bool sUseDisplayNames = true;
 
-// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
 	// RLVa override for display names
 	bool sForceDisplayNames = false;
 // [/RLVa:KB]
@@ -714,7 +714,7 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 	}
 }
 
-// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
 bool LLAvatarNameCache::getForceDisplayNames()
 {
 	return sForceDisplayNames;
@@ -732,7 +732,7 @@ void LLAvatarNameCache::setForceDisplayNames(bool force)
 
 void LLAvatarNameCache::setUseDisplayNames(bool use)
 {
-// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
 	// We need to force the use of the "display names" cache when @shownames=n restricted (and disallow toggling it)
 	use |= getForceDisplayNames();
 // [/RLVa:KB]

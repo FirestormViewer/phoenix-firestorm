@@ -45,7 +45,7 @@ std::set<std::string> LLFloaterReg::sAlwaysShowableList;
 
 static LLFloaterRegListener sFloaterRegListener;
 
-// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
+// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.4.0a) | Modified: RLVa-1.2.0a
 LLFloaterReg::validate_signal_t LLFloaterReg::mValidateSignal;
 // [/RLVa:KB]
 
@@ -221,7 +221,7 @@ LLFloater* LLFloaterReg::showInstance(const std::string& name, const LLSD& key, 
 //	if( sBlockShowFloaters
 //			// see EXT-7090
 //			&& sAlwaysShowableList.find(name) == sAlwaysShowableList.end())
-// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
+// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.4.0a) | Modified: RLVa-1.2.0a
 	if ( (sBlockShowFloaters && sAlwaysShowableList.find(name) == sAlwaysShowableList.end()) || (!mValidateSignal(name, key)) )
 // [/RLVa:KB]
 		return 0;//

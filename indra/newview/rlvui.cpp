@@ -49,7 +49,7 @@
 
 // ============================================================================
 
-// Checked: 2010-02-28 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 RlvUIEnabler::RlvUIEnabler()
 {
 	// Connect us to the behaviour toggle signal
@@ -62,6 +62,11 @@ RlvUIEnabler::RlvUIEnabler()
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWHOVERTEXTWORLD, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWHOVERTEXTHUD, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
 
+	// onToggleMovement
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_FLY, boost::bind(&RlvUIEnabler::onToggleMovement, this)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_ALWAYSRUN, boost::bind(&RlvUIEnabler::onToggleMovement, this)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_TEMPRUN, boost::bind(&RlvUIEnabler::onToggleMovement, this)));
+
 	// onToggleViewXXX
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_VIEWNOTE, boost::bind(&RlvUIEnabler::onToggleViewXXX, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_VIEWSCRIPT, boost::bind(&RlvUIEnabler::onToggleViewXXX, this)));
@@ -69,7 +74,6 @@ RlvUIEnabler::RlvUIEnabler()
 
 	// onToggleXXX
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_EDIT, boost::bind(&RlvUIEnabler::onToggleEdit, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_FLY, boost::bind(&RlvUIEnabler::onToggleFly, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_REZ, boost::bind(&RlvUIEnabler::onToggleRez, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SETENV, boost::bind(&RlvUIEnabler::onToggleSetEnv, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWINV, boost::bind(&RlvUIEnabler::onToggleShowInv, this, _1)));
@@ -109,7 +113,7 @@ void RlvUIEnabler::onBehaviour(ERlvBehaviour eBhvr, ERlvParamType eType)
 
 // ============================================================================
 
-// Checked: 2010-03-02 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
+// Checked: 2010-03-02 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 void RlvUIEnabler::onRefreshHoverText()
 {
 	// Refresh all hover text each time any of the monitored behaviours get set or unset
@@ -145,20 +149,21 @@ void RlvUIEnabler::onToggleEdit()
 		removeGenericFloaterFilter("beacons");
 }
 
-// Checked: 2010-03-02 (RLVa-1.2.0d) | Added: RLVa-1.2.0a
-void RlvUIEnabler::onToggleFly()
+// Checked: 2010-03-02 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
+void RlvUIEnabler::onToggleMovement()
 {
-	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_FLY);
-
-	// Drop the avie out of the sky if currently flying and restricted
-	if ( (!fEnable) && (gAgent.getFlying()) )
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_FLY)) && (gAgent.getFlying()) )
 		gAgent.setFlying(FALSE);
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_ALWAYSRUN)) && (gAgent.getAlwaysRun()) )
+		gAgent.clearAlwaysRun();
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_TEMPRUN)) && (gAgent.getTempRun()) )
+		gAgent.clearTempRun();
 
 	// Force an update since the status only updates when the current parcel changes [see LLFloaterMove::postBuild()]
-	LLFloaterMove::sUpdateFlyingStatus();
+	LLFloaterMove::sUpdateMovementStatus();
 }
 
-// Checked: 2010-09-11 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
+// Checked: 2010-09-11 (RLVa-1.4.0a) | Added: RLVa-1.2.1d
 void RlvUIEnabler::onToggleRez()
 {
 	// Enable/disable the "Build" bottom tray button
@@ -188,7 +193,7 @@ void RlvUIEnabler::onToggleSetEnv()
 	}
 }
 
-// Checked: 2010-09-07 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
+// Checked: 2010-09-07 (RLVa-1.4.0a) | Modified: RLVa-1.2.1a
 void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 {
 	if (fQuitting)
@@ -349,7 +354,7 @@ void RlvUIEnabler::onToggleShowLoc()
 		m_ConnFloaterShowLoc.disconnect();
 }
 
-// Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
+// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 void RlvUIEnabler::onToggleShowMinimap()
 {
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWMINIMAP);
@@ -370,11 +375,12 @@ void RlvUIEnabler::onToggleShowMinimap()
 	// Enable/disable the "Mini-Map" bottom tray button
 	const LLBottomTray* pTray = LLBottomTray::getInstance();
 	LLView* pBtnView = (pTray) ? pTray->getChildView("mini_map_btn") : NULL;
+	RLV_ASSERT(pBtnView);
 	if (pBtnView)
 		pBtnView->setEnabled(fEnable);
 }
 
-// Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
+// Checked: 2010-12-08 (RLVa-1.4.0a) | Modified: RLVa-1.2.2c
 void RlvUIEnabler::onToggleShowNames(bool fQuitting)
 {
 	if (fQuitting)
@@ -406,7 +412,7 @@ void RlvUIEnabler::onToggleShowNames(bool fQuitting)
 	LLVOAvatar::invalidateNameTags();	// See handleDisplayNamesOptionChanged()
 }
 
-// Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
+// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 void RlvUIEnabler::onToggleShowWorldMap()
 {
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP);
@@ -418,6 +424,7 @@ void RlvUIEnabler::onToggleShowWorldMap()
 	// Enable/disable the "Map" bottom tray button
 	const LLBottomTray* pTray = LLBottomTray::getInstance();
 	LLView* pBtnView = (pTray) ? pTray->getChildView("world_map_btn") : NULL;
+	RLV_ASSERT(pBtnView);
 	if (pBtnView)
 		pBtnView->setEnabled(fEnable);
 
@@ -476,8 +483,8 @@ void RlvUIEnabler::onUpdateLoginLastLocation()
 
 // ============================================================================
 
-// Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
-inline void RlvUIEnabler::addGenericFloaterFilter(const std::string& strFloaterName)
+// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
+void RlvUIEnabler::addGenericFloaterFilter(const std::string& strFloaterName)
 {
 	m_FilteredFloaters.insert(strFloaterName);
 
@@ -485,8 +492,8 @@ inline void RlvUIEnabler::addGenericFloaterFilter(const std::string& strFloaterN
 		m_ConnFloaterGeneric = LLFloaterReg::setValidateCallback(boost::bind(&RlvUIEnabler::filterFloaterGeneric, this, _1, _2));
 }
 
-// Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
-inline void RlvUIEnabler::removeGenericFloaterFilter(const std::string& strFloaterName)
+// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
+void RlvUIEnabler::removeGenericFloaterFilter(const std::string& strFloaterName)
 {
 	std::multiset<std::string>::iterator itFloater = m_FilteredFloaters.find(strFloaterName);
 	RLV_ASSERT_DBG(itFloater != m_FilteredFloaters.end());
@@ -497,10 +504,10 @@ inline void RlvUIEnabler::removeGenericFloaterFilter(const std::string& strFloat
 		m_ConnFloaterGeneric.disconnect();
 }
 
-// Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
+// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 bool RlvUIEnabler::filterFloaterGeneric(const std::string& strName, const LLSD&)
 {
-	return m_FilteredFloaters.find(strName) == m_FilteredFloaters.end();
+	return m_FilteredFloaters.end() == m_FilteredFloaters.find(strName);
 }
 
 // Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f

@@ -37,8 +37,6 @@ protected:
 	 * Signal callbacks
 	 */
 public:
-	typedef boost::function<void(bool)> behaviour_handler_t;
-	void addBehaviourToggleCallback(ERlvBehaviour eBhvr, behaviour_handler_t cb);
 	void onBehaviour(ERlvBehaviour eBhvr, ERlvParamType eType);			// RlvHandler::rlv_behaviour_signal_t
 
 	/*
@@ -47,7 +45,7 @@ public:
 protected:
 	void onRefreshHoverText();											// showloc, shownames, showhovertext(all|world|hud)
 	void onToggleEdit();												// edit
-	void onToggleFly();													// fly
+	void onToggleMovement();											// fly, alwaysrun and temprun
 	void onToggleRez();													// rez
 	void onToggleSetEnv();												// setenv
 	void onToggleShowInv(bool fQuitting);								// showinv
@@ -91,20 +89,12 @@ public:
 	 * Member variables
 	 */
 protected:
+	typedef boost::function<void(bool)> behaviour_handler_t;
 	typedef std::multimap<ERlvBehaviour, behaviour_handler_t> behaviour_handler_map_t;
 	behaviour_handler_map_t m_Handlers;
 
 	std::multiset<std::string> m_FilteredFloaters;
 };
-
-// ============================================================================
-// Inlined member functions
-
-// Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-inline void RlvUIEnabler::addBehaviourToggleCallback(ERlvBehaviour eBhvr, behaviour_handler_t cb)
-{
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(eBhvr, cb));
-}
 
 // ============================================================================
 

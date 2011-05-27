@@ -707,7 +707,10 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
 
 	LLSelectMgr::getInstance()->updateSelectionCenter();
 
-	LLFloaterMove::sUpdateFlyingStatus();
+//	LLFloaterMove::sUpdateFlyingStatus();
+// [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+	LLFloaterMove::sUpdateMovementStatus();
+// [/RLVa:KB]
 }
 
 
