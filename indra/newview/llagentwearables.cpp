@@ -49,8 +49,9 @@
 #include "llvoavatarself.h"
 #include "llwearable.h"
 #include "llwearablelist.h"
-// [RLVa:KB] - Checked: RLVa-1.2.0a (2010-03-04)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
 
 #include <boost/scoped_ptr.hpp>

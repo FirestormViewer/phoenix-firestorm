@@ -46,7 +46,6 @@ public:
 	 */
 protected:
 	void onRefreshHoverText();											// showloc, shownames, showhovertext(all|world|hud)
-	void onToggleDisplayName();											// displayname
 	void onToggleEdit();												// edit
 	void onToggleFly();													// fly
 	void onToggleRez();													// rez

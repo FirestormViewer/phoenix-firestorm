@@ -17,7 +17,6 @@
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
 #include "llagentui.h"
-#include "llappviewer.h"
 #include "llavatarnamecache.h"
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
@@ -29,6 +28,7 @@
 #include "llworld.h"
 
 #include "rlvcommon.h"
+#include "rlvhelper.h"
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 
@@ -37,22 +37,6 @@
 // ============================================================================
 // RlvNotifications
 //
-
-#ifdef RLV_EXTENSION_NOTIFY_BEHAVIOUR
-// Checked: 2009-12-05 (RLVa-1.1.0h) | Added: RLVa-1.1.0h
-/*
-void RlvNotifications::notifyBehaviour(ERlvBehaviour eBhvr, ERlvParamType eType)
-{
-	const std::string& strMsg = RlvStrings::getBehaviourNotificationString(eBhvr, eType);
-	if (!strMsg.empty())
-	{
-		LLSD argsNotify;
-		argsNotify["MESSAGE"] = strMsg;
-		LLNotifications::instance().add("SystemMessageTip", argsNotify);
-	}
-}
-*/
-#endif // RLV_EXTENSION_NOTIFY_BEHAVIOUR
 
 // Checked: 2009-11-13 (RLVa-1.1.0b) | Modified: RLVa-1.1.0b
 /*
@@ -152,10 +136,6 @@ bool RlvSettings::onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting)
 
 std::vector<std::string> RlvStrings::m_Anonyms;
 std::map<std::string, std::string> RlvStrings::m_StringMap;
-#ifdef RLV_EXTENSION_NOTIFY_BEHAVIOUR
-std::map<ERlvBehaviour, std::string> RlvStrings::m_BhvrAddMap;
-std::map<ERlvBehaviour, std::string> RlvStrings::m_BhvrRemMap;
-#endif // RLV_EXTENSION_NOTIFY_BEHAVIOUR
 
 // Checked: 2010-03-09 (RLVa-1.2.0a) | Added: RLVa-1.1.0h
 void RlvStrings::initClass()
@@ -191,25 +171,6 @@ void RlvStrings::initClass()
 					m_Anonyms.push_back(pAnonymNode->getTextContents());
 				}
 			}
-			#ifdef RLV_EXTENSION_NOTIFY_BEHAVIOUR
-			else if (pNode->hasName("behaviour-notifications"))
-			{
-				std::string strBhvr, strType; ERlvBehaviour eBhvr;
-				for (LLXMLNode* pNotifyNode = pNode->getFirstChild(); pNotifyNode != NULL; pNotifyNode = pNotifyNode->getNextSibling())
-				{
-					if ( (!pNotifyNode->hasName("notification")) || (!pNotifyNode->getAttributeString("type", strType)) ||
-						 (!pNotifyNode->getAttributeString("behaviour", strBhvr)) || 
-						 ((eBhvr = RlvCommand::getBehaviourFromString(strBhvr)) == RLV_BHVR_UNKNOWN) )
-					{
-						continue;
-					}
-					if ("add" == strType)
-						m_BhvrAddMap.insert(std::pair<ERlvBehaviour, std::string>(eBhvr, pNotifyNode->getTextContents()));
-					else if ("rem" == strType)
-						m_BhvrRemMap.insert(std::pair<ERlvBehaviour, std::string>(eBhvr, pNotifyNode->getTextContents()));
-				}
-			}
-			#endif // RLV_EXTENSION_NOTIFY_BEHAVIOUR
 		}
 
 		if ( (m_StringMap.empty()) || (m_Anonyms.empty()) )
@@ -233,24 +194,6 @@ const std::string& RlvStrings::getAnonym(const std::string& strName)
 
 	return m_Anonyms[nHash % m_Anonyms.size()];
 }
-
-#ifdef RLV_EXTENSION_NOTIFY_BEHAVIOUR
-// Checked: 2009-12-05 (RLVa-1.1.0h) | Added: RLVa-1.1.0h
-const std::string& RlvStrings::getBehaviourNotificationString(ERlvBehaviour eBhvr, ERlvParamType eType)
-{
-	if (RLV_TYPE_ADD == eType)
-	{
-		std::map<ERlvBehaviour, std::string>::const_iterator itString = m_BhvrAddMap.find(eBhvr);
-		return (itString != m_BhvrAddMap.end()) ? itString->second : LLStringUtil::null;
-	}
-	else if (RLV_TYPE_REMOVE == eType)
-	{
-		std::map<ERlvBehaviour, std::string>::const_iterator itString = m_BhvrRemMap.find(eBhvr);
-		return (itString != m_BhvrRemMap.end()) ? itString->second : LLStringUtil::null;
-	}
-	return LLStringUtil::null;
-}
-#endif // RLV_EXTENSION_NOTIFY_BEHAVIOUR
 
 // Checked: 2009-11-11 (RLVa-1.1.0a) | Added: RLVa-1.1.0a
 const std::string& RlvStrings::getString(const std::string& strStringName)
@@ -520,6 +463,32 @@ bool rlvMenuEnableIfNot(const LLSD& sdParam)
 // Selection functors
 //
 
+// Checked: 2010-04-11 (RLVa-1.2.0b) | Modified: RLVa-0.2.0g
+bool rlvCanDeleteOrReturn()
+{
+	bool fIsAllowed = true;
+
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_REZ))
+	{
+		// We'll allow if none of the prims are owned by the avie or group owned
+		LLObjectSelectionHandle handleSel = LLSelectMgr::getInstance()->getSelection();
+		RlvSelectIsOwnedByOrGroupOwned f(gAgent.getID());
+		if ( (handleSel.notNull()) && ((0 == handleSel->getRootObjectCount()) || (NULL != handleSel->getFirstRootNode(&f, FALSE))) )
+			fIsAllowed = false;
+	}
+	
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (isAgentAvatarValid()) )
+	{
+		// We'll allow if the avie isn't sitting on any of the selected objects
+		LLObjectSelectionHandle handleSel = LLSelectMgr::getInstance()->getSelection();
+		RlvSelectIsSittingOn f(gAgentAvatarp->getRoot());
+		if ( (handleSel.notNull()) && (handleSel->getFirstRootNode(&f, TRUE)) )
+			fIsAllowed = false;
+	}
+
+	return fIsAllowed;
+}
+
 // Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-0.2.0f
 bool RlvSelectHasLockedAttach::apply(LLSelectNode* pNode)
 {
@@ -605,6 +574,18 @@ bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem)
 bool rlvPredCanNotRemoveItem(const LLViewerInventoryItem* pItem)
 {
 	return !rlvPredCanRemoveItem(pItem);
+}
+
+// Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+RlvPredIsEqualOrLinkedItem::RlvPredIsEqualOrLinkedItem(const LLUUID& idItem)
+{
+	m_pItem = gInventory.getItem(idItem);
+}
+
+// Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+bool RlvPredIsEqualOrLinkedItem::operator()(const LLViewerInventoryItem* pItem) const
+{
+	return (m_pItem) && (pItem) && (m_pItem->getLinkedUUID() == pItem->getLinkedUUID());
 }
 
 // ============================================================================

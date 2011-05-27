@@ -17,31 +17,17 @@
 #ifndef RLV_LOCKS_H
 #define RLV_LOCKS_H
 
+#include "llagentconstants.h"
 #include "llagentwearables.h"
 #include "lleventtimer.h"
+#include "llvoavatarself.h"
 
 #include "rlvdefines.h"
 #include "rlvcommon.h"
 
-#ifdef LL_WINDOWS
-	#pragma warning (push)
-	#pragma warning (disable : 4702) // warning C4702: unreachable code
-#endif
-#include <boost/variant.hpp>
-#ifdef LL_WINDOWS
-	#pragma warning (pop)
-#endif
-
 // ============================================================================
 // RlvAttachPtLookup class declaration
 //
-
-#include "llagent.h"
-#include "llviewerjointattachment.h"
-#include "llviewerobject.h"
-#include "llvoavatarself.h"
-
-#include "rlvdefines.h"
 
 class RlvAttachPtLookup
 {

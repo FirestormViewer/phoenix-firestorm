@@ -68,8 +68,9 @@
 #include "llviewercontrol.h"
 #include "lluictrlfactory.h"
 //#include "llfirstuse.h"
-// [RLVa:KB] - Checked: 2010-03-31 (RLVa-1.2.0c)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "llvoavatarself.h"
 // [/RLVa:KB]
 
 #include "lldrawpool.h"

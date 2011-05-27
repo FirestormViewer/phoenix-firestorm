@@ -18,19 +18,13 @@
 #define RLV_HELPER_H
 
 #include "lleventtimer.h"
+#include "llinventorymodel.h"
+#include "llviewerinventory.h"
+#include "llwearabletype.h"
 #include "llwlparamset.h"
 
 #include "rlvdefines.h"
 #include "rlvcommon.h"
-
-#ifdef LL_WINDOWS
-	#pragma warning (push)
-	#pragma warning (disable : 4702) // warning C4702: unreachable code
-#endif
-#include <boost/variant.hpp>
-#ifdef LL_WINDOWS
-	#pragma warning (pop)
-#endif
 
 // ============================================================================
 // RlvCommand
@@ -88,7 +82,6 @@ protected:
 
 	friend class RlvHandler;
 };
-typedef std::list<RlvCommand> rlv_command_list_t;
 
 // ============================================================================
 // RlvCommandOption (and derived classed)
@@ -358,8 +351,6 @@ protected:
 // RlvException
 //
 
-typedef boost::variant<std::string, LLUUID, S32, ERlvBehaviour> RlvExceptionOption;
-
 struct RlvException
 {
 public:
@@ -376,7 +367,7 @@ private:
 // RlvWLSnapshot
 //
 
-struct RlvWLSnapshot
+class RlvWLSnapshot
 {
 public:
 	static void           restoreSnapshot(const RlvWLSnapshot* pWLSnapshot);
@@ -424,8 +415,6 @@ inline void rlvCallbackTimerOnce(F32 nPeriod, RlvCallbackTimerOnce::nullary_func
 // ============================================================================
 // Various helper functions
 //
-
-bool rlvCanDeleteOrReturn();
 
 ERlvAttachGroupType rlvAttachGroupFromIndex(S32 idxGroup);
 ERlvAttachGroupType rlvAttachGroupFromString(const std::string& strGroup);

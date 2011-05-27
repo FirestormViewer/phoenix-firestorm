@@ -15,11 +15,11 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include "llagent.h"
 #include "llagentwearables.h"
 #include "llappearancemgr.h"
 #include "llattachmentsmgr.h"
 #include "llgesturemgr.h"
-#include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llviewerobject.h"
 #include "llviewerobjectlist.h"
@@ -159,10 +159,10 @@ void RlvCommand::initLookupTable()
 				"redirchat", "rediremote", "chatwhisper", "chatnormal", "chatshout", "sendchannel", "sendim", "sendimto", 
 				"recvim", "recvimfrom", "startim", "startimto", "permissive", "notify", "showinv", "showminimap", "showworldmap", "showloc", 
 				"shownames", "showhovertext", "showhovertexthud", "showhovertextworld", "showhovertextall", "tplm", "tploc", "tplure", 
-				"viewnote", "viewscript", "viewtexture", "acceptpermission", "accepttp", "allowidle", "displayname", "edit", "editobj", 
-				"rez", "fartouch", "interact", "touchthis", "touchattach", "touchattachself", "touchattachother", "touchhud", "touchworld", 
-				"touchall", "touchme", "fly", "setgroup", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv", "alwaysrun", "temprun", 
-				"detachme", "attachover", "attachthis", "attachthisover", "attachthisexcept", "detachthis", "detachthisexcept", "attachall", 
+				"viewnote", "viewscript", "viewtexture", "acceptpermission", "accepttp", "allowidle", "edit", "editobj", "rez", "fartouch", 
+				"interact", "touchthis", "touchattach", "touchattachself", "touchattachother", "touchhud", "touchworld", "touchall", 
+				"touchme", "fly", "setgroup", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv", "alwaysrun", "temprun", "detachme", 
+				"attachover", "attachthis", "attachthisover", "attachthisexcept", "detachthis", "detachthisexcept", "attachall", 
 				"attachallover", "detachall", "attachallthis", "attachallthisexcept", "attachallthisover", "detachallthis", 
 				"detachallthisexcept", "adjustheight", "tpto", "version", "versionnew", "versionnum", "getattach", "getattachnames", 
 				"getaddattachnames", "getremattachnames", "getoutfit", "getoutfitnames", "getaddoutfitnames", "getremoutfitnames", 
@@ -1086,32 +1086,6 @@ BOOL RlvGCTimer::tick()
 // ============================================================================
 // Various helper functions
 //
-
-// Checked: 2010-04-11 (RLVa-1.2.0b) | Modified: RLVa-0.2.0g
-bool rlvCanDeleteOrReturn()
-{
-	bool fIsAllowed = true;
-
-	if (gRlvHandler.hasBehaviour(RLV_BHVR_REZ))
-	{
-		// We'll allow if none of the prims are owned by the avie or group owned
-		LLObjectSelectionHandle handleSel = LLSelectMgr::getInstance()->getSelection();
-		RlvSelectIsOwnedByOrGroupOwned f(gAgent.getID());
-		if ( (handleSel.notNull()) && ((0 == handleSel->getRootObjectCount()) || (NULL != handleSel->getFirstRootNode(&f, FALSE))) )
-			fIsAllowed = false;
-	}
-	
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (isAgentAvatarValid()) )
-	{
-		// We'll allow if the avie isn't sitting on any of the selected objects
-		LLObjectSelectionHandle handleSel = LLSelectMgr::getInstance()->getSelection();
-		RlvSelectIsSittingOn f(gAgentAvatarp->getRoot());
-		if ( (handleSel.notNull()) && (handleSel->getFirstRootNode(&f, TRUE)) )
-			fIsAllowed = false;
-	}
-
-	return fIsAllowed;
-}
 
 // ============================================================================
 // Attachment group helper functions

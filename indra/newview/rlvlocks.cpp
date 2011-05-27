@@ -15,6 +15,7 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include "llagent.h"
 #include "llappearancemgr.h"
 #include "llattachmentsmgr.h"
 #include "llinventoryobserver.h"
@@ -22,9 +23,9 @@
 #include "llviewerobjectlist.h"
 #include "pipeline.h"
 
+#include "rlvlocks.h"
 #include "rlvhelper.h"
 #include "rlvinventory.h"
-#include "rlvlocks.h"
 
 // ============================================================================
 // RlvAttachPtLookup member functions
@@ -526,7 +527,7 @@ void RlvAttachmentLockWatchdog::detach(S32 idxAttachPt, const LLViewerObject* pA
 	if (!pAttachPt)
 		return;
 
-	c_llvo_vec_t attachObjs;
+	std::vector<const LLViewerObject*> attachObjs;
 	for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator itAttachObj = pAttachPt->mAttachedObjects.begin();
 			itAttachObj != pAttachPt->mAttachedObjects.end(); ++itAttachObj)
 	{
@@ -542,7 +543,7 @@ void RlvAttachmentLockWatchdog::detach(S32 idxAttachPt, const LLViewerObject* pA
 		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
 		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
 		
-		for (c_llvo_vec_t::const_iterator itAttachObj = attachObjs.begin(); itAttachObj != attachObjs.end(); ++itAttachObj)
+		for (std::vector<const LLViewerObject*>::const_iterator itAttachObj = attachObjs.begin(); itAttachObj != attachObjs.end(); ++itAttachObj)
 		{
 			const LLViewerObject* pAttachObj = *itAttachObj;
 			gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
@@ -623,7 +624,6 @@ void RlvAttachmentLockWatchdog::onAttach(const LLViewerObject* pAttachObj, const
 				else
 				{
 					// Iterate over all the current attachments and force detach any that shouldn't be there
-					c_llvo_vec_t attachObjs;
 					for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator itAttachObj = pAttachPt->mAttachedObjects.begin();
 							itAttachObj != pAttachPt->mAttachedObjects.end(); ++itAttachObj)
 					{

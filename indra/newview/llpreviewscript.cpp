@@ -85,8 +85,9 @@
 #include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llappviewer.h"
-// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
 
 const std::string HELLO_LSL =

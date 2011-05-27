@@ -25,7 +25,6 @@
 #define RLV_EXTENSION_CMD_GETSETDEBUG_EX	// Extends the debug variables accessible through @getdebug_xxx/@setdebug_xxx
 #define RLV_EXTENSION_CMD_FINDFOLDERS		// @findfolders:<option>=<channel> - @findfolder with multiple results
 #define RLV_EXTENSION_FORCEWEAR_GESTURES	// @attach*/detach* commands also (de)activate gestures
-#define RLV_EXTENSION_NOTIFY_BEHAVIOUR		// Provides the option to show a customizable notification whenever a behaviour gets (un)set
 #define RLV_EXTENSION_STARTLOCATION			// Reenables "Start Location" at login if not @tploc=n or @unsit=n restricted at last logoff
 #define RLV_EXPERIMENTAL					// Enables/disables experimental features en masse
 #define RLV_EXPERIMENTAL_CMDS				// Enables/disables experimental commands en masse
@@ -50,7 +49,6 @@
 	#define RLV_EXTENSION_CMD_GETXXXNAMES	// @get[add|rem]attachnames:<option>=<channel> and @get[add|rem]outfitnames=<channel>
 	#define RLV_EXTENSION_CMD_INTERACT		// @interact=n
 	#define RLV_EXTENSION_CMD_TOUCHXXX		// @touch:uuid=n|y, @touchworld[:<uuid>]=n|y, @touchattach[:<uuid>]=n|y, @touchud[:<uuid>]=n|y
-	#define RLV_EXTENSION_CMD_DISPLAYNAME	// @displayname=n
 #endif // RLV_EXPERIMENTAL_CMDS
 
 // ============================================================================
@@ -85,11 +83,7 @@ const S32 RLVa_VERSION_BUILD = 1;
 	// Make sure we halt execution on errors
 	#define RLV_ERRS				LL_ERRS("RLV")
 	// Keep our asserts separate from LL's
-	#ifdef LL_WINDOWS
-		#define RLV_ASSERT(f)			if (!(f)) { if (IsDebuggerPresent()) DebugBreak(); else { RLV_ERRS << "ASSERT (" << #f << ")" << RLV_ENDL; } }
-	#else
-		#define RLV_ASSERT(f)			if (!(f)) { RLV_ERRS << "ASSERT (" << #f << ")" << RLV_ENDL; }
-	#endif // LL_WINDOWS
+	#define RLV_ASSERT(f)			if (!(f)) { RLV_ERRS << "ASSERT (" << #f << ")" << RLV_ENDL; }
 	#define RLV_ASSERT_DBG(f)		RLV_ASSERT(f)
 #else
 	// Don't halt execution on errors in release
@@ -167,7 +161,6 @@ enum ERlvBehaviour {
 	RLV_BHVR_ACCEPTPERMISSION,		// "acceptpermission"
 	RLV_BHVR_ACCEPTTP,				// "accepttp"
 	RLV_BHVR_ALLOWIDLE,				// "allowidle"
-	RLV_BHVR_DISPLAYNAME,			// "displayname"
 	RLV_BHVR_EDIT,					// "edit"
 	RLV_BHVR_EDITOBJ,				// "editobj"
 	RLV_BHVR_REZ,					// "rez"

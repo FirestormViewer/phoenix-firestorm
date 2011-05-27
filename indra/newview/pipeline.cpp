@@ -100,8 +100,9 @@
 #include "llspatialpartition.h"
 #include "llmutelist.h"
 #include "lltoolpie.h"
-// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
 
 #ifdef _DEBUG

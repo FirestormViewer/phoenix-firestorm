@@ -18,14 +18,8 @@
 #define RLV_HANDLER_H
 
 #include <stack>
-#include "llagentconstants.h"
-#include "llstartup.h"
-#include "llviewerjointattachment.h"
-#include "llviewerobject.h"
 
 #include "rlvcommon.h"
-#include "rlvhelper.h"
-#include "rlvlocks.h"
 
 // ============================================================================
 
@@ -239,12 +233,6 @@ extern rlv_handler_t gRlvHandler;
 // Inlined member functions
 //
 
-// Checked: 2009-10-04 (RLVa-1.0.4a) | Modified: RLVa-1.0.4a
-inline void RlvHandler::addException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption)
-{
-	m_Exceptions.insert(std::pair<ERlvBehaviour, RlvException>(eBhvr, RlvException(idObj, eBhvr, varOption)));
-}
-
 // Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
 inline bool RlvHandler::canEdit(const LLViewerObject* pObj) const
 {
@@ -289,26 +277,6 @@ inline bool RlvHandler::canShowHoverText(const LLViewerObject *pObj) const
 			   (isException(RLV_BHVR_SHOWHOVERTEXT, pObj->getID(), RLV_CHECK_PERMISSIVE)) ) );
 }
 
-// Checked: 2010-03-06 (RLVa-1.2.0c) | Added: RLVa-1.1.0j
-inline bool RlvHandler::canSit(LLViewerObject* pObj, const LLVector3& posOffset /*= LLVector3::zero*/) const
-{
-	// The user can sit on the specified object if:
-	//   - not prevented from sitting
-	//   - not prevented from standing up or not currently sitting
-	//   - not standtp restricted or not currently sitting (if the user is sitting and tried to sit elsewhere the tp would just kick in)
-	//   - [regular sit] not @sittp=n or @fartouch=n restricted or if they clicked on a point within 1.5m of the avie's current position
-	//   - [force sit] not @sittp=n restricted by a *different* object than the one that issued the command or the object is within 1.5m
-	return
-		( (pObj) && (LL_PCODE_VOLUME == pObj->getPCode()) ) &&
-		(!hasBehaviour(RLV_BHVR_SIT)) && 
-		( ((!hasBehaviour(RLV_BHVR_UNSIT)) && (!hasBehaviour(RLV_BHVR_STANDTP))) || 
-		  ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting())) ) &&
-		( ((NULL == getCurrentCommand() || (RLV_BHVR_SIT != getCurrentCommand()->getBehaviourType()))
-			? ((!hasBehaviour(RLV_BHVR_SITTP)) && (!hasBehaviour(RLV_BHVR_FARTOUCH)))	// [regular sit]
-			: (!hasBehaviourExcept(RLV_BHVR_SITTP, getCurrentObject()))) ||				// [force sit]
-		  (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) < 1.5f * 1.5f) );
-}
-
 inline bool RlvHandler::canStartIM(const LLUUID& idRecipient) const
 {
 	// User can start an IM session with "recipient" (could be an agent or a group) if:
@@ -317,13 +285,6 @@ inline bool RlvHandler::canStartIM(const LLUUID& idRecipient) const
 	return 
 		( (!hasBehaviour(RLV_BHVR_STARTIM)) || (isException(RLV_BHVR_STARTIM, idRecipient)) ) &&
 		( (!hasBehaviour(RLV_BHVR_STARTIMTO)) || (!isException(RLV_BHVR_STARTIMTO, idRecipient)) );
-}
-
-// Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
-inline bool RlvHandler::canStand() const
-{
-	// NOTE: return FALSE only if we're @unsit=n restricted and the avie is currently sitting on something and TRUE for everything else
-	return (!hasBehaviour(RLV_BHVR_UNSIT)) || ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting()));
 }
 
 // Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
@@ -340,44 +301,6 @@ inline bool RlvHandler::hasBehaviour(ERlvBehaviour eBhvr, const std::string& str
 inline bool RlvHandler::hasBehaviourExcept(ERlvBehaviour eBhvr, const LLUUID& idObj) const
 {
 	return hasBehaviourExcept(eBhvr, LLStringUtil::null, idObj);
-}
-
-// Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
-inline bool RlvHandler::hasException(ERlvBehaviour eBhvr) const
-{
-	return (m_Exceptions.find(eBhvr) != m_Exceptions.end());
-}
-
-inline bool RlvHandler::isPermissive(ERlvBehaviour eBhvr) const
-{
-	return (RlvCommand::hasStrictVariant(eBhvr)) 
-		? !((hasBehaviour(RLV_BHVR_PERMISSIVE)) || (isException(RLV_BHVR_PERMISSIVE, eBhvr, RLV_CHECK_PERMISSIVE)))
-		: true;
-}
-
-// Checked: 2009-10-04 (RLVa-1.0.4a) | Modified: RLVa-1.0.4a
-inline void RlvHandler::removeException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption)
-{
-	for (rlv_exception_map_t::iterator itException = m_Exceptions.lower_bound(eBhvr), 
-			endException = m_Exceptions.upper_bound(eBhvr); itException != endException; ++itException)
-	{
-		if ( (itException->second.idObject == idObj) && (itException->second.varOption == varOption) )
-		{
-			m_Exceptions.erase(itException);
-			break;
-		}
-	}
-}
-
-// Checked: 2009-11-25 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
-inline ERlvCmdRet RlvHandler::processCommand(const LLUUID& idObj, const std::string& strCommand, bool fFromObj)
-{
-	if (STATE_STARTED != LLStartUp::getStartupState())
-	{
-		m_Retained.push_back(RlvCommand(idObj, strCommand));
-		return RLV_RET_RETAINED;
-	}
-	return processCommand(RlvCommand(idObj, strCommand), fFromObj);
 }
 
 // ============================================================================

@@ -77,8 +77,9 @@
 #include "llwlparammanager.h"
 #include "llwaterparammanager.h"
 #include "llpostprocess.h"
-// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
 
 extern LLPointer<LLViewerTexture> gStartTexture;

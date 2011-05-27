@@ -46,8 +46,9 @@
 #include "llviewerregion.h"
 #include "llcallbacklist.h"
 #include "llvoavatarself.h"
-// [RLVa:KB] - Checked: RLVa-1.2.0a (2010-03-05)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
 
 //#define DIFF_INVENTORY_FILES
