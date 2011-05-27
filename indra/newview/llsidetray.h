@@ -141,7 +141,7 @@ public:
 	/*
 	 * get currently active tab
 	 */
-// [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 	// *sighs* LLSideTrayTab is defined in llsidetray.cpp... we can make do with an LLPanel* though 
 	const LLPanel*	getActiveTab() const;
 // [/RLVa:KB]
@@ -171,10 +171,10 @@ public:
 	}
 
 	LLPanel*	getButtonsPanel() { return mButtonsPanel; }
-// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 	LLButton*	getButtonFromName(const std::string& strName)
 	{ 
-		std::map<std::string, LLButton*>::const_iterator itBtn = mTabButtons.find(strName);
+		button_map_t::const_iterator itBtn = mTabButtons.find(strName);
 		return (mTabButtons.end() != itBtn) ? itBtn->second : NULL;
 	}
 // [/RLVa:KB]
@@ -206,15 +206,7 @@ public:
 
 	void		handleLoginComplete();
 
-//	bool 		isTabAttached	(const std::string& name);
-// [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
 	bool 		isTabAttached	(const std::string& name);
-	bool 		isTabAttached	(const LLSideTrayTab* tab);
-// [/RLVa:KB]
-
-// [RLVa:KB] - Checked: 2010-09-07 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
-	void 		toggleTabDocked(const std::string& strTabName);
-// [/RLVa:KB]
 
 protected:
 	bool		addChild		(LLView* view, S32 tab_group);
@@ -239,7 +231,7 @@ protected:
 	LLPanel*	openChildPanel	(LLSideTrayTab* tab, const std::string& panel_name, const LLSD& params);
 
 	void		onTabButtonClick(std::string name);
-// [RLVa:KB] - Checked: 2010-12-13 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+// [RLVa:KB] - Checked: 2010-12-13 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
 	bool		onTabDestroy	(const LLSideTrayTab* tab);
 // [/RLVa:KB]
 	void		onToggleCollapse();

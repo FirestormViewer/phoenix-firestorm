@@ -209,7 +209,7 @@ void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 			bool fCollapsed = pSideTray->getCollapsed();
 			const LLPanel* pActiveTab = pSideTray->getActiveTab();
 
-			pSideTray->toggleTabDocked("sidebar_inventory");
+			pSideTray->setTabDocked("sidebar_inventory", true, false);
 
 			if (pActiveTab)
 				pSideTray->selectTabByName(pActiveTab->getName());

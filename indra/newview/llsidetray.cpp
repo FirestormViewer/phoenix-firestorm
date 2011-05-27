@@ -172,7 +172,8 @@ LLSideTrayTab::LLSideTrayTab(const Params& p)
 
 LLSideTrayTab::~LLSideTrayTab()
 {
-// [RLVa:KB] - Checked: 2010-12-13 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+// [RLVa:KB] - Checked: 2010-12-13 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
+	// NOTE-RLVa: [RLVa-1.4.0a] This isn't really needed anymore with LLFloaterSideTrayTab since onClose will redock the tab anyway
 	if (LLSideTray::instanceCreated())
 		LLSideTray::getInstance()->onTabDestroy(this);
 // [/RLVa:KB]
@@ -262,18 +263,12 @@ void LLSideTrayTab::toggleTabDocked(bool toggle_floater /* = true */)
 
 	LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", tab_name);
 	if (!floater_tab) return;
+// [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
+	if (floater_tab->isMinimized())
+		floater_tab->setMinimized(FALSE);
+// [/RLVa:KB]
 
 	bool docking = !isDocked();
-//	bool docking = LLFloater::isShown(floater_tab);
-// [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
-//	if (floater_tab->isMinimized())
-//		floater_tab->setMinimized(FALSE);
-//
-//	LLSideTray* pSideTray = getSideTray();
-//	if (!pSideTray) return;
-//
-//	bool docking = !pSideTray->isTabAttached(this);
-// [/RLVa:KB]
 
 	// Hide the "Tear Off" button when a tab gets undocked
 	// and show "Dock" button instead.
@@ -642,52 +637,13 @@ LLSideTrayTab* LLSideTray::getTab(const std::string& name)
 	return findChild<LLSideTrayTab>(name,false);
 }
 
-//bool LLSideTray::isTabAttached(const std::string& name)
-//{
-//	LLSideTrayTab* tab = getTab(name);
-//	if (!tab) return false;
-//
-//	return std::find(mTabs.begin(), mTabs.end(), tab) != mTabs.end();
-//}
-
-// [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
 bool LLSideTray::isTabAttached(const std::string& name)
 {
 	LLSideTrayTab* tab = getTab(name);
-	return (tab) ? isTabAttached(tab) : false;
-}
+	if (!tab) return false;
 
-bool LLSideTray::isTabAttached(const LLSideTrayTab* tab)
-{
 	return std::find(mTabs.begin(), mTabs.end(), tab) != mTabs.end();
 }
-// [/RLVa:KB]
-
-// [RLVa:KB] - Checked: 2010-09-07 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
-void LLSideTray::toggleTabDocked(const std::string& strTabName)
-{
-	if (!isTabAttached(strTabName))
-	{
-		for (child_vector_iter_t itTab = mDetachedTabs.begin(); itTab != mDetachedTabs.end(); ++itTab)
-		{
-			LLSideTrayTab* pTab = *itTab;
-			if (strTabName == pTab->getName())
-			{
-				pTab->toggleTabDocked();
-				break;
-			}
-		}
-	}
-	else
-	{
-		LLSideTrayTab* pTab = getTab(strTabName);
-		if (pTab)
-		{
-			pTab->toggleTabDocked();
-		}
-	}
-}
-// [/RLVa:KB]
 
 bool LLSideTray::hasTabs()
 {
@@ -933,7 +889,7 @@ bool LLSideTray::removeTab(LLSideTrayTab* tab)
 		while ((*next_tab_it)->getName() == "sidebar_openclose");
 
 //		selectTabByName((*next_tab_it)->getName(), true); // Don't hide the tab being removed.
-// [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+// [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
 		// If there are no tabs that can be switched to then mActiveTab should be NULL rather than point to a now undocked tab
 		if (!selectTabByName((*next_tab_it)->getName(), true))
 			mActiveTab = NULL;
@@ -1091,7 +1047,7 @@ void		LLSideTray::onToggleCollapse()
 		collapseSideBar();
 }
 
-// [RLVa:KB] - Checked: 2010-12-13 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+// [RLVa:KB] - Checked: 2010-12-13 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
 bool LLSideTray::onTabDestroy(const LLSideTrayTab* tab)
 {
 	child_vector_iter_t itDetachedTab = std::find(mDetachedTabs.begin(), mDetachedTabs.end(), tab);
@@ -1226,7 +1182,7 @@ void LLSideTray::collapseSideBar()
 
 void LLSideTray::expandSideBar(bool open_active)
 {
-// [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+// [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
 	// Don't expand the sidebar unless the currently active tab's button is enabled, or we have another tab we can switch to
 	const LLPanel* pActiveTab = getActiveTab();
 	const LLButton* pTabBtn = (pActiveTab) ? getButtonFromName(pActiveTab->getName()) : NULL;
@@ -1515,7 +1471,7 @@ void LLSideTray::setVisibleWidthChangeCallback(const commit_signal_t::slot_type&
 	mVisibleWidthChangeSignal.connect(cb);
 }
 
-// [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 const LLPanel* LLSideTray::getActiveTab() const
 {
 	return mActiveTab;
