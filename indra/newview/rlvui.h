@@ -39,7 +39,7 @@ protected:
 public:
 	typedef boost::function<void(bool)> behaviour_handler_t;
 	void addBehaviourToggleCallback(ERlvBehaviour eBhvr, behaviour_handler_t cb);
-	void onBehaviour(ERlvBehaviour eBhvr, ERlvParamType eType);			// RlvHandler::rlv_behaviour_signal_t
+	void onBehaviourToggle(ERlvBehaviour eBhvr, ERlvParamType eType);	// RlvHandler::rlv_behaviour_signal_t
 
 	/*
 	 * Behaviour handlers

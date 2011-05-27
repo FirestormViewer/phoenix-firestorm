@@ -132,10 +132,11 @@ protected:
 public:
 	// The behaviour signal is triggered whenever a command is successfully processed and resulted in adding or removing a behaviour
 	typedef boost::signals2::signal<void (ERlvBehaviour, ERlvParamType)> rlv_behaviour_signal_t;
-	boost::signals2::connection setBehaviourCallback(const rlv_behaviour_signal_t::slot_type& cb ) { return m_OnBehaviour.connect(cb); }
+	boost::signals2::connection setBehaviourCallback(const rlv_behaviour_signal_t::slot_type& cb )		 { return m_OnBehaviour.connect(cb); }
+	boost::signals2::connection setBehaviourToggleCallback(const rlv_behaviour_signal_t::slot_type& cb ) { return m_OnBehaviourToggle.connect(cb); }
 	// The command signal is triggered whenever a command is processed
 	typedef boost::signals2::signal<void (const RlvCommand&, ERlvCmdRet, bool)> rlv_command_signal_t;
-	boost::signals2::connection setCommandCallback(const rlv_command_signal_t::slot_type& cb ) { return m_OnCommand.connect(cb); }
+	boost::signals2::connection setCommandCallback(const rlv_command_signal_t::slot_type& cb )			 { return m_OnCommand.connect(cb); }
 
 	void addCommandHandler(RlvCommandHandler* pHandler);
 	void removeCommandHandler(RlvCommandHandler* pHandler);
@@ -208,6 +209,7 @@ protected:
 	std::stack<LLUUID>    m_CurObjectStack;			// Convenience (see @tpto)
 
 	rlv_behaviour_signal_t m_OnBehaviour;
+	rlv_behaviour_signal_t m_OnBehaviourToggle;
 	rlv_command_signal_t   m_OnCommand;
 	mutable std::list<RlvCommandHandler*> m_CommandHandlers;
 

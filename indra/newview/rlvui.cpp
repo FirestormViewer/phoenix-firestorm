@@ -51,7 +51,7 @@
 RlvUIEnabler::RlvUIEnabler()
 {
 	// Connect us to the behaviour toggle signal
-	gRlvHandler.setBehaviourCallback(boost::bind(&RlvUIEnabler::onBehaviour, this, _1, _2));
+	gRlvHandler.setBehaviourToggleCallback(boost::bind(&RlvUIEnabler::onBehaviourToggle, this, _1, _2));
 
 	// onRefreshHoverText()
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWLOC, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
@@ -90,19 +90,13 @@ RlvUIEnabler::RlvUIEnabler()
 }
 
 // Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
-void RlvUIEnabler::onBehaviour(ERlvBehaviour eBhvr, ERlvParamType eType)
+void RlvUIEnabler::onBehaviourToggle(ERlvBehaviour eBhvr, ERlvParamType eType)
 {
 	bool fQuitting = LLApp::isQuitting();
-
-	// We're only interested in behaviour toggles (ie on->off or off->on)
-	if ( ((RLV_TYPE_ADD == eType) && (1 == gRlvHandler.hasBehaviour(eBhvr))) ||
-		 ((RLV_TYPE_REMOVE == eType) && (0 == gRlvHandler.hasBehaviour(eBhvr))) )
+	for (behaviour_handler_map_t::const_iterator itHandler = m_Handlers.lower_bound(eBhvr), endHandler = m_Handlers.upper_bound(eBhvr);
+			itHandler != endHandler; ++itHandler)
 	{
-		for (behaviour_handler_map_t::const_iterator itHandler = m_Handlers.lower_bound(eBhvr), endHandler = m_Handlers.upper_bound(eBhvr);
-				itHandler != endHandler; ++itHandler)
-		{
-			itHandler->second(fQuitting);
-		}
+		itHandler->second(fQuitting);
 	}
 }
 
