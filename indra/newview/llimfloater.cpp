@@ -811,9 +811,14 @@ void LLIMFloater::onAvatarNameCache(const LLUUID& agent_id,
 {
 	// Use the display name for titles and tabs, because the full username is already in every line header.
 	// This especially makes vertical tabs IMs more readable. -AO
-	std::string ui_title = av_name.mDisplayName;
-	updateSessionName(ui_title, av_name.mDisplayName);
-	mTypingStart.setArg("[NAME]", ui_title);
+	std::string name = av_name.getLegacyName();
+	if (LLAvatarNameCache::useDisplayNames() && (!av_name.mDisplayName.empty()))
+	{
+		name = av_name.mDisplayName;
+	}
+	updateSessionName(name, name);
+	mTypingStart.setArg("[NAME]", name);
+	llinfos << "Setting IM tab name to '" << name << "'" << llendl;
 }
 
 // virtual
