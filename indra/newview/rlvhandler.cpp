@@ -1975,7 +1975,7 @@ ERlvCmdRet RlvHandler::onFindFolder(const RlvCommand& rlvCmd, std::string& strRe
 	return RLV_RET_SUCCESS;
 }
 
-// Checked: 2010-03-19 (RLVa-1.2.0c) | Modified: RLVa-1.1.0e
+// Checked: 2010-03-19 (RLVa-1.4.0a) | Modified: RLVa-1.1.0e
 ERlvCmdRet RlvHandler::onGetAttach(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
@@ -1985,8 +1985,8 @@ ERlvCmdRet RlvHandler::onGetAttach(const RlvCommand& rlvCmd, std::string& strRep
 		return RLV_RET_FAILED;
 
 	// Sanity check - <option> should specify an attachment point or be empty
-	S32 idxAttachPt = RlvAttachPtLookup::getAttachPointIndex(rlvCmd.getOption());
-	if ( (idxAttachPt == 0) && (!rlvCmd.getOption().empty()) )
+	S32 idxAttachPt = 0;
+	if ( (rlvCmd.hasOption()) && ((idxAttachPt = RlvAttachPtLookup::getAttachPointIndex(rlvCmd.getOption())) == 0) )
 		return RLV_RET_FAILED_OPTION;
 
 	// If we're fetching all worn attachments then the reply should start with 0
@@ -2165,15 +2165,15 @@ ERlvCmdRet RlvHandler::onGetInvWorn(const RlvCommand& rlvCmd, std::string& strRe
 	return RLV_RET_SUCCESS;
 }
 
-// Checked: 2010-03-19 (RLVa-1.2.0c) | Modified: RLVa-1.2.0a
+// Checked: 2010-03-19 (RLVa-1.4.0a) | Modified: RLVa-1.2.0a
 ERlvCmdRet RlvHandler::onGetOutfit(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
 	RLV_ASSERT(RLV_BHVR_GETOUTFIT == rlvCmd.getBehaviourType());
 
 	// (Compatibility: RLV-1.16.1 will execute @getoutfit=<channel> if <layer> is invalid while we just return failure)
-	LLWearableType::EType wtType = LLWearableType::typeNameToType(rlvCmd.getOption());
-	if ( (LLWearableType::WT_INVALID == wtType) && (!rlvCmd.getOption().empty()) )
+	LLWearableType::EType wtType = LLWearableType::WT_INVALID;
+	if ( (rlvCmd.hasOption()) && ((wtType = LLWearableType::typeNameToType(rlvCmd.getOption())) == LLWearableType::WT_INVALID) )
 		return RLV_RET_FAILED_OPTION;
 
 	const LLWearableType::EType wtRlvTypes[] =
