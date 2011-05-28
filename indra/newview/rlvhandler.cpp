@@ -1999,7 +1999,7 @@ ERlvCmdRet RlvHandler::onGetAttach(const RlvCommand& rlvCmd, std::string& strRep
 		const LLViewerJointAttachment* pAttachPt = itAttach->second;
 		if ( (0 == idxAttachPt) || (itAttach->first == idxAttachPt) )
 		{
-			bool fWorn = (pAttachPt->getNumObjects()) && 
+			bool fWorn = (pAttachPt->getNumObjects() > 0) && 
 				( (!RlvSettings::getHideLockedAttach()) || (RlvForceWear::isForceDetachable(pAttachPt, true, rlvCmd.getObjectID())) );
 			strReply.push_back( (fWorn) ? '1' : '0' );
 		}
@@ -2007,7 +2007,7 @@ ERlvCmdRet RlvHandler::onGetAttach(const RlvCommand& rlvCmd, std::string& strRep
 	return RLV_RET_SUCCESS;
 }
 
-// Checked: 2010-03-19 (RLVa-1.2.0a) | Added: RLVa-1.1.0e
+// Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
 ERlvCmdRet RlvHandler::onGetAttachNames(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
@@ -2027,18 +2027,14 @@ ERlvCmdRet RlvHandler::onGetAttachNames(const RlvCommand& rlvCmd, std::string& s
 			bool fAdd = false;
 			switch (rlvCmd.getBehaviourType())
 			{
-				case RLV_BHVR_GETATTACHNAMES:		// Every attachment point that has an attached object (locked or unlocked)
-					fAdd = (pAttachPt->getNumObjects());
+				case RLV_BHVR_GETATTACHNAMES:		// Every attachment point that has an attached object
+					fAdd = (pAttachPt->getNumObjects() > 0);
 					break;
-/*
-				case RLV_BHVR_GETADDATTACHNAMES:	// Every attachment point that can be worn on (but ignore any locks set by the issuer)
-					fAdd = (!isLockedAttachmentExcept(itAttach->first, RLV_LOCK_ADD, gObjectList.findObject(idObj))) &&
-						   ( (pAttachPt->getObject() == NULL) || 
-						     (!isLockedAttachmentExcept(itAttach->first, RLV_LOCK_REMOVE, gObjectList.findObject(idObj))) );
+				case RLV_BHVR_GETADDATTACHNAMES:	// Every attachment point that can be attached to (wear replace OR wear add)
+					fAdd = (gRlvAttachmentLocks.canAttach(pAttachPt) & RLV_WEAR);
 					break;
-*/
-				case RLV_BHVR_GETREMATTACHNAMES:	// Every attachment point that can be detached (but ignore any locks set by the issuer)
-					fAdd = RlvForceWear::isForceDetachable(pAttachPt, true, rlvCmd.getObjectID());
+				case RLV_BHVR_GETREMATTACHNAMES:	// Every attachment point that has at least one attachment that can be force-detached
+					fAdd = RlvForceWear::isForceDetachable(pAttachPt);
 					break;
 				default:
 					break;
@@ -2200,7 +2196,7 @@ ERlvCmdRet RlvHandler::onGetOutfit(const RlvCommand& rlvCmd, std::string& strRep
 	return RLV_RET_SUCCESS;
 }
 
-// Checked: 2009-11-21 (RLVa-1.1.0f) | Added: RLVa-1.1.0e
+// Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
 ERlvCmdRet RlvHandler::onGetOutfitNames(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
@@ -2208,24 +2204,21 @@ ERlvCmdRet RlvHandler::onGetOutfitNames(const RlvCommand& rlvCmd, std::string& s
 		        (RLV_BHVR_GETREMOUTFITNAMES == rlvCmd.getBehaviourType()) );
 
 	// Sanity check - all these commands are optionless
-	if (!rlvCmd.getOption().empty())
+	if (rlvCmd.hasOption())
 		return RLV_RET_FAILED_OPTION;
 
-	// RELEASE-RLVa: [SL-2.0.0] Needs revisiting/rewriting once 'LLAgentWearables::MAX_WEARABLES_PER_TYPE > 1'
 	for (int idxType = 0; idxType < LLWearableType::WT_COUNT; idxType++)
 	{
 		bool fAdd = false; LLWearableType::EType wtType = (LLWearableType::EType)idxType;
 		switch (rlvCmd.getBehaviourType())
 		{
-			case RLV_BHVR_GETOUTFITNAMES:		// Every layer that's worn
+			case RLV_BHVR_GETOUTFITNAMES:		// Every layer that has at least one worn wearable
 				fAdd = (gAgentWearables.getWearableCount(wtType) > 0);
 				break;
-/*
-			case RLV_BHVR_GETADDOUTFITNAMES:	// Every layer that can be worn on (but ignore any locks set by the issuer)
-				fAdd = (isWearable(wtType)) && ( (gAgent.getWearable(wtType) == NULL) || (isRemovableExcept(wtType, idObj)) );
+			case RLV_BHVR_GETADDOUTFITNAMES:	// Every layer that can be worn on (wear replace OR wear add)
+				fAdd = (gRlvWearableLocks.canWear(wtType) & RLV_WEAR);
 				break;
-*/
-			case RLV_BHVR_GETREMOUTFITNAMES:	// Every layer that can be removed (but ignore any locks set by the issuer)
+			case RLV_BHVR_GETREMOUTFITNAMES:	// Every layer that has at least one wearable that can be force-removed
 				fAdd = RlvForceWear::isForceRemovable(wtType);
 				break;
 			default:
@@ -2236,7 +2229,7 @@ ERlvCmdRet RlvHandler::onGetOutfitNames(const RlvCommand& rlvCmd, std::string& s
 		{
 			if (!strReply.empty())
 				strReply.push_back(',');
-			strReply.append(LLWearableType::getTypeName((LLWearableType::EType)idxType));
+			strReply.append(LLWearableType::getTypeName(wtType));
 		}
 	}
 	return RLV_RET_SUCCESS;
