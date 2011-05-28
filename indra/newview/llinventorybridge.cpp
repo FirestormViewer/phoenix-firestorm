@@ -842,6 +842,21 @@ BOOL LLInvFVBridge::isAgentInventory() const
 	return model->isObjectDescendentOf(mUUID, gInventory.getRootFolderID());
 }
 
+// [SL:KB] - Patch: Inventory-Misc | Checked: 2011-05-28 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+BOOL LLInvFVBridge::isLibraryInventory() const
+{
+	const LLInventoryModel* model = getInventoryModel();
+	if (!model) return FALSE;
+	if (gInventory.getLibraryRootFolderID() == mUUID) return TRUE;
+	return model->isObjectDescendentOf(mUUID, gInventory.getLibraryRootFolderID());
+}
+
+BOOL LLInvFVBridge::isLostInventory() const
+{
+	return (!isAgentInventory()) && (!isLibraryInventory());
+}
+// [/SL:KB]
+
 BOOL LLInvFVBridge::isCOFFolder() const
 {
 	return LLAppearanceMgr::instance().getIsInCOF(mUUID);
@@ -2344,6 +2359,20 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 		restoreItem();
 		return;
 	}
+// [SL:KB] - Patch: Inventory-Misc | Checked: 2011-05-28 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+	else if ("move_to_lost_and_found" == action)
+	{
+		LLInventoryModel* pModel = getInventoryModel();
+		LLViewerInventoryCategory* pCat = getCategory();
+		if ( (!pModel) || (&gInventory != pModel) || (!pCat) )
+			return;
+
+		change_category_parent(pModel, pCat, gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND), TRUE);
+
+		gInventory.addChangedMask(LLInventoryObserver::REBUILD, mUUID);
+		gInventory.notifyObservers();
+	}
+// [/SL:KB]
 #ifndef LL_RELEASE_FOR_DOWNLOAD
 	else if ("delete_system_folder" == action)
 	{
@@ -2901,6 +2930,14 @@ void LLFolderBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 			mWearables=TRUE;
 		}
 	}
+// [SL:KB] - Patch: Inventory-Misc | Checked: 2011-05-28 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+	else if (isLostInventory())
+	{
+		mItems.push_back(std::string("Move to Lost And Found"));
+		if (0 == (flags & FIRST_SELECTED_ITEM))
+			mDisabledItems.push_back(std::string("Move to Lost And Found"));
+	}
+// [/SL:KB]
 
 	// Preemptively disable system folder removal if more than one item selected.
 	if ((flags & FIRST_SELECTED_ITEM) == 0)

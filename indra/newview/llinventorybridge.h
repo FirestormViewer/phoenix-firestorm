@@ -138,6 +138,10 @@ protected:
 	BOOL isLinkedObjectMissing() const; // Is this a linked obj whose baseobj is not in inventory?
 
 	BOOL isAgentInventory() const; // false if lost or in the inventory library
+// [SL:KB] - Patch: Inventory-Misc | Checked: 2011-05-28 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+	BOOL isLibraryInventory() const;
+	BOOL isLostInventory() const;
+// [/SL:KB]
 	BOOL isCOFFolder() const; // true if COF or descendent of
 //-TT Client LSL Bridge
 	BOOL isProtectedFolder() const;
