@@ -465,30 +465,19 @@ bool rlvMenuEnableIfNot(const LLSD& sdParam)
 // Selection functors
 //
 
-// Checked: 2010-04-11 (RLVa-1.2.0b) | Modified: RLVa-0.2.0g
+// Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
 bool rlvCanDeleteOrReturn()
 {
-	bool fIsAllowed = true;
-
-	if (gRlvHandler.hasBehaviour(RLV_BHVR_REZ))
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) )
 	{
-		// We'll allow if none of the prims are owned by the avie or group owned
-		LLObjectSelectionHandle handleSel = LLSelectMgr::getInstance()->getSelection();
-		RlvSelectIsOwnedByOrGroupOwned f(gAgent.getID());
-		if ( (handleSel.notNull()) && ((0 == handleSel->getRootObjectCount()) || (NULL != handleSel->getFirstRootNode(&f, FALSE))) )
-			fIsAllowed = false;
+		struct RlvCanDeleteOrReturn : public LLSelectedObjectFunctor
+		{
+			/*virtual*/ bool apply(LLViewerObject* pObj) { return pObj->isReturnable(); }
+		} f;
+		LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
+		return (hSel.notNull()) && (0 != hSel->getRootObjectCount()) && (hSel->applyToRootObjects(&f, false));
 	}
-	
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (isAgentAvatarValid()) )
-	{
-		// We'll allow if the avie isn't sitting on any of the selected objects
-		LLObjectSelectionHandle handleSel = LLSelectMgr::getInstance()->getSelection();
-		RlvSelectIsSittingOn f(gAgentAvatarp->getRoot());
-		if ( (handleSel.notNull()) && (handleSel->getFirstRootNode(&f, TRUE)) )
-			fIsAllowed = false;
-	}
-
-	return fIsAllowed;
+	return true;
 }
 
 // Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-0.2.0f
@@ -504,16 +493,10 @@ bool RlvSelectIsEditable::apply(LLSelectNode* pNode)
 	return (pObj) && (!gRlvHandler.canEdit(pObj));
 }
 
-// Checked: 2009-07-05 (RLVa-1.0.0b) | Modified: RLVa-0.2.0f
-bool RlvSelectIsOwnedByOrGroupOwned::apply(LLSelectNode* pNode)
-{
-	return (pNode->mPermissions->isGroupOwned()) || (pNode->mPermissions->getOwner() == m_idAgent);
-}
-
-// Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.0f
+// Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
 bool RlvSelectIsSittingOn::apply(LLSelectNode* pNode)
 {
-	return (pNode->getObject()) && (pNode->getObject()->getRootEdit() == m_pObject);
+	return (pNode->getObject()) && (pNode->getObject()->getRootEdit()->isChild(m_pAvatar));
 }
 
 // ============================================================================

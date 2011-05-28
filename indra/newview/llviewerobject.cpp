@@ -521,6 +521,15 @@ bool LLViewerObject::isReturnable()
 	{
 		return false;
 	}
+// [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+	// Block if: @rez=n restricted and owned by us or a group *or* @unsit=n restricted and being sat on by us
+	if ( (rlv_handler_t::isEnabled()) &&
+		 ( ((gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) && ((permYouOwner() || permGroupOwner()))) ||
+		   ((gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (isAgentAvatarValid()) && (getRootEdit()->isChild(gAgentAvatarp))) ) )
+	{
+		return false;
+	}
+// [/RLVa:KB]
 	std::vector<LLBBox> boxes;
 	boxes.push_back(LLBBox(getPositionRegion(), getRotationRegion(), getScale() * -0.5f, getScale() * 0.5f).getAxisAligned());
 	for (child_list_t::iterator iter = mChildList.begin();
@@ -634,7 +643,10 @@ void LLViewerObject::addThisAndNonJointChildren(std::vector<LLViewerObject*>& ob
 	}
 }
 
-BOOL LLViewerObject::isChild(LLViewerObject *childp) const
+//BOOL LLViewerObject::isChild(LLViewerObject *childp) const
+// [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+BOOL LLViewerObject::isChild(const LLViewerObject *childp) const
+// [/RLVa:KB]
 {
 	for (child_list_t::const_iterator iter = mChildList.begin();
 		 iter != mChildList.end(); iter++)
