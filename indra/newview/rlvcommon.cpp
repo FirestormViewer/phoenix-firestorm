@@ -239,8 +239,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 	return NULL;
 }
 
-// Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0b
-std::string RlvStrings::getVersion(bool fLegacy /*=false*/) 
+// Checked: 2010-03-27 (RLVa-1.4.0a) | Modified: RLVa-1.2.0b
+std::string RlvStrings::getVersion(bool fLegacy)
 {
 	return llformat("%s viewer v%d.%d.%d (%s %d.%d.%d.%d - RLVa %d.%d.%d)",
 		( (!fLegacy) ? "RestrainedLove" : "RestrainedLife" ),
@@ -249,7 +249,7 @@ std::string RlvStrings::getVersion(bool fLegacy /*=false*/)
 		RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH);
 }
 
-// Checked: 2010-04-18 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
+// Checked: 2010-04-18 (RLVa-1.4.0a) | Added: RLVa-1.2.0e
 std::string RlvStrings::getVersionAbout()
 {
 	return llformat("RLV v%d.%d.%d / RLVa v%d.%d.%d%c" , 
@@ -257,9 +257,8 @@ std::string RlvStrings::getVersionAbout()
 		RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH, 'a' + RLVa_VERSION_BUILD);
 }
 
-
-// Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.1.0a
-std::string RlvStrings::getVersionNum() 
+// Checked: 2010-03-27 (RLVa-1.4.0a) | Modified: RLVa-1.1.0a
+std::string RlvStrings::getVersionNum()
 {
 	return llformat("%d%02d%02d%02d", RLV_VERSION_MAJOR, RLV_VERSION_MINOR, RLV_VERSION_PATCH, RLV_VERSION_BUILD);
 }
