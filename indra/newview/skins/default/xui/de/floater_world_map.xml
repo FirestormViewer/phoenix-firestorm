@@ -62,7 +62,6 @@
 		</combo_box>
 		<search_editor label="Regionen nach Name" name="location" tool_tip="Geben Sie den Namen einer Region ein"/>
 		<button label="Suchen" name="DoSearch" tool_tip="Nach einer Region suchen"/>
-		<button name="Clear" tool_tip="Karte zurücksetzen"/>
 		<scroll_list name="search_results">
 			<scroll_list.columns label="" name="icon"/>
 			<scroll_list.columns label="" name="sim_name"/>
@@ -70,9 +69,16 @@
 		<text name="events_label">
 			Standort:
 		</text>
-		<button label="Teleportieren" label_selected="Teleportieren" name="Teleport" tool_tip="Zu ausgewählter Position teleportieren"/>
-		<button font="SansSerifSmall" label="SLurl kopieren" name="copy_slurl" tool_tip="Kopiert die aktuelle Position als SLurl zur Verwendung im Web."/>
-		<button label="Auswahl anzeigen" label_selected="Ziel anzeigen" name="Show Destination" tool_tip="Karte auf ausgewählte Position zentrieren"/>
+		<layout_stack>
+			<layout_panel name="layoutstackpanel_left">
+				<button label="Teleportieren" label_selected="Teleportieren" name="Teleport" tool_tip="Zu ausgewählter Position teleportieren"/>
+				<button label="Löschen" name="Clear" tool_tip="Verfolgung abschalten und Karte zurücksetzen."/>
+			</layout_panel>
+			<layout_panel name="layoutstackpanel_right">
+				<button font="SansSerifSmall" label="SLurl kopieren" name="copy_slurl" tool_tip="Kopiert die aktuelle Position als SLurl zur Verwendung im Web."/>
+				<button label="Auswahl anzeigen" label_selected="Ziel anzeigen" name="Show Destination" tool_tip="Karte auf ausgewählte Position zentrieren"/>
+			</layout_panel>
+		</layout_stack>
 	</panel>
 	<panel name="layout_panel_5">
 		<text name="zoom_label">

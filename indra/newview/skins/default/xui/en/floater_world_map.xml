@@ -596,6 +596,7 @@
      layout="topleft"
      width="100"
      height="20"
+	 name="layoutstackpanel_left"
     >
       <button
      follows="left|right|top"
@@ -628,6 +629,7 @@
      layout="topleft"
      width="100"
      height="20"
+	 name="layoutstackpanel_right"
     >
     <button
      follows="left|right|top"
