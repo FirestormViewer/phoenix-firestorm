@@ -2,7 +2,7 @@
 <panel
  border="true"
  follows="left|top|right|bottom"
- height="408"
+ height="448"
  label="Graphics"
  layout="topleft"
  left="102"
@@ -13,7 +13,7 @@
     <panel
      border="false"
 	 follows="top|left"
-     height="392"
+     height="432"
      label="User Interface"
      layout="topleft"
      left="5"
@@ -223,7 +223,7 @@
 		follows="left|top"
 		height="16"
 		layout="topleft"
-		left="475"
+		left="485"
 		name="PitchFromMousePositionText"
 		top_delta="0"
 		width="50">
@@ -251,7 +251,7 @@
 		follows="left|top"
 		height="16"
 		layout="topleft"
-		left="475"
+		left="485"
 		name="YawFromMousePositionText"
 		top_delta="0"
 		width="50">
