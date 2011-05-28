@@ -47,6 +47,7 @@ protected:
 	void onToggleEdit();												// edit
 	void onToggleMovement();											// fly, alwaysrun and temprun
 	void onToggleRez();													// rez
+	void onToggleSetDebug();											// setdebug
 	void onToggleSetEnv();												// setenv
 	void onToggleShowInv(bool fQuitting);								// showinv
 	void onToggleShowLoc();												// showloc

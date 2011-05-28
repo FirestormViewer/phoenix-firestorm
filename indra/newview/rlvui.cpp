@@ -46,6 +46,7 @@
 
 #include "rlvui.h"
 #include "rlvhandler.h"
+#include "rlvextensions.h"
 
 // ============================================================================
 
@@ -75,6 +76,7 @@ RlvUIEnabler::RlvUIEnabler()
 	// onToggleXXX
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_EDIT, boost::bind(&RlvUIEnabler::onToggleEdit, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_REZ, boost::bind(&RlvUIEnabler::onToggleRez, this)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SETDEBUG, boost::bind(&RlvUIEnabler::onToggleSetDebug, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SETENV, boost::bind(&RlvUIEnabler::onToggleSetEnv, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWINV, boost::bind(&RlvUIEnabler::onToggleShowInv, this, _1)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWLOC, boost::bind(&RlvUIEnabler::onToggleShowLoc, this)));
@@ -164,6 +166,17 @@ void RlvUIEnabler::onToggleRez()
 	LLBottomTray::getInstance()->getChild<LLButton>("build_btn")->setEnabled(isBuildEnabled());
 }
 
+// Checked: 2011-05-28 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+void RlvUIEnabler::onToggleSetDebug()
+{
+	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SETDEBUG);
+	for (auto itSetting = RlvExtGetSet::m_DbgAllowed.cbegin(); itSetting != RlvExtGetSet::m_DbgAllowed.cend(); ++itSetting)
+	{
+		if (itSetting->second & RlvExtGetSet::DBG_WRITE)
+			gSavedSettings.getControl(itSetting->first)->setHiddenFromSettingsEditor(!fEnable);
+	}
+}
+
 // Checked: 2010-03-17 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
 void RlvUIEnabler::onToggleSetEnv()
 {
@@ -185,6 +198,10 @@ void RlvUIEnabler::onToggleSetEnv()
 			removeGenericFloaterFilter(strEnvFloaters[idxFloater]);
 		}
 	}
+
+	// Don't allow toggling "Basic Shaders" and/or "Atmopsheric Shaders" through the debug settings under @setenv=n
+	gSavedSettings.getControl("VertexShaderEnable")->setHiddenFromSettingsEditor(!fEnable);
+	gSavedSettings.getControl("WindLightUseAtmosShaders")->setHiddenFromSettingsEditor(!fEnable);
 }
 
 // Checked: 2010-09-07 (RLVa-1.4.0a) | Modified: RLVa-1.2.1a
