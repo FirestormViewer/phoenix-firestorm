@@ -130,7 +130,10 @@ private:
  * We don't use LLScrollListItem to be able to override getUUID(), which is needed
  * because the name list item value is not simply an UUID but a map (uuid, is_group).
  */
-class LLNameListItem : public LLScrollListItem
+//class LLNameListItem : public LLScrollListItem
+// [SL:KB] - Patch: UI-GroupPanel | Checked: 2011-05-30 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+class LLNameListItem : public LLScrollListItem, public boost::signals2::trackable
+// [/SL:KB]
 {
 public:
 	LLUUID	getUUID() const		{ return getValue()["uuid"].asUUID(); }
@@ -142,6 +145,10 @@ protected:
 	:	LLScrollListItem(p)
 	{
 	}
+
+// [SL:KB] - Patch: UI-GroupPanel | Checked: 2011-05-30 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+	void onAvatarNameCache(S32 idxNameColumn, bool useShortNames, const LLUUID& idAgent, const LLAvatarName& avName);
+// [/SL:KB]
 };
 
 #endif

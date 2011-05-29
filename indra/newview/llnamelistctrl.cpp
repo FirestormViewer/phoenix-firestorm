@@ -335,9 +335,12 @@ LLScrollListItem* LLNameListCtrl::addNameItemRow(
 			else
 			{
 				// ...schedule a callback
-				LLAvatarNameCache::get(id,
-					boost::bind(&LLNameListCtrl::onAvatarNameCache,
-						this, _1, _2));
+//				LLAvatarNameCache::get(id,
+//					boost::bind(&LLNameListCtrl::onAvatarNameCache,
+//						this, _1, _2));
+// [SL:KB] - Patch: UI-GroupPanel | Checked: 2011-05-30 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+				LLAvatarNameCache::get(id, boost::bind(&LLNameListItem::onAvatarNameCache, item, mNameColumnIndex, mShortNames, _1, _2));
+// [/SL:KB]
 			}
 			break;
 		}
@@ -392,31 +395,31 @@ void LLNameListCtrl::removeNameItem(const LLUUID& agent_id)
 	}
 }
 
-void LLNameListCtrl::onAvatarNameCache(const LLUUID& agent_id,
-									   const LLAvatarName& av_name)
-{
-	std::string name;
-	if (mShortNames)
-		name = av_name.mDisplayName;
-	else
-		name = av_name.getCompleteName();
-
-	item_list::iterator iter;
-	for (iter = getItemList().begin(); iter != getItemList().end(); iter++)
-	{
-		LLScrollListItem* item = *iter;
-		if (item->getUUID() == agent_id)
-		{
-			LLScrollListCell* cell = item->getColumn(mNameColumnIndex);
-			if (cell)
-			{
-				cell->setValue(name);
-			}
-		}
-	}
-
-	dirtyColumns();
-}
+//void LLNameListCtrl::onAvatarNameCache(const LLUUID& agent_id,
+//									   const LLAvatarName& av_name)
+//{
+//	std::string name;
+//	if (mShortNames)
+//		name = av_name.mDisplayName;
+//	else
+//		name = av_name.getCompleteName();
+//
+//	item_list::iterator iter;
+//	for (iter = getItemList().begin(); iter != getItemList().end(); iter++)
+//	{
+//		LLScrollListItem* item = *iter;
+//		if (item->getUUID() == agent_id)
+//		{
+//			LLScrollListCell* cell = item->getColumn(mNameColumnIndex);
+//			if (cell)
+//			{
+//				cell->setValue(name);
+//			}
+//		}
+//	}
+//
+//	dirtyColumns();
+//}
 
 
 void LLNameListCtrl::updateColumns()
@@ -432,3 +435,11 @@ void LLNameListCtrl::updateColumns()
 		}
 	}
 }
+
+// [SL:KB] - Patch: UI-GroupPanel | Checked: 2011-05-30 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+void LLNameListItem::onAvatarNameCache(S32 idxNameColumn, bool useShortNames, const LLUUID& idAgent, const LLAvatarName& avName)
+{
+	if (LLScrollListCell* pCell = getColumn(idxNameColumn))
+		pCell->setValue( (useShortNames) ? avName.mDisplayName : avName.getCompleteName() );
+}
+// [/SL:KB]
