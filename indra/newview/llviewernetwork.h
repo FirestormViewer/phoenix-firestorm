@@ -47,17 +47,6 @@ extern const char* DEFAULT_LOGIN_PAGE;
 #define GRID_SLURL_BASE "slurl_base"
 #define GRID_APP_SLURL_BASE "app_slurl_base"
 
-class LLInvalidGridName
-{
-public:
-	LLInvalidGridName(std::string grid) : mGrid(grid)
-	{
-	}
-protected:
-	std::string mGrid;
-};
-
-
 /**
  * @brief A class to manage the grids available to the viewer
  * including persistance.  This class also maintains the currently
@@ -78,7 +67,7 @@ public:
 	// grid list management
 	
 	// add a grid to the list of grids
-	void addGrid(LLSD& grid_info);	
+	bool addGrid(LLSD& grid_info);	
 
 	// retrieve a map of grid-name <-> label
 	// by default only return the user visible grids
@@ -91,7 +80,7 @@ public:
 	// select a given grid as the current grid.  If the grid
 	// is not a known grid, then it's assumed to be a dns name for the
 	// grid, and the various URIs will be automatically generated.
-	void setGridChoice(const std::string& grid);
+	bool setGridChoice(const std::string& grid);
 	
 	
 	std::string getGridLabel() { return mGridList[mGrid][GRID_LABEL_VALUE]; } 	
