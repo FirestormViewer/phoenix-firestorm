@@ -219,7 +219,7 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 
 	LLComboBox* server_choice_combo = sInstance->getChild<LLComboBox>("server_combo");
 	server_choice_combo->setCommitCallback(onSelectServer, NULL);
-	server_choice_combo->setFocusLostCallback(boost::bind(onServerComboLostFocus, _1));
+//	server_choice_combo->setFocusLostCallback(boost::bind(onServerComboLostFocus, _1));
 	updateServerCombo();
 
 	childSetAction("connect_btn", onClickConnect, this);
@@ -944,6 +944,9 @@ void LLPanelLogin::onClickConnect(void *)
 		}		
 		if(!LLGridManager::getInstance()->setGridChoice(combo_val.asString()))
 		{
+			LLSD args;
+			args["GRID"] = combo_val.asString();
+			LLNotificationsUtil::add("InvalidGrid", args);
 			return;
 		}
 		updateStartSLURL();
@@ -1132,7 +1135,7 @@ void LLPanelLogin::onSelectServer(LLUICtrl*, void*)
 	updateLocationCombo(false);
 	updateLoginPanelLinks();
 }
-
+/*
 void LLPanelLogin::onServerComboLostFocus(LLFocusableElement* fe)
 {
 	if (!sInstance)
@@ -1143,10 +1146,10 @@ void LLPanelLogin::onServerComboLostFocus(LLFocusableElement* fe)
 	LLComboBox* combo = sInstance->getChild<LLComboBox>("server_combo");
 	if(fe == combo)
 	{
-		onSelectServer(combo, NULL);	
+		onSelectServer(combo, NULL);
 	}
 }
-
+*/
 void LLPanelLogin::updateLoginPanelLinks()
 {
 	LLSD grid_data;
