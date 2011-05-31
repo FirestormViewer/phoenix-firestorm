@@ -70,19 +70,6 @@
         <menu_item_call.on_click
          function="Avatar.Pay" />
     </menu_item_call>
-    <menu_item_check
-     label="Block/Unblock"
-     layout="topleft"
-     name="Block/Unblock">
-        <menu_item_check.on_click
-         function="Avatar.BlockUnblock" />
-        <menu_item_check.on_check
-         function="Avatar.CheckItem"
-         parameter="is_blocked" />
-        <menu_item_check.on_enable
-         function="Avatar.EnableItem"
-         parameter="can_block" />
-    </menu_item_check>
     <menu_item_call
     label="Offer Teleport"
     name="teleport">
@@ -98,4 +85,69 @@
       <menu_item_call.on_click
        function="Nearby.People.TeleportToAvatar"/>
     </menu_item_call>
+    <menu_item_call
+      label="Zoom In"
+      name="zoom_in">
+       <menu_item_call.on_click
+        function="Avatar.ZoomIn"/>
+       <menu_item_call.on_visible
+        function="Avatar.VisibleZoomIn"/>
+     </menu_item_call>
+    
+    <menu_item_separator />
+    
+    <menu_item_check
+     label="Block/Unblock"
+     layout="topleft"
+     name="Block/Unblock">
+        <menu_item_check.on_click
+         function="Avatar.BlockUnblock" />
+        <menu_item_check.on_check
+         function="Avatar.CheckItem"
+         parameter="is_blocked" />
+        <menu_item_check.on_enable
+         function="Avatar.EnableItem"
+         parameter="can_block" />
+    </menu_item_check>
+     <menu_item_call
+      label="Report"
+      name="report">
+     <menu_item_call.on_click
+      function="Avatar.Report"/>
+     </menu_item_call>  
+     <menu_item_call
+      label="Freeze"
+      name="freeze">
+     <menu_item_call.on_click
+      function="Avatar.Freeze"/>
+     <menu_item_call.on_visible
+      function="Avatar.VisibleFreezeEject"/>
+     </menu_item_call>
+     <menu_item_call
+      label="Eject"
+      name="eject">
+     <menu_item_call.on_click
+      function="Avatar.Eject"/>
+     <menu_item_call.on_visible
+      function="Avatar.VisibleFreezeEject"/>
+     </menu_item_call>
+     <menu_item_call
+      label="Kick"
+      name="kick">
+       <menu_item_call.on_click
+          function="Avatar.Kick"/>
+       <menu_item_call.on_visible
+          function="Avatar.VisibleKickTeleportHome"/>
+     </menu_item_call>
+     <menu_item_call
+      label="Teleport Home"
+      name="teleport_home">
+       <menu_item_call.on_click
+          function="Avatar.TeleportHome"/>
+       <menu_item_call.on_visible
+          function="Avatar.VisibleKickTeleportHome"/>
+     </menu_item_call>
+
+
+
 </context_menu>

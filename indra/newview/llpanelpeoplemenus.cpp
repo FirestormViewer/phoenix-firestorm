@@ -69,6 +69,18 @@ LLContextMenu* NearbyMenu::createMenu()
 		registrar.add("Avatar.Share",			boost::bind(&LLAvatarActions::share,					id));
 		registrar.add("Avatar.Pay",				boost::bind(&LLAvatarActions::pay,						id));
 		registrar.add("Avatar.BlockUnblock",	boost::bind(&LLAvatarActions::toggleBlock,				id));
+		// [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-12-03 (Catznip-2.4.0g) | Modified: Catznip-2.4.0g
+		registrar.add("Avatar.ZoomIn",							boost::bind(&LLAvatarActions::zoomIn,						id));
+		enable_registrar.add("Avatar.VisibleZoomIn",			boost::bind(&LLAvatarActions::canZoomIn,					id));
+		registrar.add("Avatar.Report",							boost::bind(&LLAvatarActions::report,						id));
+		registrar.add("Avatar.Eject",							boost::bind(&LLAvatarActions::landEject,					id));
+		registrar.add("Avatar.Freeze",							boost::bind(&LLAvatarActions::landFreeze,					id));
+		enable_registrar.add("Avatar.VisibleFreezeEject",		boost::bind(&LLAvatarActions::canLandFreezeOrEject,			id));
+		registrar.add("Avatar.Kick",							boost::bind(&LLAvatarActions::estateKick,					id));
+		registrar.add("Avatar.TeleportHome",					boost::bind(&LLAvatarActions::estateTeleportHome,			id));
+		enable_registrar.add("Avatar.VisibleKickTeleportHome",	boost::bind(&LLAvatarActions::canEstateKickOrTeleportHome,	id));
+		// [/SL:KB]
+		
 		registrar.add("Nearby.People.TeleportToAvatar", boost::bind(&NearbyMenu::teleportToAvatar,	this));
 
 		registrar.add("Avatar.ZoomIn",                        boost::bind(&LLAvatarActions::zoomIn,                id));
@@ -91,7 +103,15 @@ LLContextMenu* NearbyMenu::createMenu()
 		// registrar.add("Avatar.Share",		boost::bind(&LLAvatarActions::startIM,					mUUIDs)); // *TODO: unimplemented
 		// registrar.add("Avatar.Pay",		boost::bind(&LLAvatarActions::pay,						mUUIDs)); // *TODO: unimplemented
 		enable_registrar.add("Avatar.EnableItem",	boost::bind(&NearbyMenu::enableContextMenuItem,	this, _2));
-
+		// [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-11-05 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+		registrar.add("Avatar.Eject",							boost::bind(&LLAvatarActions::landEjectMultiple,			mUUIDs));
+		registrar.add("Avatar.Freeze",							boost::bind(&LLAvatarActions::landFreezeMultiple,			mUUIDs));
+		enable_registrar.add("Avatar.VisibleFreezeEject",		boost::bind(&LLAvatarActions::canLandFreezeOrEjectMultiple,	mUUIDs, false));
+		registrar.add("Avatar.Kick",							boost::bind(&LLAvatarActions::estateKickMultiple,			mUUIDs));
+		registrar.add("Avatar.TeleportHome",					boost::bind(&LLAvatarActions::estateTeleportHomeMultiple,	mUUIDs));
+		enable_registrar.add("Avatar.VisibleKickTeleportHome",	boost::bind(&LLAvatarActions::canEstateKickOrTeleportHomeMultiple, mUUIDs, false));
+		// [/SL:KB]
+		
 		// create the context menu from the XUI
 		return createFromFile("menu_people_nearby_multiselect.xml");
 	}

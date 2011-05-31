@@ -263,10 +263,16 @@ public:
 	LLVLComposition *getComposition() const		{ return mCompositionp; }
 	F32 getCompositionXY(const S32 x, const S32 y) const;
 
-	BOOL isOwnedSelf(const LLVector3& pos);
+	//	BOOL isOwnedSelf(const LLVector3& pos);
+	//
+	//	// Owned by a group you belong to?  (officer OR member)
+	//	BOOL isOwnedGroup(const LLVector3& pos);
+	// [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-12-02 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+	BOOL isOwnedSelf(const LLVector3& pos) const;
 
 	// Owned by a group you belong to?  (officer OR member)
-	BOOL isOwnedGroup(const LLVector3& pos);
+	BOOL isOwnedGroup(const LLVector3& pos) const;
+	// [/SL:KB]
 
 	// deal with map object updates in the world.
 	void updateCoarseLocations(LLMessageSystem* msg);

@@ -1221,7 +1221,10 @@ void send_agent_resume()
 	LLAppViewer::instance()->resumeMainloopTimeout();
 }
 
-static LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& region_origin)
+//static LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& region_origin)
+// [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& region_origin)
+// [/SL:KB]
 {
 	LLVector3d pos_global;
 	LLVector3 pos_local;
