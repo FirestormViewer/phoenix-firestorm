@@ -204,7 +204,7 @@
          value="4" />
 	  </combo_box>
 	  
-        <check_box bottom_delta="-30"
+        <check_box bottom_delta="-20"
       follows="left|top"
       font="SansSerifSmall"
       height="16"
@@ -217,6 +217,23 @@
       width="270"
       control_name="FSDontSendAvPhysicsParms"
       tool_tip="Disables sending your avatar physics information to the Second Life server, for compatibility with version 1 viewers"/>
+
+        <check_box bottom_delta="-20"
+      follows="left|top"
+      font="SansSerifSmall"
+      height="16"
+      initial_value="false"
+      label="Sort contact lists by username even when display names are shown"
+      left="15"
+      mouse_opaque="true"
+      name="sortcontactsbyun"
+      radio_style="false"
+      width="270"
+      control_name="FSSortContactsByUserName"
+      tool_tip="If this is checked, all contact lists are always sorted by username">
+      <check_box.commit_callback
+      function="FS.ToggleSortContacts" />
+      </check_box>
 
      <text
      top_pad="10"

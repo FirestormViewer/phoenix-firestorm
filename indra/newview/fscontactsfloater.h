@@ -50,6 +50,8 @@ public:
 
 	static FSFloaterContacts* getInstance();
 	static FSFloaterContacts* findInstance();
+
+	void					sortFriendList();
 	
 	void					updateFriendList();
 

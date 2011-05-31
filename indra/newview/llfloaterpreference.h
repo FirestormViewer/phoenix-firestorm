@@ -160,6 +160,7 @@ public:
 	void applyResolution();
 	void onChangeMaturity();
 	void onClickBlockList();
+	void onClickSortContacts();
 	void applyUIColor(LLUICtrl* ctrl, const LLSD& param);
 	void getUIColor(LLUICtrl* ctrl, const LLSD& param);
 	

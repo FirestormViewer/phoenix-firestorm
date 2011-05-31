@@ -128,6 +128,7 @@ public:
 	const LLUUID& getAvatarId() const;
 	std::string getAvatarName() const;
 	std::string getAvatarToolTip() const;
+	bool getShowingBothNames() const;
 
 	void onInfoBtnClick();
 	void onProfileBtnClick();

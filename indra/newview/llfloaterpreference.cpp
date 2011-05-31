@@ -107,6 +107,7 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "llsdserialize.h" // KB: SkinsSelector
+#include "fscontactsfloater.h" // TS: sort contacts list
 
 #include "lllogininstance.h"        // to check if logged in yet
 #include "llsdserialize.h"
@@ -336,6 +337,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.getUIColor",				boost::bind(&LLFloaterPreference::getUIColor, this ,_1, _2));
 	mCommitCallbackRegistrar.add("Pref.MaturitySettings",		boost::bind(&LLFloaterPreference::onChangeMaturity, this));
 	mCommitCallbackRegistrar.add("Pref.BlockList",				boost::bind(&LLFloaterPreference::onClickBlockList, this));
+	mCommitCallbackRegistrar.add("FS.ToggleSortContacts",			boost::bind(&LLFloaterPreference::onClickSortContacts, this));
 	
 	sSkin = gSavedSettings.getString("SkinCurrent");
 
@@ -1552,6 +1554,12 @@ void LLFloaterPreference::onClickBlockList()
 	{
 		LLSideTray::getInstance()->showPanel("panel_block_list_sidetray");
 	}
+}
+
+void LLFloaterPreference::onClickSortContacts()
+{
+        FSFloaterContacts* fs_contacts = FSFloaterContacts::getInstance();
+        fs_contacts->sortFriendList();
 }
 
 void LLFloaterPreference::onDoubleClickCheckBox(LLUICtrl* ctrl)
