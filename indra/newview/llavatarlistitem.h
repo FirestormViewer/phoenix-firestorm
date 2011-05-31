@@ -115,6 +115,8 @@ public:
 	void showFirstSeen(bool show);
 	void showStatusFlags(bool show);
 	void showAvatarAge(bool show);
+	std::string getAvatarAge();
+	std::string getSeen();
 	void showPaymentStatus(bool show);
 	void updateFirstSeen();
 	void showUsername(bool show);

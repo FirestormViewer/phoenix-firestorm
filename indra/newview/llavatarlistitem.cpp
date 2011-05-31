@@ -413,6 +413,11 @@ void LLAvatarListItem::updateFirstSeen()
 	updateChildren();
 }
 
+std::string LLAvatarListItem::getSeen()
+{
+	return mFirstSeenDisplay->getValue();
+}
+
 void LLAvatarListItem::setRange(F32 distance)
 {
 	mDistance = distance;
@@ -584,6 +589,11 @@ void LLAvatarListItem::showAvatarAge(bool display)
 	updateAvatarProperties();
 }
 
+std::string LLAvatarListItem::getAvatarAge()
+{
+	return mAvatarAgeDisplay->getValue();
+}
+
 void LLAvatarListItem::updateAvatarProperties()
 {
 	// NOTE: typically we request these once on creation to avoid excess traffic/processing. 
@@ -611,6 +621,8 @@ void LLAvatarListItem::processProperties(void* data, EAvatarProcessorType type)
 		{
 			mPaymentStatus->setVisible(avatar_data->flags & AVATAR_IDENTIFIED);
 		}
+		
+		mAvStatus = avatar_data->flags;
 		
 	}
 }

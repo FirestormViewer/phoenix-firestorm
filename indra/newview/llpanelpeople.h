@@ -32,6 +32,8 @@
 #include "llcallingcard.h" // for avatar tracker
 #include "llvoiceclient.h"
 #include "llavatarnamecache.h"
+#include "llscrolllistctrl.h"
+#include "fsradarlistctrl.h"
 #include <map>
 #include <time.h>
 
@@ -96,6 +98,7 @@ private:
 	void					showGroupMenu(LLMenuGL* menu);
 	void					setSortOrder(LLAvatarList* list, ESortOrder order, bool save = true);
 	void					reportToNearbyChat(std::string message);
+	void					handleLimitRadarByRange(const LLSD& newalue);
 
 	// UI callbacks
 	void					onFilterEdit(const std::string& search_string);
@@ -121,6 +124,7 @@ private:
 	void					onAvatarListDoubleClicked(LLUICtrl* ctrl);
 	void					onNearbyListDoubleClicked(LLUICtrl* ctrl);
 	void					onAvatarListCommitted(LLAvatarList* list);
+	void					onRadarListDoubleClicked();
 	void					onGroupPlusButtonClicked();
 	void					onGroupMinusButtonClicked();
 	void					onGroupPlusMenuItemClicked(const LLSD& userdata);
@@ -159,7 +163,8 @@ private:
 	LLAvatarList*			mNearbyList;
 	LLAvatarList*			mRecentList;
 	LLGroupList*			mGroupList;
-	LLNetMap*				mMiniMap;
+	LLRadarListCtrl*		mRadarList;
+	LLNetMap*			mMiniMap;
 
 	LLHandle<LLView>		mGroupPlusMenuHandle;
 	LLHandle<LLView>		mNearbyViewSortMenuHandle;
@@ -167,29 +172,33 @@ private:
 	LLHandle<LLView>		mGroupsViewSortMenuHandle;
 	LLHandle<LLView>		mRecentViewSortMenuHandle;
 
-	Updater*				mFriendListUpdater;
-	Updater*				mNearbyListUpdater;
-	Updater*				mRecentListUpdater;
-	Updater*				mButtonsUpdater;
+	Updater*			mFriendListUpdater;
+	Updater*			mNearbyListUpdater;
+	Updater*			mRecentListUpdater;
+	Updater*			mButtonsUpdater;
 
  	LLMenuButton*			mNearbyGearButton;
  	LLMenuButton*			mFriendsGearButton;
 	LLMenuButton*			mGroupsGearButton;
 	LLMenuButton*			mRecentGearButton;
 
-	std::string				mFilterSubString;
-	std::string				mFilterSubStringOrig;
+	std::string			mFilterSubString;
+	std::string			mFilterSubStringOrig;
+	
+	LLUIColor			mChatRangeColor;
+	LLUIColor			mShoutRangeColor;
+	LLUIColor			mFarRangeColor;
 	
 	struct radarFields 
 	{
 		std::string avName;
-		F32 lastDistance;
-		LLVector3d lastGlobalPos;
-		LLUUID lastRegion;
-		time_t firstSeen;
-		S32 lastStatus;
+		F32			lastDistance;
+		LLVector3d		lastGlobalPos;
+		LLUUID			lastRegion;
+		time_t			firstSeen;
+		S32			lastStatus;
 	}; 
-	std::map < LLUUID, radarFields > lastRadarSweep;
+	std::multimap < LLUUID, radarFields > lastRadarSweep;
 };
 
 #endif //LL_LLPANELPEOPLE_H

@@ -3,6 +3,51 @@
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
 
+  <key>ShowRadarDisplayNames</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether Display Names are used in radar listings</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <string>1</string>
+    </map>
+  <key>ShowRadarUserNames</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether Usernames are used in radar listings</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <string>0</string>
+    </map>
+  <key>ShowRadarUsernamesFirst</key>
+    <map>
+      <key>Comment</key>
+      <string>When Display Names and Usernames are both shown in radar, show Usernames First</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <string>0</string>
+    </map>
+  <key>LimitRadarByRange</key>
+    <map>
+      <key>Comment</key>
+      <string>RestrictRadarToNearmeRange</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+
   <key>PlayTeleportSound</key>
     <map>
       <key>Comment</key>
