@@ -99,10 +99,14 @@ Looking for people to hang out with? Use the search box to find topics or conten
          name="nearby_panel"
          top="0"
          width="313">
-
+			
+			
+			<layout_stack orientation="vertical" clip="true" follows="all" layout="topleft" top="0" left="0" height="355" width="313" mouse_opaque="false" auto_resize="false">
+			<layout_panel layout="topleft" top="0" left="3" height="140" width="307" max_height="140"  follows="top" mouse_opaque="false" visibility_control="ShowRadarMinimap" name="minimaplayout" auto_resize="false">
              <net_map
              bg_color="NetMapBackgroundColor"
-             follows="top|left|right"
+             visibility_control="ShowRadarMinimap"
+             follows="top|left|bottom"
              layout="topleft"
              left="3"
              mouse_opaque="false"
@@ -110,20 +114,9 @@ Looking for people to hang out with? Use the search box to find topics or conten
              width="307"
              height="140"
              top="0"/>
-             
-            <avatar_list
-             allow_select="true"
-             follows="left"
-             height="1"
-             ignore_online_status="true"
-             layout="topleft"
-             left="3"
-             multi_select="true"
-             name="avatar_list"
-             visible="false"
-             top_pad="0"
-             width="307" />
-            
+             </layout_panel>
+
+            <layout_panel layout="topleft" top="0" left="0" height="215" width="313"  mouse_opaque="false" follows="all" name="radarlayout">
             <radar_list
 		     draw_heading="true"
 		     follows="all"
@@ -162,7 +155,21 @@ Looking for people to hang out with? Use the search box to find topics or conten
 		         name="uuid"
 		         relative_width="0" />
 		    </radar_list>
-
+		    </layout_panel>
+		  </layout_stack>
+            
+            <avatar_list
+             allow_select="true"
+             follows="left"
+             height="1"
+             ignore_online_status="true"
+             layout="topleft"
+             left="3"
+             multi_select="true"
+             name="avatar_list"
+             visible="false"
+             top_pad="0"
+             width="307" />
 
 <!--  Buttons -->
 

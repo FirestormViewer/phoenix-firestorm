@@ -3,7 +3,7 @@
      name="menu_group_plus"
      left="0" bottom="0" visible="false"
      mouse_opaque="false">
-     
+  
   <menu_item_check
      label="Limit Results to specific Radius"
      name="LimitRadarByRange">
@@ -32,6 +32,16 @@
      <menu_item_check.on_click
         function="ToggleControl"
         parameter="RadarReportChatRange" />
+  </menu_item_check>
+  
+  <menu_item_check
+     label="Show Minimap above Radar"
+     name="ShowRadarMinimap">
+	 <menu_item_check.on_check
+     	control="ShowRadarMinimap" />
+     <menu_item_check.on_click
+        function="ToggleControl"
+        parameter="ShowRadarMinimap" />
   </menu_item_check>
      
   <menu_item_separator layout="topleft" />

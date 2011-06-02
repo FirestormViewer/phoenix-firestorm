@@ -76,7 +76,7 @@
 #include "llvoavatar.h"
 #include <time.h>
 #include "llnotificationmanager.h"
-#include "llslider.h"
+#include "lllayoutstack.h"
 
 using namespace std;
 
@@ -602,6 +602,9 @@ BOOL LLPanelPeople::postBuild()
 	mNearbyList->setRlvCheckShowNames(true);
 	// [/RLVa:KB]
 	
+	LLLayoutPanel* minilayout = (LLLayoutPanel*)getChildView("minimaplayout",true);
+	minilayout->setMaxDim(140);
+	minilayout->setMinDim(140);
 	mMiniMap = (LLNetMap*)getChildView("Net Map",true);
 	mMiniMap->setToolTipMsg(gSavedSettings.getBOOL("DoubleClickTeleport") ? 
 		getString("AltMiniMapToolTipMsg") :	getString("MiniMapToolTipMsg"));
@@ -764,7 +767,6 @@ void LLPanelPeople::handleLimitRadarByRange(const LLSD& newvalue)
 	if (cur_panel)
 	{
 		cur_panel->getChildView("NearMeRange")->setVisible(newvalue.asBoolean());
-		llinfos << "AO: handleLimitRadarByRange" << newvalue.asBoolean() << llendl;
 	}
 }
 
@@ -1041,7 +1043,7 @@ void LLPanelPeople::updateNearbyList()
 	}
 
 	
-	//STEP 4: Update out local radar data cache, for faster tracking of changes
+	//STEP 5: Update out local radar data cache, for faster tracking of changes
 	lastRadarSweep.clear();
 	for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
 	{
@@ -1063,6 +1065,10 @@ void LLPanelPeople::updateNearbyList()
 		
 		lastRadarSweep.insert(pair<LLUUID,radarFields>(av->getAvatarId(),rf));
 	}
+	
+	//STEP 6: Update GUI text of number of total users
+	mRadarList->setColumnLabel("name",llformat("NAME [%d]",lastRadarSweep.size()));
+	
 }
 
 void LLPanelPeople::updateRecentList()
@@ -1370,6 +1376,19 @@ void LLPanelPeople::onTabSelected(const LLSD& param)
 
 	showFriendsAccordionsIfNeeded();
 
+	// AO Layout panels will not initialize at a constant size, force it here.
+	if (tab_name == NEARBY_TAB_NAME)
+	{
+		LLLayoutPanel* minilayout = (LLLayoutPanel*)getChildView("minimaplayout",true);
+		if (minilayout->getVisible())
+		{
+			LLRect rec = minilayout->getRect();
+			rec.mBottom = 635;
+			rec.mTop = 775;
+			minilayout->setShape(rec,true);
+		}
+	}
+	
 	if (GROUP_TAB_NAME == tab_name)
 		mFilterEditor->setLabel(getString("groups_filter_label"));
 	else
