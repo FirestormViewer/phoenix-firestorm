@@ -77,6 +77,9 @@
 #include <time.h>
 #include "llnotificationmanager.h"
 #include "lllayoutstack.h"
+#include "llnearbychatbar.h"
+#include <algorithm>
+
 
 using namespace std;
 
@@ -531,6 +534,8 @@ LLPanelPeople::~LLPanelPeople()
 	delete mFriendListUpdater;
 	delete mRecentListUpdater;
 	lastRadarSweep.clear();
+	mRadarEnterAlerts.clear();
+	mRadarLeaveAlerts.clear();
 
 	if(LLVoiceClient::instanceExists())
 	{
@@ -587,6 +592,8 @@ BOOL LLPanelPeople::postBuild()
 	// AO: radarlist takes over for nearbylist. It's a scroll list vs. avatarlist.
 	mRadarList = nearby_tab->getChild<LLRadarListCtrl>("radar_list");
 	mRadarList->sortByColumn("range",TRUE); // sort by range
+	mRadarFrameCount = 0;
+	mRadarAlertRequest = false;
 	
 	mNearbyList = nearby_tab->getChild<LLAvatarList>("avatar_list");
 	mNearbyListUpdater->setActive(true); // AO: always keep radar active, for chat and channel integration
@@ -853,10 +860,17 @@ void LLPanelPeople::updateNearbyList()
 	{
 		return;
 	}
-
+	
 	F32 drawRadius = gSavedSettings.getF32("RenderFarClip");
 	BOOL limitRange = gSavedSettings.getBOOL("LimitRadarByRange");
 	const LLVector3d& posSelf = gAgent.getPositionGlobal();
+	LLViewerRegion* reg = gAgent.getRegion();
+	LLUUID regionSelf;
+	if (reg)
+		regionSelf = reg->getRegionID();
+	bool alertScripts = mRadarAlertRequest; // assign this at the beginning of the call to resist race conditions
+		
+	//const LLUUID regionSelf = gAgent.getRegion()->getRegionID();
 	std::vector<LLPanel*> items;
 	LLWorld* world = LLWorld::getInstance();
 
@@ -866,6 +880,8 @@ void LLPanelPeople::updateNearbyList()
 	if (lastRadarSelectedItem)
 		selected_id = lastRadarSelectedItem->getColumn(5)->getValue().asUUID();
 	mRadarList->clearRows();
+	mRadarEnterAlerts.clear();
+	mRadarLeaveAlerts.clear();
 	
 	//STEP 1:Detect Avatars & Positions in our defined range, dump them into avatarList
 	std::vector<LLVector3d> positions;
@@ -924,17 +940,36 @@ void LLPanelPeople::updateNearbyList()
 		av->setPosition(avPos);
 		av->setFirstSeen(time(NULL) - (time_t)seentime);
 		
-		//2c. Report on net-new entries.
+		
+		//2c Report all detected to scripts if we were asked for an update
+		if (alertScripts)
+		{
+			mRadarEnterAlerts.push_back(avId);
+		}
+		
+		//2d. Report on net-new entries.
 		if (lastRadarSweep.count(avId) == 0)
 		{
 			if (gSavedSettings.getBOOL("RadarReportChatRange") && (avRange <= CHAT_NORMAL_RADIUS))		
 				reportToNearbyChat(avName+llformat(" entered chat range (%3.2f m)\n",avRange));
 			if (gSavedSettings.getBOOL("RadarReportDrawRange") && (avRange <= drawRadius))
 				reportToNearbyChat(avName+llformat(" entered draw distance (%3.2f m)\n",avRange));
+			if (gSavedSettings.getBOOL("RadarEnterChannelAlert") && (!mRadarAlertRequest))
+			{
+				// Autodetect Phoenix chat UUID compatibility. 
+				// If Leave channel alerts are not set, restrict reports to same-sim only.
+				if (!gSavedSettings.getBOOL("RadarLeaveChannelAlert"))
+				{
+					if (avRegion == regionSelf)
+						mRadarEnterAlerts.push_back(avId);
+				}
+				else
+					mRadarEnterAlerts.push_back(avId);
+			}
 		}
 
 		
-		//2d. Build out scrollist-style view
+		//2e. Build out scrollist-style view
 		LLSD row;
 		row["columns"][0]["column"] = "name";
 		row["columns"][0]["value"] = avName;
@@ -977,7 +1012,7 @@ void LLPanelPeople::updateNearbyList()
 				updateButtons(); // TODO: only update on change, instead of every tick
 			}
 		
-		//2e. Check for range crossing alert threshholds, being careful to handle double-listings
+		//2f. Check for range crossing alert threshholds, being careful to handle double-listings
 		if (lastRadarSweep.count(avId) == 1) // normal case, check from last position
 		{
 			radarFields rf = lastRadarSweep.find(avId)->second;
@@ -1039,11 +1074,12 @@ void LLPanelPeople::updateNearbyList()
 				reportToNearbyChat(rf.avName + " left chat range.");
 			if (gSavedSettings.getBOOL("RadarReportDrawRange") && (rf.lastDistance <= drawRadius))
 				reportToNearbyChat(rf.avName + " left draw distance.");
+			if (gSavedSettings.getBOOL("RadarLeaveChannelAlert"))
+				mRadarLeaveAlerts.push_back(prevId);
 		}
 	}
 
-	
-	//STEP 5: Update out local radar data cache, for faster tracking of changes
+	//STEP 4: Update out local radar data cache, for faster tracking of changes
 	lastRadarSweep.clear();
 	for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
 	{
@@ -1066,8 +1102,49 @@ void LLPanelPeople::updateNearbyList()
 		lastRadarSweep.insert(pair<LLUUID,radarFields>(av->getAvatarId(),rf));
 	}
 	
+	//STEP 5: Send out Chat alerts on events
+	if (mRadarEnterAlerts.size() > 0)
+	{
+		mRadarFrameCount++;
+		S32 chan = (S32)gSavedSettings.getU32("RadarAlertChannel");
+		if (chan < 0) { chan = chan * -1; } // make sure chan is always positive
+		std::string msg = llformat("/%d %d,%d",chan,mRadarFrameCount,(int)mRadarEnterAlerts.size());
+		while(mRadarEnterAlerts.size() > 0)
+		{
+			int sz = min(MAX_AVATARS_PER_ALERT,(U32)mRadarEnterAlerts.size());
+			for (int i = 0; (i < sz);i++)
+			{
+				msg = llformat("%s,%s",msg.c_str(),mRadarEnterAlerts.back().asString().c_str());
+				mRadarEnterAlerts.pop_back();
+			}
+			LLNearbyChatBar::sendChatFromViewer(msg,CHAT_TYPE_WHISPER,FALSE);
+			llinfos << msg << llendl;
+		}
+	}
+	if (mRadarLeaveAlerts.size() > 0)
+	{
+		mRadarFrameCount++;
+		U32 chan = gSavedSettings.getU32("RadarAlertChannel");
+		std::string msg = llformat("/%d %d,-%d",chan,mRadarFrameCount,(int)mRadarLeaveAlerts.size());
+		while(mRadarLeaveAlerts.size() > 0)
+		{ 
+			int sz = min(MAX_AVATARS_PER_ALERT,(U32)mRadarLeaveAlerts.size());
+			for (int i = 0; (i < sz);i++)
+			{
+				msg = llformat("%s,%s",msg.c_str(),mRadarLeaveAlerts.back().asString().c_str());
+				mRadarLeaveAlerts.pop_back();
+			}
+			LLNearbyChatBar::sendChatFromViewer(msg,CHAT_TYPE_WHISPER,FALSE);
+			llinfos << msg << llendl;
+		}
+	}   
+
 	//STEP 6: Update GUI text of number of total users
 	mRadarList->setColumnLabel("name",llformat("NAME [%d]",lastRadarSweep.size()));
+	
+	// reset any active alert requests
+	if (alertScripts)
+		mRadarAlertRequest = false;
 	
 }
 

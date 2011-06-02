@@ -45,6 +45,8 @@ class LLTabContainer;
 class LLMenuButton;
 class LLMenuGL;
 
+const U32	MAX_AVATARS_PER_ALERT = 27; // maximum number of UUIDs we can cram into a single channel radar alert message
+
 class LLPanelPeople 
 	: public LLPanel
 	, public LLVoiceClientStatusObserver
@@ -58,6 +60,7 @@ public:
 	/*virtual*/ void	onOpen(const LLSD& key);
 	/*virtual*/ bool	notifyChildren(const LLSD& info);
 	void	teleportToAvatar(LLUUID targetAv);
+	void	requestRadarChannelAlertSync() {mRadarAlertRequest = true;}
 	// Implements LLVoiceClientStatusObserver::onChange() to enable call buttons
 	// when voice is available
 	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
@@ -155,6 +158,7 @@ private:
 	void					setAccordionCollapsedByUser(const std::string& name, bool collapsed);
 	bool					isAccordionCollapsedByUser(LLUICtrl* acc_tab);
 	bool					isAccordionCollapsedByUser(const std::string& name);
+	
 
 	LLFilterEditor*			mFilterEditor;
 	LLTabContainer*			mTabContainer;
@@ -199,6 +203,11 @@ private:
 		S32			lastStatus;
 	}; 
 	std::multimap < LLUUID, radarFields > lastRadarSweep;
+	std::vector <LLUUID>	mRadarEnterAlerts;
+	std::vector <LLUUID>	mRadarLeaveAlerts;
+	 	
+	S32					mRadarFrameCount;
+	bool				mRadarAlertRequest;
 };
 
 #endif //LL_LLPANELPEOPLE_H

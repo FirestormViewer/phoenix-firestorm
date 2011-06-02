@@ -5,6 +5,16 @@
      mouse_opaque="false">
   
   <menu_item_check
+     label="Show Minimap above Radar"
+     name="ShowRadarMinimap">
+	 <menu_item_check.on_check
+     	control="ShowRadarMinimap" />
+     <menu_item_check.on_click
+        function="ToggleControl"
+        parameter="ShowRadarMinimap" />
+  </menu_item_check>
+  
+  <menu_item_check
      label="Limit Results to specific Radius"
      name="LimitRadarByRange">
 	 <menu_item_check.on_check
@@ -13,6 +23,8 @@
         function="ToggleControl"
         parameter="LimitRadarByRange" />
   </menu_item_check>
+  
+  <menu_item_separator layout="topleft" />
   
   <menu_item_check
      label="Report Crossing Draw Range"
@@ -35,13 +47,23 @@
   </menu_item_check>
   
   <menu_item_check
-     label="Show Minimap above Radar"
-     name="ShowRadarMinimap">
+     label="Report Enter Alerts to Scripts"
+     name="RadarEnterChannelAlert">
 	 <menu_item_check.on_check
-     	control="ShowRadarMinimap" />
+     	control="RadarEnterChannelAlert" />
      <menu_item_check.on_click
         function="ToggleControl"
-        parameter="ShowRadarMinimap" />
+        parameter="RadarEnterChannelAlert" />
+  </menu_item_check>
+  
+  <menu_item_check
+     label="Report Exit Alerts to Scripts"
+     name="RadarLeaveChannelAlert">
+	 <menu_item_check.on_check
+     	control="RadarLeaveChannelAlert" />
+     <menu_item_check.on_click
+        function="ToggleControl"
+        parameter="RadarLeaveChannelAlert" />
   </menu_item_check>
      
   <menu_item_separator layout="topleft" />
