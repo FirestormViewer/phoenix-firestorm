@@ -106,7 +106,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              <net_map
              bg_color="NetMapBackgroundColor"
              visibility_control="ShowRadarMinimap"
-             follows="top|left|bottom"
+             follows="all"
              layout="topleft"
              left="3"
              mouse_opaque="false"
