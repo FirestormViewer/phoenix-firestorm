@@ -955,9 +955,9 @@ void LLPanelPeople::updateNearbyList()
 		if (lastRadarSweep.count(avId) == 0)
 		{
 			if (gSavedSettings.getBOOL("RadarReportChatRange") && (avRange <= CHAT_NORMAL_RADIUS))		
-				reportToNearbyChat(avName+llformat(" entered chat range (%3.2f m)\n",avRange));
+				reportToNearbyChat(avName+llformat(" entered chat range (%3.2f m)",avRange));
 			if (gSavedSettings.getBOOL("RadarReportDrawRange") && (avRange <= drawRadius))
-				reportToNearbyChat(avName+llformat(" entered draw distance (%3.2f m)\n",avRange));
+				reportToNearbyChat(avName+llformat(" entered draw distance (%3.2f m)",avRange));
 			if (gSavedSettings.getBOOL("RadarEnterChannelAlert") && (!mRadarAlertRequest))
 			{
 				// Autodetect Phoenix chat UUID compatibility. 
