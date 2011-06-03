@@ -1068,7 +1068,7 @@ void LLPanelPeople::updateNearbyList()
 	
 	
 	//STEP 3: Handle any avatars that dropped off the detected list since last time.
-	for (std::map <LLUUID, radarFields>::const_iterator i = lastRadarSweep.begin(); i != lastRadarSweep.end(); ++i)
+	for (std::multimap <LLUUID, radarFields>::const_iterator i = lastRadarSweep.begin(); i != lastRadarSweep.end(); ++i)
 	{
 		LLUUID prevId = i->first;
 		if (!mNearbyList->contains(prevId))
