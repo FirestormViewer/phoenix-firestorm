@@ -4797,12 +4797,27 @@ void LLAppViewer::handleLoginComplete()
 	mOnLoginCompleted();
 
 //-TT Window Title Access
-        std::string full_name = gAgentAvatarp->getFullname();
-        if (!full_name.empty())
-        {
-        	gWindowTitle += std::string(" - ") + full_name;
-        	gViewerWindow->setTitle(gWindowTitle);
-        }
+	std::string full_name;
+	const LLSD login_response = LLLoginInstance::getInstance()->getResponse();
+	if (login_response.has("first_name"))
+	{
+		full_name = login_response["first_name"].asString();
+		LLStringUtil::replaceChar(full_name, '"', ' ');
+		LLStringUtil::trim(full_name);
+
+		if (login_response.has("last_name"))
+		{
+			std::string temp_string = login_response["last_name"].asString();
+			LLStringUtil::replaceChar(temp_string, '"', ' ');
+			LLStringUtil::trim(temp_string);
+			full_name.append(" ").append(temp_string);
+		}
+	}
+	if (!full_name.empty())
+	{
+		gWindowTitle += std::string(" - ") + full_name;
+		gViewerWindow->getWindow()->setTitle(gWindowTitle);
+	}
 //-TT
 
 	writeDebugInfo();
