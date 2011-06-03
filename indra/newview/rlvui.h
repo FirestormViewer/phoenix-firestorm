@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2010, Kitty Barnett
+ * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -39,14 +39,13 @@ protected:
 public:
 	typedef boost::function<void(bool)> behaviour_handler_t;
 	void addBehaviourToggleCallback(ERlvBehaviour eBhvr, behaviour_handler_t cb);
-	void onBehaviour(ERlvBehaviour eBhvr, ERlvParamType eType);			// RlvHandler::rlv_behaviour_signal_t
+	void onBehaviourToggle(ERlvBehaviour eBhvr, ERlvParamType eType);	// RlvHandler::rlv_behaviour_signal_t
 
 	/*
 	 * Behaviour handlers
 	 */
 protected:
 	void onRefreshHoverText();											// showloc, shownames, showhovertext(all|world|hud)
-	void onToggleDisplayName();											// displayname
 	void onToggleEdit();												// edit
 	void onToggleFly();													// fly
 	void onToggleRez();													// rez

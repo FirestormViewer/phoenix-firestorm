@@ -40,8 +40,9 @@
 #include "llviewermenu.h"
 // [/SL:KB]
 #include "llvoavatarself.h"
-// [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1a)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
 
 class LLFindOutfitItems : public LLInventoryCollectFunctor

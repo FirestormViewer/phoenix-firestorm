@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2010, Kitty Barnett
+ * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -15,15 +15,15 @@
  */
 
 #include "llviewerprecompiledheaders.h"
-//#include "llagent.h"
+#include "llagent.h"
 #include "llagentcamera.h"
 #include "llviewercontrol.h"
-//#include "llviewerwindow.h"
-//#include "llvoavatar.h"
+#include "llvoavatarself.h"
 #include "llwlparammanager.h"
 
 #include "rlvextensions.h"
 #include "rlvhandler.h"
+#include "rlvhelper.h"
 
 // ============================================================================
 

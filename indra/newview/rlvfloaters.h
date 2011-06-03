@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2010, Kitty Barnett
+ * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -36,28 +36,25 @@ private:
 	 * LLFloater overrides
 	 */
 public:
-	virtual void onOpen(const LLSD& sdKey);
-	virtual void onClose(bool fQuitting);
-
-	/*
-	 * Event handlers
-	 */
-protected:
-	void onRlvCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
-	void onAvatarNameLookup(const LLUUID& idAgent, const std::string& strFullname, BOOL fGroup);
+	/*virtual*/ void onOpen(const LLSD& sdKey);
+	/*virtual*/ void onClose(bool fQuitting);
+	/*virtual*/ BOOL postBuild();
 
 	/*
 	 * Member functions
 	 */
 protected:
+	void onAvatarNameLookup(const LLUUID& idAgent, const LLAvatarName& avName);
+	void onBtnCopyToClipboard();
+	void onCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
 	void refreshAll();
 
 	/*
 	 * Member variables
 	 */
 protected:
-	boost::signals2::connection m_ConnRlvCommand;
-	std::list<LLUUID>           m_PendingLookup;
+	boost::signals2::connection	m_ConnRlvCommand;
+	uuid_vec_t 					m_PendingLookup;
 };
 
 // ============================================================================

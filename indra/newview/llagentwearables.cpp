@@ -49,8 +49,9 @@
 #include "llvoavatarself.h"
 #include "llwearable.h"
 #include "llwearablelist.h"
-// [RLVa:KB] - Checked: RLVa-1.2.0a (2010-03-04)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
 
 #include <boost/scoped_ptr.hpp>
@@ -944,6 +945,30 @@ const LLUUID LLAgentWearables::getWearableItemID(LLWearableType::EType type, U32
 	else
 		return LLUUID();
 }
+
+// [RLVa:KB] - Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+void LLAgentWearables::getWearableItemIDs(uuid_vec_t& idItems) const
+{
+	for (wearableentry_map_t::const_iterator itWearableType = mWearableDatas.begin(); 
+			itWearableType != mWearableDatas.end(); ++itWearableType)
+	{
+		getWearableItemIDs(itWearableType->first, idItems);
+	}
+}
+
+void LLAgentWearables::getWearableItemIDs(LLWearableType::EType eType, uuid_vec_t& idItems) const
+{
+	wearableentry_map_t::const_iterator itWearableType = mWearableDatas.find(eType);
+	if (mWearableDatas.end() != itWearableType)
+	{
+		for (wearableentry_vec_t::const_iterator itWearable = itWearableType->second.begin(), endWearable = itWearableType->second.end();
+				itWearable != endWearable; ++itWearable)
+		{
+			idItems.push_back((*itWearable)->getItemID());
+		}
+	}
+}
+// [/RLVa:KB]
 
 const LLUUID LLAgentWearables::getWearableAssetID(LLWearableType::EType type, U32 index) const
 {
@@ -1983,9 +2008,11 @@ void LLAgentWearables::userRemoveAllAttachments()
 
 void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_array_t& obj_item_array)
 {
-// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-	// RELEASE-RLVa: [SL-2.0.0] Check our callers and verify that erasing elements from the passed vector won't break random things
-	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+	static bool sInitialAttachmentsRequested = false;
+
+	// RELEASE-RLVa: [SL-2.5.2] Check our callers and verify that erasing elements from the passed vector won't break random things
+	if ( (rlv_handler_t::isEnabled()) && (sInitialAttachmentsRequested) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 	{
 		// Fall-back code: everything should really already have been pruned before we get this far
 		for (S32 idxItem = obj_item_array.count() - 1; idxItem >= 0; idxItem--)
@@ -2037,8 +2064,8 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 		msg->addUUIDFast(_PREHASH_ItemID, item->getLinkedUUID());
 		msg->addUUIDFast(_PREHASH_OwnerID, item->getPermissions().getOwner());
 		msg->addU8Fast(_PREHASH_AttachmentPt, 0 | ATTACHMENT_ADD);	// Wear at the previous or default attachment point
-// [RLVa:KB] - Checked: 2010-07-28 (RLVa-1.2.0i) | Added: RLVa-1.2.0i
-		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+		if ( (rlv_handler_t::isEnabled()) && (sInitialAttachmentsRequested) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 		{
 			RlvAttachmentLockWatchdog::instance().onWearAttachment(item, RLV_WEAR_ADD);
 		}
@@ -2053,6 +2080,10 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 			msg->sendReliable( gAgent.getRegion()->getHost() );
 		}
 	}
+
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+	sInitialAttachmentsRequested = true;
+// [/RLVa:KB]
 }
 
 void LLAgentWearables::checkWearablesLoaded() const

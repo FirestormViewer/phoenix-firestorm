@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2010, Kitty Barnett
+ * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -15,6 +15,7 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include "llagent.h"
 #include "llavatarlist.h"				// Avatar list control used by the "Nearby" tab in the "People" sidebar panel
 #include "llavatarnamecache.h"
 #include "llbottomtray.h"
@@ -40,6 +41,7 @@
 #include "llteleporthistorystorage.h"
 #include "lltoolmgr.h"
 #include "llviewerparcelmgr.h"
+#include "llvoavatar.h"
 #include "roles_constants.h"			// Group "powers"
 
 #include "rlvui.h"
@@ -51,7 +53,7 @@
 RlvUIEnabler::RlvUIEnabler()
 {
 	// Connect us to the behaviour toggle signal
-	gRlvHandler.setBehaviourCallback(boost::bind(&RlvUIEnabler::onBehaviour, this, _1, _2));
+	gRlvHandler.setBehaviourToggleCallback(boost::bind(&RlvUIEnabler::onBehaviourToggle, this, _1, _2));
 
 	// onRefreshHoverText()
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWLOC, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
@@ -66,7 +68,6 @@ RlvUIEnabler::RlvUIEnabler()
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_VIEWTEXTURE, boost::bind(&RlvUIEnabler::onToggleViewXXX, this)));
 
 	// onToggleXXX
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_DISPLAYNAME, boost::bind(&RlvUIEnabler::onToggleDisplayName, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_EDIT, boost::bind(&RlvUIEnabler::onToggleEdit, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_FLY, boost::bind(&RlvUIEnabler::onToggleFly, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_REZ, boost::bind(&RlvUIEnabler::onToggleRez, this)));
@@ -90,19 +91,13 @@ RlvUIEnabler::RlvUIEnabler()
 }
 
 // Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
-void RlvUIEnabler::onBehaviour(ERlvBehaviour eBhvr, ERlvParamType eType)
+void RlvUIEnabler::onBehaviourToggle(ERlvBehaviour eBhvr, ERlvParamType eType)
 {
 	bool fQuitting = LLApp::isQuitting();
-
-	// We're only interested in behaviour toggles (ie on->off or off->on)
-	if ( ((RLV_TYPE_ADD == eType) && (1 == gRlvHandler.hasBehaviour(eBhvr))) ||
-		 ((RLV_TYPE_REMOVE == eType) && (0 == gRlvHandler.hasBehaviour(eBhvr))) )
+	for (behaviour_handler_map_t::const_iterator itHandler = m_Handlers.lower_bound(eBhvr), endHandler = m_Handlers.upper_bound(eBhvr);
+			itHandler != endHandler; ++itHandler)
 	{
-		for (behaviour_handler_map_t::const_iterator itHandler = m_Handlers.lower_bound(eBhvr), endHandler = m_Handlers.upper_bound(eBhvr);
-				itHandler != endHandler; ++itHandler)
-		{
-			itHandler->second(fQuitting);
-		}
+		itHandler->second(fQuitting);
 	}
 }
 
@@ -113,25 +108,6 @@ void RlvUIEnabler::onRefreshHoverText()
 {
 	// Refresh all hover text each time any of the monitored behaviours get set or unset
 	LLHUDText::refreshAllObjectText();
-}
-
-// Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-void RlvUIEnabler::onToggleDisplayName()
-{
-	static const char cstrFloaterChangeDisplayName[] = "display_name";
-
-	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_DISPLAYNAME);
-	if (!fEnable)
-	{
-		// Hide the "Change Display Name" floater if it's currently visible
-		if (LLFloaterReg::floaterInstanceVisible(cstrFloaterChangeDisplayName))
-			LLFloaterReg::hideInstance(cstrFloaterChangeDisplayName);
-	}
-
-	if (!fEnable)
-		addGenericFloaterFilter(cstrFloaterChangeDisplayName);
-	else
-		removeGenericFloaterFilter(cstrFloaterChangeDisplayName);
 }
 
 // Checked: 2010-03-17 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
@@ -358,18 +334,18 @@ void RlvUIEnabler::onToggleShowLoc()
 		m_ConnFloaterShowLoc.disconnect();
 }
 
-// Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
+// Checked: 2011-05-22 (RLVa-1.3.1b) | Modified: RLVa-1.3.1b
 void RlvUIEnabler::onToggleShowMinimap()
 {
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWMINIMAP);
 
-	// Start or stop filtering opening the mini-map
+	// Start or stop filtering showing the mini-map floater
 	if (!fEnable)
 		addGenericFloaterFilter("mini_map");
 	else
 		removeGenericFloaterFilter("mini_map");
 
-	// Hide the mini-map if it's currently visible (or restore it if it was previously visible)
+	// Hide the mini-map floater if it's currently visible (or restore it if it was previously visible)
 	static bool fPrevVisibile = false;
 	if ( (!fEnable) && ((fPrevVisibile = LLFloaterReg::floaterInstanceVisible("mini_map"))) )
 		LLFloaterReg::hideFloaterInstance("mini_map");
@@ -381,6 +357,18 @@ void RlvUIEnabler::onToggleShowMinimap()
 	LLView* pBtnView = (pTray) ? pTray->getChildView("mini_map_btn") : NULL;
 	if (pBtnView)
 		pBtnView->setEnabled(fEnable);
+
+	// Break/reestablish the visibility connection for the nearby people panel embedded minimap instance
+	LLPanel* pPeoplePanel = LLSideTray::getInstance()->getPanel("panel_people");
+	LLPanel* pNetMapPanel = (pPeoplePanel) ? pPeoplePanel->getChild<LLPanel>("Net Map Panel", 1) : NULL;
+	RLV_ASSERT( (pPeoplePanel) && (pNetMapPanel) );
+	if (pNetMapPanel)
+	{
+		pNetMapPanel->setMakeVisibleControlVariable( (fEnable) ? gSavedSettings.getControl("NearbyListShowMap") : NULL);
+		// Reestablishing the visiblity connection will show the panel if needed so we only need to take care of hiding it when needed
+		if ( (!fEnable) && (pNetMapPanel->getVisible()) )
+			pNetMapPanel->setVisible(false);
+	}
 }
 
 // Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c

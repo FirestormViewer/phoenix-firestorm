@@ -105,9 +105,9 @@
 #include "lltrans.h"
 #include "lleconomy.h"
 #include "boost/unordered_map.hpp"
-
-// [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0a)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
 
 using namespace LLVOAvatarDefines;
@@ -5496,16 +5496,16 @@ class LLWorldAlwaysRun : public view_listener_t
 		if (gAgent.getAlwaysRun())
 		{
 			gAgent.clearAlwaysRun();
-			gAgent.clearRunning();
+//			gAgent.clearRunning();
 		}
 		else
 		{
 			gAgent.setAlwaysRun();
-			gAgent.setRunning();
+//			gAgent.setRunning();
 		}
 
 		// tell the simulator.
-		gAgent.sendWalkRun(gAgent.getAlwaysRun());
+//		gAgent.sendWalkRun(gAgent.getAlwaysRun());
 
 		// Update Movement Controls according to AlwaysRun mode
 		LLFloaterMove::setAlwaysRunMode(gAgent.getAlwaysRun());

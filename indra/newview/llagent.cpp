@@ -77,8 +77,9 @@
 #include "llwindow.h"
 #include "llworld.h"
 #include "llworldmap.h"
-// [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvhelper.h"
 // [/RLVa:KB]
 #include "kcwlinterface.h"
 
@@ -174,7 +175,10 @@ LLAgent::LLAgent() :
 	mDoubleTapRunMode(DOUBLETAP_NONE),
 
 	mbAlwaysRun(false),
-	mbRunning(false),
+//	mbRunning(false),
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+	mbTempRun(false),
+// [/RLVa:KB]
 	mbTeleportKeepsLookAt(false),
 
 	mAgentAccess(gSavedSettings),
@@ -2689,7 +2693,36 @@ void LLAgent::sendAnimationRequest(const LLUUID &anim_id, EAnimRequest request)
 	sendReliableMessage();
 }
 
-void LLAgent::sendWalkRun(bool running)
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+void LLAgent::setAlwaysRun()
+{
+	mbAlwaysRun = (!rlv_handler_t::isEnabled()) || (!gRlvHandler.hasBehaviour(RLV_BHVR_ALWAYSRUN));
+	sendWalkRun();
+}
+
+void LLAgent::setTempRun()
+{
+	mbTempRun = (!rlv_handler_t::isEnabled()) || (!gRlvHandler.hasBehaviour(RLV_BHVR_TEMPRUN));
+	sendWalkRun();
+}
+
+void LLAgent::clearAlwaysRun()
+{
+	mbAlwaysRun = false;
+	sendWalkRun();
+}
+
+void LLAgent::clearTempRun()
+{
+	mbTempRun = false;
+	sendWalkRun();
+}
+// [/RLVa:KB]
+
+//void LLAgent::sendWalkRun(bool running)
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+void LLAgent::sendWalkRun()
+// [/RLVa:KB]
 {
 	LLMessageSystem* msgsys = gMessageSystem;
 	if (msgsys)
@@ -2698,7 +2731,10 @@ void LLAgent::sendWalkRun(bool running)
 		msgsys->nextBlockFast(_PREHASH_AgentData);
 		msgsys->addUUIDFast(_PREHASH_AgentID, getID());
 		msgsys->addUUIDFast(_PREHASH_SessionID, getSessionID());
-		msgsys->addBOOLFast(_PREHASH_AlwaysRun, BOOL(running) );
+//		msgsys->addBOOLFast(_PREHASH_AlwaysRun, BOOL(running) );
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+		msgsys->addBOOLFast(_PREHASH_AlwaysRun, BOOL(getRunning()) );
+// [/RLVa:KB]
 		sendReliableMessage();
 	}
 }
@@ -3485,7 +3521,7 @@ void LLAgent::teleportViaLandmark(const LLUUID& landmark_asset_id)
 		                                   : gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC) ) ||
 		   ((gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (isAgentAvatarValid()) && (gAgentAvatarp->isSitting())) ))
 	{
-		RlvUtil::notifyBlockedTeleport();
+		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
 		return;
 	}
 // [/RLVa:KB]
@@ -3562,7 +3598,7 @@ void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 		     ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && 
 			   (gRlvHandler.hasBehaviourExcept(RLV_BHVR_UNSIT, gRlvHandler.getCurrentObject()))) )
 		{
-			RlvUtil::notifyBlockedTeleport();
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
 			return;
 		}
 
@@ -3620,7 +3656,7 @@ void LLAgent::teleportViaLocationLookAt(const LLVector3d& pos_global)
 	if ( (rlv_handler_t::isEnabled()) && (!RlvUtil::isForceTp()) && 
 		 ((gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) || (!gRlvHandler.canStand())) )
 	{
-		RlvUtil::notifyBlockedTeleport();
+		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
 		return;
 	}
 // [/RLVa:KB]
