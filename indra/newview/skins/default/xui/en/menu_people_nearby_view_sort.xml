@@ -24,6 +24,40 @@
         parameter="LimitRadarByRange" />
   </menu_item_check>
   
+  <menu
+    label="Radar Name Format"
+    name="radarNameFormat">
+   	<menu_item_call
+    	label="DisplayName"
+     	name="radarFmtDN">
+    	<menu_item_call.on_click
+        	function="Radar.NameFmt" 
+        	parameter="DN"/>
+    </menu_item_call>
+   	<menu_item_call
+    	label="Username"
+     	name="radarFmtUN">
+    	<menu_item_call.on_click
+        	function="Radar.NameFmt" 
+        	parameter="UN"/>
+    </menu_item_call>
+   	<menu_item_call
+    	label="DisplayName (UserName)"
+     	name="radarFmtDNUN">
+    	<menu_item_call.on_click
+        	function="Radar.NameFmt" 
+        	parameter="DNUN"/>
+    </menu_item_call>
+   	<menu_item_call
+    	label="Username (DisplayName)"
+     	name="radarFmtUNDN">
+    	<menu_item_call.on_click
+        	function="Radar.NameFmt" 
+        	parameter="UNDN"/>
+    </menu_item_call>
+   </menu>
+  
+  
   <menu_item_separator layout="topleft" />
   
   <menu_item_check

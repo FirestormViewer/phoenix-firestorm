@@ -46,6 +46,10 @@ class LLMenuButton;
 class LLMenuGL;
 
 const U32	MAX_AVATARS_PER_ALERT = 27; // maximum number of UUIDs we can cram into a single channel radar alert message
+const U32	NAMEFORMAT_DISPLAYNAME = 0;
+const U32	NAMEFORMAT_USERNAME = 1;
+const U32	NAMEFORMAT_DISPLAYNAME_USERNAME = 2;
+const U32	NAMEFORMAT_USERNAME_DISPLAYNAME = 3;
 
 class LLPanelPeople 
 	: public LLPanel
@@ -102,6 +106,7 @@ private:
 	void					setSortOrder(LLAvatarList* list, ESortOrder order, bool save = true);
 	void					reportToNearbyChat(std::string message);
 	void					handleLimitRadarByRange(const LLSD& newalue);
+	std::string				getRadarName(LLUUID avId);
 
 	// UI callbacks
 	void					onFilterEdit(const std::string& search_string);
@@ -136,6 +141,7 @@ private:
 	void					onNearbyViewSortMenuItemClicked(const LLSD& userdata);
 	void					onGroupsViewSortMenuItemClicked(const LLSD& userdata);
 	void					onRecentViewSortMenuItemClicked(const LLSD& userdata);
+	void					onRadarNameFmtClicked(const LLSD& userdata);
 
 	//returns false only if group is "none"
 	bool					isRealGroup();

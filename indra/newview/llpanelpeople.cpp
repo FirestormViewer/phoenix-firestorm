@@ -79,9 +79,11 @@
 #include "lllayoutstack.h"
 #include "llnearbychatbar.h"
 #include <algorithm>
-
-
+#include <boost/algorithm/string.hpp>
 using namespace std;
+using namespace boost;
+
+
 
 #define FRIEND_LIST_UPDATE_TIMEOUT	0.5
 #define NEARBY_LIST_UPDATE_INTERVAL 1
@@ -702,6 +704,7 @@ BOOL LLPanelPeople::postBuild()
 	registrar.add("People.Nearby.ViewSort.Action",  boost::bind(&LLPanelPeople::onNearbyViewSortMenuItemClicked,  this, _2));
 	registrar.add("People.Groups.ViewSort.Action",  boost::bind(&LLPanelPeople::onGroupsViewSortMenuItemClicked,  this, _2));
 	registrar.add("People.Recent.ViewSort.Action",  boost::bind(&LLPanelPeople::onRecentViewSortMenuItemClicked,  this, _2));
+	registrar.add("Radar.NameFmt",boost::bind(&LLPanelPeople::onRadarNameFmtClicked, this, _2));
 
 	enable_registrar.add("People.Group.Minus.Enable",	boost::bind(&LLPanelPeople::isRealGroup,	this));
 	enable_registrar.add("People.Friends.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onFriendsViewSortMenuItemCheck,	this, _2));
@@ -931,7 +934,7 @@ void LLPanelPeople::updateNearbyList()
 			if (avStatusFlags & AVATAR_IDENTIFIED)
 				avFlagStr += "$";
 		std::string avAgeStr = av->getAvatarAge();
-		std::string avName   = av->getAvatarName(); // change to vary DN/UN/DNUN/UNDN
+		std::string avName   = getRadarName(avId);
 		
 		//llinfos << "Processing " << avName << " range: " << avRange << " key: " << avId << llendl;
 		
@@ -939,6 +942,7 @@ void LLPanelPeople::updateNearbyList()
 		av->setRange(avRange);
 		av->setPosition(avPos);
 		av->setFirstSeen(time(NULL) - (time_t)seentime);
+		av->setAvatarName(avName);
 		
 		
 		//2c Report all detected to scripts if we were asked for an update
@@ -1808,6 +1812,64 @@ void LLPanelPeople::onRecentViewSortMenuItemClicked(const LLSD& userdata)
 	{
 		mRecentList->toggleIcons();
 	}
+}
+
+void LLPanelPeople::onRadarNameFmtClicked(const LLSD& userdata)
+{
+	std::string chosen_item = userdata.asString();
+	if (chosen_item == "DN")
+		gSavedSettings.setU32("RadarNameFormat", NAMEFORMAT_DISPLAYNAME);
+	else if (chosen_item == "UN")
+		gSavedSettings.setU32("RadarNameFormat", NAMEFORMAT_USERNAME);
+	else if (chosen_item == "DNUN")
+		gSavedSettings.setU32("RadarNameFormat", NAMEFORMAT_DISPLAYNAME_USERNAME);
+	else if (chosen_item == "UNDN")
+		gSavedSettings.setU32("RadarNameFormat", NAMEFORMAT_USERNAME_DISPLAYNAME);
+}
+
+
+std::string LLPanelPeople::getRadarName(LLUUID avId)
+{
+	U32 fmt = gSavedSettings.getU32("RadarNameFormat");
+	LLAvatarName avname;
+	
+	if (LLAvatarNameCache::get(avId,&avname)) // use the synchronous call. We poll every second so there's less value in using the callback form.
+	{
+		if (fmt == NAMEFORMAT_DISPLAYNAME)
+		{
+			return avname.mDisplayName;
+		}
+		else if (fmt == NAMEFORMAT_USERNAME)
+		{
+			return avname.mUsername;
+		}
+		else if (fmt == NAMEFORMAT_DISPLAYNAME_USERNAME)
+		{
+			std::string s1 = avname.mDisplayName;
+			to_lower(s1);
+			std::string s2 = avname.mUsername;
+			replace_all(s2,"."," ");
+			if (s1.compare(s2) == 0)
+				return avname.mDisplayName;
+			else
+				return llformat("%s (%s)",avname.mDisplayName.c_str(),avname.mUsername.c_str());
+		}
+		else if (fmt == NAMEFORMAT_USERNAME_DISPLAYNAME)
+		{
+			std::string s1 = avname.mDisplayName;
+			to_lower(s1);
+			std::string s2 = avname.mUsername;
+			replace_all(s2,"."," ");
+			if (s1.compare(s2) == 0)
+				return avname.mDisplayName;
+			else
+				return llformat("%s (%s)",avname.mUsername.c_str(),avname.mDisplayName.c_str());
+		}
+	}
+	
+	// name not found. Temporarily fill in with the UUID. It's more distinguishable than (loading...)
+	return avId.asString();
+
 }
 
 bool LLPanelPeople::onFriendsViewSortMenuItemCheck(const LLSD& userdata) 
