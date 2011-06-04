@@ -1432,7 +1432,8 @@ void LLPanelPeople::onFilterEdit(const std::string& search_string)
 
 
 	// Apply new filter.
-	mNearbyList->setNameFilter(mFilterSubStringOrig);
+	// AO: currently broken
+	// mNearbyList->setNameFilter(mFilterSubStringOrig);
 	mOnlineFriendList->setNameFilter(mFilterSubStringOrig);
 	mAllFriendList->setNameFilter(mFilterSubStringOrig);
 	mRecentList->setNameFilter(mFilterSubStringOrig);
