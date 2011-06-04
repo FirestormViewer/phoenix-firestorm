@@ -955,9 +955,9 @@ void LLPanelPeople::updateNearbyList()
 		if (lastRadarSweep.count(avId) == 0)
 		{
 			if (gSavedSettings.getBOOL("RadarReportChatRange") && (avRange <= CHAT_NORMAL_RADIUS))		
-				reportToNearbyChat(avName+llformat(" entered chat range (%3.2f m)\n",avRange));
+				reportToNearbyChat(avName+llformat(" entered chat range (%3.2f m)",avRange));
 			if (gSavedSettings.getBOOL("RadarReportDrawRange") && (avRange <= drawRadius))
-				reportToNearbyChat(avName+llformat(" entered draw distance (%3.2f m)\n",avRange));
+				reportToNearbyChat(avName+llformat(" entered draw distance (%3.2f m)",avRange));
 			if (gSavedSettings.getBOOL("RadarEnterChannelAlert") && (!mRadarAlertRequest))
 			{
 				// Autodetect Phoenix chat UUID compatibility. 
@@ -1068,7 +1068,7 @@ void LLPanelPeople::updateNearbyList()
 	
 	
 	//STEP 3: Handle any avatars that dropped off the detected list since last time.
-	for (std::map <LLUUID, radarFields>::const_iterator i = lastRadarSweep.begin(); i != lastRadarSweep.end(); ++i)
+	for (std::multimap <LLUUID, radarFields>::const_iterator i = lastRadarSweep.begin(); i != lastRadarSweep.end(); ++i)
 	{
 		LLUUID prevId = i->first;
 		if (!mNearbyList->contains(prevId))
