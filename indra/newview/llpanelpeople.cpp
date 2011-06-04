@@ -912,7 +912,11 @@ void LLPanelPeople::updateNearbyList()
 		LLAvatarListItem* av = mNearbyList->getAvatarListItem(avId);
 		F32 avRange          = dist_vec(avPos, posSelf);
 		S32 seentime		 = 0;
-		LLUUID avRegion		 = world->getRegionFromPosGlobal(avPos)->getRegionID();
+		LLUUID avRegion;
+		LLViewerRegion *reg	 = world->getRegionFromPosGlobal(avPos);
+		if (reg)
+			avRegion = reg->getRegionID();
+
 			if (lastRadarSweep.count(avId) > 1) // if we detect a multiple ID situation, get lastSeenTime from our cache instead
 			{
 				pair<multimap<LLUUID,radarFields>::iterator,multimap<LLUUID,radarFields>::iterator> dupeAvs;
