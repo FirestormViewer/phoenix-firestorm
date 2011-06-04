@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  legacy_header_height="18"
- can_dock="true"
- can_minimize="true"
+ can_dock="false"
+ can_minimize="false"
  can_close="false"
+ title=""
+ bg_alpha_color="SL-Background_86"
  follows="bottom"
- height="110"
+ height="94"
  layout="topleft"
  name="move_floater"
- help_topic="move_floater"
+ help_topic=""
  save_rect="true"
  save_visibility="true"
- save_dock_state="true"
  width="113">
     <string
      name="walk_forward_tooltip">
@@ -91,7 +92,7 @@
     </string>
     <panel
      border="false"
-     height="83"
+     height="67"
      follows="left|top"
      layout="topleft"
      left="0"
@@ -112,7 +113,7 @@
          name="turn left btn"
          scale_image="false"
          tool_tip="Turn left (press Left Arrow or A)"
-         top="34"
+         top="18"
          width="24" />
         <joystick_slide
          follows="left|bottom"
@@ -140,7 +141,7 @@
          name="turn right btn"
          scale_image="false"
          tool_tip="Turn right (press Right Arrow or D)"
-         top="34"
+         top="18"
          width="24" />
         <joystick_slide
          follows="left|bottom"
@@ -169,7 +170,7 @@
          quadrant="up"
          scale_image="false"
          tool_tip="Walk forward (press up arrow or W)"
-         top="20"
+         top="2"
          width="24" />
         <joystick_turn
          follows="left|bottom"
@@ -197,7 +198,7 @@
          name="move up btn"
          scale_image="false"
          tool_tip="Fly up (press E)"
-         top="22"
+         top="4"
          width="24" />
         <button
          follows="left|bottom"
