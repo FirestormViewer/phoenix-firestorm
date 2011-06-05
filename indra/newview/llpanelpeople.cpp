@@ -1838,41 +1838,51 @@ std::string LLPanelPeople::getRadarName(LLUUID avId)
 {
 	U32 fmt = gSavedSettings.getU32("RadarNameFormat");
 	LLAvatarName avname;
-	
+
 	if (LLAvatarNameCache::get(avId,&avname)) // use the synchronous call. We poll every second so there's less value in using the callback form.
 	{
-		if (fmt == NAMEFORMAT_DISPLAYNAME)
-		{
-			return avname.mDisplayName;
-		}
-		else if (fmt == NAMEFORMAT_USERNAME)
-		{
-			return avname.mUsername;
-		}
-		else if (fmt == NAMEFORMAT_DISPLAYNAME_USERNAME)
-		{
-			std::string s1 = avname.mDisplayName;
-			to_lower(s1);
-			std::string s2 = avname.mUsername;
-			replace_all(s2,"."," ");
-			if (s1.compare(s2) == 0)
+		// if display names are enabled, allow a variety of formatting options, depending on menu selection
+		if (gSavedSettings.getBOOL("UseDisplayNames"))
+		{	
+			if (fmt == NAMEFORMAT_DISPLAYNAME)
+			{
 				return avname.mDisplayName;
-			else
-				return llformat("%s (%s)",avname.mDisplayName.c_str(),avname.mUsername.c_str());
+			}
+			else if (fmt == NAMEFORMAT_USERNAME)
+			{
+				return avname.mUsername;
+			}
+			else if (fmt == NAMEFORMAT_DISPLAYNAME_USERNAME)
+			{
+				std::string s1 = avname.mDisplayName;
+				to_lower(s1);
+				std::string s2 = avname.mUsername;
+				replace_all(s2,"."," ");
+				if (s1.compare(s2) == 0)
+					return avname.mDisplayName;
+				else
+					return llformat("%s (%s)",avname.mDisplayName.c_str(),avname.mUsername.c_str());
+			}
+			else if (fmt == NAMEFORMAT_USERNAME_DISPLAYNAME)
+			{
+				std::string s1 = avname.mDisplayName;
+				to_lower(s1);
+				std::string s2 = avname.mUsername;
+				replace_all(s2,"."," ");
+				if (s1.compare(s2) == 0)
+					return avname.mDisplayName;
+				else
+					return llformat("%s (%s)",avname.mUsername.c_str(),avname.mDisplayName.c_str());
+			}
 		}
-		else if (fmt == NAMEFORMAT_USERNAME_DISPLAYNAME)
+		
+		// else use legacy name lookups
+		else
 		{
-			std::string s1 = avname.mDisplayName;
-			to_lower(s1);
-			std::string s2 = avname.mUsername;
-			replace_all(s2,"."," ");
-			if (s1.compare(s2) == 0)
-				return avname.mDisplayName;
-			else
-				return llformat("%s (%s)",avname.mUsername.c_str(),avname.mDisplayName.c_str());
+			return avname.mDisplayName; // will be mapped to legacyname automatically by the name cache
 		}
 	}
-	
+
 	// name not found. Temporarily fill in with the UUID. It's more distinguishable than (loading...)
 	return avId.asString();
 
