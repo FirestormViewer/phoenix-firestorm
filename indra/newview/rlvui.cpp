@@ -364,7 +364,7 @@ void RlvUIEnabler::onToggleShowMinimap()
 	RLV_ASSERT( (pPeoplePanel) && (pNetMapPanel) );
 	if (pNetMapPanel)
 	{
-		pNetMapPanel->setMakeVisibleControlVariable( (fEnable) ? gSavedSettings.getControl("NearbyListShowMap") : NULL);
+		pNetMapPanel->setMakeVisibleControlVariable( (fEnable) ? gSavedSettings.getControl("NearbyListShowMap").get() : NULL);
 		// Reestablishing the visiblity connection will show the panel if needed so we only need to take care of hiding it when needed
 		if ( (!fEnable) && (pNetMapPanel->getVisible()) )
 			pNetMapPanel->setVisible(false);
