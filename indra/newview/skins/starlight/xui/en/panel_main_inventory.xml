@@ -74,7 +74,7 @@
      bevel_style="none"
      follows="all"
      height="338"
-     label="MY INVENTORY"
+     label="INVENTORY"
      help_topic="my_inventory_tab"
      layout="topleft"
      left="0"

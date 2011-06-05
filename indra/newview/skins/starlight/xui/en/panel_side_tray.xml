@@ -143,7 +143,7 @@
   <sidetray_tab
     name="sidebar_inventory"
     help_topic="sidebar_inventory"
-    tab_title="My Inventory"
+    tab_title="Inventory"
     description="Browse your inventory."
     image="TabIcon_Things_Off"
     image_selected="TabIcon_Things_Selected"
@@ -162,7 +162,7 @@
   <sidetray_tab
     name="sidebar_appearance"
     help_topic="sidebar_appearance"
-    tab_title="My Appearance"
+    tab_title="Appearance"
     description="Change your appearance and current look."
     image="TabIcon_Appearance_Off"
     image_selected="TabIcon_Appearance_Selected"
