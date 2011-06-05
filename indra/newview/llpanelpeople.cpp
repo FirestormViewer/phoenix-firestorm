@@ -914,24 +914,25 @@ void LLPanelPeople::updateNearbyList()
 		S32 seentime		 = 0;
 		LLUUID avRegion;
 		LLViewerRegion *reg	 = world->getRegionFromPosGlobal(avPos);
-		if (reg)
-			avRegion = reg->getRegionID();
-
-			if (lastRadarSweep.count(avId) > 1) // if we detect a multiple ID situation, get lastSeenTime from our cache instead
+		if ((!reg) || (!av)) // don't update this radar listing if data is inaccessible
+			continue;
+		
+		avRegion = reg->getRegionID();
+		if (lastRadarSweep.count(avId) > 1) // if we detect a multiple ID situation, get lastSeenTime from our cache instead
+		{
+			pair<multimap<LLUUID,radarFields>::iterator,multimap<LLUUID,radarFields>::iterator> dupeAvs;
+			dupeAvs = lastRadarSweep.equal_range(avId);
+			for (multimap<LLUUID,radarFields>::iterator it2 = dupeAvs.first; it2 != dupeAvs.second; ++it2)
 			{
-				pair<multimap<LLUUID,radarFields>::iterator,multimap<LLUUID,radarFields>::iterator> dupeAvs;
-				dupeAvs = lastRadarSweep.equal_range(avId);
-				for (multimap<LLUUID,radarFields>::iterator it2 = dupeAvs.first; it2 != dupeAvs.second; ++it2)
-				{
-					if (it2->second.lastRegion == avRegion)
-						seentime = (S32)difftime(time(NULL),it2->second.firstSeen);
-				}
+				if (it2->second.lastRegion == avRegion)
+					seentime = (S32)difftime(time(NULL),it2->second.firstSeen);
 			}
-			else
-				seentime		 = (S32)difftime(time(NULL),av->getFirstSeen());
-			S32 hours = (S32)(seentime / 3600);
-			S32 mins = (S32)((seentime - hours * 3600) / 60);
-			S32 secs = (S32)((seentime - hours * 3600 - mins * 60));
+		}
+		else
+			seentime		 = (S32)difftime(time(NULL),av->getFirstSeen());
+		S32 hours = (S32)(seentime / 3600);
+		S32 mins = (S32)((seentime - hours * 3600) / 60);
+		S32 secs = (S32)((seentime - hours * 3600 - mins * 60));
 		std::string avSeenStr = llformat("%d:%02d:%02d", hours, mins, secs);
 		S32 avStatusFlags     = av->getAvStatus();
 		std::string avFlagStr = "";
