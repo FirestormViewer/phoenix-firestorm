@@ -780,15 +780,6 @@
       name="vbo_stream"
       tool_tip="Disabling this may improve performance when VBOs are enabled. Disabling produced observable improvement on various AMD GPUs."
      width="315" />
-    <check_box
-     control_name="RenderUseFBO"
-     height="16"
-     label="Enable Antialiasing"
-     layout="topleft"
-     left="10"
-     top_pad="5"
-     name="aa_enable"
-     width="256" />
     <text
      type="string"
      length="1"
