@@ -68,7 +68,6 @@ Looking for people to hang out with? Use the search box to find topics or conten
      label="Filter"
      max_length="300"
      name="filter_input"
-     text_color="Black"
      text_pad_left="10"
      top="3"
      width="303" />
