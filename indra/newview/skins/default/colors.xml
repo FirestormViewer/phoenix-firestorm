@@ -353,7 +353,7 @@
      reference="White" />
     <color
      name="AvatarListItemBeyondShoutRange"
-     reference="White" />
+     reference="SL-Silver" />
     <color
      name="BackgroundChatColor"
      reference="DkGray" />
