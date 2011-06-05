@@ -74,7 +74,7 @@
       </menu_item_call>
       <menu_item_call
          label="Inspect"
-         name="Object Inspect">
+         name="Object_Inspect_Floater">
         <menu_item_call.on_click
          function="Floater.Show"
          parameter="inspect" />
@@ -104,8 +104,6 @@
          <menu_item_check.on_enable function="Tools.EnableToolNotPie" />
          </menu_item_check>
    <menu_item_separator layout="topleft" />
-    label="Scripts"
-    name="Object Scripts">
        <menu_item_call
           label="Reset Scripts"
           name="Object Reset Scripts">
