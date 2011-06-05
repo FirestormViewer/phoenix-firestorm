@@ -760,6 +760,11 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 	mEditor->setPlainText(use_plain_text_chat_history);
 
+	/* This system in incompatible with vertical tabs, the firestorm default.
+	 * disabling until we can find a way to make it work without overdrawing text
+	 * or requiring a large otherwised unused gap in the XUI.
+	 *
+	 
 	if (!mEditor->scrolledToEnd() && chat.mFromID != gAgent.getID() && !chat.mFromName.empty())
 	{
 		mUnreadChatSources.insert(chat.mFromName);
@@ -788,6 +793,7 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		S32 height = mMoreChatText->getTextPixelHeight() + 5;
 		mMoreChatPanel->reshape(mMoreChatPanel->getRect().getWidth(), height);
 	}
+	*/
 
 	LLColor4 txt_color = LLUIColorTable::instance().getColor("White");
 	LLColor4 header_name_color = LLUIColorTable::instance().getColor("ChatNameColor");
