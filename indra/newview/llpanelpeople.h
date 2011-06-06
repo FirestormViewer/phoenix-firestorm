@@ -107,6 +107,8 @@ private:
 	void					reportToNearbyChat(std::string message);
 	void					handleLimitRadarByRange(const LLSD& newalue);
 	std::string				getRadarName(LLUUID avId);
+	std::string				getRadarName(LLAvatarName avName);
+	void					radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name,std::string postMsg);
 
 	// UI callbacks
 	void					onFilterEdit(const std::string& search_string);
