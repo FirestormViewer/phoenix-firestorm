@@ -202,6 +202,7 @@
 #include "llnotificationmanager.h"
 
 #include "streamtitledisplay.h"
+#include "fsdata.h"
 
 //
 // exported globals
@@ -379,6 +380,9 @@ bool idle_startup()
 		//
 		// Initialize stuff that doesn't need data from simulators
 		//
+
+		// fsdata: load dynamic xml data
+		FSData::getInstance()->startDownload();
 
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-0.2.1d
 		if ( (gSavedSettings.controlExists(RLV_SETTING_MAIN)) && (gSavedSettings.getBOOL(RLV_SETTING_MAIN)) )
@@ -3111,10 +3115,11 @@ bool process_login_success_response()
 		gAgent.setHomePosRegion(region_handle, position);
 	}
 
-	// AO - Kill LL message of the day for now, There's too many unwanted shoe and jewelry adverts.
-	//      We can set it to a more informational, less commercialized feed in the future.
-	//gAgent.mMOTD.assign(response["message"]);
-	gAgent.mMOTD.assign("Welcome to Advertisement-Free Firestorm");
+	// If MOTD has not been set by fsdata, fallback to LL MOTD
+	if (gAgent.mMOTD.empty())
+	{
+		gAgent.mMOTD.assign(response["message"]);
+	}
 
 	// Options...
 	// Each 'option' is an array of submaps. 

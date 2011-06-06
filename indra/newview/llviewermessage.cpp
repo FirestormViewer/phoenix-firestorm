@@ -113,6 +113,7 @@
 // [/RLVa:KB]
 
 #include "fsareasearch.h"
+#include "fsdata.h"
 
 #include <boost/algorithm/string/split.hpp> //
 #include <boost/regex.hpp>
@@ -2488,6 +2489,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 */
 			if (!mute_im || is_linden) 
 			{
+				// checkfor and process reqinfo
+				message = FSData::processRequestForInfo(from_id,message,name,session_id);
+				buffer = saved + message;
+
 				gIMMgr->addMessage(
 					session_id,
 					from_id,

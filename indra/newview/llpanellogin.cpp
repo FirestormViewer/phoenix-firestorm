@@ -69,6 +69,8 @@
 #include "llglheaders.h"
 #include "llpanelloginlistener.h"
 
+#include "fsdata.h"
+
 #if LL_WINDOWS
 #pragma warning(disable: 4355)      // 'this' used in initializer list
 #endif  // LL_WINDOWS
@@ -952,41 +954,48 @@ void LLPanelLogin::onClickConnect(void *)
 		updateStartSLURL();
 		std::string username = sInstance->getChild<LLUICtrl>("username_combo")->getValue().asString();
 
-		
-		if(username.empty())
+		LLSD blocked = FSData::allowed_login();
+		if (!blocked.isMap()) //hack for testing for an empty LLSD
 		{
-			// user must type in something into the username field
-			LLNotificationsUtil::add("MustHaveAccountToLogIn");
+			if(username.empty())
+			{
+				// user must type in something into the username field
+				LLNotificationsUtil::add("MustHaveAccountToLogIn");
+			}
+			else
+			{
+				LLPointer<LLCredential> cred;
+				BOOL remember;
+				getFields(cred, remember);
+				std::string identifier_type;
+				cred->identifierType(identifier_type);
+				LLSD allowed_credential_types;
+				LLGridManager::getInstance()->getLoginIdentifierTypes(allowed_credential_types);
+				
+				// check the typed in credential type against the credential types expected by the server.
+				for(LLSD::array_iterator i = allowed_credential_types.beginArray();
+					i != allowed_credential_types.endArray();
+					i++)
+				{
+					
+					if(i->asString() == identifier_type)
+					{
+						// yay correct credential type
+						sInstance->mCallback(0, sInstance->mCallbackData);
+						return;
+					}
+				}
+				
+				// Right now, maingrid is the only thing that is picky about
+				// credential format, as it doesn't yet allow account (single username)
+				// format creds.  - Rox.  James, we wanna fix the message when we change
+				// this.
+				LLNotificationsUtil::add("InvalidCredentialFormat");			
+			}
 		}
 		else
 		{
-			LLPointer<LLCredential> cred;
-			BOOL remember;
-			getFields(cred, remember);
-			std::string identifier_type;
-			cred->identifierType(identifier_type);
-			LLSD allowed_credential_types;
-			LLGridManager::getInstance()->getLoginIdentifierTypes(allowed_credential_types);
-			
-			// check the typed in credential type against the credential types expected by the server.
-			for(LLSD::array_iterator i = allowed_credential_types.beginArray();
-				i != allowed_credential_types.endArray();
-				i++)
-			{
-				
-				if(i->asString() == identifier_type)
-				{
-					// yay correct credential type
-					sInstance->mCallback(0, sInstance->mCallbackData);
-					return;
-				}
-			}
-			
-			// Right now, maingrid is the only thing that is picky about
-			// credential format, as it doesn't yet allow account (single username)
-			// format creds.  - Rox.  James, we wanna fix the message when we change
-			// this.
-			LLNotificationsUtil::add("InvalidCredentialFormat");			
+			LLNotificationsUtil::add("BlockLoginInfo", blocked);
 		}
 	}
 }

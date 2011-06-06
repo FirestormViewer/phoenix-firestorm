@@ -7222,4 +7222,35 @@ This will send the following information to the current IM session:
      yestext="OK"/>
   </notification>
 
+<!-- fsdata -->
+  <notification
+   icon="alertmodal.tga"
+   name="BlockLoginInfo"
+   type="alertmodal">
+    [REASON]
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="FireStormReqInfo"
+   type="notify">
+    [NAME] is requesting that you send them information about your Phoenix setup.
+    (This is the same information that can be found by going to Help->About Phoenix)    
+    [REASON]
+    Would you like to send them this information?
+    <form name="form">
+      <button
+       index="0"
+       name="Yes"
+       text="Yes"/>
+      <button
+       index="1"
+       name="No"
+       text="No"/>
+    </form>
+  </notification>
+
 </notifications>
