@@ -89,4 +89,14 @@ AdvancedAO		LGPL
 AutoUDPFallback		LGPL
 BoldModeratorChat	LGPL
 CacheClearOnNewDecoder	LGPL
+MoreWindlightPresets	LGPL
+SysinfoButton		LGPL
+ExtendedGraphicsPrefs	LGPL
+GridSelector		LGPL
+ContactsSortByUsername	LGPL
+SpreadsheetCtrlRadar	LGPL
+RadarUUIDChat		LGPL
+RadarIMChatFmtOptions	LGPL
+RadarEstateControls	LGPL
+DynamicMotD&Support	LGPL
 
