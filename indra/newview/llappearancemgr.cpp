@@ -2873,6 +2873,10 @@ void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
 
 						LLAppearanceMgr::instance().removeCOFItemLinks(item_to_remove->getLinkedUUID(), false);
 						gInventory.notifyObservers();
+
+// [RLVa:KB] - Checked: 2011-06-07 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+						RlvBehaviourNotifyHandler::onTakeOff(pWearable->getType(), true);
+// [/RLVa:KB]
 					}
 				}
 			}
