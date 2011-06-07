@@ -1941,7 +1941,6 @@ LLPanelPreferenceSkins::LLPanelPreferenceSkins() : LLPanelPreference(), m_pSkinC
 {
 	m_Skin = gSavedSettings.getString("SkinCurrent");
 	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme");
-	llinfos << "AO: SKINS: LLPanelPreferenceSkins, launching" << llendl;
 	const std::string strSkinsPath = gDirUtilp->getSkinBaseDir() + gDirUtilp->getDirDelimiter() + "skins.xml";
 	llifstream fileSkins(strSkinsPath, std::ios::binary);
 	if (fileSkins.is_open())
@@ -1993,6 +1992,13 @@ void LLPanelPreferenceSkins::onSkinChanged()
 	m_SkinTheme = "default";
 	refreshSkinThemeList();
 	onSkinThemeChanged(); // make sure we initialize a theme for our new skin
+	
+	//AO: Some crude hardcoded preferences per skin. We will remove these and replace them with "basic mode"-style behaviors in the 2.6 mergeup
+	if ((m_Skin.compare("metaharper") == 0) || (m_Skin.compare("metaharpersidetabs") == 0) || (m_Skin.compare("starlight") == 0))
+	{
+		llinfos << "removing menubar location" << llendl;
+		gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
+	}
 }
 
 void LLPanelPreferenceSkins::onSkinThemeChanged()
