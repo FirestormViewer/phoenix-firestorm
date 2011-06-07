@@ -8,14 +8,13 @@
  tab_stop="false" 
  name="main_view"
  width="1024">
-<!-- menu stack of the screen layout except the top menu-bar -->
   <panel top="0"
-                follows="all"
-                height="768"
-                mouse_opaque="false"
-                name="login_panel_holder"
-                width="1024"/>
-
+     follows="all"
+     height="768"
+     mouse_opaque="false"
+     name="login_panel_holder"
+     width="1024"/>
+<!-- menu stack of the screen layout except the top menu-bar -->
   <layout_stack border_size="0"
                 follows="all"
                 mouse_opaque="false"
@@ -89,22 +88,17 @@
                    tab_stop="false"
                    mouse_opaque="false"
                    user_resize="false"
-                name="hud container"
+                   name="hud container"
                    width="500">
 <!-- first element on rest of screen is top info bar - so is just below nav bar -->
             <panel follows="left|top|right"
                    height="42"
-					background_opaque="true"
-					background_visible="false"
-					bg_opaque_color="red"
-					bg_alpha_color="red"
-					color="red"
                    left="0"
                    mouse_opaque="false"
                    name="topinfo_bar_container"
                    tab_stop="false"
                    top="0"
-                   visible="true"
+                   visible="false"
                    width="1024"/>
 <!-- second element on rest of screen is stand/stop/flying container - only really contains a button -->
               <panel bottom="500"

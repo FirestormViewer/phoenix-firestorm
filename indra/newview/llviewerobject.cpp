@@ -3279,6 +3279,11 @@ LLNameValue *LLViewerObject::getNVPair(const std::string& name) const
 	char		*canonical_name;
 
 	canonical_name = gNVNameTable.addString(name);
+	// It's possible for addString to return NULL.
+	if (canonical_name == NULL)
+	{
+		return NULL;
+	}
 
 	// If you access a map with a name that isn't in it, it will add the name and a null pointer.
 	// So first check if the data is in the map.

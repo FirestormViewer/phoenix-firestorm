@@ -235,67 +235,85 @@
 		 layout="topleft"
 		 name="radio position" />
         <radio_item
-		 top_pad="6"
+		 top_pad="5"
          label="Rotate (Ctrl)"
          layout="topleft"
          name="radio rotate" />
         <radio_item
-		 top_pad="6"
+		 top_pad="5"
          label="Stretch (Ctrl+Shift)"
          layout="topleft"
          name="radio stretch" />
         <radio_item
-		 top_pad="6"
+		 top_pad="5"
          label="Select Face"
          layout="topleft"
          name="radio select face" />
+        <radio_item
+		 top_pad="5"
+         label="Align"
+         layout="topleft"
+         name="radio align" />
 			<radio_group.commit_callback
 			function="BuildTool.commitRadioEdit"/>
     </radio_group>
     <check_box
-     left="10"
+     left="5"
      follows="left|top"
      height="28"
 	 control_name="EditLinkedParts"
      label="Edit linked"
      layout="topleft"     
      name="checkbox edit linked parts"
-     top_pad="2">
+     top_pad="-10">
 		  <check_box.commit_callback
 			function="BuildTool.selectComponent"/>
 	</check_box>
 
-   <text
-   text_color="LtGray_50"
-   follows="top|left"
-   halign="left"
-   left="13"
-   name="RenderingCost"
-   tool_tip="Shows the rendering cost calculated for this object"
-   top_pad="0"
-   type="string"
-   width="100">
-   þ: [COUNT]
-   </text>
+   <button
+     follows="left|top"
+     height="23"
+     label="Link"
+     top_pad="2"
+     layout="topleft"
+     left="5"
+     name="link_btn"
+     width="50">
+	  <button.commit_callback
+	     function="BuildTool.LinkObjects"/>
+    </button>
+    <button
+     follows="left|top"
+     height="23"
+     label="Unlink"
+     layout="topleft"
+     left_pad="2"
+     name="unlink_btn"
+     width="50">
+	  <button.commit_callback
+	     function="BuildTool.UnlinkObjects"/>
+    </button>
+    <text
+	   text_color="LtGray_50"
+	   follows="top|left"
+	   halign="left"
+	   left_pad="3"
+	   name="RenderingCost"
+	   tool_tip="Shows the rendering cost calculated for this object"
+	   top_delta="11"
+	   type="string"
+	   width="100">
+	   þ: [COUNT]
+	   </text>
 	<check_box
      control_name="ScaleUniform"
      height="19"
-     label=""
+     label="Stretch Both Sides"
      layout="topleft"
      left="143"
      name="checkbox uniform"
 	 top="50"
      width="20" />
-    <text
-     height="19"
-     label="Stretch Both Sides"
-     left="163"
-     name="checkbox uniform label"
-     top="55"
-     width="120"
-     wrap="true">
-     	Stretch Both Sides
-    </text>
     <check_box
      control_name="ScaleStretchTextures"
      height="19"
@@ -304,7 +322,7 @@
      layout="topleft"
      left="143"
      name="checkbox stretch textures"
-     top_pad="7"
+     top_pad="-6"
      width="134" />
    <check_box
      control_name="SnapEnabled"
@@ -823,6 +841,10 @@
              name="Sale Mixed">
                 Mixed Sale
             </panel.string>
+            <panel.string
+             name="multiple selection">
+                Multiple selection
+            </panel.string>
             <text
              follows="left|top"
              height="10"
@@ -867,7 +889,6 @@
              height="19"
              layout="topleft"
              name="Creator:"
-             top_pad="7"
              width="90">
                 Creator:
             </text>
@@ -877,13 +898,15 @@
              length="1"
              follows="left|top"
              left_pad="0"
-             height="30"
+             height="20"
              layout="topleft"
              name="Creator Name"
              top_delta="0"
+             translate="false"
              width="190"
-             word_wrap="true">
-                Mrs. Esbee Linden (esbee.linden)
+             word_wrap="true"
+             use_ellipses="true">
+                TestString PleaseIgnore (please.ignore)
             </text>
             <text
              type="string"
@@ -893,7 +916,7 @@
              height="19"
              layout="topleft"
              name="Owner:"
-             top_pad="3"
+             top_pad="13"
              width="90">
                 Owner:
             </text>
@@ -902,14 +925,16 @@
              type="string"
              length="1"
              follows="left|top"
-             height="30"
+             height="20"
              layout="topleft"
              name="Owner Name"
              left_pad="0"
              top_delta="0"
+             translate="false"
              width="190"
-             word_wrap="true">
-                Mrs. Erica "Moose" Linden (erica.linden)
+             word_wrap="true"
+             use_ellipses="true">
+                TestString PleaseIgnore (please.ignore)
             </text>
            <text
              type="string"
@@ -919,7 +944,7 @@
              left="10"
              height="18"
              name="Group:"
-             top_pad="7"
+             top_pad="17"
              width="75">
                 Group:
             </text>
@@ -931,7 +956,7 @@
              left_pad="23"
              name="Group Name Proxy"
              width="142" />
-                 <button
+            <button
 			 follows="top|left"
 			 height="23"
 			 image_overlay="Edit_Wrench"
@@ -2558,7 +2583,7 @@ even though the user gets a free copy.
              height="16"
              layout="topleft"
              left="10"
-             max_length="63"
+             max_length_bytes="63"
              name="Home Url"
              select_on_focus="true"
              top="134"
@@ -2615,7 +2640,7 @@ even though the user gets a free copy.
              label_width="125"
              layout="topleft"
              left="20"
-             max_val="100"
+             max_val="1000"
              name="TexScaleU"
              top_pad="5"
              width="185" />
@@ -2635,7 +2660,7 @@ even though the user gets a free copy.
              label_width="125"
              layout="topleft"
              left="20"
-             max_val="100"
+             max_val="1000"
              name="TexScaleV"
              width="185" />
             <check_box

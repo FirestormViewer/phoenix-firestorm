@@ -64,7 +64,7 @@ ImprovedRadar		LGPL
 Resizable_Profiles	LGPL
 Derender		LGPL
 RezUnderLandGroup	LGPL
-JiraLinkParsing	LGPL
+JiraLinkParsing		LGPL
 AreaSearch		BSD (from Emerald/CoolVL/Phoenix)
 ConsoleChat		LGPL
 SitOnAway		LGPL
@@ -76,4 +76,27 @@ ForceGroundSit		LGPL
 PhantomMode		LGPL
 AdjustableToastWidth	LGPL
 Collapse/ExpandInv	LGPL
+CrashServerOptions	LGPL
+KillTeleportFX		LGPL
+ScriptDialogColorPrefs	LGPL
+KeywordAlerts		LGPL
+ClickableFriendPerms	LGPL
+SeparateMusicPlay	LGPL
+SaveCommDocks		LGPL
+LookAtNameText		LGPL
+V1CompatAvatarParams	LGPL
+AdvancedAO		LGPL
+AutoUDPFallback		LGPL
+BoldModeratorChat	LGPL
+CacheClearOnNewDecoder	LGPL
+MoreWindlightPresets	LGPL
+SysinfoButton		LGPL
+ExtendedGraphicsPrefs	LGPL
+GridSelector		LGPL
+ContactsSortByUsername	LGPL
+SpreadsheetCtrlRadar	LGPL
+RadarUUIDChat		LGPL
+RadarIMChatFmtOptions	LGPL
+RadarEstateControls	LGPL
+DynamicMotD&Support	LGPL
 

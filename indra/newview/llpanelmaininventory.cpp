@@ -165,7 +165,8 @@ BOOL LLPanelMainInventory::postBuild()
 		worn_items_panel->setWorn(TRUE);
 		worn_items_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::DEFAULT_SORT_ORDER));
 		worn_items_panel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
-		worn_items_panel->getFilter()->markDefault();
+		//worn_items_panel->getFilter()->markDefault();
+		worn_items_panel->getFilter()->setFilterObjectTypes(0xffffffff - (0x1 << LLInventoryType::IT_GESTURE));
 		worn_items_panel->openAllFolders();
 		worn_items_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, worn_items_panel, _1, _2));
 	}
@@ -194,15 +195,15 @@ BOOL LLPanelMainInventory::postBuild()
 			}
 		}
 
-               if(worn_items_panel)
-               {
-                       if(savedFilterState.has(worn_items_panel->getFilter()->getName()))
-                       {
-                               LLSD worn_items = savedFilterState.get(
-                                       worn_items_panel->getFilter()->getName());
-                               worn_items_panel->getFilter()->fromLLSD(worn_items);
-                       }
-               }
+	   if(worn_items_panel)
+	   {
+			   if(savedFilterState.has(worn_items_panel->getFilter()->getName()))
+			   {
+					   LLSD worn_items = savedFilterState.get(
+							   worn_items_panel->getFilter()->getName());
+					   worn_items_panel->getFilter()->fromLLSD(worn_items);
+			   }
+	   }
 	}
 
 	mFilterEditor = getChild<LLFilterEditor>("inventory search editor");

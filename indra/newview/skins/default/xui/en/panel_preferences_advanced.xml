@@ -26,8 +26,8 @@
    left="33"
    name="UI Size:"
    top_pad="25"
-   width="100">
-    UI size:
+   width="200">
+    Font Scaling (may have side effects):
   </text>
   <slider
    control_name="UIScaleFactor"
@@ -83,54 +83,5 @@
      name="show_develop_menu_check"
      top_pad="5"
      width="237"/>         
-    
-    <check_box
-     control_name="ShowScriptErrors"
-     height="20"
-     label="Show script errors in:"
-     layout="topleft"
-     left="30"
-     top_pad="0" 
-     name="show_script_errors"
-     width="256" />
-    <radio_group
-     enabled_control="ShowScriptErrors"
-     control_name="ShowScriptErrorsLocation"
-     follows="top|left"
-     draw_border="false"
-     height="16"
-     layout="topleft"
-     left_delta="50"
-     name="show_location"
-     top_pad="5"
-     width="364">
-        <radio_item
-         height="16"
-         label="Nearby chat"
-         layout="topleft"
-         left="3"
-         name="0"
-         top="0"
-         width="315" />
-        <radio_item
-         height="16"
-         label="Separate window"
-         layout="topleft"
-         left_delta="175"
-         name="1"
-         top_delta="0"
-         width="315" />
-    </radio_group>
      
- <button
- height="23"
- label="3D Joystick"
- left="30"
- name="joystick_setup_button"
- top="110"
- width="155">
-    <button.commit_callback
-     function="Floater.Show"
-     parameter="pref_joystick" />
-  </button>
 </panel>

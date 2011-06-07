@@ -160,6 +160,7 @@ public:
 	void applyResolution();
 	void onChangeMaturity();
 	void onClickBlockList();
+	void onClickSortContacts();
 	void applyUIColor(LLUICtrl* ctrl, const LLSD& param);
 	void getUIColor(LLUICtrl* ctrl, const LLSD& param);
 	
@@ -175,6 +176,7 @@ private:
 	bool mGotPersonalInfo;
 	bool mOriginalIMViaEmail;
 	bool mLanguageChanged;
+	bool mAvatarDataInitialized;
 	
 	bool mOriginalHideOnlineStatus;
 	// Record of current user's favorites may be stored in file on disk.

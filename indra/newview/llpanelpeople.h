@@ -32,6 +32,8 @@
 #include "llcallingcard.h" // for avatar tracker
 #include "llvoiceclient.h"
 #include "llavatarnamecache.h"
+#include "llscrolllistctrl.h"
+#include "fsradarlistctrl.h"
 #include <map>
 #include <time.h>
 
@@ -42,6 +44,12 @@ class LLGroupList;
 class LLTabContainer;
 class LLMenuButton;
 class LLMenuGL;
+
+const U32	MAX_AVATARS_PER_ALERT = 27; // maximum number of UUIDs we can cram into a single channel radar alert message
+const U32	NAMEFORMAT_DISPLAYNAME = 0;
+const U32	NAMEFORMAT_USERNAME = 1;
+const U32	NAMEFORMAT_DISPLAYNAME_USERNAME = 2;
+const U32	NAMEFORMAT_USERNAME_DISPLAYNAME = 3;
 
 class LLPanelPeople 
 	: public LLPanel
@@ -56,6 +64,7 @@ public:
 	/*virtual*/ void	onOpen(const LLSD& key);
 	/*virtual*/ bool	notifyChildren(const LLSD& info);
 	void	teleportToAvatar(LLUUID targetAv);
+	void	requestRadarChannelAlertSync() {mRadarAlertRequest = true;}
 	// Implements LLVoiceClientStatusObserver::onChange() to enable call buttons
 	// when voice is available
 	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
@@ -96,6 +105,10 @@ private:
 	void					showGroupMenu(LLMenuGL* menu);
 	void					setSortOrder(LLAvatarList* list, ESortOrder order, bool save = true);
 	void					reportToNearbyChat(std::string message);
+	void					handleLimitRadarByRange(const LLSD& newalue);
+	std::string				getRadarName(LLUUID avId);
+	std::string				getRadarName(LLAvatarName avName);
+	void					radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name,std::string postMsg);
 
 	// UI callbacks
 	void					onFilterEdit(const std::string& search_string);
@@ -121,6 +134,7 @@ private:
 	void					onAvatarListDoubleClicked(LLUICtrl* ctrl);
 	void					onNearbyListDoubleClicked(LLUICtrl* ctrl);
 	void					onAvatarListCommitted(LLAvatarList* list);
+	void					onRadarListDoubleClicked();
 	void					onGroupPlusButtonClicked();
 	void					onGroupMinusButtonClicked();
 	void					onGroupPlusMenuItemClicked(const LLSD& userdata);
@@ -129,6 +143,7 @@ private:
 	void					onNearbyViewSortMenuItemClicked(const LLSD& userdata);
 	void					onGroupsViewSortMenuItemClicked(const LLSD& userdata);
 	void					onRecentViewSortMenuItemClicked(const LLSD& userdata);
+	void					onRadarNameFmtClicked(const LLSD& userdata);
 
 	//returns false only if group is "none"
 	bool					isRealGroup();
@@ -151,6 +166,7 @@ private:
 	void					setAccordionCollapsedByUser(const std::string& name, bool collapsed);
 	bool					isAccordionCollapsedByUser(LLUICtrl* acc_tab);
 	bool					isAccordionCollapsedByUser(const std::string& name);
+	
 
 	LLFilterEditor*			mFilterEditor;
 	LLTabContainer*			mTabContainer;
@@ -159,7 +175,8 @@ private:
 	LLAvatarList*			mNearbyList;
 	LLAvatarList*			mRecentList;
 	LLGroupList*			mGroupList;
-	LLNetMap*				mMiniMap;
+	LLRadarListCtrl*		mRadarList;
+	LLNetMap*			mMiniMap;
 
 	LLHandle<LLView>		mGroupPlusMenuHandle;
 	LLHandle<LLView>		mNearbyViewSortMenuHandle;
@@ -167,29 +184,38 @@ private:
 	LLHandle<LLView>		mGroupsViewSortMenuHandle;
 	LLHandle<LLView>		mRecentViewSortMenuHandle;
 
-	Updater*				mFriendListUpdater;
-	Updater*				mNearbyListUpdater;
-	Updater*				mRecentListUpdater;
-	Updater*				mButtonsUpdater;
+	Updater*			mFriendListUpdater;
+	Updater*			mNearbyListUpdater;
+	Updater*			mRecentListUpdater;
+	Updater*			mButtonsUpdater;
 
  	LLMenuButton*			mNearbyGearButton;
  	LLMenuButton*			mFriendsGearButton;
 	LLMenuButton*			mGroupsGearButton;
 	LLMenuButton*			mRecentGearButton;
 
-	std::string				mFilterSubString;
-	std::string				mFilterSubStringOrig;
+	std::string			mFilterSubString;
+	std::string			mFilterSubStringOrig;
+	
+	LLUIColor			mChatRangeColor;
+	LLUIColor			mShoutRangeColor;
+	LLUIColor			mFarRangeColor;
 	
 	struct radarFields 
 	{
 		std::string avName;
-		F32 lastDistance;
-		LLVector3d lastGlobalPos;
-		LLUUID lastRegion;
-		time_t firstSeen;
-		S32 lastStatus;
+		F32			lastDistance;
+		LLVector3d		lastGlobalPos;
+		LLUUID			lastRegion;
+		time_t			firstSeen;
+		S32			lastStatus;
 	}; 
-	std::map < LLUUID, radarFields > lastRadarSweep;
+	std::multimap < LLUUID, radarFields > lastRadarSweep;
+	std::vector <LLUUID>	mRadarEnterAlerts;
+	std::vector <LLUUID>	mRadarLeaveAlerts;
+	 	
+	S32					mRadarFrameCount;
+	bool				mRadarAlertRequest;
 };
 
 #endif //LL_LLPANELPEOPLE_H

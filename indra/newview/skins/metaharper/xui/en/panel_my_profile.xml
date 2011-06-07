@@ -45,6 +45,8 @@
       name="display_name_text_args">
       [DISPLAY_NAME]
     </string>
+    
+    
     <tab_container
      left="0"
      top="4"
@@ -90,7 +92,7 @@
             <view_border
              top_pad="2"
              right="-4"
-             height="200"
+             height="150"
              bevel_style="in"
              follows="top|left|right" />
 
@@ -98,7 +100,7 @@
              left_delta="0"
              top_delta="0"
              right="-4"
-             height="200"
+             height="150"
              textbox.max_length="512"
              textbox.show_context_menu="true"
              name="sl_description_edit"
@@ -107,47 +109,67 @@
              expanded_bg_color="SL-Background_Light"
              follows="left|top|right"
              layout="topleft" />
-<!--
-            This is just a placeholder. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean viverra orci et justo sagittis aliquet.Nullamma lesuada mauris sit amet ipsum. adipiscing elit. Ae nean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum.
-            </expandable_text>
-//-->
+             
+            <text
+             top_pad="2"
+             follows="left|top"
+             height="16"
+             left="4"
+             name="Key:"
+             width="50"
+             value="Key:" />
+                         
+            <text_editor
+             name="user_key"
+             label="Your Key:"
+             left_pad="4"
+             top_delta="0"
+             right="-86"
+             height="16"
+             h_pad="0"
+             v_pad="0"
+             bg_visible="false"
+             enabled="false"
+             allow_scroll="false"
+             initial_value="(loading ...)"
+             follows="top|left|right"
+             layout="topleft" />
+
+            <button
+             name="copy_uri"
+             left_pad="4"
+             right="-4"
+             height="16"
+             label="Copy URI"
+             enabled="false"
+             follows="top|right" />
+
             <text
              name="title_partner_text"
              value="Partner:"
              left="4"
-             top_pad="4"
+             top_pad="2"
              height="15"
-             right="-4"
-             follows="top|left|right"
+             width="50"
+             follows="top|left"
              layout="topleft" />
-
-            <panel
-             name="partner_data_panel"
-             top_pad="-2"
-             right="-4"
-             height="17"
-             border="true"
-             bevel_style="in"
-             follows="top|left|right"
-             layout="topleft">
 
                 <text
                  name="partner_text"
                  initial_value="(retrieving)"
-                 left="2"
-                 top="2"
-                 width="300"
-                 height="10"
+                 left_pad="4"
+                 top_delta="0"
+                 width="100"
+                 height="15"
                  use_ellipses="true"
-                 follows="top|left|right"
+                 follows="top|left"
                  layout="topleft" />
-
-            </panel>
 
             <text
              name="title_member_text"
              value="Resident Since:"
              top_pad="4"
+             left="4"
              height="10"
              width="100"
              follows="top|left"
@@ -226,7 +248,7 @@
             <view_border
              top_pad="2"
              right="-4"
-             height="93"
+             height="45"
              bevel_style="in"
              follows="all" />
 
@@ -235,30 +257,11 @@
              left_delta="2"
              top_delta="2"
              right="-4"
-             height="89"
+             height="41"
 			 for_agent="true"
 			 allow_select="true"
              follows="all"
              layout="topleft" />
-<!--
-            <expandable_text
-            follows="all"
-            height="160"
-            layout="topleft"
-            left="5"
-            name="sl_groups"
-            textbox.max_length="512"
-            textbox.show_context_menu="true"
-            top_pad="0"
-            translate="false"
-            width="280"
-            expanded_bg_visible="true"
-            word_wrap="true"
-            allow_scroll="false"
-            expanded_bg_color="SL-Background_Light">
-              Lorem ipsum dolor sit amet, consectetur adlkjpiscing elit moose moose. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet. adipiscing elit. Aenean rigviverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet sorbet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. Aenean viverra tulip moosetop. Slan de heelish marfnik tooplod. Sum sum to whop de wompam booster copm.
-            </expandable_text>
--->
         </panel>
 
         <panel

@@ -83,6 +83,12 @@ class ViewerManifest(LLManifest):
                 self.path("*.ttf")
                 self.path("*.txt")
                 self.end_prefix("fonts")
+                
+            # AO: Include firestorm resources
+            if self.prefix(src="fs_resources"):
+				self.path("*.txt")
+				self.path("*.lsl")
+				self.end_prefix("fs_resources");
 
             # skins
             if self.prefix(src="skins"):

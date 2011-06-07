@@ -182,7 +182,7 @@ bool LLIMHandler::processNotification(const LLSD& notify)
 			LLToastIMPanel::Params im_p;
 			im_p.notification = notification;
 			im_p.avatar_id = avatar_id;
-			im_p.from = substitutions["c"].asString();
+			im_p.from = substitutions["FROM"].asString();
 			im_p.time = substitutions["TIME"].asString();
 			im_p.message = substitutions["MESSAGE"].asString();
 			im_p.session_id = substitutions["SESSION_ID"].asUUID();

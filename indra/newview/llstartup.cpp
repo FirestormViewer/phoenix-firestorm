@@ -202,6 +202,7 @@
 #include "llnotificationmanager.h"
 
 #include "streamtitledisplay.h"
+#include "fsdata.h"
 
 //
 // exported globals
@@ -219,6 +220,7 @@ LLPointer<LLViewerTexture> gStartTexture;
 //
 extern S32 gStartImageWidth;
 extern S32 gStartImageHeight;
+extern std::string gWindowTitle;
 
 //
 // local globals
@@ -378,6 +380,9 @@ bool idle_startup()
 		//
 		// Initialize stuff that doesn't need data from simulators
 		//
+
+		// fsdata: load dynamic xml data
+		FSData::getInstance()->startDownload();
 
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-0.2.1d
 		if ( (gSavedSettings.controlExists(RLV_SETTING_MAIN)) && (gSavedSettings.getBOOL(RLV_SETTING_MAIN)) )
@@ -861,7 +866,21 @@ bool idle_startup()
 		}
 		gSavedSettings.setBOOL("RememberPassword", gRememberPassword);                                                 
 		LL_INFOS("AppInit") << "Attempting login as: " << userid << LL_ENDL;                                           
-		gDebugInfo["LoginName"] = userid;                                                                              
+		gDebugInfo["LoginName"] = userid;
+		// We don't save this version of the title because it'll
+		//  be replaced later, we hope. -- TS
+		size_t underscore_pos = userid.find_first_of('_');
+		std::string display_id = userid.substr(0,underscore_pos);
+		if ((underscore_pos != std::string::npos) &&
+			(underscore_pos < userid.length()-1))
+		{
+			std::string id_last = userid.substr(underscore_pos+1);
+			if (id_last.compare("Resident") != 0)
+			{
+				display_id = display_id + " " + id_last;
+			}
+		}
+		gViewerWindow->setTitle(gWindowTitle+" - "+display_id);
          
 		// create necessary directories
 		// *FIX: these mkdir's should error check
@@ -3096,10 +3115,11 @@ bool process_login_success_response()
 		gAgent.setHomePosRegion(region_handle, position);
 	}
 
-	// AO - Kill LL message of the day for now, There's too many unwanted shoe and jewelry adverts.
-	//      We can set it to a more informational, less commercialized feed in the future.
-	//gAgent.mMOTD.assign(response["message"]);
-	gAgent.mMOTD.assign("Welcome to Advertisement-Free Firestorm");
+	// If MOTD has not been set by fsdata, fallback to LL MOTD
+	if (gAgent.mMOTD.empty())
+	{
+		gAgent.mMOTD.assign(response["message"]);
+	}
 
 	// Options...
 	// Each 'option' is an array of submaps. 

@@ -113,6 +113,7 @@
 // [/RLVa:KB]
 
 #include "fsareasearch.h"
+#include "fsdata.h"
 
 #include <boost/algorithm/string/split.hpp> //
 #include <boost/regex.hpp>
@@ -120,6 +121,10 @@
 #include "llnotificationmanager.h" //
 
 #include "lltexturefetch.h"
+// [AO : Radar]
+#include "llsidetraytab.h"
+#include "llpanelpeople.h"
+// [/AO]
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -2484,6 +2489,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 */
 			if (!mute_im || is_linden) 
 			{
+				// checkfor and process reqinfo
+				message = FSData::processRequestForInfo(from_id,message,name,session_id);
+				buffer = saved + message;
+
 				gIMMgr->addMessage(
 					session_id,
 					from_id,
@@ -3430,7 +3439,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 	{
 		//chat.mFromName = from_name;
 		// objects with no name get renamed to NO_NAME_OBJECT so the object profile is still accessable - KC
-		static const boost::regex whitespace_exp("\\s*");
+		static const boost::regex whitespace_exp("^\\s*$");
 		if (chat.mSourceType == CHAT_SOURCE_OBJECT && boost::regex_search(from_name, whitespace_exp))
 		{
 			chat.mFromName = NO_NAME_OBJECT;
@@ -4788,7 +4797,16 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	{
 		return;
 	}
-		
+	
+	// AO: Hack for legacy radar script interface compatibility. Interpret certain
+	// sound assets as a request for a full radar update to a channel
+	if ((owner_id == gAgent.getID()) && (sound_id.asString() == gSavedSettings.getString("RadarLegacyChannelAlertRefreshUUID")))
+	{
+		LLPanelPeople* pPeoplePanel = dynamic_cast<LLPanelPeople*>(LLSideTray::getInstance()->getPanel("panel_people"));
+		if (pPeoplePanel)
+			pPeoplePanel->requestRadarChannelAlertSync();
+	}
+	
 	gAudiop->triggerSound(sound_id, owner_id, gain, LLAudioEngine::AUDIO_TYPE_SFX, pos_global);
 }
 

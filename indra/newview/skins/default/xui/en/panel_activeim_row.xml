@@ -9,7 +9,7 @@
 	width="318"
   background_opaque="false"
   background_visible="true"
-  bg_alpha_color="0.0 0.0 0.0 0.0" >
+  bg_alpha_color="Transparent" >
   <chiclet_im_p2p
 		name="p2p_chiclet"
 		layout="topleft"

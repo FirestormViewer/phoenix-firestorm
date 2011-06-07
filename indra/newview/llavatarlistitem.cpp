@@ -413,6 +413,11 @@ void LLAvatarListItem::updateFirstSeen()
 	updateChildren();
 }
 
+std::string LLAvatarListItem::getSeen()
+{
+	return mFirstSeenDisplay->getValue();
+}
+
 void LLAvatarListItem::setRange(F32 distance)
 {
 	mDistance = distance;
@@ -567,6 +572,11 @@ std::string LLAvatarListItem::getAvatarToolTip() const
 	return mAvatarName->getToolTip();
 }
 
+bool LLAvatarListItem::getShowingBothNames() const
+{
+	return mShowDisplayName && mShowUsername;
+}
+
 void LLAvatarListItem::updateAvatarName()
 {
 	LLAvatarNameCache::get(getAvatarId(),
@@ -577,6 +587,11 @@ void LLAvatarListItem::showAvatarAge(bool display)
 {
 	mAvatarAgeDisplay->setVisible(display);
 	updateAvatarProperties();
+}
+
+std::string LLAvatarListItem::getAvatarAge()
+{
+	return mAvatarAgeDisplay->getValue();
 }
 
 void LLAvatarListItem::updateAvatarProperties()
@@ -607,6 +622,8 @@ void LLAvatarListItem::processProperties(void* data, EAvatarProcessorType type)
 			mPaymentStatus->setVisible(avatar_data->flags & AVATAR_IDENTIFIED);
 		}
 		
+		mAvStatus = avatar_data->flags;
+		
 	}
 }
 
@@ -628,7 +645,9 @@ void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
 		setAvatarName( (!fRlvFilter) ? av_name.mUsername : RlvStrings::getAnonym(av_name) );
 	else 
 		setAvatarName( (!fRlvFilter) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
-	
+
+	// NOTE: If you change this, you will break sorting the contacts list
+	//  by username unless you go change the comparator too. -- TS	
 	setAvatarToolTip( (!fRlvFilter) ? av_name.mUsername : RlvStrings::getAnonym(av_name) );
 	// TODO-RLVa: bit of a hack putting this here. Maybe find a better way?
 	mAvatarIcon->setDrawTooltip(!fRlvFilter);

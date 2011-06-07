@@ -370,7 +370,7 @@
          layout="topleft"
          name="rl_picture_caption"
          text_color="White"
-         value="Real Life Picture"
+         value="Additional Picture"
          use_ellipses="true"
          visible="true"
          right="-4" />

@@ -3,45 +3,106 @@
      name="menu_group_plus"
      left="0" bottom="0" visible="false"
      mouse_opaque="false">
+  
   <menu_item_check
-     label="Sort by Recent Speakers"
-     name="sort_by_recent_speakers">
-    <menu_item_check.on_click
-       function="People.Nearby.ViewSort.Action"
-       parameter="sort_by_recent_speakers"/>
-    <menu_item_check.on_check
-       function="People.Nearby.ViewSort.CheckItem"
-       parameter="sort_by_recent_speakers"/>
+     label="Show Minimap above Radar"
+     name="ShowRadarMinimap">
+	 <menu_item_check.on_check
+     	control="ShowRadarMinimap" />
+     <menu_item_check.on_click
+        function="ToggleControl"
+        parameter="ShowRadarMinimap" />
   </menu_item_check>
+  
   <menu_item_check
-     label="Sort by Name"
-     name="sort_name">
-    <menu_item_check.on_click
-       function="People.Nearby.ViewSort.Action"
-       parameter="sort_name"/>
-    <menu_item_check.on_check
-       function="People.Nearby.ViewSort.CheckItem"
-       parameter="sort_name"/>
+     label="Limit Results to specific Radius"
+     name="LimitRadarByRange">
+	 <menu_item_check.on_check
+     	control="LimitRadarByRange" />
+     <menu_item_check.on_click
+        function="ToggleControl"
+        parameter="LimitRadarByRange" />
   </menu_item_check>
-  <menu_item_check
-     label="Sort by Distance"
-     name="sort_distance">
-    <menu_item_check.on_click
-       function="People.Nearby.ViewSort.Action"
-       parameter="sort_distance"/>
-    <menu_item_check.on_check
-       function="People.Nearby.ViewSort.CheckItem"
-       parameter="sort_distance"/>
-  </menu_item_check>
+  
+  <menu
+    label="Radar Name Format"
+    name="radarNameFormat">
+   	<menu_item_call
+    	label="DisplayName"
+     	name="radarFmtDN"
+     	enabled_control="UseDisplayNames">
+    	<menu_item_call.on_click
+        	function="Radar.NameFmt" 
+        	parameter="DN"/>
+    </menu_item_call>
+   	<menu_item_call
+    	label="Username"
+     	name="radarFmtUN">
+    	<menu_item_call.on_click
+        	function="Radar.NameFmt" 
+        	parameter="UN"/>
+    </menu_item_call>
+   	<menu_item_call
+    	label="DisplayName (UserName)"
+     	name="radarFmtDNUN"
+     	enabled_control="UseDisplayNames">
+    	<menu_item_call.on_click
+        	function="Radar.NameFmt" 
+        	parameter="DNUN"/>
+    </menu_item_call>
+   	<menu_item_call
+    	label="Username (DisplayName)"
+     	name="radarFmtUNDN"
+     	enabled_control="UseDisplayNames">
+    	<menu_item_call.on_click
+        	function="Radar.NameFmt" 
+        	parameter="UNDN"/>
+    </menu_item_call>
+   </menu>
+  
+  
   <menu_item_separator layout="topleft" />
-  <menu_item_check name="view_icons" label="View People Icons">
-    <menu_item_check.on_click
-     function="People.Nearby.ViewSort.Action"
-     parameter="view_icons" />
-    <menu_item_check.on_check
-     function="CheckControl"
-     parameter="NearbyListShowIcons" />
+  
+  <menu_item_check
+     label="Report Crossing Draw Range"
+     name="RadarReportDrawRange">
+	 <menu_item_check.on_check
+     	control="RadarReportDrawRange" />
+     <menu_item_check.on_click
+        function="ToggleControl"
+        parameter="RadarReportDrawRange" />
   </menu_item_check>
+  
+  <menu_item_check
+     label="Report Crossing Chat Range"
+     name="RadarReportChatRange">
+	 <menu_item_check.on_check
+     	control="RadarReportChatRange" />
+     <menu_item_check.on_click
+        function="ToggleControl"
+        parameter="RadarReportChatRange" />
+  </menu_item_check>
+  
+  <menu_item_check
+     label="Report Enter Alerts to Scripts"
+     name="RadarEnterChannelAlert">
+	 <menu_item_check.on_check
+     	control="RadarEnterChannelAlert" />
+     <menu_item_check.on_click
+        function="ToggleControl"
+        parameter="RadarEnterChannelAlert" />
+  </menu_item_check>
+  
+  <menu_item_check
+     label="Report Exit Alerts to Scripts"
+     name="RadarLeaveChannelAlert">
+	 <menu_item_check.on_check
+     	control="RadarLeaveChannelAlert" />
+     <menu_item_check.on_click
+        function="ToggleControl"
+        parameter="RadarLeaveChannelAlert" />
+  </menu_item_check>
+     
   <menu_item_separator layout="topleft" />
   <menu_item_call name="show_blocked_list" label="Show Blocked Residents &amp; Objects">
     <menu_item_call.on_click function="SideTray.ShowPanel" userdata="panel_block_list_sidetray" />

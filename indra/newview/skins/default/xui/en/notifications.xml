@@ -1198,6 +1198,22 @@ He or she will temporarily be unable to move, chat, or interact with the world.
      notext="Unfreeze"
      yestext="Freeze"/>
   </notification>
+  
+  <notification
+    icon="alertmodal.tga"
+    name="FreezeAvatarMultiple"
+    type="alertmodal">
+ Freeze the following avatars?
+ 
+ [RESIDENTS]
+ 
+ They will temporarily be unable to move, chat, or interact with the world.
+     <usetemplate
+      canceltext="Cancel"
+      name="yesnocancelbuttons"
+      notext="Unfreeze"
+      yestext="Freeze"/>
+  </notification>  
 
   <notification
    icon="alertmodal.tga"
@@ -1227,6 +1243,33 @@ Eject this avatar from your land?
    name="EjectAvatarFullnameNoBan"
    type="alertmodal">
 Eject [AVATAR_NAME] from your land?
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="Eject"/>
+  </notification>
+
+  <notification
+    icon="alertmodal.tga"
+    name="EjectAvatarMultiple"
+    type="alertmodal">
+Eject the following avatars from your land?
+
+[RESIDENTS]
+    <usetemplate
+     canceltext="Cancel"
+     name="yesnocancelbuttons"
+     notext="Eject and Ban"
+     yestext="Eject"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="EjectAvatarMultipleNoBan"
+   type="alertmodal">
+Eject the following avatars from your land?
+
+[RESIDENTS]
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
@@ -3680,6 +3723,48 @@ Kick [EVIL_USER] from this estate?
      notext="Cancel"
      yestext="OK"/>
   </notification>
+
+  <notification
+   icon="alert.tga"
+   label="Confirm Kick"
+   name="EstateKickMultiple"
+   type="alert">
+Kick the following residents from this estate?
+
+[RESIDENTS]
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alert.tga"
+   label="Confirm Teleport Home"
+   name="EstateTeleportHomeUser"
+   type="alert">
+Teleport [AVATAR_NAME] home?
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alert.tga"
+   label="Confirm Teleport Home"
+   name="EstateTeleportHomeMultiple"
+   type="alert">
+Teleport the following residents home?
+
+[RESIDENTS]
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+
 
   <notification
    icon="alertmodal.tga"
@@ -7113,5 +7198,59 @@ Remove AO set "[AO_SET_NAME]" from the list?
   </notification>
 
 <!-- ## Zi: Animation Overrider -->
+
+<notification
+   icon="alertmodal.tga"
+   name="SendSysinfoToIM"
+   type="alertmodal">
+This will send the following information to the current IM session:
+
+[SYSINFO]
+    <usetemplate
+     name="okcancelbuttons"
+     yestext="Send"
+     notext="Cancel" />
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="InvalidGrid"
+   type="alertmodal">
+'[GRID]' is not a valid grid name or address.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+<!-- fsdata -->
+  <notification
+   icon="alertmodal.tga"
+   name="BlockLoginInfo"
+   type="alertmodal">
+    [REASON]
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="FireStormReqInfo"
+   type="notify">
+    [NAME] is requesting that you send them information about your Phoenix setup.
+    (This is the same information that can be found by going to Help->About Phoenix)    
+    [REASON]
+    Would you like to send them this information?
+    <form name="form">
+      <button
+       index="0"
+       name="Yes"
+       text="Yes"/>
+      <button
+       index="1"
+       name="No"
+       text="No"/>
+    </form>
+  </notification>
 
 </notifications>

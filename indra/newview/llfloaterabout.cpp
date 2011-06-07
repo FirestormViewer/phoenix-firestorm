@@ -50,7 +50,6 @@
 #include "llbutton.h"
 #include "llcurl.h"
 #include "llglheaders.h"
-#include "llfloater.h"
 #include "llfloaterreg.h"
 #include "llimagej2c.h"
 #include "llsys.h"
@@ -70,27 +69,6 @@ extern LLMemoryInfo gSysMemory;
 extern U32 gPacketsIn;
 
 static std::string get_viewer_release_notes_url();
-
-
-///----------------------------------------------------------------------------
-/// Class LLFloaterAbout
-///----------------------------------------------------------------------------
-class LLFloaterAbout 
-	: public LLFloater
-{
-	friend class LLFloaterReg;
-private:
-	LLFloaterAbout(const LLSD& key);
-	virtual ~LLFloaterAbout();
-
-public:
-	/*virtual*/ BOOL postBuild();
-
-	/// Obtain the data used to fill out the contents string. This is
-	/// separated so that we can programmatically access the same info.
-	static LLSD getInfo();
-	void onClickCopyToClipboard();
-};
 
 
 // Default constructor

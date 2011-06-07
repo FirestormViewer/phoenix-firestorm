@@ -27,6 +27,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "llnotifications.h"
+#include "llnotificationsutil.h"
 #include "llviewernetwork.h"
 #include "llviewercontrol.h"
 #include "llsdserialize.h"
@@ -361,7 +363,7 @@ void LLGridManager::getGridInfo(const std::string &grid, LLSD& grid_info)
 // if they're not populated yet.
 //
 
-void LLGridManager::addGrid(LLSD& grid_data)
+bool LLGridManager::addGrid(LLSD& grid_data)
 {
 	if (grid_data.isMap() && grid_data.has(GRID_VALUE))
 	{
@@ -371,8 +373,8 @@ void LLGridManager::addGrid(LLSD& grid_data)
 		if (!grid.empty() &&
 			grid.find_first_not_of("abcdefghijklmnopqrstuvwxyz1234567890-_. ") != std::string::npos)
 		{
-			printf("grid name: %s", grid.c_str());
-			throw LLInvalidGridName(grid);
+			llinfos << "Invalid grid name " << grid << llendl;
+			return false;
 		}
 		
 		// populate the other values if they don't exist
@@ -415,6 +417,7 @@ void LLGridManager::addGrid(LLSD& grid_data)
 		LL_DEBUGS("GridManager") << "ADDING: " << grid << LL_ENDL;
 		mGridList[grid] = grid_data;		
 	}
+	return true;
 }
 
 //
@@ -479,7 +482,7 @@ std::map<std::string, std::string> LLGridManager::getKnownGrids(bool favorite_on
 }
 
 
-void LLGridManager::setGridChoice(const std::string& grid)
+bool LLGridManager::setGridChoice(const std::string& grid)
 {
 	// Set the grid choice based on a string.
 	// The string can be:
@@ -501,11 +504,13 @@ void LLGridManager::setGridChoice(const std::string& grid)
 		// the grid was not in the list of grids.
 		LLSD grid_data = LLSD::emptyMap();
 		grid_data[GRID_VALUE] = grid;
-		addGrid(grid_data);		
+		if(!addGrid(grid_data))
+			return false;
 	}
 	mGrid = grid;
 	gSavedSettings.setString("CurrentGrid", grid); 
 	updateIsInProductionGrid();
+	return true;
 }
 
 std::string LLGridManager::getGridByLabel( const std::string &grid_label, bool case_sensitive)

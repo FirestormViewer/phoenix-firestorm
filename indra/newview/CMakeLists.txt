@@ -78,7 +78,9 @@ set(viewer_SOURCE_FILES
     floatermedialists.cpp
     fscontactsfloater.cpp
     fsareasearch.cpp
+    fsdata.cpp
     fskeywords.cpp
+    fsradarlistctrl.cpp
     llagent.cpp
     llagentaccess.cpp
     llagentcamera.cpp
@@ -640,7 +642,9 @@ set(viewer_HEADER_FILES
     kcwlinterface.h
     floatermedialists.h
     fscontactsfloater.h
+    fsradarlistctrl.h
     fsareasearch.h
+    fsdata.h
     fskeywords.h
     llagent.h
     llagentaccess.h

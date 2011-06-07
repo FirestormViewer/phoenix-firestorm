@@ -5,23 +5,10 @@
  height="408"
  label="Setup"
  layout="topleft"
- left="102"
+ left="115"
  name="Input panel"
  top="1"
  width="517">
-  <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left="30"
-     name="Network:"
-     mouse_opaque="false"
-     top="10"
-     width="300">
-    Network:
-  </text>
   <text
    type="string"
    length="1"
@@ -44,12 +31,12 @@
    increment="100"
    initial_value="500"
    layout="topleft"
-   left_delta="130"
+   left_delta="150"
    max_val="10000"
    min_val="100"
    name="max_bandwidth"
-   top_delta="-3"
-   width="180" />
+   top_delta="-2"
+   width="179" />
   <text
    type="string"
    length="1"
@@ -60,19 +47,49 @@
    mouse_opaque="false"
    name="text_box2"
    top_delta="1"
-   width="50">
+   width="200">
     kbps
   </text>
+  <check_box
+   control_name="ConnectionPortEnabled"
+ height="16"
+   label="Custom port"
+   layout="topleft"
+   left="20"
+   name="connection_port_enabled"
+   top_pad="10"
+   width="256">
+    <!-- check_box.commit_callback
+     function="Notification.Show"
+ parameter="ChangeConnectionPort" / -->
+  </check_box>
+  <spinner
+   control_name="ConnectionPort"
+   enabled_control="ConnectionPortEnabled"
+ decimal_digits="0"
+   follows="left|top"
+   height="23"
+   increment="1"
+   initial_value="13000"
+   label="Port number:"
+   label_width="109"
+   layout="topleft"
+   left_delta="152"
+   max_val="13050"
+   min_val="13000"
+   top_delta="-2"
+   name="connection_port"
+   width="174" />
   <text
    type="string"
    length="1"
    follows="left|top"
    height="10"
    layout="topleft"
-   left="15"
+   left="25"
    mouse_opaque="false"
    name="cache_size_label_l"
-   top_pad="15"
+   top_pad="5"
    width="200">
     Cache size
   </text>
@@ -85,12 +102,12 @@
    increment="16"
    initial_value="512"
    layout="topleft"
-   left_delta="130"
+   left_delta="140"
    max_val="1024"
    min_val="32"
    name="cache_size"
    top_delta="-2"
-   width="173" />
+   width="172" />
   <text
    type="string"
    length="1"
@@ -100,37 +117,10 @@
    left_pad="6"
    mouse_opaque="false"
    name="text_box5"
-   top_delta="1"
    width="40">
     MB
   </text>
-    <check_box
-   control_name="ConnectionPortEnabled"
- height="16"
-   label="Custom port"
-   layout="topleft"
-   left_pad="50"
-   name="connection_port_enabled"
-   top_pad="-35"
-   width="256"/>
-  <spinner
-   control_name="ConnectionPort"
-   enabled_control="ConnectionPortEnabled"
- decimal_digits="0"
-   follows="left|top"
-   height="23"
-   increment="1"
-   initial_value="13000"
-   label="Port number:"
-   label_width="0"
-   layout="topleft"
-   left_delta="15"
-   max_val="13050"
-   min_val="13000"
-   name="connection_port"
-   top_delta="15"
-   width="60" />
-  <text
+   <text
    type="string"
    length="1"
    follows="left|top"
@@ -216,7 +206,7 @@
    layout="topleft"
    left="15"
    name="log_path_desc"
-   top_delta="30"
+   top_delta="35"
    width="300">
     Chat Logs location:
   </text>
@@ -303,70 +293,110 @@
     <button.commit_callback
      function="Pref.BrowseSettingsDir" />
   </button>
+
   <text
          type="string"
          length="1"
          follows="left|top"
          height="10"
          layout="topleft"
-         left="30"
+         left="15"
          name="Web:"
-         top_pad="15"
+         top_pad="10"
          width="300">
-    Web:
-  </text>
+    Web browser:
+   </text>
   <radio_group
    control_name="UseExternalBrowser"
    draw_border="false"
    follows="top|left"
-   height="40"
+   height="20"
    layout="topleft"
-   left_delta="50"
+   left_delta="10"
    name="use_external_browser"
-   top_pad="-2"
-   width="480">
+   top_pad="4"
+   width="400">
     <radio_item
       height="20"
-      label="Use my browser (IE, Firefox, Safari)"
+      label="Built-in browser"
       layout="topleft"
       left_delta="0"
-      name="external"
-      value="1"
-      top="0"
-      tool_tip="Use the default system web browser for help, web links, etc. Not recommended if running full screen."
-      width="480" />
-    <radio_item
-      height="20"
-      label="Use built-in browser"
-      layout="topleft"
-      left="0"
       name="internal"
       value=""
       tool_tip="Use the built-in web browser for help, web links, etc. This browser opens as a new window inside [APP_NAME]."
-      top_delta="20"
-      width="480" />
+      top="0"
+      width="150" />
+    <radio_item
+      height="20"
+      label="Own browser (i.e. Firefox, Safari)"
+      layout="topleft"
+      left_pad="0"
+      name="external"
+      value="1"
+      top_delta="0"
+      tool_tip="Use the default system web browser for help, web links, etc. Not recommended if running full screen."
+      width="200" />
   </radio_group>
 
+  <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="10"
+     layout="topleft"
+     left="25"
+     name="numberwebfloaters_label"
+     mouse_opaque="false"
+     top_pad="5"
+     width="300">
+    Maximum number of web browser windows:
+  </text>
+  <combo_box
+     control_name="WebContentWindowLimit"
+     follows="left|top"
+     height="23"
+     layout="topleft"
+     left_delta="0"
+     top_pad="5"
+     tool_tip="Maximum number of web brower windows that can be open at once in the Web content floater"
+     name="web_number_combobox"
+     width="200">
+        <combo_box.item
+         label="Unlimited windows"
+         name="web_unlimited"
+         value="0" />
+        <combo_box.item
+         label="One window"
+         name="web_1"
+         value="1" />
+        <combo_box.item
+         label="Five windows"
+         name="web_5"
+         value="5" />
+        <combo_box.item
+         label="Ten windows"
+         name="web_10"
+         value="10" />
+  </combo_box>
+
   <check_box
-    top_delta="2"
     enabled="true"
     follows="left|top"
-    height="18"
+    height="16"
     initial_value="true"
     control_name="BrowserPluginsEnabled"
     label="Enable plugins"
-    left_delta="20"
+    left_delta="0"
     mouse_opaque="true"
     name="browser_plugins_enabled"
     radio_style="false"
-    width="400"
-    top_pad="5"/>
+    width="200"
+    top_pad="2"/>
 
   <check_box
-   top_delta="4"
    enabled="true"
    follows="left|top"
-   height="14"
+   height="16"
    initial_value="true"
    control_name="CookiesEnabled"
    label="Accept cookies"
@@ -374,14 +404,13 @@
    mouse_opaque="true" 
    name="cookies_enabled"
    radio_style="false"
-   width="400"
-   top_pad="5"/>
+   width="200"
+   top_pad="2"/>
   
   <check_box
-    top_delta="4"
     enabled="true"
     follows="left|top"
-    height="14"
+    height="16"
     initial_value="true"
     control_name="BrowserJavascriptEnabled"
     label="Enable Javascript"
@@ -389,26 +418,25 @@
     mouse_opaque="true"
     name="browser_javascript_enabled"
     radio_style="false"
-    width="400"
-    top_pad="5"/>
+    width="200"
+    top_pad="2"/>
   <check_box
-    top_delta="4"
     enabled="true"
     follows="left|top"
-    height="14"
+    height="16"
     initial_value="false"
     control_name="MediaEnablePopups"
     label="Enable media browser pop-ups"
     left_delta="0"
     mouse_opaque="true"
+    top_pad="2"
     name="media_popup_enabled"
-    width="400"           
-    top_pad="5"/>
+    width="200"/>
+
   <check_box
-    top_delta="4"
     enabled="true"
     follows="left|top"
-    height="14"
+    height="16"
     initial_value="false"
     control_name="BrowserProxyEnabled"
     label="Enable Web Proxy"
@@ -416,16 +444,17 @@
     mouse_opaque="true"
     name="web_proxy_enabled"
     radio_style="false"
-    width="400"           top_pad="5"/>
+    width="400"
+    top_pad="2"/>
   <text
    type="string"
    length="1"
    follows="left|top"
-   height="10"
+   height="16"
    layout="topleft"
    left_delta="20"
    name="Proxy location"
-   top_delta="16"
+   top_pad="2"
    width="300">
     Proxy location:
   </text>
@@ -439,7 +468,7 @@
    left_delta="0"
    name="web_proxy_editor"
    tool_tip="The name or IP address of the proxy you would like to use"
-   top_pad="4"
+   top_pad="1"
    width="200" />
   <spinner
    control_name="BrowserProxyPort"
@@ -458,43 +487,5 @@
    name="web_proxy_port"
    top_delta="0"
    width="145" />
-<!--
-  <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left="30"
-     name="Software updates:"
-     mouse_opaque="false"
-     top_pad="5"
-     width="300">
-    Software updates:
-  </text>
-  <combo_box
-     control_name="UpdaterServiceSetting"
-     follows="left|top"
-     height="23"
-     layout="topleft"
-     left_delta="50"
-	 top_pad="5"
-     name="updater_service_combobox"
-     width="300">
-        <combo_box.item
-         label="Install automatically"
-         name="Install_automatically"
-         value="3" />
 
-        <combo_box.item
-         label="Ask before installing"
-         name="Install_ask"
-         value="1" />
-
-        <combo_box.item
-         label="Download and install updates manually"
-         name="Install_manual"
-         value="0" />
-  </combo_box>
--->
 </panel>

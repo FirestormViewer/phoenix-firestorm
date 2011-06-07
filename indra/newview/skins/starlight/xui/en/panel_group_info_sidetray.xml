@@ -297,7 +297,7 @@ background_visible="true"
 				name="btn_create_lp"
 			    user_resize="false" 
 			    auto_resize="true"
-				width="104">
+				width="125">
 					<button
     				 follows="bottom|left|right"
 	                 height="23"
@@ -308,7 +308,7 @@ background_visible="true"
      				 name="btn_create"
                		 visible="true"
                  	 tool_tip="Create a new Group"
-                 	 width="103" />	
+                 	 width="124" />	
 				</layout_panel>
 		</layout_stack>
    <!--<button

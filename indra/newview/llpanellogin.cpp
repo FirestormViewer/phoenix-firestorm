@@ -69,6 +69,8 @@
 #include "llglheaders.h"
 #include "llpanelloginlistener.h"
 
+#include "fsdata.h"
+
 #if LL_WINDOWS
 #pragma warning(disable: 4355)      // 'this' used in initializer list
 #endif  // LL_WINDOWS
@@ -219,7 +221,7 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 
 	LLComboBox* server_choice_combo = sInstance->getChild<LLComboBox>("server_combo");
 	server_choice_combo->setCommitCallback(onSelectServer, NULL);
-	server_choice_combo->setFocusLostCallback(boost::bind(onServerComboLostFocus, _1));
+//	server_choice_combo->setFocusLostCallback(boost::bind(onServerComboLostFocus, _1));
 	updateServerCombo();
 
 	childSetAction("connect_btn", onClickConnect, this);
@@ -942,11 +944,7 @@ void LLPanelLogin::onClickConnect(void *)
 			LLNotificationsUtil::add("StartRegionEmpty");
 			return;
 		}		
-		try
-		{
-			LLGridManager::getInstance()->setGridChoice(combo_val.asString());
-		}
-		catch (LLInvalidGridName ex)
+		if(!LLGridManager::getInstance()->setGridChoice(combo_val.asString()))
 		{
 			LLSD args;
 			args["GRID"] = combo_val.asString();
@@ -956,41 +954,48 @@ void LLPanelLogin::onClickConnect(void *)
 		updateStartSLURL();
 		std::string username = sInstance->getChild<LLUICtrl>("username_combo")->getValue().asString();
 
-		
-		if(username.empty())
+		LLSD blocked = FSData::allowed_login();
+		if (!blocked.isMap()) //hack for testing for an empty LLSD
 		{
-			// user must type in something into the username field
-			LLNotificationsUtil::add("MustHaveAccountToLogIn");
+			if(username.empty())
+			{
+				// user must type in something into the username field
+				LLNotificationsUtil::add("MustHaveAccountToLogIn");
+			}
+			else
+			{
+				LLPointer<LLCredential> cred;
+				BOOL remember;
+				getFields(cred, remember);
+				std::string identifier_type;
+				cred->identifierType(identifier_type);
+				LLSD allowed_credential_types;
+				LLGridManager::getInstance()->getLoginIdentifierTypes(allowed_credential_types);
+				
+				// check the typed in credential type against the credential types expected by the server.
+				for(LLSD::array_iterator i = allowed_credential_types.beginArray();
+					i != allowed_credential_types.endArray();
+					i++)
+				{
+					
+					if(i->asString() == identifier_type)
+					{
+						// yay correct credential type
+						sInstance->mCallback(0, sInstance->mCallbackData);
+						return;
+					}
+				}
+				
+				// Right now, maingrid is the only thing that is picky about
+				// credential format, as it doesn't yet allow account (single username)
+				// format creds.  - Rox.  James, we wanna fix the message when we change
+				// this.
+				LLNotificationsUtil::add("InvalidCredentialFormat");			
+			}
 		}
 		else
 		{
-			LLPointer<LLCredential> cred;
-			BOOL remember;
-			getFields(cred, remember);
-			std::string identifier_type;
-			cred->identifierType(identifier_type);
-			LLSD allowed_credential_types;
-			LLGridManager::getInstance()->getLoginIdentifierTypes(allowed_credential_types);
-			
-			// check the typed in credential type against the credential types expected by the server.
-			for(LLSD::array_iterator i = allowed_credential_types.beginArray();
-				i != allowed_credential_types.endArray();
-				i++)
-			{
-				
-				if(i->asString() == identifier_type)
-				{
-					// yay correct credential type
-					sInstance->mCallback(0, sInstance->mCallbackData);
-					return;
-				}
-			}
-			
-			// Right now, maingrid is the only thing that is picky about
-			// credential format, as it doesn't yet allow account (single username)
-			// format creds.  - Rox.  James, we wanna fix the message when we change
-			// this.
-			LLNotificationsUtil::add("InvalidCredentialFormat");			
+			LLNotificationsUtil::add("BlockLoginInfo", blocked);
 		}
 	}
 }
@@ -1060,26 +1065,18 @@ void LLPanelLogin::onPassKey(LLLineEditor* caller, void* user_data)
 
 void LLPanelLogin::updateServer()
 {
-	try 
+	updateServerCombo();	
+	// if they've selected another grid, we should load the credentials
+	// for that grid and set them to the UI.
+	if(sInstance && !sInstance->areCredentialFieldsDirty())
 	{
-
-		updateServerCombo();	
-		// if they've selected another grid, we should load the credentials
-		// for that grid and set them to the UI.
-		if(sInstance && !sInstance->areCredentialFieldsDirty())
-		{
-			LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(LLGridManager::getInstance()->getGrid());	
-			bool remember = sInstance->getChild<LLUICtrl>("remember_check")->getValue();
-			sInstance->setFields(credential, remember);
-		}
-		// grid changed so show new splash screen (possibly)
-		loadLoginPage();
-		updateLocationCombo(LLStartUp::getStartSLURL().getType() == LLSLURL::LOCATION);
+		LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(LLGridManager::getInstance()->getGrid());	
+		bool remember = sInstance->getChild<LLUICtrl>("remember_check")->getValue();
+		sInstance->setFields(credential, remember);
 	}
-	catch (LLInvalidGridName ex)
-	{
-		// do nothing
-	}
+	// grid changed so show new splash screen (possibly)
+	loadLoginPage();
+	updateLocationCombo(LLStartUp::getStartSLURL().getType() == LLSLURL::LOCATION);
 }
 
 void LLPanelLogin::updateServerCombo()
@@ -1134,14 +1131,20 @@ void LLPanelLogin::onSelectServer(LLUICtrl*, void*)
 	combo = sInstance->getChild<LLComboBox>("start_location_combo");	
 	combo->setCurrentByIndex(1);
 	LLStartUp::setStartSLURL(LLSLURL(gSavedSettings.getString("LoginLocation")));
-	LLGridManager::getInstance()->setGridChoice(combo_val.asString());
+	if(!LLGridManager::getInstance()->setGridChoice(combo_val.asString()))
+	{
+		LLSD args;
+		args["GRID"] = combo_val.asString();
+		LLNotificationsUtil::add("InvalidGrid", args);
+		return;
+	}
 	// This new selection will override preset uris
 	// from the command line.
 	updateServer();
 	updateLocationCombo(false);
 	updateLoginPanelLinks();
 }
-
+/*
 void LLPanelLogin::onServerComboLostFocus(LLFocusableElement* fe)
 {
 	if (!sInstance)
@@ -1152,10 +1155,10 @@ void LLPanelLogin::onServerComboLostFocus(LLFocusableElement* fe)
 	LLComboBox* combo = sInstance->getChild<LLComboBox>("server_combo");
 	if(fe == combo)
 	{
-		onSelectServer(combo, NULL);	
+		onSelectServer(combo, NULL);
 	}
 }
-
+*/
 void LLPanelLogin::updateLoginPanelLinks()
 {
 	LLSD grid_data;

@@ -57,13 +57,19 @@
 		</combo_box>
 		<search_editor label="Régions par nom" name="location" tool_tip="Tapez le nom d&apos;une région"/>
 		<button label="Trouver" name="DoSearch" tool_tip="Rechercher une région"/>
-		<button name="Clear" tool_tip="Effacer les lignes de suivi et réinitialiser la carte"/>
 		<text name="events_label">
 			Endroit :
 		</text>
-		<button label="Téléporter" name="Teleport" tool_tip="Me téléporter à l&apos;emplacement sélectionné"/>
-		<button label="Copier la SLurl" name="copy_slurl" tool_tip="Copie l’emplacement actuel sous la forme d’une SLurl à utiliser sur le Web."/>
-		<button label="Afficher la sélection" name="Show Destination" tool_tip="Centrer la carte sur l&apos;emplacement sélectionné"/>
+		<layout_stack>
+			<layout_panel name="layoutstackpanel_left">
+				<button label="Téléporter" name="Teleport" tool_tip="Me téléporter à l&apos;emplacement sélectionné"/>
+				<button label="Supprimer" name="Clear" tool_tip="Effacer les lignes de suivi et réinitialiser la carte"/>
+			</layout_panel>
+			<layout_panel name="layoutstackpanel_right">
+				<button label="Copier la SLurl" name="copy_slurl" tool_tip="Copie l’emplacement actuel sous la forme d’une SLurl à utiliser sur le Web."/>
+				<button label="Afficher la sélection" name="Show Destination" tool_tip="Centrer la carte sur l&apos;emplacement sélectionné"/>
+			</layout_panel>
+		</layout_stack>
 	</panel>
 	<panel name="layout_panel_5">
 		<text name="zoom_label">

@@ -46,7 +46,7 @@
    label="Filter Inventory"
    layout="topleft"
    left="10"
-   max_length="300"
+   max_length_chars="300"
    name="inventory search editor"
    top="18"
    width="303" />
@@ -61,7 +61,7 @@
      layout="topleft"
      left="7"
      name="inventory filter tabs"
-     tab_height="30"
+     tab_height="23"
      tab_group="1"
      tab_position="top"
      tab_min_width="100"
@@ -74,7 +74,7 @@
      bevel_style="none"
      follows="all"
      height="338"
-     label="MY INVENTORY"
+     label="INVENTORY"
      help_topic="my_inventory_tab"
      layout="topleft"
      left="0"
@@ -95,6 +95,20 @@
      layout="topleft"
      left_delta="0"
      name="Recent Items"
+	 show_item_link_overlays="true"
+     width="290" />
+	<worn_inventory_panel
+     bg_alpha_color="SL-Background_66"
+     bg_opaque_color="SL-Background_66"
+     border="false"
+     bevel_style="none"
+     follows="all"
+     height="338"
+     label="WORN"
+     help_topic="worn_inventory_tab"
+     layout="topleft"
+     left_delta="0"
+     name="Worn Items"
 	 show_item_link_overlays="true"
      width="290" />
   </tab_container>
@@ -151,22 +165,74 @@
            top="0"
            width="31" />
       </layout_panel>
+	  <layout_panel
+   	  auto_resize="false"
+       height="25"
+       layout="topleft"
+       left_pad="0"
+       name="new_inventory_panel"
+       width="32">
+          <button
+           follows="bottom|left"
+           height="25"
+           image_hover_unselected="Toolbar_Middle_Over"
+           image_overlay="inventory_18"
+           image_selected="Toolbar_Middle_Selected"
+           image_unselected="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           name="new_inv_btn"
+           tool_tip="Additional Inventory Window"
+           top="0"
+           width="31">
+           <button.init_callback
+                 function="Button.SetDockableFloaterToggle"
+                 parameter="inventory" />
+           </button>
+      </layout_panel>
       <layout_panel
        auto_resize="true"
        height="25"
        layout="topleft"
-       name="dummy_panel"
+	   follows="bottom|left|right"
+       name="expand_collapse_panel"
        user_resize="false"
-       width="212">
-          <icon
+       width="180">
+	      <button
+           follows="bottom|left"
+           height="25"
+           image_hover_unselected="Toolbar_Middle_Over"
+		   label="Collapse All"
+           image_selected="Toolbar_Middle_Selected"
+           image_unselected="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           name="collapse_btn"
+           tool_tip="Collapse Folders"
+           top="0"
+           width="89" />
+		  <button
+           follows="bottom|left"
+           height="25"
+           image_hover_unselected="Toolbar_Middle_Over"
+		   label="Expand All"
+           image_selected="Toolbar_Middle_Selected"
+           image_unselected="Toolbar_Middle_Off"
+           layout="topleft"
+           left_pad="1"
+           name="expand_btn"
+           tool_tip="Expand Folders"
+           top="0"
+           width="89" />
+          <!-- icon
            follows="bottom|left|right"
            height="25"
            image_name="Toolbar_Middle_Off"
            layout="topleft"
-           left="0"
+           left_pad="1"
            top="0"
            name="dummy_icon"
-           width="211" />
+           width="59" / -->
       </layout_panel>
       <layout_panel
        auto_resize="false"

@@ -60,7 +60,7 @@
       name="text_editor_box"
       read_only="true"
       tab_stop="false"
-      text_color="ScriptDialogFb"
+      text_color="ScriptDialogFg"
       text_readonly_color="ScriptDialogFg"
       top="10"
       visible="false"

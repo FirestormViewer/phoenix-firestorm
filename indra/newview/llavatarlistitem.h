@@ -115,6 +115,8 @@ public:
 	void showFirstSeen(bool show);
 	void showStatusFlags(bool show);
 	void showAvatarAge(bool show);
+	std::string getAvatarAge();
+	std::string getSeen();
 	void showPaymentStatus(bool show);
 	void updateFirstSeen();
 	void showUsername(bool show);
@@ -128,6 +130,7 @@ public:
 	const LLUUID& getAvatarId() const;
 	std::string getAvatarName() const;
 	std::string getAvatarToolTip() const;
+	bool getShowingBothNames() const;
 
 	void onInfoBtnClick();
 	void onProfileBtnClick();

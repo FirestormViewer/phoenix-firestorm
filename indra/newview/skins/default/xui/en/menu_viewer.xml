@@ -66,7 +66,7 @@
          label="Inventory"
          name="Inventory"
          shortcut="control|shift|I"
-		 visible="true">
+		 visible="false">
             <menu_item_check.on_check
              function="Floater.Visible"
              parameter="inventory" />
@@ -79,7 +79,7 @@
          label="Inventory"
          name="ShowSidetrayInventory"
          shortcut="control|I"
-		 visible="false">
+		 visible="true">
             <menu_item_check.on_check
              function="SidetrayPanelVisible"
              parameter="sidepanel_inventory" />
@@ -180,7 +180,8 @@
 	        </menu_item_call>
 	        <menu_item_call
 	         label="Force Appearance Update"
-	         name="Rebake Texture">
+	         name="Rebake Texture"
+		 shortcut="control|alt|R">
 	            <menu_item_call.on_click
 	             function="Advanced.RebakeTextures" />
 	        </menu_item_call>
@@ -208,6 +209,71 @@
                  parameter="lagmeter" />
             </menu_item_call>
         </menu>
+        
+        <menu
+         create_jump_keys="true"
+         label="Upload"
+         layout="topleft"
+         name="Upload"
+         tear_off="true">
+            <menu_item_call
+             label="Image (L$[COST])..."
+             layout="topleft"
+             name="Upload Image"
+             shortcut="control|U">
+                <menu_item_call.on_click
+                 function="File.UploadImage"
+                 parameter="" />
+                <menu_item_call.on_enable
+                 function="File.EnableUpload" />
+                <menu_item_call.on_visible
+                 function="Upload.CalculateCosts"
+                 parameter="Upload Image" />
+            </menu_item_call>
+            <menu_item_call
+             label="Sound (L$[COST])..."
+             layout="topleft"
+             name="Upload Sound">
+                <menu_item_call.on_click
+                 function="File.UploadSound"
+                 parameter="" />
+                <menu_item_call.on_enable
+                 function="File.EnableUpload" />
+                <menu_item_call.on_visible
+                 function="Upload.CalculateCosts"
+                 parameter="Upload Sound" />
+            </menu_item_call>
+            <menu_item_call
+             label="Animation (L$[COST])..."
+             layout="topleft"
+             name="Upload Animation">
+                <menu_item_call.on_click
+                 function="File.UploadAnim"
+                 parameter="" />
+                <menu_item_call.on_enable
+                 function="File.EnableUpload" />
+                <menu_item_call.on_visible
+                 function="Upload.CalculateCosts"
+                 parameter="Upload Animation" />
+            </menu_item_call>
+            <menu_item_call
+             label="Bulk (Multi-file) upload..."
+             layout="topleft"
+             name="Bulk Upload">
+                <menu_item_call.on_click
+                 function="File.UploadBulk"
+                 parameter="" />
+            </menu_item_call>
+            <menu_item_call
+             label="Set Default Upload Permissions"
+             name="perm prefs">
+                <menu_item_call.on_click
+                 function="Floater.Toggle"
+                 parameter="perm_prefs" />
+            </menu_item_call>
+        </menu>
+
+        
         <menu_item_call
          label="Request Admin Status"
          name="Request Admin Options"
@@ -241,9 +307,37 @@
     
     <menu
      create_jump_keys="true"
-     label="Communicate"
+     label="Comm"
      name="Communicate"
      tear_off="true">
+     
+        <menu
+         create_jump_keys="true"
+         label="Online Status"
+         name="Status"
+         tear_off="true">
+            <menu_item_call
+             label="Away"
+             name="Set Away">
+                <menu_item_call.on_click
+                 function="World.SetAway" />
+            </menu_item_call>
+			<menu_item_call
+             label="Autorespond"
+             name="Set Autorespond">
+                <menu_item_call.on_click
+                 function="World.SetAutorespond"/>
+            </menu_item_call>
+            <menu_item_call
+             label="Unavailable"
+             name="Set Busy">
+                <menu_item_call.on_click
+                 function="World.SetBusy"/>
+            </menu_item_call>
+        </menu>
+        
+        <menu_item_separator/>
+             
         <menu_item_call
          label="Friends"
          name="My Friends"
@@ -285,33 +379,6 @@
              parameter="im_container" />
         </menu_item_check>
 
-        <menu_item_separator/>
-        
-        <menu
-         create_jump_keys="true"
-         label="Online Status"
-         name="Status"
-         tear_off="true">
-            <menu_item_call
-             label="Away"
-             name="Set Away">
-                <menu_item_call.on_click
-                 function="World.SetAway" />
-            </menu_item_call>
-			<menu_item_call
-             label="Autorespond"
-             name="Set Autorespond">
-                <menu_item_call.on_click
-                 function="World.SetAutorespond"/>
-            </menu_item_call>
-            <menu_item_call
-             label="Unavailable"
-             name="Set Busy">
-                <menu_item_call.on_click
-                 function="World.SetBusy"/>
-            </menu_item_call>
-        </menu>
-        
         <menu_item_separator/>
 
         <menu_item_check
@@ -400,7 +467,7 @@
         </menu_item_call>
 
         <menu_item_call
-         label="Place Profile"
+         label="Location Profile"
          layout="topleft"
          name="Place Profile">
             <menu_item_call.on_click
@@ -616,6 +683,14 @@
             <menu_item_call.on_click
              function="World.EnvSettings"
              parameter="editor" />
+        </menu_item_call>
+        <menu_item_call
+            label="Sky Editor"
+            layout="topleft"
+            name="Windlight">
+            <menu_item_call.on_click
+             function="Floater.Show"
+             parameter="env_windlight" />
         </menu_item_call>
 		<menu_item_separator/>
 		<menu_item_call
@@ -1162,9 +1237,18 @@
      label="Help"
      name="Help"
      tear_off="true">
+        <menu_item_check
+         label="Enable Tooltips"
+         name="Enable Hints">
+          <on_check
+            control="EnableUIHints"/>
+          <on_click
+            function="ToggleUIHints"/>
+        </menu_item_check>
+        
         <menu_item_call
-             label="Firestorm Wiki"
-             name="Firestorm Wiki"
+         label="Firestorm Wiki"
+         name="Firestorm Wiki"
 	     shortcut="F1">
              <menu_item_call.on_click
              function="PromptShowURL"
@@ -1172,12 +1256,12 @@
              parameter="WebLaunchExternalTarget,http://wiki.phoenixviewer.com/doku.php?id=firestorm" />
        </menu_item_call>
        <menu_item_call
-         label="Viewer Help"
-         name="Second Life Help"
-         shortcut="F1">
-            <menu_item_call.on_click
-             function="ShowHelp"
-             parameter="f1_help" />
+         label="Second Life Help"
+         name="Second Life Help">
+             <menu_item_call.on_click
+             function="PromptShowURL"
+             name="script_library_url"
+             parameter="WebLaunchExternalTarget,https://support.secondlife.com/" />
         </menu_item_call>
 <!--        <menu_item_call
          label="Tutorial"
@@ -1212,6 +1296,19 @@
 
         <menu_item_separator/>
 
+        <menu_item_check
+            label="Enable Sysinfo Button"
+            name="Enable Sysinfo Button">
+            <menu_item_check.on_check
+                function="CheckControl"
+                parameter="SysinfoButtonInIM" />
+            <menu_item_check.on_click
+                function="ToggleControl"
+                parameter="SysinfoButtonInIM" />
+        </menu_item_check>
+
+        <menu_item_separator/>
+
         <menu_item_call
          label="About [APP_NAME]"
          name="About Second Life">
@@ -1219,14 +1316,6 @@
              function="Floater.Show"
              parameter="sl_about" />
         </menu_item_call>
-        <menu_item_check
-         label="Enable Tooltips"
-         name="Enable Hints">
-          <on_check
-            control="EnableUIHints"/>
-          <on_click
-            function="ToggleUIHints"/>
-        </menu_item_check>
     </menu>
     
     <!-- Advanced Menu -->
@@ -1239,8 +1328,7 @@
      visible="false">
         <menu_item_call
          label="Rebake Textures"
-         name="Rebake Texture"
-         shortcut="control|alt|R">
+         name="Rebake Texture">
             <menu_item_call.on_click
              function="Advanced.RebakeTextures" />
         </menu_item_call>
@@ -2075,7 +2163,8 @@
 
         <menu_item_check
          label="Fly Override"
-         name="Fly Override">
+         name="Fly Override"
+	 shortcut="control|alt|V">
             <menu_item_check.on_check
              function="CheckControl"
              parameter="PhoenixAlwaysFly" />

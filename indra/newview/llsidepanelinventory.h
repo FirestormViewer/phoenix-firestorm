@@ -84,6 +84,7 @@ protected:
 	void 						onPlayButtonClicked();
 	void 						onTeleportButtonClicked();
 	void 						onOverflowButtonClicked();
+public:
 	void 						onBackButtonClicked();
 private:
 	LLButton*					mInfoBtn;

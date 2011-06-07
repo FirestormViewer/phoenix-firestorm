@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Main Menu">
-  <menu label="Inhalt" name="Content">
-    <menu_item_check label="Suchen" name="Search"/>
-    <menu_item_check label="SL-Marktplatz" name="SL Marketplace"/>
-    <menu_item_check label="L$-Markt-Kurse" name="LindenXchange"/>
-    <menu_item_check label="Script-Datenbank" name="Script Library"/>
-  </menu>
 	<menu label="Avatar" name="Me">
 		<menu_item_call label="Einstellungen" name="Preferences"/>
 		<menu_item_call label="Meine Startseite" name="Manage My Account">
@@ -35,6 +29,13 @@
 			<menu_item_call label="Auf Standard-Avatar zurücksetzen" name="ResetDefaultAvM"/>
 			<menu_item_check label="Avatar-Rendering-Kosten (ARC) anzeigen" name="Avatar Rendering Cost"/>
 			<menu_item_call label="Lag-Meter" name="Lag Meter"/>
+		</menu>
+		<menu label="Hochladen" name="Upload">
+			<menu_item_call label="Bild ([COST] L$)..." name="Upload Image"/>
+			<menu_item_call label="Sound ([COST] L$)..." name="Upload Sound"/>
+			<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
+			<menu_item_call label="Mehrfach-Upload..." name="Bulk Upload"/>
+			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Admin-Status anfordern" name="Request Admin Options"/>
 		<menu_item_call label="Admin-Status verlassen" name="Leave Admin Options"/>
@@ -76,7 +77,6 @@
 		</menu>
 		<menu_item_call label="Teleport nach Hause" name="Teleport Home"/>
 		<menu_item_call label="Hier als Zuhause wählen" name="Set Home to Here"/>
-		<menu_item_call label="Umwelt-Editor" name="Environment Editor"/>
 		<menu label="Sonne" name="Environment Settings">
 			<menu_item_call label="Sonnenaufgang" name="Sunrise"/>
 			<menu_item_call label="Mittag" name="Noon"/>
@@ -84,6 +84,8 @@
 			<menu_item_call label="Mitternacht" name="Midnight"/>
 			<menu_item_call label="Grundbesitzzeit" name="Revert to Region Default"/>
 		</menu>
+		<menu_item_call label="Umwelt-Editor" name="Environment Editor"/>
+        <menu_item_call label="Himmel-Editor" name="Windlight"/>
 		<menu_item_call label="Umgebungssuche" name="area_search"/>
 	</menu>
 	<menu label="Bauen" name="BuildTools">
@@ -114,12 +116,12 @@
 			<menu_item_call label="Wieder in Objektinhalt speichern" name="Save Object Back to Object Contents"/>
 			<menu_item_call label="Objekt zurückgeben" name="Return Object back to Owner"/>
 		</menu>
-		<menu label="Skripts" name="Scripts">
-			<menu_item_call label="Skripts rekompilieren (Mono)" name="Mono"/>
-			<menu_item_call label="Skripts rekompilieren (LSL)" name="LSL"/>
-			<menu_item_call label="Skripts zurücksetzen" name="Reset Scripts"/>
-			<menu_item_call label="Skripts auf ausführen einstellen" name="Set Scripts to Running"/>
-			<menu_item_call label="Skripts auf nicht ausführen einstellen" name="Set Scripts to Not Running"/>
+		<menu label="Skripte" name="Scripts">
+			<menu_item_call label="Skripte rekompilieren (Mono)" name="Mono"/>
+			<menu_item_call label="Skripte rekompilieren (LSL)" name="LSL"/>
+			<menu_item_call label="Skripte zurücksetzen" name="Reset Scripts"/>
+			<menu_item_call label="Skripte auf ausführen einstellen" name="Set Scripts to Running"/>
+			<menu_item_call label="Skripte auf nicht ausführen einstellen" name="Set Scripts to Not Running"/>
 		</menu>
 		<menu label="Optionen" name="Options">
 			<menu_item_check label="Erweiterte Berechtigungen anzeigen" name="DebugPermissions"/>
@@ -140,15 +142,23 @@
 			<menu_item_call label="Sound ([COST] L$)..." name="Upload Sound"/>
 			<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
 			<menu_item_call label="Mehrfach-Upload ([COST] L$ pro Datei)..." name="Bulk Upload"/>
+			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Rückgängig" name="Undo"/>
 		<menu_item_call label="Wiederholen" name="Redo"/>
+	</menu>
+	<menu label="Inhalt" name="Content">
+		<menu_item_check label="Suchen" name="Search"/>
+		<menu_item_check label="SL-Marktplatz" name="SL Marketplace"/>
+		<menu_item_check label="L$-Markt-Kurse" name="LindenXchange"/>
+		<menu_item_check label="Skript-Datenbank" name="Script Library"/>
 	</menu>
 	<menu label="Hilfe" name="Help">
 		<menu_item_call label="[SECOND_LIFE]-Hilfe" name="Second Life Help"/>
 		<menu_item_call label="Grid-Status prüfen" name="Grid Status"/>
 		<menu_item_call label="Missbrauch melden" name="Report Abuse"/>
 		<menu_item_call label="Fehler melden" name="Report Bug"/>
+        <menu_item_check label="Sysinfo-Button aktivieren" name="Enable Sysinfo Button"/>
 		<menu_item_call label="INFO ÜBER [APP_NAME]" name="About Second Life"/>
 		<menu_item_check label="Hinweise aktivieren" name="Enable Hints"/>
 	</menu>
@@ -223,7 +233,7 @@
 			<menu_item_call label="UI-Größe auf Standard setzen" name="Set UI Size to Default"/>
 			<menu_item_check label="Erweitert-Menü anzeigen - veraltetet" name="Show Advanced Menu - legacy shortcut"/>
             <menu_item_check label="Immer rennen" name="Always Run"/>
-            <menu_item_check label="Fly" name="Fly"/>
+            <menu_item_check label="Fliegen" name="Fly"/>
 			<menu_item_call label="Fenster schließen" name="Close Window"/>
 			<menu_item_call label="Alle Fenster schließen" name="Close All Windows"/>
 			<menu_item_call label="Foto auf Datenträger" name="Snapshot to Disk"/>
@@ -370,6 +380,8 @@
 		<menu label="XUI" name="XUI">
 			<menu_item_call label="Farbeinstellungen neu laden" name="Reload Color Settings"/>
 			<menu_item_call label="Schriftarttest anzeigen" name="Show Font Test"/>
+			<menu_item_call label="Aus XML-Datei laden" name="Load from XML"/>
+			<menu_item_call label="In XML-Datei speichern" name="Save to XML"/>
 			<menu_item_check label="XUI-Namen anzeigen" name="Show XUI Names"/>
 			<menu_item_call label="Test-IMs senden" name="Send Test IMs"/>
 			<menu_item_call label="Namen-Cache leeren" name="Flush Names Caches"/>

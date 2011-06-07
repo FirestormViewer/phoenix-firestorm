@@ -102,7 +102,7 @@
      height="28"
      layout="topleft"
      min_height="28"
-     min_width="59"
+     min_width="79"
      mouse_opaque="false"
      name="speak_panel"
      top_delta="0"
@@ -123,6 +123,19 @@
            parameter="voice_controls" />
         </show_button>
       </talk_button>
+        <bottomtray_button follows="left"
+            left_delta="2"
+            bottom="-3"
+            width="16"
+            height="16"
+            is_toggle="true"
+            image_selected="ptt_lock_on.tga"
+            image_unselected="ptt_lock_off.tga"
+            label=""
+            name="ptt_lock"
+            scale_image="true"
+            control_name="PushToTalkToggle">
+        </bottomtray_button>
     </layout_panel>
 
 

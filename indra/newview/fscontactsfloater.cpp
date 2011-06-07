@@ -44,8 +44,10 @@
 #include "llfriendcard.h"
 #include "llgroupactions.h"
 #include "llgrouplist.h"
+#include "llimfloatercontainer.h"
 #include "llsidetray.h"
 #include "llstartup.h"
+#include "llviewercontrol.h"
 
 static const std::string FRIENDS_TAB_NAME	= "friends_panel";
 static const std::string GROUP_TAB_NAME		= "groups_panel";
@@ -70,6 +72,16 @@ protected:
 		{
 			std::string name1 = item1->getAvatarName();
 			std::string name2 = item2->getAvatarName();
+
+			if (item1->getShowingBothNames() &&
+				gSavedSettings.getBOOL("FSSortContactsByUserName"))
+			{
+				// The tooltip happens to have the username
+				//  in it, so we'll just use that. Why store
+				//  it twice or parse it back out? -- TS
+				name1 = item1->getAvatarToolTip();
+				name2 = item2->getAvatarToolTip();
+			}
 
 			LLStringUtil::toUpper(name1);
 			LLStringUtil::toUpper(name2);
@@ -111,7 +123,7 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendList->showPermissions(TRUE);
 	mFriendList->setComparator(&STATUS_COMPARATOR);
 	
-	mFriendList->setRefreshCompleteCallback(boost::bind(&FSFloaterContacts::onFriendListRefreshComplete, this));
+	mFriendList->setRefreshCompleteCallback(boost::bind(&FSFloaterContacts::sortFriendList, this));
 	mFriendList->setItemDoubleClickCallback(boost::bind(&FSFloaterContacts::onAvatarListDoubleClicked, this, _1));
 	mFriendList->setReturnCallback(boost::bind(&FSFloaterContacts::onImButtonClicked, this));
 	
@@ -153,6 +165,19 @@ void FSFloaterContacts::updateButtons()
 
 void FSFloaterContacts::onOpen(const LLSD& key)
 {
+	if (gSavedSettings.getBOOL("ContactsTornOff"))
+	{
+		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+		// first set the tear-off host to the conversations container
+		setHost(floater_container);
+		// clear the tear-off host right after, the "last host used" will still stick
+		setHost(NULL);
+		// reparent to floater view
+		gFloaterView->addChild(this);
+		// and remember we are torn off
+		setTornOff(TRUE);
+	}
+
 	if (key.asString() == "friends")
 	{
 		childShowTab("friends_and_groups", "friends_panel");
@@ -165,8 +190,9 @@ void FSFloaterContacts::onOpen(const LLSD& key)
 	}
 }
 
-// as soon as the avatar list widget tells us all names are loaded, do another sort on the list -Zi
-void FSFloaterContacts::onFriendListRefreshComplete()
+// as soon as the avatar list widget tells us all names are loaded, do
+//  another sort on the list -Zi
+void FSFloaterContacts::sortFriendList()
 {
 	mFriendList->sort();
 }

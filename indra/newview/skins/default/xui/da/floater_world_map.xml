@@ -57,13 +57,19 @@
 		</combo_box>
 		<search_editor label="Regioner efter navn" name="location" tool_tip="Indtast navn på en region"/>
 		<button label="Find" name="DoSearch" tool_tip="Led efter region"/>
-		<button name="Clear" tool_tip="Fjern søgelinier og nulstil kort"/>
 		<text name="events_label">
 			Lokation:
 		</text>
-		<button label="Teleport" name="Teleport" tool_tip="Teleportér til valgte sted"/>
-		<button label="Kopiér SLurl" name="copy_slurl" tool_tip="Kopierer nuværende lokation som SLurl der kan sendes på web."/>
-		<button label="Vis valgte" name="Show Destination" tool_tip="Centrér kortet på valgte lokation"/>
+		<layout_stack>
+			<layout_panel name="layoutstackpanel_left">
+				<button label="Teleport" name="Teleport" tool_tip="Teleportér til valgte sted"/>
+				<button label="Slet" name="Clear" tool_tip="Fjern søgelinier og nulstil kort"/>
+			</layout_panel>
+			<layout_panel name="layoutstackpanel_right">
+				<button label="Kopiér SLurl" name="copy_slurl" tool_tip="Kopierer nuværende lokation som SLurl der kan sendes på web."/>
+				<button label="Vis valgte" name="Show Destination" tool_tip="Centrér kortet på valgte lokation"/>
+			</layout_panel>
+		</layout_stack>
 	</panel>
 	<panel name="layout_panel_5">
 		<text name="zoom_label">

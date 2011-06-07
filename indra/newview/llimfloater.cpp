@@ -37,6 +37,7 @@
 #include "llbottomtray.h"
 #include "llchannelmanager.h"
 #include "llchiclet.h"
+#include "llfloaterabout.h"		// for sysinfo button -Zi
 #include "llfloaterreg.h"
 #include "llimfloatercontainer.h" // to replace separate IM Floaters with multifloater container
 #include "llinventoryfunctions.h"
@@ -430,6 +431,68 @@ void LLIMFloater::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_s
 	updateButtons(new_state >= LLVoiceChannel::STATE_CALL_STARTED);
 }
 
+// support sysinfo button -Zi
+void LLIMFloater::onSysinfoButtonClicked()
+{
+	LLSD info=LLFloaterAbout::getInfo();
+
+	std::ostringstream support;
+	support <<
+		info["CHANNEL"] << " " << info["VIEWER_VERSION_STR"] << "\n" <<
+		"Sim: " << info["HOSTNAME"] << "(" << info["HOSTIP"] << ") " << info["SERVER_VERSION"] << "\n" <<
+		"Packet loss: " << info["PACKETS_PCT"].asReal() << "% (" << info["PACKETS_IN"].asReal() << "/" << info["PACKETS_LOST"].asReal() << ")\n" <<
+		"CPU: " << info["CPU"] << "\n" <<
+		"Memory: " << info["MEMORY_MB"] << "\n" <<
+		"OS: " << info["OS_VERSION"] << "\n" <<
+		"GPU: " << info["GRAPHICS_CARD_VENDOR"] << " " << info["GRAPHICS_CARD"] << "\n";
+
+	if(info.has("GRAPHICS_DRIVER_VERSION"))
+		support << "Driver: " << info["GRAPHICS_DRIVER_VERSION"] << "\n";
+
+	support <<
+		"OpenGL: " << info["OPENGL_VERSION"] << "\n" <<
+		"Skin: " << info["SKIN"] << "(" << info["THEME"] << ")\n" <<
+		"RLV: " << info["RLV_VERSION"] << "\n" <<
+		"Curl: " << info ["LIBCURL_VERSION"] << "\n" <<
+		"J2C: " << info["J2C_VERSION"] << "\n" <<
+		"Audio: " << info["AUDIO_DRIVER_VERSION"] << "\n" <<
+		"Webkit: " << info["QT_WEBKIT_VERSION"] << "\n" <<
+		"Voice: " << info["VOICE_VERSION"] << "\n" <<
+		"Compiler: " << info["COMPILER"] << " Version " << info["COMPILER_VERSION"].asInteger() << "\n"
+		;
+
+	LLSD args;
+	args["SYSINFO"]=support.str();
+	LLNotificationsUtil::add("SendSysinfoToIM",args,LLSD(),boost::bind(&LLIMFloater::onSendSysinfo,this,_1,_2));
+}
+
+BOOL LLIMFloater::onSendSysinfo(const LLSD& notification, const LLSD& response)
+{
+	S32 option=LLNotificationsUtil::getSelectedOption(notification,response);
+
+	if(option==0)
+	{
+		std::string text=notification["substitutions"]["SYSINFO"];
+		if (mSessionInitialized)
+		{
+			LLIMModel::sendMessage(text, mSessionID,mOtherParticipantUUID,mDialog);
+		}
+		else
+		{
+			//queue up the message to send once the session is initialized
+			mQueuedMsgsForInit.append(text);
+		}
+		return TRUE;
+	}
+	return FALSE;
+}
+
+void LLIMFloater::onSysinfoButtonVisibilityChanged(const LLSD& yes)
+{
+	mSysinfoButton->setVisible(yes.asBoolean() /* && mIsSupportIM */);
+}
+// support sysinfo button -Zi
+
 void LLIMFloater::onChange(EStatusType status, const std::string &channelURI, bool proximal)
 {
 	llinfos << "LLIMFloater::onChange" << llendl;
@@ -575,6 +638,10 @@ BOOL LLIMFloater::postBuild()
 	LLButton* add_friend = getChild<LLButton>("add_friend_btn");
 	add_friend->setClickedCallback(boost::bind(&LLIMFloater::onAddFriendButtonClicked, this));
 	
+	// support sysinfo button -Zi
+	mSysinfoButton=getChild<LLButton>("send_sysinfo_btn");
+	onSysinfoButtonVisibilityChanged(FALSE);
+
 	// extra icon controls -AO
 	LLButton* transl = getChild<LLButton>("translate_btn");
 //TT
@@ -611,6 +678,15 @@ BOOL LLIMFloater::postBuild()
 					llinfos << "LLAvatarActions::isFriend - tp button" << llendl;
 					getChild<LLButton>("teleport_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID));
 				}
+
+				// support sysinfo button -Zi
+				mSysinfoButton->setClickedCallback(boost::bind(&LLIMFloater::onSysinfoButtonClicked, this));
+				// this needs to be extended to fsdata awareness, once we have it. -Zi
+				// mIsSupportIM=fsdata(partnerUUID).isSupport(); // pseudocode something like this
+				onSysinfoButtonVisibilityChanged(gSavedSettings.getBOOL("SysinfoButtonInIM"));
+				gSavedSettings.getControl("SysinfoButtonInIM")->getCommitSignal()->connect(boost::bind(&LLIMFloater::onSysinfoButtonVisibilityChanged,this,_2));
+				// support sysinfo button -Zi
+
 				break;
 			}
 			case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat
@@ -735,9 +811,14 @@ void LLIMFloater::onAvatarNameCache(const LLUUID& agent_id,
 {
 	// Use the display name for titles and tabs, because the full username is already in every line header.
 	// This especially makes vertical tabs IMs more readable. -AO
-	std::string ui_title = av_name.mDisplayName;
-	updateSessionName(ui_title, av_name.mDisplayName);
-	mTypingStart.setArg("[NAME]", ui_title);
+	std::string name = av_name.getLegacyName();
+	if (LLAvatarNameCache::useDisplayNames() && (!av_name.mDisplayName.empty()))
+	{
+		name = av_name.mDisplayName;
+	}
+	updateSessionName(name, name);
+	mTypingStart.setArg("[NAME]", name);
+	llinfos << "Setting IM tab name to '" << name << "'" << llendl;
 }
 
 // virtual
@@ -828,19 +909,8 @@ LLIMFloater* LLIMFloater::show(const LLUUID& session_id)
 	{
 		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
 
-		if (gSavedSettings.getBOOL("ContactsTornOff"))
-		{
-			// first set the tear-off host to the conversations container
-			floater->setHost(floater_container);
-			// clear the tear-off host right after, the "last host used" will still stick
-			floater->setHost(NULL);
-			// reparent to floater view
-			gFloaterView->addChild(floater);
-			// and remember we are torn off
-			floater->setTornOff(TRUE);
-		}
 		// do not add existed floaters to avoid adding torn off instances
-		else if (!exist)
+		if (!exist)
 		{
 			//		LLTabContainer::eInsertionPoint i_pt = user_initiated ? LLTabContainer::RIGHT_OF_CURRENT : LLTabContainer::END;
 			// TODO: mantipov: use LLTabContainer::RIGHT_OF_CURRENT if it exists

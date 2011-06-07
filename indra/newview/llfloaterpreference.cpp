@@ -107,6 +107,7 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "llsdserialize.h" // KB: SkinsSelector
+#include "fscontactsfloater.h" // TS: sort contacts list
 
 #include "lllogininstance.h"        // to check if logged in yet
 #include "llsdserialize.h"
@@ -289,6 +290,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mGotPersonalInfo(false),
 	mOriginalIMViaEmail(false),
 	mLanguageChanged(false),
+	mAvatarDataInitialized(false),
 	mDoubleClickActionDirty(false),
 	mFavoritesRecordMayExist(false)
 {
@@ -335,6 +337,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.getUIColor",				boost::bind(&LLFloaterPreference::getUIColor, this ,_1, _2));
 	mCommitCallbackRegistrar.add("Pref.MaturitySettings",		boost::bind(&LLFloaterPreference::onChangeMaturity, this));
 	mCommitCallbackRegistrar.add("Pref.BlockList",				boost::bind(&LLFloaterPreference::onClickBlockList, this));
+	mCommitCallbackRegistrar.add("FS.ToggleSortContacts",			boost::bind(&LLFloaterPreference::onClickSortContacts, this));
 	
 	sSkin = gSavedSettings.getString("SkinCurrent");
 
@@ -363,14 +366,19 @@ void LLFloaterPreference::processProperties( void* pData, EAvatarProcessorType t
 
 void LLFloaterPreference::storeAvatarProperties( const LLAvatarData* pAvatarData )
 {
-	mAvatarProperties.avatar_id		= gAgent.getID();
-	mAvatarProperties.image_id		= pAvatarData->image_id;
-	mAvatarProperties.fl_image_id   = pAvatarData->fl_image_id;
-	mAvatarProperties.about_text	= pAvatarData->about_text;
-	mAvatarProperties.fl_about_text = pAvatarData->fl_about_text;
-	mAvatarProperties.profile_url   = pAvatarData->profile_url;
-	mAvatarProperties.flags		    = pAvatarData->flags;
-	mAvatarProperties.allow_publish	= pAvatarData->flags & AVATAR_ALLOW_PUBLISH;
+	if (gAgent.isInitialized() && (gAgent.getID() != LLUUID::null))
+	{
+		mAvatarProperties.avatar_id		= gAgent.getID();
+		mAvatarProperties.image_id		= pAvatarData->image_id;
+		mAvatarProperties.fl_image_id   = pAvatarData->fl_image_id;
+		mAvatarProperties.about_text	= pAvatarData->about_text;
+		mAvatarProperties.fl_about_text = pAvatarData->fl_about_text;
+		mAvatarProperties.profile_url   = pAvatarData->profile_url;
+		mAvatarProperties.flags		    = pAvatarData->flags;
+		mAvatarProperties.allow_publish	= pAvatarData->flags & AVATAR_ALLOW_PUBLISH;
+
+		mAvatarDataInitialized = true;
+	}
 }
 
 void LLFloaterPreference::processProfileProperties(const LLAvatarData* pAvatarData )
@@ -381,12 +389,15 @@ void LLFloaterPreference::processProfileProperties(const LLAvatarData* pAvatarDa
 void LLFloaterPreference::saveAvatarProperties( void )
 {
 	mAvatarProperties.allow_publish = getChild<LLUICtrl>("online_searchresults")->getValue();
-	if ( mAvatarProperties.allow_publish )
+	if (mAvatarProperties.allow_publish)
 	{
 		mAvatarProperties.flags |= AVATAR_ALLOW_PUBLISH;
 	}
-	
-	LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesUpdate( &mAvatarProperties );
+
+	if (mAvatarDataInitialized)
+	{
+		LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesUpdate( &mAvatarProperties );
+	}
 }
 
 
@@ -1545,6 +1556,12 @@ void LLFloaterPreference::onClickBlockList()
 	}
 }
 
+void LLFloaterPreference::onClickSortContacts()
+{
+        FSFloaterContacts* fs_contacts = FSFloaterContacts::getInstance();
+        fs_contacts->sortFriendList();
+}
+
 void LLFloaterPreference::onDoubleClickCheckBox(LLUICtrl* ctrl)
 {
 	if (!ctrl) return;
@@ -1924,7 +1941,6 @@ LLPanelPreferenceSkins::LLPanelPreferenceSkins() : LLPanelPreference(), m_pSkinC
 {
 	m_Skin = gSavedSettings.getString("SkinCurrent");
 	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme");
-	llinfos << "AO: SKINS: LLPanelPreferenceSkins, launching" << llendl;
 	const std::string strSkinsPath = gDirUtilp->getSkinBaseDir() + gDirUtilp->getDirDelimiter() + "skins.xml";
 	llifstream fileSkins(strSkinsPath, std::ios::binary);
 	if (fileSkins.is_open())
@@ -1976,6 +1992,13 @@ void LLPanelPreferenceSkins::onSkinChanged()
 	m_SkinTheme = "default";
 	refreshSkinThemeList();
 	onSkinThemeChanged(); // make sure we initialize a theme for our new skin
+	
+	//AO: Some crude hardcoded preferences per skin. We will remove these and replace them with "basic mode"-style behaviors in the 2.6 mergeup
+	if ((m_Skin.compare("metaharper") == 0) || (m_Skin.compare("metaharpersidetabs") == 0) || (m_Skin.compare("starlight") == 0))
+	{
+		llinfos << "removing menubar location" << llendl;
+		gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
+	}
 }
 
 void LLPanelPreferenceSkins::onSkinThemeChanged()

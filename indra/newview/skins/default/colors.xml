@@ -345,12 +345,15 @@
     <color
      name="AvatarListItemIconVoiceLeftColor"
      reference="AvatarListItemIconOfflineColor" />
-	<color
-	 name="AvatarListItemShoutRange"
-	 reference="Yellow" />
-	<color
-	 name="AvatarListItemBeyondShoutRange"
-	 reference="Red" />
+    <color
+     name="AvatarListItemChatRange"
+     reference="AccentColor" />
+    <color
+     name="AvatarListItemShoutRange"
+     reference="White" />
+    <color
+     name="AvatarListItemBeyondShoutRange"
+     reference="SL-Silver" />
     <color
      name="BackgroundChatColor"
      reference="DkGray" />

@@ -45,7 +45,7 @@
     <check_box
 	 height="16"
      enabled="true"
-     label="Show me in Search results"
+     label="Publish my avatar in search listings"
      layout="topleft"
      left="30"
      name="online_searchresults"
@@ -58,7 +58,7 @@
      layout="topleft"
      left="30"
      name="online_visibility"
-     top_pad="30"
+     top_pad="4"
      width="350" />
      
     <check_box
@@ -111,6 +111,7 @@
      left="30"
      name="favorites_on_login_check"
      top_pad="4"
+     height="16"
      width="350" /> 
      
 	<text
@@ -172,29 +173,15 @@
     <button
      follows="left|bottom"
      height="23"
-     label="Block / Mute list"
+     label="Manage Block / Mute list"
      layout="topleft"
      left="30"
      name="block_list"
      top_pad="28"
-     width="145">
+     width="255">
         <!--<button.commit_callback
          function="SideTray.ShowPanel"-->
       <button.commit_callback
          function="Pref.BlockList"/>
     </button>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left_pad="10"
-     mouse_opaque="false"
-     name="block_list_label"
-     top_delta="35"
-     text_color="LtGray_50"
-     width="300">
-       (People and/or Objects you have blocked)
-    </text>
     </panel>

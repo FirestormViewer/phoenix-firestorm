@@ -442,8 +442,6 @@
     </text>
     <text_editor
      control_name="BusyModeResponse"
-      text_readonly_color="LabelDisabledColor"
-      bg_writeable_color="LtGray"
       use_ellipses="false"
      commit_on_focus_lost = "true"
      follows="left|top"

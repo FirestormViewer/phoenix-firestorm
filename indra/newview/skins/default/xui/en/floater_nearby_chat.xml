@@ -91,7 +91,7 @@
 	 font="SansSerifSmall"
          height="20"
 	 max_length_bytes="1024"
-         label="To local chat"
+         label="To nearby chat"
          layout="bottomleft"
          name="chat_box"
          tab_group="3"

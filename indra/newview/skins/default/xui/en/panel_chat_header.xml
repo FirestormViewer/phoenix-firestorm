@@ -33,7 +33,7 @@
       right="-120"
       name="user_name"
       text_color="ChatNameColor"
-      bg_readonly_color="black"
+      bg_readonly_color="Black"
       top="0"
       translate="false"
       use_ellipses="true"

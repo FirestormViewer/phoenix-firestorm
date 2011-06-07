@@ -27,7 +27,7 @@
      left="5"
      name="appearance_tabs"
      tab_min_width="150"
-     tab_height="30"
+     tab_height="23"
      tab_position="top"
      halign="center"
      top="8"
@@ -40,7 +40,7 @@
            background_visible="false"
            help_topic="my_outfits_tab"
            follows="all"
-           label="MY OUTFITS"
+           label="OUTFITS"
            layout="topleft"
            width="315" />
          <panel
@@ -76,7 +76,7 @@
 		         left="0"
 		         orientation="horizontal"
 		         top="0"
-		         width="313">	
+		         width="308">	
 			    <layout_panel
 			         follows="bottom|left|right"
 			         height="23"
@@ -120,16 +120,16 @@
                      name="wear_btn_lp"
                      user_resize="false" 
                      auto_resize="true"
-                     width="152">
+                     width="147">
                     <button
                          follows="bottom|left|right"
                          height="23"
                          label="Wear"
                          layout="topleft"
                          name="wear_btn"
-                         left="0"
+                         left="1"
                          top="0"
-                         width="152" />
+                         width="146" />
 			    </layout_panel>
 			</layout_stack>
    </panel>

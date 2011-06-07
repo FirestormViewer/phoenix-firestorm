@@ -347,7 +347,7 @@ void init_default_trans_args()
 const char *VFS_DATA_FILE_BASE = "data.db2.x.";
 const char *VFS_INDEX_FILE_BASE = "index.db2.x.";
 
-static std::string gWindowTitle;
+std::string gWindowTitle;
 
 LLAppViewer::LLUpdaterInfo *LLAppViewer::sUpdaterInfo = NULL ;
 
@@ -3687,7 +3687,7 @@ bool LLAppViewer::initCache()
 
 void LLAppViewer::purgeCache()
 {
-	LL_INFOS("AppCache") << "Purging Cache and Texture Cache..." << llendl;
+	LL_INFOS("AppCache") << "Purging Cache and Texture Cache..." << llendl;	
 	LLAppViewer::getTextureCache()->purgeCache(LL_PATH_CACHE);
 	LLVOCache::getInstance()->removeCache(LL_PATH_CACHE);
 	std::string mask = gDirUtilp->getDirDelimiter() + "*.*";
@@ -4797,11 +4797,40 @@ void LLAppViewer::handleLoginComplete()
 	mOnLoginCompleted();
 
 //-TT Window Title Access
-	gWindowTitle += std::string(" - ") + gAgentAvatarp->getFullname();
-	gViewerWindow->setTitle(gWindowTitle);
+	std::string full_name;
+	const LLSD login_response = LLLoginInstance::getInstance()->getResponse();
+	if (login_response.has("first_name"))
+	{
+		full_name = login_response["first_name"].asString();
+		LLStringUtil::replaceChar(full_name, '"', ' ');
+		LLStringUtil::trim(full_name);
+
+		if (login_response.has("last_name"))
+		{
+			std::string temp_string = login_response["last_name"].asString();
+			LLStringUtil::replaceChar(temp_string, '"', ' ');
+			LLStringUtil::trim(temp_string);
+			full_name.append(" ").append(temp_string);
+		}
+	}
+	if (!full_name.empty())
+	{
+		gWindowTitle += std::string(" - ") + full_name;
+		gViewerWindow->getWindow()->setTitle(gWindowTitle);
+	}
 //-TT
 
 	writeDebugInfo();
+	
+	//AO : Warn users cache purge will affect usability
+	if (mPurgeCache)
+	{
+		LLSD args;
+		args["MESSAGE"] = llformat("Your viewer cache is currently empty. Please be aware that you may experience slow framerates and inventory loading for a short time while new content downloads." );
+		LLNotificationsUtil::add("GenericAlert", args);
+	}
+	// </AO>
+	
 }
 
 // *TODO - generalize this and move DSO wrangling to a helper class -brad

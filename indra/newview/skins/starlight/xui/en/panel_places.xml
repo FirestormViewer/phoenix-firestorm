@@ -13,7 +13,7 @@ background_visible="true"
  width="333">
     <string
      name="landmarks_tab_title"
-     value="MY LANDMARKS" />
+     value="LANDMARKS" />
     <string
      name="teleport_history_tab_title"
      value="TELEPORT HISTORY" />

@@ -34,6 +34,7 @@
 #include "llvoicechannel.h"
 
 class LLAvatarName;
+class LLButton;		// support sysinfo button -Zi
 class LLLineEditor;
 class LLPanelChatControlPanel;
 class LLChatHistory;
@@ -131,7 +132,10 @@ public:
 protected:
 	/* virtual */
 	void	onClickCloseBtn();
-
+	// support sysinfo button -Zi
+	void	onSysinfoButtonVisibilityChanged(const LLSD& yes);
+	LLButton* mSysinfoButton;
+	// support sysinfo button -Zi
 private:
 	// process focus events to set a currently active session
 	/* virtual */ void onFocusLost();
@@ -163,6 +167,12 @@ private:
 	void onTeleportButtonClicked();
 	void onPayButtonClicked();
 	void onGroupInfoButtonClicked();
+
+	// support sysinfo button -Zi
+	void onSysinfoButtonClicked();
+	BOOL onSendSysinfo(const LLSD& notification,const LLSD& response);
+	// support sysinfo button -Zi
+
 	// connection to voice channel state change signal
 	boost::signals2::connection mVoiceChannelStateChangeConnection;
 	

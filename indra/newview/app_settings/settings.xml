@@ -3,6 +3,90 @@
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
 
+  <key>RadarAlertChannel</key>
+    <map>
+      <key>Comment</key>
+      <string>Positive Numbered Channel for whispering radar alerts</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>777777777</integer>
+    </map>
+    
+  <key>RadarLegacyChannelAlertRefreshUUID</key>
+    <map>
+      <key>Comment</key>
+      <string>UUID of sound asset that when detected, will request a full radar channel alert update</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>76c78607-93f9-f55a-5238-e19b1a181389</string>
+    </map>
+
+  <key>RadarEnterChannelAlert</key>
+    <map>
+      <key>Comment</key>
+      <string>Toggles whether radar sends out chat alerts when it detects a new avatar</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    
+   <key>RadarLeaveChannelAlert</key>
+    <map>
+      <key>Comment</key>
+      <string>Toggles whether radar sends out chat alerts when it detects an avatar has left</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+
+  <key>ShowRadarMinimap</key>
+    <map>
+      <key>Comment</key>
+      <string>Toggle visibility of the embedded minimap in the radar panel</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+
+  <key>RadarNameFormat</key>
+    <map>
+      <key>Comment</key>
+      <string>0=DisplayName,1=Username,2=Displayname/Username,3=Username/Displayname</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    
+  <key>LimitRadarByRange</key>
+    <map>
+      <key>Comment</key>
+      <string>RestrictRadarToNearmeRange</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+
   <key>PlayTeleportSound</key>
     <map>
       <key>Comment</key>
@@ -261,6 +345,17 @@
     <map>
       <key>Comment</key>
       <string>Don't send avatar physics parameters to server with shape for v1 compatibility</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+  <key>FSSortContactsByUserName</key>
+    <map>
+      <key>Comment</key>
+      <string>Sort contact lists by username even if display name is shown</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -2290,6 +2385,17 @@
       <integer>1</integer>
       <key>Type</key>
       <string>S32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>ClickOnAvatarKeepsCamera</key>
+    <map>
+      <key>Comment</key>
+      <string>Normally, clicking on your avatar resets the camera position. This option removes this behavior.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
     </map>
@@ -4482,7 +4588,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>https://viewer-sidebar.secondlife.com/sidebar.html?p=[AUTH_TOKEN]&amp;lang=[LANGUAGE]&amp;channel=[CHANNEL]&amp;version=[VERSION]&amp;major=[VERSION_MAJOR]&amp;minor=[VERSION_MINOR]&amp;patch=[VERSION_PATCH]&amp;build=[VERSION_BUILD]&amp;firstlogin=[FIRST_LOGIN]</string>
+      <string>https://viewer-sidebar.secondlife.com/sidebar.html</string>
     </map>
     <key>SearchURL</key>
     <map>
@@ -10693,6 +10799,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string>fss.txt</string>
+    </map>
+    <key>SysinfoButtonInIM</key>
+    <map>
+      <key>Comment</key>
+      <string>Shows or hides the system info button in IM floaters. Used to send your system information to a support helper in IM.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
     <key>SystemLanguage</key>
     <map>

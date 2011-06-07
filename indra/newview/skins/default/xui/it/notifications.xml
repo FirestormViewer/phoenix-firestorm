@@ -111,7 +111,7 @@ Scegli solo un oggetto e riprova.
 	</notification>
 	<notification name="GrantModifyRights">
 		Quando concedi i diritti di modifica ad un altro residente, gli permetti di modificare, eliminare o prendere QUALSIASI oggetto che possiedi in Second Life. Pertanto ti consigliamo di essere ben sicuro quando concedi questo diritto.
-Vuoi concedere i diritti di modifica a [FIRST_NAME] [LAST_NAME]?
+Vuoi concedere i diritti di modifica a [NAME]?
 		<usetemplate name="okcancelbuttons" notext="No" yestext="Si"/>
 	</notification>
 	<notification name="GrantModifyRightsMultiple">
@@ -120,7 +120,7 @@ Vuoi concedere i diritti di modifica ai residenti selezionati?
 		<usetemplate name="okcancelbuttons" notext="No" yestext="Si"/>
 	</notification>
 	<notification name="RevokeModifyRights">
-		Vuoi revocare i diritti di modifica dati a [FIRST_NAME] [LAST_NAME]?
+		Vuoi revocare i diritti di modifica dati a [NAME]?
 		<usetemplate name="okcancelbuttons" notext="No" yestext="Si"/>
 	</notification>
 	<notification name="RevokeModifyRightsMultiple">
@@ -967,7 +967,7 @@ Offri l&apos;amicizia a [NAME]?
 		</form>
 	</notification>
 	<notification name="RemoveFromFriends">
-		Vuoi rimuovere remove [FIRST_NAME] [LAST_NAME] dalla lista dei tuoi amici?
+		Vuoi rimuovere [NAME] dalla lista dei tuoi amici?
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="OK"/>
 	</notification>
 	<notification name="RemoveMultipleFromFriends">
@@ -1090,7 +1090,7 @@ Cedi questo terreno di [AREA] m² al gruppo &apos;[GROUP_NAME]&apos;?
 	</notification>
 	<notification name="DeedLandToGroupWithContribution">
 		Cedendo questo terreno al gruppo sara richiesto hai componenti di avere e di mantenere il terreno con un credito sufficiente.
-La cessione include un contributo simultaneo di terreno al gruppo da &apos;[FIRST_NAME] [LAST_NAME]&apos;.
+La cessione include un contributo simultaneo di terreno al gruppo da &apos;[NAME]&apos;.
 Il prezzo di acquisto del terreno non è rifondibile al proprietario.
 Se una terreno ceduto al gruppo viene venduto, il prezzo di vendita viene diviso in parti uguali fra i membri del gruppo.
 

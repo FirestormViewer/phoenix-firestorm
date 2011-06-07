@@ -50,6 +50,8 @@ public:
 
 	static FSFloaterContacts* getInstance();
 	static FSFloaterContacts* findInstance();
+
+	void					sortFriendList();
 	
 	void					updateFriendList();
 
@@ -67,7 +69,6 @@ private:
 	bool					isItemsFreeOfFriends(const uuid_vec_t& uuids);
 	
 	// misc callbacks
-	void					onFriendListRefreshComplete();
 	static void				onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
 	
 	// friend buttons

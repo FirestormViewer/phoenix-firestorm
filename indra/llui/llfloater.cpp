@@ -1584,23 +1584,22 @@ void LLFloater::onClickTearOff(LLFloater* self)
 
 		self->openFloater(self->getKey());
 		
-		// only force position for floaters that don't have that data saved
+		// get floater rect size from either the rect control or the saved rect -Zi
 		if (self->mRectControl.size() <= 1)
-		{
 			// restore old size and position -Zi
 			new_rect=self->getExpandedRect();
-			if(new_rect.isEmpty())
-			{
-				llwarns << "no rect saved yet, so reshape the floater" << llendl;
-				new_rect.setLeftTopAndSize(host_floater->getRect().mLeft + 5, host_floater->getRect().mTop - floater_header_size - 5, self->getRect().getWidth(), self->getRect().getHeight());
-			}
-			self->setShape(new_rect);
-			self->storeRectControl();
-		}
 		else
+			new_rect=self->getSavedRect();
+
+		// only force position for floaters that have an empty rect -Zi
+		if(new_rect.isEmpty())
 		{
-			self->setShape(self->getSavedRect(),FALSE);
+			llwarns << "no rect saved yet, so reshape the floater" << llendl;
+			new_rect.setLeftTopAndSize(host_floater->getRect().mLeft + 5, host_floater->getRect().mTop - floater_header_size - 5, self->getRect().getWidth(), self->getRect().getHeight());
 		}
+		self->setShape(new_rect);
+		self->storeRectControl();
+
 		gFloaterView->adjustToFitScreen(self, FALSE);
 		// give focus to new window to keep continuity for the user
 		self->setFocus(TRUE);

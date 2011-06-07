@@ -3,22 +3,27 @@
  legacy_header_height="18"
  can_dock="true"
  can_minimize="true"
+ can_resize="true"
  can_close="false"
  follows="bottom"
- height="106"
+ min_width="188"
+ min_height="100"
+ height="102"
  layout="topleft"
  name="camera_floater"
  help_topic="camera_floater"
+ bg_alpha_color="SL-Background_86"
  save_rect="true"
  save_visibility="true"
  save_dock_state="true"
  single_instance="true"
- width="228">
+ width="194">
     <panel
      border="false"
      height="23"
      layout="topleft"
-     left="96"
+	 follows="right|top|left"
+     left="60"
      bottom_delta="18"
      name="buttons"
      width="77">
@@ -26,7 +31,7 @@
          height="23"
          label=""
          layout="topleft"
-         left="0"
+         left="4"
          is_toggle="true"
          image_overlay="Cam_Avatar_Off"
          image_selected="PushButton_Selected_Press"
@@ -92,21 +97,22 @@
     </floater.string>
     <panel
      border="false"
-     height="123"
+     height="110"
      layout="topleft"
+	 follows="all"
      left="2"
      top="0"
      mouse_opaque="false"
      name="controls"
-     width="226">
+     width="180">
        <panel
          follows="all"
          height="102"
          layout="topleft"
          left="4"
          name="preset_views_list"
-         top="16"
-         width="212"
+         top="22"
+         width="170"
          visible="false">
         <panel_camera_item
           name="front_view">
@@ -161,7 +167,7 @@
           left="4"
           name="camera_modes_list"
           top="24"
-          width="212"
+          width="170"
           visible="false">
         <panel_camera_item
           name="object_view">
@@ -185,7 +191,7 @@
             parameter="mouselook_view" />
           <panel_camera_item.text
             name="mouselook_view_text">
-            Mouselook View
+            Mouselook
           </panel_camera_item.text>
           <panel_camera_item.picture
             image_name="MouseLook_View_Off" />
@@ -193,91 +199,139 @@
             image_name="MouseLook_View_On" />
         </panel_camera_item>
       </panel>
-         <!--TODO: replace + - images -->
-         <panel
-            border="false"
-            class="camera_zoom_panel"
-            height="114"
-            layout="topleft"
-            left="2"
-            mouse_opaque="false"
-            name="zoom"
-            top="2"
-            width="226">
-           <joystick_rotate
-              follows="top|left"
-              height="78"
-              image_selected="Cam_Rotate_In"
-              image_unselected="Cam_Rotate_Out"
-              layout="topleft"
-              left="7"
-              mouse_opaque="false"
-              name="cam_rotate_stick"
-              quadrant="left"
-              scale_image="false"
-              sound_flags="3"
-              visible="true"
-              tool_tip="Orbit camera around focus"
-              top="20"
-              width="78" />                      
-           <button
-              follows="top|left"
-              height="18"
-              image_disabled="AddItem_Disabled"
-              image_selected="AddItem_Press"
-              image_unselected="AddItem_Off"
-              layout="topleft"
-              left_pad="14" 
-              name="zoom_plus_btn"
-              width="18"
-              top="18">
-             <commit_callback
-                function="Zoom.plus" />
-             <mouse_held_callback
-                function="Zoom.plus" />
-           </button>
-           <slider_bar
-              height="50"
-              layout="topleft"
-              name="zoom_slider"
-              orientation="vertical"
-              tool_tip="Zoom camera toward focus"
-              top_pad="0"
-              min_val="0"
-              max_val="1" 
-              width="18">
-             <commit_callback function="Slider.value_changed"/>
-           </slider_bar>
-           <button
-              follows="top|left"
-              height="18"
-              image_disabled="MinusItem_Disabled"
-              image_selected="MinusItem_Press"
-              image_unselected="MinusItem_Off"
-              layout="topleft"
-              name="zoom_minus_btn"
-              top_pad="0"
-              width="18">
-             <commit_callback
-                function="Zoom.minus" />
-             <mouse_held_callback
-                function="Zoom.minus" />
-           </button>
-         <joystick_track
-         follows="top|left"
-         height="78"
-         image_selected="Cam_Tracking_In"
-         image_unselected="Cam_Tracking_Out"
+        <!-- Camera controls panel -->
+        <panel
+         border="false"
+         class="camera_zoom_panel"
+         follows="all"
+         height="100"
          layout="topleft"
-         left="133"
-         name="cam_track_stick"
-         quadrant="left"
-         scale_image="false"
-         sound_flags="3"
-         tool_tip="Move camera up and down, left and right"
-         top="20"
-         width="78"/>
+         left="0"
+         mouse_opaque="false"
+         name="zoom"
+         top="0"
+         visible="true"
+         width="188">
+
+            <!-- Camera joystick controls layout starts here -->
+            <layout_stack
+             top="20"
+             enabled="true"
+             height="80"
+             left="2"
+             mouse_opaque="true"
+             name="stack"
+             orientation="horizontal"
+             width="186"
+             follows="all">
+
+            <!-- Camera rotate layout panel -->
+            <layout_panel
+             name="panel_rotate"
+             user_resize="false"
+             height="78"
+             width="78">
+
+            <joystick_rotate
+             follows="all"
+             height="78"
+             image_selected="Cam_Rotate_In"
+             image_unselected="Cam_Rotate_Out"
+             layout="topleft"
+             left="0"
+             mouse_opaque="false"
+             name="cam_rotate_stick"
+             quadrant="left"
+             scale_image="true"
+             sound_flags="3"
+             visible="true"
+             tool_tip="Orbit camera around focus"
+             top="0"
+             width="78" />
+            </layout_panel>
+
+            <!-- Camera zoom layout panel -->
+            <layout_panel
+             name="panel_zoom"
+             can_resize="false"
+             auto_resize="false"
+             user_resize="false"
+             height="78"
+             width="18">
+
+            <button
+             follows="right|top"
+             height="18"
+             image_disabled="AddItem_Disabled"
+             image_selected="AddItem_Press"
+             image_unselected="AddItem_Off"
+             layout="topleft"
+             left="0"
+             name="zoom_plus_btn"
+             tool_tip="Zoom in"
+             width="18"
+             top="0">
+            <commit_callback
+             function="Zoom.plus" />
+            <mouse_held_callback
+             function="Zoom.plus" />
+            </button>
+            <slider_bar
+             height="42"
+             layout="topleft"
+             name="zoom_slider"
+             orientation="vertical"
+             follows="top|right|bottom"
+             tool_tip="Zoom camera toward focus"
+             top_pad="0"
+             min_val="0"
+             max_val="1"
+             width="18">
+            <commit_callback function="Slider.value_changed"/>
+            </slider_bar>
+            <button
+             follows="bottom|right"
+             height="18"
+             image_disabled="MinusItem_Disabled"
+             image_selected="MinusItem_Press"
+             image_unselected="MinusItem_Off"
+             layout="topleft"
+             name="zoom_minus_btn"
+             tool_tip="Zoom out"
+             top_pad="0"
+             width="18">
+            <commit_callback
+             function="Zoom.minus" />
+            <mouse_held_callback
+             function="Zoom.minus" />
+            </button>
+            </layout_panel>
+
+            <!-- Camera movement layout panel -->
+            <layout_panel
+             name="panel_track"
+             user_resize="false"
+             height="78"
+             width="78">
+
+            <joystick_track
+             follows="all"
+             height="78"
+             image_selected="Cam_Tracking_In"
+             image_unselected="Cam_Tracking_Out"
+             layout="topleft"
+             left="0"
+             name="cam_track_stick"
+             quadrant="left"
+             scale_image="true"
+             sound_flags="3"
+             tool_tip="Move camera up and down, left and right"
+             top="0"
+             visible="true"
+             width="78"/>
+
+            </layout_panel>
+            </layout_stack>
         </panel>
     </panel>
-
 </floater>
