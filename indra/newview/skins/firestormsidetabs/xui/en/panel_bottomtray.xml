@@ -5,7 +5,6 @@
  bg_opaque_color="DkGray"
  chrome="true"
  follows="left|bottom|right"
- focus_root="true" 
  height="33"
  layout="topleft"
  left="0"
@@ -103,7 +102,7 @@
      height="28"
      layout="topleft"
      min_height="28"
-     min_width="59"
+     min_width="79"
      mouse_opaque="false"
      name="speak_panel"
      top_delta="0"
@@ -124,6 +123,19 @@
            parameter="voice_controls" />
         </show_button>
       </talk_button>
+      <bottomtray_button follows="left"
+          left_delta="2"
+          bottom="-3"
+          width="16"
+          height="16"
+          is_toggle="true"
+          image_selected="ptt_lock_on.tga"
+          image_unselected="ptt_lock_off.tga"
+          label=""
+          name="ptt_lock"
+          scale_image="true"
+          control_name="PushToTalkToggle">
+      </bottomtray_button>
     </layout_panel>
 
 
@@ -496,7 +508,7 @@
     </layout_panel>
 
 
-        <!--
+    <!--
          <layout_panel
          mouse_opaque="false"
          auto_resize="false"
@@ -529,84 +541,84 @@
             </button>
         </layout_panel>
         -->
-        
-        <layout_panel
-         auto_resize="false"
-         follows="left|right"
-         height="28"
-         layout="topleft"
-         min_height="28"
-         min_width="40"
-         mouse_opaque="false"
-         name="bottom_sbinv"
-         user_resize="false"
-         width="40">
-            <bottomtray_button
-             follows="left|right"
-             height="23"
-             image_pressed="PushButton_Press"
-             image_pressed_selected="PushButton_Selected_Press"
-             image_selected="PushButton_Selected_Press"
-             is_toggle="false"
-             image_overlay="inventory_18"
-             layout="topleft"
-             left="0"
-             name="sidebar_inv_btn"
-             tool_tip="Shows/hides inventory"
-             top="5"
-             enabled="true"
-             use_ellipses="true"
-             width="36">
-            </bottomtray_button>
-        </layout_panel>
 
-<!-- ## Zi: AO button -->
-        <layout_panel
-         auto_resize="false"
-         follows="left|right"
-         height="28"
-         layout="topleft"
-         min_height="28"
-         min_width="56"
-         mouse_opaque="false"
-         name="ao_btn_panel"
-         user_resize="false"
-         width="56">
-            <bottomtray_button
-             name="ao_toggle_btn"
-             tool_tip="Enables/Disables Animation Overrider"
-             follows="left|right"
-             height="23"
-             image_pressed="PushButton_Press"
-             image_pressed_selected="PushButton_Selected_Press"
-             image_selected="PushButton_Selected_Press"
-             is_toggle="true"
-             image_overlay="ao_toggle_18"
-             layout="topleft"
-             left="0"
-             top="5"
-             use_ellipses="true"
-             width="36">
-            </bottomtray_button>
-       <bottomtray_button
-        name="ao_btn"
-        tool_tip="Shows/hides Animation Overrider"
-        left_pad="0"
-        height="23"
-        width="16"
-        image_disabled="ComboButton_UpOff"
-        image_unselected="ComboButton_UpOff"
-        image_selected="ComboButton_Up_On_Selected"
-        image_pressed="ComboButton_UpSelected"
-        image_pressed_selected="ComboButton_Up_On_Selected"
-        is_toggle="true"
-        tab_stop="true">
+    <layout_panel
+     auto_resize="false"
+     follows="left|right"
+     height="28"
+     layout="topleft"
+     min_height="28"
+     min_width="40"
+     mouse_opaque="false"
+     name="bottom_sbinv"
+     user_resize="false"
+     width="40">
+      <bottomtray_button
+       follows="left|right"
+       height="23"
+       image_pressed="PushButton_Press"
+       image_pressed_selected="PushButton_Selected_Press"
+       image_selected="PushButton_Selected_Press"
+       is_toggle="false"
+       image_overlay="inventory_18"
+       layout="topleft"
+       left="0"
+       name="sidebar_inv_btn"
+       tool_tip="Shows/hides inventory"
+       top="5"
+       enabled="true"
+       use_ellipses="true"
+       width="36">
+      </bottomtray_button>
+    </layout_panel>
+
+    <!-- ## Zi: AO button -->
+    <layout_panel
+     auto_resize="false"
+     follows="left|right"
+     height="28"
+     layout="topleft"
+     min_height="28"
+     min_width="56"
+     mouse_opaque="false"
+     name="ao_btn_panel"
+     user_resize="false"
+     width="56">
+      <bottomtray_button
+       name="ao_toggle_btn"
+       tool_tip="Enables/Disables Animation Overrider"
+       follows="left|right"
+       height="23"
+       image_pressed="PushButton_Press"
+       image_pressed_selected="PushButton_Selected_Press"
+       image_selected="PushButton_Selected_Press"
+       is_toggle="true"
+       image_overlay="ao_toggle_18"
+       layout="topleft"
+       left="0"
+       top="5"
+       use_ellipses="true"
+       width="36">
+      </bottomtray_button>
+      <bottomtray_button
+       name="ao_btn"
+       tool_tip="Shows/hides Animation Overrider"
+       left_pad="0"
+       height="23"
+       width="16"
+       image_disabled="ComboButton_UpOff"
+       image_unselected="ComboButton_UpOff"
+       image_selected="ComboButton_Up_On_Selected"
+       image_pressed="ComboButton_UpSelected"
+       image_pressed_selected="ComboButton_Up_On_Selected"
+       is_toggle="true"
+       tab_stop="true">
         <init_callback
          function="Button.SetDockableFloaterToggle"
          parameter="animation_overrider" />
       </bottomtray_button>
-        </layout_panel>
-<!-- ## Zi: AO button -->
+    </layout_panel>
+    <!-- ## Zi: AO button -->
 
     <icon
      auto_resize="false"
