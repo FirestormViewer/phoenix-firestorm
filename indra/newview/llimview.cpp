@@ -3046,7 +3046,19 @@ void LLIMMgr::noteOfflineUsers(
 			{
 				LLUIString offline = LLTrans::getString("offline_message");
 				// Use display name only because this user is your friend
-				offline.setArg("[NAME]", av_name.mDisplayName);
+				// Ansariel: No please! Take preference settings into account!
+				if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
+				{
+					offline.setArg("[NAME]", av_name.getCompleteName());
+				}
+				else if (gSavedSettings.getBOOL("UseDisplayNames"))
+				{
+					offline.setArg("[NAME]", av_name.mDisplayName);
+				}
+				else
+				{
+					offline.setArg("[NAME]", av_name.getLegacyName());
+				}
 				im_model.proccessOnlineOfflineNotification(session_id, offline);
 			}
 		}

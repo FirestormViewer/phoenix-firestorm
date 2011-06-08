@@ -770,8 +770,21 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 {
 	// Popup a notify box with online status of this agent
 	// Use display name only because this user is your friend
+	// Ansariel: No please! Take preference settings into account!
 	LLSD args;
-	args["NAME"] = av_name.mDisplayName;
+
+	if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
+	{
+		args["NAME"] = av_name.getCompleteName();
+	}
+	else if (gSavedSettings.getBOOL("UseDisplayNames"))
+	{
+		args["NAME"] = av_name.mDisplayName;
+	}
+	else
+	{
+		args["NAME"] = av_name.getLegacyName();
+	}
 
 	LLNotificationPtr notification;
 	if (online)
