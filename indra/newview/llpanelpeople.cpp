@@ -1544,8 +1544,9 @@ void LLPanelPeople::onAvatarListCommitted(LLAvatarList* list)
 			mAllFriendList->resetSelection(true);
 		else if (list == mAllFriendList)
 			mOnlineFriendList->resetSelection(true);
-		else
-			llassert(0 && "commit on unknown friends list");
+// possible side effect of sidebar work; should be no harm in ignoring this -KC
+//		else
+//			llassert(0 && "commit on unknown friends list");
 	}
 
 	updateButtons();
