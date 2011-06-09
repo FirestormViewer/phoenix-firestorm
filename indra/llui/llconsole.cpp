@@ -182,10 +182,14 @@ void LLConsole::draw()
 
 	LLUIImagePtr imagep = LLUI::getUIImage("Rounded_Square");
 
-//	F32 console_opacity = llclamp(gSavedSettings.getF32("ConsoleBackgroundOpacity"), 0.f, 1.f);
-	F32 console_opacity = llclamp(LLUI::sSettingGroups["config"]->getF32("ConsoleBackgroundOpacity"), 0.f, 1.f);
-//	LLColor4 color = LLUIColorTable::instance().getColor("ConsoleBackground");
-	LLColor4 color = LLUIColorTable::instance().getColor("ConsoleBackground");
+	//AO: Unify colors and opacity with the color preferences control for all onscreen overlay background
+	//    console/bubblechat/tag backgrounds. FIRE-969
+	//	F32 console_opacity = llclamp(gSavedSettings.getF32("ConsoleBackgroundOpacity"), 0.f, 1.f);
+	F32 console_opacity = llclamp(LLUI::sSettingGroups["config"]->getF32("ChatBubbleOpacity"), 0.f, 1.f);
+	//	LLColor4 color = LLUIColorTable::instance().getColor("ConsoleBackground");
+	LLColor4 color = LLUIColorTable::instance().getColor("NameTagBackground");
+	//</AO>
+	
 	color.mV[VALPHA] *= console_opacity;
 
 	F32 line_height = mFont->getLineHeight();
