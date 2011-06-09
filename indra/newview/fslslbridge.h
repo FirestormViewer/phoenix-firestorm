@@ -50,7 +50,7 @@ public:
 	bool viewerToLSL(std::string message, FSLSLBridgeRequestResponder *responder = NULL);
 	void initBridge();
 	void processAttach(LLViewerObject *object, const LLViewerJointAttachment *attachment);
-	bool bridgeAttaching(bool status) {mBridgeAttaching = status; };
+	bool bridgeAttaching(bool status) {return mBridgeAttaching = status; };
 	void setBridge(LLViewerInventoryItem* item) { mpBridge = item; };
 	LLViewerInventoryItem* getBridge() { return mpBridge; };
 	void checkBridgeScriptName(std::string fileName);

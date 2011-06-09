@@ -80,8 +80,8 @@ set(viewer_SOURCE_FILES
     fsareasearch.cpp
     fsdata.cpp
     fskeywords.cpp
-    fslslbridge.h
-    fslslbridgerequest.h
+    fslslbridge.cpp
+    fslslbridgerequest.cpp
     fsradarlistctrl.cpp
     llagent.cpp
     llagentaccess.cpp
