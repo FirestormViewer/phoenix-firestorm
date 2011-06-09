@@ -3327,6 +3327,39 @@ public:
 			}
 // [/RLVa:KB]
 
+			// Mute group chat port from Phoenix
+			BOOL PhoenixMuteAllGroups = gSavedSettings.getBOOL("PhoenixMuteAllGroups");
+			BOOL PhoenixMuteGroupWhenNoticesDisabled = gSavedSettings.getBOOL("PhoenixMuteGroupWhenNoticesDisabled");
+			LLGroupData group_data;
+			if (gAgent.getGroupData(session_id, group_data))
+			{
+				if (PhoenixMuteAllGroups || (PhoenixMuteGroupWhenNoticesDisabled && !group_data.mAcceptNotices))
+				{
+					llinfos << "Firestorm: muting group chat: " << group_data.mName << LL_ENDL;
+					
+					//KC: make sure we leave the group chat at the server end as well
+					std::string aname;
+					gAgent.buildFullname(aname);
+					pack_instant_message(
+						gMessageSystem,
+						gAgent.getID(),
+						FALSE,
+						gAgent.getSessionID(),
+						from_id,
+						aname,
+						LLStringUtil::null,
+						IM_ONLINE,
+						IM_SESSION_LEAVE,
+						session_id);
+					gAgent.sendReliableMessage();
+					//gIMMgr->removeSession(session_id);
+					gIMMgr->leaveSession(session_id);
+					
+					return;
+				}
+			}
+			// END: Mute group chat port from Phoenix
+
 			// standard message, not from system
 			std::string saved;
 			if(offline == IM_OFFLINE)

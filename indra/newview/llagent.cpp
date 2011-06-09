@@ -2447,6 +2447,14 @@ void LLAgent::handleMaturity(const LLSD& newvalue)
 
 //----------------------------------------------------------------------------
 
+void LLAgent::buildFullname(std::string& name) const
+{
+	if (gAgentAvatarp)
+	{
+		name = gAgentAvatarp->getFullname();
+	}
+}
+
 //*TODO remove, is not used anywhere as of August 20, 2009
 void LLAgent::buildFullnameAndTitle(std::string& name) const
 {

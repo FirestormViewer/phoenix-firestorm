@@ -147,6 +147,7 @@ public:
 	//--------------------------------------------------------------------
 public:
 	//*TODO remove, is not used as of August 20, 2009
+	void			buildFullname(std::string& name) const;
 	void			buildFullnameAndTitle(std::string &name) const;
 
 	//--------------------------------------------------------------------

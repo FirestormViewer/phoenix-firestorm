@@ -508,6 +508,24 @@
           height="20"
           control_name="PhoenixBoldGroupMods"
           label="Show group moderator messages in bold"/>
+        <check_box
+          layout="topleft"
+          follows="left|top"
+          top_delta="20"
+          left="20"
+          width="50"
+          height="20"
+          control_name="PhoenixMuteAllGroups"
+          label="Disable ALL group chats"/>
+        <check_box
+          layout="topleft"
+          follows="left|top"
+          top_delta="20"
+          left="20"
+          width="50"
+          height="20"
+          control_name="PhoenixMuteGroupWhenNoticesDisabled"
+          label="When 'Receive group notices' is disabled, disable group chat as well"/>
 
 		</panel>
 
