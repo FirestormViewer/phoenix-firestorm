@@ -34,16 +34,15 @@
 #include "llanimationstates.h"
 #include "llassetstorage.h"
 #include "llcommon.h"
-#include "llinventoryfunctions.h"
+#include "llinventoryfunctions.h"		// for ROOT_FIRESTORM_FOLDER
 #include "llinventorymodel.h"
-#include "llinventoryobserver.h"
+#include "llinventoryobserver.h"  
 #include "llstring.h"
 #include "llvfs.h"
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
 
-// is there a global define for this folder somewhere?
-#define ROOT_FIRESTORM_FOLDER 	"#Firestorm"
+//#define ROOT_FIRESTORM_FOLDER 	"#Firestorm" //moved to llinventoryfunctions.h
 #define ROOT_AO_FOLDER			"#AO"
 #include <boost/graph/graph_concepts.hpp>
 

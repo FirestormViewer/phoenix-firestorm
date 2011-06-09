@@ -59,6 +59,9 @@
 // [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
+//-TT Client LSL Bridge
+#include "fslslbridge.h"
+//-TT
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -1176,7 +1179,13 @@ const LLViewerJointAttachment *LLVOAvatarSelf::attachObject(LLViewerObject *view
 				gRlvAttachmentLocks.updateLockedHUD();
 		}
 // [/RLVa:KB]
+//-TT Patch: ReplaceWornItemsOnly
 		gInventory.wearAttachmentsOnAvatarCheckRemove(viewer_object, attachment);
+//-TT
+//-TT Client LSL Bridge
+		if (gSavedSettings.getBOOL("UseLSLBridge"))
+			FSLSLBridge::instance().processAttach(viewer_object, attachment);
+//-TT
 	}
 	
 	return attachment;

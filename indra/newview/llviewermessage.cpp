@@ -111,6 +111,9 @@
 #include "rlvinventory.h"
 #include "rlvui.h"
 // [/RLVa:KB]
+//-TT Client LSL Bridge
+#include "fslslbridge.h"
+//-TT
 
 #include "fsareasearch.h"
 #include "fsdata.h"
@@ -3625,6 +3628,14 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				verb = LLTrans::getString("whisper") + " ";
 				break;
 			case CHAT_TYPE_OWNER:
+//-TT Client LSL Bridge
+				llinfos << "CHAT_TYPE_OWNER: " << mesg << llendl;
+				if (gSavedSettings.getBOOL("UseLSLBridge"))
+				{
+					if(FSLSLBridge::instance().lslToViewer(mesg, from_id, owner_id))
+						return;
+				}
+//-TT
 // [RLVa:KB] - Checked: 2010-02-XX (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
 				// TODO-RLVa: [RLVa-1.2.0] consider rewriting this before a RLVa-1.2.0 release
 				if ( (rlv_handler_t::isEnabled()) && (mesg.length() > 3) && (RLV_CMD_PREFIX == mesg[0]) && (CHAT_TYPE_OWNER == chat.mChatType) )

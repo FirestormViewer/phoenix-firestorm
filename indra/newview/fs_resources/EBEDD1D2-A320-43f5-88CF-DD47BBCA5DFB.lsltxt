@@ -1,0 +1,233 @@
+//http bridge draft 0.1.7
+//Firestorm
+//Tozh Taurog, Arrehn Oberlander
+
+//
+// global Variables
+//
+
+    // Bridge platform
+    string bridgeURL;
+    string latestURL;
+    integer channel = 99;
+    integer debug = FALSE;	//TRUE for verbose debugging
+    integer httpStatus = 200;
+    //key httpReqID;
+    
+    // for teleport
+    integer MAX_TIME_TO_TP = 10; //should be set to 10 for normal use
+    vector      mttVector;        // target for llMoveToTarget() teleport
+    integer startTimer;
+    
+    // for object details
+    vector      opVector;        // object position for llGetobjectDetails()
+    key         opUUID;        // key for llGetobjectDetails()
+    list        opObjDetails;    // result for llGetobjectDetails()
+
+//
+// helper functions
+//
+
+    initBridge()
+    {
+        llRequestURL();
+        debugOutput("rezzed");
+        
+        if(llGetAttached() != 0)
+        {
+            llRequestPermissions(llGetOwner(),PERMISSION_TAKE_CONTROLS);
+        }
+    }
+
+    saveNewURL(string url)
+    {
+        latestURL = url;
+    }
+    
+    parseCommand(key httpReqID, string msg)
+    {
+        debugOutput("Parsing original input: " + msg);
+        //remove the <llsd> </llsd> wrapper
+        integer end = llStringLength(msg) - llStringLength("</llsd>") -1;        
+        string inner = llGetSubString(msg, 6, end - 1);
+        
+        debugOutput("Parsing inner string: " + inner);
+        //remove the <string> </string> wrapper
+        end = llStringLength(inner) - llStringLength("</string>") -1;
+        string msgClean = llGetSubString(inner, 8, end);
+        
+        debugOutput("Parsing final string: " + msgClean);
+        list commandList = llParseString2List(msgClean,["|"],[]);
+        //get command name
+        string cmd = llList2String(commandList,0);
+        
+        debugOutput("Parsing command: " + cmd);
+ 
+        //Large If statement for command processing. Shame on you, LSL!
+        if (cmd == "llMoveToTarget")
+        {
+            // Get parameters
+            string params = "<" + llList2String(commandList,1) + ">";
+            debugOutput("Parsing params: " + params);
+
+            mttVector=(vector)params;
+            
+            debugOutput("Parsing vector: " + (string)mttVector);
+            
+            startTimer = llGetUnixTime();
+            llSetTimerEvent(0.05);
+    
+            //llHTTPResponse(httpReqID, httpStatus, "<llsd><string>test response from llMoveToTarget</string></llsd>");
+        }// "llMoveToTarget"
+        
+        else if (cmd == "llGetObjectDetails")
+        {
+            // Get parameters
+            opUUID = (key)llList2String(commandList, 1);
+        
+            //string opV = "<" + llList2String(commandList,2) + ">";
+            //debugOutput("Parsing params: " + opV);
+        
+            //opVector=(vector)opV;
+            //debugOutput("Parsing vector: " + (string)opVector);
+        
+            opObjDetails = llGetObjectDetails(opUUID, ([OBJECT_POS]));
+            string body = "<llsd><string>" + llList2String(opObjDetails,0) + "</string></llsd>";
+            llHTTPResponse(httpReqID, httpStatus, body);
+ 
+        }// "llGetObjectDetails"
+
+    }
+
+    debugOutput(string msg)
+    {
+        if (debug)
+        {
+            llOwnerSay("BridgeDebug: " + msg);
+        }
+    }
+
+//
+// main
+//
+
+default
+{
+    state_entry()
+    {
+         initBridge();
+       // make bridge inconspicuous
+        llSetTexture("757c276e-6409-ad54-a862-ca89c04e4940",ALL_SIDES);
+        llSetScale(<0.01,0.01,0.01>);
+    }
+    
+    on_rez(integer i)
+    {
+        initBridge();
+    }
+    
+    touch_start(integer total_number)
+    {
+        debugOutput("touched");
+
+        if (bridgeURL != latestURL)
+        {
+            //just in case, since we probably aren't there anymore
+            llReleaseURL(bridgeURL);
+    
+            bridgeURL = latestURL;
+            llOwnerSay("<curURL>" + bridgeURL + "</curURL>");
+            llRequestURL();
+        }
+    }
+    
+    run_time_permissions(integer i)
+    {
+        if(i)
+        {
+            llTakeControls(1024,TRUE,TRUE);
+        }
+    }
+
+    changed(integer change)
+    {
+        if (change & CHANGED_REGION) 
+        {
+            llRequestURL();
+            debugOutput("The region the bridge is in has changed.");
+        }
+    }
+    
+    timer()
+    {
+        llSetTimerEvent(0.0);
+        
+        vector loc = llGetPos();     // current position
+        
+        
+        vector targ = mttVector - loc;
+        //has to be less than 65m
+        float dist = llVecMag(targ);
+        
+        debugOutput("current: " + (string)loc + " target: " + (string)targ + " tp distance: " + (string)dist);
+        
+        //if we are out of time or distance - stop
+        if((dist < 2.0) ||  (llGetUnixTime() - MAX_TIME_TO_TP > startTimer) || (mttVector == loc))
+        {    
+            llStopMoveToTarget();
+            //llHTTPResponse(httpReqID, httpStatus, "Test MoveToTarget body");
+
+            return;
+        }
+        
+        if (dist < 65)
+        {
+            debugOutput("One jump to :" + (string)mttVector);
+            llMoveToTarget(mttVector, 0.05);
+        }
+        else
+        {
+            debugOutput("Multiple jump to :" + (string)(loc+llVecNorm(targ)*60));
+            llMoveToTarget(loc+llVecNorm(targ)*60, 0.05);
+        }
+        
+        // try again.
+        llSetTimerEvent(.05);
+    }
+    
+    http_request(key ID, string Method, string Body) 
+    {
+        //httpReqID = ID;
+        debugOutput("Received HTTP " + Method + " message. Command body: " + Body);
+        
+       if (Method == URL_REQUEST_GRANTED) 
+        {
+            saveNewURL(Body);
+
+            //Saying URL to owner
+            llOwnerSay("<bridgeURL>" + latestURL+ "</bridgeURL>");
+        }
+        else if (Method == URL_REQUEST_DENIED) 
+        {
+            saveNewURL("");
+
+            debugOutput("No URLs free !");
+            //keep trying?
+            llRequestURL();
+        }
+        else if (Method == "GET") 
+        {
+            parseCommand(ID, Body);
+            llHTTPResponse(ID, httpStatus, "<llsd><string> command=\"GET\" text=\"get - Hello Bridge!</string></llsd>");
+        }
+        else if (Method == "PUT")
+        {
+            llHTTPResponse(ID, httpStatus, "<llsd><string>PUT - Hello Bridge!</string></llsd>");
+        }
+        else if (Method == "POST")
+        {
+            parseCommand(ID, Body);
+            llHTTPResponse(ID, httpStatus, "<llsd><string>POST - Hello Bridge!</string></llsd>");
+        }
+    }
+}

@@ -190,6 +190,9 @@
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
+//-TT Bridge 
+#include "fslslbridge.h"
+//-TT
 
 #include "lllogin.h"
 #include "llevents.h"
@@ -2022,6 +2025,11 @@ bool idle_startup()
 	if (STATE_CLEANUP == LLStartUp::getStartupState())
 	{
 		set_startup_status(1.0, "", "");
+
+//-TT Client LSL Bridge
+		if (gSavedSettings.getBOOL("UseLSLBridge"))
+			FSLSLBridge::instance().initBridge();
+//-TT
 
 		// Let the map know about the inventory.
 		LLFloaterWorldMap* floater_world_map = LLFloaterWorldMap::getInstance();

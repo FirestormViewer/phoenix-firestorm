@@ -344,6 +344,12 @@ std::string LLDir::getExpandedFilename(ELLPath location, const std::string& subd
 		prefix += mDirDelimiter;
 		prefix += "character";
 		break;
+	
+	case LL_PATH_FS_RESOURCES:
+		prefix = getAppRODataDir();
+		prefix += mDirDelimiter;
+		prefix += "fs_resources";
+		break;
 		
 	case LL_PATH_HELP:
 		prefix = "help";
