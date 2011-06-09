@@ -222,7 +222,15 @@ public:
 	/*virtual*/ BOOL postBuild();
 	
 	void setIsNew() { mIsNew = TRUE; }
-	
+//-TT Client LSL Bridge
+	static void uploadAssetViaCapsStatic(const std::string& url,
+							const std::string& filename, 
+							const LLUUID& task_id,
+							const LLUUID& item_id,
+							const std::string& is_mono,
+							BOOL is_running);
+//-TT
+
 private:
 	virtual BOOL canClose();
 	void closeIfNeeded();
@@ -256,7 +264,6 @@ private:
 	static void onReset(void* userdata);
 
 	void loadScriptText(LLVFS *vfs, const LLUUID &uuid, LLAssetType::EType type);
-
 	static void onErrorList(LLUICtrl*, void* user_data);
 
 	static void* createScriptEdPanel(void* userdata);

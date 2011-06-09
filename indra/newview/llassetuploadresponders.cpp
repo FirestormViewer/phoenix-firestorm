@@ -51,6 +51,9 @@
 #include "llviewerwindow.h"
 #include "lltexlayer.h"
 #include "lltrans.h"
+//-TT Client LSL Bridge
+#include "fslslbridge.h"
+//-TT
 
 // library includes
 #include "lldir.h"
@@ -466,6 +469,10 @@ void LLUpdateAgentInventoryResponder::uploadComplete(const LLSD& content)
 				  preview->callbackLSLCompileFailed(content["errors"]);
 			  }
 		  }
+//-TT Client LSL Bridge
+		if (gSavedSettings.getBOOL("UseLSLBridge"))
+			  FSLSLBridge::instance().checkBridgeScriptName(mFileName);
+//-TT
 		  break;
 	  }
 

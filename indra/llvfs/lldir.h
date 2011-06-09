@@ -54,6 +54,7 @@ typedef enum ELLPath
 	LL_PATH_DEFAULT_SKIN = 17,
 	LL_PATH_FONTS = 18,
 	LL_PATH_TOP_SKINTHEME = 19, // KB - Catznip Viewer-Skins
+	LL_PATH_FS_RESOURCES = 20,  // TT - Firestorm data
 	LL_PATH_LAST
 } ELLPath;
 

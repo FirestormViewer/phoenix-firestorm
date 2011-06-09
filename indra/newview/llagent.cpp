@@ -80,6 +80,9 @@
 // [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c)
 #include "rlvhandler.h"
 // [/RLVa:KB]
+//-TT Client LSL Bridge
+#include "fslslbridge.h"
+//-TT
 #include "kcwlinterface.h"
 
 using namespace LLVOAvatarDefines;
@@ -3377,6 +3380,25 @@ void LLAgent::clearVisualParams(void *data)
 //---------------------------------------------------------------------------
 // Teleport
 //---------------------------------------------------------------------------
+//-TT Client LSL Bridge
+bool LLAgent::teleportBridgeLocal(LLVector3& pos_local)
+{
+	std::stringstream msgstream;
+	msgstream << std::setiosflags(std::ios::fixed) << std::setprecision(6); 
+	msgstream << pos_local.mV[VX] << ", " << pos_local.mV[VY] << ", "  << pos_local.mV[VZ];
+
+	return FSLSLBridge::instance().viewerToLSL("llMoveToTarget|" + msgstream.str());
+}
+
+bool LLAgent::teleportBridgeGlobal(const LLVector3d& pos_global)
+{
+	U64 region_handle = to_region_handle(pos_global);
+	LLVector3 pos_local = (LLVector3)(pos_global - from_region_handle(region_handle));
+
+	return teleportBridgeLocal(pos_local);
+
+}
+//-TT Client LSL Bridge
 
 // teleportCore() - stuff to do on any teleport
 // protected
@@ -3583,6 +3605,7 @@ void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 
 	LLViewerRegion* regionp = getRegion();
 	U64 handle = to_region_handle(pos_global);
+	bool isLocal = (regionp->getHandle() == to_region_handle_global((F32)pos_global.mdV[VX], (F32)pos_global.mdV[VY]));
 	LLSimInfo* info = LLWorldMap::getInstance()->simInfoFromHandle(handle);
 	if(regionp && info)
 	{
@@ -3593,8 +3616,7 @@ void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 			(F32)(pos_global.mdV[VZ]));
 		teleportRequest(handle, pos_local);
 	}
-	else if(regionp && 
-		teleportCore(regionp->getHandle() == to_region_handle_global((F32)pos_global.mdV[VX], (F32)pos_global.mdV[VY])))
+	else if(regionp && teleportCore(isLocal))
 	{
 		llwarns << "Using deprecated teleportlocationrequest." << llendl; 
 		// send the message
@@ -3618,6 +3640,12 @@ void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 		msg->addVector3Fast(_PREHASH_LookAt, pos);
 		sendReliableMessage();
 	}
+//-TT Client LSL Bridge
+	if (gSavedSettings.getBOOL("UseLSLBridge") && isLocal)
+	{
+		teleportBridgeGlobal(pos_global);
+	}
+//-TT 
 }
 
 // Teleport to global position, but keep facing in the same direction 
@@ -3638,6 +3666,14 @@ void LLAgent::teleportViaLocationLookAt(const LLVector3d& pos_global)
 	U64 region_handle = to_region_handle(pos_global);
 	LLVector3 pos_local = (LLVector3)(pos_global - from_region_handle(region_handle));
 	teleportRequest(region_handle, pos_local, getTeleportKeepsLookAt());
+
+//-TT Client LSL Bridge
+	if (gSavedSettings.getBOOL("UseLSLBridge"))
+	{
+		if (region_handle == to_region_handle(getPositionGlobal()))
+			teleportBridgeLocal(pos_local);
+	}
+//-TT 
 }
 
 void LLAgent::setTeleportState(ETeleportState state)

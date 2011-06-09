@@ -2081,6 +2081,23 @@ void LLLiveLSLEditor::saveIfNeeded(bool sync /*= true*/)
 	}
 }
 
+//-TT //AO Custom Update Agent Inventory via capability
+void LLLiveLSLEditor::uploadAssetViaCapsStatic(const std::string& url,
+										 const std::string& filename,
+										 const LLUUID& task_id,
+										 const LLUUID& item_id,
+										 const std::string& is_mono,
+										 BOOL is_running)
+{
+	LLSD body;
+	body["item_id"] = item_id;
+	body["target"] = "lsl2";
+	llinfos << "Upload caps body=" << body << " url=" << url << " id= " << item_id << llendl;
+	LLHTTPClient::post(url, body, 
+		new LLUpdateAgentInventoryResponder(body, filename, LLAssetType::AT_LSL_TEXT));
+}
+//-TT
+
 void LLLiveLSLEditor::uploadAssetViaCaps(const std::string& url,
 										 const std::string& filename,
 										 const LLUUID& task_id,

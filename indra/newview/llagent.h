@@ -551,8 +551,13 @@ public:
 	void			teleportViaLocationLookAt(const LLVector3d& pos_global);// To a global location, preserving camera rotation
 	void 			teleportCancel();										// May or may not be allowed by server
 	bool			getTeleportKeepsLookAt() { return mbTeleportKeepsLookAt; } // Whether look-at reset after teleport
+//-TT Client LSL Bridge
+	bool			teleportBridgeLocal(LLVector3& pos_local);					// Teleport using LSL Bridge
+	bool			teleportBridgeGlobal(const LLVector3d& pos_global);				// Teleport using LSL Bridge
+//-TT
 protected:
 	bool 			teleportCore(bool is_local = false); 					// Stuff for all teleports; returns true if the teleport can proceed
+
 
 	//--------------------------------------------------------------------
 	// Teleport State
