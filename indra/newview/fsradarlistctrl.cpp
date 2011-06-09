@@ -63,21 +63,17 @@ BOOL LLRadarListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	llinfos << "handleRightMouseDown" << llendl;
 	BOOL handled = LLUICtrl::handleRightMouseDown(x, y, mask);
-	llinfos << "handled=" << handled << llendl;
 	if ( mContextMenu )
 	//  if ( (mContextMenu) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) ) //TODO, handle RLV
 	{
-		llinfos << "x= " << x << llendl;
 		LLScrollListItem* hit_item = hitItem(x, y);
 		if (hit_item)
 		{
-			llinfos << "got hit item" << llendl;
-			LLUUID av = hit_item->getColumn(5)->getValue().asUUID();
-			llinfos << "av = " << av << llendl;
+			llinfos << "Right-click select by value: " << hit_item->getValue() << llendl;
+			selectByID(hit_item->getValue());
+			LLUUID av = hit_item->getValue();
 			uuid_vec_t selected_uuids;
-			llinfos << "about to make selected id" << llendl;
 			selected_uuids.push_back(av);
-			llinfos << "about to show menu" << llendl;
 			mContextMenu->show(this, selected_uuids, x, y);
 		}
 	}

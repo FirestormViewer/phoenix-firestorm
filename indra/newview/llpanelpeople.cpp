@@ -892,8 +892,12 @@ void LLPanelPeople::updateNearbyList()
 	//STEP 0: Clear data, saving pieces as needed.
 	LLScrollListItem* lastRadarSelectedItem = mRadarList->getFirstSelected();
 	LLUUID selected_id;
+	S32 lastScroll = mRadarList->getScrollPos();
 	if (lastRadarSelectedItem)
+	{
 		selected_id = lastRadarSelectedItem->getColumn(5)->getValue().asUUID();
+		llinfos << "selected_id ==" << selected_id << llendl;
+	}
 	mRadarList->clearRows();
 	mRadarEnterAlerts.clear();
 	mRadarLeaveAlerts.clear();
@@ -992,6 +996,7 @@ void LLPanelPeople::updateNearbyList()
 		
 		//2e. Build out scrollist-style view
 		LLSD row;
+		row["value"] = avId;
 		row["columns"][0]["column"] = "name";
 		row["columns"][0]["value"] = avName;
 		row["columns"][1]["column"] = "flags";
@@ -1029,7 +1034,7 @@ void LLPanelPeople::updateNearbyList()
 		if (lastRadarSelectedItem)
 			if (avId == selected_id)
 			{
-				mRadarList->selectNthItem(mRadarList->getItemCount());
+				mRadarList->selectByID(avId);
 				updateButtons(); // TODO: only update on change, instead of every tick
 			}
 		
@@ -1083,6 +1088,9 @@ void LLPanelPeople::updateNearbyList()
 		}
 	}
 	
+	
+	//STEP 3.0
+	mRadarList->setScrollPos(lastScroll);
 	
 	//STEP 3: Handle any avatars that dropped off the detected list since last time.
 	for (std::multimap <LLUUID, radarFields>::const_iterator i = lastRadarSweep.begin(); i != lastRadarSweep.end(); ++i)
@@ -1166,6 +1174,16 @@ void LLPanelPeople::updateNearbyList()
 	// reset any active alert requests
 	if (alertScripts)
 		mRadarAlertRequest = false;
+	
+	//minimap updates
+	uuid_vec_t selected_uuids;
+	LLUUID sVal = mRadarList->getSelectedValue().asUUID();
+	if (sVal != LLUUID::null)
+	{
+		selected_uuids.push_back(sVal);
+		llinfos << "AO: setting seleted minimap value " << sVal << llendl;
+		mMiniMap->setSelected(selected_uuids);
+	}
 	
 }
 
@@ -1534,8 +1552,14 @@ void LLPanelPeople::onAvatarListCommitted(LLAvatarList* list)
 	if (getActiveTabName() == NEARBY_TAB_NAME)
 	{
 		uuid_vec_t selected_uuids;
-		getCurrentItemIDs(selected_uuids);
-		mMiniMap->setSelected(selected_uuids);
+		//getCurrentItemIDs(selected_uuids);
+		LLUUID sVal = mRadarList->getSelectedValue().asUUID();
+		if (sVal != LLUUID::null) 
+		{
+			selected_uuids.push_back(sVal);
+			llinfos << "AO: setting seleted minimap value " << sVal << llendl;
+			mMiniMap->setSelected(selected_uuids);
+		}
 	} else
 	// Make sure only one of the friends lists (online/all) has selection.
 	if (getActiveTabName() == FRIENDS_TAB_NAME)
