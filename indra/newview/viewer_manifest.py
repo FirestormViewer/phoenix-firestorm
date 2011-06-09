@@ -88,6 +88,7 @@ class ViewerManifest(LLManifest):
             if self.prefix(src="fs_resources"):
 				self.path("*.txt")
 				self.path("*.lsl")
+				self.path("*.lsltxt")
 				self.end_prefix("fs_resources");
 
             # skins
