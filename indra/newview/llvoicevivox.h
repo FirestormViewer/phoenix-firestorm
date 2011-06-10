@@ -706,7 +706,7 @@ private:
 	
 	S32 mCurrentParcelLocalID;			// Used to detect parcel boundary crossings
 	std::string mCurrentRegionName;		// Used to detect parcel boundary crossings
-	
+	bool mRegionHasVoice;
 	std::string mConnectorHandle;	// returned by "Create Connector" message
 	std::string mAccountHandle;		// returned by login message		
 	int 		mNumberOfAliases;
