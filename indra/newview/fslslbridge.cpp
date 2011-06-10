@@ -47,6 +47,8 @@
 #include "llfoldertype.h"
 #include "llhttpclient.h"
 #include "llassetuploadresponders.h"
+#include "llnotificationmanager.h"
+
 
 #define phoenix_bridge_name "#LSL<->Client Bridge v0.12"
 #define phoenix_folder_name "#Phoenix"
@@ -174,6 +176,17 @@ void FSLSLBridge :: initBridge()
 	if (fsBridge == NULL)
 	{
 		mBridgeAttaching = true;
+		if (gSavedSettings.getBOOL("NoInventoryLibrary"))
+		{
+			llwarns << "Asked to create bridge, but we don't have a library" << llendl;
+			LLChat chat;
+			chat.mText = "Firestorm could not create an LSL bridge. Please enable your library and relog";
+			chat.mSourceType = CHAT_SOURCE_SYSTEM;
+			LLSD args;
+			args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+			LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+			return;
+		}
 		createNewBridge();
 	}
 	else
