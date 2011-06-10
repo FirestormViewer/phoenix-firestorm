@@ -109,6 +109,9 @@
 // [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
+//-TT Client LSL Bridge
+#include "fslslbridge.h"
+//-TT
 
 using namespace LLVOAvatarDefines;
 
@@ -5890,6 +5893,11 @@ void handle_buy_currency()
 	LLBuyCurrencyHTML::openCurrencyFloater();
 }
 
+void handle_recreate_lsl_bridge()
+{
+	FSLSLBridge::instance().recreateBridge();
+}
+
 class LLFloaterVisible : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -8382,7 +8390,9 @@ void initialize_menus()
 	commit.add("EditOutfit", boost::bind(&handle_edit_outfit));
 	commit.add("EditShape", boost::bind(&handle_edit_shape));
 	commit.add("EditPhysics", boost::bind(&handle_edit_physics));
-
+//-TT Client LSL Bridge
+	commit.add("RecreateLSLBridge", boost::bind(&handle_recreate_lsl_bridge));
+//-TT
 	// View menu
 	view_listener_t::addMenu(new LLViewMouselook(), "View.Mouselook");
 	view_listener_t::addMenu(new LLViewJoystickFlycam(), "View.JoystickFlycam");

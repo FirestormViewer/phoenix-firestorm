@@ -47,8 +47,8 @@
 #include "llfoldertype.h"
 #include "llhttpclient.h"
 #include "llassetuploadresponders.h"
+#include "llnearbychatbar.h"
 #include "llnotificationmanager.h"
-
 
 #define phoenix_bridge_name "#LSL<->Client Bridge v0.12"
 #define phoenix_folder_name "#Phoenix"
@@ -157,11 +157,47 @@ bool FSLSLBridge :: viewerToLSL(std::string message, FSLSLBridgeRequestResponder
 //
 //Bridge initialization
 //
+void FSLSLBridge :: recreateBridge()
+{
+	if (!gSavedSettings.getBOOL("UseLSLBridge"))
+		return;
+
+	LLUUID catID = findFSCategory();
+
+	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
+	if (fsBridge != NULL)
+	{
+		if (get_is_item_worn(fsBridge->getUUID()))
+		{
+			LLVOAvatarSelf::detachAttachmentIntoInventory(fsBridge->getUUID());
+		}
+
+		gInventory.deleteObject(fsBridge->getUUID());
+		//fsBridge->removeFromServer();
+		gInventory.notifyObservers();
+	}
+
+	mBridgeAttaching = true;
+	createNewBridge();
+}
+
 void FSLSLBridge :: initBridge()
 {
 	if (!gSavedSettings.getBOOL("UseLSLBridge"))
 		return;
 
+	LLUUID catID = findFSCategory();
+
+	//check for inventory load
+	FSLSLBridgeInventoryObserver *bridgeInventoryObserver = new FSLSLBridgeInventoryObserver(catID);
+	gInventory.addObserver(bridgeInventoryObserver);
+
+	//startCreation();
+}
+
+
+void FSLSLBridge :: startCreation()
+{
 	//are we already in conversation with a bridge?
 	if (mpBridge != NULL)
 	{
@@ -179,12 +215,7 @@ void FSLSLBridge :: initBridge()
 		if (gSavedSettings.getBOOL("NoInventoryLibrary"))
 		{
 			llwarns << "Asked to create bridge, but we don't have a library" << llendl;
-			LLChat chat;
-			chat.mText = "Firestorm could not create an LSL bridge. Please enable your library and relog";
-			chat.mSourceType = CHAT_SOURCE_SYSTEM;
-			LLSD args;
-			args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
-			LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+			reportToNearbyChat("Firestorm could not create an LSL bridge. Please enable your library and relog");
 			return;
 		}
 		createNewBridge();
@@ -200,6 +231,9 @@ void FSLSLBridge :: initBridge()
 
 void FSLSLBridge :: createNewBridge() 
 {
+	//announce yourself
+	reportToNearbyChat("Creating the bridge. This might take a few moments, please wait");
+
 	//check if user has a bridge
 	LLUUID rootID = gInventory.getRootFolderID();
 	LLUUID catID = findFSCategory();
@@ -225,6 +259,22 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 		return;
 
 	mpBridge->setDescription(mCurrentFullName);
+
+	LLProfileParams profParams(LL_PCODE_PROFILE_CIRCLE, F32(0.230), F32(0.250), F32(0.95));
+	LLPathParams pathParams(LL_PCODE_PATH_CIRCLE, F32(0), F32(0.2), F32(0.01), F32(0.01), F32(0.00), F32(0.0), 
+		F32(0), F32(0), F32(0), F32(0), F32(0), F32(0.01), 0);
+	object->setVolume(LLVolumeParams(profParams, pathParams), 0);
+	object->setTETexture(1, LLUUID("8dcd4a48-2d37-4909-9f78-f7a9eb4ef903")); //transparent texture
+	object->setTETexture(2, LLUUID("8dcd4a48-2d37-4909-9f78-f7a9eb4ef903")); //transparent texture
+	//object->setTETexture(0, LLUUID("29de489d-0491-fb00-7dab-f9e686d31e83")); //another test texture
+	object->setScale(LLVector3(F32(0.01), F32(0.01), F32(0.01)));
+	object->setFlags(FLAGS_TEMPORARY_ON_REZ, true);
+	object->markForUpdate(TRUE);
+	object->sendShapeUpdate();
+	//object->addFlags(FLAGS_TEMPORARY_ON_REZ);
+
+	gInventory.updateItem(mpBridge);
+    gInventory.notifyObservers();
 
 	//add bridge script to object
 	if (object)
@@ -264,14 +314,16 @@ FSLSLBridgeRezCallback :: ~FSLSLBridgeRezCallback()
 
 void FSLSLBridgeRezCallback :: fire(const LLUUID& inv_item)
 {
-	if (inv_item.isNull())
+	if (inv_item.isNull() || !FSLSLBridge::instance().bridgeAttaching())
 		return;
 
 	//detach from default and put on the right point
 	LLVOAvatarSelf::detachAttachmentIntoInventory(inv_item);
-	LLAttachmentsMgr::instance().addAttachment(inv_item, BRIDGE_POINT, FALSE, TRUE);
 
 	LLViewerInventoryItem *item = gInventory.getItem(inv_item);
+	
+	LLAttachmentsMgr::instance().addAttachment(inv_item, BRIDGE_POINT, FALSE, TRUE);
+
 	FSLSLBridge::instance().setBridge(item);
 }
 
@@ -288,7 +340,7 @@ FSLSLBridgeScriptCallback :: ~FSLSLBridgeScriptCallback()
 
 void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 {
-	if (inv_item.isNull())
+	if (inv_item.isNull() || !FSLSLBridge::instance().bridgeAttaching())
 		return;
 
 	LLViewerInventoryItem* item = gInventory.getItem(inv_item);
@@ -358,6 +410,12 @@ void FSLSLBridge :: checkBridgeScriptName(std::string fileName)
 		//this is our script upload
 		LLViewerObject* obj = gAgentAvatarp->getWornAttachment(mpBridge->getUUID());
 		obj->saveScript(gInventory.getItem(mScriptItemID), TRUE, false);
+		gInventory.deleteObject(mScriptItemID);
+		gInventory.notifyObservers();
+		mBridgeAttaching = false;
+		//announce yourself
+		reportToNearbyChat("Bridge created.");
+
 		mBridgeAttaching = false;
 	}
 }
@@ -408,6 +466,17 @@ LLViewerInventoryItem* FSLSLBridge :: findInvObject(std::string obj_name, LLUUID
 		return item;
 	}
 	return NULL;
+}
+
+void FSLSLBridge::reportToNearbyChat(std::string message)
+// AO small utility method for chat alerts.
+{	
+	LLChat chat;
+    chat.mText = message;
+	chat.mSourceType = CHAT_SOURCE_SYSTEM;
+	LLSD args;
+	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 }
 
 bool FSLSLBridge :: isOldBridgeVersion(LLInventoryItem *item)

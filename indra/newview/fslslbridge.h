@@ -32,6 +32,7 @@
 #include "llinventorymodel.h"
 #include "fslslbridgerequest.h"
 #include "llviewerinventory.h"
+#include "llinventoryobserver.h"
 
 //
 //-TT Client LSL Bridge File
@@ -41,6 +42,7 @@ class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLHTTPClient::Respon
 {
 	friend class FSLSLBridgeScriptCallback;
 	friend class FSLSLBridgeRezCallback;
+	friend class FSLSLBridgeInventoryObserver;
 
 public:
 	FSLSLBridge();
@@ -49,11 +51,13 @@ public:
 	bool lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID);
 	bool viewerToLSL(std::string message, FSLSLBridgeRequestResponder *responder = NULL);
 	void initBridge();
+	void recreateBridge();
 	void processAttach(LLViewerObject *object, const LLViewerJointAttachment *attachment);
-	bool bridgeAttaching(bool status) {return mBridgeAttaching = status; };
+	bool bridgeAttaching() {return mBridgeAttaching; };
 	void setBridge(LLViewerInventoryItem* item) { mpBridge = item; };
 	LLViewerInventoryItem* getBridge() { return mpBridge; };
 	void checkBridgeScriptName(std::string fileName);
+	void startCreation();
 
 protected:
 
@@ -77,6 +81,7 @@ private:
 	void createNewBridge();
 	void create_script_inner(LLViewerObject* object);
 	bool isOldBridgeVersion(LLInventoryItem *item);
+	void reportToNearbyChat(std::string message);
 };
 
 
@@ -101,5 +106,15 @@ protected:
 	~FSLSLBridgeScriptCallback();
 };
 
+class FSLSLBridgeInventoryObserver : public LLInventoryFetchDescendentsObserver
+{
+public:
+	FSLSLBridgeInventoryObserver(const LLUUID& cat_id = LLUUID::null):LLInventoryFetchDescendentsObserver(cat_id) {}
+	/*virtual*/ void done() { FSLSLBridge::instance().startCreation(); 	gInventory.removeObserver(this); }
+
+protected:
+	~FSLSLBridgeInventoryObserver() {}
+
+};
 
 #endif // FS_LSLBRIDGE_H
