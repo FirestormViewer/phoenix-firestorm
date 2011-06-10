@@ -3479,7 +3479,8 @@ bool LLAppViewer::initCache()
 		
 		// If the J2C has changed since the last run, clear the cache
 		const std::string j2c_info = LLImageJ2C::getEngineInfo();
-		if (j2c_info != gSavedSettings.getString("LastJ2CVersion"))
+		const std::string j2c_last = gSavedSettings.getString("LastJ2CVersion");
+		if (j2c_info != j2c_last && !j2c_last.empty())
 		{
 			mPurgeCache = true;
 		}
