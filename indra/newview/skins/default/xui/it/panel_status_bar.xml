@@ -28,6 +28,8 @@
 	<text name="TimeText" tool_tip="Orario attuale (Pacifico)">
 		24:00, ora del Pacifico
 	</text>
-	<button name="media_toggle_btn" tool_tip="Attiva/ferma tutti i media (musica, video, pagine Web)"/>
-	<button name="volume_btn" tool_tip="Regolazione del volume globale"/>
+	<panel name="time_and_media_bg">
+		<button name="media_toggle_btn" tool_tip="Attiva/ferma tutti i media (musica, video, pagine Web)"/>
+		<button name="volume_btn" tool_tip="Regolazione del volume globale"/>
+	</panel>
 </panel>

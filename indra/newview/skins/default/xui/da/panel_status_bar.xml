@@ -28,6 +28,8 @@
 	<text name="TimeText" tool_tip="Nuværende tid (Pacific)">
 		24:00 PST
 	</text>
-	<button name="media_toggle_btn" tool_tip="Start/Stop Alle medier (musik, video, hjemmesider)"/>
-	<button name="volume_btn" tool_tip="Kontrol for generel lydstyrke"/>
+	<panel name="time_and_media_bg">	
+		<button name="media_toggle_btn" tool_tip="Start/Stop Alle medier (musik, video, hjemmesider)"/>
+		<button name="volume_btn" tool_tip="Kontrol for generel lydstyrke"/>
+	</panel>
 </panel>
