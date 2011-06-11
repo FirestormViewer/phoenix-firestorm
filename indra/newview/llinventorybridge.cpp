@@ -3238,7 +3238,7 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 			}
 			if (is_movable)
 			{
-				is_movable = (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) && 
+				is_movable = (!RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) || 
 					(RlvFolderLocks::instance().canMoveItem(inv_item->getUUID(), mUUID));
 			}
 		}
