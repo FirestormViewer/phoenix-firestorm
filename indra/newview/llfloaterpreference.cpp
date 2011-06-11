@@ -435,6 +435,19 @@ BOOL LLFloaterPreference::postBuild()
 		gSavedPerAccountSettings.setString("BusyModeResponse", LLTrans::getString("BusyModeResponseDefault"));
 	}
 
+// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-06-11 (Catznip-2.6.c) | Added: Catznip-2.6.0c
+#ifndef LL_SEND_CRASH_REPORTS
+	// Hide the crash report tab if crash reporting isn't enabled
+	LLTabContainer* pTabContainer = getChild<LLTabContainer>("pref core");
+	if (pTabContainer)
+	{
+		LLPanel* pCrashReportPanel = pTabContainer->getPanelByName("crashreports");
+		if (pCrashReportPanel)
+			pTabContainer->removeTabPanel(pCrashReportPanel);
+	}
+#endif // LL_SEND_CRASH_REPORTS
+// [/SL:KB]
+
 	return TRUE;
 }
 
