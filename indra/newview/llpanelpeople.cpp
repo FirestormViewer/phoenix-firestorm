@@ -1876,6 +1876,13 @@ void LLPanelPeople::onRadarNameFmtClicked(const LLSD& userdata)
 
 std::string LLPanelPeople::getRadarName(LLAvatarName avname)
 {
+// [RLVa:KB-FS] - Checked: 2011-06-11 (RLVa-1.3.1) | Added: RLVa-1.3.1
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+	{
+		return RlvStrings::getAnonym(avname);
+	}
+// [/RLVa:KB-FS]
+
 	U32 fmt = gSavedSettings.getU32("RadarNameFormat");
 	// if display names are enabled, allow a variety of formatting options, depending on menu selection
 	if (gSavedSettings.getBOOL("UseDisplayNames"))

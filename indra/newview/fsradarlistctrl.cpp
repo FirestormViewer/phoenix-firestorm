@@ -63,8 +63,10 @@ BOOL LLRadarListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	llinfos << "handleRightMouseDown" << llendl;
 	BOOL handled = LLUICtrl::handleRightMouseDown(x, y, mask);
-	if ( mContextMenu )
-	//  if ( (mContextMenu) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) ) //TODO, handle RLV
+//	if ( mContextMenu )
+// [RLVa:KB-FS] - Checked: 2011-06-11 (RLVa-1.3.1) | Added: RLVa-1.3.1
+	if ( (mContextMenu) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
+// [/RLVa:KB-FS]
 	{
 		LLScrollListItem* hit_item = hitItem(x, y);
 		if (hit_item)

@@ -1193,7 +1193,7 @@ void LLAvatarActions::landEjectMultiple(const uuid_vec_t& idAgents)
 
 		if (idEjectAgents.begin() != itAgent)
 			strResidents += "\n";
-		strResidents += LLSLURL("agent", idAgent, "completename").getSLURLString();
+		strResidents += LLSLURL("agent", idAgent, (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? "completename" : "rlvanonym").getSLURLString();
 		payload["ids"].append(*itAgent);
 	}
 
@@ -1267,7 +1267,7 @@ void LLAvatarActions::landFreezeMultiple(const uuid_vec_t& idAgents)
 		const LLUUID& idAgent = *itAgent;
 		if (idEjectAgents.begin() != itAgent)
 			strResidents += "\n";
-		strResidents += LLSLURL("agent", idAgent, "completename").getSLURLString();
+		strResidents += LLSLURL("agent", idAgent, (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? "completename" : "rlvanonym").getSLURLString();
 		payload["ids"].append(*itAgent);
 	}
 
@@ -1406,7 +1406,7 @@ void LLAvatarActions::estateKickMultiple(const uuid_vec_t& idAgents)
 		const LLUUID& idAgent = *itAgent;
 		if (idEjectAgents.begin() != itAgent)
 			strResidents += "\n";
-		strResidents += LLSLURL("agent", idAgent, "completename").getSLURLString();
+		strResidents += LLSLURL("agent", idAgent, (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? "completename" : "rlvanonym").getSLURLString();
 		payload["ids"].append(*itAgent);
 	}
 
@@ -1467,7 +1467,7 @@ void LLAvatarActions::estateTeleportHomeMultiple(const uuid_vec_t& idAgents)
 		const LLUUID& idAgent = *itAgent;
 		if (idEjectAgents.begin() != itAgent)
 			strResidents += "\n";
-		strResidents += LLSLURL("agent", idAgent, "completename").getSLURLString();
+		strResidents += LLSLURL("agent", idAgent, (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? "completename" : "rlvanonym").getSLURLString();
 		payload["ids"].append(*itAgent);
 	}
 
