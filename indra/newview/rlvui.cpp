@@ -267,6 +267,12 @@ void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 			(*itFloater)->closeFloater();
 	}
 
+	// Enable/disable the "Inventory" bottom tray button
+	const LLBottomTray* pTray = LLBottomTray::getInstance();
+	LLView* pBtnView = (pTray) ? pTray->getChildView("sidebar_inv_btn") : NULL;
+	if (pBtnView)
+		pBtnView->setEnabled(fEnable);
+
 	// Filter out (or stop filtering) newly spawned old style inventory floaters
 	if (!fEnable)
 		addGenericFloaterFilter("inventory");
