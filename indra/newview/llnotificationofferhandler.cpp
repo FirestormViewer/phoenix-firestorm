@@ -101,12 +101,14 @@ bool LLOfferHandler::processNotification(const LLSD& notify)
 
 			LLUUID session_id;
 //			if (LLHandlerUtil::canSpawnIMSession(notification))
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Modified: RLVa-1.3.0h
 			// Don't spawn a new IM session for inventory offers if this notification was subject to @shownames=n
-			// RELEASE-RLVa: [SL-2.3.0] Test on every new release to make sure the notification gets routed the way we want it to be
-			bool fSpawnIM = (LLHandlerUtil::canSpawnIMSession(notification)) && (!notification->getPayload().has("rlv_shownames"));
-			if (fSpawnIM)
+			bool spawn_session = (LLHandlerUtil::canSpawnIMSession(notification)) && (!notification->getPayload().has("rlv_shownames"));
 // [/RLVa:KB]
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Modified: Catznip-2.5.0a
+//			bool spawn_session = LLHandlerUtil::canSpawnIMSession(notification);
+			if (spawn_session)
+// [/SL:KB]
 			{
 				const std::string name = LLHandlerUtil::getSubstitutionName(notification);
 
@@ -117,11 +119,11 @@ bool LLOfferHandler::processNotification(const LLSD& notify)
 
 			bool show_toast = LLHandlerUtil::canSpawnToast(notification);
 //			bool add_notid_to_im = LLHandlerUtil::canAddNotifPanelToIM(notification);
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Modified: Catznip-2.5.0a
 			// NOTE: add_notid_to_im needs to be FALSE if we suppressed spawning an IM because in that case the notification needs to
 			//       be routed to the "syswell" or the inventory offer floater will dissapear and the user won't be able to accept it
-			bool add_notid_to_im = (fSpawnIM) && (LLHandlerUtil::canAddNotifPanelToIM(notification));
-// [/RLVa:KB]
+			bool add_notid_to_im = (spawn_session) && (LLHandlerUtil::canAddNotifPanelToIM(notification));
+// [/SL:KB]
 			if (add_notid_to_im)
 			{
 				LLHandlerUtil::addNotifPanelToIM(notification);
@@ -191,19 +193,11 @@ bool LLOfferHandler::processNotification(const LLSD& notify)
 		{
 //			if (LLHandlerUtil::canAddNotifPanelToIM(notification)
 //					&& !LLHandlerUtil::isIMFloaterOpened(notification))
-// [SL:KB] - Checked: 2010-04-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
-			// Repro:
-			//   1) have someone drop you 2 inventory items (new IM session will be spawned)
-			//   2) accept/decline the inventory offers as they come in
-			//		-> unread IM counter shows 0
-			//   3) toggle "Enable plain text chat history" while the IM session with the inventory offers isn't the active session
-			//		-> unread IM counter shows -2
-			//		-> LLHandlerUtil::decIMMesageCounter() really should be fixed to check for "0" before decreasing the count but
-			//         there are enough bugfixes in RLVa as it is already :(
-			// Fix:
-			//   - the one and only time we need to decrease the unread IM count is when we've clicked any of the buttons on the *toast*
-			//   - since LLIMFloater::updateMessages() hides the toast when we open the IM (which resets the unread count to 0) we should 
-			//     *only* decrease the unread IM count if there's a visible toast since the unread count will be at 0 otherwise anyway
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Modified: Catznip-2.5.0a
+			// LLHandlerUtil::canAddNotifPanelToIM() won't necessarily tell us whether the notification went into an IM or to the syswell
+			//   -> the one and only time we need to decrease the unread IM count is when we've clicked any of the buttons on the *toast*
+			//   -> since LLIMFloater::updateMessages() hides the toast when we open the IM (which resets the unread count to 0) we should 
+			//      *only* decrease the unread IM count if there's a visible toast since the unread count will be at 0 otherwise anyway
 			LLScreenChannel* pChannel = dynamic_cast<LLScreenChannel*>(mChannel);
 			LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification->getID()) : NULL;
 			if ( (pToast) && (!pToast->getCanBeStored()) )
@@ -223,10 +217,9 @@ bool LLOfferHandler::processNotification(const LLSD& notify)
 void LLOfferHandler::onDeleteToast(LLToast* toast)
 {
 //	if (!LLHandlerUtil::canAddNotifPanelToIM(toast->getNotification()))
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
-	// BUGFIX: LLHandlerUtil::canAddNotifPanelToIM() won't necessarily tell us whether the notification went into an IM or to the syswell
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Modified: Catznip-2.5.0a
 	if (toast->getCanBeStored())
-// [/RLVa:KB]
+// [/SL:KB]
 	{
 		// send a signal to the counter manager
 		mDelNotificationSignal();
@@ -242,12 +235,25 @@ void LLOfferHandler::onRejectToast(LLUUID& id)
 {
 	LLNotificationPtr notification = LLNotifications::instance().find(id);
 
-	if (notification
-			&& LLNotificationManager::getInstance()->getHandlerForNotification(
-					notification->getType()) == this
-					// don't delete notification since it may be used by IM floater
-					&& !LLHandlerUtil::canAddNotifPanelToIM(notification))
+//	if (notification
+//			&& LLNotificationManager::getInstance()->getHandlerForNotification(
+//					notification->getType()) == this
+//					// don't delete notification since it may be used by IM floater
+//					&& !LLHandlerUtil::canAddNotifPanelToIM(notification))
+//	{
+//		LLNotifications::instance().cancel(notification);
+//	}
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Modified: Catznip-2.5.0a
+	// NOTE: this will be fired from LLScreenChannel::killToastByNotificationID() which treats visible and stored toasts differently
+	if ( (notification) && (!notification->isCancelled()) && 
+		 (LLNotificationManager::getInstance()->getHandlerForNotification(notification->getType()) == this)  )
 	{
-		LLNotifications::instance().cancel(notification);
+		LLScreenChannel* pChannel = dynamic_cast<LLScreenChannel*>(mChannel);
+		LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification->getID()) : NULL;
+		if ( (!pToast) || (pToast->getCanBeStored()) )
+		{
+			LLNotifications::instance().cancel(notification);
+		}
 	}
+// [/SL:KB]
 }

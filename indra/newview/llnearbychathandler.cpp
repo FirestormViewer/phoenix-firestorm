@@ -26,6 +26,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "llagent.h"
 #include "llagentdata.h" // for gAgentID
 #include "llnearbychathandler.h"
 

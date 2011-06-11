@@ -243,10 +243,10 @@ LLAvatarList::LLAvatarList(const Params& p)
 , mIgnoreGlobalIcons(false)
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 , mRlvCheckShowNames(false)
+// [/RLVa:KB]
 , mShowAge(false)
 , mShowPaymentStatus(false)
 , mItemHeight(0)
-// [/RLVa:KB]
 // [Ansariel: Colorful radar]
 , mUseRangeColors(false)
 // [Ansariel: Colorful radar]

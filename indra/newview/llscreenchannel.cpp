@@ -860,8 +860,7 @@ LLToast* LLScreenChannel::getToastByNotificationID(LLUUID id)
 
 //	if (it == mStoredToastList.end())
 //		return NULL;
-// [SL:KB] - Checked: 2010-04-21 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	// BUGFIX-SL: we need to get the visible toast in LLOfferHandler::processNotification() whether it's "stored" or not 
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Modified: Catznip-2.5.0a
 	if (it == mStoredToastList.end())
 	{
 		// If we can't find it among the stored toasts then widen it to "all visible toasts"

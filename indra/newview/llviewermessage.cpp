@@ -1493,7 +1493,6 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 				// end has already copied the items into your inventory,
 				// so we can fetch it out of our inventory.
 // [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
-#ifdef RLV_EXTENSION_GIVETORLV_A2A
 				if ( (rlv_handler_t::isEnabled()) && (!RlvSettings::getForbidGiveToRLV()) && (LLAssetType::AT_CATEGORY == mType) && 
 					 (RlvInventory::instance().getSharedRoot()) && (mDesc.find(RLV_PUTINV_PREFIX) == 0) )
 				{
@@ -1504,7 +1503,6 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 					else
 						gInventory.addObserver(pOfferObserver);
 				}
-#endif // RLV_EXTENSION_GIVETORLV_A2A
 // [/RLVa:KB]
 
 				LLOpenAgentOffer* open_agent_offer = new LLOpenAgentOffer(mObjectID, from_string);
@@ -1760,7 +1758,7 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 			{
 				std::string::size_type idxToken = mDesc.find("'  ( http://");
 				if (std::string::npos != idxToken)
-					RlvBehaviourNotifyHandler::instance().sendNotification("accepted_in_inv inv_offer " + mDesc.substr(1, idxToken - 1));
+					RlvBehaviourNotifyHandler::sendNotification("accepted_in_inv inv_offer " + mDesc.substr(1, idxToken - 1));
 			}
 // [/RLVa:KB]
 
@@ -1818,7 +1816,7 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 			{
 				std::string::size_type idxToken = mDesc.find("'  ( http://");
 				if (std::string::npos != idxToken)
-					RlvBehaviourNotifyHandler::instance().sendNotification("declined inv_offer " + mDesc.substr(1, idxToken - 1));
+					RlvBehaviourNotifyHandler::sendNotification("declined inv_offer " + mDesc.substr(1, idxToken - 1));
 			}
 // [/RLVa:KB]
 
@@ -1959,6 +1957,9 @@ void inventory_offer_handler(LLOfferInfo* info)
 	}
 	else
 	{
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+		args["NAME_LABEL"] = LLSLURL("agent", info->mFromID, "completename").getSLURLString();
+// [/SL:KB]
 		args["NAME_SLURL"] = LLSLURL("agent", info->mFromID, "about").getSLURLString();
 	}
 	std::string verb = "select?name=" + LLURI::escape(msg);
@@ -2819,25 +2820,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			return;
 		}
 
-		if (gRlvHandler.hasBehaviour(RLV_BHVR_RECVIM))
-		{
-			switch (pIMSession->mSessionType)
-			{
-				case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat: allow if group is a sendim exception
-					if ( (from_id != gAgent.getID()) && (!gRlvHandler.isException(RLV_BHVR_RECVIM, session_id)) )
-						return;
-					break;
-				case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat: allow if the sender is a sendim exception
-					if ( (from_id != gAgent.getID()) && (!gRlvHandler.isException(RLV_BHVR_RECVIM, from_id)) )
-						message = RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM);
-					break;
-				default:
-					RLV_ASSERT(false);
-					return;
-			}
-		}
-// [/RLVa:KB]
-
 		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_RECVIM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_RECVIMFROM)) )
 		{
 			switch (pIMSession->mSessionType)
@@ -3083,6 +3065,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 				LLSD args;
 				// *TODO: Translate -> [FIRST] [LAST] (maybe)
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+				args["NAME_LABEL"] = LLSLURL("agent", from_id, "completename").getSLURLString();
+// [/SL:KB]
 				args["NAME_SLURL"] = LLSLURL("agent", from_id, "about").getSLURLString();
 				args["MESSAGE"] = message;
 				args["MATURITY_STR"] = region_access_str;
@@ -3169,6 +3154,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			}
 			else
 			{
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+				args["NAME_LABEL"] = LLSLURL("agent", from_id, "completename").getSLURLString();
+// [/SL:KB]
 				args["NAME_SLURL"] = LLSLURL("agent", from_id, "about").getSLURLString();
 				if(message.empty())
 				{
@@ -4297,7 +4285,10 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 	}
 	
 	// send walk-vs-run status
-	gAgent.sendWalkRun(gAgent.getRunning() || gAgent.getAlwaysRun());
+//	gAgent.sendWalkRun(gAgent.getRunning() || gAgent.getAlwaysRun());
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+	gAgent.sendWalkRun();
+// [/RLVa:KB]
 
 	// If the server version has changed, display an info box and offer
 	// to display the release notes, unless this is the initial log in.

@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2010, Kitty Barnett
+ * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -18,21 +18,45 @@
 #define RLV_COMMON_H
 
 #include "llavatarname.h"
-#include "llinventorymodel.h"
 #include "llselectmgr.h"
 #include "llviewercontrol.h"
-#include "llviewerinventory.h"
 
 #include "rlvdefines.h"
+
+#ifdef LL_WINDOWS
+	#pragma warning (push)
+	#pragma warning (disable : 4702) // warning C4702: unreachable code
+#endif
+#include <boost/variant.hpp>
+#ifdef LL_WINDOWS
+	#pragma warning (pop)
+#endif
 
 // ============================================================================
 // Forward declarations
 //
 
-class RlvCommand;
+//
+// General viewer source
+//
+class LLInventoryItem;
+class LLViewerInventoryCategory;
+class LLViewerInventoryItem;
+class LLViewerJointAttachment;
+class LLWearable;
 
-typedef std::vector<LLViewerObject*> llvo_vec_t;
-typedef std::vector<const LLViewerObject*> c_llvo_vec_t;
+//
+// RLVa-specific
+//
+class RlvCommand;
+typedef std::list<RlvCommand> rlv_command_list_t;
+class RlvObject;
+
+struct RlvException;
+typedef boost::variant<std::string, LLUUID, S32, ERlvBehaviour> RlvExceptionOption;
+
+class RlvGCTimer;
+class RlvWLSnapshot;
 
 // ============================================================================
 // RlvSettings
@@ -44,7 +68,7 @@ template<typename T> inline T rlvGetSetting(const std::string& strSetting, const
 	return (gSavedSettings.controlExists(strSetting)) ? gSavedSettings.get<T>(strSetting) : defaultValue;
 }
 
-template<typename T> inline T rlvGetPerUserSettings(const std::string& strSetting, const T& defaultValue)
+template<typename T> inline T rlvGetPerUserSetting(const std::string& strSetting, const T& defaultValue)
 {
 	RLV_ASSERT_DBG(gSavedPerAccountSettings.controlExists(strSetting));
 	return (gSavedPerAccountSettings.controlExists(strSetting)) ? gSavedPerAccountSettings.get<T>(strSetting) : defaultValue;
@@ -74,7 +98,7 @@ public:
 	static bool getShowNameTags()				{ return fShowNameTags; }
 
 	#ifdef RLV_EXTENSION_STARTLOCATION
-	static bool getLoginLastLocation()			{ return rlvGetPerUserSettings<bool>(RLV_SETTING_LOGINLASTLOCATION, true); }
+	static bool getLoginLastLocation()			{ return rlvGetPerUserSetting<bool>(RLV_SETTING_LOGINLASTLOCATION, true); }
 	static void updateLoginLastLocation();
 	#endif // RLV_EXTENSION_STARTLOCATION
 
@@ -113,10 +137,6 @@ public:
 protected:
 	static std::vector<std::string> m_Anonyms;
 	static std::map<std::string, std::string> m_StringMap;
-	#ifdef RLV_EXTENSION_NOTIFY_BEHAVIOUR
-	static std::map<ERlvBehaviour, std::string> m_BhvrAddMap;
-	static std::map<ERlvBehaviour, std::string> m_BhvrRemMap;
-	#endif // RLV_EXTENSION_NOTIFY_BEHAVIOUR
 };
 
 // ============================================================================
@@ -136,10 +156,9 @@ public:
 	static bool isForceTp()	{ return m_fForceTp; }
 	static void forceTp(const LLVector3d& posDest);									// Ignores restrictions that might otherwise prevent tp'ing
 
-	static void notifyBlocked(const std::string& strRlvString);
+	static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD());
 	static void notifyBlockedGeneric()	{ notifyBlocked(RLV_STRING_BLOCKED_GENERIC); }
-	static void notifyBlockedTeleport()	{ notifyBlocked(RLV_STRING_BLOCKED_TELEPORT); }
-	static void notifyBlockedViewXXX(LLAssetType::EType assetType); 
+	static void notifyBlockedViewXXX(LLAssetType::EType assetType) { notifyBlocked(RLV_STRING_BLOCKED_VIEWXXX, LLSD().with("[TYPE]", LLAssetType::lookup(assetType))); }
 	static void notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine);
 
 	static void sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession = LLUUID::null);
@@ -177,6 +196,8 @@ bool rlvMenuEnableIfNot(const LLSD& sdParam);
 // ============================================================================
 // Selection functors
 //
+
+bool rlvCanDeleteOrReturn();
 
 struct RlvSelectHasLockedAttach : public LLSelectedNodeFunctor
 {
@@ -235,14 +256,16 @@ protected:
 struct RlvPredIsEqualOrLinkedItem
 {
 	RlvPredIsEqualOrLinkedItem(const LLViewerInventoryItem* pItem) : m_pItem(pItem) {}
-	RlvPredIsEqualOrLinkedItem(const LLUUID& idItem) { m_pItem = gInventory.getItem(idItem); }
-
-	bool operator()(const LLViewerInventoryItem* pItem) const
-	{
-		return (m_pItem) && (pItem) && (m_pItem->getLinkedUUID() == pItem->getLinkedUUID());
-	}
+	RlvPredIsEqualOrLinkedItem(const LLUUID& idItem);
+	bool operator()(const LLViewerInventoryItem* pItem) const;
 protected:
 	const LLViewerInventoryItem* m_pItem;
+};
+
+template<typename T> struct RlvPredValuesEqual
+{
+	bool operator()(const T* pT2) const { return (pT1) && (pT2) && (*pT1 == *pT2); }
+	const T* pT1;
 };
 
 // ============================================================================

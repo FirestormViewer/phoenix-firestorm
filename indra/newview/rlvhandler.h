@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2010, Kitty Barnett
+ * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -18,18 +18,12 @@
 #define RLV_HANDLER_H
 
 #include <stack>
-#include "llagentconstants.h"
-#include "llstartup.h"
-#include "llviewerjointattachment.h"
-#include "llviewerobject.h"
 
 #include "rlvcommon.h"
-#include "rlvhelper.h"
-#include "rlvlocks.h"
 
 // ============================================================================
 
-class RlvHandler
+class RlvHandler : public LLOldEvents::LLSimpleListener
 {
 public:
 	RlvHandler();
@@ -48,11 +42,13 @@ public:
 	//       - to check exceptions   -> isException()
 public:
 	// Returns TRUE is at least one object contains the specified behaviour (and optional option)
-	bool hasBehaviour(ERlvBehaviour eBehaviour) const { return (eBehaviour < RLV_BHVR_COUNT) ? (0 != m_Behaviours[eBehaviour]) : false; }
-	bool hasBehaviour(ERlvBehaviour eBehaviour, const std::string& strOption) const;
+	bool hasBehaviour(ERlvBehaviour eBhvr) const { return (eBhvr < RLV_BHVR_COUNT) ? (0 != m_Behaviours[eBhvr]) : false; }
+	bool hasBehaviour(ERlvBehaviour eBhvr, const std::string& strOption) const;
 	// Returns TRUE if at least one object (except the specified one) contains the specified behaviour (and optional option)
-	bool hasBehaviourExcept(ERlvBehaviour eBehaviour, const LLUUID& idObj) const;
-	bool hasBehaviourExcept(ERlvBehaviour eBehaviour, const std::string& strOption, const LLUUID& idObj) const;
+	bool hasBehaviourExcept(ERlvBehaviour eBhvr, const LLUUID& idObj) const;
+	bool hasBehaviourExcept(ERlvBehaviour eBhvr, const std::string& strOption, const LLUUID& idObj) const;
+	// Returns TRUE if at least one object in the linkset with specified root ID contains the specified behaviour (and optional option)
+	bool hasBehaviourRoot(const LLUUID& idObjRoot, ERlvBehaviour eBhvr, const std::string& strOption = LLStringUtil::null) const;
 
 	// Adds or removes an exception for the specified behaviour
 	void addException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption);
@@ -99,6 +95,7 @@ public:
 	bool canShowHoverText(const LLViewerObject* pObj) const;									// @showhovertext* command family
 	bool canSendIM(const LLUUID& idRecipient) const;											// @sendim and @sendimto
 	bool canSit(LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;
+	bool canStartIM(const LLUUID& idRecipient) const;											// @startim and @startimto
 	bool canStand() const;
 	bool canTeleportViaLure(const LLUUID& idAgent) const;
 	bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;	// @touch
@@ -129,10 +126,11 @@ protected:
 public:
 	// The behaviour signal is triggered whenever a command is successfully processed and resulted in adding or removing a behaviour
 	typedef boost::signals2::signal<void (ERlvBehaviour, ERlvParamType)> rlv_behaviour_signal_t;
-	boost::signals2::connection setBehaviourCallback(const rlv_behaviour_signal_t::slot_type& cb ) { return m_OnBehaviour.connect(cb); }
+	boost::signals2::connection setBehaviourCallback(const rlv_behaviour_signal_t::slot_type& cb )		 { return m_OnBehaviour.connect(cb); }
+	boost::signals2::connection setBehaviourToggleCallback(const rlv_behaviour_signal_t::slot_type& cb ) { return m_OnBehaviourToggle.connect(cb); }
 	// The command signal is triggered whenever a command is processed
 	typedef boost::signals2::signal<void (const RlvCommand&, ERlvCmdRet, bool)> rlv_command_signal_t;
-	boost::signals2::connection setCommandCallback(const rlv_command_signal_t::slot_type& cb ) { return m_OnCommand.connect(cb); }
+	boost::signals2::connection setCommandCallback(const rlv_command_signal_t::slot_type& cb )			 { return m_OnCommand.connect(cb); }
 
 	void addCommandHandler(RlvCommandHandler* pHandler);
 	void removeCommandHandler(RlvCommandHandler* pHandler);
@@ -142,6 +140,7 @@ protected:
 
 	// Externally invoked event handlers
 public:
+	bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& sdUserdata);			// Implementation of public LLSimpleListener
 	void onAttach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
 	void onDetach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
 	bool onGC();
@@ -163,11 +162,13 @@ protected:
 	ERlvCmdRet onAddRemAttach(const RlvCommand& rlvCmd, bool& fRefCount);
 	ERlvCmdRet onAddRemDetach(const RlvCommand& rlvCmd, bool& fRefCount);
 	ERlvCmdRet onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCount);
+	ERlvCmdRet onAddRemFolderLockException(const RlvCommand& rlvCmd, bool& fRefCount);
 	ERlvCmdRet onAddRemSetEnv(const RlvCommand& rlvCmd, bool& fRefCount);
 	// Command handlers (RLV_TYPE_FORCE)
 	ERlvCmdRet processForceCommand(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceRemAttach(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceRemOutfit(const RlvCommand& rlvCmd) const;
+	ERlvCmdRet onForceGroup(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceSit(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceWear(const LLViewerInventoryCategory* pFolder, ERlvBehaviour eBhvr) const;
 	// Command handlers (RLV_TYPE_REPLY)
@@ -202,13 +203,15 @@ protected:
 	std::stack<LLUUID>    m_CurObjectStack;			// Convenience (see @tpto)
 
 	rlv_behaviour_signal_t m_OnBehaviour;
+	rlv_behaviour_signal_t m_OnBehaviourToggle;
 	rlv_command_signal_t   m_OnCommand;
 	mutable std::list<RlvCommandHandler*> m_CommandHandlers;
 
 	static BOOL			  m_fEnabled;				// Use setEnabled() to toggle this
 
-	bool                  m_fCanCancelTp;			// @accepttp and @tpto
-	mutable LLVector3d    m_posSitSource;			// @standtp (mutable because onForceXXX handles are all declared as const)
+	bool				m_fCanCancelTp;				// @accepttp=n and @tpto=force
+	mutable LLVector3d	m_posSitSource;				// @standtp=n (mutable because onForceXXX handles are all declared as const)
+	LLUUID				m_idAgentGroup;				// @setgroup=n
 
 	friend class RlvSharedRootFetcher;				// Fetcher needs access to m_fFetchComplete
 	friend class RlvGCTimer;						// Timer clear its own point at destruction
@@ -229,12 +232,6 @@ extern rlv_handler_t gRlvHandler;
 // ============================================================================
 // Inlined member functions
 //
-
-// Checked: 2009-10-04 (RLVa-1.0.4a) | Modified: RLVa-1.0.4a
-inline void RlvHandler::addException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption)
-{
-	m_Exceptions.insert(std::pair<ERlvBehaviour, RlvException>(eBhvr, RlvException(idObj, eBhvr, varOption)));
-}
 
 // Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
 inline bool RlvHandler::canEdit(const LLViewerObject* pObj) const
@@ -280,31 +277,14 @@ inline bool RlvHandler::canShowHoverText(const LLViewerObject *pObj) const
 			   (isException(RLV_BHVR_SHOWHOVERTEXT, pObj->getID(), RLV_CHECK_PERMISSIVE)) ) );
 }
 
-// Checked: 2010-03-06 (RLVa-1.2.0c) | Added: RLVa-1.1.0j
-inline bool RlvHandler::canSit(LLViewerObject* pObj, const LLVector3& posOffset /*= LLVector3::zero*/) const
+inline bool RlvHandler::canStartIM(const LLUUID& idRecipient) const
 {
-	// The user can sit on the specified object if:
-	//   - not prevented from sitting
-	//   - not prevented from standing up or not currently sitting
-	//   - not standtp restricted or not currently sitting (if the user is sitting and tried to sit elsewhere the tp would just kick in)
-	//   - [regular sit] not @sittp=n or @fartouch=n restricted or if they clicked on a point within 1.5m of the avie's current position
-	//   - [force sit] not @sittp=n restricted by a *different* object than the one that issued the command or the object is within 1.5m
-	return
-		( (pObj) && (LL_PCODE_VOLUME == pObj->getPCode()) ) &&
-		(!hasBehaviour(RLV_BHVR_SIT)) && 
-		( ((!hasBehaviour(RLV_BHVR_UNSIT)) && (!hasBehaviour(RLV_BHVR_STANDTP))) || 
-		  ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting())) ) &&
-		( ((NULL == getCurrentCommand() || (RLV_BHVR_SIT != getCurrentCommand()->getBehaviourType()))
-			? ((!hasBehaviour(RLV_BHVR_SITTP)) && (!hasBehaviour(RLV_BHVR_FARTOUCH)))	// [regular sit]
-			: (!hasBehaviourExcept(RLV_BHVR_SITTP, getCurrentObject()))) ||				// [force sit]
-		  (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) < 1.5f * 1.5f) );
-}
-
-// Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
-inline bool RlvHandler::canStand() const
-{
-	// NOTE: return FALSE only if we're @unsit=n restricted and the avie is currently sitting on something and TRUE for everything else
-	return (!hasBehaviour(RLV_BHVR_UNSIT)) || ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting()));
+	// User can start an IM session with "recipient" (could be an agent or a group) if:
+	//   - not generally restricted from starting IM sessions (or the recipient is an exception)
+	//   - not specifically restricted from starting an IM session with the recipient
+	return 
+		( (!hasBehaviour(RLV_BHVR_STARTIM)) || (isException(RLV_BHVR_STARTIM, idRecipient)) ) &&
+		( (!hasBehaviour(RLV_BHVR_STARTIMTO)) || (!isException(RLV_BHVR_STARTIMTO, idRecipient)) );
 }
 
 // Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
@@ -313,52 +293,14 @@ inline bool RlvHandler::canTeleportViaLure(const LLUUID& idAgent) const
 	return ((!hasBehaviour(RLV_BHVR_TPLURE)) || (isException(RLV_BHVR_TPLURE, idAgent))) && (canStand());
 }
 
-inline bool RlvHandler::hasBehaviour(ERlvBehaviour eBehaviour, const std::string& strOption) const
+inline bool RlvHandler::hasBehaviour(ERlvBehaviour eBhvr, const std::string& strOption) const
 {
-	return hasBehaviourExcept(eBehaviour, strOption, LLUUID::null);
+	return hasBehaviourExcept(eBhvr, strOption, LLUUID::null);
 }
 
-inline bool RlvHandler::hasBehaviourExcept(ERlvBehaviour eBehaviour, const LLUUID& idObj) const
+inline bool RlvHandler::hasBehaviourExcept(ERlvBehaviour eBhvr, const LLUUID& idObj) const
 {
-	return hasBehaviourExcept(eBehaviour, std::string(), idObj);
-}
-
-// Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
-inline bool RlvHandler::hasException(ERlvBehaviour eBhvr) const
-{
-	return (m_Exceptions.find(eBhvr) != m_Exceptions.end());
-}
-
-inline bool RlvHandler::isPermissive(ERlvBehaviour eBhvr) const
-{
-	return (RlvCommand::hasStrictVariant(eBhvr)) 
-		? !((hasBehaviour(RLV_BHVR_PERMISSIVE)) || (isException(RLV_BHVR_PERMISSIVE, eBhvr, RLV_CHECK_PERMISSIVE)))
-		: true;
-}
-
-// Checked: 2009-10-04 (RLVa-1.0.4a) | Modified: RLVa-1.0.4a
-inline void RlvHandler::removeException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption)
-{
-	for (rlv_exception_map_t::iterator itException = m_Exceptions.lower_bound(eBhvr), 
-			endException = m_Exceptions.upper_bound(eBhvr); itException != endException; ++itException)
-	{
-		if ( (itException->second.idObject == idObj) && (itException->second.varOption == varOption) )
-		{
-			m_Exceptions.erase(itException);
-			break;
-		}
-	}
-}
-
-// Checked: 2009-11-25 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
-inline ERlvCmdRet RlvHandler::processCommand(const LLUUID& idObj, const std::string& strCommand, bool fFromObj)
-{
-	if (STATE_STARTED != LLStartUp::getStartupState())
-	{
-		m_Retained.push_back(RlvCommand(idObj, strCommand));
-		return RLV_RET_RETAINED;
-	}
-	return processCommand(RlvCommand(idObj, strCommand), fFromObj);
+	return hasBehaviourExcept(eBhvr, LLStringUtil::null, idObj);
 }
 
 // ============================================================================

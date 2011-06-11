@@ -1264,6 +1264,11 @@ void LLPanelPeople::updateButtons()
 		}
 		cur_panel->getChildView("activate_btn")->setEnabled(item_selected && !cur_group_active); // "none" or a non-active group selected
 		cur_panel->getChildView("minus_btn")->setEnabled(item_selected && selected_id.notNull());
+//		cur_panel->getChildView("activate_btn")->setEnabled(item_selected && !cur_group_active); // "none" or a non-active group selected
+// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+		cur_panel->getChildView("activate_btn")->setEnabled(
+			item_selected && !cur_group_active && !gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP)); // "none" or a non-active group selected
+// [/RLVa:KB]
 	}
 	else
 	{

@@ -88,10 +88,6 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
-// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g)
-#include "rlvhandler.h"
-// [/RLVa:KB]
-
 #include "llweb.h"
 #include "llsecondlifeurls.h"
 #include "llupdaterservice.h"
