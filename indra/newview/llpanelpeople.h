@@ -46,6 +46,7 @@ class LLMenuButton;
 class LLMenuGL;
 
 const U32	MAX_AVATARS_PER_ALERT = 27; // maximum number of UUIDs we can cram into a single channel radar alert message
+const U32	COARSE_OFFSET_INTERVAL = 31; // seconds after which we query the bridge for a coarse location adjustment
 const U32	NAMEFORMAT_DISPLAYNAME = 0;
 const U32	NAMEFORMAT_USERNAME = 1;
 const U32	NAMEFORMAT_DISPLAYNAME_USERNAME = 2;
@@ -209,6 +210,7 @@ private:
 		LLUUID			lastRegion;
 		time_t			firstSeen;
 		S32			lastStatus;
+		S32			coarseOffset;
 	}; 
 	std::multimap < LLUUID, radarFields > lastRadarSweep;
 	std::vector <LLUUID>	mRadarEnterAlerts;
