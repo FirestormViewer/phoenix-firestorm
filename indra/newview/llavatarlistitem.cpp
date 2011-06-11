@@ -574,7 +574,7 @@ std::string LLAvatarListItem::getAvatarToolTip() const
 
 bool LLAvatarListItem::getShowingBothNames() const
 {
-	return mShowDisplayName && mShowUsername;
+	return (mShowDisplayName && mShowUsername);
 }
 
 void LLAvatarListItem::updateAvatarName()

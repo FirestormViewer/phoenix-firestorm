@@ -308,7 +308,10 @@
 	name="display_names_check"
 	width="100"
 	tool_tip="Check to use display names in chat, IM, name tags, etc."
-	top_pad="3"/>
+	top_pad="3">
+	<check_box.commit_callback
+	function="FS.ToggleSortContacts" />
+	</check_box>
 
         <check_box
         control_name="ShowViewerIDsOnNameTag"
