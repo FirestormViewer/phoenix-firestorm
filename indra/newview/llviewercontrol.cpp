@@ -526,7 +526,8 @@ bool toggle_show_menubar_location_panel(const LLSD& newvalue)
 {
 	bool value = newvalue.asBoolean();
 
-	gStatusBar->childSetVisible("parcel_info_panel",value);
+	if (gStatusBar)
+		gStatusBar->childSetVisible("parcel_info_panel",value);
 
 	return true;
 }
