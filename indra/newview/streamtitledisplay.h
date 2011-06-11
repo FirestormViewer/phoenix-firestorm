@@ -40,6 +40,7 @@ public:
 private:
 	BOOL tick();
 	void checkMetadata();
+	void sendStreamTitleToChat(const std::string& Title);
 };
 
 #endif // STREAMTITLEDISPLAY_H

@@ -28,13 +28,15 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include "message.h"
+#include "llagent.h"
 #include "llchat.h"
 //#include "llfloaterchat.h"
 #include "llnotificationmanager.h"
 #include "llaudioengine.h"
 #include "llstreamingaudio.h"
 #include "llviewercontrol.h"
-
+#include "lltrans.h"
 #include "streamtitledisplay.h"
 
 StreamTitleDisplay::StreamTitleDisplay() : LLEventTimer(2) { };
@@ -47,9 +49,12 @@ BOOL StreamTitleDisplay::tick()
 
 void StreamTitleDisplay::checkMetadata()
 {
+	LLCachedControl<bool> ShowStreamMetadata(gSavedSettings, "ShowStreamMetadata");
+	LLCachedControl<bool> StreamMetadataAnnounceToChat(gSavedSettings, "StreamMetadataAnnounceToChat");
+
 	if(!gAudiop)
 		return;
-	if(gAudiop->getStreamingAudioImpl()->hasNewMetadata() ) // && gSavedSettings.getBOOL("PhoenixShowStreamMetadata"))
+	if(gAudiop->getStreamingAudioImpl()->hasNewMetadata() && (ShowStreamMetadata || StreamMetadataAnnounceToChat))
 	{
 		LLChat chat;
 		std::string title = gAudiop->getStreamingAudioImpl()->getCurrentTitle();
@@ -70,11 +75,38 @@ void StreamTitleDisplay::checkMetadata()
 		}
 		if (chat.mText.length() > 0)
 		{
-			chat.mText = "Now playing: " + chat.mText;
-			chat.mSourceType = CHAT_SOURCE_SYSTEM;
-			LLSD args;
-			args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
-			LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+			if (StreamMetadataAnnounceToChat)
+			{
+				sendStreamTitleToChat(chat.mText);
+			}
+
+			if (ShowStreamMetadata)
+			{
+				chat.mText = LLTrans::getString("StreamtitleNowPlaying") + " " + chat.mText;
+				chat.mSourceType = CHAT_SOURCE_SYSTEM;
+				LLSD args;
+				args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+				LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+			}
 		}
+	}
+}
+
+void StreamTitleDisplay::sendStreamTitleToChat(const std::string& Title)
+{
+	LLCachedControl<S32> StreamMetadataAnnounceChannel(gSavedSettings, "StreamMetadataAnnounceChannel");
+	if (StreamMetadataAnnounceChannel != 0)
+	{
+		LLMessageSystem* msg = gMessageSystem;
+		msg->newMessageFast(_PREHASH_ChatFromViewer);
+		msg->nextBlockFast(_PREHASH_AgentData);
+		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		msg->nextBlockFast(_PREHASH_ChatData);
+		msg->addStringFast(_PREHASH_Message, Title);
+		msg->addU8Fast(_PREHASH_Type, CHAT_TYPE_WHISPER);
+		msg->addS32("Channel", StreamMetadataAnnounceChannel);
+
+		gAgent.sendReliableMessage();
 	}
 }
