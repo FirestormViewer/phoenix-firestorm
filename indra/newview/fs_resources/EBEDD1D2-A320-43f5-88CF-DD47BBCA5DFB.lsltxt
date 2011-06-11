@@ -145,6 +145,7 @@ default
     
     on_rez(integer i)
     {
+        llSetPrimitiveParams([PRIM_TEMP_ON_REZ,TRUE]);
         initBridge();
     }
     
