@@ -141,14 +141,14 @@ const char* getBuildPlatformString()
 #if LL_WINDOWS
 	#ifndef _WIN64
 			return "Win32";
-	#elif
+	#else
 			return "Win64";
 	#endif // _WIN64
 #elif LL_SDL
 	#if LL_GNUC
 		#if ( defined(__amd64__) || defined(__x86_64__) )
 			return "Linux64";
-		#elif
+		#else
 			return "Linux32";
 		#endif
 	#endif
@@ -157,6 +157,7 @@ const char* getBuildPlatformString()
 #else
 			return "Unknown";
 #endif
+return "Unknown";
 }
 
 const std::string& LLVersionInfo::getBuildPlatform()
