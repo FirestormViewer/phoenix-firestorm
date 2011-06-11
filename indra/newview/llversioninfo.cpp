@@ -154,8 +154,6 @@ const char* getBuildPlatformString()
 	#endif
 #elif LL_DARWIN
 			return "Darwin";
-#else
-			return "Unknown";
 #endif
 return "Unknown";
 }
