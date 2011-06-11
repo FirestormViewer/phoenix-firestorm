@@ -157,6 +157,15 @@ re_map['indra/newview/res/viewerRes.rc'] = \
       'VALUE "FileVersion", "%(VER_MAJOR)s.%(VER_MINOR)s.%(VER_PATCH)s.%(VER_BUILD)s"'),
      ('VALUE "ProductVersion", "[0-9.]+"',
       'VALUE "ProductVersion", "%(VER_MAJOR)s.%(VER_MINOR)s.%(VER_PATCH)s.%(VER_BUILD)s"'))
+re_map['indra/llcommon/res/llcommon.rc'] = \
+    (('FILEVERSION [0-9,]+',
+      'FILEVERSION %(VER_MAJOR)s,%(VER_MINOR)s,%(VER_PATCH)s,%(VER_BUILD)s'),
+     ('PRODUCTVERSION [0-9,]+',
+      'PRODUCTVERSION %(VER_MAJOR)s,%(VER_MINOR)s,%(VER_PATCH)s,%(VER_BUILD)s'),
+     ('VALUE "FileVersion", "[0-9.]+"',
+      'VALUE "FileVersion", "%(VER_MAJOR)s.%(VER_MINOR)s.%(VER_PATCH)s.%(VER_BUILD)s"'),
+     ('VALUE "ProductVersion", "[0-9.]+"',
+      'VALUE "ProductVersion", "%(VER_MAJOR)s.%(VER_MINOR)s.%(VER_PATCH)s.%(VER_BUILD)s"'))
 
 # Trailing ',' in top level tuple is special form to avoid parsing issues with one element tuple
 re_map['indra/newview/Info-SecondLife.plist'] = \

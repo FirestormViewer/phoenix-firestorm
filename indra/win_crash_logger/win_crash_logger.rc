@@ -74,11 +74,11 @@ BEGIN
     DEFPUSHBUTTON   "Send",IDOK,198,104,45,15,WS_GROUP
     PUSHBUTTON      "Don't Send",IDCANCEL,247,104,45,15,WS_GROUP
     LTEXT           "%s appears to have crashed.",IDC_STATIC_HEADER,4,4,288,14
-    LTEXT           "This crash reporter collects information about your computer's hardware, operating system, and some %s logs, which are used for debugging purposes only.",IDC_STATIC_WHATINFO,4,23,288,19,NOT WS_GROUP
+    LTEXT           "This crash reporter collects information about your computer's hardware configuration and operating system which is used only for debugging purposes.\r\nSecondLife logs are not collected.",IDC_STATIC_WHATINFO,4,23,288,29,NOT WS_GROUP
     CONTROL         "Remember this choice",IDC_CHECK_AUTO,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,106,89,13
-    LTEXT           "Sending crash reports is the best way to help us improve the quality of %s.",IDC_STATIC_MOTIVATION,4,43,288,8
-    LTEXT           "If you continue to experience this problem, please try:",IDC_STATIC,4,57,251,8
-    LTEXT           "- Contacting support by visiting http://www.phoenixviewer.com/support",IDC_STATIC,4,67,231,8
+    LTEXT           "Sending crash reports is the best way to help us improve the quality of %s.",IDC_STATIC_MOTIVATION,4,54,288,8
+    CONTROL         "This report will be sent to phoenixviewer.com, not Linden Lab.\r\nPlease review the privacy policy at http://<privacy-placeholder> for more information.",IDC_STATIC,
+                    "Static",SS_LEFTNOWORDWRAP | WS_GROUP,4,68,288,17
 END
 
 IDD_PREVREPORTBOX DIALOGEX 100, 100, 232, 213
@@ -92,13 +92,13 @@ BEGIN
     PUSHBUTTON      "Don't Send",IDCANCEL,181,193,45,15,WS_GROUP
     LTEXT           "%s appears to have crashed or frozen the last time it ran.",IDC_STATIC_HEADER,4,4,214,8
     LTEXT           "This crash reporter collects information about your computer's",IDC_STATIC,4,17,201,8
-    LTEXT           "hardware configuration, operating system, and some %s",IDC_STATIC_MSG,4,25,212,8
-    LTEXT           "logs, all of which are used for debugging purposes only.",IDC_STATIC,4,33,210,8
+    LTEXT           "hardware configuration and operating system which is used only",IDC_STATIC_MSG,4,25,212,8
+    LTEXT           "for debugging purposes. SecondLife logs are not collected.",IDC_STATIC,4,33,210,8
     LTEXT           "In the space below, please briefly describe what you were doing",IDC_STATIC,3,48,208,8
     LTEXT           "or trying to do just prior to the crash.",IDC_STATIC,3,56,204,8
     LTEXT           "If you don't wish to send a crash report, press Don't Send.",IDC_STATIC,3,90,223,8
-    LTEXT           "This report is NOT read by customer support.  If you have billing or",IDC_STATIC,3,68,208,8
-    LTEXT           "other questions, please go to: www.phoenixviewer.com/support",IDC_STATIC,3,76,206,8
+    LTEXT           "This report will be sent to phoenixviewer.com, not Linden Lab. Please review",IDC_STATIC,3,68,224,8
+    LTEXT           "the privacy policy at <privacy-placeholder> for more information.",IDC_STATIC,3,76,226,8
     CONTROL         "Remember this choice",IDC_CHECK_AUTO,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,3,193,89,13
 END
 

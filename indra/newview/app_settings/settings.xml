@@ -9436,6 +9436,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>SaveMinidumpType</key>
+    <map>
+      <key>Comment</key>
+      <string>Type of minidump that is created (0 - minimal, 1 - normal [default], 2 - extended)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>ScaleShowAxes</key>
     <map>
       <key>Comment</key>
