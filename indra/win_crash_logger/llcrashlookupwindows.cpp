@@ -28,6 +28,8 @@
 
 #define MAX_STACK_FRAMES	64
 
+#ifdef LL_SEND_CRASH_REPORTS
+
 LLCrashLookupWindows::LLCrashLookupWindows()
 	: LLCrashLookup()
 	, m_pDbgClient(NULL)
@@ -139,3 +141,5 @@ bool LLCrashLookupWindows::initFromDump(const std::string& strDumpPath)
 
 	return true;
 }
+
+#endif // LL_SEND_CRASH_REPORTS

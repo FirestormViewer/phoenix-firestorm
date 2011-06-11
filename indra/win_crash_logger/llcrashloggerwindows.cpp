@@ -245,7 +245,9 @@ LRESULT CALLBACK WndProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam 
 LLCrashLoggerWindows::LLCrashLoggerWindows(void)
 {
 // [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+#ifdef LL_SEND_CRASH_REPORTS
 	mCrashLookup = new LLCrashLookupWindows();
+#endif // LL_SEND_CRASH_REPORTS
 // [/SL:KB]
 }
 

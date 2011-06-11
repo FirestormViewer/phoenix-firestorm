@@ -42,7 +42,9 @@
 #include "llsdserialize.h"
 
 // [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
-#include <shellapi.h>
+#ifdef LL_WINDOWS
+	#include <shellapi.h>
+#endif // LL_WINDOWS
 // [/SL:KB]
 
 LLPumpIO* gServicePump;
@@ -285,7 +287,10 @@ void LLCrashLogger::gatherFiles()
 	if (gDirUtilp->fileExists(minidump_path))
 	{
 		mFileMap["Minidump"] = minidump_path;
-		mCrashLookup->initFromDump(minidump_path);
+		if (mCrashLookup)
+		{
+			mCrashLookup->initFromDump(minidump_path);
+		}
 		// Remove the minidump path after we've retrieved it since it could contain the OS user name
 		mDebugLog.erase("MinidumpPath");
 	}
@@ -391,10 +396,13 @@ bool LLCrashLogger::runCrashLogPost(std::string host, LLSD data, std::string msg
 		/*
 		 * Include crash analysis pony
 		 */
-		body << getFormDataField("crash_module_name", mCrashLookup->getModuleName(), BOUNDARY);
-		body << getFormDataField("crash_module_version", llformat("%I64d", mCrashLookup->getModuleVersion()), BOUNDARY);
-		body << getFormDataField("crash_module_versionstring", mCrashLookup->getModuleVersionString(), BOUNDARY);
-		body << getFormDataField("crash_module_displacement", llformat("%I64d", mCrashLookup->getModuleDisplacement()), BOUNDARY);
+		if (mCrashLookup)
+		{
+			body << getFormDataField("crash_module_name", mCrashLookup->getModuleName(), BOUNDARY);
+			body << getFormDataField("crash_module_version", llformat("%I64d", mCrashLookup->getModuleVersion()), BOUNDARY);
+			body << getFormDataField("crash_module_versionstring", mCrashLookup->getModuleVersionString(), BOUNDARY);
+			body << getFormDataField("crash_module_displacement", llformat("%I64d", mCrashLookup->getModuleDisplacement()), BOUNDARY);
+		}
 
 		/*
 		 * Add the actual crash logs
@@ -501,7 +509,7 @@ bool LLCrashLogger::sendCrashLogs()
 // [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
 	if (!mCrashLink.empty())
 	{
-#ifdef LL_WINDOWS
+#if LL_WINDOWS && LL_SEND_CRASH_REPORTS
 		if (IDYES == MessageBox(NULL, L"Additional information is available about this crash. Display?", L"Crash Information", MB_YESNO))
 		{
 			wchar_t wstrCrashLink[512];
@@ -514,7 +522,7 @@ bool LLCrashLogger::sendCrashLogs()
 			sei.lpFile = wstrCrashLink;
 			ShellExecuteEx(&sei); 
 		}
-#endif // LL_WINDOWS
+#endif // LL_WINDOWS && LL_SEND_CRASH_REPORTS
 	}
 // [/SL:KB]
 

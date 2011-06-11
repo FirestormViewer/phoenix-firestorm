@@ -23,6 +23,8 @@
 #ifndef LLCRASHLOOKUPWINDOWS_H
 #define LLCRASHLOOKUPWINDOWS_H
 
+#ifdef LL_SEND_CRASH_REPORTS
+
 #include <DbgEng.h>
 #include "llcrashlookup.h"
 
@@ -40,5 +42,8 @@ protected:
 	IDebugControl4*	m_pDbgControl;
 	IDebugSymbols2*	m_pDbgSymbols;
 };
+#else
+
+#endif // LL_SEND_CRASH_REPORTS
 
 #endif // LLCRASHLOOKUP_H
