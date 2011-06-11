@@ -167,16 +167,22 @@ void FSLSLBridge :: recreateBridge()
 	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
 	if (fsBridge != NULL)
 	{
+		if (mpBridge != NULL)
+			mpBridge = NULL; //the object itself will get cleaned up when new one is created.
+
 		if (get_is_item_worn(fsBridge->getUUID()))
 		{
 			LLVOAvatarSelf::detachAttachmentIntoInventory(fsBridge->getUUID());
+			//FSLSLItemDeletionObserver *delObserver = new FSLSLItemDeletionObserver();
+			//delObserver->setCallback(boost::bind(&FSLSLBridge::oldBridgeDetached, fsBridge->getUUID()));
+			//gInventory.addObserver(delObserver);
 		}
-
-		gInventory.deleteObject(fsBridge->getUUID());
-		//fsBridge->removeFromServer();
-		gInventory.notifyObservers();
+		else
+		{
+			gInventory.deleteObject(fsBridge->getUUID());
+			gInventory.notifyObservers();
+		}
 	}
-
 	mBridgeAttaching = true;
 	createNewBridge();
 }
@@ -191,8 +197,6 @@ void FSLSLBridge :: initBridge()
 	//check for inventory load
 	FSLSLBridgeInventoryObserver *bridgeInventoryObserver = new FSLSLBridgeInventoryObserver(catID);
 	gInventory.addObserver(bridgeInventoryObserver);
-
-	//startCreation();
 }
 
 
@@ -205,7 +209,6 @@ void FSLSLBridge :: startCreation()
 	}
 
 	//if bridge object doesn't exist - create and attach it, update script.
-	LLUUID rootID = gInventory.getRootFolderID();
 	LLUUID catID = findFSCategory();
 
 	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
@@ -235,10 +238,9 @@ void FSLSLBridge :: createNewBridge()
 	reportToNearbyChat("Creating the bridge. This might take a few moments, please wait");
 
 	//check if user has a bridge
-	LLUUID rootID = gInventory.getRootFolderID();
 	LLUUID catID = findFSCategory();
 
-	//attach the Linden rock from the library (can we resize from here?)
+	//attach the Linden rock from the library (will resize as soon as attached)
 	LLUUID libID = gInventory.getLibraryRootFolderID();
 	LLViewerInventoryItem* libRock = findInvObject(LIB_ROCK_NAME, libID, LLAssetType::AT_OBJECT);
 	//shouldn't happen but just in case
@@ -263,15 +265,22 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 	LLProfileParams profParams(LL_PCODE_PROFILE_CIRCLE, F32(0.230), F32(0.250), F32(0.95));
 	LLPathParams pathParams(LL_PCODE_PATH_CIRCLE, F32(0), F32(0.2), F32(0.01), F32(0.01), F32(0.00), F32(0.0), 
 		F32(0), F32(0), F32(0), F32(0), F32(0), F32(0.01), 0);
+	
 	object->setVolume(LLVolumeParams(profParams, pathParams), 0);
+
+	object->setTETexture(0, LLUUID("8dcd4a48-2d37-4909-9f78-f7a9eb4ef903")); //transparent texture
 	object->setTETexture(1, LLUUID("8dcd4a48-2d37-4909-9f78-f7a9eb4ef903")); //transparent texture
 	object->setTETexture(2, LLUUID("8dcd4a48-2d37-4909-9f78-f7a9eb4ef903")); //transparent texture
+	object->setTETexture(3, LLUUID("8dcd4a48-2d37-4909-9f78-f7a9eb4ef903")); //transparent texture
+
 	//object->setTETexture(0, LLUUID("29de489d-0491-fb00-7dab-f9e686d31e83")); //another test texture
 	object->setScale(LLVector3(F32(0.01), F32(0.01), F32(0.01)));
-	object->setFlags(FLAGS_TEMPORARY_ON_REZ, true);
-	object->markForUpdate(TRUE);
 	object->sendShapeUpdate();
-	//object->addFlags(FLAGS_TEMPORARY_ON_REZ);
+	object->markForUpdate(TRUE);
+
+	//object->setFlags(FLAGS_TEMPORARY_ON_REZ, true);
+	object->addFlags(FLAGS_TEMPORARY_ON_REZ);
+	object->updateFlags();
 
 	gInventory.updateItem(mpBridge);
     gInventory.notifyObservers();
@@ -314,17 +323,15 @@ FSLSLBridgeRezCallback :: ~FSLSLBridgeRezCallback()
 
 void FSLSLBridgeRezCallback :: fire(const LLUUID& inv_item)
 {
-	if (inv_item.isNull() || !FSLSLBridge::instance().bridgeAttaching())
+	if ((FSLSLBridge::instance().getBridge() != NULL) || inv_item.isNull() || !FSLSLBridge::instance().bridgeAttaching())
 		return;
 
 	//detach from default and put on the right point
 	LLVOAvatarSelf::detachAttachmentIntoInventory(inv_item);
-
 	LLViewerInventoryItem *item = gInventory.getItem(inv_item);
-	
-	LLAttachmentsMgr::instance().addAttachment(inv_item, BRIDGE_POINT, FALSE, TRUE);
-
 	FSLSLBridge::instance().setBridge(item);
+
+	LLAttachmentsMgr::instance().addAttachment(inv_item, BRIDGE_POINT, FALSE, TRUE);
 }
 
 
@@ -412,14 +419,13 @@ void FSLSLBridge :: checkBridgeScriptName(std::string fileName)
 		obj->saveScript(gInventory.getItem(mScriptItemID), TRUE, false);
 		gInventory.deleteObject(mScriptItemID);
 		gInventory.notifyObservers();
-		mBridgeAttaching = false;
+		cleanUpBridgeFolder();
 		//announce yourself
 		reportToNearbyChat("Bridge created.");
 
 		mBridgeAttaching = false;
 	}
 }
-
 
 //
 // Helper functions
@@ -468,7 +474,7 @@ LLViewerInventoryItem* FSLSLBridge :: findInvObject(std::string obj_name, LLUUID
 	return NULL;
 }
 
-void FSLSLBridge::reportToNearbyChat(std::string message)
+void FSLSLBridge :: reportToNearbyChat(std::string message)
 // AO small utility method for chat alerts.
 {	
 	LLChat chat;
@@ -477,6 +483,33 @@ void FSLSLBridge::reportToNearbyChat(std::string message)
 	LLSD args;
 	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
 	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+}
+
+void FSLSLBridge :: cleanUpBridgeFolder()
+{
+	LLUUID catID = findFSCategory();
+	LLViewerInventoryCategory::cat_array_t cats;
+	LLViewerInventoryItem::item_array_t items;
+
+	//find all bridge and script duplicates and delete them
+	NameCollectFunctor namefunctor(mCurrentFullName);
+	gInventory.collectDescendentsIf(catID,cats,items,FALSE,namefunctor);
+
+	for (S32 iIndex = 0; iIndex < items.count(); iIndex++)
+	{
+		const LLViewerInventoryItem* itemp = items.get(iIndex);
+		if (!itemp->getIsLinkType()  && (itemp->getUUID() != mpBridge->getUUID()))
+		{
+			gInventory.deleteObject(itemp->getUUID());
+		}
+	}
+	gInventory.notifyObservers();
+}
+
+void FSLSLBridge :: oldBridgeDetached(LLUUID oldID)
+{
+	gInventory.deleteObject(oldID);
+	gInventory.notifyObservers();
 }
 
 bool FSLSLBridge :: isOldBridgeVersion(LLInventoryItem *item)

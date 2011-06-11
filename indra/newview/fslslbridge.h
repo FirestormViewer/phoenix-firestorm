@@ -50,6 +50,7 @@ public:
 
 	bool lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID);
 	bool viewerToLSL(std::string message, FSLSLBridgeRequestResponder *responder = NULL);
+
 	void initBridge();
 	void recreateBridge();
 	void processAttach(LLViewerObject *object, const LLViewerJointAttachment *attachment);
@@ -58,6 +59,7 @@ public:
 	LLViewerInventoryItem* getBridge() { return mpBridge; };
 	void checkBridgeScriptName(std::string fileName);
 	void startCreation();
+	void oldBridgeDetached(LLUUID oldID);
 
 protected:
 
@@ -74,7 +76,7 @@ private:
 	LLViewerInventoryItem*	mpBridge;
 	std::string				mCurrentFullName;
 
-private:
+protected:
 	LLViewerInventoryItem* findInvObject(std::string obj_name, LLUUID catID, LLAssetType::EType type);
 	LLUUID findFSCategory();
 	bool isItemAttached(LLUUID iID);
@@ -82,6 +84,7 @@ private:
 	void create_script_inner(LLViewerObject* object);
 	bool isOldBridgeVersion(LLInventoryItem *item);
 	void reportToNearbyChat(std::string message);
+	void cleanUpBridgeFolder();
 };
 
 
@@ -110,11 +113,23 @@ class FSLSLBridgeInventoryObserver : public LLInventoryFetchDescendentsObserver
 {
 public:
 	FSLSLBridgeInventoryObserver(const LLUUID& cat_id = LLUUID::null):LLInventoryFetchDescendentsObserver(cat_id) {}
-	/*virtual*/ void done() { FSLSLBridge::instance().startCreation(); 	gInventory.removeObserver(this); }
+	/*virtual*/ void done() { gInventory.removeObserver(this); FSLSLBridge::instance().startCreation(); }
 
 protected:
 	~FSLSLBridgeInventoryObserver() {}
 
+};
+
+class FSLSLItemDeletionObserver : public LLInventoryExistenceObserver
+{
+public:
+	typedef boost::signals2::signal<void (FSLSLItemDeletionObserver* caller)> observer_signal_t;
+
+	FSLSLItemDeletionObserver() {}
+	void setCallback(const observer_signal_t::slot_type& callback) { mObserverSignal.connect(callback);}
+	/*virtual*/ void done() { mObserverSignal(this); gInventory.removeObserver(this); }
+protected:
+	observer_signal_t mObserverSignal;
 };
 
 #endif // FS_LSLBRIDGE_H
