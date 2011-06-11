@@ -3133,10 +3133,7 @@ void handle_avatar_freeze(const LLSD& avatar_id)
 			if (!fullname.empty())
 			{
 				LLSD args;
-//				args["AVATAR_NAME"] = fullname;
-// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.0e
-				args["AVATAR_NAME"] = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? fullname : RlvStrings::getAnonym(fullname);
-// [/RLVa:KB]
+				args["AVATAR_NAME"] = fullname;
 				LLNotificationsUtil::add("FreezeAvatarFullname",
 							args,
 							payload,
@@ -3265,10 +3262,7 @@ void handle_avatar_eject(const LLSD& avatar_id)
 				if (!fullname.empty())
 				{
     				LLSD args;
-//					args["AVATAR_NAME"] = fullname;
-// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.0e
-					args["AVATAR_NAME"] = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? fullname : RlvStrings::getAnonym(fullname);
-// [/RLVa:KB]
+    				args["AVATAR_NAME"] = fullname;
     				LLNotificationsUtil::add("EjectAvatarFullname",
     							args,
     							payload,
@@ -3288,10 +3282,7 @@ void handle_avatar_eject(const LLSD& avatar_id)
 				if (!fullname.empty())
 				{
     				LLSD args;
-//					args["AVATAR_NAME"] = fullname;
-// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.0e
-					args["AVATAR_NAME"] = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? fullname : RlvStrings::getAnonym(fullname);
-// [/RLVa:KB]
+    				args["AVATAR_NAME"] = fullname;
     				LLNotificationsUtil::add("EjectAvatarFullnameNoBan",
     							args,
     							payload,
