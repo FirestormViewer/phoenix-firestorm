@@ -416,12 +416,37 @@
           top_delta="18"
           left="30"
           height="20"
-          width="400" />          
+          width="400" />
+		<check_box
+          control_name="ShowStreamMetadata"
+          name="ShowStreamMetadata"
+          label="Show stream title in local chat"
+          layout="topleft"
+          top_delta="18"
+          left="30"
+          height="20"
+          width="400" />
+		<check_box
+          control_name="StreamMetadataAnnounceToChat"
+          name="StreamMetadataAnnounceToChat"
+          label="Announce stream title to chat channel:"
+          layout="topleft"
+          top_delta="18"
+          left="30"
+          height="20"
+          width="400" />
+		<spinner control_name="StreamMetadataAnnounceChannel" decimal_digits="0"
+			enabled="true" layout="topleft" follows="left|top" height="20" bottom_delta="0" left="265" increment="1" 
+			initial_val="362394" 
+			max_val="2147483647" min_val="1" mouse_opaque="true" name="StreamMetadataAnnounceChannel"
+			width="90" />
+		
+		  
         <check_box
           layout="topleft"
           follows="left|top"
           bottom_delta="30"
-          left_delta="-10"
+          left="20"
           width="50"
           height="16"
           control_name="PhoenixNearbyChatbar"
@@ -454,7 +479,7 @@
           width="50"
           height="20"
           control_name="PhoenixLogImToChatConsole"
-          label="Show IMs in chat console"/>
+          label="Show IMs and group chat in chat console"/>
         <check_box
           layout="topleft"
           follows="left|top"

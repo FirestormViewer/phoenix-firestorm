@@ -160,6 +160,7 @@ Argent Stonecutter
 	VWR-68
 Armin Weatherwax
 	VWR-8436
+	VWR-25923
 Asuka Neely
 	VWR-3434
 	VWR-8179

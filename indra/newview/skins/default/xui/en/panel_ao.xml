@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <panel
 	name="animation_overrider_outer_panel"
 	left="0"
@@ -176,7 +177,7 @@
 		<check_box
 			name="ao_cycle"
 			label="Cycle"
-			tool_tip="Play a different animation from the list every time the animation state is called.."
+			tool_tip="Play a different animation from the list every time the animation state is called."
 			left="0"
 			top_pad="4"
 			width="55"
@@ -240,6 +241,7 @@
 			layout="topleft">
 
 		<layout_panel
+			name="next_previous_buttons_stack_left"
 			width="90"
 			height="20"
 			user_resize="false"
@@ -259,6 +261,7 @@
 
 		</layout_panel>
 		<layout_panel
+			name="next_previous_buttons_stack_right"
 			width="90"
 			height="20"
 			user_resize="false"
@@ -328,6 +331,7 @@
 				bottom="-1"
 				follows="all" />
 			<text
+				name="reload_label"
 				left_delta="0"
 				top_delta="16"
 				halign="center"
@@ -336,6 +340,7 @@
 				Reloading Config
 			</text>
 			<text
+				name="wait_label"
 				v_pad="-4"
 				bottom="-16"
 				halign="center"

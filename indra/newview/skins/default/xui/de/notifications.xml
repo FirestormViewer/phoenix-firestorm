@@ -2930,4 +2930,94 @@ Ansonsten können Sie auf der Karte nachsehen und dort Ort suchen, die als „In
 	<global name="You died and have been teleported to your home location">
 		Sie sind gestorben und wurden zu Ihrem Zuhause teleportiert.
 	</global>
+	
+  <notification name="PhoenixWL">
+&apos;[PARCEL_NAME]&apos;, im Besitz von &apos;[OWNER_NAME]&apos;, möchte deine visuellen Windlight-Umgebungseinstellungen ändern.
+    <form name="form">
+      <button name="Allow" text="Zulassen"/>
+      <button name="Ignore" text="Ignorieren"/>
+    </form>
+  </notification>
+  
+  <notification name="PhoenixWLClear">
+Windlight-Einstellungen für &apos;[PARCEL_NAME]&apos; auf Regionsstandard zurücksetzen?
+    <usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Ja"/>
+  </notification>
+	
+<!-- ## Zi: Animation Overrider -->
+  <notification name="NewAOSet">
+Bitte einen Namen für das neue Animationsset eingeben:
+(Der Name darf kein ":" oder "|" enthalten)
+    <form name="form">
+      <input name="message">
+Neues Animationsset
+      </input>
+      <button
+       name="OK"
+       text="OK"/>
+      <button
+       name="Cancel"
+       text="Abbrechen"/>
+    </form>
+  </notification>
+
+  <notification name="NewAOCantContainColon">
+Ein neues Animationsset mit Namen "[AO_SET_NAME]" konnte nicht angelegt werden.
+Der Name darf kein ":" oder "|" enhalten.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification name="RenameAOCantContainColon">
+Das Animationsset konnte nicht zu "[AO_SET_NAME]" umbenannt werden.
+Der Name darf kein ":" oder "|" enhalten.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+<notification name="RemoveAOSet">
+Animationsset "[AO_SET_NAME]" aus Liste löschen?
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Abbrechen"
+     yestext="Löschen"/>
+  </notification>
+
+<!-- ## Zi: Animation Overrider -->
+
+<notification name="SendSysinfoToIM">
+Dieses wird die folgenden Informationen an die aktuelle IM-Sitzung senden:
+
+[SYSINFO]
+    <usetemplate name="okcancelbuttons" yestext="Senden" notext="Abbrechen" />
+  </notification>
+
+  <notification name="InvalidGrid" type="alertmodal">
+'[GRID]' ist kein gültiger Gridname oder Adresse.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+<!-- fsdata -->
+  <notification name="BlockLoginInfo">
+    [REASON]
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification name="FireStormReqInfo">
+[NAME] hat die eine Anfrage geschickt, Informationen über deine Firestorm-Konfiguration zu übermitteln.
+(Dies sind dieselben Informationen, die unter Hilfe->INFO ÜBER Firestorm zu finden sind.)
+[REASON]
+Möchtest du diese Informationen übermitteln?
+    <form name="form">
+      <button name="Yes" text="Ja"/>
+      <button name="No" text="Nein"/>
+    </form>
+  </notification>
+
 </notifications>

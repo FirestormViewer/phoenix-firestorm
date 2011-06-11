@@ -976,9 +976,11 @@ void LLPanelPeople::updateNearbyList()
 		if (lastRadarSweep.count(avId) == 0)
 		{
 			if (gSavedSettings.getBOOL("RadarReportChatRange") && (avRange <= CHAT_NORMAL_RADIUS))
-				LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, llformat(" entered chat range (%3.2f m)",avRange)));
+				LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, llformat(" entered chat range (%3.2f m).",avRange)));
 			if (gSavedSettings.getBOOL("RadarReportDrawRange") && (avRange <= drawRadius))
-				LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, llformat(" entered draw distance (%3.2f m)",avRange)));
+				LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, llformat(" entered draw distance (%3.2f m).",avRange)));
+			if (gSavedSettings.getBOOL("RadarReportSimRange") && (avRegion == regionSelf))
+				LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, llformat(" entered the region (%3.2f m).",avRange)));
 			if (gSavedSettings.getBOOL("RadarEnterChannelAlert") && (!mRadarAlertRequest))
 			{
 				// Autodetect Phoenix chat UUID compatibility. 
@@ -1056,6 +1058,13 @@ void LLPanelPeople::updateNearbyList()
 				else if ((avRange > drawRadius) && (rf.lastDistance <= drawRadius))
 					LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, " left draw distance."));		
 			}
+			if (gSavedSettings.getBOOL("RadarReportSimRange"))
+			{
+				if ((avRegion == regionSelf) && (avRegion != rf.lastRegion))
+					LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, " entered the region."));
+				else if ((rf.lastRegion == regionSelf) && (avRegion != regionSelf))
+					LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, " left the region."));
+			}
 		}
 		else if (lastRadarSweep.count(avId) > 1) // handle duplicates, from sim crossing oddness
 		{
@@ -1084,7 +1093,14 @@ void LLPanelPeople::updateNearbyList()
 					LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, " entered draw distance."));
 				else if ((avRange > drawRadius) && (rf.lastDistance <= drawRadius))
 					LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, " left draw distance."));		
-			}			
+			}
+			if (gSavedSettings.getBOOL("RadarReportSimRange"))
+			{
+				if ((avRegion == regionSelf) && (avRegion != rf.lastRegion))
+					LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, " entered the region."));
+				else if ((rf.lastRegion == regionSelf) && (avRegion != regionSelf))
+					LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, " left the region."));
+			}
 		}
 	}
 	
@@ -1103,6 +1119,9 @@ void LLPanelPeople::updateNearbyList()
 				LLAvatarNameCache::get(prevId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, " left chat range."));
 			if (gSavedSettings.getBOOL("RadarReportDrawRange") && (rf.lastDistance <= drawRadius))
 				LLAvatarNameCache::get(prevId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, " left draw distance."));
+			if (gSavedSettings.getBOOL("RadarReportSimRange") && (rf.lastRegion == regionSelf))
+				LLAvatarNameCache::get(prevId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, " left the region."));
+				
 			if (gSavedSettings.getBOOL("RadarLeaveChannelAlert"))
 				mRadarLeaveAlerts.push_back(prevId);
 		}

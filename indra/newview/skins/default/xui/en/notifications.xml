@@ -7241,8 +7241,8 @@ This will send the following information to the current IM session:
    icon="notify.tga"
    name="FireStormReqInfo"
    type="notify">
-    [NAME] is requesting that you send them information about your Phoenix setup.
-    (This is the same information that can be found by going to Help->About Phoenix)    
+    [NAME] is requesting that you send them information about your Firestorm setup.
+    (This is the same information that can be found by going to Help->ABOUT Firestorm)    
     [REASON]
     Would you like to send them this information?
     <form name="form">

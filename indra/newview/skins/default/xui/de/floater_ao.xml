@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="animation_overrider">
+	<floater.string
+		name="ao_no_sets_loaded">
+		Keine Sets geladen
+	</floater.string>
+
+	<floater.string
+		name="ao_no_animations_loaded">
+		Keine Animationen geladen
+	</floater.string>
+</floater>

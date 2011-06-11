@@ -5,15 +5,14 @@
 //
 // global Variables
 //
-
     // Bridge platform
     string bridgeURL;
     string latestURL;
     integer channel = 99;
-    integer debug = FALSE;	//TRUE for verbose debugging
+    integer debug = FALSE;
     integer httpStatus = 200;
     //key httpReqID;
-    
+  
     // for teleport
     integer MAX_TIME_TO_TP = 10; //should be set to 10 for normal use
     vector      mttVector;        // target for llMoveToTarget() teleport
@@ -27,6 +26,31 @@
 //
 // helper functions
 //
+    makeSane()
+    // try and resist "accidental" damage from other scripts
+    {
+        string myName = llGetScriptName();
+        integer n = llGetInventoryNumber(INVENTORY_SCRIPT);
+        if (n > 1)
+        {
+            llOwnerSay("WARNING: One or more scripts have been added to your Firestorm bridge! If you did not expect this message, delete your bridge now.");
+            llSleep(1.0);
+            while(n)
+            {
+                string s = llGetInventoryName(INVENTORY_SCRIPT,--n);
+                if (s != myName)
+                    llSetScriptState(s,FALSE);
+            }
+        }
+        llParticleSystem([]);
+        llSetText("",ZERO_VECTOR,0.0);
+        llSetTexture("757c276e-6409-ad54-a862-ca89c04e4940",ALL_SIDES);
+        llSetTextureAnim(0,ALL_SIDES,1,1,1.0,1.0,1.0);
+	llAllowInventoryDrop(FALSE);
+        // make bridge inconspicuous
+        llSetScale(<0.01,0.01,0.01>);
+	llSetPos(<0.0,0.0,-0.15>);
+    }
 
     initBridge()
     {
@@ -115,14 +139,13 @@ default
 {
     state_entry()
     {
-         initBridge();
-       // make bridge inconspicuous
-        llSetTexture("757c276e-6409-ad54-a862-ca89c04e4940",ALL_SIDES);
-        llSetScale(<0.01,0.01,0.01>);
+	makeSane();
+	initBridge();
     }
     
     on_rez(integer i)
     {
+        llSetPrimitiveParams([PRIM_TEMP_ON_REZ,TRUE]);
         initBridge();
     }
     
@@ -155,6 +178,10 @@ default
         {
             llRequestURL();
             debugOutput("The region the bridge is in has changed.");
+        }
+        if (change & CHANGED_INVENTORY)
+        {
+            makeSane();
         }
     }
     
@@ -231,3 +258,4 @@ default
         }
     }
 }
+

@@ -99,4 +99,6 @@ RadarUUIDChat		LGPL
 RadarIMChatFmtOptions	LGPL
 RadarEstateControls	LGPL
 DynamicMotD&Support	LGPL
+LSLBridge		LGPL
+Br_AccurateTeleports	LGPL
 

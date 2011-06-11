@@ -54,6 +54,9 @@
 #include "rlvhelper.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+//-TT Client LSL Bridge
+#include "fslslbridge.h"
+//-TT
 
 // RAII thingy to guarantee that a variable gets reset when the Setter
 // goes out of scope.  More general utility would be handy - TODO:
@@ -1174,6 +1177,18 @@ void LLAppearanceMgr::takeOffOutfit(const LLUUID& cat_id)
 
 	gInventory.collectDescendentsIf(cat_id, cats, items, FALSE, collector);
 
+//-TT Client LSL Bridge
+	if (gSavedSettings.getBOOL("UseLSLBridge"))
+	{
+		//if replacing - make sure bridge stays.
+		if (FSLSLBridge::instance().getBridge())
+		{
+			//items.find(FSLSLBridge::instance().getBridge());
+			items.removeObj(FSLSLBridge::instance().getBridge());
+		}
+	}
+//-TT
+
 	LLInventoryModel::item_array_t::const_iterator it = items.begin();
 	const LLInventoryModel::item_array_t::const_iterator it_end = items.end();
 	for( ; it_end != it; ++it)
@@ -1633,6 +1648,16 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 		obj_items_new.erase(std::remove_if(obj_items_new.begin(), obj_items_new.end(), RlvPredCanNotWearItem(RLV_WEAR)), obj_items_new.end());
 	obj_items.insert(obj_items.end(), obj_items_new.begin(), obj_items_new.end());
 // [/RLVa:KB]
+//-TT Client LSL Bridge
+	if (gSavedSettings.getBOOL("UseLSLBridge"))
+	{
+		//if replacing - make sure bridge stays.
+		if (!append && FSLSLBridge::instance().getBridge())
+		{
+			obj_items.insert(obj_items.end(), FSLSLBridge::instance().getBridge());
+		}
+	}
+//-TT
 	removeDuplicateItems(obj_items);
 
 	//

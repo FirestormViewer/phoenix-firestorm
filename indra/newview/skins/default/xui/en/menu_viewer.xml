@@ -214,6 +214,12 @@
                  function="Floater.Show"
                  parameter="lagmeter" />
             </menu_item_call>
+          <menu_item_call
+             label="Recreate LSL Bridge"
+             name="Recreate LSL Bridge">
+            <menu_item_call.on_click
+             function="RecreateLSLBridge"/>
+          </menu_item_call>
         </menu>
         
         <menu

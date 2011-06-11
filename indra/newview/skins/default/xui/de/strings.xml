@@ -2023,6 +2023,10 @@ Gültige Formate: .wav, .tga, .bmp, .jpg, .jpeg oder .bvh
 	<string name="Play Media">
 		Medien Abspielen/Pausieren
 	</string>
+	<string name="StreamtitleNowPlaying">
+		Aktueller Titel:
+	</string>
+
 	<string name="MBCmdLineError">
 		Beim Parsen der Befehlszeile wurde ein Fehler festgestellt.
 Weitere Informationen: http://wiki.secondlife.com/wiki/Client_parameters (EN)
