@@ -896,7 +896,6 @@ void LLPanelPeople::updateNearbyList()
 	if (lastRadarSelectedItem)
 	{
 		selected_id = lastRadarSelectedItem->getColumn(5)->getValue().asUUID();
-		llinfos << "selected_id ==" << selected_id << llendl;
 	}
 	mRadarList->clearRows();
 	mRadarEnterAlerts.clear();
@@ -1166,7 +1165,6 @@ void LLPanelPeople::updateNearbyList()
 				mRadarEnterAlerts.pop_back();
 			}
 			LLNearbyChatBar::sendChatFromViewer(msg,CHAT_TYPE_WHISPER,FALSE);
-			llinfos << msg << llendl;
 		}
 	}
 	if (mRadarLeaveAlerts.size() > 0)
@@ -1183,7 +1181,6 @@ void LLPanelPeople::updateNearbyList()
 				mRadarLeaveAlerts.pop_back();
 			}
 			LLNearbyChatBar::sendChatFromViewer(msg,CHAT_TYPE_WHISPER,FALSE);
-			llinfos << msg << llendl;
 		}
 	}   
 
@@ -1200,7 +1197,6 @@ void LLPanelPeople::updateNearbyList()
 	if (sVal != LLUUID::null)
 	{
 		selected_uuids.push_back(sVal);
-		llinfos << "AO: setting seleted minimap value " << sVal << llendl;
 		mMiniMap->setSelected(selected_uuids);
 	}
 	
@@ -1581,7 +1577,6 @@ void LLPanelPeople::onAvatarListCommitted(LLAvatarList* list)
 		if (sVal != LLUUID::null) 
 		{
 			selected_uuids.push_back(sVal);
-			llinfos << "AO: setting seleted minimap value " << sVal << llendl;
 			mMiniMap->setSelected(selected_uuids);
 		}
 	} else
