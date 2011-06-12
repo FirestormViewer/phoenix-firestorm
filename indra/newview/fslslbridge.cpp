@@ -137,6 +137,9 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 		mCurrentURL = message.substr(tag.length(), message.length() - ((tag.length() * 2) + 1));
 		llinfos << "New URL is: " << mCurrentURL << llendl;
 		//TODO need to check if bridge finished attaching
+		
+		//At the point of successful attachment, purge old bridges
+		cleanUpBridgeFolder();
 		return true;
 	}
 	return false;
@@ -179,7 +182,7 @@ void FSLSLBridge :: recreateBridge()
 		}
 		else
 		{
-			gInventory.deleteObject(fsBridge->getUUID());
+			gInventory.purgeObject(fsBridge->getUUID());
 			gInventory.notifyObservers();
 		}
 	}
@@ -375,10 +378,10 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 		LLVOAvatarSelf::detachAttachmentIntoInventory(FSLSLBridge::instance().getBridge()->getUUID());
 
 		LLViewerInventoryItem* bridgeItem = FSLSLBridge::instance().getBridge();
-		gInventory.deleteObject(bridgeItem->getUUID());
+		gInventory.purgeObject(bridgeItem->getUUID());
 		bridgeItem->removeFromServer();
 
-		gInventory.deleteObject(item->getUUID());
+		gInventory.purgeObject(item->getUUID());
 		item->removeFromServer();
 
 		gInventory.notifyObservers();
@@ -417,7 +420,7 @@ void FSLSLBridge :: checkBridgeScriptName(std::string fileName)
 		//this is our script upload
 		LLViewerObject* obj = gAgentAvatarp->getWornAttachment(mpBridge->getUUID());
 		obj->saveScript(gInventory.getItem(mScriptItemID), TRUE, false);
-		gInventory.deleteObject(mScriptItemID);
+		gInventory.purgeObject(mScriptItemID);
 		gInventory.notifyObservers();
 		cleanUpBridgeFolder();
 		//announce yourself
@@ -487,6 +490,8 @@ void FSLSLBridge :: reportToNearbyChat(std::string message)
 
 void FSLSLBridge :: cleanUpBridgeFolder()
 {
+	llinfos << "Cleaning old Bridges..." << llendl;
+	
 	LLUUID catID = findFSCategory();
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
@@ -500,7 +505,7 @@ void FSLSLBridge :: cleanUpBridgeFolder()
 		const LLViewerInventoryItem* itemp = items.get(iIndex);
 		if (!itemp->getIsLinkType()  && (itemp->getUUID() != mpBridge->getUUID()))
 		{
-			gInventory.deleteObject(itemp->getUUID());
+			gInventory.purgeObject(itemp->getUUID());
 		}
 	}
 	gInventory.notifyObservers();
@@ -508,7 +513,7 @@ void FSLSLBridge :: cleanUpBridgeFolder()
 
 void FSLSLBridge :: oldBridgeDetached(LLUUID oldID)
 {
-	gInventory.deleteObject(oldID);
+	gInventory.purgeObject(oldID);
 	gInventory.notifyObservers();
 }
 
