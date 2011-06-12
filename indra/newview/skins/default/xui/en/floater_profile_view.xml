@@ -3,6 +3,8 @@
  height="470"
  layout="topleft"
  width="420"
+ min_height="490"
+ min_width="420"
  can_close="true"
  can_resize="true">
     <panel

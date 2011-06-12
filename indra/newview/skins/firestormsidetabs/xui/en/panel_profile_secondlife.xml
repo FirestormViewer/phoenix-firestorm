@@ -328,6 +328,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
              height="44">
 
             <layout_panel
+			 name="left_buttonstack"
              left="2"
              right="-2"
              height="42"
@@ -343,6 +344,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
              label="Find on Map"
              label_selected="Find on Map"
              name="show_on_map_btn"
+			 tool_tip="Locate the Resident on the map"
              follows="left|top|right" />
 
             <button
@@ -357,6 +359,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
 
             </layout_panel>
             <layout_panel
+			 name="middle_buttonstack"
              left="2"
              right="-2"
              user_resize="false"
@@ -371,6 +374,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
              label="Offer Teleport"
              label_selected="Offer Teleport"
              name="teleport"
+			 tool_tip="Offer a teleport to the Resident"
              follows="left|top|right" />
 
             <button
@@ -385,6 +389,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
 
             </layout_panel>
             <layout_panel
+			 name="right_buttonstack"
              left="2"
              right="-2"
              user_resize="false"
