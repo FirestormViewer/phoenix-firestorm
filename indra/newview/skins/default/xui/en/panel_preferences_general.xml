@@ -361,16 +361,16 @@
     Log out after being marked away:
     </text>
     
-  <combo_box
-            height="23"
-            layout="topleft"
-            control_name="AFKTimeout"
-            left="25"
-            top_pad="10"
-            label="Away timeout:"
-            top_delta="0"
-            name="afk"
-            width="120">
+    <combo_box
+     height="23"
+     layout="topleft"
+     control_name="AFKTimeout"
+     left="25"
+     top_pad="10"
+     label="Away timeout:"
+     top_delta="0"
+     name="afk"
+     width="120">
     <combo_box.item
      label="2 minutes"
      name="item0"
@@ -388,19 +388,23 @@
      name="item3"
      value="1800" />
     <combo_box.item
+     label="60 minutes"
+     name="item3"
+     value="3600" />
+    <combo_box.item
      label="never"
      name="item4"
      value="0" />
   </combo_box>
   
     <combo_box
-            height="23"
-            layout="topleft"
-            control_name="QuitAfterSecondsOfAFK"
-            left_pad="30"
-            top_delta="0"
-            name="quitafk"
-            width="120">
+     height="23"
+     layout="topleft"
+     control_name="QuitAfterSecondsOfAFK"
+     left_pad="30"
+     top_delta="0"
+     name="quitafk"
+     width="120">
     <combo_box.item
      label="2 minutes"
      name="item0"
