@@ -2,7 +2,7 @@
 <floater
  height="470"
  layout="topleft"
- width="430"
+ width="420"
  can_close="true"
  can_resize="true">
     <panel
