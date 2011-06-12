@@ -30,6 +30,7 @@
             <menu_item_call label="Auf weiblichen Standard-Avatar zurücksetzen" name="ResetDefaultAvF"/>
 			<menu_item_check label="Avatar-Rendering-Kosten (ARC) anzeigen" name="Avatar Rendering Cost"/>
 			<menu_item_call label="Lag-Meter" name="Lag Meter"/>
+			<menu_item_call label="LSL-Bridge neu erstellen" name="Recreate LSL Bridge"/>
 		</menu>
 		<menu label="Hochladen" name="Upload">
 			<menu_item_call label="Bild ([COST] L$)..." name="Upload Image"/>

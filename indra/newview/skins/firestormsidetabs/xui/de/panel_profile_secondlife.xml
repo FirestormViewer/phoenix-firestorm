@@ -35,7 +35,7 @@
             <layout_stack>
 				<layout_panel name="left_buttonstack">
 					<button label="Zeige auf Karte" label_selected="Zeige auf Karte" name="show_on_map_btn" tool_tip="Zeige Position des Einwohners auf der Karte."/>
-					<button label="Zahlen" label_selected="Zahlen" name="pay" tool_tip="Zahle Geld oder teile Objekte mit diesem Einwohner."/>
+					<button label="Zahlen" label_selected="Zahlen" name="pay" tool_tip="Zahle Geld an diesen Einwohner."/>
 				</layout_panel>
 
 				<layout_panel name="middle_buttonstack">
