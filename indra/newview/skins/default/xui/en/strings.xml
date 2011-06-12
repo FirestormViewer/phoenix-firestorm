@@ -2075,7 +2075,7 @@ Requests name of an avatar.  When data is available the dataserver event will be
 	<string name="Invalid Attachment">Invalid Attachment Point</string>
 
   <!-- Avatar age computation, see LLDateUtil::ageFromDate -->
-  <string name="YearsMonthsOld">[AGEYEARS] [AGEMONTHS] old</string>
+  <string name="YearsMonthsOld">[AGEYEARS] [AGEMONTHS]</string>
   <string name="YearsOld">[AGEYEARS] old</string>
   <string name="MonthsOld">[AGEMONTHS] old</string>
   <string name="WeeksOld">[AGEWEEKS] old</string>

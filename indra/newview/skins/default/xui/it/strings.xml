@@ -1274,7 +1274,7 @@
 		Punto di collegamento non valido
 	</string>
 	<string name="YearsMonthsOld">
-		Nato da [AGEYEARS] [AGEMONTHS]
+		[AGEYEARS] [AGEMONTHS]
 	</string>
 	<string name="YearsOld">
 		Nato da [AGEYEARS]
