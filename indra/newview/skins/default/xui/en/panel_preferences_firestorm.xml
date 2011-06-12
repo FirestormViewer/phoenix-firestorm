@@ -504,7 +504,7 @@
 		<spinner top_delta="25" control_name="NearbyToastLifeTime" decimal_digits="0"
 			enabled="true" follows="left|top" height="20" increment="1"
 			initial_val="10" label="Fade chat after" label_width="90" left="35"
-			max_val="60" min_val="2" mouse_opaque="true" name="fade_chat_time"
+			max_val="30" min_val="2" mouse_opaque="true" name="fade_chat_time"
 			width="130" />
 		<text type="string" length="1" bg_visible="false" border_drop_shadow_visible="false" border_visible="false"
 			bottom_delta="0" drop_shadow_visible="true" enabled="true"
