@@ -1185,7 +1185,10 @@ const LLViewerJointAttachment *LLVOAvatarSelf::attachObject(LLViewerObject *view
 //-TT
 //-TT Client LSL Bridge
 		if (gSavedSettings.getBOOL("UseLSLBridge"))
-			FSLSLBridge::instance().processAttach(viewer_object, attachment);
+		{
+			if (attachment->getName() == "Bridge")
+				FSLSLBridge::instance().processAttach(viewer_object, attachment);
+		}
 //-TT
 	}
 	

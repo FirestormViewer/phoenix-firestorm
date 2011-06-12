@@ -38,8 +38,10 @@
 //-TT Client LSL Bridge File
 //
 
-class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLHTTPClient::Responder
+class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLHTTPClient::Responder, public LLVOInventoryListener
 {
+	static const U8 BRIDGE_POINT = 127;
+
 	friend class FSLSLBridgeScriptCallback;
 	friend class FSLSLBridgeRezCallback;
 	friend class FSLSLBridgeInventoryObserver;
@@ -54,12 +56,12 @@ public:
 	void initBridge();
 	void recreateBridge();
 	void processAttach(LLViewerObject *object, const LLViewerJointAttachment *attachment);
-	bool bridgeAttaching() {return mBridgeAttaching; };
+	bool bridgeCreating() {return mBridgeCreating; };
 	void setBridge(LLViewerInventoryItem* item) { mpBridge = item; };
 	LLViewerInventoryItem* getBridge() { return mpBridge; };
 	void checkBridgeScriptName(std::string fileName);
 	void startCreation();
-	void oldBridgeDetached(LLUUID oldID);
+	std::string currentFullName() { return mCurrentFullName; }
 
 protected:
 
@@ -72,7 +74,7 @@ protected:
 private:
 	std::string				mCurrentURL;
 	int						mCurrentChannel;
-	bool					mBridgeAttaching;
+	bool					mBridgeCreating;
 	LLViewerInventoryItem*	mpBridge;
 	std::string				mCurrentFullName;
 
@@ -85,6 +87,8 @@ protected:
 	bool isOldBridgeVersion(LLInventoryItem *item);
 	void reportToNearbyChat(std::string message);
 	void cleanUpBridgeFolder();
+	void setupBridge(LLViewerObject *object);
+	void initCreationStep();
 };
 
 
@@ -118,18 +122,6 @@ public:
 protected:
 	~FSLSLBridgeInventoryObserver() {}
 
-};
-
-class FSLSLItemDeletionObserver : public LLInventoryExistenceObserver
-{
-public:
-	typedef boost::signals2::signal<void (FSLSLItemDeletionObserver* caller)> observer_signal_t;
-
-	FSLSLItemDeletionObserver() {}
-	void setCallback(const observer_signal_t::slot_type& callback) { mObserverSignal.connect(callback);}
-	/*virtual*/ void done() { mObserverSignal(this); gInventory.removeObserver(this); }
-protected:
-	observer_signal_t mObserverSignal;
 };
 
 #endif // FS_LSLBRIDGE_H
