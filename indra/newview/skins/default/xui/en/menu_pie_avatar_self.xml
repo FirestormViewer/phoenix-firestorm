@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu
+    layout="topleft"
+    name="Self Pie">
+    <pie_slice
+        label="Profile"
+        layout="topleft"
+        name="Profile...">
+        <pie_slice.on_click
+            function="ShowAgentProfile"
+            parameter="agent" />
+    </pie_slice>
+    <pie_slice
+        label="Groups"
+        layout="topleft"
+        name="Groups...">
+        <pie_slice.on_click
+            function="SideTray.PanelPeopleTab"
+            parameter="groups_panel" />
+    </pie_slice>
+    <pie_menu
+        label="Take Off"
+        layout="topleft"
+        name="Take Off &gt;">
+        <pie_menu
+            label="Clothes"
+            layout="topleft"
+            name="Clothes &gt;">
+            <pie_slice
+                enabled="false"
+                label="Shirt"
+                layout="topleft"
+                name="Shirt">
+                <pie_slice.on_click
+                    function="Edit.TakeOff"
+                    parameter="shirt" />
+                <pie_slice.on_enable
+                    function="Edit.EnableTakeOff"
+                    parameter="shirt" />
+            </pie_slice>
+            <pie_slice
+                enabled="false"
+                label="Pants"
+                layout="topleft"
+                name="Pants">
+                <pie_slice.on_click
+                    function="Edit.TakeOff"
+                    parameter="pants" />
+                <pie_slice.on_enable
+                    function="Edit.EnableTakeOff"
+                    parameter="pants" />
+            </pie_slice>
+            <pie_slice
+                enabled="false"
+                label="Shoes"
+                layout="topleft"
+                name="Shoes">
+                <pie_slice.on_click
+                    function="Edit.TakeOff"
+                    parameter="shoes" />
+                <pie_slice.on_enable
+                    function="Edit.EnableTakeOff"
+                    parameter="shoes" />
+            </pie_slice>
+            <pie_slice
+                enabled="false"
+                label="Socks"
+                layout="topleft"
+                name="Socks">
+                <pie_slice.on_click
+                    function="Edit.TakeOff"
+                    parameter="socks" />
+                <pie_slice.on_enable
+                    function="Edit.EnableTakeOff"
+                    parameter="socks" />
+            </pie_slice>
+            <pie_slice
+                enabled="false"
+                label="Jacket"
+                layout="topleft"
+                name="Jacket">
+                <pie_slice.on_click
+                    function="Edit.TakeOff"
+                    parameter="jacket" />
+                <pie_slice.on_enable
+                    function="Edit.EnableTakeOff"
+                    parameter="jacket" />
+            </pie_slice>
+            <pie_slice
+                enabled="false"
+                label="Gloves"
+                layout="topleft"
+                name="Gloves">
+                <pie_slice.on_click
+                    function="Edit.TakeOff"
+                    parameter="gloves" />
+                <pie_slice.on_enable
+                    function="Edit.EnableTakeOff"
+                    parameter="gloves" />
+            </pie_slice>
+            <pie_menu
+                label="More >"
+                name="Clothes More">
+                <pie_slice
+                    enabled="false"
+                    label="Undershirt"
+                    layout="topleft"
+                    name="Self Undershirt">
+                    <pie_slice.on_click
+                        function="Edit.TakeOff"
+                        parameter="undershirt" />
+                    <pie_slice.on_enable
+                        function="Edit.EnableTakeOff"
+                        parameter="undershirt" />
+                </pie_slice>
+
+                <pie_separator />
+
+                <pie_slice
+                    label="All Clothes"
+                    layout="topleft"
+                    name="All Clothes">
+                    <pie_slice.on_click
+                        function="Edit.TakeOff"
+                        parameter="all" />
+                </pie_slice>
+
+                <pie_separator />
+
+                <pie_slice
+                    enabled="false"
+                    label="Underpants"
+                    layout="topleft"
+                    name="Self Underpants">
+                    <pie_slice.on_click
+                        function="Edit.TakeOff"
+                        parameter="underpants" />
+                    <pie_slice.on_enable
+                        function="Edit.EnableTakeOff"
+                        parameter="underpants" />
+                </pie_slice>
+
+                <pie_slice
+                    enabled="false"
+                    label="Tattoo"
+                    layout="topleft"
+                    name="Self Tattoo">
+                    <pie_slice.on_click
+                        function="Edit.TakeOff"
+                        parameter="tattoo" />
+                    <pie_slice.on_enable
+                        function="Edit.EnableTakeOff"
+                        parameter="tattoo" />
+                </pie_slice>
+
+                <pie_separator />
+
+                <pie_slice
+                    enabled="false"
+                    label="Alpha"
+                    layout="topleft"
+                    name="Self Alpha">
+                    <pie_slice.on_click
+                        function="Edit.TakeOff"
+                        parameter="alpha" />
+                    <pie_slice.on_enable
+                        function="Edit.EnableTakeOff"
+                        parameter="alpha" />
+                </pie_slice>
+            </pie_menu>
+
+            <pie_slice
+                enabled="false"
+                label="Skirt"
+                layout="topleft"
+                name="Skirt">
+                <pie_slice.on_click
+                    function="Edit.TakeOff"
+                    parameter="skirt" />
+                <pie_slice.on_enable
+                    function="Edit.EnableTakeOff"
+                    parameter="skirt" />
+            </pie_slice>
+        </pie_menu>
+
+        <pie_menu
+            label="HUD"
+            layout="topleft"
+            name="Pie Object Detach HUD" />
+
+        <pie_separator />
+
+        <pie_menu
+            label="Detach"
+            layout="topleft"
+            name="Pie Object Detach" />
+
+        <pie_separator />
+
+        <pie_slice
+            label="Detach All"
+            layout="topleft"
+            name="Detach All">
+            <pie_slice.on_click
+                function="Self.RemoveAllAttachments"
+                parameter="" />
+            <pie_slice.on_enable
+                function="Self.EnableRemoveAllAttachments" />
+        </pie_slice>
+    </pie_menu>
+
+    <pie_slice
+        label="Sit Down"
+        autohide="true"
+        name="Sit Down Here">
+        <pie_slice.on_click
+            function="Self.SitDown" />
+        <pie_slice.on_enable
+            function="Self.EnableSitDown" />
+    </pie_slice>
+    <pie_slice
+        label="Stand Up"
+        autohide="true"
+        name="Stand Up">
+        <pie_slice.on_click
+            function="Self.StandUp" />
+        <pie_slice.on_enable
+            function="Self.EnableStandUp" />
+    </pie_slice>
+    <pie_separator name="script_count_placeholder" />
+    <pie_slice
+        label="Gestures..."
+        name="Gestures">
+        <pie_slice.on_click
+            function="Floater.Toggle"
+            parameter="gestures" />
+    </pie_slice>
+
+    <pie_slice label="Edit Shape"
+       layout="topleft"
+       name="Edit My Shape">
+       <pie_slice.on_click
+           function="EditShape" />
+       <pie_slice.on_enable
+           function="Edit.EnableEditShape" />
+    </pie_slice>
+    <pie_slice
+        label="Debug Textures"
+        name="Debug...">
+        <pie_slice.on_click
+            function="Avatar.Debug" />
+        <pie_slice.on_visible
+            function="IsGodCustomerService"/>
+    </pie_slice>
+
+</pie_menu>
