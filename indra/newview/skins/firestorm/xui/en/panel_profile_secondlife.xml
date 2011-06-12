@@ -62,7 +62,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
 -->
 
             <text
-             top="8"
+             top_pad="8"
              follows="left|top"
              halign="right"
              height="16"
