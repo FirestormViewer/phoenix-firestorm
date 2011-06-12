@@ -730,13 +730,13 @@
     <map>
       <key>Comment</key>
       <string>Time before automatically setting AFK (away from keyboard) mode (seconds, 0=never). 
-        Valid values are: 0, 120, 300, 600, 1800</string>
+        Valid values are: 0, 120, 300, 600, 1800, 3600</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <real>300</real>
+      <real>3600</real>
     </map>
     <key>AdminMenu</key>
     <map>
@@ -4633,7 +4633,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://viewer-help.secondlife.com/[LANGUAGE]/[CHANNEL]/[VERSION]/[TOPIC][DEBUG_MODE]</string>
+      <string>http://wiki.phoenixviewer.com/doku.php?id=firestorm</string>
     </map>
     <key>HomeSidePanelURL</key>
     <map>
