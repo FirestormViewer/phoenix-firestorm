@@ -978,12 +978,15 @@ void LLObjectMediaNavigateClient::navigate(LLMediaDataClientObject *object, U8 t
 {
 	LL_INFOS("LLMediaDataClient") << "navigate() initiated: url='" << url << "', object=" << object->getID() << LL_ENDL;
 
+#if 0 // TS: disable MOAP filtering until we figure out how to do it right
+
 	if (gSavedSettings.getBOOL("MediaEnableFilter"))
 	{
 		// Media filter is active, so filter it.
 		LLViewerParcelMedia::filterMOAPUrl(object, this, texture_index, url);
 	}
 	else
+#endif
 	{
 		// Create a get request and put it in the queue.
 		enqueue(new RequestNavigate(object, this, texture_index, url));
