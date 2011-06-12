@@ -380,7 +380,7 @@
 		label_width="185"
 		layout="topleft"
 		left="200"
-		max_val="992"
+		max_val="1024"
 		min_val="32"
 		name="DrawDistance"
 		top="0"
