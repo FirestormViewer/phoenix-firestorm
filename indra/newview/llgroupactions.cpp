@@ -337,7 +337,8 @@ void LLGroupActions::refresh_notices()
 	params["open_tab_name"] = "panel_group_info_sidetray";
 	params["action"] = "refresh_notices";
 
-	LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
+	// AO: We don't change modals on people unless they manually request this
+	//LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
 }
 
 //static 

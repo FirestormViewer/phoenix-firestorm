@@ -149,37 +149,26 @@ background_visible="true"
     </tab_container>
    </layout_panel>
   </layout_stack>
-
+  
+			<button
+		     follows="bottom|left"
+		     height="23"
+		     image_overlay="Refresh_Off"
+		     layout="topleft"
+		     left="6"
+		     top_pad="5"
+		     name="btn_refresh"
+		     width="23" />
+				     
    		   <layout_stack
 	     	follows="bottom|left|right"
 			height="25"
 			layout="topleft"
 			name="button_row_ls"
-			left="6"
+			left_pad="0"
 			orientation="horizontal"
-			top_pad="5"
-			width="475">
-
-				<layout_panel
-				follows="bottom|left|right"
-				height="23"
-				layout="bottomleft"
-				left="0"
-				name="btn_refresh_lp"
-			    user_resize="false"
-			    auto_resize="false"
-				width="24">
-					<button
-				     follows="bottom|left|right"
-				     height="23"
-				     image_overlay="Refresh_Off"
-				     layout="topleft"
-				     left="1"
-				     top="0"
-				     name="btn_refresh"
-				     width="23" />
-				</layout_panel>
-
+			top_delta="2"
+			width="445">
 				<layout_panel
 				follows="bottom|left|right"
 				height="23"
