@@ -235,9 +235,11 @@ default
         {
             saveNewURL(Body);
 
+            debugOutput ("keyViewerHandshake " + (string)keyViewerHandshake + " tryHandshakeOnce " + (string)tryHandshakeOnce);
             //Saying URL to owner
            if (keyViewerHandshake == FIRESTORM_VIEWER || tryHandshakeOnce == 1)
             {
+                debugOutput ("Firestorm viewer and handshake");
         	llOwnerSay("<bridgeURL>" + latestURL+ "</bridgeURL>");
                 tryHandshakeOnce = 0;
             }

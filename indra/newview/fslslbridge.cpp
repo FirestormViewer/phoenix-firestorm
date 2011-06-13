@@ -138,11 +138,8 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 
 			if (fsBridge != NULL)
 				mpBridge = fsBridge;
-
-			return viewerToLSL("URL Confirmed", new FSLSLBridgeRequestResponder());
 		}
-
-		return true;
+		return viewerToLSL("URL Confirmed", new FSLSLBridgeRequestResponder());
 	}
 	return false;
 }
