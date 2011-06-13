@@ -14,23 +14,21 @@
     <string
      name="no_group_text"
      value="Keine" />
-	 
-          <panel name="second_life_panel">
 
-            <text name="Key:" value="UUID:"/>
-            <text_editor name="user_key" value="(laden)"/>
-            <button name="copy_uri" label="URI kopieren"/>
-            <text name="Name:" value="Name:"/>
-            <text_editor name="complete_name" value="(laden)"/>
+          <panel name="second_life_panel">
+            <text name="Name:" value="Name:" />
+            <text_editor name="complete_name" value="(laden)" />
             <button name="copy_to_clipboard" tool_tip="In Zwischenablage kopieren"/>
             <text name="status" value="Online"/>
-            <text name="label" value="Geboren am:"/>
-            <text name="label2" value="Konto:"/>
-            <text name="partner_label" value="Partner:"/>
-            <text left="9" name="Groups:" value="Gruppen:"/>
-            <group_list left_pad="3" name="group_list"/>
-            <text left="9" name="About:" value="Info:"/>
-            <view_border left_pad="3" name="info_border"/>
+            <text name="Key:" value="UUID:" />
+            <text_editor name="user_key" value="(laden)" />
+            <text name="label" value="Geboren am:" />
+            <text name="label2" value="Konto:" />
+            <text name="partner_label" value="Partner:" />
+            <text name="About:" value="Info:" left="9" />
+            <view_border left_pad="3" name="info_border" />
+            <text name="Groups:" value="Gruppen:" left="9"/>
+            <group_list left_pad="3" name="group_list" />
 
             <layout_stack>
 				<layout_panel name="left_buttonstack">

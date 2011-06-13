@@ -4808,6 +4808,9 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 		if (pPeoplePanel)
 			pPeoplePanel->requestRadarChannelAlertSync();
 	}
+
+	// Don't play sounds from gestures if they are not enabled.
+	if (!gSavedSettings.getBOOL("EnableGestureSounds")) return;
 	
 	gAudiop->triggerSound(sound_id, owner_id, gain, LLAudioEngine::AUDIO_TYPE_SFX, pos_global);
 }

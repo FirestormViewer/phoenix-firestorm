@@ -111,8 +111,8 @@
          function="Pref.setControlFalse"
          parameter="MuteAmbient" />
     </slider>
-        <button
-    control_name="MuteAmbient"
+    <button
+     control_name="MuteAmbient"
      disabled_control="MuteAudio"
      follows="top|left"
      height="16"
@@ -145,7 +145,7 @@
          function="Pref.setControlFalse"
          parameter="MuteSounds" />
     </slider>
-   <button
+    <button
      control_name="MuteSounds"
      disabled_control="MuteAudio"
      follows="top|left"
@@ -157,7 +157,10 @@
      left_pad="5"
      name="mute_audio"
      tab_stop="false"
-     width="16" />
+     width="16">
+      <button.commit_callback
+      function="Pref.SetSounds"/>
+    </button>
     <slider
      control_name="AudioLevelMusic"
      disabled_control="MuteAudio"
@@ -298,7 +301,18 @@
 		left_pad="5"
 		name="enable_voice_check"
 		width="110"/>
-	<!-- -->
+	<check_box
+		name="gesture_audio_play_btn"
+		control_name="EnableGestureSounds"
+    disabled_control="MuteAudio"
+		value="true"
+		follows="left|bottom|right"
+		height="15"
+		tool_tip="Check this to hear sounds from gestures"
+		label="Play sounds from gestures"
+		top_pad="1"
+    bottom_delta="10"
+		left="325"/>
 	<check_box
 		name="media_auto_play_btn"
 		control_name="ParcelMediaAutoPlayEnable"
@@ -309,6 +323,7 @@
 		tool_tip="Check this to automatically start media when you log in or change regions."
 		label="Allow Media to auto-play when entering a region"
 		top_pad="1"
+    bottom_delta="30"
 		left="25"/>
 	<check_box
 		name="media_allowscript_btn"
@@ -327,7 +342,7 @@
 		value="true"
 		follows="left|bottom|right"
 		height="15"
-		bottom_delta="-0"
+		bottom_delta="0"
 		left_delta="245"
 		tool_tip="Check this to enable the filter that allows you to choose whether to play media from a specific host"
 		label="Enable media filter (increased security)"
@@ -366,7 +381,7 @@
      left="25"
      name="voice_chat_settings"
      width="180"
-     top_pad="40">
+     top_pad="35">
 	  Voice Chat Settings
     </text>
     <text
