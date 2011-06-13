@@ -3179,7 +3179,7 @@
                  function="Advanced.PrintTextureMemoryStats" />
             </menu_item_call>
             <menu_item_check
-             label="Double-ClickAuto-Pilot"
+             label="Double-Click Auto-Pilot"
              name="Double-ClickAuto-Pilot">
                 <menu_item_check.on_check
                  function="CheckControl"
@@ -3257,7 +3257,7 @@
                  function="Advanced.ToggleDebugKeys" />
             </menu_item_check>
             <menu_item_check
-             label="Debug WindowProc"
+             label="Debug Window Process"
              name="Debug WindowProc">
                 <menu_item_check.on_check
                  function="Advanced.CheckDebugWindowProc"
