@@ -19,11 +19,11 @@
             parameter="groups_panel" />
     </pie_slice>
     <pie_menu
-        label="Take Off"
+        label="Take Off >"
         layout="topleft"
         name="Take Off &gt;">
         <pie_menu
-            label="Clothes"
+            label="Clothes >"
             layout="topleft"
             name="Clothes &gt;">
             <pie_slice
@@ -184,14 +184,14 @@
         </pie_menu>
 
         <pie_menu
-            label="HUD"
+            label="HUD >"
             layout="topleft"
             name="Pie Object Detach HUD" />
 
         <pie_separator />
 
         <pie_menu
-            label="Detach"
+            label="Detach >"
             layout="topleft"
             name="Pie Object Detach" />
 

@@ -111,10 +111,10 @@
             function="Tools.EnableTakeCopy" />
     </pie_slice>
     <pie_menu
-        label="Attach HUD"
+        label="Attach HUD >"
         name="Pie Object Attach HUD" />
     <pie_menu
-        label="Attach"
+        label="Attach >"
         name="Pie Object Attach" />
     <pie_slice
         enabled="false"
