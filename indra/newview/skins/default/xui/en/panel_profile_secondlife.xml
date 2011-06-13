@@ -268,6 +268,29 @@ KC: I used view_border's around text_editor's due to text render issues with bor
             <text
              left="6"
              top_pad="8"
+             follows="left|top"
+             halign="right"
+             height="16"
+             name="Groups:"
+             width="45"
+             value="Groups:" />
+
+            <group_list
+            left_pad="8"
+            top_delta="0"
+            height="80"
+            right="-6"
+            border_visible="true"
+            for_agent="false"
+            follows="left|top|right"
+            name="group_list" />
+
+            <!--<button follows="left|top" left="15"  top="240" height="20" halign="center"
+            label="+" label_selected="+" name="PhoenixGroupInvite_Button" tool_tip="Invite to Group." width="40" />-->
+
+            <text
+             left="6"
+             top_pad="8"
              height="16"
              width="45"
              follows="left|top"
@@ -296,30 +319,6 @@ KC: I used view_border's around text_editor's due to text render issues with bor
              h_pad="2"
              word_wrap="true"
              parse_urls="true" />
-
-
-            <text
-             left="6"
-             top_pad="8"
-             follows="left|bottom"
-             halign="right"
-             height="16"
-             name="Groups:"
-             width="45"
-             value="Groups:" />
-
-            <group_list
-            left_pad="8"
-            top_delta="0"
-            height="80"
-            right="-6"
-            border_visible="true"
-            for_agent="false"
-            follows="left|bottom|right"
-            name="group_list" />
-
-            <!--<button follows="left|top" left="15"  top="240" height="20" halign="center"
-            label="+" label_selected="+" name="PhoenixGroupInvite_Button" tool_tip="Invite to Group." width="40" />-->
 
             <layout_stack
              top_pad="8"
