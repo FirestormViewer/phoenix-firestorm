@@ -1607,7 +1607,7 @@
                  parameter="character" />
             </menu_item_check>
             <menu_item_check
-             label="SurfacePath"
+             label="Surface Path"
              name="SurfacePath"
              shortcut="control|alt|shift|5">
                 <menu_item_check.on_check
