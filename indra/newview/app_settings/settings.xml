@@ -6280,6 +6280,17 @@
       <key>Value</key>
       <real>16.0</real>
     </map>
+    <key>MiniMapChatRing</key>
+    <map>
+      <key>Comment</key>
+      <string>Display chat distance ring on mini map</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>MiniMapRotate</key>
     <map>
       <key>Comment</key>

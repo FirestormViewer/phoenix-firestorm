@@ -65,6 +65,16 @@
   
   
   <menu_item_separator layout="topleft" />
+
+  <menu_item_check
+   label="Local chat distance ring in Minimap"
+   name="MiniMapChatRing">
+    <menu_item_check.on_check
+       control="MiniMapChatRing" />
+    <menu_item_check.on_click
+       function="ToggleControl"
+       parameter="MiniMapChatRing" />
+  </menu_item_check>
   
   <menu_item_check
      label="Report Crossing Draw Range"

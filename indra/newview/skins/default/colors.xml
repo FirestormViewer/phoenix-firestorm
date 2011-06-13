@@ -693,6 +693,9 @@
      name="MapTrackDisabledColor"
      reference="BrickBrown" />
     <color
+     name="MapChatRingColor"
+     value="0 0 1 0.1" />
+    <color
      name="MenuBarBgColor"
      reference="DkGray" />
     <color

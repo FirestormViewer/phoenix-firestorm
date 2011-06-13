@@ -366,7 +366,7 @@
           name="chat_and_in_enhancements"
           follows="left|top"
           layout="topleft"
-          top_pad="20"
+          top_pad="15"
           left="24"
           height="10"
           width="180">
@@ -399,6 +399,15 @@
           left="30"
           height="20"
           width="400" />
+      <check_box
+            control_name="MiniMapChatRing"
+            name="MiniMapChatRing"
+            label="Display a ring on the Minimap indicating local chat range"
+            layout="topleft"
+            top_delta="18"
+            left="30"
+            height="20"
+            width="400" />
 		<check_box
           control_name="RadarReportChatRange"
           name="reportChatRange"
