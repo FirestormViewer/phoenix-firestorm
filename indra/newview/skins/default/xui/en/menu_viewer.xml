@@ -3551,8 +3551,13 @@
                 <menu_item_call.on_click
                  function="Advanced.DumpAvatarLocalTextures" />
             </menu_item_call>
-        </menu>
-
+			<menu_item_call
+			 label="Reload Avatar Cloud Particle"
+			 name="Reload Avatar Cloud Particle">
+				<menu_item_call.on_click
+				 function="Advanced.ReloadAvatarCloudParticle" />
+			</menu_item_call>
+		</menu>
         <menu_item_separator/>
 
         <menu_item_check

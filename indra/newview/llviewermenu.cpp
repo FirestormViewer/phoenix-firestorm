@@ -1972,7 +1972,19 @@ class LLAdvancedDumpAvatarLocalTextures : public view_listener_t
 };
 
 #endif
-	
+
+///////////////////////////////////
+// Reload Avatar Cloud Particles //
+///////////////////////////////////
+class LLAdvancedReloadAvatarCloudParticle : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLVOAvatar::initCloud();
+		return true;
+	}
+};
+
 /////////////////
 // MESSAGE LOG //
 /////////////////
@@ -8680,6 +8692,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAdvancedRebakeTextures(), "Advanced.RebakeTextures");
 	view_listener_t::addMenu(new LLAdvancedDebugAvatarTextures(), "Advanced.DebugAvatarTextures");
 	view_listener_t::addMenu(new LLAdvancedDumpAvatarLocalTextures(), "Advanced.DumpAvatarLocalTextures");
+	view_listener_t::addMenu(new LLAdvancedReloadAvatarCloudParticle(), "Advanced.ReloadAvatarCloudParticle");
+
 	// Advanced > Network
 	view_listener_t::addMenu(new LLAdvancedEnableMessageLog(), "Advanced.EnableMessageLog");
 	view_listener_t::addMenu(new LLAdvancedDisableMessageLog(), "Advanced.DisableMessageLog");
