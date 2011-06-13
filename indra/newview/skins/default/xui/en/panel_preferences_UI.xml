@@ -147,7 +147,7 @@
 		<text
 		type="string"
             left="5"
-            top_pad="80"
+            top_pad="60"
 		length="1"
 		follows="left|top"
 		height="12"
