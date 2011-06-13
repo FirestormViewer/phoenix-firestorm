@@ -14,7 +14,7 @@ top="600"
 </panel.string>
 <panel.string
      name="real_url" translate="false">
-       http://phoenixviewer.com/app/loginFS/
+       http://phoenixviewer.com/app/loginFSbeta/
 </panel.string>
     <string name="reg_in_client_url" translate="false">
      http://secondlife.eniac15.lindenlab.com/reg-in-client/
