@@ -46,7 +46,7 @@
    left="30"
    height="12"
    name="font_colors"
-   top_pad="20"
+   top_pad="10"
    width="120"
    >
     UI Text Colors:
@@ -373,7 +373,7 @@
    left="30"
    height="12"
    name="bubble_chat"
-   top_pad="30"
+   top_pad="25"
    width="450"
    >
     Name Tag / Bubble Chat / Console Opacity:
@@ -419,7 +419,7 @@
    height="12"
    name="floater_opacity"
    top_pad="15"
-   width="120"
+   width="220"
    >
     Floating Window Opacity:
   </text>
@@ -459,4 +459,87 @@
    show_text="true"
    top_pad="5"
    width="415" />
+
+<!-- ## Zi: Pie menu -->
+  <check_box
+   control_name="OverridePieColors"
+   follows="left|top"
+   layout="topleft"
+   left="30"
+   height="12"
+   name="override_pie_color_checkbox"
+   top_pad="15"
+   width="450"
+   label="Override pie menu background color and opacity:" />
+  <color_swatch
+   can_apply_immediately="true"
+   color="PieMenuBgColorOverride"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left_delta="10"
+   top_pad="10"
+   name="pie_bg_color_override"
+   tool_tip="Choose pie menu background color"
+   width="44">
+  <color_swatch.init_callback
+   function="Pref.getUIColor"
+   parameter="PieMenuBgColorOverride" />
+  <color_swatch.commit_callback
+   function="Pref.applyUIColor"
+   parameter="PieMenuBgColorOverride" />
+  </color_swatch>
+  <color_swatch
+   can_apply_immediately="true"
+   color="PieMenuSelectedColorOverride"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left_pad="4"
+   top_delta="0"
+   name="pie_selected_color_override"
+   tool_tip="Choose pie menu selection color"
+   width="44">
+  <color_swatch.init_callback
+   function="Pref.getUIColor"
+   parameter="PieMenuSelectedColorOverride" />
+  <color_swatch.commit_callback
+   function="Pref.applyUIColor"
+   parameter="PieMenuSelectedColorOverride" />
+  </color_swatch>
+  <slider
+   control_name="PieMenuOpacity"
+   follows="left|top"
+   height="16"
+   increment="0.05"
+   initial_value="0.0"
+   label="Opacity:"
+   layout="topleft"
+   left_pad="10"
+   label_width="70"
+   max_value="1.0"
+   min_value="0.0"
+   name="pie_menu_opacity"
+   tool_tip="Choose pie menu opacity"
+   top_delta = "0"
+   width="330" />
+  <slider
+   control_name="PieMenuFade"
+   follows="left|top"
+   height="16"
+   increment="0.05"
+   initial_value="0.0"
+   label="Fade out:"
+   layout="topleft"
+   label_width="70"
+   max_value="1.0"
+   min_value="0.0"
+   name="pie_menu_fade_out"
+   tool_tip="Choose the amount of fade out to the pie edges"
+   top_pad = "5"
+   width="330" />
+<!-- ## Zi: Pie menu -->
+
 </panel>

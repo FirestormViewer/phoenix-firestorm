@@ -257,7 +257,10 @@
      value="0 0.78 0.78 1" />
     <color
      name="PieMenuBgColor"
-     value="0.24 0.24 0.24 0.59" />
+     value="0.24 0.24 0.24 0.8" />
+    <color
+     name="PieMenuBgColorOverride"
+     value="0.24 0.24 0.24 1.0" />
     <color
      name="PieMenuLineColor"
      value="0 0 0 0.5" />
@@ -267,6 +270,9 @@
     <color
      name="PieMenuSelectedColor"
      reference="EmphasisColor_35" />
+    <color
+     name="PieMenuSelectedColorOverride"
+     reference="EmphasisColor" />
     <color
      name="PropertyColorAuction"
      value="0.5 0 1 0.4" />
