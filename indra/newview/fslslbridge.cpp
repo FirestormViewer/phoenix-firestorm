@@ -49,6 +49,7 @@
 #include "llassetuploadresponders.h"
 #include "llnearbychatbar.h"
 #include "llnotificationmanager.h"
+#include "llselectmgr.h"
 
 #define phoenix_bridge_name "#LSL<->Client Bridge v0.12"
 #define phoenix_folder_name "#Phoenix"
@@ -192,11 +193,12 @@ void FSLSLBridge :: initBridge()
 
 void FSLSLBridge :: startCreation()
 {
-	//are we already in conversation with a bridge?
-	if (mpBridge != NULL)
-	{
-		return;
-	}
+	////are we already in conversation with a bridge?
+	////must have already received a URL call from a bridge.
+	//if (mpBridge != NULL) 
+	//{
+	//	return;
+	//}
 
 	//if bridge object doesn't exist - create and attach it, update script.
 	LLUUID catID = findFSCategory();
@@ -326,7 +328,7 @@ FSLSLBridgeRezCallback :: ~FSLSLBridgeRezCallback()
 
 void FSLSLBridgeRezCallback :: fire(const LLUUID& inv_item)
 {
-	if ((FSLSLBridge::instance().getBridge() != NULL) || inv_item.isNull() || !FSLSLBridge::instance().bridgeCreating())
+	if ((FSLSLBridge::instance().getBridge() != NULL) || inv_item.isNull() || !FSLSLBridge::instance().getBridgeCreating())
 		return;
 
 	//detach from default and put on the right point
@@ -350,7 +352,7 @@ FSLSLBridgeScriptCallback :: ~FSLSLBridgeScriptCallback()
 
 void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 {
-	if (inv_item.isNull() || !FSLSLBridge::instance().bridgeCreating())
+	if (inv_item.isNull() || !FSLSLBridge::instance().getBridgeCreating())
 		return;
 
 	LLViewerInventoryItem* item = gInventory.getItem(inv_item);
@@ -366,28 +368,25 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 	//caps import 
 	std::string url = gAgent.getRegion()->getCapability("UpdateScriptAgent");
 	std::string isMono = "lsl2";  //could also be "mono"
-	if (!url.empty())
+	if (!url.empty() && obj != NULL)  
 	{
 		const std::string fName = prepUploadFile();
 		LLLiveLSLEditor::uploadAssetViaCapsStatic(url, fName, 
 			obj->getID(), inv_item, isMono, true);
+		llinfos << "updating script ID for bridge" << llendl;
+		FSLSLBridge::instance().mScriptItemID = inv_item;
 	}
 	else
 	{
 		//can't complete bridge creation - detach and remove object, remove script
+		//try to clean up and go away. Fail.
 		LLVOAvatarSelf::detachAttachmentIntoInventory(FSLSLBridge::instance().getBridge()->getUUID());
-
-		LLViewerInventoryItem* bridgeItem = FSLSLBridge::instance().getBridge();
-		gInventory.purgeObject(bridgeItem->getUUID());
-		bridgeItem->removeFromServer();
-
+		FSLSLBridge::instance().cleanUpBridge();
+		//also clean up script remains
 		gInventory.purgeObject(item->getUUID());
-		item->removeFromServer();
-
 		gInventory.notifyObservers();
+		return;
 	}
-	llinfos << "updating script ID for bridge" << llendl;
-	FSLSLBridge::instance().mScriptItemID = inv_item;
 }
 
 std::string FSLSLBridgeScriptCallback::prepUploadFile()
@@ -419,19 +418,45 @@ void FSLSLBridge :: checkBridgeScriptName(std::string fileName)
 	{
 		//this is our script upload
 		LLViewerObject* obj = gAgentAvatarp->getWornAttachment(mpBridge->getUUID());
-
-		registerVOInventoryListener(obj, NULL);
+		if (obj == NULL)
+		{
+			//something happened to our object. Try to fail gracefully.
+			cleanUpBridge();
+			return;
+		}
+		//registerVOInventoryListener(obj, NULL);
 		obj->saveScript(gInventory.getItem(mScriptItemID), TRUE, false);
-		requestVOInventory();
+		FSLSLBridgeCleanupTimer *objTimer = new FSLSLBridgeCleanupTimer((F32)1.0);
+		objTimer->startTimer();
+		//obj->doInventoryCallback();
+		//requestVOInventory();
 	}
 }
-void FSLSLBridge :: inventoryChanged(LLViewerObject* object, LLInventoryObject::object_list_t* inventory_objects, S32 serial_num, void* queue)
+
+BOOL FSLSLBridgeCleanupTimer::tick()
+{
+	FSLSLBridge::instance().finishBridge();
+	stopTimer();
+	return TRUE;
+}
+
+void FSLSLBridge :: cleanUpBridge()
+{
+	//something unexpected went wrong. Try to clean up and not crash.
+	reportToNearbyChat("Bridge object not found. Can't proceed with creation, exiting.");
+	gInventory.purgeObject(mpBridge->getUUID());
+	gInventory.notifyObservers();
+	mpBridge = NULL;
+	mBridgeCreating = false;
+}
+
+void FSLSLBridge :: finishBridge()
 {
 	//announce yourself
 	reportToNearbyChat("Bridge created.");
 
 	mBridgeCreating = false;
-	removeVOInventoryListener();
+	//removeVOInventoryListener();
 	cleanUpBridgeFolder();
 }
 //

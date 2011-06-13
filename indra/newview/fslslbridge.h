@@ -33,18 +33,20 @@
 #include "fslslbridgerequest.h"
 #include "llviewerinventory.h"
 #include "llinventoryobserver.h"
+#include "lleventtimer.h"
 
 //
 //-TT Client LSL Bridge File
 //
 
-class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLHTTPClient::Responder, public LLVOInventoryListener
+class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLHTTPClient::Responder //, public LLVOInventoryListener
 {
 	static const U8 BRIDGE_POINT = 127;
 
 	friend class FSLSLBridgeScriptCallback;
 	friend class FSLSLBridgeRezCallback;
 	friend class FSLSLBridgeInventoryObserver;
+	friend class FSLSLBridgeCleanupTimer;
 
 public:
 	FSLSLBridge();
@@ -56,12 +58,17 @@ public:
 	void initBridge();
 	void recreateBridge();
 	void processAttach(LLViewerObject *object, const LLViewerJointAttachment *attachment);
-	bool bridgeCreating() {return mBridgeCreating; };
+	void startCreation();
+
+	bool getBridgeCreating() {return mBridgeCreating; };
+	void setBridgeCreating(bool status) { mBridgeCreating = status; };
+
 	void setBridge(LLViewerInventoryItem* item) { mpBridge = item; };
 	LLViewerInventoryItem* getBridge() { return mpBridge; };
+
 	void checkBridgeScriptName(std::string fileName);
-	void startCreation();
 	std::string currentFullName() { return mCurrentFullName; }
+	void finishBridge();
 
 protected:
 
@@ -89,6 +96,7 @@ protected:
 	void cleanUpBridgeFolder();
 	void setupBridge(LLViewerObject *object);
 	void initCreationStep();
+	void cleanUpBridge();
 };
 
 
@@ -121,6 +129,16 @@ public:
 
 protected:
 	~FSLSLBridgeInventoryObserver() {}
+
+};
+
+class FSLSLBridgeCleanupTimer : public LLEventTimer
+{
+public:
+	FSLSLBridgeCleanupTimer(F32 period) : LLEventTimer(period) {}
+	BOOL tick();
+	void startTimer() { mEventTimer.start(); }
+	void stopTimer() { mEventTimer.stop(); }
 
 };
 
