@@ -12,7 +12,11 @@
     integer debug = FALSE;
     integer httpStatus = 200;
     //key httpReqID;
-  
+    integer FIRESTORM_VIEWER = 0;
+    integer UNKNOWN_VIEWER = 1;
+    integer keyViewerHandshake;
+    integer tryHandshakeOnce = 1;
+
     // for teleport
     integer MAX_TIME_TO_TP = 10; //should be set to 10 for normal use
     vector      mttVector;        // target for llMoveToTarget() teleport
@@ -46,10 +50,10 @@
         llSetText("",ZERO_VECTOR,0.0);
         llSetTexture("757c276e-6409-ad54-a862-ca89c04e4940",ALL_SIDES);
         llSetTextureAnim(0,ALL_SIDES,1,1,1.0,1.0,1.0);
-	llAllowInventoryDrop(FALSE);
+        llAllowInventoryDrop(FALSE);
         // make bridge inconspicuous
         llSetScale(<0.01,0.01,0.01>);
-	llSetPos(<0.0,0.0,-0.15>);
+        llSetPos(<0.0,0.0,-0.15>);
     }
 
     initBridge()
@@ -61,7 +65,10 @@
         {
             llRequestPermissions(llGetOwner(),PERMISSION_TAKE_CONTROLS);
         }
-    }
+	
+        //assume the worst and let the viewer convince us otherwise
+        keyViewerHandshake = UNKNOWN_VIEWER;
+ }
 
     saveNewURL(string url)
     {
@@ -88,7 +95,13 @@
         debugOutput("Parsing command: " + cmd);
  
         //Large If statement for command processing. Shame on you, LSL!
-        if (cmd == "llMoveToTarget")
+        if (cmd == "URL Confirmed")
+        {
+                //we're in the right viewer, go on.
+                keyViewerHandshake = FIRESTORM_VIEWER;
+        	
+        } // URL Confirmed
+        else if (cmd == "llMoveToTarget")
         {
             // Get parameters
             string params = "<" + llList2String(commandList,1) + ">";
@@ -139,29 +152,20 @@ default
 {
     state_entry()
     {
-	makeSane();
-	initBridge();
+        makeSane();
+        initBridge();
     }
     
     on_rez(integer i)
     {
         llSetPrimitiveParams([PRIM_TEMP_ON_REZ,TRUE]);
+        llSetObjectDesc(llGetObjectName());
         initBridge();
     }
     
     touch_start(integer total_number)
     {
         debugOutput("touched");
-
-        if (bridgeURL != latestURL)
-        {
-            //just in case, since we probably aren't there anymore
-            llReleaseURL(bridgeURL);
-    
-            bridgeURL = latestURL;
-            llOwnerSay("<curURL>" + bridgeURL + "</curURL>");
-            llRequestURL();
-        }
     }
     
     run_time_permissions(integer i)
@@ -232,7 +236,16 @@ default
             saveNewURL(Body);
 
             //Saying URL to owner
-            llOwnerSay("<bridgeURL>" + latestURL+ "</bridgeURL>");
+           if (keyViewerHandshake == FIRESTORM_VIEWER || tryHandshakeOnce == 1)
+            {
+        	llOwnerSay("<bridgeURL>" + latestURL+ "</bridgeURL>");
+                tryHandshakeOnce = 0;
+            }
+            else
+            {
+                //we're in a wrong viewer. just sit quietly
+                llDetachFromAvatar();
+            }
         }
         else if (Method == URL_REQUEST_DENIED) 
         {

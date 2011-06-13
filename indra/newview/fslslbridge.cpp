@@ -51,6 +51,8 @@
 #include "llnotificationmanager.h"
 #include "llselectmgr.h"
 
+#include <boost/regex.hpp>
+
 #define phoenix_bridge_name "#LSL<->Client Bridge v0.12"
 #define phoenix_folder_name "#Phoenix"
 
@@ -62,6 +64,7 @@
 #define FS_BRIDGE_MINOR_VERSION 7
 
 const std::string UPLOAD_SCRIPT_1_7 = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
+const boost::regex FSBridgePattern("^#Firestorm LSL Bridge v*.*");
 
 
 //
@@ -124,6 +127,10 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 
 	if (tag == "<bridgeURL>")
 	{
+		// get the content of the message, between <tag> and </tag>
+		mCurrentURL = message.substr(tag.length(), message.length() - ((tag.length() * 2) + 1));
+		llinfos << "New URL is: " << mCurrentURL << llendl;
+		
 		if (mpBridge == NULL)
 		{
 			LLUUID catID = findFSCategory();
@@ -131,12 +138,10 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 
 			if (fsBridge != NULL)
 				mpBridge = fsBridge;
+
+			return viewerToLSL("URL Confirmed", new FSLSLBridgeRequestResponder());
 		}
 
-		// get the content of the message, between <tag> and </tag>
-		mCurrentURL = message.substr(tag.length(), message.length() - ((tag.length() * 2) + 1));
-		llinfos << "New URL is: " << mCurrentURL << llendl;
-		
 		return true;
 	}
 	return false;
@@ -542,25 +547,25 @@ void FSLSLBridge :: cleanUpBridgeFolder()
 
 bool FSLSLBridge :: isOldBridgeVersion(LLInventoryItem *item)
 {
-//	if (!item)
-//		return;
-//	if (!boost::regex_match(item->getName(), BridgePattern))
-//
-//	std::string str = item->getName();
-//
-//	(item) && boost::regex_match(item->getName(), AnyBridgePattern);
-//
-//	std::string tmpl = FS_BRIDGE_NAME;
-//
-//	string::size_type found = str.find_first_of(".");
-// 
-//	while( found != string::npos ) {}
-//
-//	std::string sMajor = str.substr(strlen(tmpl.c_str)-1, dotPos);
-//	std::string sMinor = str.substr(strlen(tmpl.c_str)+strlen(sMajor));
-//
-//	int iMajor = atoi(sMajor);
-//	float fMinor = atof(sMinor);
+	//if (!item)
+	//	return false;
+	////if (!boost::regex_match(item->getName(), FSBridgePattern))
+
+	//std::string str = item->getName();
+
+	//(item) && boost::regex_match(item->getName(), FSBridgePattern);
+
+	//std::string tmpl = FS_BRIDGE_NAME;
+
+	//std::string::size_type found = str.find_first_of(".");
+ //
+	//while( found != std::string::npos ) {}
+
+	////std::string sMajor = str.substr(strlen(tmpl.c_str)-1, dotPos);
+	////std::string sMinor = str.substr(strlen(tmpl.c_str)+strlen(sMajor));
+
+	////int iMajor = atoi(sMajor);
+	////float fMinor = atof(sMinor);
 
 	return false;
 }
