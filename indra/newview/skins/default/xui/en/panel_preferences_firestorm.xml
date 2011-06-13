@@ -235,6 +235,23 @@
       function="FS.ToggleSortContacts" />
       </check_box>
 
+	  <check_box bottom_delta="-20"
+      follows="left|top"
+      font="SansSerifSmall"
+      height="16"
+      initial_value="true"
+      label="Render blocked avatars as particle cloud"
+      left="15"
+      mouse_opaque="true"
+      name="ShowMutedAvatarsAsCloud"
+      radio_style="false"
+      width="270"
+      control_name="ShowMutedAvatarsAsCloud"
+      tool_tip="Blocked avatars will be rendered as a particle cloud in special color.">
+      <check_box.commit_callback
+      function="FS.ToggleSortContacts" />
+      </check_box>
+
       </panel>
 
 	  <!--View-->
