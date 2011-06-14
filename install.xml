@@ -1419,9 +1419,9 @@ anguage Infrstructure (CLI) international standard</string>
           <key>darwin</key>
           <map>
             <key>md5sum</key>
-            <string>2f9b3528d4b5f858fb8dcee4b6dd5188</string>
+            <string>8675b5eedef038b514338b17f0e55961</string>
             <key>url</key>
-            <uri>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/slvoice-2.1.3010.6270-darwin-20090309.tar.bz2</uri>
+            <uri>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/vivox-2.1.3010.6270-darwin-20090309.tar.bz2</uri>
           </map>
           <key>linux</key>
           <map>
