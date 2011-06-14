@@ -99,7 +99,7 @@
 #include "llgesturemgr.h" //needed to trigger the voice gesticulations
 #include "llvoiceclient.h"
 #include "llvoicevisualizer.h" // Ventrella
-
+#include "llsdserialize.h"
 #include "lldebugmessagebox.h"
 extern F32 SPEED_ADJUST_MAX;
 extern F32 SPEED_ADJUST_MAX_SEC;
@@ -1172,6 +1172,8 @@ void LLVOAvatar::initClass()
 	gAnimLibrary.animStateSetString(ANIM_AGENT_PELVIS_FIX,"pelvis_fix");
 	gAnimLibrary.animStateSetString(ANIM_AGENT_TARGET,"target");
 	gAnimLibrary.animStateSetString(ANIM_AGENT_WALK_ADJUST,"walk_adjust");
+
+	initCloud();
 }
 
 
@@ -1180,6 +1182,45 @@ void LLVOAvatar::cleanupClass()
 	deleteAndClear(sAvatarXmlInfo);
 	sSkeletonXMLTree.cleanup();
 	sXMLTree.cleanup();
+}
+
+LLPartSysData LLVOAvatar::sCloud;
+LLPartSysData LLVOAvatar::sCloudMuted;
+void LLVOAvatar::initCloud()
+{
+	// fancy particle cloud designed by Brent
+	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "cloud.xml");
+	if(!gDirUtilp->fileExists(filename))
+	{
+		filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "cloud.xml");
+	}
+	if(!gDirUtilp->fileExists(filename))
+	{
+		filename = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "cloud.xml");
+	}
+	LLSD cloud;
+	llifstream in_file(filename);
+	LLSDSerialize::fromXMLDocument(cloud, in_file);
+	sCloud.fromLLSD(cloud);
+	LLViewerTexture* cloud_texture = LLViewerTextureManager::getFetchedTextureFromFile("cloud-particle.j2c");
+	sCloud.mPartImageID = cloud_texture->getID();
+
+	//Todo: have own image, de-copy-pasta
+	LLSD cloud_muted;
+	filename = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "cloud_muted.xml");
+	if(!gDirUtilp->fileExists(filename))
+	{
+		filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "cloud_muted.xml");
+	}
+	if(!gDirUtilp->fileExists(filename))
+	{
+		filename = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "cloud_muted.xml");
+	}
+	llifstream in_file_muted(filename);
+	LLSDSerialize::fromXMLDocument(cloud_muted, in_file_muted);
+	sCloudMuted.fromLLSD(cloud_muted);
+	LLViewerTexture* cloud_muted_texture = LLViewerTextureManager::getFetchedTextureFromFile("cloud-particle.j2c");
+	sCloudMuted.mPartImageID = cloud_muted_texture->getID();
 }
 
 void LLVOAvatar::initInstance(void)
@@ -2649,52 +2690,25 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 	// update visibility when avatar is partially loaded
 	if (updateIsFullyLoaded()) // changed?
 	{
-		if (isFullyLoaded() && isSelf())
+		if (isFullyLoaded())
 		{
 			static bool first_fully_visible = true;
-			if (first_fully_visible)
+			if (first_fully_visible && isSelf())
 			{
 				llinfos << "self isFullyLoaded, first_fully_visible" << llendl;
 
 				first_fully_visible = false;
 				LLAppearanceMgr::instance().onFirstFullyVisible();
 			}
-		}
-		if (isFullyLoaded())
-		{
 			deleteParticleSource();
 			updateLOD();
 		}
 		else
 		{
-			LLPartSysData particle_parameters;
-
-			// fancy particle cloud designed by Brent
-			particle_parameters.mPartData.mMaxAge            = 4.f;
-			particle_parameters.mPartData.mStartScale.mV[VX] = 0.8f;
-			particle_parameters.mPartData.mStartScale.mV[VX] = 0.8f;
-			particle_parameters.mPartData.mStartScale.mV[VY] = 1.0f;
-			particle_parameters.mPartData.mEndScale.mV[VX]   = 0.02f;
-			particle_parameters.mPartData.mEndScale.mV[VY]   = 0.02f;
-			particle_parameters.mPartData.mStartColor        = LLColor4(1, 1, 1, 0.5f);
-			particle_parameters.mPartData.mEndColor          = LLColor4(1, 1, 1, 0.0f);
-			particle_parameters.mPartData.mStartScale.mV[VX] = 0.8f;
-			LLViewerTexture* cloud = LLViewerTextureManager::getFetchedTextureFromFile("cloud-particle.j2c");
-			particle_parameters.mPartImageID                 = cloud->getID();
-			particle_parameters.mMaxAge                      = 0.f;
-			particle_parameters.mPattern                     = LLPartSysData::LL_PART_SRC_PATTERN_ANGLE_CONE;
-			particle_parameters.mInnerAngle                  = F_PI;
-			particle_parameters.mOuterAngle                  = 0.f;
-			particle_parameters.mBurstRate                   = 0.02f;
-			particle_parameters.mBurstRadius                 = 0.0f;
-			particle_parameters.mBurstPartCount              = 1;
-			particle_parameters.mBurstSpeedMin               = 0.1f;
-			particle_parameters.mBurstSpeedMax               = 1.f;
-			particle_parameters.mPartData.mFlags             = ( LLPartData::LL_PART_INTERP_COLOR_MASK | LLPartData::LL_PART_INTERP_SCALE_MASK |
-																 LLPartData::LL_PART_EMISSIVE_MASK | // LLPartData::LL_PART_FOLLOW_SRC_MASK |
-																 LLPartData::LL_PART_TARGET_POS_MASK );
-			
-			setParticleSource(particle_parameters, getID());
+			if (!isSelf() && LLMuteList::getInstance()->isMuted(getID()))
+				setParticleSource(sCloudMuted, getID());
+			else
+				setParticleSource(sCloud, getID());
 		}
 	}
 }	
@@ -2901,15 +2915,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	bool is_away = mSignaledAnimations.find(ANIM_AGENT_AWAY)  != mSignaledAnimations.end();
 	bool is_busy = mSignaledAnimations.find(ANIM_AGENT_BUSY) != mSignaledAnimations.end();
 	bool is_appearance = mSignaledAnimations.find(ANIM_AGENT_CUSTOMIZE) != mSignaledAnimations.end();
-	bool is_muted;
-	if (isSelf())
-	{
-		is_muted = false;
-	}
-	else
-		{
-		is_muted = LLMuteList::getInstance()->isMuted(getID());
-	}
+	bool is_muted = (!isSelf() && LLMuteList::getInstance()->isMuted(getID()));
 //	bool is_friend = LLAvatarTracker::instance().isBuddy(getID());
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 	bool is_friend = (!fRlvShowNames) && (LLAvatarTracker::instance().isBuddy(getID()));
@@ -2978,7 +2984,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				line += LLTrans::getString("AvatarEditingAppearance");
 				line += ", ";
 					}
-			if (is_cloud)
+			if (is_cloud && !is_muted)
 					{
 				line += LLTrans::getString("LoadingData");
 				line += ", ";
@@ -6191,6 +6197,8 @@ BOOL LLVOAvatar::isVisible() const
 // Determine if we have enough avatar data to render
 BOOL LLVOAvatar::getIsCloud()
 {
+	static LLUICachedControl<bool> muted_as_cloud("ShowMutedAvatarsAsCloud");
+	
 	// Do we have a shape?
 	if (visualParamWeightsAreDefault())
 	{
@@ -6203,6 +6211,10 @@ BOOL LLVOAvatar::getIsCloud()
 	{
 		return TRUE;
 	}
+
+	if (muted_as_cloud && !isSelf() &&  LLMuteList::getInstance()->isMuted(getID()))
+		return TRUE;
+	
 	return FALSE;
 }
 

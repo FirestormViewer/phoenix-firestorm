@@ -84,6 +84,9 @@ const F32 DOT_SCALE = 0.75f;
 const F32 MIN_PICK_SCALE = 2.f;
 const S32 MOUSE_DRAG_SLOP = 2;		// How far the mouse needs to move before we think it's a drag
 
+const F32 WIDTH_PIXELS = 2.f;
+const S32 CIRCLE_STEPS = 100;
+
 LLNetMap::LLNetMap (const Params & p)
 :	LLUICtrl (p),
 	mBackgroundColor (p.bg_color()),
@@ -167,6 +170,7 @@ void LLNetMap::draw()
 	static LLUIColor map_track_disabled_color = LLUIColorTable::instance().getColor("MapTrackDisabledColor", LLColor4::white);
 	static LLUIColor map_frustum_color = LLUIColorTable::instance().getColor("MapFrustumColor", LLColor4::white);
 	static LLUIColor map_frustum_rotating_color = LLUIColorTable::instance().getColor("MapFrustumRotatingColor", LLColor4::white);
+	static LLUIColor map_chat_ring_color = LLUIColorTable::instance().getColor("MapChatRingColor", LLColor4::white);
 	
 	if (mObjectImagep.isNull())
 	{
@@ -478,11 +482,18 @@ void LLNetMap::draw()
 			{
 				mClosestAgentToCursor = gAgent.getID();
 			}
+
+			// Draw chat range ring(s)
+			static LLUICachedControl<bool> chat_ring("MiniMapChatRing", true);
+			if(chat_ring)
+			{
+				drawRing(20.0, pos_map, map_chat_ring_color);
+				drawRing(100.0, pos_map, map_chat_ring_color);
+			}
 		}
 
 		// Draw frustum
-		F32 meters_to_pixels = mScale/ LLWorld::getInstance()->getRegionWidthInMeters();
-
+		F32 meters_to_pixels = mScale / LLWorld::getInstance()->getRegionWidthInMeters();
 		F32 horiz_fov = LLViewerCamera::getInstance()->getView() * LLViewerCamera::getInstance()->getAspect();
 		F32 far_clip_meters = LLViewerCamera::getInstance()->getFar();
 		F32 far_clip_pixels = far_clip_meters * meters_to_pixels;
@@ -564,6 +575,19 @@ LLVector3 LLNetMap::globalPosToView( const LLVector3d& global_pos )
 	pos_local.mV[VY] += getRect().getHeight() / 2 + mCurPan.mV[VY];
 
 	return pos_local;
+}
+
+void LLNetMap::drawRing(const F32 radius, const LLVector3 pos_map, const LLUIColor& color)
+
+{
+	F32 meters_to_pixels = mScale / LLWorld::getInstance()->getRegionWidthInMeters();
+	F32 radius_pixels = radius * meters_to_pixels;
+
+	glMatrixMode(GL_MODELVIEW);
+	gGL.pushMatrix();
+	gGL.translatef((F32)pos_map.mV[VX], (F32)pos_map.mV[VY], 0.f);
+	gl_ring(radius_pixels, WIDTH_PIXELS, color, color, CIRCLE_STEPS, FALSE);
+	gGL.popMatrix();
 }
 
 void LLNetMap::drawTracking(const LLVector3d& pos_global, const LLColor4& color, 

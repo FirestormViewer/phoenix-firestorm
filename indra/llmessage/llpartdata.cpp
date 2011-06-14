@@ -343,3 +343,92 @@ void LLPartSysData::setPartAccel(const LLVector3 &accel)
 	mPartAccel.mV[VY] = llclamp(accel.mV[VY], -100.f, 100.f);
 	mPartAccel.mV[VZ] = llclamp(accel.mV[VZ], -100.f, 100.f);
 }
+
+LLSD LLPartSysData::asLLSD() const
+{
+	LLSD sd = LLSD();
+
+	sd["LL_PART_INTERP_COLOR_MASK"] = (LLPartData::LL_PART_INTERP_COLOR_MASK & mPartData.mFlags) ? 1 : 0;
+	sd["LL_PART_INTERP_SCALE_MASK"] = (LLPartData::LL_PART_INTERP_SCALE_MASK & mPartData.mFlags) ? 1 : 0;
+	sd["LL_PART_BOUNCE_MASK"] = (LLPartData::LL_PART_BOUNCE_MASK & mPartData.mFlags) ? 1 : 0;
+	sd["LL_PART_WIND_MASK"] = (LLPartData::LL_PART_WIND_MASK & mPartData.mFlags) ? 1 : 0;
+	sd["LL_PART_FOLLOW_SRC_MASK"] = (LLPartData::LL_PART_FOLLOW_SRC_MASK & mPartData.mFlags) ? 1 : 0;
+	sd["LL_PART_FOLLOW_VELOCITY_MASK"] = (LLPartData::LL_PART_FOLLOW_VELOCITY_MASK & mPartData.mFlags) ? 1 : 0;
+	sd["LL_PART_TARGET_POS_MASK"] = (LLPartData::LL_PART_TARGET_POS_MASK & mPartData.mFlags) ? 1 : 0;
+	sd["LL_PART_TARGET_LINEAR_MASK"] = (LLPartData::LL_PART_TARGET_LINEAR_MASK & mPartData.mFlags) ? 1 : 0;
+	sd["LL_PART_EMISSIVE_MASK"] = (LLPartData::LL_PART_EMISSIVE_MASK & mPartData.mFlags) ? 1 : 0;
+	sd["LL_PART_BEAM_MASK"] = (LLPartData::LL_PART_BEAM_MASK & mPartData.mFlags) ? 1 : 0;
+
+	sd["ParticleMaxAge"] = mPartData.mMaxAge;
+	sd["StartColor"] = ll_sd_from_color4(mPartData.mStartColor);
+	sd["EndColor"] = ll_sd_from_color4(mPartData.mEndColor);
+	sd["StartScale"] = ll_sd_from_vector2(mPartData.mStartScale);
+	sd["EndScale"] = ll_sd_from_vector2(mPartData.mEndScale);
+
+	sd["SourceMaxAge"] = mMaxAge;
+	sd["SourceStartAge"] = mStartAge;
+
+	sd["LL_PART_SRC_PATTERN_DROP"] = ( mPattern & LL_PART_SRC_PATTERN_DROP) ? 1 : 0;
+	sd["LL_PART_SRC_PATTERN_EXPLODE"] = ( mPattern & LL_PART_SRC_PATTERN_EXPLODE) ? 1 : 0;
+	sd["LL_PART_SRC_PATTERN_ANGLE"] = ( mPattern & LL_PART_SRC_PATTERN_ANGLE) ? 1 : 0;
+	sd["LL_PART_SRC_PATTERN_ANGLE_CONE"] = ( mPattern & LL_PART_SRC_PATTERN_ANGLE_CONE) ? 1 : 0 ;
+	sd["LL_PART_SRC_PATTERN_ANGLE_CONE_EMPTY"] = ( mPattern & LL_PART_SRC_PATTERN_ANGLE_CONE_EMPTY) ? 1 : 0;
+
+	sd["InnerAngle"] = mInnerAngle;
+	sd["OuterAngle"] = mOuterAngle;
+	sd["AngularVelocity"] = ll_sd_from_vector3(mAngularVelocity);
+	sd["BurstRate"] = mBurstRate;
+	sd["BurstPartCount"] = mBurstPartCount;
+	sd["BurstSpeedMin"] = mBurstSpeedMin;
+	sd["BurstSpeedMax"] = mBurstSpeedMax;
+	sd["BurstRadius"] = mBurstRadius;
+	sd["PartImageID"] = mPartImageID.asString();
+	sd["TargetId"] = mTargetUUID.asString();
+	return sd;
+}
+
+bool LLPartSysData::fromLLSD(LLSD& sd)
+{
+	mPartData.mFlags = 0;
+	if (sd["LL_PART_INTERP_COLOR_MASK"]) mPartData.mFlags |= LLPartData::LL_PART_INTERP_COLOR_MASK;
+	if (sd["LL_PART_INTERP_SCALE_MASK"]) mPartData.mFlags |= LLPartData::LL_PART_INTERP_SCALE_MASK;
+	if (sd["LL_PART_BOUNCE_MASK"]) mPartData.mFlags |= LLPartData::LL_PART_BOUNCE_MASK;
+	if (sd["LL_PART_WIND_MASK"]) mPartData.mFlags |= LLPartData::LL_PART_WIND_MASK;
+	if (sd["LL_PART_FOLLOW_SRC_MASK"]) mPartData.mFlags |= LLPartData::LL_PART_FOLLOW_SRC_MASK;
+	if (sd["LL_PART_FOLLOW_VELOCITY_MASK"]) mPartData.mFlags |= LLPartData::LL_PART_FOLLOW_VELOCITY_MASK;
+	if (sd["LL_PART_TARGET_POS_MASK"]) mPartData.mFlags |= LLPartData::LL_PART_TARGET_POS_MASK;
+	if (sd["LL_PART_TARGET_LINEAR_MASK"]) mPartData.mFlags |= LLPartData::LL_PART_TARGET_LINEAR_MASK;
+	if (sd["LL_PART_EMISSIVE_MASK"]) mPartData.mFlags |= LLPartData::LL_PART_EMISSIVE_MASK;
+	if (sd["LL_PART_BEAM_MASK"]) mPartData.mFlags |= LLPartData::LL_PART_BEAM_MASK;
+
+	mPartData.mMaxAge = (F32)sd["ParticleMaxAge"].asReal();
+	mPartData.mStartColor = ll_color4_from_sd(sd["StartColor"]);
+	mPartData.mEndColor = ll_color4_from_sd(sd["EndColor"]);
+	mPartData.mStartScale = ll_vector2_from_sd(sd["StartScale"]);
+	mPartData.mEndScale = ll_vector2_from_sd(sd["EndScale"]);
+
+	mMaxAge   = (F32)sd["SourceMaxAge"].asReal();
+	mStartAge  = (F32)sd["SourceStartAge"].asReal();
+
+	mPattern = 0;
+	if (sd["LL_PART_SRC_PATTERN_DROP"]) mPattern |= LL_PART_SRC_PATTERN_DROP;
+	if (sd["LL_PART_SRC_PATTERN_EXPLODE"]) mPattern |= LL_PART_SRC_PATTERN_EXPLODE;
+	if (sd["LL_PART_SRC_PATTERN_ANGLE"]) mPattern |= LL_PART_SRC_PATTERN_ANGLE;
+	if (sd["LL_PART_SRC_PATTERN_ANGLE_CONE"]) mPattern |= LL_PART_SRC_PATTERN_ANGLE_CONE;
+	if (sd["LL_PART_SRC_PATTERN_ANGLE_CONE_EMPTY"]) mPattern |= LL_PART_SRC_PATTERN_ANGLE_CONE_EMPTY;
+
+	mInnerAngle = (F32)sd["InnerAngle"].asReal();
+	mOuterAngle = (F32)sd["OuterAngle"].asReal();
+	mAngularVelocity = ll_vector3_from_sd(sd["AngularVelocity"]);
+	mBurstRate = (F32)sd["BurstRate"].asReal();
+	int burst_part_count = sd["BurstPartCount"];
+	mBurstPartCount = (U8)burst_part_count;
+	mBurstSpeedMin = (F32)sd["BurstSpeedMin"].asReal();
+	mBurstSpeedMax = (F32)sd["BurstSpeedMax"].asReal();
+	mBurstRadius = (F32)sd["BurstRadius"].asReal();
+
+	mPartImageID = LLUUID(sd[("PartImageID")].asString());
+	mTargetUUID = LLUUID(sd["TargetId"].asString());
+
+	return true;
+}

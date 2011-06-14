@@ -398,7 +398,7 @@
 			</menu>
 			<menu label="Avatar-Tests" name="Character Tests">
 				<menu_item_call label="Aussehen als XML speichern" name="Appearance To XML"/>
-				<menu_item_call label="Avatargeometry ein-/ausschalten" name="Toggle Character Geometry"/>
+				<menu_item_call label="Avatargeometrie ein-/ausschalten" name="Toggle Character Geometry"/>
 				<menu_item_call label="Männlich testen" name="Test Male"/>
 				<menu_item_call label="Weiblich testen" name="Test Female"/>
 				<menu_item_call label="PG ein-/ausschalten" name="Toggle PG"/>
@@ -408,16 +408,16 @@
 			<menu_item_check label="Animations-Info" name="Animation Info"/>
 			<menu_item_check label="Zeitlupen-Animationen" name="Slow Motion Animations"/>
 			<menu_item_check label="Kamerafokus anzeigen" name="Show Look At"/>
-			<menu_item_check label="Klickpunkt anzeigen??" name="Show Point At"/>
+			<menu_item_check label="Klickpunkt anzeigen" name="Show Point At"/>
 			<menu_item_check label="Fehler in Landaktualisierung beseitigen" name="Debug Joint Updates"/>
 			<menu_item_check label="LOD deaktiveren" name="Disable LOD"/>
 			<menu_item_check label="Fehler für sichtbare Agenten beseitigen" name="Debug Character Vis"/>
 			<menu_item_check label="Gelenkpunkte anzeigen" name="Show Collision Skeleton"/>
 			<menu_item_check label="Agent-Ziel anzeigen" name="Display Agent Target"/>
-			--&gt;
 			<menu_item_call label="Anhänge ausgeben" name="Dump Attachments"/>
 			<menu_item_call label="Fehler in Avatar-Texturen beseitigen" name="Debug Avatar Textures"/>
 			<menu_item_call label="Lokale Texturen ausgeben" name="Dump Local Textures"/>
+			<menu_item_call label="Avatarwolken-Partikel neu laden" name="Reload Avatar Cloud Particle"/>
 		</menu>
 		<menu_item_check label="HTTP-Texturen" name="HTTP Textures"/>
 		<menu_item_call label="Bilder komprimieren" name="Compress Images"/>

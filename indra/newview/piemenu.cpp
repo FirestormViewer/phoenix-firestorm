@@ -31,6 +31,7 @@
 #include "piemenu.h"
 #include "pieslice.h"
 #include "pieseparator.h"
+#include "llviewercontrol.h"
 #include "llviewerwindow.h"
 #include "v2math.h"
 
@@ -239,6 +240,15 @@ void PieMenu::draw( void )
 	LLColor4 textColor=LLUIColorTable::instance().getColor("PieMenuTextColor");
 	LLColor4 bgColor=LLUIColorTable::instance().getColor("PieMenuBgColor");
 	LLColor4 borderColor=bgColor % (F32)0.3;
+
+	// if the user wants their own colors, apply them here
+	if(gSavedSettings.getBOOL("OverridePieColors"))
+	{
+		bgColor=LLUIColorTable::instance().getColor("PieMenuBgColorOverride") % gSavedSettings.getF32("PieMenuOpacity");
+		borderColor=bgColor % (1.f-gSavedSettings.getF32("PieMenuFade"));
+		selectedColor=LLUIColorTable::instance().getColor("PieMenuSelectedColorOverride");
+	}
+
 	// on first click, make the menu fade out to indicate "borderless" operation
 	if(mFirstClick)
 		borderColor%=0.0;

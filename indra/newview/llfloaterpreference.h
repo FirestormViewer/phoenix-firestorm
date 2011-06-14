@@ -93,6 +93,11 @@ protected:
 	void		onLanguageChange();
 	void		onNameTagOpacityChange(const LLSD& newvalue);
 
+	// ## Zi: Pie menu
+	// make sure controls get greyed out or enwbled when pie color override is toggled
+	void onPieColorsOverrideChanged();
+	// ## Zi: Pie menu
+
 	// set value of "BusyResponseChanged" in account settings depending on whether busy response
 	// string differs from default after user changes.
 	void onBusyResponseChanged();

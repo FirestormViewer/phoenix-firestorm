@@ -3,7 +3,7 @@
     layout="topleft"
     name="Land Pie">
     <pie_slice
-        label="About Land ..."
+        label="About Land..."
         name="Place Information...">
         <pie_slice.on_click
             function="Floater.Show"

@@ -2,6 +2,17 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
+	<key>ShowMutedAvatarsAsCloud</key>
+	<map>
+		<key>Comment</key>
+		<string>If true, show muted avatars as clouds.</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>Boolean</string>
+		<key>Value</key>
+		<integer>1</integer>
+	</map>
   <key>ShowStreamMetadata</key>
   <map>
     <key>Comment</key>
@@ -6280,6 +6291,17 @@
       <key>Value</key>
       <real>16.0</real>
     </map>
+    <key>MiniMapChatRing</key>
+    <map>
+      <key>Comment</key>
+      <string>Display chat distance ring on mini map</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>MiniMapRotate</key>
     <map>
       <key>Comment</key>
@@ -11947,6 +11969,39 @@ Change of this parameter will affect the layout of buttons in notification toast
     </map>
 
 <!-- ## Zi: Pie menu -->
+		<key>OverridePieColors</key>
+		<map>
+			<key>Comment</key>
+			<string>Override the pie menu color defined by the currently selected skin</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
+		</map>
+		<key>PieMenuOpacity</key>
+		<map>
+			<key>Comment</key>
+			<string>Opacity for the pie menu background</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>F32</string>
+			<key>Value</key>
+			<real>0.85</real>
+		</map>
+		<key>PieMenuFade</key>
+		<map>
+			<key>Comment</key>
+			<string>Fade out for the pie menu background towards the edges</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>F32</string>
+			<key>Value</key>
+			<real>0.3</real>
+		</map>
 		<key>UISndPieMenuAppear</key>
 		<map>
 			<key>Comment</key>
@@ -13926,7 +13981,7 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Type</key>
 			<string>U32</string>
 			<key>Value</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</map>
 		<key>TurnAroundWhenWalkingBackwards</key>
 		<map>
@@ -14025,7 +14080,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>S32</string>
     <key>Value</key>
-    <integer>8</integer>
+    <integer>16</integer>
   </map>
   <key>ImagePipelineHTTPMaxFailCountFallback</key>
     <map>
