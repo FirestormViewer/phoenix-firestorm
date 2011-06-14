@@ -112,7 +112,7 @@
 	 show_item_link_overlays="true"
      width="290" />
   </tab_container>
-  <layout_stack
+  <panel
    animate="false"
    border_size="0"
    follows="left|right|bottom"
@@ -123,8 +123,10 @@
    left="10"
    name="bottom_panel"
    width="307">
-      <layout_panel
+      <panel
        auto_resize="false"
+	   follows="top|left"
+       left="0"
        height="25"
        layout="topleft"
        name="options_gear_btn_panel"
@@ -143,9 +145,11 @@
            name="options_gear_btn"
            top="0"
            width="31" />
-      </layout_panel>
-      <layout_panel
+      </panel>
+      <panel
        auto_resize="false"
+	   follows="top|left"
+       left_pad="0"
        height="25"
        layout="topleft"
        name="add_btn_panel"
@@ -164,12 +168,13 @@
            tool_tip="Add new item"
            top="0"
            width="31" />
-      </layout_panel>
-	  <layout_panel
+      </panel>
+	  <panel
    	  auto_resize="false"
+	  follows="top|left"
+       left_pad="0"
        height="25"
        layout="topleft"
-       left_pad="0"
        name="new_inventory_panel"
        width="32">
           <button
@@ -189,12 +194,13 @@
                  function="Button.SetDockableFloaterToggle"
                  parameter="inventory" />
            </button>
-      </layout_panel>
-      <layout_panel
+      </panel>
+      <panel
        auto_resize="true"
+	   follows="top|left|right"
+       left_pad="0"
        height="25"
        layout="topleft"
-	   follows="bottom|left|right"
        name="expand_collapse_panel"
        user_resize="false"
        width="180">
@@ -233,9 +239,11 @@
            top="0"
            name="dummy_icon"
            width="59" / -->
-      </layout_panel>
-      <layout_panel
+      </panel>
+      <panel
        auto_resize="false"
+	   follows="top|left"
+       left_pad="0"
        height="25"
        layout="topleft"
        name="trash_btn_panel"
@@ -254,6 +262,6 @@
            tool_tip="Remove selected item"
            top="0"
            width="31"/>
-      </layout_panel>
-  </layout_stack>
+      </panel>
+  </panel>
 </panel>
