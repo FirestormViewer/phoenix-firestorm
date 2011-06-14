@@ -1433,7 +1433,7 @@ anguage Infrstructure (CLI) international standard</string>
           <key>windows</key>
           <map>
             <key>md5sum</key>
-            <string>940ac55a6d0141c958bf2b14939d8474</string>
+            <string>752daa90e07c05202d1f76980cb955eb</string>
             <key>url</key>
             <uri>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/vivox-2.1.3010.6270-windows-20090309.tar.bz2</uri>
           </map>
