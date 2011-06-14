@@ -662,11 +662,10 @@ class DarwinManifest(ViewerManifest):
                 self.path("zh-Hans.lproj")
 
                 # SLVoice and vivox lols
-                self.path("vivox-runtime/universal-darwin/libsndfile.dylib", "libsndfile.dylib")
-                self.path("vivox-runtime/universal-darwin/libvivoxoal.dylib", "libvivoxoal.dylib")
+                self.path("vivox-runtime/universal-darwin/libalut.dylib", "libalut.dylib")
+                self.path("vivox-runtime/universal-darwin/libopenal.dylib", "libopenal.dylib")
                 self.path("vivox-runtime/universal-darwin/libortp.dylib", "libortp.dylib")
                 self.path("vivox-runtime/universal-darwin/libvivoxsdk.dylib", "libvivoxsdk.dylib")
-                self.path("vivox-runtime/universal-darwin/libvivoxplatform.dylib", "libvivoxplatform.dylib")
                 self.path("vivox-runtime/universal-darwin/SLVoice", "SLVoice")
 
                 libdir = "../../libraries/universal-darwin/lib_release"
