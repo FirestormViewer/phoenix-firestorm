@@ -676,14 +676,24 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 			std::map<LLUUID,LLAvatarName>::iterator it = sCache.find(agent_id);
 			if (it != sCache.end())
 			{
-				const LLAvatarName& av_name = it->second;
+				LLAvatarName& av_name = it->second;
 				
+				//AO: this is broken, it comes up as expired prematurely.
+				//disable the expire test as a temp workaround.
+				
+				/*
 				if (av_name.mExpires > LLFrameTimer::getTotalSeconds())
 				{
+				 */
 					// ...name already exists in cache, fire callback now
 					fireSignal(agent_id, slot, av_name);
+					llinfos << "AO: namelookup cache hit: " << agent_id << llendl;
 					return;
+				/*
 				}
+				else
+					llinfos << "AO: namelookup expired, re-requesting: " << agent_id << llendl;
+				 */
 			}
 		}
 		else
