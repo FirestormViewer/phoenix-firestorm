@@ -126,9 +126,10 @@
             label="Inspect"
             name="Avatar Inspect">
             <pie_slice.on_click
-                function="Object.Inspect" />
+                function="Floater.Show"
+                parameter="inspect" />
             <pie_slice.on_enable
-                function="Avatar.EnableCall" />
+                function="Object.EnableInspect" />
         </pie_slice>
         <pie_slice
             enabled="true"
