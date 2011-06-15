@@ -204,6 +204,17 @@
          value="4" />
 	  </combo_box>
 	  
+	  <check_box bottom_delta="-30"
+	  control_name="ShowNetStats"
+	  follows="left|top"
+	  height="16"
+      initial_value="false"
+      label="Show lag meter"
+      left="15"
+      radio_style="false"
+      width="270"
+      tool_tip="Show lag meter in the Status Overlay"/>
+	  
         <check_box bottom_delta="-30"
       follows="left|top"
       font="SansSerifSmall"
