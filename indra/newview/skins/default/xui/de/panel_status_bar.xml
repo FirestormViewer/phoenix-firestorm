@@ -21,6 +21,9 @@
 	<panel.string name="buycurrencylabel">
 		[AMT] L$
 	</panel.string>
+	<panel name="parcel_info_panel">
+		<text name="parcel_info_text" value="(laden)" tool_tip="Name der Parzelle, auf der dich dich befindest. Klicken öffnet die Land-Informationen."/>
+	</panel>
 	<panel name="balance_bg">
 		<text name="balance" tool_tip="Klicken, um L$-Guthaben zu aktualisieren" value="20 L$"/>
 		<button label="L$-Kauf" name="buyL" tool_tip="Hier klicken, um mehr L$ zu kaufen"/>

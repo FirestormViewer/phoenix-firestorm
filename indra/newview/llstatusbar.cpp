@@ -295,11 +295,12 @@ BOOL LLStatusBar::postBuild()
 
 	mScriptOut = getChildView("scriptout");
 	
-	mInfoBtn = getChild<LLButton>("place_info_btn");
-	mInfoBtn->setClickedCallback(boost::bind(&LLStatusBar::onInfoButtonClicked, this));
-
 	mParcelInfoPanel = getChild<LLPanel>("parcel_info_panel");
 	mParcelInfoText = getChild<LLTextBox>("parcel_info_text");
+
+	// Ansariel: Removed the info button in favor of clickable parcel info text
+	mParcelInfoText->setClickedCallback(boost::bind(&LLStatusBar::onInfoButtonClicked, this));
+
 	mDamageText = getChild<LLTextBox>("damage_text");
 
 	mPWLBtn = getChild<LLButton>("status_wl_btn");
@@ -774,6 +775,11 @@ void LLStatusBar::setParcelInfoText(const std::string& new_text)
 
 	mParcelInfoText->reshape(rect.getWidth(), rect.getHeight(), TRUE);
 	mParcelInfoText->setRect(rect);
+
+	// Ansariel: Recalculate panel size so we are able to click the whole text
+	LLRect panelRect = mParcelInfoPanel->getRect();
+	panelRect.mRight = panelRect.mLeft + rect.mRight;
+	mParcelInfoPanel->setRect(panelRect);
 }
 
 void LLStatusBar::update()
@@ -902,7 +908,7 @@ void LLStatusBar::layoutParcelIcons()
 	// Ansariel: Changed order to be more Viewer 1 like and keep important
 	//           information visible: Parcel power icons first, then parcel
 	//           info text!
-	S32 left = mInfoBtn->getRect().mRight + FIRST_ICON_HPAD;
+	S32 left = FIRST_ICON_HPAD;
 
 	left = layoutWidget(mDamageText, left);
 
