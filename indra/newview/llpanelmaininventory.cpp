@@ -543,16 +543,23 @@ BOOL LLPanelMainInventory::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 										 std::string& tooltip_msg)
 {
 	// Check to see if we are auto scrolling from the last frame
-	LLInventoryPanel* panel = (LLInventoryPanel*)this->getActivePanel();
-	BOOL needsToScroll = panel->getScrollableContainer()->autoScroll(x, y);
-	if(mFilterTabs)
+//	LLInventoryPanel* panel = (LLInventoryPanel*)this->getActivePanel();
+//	BOOL needsToScroll = panel->getScrollableContainer()->autoScroll(x, y);
+//	if(mFilterTabs)
+//	{
+//		if(needsToScroll)
+//		{
+//			mFilterTabs->startDragAndDropDelayTimer();
+//		}
+//	}
+// [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	LLInventoryPanel* pInvPanel = getActivePanel();
+	if ( (pInvPanel) && (pInvPanel->pointInView(x - pInvPanel->getRect().mLeft, y - pInvPanel->getRect().mBottom)) )
 	{
-		if(needsToScroll)
-		{
-			mFilterTabs->startDragAndDropDelayTimer();
-		}
+		pInvPanel->getScrollableContainer()->autoScroll(x, y);
 	}
-	
+// [/SL:KB]
+
 	BOOL handled = LLPanel::handleDragAndDrop(x, y, mask, drop, cargo_type, cargo_data, accept, tooltip_msg);
 
 	return handled;
