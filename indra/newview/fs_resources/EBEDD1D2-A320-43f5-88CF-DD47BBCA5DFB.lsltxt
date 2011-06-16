@@ -54,6 +54,8 @@
         // make bridge inconspicuous
         llSetScale(<0.01,0.01,0.01>);
         llSetPos(<0.0,0.0,-0.15>);
+	llSetObjectDesc(llGetObjectName());
+
     }
 
     initBridge()
@@ -158,7 +160,8 @@ default
     
     on_rez(integer i)
     {
-        llSetPrimitiveParams([PRIM_TEMP_ON_REZ,TRUE]);
+        tryHandshakeOnce = 1;
+	llSetPrimitiveParams([PRIM_TEMP_ON_REZ,TRUE]);
         llSetObjectDesc(llGetObjectName());
         initBridge();
     }

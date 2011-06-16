@@ -253,20 +253,28 @@ void FSLSLBridge :: createNewBridge()
 
 void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAttachment *attachment)
 {
+	llinfos << "enter process attach, checking the rock" << llendl;
+
 	if ((mpBridge == NULL) || (!mBridgeCreating) || (!gAgentAvatarp->isSelf()))
 		return;
 	//if (attachment->getName() != "Bridge") 
 	//	return;
 
+	llinfos << "rock is attached, mpBridge not NULL, BridgeCreating true, avatar self" << llendl;
+
 	LLViewerInventoryItem *fsObject = gInventory.getItem(object->getAttachmentItemID());
 	if (fsObject->getUUID() != mpBridge->getUUID())
 		return;
+
+	llinfos << "rock is the same rock we saved, id matched" << llendl;
 
 	setupBridge(object);
 }
 
 void FSLSLBridge :: setupBridge(LLViewerObject *object)
 {
+	llinfos << "enter rock change" << llendl;
+
 	mpBridge->setDescription(mCurrentFullName);
 
 	LLProfileParams profParams(LL_PCODE_PROFILE_CIRCLE, F32(0.230), F32(0.250), F32(0.95));
@@ -291,6 +299,8 @@ void FSLSLBridge :: setupBridge(LLViewerObject *object)
 
 	gInventory.updateItem(mpBridge);
     gInventory.notifyObservers();
+
+	llinfos << "end rock change, start script creation" << llendl;
 
 	//add bridge script to object
 	if (object)
