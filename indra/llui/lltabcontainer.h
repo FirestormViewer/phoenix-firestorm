@@ -83,6 +83,12 @@ public:
 											label_pad_left;
 
 		Optional<bool>						hide_tabs;
+// [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+		/**
+		 * Holding the mouse over a tab button while dragging will activate that tab 
+		 */
+		Optional<bool>						tab_drag_commit;
+// [/SL:KB]
 		Optional<S32>						tab_padding_right;
 
 		Optional<TabParams>					first_tab,
@@ -290,10 +296,11 @@ private:
 	// Padding to the left of text labels of tab buttons
 	S32								mLabelPadLeft;
 
-	LLFrameTimer					mDragAndDropDelayTimer;
 // [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	bool							mDragAndDropHoverCommit;
 	S32								mDragAndDropHoverIdx;
 // [/SL:KB]
+	LLFrameTimer					mDragAndDropDelayTimer;
 	
 	LLFontGL::HAlign                mFontHalign;
 	const LLFontGL*					mFont;
