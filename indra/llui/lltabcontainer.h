@@ -291,6 +291,9 @@ private:
 	S32								mLabelPadLeft;
 
 	LLFrameTimer					mDragAndDropDelayTimer;
+// [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	S32								mDragAndDropHoverIdx;
+// [/SL:KB]
 	
 	LLFontGL::HAlign                mFontHalign;
 	const LLFontGL*					mFont;
