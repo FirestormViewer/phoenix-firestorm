@@ -193,7 +193,7 @@
     </text>
     <check_box
      height="16"
-     label="Edit"
+     label="Modify"
      layout="topleft"
      left_pad="5"
      name="CheckOwnerModify"
@@ -209,7 +209,7 @@
      width="88" />
     <check_box
      height="16"
-     label="Resell"
+     label="Transfer"
      layout="topleft"
      left_delta="0"
      name="CheckOwnerTransfer"
@@ -270,7 +270,7 @@
     </text>
     <check_box
      height="16"
-     label="Edit"
+     label="Modify"
      layout="topleft"
      left_pad="5"
      name="CheckNextOwnerModify"
@@ -286,7 +286,7 @@
      width="88" />
     <check_box
      height="16"
-     label="Resell"
+     label="Transfer"
      layout="topleft"
      left_delta="0"
      name="CheckNextOwnerTransfer"
