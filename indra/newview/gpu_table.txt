@@ -318,10 +318,8 @@ NVIDIA GT 140M					.*NVIDIA.*(GeForce)? *GT *140(M)?.*			2		1
 NVIDIA GT 150M					.*NVIDIA.*(GeForce)? *GT(S)? *150(M)?.*		2		1
 NVIDIA GT 160M					.*NVIDIA.*(GeForce)? *GT *160(M)?.*			2		1
 NVIDIA GT 220M					.*NVIDIA.*(GeForce)? *GT *220(M)?.*			2		1
-NVIDIA GT 220					.*NVIDIA.*(GeForce)? *GT *220.*				2		1
 NVIDIA GT 230M					.*NVIDIA.*(GeForce)? *GT *230(M)?.*			2		1
 NVIDIA GT 240M					.*NVIDIA.*(GeForce)? *GT *240(M)?.*			2		1
-NVIDIA GT 240					.*NVIDIA.*(GeForce)? *GT *240.*				2		1
 NVIDIA GT 250M					.*NVIDIA.*(GeForce)? *GT *250(M)?.*			2		1
 NVIDIA GT 260M					.*NVIDIA.*(GeForce)? *GT *260(M)?.*			2		1
 NVIDIA GT 320M					.*NVIDIA.*(GeForce)? *GT *320(M)?.*			2		1
@@ -333,14 +331,11 @@ NVIDIA GT 415M					.*NVIDIA.*(GeForce)? *GT *415(M)?.*			2		1
 NVIDIA GT 420M					.*NVIDIA.*(GeForce)? *GT *420(M)?.*			2		1
 NVIDIA GT 425M					.*NVIDIA.*(GeForce)? *GT *425(M)?.*			3		1
 NVIDIA GT 430M					.*NVIDIA.*(GeForce)? *GT *430(M)?.*			3		1
-NVIDIA GT 430					.*NVIDIA.*(GeForce)? *GT *430.*				3		1
 NVIDIA GT 435M					.*NVIDIA.*(GeForce)? *GT *435(M)?.*			3		1
 NVIDIA GT 440M					.*NVIDIA.*(GeForce)? *GT *440(M)?.*			3		1
-NVIDIA GT 440					.*NVIDIA.*(GeForce)? *GT *440.*				3		1
 NVIDIA GT 445M					.*NVIDIA.*(GeForce)? *GT *445(M)?.*			3		1
 NVIDIA GT 450M					.*NVIDIA.*(GeForce)? *GT *450(M)?.*			3		1
 NVIDIA GT 520M					.*NVIDIA.*(GeForce)? *GT *520(M)?.*			3		1
-NVIDIA GT 520					.*NVIDIA.*(GeForce)? *GT *520.*				3		1
 NVIDIA GT 525M					.*NVIDIA.*(GeForce)? *GT *525(M)?.*			3		1
 NVIDIA GT 540M					.*NVIDIA.*(GeForce)? *GT *540(M)?.*			3		1
 NVIDIA GT 550M					.*NVIDIA.*(GeForce)? *GT *550(M)?.*			3		1
@@ -361,7 +356,6 @@ NVIDIA GTX 290					.*NVIDIA.*(GeForce)? *GTX *290.*			3		1
 NVIDIA GTX 295					.*NVIDIA.*(GeForce)? *GTX *295.*			3		1
 NVIDIA GTX 460M					.*NVIDIA.*(GeForce)? *GTX *460M.*			3		1
 NVIDIA GTX 465					.*NVIDIA.*(GeForce)? *GTX *465.*			3		1
-NVIDIA GTX 460 SE				.*NVIDIA.*(GeForce)? *GTX *460 *SE.*		3		1
 NVIDIA GTX 460					.*NVIDIA.*(GeForce)? *GTX *46.*				3		1
 NVIDIA GTX 470M					.*NVIDIA.*(GeForce)? *GTX *470M.*			3		1
 NVIDIA GTX 470					.*NVIDIA.*(GeForce)? *GTX *47.*				3		1
@@ -369,8 +363,7 @@ NVIDIA GTX 480M					.*NVIDIA.*(GeForce)? *GTX *480M.*			3		1
 NVIDIA GTX 485M					.*NVIDIA.*(GeForce)? *GTX *485M.*			3		1
 NVIDIA GTX 480					.*NVIDIA.*(GeForce)? *GTX *48.*				3		1
 NVIDIA GTX 530					.*NVIDIA.*(GeForce)? *GTX *53.*				3		1
-NVIDIA GTX 550 Ti				.*NVIDIA.*(GeForce)? *GTX *55.*				3		1
-NVIDIA GTX 560 Ti				.*NVIDIA.*(GeForce)? *GTX *560 *Ti.*		3		1
+NVIDIA GTX 550					.*NVIDIA.*(GeForce)? *GTX *55.*				3		1
 NVIDIA GTX 560					.*NVIDIA.*(GeForce)? *GTX *56.*				3		1
 NVIDIA GTX 570					.*NVIDIA.*(GeForce)? *GTX *57.*				3		1
 NVIDIA GTX 580M					.*NVIDIA.*(GeForce)? *GTX *580M.*			3		1
