@@ -358,6 +358,17 @@
              function="SideTray.PanelPeopleTab"
              parameter="friends_panel" />
             </menu_item_call>
+        <menu_item_check
+         label="Contants"
+         name="Contants"
+         shortcut="control|alt|shift|F">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="imcontacts" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="imcontacts" />
+            </menu_item_check>
         <menu_item_call
          label="Groups"
          name="My Groups"

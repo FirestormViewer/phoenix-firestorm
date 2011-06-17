@@ -58,7 +58,10 @@ LLIMFloaterContainer::~LLIMFloaterContainer()
 BOOL LLIMFloaterContainer::postBuild()
 {
 	
-	addFloater(FSFloaterContacts::getInstance(), TRUE);
+	if (!gSavedSettings.getBOOL("ContactsTornOff"))
+	{
+		addFloater(FSFloaterContacts::getInstance(), TRUE);
+	}
 
 	LLIMModel::instance().mNewMsgSignal.connect(boost::bind(&LLIMFloaterContainer::onNewMessageReceived, this, _1));
 	// Do not call base postBuild to not connect to mCloseSignal to not close all floaters via Close button
@@ -124,6 +127,7 @@ void LLIMFloaterContainer::removeFloater(LLFloater* floaterp)
 		// only chat floater now locked
 		mTabContainer->lockTabs(mTabContainer->getNumLockedTabs() - 1);
 		gSavedSettings.setBOOL("ContactsTornOff", TRUE);
+		floaterp->setCanClose(TRUE);
 	}
 	LLMultiFloater::removeFloater(floaterp);
 }

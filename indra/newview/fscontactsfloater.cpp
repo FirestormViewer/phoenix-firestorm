@@ -165,9 +165,9 @@ void FSFloaterContacts::updateButtons()
 
 void FSFloaterContacts::onOpen(const LLSD& key)
 {
+	LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
 	if (gSavedSettings.getBOOL("ContactsTornOff"))
 	{
-		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
 		// first set the tear-off host to the conversations container
 		setHost(floater_container);
 		// clear the tear-off host right after, the "last host used" will still stick
@@ -176,6 +176,10 @@ void FSFloaterContacts::onOpen(const LLSD& key)
 		gFloaterView->addChild(this);
 		// and remember we are torn off
 		setTornOff(TRUE);
+	}
+	else
+	{
+		floater_container->addFloater(this, TRUE);
 	}
 
 	if (key.asString() == "friends")
