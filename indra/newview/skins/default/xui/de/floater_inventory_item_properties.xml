@@ -55,8 +55,8 @@
 	<check_box label="Bearbeiten" name="CheckNextOwnerModify"/>
 	<check_box label="Kopieren" name="CheckNextOwnerCopy"/>
 	<check_box label="Verkaufen/Weggeben" name="CheckNextOwnerTransfer"/>
-	<check_box label="Zum Verkauf" name="CheckPurchase"/>
-	<combo_box name="combobox sale copy" left_pad="25">
+	<check_box label="Zum Verkauf" name="CheckPurchase" width="100"/>
+	<combo_box name="combobox sale copy" >
 		<combo_box.item label="Kopieren" name="Copy"/>
 		<combo_box.item label="Original" name="Original"/>
 	</combo_box>
