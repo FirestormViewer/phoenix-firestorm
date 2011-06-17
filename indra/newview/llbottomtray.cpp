@@ -1678,6 +1678,7 @@ void LLBottomTray::initResizeStateContainers()
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_ME, getChild<LLPanel>("bottom_sbme")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_PLACES, getChild<LLPanel>("bottom_sbplaces")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_AO, getChild<LLPanel>("ao_btn_panel")));		// ## Zi: Animation Overrider
+	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_QUICKPREFS, getChild<LLPanel>("quickprefs_btn_panel")));	// Quick Preferences panel	-WoLf
 
 	// since we added the sidebar buttons to the bottom bar, wen also need to make them reorderable. -Zi
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_PEOPLE, getChild<LLPanel>("bottom_sbpeople")));
@@ -1700,6 +1701,7 @@ void LLBottomTray::initResizeStateContainers()
 	mButtonsProcessOrder.push_back(RS_BUTTON_ME);
 	mButtonsProcessOrder.push_back(RS_BUTTON_PLACES);
 	mButtonsProcessOrder.push_back(RS_BUTTON_AO);		// ## Zi: Animation Overrider
+	mButtonsProcessOrder.push_back(RS_BUTTON_QUICKPREFS);	// Quick Preferences panel	-WoLf
 
 	// since we added the sidebar buttons to the bottom bar, wen also need to make them reorderable. -Zi
 	mButtonsProcessOrder.push_back(RS_BUTTON_PEOPLE);
@@ -1753,6 +1755,7 @@ void LLBottomTray::initButtonsVisibility()
 	setVisibleAndFitWidths(RS_BUTTON_ME, gSavedSettings.getBOOL("ShowMeButton"));
 	setVisibleAndFitWidths(RS_BUTTON_PLACES, gSavedSettings.getBOOL("ShowPlacesButton"));
 	setVisibleAndFitWidths(RS_BUTTON_AO, gSavedSettings.getBOOL("ShowAOButton"));	// ## Zi: Animation Overrider
+	setVisibleAndFitWidths(RS_BUTTON_QUICKPREFS, gSavedSettings.getBOOL("ShowQuickPrefsButton"));	// Quick Preferences panel	-WoLf
 	// take care of additional sidebar button visibility -Zi
 	setVisibleAndFitWidths(RS_BUTTON_PEOPLE, gSavedSettings.getBOOL("ShowPeopleButton"));
 	setVisibleAndFitWidths(RS_BUTTON_APPEARANCE, gSavedSettings.getBOOL("ShowAppearanceButton"));
@@ -1776,6 +1779,7 @@ void LLBottomTray::setButtonsControlsAndListeners()
 	gSavedSettings.getControl("ShowMeButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_ME, _2));
 	gSavedSettings.getControl("ShowPlacesButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_PLACES, _2));
 	gSavedSettings.getControl("ShowAOButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_AO, _2));			// ## Zi: Animation Overrider
+	gSavedSettings.getControl("ShowQuickPrefsButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_QUICKPREFS, _2));	// Quick Preferences panel	-WoLf
 	// take care of additional sidebar button visibility -Zi
 	gSavedSettings.getControl("ShowPeopleButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_PEOPLE, _2));
 	gSavedSettings.getControl("ShowAppearanceButton")->getSignal()->connect(boost::bind(&LLBottomTray::toggleShowButton, RS_BUTTON_APPEARANCE, _2));

@@ -609,6 +609,7 @@ set(viewer_SOURCE_FILES
     kvfloaterflickrauth.cpp
     kvfloaterflickrupload.cpp
     qtoolalign.cpp
+    quickprefs.cpp
     rlvhandler.cpp
     rlvhelper.cpp
     rlvcommon.cpp
@@ -1173,6 +1174,7 @@ set(viewer_HEADER_FILES
     pieslice.h
     pipeline.h
     qtoolalign.h
+    quickprefs.h
     rlvdefines.h
     rlvhandler.h
     rlvhelper.h

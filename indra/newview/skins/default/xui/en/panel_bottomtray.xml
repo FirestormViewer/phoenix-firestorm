@@ -575,6 +575,40 @@
             </bottomtray_button>
         </layout_panel>
 
+<!-- Quick Preferences panel    -WoLf -->
+        <layout_panel
+         auto_resize="false"
+         follows="left|right"
+         height="28"
+         layout="topleft"
+         min_height="28"
+         min_width="40"
+         mouse_opaque="false"
+         name="quickprefs_btn_panel"
+         user_resize="false"
+         width="40">
+       <bottomtray_button
+        name="quickprefs_toggle"
+        tool_tip="Shows/hides the Quick Preferences Panel"
+        left="0"
+        top="5"
+        height="23"
+        width="36"
+        layout="topleft"
+        follows="left|right"
+        image_pressed="PushButton_Press"
+        image_pressed_selected="PushButton_Selected_Press"
+        image_selected="PushButton_Selected_Press"
+        image_overlay="phoenix_18"
+        is_toggle="true"
+        tab_stop="true">
+        <init_callback
+         function="Button.SetDockableFloaterToggle"
+         parameter="quickprefs" />
+      </bottomtray_button>
+        </layout_panel>
+<!-- Quick Preferences panel    -WoLf -->
+
 <!-- ## Zi: AO button -->
         <layout_panel
          auto_resize="false"

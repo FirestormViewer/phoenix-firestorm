@@ -153,7 +153,20 @@
          parameter="ShowAOButton" />
     </menu_item_check>
     <!-- ## Zi: Animation Overrider -->
-    <menu_item_check
+  <!-- Quick Preferences panel  -WoLf -->
+  <menu_item_check
+   label="Quick Preferences"
+   layout="topleft"
+   name="ShowQuickPrefsButton">
+    <menu_item_check.on_click
+     function="ToggleControl"
+     parameter="ShowQuickPrefsButton" />
+    <menu_item_check.on_check
+     function="CheckControl"
+     parameter="ShowQuickPrefsButton" />
+  </menu_item_check>
+  <!-- Quick Preferences panel  -WoLf -->
+  <menu_item_check
      label="People button"
      layout="topleft"
      name="ShowPeopleButton">
