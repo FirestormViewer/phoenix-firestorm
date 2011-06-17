@@ -519,11 +519,10 @@ void RlvAttachmentLockWatchdog::detach(const LLViewerObject* pAttachObj)
 	}
 }
 
-// Checked: 2010-07-28 (RLVa-1.2.0i) | Added: RLVa-1.2.0i
-void RlvAttachmentLockWatchdog::detach(S32 idxAttachPt, const LLViewerObject* pAttachObjExcept /*=NULL*/)
+// Checked: 2011-06-13 (RLVa-1.3.1b) | Modified: RLVa-1.3.1b
+void RlvAttachmentLockWatchdog::detach(S32 idxAttachPt, const uuid_vec_t& idsAttachObjExcept)
 {
-	const LLViewerJointAttachment* pAttachPt = 
-		(isAgentAvatarValid()) ? get_if_there(gAgentAvatarp->mAttachmentPoints, (S32)idxAttachPt, (LLViewerJointAttachment*)NULL) : NULL;
+	const LLViewerJointAttachment* pAttachPt = RlvAttachPtLookup::getAttachPoint(idxAttachPt);
 	if (!pAttachPt)
 		return;
 
@@ -532,7 +531,7 @@ void RlvAttachmentLockWatchdog::detach(S32 idxAttachPt, const LLViewerObject* pA
 			itAttachObj != pAttachPt->mAttachedObjects.end(); ++itAttachObj)
 	{
 		const LLViewerObject* pAttachObj = *itAttachObj;
-		if (pAttachObj != pAttachObjExcept)
+		if (idsAttachObjExcept.end() == std::find(idsAttachObjExcept.begin(), idsAttachObjExcept.end(), pAttachObj->getID()))
 			attachObjs.push_back(pAttachObj);
 	}
 
@@ -548,7 +547,7 @@ void RlvAttachmentLockWatchdog::detach(S32 idxAttachPt, const LLViewerObject* pA
 			const LLViewerObject* pAttachObj = *itAttachObj;
 			gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 			gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, pAttachObj->getLocalID());
-			if (std::find(m_PendingDetach.begin(), m_PendingDetach.end(), pAttachObj->getAttachmentItemID()) == m_PendingDetach.end())
+			if (m_PendingDetach.end() == std::find(m_PendingDetach.begin(), m_PendingDetach.end(), pAttachObj->getAttachmentItemID()))
 				m_PendingDetach.push_back(pAttachObj->getAttachmentItemID());
 		}
 
@@ -649,18 +648,30 @@ void RlvAttachmentLockWatchdog::onAttach(const LLViewerObject* pAttachObj, const
 		}
 		else if (RLV_WEAR_REPLACE == itWear->second.eWearAction)
 		{
-			// Now that we know where this attaches to check if we can actually perform a "replace"
+			// Now that we know where this attaches to, check if we can actually perform a "replace"
+			uuid_vec_t idsAttachObjExcept;
 			for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator itAttachObj = pAttachPt->mAttachedObjects.begin();
 					((itAttachObj != pAttachPt->mAttachedObjects.end()) && (fAttachAllowed)); ++itAttachObj)
 			{
-				if (pAttachObj != *itAttachObj)
-					fAttachAllowed &= !gRlvAttachmentLocks.isLockedAttachment(*itAttachObj);
+				if ( (pAttachObj != *itAttachObj) && (gRlvAttachmentLocks.isLockedAttachment(*itAttachObj)) )
+				{
+					// Fail if we encounter a non-detachable attachment (unless we're only replacing detachable attachments)
+					if (gSavedSettings.getBOOL("RLVaWearReplaceUnlocked"))
+						idsAttachObjExcept.push_back((*itAttachObj)->getID());
+					else
+						fAttachAllowed = false;
+				}
 			}
 
 			if (fAttachAllowed)
-				detach(idxAttachPt, pAttachObj);	// Replace == allowed: detach everything except the new attachment
+			{
+				idsAttachObjExcept.push_back(pAttachObj->getID());	// Replace == allowed: detach everything except the new attachment
+				detach(idxAttachPt, idsAttachObjExcept);			// or detach all *unlocked* attachments except the new attachment
+			}
 			else
-				detach(pAttachObj);					// Replace != allowed: detach the new attachment
+			{
+				detach(pAttachObj);									// Replace != allowed: detach the new attachment
+			}
 		}
 		m_PendingWear.erase(itWear); // No need to start the timer since it should be running already if '!m_PendingWear.empty()'
 	}
