@@ -10,7 +10,7 @@
  width="400">
     <string
      name="message_max_lines_count"
-     value="7" />
+     value="10" />
     <string
      name="subject_font"
      value="SANSSERIF_BIG" />
@@ -57,7 +57,7 @@
      parse_urls="true"
      enabled="true"
      follows="all"
-     bottom="-60"
+     bottom="-58"
      layout="topleft"
      left_pad="5"
      max_length="67108864"
@@ -77,7 +77,7 @@
      follows="left|bottom|right"
      height="15"
      layout="topleft"
-     left="25"
+     left_delta="0"
      mouse_opaque="true"
      name="attachment_icon"
      width="15" />
@@ -87,7 +87,7 @@
      font="SansSerif"
      height="15"
      layout="topleft"
-     left="45"
+     left_pad="5"
      name="attachment"
      parse_urls="false"
      right="-10"

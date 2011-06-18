@@ -142,6 +142,13 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(LLNotificationPtr& notification
 												LLInventoryType::IT_TEXTURE);
 		pAttachIcon->setValue(attachIconImg->getName());
 	}
+	else
+	{
+		LLRect message_rect = pMessageText->getRect();
+		message_rect.mBottom -= 20;
+		pMessageText->reshape(message_rect.getWidth(), message_rect.getHeight());
+		pMessageText->setRect(message_rect);
+	}
 
 	//ok button
 	LLButton* pOkBtn = getChild<LLButton>("btn_ok");
