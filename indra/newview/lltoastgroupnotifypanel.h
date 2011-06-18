@@ -58,6 +58,7 @@ public:
 	/*virtual*/ ~LLToastGroupNotifyPanel();
 protected:
 	void onClickOk();
+	void onClickGroupNotices();
 	void onClickAttachment();
 private:
 	static bool isAttachmentOpenable(LLAssetType::EType);

@@ -49,6 +49,8 @@
 #include "llfloaterinventory.h"
 #include "llinventorytype.h"
 
+#include "llgroupactions.h"
+
 const S32 LLToastGroupNotifyPanel::DEFAULT_MESSAGE_MAX_LINE_COUNT	= 7;
 
 LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(LLNotificationPtr& notification)
@@ -62,6 +64,8 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(LLNotificationPtr& notification
 	{
 		llwarns << "Group notice for unknown group: " << payload["group_id"].asUUID() << llendl;
 	}
+	
+	mGroupID = payload["group_id"].asUUID();
 
 	//group icon
 	LLIconCtrl* pGroupIcon = getChild<LLIconCtrl>("group_icon", TRUE);
@@ -74,7 +78,7 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(LLNotificationPtr& notification
 		from_name = LLCacheName::buildUsername(from_name);
 	}
 	std::stringstream from;
-	from << from_name << "/" << groupData.mName;
+	from << "Sent by " << from_name << ", " << groupData.mName;
 	LLTextBox* pTitleText = getChild<LLTextBox>("title");
 	pTitleText->setValue(from.str());
 	pTitleText->setToolTip(from.str());
@@ -144,6 +148,11 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(LLNotificationPtr& notification
 	pOkBtn->setClickedCallback((boost::bind(&LLToastGroupNotifyPanel::onClickOk, this)));
 	setDefaultBtn(pOkBtn);
 
+	//group notices button
+	LLButton* pOkNotices = getChild<LLButton>("btn_notices");
+	if (pOkNotices)
+		pOkNotices->setClickedCallback((boost::bind(&LLToastGroupNotifyPanel::onClickGroupNotices, this)));
+
 	S32 maxLinesCount;
 	std::istringstream ss( getString("message_max_lines_count") );
 	if (!(ss >> maxLinesCount))
@@ -177,6 +186,11 @@ void LLToastGroupNotifyPanel::onClickOk()
 	LLSD response = mNotification->getResponseTemplate();
 	mNotification->respond(response);
 	close();
+}
+
+void LLToastGroupNotifyPanel::onClickGroupNotices()
+{
+	LLGroupActions::show(mGroupID, "group_notices_tab_panel");
 }
 
 void LLToastGroupNotifyPanel::onClickAttachment()
