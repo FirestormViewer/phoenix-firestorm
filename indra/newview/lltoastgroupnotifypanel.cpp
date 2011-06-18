@@ -78,7 +78,8 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(LLNotificationPtr& notification
 		from_name = LLCacheName::buildUsername(from_name);
 	}
 	std::stringstream from;
-	from << "Sent by " << from_name << ", " << groupData.mName;
+	from << "Sent by " << from_name << ", " << LLSLURL("group", groupData.mID, "inspect").getSLURLString();
+	
 	LLTextBox* pTitleText = getChild<LLTextBox>("title");
 	pTitleText->setValue(from.str());
 	pTitleText->setToolTip(from.str());
