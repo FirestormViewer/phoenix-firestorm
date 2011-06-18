@@ -324,6 +324,19 @@ void LLGroupActions::show(const LLUUID& group_id)
 	LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
 }
 
+// static
+void LLGroupActions::show(const LLUUID& group_id, const std::string& tab_name)
+{
+	if (group_id.isNull())
+		return;
+
+	LLSD params;
+	params["group_id"] = group_id;
+	params["open_tab_name"] = tab_name;
+
+	LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
+}
+
 void LLGroupActions::refresh_notices()
 {
 	//if(!isGroupUIVisible())

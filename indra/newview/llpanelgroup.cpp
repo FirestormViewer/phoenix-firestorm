@@ -107,7 +107,15 @@ void LLPanelGroup::onOpen(const LLSD& key)
 {
 	if(!key.has("group_id"))
 		return;
-	
+
+	// open the desired panel
+	if (key.has("open_tab_name"))
+	{
+		// onOpen from selected panel will be called from onTabSelected callback
+		LLTabContainer* tab_ctrl = getChild<LLTabContainer>("groups_accordion");
+		tab_ctrl->selectTabByName(key["open_tab_name"]);
+	}
+
 	LLUUID group_id = key["group_id"];
 	if(!key.has("action"))
 	{
