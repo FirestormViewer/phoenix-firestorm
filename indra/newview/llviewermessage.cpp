@@ -4812,7 +4812,8 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	// Don't play sounds from gestures if they are not enabled.
 	// ...TS: Unless they're your own.
 	if ((!gSavedSettings.getBOOL("EnableGestureSounds")) &&
-		(owner_id != gAgent.getID())) return;
+		(owner_id != gAgent.getID()) &&
+		(owner_id == object_id)) return;
 	
 	gAudiop->triggerSound(sound_id, owner_id, gain, LLAudioEngine::AUDIO_TYPE_SFX, pos_global);
 }
