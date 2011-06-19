@@ -867,7 +867,7 @@ BOOL LLTabContainer::handleDragAndDrop(S32 x, S32 y, MASK mask,	BOOL drop,	EDrag
 
 //	if( mDragAndDropDelayTimer.getStarted() && mDragAndDropDelayTimer.getElapsedTimeF32() > SCROLL_DELAY_TIME )
 // [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
-	if ( (mDragAndDropHoverCommit) && (mDragAndDropDelayTimer.getStarted() && mDragAndDropDelayTimer.getElapsedTimeF32() > SCROLL_DELAY_TIME) )
+	if ( (mDragAndDropHoverCommit) && (mDragAndDropDelayTimer.getStarted()) && (mDragAndDropDelayTimer.getElapsedTimeF32() > DELAY_DRAG_HOVER_COMMIT) )
 // [/SL:KB]
 	{
 		if (has_scroll_arrows)

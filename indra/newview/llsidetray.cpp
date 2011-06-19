@@ -522,7 +522,7 @@ public:
 			if ( (pSideTray->getCollapsed()) || ((pSideTray->getActiveTab()) && (pSideTray->getActiveTab()->getName() != getName())) )
 				mDragCommitDelayTimer.start();
 		}
-		else if ( (mDragCommitDelayTimer.getStarted()) && (mDragCommitDelayTimer.getElapsedTimeF32() > 0.5) )
+		else if ( (mDragCommitDelayTimer.getStarted()) && (mDragCommitDelayTimer.getElapsedTimeF32() > DELAY_DRAG_HOVER_COMMIT) )
 		{
 			onCommit();
 			mDragCommitDelayTimer.stop();
