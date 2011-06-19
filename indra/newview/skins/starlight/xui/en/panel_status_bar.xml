@@ -31,18 +31,6 @@
     name="parcel_info_panel"
     bg_visible="false"
     background_opaque="false">
-   <button
-    follows="left|top"
-    height="16"
-    hover_glow_amount="0.15"
-    image_disabled="Info_Off"
-    image_disabled_selected="Info_Off"
-    image_selected="Info_Off"
-    image_unselected="Info_Off"
-    left="0"
-    name="place_info_btn"
-    top="2"
-    width="16"/>
   <icon
     enabled="true"
     follows="right|top"
@@ -136,6 +124,7 @@
     width="35"
     />
      <text
+	   tool_tip="Name of land parcel on which you are standing. Click for About Land."
        follows="left|top|right"
        height="16"
        layout="topleft"

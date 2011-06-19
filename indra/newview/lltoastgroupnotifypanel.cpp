@@ -78,7 +78,8 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(LLNotificationPtr& notification
 		from_name = LLCacheName::buildUsername(from_name);
 	}
 	std::stringstream from;
-	from << "Sent by " << from_name << ", " << groupData.mName;
+	from << "Sent by " << from_name << ", " << LLSLURL("group", groupData.mID, "inspect").getSLURLString();
+	
 	LLTextBox* pTitleText = getChild<LLTextBox>("title");
 	pTitleText->setValue(from.str());
 	pTitleText->setToolTip(from.str());
@@ -141,6 +142,13 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(LLNotificationPtr& notification
 		LLUIImagePtr attachIconImg = LLInventoryIcon::getIcon(mInventoryOffer->mType,
 												LLInventoryType::IT_TEXTURE);
 		pAttachIcon->setValue(attachIconImg->getName());
+	}
+	else
+	{
+		LLRect message_rect = pMessageText->getRect();
+		message_rect.mBottom -= 20;
+		pMessageText->reshape(message_rect.getWidth(), message_rect.getHeight());
+		pMessageText->setRect(message_rect);
 	}
 
 	//ok button
