@@ -165,7 +165,7 @@ BOOL LLPanelPermissions::postBuild()
 	childSetCommitCallback("clickaction",LLPanelPermissions::onCommitClickAction,this);
 	childSetCommitCallback("search_check",LLPanelPermissions::onCommitIncludeInSearch,this);
 	
-	mLabelGroupName = getChild<LLNameBox>("Group Name Proxy");
+	// mLabelGroupName = getChild<LLNameBox>("Group Name Proxy");
 
 	return TRUE;
 }
@@ -191,8 +191,8 @@ void LLPanelPermissions::disableAll()
 	getChildView("Owner Name")->setEnabled(FALSE);
 
 	getChildView("Group:")->setEnabled(FALSE);
-	getChild<LLUICtrl>("Group Name Proxy")->setValue(LLStringUtil::null);
-	getChildView("Group Name Proxy")->setEnabled(FALSE);
+	//getChild<LLUICtrl>("Group Name Proxy")->setValue(LLStringUtil::null);
+	//getChildView("Group Name Proxy")->setEnabled(FALSE);
 	getChildView("button set group")->setEnabled(FALSE);
 
 	getChild<LLUICtrl>("Object Name")->setValue(LLStringUtil::null);
@@ -391,21 +391,24 @@ void LLPanelPermissions::refresh()
 	BOOL groups_identical = LLSelectMgr::getInstance()->selectGetGroup(group_id);
 	if (groups_identical)
 	{
-		if (mLabelGroupName)
-		{
-			mLabelGroupName->setNameID(group_id,TRUE);
-			mLabelGroupName->setEnabled(TRUE);
-		}
+		getChild<LLUICtrl>("Group Name")->setValue(LLSLURL("group", group_id, "inspect").getSLURLString());
+		getChild<LLUICtrl>("Group Name")->setEnabled(TRUE);
+		// if (mLabelGroupName)
+		// {
+			// mLabelGroupName->setNameID(group_id,TRUE);
+			// mLabelGroupName->setValue();
+			// mLabelGroupName->setEnabled(TRUE);
+		// }
 	}
-	else
-	{
-		if (mLabelGroupName)
-		{
-			mLabelGroupName->setNameID(LLUUID::null, TRUE);
-			mLabelGroupName->refresh(LLUUID::null, std::string(), true);
-			mLabelGroupName->setEnabled(FALSE);
-		}
-	}
+	// else
+	// {
+		// if (mLabelGroupName)
+		// {
+			// mLabelGroupName->setNameID(LLUUID::null, TRUE);
+			// mLabelGroupName->refresh(LLUUID::null, std::string(), true);
+			// mLabelGroupName->setEnabled(FALSE);
+		// }
+	// }
 	
 	getChildView("button set group")->setEnabled(owners_identical && (mOwnerID == gAgent.getID()));
 
@@ -897,10 +900,11 @@ void LLPanelPermissions::onClickGroup()
 
 void LLPanelPermissions::cbGroupID(LLUUID group_id)
 {
-	if(mLabelGroupName)
-	{
-		mLabelGroupName->setNameID(group_id, TRUE);
-	}
+	// if(mLabelGroupName)
+	// {
+		// mLabelGroupName->setNameID(group_id, TRUE);
+	// }
+	getChild<LLUICtrl>("Group Name")->setValue(LLSLURL("group", group_id, "inspect").getSLURLString());
 	LLSelectMgr::getInstance()->sendGroup(group_id);
 }
 

@@ -81,7 +81,7 @@ protected:
 	void disableAll();
 	
 private:
-	LLNameBox*		mLabelGroupName;		// group name
+	// LLNameBox*		mLabelGroupName;		// group name
 
 	LLUUID			mCreatorID;
 	LLUUID			mOwnerID;
