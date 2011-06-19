@@ -146,7 +146,11 @@ public:
 	// [/Ansariel: Colorful radar]
 
 	/*virtual*/ BOOL handleDoubleClick(S32 x, S32 y, MASK mask);
-
+// [SL:KB] - Patch: UI-AvatarListDndShare | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	/*virtual*/ BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDropType cargo_type, void *cargo_data, 
+	                                   EAcceptance *accept, std::string& tooltip_msg);
+// [/SL:KB]
+ 
 protected:
 	/**
 	 * Contains indicator to show voice activity. 
