@@ -970,14 +970,28 @@
              width="75">
                 Group:
             </text>
-            <name_box
+            <!--<name_box
              follows="left|top"
              height="18"
              initial_value="Loading..."
              layout="topleft"
              left_pad="23"
              name="Group Name Proxy"
-             width="142" />
+             width="142" />-->
+			 <text
+             type="string"
+             length="1"
+             follows="left|top"
+             height="18"
+             layout="topleft"
+             name="Group Name"
+             left_pad="23"
+             translate="false"
+             width="142"
+             word_wrap="true"
+             use_ellipses="true">
+                Loading...
+            </text>
             <button
 			 follows="top|left"
 			 height="23"
