@@ -14170,5 +14170,50 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Value</key>
 			<real>50</real>
 		</map>
+		<key>PhoenixBuildPrefs_Xsize</key>
+		<map>
+			<key>Comment</key>
+			<string>Default Size For New Objects to be created X</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>F32</string>
+			<key>Value</key>
+			<real>0.5</real>
+		</map>
+		<key>PhoenixBuildPrefs_Ysize</key>
+		<map>
+			<key>Comment</key>
+			<string>Default Size For New Objects to be created Y</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>F32</string>
+			<key>Value</key>
+			<real>0.5</real>
+		</map>
+		<key>PhoenixBuildPrefs_Zsize</key>
+		<map>
+			<key>Comment</key>
+			<string>Default Size For New Objects to be created Z</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>F32</string>
+			<key>Value</key>
+			<real>0.5</real>
+		</map>
+		<key>PhoenixBuildPrefs_Material</key>
+		<map>
+			<key>Comment</key>
+			<string>Default Setting For New Objects to be created, physical flag</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>Wood</string>
+		</map>
+		
 </map>
 </llsd>
