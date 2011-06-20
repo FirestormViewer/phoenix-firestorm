@@ -1914,6 +1914,7 @@ Requests name of an avatar.  When data is available the dataserver event will be
 	<string name="GroupNotifyViewPastNotices">View past notices or opt-out of receiving these messages here.</string>
 	<string name="GroupNotifyOpenAttachment">Open Attachment</string>
 	<string name="GroupNotifySaveAttachment">Save Attachment</string>
+	<string name="GroupNotifySender">Sent by [SENDER], [GROUPNAME]</string>
 
   <string name="TeleportOffer">Teleport offering</string>
   <!-- start-up toast's string-->

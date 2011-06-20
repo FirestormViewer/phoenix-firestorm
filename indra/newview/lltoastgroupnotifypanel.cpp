@@ -57,7 +57,7 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(LLNotificationPtr& notification
 :	LLToastPanel(notification),
 	mInventoryOffer(NULL)
 {
-	buildFromFile( "panel_group_notify.xml");
+	buildFromFile("panel_group_notify.xml");
 	const LLSD& payload = notification->getPayload();
 	LLGroupData groupData;
 	if (!gAgent.getGroupData(payload["group_id"].asUUID(),groupData))
@@ -77,12 +77,15 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(LLNotificationPtr& notification
 	{
 		from_name = LLCacheName::buildUsername(from_name);
 	}
-	std::stringstream from;
-	from << "Sent by " << from_name << ", " << LLSLURL("group", groupData.mID, "inspect").getSLURLString();
+	std::string from;
+	LLStringUtil::format_map_t args;
+	args["[SENDER]"] = from_name;
+	args["[GROUPNAME]"] = LLSLURL("group", groupData.mID, "inspect").getSLURLString();
+	from = LLTrans::getString("GroupNotifySender", args);
 	
 	LLTextBox* pTitleText = getChild<LLTextBox>("title");
-	pTitleText->setValue(from.str());
-	pTitleText->setToolTip(from.str());
+	pTitleText->setValue(from);
+	pTitleText->setToolTip(from);
 
 	//message subject
 	const std::string& subject = payload["subject"].asString();

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="quickprefs" title="Schnelleinstellungen" width="280">
+<panel name="quickprefs" width="280">
+        <text name="Maximum bandwidth" width="105">
+            Max. Bandbreite:
+        </text>
+        <slider left_delta="108" name="max_bandwidth"/>		
+        <text name="Draw Distance" width="105">
+            Draw Distance:
+        </text>
+        <slider left_delta="101" name="DrawDistance"/>		
+        <text name="Particles" width="105">
+            Max. Partikel:
+        </text>
+        <slider left_delta="101" name="RenderMaxPartCount"/>		
+        <text name="Max Node" width="105">
+            Max. Node-Anzahl:
+        </text>
+        <slider left_delta="108" name="RenderMaxNodeSize"/>		
+        <text name="LOD Factor" width="105">
+            LOD-Faktor:
+        </text>
+        <slider left_delta="90" name="RenderVolumeLODFactor"/>		
+        <text name="Max Avatars" width="105">
+            Max. Avatare:
+        </text>
+        <slider left_delta="87" name="RenderAvatarMaxVisible"/>		
+        <text name="WL Sky" width="105">
+            WindLight-Himmel:
+        </text>
+        <combo_box left_delta="115" name="WLPresetsCombo"/>
+        <text name="WL Water" width="105">
+            WindLight-Wasser:
+        </text>
+        <combo_box left_delta="115" name="WaterPresetsCombo"/>
+</panel>
+</floater>

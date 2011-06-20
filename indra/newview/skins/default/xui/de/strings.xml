@@ -993,6 +993,9 @@
 	<string name="GroupNotifySaveAttachment">
 		Siehe Anhang
 	</string>
+	<string name="GroupNotifySender">
+		Gesendet von [SENDER], [GROUPNAME]
+	</string>
 	<string name="TeleportOffer">
 		Teleport-Angebot
 	</string>

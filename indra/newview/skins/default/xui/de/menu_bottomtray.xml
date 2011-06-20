@@ -12,6 +12,7 @@
 	<menu_item_check label="Schaltfläche „Startseite“" name="ShowHomeButton"/>
 	<menu_item_check label="Schaltfläche „Mein Profil“" name="ShowMeButton"/>
 	<menu_item_check label="Schaltfläche „Orte“" name="ShowPlacesButton"/>
+	<menu_item_check label="Schaltfläche „Schnelleinstellungen“" name="ShowQuickPrefsButton"/>
 	<menu_item_check label="Schaltfläche „Animation Overrider“" name="ShowAOButton"/>
 	<menu_item_check label="Schaltfläche „Leute“" name="ShowPeopleButton"/>
 	<menu_item_check label="Schaltfläche „Mein Aussehen“" name="ShowAppearanceButton"/>
