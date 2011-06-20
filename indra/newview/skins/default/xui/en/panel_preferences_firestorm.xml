@@ -1179,5 +1179,196 @@
 		 name="PhoenixWLWhitelistAll"
 		 width="256" />
 	</panel>
+	
+	<!--Build-->
+	<panel
+		border="true"
+		top_pad="5"
+		bottom="-1"
+		left="1"
+		right="-1"
+		follows="all"
+		label="Build"
+		name="BuildTab">
+
+		<text
+		 top="20"
+		 follows="left|top|right"
+		 height="10"
+		 left="10"
+		 name="text_box_objprams"
+		 width="175">
+		 Default Object Parameters
+		 </text>
+		<view_border
+		 top_pad="5"
+		 left="10"
+		 right="-10"
+		 height="75"
+		 follows="left|top|right"
+		 bevel_style="none"
+		 border_thickness="1"
+		 name="SizeBorder"/>
+		<spinner
+		 top_delta="10"
+		 left_delta="5"
+		 decimal_digits="5"
+		 follows="left|top"
+		 height="16"
+		 increment="0.05"
+		 label="X size"
+		 label_width="40"
+		 max_val="10"
+		 min_val="0.01"
+		 mouse_opaque="true"
+		 name="X size"
+		 width="120"
+		 control_name="PhoenixBuildPrefs_Xsize"/>
+		<spinner
+		 top_pad="3"
+		 decimal_digits="5"
+		 follows="left|top"
+		 height="16"
+		 increment="0.05"
+		 label="Y size"
+		 label_width="40"
+		 max_val="10"
+		 min_val="0.01"
+		 mouse_opaque="true"
+		 name="Y size"
+		 width="120"
+		 control_name="PhoenixBuildPrefs_Ysize"/>
+		<spinner
+		 top_pad="3"
+		 decimal_digits="5"
+		 follows="left|top"
+		 height="16"
+		 increment="0.05"
+		 label="Z size"
+		 label_width="40"
+		 max_val="10"
+		 min_val="0.01"
+		 mouse_opaque="true"
+		 name="Z size"
+		 width="120"
+		 control_name="PhoenixBuildPrefs_Zsize"/>
+		<text
+		 top="45"
+		 left_pad="15"
+		 follows="left|top"
+		 height="15"
+		 name="text_box_objmaterial"
+		 width="50">
+		 Material:
+		 </text>
+		<combo_box
+		 left_pad="2"
+		 height="18"
+		 width="80"
+		 allow_text_entry="false"
+		 follows="left|top"
+		 name="material"
+		 control_name="PhoenixBuildPrefs_Material">
+			 <combo_item name="Stone" value="Stone">Stone</combo_item>
+			 <combo_item name="Metal" value="Metal">Metal</combo_item>
+			 <combo_item name="Glass" value="Glass">Glass</combo_item>
+			 <combo_item name="Wood" value="Wood">Wood</combo_item>
+			 <combo_item name="Flesh" value="Flesh">Flesh</combo_item>
+			 <combo_item name="Plastic" value="Plastic">Plastic</combo_item>
+			 <combo_item name="Rubber" value="Rubber">Rubber</combo_item>
+		</combo_box>
+
+		<text
+		 top="125"
+		 left="10"
+		 follows="left|top"
+		 height="10"
+		 name="text_box_pivotpoint"
+		 width="135">
+		 Pivot Point
+		</text>
+		<view_border
+		 top_pad="5"
+		 bevel_style="none"
+		 border_thickness="1"
+		 follows="top|left"
+		 height="110"
+		 name="SizeBorder"
+		 width="235"/>
+		<check_box
+		 top_delta="10"
+		 follows="left|top"
+		 label="Show axis arrow on root prim position"
+		 tool_tip="Default behaviour is to show the axis on the center of mass of a linkset. If enabled, the axis will be shown on the root prim of the linkset instead."
+		 name="EmBuildPrefsActualRoot_toggle"
+		 control_name="PhoenixBuildPrefs_ActualRoot"/>
+		<spinner
+		 top_pad="5"
+		 left_delta="5"
+		 decimal_digits="5"
+		 follows="left|top"
+		 height="16"
+		 increment="0.05"
+		 label="X pos"
+		 label_width="40"
+		 mouse_opaque="true"
+		 max_val="256"
+		 min_val="-256"
+		 name="X pos"
+		 width="120"
+		 control_name="PhoenixBuildPrefs_PivotX"/>
+		<spinner
+		 top_pad="3"
+		 decimal_digits="5"
+		 follows="left|top"
+		 height="16"
+		 increment="0.05"
+		 label="Y pos"
+		 label_width="40"
+		 mouse_opaque="true"
+		 max_val="256"
+		 min_val="-256"
+		 name="Y pos"
+		 width="120"
+		 control_name="PhoenixBuildPrefs_PivotY"/>
+		<spinner
+		 top_pad="3"
+		 decimal_digits="5"
+		 follows="left|top"
+		 height="16"
+		 increment="0.05"
+		 label="Z pos"
+		 label_width="40"
+		 mouse_opaque="true"
+		 max_val="256"
+		 min_val="-256"
+		 name="Z pos"
+		 width="120"
+		 control_name="PhoenixBuildPrefs_PivotZ"/>
+		<check_box
+		 top_pad="10"
+		 left_delta="-5"
+		 enabled="true"
+		 follows="left|top"
+		 font="SansSerifSmall"
+		 height="16"
+		 label="Values are percent"
+		 mouse_opaque="true"
+		 tool_tip="Default settings are Percentages and every axis set at 50"
+		 name="EmPivotPercToggle"
+		 radio_style="false"
+		 width="100"
+		 control_name="PhoenixBuildPrefs_PivotIsPercent"/>
+		 
+		<check_box
+		 top_pad="20"
+		 follows="left|top"
+		 height="16"
+		 label="Enable highlighting of selected prims"
+		 tool_tip="When unchecked, the yellow/blue outline effects are not rendered, improving performance when large numbers of prims are selected."
+		 name="EmBuildPrefsRenderHighlight_toggle"
+		 control_name="RenderHighlightSelections"/>
+	
+	</panel>
 </tab_container>
 </panel>
