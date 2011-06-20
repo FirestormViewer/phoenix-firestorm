@@ -116,6 +116,7 @@ void commit_radio_group_edit(LLUICtrl* ctrl);
 void commit_radio_group_land(LLUICtrl* ctrl);
 void commit_grid_mode(LLUICtrl *);
 void commit_slider_zoom(LLUICtrl *ctrl);
+void commit_show_highlight(LLUICtrl *, void*);
 
 
 //static
@@ -234,6 +235,11 @@ BOOL	LLFloaterTools::postBuild()
 	getChild<LLUICtrl>("checkbox stretch textures")->setValue((BOOL)gSavedSettings.getBOOL("ScaleStretchTextures"));
 	mComboGridMode			= getChild<LLComboBox>("combobox grid mode");
 
+	//Phoenix:KC show highlight
+	mCheckShowHighlight = getChild<LLCheckBoxCtrl>("checkbox show highlight");
+	mOrginalShowHighlight = gSavedSettings.getBOOL("RenderHighlightSelections");
+	mCheckShowHighlight->setValue(mOrginalShowHighlight);
+
 	//
 	// Create Buttons
 	//
@@ -311,6 +317,7 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mComboGridMode(NULL),
 	mCheckStretchUniform(NULL),
 	mCheckStretchTexture(NULL),
+	mCheckShowHighlight(NULL),
 
 	mBtnRotateLeft(NULL),
 	mBtnRotateReset(NULL),
@@ -641,6 +648,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	//mCheckSelectLinked	->setVisible( edit_visible );
 	if (mCheckStretchUniform) mCheckStretchUniform->setVisible( edit_visible );
 	if (mCheckStretchTexture) mCheckStretchTexture->setVisible( edit_visible );
+	if (mCheckShowHighlight) mCheckShowHighlight->setVisible( edit_visible ); //Phoenix:KC
 
 	// Create buttons
 	BOOL create_visible = (tool == LLToolCompCreate::getInstance());
@@ -753,6 +761,15 @@ void LLFloaterTools::onOpen(const LLSD& key)
 	mParcelSelection = LLViewerParcelMgr::getInstance()->getFloatingParcelSelection();
 	mObjectSelection = LLSelectMgr::getInstance()->getEditSelection();
 	
+	//Phoenix:KC - set the check box value from the saved setting
+	// this function runs on selection change
+	if (!mOpen)
+	{
+		mOpen = TRUE;
+		mOrginalShowHighlight = gSavedSettings.getBOOL("RenderHighlightSelections");
+		mCheckShowHighlight->setValue(mOrginalShowHighlight);
+	}
+
 	std::string panel = key.asString();
 	if (!panel.empty())
 	{
@@ -780,6 +797,10 @@ void LLFloaterTools::onClose(bool app_quitting)
 	// exit component selection mode
 	LLSelectMgr::getInstance()->promoteSelectionToRoot();
 	gSavedSettings.setBOOL("EditLinkedParts", FALSE);
+
+	//Reset silhouette override -KC
+	gSavedSettings.setBOOL("RenderHighlightSelections", mOrginalShowHighlight);
+	mOpen = FALSE; //hack cause onOpen runs on every selection change but onClose doesnt.
 
 	gViewerWindow->showCursor();
 

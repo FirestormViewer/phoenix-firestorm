@@ -143,6 +143,7 @@ public:
 	LLComboBox*		mComboGridMode;
 	LLCheckBoxCtrl*	mCheckStretchUniform;
 	LLCheckBoxCtrl*	mCheckStretchTexture;
+	LLCheckBoxCtrl*	mCheckShowHighlight; //Phoenix:KC
 
 	// Ansariel: Reverted the hack because then when clicking the label it
 	//           doesn't check the checkbox anymore!
@@ -190,6 +191,8 @@ public:
 
 private:
 	BOOL					mDirty;
+	BOOL					mOrginalShowHighlight; //Phoenix:KC
+	BOOL					mOpen; //Phoenix:KC
 
 	std::map<std::string, std::string> mStatusText;
 

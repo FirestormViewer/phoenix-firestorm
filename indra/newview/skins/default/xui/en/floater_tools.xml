@@ -333,6 +333,15 @@
      top_pad="0"
      name="checkbox snap to grid"
      width="134" />
+  <check_box
+     control_name="RenderHighlightSelections"
+     height="18"
+     initial_value="true"
+     label="Show Highlight"
+     layout="topleft"
+     top_pad="0"
+     name="checkbox show highlight"
+     width="134" />
     <combo_box
      height="23"
      layout="topleft"
