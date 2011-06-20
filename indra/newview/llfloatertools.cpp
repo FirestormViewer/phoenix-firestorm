@@ -85,6 +85,7 @@
 #include "llvovolume.h"
 #include "lluictrlfactory.h"
 #include "qtoolalign.h"
+#include "llselectmgr.h"
 
 // Globals
 LLFloaterTools *gFloaterTools = NULL;
@@ -429,11 +430,49 @@ void LLFloaterTools::refresh()
 
 	// Refresh object and prim count labels
 	LLLocale locale(LLLocale::USER_LOCALE);
-	std::string obj_count_string;
-	LLResMgr::getInstance()->getIntegerString(obj_count_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
-	getChild<LLUICtrl>("obj_count")->setTextArg("[COUNT]", obj_count_string);	
+	//std::string obj_count_string;
+	//LLResMgr::getInstance()->getIntegerString(obj_count_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
+	//getChild<LLUICtrl>("obj_count")->setTextArg("[COUNT]", obj_count_string);	
+
+	std::string desc_string;
+	std::string num_string;
+	S32 prim_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
+	if (prim_count != 1 || !gSavedSettings.getBOOL("EditLinkedParts")) //Selecting a single prim in "Edit Linked" mode, show link number
+	{
+		desc_string = "Selected objects:";
+		LLResMgr::getInstance()->getIntegerString(num_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
+	}
+	else
+	{
+		desc_string = "Link number:";
+		LLViewerObject* selected = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
+		if (selected && selected->getRootEdit())
+		{
+			LLViewerObject::child_list_t children = selected->getRootEdit()->getChildren();
+			if (children.empty())
+				num_string = "0"; //a childless prim is always link zero, and unhappy
+			else if (selected->getRootEdit()->isSelected())
+				num_string = "1"; //root prim is always link one
+			else
+			{
+				S32 index = 1;
+				for (LLViewerObject::child_list_t::iterator iter = children.begin(); iter != children.end(); ++iter)
+				{
+					index++;
+					if ((*iter)->isSelected())
+					{
+						LLResMgr::getInstance()->getIntegerString(num_string, index);
+						break;
+					}
+				}
+			}
+		}
+	}
+	getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[DESC]", desc_string);
+	getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[NUM]", num_string);
+
 	std::string prim_count_string;
-	LLResMgr::getInstance()->getIntegerString(prim_count_string, LLSelectMgr::getInstance()->getSelection()->getObjectCount());
+	LLResMgr::getInstance()->getIntegerString(prim_count_string, prim_count);
 	getChild<LLUICtrl>("prim_count")->setTextArg("[COUNT]", prim_count_string);
 
 	// calculate selection rendering cost
@@ -447,7 +486,8 @@ void LLFloaterTools::refresh()
 
 	// disable the object and prim counts if nothing selected
 	bool have_selection = ! LLSelectMgr::getInstance()->getSelection()->isEmpty();
-	getChildView("obj_count")->setEnabled(have_selection);
+	//getChildView("obj_count")->setEnabled(have_selection);
+	getChildView("link_num_obj_count")->setEnabled(have_selection);
 	getChildView("prim_count")->setEnabled(have_selection);
 	getChildView("RenderingCost")->setEnabled(have_selection && sShowObjectCost);
 

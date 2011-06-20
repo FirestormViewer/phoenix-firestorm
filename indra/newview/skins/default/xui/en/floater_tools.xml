@@ -352,29 +352,6 @@
      top_pad="0"
      name="checkbox show highlight"
      width="134" />
-    <combo_box
-     height="23"
-     layout="topleft"
-     follows="left|top"
-     name="combobox grid mode"
-     tool_tip="Choose the type of grid ruler for positioning the object"
-     top_pad="0"
-     width="108">
-        <combo_box.item
-         label="World grid"
-         name="World"
-         value="World" />
-        <combo_box.item
-         label="Local grid"
-         name="Local"
-         value="Local" />
-        <combo_box.item
-         label="Reference grid"
-         name="Reference"
-         value="Reference" />
-		 <combo_box.commit_callback
-	     function="BuildTool.gridMode"/>
-    </combo_box>
     <button
      left_pad="0"
      image_selected="ForwardArrow_Press"
@@ -382,13 +359,37 @@
      layout="topleft"
      name="Options..."
      tool_tip="See more grid options"
-     top_delta="0"
+     top="95"
      right="-10"
      width="18"
      height="23" >
 	 <button.commit_callback
 	     function="BuildTool.gridOptions"/>
 	</button>
+    <combo_box
+	 left="115"
+     height="23"
+     layout="topleft"
+     follows="left|top"
+     name="combobox grid mode"
+     tool_tip="Choose the type of grid ruler for positioning the object"
+     top="135"
+     width="84">
+        <combo_box.item
+         label="World"
+         name="World"
+         value="World" />
+        <combo_box.item
+         label="Local"
+         name="Local"
+         value="Local" />
+        <combo_box.item
+         label="Reference"
+         name="Reference"
+         value="Reference" />
+		 <combo_box.commit_callback
+	     function="BuildTool.gridMode"/>
+    </combo_box>
    <button
      follows="left|top"
      height="20"
@@ -773,22 +774,24 @@
      halign="right"
      layout="topleft"
      right="-10"
-     name="obj_count"
+     name="prim_count"
      top_pad="7"
      width="143">
-        Objects: [COUNT]
+        Prims: [COUNT]
     </text>
     <text
     text_color="LtGray_50"
      type="string"
      length="1"
+     height="10"
      follows="left|top"
      halign="right"
      layout="topleft"
      right="-10"
-     name="prim_count"
+     name="link_num_obj_count"
+	 tooltip="Link number may not be accurate."
      width="143">
-        Prims: [COUNT]
+        [DESC] [NUM]
     </text>
     <tab_container
      follows="left|top"
