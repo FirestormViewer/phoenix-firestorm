@@ -144,6 +144,7 @@ public:
 	LLCheckBoxCtrl*	mCheckStretchUniform;
 	LLCheckBoxCtrl*	mCheckStretchTexture;
 	LLCheckBoxCtrl*	mCheckShowHighlight; //Phoenix:KC
+	LLCheckBoxCtrl*	mCheckActualRoot;
 
 	// Ansariel: Reverted the hack because then when clicking the label it
 	//           doesn't check the checkbox anymore!

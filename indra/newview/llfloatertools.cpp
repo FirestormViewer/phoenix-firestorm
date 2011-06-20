@@ -240,6 +240,8 @@ BOOL	LLFloaterTools::postBuild()
 	mOrginalShowHighlight = gSavedSettings.getBOOL("RenderHighlightSelections");
 	mCheckShowHighlight->setValue(mOrginalShowHighlight);
 
+	mCheckActualRoot = getChild<LLCheckBoxCtrl>("checkbox actual root");
+
 	//
 	// Create Buttons
 	//
@@ -318,6 +320,7 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mCheckStretchUniform(NULL),
 	mCheckStretchTexture(NULL),
 	mCheckShowHighlight(NULL),
+	mCheckActualRoot(NULL),
 
 	mBtnRotateLeft(NULL),
 	mBtnRotateReset(NULL),
@@ -649,6 +652,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	if (mCheckStretchUniform) mCheckStretchUniform->setVisible( edit_visible );
 	if (mCheckStretchTexture) mCheckStretchTexture->setVisible( edit_visible );
 	if (mCheckShowHighlight) mCheckShowHighlight->setVisible( edit_visible ); //Phoenix:KC
+	if (mCheckActualRoot) mCheckActualRoot->setVisible( edit_visible ); //Phoenix:KC
 
 	// Create buttons
 	BOOL create_visible = (tool == LLToolCompCreate::getInstance());

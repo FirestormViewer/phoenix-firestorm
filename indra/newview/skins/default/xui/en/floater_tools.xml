@@ -333,6 +333,16 @@
      top_pad="0"
      name="checkbox snap to grid"
      width="134" />
+
+  <check_box
+     control_name="PhoenixBuildPrefs_ActualRoot"
+     height="18"
+     initial_value="false"
+     label="Edit axis at root"
+     layout="topleft"
+     top_pad="0"
+     name="checkbox actual root"
+     width="134" />
   <check_box
      control_name="RenderHighlightSelections"
      height="18"
