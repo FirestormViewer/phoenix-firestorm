@@ -172,7 +172,7 @@ void PieMenu::hide()
 	// make a sound when hiding
 	make_ui_sound("UISndPieMenuHide");
 
-	llwarns << "Clearing selections" << llendl;
+	lldebugs << "Clearing selections" << llendl;
 
 	mSlices=&mMySlices;
 #if PIE_POPUP_EFFECT
@@ -265,7 +265,7 @@ void PieMenu::draw( void )
 	LLVector2 mouseVector(x-PIE_OUTER_SIZE/scale.mV[VX],y-PIE_OUTER_SIZE/scale.mV[VY]);
 
 	// get the distance from the center point
-	S32 distance=mouseVector.length();
+	F32 distance=mouseVector.length();
 	// check if our mouse pointer is within the pie slice area
 	if(distance>PIE_INNER_SIZE && (distance<(PIE_OUTER_SIZE*factor) || mFirstClick))
 	{
