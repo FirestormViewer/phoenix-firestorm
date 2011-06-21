@@ -204,17 +204,41 @@
             left="5"
             name="WL Sky"
             mouse_opaque="false"
-            top_delta="40"
+            top_delta="45"
             width="90">
-            WindLight Sky:
+            WL Sky:
         </text>
         <combo_box
             height="20"
             layout="topleft"
-            left_delta="100"
+            left_delta="58"
             name="WLPresetsCombo"
-            top_delta="-2"
+            top_delta="-4"
             width="150" />
+        <button
+            enabled="true"
+            name="WLprev"
+            follows="left|bottom"
+            height="20"
+            width="20"
+            bottom_delta="-0"
+            left_delta="152"
+            label=""
+            label_selected=""
+            image_overlay="Arrow_Left_Off"
+            scale_image="true" />
+        <button
+            enabled="true"
+            name="WLnext"
+            follows="left|bottom"
+            height="20"
+            width="20"
+            bottom_delta="-0"
+            left_delta="21"
+            label=""
+            label_selected=""
+            image_overlay="Arrow_Right_Off"
+            scale_image="true" />
         <text
             type="string"
             length="1"
@@ -226,14 +250,38 @@
             mouse_opaque="false"
             top_delta="25"
             width="90">
-            WindLight Water:
+            WL Water:
         </text>
         <combo_box
             height="20"
             layout="topleft"
-            left_delta="100"
+            left_delta="58"
             name="WaterPresetsCombo"
-            top_delta="-2"
+            top_delta="-4"
             width="150" />
+        <button
+            enabled="true"
+            name="WWprev"
+            follows="left|bottom"
+            height="20"
+            width="20"
+            bottom_delta="-0"
+            left_delta="152"
+            label=""
+            label_selected=""
+            image_overlay="Arrow_Left_Off"
+            scale_image="true" />
+        <button
+            enabled="true"
+            name="WWnext"
+            follows="left|bottom"
+            height="20"
+            width="20"
+            bottom_delta="-0"
+            left_delta="21"
+            label=""
+            label_selected=""
+            image_overlay="Arrow_Right_Off"
+            scale_image="true" />
 </panel>
 </floater>
