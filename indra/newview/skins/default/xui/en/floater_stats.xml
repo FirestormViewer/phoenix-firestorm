@@ -10,7 +10,7 @@
  save_rect="true"
  save_visibility="true"
  title="STATISTICS"
- width="250">
+ width="260">
     <scroll_container
      follows="top|left|bottom|right"
      height="380"
@@ -19,16 +19,16 @@
      name="statistics_scroll"
      reserve_scroll_corner="true"
      top="20"
-     width="250">
-        <container_view
-         follows="top|left|bottom|right"
-         height="378"
-         layout="topleft"
-         left="2"
-         name="statistics_view"
-         top="20"
-         width="230" >
-          <!--Basic Section-->
+     width="260">
+      <container_view
+       follows="top|left|bottom|right"
+       height="378"
+       layout="topleft"
+       left="2"
+       name="statistics_view"
+       top="20"
+       width="245" >
+        <!--Basic Section-->
 		  <stat_view
 			 name="basic"
 			 label="Basic"
@@ -56,7 +56,7 @@
 			   bar_max="5000"
 			   tick_spacing="500"
 			   label_spacing="1000"
-				 precision="1"
+				 precision="0"
 			   show_bar="true"
 			   show_history="false">
 			</stat_bar>
@@ -110,8 +110,9 @@
 				 tick_spacing="1000"
 				 label_spacing="2000"
 				 precision="0"
-				 show_per_sec="false">
-			  </stat_bar>
+				 show_per_sec="false"
+         show_bar="false">
+        </stat_bar>
 			  <stat_bar
 				 name="ktrissec"
 				 label="KTris Drawn per Sec"
@@ -121,8 +122,9 @@
 				 bar_max="200000"
 				 tick_spacing="20000"
 				 label_spacing="40000"
-				 precision="0">
-			  </stat_bar>
+				 precision="0"
+         show_bar="false">
+        </stat_bar>
 			  <stat_bar
 				 name="objs"
 				 label="Total Objects"
@@ -187,8 +189,9 @@
 				 tick_spacing="100.f"
 				 label_spacing="200.f" 
 				 precision="1"
-				 show_per_sec="false" >
-			  </stat_bar>
+				 show_per_sec="false" 
+         show_bar="false">
+        </stat_bar>
 
 			  <stat_bar
 				 name="formattedmemstat"
@@ -199,8 +202,9 @@
 				 tick_spacing="100.f"
 				 label_spacing="200.f" 
 				 precision="1"
-				 show_per_sec="false" >
-			  </stat_bar>
+				 show_per_sec="false" 
+         show_bar="false">
+        </stat_bar>
 
 			  <stat_bar
 				 name="rawmemstat"
@@ -211,8 +215,9 @@
 				 tick_spacing="100.f"
 				 label_spacing="200.f" 
 				 precision="1"
-				 show_per_sec="false" >
-			  </stat_bar>
+				 show_per_sec="false" 
+         show_bar="false">
+        </stat_bar>
 
 			  <stat_bar
 				 name="glboundmemstat"
@@ -223,8 +228,9 @@
 				 tick_spacing="100.f"
 				 label_spacing="200.f" 
 				 precision="1"
-				 show_per_sec="false" >
-			  </stat_bar>
+				 show_per_sec="false" 
+         show_bar="false">
+        </stat_bar>
 			</stat_view>
         <!--Network Stats-->
 			<stat_view
@@ -320,7 +326,7 @@
          tick_spacing="128.f"
          label_spacing="256.f"
          precision="1"
-				 show_bar="true"
+				 show_bar="false"
 				 show_history="false" >
 			  </stat_bar>
 
@@ -334,7 +340,7 @@
          tick_spacing="128.f"
          label_spacing="256.f"
          precision="1"
-				 show_bar="true"
+				 show_bar="false"
 				 show_history="false">
 			  </stat_bar>
 
@@ -506,9 +512,9 @@
 			   stat="simactiveobjects"
 			   precision="0"
 			   bar_min="0.f"
-			   bar_max="800.f" 
-			   tick_spacing="100.f"
-			   label_spacing="200.f" 
+			   bar_max="5000.f" 
+			   tick_spacing="750.f"
+			   label_spacing="1250.f" 
 			   show_per_sec="false"
 			   show_bar="false"
 			   show_mean="false" >
@@ -520,9 +526,9 @@
 			   stat="simactivescripts"
 			   precision="0"
 			   bar_min="0.f"
-			   bar_max="800.f" 
-			   tick_spacing="100.f"
-			   label_spacing="200.f" 
+			   bar_max="15000.f" 
+			   tick_spacing="1875.f"
+			   label_spacing="3750.f"  
 			   show_per_sec="false"
 			   show_bar="false"
 			   show_mean="false" >
@@ -535,9 +541,9 @@
 			   unit_label="eps"
 			   precision="0"
 			   bar_min="0.f"
-			   bar_max="20000.f" 
-			   tick_spacing="2500.f"
-			   label_spacing="5000.f" 
+			   bar_max="5000.f" 
+			   tick_spacing="750.f"
+			   label_spacing="1250.f"  
 			   show_per_sec="false"
 			   show_bar="false"
 			   show_mean="false" >
