@@ -2880,7 +2880,17 @@ even though the user gets a free copy.
              left="20"
              min_val="-1"
              name="TexOffsetU"
-             width="185" />
+             width="160" />
+            <button
+             follows="top|right"
+             height="19"
+             label="Copy"
+             layout="topleft"
+             left_pad="30"
+             name="copytextures"
+             tool_tip="Copy Parameters to Clipboard"
+             width="68">
+            </button>
             <spinner
              follows="left|top"
              height="19"
@@ -2888,11 +2898,21 @@ even though the user gets a free copy.
              label="Vertical (V)"
              label_width="125"
              layout="topleft"
-             left_delta="0"
+             left="20"
              min_val="-1"
              name="TexOffsetV"
              top_pad="1"
-             width="185" />
+             width="160" />
+            <button
+             follows="top|right"
+             height="20"
+             label="Paste"
+             layout="topleft"
+             left_pad="30"
+             name="pastetextures"
+             tool_tip="Paste Parameters from Clipboard"
+             width="68">
+            </button>
         <panel
          border="false"
          follows="left|top"
