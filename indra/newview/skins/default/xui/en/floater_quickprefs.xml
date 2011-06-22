@@ -217,7 +217,7 @@
             width="150" />
         <button
             enabled="true"
-            name="WLprev"
+            name="WLPrevPreset"
             follows="left|bottom"
             height="20"
             width="20"
@@ -229,7 +229,7 @@
             scale_image="true" />
         <button
             enabled="true"
-            name="WLnext"
+            name="WLNextPreset"
             follows="left|bottom"
             height="20"
             width="20"
@@ -261,7 +261,7 @@
             width="150" />
         <button
             enabled="true"
-            name="WWprev"
+            name="WWPrevPreset"
             follows="left|bottom"
             height="20"
             width="20"
@@ -273,7 +273,7 @@
             scale_image="true" />
         <button
             enabled="true"
-            name="WWnext"
+            name="WWNextPreset"
             follows="left|bottom"
             height="20"
             width="20"

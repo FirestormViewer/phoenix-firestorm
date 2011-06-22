@@ -99,6 +99,10 @@ public:
 	/// sync up sliders with parameters
 	void syncMenu();
 
+	/// Preset prev/next controls	-WoLf
+	static void onPrevPreset(void* user_data);
+	static void onNextPreset(void* user_data);
+
 private:
 	static std::set<std::string> sDefaultPresets;
 };
