@@ -28,6 +28,7 @@
 #ifndef AO_H
 #define AO_H
 
+#include "lleventtimer.h"
 #include "lltransientdockablefloater.h"
 #include "aoset.h"
 
@@ -40,7 +41,8 @@ class LLSpinCtrl;
 class LLTextBox;
 
 class FloaterAO
-:	public LLTransientDockableFloater
+:	public LLTransientDockableFloater,
+	public LLEventTimer
 {
 	friend class LLFloaterReg;
 
@@ -97,6 +99,8 @@ class FloaterAO
 
 		BOOL newSetCallback(const LLSD& notification,const LLSD& response);
 		BOOL removeSetCallback(const LLSD& notification,const LLSD& response);
+
+		virtual BOOL tick();
 
 		std::vector<AOSet*> mSetList;
 		AOSet* mSelectedSet;

@@ -40,7 +40,7 @@
 #include <boost/graph/graph_concepts.hpp>
 
 FloaterAO::FloaterAO(const LLSD& key)
-:	LLTransientDockableFloater(NULL,true,key),
+:	LLTransientDockableFloater(NULL,true,key),LLEventTimer(10.0),
 	mSetList(0),
 	mSelectedSet(0),
 	mSelectedState(0),
@@ -48,6 +48,7 @@ FloaterAO::FloaterAO(const LLSD& key)
 	mImportRunning(FALSE),
 	mMore(TRUE)
 {
+	mEventTimer.stop();
 }
 
 FloaterAO::~FloaterAO()
@@ -56,9 +57,22 @@ FloaterAO::~FloaterAO()
 
 void FloaterAO::reloading(BOOL yes)
 {
+	if(yes)
+		mEventTimer.start();
+	else
+		mEventTimer.stop();
+
 	mReloadCoverPanel->setVisible(yes);
 	enableSetControls(!yes);
 	enableStateControls(!yes);
+}
+
+BOOL FloaterAO::tick()
+{
+	// reloading took too long, probably missed the signal, so we hide the reload cover
+	llwarns << "AO reloading timeout." << llendl;
+	updateList();
+	return FALSE;
 }
 
 void FloaterAO::updateSetParameters()
