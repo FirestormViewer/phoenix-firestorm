@@ -1361,6 +1361,15 @@ even though the user gets a free copy.
              text_enabled_color="Red"
              top_pad="5"
              width="87" />
+            <button follows="top|right"
+             height="18" 
+             label="C"
+             left_pad="5"
+             mouse_opaque="true"
+             name="copypos"
+             enabled="true"
+             tool_tip="Copy Position"
+             width="20" />
             <spinner
              follows="left|top"
              height="19"
@@ -1369,13 +1378,22 @@ even though the user gets a free copy.
              label="Y"
              label_width="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              max_val="512"
              min_val="-256"
              name="Pos Y"
              text_enabled_color="EmphasisColor"
              top_pad="3"
              width="87" />
+            <button follows="top|right"
+             height="18"
+             label="P"
+             left_pad="5"
+             mouse_opaque="true"
+             name="pastepos"
+             enabled="true"
+             tool_tip="Paste Position"
+             width="20" />
             <spinner
              follows="left|top"
              height="19"
@@ -1384,19 +1402,28 @@ even though the user gets a free copy.
              label="Z"
              label_width="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              max_val="4096"
              name="Pos Z"
              text_enabled_color="SL-MidBlue"
              top_pad="3"
              width="87" />
+            <button follows="top|right"
+             height="18"
+             label="p"
+             left_pad="5"
+             mouse_opaque="true"
+             name="pasteposclip"
+             enabled="true"
+             tool_tip="Paste Position from Clipboard"
+             width="20" />
             <text
              type="string"
              length="1"
              follows="left|top"
              height="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              name="label size"
              top_pad="6"
              width="121">
@@ -1417,6 +1444,15 @@ even though the user gets a free copy.
              text_enabled_color="White"
              top_pad="5"
              width="87" />
+            <button follows="top|right"
+             height="18" 
+             label="C"
+             left_pad="5"
+             mouse_opaque="true"
+             name="copysize"
+             enabled="true"
+             tool_tip="Copy Size"
+             width="20" />
             <spinner
              follows="left|top"
              height="19"
@@ -1425,13 +1461,22 @@ even though the user gets a free copy.
              label="Y"
              label_width="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              max_val="10"
              min_val="0.01"
              name="Scale Y"
              text_enabled_color="White"
              top_pad="3"
              width="87" />
+            <button follows="top|right"
+             height="18"
+             label="P"
+             left_pad="5"
+             mouse_opaque="true"
+             name="pastesize"
+             enabled="true"
+             tool_tip="Paste Size"
+             width="20" />
             <spinner
              follows="left|top"
              height="19"
@@ -1440,20 +1485,29 @@ even though the user gets a free copy.
              label="Z"
              label_width="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              max_val="10"
              min_val="0.01"
              name="Scale Z"
              text_enabled_color="White"
              top_pad="3"
              width="87" />
+            <button follows="top|right"
+             height="18"
+             label="p"
+             left_pad="5"
+             mouse_opaque="true"
+             name="pastesizeclip"
+             enabled="true"
+             tool_tip="Paste Size from Clipboard"
+             width="20" />
             <text
              type="string"
              length="1"
              follows="left|top"
              height="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              name="label rotation"
              top_pad="10"
              width="121">
@@ -1475,6 +1529,15 @@ even though the user gets a free copy.
              text_enabled_color="White"
              top_pad="5"
              width="87" />
+            <button follows="top|right"
+             height="18"
+             label="C"
+             left_pad="5"
+             mouse_opaque="true"
+             name="copyrot"
+             enabled="true"
+             tool_tip="Copy Rotation"
+             width="20" />
             <spinner
              decimal_digits="2"
              follows="left|top"
@@ -1484,13 +1547,22 @@ even though the user gets a free copy.
              label="Y"
              label_width="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              max_val="9999"
              min_val="-9999"
              name="Rot Y"
              text_enabled_color="White"
              top_pad="3"
              width="87" />
+            <button follows="top|right"
+             height="18"
+             label="P"
+             left_pad="5"
+             mouse_opaque="true"
+             name="pasterot"
+             enabled="true"
+             tool_tip="Paste Rotation"
+             width="20" />
             <spinner
              decimal_digits="2"
              follows="left|top"
@@ -1500,13 +1572,22 @@ even though the user gets a free copy.
              label="Z"
              label_width="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              max_val="9999"
              min_val="-9999"
              name="Rot Z"
              text_enabled_color="White"
              top_pad="3"
              width="87" />
+            <button follows="top|right"
+             height="18"
+             label="p"
+             left_pad="5"
+             mouse_opaque="true"
+             name="pasterotclip"
+             enabled="true"
+             tool_tip="Paste Rotation from Clipboard"
+             width="20" />
 
  <!--           <text
              type="string"
@@ -1520,6 +1601,39 @@ even though the user gets a free copy.
              width="150">
                 Prim Type
             </text>-->
+			<text
+			 type="string"
+			 length="1"
+			 follows="left|top"
+			 height="10"
+			 bottom="-15"
+			 layout="topleft"
+			 left="10"
+			 name="edit_object"
+			 top_pad="8"
+			 width="121">
+			  Object Parameters:
+			</text>
+			<button
+			 follows="top|right"
+			 height="16"
+			 label="Copy"
+			 layout="topleft"
+			 left="5"
+			 name="copyparams"
+			 tool_tip="Copy Parameters to Clipboard"
+			 width="52">
+			</button>
+			<button
+			 follows="top|right"
+			 height="16"
+			 label="Paste"
+			 layout="topleft"
+			 left_pad="10"
+			 name="pasteparams"
+			 tool_tip="Paste Parameters from Clipboard"
+			 width="52">
+			</button>
             <combo_box
              height="19"
              layout="topleft"
