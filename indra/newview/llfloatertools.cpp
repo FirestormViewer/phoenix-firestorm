@@ -439,12 +439,12 @@ void LLFloaterTools::refresh()
 	S32 prim_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
 	if (prim_count != 1 || !gSavedSettings.getBOOL("EditLinkedParts")) //Selecting a single prim in "Edit Linked" mode, show link number
 	{
-		desc_string = "Selected objects:";
+		desc_string = getString("selected_objects");
 		LLResMgr::getInstance()->getIntegerString(num_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
 	}
 	else
 	{
-		desc_string = "Link number:";
+		desc_string = getString("link_number");
 		LLViewerObject* selected = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
 		if (selected && selected->getRootEdit())
 		{

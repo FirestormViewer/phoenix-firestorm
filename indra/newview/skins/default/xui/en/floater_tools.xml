@@ -71,6 +71,14 @@
      name="grid_attachment_text">
         Attachment
     </floater.string>
+	<floater.string
+	  name="selected_objects">
+		Selected objects:
+	</floater.string>
+	<floater.string
+	  name="link_number">
+		Link number:
+	</floater.string>
     <button
      follows="left|top"
      height="25"
