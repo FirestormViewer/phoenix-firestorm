@@ -105,8 +105,8 @@ public:
 	static void deactivateAnimator();
 
 	/// Preset prev/next controls	-WoLf
-	static void onPrevPreset(void* user_data);
-	static void onNextPreset(void* user_data);
+	void onPrevPreset();
+	void onNextPreset();
 
 private:
 	static std::set<std::string> sDefaultPresets;

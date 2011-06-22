@@ -628,10 +628,8 @@ void LLFloaterWater::onChangePresetName(LLUICtrl* ctrl)
 }
 
 // > Presets prev/next controls	-WoLf 
-void LLFloaterWater::onPrevPreset(void* user_data)
+void LLFloaterWater::onPrevPreset()
 {
-	LLFloaterWater* self = (LLFloaterWater*) user_data;
-	
 	LLWaterParamManager * param_mgr = LLWaterParamManager::instance();
 	LLWaterParamSet & currentParams = param_mgr->mCurParams;
 
@@ -650,14 +648,12 @@ void LLFloaterWater::onPrevPreset(void* user_data)
 		mIt--;
 	}
 	param_mgr->loadPreset(mIt->first, true);
-	LLComboBox* WWcomboBox = self->getChild<LLComboBox>("WaterPresetsCombo");
+	LLComboBox* WWcomboBox = getChild<LLComboBox>("WaterPresetsCombo");
 	WWcomboBox->setSimple(mIt->first);
 }
 
-void LLFloaterWater::onNextPreset(void* user_data)
+void LLFloaterWater::onNextPreset()
 {
-	LLFloaterWater* self = (LLFloaterWater*) user_data;
-	
 	LLWaterParamManager * param_mgr = LLWaterParamManager::instance();
 	LLWaterParamSet& currentParams = param_mgr->mCurParams;
 
@@ -676,7 +672,7 @@ void LLFloaterWater::onNextPreset(void* user_data)
 		mIt++;
 	}
 	param_mgr->loadPreset(mIt->first, true);
-	LLComboBox* WWcomboBox = self->getChild<LLComboBox>("WaterPresetsCombo");
+	LLComboBox* WWcomboBox = getChild<LLComboBox>("WaterPresetsCombo");
 	WWcomboBox->setSimple(mIt->first);
 }
 // < Presets prev/next controls	-WoLf

@@ -46,6 +46,11 @@ class FloaterQuickPrefs : public LLTransientDockableFloater
 		void initCallbacks(void);
 		void onChangeWaterPreset(LLUICtrl* ctrl);
 		void onChangeSkyPreset(LLUICtrl* ctrl);
+		void deactivateAnimator();
+		void onClickSkyPrev();
+		void onClickSkyNext();
+		void onClickWaterPrev();
+		void onClickWaterNext();
 
 };
 #endif

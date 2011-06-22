@@ -889,12 +889,9 @@ void LLFloaterWindLight::deactivateAnimator()
 	LLWLParamManager::instance()->mAnimator.mUseLindenTime = false;
 }
 
-
 // > Presets prev/next controls	-WoLf 
-void LLFloaterWindLight::onPrevPreset(void* user_data)
+void LLFloaterWindLight::onPrevPreset()
 {
-	LLFloaterWindLight* self = (LLFloaterWindLight*) user_data;
-	
 	// find place of current param
 	std::map<std::string, LLWLParamSet>::iterator mIt = 
 		LLWLParamManager::instance()->mParamList.find(LLWLParamManager::instance()->mCurParams.mName);
@@ -918,14 +915,12 @@ void LLFloaterWindLight::onPrevPreset(void* user_data)
 	}
 	deactivateAnimator();
 	LLWLParamManager::instance()->loadPreset(mIt->first, true);
-	LLComboBox* WLcomboBox = self->getChild<LLComboBox>("WLPresetsCombo");
+	LLComboBox* WLcomboBox = getChild<LLComboBox>("WLPresetsCombo");
 	WLcomboBox->setSimple(mIt->first);
 }
 
-void LLFloaterWindLight::onNextPreset(void* user_data)
+void LLFloaterWindLight::onNextPreset()
 {
-	LLFloaterWindLight* self = (LLFloaterWindLight*) user_data;
-	
 	// find place of current param
 	std::map<std::string, LLWLParamSet>::iterator mIt = 
 		LLWLParamManager::instance()->mParamList.find(LLWLParamManager::instance()->mCurParams.mName);
@@ -949,7 +944,7 @@ void LLFloaterWindLight::onNextPreset(void* user_data)
 	}
 	deactivateAnimator();
 	LLWLParamManager::instance()->loadPreset(mIt->first, true);
-	LLComboBox* WLcomboBox = self->getChild<LLComboBox>("WLPresetsCombo");
+	LLComboBox* WLcomboBox = getChild<LLComboBox>("WLPresetsCombo");
 	WLcomboBox->setSimple(mIt->first);
 }
 // < Presets prev/next controls	-WoLf

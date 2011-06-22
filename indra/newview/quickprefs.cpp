@@ -58,12 +58,10 @@ void FloaterQuickPrefs::onOpen(const LLSD& key)
 void FloaterQuickPrefs::initCallbacks(void) {
 	getChild<LLUICtrl>("WaterPresetsCombo")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeWaterPreset, this, _1));
 	getChild<LLUICtrl>("WLPresetsCombo")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeSkyPreset, this, _1));
-	getChild<LLUICtrl>("WLPrevPreset")->setCommitCallback(boost::bind(&LLFloaterWindLight::onPrevPreset, this));
-	getChild<LLUICtrl>("WLNextPreset")->setCommitCallback(boost::bind(&LLFloaterWindLight::onNextPreset, this));
-	getChild<LLUICtrl>("WWPrevPreset")->setCommitCallback(boost::bind(&LLFloaterWater::onPrevPreset, this));
-	getChild<LLUICtrl>("WWNextPreset")->setCommitCallback(boost::bind(&LLFloaterWater::onNextPreset, this));
-
-
+	getChild<LLUICtrl>("WLPrevPreset")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickSkyPrev, this));
+	getChild<LLUICtrl>("WLNextPreset")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickSkyNext, this));
+	getChild<LLUICtrl>("WWPrevPreset")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickWaterPrev, this));
+	getChild<LLUICtrl>("WWNextPreset")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickWaterNext, this));
 }
 
 BOOL FloaterQuickPrefs::postBuild()
@@ -107,11 +105,123 @@ void FloaterQuickPrefs::onChangeWaterPreset(LLUICtrl* ctrl)
 
 void FloaterQuickPrefs::onChangeSkyPreset(LLUICtrl* ctrl)
 {
-	LLFloaterWindLight::deactivateAnimator();
+	deactivateAnimator();
 
 	std::string data = ctrl->getValue().asString();
 	if(!data.empty())
 	{
 		LLWLParamManager::instance()->loadPreset( data);
 	}
+}
+
+void FloaterQuickPrefs::deactivateAnimator()
+{
+	LLWLParamManager::instance()->mAnimator.mIsRunning = false;
+	LLWLParamManager::instance()->mAnimator.mUseLindenTime = false;
+}
+
+void FloaterQuickPrefs::onClickWaterPrev()
+{
+	LLWaterParamManager * param_mgr = LLWaterParamManager::instance();
+	LLWaterParamSet & currentParams = param_mgr->mCurParams;
+
+	// find place of current param
+	std::map<std::string, LLWaterParamSet>::iterator mIt = 
+		param_mgr->mParamList.find(currentParams.mName);
+
+	// if at the beginning, loop
+	if(mIt == param_mgr->mParamList.begin()) 
+	{
+		std::map<std::string, LLWaterParamSet>::iterator last = param_mgr->mParamList.end(); --last;
+		mIt = last;
+	}
+	else
+	{
+		mIt--;
+	}
+	param_mgr->loadPreset(mIt->first, true);
+	LLComboBox* WWcomboBox = getChild<LLComboBox>("WaterPresetsCombo");
+	WWcomboBox->setSimple(mIt->first);
+}
+
+void FloaterQuickPrefs::onClickWaterNext()
+{
+	LLWaterParamManager * param_mgr = LLWaterParamManager::instance();
+	LLWaterParamSet& currentParams = param_mgr->mCurParams;
+
+	// find place of current param
+	std::map<std::string, LLWaterParamSet>::iterator mIt = 
+		param_mgr->mParamList.find(currentParams.mName);
+
+	// if at the end, loop
+	std::map<std::string, LLWaterParamSet>::iterator last = param_mgr->mParamList.end(); --last;
+	if(mIt == last) 
+	{
+		mIt = param_mgr->mParamList.begin();
+	}
+	else
+	{
+		mIt++;
+	}
+	param_mgr->loadPreset(mIt->first, true);
+	LLComboBox* WWcomboBox = getChild<LLComboBox>("WaterPresetsCombo");
+	WWcomboBox->setSimple(mIt->first);
+}
+
+void FloaterQuickPrefs::onClickSkyPrev()
+{
+	// find place of current param
+	std::map<std::string, LLWLParamSet>::iterator mIt = 
+		LLWLParamManager::instance()->mParamList.find(LLWLParamManager::instance()->mCurParams.mName);
+
+	// shouldn't happen unless you delete every preset but Default
+	if (mIt == LLWLParamManager::instance()->mParamList.end())
+	{
+		llwarns << "No more presets left!" << llendl;
+		return;
+	}
+
+	// if at the beginning, loop
+	if(mIt == LLWLParamManager::instance()->mParamList.begin()) 
+	{
+		std::map<std::string, LLWLParamSet>::iterator last = LLWLParamManager::instance()->mParamList.end(); --last;
+		mIt = last;
+	}
+	else
+	{
+		mIt--;
+	}
+		deactivateAnimator();
+	LLWLParamManager::instance()->loadPreset(mIt->first, true);
+	LLComboBox* WLcomboBox = getChild<LLComboBox>("WLPresetsCombo");
+	WLcomboBox->setSimple(mIt->first);
+}
+
+void FloaterQuickPrefs::onClickSkyNext()
+{
+	// find place of current param
+	std::map<std::string, LLWLParamSet>::iterator mIt = 
+		LLWLParamManager::instance()->mParamList.find(LLWLParamManager::instance()->mCurParams.mName);
+
+	// shouldn't happen unless you delete every preset but Default
+	if (mIt == LLWLParamManager::instance()->mParamList.end())
+	{
+		llwarns << "No more presets left!" << llendl;
+		return;
+	}
+
+	// if at the end, loop
+	std::map<std::string, LLWLParamSet>::iterator last = LLWLParamManager::instance()->mParamList.end(); --last;
+	if(mIt == last) 
+	{
+		mIt = LLWLParamManager::instance()->mParamList.begin();
+	}
+	else
+	{
+		mIt++;
+	}
+		deactivateAnimator();
+	LLWLParamManager::instance()->loadPreset(mIt->first, true);
+	LLComboBox* WLcomboBox = getChild<LLComboBox>("WLPresetsCombo");
+	WLcomboBox->setSimple(mIt->first);
 }
