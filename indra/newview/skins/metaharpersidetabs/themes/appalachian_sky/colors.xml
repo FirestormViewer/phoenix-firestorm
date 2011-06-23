@@ -659,14 +659,12 @@
     <color
      name="LoginProgressBoxTextColor"
      reference="White" />
-<!-- Changed Color -->
     <color
      name="MapAvatarColor"
-     reference="Red" />
-<!-- Changed Color -->
+     reference="Green" />
     <color
      name="MapAvatarFriendColor"
-     reference="Green" />
+     reference="Yellow" />
     <color
      name="MapFrustumColor"
      reference="White_10" />
