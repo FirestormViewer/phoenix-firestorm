@@ -278,6 +278,7 @@ private:
 	LLIconCtrl*				mParcelIcon[ICON_COUNT];
 	LLParcelChangeObserver*	mParcelChangedObserver;
 	LLButton* 				mPWLBtn;
+	LLPanel*				mBalancePanel;
 
 	boost::signals2::connection	mParcelPropsCtrlConnection;
 	boost::signals2::connection	mShowCoordsCtrlConnection;

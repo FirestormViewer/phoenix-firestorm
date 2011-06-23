@@ -306,6 +306,8 @@ BOOL LLStatusBar::postBuild()
 	mPWLBtn = getChild<LLButton>("status_wl_btn");
 	mPWLBtn->setClickedCallback(boost::bind(&LLStatusBar::onParcelWLClicked, this));
 
+	mBalancePanel = getChild<LLPanel>("balance_bg");
+
 	initParcelIcons();
 
 	mParcelChangedObserver = new LLParcelChangeObserver(this);
@@ -765,6 +767,7 @@ void LLStatusBar::buildLocationString(std::string& loc_str, bool show_coords)
 
 void LLStatusBar::setParcelInfoText(const std::string& new_text)
 {
+	const S32 ParcelInfoSpacing = 5;
 	const LLFontGL* font = mParcelInfoText->getDefaultFont();
 	S32 new_text_width = font->getWidth(new_text);
 
@@ -773,13 +776,23 @@ void LLStatusBar::setParcelInfoText(const std::string& new_text)
 	LLRect rect = mParcelInfoText->getRect();
 	rect.setOriginAndSize(rect.mLeft, rect.mBottom, new_text_width, rect.getHeight());
 
+	// Ansariel: Recalculate panel size so we are able to click the whole text
+	LLRect panelParcelInfoRect = mParcelInfoPanel->getRect();
+	LLRect panelBalanceRect = mBalancePanel->getRect();
+	panelParcelInfoRect.mRight = panelParcelInfoRect.mLeft + rect.mRight;
+	S32 borderRight = panelBalanceRect.mLeft - ParcelInfoSpacing;
+
+	// If we're about to float away under the L$ balance, cut off
+	// the parcel description so it doesn't happen.
+	if (panelParcelInfoRect.mRight > borderRight)
+	{
+		panelParcelInfoRect.mRight = borderRight;
+		rect.mRight = panelParcelInfoRect.getWidth();
+	}
+
 	mParcelInfoText->reshape(rect.getWidth(), rect.getHeight(), TRUE);
 	mParcelInfoText->setRect(rect);
-
-	// Ansariel: Recalculate panel size so we are able to click the whole text
-	LLRect panelRect = mParcelInfoPanel->getRect();
-	panelRect.mRight = panelRect.mLeft + rect.mRight;
-	mParcelInfoPanel->setRect(panelRect);
+	mParcelInfoPanel->setRect(panelParcelInfoRect);
 }
 
 void LLStatusBar::update()
