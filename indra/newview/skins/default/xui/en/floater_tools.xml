@@ -1687,6 +1687,64 @@ even though the user gets a free copy.
                  label="Sculpted"
                  name="Sculpted"
                  value="Sculpted" />
+				<combo_item
+				 name="PathLineProfileHalfCircle"
+				 value="PathLineProfileHalfCircle"
+				 label="Line->Half-Circle" />
+				<combo_item
+				 name="PathCircleProfileHalfCircle"
+				 value="PathCircleProfileHalfCircle"
+				 label="Circle->Half-Circle" />
+				<combo_item
+				 name="PathCircle2ProfileSquare"
+				 value="PathCircle2ProfileSquare"
+				 label="Circle2->Square" />
+				<combo_item
+				 name="PathCircle2ProfileTriangle"
+				 value="PathCircle2ProfileTriangle"
+				 label="Circle2->Triangle" />
+				<combo_item
+				 name="PathCircle2ProfileCircle"
+				 value="PathCircle2ProfileCircle"
+				 label="Circle2->Circle" />
+				<combo_item
+				 name="PathCircle2ProfileHalfCircle"
+				 value="PathCircle2ProfileHalfCircle"
+				 label="Circle2->Half-Circle" />
+				<combo_item
+				 name="PathTestProfileSquare"
+				 value="PathTestProfileSquare"
+				 label="Test->Square" />
+				<combo_item
+				 name="PathTestProfileTriangle"
+				 value="PathTestProfileTriangle"
+				 label="Test->Triangle" />
+				<combo_item
+				 name="PathTestProfileCircle"
+				 value="PathTestProfileCircle"
+				 label="Test->Circle" />
+				<combo_item
+				 name="PathTestProfileHalfCircle"
+				 value="PathTestProfileHalfCircle"
+				 label="Test->Half-Circle" />
+				<!-- Working33 by Gregory Maurer -->
+				<combo_item
+				 name="Path33Profile0"
+				 value="Path33Profile0"
+				 label="33->Circle" />
+				<combo_item
+				 name="Path33Profile1"
+				 value="Path33Profile1"
+				 label="33->Square" />
+				<combo_item
+				 name="Path33Profile2"
+				 value="Path33Profile2"
+				 label="33->Triangle" />
+				<combo_item
+				 name="Path33Profile5"
+				 value="Path33Profile5"
+				 label="33->HalfCircle" />
+<!-- End Working33 by Gregory Maurer -->
             </combo_box>
             <combo_box
              height="19"
