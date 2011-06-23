@@ -384,6 +384,7 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mCommitCallbackRegistrar.add("BuildTool.LinkObjects",		boost::bind(&LLSelectMgr::linkObjects, LLSelectMgr::getInstance()));
 	mCommitCallbackRegistrar.add("BuildTool.UnlinkObjects",		boost::bind(&LLSelectMgr::unlinkObjects, LLSelectMgr::getInstance()));
 
+	mCommitCallbackRegistrar.add("BuildTool.CopyKeys",			boost::bind(&LLFloaterTools::onClickBtnCopyKeys,this));
 }
 
 LLFloaterTools::~LLFloaterTools()
@@ -1938,3 +1939,31 @@ void LLFloaterTools::updateMediaSettings()
     mMediaSettings[ base_key + std::string( LLPanelContents::TENTATIVE_SUFFIX ) ] = ! identical;
 }
 
+struct LLFloaterToolsCopyKeysFunctor : public LLSelectedObjectFunctor
+{
+	LLFloaterToolsCopyKeysFunctor(std::string& strOut, std::string& strSep) : mOutput(strOut), mSep(strSep) {}
+	virtual bool apply(LLViewerObject* object)
+	{
+		if (!mOutput.empty())
+			mOutput.append(mSep);
+
+		mOutput.append(object->getID().asString());
+
+		return true;
+	}
+private:
+	std::string& mOutput;
+	std::string& mSep;
+};
+
+void LLFloaterTools::onClickBtnCopyKeys()
+{
+	std::string separator = gSavedSettings.getString("PhoenixCopyObjKeySeparator");
+	std::string stringKeys;
+	LLFloaterToolsCopyKeysFunctor copy_keys(stringKeys, separator);
+	bool copied = LLSelectMgr::getInstance()->getSelection()->applyToObjects(&copy_keys);
+	if (copied)
+	{
+		LLView::getWindow()->copyTextToClipboard(utf8str_to_wstring(stringKeys));
+	}
+}

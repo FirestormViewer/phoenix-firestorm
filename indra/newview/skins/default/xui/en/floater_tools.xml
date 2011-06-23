@@ -1124,13 +1124,24 @@ even though the user gets a free copy.
         min_val="0"
         height="20"
         max_val="999999999" />
+	<button
+	 top_pad="5"
+	 left="10"
+	 follows="top|right"
+	 height="20"
+	 label="Copy Keys"
+	 name="btnCopyKeys"
+	 tool_tip="Copies the selected objects' keys to the clipboard."
+	 width="80">
+		<button.commit_callback
+		function="BuildTool.CopyKeys"/>
+	</button>
       <check_box
 	   height="15"
 	   width="110"
-	   top_pad="5"
 	   label="Show in search"
        layout="topleft"
-	   left="100"
+	   left_pad="15"
        name="search_check"
        tool_tip="Let people see this object in search results" />
 		<panel
