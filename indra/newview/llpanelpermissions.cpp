@@ -159,6 +159,8 @@ BOOL LLPanelPermissions::postBuild()
 
 	childSetCommitCallback("Edit Cost", LLPanelPermissions::onCommitSaleInfo, this);
 	
+	getChild<LLUICtrl>("btnMarkForSale")->setCommitCallback( boost::bind(&LLPanelPermissions::setAllSaleInfo, this));
+
 	childSetCommitCallback("checkbox next owner can modify",LLPanelPermissions::onCommitNextOwnerModify,this);
 	childSetCommitCallback("checkbox next owner can copy",LLPanelPermissions::onCommitNextOwnerCopy,this);
 	childSetCommitCallback("checkbox next owner can transfer",LLPanelPermissions::onCommitNextOwnerTransfer,this);
@@ -241,6 +243,14 @@ void LLPanelPermissions::disableAll()
 	getChild<LLUICtrl>("Edit Cost")->setValue(LLStringUtil::null);
 	getChildView("Edit Cost")->setEnabled(FALSE);
 		
+	//mark for sale button
+	LLButton* btnMarkForSale = getChild<LLButton>("btnMarkForSale");
+	btnMarkForSale->setEnabled(FALSE);
+	btnMarkForSale->setFlashing(FALSE);
+	LLColor4 DefaultShadowDark = LLUIColorTable::instance().getColor("DefaultShadowDark");
+	LLColor4 DefaultHighlightLight = LLUIColorTable::instance().getColor("DefaultHighlightLight");
+	getChild<LLViewBorder>("SaleBorder")->setColors(DefaultShadowDark, DefaultHighlightLight);
+
 	getChildView("label click action")->setEnabled(FALSE);
 	LLComboBox*	combo_click_action = getChild<LLComboBox>("clickaction");
 	if (combo_click_action)
@@ -857,6 +867,14 @@ void LLPanelPermissions::refresh()
 	}
 	getChildView("label click action")->setEnabled(is_perm_modify && all_volume);
 	getChildView("clickaction")->setEnabled(is_perm_modify && all_volume);
+
+	//mark for sale button
+	LLButton* btnMarkForSale = getChild<LLButton>("btnMarkForSale");
+	btnMarkForSale->setEnabled(FALSE);
+	btnMarkForSale->setFlashing(FALSE);
+	LLColor4 DefaultShadowDark = LLUIColorTable::instance().getColor("DefaultShadowDark");
+	LLColor4 DefaultHighlightLight = LLUIColorTable::instance().getColor("DefaultHighlightLight");
+	getChild<LLViewBorder>("SaleBorder")->setColors(DefaultShadowDark, DefaultHighlightLight);
 }
 
 
@@ -1017,14 +1035,39 @@ void LLPanelPermissions::onCommitDesc(LLUICtrl*, void* data)
 void LLPanelPermissions::onCommitSaleInfo(LLUICtrl*, void* data)
 {
 	LLPanelPermissions* self = (LLPanelPermissions*)data;
-	self->setAllSaleInfo();
+	LLCheckBoxCtrl *checkPurchase = self->getChild<LLCheckBoxCtrl>("checkbox for sale");
+	if(!gSavedSettings.getBOOL("PhoenixCommitForSaleOnChange") && checkPurchase && checkPurchase->get())
+	{
+		self->getChildView("sale type")->setEnabled(TRUE);
+		self->getChildView("Edit Cost")->setEnabled(TRUE);
+		LLButton* btnMarkForSale = self->getChild<LLButton>("btnMarkForSale");
+		btnMarkForSale->setEnabled(TRUE);
+		btnMarkForSale->setFlashing(TRUE);
+		LLColor4 EmphasisColor = LLUIColorTable::instance().getColor("EmphasisColor");
+		self->getChild<LLViewBorder>("SaleBorder")->setColors(EmphasisColor, EmphasisColor);
+	}
+	else
+	{
+		self->setAllSaleInfo();
+	}
 }
 
 // static
 void LLPanelPermissions::onCommitSaleType(LLUICtrl*, void* data)
 {
 	LLPanelPermissions* self = (LLPanelPermissions*)data;
-	self->setAllSaleInfo();
+	if (gSavedSettings.getBOOL("PhoenixCommitForSaleOnChange"))
+	{
+		self->setAllSaleInfo();
+	}
+	else
+	{
+		LLButton* btnMarkForSale = self->getChild<LLButton>("btnMarkForSale");
+		btnMarkForSale->setEnabled(TRUE);
+		btnMarkForSale->setFlashing(TRUE);
+		LLColor4 EmphasisColor = LLUIColorTable::instance().getColor("EmphasisColor");
+		self->getChild<LLViewBorder>("SaleBorder")->setColors(EmphasisColor, EmphasisColor);
+	}
 }
 
 void LLPanelPermissions::setAllSaleInfo()
@@ -1076,6 +1119,12 @@ void LLPanelPermissions::setAllSaleInfo()
 		LLSelectMgr::getInstance()->
 			selectionSetClickAction(CLICK_ACTION_BUY);
 	}
+	LLButton* btnMarkForSale = getChild<LLButton>("btnMarkForSale");
+	btnMarkForSale->setEnabled(FALSE);
+	btnMarkForSale->setFlashing(FALSE);
+	LLColor4 DefaultShadowDark = LLUIColorTable::instance().getColor("DefaultShadowDark");
+	LLColor4 DefaultHighlightLight = LLUIColorTable::instance().getColor("DefaultHighlightLight");
+	getChild<LLViewBorder>("SaleBorder")->setColors(DefaultShadowDark, DefaultHighlightLight);
 }
 
 struct LLSelectionPayable : public LLSelectedObjectFunctor

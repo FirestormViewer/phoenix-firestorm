@@ -1074,7 +1074,17 @@
                  name="Zoom"
                  value="Zoom" />
             </combo_box>
+			<view_border
+			 left="5"
+			 right="-5"
+			 bevel_style="none"
+			 border_thickness="1"
+			 follows="left|top|right"
+			 height="55"
+			 name="SaleBorder"
+			 width="235"/>
             <check_box
+			 top_delta="3"
              height="23"
              label="For Sale:"
              layout="topleft"
@@ -1114,8 +1124,8 @@ even though the user gets a free copy.
         follows="left|top"
         decimal_digits="0"
         increment="1"
-        top_pad="8"
-        left="118"
+        top_pad="5"
+        left="10"
         control_name="Edit Cost"
         name="Edit Cost"
         label="Price: L$"
@@ -1125,7 +1135,19 @@ even though the user gets a free copy.
         height="20"
         max_val="999999999" />
 	<button
-	 top_pad="5"
+	 left_pad="10"
+	 enabled="false"
+	 follows="top|right"
+	 height="20"
+	 label="Apply"
+	 name="btnMarkForSale"
+	 tool_tip="Mark/Update object(s) for sale."
+	 width="100">
+		<button.commit_callback
+		function="BuildTool.ApplySale"/>
+	</button>
+	<button
+	 top_pad="7"
 	 left="10"
 	 follows="top|right"
 	 height="20"

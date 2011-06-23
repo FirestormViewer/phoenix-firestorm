@@ -1368,6 +1368,14 @@
 		 tool_tip="When unchecked, the yellow/blue outline effects are not rendered, improving performance when large numbers of prims are selected."
 		 name="EmBuildPrefsRenderHighlight_toggle"
 		 control_name="RenderHighlightSelections"/>
+
+		<check_box
+		 follows="left|top"
+		 height="16"
+		 label="Use old &quot;Set Object For Sale&quot; behavior"
+		 tool_tip="When checked, object for sale info is saved on change instead of requiring a confirm."
+		 name="PhoenixCommitForSaleOnChange_toggle"
+		 control_name="PhoenixCommitForSaleOnChange"/>
 	
 	</panel>
 </tab_container>
