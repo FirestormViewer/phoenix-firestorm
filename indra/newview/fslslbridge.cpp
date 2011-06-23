@@ -42,14 +42,12 @@
 #include "llpreviewscript.h"
 #include "llselectmgr.h"
 #include "llinventorydefines.h"
-#include "llselectmgr.h"
 #include "llviewerregion.h"
 #include "llfoldertype.h"
 #include "llhttpclient.h"
 #include "llassetuploadresponders.h"
 #include "llnearbychatbar.h"
 #include "llnotificationmanager.h"
-#include "llselectmgr.h"
 
 #include <boost/regex.hpp>
 
@@ -174,6 +172,7 @@ void FSLSLBridge :: recreateBridge()
 			LLVOAvatarSelf::detachAttachmentIntoInventory(fsBridge->getUUID());
 		}
 	}
+	// clear the stored bridge ID - we are starting over.
 	if (mpBridge != NULL)
 		mpBridge = NULL; //the object itself will get cleaned up when new one is created.
 
@@ -193,21 +192,16 @@ void FSLSLBridge :: initBridge()
 }
 
 
+// Gets called by the Init, when inventory loaded.
 void FSLSLBridge :: startCreation()
 {
-	////are we already in conversation with a bridge?
-	////must have already received a URL call from a bridge.
-	//if (mpBridge != NULL) 
-	//{
-	//	return;
-	//}
-
 	//if bridge object doesn't exist - create and attach it, update script.
 	LLUUID catID = findFSCategory();
 
 	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
 	if (fsBridge == NULL)
 	{
+		llinfos << "bridge not found, creating new" << llendl;
 		initCreationStep();
 	}
 	else
@@ -215,7 +209,12 @@ void FSLSLBridge :: startCreation()
 		//TODO need versioning - see isOldBridgeVersion()
 		mpBridge = fsBridge;
 		if (!isItemAttached(mpBridge->getUUID()))
-			LLAttachmentsMgr::instance().addAttachment(mpBridge->getUUID(), BRIDGE_POINT, FALSE, TRUE);			
+		{
+			//Is this a valid bridge - wear it. 
+			LLAttachmentsMgr::instance().addAttachment(mpBridge->getUUID(), BRIDGE_POINT, FALSE, TRUE);	
+			llinfos << "found a bridge, reattached it" << llendl;
+			//from here, the attach shoould report to ProcessAttach and make sure bridge is valid.
+		}
 	}
 }
 
@@ -247,6 +246,7 @@ void FSLSLBridge :: createNewBridge()
 	{
 		//copy the library item to inventory and put it on 
 		LLPointer<LLInventoryCallback> cb = new FSLSLBridgeRezCallback();
+		llinfos << "attach the Linden rock from the library" << llendl;
 		copy_inventory_item(gAgent.getID(),libRock->getPermissions().getOwner(),libRock->getUUID(),catID,mCurrentFullName,cb);
 	}
 }
@@ -255,27 +255,92 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 {
 	llinfos << "enter process attach, checking the rock" << llendl;
 
-	if ((mpBridge == NULL) || (!mBridgeCreating) || (!gAgentAvatarp->isSelf()))
+	if ((mpBridge == NULL) || (!gAgentAvatarp->isSelf()) || (attachment->getName() != "Bridge"))
 		return;
-	//if (attachment->getName() != "Bridge") 
-	//	return;
-
-	llinfos << "rock is attached, mpBridge not NULL, BridgeCreating true, avatar self" << llendl;
+	llinfos << "rock is attached, mpBridge not NULL, avatar is self, point is bridge" << llendl;
 
 	LLViewerInventoryItem *fsObject = gInventory.getItem(object->getAttachmentItemID());
-	if (fsObject->getUUID() != mpBridge->getUUID())
+	if (fsObject == NULL) //just in case
 		return;
 
-	llinfos << "rock is the same rock we saved, id matched" << llendl;
+	if (fsObject->getUUID() != mpBridge->getUUID())
+	{
+		//something odd just got attached to bridge?
+		llinfos << "Something unknown just got attached to bridge point, detaching." << llendl;
+		LLVOAvatarSelf::detachAttachmentIntoInventory(mpBridge->getUUID());
+		return;
+	}
+	llinfos << "rock found is the same rock we saved, id matched" << llendl;
 
-	setupBridge(object);
+	if (!mBridgeCreating) //just an attach. See what it is
+	{
+		//are we attaching the right thing? Check size and script
+		LLInventoryObject::object_list_t inventory_objects;
+		object->getInventoryContents(inventory_objects);
+		if (inventory_objects.size() == 0)
+		{
+			llinfos << "Empty bridge - re-enter creation process" << llendl;
+			mBridgeCreating = true;
+		}
+		else if (inventory_objects.size() > 0)
+		{
+			LLInventoryObject::object_list_t::iterator it = inventory_objects.begin();
+			LLInventoryObject::object_list_t::iterator end = inventory_objects.end();
+			bool isOurScript = false;
+			for ( ; it != end; ++it)
+			{
+				LLInventoryItem* item = ((LLInventoryItem*)((LLInventoryObject*)(*it)));
+				if (item->getType() == LLAssetType::AT_LSL_TEXT)
+				{
+					if (item->getCreatorUUID() == gAgent.getID()) 
+						isOurScript = true;
+					else //problem, not our script
+						llwarns << "The bridge inventory contains a script not created by user" << llendl;
+				}
+			}
+			if ((inventory_objects.size() == 1) && isOurScript) //We attached a valid bridge. Run along.
+				return;
+			else 
+			{
+				reportToNearbyChat("The bridge inventory contains unexpected items");
+				llinfos << "The bridge inventory contains items other than bridge script" << llendl;
+				if (!isOurScript)	//some junk but no valid script? Unlikely to happen, but lets add script anyway.
+					mBridgeCreating = true;
+				else //Let the script disable competitors 
+					return;
+			}
+		}
+		else //no script, need adding.
+			mBridgeCreating = true;
+	}
+
+	//modify the rock size and texture
+	if (object != NULL)
+	{
+		llinfos << "rock object found after second attachment, resize" << llendl;
+		setupBridgePrim(object);
+	}
+
+	mpBridge->setDescription(mCurrentFullName);
+	mpBridge->setComplete(TRUE);
+	mpBridge->updateServer(FALSE);
+
+	gInventory.updateItem(mpBridge);
+	gInventory.notifyObservers();
+
+	//add bridge script to object
+	if (object)
+	{
+		llinfos << "go on to create script" << llendl;
+		create_script_inner(object);
+	}
 }
 
-void FSLSLBridge :: setupBridge(LLViewerObject *object)
+void FSLSLBridge :: setupBridgePrim(LLViewerObject *object)
 {
 	llinfos << "enter rock change" << llendl;
 
-	mpBridge->setDescription(mCurrentFullName);
+	object->setScale(LLVector3(0.01f, 0.01f, 0.01f));
 
 	LLProfileParams profParams(LL_PCODE_PROFILE_CIRCLE, F32(0.230), F32(0.250), F32(0.95));
 	LLPathParams pathParams(LL_PCODE_PATH_CIRCLE, F32(0), F32(0.2), F32(0.01), F32(0.01), F32(0.00), F32(0.0), 
@@ -289,7 +354,6 @@ void FSLSLBridge :: setupBridge(LLViewerObject *object)
 	}
 
 	//object->setTETexture(0, LLUUID("29de489d-0491-fb00-7dab-f9e686d31e83")); //another test texture
-	object->setScale(LLVector3(F32(0.01), F32(0.01), F32(0.01)));
 	object->sendShapeUpdate();
 	object->markForUpdate(TRUE);
 
@@ -297,16 +361,7 @@ void FSLSLBridge :: setupBridge(LLViewerObject *object)
 	object->addFlags(FLAGS_TEMPORARY_ON_REZ);
 	object->updateFlags();
 
-	gInventory.updateItem(mpBridge);
-    gInventory.notifyObservers();
-
-	llinfos << "end rock change, start script creation" << llendl;
-
-	//add bridge script to object
-	if (object)
-	{
-		create_script_inner(object);
-	}
+	llinfos << "end rock change" << llendl;
 }
 
 void FSLSLBridge :: create_script_inner(LLViewerObject* object)
@@ -340,14 +395,28 @@ FSLSLBridgeRezCallback :: ~FSLSLBridgeRezCallback()
 
 void FSLSLBridgeRezCallback :: fire(const LLUUID& inv_item)
 {
+	// this is the first attach - librock got copied and worn on hand - but the ID is now real.
 	if ((FSLSLBridge::instance().getBridge() != NULL) || inv_item.isNull() || !FSLSLBridge::instance().getBridgeCreating())
 		return;
+
+	llinfos << "rock attach callback fired, look for object" << llendl;
+
+	LLViewerObject* obj = gAgentAvatarp->getWornAttachment(inv_item);
+	if (obj != NULL)
+	{
+		llinfos << "rock object found, resize" << llendl;
+		FSLSLBridge::instance().setupBridgePrim(obj);
+	}
+	else
+		llinfos << "rock object not found yet, keep going" << llendl;
 
 	//detach from default and put on the right point
 	LLVOAvatarSelf::detachAttachmentIntoInventory(inv_item);
 	LLViewerInventoryItem *item = gInventory.getItem(inv_item);
+	//from this point on, this is our bridge - accept no substitutes!
 	FSLSLBridge::instance().setBridge(item);
-
+	
+	llinfos << "attaching rock to the right spot now" << llendl;
 	LLAttachmentsMgr::instance().addAttachment(inv_item, FSLSLBridge::BRIDGE_POINT, FALSE, TRUE);
 }
 

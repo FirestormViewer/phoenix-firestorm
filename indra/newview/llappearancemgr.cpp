@@ -1183,8 +1183,10 @@ void LLAppearanceMgr::takeOffOutfit(const LLUUID& cat_id)
 		//if replacing - make sure bridge stays.
 		if (FSLSLBridge::instance().getBridge())
 		{
+			llinfos << "reinserting bridge at outfit remove" << llendl;
 			//items.find(FSLSLBridge::instance().getBridge());
 			items.removeObj(FSLSLBridge::instance().getBridge());
+			llinfos << "reinserted bridge at outfit remove" << llendl;
 		}
 	}
 //-TT
@@ -1654,7 +1656,9 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 		//if replacing - make sure bridge stays.
 		if (!append && FSLSLBridge::instance().getBridge())
 		{
+			llinfos << "reinserting bridge at outfit replace" << llendl;
 			obj_items.insert(obj_items.end(), FSLSLBridge::instance().getBridge());
+			llinfos << "reinserted bridge at outfit replace" << llendl;
 		}
 	}
 //-TT

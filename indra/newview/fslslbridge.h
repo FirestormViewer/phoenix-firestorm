@@ -94,7 +94,7 @@ protected:
 	bool isOldBridgeVersion(LLInventoryItem *item);
 	void reportToNearbyChat(std::string message);
 	void cleanUpBridgeFolder();
-	void setupBridge(LLViewerObject *object);
+	void setupBridgePrim(LLViewerObject *object);
 	void initCreationStep();
 	void cleanUpBridge();
 };

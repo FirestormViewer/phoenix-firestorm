@@ -311,6 +311,7 @@ extern "C" { int yyerror(const char *fmt, ...); }
 "ATTACH_HUD_BOTTOM_LEFT" { count(); yylval.ival = 36; return(INTEGER_CONSTANT); }
 "ATTACH_HUD_BOTTOM"		{ count(); yylval.ival = 37; return(INTEGER_CONSTANT); }
 "ATTACH_HUD_BOTTOM_RIGHT"	{ count(); yylval.ival = 38; return(INTEGER_CONSTANT); }
+"ATTACH_BRIDGE"		{ count(); yylval.ival = 127; return(INTEGER_CONSTANT); }
 
 "LAND_LEVEL"		{ count(); yylval.ival = E_LANDBRUSH_LEVEL; return(INTEGER_CONSTANT); }
 "LAND_RAISE"		{ count(); yylval.ival = E_LANDBRUSH_RAISE; return(INTEGER_CONSTANT); }
