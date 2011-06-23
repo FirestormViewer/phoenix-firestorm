@@ -71,6 +71,14 @@
      name="grid_attachment_text">
         Attachment
     </floater.string>
+	<floater.string
+	  name="selected_objects">
+		Selected objects:
+	</floater.string>
+	<floater.string
+	  name="link_number">
+		Link number:
+	</floater.string>
     <button
      follows="left|top"
      height="25"
@@ -1116,13 +1124,24 @@ even though the user gets a free copy.
         min_val="0"
         height="20"
         max_val="999999999" />
+	<button
+	 top_pad="5"
+	 left="10"
+	 follows="top|right"
+	 height="20"
+	 label="Copy Keys"
+	 name="btnCopyKeys"
+	 tool_tip="Copies the selected objects' keys to the clipboard."
+	 width="80">
+		<button.commit_callback
+		function="BuildTool.CopyKeys"/>
+	</button>
       <check_box
 	   height="15"
 	   width="110"
-	   top_pad="5"
 	   label="Show in search"
        layout="topleft"
-	   left="100"
+	   left_pad="15"
        name="search_check"
        tool_tip="Let people see this object in search results" />
 		<panel
@@ -1347,6 +1366,7 @@ even though the user gets a free copy.
                 Position (meters)
             </text> 
             <spinner
+             decimal_digits="4"
              follows="left|top"
              height="19"
              increment="0.01"
@@ -1361,7 +1381,17 @@ even though the user gets a free copy.
              text_enabled_color="Red"
              top_pad="5"
              width="87" />
+            <button follows="top|right"
+             height="18" 
+             label="C"
+             left_pad="5"
+             mouse_opaque="true"
+             name="copypos"
+             enabled="true"
+             tool_tip="Copy Position"
+             width="20" />
             <spinner
+             decimal_digits="4"
              follows="left|top"
              height="19"
              increment="0.01"
@@ -1369,14 +1399,24 @@ even though the user gets a free copy.
              label="Y"
              label_width="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              max_val="512"
              min_val="-256"
              name="Pos Y"
              text_enabled_color="EmphasisColor"
              top_pad="3"
              width="87" />
+            <button follows="top|right"
+             height="18"
+             label="P"
+             left_pad="5"
+             mouse_opaque="true"
+             name="pastepos"
+             enabled="true"
+             tool_tip="Paste Position"
+             width="20" />
             <spinner
+             decimal_digits="4"
              follows="left|top"
              height="19"
              increment="0.01"
@@ -1384,25 +1424,35 @@ even though the user gets a free copy.
              label="Z"
              label_width="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              max_val="4096"
              name="Pos Z"
              text_enabled_color="SL-MidBlue"
              top_pad="3"
              width="87" />
+            <button follows="top|right"
+             height="18"
+             label="p"
+             left_pad="5"
+             mouse_opaque="true"
+             name="pasteposclip"
+             enabled="true"
+             tool_tip="Paste Position from Clipboard"
+             width="20" />
             <text
              type="string"
              length="1"
              follows="left|top"
              height="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              name="label size"
              top_pad="6"
              width="121">
                 Size (meters)
             </text>
             <spinner
+             decimal_digits="4"
              follows="left|top"
              height="19"
              increment="0.01"
@@ -1417,7 +1467,17 @@ even though the user gets a free copy.
              text_enabled_color="White"
              top_pad="5"
              width="87" />
+            <button follows="top|right"
+             height="18" 
+             label="C"
+             left_pad="5"
+             mouse_opaque="true"
+             name="copysize"
+             enabled="true"
+             tool_tip="Copy Size"
+             width="20" />
             <spinner
+             decimal_digits="4"
              follows="left|top"
              height="19"
              increment="0.01"
@@ -1425,14 +1485,24 @@ even though the user gets a free copy.
              label="Y"
              label_width="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              max_val="10"
              min_val="0.01"
              name="Scale Y"
              text_enabled_color="White"
              top_pad="3"
              width="87" />
+            <button follows="top|right"
+             height="18"
+             label="P"
+             left_pad="5"
+             mouse_opaque="true"
+             name="pastesize"
+             enabled="true"
+             tool_tip="Paste Size"
+             width="20" />
             <spinner
+             decimal_digits="4"
              follows="left|top"
              height="19"
              increment="0.01"
@@ -1440,27 +1510,36 @@ even though the user gets a free copy.
              label="Z"
              label_width="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              max_val="10"
              min_val="0.01"
              name="Scale Z"
              text_enabled_color="White"
              top_pad="3"
              width="87" />
+            <button follows="top|right"
+             height="18"
+             label="p"
+             left_pad="5"
+             mouse_opaque="true"
+             name="pastesizeclip"
+             enabled="true"
+             tool_tip="Paste Size from Clipboard"
+             width="20" />
             <text
              type="string"
              length="1"
              follows="left|top"
              height="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              name="label rotation"
              top_pad="10"
              width="121">
                 Rotation (degrees)
             </text>
             <spinner
-             decimal_digits="2"
+             decimal_digits="3"
              follows="left|top"
              height="19"
              increment="1"
@@ -1475,8 +1554,17 @@ even though the user gets a free copy.
              text_enabled_color="White"
              top_pad="5"
              width="87" />
+            <button follows="top|right"
+             height="18"
+             label="C"
+             left_pad="5"
+             mouse_opaque="true"
+             name="copyrot"
+             enabled="true"
+             tool_tip="Copy Rotation"
+             width="20" />
             <spinner
-             decimal_digits="2"
+             decimal_digits="3"
              follows="left|top"
              height="19"
              increment="1"
@@ -1484,15 +1572,24 @@ even though the user gets a free copy.
              label="Y"
              label_width="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              max_val="9999"
              min_val="-9999"
              name="Rot Y"
              text_enabled_color="White"
              top_pad="3"
              width="87" />
+            <button follows="top|right"
+             height="18"
+             label="P"
+             left_pad="5"
+             mouse_opaque="true"
+             name="pasterot"
+             enabled="true"
+             tool_tip="Paste Rotation"
+             width="20" />
             <spinner
-             decimal_digits="2"
+             decimal_digits="3"
              follows="left|top"
              height="19"
              increment="1"
@@ -1500,13 +1597,22 @@ even though the user gets a free copy.
              label="Z"
              label_width="10"
              layout="topleft"
-             left_delta="0"
+             left="10"
              max_val="9999"
              min_val="-9999"
              name="Rot Z"
              text_enabled_color="White"
              top_pad="3"
              width="87" />
+            <button follows="top|right"
+             height="18"
+             label="p"
+             left_pad="5"
+             mouse_opaque="true"
+             name="pasterotclip"
+             enabled="true"
+             tool_tip="Paste Rotation from Clipboard"
+             width="20" />
 
  <!--           <text
              type="string"
@@ -1520,6 +1626,39 @@ even though the user gets a free copy.
              width="150">
                 Prim Type
             </text>-->
+			<text
+			 type="string"
+			 length="1"
+			 follows="left|top"
+			 height="10"
+			 bottom="-15"
+			 layout="topleft"
+			 left="10"
+			 name="edit_object"
+			 top_pad="8"
+			 width="121">
+			  Object Parameters:
+			</text>
+			<button
+			 follows="top|right"
+			 height="16"
+			 label="Copy"
+			 layout="topleft"
+			 left="5"
+			 name="copyparams"
+			 tool_tip="Copy Parameters to Clipboard"
+			 width="52">
+			</button>
+			<button
+			 follows="top|right"
+			 height="16"
+			 label="Paste"
+			 layout="topleft"
+			 left_pad="10"
+			 name="pasteparams"
+			 tool_tip="Paste Parameters from Clipboard"
+			 width="52">
+			</button>
             <combo_box
              height="19"
              layout="topleft"
@@ -1559,6 +1698,64 @@ even though the user gets a free copy.
                  label="Sculpted"
                  name="Sculpted"
                  value="Sculpted" />
+				<combo_item
+				 name="PathLineProfileHalfCircle"
+				 value="PathLineProfileHalfCircle"
+				 label="Line->Half-Circle" />
+				<combo_item
+				 name="PathCircleProfileHalfCircle"
+				 value="PathCircleProfileHalfCircle"
+				 label="Circle->Half-Circle" />
+				<combo_item
+				 name="PathCircle2ProfileSquare"
+				 value="PathCircle2ProfileSquare"
+				 label="Circle2->Square" />
+				<combo_item
+				 name="PathCircle2ProfileTriangle"
+				 value="PathCircle2ProfileTriangle"
+				 label="Circle2->Triangle" />
+				<combo_item
+				 name="PathCircle2ProfileCircle"
+				 value="PathCircle2ProfileCircle"
+				 label="Circle2->Circle" />
+				<combo_item
+				 name="PathCircle2ProfileHalfCircle"
+				 value="PathCircle2ProfileHalfCircle"
+				 label="Circle2->Half-Circle" />
+				<combo_item
+				 name="PathTestProfileSquare"
+				 value="PathTestProfileSquare"
+				 label="Test->Square" />
+				<combo_item
+				 name="PathTestProfileTriangle"
+				 value="PathTestProfileTriangle"
+				 label="Test->Triangle" />
+				<combo_item
+				 name="PathTestProfileCircle"
+				 value="PathTestProfileCircle"
+				 label="Test->Circle" />
+				<combo_item
+				 name="PathTestProfileHalfCircle"
+				 value="PathTestProfileHalfCircle"
+				 label="Test->Half-Circle" />
+				<!-- Working33 by Gregory Maurer -->
+				<combo_item
+				 name="Path33Profile0"
+				 value="Path33Profile0"
+				 label="33->Circle" />
+				<combo_item
+				 name="Path33Profile1"
+				 value="Path33Profile1"
+				 label="33->Square" />
+				<combo_item
+				 name="Path33Profile2"
+				 value="Path33Profile2"
+				 label="33->Triangle" />
+				<combo_item
+				 name="Path33Profile5"
+				 value="Path33Profile5"
+				 label="33->HalfCircle" />
+<!-- End Working33 by Gregory Maurer -->
             </combo_box>
             <combo_box
              height="19"
@@ -2673,7 +2870,7 @@ even though the user gets a free copy.
              height="19"
              initial_value="0"
              label="Horizontal (U)"
-             label_width="125"
+             label_width="115"
              layout="topleft"
              left="20"
              max_val="1000"
@@ -2693,7 +2890,7 @@ even though the user gets a free copy.
              height="19"
              initial_value="0"
              label="Vertical (V)"
-             label_width="125"
+             label_width="115"
              layout="topleft"
              left="20"
              max_val="1000"
@@ -2715,12 +2912,12 @@ even though the user gets a free copy.
              initial_value="0"
 			 label="Rotation˚"
              layout="topleft"
-			 label_width="135"
+			 label_width="125"
              left="10"
              max_val="9999"
              min_val="-9999"
              name="TexRot"
-             width="195" />
+             width="185" />
 
             <spinner
              decimal_digits="1"
@@ -2729,12 +2926,12 @@ even though the user gets a free copy.
              initial_value="1"
 			 label="Repeats / Meter"
              layout="topleft"
-			 label_width="135"
+			 label_width="125"
              left="10"
              max_val="10"
              min_val="0.1"
              name="rptctrl"
-             width="195" />
+             width="185" />
             <button
              follows="left|top"
              height="23"
@@ -2756,29 +2953,63 @@ even though the user gets a free copy.
              width="200">
                 Texture Offset
             </text>
+            <text
+             type="string"
+             length="1"
+             follows="right|top"
+             height="10"
+             layout="topleft"
+             right="-10"
+			 top_delta="0"
+			 halign="right"
+             name="tex offset"
+             text_readonly_color="LabelDisabledColor"
+             width="100">
+                Texture Prams
+            </text>
             <spinner
              follows="left|top"
              height="19"
              initial_value="0"
              label="Horizontal (U)"
-             label_width="125"
+             label_width="115"
              layout="topleft"
              left="20"
              min_val="-1"
              name="TexOffsetU"
              width="185" />
+            <button
+             follows="top|right"
+             height="19"
+             label="Copy"
+             layout="topleft"
+             left_pad="10"
+             name="copytextures"
+             tool_tip="Copy Parameters to Clipboard"
+             width="68">
+            </button>
             <spinner
              follows="left|top"
              height="19"
              initial_value="0"
              label="Vertical (V)"
-             label_width="125"
+             label_width="115"
              layout="topleft"
-             left_delta="0"
+             left="20"
              min_val="-1"
              name="TexOffsetV"
              top_pad="1"
              width="185" />
+            <button
+             follows="top|right"
+             height="20"
+             label="Paste"
+             layout="topleft"
+             left_pad="10"
+             name="pastetextures"
+             tool_tip="Paste Parameters from Clipboard"
+             width="68">
+            </button>
         <panel
          border="false"
          follows="left|top"

@@ -11582,6 +11582,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>5748decc-f629-461c-9a36-a35a221fe21f</string>
     </map>
+    <key>UIImgInvisibleUUID</key>
+    <map>
+      <key>Comment</key>
+      <string />
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>f54a0c32-3cd1-d49a-5b4f-7b792bebc204</string>
+    </map>
     <key>UILineEditorCursorThickness</key>
     <map>
       <key>Comment</key>
@@ -14213,6 +14224,17 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<string>String</string>
 			<key>Value</key>
 			<string>Wood</string>
+		</map>
+		<key>PhoenixCopyObjKeySeparator</key>
+		<map>
+			<key>Comment</key>
+			<string>This chunk of text goes between keys when you use the Copy Key button with multiple objects selected.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>,</string>
 		</map>
 		
 </map>

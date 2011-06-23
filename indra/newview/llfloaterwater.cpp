@@ -131,6 +131,10 @@ void LLFloaterWater::initCallbacks(void) {
 	// blur mult
 	getChild<LLUICtrl>("WaterBlurMult")->setCommitCallback(boost::bind(&LLFloaterWater::onFloatControlMoved, this, _1, &param_mgr->mBlurMultiplier));
 
+	// Preset prev/next controls	-WoLf
+	getChild<LLUICtrl>("WWPrevPreset")->setCommitCallback(boost::bind(&LLFloaterWater::onPrevPreset, this));
+	getChild<LLUICtrl>("WWNextPreset")->setCommitCallback(boost::bind(&LLFloaterWater::onNextPreset, this));
+
 	// Load/save
 // 	getChild<LLUICtrl>("WaterLoadPreset")->setCommitCallback(boost::bind(&LLFloaterWater::onLoadPreset, this));
 	getChild<LLUICtrl>("WaterNewPreset")->setCommitCallback(boost::bind(&LLFloaterWater::onNewPreset, this));
@@ -623,3 +627,52 @@ void LLFloaterWater::onChangePresetName(LLUICtrl* ctrl)
 	}
 }
 
+// > Presets prev/next controls	-WoLf 
+void LLFloaterWater::onPrevPreset()
+{
+	LLWaterParamManager * param_mgr = LLWaterParamManager::instance();
+	LLWaterParamSet & currentParams = param_mgr->mCurParams;
+
+	// find place of current param
+	std::map<std::string, LLWaterParamSet>::iterator mIt = 
+		param_mgr->mParamList.find(currentParams.mName);
+
+	// if at the beginning, loop
+	if(mIt == param_mgr->mParamList.begin()) 
+	{
+		std::map<std::string, LLWaterParamSet>::iterator last = param_mgr->mParamList.end(); --last;
+		mIt = last;
+	}
+	else
+	{
+		mIt--;
+	}
+	param_mgr->loadPreset(mIt->first, true);
+	LLComboBox* WWcomboBox = getChild<LLComboBox>("WaterPresetsCombo");
+	WWcomboBox->setSimple(mIt->first);
+}
+
+void LLFloaterWater::onNextPreset()
+{
+	LLWaterParamManager * param_mgr = LLWaterParamManager::instance();
+	LLWaterParamSet& currentParams = param_mgr->mCurParams;
+
+	// find place of current param
+	std::map<std::string, LLWaterParamSet>::iterator mIt = 
+		param_mgr->mParamList.find(currentParams.mName);
+
+	// if at the end, loop
+	std::map<std::string, LLWaterParamSet>::iterator last = param_mgr->mParamList.end(); --last;
+	if(mIt == last) 
+	{
+		mIt = param_mgr->mParamList.begin();
+	}
+	else
+	{
+		mIt++;
+	}
+	param_mgr->loadPreset(mIt->first, true);
+	LLComboBox* WWcomboBox = getChild<LLComboBox>("WaterPresetsCombo");
+	WWcomboBox->setSimple(mIt->first);
+}
+// < Presets prev/next controls	-WoLf

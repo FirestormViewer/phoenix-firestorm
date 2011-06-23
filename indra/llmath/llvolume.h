@@ -148,6 +148,9 @@ const U8    LL_PCODE_PATH_IGNORE    = 0x00;
 const U8	LL_PCODE_PATH_MIN		= 0x01;		// min/max needs to be >> 4 of real min/max
 const U8    LL_PCODE_PATH_LINE      = 0x10;
 const U8    LL_PCODE_PATH_CIRCLE    = 0x20;
+//<-- Working33 by Gregory Maurer
+const U8    LL_PCODE_PATH_CIRCLE_33 = 0x21;
+//Working33 -->
 const U8    LL_PCODE_PATH_CIRCLE2   = 0x30;
 const U8    LL_PCODE_PATH_TEST      = 0x40;
 const U8    LL_PCODE_PATH_FLEXIBLE  = 0x80;

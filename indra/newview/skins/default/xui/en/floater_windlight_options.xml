@@ -32,12 +32,39 @@
      name="WLPresetsCombo"
      top_delta="-4"
      width="150" />
+<!-- Preset prev/next controls    -WoLf -->
+        <button
+            enabled="true"
+            name="WLPrevPreset"
+            follows="left|bottom"
+            height="20"
+            width="20"
+            bottom_delta="-1"
+            left_delta="152"
+            label=""
+            label_selected=""
+            image_overlay="Arrow_Left_Off"
+            scale_image="true" />
+        <button
+            enabled="true"
+            name="WLNextPreset"
+            follows="left|bottom"
+            height="20"
+            width="20"
+            bottom_delta="-0"
+            left_delta="21"
+            label=""
+            label_selected=""
+            image_overlay="Arrow_Right_Off"
+            scale_image="true" />
+<!-- Preset prev/next controls    -WoLf -->
     <button
      height="23"
      label="New"
      label_selected="New"
      layout="topleft"
-     left_pad="3"
+     left_pad="10"
+     bottom_delta="1"
      name="WLNewPreset"
      width="70" />
     <button

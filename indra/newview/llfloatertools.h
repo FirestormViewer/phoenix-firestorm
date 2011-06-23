@@ -105,6 +105,8 @@ public:
 	void navigateToTitleMedia( const std::string url );
 	bool selectedMediaEditable();
 
+	void onClickBtnCopyKeys();
+
 private:
 	void refresh();
 	void refreshMedia();

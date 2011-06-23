@@ -39,6 +39,14 @@
 	<floater.string name="grid_attachment_text">
 		Anhang
 	</floater.string>
+	<floater.string
+	  name="selected_objects">
+		Ausgew. Objekte:
+	</floater.string>
+	<floater.string
+	  name="link_number">
+		Link-Nummer:
+	</floater.string>
 	<button label="" label_selected="" name="button focus" tool_tip="Fokus"/>
 	<button label="" label_selected="" name="button move" tool_tip="Verschieben"/>
 	<button label="" label_selected="" name="button edit" tool_tip="Bearbeiten"/>
@@ -60,22 +68,27 @@
 	<radio_group name="edit_radio_group">
 		<radio_item label="Bewegen" name="radio position"/>
 		<radio_item label="Drehen (Strg)" name="radio rotate"/>
-		<radio_item label="Dehnen (Strg+Umschalt)" name="radio stretch"/>
+		<radio_item label="Dehnen (Strg+Umsch)" name="radio stretch"/>
 		<radio_item label="Fläche auswählen" name="radio select face"/>
+		<radio_item label="Ausrichten" name="radio align"/>
 	</radio_group>
-	<check_box label="Verknüpfte Teile bearbeiten" name="checkbox edit linked parts"/>
+	<check_box label="Teile bearbeiten" name="checkbox edit linked parts"/>
+	<button label="Verkn." name="link_btn" width="50"/>
+    <button label="Trennen" name="unlink_btn" width="55"/>
 	<text name="RenderingCost" tool_tip="Zeigt die errechneten Wiedergabekosten für dieses Objekt">
 		þ: [COUNT]
 	</text>
 	<check_box name="checkbox uniform" label="Beide Seiten dehnen"/>
-	<check_box initial_value="true" label="Texturen dehnen" name="checkbox stretch textures" top_pad="-5"/>
-	<check_box initial_value="true" label="An Raster ausrichten" name="checkbox snap to grid" top_pad="15"/>
+	<check_box initial_value="true" label="Texturen dehnen" name="checkbox stretch textures"/>
+	<check_box initial_value="true" label="An Raster ausrichten" name="checkbox snap to grid"/>
+    <check_box initial_value="false" label="Achse an Wurzel edit." name="checkbox actual root"/>
+	<check_box initial_value="true" label="Aktiviere Hervorhebung" name="checkbox show highlight"/>
 	<combo_box name="combobox grid mode" tool_tip="Wählen Sie ein Rasterlineal zum Positionieren des Objekts aus.">
 		<combo_box.item label="Globales Raster" name="World"/>
 		<combo_box.item label="Lokales Raster" name="Local"/>
 		<combo_box.item label="Referenzraster" name="Reference"/>
 	</combo_box>
-	<button label="Optionen..." label_selected="Optionen..." name="Options..." tool_tip="Mehr Raster-Optionen anzeigen"/>
+	<button label="Optionen..." label_selected="Optionen..." name="Options..." tool_tip="Mehr Raster-Optionen anzeigen" top="60"/>
 	<button label="" label_selected="" name="ToolCube" tool_tip="Würfel"/>
 	<button label="" label_selected="" name="ToolPrism" tool_tip="Prisma"/>
 	<button label="" label_selected="" name="ToolPyramid" tool_tip="Pyramide"/>
@@ -114,9 +127,6 @@
 		Stärke
 	</text>
 	<button label="Übernehmen" label_selected="Übernehmen" name="button apply to selection" tool_tip="Ausgewähltes Land bearbeiten"/>
-	<text name="obj_count">
-		Objekte: [COUNT]
-	</text>
 	<text name="prim_count">
 		Primitive: [COUNT]
 	</text>

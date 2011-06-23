@@ -7201,6 +7201,104 @@ Remove AO set "[AO_SET_NAME]" from the list?
      yestext="Remove"/>
   </notification>
 
+  <notification
+   icon="notifytip.tga"
+   name="AOImportSetAlreadyExists"
+   type="notifytip">
+An animation set with this name already exists.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="AOImportPermissionDenied"
+   type="notifytip">
+Insufficient permissions to read notecard.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="AOImportCreateSetFailed"
+   type="notifytip">
+Error while creating import set.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="AOImportDownloadFailed"
+   type="notifytip">
+Could not download notecard.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="AOImportNoText"
+   type="notifytip">
+Notecard is empty or unreadable.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="AOImportNoFolder"
+   type="notifytip">
+Couldn't find folder to read the animations.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="AOImportNoStatePrefix"
+   type="notifytip">
+Notecard line [LINE] has no valid [ state prefix.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="AOImportNoValidDelimiter"
+   type="notifytip">
+Notecard line [LINE] has no valid ] delimiter.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="AOImportStateNameNotFound"
+   type="notifytip">
+State name [NAME] not found.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="AOImportAnimationNotFound"
+   type="notifytip">
+Couldn't find animation [NAME]. Please make sure it's present in the same folder as the import notecard.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="AOImportInvalid"
+   type="notifytip">
+Notecard didn't contain any usable data. Aborting import.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="AOImportRetryCreateSet"
+   type="notifytip">
+Could not create import folder for animation set [NAME]. Retrying ...
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="AOImportAbortCreateSet"
+   type="notifytip">
+Could not create import folder for animation set [NAME]. Giving up.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="AOImportLinkFailed"
+   type="notifytip">
+Creating animation link for animation "[NAME]" failed!
+  </notification>
+
 <!-- ## Zi: Animation Overrider -->
 
 <notification

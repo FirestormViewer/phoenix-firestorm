@@ -104,6 +104,10 @@ public:
 	/// turn off animated skies
 	static void deactivateAnimator();
 
+	/// Preset prev/next controls	-WoLf
+	void onPrevPreset();
+	void onNextPreset();
+
 private:
 	static std::set<std::string> sDefaultPresets;
 };

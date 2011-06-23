@@ -384,6 +384,7 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mCommitCallbackRegistrar.add("BuildTool.LinkObjects",		boost::bind(&LLSelectMgr::linkObjects, LLSelectMgr::getInstance()));
 	mCommitCallbackRegistrar.add("BuildTool.UnlinkObjects",		boost::bind(&LLSelectMgr::unlinkObjects, LLSelectMgr::getInstance()));
 
+	mCommitCallbackRegistrar.add("BuildTool.CopyKeys",			boost::bind(&LLFloaterTools::onClickBtnCopyKeys,this));
 }
 
 LLFloaterTools::~LLFloaterTools()
@@ -439,12 +440,12 @@ void LLFloaterTools::refresh()
 	S32 prim_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
 	if (prim_count != 1 || !gSavedSettings.getBOOL("EditLinkedParts")) //Selecting a single prim in "Edit Linked" mode, show link number
 	{
-		desc_string = "Selected objects:";
+		desc_string = getString("selected_objects");
 		LLResMgr::getInstance()->getIntegerString(num_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
 	}
 	else
 	{
-		desc_string = "Link number:";
+		desc_string = getString("link_number");
 		LLViewerObject* selected = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
 		if (selected && selected->getRootEdit())
 		{
@@ -1938,3 +1939,31 @@ void LLFloaterTools::updateMediaSettings()
     mMediaSettings[ base_key + std::string( LLPanelContents::TENTATIVE_SUFFIX ) ] = ! identical;
 }
 
+struct LLFloaterToolsCopyKeysFunctor : public LLSelectedObjectFunctor
+{
+	LLFloaterToolsCopyKeysFunctor(std::string& strOut, std::string& strSep) : mOutput(strOut), mSep(strSep) {}
+	virtual bool apply(LLViewerObject* object)
+	{
+		if (!mOutput.empty())
+			mOutput.append(mSep);
+
+		mOutput.append(object->getID().asString());
+
+		return true;
+	}
+private:
+	std::string& mOutput;
+	std::string& mSep;
+};
+
+void LLFloaterTools::onClickBtnCopyKeys()
+{
+	std::string separator = gSavedSettings.getString("PhoenixCopyObjKeySeparator");
+	std::string stringKeys;
+	LLFloaterToolsCopyKeysFunctor copy_keys(stringKeys, separator);
+	bool copied = LLSelectMgr::getInstance()->getSelection()->applyToObjects(&copy_keys);
+	if (copied)
+	{
+		LLView::getWindow()->copyTextToClipboard(utf8str_to_wstring(stringKeys));
+	}
+}

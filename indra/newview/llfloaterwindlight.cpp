@@ -188,6 +188,10 @@ void LLFloaterWindLight::initCallbacks(void) {
 	// Load/save
 	LLComboBox* comboBox = getChild<LLComboBox>("WLPresetsCombo");
 
+	// Preset prev/next controls	-WoLf
+	getChild<LLUICtrl>("WLPrevPreset")->setCommitCallback(boost::bind(&LLFloaterWindLight::onPrevPreset, this));
+	getChild<LLUICtrl>("WLNextPreset")->setCommitCallback(boost::bind(&LLFloaterWindLight::onNextPreset, this));
+
 	//childSetAction("WLLoadPreset", onLoadPreset, comboBox);
 	getChild<LLUICtrl>("WLNewPreset")->setCommitCallback(boost::bind(&LLFloaterWindLight::onNewPreset, this));
 	getChild<LLUICtrl>("WLSavePreset")->setCommitCallback(boost::bind(&LLFloaterWindLight::onSavePreset, this));
@@ -884,3 +888,63 @@ void LLFloaterWindLight::deactivateAnimator()
 	LLWLParamManager::instance()->mAnimator.mIsRunning = false;
 	LLWLParamManager::instance()->mAnimator.mUseLindenTime = false;
 }
+
+// > Presets prev/next controls	-WoLf 
+void LLFloaterWindLight::onPrevPreset()
+{
+	// find place of current param
+	std::map<std::string, LLWLParamSet>::iterator mIt = 
+		LLWLParamManager::instance()->mParamList.find(LLWLParamManager::instance()->mCurParams.mName);
+
+	// shouldn't happen unless you delete every preset but Default
+	if (mIt == LLWLParamManager::instance()->mParamList.end())
+	{
+		llwarns << "No more presets left!" << llendl;
+		return;
+	}
+
+	// if at the beginning, loop
+	if(mIt == LLWLParamManager::instance()->mParamList.begin()) 
+	{
+		std::map<std::string, LLWLParamSet>::iterator last = LLWLParamManager::instance()->mParamList.end(); --last;
+		mIt = last;
+	}
+	else
+	{
+		mIt--;
+	}
+	deactivateAnimator();
+	LLWLParamManager::instance()->loadPreset(mIt->first, true);
+	LLComboBox* WLcomboBox = getChild<LLComboBox>("WLPresetsCombo");
+	WLcomboBox->setSimple(mIt->first);
+}
+
+void LLFloaterWindLight::onNextPreset()
+{
+	// find place of current param
+	std::map<std::string, LLWLParamSet>::iterator mIt = 
+		LLWLParamManager::instance()->mParamList.find(LLWLParamManager::instance()->mCurParams.mName);
+
+	// shouldn't happen unless you delete every preset but Default
+	if (mIt == LLWLParamManager::instance()->mParamList.end())
+	{
+		llwarns << "No more presets left!" << llendl;
+		return;
+	}
+
+	// if at the end, loop
+	std::map<std::string, LLWLParamSet>::iterator last = LLWLParamManager::instance()->mParamList.end(); --last;
+	if(mIt == last) 
+	{
+		mIt = LLWLParamManager::instance()->mParamList.begin();
+	}
+	else
+	{
+		mIt++;
+	}
+	deactivateAnimator();
+	LLWLParamManager::instance()->loadPreset(mIt->first, true);
+	LLComboBox* WLcomboBox = getChild<LLComboBox>("WLPresetsCombo");
+	WLcomboBox->setSimple(mIt->first);
+}
+// < Presets prev/next controls	-WoLf

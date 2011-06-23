@@ -37,6 +37,7 @@
 #include "llinventoryfunctions.h"		// for ROOT_FIRESTORM_FOLDER
 #include "llinventorymodel.h"
 #include "llinventoryobserver.h"  
+#include "llnotificationsutil.h"
 #include "llstring.h"
 #include "llvfs.h"
 #include "llviewercontrol.h"
@@ -1303,13 +1304,13 @@ BOOL AOEngine::importNotecard(const LLInventoryItem* item)
 		llwarns << "importing AO notecard: " << item->getName() << llendl;
 		if(getSetByName(item->getName()))
 		{
-			llwarns << "set with this name already exists" << llendl;
+			LLNotificationsUtil::add("AOImportSetAlreadyExists", LLSD());
 			return FALSE;
 		}
 
 		if(!gAgent.allowOperation(PERM_COPY,item->getPermissions(),GP_OBJECT_MANIPULATE) && !gAgent.isGodlike())
 		{
-			llwarns << "Insufficient permissions to read notecard." << llendl;
+			LLNotificationsUtil::add("AOImportPermissionDenied", LLSD());
 			return FALSE;
 		}
 
@@ -1318,7 +1319,7 @@ BOOL AOEngine::importNotecard(const LLInventoryItem* item)
 			mImportSet=new AOSet(item->getParentUUID());
 			if(!mImportSet)
 			{
-				llwarns << "could not create import set." << llendl;
+				LLNotificationsUtil::add("AOImportCreateSetFailed", LLSD());
 				return FALSE;
 			}
 			mImportSet->setName(item->getName());
@@ -1353,7 +1354,8 @@ void AOEngine::onNotecardLoadComplete(	LLVFS* vfs,const LLUUID& assetUUID,LLAsse
 {
 	if(status!=LL_ERR_NOERR)
 	{
-		llwarns << "Error downloading import notecard." << llendl;
+		// AOImportDownloadFailed
+		LLNotificationsUtil::add("AOImportDownloadFailed", LLSD());
 		// NULL tells the importer to cancel all operations and free the import set memory
 		AOEngine::instance().parseNotecard(NULL);
 		return;
@@ -1401,7 +1403,7 @@ void AOEngine::parseNotecard(const char* buffer)
 
 	if(found==-1)
 	{
-		llwarns << "notecard is missing the text portion" << llendl;
+		LLNotificationsUtil::add("AOImportNoText", LLSD());
 		delete mImportSet;
 		mImportSet=0;
 		mUpdatedSignal();
@@ -1411,7 +1413,7 @@ void AOEngine::parseNotecard(const char* buffer)
 	LLViewerInventoryCategory* importCategory=gInventory.getCategory(mImportSet->getInventoryUUID());
 	if(!importCategory)
 	{
-		llwarns << "couldn't find folder to read the animations" << llendl;
+		LLNotificationsUtil::add("AOImportNoFolder", LLSD());
 		delete mImportSet;
 		mImportSet=0;
 		mUpdatedSignal();
@@ -1442,14 +1444,18 @@ void AOEngine::parseNotecard(const char* buffer)
 		LLStringUtil::trim(line);
 		if(line.find("[")!=0)
 		{
-			llwarns << "line " << index << " has no valid [ state prefix" << llendl;
+			LLSD args;
+			args["LINE"]=(S32) index;
+			LLNotificationsUtil::add("AOImportNoStatePrefix",args);
 			continue;
 		}
 
 		U32 endTag=line.find("]");
 		if(endTag==std::string::npos)
 		{
-			llwarns << "line " << index << " has no valid ] delimiter" << llendl;
+			LLSD args;
+			args["LINE"]=(S32) index;
+			LLNotificationsUtil::add("AOImportNoValidDelimiter",args);
 			continue;
 		}
 
@@ -1459,7 +1465,9 @@ void AOEngine::parseNotecard(const char* buffer)
 		AOSet::AOState* newState=mImportSet->getStateByName(stateName);
 		if(!newState)
 		{
-			llwarns << "state name " << stateName << " not found." << llendl;
+			LLSD args;
+			args["NAME"]=stateName;
+			LLNotificationsUtil::add("AOImportStateNameNotFound",args);
 			continue;
 		}
 
@@ -1474,7 +1482,9 @@ void AOEngine::parseNotecard(const char* buffer)
 			animation.mInventoryUUID=animationMap[animation.mName];
 			if(animation.mInventoryUUID.isNull())
 			{
-				llwarns << "couldn't find animation " << animation.mName << " in animation map." << llendl;
+				LLSD args;
+				args["NAME"]=animation.mName;
+				LLNotificationsUtil::add("AOImportAnimationNotFound",args);
 				continue;
 			}
 			animation.mSortOrder=animIndex;
@@ -1485,7 +1495,7 @@ void AOEngine::parseNotecard(const char* buffer)
 
 	if(!isValid)
 	{
-		llwarns << "Notecard didn't contain any usable data. Aborting import." << llendl;
+		LLNotificationsUtil::add("AOImportInvalid",LLSD());
 		// NOTE: cleanup is always the same, needs streamlining
 		delete mImportSet;
 		mImportSet=0;
@@ -1514,10 +1524,16 @@ void AOEngine::processImport()
 				mImportSet=0;
 				mImportCategory.setNull();
 				mUpdatedSignal();
-				llwarns << "could not create import category for set " << mImportSet->getName() << " ... giving up" << llendl;
+				LLSD args;
+				args["NAME"]=mImportSet->getName();
+				LLNotificationsUtil::add("AOImportAbortCreateSet",args);
 			}
 			else
-				llwarns << "could not create import category for set " << mImportSet->getName() << " ... retrying ..." << llendl;
+			{
+				LLSD args;
+				args["NAME"]=mImportSet->getName();
+				LLNotificationsUtil::add("AOImportRetryCreateSet",args);
+			}
 			return;
 		}
 		mImportSet->setInventoryUUID(mImportCategory);
@@ -1543,7 +1559,11 @@ void AOEngine::processImport()
 					lldebugs << "deleted, size now: " << state->mAnimations.size() << llendl;
 				}
 				else
-					llwarns << "linking animation failed!" << llendl;
+				{
+					LLSD args;
+					args["NAME"]=state->mAnimations[animationIndex].mName;
+					LLNotificationsUtil::add("AOImportLinkFailed",args);
+				}
 			}
 		}
 	}
