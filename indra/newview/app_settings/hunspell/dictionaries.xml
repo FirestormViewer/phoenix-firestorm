@@ -1,0 +1,28 @@
+<llsd>
+    <array>
+        <map>
+        <key>name</key>
+            <string>en_AU</string>
+        <key>language</key>
+            <string>English (Australia)</string>
+        </map>
+        <map>
+        <key>name</key>
+            <string>en_CA</string>
+        <key>language</key>
+            <string>English (Canada)</string>
+        </map>
+        <map>
+        <key>name</key>
+            <string>en_GB</string>
+        <key>language</key>
+            <string>English (United Kingdom)</string>
+        </map>
+        <map>
+        <key>name</key>
+            <string>en_US</string>
+        <key>language</key>
+            <string>English (United States)</string>
+        </map>
+    </array>
+</llsd>
