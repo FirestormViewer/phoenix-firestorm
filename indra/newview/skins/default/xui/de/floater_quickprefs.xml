@@ -25,13 +25,13 @@
             Max. Avatare:
         </text>
         <slider left_delta="87" name="RenderAvatarMaxVisible"/>		
-        <text name="WL Sky" width="105">
-            WindLight-Himmel:
+        <text name="WL Sky" width="67">
+            WL-Himmel:
         </text>
-        <combo_box left_delta="115" name="WLPresetsCombo"/>
-        <text name="WL Water" width="105">
-            WindLight-Wasser:
+        <combo_box left_delta="77" name="WLPresetsCombo"/>
+        <text name="WL Water" width="67">
+            WL-Wasser:
         </text>
-        <combo_box left_delta="115" name="WaterPresetsCombo"/>
+        <combo_box left_delta="77" name="WaterPresetsCombo"/>
 </panel>
 </floater>
