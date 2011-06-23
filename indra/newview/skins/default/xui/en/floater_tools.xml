@@ -2870,7 +2870,7 @@ even though the user gets a free copy.
              height="19"
              initial_value="0"
              label="Horizontal (U)"
-             label_width="125"
+             label_width="115"
              layout="topleft"
              left="20"
              max_val="1000"
@@ -2890,7 +2890,7 @@ even though the user gets a free copy.
              height="19"
              initial_value="0"
              label="Vertical (V)"
-             label_width="125"
+             label_width="115"
              layout="topleft"
              left="20"
              max_val="1000"
@@ -2912,12 +2912,12 @@ even though the user gets a free copy.
              initial_value="0"
 			 label="Rotation˚"
              layout="topleft"
-			 label_width="135"
+			 label_width="125"
              left="10"
              max_val="9999"
              min_val="-9999"
              name="TexRot"
-             width="195" />
+             width="185" />
 
             <spinner
              decimal_digits="1"
@@ -2926,12 +2926,12 @@ even though the user gets a free copy.
              initial_value="1"
 			 label="Repeats / Meter"
              layout="topleft"
-			 label_width="135"
+			 label_width="125"
              left="10"
              max_val="10"
              min_val="0.1"
              name="rptctrl"
-             width="195" />
+             width="185" />
             <button
              follows="left|top"
              height="23"
@@ -2953,23 +2953,37 @@ even though the user gets a free copy.
              width="200">
                 Texture Offset
             </text>
+            <text
+             type="string"
+             length="1"
+             follows="right|top"
+             height="10"
+             layout="topleft"
+             right="-10"
+			 top_delta="0"
+			 halign="right"
+             name="tex offset"
+             text_readonly_color="LabelDisabledColor"
+             width="100">
+                Texture Prams
+            </text>
             <spinner
              follows="left|top"
              height="19"
              initial_value="0"
              label="Horizontal (U)"
-             label_width="125"
+             label_width="115"
              layout="topleft"
              left="20"
              min_val="-1"
              name="TexOffsetU"
-             width="160" />
+             width="185" />
             <button
              follows="top|right"
              height="19"
              label="Copy"
              layout="topleft"
-             left_pad="30"
+             left_pad="10"
              name="copytextures"
              tool_tip="Copy Parameters to Clipboard"
              width="68">
@@ -2979,19 +2993,19 @@ even though the user gets a free copy.
              height="19"
              initial_value="0"
              label="Vertical (V)"
-             label_width="125"
+             label_width="115"
              layout="topleft"
              left="20"
              min_val="-1"
              name="TexOffsetV"
              top_pad="1"
-             width="160" />
+             width="185" />
             <button
              follows="top|right"
              height="20"
              label="Paste"
              layout="topleft"
-             left_pad="30"
+             left_pad="10"
              name="pastetextures"
              tool_tip="Paste Parameters from Clipboard"
              width="68">
