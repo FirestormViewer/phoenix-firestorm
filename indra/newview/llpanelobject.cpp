@@ -1079,6 +1079,7 @@ void LLPanelObject::getState( )
 	case MI_BOX:
 		advanced_cut_visible	= TRUE;
 		advanced_is_slice		= TRUE;
+		taper_visible			= FALSE; //KC: does nothing for boxes
 		break;
 
 	case MI_CYLINDER:

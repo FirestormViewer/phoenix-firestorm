@@ -2125,8 +2125,9 @@ even though the user gets a free copy.
              left="125"
              name="text taper2"
              top_pad="3"
+			 tool_tip="Does not work on all prim types."
              width="150">
-                Taper
+                Taper Profile
             </text>
             <spinner
 			 visible="false"
