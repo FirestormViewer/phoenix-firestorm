@@ -2965,7 +2965,7 @@ even though the user gets a free copy.
              name="tex offset"
              text_readonly_color="LabelDisabledColor"
              width="100">
-                Texture Prams
+                Texture Parms
             </text>
             <spinner
              follows="left|top"
