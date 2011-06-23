@@ -88,6 +88,7 @@ BOOL LLPanelContents::postBuild()
 
 	childSetAction("button new script",&LLPanelContents::onClickNewScript, this);
 	childSetAction("button permissions",&LLPanelContents::onClickPermissions, this);
+	childSetAction("button refresh",&LLPanelContents::onClickRefresh, this);
 
 	mPanelInventoryObject = getChild<LLPanelObjectInventory>("contents_inventory");
 
@@ -235,4 +236,11 @@ void LLPanelContents::onClickPermissions(void *userdata)
 {
 	LLPanelContents* self = (LLPanelContents*)userdata;
 	gFloaterView->getParentFloater(self)->addDependentFloater(LLFloaterReg::showInstance("bulk_perms"));
+}
+
+// static
+void LLPanelContents::onClickRefresh(void *userdata)
+{
+	LLPanelContents* self = (LLPanelContents*)userdata;
+	self->refresh();
 }

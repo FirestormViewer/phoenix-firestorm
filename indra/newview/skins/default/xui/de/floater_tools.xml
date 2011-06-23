@@ -490,6 +490,7 @@
 		<panel label="Inhalt" name="Contents">
 			<button label="Neues Skript" label_selected="Neues Skript" name="button new script"/>
 			<button label="Berechtigungen" name="button permissions"/>
+			<button label="Aktualisieren" name="button refresh"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

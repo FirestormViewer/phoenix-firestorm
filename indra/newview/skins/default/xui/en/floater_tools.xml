@@ -3132,7 +3132,7 @@ even though the user gets a free copy.
              left="10"
              name="button new script"
              top="10"
-             width="134" />
+             width="90" />
             <button
              follows="left|top"
              height="23"
@@ -3140,7 +3140,15 @@ even though the user gets a free copy.
              layout="topleft"
              left_pad="8"
              name="button permissions"
-             width="134" />
+             width="90" />
+            <button
+             follows="left|top"
+             height="23"
+             label="Refresh"
+             layout="topleft"
+             left_pad="8"
+             name="button refresh"
+             width="75" />
             <panel_inventory_object
              border="true"
              border_visible="true"
