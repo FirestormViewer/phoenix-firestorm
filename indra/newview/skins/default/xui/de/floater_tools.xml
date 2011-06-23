@@ -205,6 +205,7 @@
 				<combo_box.item label="Original" name="Original"/>
 			</combo_box>
 			<spinner label="Preis: L$" name="Edit Cost"/>
+			<button label="UUIDs kopieren" name="btnCopyKeys" tool_tip="Kopiert die Schüssel der ausgewählten Objekte in die Zwischenablage." width="110"/>
 			<check_box label="In Suche anzeigen" name="search_check" tool_tip="Dieses Objekt in Suchergebnissen anzeigen"/>
 			<panel name="perms_build">
 				<text name="perm_modify">
@@ -250,20 +251,34 @@
 				Position (Meter)
 			</text>
 			<spinner label="X" name="Pos X"/>
+			<button label="K" name="copypos" tool_tip="Position kopieren"/>
 			<spinner label="Y" name="Pos Y"/>
+			<button label="E" name="pastepos" tool_tip="Position einfügen"/>
 			<spinner label="Z" name="Pos Z"/>
+			<button label="e" name="pasteposclip"  tool_tip="Position aus Zwischenablage einfügen"/>
 			<text name="label size">
 				Größe (Meter)
 			</text>
 			<spinner label="X" name="Scale X"/>
+			<button label="K" name="copysize" tool_tip="Größe kopieren"/>
 			<spinner label="Y" name="Scale Y"/>
+			<button label="E" name="pastesize" tool_tip="Größe einfügen"/>
 			<spinner label="Z" name="Scale Z"/>
+			<button label="e" name="pastesizeclip" tool_tip="Größe aus Zwischenablage einfügen"/>
 			<text name="label rotation">
 				Rotation (Grad)
 			</text>
 			<spinner label="X" name="Rot X"/>
+			<button label="K" name="copyrot" tool_tip="Rotation kopieren"/>
 			<spinner label="Y" name="Rot Y"/>
+			<button label="E" name="pasterot" tool_tip="Rotation einfügen"/>
 			<spinner label="Z" name="Rot Z"/>
+			<button label="e" name="pasterotclip" tool_tip="Rotation aus Zwischenablage einfügen"/>
+			<text name="edit_object">
+				Objekt-Parameter:
+			</text>
+			<button label="Kop." name="copyparams" tool_tip="Objekt-Parameter in Zwischenablage kopieren"/>
+			<button label="Einf." name="pasteparams" tool_tip="Objekt-Parameters aus Zwischenablage einfügen"/>
 			<combo_box name="comboBaseType">
 				<combo_box.item label="Quader" name="Box"/>
 				<combo_box.item label="Zylinder" name="Cylinder"/>
@@ -442,7 +457,7 @@
 				<combo_box.item label="gewoben" name="weave"/>
 			</combo_box>
 			<check_box initial_value="falsch" label="Flache Oberflächen ausrichten" name="checkbox planar align" tool_tip="Texturen auf allen ausgewählten Oberflächen an der zuletzt ausgewählten Oberfläche ausrichten. Planar Texture Mapping erforderlich."/>
-			<text name="rpt">
+			<text name="rpt" width="165">
 				Wiederholungen / Oberfläche
 			</text>
 			<spinner label="Horizontal (U)" name="TexScaleU"/>
@@ -450,13 +465,18 @@
 			<spinner label="Vertikal (V)" name="TexScaleV"/>
 			<check_box label="Umkehren" name="checkbox flip t"/>
 			<spinner label="Rotation˚" name="TexRot"/>
-			<spinner label="Wiederholungen / Meter" name="rptctrl"/>
-			<button label="Übernehmen" label_selected="Übernehmen" name="button apply"/>
+			<spinner label="Wiederh. / Meter" name="rptctrl"/>
+			<button label="Übernehmen" label_selected="Übernehmen" name="button apply" width="85"/>
 			<text name="tex offset">
-				Texture-Versatz
+				Textur-Versatz
+			</text>
+			<text name="tex params">
+				Textur-Parameter
 			</text>
 			<spinner label="Horizontal (U)" name="TexOffsetU"/>
+			<button  label="Kopieren" name="copytextures" tool_tip="Parameter in Zwischenablage kopieren"/>
 			<spinner label="Vertikal (V)" name="TexOffsetV"/>
+			<button label="Einfügen" name="pastetextures" tool_tip="Parameter aus Zwischenablage einfügen"/>
 			<panel name="Add_Media">
 				<text name="media_tex">
 					Medien

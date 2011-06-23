@@ -2962,10 +2962,9 @@ even though the user gets a free copy.
              right="-10"
 			 top_delta="0"
 			 halign="right"
-             name="tex offset"
-             text_readonly_color="LabelDisabledColor"
+             name="tex params"
              width="100">
-                Texture Parms
+                Texture Params
             </text>
             <spinner
              follows="left|top"
