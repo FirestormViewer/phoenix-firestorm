@@ -12,16 +12,16 @@ PanelPreferenceFirestorm::PanelPreferenceFirestorm() : LLPanelPreference(), m_ca
 
 BOOL PanelPreferenceFirestorm::postBuild()
 {
-	m_calcLineEditor = getChild<LLLineEditor>("PhoenixCmdLineCalc");
+	// m_calcLineEditor = getChild<LLLineEditor>("PhoenixCmdLineCalc");
 	m_acLineEditor = getChild<LLLineEditor>("PhoenixCmdLineAutocorrect");
 	m_tp2LineEditor = getChild<LLLineEditor>("PhoenixCmdLineTP2");
 	m_clearchatLineEditor = getChild<LLLineEditor>("PhoenixCmdLineClearChat");
 	m_musicLineEditor = getChild<LLLineEditor>("PhoenixCmdLineMusic");
 	m_aoLineEditor = getChild<LLLineEditor>("PhoenixCmdLineAO");
-	if(m_calcLineEditor)
-	{
-		m_calcLineEditor->setEnabled(FALSE);
-	}
+	// if(m_calcLineEditor)
+	// {
+		// m_calcLineEditor->setEnabled(FALSE);
+	// }
 	if(m_acLineEditor)
 	{
 		m_acLineEditor->setEnabled(FALSE);

@@ -33,7 +33,7 @@
 
 #include "chatbar_as_cmdline.h"
 
-//#include "llcalc.h"
+#include "llcalc.h"
 
 #include "llchatbar.h"
 #include "llagent.h"
@@ -852,7 +852,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				return false;
 			}
 #ifdef LL_CALC_H
-			else if(command == *sPhoenixCmdLineCalc)//Cryogenic Blitz
+			else if(command == std::string(sPhoenixCmdLineCalc))//Cryogenic Blitz
 			{
 				bool success;
 				F32 result = 0.f;
