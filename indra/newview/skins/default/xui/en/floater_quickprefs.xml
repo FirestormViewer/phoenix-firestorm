@@ -202,9 +202,38 @@
             height="10"
             layout="topleft"
             left="5"
+            name="Height Offset"
+            mouse_opaque="false"
+            top_delta="20"
+            width="90">
+            Height Offset:
+        </text>
+        <slider
+            can_edit_text="true"
+            control_name="RestrainedLoveOffsetAvatarZ"
+            decimal_digits="2"
+            follows="left|top"
+            height="15"
+            increment="0.05"
+            initial_value="0"
+            layout="topleft"
+            left_delta="79"
+            max_val="2"
+            min_val="-2"
+            name="RestrainedLoveOffsetAvatarZ"
+            top_delta="-2"
+            width="164"
+            label_width="17"/>
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left="5"
             name="WL Sky"
             mouse_opaque="false"
-            top_delta="45"
+            top_delta="27"
             width="90">
             WL Sky:
         </text>
