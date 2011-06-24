@@ -23,6 +23,7 @@
 
 #if LL_WINDOWS
 	#include <hunspell/hunspelldll.h>
+	#pragma comment(lib, "libhunspell.lib")
 #else
 	#include <hunspell/hunspell.hxx>
 #endif
