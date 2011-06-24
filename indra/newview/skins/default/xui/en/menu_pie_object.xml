@@ -32,7 +32,7 @@
     </pie_slice>
     <pie_slice
         enabled="false"
-        autohide="true"
+        start_autohide="true"
         label="Sit Here"
         name="Object Sit">
         <pie_slice.on_click
@@ -51,15 +51,7 @@
             function="Object.EnableStandUp" />
     </pie_slice>
     <pie_slice
-        label="Take"
-        name="Pie Object Take">
-        <pie_slice.on_click
-            function="Object.Take"/>
-        <pie_slice.on_enable
-            function="Object.VisibleTake"/>
-    </pie_slice>
-<!-- ## Zi: disabled here because V1 replaces Take with buy on the fly, V2 does not (yet)
-    <pie_slice
+        start_autohide="true"
         enabled="false"
         label="Buy"
         name="Buy...">
@@ -68,7 +60,15 @@
         <pie_slice.on_enable
             function="Object.EnableBuy" />
     </pie_slice>
--->
+    <pie_slice
+        autohide="true"
+        label="Take"
+        name="Pie Object Take">
+        <pie_slice.on_click
+            function="Object.Take"/>
+        <pie_slice.on_enable
+            function="Object.VisibleTake"/>
+    </pie_slice>
     <pie_slice
         enabled="false"
         label="Pay"

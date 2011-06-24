@@ -46,7 +46,7 @@
     </pie_menu>
     <pie_slice
         label="Sit Here"
-        autohide="true"
+        start_autohide="true"
         name="Sit Down Here">
         <pie_slice.on_click
             function="Self.SitDown"

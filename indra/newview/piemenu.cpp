@@ -323,12 +323,17 @@ void PieMenu::draw( void )
 				// get the slice label and tell the slice to check if it's supposed to be visible
 				label=currentSlice->getLabel();
 				currentSlice->updateVisible();
-				// skip it if it's not visible
+				// disable it if it's not visible, pie slices never really disappear
 				if(!currentSlice->getVisible())
 				{
 					lldebugs << label << " is not visible" << llendl;
-					continue;
+					currentSlice->setEnabled(FALSE);
 				}
+
+				// if the current slice is the start of an autohide chain, clear out previous chains
+				if(currentSlice->getStartAutohide())
+					wasAutohide=FALSE;
+
 				// check if the current slice is part of an autohide chain
 				if(currentSlice->getAutohide())
 				{
@@ -341,8 +346,8 @@ void PieMenu::draw( void )
 					PieSlice* lookSlice=dynamic_cast<PieSlice*>(lookAhead);
 					if(lookSlice)
 					{
-						// if the next item is part of the autohide chain as well ...
-						if(lookSlice->getAutohide())
+						// if the next item is part of the current autohide chain as well ...
+						if(lookSlice->getAutohide() && !lookSlice->getStartAutohide())
 						{
 							// ... it's visible and it's enabled, skip the current one.
 							// the first visible and enabled item in autohide chains wins

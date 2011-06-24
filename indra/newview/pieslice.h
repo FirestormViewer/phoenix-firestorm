@@ -49,6 +49,8 @@ class PieSlice : public LLUICtrl
 			Optional<EnableCallbackParam > on_visible;
 
 			// autohide feature to hide a disabled pie slice (NOTE: <bool> is not <BOOL>)
+			Optional<bool> start_autohide;
+			// next item in an autohide chain
 			Optional<bool> autohide;
 			// parameter "constructor" function to pick up the parameters from the XUI system
 			Params();
@@ -66,6 +68,7 @@ class PieSlice : public LLUICtrl
 		// accessor to expose the label to the outside
 		std::string getLabel();
 		// accessor to expose the autohide feature
+		BOOL getStartAutohide();
 		BOOL getAutohide();
 
 		// callback connection for the onCommit method to launch the specified function
@@ -83,6 +86,7 @@ class PieSlice : public LLUICtrl
 	protected:
 		// accessor store
 		std::string mLabel;
+		BOOL mStartAutohide;
 		BOOL mAutohide;
 
 	private:
