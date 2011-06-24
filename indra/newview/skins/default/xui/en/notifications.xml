@@ -7355,4 +7355,22 @@ This will send the following information to the current IM session:
     </form>
   </notification>
 
+<!-- Firestorm Phantom -->
+
+  <notification
+   icon="notifytip.tga"
+   name="PhantomOn"
+   type="notifytip">
+Phantom mode on.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="PhantomOff"
+   type="notifytip">
+Phantom mode off.
+  </notification>
+
+<!-- Firestorm Phantom -->
+
 </notifications>
