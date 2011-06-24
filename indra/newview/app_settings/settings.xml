@@ -14102,7 +14102,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>S32</string>
     <key>Value</key>
-    <integer>16</integer>
+    <integer>8</integer>
   </map>
   <key>ImagePipelineHTTPMaxFailCountFallback</key>
     <map>
