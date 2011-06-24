@@ -966,35 +966,18 @@
 		name="TexturesHTTP"
 		top_pad="3"
 		width="256"/>
-<!-- Max Concurent HTTP GET requests-->
-      <slider
-      control_name="ImagePipelineUseHTTPFetchMaxRequests"
-      decimal_digits="1"
-      follows="left|top"
-      height="16"
-      increment="1"
-      initial_value="16"
-      label="Max number of concurrent HTTP GET requests"
-      label_width="250"
-      layout="topleft"
-      left="20"
-      max_val="32"
-      min_val="4"
-      name="HTTPFetchMaxRequests"
-      top_pad="5"
-      width="375" />
 
 <!-- New Texture detail 5 is lowest, 0 is highest -->
      <text
       type="string"
       length="1"
-      top_pad="5"
+      top_pad="20"
       follows="top|left"
       height="18"
       width="180"
       word_wrap="true"
       layout="topleft"
-      left="20"
+      left="10"
       name="shadows_label">
         Texture Details Loaded:
       </text>
@@ -1003,7 +986,7 @@
       height="23"
       layout="topleft"
       follows="left|top"
-      left="20"
+      left="10"
       top_pad="0" 
       name="TextureDetail"
       width="150">
