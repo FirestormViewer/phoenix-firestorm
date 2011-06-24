@@ -367,7 +367,7 @@
      layout="topleft"
      name="Options..."
      tool_tip="See more grid options"
-     top="95"
+     top="80"
      right="-10"
      width="18"
      height="23" >
@@ -892,7 +892,7 @@
              name="Object Name"
              select_on_focus="true"
              top_delta="0"
-             width="170" />
+             width="190" />
             <text
              follows="left|top"
              height="10"
@@ -910,7 +910,7 @@
              name="Object Description"
              select_on_focus="true"
              top_delta="0"
-             width="170" />
+             width="190" />
             <text
              type="string"
              left="10"
@@ -919,7 +919,7 @@
              height="19"
              layout="topleft"
              name="Creator:"
-             width="90">
+             width="75">
                 Creator:
             </text>
             <!-- *NOTE: Intentionally wide for long names -->
@@ -928,7 +928,7 @@
              length="1"
              follows="left|top"
              left_pad="0"
-             height="20"
+             height="24"
              layout="topleft"
              name="Creator Name"
              top_delta="0"
@@ -936,7 +936,7 @@
              width="190"
              word_wrap="true"
              use_ellipses="true">
-                TestString PleaseIgnore (please.ignore)
+                secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect TestString PleaseIgnore (please.ignore)
             </text>
             <text
              type="string"
@@ -946,8 +946,8 @@
              height="19"
              layout="topleft"
              name="Owner:"
-             top_pad="13"
-             width="90">
+             top_pad="7"
+             width="75">
                 Owner:
             </text>
             <!-- *NOTE: Intentionally wide for long names -->
@@ -955,7 +955,7 @@
              type="string"
              length="1"
              follows="left|top"
-             height="20"
+             height="24"
              layout="topleft"
              name="Owner Name"
              left_pad="0"
@@ -964,7 +964,33 @@
              width="190"
              word_wrap="true"
              use_ellipses="true">
-                TestString PleaseIgnore (please.ignore)
+                secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect TestString PleaseIgnore (please.ignore)
+            </text>
+            <text
+             type="string"
+             length="1"
+             left="10"
+             follows="left|top"
+             height="19"
+             layout="topleft"
+             name="Last Owner:"
+             top_pad="7"
+             width="75">
+                Last Owner:
+            </text>
+            <!-- *NOTE: Intentionally wide for long names -->
+            <text
+             type="string"
+             length="1"
+             follows="left|top"
+             height="22"
+             layout="topleft"
+             name="Last Owner Name"
+             left_pad="0"
+             top_delta="0"
+             translate="false"
+             width="190">
+                secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect TestString PleaseIgnore (please.ignore)
             </text>
            <text
              type="string"
@@ -974,7 +1000,7 @@
              left="10"
              height="18"
              name="Group:"
-             top_pad="17"
+             top_pad="-2"
              width="75">
                 Group:
             </text>
@@ -990,26 +1016,27 @@
              type="string"
              length="1"
              follows="left|top"
-             height="18"
+             height="22"
              layout="topleft"
              name="Group Name"
-             left_pad="23"
+             left_pad="0"
+             top_delta="0"
              translate="false"
-             width="142"
-             word_wrap="true"
+             width="170"
              use_ellipses="true">
-                Loading...
+                secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect Loading...
             </text>
             <button
-			 follows="top|left"
-			 height="23"
+			 follows="top|right"
+			 height="18"
 			 image_overlay="Edit_Wrench"
 			 layout="topleft"
-			 left_pad="13"
+			 right="-5"
+			 top_delta="0"
 			 name="button set group"
 			 tab_stop="false"
 			 tool_tip="Choose a group to share this object's permissions"
-			 width="23" />
+			 width="18" />
             <check_box
              height="19"
              follows="left|top"
@@ -1017,17 +1044,18 @@
              layout="topleft"
              name="checkbox share with group"
              tool_tip="Allow all members of the set group to share your modify permissions for this object. You must Deed to enable role restrictions."
-             top_pad="10"
-             left="100"
+             top_pad="3"
+             left="85"
              width="87" />
             <button
-             follows="top|left"
-             height="23"
+             follows="top|right"
+             height="19"
              label="Deed"
              label_selected="Deed"
              layout="topleft"
              name="button deed"
-             left_pad="19"
+             right="-5"
+			 top_delta="-1"
              tool_tip="Deeding gives this item away with next owner permissions. Group shared objects can be deeded by a group officer."
              width="80" />
             <text

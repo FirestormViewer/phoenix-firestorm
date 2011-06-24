@@ -180,6 +180,9 @@
 			<text name="Owner:">
 				Eigentümer:
 			</text>
+			<text name="Last Owner:">
+				Vorbesitzer:
+			</text>
 			<text name="Group:">
 				Gruppe:
 			</text>
