@@ -34,7 +34,8 @@
 	-->
 
 	<string name="TimeHour">hour,datetime,slt</string>
-	<string name="TimeMin">min,datetime,slt</string>	
+	<string name="TimeMin">min,datetime,slt</string>
+	<string name="TimeSec">second,datetime,slt</string>
 	<string name="TimeYear">year,datetime,slt</string>	
 	<string name="TimeDay">day,datetime,slt</string>	
 	<string name="TimeMonth">mthnum,datetime,slt</string>	

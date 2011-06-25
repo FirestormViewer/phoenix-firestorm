@@ -192,9 +192,15 @@ void LLPanelPermissions::disableAll()
 	getChild<LLUICtrl>("Owner Name")->setValue(LLStringUtil::null);
 	getChildView("Owner Name")->setEnabled(FALSE);
 
+	getChildView("Last Owner:")->setEnabled(FALSE);
+	getChild<LLUICtrl>("Last Owner Name")->setValue(LLStringUtil::null);
+	getChildView("Last Owner Name")->setEnabled(FALSE);
+
 	getChildView("Group:")->setEnabled(FALSE);
 	//getChild<LLUICtrl>("Group Name Proxy")->setValue(LLStringUtil::null);
 	//getChildView("Group Name Proxy")->setEnabled(FALSE);
+	getChild<LLUICtrl>("Group Name")->setValue(LLStringUtil::null);
+	getChildView("Group Name")->setEnabled(FALSE);
 	getChildView("button set group")->setEnabled(FALSE);
 
 	getChild<LLUICtrl>("Object Name")->setValue(LLStringUtil::null);
@@ -347,30 +353,32 @@ void LLPanelPermissions::refresh()
 
 	// Update owner text field
 	getChildView("Owner:")->setEnabled(TRUE);
+	getChildView("Last Owner:")->setEnabled(TRUE);
 
 	std::string owner_name;
 	const BOOL owners_identical = LLSelectMgr::getInstance()->selectGetOwner(mOwnerID, owner_name);
-	if (mOwnerID.isNull())
-	{
-		if (LLSelectMgr::getInstance()->selectIsGroupOwned())
-		{
+	//KC: Always show last owner
+	// if (mOwnerID.isNull())
+	// {
+		// if (LLSelectMgr::getInstance()->selectIsGroupOwned())
+		// {
 			// Group owned already displayed by selectGetOwner
-		}
-		else
-		{
+		// }
+		// else
+		// {
 			// Display last owner if public
 			std::string last_owner_name;
 			LLSelectMgr::getInstance()->selectGetLastOwner(mLastOwnerID, last_owner_name);
 
 			// It should never happen that the last owner is null and the owner
 			// is null, but it seems to be a bug in the simulator right now. JC
-			if (!mLastOwnerID.isNull() && !last_owner_name.empty())
-			{
-				owner_name.append(", last ");
-				owner_name.append(last_owner_name);
-			}
-		}
-	}
+			// if (!mLastOwnerID.isNull() && !last_owner_name.empty())
+			// {
+				// owner_name.append(", last ");
+				// owner_name.append(last_owner_name);
+			// }
+		// }
+	// }
 //	getChild<LLUICtrl>("Owner Name")->setValue(owner_name);
 //	getChildView("Owner Name")->setEnabled(TRUE);
 // [RLVa:KB] - Moved further down to avoid an annoying flicker when the text is set twice in a row
@@ -392,6 +400,9 @@ void LLPanelPermissions::refresh()
 
 	getChild<LLUICtrl>("Owner Name")->setValue(owner_name);
 	getChildView("Owner Name")->setEnabled(TRUE);
+	
+	getChild<LLUICtrl>("Last Owner Name")->setValue(last_owner_name);
+	getChildView("Last Owner Name")->setEnabled(TRUE);
 // [/RLVa:KB]
 
 	// update group text field

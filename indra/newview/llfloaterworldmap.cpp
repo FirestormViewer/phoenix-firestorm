@@ -1540,6 +1540,9 @@ void LLFloaterWorldMap::updateSims(bool found_null_sim)
 	
 	if (num_results > 0)
 	{
+		// Ansariel: Let's sort the list to make it more user-friendly
+		list->sortByColumn("sim_name", TRUE);
+
 		// if match found, highlight it and go
 		if (!match.isUndefined())
 		{

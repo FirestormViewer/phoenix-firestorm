@@ -813,8 +813,8 @@ public:
  **/
 
 public:
-	void		togglePhantom()		{ mPhantom = !mPhantom; }
-	bool		getPhantom() const 	{ return mPhantom; }
+	void		togglePhantom();
+	bool		getPhantom() const;
 private:
 	BOOL		mPhantom;
 

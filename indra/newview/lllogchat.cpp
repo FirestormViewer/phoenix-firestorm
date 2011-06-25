@@ -82,7 +82,8 @@ const static std::string MULTI_LINE_PREFIX(" ");
  *
  * Note: "You" was used as an avatar names in viewers of previous versions
  */
-const static boost::regex TIMESTAMP_AND_STUFF("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}\\]\\s+)?(.*)$");
+//const static boost::regex TIMESTAMP_AND_STUFF("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}\\]\\s+)?(.*)$");
+const static boost::regex TIMESTAMP_AND_STUFF("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}:\\d{2}\\]\\s+)?(.*)$");
 
 /**
  *  Regular expression suitable to match names like
@@ -104,8 +105,8 @@ const static boost::regex OUTBOUND_CONFERENCE("^Ad-hoc Conference hash[a-f0-9]{8
 const static std::string NAME_TEXT_DIVIDER(": ");
 
 // is used for timestamps adjusting
-const static char* DATE_FORMAT("%Y/%m/%d %H:%M");
-const static char* TIME_FORMAT("%H:%M");
+const static char* DATE_FORMAT("%Y/%m/%d %H:%M:%S");
+const static char* TIME_FORMAT("%H:%M:%S");
 
 const static int IDX_TIMESTAMP = 1;
 const static int IDX_STUFF = 2;
@@ -254,12 +255,14 @@ std::string LLLogChat::timestamp(bool withdate)
 		          +LLTrans::getString ("TimeMonth")+"]/["
 				  +LLTrans::getString ("TimeDay")+"] ["
 				  +LLTrans::getString ("TimeHour")+"]:["
-				  +LLTrans::getString ("TimeMin")+"]";
+				  +LLTrans::getString ("TimeMin")+"]:["
+				  +LLTrans::getString ("TimeSec")+"]";
 	}
 	else
 	{
 		timeStr = "[" + LLTrans::getString("TimeHour") + "]:["
-			      + LLTrans::getString ("TimeMin")+"]";
+				  + LLTrans::getString ("TimeMin")+"]:["
+			      + LLTrans::getString ("TimeSec")+"]";
 	}
 
 	LLStringUtil::format (timeStr, substitution);

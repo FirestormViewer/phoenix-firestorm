@@ -4123,6 +4123,22 @@ void LLAgent::renderAutoPilotTarget()
 	}
 }
 
+// Firestorm Phantom
+void LLAgent::togglePhantom()
+{
+	mPhantom = !mPhantom;
+	if(mPhantom)
+		LLNotificationsUtil::add("PhantomOn", LLSD());
+	else
+		LLNotificationsUtil::add("PhantomOff", LLSD());
+}
+
+bool LLAgent::getPhantom() const
+{
+	return mPhantom;
+}
+// Firestorm Phantom
+
 /********************************************************************************/
 
 LLAgentQueryManager gAgentQueryManager;

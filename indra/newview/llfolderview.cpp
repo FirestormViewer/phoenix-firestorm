@@ -2097,7 +2097,7 @@ bool LLFolderView::doToSelected(LLInventoryModel* model, const LLSD& userdata)
 		return true;
 	}
 
-	if ("copy" == action)
+	if ("copy" == action || "cut" == action)
 	{	
 		LLInventoryClipboard::instance().reset();
 	}

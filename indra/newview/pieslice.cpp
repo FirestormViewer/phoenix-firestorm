@@ -33,7 +33,8 @@
 PieSlice::PieSlice(const PieSlice::Params& p) :
 	LLUICtrl(p),
 	mLabel(p.label),
-	mAutohide(p.autohide)
+	mStartAutohide(p.start_autohide),
+	mAutohide(p.autohide)	
 {
 
 	lldebugs << "PieSlice::PieSlice(): " << mLabel << " " << mAutohide << llendl;
@@ -44,6 +45,7 @@ PieSlice::Params::Params() :
 	on_click("on_click"),
 	on_visible("on_visible"),
 	on_enable("on_enable"),
+	start_autohide("start_autohide",FALSE),
 	autohide("autohide",FALSE)
 {
 }
@@ -117,7 +119,13 @@ std::string PieSlice::getLabel()
 }
 
 // accessor
+BOOL PieSlice::getStartAutohide()
+{
+	return mStartAutohide;
+}
+
+// accessor
 BOOL PieSlice::getAutohide()
 {
-	return mAutohide;
+	return mStartAutohide | mAutohide;
 }
