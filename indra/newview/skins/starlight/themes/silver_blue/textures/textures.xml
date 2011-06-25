@@ -716,7 +716,7 @@ with the same filename but different name
   <texture name="Windlight_btn" file_name="icons/Inv_WindLight.png" preload="false" />
   <texture name="Prefs_btn" file_name="icons/Edit_Wrench.png" preload="false" />
   <texture name="XMPP_Icon" file_name="icons/xmpp_default_icon.jpg" preload="true" />
-  
+    
   <!-- Firestorm viewer Art --> 
   <texture name="Inv_CallingCardOffline" file_name="icons/Inv_CallingCard.png" preload="false" />
   <texture name="Inv_LandmarkVisited" file_name="icons/Inv_Landmark.png" preload="false" />
@@ -758,8 +758,10 @@ with the same filename but different name
   <texture name="teleport_icon_24x24" file_name="icons/genie_icon_24x24.png" preload="false" />
   <texture name="friends_icon_24x24" file_name="icons/Friends_Icon_24x24.png" preload="false" />
   <texture name="gift_icon_24x24" file_name="icons/gift_icon_24x24.png" preload="false" />
-
-<!-- StarLight Textures - rationalise with sections above -->
+  <texture name="Music_Off" file_name="icons/Music_Off.png" preload="true" />
+  <texture name="Music_Over" file_name="icons/Music_Over.png" preload="true" />
+  <texture name="Music_Press" file_name="icons/Music_Press.png" preload="true" />
+<!-- StarLight Textures - rationalise with section above -->
 
   <texture name="SpeakBtn_Left_Selected_Press" file_name="widgets/SpeakBtn_Left_Selected_Press.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
   <texture name="SpeakBtn_Left_Off" file_name="widgets/SpeakBtn_Left_Off.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
@@ -773,5 +775,11 @@ with the same filename but different name
   <texture name="StarLight_Search" file_name="bottomtray/starlight_search.png" preload="true" />
   <texture name="StarLight_Build" file_name="bottomtray/starlight_build.png" preload="true" />
   <texture name="StarLight_Gesture" file_name="bottomtray/starlight_gesture.png" preload="true" />
+  <texture name="AddItem_Over" file_name="icons/AddItem_Over.png" preload="false" />
+  <texture name="Cam_FreeCam_Off_Pref" file_name="bottomtray/Cam_FreeCam_Off_Pref.png" preload="false" />
+  <texture name="Move_Walk_Off_Pref" file_name="bottomtray/Move_Walk_Off_Pref.png" preload="false" />
+  <texture name="Zoom_Over" file_name="icons/Zoom_Over.png" preload="false" />
+  <texture name="Edit_Prefs_Wrench" file_name="icons/Edit_Prefs_Wrench.png" preload="false" />
+  
 
 </textures>
