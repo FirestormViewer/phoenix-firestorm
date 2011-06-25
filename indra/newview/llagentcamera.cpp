@@ -2662,16 +2662,7 @@ void LLAgentCamera::setFocusOnAvatar(BOOL focus_on_avatar, BOOL animate)
 
 BOOL LLAgentCamera::setLookAt(ELookAtType target_type, LLViewerObject *object, LLVector3 position)
 {
-//	if(object && object->isAttachment())
-	static LLCachedControl<bool> is_private(gSavedSettings, "PrivateLookAtTarget", false);
-
-	if(is_private)
-	{
-		position.clearVec();
-		target_type = LOOKAT_TARGET_NONE;
-		object = gAgentAvatarp;
-	}
-	else if(object && object->isAttachment())
+	if(object && object->isAttachment())
 	{
 		LLViewerObject* parent = object;
 		while(parent)
