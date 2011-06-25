@@ -124,7 +124,7 @@ bg_opaque_color="SL-Background_66"
                    left_pad="2"
                    top="0"
                    name="dummy_icon"
-                   width="211" />
+                   width="208" />
 
                   <dnd_button
                    follows="bottom|right"
@@ -133,7 +133,7 @@ bg_opaque_color="SL-Background_66"
                    image_overlay="TrashItem_Off"
                    image_selected="Toolbar_Right_Selected"
                    image_unselected="Toolbar_Right_Off"
-                   right="-1"
+                   left_pad="1"
                    layout="topleft"
                    name="trash_btn"
                    top="0"

@@ -119,6 +119,7 @@
    height="25"
    layout="topleft"
    orientation="horizontal"
+   auto_resize="true"
    top_pad="0"
    left="10"
    name="bottom_panel"
@@ -196,16 +197,18 @@
            </button>
       </panel>
       <panel
-       auto_resize="true"
+	   auto_resize="true"
 	   follows="top|left|right"
        left_pad="0"
        height="25"
        layout="topleft"
-       name="expand_collapse_panel"
+       name="collapse_panel"
        user_resize="false"
-       width="180">
+	   min_width="0"
+       width="90">
 	      <button
-           follows="bottom|left"
+		   auto_resize="false"
+           follows="all"
            height="25"
            image_hover_unselected="Toolbar_Middle_Over"
 		   label="Collapse All"
@@ -216,16 +219,29 @@
            name="collapse_btn"
            tool_tip="Collapse Folders"
            top="0"
+		   max_width="90"
            width="89" />
+	  </panel>	   
+      <panel
+	   auto_resize="true"
+	   follows="top|left|right"
+       left_pad="0"
+       height="25"
+       layout="topleft"
+       name="expand_panel"
+       user_resize="false"
+	   min_width="0"
+       width="90">
 		  <button
-           follows="bottom|left"
+		   auto_resize="false"
+           follows="bottom|left|right"
            height="25"
            image_hover_unselected="Toolbar_Middle_Over"
 		   label="Expand All"
            image_selected="Toolbar_Middle_Selected"
            image_unselected="Toolbar_Middle_Off"
            layout="topleft"
-           left_pad="1"
+           left="0"
            name="expand_btn"
            tool_tip="Expand Folders"
            top="0"
@@ -242,7 +258,7 @@
       </panel>
       <panel
        auto_resize="false"
-	   follows="top|left"
+	   follows="top|right"
        left_pad="0"
        height="25"
        layout="topleft"
@@ -250,7 +266,7 @@
        user_resize="false"
        width="31">
           <dnd_button
-           follows="bottom|left"
+           follows="top|right"
            height="25"
            image_hover_unselected="Toolbar_Right_Over"
            image_overlay="TrashItem_Off"
