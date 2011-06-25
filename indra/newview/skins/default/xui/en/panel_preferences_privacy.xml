@@ -159,6 +159,15 @@
      name="show_timestamps_check_im"
      top_pad="4"
      width="237" />
+    <check_box
+     control_name="FSSecondsinChatTimestamps"
+     height="16"
+     label="Show seconds in chat and log timestamps"
+     layout="topleft"
+     left_delta="0"
+     name="seconds_in_timestamps"
+     top_pad="4"
+     width="237" />
 	<check_box
      control_name="LogFileNamewithDate"
      enabled="false"
