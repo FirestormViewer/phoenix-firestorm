@@ -125,6 +125,9 @@
     />
      <text
 	   tool_tip="Name of land parcel on which you are standing. Click for About Land."
+	   text_color="White"
+	   hover="true"
+	   hover_color="ParcelHoverColor"
        follows="left|top|right"
        height="16"
        layout="topleft"
@@ -136,28 +139,6 @@
        type="string"
        width="100"/>
    </panel>
-   
-   <!-- Draw distance widget here -->
-      <slider
-      control_name="RenderFarClip"
-      decimal_digits="0"
-      follows="right|top"
-      height="15"
-      increment="16"
-      initial_value="64"
-      layout="topleft"
-      tool_tip="Furthest distance objects will be rendered from you (larger numbers == slower, but more details)."
-      top="4"
-      label="Draw:"
-      label_length="40"
-      left="-396"
-      max_val="256"
-      min_val="32"
-      name="drawdistance" 
-      top_delta="0"
-      width="160" />
- <!-- End Draw distance widget here -->
-
 
     <panel.string
      name="packet_loss_tooltip">
@@ -181,7 +162,7 @@
     </panel.string>
   <panel
     height="18"
-    left_pad="0"
+    left="-240"
     width="95"
     top="0"
     follows="right|top"

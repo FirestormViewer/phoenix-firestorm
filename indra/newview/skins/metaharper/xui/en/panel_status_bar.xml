@@ -125,6 +125,9 @@
     />
      <text
 	   tool_tip="Name of land parcel on which you are standing. Click for About Land."
+	   text_color="White"
+	   hover="true"
+	   hover_color="ParcelHoverColor"
        follows="left|top|right"
        height="16"
        layout="topleft"
@@ -136,28 +139,6 @@
        type="string"
        width="100"/>
    </panel>
-   
-   <!-- Draw distance widget here -->
-      <slider
-      control_name="RenderFarClip"
-      decimal_digits="0"
-      follows="right|top"
-      height="15"
-      increment="16"
-      initial_value="64"
-      layout="topleft"
-      tool_tip="Furthest distance objects will be rendered from you (larger numbers == slower, but more details)."
-      top="4"
-      label="Draw:"
-      label_length="40"
-      left="-396"
-      max_val="256"
-      min_val="32"
-      name="drawdistance" 
-      top_delta="0"
-      width="160" />
- <!-- End Draw distance widget here -->
-
 
     <panel.string
      name="packet_loss_tooltip">
@@ -181,7 +162,7 @@
     </panel.string>
   <panel
     height="18"
-    left_pad="0"
+    left="-240"
     width="95"
     top="0"
     follows="right|top"
@@ -195,13 +176,14 @@
      follows="all"
      height="18"
      left="0"
+	 right="30"
      name="balance"
      tool_tip="Click to refresh your L$ balance"
      v_pad="4"
      top="0"
      wrap="false"
      value="L$???"
-     width="40" />
+     width="35" />
     <button
      auto_resize="true"
      halign="center"
@@ -213,19 +195,19 @@
      height="18"
      label="BUY L$"
      label_color="White"
-     left_pad="0"
+     left_pad="2"
      label_shadow="true"
      name="buyL"
-     pad_right="0"
+     pad_right="2"
      pad_bottom="3"
      tool_tip="Click to buy more L$"
      top="2"
-     width="55" />
+     width="40" />
   </panel>
   
   <panel
     height="18"
-    left_pad="0"
+    left_pad="12"
     width="130"
     top="0"
     follows="right|top"
@@ -245,7 +227,7 @@
      left="0"
      name="TimeText"
      tool_tip="Current time (Pacific)"
-     width="80">
+     width="50">
         24:00 AM PST
     </text>
     <button
@@ -256,7 +238,7 @@
      image_pressed="Pause_Press"
      image_pressed_selected="Music_Press"
      is_toggle="true"
-     left_delta="85"
+     left_delta="55"
      top="1"
      name="stream_toggle_btn"
      tool_tip="Start/Stop Parcel Audio Stream"
@@ -270,6 +252,7 @@
      image_pressed="Pause_Press"
      image_pressed_selected="Play_Press"
      is_toggle="true"
+	 left_delta="60"
      left_pad="2"
      top="1"
      name="media_toggle_btn"
@@ -283,7 +266,7 @@
      image_pressed="Audio_Press"
      image_unselected="Audio_Off"
      is_toggle="true"
-     left_pad="5"
+     left_pad="4"
      top="2"
      name="volume_btn"
      tool_tip="Global Volume Control"
