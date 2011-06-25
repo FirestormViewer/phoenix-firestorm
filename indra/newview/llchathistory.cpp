@@ -829,7 +829,10 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	if (irc_me || chat.mChatStyle == CHAT_STYLE_IRC)
 	{
 		delimiter = LLStringUtil::null;
-		style_params.font.style = "ITALIC";
+
+		// italics for emotes -Zi
+		if(gSavedSettings.getBOOL("EmotesUseItalic"))
+			style_params.font.style = "ITALIC";
 	}
 
 	bool message_from_log = chat.mChatStyle == CHAT_STYLE_HISTORY;
@@ -843,7 +846,8 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	// Bold group moderators' chat -KC 
 	if (chat.mChatStyle == CHAT_STYLE_MODERATOR)
 	{
-		style_params.font.style = irc_me ? "ITALICBOLD" : "BOLD";
+		// italics for emotes -Zi
+		style_params.font.style = (irc_me && gSavedSettings.getBOOL("EmotesUseItalic")) ? "ITALICBOLD" : "BOLD";
 	}
 
 	if (use_plain_text_chat_history)

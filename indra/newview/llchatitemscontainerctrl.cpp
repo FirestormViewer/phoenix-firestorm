@@ -157,7 +157,9 @@ void LLNearbyChatToastPanel::addMessage(LLSD& notification)
 
 		if(notification["chat_style"].asInteger()== CHAT_STYLE_IRC)
 		{
-			style_params.font.style = "ITALIC";
+			// italics for emotes -Zi
+			if(gSavedSettings.getBOOL("EmotesUseItalic"))
+				style_params.font.style = "ITALIC";
 		}
 		else if( chat_type == CHAT_TYPE_SHOUT)
 		{

@@ -448,6 +448,14 @@
 			 height="20"
 			 width="400" />
 			<check_box
+			 control_name="EmotesUseItalic"
+			 name="EmotesUseItalic"
+			 label="Emotes use italic font"
+			 layout="topleft"
+			 top_pad="0"
+			 height="20"
+			 width="400" />
+			<check_box
 			 control_name="AutoCloseOOC"
 			 name="AutoCloseOOC"
 			 label="Auto-close ((OOC)) parentheses"
