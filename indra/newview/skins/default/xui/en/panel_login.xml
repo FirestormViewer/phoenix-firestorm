@@ -113,7 +113,6 @@ label="Remember password"
 <button
   follows="left|bottom"
   height="23"
-  image_unselected="PushButton_On"
   image_selected="PushButton_On_Selected"
   label="Log In"
   label_color="White"
