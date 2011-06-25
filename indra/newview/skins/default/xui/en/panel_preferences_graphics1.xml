@@ -471,8 +471,8 @@
 		left="200"
 		name="MeshDetailText"
 		top_pad="6"
-		width="128">
-			Mesh Detail:
+		width="400">
+			Level of Detail(LOD) distance multiplier, &gt; 4.0 may cause lag:
 		</text>
 		<slider
 		control_name="RenderVolumeLODFactor"
@@ -480,7 +480,7 @@
 		height="15"
 		increment="0.125"
 		initial_value="160"
-		label="  Objects"
+		label="  Objects &amp; Sculpts"
 		label_width="140"
 		layout="topleft"
 		left_delta="0"
