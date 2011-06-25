@@ -309,6 +309,15 @@
                 <integer>0</integer>
             </array>
         </map>
+    <key>ProtectBridgeFolder</key>
+        <map>
+        <key>Comment</key>
+            <string>Keep the Bridge folder in Inventory safe from manual changes.</string>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>1</integer>
+        </map>
 	
 	<key>PhoenixKeywordOn</key>
 	<map>

@@ -27,6 +27,7 @@
 #include "llviewerprecompiledheaders.h"
 #include "fslslbridge.h"
 #include "fslslbridgerequest.h"
+#include "imageids.h"
 #include "llxmlnode.h"
 #include "llbufferstream.h"
 #include "llsdserialize.h"
@@ -48,6 +49,7 @@
 #include "llassetuploadresponders.h"
 #include "llnearbychatbar.h"
 #include "llnotificationmanager.h"
+#include "llviewerobject.h"
 
 #include <boost/regex.hpp>
 
@@ -57,6 +59,7 @@
 #define LIB_ROCK_NAME "Rock - medium, round"
 
 //#define ROOT_FIRESTORM_FOLDER "#Firestorm"	//moved to llinventoryfunctions to synch with the AO object
+#define FS_BRIDGE_FOLDER "#LSL Bridge"
 #define FS_BRIDGE_NAME "#Firestorm LSL Bridge v"
 #define FS_BRIDGE_MAJOR_VERSION 1
 #define FS_BRIDGE_MINOR_VERSION 7
@@ -97,6 +100,7 @@ FSLSLBridge :: FSLSLBridge():
 					mBridgeCreating(false),
 					mpBridge(NULL)
 {
+	llinfos << "Initializing fsbridge class" << llendl;
 	std::stringstream sstr;
 	
 	sstr << FS_BRIDGE_NAME;
@@ -161,6 +165,12 @@ void FSLSLBridge :: recreateBridge()
 {
 	if (!gSavedSettings.getBOOL("UseLSLBridge"))
 		return;
+
+	if (mBridgeCreating)
+	{
+		reportToNearbyChat("Bridge creation in process, can't start another. Please wait a few minutes.");
+		return;
+	}
 
 	LLUUID catID = findFSCategory();
 
@@ -255,13 +265,24 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 {
 	llinfos << "enter process attach, checking the rock" << llendl;
 
-	if ((mpBridge == NULL) || (!gAgentAvatarp->isSelf()) || (attachment->getName() != "Bridge"))
+	if ((!gAgentAvatarp->isSelf()) || (attachment->getName() != "Bridge"))
 		return;
-	llinfos << "rock is attached, mpBridge not NULL, avatar is self, point is bridge" << llendl;
 
 	LLViewerInventoryItem *fsObject = gInventory.getItem(object->getAttachmentItemID());
 	if (fsObject == NULL) //just in case
 		return;
+	if (mpBridge == NULL) //user is attaching an existing bridge?
+	{
+		//is it in the right place?
+		LLUUID catID = findFSCategory();
+		if (catID != fsObject->getParentUUID())
+		{
+			//the object is not where we think it is. what to do?
+		}
+		mpBridge = fsObject;
+	}
+	llinfos << "rock is attached, mpBridge not NULL, avatar is self, point is bridge" << llendl;
+
 
 	if (fsObject->getUUID() != mpBridge->getUUID())
 	{
@@ -340,18 +361,24 @@ void FSLSLBridge :: setupBridgePrim(LLViewerObject *object)
 {
 	llinfos << "enter rock change" << llendl;
 
-	object->setScale(LLVector3(0.01f, 0.01f, 0.01f));
-
 	LLProfileParams profParams(LL_PCODE_PROFILE_CIRCLE, F32(0.230), F32(0.250), F32(0.95));
-	LLPathParams pathParams(LL_PCODE_PATH_CIRCLE, F32(0), F32(0.2), F32(0.01), F32(0.01), F32(0.00), F32(0.0), 
-		F32(0), F32(0), F32(0), F32(0), F32(0), F32(0.01), 0);
-	
+	LLPathParams pathParams(LL_PCODE_PATH_CIRCLE, F32(0.2), F32(0.22), 
+		F32(0.0), F32(350.0),	//scale
+		F32(0.0), F32(0.0),		//shear
+		F32(0), F32(0),			//twist
+		F32(0),					//offset
+		F32(0), F32(0.0),		//taper
+		F32(0.05), F32(0.05));	//revolutions, skew
+	pathParams.setRevolutions(F32(1.0));
 	object->setVolume(LLVolumeParams(profParams, pathParams), 0);
 
+	object->setScale(LLVector3(10.0f, 10.0f, 10.0f), TRUE);
 	for (int i = 0; i < object->getNumTEs(); i++)
 	{
-		object->setTETexture(i, LLUUID("8dcd4a48-2d37-4909-9f78-f7a9eb4ef903")); //transparent texture
+		LLViewerTexture* image = LLViewerTextureManager::getFetchedTexture( IMG_INVISIBLE );
+		object->setTEImage(i, image); //transparent texture
 	}
+	object->setChanged(LLXform::MOVED | LLXform::SILHOUETTE | LLXform::TEXTURE);
 
 	//object->setTETexture(0, LLUUID("29de489d-0491-fb00-7dab-f9e686d31e83")); //another test texture
 	object->sendShapeUpdate();
@@ -550,13 +577,43 @@ bool FSLSLBridge :: isItemAttached(LLUUID iID)
 
 LLUUID FSLSLBridge :: findFSCategory()
 {
-	LLUUID catID;
-	catID = gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER);
-	if(catID.isNull())
+	if (!mBridgeFolderID.isNull())
+		return mBridgeFolderID;
+
+	LLUUID fsCatID;
+	LLUUID bridgeCatID;
+
+	fsCatID = gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER);
+	if(!fsCatID.isNull())
 	{
-		catID = gInventory.createNewCategory(gInventory.getRootFolderID(), LLFolderType::FT_NONE, ROOT_FIRESTORM_FOLDER);
+		LLInventoryModel::item_array_t* items;
+		LLInventoryModel::cat_array_t* cats;
+		gInventory.getDirectDescendentsOf(fsCatID, cats, items);
+		if(cats)
+		{
+			S32 count = cats->count();
+			for(S32 i = 0; i < count; ++i)
+			{
+				if(cats->get(i)->getName() == FS_BRIDGE_FOLDER)
+				{
+					bridgeCatID = cats->get(i)->getUUID();
+				}
+			}
+		}
 	}
-	return catID;
+	else
+	{
+		fsCatID = gInventory.createNewCategory(gInventory.getRootFolderID(), LLFolderType::FT_NONE, ROOT_FIRESTORM_FOLDER);
+	}
+
+	if (bridgeCatID.isNull())
+	{
+		bridgeCatID = gInventory.createNewCategory(fsCatID, LLFolderType::FT_NONE, FS_BRIDGE_FOLDER);
+	}
+
+	mBridgeFolderID = bridgeCatID;
+
+	return mBridgeFolderID;
 }
 LLViewerInventoryItem* FSLSLBridge :: findInvObject(std::string obj_name, LLUUID catID, LLAssetType::EType type)
 {

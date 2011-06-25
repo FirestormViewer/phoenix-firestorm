@@ -58,7 +58,6 @@ public:
 	void initBridge();
 	void recreateBridge();
 	void processAttach(LLViewerObject *object, const LLViewerJointAttachment *attachment);
-	void startCreation();
 
 	bool getBridgeCreating() {return mBridgeCreating; };
 	void setBridgeCreating(bool status) { mBridgeCreating = status; };
@@ -68,26 +67,22 @@ public:
 
 	void checkBridgeScriptName(std::string fileName);
 	std::string currentFullName() { return mCurrentFullName; }
-	void finishBridge();
 
-protected:
-
-	/*virtual*/ void inventoryChanged(LLViewerObject* obj,
-									 LLInventoryObject::object_list_t* inv,
-									 S32 serial_num,
-									 void* queue);
-	LLUUID	mScriptItemID;	//internal script ID
+	LLUUID getBridgeFolder() { return mBridgeFolderID; }
 
 private:
 	std::string				mCurrentURL;
-	int						mCurrentChannel;
 	bool					mBridgeCreating;
+
 	LLViewerInventoryItem*	mpBridge;
 	std::string				mCurrentFullName;
+	LLUUID					mScriptItemID;	//internal script ID
+	LLUUID					mBridgeFolderID;
 
 protected:
 	LLViewerInventoryItem* findInvObject(std::string obj_name, LLUUID catID, LLAssetType::EType type);
 	LLUUID findFSCategory();
+
 	bool isItemAttached(LLUUID iID);
 	void createNewBridge();
 	void create_script_inner(LLViewerObject* object);
@@ -97,6 +92,13 @@ protected:
 	void setupBridgePrim(LLViewerObject *object);
 	void initCreationStep();
 	void cleanUpBridge();
+	void startCreation();
+	void finishBridge();
+
+	/*virtual*/ void inventoryChanged(LLViewerObject* obj,
+									 LLInventoryObject::object_list_t* inv,
+									 S32 serial_num,
+									 void* queue);
 };
 
 

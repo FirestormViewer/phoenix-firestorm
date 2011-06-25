@@ -138,6 +138,9 @@ protected:
 
 	BOOL isAgentInventory() const; // false if lost or in the inventory library
 	BOOL isCOFFolder() const; // true if COF or descendent of
+//-TT Client LSL Bridge
+	BOOL isProtectedFolder() const;
+//-TT
 	virtual BOOL isItemPermissive() const;
 	static void changeItemParent(LLInventoryModel* model,
 								 LLViewerInventoryItem* item,

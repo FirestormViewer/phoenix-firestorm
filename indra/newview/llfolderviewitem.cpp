@@ -29,6 +29,7 @@
 
 // viewer includes
 #include "aoengine.h"			// ## Zi: Animation Overrider
+#include "fslslbridge.h"		//-TT Client LSL Bridge
 #include "llfolderview.h"		// Items depend extensively on LLFolderViews
 #include "llfoldervieweventlistener.h"
 #include "llinventorybridge.h"	// for LLItemBridge in LLInventorySort::operator()
@@ -1069,7 +1070,11 @@ void LLFolderViewItem::draw()
 	//--------------------------------------------------------------------------------//
 	// Draw "protected" indicator
 	//
-	if(mListener->getUUID()==AOEngine::instance().getAOFolder() && gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+	if((mListener->getUUID()==AOEngine::instance().getAOFolder() && gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+//-TT Client LSL Bridge
+		||(mListener->getUUID()==FSLSLBridge::instance().getBridgeFolder() && gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+//-TT
+		)
 	{
 		std::string locked_string = " (" + LLTrans::getString("ProtectedFolder") + ") ";
 		font->renderUTF8(locked_string, 0, right_x, y, sProtectedColor,

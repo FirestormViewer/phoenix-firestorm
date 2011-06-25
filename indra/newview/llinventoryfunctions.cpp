@@ -44,6 +44,9 @@
 
 // newview includes
 #include "aoengine.h"			// ## Zi: Animation Overrider
+//-TT Client LSL Bridge
+#include "fslslbridge.h"		
+//-TT
 #include "llappearancemgr.h"
 #include "llappviewer.h"
 //#include "llfirstuse.h"
@@ -122,6 +125,11 @@ void change_item_parent(LLInventoryModel* model,
 			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
 			return;
 		// ## Zi: Animation Overrider
+//-TT Client LSL Bridge
+		if(model->isObjectDescendentOf(item->getUUID(),FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+			return;
+//-TT
 
 		LLInventoryModel::update_list_t update;
 		LLInventoryModel::LLCategoryUpdate old_folder(item->getParentUUID(),-1);
@@ -155,8 +163,13 @@ void change_category_parent(LLInventoryModel* model,
 	}
 
 	// ## Zi: Animation Overrider
-	if(model->isObjectDescendentOf(cat->getUUID(),AOEngine::instance().getAOFolder())
+	if((model->isObjectDescendentOf(cat->getUUID(),AOEngine::instance().getAOFolder())
 		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+//-TT Client LSL Bridge
+		|| (model->isObjectDescendentOf(cat->getUUID(),FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+//-TT
+		)
 		return;
 	// ## Zi: Animation Overrider
 
@@ -340,8 +353,13 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 	}
 
 	// ## Zi: Animation Overrider
-	if(model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder())
+	if((model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder())
 		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+//-TT Client LSL Bridge
+		|| (model->isObjectDescendentOf(id,FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		)
+//-TT
 		return FALSE;
 	// ## Zi: Animation Overrider
 
@@ -400,8 +418,13 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 // [/RLVa:KB]
 
 	// ## Zi: Animation Overrider
-	if((id==AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder()))
+	if(((id==AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder()))
 		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+//-TT Client LSL Bridge
+		|| (id==FSLSLBridge::instance().getBridgeFolder() || model->isObjectDescendentOf(id,FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		)
+//-TT
 		return FALSE;
 	// ## Zi: Animation Overrider
 
@@ -448,8 +471,13 @@ BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 // [/RLVa:KB]
 
 	// ## Zi: Animation Overrider
-	if((id==AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder()))
+	if(((id==AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder()))
 		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+//-TT Client LSL Bridge
+		|| (id==FSLSLBridge::instance().getBridgeFolder() || model->isObjectDescendentOf(id,FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		)
+//-TT
 		return FALSE;
 	// ## Zi: Animation Overrider
 

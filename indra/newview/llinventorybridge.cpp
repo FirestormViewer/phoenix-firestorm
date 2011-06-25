@@ -72,6 +72,9 @@
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+//-TT Client LSL Bridge
+#include "fslslbridge.h"
+//-TT
 
 typedef std::pair<LLUUID, LLUUID> two_uuids_t;
 typedef std::list<two_uuids_t> two_uuids_list_t;
@@ -612,7 +615,10 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 
 
 	// Don't allow items to be pasted directly into the COF.
-	if (!isCOFFolder())
+	//if (!isCOFFolder())
+//-TT Client LSL Bridge
+	if (!isCOFFolder() && !isProtectedFolder())
+//-TT
 	{
 		items.push_back(std::string("Paste"));
 	}
@@ -834,6 +840,18 @@ BOOL LLInvFVBridge::isCOFFolder() const
 {
 	return LLAppearanceMgr::instance().getIsInCOF(mUUID);
 }
+
+//-TT Client LSL Bridge
+BOOL LLInvFVBridge::isProtectedFolder() const
+{
+	const LLInventoryModel* model = getInventoryModel();
+	if(!model) return FALSE;
+
+	return ((mUUID ==  FSLSLBridge::instance().getBridgeFolder()) 
+		|| (model->isObjectDescendentOf(mUUID, FSLSLBridge::instance().getBridgeFolder()))
+		&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"));
+}
+//-TT
 
 BOOL LLInvFVBridge::isItemPermissive() const
 {
