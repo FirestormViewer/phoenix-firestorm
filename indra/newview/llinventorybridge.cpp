@@ -74,6 +74,7 @@
 // [/RLVa:KB]
 //-TT Client LSL Bridge
 #include "fslslbridge.h"
+#include "aoengine.h"
 //-TT
 
 typedef std::pair<LLUUID, LLUUID> two_uuids_t;
@@ -847,9 +848,17 @@ BOOL LLInvFVBridge::isProtectedFolder() const
 	const LLInventoryModel* model = getInventoryModel();
 	if(!model) return FALSE;
 
-	return ((mUUID ==  FSLSLBridge::instance().getBridgeFolder()) 
+	if ((mUUID ==  FSLSLBridge::instance().getBridgeFolder()) 
 		|| (model->isObjectDescendentOf(mUUID, FSLSLBridge::instance().getBridgeFolder()))
-		&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"));
+		&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		return TRUE;
+
+	if ((mUUID==AOEngine::instance().getAOFolder() 
+		|| model->isObjectDescendentOf(mUUID, AOEngine::instance().getAOFolder()))
+		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+		return TRUE;
+
+	return FALSE;
 }
 //-TT
 
@@ -3205,6 +3214,9 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 	if(!model || !inv_item) return FALSE;
 	if(!isAgentInventory()) return FALSE; // cannot drag into library
 	if (!isAgentAvatarValid()) return FALSE;
+//-TT Client LSL Bridge
+	if (isProtectedFolder()) return FALSE;
+//-TT
 
 	const LLUUID &current_outfit_id = model->findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT, false);
 	const LLUUID &favorites_id = model->findCategoryUUIDForType(LLFolderType::FT_FAVORITE, false);
