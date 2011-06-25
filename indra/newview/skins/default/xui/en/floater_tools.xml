@@ -9,7 +9,7 @@
 <floater
  legacy_header_height="18"
  follows="left|top|right"
- height="580"
+ height="588"
  layout="topleft"
  name="toolbox floater"
  help_topic="toolbox_floater"
@@ -365,6 +365,7 @@
      image_selected="ForwardArrow_Press"
      image_unselected="ForwardArrow_Off"
      layout="topleft"
+     follows="left|top"
      name="Options..."
      tool_tip="See more grid options"
      top="80"
@@ -810,7 +811,7 @@
      tab_max_width="100"
      tab_min_width="40"
      tab_position="top"
-     tab_height="25"
+     tab_height="20"
      top="173"
      width="295">
 	<panel
@@ -3345,4 +3346,17 @@ even though the user gets a free copy.
          width="125" />
  </panel>
 <!-- end of tabs -->
+	<button
+	 bottom="-1"
+	 follows="left|bottom|right"
+	 halign="center"
+	 left="1"
+	 right="-1"
+	 height="12"
+	 image_overlay="Arrow_Up"
+	 name="btnExpand"
+	 scale_image="TRUE">
+		<button.commit_callback
+		function="BuildTool.Expand"/>
+	</button>
 </floater>

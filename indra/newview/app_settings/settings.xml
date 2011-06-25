@@ -14247,6 +14247,17 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Value</key>
 			<integer>0</integer>
 		</map>
+		<key>PhoenixToolboxExpanded</key>
+		<map>
+			<key>Comment</key>
+			<string>Whether to show additional build tool controls</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>1</integer>
+		</map>
 		
 </map>
 </llsd>

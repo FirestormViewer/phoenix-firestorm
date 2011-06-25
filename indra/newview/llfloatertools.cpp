@@ -102,7 +102,7 @@ const std::string PANEL_NAMES[LLFloaterTools::PANEL_COUNT] =
 
 // Local prototypes
 void commit_select_component(void *data);
-void click_show_more(void*);
+//void click_show_more(void*);
 void click_popup_info(void*);
 void click_popup_done(void*);
 void click_popup_minimize(void*);
@@ -117,7 +117,6 @@ void commit_radio_group_edit(LLUICtrl* ctrl);
 void commit_radio_group_land(LLUICtrl* ctrl);
 void commit_grid_mode(LLUICtrl *);
 void commit_slider_zoom(LLUICtrl *ctrl);
-void commit_show_highlight(LLUICtrl *, void*);
 
 
 //static
@@ -278,8 +277,8 @@ BOOL	LLFloaterTools::postBuild()
 	mTab = getChild<LLTabContainer>("Object Info Tabs");
 	if(mTab)
 	{
-		mTab->setFollows(FOLLOWS_TOP | FOLLOWS_LEFT);
-		mTab->setBorderVisible(FALSE);
+		//mTab->setFollows(FOLLOWS_TOP | FOLLOWS_LEFT);
+		//mTab->setBorderVisible(FALSE);
 		mTab->selectFirstTab();
 	}
 
@@ -294,6 +293,22 @@ BOOL	LLFloaterTools::postBuild()
 
 	sShowObjectCost = gSavedSettings.getBOOL("ShowObjectRenderingCost");
 	
+	//Phoenix:KC - added back more/less button
+	LLButton* btnExpand = getChild<LLButton>("btnExpand");
+	if (btnExpand)
+	{
+		mExpandedHeight = getRect().getHeight();
+		if (mTab) mCollapsedHeight = mExpandedHeight - mTab->getRect().getHeight() + btnExpand->getRect().getHeight();
+		if(!gSavedSettings.getBOOL("PhoenixToolboxExpanded"))
+		{
+			btnExpand->setImageOverlay("Arrow_Down", btnExpand->getImageOverlayHAlign());
+		}
+	}
+	else
+	{
+		gSavedSettings.setBOOL("PhoenixToolboxExpanded", TRUE);
+	}
+
 	return TRUE;
 }
 
@@ -320,8 +335,8 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mComboGridMode(NULL),
 	mCheckStretchUniform(NULL),
 	mCheckStretchTexture(NULL),
-	mCheckShowHighlight(NULL),
-	mCheckActualRoot(NULL),
+	mCheckShowHighlight(NULL), //Phoenix:KC
+	mCheckActualRoot(NULL), //Phoenix:KC
 
 	mBtnRotateLeft(NULL),
 	mBtnRotateReset(NULL),
@@ -385,6 +400,7 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mCommitCallbackRegistrar.add("BuildTool.UnlinkObjects",		boost::bind(&LLSelectMgr::unlinkObjects, LLSelectMgr::getInstance()));
 
 	mCommitCallbackRegistrar.add("BuildTool.CopyKeys",			boost::bind(&LLFloaterTools::onClickBtnCopyKeys,this));
+	mCommitCallbackRegistrar.add("BuildTool.Expand",			boost::bind(&LLFloaterTools::onClickExpand,this));
 }
 
 LLFloaterTools::~LLFloaterTools()
@@ -622,7 +638,8 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 
 	mBtnEdit	->setToggleState( edit_visible );
 	mRadioGroupEdit->setVisible( edit_visible );
-	bool linked_parts = gSavedSettings.getBOOL("EditLinkedParts");
+	//bool linked_parts = gSavedSettings.getBOOL("EditLinkedParts");
+	static LLCachedControl<bool> linked_parts(gSavedSettings,  "EditLinkedParts");
 	getChildView("RenderingCost")->setVisible( !linked_parts && (edit_visible || focus_visible || move_visible) && sShowObjectCost);
 
 	mBtnLink->setVisible(edit_visible);
@@ -743,7 +760,8 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	}
 	else if ( tool == LLToolBrushLand::getInstance() )
 	{
-		S32 dozer_mode = gSavedSettings.getS32("RadioLandBrushAction");
+		//S32 dozer_mode = gSavedSettings.getS32("RadioLandBrushAction");
+		static LLCachedControl<S32> dozer_mode(gSavedSettings,  "RadioLandBrushAction");
 		switch(dozer_mode)
 		{
 		case 0:
@@ -788,8 +806,9 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 
 	getChildView("obj_count")->setVisible( !land_visible);
 	getChildView("prim_count")->setVisible( !land_visible);
-	mTab->setVisible(!land_visible);
-	mPanelLandInfo->setVisible(land_visible);
+	static LLCachedControl<bool> sPhoenixToolboxExpanded(gSavedSettings,  "PhoenixToolboxExpanded", TRUE);
+	mTab->setVisible(!land_visible && sPhoenixToolboxExpanded);
+	mPanelLandInfo->setVisible(land_visible && sPhoenixToolboxExpanded);
 }
 
 
@@ -1965,5 +1984,27 @@ void LLFloaterTools::onClickBtnCopyKeys()
 	if (copied)
 	{
 		LLView::getWindow()->copyTextToClipboard(utf8str_to_wstring(stringKeys));
+	}
+}
+
+void LLFloaterTools::onClickExpand()
+{
+	BOOL show_more = !gSavedSettings.getBOOL("PhoenixToolboxExpanded");
+	gSavedSettings.setBOOL("PhoenixToolboxExpanded", show_more);
+
+	LLButton* btnExpand = getChild<LLButton>("btnExpand");
+	if (show_more)
+	{
+		mTab->setVisible(TRUE);
+		reshape( getRect().getWidth(), mExpandedHeight);
+		translate( 0, mCollapsedHeight - mExpandedHeight );
+		btnExpand->setImageOverlay("Arrow_Up", btnExpand->getImageOverlayHAlign());
+	}
+	else
+	{
+		mTab->setVisible(FALSE);
+		reshape( getRect().getWidth(), mCollapsedHeight);
+		translate( 0, mExpandedHeight - mCollapsedHeight );
+		btnExpand->setImageOverlay("Arrow_Down", btnExpand->getImageOverlayHAlign());
 	}
 }

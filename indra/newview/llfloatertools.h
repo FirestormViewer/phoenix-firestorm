@@ -106,6 +106,7 @@ public:
 	bool selectedMediaEditable();
 
 	void onClickBtnCopyKeys();
+	void onClickExpand();
 
 private:
 	void refresh();
@@ -146,7 +147,7 @@ public:
 	LLCheckBoxCtrl*	mCheckStretchUniform;
 	LLCheckBoxCtrl*	mCheckStretchTexture;
 	LLCheckBoxCtrl*	mCheckShowHighlight; //Phoenix:KC
-	LLCheckBoxCtrl*	mCheckActualRoot;
+	LLCheckBoxCtrl*	mCheckActualRoot; //Phoenix:KC
 
 	// Ansariel: Reverted the hack because then when clicking the label it
 	//           doesn't check the checkbox anymore!
@@ -197,6 +198,9 @@ private:
 	BOOL					mOrginalShowHighlight; //Phoenix:KC
 	BOOL					mOpen; //Phoenix:KC
 
+	//Phoenix:KC
+	S32					mCollapsedHeight;
+	S32					mExpandedHeight;
 	std::map<std::string, std::string> mStatusText;
 
 protected:
