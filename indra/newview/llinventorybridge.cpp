@@ -568,7 +568,7 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 				items.push_back(std::string("Find Links"));
 			}
 			items.push_back(std::string("Rename"));
-			if (!isItemRenameable() || (flags & FIRST_SELECTED_ITEM) == 0)
+			if (!isItemRenameable() || (flags & FIRST_SELECTED_ITEM) == 0 || isProtectedFolder())
 			{
 				disabled_items.push_back(std::string("Rename"));
 			}
@@ -617,7 +617,7 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 
 	// Don't allow items to be pasted directly into the COF.
 	//if (!isCOFFolder())
-//-TT Client LSL Bridge
+//-TT Client LSL Bridge (also for #AO)
 	if (!isCOFFolder() && !isProtectedFolder())
 //-TT
 	{
@@ -628,7 +628,11 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 		disabled_items.push_back(std::string("Paste"));
 	}
 
-	if (gSavedSettings.getBOOL("InventoryLinking"))
+	if (gSavedSettings.getBOOL("InventoryLinking")
+//-TT Client LSL Bridge  (also for #AO)
+		&& !isProtectedFolder()
+//-TT
+		)
 	{
 		items.push_back(std::string("Paste As Link"));
 		if (!isClipboardPasteableAsLink() || (flags & FIRST_SELECTED_ITEM) == 0)
@@ -842,7 +846,7 @@ BOOL LLInvFVBridge::isCOFFolder() const
 	return LLAppearanceMgr::instance().getIsInCOF(mUUID);
 }
 
-//-TT Client LSL Bridge
+//-TT Client LSL Bridge  (also for #AO)
 BOOL LLInvFVBridge::isProtectedFolder() const
 {
 	const LLInventoryModel* model = getInventoryModel();
@@ -2786,7 +2790,11 @@ void LLFolderBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		mItems.clear(); // clear any items that used to exist
 		addTrashContextMenuOptions(mItems, mDisabledItems);
 	}
-	else if(isAgentInventory()) // do not allow creating in library
+	else if(isAgentInventory()
+//-TT Client LSL Bridge  (also for #AO)
+		&& !isProtectedFolder()
+//-TT
+		) // do not allow creating in library
 	{
 		LLViewerInventoryCategory *cat =  getCategory();
 		// BAP removed protected check to re-enable standard ops in untyped folders.
@@ -3214,7 +3222,7 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 	if(!model || !inv_item) return FALSE;
 	if(!isAgentInventory()) return FALSE; // cannot drag into library
 	if (!isAgentAvatarValid()) return FALSE;
-//-TT Client LSL Bridge
+//-TT Client LSL Bridge (also for #AO)
 	if (isProtectedFolder()) return FALSE;
 //-TT
 
