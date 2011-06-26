@@ -454,21 +454,45 @@ void LLFloaterTools::refresh()
 	std::string desc_string;
 	std::string num_string;
 	S32 prim_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
-	if (prim_count != 1 || !gSavedSettings.getBOOL("EditLinkedParts")) //Selecting a single prim in "Edit Linked" mode, show link number
+	if (prim_count == 1 && LLToolMgr::getInstance()->getCurrentTool() == LLToolFace::getInstance())
 	{
-		desc_string = getString("selected_objects");
-		LLResMgr::getInstance()->getIntegerString(num_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
+		desc_string = getString("selected_faces");
+		
+		LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getFirstRootObject();
+		LLSelectNode* nodep = LLSelectMgr::getInstance()->getSelection()->getFirstRootNode();
+		if(!objectp || !nodep)
+		{
+			objectp = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
+			nodep = LLSelectMgr::getInstance()->getSelection()->getFirstNode();
+		}
+
+		if (objectp && objectp->getNumTEs() == LLSelectMgr::getInstance()->getSelection()->getTECount())
+			num_string = "ALL_SIDES";
+		else if (objectp && nodep)
+		{
+			//S32 count = 0;
+			for (S32 i = 0; i < objectp->getNumTEs(); i++)
+			{
+				if (nodep->isTESelected(i))
+				{
+					if (!num_string.empty())
+						num_string.append(", ");
+					num_string.append(llformat("%d", i));
+					//count++;
+				}
+			}
+		}
 	}
-	else
+	else if (prim_count == 1 && gSavedSettings.getBOOL("EditLinkedParts"))
 	{
 		desc_string = getString("link_number");
-		LLViewerObject* selected = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
-		if (selected && selected->getRootEdit())
+		LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
+		if (objectp && objectp->getRootEdit())
 		{
-			LLViewerObject::child_list_t children = selected->getRootEdit()->getChildren();
+			LLViewerObject::child_list_t children = objectp->getRootEdit()->getChildren();
 			if (children.empty())
 				num_string = "0"; //a childless prim is always link zero, and unhappy
-			else if (selected->getRootEdit()->isSelected())
+			else if (objectp->getRootEdit()->isSelected())
 				num_string = "1"; //root prim is always link one
 			else
 			{
@@ -484,6 +508,11 @@ void LLFloaterTools::refresh()
 				}
 			}
 		}
+	}
+	else
+	{
+		desc_string = getString("selected_objects");
+		LLResMgr::getInstance()->getIntegerString(num_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
 	}
 	getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[DESC]", desc_string);
 	getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[NUM]", num_string);

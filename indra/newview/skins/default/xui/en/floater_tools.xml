@@ -79,6 +79,10 @@
 	  name="link_number">
 		Link number:
 	</floater.string>
+	<floater.string
+	  name="selected_faces">
+		Faces:
+	</floater.string>
     <button
      follows="left|top"
      height="25"
