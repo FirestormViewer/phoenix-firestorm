@@ -58,6 +58,7 @@ public:
 	void initBridge();
 	void recreateBridge();
 	void processAttach(LLViewerObject *object, const LLViewerJointAttachment *attachment);
+	void processDetach(LLViewerObject *object, const LLViewerJointAttachment *attachment);
 
 	bool getBridgeCreating() {return mBridgeCreating; };
 	void setBridgeCreating(bool status) { mBridgeCreating = status; };

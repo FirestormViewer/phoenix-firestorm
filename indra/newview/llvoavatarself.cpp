@@ -1339,13 +1339,23 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 
 // [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
 	// NOTE: RLVa event handlers should be invoked *before* LLVOAvatar::detachObject() calls LLViewerJointAttachment::removeObject()
-	if (rlv_handler_t::isEnabled())
+	//if (rlv_handler_t::isEnabled())
+	//{
+	//	for (attachment_map_t::const_iterator itAttachPt = mAttachmentPoints.begin(); itAttachPt != mAttachmentPoints.end(); ++itAttachPt)
+	//	{
+	//		const LLViewerJointAttachment* pAttachPt = itAttachPt->second;
+	//		if (pAttachPt->isObjectAttached(viewer_object))
+	//		{
+//-TT Client LSL Bridge - moving the rlv check to get the pAttachPt for the bridge
+	const LLViewerJointAttachment* pAttachPt = NULL;
+	for (attachment_map_t::const_iterator itAttachPt = mAttachmentPoints.begin(); itAttachPt != mAttachmentPoints.end(); ++itAttachPt)
 	{
-		for (attachment_map_t::const_iterator itAttachPt = mAttachmentPoints.begin(); itAttachPt != mAttachmentPoints.end(); ++itAttachPt)
+		pAttachPt = itAttachPt->second;
+		if (pAttachPt->isObjectAttached(viewer_object))
 		{
-			const LLViewerJointAttachment* pAttachPt = itAttachPt->second;
-			if (pAttachPt->isObjectAttached(viewer_object))
+			if (rlv_handler_t::isEnabled())
 			{
+//-TT
 				RlvAttachmentLockWatchdog::instance().onDetach(viewer_object, pAttachPt);
 				gRlvHandler.onDetach(viewer_object, pAttachPt);
 			}
@@ -1389,6 +1399,13 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 		if ( (rlv_handler_t::isEnabled()) && (viewer_object->isHUDAttachment()) && (gRlvAttachmentLocks.hasLockedHUD()) )
 			gRlvAttachmentLocks.updateLockedHUD();
 // [/RLVa:KB]
+//-TT Client LSL Bridge
+		if (gSavedSettings.getBOOL("UseLSLBridge"))
+		{
+			if ((pAttachPt != NULL) && (pAttachPt->getName() == "Bridge"))
+				FSLSLBridge::instance().processDetach(viewer_object, pAttachPt);
+		}
+//-TT
 
 		return TRUE;
 	}
