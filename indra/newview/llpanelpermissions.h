@@ -37,6 +37,7 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 class LLNameBox;
+class LLViewerObject;
 
 class LLPanelPermissions : public LLPanel
 {
@@ -86,6 +87,8 @@ private:
 	LLUUID			mCreatorID;
 	LLUUID			mOwnerID;
 	LLUUID			mLastOwnerID;
+
+	LLPointer<LLViewerObject> mLastSelectedObejct;
 };
 
 
