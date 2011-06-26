@@ -44,6 +44,9 @@
 #include "lltextbox.h"
 #include "llviewermenu.h"
 
+#include "llagent.h"
+#include "llfloaterworldmap.h"
+
 //
 // Constants
 //
@@ -124,10 +127,35 @@ BOOL LLFloaterMap::postBuild()
 
 BOOL LLFloaterMap::handleDoubleClick( S32 x, S32 y, MASK mask )
 {
-	// If floater is minimized, minimap should be shown on doubleclick (STORM-299)
-	std::string floater_to_show = this->isMinimized() ? "mini_map" : "world_map";
-	LLFloaterReg::showInstance(floater_to_show);
-	return TRUE;
+    // If floater is minimized, minimap should be shown on doubleclick (STORM-299)
+    if (isMinimized())
+    {
+        setMinimized(FALSE);
+        return TRUE;
+    }
+
+    LLVector3d pos_global = mMap->viewPosToGlobal(x, y);
+    
+    // If we're not tracking a beacon already, double-click will set one 
+    if (!LLTracker::isTracking(NULL))
+    {
+        LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
+        if (world_map)
+        {
+            world_map->trackLocation(pos_global);
+        }
+    }
+    
+    if (gSavedSettings.getBOOL("DoubleClickTeleport"))
+    {
+        // If DoubleClickTeleport is on, double clicking the minimap will teleport there
+        gAgent.teleportViaLocationLookAt(pos_global);
+    }
+    else
+    {
+        LLFloaterReg::showInstance("world_map");
+    }
+    return TRUE;
 }
 
 BOOL LLFloaterMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
@@ -261,16 +289,20 @@ void LLFloaterMap::handleZoom(const LLSD& userdata)
 	std::string level = userdata.asString();
 	
 	F32 scale = 0.0f;
-	if (level == std::string("default"))
-	{
-		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
-		if(pvar)
-		{
-			pvar->resetToDefault();
-			scale = gSavedSettings.getF32("MiniMapScale");
-		}
-	}
-	else if (level == std::string("close"))
+
+	// Ansariel: Fixing borked minimap zoom level persistance
+	//if (level == std::string("default"))
+	//{
+	//	LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
+	//	if(pvar)
+	//	{
+	//		pvar->resetToDefault();
+	//		scale = gSavedSettings.getF32("MiniMapScale");
+	//	}
+	//}
+	//else if (level == std::string("close"))
+	if (level == std::string("close"))
+	// END Ansariel: Fixing borked minimap zoom level persistance
 		scale = LLNetMap::MAP_SCALE_MAX;
 	else if (level == std::string("medium"))
 		scale = LLNetMap::MAP_SCALE_MID;

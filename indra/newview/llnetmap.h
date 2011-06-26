@@ -81,6 +81,7 @@ public:
 	void			setScale( F32 scale );
 	void			setToolTipMsg(const std::string& msg) { mToolTipMsg = msg; }
 	void			renderScaledPointGlobal( const LLVector3d& pos, const LLColor4U &color, F32 radius );
+	LLVector3d		viewPosToGlobal(S32 x,S32 y);
 
 private:
 	const LLVector3d& getObjectImageCenterGlobal()	{ return mObjectImageCenterGlobal; }
@@ -88,7 +89,6 @@ private:
 								S32 diameter, S32 relative_height = 0);
 
 	LLVector3		globalPosToView(const LLVector3d& global_pos);
-	LLVector3d		viewPosToGlobal(S32 x,S32 y);
 
 	void			drawTracking( const LLVector3d& pos_global, 
 								  const LLColor4& color,
@@ -133,7 +133,9 @@ public:
 	void			setSelected(uuid_vec_t uuids) { gmSelected=uuids; };
 
 private:
-	void handleZoom(const LLSD& userdata);
+	// Ansariel: Fixing borked minimap zoom level persistance
+	// void handleZoom(const LLSD& userdata);
+	// END Ansariel: Fixing borked minimap zoom level persistance
 	void handleStopTracking (const LLSD& userdata);
 
 	LLMenuGL*		mPopupMenu;
