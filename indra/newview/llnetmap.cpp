@@ -109,19 +109,25 @@ LLNetMap::LLNetMap (const Params & p)
 	mScale = gSavedSettings.getF32("MiniMapScale");
 	mPixelsPerMeter = mScale / REGION_WIDTH_METERS;
 	mDotRadius = llmax(DOT_SCALE * mPixelsPerMeter, MIN_DOT_RADIUS);
-	setScale(gSavedSettings.getF32("MiniMapScale"));
+	// Ansariel: Fixing borked minimap zoom level persistance
+	//setScale(gSavedSettings.getF32("MiniMapScale"));
+	// END Ansariel: Fixing borked minimap zoom level persistance
 }
 
 LLNetMap::~LLNetMap()
 {
-	gSavedSettings.setF32("MiniMapScale", mScale);
+	// Ansariel: Fixing borked minimap zoom level persistance
+	//gSavedSettings.setF32("MiniMapScale", mScale);
+	// END Ansariel: Fixing borked minimap zoom level persistance
 }
 
 BOOL LLNetMap::postBuild()
 {
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 	
-	registrar.add("Minimap.Zoom", boost::bind(&LLNetMap::handleZoom, this, _2));
+	// Ansariel: Fixing borked minimap zoom level persistance
+	//registrar.add("Minimap.Zoom", boost::bind(&LLNetMap::handleZoom, this, _2));
+	// END Ansariel: Fixing borked minimap zoom level persistance
 	registrar.add("Minimap.Tracker", boost::bind(&LLNetMap::handleStopTracking, this, _2));
 
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
@@ -1072,31 +1078,33 @@ BOOL LLNetMap::handleHover( S32 x, S32 y, MASK mask )
 	return TRUE;
 }
 
-void LLNetMap::handleZoom(const LLSD& userdata)
-{
-	std::string level = userdata.asString();
-	
-	F32 scale = 0.0f;
-	if (level == std::string("default"))
-	{
-		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
-		if(pvar)
-		{
-			pvar->resetToDefault();
-			scale = gSavedSettings.getF32("MiniMapScale");
-		}
-	}
-	else if (level == std::string("close"))
-		scale = LLNetMap::MAP_SCALE_MAX;
-	else if (level == std::string("medium"))
-		scale = LLNetMap::MAP_SCALE_MID;
-	else if (level == std::string("far"))
-		scale = LLNetMap::MAP_SCALE_MIN;
-	if (scale != 0.0f)
-	{
-		setScale(scale);
-	}
-}
+// Ansariel: Fixing borked minimap zoom level persistance
+//void LLNetMap::handleZoom(const LLSD& userdata)
+//{
+//	std::string level = userdata.asString();
+//	
+//	F32 scale = 0.0f;
+//	if (level == std::string("default"))
+//	{
+//		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
+//		if(pvar)
+//		{
+//			pvar->resetToDefault();
+//			scale = gSavedSettings.getF32("MiniMapScale");
+//		}
+//	}
+//	else if (level == std::string("close"))
+//		scale = LLNetMap::MAP_SCALE_MAX;
+//	else if (level == std::string("medium"))
+//		scale = LLNetMap::MAP_SCALE_MID;
+//	else if (level == std::string("far"))
+//		scale = LLNetMap::MAP_SCALE_MIN;
+//	if (scale != 0.0f)
+//	{
+//		setScale(scale);
+//	}
+//}
+// END Ansariel: Fixing borked minimap zoom level persistance
 
 void LLNetMap::handleStopTracking (const LLSD& userdata)
 {

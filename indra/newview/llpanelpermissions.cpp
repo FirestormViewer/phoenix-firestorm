@@ -307,6 +307,7 @@ void LLPanelPermissions::refresh()
 	{
 		// ...nothing selected
 		disableAll();
+		mLastSelectedObejct = NULL;
 		return;
 	}
 
@@ -493,6 +494,15 @@ void LLPanelPermissions::refresh()
 		getChildView("Object Description")->setEnabled(FALSE);
 	}
 
+	//KC: Check if the selection has chnaged and that there are pending sale changes
+	BOOL selection_changed = FALSE;
+	if (mLastSelectedObejct != objectp)
+	{
+		mLastSelectedObejct = objectp;
+		selection_changed = TRUE;
+	}
+	BOOL update_sale_info = selection_changed || !getChild<LLButton>("btnMarkForSale")->getEnabled();
+
 	S32 total_sale_price = 0;
 	S32 individual_sale_price = 0;
 	BOOL is_for_sale_mixed = FALSE;
@@ -519,6 +529,9 @@ void LLPanelPermissions::refresh()
 	// You own these objects.
 	else if (self_owned || (group_owned && gAgent.hasPowerInGroup(group_id,GP_OBJECT_SET_SALE)))
 	{
+		//KC: dont update and clear sale info if changes are pending
+		if (update_sale_info)
+		{
 		// If there are multiple items for sale then set text to PRICE PER UNIT.
 		if (num_for_sale > 1)
 		{
@@ -552,6 +565,7 @@ void LLPanelPermissions::refresh()
 		BOOL enable_edit = (num_for_sale && can_transfer) ? !is_for_sale_mixed : FALSE;
 		getChildView("Cost")->setEnabled(enable_edit);
 		getChildView("Edit Cost")->setEnabled(enable_edit);
+		}
 	}
 	// Someone, not you, owns these objects.
 	else if (!public_owned)
@@ -688,6 +702,9 @@ void LLPanelPermissions::refresh()
 		getChildView("checkbox allow everyone copy")->setEnabled(FALSE);
 	}
 
+	//KC: dont update and clear sale info if changes are pending
+	if (update_sale_info)
+	{
 	if (has_change_sale_ability && (owner_mask_on & PERM_TRANSFER))
 	{
 		getChildView("checkbox for sale")->setEnabled(can_transfer || (!can_transfer && num_for_sale));
@@ -710,6 +727,7 @@ void LLPanelPermissions::refresh()
 		getChildView("checkbox next owner can modify")->setEnabled(FALSE);
 		getChildView("checkbox next owner can copy")->setEnabled(FALSE);
 		getChildView("checkbox next owner can transfer")->setEnabled(FALSE);
+	}
 	}
 
 	if (valid_group_perms)

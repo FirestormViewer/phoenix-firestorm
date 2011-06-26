@@ -430,6 +430,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+  <key>FSSecondsinChatTimestamps</key>
+    <map>
+      <key>Comment</key>
+      <string>Show seconds in chat timestamps, in the chat window and logs</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
   <key>AutoCloseOOC</key>
     <map>
       <key>Comment</key>
@@ -3698,6 +3709,17 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>EmotesUseItalic</key>
+    <map>
+      <key>Comment</key>
+      <string>Chat emotes are emphasized by using italic font style.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
     <key>EnableGrab</key>
     <map>
