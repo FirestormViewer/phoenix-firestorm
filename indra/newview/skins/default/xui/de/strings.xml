@@ -309,6 +309,9 @@
 	<string name="LoadingData">
 		Wird geladen...
 	</string>
+	<string name="ProtectedFolder">
+		geschützt
+	</string>
 	<string name="AvatarNameNobody">
 		(niemand)
 	</string>
