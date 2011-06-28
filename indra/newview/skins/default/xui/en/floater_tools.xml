@@ -2361,7 +2361,7 @@ even though the user gets a free copy.
              left="10"
              name="select_single"
              top="5"
-             width="252">
+             width="270">
                 Select only one primitive to edit features.
             </text>
             <text
