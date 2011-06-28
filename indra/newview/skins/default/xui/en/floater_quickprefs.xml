@@ -160,7 +160,7 @@
             initial_value="2"
             layout="topleft"
             left_delta="82"
-            max_val="8"
+            max_val="4"
             min_val="0"
             name="RenderVolumeLODFactor"
             top_delta="-2"
