@@ -124,7 +124,7 @@
          filename="panel_preferences_privacy.xml"
          label="Privacy"
          layout="topleft"
-         help_topic="preferences_im_tab"
+         help_topic="preferences_privacy_tab"
          name="im" />
         <panel
 		 class="panel_preference"
@@ -138,7 +138,7 @@
          filename="panel_preferences_UI.xml"
          label="UI Extras"
          layout="topleft"
-         help_topic="preferences_advanced1_tab"
+         help_topic="preferences_ui_extras_tab"
          name="starlightUI1" />
 		<panel
          class="panel_preference_skins"
@@ -159,7 +159,7 @@
          filename="panel_preferences_firestorm.xml"
          label="Firestorm"
          layout="topleft"
-         help_topic="preferences_advanced1.tab"
+         help_topic="preferences_firestorm_tab"
          name="firestorm" />
     </tab_container>
 
