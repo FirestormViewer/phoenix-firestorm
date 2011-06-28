@@ -765,7 +765,7 @@
      reference="AccentColor" />
     <color
      name="ObjectChatColor"
-     reference="EmphasisColor" />
+     reference="ColorPaletteEntry30" />
     <color
      name="OverdrivenColor"
      reference="Red" />
