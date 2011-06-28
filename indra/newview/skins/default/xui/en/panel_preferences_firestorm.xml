@@ -319,6 +319,14 @@
 		 height="16"
 		 name="PhoenixBlockClickSit"
 		 width="256" />
+		<check_box
+		 top_pad="8"
+		 label="Allow scripts to show map UI (llMapDestination)"
+		 control_name="ScriptsCanShowUI"
+		 follows="left|top"
+		 height="16"
+		 name="ScriptsCanShowUI"
+		 width="256" />
 	</panel>
 
 
