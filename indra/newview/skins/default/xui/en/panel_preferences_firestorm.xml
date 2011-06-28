@@ -299,6 +299,97 @@
 
 	</panel>
 
+
+	<!--Protection-->
+	<panel
+	 border="true"
+	 top_pad="5"
+	 bottom="-1"
+	 left="1"
+	 right="-1"
+	 follows="all"
+	 label="Protection"
+	 name="ProtectionTab">
+		<check_box
+		 top_pad="12"
+		 left="10"
+		 label="Block left-click sitting on objects"
+		 control_name="PhoenixBlockClickSit"
+		 follows="left|top"
+		 height="16"
+		 name="PhoenixBlockClickSit"
+		 width="256" />
+		<check_box
+		 top_pad="8"
+		 label="Allow scripts to show map UI (llMapDestination)"
+		 control_name="ScriptsCanShowUI"
+		 follows="left|top"
+		 height="16"
+		 name="ScriptsCanShowUI"
+		 width="256" />
+
+		<text
+		 top_pad="10"
+		 follows="left|top"
+		 height="12"
+		 name="TextText"
+		 width="200">
+		 Revoke Permissions:
+		 </text>
+		<radio_group
+		 top_pad="5"
+		 left="20"
+		 height="62"
+		 layout="topleft"
+		 control_name="PhoenixRevokePerms"
+		 name="PhoenixRevokePerms"
+		 tool_tip="PhoenixRevokePerms"
+		 width="331">
+			<radio_item
+			 height="16"
+			 label="Never (Original behaviour)"
+			 layout="topleft"
+			 name="radio_horizontal"
+			 value="0"
+			 top_pad="0"
+			 width="150" />
+			<radio_item
+			 height="16"
+			 label="Revoke on SIT"
+			 layout="topleft"
+			 top_pad="0"
+			 name="radio_vertical"
+			 value="1"
+			 width="150" />
+			<radio_item
+			 height="16"
+			 label="Revoke on STAND"
+			 layout="topleft"
+			 top_pad="0"
+			 name="radio_vertical"
+			 value="2"
+			 width="150" />
+			<radio_item
+			 height="16"
+			 label="Revoke on SIT and STAND"
+			 layout="topleft"
+			 top_pad="0"
+			 name="radio_vertical"
+			 value="3"
+			 width="150" />
+		</radio_group>
+		<check_box
+		 top_pad="5"
+		 label="Also revoke from your own objects on sit/stand."
+		 tool_tip="Uses above settings. Useful for testing scripts."
+		 control_name="PhoenixRevokePermsOwnObjects"
+		 follows="left|top"
+		 height="16"
+		 name="PhoenixRevokePermsOwnObjects"
+		 width="256" />
+	</panel>
+
+
 	<!--View-->
 	<panel
 	 border="true"

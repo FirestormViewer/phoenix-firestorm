@@ -359,8 +359,8 @@
              parameter="friends_panel" />
             </menu_item_call>
         <menu_item_check
-         label="Contants"
-         name="Contants"
+         label="Contacts"
+         name="Contacts"
          shortcut="control|alt|shift|F">
             <menu_item_check.on_check
              function="Floater.Visible"
@@ -1314,7 +1314,7 @@
              name="Report Bug">
                 <menu_item_call.on_click
                  function="ShowHelp"
-                 parameter="report_bug" />
+                 parameter="file_a_jira" />
             </menu_item_call>
 
         <menu_item_separator/>
@@ -2413,16 +2413,6 @@
                 <menu_item_check.on_click
                  function="ToggleControl"
                  parameter="DebugShowRenderInfo" />
-            </menu_item_check>
-			<menu_item_check
-             label="Show Texture Info"
-             name="Show Texture Info">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="DebugShowTextureInfo" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="DebugShowTextureInfo" />
             </menu_item_check>
             <menu_item_check
              label="Show Matrices"

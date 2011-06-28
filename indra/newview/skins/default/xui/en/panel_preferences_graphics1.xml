@@ -472,19 +472,19 @@
 		name="MeshDetailText"
 		top_pad="6"
 		width="400">
-			Level of Detail(LOD) distance multiplier, &gt; 4.0 may cause lag:
-		</text>
+      Mesh Detail:
+    </text>
 		<slider
 		control_name="RenderVolumeLODFactor"
 		follows="left|top"
 		height="15"
 		increment="0.125"
-		initial_value="160"
-		label="  Objects &amp; Sculpts"
+		initial_value="2"
+		label="  Objects &amp; Sculpts LOD"
 		label_width="140"
 		layout="topleft"
 		left_delta="0"
-		max_val="8"
+		max_val="4"
 		name="ObjectMeshDetail"
 		show_text="true"
 		top_pad="6"
@@ -967,18 +967,36 @@
 		name="TexturesHTTP"
 		top_pad="3"
 		width="256"/>
+      
+<!-- Max Concurrent HTTP GET requests-->
+      <slider
+      control_name="ImagePipelineUseHTTPFetchMaxRequests"
+      decimal_digits="1"
+      follows="left|top"
+      height="16"
+      increment="1"
+      initial_value="8"
+      label="Max number of concurrent HTTP GET requests"
+      label_width="250"
+      layout="topleft"
+      left="20"
+      max_val="8"
+      min_val="1"
+      name="HTTPFetchMaxRequests"
+      top_pad="5"
+      width="375" />
 
 <!-- New Texture detail 5 is lowest, 0 is highest -->
      <text
       type="string"
       length="1"
-      top_pad="20"
+      top_pad="5"
       follows="top|left"
       height="18"
       width="180"
       word_wrap="true"
       layout="topleft"
-      left="10"
+      left="20"
       name="shadows_label">
         Texture Details Loaded:
       </text>
@@ -987,7 +1005,7 @@
       height="23"
       layout="topleft"
       follows="left|top"
-      left="10"
+      left="20"
       top_pad="0" 
       name="TextureDetail"
       width="150">

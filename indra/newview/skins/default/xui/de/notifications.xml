@@ -2985,6 +2985,62 @@ Animationsset "[AO_SET_NAME]" aus Liste löschen?
      yestext="Löschen"/>
   </notification>
 
+  <notification name="AOImportSetAlreadyExists">
+Ein Animationsset mit diesem Namen existiert bereits.
+  </notification>
+
+  <notification name="AOImportPermissionDenied">
+Keine Berechtigung zum Lesen der Notizkarte.
+  </notification>
+
+  <notification name="AOImportCreateSetFailed">
+Fehler beim Erstellen des Importsets.
+  </notification>
+
+  <notification name="AOImportDownloadFailed">
+Notizkarte konnte nicht geladen werden.
+  </notification>
+
+  <notification name="AOImportNoText">
+Notizkarte ist leer or nicht lesbar.
+  </notification>
+
+  <notification name="AOImportNoFolder">
+Ordner zum Laden der Animationen konnte nicht gefunden werden.
+  </notification>
+
+  <notification name="AOImportNoStatePrefix">
+Zeile [LINE] der Notizkarte besitzt keinen gültigen "["-Status-Präfix.
+  </notification>
+
+  <notification name="AOImportNoValidDelimiter">
+Zeile [LINE] der Notizkarte besitzt keinen gültigen "["-Status-Suffix.
+  </notification>
+
+  <notification name="AOImportStateNameNotFound">
+Status [NAME] existiert nicht.
+  </notification>
+
+  <notification name="AOImportAnimationNotFound">
+Animation [NAME] konnte nicht gefunden werden. Bitte sicherstellen, dass sie sich im selben Ordner wie die Notizkarte befindet.
+  </notification>
+
+  <notification name="AOImportInvalid">
+Notizkarte enthält keine verwendbaren Daten. Import wird abgebrochen.
+  </notification>
+
+  <notification name="AOImportRetryCreateSet">
+Import-Ordner für Animationsset [NAME] konnte nicht erstellt werden. Wiederhole...
+  </notification>
+
+  <notification name="AOImportAbortCreateSet">
+Import-Ordner für Animationsset [NAME] konnte nicht erstellt werden. Import wird abgebrochen.
+  </notification>
+
+  <notification name="AOImportLinkFailed">
+Erstellung der Verknüpfung zur Animation [NAME] ist fehlgeschlagen!
+  </notification>
+
 <!-- ## Zi: Animation Overrider -->
 
 <notification name="SendSysinfoToIM">
@@ -3020,4 +3076,15 @@ Möchtest du diese Informationen übermitteln?
     </form>
   </notification>
 
+  <!-- Firestorm Phantom -->
+
+  <notification name="PhantomOn">
+Phantom-Modus eingeschaltet.
+  </notification>
+
+  <notification name="PhantomOff">
+Phantom-Modus ausgeschaltet.
+  </notification>
+
+<!-- Firestorm Phantom -->
 </notifications>

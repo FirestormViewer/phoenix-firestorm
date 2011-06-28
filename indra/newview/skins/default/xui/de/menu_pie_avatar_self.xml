@@ -27,6 +27,9 @@
     <pie_slice label="Aufstehen" name="Stand Up"/>
     <pie_separator name="script_count_placeholder" />
     <pie_slice label="Gesten..." name="Gestures"/>
-    <pie_slice label="Aussehen..." name="Edit My Shape"/>
+	<pie_menu label="Aussehen &gt;" name="Appearance &gt;">
+		<pie_slice label="Form bearbeiten" name="Edit My Shape"/>
+		<pie_slice label="Outfit bearbeiten" name="Edit My Outfit"/>
+	</pie_menu>
     <pie_slice label="Debug Texturen" name="Debug..."/>
 </pie_menu>

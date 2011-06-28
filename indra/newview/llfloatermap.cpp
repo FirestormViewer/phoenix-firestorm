@@ -290,19 +290,16 @@ void LLFloaterMap::handleZoom(const LLSD& userdata)
 	
 	F32 scale = 0.0f;
 
-	// Ansariel: Fixing borked minimap zoom level persistance
-	//if (level == std::string("default"))
-	//{
-	//	LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
-	//	if(pvar)
-	//	{
-	//		pvar->resetToDefault();
-	//		scale = gSavedSettings.getF32("MiniMapScale");
-	//	}
-	//}
-	//else if (level == std::string("close"))
-	if (level == std::string("close"))
-	// END Ansariel: Fixing borked minimap zoom level persistance
+	if (level == std::string("default"))
+	{
+		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
+		if(pvar)
+		{
+			pvar->resetToDefault();
+			scale = gSavedSettings.getF32("MiniMapScale");
+		}
+	}
+	else if (level == std::string("close"))
 		scale = LLNetMap::MAP_SCALE_MAX;
 	else if (level == std::string("medium"))
 		scale = LLNetMap::MAP_SCALE_MID;

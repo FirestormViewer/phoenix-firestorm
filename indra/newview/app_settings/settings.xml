@@ -484,7 +484,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>50.0</real>
+      <real>75.0</real>
     </map>
   <key>RenderSculptSAThreshold</key>
     <map>
@@ -495,7 +495,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>115.0</real>
+      <real>150.0</real>
     </map>
     <key>RenderVolumeSAFrameMax</key>
     <map>
@@ -506,7 +506,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>500.0</real>
+      <real>1000.0</real>
     </map>
     <key>EnableGroupChatPopups</key>
     <map>
@@ -10598,7 +10598,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ShowNetStats</key>
     <map>
       <key>Comment</key>
-      <string>Show the Search Bar in the Status Overlay</string>
+      <string>Show the Status Indicators for the Viewer and Network Usage in the Status Overlay.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -14301,6 +14301,39 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<string>Boolean</string>
 			<key>Value</key>
 			<integer>1</integer>
+		</map>
+		<key>PhoenixBlockClickSit</key>
+		<map>
+			<key>Comment</key>
+			<string>Prevents sitting on left-click.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
+		</map>
+		<key>PhoenixRevokePerms</key>
+		<map>
+			<key>Comment</key>
+			<string>Revokes objects anim perms on your avatar on: 0) never, 1) on sit, 2) on stand, 3) on sit and stand.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>U32</string>
+			<key>Value</key>
+			<integer>0</integer>
+		</map>
+		<key>PhoenixRevokePermsOwnObjects</key>
+		<map>
+			<key>Comment</key>
+			<string>Extends PhoenixRevokePerms to also revoke perms on sit/stand on your own objects.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
 		</map>
 		
 </map>

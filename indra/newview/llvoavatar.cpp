@@ -6004,6 +6004,13 @@ void LLVOAvatar::sitOnObject(LLViewerObject *sit_object)
 		{
 			gAgentCamera.changeCameraToMouselook();
 		}
+
+		//KC: revoke perms on sit
+		U32 revoke_on = gSavedSettings.getU32("PhoenixRevokePerms");
+		if ((revoke_on == 1 || revoke_on == 3) && (!sit_object->permYouOwner() || gSavedSettings.getU32("PhoenixRevokePermsOwnObjects")))
+		{
+			revokePermissionsOnObject(sit_object);
+		}
 	}
 
 	if (mDrawable.isNull())
@@ -6028,7 +6035,6 @@ void LLVOAvatar::sitOnObject(LLViewerObject *sit_object)
 	mRoot.updateWorldMatrixChildren();
 
 	stopMotion(ANIM_AGENT_BODY_NOISE);
-
 }
 
 //-----------------------------------------------------------------------------
@@ -6094,6 +6100,31 @@ void LLVOAvatar::getOffObject()
 		gAgentCamera.setThirdPersonHeadOffset(LLVector3(0.f, 0.f, 1.f));
 
 		gAgentCamera.setSitCamera(LLUUID::null);
+
+		//KC: revoke perms on sit
+		U32 revoke_on = gSavedSettings.getU32("PhoenixRevokePerms");
+		if ((revoke_on == 2 || revoke_on == 3) && (!sit_object->permYouOwner() || gSavedSettings.getU32("PhoenixRevokePermsOwnObjects")))
+		{
+			revokePermissionsOnObject(sit_object);
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
+// revokePermissionsOnObject()
+//-----------------------------------------------------------------------------
+void LLVOAvatar::revokePermissionsOnObject(LLViewerObject *sit_object)
+{
+	if (sit_object)
+	{
+		gMessageSystem->newMessageFast(_PREHASH_RevokePermissions);
+		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
+		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		gMessageSystem->nextBlockFast(_PREHASH_Data);
+		gMessageSystem->addUUIDFast(_PREHASH_ObjectID, sit_object->getID());
+		gMessageSystem->addU32Fast(_PREHASH_ObjectPermissions, 0xFFFFFFFF);
+		gAgent.sendReliableMessage();
 	}
 }
 
@@ -8459,4 +8490,3 @@ BOOL LLVOAvatar::isTextureVisible(LLVOAvatarDefines::ETextureIndex type, LLWeara
 	// non-self avatars don't have wearables
 	return FALSE;
 }
-

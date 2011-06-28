@@ -5,18 +5,8 @@
     <pie_slice label="Berühren" name="Object Touch"/>
     <pie_slice label="Hier sitzen" name="Object Sit"/>
     <pie_slice label="Aufstehen" name="Object Stand Up"/>
+    <pie_slice label="Kaufen" name="Buy..."/>
     <pie_slice label="Nehmen" name="Pie Object Take"/>
-<!-- ## Zi: disabled here because V1 replaces Take with buy on the fly, V2 does not (yet)
-    <pie_slice
-        enabled="false"
-        label="Buy"
-        name="Buy...">
-        <pie_slice.on_click
-            function="Object.Buy" />
-        <pie_slice.on_enable
-            function="Object.EnableBuy" />
-    </pie_slice>
--->
     <pie_slice label="Zahlen" name="Pay..."/>
     <pie_menu label="Mehr >" name="Object Pie More 1">
 		<pie_slice label="Löschen" name="Delete"/>

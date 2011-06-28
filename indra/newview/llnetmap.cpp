@@ -125,9 +125,7 @@ BOOL LLNetMap::postBuild()
 {
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 	
-	// Ansariel: Fixing borked minimap zoom level persistance
-	//registrar.add("Minimap.Zoom", boost::bind(&LLNetMap::handleZoom, this, _2));
-	// END Ansariel: Fixing borked minimap zoom level persistance
+	registrar.add("Minimap.Zoom", boost::bind(&LLNetMap::handleZoom, this, _2));
 	registrar.add("Minimap.Tracker", boost::bind(&LLNetMap::handleStopTracking, this, _2));
 
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
@@ -1078,33 +1076,31 @@ BOOL LLNetMap::handleHover( S32 x, S32 y, MASK mask )
 	return TRUE;
 }
 
-// Ansariel: Fixing borked minimap zoom level persistance
-//void LLNetMap::handleZoom(const LLSD& userdata)
-//{
-//	std::string level = userdata.asString();
-//	
-//	F32 scale = 0.0f;
-//	if (level == std::string("default"))
-//	{
-//		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
-//		if(pvar)
-//		{
-//			pvar->resetToDefault();
-//			scale = gSavedSettings.getF32("MiniMapScale");
-//		}
-//	}
-//	else if (level == std::string("close"))
-//		scale = LLNetMap::MAP_SCALE_MAX;
-//	else if (level == std::string("medium"))
-//		scale = LLNetMap::MAP_SCALE_MID;
-//	else if (level == std::string("far"))
-//		scale = LLNetMap::MAP_SCALE_MIN;
-//	if (scale != 0.0f)
-//	{
-//		setScale(scale);
-//	}
-//}
-// END Ansariel: Fixing borked minimap zoom level persistance
+void LLNetMap::handleZoom(const LLSD& userdata)
+{
+	std::string level = userdata.asString();
+	
+	F32 scale = 0.0f;
+	if (level == std::string("default"))
+	{
+		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
+		if(pvar)
+		{
+			pvar->resetToDefault();
+			scale = gSavedSettings.getF32("MiniMapScale");
+		}
+	}
+	else if (level == std::string("close"))
+		scale = LLNetMap::MAP_SCALE_MAX;
+	else if (level == std::string("medium"))
+		scale = LLNetMap::MAP_SCALE_MID;
+	else if (level == std::string("far"))
+		scale = LLNetMap::MAP_SCALE_MIN;
+	if (scale != 0.0f)
+	{
+		setScale(scale);
+	}
+}
 
 void LLNetMap::handleStopTracking (const LLSD& userdata)
 {
