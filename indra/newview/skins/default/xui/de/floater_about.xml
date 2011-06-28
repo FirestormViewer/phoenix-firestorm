@@ -47,17 +47,18 @@ Voice-Serverversion: [VOICE_VERSION]
 Firestorm ist ein Community-Entwicklungsprojekt, um das SecondLife(tm) Viewer-2-Erlebnis zu verbessern. Wir verbinden Beiträge von verschiedenen Community-Entwicklern mit Code von Linden Lab sowie unseren eigenen Erweiterungen, um Ihnen ein qualitativ hochwertiges und funktionsreiches Viewer-Erlebnis zu bieten. Wir werden durch ein großes, freiwilliges Support-Team unterstützt. Firestorm wird Ihnen präsentiert von The Phoenix Viewer Project, Inc., einer gemeinnützigen Organisation.
 
 Das Firestorm Entwickler-Team:
-LordGreggreg Back, Kitty Barnett, Kadah Coba, Tankmaster Finesmith, Wolf Loonie, Techwolf Lupindo, Jessica Lyon, Wolfspirit Magic, Arrehn Oberlander, Liny Odell, Mobius Ryba, Tonya Souther und Tozh Taurog.
-
-Starlight-UI von Hitomi Tiponi und:
-Alexandrea Fride, psi Merlin, Hugh Helendale, Digital Scribe, Naomah Beaumont, Nadin, KirstenLee Cinquetti
+Kitty Barnett, Kadah Coba, Tankmaster Finesmith, Ansariel Hiller, WoLf Loonie, Techwolf Lupindo, Jessica Lyon, Wolfspirit Magic, Arrehn Oberlander, Liny Odell, Zi Ree, Mobius Ryba, Tonya Souther, Tozh Taurog.
 
 Zusätzlicher Programmcode von:
-Satomi Ahn, Lance Corrimal, Nicki Dasmijn, Ansariel Hiller, Zwagoth Klaar, Shyotl Kuhr, Thickbrick Sleaford, Hitomi Tiponi, Armin WeatherHax, Chalice Yao, Nogardrevlis Lectar und vielen anderen.
+Satomi Ahn, Katharine Berry, Alexie Birman, Lance Corrimal, Nicki Dasmijn, Zwagoth Klaar, Shyotl Kuhr, Sione Lomu, Peyton Menges, Andromeda Rage, Mysty Saunders, Thickbrick Sleaford, Hitomi Tiponi, Shin Wasp, Armin WeatherHax, Chalice Yao, Nogardrevlis Lectar, and others.
+
+Firestorm enthält Starlight 2.6.0440, modifiziert für Firestorm, ein alternatives Set an Oberflächen für Viewer 2 and assoziierte TPVs. Es wird von Einwohnern für Einwohner gemacht mit der Intention, eine alternative, hellere und hoffentlich einfacher zu bedienende Bedienoberfläche bereitzustellen. Für weitere Details, siehe https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight.
+
+Verantwortlich für das Starlight-Design ist Hitomi Tiponi; es enthält zusätzlich das Werk von diversen Einwohnern von Second Life, insbesondere: KirstenLee Cinquetti, Alexandrea Fride, psi Merlin, Hugh Helendale, samm florian, Digital Scribe, Naomah Beaumont, Nadin.
 
 Weitere Künstler:
 Neue Icons by Joseph Wain / glyphish.com
-Sammie Bennoir, Mobius Ryba 
+Sammie Bennoir, Mobius Ryba, DarkAgent Baphomet
 Viewer 1-Icons, Mauszeiger und andere Grafiken von Linden Lab
 
 Ohne Linden Labs Entscheidung, den Second Life-Viewer quelloffen zu machen, wäre Firestorm nicht möglich gewesen.
