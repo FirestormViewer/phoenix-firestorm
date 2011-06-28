@@ -708,6 +708,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>RLVaWearReplaceUnlocked</key>
+    <map>
+      <key>Comment</key>
+      <string>Don't block wear replace when at least one attachment on the target attachment point is non-detachable</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>WarnFirstRLVGiveToRLV</key>
     <map>
       <key>Comment</key>
@@ -3588,6 +3599,17 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>DragAndDropCommitDelay</key>
+    <map>
+      <key>Comment</key>
+      <string>Seconds before committing when hovering over a button while performing a drag and drop operation</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.5</real>
     </map>
     <key>DragAndDropToolTipDelay</key>
     <map>

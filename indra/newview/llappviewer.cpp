@@ -462,6 +462,9 @@ static void settings_to_globals()
 	LLBUTTON_H_PAD		= gSavedSettings.getS32("ButtonHPad");
 	BTN_HEIGHT_SMALL	= gSavedSettings.getS32("ButtonHeightSmall");
 	BTN_HEIGHT			= gSavedSettings.getS32("ButtonHeight");
+// [SL:KB] - Patch: UI-DndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	DELAY_DRAG_HOVER_COMMIT = gSavedSettings.getF32("DragAndDropCommitDelay");
+// [/SL:KB]
 
 	MENU_BAR_HEIGHT		= gSavedSettings.getS32("MenuBarHeight");
 	MENU_BAR_WIDTH		= gSavedSettings.getS32("MenuBarWidth");

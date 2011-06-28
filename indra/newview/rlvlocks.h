@@ -151,7 +151,8 @@ protected:
 protected:
 	// NOTE: detach does *not* respect attachment locks so use with care
 	void detach(const LLViewerObject* pAttachObj);
-	void detach(S32 idxAttachPt, const LLViewerObject* pAttachObjExcept = NULL);
+	void detach(S32 idxAttachPt) { uuid_vec_t idsAttachObjExcept; detach(idxAttachPt, idsAttachObjExcept); }
+	void detach(S32 idxAttachPt, const uuid_vec_t& idsAttachObjExcept);
 
 	void startTimer() { if (!m_pTimer) m_pTimer = new RlvAttachmentLockWatchdogTimer(this); }
 

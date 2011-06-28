@@ -212,6 +212,9 @@ LLTabContainer::Params::Params()
 	label_pad_left("label_pad_left"),
 	tab_position("tab_position"),
 	hide_tabs("hide_tabs", false),
+// [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	tab_drag_commit("tab_drag_commit", false),
+// [/SL:KB]
 	tab_padding_right("tab_padding_right"),
 	first_tab("first_tab"),
 	middle_tab("middle_tab"),
@@ -228,6 +231,10 @@ LLTabContainer::Params::Params()
 LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 :	LLPanel(p),
 	mCurrentTabIdx(-1),
+// [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	mDragAndDropHoverCommit(p.tab_drag_commit),
+	mDragAndDropHoverIdx(-1),
+// [/SL:KB]
 	mTabsHidden(p.hide_tabs),
 	mScrolled(FALSE),
 	mScrollPos(0),
@@ -834,7 +841,34 @@ BOOL LLTabContainer::handleDragAndDrop(S32 x, S32 y, MASK mask,	BOOL drop,	EDrag
 {
 	BOOL has_scroll_arrows = (getMaxScrollPos() > 0);
 
-	if( mDragAndDropDelayTimer.getStarted() && mDragAndDropDelayTimer.getElapsedTimeF32() > SCROLL_DELAY_TIME )
+// [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	S32 curHoverIdx = -1;
+	if (!getTabsHidden())
+	{
+		for(tuple_list_t::const_iterator itTab = mTabList.begin(); itTab != mTabList.end(); ++itTab)
+		{
+			const LLTabTuple* pTuple = *itTab;
+			S32 local_x = x - pTuple->mButton->getRect().mLeft;
+			S32 local_y = y - pTuple->mButton->getRect().mBottom;
+			if ( (pTuple->mButton->getEnabled()) && (pTuple->mButton->pointInView(local_x, local_y)) )
+				curHoverIdx = itTab - mTabList.begin();
+		}
+	}
+
+	if (-1 == curHoverIdx)
+		mDragAndDropDelayTimer.stop();		// Mouse not hovering over a tab button
+	else if ( (mCurrentTabIdx != curHoverIdx) && (!mDragAndDropDelayTimer.getStarted()) )
+		mDragAndDropDelayTimer.start();		// Mouse hovering over a tab button
+	else if ( (mDragAndDropHoverIdx != curHoverIdx) && (mDragAndDropDelayTimer.getStarted()) )
+		mDragAndDropDelayTimer.reset();		// Mouse hovering over a different tab button
+
+	mDragAndDropHoverIdx = curHoverIdx;
+// [/SL:KB]
+
+//	if( mDragAndDropDelayTimer.getStarted() && mDragAndDropDelayTimer.getElapsedTimeF32() > SCROLL_DELAY_TIME )
+// [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	if ( (mDragAndDropHoverCommit) && (mDragAndDropDelayTimer.getStarted()) && (mDragAndDropDelayTimer.getElapsedTimeF32() > DELAY_DRAG_HOVER_COMMIT) )
+// [/SL:KB]
 	{
 		if (has_scroll_arrows)
 		{
@@ -864,18 +898,29 @@ BOOL LLTabContainer::handleDragAndDrop(S32 x, S32 y, MASK mask,	BOOL drop,	EDrag
 			}
 		}
 
-		for(tuple_list_t::iterator iter	= mTabList.begin();	iter !=	 mTabList.end(); ++iter)
+// [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+		if (-1 != mDragAndDropHoverIdx)
 		{
-			LLTabTuple*	tuple =	*iter;
-			tuple->mButton->setVisible(	TRUE );
-			S32	local_x	= x	- tuple->mButton->getRect().mLeft;
-			S32	local_y	= y	- tuple->mButton->getRect().mBottom;
-			if (tuple->mButton->pointInView(local_x, local_y) &&  tuple->mButton->getEnabled() && !tuple->mTabPanel->getVisible())
+			const LLTabTuple* pTuple = mTabList[mDragAndDropHoverIdx];
+			if (!pTuple->mTabPanel->getVisible())
 			{
-				tuple->mButton->onCommit();
+				pTuple->mButton->onCommit();
 				mDragAndDropDelayTimer.stop();
 			}
 		}
+// [/SL:KB]
+//		for(tuple_list_t::iterator iter	= mTabList.begin();	iter !=	 mTabList.end(); ++iter)
+//		{
+//			LLTabTuple*	tuple =	*iter;
+//			tuple->mButton->setVisible(	TRUE );
+//			S32	local_x	= x	- tuple->mButton->getRect().mLeft;
+//			S32	local_y	= y	- tuple->mButton->getRect().mBottom;
+//			if (tuple->mButton->pointInView(local_x, local_y) &&  tuple->mButton->getEnabled() && !tuple->mTabPanel->getVisible())
+//			{
+//				tuple->mButton->onCommit();
+//				mDragAndDropDelayTimer.stop();
+//			}
+//		}
 	}
 
 	return LLView::handleDragAndDrop(x,	y, mask, drop, type, cargo_data,  accept, tooltip);
