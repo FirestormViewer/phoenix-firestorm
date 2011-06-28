@@ -249,7 +249,7 @@ void LLPanelPermissions::disableAll()
 	getChild<LLUICtrl>("Edit Cost")->setValue(LLStringUtil::null);
 	getChildView("Edit Cost")->setEnabled(FALSE);
 		
-	//mark for sale button
+	//KC: mark for sale button
 	LLButton* btnMarkForSale = getChild<LLButton>("btnMarkForSale");
 	btnMarkForSale->setEnabled(FALSE);
 	btnMarkForSale->setFlashing(FALSE);
@@ -494,7 +494,8 @@ void LLPanelPermissions::refresh()
 		getChildView("Object Description")->setEnabled(FALSE);
 	}
 
-	//KC: Check if the selection has chnaged and that there are pending sale changes
+	//KC: Check if the object selection has changed and that there is pending sale info changes
+	//Prevents clearing the pending changes on idle refresh
 	BOOL selection_changed = FALSE;
 	if (mLastSelectedObejct != objectp)
 	{
@@ -532,39 +533,39 @@ void LLPanelPermissions::refresh()
 		//KC: dont update and clear sale info if changes are pending
 		if (update_sale_info)
 		{
-		// If there are multiple items for sale then set text to PRICE PER UNIT.
-		if (num_for_sale > 1)
-		{
-			getChild<LLUICtrl>("Cost")->setValue(getString("Cost Per Unit"));
-		}
-		else
-		{
-			getChild<LLUICtrl>("Cost")->setValue(getString("Cost Default"));
-		}
-		
-		LLSpinCtrl *edit_price = getChild<LLSpinCtrl>("Edit Cost");
-		if (!edit_price->hasFocus())
-		{
-			// If the sale price is mixed then set the cost to MIXED, otherwise
-			// set to the actual cost.
-			if ((num_for_sale > 0) && is_for_sale_mixed)
+			// If there are multiple items for sale then set text to PRICE PER UNIT.
+			if (num_for_sale > 1)
 			{
-				edit_price->setTentative(TRUE);
+				getChild<LLUICtrl>("Cost")->setValue(getString("Cost Per Unit"));
 			}
-			else if ((num_for_sale > 0) && is_sale_price_mixed)
+			else
 			{
-				edit_price->setTentative(TRUE);
+				getChild<LLUICtrl>("Cost")->setValue(getString("Cost Default"));
 			}
-			else 
+			
+			LLSpinCtrl *edit_price = getChild<LLSpinCtrl>("Edit Cost");
+			if (!edit_price->hasFocus())
 			{
-				edit_price->setValue(individual_sale_price);
+				// If the sale price is mixed then set the cost to MIXED, otherwise
+				// set to the actual cost.
+				if ((num_for_sale > 0) && is_for_sale_mixed)
+				{
+					edit_price->setTentative(TRUE);
+				}
+				else if ((num_for_sale > 0) && is_sale_price_mixed)
+				{
+					edit_price->setTentative(TRUE);
+				}
+				else 
+				{
+					edit_price->setValue(individual_sale_price);
+				}
 			}
-		}
-		// The edit fields are only enabled if you can sell this object
-		// and the sale price is not mixed.
-		BOOL enable_edit = (num_for_sale && can_transfer) ? !is_for_sale_mixed : FALSE;
-		getChildView("Cost")->setEnabled(enable_edit);
-		getChildView("Edit Cost")->setEnabled(enable_edit);
+			// The edit fields are only enabled if you can sell this object
+			// and the sale price is not mixed.
+			BOOL enable_edit = (num_for_sale && can_transfer) ? !is_for_sale_mixed : FALSE;
+			getChildView("Cost")->setEnabled(enable_edit);
+			getChildView("Edit Cost")->setEnabled(enable_edit);
 		}
 	}
 	// Someone, not you, owns these objects.
@@ -705,29 +706,29 @@ void LLPanelPermissions::refresh()
 	//KC: dont update and clear sale info if changes are pending
 	if (update_sale_info)
 	{
-	if (has_change_sale_ability && (owner_mask_on & PERM_TRANSFER))
-	{
-		getChildView("checkbox for sale")->setEnabled(can_transfer || (!can_transfer && num_for_sale));
-		// Set the checkbox to tentative if the prices of each object selected
-		// are not the same.
-		getChild<LLUICtrl>("checkbox for sale")->setTentative( 				is_for_sale_mixed);
-		getChildView("sale type")->setEnabled(num_for_sale && can_transfer && !is_sale_price_mixed);
-
-		getChildView("Next owner can:")->setEnabled(TRUE);
-		getChildView("checkbox next owner can modify")->setEnabled(base_mask_on & PERM_MODIFY);
-		getChildView("checkbox next owner can copy")->setEnabled(base_mask_on & PERM_COPY);
-		getChildView("checkbox next owner can transfer")->setEnabled(next_owner_mask_on & PERM_COPY);
-	}
-	else 
-	{
-		getChildView("checkbox for sale")->setEnabled(FALSE);
-		getChildView("sale type")->setEnabled(FALSE);
-
-		getChildView("Next owner can:")->setEnabled(FALSE);
-		getChildView("checkbox next owner can modify")->setEnabled(FALSE);
-		getChildView("checkbox next owner can copy")->setEnabled(FALSE);
-		getChildView("checkbox next owner can transfer")->setEnabled(FALSE);
-	}
+		if (has_change_sale_ability && (owner_mask_on & PERM_TRANSFER))
+		{
+			getChildView("checkbox for sale")->setEnabled(can_transfer || (!can_transfer && num_for_sale));
+			// Set the checkbox to tentative if the prices of each object selected
+			// are not the same.
+			getChild<LLUICtrl>("checkbox for sale")->setTentative( 				is_for_sale_mixed);
+			getChildView("sale type")->setEnabled(num_for_sale && can_transfer && !is_sale_price_mixed);
+	
+			getChildView("Next owner can:")->setEnabled(TRUE);
+			getChildView("checkbox next owner can modify")->setEnabled(base_mask_on & PERM_MODIFY);
+			getChildView("checkbox next owner can copy")->setEnabled(base_mask_on & PERM_COPY);
+			getChildView("checkbox next owner can transfer")->setEnabled(next_owner_mask_on & PERM_COPY);
+		}
+		else 
+		{
+			getChildView("checkbox for sale")->setEnabled(FALSE);
+			getChildView("sale type")->setEnabled(FALSE);
+	
+			getChildView("Next owner can:")->setEnabled(FALSE);
+			getChildView("checkbox next owner can modify")->setEnabled(FALSE);
+			getChildView("checkbox next owner can copy")->setEnabled(FALSE);
+			getChildView("checkbox next owner can transfer")->setEnabled(FALSE);
+		}
 	}
 
 	if (valid_group_perms)
@@ -897,7 +898,7 @@ void LLPanelPermissions::refresh()
 	getChildView("label click action")->setEnabled(is_perm_modify && all_volume);
 	getChildView("clickaction")->setEnabled(is_perm_modify && all_volume);
 
-	//mark for sale button
+	//KC: mark for sale button
 	LLButton* btnMarkForSale = getChild<LLButton>("btnMarkForSale");
 	btnMarkForSale->setEnabled(FALSE);
 	btnMarkForSale->setFlashing(FALSE);
@@ -1064,6 +1065,8 @@ void LLPanelPermissions::onCommitDesc(LLUICtrl*, void* data)
 void LLPanelPermissions::onCommitSaleInfo(LLUICtrl*, void* data)
 {
 	LLPanelPermissions* self = (LLPanelPermissions*)data;
+	//KC: don't commit sale info on change (VWR-21522)
+	//but allow it to be cleared by unchecking for sale
 	LLCheckBoxCtrl *checkPurchase = self->getChild<LLCheckBoxCtrl>("checkbox for sale");
 	if(!gSavedSettings.getBOOL("PhoenixCommitForSaleOnChange") && checkPurchase && checkPurchase->get())
 	{
@@ -1085,6 +1088,7 @@ void LLPanelPermissions::onCommitSaleInfo(LLUICtrl*, void* data)
 void LLPanelPermissions::onCommitSaleType(LLUICtrl*, void* data)
 {
 	LLPanelPermissions* self = (LLPanelPermissions*)data;
+	//KC: don't commit sale info on change (VWR-21522)
 	if (gSavedSettings.getBOOL("PhoenixCommitForSaleOnChange"))
 	{
 		self->setAllSaleInfo();
