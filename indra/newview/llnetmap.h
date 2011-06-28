@@ -133,9 +133,7 @@ public:
 	void			setSelected(uuid_vec_t uuids) { gmSelected=uuids; };
 
 private:
-	// Ansariel: Fixing borked minimap zoom level persistance
-	// void handleZoom(const LLSD& userdata);
-	// END Ansariel: Fixing borked minimap zoom level persistance
+	void handleZoom(const LLSD& userdata);
 	void handleStopTracking (const LLSD& userdata);
 
 	LLMenuGL*		mPopupMenu;
