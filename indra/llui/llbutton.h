@@ -45,6 +45,9 @@
 extern S32	LLBUTTON_H_PAD;
 extern S32	BTN_HEIGHT_SMALL;
 extern S32	BTN_HEIGHT;
+// [SL:KB] - Patch: UI-DndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+extern F32	DELAY_DRAG_HOVER_COMMIT;
+// [/SL:KB]
 
 //
 // Helpful functions

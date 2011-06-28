@@ -67,6 +67,7 @@
      layout="topleft"
      left="4"
      name="inventory filter tabs"
+     tab_drag_commit="true"
      tab_group="1"
      tab_position="top"
      top_pad="4"

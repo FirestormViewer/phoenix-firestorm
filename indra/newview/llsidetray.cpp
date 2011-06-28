@@ -512,18 +512,52 @@ public:
 		return FALSE;
 	}
 
+// [SL:KB] - Patch: UI-SideTrayDndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	/*virtual*/ BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDropType cargo_type, void* cargo_data,
+	                                   EAcceptance* accept, std::string& tooltip_msg)
+	{
+		if ( (getEnabled()) && (!mDragCommitDelayTimer.getStarted()) )
+		{
+			const LLSideTray* pSideTray = LLSideTray::getInstance();
+			if ( (pSideTray->getCollapsed()) || ((pSideTray->getActiveTab()) && (pSideTray->getActiveTab()->getName() != getName())) )
+				mDragCommitDelayTimer.start();
+		}
+		else if ( (mDragCommitDelayTimer.getStarted()) && (mDragCommitDelayTimer.getElapsedTimeF32() > DELAY_DRAG_HOVER_COMMIT) )
+		{
+			onCommit();
+			mDragCommitDelayTimer.stop();
+			return TRUE;
+		}
+	 	return LLButton::handleDragAndDrop(x, y, mask, drop, cargo_type, cargo_data,  accept, tooltip_msg);
+	}
+
+	/*virtual*/ void onMouseLeave(S32 x, S32 y, MASK mask)
+	{
+		mDragCommitDelayTimer.stop();
+		LLButton::onMouseLeave(x, y, mask);
+	}
+// [/SL:KB]
+
 protected:
 	LLSideTrayButton(const LLButton::Params& p)
 	: LLButton(p)
 	, mDragLastScreenX(0)
 	, mDragLastScreenY(0)
-	{}
+//	{}
+// [SL:KB] - Patch: UI-SideTrayDndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	{
+		mDragCommitDelayTimer.stop();
+	}
+// [/SL:KB]
 
 	friend class LLUICtrlFactory;
 
 private:
 	S32		mDragLastScreenX;
 	S32		mDragLastScreenY;
+// [SL:KB] - Patch: UI-SideTrayDndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	LLFrameTimer mDragCommitDelayTimer;
+// [/SL:KB]
 };
 
 //////////////////////////////////////////////////////////////////////////////
