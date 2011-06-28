@@ -484,7 +484,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>50.0</real>
+      <real>75.0</real>
     </map>
   <key>RenderSculptSAThreshold</key>
     <map>
@@ -495,7 +495,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>115.0</real>
+      <real>150.0</real>
     </map>
     <key>RenderVolumeSAFrameMax</key>
     <map>
@@ -506,7 +506,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>500.0</real>
+      <real>1000.0</real>
     </map>
     <key>EnableGroupChatPopups</key>
     <map>
