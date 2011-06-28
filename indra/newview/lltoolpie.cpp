@@ -217,7 +217,7 @@ BOOL LLToolPie::pickLeftMouseDownCallback()
 			break;
 		case CLICK_ACTION_SIT:
 			{
-				if (isAgentAvatarValid() && !gAgentAvatarp->isSitting()) // agent not already sitting
+				if (isAgentAvatarValid() && !gAgentAvatarp->isSitting() && !gSavedSettings.getBOOL("PhoenixBlockClickSit")) // agent not already sitting
 				{
 					handle_object_sit_or_stand();
 					// put focus in world when sitting on an object

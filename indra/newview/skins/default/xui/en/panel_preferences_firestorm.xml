@@ -299,6 +299,29 @@
 
 	</panel>
 
+
+	<!--Protection-->
+	<panel
+	 border="true"
+	 top_pad="5"
+	 bottom="-1"
+	 left="1"
+	 right="-1"
+	 follows="all"
+	 label="Protection"
+	 name="ProtectionTab">
+		<check_box
+		 top_pad="12"
+		 left="10"
+		 label="Block left-click sitting on objects"
+		 control_name="PhoenixBlockClickSit"
+		 follows="left|top"
+		 height="16"
+		 name="PhoenixBlockClickSit"
+		 width="256" />
+	</panel>
+
+
 	<!--View-->
 	<panel
 	 border="true"
