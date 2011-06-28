@@ -13,17 +13,22 @@
 	<check_box label="IMs per Email zuschicken, wenn ich offline bin" name="send_im_to_email"/>
 	<check_box label="Kompakten IM- und Text-Chatverlauf aktivieren" name="plain_text_chat_history"/>
 	<check_box label="Blasen-Chat" name="bubble_text_chat"/>
-	<text name="show_ims_in_label">
+	<text name="show_ims_in_label"
+		  width="90">
 		IMs anzeigen in:
 	</text>
-	<text name="requires_restart_label">
+	<text name="req_restart"
+		  left_pad="55"
+		  width="120">
 		(Neustart erforderlich)
 	</text>
-	<radio_group name="chat_window" tool_tip="Zeigen Sie Ihre Sofortnachrichten (Instant Messages) in einem anderen Fenster oder in einem einzigen Fenster mit vielen Registerkarten an (Neustart erforderlich).">
+	<radio_group name="chat_window" tool_tip="Zeigen Sie Ihre Sofortnachrichten (Instant Messages) in einem anderen Fenster oder in einem einzigen Fenster mit vielen Registerkarten an (Neustart erforderlich)."
+				 left_pad="2">
 		<radio_item label="Getrennte Fenster" name="radio" value="0"/>
 		<radio_item label="Registerkarten" name="radio2" value="1"/>
 	</radio_group>
-	<text name="disable_toast_label">
+	<text name="disable_toast_label"
+		  width="220">
 		Popups für eingehende Chats aktivieren:
 	</text>
 	<check_box label="Gruppen-Chats" name="EnableGroupChatPopups" tool_tip="Markieren, um Popups zu sehen, wenn Gruppen-Chat-Message eintrifft"/>
