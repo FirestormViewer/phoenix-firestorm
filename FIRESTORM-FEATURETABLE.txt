@@ -101,4 +101,24 @@ RadarEstateControls	LGPL
 DynamicMotD&Support	LGPL
 LSLBridge		LGPL
 Br_AccurateTeleports	LGPL
-
+RestoreToLastPosition	LGPL
+V1StyleGroupNotices	LGPL
+QuickPreferences	LGPL
+Build_ObjectHighlight	LGPL
+Build_PivotPoint	LGPL
+Build_DefaultSize	LGPL
+Build_ShowLinkNumber	LGPL
+Build_CopyPasteParams	LGPL
+WindlightScrollButtons	LGPL
+Build_Calculations	LGPL
+Build_IncrementModKeys	LGPL
+Build_HighPrecision	LGPL
+Build_ExtraShapes	LGPL
+SafeSalePricing		LGPL
+MoreLookatOptions	LGPL
+ZoffsetControl		LGPL
+Build_LastOwner		LGPL
+ChatSecondsDisplay	LGPL
+Build_ShowFaceNumbers	LGPL
+BlockClickSit		LGPL
+ExtWindlightPresets	LGPL
