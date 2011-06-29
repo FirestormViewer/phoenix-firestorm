@@ -67,6 +67,7 @@
 //-TT Client LSL Bridge
 #include "fslslbridge.h"
 //-TT
+#include "lggbeammaps.h"
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -1015,10 +1016,13 @@ void LLVOAvatarSelf::updateRegion(LLViewerRegion *regionp)
 //virtual
 void LLVOAvatarSelf::idleUpdateTractorBeam()
 {
+	LLColor4U rgb = gLggBeamMaps.getCurrentColor(LLColor4U(gAgent.getEffectColor()));
+
 	// This is only done for yourself (maybe it should be in the agent?)
 	if (!needsRenderBeam() || !mIsBuilt)
 	{
 		mBeam = NULL;
+		gLggBeamMaps.stopBeamChat();
 	}
 	else if (!mBeam || mBeam->isDead())
 	{
@@ -1037,6 +1041,7 @@ void LLVOAvatarSelf::idleUpdateTractorBeam()
 		{
 			// get point from pointat effect
 			mBeam->setPositionGlobal(gAgentCamera.mPointAt->getPointAtPosGlobal());
+			gLggBeamMaps.updateBeamChat(gAgentCamera.mPointAt->getPointAtPosGlobal());
 			mBeam->triggerLocal();
 		}
 		else if (selection->getFirstRootObject() && 
@@ -1067,11 +1072,12 @@ void LLVOAvatarSelf::idleUpdateTractorBeam()
 			}
 
 		}
-		if (mBeamTimer.getElapsedTimeF32() > 0.25f)
+		if (mBeamTimer.getElapsedTimeF32() > gLggBeamMaps.setUpAndGetDuration())
 		{
 			mBeam->setColor(LLColor4U(gAgent.getEffectColor()));
 			mBeam->setNeedsSendToSim(TRUE);
 			mBeamTimer.reset();
+			gLggBeamMaps.fireCurrentBeams(mBeam,rgb );
 		}
 	}
 }

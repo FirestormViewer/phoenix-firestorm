@@ -101,6 +101,7 @@ public:
 		FFSAVE_J2C = 12,
 		FFSAVE_PNG = 13,
 		FFSAVE_JPEG = 14,
+		FFSAVE_BEAM = 15,
 	};
 
 	// open the dialog. This is a modal operation

@@ -13,6 +13,12 @@ public:
 	/*virtual*/ void apply();
 	/*virtual*/ void cancel();
 
+	void refreshBeamLists();
+	void onBeamColor_new();
+	void onBeam_new();
+	void onBeamColorDelete();
+	void onBeamDelete();
+
 protected:
 	LLLineEditor* m_calcLineEditor;
 	LLLineEditor* m_acLineEditor;

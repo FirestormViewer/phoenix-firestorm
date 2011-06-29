@@ -14347,6 +14347,61 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Value</key>
 			<integer>0</integer>
 		</map>
+		<key>PhoenixBeamShape</key>
+		<map>
+			<key>Comment</key>
+			<string>Beam file for the shape of your beam</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>Phoenix</string>
+		</map>
+		<key>PhoenixBeamColorFile</key>
+		<map>
+			<key>Comment</key>
+			<string>Beam file for the shape of your beam</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>===OFF===</string>
+		</map>
+		<key>PhoenixMaxBeamsPerSecond</key>
+		<map>
+			<key>Comment</key>
+			<string>How many selection beam updates to send in a second</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>F32</string>
+			<key>Value</key>
+			<real>40</real>
+		</map>
+		<key>PhoenixBeamShapeScale</key>
+		<map>
+			<key>Comment</key>
+			<string>How Big You Want to let the beam be</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>F32</string>
+			<key>Value</key>
+			<real>1.3</real>
+		</map>
+		<key>PhoenixParticleChat</key>
+		<map>
+			<key>Comment</key>
+			<string>Speak Particle Info on channel 9000</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
+		</map>
 		
 </map>
 </llsd>

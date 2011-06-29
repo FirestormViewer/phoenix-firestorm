@@ -379,6 +379,13 @@ bool idle_startup()
 		gViewerWindow->showCursor(); 
 		gViewerWindow->getWindow()->setCursor(UI_CURSOR_WAIT);
 
+		std::string beamsFolder(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beams",""));
+		LLFile::mkdir(beamsFolder.c_str());
+		
+		std::string beamsColorsFolder(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors",""));
+		LLFile::mkdir(beamsColorsFolder.c_str());
+
+
 		/////////////////////////////////////////////////
 		//
 		// Initialize stuff that doesn't need data from simulators
