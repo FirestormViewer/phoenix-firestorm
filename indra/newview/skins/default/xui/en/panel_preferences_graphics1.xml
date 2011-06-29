@@ -384,7 +384,7 @@
 		min_val="32"
 		name="DrawDistance"
 		top="0"
-		width="296" />
+		width="303" />
 		<text
 		type="string"
 		length="1"
@@ -462,6 +462,29 @@
            Low
         </text>
 
+        <slider
+        control_name="WLSkyDetail"
+		enabled_control="WindLightUseAtmosShaders"
+        decimal_digits="0"
+        follows="left|top"
+        height="15"
+        increment="8"
+        initial_value="160"
+        label="Windlight Sky Detail:"
+        label_width="185"
+        layout="topleft"
+        left="200"
+        max_val="128"
+        min_val="16"
+        name="SkyMeshDetail"
+        show_text="true"
+        top_pad="5"
+        width="297">
+           <slider.commit_callback
+            function="Pref.UpdateSliderText"
+            parameter="SkyMeshDetailText" />
+        </slider>
+
 		<text
 		type="string"
 		length="1"
@@ -470,9 +493,9 @@
 		layout="topleft"
 		left="200"
 		name="MeshDetailText"
-		top_pad="6"
+		top_pad="10"
 		width="400">
-      Mesh Detail:
+      Level of Detail (LOD) Distance Factors:
     </text>
 		<slider
 		control_name="RenderVolumeLODFactor"
@@ -566,58 +589,41 @@
             function="Pref.UpdateSliderText"
             parameter="TerrainMeshDetailText" />
         </slider>
-        <slider
-        control_name="WLSkyDetail"
-		enabled_control="WindLightUseAtmosShaders"
-        decimal_digits="0"
-        follows="left|top"
-        height="15"
-        increment="8"
-        initial_value="160"
-        label="  Sky"
-        label_width="140"
-        layout="topleft"
-        left_delta="0"
-        max_val="128"
-        min_val="16"
-        name="SkyMeshDetail"
-        show_text="true"
-        top_pad="3"
-        width="295">
-           <slider.commit_callback
-            function="Pref.UpdateSliderText"
-            parameter="SkyMeshDetailText" />
-        </slider>
 	   <slider
         control_name="RenderAvatarPhysicsLODFactor"
         follows="left|top"
         height="15"
-        initial_value="100"
-	increment=".05"
-        label="Avatar Physics Detail:"
+        decimal_digits="3"
+        initial_value="1"
+	    increment=".05"
+        label="  Avatar Physics"
         label_width="140"
         layout="topleft"
-        left="200"
+        left_delta="0"
         name="AvatarPhysicsDetail"
-        show_text="false"
-        top_pad="12"
-        width="264">
+        show_text="true"
+        top_pad="3"
+        width="305">
            <slider.commit_callback
             function="Pref.UpdateSliderText"
             parameter="AvatarPhysicsDetailText" />
         </slider>
+        
         <text
         type="string"
         length="1"
         follows="left|top"
         height="12"
         layout="topleft"
-        left="469"
+        left_delta="0"
         name="AvatarPhysicsDetailText"
+        visible="false"
         top_delta="0"
-        width="128">
-           Low
+        width="0">
         </text>
+                       
+
+        
    <text
       type="string"
       length="1"
