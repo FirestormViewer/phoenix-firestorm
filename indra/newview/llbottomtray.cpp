@@ -1670,6 +1670,7 @@ void LLBottomTray::initResizeStateContainers()
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_MOVEMENT, getChild<LLPanel>("movement_panel")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_CAMERA, getChild<LLPanel>("cam_panel")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_SNAPSHOT, getChild<LLPanel>("snapshot_panel")));
+	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_PEOPLE, getChild<LLPanel>("bottom_sbpeople")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_BUILD, getChild<LLPanel>("build_btn_panel")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_SEARCH, getChild<LLPanel>("search_btn_panel")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_WORLD_MAP, getChild<LLPanel>("world_map_btn_panel")));
@@ -1677,13 +1678,11 @@ void LLBottomTray::initResizeStateContainers()
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_HOME, getChild<LLPanel>("bottom_sbhome")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_ME, getChild<LLPanel>("bottom_sbme")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_PLACES, getChild<LLPanel>("bottom_sbplaces")));
+	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_APPEARANCE, getChild<LLPanel>("bottom_sbappearance")));
+	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_INVENTORY, getChild<LLPanel>("bottom_sbinv")));
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_AO, getChild<LLPanel>("ao_btn_panel")));		// ## Zi: Animation Overrider
 	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_QUICKPREFS, getChild<LLPanel>("quickprefs_btn_panel")));	// Quick Preferences panel	-WoLf
 
-	// since we added the sidebar buttons to the bottom bar, wen also need to make them reorderable. -Zi
-	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_PEOPLE, getChild<LLPanel>("bottom_sbpeople")));
-	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_APPEARANCE, getChild<LLPanel>("bottom_sbappearance")));
-	mStateProcessedObjectMap.insert(std::make_pair(RS_BUTTON_INVENTORY, getChild<LLPanel>("bottom_sbinv")));
 
 	// init an order of processed buttons
 // [SL:KB] - Patch: UI-BottomTray | Checked: 2010-09-07 (Catznip-2.1.2b) | Added: Catznip-2.1.2b
@@ -1693,6 +1692,7 @@ void LLBottomTray::initResizeStateContainers()
 	mButtonsProcessOrder.push_back(RS_BUTTON_MOVEMENT);
 	mButtonsProcessOrder.push_back(RS_BUTTON_CAMERA);
 	mButtonsProcessOrder.push_back(RS_BUTTON_SNAPSHOT);
+	mButtonsProcessOrder.push_back(RS_BUTTON_PEOPLE);
 	mButtonsProcessOrder.push_back(RS_BUTTON_BUILD);
 	mButtonsProcessOrder.push_back(RS_BUTTON_SEARCH);
 	mButtonsProcessOrder.push_back(RS_BUTTON_WORLD_MAP);
@@ -1700,13 +1700,12 @@ void LLBottomTray::initResizeStateContainers()
 	mButtonsProcessOrder.push_back(RS_BUTTON_HOME);
 	mButtonsProcessOrder.push_back(RS_BUTTON_ME);
 	mButtonsProcessOrder.push_back(RS_BUTTON_PLACES);
-	mButtonsProcessOrder.push_back(RS_BUTTON_AO);		// ## Zi: Animation Overrider
-	mButtonsProcessOrder.push_back(RS_BUTTON_QUICKPREFS);	// Quick Preferences panel	-WoLf
-
-	// since we added the sidebar buttons to the bottom bar, wen also need to make them reorderable. -Zi
-	mButtonsProcessOrder.push_back(RS_BUTTON_PEOPLE);
 	mButtonsProcessOrder.push_back(RS_BUTTON_APPEARANCE);
 	mButtonsProcessOrder.push_back(RS_BUTTON_INVENTORY);
+	mButtonsProcessOrder.push_back(RS_BUTTON_AO);		// ## Zi: Animation Overrider
+	mButtonsProcessOrder.push_back(RS_BUTTON_QUICKPREFS);	// Quick Preferences panel	-WoLf	
+	
+
 
 //	mButtonsOrder.push_back(RS_BUTTON_SPEAK);
 //	mButtonsOrder.insert(mButtonsOrder.end(), mButtonsProcessOrder.begin(), mButtonsProcessOrder.end());
