@@ -40,8 +40,9 @@
 #include "llsidetray.h"
 #include "llstatusbar.h"	// can_afford_transaction()
 #include "llimfloater.h"
-//-TT - Patch : ShowGroupFloaters
+//-TT  ShowGroupFloaters
 #include "llpanelgroup.h"
+//-TT
 // [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -272,36 +273,47 @@ static bool isGroupVisible(const LLUUID& group_id)
 	static LLPanelGroup* panel = 0;
 	LLSideTray *sidetray = LLSideTray::getInstance();
 	
-	//if(!panel)
-	//{
-		//if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
-		//{
-		//	panel = sidetray->getPanel<LLPanelGroup>("panel_group_info_sidetray");
-		//	if (panel->getID() != group_id)
-		//		return false;
-		//}
-		//else
-		//{
-		//	LLFloater *floater = LLFloaterReg::getInstance("floater_group_view", LLSD().with("group_id", group_id));
-
-		//	panel = floater->findChild<LLPanel>("panel_group_info_sidetray");
-		//}
-	//}
-
-	//AO reworked logic for only updated profiles that are already visible.
-    panel = sidetray->getPanel<LLPanelGroup>("panel_group_info_sidetray");
-	if(!panel)
-		return false;
-    if (panel->getID() != group_id)
-		return false;
-	if (sidetray->isTabAttached("sidebar_people"))
+	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
 	{
-		return panel->isInVisibleChain();
+		//AO reworked logic for only updated profiles that are already visible.
+		panel = sidetray->getPanel<LLPanelGroup>("panel_group_info_sidetray");
+		if(!panel)
+			return false;
+		else if (panel->getID() != group_id)
+			return false;
+		if (sidetray->isTabAttached("sidebar_people"))
+		{
+			return panel->isInVisibleChain();
+		}
+		else
+		{
+			return sidetray->isFloaterPanelVisible("panel_group_info_sidetray");
+		}
 	}
 	else
 	{
-		return sidetray->isFloaterPanelVisible("panel_group_info_sidetray");
+		bool vis = LLFloaterReg::instanceVisible("floater_group_view", LLSD().with("group_id", group_id));
+		llinfos << "checking visibility for group ID: " << group_id << " visible =" << vis << llendl;
+		return vis;
+
+		//LLFloater *floater = LLFloaterReg::getInstance("floater_group_view", LLSD().with("group_id", group_id));
+		//panel = floater->findChild<LLPanelGroup>("panel_group_info_sidetray");
+		//return panel->isInVisibleChain();
 	}
+	//AO reworked logic for only updated profiles that are already visible.
+    //panel = sidetray->getPanel<LLPanelGroup>("panel_group_info_sidetray");
+	//if(!panel)
+	//	return false;
+ //   if (panel->getID() != group_id)
+	//	return false;
+	//if (sidetray->isTabAttached("sidebar_people"))
+	//{
+	//	return panel->isInVisibleChain();
+	//}
+	//else
+	//{
+	//	return sidetray->isFloaterPanelVisible("panel_group_info_sidetray");
+	//}
 }
 //-TT
 
@@ -317,11 +329,22 @@ void LLGroupActions::show(const LLUUID& group_id)
 	if (group_id.isNull())
 		return;
 
-	LLSD params;
-	params["group_id"] = group_id;
-	params["open_tab_name"] = "panel_group_info_sidetray";
+//-TT - Patch : ShowGroupFloaters
+	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
+	{
+//-TT
+		LLSD params;
+		params["group_id"] = group_id;
+		params["open_tab_name"] = "panel_group_info_sidetray";
 
-	LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
+		LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
+//-TT - Patch : ShowGroupFloaters
+	}
+	else
+	{
+		LLFloaterReg::showInstance("floater_group_view", LLSD().with("group_id", group_id));
+	}
+//-TT}
 }
 
 // static
@@ -350,8 +373,19 @@ void LLGroupActions::refresh_notices()
 	params["open_tab_name"] = "panel_group_info_sidetray";
 	params["action"] = "refresh_notices";
 
-	// AO: We don't change modals on people unless they manually request this
-	//LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
+//-TT - Patch : ShowGroupFloaters
+	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
+	{
+//-TT
+		// AO: We don't change modals on people unless they manually request this
+		//LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
+//-TT - Patch : ShowGroupFloaters
+	}
+	else
+	{
+		LLFloaterReg::showInstance("floater_group_view", params); //LLSD().with("group_id", LLUUID::null));
+	}
+//-TT
 }
 
 //static 
@@ -368,7 +402,21 @@ void LLGroupActions::refresh(const LLUUID& group_id)
 	params["open_tab_name"] = "panel_group_info_sidetray";
 	params["action"] = "refresh";
 
-	LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
+//-TT - Patch : ShowGroupFloaters
+	llinfos << "refreshing group ID: " << group_id << llendl;
+	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
+	{
+//-TT
+		LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
+//-TT - Patch : ShowGroupFloaters
+	}
+	else
+	{
+		LLFloaterReg::showInstance("floater_group_view", LLSD().with("group_id", group_id));//params); //LLSD().with("group_id", group_id));
+		//LLFloater *floater = LLFloaterReg::getInstance("floater_group_view", LLSD().with("group_id", group_id));
+		//panel = floater->findChild<LLPanelGroup>("panel_group_info_sidetray");
+	}
+//-TT
 }
 
 //static 
@@ -379,8 +427,20 @@ void LLGroupActions::createGroup()
 	params["open_tab_name"] = "panel_group_info_sidetray";
 	params["action"] = "create";
 
-	LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
-
+////-TT - Patch : ShowGroupFloaters
+//	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
+//	{
+////-TT
+		params["open_tab_name"] = "panel_group_info_sidetray";
+ 
+		LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
+////-TT - Patch : ShowGroupFloaters
+//	}
+//	else
+//	{
+//		LLFloaterReg::showInstance("floater_group_view", params);  //LLSD().with("group_id", group_id));
+//	}
+////-TT
 }
 //static
 void LLGroupActions::closeGroup(const LLUUID& group_id)
@@ -396,9 +456,19 @@ void LLGroupActions::closeGroup(const LLUUID& group_id)
 	params["open_tab_name"] = "panel_group_info_sidetray";
 	params["action"] = "close";
 
-	LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
+//-TT - Patch : ShowGroupFloaters
+	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
+	{
+//-TT
+		LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
+//-TT - Patch : ShowGroupFloaters
+	}
+	else
+	{
+		LLFloaterReg::showInstance("floater_group_view", params);  //LLSD().with("group_id", group_id));
+	}
+//-TT}
 }
-
 
 // static
 void LLGroupActions::startIM(const LLUUID& group_id)
@@ -488,6 +558,12 @@ bool LLGroupActions::onLeaveGroup(const LLSD& notification, const LLSD& response
 	LLUUID group_id = notification["payload"]["group_id"].asUUID();
 	if(option == 0)
 	{
+//-TT - Patch : ShowGroupFloaters
+		if (gSavedSettings.getBOOL("ShowGroupFloaters")) 
+		{
+			LLFloaterReg::destroyInstance("floater_group_view", LLSD().with("group_id", group_id));
+		}
+//-TT}
 		LLMessageSystem* msg = gMessageSystem;
 		msg->newMessageFast(_PREHASH_LeaveGroupRequest);
 		msg->nextBlockFast(_PREHASH_AgentData);

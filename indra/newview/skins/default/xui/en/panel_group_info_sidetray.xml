@@ -9,7 +9,7 @@ background_visible="true"
  left="0"
  top="20"
  name="GroupInfo"
- width="313">
+ width="333">
     <panel.string
      name="default_needs_apply_text">
         There are unsaved changes
@@ -42,10 +42,10 @@ background_visible="true"
      image_unselected="BackButton_Off"
      layout="topleft"
      name="back"
-     left="7"
+     left="0"
      tab_stop="false"
      top="2"
-     width="30"
+     width="0"
      use_draw_context_alpha="false" />
     <text_editor
      allow_scroll="false"
@@ -98,7 +98,7 @@ background_visible="true"
        layout="topleft"
        auto_resize="true"
        height="513"
-       width="313">
+       width="333">
    <accordion
      left="0"
      top="0"
@@ -108,7 +108,7 @@ background_visible="true"
      layout="topleft"
      name="groups_accordion"
      height="513"
-     width="313">
+     width="333">
          <accordion_tab
             expanded="true"
             layout="topleft"
