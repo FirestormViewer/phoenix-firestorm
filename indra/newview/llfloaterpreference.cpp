@@ -2101,11 +2101,17 @@ void LLPanelPreferenceSkins::onSkinChanged()
 	onSkinThemeChanged(); // make sure we initialize a theme for our new skin
 	
 	//AO: Some crude hardcoded preferences per skin. We will remove these and replace them with "basic mode"-style behaviors in the 2.6 mergeup
-	if ((m_Skin.compare("metaharper") == 0) || (m_Skin.compare("metaharpersidetabs") == 0) || (m_Skin.compare("starlight") == 0))
+	if  (m_Skin.compare("starlight") == 0)
 	{
-		llinfos << "removing menubar location" << llendl;
 		gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
+		gSavedSettings.setBOOL("ShowNavbarNavigationPanel",TRUE);
 	}
+	else 
+	{
+		gSavedSettings.setBOOL("ShowMenuBarLocation", TRUE);
+		gSavedSettings.setBOOL("ShowNavbarNavigationPanel",FALSE);
+	}
+
 }
 
 void LLPanelPreferenceSkins::onSkinThemeChanged()
