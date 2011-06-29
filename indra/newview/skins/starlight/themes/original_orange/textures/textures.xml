@@ -117,7 +117,7 @@ with the same filename but different name
   <texture name="Checkbox_On" file_name="widgets/Checkbox_On.png" preload="true" />
   <texture name="Checkbox_On_Press" file_name="widgets/Checkbox_On_Press.png" preload="true" />
   <texture name="Checkbox_Press" file_name="widgets/Checkbox_Press.png" preload="true" />
-  <texture name="Check_Mark" file_name="icons/check_mark" preload="true" />
+  <texture name="Check_Mark" file_name="icons/check_mark.png" preload="true" />
 
   <texture name="ComboButton_Disabled" file_name="widgets/ComboButton_Disabled.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_Selected" file_name="widgets/ComboButton_Selected.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
@@ -182,7 +182,7 @@ with the same filename but different name
   <texture name="Icon_Dock_Foreground" file_name="windows/Icon_Dock_Foreground.png" preload="true" />
   <texture name="Icon_Dock_Press" file_name="windows/Icon_Dock_Press.png" preload="true" />
 
-  <texture name="Icon_For_Sale" file_name="icons/Icon_For_sale.png" preload="false" />
+  <texture name="Icon_For_Sale" file_name="icons/Icon_For_Sale.png" preload="false" />
 
   <texture name="Icon_Gear_Background" file_name="windows/Icon_Gear_Background.png" preload="false" />
   <texture name="Icon_Gear_Foreground" file_name="windows/Icon_Gear_Foreground.png" preload="false" />
@@ -279,8 +279,8 @@ with the same filename but different name
   <texture name="ModelImport_Status_Warning" file_name="lag_status_warning.tga" preload="false"/>
   <texture name="ModelImport_Status_Error" file_name="lag_status_critical.tga" preload="false"/>
   
-  <texture name="MouseLook_View_Off" file_name="bottomtray/MouseLook_view_off.png" preload="false" />
-  <texture name="MouseLook_View_On" file_name="bottomtray/MouseLook_view_on.png" preload="false" />
+  <texture name="MouseLook_View_Off" file_name="bottomtray/MouseLook_View_Off.png" preload="false" />
+  <texture name="MouseLook_View_On" file_name="bottomtray/MouseLook_View_On.png" preload="false" />
 
   <texture name="Move_Fly_Off" file_name="bottomtray/Move_Fly_Off.png" preload="false" />
   <texture name="Move_Run_Off" file_name="bottomtray/Move_Run_Off.png" preload="false" />
@@ -647,8 +647,10 @@ with the same filename but different name
   <texture name="icon_for_sale.tga" file_name="icons/Icon_For_Sale.png" />
   <texture name="icon_top_pick.tga" />
 
+  <!-- commenting out the mesh items uncoment when mesh comes to FS WolfPup Lowenhar
   <texture name="inv_folder_mesh.tga"/>
   <texture name="inv_item_mesh.tga"/>
+  -->
   <texture name="lag_status_critical.tga" />
   <texture name="lag_status_good.tga" />
   <texture name="lag_status_warning.tga" />
