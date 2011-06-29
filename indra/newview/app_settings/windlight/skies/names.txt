@@ -19,12 +19,12 @@ AnaLutetia-default
 AnaLutetia-outdoor2(2)
 AnaLutetia
 B5-ShadowDancing
-CB'%s %Rouge 1
-CB'%s %Rouge 2
-CB'%s %Rouge 3
-CB'%s %Rouge 4
-CB'%s %Rouge 5
-CB'%s %Rouge 6
+CB's Rouge 1
+CB's Rouge 2
+CB's Rouge 3
+CB's Rouge 4
+CB's Rouge 5
+CB's Rouge 6
 Fairy blue (Paulina)
 Fairy dark blue (Paulina)
 Fairy light pink (Paulina)
