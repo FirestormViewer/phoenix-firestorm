@@ -1174,7 +1174,7 @@ even though the user gets a free copy.
 	 follows="top|right"
 	 height="20"
 	 label="Apply"
-	 name="btnMarkForSale"
+	 name="button mark for sale"
 	 tool_tip="Mark/Update object(s) for sale."
 	 width="100">
 		<button.commit_callback

@@ -153,13 +153,13 @@ BOOL LLPanelPermissions::postBuild()
 
 	childSetCommitCallback("checkbox allow everyone copy",LLPanelPermissions::onCommitEveryoneCopy,this);
 	
-	childSetCommitCallback("checkbox for sale",LLPanelPermissions::onCommitSaleInfo,this);
+	getChild<LLUICtrl>("checkbox for sale")->setCommitCallback( boost::bind(&LLPanelPermissions::onCommitForSale, this));
 
-	childSetCommitCallback("sale type",LLPanelPermissions::onCommitSaleType,this);
+	getChild<LLUICtrl>("sale type")->setCommitCallback( boost::bind(&LLPanelPermissions::onCommitSaleInfo, this));
 
-	childSetCommitCallback("Edit Cost", LLPanelPermissions::onCommitSaleInfo, this);
-	
-	getChild<LLUICtrl>("btnMarkForSale")->setCommitCallback( boost::bind(&LLPanelPermissions::setAllSaleInfo, this));
+	getChild<LLUICtrl>("Edit Cost")->setCommitCallback( boost::bind(&LLPanelPermissions::onCommitSaleInfo, this));
+
+	getChild<LLUICtrl>("button mark for sale")->setCommitCallback( boost::bind(&LLPanelPermissions::setAllSaleInfo, this));
 
 	childSetCommitCallback("checkbox next owner can modify",LLPanelPermissions::onCommitNextOwnerModify,this);
 	childSetCommitCallback("checkbox next owner can copy",LLPanelPermissions::onCommitNextOwnerCopy,this);
@@ -249,13 +249,7 @@ void LLPanelPermissions::disableAll()
 	getChild<LLUICtrl>("Edit Cost")->setValue(LLStringUtil::null);
 	getChildView("Edit Cost")->setEnabled(FALSE);
 		
-	//KC: mark for sale button
-	LLButton* btnMarkForSale = getChild<LLButton>("btnMarkForSale");
-	btnMarkForSale->setEnabled(FALSE);
-	btnMarkForSale->setFlashing(FALSE);
-	LLColor4 DefaultShadowDark = LLUIColorTable::instance().getColor("DefaultShadowDark");
-	LLColor4 DefaultHighlightLight = LLUIColorTable::instance().getColor("DefaultHighlightLight");
-	getChild<LLViewBorder>("SaleBorder")->setColors(DefaultShadowDark, DefaultHighlightLight);
+	showMarkForSale(FALSE);
 
 	getChildView("label click action")->setEnabled(FALSE);
 	LLComboBox*	combo_click_action = getChild<LLComboBox>("clickaction");
@@ -307,7 +301,7 @@ void LLPanelPermissions::refresh()
 	{
 		// ...nothing selected
 		disableAll();
-		mLastSelectedObejct = NULL;
+		mLastSelectedObject = NULL;
 		return;
 	}
 
@@ -494,15 +488,15 @@ void LLPanelPermissions::refresh()
 		getChildView("Object Description")->setEnabled(FALSE);
 	}
 
-	//KC: Check if the object selection has changed and that there is pending sale info changes
-	//Prevents clearing the pending changes on idle refresh
+	//Check if the object selection has changed and that there is pending sale info changes
+	//Prevents clearing the unsaved input on idle refresh
 	BOOL selection_changed = FALSE;
-	if (mLastSelectedObejct != objectp)
+	if (mLastSelectedObject != objectp)
 	{
-		mLastSelectedObejct = objectp;
+		mLastSelectedObject = objectp;
 		selection_changed = TRUE;
 	}
-	BOOL update_sale_info = selection_changed || !getChild<LLButton>("btnMarkForSale")->getEnabled();
+	BOOL update_sale_info = selection_changed || !getChild<LLButton>("button mark for sale")->getEnabled();
 
 	S32 total_sale_price = 0;
 	S32 individual_sale_price = 0;
@@ -530,19 +524,23 @@ void LLPanelPermissions::refresh()
 	// You own these objects.
 	else if (self_owned || (group_owned && gAgent.hasPowerInGroup(group_id,GP_OBJECT_SET_SALE)))
 	{
-		//KC: dont update and clear sale info if changes are pending
+		// If there are multiple items for sale then set text to PRICE PER UNIT.
+		if (num_for_sale > 1)
+		{
+			getChild<LLUICtrl>("Cost")->setValue(getString("Cost Per Unit"));
+		}
+		else
+		{
+			getChild<LLUICtrl>("Cost")->setValue(getString("Cost Default"));
+		}
+		// The edit fields are only enabled if you can sell this object
+		// and the sale price is not mixed.
+		BOOL enable_edit = (num_for_sale && can_transfer) ? !is_for_sale_mixed : FALSE;
+		getChildView("Cost")->setEnabled(enable_edit);
+		
+		// Dont update and clear the price if change is pending
 		if (update_sale_info)
 		{
-			// If there are multiple items for sale then set text to PRICE PER UNIT.
-			if (num_for_sale > 1)
-			{
-				getChild<LLUICtrl>("Cost")->setValue(getString("Cost Per Unit"));
-			}
-			else
-			{
-				getChild<LLUICtrl>("Cost")->setValue(getString("Cost Default"));
-			}
-			
 			LLSpinCtrl *edit_price = getChild<LLSpinCtrl>("Edit Cost");
 			if (!edit_price->hasFocus())
 			{
@@ -561,10 +559,6 @@ void LLPanelPermissions::refresh()
 					edit_price->setValue(individual_sale_price);
 				}
 			}
-			// The edit fields are only enabled if you can sell this object
-			// and the sale price is not mixed.
-			BOOL enable_edit = (num_for_sale && can_transfer) ? !is_for_sale_mixed : FALSE;
-			getChildView("Cost")->setEnabled(enable_edit);
 			getChildView("Edit Cost")->setEnabled(enable_edit);
 		}
 	}
@@ -703,7 +697,7 @@ void LLPanelPermissions::refresh()
 		getChildView("checkbox allow everyone copy")->setEnabled(FALSE);
 	}
 
-	//KC: dont update and clear sale info if changes are pending
+	//Do not update and clear sale info if changes are pending
 	if (update_sale_info)
 	{
 		if (has_change_sale_ability && (owner_mask_on & PERM_TRANSFER))
@@ -844,36 +838,42 @@ void LLPanelPermissions::refresh()
 		}
 	}
 
-	// reflect sale information
-	LLSaleInfo sale_info;
-	BOOL valid_sale_info = LLSelectMgr::getInstance()->selectGetSaleInfo(sale_info);
-	LLSaleInfo::EForSale sale_type = sale_info.getSaleType();
-
-	LLComboBox* combo_sale_type = getChild<LLComboBox>("sale type");
-	if (valid_sale_info)
+	//Do not update and clear sale info if changes are pending
+	if (update_sale_info)
 	{
-		combo_sale_type->setValue(					sale_type == LLSaleInfo::FS_NOT ? LLSaleInfo::FS_COPY : sale_type);
-		combo_sale_type->setTentative(				FALSE); // unfortunately this doesn't do anything at the moment.
-	}
-	else
-	{
-		// default option is sell copy, determined to be safest
-		combo_sale_type->setValue(					LLSaleInfo::FS_COPY);
-		combo_sale_type->setTentative(				TRUE); // unfortunately this doesn't do anything at the moment.
-	}
+		// reflect sale information
+		LLSaleInfo sale_info;
+		BOOL valid_sale_info = LLSelectMgr::getInstance()->selectGetSaleInfo(sale_info);
+		LLSaleInfo::EForSale sale_type = sale_info.getSaleType();
 
-	getChild<LLUICtrl>("checkbox for sale")->setValue((num_for_sale != 0));
-
-	// HACK: There are some old objects in world that are set for sale,
-	// but are no-transfer.  We need to let users turn for-sale off, but only
-	// if for-sale is set.
-	bool cannot_actually_sell = !can_transfer || (!can_copy && sale_type == LLSaleInfo::FS_COPY);
-	if (cannot_actually_sell)
-	{
-		if (num_for_sale && has_change_sale_ability)
+		LLComboBox* combo_sale_type = getChild<LLComboBox>("sale type");
+		if (valid_sale_info)
 		{
-			getChildView("checkbox for sale")->setEnabled(true);
+			combo_sale_type->setValue(					sale_type == LLSaleInfo::FS_NOT ? LLSaleInfo::FS_COPY : sale_type);
+			combo_sale_type->setTentative(				FALSE); // unfortunately this doesn't do anything at the moment.
 		}
+		else
+		{
+			// default option is sell copy, determined to be safest
+			combo_sale_type->setValue(					LLSaleInfo::FS_COPY);
+			combo_sale_type->setTentative(				TRUE); // unfortunately this doesn't do anything at the moment.
+		}
+
+		getChild<LLUICtrl>("checkbox for sale")->setValue((num_for_sale != 0));
+
+		// HACK: There are some old objects in world that are set for sale,
+		// but are no-transfer.  We need to let users turn for-sale off, but only
+		// if for-sale is set.
+		bool cannot_actually_sell = !can_transfer || (!can_copy && sale_type == LLSaleInfo::FS_COPY);
+		if (cannot_actually_sell)
+		{
+			if (num_for_sale && has_change_sale_ability)
+			{
+				getChildView("checkbox for sale")->setEnabled(true);
+			}
+		}
+		
+		showMarkForSale(FALSE);
 	}
 	
 	// Check search status of objects
@@ -897,14 +897,6 @@ void LLPanelPermissions::refresh()
 	}
 	getChildView("label click action")->setEnabled(is_perm_modify && all_volume);
 	getChildView("clickaction")->setEnabled(is_perm_modify && all_volume);
-
-	//KC: mark for sale button
-	LLButton* btnMarkForSale = getChild<LLButton>("btnMarkForSale");
-	btnMarkForSale->setEnabled(FALSE);
-	btnMarkForSale->setFlashing(FALSE);
-	LLColor4 DefaultShadowDark = LLUIColorTable::instance().getColor("DefaultShadowDark");
-	LLColor4 DefaultHighlightLight = LLUIColorTable::instance().getColor("DefaultHighlightLight");
-	getChild<LLViewBorder>("SaleBorder")->setColors(DefaultShadowDark, DefaultHighlightLight);
 }
 
 
@@ -1061,45 +1053,33 @@ void LLPanelPermissions::onCommitDesc(LLUICtrl*, void* data)
 	}
 }
 
-// static
-void LLPanelPermissions::onCommitSaleInfo(LLUICtrl*, void* data)
+void LLPanelPermissions::onCommitForSale()
 {
-	LLPanelPermissions* self = (LLPanelPermissions*)data;
-	//KC: don't commit sale info on change (VWR-21522)
-	//but allow it to be cleared by unchecking for sale
-	LLCheckBoxCtrl *checkPurchase = self->getChild<LLCheckBoxCtrl>("checkbox for sale");
+	//Don't commit sale info on change (STORM-1453)
+	//but allow it to be cleared instantly by unchecking for sale
+	LLCheckBoxCtrl *checkPurchase = getChild<LLCheckBoxCtrl>("checkbox for sale");
 	if(!gSavedSettings.getBOOL("PhoenixCommitForSaleOnChange") && checkPurchase && checkPurchase->get())
 	{
-		self->getChildView("sale type")->setEnabled(TRUE);
-		self->getChildView("Edit Cost")->setEnabled(TRUE);
-		LLButton* btnMarkForSale = self->getChild<LLButton>("btnMarkForSale");
-		btnMarkForSale->setEnabled(TRUE);
-		btnMarkForSale->setFlashing(TRUE);
-		LLColor4 EmphasisColor = LLUIColorTable::instance().getColor("EmphasisColor");
-		self->getChild<LLViewBorder>("SaleBorder")->setColors(EmphasisColor, EmphasisColor);
+		getChildView("sale type")->setEnabled(TRUE);
+		getChildView("Edit Cost")->setEnabled(TRUE);
+		showMarkForSale(TRUE); 
 	}
 	else
 	{
-		self->setAllSaleInfo();
+		setAllSaleInfo();
 	}
 }
 
-// static
-void LLPanelPermissions::onCommitSaleType(LLUICtrl*, void* data)
+void LLPanelPermissions::onCommitSaleInfo()
 {
-	LLPanelPermissions* self = (LLPanelPermissions*)data;
-	//KC: don't commit sale info on change (VWR-21522)
+	//Don't commit sale info on change (STORM-1453)
 	if (gSavedSettings.getBOOL("PhoenixCommitForSaleOnChange"))
 	{
-		self->setAllSaleInfo();
+		setAllSaleInfo();
 	}
 	else
 	{
-		LLButton* btnMarkForSale = self->getChild<LLButton>("btnMarkForSale");
-		btnMarkForSale->setEnabled(TRUE);
-		btnMarkForSale->setFlashing(TRUE);
-		LLColor4 EmphasisColor = LLUIColorTable::instance().getColor("EmphasisColor");
-		self->getChild<LLViewBorder>("SaleBorder")->setColors(EmphasisColor, EmphasisColor);
+		showMarkForSale(TRUE);
 	}
 }
 
@@ -1152,12 +1132,27 @@ void LLPanelPermissions::setAllSaleInfo()
 		LLSelectMgr::getInstance()->
 			selectionSetClickAction(CLICK_ACTION_BUY);
 	}
-	LLButton* btnMarkForSale = getChild<LLButton>("btnMarkForSale");
-	btnMarkForSale->setEnabled(FALSE);
-	btnMarkForSale->setFlashing(FALSE);
-	LLColor4 DefaultShadowDark = LLUIColorTable::instance().getColor("DefaultShadowDark");
-	LLColor4 DefaultHighlightLight = LLUIColorTable::instance().getColor("DefaultHighlightLight");
-	getChild<LLViewBorder>("SaleBorder")->setColors(DefaultShadowDark, DefaultHighlightLight);
+	showMarkForSale(FALSE);
+}
+
+void LLPanelPermissions::showMarkForSale(BOOL show)
+{
+	LLButton* button_mark_for_sale = getChild<LLButton>("button mark for sale");
+	button_mark_for_sale->setEnabled(show);
+	button_mark_for_sale->setFlashing(show);
+	LLColor4 shadow_dark = LLUIColorTable::instance().getColor("DefaultShadowDark");
+	LLColor4 highlight_light;
+	if (show)
+	{
+		//shadow_dark = LLUIColorTable::instance().getColor("EmphasisColor");
+		highlight_light = LLUIColorTable::instance().getColor("EmphasisColor");
+	}
+	else
+	{
+		//shadow_dark = LLUIColorTable::instance().getColor("DefaultShadowDark");
+		highlight_light = LLUIColorTable::instance().getColor("DefaultHighlightLight");
+	}
+	getChild<LLViewBorder>("SaleBorder")->setColors(shadow_dark, highlight_light);
 }
 
 struct LLSelectionPayable : public LLSelectedObjectFunctor
