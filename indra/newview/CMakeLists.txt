@@ -89,8 +89,6 @@ set(viewer_SOURCE_FILES
     lggbeammaps.cpp
     lggbeamscolors.cpp
     lggbeamcolormapfloater.cpp
-    lggbeamscolors.cpp
-    lggbeamcolormapfloater.cpp
     llagent.cpp
     llagentaccess.cpp
     llagentcamera.cpp
