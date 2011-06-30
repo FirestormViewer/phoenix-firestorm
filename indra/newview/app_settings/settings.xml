@@ -12706,6 +12706,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>LLSD</string>
       <key>Value</key>
+      <string />
     </map>
     <key>UseLSLBridge</key>
     <map>
@@ -12804,7 +12805,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <integer>3.0</integer>
+      <real>3.0</real>
     </map>
     <key>InterpolationPhaseOut</key>
     <map>
@@ -12815,7 +12816,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <integer>1.0</integer>
+      <real>1.0</real>
     </map>
     <key>VerboseLogs</key>
     <map>
