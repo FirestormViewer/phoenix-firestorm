@@ -19,6 +19,8 @@ public:
 	void onBeamColorDelete();
 	void onBeamDelete();
 
+	void onAutoCorrectSettings();
+
 protected:
 	LLLineEditor* m_calcLineEditor;
 	LLLineEditor* m_acLineEditor;

@@ -919,7 +919,19 @@
 			 height="20"
 			 control_name="PhoenixMuteGroupWhenNoticesDisabled"
 			 label="When 'Receive group notices' is disabled, disable group chat as well"/>
-
+      <button
+                 layout="topleft"
+                follows="left|top"
+                top_pad="10"
+                width="250"
+                height="22"
+                font="SansSerif"
+                mouse_opaque="true"
+                halign="center"
+                scale_image="true"
+                name="lgg_ac_showgui"
+                label="Show AutoCorrect Settings"
+                tool_tip="Click this show the options for autocorrection macros."/>
 		</panel>
 
 		<!--Chat: Radar-->

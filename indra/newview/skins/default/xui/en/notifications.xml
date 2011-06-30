@@ -7118,6 +7118,13 @@ You died and have been teleported to your home location.
   </global>
 
   <notification
+     icon="notifytip.tga"
+     name="PhoenixAutoReplace"
+     type="notifytip">
+    &apos;[BEFORE]&apos; has been auto replaced by &apos;[REPLACEMENT]&apos;
+    based on your [LISTNAME] list.
+  </notification>
+  <notification
    icon="notify.tga"
    name="PhoenixWL"
    type="notify">

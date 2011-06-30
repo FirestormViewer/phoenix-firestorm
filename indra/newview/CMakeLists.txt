@@ -83,10 +83,14 @@ set(viewer_SOURCE_FILES
     fslslbridge.cpp
     fslslbridgerequest.cpp
     fsradarlistctrl.cpp
-	lggbeammapfloater.cpp
-	lggbeammaps.cpp
-	lggbeamscolors.cpp
-	lggbeamcolormapfloater.cpp
+    lggautocorrect.cpp
+    lggautocorrectfloater.cpp
+    lggbeammapfloater.cpp
+    lggbeammaps.cpp
+    lggbeamscolors.cpp
+    lggbeamcolormapfloater.cpp
+    lggbeamscolors.cpp
+    lggbeamcolormapfloater.cpp
     llagent.cpp
     llagentaccess.cpp
     llagentcamera.cpp
@@ -658,10 +662,12 @@ set(viewer_HEADER_FILES
     fskeywords.h
     fslslbridge.h
     fslslbridgerequest.h
-	lggbeammapfloater.h
-	lggbeammaps.h
-	lggbeamscolors.h
-	lggbeamcolormapfloater.h
+    lggautocorrect.h
+    lggautocorrectfloater.h
+    lggbeammapfloater.h
+    lggbeammaps.h
+    lggbeamscolors.h
+    lggbeamcolormapfloater.h
     llagent.h
     llagentaccess.h
     llagentcamera.h

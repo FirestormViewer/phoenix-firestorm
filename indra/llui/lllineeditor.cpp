@@ -51,6 +51,8 @@
 #include "lluictrlfactory.h"
 #include "llclipboard.h"
 #include "llmenugl.h"
+#include "..\newview\lggautocorrect.h"
+#include "..\newview\llviewercontrol.h"
 
 //
 // Imported globals
@@ -190,7 +192,47 @@ LLLineEditor::~LLLineEditor()
 	// calls onCommit() while LLLineEditor still valid
 	gFocusMgr.releaseFocusIfNeeded( this );
 }
+void LLLineEditor::autoCorrectText()
+{
+	static LLCachedControl<bool> doAnything(gSavedSettings, "PhoenixEnableAutoCorrect");
+	if( (!mReadOnly) && (doAnything))// && (isDirty()))
+	{
+		S32 wordStart = 0;
+		S32 wordEnd = mCursorPos-1;
+		//llinfos <<"Checking Word, Cursor is at "<<mCursorPos<<" and text is "<<mText.getString().c_str()<<llendl;
+		if(wordEnd<1)return;
+		const LLWString& text = mText.getWString();
+		if(text.size()<1)return;
+		if( LLWStringUtil::isPartOfWord( text[wordEnd] )) return;//we only check on word breaks
+		wordEnd--;
+		if( LLWStringUtil::isPartOfWord( text[wordEnd] ) )
+		{
+			while ((wordEnd > 0) && (' '!=text[wordEnd-1]))
+			{
+				wordEnd--;
+			}
+			wordStart=wordEnd;		
+			while ((wordEnd < (S32)text.length()) && (' '!=text[wordEnd] ) )
+			{
+				wordEnd++;
+			}
+			std::string lastTypedWord(std::string(text.begin(), 
+				text.end()).substr(wordStart,wordEnd-wordStart));
+			//llinfos << " The last typed word has been chosen, it is "<<lastTypedWord.c_str()<<llendl;
 
+			std::string correctedWord(LGGAutoCorrect::getInstance()->replaceWord(lastTypedWord));
+			if(correctedWord!=lastTypedWord)
+			{
+				int dif = correctedWord.length()-lastTypedWord.length();
+				std::string regText(mText);
+				//int wordStart = regText.find(lastTypedWord);
+				regText.replace(wordStart,lastTypedWord.length(),correctedWord);
+				mText=regText;
+				mCursorPos+=dif;
+			}
+		}
+	}
+}
 
 void LLLineEditor::onFocusReceived()
 {
@@ -853,6 +895,8 @@ void LLLineEditor::addChar(const llwchar uni_char)
 	{
 		LLUI::reportBadKeystroke();
 	}
+
+	autoCorrectText();
 
 	getWindow()->hideCursorUntilMouseMove();
 }

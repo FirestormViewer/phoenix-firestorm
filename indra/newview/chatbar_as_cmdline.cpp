@@ -74,8 +74,8 @@
 #include "llaudioengine.h"
 #include "llviewerparcelmediaautoplay.h"
 #include "lloverlaybar.h"
-//#include "lggautocorrectfloater.h"
-//#include "lggautocorrect.h"
+#include "lggautocorrectfloater.h"
+#include "lggautocorrect.h"
 
 #include "rlvhandler.h"
 
@@ -909,13 +909,13 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 #ifdef LGG_AUTO_CORRECT
 			else if(revised_text == "/ac")
 			{
-				lggAutoCorrectFloaterStart::show(TRUE,NULL);
+				LGGAutoCorrectFloater::showFloater();
 				cmdline_printchat("Displaying Auto Correction Floater.");
 				return false;
 			}
 			else if(command == std::string(sPhoenixCmdLineAutocorrect))
 			{
-				if (revised_text.length() < sPhoenixCmdLineAutocorrect->length()+2)
+				if (revised_text.length() < (std::string(sPhoenixCmdLineAutocorrect)).length()+2)
 				{
 					cmdline_printchat("Wrong usage, correct usage is"+
 						std::string(sPhoenixCmdLineAutocorrect)+" list Name|wrong word|right word.");

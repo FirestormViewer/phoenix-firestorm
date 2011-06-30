@@ -7,6 +7,7 @@
 #include "lggbeammaps.h"
 #include "lggbeammapfloater.h"
 #include "lggbeamcolormapfloater.h"
+#include "lggautocorrectfloater.h"
 
 static LLRegisterPanelClassWrapper<PanelPreferenceFirestorm> t_pref_fs("panel_preference_firestorm");
 
@@ -28,6 +29,9 @@ BOOL PanelPreferenceFirestorm::postBuild()
 	getChild<LLUICtrl>("custom_beam_btn")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onBeam_new, this));
 	getChild<LLUICtrl>("refresh_beams")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::refreshBeamLists, this));
 	getChild<LLUICtrl>("delete_beam")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onBeamDelete, this));
+
+	//autocorrect button
+	getChild<LLUICtrl>("lgg_ac_showgui")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onAutoCorrectSettings, this));
 
 
 	// m_calcLineEditor = getChild<LLLineEditor>("PhoenixCmdLineCalc");
@@ -160,4 +164,8 @@ void PanelPreferenceFirestorm::onBeamDelete()
 		}
 	}
 	refreshBeamLists();
+}
+void PanelPreferenceFirestorm::onAutoCorrectSettings()
+{
+	LGGAutoCorrectFloater::showFloater();
 }
