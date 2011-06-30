@@ -52,6 +52,10 @@ static PieChildRegistry::Register<PieSeparator> pie_r3("pie_separator");
 #define PIE_POPUP_EFFECT 1			// debug
 #define PIE_DRAW_BOUNDING_BOX 0		// debug
 
+// pie slice label text positioning
+S32 PIE_X[]={64,45, 0,-45,-63,-45,  0, 45};
+S32 PIE_Y[]={ 0,44,73, 44,  0,-44,-73,-44};
+
 PieMenu::PieMenu(const LLContextMenu::Params& p) :
 	LLContextMenu(p)
 {
@@ -402,11 +406,11 @@ void PieMenu::draw( void )
 		// draw the divider line for this slice
 		gl_washer_segment_2d(PIE_OUTER_SIZE*factor,PIE_INNER_SIZE,segmentStart-0.02,segmentStart+0.02,4,lineColor,borderColor);
 
-		// draw the slice labels in a slightly elliptic shape around the center
+		// draw the slice labels around the center
 		mFont->renderUTF8(label,
 							0,
-							(S32) (cos(segmentStart+F_PI/8.0)*PIE_OUTER_SIZE/1.5),
-							(S32) (sin(segmentStart+F_PI/8.0)*PIE_OUTER_SIZE/1.3),
+							PIE_X[num],
+							PIE_Y[num],
 							itemColor,
 							LLFontGL::HCENTER,
 							LLFontGL::VCENTER,
