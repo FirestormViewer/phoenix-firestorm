@@ -70,11 +70,11 @@ class ViewerManifest(LLManifest):
                 self.path("shaders")
                 # ... and the entire windlight directory
                 self.path("windlight")
-				
-				# include the entire beams directory
-				self.path("beams")
-				self.path("beamsColors")
-				
+
+                # include the entire beams directory
+                self.path("beams")
+                self.path("beamsColors")
+
                 self.end_prefix("app_settings")
 
             if self.prefix(src="character"):
