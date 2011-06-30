@@ -1028,7 +1028,7 @@ void LLVOAvatarSelf::idleUpdateTractorBeam()
 	{
 		// VEFFECT: Tractor Beam
 		mBeam = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM);
-		mBeam->setColor(LLColor4U(gAgent.getEffectColor()));
+		mBeam->setColor(rgb);
 		mBeam->setSourceObject(this);
 		mBeamTimer.reset();
 	}
@@ -1070,14 +1070,13 @@ void LLVOAvatarSelf::idleUpdateTractorBeam()
 				const LLPickInfo& pick = gViewerWindow->getLastPick();
 				mBeam->setPositionGlobal(pick.mPosGlobal);
 			}
-
 		}
 		if (mBeamTimer.getElapsedTimeF32() > gLggBeamMaps.setUpAndGetDuration())
 		{
-			mBeam->setColor(LLColor4U(gAgent.getEffectColor()));
+			mBeam->setColor(rgb);
 			mBeam->setNeedsSendToSim(TRUE);
 			mBeamTimer.reset();
-			gLggBeamMaps.fireCurrentBeams(mBeam,rgb );
+			gLggBeamMaps.fireCurrentBeams(mBeam, rgb);
 		}
 	}
 }
