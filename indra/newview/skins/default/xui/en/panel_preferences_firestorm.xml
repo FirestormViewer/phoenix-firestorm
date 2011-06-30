@@ -925,7 +925,6 @@
                 top_pad="10"
                 width="250"
                 height="22"
-                font="SansSerif"
                 mouse_opaque="true"
                 halign="center"
                 scale_image="true"
