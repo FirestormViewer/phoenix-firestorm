@@ -51,8 +51,8 @@
 #include "lluictrlfactory.h"
 #include "llclipboard.h"
 #include "llmenugl.h"
-#include "..\newview\lggautocorrect.h"
-#include "..\newview\llviewercontrol.h"
+#include "../newview/lggautocorrect.h"
+#include "../newview/llviewercontrol.h"
 
 //
 // Imported globals
