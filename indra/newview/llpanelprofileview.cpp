@@ -65,6 +65,7 @@ public:
 		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
 		if(avatar_data && mProfileView->getAvatarId() == avatar_data->avatar_id)
 		{
+			llinfos << "processing online status in the AvatarStatusObserver, will remove it." << llendl;
 			mProfileView->processOnlineStatus(avatar_data->flags & AVATAR_ONLINE);
 			LLAvatarPropertiesProcessor::instance().removeObserver(mProfileView->getAvatarId(), this);
 		}
@@ -95,6 +96,8 @@ LLPanelProfileView::~LLPanelProfileView(void)
 /*virtual*/ 
 void LLPanelProfileView::onOpen(const LLSD& key)
 {
+	llinfos << "opening profile" << llendl;
+
 	LLUUID id;
 	if(key.has("id"))
 	{
@@ -228,6 +231,7 @@ void LLPanelProfileView::updateOnlineStatus()
 		// subscribe observer to get online status. Request will be sent by LLPanelAvatarProfile itself.
 		// do not subscribe for friend avatar because online status can be wrong overridden
 		// via LLAvatarData::flags if Preferences: "Only Friends & Groups can see when I am online" is set.
+		llinfos << "subscribing to AvatarStatusObserver for the profile" << llendl;
 		mAvatarStatusObserver->subscribe();
 		return;
 	}
