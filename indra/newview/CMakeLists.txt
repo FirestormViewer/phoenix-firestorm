@@ -1434,6 +1434,7 @@ set(viewer_APPSETTINGS_FILES
     app_settings/low_graphics.xml
     app_settings/mid_graphics.xml
     app_settings/settings.xml
+    app_settings/settings_autocorrect.xml
     app_settings/settings_crash_behavior.xml
     app_settings/settings_files.xml
     app_settings/settings_per_account.xml
