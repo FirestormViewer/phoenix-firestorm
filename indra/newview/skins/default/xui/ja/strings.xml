@@ -1132,7 +1132,7 @@
 	<string name="InvFolder Lost And Found">
 		紛失物
 	</string>
-	<string name="InvFolder Sounds">
+	<string name="InvFolder Uncompressed Sounds">
 		圧縮されていないサウンド
 	</string>
 	<string name="InvFolder Animations">
