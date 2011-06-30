@@ -230,7 +230,8 @@ F32 lggBeamMaps::setUpAndGetDuration()
 				
 				dot.p = LLVector3d(beamData["offset"]);
 				dot.p *= (gSavedSettings.getF32("PhoenixBeamShapeScale")*2.0f);
-				dot.c = LLColor4U(beamData["color"]);
+				LLColor4 color = LLColor4(beamData["color"]);
+				dot.c = LLColor4U(color);
 				dots.push_back(dot);
 			}
 			
