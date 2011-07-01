@@ -6632,7 +6632,12 @@ void process_teleport_failed(LLMessageSystem *msg, void**)
 		}
 	}
 
-	LLNotificationsUtil::add("CouldNotTeleportReason", args);
+	llinfos << "Teleport error, reason=" << reason << llendl;
+	if ((!gSavedSettings.getBOOL("UseLSLBridge")) ||
+		(reason != "Could not teleport closer to destination"))
+	{
+		LLNotificationsUtil::add("CouldNotTeleportReason", args);
+	}
 
 	// Let the interested parties know that teleport failed.
 	LLViewerParcelMgr::getInstance()->onTeleportFailed();
