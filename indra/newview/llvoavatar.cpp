@@ -6007,7 +6007,7 @@ void LLVOAvatar::sitOnObject(LLViewerObject *sit_object)
 
 		//KC: revoke perms on sit
 		U32 revoke_on = gSavedSettings.getU32("PhoenixRevokePerms");
-		if ((revoke_on == 1 || revoke_on == 3) && (!sit_object->permYouOwner() || gSavedSettings.getU32("PhoenixRevokePermsOwnObjects")))
+		if ((revoke_on == 1 || revoke_on == 3) && !sit_object->permYouOwner())
 		{
 			revokePermissionsOnObject(sit_object);
 		}
@@ -6103,7 +6103,7 @@ void LLVOAvatar::getOffObject()
 
 		//KC: revoke perms on sit
 		U32 revoke_on = gSavedSettings.getU32("PhoenixRevokePerms");
-		if ((revoke_on == 2 || revoke_on == 3) && (!sit_object->permYouOwner() || gSavedSettings.getU32("PhoenixRevokePermsOwnObjects")))
+		if ((revoke_on == 2 || revoke_on == 3) && !sit_object->permYouOwner())
 		{
 			revokePermissionsOnObject(sit_object);
 		}

@@ -378,15 +378,6 @@
 			 value="3"
 			 width="150" />
 		</radio_group>
-		<check_box
-		 top_pad="5"
-		 label="Also revoke from your own objects on sit/stand."
-		 tool_tip="Uses above settings. Useful for testing scripts."
-		 control_name="PhoenixRevokePermsOwnObjects"
-		 follows="left|top"
-		 height="16"
-		 name="PhoenixRevokePermsOwnObjects"
-		 width="256" />
 	</panel>
 
 
