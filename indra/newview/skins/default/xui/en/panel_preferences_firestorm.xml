@@ -296,7 +296,16 @@
 			 name="Beta V2 Search"
 			 value="http://search-beta.secondlife.com/viewer/[CATEGORY]/?q=[QUERY]&amp;p=[AUTH_TOKEN]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;g=[GODLIKE]&amp;sid=[SESSION_ID]&amp;rid=[REGION_ID]&amp;pid=[PARCEL_ID]&amp;channel=[CHANNEL]&amp;version=[VERSION]&amp;major=[VERSION_MAJOR]&amp;minor=[VERSION_MINOR]&amp;patch=[VERSION_PATCH]&amp;build=[VERSION_BUILD]" />
 		</combo_box>
-
+		<check_box
+		top_pad="15"
+		control_name="UseLSLBridge"
+		follows="left|top"
+		height="16"
+		initial_value="true"
+		label="Enable LSL-Client Bridge"
+		left="15"
+		width="270"
+		tool_tip="Allows the Viewer to use a scripted attachment (Bridge) to extend its features"/>
 	</panel>
 
 
