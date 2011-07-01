@@ -45,6 +45,9 @@
 #include "llagent.h"
 // [/RLVa:KB]
 
+#include "llavatarname.h"
+#include "lltrans.h"
+
 //LLFloaterInspect* LLFloaterInspect::sInstance = NULL;
 
 LLFloaterInspect::LLFloaterInspect(const LLSD& key)
@@ -188,6 +191,40 @@ LLUUID LLFloaterInspect::getSelectedUUID()
 	return LLUUID::null;
 }
 
+// BEGIN Ansariel: Fixing the avatar name lookup
+void LLFloaterInspect::onGetCreatorAvNameCallback(const LLUUID& idCreator, const LLAvatarName& av_name, void* SelectNode, void* Ctrl)
+{
+	if (Ctrl && SelectNode)
+	{
+		LLScrollListItem* listItem = (LLScrollListItem*)Ctrl;
+		LLSelectNode* obj = (LLSelectNode*)SelectNode;
+		std::string creator_name;
+
+		bool fRlvFilterCreator = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idCreator != gAgent.getID()) && 
+			( (obj->mPermissions->getOwner() == idCreator) || (RlvUtil::isNearbyAgent(idCreator)) );
+		creator_name = (!fRlvFilterCreator) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+
+		listItem->getColumn(2)->setValue(LLSD(creator_name.c_str()));		
+	}
+}
+
+void LLFloaterInspect::onGetOwnerAvNameCallback(const LLUUID& idOwner, const LLAvatarName& av_name, void* SelectNode, void* Ctrl)
+{
+	if (Ctrl && SelectNode)
+	{
+		LLScrollListItem* listItem = (LLScrollListItem*)Ctrl;
+		LLSelectNode* obj = (LLSelectNode*)SelectNode;
+		std::string owner_name;
+
+		bool fRlvFilterOwner = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idOwner != gAgent.getID()) && 
+			(!obj->mPermissions->isGroupOwned());
+		owner_name = (!fRlvFilterOwner) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+
+		listItem->getColumn(1)->setValue(LLSD(owner_name.c_str()));		
+	}
+}
+// END Ansariel: Fixing the avatar name lookup
+
 void LLFloaterInspect::refresh()
 {
 	LLUUID creator_id;
@@ -227,6 +264,8 @@ void LLFloaterInspect::refresh()
 		substitution["datetime"] = (S32) timestamp;
 		LLStringUtil::format (timeStr, substitution);
 
+		bool requestOwnerName = false;
+		bool requestCreatorName = false;
 		LLAvatarName av_name;
 //		LLAvatarNameCache::get(obj->mPermissions->getOwner(), &av_name);
 //		owner_name = av_name.getCompleteName();
@@ -234,16 +273,40 @@ void LLFloaterInspect::refresh()
 //		creator_name = av_name.getCompleteName();
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 		const LLUUID& idOwner = obj->mPermissions->getOwner();
-		LLAvatarNameCache::get(idOwner, &av_name);
-		bool fRlvFilterOwner = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idOwner != gAgent.getID()) && 
-			(!obj->mPermissions->isGroupOwned());
-		owner_name = (!fRlvFilterOwner) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+
+		// Ansariel - Fixing the avatar name lookup: Only
+		// work with the name if we actually get a result
+		// from the name cache. If not, defer setting the
+		// actual name and set a placeholder.
+		if (LLAvatarNameCache::get(idOwner, &av_name))
+		{
+			bool fRlvFilterOwner = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idOwner != gAgent.getID()) && 
+				(!obj->mPermissions->isGroupOwned());
+			owner_name = (!fRlvFilterOwner) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+		}
+		else
+		{
+			owner_name = LLTrans::getString("RetrievingData");
+			requestOwnerName = true;
+		}
 
 		const LLUUID& idCreator = obj->mPermissions->getCreator();
-		LLAvatarNameCache::get(idCreator, &av_name);
-		bool fRlvFilterCreator = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idCreator != gAgent.getID()) && 
-			( (obj->mPermissions->getOwner() == idCreator) || (RlvUtil::isNearbyAgent(idCreator)) );
-		creator_name = (!fRlvFilterCreator) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+
+		// Ansariel - Fixing the avatar name lookup: Only
+		// work with the name if we actually get a result
+		// from the name cache. If not, defer setting the
+		// actual name and set a placeholder.
+		if (LLAvatarNameCache::get(idCreator, &av_name))
+		{
+			bool fRlvFilterCreator = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idCreator != gAgent.getID()) && 
+				( (obj->mPermissions->getOwner() == idCreator) || (RlvUtil::isNearbyAgent(idCreator)) );
+			creator_name = (!fRlvFilterCreator) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+		}
+		else
+		{
+			creator_name = LLTrans::getString("RetrievingData");
+			requestCreatorName = true;
+		}
 // [/RLVa:KB]
 
 		row["id"] = obj->getObject()->getID();
@@ -268,7 +331,19 @@ void LLFloaterInspect::refresh()
 		row["columns"][3]["column"] = "creation_date";
 		row["columns"][3]["type"] = "text";
 		row["columns"][3]["value"] = timeStr;
-		mObjectList->addElement(row, ADD_TOP);
+
+		LLScrollListItem* rowCtrl = mObjectList->addElement(row, ADD_TOP);
+
+		// Ansariel: Invoke methods to retrieve the missing avatar name(s)
+		// -> We also need to pass the object for the RLVa check!
+		if (requestOwnerName)
+		{
+			LLAvatarNameCache::get(idOwner, boost::bind(&LLFloaterInspect::onGetOwnerAvNameCallback, _1, _2, obj, rowCtrl));
+		}
+		if (requestCreatorName)
+		{
+			LLAvatarNameCache::get(idCreator, boost::bind(&LLFloaterInspect::onGetCreatorAvNameCallback, _1, _2, obj, rowCtrl));
+		}
 	}
 	if(selected_index > -1 && mObjectList->getItemIndex(selected_uuid) == selected_index)
 	{

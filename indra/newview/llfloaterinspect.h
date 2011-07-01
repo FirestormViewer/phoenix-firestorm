@@ -30,6 +30,7 @@
 #define LL_LLFLOATERINSPECT_H
 
 #include "llfloater.h"
+#include "llavatarname.h"
 
 //class LLTool;
 class LLObjectSelection;
@@ -54,6 +55,12 @@ public:
 	void onClickOwnerProfile();
 	void onSelectObject();
 	LLScrollListCtrl* mObjectList;
+
+	// BEGIN Ansariel: Fixing the avatar name lookup
+	static void onGetCreatorAvNameCallback(const LLUUID& idCreator, const LLAvatarName& av_name, void* SelectNode, void* Ctrl);
+	static void onGetOwnerAvNameCallback(const LLUUID& idOwner, const LLAvatarName& av_name, void* SelectNode, void* Ctrl);
+	// END Ansariel: Fixing the avatar name lookup
+
 protected:
 	// protected members
 	void setDirty() { mDirty = TRUE; }
