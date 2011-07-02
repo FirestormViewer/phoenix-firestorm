@@ -54,6 +54,9 @@ const std::string LLInventoryPanel::RECENTITEMS_SORT_ORDER = std::string("Recent
 const std::string LLInventoryPanel::INHERIT_SORT_ORDER = std::string("");
 static const LLInventoryFVBridgeBuilder INVENTORY_BRIDGE_BUILDER;
 
+// [SL:KB] - Patch: Inventory-ActivePanel | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
+bool LLInventoryPanel::s_fActiveSidebar = false;
+// [/SL:KB]
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLInventoryPanelObserver
@@ -784,6 +787,10 @@ void LLInventoryPanel::onFocusReceived()
 	// inventory now handles cut/copy/paste/delete
 	LLEditMenuHandler::gEditMenuHandler = mFolderRoot;
 
+// [SL:KB] - Patch: Inventory-ActivePanel | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
+	s_fActiveSidebar = (LLSideTray::instanceCreated()) && (hasAncestor(LLSideTray::getInstance()->getPanel("sidepanel_inventory")));
+// [/SL:KB]
+
 	LLPanel::onFocusReceived();
 }
 
@@ -1016,8 +1023,12 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 	LLInventoryPanel* res = NULL;
 	LLFloater* active_inv_floaterp = NULL;
 
-	// A. If the inventory side panel is open, use that preferably.
-	if (is_inventorysp_active())
+//	// A. If the inventory side panel is open, use that preferably.
+//	if (is_inventorysp_active())
+// [SL:KB] - Patch: Inventory-ActivePanel | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
+	// A. If the inventory side panel is open and the last inventory panel the user had focus on, use that preferably.
+	if ( (is_inventorysp_active()) && (s_fActiveSidebar) )
+// [/SL:KB]
 	{
 		LLSidepanelInventory *inventorySP = dynamic_cast<LLSidepanelInventory *>(LLSideTray::getInstance()->getPanel("sidepanel_inventory"));
 		if (inventorySP)
