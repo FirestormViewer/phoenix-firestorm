@@ -59,6 +59,14 @@ public:
 		mProfileView = profile_view;
 	}
 
+// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-11-28 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+	~AvatarStatusObserver()
+	{
+		if (mAvatarId.notNull())
+			LLAvatarPropertiesProcessor::instance().removeObserver(mAvatarId, this);
+	}
+// [/SL:KB]
+
 	void processProperties(void* data, EAvatarProcessorType type)
 	{
 		if(APT_PROPERTIES != type) return;
@@ -66,17 +74,32 @@ public:
 		if(avatar_data && mProfileView->getAvatarId() == avatar_data->avatar_id)
 		{
 			mProfileView->processOnlineStatus(avatar_data->flags & AVATAR_ONLINE);
-			LLAvatarPropertiesProcessor::instance().removeObserver(mProfileView->getAvatarId(), this);
+//			LLAvatarPropertiesProcessor::instance().removeObserver(mProfileView->getAvatarId(), this);
 		}
+
+// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-11-28 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+		// Profile view may have switched to a new avatar already so this needs to be outside the check above
+		LLAvatarPropertiesProcessor::instance().removeObserver(mAvatarId, this);
+		mAvatarId.setNull();
+// [/SL:KB]
 	}
 
 	void subscribe()
 	{
-		LLAvatarPropertiesProcessor::instance().addObserver(mProfileView->getAvatarId(), this);
+//		LLAvatarPropertiesProcessor::instance().addObserver(mProfileView->getAvatarId(), this);
+// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-11-28 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+		if (mAvatarId.notNull())
+			LLAvatarPropertiesProcessor::instance().removeObserver(mProfileView->getAvatarId(), this);
+		mAvatarId = mProfileView->getAvatarId();
+		LLAvatarPropertiesProcessor::instance().addObserver(mAvatarId, this);
+// [/SL:KB]
 	}
 
 private:
 	LLPanelProfileView* mProfileView;
+// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-11-28 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+	LLUUID				mAvatarId;
+// [/SL:KB]
 };
 
 LLPanelProfileView::LLPanelProfileView()
