@@ -222,49 +222,49 @@ werden.
 			<text name="Simulator primitive usage:">
 				Prim-Verwendung:
 			</text>
-			<text name="objects_available">
+			<text left_delta="214" name="objects_available">
 				[COUNT] von [MAX] ([AVAILABLE] verfügbar)
 			</text>
 			<text name="Primitives parcel supports:" width="200">
 				Von Parzelle unterstützte Prims:
 			</text>
-			<text left="204" name="object_contrib_text" width="152">
+			<text left_delta="214" name="object_contrib_text" width="152">
 				[COUNT]
 			</text>
 			<text name="Primitives on parcel:">
 				Prims auf Parzelle:
 			</text>
-			<text left="204" name="total_objects_text" width="48">
+			<text left_delta="214" name="total_objects_text" width="48">
 				[COUNT]
 			</text>
-			<text left="14" name="Owned by parcel owner:" width="200">
+			<text left="20" name="Owned by parcel owner:" width="200">
 				Im Eigentum des Parzellenbesitzers:
 			</text>
-			<text left="204" left_delta="200" name="owner_objects_text" width="48">
+			<text left_delta="204"  name="owner_objects_text" width="48">
 				[COUNT]
 			</text>
 			<button label="Anzeigen" label_selected="Anzeigen" name="ShowOwner" right="-135" width="60"/>
 			<button label="Zurückgeben" label_selected="Zurückgeben..." name="ReturnOwner..." right="-10" tool_tip="Objekte an ihre Eigentümer zurückgeben." width="119"/>
-			<text left="14" name="Set to group:">
+			<text left="20" name="Set to group:">
 				Der Gruppe zugeordnet:
 			</text>
-			<text left="204" name="group_objects_text" width="48">
+			<text left_delta="204" name="group_objects_text" width="48">
 				[COUNT]
 			</text>
 			<button label="Anzeigen" label_selected="Anzeigen" name="ShowGroup" right="-135" width="60"/>
 			<button label="Zurückgeben" label_selected="Zurückgeben..." name="ReturnGroup..." right="-10" tool_tip="Objekte an ihre Eigentümer zurückgeben." width="119"/>
-			<text left="14" name="Owned by others:" width="128">
+			<text left="20" name="Owned by others:" width="128">
 				Im Eigentum anderer:
 			</text>
-			<text left="204" name="other_objects_text" width="48">
+			<text left_delta="204" name="other_objects_text" width="48">
 				[COUNT]
 			</text>
-			<button label="Anzeigen" label_selected="Anzeigen" name="ShowOther"/>
+			<button label="Anzeigen" label_selected="Anzeigen" name="ShowOther" right="-135" width="60"/>
 			<button label="Zurückgeben" label_selected="Zurückgeben..." name="ReturnOther..." tool_tip="Objekte an ihre Eigentümer zurückgeben."/>
-			<text name="Selected / sat upon:">
+			<text left="20" name="Selected / sat upon:">
 				Ausgewählt/gesessen auf:
 			</text>
-			<text name="selected_objects_text">
+			<text left_delta="204" name="selected_objects_text">
 				[COUNT]
 			</text>
 			<text name="Autoreturn">
