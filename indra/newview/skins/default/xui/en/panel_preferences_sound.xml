@@ -161,6 +161,17 @@
       <button.commit_callback
       function="Pref.SetSounds"/>
     </button>
+  <check_box
+		name="gesture_audio_play_btn"
+		control_name="EnableGestureSounds"
+    disabled_control="MuteAudio"
+		height="16"
+		layout="topleft"
+		left_pad="5"
+		tool_tip="Check this to hear sounds from gestures"
+		label="Play sounds from gestures"
+		top_delta="2"
+		width="350"/>
     <slider
      control_name="AudioLevelMusic"
      disabled_control="MuteAudio"
@@ -301,18 +312,6 @@
 		left_pad="5"
 		name="enable_voice_check"
 		width="110"/>
-	<check_box
-		name="gesture_audio_play_btn"
-		control_name="EnableGestureSounds"
-    disabled_control="MuteAudio"
-		value="true"
-		follows="left|bottom|right"
-		height="15"
-		tool_tip="Check this to hear sounds from gestures"
-		label="Play sounds from gestures"
-		top_pad="1"
-    bottom_delta="10"
-		left="325"/>
 	<check_box
 		name="media_auto_play_btn"
 		control_name="ParcelMediaAutoPlayEnable"
@@ -572,18 +571,48 @@
      max_chars="128"
      name="voice_input_device"
      top_delta="-5"
-     width="200" />
+     width="150" />
+    <icon
+     height="18"
+     image_name="Parcel_Voice_Light"
+     left="275"
+     name="speaker_icon"
+     mouse_opaque="false"
+     top_pad="-20"
+     visible="true"
+     width="22" />
+    <text
+     font.style="BOLD"
+     type="string"
+     length="1"
+     follows="left|top"
+     height="15"
+     layout="topleft"
+     left_pad="0"
+     name="Output"
+     width="70">
+      Output
+    </text>
+    <combo_box
+     control_name="VoiceOutputAudioDevice"
+     height="23"
+     layout="topleft"
+     left_pad="0"
+     max_chars="128"
+     name="voice_output_device"
+     top_delta="-3"
+     width="150" />
    <text
      type="string"
      length="1"
      follows="left|top"
      height="16"
      layout="topleft"
-     left_delta="-70"
+     left_delta="-360"
      name="Volume label"
      top_pad="4"
      width="200">
-        Volume:
+        Input Volume:
     </text>
       <slider_bar
         control_name="AudioLevelMic"
@@ -646,35 +675,5 @@
      name="bar4"
      top_delta="0"
      width="20" />
-          <icon
-             height="18"
-             image_name="Parcel_Voice_Light"
-             left="5"
-             name="speaker_icon"
-             mouse_opaque="false"
-             top_pad="3"
-             visible="true"
-             width="22" />
-    <text
-     font.style="BOLD"
-     type="string"
-     length="1"
-     follows="left|top"
-     height="15"
-     layout="topleft"
-     left_pad="0"
-     name="Output"
-     width="70">
-        Output
-    </text>
-    <combo_box
-     control_name="VoiceOutputAudioDevice"
-     height="23"
-     layout="topleft"
-     left_pad="0"
-     max_chars="128"
-     name="voice_output_device"
-     top_delta="-3"
-     width="200" />
     </panel>
     </panel>
