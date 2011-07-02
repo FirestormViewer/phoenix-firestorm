@@ -91,7 +91,7 @@ public:
 
 		Optional<bool>					select_on_focus,
 										revert_on_esc,
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
 										spellcheck,
 // [/SL:KB]
 										commit_on_focus_lost,

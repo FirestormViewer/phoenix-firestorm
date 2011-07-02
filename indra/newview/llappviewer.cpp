@@ -102,7 +102,7 @@
 #include "llvfsthread.h"
 #include "llvolumemgr.h"
 #include "llxfermanager.h"
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
 #include "llhunspell.h"
 // [/SL:KB]
 
@@ -2455,7 +2455,7 @@ bool LLAppViewer::initConfiguration()
 		//gDirUtilp->setSkinFolder("default");
     }
 
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-23 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-23 (Catznip-2.7.0a) | Modified: Catznip-2.7.0a
 	LLHunspellWrapper::setUseSpellCheck(gSavedSettings.getBOOL("SpellCheck"));
 	if (LLHunspellWrapper::useSpellCheck())
 		LLHunspellWrapper::instance().setCurrentDictionary(gSavedSettings.getString("SpellCheckDictionary"));
