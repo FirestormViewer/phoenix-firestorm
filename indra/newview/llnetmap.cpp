@@ -755,9 +755,12 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 			LLVector3d delta = otherPosition - myPosition;
 			F32 distance = (F32)delta.magVec();
 
+			// If avatar is >1020, the value for Z is returned as 0
+			bool isHigher1020mBug = (otherPosition[VZ] == 0.0);
+
 			// Ansariel: Try to get distance from the nearby people panel
 			//           aka radar. This usually contains better data,
-			//           especially when above 1024m.
+			//           especially when above 1020m.
 			LLPanel* panel_people = LLSideTray::getInstance()->getPanel("panel_people");
 			if (panel_people != NULL)
 			{
@@ -765,11 +768,24 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 				if (avatar_list_item != NULL)
 				{
 					distance = avatar_list_item->getRange();
+
+					// If avatar is >1020m and no viewer object exists,
+					// it is beyond far clip, so the distance value is wrong!
+					isHigher1020mBug = (isHigher1020mBug && gObjectList.findObject(avatar_id) == NULL);
 				}
 			}
 
 			LLStringUtil::format_map_t args;
-			args["DISTANCE"] = llformat("%.02f", distance);
+
+			if (!isHigher1020mBug)
+			{
+				args["DISTANCE"] = llformat("%.02f", distance);
+			}
+			else
+			{
+				static LLCachedControl<F32> farClip(gSavedSettings, "RenderFarClip");
+				args["DISTANCE"] = llformat("> %.02f", F32(farClip));
+			}
 			std::string distanceLabel = LLTrans::getString("minimap_distance");
 			LLStringUtil::format(distanceLabel, args);
 			p.message(av_name.getCompleteName() + "\n" + distanceLabel);
