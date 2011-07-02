@@ -239,8 +239,6 @@ void LLFloaterInspect::refresh()
 		substitution["datetime"] = (S32) timestamp;
 		LLStringUtil::format (timeStr, substitution);
 
-		bool requestOwnerName = false;
-		bool requestCreatorName = false;
 		LLAvatarName av_name;
 //		LLAvatarNameCache::get(obj->mPermissions->getOwner(), &av_name);
 //		owner_name = av_name.getCompleteName();
@@ -262,7 +260,7 @@ void LLFloaterInspect::refresh()
 		else
 		{
 			owner_name = LLTrans::getString("RetrievingData");
-			requestOwnerName = true;
+			LLAvatarNameCache::get(idOwner, boost::bind(&LLFloaterInspect::onGetAvNameCallback, _1, _2, this));
 		}
 
 		const LLUUID& idCreator = obj->mPermissions->getCreator();
@@ -280,7 +278,7 @@ void LLFloaterInspect::refresh()
 		else
 		{
 			creator_name = LLTrans::getString("RetrievingData");
-			requestCreatorName = true;
+			LLAvatarNameCache::get(idCreator, boost::bind(&LLFloaterInspect::onGetAvNameCallback, _1, _2, this));
 		}
 // [/RLVa:KB]
 
@@ -307,17 +305,6 @@ void LLFloaterInspect::refresh()
 		row["columns"][3]["type"] = "text";
 		row["columns"][3]["value"] = timeStr;
 		mObjectList->addElement(row, ADD_TOP);
-
-		// Ansariel: Invoke methods to retrieve the missing avatar name(s)
-		// -> We also need to pass the object for the RLVa check!
-		if (requestOwnerName)
-		{
-			LLAvatarNameCache::get(idOwner, boost::bind(&LLFloaterInspect::onGetAvNameCallback, _1, _2, this));
-		}
-		if (requestCreatorName)
-		{
-			LLAvatarNameCache::get(idCreator, boost::bind(&LLFloaterInspect::onGetAvNameCallback, _1, _2, this));
-		}
 	}
 	if(selected_index > -1 && mObjectList->getItemIndex(selected_uuid) == selected_index)
 	{
