@@ -56,10 +56,7 @@ public:
 	void onSelectObject();
 	LLScrollListCtrl* mObjectList;
 
-	// BEGIN Ansariel: Fixing the avatar name lookup
-	static void onGetCreatorAvNameCallback(const LLUUID& idCreator, const LLAvatarName& av_name, void* SelectNode, void* Ctrl);
-	static void onGetOwnerAvNameCallback(const LLUUID& idOwner, const LLAvatarName& av_name, void* SelectNode, void* Ctrl);
-	// END Ansariel: Fixing the avatar name lookup
+	static void onGetAvNameCallback(const LLUUID& idCreator, const LLAvatarName& av_name, void* FloaterPtr);
 
 protected:
 	// protected members

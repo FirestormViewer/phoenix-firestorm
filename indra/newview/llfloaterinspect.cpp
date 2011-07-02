@@ -191,39 +191,14 @@ LLUUID LLFloaterInspect::getSelectedUUID()
 	return LLUUID::null;
 }
 
-// BEGIN Ansariel: Fixing the avatar name lookup
-void LLFloaterInspect::onGetCreatorAvNameCallback(const LLUUID& idCreator, const LLAvatarName& av_name, void* SelectNode, void* Ctrl)
+void LLFloaterInspect::onGetAvNameCallback(const LLUUID& idCreator, const LLAvatarName& av_name, void* FloaterPtr)
 {
-	if (Ctrl && SelectNode)
+	if (FloaterPtr)
 	{
-		LLScrollListItem* listItem = (LLScrollListItem*)Ctrl;
-		LLSelectNode* obj = (LLSelectNode*)SelectNode;
-		std::string creator_name;
-
-		bool fRlvFilterCreator = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idCreator != gAgent.getID()) && 
-			( (obj->mPermissions->getOwner() == idCreator) || (RlvUtil::isNearbyAgent(idCreator)) );
-		creator_name = (!fRlvFilterCreator) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
-
-		listItem->getColumn(2)->setValue(LLSD(creator_name.c_str()));		
+		LLFloaterInspect* floater = (LLFloaterInspect*)FloaterPtr;
+		floater->dirty();
 	}
 }
-
-void LLFloaterInspect::onGetOwnerAvNameCallback(const LLUUID& idOwner, const LLAvatarName& av_name, void* SelectNode, void* Ctrl)
-{
-	if (Ctrl && SelectNode)
-	{
-		LLScrollListItem* listItem = (LLScrollListItem*)Ctrl;
-		LLSelectNode* obj = (LLSelectNode*)SelectNode;
-		std::string owner_name;
-
-		bool fRlvFilterOwner = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idOwner != gAgent.getID()) && 
-			(!obj->mPermissions->isGroupOwned());
-		owner_name = (!fRlvFilterOwner) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
-
-		listItem->getColumn(1)->setValue(LLSD(owner_name.c_str()));		
-	}
-}
-// END Ansariel: Fixing the avatar name lookup
 
 void LLFloaterInspect::refresh()
 {
@@ -331,18 +306,17 @@ void LLFloaterInspect::refresh()
 		row["columns"][3]["column"] = "creation_date";
 		row["columns"][3]["type"] = "text";
 		row["columns"][3]["value"] = timeStr;
-
-		LLScrollListItem* rowCtrl = mObjectList->addElement(row, ADD_TOP);
+		mObjectList->addElement(row, ADD_TOP);
 
 		// Ansariel: Invoke methods to retrieve the missing avatar name(s)
 		// -> We also need to pass the object for the RLVa check!
 		if (requestOwnerName)
 		{
-			LLAvatarNameCache::get(idOwner, boost::bind(&LLFloaterInspect::onGetOwnerAvNameCallback, _1, _2, obj, rowCtrl));
+			LLAvatarNameCache::get(idOwner, boost::bind(&LLFloaterInspect::onGetAvNameCallback, _1, _2, this));
 		}
 		if (requestCreatorName)
 		{
-			LLAvatarNameCache::get(idCreator, boost::bind(&LLFloaterInspect::onGetCreatorAvNameCallback, _1, _2, obj, rowCtrl));
+			LLAvatarNameCache::get(idCreator, boost::bind(&LLFloaterInspect::onGetAvNameCallback, _1, _2, this));
 		}
 	}
 	if(selected_index > -1 && mObjectList->getItemIndex(selected_uuid) == selected_index)
