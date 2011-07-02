@@ -104,18 +104,17 @@
             <gesture_combo_list
              follows="left|right"
              height="26"
-             image_pressed="PushButton_Press"
-             image_pressed_selected="PushButton_Selected_Press"
-             image_selected="PushButton_Selected_Press"
              layout="topleft"
-             left="0"
              name="Gesture"
              tool_tip="Shows/hides gestures"
              top="5"
              width="42">
                 <combo_button
-				image_overlay="Gesture_btn"
-                 pad_right="10"
+                 height="26"
+                 image_overlay="Gesture_btn"
+             	 image_pressed="PushButton_Press"
+             	 image_pressed_selected="PushButton_Selected_Press"
+             	 image_selected="PushButton_Selected_Press"
                  use_ellipses="true" />
                 <combo_list
                  page_lines="17" />
@@ -133,6 +132,7 @@
          layout="topleft"
          min_height="28"
          min_width="59"
+		 left_delta="0"
          mouse_opaque="false"
          name="speak_panel"
          top_delta="0"
@@ -536,9 +536,8 @@
                  parameter="mini_map" />
             </bottomtray_button>
         </layout_panel>
-
-<!--        
-         <layout_panel
+      
+         <!-- layout_panel
          mouse_opaque="false"
          auto_resize="false"
          follows="left|right"
@@ -568,8 +567,7 @@
                  function="Button.SetDockableFloaterToggle"
                  parameter="inventory" />
             </button>
-        </layout_panel>
--->
+        </layout_panel -->
 
         <layout_panel
          auto_resize="false"
@@ -647,7 +645,41 @@
          parameter="animation_overrider" />
       </bottomtray_button>
         </layout_panel>
-<!-- ## Zi: AO button -->      
+<!-- ## Zi: AO button -->   
+
+<!-- Quick Preferences panel    -WoLf -->
+        <layout_panel
+         auto_resize="false"
+         follows="left|right"
+         height="28"
+         layout="topleft"
+         min_height="28"
+         min_width="43"
+         mouse_opaque="false"
+         name="quickprefs_btn_panel"
+         user_resize="false"
+         width="43">
+       <bottomtray_button
+        name="quickprefs_toggle"
+        tool_tip="Shows/hides the Quick Preferences Panel"
+        left="0"
+        top="5"
+        height="26"
+        width="40"
+        layout="topleft"
+        follows="left|right"
+        image_pressed="PushButton_Press"
+        image_pressed_selected="PushButton_Selected_Press"
+        image_selected="PushButton_Selected_Press"
+        image_overlay="phoenix_18"
+        is_toggle="true"
+        tab_stop="true">
+        <init_callback
+         function="Button.SetDockableFloaterToggle"
+         parameter="quickprefs" />
+      </bottomtray_button>
+        </layout_panel>
+<!-- Quick Preferences panel    -WoLf -->   
 
         <icon
          auto_resize="false"
