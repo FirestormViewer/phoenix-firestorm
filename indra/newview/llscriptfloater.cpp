@@ -278,6 +278,21 @@ void LLScriptFloater::restorePosition()
 	}
 }
 
+// Ansariel: Override base method so we have the option to ignore
+// the global transparency settings and show the script dialog
+// always on opaque background.
+F32 LLScriptFloater::getCurrentTransparency()
+{
+	if (gSavedSettings.getBOOL("FSScriptDialogNoTransparency"))
+	{
+		return 1.0;
+	}
+	else
+	{
+		return LLUICtrl::getCurrentTransparency();
+	}
+}
+
 void LLScriptFloater::onFocusLost()
 {
 	if(getNotificationId().notNull())

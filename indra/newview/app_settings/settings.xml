@@ -2,6 +2,17 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
+	<key>FSScriptDialogNoTransparency</key>
+	<map>
+		<key>Comment</key>
+		<string>If true, script dialogs will be shown opaque and ignore the floater opacity settings.</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>Boolean</string>
+		<key>Value</key>
+		<integer>0</integer>
+	</map>
 	<key>ShowMutedAvatarsAsCloud</key>
 	<map>
 		<key>Comment</key>

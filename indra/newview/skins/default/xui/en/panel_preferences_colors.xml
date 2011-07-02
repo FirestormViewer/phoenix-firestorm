@@ -460,6 +460,17 @@
    top_pad="5"
    width="415" />
 
+  <check_box
+   control_name="FSScriptDialogNoTransparency"
+   follows="left|top"
+   layout="topleft"
+   left="30"
+   height="12"
+   name="FSScriptDialogNoTransparency"
+   top_pad="10"
+   width="450"
+   label="Show script dialogs always on opaque background" />
+
 <!-- ## Zi: Pie menu -->
   <check_box
    control_name="OverridePieColors"
@@ -468,7 +479,7 @@
    left="30"
    height="12"
    name="override_pie_color_checkbox"
-   top_pad="15"
+   top_pad="10"
    width="450"
    label="Override pie menu background color and opacity:" />
   <color_swatch
@@ -479,7 +490,7 @@
    label_height="0"
    layout="topleft"
    left_delta="10"
-   top_pad="10"
+   top_pad="5"
    name="pie_bg_color_override"
    tool_tip="Choose pie menu background color"
    width="44">

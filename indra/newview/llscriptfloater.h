@@ -178,6 +178,8 @@ public:
 
 	void restorePosition();
 
+	F32 getCurrentTransparency();
+
 protected:
 
 	/**
