@@ -28,7 +28,7 @@
 				</text>
 			</panel>
 			<panel name="sidebar_inventory">
-				<text name="tab_name" value="Mein Inventar"/>
+				<text name="tab_name" value="Inventar"/>
 				<text name="tab_description">
 					Inventar durchsuchen.
 				</text>
