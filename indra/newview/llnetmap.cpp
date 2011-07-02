@@ -64,6 +64,7 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "lltrans.h"
+#include "llmutelist.h"
 
 // Ansariel: For accessing the radar data
 #include "llavatarlist.h"
@@ -170,6 +171,8 @@ void LLNetMap::draw()
  	static LLFrameTimer map_timer;
 	static LLUIColor map_avatar_color = LLUIColorTable::instance().getColor("MapAvatarColor", LLColor4::white);
 	static LLUIColor map_avatar_friend_color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white);
+	static LLUIColor map_avatar_linden_color = LLUIColorTable::instance().getColor("MapAvatarLindenColor", LLColor4::blue);
+	static LLUIColor map_avatar_muted_color = LLUIColorTable::instance().getColor("MapAvatarMutedColor", LLColor4::grey3);
 	static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
 	static LLUIColor map_track_disabled_color = LLUIColorTable::instance().getColor("MapTrackDisabledColor", LLColor4::white);
 	static LLUIColor map_frustum_color = LLUIColorTable::instance().getColor("MapFrustumColor", LLColor4::white);
@@ -404,6 +407,17 @@ void LLNetMap::draw()
 				}
 
 				LLColor4 color = show_as_friend ? map_avatar_friend_color : map_avatar_color;
+
+				// Ansariel: Colorize muted avatars and Lindens
+				if (uuid.notNull())
+				{
+					std::string fullName;
+					LLMuteList* muteListInstance = LLMuteList::getInstance();
+
+					if (muteListInstance->isMuted(uuid)) color = map_avatar_muted_color;
+					else if (gCacheName->getFullName(uuid, fullName) && muteListInstance->isLinden(fullName)) color = map_avatar_linden_color;			
+				}
+
 				LLWorldMapView::drawAvatar(
 					pos_map.mV[VX], pos_map.mV[VY], 
 					color, 

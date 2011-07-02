@@ -685,6 +685,12 @@
      name="MapAvatarFriendColor"
      reference="Green" />
     <color
+     name="MapAvatarLindenColor"
+     reference="Blue" />
+    <color
+     name="MapAvatarMutedColor"
+     value="0.4 0.4 0.4 1" />
+    <color
      name="MapFrustumColor"
      reference="White_10" />
 <!-- Changed Color -->
