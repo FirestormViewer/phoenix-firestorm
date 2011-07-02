@@ -1066,7 +1066,7 @@
 	<string name="InvFolder My Inventory">
 		Min beholdning
 	</string>
-	<string name="InvFolder My Favorites">
+	<string name="InvFolder Favorites">
 		Mine favoritter
 	</string>
 	<string name="InvFolder Library">
@@ -1117,7 +1117,7 @@
 	<string name="InvFolder Lost And Found">
 		Fundne genstande
 	</string>
-	<string name="InvFolder Uncompressed Sounds">
+	<string name="InvFolder Sounds">
 		Ukomprimerede lyde
 	</string>
 	<string name="InvFolder Animations">

@@ -1990,7 +1990,7 @@ Requests name of an avatar.  When data is available the dataserver event will be
 
 	<!-- inventory folder -->
 	<string name="InvFolder My Inventory">Inventory</string>
-	<string name="InvFolder My Favorites">Favorites</string>
+	<string name="InvFolder Favorites">Favorites</string>
 	<string name="InvFolder Library">Library</string>
 	<string name="InvFolder Textures">Textures</string>
 	<string name="InvFolder Sounds">Sounds</string>
@@ -2007,7 +2007,7 @@ Requests name of an avatar.  When data is available the dataserver event will be
 	<string name="InvFolder Trash">Trash</string>
 	<string name="InvFolder Photo Album">Photo Album</string>
 	<string name="InvFolder Lost And Found">Lost And Found</string>
-	<string name="InvFolder Uncompressed Sounds">Uncompressed Sounds</string>
+	<string name="InvFolder Sounds">Uncompressed Sounds</string>
 	<string name="InvFolder Animations">Animations</string>
 	<string name="InvFolder Gestures">Gestures</string>
 	<string name="InvFolder Favorite">Favorites</string>

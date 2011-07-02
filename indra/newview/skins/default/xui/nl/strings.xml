@@ -855,7 +855,7 @@
 	<string name="InvFolder My Inventory">
 		Mijn Inventaris
 	</string>
-	<string name="InvFolder My Favorites">
+	<string name="InvFolder Favorites">
 		Mijn Favorieten
 	</string>
 	<string name="InvFolder Library">
@@ -906,7 +906,7 @@
 	<string name="InvFolder Lost And Found">
 		Verloren en Gevonden
 	</string>
-	<string name="InvFolder Uncompressed Sounds">
+	<string name="InvFolder Sounds">
 		Ongecomprimeerde Geluiden
 	</string>
 	<string name="InvFolder Animations">

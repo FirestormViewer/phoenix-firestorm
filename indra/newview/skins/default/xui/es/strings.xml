@@ -1069,7 +1069,7 @@
 	<string name="InvFolder My Inventory">
 		Mi Inventario
 	</string>
-	<string name="InvFolder My Favorites">
+	<string name="InvFolder Favorites">
 		Mis Favoritos
 	</string>
 	<string name="InvFolder Library">
@@ -1120,7 +1120,7 @@
 	<string name="InvFolder Lost And Found">
 		Objetos Perdidos
 	</string>
-	<string name="InvFolder Uncompressed Sounds">
+	<string name="InvFolder Sounds">
 		Sonidos sin comprimir
 	</string>
 	<string name="InvFolder Animations">

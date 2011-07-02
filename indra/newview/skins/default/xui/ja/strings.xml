@@ -1081,7 +1081,7 @@
 	<string name="InvFolder My Inventory">
 		持ち物
 	</string>
-	<string name="InvFolder My Favorites">
+	<string name="InvFolder Favorites">
 		お気に入り
 	</string>
 	<string name="InvFolder Library">
@@ -1132,7 +1132,7 @@
 	<string name="InvFolder Lost And Found">
 		紛失物
 	</string>
-	<string name="InvFolder Uncompressed Sounds">
+	<string name="InvFolder Sounds">
 		圧縮されていないサウンド
 	</string>
 	<string name="InvFolder Animations">

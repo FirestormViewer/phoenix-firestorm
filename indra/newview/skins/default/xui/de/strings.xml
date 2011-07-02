@@ -1096,8 +1096,8 @@
 	<string name="InvFolder My Inventory">
 		Mein Inventar
 	</string>
-	<string name="InvFolder My Favorites">
-		Meine Favoriten
+	<string name="InvFolder Favorites">
+		Favoriten
 	</string>
 	<string name="InvFolder Library">
 		Bibliothek
@@ -1115,7 +1115,7 @@
 		Landmarken
 	</string>
 	<string name="InvFolder Scripts">
-		Skripts
+		Skripte
 	</string>
 	<string name="InvFolder Clothing">
 		Kleidung
@@ -1133,7 +1133,7 @@
 		Inventar
 	</string>
 	<string name="InvFolder Uncompressed Images">
-		Nicht-Komprimierte Bilder
+		Unkomprimierte Bilder
 	</string>
 	<string name="InvFolder Body Parts">
 		Körperteile
@@ -1147,8 +1147,8 @@
 	<string name="InvFolder Lost And Found">
 		Fundbüro
 	</string>
-	<string name="InvFolder Uncompressed Sounds">
-		Nicht-Komprimierte Sounds
+	<string name="InvFolder Sounds">
+		Unkomprimierte Sounds
 	</string>
 	<string name="InvFolder Animations">
 		Animationen
