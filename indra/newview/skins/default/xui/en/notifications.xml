@@ -7343,9 +7343,9 @@ This will send the following information to the current IM session:
   </notification>
 
   <notification
-   icon="notify.tga"
+   icon="alertmodal.tga"
    name="FireStormReqInfo"
-   type="notify">
+   type="alertmodal">
     [NAME] is requesting that you send them information about your Firestorm setup.
     (This is the same information that can be found by going to Help->ABOUT Firestorm)    
     [REASON]
