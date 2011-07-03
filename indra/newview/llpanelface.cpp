@@ -975,6 +975,7 @@ void LLPanelFace::getState()
 		
 
 		// Set variable values for numeric expressions
+		LLCalc* calcp = LLCalc::getInstance();
 		calcp->clearVar(LLCalc::TEX_U_SCALE);
 		calcp->clearVar(LLCalc::TEX_V_SCALE);
 		calcp->clearVar(LLCalc::TEX_U_OFFSET);
