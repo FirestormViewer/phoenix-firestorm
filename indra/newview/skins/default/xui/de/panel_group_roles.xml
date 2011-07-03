@@ -45,11 +45,11 @@ definieren, darunter  &apos;Jeder &apos; und  &apos;Eigentümer &apos;.
 				Checkbox_Off
 			</panel.string>
 			<filter_editor label="Rollen filtern" name="filter_input"/>
-			<scroll_list name="role_list">
-				<scroll_list.columns label="Rolle" name="name"/>
-				<scroll_list.columns label="Titel" name="title"/>
-				<scroll_list.columns label="#" name="members"/>
-			</scroll_list>
+			<name_list name="role_list">
+				<name_list.columns label="Rolle" name="name"/>
+				<name_list.columns label="Titel" name="title"/>
+				<name_list.columns label="#" name="members"/>
+			</name_list>
 			<button label="Neue Rolle" name="role_create"/>
 			<button label="Rolle löschen" name="role_delete"/>
 		</panel>
@@ -65,9 +65,9 @@ Rechte in einer Gruppe. Es gibt viele verschiedene Fähigkeiten.
 		</panel>
 	</tab_container>
 	<panel name="members_footer">
-		<text name="static">
-			Rollen
-		</text>
+		<text name="assigned_roles_label">
+			Zugewiesene Rollen
+        </text>	
 		<scroll_list name="member_assigned_roles">
 			<scroll_list.columns label="" name="checkbox"/>
 			<scroll_list.columns label="" name="role"/>
@@ -80,38 +80,45 @@ Rechte in einer Gruppe. Es gibt viele verschiedene Fähigkeiten.
 		</scroll_list>
 	</panel>
 	<panel name="roles_footer">
-		<text name="static">
+		<text name="role_name_label">
 			Rolle:
 		</text>
 		<line_editor name="role_name"/>
-		<text name="static3">
+		<text name="role_title_label">
 			Rollentitel
 		</text>
 		<line_editor name="role_title"/>
-		<text name="static2">
+		<text name="description_label">
 			Beschreibung
 		</text>
 		<text_editor name="role_description"/>
-		<text name="static4">
-			Mitglieder in Rolle
-		</text>
 		<check_box label="Mitglieder anzeigen" name="role_visible_in_list" tool_tip="Festlegen, ob Mitglieder in dieser Rolle auf der Registerkarte  &apos;Allgemein &apos; für Personen außerhalb der Gruppe sichtbar sind."/>
-		<text name="static5" tool_tip="Eine Liste der Fähigkeiten der aktuell ausgewählten Rolle.">
-			Zulässige Fähigkeiten
-		</text>
-		<scroll_list name="role_allowed_actions" tool_tip="Um detaillierte Informationen zu den Fähigkeiten anzuzeigen, siehe Registerkarte Fähigkeiten.">
-			<scroll_list.columns label="" name="checkbox"/>
-			<scroll_list.columns label="" name="action"/>
-		</scroll_list>
+		
+		<panel name="group_roles_layout_panel">
+			<text name="assigned_members_label">
+				Mitglieder in Rolle
+			</text>
+		</panel>
+		<panel name="group_roles_layout_panel">
+			<text name="allowed_abilities_label" tool_tip="Eine Liste der Fähigkeiten der aktuell ausgewählten Rolle.">
+				Zulässige Fähigkeiten
+			</text>
+			<scroll_list name="role_allowed_actions" tool_tip="Um detaillierte Informationen zu den Fähigkeiten anzuzeigen, siehe Registerkarte Fähigkeiten.">
+				<scroll_list.columns label="" name="checkbox"/>
+				<scroll_list.columns label="" name="action"/>
+			</scroll_list>
+		</panel>
 	</panel>
 	<panel name="actions_footer">
-		<text_editor name="action_description">
-			Diese Fähigkeit heißt „Mitglieder aus dieser Gruppe werfen“. Eigentümer können nur von anderen Eigentümern hinausgeworfen werden.
-		</text_editor>
-		<text name="static2">
+		<panel>
+			<text_editor name="action_description">
+				Diese Fähigkeit heißt „Mitglieder aus dieser Gruppe werfen“. Eigentümer können nur von anderen Eigentümern hinausgeworfen werden.
+			</text_editor>
+		</panel>
+		<text name="action_roles_label">
 			Rollen mit Fähigkeiten
 		</text>
-		<text name="static3">
+		<text name="action_members_label">
 			Rollen mit dieser Fähigkeit
 		</text>
 	</panel>

@@ -32,7 +32,7 @@ Hover your mouse over the options for more help.
     layout="topleft">
 
     <text
-     name="group_key"
+     name="group_key_label"
      left="0"
      top="2"
      width="68"
@@ -63,7 +63,7 @@ Hover your mouse over the options for more help.
       bg_visible="false"
       enabled="false"
       allow_scroll="false"
-      initial_value="(loading ...)"
+      initial_value="(loading...)"
       follows="top|left|right"
       layout="topleft" />
 
@@ -93,7 +93,7 @@ Hover your mouse over the options for more help.
      left_pad="4"
      right="-1"
      height="20"
-     initial_value="(loading ...)"
+     initial_value="(loading...)"
      type="string"
      use_ellipses="true"
      follows="top|left|right"

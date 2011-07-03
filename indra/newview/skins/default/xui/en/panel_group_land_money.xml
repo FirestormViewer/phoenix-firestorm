@@ -125,7 +125,7 @@
      name="land_available_label"
      width="110">
         Land available:
-    </text>Nivi Snowpaw
+    </text>
     <text
     text_color="EmphasisColor"
      type="string"
@@ -212,7 +212,7 @@
      font="SansSerifBig"
      height="16"
      layout="topleft"
-     left="0"
+     left="5"
      name="group_money_heading"
      text_color="EmphasisColor"
      top_pad="0"
