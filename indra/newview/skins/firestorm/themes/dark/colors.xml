@@ -33,6 +33,30 @@
    name="TextFgReadOnlyColor"
    reference="LtGray_50" />	 
    
-   
+ 
+  <color
+   name="BackgroundChatColor"
+   reference="DkGray" />
+  <color
+   name="ButtonImageColor"
+   reference="SL-White" />
+  <color
+   name="ButtonLabelColor"
+   reference="LtGray" />
+  <color
+   name="ChatHistoryTextColor"
+   reference="LtGray" />   
+  <color
+   name="MapAvatarColor"
+   reference="Green" />
+  <color
+   name="MapAvatarFriendColor"
+   reference="Yellow" />
+  <color
+   name="ObjectChatColor"
+   reference="EmphasisColor" />
+     
+    
+     
     
 </colors>
