@@ -130,6 +130,10 @@ LLViewerFolderDictionary::LLViewerFolderDictionary()
 		 
 	addEntry(LLFolderType::FT_NONE, 				new ViewerFolderEntry("New Folder",				"Inv_FolderOpen",		"Inv_FolderClosed",		FALSE, "default"));
 
+	addEntry(LLFolderType::FT_FIRESTORM, 			new ViewerFolderEntry("Firestorm",				"Inv_FirestormOpen",	"Inv_FirestormClosed",		FALSE, "default"));
+	addEntry(LLFolderType::FT_PHOENIX, 				new ViewerFolderEntry("Phoenix",				"Inv_PhoenixOpen",		"Inv_PhoenixClosed",		FALSE, "default"));
+	addEntry(LLFolderType::FT_RLV,					new ViewerFolderEntry("RLV",					"Inv_RLVOpen",			"Inv_RLVClosed",		FALSE, "default"));
+
 #if SUPPORT_ENSEMBLES
 	initEnsemblesFromFile();
 #else

@@ -2385,7 +2385,11 @@ LLFolderType::EType LLFolderBridge::getPreferredType() const
 	LLViewerInventoryCategory* cat = getCategory();
 	if(cat)
 	{
-		preferred_type = cat->getPreferredType();
+		std::string catName(cat->getName());
+		if (catName == ROOT_FIRESTORM_FOLDER) preferred_type = LLFolderType::FT_FIRESTORM;
+		else if (catName == RLV_ROOT_FOLDER) preferred_type = LLFolderType::FT_RLV;
+		else if (catName == "#Phoenix") preferred_type = LLFolderType::FT_PHOENIX;
+		else preferred_type = cat->getPreferredType();
 	}
 
 	return preferred_type;
@@ -2398,7 +2402,11 @@ LLUIImagePtr LLFolderBridge::getIcon() const
 	LLViewerInventoryCategory* cat = getCategory();
 	if(cat)
 	{
-		preferred_type = cat->getPreferredType();
+		std::string catName(cat->getName());
+		if (catName == ROOT_FIRESTORM_FOLDER) preferred_type = LLFolderType::FT_FIRESTORM;
+		else if (catName == RLV_ROOT_FOLDER) preferred_type = LLFolderType::FT_RLV;
+		else if (catName == "#Phoenix") preferred_type = LLFolderType::FT_PHOENIX;
+		else preferred_type = cat->getPreferredType();
 	}
 	return getIcon(preferred_type);
 }

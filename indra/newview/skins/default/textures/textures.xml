@@ -264,6 +264,14 @@ with the same filename but different name
   <texture name="Inv_InboxOpen"			file_name="icons/Inv_SysOpen.png" />
   <texture name="Inv_InboxClosed"		file_name="icons/Inv_SysClosed.png" />
   
+ <!-- Firstorm virtual system folders -->
+  <texture name="Inv_FirestormOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_FirestormClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_PhoenixOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_PhoenixClosed"		file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_RLVOpen"			file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_RLVClosed"			file_name="icons/Inv_SysClosed.png" />
+  
   <texture name="Linden_Dollar_Alert" file_name="widgets/Linden_Dollar_Alert.png"/>
   <texture name="Linden_Dollar_Background" file_name="widgets/Linden_Dollar_Background.png"/>
 

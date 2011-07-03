@@ -82,7 +82,13 @@ public:
 		
 		FT_INBOX = 49,
 
-		FT_COUNT = 50,
+		// Ansariel: Folder types for our own virtual system folders
+		//FT_COUNT = 50,
+		FT_FIRESTORM = 50,
+		FT_PHOENIX = 51,
+		FT_RLV = 52,
+		FT_COUNT = 53,
+		// END Ansariel: Folder types for our own virtual system folders
 
 		FT_NONE = -1
 	};
