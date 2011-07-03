@@ -13,6 +13,12 @@
                 <key>folder</key>
                     <string>grey</string>
                 </map>
+                <map>
+                <key>name</key>
+                    <string>Dark</string>
+                <key>folder</key>
+                    <string>dark</string>
+                </map>
             </array>
         </map>
 		
