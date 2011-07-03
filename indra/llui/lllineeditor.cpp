@@ -135,6 +135,7 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 	mIgnoreTab( p.ignore_tab ),
 	mDrawAsterixes( p.is_password ),
 	mSelectAllonFocusReceived( p.select_on_focus ),
+	mSelectAllonCommit( TRUE ),
 	mPassDelete(FALSE),
 	mReadOnly(FALSE),
 	mBgImage( p.background_image ),
@@ -271,7 +272,6 @@ void LLLineEditor::onCommit()
 
 	setControlValue(getValue());
 	LLUICtrl::onCommit();
-	//selectAll();
 
 	// Selection on commit needs to be turned off when evaluating maths
 	// expressions, to allow indication of the error position

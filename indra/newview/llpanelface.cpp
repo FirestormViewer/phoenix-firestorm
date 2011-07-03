@@ -495,7 +495,6 @@ void LLPanelFace::getState()
 {
 	LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
 
-	LLCalc* calcp = LLCalc::getInstance();
 	if( objectp
 		&& objectp->getPCode() == LL_PCODE_VOLUME
 		&& objectp->permModify())
@@ -518,7 +517,6 @@ void LLPanelFace::getState()
 		BOOL single_volume = (LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
 						 && (selected_count == 1);
 		getChildView("copytextures")->setEnabled(single_volume && editable);
-		//getChildView("pastetextures")->setEnabled(single_volume && editable);
 		getChildView("pastetextures")->setEnabled(editable);
 		getChildView("textbox params")->setEnabled(single_volume && editable);
 		getChildView("button apply")->setEnabled(editable);
@@ -932,6 +930,7 @@ void LLPanelFace::getState()
 		}
 
 		// Set variable values for numeric expressions
+		LLCalc* calcp = LLCalc::getInstance();
 		calcp->setVar(LLCalc::TEX_U_SCALE, childGetValue("TexScaleU").asReal());
 		calcp->setVar(LLCalc::TEX_V_SCALE, childGetValue("TexScaleV").asReal());
 		calcp->setVar(LLCalc::TEX_U_OFFSET, childGetValue("TexOffsetU").asReal());

@@ -122,7 +122,7 @@ LLSpinCtrl::LLSpinCtrl(const LLSpinCtrl::Params& p)
 	params.max_length.bytes(MAX_STRING_LENGTH);
 	params.commit_callback.function((boost::bind(&LLSpinCtrl::onEditorCommit, this, _2)));
 	
-	//KC: allow entering of any chars for LLCalc, proper input will be evaluated later 
+	//allow entering of any chars for LLCalc, proper input will be evaluated on commit
 	//if( mPrecision>0 )//should accept float numbers
 	//{
 	//	params.prevalidate_callback(&LLTextValidate::validateFloat);
