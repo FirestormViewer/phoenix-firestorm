@@ -4687,6 +4687,7 @@ BOOL LLVOAvatar::processSingleAnimationStateChange( const LLUUID& anim_id, BOOL 
 					//	gAudiop->triggerSound(LLUUID(gSavedSettings.getString("UISndTyping")), 1.0f, LLAudioEngine::AUDIO_TYPE_UI);
 					//}
 					//else
+					if(gSavedSettings.getBOOL("PhoenixPlayTypingSound"))
 					{
 						LLUUID sound_id = LLUUID(gSavedSettings.getString("UISndTyping"));
 						gAudiop->triggerSound(sound_id, getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_SFX, char_pos_global);
