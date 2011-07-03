@@ -1211,6 +1211,14 @@ void LLPanelScriptLimitsAttachment::setAttachmentDetails(LLSD content)
 				urls = content["attachments"][i]["objects"][j]["resources"]["urls"].asInteger();
 			}
 			std::string name = content["attachments"][i]["objects"][j]["name"].asString();
+
+			// Ansariel: Crude hack to make the bridge display the proper attachment spot
+			//           and not "MissingString(Bad attachment point)"
+			if (humanReadableLocation == "MissingString(Bad attachment point)" && (name.find("Firestorm LSL Bridge") != std::string::npos || name == "Rock - medium, round"))
+			{
+				humanReadableLocation = LLTrans::getString("Bridge");
+				name = "Firestorm LSL Bridge";
+			}
 			
 			LLSD element;
 
