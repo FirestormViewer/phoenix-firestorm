@@ -22,7 +22,7 @@
   <radio_group
      height="20"
      layout="topleft"
-     left_delta="140"
+     left_delta="170"
 	   control_name="ChatFontSize"
      name="chat_font_size"
      top="10"
@@ -211,7 +211,7 @@
          height="16" 
          left="0" 
          value="1"
-         width="120" />
+         width="130" />
         <radio_item
          label="Affects movement (i.e. WASD)"
          left_pad="0"
@@ -240,7 +240,7 @@
     <radio_group
      height="16"
      layout="topleft"
-     left_pad="0"
+     left_delta="120"
      top_delta="0"
      control_name="ChatWindow"
      name="chat_window"
