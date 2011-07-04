@@ -1374,7 +1374,7 @@ void LLScrollListCtrl::drawItems()
 	S32 y = mItemListRect.mTop - mLineHeight;
 
 	// allow for partial line at bottom
-	S32 num_page_lines = getLinesPerPage();
+	S32 num_page_lines = getLinesPerPage() + 1;
 
 	LLRect item_rect;
 
@@ -1890,7 +1890,7 @@ LLScrollListItem* LLScrollListCtrl::hitItem( S32 x, S32 y )
 		mLineHeight );
 
 	// allow for partial line at bottom
-	S32 num_page_lines = getLinesPerPage();
+	S32 num_page_lines = getLinesPerPage() + 1;
 
 	S32 line = 0;
 	item_list::iterator iter;
