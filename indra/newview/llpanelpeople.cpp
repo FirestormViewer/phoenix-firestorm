@@ -753,9 +753,6 @@ BOOL LLPanelPeople::postBuild()
 
 	mOnlineFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
 	mAllFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
-
-	// FSFloaterContacts* fs_contacts = FSFloaterContacts::getInstance();
-	// fs_contacts->mFriendsTab->setVisibleCallback(boost::bind(&Updater::setActive, mFriendListUpdater, _2));
 	
 	return TRUE;
 }
@@ -841,11 +838,6 @@ void LLPanelPeople::updateFriendList()
 	{
 		llwarns << "Friends Cards failed to load" << llendl;
 	}
-
-	// update the contacts floater as well -KC
-	// static FSFloaterContacts* fs_contacts = FSFloaterContacts::getInstance();
-	// if (fs_contacts)
-		// fs_contacts->updateFriendList();
 
 	LLAvatarTracker::buddy_map_t::const_iterator buddy_it = all_buddies.begin();
 	for (; buddy_it != all_buddies.end(); ++buddy_it)

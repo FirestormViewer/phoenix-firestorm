@@ -39,6 +39,7 @@
 #include "llavataractions.h"
 #include "llavatarlist.h"
 #include "llavatarlistitem.h"
+#include "llavatarnamecache.h"
 #include "llcallingcard.h"			// for LLAvatarTracker
 #include "llfloateravatarpicker.h"
 #include "llfriendcard.h"
@@ -57,8 +58,6 @@
 #define DEFAULT_PERIOD 5.0
 #define RIGHTS_CHANGE_TIMEOUT 5.0
 #define OBSERVER_TIMEOUT 0.5
-
-#define ONLINE_SIP_ICON_NAME "slim_icon_16_viewer.tga"
 
 static const std::string FRIENDS_TAB_NAME	= "friends_panel";
 static const std::string GROUP_TAB_NAME		= "groups_panel";
@@ -152,10 +151,11 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	LLEventTimer(DEFAULT_PERIOD),
 	mTabContainer(NULL),
 	mObserver(NULL),
-	// mFriendList(NULL),
+	mFriendsList(NULL),
 	mGroupList(NULL),
 	mAllowRightsChange(TRUE),
-	mNumRightsChanged(0)
+	mNumRightsChanged(0),
+	mSortByUserName(LLCachedControl<bool>(gSavedSettings,"FSSortContactsByUserName", FALSE))
 {
 	mEventTimer.stop();
 	mObserver = new LLLocalFriendsObserver(this);
@@ -184,19 +184,8 @@ BOOL FSFloaterContacts::tick()
 BOOL FSFloaterContacts::postBuild()
 {
 	mTabContainer = getChild<LLTabContainer>("friends_and_groups");
-
 	mFriendsTab = getChild<LLPanel>(FRIENDS_TAB_NAME);
-	// mFriendList = mFriendsTab->getChild<LLAvatarList>("avatars_all");
-	// mFriendList->setNoItemsCommentText(getString("no_friends"));
-	// mFriendList->setShowIcons("FriendsListShowIcons");
-	// mFriendList->showPermissions(TRUE);
-	// mFriendList->setComparator(&STATUS_COMPARATOR);
-	
-	// mFriendList->setRefreshCompleteCallback(boost::bind(&FSFloaterContacts::sortFriendList, this));
-	// mFriendList->setItemDoubleClickCallback(boost::bind(&FSFloaterContacts::onAvatarListDoubleClicked, this, _1));
-	// mFriendList->setReturnCallback(boost::bind(&FSFloaterContacts::onImButtonClicked, this));
-	
-	
+
 	mFriendsList = mFriendsTab->getChild<LLScrollListCtrl>("friend_list");
 	mFriendsList->setMaxSelectable(MAX_FRIEND_SELECT);
 	//mFriendsList->setMaximumSelectCallback(boost::bind(&FSFloaterContacts::onMaximumSelect, this)); //TODO
@@ -208,9 +197,12 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsList->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
 
 	// primary sort = online status, secondary sort = name
-	mFriendsList->sortByColumn(std::string("friend_name"), TRUE);
+	if (mSortByUserName)
+		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
+	else
+		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_NAME)->mName;
+	mFriendsList->sortByColumn(std::string("full_name"), TRUE);
 	mFriendsList->sortByColumn(std::string("icon_online_status"), FALSE);
-	
 	
 	mFriendsTab->childSetAction("im_btn", boost::bind(&FSFloaterContacts::onImButtonClicked, this));
 	mFriendsTab->childSetAction("profile_btn", boost::bind(&FSFloaterContacts::onViewProfileButtonClicked, this));
@@ -279,13 +271,19 @@ void FSFloaterContacts::onOpen(const LLSD& key)
 	}
 }
 
-// as soon as the avatar list widget tells us all names are loaded, do
-//  another sort on the list -Zi
-void FSFloaterContacts::sortFriendList()
+
+//static
+FSFloaterContacts* FSFloaterContacts::findInstance()
 {
-	// mFriendList->sort();
-	mFriendsList->updateSort();
+	return LLFloaterReg::findTypedInstance<FSFloaterContacts>("imcontacts");
 }
+
+//static
+FSFloaterContacts* FSFloaterContacts::getInstance()
+{
+	return LLFloaterReg::getTypedInstance<FSFloaterContacts>("imcontacts");
+}
+
 
 //
 // Friend actions
@@ -375,6 +373,13 @@ bool FSFloaterContacts::isItemsFreeOfFriends(const uuid_vec_t& uuids)
 	return true;
 }
 
+// static
+void FSFloaterContacts::onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names)
+{
+	if (!names.empty() && !ids.empty())
+		LLAvatarActions::requestFriendshipDialog(ids[0], names[0].getCompleteName());
+}
+
 void FSFloaterContacts::onAddFriendWizButtonClicked()
 {
 	// Show add friend wizard.
@@ -427,6 +432,9 @@ void FSFloaterContacts::onGroupSearchButtonClicked()
 }
 
 
+//
+// Tab and list functions
+//
 
 std::string FSFloaterContacts::getActiveTabName() const
 {
@@ -439,7 +447,6 @@ LLUUID FSFloaterContacts::getCurrentItemID() const
 
 	if (cur_tab == FRIENDS_TAB_NAME)
 	{
-		// return mFriendList->getSelectedUUID();
 		LLScrollListItem* selected = mFriendsList->getFirstSelected();
 		if (selected)
 			selected->getUUID();
@@ -447,9 +454,10 @@ LLUUID FSFloaterContacts::getCurrentItemID() const
 			return LLUUID::null;
 	}
 	if (cur_tab == GROUP_TAB_NAME)
+	{
 		return mGroupList->getSelectedUUID();
+	}
 
-	llassert(0 && "unknown tab selected");
 	return LLUUID::null;
 }
 
@@ -459,7 +467,6 @@ void FSFloaterContacts::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 
 	if (cur_tab == FRIENDS_TAB_NAME)
 	{
-		// mFriendList->getSelectedUUIDs(selected_uuids);
 		std::vector<LLScrollListItem*> selected = mFriendsList->getAllSelected();
 		for(std::vector<LLScrollListItem*>::iterator itr = selected.begin(); itr != selected.end(); ++itr)
 		{
@@ -467,61 +474,29 @@ void FSFloaterContacts::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 		}
 	}
 	else if (cur_tab == GROUP_TAB_NAME)
+	{
 		mGroupList->getSelectedUUIDs(selected_uuids);
+	}
+}
+
+void FSFloaterContacts::sortFriendList()
+{
+	mFriendsList->updateLineHeight();
+	mFriendsList->updateLayout();
+
+	if (mSortByUserName)
+		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
 	else
-		llassert(0 && "unknown tab selected");
-
-}
-
-
-// void FSFloaterContacts::updateFriendList()
-// {
-	// if (!mFriendList)
-		// return;
-
-	// uuid_vec_t& contact_friendsp = mFriendList->getIDs();
-	// contact_friendsp.clear();
-	
-	// Cause inv fails so very much, lets just load the contacts floater from
-	// the avatar tracker instead of from calling cards, which are fail
-	// This should resolve part or all of FIRE-565 -KC
-	
-	// const LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
-	// LLAvatarTracker::buddy_map_t all_buddies;
-	// av_tracker.copyBuddyList(all_buddies);
-
-	// LLAvatarTracker::buddy_map_t::const_iterator buddy_it = all_buddies.begin();
-	// for (; buddy_it != all_buddies.end(); ++buddy_it)
-	// {
-		// LLUUID buddy_id = buddy_it->first;
-		// contact_friendsp.push_back(buddy_id);
-	// }
-
-	// mFriendList->setDirty(true, !mFriendList->filterHasMatches());
-// }
-
-
-// static
-void FSFloaterContacts::onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names)
-{
-	if (!names.empty() && !ids.empty())
-		LLAvatarActions::requestFriendshipDialog(ids[0], names[0].getCompleteName());
-}
-
-
-//static
-FSFloaterContacts* FSFloaterContacts::findInstance()
-{
-	return LLFloaterReg::findTypedInstance<FSFloaterContacts>("imcontacts");
-}
-
-FSFloaterContacts* FSFloaterContacts::getInstance()
-{
-	return LLFloaterReg::getTypedInstance<FSFloaterContacts>("imcontacts");
+		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_NAME)->mName;
+	mFriendsList->setNeedsSort(true);
 }
 
 
 
+
+//
+// Friends list
+//
 
 void FSFloaterContacts::updateFriends(U32 changed_mask)
 {
@@ -567,125 +542,130 @@ void FSFloaterContacts::updateFriends(U32 changed_mask)
 	refreshUI();
 }
 
-BOOL FSFloaterContacts::addFriend(const LLUUID& agent_id)
+void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 {
 	LLAvatarTracker& at = LLAvatarTracker::instance();
 	const LLRelationship* relationInfo = at.getBuddyInfo(agent_id);
-	if(!relationInfo) return FALSE;
+	if(!relationInfo) return;
 
 	bool isOnlineSIP = LLVoiceClient::getInstance()->isOnlineSIP(agent_id);
 	bool isOnline = relationInfo->isOnline();
 
-	std::string fullname;
-	BOOL have_name = gCacheName->getFullName(agent_id, fullname);
-	
+	LLAvatarName av_name;
+	if (!LLAvatarNameCache::get(agent_id, &av_name))
+	{
+		const LLRelationship* info = LLAvatarTracker::instance().getBuddyInfo(agent_id);
+		LLAvatarNameCache::get(agent_id, boost::bind(&FSFloaterContacts::updateFriendItem, this, agent_id, info));
+	}
+
 	LLSD element;
 	element["id"] = agent_id;
-	LLSD& friend_column = element["columns"][LIST_FRIEND_NAME];
-	friend_column["column"] = "friend_name";
-	friend_column["value"] = fullname;
-	friend_column["font"]["name"] = "SANSSERIF";
-	friend_column["font"]["style"] = "NORMAL";	
+	LLSD& username_column				= element["columns"][LIST_FRIEND_USER_NAME];
+	username_column["column"]			= "user_name";
+	username_column["value"]			= av_name.mUsername;
+	
+	LLSD& friend_column					= element["columns"][LIST_FRIEND_NAME];
+	friend_column["column"]				= "full_name";
+	friend_column["value"]				= av_name.getCompleteName();
+	friend_column["font"]["name"]		= "SANSSERIF";
+	friend_column["font"]["style"]		= "NORMAL";
 
-	LLSD& online_status_column = element["columns"][LIST_ONLINE_STATUS];
-	online_status_column["column"] = "icon_online_status";
-	online_status_column["type"] = "icon";
+	LLSD& online_status_column			= element["columns"][LIST_ONLINE_STATUS];
+	online_status_column["column"]		= "icon_online_status";
+	online_status_column["type"]		= "icon";
 	
 	if (isOnline)
-	{
-		friend_column["font"]["style"] = "BOLD";	
-		online_status_column["value"] = "legacy/icon_avatar_online.tga";
+	{	
+		friend_column["font"]["style"]		= "BOLD";	
+		online_status_column["value"]		= "icon_avatar_online";
 	}
 	else if(isOnlineSIP)
-	{
-		friend_column["font"]["style"] = "BOLD";	
-		online_status_column["value"] = ONLINE_SIP_ICON_NAME;
+	{	
+		friend_column["font"]["style"]		= "BOLD";	
+		online_status_column["value"]		= "slim_icon_16_viewer";
 	}
 
-	LLSD& online_column = element["columns"][LIST_VISIBLE_ONLINE];
-	online_column["column"] = "icon_visible_online";
-	online_column["type"] = "checkbox";
-	online_column["value"] = relationInfo->isRightGrantedTo(LLRelationship::GRANT_ONLINE_STATUS);
+	LLSD& online_column						= element["columns"][LIST_VISIBLE_ONLINE];
+	online_column["column"]					= "icon_visible_online";
+	online_column["type"]					= "checkbox";
+	online_column["value"]					= relationInfo->isRightGrantedTo(LLRelationship::GRANT_ONLINE_STATUS);
 
-	LLSD& visible_map_column = element["columns"][LIST_VISIBLE_MAP];
-	visible_map_column["column"] = "icon_visible_map";
-	visible_map_column["type"] = "checkbox";
-	visible_map_column["value"] = relationInfo->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION);
+	LLSD& visible_map_column				= element["columns"][LIST_VISIBLE_MAP];
+	visible_map_column["column"]			= "icon_visible_map";
+	visible_map_column["type"]				= "checkbox";
+	visible_map_column["value"]				= relationInfo->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION);
 
-	LLSD& edit_my_object_column = element["columns"][LIST_EDIT_MINE];
-	edit_my_object_column["column"] = "icon_edit_mine";
-	edit_my_object_column["type"] = "checkbox";
-	edit_my_object_column["value"] = relationInfo->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS);
+	LLSD& edit_my_object_column				= element["columns"][LIST_EDIT_MINE];
+	edit_my_object_column["column"]			= "icon_edit_mine";
+	edit_my_object_column["type"]			= "checkbox";
+	edit_my_object_column["value"]			= relationInfo->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS);
 
-	LLSD& visible_their_map_column = element["columns"][LIST_VISIBLE_MAP_THEIRS];
-	visible_their_map_column["column"] = "icon_visible_map_theirs";
-	visible_their_map_column["type"] = "checkbox";
-	visible_their_map_column["enabled"] = "";
-	visible_their_map_column["value"] = relationInfo->isRightGrantedFrom(LLRelationship::GRANT_MAP_LOCATION);
+	LLSD& visible_their_map_column			= element["columns"][LIST_VISIBLE_MAP_THEIRS];
+	visible_their_map_column["column"]		= "icon_visible_map_theirs";
+	visible_their_map_column["type"]		= "checkbox";
+	visible_their_map_column["enabled"]		= "";
+	visible_their_map_column["value"]		= relationInfo->isRightGrantedFrom(LLRelationship::GRANT_MAP_LOCATION);
 	
-	LLSD& edit_their_object_column = element["columns"][LIST_EDIT_THEIRS];
-	edit_their_object_column["column"] = "icon_edit_theirs";
-	edit_their_object_column["type"] = "checkbox";
-	edit_their_object_column["enabled"] = "";
-	edit_their_object_column["value"] = relationInfo->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS);
+	LLSD& edit_their_object_column			= element["columns"][LIST_EDIT_THEIRS];
+	edit_their_object_column["column"]		= "icon_edit_theirs";
+	edit_their_object_column["type"]		= "checkbox";
+	edit_their_object_column["enabled"]		= "";
+	edit_their_object_column["value"]		= relationInfo->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS);
 
-	LLSD& update_gen_column = element["columns"][LIST_FRIEND_UPDATE_GEN];
-	update_gen_column["column"] = "friend_last_update_generation";
-	update_gen_column["value"] = have_name ? relationInfo->getChangeSerialNum() : -1;
+	LLSD& update_gen_column					= element["columns"][LIST_FRIEND_UPDATE_GEN];
+	update_gen_column["column"]				= "friend_last_update_generation";
+	update_gen_column["value"]				= relationInfo->getChangeSerialNum();
 
 	mFriendsList->addElement(element, ADD_BOTTOM);
-	return have_name;
 }
 
 
 // propagate actual relationship to UI.
 // Does not resort the UI list because it can be called frequently. JC
-BOOL FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelationship* info)
+void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelationship* info)
 {
-	if (!info) return FALSE;
+	if (!info) return;
 	LLScrollListItem* itemp = mFriendsList->getItem(agent_id);
-	if (!itemp) return FALSE;
+	if (!itemp) return;
 	
 	bool isOnlineSIP = LLVoiceClient::getInstance()->isOnlineSIP(itemp->getUUID());
 	bool isOnline = info->isOnline();
 
-	std::string fullname;
-	BOOL have_name = gCacheName->getFullName(agent_id, fullname);
-	
+	LLAvatarName av_name;
+	if (!LLAvatarNameCache::get(agent_id, &av_name))
+	{
+		LLAvatarNameCache::get(agent_id, boost::bind(&FSFloaterContacts::updateFriendItem, this, agent_id, info));
+	}
+
 	// Name of the status icon to use
 	std::string statusIcon;
-	
 	if(isOnline)
 	{
-		statusIcon = "legacy/icon_avatar_online.tga";
+		statusIcon = "icon_avatar_online";
 	}
 	else if(isOnlineSIP)
 	{
-		statusIcon = ONLINE_SIP_ICON_NAME;
+		statusIcon = "slim_icon_16_viewer";
 	}
 
 	itemp->getColumn(LIST_ONLINE_STATUS)->setValue(statusIcon);
-	
-	itemp->getColumn(LIST_FRIEND_NAME)->setValue(fullname);
-	//This might work, but would need to test if it changes with DN changes _KC
-	//itemp->getColumn(LIST_FRIEND_NAME)->setValue( LLSLURL("agent", agent_id, "completename").getSLURLString());
-	
+
+	itemp->getColumn(LIST_FRIEND_USER_NAME)->setValue( av_name.mUsername );
+	itemp->getColumn(LIST_FRIEND_NAME)->setValue( av_name.getCompleteName() );
+
 	// render name of online friends in bold text
-	((LLScrollListText*)itemp->getColumn(LIST_FRIEND_NAME))->setFontStyle((isOnline || isOnlineSIP) ? LLFontGL::BOLD : LLFontGL::NORMAL);	
+	((LLScrollListText*)itemp->getColumn(LIST_FRIEND_NAME))->setFontStyle((isOnline || isOnlineSIP) ? LLFontGL::BOLD : LLFontGL::NORMAL);
+
 	itemp->getColumn(LIST_VISIBLE_ONLINE)->setValue(info->isRightGrantedTo(LLRelationship::GRANT_ONLINE_STATUS));
 	itemp->getColumn(LIST_VISIBLE_MAP)->setValue(info->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION));
 	itemp->getColumn(LIST_EDIT_MINE)->setValue(info->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS));
 	itemp->getColumn(LIST_VISIBLE_MAP_THEIRS)->setValue(info->isRightGrantedFrom(LLRelationship::GRANT_MAP_LOCATION));
 	itemp->getColumn(LIST_EDIT_THEIRS)->setValue(info->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS));
-	S32 change_generation = have_name ? info->getChangeSerialNum() : -1;
-	// S32 change_generation = info->getChangeSerialNum();
+	S32 change_generation = info->getChangeSerialNum();
 	itemp->getColumn(LIST_FRIEND_UPDATE_GEN)->setValue(change_generation);
 
 	// enable this item, in case it was disabled after user input
 	itemp->setEnabled(TRUE);
-
-	// Do not resort, this function can be called frequently.
-	return have_name;
 }
 
 void FSFloaterContacts::refreshRightsChangeList()
@@ -750,55 +730,45 @@ void FSFloaterContacts::refreshNames(U32 changed_mask)
 	LLAvatarTracker::buddy_map_t all_buddies;
 	LLAvatarTracker::instance().copyBuddyList(all_buddies);
 
-	BOOL have_names = TRUE;
-
 	if(changed_mask & (LLFriendObserver::ADD | LLFriendObserver::REMOVE))
 	{
-		have_names &= refreshNamesSync(all_buddies);
+		refreshNamesSync(all_buddies);
 	}
 
 	if(changed_mask & LLFriendObserver::ONLINE)
 	{
-		have_names &= refreshNamesPresence(all_buddies);
+		refreshNamesPresence(all_buddies);
 	}
 
-	if (!have_names)
-	{
-		mEventTimer.start();
-	}
 	// Changed item in place, need to request sort and update columns
 	// because we might have changed data in a column on which the user
 	// has already sorted. JC
-	mFriendsList->updateSort();
+	sortFriendList();
 
 	// re-select items
 	mFriendsList->selectMultiple(selected_ids);
 	mFriendsList->setScrollPos(pos);
 }
 
-BOOL FSFloaterContacts::refreshNamesSync(const LLAvatarTracker::buddy_map_t & all_buddies)
+void FSFloaterContacts::refreshNamesSync(const LLAvatarTracker::buddy_map_t & all_buddies)
 {
 	mFriendsList->deleteAllItems();
 
-	BOOL have_names = TRUE;
 	LLAvatarTracker::buddy_map_t::const_iterator buddy_it = all_buddies.begin();
 
 	for(; buddy_it != all_buddies.end(); ++buddy_it)
 	{
-		have_names &= addFriend(buddy_it->first);
+		addFriend(buddy_it->first);
 	}
-
-	return have_names;
 }
 
-BOOL FSFloaterContacts::refreshNamesPresence(const LLAvatarTracker::buddy_map_t & all_buddies)
+void FSFloaterContacts::refreshNamesPresence(const LLAvatarTracker::buddy_map_t & all_buddies)
 {
 	std::vector<LLScrollListItem*> items = mFriendsList->getAllData();
 	std::sort(items.begin(), items.end(), SortFriendsByID());
 
 	LLAvatarTracker::buddy_map_t::const_iterator buddy_it  = all_buddies.begin();
 	std::vector<LLScrollListItem*>::const_iterator item_it = items.begin();
-	BOOL have_names = TRUE;
 
 	while(true)
 	{
@@ -822,7 +792,7 @@ BOOL FSFloaterContacts::refreshNamesPresence(const LLAvatarTracker::buddy_map_t 
 			if (last_change_generation < info->getChangeSerialNum())
 			{
 				// update existing item in UI
-				have_names &= updateFriendItem(buddy_it->first, info);
+				updateFriendItem(buddy_it->first, info);
 			}
 
 			++buddy_it;
@@ -837,8 +807,6 @@ BOOL FSFloaterContacts::refreshNamesPresence(const LLAvatarTracker::buddy_map_t 
 			++buddy_it;
 		}
 	}
-
-	return have_names;
 }
 
 void FSFloaterContacts::refreshUI()
@@ -864,7 +832,6 @@ void FSFloaterContacts::refreshUI()
 	//(single_selected will always be true in this situations)
 	childSetEnabled("remove_btn", single_selected);
 	childSetEnabled("im_btn", single_selected);
-//	childSetEnabled("friend_rights", single_selected);
 
 	refreshRightsChangeList();
 }
@@ -875,8 +842,6 @@ void FSFloaterContacts::onSelectName()
 	// check to see if rights have changed
 	applyRightsToFriends();
 }
-
-
 
 void FSFloaterContacts::confirmModifyRights(rights_map_t& ids, EGrantRevoke command)
 {

@@ -71,12 +71,9 @@ public:
 	static FSFloaterContacts* findInstance();
 
 	void					sortFriendList();
-	
-	// void					updateFriendList();
 
 	LLPanel*				mFriendsTab;
-	// LLAvatarList*			mFriendList;
-	LLScrollListCtrl*			mFriendsList;
+	LLScrollListCtrl*		mFriendsList;
 	LLPanel*				mGroupsTab;
 	LLGroupList*			mGroupList;
 
@@ -89,6 +86,7 @@ private:
 	enum FRIENDS_COLUMN_ORDER
 	{
 		LIST_ONLINE_STATUS,
+		LIST_FRIEND_USER_NAME,
 		LIST_FRIEND_NAME,
 		LIST_VISIBLE_ONLINE,
 		LIST_VISIBLE_MAP,
@@ -100,14 +98,14 @@ private:
 
 	typedef std::map<LLUUID, S32> rights_map_t;
 	void					refreshNames(U32 changed_mask);
-	BOOL					refreshNamesSync(const LLAvatarTracker::buddy_map_t & all_buddies);
-	BOOL					refreshNamesPresence(const LLAvatarTracker::buddy_map_t & all_buddies);
+	void					refreshNamesSync(const LLAvatarTracker::buddy_map_t & all_buddies);
+	void					refreshNamesPresence(const LLAvatarTracker::buddy_map_t & all_buddies);
 	void					refreshRightsChangeList();
 	void					refreshUI();
 	void					onSelectName();
 	void					applyRightsToFriends();
-	BOOL					addFriend(const LLUUID& agent_id);	
-	BOOL					updateFriendItem(const LLUUID& agent_id, const LLRelationship* relationship);
+	void					addFriend(const LLUUID& agent_id);	
+	void					updateFriendItem(const LLUUID& agent_id, const LLRelationship* relationship);
 
 	typedef enum 
 	{
@@ -146,6 +144,7 @@ private:
 	LLFriendObserver*		mObserver;
 	BOOL					mAllowRightsChange;
 	S32						mNumRightsChanged;
+	LLCachedControl<bool>	mSortByUserName;
 };
 
 
