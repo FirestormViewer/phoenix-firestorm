@@ -20,6 +20,7 @@
 #include <stack>
 
 #include "rlvcommon.h"
+#include "rlvhelper.h"
 
 // ============================================================================
 
