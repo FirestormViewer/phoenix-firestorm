@@ -412,6 +412,7 @@ protected:
 	typedef std::deque<LLScrollListItem *> item_list;
 	item_list&		getItemList() { return mItemList; }
 
+public:
 	void			updateLineHeight();
 
 private:

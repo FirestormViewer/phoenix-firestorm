@@ -690,7 +690,7 @@ void LLScrollListCtrl::updateColumns()
 	}
 
 	// expand last column header we encountered to full list width
-	if (last_header)
+	if (last_header && last_header->canResize())
 	{
 		S32 new_width = llmax(0, mItemListRect.mRight - last_header->getRect().mLeft);
 		last_header->reshape(new_width, last_header->getRect().getHeight());
@@ -1374,7 +1374,7 @@ void LLScrollListCtrl::drawItems()
 	S32 y = mItemListRect.mTop - mLineHeight;
 
 	// allow for partial line at bottom
-	S32 num_page_lines = getLinesPerPage();
+	S32 num_page_lines = getLinesPerPage() + 1;
 
 	LLRect item_rect;
 
@@ -1890,7 +1890,7 @@ LLScrollListItem* LLScrollListCtrl::hitItem( S32 x, S32 y )
 		mLineHeight );
 
 	// allow for partial line at bottom
-	S32 num_page_lines = getLinesPerPage();
+	S32 num_page_lines = getLinesPerPage() + 1;
 
 	S32 line = 0;
 	item_list::iterator iter;
