@@ -690,7 +690,7 @@ void LLScrollListCtrl::updateColumns()
 	}
 
 	// expand last column header we encountered to full list width
-	if (last_header)
+	if (last_header && last_header->canResize())
 	{
 		S32 new_width = llmax(0, mItemListRect.mRight - last_header->getRect().mLeft);
 		last_header->reshape(new_width, last_header->getRect().getHeight());
