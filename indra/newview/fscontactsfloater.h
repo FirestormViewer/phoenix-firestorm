@@ -32,18 +32,37 @@
 #include <vector>
 
 #include "llfloater.h"
+#include "lleventtimer.h"
+#include "llcallingcard.h"
 
 class LLAvatarList;
 class LLAvatarName;
+class LLAvatarTracker;
+class LLFriendObserver;
+class LLScrollListCtrl;
 class LLGroupList;
+class LLRelationship;
 class LLPanel;
 class LLTabContainer;
 
-class FSFloaterContacts : public LLFloater
+class FSFloaterContacts : public LLFloater, public LLEventTimer
 {
 public:
 	FSFloaterContacts(const LLSD& seed);
 	virtual ~FSFloaterContacts();
+	
+	/** 
+	 * @brief This method either creates or brings to the front the
+	 * current instantiation of this floater. There is only once since
+	 * you can currently only look at your local friends.
+	 */
+	virtual BOOL tick();
+	
+	/** 
+	 * @brief This method is called in response to the LLAvatarTracker
+	 * sending out a changed() message.
+	 */
+	void updateFriends(U32 changed_mask);
 
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
@@ -53,10 +72,11 @@ public:
 
 	void					sortFriendList();
 	
-	void					updateFriendList();
+	// void					updateFriendList();
 
 	LLPanel*				mFriendsTab;
-	LLAvatarList*			mFriendList;
+	// LLAvatarList*			mFriendList;
+	LLScrollListCtrl*			mFriendsList;
 	LLPanel*				mGroupsTab;
 	LLGroupList*			mGroupList;
 
@@ -65,7 +85,40 @@ private:
 	LLUUID					getCurrentItemID() const;
 	void					getCurrentItemIDs(uuid_vec_t& selected_uuids) const;
 	void					onAvatarListDoubleClicked(LLUICtrl* ctrl);
-	
+
+	enum FRIENDS_COLUMN_ORDER
+	{
+		LIST_ONLINE_STATUS,
+		LIST_FRIEND_NAME,
+		LIST_VISIBLE_ONLINE,
+		LIST_VISIBLE_MAP,
+		LIST_EDIT_MINE,
+		LIST_VISIBLE_MAP_THEIRS,
+		LIST_EDIT_THEIRS,
+		LIST_FRIEND_UPDATE_GEN
+	};
+
+	typedef std::map<LLUUID, S32> rights_map_t;
+	void					refreshNames(U32 changed_mask);
+	BOOL					refreshNamesSync(const LLAvatarTracker::buddy_map_t & all_buddies);
+	BOOL					refreshNamesPresence(const LLAvatarTracker::buddy_map_t & all_buddies);
+	void					refreshRightsChangeList();
+	void					refreshUI();
+	void					onSelectName();
+	void					applyRightsToFriends();
+	BOOL					addFriend(const LLUUID& agent_id);	
+	BOOL					updateFriendItem(const LLUUID& agent_id, const LLRelationship* relationship);
+
+	typedef enum 
+	{
+		GRANT,
+		REVOKE
+	} EGrantRevoke;
+	void					confirmModifyRights(rights_map_t& ids, EGrantRevoke command);
+	void					sendRightsGrant(rights_map_t& ids);
+	bool					modifyRightsConfirmation(const LLSD& notification, const LLSD& response, rights_map_t* rights);
+
+
 	bool					isItemsFreeOfFriends(const uuid_vec_t& uuids);
 	
 	// misc callbacks
@@ -89,7 +142,10 @@ private:
 	void					updateButtons();
 
 	LLTabContainer*			mTabContainer;
-	
+
+	LLFriendObserver*		mObserver;
+	BOOL					mAllowRightsChange;
+	S32						mNumRightsChanged;
 };
 
 
