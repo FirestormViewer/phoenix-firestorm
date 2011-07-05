@@ -45,14 +45,14 @@
 		 width="20" />
 		<scroll_list.column
 		 dynamicwidth="true"
-		 label="Name"
+		 label="Username"
 		 name="user_name"
-		 tool_tip="Name" />
+		 tool_tip="This contact's username." />
 		<scroll_list.column
 		 dynamicwidth="true"
-		 label="Name"
+		 label="Display Name"
 		 name="full_name"
-		 tool_tip="Name" />
+		 tool_tip="This contact's chosen display name." />
 		<scroll_list.column
 		 image="legacy/ff_visible_online_button.tga"
 		 name="icon_visible_online"
