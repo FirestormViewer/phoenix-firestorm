@@ -46,7 +46,12 @@
 		<scroll_list.column
 		 dynamicwidth="true"
 		 label="Name"
-		 name="friend_name"
+		 name="user_name"
+		 tool_tip="Name" />
+		<scroll_list.column
+		 dynamicwidth="true"
+		 label="Name"
+		 name="full_name"
 		 tool_tip="Name" />
 		<scroll_list.column
 		 image="legacy/ff_visible_online_button.tga"
