@@ -2023,6 +2023,11 @@ Requests name of an avatar.  When data is available the dataserver event will be
 	<string name="InvFolder Friends">Friends</string>
 	<string name="InvFolder All">All</string>
 
+	<!-- Virtual Firestorm system folders -->
+	<string name="InvFolder #Firestorm">#Firestorm</string>
+	<string name="InvFolder #Phoenix">#Phoenix</string>
+	<string name="InvFolder #RLV">#RLV</string>
+	
 	<!-- inventory FVBridge -->
 	<!--  This is used in llpanelinventory.cpp when constructing a context menu for an item for Sale  -->
 	<string name="Buy">Buy</string>
