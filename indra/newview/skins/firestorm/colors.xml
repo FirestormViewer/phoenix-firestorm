@@ -455,7 +455,7 @@
      reference="Red" />
     <color
      name="ColorPaletteEntry20"
-     reference=".5 .5 1 0" />
+     value=".5 .5 1 0" />
     <color
      name="ColorPaletteEntry21"
      reference="Green" />

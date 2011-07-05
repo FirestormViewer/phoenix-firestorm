@@ -109,6 +109,10 @@
 	<color
 	 name="Green"
 	 value="0 1 0 1" />
+	<!-- Ansariel: Added missing referenced color -->
+	 <color
+	 name="LtGreen"
+	 value="0.79 1 0.79 1" />
 	<color
 	 name="Transparent"
 	 value="0 0 0 0" />
@@ -474,7 +478,7 @@
      reference="Red" />
     <color
      name="ColorPaletteEntry20"
-     reference=".5 .5 1 0" />
+     value=".5 .5 1 0" />
     <color
      name="ColorPaletteEntry21"
      reference="Green" />
