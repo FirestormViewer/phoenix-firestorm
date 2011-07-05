@@ -15,12 +15,12 @@ title="KONTAKTE">
 	name="friends_and_groups">
 
 	<panel
-	filename="fs_panel_contacts_friends.xml" 
+	filename="panel_fs_contacts_friends.xml" 
 	label="Freunde"
 	name="friends_panel" />
 
 	<panel
-	filename="fs_panel_contacts_groups.xml"
+	filename="panel_fs_contacts_groups.xml"
 	label="Gruppen"
 	name="groups_panel" />
 
