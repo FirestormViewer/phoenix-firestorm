@@ -2879,8 +2879,8 @@
                  parameter="TextureDisable" />
             </menu_item_check>
             <menu_item_check
-              label="Full Res Textures"
-             name="Rull Res Textures">
+              label="Full Res Textures (dangerous)"
+             name="Full Res Textures">
                 <menu_item_check.on_check
                  function="CheckControl"
                  parameter="TextureLoadFullRes" />

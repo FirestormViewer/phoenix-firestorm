@@ -270,7 +270,7 @@
 			<menu_item_check label="自動アルファマスク（遅延なし）" name="Automatic Alpha Masks (non-deferred)"/>
 			<menu_item_check label="アニメーションテクスチャ" name="Animation Textures"/>
 			<menu_item_check label="テクスチャを無効にする" name="Disable Textures"/>
-			<menu_item_check label="フル解像度テクスチャ" name="Rull Res Textures"/>
+			<menu_item_check label="フル解像度テクスチャ (dangerous)" name="Full Res Textures"/>
 			<menu_item_check label="テクスチャの検査" name="Audit Textures"/>
 			<menu_item_check label="テクスチャアトラス（試験段階）" name="Texture Atlas"/>
 			<menu_item_check label="装着された光源を描画する" name="Render Attached Lights"/>

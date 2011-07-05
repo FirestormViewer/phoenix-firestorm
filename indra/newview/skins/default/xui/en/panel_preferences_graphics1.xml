@@ -950,18 +950,6 @@
 		name="TexturesLoaded"
 		top_pad="12"
 		width="256"/>  
-<!-- texture disabler -->
-		<check_box
-		control_name="TextureLoadFullRes"
-		height="16"
-		initial_value="false"
-		label="Always Load Textures at full resolution" 
-		tool_tip="Set this to always load textures at their highest possible settings"                          
-		layout="topleft"
-		left_delta="0"
-		name="TexturesLoadAtFullRes"
-		top_pad="3"
-		width="256"/>
 <!-- HTTP textures -->
 		<check_box
 		control_name="ImagePipelineUseHTTP"

@@ -284,7 +284,7 @@
 			<menu_item_check label="Masques alpha automatiques (non différés)" name="Automatic Alpha Masks (non-deferred)"/>
 			<menu_item_check label="Textures d&apos;animation" name="Animation Textures"/>
 			<menu_item_check label="Désactiver les textures" name="Disable Textures"/>
-			<menu_item_check label="Textures pleine résolution" name="Rull Res Textures"/>
+			<menu_item_check label="Textures pleine résolution (dangerous)" name="Full Res Textures"/>
 			<menu_item_check label="Audit Textures" name="Audit Textures"/>
 			<menu_item_check label="Atlas des textures (expérimental)" name="Texture Atlas"/>
 			<menu_item_check label="Rendu des lumières jointes" name="Render Attached Lights"/>
