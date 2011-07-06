@@ -356,11 +356,12 @@ LLVector3 LLManip::getPivotPoint()
 	static LLCachedControl<F32> sPivotY(gSavedSettings, "PhoenixBuildPrefs_PivotY");
 	static LLCachedControl<F32> sPivotZ(gSavedSettings, "PhoenixBuildPrefs_PivotZ");
 	
-	if (mObjectSelection->getFirstObject() && (mObjectSelection->getObjectCount() == 1 || sActualRoot) && mObjectSelection->getSelectType() != SELECT_TYPE_HUD)
+	const BOOL children_ok = TRUE;
+	if (mObjectSelection->getFirstRootObject(children_ok) && (mObjectSelection->getObjectCount() == 1 || sActualRoot) && mObjectSelection->getSelectType() != SELECT_TYPE_HUD)
 	{
-		pos = mObjectSelection->getFirstObject()->getPivotPositionAgent();
-		scale = mObjectSelection->getFirstObject()->getScale();
-		rot = mObjectSelection->getFirstObject()->getRotation();
+		pos = mObjectSelection->getFirstRootObject(children_ok)->getPivotPositionAgent();
+		scale = mObjectSelection->getFirstRootObject(children_ok)->getScale();
+		rot = mObjectSelection->getFirstRootObject(children_ok)->getRotation();
 	}
 	else
 	{
