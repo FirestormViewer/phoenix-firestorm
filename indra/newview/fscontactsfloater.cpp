@@ -62,84 +62,22 @@
 static const std::string FRIENDS_TAB_NAME	= "friends_panel";
 static const std::string GROUP_TAB_NAME		= "groups_panel";
 
-/** Compares avatar items by online status, then by name */
-// class LLAvatarItemStatusComparator : public LLAvatarItemComparator
-// {
-// public:
-	// LLAvatarItemStatusComparator() {};
-
-// protected:
-	// /**
-	 // * @return true if item1 < item2, false otherwise
-	 // */
-	// virtual bool doCompare(const LLAvatarListItem* item1, const LLAvatarListItem* item2) const
-	// {
-		// LLAvatarTracker& at = LLAvatarTracker::instance();
-		// bool online1 = at.isBuddyOnline(item1->getAvatarId());
-		// bool online2 = at.isBuddyOnline(item2->getAvatarId());
-
-		// if (online1 == online2)
-		// {
-			// std::string name1 = item1->getAvatarName();
-			// std::string name2 = item2->getAvatarName();
-
-			// if (item1->getShowingBothNames() &&
-				// gSavedSettings.getBOOL("FSSortContactsByUserName"))
-			// {
-				// // The tooltip happens to have the username
-				// //  in it, so we'll just use that. Why store
-				// //  it twice or parse it back out? -- TS
-				// name1 = item1->getAvatarToolTip();
-				// name2 = item2->getAvatarToolTip();
-			// }
-
-			// LLStringUtil::toUpper(name1);
-			// LLStringUtil::toUpper(name2);
-
-			// return name1 < name2;
-		// }
-		
-		// return online1 > online2; 
-	// }
-// };
-
-// static const LLAvatarItemStatusComparator STATUS_COMPARATOR;
-
 
 // simple class to observe the calling cards.
-class LLLocalFriendsObserver : public LLFriendObserver, public LLEventTimer
+class LLLocalFriendsObserver : public LLFriendObserver
 {
 public: 
-	LLLocalFriendsObserver(FSFloaterContacts* floater) : mFloater(floater), LLEventTimer(OBSERVER_TIMEOUT)
-	{
-		mEventTimer.stop();
-	}
+	LLLocalFriendsObserver(FSFloaterContacts* floater) : mFloater(floater) {}
 	virtual ~LLLocalFriendsObserver()
 	{
 		mFloater = NULL;
 	}
 	virtual void changed(U32 mask)
 	{
-		// events can arrive quickly in bulk - we need not process EVERY one of them -
-		// so we wait a short while to let others pile-in, and process them in aggregate.
-		mEventTimer.start();
-
-		// save-up all the mask-bits which have come-in
-		mMask |= mask;
+		mFloater->onFriendListUpdate(mask);
 	}
-	virtual BOOL tick()
-	{
-		mFloater->updateFriends(mMask);
-
-		mEventTimer.stop();
-		mMask = 0;
-
-		return FALSE;
-	}
-	
 protected:
 	FSFloaterContacts* mFloater;
-	U32 mMask;
 };
 
 //
@@ -148,7 +86,6 @@ protected:
 
 FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	: LLFloater(seed),
-	LLEventTimer(DEFAULT_PERIOD),
 	mTabContainer(NULL),
 	mObserver(NULL),
 	mFriendsList(NULL),
@@ -157,7 +94,6 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	mNumRightsChanged(0),
 	mSortByUserName(LLCachedControl<bool>(gSavedSettings,"FSSortContactsByUserName", FALSE))
 {
-	mEventTimer.stop();
 	mObserver = new LLLocalFriendsObserver(this);
 	LLAvatarTracker::instance().addObserver(mObserver);
 	// For notification when SIP online status changes.
@@ -170,15 +106,6 @@ FSFloaterContacts::~FSFloaterContacts()
 	LLVoiceClient::getInstance()->removeObserver(mObserver);
 	LLAvatarTracker::instance().removeObserver(mObserver);
 	delete mObserver;
-}
-
-BOOL FSFloaterContacts::tick()
-{
-	mEventTimer.stop();
-	mPeriod = DEFAULT_PERIOD;
-	mAllowRightsChange = TRUE;
-	updateFriends(LLFriendObserver::ADD);
-	return FALSE;
 }
 
 BOOL FSFloaterContacts::postBuild()
@@ -449,7 +376,7 @@ LLUUID FSFloaterContacts::getCurrentItemID() const
 	{
 		LLScrollListItem* selected = mFriendsList->getFirstSelected();
 		if (selected)
-			selected->getUUID();
+			return selected->getUUID();
 		else
 			return LLUUID::null;
 	}
@@ -498,47 +425,65 @@ void FSFloaterContacts::sortFriendList()
 // Friends list
 //
 
-void FSFloaterContacts::updateFriends(U32 changed_mask)
+void FSFloaterContacts::onFriendListUpdate(U32 changed_mask)
 {
-	LLUUID selected_id;
-	LLCtrlListInterface *friends_list = childGetListInterface("friend_list");
-	if (!friends_list) return;
-	LLCtrlScrollInterface *friends_scroll = childGetScrollInterface("friend_list");
-	if (!friends_scroll) return;
+	LLAvatarTracker& at = LLAvatarTracker::instance();
 
-	if(changed_mask & (LLFriendObserver::ADD | LLFriendObserver::REMOVE | LLFriendObserver::ONLINE))
-	{
-		refreshNames(changed_mask);
-	}
-	else if(changed_mask & LLFriendObserver::POWERS)
-	{
-		--mNumRightsChanged;
-		if(mNumRightsChanged > 0)
+	switch(changed_mask) {
+	case LLFriendObserver::ADD:
 		{
-			mPeriod = RIGHTS_CHANGE_TIMEOUT;	
-			mEventTimer.start();
-			mAllowRightsChange = FALSE;
+			const std::set<LLUUID>& changed_items = at.getChangedIDs();
+			std::set<LLUUID>::const_iterator id_it = changed_items.begin();
+			std::set<LLUUID>::const_iterator id_end = changed_items.end();
+			for (;id_it != id_end; ++id_it)
+			{
+				addFriend(*id_it);
+			}
 		}
-		else
+		break;
+	case LLFriendObserver::REMOVE:
 		{
-			tick();
+			const std::set<LLUUID>& changed_items = at.getChangedIDs();
+			std::set<LLUUID>::const_iterator id_it = changed_items.begin();
+			std::set<LLUUID>::const_iterator id_end = changed_items.end();
+			for (;id_it != id_end; ++id_it)
+			{
+				mFriendsList->deleteSingleItem(mFriendsList->getItemIndex(*id_it));
+			}
 		}
-	}
-
-	uuid_vec_t selected_friends;
-	getCurrentItemIDs(selected_friends);
-	if(selected_friends.size() > 0)
-	{
-		// only non-null if friends was already found. This may fail,
-		// but we don't really care here, because refreshUI() will
-		// clean up the interface.
-		friends_list->setCurrentByID(selected_id);
-		for(std::vector<LLUUID>::iterator itr = selected_friends.begin(); itr != selected_friends.end(); ++itr)
+		break;
+	case LLFriendObserver::POWERS:
 		{
-			friends_list->setSelectedByValue(*itr, true);
+			--mNumRightsChanged;
+			if(mNumRightsChanged > 0)
+				mAllowRightsChange = FALSE;
+			else
+				mAllowRightsChange = TRUE;
+			
+			const std::set<LLUUID>& changed_items = at.getChangedIDs();
+			std::set<LLUUID>::const_iterator id_it = changed_items.begin();
+			std::set<LLUUID>::const_iterator id_end = changed_items.end();
+			for (;id_it != id_end; ++id_it)
+			{
+				const LLRelationship* info = at.getBuddyInfo(*id_it);
+				updateFriendItem(*id_it, info);
+			}
 		}
+		break;
+	case LLFriendObserver::ONLINE:
+		{
+			const std::set<LLUUID>& changed_items = at.getChangedIDs();
+			std::set<LLUUID>::const_iterator id_it = changed_items.begin();
+			std::set<LLUUID>::const_iterator id_end = changed_items.end();
+			for (;id_it != id_end; ++id_it)
+			{
+				const LLRelationship* info = at.getBuddyInfo(*id_it);
+				updateFriendItem(*id_it, info);
+			}
+		}
+	default:;
 	}
-
+	
 	refreshUI();
 }
 
@@ -711,106 +656,10 @@ void FSFloaterContacts::refreshRightsChangeList()
 	}
 }
 
-struct SortFriendsByID
+void FSFloaterContacts::refreshUI()
 {
-	bool operator() (const LLScrollListItem* const a, const LLScrollListItem* const b) const
-	{
-		return a->getValue().asUUID() < b->getValue().asUUID();
-	}
-};
-
-void FSFloaterContacts::refreshNames(U32 changed_mask)
-{
-	uuid_vec_t selected_ids;
-	getCurrentItemIDs(selected_ids);
-	
-	S32 pos = mFriendsList->getScrollPos();	
-	
-	// get all buddies we know about
-	LLAvatarTracker::buddy_map_t all_buddies;
-	LLAvatarTracker::instance().copyBuddyList(all_buddies);
-
-	if(changed_mask & (LLFriendObserver::ADD | LLFriendObserver::REMOVE))
-	{
-		refreshNamesSync(all_buddies);
-	}
-
-	if(changed_mask & LLFriendObserver::ONLINE)
-	{
-		refreshNamesPresence(all_buddies);
-	}
-
-	// Changed item in place, need to request sort and update columns
-	// because we might have changed data in a column on which the user
-	// has already sorted. JC
 	sortFriendList();
 
-	// re-select items
-	mFriendsList->selectMultiple(selected_ids);
-	mFriendsList->setScrollPos(pos);
-}
-
-void FSFloaterContacts::refreshNamesSync(const LLAvatarTracker::buddy_map_t & all_buddies)
-{
-	mFriendsList->deleteAllItems();
-
-	LLAvatarTracker::buddy_map_t::const_iterator buddy_it = all_buddies.begin();
-
-	for(; buddy_it != all_buddies.end(); ++buddy_it)
-	{
-		addFriend(buddy_it->first);
-	}
-}
-
-void FSFloaterContacts::refreshNamesPresence(const LLAvatarTracker::buddy_map_t & all_buddies)
-{
-	std::vector<LLScrollListItem*> items = mFriendsList->getAllData();
-	std::sort(items.begin(), items.end(), SortFriendsByID());
-
-	LLAvatarTracker::buddy_map_t::const_iterator buddy_it  = all_buddies.begin();
-	std::vector<LLScrollListItem*>::const_iterator item_it = items.begin();
-
-	while(true)
-	{
-		if(item_it == items.end() || buddy_it == all_buddies.end())
-		{
-			break;
-		}
-
-		const LLUUID & buddy_uuid = buddy_it->first;
-		const LLUUID & item_uuid  = (*item_it)->getValue().asUUID();
-		if(item_uuid == buddy_uuid)
-		{
-			const LLRelationship* info = buddy_it->second;
-			if (!info) 
-			{	
-				++item_it;
-				continue;
-			}
-			
-			S32 last_change_generation = (*item_it)->getColumn(LIST_FRIEND_UPDATE_GEN)->getValue().asInteger();
-			if (last_change_generation < info->getChangeSerialNum())
-			{
-				// update existing item in UI
-				updateFriendItem(buddy_it->first, info);
-			}
-
-			++buddy_it;
-			++item_it;
-		}
-		else if(item_uuid < buddy_uuid)
-		{
-			++item_it;
-		}
-		else //if(item_uuid > buddy_uuid)
-		{
-			++buddy_it;
-		}
-	}
-}
-
-void FSFloaterContacts::refreshUI()
-{	
 	BOOL single_selected = FALSE;
 	BOOL multiple_selected = FALSE;
 	int num_selected = mFriendsList->getAllSelected().size();
@@ -822,7 +671,6 @@ void FSFloaterContacts::refreshUI()
 			multiple_selected = TRUE;		
 		}
 	}
-
 
 	//Options that can only be performed with one friend selected
 	childSetEnabled("profile_btn", single_selected && !multiple_selected);

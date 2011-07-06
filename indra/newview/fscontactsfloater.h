@@ -45,24 +45,17 @@ class LLRelationship;
 class LLPanel;
 class LLTabContainer;
 
-class FSFloaterContacts : public LLFloater, public LLEventTimer
+class FSFloaterContacts : public LLFloater
 {
 public:
 	FSFloaterContacts(const LLSD& seed);
 	virtual ~FSFloaterContacts();
-	
-	/** 
-	 * @brief This method either creates or brings to the front the
-	 * current instantiation of this floater. There is only once since
-	 * you can currently only look at your local friends.
-	 */
-	virtual BOOL tick();
-	
+
 	/** 
 	 * @brief This method is called in response to the LLAvatarTracker
 	 * sending out a changed() message.
 	 */
-	void updateFriends(U32 changed_mask);
+	void onFriendListUpdate(U32 changed_mask);
 
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
@@ -97,9 +90,6 @@ private:
 	};
 
 	typedef std::map<LLUUID, S32> rights_map_t;
-	void					refreshNames(U32 changed_mask);
-	void					refreshNamesSync(const LLAvatarTracker::buddy_map_t & all_buddies);
-	void					refreshNamesPresence(const LLAvatarTracker::buddy_map_t & all_buddies);
 	void					refreshRightsChangeList();
 	void					refreshUI();
 	void					onSelectName();
