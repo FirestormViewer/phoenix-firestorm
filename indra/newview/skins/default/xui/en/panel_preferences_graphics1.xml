@@ -965,7 +965,7 @@
 <!-- Max Concurrent HTTP GET requests-->
       <slider
       control_name="ImagePipelineUseHTTPFetchMaxRequests"
-      decimal_digits="1"
+      decimal_digits="0"
       follows="left|top"
       height="16"
       increment="1"
@@ -1067,25 +1067,14 @@
 		</text>
 
 		<check_box
-		control_name="RenderUIInSnapshot"
-		height="16"
-		initial_value="false"
-		label="Render the User Interface in snapshots" 
-		tool_tip="When ticked this makes the User Interface appear in snapshots"                          
-		layout="topleft"
-		left_delta="10"
-		name="UIinSnapshot"
-		top_pad="12"
-		width="256"/>
-		<check_box
 		control_name="RenderUnloadedAvatars"
 		height="16"
 		initial_value="false"
 		label="Show avatars that haven't finished loading"                           
 		layout="topleft"
-		left_delta="0"
+		left_delta="10"
 		name="RenderUnloadedAvatars"
-		top_pad="3"
+		top_pad="12"
 		width="256"/>
 		<slider
 		control_name="PrecachingDelay"
@@ -1098,11 +1087,10 @@
             tool_tip="How long to delay before showing world to you after you show as being online to others (default is 6 seconds)"
 		label_width="300"
 		layout="topleft"
-		left_delta="0"
 		max_val="15"
 	      min_val="1"
 		name="PrecachingDelay"
-		top_pad="3"
+		top_pad="10"
 		width="405" />
 		<text
 		type="string"
