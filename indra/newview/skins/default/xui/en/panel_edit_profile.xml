@@ -234,7 +234,6 @@
          length="1"
          follows="all"
          font="SansSerifSmall"
-         text_color="Black"
          height="120"
          layout="topleft"
          left="4"
@@ -415,7 +414,6 @@
        length="1"
        follows="all"
        font="SansSerifSmall"
-       text_color="Black"
        height="246"
        layout="topleft"
        left="4"
@@ -441,7 +439,6 @@
       <line_editor
        follows="bottom|left|right"
        font="SansSerifSmall"
-       text_color="Black"
        height="20"
        top_pad="0"
        value="http://"
