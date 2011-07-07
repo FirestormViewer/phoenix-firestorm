@@ -389,10 +389,12 @@ void LLNetMap::draw()
 				bits = compact_local & 0xFF;
 				pos_local.mV[VX] = (F32)bits;
 
-				pos_global.setVec( pos_local );
-				pos_global += origin_global;
+				// Ansariel: Moved further down
+				//pos_global.setVec( pos_local );
+				//pos_global += origin_global;
 
-				pos_map = globalPosToView(pos_global);
+				//pos_map = globalPosToView(pos_global);
+				// END Ansariel: Moved further down
 
 				LLUUID uuid(NULL);
 				BOOL show_as_friend = FALSE;
@@ -408,20 +410,42 @@ void LLNetMap::draw()
 
 				LLColor4 color = show_as_friend ? map_avatar_friend_color : map_avatar_color;
 
-				// Ansariel: Colorize muted avatars and Lindens
+				// Ansariel: Colorize and make use of avatar viewer objects
+				//           for improved height indication
+				bool isHeightUnknown = (pos_local.mV[VZ] == 0.f);
 				if (uuid.notNull())
 				{
+					// Colorize muted avatars and Lindens
 					std::string fullName;
 					LLMuteList* muteListInstance = LLMuteList::getInstance();
 
 					if (muteListInstance->isMuted(uuid)) color = map_avatar_muted_color;
 					else if (gCacheName->getFullName(uuid, fullName) && muteListInstance->isLinden(fullName)) color = map_avatar_linden_color;			
+
+					// Try to workaround 1020m bug by using
+					// the viewer object for the avatar.
+					if (isHeightUnknown)
+					{
+						LLViewerObject* viewerObject = gObjectList.findObject(uuid);
+						if (viewerObject)
+						{
+							pos_local.mV[VZ] = viewerObject->getPositionGlobal().mdV[VZ];
+							isHeightUnknown = false;
+						}
+					}
 				}
+
+				// Ansariel: Moved down here so we can take precise
+				//           height data into account
+				pos_global.setVec( pos_local );
+				pos_global += origin_global;
+				pos_map = globalPosToView(pos_global);
 
 				LLWorldMapView::drawAvatar(
 					pos_map.mV[VX], pos_map.mV[VY], 
 					color, 
-					pos_map.mV[VZ], mDotRadius);
+					pos_map.mV[VZ], mDotRadius,
+					isHeightUnknown);
 
 				if(uuid.notNull())
 				{
