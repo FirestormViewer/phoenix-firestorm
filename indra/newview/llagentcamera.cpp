@@ -176,7 +176,9 @@ LLAgentCamera::LLAgentCamera() :
 	mPanLeftKey(0.f),
 	mPanRightKey(0.f),
 	mPanInKey(0.f),
-	mPanOutKey(0.f)
+	mPanOutKey(0.f),
+
+	mPointAtObject(NULL)
 {
 	mFollowCam.setMaxCameraDistantFromSubject( MAX_CAMERA_DISTANCE_FROM_AGENT );
 
@@ -2769,6 +2771,9 @@ void LLAgentCamera::lookAtLastChat()
 
 BOOL LLAgentCamera::setPointAt(EPointAtType target_type, LLViewerObject *object, LLVector3 position)
 {
+	// Ansariel: Remember the current object point pointed at - we might need it later
+	mPointAtObject = object;
+
 	// disallow pointing at attachments and avatars
 	//this is the editing arm motion
 	static LLCachedControl<bool> private_pointat(gSavedSettings, "PrivatePointAtTarget", false);

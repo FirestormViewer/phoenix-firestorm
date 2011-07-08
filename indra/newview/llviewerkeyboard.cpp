@@ -549,6 +549,11 @@ void start_chat( EKeystate s )
 
 void start_gesture( EKeystate s )
 {
+	// Ansariel: If avatar is pointing at something, don't start
+	//           gesture. This works around the bug with Shared
+	//           Media prims.
+	if (gAgentCamera.mPointAtObject != NULL) return;
+
 	LLUICtrl* focus_ctrlp = dynamic_cast<LLUICtrl*>(gFocusMgr.getKeyboardFocus());
 	if (KEYSTATE_UP == s &&
 		! (focus_ctrlp && focus_ctrlp->acceptsTextInput()))
