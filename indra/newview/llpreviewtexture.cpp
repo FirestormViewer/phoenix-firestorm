@@ -35,6 +35,7 @@
 #include "llcombobox.h"
 #include "llfilepicker.h"
 #include "llfloaterreg.h"
+#include "llimagepng.h"
 #include "llimagetga.h"
 #include "llinventory.h"
 #include "llnotificationsutil.h"
@@ -111,7 +112,7 @@ BOOL LLPreviewTexture::postBuild()
 		getChildView("Discard")->setVisible( false);
 	}
 	
-	childSetAction("save_tex_btn", LLPreviewTexture::onSaveAsBtn, this);
+	childSetCommitCallback("save_tex_btn", onSaveAsBtn, this);
 	getChildView("save_tex_btn")->setVisible( true);
 	getChildView("save_tex_btn")->setEnabled(canSaveAs());
 	
@@ -135,10 +136,22 @@ BOOL LLPreviewTexture::postBuild()
 }
 
 // static
-void LLPreviewTexture::onSaveAsBtn(void* data)
+void LLPreviewTexture::onSaveAsBtn(LLUICtrl* ctrl, void* data)
 {
 	LLPreviewTexture* self = (LLPreviewTexture*)data;
-	self->saveAs();
+	std::string value = ctrl->getValue().asString();
+	if (value == "format_png")
+	{
+		self->saveAs(LLPreviewTexture::FORMAT_PNG);
+	}
+	else if (value == "format_tga")
+	{
+		self->saveAs(LLPreviewTexture::FORMAT_TGA);
+	}
+	else
+	{
+		self->saveAs(LLPreviewTexture::FORMAT_TGA);
+	}
 }
 
 void LLPreviewTexture::draw()
@@ -255,27 +268,49 @@ BOOL LLPreviewTexture::canSaveAs() const
 	return mIsCopyable && !mLoadingFullImage && mImage.notNull() && !mImage->isMissingAsset();
 }
 
-
 // virtual
 void LLPreviewTexture::saveAs()
+{
+	saveAs(LLPreviewTexture::FORMAT_TGA);
+}
+
+void LLPreviewTexture::saveAs(EFileformatType format)
 {
 	if( mLoadingFullImage )
 		return;
 
 	LLFilePicker& file_picker = LLFilePicker::instance();
-	const LLInventoryItem* item = getItem() ;
-	if( !file_picker.getSaveFile( LLFilePicker::FFSAVE_TGA, item ? LLDir::getScrubbedFileName(item->getName()) : LLStringUtil::null) )
+	const LLInventoryItem* item = getItem();
+
+	loaded_callback_func callback;
+	LLFilePicker::ESaveFilter saveFilter;
+
+	switch (format)
+	{
+		case LLPreviewTexture::FORMAT_PNG:
+			callback = LLPreviewTexture::onFileLoadedForSavePNG;
+			saveFilter = LLFilePicker::FFSAVE_PNG;
+			break;
+		case LLPreviewTexture::FORMAT_TGA:
+		default:
+			callback = LLPreviewTexture::onFileLoadedForSaveTGA;
+			saveFilter = LLFilePicker::FFSAVE_TGA;
+			break;
+	}
+
+	if( !file_picker.getSaveFile( saveFilter, item ? LLDir::getScrubbedFileName(item->getName()) : LLStringUtil::null) )
 	{
 		// User canceled or we failed to acquire save file.
 		return;
 	}
+
 	// remember the user-approved/edited file name.
 	mSaveFileName = file_picker.getFirstFile();
 	mLoadingFullImage = TRUE;
 	getWindow()->incBusyCount();
 
 	mImage->forceToSaveRawImage(0) ;//re-fetch the raw image if the old one is removed.
-	mImage->setLoadedCallback( LLPreviewTexture::onFileLoadedForSave, 
+	mImage->setLoadedCallback( callback, 
 								0, TRUE, FALSE, new LLUUID( mItemUUID ), &mCallbackTextureList );
 }
 
@@ -340,7 +375,7 @@ void LLPreviewTexture::openToSave()
 }
 
 // static
-void LLPreviewTexture::onFileLoadedForSave(BOOL success, 
+void LLPreviewTexture::onFileLoadedForSaveTGA(BOOL success, 
 					   LLViewerFetchedTexture *src_vi,
 					   LLImageRaw* src, 
 					   LLImageRaw* aux_src, 
@@ -394,6 +429,59 @@ void LLPreviewTexture::onFileLoadedForSave(BOOL success,
 
 }
 
+// static
+void LLPreviewTexture::onFileLoadedForSavePNG(BOOL success, 
+											LLViewerFetchedTexture *src_vi,
+											LLImageRaw* src, 
+											LLImageRaw* aux_src, 
+											S32 discard_level,
+											BOOL final,
+											void* userdata)
+{
+	LLUUID* item_uuid = (LLUUID*) userdata;
+
+	LLPreviewTexture* self = LLFloaterReg::findTypedInstance<LLPreviewTexture>("preview_texture", *item_uuid);
+
+	if( final || !success )
+	{
+		delete item_uuid;
+
+		if( self )
+		{
+			self->getWindow()->decBusyCount();
+			self->mLoadingFullImage = FALSE;
+		}
+	}
+
+	if( self && final && success )
+	{
+		LLPointer<LLImagePNG> image_png = new LLImagePNG;
+		if( !image_png->encode( src, 0.0 ) )
+		{
+			LLSD args;
+			args["FILE"] = self->mSaveFileName;
+			LLNotificationsUtil::add("CannotEncodeFile", args);
+		}
+		else if( !image_png->save( self->mSaveFileName ) )
+		{
+			LLSD args;
+			args["FILE"] = self->mSaveFileName;
+			LLNotificationsUtil::add("CannotWriteFile", args);
+		}
+		else
+		{
+			self->mSavedFileTimer.reset();
+			self->mSavedFileTimer.setTimerExpirySec( SECONDS_TO_SHOW_FILE_SAVED_MSG );
+		}
+
+		self->mSaveFileName.clear();
+	}
+
+	if( self && !success )
+	{
+		LLNotificationsUtil::add("CannotDownloadFile");
+	}
+}
 
 // It takes a while until we get height and width information.
 // When we receive it, reshape the window accordingly.

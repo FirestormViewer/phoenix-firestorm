@@ -43,5 +43,8 @@
 	</combo_box>
 	<button label="OK" name="Keep"/>
 	<button label="Verwerfen" name="Discard"/>
-	<button label="Speichern unter" name="save_tex_btn"/>
+	<flyout_button label="Speichern als TGA" name="save_tex_btn" width="140">
+		<flyout_button.item label="Speichern als TGA" name="save_item_tga"/>
+        <flyout_button.item label="Speichern als PNG" name="save_item_png"/>
+	</flyout_button>
 </floater>
