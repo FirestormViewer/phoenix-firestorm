@@ -1261,7 +1261,7 @@
      name="Help"
      tear_off="true">
         <menu_item_check
-         label="Enable Tooltips"
+         label="Enable Viewer UI Hints"
          name="Enable Hints">
           <on_check
             control="EnableUIHints"/>
