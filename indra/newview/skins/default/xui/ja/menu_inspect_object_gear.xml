@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu name="Gear Menu">
+<toggleable_menu name="Gear Menu">
 	<menu_item_call label="触る" name="touch"/>
 	<menu_item_call label="座る" name="sit"/>
 	<menu_item_call label="支払う" name="pay"/>
@@ -15,4 +15,4 @@
 	<menu_item_call label="ズームイン" name="zoom_in"/>
 	<menu_item_call label="削除" name="remove"/>
 	<menu_item_call label="詳細" name="more_info"/>
-</menu>
+</toggleable_menu>
