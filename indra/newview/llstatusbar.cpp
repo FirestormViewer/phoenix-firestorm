@@ -824,13 +824,17 @@ void LLStatusBar::updateParcelInfoText()
 {
 	static LLUICachedControl<bool> show_coords("NavBarShowCoordinates", false);
 
-	if (show_coords)
-	{
+	// Ansariel: This doesn't make sense at all. The location in the statusbar
+	//           has ever shown coordinates and why should one have to enable
+	//           the navigation bar to configure a setting that has effect on
+	//           the statusbar?
+	// if (show_coords)
+	// {
 		std::string new_text;
 
 		buildLocationString(new_text, show_coords);
 		setParcelInfoText(new_text);
-	}
+	// }
 }
 
 void LLStatusBar::updateParcelIcons()
