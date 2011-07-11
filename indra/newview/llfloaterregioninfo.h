@@ -194,7 +194,7 @@ protected:
 	static void onClickTopColliders(void*);
 	static void onClickTopScripts(void*);
 	static void onClickRestart(void* data);
-	bool callbackRestart(const LLSD& notification, const LLSD& response);
+	bool callbackRestart(const LLSD& notification, const LLSD& response, S32 seconds);
 	static void onClickCancelRestart(void* data);
 	
 private:
