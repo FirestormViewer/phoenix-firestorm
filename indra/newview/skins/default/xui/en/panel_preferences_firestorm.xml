@@ -163,8 +163,16 @@
 		 width="270"
 		 control_name="TurnAroundWhenWalkingBackwards"
 		 tool_tip="Turns your avatar around to face the camera when you are walking backwards."/>
-
-		 <text
+		<check_box top_pad="5"
+		 follows="left|top"
+		 height="16"
+		 label="Show look at target"
+		 left="15"
+		 name="showlookat"
+		 width="270"
+		 control_name="DebugLookAt"
+		 tool_tip="Enable crosshairs marking where people are looking."/>
+		<text
 		 type="string"
 		 length="1"
 		 follows="left|top"
