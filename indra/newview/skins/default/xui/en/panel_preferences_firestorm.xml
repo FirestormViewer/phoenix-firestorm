@@ -870,7 +870,7 @@
 			 label="Fade chat after"
 			 label_width="90"
 			 left="35"
-			 max_val="30"
+			 max_val="60"
 			 min_val="2"
 			 name="fade_chat_time"
 			 width="130" />
