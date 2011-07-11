@@ -29,37 +29,9 @@
             height="10"
             layout="topleft"
             left="5"
-            name="Maximum bandwidth"
-            mouse_opaque="false"
-            top="10"
-            width="90">
-            Max Bandwidth:
-        </text>
-        <slider
-            can_edit_text="true"
-            control_name="ThrottleBandwidthKBPS"
-            decimal_digits="0"
-            follows="left|top"
-            height="15"
-            increment="100"
-            initial_value="500"
-            layout="topleft"
-            left_delta="100"
-            max_val="10000"
-            min_val="100"
-            name="max_bandwidth"
-            top_delta="-2"
-            width="150" />
-        <text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="10"
-            layout="topleft"
-            left="5"
             name="Draw Distance"
             mouse_opaque="false"
-            top_delta="20"
+            top="10"
             width="90">
             Draw Distance:
         </text>
@@ -79,6 +51,34 @@
             top_delta="-2"
             width="150"
             label_width="3"/>
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left="5"
+            name="Maximum bandwidth"
+            mouse_opaque="false"
+            top_delta="20"
+            width="90">
+            Max Bandwidth:
+        </text>
+        <slider
+            can_edit_text="true"
+            control_name="ThrottleBandwidthKBPS"
+            decimal_digits="0"
+            follows="left|top"
+            height="15"
+            increment="100"
+            initial_value="500"
+            layout="topleft"
+            left_delta="100"
+            max_val="10000"
+            min_val="100"
+            name="max_bandwidth"
+            top_delta="-2"
+            width="150" />
         <text
             type="string"
             length="1"
