@@ -188,7 +188,7 @@
      layout="topleft"
      left="10"
      name="restart_btn"
-     tool_tip="Give 2 minute countdown and restart region"
+     tool_tip="Give countdown of selected seconds and restart region"
      top_pad="5"
      width="130" />
 	<text follows="left|top" top_delta="5" left_delta="135" width="50" name="label_restart_delay">
