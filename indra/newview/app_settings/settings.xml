@@ -2,6 +2,17 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
+	<key>FSPaymentInfoInChat</key>
+	<map>
+		<key>Comment</key>
+		<string>If true, L$ balance changes will be shown in nearby chat instead of toasts.</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>Boolean</string>
+		<key>Value</key>
+		<integer>0</integer>
+	</map>
 	<key>FSScriptDialogNoTransparency</key>
 	<map>
 		<key>Comment</key>
