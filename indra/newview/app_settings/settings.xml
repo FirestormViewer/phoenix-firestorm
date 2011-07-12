@@ -6477,6 +6477,17 @@
       <key>Value</key>
       <real>16.0</real>
     </map>
+    <key>MiniMapPrimMaxVertDistance</key>
+    <map>
+      <key>Comment</key>
+      <string>Max height difference between avatar and prim to be shown on the MiniMap. Set to 0.0 to disable.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>256.0</real>
+    </map>
     <key>MiniMapChatRing</key>
     <map>
       <key>Comment</key>
