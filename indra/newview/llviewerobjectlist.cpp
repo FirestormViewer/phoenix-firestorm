@@ -1223,7 +1223,7 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 			}
 		}
 
-		F32 approx_radius = (scale.mV[VX] + scale.mV[VY]) * 0.5f * 0.5f * 1.3f;  // 1.3 is a fudge
+		F32 approx_radius = (scale.mV[VX] + scale.mV[VY]) * 0.325; // <- 0.5f * 0.5f * 1.3f;  // 1.3 is a fudge
 
 		// Limit the size of megaprims so they don't blot out everything on the minimap.
 		// Attempting to draw very large megaprims also causes client lag.
