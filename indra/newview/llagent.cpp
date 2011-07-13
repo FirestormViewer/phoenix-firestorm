@@ -3436,7 +3436,7 @@ bool LLAgent::teleportCore(bool is_local)
 	if(TELEPORT_NONE != mTeleportState)
 	{
 		llwarns << "Attempt to teleport when already teleporting." << llendl;
-		return false;
+		//return false; //LO - yea, lets not return here, we may be stuck in TP and if we are, letting this go through will get us out;
 	}
 
 #if 0
