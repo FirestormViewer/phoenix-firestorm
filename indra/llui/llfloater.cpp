@@ -2240,7 +2240,15 @@ void LLFloaterView::restoreAll()
 	for ( child_list_const_iter_t child_it = getChildList()->begin(); child_it != getChildList()->end(); ++child_it)
 	{
 		LLFloater* floaterp = (LLFloater*)*child_it;
-		floaterp->setMinimized(FALSE);
+
+		// Ansariel: Don't restore "closed" sidebar floaters that are hidden
+		//           minimized to emulate closed state!
+		std::string pat = "side_bar_tab";
+		size_t found = floaterp->getInstanceName().find(pat);
+		if (found == std::string::npos)
+		{
+			floaterp->setMinimized(FALSE);
+		}
 	}
 
 	// *FIX: make sure dependents are restored
