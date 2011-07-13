@@ -91,7 +91,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
-
+  <key>PhoenixDoubleClickAddInventoryObjects</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether or not to add items instead of wearing them</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>RadarAlertChannel</key>
     <map>
       <key>Comment</key>

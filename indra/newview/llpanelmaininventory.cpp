@@ -1050,6 +1050,10 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 		const LLSD arg = "systemfolderstotop";
 		setSortBy(arg);
 	}
+	if (command_name == "add_objects_on_double_click")
+	{
+		gSavedSettings.setBOOL("PhoenixDoubleClickAddInventoryObjects",!gSavedSettings.getBOOL("PhoenixDoubleClickAddInventoryObjects"));
+	}
 	if (command_name == "show_filters")
 	{
 		toggleFindOptions();
@@ -1245,6 +1249,11 @@ BOOL LLPanelMainInventory::isActionChecked(const LLSD& userdata)
 	if (command_name == "sort_system_folders_to_top")
 	{
 		return sort_order_mask & LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP;
+	}
+
+	if (command_name == "add_objects_on_double_click")
+	{
+		return gSavedSettings.getBOOL("PhoenixDoubleClickAddInventoryObjects");
 	}
 
 	return FALSE;
