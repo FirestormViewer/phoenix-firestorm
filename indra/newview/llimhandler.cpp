@@ -73,29 +73,6 @@ void LLIMHandler::updatePhoenixLogImToChatConsole(const LLSD &data)
 }
 
 
-void LLIMHandler::lookupDisplayNames(const LLUUID& agent_id)
-{
-	LLAvatarNameCache::get(agent_id, boost::bind(&LLIMHandler::onAvatarNameCache, this, _1, _2));
-}
-
-void LLIMHandler::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
-{
-	mAvatarName = av_name;
-}
-
-bool LLIMHandler::checkDisplayName()
-{
-	for (int i = 0; i <=20; i++)
-	{
-		if (mAvatarName.mDisplayName.empty())
-			ms_sleep(50);
-		else
-			return true;
-	}
-	return false;
-}
-
-
 //--------------------------------------------------------------------------
 bool LLIMHandler::processNotification(const LLSD& notify)
 {
@@ -118,49 +95,9 @@ bool LLIMHandler::processNotification(const LLSD& notify)
 			// Filter notifications with empty ID and empty message
 			if (substitutions["FROM_ID"].asString() == "" && substitutions["MESSAGE"].asString() == "") return false;
 
-			lookupDisplayNames(LLUUID(substitutions["FROM_ID"].asString()));
-
-			std::string senderName;
-			std::string message(substitutions["MESSAGE"].asString());
-			std::string delimiter = ": ";
-			std::string prefix = message.substr(0, 4);
-			LLStringUtil::toLower(prefix);
-
-			// irc styled messages
-			if (prefix == "/me " || prefix == "/me'")
-			{
-				delimiter = LLStringUtil::null;
-				message = message.substr(3);
-			}
-
-			if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
-			{
-				checkDisplayName();
-				senderName = mAvatarName.getCompleteName();
-			}
-			else if (gSavedSettings.getBOOL("UseDisplayNames"))
-			{
-				checkDisplayName();
-				senderName = mAvatarName.mDisplayName;
-			}
-			else
-			{
-				checkDisplayName();
-				senderName = mAvatarName.getLegacyName();
-			}
-
-			if (rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-			{
-				senderName = RlvStrings::getAnonym(senderName);
-			}
-
-			gConsole->addConsoleLine("IM: " + senderName + delimiter + message, LLUIColorTable::instance().getColor("AgentChatColor"));
-
-			LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
-			gConsole->setVisible(!nearby_chat->getVisible());
+			LLAvatarNameCache::get(LLUUID(substitutions["FROM_ID"].asString()), boost::bind(&LLIMHandler::onAvatarNameLookup, this, _1, _2, substitutions["MESSAGE"].asString()));
 		}
 	}
-
 	else
 	{
 		// arrange a channel on a screen
@@ -220,4 +157,41 @@ void LLIMHandler::onDeleteToast(LLToast* toast)
 
 //--------------------------------------------------------------------------
 
+void LLIMHandler::onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str)
+{
+			std::string senderName;
+			std::string message(message_str);
+			std::string delimiter = ": ";
+			std::string prefix = message.substr(0, 4);
+			LLStringUtil::toLower(prefix);
 
+			// irc styled messages
+			if (prefix == "/me " || prefix == "/me'")
+			{
+				delimiter = LLStringUtil::null;
+				message = message.substr(3);
+			}
+
+			if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
+			{
+				senderName = av_name.getCompleteName();
+			}
+			else if (gSavedSettings.getBOOL("UseDisplayNames"))
+			{
+				senderName = av_name.mDisplayName;
+			}
+			else
+			{
+				senderName = av_name.getLegacyName();
+			}
+
+			if (rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+			{
+				senderName = RlvStrings::getAnonym(senderName);
+			}
+
+			gConsole->addConsoleLine("IM: " + senderName + delimiter + message, LLUIColorTable::instance().getColor("AgentChatColor"));
+
+			LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+			gConsole->setVisible(!nearby_chat->getVisible());
+}

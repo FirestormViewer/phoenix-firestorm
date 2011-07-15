@@ -49,13 +49,9 @@ protected:
 	virtual void onDeleteToast(LLToast* toast);
 	virtual void initChannel();
 
-	void lookupDisplayNames(const LLChat& chat);
-	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
-	bool checkDisplayName();
+	void onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const LLChat& chat_msg);
 
 	BOOL PhoenixUseNearbyChatConsole;
-	std::string mDisplayName;
-	std::string mDisplayName_Username;
 };
 
 }
