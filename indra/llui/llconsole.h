@@ -102,8 +102,7 @@ public:
 	typedef std::list<Line> lines_t;
 	typedef std::list<ParagraphColorSegment> paragraph_color_segments_t;
 	
-	typedef std::list<LLColor4> line_colors_t;
-	line_colors_t mLineColors;
+	std::deque<LLColor4> mLineColors;
 	
 	//A paragraph is a processed element containing the entire text of the
 	//message (used for recalculating positions on screen resize)
@@ -146,6 +145,9 @@ public:
 	void addConsoleLine(const std::string& utf8line, const LLColor4 &color);
 	void addConsoleLine(const LLWString& wline, const LLColor4 &color);
 	void clear();
+
+protected:
+	void removeExtraLines();
 
 private:
 	void		update();

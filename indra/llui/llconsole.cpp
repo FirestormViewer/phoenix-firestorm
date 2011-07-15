@@ -449,3 +449,15 @@ void LLConsole::update()
 	}
 }
 
+void LLConsole::removeExtraLines()
+{
+	mMutex.lock() ;
+	while ((S32)mLines.size() > llmax((S32)0, (S32)(mMaxLines - 1)))
+	{
+		mLines.pop_front();
+		mAddTimes.pop_front();
+		mLineLengths.pop_front();
+		mLineColors.pop_front();
+	}
+	mMutex.unlock() ;
+}
