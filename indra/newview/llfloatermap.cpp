@@ -102,6 +102,9 @@ BOOL LLFloaterMap::postBuild()
 	registrar.add("Minimap.Zoom", boost::bind(&LLFloaterMap::handleZoom, this, _2));
 	registrar.add("Minimap.Tracker", boost::bind(&LLFloaterMap::handleStopTracking, this, _2));
 
+	registrar.add("Minimap.Mark", boost::bind(&LLFloaterMap::handleMark, this, _2));
+	registrar.add("Minimap.ClearMarks", boost::bind(&LLFloaterMap::handleClearMarks, this));
+
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if (mPopupMenu && !LLTracker::isTracking(0))
 	{
@@ -160,6 +163,8 @@ BOOL LLFloaterMap::handleDoubleClick( S32 x, S32 y, MASK mask )
 
 BOOL LLFloaterMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
+	mMap->saveClosestAgentAtLastRightClick();
+
 	if (mPopupMenu)
 	{
 		mPopupMenu->buildDrawLabels();
@@ -330,4 +335,14 @@ void	LLFloaterMap::setMinimized(BOOL b)
 	{
 		setTitle("");
 	}
+}
+
+void LLFloaterMap::handleMark(const LLSD& userdata)
+{
+	mMap->setAvatarMark(userdata);
+}
+
+void LLFloaterMap::handleClearMarks()
+{
+	mMap->clearAvatarMarks();
 }

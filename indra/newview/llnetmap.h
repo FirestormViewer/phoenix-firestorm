@@ -129,12 +129,19 @@ private:
 
 	std::string		mToolTipMsg;
 
+	static std::map<LLUUID, LLColor4> sAvatarMarksMap;
+
 public:
 	void			setSelected(uuid_vec_t uuids) { gmSelected=uuids; };
+	void			setAvatarMark(const LLSD& userdata);
+	void			saveClosestAgentAtLastRightClick();
+	void			clearAvatarMarks();
 
 private:
 	void handleZoom(const LLSD& userdata);
 	void handleStopTracking (const LLSD& userdata);
+	void handleMark(const LLSD& userdata);
+	void handleClearMarks();
 
 	LLMenuGL*		mPopupMenu;
 	uuid_vec_t		gmSelected;

@@ -88,6 +88,9 @@ const S32 MOUSE_DRAG_SLOP = 2;		// How far the mouse needs to move before we thi
 const F32 WIDTH_PIXELS = 2.f;
 const S32 CIRCLE_STEPS = 100;
 
+std::map<LLUUID, LLColor4> LLNetMap::sAvatarMarksMap;
+
+
 LLNetMap::LLNetMap (const Params & p)
 :	LLUICtrl (p),
 	mBackgroundColor (p.bg_color()),
@@ -128,6 +131,9 @@ BOOL LLNetMap::postBuild()
 	
 	registrar.add("Minimap.Zoom", boost::bind(&LLNetMap::handleZoom, this, _2));
 	registrar.add("Minimap.Tracker", boost::bind(&LLNetMap::handleStopTracking, this, _2));
+
+	registrar.add("Minimap.Mark", boost::bind(&LLNetMap::handleMark, this, _2));
+	registrar.add("Minimap.ClearMarks", boost::bind(&LLNetMap::handleClearMarks, this));
 
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if (mPopupMenu && !LLTracker::isTracking(0))
@@ -432,6 +438,12 @@ void LLNetMap::draw()
 							pos_local.mV[VZ] = viewerObject->getPositionGlobal().mdV[VZ];
 							isHeightUnknown = false;
 						}
+					}
+
+					// Mark Avatars with special colors
+					if (LLNetMap::sAvatarMarksMap.find(uuid) != LLNetMap::sAvatarMarksMap.end())
+					{
+						color = LLNetMap::sAvatarMarksMap[uuid];
 					}
 				}
 
@@ -1034,6 +1046,8 @@ BOOL LLNetMap::handleMouseUp( S32 x, S32 y, MASK mask )
 
 BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
+	saveClosestAgentAtLastRightClick();
+
 	if (mPopupMenu)
 	{
 		mPopupMenu->buildDrawLabels();
@@ -1163,4 +1177,35 @@ void LLNetMap::handleStopTracking (const LLSD& userdata)
 		mPopupMenu->setItemEnabled ("Stop Tracking", false);
 		LLTracker::stopTracking ((void*)LLTracker::isTracking(NULL));
 	}
+}
+
+void LLNetMap::handleMark(const LLSD& userdata)
+{
+	setAvatarMark(userdata);
+}
+
+void LLNetMap::handleClearMarks()
+{
+	clearAvatarMarks();
+}
+
+void LLNetMap::setAvatarMark(const LLSD& userdata)
+{
+	if (mClosestAgentAtLastRightClick.notNull())
+	{
+		// Use the name as color definition name from colors.xml
+		LLColor4 color = LLUIColorTable::instance().getColor(userdata.asString(), LLColor4::green);
+		LLNetMap::sAvatarMarksMap[mClosestAgentAtLastRightClick] = color;
+		llinfos << "Minimap: Marking " << mClosestAgentAtLastRightClick.asString() << " in " << userdata.asString() << llendl;
+	}
+}
+
+void LLNetMap::saveClosestAgentAtLastRightClick()
+{
+	mClosestAgentAtLastRightClick = mClosestAgentToCursor;
+}
+
+void LLNetMap::clearAvatarMarks()
+{
+	LLNetMap::sAvatarMarksMap.clear();
 }

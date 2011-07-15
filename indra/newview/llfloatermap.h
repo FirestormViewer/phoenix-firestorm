@@ -57,6 +57,8 @@ private:
 	void handleStopTracking (const LLSD& userdata);
 	void setDirectionPos( LLTextBox* text_box, F32 rotation );
 	void updateMinorDirections();
+	void handleMark(const LLSD& userdata);
+	void handleClearMarks();
 
 	void stretchMiniMap(S32 width,S32 height);
 	
