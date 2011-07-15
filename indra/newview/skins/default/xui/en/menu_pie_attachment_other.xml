@@ -62,7 +62,7 @@
             name="Freeze...">
             <pie_slice.on_click
                 function="Avatar.Freeze" />
-            <pie_slice.on_visible
+            <pie_slice.on_enable
                 function="Avatar.EnableFreezeEject"/>
         </pie_slice>
         <pie_slice
@@ -86,7 +86,7 @@
             name="Eject...">
             <pie_slice.on_click
                 function="Avatar.Eject" />
-            <pie_slice.on_visible
+            <pie_slice.on_enable
                 function="Avatar.EnableFreezeEject"/>
         </pie_slice>
 
