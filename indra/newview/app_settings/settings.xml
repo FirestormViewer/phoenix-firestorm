@@ -102,6 +102,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>PhoenixKeepUnpackedCacheFiles</key>
+  <map>
+    <key>Comment</key>
+    <string>If TRUE, the viewer won't delete unpacked cache files when logging out (improves overall performance and fixes sound bugs)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>RadarAlertChannel</key>
     <map>
       <key>Comment</key>
