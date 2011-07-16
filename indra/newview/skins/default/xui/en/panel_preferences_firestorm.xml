@@ -1725,6 +1725,14 @@
 		 name="PhoenixCommitForSaleOnChange_toggle"
 		 control_name="PhoenixCommitForSaleOnChange"/>
 	
+		<check_box
+		 follows="left|top"
+		 height="16"
+		 label="Save scripts edited from inventory as Mono"
+		 tool_tip="When checked, editing a script directly from inventory and then saving it saves as Mono instead of LSL."
+		 name="FSSaveInventoryScriptsAsMono_toggle"
+		 control_name="FSSaveInventoryScriptsAsMono"/>
+	
 	</panel>
 </tab_container>
 </panel>
