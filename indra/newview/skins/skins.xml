@@ -127,6 +127,22 @@
 
             </array>
         </map>
+
+        <map>
+            <key>name</key>
+                <string>Droidstorm</string>
+            <key>folder</key>
+                <string>droidstorm</string>
+            <key>themes</key>
+            <array>
+                <map>
+                    <key>name</key>
+                        <string>Default</string>
+                    <key>folder</key>
+                        <string>default</string>
+                </map>
+            </array>
+        </map>
     </array>
 </llsd>
 
