@@ -191,6 +191,9 @@
 	 name="SL-MidBlue"
 	 value="0.3 0.6 0.9 1" />
 	<color
+	 name="OldGray_63"
+	 value="0.243 0.243 0.243 0.63" />
+	<color
 	 name="Brown"
 	 value="0.225 0.100 0.05 1" />
 	<color
@@ -397,7 +400,7 @@
      reference="Unused?" />
     <color
      name="ChatHistoryBgColor"
-     reference="DkGray_66" />
+     reference="OldGray_63" />
     <color
      name="ChatHistoryTextColor"
      reference="LtGray" />
@@ -765,7 +768,7 @@
      reference="White" />
     <color
      name="TextBgReadOnlyColor"
-	 reference="White_05" />
+	 reference="OldGray_63" />
     <color
      name="TextBgWriteableColor"
      reference="LtGray" />
