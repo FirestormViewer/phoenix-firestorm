@@ -2,6 +2,28 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
+	<key>FSShowIMInChatHistory</key>
+	<map>
+		<key>Comment</key>
+		<string>If true, IM will also be shown in the nearby chat history.</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>Boolean</string>
+		<key>Value</key>
+		<integer>0</integer>
+	</map>
+	<key>FSLogIMInChatHistory</key>
+	<map>
+		<key>Comment</key>
+		<string>If true, IM will also be logged in the nearby chat history if logging nearby chat and showing IMs in nearby chat is enabled.</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>Boolean</string>
+		<key>Value</key>
+		<integer>0</integer>
+	</map>
 	<key>FSPaymentInfoInChat</key>
 	<map>
 		<key>Comment</key>

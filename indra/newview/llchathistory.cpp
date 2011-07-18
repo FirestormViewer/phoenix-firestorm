@@ -307,12 +307,13 @@ public:
 			{
 				user_name->setValue( LLSD() );
 				LLAvatarNameCache::get(mAvatarID,
-					boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+					boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType));
 			}
 			else
 			{
 				// If the agent's chat was subject to @shownames=n we should display their anonimized name
 				mFrom = chat.mFromName;
+				if (chat.mChatType == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
 				user_name->setValue(mFrom);
 				user_name->setToolTip(mFrom);
 				setToolTip(mFrom);
@@ -331,12 +332,13 @@ public:
 				username_end == (chat.mFromName.length() - 1))
 			{
 				user_name->setValue( LLSD() );
-				LLAvatarNameCache::get(mAvatarID, boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+				LLAvatarNameCache::get(mAvatarID, boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType));
 			}
 			else
 			{
 				// If the agent's chat was subject to @shownames=n we should display their anonimized name
 				mFrom = chat.mFromName;
+				if (chat.mChatType == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
 				user_name->setValue(mFrom);
 				user_name->setToolTip(mFrom);
 				setToolTip(mFrom);
@@ -431,12 +433,13 @@ public:
 		}
 	}
 
-	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
+	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, EChatType chat_type)
 	{
 		mFrom = av_name.mDisplayName;
+		if (chat_type == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
 
 		LLTextBox* user_name = getChild<LLTextBox>("user_name");
-		user_name->setValue( LLSD(av_name.mDisplayName ) );
+		user_name->setValue( LLSD(mFrom) );
 		user_name->setToolTip( av_name.mUsername );
 
 		if (gSavedSettings.getBOOL("NameTagShowUsernames") && LLAvatarNameCache::useDisplayNames())
@@ -917,6 +920,12 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				// reset the style parameter for the header only -AO
 				link_params.color(header_name_color);
 				link_params.readonly_color(header_name_color);
+
+				if (chat.mChatType == CHAT_TYPE_IM)
+				{
+					mEditor->appendText(LLTrans::getString("IMPrefix") + " ", false, link_params);
+				}
+
 				if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
 				{
 					checkDisplayName();
@@ -938,7 +947,14 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			}
 			else
 			{
-				mEditor->appendText(chat.mFromName + delimiter, false, style_params);
+				if (chat.mChatType == CHAT_TYPE_IM)
+				{
+					mEditor->appendText(LLTrans::getString("IMPrefix") + " " + chat.mFromName + delimiter, false, style_params);
+				}
+				else
+				{
+					mEditor->appendText(chat.mFromName + delimiter, false, style_params);
+				}
 			}
 		}
 	}
@@ -952,7 +968,10 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 		LLDate new_message_time = LLDate::now();
 
-		if (mLastFromName == chat.mFromName 
+		std::string tmp_from_name(chat.mFromName);
+		if (chat.mChatType == CHAT_TYPE_IM) tmp_from_name = LLTrans::getString("IMPrefix") + " " + tmp_from_name;
+
+		if (mLastFromName == tmp_from_name 
 			&& mLastFromID == chat.mFromID
 			&& mLastMessageTime.notNull() 
 			&& (new_message_time.secondsSinceEpoch() - mLastMessageTime.secondsSinceEpoch()) < 60.0
@@ -994,7 +1013,9 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			widget_associated_text += chat.mFromName + delimiter;
 
 		mEditor->appendWidget(p, widget_associated_text, false);
+
 		mLastFromName = chat.mFromName;
+		if (chat.mChatType == CHAT_TYPE_IM) mLastFromName = LLTrans::getString("IMPrefix") + " " + mLastFromName;
 		mLastFromID = chat.mFromID;
 		mLastMessageTime = new_message_time;
 		mIsLastMessageFromLog = message_from_log;

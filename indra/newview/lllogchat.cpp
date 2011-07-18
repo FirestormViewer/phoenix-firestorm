@@ -573,6 +573,18 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im)
 	bool has_name = name_and_text[IDX_NAME].matched;
 	std::string name = name_and_text[IDX_NAME];
 
+	// Ansariel: Handle the case an IM was stored in nearby chat history
+	if (name == "IM:")
+	{
+		U32 divider_pos = stuff.find(NAME_TEXT_DIVIDER, 3);
+		if (divider_pos != std::string::npos && divider_pos < (stuff.length() - NAME_TEXT_DIVIDER.length()))
+		{
+			im[IM_FROM] = stuff.substr(0, divider_pos);
+			im[IM_TEXT] = stuff.substr(divider_pos + NAME_TEXT_DIVIDER.length());
+			return true;
+		}
+	}
+
 	//we don't need a name/text separator
 	if (has_name && name.length() && name[name.length()-1] == ':')
 	{
