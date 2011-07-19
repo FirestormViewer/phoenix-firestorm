@@ -588,7 +588,7 @@ void LLNearbyChat::loadHistory()
 			//           saved IM in nearby chat history.
 			std::string im_prefix = "IM: ";
 			size_t im_prefix_found = from.find(im_prefix);
-			if (im_prefix_found != std::string.npos)
+			if (im_prefix_found != std::string::npos)
 			{
 				from = from.substr(im_prefix.length());
 				im_type = true;
