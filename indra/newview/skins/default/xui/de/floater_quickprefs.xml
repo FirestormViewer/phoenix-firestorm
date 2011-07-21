@@ -28,7 +28,7 @@
         <text name="Height Offset" width="105">
             Höhenabstand:
         </text>
-        <slider left_delta="87" name="RestrainedLoveOffsetAvatarZ"/>		
+        <slider left_delta="87" name="AvatarZOffset"/>		
         <text name="WL Sky" width="67">
             WL-Himmel:
         </text>

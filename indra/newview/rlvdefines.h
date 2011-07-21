@@ -101,7 +101,7 @@ const S32 RLVa_VERSION_BUILD = 1;
 #define RLV_ROOT_FOLDER					"#RLV"
 #define RLV_CMD_PREFIX					'@'
 #define RLV_PUTINV_PREFIX				"#RLV/~"
-#define RLV_SETROT_OFFSET				F_PI_BY_TWO		// @setrot is off by 90° with the rest of SL
+#define RLV_SETROT_OFFSET				F_PI_BY_TWO		// @setrot is off by 90 degrees with the rest of SL
 
 #define RLV_FOLDER_FLAG_NOSTRIP			"nostrip"
 #define RLV_FOLDER_PREFIX_HIDDEN		'.'
@@ -292,7 +292,7 @@ enum ERlvAttachGroupType
 
 #define RLV_SETTING_MAIN				"RestrainedLove"
 #define RLV_SETTING_DEBUG				"RestrainedLoveDebug"
-#define RLV_SETTING_AVATAROFFSET_Z		"RestrainedLoveOffsetAvatarZ"
+#define RLV_SETTING_AVATAROFFSET_Z		"AvatarZOffset"
 #define RLV_SETTING_FORBIDGIVETORLV		"RestrainedLoveForbidGiveToRLV"
 #define RLV_SETTING_NOSETENV			"RestrainedLoveNoSetEnv"
 #define RLV_SETTING_WEARADDPREFIX       "RestrainedLoveStackWhenFolderBeginsWith"

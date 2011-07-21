@@ -706,10 +706,10 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>RestrainedLoveOffsetAvatarZ</key>
+    <key>AvatarZOffset</key>
     <map>
       <key>Comment</key>
-      <string>Offset the avatar.</string>
+      <string>Height offset the avatar.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
