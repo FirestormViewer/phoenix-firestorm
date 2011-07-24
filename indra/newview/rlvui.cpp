@@ -91,8 +91,8 @@ RlvUIEnabler::RlvUIEnabler()
 
 	// onUpdateLoginLastLocation
 	#ifdef RLV_EXTENSION_STARTLOCATION
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_TPLOC, boost::bind(&RlvUIEnabler::onUpdateLoginLastLocation, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_UNSIT, boost::bind(&RlvUIEnabler::onUpdateLoginLastLocation, this)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_TPLOC, boost::bind(&RlvUIEnabler::onUpdateLoginLastLocation, this, _1)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_UNSIT, boost::bind(&RlvUIEnabler::onUpdateLoginLastLocation, this, _1)));
 	#endif // RLV_EXTENSION_STARTLOCATION
 }
 
@@ -499,9 +499,10 @@ void RlvUIEnabler::onToggleViewXXX()
 }
 
 // Checked: 2010-04-01 (RLVa-1.2.0c) | Added: RLVa-1.2.0c
-void RlvUIEnabler::onUpdateLoginLastLocation()
+void RlvUIEnabler::onUpdateLoginLastLocation(bool fQuitting)
 {
-	RlvSettings::updateLoginLastLocation();
+	if (!fQuitting)
+		RlvSettings::updateLoginLastLocation();
 }
 
 // ============================================================================

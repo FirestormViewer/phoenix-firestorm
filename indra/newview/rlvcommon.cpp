@@ -109,7 +109,7 @@ void RlvSettings::initClass()
 	// Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.1d
 	void RlvSettings::updateLoginLastLocation()
 	{
-		if (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION))
+		if ( (!LLApp::isQuitting()) && (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION)) )
 		{
 			BOOL fValue = (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) || (!gRlvHandler.canStand());
 			if (gSavedPerAccountSettings.getBOOL(RLV_SETTING_LOGINLASTLOCATION) != fValue)
