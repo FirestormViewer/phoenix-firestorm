@@ -4806,7 +4806,11 @@ void LLWearableBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 					if (LLWearableType::getAllowMultiwear(mWearableType))
 					{
 						items.push_back(std::string("Wearable Add"));
-						if (gAgentWearables.getWearableCount(mWearableType) >= LLAgentWearables::MAX_CLOTHING_PER_TYPE)
+//						if (gAgentWearables.getWearableCount(mWearableType) >= LLAgentWearables::MAX_CLOTHING_PER_TYPE)
+// [SL:KB] - Patch: Appearance-WearableDuplicateAssets | Checked: 2011-07-24 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
+						if ( (gAgentWearables.getWearableCount(mWearableType) >= LLAgentWearables::MAX_CLOTHING_PER_TYPE) ||
+							 (gAgentWearables.getWearableFromAssetID(item->getAssetUUID())) )
+// [/SL:KB]
 						{
 							disabled_items.push_back(std::string("Wearable Add"));
 						}
