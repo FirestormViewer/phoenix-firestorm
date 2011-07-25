@@ -1405,6 +1405,7 @@ void LLViewerRegion::setSeedCapability(const std::string& url)
 
 	capabilityNames.append("GetDisplayNames");
 	capabilityNames.append("GetTexture");
+	capabilityNames.append("GetMesh"); // detect mesh
 	capabilityNames.append("GroupProposalBallot");
 	capabilityNames.append("HomeLocation");
 	capabilityNames.append("LandResources");

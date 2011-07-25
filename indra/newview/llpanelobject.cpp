@@ -1928,13 +1928,23 @@ void LLPanelObject::sendRotation(BOOL btn_down)
 	}
 }
 
+// patch up for mesh, to be removed during real mesh merge -Zi
+F32 llpanelobject_max_prim_scale()
+{
+	if(gAgent.getRegion()->getCapability("GetMesh").empty())
+		return DEFAULT_MAX_PRIM_SCALE;
+	return 64.f;
+}
 
 // BUG: Make work with multiple objects
 void LLPanelObject::sendScale(BOOL btn_down)
 {
 	if (mObject.isNull()) return;
 
-	LLVector3 newscale(mCtrlScaleX->get(), mCtrlScaleY->get(), mCtrlScaleZ->get());
+	// make sure not to send larger/smaller values than permitted -Zi
+	LLVector3 newscale(llclamp(mCtrlScaleX->get(), MIN_PRIM_SCALE, llpanelobject_max_prim_scale()),
+					   llclamp(mCtrlScaleY->get(), MIN_PRIM_SCALE, llpanelobject_max_prim_scale()),
+					   llclamp(mCtrlScaleZ->get(), MIN_PRIM_SCALE, llpanelobject_max_prim_scale()));
 
 	LLVector3 delta = newscale - mObject->getScale();
 	if (delta.magVec() >= 0.00005f)
@@ -2381,9 +2391,9 @@ void LLPanelObject::onPasteSize(const LLSD& data)
 {
 	if(mClipboardSize.isNull()) return;
 
-	mClipboardSize.mV[VX] = llclamp(mClipboardSize.mV[VX], MIN_PRIM_SCALE, DEFAULT_MAX_PRIM_SCALE);
-	mClipboardSize.mV[VY] = llclamp(mClipboardSize.mV[VY], MIN_PRIM_SCALE, DEFAULT_MAX_PRIM_SCALE);
-	mClipboardSize.mV[VZ] = llclamp(mClipboardSize.mV[VZ], MIN_PRIM_SCALE, DEFAULT_MAX_PRIM_SCALE);
+	mClipboardSize.mV[VX] = llclamp(mClipboardSize.mV[VX], MIN_PRIM_SCALE, llpanelobject_max_prim_scale());
+	mClipboardSize.mV[VY] = llclamp(mClipboardSize.mV[VY], MIN_PRIM_SCALE, llpanelobject_max_prim_scale());
+	mClipboardSize.mV[VZ] = llclamp(mClipboardSize.mV[VZ], MIN_PRIM_SCALE, llpanelobject_max_prim_scale());
 
 	mCtrlScaleX->set( mClipboardSize.mV[VX] );
 	mCtrlScaleY->set( mClipboardSize.mV[VY] );
