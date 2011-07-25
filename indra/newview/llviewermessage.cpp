@@ -6341,6 +6341,24 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 		payload["object_name"] = object_name;
 		payload["owner_name"] = owner_name;
 
+// [RLVa:KB] - Checked: 2011-07-25 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+		if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canAttach()) )
+		{
+			// If only the attachment permission is requested we'll auto-deny it; otherwise let the user decide over remaining permissions
+			if (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH] == questions)
+			{
+				RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_PERMATTACH, LLSD().with("OBJECT", object_name));
+				LLNotifications::instance().forceResponse(
+					LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 1/*NO*/);
+				return;
+			}
+			else
+			{
+				questions &= ~LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH];		
+				payload["questions"] = questions;
+			}
+		}
+// [/RLVa:KB]
 // [RLVa:KB] - Checked: 2009-07-10 (RLVa-1.0.0g) | Modified: RLVa-0.2.0e
 		S32 rlvQuestionsOther = questions;
 
