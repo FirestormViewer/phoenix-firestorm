@@ -251,16 +251,28 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 	fi
 	./develop.py -t $BTYPE configure $KDU -DPACKAGE:BOOL=ON -DLL_TESTS:BOOL=OFF -DVIEWER_CHANNEL:STRING=Firestorm-$CHANNEL -DVIEWER_LOGIN_CHANNEL:STRING=Firestorm-$CHANNEL 2>&1 | tee $LOG
 	# LL build wants this directory to exist, but doesn't make it itself.
-	mkdir -p ./build-darwin-i386/newview/Release/Firestorm.app
+	if [ -f "./build-darwin-i386/SecondLife.xcodeproj" ]; then
+		mkdir -p ./build-darwin-i386/newview/Release/Firestorm.app
+	elif [ -f "./build-darwin-i686/SecondLife.xcodeproj" ]; then
+		mkdir -p ./build-darwin-i686/newview/Release/Firestorm.app
+	fi
 fi
 
 if [ $WANTS_BUILD -eq $TRUE ] ; then
 
 	echo "Building in progress. Check $LOG for verbose status."
 	# -sdk macosx10.6
-	xcodebuild -project build-darwin-i386/SecondLife.xcodeproj \
-		-alltargets -configuration $BTYPE GCC_VERSION=4.2 \
-		-sdk macosx10.5 GCC_OPTIMIZATION_LEVEL=3 ARCHS=i386 \
+	PROJDIR="build-darwin-i386/SecondLife.xcodeproj"
+	if [ ! -d $PROJDIR ]; then
+		PROJDIR="build-darwin-i686/SecondLife.xcodeproj"
+		if [ ! -d $PROJDIR ]; then
+			echo "Could not find Xcode project file."
+			exit 2
+		fi
+	fi
+	xcodebuild -project $PROJDIR -alltargets -configuration $BTYPE \
+		MACOSX_DEPLOYMENT_TARGET=10.4 GCC_VERSION=4.2 \
+		-sdk macosx10.6 GCC_OPTIMIZATION_LEVEL=3 ARCHS=i386 \
 		GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee $LOG | \
 		grep -e "[(make.*Error)|(xcodebuild.*Error)] "
 	trap - INT TERM EXIT
