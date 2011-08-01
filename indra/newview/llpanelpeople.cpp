@@ -1145,8 +1145,7 @@ void LLPanelPeople::updateNearbyList()
 	if (mRadarEnterAlerts.size() > 0)
 	{
 		mRadarFrameCount++;
-		S32 chan = (S32)gSavedSettings.getU32("RadarAlertChannel");
-		if (chan < 0) { chan = chan * -1; } // make sure chan is always positive
+		S32 chan = gSavedSettings.getS32("RadarAlertChannel");
 		std::string msg = llformat("/%d %d,%d",chan,mRadarFrameCount,(int)mRadarEnterAlerts.size());
 		while(mRadarEnterAlerts.size() > 0)
 		{
@@ -1156,7 +1155,17 @@ void LLPanelPeople::updateNearbyList()
 				msg = llformat("%s,%s",msg.c_str(),mRadarEnterAlerts.back().asString().c_str());
 				mRadarEnterAlerts.pop_back();
 			}
-			LLNearbyChatBar::sendChatFromViewer(msg,CHAT_TYPE_WHISPER,FALSE);
+			LLMessageSystem* msgs = gMessageSystem;
+			msgs->newMessage("ScriptDialogReply");
+			msgs->nextBlock("AgentData");
+			msgs->addUUID("AgentID", gAgent.getID());
+			msgs->addUUID("SessionID", gAgent.getSessionID());
+			msgs->nextBlock("Data");
+			msgs->addUUID("ObjectID", gAgent.getID());
+			msgs->addS32("ChatChannel", chan);
+			msgs->addS32("ButtonIndex", 1);
+			msgs->addString("ButtonLabel", msg.c_str());
+			gAgent.sendReliableMessage();
 		}
 	}
 	if (mRadarLeaveAlerts.size() > 0)
@@ -1696,6 +1705,15 @@ void LLPanelPeople::onChatButtonClicked()
 	LLUUID group_id = getCurrentItemID();
 	if (group_id.notNull())
 		LLGroupActions::startIM(group_id);
+}
+void LLPanelPeople::requestRadarChannelAlertSync()
+{
+	F32 timeNow = gFrameTimeSeconds;
+	if( (timeNow - RADAR_CHAT_MIN_SPACING)>mRadarLastRequestTime)
+	{
+		mRadarLastRequestTime=timeNow;
+		mRadarAlertRequest = true;
+	}
 }
 
 void LLPanelPeople::teleportToAvatar(LLUUID targetAv)

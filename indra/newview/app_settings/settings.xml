@@ -138,13 +138,13 @@
   <key>RadarAlertChannel</key>
     <map>
       <key>Comment</key>
-      <string>Positive Numbered Channel for whispering radar alerts</string>
+      <string>Channel for whispering radar alerts</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>U32</string>
+      <string>S32</string>
       <key>Value</key>
-      <integer>777777777</integer>
+      <integer>-777777777</integer>
     </map>
     
   <key>RadarLegacyChannelAlertRefreshUUID</key>
