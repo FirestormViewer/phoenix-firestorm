@@ -1207,6 +1207,12 @@ void LLPanelEditWearable::onTabExpandedCollapsed(const LLSD& param, U8 index)
 
 void LLPanelEditWearable::changeCamera(U8 subpart)
 {
+	// Don't change the camera if this type doesn't have a camera switch.
+	// Useful for wearables like physics that don't have an associated physical body part.
+	if (LLWearableType::getDisableCameraSwitch(mWearablePtr->getType()))
+	{
+		return;
+	}
         const LLEditWearableDictionary::WearableEntry *wearable_entry = LLEditWearableDictionary::getInstance()->getWearable(mWearablePtr->getType());
         if (!wearable_entry)
         {
@@ -1263,9 +1269,10 @@ void LLPanelEditWearable::updateTypeSpecificControls(LLWearableType::EType type)
         if (type == LLWearableType::WT_SHAPE)
         {
                 // Update avatar height
-		// The .195 is a fudge factor derived by measuring against
-		//  prims inworld, and carried forward from Phoenix. -- TS
-		F32 new_size = gAgentAvatarp->mBodySize.mV[VZ] + .195;
+				// The .195 is a fudge factor derived by measuring against
+				//  prims inworld, and carried forward from Phoenix. -- TS
+				F32 new_size = gAgentAvatarp->mBodySize.mV[VZ] + .195;
+
                 if (gSavedSettings.getBOOL("HeightUnits") == FALSE)
                 {
                         // convert meters to feet

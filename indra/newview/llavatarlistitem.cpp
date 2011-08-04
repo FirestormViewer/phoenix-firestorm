@@ -35,6 +35,7 @@
 #include "lltextutil.h"
 
 #include "llagent.h"
+#include "llslurl.h" // AO: Used for confirm modify rights
 #include "llavatarnamecache.h"
 #include "llavatariconctrl.h"
 #include "lloutputmonitorctrl.h"

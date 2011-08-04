@@ -33,6 +33,7 @@
 #include "llviewercontrol.h"
 #include "llsdserialize.h"
 #include "llsecapi.h"
+#include "lltrans.h"
 #include "llweb.h"
 
                                                             
@@ -508,7 +509,8 @@ bool LLGridManager::setGridChoice(const std::string& grid)
 			return false;
 	}
 	mGrid = grid;
-	gSavedSettings.setString("CurrentGrid", grid); 
+	gSavedSettings.setString("CurrentGrid", grid);
+
 	updateIsInProductionGrid();
 	return true;
 }

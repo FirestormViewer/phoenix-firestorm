@@ -33,6 +33,13 @@
 class LLAccordionCtrl;
 class LLSideTrayTab;
 
+// Deal with LLSideTrayTab being opaque. Generic do-nothing cast...
+template <class T>
+T tab_cast(LLSideTrayTab* tab) { return tab; }
+// specialized for implementation in presence of LLSideTrayTab definition
+template <>
+LLPanel* tab_cast<LLPanel*>(LLSideTrayTab* tab);
+
 // added inheritance from LLDestroyClass<LLSideTray> to enable Side Tray perform necessary actions 
 // while disconnecting viewer in LLAppViewer::disconnectViewer().
 // LLDestroyClassList::instance().fireCallbacks() calls destroyClass method. See EXT-245.
@@ -97,6 +104,8 @@ public:
 	 */
 	LLPanel*	showPanel		(const std::string& panel_name, const LLSD& params = LLSD());
 
+	bool		hidePanel		(const std::string& panel_name);
+
 	/**
 	 * Toggling Side Tray tab which contains "sub_panel" child of "panel_name" panel.
 	 * If "sub_panel" is not visible Side Tray is opened to display it,
@@ -112,6 +121,8 @@ public:
     LLPanel*	getActivePanel	();
     std::string		getActivePanelName ();
     bool		isPanelActive	(const std::string& panel_name);
+
+	void		setTabDocked(const std::string& tab_name, bool dock, bool toggle_floater = true);
 
 	/*
 	 * get the panel of given type T (don't show it or do anything else with it)
@@ -251,8 +262,11 @@ private:
 		if (LLSideTray::instanceCreated())
 			LLSideTray::getInstance()->setEnabled(FALSE);
 	}
-	
+
 private:
+	// Since we provide no public way to query mTabs and mDetachedTabs, give
+	// LLSideTrayListener friend access.
+	friend class LLSideTrayListener;
 	LLPanel*						mButtonsPanel;
 	typedef std::map<std::string,LLButton*> button_map_t;
 	button_map_t					mTabButtons;

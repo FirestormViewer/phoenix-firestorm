@@ -47,6 +47,7 @@
 #include "llfloatergroups.h"
 #include "llfloaterreg.h"
 #include "llfloaterpay.h"
+#include "llfloaterwebcontent.h"
 #include "llfloaterworldmap.h"
 #include "llgiveinventory.h"
 #include "llinventorybridge.h"
@@ -327,7 +328,7 @@ bool LLAvatarActions::isCalling(const LLUUID &id)
 //static
 bool LLAvatarActions::canCall()
 {
-		return LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
+	return LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
 }
 
 // static
@@ -357,6 +358,23 @@ void LLAvatarActions::startConference(const uuid_vec_t& ids)
 	}
 	make_ui_sound("UISndStartIM");
 }
+
+/* Web profiles - here for compatibility only, do not uncomment. //-TT
+static void on_avatar_name_show_profile(const LLUUID& agent_id, const LLAvatarName& av_name)
+{
+	std::string username = av_name.mUsername;
+	if (username.empty())
+	{
+		username = LLCacheName::buildUsername(av_name.mDisplayName);
+	}
+	
+	llinfos << "opening web profile for " << username << llendl;		
+	std::string url = getProfileURL(username);
+
+	// PROFILES: open in webkit window
+	LLWeb::loadWebURLInternal(url, "", agent_id.asString());
+}
+*/
 
 // static
 void LLAvatarActions::showProfile(const LLUUID& id)
@@ -414,6 +432,23 @@ void LLAvatarActions::showProfile(const LLUUID& id)
 				LLFloaterReg::showInstance("floater_profile_view", LLSD().with("id", id));
 			}
 		}
+	}
+}
+//static 
+bool LLAvatarActions::profileVisible(const LLUUID& id)
+{
+	LLFloaterWebContent *browser = dynamic_cast<LLFloaterWebContent*> (LLFloaterReg::findInstance("web_content", id.asString()));
+	return browser && browser->isShown();
+}
+
+
+//static 
+void LLAvatarActions::hideProfile(const LLUUID& id)
+{
+	LLFloaterWebContent *browser = dynamic_cast<LLFloaterWebContent*> (LLFloaterReg::findInstance("web_content", id.asString()));
+	if (browser)
+	{
+		browser->closeFloater();
 	}
 }
 

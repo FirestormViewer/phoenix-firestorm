@@ -45,7 +45,7 @@
         </menu_item_call>
         
         <menu_item_call
-         label="Outfit"
+         label="Appearance"
          name="ChangeOutfit">
             <menu_item_call.on_click
              function="CustomizeAvatar" />
@@ -477,7 +477,6 @@
              function="Floater.Toggle"
              parameter="world_map" />
         </menu_item_check>
-
         <menu_item_separator/>
         
         <menu_item_call
@@ -1219,6 +1218,7 @@
     	label="Content"
     	name="Content"
     	tear_off="true">
+<!--
         <menu_item_call
              label="Search"
              name="Search">
@@ -1226,6 +1226,20 @@
                  function="Floater.Show"
                  parameter="search"/>
        </menu_item_call>
+-->
+        <menu_item_check
+        label="Search"
+        name="Search"
+        shortcut="control|F">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="search" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="search" />
+            </menu_item_check>
+
+
     	<menu_item_call
              label="SL Marketplace"
              name="SL Marketplace">
@@ -3129,7 +3143,7 @@
           <menu_item_call
            label="Web Content Browser"
            name="Web Content Browser"
-           shortcut="control|alt|W">
+           shortcut="control|shift|Z">
             <menu_item_call.on_click
              function="Advanced.WebContentTest"
              parameter="http://google.com"/>
@@ -3570,6 +3584,16 @@
             <menu_item_check.on_click
              function="ToggleControl"
              parameter="ImagePipelineUseHTTP" />
+        </menu_item_check>
+        <menu_item_check
+         label="HTTP Inventory"
+         name="HTTP Inventory">
+            <menu_item_check.on_check
+             function="CheckControl"
+             parameter="UseHTTPInventory" />
+            <menu_item_check.on_click
+             function="ToggleControl"
+             parameter="UseHTTPInventory" />
         </menu_item_check>
         <menu_item_call
          label="Compress Images"

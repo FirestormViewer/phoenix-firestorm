@@ -589,6 +589,10 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 		&& chat_msg.mFromID != gAgentID)
 	{
  		LLFirstUse::otherAvatarChatFirst();
+
+ 		// Add sender to the recent people list.
+ 		LLRecentPeople::instance().add(chat_msg.mFromID);
+
 	}
 
 	// Ansariel: Use either old style chat output to console or toasts
@@ -602,10 +606,17 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 
 		std::string consoleChat;
 		
-		if (chat_msg.mSourceType != CHAT_SOURCE_SYSTEM)
+		//-TT 2.6.9 cosmetic changes for merge
+		//if (chat_msg.mSourceType != CHAT_SOURCE_SYSTEM)
+		//{
+		//	// Get display name for sender
+		//	lookupDisplayNames(chat_msg);
+		if (chat_msg.mSourceType == CHAT_SOURCE_AGENT) 
 		{
-			// Get display name for sender
-			lookupDisplayNames(chat_msg);
+			LLAvatarNameCache::get(chat_msg.mFromID, boost::bind(&LLNearbyChatHandler::onAvatarNameLookup, this, _1, _2, chat_msg));
+		}
+		else if (chat_msg.mSourceType == CHAT_SOURCE_OBJECT)
+		{
 
 			std::string senderName(chat_msg.mFromName);
 			std::string prefix = chat_msg.mText.substr(0, 4);
@@ -634,29 +645,36 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 
 			std::string message = irc_me ? chat_msg.mText.substr(3) : chat_msg.mText;
 
-			// Get the display name of the sender if required
-			if (!chat_msg.mRlvNamesFiltered)
-			{
-				if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
-				{
-					if (!chat_msg.mFromName.empty()) checkDisplayName();
-					senderName = mDisplayName_Username;
-				}
-				else if (gSavedSettings.getBOOL("UseDisplayNames"))
-				{
-					if (!chat_msg.mFromName.empty()) checkDisplayName();
-					senderName = mDisplayName;
-				}
-			}
+			//// Get the display name of the sender if required
+			//if (!chat_msg.mRlvNamesFiltered)
+			//{
+			//	if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
+			//	{
+			//		if (!chat_msg.mFromName.empty()) checkDisplayName();
+			//		senderName = mDisplayName_Username;
+			//	}
+			//	else if (gSavedSettings.getBOOL("UseDisplayNames"))
+			//	{
+			//		if (!chat_msg.mFromName.empty()) checkDisplayName();
+			//		senderName = mDisplayName;
+			//	}
+			//}
 
 			consoleChat = senderName + delimiter + message;
+			LLColor4 chatcolor;
+			LLViewerChat::getChatColor(chat_msg, chatcolor);
+			gConsole->addConsoleLine(consoleChat, chatcolor);
+			gConsole->setVisible(!nearby_chat->getVisible());
 		}
-		else consoleChat = chat_msg.mText;
+		else
+		{
+			consoleChat = chat_msg.mText;
 
-		LLColor4 chatcolor;
-		LLViewerChat::getChatColor(chat_msg, chatcolor);
-		gConsole->addConsoleLine(consoleChat, chatcolor);
-		gConsole->setVisible(!nearby_chat->getVisible());
+			LLColor4 chatcolor;
+			LLViewerChat::getChatColor(chat_msg, chatcolor);
+			gConsole->addConsoleLine(consoleChat, chatcolor);
+			gConsole->setVisible(!nearby_chat->getVisible());
+		}
 	}
 	else
 	{
@@ -729,6 +747,61 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 	}
 }
 
+//-TT 2.6.9 merge
+//Ansariel name lookup function
+void LLNearbyChatHandler::onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const LLChat& chat_msg)
+{
+	std::string consoleChat;
+	std::string senderName(chat_msg.mFromName);
+	std::string prefix = chat_msg.mText.substr(0, 4);
+	LLStringUtil::toLower(prefix);
+
+	//IRC styled /me messages.
+	bool irc_me = prefix == "/me " || prefix == "/me'";
+
+	// Delimiter after a name in header copy/past and in plain text mode
+	std::string delimiter = ": ";
+	std::string shout = LLTrans::getString("shout");
+	std::string whisper = LLTrans::getString("whisper");
+	if (chat_msg.mChatType == CHAT_TYPE_SHOUT || 
+		chat_msg.mChatType == CHAT_TYPE_WHISPER ||
+		chat_msg.mText.compare(0, shout.length(), shout) == 0 ||
+		chat_msg.mText.compare(0, whisper.length(), whisper) == 0)
+	{
+		delimiter = " ";
+	}
+
+	// Don't add any delimiter after name in irc styled messages
+	if (irc_me || chat_msg.mChatStyle == CHAT_STYLE_IRC)
+	{
+		delimiter = LLStringUtil::null;
+	}
+
+	std::string message = irc_me ? chat_msg.mText.substr(3) : chat_msg.mText;
+
+	// Get the display name of the sender if required
+	if (!chat_msg.mRlvNamesFiltered)
+	{
+		if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
+		{
+			senderName = av_name.getCompleteName();
+		}
+		else if (gSavedSettings.getBOOL("UseDisplayNames"))
+		{
+			senderName = av_name.mDisplayName;
+		}
+	}
+
+	consoleChat = senderName + delimiter + message;
+	LLColor4 chatcolor;
+	LLViewerChat::getChatColor(chat_msg, chatcolor);
+	gConsole->addConsoleLine(consoleChat, chatcolor);
+	LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+	gConsole->setVisible(!nearby_chat->getVisible());
+}
+
+//-TT 2.6.9 merge - not used
+/*
 void LLNearbyChatHandler::lookupDisplayNames(const LLChat& chat)
 {
 	// resolve display names if necessary		
@@ -757,8 +830,7 @@ bool LLNearbyChatHandler::checkDisplayName()
 	}
 	return false;
 }
-
-
+*/
 void LLNearbyChatHandler::onDeleteToast(LLToast* toast)
 {
 }

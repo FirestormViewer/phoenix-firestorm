@@ -148,10 +148,7 @@ public:
 
 		if (level == "profile")
 		{
-			LLSD params;
-			params["object_id"] = getAvatarId();
-
-			LLFloaterReg::showInstance("inspect_object", params);
+			LLFloaterReg::showInstance("inspect_remote_object", mObjectData);
 		}
 		else if (level == "block")
 		{
@@ -243,7 +240,7 @@ public:
 		
 		if (mSourceType == CHAT_SOURCE_OBJECT)
 		{
-			LLFloaterReg::showInstance("inspect_object", LLSD().with("object_id", mAvatarID));
+			LLFloaterReg::showInstance("inspect_remote_object", mObjectData);
 		}
 		else if (mSourceType == CHAT_SOURCE_AGENT)
 		{
@@ -265,7 +262,7 @@ public:
 
 	const LLUUID&		getAvatarId () const { return mAvatarID;}
 
-	void setup(const LLChat& chat,const LLStyle::Params& style_params) 
+	void setup(const LLChat& chat, const LLStyle::Params& style_params, const LLSD& args)
 	{
 		mAvatarID = chat.mFromID;
 		mSessionID = chat.mSessionID;
@@ -330,7 +327,24 @@ public:
 			if (username_start != std::string::npos &&
 				username_end == (chat.mFromName.length() - 1))
 			{
-				user_name->setValue( LLSD() );
+				mFrom = chat.mFromName.substr(0, username_start);
+				user_name->setValue(mFrom);
+				
+				//-TT 2.6.9 - old style headers removed in FS?
+				/*
+				if (gSavedSettings.getBOOL("NameTagShowUsernames"))
+				{
+					std::string username = chat.mFromName.substr(username_start + 2);
+					username = username.substr(0, username.length() - 1);
+					LLStyle::Params style_params_name;
+					LLColor4 userNameColor = LLUIColorTable::instance().getColor("EmphasisColor");
+					style_params_name.color(userNameColor);
+					style_params_name.font.name("SansSerifSmall");
+					style_params_name.font.style("NORMAL");
+					style_params_name.readonly_color(userNameColor);
+					user_name->appendText("  - " + username, FALSE, style_params_name);
+				}
+				*/
 				LLAvatarNameCache::get(mAvatarID, boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
 			}
 			else
@@ -353,7 +367,8 @@ public:
 
 
 		setTimeField(chat);
-			
+
+		// Set up the icon.
 		LLAvatarIconCtrl* icon = getChild<LLAvatarIconCtrl>("avatar_icon");
 		
 		// Hacky preference to hide avatar icons for people who don't like them by overdrawing them. Will change to disable soon. -AO
@@ -388,6 +403,30 @@ public:
 				break;
 			case CHAT_SOURCE_UNKNOWN: 
 				icon->setValue(LLSD("Unknown_Icon"));
+		}
+
+		// In case the message came from an object, save the object info
+		// to be able properly show its profile.
+		if ( chat.mSourceType == CHAT_SOURCE_OBJECT)
+		{
+			std::string slurl = args["slurl"].asString();
+			if (slurl.empty())
+			{
+				LLViewerRegion *region = LLWorld::getInstance()->getRegionFromPosAgent(chat.mPosAgent);
+				if(region)
+				{
+					LLSLURL region_slurl(region->getName(), chat.mPosAgent);
+					slurl = region_slurl.getLocationString();
+				}
+			}
+
+			LLSD payload;
+			payload["object_id"]	= chat.mFromID;
+			payload["name"]			= chat.mFromName;
+			payload["owner_id"]		= chat.mOwnerID;
+			payload["slurl"]		= LLWeb::escapeURL(slurl);
+
+			mObjectData = payload;
 		}
 	}
 
@@ -582,6 +621,7 @@ protected:
 	static LLUICtrl*	sInfoCtrl;
 
 	LLUUID			    mAvatarID;
+	LLSD				mObjectData;
 	EChatSourceType		mSourceType;
 	std::string			mFrom;
 	LLUUID				mSessionID;
@@ -695,10 +735,10 @@ LLView* LLChatHistory::getSeparator()
 	return separator;
 }
 
-LLView* LLChatHistory::getHeader(const LLChat& chat,const LLStyle::Params& style_params)
+LLView* LLChatHistory::getHeader(const LLChat& chat,const LLStyle::Params& style_params, const LLSD& args)
 {
 	LLChatHistoryHeader* header = LLChatHistoryHeader::createInstance(mMessageHeaderFilename);
-	header->setup(chat,style_params);
+	header->setup(chat, style_params, args);
 	return header;
 }
 
@@ -735,7 +775,6 @@ void LLChatHistory::lookupDisplayNames(const LLChat& chat)
 
 void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LLStyle::Params& input_append_params)
 {
-	
 	bool use_plain_text_chat_history = args["use_plain_text_chat_history"].asBoolean();
 	// AO: Do any display name lookups in plaintext chat headers as early as possible to give the cache maximal 
 	//time to get an answer back before it's needed.
@@ -892,7 +931,6 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 				}
 // [/RLVa:KB]
-
 				// set the link for the object name to be the objectim SLapp
 				// (don't let object names with hyperlinks override our objectim Url)
 				LLStyle::Params link_params(style_params);
@@ -967,10 +1005,9 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			// reset the style color parameter for the header only -AO
 			style_params.color(header_name_color);
 			style_params.readonly_color(header_name_color);
-			view = getHeader(chat, style_params);
+			view = getHeader(chat, style_params, args);
 			style_params.color(txt_color);
 			style_params.readonly_color(txt_color);
-			
 			
 			if (mEditor->getText().size() == 0)
 				p.top_pad = 0;

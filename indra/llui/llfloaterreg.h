@@ -27,15 +27,14 @@
 #define LLFLOATERREG_H
 
 /// llcommon
-#include "llboost.h"
 #include "llrect.h"
-#include "llstl.h"
 #include "llsd.h"
-
-/// llui
-#include "lluictrl.h"
-
 #include <boost/function.hpp>
+
+// [RLVa:KB] - Checked: 2011-05-25 (RLVa-1.4.0a)
+#include <boost/signals2.hpp>
+#include "llboost.h"
+// [/RLVa:KB]
 
 //*******************************************************
 //
@@ -43,6 +42,7 @@
 //
 
 class LLFloater;
+class LLUICtrl;
 
 typedef boost::function<LLFloater* (const LLSD& key)> LLFloaterBuildFunc;
 

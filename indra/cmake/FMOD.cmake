@@ -1,64 +1,39 @@
 # -*- cmake -*-
 
-include(Linking)
-
-if(INSTALL_PROPRIETARY)
-  include(Prebuilt)
-  use_prebuilt_binary(fmod)
-endif(INSTALL_PROPRIETARY)
-
-find_library(FMOD_LIBRARY_RELEASE
-             NAMES fmod fmodvc fmod-3.75
-             PATHS
-             ${ARCH_PREBUILT_DIRS_RELEASE}
-             )
-
-find_library(FMOD_LIBRARY_DEBUG
-             NAMES fmod fmodvc fmod-3.75
-             PATHS
-             ${ARCH_PREBUILT_DIRS_DEBUG}
-             )
-
-if (FMOD_LIBRARY_RELEASE AND FMOD_LIBRARY_DEBUG)
-  set(FMOD_LIBRARY
-      debug ${FMOD_LIBRARY_DEBUG}
-      optimized ${FMOD_LIBRARY_RELEASE})
-elseif (FMOD_LIBRARY_RELEASE)
-  set(FMOD_LIBRARY ${FMOD_LIBRARY_RELEASE})
-endif (FMOD_LIBRARY_RELEASE AND FMOD_LIBRARY_DEBUG)
-
-if (NOT FMOD_LIBRARY)
-  set(FMOD_SDK_DIR CACHE PATH "Path to the FMOD SDK.")
-  if (FMOD_SDK_DIR)
-    find_library(FMOD_LIBRARY
-                 NAMES fmodvc fmod-3.75 fmod
-                 PATHS
-                 ${FMOD_SDK_DIR}/api/lib
-                 ${FMOD_SDK_DIR}/api
-                 ${FMOD_SDK_DIR}/lib
-                 ${FMOD_SDK_DIR}
-                 )
-  endif (FMOD_SDK_DIR)
-endif (NOT FMOD_LIBRARY)
-
-find_path(FMOD_INCLUDE_DIR fmod.h
-          ${LIBS_PREBUILT_DIR}/include
-          ${FMOD_SDK_DIR}/api/inc
-          ${FMOD_SDK_DIR}/inc
-          ${FMOD_SDK_DIR}
-          )
-
-if (FMOD_LIBRARY AND FMOD_INCLUDE_DIR)
-  set(FMOD ON CACHE BOOL "Use closed source FMOD sound library.")
-else (FMOD_LIBRARY AND FMOD_INCLUDE_DIR)
-  set(FMOD_LIBRARY "")
-  set(FMOD_INCLUDE_DIR "")
-  if (FMOD)
-    message(STATUS "No support for FMOD audio (need to set FMOD_SDK_DIR?)")
-  endif (FMOD)
-  set(FMOD OFF CACHE BOOL "Use closed source FMOD sound library.")
-endif (FMOD_LIBRARY AND FMOD_INCLUDE_DIR)
+# FMOD can be set when launching the make using the argument -DFMOD:BOOL=ON
+# When building using proprietary binaries though (i.e. having access to LL private servers),
+# we always build with FMOD.
+# Open source devs should use the -DFMOD:BOOL=ON then if they want to build with FMOD, whether
+# they are using STANDALONE or not.
+if (INSTALL_PROPRIETARY)
+  set(FMOD ON CACHE BOOL "Use FMOD sound library.")
+endif (INSTALL_PROPRIETARY)
 
 if (FMOD)
-  message(STATUS "Building with FMOD audio support")
+  if (STANDALONE)
+    # In that case, we use the version of the library installed on the system
+    set(FMOD_FIND_REQUIRED ON)
+    include(FindFMOD)
+  else (STANDALONE)
+    if (FMOD_LIBRARY AND FMOD_INCLUDE_DIR)
+	  # If the path have been specified in the arguments, use that
+      set(FMOD_LIBRARIES ${FMOD_LIBRARY})
+	  MESSAGE(STATUS "Using FMOD path: ${FMOD_LIBRARIES}, ${FMOD_INCLUDE_DIR}")
+    else (FMOD_LIBRARY AND FMOD_INCLUDE_DIR)
+	  # If not, we're going to try to get the package listed in autobuild.xml
+	  # Note: if you're not using INSTALL_PROPRIETARY, the package URL should be local (file:/// URL) 
+	  # as accessing the private LL location will fail if you don't have the credential
+	  include(Prebuilt)
+	  use_prebuilt_binary(fmod)    
+      if (WINDOWS)
+        set(FMOD_LIBRARY fmod)
+      elseif (DARWIN)
+        set(FMOD_LIBRARY fmod)
+      elseif (LINUX)
+        set(FMOD_LIBRARY fmod-3.75)
+      endif (WINDOWS)
+      set(FMOD_LIBRARIES ${FMOD_LIBRARY})
+      set(FMOD_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include)
+    endif (FMOD_LIBRARY AND FMOD_INCLUDE_DIR)
+  endif (STANDALONE)
 endif (FMOD)

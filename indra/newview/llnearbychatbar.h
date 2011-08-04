@@ -72,6 +72,8 @@ public:
 	virtual void	hideList();
 	virtual BOOL	handleKeyHere(KEY key, MASK mask);
 
+	virtual void	draw();
+
 	S32				getCurrentIndex() const;
 	void			onItemSelected(const LLSD& data);
 	void			sortByName(bool ascending = true);
@@ -117,10 +119,11 @@ public:
 	static void sendChatFromViewer(const std::string &utf8text, EChatType type, BOOL animate);
 	static void sendChatFromViewer(const LLWString &wtext, EChatType type, BOOL animate);
 	
-	// AO, moved to public so we can relay from other textentries.
+	// <AO>, moved to public so we can relay from other textentries.
 	static void onChatBoxFocusLost(LLFocusableElement* caller, void* userdata);
-	void onChatBoxFocusReceived();
-	void onChatBoxCommit();
+        void onChatBoxFocusReceived();
+        void onChatBoxCommit();
+	// </AO>
 	void setText(const LLStringExplicit &new_text);
 
 	void sendChat( EChatType type );
@@ -130,6 +133,8 @@ protected:
 	static BOOL matchChatTypeTrigger(const std::string& in_str, std::string* out_str);
 	static void onChatBoxKeystroke(LLLineEditor* caller, void* userdata);
 
+	//void onChatBoxCommit(); // moved to public
+	void onChatFontChange(LLFontGL* fontp);
 
 	static LLWString stripChannelNumber(const LLWString &mesg, S32* channel);
 	EChatType processChatTypeTriggers(EChatType type, std::string &str);

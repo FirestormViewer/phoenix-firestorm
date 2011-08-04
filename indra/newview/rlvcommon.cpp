@@ -92,6 +92,12 @@ void RlvSettings::initClass()
 		if (gSavedSettings.controlExists(RLV_SETTING_SHOWNAMETAGS))
 			gSavedSettings.getControl(RLV_SETTING_SHOWNAMETAGS)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fShowNameTags));
 
+#ifdef RLV_EXTENSION_STARTLOCATION
+		// Don't allow toggling RLVaLoginLastLocation from the debug settings floater
+		if (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION))
+			gSavedPerAccountSettings.getControl(RLV_SETTING_LOGINLASTLOCATION)->setHiddenFromSettingsEditor(true);
+#endif // RLV_EXTENSION_STARTLOCATION
+
 		if (gSavedSettings.controlExists(RLV_SETTING_AVATAROFFSET_Z))
 			gSavedSettings.getControl(RLV_SETTING_AVATAROFFSET_Z)->getSignal()->connect(boost::bind(&onChangedAvatarOffset, _2));
 
@@ -444,10 +450,7 @@ bool rlvMenuToggleEnabled()
 		llformat("RestrainedLove Support will be %s after you restart", (rlv_handler_t::isEnabled()) ? "disabled" : "enabled" );
 	LLNotificationsUtil::add("GenericAlert", args);
 	
-	// AO 
-	// return true;
-	return gSavedSettings.getBOOL(RLV_SETTING_MAIN);
-
+	return true;
 }
 
 // Checked: 2010-04-23 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g

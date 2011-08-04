@@ -42,6 +42,7 @@
 
 // Viewer includes
 #include "llagent.h"
+#include "llagentaccess.h"
 #include "llviewerwindow.h"
 #include "llviewercontrol.h"
 //#include "llfirstuse.h"
@@ -54,6 +55,7 @@
 #include "llresmgr.h"
 #include "llsdutil.h"
 #include "llsdutil_math.h"
+#include "llslurl.h"
 #include "llstatusbar.h"
 #include "llui.h"
 #include "llviewertexture.h"
@@ -1384,11 +1386,6 @@ void LLViewerParcelMgr::setHoverParcel(const LLVector3d& pos)
 // static
 void LLViewerParcelMgr::processParcelOverlay(LLMessageSystem *msg, void **user)
 {
-	if (gNoRender)
-	{
-		return;
-	}
-
 	// Extract the packed overlay information
 	S32 packed_overlay_size = msg->getSizeFast(_PREHASH_ParcelData, _PREHASH_Data);
 

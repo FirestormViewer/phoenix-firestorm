@@ -847,7 +847,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					}
 
 					url = llformat("secondlife:///app/teleport/%s/%d/%d/%d",region_name.c_str(),agent_x,agent_y,agent_z);
-					LLURLDispatcher::dispatch(url, NULL, true);
+					LLURLDispatcher::dispatch(url, "clicked", NULL, true);
 				}
 				return false;
 			}

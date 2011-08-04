@@ -147,7 +147,6 @@ void LLPanelMe::buildEditPanel()
 	}
 }
 
-
 void LLPanelMe::onEditProfileClicked()
 {
 	buildEditPanel();

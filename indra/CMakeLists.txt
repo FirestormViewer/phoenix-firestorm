@@ -20,10 +20,6 @@ project(${ROOT_PROJECT_NAME})
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 include(Variables)
-include(Utils)
-
-# Load version data and build data
-load_version_data()
 
 if (DARWIN)
   # 2.6.4 fixes a Mac bug in get_target_property(... "SLPlugin" LOCATION):
@@ -39,8 +35,10 @@ endif (NOT CMAKE_BUILD_TYPE)
 
 # For the library installation process;
 # see cmake/Prebuild.cmake for the counterpart code.
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/temp)
-file(WRITE ${CMAKE_BINARY_DIR}/temp/sentinel_installed "0")
+if ("${CMAKE_SOURCE_DIR}/../autobuild.xml" IS_NEWER_THAN "${CMAKE_BINARY_DIR}/temp/sentinel_installed")
+  file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/temp)
+  file(WRITE ${CMAKE_BINARY_DIR}/temp/sentinel_installed "0")
+endif ("${CMAKE_SOURCE_DIR}/../autobuild.xml" IS_NEWER_THAN "${CMAKE_BINARY_DIR}/temp/sentinel_installed")
 add_subdirectory(cmake)
 
 add_subdirectory(${LIBS_OPEN_PREFIX}llaudio)
@@ -107,7 +105,7 @@ if (VIEWER)
 endif (VIEWER)
 
 # Linux builds the viewer and server in 2 separate projects
-# In order for ./develop.py build server to work on linux, 
+# In order for build server to work on linux, 
 # the viewer project needs a server target.
 # This is not true for mac and windows.
 if (LINUX) 

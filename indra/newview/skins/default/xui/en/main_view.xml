@@ -8,13 +8,6 @@
  tab_stop="false" 
  name="main_view"
  width="1024">
-<!-- menu stack of the screen layout except the top menu-bar -->
-  <panel top="0"
-     follows="all"
-     height="768"
-     mouse_opaque="false"
-     name="login_panel_holder"
-     width="1024"/>
   <layout_stack border_size="0"
                 follows="all"
                 mouse_opaque="false"
@@ -88,6 +81,15 @@
                    user_resize="false"
                 name="hud container"
                    width="500">
+<!-- New in 2.6 -->
+              <view top="0"
+                    follows="all"
+                    height="500"
+                    left="0"
+                    mouse_opaque="false"
+                    name="floater_snap_region"
+                    width="500"/>
+
 <!-- first element on rest of screen is top info bar - so is just below nav bar -->
             <panel follows="left|top|right"
                    height="42"
@@ -174,6 +176,14 @@
       </layout_stack>      
 -->
 <!-- controls floaters only appearing on the screen -->
+
+      <panel top="0"
+         follows="all"
+         height="500"
+         mouse_opaque="false"
+         name="login_panel_holder"
+         width="1024"/>
+
       <panel follows="all"
                     height="500"
                     left="0"

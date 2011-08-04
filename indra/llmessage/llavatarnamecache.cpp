@@ -47,7 +47,7 @@ namespace LLAvatarNameCache
 	// supports it.
 	bool sUseDisplayNames = true;
 
-// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
 	// RLVa override for display names
 	bool sForceDisplayNames = false;
 // [/RLVa:KB]
@@ -558,12 +558,10 @@ void LLAvatarNameCache::eraseUnrefreshed()
     if (!sLastExpireCheck || sLastExpireCheck < max_unrefreshed)
     {
         sLastExpireCheck = now;
-        cache_t::iterator it = sCache.begin();
-        while (it != sCache.end())
+
+        for (cache_t::iterator it = sCache.begin(); it != sCache.end();)
         {
-            cache_t::iterator cur = it;
-            ++it;
-            const LLAvatarName& av_name = cur->second;
+            const LLAvatarName& av_name = it->second;
             if (av_name.mExpires < max_unrefreshed)
             {
                 const LLUUID& agent_id = it->first;
@@ -571,8 +569,12 @@ void LLAvatarNameCache::eraseUnrefreshed()
                                          << " user '" << av_name.mUsername << "' "
                                          << "expired " << now - av_name.mExpires << " secs ago"
                                          << LL_ENDL;
-                sCache.erase(cur);
+                sCache.erase(it++);
             }
+			else
+			{
+				++it;
+			}
         }
         LL_INFOS("AvNameCache") << sCache.size() << " cached avatar names" << LL_ENDL;
 	}
@@ -588,15 +590,16 @@ void LLAvatarNameCache::buildLegacyName(const std::string& full_name,
 	av_name->mIsTemporaryName = true;
 	av_name->mExpires = F64_MAX; // not used because these are not cached
 
-	// Ansariel: Please leave this when merging! In case no display names
-	//           are used, you would have to retrieve mDisplayName to get
-	//           the legacy name - something that absolutely makes no
-	//           sense. And getLegacyName(), which is supposed to return
-	//           the legacy name, returns an empty string. By adding the
-	//           next two lines, getLegacyName() will function properly
-	//           in either display name or no display name case.
-	std::istringstream fname(full_name);
-	fname >> av_name->mLegacyFirstName >> av_name->mLegacyLastName;
+        // Ansariel: Please leave this when merging! In case no display names
+        //           are used, you would have to retrieve mDisplayName to get
+        //           the legacy name - something that absolutely makes no
+        //           sense. And getLegacyName(), which is supposed to return
+        //           the legacy name, returns an empty string. By adding the
+        //           next two lines, getLegacyName() will function properly
+        //           in either display name or no display name case.
+        std::istringstream fname(full_name);
+        fname >> av_name->mLegacyFirstName >> av_name->mLegacyLastName;
+
 
 	LL_DEBUGS("AvNameCache") << "LLAvatarNameCache::buildLegacyName "
 							 << full_name
@@ -676,21 +679,14 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 			std::map<LLUUID,LLAvatarName>::iterator it = sCache.find(agent_id);
 			if (it != sCache.end())
 			{
-				LLAvatarName& av_name = it->second;
+				const LLAvatarName& av_name = it->second;
 				
-				//AO: this is broken, it comes up as expired prematurely.
-				//disable the expire test as a temp workaround.
-				
-				/*
 				if (av_name.mExpires > LLFrameTimer::getTotalSeconds())
 				{
-				 */
 					// ...name already exists in cache, fire callback now
 					fireSignal(agent_id, slot, av_name);
 					return;
-				/*
 				}
-				 */
 			}
 		}
 		else
@@ -730,7 +726,7 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 	}
 }
 
-// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
 bool LLAvatarNameCache::getForceDisplayNames()
 {
 	return sForceDisplayNames;
@@ -748,7 +744,7 @@ void LLAvatarNameCache::setForceDisplayNames(bool force)
 
 void LLAvatarNameCache::setUseDisplayNames(bool use)
 {
-// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
 	// We need to force the use of the "display names" cache when @shownames=n restricted (and disallow toggling it)
 	use |= getForceDisplayNames();
 // [/RLVa:KB]

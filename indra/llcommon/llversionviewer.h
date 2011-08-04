@@ -27,12 +27,12 @@
 #ifndef LL_LLVERSIONVIEWER_H
 #define LL_LLVERSIONVIEWER_H
 
-LL_COMMON_API extern const S32 LL_VERSION_MAJOR;
-LL_COMMON_API extern const S32 LL_VERSION_MINOR;
-LL_COMMON_API extern const S32 LL_VERSION_PATCH;
-LL_COMMON_API extern const S32 LL_VERSION_BUILD;
+const S32 LL_VERSION_MAJOR = 2;
+const S32 LL_VERSION_MINOR = 6;
+const S32 LL_VERSION_PATCH = 9;
+const S32 LL_VERSION_BUILD = 16953;
 
-LL_COMMON_API extern const char * const LL_CHANNEL;
+const char * const LL_CHANNEL = "Firestorm-private-Romana";
 
 #if LL_DARWIN
 const char * const LL_VERSION_BUNDLE_ID = "com.phoenixviewer.firestorm.viewer";

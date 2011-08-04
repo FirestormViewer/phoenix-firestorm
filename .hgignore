@@ -13,7 +13,10 @@ LICENSES
 scripts/install.cache.*
 indra/newview/res/viewerRes.rc
 indra/.distcc
-indra/build-darwin-*
+build-linux-*
+build-darwin-*
+build-vc80/
+build-vc100/
 indra/build-vc[0-9]*
 indra/build-VC[0-9]*
 indra/CMakeFiles

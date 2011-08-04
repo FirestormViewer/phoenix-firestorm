@@ -48,10 +48,9 @@ width="996"
 height="80">
 <layout_panel
 auto_resize="false"
-follows="left|bottom"
+follows="left|bottom|right"
 name="login"
-layout="topleft"
-width="720"
+width="850"
 min_width="720"
 user_resize="false"
 height="80">
@@ -71,8 +70,7 @@ follows="left|bottom"
 height="22"
 left_delta="0"
 max_chars="128"
-prevalidate_callback="ascii"
-select_on_focus="true"
+combo_editor.prevalidate_callback="ascii"
 tool_tip="The account name you chose when you registered, like bobsmith12 or Steller Sunshine"
 top_pad="0"
 name="username_combo"
@@ -121,6 +119,37 @@ label="Remember password"
   name="connect_btn"
   top="35"
   width="90" />
+ <text
+  follows="left|bottom"
+  font="SansSerifSmall"
+  height="15"
+  left_pad="10"
+  name="mode_selection_text"
+  top="20"
+  width="130">
+      Default Settings: 
+ </text>
+<combo_box
+  follows="left|bottom"
+  height="23"
+  max_chars="128"
+  tool_tip="Select which style of viewer you are most familiar with to reset yoru defaults appropriately."
+  top_pad="0"
+  name="mode_combo"
+  width="110">
+<combo_box.item
+  label="Phoenix"
+  name="Phoenix"
+  value="" />
+<combo_box.item
+  label="V2"
+  name="V2"
+  value="" />
+<combo_box.item
+  label="Hybrid"
+  name="Hybrid"
+  value="" />
+</combo_box>
   <text
   follows="left|bottom"
   font="SansSerifSmall"
@@ -139,7 +168,7 @@ control_name="NextLoginLocation"
 max_chars="128"
 top_pad="0"
 name="start_location_combo"
-     width="170">
+     width="165">
 <combo_box.item
 label="Last location"
 name="MyLastLocation"
@@ -165,7 +194,7 @@ width="100">
 <combo_box
 allow_text_entry="true"
 font="SansSerifSmall"
-   follows="left|right|bottom"
+   follows="left|bottom"
    height="23"
    max_chars="256"
 layout="topleft"
@@ -178,8 +207,8 @@ width="120"
 tab_stop="false"
 follows="right|bottom"
 name="links"
-width="205"
-min_width="205"
+width="105"
+min_width="105"
 user_resize="false"
 height="80">
    <text
@@ -191,7 +220,7 @@ height="16"
 top="12"
 right="-10"
 name="create_new_account_text"
-  width="200">
+  width="100">
        Sign up
  </text>
 <text
@@ -203,8 +232,8 @@ height="16"
 name="forgot_password_text"
 top_pad="12"
 right="-10"
-  width="200">
-       Forgot your username or password?
+  width="100">
+       Forgot password?
 </text>
 <text
 follows="right|bottom"
@@ -215,7 +244,7 @@ height="16"
 name="login_help"
 top_pad="2"
 right="-10"
-    width="200">
+    width="100">
        Need help logging in?   
 </text>
 <!--  <text

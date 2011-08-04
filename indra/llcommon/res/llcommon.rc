@@ -24,8 +24,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,1,1,0
- PRODUCTVERSION 2,1,1,0
+ FILEVERSION 2,6,9,16953
+ PRODUCTVERSION 2,6,9,16953
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -42,12 +42,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Phoenix Viewer"
             VALUE "FileDescription", "Phoenix Firestorm Viewer Common Library"
-            VALUE "FileVersion", "2.1.1.0"
+            VALUE "FileVersion", "2.6.9.16953"
             VALUE "InternalName", "llcommon.dll"
             VALUE "LegalCopyright", "Copyright © 2010 Phoenix Viewer"
             VALUE "OriginalFilename", "llcommon.dll"
             VALUE "ProductName", "Phoenix Firestorm Viewer"
-            VALUE "ProductVersion", "2.1.1.0"
+            VALUE "ProductVersion", "2.6.9.16953"
         END
     END
     BLOCK "VarFileInfo"

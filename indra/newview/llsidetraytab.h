@@ -66,25 +66,21 @@ protected:
 public:
 	virtual ~LLSideTrayTab();
 	
-    /*virtual*/ BOOL	postBuild	();
+    	/*virtual*/ BOOL	postBuild	();
 	/*virtual*/ bool	addChild	(LLView* view, S32 tab_group);
 	
 //-TT Toggle sidebar panels with buttons
 	static void		toggleSidebarTabInstance(std::string sdname);
 //-TT
-	
 	void			reshape		(S32 width, S32 height, BOOL called_from_parent = TRUE);
-	
 	static LLSideTrayTab*  createInstance	();
-	
 	const std::string& getDescription () const { return mDescription;}
 	const std::string& getTabTitle() const { return mTabTitle;}
-	
 	void			onOpen		(const LLSD& key);
-	
-	void			toggleTabDocked();
+	void			toggleTabDocked(bool toggle_floater = true);
+        void                    setDocked(bool dock);
+        bool                    isDocked() const;
 	void			minimizeTab();
-
 	BOOL                    handleScrollWheel(S32 x, S32 y, S32 clicks);
 
 	LLPanel *getPanel();

@@ -94,7 +94,7 @@ bool LLImageDimensionsInfo::getImageDimensionsBmp()
 	}
 
 	// Read image dimensions.
-	mInfile.seek(APR_CUR, 16); // BMP header (14) + DIB header size (4) - signature (2)
+	mInfile.seek(APR_CUR, 16);
 	mWidth = read_reverse_s32();
 	mHeight = read_reverse_s32();
 
@@ -172,8 +172,8 @@ bool LLImageDimensionsInfo::getImageDimensionsJpeg()
 
 	/* Make sure this is a JPEG file. */
 	const size_t JPEG_MAGIC_SIZE = 2;
-	const U8 jpeg_magic[JPEG_MAGIC_SIZE] = {0xFF, 0xD8};
-	U8 signature[JPEG_MAGIC_SIZE];
+	const uint8_t jpeg_magic[JPEG_MAGIC_SIZE] = {0xFF, 0xD8};
+	uint8_t signature[JPEG_MAGIC_SIZE];
 
 	if (fread(signature, sizeof(signature), 1, fp) != 1)
 	{

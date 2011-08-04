@@ -36,6 +36,7 @@
 class LLSplashScreen;
 class LLPreeditor;
 class LLWindowCallbacks;
+class LLWindowListener;
 
 // Refer to llwindow_test in test/common/llwindow for usage example
 
@@ -193,6 +194,7 @@ protected:
 	BOOL		mHideCursorPermanent;
 	U32			mFlags;
 	U16			mHighSurrogate;
+	LLWindowListener* mListener;
 
  	// Handle a UTF-16 encoding unit received from keyboard.
  	// Converting the series of UTF-16 encoding units to UTF-32 data,

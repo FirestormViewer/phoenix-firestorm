@@ -37,6 +37,7 @@
 
 // newview includes
 #include "llagent.h"
+#include "llagentaccess.h"
 #include "llagentcamera.h"
 #include "llagentwearables.h"
 #include "llagentpilot.h"
@@ -898,31 +899,48 @@ class LLAdvancedCheckFeature : public view_listener_t
 }
 };
 
-void LLDestinationAndAvatarShow(const LLSD& value)
+void toggle_destination_and_avatar_picker(const LLSD& show)
 {
-	S32 panel_idx = value.isDefined() ? value.asInteger() : -1;
-	LLView* container = gViewerWindow->getRootView()->getChildView("avatar_picker_and_destination_guide_container");
+	S32 panel_idx = show.isDefined() ? show.asInteger() : -1;
+	LLView* container = gViewerWindow->getRootView()->findChildView("avatar_picker_and_destination_guide_container");
+	if (!container) return;
+
 	LLMediaCtrl* destinations = container->findChild<LLMediaCtrl>("destination_guide_contents");
 	LLMediaCtrl* avatar_picker = container->findChild<LLMediaCtrl>("avatar_picker_contents");
+	if (!destinations || !avatar_picker) return;
 
-	switch(panel_idx)
-	{
-	case 0:
+	LLButton* avatar_btn = gViewerWindow->getRootView()->getChildView("bottom_tray")->getChild<LLButton>("avatar_btn");
+	LLButton* destination_btn = gViewerWindow->getRootView()->getChildView("bottom_tray")->getChild<LLButton>("destination_btn");
+
+	if (panel_idx == 0
+		&& !destinations->getVisible())
+	{	// opening destinations guide
 		container->setVisible(true);
 		destinations->setVisible(true);
 		avatar_picker->setVisible(false);
 		LLFirstUse::notUsingDestinationGuide(false);
-		break;
-	case 1:
+		avatar_btn->setToggleState(false);
+		destination_btn->setToggleState(true);
+		gSavedSettings.setS32("DestinationsAndAvatarsVisibility", 0);
+	}
+	else if (panel_idx == 1 
+		&& !avatar_picker->getVisible())
+	{	// opening avatar picker
 		container->setVisible(true);
 		destinations->setVisible(false);
 		avatar_picker->setVisible(true);
-		break;
-	default:
+		avatar_btn->setToggleState(true);
+		destination_btn->setToggleState(false);
+		gSavedSettings.setS32("DestinationsAndAvatarsVisibility", 1);
+	}
+	else
+	{	// toggling off dest guide or avatar picker
 		container->setVisible(false);
 		destinations->setVisible(false);
 		avatar_picker->setVisible(false);
-		break;
+		avatar_btn->setToggleState(false);
+		destination_btn->setToggleState(false);
+		gSavedSettings.setS32("DestinationsAndAvatarsVisibility", -1);
 	}
 };
 
@@ -6010,33 +6028,49 @@ class LLShowHelp : public view_listener_t
 	}
 };
 
+class LLToggleHelp : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLFloater* help_browser = (LLFloaterReg::findInstance("help_browser"));
+		if (help_browser && help_browser->isInVisibleChain())
+		{
+			help_browser->closeFloater();
+		}
+		else
+		{
+			std::string help_topic = userdata.asString();
+			LLViewerHelp* vhelp = LLViewerHelp::getInstance();
+			vhelp->showTopic(help_topic);
+		}
+		return true;
+	}
+};
+
+class LLToggleSpeak : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLVoiceClient::getInstance()->toggleUserPTTState();
+		return true;
+	}
+};
 class LLShowSidetrayPanel : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
 		std::string panel_name = userdata.asString();
-		std::string udock_name = userdata.asString();
-		if (panel_name == "sidepanel_inventory")
-			udock_name = "sidebar_inventory";
 
-		// AO: Proper behavior if tab is undocked
-		LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab",udock_name);
-		if (LLFloater::isShown(floater_tab))
+		LLPanel* panel = LLSideTray::getInstance()->getPanel(panel_name);
+		if (panel)
 		{
-			bool isMinimized = floater_tab->isMinimized();
-			floater_tab->setMinimized(!isMinimized);
-		}
-		else // Toggle docked sidetray
-		{
-			// Toggle the panel
-			if (!LLSideTray::getInstance()->isPanelActive(panel_name))
+			if (panel->isInVisibleChain())
 			{
-				// LLFloaterInventory::showAgentInventory();
-				LLSideTray::getInstance()->showPanel(panel_name, LLSD());
+				LLSideTray::getInstance()->hidePanel(panel_name);
 			}
 			else
 			{
-				LLSideTray::getInstance()->collapseSideBar();
+				LLSideTray::getInstance()->showPanel(panel_name);
 			}
 		}
 		return true;
@@ -6165,6 +6199,44 @@ class LLShowAgentProfile : public view_listener_t
 // [/RLVa:KB]
 		{
 			LLAvatarActions::showProfile(avatar->getID());
+		}
+		return true;
+	}
+};
+
+class LLToggleAgentProfile : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLUUID agent_id;
+		if (userdata.asString() == "agent")
+		{
+			agent_id = gAgent.getID();
+		}
+		else if (userdata.asString() == "hit object")
+		{
+			LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+			if (objectp)
+			{
+				agent_id = objectp->getID();
+			}
+		}
+		else
+		{
+			agent_id = userdata.asUUID();
+		}
+
+		LLVOAvatar* avatar = find_avatar_from_object(agent_id);
+		if (avatar)
+		{
+			if (!LLAvatarActions::profileVisible(avatar->getID()))
+			{
+				LLAvatarActions::showProfile(avatar->getID());
+			}
+			else
+			{
+				LLAvatarActions::hideProfile(avatar->getID());
+			}
 		}
 		return true;
 	}
@@ -6945,12 +7017,12 @@ class LLToolsSelectedScriptAction : public view_listener_t
 		else if (action == "start")
 		{
 			name = "start_queue";
-			msg = "Running";
+			msg = "SetRunning";
 		}
 		else if (action == "stop")
 		{
 			name = "stop_queue";
-			msg = "RunningNot";
+			msg = "SetRunningNot";
 		}
 		LLUUID id; id.generate();
 		
@@ -7750,7 +7822,13 @@ LLViewerMenuHolderGL::LLViewerMenuHolderGL(const LLViewerMenuHolderGL::Params& p
 
 BOOL LLViewerMenuHolderGL::hideMenus()
 {
-	BOOL handled = LLMenuHolderGL::hideMenus();
+	BOOL handled = FALSE;
+	
+	if (LLMenuHolderGL::hideMenus())
+	{
+		LLToolPie::instance().blockClickToWalk();
+		handled = TRUE;
+	}
 
 	// drop pie menu selection
 	mParcelSelection = NULL;
@@ -7961,6 +8039,11 @@ class LLViewToggleBeacon : public view_listener_t
 			LLPipeline::toggleRenderPhysicalBeacons(NULL);
 			gSavedSettings.setBOOL( "physicalbeacon", LLPipeline::getRenderPhysicalBeacons(NULL) );
 		}
+		else if (beacon == "moapbeacon")
+		{
+			LLPipeline::toggleRenderMOAPBeacons(NULL);
+			gSavedSettings.setBOOL( "moapbeacon", LLPipeline::getRenderMOAPBeacons(NULL) );
+		}
 		else if (beacon == "soundsbeacon")
 		{
 			LLPipeline::toggleRenderSoundBeacons(NULL);
@@ -8019,6 +8102,11 @@ class LLViewCheckBeaconEnabled : public view_listener_t
 		{
 			new_value = gSavedSettings.getBOOL( "scriptsbeacon");
 			LLPipeline::setRenderScriptedBeacons(new_value);
+		}
+		else if (beacon == "moapbeacon")
+		{
+			new_value = gSavedSettings.getBOOL( "moapbeacon");
+			LLPipeline::setRenderMOAPBeacons(new_value);
 		}
 		else if (beacon == "physicalbeacon")
 		{
@@ -8481,6 +8569,7 @@ void initialize_menus()
 //-TT Client LSL Bridge
 	commit.add("RecreateLSLBridge", boost::bind(&handle_recreate_lsl_bridge));
 //-TT
+
 	// View menu
 	view_listener_t::addMenu(new LLViewMouselook(), "View.Mouselook");
 	view_listener_t::addMenu(new LLViewJoystickFlycam(), "View.JoystickFlycam");
@@ -8843,8 +8932,11 @@ void initialize_menus()
 	commit.add("ReportAbuse", boost::bind(&handle_report_abuse));
 	commit.add("BuyCurrency", boost::bind(&handle_buy_currency));
 	view_listener_t::addMenu(new LLShowHelp(), "ShowHelp");
+	view_listener_t::addMenu(new LLToggleHelp(), "ToggleHelp");
+	view_listener_t::addMenu(new LLToggleSpeak(), "ToggleSpeak");
 	view_listener_t::addMenu(new LLPromptShowURL(), "PromptShowURL");
 	view_listener_t::addMenu(new LLShowAgentProfile(), "ShowAgentProfile");
+	view_listener_t::addMenu(new LLToggleAgentProfile(), "ToggleAgentProfile");
 	view_listener_t::addMenu(new LLToggleControl(), "ToggleControl");
 	view_listener_t::addMenu(new LLCheckControl(), "CheckControl");
 	view_listener_t::addMenu(new LLGoToObject(), "GoToObject");
@@ -8865,8 +8957,6 @@ void initialize_menus()
 
 	view_listener_t::addMenu(new LLToggleUIHints(), "ToggleUIHints");
 
-	commit.add("DestinationAndAvatar.show", boost::bind(&LLDestinationAndAvatarShow, _2));
-
 // [RLVa:KB] - Checked: 2010-04-23 (RLVa-1.2.0g) | Added: RLVa-1.2.0
 	commit.add("RLV.ToggleEnabled", boost::bind(&rlvMenuToggleEnabled));
 	enable.add("RLV.CheckEnabled", boost::bind(&rlvMenuCheckEnabled));
@@ -8875,4 +8965,6 @@ void initialize_menus()
 		enable.add("RLV.EnableIfNot", boost::bind(&rlvMenuEnableIfNot, _2));
 	}
 // [/RLVa:KB]
+	commit.add("Destination.show", boost::bind(&toggle_destination_and_avatar_picker, 0));
+	commit.add("Avatar.show", boost::bind(&toggle_destination_and_avatar_picker, 1));
 }

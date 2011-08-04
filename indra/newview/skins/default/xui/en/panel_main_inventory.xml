@@ -31,8 +31,8 @@
    height="23"
    label="Filter Inventory"
    layout="topleft"
-   left="4"
-   max_length="300"
+   left="10"
+   max_length_chars="300"
    name="inventory search editor"
    top_pad="4"
    width="322" />

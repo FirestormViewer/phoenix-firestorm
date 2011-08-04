@@ -59,7 +59,7 @@
 LLAgentWearables gAgentWearables;
 
 BOOL LLAgentWearables::mInitialWearablesUpdateReceived = FALSE;
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.5.0a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.6.0a) | Added: Catznip-2.1.1d
 bool LLAgentWearables::mInitialWearablesLoaded = false;
 // [/SL:KB]
 
@@ -1556,7 +1556,7 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 	// Start rendering & update the server
 	mWearablesLoaded = TRUE; 
 	checkWearablesLoaded();
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-09-22 (Catznip-2.5.0a) | Modified: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-09-22 (Catznip-2.6.0a) | Modified: Catznip-2.2.0a
 	if (!mInitialWearablesLoaded)
 	{
 		mInitialWearablesLoaded = true;
@@ -1851,7 +1851,7 @@ LLUUID LLAgentWearables::computeBakedTextureHash(LLVOAvatarDefines::EBakedTextur
 // Combines userRemoveAllAttachments() and userAttachMultipleAttachments() logic to
 // get attachments into desired state with minimal number of adds/removes.
 //void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array)
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.5.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
 void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array, bool fAttachOnly)
 // [/SL:KB]
 {
@@ -1919,7 +1919,7 @@ void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj
 
 	// Remove everything in objects_to_remove
 //	userRemoveMultipleAttachments(objects_to_remove);
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.5.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
 	if (!fAttachOnly)
 	{
 		userRemoveMultipleAttachments(objects_to_remove);
@@ -2292,7 +2292,7 @@ boost::signals2::connection LLAgentWearables::addLoadedCallback(loaded_callback_
 	return mLoadedSignal.connect(cb);
 }
 
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.5.0a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.6.0a) | Added: Catznip-2.1.1d
 boost::signals2::connection LLAgentWearables::addInitialWearablesLoadedCallback(loaded_callback_t cb)
 {
 	return mInitialWearablesLoadedSignal.connect(cb);

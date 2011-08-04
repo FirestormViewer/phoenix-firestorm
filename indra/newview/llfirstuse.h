@@ -68,6 +68,8 @@ object or from inventory.
 13. First time you open the debug menus (ctrl-alt-shift D)
 
 14. First time you create/edit a sculpted prim.
+
+15. Explanation of Speak&flyout buttons.
 */
 
 class LLNotification;
@@ -78,13 +80,14 @@ class LLFirstUse
 public:
 
 	// Add a config variable to be reset on resetFirstUse()
-	//static void addConfigVariable(const std::string& var);
+	static void addConfigVariable(const std::string& var);
 	
 	// Sets all controls back to show the dialogs.
-	//static void disableFirstUse();
-	//static void resetFirstUse();
+	static void disableFirstUse();
+	static void resetFirstUse();
 
 	static void otherAvatarChatFirst(bool enable = true);
+	static void speak(bool enable = true);
 	static void sit(bool enable = true);
 	static void notUsingDestinationGuide(bool enable = true);
 	static void notUsingSidePanel(bool enable = true);
@@ -97,8 +100,7 @@ public:
 	
 protected:
 	static void firstUseNotification(const std::string& control_var, bool enable, const std::string& notification_name, LLSD args = LLSD(), LLSD payload = LLSD());
-	//static std::set<std::string> sConfigVariables;
-	static std::set<std::string> sConfigVariablesEnabled;
+	static std::set<std::string> sConfigVariables;
 
 	static void init();
 	static bool processNotification(const LLSD& notify);

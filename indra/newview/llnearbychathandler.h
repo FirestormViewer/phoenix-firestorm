@@ -51,6 +51,7 @@ protected:
 
 	void lookupDisplayNames(const LLChat& chat);
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+	void onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const LLChat& chat_msg);
 	bool checkDisplayName();
 
 	BOOL PhoenixUseNearbyChatConsole;

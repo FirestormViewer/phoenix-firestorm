@@ -322,18 +322,6 @@
         name="show_viewerID"
         tool_tip="Shows the name of the avatar's detected viewer next to their name (delayed effect)" />
 
-       <check_box
-        control_name="EnableUIHints"
-        follows="top|left"
-        height="16"
-        label="Enable Viewer UI Hints"
-        layout="topleft"
-        left="35"
-        name="viewer_hints_check"
-        top_pad="5"
-        width="237"/>
-
-
     <text
       type="string"
       length="1"

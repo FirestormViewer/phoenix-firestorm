@@ -34,6 +34,7 @@
 #include "stdtypes.h"
 #include "llcoord.h"
 #include "llfontgl.h"
+#include "llhandle.h"
 #include "llmortician.h"
 #include "llmousehandler.h"
 #include "llstring.h"
@@ -406,8 +407,8 @@ public:
 	BOOL blockMouseEvent(S32 x, S32 y) const;
 
 	// See LLMouseHandler virtuals for screenPointToLocal and localPointToScreen
-	BOOL localPointToOtherView( S32 x, S32 y, S32 *other_x, S32 *other_y, LLView* other_view) const;
-	BOOL localRectToOtherView( const LLRect& local, LLRect* other, LLView* other_view ) const;
+	BOOL localPointToOtherView( S32 x, S32 y, S32 *other_x, S32 *other_y, const LLView* other_view) const;
+	BOOL localRectToOtherView( const LLRect& local, LLRect* other, const LLView* other_view ) const;
 	void screenRectToLocal( const LLRect& screen, LLRect* local ) const;
 	void localRectToScreen( const LLRect& local, LLRect* screen ) const;
 	

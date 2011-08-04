@@ -126,7 +126,7 @@
                          label="Wear"
                          layout="topleft"
                          name="wear_btn"
-                         left="0"
+                         left="1"
                          top="0"
                          right="-2" />
 			    </layout_panel>

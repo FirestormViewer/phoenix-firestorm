@@ -501,6 +501,8 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 	//-----------------------------------------------------------------------
 
 	DEVMODE dev_mode;
+	::ZeroMemory(&dev_mode, sizeof(DEVMODE));
+	dev_mode.dmSize = sizeof(DEVMODE);
 	DWORD current_refresh;
 	if (EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dev_mode))
 	{
@@ -879,6 +881,8 @@ BOOL LLWindowWin32::switchContext(BOOL fullscreen, const LLCoordScreen &size, BO
 {
 	GLuint	pixel_format;
 	DEVMODE dev_mode;
+	::ZeroMemory(&dev_mode, sizeof(DEVMODE));
+	dev_mode.dmSize = sizeof(DEVMODE);
 	DWORD	current_refresh;
 	DWORD	dw_ex_style;
 	DWORD	dw_style;
@@ -2723,6 +2727,8 @@ LLWindow::LLWindowResolution* LLWindowWin32::getSupportedResolutions(S32 &num_re
 	{
 		mSupportedResolutions = new LLWindowResolution[MAX_NUM_RESOLUTIONS];
 		DEVMODE dev_mode;
+		::ZeroMemory(&dev_mode, sizeof(DEVMODE));
+		dev_mode.dmSize = sizeof(DEVMODE);
 
 		mNumSupportedResolutions = 0;
 		for (S32 mode_num = 0; mNumSupportedResolutions < MAX_NUM_RESOLUTIONS; mode_num++)
@@ -2798,7 +2804,8 @@ F32 LLWindowWin32::getPixelAspectRatio()
 BOOL LLWindowWin32::setDisplayResolution(S32 width, S32 height, S32 bits, S32 refresh)
 {
 	DEVMODE dev_mode;
-	dev_mode.dmSize = sizeof(dev_mode);
+	::ZeroMemory(&dev_mode, sizeof(DEVMODE));
+	dev_mode.dmSize = sizeof(DEVMODE);
 	BOOL success = FALSE;
 
 	// Don't change anything if we don't have to

@@ -336,7 +336,6 @@ LLVivoxVoiceClient::LLVivoxVoiceClient() :
 	mMicVolumeDirty(true),
 
 	mVoiceEnabled(false),
-	mRegionHasVoice(false),
 	mWriteInProgress(false),
 
 	mLipSyncEnabled(false),
@@ -552,20 +551,13 @@ void LLVivoxVoiceClient::userAuthorized(const std::string& user_id, const LLUUID
 
 void LLVivoxVoiceClient::requestVoiceAccountProvision(S32 retries)
 {
-	LLViewerRegion* region = gAgent.getRegion();
-
-	if ( mVoiceEnabled && region && region->capabilitiesReceived())
+	if ( gAgent.getRegion() && mVoiceEnabled )
 	{
 		std::string url = 
 			gAgent.getRegion()->getCapability(
 				"ProvisionVoiceAccountRequest");
 
-		if ( url.empty() ) 
-		{
-			mRegionHasVoice = false;
-			setState(stateDisableCleanup);
-			return;
-		}
+		if ( url == "" ) return;
 
 		LLHTTPClient::post(
 			url,
@@ -752,22 +744,35 @@ void LLVivoxVoiceClient::stateMachine()
 	// Check for parcel boundary crossing
 	{
 		LLViewerRegion *region = gAgent.getRegion();
-		if(region && region->capabilitiesReceived())
+		LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+		
+		if(region && parcel)
 		{
-			LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
-			if(parcel)
+			S32 parcelLocalID = parcel->getLocalID();
+			std::string regionName = region->getName();
+			std::string capURI = region->getCapability("ParcelVoiceInfoRequest");
+		
+//			LL_DEBUGS("Voice") << "Region name = \"" << regionName << "\", parcel local ID = " << parcelLocalID << ", cap URI = \"" << capURI << "\"" << LL_ENDL;
+
+			// The region name starts out empty and gets filled in later.  
+			// Also, the cap gets filled in a short time after the region cross, but a little too late for our purposes.
+			// If either is empty, wait for the next time around.
+			if(!regionName.empty())
 			{
-				S32 parcelLocalID = parcel->getLocalID();
-				std::string regionName = region->getName();
-	
-	
-				if((parcelLocalID != mCurrentParcelLocalID) || (regionName != mCurrentRegionName))
+				if(!capURI.empty())
 				{
-					// We have changed parcels.  Initiate a parcel channel lookup.
-					mCurrentParcelLocalID = parcelLocalID;
-					mCurrentRegionName = regionName;
-					
-					parcelChanged();
+					if((parcelLocalID != mCurrentParcelLocalID) || (regionName != mCurrentRegionName))
+					{
+						// We have changed parcels.  Initiate a parcel channel lookup.
+						mCurrentParcelLocalID = parcelLocalID;
+						mCurrentRegionName = regionName;
+						
+						parcelChanged();
+					}
+				}
+				else
+				{
+					LL_WARNS_ONCE("Voice") << "region doesn't have ParcelVoiceInfoRequest capability.  This is normal for a short time after teleporting, but bad if it persists for very long." << LL_ENDL;
 				}
 			}
 		}
@@ -790,7 +795,7 @@ void LLVivoxVoiceClient::stateMachine()
 		
 		//MARK: stateDisabled
 		case stateDisabled:
-			if(mTuningMode || (mVoiceEnabled && !mAccountName.empty() && mRegionHasVoice))
+			if(mTuningMode || (mVoiceEnabled && !mAccountName.empty()))
 			{
 				setState(stateStart);
 			}
@@ -1023,14 +1028,20 @@ void LLVivoxVoiceClient::stateMachine()
 			{
 				LLViewerRegion *region = gAgent.getRegion();
 				
-				if(region && region->capabilitiesReceived())
+				if(region)
 				{
-					if ( mAccountPassword.empty() )
+					if ( region->getCapability("ProvisionVoiceAccountRequest") != "" )
 					{
-						requestVoiceAccountProvision();
+						if ( mAccountPassword.empty() )
+						{
+							requestVoiceAccountProvision();
+						}
+						setState(stateConnectorStart);
 					}
-					setState(stateConnectorStart);
-
+					else
+					{
+						LL_WARNS_ONCE("Voice") << "region doesn't have ProvisionVoiceAccountRequest capability!" << LL_ENDL;
+					}
 				}
 			}
 		break;
@@ -4438,31 +4449,17 @@ LLVivoxVoiceClient::participantState* LLVivoxVoiceClient::findParticipantByID(co
 
 void LLVivoxVoiceClient::parcelChanged()
 {
-	mRegionHasVoice = true;
-	LLViewerRegion* region = gAgent.getRegion();
-	if(getState() >= stateNoChannel && region && region->capabilitiesReceived())
+	if(getState() >= stateNoChannel)
 	{
 		// If the user is logged in, start a channel lookup.
 		LL_DEBUGS("Voice") << "sending ParcelVoiceInfoRequest (" << mCurrentRegionName << ", " << mCurrentParcelLocalID << ")" << LL_ENDL;
 
 		std::string url = gAgent.getRegion()->getCapability("ParcelVoiceInfoRequest");
-		if(url.empty())
-		{
-			mRegionHasVoice = false;
-			setState(stateDisableCleanup);
-		}
-		else
-		{
-			LLSD data;
-			LLHTTPClient::post(
-				url,
-				data,
-				new LLVivoxVoiceClientCapResponder);
-		}
-	}
-	else if  (region && !region->capabilitiesReceived())
-	{
-		mCurrentRegionName.append("retry");
+		LLSD data;
+		LLHTTPClient::post(
+			url,
+			data,
+			new LLVivoxVoiceClientCapResponder);
 	}
 	else
 	{
@@ -5091,7 +5088,7 @@ void LLVivoxVoiceClient::enforceTether(void)
 		}
 	}
 	
-	if(dist_vec(mCameraPosition, tethered) > 0.1)
+	if(dist_vec_squared(mCameraPosition, tethered) > 0.01)
 	{
 		mCameraPosition = tethered;
 		mSpatialCoordsDirty = true;
@@ -5153,7 +5150,7 @@ void LLVivoxVoiceClient::setCameraPosition(const LLVector3d &position, const LLV
 
 void LLVivoxVoiceClient::setAvatarPosition(const LLVector3d &position, const LLVector3 &velocity, const LLMatrix3 &rot)
 {
-	if(dist_vec(mAvatarPosition, position) > 0.1)
+	if(dist_vec_squared(mAvatarPosition, position) > 0.01)
 	{
 		mAvatarPosition = position;
 		mSpatialCoordsDirty = true;
@@ -5219,14 +5216,12 @@ void LLVivoxVoiceClient::setVoiceEnabled(bool enabled)
 		if (enabled)
 		{
 			LLVoiceChannel::getCurrentVoiceChannel()->activate();
-			mRegionHasVoice = true;
 			status = LLVoiceClientStatusObserver::STATUS_VOICE_ENABLED;
 		}
 		else
 		{
 			// Turning voice off looses your current channel -- this makes sure the UI isn't out of sync when you re-enable it.
 			LLVoiceChannel::getCurrentVoiceChannel()->deactivate();
-			mRegionHasVoice = false;
 			status = LLVoiceClientStatusObserver::STATUS_VOICE_DISABLED;
 		}
 		notifyStatusObservers(status);		

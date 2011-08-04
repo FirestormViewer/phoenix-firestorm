@@ -78,10 +78,12 @@ class LLDir
 	virtual U32 countFilesInDir(const std::string &dirname, const std::string &mask) = 0;
 
     /// Walk the files in a directory, with file pattern matching
+	// <AO> Used by LGG Selection beams, do not remove
 	virtual BOOL getNextFileInDir(const std::string& dirname, ///< directory path - must end in trailing slash!
                                   const std::string& mask,    ///< file pattern string (use "*" for all)
                                   std::string& fname          ///< output: found file name
                                   ) = 0;
+	// </AO>
     /**<
      * @returns true if a file was found, false if the entire directory has been scanned.
      *
