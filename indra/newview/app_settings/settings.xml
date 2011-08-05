@@ -14,6 +14,17 @@
     <integer>1</integer>
   </map>
 
+	<key>FSPlayTypingSound</key>
+	<map>
+		<key>Comment</key>
+		<string>Hear the typing sound when others type in to local chat</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>Boolean</string>
+		<key>Value</key>
+		<integer>1</integer>
+	</map>
 	<key>FSShowIMInChatHistory</key>
 	<map>
 		<key>Comment</key>
