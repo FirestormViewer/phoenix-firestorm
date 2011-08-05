@@ -70,7 +70,7 @@ Right Click Changes End Position.
 	 follows="left|top"
 	 height="18"
 	 increment="1"
-	 initial_val="100"
+	 initial_value="100"
 	 label="Rotation Speed:"
 	 label_width="85"
 	 max_val="300"

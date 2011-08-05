@@ -63,7 +63,7 @@
          layout="topleft"
          left_pad="5"
          name="user_name"
-         text_color="White"
+         text_color="SL-White"
          top="8"
          translate="false"
          use_ellipses="true"

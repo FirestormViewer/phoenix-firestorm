@@ -1067,7 +1067,7 @@
 		</text>
 
 		<check_box
-		control_name="RenderUnloadedAvatars"
+		control_name="RenderUnloadedAvatar"
 		height="16"
 		initial_value="false"
 		label="Show avatars that haven't finished loading"                           

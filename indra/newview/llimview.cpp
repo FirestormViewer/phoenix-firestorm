@@ -809,8 +809,26 @@ bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, 
 		llwarns << "session " << session_id << "does not exist " << llendl;
 		return false;
 	}
+	
+	// <Ansariel>  Forward IM to nearby chat if wanted
+	std::string timestr = LLLogChat::timestamp(false);
+	session->addMessage(from, from_id, utf8_text, timestr); //might want to add date separately
 
-	session->addMessage(from, from_id, utf8_text, LLLogChat::timestamp(false)); //might want to add date separately
+	static LLCachedControl<bool> show_im_in_chat(gSavedSettings, "FSShowIMInChatHistory");
+	if (show_im_in_chat)
+	{
+		LLChat chat;
+		chat.mChatStyle = CHAT_STYLE_NORMAL;
+		chat.mChatType = CHAT_TYPE_IM;
+		chat.mFromID = from_id;
+		chat.mFromName = from;
+		chat.mSourceType = CHAT_SOURCE_AGENT;
+		chat.mText = utf8_text;
+		chat.mTimeStr = timestr;
+		LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+		nearby_chat->addMessage(chat, true, LLSD());
+	}
+	// </Ansariel>
 
 	return true;
 }

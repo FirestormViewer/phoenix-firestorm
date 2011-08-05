@@ -1195,32 +1195,37 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 	LLColor4 group_own_below_water_color = 
 						LLUIColorTable::instance().getColor( "NetMapGroupOwnBelowWater" );
 
-	F32 max_radius = gSavedSettings.getF32("MiniMapPrimMaxRadius");
+	static LLCachedControl<F32> max_radius(gSavedSettings, "MiniMapPrimMaxRadius");
+	static LLCachedControl<F32> max_zdistance_from_avatar(gSavedSettings, "MiniMapPrimMaxVertDistance");
 
 	for (vobj_list_t::iterator iter = mMapObjects.begin(); iter != mMapObjects.end(); ++iter)
 	{
 		LLViewerObject* objectp = *iter;
 
-		if(objectp->isDead())//some dead objects somehow not cleaned.
-		{
-			continue ;
-		}
-
-		if (!objectp->getRegion() || objectp->isOrphaned() || objectp->isAttachment())
+		if (!objectp || objectp->isDead() || !objectp->getRegion() || objectp->isOrphaned() || objectp->isAttachment())
 		{
 			continue;
 		}
 		const LLVector3& scale = objectp->getScale();
 		const LLVector3d pos = objectp->getPositionGlobal();
 		const F64 water_height = F64( objectp->getRegion()->getWaterHeight() );
-		// LLWorld::getInstance()->getWaterHeight();
 
-		F32 approx_radius = (scale.mV[VX] + scale.mV[VY]) * 0.5f * 0.5f * 1.3f;  // 1.3 is a fudge
+		// Skip all objects that are more than MiniMapPrimMaxVertDistance above or below the avatar
+		if (max_zdistance_from_avatar > 0.0)
+		{
+			F64 zdistance = pos.mdV[VZ] - gAgent.getPositionGlobal().mdV[VZ];
+			if (zdistance < (-max_zdistance_from_avatar) || zdistance > max_zdistance_from_avatar)
+			{
+				continue;
+			}
+		}
+
+		F32 approx_radius = (scale.mV[VX] + scale.mV[VY]) * 0.325; // <- 0.5f * 0.5f * 1.3f;  // 1.3 is a fudge
 
 		// Limit the size of megaprims so they don't blot out everything on the minimap.
 		// Attempting to draw very large megaprims also causes client lag.
 		// See DEV-17370 and DEV-29869/SNOW-79 for details.
-		approx_radius = llmin(approx_radius, max_radius);
+		approx_radius = llmin(approx_radius, F32(max_radius));
 
 		LLColor4U color = above_water_color;
 		if( objectp->permYouOwner() )
@@ -1239,8 +1244,8 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 				}
 				else
 				{
-				color = you_own_above_water_color;
-			}
+					color = you_own_above_water_color;
+				}
 			}
 			else
 			{
@@ -1248,14 +1253,13 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 				{
 					color = group_own_below_water_color;
 				}
-			else
-			{
-				color = you_own_below_water_color;
+				else
+				{
+					color = you_own_below_water_color;
+				}
 			}
 		}
-		}
-		else
-		if( pos.mdV[VZ] < water_height )
+		else if( pos.mdV[VZ] < water_height )
 		{
 			color = below_water_color;
 		}

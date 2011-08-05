@@ -173,7 +173,7 @@
          name="avhealth"
          tear_off="true">
    	        <menu_item_call
-	         label="Stop Avatar Animatons"
+	         label="Stop Avatar Animations"
 	         name="Stop Animating My Avatar">
 	            <menu_item_call.on_click
 	             function="Tools.StopAllAnimations" />
@@ -1978,7 +1978,7 @@
          tear_off="true"
          visible="false">
           <menu_item_call
-             label="Image (L$[COST])..."
+             label="Upload Image (L$[COST])..."
              name="Upload Image"
              shortcut="control|U">
             <menu_item_call.on_click

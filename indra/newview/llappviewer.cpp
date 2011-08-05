@@ -1570,7 +1570,10 @@ bool LLAppViewer::cleanup()
 	removeCacheFiles("*.tmp");
 	removeCacheFiles("*.lso");
 	removeCacheFiles("*.out");
-	removeCacheFiles("*.dsf");
+	if(!gSavedSettings.getBOOL("PhoenixKeepUnpackedCacheFiles"))
+	{
+		removeCacheFiles("*.dsf");
+	}
 	removeCacheFiles("*.bodypart");
 	removeCacheFiles("*.clothing");
 

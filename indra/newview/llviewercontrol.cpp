@@ -472,6 +472,14 @@ bool handleSettingF32Change(const LLSD& sdValue, F32* pValue)
 }
 // [/SL:KB]
 
+// ## Zi: Moved Avatar Z offset from RLVa to here
+bool handleAvatarZOffsetChanged(const LLSD& sdValue)
+{
+	gAgent.sendAgentSetAppearance();
+	return true;
+}
+// ## Zi: Moved Avatar Z offset from RLVa to here
+
 bool handleForceShowGrid(const LLSD& newvalue)
 {
 	LLPanelLogin::updateServer( );
@@ -718,6 +726,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("DragAndDropCommitDelay")->getSignal()->connect(boost::bind(&handleSettingF32Change, _2, &DELAY_DRAG_HOVER_COMMIT));
 // [/SL:KB]
 	gSavedSettings.getControl("ImagePipelineHTTPMaxFailCountFallback")->getSignal()->connect(boost::bind(&handleImagePipelineHTTPMaxFailCountFallback, _2));
+	gSavedSettings.getControl("AvatarZOffset")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // ## Zi: Moved Avatar Z offset from RLVa to here
 }
 
 #if TEST_CACHED_CONTROL

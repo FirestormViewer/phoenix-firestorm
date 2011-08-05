@@ -171,7 +171,7 @@ BOOL  LLAvatarListItem::postBuild()
 	mInfoBtn = getChild<LLButton>("info_btn");
 	mProfileBtn = getChild<LLButton>("profile_btn");
 
-	mInfoBtn->setVisible(false);
+	mInfoBtn->setVisible(true); // changed from false to have the info button always shown	-WoLf
 	mInfoBtn->setClickedCallback(boost::bind(&LLAvatarListItem::onInfoBtnClick, this));
 
 	mProfileBtn->setVisible(false);
@@ -238,7 +238,7 @@ void LLAvatarListItem::onMouseLeave(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( false);
 
-	mInfoBtn->setVisible(false);
+//	mInfoBtn->setVisible(false); // commented out to have the info button always shown	-WoLf
 	mHovered = false;
 	LLPanel::onMouseLeave(x, y, mask);
 	updateChildren();

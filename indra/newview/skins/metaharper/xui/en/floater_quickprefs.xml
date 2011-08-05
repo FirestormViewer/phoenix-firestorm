@@ -182,7 +182,7 @@
         </text>
         <slider
             can_edit_text="true"
-            control_name="RestrainedLoveOffsetAvatarZ"
+            control_name="AvatarZOffset"
             decimal_digits="2"
             follows="left|top"
             height="15"
@@ -192,7 +192,7 @@
             left_delta="79"
             max_val="2"
             min_val="-2"
-            name="RestrainedLoveOffsetAvatarZ"
+            name="AvatarZOffset"
             top_delta="-2"
             width="164"
             label_width="17"/>

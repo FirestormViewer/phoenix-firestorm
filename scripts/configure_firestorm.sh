@@ -323,7 +323,7 @@ fi
 if [ $WANTS_BUILD -eq $TRUE ] ; then
 	echo "Building $PLATFORM..."
 	if [ $PLATFORM == "darwin" ] ; then
-		xcodebuild -configuration Release -project Firestorm.xcodeproj 2>&1 | tee -a $LOG
+		xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
 	elif [ $PLATFORM == "linux32" ] ; then
 		JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
 		make -j $JOBS | tee -a $LOG

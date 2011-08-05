@@ -77,28 +77,13 @@ background_opaque="false"
 
                   <button
                    follows="bottom|left"
-                    enabled="false"
-                   tool_tip="Show additional options"
-                   height="25"
-                   image_hover_unselected="Toolbar_Left_Over"
-                   image_overlay="OptionsMenu_Off"
-                   image_selected="Toolbar_Left_Selected"
-                   image_unselected="Toolbar_Left_Off"
-                   layout="topleft"
-                   left="0"
-                   name="gear_menu_btn"
-                   top="0"
-                   width="31" />
-
-                  <button
-                   follows="bottom|left"
                    height="25"
                    image_hover_unselected="Toolbar_Middle_Over"
                    image_overlay="AddItem_Off"
                    image_selected="Toolbar_Middle_Selected"
                    image_unselected="Toolbar_Middle_Off"
                    layout="topleft"
-                   left_pad="2"
+                   left="0"
                    name="new_btn"
                    tool_tip="Create a new pick or classified at the current location"
                    top="0"
@@ -113,7 +98,7 @@ background_opaque="false"
                    left_pad="2"
                    top="0"
                    name="dummy_icon"
-                   width="211" />
+                   width="237" />
 
                   <dnd_button
                    follows="bottom|right"
@@ -122,7 +107,7 @@ background_opaque="false"
                    image_overlay="TrashItem_Off"
                    image_selected="Toolbar_Right_Selected"
                    image_unselected="Toolbar_Right_Off"
-                   right="-1"
+                   right="-10"
                    layout="topleft"
                    name="trash_btn"
                    top="0"

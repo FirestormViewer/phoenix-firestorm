@@ -163,8 +163,16 @@
 		 width="270"
 		 control_name="TurnAroundWhenWalkingBackwards"
 		 tool_tip="Turns your avatar around to face the camera when you are walking backwards."/>
-
-		 <text
+		<check_box top_pad="5"
+		 follows="left|top"
+		 height="16"
+		 label="Show look at target"
+		 left="15"
+		 name="showlookat"
+		 width="270"
+		 control_name="DebugLookAt"
+		 tool_tip="Enable crosshairs marking where people are looking."/>
+		<text
 		 type="string"
 		 length="1"
 		 follows="left|top"
@@ -697,7 +705,7 @@
 	 right="-1"
 	 follows="all"
 	 label="Chat"
-	 name="tab1-2" >
+	 name="firestorm_chat" >
 
 		<tab_container
 		 label="Firestorm Prefs"
@@ -713,7 +721,7 @@
 		<!--Chat: General-->
 		<panel
 		 border="true"
-		 top_pad="5"
+		 top_pad="1"
 		 bottom="-1"
 		 left="1"
 		 right="-1"
@@ -725,7 +733,7 @@
 			 name="chat_and_in_enhancements"
 			 follows="left|top"
 			 layout="topleft"
-			 top_pad="15"
+			 top_pad="5"
 			 left="24"
 			 height="10"
 			 width="180">
@@ -746,7 +754,7 @@
 			 label="Emotes use italic font"
 			 layout="topleft"
 			 top_pad="0"
-			 height="20"
+			 height="18"
 			 width="400" />
 			<check_box
 			 control_name="AutoCloseOOC"
@@ -754,7 +762,7 @@
 			 label="Auto-close ((OOC)) parentheses"
 			 layout="topleft"
 			 top_pad="0"
-			 height="20"
+			 height="18"
 			 width="400" />
 			<check_box
 			 control_name="OnlineOfflinetoNearbyChat"
@@ -762,7 +770,7 @@
 			 label="Friend on/off-line notices to Nearby Chat"
 			 layout="topleft"
 			 top_pad="0"
-			 height="20"
+			 height="18"
 			 width="400" />
 			<check_box
 			 control_name="ShowStreamMetadata"
@@ -770,7 +778,7 @@
 			 label="Show stream title in local chat"
 			 layout="topleft"
 			 top_pad="0"
-			 height="20"
+			 height="18"
 			 width="400" />
 			<check_box
 			 control_name="StreamMetadataAnnounceToChat"
@@ -778,7 +786,7 @@
 			 label="Announce stream title to chat channel:"
 			 layout="topleft"
 			 top_pad="0"
-			 height="20"
+			 height="18"
 			 width="240" />
 			<spinner
 			 top_delta="-2"
@@ -786,7 +794,7 @@
 			 decimal_digits="0"
 			 layout="topleft"
 			 follows="left|top"
-			 height="20"
+			 height="18"
 			 left_pad="5"
 			 increment="1"
 			 initial_val="362394"
@@ -809,7 +817,7 @@
 			 follows="left|top"
 			 layout="topleft"
 			 left_pad="0"
-			 height="20"
+			 height="18"
 			 width="130"
 			 text_color="White_25">
 			  (requires restart)
@@ -820,7 +828,39 @@
 			 top_pad="0"
 			 left="20"
 			 width="400"
-			 height="20"
+			 height="18"
+			 name="FSShowIMInChatHistory"
+			 control_name="FSShowIMInChatHistory"
+			 label="Show IMs in nearby chat window"/>
+			<check_box
+			 layout="topleft"
+			 follows="left|top"
+			 top_pad="0"
+			 left="30"
+			 width="155"
+			 height="18"
+			 name="FSLogIMInChatHistory"
+			 control_name="FSLogIMInChatHistory"
+			 label="Save IMs in nearby chat"/>
+			<text
+			 top_delta="2"
+			 name="requires_save_chat_logs"
+			 follows="left|top"
+			 layout="topleft"
+			 left_pad="0"
+			 height="18"
+			 width="200"
+			 text_color="White_25">
+			  (requires saving nearby chat logs)
+			</text>
+			<check_box
+			 layout="topleft"
+			 follows="left|top"
+			 top_pad="0"
+			 left="20"
+			 width="400"
+			 height="18"
+			 name="PhoenixUseNearbyChatConsole"
 			 control_name="PhoenixUseNearbyChatConsole"
 			 label="Use console for chat popups instead of floating toasts (Viewer 1.x style)"/>
 			<check_box
@@ -828,7 +868,8 @@
 			 follows="left|top"
 			 top_pad="0"
 			 width="50"
-			 height="20"
+			 height="18"
+			 name="PhoenixLogImToChatConsole"
 			 control_name="PhoenixLogImToChatConsole"
 			 label="Show IMs and group chat in chat console"/>
 			<check_box
@@ -836,7 +877,8 @@
 			 follows="left|top"
 			 top_pad="0"
 			 width="200"
-			 height="20"
+			 height="18"
+			 name="ChatFullWidth"
 			 control_name="ChatFullWidth"
 			 label="Use full screen width for console"/>
 			<text
@@ -862,7 +904,7 @@
 			 label="Fade chat after"
 			 label_width="90"
 			 left="35"
-			 max_val="30"
+			 max_val="60"
 			 min_val="2"
 			 name="fade_chat_time"
 			 width="130" />
@@ -902,27 +944,40 @@
 			 width="50"
 			 height="20"
 			 control_name="PhoenixBoldGroupMods"
+			 name="PhoenixBoldGroupMods"
 			 label="Show group moderator messages in bold"/>
 			<check_box
 			 layout="topleft"
 			 follows="left|top"
 			 top_pad="0"
+			 left="20"
 			 width="50"
-			 height="20"
+			 height="18"
+			 control_name="FSPaymentInfoInChat"
+			 name="FSPaymentInfoInChat"
+			 label="Show L$ transactions in local chat instead of toasts"/>
+			<check_box
+			 layout="topleft"
+			 follows="left|top"
+			 top_pad="0"
+			 width="50"
+			 height="18"
 			 control_name="PhoenixMuteAllGroups"
+			 name="PhoenixMuteAllGroups"
 			 label="Disable ALL group chats"/>
 			<check_box
 			 layout="topleft"
 			 follows="left|top"
 			 top_pad="0"
 			 width="50"
-			 height="20"
+			 height="18"
 			 control_name="PhoenixMuteGroupWhenNoticesDisabled"
+			 name="PhoenixMuteGroupWhenNoticesDisabled"
 			 label="When 'Receive group notices' is disabled, disable group chat as well"/>
       <button
                  layout="topleft"
                 follows="left|top"
-                top_pad="10"
+                top_pad="5"
                 width="250"
                 height="22"
                 mouse_opaque="true"
@@ -1703,6 +1758,14 @@
 		 tool_tip="When checked, object for sale info is saved on change instead of requiring a confirm."
 		 name="PhoenixCommitForSaleOnChange_toggle"
 		 control_name="PhoenixCommitForSaleOnChange"/>
+	
+		<check_box
+		 follows="left|top"
+		 height="16"
+		 label="Save scripts edited from inventory as Mono"
+		 tool_tip="When checked, editing a script directly from inventory and then saving it saves as Mono instead of LSL."
+		 name="FSSaveInventoryScriptsAsMono_toggle"
+		 control_name="FSSaveInventoryScriptsAsMono"/>
 	
 	</panel>
 </tab_container>

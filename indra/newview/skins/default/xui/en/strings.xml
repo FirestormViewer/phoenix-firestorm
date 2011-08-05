@@ -3520,4 +3520,5 @@ Try enclosing path to the editor with double quotes.
   <string name="BeaconMedia">Viewing media beacons (white)</string>
   <string name="ParticleHiding">Hiding Particles</string>
 
+  <string name="IMPrefix">IM:</string>
   </strings>

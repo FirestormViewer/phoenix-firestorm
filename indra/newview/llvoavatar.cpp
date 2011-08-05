@@ -1419,13 +1419,21 @@ void LLVOAvatar::updateSpatialExtents(LLVector3& newMin, LLVector3 &newMax)
 	}
 }
 
+// patch up for mesh, to be removed during real mesh merge -Zi
+F32 llvoavatar_max_prim_scale()
+{
+	if(gAgent.getRegion()->getCapability("GetMesh").empty())
+		return DEFAULT_MAX_PRIM_SCALE;
+	return 64.f;
+}
+
 void LLVOAvatar::getSpatialExtents(LLVector3& newMin, LLVector3& newMax)
 {
 	LLVector3 buffer(0.25f, 0.25f, 0.25f);
 	LLVector3 pos = getRenderPosition();
 	newMin = pos - buffer;
 	newMax = pos + buffer;
-	float max_attachment_span = DEFAULT_MAX_PRIM_SCALE * 5.0f;
+	float max_attachment_span = llvoavatar_max_prim_scale() * 5.0f;
 	
 	//stretch bounding box by joint positions
 	for (polymesh_map_t::iterator i = mMeshes.begin(); i != mMeshes.end(); ++i)

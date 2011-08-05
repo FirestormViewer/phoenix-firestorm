@@ -291,6 +291,16 @@ void	LLNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 			{
 				from_name = av_name.getCompleteName();
 			}
+
+			// Ansariel: Handle IMs in nearby chat
+			if (gSavedSettings.getBOOL("FSShowIMInChatHistory") && chat.mChatType == CHAT_TYPE_IM)
+			{
+				if (gSavedSettings.getBOOL("FSLogIMInChatHistory"))
+				{
+					from_name = "IM: " + from_name;
+				}
+				else return;
+			}
 		}
 
 		LLLogChat::saveHistory("chat", from_name, chat.mFromID, chat.mText);
@@ -566,6 +576,7 @@ void LLNearbyChat::loadHistory()
 	std::list<LLSD>::const_iterator it = history.begin();
 	while (it != history.end())
 	{
+		bool im_type = false;
 		const LLSD& msg = *it;
 
 		std::string from = msg[IM_FROM];
@@ -576,6 +587,17 @@ void LLNearbyChat::loadHistory()
 		}
 		else
  		{
+			// Ansariel: Strip IM prefix so we can properly
+			//           retrieve the UUID in case we got a
+			//           saved IM in nearby chat history.
+			std::string im_prefix = "IM: ";
+			size_t im_prefix_found = from.find(im_prefix);
+			if (im_prefix_found != std::string::npos)
+			{
+				from = from.substr(im_prefix.length());
+				im_type = true;
+			}
+
 			std::string legacy_name = gCacheName->buildLegacyName(from);
  			gCacheName->getUUID(legacy_name, from_id);
  		}
@@ -586,6 +608,8 @@ void LLNearbyChat::loadHistory()
 		chat.mText = msg[IM_TEXT].asString();
 		chat.mTimeStr = msg[IM_TIME].asString();
 		chat.mChatStyle = CHAT_STYLE_HISTORY;
+
+		if (im_type) chat.mChatType = CHAT_TYPE_IM;
 
 		chat.mSourceType = CHAT_SOURCE_AGENT;
 		if (from_id.isNull() && SYSTEM_FROM == from)

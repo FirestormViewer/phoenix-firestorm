@@ -5645,10 +5645,24 @@ static void money_balance_group_notify(const LLUUID& group_id,
 									   LLSD args,
 									   LLSD payload)
 {
-	// Message uses name SLURLs, don't actually have to substitute in
-	// the name.  We're just making sure it's available.
-	// Notification is either PaymentReceived or PaymentSent
-	LLNotificationsUtil::add(notification, args, payload);
+	static LLCachedControl<bool> balance_change_in_chat(gSavedSettings, "FSPaymentInfoInChat");
+
+	if (balance_change_in_chat)
+	{
+		LLChat chat;
+		chat.mText = llformat(args["MESSAGE"].asString().c_str(), name.c_str());
+		chat.mSourceType = CHAT_SOURCE_SYSTEM;
+		LLSD chat_args;
+		chat_args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, chat_args);
+	}
+	else
+	{
+		// Message uses name SLURLs, don't actually have to substitute in
+		// the name.  We're just making sure it's available.
+		// Notification is either PaymentReceived or PaymentSent
+		LLNotificationsUtil::add(notification, args, payload);
+	}
 }
 
 static void money_balance_avatar_notify(const LLUUID& agent_id,
@@ -5657,10 +5671,24 @@ static void money_balance_avatar_notify(const LLUUID& agent_id,
 									   	LLSD args,
 									   	LLSD payload)
 {
-	// Message uses name SLURLs, don't actually have to substitute in
-	// the name.  We're just making sure it's available.
-	// Notification is either PaymentReceived or PaymentSent
-	LLNotificationsUtil::add(notification, args, payload);
+	static LLCachedControl<bool> balance_change_in_chat(gSavedSettings, "FSPaymentInfoInChat");
+
+	if (balance_change_in_chat)
+	{
+		LLChat chat;
+		chat.mText = llformat(args["MESSAGE"].asString().c_str(), av_name.getCompleteName().c_str());
+		chat.mSourceType = CHAT_SOURCE_SYSTEM;
+		LLSD chat_args;
+		chat_args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, chat_args);
+	}
+	else
+	{
+		// Message uses name SLURLs, don't actually have to substitute in
+		// the name.  We're just making sure it's available.
+		// Notification is either PaymentReceived or PaymentSent
+		LLNotificationsUtil::add(notification, args, payload);
+	}
 }
 
 static void process_money_balance_reply_extended(LLMessageSystem* msg)
@@ -5674,6 +5702,11 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 	BOOL is_dest_group = FALSE;
     S32 amount = 0;
     std::string item_description;
+
+	// Ansariel: If we output to chat history and probably console,
+	//           don't create an SLURL for the name or we will end
+	//           up with a SLURL in the console
+	static LLCachedControl<bool> balance_change_in_chat(gSavedSettings, "FSPaymentInfoInChat");
 
     msg->getS32("TransactionInfo", "TransactionType", transaction_type);
     msg->getUUID("TransactionInfo", "SourceID", source_id);
@@ -5736,7 +5769,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 	bool you_paid_someone = (source_id == gAgentID);
 	if (you_paid_someone)
 	{
-		args["NAME"] = dest_slurl;
+		args["NAME"] = balance_change_in_chat ? "%s" : dest_slurl;
 		is_name_group = is_dest_group;
 		name_id = dest_id;
 		if (!reason.empty())
@@ -5768,7 +5801,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 	}
 	else {
 		// ...someone paid you
-		args["NAME"] = source_slurl;
+		args["NAME"] = balance_change_in_chat ? "%s" : source_slurl;
 		is_name_group = is_source_group;
 		name_id = source_id;
 		if (!reason.empty())

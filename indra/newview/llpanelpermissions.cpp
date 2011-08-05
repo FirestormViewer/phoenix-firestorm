@@ -536,7 +536,8 @@ void LLPanelPermissions::refresh()
 		}
 		// The edit fields are only enabled if you can sell this object
 		// and the sale price is not mixed.
-		BOOL enable_edit = (num_for_sale && can_transfer) ? !is_for_sale_mixed : FALSE;
+		//BOOL enable_edit = (num_for_sale && can_transfer) ? !is_for_sale_mixed : FALSE;
+		BOOL enable_edit = can_transfer ? !is_for_sale_mixed : FALSE;
 		getChildView("Cost")->setEnabled(enable_edit);
 		
 		// Dont update and clear the price if change is pending
@@ -1100,7 +1101,8 @@ void LLPanelPermissions::setAllSaleInfo()
 	S32 price = -1;
 	
 	LLSpinCtrl *edit_price = getChild<LLSpinCtrl>("Edit Cost");
-	price = (edit_price->getTentative()) ? DEFAULT_PRICE : edit_price->getValue().asInteger();
+	//price = (edit_price->getTentative()) ? DEFAULT_PRICE : edit_price->getValue().asInteger();
+	price = edit_price->getValue().asInteger();
 
 	// If somehow an invalid price, turn the sale off.
 	if (price < 0)

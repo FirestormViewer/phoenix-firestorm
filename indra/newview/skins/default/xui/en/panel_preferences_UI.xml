@@ -390,7 +390,7 @@
 		label_width="155"
 		layout="topleft"
 		left="210"
-		max_val="30"
+		max_val="60"
 		name="NearbyToastLifetime"
 		top_pad="7"
 		width="266" />

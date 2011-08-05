@@ -1525,6 +1525,25 @@ LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index)
 	index_segment->setStart(index);
 	index_segment->setEnd(index);
 	segment_set_t::iterator it = mSegments.upper_bound(index_segment);
+
+	// FIXME: I tried to put this into its own function but ended up with errors,
+	//        so this is duplicated in the const version of this function for now. -Zi
+
+	// This goes reports one segment backwards if the cursor is inside a non-editable segment,
+	// but only if that segment is editable -Zi
+	LLTextSegment* seg=*it;
+	if(!seg->canEdit())
+	{
+		if(it!=mSegments.begin())
+		{
+			--it;
+
+			seg=*it;
+			if(!seg->canEdit())
+				++it;
+		}
+	}
+
 	return it;
 }
 
@@ -1540,6 +1559,25 @@ LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 i
 	index_segment->setStart(index);
 	index_segment->setEnd(index);
 	LLTextBase::segment_set_t::const_iterator it =  mSegments.upper_bound(index_segment);
+
+	// FIXME: I tried to put this into its own function but ended up with errors,
+	//        so this is duplicated in the non-const version of this function for now. -Zi
+
+	// This goes reports one segment backwards if the cursor is inside a non-editable segment,
+	// but only if that segment is editable -Zi
+	LLTextSegment* seg=*it;
+	if(!seg->canEdit())
+	{
+		if(it!=mSegments.begin())
+		{
+			--it;
+
+			seg=*it;
+			if(!seg->canEdit())
+				++it;
+		}
+	}
+
 	return it;
 }
 

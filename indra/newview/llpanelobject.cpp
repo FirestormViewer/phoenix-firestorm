@@ -430,9 +430,9 @@ void LLPanelObject::getState( )
 	}
 
 	// can move or rotate only linked group with move permissions, or sub-object with move and modify perms
-	BOOL enable_move	= objectp->permMove() && !objectp->isAttachment() && (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
+	BOOL enable_move	= objectp->permMove() && (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
 	BOOL enable_scale	= objectp->permMove() && objectp->permModify();
-	BOOL enable_rotate	= objectp->permMove() && ( (objectp->permModify() && !objectp->isAttachment()) || !gSavedSettings.getBOOL("EditLinkedParts"));
+	BOOL enable_rotate	= objectp->permMove() && (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
 
 	S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
 	BOOL single_volume = (LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
@@ -1928,18 +1928,28 @@ void LLPanelObject::sendRotation(BOOL btn_down)
 	}
 }
 
+// patch up for mesh, to be removed during real mesh merge -Zi
+F32 llpanelobject_max_prim_scale()
+{
+	if(gAgent.getRegion()->getCapability("GetMesh").empty())
+		return DEFAULT_MAX_PRIM_SCALE;
+	return 64.f;
+}
 
 // BUG: Make work with multiple objects
 void LLPanelObject::sendScale(BOOL btn_down)
 {
 	if (mObject.isNull()) return;
 
-	LLVector3 newscale(mCtrlScaleX->get(), mCtrlScaleY->get(), mCtrlScaleZ->get());
+	// make sure not to send larger/smaller values than permitted -Zi
+	LLVector3 newscale(llclamp(mCtrlScaleX->get(), MIN_PRIM_SCALE, llpanelobject_max_prim_scale()),
+					   llclamp(mCtrlScaleY->get(), MIN_PRIM_SCALE, llpanelobject_max_prim_scale()),
+					   llclamp(mCtrlScaleZ->get(), MIN_PRIM_SCALE, llpanelobject_max_prim_scale()));
 
 	LLVector3 delta = newscale - mObject->getScale();
-	if (delta.magVec() >= 0.0005f)
+	if (delta.magVec() >= 0.00005f)
 	{
-		// scale changed by more than 1/2 millimeter
+		// scale changed by more than 1/20 millimeter
 
 		// check to see if we aren't scaling the textures
 		// (in which case the tex coord's need to be recomputed)
@@ -2007,8 +2017,8 @@ void LLPanelObject::sendPosition(BOOL btn_down)
 		// send only if the position is changed, that is, the delta vector is not zero
 		LLVector3d old_pos_global = mObject->getPositionGlobal();
 		LLVector3d delta = new_pos_global - old_pos_global;
-		// moved more than 1/2 millimeter
-		if (delta.magVec() >= 0.0005f)
+		// moved more than 1/20 millimeter
+		if (delta.magVec() >= 0.00005f)
 		{			
 			if (mRootObject != mObject)
 			{
@@ -2381,9 +2391,9 @@ void LLPanelObject::onPasteSize(const LLSD& data)
 {
 	if(mClipboardSize.isNull()) return;
 
-	mClipboardSize.mV[VX] = llclamp(mClipboardSize.mV[VX], MIN_PRIM_SCALE, DEFAULT_MAX_PRIM_SCALE);
-	mClipboardSize.mV[VY] = llclamp(mClipboardSize.mV[VY], MIN_PRIM_SCALE, DEFAULT_MAX_PRIM_SCALE);
-	mClipboardSize.mV[VZ] = llclamp(mClipboardSize.mV[VZ], MIN_PRIM_SCALE, DEFAULT_MAX_PRIM_SCALE);
+	mClipboardSize.mV[VX] = llclamp(mClipboardSize.mV[VX], MIN_PRIM_SCALE, llpanelobject_max_prim_scale());
+	mClipboardSize.mV[VY] = llclamp(mClipboardSize.mV[VY], MIN_PRIM_SCALE, llpanelobject_max_prim_scale());
+	mClipboardSize.mV[VZ] = llclamp(mClipboardSize.mV[VZ], MIN_PRIM_SCALE, llpanelobject_max_prim_scale());
 
 	mCtrlScaleX->set( mClipboardSize.mV[VX] );
 	mCtrlScaleY->set( mClipboardSize.mV[VY] );

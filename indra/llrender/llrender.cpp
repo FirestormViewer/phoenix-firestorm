@@ -1234,7 +1234,12 @@ void LLRender::vertexBatchPreTransformed(LLVector3* verts, S32 vert_count)
 		mColorsp[mCount] = mColorsp[mCount-1];
 	}
 
-	mVerticesp[mCount] = mVerticesp[mCount-1];
+	// Often happens with LLFontGL::render(), especially in LLScrollListText::draw()
+	// Can be observed by opening the V1 style friends list for example
+	if (mCount == 0)
+		lldebugs << "Vertex count was 0, prevented crashing." << llendl;
+	else
+		mVerticesp[mCount] = mVerticesp[mCount-1];
 }
 
 void LLRender::vertexBatchPreTransformed(LLVector3* verts, LLVector2* uvs, S32 vert_count)
@@ -1254,8 +1259,15 @@ void LLRender::vertexBatchPreTransformed(LLVector3* verts, LLVector2* uvs, S32 v
 		mColorsp[mCount] = mColorsp[mCount-1];
 	}
 
-	mVerticesp[mCount] = mVerticesp[mCount-1];
-	mTexcoordsp[mCount] = mTexcoordsp[mCount-1];
+	// Often happens with LLFontGL::render(), especially in LLScrollListText::draw()
+	// Can be observed by opening the V1 style friends list for example
+	if (mCount == 0)
+		lldebugs << "Vertex count was 0, prevented crashing." << llendl;
+	else
+	{
+		mVerticesp[mCount] = mVerticesp[mCount-1];
+		mTexcoordsp[mCount] = mTexcoordsp[mCount-1];
+	}
 }
 
 void LLRender::vertexBatchPreTransformed(LLVector3* verts, LLVector2* uvs, LLColor4U* colors, S32 vert_count)
@@ -1275,9 +1287,16 @@ void LLRender::vertexBatchPreTransformed(LLVector3* verts, LLVector2* uvs, LLCol
 		mCount++;
 	}
 
-	mVerticesp[mCount] = mVerticesp[mCount-1];
-	mTexcoordsp[mCount] = mTexcoordsp[mCount-1];
-	mColorsp[mCount] = mColorsp[mCount-1];
+	// Often happens with LLFontGL::render(), especially in LLScrollListText::draw()
+	// Can be observed by opening the V1 style friends list for example
+	if (mCount == 0)
+		lldebugs << "Vertex count was 0, prevented crashing." << llendl;
+	else
+	{
+		mVerticesp[mCount] = mVerticesp[mCount-1];
+		mTexcoordsp[mCount] = mTexcoordsp[mCount-1];
+		mColorsp[mCount] = mColorsp[mCount-1];
+	}
 }
 
 void LLRender::vertex2i(const GLint& x, const GLint& y)

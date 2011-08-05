@@ -45,9 +45,11 @@ class LLTabContainer;
 class LLMenuButton;
 class LLMenuGL;
 
-const U32	MAX_AVATARS_PER_ALERT = 27; // maximum number of UUIDs we can cram into a single channel radar alert message
+const U32	MAX_AVATARS_PER_ALERT = 7; // maximum number of UUIDs we can cram into a single channel radar alert message
 const U32	COARSE_OFFSET_INTERVAL = 31; // seconds after which we query the bridge for a coarse location adjustment
 const U32	NAMEFORMAT_DISPLAYNAME = 0;
+const U32	RADAR_CHAT_MIN_SPACING = 6; //minimum delay between radar chat messages
+
 const U32	NAMEFORMAT_USERNAME = 1;
 const U32	NAMEFORMAT_DISPLAYNAME_USERNAME = 2;
 const U32	NAMEFORMAT_USERNAME_DISPLAYNAME = 3;
@@ -65,7 +67,7 @@ public:
 	/*virtual*/ void	onOpen(const LLSD& key);
 	/*virtual*/ bool	notifyChildren(const LLSD& info);
 	void	teleportToAvatar(LLUUID targetAv);
-	void	requestRadarChannelAlertSync() {mRadarAlertRequest = true;}
+	void	requestRadarChannelAlertSync();
 	// Implements LLVoiceClientStatusObserver::onChange() to enable call buttons
 	// when voice is available
 	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
@@ -218,6 +220,7 @@ private:
 	 	
 	S32					mRadarFrameCount;
 	bool				mRadarAlertRequest;
+	F32					mRadarLastRequestTime;
 };
 
 #endif //LL_LLPANELPEOPLE_H

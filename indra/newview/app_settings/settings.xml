@@ -14,6 +14,50 @@
     <integer>1</integer>
   </map>
 
+	<key>FSShowIMInChatHistory</key>
+	<map>
+		<key>Comment</key>
+		<string>If true, IM will also be shown in the nearby chat history.</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>Boolean</string>
+		<key>Value</key>
+		<integer>0</integer>
+	</map>
+	<key>FSLogIMInChatHistory</key>
+	<map>
+		<key>Comment</key>
+		<string>If true, IM will also be logged in the nearby chat history if logging nearby chat and showing IMs in nearby chat is enabled.</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>Boolean</string>
+		<key>Value</key>
+		<integer>0</integer>
+	</map>
+	<key>FSPaymentInfoInChat</key>
+	<map>
+		<key>Comment</key>
+		<string>If true, L$ balance changes will be shown in nearby chat instead of toasts.</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>Boolean</string>
+		<key>Value</key>
+		<integer>0</integer>
+	</map>
+	<key>FSScriptDialogNoTransparency</key>
+	<map>
+		<key>Comment</key>
+		<string>If true, script dialogs will be shown opaque and ignore the floater opacity settings.</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>Boolean</string>
+		<key>Value</key>
+		<integer>0</integer>
+	</map>
   <key>ShowStreamMetadata</key>
   <map>
     <key>Comment</key>
@@ -71,17 +115,38 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
-
+  <key>PhoenixDoubleClickAddInventoryObjects</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether or not to add items instead of wearing them</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>PhoenixKeepUnpackedCacheFiles</key>
+  <map>
+    <key>Comment</key>
+    <string>If TRUE, the viewer won't delete unpacked cache files when logging out (improves overall performance and fixes sound bugs)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>RadarAlertChannel</key>
     <map>
       <key>Comment</key>
-      <string>Positive Numbered Channel for whispering radar alerts</string>
+      <string>Channel for whispering radar alerts</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>U32</string>
+      <string>S32</string>
       <key>Value</key>
-      <integer>777777777</integer>
+      <integer>-777777777</integer>
     </map>
     
   <key>RadarLegacyChannelAlertRefreshUUID</key>
@@ -475,6 +540,28 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+  <key>FSLeaveMouselookOnFocus</key>
+    <map>
+      <key>Comment</key>
+      <string>Exit mouselook mode when regaining focus</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+  <key>FSSaveInventoryScriptsAsMono</key>
+    <map>
+      <key>Comment</key>
+      <string>Saves scripts edited directly from inventory as Mono instead of LSL</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
   <key>AutoCloseOOC</key>
     <map>
       <key>Comment</key>
@@ -621,10 +708,10 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>RestrainedLoveOffsetAvatarZ</key>
+    <key>AvatarZOffset</key>
     <map>
       <key>Comment</key>
-      <string>Offset the avatar.</string>
+      <string>Height offset the avatar.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -4634,7 +4721,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>https://marketplace.secondlife.com/products/search?search[category_id]=200</string>
+      <string>https://marketplace.secondlife.com/products/search?search[category_id]=200&amp;search[page]=1&amp;search[per_page]=12</string>
     </map>
     <key>GridCrossSections</key>
     <map>
@@ -6441,6 +6528,17 @@
       <string>F32</string>
       <key>Value</key>
       <real>16.0</real>
+    </map>
+    <key>MiniMapPrimMaxVertDistance</key>
+    <map>
+      <key>Comment</key>
+      <string>Max height difference between avatar and prim to be shown on the MiniMap. Set to 0.0 to disable.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>256.0</real>
     </map>
     <key>MiniMapChatRing</key>
     <map>
