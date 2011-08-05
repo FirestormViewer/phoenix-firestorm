@@ -81,6 +81,8 @@ LLDir::~LLDir()
 
 S32 LLDir::deleteFilesInDir(const std::string &dirname, const std::string &mask)
 {
+	if (!fileExists(dirname)) return 0;
+
 	S32 count = 0;
 	std::string filename; 
 	std::string fullpath;
