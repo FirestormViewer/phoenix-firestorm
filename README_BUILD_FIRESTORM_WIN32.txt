@@ -20,6 +20,12 @@ mailing list. Ask Arrehn Oberlander about joining "Firestorm Self Compilers" for
 
 To build firestorm:
 
+	Launch the VS2010 CMD Environment. This is NOT just cmd.exe, this is the CMD shell in the VS2010 start folder
+that sets your dev environment variables. You will use this shell to kick off command line builds. CYGWIN or standard
+CMD.EXE will not work.
+
+After launching the VS2010 cmd shell and navigating to your firestorm code repo:
+
         autobuild build -c ReleaseFS
 
 Other examples:
