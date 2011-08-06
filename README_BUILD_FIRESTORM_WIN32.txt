@@ -16,7 +16,9 @@ If you're licensing these with Phoenix/Firestorm, ask for the libraries for fmod
 If you're a community builder, you'll need to build these libraries yourself, then change your autobuild.xml file to
 point to your own versions, or create a different autobuild.xml with your customizations, and use this with autobuild
 instead of our default autobuild.xml There are some examples of how to build FMOD on the LL Wiki and opensource-dev
-mailing list. Ask Arrehn Oberlander about joining "Firestorm Self Compilers" for additional community help.
+mailing list. We've created a non-KDU build target to make this easier. Everywhere you see "ReleaseFS" below, use 
+"ReleaseFS_open" instead.  This will perform the same build, using openjpeg instead of KDU.
+
 
 To build firestorm:
 
@@ -35,7 +37,7 @@ Other examples:
         autobuild configure -c ReleaseFS -- --fmod --kdu    # configure with fmod, kdu enabled
         autobuild configure -c ReleaseFS -- --chan Private-Yourname   # configure with a custom channel
 
-        autobuild build -c ReleaseFS -no-configure              # default quick rebuild
+        autobuild build -c ReleaseFS --no-configure              # default quick rebuild
 
 Any of the configure options can also be used (and do the same thing) with the build options.
 

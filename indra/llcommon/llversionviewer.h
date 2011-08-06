@@ -30,7 +30,7 @@
 const S32 LL_VERSION_MAJOR = 2;
 const S32 LL_VERSION_MINOR = 6;
 const S32 LL_VERSION_PATCH = 9;
-const S32 LL_VERSION_BUILD = 18325;
+const S32 LL_VERSION_BUILD = 18380;
 
 const char * const LL_CHANNEL = "Firestorm-private-Romana";
 

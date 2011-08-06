@@ -239,7 +239,7 @@ function getopt()
 ### 
 
 getArgs $*
-echo -e "	Your platform is: $PLATFORM"
+echo -e "	Your platform is: '$PLATFORM'"
 echo -e "	KDU: 	`b2a $WANTS_KDU`"
 echo -e "	FMOD: 	`b2a $WANTS_FMOD`"
 echo -e "	PACKAGE:`b2a $WANTS_PACKAGE`"
@@ -257,24 +257,35 @@ CHANNEL=`echo $CHANNEL | sed -e "s/[^a-zA-Z0-9\-]*//g"` # strip out difficult ch
 
 if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
 	echo "Cleaning $PLATFORM...."
-	pushd ..
-	if [ \( $PLATFORM == "darwin" \) -a \( -d build-linux-i686/packages \) ] ; then
-	    mv build-darwin-i386/packages packages
+	wdir=`pwd`
+	cd ..
+	if [ $PLATFORM == "darwin" ] ; then
+	    if [ -d build-darwin-i386/packages ] ; then
+	    	mv build-darwin-i386/packages packages
+	    fi
 	    rm -rf build-darwin-i386/*
-	    mv packages build-darwin-i386
-	elif [ \( $PLATFORM == "win32" \) -a \( -d build-vc100/packages \) ] ; then
-	    echo "deleting work directory..."
-	    mv build-vc100/packages packages
-	    rm -rf build-vc100/*
-	    mv packages build-vc100
-	elif [ \( $PLATFORM == "linux32" \) -a \( -d build-linux-i686/packages \) ] ; then
-	    mv build-linux-i686/packages packages
-	    rm -rf build-linux-i686/*
-	    mv packages build-linux-i686
+	    if [ -d packages ] ; then
+	        mv packages build-darwin-i386/packages
+            fi
+	elif [ $PLATFORM == "win32" ] ; then
+            if [ -d build-vc100/packages ] ; then
+                mv build-vc100/packages packages
+            fi
+            rm -rf build-vc100/*
+            if [ -d packages ] ; then                
+		mv packages build-vc100/packages
+            fi
+	elif [ $PLATFORM == "linux32" ] ; then
+            if [ -d build-linux-i686/packages ] ; then
+                mv build-linux-i686/packages packages
+            fi
+            rm -rf build-linux-i686/*
+            if [ -d packages ] ; then                
+	    	mv packages build-linux-i686/packages
+	    fi
 	fi
 
-	find . -name "*.pyc" -exec rm {} \;
-	popd
+	cd $wdir
 fi
 
 if [ \( $WANTS_VERSION -eq $TRUE \) -o \( $WANTS_CONFIG -eq $TRUE \) ] ; then
@@ -295,19 +306,19 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 	echo "Configuring $PLATFORM..."
         
 	if [ $WANTS_KDU -eq $TRUE ] ; then
-		KDU="-DUSE_KDU:BOOL=ON"
+		KDU="-DUSE_KDU:BOOL=ON -D:INSTALL_PROPRIETARY=TRUE"
 	else
-		KDU=""
+		KDU="-USE_KDU:BOOL=OFF"
 	fi
 	if [ $WANTS_FMOD -eq $TRUE ] ; then
 		FMOD="-DFMOD:BOOL=ON"
 	else
-		FMOD=""
+		FMOD="-DFMOD:BOOL=OFF"
 	fi
 	if [ $WANTS_PACKAGE -eq $TRUE ] ; then
 		PACKAGE="-DPACKAGE:BOOL=ON"
 	else
-		PACKAGE=""
+		PACKAGE="-DPACKAGE:BOOL=OFF"
 	fi
 	if [ $PLATFORM == "darwin" ] ; then
 		TARGET="Xcode"
@@ -317,7 +328,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 		TARGET="Visual Studio 10"
 	fi
 	
-	cmake -G "$TARGET" ../indra $FMOD $KDU $PACKAGE -DUNATTENDED:BOOL=ON -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DINSTALL_PROPRIETARY=TRUE -DCMAKE_BUILD_TYPE:STRING=$BTYPE -DROOT_PROJECT_NAME:STRING=Firestorm | tee $LOG
+	cmake -G "$TARGET" ../indra $FMOD $KDU $PACKAGE -DUNATTENDED:BOOL=ON -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE -DROOT_PROJECT_NAME:STRING=Firestorm | tee $LOG
 fi
 
 if [ $WANTS_BUILD -eq $TRUE ] ; then
