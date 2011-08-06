@@ -37,8 +37,6 @@ protected:
 	 * Signal callbacks
 	 */
 public:
-	typedef boost::function<void(bool)> behaviour_handler_t;
-	void addBehaviourToggleCallback(ERlvBehaviour eBhvr, behaviour_handler_t cb);
 	void onBehaviourToggle(ERlvBehaviour eBhvr, ERlvParamType eType);	// RlvHandler::rlv_behaviour_signal_t
 
 	/*
@@ -47,8 +45,9 @@ public:
 protected:
 	void onRefreshHoverText();											// showloc, shownames, showhovertext(all|world|hud)
 	void onToggleEdit();												// edit
-	void onToggleFly();													// fly
+	void onToggleMovement();											// fly, alwaysrun and temprun
 	void onToggleRez();													// rez
+	void onToggleSetDebug();											// setdebug
 	void onToggleSetEnv();												// setenv
 	void onToggleShowInv(bool fQuitting);								// showinv
 	void onToggleShowLoc();												// showloc
@@ -60,19 +59,22 @@ protected:
 	void onToggleViewXXX();												// viewnote, viewscript, viewtexture
 	void onUpdateLoginLastLocation();									// tploc and unsit
 
-	/*
-	 * Floater validation callbacks
+ 	/*
+	 * Floater and sidebar validation callbacks
 	 */
 protected:
 	void addGenericFloaterFilter(const std::string& strFloaterName);
 	void removeGenericFloaterFilter(const std::string& strFloaterName);
+
 	bool filterFloaterGeneric(const std::string&, const LLSD&);
 	boost::signals2::connection m_ConnFloaterGeneric;
-
 	bool filterFloaterShowLoc(const std::string&, const LLSD& );
 	boost::signals2::connection m_ConnFloaterShowLoc;					// showloc
 	bool filterFloaterViewXXX(const std::string&, const LLSD&);
 	boost::signals2::connection m_ConnFloaterViewXXX;					// viewnote, viewscript, viewtexture
+
+	bool canOpenSidebarTab(ERlvBehaviour, const std::string&, LLUICtrl*, const LLSD&);
+	boost::signals2::connection m_ConnSidePanelInventory;				// showinv
 
 	/*
 	 * Helper functions
@@ -88,20 +90,12 @@ public:
 	 * Member variables
 	 */
 protected:
+	typedef boost::function<void(bool)> behaviour_handler_t;
 	typedef std::multimap<ERlvBehaviour, behaviour_handler_t> behaviour_handler_map_t;
 	behaviour_handler_map_t m_Handlers;
 
 	std::multiset<std::string> m_FilteredFloaters;
 };
-
-// ============================================================================
-// Inlined member functions
-
-// Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-inline void RlvUIEnabler::addBehaviourToggleCallback(ERlvBehaviour eBhvr, behaviour_handler_t cb)
-{
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(eBhvr, cb));
-}
 
 // ============================================================================
 

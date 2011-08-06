@@ -44,7 +44,6 @@
 #include "rlvhandler.h"
 #include "llagent.h"
 // [/RLVa:KB]
-
 #include "llavatarname.h"
 #include "lltrans.h"
 

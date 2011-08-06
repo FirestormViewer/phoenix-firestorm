@@ -570,6 +570,7 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 		return TRUE;
 	}
 // [/RLVa:KB]
+
 	if (object)
 	{
 		parent = object->getRootEdit();
@@ -630,7 +631,13 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 			gViewerWindow->setCursor(cursor);
 			lldebugst(LLERR_USER_INPUT) << "hover handled by LLToolPie (inactive)" << llendl;
 		}
-		
+// [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Added: RLVa-1.1.0l
+		else if ( (object) && (rlv_handler_t::isEnabled()) && (!gRlvHandler.canTouch(object)) )
+		{
+			// Block showing the "grab" or "touch" cursor if we can't touch the object (@fartouch=n is handled above)
+			gViewerWindow->setCursor(UI_CURSOR_ARROW);
+		}
+// [/RLVa:KB]
 		else if ((object && !object->isAvatar() && object->usePhysics()) 
 				 || (parent && !parent->isAvatar() && parent->usePhysics()))
 		{
@@ -1070,7 +1077,6 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				p.click_callback(boost::bind(showAvatarInspector, hover_object->getID()));
 				p.visible_time_near(6.f);
 				p.visible_time_far(3.f);
-				//p.delay_time(0.35f);
 				p.delay_time(gSavedSettings.getF32("AvatarInspectorTooltipDelay"));
 				p.wrap(false);
 				
@@ -1201,7 +1207,6 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 					p.click_homepage_callback(boost::bind(VisitHomePage, mHoverPick));
 					p.visible_time_near(6.f);
 					p.visible_time_far(3.f);
-					//p.delay_time(0.35f);
 					p.delay_time(gSavedSettings.getF32("ObjectInspectorTooltipDelay"));
 					p.wrap(false);
 					
@@ -1213,7 +1218,6 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 					LLToolTipMgr::instance().show(tooltip_msg);
 				}
 // [/RLVa:KB]
-
 			}
 		}
 	}

@@ -46,7 +46,7 @@
 #include "llstatusbar.h"
 #include "llmenugl.h"
 #include "pipeline.h"
-// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.2a)
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.4.0a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include <boost/tokenizer.hpp>
@@ -258,7 +258,7 @@ void LLHUDText::setString(const std::string &text_utf8)
 {
 	mTextSegments.clear();
 //	addLine(text_utf8, mColor);
-// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.2.2a) | Modified: RLVa-1.0.0f
+// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.4.0a) | Modified: RLVa-1.0.0f
 	// NOTE: setString() is called for debug and map beacons as well
 	if (rlv_handler_t::isEnabled())
 	{
@@ -663,17 +663,14 @@ F32 LLHUDText::LLHUDTextSegment::getWidth(const LLFontGL* font)
 	}
 }
 
-// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.2a) | Added: RLVa-1.0.0f
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.0.0f
 void LLHUDText::refreshAllObjectText()
 {
-	for (TextObjectIterator itText = sTextObjects.begin(); itText != sTextObjects.end(); itText++)
+	for (TextObjectIterator itText = sTextObjects.begin(); itText != sTextObjects.end(); ++itText)
 	{
 		LLHUDText* pText = *itText;
-		if ( (pText) && (!pText->mObjText.empty() && ("" != pText->mObjText) ) && 
-			 (pText->mSourceObject) && (LL_PCODE_VOLUME == pText->mSourceObject->getPCode()) )
-		{
+		if ( (pText) && (!pText->mObjText.empty()) && (pText->mSourceObject) && (LL_PCODE_VOLUME == pText->mSourceObject->getPCode()) )
 			pText->setString(pText->mObjText);
-		}
 	}
 }
 // [/RLVa:KB]

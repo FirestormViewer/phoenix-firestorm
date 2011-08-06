@@ -31,6 +31,7 @@ Other examples:
 
 	autobuild build -c ReleaseFS --no-configure		# default quick rebuild
 	autobuild build -c ReleaseFS --no-configure -- --clean	# Clean rebuild
+	autobuild build -c ReleaseFS -- --package		# Complete a build and package it into a tarball for sharing
 
 Any of the configure options can also be used (and do the same thing) with the build options.
 

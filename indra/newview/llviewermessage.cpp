@@ -1503,6 +1503,7 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 						gInventory.addObserver(pOfferObserver);
 				}
 // [/RLVa:KB]
+
 				if (gSavedSettings.getBOOL("ShowOfferedInventory"))
 				{
 					LLOpenAgentOffer* open_agent_offer = new LLOpenAgentOffer(mObjectID, from_string);
@@ -1827,6 +1828,7 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 				log_message_args["DESC"] = mDesc;
 				log_message_args["NAME"] = mFromName;
 				log_message = LLTrans::getString("InvOfferDecline", log_message_args);
+
 
 				LLSD args;
 				args["MESSAGE"] = log_message;

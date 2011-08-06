@@ -75,7 +75,7 @@ private:
 	 */
 	static std::set<std::string> sAlwaysShowableList;
 	
-// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
+// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.4.0a) | Modified: RLVa-1.2.0a
 	// Used to determine whether a floater can be shown
 public:
 	typedef boost::signals2::signal<bool(const std::string&, const LLSD&), boost_boolean_combiner> validate_signal_t;

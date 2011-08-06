@@ -46,10 +46,11 @@
 
 #include "rlvui.h"
 #include "rlvhandler.h"
+#include "rlvextensions.h"
 
 // ============================================================================
 
-// Checked: 2010-02-28 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 RlvUIEnabler::RlvUIEnabler()
 {
 	// Connect us to the behaviour toggle signal
@@ -62,6 +63,11 @@ RlvUIEnabler::RlvUIEnabler()
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWHOVERTEXTWORLD, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWHOVERTEXTHUD, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
 
+	// onToggleMovement
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_FLY, boost::bind(&RlvUIEnabler::onToggleMovement, this)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_ALWAYSRUN, boost::bind(&RlvUIEnabler::onToggleMovement, this)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_TEMPRUN, boost::bind(&RlvUIEnabler::onToggleMovement, this)));
+
 	// onToggleViewXXX
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_VIEWNOTE, boost::bind(&RlvUIEnabler::onToggleViewXXX, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_VIEWSCRIPT, boost::bind(&RlvUIEnabler::onToggleViewXXX, this)));
@@ -69,8 +75,8 @@ RlvUIEnabler::RlvUIEnabler()
 
 	// onToggleXXX
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_EDIT, boost::bind(&RlvUIEnabler::onToggleEdit, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_FLY, boost::bind(&RlvUIEnabler::onToggleFly, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_REZ, boost::bind(&RlvUIEnabler::onToggleRez, this)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SETDEBUG, boost::bind(&RlvUIEnabler::onToggleSetDebug, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SETENV, boost::bind(&RlvUIEnabler::onToggleSetEnv, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWINV, boost::bind(&RlvUIEnabler::onToggleShowInv, this, _1)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWLOC, boost::bind(&RlvUIEnabler::onToggleShowLoc, this)));
@@ -90,7 +96,7 @@ RlvUIEnabler::RlvUIEnabler()
 	#endif // RLV_EXTENSION_STARTLOCATION
 }
 
-// Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
+// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 void RlvUIEnabler::onBehaviourToggle(ERlvBehaviour eBhvr, ERlvParamType eType)
 {
 	bool fQuitting = LLApp::isQuitting();
@@ -103,7 +109,7 @@ void RlvUIEnabler::onBehaviourToggle(ERlvBehaviour eBhvr, ERlvParamType eType)
 
 // ============================================================================
 
-// Checked: 2010-03-02 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
+// Checked: 2010-03-02 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 void RlvUIEnabler::onRefreshHoverText()
 {
 	// Refresh all hover text each time any of the monitored behaviours get set or unset
@@ -139,24 +145,36 @@ void RlvUIEnabler::onToggleEdit()
 		removeGenericFloaterFilter("beacons");
 }
 
-// Checked: 2010-03-02 (RLVa-1.2.0d) | Added: RLVa-1.2.0a
-void RlvUIEnabler::onToggleFly()
+// Checked: 2010-03-02 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
+void RlvUIEnabler::onToggleMovement()
 {
-	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_FLY);
-
-	// Drop the avie out of the sky if currently flying and restricted
-	if ( (!fEnable) && (gAgent.getFlying()) )
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_FLY)) && (gAgent.getFlying()) )
 		gAgent.setFlying(FALSE);
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_ALWAYSRUN)) && (gAgent.getAlwaysRun()) )
+		gAgent.clearAlwaysRun();
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_TEMPRUN)) && (gAgent.getTempRun()) )
+		gAgent.clearTempRun();
 
 	// Force an update since the status only updates when the current parcel changes [see LLFloaterMove::postBuild()]
-	LLFloaterMove::sUpdateFlyingStatus();
+	LLFloaterMove::sUpdateMovementStatus();
 }
 
-// Checked: 2010-09-11 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
+// Checked: 2010-09-11 (RLVa-1.4.0a) | Added: RLVa-1.2.1d
 void RlvUIEnabler::onToggleRez()
 {
 	// Enable/disable the "Build" bottom tray button
 	LLBottomTray::getInstance()->getChild<LLButton>("build_btn")->setEnabled(isBuildEnabled());
+}
+
+// Checked: 2011-05-28 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+void RlvUIEnabler::onToggleSetDebug()
+{
+	//bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SETDEBUG);
+	//for (auto itSetting = RlvExtGetSet::m_DbgAllowed.cbegin(); itSetting != RlvExtGetSet::m_DbgAllowed.cend(); ++itSetting)
+	//{
+	//	if (itSetting->second & RlvExtGetSet::DBG_WRITE)
+	//		gSavedSettings.getControl(itSetting->first)->setHiddenFromSettingsEditor(!fEnable);
+	//}
 }
 
 // Checked: 2010-03-17 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
@@ -180,9 +198,13 @@ void RlvUIEnabler::onToggleSetEnv()
 			removeGenericFloaterFilter(strEnvFloaters[idxFloater]);
 		}
 	}
+
+	// Don't allow toggling "Basic Shaders" and/or "Atmopsheric Shaders" through the debug settings under @setenv=n
+	gSavedSettings.getControl("VertexShaderEnable")->setHiddenFromSettingsEditor(!fEnable);
+	gSavedSettings.getControl("WindLightUseAtmosShaders")->setHiddenFromSettingsEditor(!fEnable);
 }
 
-// Checked: 2010-09-07 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
+// Checked: 2010-09-07 (RLVa-1.4.0a) | Modified: RLVa-1.2.1a
 void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 {
 	if (fQuitting)
@@ -203,7 +225,7 @@ void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 			bool fCollapsed = pSideTray->getCollapsed();
 			const LLPanel* pActiveTab = pSideTray->getActiveTab();
 
-			pSideTray->toggleTabDocked("sidebar_inventory");
+			pSideTray->setTabDocked("sidebar_inventory", true, false);
 
 			if (pActiveTab)
 				pSideTray->selectTabByName(pActiveTab->getName());
@@ -267,17 +289,20 @@ void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 			(*itFloater)->closeFloater();
 	}
 
-	// Enable/disable the "Inventory" bottom tray button
-	const LLBottomTray* pTray = LLBottomTray::getInstance();
-	LLView* pBtnView = (pTray) ? pTray->getChildView("sidebar_inv_btn") : NULL;
-	if (pBtnView)
-		pBtnView->setEnabled(fEnable);
-
-	// Filter out (or stop filtering) newly spawned old style inventory floaters
+	//
+	// Filter (or stop filtering) opening the inventory sidebar tab and spawning old style inventory floaters
+	//
+	RLV_ASSERT_DBG( (fEnable) || (!m_ConnSidePanelInventory.connected()) );
 	if (!fEnable)
+	{
+		m_ConnSidePanelInventory = pSideTray->setValidateCallback(boost::bind(&RlvUIEnabler::canOpenSidebarTab, this, RLV_BHVR_SHOWINV, "sidebar_inventory", _1, _2));
 		addGenericFloaterFilter("inventory");
+	}
 	else
+	{
+		m_ConnSidePanelInventory.disconnect();
 		removeGenericFloaterFilter("inventory");
+	}
 }
 
 // Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
@@ -340,7 +365,7 @@ void RlvUIEnabler::onToggleShowLoc()
 		m_ConnFloaterShowLoc.disconnect();
 }
 
-// Checked: 2011-05-22 (RLVa-1.3.1b) | Modified: RLVa-1.3.1b
+// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 void RlvUIEnabler::onToggleShowMinimap()
 {
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWMINIMAP);
@@ -361,6 +386,7 @@ void RlvUIEnabler::onToggleShowMinimap()
 	// Enable/disable the "Mini-Map" bottom tray button
 	const LLBottomTray* pTray = LLBottomTray::getInstance();
 	LLView* pBtnView = (pTray) ? pTray->getChildView("mini_map_btn") : NULL;
+	RLV_ASSERT(pBtnView);
 	if (pBtnView)
 		pBtnView->setEnabled(fEnable);
 
@@ -377,7 +403,7 @@ void RlvUIEnabler::onToggleShowMinimap()
 	}
 }
 
-// Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
+// Checked: 2010-12-08 (RLVa-1.4.0a) | Modified: RLVa-1.2.2c
 void RlvUIEnabler::onToggleShowNames(bool fQuitting)
 {
 	if (fQuitting)
@@ -409,7 +435,7 @@ void RlvUIEnabler::onToggleShowNames(bool fQuitting)
 	LLVOAvatar::invalidateNameTags();	// See handleDisplayNamesOptionChanged()
 }
 
-// Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
+// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 void RlvUIEnabler::onToggleShowWorldMap()
 {
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP);
@@ -421,6 +447,7 @@ void RlvUIEnabler::onToggleShowWorldMap()
 	// Enable/disable the "Map" bottom tray button
 	const LLBottomTray* pTray = LLBottomTray::getInstance();
 	LLView* pBtnView = (pTray) ? pTray->getChildView("world_map_btn") : NULL;
+	RLV_ASSERT(pBtnView);
 	if (pBtnView)
 		pBtnView->setEnabled(fEnable);
 
@@ -479,8 +506,8 @@ void RlvUIEnabler::onUpdateLoginLastLocation()
 
 // ============================================================================
 
-// Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
-inline void RlvUIEnabler::addGenericFloaterFilter(const std::string& strFloaterName)
+// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
+void RlvUIEnabler::addGenericFloaterFilter(const std::string& strFloaterName)
 {
 	m_FilteredFloaters.insert(strFloaterName);
 
@@ -488,8 +515,8 @@ inline void RlvUIEnabler::addGenericFloaterFilter(const std::string& strFloaterN
 		m_ConnFloaterGeneric = LLFloaterReg::setValidateCallback(boost::bind(&RlvUIEnabler::filterFloaterGeneric, this, _1, _2));
 }
 
-// Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
-inline void RlvUIEnabler::removeGenericFloaterFilter(const std::string& strFloaterName)
+// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
+void RlvUIEnabler::removeGenericFloaterFilter(const std::string& strFloaterName)
 {
 	std::multiset<std::string>::iterator itFloater = m_FilteredFloaters.find(strFloaterName);
 	RLV_ASSERT_DBG(itFloater != m_FilteredFloaters.end());
@@ -500,10 +527,10 @@ inline void RlvUIEnabler::removeGenericFloaterFilter(const std::string& strFloat
 		m_ConnFloaterGeneric.disconnect();
 }
 
-// Checked: 2010-02-28 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
+// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 bool RlvUIEnabler::filterFloaterGeneric(const std::string& strName, const LLSD&)
 {
-	return m_FilteredFloaters.find(strName) == m_FilteredFloaters.end();
+	return m_FilteredFloaters.end() == m_FilteredFloaters.find(strName);
 }
 
 // Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
@@ -537,6 +564,13 @@ bool RlvUIEnabler::filterFloaterViewXXX(const std::string& strName, const LLSD&)
 		return false;
 	}
 	return true;
+}
+
+// Checked: 2010-03-01 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
+bool RlvUIEnabler::canOpenSidebarTab(ERlvBehaviour eBhvrFilter, const std::string& strNameFilter, LLUICtrl* pCtrl, const LLSD& sdParam)
+{
+	// NOTE: pCtrl->getName() is the name of the sidebar tab and sdParam is the name of the child panel being activated (can be omitted)
+	return (!gRlvHandler.hasBehaviour(eBhvrFilter)) || (strNameFilter != pCtrl->getName());
 }
 
 // ============================================================================

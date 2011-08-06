@@ -8967,4 +8967,13 @@ void initialize_menus()
 // [/RLVa:KB]
 	commit.add("Destination.show", boost::bind(&toggle_destination_and_avatar_picker, 0));
 	commit.add("Avatar.show", boost::bind(&toggle_destination_and_avatar_picker, 1));
+
+// [RLVa:KB] - Checked: 2010-04-23 (RLVa-1.2.0g) | Added: RLVa-1.2.0
+	commit.add("RLV.ToggleEnabled", boost::bind(&rlvMenuToggleEnabled));
+	enable.add("RLV.CheckEnabled", boost::bind(&rlvMenuCheckEnabled));
+	if (rlv_handler_t::isEnabled())
+	{
+		enable.add("RLV.EnableIfNot", boost::bind(&rlvMenuEnableIfNot, _2));
+	}
+// [/RLVa:KB]
 }

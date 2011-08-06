@@ -268,7 +268,7 @@ inline bool RlvHandler::canSendIM(const LLUUID& idRecipient) const
 		( (!hasBehaviour(RLV_BHVR_SENDIMTO)) || (!isException(RLV_BHVR_SENDIMTO, idRecipient)) );
 }
 
-// Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.0.0f
+// Checked: 2010-03-27 (RLVa-1.4.0a) | Modified: RLVa-1.0.0f
 inline bool RlvHandler::canShowHoverText(const LLViewerObject *pObj) const
 {
 	return ( (!pObj) || (LL_PCODE_VOLUME != pObj->getPCode()) ||

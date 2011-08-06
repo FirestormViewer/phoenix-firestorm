@@ -32,7 +32,6 @@
 #include "message.h"
 
 #include "llagent.h"
-#include "llslurl.h"
 #include "llcommandhandler.h"
 #include "llfloaterreg.h"
 #include "llgroupmgr.h"
@@ -45,6 +44,7 @@
 #include "llpanelgroup.h"
 //-TT
 // [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+#include "llslurl.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
 

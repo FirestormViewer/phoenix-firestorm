@@ -148,7 +148,10 @@ BOOL LLFloaterMove::postBuild()
 
 	initMovementMode();
 
-	LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(LLFloaterMove::sUpdateFlyingStatus);
+//	LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(LLFloaterMove::sUpdateFlyingStatus);
+// [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+	LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(LLFloaterMove::sUpdateMovementStatus);
+// [/RLVa:KB]
 
 	return TRUE;
 }
@@ -477,12 +480,23 @@ void LLFloaterMove::updatePosition()
 }
 
 //static
-void LLFloaterMove::sUpdateFlyingStatus()
+//void LLFloaterMove::sUpdateFlyingStatus()
+//{
+//	LLFloaterMove *floater = LLFloaterReg::findTypedInstance<LLFloaterMove>("moveview");
+//	if (floater) floater->mModeControlButtonMap[MM_FLY]->setEnabled(gAgent.canFly());
+//	
+//}
+// [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+void LLFloaterMove::sUpdateMovementStatus()
 {
-	LLFloaterMove *floater = LLFloaterReg::findTypedInstance<LLFloaterMove>("moveview");
-	if (floater) floater->mModeControlButtonMap[MM_FLY]->setEnabled(gAgent.canFly());
-	
+	LLFloaterMove* pFloater = LLFloaterReg::findTypedInstance<LLFloaterMove>("moveview");
+	if (pFloater)
+	{
+		pFloater->mModeControlButtonMap[MM_RUN]->setEnabled(gRlvHandler.hasBehaviour(RLV_BHVR_ALWAYSRUN));
+		pFloater->mModeControlButtonMap[MM_FLY]->setEnabled(gAgent.canFly());
+	}
 }
+// [/RLVa:KB]
 
 void LLFloaterMove::showModeButtons(BOOL bShow)
 {
@@ -528,7 +542,10 @@ void LLFloaterMove::onOpen(const LLSD& key)
 //		anchor_panel, this,
 //		getDockTongue(), LLDockControl::TOP));
 
-	sUpdateFlyingStatus();
+//	sUpdateFlyingStatus();
+// [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+	sUpdateMovementStatus();
+// [/RLVa:KB]
 }
 
 //virtual
