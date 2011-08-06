@@ -2498,7 +2498,7 @@
                   <string>-DUNATTENDED:BOOL=OFF</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
-                  <string>-DFMOD=FALSE</string>
+                  <string>-DFMOD=TRUE</string>
                 </array>
               </map>
               <key>name</key>
