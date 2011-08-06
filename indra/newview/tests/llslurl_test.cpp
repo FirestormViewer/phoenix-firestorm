@@ -31,6 +31,35 @@
 #include "../llslurl.h"
 #include "../../llxml/llcontrol.h"
 #include "llsdserialize.h"
+
+// [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+// Stub implementation to get the test to compile properly
+#include "../rlvhandler.h"
+
+const std::string& RlvStrings::getString(const std::string& strStringName)
+{
+	static const std::string strMissing = "(Missing RLVa string)";
+	return strMissing;
+}
+
+bool RlvUtil::isNearbyRegion(const std::string& strRegion)
+{
+	return false;
+}
+
+RlvHandler::RlvHandler() : m_pGCTimer(NULL), m_pWLSnapshot(NULL)
+{
+	// Array auto-initialization to 0 is non-standard? (Compiler warning in VC-8.0)
+	memset(m_Behaviours, 0, sizeof(S16) * RLV_BHVR_COUNT);
+}
+
+RlvHandler::~RlvHandler()
+{
+}
+
+RlvHandler gRlvHandler;
+// [/RLVa:KB]
+
 //----------------------------------------------------------------------------               
 // Mock objects for the dependencies of the code we're testing                               
 
