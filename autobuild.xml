@@ -1182,9 +1182,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>92f1dff3249024c1534b55343ed79ea3</string>
+              <string>2fb7013f67a9353f39f9b616ce4fd203</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llconvexdecompositionstub/rev/227399/arch/CYGWIN/installer/llconvexdecompositionstub-0.3-windows-20110421.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/llconvexdecompositionstub-0.1-windows-20110806.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
