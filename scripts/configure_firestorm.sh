@@ -306,7 +306,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 	echo "Configuring $PLATFORM..."
         
 	if [ $WANTS_KDU -eq $TRUE ] ; then
-		KDU="-DUSE_KDU:BOOL=ON -D:INSTALL_PROPRIETARY=TRUE"
+		KDU="-DUSE_KDU:BOOL=ON"
 	else
 		KDU="-USE_KDU:BOOL=OFF"
 	fi
