@@ -308,7 +308,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 	if [ $WANTS_KDU -eq $TRUE ] ; then
 		KDU="-DUSE_KDU:BOOL=ON"
 	else
-		KDU="-USE_KDU:BOOL=OFF"
+		KDU="-DUSE_KDU:BOOL=OFF"
 	fi
 	if [ $WANTS_FMOD -eq $TRUE ] ; then
 		FMOD="-DFMOD:BOOL=ON"
