@@ -241,16 +241,19 @@ const LLUUID LLFloaterWorldMap::sHomeID( "10000000-0000-0000-0000-000000000001" 
 
 LLFloaterWorldMap::LLFloaterWorldMap(const LLSD& key)
 :	LLFloater(key),
-mInventory(NULL),
-mInventoryObserver(NULL),
-mFriendObserver(NULL),
-mCompletingRegionName(),
-mCompletingRegionPos(),
-mWaitingForTracker(FALSE),
-mIsClosing(FALSE),
-mSetToUserPosition(TRUE),
-mTrackedLocation(0,0,0),
-mTrackedStatus(LLTracker::TRACKING_NOTHING)
+	mInventory(NULL),
+	mInventoryObserver(NULL),
+	mFriendObserver(NULL),
+	mCompletingRegionName(),
+	mCompletingRegionPos(),
+	mWaitingForTracker(FALSE),
+	mIsClosing(FALSE),
+	mSetToUserPosition(TRUE),
+	mTrackedLocation(0,0,0),
+	mTrackedStatus(LLTracker::TRACKING_NOTHING),
+	mListFriendCombo(NULL),
+	mListLandmarkCombo(NULL),
+	mListSearchResults(NULL)
 {
 	gFloaterWorldMap = this;
 	
@@ -285,17 +288,20 @@ BOOL LLFloaterWorldMap::postBuild()
 	avatar_combo->selectFirstItem();
 	avatar_combo->setPrearrangeCallback( boost::bind(&LLFloaterWorldMap::onAvatarComboPrearrange, this) );
 	avatar_combo->setTextEntryCallback( boost::bind(&LLFloaterWorldMap::onComboTextEntry, this) );
+	mListFriendCombo = dynamic_cast<LLCtrlListInterface *>(avatar_combo);
 	
 	LLSearchEditor *location_editor = getChild<LLSearchEditor>("location");
 	location_editor->setFocusChangedCallback(boost::bind(&LLFloaterWorldMap::onLocationFocusChanged, this, _1));
 	location_editor->setKeystrokeCallback( boost::bind(&LLFloaterWorldMap::onSearchTextEntry, this));
 	
 	getChild<LLScrollListCtrl>("search_results")->setDoubleClickCallback( boost::bind(&LLFloaterWorldMap::onClickTeleportBtn, this));
+	mListSearchResults = childGetListInterface("search_results");
 	
 	LLComboBox *landmark_combo = getChild<LLComboBox>( "landmark combo");
 	landmark_combo->selectFirstItem();
 	landmark_combo->setPrearrangeCallback( boost::bind(&LLFloaterWorldMap::onLandmarkComboPrearrange, this) );
 	landmark_combo->setTextEntryCallback( boost::bind(&LLFloaterWorldMap::onComboTextEntry, this) );
+	mListLandmarkCombo = dynamic_cast<LLCtrlListInterface *>(landmark_combo);
 	
 	mCurZoomVal = log(LLWorldMapView::sMapScale)/log(2.f);
 	getChild<LLUICtrl>("zoom slider")->setValue(LLWorldMapView::sMapScale);
@@ -884,7 +890,7 @@ void LLFloaterWorldMap::friendsChanged()
 // No longer really builds a list.  Instead, just updates mAvatarCombo.
 void LLFloaterWorldMap::buildAvatarIDList()
 {
-	LLCtrlListInterface *list = childGetListInterface("friend combo");
+	LLCtrlListInterface *list = mListFriendCombo;
 	if (!list) return;
 	
     // Delete all but the "None" entry
@@ -914,7 +920,7 @@ void LLFloaterWorldMap::buildAvatarIDList()
 
 void LLFloaterWorldMap::buildLandmarkIDLists()
 {
-	LLCtrlListInterface *list = childGetListInterface("landmark combo");
+	LLCtrlListInterface *list = mListLandmarkCombo;
 	if (!list) return;
 	
     // Delete all but the "None" entry
@@ -992,7 +998,7 @@ F32 LLFloaterWorldMap::getDistanceToDestination(const LLVector3d &destination,
 
 void LLFloaterWorldMap::clearLocationSelection(BOOL clear_ui)
 {
-	LLCtrlListInterface *list = childGetListInterface("search_results");
+	LLCtrlListInterface *list = mListSearchResults;
 	if (list)
 	{
 		list->operateOnAll(LLCtrlListInterface::OP_DELETE);
@@ -1006,7 +1012,7 @@ void LLFloaterWorldMap::clearLandmarkSelection(BOOL clear_ui)
 {
 	if (clear_ui || !childHasKeyboardFocus("landmark combo"))
 	{
-		LLCtrlListInterface *list = childGetListInterface("landmark combo");
+		LLCtrlListInterface *list = mListLandmarkCombo;
 		if (list)
 		{
 			list->selectByValue( "None" );
@@ -1020,7 +1026,7 @@ void LLFloaterWorldMap::clearAvatarSelection(BOOL clear_ui)
 	if (clear_ui || !childHasKeyboardFocus("friend combo"))
 	{
 		mTrackedStatus = LLTracker::TRACKING_NOTHING;
-		LLCtrlListInterface *list = childGetListInterface("friend combo");
+		LLCtrlListInterface *list = mListFriendCombo;
 		if (list)
 		{
 			list->selectByValue( "None" );
@@ -1088,7 +1094,7 @@ void LLFloaterWorldMap::onLandmarkComboPrearrange( )
 		return;
 	}
 	
-	LLCtrlListInterface *list = childGetListInterface("landmark combo");
+	LLCtrlListInterface *list = mListLandmarkCombo;
 	if (!list) return;
 	
 	LLUUID current_choice = list->getCurrentID();
@@ -1124,7 +1130,7 @@ void LLFloaterWorldMap::onLandmarkComboCommit()
 		return;
 	}
 	
-	LLCtrlListInterface *list = childGetListInterface("landmark combo");
+	LLCtrlListInterface *list = mListLandmarkCombo;
 	if (!list) return;
 	
 	LLUUID asset_id;
@@ -1171,7 +1177,7 @@ void LLFloaterWorldMap::onAvatarComboPrearrange( )
 		return;
 	}
 	
-	LLCtrlListInterface *list = childGetListInterface("friend combo");
+	LLCtrlListInterface *list = mListFriendCombo;
 	if (!list) return;
 	
 	LLUUID current_choice;
@@ -1196,7 +1202,7 @@ void LLFloaterWorldMap::onAvatarComboCommit()
 		return;
 	}
 	
-	LLCtrlListInterface *list = childGetListInterface("friend combo");
+	LLCtrlListInterface *list = mListFriendCombo;
 	if (!list) return;
 	
 	const LLUUID& new_avatar_id = list->getCurrentID();
@@ -1593,7 +1599,7 @@ void LLFloaterWorldMap::updateSims(bool found_null_sim)
 
 void LLFloaterWorldMap::onCommitSearchResult()
 {
-	LLCtrlListInterface *list = childGetListInterface("search_results");
+	LLCtrlListInterface *list = mListSearchResults;
 	if (!list) return;
 	
 	LLSD selected_value = list->getSelectedValue();
