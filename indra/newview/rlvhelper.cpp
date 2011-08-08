@@ -272,7 +272,7 @@ RlvCommandOptionAdjustHeight::RlvCommandOptionAdjustHeight(const RlvCommand& rlv
 	: m_nPelvisToFoot(0.0f), m_nPelvisToFootDeltaMult(0.0f), m_nPelvisToFootOffset(0.0f)
 {
 	std::vector<std::string> cmdTokens;
-	boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of(";"));
+	boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of(std::string(";")));
 	if (1 == cmdTokens.size())
 	{
 		m_fValid = (LLStringUtil::convertToF32(cmdTokens[0], m_nPelvisToFootOffset));
@@ -290,7 +290,7 @@ RlvCommandOptionAdjustHeight::RlvCommandOptionAdjustHeight(const RlvCommand& rlv
 RlvCommandOptionTpTo::RlvCommandOptionTpTo(const RlvCommand &rlvCmd)
 {
 	std::vector<std::string> cmdTokens;
-	boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of("/"));
+	boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of(std::string("/")));
 
 	m_fValid = (3 == cmdTokens.size());
 	for (int idxAxis = 0; (idxAxis < 3) && (m_fValid); idxAxis++)
