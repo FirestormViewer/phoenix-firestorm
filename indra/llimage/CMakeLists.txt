@@ -63,6 +63,10 @@ target_link_libraries(llimage
     ${ZLIB_LIBRARIES}
     )
 
+if (USE_KDU)
+    add_definitions( -DUSE_KDU )
+endif (USE_KDU)
+
 # Add tests
 if (LL_TESTS)
   SET(llimage_TEST_SOURCE_FILES
