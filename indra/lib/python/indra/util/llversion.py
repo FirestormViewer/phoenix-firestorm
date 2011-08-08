@@ -39,7 +39,11 @@ def get_src_root():
     return os.path.abspath(os.path.realpath(indra_lib_python_indra_path + "/../../../../../"))
 
 def get_version_file_contents(version_type):
+    # AO , be aware of .in files
     filepath = get_src_root() + '/indra/llcommon/llversion%s.h' % version_type
+    if not (os.path.isfile(filepath)):
+        filepath = filepath + ".in"
+    
     file = open(filepath,"r")
     file_str = file.read()
     file.close()

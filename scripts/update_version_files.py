@@ -330,12 +330,18 @@ def main():
         try:
             # Read the entire file into a string
             full_fn = src_root + '/' + filename
-            file = open(full_fn,"r")
+            
+            #AO: Use .in files if we have them
+            full_infile = full_fn + ".in" 
+            if not (os.path.isfile(full_fn + ".in")): 
+                full_infile = full_fn
+            
+            file = open(full_infile,"r")
             file_str = file.read()
             file.close()
 
             if verbose:
-                print "Processing file:",filename
+                print "Processing file:",full_infile
             for rule in re_map[filename]:
                 repl = rule[1] % locals()
                 file_str = re.sub(rule[0], repl, file_str)

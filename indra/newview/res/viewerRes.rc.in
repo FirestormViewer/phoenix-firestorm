@@ -146,8 +146,8 @@ TOOLSIT-LEGACY          CURSOR                  "toolsit-legacy.cur"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION @VERSION_VIEWER_MAJOR@,@VERSION_VIEWER_MINOR@,@VERSION_VIEWER_PATCH@,@VERSION_BUILD@
- PRODUCTVERSION @VERSION_VIEWER_MAJOR@,@VERSION_VIEWER_MINOR@,@VERSION_VIEWER_PATCH@,@VERSION_BUILD@
+ FILEVERSION 2,6,1,18383
+ PRODUCTVERSION 2,6,1,18383
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -164,12 +164,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Phoenix Viewer"
             VALUE "FileDescription", "Phoenix Firestorm Viewer"
-            VALUE "FileVersion", "@VERSION_VIEWER@"
+            VALUE "FileVersion", "2.6.1.18383"
             VALUE "InternalName", "Phoenix Firestorm Viewer"
             VALUE "LegalCopyright", "Copyright © 2010 Phoenix Viewer"
             VALUE "OriginalFilename", "Firestorm Viewer.exe"
             VALUE "ProductName", "Phoenix Firestorm Viewer"
-            VALUE "ProductVersion", "@VERSION_VIEWER@"
+            VALUE "ProductVersion", "2.6.1.18383"
         END
     END
     BLOCK "VarFileInfo"
