@@ -30,9 +30,9 @@
 const S32 LL_VERSION_MAJOR = 2;
 const S32 LL_VERSION_MINOR = 6;
 const S32 LL_VERSION_PATCH = 1;
-const S32 LL_VERSION_BUILD = 18382;
+const S32 LL_VERSION_BUILD = 18383;
 
-const char * const LL_CHANNEL = "Firestorm-private-ubuntu";
+const char * const LL_CHANNEL = "Firestorm-private-devFS32";
 
 #if LL_DARWIN
 const char * const LL_VERSION_BUNDLE_ID = "com.phoenixviewer.firestorm.viewer";

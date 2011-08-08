@@ -939,10 +939,10 @@
           </map>
           <key>windows</key>
           <map>
-            <key>archive</key>
+            <key>archive</key> 
             <map>
               <key>hash</key>
-              <string>738b89ab6f27df7799dc5cfe86e169ed</string>
+              <string>bf69a5ecaa9af29e924a9691fcaff929</string>
               <key>url</key>
               <string>file:///c:/cygwin/opt/firestorm/kdu-6.4.1-windows-20110704.tar.bz2</string>
             </map>
@@ -1920,14 +1920,12 @@
                   <string>--build</string>
                   <string>--package</string>
                   <string>--platform darwin</string>
-                  <string>--fmod</string>
                 </array>
               </map>
               <key>configure</key>
 `             <map>
                 <key>options</key>
                 <array>
-                  <string>--fmod</string>
                   <string>--platform darwin</string>
                 </array>
               </map>
@@ -2136,7 +2134,6 @@
 `             <map>
                 <key>options</key>
                 <array>
-                  <string>--fmod</string>
                   <string>--platform linux32</string>
                 </array>
               </map>
@@ -2444,7 +2441,6 @@
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmod</string>
                   <string>--package</string>
                   <string>--version</string>
                   <string>--platform win32</string>
@@ -2483,9 +2479,6 @@
                   <string>-G</string>
                   <string>"Visual Studio 10"</string>
                   <string>-DUNATTENDED:BOOL=ON</string>
-                  <string>-DINSTALL_PROPRIETARY=TRUE</string>
-                  <string>-DUSE_KDU=FALSE</string>
-                  <string>-DFMOD=FALSE</string>
                 </array>
               </map>
               <key>name</key>
