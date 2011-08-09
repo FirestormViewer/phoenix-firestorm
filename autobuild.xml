@@ -2432,7 +2432,7 @@
                   <string>/p:Platform=Win32</string>
                   <string>/t:Build</string>
                   <string>/p:useenv=true</string>
-                  <string>/verbosity:normal</string>
+                  <string>/verbosity:minimal</string>
                   <string>/toolsversion:4.0</string>
                   <string>/p:"VCBuildAdditionalOptions= /incremental"</string>
                 </array>
