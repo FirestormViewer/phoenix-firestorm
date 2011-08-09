@@ -1392,7 +1392,7 @@
               <key>hash</key>
               <string>d1c0329b42321121f6300339b50ccaed</string>
               <key>url</key>
-              <string>file:///opt/firestorm/vivox-2.1.3010.6270-darwin-20090309.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/vivox-2.1.3010.6270-darwin-20090309.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1416,7 +1416,7 @@
               <key>hash</key>
               <string>462aa3dc1a9fcf7d87bb58a4bc84f52d</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/vivox-2.1.3010.6270fs-windows-20090309.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/vivox-2.1.3010.6270fs-windows-20090309.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
