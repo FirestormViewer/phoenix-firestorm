@@ -168,7 +168,7 @@ re_map['indra/llcommon/res/llcommon.rc'] = \
       'VALUE "ProductVersion", "%(VER_MAJOR)s.%(VER_MINOR)s.%(VER_PATCH)s.%(VER_BUILD)s"'))
 
 # Trailing ',' in top level tuple is special form to avoid parsing issues with one element tuple
-re_map['indra/newview/Info-SecondLife.plist'] = \
+re_map['indra/newview/Info-Firestorm.plist'] = \
     (('<key>CFBundleVersion</key>\n\t<string>[0-9.]+</string>',
       '<key>CFBundleVersion</key>\n\t<string>%(VER_MAJOR)s.%(VER_MINOR)s.%(VER_PATCH)s.%(VER_BUILD)s</string>'),)
 

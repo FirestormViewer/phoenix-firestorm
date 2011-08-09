@@ -60,7 +60,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>@VERSION_VIEWER_MAJOR@.@VERSION_VIEWER_MINOR@.@VERSION_VIEWER_PATCH@ (@VERSION_BUILD@)</string>
+	<string>2.6.1.18388</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 </dict>
