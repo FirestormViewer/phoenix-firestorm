@@ -16,6 +16,7 @@ indra/llcommon/llversionserver.h
 indra/llcommon/llversionviewer.h
 indra/llcommon/res/llcommon.rc
 indra/newview/Info-SecondLife.plist
+indra/newview/info-Firestorm.plist
 indra/.distcc
 build-linux-*
 build-darwin-*
