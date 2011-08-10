@@ -66,6 +66,7 @@ void RlvNotifications::onGiveToRLVConfirmation(const LLSD& notification, const L
 #ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 bool RlvSettings::fCompositeFolders = false;
 #endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
+bool RlvSettings::fCanOOC = true;
 bool RlvSettings::fLegacyNaming = true;
 bool RlvSettings::fNoSetEnv = false;
 bool RlvSettings::fShowNameTags = false;
@@ -86,6 +87,7 @@ void RlvSettings::initClass()
 		if (gSavedSettings.controlExists(RLV_SETTING_ENABLELEGACYNAMING))
 			gSavedSettings.getControl(RLV_SETTING_ENABLELEGACYNAMING)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fLegacyNaming));
 
+		fCanOOC = rlvGetSetting<bool>(RLV_SETTING_CANOOC, true);
 		fNoSetEnv = rlvGetSetting<bool>(RLV_SETTING_NOSETENV, false);
 
 		fShowNameTags = rlvGetSetting<bool>(RLV_SETTING_SHOWNAMETAGS, false);

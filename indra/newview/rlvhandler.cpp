@@ -774,7 +774,8 @@ bool RlvHandler::filterChat(std::string& strUTF8Text, bool fFilterEmote) const
 	{
 		fFilter = (utf8str_strlen(strUTF8Text) > 7);// Allow as long if it's 6 characters or less
 	}
-	else if ((strUTF8Text.length() < 4) || (strUTF8Text.compare(0, 2, "((")) || (strUTF8Text.compare(strUTF8Text.length() - 2, 2, "))")))
+	else if ( (!RlvSettings::getCanOOC()) ||
+			  (strUTF8Text.length() < 4) || (strUTF8Text.compare(0, 2, "((")) || (strUTF8Text.compare(strUTF8Text.length() - 2, 2, "))")) )
 	{
 		fFilter = true;								// Regular chat (not OOC)
 	}
