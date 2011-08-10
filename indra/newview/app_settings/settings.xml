@@ -68,6 +68,17 @@
       <key>Value</key>
       <string></string>
     </map>
+    <key>RestrainedLoveShowEllipsis</key>
+    <map>
+      <key>Comment</key>
+      <string>When TRUE, show "..." when someone speaks, while the avatar is prevented from hearing. When FALSE, don't show anything.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>RestrainedLoveStackWhenFolderBeginsWith</key>
     <map>
       <key>Comment</key>

@@ -3487,12 +3487,15 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 					if ( ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHAT)) && (!gRlvHandler.isException(RLV_BHVR_RECVCHAT, from_id))) &&
 						 ((!gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHATFROM)) || (gRlvHandler.isException(RLV_BHVR_RECVCHATFROM, from_id))) )
 					{
-						gRlvHandler.filterChat(mesg, false);
+						if ( (gRlvHandler.filterChat(mesg, false)) && (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis")) )
+							return;
 					}
 				}
 				else if ( ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTE)) && (!gRlvHandler.isException(RLV_BHVR_RECVEMOTE, from_id))) &&
 					      ((!gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTEFROM)) || (gRlvHandler.isException(RLV_BHVR_RECVEMOTEFROM, from_id))) )
 				{
+					if (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis"))
+						return;
 					mesg = "/me ...";
 				}
 			}

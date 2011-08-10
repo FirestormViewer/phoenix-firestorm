@@ -99,7 +99,7 @@ public:
 	bool canStand() const;
 	bool canTeleportViaLure(const LLUUID& idAgent) const;
 	bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;	// @touch
-	void filterChat(std::string& strUTF8Text, bool fFilterEmote) const;							// @sendchat, @recvchat and @redirchat
+	bool filterChat(std::string& strUTF8Text, bool fFilterEmote) const;							// @sendchat, @recvchat and @redirchat
 	bool redirectChatOrEmote(const std::string& strUTF8Test) const;								// @redirchat and @rediremote
 
 	// Command processing helper functions
