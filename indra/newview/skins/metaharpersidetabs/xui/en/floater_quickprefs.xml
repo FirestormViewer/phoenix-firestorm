@@ -107,7 +107,7 @@
             min_val="0"
             name="RenderAvatarPhysicsLOD"
             top_delta="-2"
-            width="140"
+            width="146"
             label_width="3"/>
         <text
             type="string"
@@ -136,7 +136,7 @@
             min_val="0"
             name="RenderVolumeLODFactor"
             top_delta="-2"
-            width="150"
+            width="157"
             label_width="14"/>
         <text
             type="string"
