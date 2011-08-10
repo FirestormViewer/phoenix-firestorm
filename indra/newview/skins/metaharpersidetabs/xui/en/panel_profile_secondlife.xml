@@ -115,7 +115,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
              layout="topleft"
              name="status"
              text_color="LtGray_50"
-             value="Online" />
+             value="" />
 
             <text
              top_pad="2"
