@@ -124,7 +124,7 @@ private:
 LLSysWellChiclet::Params::Params()
 : button("button")
 , unread_notifications("unread_notifications")
-, max_displayed_count("max_displayed_count", 999)
+, max_displayed_count("max_displayed_count", 99)
 {
 	button.name("button");
 	button.tab_stop(FALSE);
@@ -1709,7 +1709,7 @@ S32 LLChicletPanel::getTotalUnreadIMCount()
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 LLChicletNotificationCounterCtrl::Params::Params()
-: max_displayed_count("max_displayed_count", 999)
+: max_displayed_count("max_displayed_count", 99)
 {
 }
 
