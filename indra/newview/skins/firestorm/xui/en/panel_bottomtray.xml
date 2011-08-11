@@ -5,6 +5,7 @@
  bg_opaque_color="DkGray"
  chrome="true"
  follows="left|bottom|right"
+ focus_root="true"
  height="33"
  layout="topleft"
  left="0"
@@ -52,7 +53,7 @@
         filename="panel_nearby_chat_bar.xml"
         left="0"
         height="28"
-        width="308"
+        width="310"
         top="0"
         mouse_opaque="false"
         follows="left|right"
@@ -98,7 +99,7 @@
         -->
     <layout_panel
      auto_resize="false"
-     follows="right"
+     follows="left|right"
      height="28"
      layout="topleft"
      min_height="28"
@@ -136,6 +137,14 @@
             scale_image="true"
             control_name="PushToTalkToggle">
         </bottomtray_button>
+           <speak_button
+            halign="center"
+            label="Speak"
+            label_selected="Speak"
+            name="speak_btn"
+            pad_right="20"
+            tab_stop="true"
+            use_ellipses="true" />
     </layout_panel>
 
 
