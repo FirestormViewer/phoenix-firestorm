@@ -101,6 +101,9 @@
 #include "llvoicevisualizer.h" // Ventrella
 #include "llsdserialize.h"
 #include "lldebugmessagebox.h"
+
+#include "fsdata.h"
+
 extern F32 SPEED_ADJUST_MAX;
 extern F32 SPEED_ADJUST_MAX_SEC;
 extern F32 ANIM_SPEED_MAX;
@@ -2944,7 +2947,19 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		|| is_friend != mNameFriend
 		|| is_cloud != mNameCloud)
 				{
+
+					
 		LLColor4 name_tag_color = getNameTagColor(is_friend);
+
+		// Wolfspirit: If we don't need to display a friend,
+		// if we aren't self, if we use colored Clienttags and if we have a color
+		// then use that color as name_tag_color
+		static LLUICachedControl<bool> show_friends("NameTagShowFriends");
+		static LLUICachedControl<bool> use_colors("FSColorClienttags");
+		if(mHasClientTagColor && !(show_friends && is_friend) && use_colors && !this->isSelf()){
+			name_tag_color = mClientTagColor; 
+		}
+
 
 		clearNameTag();
 
@@ -2996,6 +3011,8 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 		static LLUICachedControl<bool> show_display_names("NameTagShowDisplayNames");
 		static LLUICachedControl<bool> show_usernames("NameTagShowUsernames");
+		static LLUICachedControl<bool> FScolor_username("FSColorUsername");
+		
 
 		if (LLAvatarNameCache::useDisplayNames())
 		{
@@ -3014,9 +3031,9 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				// Might be blank if name not available yet, that's OK
 				if (show_display_names)
 				{
+
 					if (!mClientTag.empty() && gSavedSettings.getBOOL("ShowViewerIDsOnNameTag"))
 					{
-						LLColor4 name_tag_color = getNameTagColor(is_friend); // could be modified later
 						addNameTagLine(av_name.mDisplayName+" (" + mClientTag + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif());
 					}
 					else
@@ -3029,7 +3046,12 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				if (show_usernames && !av_name.mIsDisplayNameDefault)
 				{
 					// *HACK: Desaturate the color
-					LLColor4 username_color = name_tag_color * 0.83f;
+					LLColor4 username_color;
+
+
+					// Wolfspirit: If we want to display the username as orange (like Phoenix).
+					if(!FScolor_username) username_color = name_tag_color * 0.83f;
+					else username_color = LLColor4::orange; //Temporary Orange. Maybe change that to something changeable via.
 					addNameTagLine(av_name.mUsername, username_color, LLFontGL::NORMAL,
 						LLFontGL::getFontSansSerifSmall());
 				}
@@ -3061,7 +3083,6 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				if (!mClientTag.empty() && gSavedSettings.getBOOL("ShowViewerIDsOnNameTag"))
 				{
 					lldebugs << "ClientTag is set! mClientTag=" << mClientTag << llendl;
-					LLColor4 name_tag_color = getNameTagColor(is_friend); // could be modified later
 					addNameTagLine(full_name+" (" + mClientTag + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif());
 				}
 				else
@@ -3254,6 +3275,8 @@ void LLVOAvatar::idleUpdateNameTagAlpha(BOOL new_name, F32 alpha)
 LLColor4 LLVOAvatar::getNameTagColor(bool is_friend)
 {
 	static LLUICachedControl<bool> show_friends("NameTagShowFriends");
+	static LLUICachedControl<bool> use_old_color("FSUseV1TagColor");
+
 	const char* color_name;
 	if (show_friends && is_friend)
 	{
@@ -3272,13 +3295,20 @@ LLColor4 LLVOAvatar::getNameTagColor(bool is_friend)
 		else
 		{
 			color_name = "NameTagMismatch";
-	}
+		}
 	}
 	else
 	{
 		// ...not using display names
 		color_name = "NameTagLegacy";
 	}
+
+	//Wolfspirit: If we don't display a friend, then use "NameTagV1"
+
+	if(use_old_color && color_name!="NameTagFriend"){
+		return LLUIColorTable::getInstance()->getColor("NameTagV1");
+	}
+
 	return LLUIColorTable::getInstance()->getColor( color_name );
 }
 
@@ -6959,41 +6989,71 @@ void LLVOAvatar::resolveClient(const LLUUID tag)
 // hard coded list to be quick and dirty. TODO: Replace with the usual XML file.
 // TODO: turn this into an enumeration-backed switch statement.
 {
-	if(tag == LLUUID("5d9581af-d615-bc16-2667-2f04f8eeefe4"))//green
+	// Wolfspirit: The clienttag list is loaded into FSData::LegacyClientList
+	LLSD taglist = FSData::getInstance()->LegacyClientList;
+	mHasClientTagColor = false;
+
+	// Wolfspirit: If the Taglist is complete and the taglist contains our requested key, then set the ClientName and ClientColor
+	// else try to use our fallback alternatives.
+	if(taglist.has("isComplete") && taglist.has(tag.asString())){
+		LLSD tagdata = taglist[tag.asString()];
+		mClientTag = tagdata["name"].asString();
+		mClientTagColor.setValue(tagdata["color"]);
+		mHasClientTagColor = true;
+	}
+	else if(tag == LLUUID("5d9581af-d615-bc16-2667-2f04f8eeefe4"))//green
 	{
 		mClientTag = "Phoenix";
+		mClientTagColor = LLColor4::green;
+		mHasClientTagColor =true;
 	}
 	else if(tag == LLUUID("e35f7d40-6071-4b29-9727-5647bdafb5d5"))//white
 	{
 		mClientTag = "Phoenix";
+		mClientTagColor = LLColor4::white;
+		mHasClientTagColor =true;
 	}
 	else if(tag == LLUUID("ae4e92fb-023d-23ba-d060-3403f953ab1a"))//pink
 	{
 		mClientTag = "Phoenix";
+		mClientTagColor = LLColor4::pink;
+		mHasClientTagColor =true;
 	}
 	else if(tag == LLUUID("e71b780e-1a57-400d-4649-959f69ec7d51"))//red
 	{
 		mClientTag = "Phoenix";
+		mClientTagColor = LLColor4::red;
+		mHasClientTagColor =true;
 	}
 	else if(tag == LLUUID("c1c189f5-6dab-fc03-ea5a-f9f68f90b018"))//orange
 	{
 		mClientTag = "Phoenix";
+		mClientTagColor = LLColor4::orange;
+		mHasClientTagColor =true;
 	}
 	else if(tag == LLUUID("8cf0577c-22d3-6a73-523c-15c0a90d6c27")) //purple
 	{
 		mClientTag = "Phoenix";
+		mClientTagColor = LLColor4::purple;
+		mHasClientTagColor =true;
 	}
 	else if(tag == LLUUID("5f0e7c32-38c3-9214-01f0-fb16a5b40128"))//yellow
 	{
 		mClientTag = "Phoenix";
+		mClientTagColor = LLColor4::yellow;
+		mHasClientTagColor =true;
 	}
 	else if(tag == LLUUID("5bb6e4a6-8e24-7c92-be2e-91419bb0ebcb"))//blue
 	{
 		mClientTag = "Phoenix";
+		mClientTagColor = LLColor4::blue;
+		mHasClientTagColor =true;
 	}
 	else if(tag == LLUUID("ed63fbd0-589e-fe1d-a3d0-16905efaa96b"))//default (red)
 	{
 		mClientTag = "Phoenix";
+		mClientTagColor = LLColor4::red;
+		mHasClientTagColor =true;
 	}
 	
 	else if(tag == LLUUID("c228d1cf-4b5d-4ba8-84f4-899a0796aa97"))//viewer 2.0
@@ -7045,8 +7105,7 @@ void LLVOAvatar::resolveClient(const LLUUID tag)
 	{
 		mClientTag = "Singularity";
 	}
-
-
+	
 	// Nothing found
 	
 	else 
@@ -7092,18 +7151,23 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 	// <clientTags>
 	LLTextureEntry* tex = getTE(0);
 	const LLUUID tag_uuid = tex->getID();
-	resolveClient(tag_uuid); // sets mClientTag
+
+	// Wolfspirit: Only resolve the Client via a list, when we want it to do that.
+	if(gSavedSettings.getS32("FSUseLegacyClienttags")>0) resolveClient(tag_uuid); // sets mClientTag
 	
-	if (mClientTag != "")
+	// Wolfspirit: Don't use old Version if we have a texture glow more then 0.0f (we are using the new System)
+	if (mClientTag != "" && !(tex->getGlow() > 0.0f))
 	{
 		//llinfos << "LLVOAvatar::processAvatarAppearance() Detected ClientTag=" << mClientTag << llendl;
 		mNameString.clear();
 	}	
 	else if(tex->getGlow() > 0.0f)
 	{
-				
+				// Wolfspirit: New Clienttag Version. Set Color and Text based on the Texture.
 		U32 tag_len = strnlen((const char*)&tag_uuid.mData[0], UUID_BYTES);
 		mClientTag = std::string((const char*)&tag_uuid.mData[0], tag_len);
+		mClientTagColor = tex->getColor();
+		mHasClientTagColor=true;
 		LLStringFn::replace_ascii_controlchars(mClientTag, LL_UNKNOWN_CHAR);
 		//llinfos << "LLVOAvatar::processAvatarAppearance() Detected ClientTag=" << mClientTag << llendl;
 		mNameString.clear();
@@ -7111,6 +7175,7 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 	else
 	{
 		mNameString.clear();
+		mHasClientTagColor=false;
 	}
 	// </clientTags>
 	

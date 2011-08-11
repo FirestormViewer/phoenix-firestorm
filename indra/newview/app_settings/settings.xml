@@ -13,7 +13,50 @@
     <key>Value</key>
     <integer>1</integer>
   </map>
-
+  <key>FSUseLegacyClienttags</key>
+  <map>
+    <key>Comment</key>
+    <string>0=Off, 1=Local Clienttags, 2=Download Clienttags (needs relog)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>2</integer>
+  </map>
+  <key>FSColorClienttags</key>
+  <map>
+    <key>Comment</key>
+    <string>If Clienttags should be colored</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>FSUseV1TagColor</key>
+  <map>
+    <key>Comment</key>
+    <string>If Clienttags should be colored</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSColorUsername</key>
+  <map>
+    <key>Comment</key>
+    <string>If Username should be colored orange</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
 	<key>FSPlayTypingSound</key>
 	<map>
 		<key>Comment</key>

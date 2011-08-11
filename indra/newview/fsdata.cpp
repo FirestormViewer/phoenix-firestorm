@@ -59,7 +59,10 @@ static const std::string versionid = llformat("%s %d.%d.%d (%d)", LL_CHANNEL, LL
 static const std::string fsdata_url = "http://phoenixviewer.com/app/fsdata/data.xml";
 static const std::string releases_url = "http://phoenixviewer.com/app/fsdata/releases.xml";
 static const std::string agents_url = "http://phoenixviewer.com/app/fsdata/agents.xml";
+static const std::string legacy_client_list = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
+
 //static const std::string blacklist_url = "http://phoenixviewer.com/app/fsdata/blacklist.xml";
+
 
 class FSDownloader : public LLHTTPClient::Responder
 {
@@ -92,6 +95,10 @@ public:
 		{
 			FSData::getInstance()->processAgents(status, result);
 		}
+		if (mFilename == legacy_client_list)
+		{
+			FSData::getInstance()->processClientTags(status, result);
+		}
 	}
 	
 private:
@@ -102,7 +109,7 @@ private:
 
 std::string FSData::blacklist_version;
 LLSD FSData::blocked_login_info = 0;
-LLSD FSData::phoenix_tags = 0;
+std::map<LLSD, std::string> legacy_tags;
 BOOL FSData::msDataDone = FALSE;
 
 FSData* FSData::sInstance;
@@ -260,7 +267,7 @@ void FSData::processData(U32 status, std::string body)
 // 	LLHTTPClient::get(url,new FSDownloader( FSData::msblacklist ),headers);
 
 	//TODO: add legisity client tags
-	//downloadClientTags();
+	downloadClientTags();
 }
 
 void FSData::processReleases(U32 status, std::string body)
@@ -348,29 +355,78 @@ void FSData::processAgents(U32 status, std::string body)
 	}
 }
 
-//TODO: add legisity tags support
-#if (0)
+
 void FSData::downloadClientTags()
 {
-	if(gSavedSettings.getBOOL("PhoenixDownloadClientTags"))
+
+	if(gSavedSettings.getS32("FSUseLegacyClienttags")>1)
 	{
-		//url = "http://phoenixviewer.com/app/client_tags/client_list.xml";
-		std::string url("http://phoenixviewer.com/app/client_tags/client_list_v2.xml");
-		// if(gSavedSettings.getBOOL("PhoenixDontUseMultipleColorTags"))
-		// {
-		//	 url="http://phoenixviewer.com/app/client_list_unified_colours.xml";
-		// }
 		LLSD headers;
-		LLHTTPClient::get(url,new FSDownloader( FSData::updateClientTags),headers);
+		headers.insert("User-Agent", LLViewerMedia::getCurrentUserAgent());
+		headers.insert("viewer-version", versionid);
+		LLHTTPClient::get(legacy_client_list,new FSDownloader(legacy_client_list),headers);
 		LL_INFOS("CLIENTTAGS DOWNLOADER") << "Getting new tags" << LL_ENDL;
 	}
-	else
+	else if(gSavedSettings.getS32("FSUseLegacyClienttags")>0)
 	{
 		updateClientTagsLocal();
 	}
 	
 }
 
+
+void FSData::processClientTags(U32 status,std::string body)
+{
+
+	if(status != 200)
+	{
+		LL_WARNS("ClientTags") << "client_list_v2.xml download failed with status of " << status << LL_ENDL;
+		// Wolfspirit: If something failes, try to use the local file
+		updateClientTagsLocal();
+		return;
+	}
+  
+	FSData* self = getInstance();
+	LLSD tags;
+	std::istringstream istr(body);
+	LLSDSerialize::fromXML(tags, istr);
+	if(tags.isDefined())
+	{
+		
+		if(tags.has("isComplete"))
+		{
+			self->LegacyClientList = tags;
+			// save the download to a file
+			const std::string tags_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml");
+			LL_INFOS("Data") << "Saving " << tags_filename << LL_ENDL;
+			llofstream tags_file;
+			tags_file.open(tags_filename);
+			LLSDSerialize::toPrettyXML(tags, tags_file);
+			tags_file.close();
+		}
+	}
+	
+}
+
+void FSData::updateClientTagsLocal()
+{
+	std::string client_list_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml");
+	FSData* self = getInstance();
+	llifstream xml_file(client_list_filename);
+	LLSD data;
+	if(!xml_file.is_open()) return;
+	if(LLSDSerialize::fromXML(data, xml_file) >= 1)
+	{
+		if(data.has("isComplete"))
+		{
+			self->LegacyClientList = data;
+		}
+
+		xml_file.close();
+	}
+}
+
+#if(0)
 void FSData::msblacklist(U32 status,std::string body)
 {
 	if(status != 200)
@@ -399,40 +455,6 @@ void FSData::msblacklist(U32 status,std::string body)
 	else
 	{
 		LL_INFOS("Blacklist") << "Empty blacklist.xml" << LL_ENDL;
-	}
-}
-
-void FSData::updateClientTags(U32 status,std::string body)
-{
-    std::string client_list_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml");
-
-    std::istringstream istr(body);
-    LLSD data;
-    if(LLSDSerialize::fromXML(data, istr) >= 1)
-	{
-		llofstream export_file;
-        export_file.open(client_list_filename);
-        LLSDSerialize::toPrettyXML(data, export_file);
-        export_file.close();
-    }
-}
-
-void FSData::updateClientTagsLocal()
-{
-	std::string client_list_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml");
-
-	llifstream xml_file(client_list_filename);
-	LLSD data;
-	if(!xml_file.is_open()) return;
-	if(LLSDSerialize::fromXML(data, xml_file) >= 1)
-	{
-		if(data.has("phoenixTags"))
-		{
-			phoenix_tags = data["phoenixTags"];
-			LLPrimitive::tagstring = FSData::phoenix_tags[gSavedSettings.getString("PhoenixTagColor")].asString();
-		}
-
-		xml_file.close();
 	}
 }
 

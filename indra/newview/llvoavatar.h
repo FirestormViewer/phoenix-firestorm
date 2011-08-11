@@ -850,6 +850,8 @@ private:
 	void			resolveClient(const LLUUID tag);
 	std::string		mNameString;		// UTF-8 title + name + status
 	std::string		mClientTag;
+	LLColor4		mClientTagColor;
+	bool			mHasClientTagColor;
 	std::string  	mTitle;
 	bool	  		mNameAway;
 	bool	  		mNameBusy;

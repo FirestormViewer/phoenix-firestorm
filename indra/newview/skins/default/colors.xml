@@ -771,6 +771,9 @@
      name="NameTagLegacy"
      reference="White" />
     <color
+     name="NameTagV1"
+     value="0.98 0.69 0.36 1.0" />
+    <color
      name="NameTagMatch"
      reference="White" />
     <color

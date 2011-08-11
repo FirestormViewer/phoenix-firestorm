@@ -54,9 +54,9 @@ public:
 
 	static void processReleases(U32 status, std::string body);
 	static void processAgents(U32 status, std::string body);
+	static void processClientTags(U32 status, std::string body);
 	static void msdata(U32 status, std::string body);
 	static void msblacklist(U32 status, std::string body);
-	static void updateClientTags(U32 status,std::string body);
 	static void updateClientTagsLocal();
 	static const U8 EM_SUPPORT		= 0x01;
 	static const U8 EM_DEVELOPER	= 0x02;
@@ -80,8 +80,9 @@ public:
 	static std::string getMyInfo(int part =0);
 	static void callbackReqInfo(const LLSD &notification, const LLSD &response);
 	static void sendInfo(LLUUID destination, LLUUID sessionid, std::string myName, EInstantMessage dialog);
-
-	static LLSD phoenix_tags;
+	
+	LLSD FSData::LegacyClientList;
+	
 	std::map<std::string, LLSD> blocked_versions;
 	static LLSD blocked_login_info;
 	// std::string ms_motd;
