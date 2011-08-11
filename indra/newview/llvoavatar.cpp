@@ -3305,7 +3305,7 @@ LLColor4 LLVOAvatar::getNameTagColor(bool is_friend)
 
 	//Wolfspirit: If we don't display a friend, then use "NameTagV1"
 
-	if(use_old_color && color_name!="NameTagFriend"){
+	if(use_old_color && !(show_friends && is_friend)){
 		return LLUIColorTable::getInstance()->getColor("NameTagV1");
 	}
 

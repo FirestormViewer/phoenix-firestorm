@@ -81,7 +81,7 @@ public:
 	static void callbackReqInfo(const LLSD &notification, const LLSD &response);
 	static void sendInfo(LLUUID destination, LLUUID sessionid, std::string myName, EInstantMessage dialog);
 	
-	LLSD FSData::LegacyClientList;
+	LLSD LegacyClientList;
 	
 	std::map<std::string, LLSD> blocked_versions;
 	static LLSD blocked_login_info;
