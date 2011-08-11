@@ -729,12 +729,13 @@ void LLSDXMLParser::Impl::endElementHandler(const XML_Char* name)
 		
 		case ELEMENT_REAL:
 			{
-				F64 r;
+// SA: it seems sscanf does not always give expected result (for instance 0.009999999776482582092285156 is decoded as 0 under Linux)
+/*				F64 r;
 				if ( sscanf(mCurrentContent.c_str(), "%lf", &r ) == 1 )
 				{	// See if sscanf works - it's faster
 					value = r;
 				}
-				else
+				else*/
 				{
 					value = LLSD(mCurrentContent).asReal();
 				}
