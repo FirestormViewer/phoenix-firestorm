@@ -121,13 +121,23 @@
    left="30" />
   <check_box
    control_name="FirstPersonAvatarVisible"
-   follows="left|top"
+   follows="top"
    height="20"
    label="Show avatar in Mouselook"
    layout="topleft"
    left_pad="30"
    name="first_person_avatar_visible"
    width="256" />
+  <check_box
+ control_name="FSShowMouselookInstructions"
+ follows="left|top"
+ height="16"
+ initial_value="true"
+ label="Show Mouselook instructions"
+ layout="topleft"
+ name="mouselook_instructions_visible"
+ tool_tip="Show Mouselook Instructions"
+ width="256" />
   <text
    type="string"
    length="1"
