@@ -779,6 +779,7 @@ void LLChatHistory::lookupDisplayNames(const LLChat& chat)
 void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LLStyle::Params& input_append_params)
 {
 	bool use_plain_text_chat_history = args["use_plain_text_chat_history"].asBoolean();
+	bool show_timestamps_in_nearby_chat = args["show_timestamps_in_nearby_chat"].asBoolean();
 	// AO: Do any display name lookups in plaintext chat headers as early as possible to give the cache maximal 
 	//time to get an answer back before it's needed.
 	if (use_plain_text_chat_history)
@@ -901,7 +902,14 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			timestamp_style.color(timestamp_color);
 			timestamp_style.readonly_color(timestamp_color);
 		}
-		mEditor->appendText("[" + chat.mTimeStr + "] ", mEditor->getText().size() != 0, timestamp_style);
+		if (show_timestamps_in_nearby_chat)
+		{
+		   mEditor->appendText("[" + chat.mTimeStr + "] ", mEditor->getText().size() != 0, timestamp_style);
+		} 
+		else 
+		{
+		   mEditor->appendLineBreakSegment(timestamp_style);
+		}
 
 		if (utf8str_trim(chat.mFromName).size() != 0)
 		{
