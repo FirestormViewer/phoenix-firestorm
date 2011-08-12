@@ -152,6 +152,7 @@ public:
 private:
 	typedef enum e_resize_state
 	{
+		// LL Stock buttons
 		RS_NORESIZE				= 0x0000,
 		RS_CHICLET_PANEL		= 0x0001,
 		RS_CHATBAR_INPUT		= 0x0002,
@@ -173,12 +174,15 @@ private:
 		RS_BUTTON_HOWTO			= 0x20000,
 		RS_BUTTON_SPLITTER_1	= 0x40000,
 		RS_BUTTON_SPLITTER_2	= 0x80000,
-		//-TT 2.6.9 - changed values to let the defaults be same as LL
-		RS_BUTTON_AO			= 0x10000,		// ## Zi: Animation Overrider
-		// sidebar buttons -Zi
+		
+		// FS Buttons
+		RS_BUTTON_AO			= 0x100000,		// ## Zi: Animation Overrider
 		RS_BUTTON_APPEARANCE	= 0x200000,
 		RS_BUTTON_INVENTORY		= 0x400000,
 		RS_BUTTON_QUICKPREFS	= 0x800000,		// Quick Preferences panel -WoLf
+		RS_BUTTON_PLACES		= 0x1000000,
+		RS_BUTTON_HOME			= 0x2000000,
+		RS_BUTTON_ME			= 0x4000000,
 
 		/*
 		Once new button that can be hidden on resize is added don't forget to update related places:
@@ -193,9 +197,10 @@ private:
 		 */
 		RS_BUTTONS_CAN_BE_HIDDEN = RS_BUTTON_SNAPSHOT | RS_BUTTON_CAMERA | RS_BUTTON_MOVEMENT | RS_BUTTON_GESTURES
 									| RS_BUTTON_BUILD | RS_BUTTON_SEARCH | RS_BUTTON_WORLD_MAP | RS_BUTTON_MINI_MAP 
-									| RS_BUTTON_AO	// ## Zi: Animation Overrider
-									| RS_BUTTON_PEOPLE | RS_BUTTON_APPEARANCE | RS_BUTTON_INVENTORY		// more sidebar buttons -Zi
-									| RS_BUTTON_QUICKPREFS // Quick Preferences panel -WoLf
+									| RS_BUTTON_DESTINATIONS | RS_BUTTON_AVATARS
+									| RS_BUTTON_PROFILE | RS_BUTTON_HOWTO | RS_BUTTON_PEOPLE | RS_BUTTON_APPEARANCE 
+									| RS_BUTTON_INVENTORY | RS_BUTTON_PLACES | RS_BUTTON_HOME | RS_BUTTON_ME	
+		// AO: Removed AO and QUickprefs from the "can be hidden" list, due to the strong number of use cases for these, even in very small screens
 
 	}EResizeState;
 
