@@ -116,16 +116,15 @@ LLDir_Win32::LLDir_Win32()
 	mExecutableDir = utf16str_to_utf8str(llutf16string(w_str));
 #endif
 
-	if (mExecutableDir.find("indra") == std::string::npos)
-	{
-		// Running from installed directory.  Make sure current
-		// directory isn't something crazy (e.g. if invoking from
-		// command line).
-		SetCurrentDirectory(utf8str_to_utf16str(mExecutableDir).c_str());
-		GetCurrentDirectory(MAX_PATH, w_str);
-		mWorkingDir = utf16str_to_utf8str(llutf16string(w_str));
-	}
+	
 	mAppRODataDir = mWorkingDir;	
+
+	if(! LLFile::isdir(mAppRODataDir + mDirDelimiter + "skins") || ! LLFile::isdir(mAppRODataDir + mDirDelimiter + "app_settings"))
+	{
+		// What? No skins or app_settings in the working dir?
+		// Try the executable's directory.
+		mAppRODataDir = mExecutableDir;
+	}
 
 	llinfos << "mAppRODataDir = " << mAppRODataDir << llendl;
 
