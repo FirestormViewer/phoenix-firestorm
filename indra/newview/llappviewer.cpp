@@ -2224,11 +2224,12 @@ bool LLAppViewer::initConfiguration()
 	// - load overrides from user_settings 
 	loadSettingsFromDirectory("User");
 
+	/* //Wolfspirit: Temporary fix for NOT loading settings_minimal.xml
 	if (gSavedSettings.getBOOL("FirstRunThisInstall"))
 	{
 		gSavedSettings.setString("SessionSettingsFile", "settings_minimal.xml");
 		gSavedSettings.setBOOL("FirstRunThisInstall", FALSE);
-	}
+	}*/
 
 	if (clp.hasOption("sessionsettings"))
 	{
