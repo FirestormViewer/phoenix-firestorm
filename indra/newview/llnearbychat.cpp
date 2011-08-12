@@ -222,11 +222,10 @@ std::string appendTime()
 	utc_time = time_corrected();
 	std::string timeStr ="["+ LLTrans::getString("TimeHour")+"]:["
 		+LLTrans::getString("TimeMin")+"]";
-
 	if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
 	{
-	   timeStr += ":["
-	     	+LLTrans::getString("TimeSec")+"]";
+		timeStr += ":["
+			+LLTrans::getString("TimeSec")+"]";
 	}
 
 	LLSD substitution;
@@ -242,20 +241,16 @@ void	LLNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 {
 	LLChat& tmp_chat = const_cast<LLChat&>(chat);
 	bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
-	bool show_timestamps_in_nearby_chat = gSavedSettings.getBOOL("FSTimestampsInNearbyChat");
-   	if (show_timestamps_in_nearby_chat)
-	{
-		if(tmp_chat.mTimeStr.empty())
-			tmp_chat.mTimeStr = appendTime();
 
-	} 
+	if(tmp_chat.mTimeStr.empty())
+		tmp_chat.mTimeStr = appendTime();
 
+	
 	if (!chat.mMuted)
 	{
 		tmp_chat.mFromName = chat.mFromName;
 		LLSD chat_args = args;
 		chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
-		chat_args["show_timestamps_in_nearby_chat"] = show_timestamps_in_nearby_chat;
 		mChatHistory->appendMessage(chat, chat_args);
 	}
 
