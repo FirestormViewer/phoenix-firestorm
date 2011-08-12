@@ -1927,6 +1927,7 @@
                 <key>options</key>
                 <array>
                   <string>--platform darwin</string>
+		  <string>--package</string>
                 </array>
               </map>
               <key>name</key>
@@ -2135,6 +2136,7 @@
                 <key>options</key>
                 <array>
                   <string>--platform linux32</string>
+		  <string>--package</string>
                 </array>
               </map>
               <key>name</key>

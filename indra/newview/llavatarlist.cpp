@@ -263,6 +263,19 @@ LLAvatarList::LLAvatarList(const Params& p)
 		mLITUpdateTimer->start();
 	}
 	
+	// AO: Because Avatarlist is shared in so many places, some without good initialization
+	// one-off exceptions here
+	if (getName() == "speakers_list")
+	{
+		mShowInfoBtn = true;
+	}
+	else 
+	{
+		mShowInfoBtn = false;
+	}
+
+
+	
 	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&LLAvatarList::handleDisplayNamesOptionChanged, this));
 }
 
@@ -802,7 +815,7 @@ BOOL LLAvalineListItem::postBuild()
 		setOnline(true);
 		showLastInteractionTime(false);
 		setShowProfileBtn(false);
-		setShowInfoBtn(false);
+		
 		mAvatarIcon->setValue("Avaline_Icon");
 		mAvatarIcon->setToolTip(std::string(""));
 	}
