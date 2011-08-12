@@ -150,8 +150,6 @@ BOOL  LLAvatarListItem::postBuild()
 	mIconPermissionEditTheirs->setVisible(false);
 	
 	
-	
-	
 	// radar
 	mNearbyRange = getChild<LLTextBox>("radar_range");
 	mNearbyRange->setValue("N/A");
@@ -170,8 +168,8 @@ BOOL  LLAvatarListItem::postBuild()
 	mSpeakingIndicator = getChild<LLOutputMonitorCtrl>("speaking_indicator");
 	mInfoBtn = getChild<LLButton>("info_btn");
 	mProfileBtn = getChild<LLButton>("profile_btn");
-
-	mInfoBtn->setVisible(true); // changed from false to have the info button always shown	-WoLf
+	
+	mInfoBtn->setVisible(false); // AO: enable this by calling setShowInfoButton
 	mInfoBtn->setClickedCallback(boost::bind(&LLAvatarListItem::onInfoBtnClick, this));
 
 	mProfileBtn->setVisible(false);
@@ -205,24 +203,8 @@ S32 LLAvatarListItem::notifyParent(const LLSD& info)
 void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( true);
-	
-	// AO: behave differently based on which avlist we are. Should move this into XUI or subclasses.
-	std::string listName = getParent()->getParent()->getName();	
-	if ( listName == "speakers_list" )
-	{
-		//LLButton* b1 = getChild<LLButton>("info_btn");
-		//b1->setVisible(TRUE);
-		//[RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d	
-		mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
-	}
 
-// AO: We normally do not show the hover-over items because of space contraints and ease of access through better known context menu.
-//	mInfoBtn->setVisible(mShowInfoBtn);
-//	mProfileBtn->setVisible(mShowProfileBtn);
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
-//	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
-//	mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
-// [/RLVa:KB]
+	// AO, removed on-hover visibility. Don't do this. instead flip info buttons on full-time in postbuild.
 
 	mHovered = true;
 	LLPanel::onMouseEnter(x, y, mask);
@@ -368,6 +350,7 @@ void LLAvatarListItem::setLastInteractionTime(U32 secs_since)
 void LLAvatarListItem::setShowInfoBtn(bool show)
 {
 	mShowInfoBtn = show;
+	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
 }
 
 void LLAvatarListItem::setShowProfileBtn(bool show)
