@@ -1161,7 +1161,7 @@ void LLPanelPeople::updateNearbyList()
 	{
 		mRadarFrameCount++;
 		S32 chan = gSavedSettings.getS32("RadarAlertChannel");
-		std::string msg = llformat("/%d %d,%d",chan,mRadarFrameCount,(int)mRadarEnterAlerts.size());
+		std::string msg = llformat("%d,%d",mRadarFrameCount,(int)mRadarEnterAlerts.size());
 		while(mRadarEnterAlerts.size() > 0)
 		{
 			int sz = min(MAX_AVATARS_PER_ALERT,(U32)mRadarEnterAlerts.size());
@@ -1186,8 +1186,8 @@ void LLPanelPeople::updateNearbyList()
 	if (mRadarLeaveAlerts.size() > 0)
 	{
 		mRadarFrameCount++;
-		U32 chan = gSavedSettings.getU32("RadarAlertChannel");
-		std::string msg = llformat("/%d %d,-%d",chan,mRadarFrameCount,(int)mRadarLeaveAlerts.size());
+		S32 chan = gSavedSettings.getS32("RadarAlertChannel");
+		std::string msg = llformat("%d,-%d",mRadarFrameCount,(int)mRadarLeaveAlerts.size());
 		while(mRadarLeaveAlerts.size() > 0)
 		{ 
 			int sz = min(MAX_AVATARS_PER_ALERT,(U32)mRadarLeaveAlerts.size());
@@ -1196,7 +1196,17 @@ void LLPanelPeople::updateNearbyList()
 				msg = llformat("%s,%s",msg.c_str(),mRadarLeaveAlerts.back().asString().c_str());
 				mRadarLeaveAlerts.pop_back();
 			}
-			LLNearbyChatBar::sendChatFromViewer(msg,CHAT_TYPE_WHISPER,FALSE);
+			LLMessageSystem* msgs = gMessageSystem;
+			msgs->newMessage("ScriptDialogReply");
+			msgs->nextBlock("AgentData");
+			msgs->addUUID("AgentID", gAgent.getID());
+			msgs->addUUID("SessionID", gAgent.getSessionID());
+			msgs->nextBlock("Data");
+			msgs->addUUID("ObjectID", gAgent.getID());
+			msgs->addS32("ChatChannel", chan);
+			msgs->addS32("ButtonIndex", 1);
+			msgs->addString("ButtonLabel", msg.c_str());
+			gAgent.sendReliableMessage();
 		}
 	}   
 
