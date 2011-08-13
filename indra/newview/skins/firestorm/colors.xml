@@ -10,7 +10,7 @@
    var. 5 = #AB7B61 = rgb(171,123,97) 0.76 0.58 0.49
 
 	-->
-	 <color
+	<color
 	 name="ltgrey123"
 	 value="0.33333  0.33333  0.33333 1.0" />
 	 <color
@@ -188,6 +188,9 @@
 	 name="SL-MidBlue"
 	 value="0.3 0.6 0.9 1" />
 	<color
+	 name="OldGray_63"
+	 value="0.243 0.243 0.243 0.63" />
+	<color
 	 name="Brown"
 	 value="0.225 0.100 0.05 1" />
 	<color
@@ -300,7 +303,15 @@
      value="White" />
 
   <!-- UI Definitions -->
-
+  	<color
+	 name="HintTitle"
+	 reference="SchemeLightest" />
+	<color
+	 name="HintText"
+	 reference="LtGray" />
+	<color
+	 name="HintBg"
+	 reference="Black" />
     <color
      name="AccordionHeaderTextColor"
      reference="LtGray" />
@@ -343,7 +354,7 @@
      reference="AvatarListItemIconOfflineColor" />
     <color
      name="BackgroundChatColor"
-     reference="ltgrey123" />
+     reference="DkGray" />
     <color
      name="ButtonBorderColor"
      reference="Unused?" />
@@ -359,10 +370,10 @@
 <!-- Color Changed -->
     <color
      name="ButtonImageColor"
-     reference="White" />
+     reference="SL-White" />
     <color
      name="ButtonLabelColor"
-     reference="White" />
+     reference="LtGray" />
     <color
      name="ButtonLabelDisabledColor"
      reference="White_25" />
@@ -374,7 +385,7 @@
      reference="White_25" />
     <color
      name="ButtonSelectedBgColor"
-     reference="DkGray" />
+     reference="Unused?" />
     <color
      name="ButtonSelectedColor"
      reference="Unused?" />
@@ -386,10 +397,10 @@
      reference="Unused?" />
     <color
      name="ChatHistoryBgColor"
-     reference="DkGray_66" />
+     reference="OldGray_63" />
     <color
      name="ChatHistoryTextColor"
-     reference="White_25" />
+     reference="LtGray" />
     <color
      name="ColorDropShadow"
      reference="Black_50" />
@@ -556,10 +567,10 @@
      reference="White" />
     <color
      name="MapAvatarColor"
-     reference="Red" />
+     reference="Green" />
     <color
      name="MapAvatarFriendColor"
-     reference="Green" />
+     reference="Yellow" />
     <color
      name="MapFrustumColor"
      reference="White_10" />
@@ -666,7 +677,7 @@
      reference="AccentColor" />
     <color
      name="ObjectChatColor"
-     reference="ColorPaletteEntry30" />
+     value="0.699 0.899 0.699 1" />
     <color
      name="OverdrivenColor"
      reference="Red" />
@@ -754,7 +765,7 @@
      reference="White" />
     <color
      name="TextBgReadOnlyColor"
-	 reference="White_05" />
+	 reference="OldGray_63" />
     <color
      name="TextBgWriteableColor"
      reference="LtGray" />
