@@ -2213,7 +2213,7 @@
                   <string>--config</string>
                   <string>Debug</string>
                   <string>--startup</string>
-                  <string>secondlife-bin</string>
+                  <string>firestorm-bin</string>
                 </array>
                 <key>options</key>
                 <array>
@@ -2288,7 +2288,7 @@
                   <string>--config</string>
                   <string>RelWithDebInfo</string>
                   <string>--startup</string>
-                  <string>secondlife-bin</string>
+                  <string>firestorm-bin</string>
                 </array>
                 <key>options</key>
                 <array>
@@ -2366,7 +2366,7 @@
                   <string>--config</string>
                   <string>Release</string>
                   <string>--startup</string>
-                  <string>secondlife-bin</string>
+                  <string>firestorm-bin</string>
                 </array>
                 <key>options</key>
                 <array>
