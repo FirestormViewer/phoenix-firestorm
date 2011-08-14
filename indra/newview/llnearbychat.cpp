@@ -241,9 +241,13 @@ void	LLNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 {
 	LLChat& tmp_chat = const_cast<LLChat&>(chat);
 	bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
-
-	if(tmp_chat.mTimeStr.empty())
-		tmp_chat.mTimeStr = appendTime();
+	bool hide_timestamps_nearby_chat = gSavedSettings.getBOOL("FSHideTimestampsNearbyChat");
+	// [FIRE-1641 : SJ]: Option to hide timestamps in nearby chat - only add Timestamp when hide_timestamps_nearby_chat is not TRUE
+	if (!hide_timestamps_nearby_chat)
+	{
+		if(tmp_chat.mTimeStr.empty())
+			tmp_chat.mTimeStr = appendTime();
+	}
 
 	
 	if (!chat.mMuted)
@@ -251,6 +255,7 @@ void	LLNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 		tmp_chat.mFromName = chat.mFromName;
 		LLSD chat_args = args;
 		chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
+		chat_args["hide_timestamps_nearby_chat"] = hide_timestamps_nearby_chat;
 		mChatHistory->appendMessage(chat, chat_args);
 	}
 
