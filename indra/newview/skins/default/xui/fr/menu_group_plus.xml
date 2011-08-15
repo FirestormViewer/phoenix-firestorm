@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--alba: label modification-->
 <menu name="menu_group_plus">
-	<menu_item_call label="Rejoindre des groupes..." name="item_join"/>
-	<menu_item_call label="Nouveau groupe..." name="item_new"/>
+	<menu_item_call label="Chercher un groupe..." name="item_join"/>
+	<menu_item_call label="Créer un groupe..." name="item_new"/>
 </menu>

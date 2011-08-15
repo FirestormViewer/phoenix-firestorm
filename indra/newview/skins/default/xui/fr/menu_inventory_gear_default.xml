@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--alba changed 'objets trouvés' → 'objets renvoyés'-->
 <toggleable_menu name="menu_gear_default">
 	<menu_item_call label="Nouvelle fenêtre d&apos;inventaire" name="new_window"/>
 	<menu_item_check label="Trier par nom" name="sort_by_name"/>
@@ -8,7 +9,7 @@
 	<menu_item_call label="Afficher les filtres" name="show_filters"/>
 	<menu_item_call label="Réinitialiser les filtres" name="reset_filters"/>
 	<menu_item_call label="Fermer tous les dossiers" name="close_folders"/>
-	<menu_item_call label="Vider les objets trouvés" name="empty_lostnfound"/>
+	<menu_item_call label="Vider les objets renvoyés" name="empty_lostnfound"/>
 	<menu_item_call label="Enregistrer la texture sous" name="Save Texture As"/>
 	<menu_item_call label="Partager" name="Share"/>
 	<menu_item_call label="Trouver l&apos;original" name="Find Original"/>

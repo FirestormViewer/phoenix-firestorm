@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--alba: changed 'pluriel' to 'singulier' (grammatical mistake)-->
 <menu name="Gear COF">
-	<menu label="Nouveaux habits" name="COF.Gear.New_Clothes"/>
-	<menu label="Nouvelles parties du corps" name="COF.Geear.New_Body_Parts"/>
+	<menu label="Nouvel habit" name="COF.Gear.New_Clothes"/>
+	<menu label="Nouvelle partie du corps" name="COF.Geear.New_Body_Parts"/>
 </menu>

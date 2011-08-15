@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--alba: added grid text + modified 'start location' → 'landing point'-->
 <panel name="panel_login">
 	<panel.string name="create_account_url">
 		http://fr.secondlife.com/registration/
@@ -25,13 +26,16 @@
 				<combo_box.item label="Avancé" name="Advanced"/>
 			</combo_box>
 			<text name="start_location_text">
-				Lieu de départ :
+				Point d'entrée :
 			</text>
 			<combo_box name="start_location_combo">
 				<combo_box.item label="Dernier emplacement" name="MyLastLocation"/>
 				<combo_box.item label="Domicile" name="MyHome"/>
 				<combo_box.item label="&lt;Saisir le nom de la région&gt;" name="Typeregionname"/>
 			</combo_box>
+			<text name="grid_selection_text">
+				Grille :
+			</text>
 		</layout_panel>
 		<layout_panel name="links">
 			<text name="create_new_account_text">
