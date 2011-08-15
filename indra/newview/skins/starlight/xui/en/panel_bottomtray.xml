@@ -131,7 +131,7 @@
          height="28"
          layout="topleft"
          min_height="28"
-         min_width="59"
+         min_width="65"
 		 left_delta="0"
          mouse_opaque="false"
          name="speak_panel"
@@ -154,14 +154,20 @@
                 </show_button>
                 <!-- do not remove halign attribute with default value. otherwise it can't be overridden in other locales.
                  & pad_right is default value for long label which can be right aligned. See EXT-6318 -->
-                <speak_button
-                 halign="center"
-                 image_overlay="Speaking_btn"
-                 name="speak_btn"
-                 pad_right="22"
-                 tab_stop="true"
-                 use_ellipses="true" />
             </talk_button>
+			<bottomtray_button follows="left"
+                left_delta="2"
+                bottom="-3"
+                width="16"
+                height="16"
+                is_toggle="true"
+                image_selected="ptt_lock_on.tga"
+                image_unselected="ptt_lock_off.tga"
+                label=""
+                name="ptt_lock"
+                scale_image="true"
+                control_name="PushToTalkToggle">
+            </bottomtray_button>
         </layout_panel>
 
 
@@ -773,7 +779,7 @@ as for parent layout_panel (chiclet_list_panel) to resize bottom tray properly. 
              height="28"
              layout="topleft"
              left="0"
-             max_displayed_count="99"
+             max_displayed_count="999"
              name="im_well"
              top="0"
              width="35">
@@ -822,7 +828,7 @@ image_pressed_selected  "Lit" + "Selected" - there are new messages and the Well
              height="23"
              layout="topleft"
              left="0"
-             max_displayed_count="99"
+             max_displayed_count="999"
              name="notification_well"
              top="5"
              width="35">
