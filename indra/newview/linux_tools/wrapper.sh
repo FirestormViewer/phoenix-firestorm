@@ -112,7 +112,9 @@ fi
 
 export SL_ENV='LD_LIBRARY_PATH="`pwd`"/lib:"${LD_LIBRARY_PATH}"'
 export SL_CMD='$LL_WRAPPER bin/do-not-directly-run-firestorm-bin'
-export SL_OPT="`cat etc/gridargs.dat` $@"
+
+# AO: experimentally removing to allow --settings on the command line w/o error. FIRE-1031
+#export SL_OPT="`cat etc/gridargs.dat` $@"
 
 # Run the program
 eval ${SL_ENV} ${SL_CMD} ${SL_OPT} || LL_RUN_ERR=runerr
