@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+
+<floater name="worldmap" 
+title="textgoeshere">
+
+	<panel name="layout_panel_1">
+		<text name="events_label">
+		textgoeshere</text>
+	</panel>
+
+	<panel name="layout_panel_2">
+		<button name="Show Current Location" 
+		tool_tip="textgoeshere">
+		</button>
+		<text name="me_label">
+		textgoeshere
+		</text>
+		<text name="person_label">
+		textgoeshere
+		</text>
+		<text name="infohub_label">
+		textgoeshere
+		</text>
+		<text name="land_sale_label">
+		textgoeshere
+		</text>
+		<text name="auction_label">
+		textgoeshere
+		</text>
+		<text name="by_owner_label">
+		textgoeshere
+		</text>
+		<button name="Go Home" 
+		tool_tip="textgoeshere">
+		</button>
+		<text name="Home_label">
+		textgoeshere
+		</text>
+		<text name="events_label">
+		textgoeshere
+		</text>
+		<text name="pg_label">
+		textgoeshere
+		</text>
+		<text name="events_mature_label">
+		textgoeshere
+		</text>
+		<text name="events_adult_label">
+		textgoeshere
+		</text>
+	</panel>
+
+	<panel name="layout_panel_3">
+		<text name="find_on_map_label">
+		textgoeshere
+		</text>
+	</panel>
+
+	<panel name="layout_panel_4">
+		<combo_box name="friend combo" 
+		label="textgoeshere" 
+		tool_tip="textgoeshere">
+			<combo_box.item name="item1"
+			label="textgoeshere"/>
+		</combo_box>
+		<combo_box name="landmark combo" 
+		label="textgoeshere" 
+		tool_tip="textgoeshere">
+			<combo_box.item name="item1"
+			label="textgoeshere"/>
+		</combo_box>
+		<search_editor name="location" 
+		label="textgoeshere" 
+		tool_tip="textgoeshere"/>
+		<button name="DoSearch" 
+		label="textgoeshere" 
+		tool_tip="textgoeshere">
+		</button>
+		<button name="Clear" 
+		label="textgoeshere" 
+		tool_tip="textgoeshere">
+		</button>
+		<text name="events_label">
+		textgoeshere
+		</text>
+		<button name="Teleport" 
+		label="textgoeshere" 
+		tool_tip="textgoeshere">
+		</button>
+		<button name="copy_slurl" 
+		label="textgoeshere" 
+		tool_tip="textgoeshere">
+		</button>
+		<button name="Show Destination" 
+		label="textgoeshere" 
+		tool_tip="textgoeshere">
+		</button>
+		<layout_stack>
+			<layout_panel name="layoutstackpanel_left">
+				<button name="Teleport" 
+				label="textgoeshere" 
+				tool_tip="textgoeshere">
+				</button>
+				<button name="Clear" 
+				label="textgoeshere" 
+				tool_tip="textgoeshere">
+				</button>
+			</layout_panel>
+			<layout_panel name="layoutstackpanel_right">
+				<button name="copy_slurl" 
+				label="textgoeshere" 
+				tool_tip="textgoeshere">
+				</button>
+				<button name="Show Destination" 
+				label="textgoeshere" 
+				tool_tip="textgoeshere">
+				</button>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+
+	<panel name="layout_panel_5">
+		<text name="zoom_label">
+		textgoeshere
+		</text>
+	</panel>
+
+</floater>

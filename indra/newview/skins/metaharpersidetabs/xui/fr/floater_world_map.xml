@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+
+<floater name="worldmap" 
+title="CARTE DU MONDE">
+
+	<panel name="layout_panel_1">
+		<text name="events_label">
+		Légende</text>
+	</panel>
+
+	<panel name="layout_panel_2">
+		<button name="Show Current Location" 
+		tool_tip="Centrer la carte sur votre position">
+		</button>
+		<text name="me_label">
+		Vous
+		</text>
+		<text name="person_label">
+		Résident
+		</text>
+		<text name="infohub_label">
+		Infohub
+		</text>
+		<text name="land_sale_label">
+		Terrain à vendre
+		</text>
+		<text name="auction_label">
+		Vente aux enchères
+		</text>
+		<text name="by_owner_label">
+		Surface en vente
+		</text>
+		<button name="Go Home" 
+		tool_tip="Téléportation au domicile">
+		</button>
+		<text name="Home_label">
+		Domicile
+		</text>
+		<text name="events_label">
+		Evènements
+		</text>
+		<text name="pg_label">
+		Général
+		</text>
+		<text name="events_mature_label">
+		Mature
+		</text>
+		<text name="events_adult_label">
+		Adulte
+		</text>
+	</panel>
+
+	<panel name="layout_panel_3">
+		<text name="find_on_map_label">
+		Situer sur la carte
+		</text>
+	</panel>
+
+	<panel name="layout_panel_4">
+		<combo_box name="friend combo" 
+		label="Amis connectés" 
+		tool_tip="Sélectionner dans la liste un ami à afficher sur la carte.">
+			<combo_box.item name="item1"
+			label="Amis connectés"/>
+		</combo_box>
+		<combo_box name="landmark combo" 
+		label="Repères" 
+		tool_tip="Sélectionner dans la liste un repère à afficher sur la carte.">
+			<combo_box.item name="item1"
+			label="Repères"/>
+		</combo_box>
+		<search_editor name="location" 
+		label="Région par nom" 
+		tool_tip="Entrer le nom d&apos;une région"/>
+		<button name="DoSearch" 
+		label="Chercher" 
+		tool_tip="Lancer une recherche sur le nom de la région">
+		</button>
+		<button name="Clear" 
+		label="Purger" 
+		tool_tip="Purger les champs de recherche et d'affichage des régions">
+		</button>
+		<text name="events_label">
+		Position
+		</text>
+		<button name="Teleport" 
+		label="Téléportation" 
+		tool_tip="Téléportation à la position du marqueur">
+		</button>
+		<button name="copy_slurl" 
+		label="Copier le SLurl" 
+		tool_tip="Copier la position du marqueur en tant que SLurl utilisable sur le Web et sur SL">
+		</button>
+		<button name="Show Destination" 
+		label="Centrer la carte" 
+		tool_tip="Centrer la carte sur la position du marqueur. (Cliquer sur la carte pour marquer la position)">
+		</button>
+		<layout_stack>
+			<layout_panel name="layoutstackpanel_left">
+				<button name="Teleport" 
+				label="Téléportation" 
+				tool_tip="Téléportation à la position du marqueur">
+				</button>
+				<button name="Clear" 
+				label="Purger" 
+				tool_tip="Purger les champs de recherche et d'affichage des régions">
+				</button>
+			</layout_panel>
+			<layout_panel name="layoutstackpanel_right">
+				<button name="copy_slurl" 
+				label="Copier le SLurl" 
+				tool_tip="Copier la position du marqueur en tant que SLurl utilisable sur le Web et sur SL">
+				</button>
+				<button name="Show Destination" 
+				label="Centrer la carte" 
+				tool_tip="Centrer la carte sur la position du marqueur. (Cliquer sur la carte pour marquer une position.)">
+				</button>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+
+	<panel name="layout_panel_5">
+		<text name="zoom_label">
+		Zoom
+		</text>
+	</panel>
+
+</floater>
