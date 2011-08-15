@@ -172,7 +172,7 @@
            width="31" />
       </panel>
 	  <panel
-   	  auto_resize="false"
+   	  auto_resize="true"
 	  follows="top|left"
        left_pad="0"
        height="25"
@@ -199,17 +199,16 @@
       </panel>
       <panel
 	   auto_resize="true"
-	   follows="top|left|right"
+	   follows="top|left"
        left_pad="0"
        height="25"
        layout="topleft"
+	   user_resize="false"
        name="collapse_panel"
-       user_resize="false"
-	   min_width="0"
        width="90">
 	      <button
-		   auto_resize="false"
-           follows="all"
+		   auto_resize="true"
+           follows="bottom|left|right"
            height="25"
            image_hover_unselected="Toolbar_Middle_Over"
 		   label="Collapse All"
@@ -220,21 +219,19 @@
            name="collapse_btn"
            tool_tip="Collapse Folders"
            top="0"
-		   max_width="90"
            width="89" />
 	  </panel>	   
       <panel
-	   auto_resize="true"
+	   auto_resize="false"
 	   follows="top|left|right"
        left_pad="0"
        height="25"
        layout="topleft"
        name="expand_panel"
        user_resize="false"
-	   min_width="0"
        width="90">
 		  <button
-		   auto_resize="false"
+		   auto_resize="true"
            follows="bottom|left|right"
            height="25"
            image_hover_unselected="Toolbar_Middle_Over"
