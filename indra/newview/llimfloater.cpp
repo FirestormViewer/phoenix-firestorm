@@ -387,9 +387,12 @@ void LLIMFloater::onViewProfileButtonClicked()
 void LLIMFloater::onAddFriendButtonClicked()
 {
 	llinfos << "LLIMFloater::onAddFriendButtonClicked" << llendl;
-	LLAvatarIconCtrl* avatar_icon = getChild<LLAvatarIconCtrl>("avatar_icon");
-	std::string full_name = avatar_icon->getFullName();
-	LLAvatarActions::requestFriendshipDialog(mOtherParticipantUUID, full_name);
+	//[FIX FIRE-2009: SJ] Offering friendship gives wrong status message. full_name was emtpy on call but was also obsolete
+	//                    
+	//LLAvatarIconCtrl* avatar_icon = getChild<LLAvatarIconCtrl>("avatar_icon");
+	//std::string full_name = avatar_icon->getFullName();
+	//LLAvatarActions::requestFriendshipDialog(mOtherParticipantUUID, full_name);
+	LLAvatarActions::requestFriendshipDialog(mOtherParticipantUUID);
 }
 void LLIMFloater::onShareButtonClicked()
 {
