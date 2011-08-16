@@ -23,6 +23,7 @@
 #include "lluictrlfactory.h"
 #include "llversionviewer.h"
 #include "llviewerparcelmgr.h"
+#include "llviewermenu.h"
 #include "llviewerregion.h"
 #include "llviewerstats.h"
 #include "llworld.h"
@@ -103,6 +104,9 @@ void RlvSettings::initClass()
 		if (gSavedSettings.controlExists(RLV_SETTING_AVATAROFFSET_Z))
 			gSavedSettings.getControl(RLV_SETTING_AVATAROFFSET_Z)->getSignal()->connect(boost::bind(&onChangedAvatarOffset, _2));
 
+		if (gSavedSettings.controlExists(RLV_SETTING_TOPLEVELMENU))
+			gSavedSettings.getControl(RLV_SETTING_TOPLEVELMENU)->getSignal()->connect(boost::bind(&onChangedMenuLevel));
+
 		fInitialized = true;
 	}
 }
@@ -127,6 +131,13 @@ void RlvSettings::initClass()
 bool RlvSettings::onChangedAvatarOffset(const LLSD& sdValue)
 {
 	gAgent.sendAgentSetAppearance();
+	return true;
+}
+
+// Checked: 2011-08-16 (RLVa-1.4.0b) | Added: RLVa-1.4.0b
+bool RlvSettings::onChangedMenuLevel()
+{
+	rlvMenuToggleVisible();
 	return true;
 }
 
@@ -453,6 +464,33 @@ bool rlvMenuToggleEnabled()
 	LLNotificationsUtil::add("GenericAlert", args);
 	
 	return true;
+}
+
+// Checked: 2011-08-16 (RLVa-1.4.0b) | Added: RLVa-1.4.0b
+void rlvMenuToggleVisible()
+{
+	bool fTopLevel = rlvGetSetting(RLV_SETTING_TOPLEVELMENU, true);
+	bool fRlvEnabled = rlv_handler_t::isEnabled();
+
+	LLMenuGL* pRLVaMenuMain = gMenuBarView->findChildMenuByName("RLVa Main", FALSE);
+	LLMenuGL* pAdvancedMenu = gMenuBarView->findChildMenuByName("Advanced", FALSE);
+	LLMenuGL* pRLVaMenuEmbed = pAdvancedMenu->findChildMenuByName("RLVa Embedded", FALSE);
+
+	gMenuBarView->setItemVisible("RLVa Main", (fRlvEnabled) && (fTopLevel));
+	pAdvancedMenu->setItemVisible("RLVa Embedded", (fRlvEnabled) && (!fTopLevel));
+
+	if ( (rlv_handler_t::isEnabled()) && (pRLVaMenuMain) && (pRLVaMenuEmbed) && 
+		 ( ((fTopLevel) && (1 == pRLVaMenuMain->getItemCount())) || ((!fTopLevel) && (1 == pRLVaMenuEmbed->getItemCount())) ) )
+	{
+		LLMenuGL* pMenuFrom = (fTopLevel) ? pRLVaMenuEmbed : pRLVaMenuMain;
+		LLMenuGL* pMenuTo = (fTopLevel) ? pRLVaMenuMain : pRLVaMenuEmbed;
+		while (LLMenuItemGL* pItem = pMenuFrom->getItem(1))
+		{
+			pMenuFrom->removeChild(pItem);
+			pMenuTo->addChild(pItem);
+			pItem->updateBranchParent(pMenuTo);
+		}
+	}
 }
 
 // Checked: 2010-04-23 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g

@@ -5236,14 +5236,9 @@ void show_debug_menus()
 		gMenuBarView->setItemVisible("Advanced", debug);
 // 		gMenuBarView->setItemEnabled("Advanced", debug); // Don't disable Advanced keyboard shortcuts when hidden
 
-// [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// [RLVa:KB] - Checked: 2011-08-16 (RLVa-1.4.0b) | Modified: RLVa-1.4.0b
 		// NOTE: this is supposed to execute whether RLVa is enabled or not
-		LLMenuGL* pAdvancedMenu = gMenuBarView->findChildMenuByName("Advanced", FALSE);
-		if (pAdvancedMenu)
-		{
-			pAdvancedMenu->setItemVisible("RLVa", rlv_handler_t::isEnabled());
-			pAdvancedMenu->setItemEnabled("RLVa", rlv_handler_t::isEnabled());
-		}
+		rlvMenuToggleVisible();
 // [/RLVa:KB]
 		
 		gMenuBarView->setItemVisible("Debug", qamode);
