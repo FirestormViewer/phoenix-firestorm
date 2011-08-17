@@ -685,6 +685,8 @@ BOOL LLIMFloater::postBuild()
 
 				// support sysinfo button -Zi
 				mSysinfoButton->setClickedCallback(boost::bind(&LLIMFloater::onSysinfoButtonClicked, this));
+				// [FIRE-1168 -SJ] Set focus back to Chatline when switching to IM
+				mSysinfoButton->setFocusReceivedCallback(boost::bind(&LLIMFloater::onSysinfoButtonFocusReceived, _1, this) );
 				// this needs to be extended to fsdata awareness, once we have it. -Zi
 				// mIsSupportIM=fsdata(partnerUUID).isSupport(); // pseudocode something like this
 				onSysinfoButtonVisibilityChanged(gSavedSettings.getBOOL("SysinfoButtonInIM"));
@@ -1300,6 +1302,15 @@ void LLIMFloater::onSlideRightFocusReceived(LLFocusableElement* caller, void* us
 
 // static
 void LLIMFloater::onViewProfileFocusReceived(LLFocusableElement* caller, void* userdata)
+{
+	LLIMFloater* self= (LLIMFloater*) userdata;
+	LLLineEditor* inputEditor = 
+		self->getChild<LLLineEditor>("chat_editor");
+	inputEditor->setFocus(TRUE);
+}
+
+void LLIMFloater::onSysinfoButtonFocusReceived(LLFocusableElement* caller, void* userdata)
+// [FIRE-1168 -SJ] Set focus back to Chatline when switching to IM
 {
 	LLIMFloater* self= (LLIMFloater*) userdata;
 	LLLineEditor* inputEditor = 
