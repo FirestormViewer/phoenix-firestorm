@@ -34,7 +34,7 @@ WANTS_FMOD=$FALSE
 WANTS_BUILD=$FALSE
 PLATFORM="darwin" # darwin, win32, win64, linux32, linux64
 BTYPE="Release"
-CHANNEL="private-`hostname -s`"
+CHANNEL="" # will be overwritten later with platform-specific values unless manually specified.
 
 ###
 ### Helper Functions
@@ -253,7 +253,15 @@ if [ ! -d `dirname $LOG` ] ; then
 	mkdir -p `dirname $LOG`
 fi
 
-CHANNEL=`echo $CHANNEL | sed -e "s/[^a-zA-Z0-9\-]*//g"` # strip out difficult characters from channel
+if [ -z $CHANNEL ] ; then
+	if [ $PLATFORM == "win32" ] ; then
+		CHANNEL="private-`hostname` "
+	else
+		CHANNEL="private-`hostname -s`"
+	fi
+else
+	CHANNEL=`echo $CHANNEL | sed -e "s/[^a-zA-Z0-9\-]*//g"` # strip out difficult characters from channel
+fi
 
 if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
 	echo "Cleaning $PLATFORM...."
