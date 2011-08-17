@@ -453,6 +453,17 @@
    name="enable_lip_sync"
    top_pad="5" 
    width="237"/>
+   <check_box
+   control_name="ShowVoiceVisualizersInCalls"
+   follows="left|top"
+   height="15"
+   label="Show voice visualizers in calls"
+   tool_tip="Shows Voice Indicator and move lips in world while being in private and group calls"
+   layout="topleft"
+   left="44"
+   name="Show_Voice_Visualizers_In_Calls"
+   top_pad="3" 
+   width="237"/>
  <check_box
   follows="top|left"
   enabled_control="EnableVoiceChat"
@@ -512,7 +523,7 @@
    label="Audio Device Settings"
    layout="topleft"
    left="20"
-   top_pad="11"
+   top_pad="3"
    name="device_settings_btn"
    width="190">
   </button>
