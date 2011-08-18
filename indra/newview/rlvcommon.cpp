@@ -395,12 +395,14 @@ void RlvUtil::notifyBlocked(const std::string& strNotifcation, const LLSD& sdArg
 // Checked: 2010-11-11 (RLVa-1.2.1g) | Added: RLVa-1.2.1g
 void RlvUtil::notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine)
 {
+	// Don't show the same assertion over and over, or if the user opted out
 	static std::string strAssertPrev, strFilePrev; static int nLinePrev;
-	if ( (strAssertPrev == strAssert) && (strFile == strFilePrev) && (nLine == nLinePrev) )
+	if ( ((strAssertPrev == strAssert) && (strFile == strFilePrev) && (nLine == nLinePrev)) ||
+		 (!rlvGetSetting<bool>(RLV_SETTING_SHOWASSERTIONFAIL, true)) )
 	{
-		// Don't show the same assertion over and over
 		return;
 	}
+
 	strAssertPrev = strAssert;
 	strFilePrev = strFile;
 	nLinePrev = nLine;

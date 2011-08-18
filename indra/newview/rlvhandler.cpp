@@ -1052,6 +1052,10 @@ BOOL RlvHandler::setEnabled(BOOL fEnable)
 
 		// Set up RlvUIEnabler
 		RlvUIEnabler::getInstance();
+
+		// Reset to show assertions if the viewer version changed
+		if (gSavedSettings.getString("LastRunVersion") != gLastRunVersion)
+			gSavedSettings.setBOOL("RLVaShowAssertionFailures", TRUE);
 	}
 
 	return m_fEnabled;
