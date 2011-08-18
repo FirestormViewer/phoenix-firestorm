@@ -233,7 +233,7 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 		case RLV_RET_SUCCESS_DUPLICATE:
 			return "duplicate";
 		case RLV_RET_FAILED_SYNTAX:
-			return "syntax error";
+			return "thingy error";
 		case RLV_RET_FAILED_OPTION:
 			return "invalid option";
 		case RLV_RET_FAILED_PARAM:
