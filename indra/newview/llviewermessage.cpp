@@ -3502,19 +3502,18 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 
 			// Filtering "rules":
 			//   avatar => filter only their name (unless it's this avie)
-			//   other  => filter everything except attachments this avie owns but then we still do filter their text
-			if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) &&
-				 ((CHAT_SOURCE_AGENT != chat.mSourceType) || (chat.mFromID != gAgent.getID())) )
+			//   other  => filter everything
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 			{
-				if (CHAT_SOURCE_AGENT == chat.mSourceType)
+				if (CHAT_SOURCE_AGENT != chat.mSourceType)
+				{
+					RlvUtil::filterNames(chat.mFromName);
+				}
+				else if (chat.mFromID != gAgent.getID())
 				{
 					chat.mFromName = RlvStrings::getAnonym(chat.mFromName);
 					chat.mRlvNamesFiltered = TRUE;
 				} 
-				else if ( (!is_owned_by_me) || (!is_attachment) )
-				{
-					RlvUtil::filterNames(chat.mFromName);
-				}
 			}
 
 			// Create an "objectim" URL for objects if we're either @shownames or @showloc restricted
