@@ -326,8 +326,11 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 
 			// NOTE: if the legacy first and last name are empty we get a legacy name of " " which would replace all spaces in the string
 			std::string strLegacyName;
-			if ( (fFilterLegacy) && (!avName.mIsDisplayNameDefault) && (!avName.mLegacyFirstName.empty()) )
+			if ( (fFilterLegacy) && (!avName.mLegacyFirstName.empty()) &&
+				 ((!avName.mIsDisplayNameDefault) || (LLCacheName::getDefaultLastName() == avName.mLegacyLastName)) )
+			{
 				strLegacyName = avName.getLegacyName();
+			}
 
 			// If the display name is a subset of the legacy name we need to filter that first, otherwise it's the other way around
 			if (boost::icontains(strLegacyName, avName.mDisplayName))
