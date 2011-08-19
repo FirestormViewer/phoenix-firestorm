@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!--alba: added tear_off and label-->
 <menu
+ tear_off="true"
+ label="Button Bar"
  height="201"
  layout="topleft"
  left="100"

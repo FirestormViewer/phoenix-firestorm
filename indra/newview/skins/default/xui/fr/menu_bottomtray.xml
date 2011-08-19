@@ -1,21 +1,56 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<menu name="hide_camera_move_controls_menu">
-<<<<<<< local
-	<menu_item_check label="Voix activée" name="EnableVoiceChat"/>
-=======
-	<menu_item_check label="Bouton Parler" name="EnableVoiceChat"/>
->>>>>>> other
-	<menu_item_check label="Bouton Geste" name="ShowGestureButton"/>
-	<menu_item_check label="Bouton Bouger" name="ShowMoveButton"/>
-	<menu_item_check label="Bouton Affichage" name="ShowCameraButton"/>
-	<menu_item_check label="Bouton Photo" name="ShowSnapshotButton"/>
-	<menu_item_check label="Bouton Construire" name="ShowBuildButton"/>
-	<menu_item_check label="Bouton Rechercher" name="ShowSearchButton"/>
-	<menu_item_check label="Bouton Carte" name="ShowWorldMapButton"/>
-	<menu_item_check label="Bouton Mini-carte" name="ShowMiniMapButton"/>
-	<menu_item_call label="Couper" name="NearbyChatBar_Cut"/>
-	<menu_item_call label="Copier" name="NearbyChatBar_Copy"/>
-	<menu_item_call label="Coller" name="NearbyChatBar_Paste"/>
-	<menu_item_call label="Supprimer" name="NearbyChatBar_Delete"/>
-	<menu_item_call label="Tout sélectionner" name="NearbyChatBar_Select_All"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!--alba-->
+<menu name="hide_camera_move_controls_menu"
+	label="Barre de boutons">
+
+    <menu_item_chek name="ShowSpeakButton"
+         label="Parler"/>
+	<menu_item_check name="ShowGestureButton"
+         label="Gestes / Ctl-G"/>
+    <menu_item_check name="ShowMoveButton"
+         label="Contrôle Mouv."/>
+    <menu_item_check name="ShowCameraButton"
+         label="Contrôle Caméra"/>
+    <menu_item_check name="ShowSnapshotButton"
+         label="Photo / Ctl-Maj-S"/>
+    <menu_item_check name="ShowBuildButton"
+		label="Construire / Ctl-B"/>
+    <menu_item_check name="ShowSearchButton"
+		label="Recherche / Ctl-F"/>
+    <menu_item_check name="ShowWorldMapButton"
+		label="Carte / Ctl-M"/>
+    <menu_item_check name="ShowMiniMapButton"
+		label="Mini carte / Ctl-Maj-M"/>
+    <menu_item_check name="ShowHomeButton"
+		label="Domicile / Ctl-Maj-H"/>
+    <menu_item_check name="ShowMeButton"
+		label="Profil / Clic-dr. s/soi"/>
+    <menu_item_check name="ShowPlacesButton"
+		label="Endroits"/>
+<!-- ## Zi: Animation Overrider -->
+    <menu_item_check name="ShowAOButton"
+		label="AO"/>
+<!-- ## Zi: Animation Overrider -->
+<!-- Quick Preferences panel -Wolf -->
+	<menu_item_check name="ShowQuickPrefsButton"
+		label="Préférences rapides"/>
+<!-- Quick Preferences panel -Wolf -->
+	<menu_item_check name="ShowPeopleButton"
+		label="Personnes / Ctl-F"/>
+    <menu_item_check name="ShowAppearanceButton"
+		label="Apparence / Clic-dr. s/soi"/>
+    <menu_item_check name="ShowInventoryButton"
+		label="Inventaire Ctl-I"/>
+<!--???-->
+    <menu_item_call name="NearbyChatBar_Cut"
+		label="Couper Ctl-X"/>
+    <menu_item_call name="NearbyChatBar_Copy"
+		label="Copier Ctl-C"/>
+    <menu_item_call name="NearbyChatBar_Paste"
+		label="Coller Ctl-V"/>
+    <menu_item_call name="NearbyChatBar_Delete"
+		label="Supprimer Del"/>
+    <menu_item_call name="NearbyChatBar_Select_All"
+		label="Tout sélect. Ctl-A"/>
+
 </menu>
