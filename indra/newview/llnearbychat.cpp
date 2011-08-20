@@ -52,6 +52,9 @@
 
 #include "llbottomtray.h"
 #include "llnearbychatbar.h"
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+#include "llnearbychatbarmulti.h"
+// [/SL:KB]
 #include "llfloaterreg.h"
 #include "lltrans.h"
 
@@ -61,7 +64,9 @@ LLNearbyChat::LLNearbyChat(const LLSD& key)
 	: LLDockableFloater(NULL, false, false, key)
 	,mChatHistory(NULL)
 {
-	
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	mFactoryMap["panel_chat_editor"] = LLCallbackMap(LLNearbyChat::createChatEditor, NULL);
+// [/SL:KB]
 }
 
 LLNearbyChat::~LLNearbyChat()
@@ -382,3 +387,10 @@ void LLNearbyChat::draw()
 
 	LLDockableFloater::draw();
 }
+
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+void* LLNearbyChat::createChatEditor(void*)
+{
+	return new LLNearbyChatBarMulti();
+}
+// [/SL:KB]
