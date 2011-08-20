@@ -8,6 +8,8 @@
 
 LLNearbyChatBarMulti::LLNearbyChatBarMulti()
 {
+	// Initialize current history line iterator
+	mCurrentHistoryLine = mLineHistory.begin();
 }
 
 BOOL LLNearbyChatBarMulti::postBuild()
@@ -38,14 +40,37 @@ BOOL LLNearbyChatBarMulti::postBuild()
 BOOL LLNearbyChatBarMulti::handleKeyHere(KEY key, MASK mask)
 {
 	BOOL handled = FALSE;
-
 	if ( (KEY_RETURN == key) && (MASK_CONTROL == mask) )
 	{
-		// shout
 		sendChat(CHAT_TYPE_SHOUT);
 		handled = TRUE;
 	}
-
+	else if ( (KEY_UP == key) && (MASK_CONTROL == mask) )
+	{
+		if (mCurrentHistoryLine > mLineHistory.begin())
+		{
+			m_pChatEditor->setText(*(--mCurrentHistoryLine));
+			m_pChatEditor->endOfDoc();
+		}
+		else
+		{
+			LLUI::reportBadKeystroke();
+		}
+		handled = TRUE;
+	}
+	else if ( (KEY_DOWN == key) && (MASK_CONTROL == mask) )
+	{
+		if ( (!mLineHistory.empty()) && (mCurrentHistoryLine < mLineHistory.end() - 1) )
+		{
+			m_pChatEditor->setText(*(++mCurrentHistoryLine));
+			m_pChatEditor->endOfDoc();
+		}
+		else
+		{
+			LLUI::reportBadKeystroke();
+		}
+		handled = TRUE;
+	}
 	return handled;
 }
 
@@ -53,6 +78,31 @@ void LLNearbyChatBarMulti::onChatBoxCommit()
 {
 	if (m_pChatEditor->getLength() > 0)
 	{
+		if (!mLineHistory.empty())
+		{
+			// When not empty, last line of history should always be blank.
+			if (mLineHistory.back().empty())
+			{
+				// discard the empty line
+				mLineHistory.pop_back();
+			}
+			else
+			{
+				LL_WARNS("") << "Last line of history was not blank." << LL_ENDL;
+			}
+		}
+
+		// Add text to history, ignoring duplicates
+		if ( (mLineHistory.empty()) || (m_pChatEditor->getText() != mLineHistory.back()) )
+		{
+			mLineHistory.push_back(m_pChatEditor->getText());
+		}
+
+		// Restore the blank line and set mCurrentHistoryLine to point at it
+		mLineHistory.push_back("");
+		mCurrentHistoryLine = mLineHistory.end() - 1;
+
+		// Send the chat
 		sendChat(CHAT_TYPE_NORMAL);
 	}
 
@@ -128,5 +178,25 @@ void LLNearbyChatBarMulti::onChatBoxKeystroke(LLTextEditor* pTextCtrl)
 		//	<< " len " << length
 		//	<< " outlen " << out_str.getLength()
 		//	<< llendl;
+	}
+}
+
+LLWString LLNearbyChatBarMulti::getChatBoxText()
+{
+	return m_pChatEditor->getWText();
+}
+
+void LLNearbyChatBarMulti::setChatBoxText(LLStringExplicit& text)
+{
+	m_pChatEditor->setText(text);
+
+	// Set current history line to end of history.
+	if (mLineHistory.empty())
+	{
+		mCurrentHistoryLine = mLineHistory.end();
+	}
+	else
+	{
+		mCurrentHistoryLine = mLineHistory.end() - 1;
 	}
 }

@@ -24,10 +24,20 @@ protected:
 
 	/*virtual*/ BOOL		handleKeyHere(KEY key, MASK mask);
 
-	/*virtual*/ LLWString	getChatBoxText()						 { return m_pChatEditor->getWText(); }
-	/*virtual*/ void		setChatBoxText(LLStringExplicit& text) { m_pChatEditor->setText(text); }
+	/*virtual*/ LLWString	getChatBoxText();
+	/*virtual*/ void		setChatBoxText(LLStringExplicit& text);
 
-	LLTextEditor* m_pChatEditor;
+	/*
+	 * Member variables
+	 */
+protected:
+	// Controls
+	LLTextEditor*						m_pChatEditor;
+
+	// Line history support
+	typedef std::vector<std::string>	line_history_t;
+	line_history_t						mLineHistory;
+	line_history_t::iterator			mCurrentHistoryLine;
 };
 
 #endif // LL_LLNEARBYCHATBARMULTI_H
