@@ -35,6 +35,7 @@ WANTS_BUILD=$FALSE
 PLATFORM="darwin" # darwin, win32, win64, linux32, linux64
 BTYPE="Release"
 CHANNEL="" # will be overwritten later with platform-specific values unless manually specified.
+LL_ARGS_PASSTHRU=""
 
 ###
 ### Helper Functions
@@ -56,6 +57,9 @@ showUsage()
 	echo "  --package   : Build installer"
 	echo "  --fmod      : Build fmod"
 	echo "  --platform  : darwrin | win32 | win64 | linux32 | linux64"
+	echo 
+	echo "All arguments not in the above list will be passed through to LL's configure/build"
+	echo
 }
 
 getArgs()
@@ -195,9 +199,11 @@ function getoptex()
                 esac
           fi
         done
-        echo "$0: error: invalid option: $o"
-	showUsage
-	exit 1
+        #echo "$0: error: invalid option: $o"
+	LL_ARGS_PASSTHRU="$LL_ARGS_PASSTHRU $o"
+	return 0
+	#showUsage
+	#exit 1
   fi; fi
   OPTOPT="?"
   unset OPTARG
@@ -240,12 +246,14 @@ function getopt()
 
 getArgs $*
 echo -e "	Your platform is: '$PLATFORM'"
-echo -e "	KDU: 	`b2a $WANTS_KDU`"
-echo -e "	FMOD: 	`b2a $WANTS_FMOD`"
-echo -e "	PACKAGE:`b2a $WANTS_PACKAGE`"
-echo -e "	CLEAN:	`b2a $WANTS_CLEAN`"
-echo -e "	BUILD:	`b2a $WANTS_BUILD`"
-echo -e "	CONFIG:	`b2a $WANTS_CONFIG`"
+echo -e "	     KDU: `b2a $WANTS_KDU`"
+echo -e "	    FMOD: `b2a $WANTS_FMOD`"
+echo -e "	 PACKAGE: `b2a $WANTS_PACKAGE`"
+echo -e "	   CLEAN: `b2a $WANTS_CLEAN`"
+echo -e "	   BUILD: `b2a $WANTS_BUILD`"
+echo -e "	  CONFIG: `b2a $WANTS_CONFIG`"
+echo -e "	PASSTHRU: $LL_ARGS_PASSTHRU"
+echo -e "	   BTYPE: $BTYPE"
 echo -e "       Logging to $LOG"
 
 
@@ -339,10 +347,10 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 		TARGET="Visual Studio 10"
 	fi
 	
-	cmake -G "$TARGET" ../indra $FMOD $KDU $PACKAGE -DUNATTENDED:BOOL=ON -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE -DROOT_PROJECT_NAME:STRING=Firestorm | tee $LOG
+	cmake -G "$TARGET" ../indra $FMOD $KDU $PACKAGE -DUNATTENDED:BOOL=ON -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
 	if [ $PLATFORM == "win32" ] ; then
-    ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config Release
+    ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
 	fi
 	
 fi
@@ -350,14 +358,14 @@ fi
 if [ $WANTS_BUILD -eq $TRUE ] ; then
 	echo "Building $PLATFORM..."
 	if [ $PLATFORM == "darwin" ] ; then
-		xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj -sdk macosx10.6 GCC_VERSION=4.2 GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
+		xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_VERSION=4.2 GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
 	elif [ $PLATFORM == "linux32" ] ; then
 		JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
 		make -j $JOBS | tee -a $LOG
 	elif [ $PLATFORM == "win32" ] ; then
 		# note: this is not used to do needing to source vsversall.bat first. Autobuild calls this directly.
 		if [ ! -d logs ] ; then mkdir logs ; fi
-		msbuild.exe Firestorm.sln /flp:LogFile=logs\\FirestormBuild_win32.log /flp1:errorsonly;LogFile=logs\\FirestormBuild_win32.err /flp:LogFile=logs\\FirestormBuild_win32.log /p:Configuration=Release /p:Platform=Win32 /t:Build /p:useenv=true /verbosity:normal /toolsversion:4.0 /p:"VCBuildAdditionalOptions= /incremental"
+		msbuild.exe Firestorm.sln /flp:LogFile=logs\\FirestormBuild_win32.log /flp1:errorsonly;LogFile=logs\\FirestormBuild_win32.err /flp:LogFile=logs\\FirestormBuild_win32.log /p:Configuration=$BTYPE /p:Platform=Win32 /t:Build /p:useenv=true /verbosity:normal /toolsversion:4.0 /p:"VCBuildAdditionalOptions= /incremental"
 	fi	
 fi
 

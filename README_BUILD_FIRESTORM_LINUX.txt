@@ -16,7 +16,11 @@ instead of our default autobuild.xml There are some examples of how to build FMO
 mailing list. We've created a non-KDU build target to make this easier. Everywhere you see "ReleaseFS" below, use 
 "ReleaseFS_open" instead.  This will perform the same build, using openjpeg instead of KDU.
 
+Available premade firestorm-specific build targets:
 
+	ReleaseFS		(includes KDU, FMOD)
+	ReleaseFS_open		(no KDU, no FMOD)
+	RelWithDebInfo_open	(no KDU, no FMOD)
 
 To build firestorm:
 
@@ -26,15 +30,15 @@ Other examples:
 
 	autobuild configure -c ReleaseFS  		    # basic configuration step, don't build, just configure
 	autobuild configure -c ReleaseFS -- --clean	    # clean the output area first, then configure
-	autobuild configure -c ReleaseFS -- --fmod --kdu    # configure with fmod, kdu enabled
 	autobuild configure -c ReleaseFS -- --chan Private-Yourname   # configure with a custom channel
 
 	autobuild build -c ReleaseFS --no-configure		# default quick rebuild
 	autobuild build -c ReleaseFS --no-configure -- --clean	# Clean rebuild
-	autobuild build -c ReleaseFS -- --package		# Complete a build and package it into a tarball for sharing
+	autobuild build -c ReleaseFS -- --package		# Complete a build and package it into a tarball
 
 Any of the configure options can also be used (and do the same thing) with the build options.
-
+Typical LL autobuild configure options should also work, as long as they don't duplicate configuration we are
+already doing.
 
 Logs:
 
