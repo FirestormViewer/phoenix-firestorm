@@ -72,6 +72,9 @@
 #include "llpanellogin.h"
 #include "llpaneltopinfobar.h"
 #include "llupdaterservice.h"
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-07-02 (Catznip-2.7.0a) | Added: Catznip-2.7.0a
+#include "llhunspell.h"
+// [/SL:KB]
 
 #ifdef TOGGLE_HACKED_GODLIKE_VIEWER
 BOOL 				gHackGodmode = FALSE;
@@ -521,6 +524,23 @@ bool handleForceShowGrid(const LLSD& newvalue)
 	return true;
 }
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-07-02 (Catznip-2.7.0a) | Added: Catznip-2.7.0a
+bool handleSpellCheckChanged(const LLSD& sdValue)
+{
+	LLHunspellWrapper::setUseSpellCheck(sdValue.asBoolean());
+	return true;
+}
+
+bool handleSpellCheckDictChanged(const LLSD& sdValue)
+{
+	if (LLHunspellWrapper::useSpellCheck())
+	{
+		LLHunspellWrapper::instance().setCurrentDictionary(sdValue.asString());
+	}
+	return true;
+}
+// [/SL:KB]
+
 bool toggle_agent_pause(const LLSD& newvalue)
 {
 	if ( newvalue.asBoolean() )
@@ -738,6 +758,10 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("UpdaterServiceSetting")->getSignal()->connect(boost::bind(&toggle_updater_service_active, _2));
 	gSavedSettings.getControl("ForceShowGrid")->getSignal()->connect(boost::bind(&handleForceShowGrid, _2));
 	gSavedSettings.getControl("RenderTransparentWater")->getSignal()->connect(boost::bind(&handleRenderTransparentWaterChanged, _2));
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-07-02 (Catznip-2.7.0a) | Added: Catznip-2.7.0a
+	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged, _2));
+	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckDictChanged, _2));
+// [/SL:KB]
 }
 
 #if TEST_CACHED_CONTROL
