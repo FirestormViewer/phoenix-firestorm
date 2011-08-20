@@ -1976,6 +1976,7 @@
                 <array>
                   <string>--platform darwin</string>
                   <string>--package</string>
+		  <string>--btype RelWithDebInfo</string>
                 </array>
               </map>
               <key>name</key>
@@ -2212,6 +2213,7 @@
                 <array>
                   <string>--platform linux32</string>
                   <string>--package</string>
+	          <string>--btype RelWithDebInfo</string>
                 </array>
               </map>
               <key>name</key>
@@ -2558,6 +2560,7 @@
                 <array>
                   <string>--package</string>
                   <string>--version</string>
+                  <string>--btype RelWithDebInfo</string>
                   <string>--platform win32</string>
                 </array>
               </map>
