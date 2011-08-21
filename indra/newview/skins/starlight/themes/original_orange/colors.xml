@@ -81,6 +81,9 @@
 	 name="Green"
 	 value="0 1 0 1" />
 	<color
+	 name="LtGreen"
+	 value="0.79 1 0.79 1" />
+	<color
 	 name="Transparent"
 	 value="0 0 0 0" />
 	<color
@@ -319,6 +322,15 @@
     <color
      name="AvatarListItemIconVoiceLeftColor"
      reference="AvatarListItemIconOfflineColor" />
+    <color
+     name="BadgeImageColor"
+     value="1.0 0.40 0.0 1.0" />
+    <color
+     name="BadgeBorderColor"
+     value="0.9 0.9 0.9 1.0" />
+    <color
+     name="BadgeLabelColor"
+     reference="White" />
     <color
      name="ButtonBorderColor"
      reference="Unused?" />
@@ -666,27 +678,22 @@
 	  reference="DkGray2" />
     <color
      name="MultiSliderDisabledThumbColor"
-     reference="Unused?" />
+     reference="Black" />
     <color
      name="MultiSliderThumbCenterColor"
-     reference="Unused?" />
+     reference="White" />
     <color
      name="MultiSliderThumbCenterSelectedColor"
-     reference="Unused?" />
+     reference="Green" />
     <color
      name="MultiSliderThumbOutlineColor"
      reference="Unused?" />
     <color
      name="MultiSliderTrackColor"
-     reference="Unused?" />
+     reference="LtGray" />
     <color
      name="MultiSliderTriangleColor"
-     reference="Unused?" />
-  <!--
-    <color
-      name="NameTagBackground"
-      value="0.85 0.85 0.85 0.80" />
-      -->
+     reference="Yellow" />
     <color
       name="NameTagBackground"
       value="0 0 0 1" />
@@ -872,6 +879,9 @@
     <color
       name="MeshImportTableHighlightColor"
       value="0.2 0.8 1 1"/>
+    <color
+     name="DirectChatColor"
+     reference="LtOrange" />
 	    
     <!-- Generic colour names (legacy) -->
   <color
@@ -907,7 +917,10 @@
 	 name="AvatarListItemBeyondShoutRange"
 	 reference="LtYellow" />
 	 
-    <!-- Colours for Firestorm - same for all themes -->	 
+    <!-- Colours for Firestorm - same for all themes -->	
+    <color
+     name="SchemeLightest"
+     reference="EmphasisColor" />		
 	<color
 	 name="HintTitle"
 	 reference="EmphasisColor" />
@@ -929,6 +942,13 @@
 	<color
      name="ChatToastAgentNameColor"
      reference="EmphasisColor" />
-	
+	 
+    <!-- Colours for Kirstens Viewer - all themes -->	
+     <color
+     name="MapChatRingColor"
+     value="0.6 0.2 0.8 0.3" />
+	 <color
+     name="PieMenuTextColor"
+     value="1 1 1 0.85" />	
 </colors>
 

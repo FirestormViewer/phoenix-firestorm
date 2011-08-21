@@ -280,7 +280,7 @@ Maximum 200 per group daily
          height="16"
          layout="topleft"
          left_delta="0"
-         name="lbl3"
+         name="lbl3b"
          top_pad="15"
          visible="false"
          width="60">
@@ -304,7 +304,7 @@ Maximum 200 per group daily
          height="16"
          layout="topleft"
          left="10"
-         name="lbl4"
+         name="lbl5b"
          top_pad="10"
          visible="false"
          width="60">
