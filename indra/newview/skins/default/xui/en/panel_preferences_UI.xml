@@ -628,9 +628,9 @@
 		 name="tt_item3"
 		 value="fonts_liberation.xml" />
 		<combo_box.item
-		 label="Driod Sans"
+		 label="Droid Sans"
 		 name="tt_item4"
-		 value="fonts_driod.xml" />
+		 value="fonts_droid.xml" />
     </combo_box>
 	<text
      name="tooltip_textbox"
