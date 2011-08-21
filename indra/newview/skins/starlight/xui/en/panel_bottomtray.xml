@@ -67,10 +67,9 @@
         </layout_panel>
 		        <!--
          This 5px Panel is an indicator of where the resize handle is.
-         The panel provides a gap between the resize handle icon and a button to the right. 
-
-         Removed until I can stop it wandering		 
-        <layout_panel
+         The panel provides a gap between the resize handle icon and a button to the right. -->
+		 
+        <!-- layout_panel
          auto_resize="false"
 		 follows="left|top|right"
          layout="topleft"
@@ -88,7 +87,7 @@
              name="resize_handle"
              top="4"
              width="5" />
-	    </layout_panel>   			         -->
+	    </layout_panel -->
         <layout_panel
          auto_resize="false"
          follows="right"
@@ -105,6 +104,7 @@
              follows="left|right"
              height="26"
              layout="topleft"
+			 left="0"
              name="Gesture"
              tool_tip="Shows/hides gestures"
              top="5"
@@ -137,7 +137,7 @@
          name="speak_panel"
          top_delta="0"
          user_resize="false"
-         width="88">
+         width="50">
             <talk_button
              follows="left|right"
              height="26"
@@ -145,7 +145,7 @@
              left="0"
              name="talk"
              top="5"
-             width="85">
+             width="45">
                 <show_button
                  tab_stop="true">
                     <init_callback
@@ -622,9 +622,10 @@
              tool_tip="Enables/Disables Animation Overrider"
              follows="left|right"
              height="26"
-             image_pressed="PushButton_Press"
-             image_pressed_selected="PushButton_Selected_Press"
-             image_selected="PushButton_Selected_Press"
+             image_selected="SpeakBtn_Left_Selected_Press"
+             image_unselected="SpeakBtn_Left_Off"
+		     image_pressed="SpeakBtn_Left_Selected_Press"
+		     image_pressed_selected="SpeakBtn_Left_Selected_Press"
              is_toggle="true"
              image_overlay="ao_toggle_18"
              layout="topleft"

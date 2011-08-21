@@ -266,7 +266,7 @@ Hover your mouse over the options for more help.
          width="300" />
 
         <text
-		 name="group_key"
+		 name="group_key_label"
 		 font.style="BOLD"
 		 left="4"
 		 top_pad="11"
