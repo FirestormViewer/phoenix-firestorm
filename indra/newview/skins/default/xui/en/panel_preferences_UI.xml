@@ -1,25 +1,37 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  border="true"
- follows="left|top|right|bottom"
- height="448"
- label="Graphics"
+ follows="all"
+ height="440"
+ label="UI-Pref"
  layout="topleft"
- left="102"
+ left="1"
  name="Display panel"
  top="1"
- width="517">
+ width="535">
+ 
+<tab_container
+ label="Firestorm Prefs"
+ layout="topleft"
+ follows="all"
+ top="5"
+ bottom="-10"
+ left="1"
+ right="-1"
+ name="tabs"
+ tab_min_width="50"
+ tab_position="top" >
 
-    <panel
-     border="false"
-	 follows="top|left"
-     height="432"
-     label="User Interface"
-     layout="topleft"
-     left="5"
-     name="UI Prefs Panel"
-     top="16"
-     width="485">
+	<!--General-->
+	<panel
+	 top_pad="5"
+	 bottom="-1"
+	 left="1"
+	 right="-1"
+	 follows="all"
+	 label="User Interface"
+	 name="UI Prefs Panel" >
+
 		<text
 		type="string"
             left="5"
@@ -147,7 +159,7 @@
 		<text
 		type="string"
             left="5"
-            top_pad="60"
+            top_pad="30"
 		length="1"
 		follows="left|top"
 		height="12"
@@ -572,5 +584,208 @@
 			%
 		</text>
 	</panel>
+
+	<!--Font-->
+	<panel
+	 top_pad="5"
+	 bottom="-1"
+	 left="1"
+	 right="-1"
+	 follows="all"
+	 label="Font"
+	 name="UI-font-tab" >
+
+	<text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="16"
+     layout="topleft"
+     left="10"
+     name="tooltip_textbox"
+     top_pad="10"
+     width="120">
+       Font Scheme:
+    </text>
+    <combo_box
+     height="23"
+     layout="topleft"
+     follows="left|top"
+     control_name="PhoenixFontSettingsFile"
+     left_pad="5"
+     name="Tooltipdelay"
+     width="160">
+		<combo_box.item
+		 label="Deja Vu"
+		 name="tt_item1"
+		 value="fonts.xml" />
+		<combo_box.item
+		 label="Ubuntu Font Family"
+		 name="tt_item2"
+		 value="fonts_ubuntu.xml" />
+		<combo_box.item
+		 label="Liberation"
+		 name="tt_item3"
+		 value="fonts_liberation.xml" />
+		<combo_box.item
+		 label="Driod Sans"
+		 name="tt_item4"
+		 value="fonts_driod.xml" />
+    </combo_box>
+	<text
+     name="tooltip_textbox"
+	 top_delta="5"
+	 left_pad="5"
+	 height="16"
+	 width="120"
+     layout="topleft"
+     follows="left|top"
+     type="string"
+     length="1">
+       (Requires restart)
+    </text>
+
+<!-- disabled for now, needs code support
+	<text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="16"
+     layout="topleft"
+     left="10"
+     name="tooltip_textbox"
+     top_pad="15"
+     width="120">
+       Chat Line spacing:
+    </text>
+	<spinner
+	 top_delta="-5"
+	 left_pad="5"
+	 height="18"
+	 width="90"
+	 control_name="PhoenixFontChatLineSpacing"
+	 layout="topleft"
+	 follows="left|top"
+	 increment="0.01"
+	 decimal_digits="2"
+	 initial_val="1"
+	 min_val="1"
+	 max_val="1.75"
+	 name="chat_line_spacing_slider" />
+
+	<text
+     name="tooltip_textbox"
+     top_pad="15"
+     left="10"
+     height="16"
+     width="120"
+     layout="topleft"
+     follows="left|top"
+     type="string"
+     length="1">
+       Small Font Size:
+    </text>
+	<spinner
+	 name="chat_line_spacing_slider"
+	 top_delta="-5"
+	 left_pad="5"
+	 height="18"
+	 width="40"
+	 layout="topleft"
+	 follows="left|top"
+	 control_name="PhoenixFontSizeSmall"
+	 increment="1"
+	 decimal_digits="0"
+	 initial_val="10"
+	 min_val="6"
+	 max_val="14" />
+	<text
+     name="tooltip_textbox"
+	 top_delta="5"
+	 left_pad="3"
+	 height="16"
+	 width="80"
+     layout="topleft"
+     follows="left|top"
+     type="string"
+     length="1">
+       pt (defualt 10)
+    </text>
+-->
+
+<!-- not a live preview
+	<text
+     name="tooltip_textbox"
+     top_pad="15"
+     left="10"
+     height="24"
+     width="480"
+     layout="topleft"
+     follows="left|top"
+     type="string"
+     length="1"
+	 font="SansSerifHuge">
+       The quick brown fox jumps over the lazy dog.
+    </text>
+
+	<text
+     name="tooltip_textbox"
+     top_pad="5"
+     left="10"
+     height="18"
+     width="480"
+     layout="topleft"
+     follows="left|top"
+     type="string"
+     length="1"
+	 font="SansSerifLarge">
+       The quick brown fox jumps over the lazy dog.
+    </text>
+
+	<text
+     name="tooltip_textbox"
+     top_pad="5"
+     left="10"
+     height="16"
+     width="480"
+     layout="topleft"
+     follows="left|top"
+     type="string"
+     length="1"
+	 font="SansSerifMedium">
+       The quick brown fox jumps over the lazy dog.
+    </text>
+
+	<text
+     name="tooltip_textbox"
+     top_pad="5"
+     left="10"
+     height="16"
+     width="480"
+     layout="topleft"
+     follows="left|top"
+     type="string"
+     length="1"
+	 font="SansSerifSmall">
+       The quick brown fox jumps over the lazy dog.
+    </text>
+
+	<text
+     name="tooltip_textbox"
+     top_pad="8"
+     left="10"
+     height="12"
+     width="480"
+     layout="topleft"
+     follows="left|top"
+     type="string"
+     length="1"
+	 font="Monospace">
+       The quick brown fox jumps over the lazy dog.
+    </text>
+-->
+	
+	</panel>
+</tab_container>
 </panel>
 

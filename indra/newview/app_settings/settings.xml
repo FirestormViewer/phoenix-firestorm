@@ -15083,5 +15083,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>1</integer>
     </map>
 
+    <key>PhoenixFontSettingsFile</key>
+    <map>
+      <key>Comment</key>
+      <string>Line spacing on chat</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <integer>fonts.xml</integer>
+    </map>
 </map>
 </llsd>

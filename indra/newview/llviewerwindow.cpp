@@ -1526,7 +1526,8 @@ LLViewerWindow::LLViewerWindow(
 								mDisplayScale.mV[VX],
 								mDisplayScale.mV[VY],
 								gDirUtilp->getAppRODataDir(),
-								LLUI::getXUIPaths());
+								LLUI::getXUIPaths(),
+								gSavedSettings.getString("PhoenixFontSettingsFile"));
 	
 	// Create container for all sub-views
 	LLView::Params rvp;
@@ -4577,7 +4578,8 @@ void LLViewerWindow::initFonts(F32 zoom_factor)
 								mDisplayScale.mV[VX] * zoom_factor,
 								mDisplayScale.mV[VY] * zoom_factor,
 								gDirUtilp->getAppRODataDir(),
-								LLUI::getXUIPaths());
+								LLUI::getXUIPaths(),
+								gSavedSettings.getString("PhoenixFontSettingsFile"));
 	// Force font reloads, which can be very slow
 	LLFontGL::loadDefaultFonts();
 }
