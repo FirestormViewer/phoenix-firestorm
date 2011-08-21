@@ -24,7 +24,6 @@
 
 	<!--General-->
 	<panel
-	 border="true"
 	 top_pad="5"
 	 bottom="-1"
 	 left="1"
@@ -319,7 +318,6 @@
 
 	<!--Protection-->
 	<panel
-	 border="true"
 	 top_pad="5"
 	 bottom="-1"
 	 left="1"
@@ -400,7 +398,6 @@
 
 	<!--View-->
 	<panel
-	 border="true"
 	 top_pad="5"
 	 bottom="-1"
 	 left="1"
@@ -698,7 +695,6 @@
 
 	<!--Chat-->
 	<panel
-	 border="true"
 	 top_pad="5"
 	 bottom="-1"
 	 left="1"
@@ -1144,7 +1140,6 @@
 
 	<!--CmdLine-->
 	<panel
-	 border="true"
 	 top_pad="5"
 	 bottom="-1"
 	 left="1"
@@ -1506,7 +1501,6 @@
 
 	<!--Windlight-->
 	<panel
-	 border="true"
 	 top_pad="5"
 	 bottom="-1"
 	 left="1"
@@ -1564,7 +1558,6 @@
 	
 	<!--Build-->
 	<panel
-		border="true"
 		top_pad="5"
 		bottom="-1"
 		left="1"
