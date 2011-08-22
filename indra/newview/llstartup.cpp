@@ -790,7 +790,7 @@ bool idle_startup()
 		//
 		if (gUserCredential.isNull())
 		{
-			gUserCredential = gLoginHandler.initializeLoginInfo();
+			gUserCredential = gSecAPIHandler->loadCredential(gSavedSettings.getString("UserLoginInfo"));                       
 		}
 		// Previous initializeLoginInfo may have generated user credentials.  Re-check them.
 		if (gUserCredential.isNull())
@@ -851,7 +851,7 @@ bool idle_startup()
 			// show the login view until login_show() is called below.  
 			if (gUserCredential.isNull())                                                                          
 			{                                                                                                      
-				gUserCredential = gLoginHandler.initializeLoginInfo();                 
+				gUserCredential = gSecAPIHandler->loadCredential(gSavedSettings.getString("UserLoginInfo"));                       
 			}     
 			if (gHeadlessClient)
 			{
@@ -982,7 +982,6 @@ bool idle_startup()
 		if(gUserCredential.notNull())                                                                                  
 		{  
 			userid = gUserCredential->userID();                                                                    
-			gSecAPIHandler->saveCredential(gUserCredential, gRememberPassword);  
 		}
 		gSavedSettings.setBOOL("RememberPassword", gRememberPassword);                                                 
 		LL_INFOS("AppInit") << "Attempting login as: " << userid << LL_ENDL;                                           
@@ -1297,6 +1296,7 @@ bool idle_startup()
 				// create the default proximal channel
 				LLVoiceChannel::initClass();
 				LLGridManager::getInstance()->setFavorite(); 
+				gSecAPIHandler->saveCredential(gUserCredential, gRememberPassword);  
 				LLStartUp::setStartupState( STATE_WORLD_INIT);
 			}
 			else

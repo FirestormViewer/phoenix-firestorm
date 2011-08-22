@@ -94,15 +94,22 @@ private:
 	static void onClickVersion(void*);
 	static void onClickForgotPassword(void*);
 	static void onClickHelp(void*);
+	static void onClickDelete(void*);
 	static void onPassKey(LLLineEditor* caller, void* user_data);
 	static void onSelectServer(LLUICtrl*, void*);
+	static void onSelectSavedLogin(LLUICtrl*, void*);
 //	static void onServerComboLostFocus(LLFocusableElement*);
 	static void updateServerCombo();
+	static void updateSavedLoginsCombo();
 	static void updateStartSLURL();
 	void onModeChange(const LLSD& original_value, const LLSD& new_value);
 	void onModeChangeConfirm(const LLSD& original_value, const LLSD& new_value, const LLSD& notification, const LLSD& response);
 	
 	static void updateLoginPanelLinks();
+
+	// Helper for making a standardized saved login name, depending on user name and grid name
+	static std::string credential_name();
+
 
 private:
 	LLPointer<LLUIImage> mLogoImage;

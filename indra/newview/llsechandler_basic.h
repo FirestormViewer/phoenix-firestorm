@@ -208,7 +208,7 @@ public:
 class LLSecAPIBasicCredential : public LLCredential
 {
 public:
-	LLSecAPIBasicCredential(const std::string& grid) : LLCredential(grid) {} 
+	LLSecAPIBasicCredential(const std::string& credName) : LLCredential(credName) {} 
 	virtual ~LLSecAPIBasicCredential() {}
 	// return a value representing the user id, (could be guid, name, whatever)
 	virtual std::string userID() const;	
@@ -261,15 +261,17 @@ public:
 	
 	// credential management routines
 	
-	virtual LLPointer<LLCredential> createCredential(const std::string& grid,
+	virtual LLPointer<LLCredential> createCredential(const std::string& credName,
 													 const LLSD& identifier, 
 													 const LLSD& authenticator);
 	
-	virtual LLPointer<LLCredential> loadCredential(const std::string& grid);
+	virtual LLPointer<LLCredential> loadCredential(const std::string& credName);
 
 	virtual void saveCredential(LLPointer<LLCredential> cred, bool save_authenticator);
 	
 	virtual void deleteCredential(LLPointer<LLCredential> cred);
+
+	virtual std::vector<std::string> listCredentials();
 	
 protected:
 	void _readProtectedData();
