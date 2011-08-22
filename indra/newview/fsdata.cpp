@@ -518,7 +518,11 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color){
 	//WS: If we have a tag using the new system, check if we want to display it's name and/or color
 	if(new_system){
 		if(gSavedSettings.getU32("FSClientTagsVisibility")>=3){
-			U32 tag_len = strnlen((const char*)&id.mData[0], UUID_BYTES);
+			// strnlen() doesn't exist on OS X before 10.7. -- TS
+			char tag_temp[UUID_BYTES+1];
+			strncpy(tag_temp,(const char*)&id.mData[0], UUID_BYTES);
+			tag_temp[UUID_BYTES] = '\0';
+			U32 tag_len = strlen(tag_temp);
 			std::string clienttagname = std::string((const char*)&id.mData[0], tag_len);
 			LLStringFn::replace_ascii_controlchars(clienttagname, LL_UNKNOWN_CHAR);
 			curtag["name"] = clienttagname;
