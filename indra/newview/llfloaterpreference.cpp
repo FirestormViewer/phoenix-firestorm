@@ -729,11 +729,16 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 
 	LLPanelLogin::setAlwaysRefresh(true);
 	refresh();
+
+	
+	getChildView("plain_text_chat_history")->setEnabled(TRUE);
+	getChild<LLUICtrl>("plain_text_chat_history")->setValue(gSavedSettings.getBOOL("PlainTextChatHistory"));
 	
 	// Make sure the current state of prefs are saved away when
 	// when the floater is opened.  That will make cancel do its
 	// job
 	saveSettings();
+	
 }
 
 void LLFloaterPreference::onVertexShaderEnable()
@@ -1502,8 +1507,6 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	getChild<LLUICtrl>("online_visibility")->setLabelArg("[DIR_VIS]", mDirectoryVisibility);
 	getChildView("send_im_to_email")->setEnabled(TRUE);
 	getChild<LLUICtrl>("send_im_to_email")->setValue(im_via_email);
-	getChildView("plain_text_chat_history")->setEnabled(TRUE);
-	getChild<LLUICtrl>("plain_text_chat_history")->setValue(gSavedSettings.getBOOL("PlainTextChatHistory"));
 	getChildView("log_instant_messages")->setEnabled(TRUE);
 //	getChildView("log_chat")->setEnabled(TRUE);
 //	getChildView("busy_response")->setEnabled(TRUE);
