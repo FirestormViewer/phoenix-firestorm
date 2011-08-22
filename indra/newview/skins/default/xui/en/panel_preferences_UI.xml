@@ -672,6 +672,7 @@
 	 min_val="1"
 	 max_val="1.75"
 	 name="chat_line_spacing_slider" />
+-->
 
 	<text
      name="tooltip_textbox"
@@ -683,35 +684,34 @@
      follows="left|top"
      type="string"
      length="1">
-       Small Font Size:
+       Font Size Adjustment:
     </text>
 	<spinner
 	 name="chat_line_spacing_slider"
 	 top_delta="-5"
 	 left_pad="5"
 	 height="18"
-	 width="40"
+	 width="50"
 	 layout="topleft"
 	 follows="left|top"
-	 control_name="PhoenixFontSizeSmall"
-	 increment="1"
-	 decimal_digits="0"
-	 initial_val="10"
-	 min_val="6"
-	 max_val="14" />
+	 control_name="PhoenixFontSizeAdjustment"
+	 increment=".1"
+	 decimal_digits="1"
+	 initial_val="0"
+	 min_val="-1"
+	 max_val="2" />
 	<text
      name="tooltip_textbox"
 	 top_delta="5"
 	 left_pad="3"
 	 height="16"
-	 width="80"
+	 width="335"
      layout="topleft"
      follows="left|top"
      type="string"
      length="1">
-       pt (defualt 10)
+       pt (defualt 0, larger values may not work well, requires restart)
     </text>
--->
 
 <!-- not a live preview
 	<text

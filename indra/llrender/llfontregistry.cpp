@@ -164,8 +164,8 @@ LLFontDescriptor LLFontDescriptor::normalize() const
 }
 
 LLFontRegistry::LLFontRegistry(const string_vec_t& xui_paths,
-							   bool create_gl_textures)
-:	mCreateGLTextures(create_gl_textures)
+							   bool create_gl_textures, F32 size_mod)
+:	mCreateGLTextures(create_gl_textures), mFontSizeMod(size_mod)
 {
 	// Propagate this down from LLUICtrlFactory so LLRender doesn't
 	// need an upstream dependency on LLUI.
@@ -320,7 +320,9 @@ bool LLFontRegistry::initFromXML(LLXMLNodePtr node)
 			if (child->getAttributeString("name",size_name) &&
 				child->getAttributeF32("size",size_value))
 			{
-				mFontSizes[size_name] = size_value;
+				// mFontSizes[size_name] = size_value;
+				// +/- defualt font sizes -KC
+				mFontSizes[size_name] = size_value + mFontSizeMod;
 			}
 
 		}

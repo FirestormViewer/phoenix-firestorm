@@ -170,6 +170,7 @@ void init_llui()
 						gDirUtilp->getAppRODataDir(),
 						LLUI::getXUIPaths(),
 						"fonts.xml",
+						f.0,
 						false );	// don't create gl textures
 	
 	LLFloaterView::Params fvparams;
