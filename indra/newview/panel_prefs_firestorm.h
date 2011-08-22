@@ -21,6 +21,10 @@ public:
 
 	void onAutoCorrectSettings();
 
+	
+	void refreshTagCombos();
+	void applyTagCombos();
+
 protected:
 	LLLineEditor* m_calcLineEditor;
 	LLLineEditor* m_acLineEditor;
@@ -28,5 +32,9 @@ protected:
 	LLLineEditor* m_clearchatLineEditor;
 	LLLineEditor* m_musicLineEditor;
 	LLLineEditor* m_aoLineEditor;
+	
+	LLComboBox* m_UseLegacyClienttags;
+	LLComboBox* m_ColorClienttags;
+	LLComboBox* m_ClientTagsVisibility;
 };
 #endif

@@ -8,6 +8,7 @@
 #include "lggbeammapfloater.h"
 #include "lggbeamcolormapfloater.h"
 #include "lggautocorrectfloater.h"
+#include "llvoavatar.h"
 
 static LLRegisterPanelClassWrapper<PanelPreferenceFirestorm> t_pref_fs("panel_preference_firestorm");
 
@@ -17,6 +18,7 @@ PanelPreferenceFirestorm::PanelPreferenceFirestorm() : LLPanelPreference(), m_ca
 
 BOOL PanelPreferenceFirestorm::postBuild()
 {
+	
 	// LGG's Color Beams
 	refreshBeamLists();
 
@@ -64,17 +66,32 @@ BOOL PanelPreferenceFirestorm::postBuild()
 	{
 		m_aoLineEditor->setEnabled(FALSE);
 	}
+	
+	
+	//WS: Set the combo_box vars and refresh/reload them
+	m_UseLegacyClienttags = getChild<LLComboBox>("UseLegacyClienttags");		
+	m_ColorClienttags = getChild<LLComboBox>("ColorClienttags");		
+	m_ClientTagsVisibility = getChild<LLComboBox>("ClientTagsVisibility");	
+	refreshTagCombos();
+
+
 	return LLPanelPreference::postBuild();	
 }
 
 void PanelPreferenceFirestorm::apply()
 {
+	//WS: Apply the combo_boxes for tags
+	applyTagCombos();
+
 }
 
 
 void PanelPreferenceFirestorm::cancel()
 {
+	//WS: Refresh/Reload the Combo_boxes for tags to show the right setting.
+	refreshTagCombos();
 }
+
 
 void PanelPreferenceFirestorm::refreshBeamLists()
 {
@@ -168,4 +185,43 @@ void PanelPreferenceFirestorm::onBeamDelete()
 void PanelPreferenceFirestorm::onAutoCorrectSettings()
 {
 	LGGAutoCorrectFloater::showFloater();
+}
+
+
+
+void PanelPreferenceFirestorm::refreshTagCombos()
+{	
+
+	//WS: Set the combo_boxes to the right value
+	U32 usel_u = gSavedSettings.getU32("FSUseLegacyClienttags");
+	U32 tagv_u = gSavedSettings.getU32("FSClientTagsVisibility");
+	U32 tagc_u = gSavedSettings.getU32("FSColorClienttags");
+
+
+	std::string usel = llformat("%d",usel_u);
+	std::string tagv = llformat("%d",tagv_u);
+	std::string tagc = llformat("%d",tagc_u);
+	
+	m_UseLegacyClienttags->setCurrentByIndex(usel_u);
+	m_ColorClienttags->setCurrentByIndex(tagc_u);
+	m_ClientTagsVisibility->setCurrentByIndex(tagv_u);
+
+}
+
+
+void PanelPreferenceFirestorm::applyTagCombos()
+{
+	//WS: If the user hits "apply" then write everything (if something changed) into the Debug Settings
+
+	if(gSavedSettings.getU32("FSUseLegacyClienttags")!=m_UseLegacyClienttags->getCurrentIndex()
+		|| gSavedSettings.getU32("FSColorClienttags")!=m_ColorClienttags->getCurrentIndex()
+		|| gSavedSettings.getU32("FSClientTagsVisibility")!=m_ClientTagsVisibility->getCurrentIndex()){
+
+		gSavedSettings.setU32("FSUseLegacyClienttags",m_UseLegacyClienttags->getCurrentIndex());
+		gSavedSettings.setU32("FSColorClienttags",m_ColorClienttags->getCurrentIndex());
+		gSavedSettings.setU32("FSClientTagsVisibility",m_ClientTagsVisibility->getCurrentIndex());
+		
+		//WS: Clear all nametags to make everything display properly!
+		LLVOAvatar::invalidateNameTags();
+	}
 }

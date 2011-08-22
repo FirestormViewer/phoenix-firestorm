@@ -1761,5 +1761,108 @@
 		 control_name="FSSaveInventoryScriptsAsMono"/>
 	
 	</panel>
+
+
+
+
+
+
+  <!--Tags-->
+  <panel
+		top_pad="5"
+		bottom="-1"
+		left="1"
+		right="-1"
+		follows="all"
+		label="Tags"
+		name="TagTab">
+
+    <text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="15"
+		 layout="topleft"
+		 left="20"
+		 name="whattagstoshow"
+		 top_pad="20"
+		 width="220">
+      What tags do you want to see?
+    </text>
+
+    <combo_box
+    follows="left|top"
+    height="23"
+    layout="topleft"
+    left_pad="2"
+    max_chars="135"
+      width="220"
+     allow_text_entry="false"
+       name="ClientTagsVisibility">
+      <combo_item name="No Viewertags" value="0">No Viewertags</combo_item>
+      <combo_item name="TPVD Viewer" value="1">TPVD Viewers (using a list)</combo_item>
+      <combo_item name="All known Viewers" value="2">All known Viewers (using a list)</combo_item>
+      <combo_item name="All Viewers" value="3">All Viewers</combo_item>
+    </combo_box>   
+    
+    <text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="15"
+		 layout="topleft"
+		 left="20"
+		 name="colorbasedonviewer"
+		 top_pad="10"
+		 width="220">
+      Tag Color based on Viewer?
+    </text>
+
+    <combo_box
+     follows="left|top"
+     height="23"
+     layout="topleft"
+     left_pad="2"
+     max_chars="135"
+		   width="220"
+      allow_text_entry="false"
+      name="ColorClienttags">
+      <combo_item name="Color not based on Viewer" value="0">Color not based on Viewer</combo_item>
+      <combo_item name="Single color per Viewer" value="1">Single color per Viewer</combo_item>
+      <combo_item name="Multiple colors per Viewer" value="2">Multiple colors per Viewer</combo_item>
+      <combo_item name="Userdefined color" value="3">Userdefined Color</combo_item>
+    </combo_box>
+
+    <text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="15"
+		 layout="topleft"
+		 left="20"
+		 name="uselistfortags"
+		 top_pad="10"
+		 width="220">
+      Use a list to display Viewertags?
+    </text>
+
+    <combo_box
+ follows="left|top"
+ height="23"
+ layout="topleft"
+ left_pad="2"
+ max_chars="135"
+ width="220"
+  allow_text_entry="false"
+  name="UseLegacyClienttags">
+      <combo_item name="Don't use a list" value="0">Don't use a list</combo_item>
+      <combo_item name="Local Clienttags" value="1">Local Tag List</combo_item>
+      <combo_item name="Download Clienttags" value="2">Download Tag List at Viewer Start</combo_item>
+    </combo_box>
+    
+  </panel>
+  
+  
+  
 </tab_container>
 </panel>

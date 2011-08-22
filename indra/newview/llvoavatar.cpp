@@ -2948,16 +2948,22 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		|| is_cloud != mNameCloud)
 				{
 
-					
+		//WS: If we got a uuid and if we know if it's id_based or not, ask FSDATA for the other tagdata, before we display it.
+		if(mClientTagData.has("uuid") && mClientTagData.has("id_based")){			
+			LLColor4 color;
+			if(mClientTagData.has("tex_color")) color.setValue(mClientTagData["tex_color"]);
+			else color = LLColor4::black;
+			mClientTagData = FSData::resolveClientTag(LLUUID(mClientTagData["uuid"].asString()), mClientTagData["id_based"].asBoolean(),color);
+		}
+
 		LLColor4 name_tag_color = getNameTagColor(is_friend);
 
 		// Wolfspirit: If we don't need to display a friend,
 		// if we aren't self, if we use colored Clienttags and if we have a color
 		// then use that color as name_tag_color
 		static LLUICachedControl<bool> show_friends("NameTagShowFriends");
-		static LLUICachedControl<bool> use_colors("FSColorClienttags");
-		if(mHasClientTagColor && !(show_friends && is_friend) && use_colors && !this->isSelf()){
-			name_tag_color = mClientTagColor; 
+		if(mClientTagData.has("color") && !(show_friends && is_friend) && gSavedSettings.getU32("FSColorClienttags")>0 && !this->isSelf()){
+			name_tag_color = mClientTagData["color"]; 
 		}
 
 
@@ -3032,9 +3038,9 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				if (show_display_names)
 				{
 
-					if (!mClientTag.empty() && gSavedSettings.getBOOL("ShowViewerIDsOnNameTag"))
+					if (mClientTagData.has("name") && !mClientTagData["name"].asString().empty())
 					{
-						addNameTagLine(av_name.mDisplayName+" (" + mClientTag + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif());
+						addNameTagLine(av_name.mDisplayName+" (" + mClientTagData["name"].asString() + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif());
 					}
 					else
 					{
@@ -3080,10 +3086,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 // [/RLVa:KB]
 			else // Only check for client tags when not RLV anon -AO
 			{
-				if (!mClientTag.empty() && gSavedSettings.getBOOL("ShowViewerIDsOnNameTag"))
+				if (mClientTagData.has("name") && !mClientTagData["name"].asString().empty())
 				{
-					lldebugs << "ClientTag is set! mClientTag=" << mClientTag << llendl;
-					addNameTagLine(full_name+" (" + mClientTag + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif());
+					lldebugs << "ClientTag is set! mClientTag=" << mClientTagData["name"].asString() << llendl;
+					addNameTagLine(full_name+" (" + mClientTagData["name"].asString() + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif());
 				}
 				else
 				{
@@ -6984,133 +6990,7 @@ bool LLVOAvatar::visualParamWeightsAreDefault()
 	return rtn;
 }
 
-void LLVOAvatar::resolveClient(const LLUUID tag)
-// looks at a UUID and tries to match it to a known client.
-// hard coded list to be quick and dirty. TODO: Replace with the usual XML file.
-// TODO: turn this into an enumeration-backed switch statement.
-{
-	// Wolfspirit: The clienttag list is loaded into FSData::LegacyClientList
-	LLSD taglist = FSData::getInstance()->LegacyClientList;
-	mHasClientTagColor = false;
 
-	// Wolfspirit: If the Taglist is complete and the taglist contains our requested key, then set the ClientName and ClientColor
-	// else try to use our fallback alternatives.
-	if(taglist.has("isComplete") && taglist.has(tag.asString())){
-		LLSD tagdata = taglist[tag.asString()];
-		mClientTag = tagdata["name"].asString();
-		mClientTagColor.setValue(tagdata["color"]);
-		mHasClientTagColor = true;
-	}
-	else if(tag == LLUUID("5d9581af-d615-bc16-2667-2f04f8eeefe4"))//green
-	{
-		mClientTag = "Phoenix";
-		mClientTagColor = LLColor4::green;
-		mHasClientTagColor =true;
-	}
-	else if(tag == LLUUID("e35f7d40-6071-4b29-9727-5647bdafb5d5"))//white
-	{
-		mClientTag = "Phoenix";
-		mClientTagColor = LLColor4::white;
-		mHasClientTagColor =true;
-	}
-	else if(tag == LLUUID("ae4e92fb-023d-23ba-d060-3403f953ab1a"))//pink
-	{
-		mClientTag = "Phoenix";
-		mClientTagColor = LLColor4::pink;
-		mHasClientTagColor =true;
-	}
-	else if(tag == LLUUID("e71b780e-1a57-400d-4649-959f69ec7d51"))//red
-	{
-		mClientTag = "Phoenix";
-		mClientTagColor = LLColor4::red;
-		mHasClientTagColor =true;
-	}
-	else if(tag == LLUUID("c1c189f5-6dab-fc03-ea5a-f9f68f90b018"))//orange
-	{
-		mClientTag = "Phoenix";
-		mClientTagColor = LLColor4::orange;
-		mHasClientTagColor =true;
-	}
-	else if(tag == LLUUID("8cf0577c-22d3-6a73-523c-15c0a90d6c27")) //purple
-	{
-		mClientTag = "Phoenix";
-		mClientTagColor = LLColor4::purple;
-		mHasClientTagColor =true;
-	}
-	else if(tag == LLUUID("5f0e7c32-38c3-9214-01f0-fb16a5b40128"))//yellow
-	{
-		mClientTag = "Phoenix";
-		mClientTagColor = LLColor4::yellow;
-		mHasClientTagColor =true;
-	}
-	else if(tag == LLUUID("5bb6e4a6-8e24-7c92-be2e-91419bb0ebcb"))//blue
-	{
-		mClientTag = "Phoenix";
-		mClientTagColor = LLColor4::blue;
-		mHasClientTagColor =true;
-	}
-	else if(tag == LLUUID("ed63fbd0-589e-fe1d-a3d0-16905efaa96b"))//default (red)
-	{
-		mClientTag = "Phoenix";
-		mClientTagColor = LLColor4::red;
-		mHasClientTagColor =true;
-	}
-	
-	else if(tag == LLUUID("c228d1cf-4b5d-4ba8-84f4-899a0796aa97"))//viewer 2.0
-	{
-		mClientTag = "Viewer 2";
-	}
-
-	else if(tag == LLUUID("0bcd5f5d-a4ce-9ea4-f9e8-15132653b3d8"))
-	{
-		mClientTag = "MoyMix";
-	}
-	else if(tag == LLUUID("c58fca06-33b3-827d-d81c-a886a631affc"))
-	{
-		mClientTag = "Whale";
-	}
-	else if(tag == LLUUID("cc7a030f-282f-c165-44d2-b5ee572e72bf"))
-	{
-		mClientTag = "Imprudence";
-	}
-	else if(tag == LLUUID("2a9a406c-f448-68f2-4e38-878f8c46c190"))
-	{
-		mClientTag = "Meerkat";
-	}
-	else if(tag == LLUUID("b6820989-bf42-ff59-ddde-fd3fd3a74fe4"))
-	{
-		mClientTag = "Meerkat";
-	}
-	else if(tag == LLUUID("5aa5c70d-d787-571b-0495-4fc1bdef1500"))
-	{
-		mClientTag = "PAR"; // used to be LGG Proxy, more correct
-	}
-	else if(tag == LLUUID("54d93609-1392-2a93-255c-a9dd429ecca5"))
-	{
-		mClientTag = "Emergence";
-	}
-	else if(tag == LLUUID("8873757c-092a-98fb-1afd-ecd347566fcd"))
-	{
-		mClientTag = "Ascent";
-	}
-	else if(tag == LLUUID("734fed29-4c51-63e5-1648-6589949d7585"))
-	{
-		mClientTag = "Explicit";
-	}
-	else if(tag == LLUUID("b33b69ae-6b6c-b395-0175-ce76a871173b"))
-	{
-		mClientTag = "Nicholas";
-	}
-	else if(tag == LLUUID("f25263b7-6167-4f34-a4ef-af65213b2e39"))
-	{
-		mClientTag = "Singularity";
-	}
-	
-	// Nothing found
-	
-	else 
-		mClientTag = "";
-}
 
 
 //-----------------------------------------------------------------------------
@@ -7149,37 +7029,23 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 //	dumpAvatarTEs( "POST processAvatarAppearance()" );
 
 	// <clientTags>
+	//Wolfspirit: Read the UUID, system and Texturecolor
 	LLTextureEntry* tex = getTE(0);
 	const LLUUID tag_uuid = tex->getID();
+	bool new_system=false;
+	if(tex->getGlow() > 0.0f){
+		new_system=true;
+	}
 
-	// Wolfspirit: Only resolve the Client via a list, when we want it to do that.
-	if(gSavedSettings.getS32("FSUseLegacyClienttags")>0) resolveClient(tag_uuid); // sets mClientTag
-	
-	// Wolfspirit: Don't use old Version if we have a texture glow more then 0.0f (we are using the new System)
-	if (mClientTag != "" && !(tex->getGlow() > 0.0f))
-	{
-		//llinfos << "LLVOAvatar::processAvatarAppearance() Detected ClientTag=" << mClientTag << llendl;
-		mNameString.clear();
-	}	
-	else if(tex->getGlow() > 0.0f)
-	{
-				// Wolfspirit: New Clienttag Version. Set Color and Text based on the Texture.
-		U32 tag_len = strnlen((const char*)&tag_uuid.mData[0], UUID_BYTES);
-		mClientTag = std::string((const char*)&tag_uuid.mData[0], tag_len);
-		mClientTagColor = tex->getColor();
-		mHasClientTagColor=true;
-		LLStringFn::replace_ascii_controlchars(mClientTag, LL_UNKNOWN_CHAR);
-		//llinfos << "LLVOAvatar::processAvatarAppearance() Detected ClientTag=" << mClientTag << llendl;
-		mNameString.clear();
-	}
-	else
-	{
-		mNameString.clear();
-		mHasClientTagColor=false;
-	}
+	//WS: Write them into an LLSD map
+	mClientTagData["uuid"]=tag_uuid.asString();
+	mClientTagData["id_based"]=new_system;
+	mClientTagData["tex_color"]=tex->getColor().getValue();
+
+	//WS: Clear mNameString to force a rebuild
+	mNameString.clear();
 	// </clientTags>
 	
-
 
 	// prevent the overwriting of valid baked textures with invalid baked textures
 	for (U8 baked_index = 0; baked_index < mBakedTextureDatas.size(); baked_index++)
