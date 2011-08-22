@@ -65,19 +65,21 @@ public:
 
 	static void getFields(LLPointer<LLCredential>& credential, BOOL& remember);
 
-	static BOOL isGridComboDirty();
+// <AW: opensim>
+// 	static BOOL isGridComboDirty(); 
 	static BOOL areCredentialFieldsDirty();
 	static void setLocation(const LLSLURL& slurl);
 	
 	static void updateLocationCombo(bool force_visible);  // simply update the combo box
 	static void closePanel();
 
-	void setSiteIsAlive( bool alive );
+// <AW: opensim>
+// 	void setSiteIsAlive( bool alive );
 
 	static void loadLoginPage();	
 	static void giveFocus();
 	static void setAlwaysRefresh(bool refresh); 
-	
+
 	// inherited from LLViewerMediaObserver
 	/*virtual*/ void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event);
 	static void updateServer();  // update the combo box, change the login page to the new server, clear the combo
@@ -113,6 +115,8 @@ private:
 
 	static LLPanelLogin* sInstance;
 	static BOOL		sCapslockDidNotification;
+	int mGridEntries; 	// <AW: opensim>
+	std::string mLoginPage; // <AW: opensim>
 };
 
 #endif

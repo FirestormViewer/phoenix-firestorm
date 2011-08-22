@@ -250,6 +250,17 @@ void LLURLRequest::allowCookies()
 	mDetail->mCurlRequest->setoptString(CURLOPT_COOKIEFILE, "");
 }
 
+// <AW: opensim>
+void LLURLRequest::setModifiedSince(const time_t &if_modified_since)
+{
+	if(if_modified_since)
+	{
+		mDetail->mCurlRequest->setopt(CURLOPT_TIMECONDITION, CURL_TIMECOND_IFMODSINCE);
+		mDetail->mCurlRequest->setopt(CURLOPT_TIMEVALUE, (long)if_modified_since);
+	}
+}
+// </AW: opensim>
+
 // virtual
 LLIOPipe::EStatus LLURLRequest::handleError(
 	LLIOPipe::EStatus status,

@@ -2044,7 +2044,7 @@ void LLViewerWindow::setNormalControlsVisible( BOOL visible )
 
 		// ...and set the menu color appropriately.
 		setMenuBackgroundColor(gAgent.getGodLevel() > GOD_NOT, 
-			LLGridManager::getInstance()->isInProductionGrid());
+			!LLGridManager::getInstance()->isInSLBeta());
 	}
         
 	if ( gStatusBar )
@@ -2070,11 +2070,11 @@ void LLViewerWindow::setMenuBackgroundColor(bool god_mode, bool dev_grid)
 	bool isProject = (channel.find("Project") != std::string::npos);
 	
 	// god more important than project, proj more important than grid
-    if(god_mode && LLGridManager::getInstance()->isInProductionGrid())
+    if(god_mode && !LLGridManager::getInstance()->isInSLBeta())
     {
         new_bg_color = LLUIColorTable::instance().getColor( "MenuBarGodBgColor" );
     }
-    else if(god_mode && !LLGridManager::getInstance()->isInProductionGrid())
+    else if(god_mode && LLGridManager::getInstance()->isInSLBeta())
     {
         new_bg_color = LLUIColorTable::instance().getColor( "MenuNonProductionGodBgColor" );
     }
@@ -2082,7 +2082,7 @@ void LLViewerWindow::setMenuBackgroundColor(bool god_mode, bool dev_grid)
 	{
 		new_bg_color = LLUIColorTable::instance().getColor( "MenuBarProjectBgColor" );
     }
-    else if(!god_mode && !LLGridManager::getInstance()->isInProductionGrid())
+    else if(!god_mode && LLGridManager::getInstance()->isInSLBeta())
     {
         new_bg_color = LLUIColorTable::instance().getColor( "MenuNonProductionBgColor" );
     }

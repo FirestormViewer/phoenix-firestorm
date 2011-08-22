@@ -2421,20 +2421,20 @@ bool LLAppViewer::initConfiguration()
     // What can happen is that someone can use IE (or potentially 
     // other browsers) and do the rough equivalent of command 
     // injection and steal passwords. Phoenix. SL-55321
-    if(clp.hasOption("url"))
-    {
-		LLStartUp::setStartSLURL(LLSLURL(clp.getOption("url")[0]));
-		if(LLStartUp::getStartSLURL().getType() == LLSLURL::LOCATION) 
-		{  
-			LLGridManager::getInstance()->setGridChoice(LLStartUp::getStartSLURL().getGrid());
-			
-		}  
-    }
-    else if(clp.hasOption("slurl"))
-    {
-		LLSLURL start_slurl(clp.getOption("slurl")[0]);
-		LLStartUp::setStartSLURL(start_slurl);
-    }
+
+	// The gridmanager doesn't know the grids yet, only prepare
+	// parsing the slurls, actually done when the grids are fetched 
+	// (currently at the top of startup STATE_AUDIO_INIT,
+	// but rather it belongs into the gridmanager)
+	if(clp.hasOption("url"))
+	{
+		LLStartUp::setStartSLURLString((clp.getOption("url")[0]));
+	}
+	else if(clp.hasOption("slurl"))
+	{
+		LLStartUp::setStartSLURLString(clp.getOption("slurl")[0]);
+	}
+
 //-TT Hacking to save the skin and theme for future use.
 	mCurrentSkin = gSavedSettings.getString("SkinCurrent");
 	mCurrentSkinTheme = gSavedSettings.getString("SkinCurrentTheme");

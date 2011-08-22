@@ -488,7 +488,7 @@ void init_menus()
 	gPopupMenuView->setBackgroundColor( color );
 
 	// If we are not in production, use a different color to make it apparent.
-	if (LLGridManager::getInstance()->isInProductionGrid())
+	if (!LLGridManager::getInstance()->isInSLBeta())
 	{
 		color = LLUIColorTable::instance().getColor( "MenuBarBgColor" );
 	}
@@ -504,7 +504,7 @@ void init_menus()
 	menu_bar_holder->addChild(gMenuBarView);
   
     gViewerWindow->setMenuBackgroundColor(false, 
-        LLGridManager::getInstance()->isInProductionGrid());
+        !LLGridManager::getInstance()->isInSLBeta());
 
 	// Assume L$10 for now, the server will tell us the real cost at login
 	// *TODO:Also fix cost in llfolderview.cpp for Inventory menus
@@ -3801,7 +3801,7 @@ void set_god_level(U8 god_level)
         if(gViewerWindow)
         {
             gViewerWindow->setMenuBackgroundColor(god_level > GOD_NOT,
-            LLGridManager::getInstance()->isInProductionGrid());
+            !LLGridManager::getInstance()->isInSLBeta());
         }
     
         LLSD args;
@@ -3841,7 +3841,7 @@ BOOL check_toggle_hacked_godmode(void*)
 
 bool enable_toggle_hacked_godmode(void*)
 {
-  return !LLGridManager::getInstance()->isInProductionGrid();
+  return LLGridManager::getInstance()->isInSLBeta();
 }
 #endif
 
@@ -4800,7 +4800,7 @@ BOOL enable_take()
 		return TRUE;
 #else
 # ifdef TOGGLE_HACKED_GODLIKE_VIEWER
-		if (!LLGridManager::getInstance()->isInProductionGrid() 
+		if (LLGridManager::getInstance()->isInSLBeta() 
             && gAgent.isGodlike())
 		{
 			return TRUE;
@@ -5326,7 +5326,7 @@ bool enable_object_delete()
 	TRUE;
 #else
 # ifdef TOGGLE_HACKED_GODLIKE_VIEWER
-	(!LLGridManager::getInstance()->isInProductionGrid()
+	(LLGridManager::getInstance()->isInSLBeta()
      && gAgent.isGodlike()) ||
 # endif
 	LLSelectMgr::getInstance()->canDoDelete();
@@ -6027,6 +6027,50 @@ class LLShowHelp : public view_listener_t
 		return true;
 	}
 };
+
+// <AW: OpenSim>
+bool update_grid_help()
+{
+	LLSD grid_info;
+	LLGridManager::getInstance()->getGridData(grid_info);
+	std::string grid_label = LLGridManager::getInstance()->getGridLabel();
+
+	bool needs_seperator = false;
+
+
+	if (LLGridManager::getInstance()->isInOpenSim() && grid_info.has("help"))
+	{
+		needs_seperator = true;
+		gMenuHolder->childSetVisible("current_grid_help",true);
+		gMenuHolder->childSetLabelArg("current_grid_help", "[CURRENT_GRID]", grid_label);
+		gMenuHolder->childSetVisible("current_grid_help_login",true);
+		gMenuHolder->childSetLabelArg("current_grid_help_login", "[CURRENT_GRID]", grid_label);
+	}
+	else
+	{
+		gMenuHolder->childSetVisible("current_grid_help",false);
+		gMenuHolder->childSetVisible("current_grid_help_login",false);
+	}
+	if (LLGridManager::getInstance()->isInOpenSim() && grid_info.has("about"))
+	{
+		needs_seperator = true;
+		gMenuHolder->childSetVisible("current_grid_about",true);
+		gMenuHolder->childSetLabelArg("current_grid_about", "[CURRENT_GRID]", grid_label);
+		gMenuHolder->childSetVisible("current_grid_about_login",true);
+		gMenuHolder->childSetLabelArg("current_grid_about_login", "[CURRENT_GRID]", grid_label);
+	}
+	else
+	{
+		gMenuHolder->childSetVisible("current_grid_about",false);
+		gMenuHolder->childSetVisible("current_grid_about_login",false);
+	}
+	//FIXME: this does nothing
+	gMenuHolder->childSetVisible("grid_help_seperator",needs_seperator);
+	gMenuHolder->childSetVisible("grid_help_seperator_login",needs_seperator);
+
+	return true;
+}
+// </AW: OpenSim>
 
 class LLToggleHelp : public view_listener_t
 {
@@ -7341,7 +7385,7 @@ bool enable_object_take_copy()
 		all_valid = true;
 #ifndef HACKED_GODLIKE_VIEWER
 # ifdef TOGGLE_HACKED_GODLIKE_VIEWER
-		if (LLGridManager::getInstance()->isInProductionGrid()
+		if (!LLGridManager::getInstance()->isInSLBeta()
             || !gAgent.isGodlike())
 # endif
 		{
@@ -7407,7 +7451,7 @@ BOOL enable_save_into_inventory(void*)
 	return TRUE;
 #else
 # ifdef TOGGLE_HACKED_GODLIKE_VIEWER
-	if (!LLGridManager::getInstance()->isInProductionGrid()
+	if (LLGridManager::getInstance()->isInSLBeta()
         && gAgent.isGodlike())
 	{
 		return TRUE;

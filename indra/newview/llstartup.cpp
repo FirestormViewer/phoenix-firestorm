@@ -238,6 +238,7 @@ static bool gUseCircuitCallbackCalled = false;
 
 EStartupState LLStartUp::gStartupState = STATE_FIRST;
 LLSLURL LLStartUp::sStartSLURL;
+std::string LLStartUp::sStartSLURLString;
 
 static LLPointer<LLCredential> gUserCredential;
 static std::string gDisplayName;
@@ -311,6 +312,38 @@ namespace
 		}
 	};
 }
+
+// <AW: opensim>
+static bool sGridListRequestReady = false;
+class GridListRequestResponder : public LLHTTPClient::Responder
+{
+public:
+	//If we get back a normal response, handle it here
+	virtual void result(const LLSD& content)
+	{
+		std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.remote.xml");
+
+		llofstream out_file;
+		out_file.open(filename);
+		LLSDSerialize::toPrettyXML(content, out_file);
+		out_file.close();
+		llinfos << "GridListRequest: got new list." << llendl;
+		sGridListRequestReady = true;
+	}
+
+	//If we get back an error (not found, etc...), handle it here
+	virtual void error(U32 status, const std::string& reason)
+	{
+		sGridListRequestReady = true;
+		if (304 == status)
+		{
+			LL_DEBUGS("GridManager") << "<- no error :P ... GridListRequest: List not modified since last session" << LL_ENDL;
+		}
+		else
+			llwarns << "GridListRequest::error("<< status << ": " << reason << ")" << llendl;
+	}
+};
+// </AW: opensim>
 
 void update_texture_fetch()
 {
@@ -637,6 +670,54 @@ bool idle_startup()
 		// Init audio, which may be needed for prefs dialog
 		// or audio cues in connection UI.
 		//-------------------------------------------------
+
+// <AW: opensim>
+		if(!gSavedSettings.getBOOL("GridListDownload"))
+		{
+			sGridListRequestReady = true;
+		}
+		else
+		{
+			std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.remote.xml");
+
+			llstat file_stat; //platform independent wrapper for stat
+			time_t last_modified = 0;
+
+			if(!LLFile::stat(filename, &file_stat))//exists
+			{
+				last_modified = file_stat.st_mtime;
+			}
+
+			std::string url = gSavedSettings.getString("GridListDownloadURL");
+			LLHTTPClient::getIfModified(url, new GridListRequestResponder(), last_modified );
+		}
+		// Fetch grid infos as needed
+		LLGridManager::getInstance()->initGrids();
+		LLStartUp::setStartupState( STATE_FETCH_GRID_INFO );
+	}
+
+	if (STATE_FETCH_GRID_INFO == LLStartUp::getStartupState())
+	{
+		static LLFrameTimer grid_timer;
+
+		const F32 grid_time = grid_timer.getElapsedTimeF32();
+		const F32 MAX_GRID_TIME = 15.f;//don't wait forever
+
+		if(grid_time>MAX_GRID_TIME ||
+			( sGridListRequestReady && LLGridManager::getInstance()->isReadyToLogin() ))
+		{
+			LLStartUp::setStartupState( STATE_AUDIO_INIT );
+		}
+		else
+		{
+			ms_sleep(1);
+			return FALSE;
+		}
+	}
+// </AW: opensim>
+
+	if (STATE_AUDIO_INIT == LLStartUp::getStartupState())
+	{
 
 		if (FALSE == gSavedSettings.getBOOL("NoAudio"))
 		{
@@ -2668,6 +2749,8 @@ std::string LLStartUp::startupStateToString(EStartupState state)
 #define RTNENUM(E) case E: return #E
 	switch(state){
 		RTNENUM( STATE_FIRST );
+		RTNENUM( STATE_FETCH_GRID_INFO);
+		RTNENUM( STATE_AUDIO_INIT);
 		RTNENUM( STATE_BROWSER_INIT );
 		RTNENUM( STATE_LOGIN_SHOW );
 		RTNENUM( STATE_LOGIN_WAIT );

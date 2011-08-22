@@ -124,6 +124,16 @@ public:
 	 */
 	void setURL(const std::string& url);
 	std::string getURL() const;
+
+	/**
+	 * @brief Set If-Modified-Since Attribute
+	 * 
+	 * A null value means fetch always, otherwise check and only HTTP-get if the file on the server is newer
+	 * than the UNIX time in if_modified_since, if the file on the server was not newer you get a 
+	 * "304 not modified" response.
+	 */
+	void setModifiedSince(const time_t &if_modified_since);
+
 	/** 
 	 * @brief Add a header to the http post.
 	 *
