@@ -51,8 +51,14 @@ LLToastScriptTextbox::LLToastScriptTextbox(const LLNotificationPtr& notification
 {
 	buildFromFile( "panel_notify_textbox.xml");
 
+
 	LLTextEditor* text_editorp = getChild<LLTextEditor>("text_editor_box");
+
+	const S32 MAX_LENGTH = 512 + 20 + DB_FIRST_NAME_BUF_SIZE + DB_LAST_NAME_BUF_SIZE + DB_INV_ITEM_NAME_BUF_SIZE; 
+
+	text_editorp->setMaxTextLength(MAX_LENGTH);
 	text_editorp->setValue(notification->getMessage());
+
 
 	getChild<LLButton>("ignore_btn")->setClickedCallback(boost::bind(&LLToastScriptTextbox::onClickIgnore, this));
 
