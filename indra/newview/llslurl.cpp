@@ -48,7 +48,7 @@ const char* LLSLURL::SLURL_X_GRID_LOCATION_INFO_SCHEME = "x-grid-location-info";
 // version is required also.
 
 const char* LLSLURL::WWW_SLURL_COM	 = "www.slurl.com";
-const char* LLSLURL::MAPS_SECONDLIFE_CO	 = "maps.secondlife.com";
+const char* LLSLURL::MAPS_SECONDLIFE_COM = "maps.secondlife.com";
 
 // <AW: opensim>
 const char* LLSLURL::SLURL_COM           = "slurl.com";

@@ -46,6 +46,7 @@ extern const char* DEFAULT_LOGIN_PAGE;
 #define GRID_LOGIN_PAGE_VALUE "loginpage"
 #define GRID_IS_FAVORITE_VALUE "favorite"
 #define GRID_REGISTER_NEW_ACCOUNT "register"
+#define GRID_FORGOT_PASSWORD "password"
 // </AW opensim>
 #define GRID_IS_SYSTEM_GRID_VALUE "system_grid"
 #define GRID_IS_FAVORITE_VALUE "favorite"
