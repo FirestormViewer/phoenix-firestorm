@@ -1859,7 +1859,72 @@
       <combo_item name="Local Clienttags" value="1">Local Tag List</combo_item>
       <combo_item name="Download Clienttags" value="2">Download Tag List at Viewer Start</combo_item>
     </combo_box>
-    
+
+    <text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="15"
+		 layout="topleft"
+		 left="20"
+		 name="uselistfortags"
+		 top_pad="10"
+		 width="220">
+      Choose your color:
+    </text>
+
+    <combo_box
+ height="23"
+ layout="topleft"
+ follows="left|top"
+ left_pad="2"
+ max_chars="135"
+ width="220"
+  allow_text_entry="false"
+  name="ClientTagColor">
+      <combo_item name="red">Red</combo_item>
+      <combo_item name="blue">Blue</combo_item>
+      <combo_item name="yellow">Yellow</combo_item>
+      <combo_item name="purple">Purple</combo_item>
+      <combo_item name="pink">Pink</combo_item>
+      <combo_item name="white">White</combo_item>
+      <combo_item name="orange">Orange</combo_item>
+      <combo_item name="green">Green</combo_item>
+    </combo_box>
+
+    <check_box
+		  left="20"
+		  top_pad="10"
+      follows="left|top"
+      height="16"
+      width="220"
+      label="Show your own color"
+      name="FSShowOwnTagColor_toggle"
+      tool_tip="When checked, your Tag will be shown in the given color."
+     />
+
+    <check_box
+		  top_pad="10"
+      follows="left|top"
+      height="16"
+      width="220"
+      label="Color usernames differently"
+      name="FSColorUsername_toggle"
+      tool_tip="Displays usernames in a different color (this overrides client tag colors for usernames)"
+     />
+
+    <color_swatch
+     border.border_thickness="0"
+     label_height="0"
+     layout="topleft"
+     follows="left|top"
+     top_delta="0"
+     left_pad="2"
+     height="15"
+     width="15"
+     name="usernamecolorswatch"
+     tool_tip="Click to open color picker"/>
+
   </panel>
   
   

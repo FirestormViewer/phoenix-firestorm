@@ -434,11 +434,6 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color){
 				curtag["color"] = LLColor4::green.getValue();
 				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
 			}
-			else if(id == LLUUID("91144252-196e-bac9-3737-92752eee612d"))//white
-			{
-				curtag["name"] = "Canine (fallback)";			
-				curtag["color"] = LLColor4::white.getValue();
-			}
 			else if(id == LLUUID("e35f7d40-6071-4b29-9727-5647bdafb5d5"))//white
 			{
 				curtag["name"] = "Phoenix";			
@@ -527,8 +522,15 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color){
 			LLStringFn::replace_ascii_controlchars(clienttagname, LL_UNKNOWN_CHAR);
 			curtag["name"] = clienttagname;
 		}
-		if(gSavedSettings.getU32("FSColorClienttags")>=3){
-			curtag["color"] = color.getValue();
+		if(gSavedSettings.getU32("FSColorClienttags")>=3 || curtag["tpvd"].asBoolean()){
+			if(curtag["tpvd"].asBoolean() && gSavedSettings.getU32("FSColorClienttags")<3){
+				if(color == LLColor4::blue || color == LLColor4::yellow ||
+				   color == LLColor4::purple || color == LLColor4((F32)0.99,(F32)0.39,(F32)0.12,(F32)1) ||
+				   color == LLColor4::red || color == LLColor4((F32)0.99,(F32)0.56,(F32)0.65,(F32)1) ||
+				   color == LLColor4::white || color == LLColor4::green)
+				   curtag["color"] = color.getValue();
+			} else 
+				curtag["color"] = color.getValue();
 		}
 	}
 

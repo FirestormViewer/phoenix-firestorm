@@ -2957,6 +2957,8 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		}
 
 		LLColor4 name_tag_color = getNameTagColor(is_friend);
+		
+		if(isSelf() && gSavedSettings.getBOOL("FSShowOwnTagColor")) name_tag_color=gSavedSettings.getColor4("FirestormTagColor");
 
 		// Wolfspirit: If we don't need to display a friend,
 		// if we aren't self, if we use colored Clienttags and if we have a color
@@ -3018,6 +3020,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		static LLUICachedControl<bool> show_display_names("NameTagShowDisplayNames");
 		static LLUICachedControl<bool> show_usernames("NameTagShowUsernames");
 		static LLUICachedControl<bool> FScolor_username("FSColorUsername");
+		static LLUICachedControl<LLColor4> FScolor_username_color("FSColorUsernameColor");
 		
 
 		if (LLAvatarNameCache::useDisplayNames())
@@ -3057,7 +3060,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 					// Wolfspirit: If we want to display the username as orange (like Phoenix).
 					if(!FScolor_username) username_color = name_tag_color * 0.83f;
-					else username_color = LLColor4::orange; //Temporary Orange. Maybe change that to something changeable via.
+					else username_color = FScolor_username_color;
 					addNameTagLine(av_name.mUsername, username_color, LLFontGL::NORMAL,
 						LLFontGL::getFontSansSerifSmall());
 				}

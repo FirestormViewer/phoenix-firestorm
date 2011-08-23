@@ -90,7 +90,34 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
-	<key>FSPlayTypingSound</key>
+  <key>FSColorUsernameColor</key>
+  <map>
+    <key>Comment</key>
+    <string>The color the Username should be colored.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>1</real>
+      <real>0.5</real>
+      <real>0</real>
+      <real>1.0</real>
+    </array>
+  </map>
+  <key>FSShowOwnTagColor</key>
+  <map>
+    <key>Comment</key>
+    <string>If you want to see your own color</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>FSPlayTypingSound</key>
 	<map>
 		<key>Comment</key>
 		<string>Hear the typing sound when others type in to local chat</string>
