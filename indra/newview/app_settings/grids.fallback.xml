@@ -335,7 +335,7 @@
                 <string>agent</string>
             </array>
         <key>loginpage</key>
-            <string>http://secondlife.com/app/login/</string>
+            <string>http://phoenixviewer.com/app/loginFSbeta/</string>
         <key>loginuri</key>
             <array>
                 <string>https://login.aditi.lindenlab.com/cgi-bin/login.cgi</string>
@@ -364,7 +364,7 @@
                 <string>agent</string>
             </array>
         <key>loginpage</key>
-            <string>http://secondlife.com/app/login/</string>
+            <string>http://phoenixviewer.com/app/loginFSbeta/</string>
         <key>loginuri</key>
             <array>
                 <string>https://login.agni.lindenlab.com/cgi-bin/login.cgi</string>
