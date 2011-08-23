@@ -5,7 +5,7 @@
   <key>GridListDownload</key>
   <map>
     <key>Comment</key>
-    <string>Wether to fetch a grid list from the URL specified in GridListDownloadURL.</string>
+    <string>Whether to fetch a grid list from the URL specified in GridListDownloadURL.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
