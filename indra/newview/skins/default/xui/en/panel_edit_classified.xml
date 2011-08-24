@@ -122,7 +122,7 @@
          layout="topleft"
          left="10"
          top_pad="2"
-         max_length_bytes="30"
+         max_length_bytes="63"
          name="classified_name"
          prevalidate_callback="ascii"
          text_color="black"
@@ -150,7 +150,7 @@
          layout="topleft"
          left="10"
          top_pad="2"
-         max_length="256"
+         max_length="1024"
          name="classified_desc"
          text_color="black"
          word_wrap="true" />
