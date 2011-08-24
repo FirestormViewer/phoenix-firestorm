@@ -63,56 +63,24 @@
 			 width="315" />
 		</layout_panel>
 
-<!--
 		<layout_panel
 		 auto_resize="false"
-		 bottom_pad="5"
+		 height="28"
 		 layout="topleft"
 		 left="0"
-		 max_height="5"
-		 min_height="5"
-		 name="chat_bar_resize_handle_panel"
-		 top_pad="5"
-		 user_resize="false"
+		 mouse_opaque="false"
 		 width="320"
-		 height="5">
-			<icon
-			 follows="left|right|bottom"
-			 height="5"
-			 left="5"
-			 image_name="ChatBarHandle_Vert"
-			 layout="topleft"
-			 name="resize_handle"
-			 width="315" />
-		</layout_panel>
--->
-
-		<layout_panel
-		 height="70"
-		 left="0"
-		 width="320"
-		 auto_resize="false"
 		 user_resize="false">
 			<panel
+			 filename="panel_nearby_chat_bar.xml"
 			 follows="left|right|bottom"
-			 height="60"
+			 height="28"
+			 mouse_opaque="false"
+			 name="panel_chat_bar_single"
 			 layout="topleft"
 			 left="10"
-			 name="panel_chat_bar_multi"
-			 width="300" >
-				<text_editor
-				 commit_on_return="true"
-				 follows="left|right|bottom"
-				 height="50"
-				 layout="topleft"
-				 max_length="1024"
-				 name="chat_editor"
-				 use_ellipses="false"
-				 width="300"
-				 word_wrap="true">
-					Click here to chat
-				</text_editor>
-			</panel>
+			 top="0"
+			 width="300" />
 		</layout_panel>
 
 	</layout_stack>

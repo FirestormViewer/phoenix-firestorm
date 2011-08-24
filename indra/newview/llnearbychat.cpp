@@ -65,7 +65,8 @@ LLNearbyChat::LLNearbyChat(const LLSD& key)
 	,mChatHistory(NULL)
 {
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-	mFactoryMap["panel_chat_editor"] = LLCallbackMap(LLNearbyChat::createChatEditor, NULL);
+	mFactoryMap["panel_chat_bar_single"] = LLCallbackMap(LLNearbyChat::createChatBarSingle, NULL);
+	mFactoryMap["panel_chat_bar_multi"] = LLCallbackMap(LLNearbyChat::createChatBarMulti, NULL);
 // [/SL:KB]
 }
 
@@ -389,7 +390,12 @@ void LLNearbyChat::draw()
 }
 
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-void* LLNearbyChat::createChatEditor(void*)
+void* LLNearbyChat::createChatBarSingle(void*)
+{
+	return new LLNearbyChatBar();
+}
+
+void* LLNearbyChat::createChatBarMulti(void*)
 {
 	return new LLNearbyChatBarMulti();
 }
