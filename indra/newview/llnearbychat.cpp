@@ -399,4 +399,23 @@ void* LLNearbyChat::createChatBarMulti(void*)
 {
 	return new LLNearbyChatBarMulti();
 }
+
+const std::string& LLNearbyChat::getFloaterXMLFile()
+{
+	static std::string strFile;
+	switch (gSavedSettings.getS32("NearbyChatFloaterBarType"))
+	{
+		case 1:		// Single-line
+			strFile = "floater_nearby_chat_single.xml";
+			break;
+		case 2:		// Multi-line
+			strFile = "floater_nearby_chat_multi.xml";
+			break;
+		case 0:		// None (default)
+		default:
+			strFile = "floater_nearby_chat.xml";
+			break;
+	}
+	return strFile;
+}
 // [/SL:KB]

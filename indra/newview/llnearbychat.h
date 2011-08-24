@@ -76,6 +76,9 @@ private:
 	void	onNearbySpeakers	();
 
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+public:
+	static const std::string& getFloaterXMLFile();
+protected:
 	static void* createChatBarSingle(void*);
 	static void* createChatBarMulti(void*);
 // [/SL:KB]
