@@ -1025,10 +1025,14 @@ void LLPanelLogin::updateServer()
 			sInstance->setFields(credential, remember);
 		}
 		// grid changed so show "loading..." until the new page is loaded
-		LLMediaCtrl* web_browser = sInstance->getChild<LLMediaCtrl>("login_html");
-		web_browser->navigateToLocalPage( "loading", "loading.html" );
 
-		updateLocationCombo(LLStartUp::getStartSLURL().getType() == LLSLURL::LOCATION);
+		// WS: Don't change the loginpage, when not available
+		if(sInstance){
+			LLMediaCtrl* web_browser = sInstance->getChild<LLMediaCtrl>("login_html");
+			web_browser->navigateToLocalPage( "loading", "loading.html" );
+
+			updateLocationCombo(LLStartUp::getStartSLURL().getType() == LLSLURL::LOCATION);
+		}
 
 	}
 	catch (LLInvalidGridName ex)
