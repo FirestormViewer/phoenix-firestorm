@@ -84,6 +84,16 @@
 	<string name="TooltipLand">Land:</string>
 	<string name="TooltipMustSingleDrop">Only a single item can be dragged here</string>
 	<string name="TooltipPrice" value="L$[AMOUNT]: "/>
+	<string name="TooltipFlagScript">Script</string>
+	<string name="TooltipFlagPhysics">Physics</string>
+	<string name="TooltipFlagTouch">Touch</string>
+	<string name="TooltipFlagL$">L$</string>
+	<string name="TooltipFlagDropInventory">Drop Inventory</string>
+	<string name="TooltipFlagPhantom">Phantom</string>
+	<string name="TooltipFlagTemporary">Temporary</string>
+	<string name="TooltipPrimCount">Prims: [COUNT]</string>
+	<string name="TooltipDistance">Distance: [DISTANCE] m</string>
+	<string name="TooltipPosition">Position: [POSITION]</string>
 
 	<!-- tooltips for Urls -->
 	<string name="TooltipHttpUrl">Click to view this web page</string>

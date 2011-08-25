@@ -188,6 +188,36 @@
 		Sie können nur ein einzelnes Objekt hierher ziehen
 	</string>
 	<string name="TooltipPrice" value="[AMOUNT] L$"/>
+	<string name="TooltipFlagScript">
+		Skript
+	</string>
+	<string name="TooltipFlagPhysics">
+		Physik
+	</string>
+	<string name="TooltipFlagTouch">
+		Berühren
+	</string>
+	<string name="TooltipFlagL$">
+		L$
+	</string>
+	<string name="TooltipFlagDropInventory">
+		Inventar fallen lassen
+	</string>
+	<string name="TooltipFlagPhantom">
+		Phantom
+	</string>
+	<string name="TooltipFlagTemporary">
+		Temporär
+	</string>
+	<string name="TooltipPrimCount">
+		Primitive: [COUNT]
+	</string>
+	<string name="TooltipDistance">
+		Entfernung: [DISTANCE] m
+	</string>
+	<string name="TooltipPosition">
+		Position: [POSITION]
+	</string>
 	<string name="TooltipHttpUrl">
 		Anklicken, um Webseite anzuzeigen
 	</string>
