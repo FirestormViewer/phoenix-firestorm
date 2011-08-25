@@ -631,6 +631,10 @@
 		 label="Droid Sans"
 		 name="tt_item4"
 		 value="fonts_droid.xml" />
+		<combo_box.item
+		 label="Mobi Sans"
+		 name="tt_item5"
+		 value="fonts_mobi.xml" />
     </combo_box>
 	<text
      name="tooltip_textbox"
