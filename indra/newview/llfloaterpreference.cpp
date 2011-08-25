@@ -322,6 +322,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.BrowseLogPath",			boost::bind(&LLFloaterPreference::onClickBrowseChatLogDir, this));
 	mCommitCallbackRegistrar.add("Pref.ResetCache",				boost::bind(&LLFloaterPreference::onClickResetCache, this));
 	mCommitCallbackRegistrar.add("Pref.ClearCache",				boost::bind(&LLFloaterPreference::onClickClearCache, this));
+	mCommitCallbackRegistrar.add("Pref.Cookies",	    		boost::bind(&LLFloaterPreference::onClickCookies, this));
+	mCommitCallbackRegistrar.add("Pref.Javascript",	        	boost::bind(&LLFloaterPreference::onClickJavascript, this));
 	//	mCommitCallbackRegistrar.add("Pref.ClickSkin",				boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
 //	mCommitCallbackRegistrar.add("Pref.SelectSkin",				boost::bind(&LLFloaterPreference::onSelectSkin, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetKey",			boost::bind(&LLFloaterPreference::onClickSetKey, this));
@@ -1024,6 +1026,18 @@ bool callback_clear_settings(const LLSD& notification, const LLSD& response)
 void LLFloaterPreference::onClickClearSettings()
 {
 	LLNotificationsUtil::add("FirestormClearSettingsPrompt",LLSD(), LLSD(), callback_clear_settings);
+}
+
+//[FIX JIRA-1971 : SJ] Show an notify when Cookies setting change
+void LLFloaterPreference::onClickCookies()
+{
+	LLNotificationsUtil::add("DisableCookiesBreaksSearch");
+}
+
+//[FIX JIRA-1971 : SJ] Show an notify when Javascript setting change
+void LLFloaterPreference::onClickJavascript()
+{
+	LLNotificationsUtil::add("DisableJavascriptBreaksSearch");
 }
 
 /*

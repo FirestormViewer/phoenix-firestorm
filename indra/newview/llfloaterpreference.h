@@ -133,6 +133,8 @@ public:
 	void onClickBrowseChatLogDir();
 	void onClickResetCache();
 	void onClickClearCache();
+	void onClickCookies();
+	void onClickJavascript();
 	void onClickBrowseSettingsDir();
 	void onClickSkin(LLUICtrl* ctrl,const LLSD& userdata);
 	void onSelectSkin();

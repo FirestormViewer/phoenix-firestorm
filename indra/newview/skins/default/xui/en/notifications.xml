@@ -973,6 +973,20 @@ Cache will be cleared after restarting [APP_NAME].
   </notification>
 
   <notification
+ icon="alertmodal.tga"
+ name="DisableCookiesBreaksSearch"
+ type="alertmodal">
+    The search function relies on Cookies, disabling Cookies will break Search.
+  </notification>
+
+  <notification
+ icon="alertmodal.tga"
+ name="DisableJavascriptBreaksSearch"
+ type="alertmodal">
+    The Search function relies on Javascript, disabling Javascript will break Search.
+  </notification>
+  
+  <notification
    icon="alertmodal.tga"
    name="CacheWillBeMoved"
    type="alertmodal">
