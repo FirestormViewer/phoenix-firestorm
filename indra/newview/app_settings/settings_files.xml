@@ -39,9 +39,9 @@
             persistent="false"/>
   </group>
   <group name="UserSession"
-         path_index="1">
-    <file name="Global"
-          file_name="session.xml" 
+         path_index="2">
+    <file name="PerAccount"
+          file_name="session_account.xml"
           file_name_setting="UserSessionSettingsFile"
           persistent="false"/>
   </group>

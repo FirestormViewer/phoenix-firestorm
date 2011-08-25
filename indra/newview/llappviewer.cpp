@@ -2227,9 +2227,17 @@ bool LLAppViewer::initConfiguration()
 	//Wolfspirit: Temporary fix for NOT loading settings_minimal.xml
 	if (gSavedSettings.getBOOL("FirstRunThisInstall"))
 	{
-		//gSavedSettings.setString("SessionSettingsFile", "settings_minimal.xml");
+		gSavedSettings.setString("SessionSettingsFile", "settings_phoenix.xml");
 		gSavedSettings.setBOOL("FirstRunThisInstall", FALSE);
 	}
+
+	//WS: Set the usersessionsettingsfile to the account_SessionSettingsFile file. This allows settings_per_accounts to be per session.
+	if(gSavedSettings.getString("SessionSettingsFile")!=""){
+		if(gSavedSettings.getString("UserSessionSettingsFile")=="")
+			gSavedSettings.setString("UserSessionSettingsFile","account_"+gSavedSettings.getString("SessionSettingsFile"));
+	}
+	else gSavedSettings.setString("UserSessionSettingsFile","");
+
 
 	if (clp.hasOption("sessionsettings"))
 	{

@@ -164,15 +164,15 @@ label="Remember password"
 <combo_box.item
   label="Phoenix"
   name="Phoenix"
-  value="" />
+  value="settings_phoenix.xml" />
 <combo_box.item
   label="V2"
   name="V2"
-  value="" />
+  value="settings_v2.xml" />
 <combo_box.item
   label="Hybrid"
   name="Hybrid"
-  value="" />
+  value="settings_hybrid.xml" />
 </combo_box>
   <text
   follows="left|bottom"
