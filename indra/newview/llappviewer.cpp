@@ -2298,14 +2298,23 @@ bool LLAppViewer::initConfiguration()
 			gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, 
 										   clp.getOption("settings")[0]);
 		gSavedSettings.setString("ClientSettingsFile", user_settings_filename);
+		// SJ: if asked to purge configuration, remove custom user-settings file before it will be read
+		if (mPurgeSettings)
+		{
+			LLFile::remove(user_settings_filename);
+		}
 
 		llinfos	<< "Using command line specified settings filename: " 
 			<< user_settings_filename << llendl;
 	}
-	// SJ: if asked to purge configuration, remove default user-settings file before it will be read
-	if (mPurgeSettings)
+	else
 	{
-		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("User", "Global")));
+		// SJ: if asked to purge configuration, remove default user-settings file before it will be read
+		if (mPurgeSettings)
+		{
+			LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("User", "Global")));
+		}
+
 	}
 	
 
