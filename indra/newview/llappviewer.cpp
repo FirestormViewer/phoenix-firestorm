@@ -1791,7 +1791,7 @@ bool LLAppViewer::cleanup()
 	// save all settings, even if equals defaults
 	gCrashSettings.saveToFile(crash_settings_filename, FALSE);
 
-	std::string warnings_settings_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("Default", "Warnings"));
+	std::string warnings_settings_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("User", "Warnings"));
 	gWarningSettings.saveToFile(warnings_settings_filename, TRUE);
 
 	// Save URL history file
@@ -2223,7 +2223,7 @@ bool LLAppViewer::initConfiguration()
 	// - set procedural settings
 	// Note: can't use LL_PATH_PER_SL_ACCOUNT for any of these since we haven't logged in yet
 	gSavedSettings.setString("ClientSettingsFile", 
-        gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("Default", "Global")));
+        gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("User", "Global")));
 	
 #ifndef	LL_RELEASE_FOR_DOWNLOAD
 	// provide developer build only overrides for these control variables that are not
@@ -2298,23 +2298,16 @@ bool LLAppViewer::initConfiguration()
 			gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, 
 										   clp.getOption("settings")[0]);
 		gSavedSettings.setString("ClientSettingsFile", user_settings_filename);
-		// SJ: if asked to purge configuration, remove custom user-settings file before it will be read
-		if (mPurgeSettings)
-		{
-			LLFile::remove(user_settings_filename);
-		}
 
 		llinfos	<< "Using command line specified settings filename: " 
 			<< user_settings_filename << llendl;
 	}
-	else
+	// SJ: if asked to purge configuration, remove default user-settings file before it will be read
+	if (mPurgeSettings)
 	{
-		// SJ: if asked to purge configuration, remove default user-settings file before it will be read
-		if (mPurgeSettings)
-		{
-			LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("Default", "Global")));
-		}
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("User", "Global")));
 	}
+	
 
 	// - load overrides from user_settings 
 	loadSettingsFromDirectory("User");
@@ -2338,11 +2331,6 @@ bool LLAppViewer::initConfiguration()
 	{
 		std::string session_settings_filename = clp.getOption("sessionsettings")[0];		
 		gSavedSettings.setString("SessionSettingsFile", session_settings_filename);
-		// SJ: if asked to purge configuration, remove sessionsettings file before it will be read
-		if (mPurgeSettings)
-		{
-			LLFile::remove(session_settings_filename);
-		}
 		llinfos	<< "Using session settings filename: " 
 			<< session_settings_filename << llendl;
 	}
@@ -2352,11 +2340,6 @@ bool LLAppViewer::initConfiguration()
 	{
 		std::string user_session_settings_filename = clp.getOption("usersessionsettings")[0];		
 		gSavedSettings.setString("UserSessionSettingsFile", user_session_settings_filename);
-		// SJ: if asked to purge configuration, remove user-session-settings file before it will be read
-		if (mPurgeSettings)
-		{
-			LLFile::remove(user_session_settings_filename);
-		}
 		llinfos	<< "Using user session settings filename: " 
 			<< user_session_settings_filename << llendl;
 
