@@ -1513,7 +1513,7 @@ void LLTextureCache::purgeAllTextures(bool purge_directories)
 	{
 		const char* subdirs = "0123456789abcdef";
 		std::string delem = gDirUtilp->getDirDelimiter();
-		std::string mask = delem + "*";
+		std::string mask = "*";
 		for (S32 i=0; i<16; i++)
 		{
 			std::string dirname = mTexturesDirName + delem + subdirs[i];
