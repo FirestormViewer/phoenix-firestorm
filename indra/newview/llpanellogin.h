@@ -98,6 +98,7 @@ private:
 	static void onPassKey(LLLineEditor* caller, void* user_data);
 	static void onSelectServer(LLUICtrl*, void*);
 	static void onSelectSavedLogin(LLUICtrl*, void*);
+	static void usernameLostFocus(LLFocusableElement* caller, void* userdata);
 //	static void onServerComboLostFocus(LLFocusableElement*);
 	static void updateServerCombo();
 	static void updateSavedLoginsCombo();
