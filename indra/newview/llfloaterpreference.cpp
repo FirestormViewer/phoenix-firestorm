@@ -193,6 +193,7 @@ void LLVoiceSetKeyDialog::onCancel(void* user_data)
 void handleNameTagOptionChanged(const LLSD& newvalue);	
 void handleDisplayNamesOptionChanged(const LLSD& newvalue);	
 bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response);
+bool callback_clear_settings(const LLSD& notification, const LLSD& response);
 
 //bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
 //bool callback_reset_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
@@ -343,6 +344,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.MaturitySettings",		boost::bind(&LLFloaterPreference::onChangeMaturity, this));
 	mCommitCallbackRegistrar.add("Pref.BlockList",				boost::bind(&LLFloaterPreference::onClickBlockList, this));
 	mCommitCallbackRegistrar.add("FS.ToggleSortContacts",			boost::bind(&LLFloaterPreference::onClickSortContacts, this));
+	//[ADD - Clear Settings : SJ]
+	mCommitCallbackRegistrar.add("Pref.ClearSettings",			boost::bind(&LLFloaterPreference::onClickClearSettings, this));
 	
 	sSkin = gSavedSettings.getString("SkinCurrent");
 
@@ -983,6 +986,44 @@ void LLFloaterPreference::onClickClearCache()
 {
 	gSavedSettings.setBOOL("PurgeCacheOnNextStartup", TRUE);
 	LLNotificationsUtil::add("CacheWillClear");
+}
+
+
+
+// Performs a wipe of the local settings dir on next restart 
+bool callback_clear_settings(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if ( option == 0 ) // YES
+	{
+  
+		// Create a filesystem marker instructing a full settings wipe
+		std::string clear_file_name;
+		clear_file_name = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"CLEAR");
+		llinfos << "Creating clear settings marker file " << clear_file_name << llendl;
+		
+		LLAPRFile clear_file ;
+		clear_file.open(clear_file_name, LL_APR_W);
+		if (clear_file.getFileHandle())
+		{
+			LL_INFOS("MarkerFile") << "Created clear settings marker file " << clear_file_name << LL_ENDL;
+			clear_file.close();
+			LLNotificationsUtil::add("SettingsWillClear");
+		}
+		else
+		{
+			LL_WARNS("MarkerFile") << "Cannot clear settings marker file " << clear_file_name << LL_ENDL;
+		}
+		
+		return true;
+	}
+	return false;
+}
+
+//[ADD - Clear Usersettings : SJ] - When button Reset Defaults is clicked show a warning 
+void LLFloaterPreference::onClickClearSettings()
+{
+	LLNotificationsUtil::add("FirestormClearSettingsPrompt",LLSD(), LLSD(), callback_clear_settings);
 }
 
 /*

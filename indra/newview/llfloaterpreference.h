@@ -155,6 +155,8 @@ public:
 	void refresh();	// Refresh enable/disable
 	// if the quality radio buttons are changed
 	void onChangeQuality(const LLSD& data);
+	void onClickClearSettings();
+	//void callback_clear_settings(const LLSD& notification, const LLSD& response);
 	
 	void updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box);
 	void onUpdateSliderText(LLUICtrl* ctrl, const LLSD& name);

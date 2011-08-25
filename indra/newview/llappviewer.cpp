@@ -713,11 +713,92 @@ bool LLAppViewer::init()
 	// OK to write stuff to logs now, we've now crash reported if necessary
 	//
 	
+	
+	// SJ/AO:  Reset Configuration here, if our marker file exists. Configuration needs to be reset before settings files 
+	// are read in to avoid file locks.
+
+	mPurgeSettings = false;
+	std::string clear_settings_filename = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"CLEAR");
+	LLAPRFile clear_file ;
+	if (clear_file.isExist(clear_settings_filename))
+	{
+		mPurgeSettings = true;
+		llinfos << "Purging configuration..." << llendl;
+		std::string delem = gDirUtilp->getDirDelimiter();
+
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"CLEAR"));
+		
+		//[ADD - Clear Usersettings : SJ] - Delete directories beams, beamsColors, windlight in usersettings
+		std::string beams_dir = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beams");
+		beams_dir += gDirUtilp->getDirDelimiter();
+		gDirUtilp->deleteFilesInDir(beams_dir, "*.*");
+		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beams") );
+		
+		std::string beamscolors_dir = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors");
+		beamscolors_dir += gDirUtilp->getDirDelimiter();
+		gDirUtilp->deleteFilesInDir(beamscolors_dir, "*.*");
+		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors") );
+		
+		std::string windlight_water_dir = gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/water", "");
+		windlight_water_dir += gDirUtilp->getDirDelimiter();
+		gDirUtilp->deleteFilesInDir(windlight_water_dir, "*.*");
+		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight/water") );
+		
+		std::string windlight_days_dir = gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/days", "");
+		windlight_days_dir += gDirUtilp->getDirDelimiter();
+		gDirUtilp->deleteFilesInDir(windlight_days_dir, "*.*");
+		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight/days") );
+		
+		std::string windlight_skies_dir = gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/skies", "");
+		windlight_skies_dir += gDirUtilp->getDirDelimiter();
+		gDirUtilp->deleteFilesInDir(windlight_skies_dir, "*.*");
+		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight/skies") );
+		
+		std::string windlight_dir = gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight", "");
+		windlight_dir += gDirUtilp->getDirDelimiter();
+		gDirUtilp->deleteFilesInDir(windlight_dir, "*.*");  
+		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight") );		
+	
+		std::string user_dir = gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "", "") + delem;
+
+		// We don't delete the entire folder to avoid data loss of config files unrelated to the current binary. -AO
+		//gDirUtilp->deleteFilesInDir(user_dir, "*.*");
+		
+		//The below line would delete the settings file assuming no channel overrides on the command line, which
+		//may be typical for some start scripts or launchers.  Rather than use this assumption, we'll do further config 
+		//file deletion later in initConfiguration() after parsing command line arguments.
+                //std::string sWorkingChannelName(LL_CHANNEL);
+                //LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_"+sWorkingChannelName+".xml"));
+
+                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "colors.xml"));
+                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.xml"));
+                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "agents.xml"));
+	        gDirUtilp->deleteFilesInDir(user_dir, "feature*.txt");
+	        gDirUtilp->deleteFilesInDir(user_dir, "gpu*.txt");
+                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "releases.xml"));
+                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml"));
+                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_phoenix.xml"));
+                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_hybrid.xml"));
+                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_v2.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_minimal.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "account_settings_phoenix.xml"));
+                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_autocorrect.xml"));
+                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "bin_conf.dat"));
+                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "password.dat"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "ignorable_dialogs.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml"));
+                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, CRASH_SETTINGS_FILE));
+
+		// Delete per-user files below
+		/* TODO: spider user folders for settings_per_account, notices, contactsets */
+	}
+	
+	
 	init_default_trans_args();
 	
 	if (!initConfiguration())
 		return false;
-
+		
 	// write Google Breakpad minidump files to our log directory
 	std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
 	logdir += gDirUtilp->getDirDelimiter();
@@ -2143,7 +2224,7 @@ bool LLAppViewer::initConfiguration()
 	// Note: can't use LL_PATH_PER_SL_ACCOUNT for any of these since we haven't logged in yet
 	gSavedSettings.setString("ClientSettingsFile", 
         gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("Default", "Global")));
-
+	
 #ifndef	LL_RELEASE_FOR_DOWNLOAD
 	// provide developer build only overrides for these control variables that are not
 	// persisted to settings.xml
@@ -2215,10 +2296,24 @@ bool LLAppViewer::initConfiguration()
 	{
 		std::string	user_settings_filename = 
 			gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, 
-										   clp.getOption("settings")[0]);		
+										   clp.getOption("settings")[0]);
 		gSavedSettings.setString("ClientSettingsFile", user_settings_filename);
+		// SJ: if asked to purge configuration, remove custom user-settings file before it will be read
+		if (mPurgeSettings)
+		{
+			LLFile::remove(user_settings_filename);
+		}
+
 		llinfos	<< "Using command line specified settings filename: " 
 			<< user_settings_filename << llendl;
+	}
+	else
+	{
+		// SJ: if asked to purge configuration, remove default user-settings file before it will be read
+		if (mPurgeSettings)
+		{
+			LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("Default", "Global")));
+		}
 	}
 
 	// - load overrides from user_settings 
@@ -2243,6 +2338,11 @@ bool LLAppViewer::initConfiguration()
 	{
 		std::string session_settings_filename = clp.getOption("sessionsettings")[0];		
 		gSavedSettings.setString("SessionSettingsFile", session_settings_filename);
+		// SJ: if asked to purge configuration, remove sessionsettings file before it will be read
+		if (mPurgeSettings)
+		{
+			LLFile::remove(session_settings_filename);
+		}
 		llinfos	<< "Using session settings filename: " 
 			<< session_settings_filename << llendl;
 	}
@@ -2252,10 +2352,17 @@ bool LLAppViewer::initConfiguration()
 	{
 		std::string user_session_settings_filename = clp.getOption("usersessionsettings")[0];		
 		gSavedSettings.setString("UserSessionSettingsFile", user_session_settings_filename);
+		// SJ: if asked to purge configuration, remove user-session-settings file before it will be read
+		if (mPurgeSettings)
+		{
+			LLFile::remove(user_session_settings_filename);
+		}
 		llinfos	<< "Using user session settings filename: " 
 			<< user_session_settings_filename << llendl;
 
 	}
+
+	
 	loadSettingsFromDirectory("UserSession");
 
 	// - apply command line settings 

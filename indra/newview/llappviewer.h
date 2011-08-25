@@ -164,7 +164,7 @@ public:
 	login_completed_signal_t mOnLoginCompleted;
 	boost::signals2::connection setOnLoginCompletedCallback( const login_completed_signal_t::slot_type& cb ) { return mOnLoginCompleted.connect(cb); } 
 
-	void purgeCache(); // Clear the local cache. 
+	void purgeCache(); // Clear the local cache.
 	
 	// mute/unmute the system's master audio
 	virtual void setMasterSystemAudioMute(bool mute);
@@ -248,6 +248,7 @@ private:
 
 	std::string mSerialNumber;
 	bool mPurgeCache;
+	bool mPurgeSettings;
     bool mPurgeOnExit;
 
 	bool mSavedFinalSnapshot;
