@@ -747,11 +747,12 @@ std::string utf8str_chtruncate(const std::string& utf8, size_t length)
 }
 
 // Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.0f
-void RlvHandler::filterChat(std::string& strUTF8Text, bool fFilterEmote) const
+bool RlvHandler::filterChat(std::string& strUTF8Text, bool fFilterEmote) const
 {
 	if (strUTF8Text.empty())
-		return;
+		return false;
 
+	bool fFilter = false;
 	if (RlvUtil::isEmote(strUTF8Text))				// Check if it's an emote
 	{
 		if (fFilterEmote)							// Emote filtering depends on fFilterEmote
@@ -760,7 +761,7 @@ void RlvHandler::filterChat(std::string& strUTF8Text, bool fFilterEmote) const
 				 (strUTF8Text.find(" -") != std::string::npos) || (strUTF8Text.find("- ") != std::string::npos) || 
 				 (strUTF8Text.find("''") != std::string::npos) )
 			{
-				strUTF8Text = "...";				// Emote contains illegal character (or character sequence)
+				fFilter = true;						// Emote contains illegal character (or character sequence)
 			}
 			else if (!hasBehaviour(RLV_BHVR_EMOTE))
 			{
@@ -771,13 +772,17 @@ void RlvHandler::filterChat(std::string& strUTF8Text, bool fFilterEmote) const
 	} 
 	else if (strUTF8Text[0] == '/')					// Not an emote, but starts with a '/'
 	{
-		if (utf8str_strlen(strUTF8Text) > 7)		// Allow as long if it's 6 characters or less
-			strUTF8Text = "...";
+		fFilter = (utf8str_strlen(strUTF8Text) > 7);// Allow as long if it's 6 characters or less
 	}
-	else if ((strUTF8Text.length() < 4) || (strUTF8Text.compare(0, 2, "((")) || (strUTF8Text.compare(strUTF8Text.length() - 2, 2, "))")))
+	else if ( (!RlvSettings::getCanOOC()) ||
+			  (strUTF8Text.length() < 4) || (strUTF8Text.compare(0, 2, "((")) || (strUTF8Text.compare(strUTF8Text.length() - 2, 2, "))")) )
 	{
-		strUTF8Text = "...";						// Regular chat (not OOC)
+		fFilter = true;								// Regular chat (not OOC)
 	}
+
+	if (fFilter)
+		strUTF8Text = (gSavedSettings.getBOOL("RestrainedLoveShowEllipsis")) ? "..." : "";
+	return fFilter;
 }
 
 // Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
@@ -791,14 +796,13 @@ bool RlvHandler::redirectChatOrEmote(const std::string& strUTF8Text) const
 {
 	// Sanity check - @redirchat only for chat and @rediremote only for emotes
 	ERlvBehaviour eBhvr = (!RlvUtil::isEmote(strUTF8Text)) ? RLV_BHVR_REDIRCHAT : RLV_BHVR_REDIREMOTE;
-	if (!hasBehaviour(eBhvr))
+	if ( (strUTF8Text.empty()) || (!hasBehaviour(eBhvr)) )
 		return false;
 
 	if (RLV_BHVR_REDIRCHAT == eBhvr)
 	{
 		std::string strText = strUTF8Text;
-		filterChat(strText, false);
-		if (strText != "...")
+		if (!filterChat(strText, false))
 			return false;	// @sendchat wouldn't filter it so @redirchat won't redirect it either
 	}
 
@@ -1048,6 +1052,10 @@ BOOL RlvHandler::setEnabled(BOOL fEnable)
 
 		// Set up RlvUIEnabler
 		RlvUIEnabler::getInstance();
+
+		// Reset to show assertions if the viewer version changed
+		if (gSavedSettings.getString("LastRunVersion") != gLastRunVersion)
+			gSavedSettings.setBOOL("RLVaShowAssertionFailures", TRUE);
 	}
 
 	return m_fEnabled;

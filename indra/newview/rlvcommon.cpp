@@ -23,6 +23,7 @@
 #include "lluictrlfactory.h"
 #include "llversionviewer.h"
 #include "llviewerparcelmgr.h"
+#include "llviewermenu.h"
 #include "llviewerregion.h"
 #include "llviewerstats.h"
 #include "llworld.h"
@@ -66,6 +67,7 @@ void RlvNotifications::onGiveToRLVConfirmation(const LLSD& notification, const L
 #ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 bool RlvSettings::fCompositeFolders = false;
 #endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
+bool RlvSettings::fCanOOC = true;
 bool RlvSettings::fLegacyNaming = true;
 bool RlvSettings::fNoSetEnv = false;
 bool RlvSettings::fShowNameTags = false;
@@ -86,6 +88,7 @@ void RlvSettings::initClass()
 		if (gSavedSettings.controlExists(RLV_SETTING_ENABLELEGACYNAMING))
 			gSavedSettings.getControl(RLV_SETTING_ENABLELEGACYNAMING)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fLegacyNaming));
 
+		fCanOOC = rlvGetSetting<bool>(RLV_SETTING_CANOOC, true);
 		fNoSetEnv = rlvGetSetting<bool>(RLV_SETTING_NOSETENV, false);
 
 		fShowNameTags = rlvGetSetting<bool>(RLV_SETTING_SHOWNAMETAGS, false);
@@ -100,6 +103,9 @@ void RlvSettings::initClass()
 
 		if (gSavedSettings.controlExists(RLV_SETTING_AVATAROFFSET_Z))
 			gSavedSettings.getControl(RLV_SETTING_AVATAROFFSET_Z)->getSignal()->connect(boost::bind(&onChangedAvatarOffset, _2));
+
+		if (gSavedSettings.controlExists(RLV_SETTING_TOPLEVELMENU))
+			gSavedSettings.getControl(RLV_SETTING_TOPLEVELMENU)->getSignal()->connect(boost::bind(&onChangedMenuLevel));
 
 		fInitialized = true;
 	}
@@ -125,6 +131,13 @@ void RlvSettings::initClass()
 bool RlvSettings::onChangedAvatarOffset(const LLSD& sdValue)
 {
 	gAgent.sendAgentSetAppearance();
+	return true;
+}
+
+// Checked: 2011-08-16 (RLVa-1.4.0b) | Added: RLVa-1.4.0b
+bool RlvSettings::onChangedMenuLevel()
+{
+	rlvMenuToggleVisible();
 	return true;
 }
 
@@ -220,7 +233,7 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 		case RLV_RET_SUCCESS_DUPLICATE:
 			return "duplicate";
 		case RLV_RET_FAILED_SYNTAX:
-			return "syntax error";
+			return "thingy error";
 		case RLV_RET_FAILED_OPTION:
 			return "invalid option";
 		case RLV_RET_FAILED_PARAM:
@@ -313,8 +326,11 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 
 			// NOTE: if the legacy first and last name are empty we get a legacy name of " " which would replace all spaces in the string
 			std::string strLegacyName;
-			if ( (fFilterLegacy) && (!avName.mIsDisplayNameDefault) && (!avName.mLegacyFirstName.empty()) )
+			if ( (fFilterLegacy) && (!avName.mLegacyFirstName.empty()) &&
+				 ((!avName.mIsDisplayNameDefault) || (LLCacheName::getDefaultLastName() == avName.mLegacyLastName)) )
+			{
 				strLegacyName = avName.getLegacyName();
+			}
 
 			// If the display name is a subset of the legacy name we need to filter that first, otherwise it's the other way around
 			if (boost::icontains(strLegacyName, avName.mDisplayName))
@@ -382,12 +398,14 @@ void RlvUtil::notifyBlocked(const std::string& strNotifcation, const LLSD& sdArg
 // Checked: 2010-11-11 (RLVa-1.2.1g) | Added: RLVa-1.2.1g
 void RlvUtil::notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine)
 {
+	// Don't show the same assertion over and over, or if the user opted out
 	static std::string strAssertPrev, strFilePrev; static int nLinePrev;
-	if ( (strAssertPrev == strAssert) && (strFile == strFilePrev) && (nLine == nLinePrev) )
+	if ( ((strAssertPrev == strAssert) && (strFile == strFilePrev) && (nLine == nLinePrev)) ||
+		 (!rlvGetSetting<bool>(RLV_SETTING_SHOWASSERTIONFAIL, true)) )
 	{
-		// Don't show the same assertion over and over
 		return;
 	}
+
 	strAssertPrev = strAssert;
 	strFilePrev = strFile;
 	nLinePrev = nLine;
@@ -451,6 +469,33 @@ bool rlvMenuToggleEnabled()
 	LLNotificationsUtil::add("GenericAlert", args);
 	
 	return true;
+}
+
+// Checked: 2011-08-16 (RLVa-1.4.0b) | Added: RLVa-1.4.0b
+void rlvMenuToggleVisible()
+{
+	bool fTopLevel = rlvGetSetting(RLV_SETTING_TOPLEVELMENU, true);
+	bool fRlvEnabled = rlv_handler_t::isEnabled();
+
+	LLMenuGL* pRLVaMenuMain = gMenuBarView->findChildMenuByName("RLVa Main", FALSE);
+	LLMenuGL* pAdvancedMenu = gMenuBarView->findChildMenuByName("Advanced", FALSE);
+	LLMenuGL* pRLVaMenuEmbed = pAdvancedMenu->findChildMenuByName("RLVa Embedded", FALSE);
+
+	gMenuBarView->setItemVisible("RLVa Main", (fRlvEnabled) && (fTopLevel));
+	pAdvancedMenu->setItemVisible("RLVa Embedded", (fRlvEnabled) && (!fTopLevel));
+
+	if ( (rlv_handler_t::isEnabled()) && (pRLVaMenuMain) && (pRLVaMenuEmbed) && 
+		 ( ((fTopLevel) && (1 == pRLVaMenuMain->getItemCount())) || ((!fTopLevel) && (1 == pRLVaMenuEmbed->getItemCount())) ) )
+	{
+		LLMenuGL* pMenuFrom = (fTopLevel) ? pRLVaMenuEmbed : pRLVaMenuMain;
+		LLMenuGL* pMenuTo = (fTopLevel) ? pRLVaMenuMain : pRLVaMenuEmbed;
+		while (LLMenuItemGL* pItem = pMenuFrom->getItem(1))
+		{
+			pMenuFrom->removeChild(pItem);
+			pMenuTo->addChild(pItem);
+			pItem->updateBranchParent(pMenuTo);
+		}
+	}
 }
 
 // Checked: 2010-04-23 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g

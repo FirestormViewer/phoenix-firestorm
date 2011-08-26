@@ -170,7 +170,8 @@ void RlvUIEnabler::onToggleRez()
 void RlvUIEnabler::onToggleSetDebug()
 {
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SETDEBUG);
-	for (auto itSetting = RlvExtGetSet::m_DbgAllowed.cbegin(); itSetting != RlvExtGetSet::m_DbgAllowed.cend(); ++itSetting)
+	for (std::map<std::string, S16>::const_iterator itSetting = RlvExtGetSet::m_DbgAllowed.cbegin(); 
+			itSetting != RlvExtGetSet::m_DbgAllowed.cend(); ++itSetting)
 	{
 		if (itSetting->second & RlvExtGetSet::DBG_WRITE)
 			gSavedSettings.getControl(itSetting->first)->setHiddenFromSettingsEditor(!fEnable);
