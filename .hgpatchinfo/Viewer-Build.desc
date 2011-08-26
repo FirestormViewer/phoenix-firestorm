@@ -5,3 +5,5 @@
 - changed : break into the debugger rather than forcing the process into an unrecoverable state for "llerrs" on non-release builds
     -> Windows only
 - fixed   : *OS builds don't set the default Visual Studio project and configuration
+- changed : set the "FMOD" flag to TRUE for the (Windows) ReleaseOS build configuration
+- changed : set the "UNATTENDED" flag to FALSE for all (Windows) *OS build configurations
