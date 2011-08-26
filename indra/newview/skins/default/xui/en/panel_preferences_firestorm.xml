@@ -488,6 +488,15 @@
 		 top_pad="0"
 		 height="20"
 		 width="350" />
+
+		<check_box
+		 control_name="FSAdvancedTooltips"
+		 name="FSAdvancedTooltips"
+		 label="Show extended information in hovertips (classic Phoenix style)"
+		 layout="topleft"
+		 top_pad="0"
+		 height="20"
+		 width="350" />
 		 
 		<!-- LGG Color Beams -->
         <text font="SansSerifSmall" name="BeamPrefs" follows="left|top" left="15" bottom_delta="25">
