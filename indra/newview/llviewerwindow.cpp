@@ -25,7 +25,6 @@
  */
 
 #include "llviewerprecompiledheaders.h"
-
 #include "llviewerwindow.h"
 
 #if LL_WINDOWS
@@ -41,6 +40,7 @@
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llfloaterreg.h"
+#include "llmeshrepository.h"
 #include "llpanellogin.h"
 #include "llviewerkeyboard.h"
 #include "llviewermenu.h"
@@ -232,6 +232,8 @@ LLVector2       gDebugRaycastTexCoord;
 LLVector3       gDebugRaycastNormal;
 LLVector3       gDebugRaycastBinormal;
 S32				gDebugRaycastFaceHit;
+LLVector3		gDebugRaycastStart;
+LLVector3		gDebugRaycastEnd;
 
 // HUD display lines in lower right
 BOOL				gDisplayWindInfo = FALSE;
@@ -327,7 +329,7 @@ public:
 		mTextColor = LLColor4( 0.86f, 0.86f, 0.86f, 1.f );
 
 		// Draw stuff growing up from right lower corner of screen
-		U32 xpos = mWindow->getWindowWidthScaled() - 350;
+		U32 xpos = mWindow->getWorldViewWidthScaled() - 350;
 		U32 ypos = 64;
 		const U32 y_inc = 20;
 
@@ -456,6 +458,79 @@ public:
 				addText(xpos, ypos, "Shaders Disabled");
 				ypos += y_inc;
 			}
+
+			if (gGLManager.mHasATIMemInfo)
+			{
+				S32 meminfo[4];
+				glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, meminfo);
+
+				addText(xpos, ypos, llformat("%.2f MB Texture Memory Free", meminfo[0]/1024.f));
+				ypos += y_inc;
+
+				if (gGLManager.mHasVertexBufferObject)
+				{
+					glGetIntegerv(GL_VBO_FREE_MEMORY_ATI, meminfo);
+					addText(xpos, ypos, llformat("%.2f MB VBO Memory Free", meminfo[0]/1024.f));
+					ypos += y_inc;
+				}
+			}
+			else if (gGLManager.mHasNVXMemInfo)
+			{
+				S32 free_memory;
+				glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &free_memory);
+				addText(xpos, ypos, llformat("%.2f MB Video Memory Free", free_memory/1024.f));
+				ypos += y_inc;
+			}
+
+			//show streaming cost/triangle count of known prims in current region OR selection
+			{
+				F32 cost = 0.f;
+				S32 count = 0;
+				S32 object_count = 0;
+				S32 total_bytes = 0;
+				S32 visible_bytes = 0;
+
+				const char* label = "Region";
+				if (LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 0)
+				{ //region
+					LLViewerRegion* region = gAgent.getRegion();
+					if (region)
+					{
+						for (U32 i = 0; i < gObjectList.getNumObjects(); ++i)
+						{
+							LLViewerObject* object = gObjectList.getObject(i);
+							if (object && 
+								object->getRegion() == region &&
+								object->getVolume())
+							{
+								object_count++;
+								S32 bytes = 0;	
+								S32 visible = 0;
+								cost += object->getStreamingCost(&bytes, &visible);
+								count += object->getTriangleCount();
+								total_bytes += bytes;
+								visible_bytes += visible;
+							}
+						}
+					}
+				}
+				else
+				{
+					label = "Selection";
+					cost = LLSelectMgr::getInstance()->getSelection()->getSelectedObjectStreamingCost(&total_bytes, &visible_bytes);
+					count = LLSelectMgr::getInstance()->getSelection()->getSelectedObjectTriangleCount();
+					object_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
+				}
+					
+				addText(xpos,ypos, llformat("%s streaming cost: %.1f", label, cost));
+				ypos += y_inc;
+
+				addText(xpos, ypos, llformat("    %.3f KTris, %.1f/%.1f KB, %d objects",
+										count/1000.f, visible_bytes/1024.f, total_bytes/1024.f, object_count));
+				ypos += y_inc;
+			
+			}
+
 			addText(xpos, ypos, llformat("%d MB Vertex Data", LLVertexBuffer::sAllocatedBytes/(1024*1024)));
 			ypos += y_inc;
 
@@ -508,6 +583,12 @@ public:
 			
 			ypos += y_inc;
 
+			if (!LLSpatialGroup::sPendingQueries.empty())
+			{
+				addText(xpos,ypos, llformat("%d Queries pending", LLSpatialGroup::sPendingQueries.size()));
+				ypos += y_inc;
+			}
+
 
 			addText(xpos,ypos, llformat("%d Avatars visible", LLVOAvatar::sNumVisibleAvatars));
 			
@@ -516,6 +597,22 @@ public:
 			addText(xpos,ypos, llformat("%d Lights visible", LLPipeline::sVisibleLightCount));
 			
 			ypos += y_inc;
+
+			if (gMeshRepo.meshRezEnabled())
+			{
+				addText(xpos, ypos, llformat("%.3f MB Mesh Data Received", LLMeshRepository::sBytesReceived/(1024.f*1024.f)));
+				
+				ypos += y_inc;
+				
+				addText(xpos, ypos, llformat("%d/%d Mesh HTTP Requests/Retries", LLMeshRepository::sHTTPRequestCount,
+					LLMeshRepository::sHTTPRetryCount));
+				
+				ypos += y_inc;
+
+				addText(xpos, ypos, llformat("%.3f/%.3f MB Mesh Cache Read/Write ", LLMeshRepository::sCacheBytesRead/(1024.f*1024.f), LLMeshRepository::sCacheBytesWritten/(1024.f*1024.f)));
+
+				ypos += y_inc;
+			}
 
 			LLVertexBuffer::sBindCount = LLImageGL::sBindCount = 
 				LLVertexBuffer::sSetCount = LLImageGL::sUniqueCount = 
@@ -605,6 +702,7 @@ public:
 				ypos += y_inc;
 			}
 		}
+
 		if(log_texture_traffic)
 		{	
 			U32 old_y = ypos ;
@@ -621,6 +719,37 @@ public:
 				addText(xpos, ypos, "Network traffic for textures:");
 				ypos += y_inc;
 			}
+		}				
+
+		//temporary hack to give feedback on mesh upload progress
+		if (!gMeshRepo.mUploads.empty())
+		{
+			for (std::vector<LLMeshUploadThread*>::iterator iter = gMeshRepo.mUploads.begin(); 
+				iter != gMeshRepo.mUploads.end(); ++iter)
+			{
+				LLMeshUploadThread* thread = *iter;
+
+				addText(xpos, ypos, llformat("Mesh Uploads: %d", 
+								thread->mPendingUploads));
+				ypos += y_inc;
+			}
+		}
+
+		if (!gMeshRepo.mPendingRequests.empty() ||
+			!gMeshRepo.mThread->mHeaderReqQ.empty() ||
+			!gMeshRepo.mThread->mLODReqQ.empty())
+		{
+			LLMutexLock lock(gMeshRepo.mThread->mMutex);
+			S32 pending = (S32) gMeshRepo.mPendingRequests.size();
+			S32 header = (S32) gMeshRepo.mThread->mHeaderReqQ.size();
+			S32 lod = (S32) gMeshRepo.mThread->mLODReqQ.size();
+
+			addText(xpos, ypos, llformat ("Mesh Queue - %d pending (%d:%d header | %d:%d LOD)", 
+												pending,
+												LLMeshRepoThread::sActiveHeaderRequests, header,
+												LLMeshRepoThread::sActiveLODRequests, lod));
+
+			ypos += y_inc;
 		}
 		
 		if (gSavedSettings.getBOOL("DebugShowTextureInfo"))
@@ -1427,8 +1556,27 @@ LLViewerWindow::LLViewerWindow(
 		gSavedSettings.getBOOL("DisableVerticalSync"),
 		!gHeadlessClient,
 		ignore_pixel_depth,
-		gSavedSettings.getBOOL("RenderUseFBO") ? 0 : gSavedSettings.getU32("RenderFSAASamples")); //don't use window level anti-aliasing if FBOs are enabled
+		gSavedSettings.getBOOL("RenderDeferred") ? 0 : gSavedSettings.getU32("RenderFSAASamples")); //don't use window level anti-aliasing if FBOs are enabled
 
+	if (NULL == mWindow)
+	{
+		LLSplashScreen::update(LLTrans::getString("StartupRequireDriverUpdate"));
+	
+		LL_WARNS("Window") << "Failed to create window, to be shutting Down, be sure your graphics driver is updated." << llendl ;
+
+		ms_sleep(5000) ; //wait for 5 seconds.
+
+		LLSplashScreen::update(LLTrans::getString("ShuttingDown"));
+#if LL_LINUX || LL_SOLARIS
+		llwarns << "Unable to create window, be sure screen is set at 32-bit color and your graphics driver is configured correctly.  See README-linux.txt or README-solaris.txt for further information."
+				<< llendl;
+#else
+		LL_WARNS("Window") << "Unable to create window, be sure screen is set at 32-bit color in Control Panels->Display->Settings"
+				<< LL_ENDL;
+#endif
+        LLAppViewer::instance()->fastQuit(1);
+	}
+	
 	if (!LLAppViewer::instance()->restoreErrorTrap())
 	{
 		LL_WARNS("Window") << " Someone took over my signal/exception handler (post createWindow)!" << LL_ENDL;
@@ -1444,19 +1592,6 @@ LLViewerWindow::LLViewerWindow(
 		gSavedSettings.setS32("FullScreenHeight",scr.mY);
     }
 
-	if (NULL == mWindow)
-	{
-		LLSplashScreen::update(LLTrans::getString("ShuttingDown"));
-#if LL_LINUX || LL_SOLARIS
-		llwarns << "Unable to create window, be sure screen is set at 32-bit color and your graphics driver is configured correctly.  See README-linux.txt or README-solaris.txt for further information."
-				<< llendl;
-#else
-		LL_WARNS("Window") << "Unable to create window, be sure screen is set at 32-bit color in Control Panels->Display->Settings"
-				<< LL_ENDL;
-#endif
-        LLAppViewer::instance()->fastQuit(1);
-	}
-	
 	// Get the real window rect the window was created with (since there are various OS-dependent reasons why
 	// the size of a window or fullscreen context may have been adjusted slightly...)
 	F32 ui_scale_factor = gSavedSettings.getF32("UIScaleFactor");
@@ -1489,6 +1624,7 @@ LLViewerWindow::LLViewerWindow(
 		gSavedSettings.setBOOL("RenderVBOEnable", FALSE);
 	}
 	LLVertexBuffer::initClass(gSavedSettings.getBOOL("RenderVBOEnable"), gSavedSettings.getBOOL("RenderVBOMappingDisable"));
+	LL_INFOS("RenderInit") << "LLVertexBuffer initialization done." << LL_ENDL ;
 
 	if (LLFeatureManager::getInstance()->isSafe()
 		|| (gSavedSettings.getS32("LastFeatureVersion") != LLFeatureManager::getInstance()->getVersion())
@@ -1845,7 +1981,10 @@ void LLViewerWindow::shutdownViews()
 	
 	// destroy the nav bar, not currently part of gViewerWindow
 	// *TODO: Make LLNavigationBar part of gViewerWindow
+	if (LLNavigationBar::instanceExists())
+	{
 	delete LLNavigationBar::getInstance();
+	}
 
 	// destroy menus after instantiating navbar above, as it needs
 	// access to gMenuHolder
@@ -2159,6 +2298,11 @@ void LLViewerWindow::draw()
 	// Draw all nested UI views.
 	// No translation needed, this view is glued to 0,0
 
+	if (LLGLSLShader::sNoFixedFunction)
+	{
+		gUIProgram.bind();
+	}
+
 	gGL.pushMatrix();
 	LLUI::pushMatrix();
 	{
@@ -2232,6 +2376,11 @@ void LLViewerWindow::draw()
 	}
 	LLUI::popMatrix();
 	gGL.popMatrix();
+
+	if (LLGLSLShader::sNoFixedFunction)
+	{
+		gUIProgram.unbind();
+	}
 
 //#if LL_DEBUG
 	LLView::sIsDrawing = FALSE;
@@ -2622,7 +2771,9 @@ void LLViewerWindow::updateUI()
 											  &gDebugRaycastIntersection,
 											  &gDebugRaycastTexCoord,
 											  &gDebugRaycastNormal,
-											  &gDebugRaycastBinormal);
+											  &gDebugRaycastBinormal,
+											  &gDebugRaycastStart,
+											  &gDebugRaycastEnd);
 	}
 
 	updateMouseDelta();
@@ -3011,6 +3162,12 @@ void LLViewerWindow::updateLayout()
 			gFloaterTools->setVisible(FALSE);
 		}
 		//gMenuBarView->setItemVisible("BuildTools", gFloaterTools->getVisible());
+	}
+
+	LLFloaterBuildOptions* build_options_floater = LLFloaterReg::getTypedInstance<LLFloaterBuildOptions>("build_options");
+	if (build_options_floater && build_options_floater->getVisible())
+	{
+		build_options_floater->updateGridMode();
 	}
 
 	// Always update console
@@ -3566,7 +3723,9 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 												LLVector3 *intersection,
 												LLVector2 *uv,
 												LLVector3 *normal,
-												LLVector3 *binormal)
+												LLVector3 *binormal,
+												LLVector3* start,
+												LLVector3* end)
 {
 	S32 x = mouse_x;
 	S32 y = mouse_y;
@@ -3598,7 +3757,22 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 	LLVector3 mouse_world_start = mouse_point_global;
 	LLVector3 mouse_world_end   = mouse_point_global + mouse_direction_global * depth;
 
-	
+	if (!LLViewerJoystick::getInstance()->getOverrideCamera())
+	{ //always set raycast intersection to mouse_world_end unless
+		//flycam is on (for DoF effect)
+		gDebugRaycastIntersection = mouse_world_end;
+	}
+
+	if (start)
+	{
+		*start = mouse_world_start;
+	}
+
+	if (end)
+	{
+		*end = mouse_world_end;
+	}
+
 	LLViewerObject* found = NULL;
 
 	if (this_object)  // check only this object
@@ -3610,8 +3784,7 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 			{
 				found = this_object;
 			}
-			}
-		
+		}
 		else // is a world object
 		{
 			if (this_object->lineSegmentIntersect(mouse_world_start, mouse_world_end, this_face, pick_transparent,
@@ -3619,9 +3792,8 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 			{
 				found = this_object;
 			}
-			}
-			}
-
+		}
+	}
 	else // check ALL objects
 	{
 		found = gPipeline.lineSegmentIntersectInHUD(mouse_hud_start, mouse_hud_end, pick_transparent,
@@ -3633,35 +3805,37 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 		{
 			found = NULL;
 		}
-// [/RLVa:KB]
-
-		if (!found) // if not found in HUD, look in world:
-		{
-			found = gPipeline.lineSegmentIntersectInWorld(mouse_world_start, mouse_world_end, pick_transparent,
-														  face_hit, intersection, uv, normal, binormal);
+                if (!found) // if not found in HUD, look in world:
+                {
+                        found = gPipeline.lineSegmentIntersectInWorld(mouse_world_start, mouse_world_end, pick_transparent,
+                                                                                                                  face_hit, intersection, uv, normal, binormal);
+                        if (found && !pick_transparent)
+                        {
+                                gDebugRaycastIntersection = *intersection;
+                        }
+                }
 
 // [RLVa:KB] - Checked: 2010-01-02 (RLVa-1.1.0l) | Added: RLVa-1.1.0l
 #ifdef RLV_EXTENSION_CMD_INTERACT
-			if ( (rlv_handler_t::isEnabled()) && (found) && (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) )
-			{
-				// Allow picking if:
-				//   - the drag-and-drop tool is active (allows inventory offers)
-				//   - the camera tool is active
-				//   - the pie tool is active *and* we picked our own avie (allows "mouse steering" and the self pie menu)
-				LLTool* pCurTool = LLToolMgr::getInstance()->getCurrentTool();
-				if ( (LLToolDragAndDrop::getInstance() != pCurTool) && 
-					 (!LLToolCamera::getInstance()->hasMouseCapture()) &&
-					 ((LLToolPie::getInstance() != pCurTool) || (gAgent.getID() != found->getID())) )
-				{
-					found = NULL;
-				}
-			}
+                if ( (rlv_handler_t::isEnabled()) && (found) && (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) )
+                {
+                        // Allow picking if:
+                        //   - the drag-and-drop tool is active (allows inventory offers)
+                        //   - the camera tool is active
+                        //   - the pie tool is active *and* we picked our own avie (allows "mouse steering" and the self pie menu)
+                        LLTool* pCurTool = LLToolMgr::getInstance()->getCurrentTool();
+                        if ( (LLToolDragAndDrop::getInstance() != pCurTool) &&
+                                        (!LLToolCamera::getInstance()->hasMouseCapture()) &&
+                                        ((LLToolPie::getInstance() != pCurTool) || (gAgent.getID() != found->getID())) )
+                        {
+                                found = NULL;
+                        }
 #endif // RLV_EXTENSION_CMD_INTERACT
 // [/RLVa:KB]
-		}
-	}
+                }
+        }
 
-	return found;
+        return found;
 }
 
 // Returns unit vector relative to camera
@@ -4399,11 +4573,27 @@ void LLViewerWindow::setup3DViewport(S32 x_offset, S32 y_offset)
 	glViewport(gGLViewport[0], gGLViewport[1], gGLViewport[2], gGLViewport[3]);
 }
 
+void LLViewerWindow::revealIntroPanel()
+{
+	if (mProgressView)
+	{
+		mProgressView->revealIntroPanel();
+	}
+}
+
 void LLViewerWindow::setShowProgress(const BOOL show)
 {
 	if (mProgressView)
 	{
 		mProgressView->setVisible(show);
+	}
+}
+
+void LLViewerWindow::setStartupComplete()
+{
+	if (mProgressView)
+	{
+		mProgressView->setStartupComplete();
 	}
 }
 
@@ -4623,6 +4813,7 @@ BOOL LLViewerWindow::changeDisplaySettings(LLCoordScreen size, BOOL disable_vsyn
 	//BOOL was_maximized = gSavedSettings.getBOOL("WindowMaximized");
 
 	//gResizeScreenTexture = TRUE;
+
 
 	//U32 fsaa = gSavedSettings.getU32("RenderFSAASamples");
 	//U32 old_fsaa = mWindow->getFSAASamples();

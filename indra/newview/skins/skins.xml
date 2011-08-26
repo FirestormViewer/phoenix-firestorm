@@ -67,26 +67,16 @@
                     <string>AppalachianSky</string>
                 <key>folder</key>
                     <string>appalachian_sky</string>
-                </map>
+		</map>
+		<map>
+		<key>name</key>
+		    <string>Sidetabs</string>
+		<key>folder</key>
+		    <string>sidetabs</string>
+		</map>
             </array>
         </map>
 
-        <map>
-        <key>name</key>
-            <string>MetaHarper w/SideTabs</string>
-        <key>folder</key>
-            <string>metaharpersidetabs</string>
-        <key>themes</key>
-            <array>
-                <map>
-                <key>name</key>
-                    <string>AppalachianSky</string>
-                <key>folder</key>
-                    <string>appalachian_sky</string>
-                </map>
-            </array>
-        </map>
-        
         <map>
         <key>name</key>
             <string>StarLight</string>

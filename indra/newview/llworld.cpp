@@ -55,6 +55,11 @@
 #include "message.h"
 #include "pipeline.h"
 #include "llappviewer.h"		// for do_disconnect()
+#include <deque>
+#include <queue>
+#include <map>
+#include <cstring>
+
 
 //
 // Globals
@@ -86,8 +91,7 @@ LLWorld::LLWorld() :
 	mLastPacketsIn(0),
 	mLastPacketsOut(0),
 	mLastPacketsLost(0),
-	mSpaceTimeUSec(0),
-	mClassicCloudsEnabled(TRUE)
+	mSpaceTimeUSec(0)
 {
 	for (S32 i = 0; i < 8; i++)
 	{
@@ -177,10 +181,6 @@ LLViewerRegion* LLWorld::addRegion(const U64 &region_handle, const LLHost &host)
 	{
 		llerrs << "Unable to create new region!" << llendl;
 	}
-
-	regionp->mCloudLayer.create(regionp);
-	regionp->mCloudLayer.setWidth((F32)mWidth);
-	regionp->mCloudLayer.setWindPointer(&regionp->mWind);
 
 	mRegionList.push_back(regionp);
 	mActiveRegionList.push_back(regionp);
@@ -592,7 +592,7 @@ void LLWorld::updateVisibilities()
 		region_list_t::iterator curiter = iter++;
 		LLViewerRegion* regionp = *curiter;
 		F32 height = regionp->getLand().getMaxZ() - regionp->getLand().getMinZ();
-		F32 radius = 0.5f*fsqrtf(height * height + diagonal_squared);
+		F32 radius = 0.5f*(F32) sqrt(height * height + diagonal_squared);
 		if (!regionp->getLand().hasZData()
 			|| LLViewerCamera::getInstance()->sphereInFrustum(regionp->getCenterAgent(), radius))
 		{
@@ -613,7 +613,7 @@ void LLWorld::updateVisibilities()
 		}
 
 		F32 height = regionp->getLand().getMaxZ() - regionp->getLand().getMinZ();
-		F32 radius = 0.5f*fsqrtf(height * height + diagonal_squared);
+		F32 radius = 0.5f*(F32) sqrt(height * height + diagonal_squared);
 		if (LLViewerCamera::getInstance()->sphereInFrustum(regionp->getCenterAgent(), radius))
 		{
 			regionp->calculateCameraDistance();
@@ -655,92 +655,6 @@ void LLWorld::updateParticles()
 {
 	LLViewerPartSim::getInstance()->updateSimulation();
 }
-
-void LLWorld::updateClouds(const F32 dt)
-{
-	static LLFastTimer::DeclareTimer ftm("World Clouds");
-	LLFastTimer t(ftm);
-
-	if ( gSavedSettings.getBOOL("FreezeTime") )
-	{
-		// don't move clouds in snapshot mode
-		return;
-	}
-
-	if (
-		mClassicCloudsEnabled !=
-		gSavedSettings.getBOOL("SkyUseClassicClouds") )
-	{
-		// The classic cloud toggle has been flipped
-		// gotta update all of the cloud layers
-		mClassicCloudsEnabled =
-			gSavedSettings.getBOOL("SkyUseClassicClouds");
-
-		if ( !mClassicCloudsEnabled && mActiveRegionList.size() )
-		{
-			// We've transitioned to having classic clouds disabled
-			// reset all cloud layers.
-			for (
-				region_list_t::iterator iter = mActiveRegionList.begin();
-				iter != mActiveRegionList.end();
-				++iter)
-			{
-				LLViewerRegion* regionp = *iter;
-				regionp->mCloudLayer.reset();
-			}
-
-			return;
-		}
-	}
-	else if ( !mClassicCloudsEnabled ) return;
-
-	if (mActiveRegionList.size())
-	{
-		for (region_list_t::iterator iter = mActiveRegionList.begin();
-			 iter != mActiveRegionList.end(); ++iter)
-		{
-			LLViewerRegion* regionp = *iter;
-			regionp->mCloudLayer.updatePuffs(dt);
-		}
-
-		// Reshuffle who owns which puffs
-		for (region_list_t::iterator iter = mActiveRegionList.begin();
-			 iter != mActiveRegionList.end(); ++iter)
-		{
-			LLViewerRegion* regionp = *iter;
-			regionp->mCloudLayer.updatePuffOwnership();
-		}
-
-		// Add new puffs
-		for (region_list_t::iterator iter = mActiveRegionList.begin();
-			 iter != mActiveRegionList.end(); ++iter)
-		{
-			LLViewerRegion* regionp = *iter;
-			regionp->mCloudLayer.updatePuffCount();
-		}
-	}
-}
-
-LLCloudGroup* LLWorld::findCloudGroup(const LLCloudPuff &puff)
-{
-	if (mActiveRegionList.size())
-	{
-		// Update all the cloud puff positions, and timer based stuff
-		// such as death decay
-		for (region_list_t::iterator iter = mActiveRegionList.begin();
-			 iter != mActiveRegionList.end(); ++iter)
-		{
-			LLViewerRegion* regionp = *iter;
-			LLCloudGroup *groupp = regionp->mCloudLayer.findCloudGroup(puff);
-			if (groupp)
-			{
-				return groupp;
-			}
-		}
-	}
-	return NULL;
-}
-
 
 void LLWorld::renderPropertyLines()
 {
@@ -954,8 +868,8 @@ void LLWorld::updateWaterObjects()
 		{
 			// The edge water objects can be dead because they're attached to the region that the
 			// agent was in when they were originally created.
-			mEdgeWaterObjects[dir] = (LLVOWater *)gObjectList.createObjectViewer(LLViewerObject::LL_VO_WATER,
-																				 gAgent.getRegion());
+			mEdgeWaterObjects[dir] = (LLVOWater *)gObjectList.createObjectViewer(LLViewerObject::LL_VO_VOID_WATER,
+				gAgent.getRegion());
 			waterp = mEdgeWaterObjects[dir];
 			waterp->setUseTexture(FALSE);
 			waterp->setIsEdgePatch(TRUE);
@@ -980,6 +894,7 @@ void LLWorld::updateWaterObjects()
 		gObjectList.updateActive(waterp);
 	}
 }
+
 
 void LLWorld::shiftRegions(const LLVector3& offset)
 {

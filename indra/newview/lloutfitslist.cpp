@@ -394,8 +394,8 @@ LLOutfitsList::~LLOutfitsList()
 	if (gInventory.containsObserver(mCategoriesObserver))
 	{
 		gInventory.removeObserver(mCategoriesObserver);
-		delete mCategoriesObserver;
 	}
+	delete mCategoriesObserver;
 }
 
 BOOL LLOutfitsList::postBuild()

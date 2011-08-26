@@ -52,6 +52,7 @@ LLSpinCtrl::Params::Params()
 :	label_width("label_width"),
 	decimal_digits("decimal_digits"),
 	allow_text_entry("allow_text_entry", true),
+	label_wrap("label_wrap", false),
 	text_enabled_color("text_enabled_color"),
 	text_disabled_color("text_disabled_color"),
 	up_button("up_button"),
@@ -80,6 +81,7 @@ LLSpinCtrl::LLSpinCtrl(const LLSpinCtrl::Params& p)
 	{
 		LLRect label_rect( 0, centered_top, label_width, centered_bottom );
 		LLTextBox::Params params;
+		params.wrap(p.label_wrap);
 		params.name("SpinCtrl Label");
 		params.rect(label_rect);
 		params.initial_value(p.label());
@@ -122,7 +124,8 @@ LLSpinCtrl::LLSpinCtrl(const LLSpinCtrl::Params& p)
 	params.max_length.bytes(MAX_STRING_LENGTH);
 	params.commit_callback.function((boost::bind(&LLSpinCtrl::onEditorCommit, this, _2)));
 	
-	//allow entering of any chars for LLCalc, proper input will be evaluated on commit
+
+	//*NOTE: allow entering of any chars for LLCalc, proper input will be evaluated on commit
 	//if( mPrecision>0 )//should accept float numbers
 	//{
 	//	params.prevalidate_callback(&LLTextValidate::validateFloat);
@@ -131,7 +134,7 @@ LLSpinCtrl::LLSpinCtrl(const LLSpinCtrl::Params& p)
 	//{
 	//	params.prevalidate_callback(&LLTextValidate::validateInt);
 	//}
-	
+
 	params.follows.flags(FOLLOWS_LEFT | FOLLOWS_BOTTOM);
 	mEditor = LLUICtrlFactory::create<LLLineEditor> (params);
 	mEditor->setFocusReceivedCallback( boost::bind(&LLSpinCtrl::onEditorGainFocus, _1, this ));

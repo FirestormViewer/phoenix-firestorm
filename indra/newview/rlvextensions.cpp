@@ -293,6 +293,10 @@ ERlvCmdRet RlvExtGetSet::onSetPseudoDebug(const std::string& strSetting, const s
 // Checked: 2010-04-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
 std::string RlvExtGetSet::onGetEnv(std::string strSetting)
 {
+	// <AO> merge casualty, windlight is all different now.
+	return "";
+	// </AO>
+/*
 	LLWLParamManager* pWLParams = LLWLParamManager::instance(); bool fErr;
 	WLFloatControl* pFloat = NULL;
 	WLColorControl* pColour = NULL;
@@ -381,11 +385,15 @@ std::string RlvExtGetSet::onGetEnv(std::string strSetting)
 	}
 
 	return llformat("%f", nValue);
+*/
 }
 
 // Checked: 2010-04-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
 ERlvCmdRet RlvExtGetSet::onSetEnv(std::string strSetting, const std::string& strValue)
 {
+	// AO Merge Casualty
+	return RLV_RET_FAILED_UNKNOWN;
+/*
 	LLWLParamManager* pWLParams = LLWLParamManager::instance(); bool fErr;
 	WLFloatControl* pFloat = NULL;
 	WLColorControl* pColour = NULL;
@@ -553,6 +561,7 @@ ERlvCmdRet RlvExtGetSet::onSetEnv(std::string strSetting, const std::string& str
 		}
 	}
 	return RLV_RET_FAILED_UNKNOWN;
+*** AO *** */
 }
 
 // ============================================================================

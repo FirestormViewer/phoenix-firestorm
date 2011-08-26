@@ -42,9 +42,13 @@ installer_Linux()
 
 installer_CYGWIN()
 {
-  d=$(build_dir_CYGWIN ${last_built_variant:-Release})
-  p=$(sed 's:.*=::' "$d/newview/${last_built_variant:-Release}/touched.bat")
-  echo "$d/newview/${last_built_variant:-Release}/$p"
+  v=${last_built_variant:-Release}
+  d=$(build_dir_CYGWIN $v)
+  if [ -r "$d/newview/$v/touched.bat" ]
+  then
+    p=$(sed 's:.*=::' "$d/newview/$v/touched.bat")
+    echo "$d/newview/$v/$p"
+  fi
 }
 
 pre_build()
@@ -205,7 +209,7 @@ do
       end_section BuildParallel
     else
       begin_section "Build$variant"
-      build "$variant" "$build_dir" 2>&1 | tee -a "$build_log" | grep --line-buffered "^##teamcity"
+      build "$variant" "$build_dir" 2>&1 | tee -a "$build_log" | sed -n 's/^ *\(##teamcity.*\)/\1/p'
       if `cat "$build_dir/build_ok"`
       then
         echo so far so good.
@@ -234,7 +238,7 @@ then
     begin_section "Build$variant"
     build_dir=`build_dir_$arch $variant`
     build_dir_stubs="$build_dir/win_setup/$variant"
-    tee -a $build_log < "$build_dir/build.log" | grep --line-buffered "^##teamcity"
+    tee -a $build_log < "$build_dir/build.log" | sed -n 's/^ *\(##teamcity.*\)/\1/p'
     if `cat "$build_dir/build_ok"`
     then
       echo so far so good.

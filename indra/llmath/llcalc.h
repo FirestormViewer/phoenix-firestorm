@@ -69,15 +69,16 @@ public:
 private:
 	std::string::size_type	mLastErrorPos;
 	
-	calc_map_t*	mConstants;
-	calc_map_t*	mVariables;
+	calc_map_t	mConstants;
+	calc_map_t	mVariables;
 	
 	// *TODO: Add support for storing user defined variables, and stored functions.
 	//	Will need UI work, and a means to save them between sessions.
-//	calc_map_t* mUserVariables;
+//	calc_map_t mUserVariables;
 	
 	// "There shall be only one"
 	static LLCalc*	sInstance;
 };
 
 #endif // LL_CALC_H
+

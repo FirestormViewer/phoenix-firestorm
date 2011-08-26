@@ -308,6 +308,9 @@ bool	LLNearbyChatScreenChannel::createPoolToast()
 	
 	toast->setOnFadeCallback(boost::bind(&LLNearbyChatScreenChannel::onToastFade, this, _1));
 
+	// If the toast gets somehow prematurely destroyed, deactivate it to prevent crash (STORM-1352).
+	toast->setOnToastDestroyedCallback(boost::bind(&LLNearbyChatScreenChannel::onToastDestroyed, this, _1, false));
+
 	LL_DEBUGS("NearbyChat") << "Creating and pooling toast" << llendl;	
 	m_toast_pool.push_back(toast->getHandle());
 	return true;
@@ -411,8 +414,10 @@ void LLNearbyChatScreenChannel::arrangeToasts()
 	}
 }
 
-int sort_toasts_predicate(LLHandle<LLToast> first, LLHandle<LLToast> second)
+static bool sort_toasts_predicate(LLHandle<LLToast> first, LLHandle<LLToast> second)
 {
+	if (!first.get() || !second.get()) return false; // STORM-1352
+
 	F32 v1 = first.get()->getTimeLeftToLive();
 	F32 v2 = second.get()->getTimeLeftToLive();
 	return v1 > v2;
@@ -438,7 +443,11 @@ void LLNearbyChatScreenChannel::showToastsBottom()
 	for(toast_vec_t::iterator it = m_active_toasts.begin(); it != m_active_toasts.end(); ++it)
 	{
 		LLToast* toast = it->get();
-		if (!toast) continue;
+		if (!toast)
+		{
+			llwarns << "NULL found in the active chat toasts list!" << llendl;
+			continue;
+		}
 
 		S32 toast_top = bottom + toast->getRect().getHeight() + margin;
 
@@ -483,6 +492,8 @@ void LLNearbyChatScreenChannel::reshape			(S32 width, S32 height, BOOL called_fr
 //-----------------------------------------------------------------------------------------------
 //LLNearbyChatHandler
 //-----------------------------------------------------------------------------------------------
+boost::scoped_ptr<LLEventPump> LLNearbyChatHandler::sChatWatcher(new LLEventStream("LLChat"));
+
 LLNearbyChatHandler::LLNearbyChatHandler(e_notification_type type, const LLSD& id)
 {
 	mType = type;
@@ -519,7 +530,8 @@ void LLNearbyChatHandler::initChannel()
 
 
 
-void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
+void LLNearbyChatHandler::processChat(const LLChat& chat_msg,		// WARNING - not really const, see hack below changing chat_msg.mText
+									  const LLSD &args)
 {
 	if(chat_msg.mMuted == TRUE)
 		return;
@@ -527,7 +539,17 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 	if(chat_msg.mText.empty())
 		return;//don't process empty messages
 
+	// Handle irc styled messages for toast panel
+	// HACK ALERT - changes mText, stripping out IRC style "/me" prefixes
 	LLChat& tmp_chat = const_cast<LLChat&>(chat_msg);
+	std::string original_message = tmp_chat.mText;			// Save un-modified version of chat text
+	if (tmp_chat.mChatStyle == CHAT_STYLE_IRC)
+	{
+		if(!tmp_chat.mFromName.empty())
+			tmp_chat.mText = tmp_chat.mFromName + tmp_chat.mText.substr(3);
+		else
+			tmp_chat.mText = tmp_chat.mText.substr(3);
+	}
 
 // [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
 	if (rlv_handler_t::isEnabled())
@@ -553,6 +575,27 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 		//	tmp_chat.mFromName = tmp_chat.mFromID.asString();
 	}
 
+	// Build notification data 
+	LLSD notification;
+	notification["message"] = chat_msg.mText;
+	notification["from"] = chat_msg.mFromName;
+	notification["from_id"] = chat_msg.mFromID;
+	notification["time"] = chat_msg.mTime;
+	notification["source"] = (S32)chat_msg.mSourceType;
+	notification["chat_type"] = (S32)chat_msg.mChatType;
+	notification["chat_style"] = (S32)chat_msg.mChatStyle;
+	// Pass sender info so that it can be rendered properly (STORM-1021).
+	notification["sender_slurl"] = LLViewerChat::getSenderSLURL(chat_msg, args);
+
+	if (chat_msg.mChatType == CHAT_TYPE_DIRECT &&
+		chat_msg.mText.length() > 0 &&
+		chat_msg.mText[0] == '@')
+	{
+		// Send event on to LLEventStream and exit
+		sChatWatcher->post(notification);
+		return;
+	}
+
 	// don't show toast and add message to chat history on receive debug message
 	// with disabled setting showing script errors or enabled setting to show script
 	// errors in separate window.
@@ -574,7 +617,7 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 
 			LLViewerChat::getChatColor(chat_msg,txt_color);
 
-			LLFloaterScriptDebug::addScriptLine(chat_msg.mText,
+			LLFloaterScriptDebug::addScriptLine(original_message,		// Send full message with "/me" style prefix
 												chat_msg.mFromName,
 												txt_color,
 												chat_msg.mFromID);
@@ -595,6 +638,16 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 
 	}
 
+	// Send event on to LLEventStream
+	sChatWatcher->post(notification);
+
+
+	if( nearby_chat->getVisible()
+		|| ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
+			&& gSavedSettings.getBOOL("UseChatBubbles") )
+		|| !mChannel->getShowToasts() ) // to prevent toasts in Busy mode
+		return;//no need in toast if chat is visible or if bubble chat is enabled
+
 	// Ansariel: Use either old style chat output to console or toasts
 	if (PhoenixUseNearbyChatConsole)
 	{
@@ -606,7 +659,7 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 
 		std::string consoleChat;
 		
-		//-TT 2.6.9 cosmetic changes for merge
+		//-TT 2.6.9 merge
 		//if (chat_msg.mSourceType != CHAT_SOURCE_SYSTEM)
 		//{
 		//	// Get display name for sender
@@ -719,18 +772,20 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg, const LLSD &args)
 
 		LLNearbyChatScreenChannel* channel = dynamic_cast<LLNearbyChatScreenChannel*>(mChannel);
 		
-
 		if(channel)
 		{
-			LLSD notification;
+            // Add a nearby chat toast.
+            LLUUID id;
+            id.generate();			
+			//LLSD notification;
 			notification["id"] = id;
-			notification["message"] = chat_msg.mText;
-			notification["from"] = chat_msg.mFromName;
-			notification["from_id"] = chat_msg.mFromID;
-			notification["time"] = chat_msg.mTime;
-			notification["source"] = (S32)chat_msg.mSourceType;
-			notification["chat_type"] = (S32)chat_msg.mChatType;
-			notification["chat_style"] = (S32)chat_msg.mChatStyle;
+			//notification["message"] = chat_msg.mText;
+			//notification["from"] = chat_msg.mFromName;
+			//notification["from_id"] = chat_msg.mFromID;
+			//notification["time"] = chat_msg.mTime;
+			//notification["source"] = (S32)chat_msg.mSourceType;
+			//notification["chat_type"] = (S32)chat_msg.mChatType;
+			//notification["chat_style"] = (S32)chat_msg.mChatStyle;
 	// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 			if (rlv_handler_t::isEnabled())
 				notification["show_icon_tooltip"] = !chat_msg.mRlvNamesFiltered;

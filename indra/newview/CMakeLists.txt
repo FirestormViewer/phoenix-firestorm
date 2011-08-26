@@ -15,6 +15,7 @@ include(OPENAL)
 include(FindOpenGL)
 include(JsonCpp)
 include(LLAudio)
+include(LLConvexDecomposition)
 include(LLCharacter)
 include(LLCommon)
 include(LLImage)
@@ -40,14 +41,17 @@ include(UnixInstall)
 include(LLKDU)
 include(ViewerMiscLibs)
 include(LLLogin)
+include(GLOD)
 include(CMakeCopyIfDifferent)
 
 include_directories(
     ${DBUSGLIB_INCLUDE_DIRS}
     ${JSONCPP_INCLUDE_DIRS}
+    ${GLOD_INCLUDE_DIR}
     ${LLAUDIO_INCLUDE_DIRS}
     ${LLCHARACTER_INCLUDE_DIRS}
     ${LLCOMMON_INCLUDE_DIRS}
+    ${LLCONVEXDECOMP_INCLUDE_DIRS}
     ${FMOD_INCLUDE_DIR}
     ${LLIMAGE_INCLUDE_DIRS}
     ${LLKDU_INCLUDE_DIRS}
@@ -65,11 +69,15 @@ include_directories(
     ${LSCRIPT_INCLUDE_DIRS}
     ${LSCRIPT_INCLUDE_DIRS}/lscript_compile
     ${LLLOGIN_INCLUDE_DIRS}
+    ${LIBS_PREBUILT_DIR}/include/collada
     ${UPDATER_INCLUDE_DIRS}
     ${OPENAL_LIB_INCLUDE_DIRS}
+    ${LIBS_PREBUILT_DIR}/include/collada/1.4
     )
 
 set(viewer_SOURCE_FILES
+    groupchatlistener.cpp
+    llaccountingquotamanager.cpp
     ao.cpp
     aoengine.cpp
     aoset.cpp
@@ -131,7 +139,6 @@ set(viewer_SOURCE_FILES
     llchiclet.cpp
     llclassifiedinfo.cpp
     llclassifiedstatsresponder.cpp
-    llcloud.cpp
     llcofwearables.cpp
     llcolorswatch.cpp
     llcommanddispatcherlistener.cpp
@@ -142,6 +149,7 @@ set(viewer_SOURCE_FILES
     llcurrencyuimanager.cpp
     llcylinder.cpp
     lldateutil.cpp
+    lldaycyclemanager.cpp
     lldebugmessagebox.cpp
     lldebugview.cpp
     lldelayedgestureerror.cpp
@@ -162,6 +170,8 @@ set(viewer_SOURCE_FILES
     lldriverparam.cpp
     lldynamictexture.cpp
     llemote.cpp
+    llenvmanager.cpp
+    llestateinfomodel.cpp
     lleventnotifier.cpp
     lleventpoll.cpp
     llexpandabletextbox.cpp
@@ -190,9 +200,12 @@ set(viewer_SOURCE_FILES
     llfloaterbuyland.cpp
     llfloatercamera.cpp
     llfloatercolorpicker.cpp
-    llfloaterdaycycle.cpp
+    llfloaterdeleteenvpreset.cpp
     llfloaterdisplayname.cpp
-    llfloaterenvsettings.cpp
+    llfloatereditdaycycle.cpp
+    llfloatereditsky.cpp
+    llfloatereditwater.cpp
+    llfloaterenvironmentsettings.cpp
     llfloaterevent.cpp
     llfloaterfonttest.cpp
     llfloatergesture.cpp
@@ -214,6 +227,9 @@ set(viewer_SOURCE_FILES
     llfloatermediabrowser.cpp
     llfloatermediasettings.cpp
     llfloatermemleak.cpp
+    llfloatermodelpreview.cpp
+    llfloatermodeluploadbase.cpp
+    llfloatermodelwizard.cpp
     llfloaternamedesc.cpp
     llfloaternotificationsconsole.cpp
     llfloateropenobject.cpp
@@ -243,16 +259,15 @@ set(viewer_SOURCE_FILES
     llfloateruipreview.cpp
     llfloaterurlentry.cpp
     llfloatervoiceeffect.cpp
-    llfloaterwater.cpp
     llfloaterwebcontent.cpp
     llfloaterwhitelistentry.cpp
-    llfloaterwindlight.cpp
     llfloaterwindowsize.cpp
     llfloaterworldmap.cpp
     llfolderview.cpp
     llfolderviewitem.cpp
     llfollowcam.cpp
     llfriendcard.cpp
+    llgesturelistener.cpp
     llgesturemgr.cpp
     llgiveinventory.cpp
     llglsandbox.cpp
@@ -318,6 +333,7 @@ set(viewer_SOURCE_FILES
     llmediadataclient.cpp
     llmemoryview.cpp
     llmenucommands.cpp
+    llmeshrepository.cpp
     llmimetypes.cpp
     llmorphview.cpp
     llmoveview.cpp
@@ -329,6 +345,7 @@ set(viewer_SOURCE_FILES
     llnearbychat.cpp
     llnearbychatbar.cpp
     llnearbychathandler.cpp
+    llnearbychatbarlistener.cpp
     llnetmap.cpp
     llnotificationalerthandler.cpp
     llnotificationgrouphandler.cpp
@@ -367,6 +384,9 @@ set(viewer_SOURCE_FILES
     llpanellogin.cpp
     llpanelloginlistener.cpp
     llpanelmaininventory.cpp
+    llpanelmarketplaceinbox.cpp
+    llpanelmarketplaceinboxinventory.cpp
+    llpanelmarketplaceoutbox.cpp
     llpanelmediasettingsgeneral.cpp
     llpanelmediasettingspermissions.cpp
     llpanelmediasettingssecurity.cpp
@@ -401,6 +421,7 @@ set(viewer_SOURCE_FILES
     llparticipantlist.cpp
     llpatchvertexarray.cpp
     llphysicsmotion.cpp
+    llphysicsshapebuilderutil.cpp
     llplacesinventorybridge.cpp
     llplacesinventorypanel.cpp
     llpopupview.cpp
@@ -416,10 +437,12 @@ set(viewer_SOURCE_FILES
     llproductinforequest.cpp
     llprogressview.cpp
     llrecentpeople.cpp
+    llregioninfomodel.cpp
     llregionposition.cpp
     llremoteparcelrequest.cpp
     llsavedsettingsglue.cpp
     llsaveoutfitcombobtn.cpp
+    llsceneview.cpp
     llscreenchannel.cpp
     llscriptfloater.cpp
     llscrollingpanelparam.cpp
@@ -500,6 +523,7 @@ set(viewer_SOURCE_FILES
     lltranslate.cpp
     lluilistener.cpp
     lluploaddialog.cpp
+    lluploadfloaterobservers.cpp
     llurl.cpp
     llurldispatcher.cpp
     llurldispatcherlistener.cpp
@@ -570,7 +594,6 @@ set(viewer_SOURCE_FILES
     llvoavatardefines.cpp
     llvoavatarself.cpp
     llvocache.cpp
-    llvoclouds.cpp
     llvograss.cpp
     llvoground.cpp
     llvoicecallhandler.cpp
@@ -599,6 +622,7 @@ set(viewer_SOURCE_FILES
     llwind.cpp
     llwlanimator.cpp
     llwldaycycle.cpp
+    llwlhandlers.cpp
     llwlparammanager.cpp
     llwlparamset.cpp
     llworld.cpp
@@ -609,7 +633,7 @@ set(viewer_SOURCE_FILES
     llxmlrpclistener.cpp
     llxmlrpctransaction.cpp
     noise.cpp
-	panel_prefs_firestorm.cpp
+    panel_prefs_firestorm.cpp
     piemenu.cpp
     pieseparator.cpp
     pieslice.cpp
@@ -650,6 +674,8 @@ endif (LINUX)
 set(viewer_HEADER_FILES
     CMakeLists.txt
     ViewerInstall.cmake
+    groupchatlistener.h
+    llaccountingquotamanager.h
     ao.h
     aoengine.h
     aoset.h
@@ -712,7 +738,6 @@ set(viewer_HEADER_FILES
     llchiclet.h
     llclassifiedinfo.h
     llclassifiedstatsresponder.h
-    llcloud.h
     llcofwearables.h
     llcolorswatch.h
     llcommanddispatcherlistener.h
@@ -723,6 +748,7 @@ set(viewer_HEADER_FILES
     llcurrencyuimanager.h
     llcylinder.h
     lldateutil.h
+    lldaycyclemanager.h
     lldebugmessagebox.h
     lldebugview.h
     lldelayedgestureerror.h
@@ -733,7 +759,6 @@ set(viewer_HEADER_FILES
     lldrawpoolalpha.h
     lldrawpoolavatar.h
     lldrawpoolbump.h
-    lldrawpoolclouds.h
     lldrawpoolground.h
     lldrawpoolsimple.h
     lldrawpoolsky.h
@@ -744,6 +769,8 @@ set(viewer_HEADER_FILES
     lldriverparam.h
     lldynamictexture.h
     llemote.h
+    llenvmanager.h
+    llestateinfomodel.h
     lleventnotifier.h
     lleventpoll.h
     llexpandabletextbox.h
@@ -772,9 +799,12 @@ set(viewer_HEADER_FILES
     llfloaterbuyland.h
     llfloatercamera.h
     llfloatercolorpicker.h
-    llfloaterdaycycle.h
+    llfloaterdeleteenvpreset.h
     llfloaterdisplayname.h
-    llfloaterenvsettings.h
+    llfloatereditdaycycle.h
+    llfloatereditsky.h
+    llfloatereditwater.h
+    llfloaterenvironmentsettings.h
     llfloaterevent.h
     llfloaterfonttest.h
     llfloatergesture.h
@@ -796,6 +826,9 @@ set(viewer_HEADER_FILES
     llfloatermediabrowser.h
     llfloatermediasettings.h
     llfloatermemleak.h
+    llfloatermodelpreview.h
+    llfloatermodeluploadbase.h
+    llfloatermodelwizard.h
     llfloaternamedesc.h
     llfloaternotificationsconsole.h
     llfloateropenobject.h
@@ -825,10 +858,8 @@ set(viewer_HEADER_FILES
     llfloateruipreview.h
     llfloaterurlentry.h
     llfloatervoiceeffect.h
-    llfloaterwater.h
     llfloaterwebcontent.h
     llfloaterwhitelistentry.h
-    llfloaterwindlight.h
     llfloaterwindowsize.h
     llfloaterworldmap.h
     llfolderview.h
@@ -836,6 +867,7 @@ set(viewer_HEADER_FILES
     llfolderviewitem.h
     llfollowcam.h
     llfriendcard.h
+    llgesturelistener.h
     llgesturemgr.h
     llgiveinventory.h
     llgroupactions.h
@@ -900,6 +932,7 @@ set(viewer_HEADER_FILES
     llmediadataclient.h
     llmemoryview.h
     llmenucommands.h
+    llmeshrepository.h
     llmimetypes.h
     llmorphview.h
     llmoveview.h
@@ -911,6 +944,7 @@ set(viewer_HEADER_FILES
     llnearbychat.h
     llnearbychatbar.h
     llnearbychathandler.h
+    llnearbychatbarlistener.h
     llnetmap.h
     llnotificationhandler.h
     llnotificationmanager.h
@@ -943,6 +977,9 @@ set(viewer_HEADER_FILES
     llpanellogin.h
     llpanelloginlistener.h
     llpanelmaininventory.h
+    llpanelmarketplaceinbox.h
+    llpanelmarketplaceinboxinventory.h
+    llpanelmarketplaceoutbox.h
     llpanelmediasettingsgeneral.h
     llpanelmediasettingspermissions.h
     llpanelmediasettingssecurity.h
@@ -977,6 +1014,7 @@ set(viewer_HEADER_FILES
     llparticipantlist.h
     llpatchvertexarray.h
     llphysicsmotion.h
+    llphysicsshapebuilderutil.h
     llplacesinventorybridge.h
     llplacesinventorypanel.h
     llpolymesh.h
@@ -992,12 +1030,14 @@ set(viewer_HEADER_FILES
     llproductinforequest.h
     llprogressview.h
     llrecentpeople.h
+    llregioninfomodel.h
     llregionposition.h
     llremoteparcelrequest.h
     llresourcedata.h
     llrootview.h
     llsavedsettingsglue.h
     llsaveoutfitcombobtn.h
+    llsceneview.h
     llscreenchannel.h
     llscriptfloater.h
     llscrollingpanelparam.h
@@ -1079,6 +1119,7 @@ set(viewer_HEADER_FILES
     lluiconstants.h
     lluilistener.h
     lluploaddialog.h
+    lluploadfloaterobservers.h
     llurl.h
     llurldispatcher.h
     llurldispatcherlistener.h
@@ -1146,7 +1187,6 @@ set(viewer_HEADER_FILES
     llvoavatardefines.h
     llvoavatarself.h
     llvocache.h
-    llvoclouds.h
     llvograss.h
     llvoground.h
     llvoicechannel.h
@@ -1175,6 +1215,7 @@ set(viewer_HEADER_FILES
     llwind.h
     llwlanimator.h
     llwldaycycle.h
+    llwlhandlers.h
     llwlparammanager.h
     llwlparamset.h
     llworld.h
@@ -1530,9 +1571,9 @@ if (WINDOWS)
         PROPERTIES
         # *TODO -reenable this once we get server usage sorted out
         #LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /INCLUDE:\"__tcmalloc\""
-        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS"
+        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /INCLUDE:__tcmalloc"
         LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\" /INCREMENTAL:NO"
-        LINK_FLAGS_RELEASE ""
+        LINK_FLAGS_RELEASE "/OPT:REF"
         )
     if(USE_PRECOMPILED_HEADERS)
         set_target_properties(
@@ -1569,6 +1610,12 @@ if (WINDOWS)
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libapr-1.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libaprutil-1.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libapriconv-1.dll
+      ${SHARED_LIB_STAGING_DIR}/Release/glod.dll
+      ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/glod.dll
+      ${SHARED_LIB_STAGING_DIR}/Debug/glod.dll
+      ${SHARED_LIB_STAGING_DIR}/Release/libcollada14dom22.dll
+      ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libcollada14dom22.dll
+      ${SHARED_LIB_STAGING_DIR}/Debug/libcollada14dom22-d.dll
       ${SHARED_LIB_STAGING_DIR}/Release/openjpeg.dll
       ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/openjpeg.dll
       ${SHARED_LIB_STAGING_DIR}/Debug/openjpegd.dll
@@ -1744,6 +1791,7 @@ endif (WINDOWS)
 # that they depend upon. -brad
 target_link_libraries(${VIEWER_BINARY_NAME}
     ${UPDATER_LIBRARIES}
+    ${GOOGLE_PERFTOOLS_LIBRARIES}
     ${LLAUDIO_LIBRARIES}
     ${LLCHARACTER_LIBRARIES}
     ${LLIMAGE_LIBRARIES}
@@ -1768,6 +1816,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${DBUSGLIB_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${FMODWRAPPER_LIBRARY} # must come after LLAudio
+    ${GLOD_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${JSONCPP_LIBRARIES}
     ${SDL_LIBRARY}
@@ -1780,6 +1829,8 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${CRYPTO_LIBRARIES}
     ${LLLOGIN_LIBRARIES}
     ${GOOGLE_PERFTOOLS_LIBRARIES}
+    ${LLCONVEXDECOMP_LIBRARY}
+    ${TCMALLOC_LIBRARIES}
     )
 
 if (USE_KDU)
@@ -2087,6 +2138,22 @@ if (LL_TESTS)
   #ADD_VIEWER_BUILD_TEST(lltextureinfo viewer)
   #ADD_VIEWER_BUILD_TEST(lltextureinfodetails viewer)
   #ADD_VIEWER_BUILD_TEST(lltexturestatsuploader viewer)
+
+include(LLAddBuildTest)
+SET(viewer_TEST_SOURCE_FILES
+  llagentaccess.cpp
+  llwlparammanager.cpp
+  # Not *actually* a unit test, it's an integration test.
+  # Because it won't work in the new unit test iface, i've commented out
+  # and notified Nat. Delete this when it's replaced!
+  # + poppy & brad 2009-06-05
+  # llcapabilitylistener.cpp
+  )
+set_source_files_properties(
+  ${viewer_TEST_SOURCE_FILES}
+  PROPERTIES
+    LL_TEST_ADDITIONAL_SOURCE_FILES llviewerprecompiledheaders.cpp
+  )
 
 endif (LL_TESTS)
 

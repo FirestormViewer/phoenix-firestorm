@@ -337,6 +337,10 @@ void LLGiveInventory::logInventoryOffer(const LLUUID& to_agent, const LLUUID &im
 		if (LLIMModel::buildIMP2PLogFilename(to_agent, LLStringUtil::null, strFilename))
 		{
 			LLIMModel::instance().logToFile(strFilename, LLTrans::getString("SECOND_LIFE"), im_session_id, LLTrans::getString("inventory_item_offered-im"));
+			//// Build a new format username or firstname_lastname for legacy names
+			//// to use it for a history log filename.
+			//full_name = LLCacheName::buildUsername(full_name);
+			//LLIMModel::instance().logToFile(full_name, LLTrans::getString("SECOND_LIFE"), im_session_id, LLTrans::getString("inventory_item_offered-im"));
 		}
 // [/SL:KB]
 	}

@@ -670,6 +670,14 @@ U32 LLInventoryModel::updateItem(const LLViewerInventoryItem* item)
 		return mask;
 	}
 
+	// We're hiding mesh types
+#if 0
+	if (item->getType() == LLAssetType::AT_MESH)
+	{
+		return mask;
+	}
+#endif
+
 	LLViewerInventoryItem* old_item = getItem(item->getUUID());
 	LLPointer<LLViewerInventoryItem> new_item;
 	if(old_item)
@@ -1309,6 +1317,12 @@ void LLInventoryModel::addCategory(LLViewerInventoryCategory* category)
 	//llinfos << "LLInventoryModel::addCategory()" << llendl;
 	if(category)
 	{
+		// We aren't displaying the Meshes folder
+		if (category->mPreferredType == LLFolderType::FT_MESH)
+		{
+			return;
+		}
+
 		// try to localize default names first. See EXT-8319, EXT-7051.
 		category->localizeName();
 
@@ -2200,6 +2214,9 @@ void LLInventoryModel::registerCallbacks(LLMessageSystem* msg)
 	msg->setHandlerFuncFast(_PREHASH_RemoveInventoryFolder,
 						processRemoveInventoryFolder,
 						NULL);
+	msg->setHandlerFuncFast(_PREHASH_RemoveInventoryObjects,
+							processRemoveInventoryObjects,
+							NULL);	
 	//msg->setHandlerFuncFast(_PREHASH_ExchangeCallingCard,
 	//						processExchangeCallingcard,
 	//						NULL);
@@ -2316,6 +2333,37 @@ bool LLInventoryModel::messageUpdateCore(LLMessageSystem* msg, bool account)
 }
 
 // 	static
+void LLInventoryModel::removeInventoryItem(LLUUID agent_id, LLMessageSystem* msg, const char* msg_label)
+{
+	LLUUID item_id;
+	S32 count = msg->getNumberOfBlocksFast(msg_label);
+	lldebugs << "Message has " << count << " item blocks" << llendl;
+	uuid_vec_t item_ids;
+	update_map_t update;
+	for(S32 i = 0; i < count; ++i)
+	{
+		msg->getUUIDFast(msg_label, _PREHASH_ItemID, item_id, i);
+		lldebugs << "Checking for item-to-be-removed " << item_id << llendl;
+		LLViewerInventoryItem* itemp = gInventory.getItem(item_id);
+		if(itemp)
+		{
+		lldebugs << "Item will be removed " << item_id << llendl;
+			// we only bother with the delete and account if we found
+			// the item - this is usually a back-up for permissions,
+			// so frequently the item will already be gone.
+			--update[itemp->getParentUUID()];
+			item_ids.push_back(item_id);
+		}
+	}
+	gInventory.accountForUpdate(update);
+	for(uuid_vec_t::iterator it = item_ids.begin(); it != item_ids.end(); ++it)
+	{
+		lldebugs << "Calling deleteObject " << *it << llendl;
+		gInventory.deleteObject(*it);
+	}
+}
+
+// 	static
 void LLInventoryModel::processRemoveInventoryItem(LLMessageSystem* msg, void**)
 {
 	lldebugs << "LLInventoryModel::processRemoveInventoryItem()" << llendl;
@@ -2327,27 +2375,7 @@ void LLInventoryModel::processRemoveInventoryItem(LLMessageSystem* msg, void**)
 				<< llendl;
 		return;
 	}
-	S32 count = msg->getNumberOfBlocksFast(_PREHASH_InventoryData);
-	uuid_vec_t item_ids;
-	update_map_t update;
-	for(S32 i = 0; i < count; ++i)
-	{
-		msg->getUUIDFast(_PREHASH_InventoryData, _PREHASH_ItemID, item_id, i);
-		LLViewerInventoryItem* itemp = gInventory.getItem(item_id);
-		if(itemp)
-		{
-			// we only bother with the delete and account if we found
-			// the item - this is usually a back-up for permissions,
-			// so frequently the item will already be gone.
-			--update[itemp->getParentUUID()];
-			item_ids.push_back(item_id);
-		}
-	}
-	gInventory.accountForUpdate(update);
-	for(uuid_vec_t::iterator it = item_ids.begin(); it != item_ids.end(); ++it)
-	{
-		gInventory.deleteObject(*it);
-	}
+	LLInventoryModel::removeInventoryItem(agent_id, msg, _PREHASH_InventoryData);
 	gInventory.notifyObservers();
 }
 
@@ -2412,18 +2440,10 @@ void LLInventoryModel::processUpdateInventoryFolder(LLMessageSystem* msg,
 }
 
 // 	static
-void LLInventoryModel::processRemoveInventoryFolder(LLMessageSystem* msg,
-													void**)
+void LLInventoryModel::removeInventoryFolder(LLUUID agent_id,
+											 LLMessageSystem* msg)
 {
-	lldebugs << "LLInventoryModel::processRemoveInventoryFolder()" << llendl;
-	LLUUID agent_id, folder_id;
-	msg->getUUIDFast(_PREHASH_FolderData, _PREHASH_AgentID, agent_id);
-	if(agent_id != gAgent.getID())
-	{
-		llwarns << "Got a RemoveInventoryFolder for the wrong agent."
-				<< llendl;
-		return;
-	}
+	LLUUID folder_id;
 	uuid_vec_t folder_ids;
 	update_map_t update;
 	S32 count = msg->getNumberOfBlocksFast(_PREHASH_FolderData);
@@ -2442,6 +2462,42 @@ void LLInventoryModel::processRemoveInventoryFolder(LLMessageSystem* msg,
 	{
 		gInventory.deleteObject(*it);
 	}
+}
+
+// 	static
+void LLInventoryModel::processRemoveInventoryFolder(LLMessageSystem* msg,
+													void**)
+{
+	lldebugs << "LLInventoryModel::processRemoveInventoryFolder()" << llendl;
+	LLUUID agent_id, session_id;
+	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, agent_id);
+	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_SessionID, session_id);
+	if(agent_id != gAgent.getID())
+	{
+		llwarns << "Got a RemoveInventoryFolder for the wrong agent."
+		<< llendl;
+		return;
+	}
+	LLInventoryModel::removeInventoryFolder( agent_id, msg );
+	gInventory.notifyObservers();
+}
+
+// 	static
+void LLInventoryModel::processRemoveInventoryObjects(LLMessageSystem* msg,
+													void**)
+{
+	lldebugs << "LLInventoryModel::processRemoveInventoryObjects()" << llendl;
+	LLUUID agent_id, session_id;
+	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, agent_id);
+	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_SessionID, session_id);
+	if(agent_id != gAgent.getID())
+	{
+		llwarns << "Got a RemoveInventoryObjects for the wrong agent."
+		<< llendl;
+		return;
+	}
+	LLInventoryModel::removeInventoryFolder( agent_id, msg );
+	LLInventoryModel::removeInventoryItem( agent_id, msg, _PREHASH_ItemData );
 	gInventory.notifyObservers();
 }
 
@@ -2643,7 +2699,7 @@ void LLInventoryModel::processBulkUpdateInventory(LLMessageSystem* msg, void**)
 		LLInventoryState::sWearNewClothing = FALSE;
 	}
 
-	if (tid == LLInventoryState::sWearNewClothingTransactionID)
+	if (tid.notNull() && tid == LLInventoryState::sWearNewClothingTransactionID)
 	{
 		count = wearable_ids.size();
 		for (i = 0; i < count; ++i)

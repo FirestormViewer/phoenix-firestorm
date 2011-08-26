@@ -1550,6 +1550,11 @@ Veuillez réessayer ultérieurement.
 			<button name="Cancel" text="Annuler"/>
 		</form>
 	</notification>
+	<notification name="TooManyTeleportOffers">
+		Vous avez essayé d&apos;effectuer [OFFERS] offres de téléportation,
+or ce nombre dépasse la limite autorisée fixée à [LIMIT].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="OfferTeleportFromGod">
 		Exiger du résident qu&apos;il vienne vous rejoindre ?
 		<form name="form">
@@ -1971,6 +1976,10 @@ Souhaitez-vous quitter le mode occupé avant de terminer cette transaction ?
 		Êtes-vous certain de vouloir supprimer l&apos;historique de vos visites et recherches ?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
+	<notification name="ConfirmClearCache">
+		Voulez-vous vraiment vider le cache de votre client ?
+		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmClearCookies">
 		Êtes-vous certain de vouloir supprimer vos cookies ?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Oui"/>
@@ -1996,48 +2005,30 @@ Liez-la à partir d&apos;une page web pour permettre aux autres résidents d&apo
 		Voulez-vous écraser l&apos;option précédemment enregistrée ?
 		<usetemplate name="okcancelbuttons" notext="Non" yestext="Oui"/>
 	</notification>
-	<notification name="WLDeletePresetAlert">
-		Voulez-vous supprimer [SKY] ?
-		<usetemplate name="okcancelbuttons" notext="Non" yestext="Oui"/>
-	</notification>
 	<notification name="WLNoEditDefault">
 		Vous ne pouvez pas modifier ou supprimer un préréglage par défaut.
 	</notification>
 	<notification name="WLMissingSky">
 		Une dossier semble manquer au Cycle du jour : [SKY].
 	</notification>
+	<notification name="WLRegionApplyFail">
+		Impossible d&apos;appliquer les réglages à la région. Le problème est parfois résolu en quittant la région puis en y revenant. Motif fourni : [FAIL_REASON]
+	</notification>
+	<notification name="EnvCannotDeleteLastDayCycleKey">
+		Impossible de supprimer la dernière clé de ce cycle du jour car ce dernier ne peut pas être vide. Modifiez la dernière clé restante au lieu d&apos;essayer de la supprimer puis d&apos;en créer une nouvelle.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="DayCycleTooManyKeyframes">
+		Impossible d&apos;ajouter plus d&apos;images-clés à ce cycle du jour. Un maximum de [MAX] images-clés peut être associé aux cycles du jour de type [SCOPE].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="EnvUpdateRate">
+		Vous ne pouvez mettre à jour les paramètres d&apos;environnement d&apos;une région que toutes les [WAIT] secondes. Veuillez patienter pendant au moins ce délai avant de réessayer.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="PPSaveEffectAlert">
 		Certains effets post-traitement existent. Voulez-vous quand même écraser ce fichier ?
 		<usetemplate name="okcancelbuttons" notext="Non" yestext="Oui"/>
-	</notification>
-	<notification name="NewSkyPreset">
-		Nommez le nouveau ciel.
-		<form name="form">
-			<input name="message">
-				Nouveau préréglage
-			</input>
-			<button name="OK" text="OK"/>
-			<button name="Cancel" text="Annuler"/>
-		</form>
-	</notification>
-	<notification name="ExistsSkyPresetAlert">
-		Ce préréglage existe déjà !
-	</notification>
-	<notification name="NewWaterPreset">
-		Nommez ce nouveau préréglage d&apos;eau.
-		<form name="form">
-			<input name="message">
-				Nouveau préréglage
-			</input>
-			<button name="OK" text="OK"/>
-			<button name="Cancel" text="Annuler"/>
-		</form>
-	</notification>
-	<notification name="ExistsWaterPresetAlert">
-		Ce préréglage existe déjà !
-	</notification>
-	<notification name="WaterNoEditDefault">
-		Vous ne pouvez pas modifier ou supprimer un préréglage par défaut.
 	</notification>
 	<notification name="ChatterBoxSessionStartError">
 		Impossible de démarrer une nouvelle session de chat avec [RECIPIENT].
@@ -2156,6 +2147,12 @@ Cela risque d&apos;impacter votre mot de passe.
 	</notification>
 	<notification name="RezItemNoPermissions">
 		Droits insuffisants pour rezzer l&apos;objet.
+	</notification>
+	<notification name="IMAcrossParentEstates">
+		Impossible d&apos;envoyer d&apos;IM entre domaines parents.
+	</notification>
+	<notification name="TransferInventoryAcrossParentEstates">
+		Impossible de transférer l&apos;inventaire entre domaines parents.
 	</notification>
 	<notification name="UnableToLoadNotecard">
 		Impossible de lire les données de la note actuellement.
@@ -2322,6 +2319,9 @@ Vous ne pouvez pas voler ici.
 	</notification>
 	<notification name="NoBuild">
 		La construction est interdite dans cette zone. Vous ne pouvez pas construite ou rezzer d&apos;objets ici.
+	</notification>
+	<notification name="SeeAvatars">
+		Cette parcelle masque les avatars et le chat écrit des autres parcelles. Vous ne pouvez pas voir les résidents qui se trouvent en dehors, et ceux qui se trouvent en dehors ne peuvent pas vous voir. Le chat écrit habituel sur le canal 0 est également bloqué.
 	</notification>
 	<notification name="ScriptsStopped">
 		Un administrateur a temporairement stoppé les scripts dans cette région.
@@ -2734,6 +2734,10 @@ Elles vont être bloquées pendant quelques secondes pour votre sécurité.
 		Le modérateur ignore vos paroles.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="UploadCostConfirmation">
+		Ce chargement coûtera [PRICE] L$. Continuer ?
+		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Charger"/>
+	</notification>
 	<notification name="ConfirmClearTeleportHistory">
 		Voulez-vous vraiment supprimer votre historique des téléportations ?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
@@ -2744,6 +2748,11 @@ Le bouton sera affiché quand il y aura suffisamment de place.
 	</notification>
 	<notification name="ShareNotification">
 		Sélectionnez les résidents avec lesquels partager l&apos;élément.
+	</notification>
+	<notification name="MeshUploadError">
+		Échec de chargement de [LABEL] : [MESSAGE] [IDENTIFIER] 
+
+Voir le fichier journal pour plus de détails.
 	</notification>
 	<notification name="ShareItemsConfirmation">
 		Voulez-vous vraiment partager les articles suivants :
@@ -2760,6 +2769,19 @@ avec les résidents suivants :
 	</notification>
 	<notification name="DeedToGroupFail">
 		Échec de cession au groupe.
+	</notification>
+	<notification name="ReleaseLandThrottled">
+		Impossible d&apos;abandonner la parcelle [PARCEL_NAME] actuellement.
+	</notification>
+	<notification name="ReleasedLandWithReclaim">
+		La parcelle [PARCEL_NAME] de [AREA] m² a été libérée.
+
+Vous disposerez d&apos;un délai de récupération à 0 L$ de [RECLAIM_PERIOD] heures avant qu&apos;elle soit mise en vente pour tous.
+	</notification>
+	<notification name="ReleasedLandNoReclaim">
+		La parcelle [PARCEL_NAME] de [AREA] m² a été libérée.
+
+Elle est désormais disponible à l&apos;achat auprès de tous.
 	</notification>
 	<notification name="AvatarRezNotification">
 		([EXISTENCE] secondes d&apos;existence)
@@ -2901,6 +2923,10 @@ Cliquez sur un point dans le monde et faites glisser votre souris pour faire tou
 		Pour créer et modifier des groupes, vous devez utiliser le mode Avancé. Voulez-vous quitter l&apos;application afin de changer de mode ? Le sélecteur de mode se trouve sur l&apos;écran de connexion.
 		<usetemplate name="okcancelbuttons" notext="Ne pas quitter" yestext="Quitter"/>
 	</notification>
+	<notification label="" name="NoPlaceInfo">
+		L&apos;affichage du profil du lieu est uniquement disponible en mode Avancé. Voulez-vous quitter l&apos;application afin de changer de mode ? Le sélecteur de mode se trouve sur l&apos;écran de connexion.
+		<usetemplate name="okcancelbuttons" notext="Ne pas quitter" yestext="Quitter"/>
+	</notification>
 	<notification label="" name="NoPicks">
 		Pour créer et modifier des favoris, vous devez utiliser le mode Avancé. Voulez-vous quitter l&apos;application afin de changer de mode ? Le sélecteur de mode se trouve sur l&apos;écran de connexion.
 		<usetemplate name="okcancelbuttons" notext="Ne pas quitter" yestext="Quitter"/>
@@ -2921,9 +2947,18 @@ Cliquez sur un point dans le monde et faites glisser votre souris pour faire tou
 		Pour pouvoir payer d&apos;autres résidents, vous devez utiliser le mode Avancé. Voulez-vous quitter l&apos;application afin de changer de mode ?
 		<usetemplate name="okcancelbuttons" notext="Ne pas quitter" yestext="Quitter"/>
 	</notification>
-	<global name="UnsupportedCPU">
-		- Votre processeur ne remplit pas les conditions minimum requises.
-	</global>
+	<notification label="" name="NoInventory">
+		L&apos;affichage de l&apos;inventaire est uniquement disponible en mode Avancé. Voulez-vous quitter l&apos;application afin de changer de mode ?
+		<usetemplate name="okcancelbuttons" notext="Ne pas quitter" yestext="Quitter"/>
+	</notification>
+	<notification label="" name="NoAppearance">
+		L&apos;Éditeur d&apos;apparence est uniquement disponible en mode Avancé. Voulez-vous quitter l&apos;application afin de changer de mode ?
+		<usetemplate name="okcancelbuttons" notext="Ne pas quitter" yestext="Quitter"/>
+	</notification>
+	<notification label="" name="NoSearch">
+		La recherche est uniquement disponible en mode Avancé. Voulez-vous quitter l&apos;application afin de changer de mode ?
+		<usetemplate name="okcancelbuttons" notext="Ne pas quitter" yestext="Quitter"/>
+	</notification>
 	<global name="UnsupportedGLRequirements">
 		Vous semblez ne pas avoir le matériel requis pour utiliser [APP_NAME]. [APP_NAME] requiert une carte graphique OpenGL avec une prise en charge du multitexturing. Si vous avez une telle carte, assurez-vous que vous avez aussi les pilotes les plus récents pour la carte, ainsi que les service packs et les patchs pour votre système d&apos;exploitation.
 

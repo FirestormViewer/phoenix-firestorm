@@ -44,3 +44,4 @@ F32 LLCalcParser::lookup(const std::string::iterator& start, const std::string::
 	throw_(end, std::string("Unknown symbol " + name));
 	return 0.f;
 }
+

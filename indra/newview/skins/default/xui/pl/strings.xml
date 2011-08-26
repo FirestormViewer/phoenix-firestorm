@@ -1075,9 +1075,6 @@
 	<string name="InvFolder My Inventory">
 		Moja Szafa
 	</string>
-	<string name="InvFolder Favorites">
-		Moje ulubione
-	</string>
 	<string name="InvFolder Library">
 		Biblioteka
 	</string>
@@ -1136,10 +1133,10 @@
 		Gesturki
 	</string>
 	<string name="InvFolder Favorite">
-		Ulubione
+		Moje ulubione
 	</string>
 	<string name="InvFolder favorite">
-		Ulubione
+		Moje ulubione
 	</string>
 	<string name="InvFolder Current Outfit">
 		Obecny strój
@@ -1467,7 +1464,7 @@
 		(nieznane)
 	</string>
 	<string name="SummaryForTheWeek" value="Podsumowanie dla tego tygodnia, począwszy od "/>
-	<string name="NextStipendDay" value="Następna wypłata będzie w "/>
+	<string name="NextStipendDay" value=". Następna wypłata będzie w "/>
 	<string name="GroupIndividualShare" value="                      Groupa       Udziały Indywidualne"/>
 	<string name="GroupColumn" value="Grupa"/>
 	<string name="Balance">

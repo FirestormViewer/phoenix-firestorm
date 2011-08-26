@@ -31,10 +31,12 @@
 #include "llcrashlogger.h"
 #include "linden_common.h"
 #include "llstring.h"
-#include "indra_constants.h"	// CRASH_BEHAVIOR_ASK, CRASH_SETTING_NAME
+#include "indra_constants.h"	// CRASH_BEHAVIOR_...
 #include "llerror.h"
+#include "llerrorcontrol.h"
 #include "lltimer.h"
 #include "lldir.h"
+#include "llfile.h"
 #include "llsdserialize.h"
 #include "lliopipe.h"
 #include "llpumpio.h"
@@ -60,7 +62,7 @@ public:
 
 	virtual void error(U32 status, const std::string& reason)
 	{
-		gBreak = true;		
+		gBreak = true;
 	}
 
 	virtual void result(const LLSD& content)
@@ -76,19 +78,6 @@ public:
 		gSent = true;
 	}
 };
-
-bool LLCrashLoggerText::mainLoop()
-{
-	std::cout << "Entering main loop" << std::endl;
-	sendCrashLogs();
-	return true;	
-}
-
-void LLCrashLoggerText::updateApplication(const std::string& message)
-{
-	LLCrashLogger::updateApplication(message);
-	std::cout << message << std::endl;
-}
 
 LLCrashLogger::LLCrashLogger() :
 // [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
@@ -329,24 +318,44 @@ LLSD LLCrashLogger::constructPostData()
 
 S32 LLCrashLogger::loadCrashBehaviorSetting()
 {
+	// First check user_settings (in the user's home dir)
 	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, CRASH_SETTINGS_FILE);
+	if (! mCrashSettings.loadFromFile(filename))
+	{
+		// Next check app_settings (in the SL program dir)
+		std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, CRASH_SETTINGS_FILE);
+		mCrashSettings.loadFromFile(filename);
+	}
 
-	mCrashSettings.loadFromFile(filename);
-		
-	S32 value = mCrashSettings.getS32(CRASH_BEHAVIOR_SETTING);
-	
-	if (value < CRASH_BEHAVIOR_ASK || CRASH_BEHAVIOR_NEVER_SEND < value) return CRASH_BEHAVIOR_ASK;
+	// If we didn't load any files above, this will return the default
+	S32 value = mCrashSettings.getS32("CrashSubmitBehavior");
 
-	return value;
+	// Whatever value we got, make sure it's valid
+	switch (value)
+	{
+	case CRASH_BEHAVIOR_NEVER_SEND:
+		return CRASH_BEHAVIOR_NEVER_SEND;
+	case CRASH_BEHAVIOR_ALWAYS_SEND:
+		return CRASH_BEHAVIOR_ALWAYS_SEND;
+	}
+
+	return CRASH_BEHAVIOR_ASK;
 }
 
 bool LLCrashLogger::saveCrashBehaviorSetting(S32 crash_behavior)
 {
-	if (crash_behavior != CRASH_BEHAVIOR_ASK && crash_behavior != CRASH_BEHAVIOR_ALWAYS_SEND) return false;
+	switch (crash_behavior)
+	{
+	case CRASH_BEHAVIOR_ASK:
+	case CRASH_BEHAVIOR_NEVER_SEND:
+	case CRASH_BEHAVIOR_ALWAYS_SEND:
+		break;
+	default:
+		return false;
+	}
 
-	mCrashSettings.setS32(CRASH_BEHAVIOR_SETTING, crash_behavior);
+	mCrashSettings.setS32("CrashSubmitBehavior", crash_behavior);
 	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, CRASH_SETTINGS_FILE);
-
 	mCrashSettings.saveToFile(filename, FALSE);
 
 	return true;
@@ -368,10 +377,9 @@ std::string getFormDataField(const std::string& strFieldName, const std::string&
 bool LLCrashLogger::runCrashLogPost(std::string host, LLSD data, std::string msg, int retries, int timeout)
 {
 	gBreak = false;
-	std::string status_message;
 	for(int i = 0; i < retries; ++i)
 	{
-		status_message = llformat("%s, try %d...", msg.c_str(), i+1);
+		//status_message = llformat("%s, try %d...", msg.c_str(), i+1);
 //		LLHTTPClient::post(host, data, new LLCrashLoggerResponder(), timeout);
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-03-24 (Catznip-2.6.0a) | Modified: Catznip-2.6.0a
 		static const std::string BOUNDARY("------------abcdef012345xyZ");
@@ -450,10 +458,12 @@ bool LLCrashLogger::runCrashLogPost(std::string host, LLSD data, std::string msg
 		// Send request
 		LLHTTPClient::postRaw(host, data, size, new LLCrashLoggerResponder(), headers);
 // [/SL:KB]
+		//updateApplication(llformat("%s, try %d...", msg.c_str(), i+1));
+		//LLHTTPClient::post(host, data, new LLCrashLoggerResponder(), timeout);
 
 		while(!gBreak)
 		{
-			updateApplication(status_message);
+			updateApplication(); // No new message, just pump the IO
 		}
 		if(gSent)
 		{
@@ -533,23 +543,37 @@ void LLCrashLogger::updateApplication(const std::string& message)
 {
 	gServicePump->pump();
     gServicePump->callback();
+	if (!message.empty()) llinfos << message << llendl;
 }
 
 bool LLCrashLogger::init()
 {
-	LLCurl::initClass();
+	LLCurl::initClass(false);
 
 	// We assume that all the logs we're looking for reside on the current drive
 	gDirUtilp->initAppDirs("Firestorm");
 
+	LLError::initForApplication(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, ""));
+
 	// Default to the product name "Second Life" (this is overridden by the -name argument)
 	mProductName = "Second Life";
-	
-	mCrashSettings.declareS32(CRASH_BEHAVIOR_SETTING, CRASH_BEHAVIOR_ASK, "Controls behavior when viewer crashes "
-		"(0 = ask before sending crash report, 1 = always send crash report, 2 = never send crash report)");
 
-	llinfos << "Loading crash behavior setting" << llendl;
-	mCrashBehavior = loadCrashBehaviorSetting();
+	// Rename current log file to ".old"
+	std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "crashreport.log.old");
+	std::string log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "crashreport.log");
+	LLFile::rename(log_file.c_str(), old_log_file.c_str());
+
+	// Set the log file to crashreport.log
+	LLError::logToFile(log_file);
+	
+	mCrashSettings.declareS32("CrashSubmitBehavior", CRASH_BEHAVIOR_ALWAYS_SEND,
+							  "Controls behavior when viewer crashes "
+							  "(0 = ask before sending crash report, "
+							  "1 = always send crash report, "
+							  "2 = never send crash report)");
+
+	// llinfos << "Loading crash behavior setting" << llendl;
+	// mCrashBehavior = loadCrashBehaviorSetting();
 
 	// If user doesn't want to send, bail out
 	if (mCrashBehavior == CRASH_BEHAVIOR_NEVER_SEND)
@@ -562,10 +586,11 @@ bool LLCrashLogger::init()
 	gServicePump->prime(gAPRPoolp);
 	LLHTTPClient::setPump(*gServicePump);
 
-	//If we've opened the crash logger, assume we can delete the marker file if it exists	
+	//If we've opened the crash logger, assume we can delete the marker file if it exists
 	if( gDirUtilp )
 	{
-		std::string marker_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"SecondLife.exec_marker");
+		std::string marker_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
+																 "SecondLife.exec_marker");
 		LLAPRFile::remove( marker_file );
 	}
 	

@@ -1560,6 +1560,11 @@ Vuelve a intentarlo más tarde.
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
+	<notification name="TooManyTeleportOffers">
+		Has intentado hacer [OFFERS] ofertas de teleporte,
+excediendo el límite de [LIMIT].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="OfferTeleportFromGod">
 		¿Obligar a este Residente a ir a tu localización?
 		<form name="form">
@@ -1761,11 +1766,11 @@ Puedes pulsar &apos;Cambiar las Preferencias&apos; para incrementar las preferen
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
 	</notification>
 	<notification name="SetClassifiedMature">
-		¿Este anuncio tiene contenido &apos;Moderado&apos;?
+		¿Este anuncio tiene contenido moderado?
 		<usetemplate canceltext="Cancelar" name="yesnocancelbuttons" notext="No" yestext="Sí"/>
 	</notification>
 	<notification name="SetGroupMature">
-		¿Este grupo tiene contenido &apos;Moderado&apos;?
+		¿Este grupo tiene contenido moderado?
 		<usetemplate canceltext="Cancelar" name="yesnocancelbuttons" notext="No" yestext="Sí"/>
 	</notification>
 	<notification label="Confirmar el reinicio" name="ConfirmRestart">
@@ -1980,6 +1985,10 @@ Linden Lab
 		¿Estás seguro de que quieres borrar tu historial web, de viajes y de búsquedas?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
 	</notification>
+	<notification name="ConfirmClearCache">
+		¿Estás seguro de que quieres vaciar la caché del visor?
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmClearCookies">
 		¿Estás seguro de que quieres limpiar tus cookies?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Sí"/>
@@ -2005,48 +2014,30 @@ Publícala en una página web para que otros puedan acceder fácilmente a esta p
 		¿Quieres sobrescribir la preselección guardada?
 		<usetemplate name="okcancelbuttons" notext="No" yestext="Sí"/>
 	</notification>
-	<notification name="WLDeletePresetAlert">
-		¿Quieres borrar [SKY]?
-		<usetemplate name="okcancelbuttons" notext="No" yestext="Sí"/>
-	</notification>
 	<notification name="WLNoEditDefault">
 		No puedes editar ni borrar una preselección por defecto.
 	</notification>
 	<notification name="WLMissingSky">
 		Este archivo del ciclo de un día se refiere a un archivo perdido de cielo: [SKY].
 	</notification>
+	<notification name="WLRegionApplyFail">
+		No se pudo aplicar la configuración a la región. El problema podría solucionarse saliendo de la región y regresando a ella. La razón especificada fue: [FAIL_REASON]
+	</notification>
+	<notification name="EnvCannotDeleteLastDayCycleKey">
+		No se puede eliminar la última clave de este ciclo del día, ya que no puedes vaciar la caché del día. En lugar de intentar eliminar la última clave restante y después intentar crear una nueva, debes modificarla.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="DayCycleTooManyKeyframes">
+		No se pueden añadir más fotogramas clave a este ciclo del día. El número máximo de fotogramas clave para ciclos del día de alcance [SCOPE] es [MAX].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="EnvUpdateRate">
+		La configuración de entorno de la región sólo puede actualizarse cada [WAIT] segundos. Espera por lo menos este tiempo y vuelve intentarlo.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="PPSaveEffectAlert">
 		Ya existe un efecto de procesamiento. ¿Quieres sobreescribirlo?
 		<usetemplate name="okcancelbuttons" notext="No" yestext="Sí"/>
-	</notification>
-	<notification name="NewSkyPreset">
-		Dame un nombre para el cielo nuevo.
-		<form name="form">
-			<input name="message">
-				Preselección nueva
-			</input>
-			<button name="OK" text="OK"/>
-			<button name="Cancel" text="Cancelar"/>
-		</form>
-	</notification>
-	<notification name="ExistsSkyPresetAlert">
-		¡Esa preselección ya existe!
-	</notification>
-	<notification name="NewWaterPreset">
-		Dame un nombre para la nueva preselección de agua.
-		<form name="form">
-			<input name="message">
-				Preselección nueva
-			</input>
-			<button name="OK" text="OK"/>
-			<button name="Cancel" text="Cancelar"/>
-		</form>
-	</notification>
-	<notification name="ExistsWaterPresetAlert">
-		¡Esa preselección ya existe!
-	</notification>
-	<notification name="WaterNoEditDefault">
-		No puedes editar o borrar una preselección por defecto.
 	</notification>
 	<notification name="ChatterBoxSessionStartError">
 		No se puede empezar una nueva sesión de chat con [RECIPIENT].
@@ -2166,6 +2157,12 @@ Esto puede influir en tu contraseña.
 	<notification name="RezItemNoPermissions">
 		No tienes permisos suficientes para renderizar el objeto.
 	</notification>
+	<notification name="IMAcrossParentEstates">
+		No se pueden enviar mensajes instantáneos entre propiedades principales.
+	</notification>
+	<notification name="TransferInventoryAcrossParentEstates">
+		No se puede transferir el inventario entre propiedades principales.
+	</notification>
 	<notification name="UnableToLoadNotecard">
 		En este momento no se puede cargar la nota.
 	</notification>
@@ -2244,7 +2241,7 @@ Inténtalo seleccionando un trozo más pequeño de terreno.
 		Se han excluido algunos términos de tu búsqueda debido a restricciones en el contenido, según se especifica en las Normas de la Comunidad.
 	</notification>
 	<notification name="NoContentToSearch">
-		Por favor, elige al menos un tipo de contenido a buscar (&apos;PG&apos;, &apos;Mature&apos;, o &apos;Adult&apos;).
+		Por favor, elige al menos un tipo de contenido a buscar (General, Moderado o Adulto;).
 	</notification>
 	<notification name="SystemMessage">
 		[MESSAGE]
@@ -2331,6 +2328,9 @@ Aquí no puedes volar.
 	<notification name="NoBuild">
 		Este terreno tiene desactivado el poder construir. Aquí no puedes ni construir ni crear objetos.
 	</notification>
+	<notification name="SeeAvatars">
+		Esta parcela oculta los avatares y el chat de texto de otras parcelas. No podrás ver a los residentes que estén fuera la parcela ni ellos podrán verte a ti. El chat de texto regular del canal 0 también está bloqueado.
+	</notification>
 	<notification name="ScriptsStopped">
 		Un administrador ha detenido temporalmente los scripts en esta región.
 	</notification>
@@ -2358,6 +2358,9 @@ Por favor, dirígete a la Base de Conocimientos para más detalles sobre el acce
 	</notification>
 	<notification name="ImproperPaymentStatus">
 		No tienes el estado de pago adecuado para entrar a esta región.
+	</notification>
+	<notification name="MustGetAgeRgion">
+		Debes tener verificada la edad para entrar a esta región
 	</notification>
 	<notification name="MustGetAgeParcel">
 		Debes haber verificado tu edad para entrar a esta parcela.
@@ -2738,6 +2741,10 @@ Por tu seguridad, serán bloqueadas durante unos segundos.
 		Un moderador ha silenciado tu voz.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="UploadCostConfirmation">
+		Esta carga te costará [PRECIO] L$. ¿Deseas continuar?
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Subir"/>
+	</notification>
 	<notification name="ConfirmClearTeleportHistory">
 		¿Estás seguro de que quieres borrar tu historial de teleportes?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
@@ -2748,6 +2755,11 @@ Se mostrará cuando haya suficiente espacio.
 	</notification>
 	<notification name="ShareNotification">
 		Selecciona los residentes con quienes deseas compartir.
+	</notification>
+	<notification name="MeshUploadError">
+		[LABEL] no se pudo subir: [MESSAGE] [IDENTIFIER] 
+
+Consulta los detalles en el archivo de registro.
 	</notification>
 	<notification name="ShareItemsConfirmation">
 		¿Estás seguro de que quieres compartir los elementos siguientes?
@@ -2764,6 +2776,19 @@ Con los siguientes residentes:
 	</notification>
 	<notification name="DeedToGroupFail">
 		Error de transferencia a grupo.
+	</notification>
+	<notification name="ReleaseLandThrottled">
+		La parcela [NOMBRE_PARCELA] no se puede abandonar en este momento.
+	</notification>
+	<notification name="ReleasedLandWithReclaim">
+		Ya está disponible la parcela [NOMBRE_PARCELA] de [ÁREA] m².
+
+Dispondrás de [PERÍODO_DE_RECLAMACIÓN] horas para reclamar la cantidad de 0 L$ antes de que se ponga en venta.
+	</notification>
+	<notification name="ReleasedLandNoReclaim">
+		Ya está disponible la parcela [NOMBRE_PARCELA] de [ÁREA] m².
+
+Ya está en venta.
 	</notification>
 	<notification name="AvatarRezNotification">
 		( [EXISTENCE] segundos vivo)
@@ -2902,6 +2927,10 @@ Al ocultar el botón Hablar se desactiva la función de voz.
 		La creación y edición de grupos sólo está disponible en el modo Avanzado. ¿Quieres salir y cambiar de modo? El selector de modo se encuentra en la pantalla de inicio de sesión.
 		<usetemplate name="okcancelbuttons" notext="No salir" yestext="Salir"/>
 	</notification>
+	<notification label="" name="NoPlaceInfo">
+		La opción de consulta del perfil del lugar solo está disponible en el modo Avanzado. ¿Quieres salir y cambiar de modo? El selector de modo se encuentra en la pantalla de inicio de sesión.
+		<usetemplate name="okcancelbuttons" notext="No salir" yestext="Salir"/>
+	</notification>
 	<notification label="" name="NoPicks">
 		La creación y edición de Destacados sólo está disponible en el modo Avanzado. ¿Quieres salir y cambiar de modo? El selector de modo se encuentra en la pantalla de inicio de sesión.
 		<usetemplate name="okcancelbuttons" notext="No salir" yestext="Salir"/>
@@ -2922,9 +2951,18 @@ Al ocultar el botón Hablar se desactiva la función de voz.
 		El pago a otros residentes sólo está disponible en el modo Avanzado. ¿Quieres cerrar sesión y cambiar de modo?
 		<usetemplate name="okcancelbuttons" notext="No salir" yestext="Salir"/>
 	</notification>
-	<global name="UnsupportedCPU">
-		- La velocidad de tu CPU no cumple los requerimientos mínimos.
-	</global>
+	<notification label="" name="NoInventory">
+		La opción de consulta del inventario solo está disponible en el modo Avanzado. ¿Quieres cerrar sesión y cambiar de modo?
+		<usetemplate name="okcancelbuttons" notext="No salir" yestext="Salir"/>
+	</notification>
+	<notification label="" name="NoAppearance">
+		El editor de apariencia solo está disponible en el modo Avanzado. ¿Quieres cerrar sesión y cambiar de modo?
+		<usetemplate name="okcancelbuttons" notext="No salir" yestext="Salir"/>
+	</notification>
+	<notification label="" name="NoSearch">
+		Las búsquedas solo están disponibles en el modo Avanzado. ¿Quieres cerrar sesión y cambiar de modo?
+		<usetemplate name="okcancelbuttons" notext="No salir" yestext="Salir"/>
+	</notification>
 	<global name="UnsupportedGLRequirements">
 		Parece que no tienes el hardware apropiado para [APP_NAME]. [APP_NAME] requiere una tarjeta gráfica OpenGL que admita texturas múltiples (&apos;multitexture support&apos;). Si la tienes, comprueba que tienes los últimos &apos;drivers&apos; para tu tarjeta gráfica, así como los últimos parches y &apos;service packs&apos; para tu sistema operativo.
 

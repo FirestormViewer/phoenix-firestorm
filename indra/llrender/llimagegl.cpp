@@ -1083,11 +1083,16 @@ void LLImageGL::generateTextures(S32 numTextures, U32 *textures)
 }
 
 // static
-void LLImageGL::deleteTextures(S32 numTextures, U32 *textures)
+void LLImageGL::deleteTextures(S32 numTextures, U32 *textures, bool immediate)
 {
 	for (S32 i = 0; i < numTextures; i++)
 	{
 		sDeadTextureList.push_back(textures[i]);
+	}
+
+	if (immediate)
+	{
+		LLImageGL::deleteDeadTextures();
 	}
 }
 
@@ -1409,21 +1414,35 @@ BOOL LLImageGL::readBackRaw(S32 discard_level, LLImageRaw* imageraw, bool compre
 
 void LLImageGL::deleteDeadTextures()
 {
+	bool reset = false;
+
 	while (!sDeadTextureList.empty())
 	{
 		GLuint tex = sDeadTextureList.front();
 		sDeadTextureList.pop_front();
-		for (int i = 0; i < gGLManager.mNumTextureUnits; i++)
+		for (int i = 0; i < gGLManager.mNumTextureImageUnits; i++)
 		{
-			if (sCurrentBoundTextures[i] == tex)
+			LLTexUnit* tex_unit = gGL.getTexUnit(i);
+
+			if (tex_unit->getCurrTexture() == tex)
 			{
-				gGL.getTexUnit(i)->unbind(LLTexUnit::TT_TEXTURE);
+				tex_unit->unbind(tex_unit->getCurrType());
 				stop_glerror();
+
+				if (i > 0)
+				{
+					reset = true;
+				}
 			}
 		}
 		
 		glDeleteTextures(1, &tex);
 		stop_glerror();
+	}
+
+	if (reset)
+	{
+		gGL.getTexUnit(0)->activate();
 	}
 }
 		
@@ -1709,6 +1728,7 @@ void LLImageGL::analyzeAlpha(const void* data_in, U32 w, U32 h)
 				alphatotal += asum;
 				sample[asum/(16*4)] += 4;
 			}
+			
 			
 			rowstart += 2 * w * mAlphaStride;
 		}

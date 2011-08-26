@@ -1565,6 +1565,11 @@ Versuchen Sie es später erneut.
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
+	<notification name="TooManyTeleportOffers">
+		Sie haben versucht, [OFFERS] Teleport-Angebote zu machen,
+womit Sie die Höchstgrenze von [LIMIT] überschreiten.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="OfferTeleportFromGod">
 		Einwohner zu Ihrem Standort einladen?
 		<form name="form">
@@ -1986,6 +1991,10 @@ Möchten Sie den Bechäftigt-Modus verlassen, bevor Sie diese Transaktion abschl
 		Sind Sie sicher, dass Sie Ihren Reise-, Internet- und Suchverlauf löschen möchten?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="ConfirmClearCache">
+		Möchten Sie Ihren Viewer-Cache wirklich leeren?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmClearCookies">
 		Sind Sie sicher, dass Sie Ihre Cookies löschen möchten?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Ja"/>
@@ -2011,48 +2020,30 @@ Von einer Webseite zu diesem Formular linken, um anderen leichten Zugang zu dies
 		Die gespeicherte Voreinstellung überschreiben?
 		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
 	</notification>
-	<notification name="WLDeletePresetAlert">
-		[SKY] löschen?
-		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
-	</notification>
 	<notification name="WLNoEditDefault">
 		Standardvoreinstellungen können nicht bearbeitet oder gelöscht werden.
 	</notification>
 	<notification name="WLMissingSky">
 		Diese Tageszyklusdatei verweist auf eine fehlende Himmel-Datei: [SKY].
 	</notification>
+	<notification name="WLRegionApplyFail">
+		Die Einstellungen konnten nicht auf die Region angewendet werden.  Verlassen Sie die Region und kehren Sie zurück, um das Problem zu beheben.  Angegebener Grund: [FAIL_REASON]
+	</notification>
+	<notification name="EnvCannotDeleteLastDayCycleKey">
+		Der letzte Schlüssel in diesem Tageszyklus kann nicht gelöscht werden, da ein Tageszyklus nicht leer sein kann.  Statt den letzten verbleibenden Schlüssel zu löschen, versuchen Sie stattdessen, ihn zu modifizieren und dann einen neuen zu erstellen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="DayCycleTooManyKeyframes">
+		Sie können diesem Tageszyklus keine Keyframes mehr hinzufügen.  Die Höchstzahl an Keyframes für Tageszyklen mit Umfang [SCOPE] beträgt [MAX].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="EnvUpdateRate">
+		Sie können die Umgebungseinstellungen der Region nur alle [WAIT] Sekunden aktualisieren.  Warten Sie mindestens so lange und versuchen Sie es dann erneut.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="PPSaveEffectAlert">
 		Post-Processing-Effekt bereits vorhanden. Möchten Sie ihn überschreiben?
 		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
-	</notification>
-	<notification name="NewSkyPreset">
-		Wählen Sie einen Namen für den neuen Himmel.
-		<form name="form">
-			<input name="message">
-				Neue Voreinstellung
-			</input>
-			<button name="OK" text="OK"/>
-			<button name="Cancel" text="Abbrechen"/>
-		</form>
-	</notification>
-	<notification name="ExistsSkyPresetAlert">
-		Voreinstellung bereits vorhanden!
-	</notification>
-	<notification name="NewWaterPreset">
-		Wählen Sie einen Namen für die neue Wasservoreinstellung.
-		<form name="form">
-			<input name="message">
-				Neue Voreinstellung
-			</input>
-			<button name="OK" text="OK"/>
-			<button name="Cancel" text="Abbrechen"/>
-		</form>
-	</notification>
-	<notification name="ExistsWaterPresetAlert">
-		Voreinstellung bereits vorhanden!
-	</notification>
-	<notification name="WaterNoEditDefault">
-		Standardvoreinstellungen können nicht bearbeitet oder gelöscht werden.
 	</notification>
 	<notification name="ChatterBoxSessionStartError">
 		Neue Chat-Sitzung mit [RECIPIENT] konnte nicht gestartet werden.
@@ -2171,6 +2162,12 @@ Dies kann die Eingabe Ihres Passworts beeinflussen.
 	</notification>
 	<notification name="RezItemNoPermissions">
 		Keine Berechtigung zum Rezzen von Objekten.
+	</notification>
+	<notification name="IMAcrossParentEstates">
+		Senden von IMs über übergeordnete Grundbesitze hinweg nicht möglich.
+	</notification>
+	<notification name="TransferInventoryAcrossParentEstates">
+		Inventarübertragung über übergeordnete Grundbesitze hinweg nicht möglich.
 	</notification>
 	<notification name="UnableToLoadNotecard">
 		Notizkarten-Asset konnte nicht geladen werden.
@@ -2336,6 +2333,9 @@ Fliegen ist hier nicht möglich.
 	</notification>
 	<notification name="NoBuild">
 		In diesem Bereich ist das Bauen deaktiviert. Sie können keine Objekte bauen oder rezzen.
+	</notification>
+	<notification name="SeeAvatars">
+		Diese Parzelle verbirgt Avatare und Text-Chat vor einer anderen Parzelle.   Sie können Einwohner außerhalb dieser Parzelle weder sehen noch von ihnen gesehen werden.  Regulärer Text-Chat auf Kanal 0 ist ebenfalls blockiert.
 	</notification>
 	<notification name="ScriptsStopped">
 		Ein Administrator hat die Skriptausführung in dieser Region vorübergehend deaktiviert.
@@ -2749,6 +2749,10 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 		Sie wurden vom Moderator stummgeschaltet.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="UploadCostConfirmation">
+		Das Hochladen kostet [PRICE] L$. Möchten Sie fortfahren?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Hochladen"/>
+	</notification>
 	<notification name="ConfirmClearTeleportHistory">
 		Möchten Sie Ihre Teleport-Liste löschen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
@@ -2759,6 +2763,11 @@ Die Schaltfläche wird angezeigt, wenn genügend Platz vorhanden ist.
 	</notification>
 	<notification name="ShareNotification">
 		Wählen Sie Einwohner aus, für die Sie das Objekt freigeben möchten.
+	</notification>
+	<notification name="MeshUploadError">
+		[LABEL] konnte nicht hochgeladen werden: [MESSAGE] [IDENTIFIER] 
+
+Details finden Sie in der Protokolldatei.
 	</notification>
 	<notification name="ShareItemsConfirmation">
 		Möchten Sie wirklich die folgenden Objekte:
@@ -2775,6 +2784,19 @@ für folgende Einwohner freigeben:
 	</notification>
 	<notification name="DeedToGroupFail">
 		Übertragung an Gruppe ist fehlgeschlagen.
+	</notification>
+	<notification name="ReleaseLandThrottled">
+		Die Parzelle [PARCEL_NAME] kann zurzeit nicht aufgegeben werden.
+	</notification>
+	<notification name="ReleasedLandWithReclaim">
+		Die [AREA] m² große Parzelle „[PARCEL_NAME]“ wurde freigegeben.
+
+Sie haben [RECLAIM_PERIOD] Stunden, um die Parzelle für 0 L$ zurückzufordern, bevor sie zum Verkauf an alle freigegeben wird.
+	</notification>
+	<notification name="ReleasedLandNoReclaim">
+		Die [AREA] m² große Parzelle „[PARCEL_NAME]“ wurde freigegeben.
+
+Sie steht jetzt zum Verkauf an alle zur Verfügung.
 	</notification>
 	<notification name="AvatarRezNotification">
 		(Seit [EXISTENCE] Sekunden inworld )
@@ -2914,6 +2936,10 @@ Durch Ausblenden der Schaltfläche „Sprechen“ wird die Sprechfunktion deakti
 		Die Erstellung und Bearbeitung von Gruppen ist nur im Modus „Erweitert“ möglich. Möchten Sie das Programm beenden und den Modus wechseln? Die Modusauswahl ist auf dem Anmeldebildschirm zu finden.
 		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
 	</notification>
+	<notification label="" name="NoPlaceInfo">
+		Die Anzeige des Ortsprofils ist nur im Modus „Erweitert“ möglich. Möchten Sie das Programm beenden und den Modus wechseln? Die Modusauswahl ist auf dem Anmeldebildschirm zu finden.
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
 	<notification label="" name="NoPicks">
 		Die Erstellung und Bearbeitung von Auswahlen ist nur im Modus „Erweitert“ möglich. Möchten Sie das Programm beenden und den Modus wechseln? Die Modusauswahl ist auf dem Anmeldebildschirm zu finden.
 		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
@@ -2934,9 +2960,18 @@ Durch Ausblenden der Schaltfläche „Sprechen“ wird die Sprechfunktion deakti
 		Die Bezahlung anderer Einwohner ist nur im Modus „Erweitert“ möglich. Möchten Sie sich abmelden und den Modus wechseln?
 		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
 	</notification>
-	<global name="UnsupportedCPU">
-		- Ihre CPU-Geschwindigkeit entspricht nicht den Mindestanforderungen.
-	</global>
+	<notification label="" name="NoInventory">
+		Die Inventaranzeige ist nur im Modus „Erweitert“ möglich. Möchten Sie sich abmelden und den Modus wechseln?
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
+	<notification label="" name="NoAppearance">
+		Das Fenster zum Bearbeiten des Aussehens ist nur im Modus „Erweitert“ verfügbar. Möchten Sie sich abmelden und den Modus wechseln?
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
+	<notification label="" name="NoSearch">
+		Die Suche ist nur im Modus „Erweitert“ möglich. Möchten Sie sich abmelden und den Modus wechseln?
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
 	<global name="UnsupportedGLRequirements">
 		Ihr Computer entspricht nicht den Hardwareanforderungen von [APP_NAME]. [APP_NAME] setzt eine OpenGL-Grafikkarte mit Multitextur-Unterstützung voraus. Falls Ihre Grafikkarte diese Funktion unterstützt, installieren Sie die neuesten Treiber sowie die aktuellen Service Packs und Patches für Ihr Betriebssystem.
 

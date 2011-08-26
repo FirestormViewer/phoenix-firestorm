@@ -36,6 +36,7 @@
 
 class LLInventoryPanel;
 
+
 /**
  * Friend-related actions (add, remove, offer teleport, etc)
  */
@@ -231,12 +232,13 @@ public:
 	static bool canEstateKickOrTeleportHomeMultiple(uuid_vec_t& idAgents, bool fFilter = false);
 	static void estateKickMultiple(const uuid_vec_t& idAgents);
 	static void estateTeleportHomeMultiple(const uuid_vec_t& idAgents);
+
+	static std::set<LLUUID> getInventorySelectedUUIDs();
+
 protected:
 	static bool callbackEstateKick(const LLSD& notification, const LLSD& response);
 	static bool callbackEstateTeleportHome(const LLSD& notification, const LLSD& response);
-// [/SL:KB]
 	
-
 private:
 	static bool callbackAddFriendWithMessage(const LLSD& notification, const LLSD& response);
 	static bool handleRemove(const LLSD& notification, const LLSD& response);

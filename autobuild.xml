@@ -3,14 +3,14 @@
 <map>
     <key>installables</key>
     <map>
-      <key>GL</key>
+      <key>GLOD</key>
       <map>
         <key>license</key>
-        <string>GL</string>
+        <string>GLOD</string>
         <key>license_file</key>
-        <string>LICENSES/GL.txt</string>
+        <string>LICENSES/glod.txt</string>
         <key>name</key>
-        <string>GL</string>
+        <string>GLOD</string>
         <key>platforms</key>
         <map>
           <key>darwin</key>
@@ -18,9 +18,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0b7c1d43dc2b39301fef6c05948fb826</string>
+              <string>b2fe1c860613a68e74d4384be418ffee</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/GL-darwin-20101004.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-glod/rev/232684/arch/Darwin/installer/glod-1.0pre4-darwin-20110610.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -30,9 +30,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d85d88088360aee5b67105ad93b5ad16</string>
+              <string>c0c64dae149d0892343e2ff300fd06b9</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/GL-linux-20100929.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-glod/rev/232684/arch/Linux/installer/glod-1.0pre4-linux-20110611.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -42,9 +42,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f8d98cbe78d5aafbc7aaabf840325aaf</string>
+              <string>842208365f5b108dac4c7c733b99da9c</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/GL-0.0.0-windows-20110303.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-glod/rev/232684/arch/CYGWIN/installer/glod-1.0pre4-windows-20110610.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -213,6 +213,54 @@
               <string>98be22c8833aa2bca184b9fa09fbb82b</string>
               <key>url</key>
               <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/boost-1.45.0-windows-20110124.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+      </map>
+      <key>colladadom</key>
+      <map>
+        <key>license</key>
+        <string>scea</string>
+        <key>license_file</key>
+        <string>LICENSES/collada.txt</string>
+        <key>name</key>
+        <string>colladadom</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>480b27a0cb39a4adfcdeabef895de3e1</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-colladadom/rev/227230/arch/Darwin/installer/colladadom-2.2-darwin-20110420.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin</string>
+          </map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>be7321370b69b6d66938b82a9230a067</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-colladadom/rev/233450/arch/Linux/installer/colladadom-2.2-linux-20110621.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>a9f548eb6f9aaf292508a8b09c7f2f73</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-colladadom/rev/226584/arch/CYGWIN/installer/colladadom-2.2-windows-20110413.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -531,6 +579,42 @@
           </map>
         </map>
       </map>
+      <key>glext</key>
+      <map>
+        <key>license</key>
+        <string>glext</string>
+        <key>license_file</key>
+        <string>LICENSES/glext.txt</string>
+        <key>name</key>
+        <string>glext</string>
+        <key>platforms</key>
+        <map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>5de58ca0fe19abf68b25956762ee0d29</string>
+              <key>url</key>
+              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/glext-68-windows-20110406.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>5de58ca0fe19abf68b25956762ee0d29</string>
+              <key>url</key>
+              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/glext-68-windows-20110406.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+      </map>
       <key>glh_linear</key>
       <map>
         <key>license</key>
@@ -615,42 +699,6 @@
           </map>
         </map>
       </map>
-      <key>google-perftools</key>
-      <map>
-        <key>license</key>
-        <string>bsd</string>
-        <key>license_file</key>
-        <string>LICENSES/google-perftools.txt</string>
-        <key>name</key>
-        <string>google-perftools</string>
-        <key>platforms</key>
-        <map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>cf513fc2eec4a414cc804cf408932a45</string>
-              <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/google_perftools-1.7-linux-20110315.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>8108bffe1c814be9d035b47dac3d4541</string>
-              <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/google-perftools-1.0-windows-20101001b.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-        </map>
-      </map>
       <key>google_breakpad</key>
       <map>
         <key>license</key>
@@ -704,7 +752,7 @@
         <key>license</key>
         <string>bsd</string>
         <key>license_file</key>
-        <string>LICENSES/gmock.txt</string>
+        <string>LICENSES/googlemock.txt</string>
         <key>name</key>
         <string>googlemock</string>
         <key>platforms</key>
@@ -776,7 +824,7 @@
         <key>license</key>
         <string>lgpl</string>
         <key>license_file</key>
-        <string>LICENSES/gtk.txt</string>
+        <string>LICENSES/gtk-atk-pango-glib.txt</string>
         <key>name</key>
         <string>gtk-atk-pango-glib</string>
         <key>platforms</key>
@@ -930,7 +978,7 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4e6db3b0c1e22cea782b0ac27cf8d74f</string>
+              <string>812ac22eaaeabdcfd73ad8d82052f4ed</string>
 	      <key>url</key>
               <string>file:///opt/firestorm/kdu-6.4.1-linux-20110802.tar.bz2</string>
             </map>
@@ -990,9 +1038,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>735a955e6442733e2342ab12c1087488</string>
+              <string>f194ba857ca8dd86483a3ef24535d0db</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/libpng-1.5.1-windows-20110221.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-libpng/rev/226532/arch/CYGWIN/installer/libpng-1.5.1-windows-20110413.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1047,6 +1095,102 @@
           </map>
         </map>
       </map>
+      <key>llconvexdecomposition</key>
+      <map>
+        <key>license</key>
+        <string>havok</string>
+        <key>license_file</key>
+        <string>on_file</string>
+        <key>name</key>
+        <string>llconvexdecomposition</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>362654a472ef7368d4c803ae3fb89d95</string>
+              <key>url</key>
+		<string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/3p-llconvexdecomposition/rev/238959/arch/Darwin/installer/llconvexdecomposition-0.1-darwin-20110819.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin</string>
+          </map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>c7801d899daec5338fbe95053255b7e7</string>
+              <key>url</key>
+		<string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/3p-llconvexdecomposition/rev/238959/arch/Linux/installer/llconvexdecomposition-0.1-linux-20110819.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>6ecf2f85f03c5ae87fe45769566a5660</string>
+              <key>url</key>
+		<string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/3p-llconvexdecomposition/rev/238959/arch/CYGWIN/installer/llconvexdecomposition-0.1-windows-20110819.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+      </map>
+      <key>llconvexdecompositionstub</key>
+      <map>
+        <key>license</key>
+        <string>lgpl</string>
+        <key>license_file</key>
+        <string>LICENSES/LLConvexDecompositionStubLicense.txt</string>
+        <key>name</key>
+        <string>llconvexdecompositionstub</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>a5f53e09f67271fd50f1131ffdda9d27</string>
+              <key>url</key>
+		<string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llconvexdecompositionstub/rev/238958/arch/Darwin/installer/llconvexdecompositionstub-0.3-darwin-20110819.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin</string>
+          </map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>0006a964f1497f55a5f181b7042d2d22</string>
+              <key>url</key>
+		 <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llconvexdecompositionstub/rev/238958/arch/Linux/installer/llconvexdecompositionstub-0.3-linux-20110819.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>b859e7e3bb03ebb467f0309f46422995</string>
+              <key>url</key>
+		<string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llconvexdecompositionstub/rev/238958/arch/CYGWIN/installer/llconvexdecompositionstub-0.3-windows-20110819.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+      </map>
       <key>llqtwebkit</key>
       <map>
         <key>license</key>
@@ -1062,9 +1206,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>76c1015eafcba5ca9932c3009533b51c</string>
+              <string>a7c80fd8516df3b879b669b2b220067f</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llqtwebkit/rev/225273/arch/Darwin/installer/llqtwebkit-4.7.1-darwin-20110329.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llqtwebkit/rev/232420/arch/Darwin/installer/llqtwebkit-4.7.1-darwin-20110608.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1086,9 +1230,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1b1b8e104e39c542d69eb37b5ee81818</string>
+              <string>b9cc0333cc274c9cc40256ab7146b4fc</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llqtwebkit/rev/225249/arch/CYGWIN/installer/llqtwebkit-4.7.1-windows-20110329.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llqtwebkit/rev/232420/arch/CYGWIN/installer/llqtwebkit-4.7.1-windows-20110608.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1146,9 +1290,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c81bacf922bb3b540d92b660364c48ce</string>
+              <string>9bf7a96c1d2fadb180fda91740c945c6</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/ndofdev-linux-0.2-20101013.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-libndofdev-linux/rev/233137/arch/Linux/installer/libndofdev-0.3-linux-20110617.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1351,6 +1495,42 @@
           </map>
         </map>
       </map>
+      <key>pcre</key>
+      <map>
+        <key>license</key>
+        <string>bsd</string>
+        <key>license_file</key>
+        <string>LICENSES/pcre-license.txt</string>
+        <key>name</key>
+        <string>pcre</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>a8e74694a0f4248228c13c845ed0a6f8</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-pcre/rev/228822/arch/Darwin/installer/pcre-7.6-darwin-20110504.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin</string>
+          </map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>bb0abe962b3b8208ed2dab0424aab33d</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-pcre/rev/228822/arch/Linux/installer/pcre-7.6-linux-20110504.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+        </map>
+      </map>
       <key>quicktime</key>
       <map>
         <key>license</key>
@@ -1402,9 +1582,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>53fefed8120d7c6a0eb6778edae6fa32</string>
+              <string>8a0bc982367d6fdc20a28b391cd40566</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/slvoice-3.2.0002.9361-linux-20110120.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-slvoice/rev/231678/arch/Linux/installer/slvoice-3.2.0002.10426-linux-20110601.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1417,6 +1597,42 @@
               <string>462aa3dc1a9fcf7d87bb58a4bc84f52d</string>
               <key>url</key>
               <string>http://phoenixviewer.com/app/packages/vivox-2.1.3010.6270fs-windows-20090309.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+      </map>
+      <key>tcmalloc</key>
+      <map>
+        <key>license</key>
+        <string>bsd</string>
+        <key>license_file</key>
+        <string>LICENSES/google-perftools.txt</string>
+        <key>name</key>
+        <string>tcmalloc</string>
+        <key>platforms</key>
+        <map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>dde928cb24d22a267004a8c17669ba65</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-google-perftools/rev/226426/arch/Linux/installer/google_perftools-1.7-linux-20110412.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>8308f7bd68bb7083655753b7abe7225f</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-google-perftools/rev/226287/arch/CYGWIN/installer/google_perftools-1.7-windows-20110411.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1734,11 +1950,8 @@
             <map>
               <key>build</key>
               <map>
-                <key>arguments</key>
+                <key>filters</key>
                 <array>
-                  <string>|</string>
-                  <string>grep</string>
-                  <string>-v</string>
                   <string>setenv</string>
                 </array>
                 <key>command</key>
@@ -1791,11 +2004,8 @@
             <map>
               <key>build</key>
               <map>
-                <key>arguments</key>
+                <key>filters</key>
                 <array>
-                  <string>|</string>
-                  <string>grep</string>
-                  <string>-v</string>
                   <string>setenv</string>
                 </array>
                 <key>command</key>
@@ -1850,11 +2060,8 @@
             <map>
               <key>build</key>
               <map>
-                <key>arguments</key>
+                <key>filters</key>
                 <array>
-                  <string>|</string>
-                  <string>grep</string>
-                  <string>-v</string>
                   <string>setenv</string>
                 </array>
                 <key>command</key>
@@ -2252,7 +2459,6 @@
                   <string>-G</string>
                   <string>"Visual Studio 10"</string>
                   <string>-DUNATTENDED:BOOL=ON</string>
-                  <string>-DINSTALL_PROPRIETARY=TRUE</string>
                   <string>-DUSE_KDU=FALSE</string>
                   <string>-DFMOD=FALSE</string>
                 </array>
@@ -2329,7 +2535,7 @@
                   <string>-G</string>
                   <string>"Visual Studio 10"</string>
                   <string>-DUNATTENDED:BOOL=ON</string>
-                  <string>-DINSTALL_PROPRIETARY=TRUE</string>
+                  <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
                   <string>-DFMOD=FALSE</string>
                 </array>
@@ -2481,6 +2687,9 @@
                   <string>-G</string>
                   <string>"Visual Studio 10"</string>
                   <string>-DUNATTENDED:BOOL=ON</string>
+                  <string>-DINSTALL_PROPRIETARY=FALSE</string>
+                  <string>-DUSE_KDU=FALSE</string>
+                  <string>-DFMOD=FALSE</string>
                 </array>
               </map>
               <key>name</key>

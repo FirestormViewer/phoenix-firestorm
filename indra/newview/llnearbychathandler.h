@@ -31,6 +31,8 @@
 #include "llavatarname.h"
 #include "llchat.h"
 
+class LLEventPump;
+
 //add LLNearbyChatHandler to LLNotificationsUI namespace
 namespace LLNotificationsUI{
 
@@ -56,6 +58,8 @@ protected:
 //	bool checkDisplayName();
 
 	BOOL PhoenixUseNearbyChatConsole;
+
+	static boost::scoped_ptr<LLEventPump> sChatWatcher;
 };
 
 }

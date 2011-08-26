@@ -339,6 +339,8 @@ LLLocale::LLLocale(const std::string& locale_string)
 	{
 		// .c_str() : Workaround for a segfault in g++ < 4.5.3 -Zi
 		llwarns << "Failed to set locale " << locale_string.c_str() << llendl;
+		//LL_WARNS_ONCE("LLLocale") << "Failed to set locale " << locale_string << LL_ENDL;
+
 		setlocale(LC_ALL, SYSTEM_LOCALE.c_str());
 	}
 	//else

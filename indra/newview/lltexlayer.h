@@ -366,13 +366,13 @@ struct LLBakedUploadData
 	LLBakedUploadData(const LLVOAvatarSelf* avatar, 
 					  LLTexLayerSet* layerset, 
 					  const LLUUID& id,
-					  BOOL highest_res);
+					  bool highest_res);
 	~LLBakedUploadData() {}
 	const LLUUID				mID;
 	const LLVOAvatarSelf*		mAvatar; // note: backlink only; don't LLPointer 
 	LLTexLayerSet*				mTexLayerSet;
    	const U64					mStartTime;	// for measuring baked texture upload time
-   	const BOOL					mIsHighestRes; // whether it a "final" bake, or intermidiary low res
+   	const bool					mIsHighestRes; // whether this is a "final" bake, or intermediate low res
 };
 
 #endif  // LL_LLTEXLAYER_H

@@ -47,10 +47,12 @@
 #include "llslurl.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "groupchatlistener.h"
 
 //
 // Globals
 //
+static GroupChatListener sGroupChatListener;
 
 class LLGroupHandler : public LLCommandHandler
 {
@@ -478,17 +480,16 @@ void LLGroupActions::closeGroup(const LLUUID& group_id)
 }
 
 // static
-void LLGroupActions::startIM(const LLUUID& group_id)
+LLUUID LLGroupActions::startIM(const LLUUID& group_id)
 {
-	if (group_id.isNull())
-		return;
+	if (group_id.isNull()) return LLUUID::null;
 
 // [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
 	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(group_id)) && (!gIMMgr->hasSession(group_id)) )
 	{
 		make_ui_sound("UISndInvalidOp");
 		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("group", group_id, "about").getSLURLString()));
-		return;
+		return LLUUID::null;;
 	}
 // [/RLVa:KB]
 
@@ -504,12 +505,14 @@ void LLGroupActions::startIM(const LLUUID& group_id)
 			LLIMFloater::show(session_id);
 		}
 		make_ui_sound("UISndStartIM");
+		return session_id;
 	}
 	else
 	{
 		// this should never happen, as starting a group IM session
 		// relies on you belonging to the group and hence having the group data
 		make_ui_sound("UISndInvalidOp");
+		return LLUUID::null;
 	}
 }
 

@@ -114,7 +114,8 @@ LLView::Params::Params()
 }
 
 LLView::LLView(const LLView::Params& p)
-:	mName(p.name),
+:	mVisible(p.visible),
+	mName(p.name),
 	mParentView(NULL),
 	mReshapeFlags(FOLLOWS_NONE),
 	mFromXUI(p.from_xui),
@@ -123,7 +124,6 @@ LLView::LLView(const LLView::Params& p)
 	mNextInsertionOrdinal(0),
 	mHoverCursor(getCursorFromString(p.hover_cursor)),
 	mEnabled(p.enabled),
-	mVisible(p.visible),
 	mMouseOpaque(p.mouse_opaque),
 	mSoundFlags(p.sound_flags),
 	mUseBoundingRect(p.use_bounding_rect),
@@ -1299,9 +1299,7 @@ void LLView::drawChildren()
 {
 	if (!mChildList.empty())
 	{
-		LLRect rootRect = getRootView()->getRect();
-		LLRect screenRect;
-
+		LLView* rootp = LLUI::getRootView();		
 		++sDepth;
 
 		for (child_list_reverse_iter_t child_iter = mChildList.rbegin(); child_iter != mChildList.rend();)  // ++child_iter)
@@ -1311,9 +1309,8 @@ void LLView::drawChildren()
 
 			if (viewp->getVisible() && viewp->getRect().isValid())
 			{
-				// Only draw views that are within the root view
-				localRectToScreen(viewp->getRect(),&screenRect);
-				if ( rootRect.overlaps(screenRect)  && LLUI::sDirtyRect.overlaps(screenRect))
+				LLRect screen_rect = viewp->calcScreenRect();
+				if ( rootp->getLocalRect().overlaps(screen_rect)  && LLUI::sDirtyRect.overlaps(screen_rect))
 				{
 					LLUI::pushMatrix();
 					{

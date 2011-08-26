@@ -396,10 +396,10 @@ LLVector3 LLAgentCamera::calcFocusOffset(LLViewerObject *object, LLVector3 origi
 	{
 		return original_focus_point - obj_pos;
 	}
-
 	
 	LLQuaternion inv_obj_rot = ~obj_rot; // get inverse of rotation
-	LLVector3 object_extents = object->getScale();
+	LLVector3 object_extents = object->getScale();	
+	
 	// make sure they object extents are non-zero
 	object_extents.clamp(0.001f, F32_MAX);
 
@@ -557,7 +557,9 @@ BOOL LLAgentCamera::calcCameraMinDistance(F32 &obj_min_distance)
 {
 	BOOL soft_limit = FALSE; // is the bounding box to be treated literally (volumes) or as an approximation (avatars)
 
-	if (!mFocusObject || mFocusObject->isDead())
+	if (!mFocusObject || mFocusObject->isDead() || 
+		mFocusObject->isMesh() ||
+		gSavedSettings.getBOOL("DisableCameraConstraints"))
 	{
 		obj_min_distance = 0.f;
 		return TRUE;

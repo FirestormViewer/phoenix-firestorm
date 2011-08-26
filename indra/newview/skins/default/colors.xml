@@ -356,6 +356,15 @@
      name="AvatarListItemIconVoiceLeftColor"
      reference="AvatarListItemIconOfflineColor" />
     <color
+     name="BadgeImageColor"
+     value="1.0 0.40 0.0 1.0" />
+    <color
+     name="BadgeBorderColor"
+     value="0.9 0.9 0.9 1.0" />
+    <color
+     name="BadgeLabelColor"
+     reference="White" />
+    <color
      name="AvatarListItemChatRange"
      reference="AccentColor" />
     <color
@@ -737,22 +746,22 @@
 	  reference="DkGray2" />
     <color
      name="MultiSliderDisabledThumbColor"
-     reference="Unused?" />
+     reference="Black" />
     <color
      name="MultiSliderThumbCenterColor"
-     reference="Unused?" />
+     reference="White" />
     <color
      name="MultiSliderThumbCenterSelectedColor"
-     reference="Unused?" />
+     reference="Green" />
     <color
      name="MultiSliderThumbOutlineColor"
      reference="Unused?" />
     <color
      name="MultiSliderTrackColor"
-     reference="Unused?" />
+     reference="LtGray" />
     <color
      name="MultiSliderTriangleColor"
-     reference="Unused?" />
+     reference="Yellow" />
   <!--
     <color
       name="NameTagBackground"
@@ -948,6 +957,17 @@
     <color
      name="MenuBarProjectBgColor"
      reference="MdBlue" />
+  
+    <color
+      name="MeshImportTableNormalColor"
+      value="1 1 1 1"/>
+    <color
+      name="MeshImportTableHighlightColor"
+      value="0.2 0.8 1 1"/>
+
+    <color
+     name="DirectChatColor"
+     reference="LtOrange" />
   
     <!-- Generic color names (legacy) -->
   <color

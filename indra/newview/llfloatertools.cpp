@@ -32,10 +32,10 @@
 #include "llcoord.h"
 //#include "llgl.h"
 
+#include "llagent.h"
 #include "llagentcamera.h"
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
-#include "llcombobox.h"
 #include "lldraghandle.h"
 #include "llerror.h"
 #include "llfloaterbuildoptions.h"
@@ -86,6 +86,8 @@
 #include "lluictrlfactory.h"
 #include "qtoolalign.h"
 #include "llselectmgr.h"
+#include "llaccountingquotamanager.h"
+#include "llmeshrepository.h"
 
 // Globals
 LLFloaterTools *gFloaterTools = NULL;
@@ -99,6 +101,7 @@ const std::string PANEL_NAMES[LLFloaterTools::PANEL_COUNT] =
 	std::string("Texture"),	// PANEL_FACE,
 	std::string("Content"),	// PANEL_CONTENTS,
 };
+
 
 // Local prototypes
 void commit_select_component(void *data);
@@ -115,7 +118,6 @@ void commit_radio_group_focus(LLUICtrl* ctrl);
 void commit_radio_group_move(LLUICtrl* ctrl);
 void commit_radio_group_edit(LLUICtrl* ctrl);
 void commit_radio_group_land(LLUICtrl* ctrl);
-void commit_grid_mode(LLUICtrl *);
 void commit_slider_zoom(LLUICtrl *ctrl);
 
 
@@ -233,7 +235,6 @@ BOOL	LLFloaterTools::postBuild()
 	getChild<LLUICtrl>("checkbox uniform")->setValue((BOOL)gSavedSettings.getBOOL("ScaleUniform"));
 	mCheckStretchTexture	= getChild<LLCheckBoxCtrl>("checkbox stretch textures");
 	getChild<LLUICtrl>("checkbox stretch textures")->setValue((BOOL)gSavedSettings.getBOOL("ScaleStretchTextures"));
-	mComboGridMode			= getChild<LLComboBox>("combobox grid mode");
 
 	//Phoenix:KC show highlight
 	mCheckShowHighlight = getChild<LLCheckBoxCtrl>("checkbox show highlight");
@@ -241,6 +242,9 @@ BOOL	LLFloaterTools::postBuild()
 	mCheckShowHighlight->setValue(mOrginalShowHighlight);
 
 	mCheckActualRoot = getChild<LLCheckBoxCtrl>("checkbox actual root");
+
+	//mCheckStretchUniformLabel = getChild<LLTextBox>("checkbox uniform label");
+
 
 	//
 	// Create Buttons
@@ -273,6 +277,8 @@ BOOL	LLFloaterTools::postBuild()
 	mSliderDozerForce		= getChild<LLSlider>("slider force");
 	// the setting stores the actual force multiplier, but the slider is logarithmic, so we convert here
 	getChild<LLUICtrl>("slider force")->setValue(log10(gSavedSettings.getF32("LandBrushForce")));
+
+	mCostTextBorder = getChild<LLViewBorder>("cost_text_border");
 
 	mTab = getChild<LLTabContainer>("Object Info Tabs");
 	if(mTab)
@@ -332,7 +338,6 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mCheckSnapToGrid(NULL),
 	mBtnGridOptions(NULL),
 	mTitleMedia(NULL),
-	mComboGridMode(NULL),
 	mCheckStretchUniform(NULL),
 	mCheckStretchTexture(NULL),
 	mCheckShowHighlight(NULL), //Phoenix:KC
@@ -366,6 +371,7 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mPanelFace(NULL),
 	mPanelLandInfo(NULL),
 
+	mCostTextBorder(NULL),
 	mTabLand(NULL),
 	mDirty(TRUE),
 	mNeedMediaTitle(TRUE)
@@ -389,7 +395,6 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mCommitCallbackRegistrar.add("BuildTool.selectComponent",	boost::bind(&commit_select_component, this));
 	mCommitCallbackRegistrar.add("BuildTool.gridOptions",		boost::bind(&LLFloaterTools::onClickGridOptions,this));
 	mCommitCallbackRegistrar.add("BuildTool.applyToSelection",	boost::bind(&click_apply_to_selection, this));
-	mCommitCallbackRegistrar.add("BuildTool.gridMode",			boost::bind(&commit_grid_mode,_1));
 	mCommitCallbackRegistrar.add("BuildTool.commitRadioLand",	boost::bind(&commit_radio_group_land,_1));
 	mCommitCallbackRegistrar.add("BuildTool.LandBrushForce",	boost::bind(&commit_slider_dozer_force,_1));
 	mCommitCallbackRegistrar.add("BuildTool.AddMedia",			boost::bind(&LLFloaterTools::onClickBtnAddMedia,this));
@@ -447,6 +452,8 @@ void LLFloaterTools::refresh()
 
 	// Refresh object and prim count labels
 	LLLocale locale(LLLocale::USER_LOCALE);
+	
+	//-TT 2.8.2 - from KC
 	//std::string obj_count_string;
 	//LLResMgr::getInstance()->getIntegerString(obj_count_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
 	//getChild<LLUICtrl>("obj_count")->setTextArg("[COUNT]", obj_count_string);	
@@ -516,19 +523,83 @@ void LLFloaterTools::refresh()
 	}
 	getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[DESC]", desc_string);
 	getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[NUM]", num_string);
-
+	// - KC
 	std::string prim_count_string;
 	LLResMgr::getInstance()->getIntegerString(prim_count_string, prim_count);
 	getChild<LLUICtrl>("prim_count")->setTextArg("[COUNT]", prim_count_string);
+#if 0
+	if (!gMeshRepo.meshRezEnabled())
+	{		
+		std::string obj_count_string;
+		LLResMgr::getInstance()->getIntegerString(obj_count_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
+		getChild<LLUICtrl>("selection_count")->setTextArg("[OBJ_COUNT]", obj_count_string);
+		std::string prim_count_string;
+		LLResMgr::getInstance()->getIntegerString(prim_count_string, LLSelectMgr::getInstance()->getSelection()->getObjectCount());
+		getChild<LLUICtrl>("selection_count")->setTextArg("[PRIM_COUNT]", prim_count_string);
 
-	// calculate selection rendering cost
-	if (sShowObjectCost)
-	{
-		std::string prim_cost_string;
-		LLResMgr::getInstance()->getIntegerString(prim_cost_string, calcRenderCost());
-		getChild<LLUICtrl>("RenderingCost")->setTextArg("[COUNT]", prim_cost_string);
+		// calculate selection rendering cost
+		if (sShowObjectCost)
+		{
+			std::string prim_cost_string;
+			LLResMgr::getInstance()->getIntegerString(prim_cost_string, calcRenderCost());
+			getChild<LLUICtrl>("RenderingCost")->setTextArg("[COUNT]", prim_cost_string);
+		}
+		
+		// disable the object and prim counts if nothing selected
+		bool have_selection = ! LLSelectMgr::getInstance()->getSelection()->isEmpty();
+		getChildView("link_num_obj_count")->setEnabled(have_selection);
+		//getChildView("obj_count")->setEnabled(have_selection);
+		getChildView("prim_count")->setEnabled(have_selection);
+		getChildView("RenderingCost")->setEnabled(have_selection && sShowObjectCost);
 	}
+	else
+#endif
+	{
+		F32 link_phys_cost  = LLSelectMgr::getInstance()->getSelection()->getSelectedLinksetPhysicsCost();
+		F32 link_cost  = LLSelectMgr::getInstance()->getSelection()->getSelectedLinksetCost();
+		S32 prim_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
+		S32 link_count = LLSelectMgr::getInstance()->getSelection()->getRootObjectCount();
 
+		LLStringUtil::format_map_t selection_args;
+		selection_args["OBJ_COUNT"] = llformat("%.1d", link_count);
+		selection_args["PRIM_COUNT"] = llformat("%.1d", prim_count);
+
+		std::ostringstream selection_info;
+
+		bool show_adv_weight = gSavedSettings.getBOOL("ShowAdvancedBuilderOptions");
+		bool show_mesh_cost = gMeshRepo.meshRezEnabled();
+
+		if (show_mesh_cost)
+		{
+			LLStringUtil::format_map_t prim_equiv_args;
+			prim_equiv_args["SEL_WEIGHT"] = llformat("%.1d", (S32)link_cost);
+			selection_args["PE_STRING"] = getString("status_selectprimequiv", prim_equiv_args);
+		}
+		else
+		{
+			selection_args["PE_STRING"] = "";
+		}
+
+		selection_info << getString("status_selectcount", selection_args);
+
+		if (show_adv_weight)
+		{
+			selection_info << ",";
+
+			childSetTextArg("selection_weight", "[PHYS_WEIGHT]", llformat("%.1f", link_phys_cost));
+			childSetTextArg("selection_weight", "[DISP_WEIGHT]", llformat("%.1d", calcRenderCost()));
+		}
+		else
+		{
+			selection_info<<".";
+		}
+		getChild<LLTextBox>("selection_count")->setText(selection_info.str());
+
+		bool have_selection = !LLSelectMgr::getInstance()->getSelection()->isEmpty();
+		childSetVisible("selection_count",  have_selection);
+		childSetVisible("selection_weight", have_selection && show_adv_weight);
+		childSetVisible("selection_empty", !have_selection);
+	}
 
 	// disable the object and prim counts if nothing selected
 	bool have_selection = ! LLSelectMgr::getInstance()->getSelection()->isEmpty();
@@ -704,33 +775,6 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 		mRadioGroupEdit->setValue("radio align");
 	}
 
-	if (mComboGridMode) 
-	{
-		mComboGridMode->setVisible( edit_visible );
-		S32 index = mComboGridMode->getCurrentIndex();
-		mComboGridMode->removeall();
-
-		switch (mObjectSelection->getSelectType())
-		{
-		case SELECT_TYPE_HUD:
-		  mComboGridMode->add(getString("grid_screen_text"));
-		  mComboGridMode->add(getString("grid_local_text"));
-		  //mComboGridMode->add(getString("grid_reference_text"));
-		  break;
-		case SELECT_TYPE_WORLD:
-		  mComboGridMode->add(getString("grid_world_text"));
-		  mComboGridMode->add(getString("grid_local_text"));
-		  mComboGridMode->add(getString("grid_reference_text"));
-		  break;
-		case SELECT_TYPE_ATTACHMENT:
-		  mComboGridMode->add(getString("grid_attachment_text"));
-		  mComboGridMode->add(getString("grid_local_text"));
-		  mComboGridMode->add(getString("grid_reference_text"));
-		  break;
-		}
-
-		mComboGridMode->setCurrentByIndex(index);
-	}
 	// Snap to grid disabled for grab tool - very confusing
 	if (mCheckSnapToGrid) mCheckSnapToGrid->setVisible( edit_visible /* || tool == LLToolGrab::getInstance() */ );
 	if (mBtnGridOptions) mBtnGridOptions->setVisible( edit_visible /* || tool == LLToolGrab::getInstance() */ );
@@ -779,6 +823,8 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 
 	// Land buttons
 	BOOL land_visible = (tool == LLToolBrushLand::getInstance() || tool == LLToolSelectLand::getInstance() );
+
+	mCostTextBorder->setVisible(!land_visible);
 
 	if (mBtnLand)	mBtnLand	->setToggleState( land_visible );
 
@@ -833,11 +879,22 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 		getChildView("Strength:")->setVisible( land_visible);
 	}
 
-	getChildView("obj_count")->setVisible( !land_visible);
+	//getChildView("link_num_obj_count")->setVisible( !land_visible);
 	getChildView("prim_count")->setVisible( !land_visible);
+
 	static LLCachedControl<bool> sPhoenixToolboxExpanded(gSavedSettings,  "PhoenixToolboxExpanded", TRUE);
 	mTab->setVisible(!land_visible && sPhoenixToolboxExpanded);
 	mPanelLandInfo->setVisible(land_visible && sPhoenixToolboxExpanded);
+
+	bool have_selection = !LLSelectMgr::getInstance()->getSelection()->isEmpty();
+
+	getChildView("selection_count")->setVisible(!land_visible && have_selection);
+	getChildView("selection_weight")->setVisible(!land_visible && have_selection && gSavedSettings.getBOOL("ShowAdvancedBuilderOptions"));
+	getChildView("selection_empty")->setVisible(!land_visible && !have_selection);
+	
+	//mTab->setVisible(!land_visible);
+	//mPanelLandInfo->setVisible(land_visible);
+
 }
 
 
@@ -1084,13 +1141,6 @@ void commit_select_component(void *data)
 	}
 }
 
-void commit_grid_mode(LLUICtrl *ctrl)   
-{   
-	LLComboBox* combo = (LLComboBox*)ctrl;   
-    
-	LLSelectMgr::getInstance()->setGridMode((EGridMode)combo->getCurrentIndex());
-} 
-
 // static 
 void LLFloaterTools::setObjectType( LLPCode pcode )
 {
@@ -1109,29 +1159,32 @@ void LLFloaterTools::onClickGridOptions()
 
 S32 LLFloaterTools::calcRenderCost()
 {
-	S32 cost = 0;
-	std::set<LLUUID> textures;
+       S32 cost = 0;
+       std::set<LLUUID> textures;
 
-	for (LLObjectSelection::iterator selection_iter = LLSelectMgr::getInstance()->getSelection()->begin();
-		  selection_iter != LLSelectMgr::getInstance()->getSelection()->end();
-		  ++selection_iter)
-	{
-		LLSelectNode *select_node = *selection_iter;
-		if (select_node)
-		{
-			LLVOVolume *viewer_volume = (LLVOVolume*)select_node->getObject();
-			if (viewer_volume)
-			{
-				cost += viewer_volume->getRenderCost(textures);
-				cost += textures.size() * LLVOVolume::ARC_TEXTURE_COST;
-				textures.clear();
-			}
-		}
-	}
+       for (LLObjectSelection::iterator selection_iter = LLSelectMgr::getInstance()->getSelection()->begin();
+                 selection_iter != LLSelectMgr::getInstance()->getSelection()->end();
+                 ++selection_iter)
+       {
+               LLSelectNode *select_node = *selection_iter;
+               if (select_node)
+               {
+                       LLViewerObject *vobj = select_node->getObject();
+                       if (vobj->getVolume())
+                       {
+                               LLVOVolume* volume = (LLVOVolume*) vobj;
+
+                               cost += volume->getRenderCost(textures);
+							   cost += textures.size() * LLVOVolume::ARC_TEXTURE_COST;
+							   textures.clear();
+                       }
+               }
+       }
 
 
-	return cost;
+       return cost;
 }
+
 
 // static
 void LLFloaterTools::setEditTool(void* tool_pointer)

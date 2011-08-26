@@ -2,24 +2,12 @@
 //
 #include "resource.h"
 
-#ifdef IDC_STATIC
-
-#undef IDC_STATIC
-
-#endif
-
-#define IDC_STATIC (-1)
-
-#include "WinResrc.h"
-
-
-
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-//#include "winres.h"
+#include "windows.h"
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
@@ -46,7 +34,7 @@ END
 
 2 TEXTINCLUDE 
 BEGIN
-    "#include ""winres.h""\r\n"
+    "#include ""windows.h""\r\n"
     "\0"
 END
 
@@ -66,20 +54,20 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_LL_ICON             ICON                    "firestorm_icon.ico"
-IDI_LCD_LL_ICON         ICON                    "firestorm_icon.ico"
+IDI_LL_ICON             ICON                    "ll_icon.ico"
+IDI_LCD_LL_ICON         ICON                    "icon1.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
 //
 
-SPLASHSCREEN DIALOG  32, 32, 144, 34
+SPLASHSCREEN DIALOG  32, 32, 264, 34
 STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_VISIBLE
 FONT 8, "MS Sans Serif"
 BEGIN
     ICON            IDI_LL_ICON,IDC_STATIC,7,7,20,20
-    LTEXT           "Loading Firestorm Viewer...",666,36,13,91,8
+    LTEXT           "Loading Firestorm ...",666,36,13,211,8
 END
 
 
@@ -94,7 +82,7 @@ BEGIN
     "SPLASHSCREEN", DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 137
+        RIGHTMARGIN, 257
         VERTGUIDE, 36
         TOPMARGIN, 7
         BOTTOMMARGIN, 27
@@ -135,19 +123,14 @@ TOOLBUY                 CURSOR                  "toolbuy.cur"
 TOOLOPEN                CURSOR                  "toolopen.cur"
 TOOLSIT                 CURSOR                  "toolsit.cur"
 
-TOOLBUY-LEGACY          CURSOR                  "toolbuy-legacy.cur"
-TOOLPAY-LEGACY          CURSOR                  "toolpay-legacy.cur"
-TOOLOPEN-LEGACY         CURSOR                  "toolopen-legacy.cur"
-TOOLSIT-LEGACY          CURSOR                  "toolsit-legacy.cur"
-
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,6,1,18383
- PRODUCTVERSION 2,6,1,18383
+ FILEVERSION 2,1,1,0
+ PRODUCTVERSION 2,1,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -162,14 +145,14 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "CompanyName", "Phoenix Viewer"
-            VALUE "FileDescription", "Phoenix Firestorm Viewer"
-            VALUE "FileVersion", "2.6.1.18383"
-            VALUE "InternalName", "Phoenix Firestorm Viewer"
-            VALUE "LegalCopyright", "Copyright © 2010 Phoenix Viewer"
-            VALUE "OriginalFilename", "Firestorm Viewer.exe"
-            VALUE "ProductName", "Phoenix Firestorm Viewer"
-            VALUE "ProductVersion", "2.6.1.18383"
+            VALUE "CompanyName", "The Phoenix Viewer Project"
+            VALUE "FileDescription", "Firestorm"
+            VALUE "FileVersion", "2.1.1.0"
+            VALUE "InternalName", "Second Life"
+            VALUE "LegalCopyright", "Copyright ï¿½ 2001-2010, The Phoenix Viewer Project"
+            VALUE "OriginalFilename", "Firestorm.exe"
+            VALUE "ProductName", "Second Life"
+            VALUE "ProductVersion", "2.1.1.0"
         END
     END
     BLOCK "VarFileInfo"

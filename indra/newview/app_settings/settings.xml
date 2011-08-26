@@ -1684,6 +1684,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>BrowserEnableJSObject</key>
+    <map>
+      <key>Comment</key>
+      <string>(WARNING: Advanced feature. Use if you are aware of the implications). Enable or disable the viewer to Javascript bridge object.</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>BlockAvatarAppearanceMessages</key>
         <map>
         <key>Comment</key>
@@ -2386,7 +2397,68 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>CertStore</key>
+
+  <key>CameraFocusTransitionTime</key>
+  <map>
+    <key>Comment</key>
+    <string>How many seconds it takes the camera to transition between focal distances</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.5</real>
+  </map>
+
+  <key>CameraFNumber</key>
+  <map>
+    <key>Comment</key>
+    <string>Camera f-number value for DoF effect</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>9.0</real>
+  </map>
+
+  <key>CameraFocalLength</key>
+  <map>
+    <key>Comment</key>
+    <string>Camera focal length for DoF effect (in millimeters)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>50</real>
+  </map>
+
+  <key>CameraFieldOfView</key>
+  <map>
+    <key>Comment</key>
+    <string>Vertical camera field of view for DoF effect (in degrees)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>60.0</real>
+  </map>
+
+  <key>CameraAspectRatio</key>
+  <map>
+    <key>Comment</key>
+    <string>Camera aspect ratio for DoF effect</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>1.5</real>
+  </map>
+
+  <key>CertStore</key>
     <map>
       <key>Comment</key>
       <string>Specifies the Certificate Store for certificate trust verification</string>
@@ -2806,6 +2878,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+  <key>CurlUseMultipleThreads</key>
+  <map>
+    <key>Comment</key>
+    <string>Use background threads for executing curl_multi_perform (requires restart)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
     <key>Cursor3D</key>
     <map>
       <key>Comment</key>
@@ -2930,7 +3013,7 @@
     <key>DebugShowRenderInfo</key>
     <map>
       <key>Comment</key>
-      <string>Show depth buffer contents</string>
+      <string>Show stats about current scene</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -2971,6 +3054,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+  <key>DebugShowUploadCost</key>
+  <map>
+    <key>Comment</key>
+    <string>Show mesh upload cost</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
   <key>DebugShowXUINames</key>
     <map>
       <key>Comment</key>
@@ -4259,17 +4353,6 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>FirstLoginThisInstall</key>
-    <map>
-      <key>Comment</key>
-      <string>Specifies that you have not successfully logged in since you installed the latest update</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
     <key>FirstName</key>
     <map>
       <key>Comment</key>
@@ -5206,6 +5289,28 @@
       <key>Value</key>
       <real>1.0</real>
     </map>
+    <key>InventoryDisplayInbox</key>
+    <map>
+        <key>Comment</key>
+        <string>Override received items inventory inbox display</string>
+        <key>Persist</key>
+        <integer>0</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>0</integer>
+    </map>
+    <key>InventoryDisplayOutbox</key>
+    <map>
+        <key>Comment</key>
+        <string>Override merchant inventory outbox display</string>
+        <key>Persist</key>
+        <integer>0</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>0</integer>
+    </map>
 	<key>InventoryLinking</key>
 	<map>
 		<key>Comment</key>
@@ -5883,7 +5988,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string />
+      <string/>
     </map>
     <key>LosslessJ2CUpload</key>
     <map>
@@ -5905,7 +6010,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>20.0</real>
+      <real>60.0</real>
     </map>
     <key>MapOverlayIndex</key>
     <map>
@@ -6660,7 +6765,62 @@
       <key>Value</key>
       <real>0</real>
     </map>
-    <key>MigrateCacheDirectory</key>
+  <key>MeshEnabled</key>
+  <map>
+    <key>Comment</key>
+    <string>Expose UI for mesh functionality (may require restart to take effect).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <real>1</real>
+  </map>
+  <key>MeshImportUseSLM</key>
+  <map>
+    <key>Comment</key>
+    <string>Use cached copy of last upload for a dae if available instead of loading dae file from scratch.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <real>1</real>
+  </map>
+  <key>MeshUploadLogXML</key>
+  <map>
+    <key>Comment</key>
+    <string>Verbose XML logging on mesh upload</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <real>0</real>
+  </map>
+  <key>MeshUploadFakeErrors</key>
+  <map>
+    <key>Comment</key>
+    <string>Force upload errors (for testing)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <real>0</real>
+  </map>
+  <key>MeshUploadTimeOut</key>
+  <map>
+    <key>Comment</key>
+    <string>Maximum time in seconds for llcurl to execute a mesh uoloading request</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <real>600</real>
+  </map>
+  <key>MigrateCacheDirectory</key>
     <map>
       <key>Comment</key>
       <string>Check for old version of disk cache to migrate to current location</string>
@@ -7367,6 +7527,66 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>0.0</real>
     </map>
+  <key>ObjectCostHighThreshold</key>
+  <map>
+    <key>Comment</key>
+    <string>Threshold at which object cost is considered high (displayed in red).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>50.0</real>
+  </map>
+  <key>ObjectCostLowColor</key>
+  <map>
+    <key>Comment</key>
+    <string>Color for object with a low object cost.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>0.0</real>
+      <real>0.5</real>
+      <real>1.0</real>
+      <real>0.5</real>
+    </array>
+  </map>
+  <key>ObjectCostMidColor</key>
+  <map>
+    <key>Comment</key>
+    <string>Color for object with a medium object cost.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>1.0</real>
+      <real>0.75</real>
+      <real>0.0</real>
+      <real>0.65</real>
+    </array>
+  </map>
+  <key>ObjectCostHighColor</key>
+  <map>
+    <key>Comment</key>
+    <string>Color for object a high object cost.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>1.0</real>
+      <real>0.0</real>
+      <real>0.0</real>
+      <real>0.75</real>
+    </array>
+  </map>
+  
     <key>ParcelMediaAutoPlayEnable</key>
     <map>
       <key>Comment</key>
@@ -7579,7 +7799,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-
+   <key>PostFirstLoginIntroURL</key>
+   <map>
+     <key>Comment</key>
+     <string>URL of intro presenatation after first time users first login</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>String</string>
+     <key>Value</key>
+     <string></string>
+   </map>
+  <key>PostFirstLoginIntroViewed</key>
+  <map>
+    <key>Comment</key>
+    <string>Flag indicating if user has seen intro presenatation after first time users first login</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+      <integer>0</integer>
+  </map>
     <key>PrecachingDelay</key>
     <map>
       <key>Comment</key>
@@ -7602,7 +7843,177 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
 	  <integer>13</integer>
     </map>
-	<key>PrimMediaMasterEnabled</key>
+
+  <key>PreviewAmbientColor</key>
+  <map>
+    <key>Comment</key>
+    <string>Ambient color of preview render.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>0.0</real>
+      <real>0.0</real>
+      <real>0.0</real>
+      <real>1.0</real>
+    </array>
+  </map>
+
+
+  <key>PreviewDiffuse0</key>
+  <map>
+    <key>Comment</key>
+    <string>Diffise color of preview light 0.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>1.0</real>
+      <real>1.0</real>
+      <real>1.0</real>
+      <real>1.0</real>
+    </array>
+  </map>
+
+  <key>PreviewDiffuse1</key>
+  <map>
+    <key>Comment</key>
+    <string>Diffise color of preview light 1.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>0.25</real>
+      <real>0.25</real>
+      <real>0.25</real>
+      <real>1.0</real>
+    </array>
+  </map>
+
+  <key>PreviewDiffuse2</key>
+  <map>
+    <key>Comment</key>
+    <string>Diffise color of preview light 2.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>1.0</real>
+      <real>1.0</real>
+      <real>1.0</real>
+      <real>1.0</real>
+    </array>
+  </map>
+
+  <key>PreviewSpecular0</key>
+  <map>
+    <key>Comment</key>
+    <string>Diffise color of preview light 0.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>1.0</real>
+      <real>1.0</real>
+      <real>1.0</real>
+      <real>1.0</real>
+    </array>
+  </map>
+
+  <key>PreviewSpecular1</key>
+  <map>
+    <key>Comment</key>
+    <string>Diffise color of preview light 1.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>1.0</real>
+      <real>1.0</real>
+      <real>1.0</real>
+      <real>1.0</real>
+    </array>
+  </map>
+
+  <key>PreviewSpecular2</key>
+  <map>
+    <key>Comment</key>
+    <string>Diffise color of preview light 2.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>1.0</real>
+      <real>1.0</real>
+      <real>1.0</real>
+      <real>1.0</real>
+    </array>
+  </map>
+
+
+  <key>PreviewDirection0</key>
+  <map>
+    <key>Comment</key>
+    <string>Direction of light 0 for preview render.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Vector3</string>
+    <key>Value</key>
+    <array>
+      <real>-0.75</real>
+      <real>1</real>
+      <real>1.0</real>
+    </array>
+  </map>
+
+  <key>PreviewDirection1</key>
+  <map>
+    <key>Comment</key>
+    <string>Direction of light 1 for preview render.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Vector3</string>
+    <key>Value</key>
+    <array>
+      <real>0.5</real>
+      <real>-0.6</real>
+      <real>0.4</real>
+    </array>
+  </map>
+  
+  <key>PreviewDirection2</key>
+  <map>
+    <key>Comment</key>
+    <string>Direction of light 2 for preview render.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Vector3</string>
+    <key>Value</key>
+    <array>
+      <real>0.5</real>
+      <real>-0.8</real>
+      <real>0.3</real>
+    </array>
+  </map>
+
+  <key>PrimMediaMasterEnabled</key>
 	<map>
 	  <key>Comment</key>
       <string>Whether or not Media on a Prim is enabled.</string>
@@ -7990,6 +8401,75 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+
+  <key>OctreeMaxNodeCapacity</key>
+  <map>
+    <key>Comment</key>
+    <string>Maximum number of elements to store in a single octree node</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>128</integer>
+  </map>
+
+  <key>OctreeStaticObjectSizeFactor</key>
+  <map>
+    <key>Comment</key>
+    <string>Multiplier on static object size for determining octree node size </string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>4</integer>
+  </map>
+
+  <key>OctreeAlphaDistanceFactor</key>
+  <map>
+    <key>Comment</key>
+    <string>Multiplier on alpha object distance for determining octree node size </string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Vector3</string>
+    <key>Value</key>
+    <array>
+      <real>0.1</real>
+      <real>0.0</real>
+      <real>0.0</real>
+    </array>
+  </map>
+
+  <key>OctreeAttachmentSizeFactor</key>
+  <map>
+    <key>Comment</key>
+    <string>Multiplier on attachment size for determining octree node size </string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>4</integer>
+  </map>
+
+  <key>OctreeDistanceFactor</key>
+  <map>
+    <key>Comment</key>
+    <string>Multiplier on distance for determining octree node size </string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Vector3</string>
+    <key>Value</key>
+    <array>
+      <real>0.01</real>
+      <real>0.0</real>
+      <real>0.0</real>
+    </array>
+  </map>
+
     <key>RenderAnisotropic</key>
     <map>
       <key>Comment</key>
@@ -8100,7 +8580,33 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-  
+    <key>RenderPerformanceTest</key>
+    <map>
+      <key>Comment</key>
+            <string>
+                Disable rendering of everything but in-world content for
+                performance testing
+</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+   
+  <key>RenderLocalLights</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether or not to render local lights.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
   <key>RenderShadowNearDist</key>
   <map>
     <key>Comment</key>
@@ -8237,7 +8743,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>Vector3</string>
     <key>Value</key>
     <array>
-      <real>0.40</real>
+      <real>0.80</real>
       <real>1.00</real>
       <real>0.00</real>
     </array>
@@ -8297,7 +8803,18 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>RenderDebugPipeline</key>
+  <key>RenderDebugNormalScale</key>
+  <map>
+    <key>Comment</key>
+    <string>Scale of normals in debug display.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.03</real>
+  </map>
+  <key>RenderDebugPipeline</key>
     <map>
       <key>Comment</key>
       <string>Enable strict pipeline debugging.</string>
@@ -8308,6 +8825,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+  <key>RenderMaxTextureIndex</key>
+  <map>
+    <key>Comment</key>
+    <string>Maximum texture index to use for indexed texture rendering.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>6</integer>
+  </map>
     <key>RenderDebugTextureBind</key>
     <map>
       <key>Comment</key>
@@ -8330,6 +8858,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
+ 
   <key>RenderAnimateRes</key>
   <map>
     <key>Comment</key>
@@ -8341,7 +8870,31 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
-  
+
+  <key>RenderBakeSunlight</key>
+  <map>
+    <key>Comment</key>
+    <string>Bake sunlight into vertex buffers for static objects.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>RenderNoAlpha</key>
+  <map>
+    <key>Comment</key>
+    <string>Disable rendering of alpha objects (render all alpha objects as alpha masks).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
   <key>RenderAnimateTrees</key>
   <map>
     <key>Comment</key>
@@ -8498,6 +9051,18 @@ Change of this parameter will affect the layout of buttons in notification toast
     <real>16.0</real>
    </map>
 
+  <key>RenderMinimumLODTriangleCount</key>
+  <map>
+    <key>Comment</key>
+    <string>Triangle count threshold at which automatic LOD generation stops</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <real>16</real>
+  </map>
+
   <key>RenderEdgeDepthCutoff</key>
   <map>
     <key>Comment</key>
@@ -8588,7 +9153,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>0.01</real>
   </map>
-
   <key>RenderShadowBiasError</key>
   <map>
     <key>Comment</key>
@@ -8610,6 +9174,18 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>F32</string>
     <key>Value</key>
     <real>0</real>
+  </map>
+
+  <key>RenderDepthOfField</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether to use depth of field effect when lighting and shadows are enabled</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
   </map>
   
   <key>RenderSpotLightsInNondeferred</key>
@@ -8633,7 +9209,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>0.0</real>
+    <real>-0.001</real>
   </map>
   <key>RenderSpotShadowOffset</key>
   <map>
@@ -8855,30 +9431,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <integer>1</integer>
   </map>
 
-  <key>RenderDeferredLocalLights</key>
-  <map>
-    <key>Comment</key>
-    <string>Execute local lighting shader in deferred renderer.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>1</integer>
-  </map>
-
-  <key>RenderDeferredFullscreenLights</key>
-  <map>
-    <key>Comment</key>
-    <string>Execute local lighting shader in deferred renderer.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>1</integer>
-  </map>
-
   <key>RenderDeferredSunWash</key>
   <map>
     <key>Comment</key>
@@ -8921,7 +9473,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>1.1</real>
+    <real>0.8</real>
   </map>
 
   <key>RenderShadowGaussian</key>
@@ -8971,7 +9523,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>0.1</real>
+    <real>0</real>
   </map>
 
   <key>RenderGIAmbiance</key>
@@ -9191,9 +9743,9 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Vector3</string>
       <key>Value</key>
       <array>
-        <real>0.299</real>
-        <real>0.587</real>
-        <real>0.114</real>
+        <real>1</real>
+        <real>0</real>
+        <real>0</real>
       </array>
     </map>
     <key>RenderGlowMaxExtractAlpha</key>
@@ -9205,7 +9757,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.065</real>
+      <real>0.25</real>
     </map>
     <key>RenderGlowMinLuminance</key>
     <map>
@@ -9216,7 +9768,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>2.5</real>
+      <real>9999</real>
     </map>
     <key>RenderGlowResolutionPow</key>
     <map>
@@ -9330,7 +9882,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>RenderHideGroupTitle</key>
     <map>
@@ -9429,7 +9981,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>S32</string>
     <key>Value</key>
-    <integer>8192</integer>
+    <integer>65536</integer>
   </map>
     <key>RenderMaxVBOSize</key>
     <map>
@@ -9793,7 +10345,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
   <key>RenderUseStreamVBO</key>
   <map>
@@ -9806,7 +10358,18 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>1</integer>
   </map>
-    <key>RenderVolumeLODFactor</key>
+	<key>RenderPreferStreamDraw</key>
+	<map>
+		<key>Comment</key>
+		<string>Use GL_STREAM_DRAW in place of GL_DYNAMIC_DRAW</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>Boolean</string>
+		<key>Value</key>
+		<integer>0</integer>
+	</map>
+	<key>RenderVolumeLODFactor</key>
     <map>
       <key>Comment</key>
       <string>Controls level of detail of primitives (multiplier for current screen area when calculated level of detail)</string>
@@ -9883,7 +10446,74 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>1.0</real>
     </map>
-    <key>SafeMode</key>
+  <key>MeshTriangleBudget</key>
+  <map>
+    <key>Comment</key>
+    <string>Target visible triangle budget to use when estimating streaming cost.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <real>250000</real>
+  </map>
+  <key>MeshMetaDataDiscount</key>
+  <map>
+    <key>Comment</key>
+    <string>Number of bytes to deduct for metadata when determining streaming cost.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <real>384</real>
+  </map>
+  <key>MeshMinimumByteSize</key>
+  <map>
+    <key>Comment</key>
+    <string>Minimum number of bytes per LoD block when determining streaming cost.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <real>16</real>
+  </map>
+  <key>MeshBytesPerTriangle</key>
+  <map>
+    <key>Comment</key>
+    <string>Approximation of bytes per triangle to use for determining mesh streaming cost.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <real>16</real>
+  </map>
+
+  <key>MeshMaxConcurrentRequests</key>
+  <map>
+    <key>Comment</key>
+    <string>Number of threads to use for loading meshes.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>32</integer>
+  </map>
+   <key>RunMultipleThreads</key>
+    <map>
+      <key>Comment</key>
+      <string>If TRUE keep background threads active during render</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+  <key>SafeMode</key>
     <map>
       <key>Comment</key>
       <string>Reset preferences, run in safe mode.</string>
@@ -10096,6 +10726,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Newly created objects are shared with the currently active group</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>ShowAdvancedBuilderOptions</key>
+    <map>
+      <key>Comment</key>
+      <string>Shows physics and display weight</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10580,6 +11221,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Show/hide permission icons in the friend list</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>NearbyListShowMap</key>
+    <map>
+      <key>Comment</key>
+      <string>Show/hide map above nearby people list</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -11074,17 +11726,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>0.300000011921</real>
     </map>
-    <key>SkyEditPresets</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether to be able to edit the sky defaults or not</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>SkyNightColorShift</key>
     <map>
       <key>Comment</key>
@@ -11125,17 +11766,6 @@ Change of this parameter will affect the layout of buttons in notification toast
         <real>0.0</real>
         <real>0.1</real>
       </array>
-    </map>
-    <key>SkyUseClassicClouds</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether to use the old Second Life particle clouds or not</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
     </map>
     <key>SnapEnabled</key>
     <map>
@@ -11301,6 +11931,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string>pilot.txt</string>
+    </map>
+    <key>StatsPilotXMLFile</key>
+    <map>
+      <key>Comment</key>
+      <string>Filename for stats logging extended autopilot path</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>pilot.xml</string>
     </map>
     <key>StatsQuitAfterRuns</key>
     <map>
@@ -11762,7 +12403,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <real>-2</real>
+      <real>-1</real>
     </map>
     <key>UIExtraTriangleWidth</key>
     <map>
@@ -11773,7 +12414,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <real>2</real>
+      <real>4</real>
     </map>
     <key>UIFloaterCloseBoxSize</key>
     <map>
@@ -12923,6 +13564,61 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>UseEnvironmentFromRegion</key>
+    <map>
+      <key>Comment</key>
+      <string>Choose whether to use the region's environment settings, or override them with the local settings.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>UseDayCycle</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether to use use a day cycle or a fixed sky.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>WaterPresetName</key>
+    <map>
+      <key>Comment</key>
+      <string>Water preset to use. May be superseded by region settings.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>Default</string>
+    </map>
+    <key>SkyPresetName</key>
+    <map>
+      <key>Comment</key>
+      <string>Sky preset to use. May be superseded by region settings or by a day cycle (see DayCycleName).</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>Default</string>
+    </map>
+    <key>DayCycleName</key>
+    <map>
+      <key>Comment</key>
+      <string>Day cycle to use. May be superseded by region settings.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>Default</string>
+    </map>
     <key>UseExternalBrowser</key>
     <map>
       <key>Comment</key>
@@ -12976,7 +13672,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>SpeakerParticipantDefaultOrder</key>
     <map>
@@ -13520,13 +14216,13 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>WatchdogEnabled</key>
     <map>
       <key>Comment</key>
-      <string>Controls whether the thread watchdog timer is activated.</string>
+      <string>Controls whether the thread watchdog timer is activated. Value is boolean. Set to -1 to defer to built-in default.</string>
       <key>Persist</key>
       <integer>0</integer>
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>-1</integer>
+      <integer>0</integer>
     </map>
     <key>WaterEditPresets</key>
     <map>
@@ -13567,6 +14263,8 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>F32</string>
       <key>Value</key>
       <real>16.0</real>
+=======
+>>>>>>> other
     </map>
 
 
@@ -13881,6 +14579,17 @@ Change of this parameter will affect the layout of buttons in notification toast
 		<key>Value</key>
 		<integer>1</integer>
 	</map>
+    <key>SLURLPassToOtherInstance</key>
+    <map>
+    <key>Comment</key>
+    <string>Pass execution to prevoius viewer instances if there is a given slurl</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+    </map>
     <key>soundsbeacon</key>
     <map>
       <key>Comment</key>
@@ -15081,6 +15790,44 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>WebProfileRect</key>
+    <map>
+      <key>Comment</key>
+      <string>Web profile dimensions</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Rect</string>
+      <key>Value</key>
+      <array>
+        <integer>0</integer>
+        <integer>650</integer>
+        <integer>490</integer>
+        <integer>0</integer>
+        </array>
+    </map>
+    <key>HelpFloaterOpen</key>
+    <map>
+      <key>Comment</key>
+      <string>Show Help Floater on login?</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>ShowHelpOnFirstLogin</key>
+    <map>
+      <key>Comment</key>
+      <string>Show Help Floater on first login</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
 
 </map>

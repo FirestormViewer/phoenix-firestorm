@@ -89,7 +89,7 @@ protected:
 	void		onBtnCancel();
 	void		onBtnApply();
 
-	void		onClickBrowserClearCache();
+	void		onClickBrowserClearCache();		// Clear web history and caches as well as viewer caches above
 	void		onLanguageChange();
 	void		onNameTagOpacityChange(const LLSD& newvalue);
 
@@ -105,7 +105,7 @@ protected:
 	void onChangeCustom();
 	void updateMeterText(LLUICtrl* ctrl);
 	void onOpenHardwareSettings();
-	/// callback for defaults
+	// callback for defaults
 	void setHardwareDefaults();
 	// callback for when client turns on shaders
 	void onVertexShaderEnable();
@@ -132,7 +132,7 @@ public:
 	void onClickBrowseCrashLogs();
 	void onClickBrowseChatLogDir();
 	void onClickResetCache();
-	void onClickClearCache();
+	void onClickClearCache(); // AO: was protected, moved to public
 	void onClickBrowseSettingsDir();
 	void onClickSkin(LLUICtrl* ctrl,const LLSD& userdata);
 	void onSelectSkin();

@@ -41,6 +41,7 @@ class LLMenuGL;
 class LLCallingCardObserver;
 class LLViewerJointAttachment;
 
+
 typedef std::vector<std::string> menuentry_vec_t;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -141,6 +142,7 @@ protected:
 //-TT Client LSL Bridge
 	BOOL isProtectedFolder() const;
 //-TT
+	BOOL isInboxFolder() const; // true if COF or descendent of marketplace inbox
 	virtual BOOL isItemPermissive() const;
 	static void changeItemParent(LLInventoryModel* model,
 								 LLViewerInventoryItem* item,
@@ -529,6 +531,24 @@ protected:
 	static std::string sPrefix;
 };
 
+
+class LLMeshBridge : public LLItemBridge
+{
+	friend class LLInvFVBridge;
+public:
+	virtual LLUIImagePtr getIcon() const;
+	virtual void openItem();
+	virtual void previewItem();
+	virtual void buildContextMenu(LLMenuGL& menu, U32 flags);
+
+protected:
+	LLMeshBridge(LLInventoryPanel* inventory, 
+		     LLFolderView* root,
+		     const LLUUID& uuid) :
+                       LLItemBridge(inventory, root, uuid) {}
+};
+
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLInvFVBridgeAction
 //
@@ -559,6 +579,18 @@ protected:
 	LLInventoryModel* mModel;
 };
 
+class LLMeshBridgeAction: public LLInvFVBridgeAction
+{
+	friend class LLInvFVBridgeAction;
+public:
+	virtual void	doIt() ;
+	virtual ~LLMeshBridgeAction(){}
+protected:
+	LLMeshBridgeAction(const LLUUID& id,LLInventoryModel* model):LLInvFVBridgeAction(id,model){}
+
+};
+
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Recent Inventory Panel related classes
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -566,6 +598,7 @@ protected:
 // Overridden version of the Inventory-Folder-View-Bridge for Folders
 class LLRecentItemsFolderBridge : public LLFolderBridge
 {
+	friend class LLInvFVBridgeAction;
 public:
 	// Creates context menu for Folders related to Recent Inventory Panel.
 	// Uses base logic and than removes from visible items "New..." menu items.

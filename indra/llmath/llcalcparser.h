@@ -172,3 +172,4 @@ private:
 };
 
 #endif // LL_CALCPARSER_H
+

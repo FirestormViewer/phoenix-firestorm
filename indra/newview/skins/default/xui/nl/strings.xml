@@ -855,9 +855,6 @@
 	<string name="InvFolder My Inventory">
 		Mijn Inventaris
 	</string>
-	<string name="InvFolder Favorites">
-		Mijn Favorieten
-	</string>
 	<string name="InvFolder Library">
 		Bibliotheek
 	</string>
@@ -916,10 +913,10 @@
 		Gebaren
 	</string>
 	<string name="InvFolder Favorite">
-		Favoriten
+		Mijn Favorieten
 	</string>
 	<string name="InvFolder favorite">
-		Favoriten
+		Mijn Favorieten
 	</string>
 	<string name="InvFolder Current Outfit">
 		Huidige Uitrusting
@@ -1237,8 +1234,8 @@
 	<string name="Unknown">
 		(Unknown)
 	</string>
-	<string name="SummaryForTheWeek" value="Samenvatting voor deze week, vanaf"/>
-	<string name="NextStipendDay" value="The next stipend day is"/>
+	<string name="SummaryForTheWeek" value="Samenvatting voor deze week, vanaf "/>
+	<string name="NextStipendDay" value=". The next stipend day is "/>
 	<string name="GroupIndividualShare" value="Groep       Individueel Aandeel"/>
 	<string name="Balance">
 		Banksaldo

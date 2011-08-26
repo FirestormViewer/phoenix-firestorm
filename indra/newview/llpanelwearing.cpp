@@ -219,8 +219,8 @@ LLPanelWearing::~LLPanelWearing()
 	if (gInventory.containsObserver(mCategoriesObserver))
 	{
 		gInventory.removeObserver(mCategoriesObserver);
-		delete mCategoriesObserver;
 	}
+	delete mCategoriesObserver;
 }
 
 BOOL LLPanelWearing::postBuild()
@@ -333,10 +333,12 @@ void LLPanelWearing::copyToClipboard()
 	std::string text;
 	std::vector<LLSD> data;
 	mCOFItemsList->getValues(data);
+
 	for(std::vector<LLSD>::const_iterator iter = data.begin(); iter != data.end();)
 	{
 		LLSD uuid = (*iter);
 		LLViewerInventoryItem* item = gInventory.getItem(uuid);
+
 		iter++;
 		if (item != NULL)
 		{

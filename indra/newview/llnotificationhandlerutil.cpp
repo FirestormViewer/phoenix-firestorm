@@ -27,6 +27,16 @@
 
 #include "llviewerprecompiledheaders.h" // must be first include
 
+#include "llavatarnamecache.h"
+
+#include "llfloaterreg.h"
+#include "llnotifications.h"
+#include "llurlaction.h"
+
+#include "llagent.h"
+#include "llimfloater.h"
+#include "llimview.h"
+#include "llnearbychat.h"
 #include "llnotificationhandler.h"
 #include "llnotifications.h"
 #include "llimview.h"
@@ -334,6 +344,11 @@ void LLHandlerUtil::logToIM(const EInstantMessage& session_type,
 // [SL:KB] - Patch: Chat-Logs | Checked: 2010-11-18 (Catznip-2.4.0c) | Added: Catznip-2.4.0c
 		LLIMModel::instance().logToFile(file_name, from, from_id, message);
 // [/SL:KB]
+		//-TT 2.8.2 merge changes - left out for now
+		//// Build a new format username or firstname_lastname for legacy names
+		//// to use it for a history log filename.
+		//std::string user_name = LLCacheName::buildUsername(session_name);
+		//LLIMModel::instance().logToFile(user_name, from, from_id, message);
 	}
 	else
 	{

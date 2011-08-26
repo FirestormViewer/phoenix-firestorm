@@ -164,6 +164,7 @@ protected:
 	 */
 	LLSocket(apr_socket_t* socket, apr_pool_t* pool);
 
+
 public:
 	/** 
 	 * @brief Do not call this directly.

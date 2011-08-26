@@ -55,6 +55,8 @@
 		</menu>
         <menu_item_check label="Gesten" name="Gestures"/>
         <menu_item_check label="Sprachfilter" name="ShowVoice"/>
+		<menu_item_call label="Leute in der Nähe" name="Active Speakers"/>
+		<menu_item_check label="Stimme in der Nähe" name="Nearby Voice"/>
 	</menu>
 	<menu label="Welt" name="World">
         <menu_item_call label="Avatare in der Nähe" name="Active Speakers"/>
@@ -84,7 +86,24 @@
 			<menu_item_call label="Mittag" name="Noon"/>
 			<menu_item_call label="Sonnenuntergang" name="Sunset"/>
 			<menu_item_call label="Mitternacht" name="Midnight"/>
-			<menu_item_call label="Grundbesitzzeit" name="Revert to Region Default"/>
+		</menu>
+		<menu label="Umgebungs-Editor" name="Enviroment Editor">
+			<menu_item_call label="Umgebungseinstellungen..." name="Enviroment Settings"/>
+			<menu label="Wasser-Voreinstellungen" name="Water Presets">
+				<menu_item_call label="Neue Voreinstellung..." name="new_water_preset"/>
+				<menu_item_call label="Voreinstellung bearbeiten..." name="edit_water_preset"/>
+				<menu_item_call label="Voreinstellung löschen..." name="delete_water_preset"/>
+			</menu>
+			<menu label="Himmel-Voreinstellungen" name="Sky Presets">
+				<menu_item_call label="Neue Voreinstellung..." name="new_sky_preset"/>
+				<menu_item_call label="Voreinstellung bearbeiten..." name="edit_sky_preset"/>
+				<menu_item_call label="Voreinstellung löschen..." name="delete_sky_preset"/>
+			</menu>
+			<menu label="Tag-Voreinstellungen" name="Day Presets">
+				<menu_item_call label="Neue Voreinstellung..." name="new_day_preset"/>
+				<menu_item_call label="Voreinstellung bearbeiten..." name="edit_day_preset"/>
+				<menu_item_call label="Voreinstellung löschen..." name="delete_day_preset"/>
+			</menu>
 		</menu>
 		<menu_item_call label="Umwelt-Editor" name="Environment Editor"/>
         <menu_item_call label="Himmel-Editor" name="Windlight"/>
@@ -143,6 +162,8 @@
 			<menu_item_call label="Bild ([COST] L$)..." name="Upload Image"/>
 			<menu_item_call label="Sound ([COST] L$)..." name="Upload Sound"/>
 			<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
+			<menu_item_call label="Modell..." name="Upload Model"/>
+			<menu_item_call label="Modellassistent..." name="Upload Model Wizard"/>
 			<menu_item_call label="Mehrfach-Upload ([COST] L$ pro Datei)..." name="Bulk Upload"/>
 			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
 		</menu>
@@ -191,7 +212,7 @@
 			<menu_item_check label="Alpha" name="Alpha"/>
 			<menu_item_check label="Baum" name="Tree"/>
 			<menu_item_check label="Avatare" name="Character"/>
-			<menu_item_check label="SurfacePath" name="SurfacePath"/>
+			<menu_item_check label="Flächenpatch" name="Surface Patch"/>
 			<menu_item_check label="Himmel" name="Sky"/>
 			<menu_item_check label="Wasser" name="Water"/>
 			<menu_item_check label="Boden" name="Ground"/>
@@ -268,6 +289,7 @@
 			<menu_item_check label="Texture-Kategorie" name="Texture Category"/>
 			<menu_item_check label="Schnelle Timer" name="Fast Timers"/>
 			<menu_item_check label="Speicher" name="Memory"/>
+			<menu_item_check label="Szenestatistiken" name="Scene Statistics"/>
 			<menu_item_call label="Info zu Region in Fenster Fehler beseitigen" name="Region Info to Debug Console"/>
 			<menu_item_call label="Gruppeninfo in Fenster Fehler beseitigen" name="Group Info to Debug Console"/>
 			<menu_item_call label="Info zu Fähigkeiten in Fenster Fehler beseitigen" name="Capabilities Info to Debug Console"/>
@@ -278,7 +300,7 @@
 		</menu>
 		<menu label="Info anzeigen" name="Display Info">
 			<menu_item_check label="Zeit anzeigen" name="Show Time"/>
-			<menu_item_check label="Texture-Informationen anzeigen" name="Show Texture Info"/>
+			<menu_item_check label="Kosten für Hochladen anzeigen" name="Show Upload Cost"/>
 			<menu_item_check label="Render-Info anzeigen" name="Show Render Info"/>
 			<menu_item_check label="Texturinfos anzeigen" name="Show Texture Info"/>
 			<menu_item_check label="Matrizen anzeigen" name="Show Matrices"/>
@@ -304,8 +326,10 @@
 		</menu>
 		<menu label="Metadaten darstellen" name="Render Metadata">
 			<menu_item_check label="Bonding Boxes" name="Bounding Boxes"/>
+			<menu_item_check label="Normalen" name="Normals"/>
 			<menu_item_check label="Octree" name="Octree"/>
 			<menu_item_check label="Shadow Frusta" name="Shadow Frusta"/>
+			<menu_item_check label="Physische Formen" name="Physics Shapes"/>
 			<menu_item_check label="Okklusion" name="Occlusion"/>
 			<menu_item_check label="Bündel rendern" name="Render Batches"/>
 			<menu_item_check label="Typ aktualisieren" name="Update Type"/>
@@ -313,9 +337,12 @@
 			<menu_item_check label="Textur-Priorität" name="Texture Priority"/>
 			<menu_item_check label="Texturbereich" name="Texture Area"/>
 			<menu_item_check label="Oberflächenbereich" name="Face Area"/>
+			<menu_item_check label="Detailstufeninfos" name="LOD Info"/>
+			<menu_item_check label="Konstruktionswarteschlange" name="Build Queue"/>
 			<menu_item_check label="Lichter" name="Lights"/>
 			<menu_item_check label="Gelenkpunkte" name="Collision Skeleton"/>
 			<menu_item_check label="Raycast" name="Raycast"/>
+			<menu_item_check label="Formen" name="Sculpt"/>
 		</menu>
 		<menu label="Rendering" name="Rendering">
 			<menu_item_check label="Achsen" name="Axes"/>
@@ -323,7 +350,6 @@
 			<menu_item_call label="Texturinfo für ausgewähltes Objekt" name="Selected Texture Info Basis"/>
 			<menu_item_check label="Wireframe" name="Wireframe"/>
 			<menu_item_check label="Objekt-Objekt Okklusion" name="Object-Object Occlusion"/>
-			<menu_item_check label="Framebuffer-Objekte" name="Framebuffer Objects"/>
 			<menu_item_check label="Licht und Schatten" name="Lighting and Shadows"/>
 			<menu_item_check label="Schatten von Sonne-/Mond-Projektoren" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="SSAO und Schattenglättung" name="SSAO and Shadow Smoothing"/>
@@ -424,6 +450,7 @@
 			<menu_item_call label="Avatarwolken-Partikel neu laden" name="Reload Avatar Cloud Particle"/>
 		</menu>
 		<menu_item_check label="HTTP-Texturen" name="HTTP Textures"/>
+		<menu_item_check label="HTTP-Inventar" name="HTTP Inventory"/>
 		<menu_item_call label="Bilder komprimieren" name="Compress Images"/>
 		<menu_item_check label="Ausgabe Fehlerbeseitigung ausgeben" name="Output Debug Minidump"/>
 		<menu_item_check label="Bei nächster Ausführung Fenster öffnen" name="Console Window"/>

@@ -28,7 +28,7 @@
 #ifndef LL_LLFLOATERSEARCH_H
 #define LL_LLFLOATERSEARCH_H
 
-#include "llfloater.h"
+#include "llfloaterwebcontent.h"
 #include "llviewermediaobserver.h"
 
 #include <string>
@@ -43,22 +43,37 @@ class LLMediaCtrl;
 /// so that the user can click on teleport links in search results.
 ///
 class LLFloaterSearch : 
-	public LLFloater, 
-	public LLViewerMediaObserver
+	public LLFloaterWebContent
 {
 public:
-	LLFloaterSearch(const LLSD& key);
+	struct SearchQuery : public LLInitParam::Block<SearchQuery>
+	{
+		Optional<std::string> category;
+		Optional<std::string> query;
+
+		SearchQuery();
+	};
+
+	struct _Params : public LLInitParam::Block<_Params, LLFloaterWebContent::Params>
+	{
+		Optional<SearchQuery> search;
+	};
+
+	typedef LLSDParamAdapter<_Params> Params;
+
+	LLFloaterSearch(const Params& key);
 
 	/// show the search floater with a new search
 	/// see search() for details on the key parameter.
 	/*virtual*/ void onOpen(const LLSD& key);
+	/*virtual*/ void onClose(bool app_quitting);
 
 	/// perform a search with the specific search term.
 	/// The key should be a map that can contain the following keys:
 	///  - "id": specifies the text phrase to search for
 	///  - "category": one of "all" (default), "people", "places",
 	///    "events", "groups", "wiki", "destinations", "classifieds"
-	void search(const LLSD &key);
+	void search(const SearchQuery &query);
 
 	/// changing godmode can affect the search results that are
 	/// returned by the search website - use this method to tell the
@@ -68,10 +83,6 @@ public:
 private:
 	/*virtual*/ BOOL postBuild();
 
-	// inherited from LLViewerMediaObserver
-	/*virtual*/ void handleMediaEvent(LLPluginClassMedia *self, EMediaEvent event);
-
-	LLMediaCtrl *mBrowser;
 	LLSD        mCategoryPaths;
 	U8          mSearchGodLevel;
 };

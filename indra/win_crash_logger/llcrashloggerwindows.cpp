@@ -310,6 +310,7 @@ void LLCrashLoggerWindows::gatherPlatformSpecificFiles()
 
 bool LLCrashLoggerWindows::mainLoop()
 {	
+	llinfos << "CrashSubmitBehavior is " << mCrashBehavior << llendl;
 
 	// Note: parent hwnd is 0 (the desktop).  No dlg proc.  See Petzold (5th ed) HexCalc example, Chapter 11, p529
 	// win_crash_logger.rc has been edited by hand.
@@ -322,6 +323,7 @@ bool LLCrashLoggerWindows::mainLoop()
 
 	if (mCrashBehavior == CRASH_BEHAVIOR_ALWAYS_SEND)
 	{
+		llinfos << "Showing crash report submit progress window." << llendl;
 		ShowWindow(gHwndProgress, SW_SHOW );
 		sendCrashLogs();
 	}
@@ -368,7 +370,7 @@ bool LLCrashLoggerWindows::mainLoop()
 
 void LLCrashLoggerWindows::updateApplication(const std::string& message)
 {
-	LLCrashLogger::updateApplication();
+	LLCrashLogger::updateApplication(message);
 	if(!message.empty()) show_progress(message);
 	update_messages();
 }
@@ -384,6 +386,3 @@ bool LLCrashLoggerWindows::cleanup()
 	PostQuitMessage(0);
 	return true;
 }
-
-
-

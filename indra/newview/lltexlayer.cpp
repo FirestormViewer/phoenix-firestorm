@@ -45,14 +45,15 @@
 #include "llagentwearables.h"
 #include "llwearable.h"
 #include "llviewercontrol.h"
+#include "llviewershadermgr.h"
 #include "llviewervisualparam.h"
 
 //#include "../tools/imdebug/imdebug.h"
 
 using namespace LLVOAvatarDefines;
 
-const S32 BAKE_UPLOAD_ATTEMPTS = 5;
-const F32 BAKE_UPLOAD_RETRY_DELAY = 5.f;
+static const S32 BAKE_UPLOAD_ATTEMPTS = 7;
+static const F32 BAKE_UPLOAD_RETRY_DELAY = 2.f; // actual delay grows by power of 2 each attempt
 
 class LLTexLayerInfo
 {
@@ -97,7 +98,7 @@ private:
 LLBakedUploadData::LLBakedUploadData(const LLVOAvatarSelf* avatar,
 									 LLTexLayerSet* layerset,
 									 const LLUUID& id,
-									 BOOL highest_res) :
+									 bool highest_res) :
 	mAvatar(avatar),
 	mTexLayerSet(layerset),
 	mID(id),
@@ -294,11 +295,17 @@ BOOL LLTexLayerSetBuffer::render()
 	
 	BOOL success = TRUE;
 
+	//hack to use fixed function when updating tex layer sets
+	bool no_ff = LLGLSLShader::sNoFixedFunction;
+	LLGLSLShader::sNoFixedFunction = false;
+	
 	// Composite the color data
 	LLGLSUIDefault gls_ui;
 	success &= mTexLayerSet->render( mOrigin.mX, mOrigin.mY, mFullWidth, mFullHeight );
 	gGL.flush();
 
+	LLGLSLShader::sNoFixedFunction = no_ff;
+	
 	if(upload_now)
 	{
 		if (!success)
@@ -363,18 +370,17 @@ BOOL LLTexLayerSetBuffer::isReadyToUpload() const
 	if (!gAgentQueryManager.hasNoPendingQueries()) return FALSE; // Can't upload if there are pending queries.
 	if (isAgentAvatarValid() && !gAgentAvatarp->isUsingBakedTextures()) return FALSE; // Don't upload if avatar is using composites.
 
-
-	BOOL res = FALSE;
+	BOOL ready = FALSE;
 	if (mTexLayerSet->isLocalTextureDataFinal())
 	{
 		// If we requested an upload and have the final LOD ready, upload (or wait a while if this is a retry)
 		if (mUploadFailCount == 0)
 		{
-			res = TRUE;
+			ready = TRUE;
 		}
 		else
 		{
-			res = mUploadRetryTimer.getElapsedTimeF32() >= BAKE_UPLOAD_RETRY_DELAY;
+			ready = mUploadRetryTimer.getElapsedTimeF32() >= BAKE_UPLOAD_RETRY_DELAY * (1 << (mUploadFailCount - 1));
 		}
 	}
 	else
@@ -391,11 +397,11 @@ BOOL LLTexLayerSetBuffer::isReadyToUpload() const
 			// If we hit our timeout and have textures available at even lower resolution, then upload.
 			const BOOL is_upload_textures_timeout = mNeedsUploadTimer.getElapsedTimeF32() >= texture_timeout_threshold;
 			const BOOL has_lower_lod = mTexLayerSet->isLocalTextureDataAvailable();
-			res = has_lower_lod && is_upload_textures_timeout;
+
+			ready = has_lower_lod && is_upload_textures_timeout;
 		}
 	}
-
-	return res;
+	return ready;
 }
 
 BOOL LLTexLayerSetBuffer::isReadyToUpdate() const
@@ -503,7 +509,7 @@ void LLTexLayerSetBuffer::doUpload()
 			
 			if (valid)
 			{
-				const BOOL highest_lod = mTexLayerSet->isLocalTextureDataFinal();
+				const bool highest_lod = mTexLayerSet->isLocalTextureDataFinal();
 				// Baked_upload_data is owned by the responder and deleted after the request completes.
 				LLBakedUploadData* baked_upload_data = new LLBakedUploadData(gAgentAvatarp, 
 																			 this->mTexLayerSet, 
@@ -516,7 +522,7 @@ void LLTexLayerSetBuffer::doUpload()
 				const std::string url = gAgent.getRegion()->getCapability("UploadBakedTexture");
 				if(!url.empty()
 					&& !LLPipeline::sForceOldBakedUpload // toggle debug setting UploadBakedTexOld to change between the new caps method and old method
-					&& (mUploadFailCount < BAKE_UPLOAD_ATTEMPTS-1)) // Try last ditch attempt via asset store if cap upload is failing.
+					&& (mUploadFailCount < (BAKE_UPLOAD_ATTEMPTS - 1))) // Try last ditch attempt via asset store if cap upload is failing.
 				{
 					LLSD body = LLSD::emptyMap();
 					// The responder will call LLTexLayerSetBuffer::onTextureUploadComplete()
@@ -665,15 +671,17 @@ void LLTexLayerSetBuffer::onTextureUploadComplete(const LLUUID& uuid,
 			{	
 				++failures;
 				S32 max_attempts = baked_upload_data->mIsHighestRes ? BAKE_UPLOAD_ATTEMPTS : 1; // only retry final bakes
-				llwarns << "Baked" << resolution << "texture upload for " << name << " failed (attempt " << failures << "/" << BAKE_UPLOAD_ATTEMPTS << "), ";
+				llwarns << "Baked" << resolution << "texture upload for " << name << " failed (attempt " << failures << "/" << max_attempts << ")" << llendl;
+
 				if (failures < max_attempts)
 				{
-					llcont << llformat("retrying in %.1f seconds.", BAKE_UPLOAD_RETRY_DELAY);
+					//llcont << llformat("retrying in %.1f seconds.", BAKE_UPLOAD_RETRY_DELAY);
+
 					layerset_buffer->mUploadFailCount = failures;
 					layerset_buffer->mUploadRetryTimer.start();
 					layerset_buffer->requestUpload();
 				}
-				llcont << llendl;
+				//llcont << llendl;
 			}
 		}
 		else

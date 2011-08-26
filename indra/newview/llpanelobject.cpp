@@ -33,11 +33,9 @@
 #include "lleconomy.h"
 #include "llerror.h"
 #include "llfontgl.h"
-#include "llmaterialtable.h"
 #include "llpermissionsflags.h"
 #include "llstring.h"
 #include "llvolume.h"
-#include "material_codes.h"
 #include "m3math.h"
 
 // project includes
@@ -60,7 +58,6 @@
 #include "lltool.h"
 #include "lltoolcomp.h"
 #include "lltoolmgr.h"
-#include "lltrans.h"
 #include "llui.h"
 #include "llviewerobject.h"
 #include "llviewerregion.h"
@@ -125,17 +122,6 @@ BOOL	LLPanelObject::postBuild()
 {
 	setMouseOpaque(FALSE);
 	
-	std::map<std::string, std::string> material_name_map;
-	material_name_map["Stone"]= LLTrans::getString("Stone");
-	material_name_map["Metal"]= LLTrans::getString("Metal");	
-	material_name_map["Glass"]= LLTrans::getString("Glass");	
-	material_name_map["Wood"]= LLTrans::getString("Wood");	
-	material_name_map["Flesh"]= LLTrans::getString("Flesh");
-	material_name_map["Plastic"]= LLTrans::getString("Plastic");
-	material_name_map["Rubber"]= LLTrans::getString("Rubber");	
-	material_name_map["Light"]= LLTrans::getString("Light");		
-	
-	LLMaterialTable::basic.initTableTransNames(material_name_map);
 	//--------------------------------------------------------
 	// Top
 	//--------------------------------------------------------
@@ -220,22 +206,6 @@ BOOL	LLPanelObject::postBuild()
 
 	//--------------------------------------------------------
 		
-	// material type popup
-	mComboMaterial = getChild<LLComboBox>("material");
-	childSetCommitCallback("material",onCommitMaterial,this);
-	mComboMaterial->removeall();
-
-	for (LLMaterialTable::info_list_t::iterator iter = LLMaterialTable::basic.mMaterialInfoList.begin();
-		 iter != LLMaterialTable::basic.mMaterialInfoList.end(); ++iter)
-	{
-		LLMaterialInfo* minfop = *iter;
-		if (minfop->mMCode != LL_MCODE_LIGHT)
-		{
-			mComboMaterial->add(minfop->mName);  
-		}
-	}
-	mComboMaterialItemCount = mComboMaterial->getItemCount();
-
 	// Base Type
 	mComboBaseType = getChild<LLComboBox>("comboBaseType");
 	childSetCommitCallback("comboBaseType",onCommitParametric,this);
@@ -363,7 +333,6 @@ BOOL	LLPanelObject::postBuild()
 
 LLPanelObject::LLPanelObject()
 :	LLPanel(),
-	mComboMaterialItemCount(0),
 	mIsPhysical(FALSE),
 	mIsTemporary(FALSE),
 	mIsPhantom(FALSE),
@@ -626,43 +595,6 @@ void LLPanelObject::getState( )
 	mCheckCastShadows->setEnabled( roots_selected==1 && editable );
 #endif
 	
-	// Update material part
-	// slightly inefficient - materials are unique per object, not per TE
-	U8 material_code = 0;
-	struct f : public LLSelectedTEGetFunctor<U8>
-	{
-		U8 get(LLViewerObject* object, S32 te)
-		{
-			return object->getMaterial();
-		}
-	} func;
-	bool material_same = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue( &func, material_code );
-	std::string LEGACY_FULLBRIGHT_DESC = LLTrans::getString("Fullbright");
-	if (editable && single_volume && material_same)
-	{
-		mComboMaterial->setEnabled( TRUE );
-		if (material_code == LL_MCODE_LIGHT)
-		{
-			if (mComboMaterial->getItemCount() == mComboMaterialItemCount)
-			{
-				mComboMaterial->add(LEGACY_FULLBRIGHT_DESC);
-			}
-			mComboMaterial->setSimple(LEGACY_FULLBRIGHT_DESC);
-		}
-		else
-		{
-			if (mComboMaterial->getItemCount() != mComboMaterialItemCount)
-			{
-				mComboMaterial->remove(LEGACY_FULLBRIGHT_DESC);
-			}
-			
-			mComboMaterial->setSimple(std::string(LLMaterialTable::basic.getName(material_code)));
-		}
-	}
-	else
-	{
-		mComboMaterial->setEnabled( FALSE );
-	}
 	//----------------------------------------------------------------------------
 
 	S32 selected_item	= MI_BOX;
@@ -670,6 +602,7 @@ void LLPanelObject::getState( )
 	BOOL enabled = FALSE;
 	BOOL hole_enabled = FALSE;
 	F32 scale_x=1.f, scale_y=1.f;
+	BOOL isMesh = FALSE;
 	
 	if( !objectp || !objectp->getVolume() || !editable || !single_volume)
 	{
@@ -1002,7 +935,7 @@ void LLPanelObject::getState( )
 		mSpinSkew->set( skew );
 		calcp->setVar(LLCalc::SKEW, skew);
 	}
-
+	
 	// Compute control visibility, label names, and twist range.
 	// Start with defaults.
 	BOOL cut_visible                = TRUE;
@@ -1138,6 +1071,7 @@ void LLPanelObject::getState( )
 			mSpinScaleX->setMaxValue(4000.f);
 			mSpinScaleY->setMinValue(-4000.f);
 			mSpinScaleY->setMaxValue(4000.f);
+
 			// Torus' Hole Size is Box/Cyl/Prism's Taper
 			calcp->setVar(LLCalc::X_TAPER, 1.f - scale_x);
 			calcp->setVar(LLCalc::Y_TAPER, 1.f - scale_y);
@@ -1292,15 +1226,14 @@ void LLPanelObject::getState( )
 	mCtrlSculptTexture->setVisible(sculpt_texture_visible);
 	mLabelSculptType->setVisible(sculpt_texture_visible);
 	mCtrlSculptType->setVisible(sculpt_texture_visible);
-	mCtrlSculptMirror->setVisible(sculpt_texture_visible);
-	mCtrlSculptInvert->setVisible(sculpt_texture_visible);
 
 
 	// sculpt texture
-
 	if (selected_item == MI_SCULPT)
 	{
-        LLUUID id;
+
+
+		LLUUID id;
 		LLSculptParams *sculpt_params = (LLSculptParams *)objectp->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
 
 		
@@ -1312,32 +1245,35 @@ void LLPanelObject::getState( )
 				mSculptTypeRevert    = sculpt_params->getSculptType();
 			}
 		
+			U8 sculpt_type = sculpt_params->getSculptType();
+			U8 sculpt_stitching = sculpt_type & LL_SCULPT_TYPE_MASK;
+			BOOL sculpt_invert = sculpt_type & LL_SCULPT_FLAG_INVERT;
+			BOOL sculpt_mirror = sculpt_type & LL_SCULPT_FLAG_MIRROR;
+			isMesh = (sculpt_stitching == LL_SCULPT_TYPE_MESH);
+
 			LLTextureCtrl*  mTextureCtrl = getChild<LLTextureCtrl>("sculpt texture control");
 			if(mTextureCtrl)
 			{
 				mTextureCtrl->setTentative(FALSE);
-				mTextureCtrl->setEnabled(editable);
+				mTextureCtrl->setEnabled(editable && !isMesh);
 				if (editable)
 					mTextureCtrl->setImageAssetID(sculpt_params->getSculptTexture());
 				else
 					mTextureCtrl->setImageAssetID(LLUUID::null);
 			}
 
-			U8 sculpt_type = sculpt_params->getSculptType();
-			U8 sculpt_stitching = sculpt_type & LL_SCULPT_TYPE_MASK;
-			BOOL sculpt_invert = sculpt_type & LL_SCULPT_FLAG_INVERT;
-			BOOL sculpt_mirror = sculpt_type & LL_SCULPT_FLAG_MIRROR;
+			mComboBaseType->setEnabled(!isMesh);
 			
 			if (mCtrlSculptType)
 			{
 				mCtrlSculptType->setCurrentByIndex(sculpt_stitching);
-				mCtrlSculptType->setEnabled(editable);
+				mCtrlSculptType->setEnabled(editable && !isMesh);
 			}
 
 			if (mCtrlSculptMirror)
 			{
 				mCtrlSculptMirror->set(sculpt_mirror);
-				mCtrlSculptMirror->setEnabled(editable);
+				mCtrlSculptMirror->setEnabled(editable && !isMesh);
 			}
 
 			if (mCtrlSculptInvert)
@@ -1350,14 +1286,17 @@ void LLPanelObject::getState( )
 			{
 				mLabelSculptType->setEnabled(TRUE);
 			}
+			
 		}
 	}
 	else
 	{
-		mSculptTextureRevert = LLUUID::null;
+		mSculptTextureRevert = LLUUID::null;		
 	}
 
-	
+	mCtrlSculptMirror->setVisible(sculpt_texture_visible && !isMesh);
+	mCtrlSculptInvert->setVisible(sculpt_texture_visible && !isMesh);
+
 	//----------------------------------------------------------------------------
 
 	mObject = objectp;
@@ -1433,25 +1372,6 @@ void LLPanelObject::sendCastShadows()
 	else
 	{
 		llinfos << "update cast shadows not changed" << llendl;
-	}
-}
-
-// static
-void LLPanelObject::onCommitMaterial( LLUICtrl* ctrl, void* userdata )
-{
-	//LLPanelObject* self = (LLPanelObject*) userdata;
-	LLComboBox* box = (LLComboBox*) ctrl;
-
-	if (box)
-	{
-		// apply the currently selected material to the object
-		const std::string& material_name = box->getSimple();
-		std::string LEGACY_FULLBRIGHT_DESC = LLTrans::getString("Fullbright");
-		if (material_name != LEGACY_FULLBRIGHT_DESC)
-		{
-			U8 material_code = LLMaterialTable::basic.getMCode(material_name);
-			LLSelectMgr::getInstance()->selectionSetMaterial(material_code);
-		}
 	}
 }
 
@@ -2073,6 +1993,17 @@ void LLPanelObject::sendSculpt()
 	if (mCtrlSculptType)
 		sculpt_type |= mCtrlSculptType->getCurrentIndex();
 
+	bool enabled = sculpt_type != LL_SCULPT_TYPE_MESH;
+
+	if (mCtrlSculptMirror)
+	{
+		mCtrlSculptMirror->setEnabled(enabled ? TRUE : FALSE);
+	}
+	if (mCtrlSculptInvert)
+	{
+		mCtrlSculptInvert->setEnabled(enabled ? TRUE : FALSE);
+	}
+	
 	if ((mCtrlSculptMirror) && (mCtrlSculptMirror->get()))
 		sculpt_type |= LL_SCULPT_FLAG_MIRROR;
 
@@ -2095,6 +2026,12 @@ void LLPanelObject::refresh()
 	{
 		mRootObject = NULL;
 	}
+	
+	F32 max_scale = get_default_max_prim_scale(LLPickInfo::isFlora(mObject));
+
+	getChild<LLSpinCtrl>("Scale X")->setMaxValue(max_scale);
+	getChild<LLSpinCtrl>("Scale Y")->setMaxValue(max_scale);
+	getChild<LLSpinCtrl>("Scale Z")->setMaxValue(max_scale);
 }
 
 
@@ -2181,11 +2118,11 @@ void LLPanelObject::clearCtrls()
 	mCheckTemporary	->setEnabled( FALSE );
 	mCheckPhantom	->set(FALSE);
 	mCheckPhantom	->setEnabled( FALSE );
+	
 #if 0 // 1.9.2
 	mCheckCastShadows->set(FALSE);
 	mCheckCastShadows->setEnabled( FALSE );
 #endif
-	mComboMaterial	->setEnabled( FALSE );
 	// Disable text labels
 	mLabelPosition	->setEnabled( FALSE );
 	mLabelSize		->setEnabled( FALSE );

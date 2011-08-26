@@ -160,6 +160,8 @@ public:
 	
 	static void createSpareBrowserMediaSource();
 	static LLPluginClassMedia* getSpareBrowserMediaSource();
+
+	static void setOnlyAudibleMediaTextureID(const LLUUID& texture_id);
 	
 private:
 	static void setOpenIDCookie();
@@ -339,7 +341,10 @@ public:
 	LLVOVolume *getSomeObject();
 	void setUpdated(BOOL updated) ;
 	BOOL isUpdated() ;
-	
+
+	// updates the javascript object in the embedded browser with viewer values
+	void updateJavascriptObject();
+		
 	// Updates the "interest" value in this object
 	void calculateInterest();
 	F64 getInterest() const { return mInterest; };

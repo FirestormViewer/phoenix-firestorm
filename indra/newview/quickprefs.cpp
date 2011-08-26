@@ -31,8 +31,8 @@
 #include "llboost.h"
 #include "llbottomtray.h"
 #include "llcombobox.h"
-#include "llfloaterwindlight.h"
-#include "llfloaterwater.h"
+//#include "llfloaterwindlight.h"
+//#include "llfloaterwater.h"
 #include "llwlparamset.h"
 #include "llwlparammanager.h"
 #include "llwaterparammanager.h"
@@ -68,28 +68,31 @@ BOOL FloaterQuickPrefs::postBuild()
 {
 	LLComboBox* WWcomboBox = getChild<LLComboBox>("WaterPresetsCombo");
 	if(WWcomboBox != NULL) {
-		std::map<std::string, LLWaterParamSet>::iterator mIt =
-			LLWaterParamManager::instance()->mParamList.begin();
-		for(; mIt != LLWaterParamManager::instance()->mParamList.end(); mIt++) 
-		{
-			if (mIt->first.length() > 0)
-				WWcomboBox->add(mIt->first);
-		}
-		WWcomboBox->add(LLStringUtil::null);
-		WWcomboBox->setSimple(LLWaterParamManager::instance()->mCurParams.mName);
+		//-TT 2.8.2 merge casualty
+		//std::map<std::string, LLWaterParamSet>::iterator mIt =
+		//	LLWaterParamManager::instance()->mParamList.begin();
+		//for(; mIt != LLWaterParamManager::instance()->mParamList.end(); mIt++) 
+		//{
+		//	if (mIt->first.length() > 0)
+		//		WWcomboBox->add(mIt->first);
+		//}
+		//WWcomboBox->add(LLStringUtil::null);
+		//WWcomboBox->setSimple(LLWaterParamManager::instance()->mCurParams.mName);
 	}
-	LLComboBox* WLcomboBox = getChild<LLComboBox>("WLPresetsCombo");
-	if(WLcomboBox != NULL) {
-		std::map<std::string, LLWLParamSet>::iterator mIt = 
-			LLWLParamManager::instance()->mParamList.begin();
-		for(; mIt != LLWLParamManager::instance()->mParamList.end(); mIt++) 
-		{
-			if (mIt->first.length() > 0)
-				WLcomboBox->add(mIt->first);
-		}
-		WLcomboBox->add(LLStringUtil::null);
-		WLcomboBox->setSimple(LLWLParamManager::instance()->mCurParams.mName);
-	}
+	//-TT 2.8.2 - commented out for merge
+	//LLComboBox* WLcomboBox = getChild<LLComboBox>("WLPresetsCombo");
+	//
+	//if(WLcomboBox != NULL) {
+	//	std::map<std::string, LLWLParamSet>::iterator mIt = 
+	//		LLWLParamManager::instance()->mParamList.begin();
+	//	for(; mIt != LLWLParamManager::instance()->mParamList.end(); mIt++) 
+	//	{
+	//		if (mIt->first.length() > 0)
+	//			WLcomboBox->add(mIt->first);
+	//	}
+	//	WLcomboBox->add(LLStringUtil::null);
+	//	WLcomboBox->setSimple(LLWLParamManager::instance()->mCurParams.mName);
+	//}
 		initCallbacks();
 	return LLDockableFloater::postBuild();
 }
@@ -99,7 +102,9 @@ void FloaterQuickPrefs::onChangeWaterPreset(LLUICtrl* ctrl)
 	std::string data = ctrl->getValue().asString();
 	if(!data.empty())
 	{
-		LLWaterParamManager::instance()->loadPreset(data);
+	//-TT 2.8.2 - changed from pointer to object call
+	//AO commented out for merge
+	//	LLWaterParamManager::instance().loadPreset(data);
 	}
 }
 
@@ -110,118 +115,125 @@ void FloaterQuickPrefs::onChangeSkyPreset(LLUICtrl* ctrl)
 	std::string data = ctrl->getValue().asString();
 	if(!data.empty())
 	{
-		LLWLParamManager::instance()->loadPreset( data);
+	//-TT 2.8.2 - changed from pointer to object call
+	//AO: commented out for merge
+	//	LLWLParamManager::instance().loadPreset( data);
 	}
 }
 
 void FloaterQuickPrefs::deactivateAnimator()
 {
-	LLWLParamManager::instance()->mAnimator.mIsRunning = false;
-	LLWLParamManager::instance()->mAnimator.mUseLindenTime = false;
+	//-TT 2.8.2 - commented out for merge
+	//LLWLParamManager::instance()->mAnimator.mIsRunning = false;
+	//LLWLParamManager::instance()->mAnimator.mUseLindenTime = false;
 }
 
 void FloaterQuickPrefs::onClickWaterPrev()
 {
-	LLWaterParamManager * param_mgr = LLWaterParamManager::instance();
-	LLWaterParamSet & currentParams = param_mgr->mCurParams;
+		//-TT 2.8.2 - commented out for merge
+	//LLWaterParamManager * param_mgr = LLWaterParamManager::instance();
+	//LLWaterParamSet & currentParams = param_mgr->mCurParams;
 
-	// find place of current param
-	std::map<std::string, LLWaterParamSet>::iterator mIt = 
-		param_mgr->mParamList.find(currentParams.mName);
+	//// find place of current param
+	//std::map<std::string, LLWaterParamSet>::iterator mIt = 
+	//	param_mgr->mParamList.find(currentParams.mName);
 
-	// if at the beginning, loop
-	if(mIt == param_mgr->mParamList.begin()) 
-	{
-		std::map<std::string, LLWaterParamSet>::iterator last = param_mgr->mParamList.end(); --last;
-		mIt = last;
-	}
-	else
-	{
-		mIt--;
-	}
-	param_mgr->loadPreset(mIt->first, true);
-	LLComboBox* WWcomboBox = getChild<LLComboBox>("WaterPresetsCombo");
-	WWcomboBox->setSimple(mIt->first);
+	//// if at the beginning, loop
+	//if(mIt == param_mgr->mParamList.begin()) 
+	//{
+	//	std::map<std::string, LLWaterParamSet>::iterator last = param_mgr->mParamList.end(); --last;
+	//	mIt = last;
+	//}
+	//else
+	//{
+	//	mIt--;
+	//}
+	//param_mgr->loadPreset(mIt->first, true);
+	//LLComboBox* WWcomboBox = getChild<LLComboBox>("WaterPresetsCombo");
+	//WWcomboBox->setSimple(mIt->first);
 }
 
 void FloaterQuickPrefs::onClickWaterNext()
 {
-	LLWaterParamManager * param_mgr = LLWaterParamManager::instance();
-	LLWaterParamSet& currentParams = param_mgr->mCurParams;
+	//-TT 2.8.2 - commented out for merge
+	//LLWaterParamManager * param_mgr = LLWaterParamManager::instance();
+	//LLWaterParamSet& currentParams = param_mgr->mCurParams;
 
-	// find place of current param
-	std::map<std::string, LLWaterParamSet>::iterator mIt = 
-		param_mgr->mParamList.find(currentParams.mName);
+	//// find place of current param
+	//std::map<std::string, LLWaterParamSet>::iterator mIt = 
+	//	param_mgr->mParamList.find(currentParams.mName);
 
-	// if at the end, loop
-	std::map<std::string, LLWaterParamSet>::iterator last = param_mgr->mParamList.end(); --last;
-	if(mIt == last) 
-	{
-		mIt = param_mgr->mParamList.begin();
-	}
-	else
-	{
-		mIt++;
-	}
-	param_mgr->loadPreset(mIt->first, true);
-	LLComboBox* WWcomboBox = getChild<LLComboBox>("WaterPresetsCombo");
-	WWcomboBox->setSimple(mIt->first);
+	//// if at the end, loop
+	//std::map<std::string, LLWaterParamSet>::iterator last = param_mgr->mParamList.end(); --last;
+	//if(mIt == last) 
+	//{
+	//	mIt = param_mgr->mParamList.begin();
+	//}
+	//else
+	//{
+	//	mIt++;
+	//}
+	//param_mgr->loadPreset(mIt->first, true);
+	//LLComboBox* WWcomboBox = getChild<LLComboBox>("WaterPresetsCombo");
+	//WWcomboBox->setSimple(mIt->first);
 }
 
 void FloaterQuickPrefs::onClickSkyPrev()
 {
-	// find place of current param
-	std::map<std::string, LLWLParamSet>::iterator mIt = 
-		LLWLParamManager::instance()->mParamList.find(LLWLParamManager::instance()->mCurParams.mName);
+	//-TT 2.8.2 - commented out for merge
+	//// find place of current param
+	//std::map<std::string, LLWLParamSet>::iterator mIt = 
+	//	LLWLParamManager::instance()->mParamList.find(LLWLParamManager::instance()->mCurParams.mName);
 
-	// shouldn't happen unless you delete every preset but Default
-	if (mIt == LLWLParamManager::instance()->mParamList.end())
-	{
-		llwarns << "No more presets left!" << llendl;
-		return;
-	}
+	//// shouldn't happen unless you delete every preset but Default
+	//if (mIt == LLWLParamManager::instance()->mParamList.end())
+	//{
+	//	llwarns << "No more presets left!" << llendl;
+	//	return;
+	//}
 
-	// if at the beginning, loop
-	if(mIt == LLWLParamManager::instance()->mParamList.begin()) 
-	{
-		std::map<std::string, LLWLParamSet>::iterator last = LLWLParamManager::instance()->mParamList.end(); --last;
-		mIt = last;
-	}
-	else
-	{
-		mIt--;
-	}
-		deactivateAnimator();
-	LLWLParamManager::instance()->loadPreset(mIt->first, true);
-	LLComboBox* WLcomboBox = getChild<LLComboBox>("WLPresetsCombo");
-	WLcomboBox->setSimple(mIt->first);
+	//// if at the beginning, loop
+	//if(mIt == LLWLParamManager::instance()->mParamList.begin()) 
+	//{
+	//	std::map<std::string, LLWLParamSet>::iterator last = LLWLParamManager::instance()->mParamList.end(); --last;
+	//	mIt = last;
+	//}
+	//else
+	//{
+	//	mIt--;
+	//}
+	//	deactivateAnimator();
+	//LLWLParamManager::instance()->loadPreset(mIt->first, true);
+	//LLComboBox* WLcomboBox = getChild<LLComboBox>("WLPresetsCombo");
+	//WLcomboBox->setSimple(mIt->first);
 }
 
 void FloaterQuickPrefs::onClickSkyNext()
 {
-	// find place of current param
-	std::map<std::string, LLWLParamSet>::iterator mIt = 
-		LLWLParamManager::instance()->mParamList.find(LLWLParamManager::instance()->mCurParams.mName);
+	//-TT 2.8.2 - commented out for merge
+	//// find place of current param
+	//std::map<std::string, LLWLParamSet>::iterator mIt = 
+	//	LLWLParamManager::instance()->mParamList.find(LLWLParamManager::instance()->mCurParams.mName);
 
-	// shouldn't happen unless you delete every preset but Default
-	if (mIt == LLWLParamManager::instance()->mParamList.end())
-	{
-		llwarns << "No more presets left!" << llendl;
-		return;
-	}
+	//// shouldn't happen unless you delete every preset but Default
+	//if (mIt == LLWLParamManager::instance()->mParamList.end())
+	//{
+	//	llwarns << "No more presets left!" << llendl;
+	//	return;
+	//}
 
-	// if at the end, loop
-	std::map<std::string, LLWLParamSet>::iterator last = LLWLParamManager::instance()->mParamList.end(); --last;
-	if(mIt == last) 
-	{
-		mIt = LLWLParamManager::instance()->mParamList.begin();
-	}
-	else
-	{
-		mIt++;
-	}
-		deactivateAnimator();
-	LLWLParamManager::instance()->loadPreset(mIt->first, true);
-	LLComboBox* WLcomboBox = getChild<LLComboBox>("WLPresetsCombo");
-	WLcomboBox->setSimple(mIt->first);
+	//// if at the end, loop
+	//std::map<std::string, LLWLParamSet>::iterator last = LLWLParamManager::instance()->mParamList.end(); --last;
+	//if(mIt == last) 
+	//{
+	//	mIt = LLWLParamManager::instance()->mParamList.begin();
+	//}
+	//else
+	//{
+	//	mIt++;
+	//}
+	//	deactivateAnimator();
+	//LLWLParamManager::instance()->loadPreset(mIt->first, true);
+	//LLComboBox* WLcomboBox = getChild<LLComboBox>("WLPresetsCombo");
+	//WLcomboBox->setSimple(mIt->first);
 }

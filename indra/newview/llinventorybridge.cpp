@@ -40,6 +40,7 @@
 #include "llfloateropenobject.h"
 #include "llfloaterreg.h"
 #include "llfloaterworldmap.h"
+#include "llfolderview.h"
 #include "llfriendcard.h"
 #include "llgesturemgr.h"
 #include "llgiveinventory.h" 
@@ -614,12 +615,12 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 	}
 // [/SL:KB]
 
-
-	// Don't allow items to be pasted directly into the COF.
-	//if (!isCOFFolder())
-//-TT Client LSL Bridge (also for #AO)
-	if (!isCOFFolder() && !isProtectedFolder())
+	// Don't allow items to be pasted directly into the COF or the inbox
+	if (!isCOFFolder() && !isInboxFolder()
+//-TT Client LSL Bridge  (also for #AO)
+		&& !isProtectedFolder()
 //-TT
+	)
 	{
 		items.push_back(std::string("Paste"));
 	}
@@ -851,7 +852,6 @@ BOOL LLInvFVBridge::isProtectedFolder() const
 {
 	const LLInventoryModel* model = getInventoryModel();
 	if(!model) return FALSE;
-
 	if ((mUUID ==  FSLSLBridge::instance().getBridgeFolder()) 
 		|| (model->isObjectDescendentOf(mUUID, FSLSLBridge::instance().getBridgeFolder()))
 		&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
@@ -865,6 +865,19 @@ BOOL LLInvFVBridge::isProtectedFolder() const
 	return FALSE;
 }
 //-TT
+
+
+BOOL LLInvFVBridge::isInboxFolder() const
+{
+	const LLUUID inbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX, false, false);
+	
+	if (inbox_id.isNull())
+	{
+		return FALSE;
+	}
+	
+	return gInventory.isObjectDescendentOf(mUUID, inbox_id);
+}
 
 BOOL LLInvFVBridge::isItemPermissive() const
 {
@@ -1002,6 +1015,14 @@ LLInvFVBridge* LLInvFVBridge::createBridge(LLAssetType::EType asset_type,
 			// Only should happen for broken links.
 			new_listener = new LLLinkItemBridge(inventory, root, uuid);
 			break;
+	    case LLAssetType::AT_MESH:
+			if(!(inv_type == LLInventoryType::IT_MESH))
+			{
+				llwarns << LLAssetType::lookup(asset_type) << " asset has inventory type " << LLInventoryType::lookupHumanReadable(inv_type) << " on uuid " << uuid << llendl;
+			}
+			new_listener = new LLMeshBridge(inventory, root, uuid);
+			break;
+
 		default:
 			llinfos << "Unhandled asset type (llassetstorage.h): "
 					<< (S32)asset_type << llendl;
@@ -1901,6 +1922,10 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 			}
 			else
 			{
+				if (gInventory.isObjectDescendentOf(inv_cat->getUUID(), gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX, false, false)))
+				{
+					set_dad_inbox_object(inv_cat->getUUID());
+				}
 
 				// Reparent the folder and restamp children if it's moving
 				// into trash.
@@ -2415,6 +2440,9 @@ LLUIImagePtr LLFolderBridge::getIcon() const
 LLUIImagePtr LLFolderBridge::getIcon(LLFolderType::EType preferred_type)
 {
 	return LLUI::getUIImage(LLViewerFolderType::lookupIconName(preferred_type, FALSE));
+		/*case LLAssetType::AT_MESH:
+			control = "inv_folder_mesh.tga";
+			break;*/
 }
 
 LLUIImagePtr LLFolderBridge::getOpenIcon() const
@@ -2647,8 +2675,6 @@ void LLFolderBridge::staticFolderOptionsMenu()
 
 void LLFolderBridge::folderOptionsMenu()
 {
-	menuentry_vec_t disabled_items;
-
 	LLInventoryModel* model = getInventoryModel();
 	if(!model) return;
 
@@ -2679,6 +2705,11 @@ void LLFolderBridge::folderOptionsMenu()
 			mItems.push_back(std::string("Conference Chat Folder"));
 			mItems.push_back(std::string("IM All Contacts In Folder"));
 		}
+	}
+
+	if (!isItemRemovable())
+	{
+		mDisabledItems.push_back(std::string("Delete"));
 	}
 
 #ifndef LL_RELEASE_FOR_DOWNLOAD
@@ -2712,6 +2743,7 @@ void LLFolderBridge::folderOptionsMenu()
 				mItems.push_back(std::string("Wear Items"));
 //-TT
 			}
+
 			mItems.push_back(std::string("Replace Outfit"));
 		}
 		if (is_ensemble)
@@ -2721,7 +2753,7 @@ void LLFolderBridge::folderOptionsMenu()
 		mItems.push_back(std::string("Remove From Outfit"));
 		if (!LLAppearanceMgr::getCanRemoveFromCOF(mUUID))
 		{
-			disabled_items.push_back(std::string("Remove From Outfit"));
+			mDisabledItems.push_back(std::string("Remove From Outfit"));
 		}
 //		if (!LLAppearanceMgr::instance().getCanReplaceCOF(mUUID))
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2010-11-24 (Catznip-2.6.0a) | Added: Catznip-2.4.0e
@@ -2729,14 +2761,14 @@ void LLFolderBridge::folderOptionsMenu()
 			 ((!is_outfit) && (gAgentWearables.isCOFChangeInProgress())) )
 // [/SL:KB]
 		{
-			disabled_items.push_back(std::string("Replace Outfit"));
+			mDisabledItems.push_back(std::string("Replace Outfit"));
 		}
 		mItems.push_back(std::string("Outfit Separator"));
 	}
 	LLMenuGL* menup = dynamic_cast<LLMenuGL*>(mMenu.get());
 	if (menup)
 	{
-		hide_context_entries(*menup, mItems, disabled_items, TRUE);
+		hide_context_entries(*menup, mItems, mDisabledItems, TRUE);
 
 		// Reposition the menu, in case we're adding items to an existing menu.
 		menup->needsArrange();
@@ -2809,15 +2841,17 @@ void LLFolderBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		// Not sure what the right thing is to do here.
 		if (!isCOFFolder() && cat && (cat->getPreferredType() != LLFolderType::FT_OUTFIT))
 		{
-			// Do not allow to create 2-level subfolder in the Calling Card/Friends folder. EXT-694.
-			if (!LLFriendCardsManager::instance().isCategoryInFriendFolder(cat))
-				mItems.push_back(std::string("New Folder"));
-			mItems.push_back(std::string("New Script"));
-			mItems.push_back(std::string("New Note"));
-			mItems.push_back(std::string("New Gesture"));
-			mItems.push_back(std::string("New Clothes"));
-			mItems.push_back(std::string("New Body Parts"));
-
+			if (!isInboxFolder()) // don't allow creation in inbox
+			{
+				// Do not allow to create 2-level subfolder in the Calling Card/Friends folder. EXT-694.
+				if (!LLFriendCardsManager::instance().isCategoryInFriendFolder(cat))
+					mItems.push_back(std::string("New Folder"));
+				mItems.push_back(std::string("New Script"));
+				mItems.push_back(std::string("New Note"));
+				mItems.push_back(std::string("New Gesture"));
+				mItems.push_back(std::string("New Clothes"));
+				mItems.push_back(std::string("New Body Parts"));
+			}
 #if SUPPORT_ENSEMBLES
 			// Changing folder types is an unfinished unsupported feature
 			// and can lead to unexpected behavior if enabled.
@@ -2931,12 +2965,13 @@ BOOL LLFolderBridge::dragOrDrop(MASK mask, BOOL drop,
 		case DAD_CALLINGCARD:
 		case DAD_LANDMARK:
 		case DAD_SCRIPT:
+		case DAD_CLOTHING:
 		case DAD_OBJECT:
 		case DAD_NOTECARD:
-		case DAD_CLOTHING:
 		case DAD_BODYPART:
 		case DAD_ANIMATION:
 		case DAD_GESTURE:
+		case DAD_MESH:
 			accept = dragItemIntoFolder(inv_item, drop);
 			break;
 		case DAD_LINK:
@@ -2966,7 +3001,11 @@ BOOL LLFolderBridge::dragOrDrop(MASK mask, BOOL drop,
 				accept = dragCategoryIntoFolder((LLInventoryCategory*)cargo_data, drop);
 			}
 			break;
+		case DAD_ROOT_CATEGORY:
+		case DAD_NONE:
+			break;
 		default:
+			llwarns << "Unhandled cargo type for drag&drop " << cargo_type << llendl;
 			break;
 	}
 	return accept;
@@ -3379,6 +3418,12 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 			// (move the item, restamp if into trash)
 			else
 			{
+				// set up observer to select item once drag and drop from inbox is complete 
+				if (gInventory.isObjectDescendentOf(inv_item->getUUID(), gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX, false, false)))
+				{
+					set_dad_inbox_object(inv_item->getUUID());
+				}
+
 				LLInvFVBridge::changeItemParent(
 					model,
 					(LLViewerInventoryItem*)inv_item,
@@ -3989,6 +4034,7 @@ BOOL LLCallingCardBridge::dragOrDrop(MASK mask, BOOL drop,
 			case DAD_BODYPART:
 			case DAD_ANIMATION:
 			case DAD_GESTURE:
+			case DAD_MESH:
 			{
 				LLInventoryItem* inv_item = (LLInventoryItem*)cargo_data;
 				const LLPermissions& perm = inv_item->getPermissions();
@@ -5247,6 +5293,7 @@ void LLWearableBridge::removeFromAvatar()
 	}
 }
 
+
 // +=================================================+
 // |        LLLinkItemBridge                         |
 // +=================================================+
@@ -5275,6 +5322,63 @@ void LLLinkItemBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	}
 	hide_context_entries(menu, items, disabled_items);
 }
+
+// +=================================================+
+// |        LLMeshBridge                             |
+// +=================================================+
+
+LLUIImagePtr LLMeshBridge::getIcon() const
+{
+	return LLInventoryIcon::getIcon(LLAssetType::AT_MESH, LLInventoryType::IT_MESH, 0, FALSE);
+}
+
+void LLMeshBridge::openItem()
+{
+	LLViewerInventoryItem* item = getItem();
+	
+	if (item)
+	{
+		// open mesh
+	}
+}
+
+void LLMeshBridge::previewItem()
+{
+	LLViewerInventoryItem* item = getItem();
+	if(item)
+	{
+		// preview mesh
+	}
+}
+
+
+void LLMeshBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
+{
+	lldebugs << "LLMeshBridge::buildContextMenu()" << llendl;
+	std::vector<std::string> items;
+	std::vector<std::string> disabled_items;
+
+	if(isItemInTrash())
+	{
+		items.push_back(std::string("Purge Item"));
+		if (!isItemRemovable())
+		{
+			disabled_items.push_back(std::string("Purge Item"));
+		}
+
+		items.push_back(std::string("Restore Item"));
+	}
+	else
+	{
+		items.push_back(std::string("Properties"));
+
+		getClipboardEntries(true, items, disabled_items, flags);
+	}
+
+
+	hide_context_entries(menu, items, disabled_items);
+}
+
 
 // +=================================================+
 // |        LLLinkBridge                             |
@@ -5589,6 +5693,7 @@ public:
 			else LLAppearanceMgr::instance().wearItemOnAvatar(mUUID /*item->getUUID()*/, true, true);
 		}
 	}
+
 	virtual ~LLWearableBridgeAction(){}
 protected:
 	LLWearableBridgeAction(const LLUUID& id,LLInventoryModel* model) : LLInvFVBridgeAction(id,model) {}

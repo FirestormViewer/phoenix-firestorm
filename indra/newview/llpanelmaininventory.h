@@ -57,7 +57,7 @@ class LLPanelMainInventory : public LLPanel, LLInventoryObserver
 public:
 	friend class LLFloaterInventoryFinder;
 
-	LLPanelMainInventory();
+	LLPanelMainInventory(const LLPanel::Params& p = getDefaultParams());
 	~LLPanelMainInventory();
 
 	BOOL postBuild();
@@ -118,6 +118,7 @@ protected:
 	void onCollapseButtonClicked();
 	void onExpandButtonClicked();
 	// ## Zi: Inventory Collapse and Expand Buttons
+	void onFocusReceived();
 
 private:
 	LLFloaterInventoryFinder* getFinder();

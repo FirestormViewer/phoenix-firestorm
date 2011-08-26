@@ -193,11 +193,25 @@ void LLVoiceSetKeyDialog::onCancel(void* user_data)
 void handleNameTagOptionChanged(const LLSD& newvalue);	
 void handleDisplayNamesOptionChanged(const LLSD& newvalue);	
 bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response);
+bool callback_clear_cache(const LLSD& notification, const LLSD& response);
 
 //bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
 //bool callback_reset_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
 
 void fractionFromDecimal(F32 decimal_val, S32& numerator, S32& denominator);
+
+bool callback_clear_cache(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if ( option == 0 ) // YES
+	{
+		// flag client texture cache for clearing next time the client runs
+		gSavedSettings.setBOOL("PurgeCacheOnNextStartup", TRUE);
+		LLNotificationsUtil::add("CacheWillClear");
+	}
+
+	return false;
+}
 
 bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response)
 {
@@ -312,7 +326,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.Cancel",				boost::bind(&LLFloaterPreference::onBtnCancel, this));
 	mCommitCallbackRegistrar.add("Pref.OK",					boost::bind(&LLFloaterPreference::onBtnOK, this));
 	
-//	mCommitCallbackRegistrar.add("Pref.ClearCache",				boost::bind(&LLFloaterPreference::onClickClearCache, this));
+	mCommitCallbackRegistrar.add("Pref.ClearCache",				boost::bind(&LLFloaterPreference::onClickClearCache, this));
 	mCommitCallbackRegistrar.add("Pref.WebClearCache",			boost::bind(&LLFloaterPreference::onClickBrowserClearCache, this));
 	mCommitCallbackRegistrar.add("Pref.SetCache",				boost::bind(&LLFloaterPreference::onClickSetCache, this));
 	mCommitCallbackRegistrar.add("Pref.BrowseCache",			boost::bind(&LLFloaterPreference::onClickBrowseCache, this));
@@ -320,7 +334,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.BrowseSettingsDir",		boost::bind(&LLFloaterPreference::onClickBrowseSettingsDir, this));
 	mCommitCallbackRegistrar.add("Pref.BrowseLogPath",			boost::bind(&LLFloaterPreference::onClickBrowseChatLogDir, this));
 	mCommitCallbackRegistrar.add("Pref.ResetCache",				boost::bind(&LLFloaterPreference::onClickResetCache, this));
-	mCommitCallbackRegistrar.add("Pref.ClearCache",				boost::bind(&LLFloaterPreference::onClickClearCache, this));
 	//	mCommitCallbackRegistrar.add("Pref.ClickSkin",				boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
 //	mCommitCallbackRegistrar.add("Pref.SelectSkin",				boost::bind(&LLFloaterPreference::onSelectSkin, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetKey",			boost::bind(&LLFloaterPreference::onClickSetKey, this));
@@ -815,10 +828,7 @@ void LLFloaterPreference::onBtnOK()
 		closeFloater(false);
 
 		LLUIColorTable::instance().saveUserSettings();
-		gSavedSettings.saveToFile( gSavedSettings.getString("ClientSettingsFile"), TRUE );
-		std::string crash_settings_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, CRASH_SETTINGS_FILE);
-		// save all settings, even if equals defaults
-		gCrashSettings.saveToFile(crash_settings_filename, FALSE);
+		gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), TRUE);
 	}
 	else
 	{
@@ -886,6 +896,11 @@ void LLFloaterPreference::refreshEnabledGraphics()
 	{
 		hardware_settings->refreshEnabledState();
 	}
+}
+
+void LLFloaterPreference::onClickClearCache()
+{
+	LLNotificationsUtil::add("ConfirmClearCache", LLSD(), LLSD(), callback_clear_cache);
 }
 
 void LLFloaterPreference::onClickBrowserClearCache()
@@ -962,22 +977,18 @@ void LLFloaterPreference::onClickBrowseChatLogDir()
 }
 void LLFloaterPreference::onClickResetCache()
 {
-	if (!gSavedSettings.getString("CacheLocation").empty())
+	if (gDirUtilp->getCacheDir(false) == gDirUtilp->getCacheDir(true))
 	{
-		gSavedSettings.setString("NewCacheLocation", "");
-		gSavedSettings.setString("NewCacheLocationTopFolder", "");
+		// The cache location was already the default.
+		return;
 	}
-	
+	gSavedSettings.setString("NewCacheLocation", "");
+	gSavedSettings.setString("NewCacheLocationTopFolder", "");
 	LLNotificationsUtil::add("CacheWillBeMoved");
-	std::string cache_location = gDirUtilp->getCacheDir(true);
+	std::string cache_location = gDirUtilp->getCacheDir(false);
 	gSavedSettings.setString("CacheLocation", cache_location);
 	std::string top_folder(gDirUtilp->getBaseFileName(cache_location));
 	gSavedSettings.setString("CacheLocationTopFolder", top_folder);
-}
-void LLFloaterPreference::onClickClearCache()
-{
-	gSavedSettings.setBOOL("PurgeCacheOnNextStartup", TRUE);
-	LLNotificationsUtil::add("CacheWillClear");
 }
 
 /*
@@ -1092,9 +1103,15 @@ void LLFloaterPreference::refreshEnabledState()
 	LLCheckBoxCtrl* ctrl_avatar_vp = getChild<LLCheckBoxCtrl>("AvatarVertexProgram");
 	// Avatar Render Mode
 	LLCheckBoxCtrl* ctrl_avatar_cloth = getChild<LLCheckBoxCtrl>("AvatarCloth");
+	
+	bool avatar_vp_enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderAvatarVP");
+	if (LLViewerShaderMgr::sInitialized)
+	{
+		S32 max_avatar_shader = LLViewerShaderMgr::instance()->mMaxAvatarShaderLevel;
+		avatar_vp_enabled = (max_avatar_shader > 0) ? TRUE : FALSE;
+	}
 
-	S32 max_avatar_shader = LLViewerShaderMgr::instance()->mMaxAvatarShaderLevel;
-	ctrl_avatar_vp->setEnabled((max_avatar_shader > 0) ? TRUE : FALSE);
+	ctrl_avatar_vp->setEnabled(avatar_vp_enabled);
 	
 	if (gSavedSettings.getBOOL("VertexShaderEnable") == FALSE || 
 		gSavedSettings.getBOOL("RenderAvatarVP") == FALSE)
@@ -1146,29 +1163,30 @@ void LLFloaterPreference::refreshEnabledState()
 
 	//Deferred/SSAO/Shadows
 	LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
-	if (LLFeatureManager::getInstance()->isFeatureAvailable("RenderUseFBO") &&
-	    LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
-		shaders)
-	{
-		BOOL enabled = (ctrl_wind_light->get()) ? TRUE : FALSE;
-
-		ctrl_deferred->setEnabled(enabled);
 	
-		LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
-		LLCheckBoxCtrl* ctrl_UseGI = getChild<LLCheckBoxCtrl>("UseGI");
-		LLComboBox* ctrl_shadow = getChild<LLComboBox>("ShadowDetail");
+	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") && 
+						shaders && 
+						gGLManager.mHasFramebufferObject &&
+						gSavedSettings.getBOOL("RenderAvatarVP") &&
+						(ctrl_wind_light->get()) ? TRUE : FALSE;
 
-		enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO") && (ctrl_deferred->get() ? TRUE : FALSE);
+	ctrl_deferred->setEnabled(enabled);
+	
+	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
+	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
+	LLComboBox* ctrl_shadow = getChild<LLComboBox>("ShadowDetail");
+	LLCheckBoxCtrl* ctrl_UseGI = getChild<LLCheckBoxCtrl>("UseGI");
+
+	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO") && (ctrl_deferred->get() ? TRUE : FALSE);
 		
-		ctrl_ssao->setEnabled(enabled);
-		
-		ctrl_UseGI->setEnabled(enabled);
+	ctrl_ssao->setEnabled(enabled);
+	ctrl_dof->setEnabled(enabled);
+	ctrl_UseGI->setEnabled(enabled);
 
-		enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail");
+	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail");
 
-		ctrl_shadow->setEnabled(enabled);
-	}
-
+	ctrl_shadow->setEnabled(enabled);
+	
 
 	// now turn off any features that are unavailable
 	disableUnavailableSettings();
@@ -1188,6 +1206,7 @@ void LLFloaterPreference::disableUnavailableSettings()
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_UseGI = getChild<LLCheckBoxCtrl>("UseGI");
+	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
 
 	// if vertex shaders off, disable all shader related products
 	if(!LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable"))
@@ -1216,6 +1235,9 @@ void LLFloaterPreference::disableUnavailableSettings()
 		ctrl_UseGI->setEnabled(FALSE);
 		ctrl_UseGI->setValue(FALSE);
 
+		ctrl_dof->setEnabled(FALSE);
+		ctrl_dof->setValue(FALSE);
+
 		ctrl_deferred->setEnabled(FALSE);
 		ctrl_deferred->setValue(FALSE);
 	}
@@ -1236,12 +1258,16 @@ void LLFloaterPreference::disableUnavailableSettings()
 		ctrl_UseGI->setEnabled(FALSE);
 		ctrl_UseGI->setValue(FALSE);
 
+		ctrl_dof->setEnabled(FALSE);
+		ctrl_dof->setValue(FALSE);
+
 		ctrl_deferred->setEnabled(FALSE);
 		ctrl_deferred->setValue(FALSE);
 	}
 
 	// disabled deferred
-	if(!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred"))
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") ||
+		!gGLManager.mHasFramebufferObject)
 	{
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
@@ -1251,6 +1277,9 @@ void LLFloaterPreference::disableUnavailableSettings()
 
 		ctrl_UseGI->setEnabled(FALSE);
 		ctrl_UseGI->setValue(FALSE);
+
+		ctrl_dof->setEnabled(FALSE);
+		ctrl_dof->setValue(FALSE);
 
 		ctrl_deferred->setEnabled(FALSE);
 		ctrl_deferred->setValue(FALSE);
@@ -1298,6 +1327,9 @@ void LLFloaterPreference::disableUnavailableSettings()
 		
 		ctrl_UseGI->setEnabled(FALSE);
 		ctrl_UseGI->setValue(FALSE);
+
+		ctrl_dof->setEnabled(FALSE);
+		ctrl_dof->setValue(FALSE);
 
 		ctrl_deferred->setEnabled(FALSE);
 		ctrl_deferred->setValue(FALSE);

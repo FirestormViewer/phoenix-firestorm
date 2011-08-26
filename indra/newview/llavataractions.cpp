@@ -49,6 +49,7 @@
 #include "llfloaterpay.h"
 #include "llfloaterwebcontent.h"
 #include "llfloaterworldmap.h"
+#include "llfolderview.h"
 #include "llgiveinventory.h"
 #include "llinventorybridge.h"
 #include "llinventorymodel.h"	// for gInventory.findCategoryUUIDForType
@@ -81,6 +82,7 @@
 // [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "llsidepanelinventory.h"
 
 // static
 void LLAvatarActions::requestFriendshipDialog(const LLUUID& id, const std::string& name)
@@ -372,7 +374,14 @@ static void on_avatar_name_show_profile(const LLUUID& agent_id, const LLAvatarNa
 	std::string url = getProfileURL(username);
 
 	// PROFILES: open in webkit window
-	LLWeb::loadWebURLInternal(url, "", agent_id.asString());
+	const bool show_chrome = false;
+	static LLCachedControl<LLRect> profile_rect(gSavedSettings, "WebProfileRect");
+	LLFloaterWebContent::create(LLFloaterWebContent::Params().
+							url(url).
+							id(agent_id.asString()).
+							show_chrome(show_chrome).
+							window_class("profile").
+							preferred_media_size(profile_rect));
 }
 */
 
@@ -437,7 +446,9 @@ void LLAvatarActions::showProfile(const LLUUID& id)
 //static 
 bool LLAvatarActions::profileVisible(const LLUUID& id)
 {
-	LLFloaterWebContent *browser = dynamic_cast<LLFloaterWebContent*> (LLFloaterReg::findInstance("web_content", id.asString()));
+	LLSD sd;
+	sd["id"] = id;
+	LLFloaterWebContent *browser = dynamic_cast<LLFloaterWebContent*> (LLFloaterReg::findInstance("profile", sd));
 	return browser && browser->isShown();
 }
 
@@ -445,7 +456,9 @@ bool LLAvatarActions::profileVisible(const LLUUID& id)
 //static 
 void LLAvatarActions::hideProfile(const LLUUID& id)
 {
-	LLFloaterWebContent *browser = dynamic_cast<LLFloaterWebContent*> (LLFloaterReg::findInstance("web_content", id.asString()));
+	LLSD sd;
+	sd["id"] = id;
+	LLFloaterWebContent *browser = dynamic_cast<LLFloaterWebContent*> (LLFloaterReg::findInstance("profile", sd));
 	if (browser)
 	{
 		browser->closeFloater();
@@ -585,45 +598,51 @@ namespace action_give_inventory
 	/**
 	 * Checks My Inventory visibility.
 	 */
-//	static bool is_give_inventory_acceptable()
+
+//      static bool is_give_inventory_acceptable()
 // [SL:KB] - Patch: Inventory-ShareSelection | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
-	static bool is_give_inventory_acceptable(const uuid_set_t inventory_selected_uuids)
+        static bool is_give_inventory_acceptable(const uuid_set_t inventory_selected_uuids)
 // [/SL:KB]
-	{
-//		LLInventoryPanel* active_panel = get_active_inventory_panel();
-//		if (!active_panel) return false;
+        {
+//              LLInventoryPanel* active_panel = get_active_inventory_panel();
+//              if (!active_panel) return false;
 
-//		// check selection in the panel
-//		const uuid_set_t inventory_selected_uuids = active_panel->getRootFolder()->getSelectionList();
-		if (inventory_selected_uuids.empty()) return false; // nothing selected
+//              // check selection in the panel
+//		const std::set<LLUUID> inventory_selected_uuids = LLAvatarActions::getInventorySelectedUUIDs();
+//
+                if (inventory_selected_uuids.empty()) return false; // nothing selected
 
-		bool acceptable = false;
-		uuid_set_t::const_iterator it = inventory_selected_uuids.begin();
-		const uuid_set_t::const_iterator it_end = inventory_selected_uuids.end();
-		for (; it != it_end; ++it)
-		{
-			LLViewerInventoryCategory* inv_cat = gInventory.getCategory(*it);
-			// any category can be offered.
-			if (inv_cat)
-			{
-				acceptable = true;
-				continue;
-			}
+                bool acceptable = false;
+//                std::set<LLUUID>::const_iterator it = inventory_selected_uuids.begin();
+//                const std::set<LLUUID>::const_iterator it_end = inventory_selected_uuids.end();
 
-			LLViewerInventoryItem* inv_item = gInventory.getItem(*it);
-			// check if inventory item can be given
-			if (LLGiveInventory::isInventoryGiveAcceptable(inv_item))
-			{
-				acceptable = true;
-				continue;
-			}
+                uuid_set_t::const_iterator it = inventory_selected_uuids.begin();
+                const uuid_set_t::const_iterator it_end = inventory_selected_uuids.end();
+                for (; it != it_end; ++it)
+                {
+                        LLViewerInventoryCategory* inv_cat = gInventory.getCategory(*it);
+                        // any category can be offered.
+                        if (inv_cat)
+                        {
+                                acceptable = true;
+                                continue;
+                        }
 
-			// there are neither item nor category in inventory
-			acceptable = false;
-			break;
-		}
-		return acceptable;
-	}
+                        LLViewerInventoryItem* inv_item = gInventory.getItem(*it);
+                        // check if inventory item can be given
+                        if (LLGiveInventory::isInventoryGiveAcceptable(inv_item))
+                        {
+                                acceptable = true;
+                                continue;
+                        }
+
+                        // there are neither item nor category in inventory
+                        acceptable = false;
+                        break;
+                }
+                return acceptable;
+        }
+
 
 	static void build_residents_string(const std::vector<LLAvatarName> avatar_names, std::string& residents_string)
 	{
@@ -642,12 +661,12 @@ namespace action_give_inventory
 		}
 	}
 
-	static void build_items_string(const uuid_set_t& inventory_selected_uuids , std::string& items_string)
+	static void build_items_string(const std::set<LLUUID>& inventory_selected_uuids , std::string& items_string)
 	{
 		llassert(inventory_selected_uuids.size() > 0);
 
 		const std::string& separator = LLTrans::getString("words_separator");
-		for (uuid_set_t::const_iterator it = inventory_selected_uuids.begin(); ; )
+		for (std::set<LLUUID>::const_iterator it = inventory_selected_uuids.begin(); ; )
 		{
 			LLViewerInventoryCategory* inv_cat = gInventory.getCategory(*it);
 			if (NULL != inv_cat)
@@ -688,10 +707,13 @@ namespace action_give_inventory
 
 //		const uuid_set_t inventory_selected_uuids = active_panel->getRootFolder()->getSelectionList();
 // [SL:KB] - Patch: Inventory-ShareSelection | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
-		uuid_set_t inventory_selected_uuids; const LLSD& sdPayload = notification["payload"];
+		uuid_set_t inventory_selected_uuids; 
+		const LLSD& sdPayload = notification["payload"];
 		for (LLSD::array_const_iterator itItem = sdPayload.beginArray(); itItem != sdPayload.endArray(); ++itItem)
 			inventory_selected_uuids.insert(itItem->asUUID());
 // [/SL:KB]
+		//const std::set<LLUUID> inventory_selected_uuids = LLAvatarActions::getInventorySelectedUUIDs();
+
 		if (inventory_selected_uuids.empty())
 		{
 			return;
@@ -708,8 +730,8 @@ namespace action_give_inventory
 			// We souldn't open IM session, just calculate session ID for logging purpose. See EXT-6710
 			const LLUUID session_id = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL, avatar_uuid);
 
-			uuid_set_t::const_iterator it = inventory_selected_uuids.begin();
-			const uuid_set_t::const_iterator it_end = inventory_selected_uuids.end();
+			std::set<LLUUID>::const_iterator it = inventory_selected_uuids.begin();
+			const std::set<LLUUID>::const_iterator it_end = inventory_selected_uuids.end();
 
 			const std::string& separator = LLTrans::getString("words_separator");
 			std::string noncopy_item_names;
@@ -789,6 +811,8 @@ namespace action_give_inventory
 //		if (!active_panel) return;
 
 //		const uuid_set_t inventory_selected_uuids = active_panel->getRootFolder()->getSelectionList();
+		//const std::set<LLUUID> inventory_selected_uuids = LLAvatarActions::getInventorySelectedUUIDs();
+
 		if (inventory_selected_uuids.empty())
 		{
 			return;
@@ -815,6 +839,33 @@ namespace action_give_inventory
 		LLNotificationsUtil::add("ShareItemsConfirmation", substitutions, sdPayload, &give_inventory_cb);
 // [/SL:KB]
 	}
+}
+
+
+
+//static
+std::set<LLUUID> LLAvatarActions::getInventorySelectedUUIDs()
+{
+	std::set<LLUUID> inventory_selected_uuids;
+
+	LLInventoryPanel* active_panel = action_give_inventory::get_active_inventory_panel();
+	if (active_panel)
+	{
+		inventory_selected_uuids = active_panel->getRootFolder()->getSelectionList();
+	}
+
+	if (inventory_selected_uuids.empty())
+	{
+		LLSidepanelInventory * sidepanel_inventory = LLSideTray::getInstance()->getPanel<LLSidepanelInventory>("sidepanel_inventory");
+		LLInventoryPanel * inbox = sidepanel_inventory->findChild<LLInventoryPanel>("inventory_inbox");
+		if (inbox)
+		{
+			inventory_selected_uuids = inbox->getRootFolder()->getSelectionList();
+		}
+
+	}
+
+	return inventory_selected_uuids;
 }
 
 //static
@@ -849,12 +900,12 @@ bool LLAvatarActions::canShareSelectedItems(LLInventoryPanel* inv_panel /* = NUL
 
 	// check selection in the panel
 	LLFolderView* root_folder = inv_panel->getRootFolder();
-	const uuid_set_t inventory_selected_uuids = root_folder->getSelectionList();
+	const std::set<LLUUID> inventory_selected_uuids = root_folder->getSelectionList();
 	if (inventory_selected_uuids.empty()) return false; // nothing selected
 
 	bool can_share = true;
-	uuid_set_t::const_iterator it = inventory_selected_uuids.begin();
-	const uuid_set_t::const_iterator it_end = inventory_selected_uuids.end();
+	std::set<LLUUID>::const_iterator it = inventory_selected_uuids.begin();
+	const std::set<LLUUID>::const_iterator it_end = inventory_selected_uuids.end();
 	for (; it != it_end; ++it)
 	{
 		LLViewerInventoryCategory* inv_cat = gInventory.getCategory(*it);
@@ -917,6 +968,10 @@ bool LLAvatarActions::canOfferTeleport(const LLUUID& id)
 // static
 bool LLAvatarActions::canOfferTeleport(const uuid_vec_t& ids)
 {
+	// We can't send more than 250 lures in a single message, so disable this
+	// button when there are too many id's selected.
+	if(ids.size() > 250) return false;
+	
 	bool result = true;
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{

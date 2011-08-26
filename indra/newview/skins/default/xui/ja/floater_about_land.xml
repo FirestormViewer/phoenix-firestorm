@@ -139,12 +139,12 @@
 				誤
 			</text>
 			<button label="土地の購入" label_selected="土地を購入..." left="130" name="Buy Land..." width="100"/>
+			<button label="リンデンセール" label_selected="Linden セール..." name="Linden Sale..." tool_tip="土地が所有されており、コンテンツが設定されている必要があります。オークションの対象になっていないことも必要条件です。"/>
 			<button label="スクリプト情報" name="Scripts..." width="100"/>
 			<button label="グループに購入" label_selected="グループ用に購入..." name="Buy For Group..."/>
 			<button label="入場許可を購入" label_selected="入場許可を購入..." left="130" name="Buy Pass..." tool_tip="この土地への一時的なアクセスを許可します。" width="100"/>
 			<button label="土地の放棄" label_selected="土地を放棄..." name="Abandon Land..."/>
 			<button label="土地を取り戻す" label_selected="土地の返還を要求..." name="Reclaim Land..."/>
-			<button label="リンデンセール" label_selected="Linden セール..." name="Linden Sale..." tool_tip="土地が所有されており、コンテンツが設定されている必要があります。オークションの対象になっていないことも必要条件です。"/>
 		</panel>
 		<panel label="約款" name="land_covenant_panel">
 			<panel.string name="can_resell">
@@ -316,6 +316,9 @@
 			<panel.string name="push_restrict_region_text">
 				プッシュ禁止 （地域設定優先）
 			</panel.string>
+			<panel.string name="see_avs_text">
+				この区画にいる住人と会ってチャットする
+			</panel.string>
 			<text name="allow_label">
 				他の住人への許可：
 			</text>
@@ -355,6 +358,7 @@
 				<combo_box.item label="公園と自然" name="item9"/>
 				<combo_box.item label="住宅用" name="item10"/>
 				<combo_box.item label="ショッピング" name="item11"/>
+				<combo_box.item label="レンタル" name="item13"/>
 				<combo_box.item label="その他" name="item12"/>
 			</combo_box>
 			<combo_box name="land category">
@@ -369,6 +373,7 @@
 				<combo_box.item label="公園と自然" name="item9"/>
 				<combo_box.item label="住宅用" name="item10"/>
 				<combo_box.item label="ショッピング" name="item11"/>
+				<combo_box.item label="レンタル" name="item13"/>
 				<combo_box.item label="その他" name="item12"/>
 			</combo_box>
 			<check_box label="「Moderate」コンテンツ" name="MatureCheck" tool_tip=""/>
@@ -376,6 +381,10 @@
 				スナップショット：
 			</text>
 			<texture_picker label="" name="snapshot_ctrl" tool_tip="写真をクリックして選択"/>
+			<text name="allow_label5">
+				他の区画にいる住人への許可：
+			</text>
+			<check_box label="アバターを表示" name="SeeAvatarsCheck" tool_tip="他の区画の住人が、この区画にいる住人に会ってチャットすることを許可し、あなたもそれら住人に会ってチャットできるようにします。"/>
 			<text name="landing_point">
 				着地点: [LANDING]
 			</text>
@@ -432,6 +441,11 @@
 				サウンド：
 			</text>
 			<check_box label="ジェスチャーとオブジェクトの音をこの区画だけに限定する" name="check sound local"/>
+			<text name="Avatar Sounds:">
+				アバターのサウンド：
+			</text>
+			<check_box label="全員" name="all av sound check"/>
+			<check_box label="グループ" name="group av sound check"/>
 			<text name="Voice settings:">
 				ボイス：
 			</text>
@@ -444,7 +458,7 @@
 				（エステートに限定）
 			</panel.string>
 			<panel.string name="allow_public_access">
-				パブリックアクセスを許可 （[MATURITY]）
+				パブリックアクセスを許可 （[MATURITY]）（注意：このオプションをオフにすると立入禁止ラインが作成されます）
 			</panel.string>
 			<panel.string name="estate_override">
 				1 つ以上のオプションが、不動産レベルで設定されています。

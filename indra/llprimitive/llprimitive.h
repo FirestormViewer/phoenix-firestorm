@@ -103,6 +103,8 @@ public:
 		PARAMS_LIGHT    = 0x20,
 		PARAMS_SCULPT   = 0x30,
 		PARAMS_LIGHT_IMAGE = 0x40,
+		PARAMS_RESERVED = 0x50, // Used on server-side
+		PARAMS_MESH     = 0x60,
 	};
 	
 public:
@@ -323,7 +325,7 @@ public:
 	const LLVolume *getVolumeConst() const { return mVolumep; }		// HACK for Windoze confusion about ostream operator in LLVolume
 	LLVolume *getVolume() const { return mVolumep; }
 	virtual BOOL setVolume(const LLVolumeParams &volume_params, const S32 detail, bool unique_volume = false);
-
+	
 	// Modify texture entry properties
 	inline BOOL validTE(const U8 te_num) const;
 	LLTextureEntry* getTE(const U8 te_num) const;
@@ -444,6 +446,7 @@ protected:
 	U8					mNumTEs;			// # of faces on the primitve	
 	U32 				mMiscFlags;			// home for misc bools
 
+public:
 	static LLVolumeMgr* sVolumeManager;
 };
 

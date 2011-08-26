@@ -28,6 +28,9 @@ include_directories(
 set(llui_SOURCE_FILES
     llaccordionctrl.cpp
     llaccordionctrltab.cpp
+    llbadge.cpp
+	llbadgeholder.cpp
+    llbadgeowner.cpp
     llbutton.cpp
     llcheckboxctrl.cpp
     llclipboard.cpp
@@ -93,6 +96,7 @@ set(llui_SOURCE_FILES
     lltextparser.cpp
     lltextutil.cpp
     lltextvalidate.cpp
+    lltimectrl.cpp
     lltransutil.cpp
     lltoggleablemenu.cpp
     lltooltip.cpp
@@ -119,6 +123,9 @@ set(llui_HEADER_FILES
 
     llaccordionctrl.h
     llaccordionctrltab.h
+    llbadge.h
+	llbadgeholder.h
+    llbadgeowner.h
     llbutton.h
     llcallbackmap.h
     llcheckboxctrl.h
@@ -191,6 +198,7 @@ set(llui_HEADER_FILES
     lltextparser.h
     lltextutil.h
     lltextvalidate.h
+    lltimectrl.h
     lltoggleablemenu.h
     lltooltip.h
     lltransutil.h
@@ -244,8 +252,8 @@ target_link_libraries(llui
     ${LLCOMMON_LIBRARIES} # must be after llimage, llwindow, llrender
     )
 
+# Add tests
 if(LL_TESTS)
-  # Add tests
   include(LLAddBuildTest)
   SET(llui_TEST_SOURCE_FILES
       llurlmatch.cpp

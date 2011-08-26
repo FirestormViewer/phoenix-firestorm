@@ -82,7 +82,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				Calificación:
 			</text>
 			<text name="ContentRatingText">
-				&apos;Adult&apos;
+				Adulto
 			</text>
 			<text name="Owner:">
 				Propietario:
@@ -113,13 +113,13 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 			<text name="For sale to">
 				En venta a: [BUYER]
 			</text>
-			<text name="Sell with landowners objects in parcel." width="216">
-				Los objetos se incluyen en la venta.
+			<text name="Sell with landowners objects in parcel.">
+				Objetos incluidos en la venta
 			</text>
-			<text name="Selling with no objects in parcel." width="216">
+			<text name="Selling with no objects in parcel.">
 				Los objetos no se incluyen en la venta.
 			</text>
-			<button bottom="-245" font="SansSerifSmall" label="Cancelar la venta del terreno" label_selected="Cancelar la venta del terreno" left="275" name="Cancel Land Sale"/>
+			<button label="Cancelar la venta del terreno" label_selected="Cancelar la venta del terreno" name="Cancel Land Sale"/>
 			<text name="Claimed:">
 				Reclamada:
 			</text>
@@ -139,12 +139,12 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				0
 			</text>
 			<button label="Comprar terreno" left="130" name="Buy Land..." width="125"/>
-			<button label="Información del script" name="Scripts..."/>
+			<button label="Venta Linden" name="Linden Sale..." tool_tip="El terreno debe estar en propiedad, con contenido, y no estar en subasta."/>
+			<button label="Información de scripts" name="Scripts..."/>
 			<button label="Comprar para el grupo" name="Buy For Group..."/>
 			<button label="Comprar un pase" left="130" name="Buy Pass..." tool_tip="Un pase le da acceso temporal a este terreno." width="125"/>
 			<button label="Abandonar el terreno" name="Abandon Land..."/>
 			<button label="Reclamar el terreno" name="Reclaim Land..."/>
-			<button label="Venta Linden" name="Linden Sale..." tool_tip="El terreno debe estar en propiedad, con contenido, y no estar en subasta."/>
 		</panel>
 		<panel label="CONTRATO" name="land_covenant_panel">
 			<panel.string name="can_resell">
@@ -193,7 +193,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				Calificación:
 			</text>
 			<text name="region_maturity_text">
-				&apos;Adult&apos;
+				Adulto
 			</text>
 			<text name="resellable_lbl">
 				Revender:
@@ -294,16 +294,16 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 				Esta opción no esta activada porque usted no puede modificar las opciones de la parcela.
 			</panel.string>
 			<panel.string name="mature_check_mature">
-				Contenido &apos;Mature&apos;
+				Contenido Moderado
 			</panel.string>
 			<panel.string name="mature_check_adult">
-				Contenido &apos;Adult&apos;
+				Contenido Adulto
 			</panel.string>
 			<panel.string name="mature_check_mature_tooltip">
-				La información o el contenido de su parcela se considera &apos;Mature&apos;.
+				La información o el contenido de su parcela se considera Moderado.
 			</panel.string>
 			<panel.string name="mature_check_adult_tooltip">
-				La información o el contenido de su parcela se considera &apos;Adult&apos;.
+				La información o el contenido de su parcela se considera Adulto.
 			</panel.string>
 			<panel.string name="landing_point_none">
 				(ninguno)
@@ -313,6 +313,9 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 			</panel.string>
 			<panel.string name="push_restrict_region_text">
 				Sin &apos;empujones&apos; (prevalece lo marcado en la región)
+			</panel.string>
+			<panel.string name="see_avs_text">
+				Ver a los residentes de esta parcela y chatear con ellos
 			</panel.string>
 			<text name="allow_label">
 				Permitir a otros Residentes:
@@ -343,7 +346,7 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 			<combo_box name="land category with adult">
 				<combo_box.item label="Cualquier categoría" name="item0"/>
 				<combo_box.item label="Localización Linden" name="item1"/>
-				<combo_box.item label="&apos;Adult&apos;" name="item2"/>
+				<combo_box.item label="Adulto" name="item2"/>
 				<combo_box.item label="Arte y Cultura" name="item3"/>
 				<combo_box.item label="Negocios" name="item4"/>
 				<combo_box.item label="Educativo" name="item5"/>
@@ -371,11 +374,15 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 				<combo_box.item label="Terreno en alquiler" name="item13"/>
 				<combo_box.item label="Otra" name="item12"/>
 			</combo_box>
-			<check_box label="Contenido &apos;Mature&apos;" name="MatureCheck" tool_tip=""/>
+			<check_box label="Contenido Moderado" name="MatureCheck" tool_tip=""/>
 			<text name="Snapshot:">
 				Foto:
 			</text>
 			<texture_picker label="" name="snapshot_ctrl" tool_tip="Pulse para elegir una imagen"/>
+			<text name="allow_label5">
+				Permitir a los residentes de otras parcelas:
+			</text>
+			<check_box label="Ver los avatares" name="SeeAvatarsCheck" tool_tip="Permite que los residentes de otras parcelas vean a los residentes de ésta y chateen con ellos, y también que tú puedas verles y chatear con ellos."/>
 			<text name="landing_point">
 				Punto de llegada: [LANDING]
 			</text>
@@ -435,6 +442,11 @@ los media:
 				Sonido:
 			</text>
 			<check_box label="Restringir sonidos de objetos y gestos a esta parcela" name="check sound local"/>
+			<text name="Avatar Sounds:">
+				Sonidos de avatar:
+			</text>
+			<check_box label="Todos" name="all av sound check"/>
+			<check_box label="Grupo" name="group av sound check"/>
 			<text name="Voice settings:">
 				Voz:
 			</text>

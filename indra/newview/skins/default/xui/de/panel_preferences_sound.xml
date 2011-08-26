@@ -21,7 +21,8 @@
 	<check_box name="media_allowscript_btn" tool_tip="Erlaubt bzw. verbietet Scripten die Kontrolle über die Medienwiedergabe" label="Skripte erlauben Medien abzuspielen" />
  	<check_box name="media_filter" tool_tip="Aktiviert den Medienfilter, der abhängig der Medien-URL die Wiedergabe erlaubt oder verbietet." label="Medienfilter aktivieren (erhöhte Sicherheit)" />
 	<button label="Listen bearbeiten..." name="edit_media_lists_button" />
-	<check_box label="An and. Avataren angeh. Medien wiederg." name="media_show_on_others_btn" tool_tip="Diese Option deaktivieren, um Medien für andere Avataren, die sich in der Nähe befinden, auszublenden." value="true"/>
+	<check_box label="Medien, die an andere Avatare angehängt sind, wiedergeben." name="media_show_on_others_btn" tool_tip="Diese Option deaktivieren, um Medien für andere Avataren, die sich in der Nähe befinden, auszublenden." value="true"/>
+	<check_box label="Sounds von Gesten abspielen" name="gesture_audio_play_btn" tool_tip="Markieren, um Sounds von Gesten zu hören" value="true"/>
 	<text name="voice_chat_settings">
 		Voice-Chat-Einstellungen
 	</text>
@@ -38,28 +39,5 @@
 	<button label="Taste festlegen" name="set_voice_hotkey_button"/>
 	<button name="set_voice_middlemouse_button" tool_tip="Auf mittlere Maustaste zurücksetzen"/>
 	<button label="Eingabe-/Ausgabegeräte" name="device_settings_btn"/>
-	<panel label="Geräte-Einstellungen" name="device_settings_panel">
-		<panel.string name="default_text">
-			Standard
-		</panel.string>
-		<panel.string name="default system device">
-			Standardgerät
-		</panel.string>
-		<panel.string name="no device">
-			Kein Gerät
-		</panel.string>
-		<text name="Input">
-			Eingabe
-		</text>
-		<text name="My volume label">
-			Meine Lautstärke:
-		</text>
-		<slider_bar initial_value="1.0" name="mic_volume_slider" tool_tip="Ändern Sie die Lautstärke mit dem Regler"/>
-		<text name="wait_text">
-			Bitte warten
-		</text>
-		<text name="Output">
-			Ausgabe
-		</text>
-	</panel>
+	<panel label="Geräte-Einstellungen" name="device_settings_panel"/>
 </panel>
