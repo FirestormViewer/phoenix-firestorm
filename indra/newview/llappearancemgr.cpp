@@ -2710,7 +2710,9 @@ void LLAppearanceMgr::autopopulateOutfits()
 void LLAppearanceMgr::onFirstFullyVisible()
 {
 	gAgentAvatarp->debugAvatarVisible();
-	autopopulateOutfits();
+	// The auto-populate is failing at the point of generating outfits
+	// folders, so don't do the library copy until that is resolved.
+	// autopopulateOutfits();
 }
 
 bool LLAppearanceMgr::updateBaseOutfit()
