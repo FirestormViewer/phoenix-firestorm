@@ -103,7 +103,10 @@
 #include "llmutelist.h"
 #include "lltoolpie.h"
 #include "llcurl.h"
-
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 void check_stack_depth(S32 stack_depth)
 {
@@ -2856,8 +2859,15 @@ void LLPipeline::stateSort(LLDrawable* drawablep, LLCamera& camera)
 	
 	if (LLSelectMgr::getInstance()->mHideSelectedObjects)
 	{
-		if (drawablep->getVObj().notNull() &&
-			drawablep->getVObj()->isSelected())
+//		if (drawablep->getVObj().notNull() &&
+//			drawablep->getVObj()->isSelected())
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.2.1f
+		const LLViewerObject* pObj = drawablep->getVObj();
+		if ( (pObj) && (pObj->isSelected()) && 
+			 ( (!rlv_handler_t::isEnabled()) || 
+			   ( ((!pObj->isHUDAttachment()) || (!gRlvAttachmentLocks.isLockedAttachment(pObj->getRootEdit()))) && 
+			     (gRlvHandler.canEdit(pObj)) ) ) )
+// [/RVLa:KB]
 		{
 			return;
 		}

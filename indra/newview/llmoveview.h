@@ -60,7 +60,10 @@ public:
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ void setDocked(bool docked, bool pop_on_undock = true);
 
-	static void sUpdateFlyingStatus();
+//	static void sUpdateFlyingStatus();
+// [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+	static void sUpdateMovementStatus();
+// [/RLVa:KB]
 
 protected:
 	void turnLeft();

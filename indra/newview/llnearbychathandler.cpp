@@ -42,6 +42,10 @@
 #include "llfloaterreg.h"//for LLFloaterReg::getTypedInstance
 #include "llviewerwindow.h"//for screen channel position
 
+// [RLVa:KB] - Checked: 2010-04-21 (RLVa-1.2.0f)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 //add LLNearbyChatHandler to LLNotificationsUI namespace
 using namespace LLNotificationsUI;
 
@@ -502,6 +506,23 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,		// WARNING - not 
 			tmp_chat.mText = tmp_chat.mText.substr(3);
 	}
 
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+	if (rlv_handler_t::isEnabled())
+	{
+		// NOTE-RLVa: we can only filter the *message* here since most everything else will already be part of "args" as well
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) && (!tmp_chat.mRlvLocFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
+		{
+			RlvUtil::filterLocation(tmp_chat.mText);
+			tmp_chat.mRlvLocFiltered = TRUE;
+		}
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!tmp_chat.mRlvNamesFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
+		{
+			RlvUtil::filterNames(tmp_chat.mText);
+			tmp_chat.mRlvNamesFiltered = TRUE;
+		}
+	}
+// [/RLVa:KB]
+
 	LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
 	{
 		//sometimes its usefull to have no name at all...
@@ -608,6 +629,10 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,		// WARNING - not 
 		LLUUID id;
 		id.generate();
 		notification["id"] = id;
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+		if (rlv_handler_t::isEnabled())
+			notification["show_icon_tooltip"] = !chat_msg.mRlvNamesFiltered;
+// [/RLVa:KB]
 		std::string r_color_name = "White";
 		F32 r_color_alpha = 1.0f; 
 		LLViewerChat::getChatColor( chat_msg, r_color_name, r_color_alpha);

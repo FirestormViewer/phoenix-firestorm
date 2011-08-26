@@ -58,6 +58,11 @@
 #include "llsdserialize.h"
 #include "llfirstuse.h"
 
+// [RLVa:KB] - Checked: 2010-09-11 (RLVa-1.2.1d)
+#include "rlvhandler.h"
+#include "rlvui.h"
+// [/RLVa:KB]
+
 // Distance from mouse down on which drag'n'drop should be started.
 #define DRAG_START_DISTANCE 3
 
@@ -111,7 +116,10 @@ BOOL LLBottomtrayButton::handleMouseDown(S32 x, S32 y, MASK mask)
 
 static void update_build_button_enable_state()
 {
-	bool can_edit = LLToolMgr::getInstance()->canEdit();
+//	bool can_edit = LLToolMgr::getInstance()->canEdit();
+// [RLVa:KB] - Checked: 2010-09-11 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
+	bool can_edit = RlvUIEnabler::isBuildEnabled();
+// [/RLVa:KB]
 
 	LLBottomTray::getInstance()->getChildView("build_btn")->setEnabled(can_edit);
 }
