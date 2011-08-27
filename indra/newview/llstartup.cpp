@@ -1067,7 +1067,7 @@ bool idle_startup()
 		if (show_connect_box)
 		{
 			LLSLURL slurl;
-			//LLPanelLogin::closePanel();
+			LLPanelLogin::closePanel();
 		}
 
 		
