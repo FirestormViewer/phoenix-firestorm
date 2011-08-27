@@ -1067,7 +1067,8 @@ bool idle_startup()
 		if (show_connect_box)
 		{
 			LLSLURL slurl;
-			LLPanelLogin::closePanel();
+			// WS: Close the Panel only, if we have DisableLoginScreens enabled. Else fade away.
+			if(gSavedSettings.getBOOL("PhoenixDisableLoginScreens")) LLPanelLogin::closePanel();
 		}
 
 		
