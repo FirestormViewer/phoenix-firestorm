@@ -91,8 +91,8 @@ RlvUIEnabler::RlvUIEnabler()
 
 	// onUpdateLoginLastLocation
 	#ifdef RLV_EXTENSION_STARTLOCATION
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_TPLOC, boost::bind(&RlvUIEnabler::onUpdateLoginLastLocation, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_UNSIT, boost::bind(&RlvUIEnabler::onUpdateLoginLastLocation, this)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_TPLOC, boost::bind(&RlvUIEnabler::onUpdateLoginLastLocation, this, _1)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_UNSIT, boost::bind(&RlvUIEnabler::onUpdateLoginLastLocation, this, _1)));
 	#endif // RLV_EXTENSION_STARTLOCATION
 }
 
@@ -169,8 +169,10 @@ void RlvUIEnabler::onToggleRez()
 // Checked: 2011-05-28 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
 void RlvUIEnabler::onToggleSetDebug()
 {
+	// AO: comment until we figure out how to support this compiler extension without breaking other code
 	//bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SETDEBUG);
-	//for (auto itSetting = RlvExtGetSet::m_DbgAllowed.cbegin(); itSetting != RlvExtGetSet::m_DbgAllowed.cend(); ++itSetting)
+	//for (std::map<std::string, S16>::const_iterator itSetting = RlvExtGetSet::m_DbgAllowed.cbegin(); 
+	//		itSetting != RlvExtGetSet::m_DbgAllowed.cend(); ++itSetting)
 	//{
 	//	if (itSetting->second & RlvExtGetSet::DBG_WRITE)
 	//		gSavedSettings.getControl(itSetting->first)->setHiddenFromSettingsEditor(!fEnable);
@@ -385,14 +387,14 @@ void RlvUIEnabler::onToggleShowMinimap()
 
 	// Enable/disable the "Mini-Map" bottom tray button
 	const LLBottomTray* pTray = LLBottomTray::getInstance();
-	LLView* pBtnView = (pTray) ? pTray->getChildView("mini_map_btn") : NULL;
+	LLView* pBtnView = (pTray) ? pTray->findChildView("mini_map_btn") : NULL;
 	RLV_ASSERT(pBtnView);
 	if (pBtnView)
 		pBtnView->setEnabled(fEnable);
 
 	// Break/reestablish the visibility connection for the nearby people panel embedded minimap instance
 	LLPanel* pPeoplePanel = LLSideTray::getInstance()->getPanel("panel_people");
-	LLPanel* pNetMapPanel = (pPeoplePanel) ? pPeoplePanel->getChild<LLPanel>("minimaplayout", TRUE) : NULL;
+	LLPanel* pNetMapPanel = (pPeoplePanel) ? pPeoplePanel->getChild<LLPanel>("minimaplayout", TRUE) : NULL;  //AO: firestorm specific
 	RLV_ASSERT( (pPeoplePanel) && (pNetMapPanel) );
 	if (pNetMapPanel)
 	{
@@ -446,7 +448,7 @@ void RlvUIEnabler::onToggleShowWorldMap()
 
 	// Enable/disable the "Map" bottom tray button
 	const LLBottomTray* pTray = LLBottomTray::getInstance();
-	LLView* pBtnView = (pTray) ? pTray->getChildView("world_map_btn") : NULL;
+	LLView* pBtnView = (pTray) ? pTray->findChildView("world_map_btn") : NULL;
 	RLV_ASSERT(pBtnView);
 	if (pBtnView)
 		pBtnView->setEnabled(fEnable);
@@ -462,7 +464,7 @@ void RlvUIEnabler::onToggleShowWorldMap()
 void RlvUIEnabler::onToggleTp()
 {
 	// Disable the navigation bar "Home" button if both @tplm=n *and* @tploc=n restricted
-	LLButton* pNavBarHomeBtn = LLNavigationBar::getInstance()->getChild<LLButton>("home_btn");
+	LLButton* pNavBarHomeBtn = LLNavigationBar::getInstance()->findChild<LLButton>("home_btn");
 	RLV_ASSERT(pNavBarHomeBtn);
 	if (pNavBarHomeBtn)
 		pNavBarHomeBtn->setEnabled(!(gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)));
@@ -477,7 +479,7 @@ void RlvUIEnabler::onToggleUnsit()
 	RLV_ASSERT(pPanelStand);
 	if (pPanelStand)
 	{
-		LLButton* pBtnStand = pPanelStand->getChild<LLButton>("stand_btn");
+		LLButton* pBtnStand = pPanelStand->findChild<LLButton>("stand_btn");
 		RLV_ASSERT(pBtnStand);
 		if (pBtnStand)
 			pBtnStand->setEnabled(fEnable);
@@ -499,9 +501,10 @@ void RlvUIEnabler::onToggleViewXXX()
 }
 
 // Checked: 2010-04-01 (RLVa-1.2.0c) | Added: RLVa-1.2.0c
-void RlvUIEnabler::onUpdateLoginLastLocation()
+void RlvUIEnabler::onUpdateLoginLastLocation(bool fQuitting)
 {
-	RlvSettings::updateLoginLastLocation();
+	if (!fQuitting)
+		RlvSettings::updateLoginLastLocation();
 }
 
 // ============================================================================

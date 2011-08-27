@@ -3323,7 +3323,7 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 			}
 			if (is_movable)
 			{
-				is_movable = (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) && 
+				is_movable = (!RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) || 
 					(RlvFolderLocks::instance().canMoveItem(inv_item->getUUID(), mUUID));
 			}
 		}
@@ -4835,6 +4835,10 @@ void remove_inventory_category_from_avatar_step2( BOOL proceed, LLUUID category_
 					continue;
 				if (get_is_item_worn(item->getUUID()))
 				{
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0c) | Modified: RLVa-0.2.2a
+//					if ( (rlv_handler_t::isEnabled()) && (!gRlvWearableLocks.canRemove(item)) )
+//						continue;
+// [/RLVa:KB]
 //					LLWearableList::instance().getAsset(item->getAssetUUID(),
 //														item->getName(),
 //														item->getType(),
@@ -5037,7 +5041,11 @@ void LLWearableBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 					if (LLWearableType::getAllowMultiwear(mWearableType))
 					{
 						items.push_back(std::string("Wearable Add"));
-						if (gAgentWearables.getWearableCount(mWearableType) >= LLAgentWearables::MAX_CLOTHING_PER_TYPE)
+//						if (gAgentWearables.getWearableCount(mWearableType) >= LLAgentWearables::MAX_CLOTHING_PER_TYPE)
+// [SL:KB] - Patch: Appearance-WearableDuplicateAssets | Checked: 2011-07-24 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
+						if ( (gAgentWearables.getWearableCount(mWearableType) >= LLAgentWearables::MAX_CLOTHING_PER_TYPE) ||
+							 (gAgentWearables.getWearableFromAssetID(item->getAssetUUID())) )
+// [/SL:KB]
 						{
 							disabled_items.push_back(std::string("Wearable Add"));
 						}
@@ -5204,6 +5212,18 @@ BOOL LLWearableBridge::canRemoveFromAvatar(void* user_data)
 //}
 
 // static
+//void LLWearableBridge::onRemoveFromAvatarArrived(LLWearable* wearable,
+//												 void* userdata)
+//{
+//	OnRemoveStruct *on_remove_struct = (OnRemoveStruct*) userdata;
+//	const LLUUID &item_id = gInventory.getLinkedItemID(on_remove_struct->mUUID);
+// [RLVa:KB] - Checked: 2010-03-20 (RLVa-1.2.0c) | Modified: RLVa-1.2.0a
+//	if ( (rlv_handler_t::isEnabled()) && ((!wearable) || (!gRlvWearableLocks.canRemove(gInventory.getItem(item_id)))) )
+//	{
+//		delete on_remove_struct;
+//		return;
+//	}
+// [/RLVa:KB]
 //	if(wearable)
 //	{
 //		if( get_is_item_worn( item_id ) )

@@ -83,6 +83,9 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "llsidepanelinventory.h"
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 // static
 void LLAvatarActions::requestFriendshipDialog(const LLUUID& id, const std::string& name)

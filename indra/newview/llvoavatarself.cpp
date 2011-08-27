@@ -70,6 +70,10 @@
 #include "lggbeammaps.h"
 #include "llmeshrepository.h"
 #include "llvovolume.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -1340,6 +1344,18 @@ const LLViewerJointAttachment *LLVOAvatarSelf::attachObject(LLViewerObject *view
 		}
 //-TT
 		updateLODRiggedAttachments();		
+
+// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
+		// NOTE: RLVa event handlers should be invoked *after* LLVOAvatar::attachObject() calls LLViewerJointAttachment::addObject()
+		if (rlv_handler_t::isEnabled())
+		{
+			RlvAttachmentLockWatchdog::instance().onAttach(viewer_object, attachment);
+			gRlvHandler.onAttach(viewer_object, attachment);
+
+			if ( (attachment->getIsHUDAttachment()) && (!gRlvAttachmentLocks.hasLockedHUD()) )
+				gRlvAttachmentLocks.updateLockedHUD();
+		}
+// [/RLVa:KB]
 	}
 	
 	return attachment;

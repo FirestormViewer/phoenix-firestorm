@@ -148,6 +148,7 @@ if (LINUX)
       -msse2
       -mfpmath=sse
       -pthread
+#      -std=gnu++0x
       )
 
   if (SERVER)

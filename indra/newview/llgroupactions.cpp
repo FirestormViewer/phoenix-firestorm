@@ -48,6 +48,10 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "groupchatlistener.h"
+// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f)
+#include "llslurl.h"
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 //
 // Globals
@@ -489,7 +493,7 @@ LLUUID LLGroupActions::startIM(const LLUUID& group_id)
 	{
 		make_ui_sound("UISndInvalidOp");
 		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("group", group_id, "about").getSLURLString()));
-		return LLUUID::null;;
+		return LLUUID::null;
 	}
 // [/RLVa:KB]
 

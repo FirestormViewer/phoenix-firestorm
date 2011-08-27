@@ -1227,7 +1227,7 @@ set(viewer_HEADER_FILES
     llxmlrpctransaction.h
     macmain.h
     noise.h
-	panel_prefs_firestorm.h
+    panel_prefs_firestorm.h
     piemenu.h
     pieseparator.h
     pieslice.h

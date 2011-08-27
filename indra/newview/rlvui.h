@@ -57,7 +57,7 @@ protected:
 	void onToggleTp();													// tploc and tplm
 	void onToggleUnsit();												// unsit
 	void onToggleViewXXX();												// viewnote, viewscript, viewtexture
-	void onUpdateLoginLastLocation();									// tploc and unsit
+	void onUpdateLoginLastLocation(bool fQuitting);						// tploc and unsit
 
  	/*
 	 * Floater and sidebar validation callbacks

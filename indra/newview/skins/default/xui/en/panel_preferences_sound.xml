@@ -539,9 +539,18 @@
         Default system device
       </panel.string>
       <panel.string
+        name="name_default_system_device">
+        Default system device
+      </panel.string>
+      <panel.string
         name="no device">
         No device
       </panel.string>
+      <panel.string
+        name="name_no_device">
+        No device
+      </panel.string>
+
       <icon
              height="18"
              image_name="Microphone_On"

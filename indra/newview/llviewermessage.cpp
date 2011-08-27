@@ -3603,31 +3603,33 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 					if ( ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHAT)) && (!gRlvHandler.isException(RLV_BHVR_RECVCHAT, from_id))) &&
 						 ((!gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHATFROM)) || (gRlvHandler.isException(RLV_BHVR_RECVCHATFROM, from_id))) )
 					{
-						gRlvHandler.filterChat(mesg, false);
+						if ( (gRlvHandler.filterChat(mesg, false)) && (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis")) )
+							return;
 					}
 				}
 				else if ( ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTE)) && (!gRlvHandler.isException(RLV_BHVR_RECVEMOTE, from_id))) &&
 					      ((!gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTEFROM)) || (gRlvHandler.isException(RLV_BHVR_RECVEMOTEFROM, from_id))) )
 				{
+					if (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis"))
+						return;
 					mesg = "/me ...";
 				}
 			}
 
 			// Filtering "rules":
 			//   avatar => filter only their name (unless it's this avie)
-			//   other  => filter everything except attachments this avie owns but then we still do filter their text
-			if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) &&
-				 ((CHAT_SOURCE_AGENT != chat.mSourceType) || (chat.mFromID != gAgent.getID())) )
+			//   other  => filter everything
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 			{
-				if (CHAT_SOURCE_AGENT == chat.mSourceType)
+				if (CHAT_SOURCE_AGENT != chat.mSourceType)
+				{
+					RlvUtil::filterNames(chat.mFromName);
+				}
+				else if (chat.mFromID != gAgent.getID())
 				{
 					chat.mFromName = RlvStrings::getAnonym(chat.mFromName);
 					chat.mRlvNamesFiltered = TRUE;
 				} 
-				else if ( (!is_owned_by_me) || (!is_attachment) )
-				{
-					RlvUtil::filterNames(chat.mFromName);
-				}
 			}
 
 			// Create an "objectim" URL for objects if we're either @shownames or @showloc restricted
@@ -3760,22 +3762,22 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 					// Silly people want comprehensive debug messages, blah :p
 					if ( (!strExecuted.empty()) && (strFailed.empty()) && (strRetained.empty()) )
 					{
-						verb = " executes: @";
+						chat.mText = " executes: @";
 						mesg = strExecuted;
 					}
 					else if ( (strExecuted.empty()) && (!strFailed.empty()) && (strRetained.empty()) )
 					{
-						verb = " failed: @";
+						chat.mText = " failed: @";
 						mesg = strFailed;
 					}
 					else if ( (strExecuted.empty()) && (strFailed.empty()) && (!strRetained.empty()) )
 					{
-						verb = " retained: @";
+						chat.mText = " retained: @";
 						mesg = strRetained;
 					}
 					else
 					{
-						verb = ": @";
+						chat.mText = ": @";
 						if (!strExecuted.empty())
 							mesg += "\n    - executed: @" + strExecuted;
 						if (!strFailed.empty())
@@ -6526,6 +6528,24 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 		payload["object_name"] = object_name;
 		payload["owner_name"] = owner_name;
 
+// [RLVa:KB] - Checked: 2011-07-25 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+		if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canAttach()) )
+		{
+			// If only the attachment permission is requested we'll auto-deny it; otherwise let the user decide over remaining permissions
+			if (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH] == questions)
+			{
+				RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_PERMATTACH, LLSD().with("OBJECT", object_name));
+				LLNotifications::instance().forceResponse(
+					LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 1/*NO*/);
+				return;
+			}
+			else
+			{
+				questions &= ~LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH];		
+				payload["questions"] = questions;
+			}
+		}
+// [/RLVa:KB]
 // [RLVa:KB] - Checked: 2009-07-10 (RLVa-1.0.0g) | Modified: RLVa-0.2.0e
 		S32 rlvQuestionsOther = questions;
 

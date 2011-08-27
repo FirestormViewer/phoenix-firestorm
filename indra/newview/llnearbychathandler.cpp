@@ -774,9 +774,6 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,		// WARNING - not 
 		
 		if(channel)
 		{
-            // Add a nearby chat toast.
-            LLUUID id;
-            id.generate();			
 			//LLSD notification;
 			notification["id"] = id;
 			//notification["message"] = chat_msg.mText;

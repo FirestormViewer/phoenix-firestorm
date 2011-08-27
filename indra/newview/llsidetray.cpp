@@ -223,18 +223,8 @@ void LLSideTrayTab::toggleTabDocked(bool toggle_floater /* = true */)
 		floater_tab->setMinimized(FALSE);
 // [/RLVa:KB]
 
-//	bool docking = LLFloater::isShown(floater_tab);
-// [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
-
-// 	AO: Don't change minimized state. We want it preserved.
-//	if (floater_tab->isMinimized())
-//		floater_tab->setMinimized(FALSE);
-
 	LLSideTray* pSideTray = getSideTray();
 	if (!pSideTray) return;
-
-	//bool docking = !pSideTray->isTabAttached(this);
-// [/RLVa:KB]
 
 	bool docking = !isDocked();
 

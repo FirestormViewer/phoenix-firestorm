@@ -194,8 +194,8 @@ RlvCommandOptionGeneric::RlvCommandOptionGeneric(const std::string& strOption)
 
 	if (!(m_fEmpty = strOption.empty()))														// <option> could be an empty string
 	{
-		if ((wtType = LLWearableType::typeNameToType(strOption)) != LLWearableType::WT_INVALID)
-			m_varOption = wtType;																// ... or specify a clothing layer
+		if ( ((wtType = LLWearableType::typeNameToType(strOption)) != LLWearableType::WT_INVALID) && (wtType != LLWearableType::WT_NONE) )
+			m_varOption = wtType;																// ... or specify a (valid) clothing layer
 		else if ((pAttachPt = RlvAttachPtLookup::getAttachPoint(strOption)) != NULL)
 			m_varOption = pAttachPt;															// ... or specify an attachment point
 		else if ( ((UUID_STR_LENGTH - 1) == strOption.length()) && (idOption.set(strOption)) )
@@ -272,8 +272,7 @@ RlvCommandOptionAdjustHeight::RlvCommandOptionAdjustHeight(const RlvCommand& rlv
 	: m_nPelvisToFoot(0.0f), m_nPelvisToFootDeltaMult(0.0f), m_nPelvisToFootOffset(0.0f)
 {
 	std::vector<std::string> cmdTokens;
-	//AO: breaks GCC 4.4 
-	//boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of(";"));
+	boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of(std::string(";")));
 	if (1 == cmdTokens.size())
 	{
 		m_fValid = (LLStringUtil::convertToF32(cmdTokens[0], m_nPelvisToFootOffset));
@@ -291,8 +290,7 @@ RlvCommandOptionAdjustHeight::RlvCommandOptionAdjustHeight(const RlvCommand& rlv
 RlvCommandOptionTpTo::RlvCommandOptionTpTo(const RlvCommand &rlvCmd)
 {
 	std::vector<std::string> cmdTokens;
-	//AO: breaks GCC 4.4
-	//boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of("/"));
+	boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of(std::string("/")));
 
 	m_fValid = (3 == cmdTokens.size());
 	for (int idxAxis = 0; (idxAxis < 3) && (m_fValid); idxAxis++)
@@ -1065,31 +1063,30 @@ void RlvBehaviourNotifyHandler::onReattach(const LLViewerJointAttachment* pAttac
 // Checked: 2010-03-18 (RLVa-1.2.0e) | Added: RLVa-0.2.0h
 void RlvWLSnapshot::restoreSnapshot(const RlvWLSnapshot* pWLSnapshot)
 {
-	//AO: Merge casualty
-	//LLWLParamManager* pWLParams = LLWLParamManager::instance();
-	//if ( (pWLSnapshot) && (pWLParams) )
-	//{
-	//	pWLParams->mAnimator.mIsRunning = pWLSnapshot->fIsRunning;
-	//	pWLParams->mAnimator.mUseLindenTime = pWLSnapshot->fUseLindenTime;
-	//	pWLParams->mCurParams = pWLSnapshot->WLParams;
-	//	pWLParams->propagateParameters();
-	//}
+//	LLWLParamManager* pWLParams = LLWLParamManager::instance();
+//	if ( (pWLSnapshot) && (pWLParams) )
+//	{
+//		pWLParams->mAnimator.mIsRunning = pWLSnapshot->fIsRunning;
+//		pWLParams->mAnimator.mUseLindenTime = pWLSnapshot->fUseLindenTime;
+//		pWLParams->mCurParams = pWLSnapshot->WLParams;
+//		pWLParams->propagateParameters();
+//	}
 }
 
 // Checked: 2010-03-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
 RlvWLSnapshot* RlvWLSnapshot::takeSnapshot()
 {
-	RlvWLSnapshot* pWLSnapshot = NULL;
-	// AO: Merge Casualty
-	//LLWLParamManager* pWLParams = LLWLParamManager::instance();
-	//if (pWLParams)
-	//{
-	//	pWLSnapshot = new RlvWLSnapshot();
-	//	pWLSnapshot->fIsRunning = pWLParams->mAnimator.mIsRunning;
-	//	pWLSnapshot->fUseLindenTime = pWLParams->mAnimator.mUseLindenTime;
-	//	pWLSnapshot->WLParams = pWLParams->mCurParams;
-	//}
-	return pWLSnapshot;
+//	RlvWLSnapshot* pWLSnapshot = NULL;
+//	LLWLParamManager* pWLParams = LLWLParamManager::instance();
+//	if (pWLParams)
+//	{
+//		pWLSnapshot = new RlvWLSnapshot();
+//		pWLSnapshot->fIsRunning = pWLParams->mAnimator.mIsRunning;
+//		pWLSnapshot->fUseLindenTime = pWLParams->mAnimator.mUseLindenTime;
+//		pWLSnapshot->WLParams = pWLParams->mCurParams;
+//	}
+//	return pWLSnapshot;
+	return NULL;
 }
 
 // =========================================================================

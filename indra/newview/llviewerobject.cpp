@@ -105,6 +105,10 @@
 #include "rlvlocks.h"
 // [/RLVa:KB]
 #include "llaccountingquota.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 //#define DEBUG_UPDATE_TYPE
 

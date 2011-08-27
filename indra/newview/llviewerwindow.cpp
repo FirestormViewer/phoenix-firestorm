@@ -3805,37 +3805,33 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 		{
 			found = NULL;
 		}
-                if (!found) // if not found in HUD, look in world:
-                {
-                        found = gPipeline.lineSegmentIntersectInWorld(mouse_world_start, mouse_world_end, pick_transparent,
-                                                                                                                  face_hit, intersection, uv, normal, binormal);
-                        if (found && !pick_transparent)
-                        {
-                                gDebugRaycastIntersection = *intersection;
-                        }
-                }
+// [/RLVa:KB]
+		if (!found) // if not found in HUD, look in world:
+		{
+			found = NULL;
+		}
 
 // [RLVa:KB] - Checked: 2010-01-02 (RLVa-1.1.0l) | Added: RLVa-1.1.0l
 #ifdef RLV_EXTENSION_CMD_INTERACT
-                if ( (rlv_handler_t::isEnabled()) && (found) && (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) )
-                {
-                        // Allow picking if:
-                        //   - the drag-and-drop tool is active (allows inventory offers)
-                        //   - the camera tool is active
-                        //   - the pie tool is active *and* we picked our own avie (allows "mouse steering" and the self pie menu)
-                        LLTool* pCurTool = LLToolMgr::getInstance()->getCurrentTool();
-                        if ( (LLToolDragAndDrop::getInstance() != pCurTool) &&
-                                        (!LLToolCamera::getInstance()->hasMouseCapture()) &&
-                                        ((LLToolPie::getInstance() != pCurTool) || (gAgent.getID() != found->getID())) )
-                        {
-                                found = NULL;
-                        }
+		if ( (rlv_handler_t::isEnabled()) && (found) && (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) )
+		{
+			// Allow picking if:
+			//   - the drag-and-drop tool is active (allows inventory offers)
+			//   - the camera tool is active
+			//   - the pie tool is active *and* we picked our own avie (allows "mouse steering" and the self pie menu)
+			LLTool* pCurTool = LLToolMgr::getInstance()->getCurrentTool();
+			if ( (LLToolDragAndDrop::getInstance() != pCurTool) && 
+					(!LLToolCamera::getInstance()->hasMouseCapture()) &&
+					((LLToolPie::getInstance() != pCurTool) || (gAgent.getID() != found->getID())) )
+			{
+				found = NULL;
+			}
 #endif // RLV_EXTENSION_CMD_INTERACT
 // [/RLVa:KB]
-                }
-        }
+		}
+	}
 
-        return found;
+	return found;
 }
 
 // Returns unit vector relative to camera

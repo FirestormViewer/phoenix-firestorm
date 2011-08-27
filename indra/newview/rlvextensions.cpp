@@ -293,275 +293,267 @@ ERlvCmdRet RlvExtGetSet::onSetPseudoDebug(const std::string& strSetting, const s
 // Checked: 2010-04-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
 std::string RlvExtGetSet::onGetEnv(std::string strSetting)
 {
-	// <AO> merge casualty, windlight is all different now.
+//	LLWLParamManager* pWLParams = LLWLParamManager::instance(); bool fErr;
+//	WLFloatControl* pFloat = NULL;
+//	WLColorControl* pColour = NULL;
+//
+//	F32 nValue = 0.0f;
+//	if ("daytime" == strSetting)
+//	{
+//		nValue = (pWLParams->mAnimator.mIsRunning && pWLParams->mAnimator.mUseLindenTime) ? -1.0f : pWLParams->mAnimator.getDayTime();
+//	}
+//	else if ("preset" == strSetting)
+//	{
+//		return (pWLParams->mAnimator.mIsRunning && pWLParams->mAnimator.mUseLindenTime) ? std::string() : pWLParams->mCurParams.mName;
+//	}
+//	else if ( ("sunglowfocus" == strSetting) || ("sunglowsize" == strSetting) )
+//	{
+//		pWLParams->mGlow = pWLParams->mCurParams.getVector(pWLParams->mGlow.mName, fErr);
+//		RLV_ASSERT_DBG(!fErr);
+//
+//		if ("sunglowfocus" == strSetting) 
+//			nValue = -pWLParams->mGlow.b / 5.0f;
+//		else
+//			nValue = 2 - pWLParams->mGlow.r / 20.0f;
+//	}
+//	else if ("starbrightness" == strSetting)		nValue = pWLParams->mCurParams.getStarBrightness();
+//	else if ("eastangle" == strSetting)				nValue = pWLParams->mCurParams.getEastAngle() / F_TWO_PI;
+//	else if ("sunmoonposition" == strSetting)		nValue = pWLParams->mCurParams.getSunAngle() / F_TWO_PI;
+//	else if ("cloudscrollx" == strSetting)			nValue = pWLParams->mCurParams.getCloudScrollX() - 10.0f;
+//	else if ("cloudscrolly" == strSetting)			nValue = pWLParams->mCurParams.getCloudScrollY() - 10.0f;
+//	// Float controls
+//	else if ("cloudcoverage" == strSetting)			pFloat = &pWLParams->mCloudCoverage;
+//	else if ("cloudscale" == strSetting)			pFloat = &pWLParams->mCloudScale;
+//	else if ("densitymultiplier" == strSetting)		pFloat = &pWLParams->mDensityMult;
+//	else if ("distancemultiplier" == strSetting)	pFloat = &pWLParams->mDistanceMult;
+//	else if ("maxaltitude" == strSetting)			pFloat = &pWLParams->mMaxAlt;
+//	else if ("scenegamma" == strSetting)			pFloat = &pWLParams->mWLGamma;
+//	// Colour controls
+//	else if ("hazedensity" == strSetting)			pColour = &pWLParams->mHazeDensity;
+//	else if ("hazehorizon" == strSetting)			pColour = &pWLParams->mHazeHorizon;
+//	else
+//	{
+//		char ch = strSetting[strSetting.length() - 1];
+//		// HACK-RLVa: not entirely proper (creates new synonyms)
+//		if ('x' == ch)		ch = 'r';
+//		else if ('y' == ch)	ch = 'g';
+//		else if ('d' == ch)	ch = 'b';
+//
+//		if ( ('r' == ch) || ('g' == ch) || ('b' == ch) || ('i' == ch) )
+//		{
+//			strSetting.erase(strSetting.length() - 1, 1);
+//			
+//			if ("ambient" == strSetting)			pColour = &pWLParams->mAmbient;
+//			else if ("bluedensity" == strSetting)	pColour = &pWLParams->mBlueDensity;
+//			else if ("bluehorizon" == strSetting)	pColour = &pWLParams->mBlueHorizon;
+//			else if ("sunmooncolor" == strSetting)	pColour = &pWLParams->mSunlight;
+//			else if ("cloudcolor" == strSetting)	pColour = &pWLParams->mCloudColor;
+//			else if ("cloud" == strSetting)			pColour = &pWLParams->mCloudMain;
+//			else if ("clouddetail" == strSetting)	pColour = &pWLParams->mCloudDetail;
+//
+//			if (pColour)
+//			{
+//				*pColour = pWLParams->mCurParams.getVector(pColour->mName, fErr);
+//				RLV_ASSERT_DBG(!fErr);
+//
+//				if ('r' == ch)		nValue = pColour->r;
+//				else if ('g' == ch)	nValue = pColour->g;
+//				else if ('b' == ch)	nValue = pColour->b;
+//				else if (('i' == ch) && (pColour->hasSliderName)) nValue = llmax(pColour->r, pColour->g, pColour->b);
+//
+//				if (pColour->isBlueHorizonOrDensity)	nValue /= 2.0f;
+//				else if (pColour->isSunOrAmbientColor)	nValue /= 3.0f;
+//			}
+//		}
+//	}
+//
+//	if (pFloat)
+//	{
+//		*pFloat = pWLParams->mCurParams.getVector(pFloat->mName, fErr);
+//		RLV_ASSERT_DBG(!fErr);
+//		nValue = pFloat->x * pFloat->mult;;
+//	}
+//	else if (pColour)
+//	{
+//		*pColour = pWLParams->mCurParams.getVector(pColour->mName, fErr);
+//		RLV_ASSERT_DBG(!fErr);
+//		nValue = pColour->r;
+//	}
+//	return llformat("%f", nValue);
 	return "";
-	// </AO>
-/*
-	LLWLParamManager* pWLParams = LLWLParamManager::instance(); bool fErr;
-	WLFloatControl* pFloat = NULL;
-	WLColorControl* pColour = NULL;
-
-	F32 nValue = 0.0f;
-	if ("daytime" == strSetting)
-	{
-		nValue = (pWLParams->mAnimator.mIsRunning && pWLParams->mAnimator.mUseLindenTime) ? -1.0f : pWLParams->mAnimator.getDayTime();
-	}
-	else if ("preset" == strSetting)
-	{
-		return (pWLParams->mAnimator.mIsRunning && pWLParams->mAnimator.mUseLindenTime) ? std::string() : pWLParams->mCurParams.mName;
-	}
-	else if ( ("sunglowfocus" == strSetting) || ("sunglowsize" == strSetting) )
-	{
-		pWLParams->mGlow = pWLParams->mCurParams.getVector(pWLParams->mGlow.mName, fErr);
-		RLV_ASSERT_DBG(!fErr);
-
-		if ("sunglowfocus" == strSetting) 
-			nValue = -pWLParams->mGlow.b / 5.0f;
-		else
-			nValue = 2 - pWLParams->mGlow.r / 20.0f;
-	}
-	else if ("starbrightness" == strSetting)		nValue = pWLParams->mCurParams.getStarBrightness();
-	else if ("eastangle" == strSetting)				nValue = pWLParams->mCurParams.getEastAngle() / F_TWO_PI;
-	else if ("sunmoonposition" == strSetting)		nValue = pWLParams->mCurParams.getSunAngle() / F_TWO_PI;
-	else if ("cloudscrollx" == strSetting)			nValue = pWLParams->mCurParams.getCloudScrollX() - 10.0f;
-	else if ("cloudscrolly" == strSetting)			nValue = pWLParams->mCurParams.getCloudScrollY() - 10.0f;
-	// Float controls
-	else if ("cloudcoverage" == strSetting)			pFloat = &pWLParams->mCloudCoverage;
-	else if ("cloudscale" == strSetting)			pFloat = &pWLParams->mCloudScale;
-	else if ("densitymultiplier" == strSetting)		pFloat = &pWLParams->mDensityMult;
-	else if ("distancemultiplier" == strSetting)	pFloat = &pWLParams->mDistanceMult;
-	else if ("maxaltitude" == strSetting)			pFloat = &pWLParams->mMaxAlt;
-	else if ("scenegamma" == strSetting)			pFloat = &pWLParams->mWLGamma;
-	// Colour controls
-	else if ("hazedensity" == strSetting)			pColour = &pWLParams->mHazeDensity;
-	else if ("hazehorizon" == strSetting)			pColour = &pWLParams->mHazeHorizon;
-	else
-	{
-		char ch = strSetting[strSetting.length() - 1];
-		// HACK-RLVa: not entirely proper (creates new synonyms)
-		if ('x' == ch)		ch = 'r';
-		else if ('y' == ch)	ch = 'g';
-		else if ('d' == ch)	ch = 'b';
-
-		if ( ('r' == ch) || ('g' == ch) || ('b' == ch) || ('i' == ch) )
-		{
-			strSetting.erase(strSetting.length() - 1, 1);
-			
-			if ("ambient" == strSetting)			pColour = &pWLParams->mAmbient;
-			else if ("bluedensity" == strSetting)	pColour = &pWLParams->mBlueDensity;
-			else if ("bluehorizon" == strSetting)	pColour = &pWLParams->mBlueHorizon;
-			else if ("sunmooncolor" == strSetting)	pColour = &pWLParams->mSunlight;
-			else if ("cloudcolor" == strSetting)	pColour = &pWLParams->mCloudColor;
-			else if ("cloud" == strSetting)			pColour = &pWLParams->mCloudMain;
-			else if ("clouddetail" == strSetting)	pColour = &pWLParams->mCloudDetail;
-
-			if (pColour)
-			{
-				*pColour = pWLParams->mCurParams.getVector(pColour->mName, fErr);
-				RLV_ASSERT_DBG(!fErr);
-
-				if ('r' == ch)		nValue = pColour->r;
-				else if ('g' == ch)	nValue = pColour->g;
-				else if ('b' == ch)	nValue = pColour->b;
-				else if (('i' == ch) && (pColour->hasSliderName)) nValue = llmax(pColour->r, pColour->g, pColour->b);
-
-				if (pColour->isBlueHorizonOrDensity)	nValue /= 2.0f;
-				else if (pColour->isSunOrAmbientColor)	nValue /= 3.0f;
-			}
-		}
-	}
-
-	if (pFloat)
-	{
-		*pFloat = pWLParams->mCurParams.getVector(pFloat->mName, fErr);
-		RLV_ASSERT_DBG(!fErr);
-		nValue = pFloat->x * pFloat->mult;;
-	}
-	else if (pColour)
-	{
-		*pColour = pWLParams->mCurParams.getVector(pColour->mName, fErr);
-		RLV_ASSERT_DBG(!fErr);
-		nValue = pColour->r;
-	}
-
-	return llformat("%f", nValue);
-*/
 }
 
 // Checked: 2010-04-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
 ERlvCmdRet RlvExtGetSet::onSetEnv(std::string strSetting, const std::string& strValue)
 {
-	// AO Merge Casualty
+//	LLWLParamManager* pWLParams = LLWLParamManager::instance(); bool fErr;
+//	WLFloatControl* pFloat = NULL;
+//	WLColorControl* pColour = NULL;
+//
+//	F32 nValue = 0.0f;
+//	// Sanity check - make sure strValue specifies a number for all settings except "preset"
+//	if ( (RlvSettings::getNoSetEnv()) || ( (!LLStringUtil::convertToF32(strValue, nValue)) && ("preset" != strSetting) ))
+//		return RLV_RET_FAILED_OPTION;
+//
+//	// Not quite correct, but RLV-1.16.0 will halt the default daytime cycle on invalid commands so we need to as well
+//	pWLParams->mAnimator.mIsRunning = false;
+//	pWLParams->mAnimator.mUseLindenTime = false;
+//
+//	// See LLWorldEnvSettings::handleEvent()
+//	if ("daytime" == strSetting)
+//	{
+//		if (0.0f <= nValue)
+//		{
+//			pWLParams->mAnimator.setDayTime(llmin(nValue, 1.0f));
+//			pWLParams->mAnimator.update(pWLParams->mCurParams);
+//		}
+//		else
+//		{
+//			pWLParams->mAnimator.mIsRunning = true;
+//			pWLParams->mAnimator.mUseLindenTime = true;	
+//		}
+//		return RLV_RET_SUCCESS;
+//	}
+//	// See LLFloaterWindLight::onChangePresetName()
+//	else if ("preset" == strSetting)
+//	{
+//		pWLParams->loadPreset(strValue, true);
+//		return RLV_RET_SUCCESS;
+//	}
+//	// See LLFloaterWindLight::onGlowRMoved() / LLFloaterWindLight::onGlowBMoved()
+//	else if ( ("sunglowfocus" == strSetting) || ("sunglowsize" == strSetting) )
+//	{
+//		pWLParams->mGlow = pWLParams->mCurParams.getVector(pWLParams->mGlow.mName, fErr);
+//		RLV_ASSERT_DBG(!fErr);
+//
+//		if ("sunglowfocus" == strSetting) 
+//			pWLParams->mGlow.b = -nValue * 5;
+//		else
+//			pWLParams->mGlow.r = (2 - nValue) * 20;
+//		pWLParams->mGlow.update(pWLParams->mCurParams);
+//
+//		pWLParams->propagateParameters();
+//		return RLV_RET_SUCCESS;
+//	}
+//	// See LLFloaterWindLight::onStarAlphaMoved
+//	else if ("starbrightness" == strSetting)
+//	{
+//		pWLParams->mCurParams.setStarBrightness(nValue);
+//		return RLV_RET_SUCCESS;
+//	}
+//	// See LLFloaterWindLight::onSunMoved()
+//	else if ( ("eastangle" == strSetting) || ("sunmoonposition" == strSetting) )	
+//	{
+//		if ("eastangle" == strSetting)	
+//			pWLParams->mCurParams.setEastAngle(F_TWO_PI * nValue);
+//		else
+//			pWLParams->mCurParams.setSunAngle(F_TWO_PI * nValue);
+//
+//		pWLParams->propagateParameters();
+//		return RLV_RET_SUCCESS;
+//	}
+//	// See LLFloaterWindLight::onCloudScrollXMoved() / LLFloaterWindLight::onCloudScrollYMoved() 
+//	else if ("cloudscrollx" == strSetting)
+//	{
+//		pWLParams->mCurParams.setCloudScrollX(nValue + 10.0f);
+//		return RLV_RET_SUCCESS;
+//	}
+//	else if ("cloudscrolly" == strSetting)
+//	{
+//		pWLParams->mCurParams.setCloudScrollY(nValue + 10.0f);
+//		return RLV_RET_SUCCESS;
+//	}
+//	// See LLFloaterWindLight::onFloatControlMoved()
+//	else if ("cloudcoverage" == strSetting)			pFloat = &pWLParams->mCloudCoverage;
+//	else if ("cloudscale" == strSetting)			pFloat = &pWLParams->mCloudScale;
+//	else if ("densitymultiplier" == strSetting)		pFloat = &pWLParams->mDensityMult;
+//	else if ("distancemultiplier" == strSetting)	pFloat = &pWLParams->mDistanceMult;
+//	else if ("maxaltitude" == strSetting)			pFloat = &pWLParams->mMaxAlt;
+//	else if ("scenegamma" == strSetting)			pFloat = &pWLParams->mWLGamma;
+//	// See LLFloaterWindLight::onColorControlRMoved()
+//	else if ("hazedensity" == strSetting)	        pColour = &pWLParams->mHazeDensity;
+//	else if ("hazehorizon" == strSetting)	        pColour = &pWLParams->mHazeHorizon;
+//
+//	if (pFloat)
+//	{
+//		*pFloat = pWLParams->mCurParams.getVector(pFloat->mName, fErr);
+//		RLV_ASSERT_DBG(!fErr);
+//
+//		pFloat->x = nValue / pFloat->mult;
+//		pFloat->update(pWLParams->mCurParams);
+//		pWLParams->propagateParameters();
+//		return RLV_RET_SUCCESS;
+//	} 
+//	else if (pColour)
+//	{
+//		*pColour = pWLParams->mCurParams.getVector(pColour->mName, fErr);
+//		RLV_ASSERT_DBG(!fErr);
+//
+//		pColour->r = nValue;
+//		pColour->update(pWLParams->mCurParams);
+//		pWLParams->propagateParameters();
+//		return RLV_RET_SUCCESS;
+//	}
+//
+//	// RGBI settings
+//	char ch = strSetting[strSetting.length() - 1];
+//	if ('x' == ch)		ch = 'r';
+//	else if ('y' == ch)	ch = 'g';
+//	else if ('d' == ch)	ch = 'b';
+//
+//	if ( ('r' == ch) || ('g' == ch) || ('b' == ch) || ('i' == ch) )
+//	{
+//		strSetting.erase(strSetting.length() - 1, 1);
+//		
+//		if ("ambient" == strSetting)			pColour = &pWLParams->mAmbient;
+//		else if ("bluedensity" == strSetting)	pColour = &pWLParams->mBlueDensity;
+//		else if ("bluehorizon" == strSetting)	pColour = &pWLParams->mBlueHorizon;
+//		else if ("sunmooncolor" == strSetting)	pColour = &pWLParams->mSunlight;
+//		else if ("cloudcolor" == strSetting)	pColour = &pWLParams->mCloudColor;
+//		else if ("cloud" == strSetting)			pColour = &pWLParams->mCloudMain;
+//		else if ("clouddetail" == strSetting)	pColour = &pWLParams->mCloudDetail;
+//
+//		if (pColour)
+//		{
+//			*pColour = pWLParams->mCurParams.getVector(pColour->mName, fErr);
+//			RLV_ASSERT_DBG(!fErr);
+//
+//			if (pColour->isBlueHorizonOrDensity)   nValue *= 2.0f;
+//			else if (pColour->isSunOrAmbientColor) nValue *= 3.0f;
+//
+//			if ('i' == ch)									// (See: LLFloaterWindLight::onColorControlIMoved)
+//			{
+//				if (!pColour->hasSliderName)
+//					return RLV_RET_FAILED_UNKNOWN;
+//
+//				F32 curMax = llmax(pColour->r, pColour->g, pColour->b);
+//				if ( (0.0f == nValue) || (0.0f == curMax) )
+//					pColour->r = pColour->g = pColour->b = pColour->i = nValue;
+//				else
+//				{
+//					F32 nDelta = (nValue - curMax) / curMax;
+//					pColour->r *= (1.0f + nDelta);
+//					pColour->g *= (1.0f + nDelta);
+//					pColour->b *= (1.0f + nDelta);
+//					pColour->i = nValue;
+//				}
+//			}
+//			else											// (See: LLFloaterWindLight::onColorControlRMoved)
+//			{
+//				F32* pnValue = ('r' == ch) ? &pColour->r : ('g' == ch) ? &pColour->g : ('b' == ch) ? &pColour->b : NULL;
+//				if (pnValue)
+//					*pnValue = nValue;
+//				pColour->i = llmax(pColour->r, pColour->g, pColour->b);
+//			}
+//
+//			pColour->update(pWLParams->mCurParams);
+//			pWLParams->propagateParameters();
+//
+//			return RLV_RET_SUCCESS;
+//		}
+//	}
+//	return RLV_RET_FAILED_UNKNOWN;
 	return RLV_RET_FAILED_UNKNOWN;
-/*
-	LLWLParamManager* pWLParams = LLWLParamManager::instance(); bool fErr;
-	WLFloatControl* pFloat = NULL;
-	WLColorControl* pColour = NULL;
-
-	F32 nValue = 0.0f;
-	// Sanity check - make sure strValue specifies a number for all settings except "preset"
-	if ( (RlvSettings::getNoSetEnv()) || ( (!LLStringUtil::convertToF32(strValue, nValue)) && ("preset" != strSetting) ))
-		return RLV_RET_FAILED_OPTION;
-
-	// Not quite correct, but RLV-1.16.0 will halt the default daytime cycle on invalid commands so we need to as well
-	pWLParams->mAnimator.mIsRunning = false;
-	pWLParams->mAnimator.mUseLindenTime = false;
-
-	// See LLWorldEnvSettings::handleEvent()
-	if ("daytime" == strSetting)
-	{
-		if (0.0f <= nValue)
-		{
-			pWLParams->mAnimator.setDayTime(llmin(nValue, 1.0f));
-			pWLParams->mAnimator.update(pWLParams->mCurParams);
-		}
-		else
-		{
-			pWLParams->mAnimator.mIsRunning = true;
-			pWLParams->mAnimator.mUseLindenTime = true;	
-		}
-		return RLV_RET_SUCCESS;
-	}
-	// See LLFloaterWindLight::onChangePresetName()
-	else if ("preset" == strSetting)
-	{
-		pWLParams->loadPreset(strValue, true);
-		return RLV_RET_SUCCESS;
-	}
-	// See LLFloaterWindLight::onGlowRMoved() / LLFloaterWindLight::onGlowBMoved()
-	else if ( ("sunglowfocus" == strSetting) || ("sunglowsize" == strSetting) )
-	{
-		pWLParams->mGlow = pWLParams->mCurParams.getVector(pWLParams->mGlow.mName, fErr);
-		RLV_ASSERT_DBG(!fErr);
-
-		if ("sunglowfocus" == strSetting) 
-			pWLParams->mGlow.b = -nValue * 5;
-		else
-			pWLParams->mGlow.r = (2 - nValue) * 20;
-		pWLParams->mGlow.update(pWLParams->mCurParams);
-
-		pWLParams->propagateParameters();
-		return RLV_RET_SUCCESS;
-	}
-	// See LLFloaterWindLight::onStarAlphaMoved
-	else if ("starbrightness" == strSetting)
-	{
-		pWLParams->mCurParams.setStarBrightness(nValue);
-		return RLV_RET_SUCCESS;
-	}
-	// See LLFloaterWindLight::onSunMoved()
-	else if ( ("eastangle" == strSetting) || ("sunmoonposition" == strSetting) )	
-	{
-		if ("eastangle" == strSetting)	
-			pWLParams->mCurParams.setEastAngle(F_TWO_PI * nValue);
-		else
-			pWLParams->mCurParams.setSunAngle(F_TWO_PI * nValue);
-
-		pWLParams->propagateParameters();
-		return RLV_RET_SUCCESS;
-	}
-	// See LLFloaterWindLight::onCloudScrollXMoved() / LLFloaterWindLight::onCloudScrollYMoved() 
-	else if ("cloudscrollx" == strSetting)
-	{
-		pWLParams->mCurParams.setCloudScrollX(nValue + 10.0f);
-		return RLV_RET_SUCCESS;
-	}
-	else if ("cloudscrolly" == strSetting)
-	{
-		pWLParams->mCurParams.setCloudScrollY(nValue + 10.0f);
-		return RLV_RET_SUCCESS;
-	}
-	// See LLFloaterWindLight::onFloatControlMoved()
-	else if ("cloudcoverage" == strSetting)			pFloat = &pWLParams->mCloudCoverage;
-	else if ("cloudscale" == strSetting)			pFloat = &pWLParams->mCloudScale;
-	else if ("densitymultiplier" == strSetting)		pFloat = &pWLParams->mDensityMult;
-	else if ("distancemultiplier" == strSetting)	pFloat = &pWLParams->mDistanceMult;
-	else if ("maxaltitude" == strSetting)			pFloat = &pWLParams->mMaxAlt;
-	else if ("scenegamma" == strSetting)			pFloat = &pWLParams->mWLGamma;
-	// See LLFloaterWindLight::onColorControlRMoved()
-	else if ("hazedensity" == strSetting)	        pColour = &pWLParams->mHazeDensity;
-	else if ("hazehorizon" == strSetting)	        pColour = &pWLParams->mHazeHorizon;
-
-	if (pFloat)
-	{
-		*pFloat = pWLParams->mCurParams.getVector(pFloat->mName, fErr);
-		RLV_ASSERT_DBG(!fErr);
-
-		pFloat->x = nValue / pFloat->mult;
-		pFloat->update(pWLParams->mCurParams);
-		pWLParams->propagateParameters();
-		return RLV_RET_SUCCESS;
-	} 
-	else if (pColour)
-	{
-		*pColour = pWLParams->mCurParams.getVector(pColour->mName, fErr);
-		RLV_ASSERT_DBG(!fErr);
-
-		pColour->r = nValue;
-		pColour->update(pWLParams->mCurParams);
-		pWLParams->propagateParameters();
-		return RLV_RET_SUCCESS;
-	}
-
-	// RGBI settings
-	char ch = strSetting[strSetting.length() - 1];
-	if ('x' == ch)		ch = 'r';
-	else if ('y' == ch)	ch = 'g';
-	else if ('d' == ch)	ch = 'b';
-
-	if ( ('r' == ch) || ('g' == ch) || ('b' == ch) || ('i' == ch) )
-	{
-		strSetting.erase(strSetting.length() - 1, 1);
-		
-		if ("ambient" == strSetting)			pColour = &pWLParams->mAmbient;
-		else if ("bluedensity" == strSetting)	pColour = &pWLParams->mBlueDensity;
-		else if ("bluehorizon" == strSetting)	pColour = &pWLParams->mBlueHorizon;
-		else if ("sunmooncolor" == strSetting)	pColour = &pWLParams->mSunlight;
-		else if ("cloudcolor" == strSetting)	pColour = &pWLParams->mCloudColor;
-		else if ("cloud" == strSetting)			pColour = &pWLParams->mCloudMain;
-		else if ("clouddetail" == strSetting)	pColour = &pWLParams->mCloudDetail;
-
-		if (pColour)
-		{
-			*pColour = pWLParams->mCurParams.getVector(pColour->mName, fErr);
-			RLV_ASSERT_DBG(!fErr);
-
-			if (pColour->isBlueHorizonOrDensity)   nValue *= 2.0f;
-			else if (pColour->isSunOrAmbientColor) nValue *= 3.0f;
-
-			if ('i' == ch)									// (See: LLFloaterWindLight::onColorControlIMoved)
-			{
-				if (!pColour->hasSliderName)
-					return RLV_RET_FAILED_UNKNOWN;
-
-				F32 curMax = llmax(pColour->r, pColour->g, pColour->b);
-				if ( (0.0f == nValue) || (0.0f == curMax) )
-					pColour->r = pColour->g = pColour->b = pColour->i = nValue;
-				else
-				{
-					F32 nDelta = (nValue - curMax) / curMax;
-					pColour->r *= (1.0f + nDelta);
-					pColour->g *= (1.0f + nDelta);
-					pColour->b *= (1.0f + nDelta);
-					pColour->i = nValue;
-				}
-			}
-			else											// (See: LLFloaterWindLight::onColorControlRMoved)
-			{
-				F32* pnValue = ('r' == ch) ? &pColour->r : ('g' == ch) ? &pColour->g : ('b' == ch) ? &pColour->b : NULL;
-				if (pnValue)
-					*pnValue = nValue;
-				pColour->i = llmax(pColour->r, pColour->g, pColour->b);
-			}
-
-			pColour->update(pWLParams->mCurParams);
-			pWLParams->propagateParameters();
-
-			return RLV_RET_SUCCESS;
-		}
-	}
-	return RLV_RET_FAILED_UNKNOWN;
-*** AO *** */
 }
 
 // ============================================================================

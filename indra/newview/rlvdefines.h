@@ -292,9 +292,11 @@ enum ERlvAttachGroupType
 
 #define RLV_SETTING_MAIN				"RestrainedLove"
 #define RLV_SETTING_DEBUG				"RestrainedLoveDebug"
-#define RLV_SETTING_AVATAROFFSET_Z		"AvatarZOffset"
+#define RLV_SETTING_AVATAROFFSET_Z		"RestrainedLoveOffsetAvatarZ"
+#define RLV_SETTING_CANOOC				"RestrainedLoveCanOOC"
 #define RLV_SETTING_FORBIDGIVETORLV		"RestrainedLoveForbidGiveToRLV"
 #define RLV_SETTING_NOSETENV			"RestrainedLoveNoSetEnv"
+#define RLV_SETTING_SHOWELLIPSIS		"RestrainedLoveShowEllipsis"
 #define RLV_SETTING_WEARADDPREFIX       "RestrainedLoveStackWhenFolderBeginsWith"
 #define RLV_SETTING_WEARREPLACEPREFIX   "RestrainedLoveReplaceWhenFolderBeginsWith"
 
@@ -307,7 +309,9 @@ enum ERlvAttachGroupType
 #define RLV_SETTING_HIDELOCKEDINVENTORY	"RLVaHideLockedInventory"
 #define RLV_SETTING_LOGINLASTLOCATION	"RLVaLoginLastLocation"
 #define RLV_SETTING_SHAREDINVAUTORENAME	"RLVaSharedInvAutoRename"
+#define RLV_SETTING_SHOWASSERTIONFAIL	"RLVaShowAssertionFailures"
 #define RLV_SETTING_SHOWNAMETAGS		"RLVaShowNameTags"
+#define RLV_SETTING_TOPLEVELMENU		"RLVaTopLevelMenu"
 #define RLV_SETTING_WEARREPLACEUNLOCKED	"RLVaWearReplaceUnlocked"
 
 #define RLV_SETTING_FIRSTUSE_PREFIX		"FirstRLV"
@@ -322,6 +326,7 @@ enum ERlvAttachGroupType
 #define RLV_STRING_HIDDEN_REGION			"hidden_region"
 
 #define RLV_STRING_BLOCKED_GENERIC			"blocked_generic"
+#define RLV_STRING_BLOCKED_PERMATTACH		"blocked_permattach"
 #define RLV_STRING_BLOCKED_RECVIM			"blocked_recvim"
 #define RLV_STRING_BLOCKED_RECVIM_REMOTE	"blocked_recvim_remote"
 #define RLV_STRING_BLOCKED_SENDIM			"blocked_sendim"

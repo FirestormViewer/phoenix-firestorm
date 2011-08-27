@@ -51,6 +51,10 @@
 #include "lltoolgrab.h"
 #include "llhudeffectlookat.h"
 #include "llagentcamera.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "llvoavatarself.h"
+// [/RLVa:KB]
 
 LLAgentListener::LLAgentListener(LLAgent &agent)
   : LLEventAPI("LLAgent",
@@ -205,8 +209,8 @@ void LLAgentListener::requestSit(LLSD const & event_data) const
 		gMessageSystem->addUUIDFast(_PREHASH_TargetID, object->mID);
 		gMessageSystem->addVector3Fast(_PREHASH_Offset, LLVector3(0,0,0));
 
-        object->getRegion()->sendReliableMessage();
-    }
+        	object->getRegion()->sendReliableMessage();
+    	}
 	else
 	{
 		llwarns << "LLAgent requestSit could not find the sit target: " 

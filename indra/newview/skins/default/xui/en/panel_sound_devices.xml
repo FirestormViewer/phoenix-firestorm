@@ -16,6 +16,10 @@
         No Device
     </string>
     <string
+     name="name_no_device">
+        No Device
+    </string>
+    <string
      name="name_default_system_device">
         Default System Device
     </string>
