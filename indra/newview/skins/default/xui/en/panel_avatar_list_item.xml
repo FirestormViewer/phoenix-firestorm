@@ -61,10 +61,10 @@
      left_pad="5"
      name="avatar_name"
      top="5"
-     clip_partial="true"
+     clip_partial="false"
      use_ellipses="true"
      value="(loading)"
-     width="40" />
+     width="50" />
     <icon
      height="16"
      follows="right"

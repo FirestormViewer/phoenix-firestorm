@@ -2,10 +2,43 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
+  <key>GridListDownload</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether to fetch a grid list from the URL specified in GridListDownloadURL.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>GridListDownloadURL</key>
+  <map>
+    <key>Comment</key>
+    <string>Fetch a grid list from this URL.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>http://localhost/grids.xml</string>
+  </map>
   <key>ShowMutedAvatarsAsCloud</key>
   <map>
     <key>Comment</key>
     <string>If true, show muted avatars as clouds.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>FSAdvancedTooltips</key>
+  <map>
+    <key>Comment</key>
+    <string>Show extended information in hovertips about objects (classic Phoenix style)</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -20,18 +53,29 @@
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
-    <string>S32</string>
+    <string>U32</string>
     <key>Value</key>
     <integer>2</integer>
   </map>
   <key>FSColorClienttags</key>
   <map>
     <key>Comment</key>
-    <string>If Clienttags should be colored</string>
+    <string>Color Clienttags by: 0=Off, 1=Single color per Viewer, 2=Userdefinied color (one color per UUID), 3=New Tagsystem Color</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
-    <string>Boolean</string>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>2</integer>
+  </map>
+  <key>FSClientTagsVisibility</key>
+  <map>
+    <key>Comment</key>
+    <string>Show clienttags: 0=Clienttags Off, 1=That are on the TPVD (needs FSUseLegacyClienttags), 2=That are on the client_tag.xml (needs FSUseLegacyClienttags), 3=That using the new system</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
     <key>Value</key>
     <integer>1</integer>
   </map>
@@ -57,7 +101,34 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
-	<key>FSPlayTypingSound</key>
+  <key>FSColorUsernameColor</key>
+  <map>
+    <key>Comment</key>
+    <string>The color the Username should be colored.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>1</real>
+      <real>0.5</real>
+      <real>0</real>
+      <real>1.0</real>
+    </array>
+  </map>
+  <key>FSShowOwnTagColor</key>
+  <map>
+    <key>Comment</key>
+    <string>If you want to see your own color</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>FSPlayTypingSound</key>
 	<map>
 		<key>Comment</key>
 		<string>Hear the typing sound when others type in to local chat</string>
@@ -308,18 +379,6 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-
-  <key>ShowViewerIDsOnNameTag</key>
-    <map>
-      <key>Comment</key>
-      <string>Show viewer identification when display hovertext names over avatars</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
     </map>
   <key>PhoenixEnableAutoCorrect</key>
 	<map>
@@ -13812,7 +13871,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>LLSD</string>
+      <string>String</string>
       <key>Value</key>
       <string />
     </map>
@@ -15884,5 +15943,27 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>0</integer>
     </map>
 
+    <key>PhoenixFontSettingsFile</key>
+    <map>
+      <key>Comment</key>
+      <string>Line spacing on chat</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>fonts.xml</string>
+    </map>
+    <key>PhoenixFontSizeAdjustment</key>
+    <map>
+      <key>Comment</key>
+      <string>Number of points to add to the defualt font sizes</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.0</real>
+    </map>
 </map>
 </llsd>

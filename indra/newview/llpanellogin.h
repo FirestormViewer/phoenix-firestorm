@@ -65,19 +65,21 @@ public:
 
 	static void getFields(LLPointer<LLCredential>& credential, BOOL& remember);
 
-	static BOOL isGridComboDirty();
+// <AW: opensim>
+// 	static BOOL isGridComboDirty(); 
 	static BOOL areCredentialFieldsDirty();
 	static void setLocation(const LLSLURL& slurl);
 	
 	static void updateLocationCombo(bool force_visible);  // simply update the combo box
 	static void closePanel();
 
-	void setSiteIsAlive( bool alive );
+// <AW: opensim>
+// 	void setSiteIsAlive( bool alive );
 
 	static void loadLoginPage();	
 	static void giveFocus();
 	static void setAlwaysRefresh(bool refresh); 
-	
+
 	// inherited from LLViewerMediaObserver
 	/*virtual*/ void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event);
 	static void updateServer();  // update the combo box, change the login page to the new server, clear the combo
@@ -92,15 +94,23 @@ private:
 	static void onClickVersion(void*);
 	static void onClickForgotPassword(void*);
 	static void onClickHelp(void*);
+	static void onClickDelete(void*);
 	static void onPassKey(LLLineEditor* caller, void* user_data);
 	static void onSelectServer(LLUICtrl*, void*);
+	static void onSelectSavedLogin(LLUICtrl*, void*);
+	static void usernameLostFocus(LLFocusableElement* caller, void* userdata);
 //	static void onServerComboLostFocus(LLFocusableElement*);
 	static void updateServerCombo();
+	static void updateSavedLoginsCombo();
 	static void updateStartSLURL();
 	void onModeChange(const LLSD& original_value, const LLSD& new_value);
 	void onModeChangeConfirm(const LLSD& original_value, const LLSD& new_value, const LLSD& notification, const LLSD& response);
 	
 	static void updateLoginPanelLinks();
+
+	// Helper for making a standardized saved login name, depending on user name and grid name
+	static std::string credential_name();
+
 
 private:
 	LLPointer<LLUIImage> mLogoImage;
@@ -113,6 +123,8 @@ private:
 
 	static LLPanelLogin* sInstance;
 	static BOOL		sCapslockDidNotification;
+	int mGridEntries; 	// <AW: opensim>
+	std::string mLoginPage; // <AW: opensim>
 };
 
 #endif

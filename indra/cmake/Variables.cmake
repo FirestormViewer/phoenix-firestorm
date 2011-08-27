@@ -101,7 +101,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   
   # To support a different SDK update these Xcode settings:
   if (${XCODE_VERSION} VERSION_LESS 4.0.0)
-    set(CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.6.sdk)
+    set(CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.5.sdk)
     set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "4.2")
   else (${XCODE_VERSION} VERSION_LESS 4.0.0)
     set(CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.6.sdk)

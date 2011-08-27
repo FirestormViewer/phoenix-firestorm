@@ -1,6 +1,12 @@
 Make sure xcode is installed, it's a (sometimes) free download from apple.
 Make sure cmake is installed, use at least a 2.8.x version.
 
+If you are using OSX 10.5 or 10.6, Xcode 3 will be used. Output will work on all 10.5 systems and
+higher.
+
+If you are using OSX 10.7 (ie, Lion), the build will use Xcode 4 and your output will only work on OSX 10.6 and
+higher.
+
 Insure you can build a stock viewer-development try as described in the SL wiki. Before asking for any help 
 compiling Firestorm, make sure you can build viewer-development first. If you try and skip this step, you may 
 receive  much less help. http://wiki.secondlife.com/wiki/Compiling_the_viewer_(Mac_OS_X)
@@ -15,11 +21,11 @@ instead of our default autobuild.xml There are some examples of how to build FMO
 mailing list. We've created a non-KDU build target to make this easier. Everywhere you see "ReleaseFS" below, use 
 "ReleaseFS_open" instead.  This will perform the same build, using openjpeg instead of KDU.
 
+Available premade firestorm-specific build targets:
 
-Additionally, you will need to procure an update vivox build package and place it in:
-	/opt/firestorm
-No licenses are required for this, but it is not yet directly available. Ask someone in Firestorm for a copy, until
-this can be updated.
+	ReleaseFS		(includes KDU, FMOD)
+	ReleaseFS_open		(no KDU, no FMOD)
+	RelWithDebInfo_open	(no KDU, no FMOD)
 
 To build firestorm:
 
@@ -29,13 +35,14 @@ Other examples:
 
         autobuild configure -c ReleaseFS                    # basic configuration step, don't build, just configure
         autobuild configure -c ReleaseFS -- --clean         # clean the output area first, then configure
-        autobuild configure -c ReleaseFS -- --fmod --kdu    # configure with fmod, kdu enabled
         autobuild configure -c ReleaseFS -- --chan Private-Yourname   # configure with a custom channel
 
         autobuild build -c ReleaseFS --no-configure              # default quick rebuild
         autobuild build -c ReleaseFS --no-configure -- --clean   # Clean rebuild
 
 Any of the configure options can also be used (and do the same thing) with the build options.
+Typical LL autobuild configure options should also work, as long as they don't duplicate configuration we are
+already doing.
 
 
 Logs:

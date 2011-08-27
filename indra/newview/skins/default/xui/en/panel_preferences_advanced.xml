@@ -158,4 +158,21 @@
             width="90">
             meters
         </text>
-            </panel>
+        <button
+          top="40"
+          enabled="true"
+          follows="left|top"
+          halign="center"
+          height="25"
+          label="Reset All Settings"
+          label_selected="Reset All Settings..."
+          left_delta="0"
+          mouse_opaque="true"
+          name="clear_settings"
+          scale_image="true"
+          width="200" >
+          <button.commit_callback
+           function="Pref.ClearSettings" />
+        </button>
+  
+     </panel>

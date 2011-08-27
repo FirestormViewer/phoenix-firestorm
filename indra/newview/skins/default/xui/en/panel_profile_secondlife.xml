@@ -116,7 +116,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
              name="status"
              text_color="LtGray_50"
              value="" />
-
+            
             <text
              top_pad="2"
              follows="left|top"
@@ -158,7 +158,45 @@ KC: I used view_border's around text_editor's due to text render issues with bor
              label="Copy URI"
              enabled="false"
              follows="top|right" />
+            
+<!--
+FIRE-2266: SJ: Link to webprofiles on main panel
+-->
+            <text
+             top_pad="2"
+             follows="left|top"
+             halign="right"
+             height="16"
+             left="6"
+             name="Web:"
+             width="40"
+             value="Web:" />
 
+
+            <view_border
+             left_pad="4"
+             height="16"
+             right="-6"
+             bevel_style="in"
+             follows="left|top|right"
+             name="web_border" />
+            
+            <text
+             left_delta="3"
+             bottom_delta="2"
+             height="16"
+             right="-6"
+             h_pad="0"
+             v_pad="0"
+             allow_scroll="false"
+             bg_visible="false"
+             enabled="true"
+             follows="left|top|right"
+             name="web_profile_text"
+             value="" />
+<!--
+FIRE-2266: SJ: End change
+-->            
             <texture_picker
              left="6"
              top_pad="3"
@@ -301,7 +339,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
             <view_border
              left_pad="6"
              top_delta="0"
-             height="90"
+             height="74"
              right="-6"
              bevel_style="in"
              follows="all"
@@ -309,7 +347,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
             <text_editor
              left_delta="1"
              top_delta="1"
-             height="88"
+             height="72"
              right="-7"
              read_only="true"
              enabled="false"

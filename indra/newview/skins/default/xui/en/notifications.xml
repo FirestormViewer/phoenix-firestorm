@@ -973,6 +973,20 @@ Cache will be cleared after restarting [APP_NAME].
   </notification>
 
   <notification
+ icon="alertmodal.tga"
+ name="DisableCookiesBreaksSearch"
+ type="alertmodal">
+    The search function relies on Cookies, disabling Cookies will break Search.
+  </notification>
+
+  <notification
+ icon="alertmodal.tga"
+ name="DisableJavascriptBreaksSearch"
+ type="alertmodal">
+    The Search function relies on Javascript, disabling Javascript will break Search.
+  </notification>
+  
+  <notification
    icon="alertmodal.tga"
    name="CacheWillBeMoved"
    type="alertmodal">
@@ -8172,5 +8186,28 @@ Phantom mode off.
   </notification>
 
 <!-- Firestorm Phantom -->
+
+<!-- Firestorm Reset Settings -->
+  <notification
+    icon="alertmodal.tga"
+    label="Reset all settings"
+    name="FirestormClearSettingsPrompt"
+    type="alertmodal">
+    Resetting all settings may be helpful if you are experiencing problems; however, you will need to redo any customizations you have made to the default configuration. 
+
+    Are you sure you want to reset all settings?
+    <usetemplate
+      name="okcancelbuttons"
+      notext="Cancel"
+      yestext="OK"/>
+  </notification>
+
+  <notification
+    icon="alertmodal.tga"
+    name="SettingsWillClear"
+    type="alertmodal">
+    Settings will be cleared after restarting [APP_NAME].
+  </notification>
+<!-- Firestorm Reset Settings -->
 
 </notifications>

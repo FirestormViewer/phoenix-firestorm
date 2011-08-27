@@ -401,11 +401,14 @@
    control_name="CookiesEnabled"
    label="Accept cookies"
    left_delta="0"
-   mouse_opaque="true" 
+   mouse_opaque="true"
    name="cookies_enabled"
    radio_style="false"
    width="200"
-   top_pad="2"/>
+   top_pad="2">
+    <check_box.commit_callback
+   function="Pref.Cookies" />
+  </check_box>
   
   <check_box
     enabled="true"
@@ -419,7 +422,11 @@
     name="browser_javascript_enabled"
     radio_style="false"
     width="200"
-    top_pad="2"/>
+    top_pad="2">
+    <check_box.commit_callback
+   function="Pref.Javascript" />
+  </check_box>
+  
   <check_box
     enabled="true"
     follows="left|top"

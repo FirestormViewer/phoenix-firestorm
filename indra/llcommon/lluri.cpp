@@ -469,6 +469,15 @@ std::string LLURI::hostName() const
 	return unescape(host);
 }
 
+// <AW: opensim>
+std::string LLURI::hostNameAndPort() const
+{
+	std::string user, host, port;
+	findAuthorityParts(mEscapedAuthority, user, host, port);
+	return port.empty() ? unescape(host) : unescape(host + ":" + port);
+}
+// </AW: opensim>
+
 std::string LLURI::userName() const
 {
 	std::string user, userPass, host, port;

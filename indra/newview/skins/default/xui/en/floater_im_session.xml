@@ -316,7 +316,7 @@
       width="150" 
       height="320" 
       auto_resize="false"
-      user_resize="false">
+      user_resize="true">
       <panel
         name="panel_im_control_panel"
         layout="topleft"

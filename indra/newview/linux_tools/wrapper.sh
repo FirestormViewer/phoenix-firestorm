@@ -117,7 +117,7 @@ export SL_CMD='$LL_WRAPPER bin/do-not-directly-run-firestorm-bin'
 #export SL_OPT="`cat etc/gridargs.dat` $@"
 
 # Run the program
-eval ${SL_ENV} ${SL_CMD} ${SL_OPT} || LL_RUN_ERR=runerr
+eval ${SL_ENV} ${SL_CMD} $@ ${SL_OPT} || LL_RUN_ERR=runerr
 
 # Handle any resulting errors
 if [ -n "$LL_RUN_ERR" ]; then

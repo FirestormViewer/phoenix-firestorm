@@ -129,6 +129,7 @@ void handle_give_money_dialog();
 bool enable_pay_object();
 bool enable_buy_object();
 bool handle_go_to();
+bool update_grid_help();
 
 void toggle_destination_and_avatar_picker(const LLSD& show);
 

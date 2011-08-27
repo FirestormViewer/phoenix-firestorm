@@ -6,7 +6,7 @@ Before you start configuring your Windows build system, be aware of our tested c
 
 Insure you can build a stock viewer-development try as described in the SL wiki. Before asking for any help
 compiling Firestorm, make sure you can build viewer-development first. If you try and skip this step, you may
-receive  much less help. http://wiki.secondlife.com/wiki/Viewer_2_Microsoft_Windows_Builds
+receive much less help. http://wiki.secondlife.com/wiki/Viewer_2_Microsoft_Windows_Builds
 
 If you want to use licensed FMOD or KDU build libraries (they are optional) you have to provision these yourself.
 If you're licensing these with Phoenix/Firestorm, ask for the libraries for fmod and kdu. Put them into:
@@ -30,16 +30,22 @@ After launching the VS2010 cmd shell and navigating to your firestorm code repo:
 
         autobuild build -c ReleaseFS
 
+Other build targets you may use are:
+
+	ReleaseFS		(includes KDU, FMOD)
+	ReleaseFS_open		(no KDU, no FMOD)
+	RelWithDebInfo_open	(no KDU, no FMOD)
+
 Other examples:
 
         autobuild configure -c ReleaseFS                    # basic configuration step, don't build, just configure
         autobuild configure -c ReleaseFS -- --clean         # clean the output area first, then configure
-        autobuild configure -c ReleaseFS -- --fmod --kdu    # configure with fmod, kdu enabled
         autobuild configure -c ReleaseFS -- --chan Private-Yourname   # configure with a custom channel
 
         autobuild build -c ReleaseFS --no-configure              # default quick rebuild
 
-Any of the configure options can also be used (and do the same thing) with the build options.
+If you want to set custom configuration, do this in the configure step separately from build, then run "autobuild
+build -c ReleaseFS --no-configure" as a secondary step.
 
 Logs:
 

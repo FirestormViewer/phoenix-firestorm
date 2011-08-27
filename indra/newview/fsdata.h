@@ -57,7 +57,11 @@ public:
 	static void processClientTags(U32 status, std::string body);
 	static void msdata(U32 status, std::string body);
 	static void msblacklist(U32 status, std::string body);
+
 	static void updateClientTagsLocal();
+	static LLSD resolveClientTag(LLUUID id);
+	static LLSD resolveClientTag(LLUUID id, bool new_system, LLColor4 new_system_color);
+
 	static const U8 EM_SUPPORT		= 0x01;
 	static const U8 EM_DEVELOPER	= 0x02;
 	static const U8 PH_BETA			= 0x01;

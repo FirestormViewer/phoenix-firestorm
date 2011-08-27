@@ -62,6 +62,7 @@
 #include "llviewerobjectlist.h"
 #include "llviewerobject.h"
 #include "llviewerparcelmgr.h"
+#include "llviewerregion.h"
 #include "llviewerwindow.h"
 #include "llviewermedia.h"
 #include "llvoavatarself.h"
@@ -996,6 +997,9 @@ BOOL LLToolPie::handleTooltipLand(std::string line, std::string tooltip_msg)
 
 BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string line, std::string tooltip_msg)
 {
+	const char* const DEFAULT_DESC = "(No Description)";
+	static LLCachedControl<bool> advancedToolTip(gSavedSettings, "FSAdvancedTooltips");
+
 	if ( hover_object->isHUDAttachment() )
 	{
 		// no hover tips for HUD elements, since they can obscure
@@ -1074,7 +1078,11 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				LLInspector::Params p;
 				p.fillFrom(LLUICtrlFactory::instance().getDefaultParams<LLInspector>());
 				p.message(final_name);
-				p.image.name("Inspector_I");
+				// Ansariel: Get rid of the useless button!
+				if (!advancedToolTip)
+				{
+					p.image.name("Inspector_I");
+				}
 				p.click_callback(boost::bind(showAvatarInspector, hover_object->getID()));
 				p.visible_time_near(6.f);
 				p.visible_time_far(3.f);
@@ -1129,6 +1137,109 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			else
 			{
 				tooltip_msg.append( nodep->mName );
+			}
+
+			if (advancedToolTip)
+			{
+				// Set description
+				if (!nodep->mDescription.empty() && nodep->mDescription != DEFAULT_DESC)
+				{
+					tooltip_msg.append("\n" + nodep->mDescription);
+				}
+
+				// Set owner name
+				std::string final_name;
+				std::string full_name;
+			
+				if (nodep->mValid)
+				{
+					LLUUID owner = nodep->mPermissions->getOwner();
+					if (owner.notNull())
+					{
+				
+						if (!gCacheName->getFullName(LLSelectMgr::getInstance()->getHoverNode()->mPermissions->getOwner(), full_name))
+						{
+							full_name = LLTrans::getString("LoadingData");
+						}
+
+						LLAvatarName av_name;
+						if (LLAvatarNameCache::useDisplayNames() && 
+							LLAvatarNameCache::get(owner, &av_name))
+						{
+							final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+						}
+						else
+						{
+							final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? full_name : RlvStrings::getAnonym(full_name);
+						}
+
+						// Owner name
+						tooltip_msg.append("\n" + LLTrans::getString("TooltipOwner") + " " + final_name);
+					}
+				}
+
+				// Permission flags
+				LLViewerObject* parentobject = (LLViewerObject*)hover_object->getParent();
+				std::string permissionsline;
+				if (hover_object->flagScripted())
+				{
+					permissionsline += LLTrans::getString("TooltipFlagScript") + " ";
+				}
+				if (hover_object->usePhysics())
+				{
+					permissionsline += LLTrans::getString("TooltipFlagPhysics") + " ";
+				}
+				if (hover_object->flagHandleTouch() || (parentobject && parentobject->flagHandleTouch()))
+				{
+					permissionsline += LLTrans::getString("TooltipFlagTouch") + " ";
+				}
+				if (hover_object->flagTakesMoney() || (parentobject && parentobject->flagTakesMoney()))
+				{
+					permissionsline += LLTrans::getString("TooltipFlagL$") + " ";
+				}
+				if (hover_object->flagAllowInventoryAdd())
+				{
+					permissionsline += LLTrans::getString("TooltipFlagDropInventory") + " ";
+				}
+				if (hover_object->flagPhantom())
+				{
+					permissionsline += LLTrans::getString("TooltipFlagPhantom") + " ";
+				}
+				if (hover_object->flagTemporary())
+				{
+					permissionsline += LLTrans::getString("TooltipFlagTemporary") + " ";
+				}
+				if (!permissionsline.empty())
+				{
+					permissionsline = "\n" + permissionsline.substr(0, permissionsline.length() - 1);
+				}
+				tooltip_msg += permissionsline + "\n";
+
+				LLStringUtil::format_map_t args;
+
+				// Get prim count
+				S32 prim_count = LLSelectMgr::getInstance()->getHoverObjects()->getObjectCount();
+				args["COUNT"] = llformat("%d", prim_count);
+				std::string primlabel = LLTrans::getString("TooltipPrimCount");
+				LLStringUtil::format(primlabel, args);
+				tooltip_msg.append("\n" + primlabel);
+
+				// Get position
+				LLViewerRegion *region = gAgent.getRegion();
+				LLVector3 relPositionObject = region->getPosRegionFromGlobal(hover_object->getPositionGlobal());
+				args.clear();
+				args["POSITION"] = llformat("<%.02f, %.02f, %.02f>", relPositionObject.mV[VX], relPositionObject.mV[VY], relPositionObject.mV[VZ]);
+				std::string positionlabel = LLTrans::getString("TooltipPosition");
+				LLStringUtil::format(positionlabel, args);
+				tooltip_msg.append("\n" + positionlabel);
+
+				// Get distance
+				F32 distance = (relPositionObject - region->getPosRegionFromGlobal(gAgent.getPositionGlobal())).magVec();
+				args.clear();
+				args["DISTANCE"] = llformat("%.02f", distance);
+				std::string distancelabel = LLTrans::getString("TooltipDistance");
+				LLStringUtil::format(distancelabel, args);
+				tooltip_msg.append("\n" + distancelabel);
 			}
 			
 			bool has_media = false;
@@ -1199,7 +1310,11 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 					LLInspector::Params p;
 					p.fillFrom(LLUICtrlFactory::instance().getDefaultParams<LLInspector>());
 					p.message(tooltip_msg);
-					p.image.name("Inspector_I");
+					// Ansariel: Get rid of the useless button!
+					if (!advancedToolTip)
+					{
+						p.image.name("Inspector_I");
+					}
 					p.click_callback(boost::bind(showObjectInspector, hover_object->getID(), mHoverPick.mObjectFace));
 					p.time_based_media(is_time_based_media);
 					p.web_based_media(is_web_based_media);

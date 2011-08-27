@@ -44,14 +44,14 @@ name="login_widgets"
 layout="topleft"
 orientation="horizontal"
 top="519"
-width="996"
+width="980"
 height="80">
 <layout_panel
 auto_resize="false"
 follows="left|bottom|right"
 name="login"
-width="850"
-min_width="720"
+width="845"
+min_width="845"
 user_resize="false"
 height="80">
 <text
@@ -74,17 +74,41 @@ combo_editor.prevalidate_callback="ascii"
 tool_tip="The account name you chose when you registered, like bobsmith12 or Steller Sunshine"
 top_pad="0"
 name="username_combo"
-width="178">
+width="150">
   <combo_box.combo_button
-   visible ="false"/>
+   visible ="true"/>
   <combo_box.drop_down_button
-   visible ="false"/>
+   visible ="true"/>
 </combo_box>
+  <combo_box
+  allow_text_entry="false"
+  font="SansSerifSmall"
+  follows="left|bottom"
+  height="23"
+  max_chars="256"
+  layout="topleft"
+  left_pad="-26"
+  name="saved_logins_combo"
+  width="23"
+  visible="false"
+  />
+  <button
+  follows="left|bottom"
+  height="16"
+  image_selected="PushButton_On_Selected"
+  label="Delete this entry"
+  label_color="White"
+  layout="topleft"
+  top_pad="0"
+left="18"
+  name="delete_saved_login_btn"
+  width="150"
+  tab_stop="false" />
 <text
 follows="left|bottom"
 font="SansSerifSmall"
 height="15"
-left_pad="-19"
+left_pad="5"
 name="password_text"
 top="20"
     width="150">
@@ -98,7 +122,7 @@ name="password_edit"
 is_password="true" 
 select_on_focus="true"
   top_pad="0"
-  width="135" />
+  width="150" />
  <check_box
 control_name="RememberPassword"
 follows="left|bottom"
@@ -107,7 +131,7 @@ height="16"
 label="Remember password"
   top_pad="3"
   name="remember_check"
- width="135" />
+ width="150" />
 <button
   follows="left|bottom"
   height="23"
@@ -126,7 +150,7 @@ label="Remember password"
   left_pad="10"
   name="mode_selection_text"
   top="20"
-  width="130">
+  width="110">
       Default Settings: 
  </text>
 <combo_box
@@ -140,15 +164,15 @@ label="Remember password"
 <combo_box.item
   label="Phoenix"
   name="Phoenix"
-  value="" />
+  value="settings_phoenix.xml" />
 <combo_box.item
   label="V2"
   name="V2"
-  value="" />
+  value="settings_v2.xml" />
 <combo_box.item
   label="Hybrid"
   name="Hybrid"
-  value="" />
+  value="settings_hybrid.xml" />
 </combo_box>
   <text
   follows="left|bottom"
@@ -168,7 +192,7 @@ control_name="NextLoginLocation"
 max_chars="128"
 top_pad="0"
 name="start_location_combo"
-     width="165">
+     width="170">
 <combo_box.item
 label="Last location"
 name="MyLastLocation"
@@ -188,7 +212,8 @@ height="15"
 left_pad="8"
 name="grid_selection_text"
 top="20"
-width="100">
+width="110"
+visible="true">
     Log onto Grid:
   </text>
 <combo_box
@@ -200,15 +225,15 @@ font="SansSerifSmall"
 layout="topleft"
 top_pad="0"
 name="server_combo"
-width="120"
-  visible="false" />
+width="110"
+  visible="true" />
 </layout_panel>
 <layout_panel
 tab_stop="false"
 follows="right|bottom"
 name="links"
-width="105"
-min_width="105"
+width="135"
+min_width="135"
 user_resize="false"
 height="80">
    <text

@@ -462,6 +462,7 @@ public:
 	////////////////////////////////////////////////////////////////
 	// Selection accessors
 	////////////////////////////////////////////////////////////////
+	LLObjectSelectionHandle	getHoverObjects() { return mHoverObjects; }
 	LLObjectSelectionHandle	getSelection() { return mSelectedObjects; }
 	// right now this just renders the selection with root/child colors instead of a single color
 	LLObjectSelectionHandle	getEditSelection() { convertTransient(); return mSelectedObjects; }

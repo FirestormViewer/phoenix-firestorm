@@ -136,6 +136,8 @@ void LLPanelProfileView::onOpen(const LLSD& key)
 		getChild<LLUICtrl>("display_name")->setValue( LLSD() );
 		getChild<LLUICtrl>("user_name")->setValue( LLSD() );
 		getChild<LLUICtrl>("user_key")->setValue( LLSD() );
+		//[ADD: FIRE-2266: SJ] Adding link to webprofiles on profile which opens Web Profiles in browser
+		getChild<LLUICtrl>("web_profile_text")->setValue( LLSD() );
 	}
 
 	// Update the avatar name.
@@ -281,6 +283,15 @@ void LLPanelProfileView::onAvatarNameCache(const LLUUID& agent_id,
 	getChild<LLUICtrl>("user_name")->setValue( av_name.mUsername );
 	getChild<LLUICtrl>("user_key")->setValue( agent_id.asString() );
 	getChild<LLUICtrl>("copy_uri")->setEnabled( true );
+	//[ADD: FIRE-2266: SJ] make sure username is always filled even when Displaynames are not enabled
+	std::string username = av_name.mUsername;
+	if (username.empty())
+	{
+		username = LLCacheName::buildUsername(av_name.mDisplayName);
+	}
+
+	//[ADD: FIRE-2266: SJ] Adding link to webprofiles on profile which opens Web Profiles in browser
+	getChild<LLUICtrl>("web_profile_text")->setValue( "https://my.secondlife.com/" + username );
 
 #if 0
 	getChild<LLUICtrl>("user_name")->setValue( av_name.mDisplayName );

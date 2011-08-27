@@ -194,6 +194,7 @@ void handleNameTagOptionChanged(const LLSD& newvalue);
 void handleDisplayNamesOptionChanged(const LLSD& newvalue);	
 bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response);
 bool callback_clear_cache(const LLSD& notification, const LLSD& response);
+bool callback_clear_settings(const LLSD& notification, const LLSD& response);
 
 //bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
 //bool callback_reset_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
@@ -334,6 +335,9 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.BrowseSettingsDir",		boost::bind(&LLFloaterPreference::onClickBrowseSettingsDir, this));
 	mCommitCallbackRegistrar.add("Pref.BrowseLogPath",			boost::bind(&LLFloaterPreference::onClickBrowseChatLogDir, this));
 	mCommitCallbackRegistrar.add("Pref.ResetCache",				boost::bind(&LLFloaterPreference::onClickResetCache, this));
+	mCommitCallbackRegistrar.add("Pref.ClearCache",				boost::bind(&LLFloaterPreference::onClickClearCache, this));
+	mCommitCallbackRegistrar.add("Pref.Cookies",	    		boost::bind(&LLFloaterPreference::onClickCookies, this));
+	mCommitCallbackRegistrar.add("Pref.Javascript",	        	boost::bind(&LLFloaterPreference::onClickJavascript, this));
 	//	mCommitCallbackRegistrar.add("Pref.ClickSkin",				boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
 //	mCommitCallbackRegistrar.add("Pref.SelectSkin",				boost::bind(&LLFloaterPreference::onSelectSkin, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetKey",			boost::bind(&LLFloaterPreference::onClickSetKey, this));
@@ -356,6 +360,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.MaturitySettings",		boost::bind(&LLFloaterPreference::onChangeMaturity, this));
 	mCommitCallbackRegistrar.add("Pref.BlockList",				boost::bind(&LLFloaterPreference::onClickBlockList, this));
 	mCommitCallbackRegistrar.add("FS.ToggleSortContacts",			boost::bind(&LLFloaterPreference::onClickSortContacts, this));
+	//[ADD - Clear Settings : SJ]
+	mCommitCallbackRegistrar.add("Pref.ClearSettings",			boost::bind(&LLFloaterPreference::onClickClearSettings, this));
 	
 	sSkin = gSavedSettings.getString("SkinCurrent");
 
@@ -742,11 +748,16 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 
 	LLPanelLogin::setAlwaysRefresh(true);
 	refresh();
+
+	
+	getChildView("plain_text_chat_history")->setEnabled(TRUE);
+	getChild<LLUICtrl>("plain_text_chat_history")->setValue(gSavedSettings.getBOOL("PlainTextChatHistory"));
 	
 	// Make sure the current state of prefs are saved away when
 	// when the floater is opened.  That will make cancel do its
 	// job
 	saveSettings();
+	
 }
 
 void LLFloaterPreference::onVertexShaderEnable()
@@ -989,6 +1000,56 @@ void LLFloaterPreference::onClickResetCache()
 	gSavedSettings.setString("CacheLocation", cache_location);
 	std::string top_folder(gDirUtilp->getBaseFileName(cache_location));
 	gSavedSettings.setString("CacheLocationTopFolder", top_folder);
+}
+
+
+
+// Performs a wipe of the local settings dir on next restart 
+bool callback_clear_settings(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if ( option == 0 ) // YES
+	{
+  
+		// Create a filesystem marker instructing a full settings wipe
+		std::string clear_file_name;
+		clear_file_name = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"CLEAR");
+		llinfos << "Creating clear settings marker file " << clear_file_name << llendl;
+		
+		LLAPRFile clear_file ;
+		clear_file.open(clear_file_name, LL_APR_W);
+		if (clear_file.getFileHandle())
+		{
+			LL_INFOS("MarkerFile") << "Created clear settings marker file " << clear_file_name << LL_ENDL;
+			clear_file.close();
+			LLNotificationsUtil::add("SettingsWillClear");
+		}
+		else
+		{
+			LL_WARNS("MarkerFile") << "Cannot clear settings marker file " << clear_file_name << LL_ENDL;
+		}
+		
+		return true;
+	}
+	return false;
+}
+
+//[ADD - Clear Usersettings : SJ] - When button Reset Defaults is clicked show a warning 
+void LLFloaterPreference::onClickClearSettings()
+{
+	LLNotificationsUtil::add("FirestormClearSettingsPrompt",LLSD(), LLSD(), callback_clear_settings);
+}
+
+//[FIX JIRA-1971 : SJ] Show an notify when Cookies setting change
+void LLFloaterPreference::onClickCookies()
+{
+	LLNotificationsUtil::add("DisableCookiesBreaksSearch");
+}
+
+//[FIX JIRA-1971 : SJ] Show an notify when Javascript setting change
+void LLFloaterPreference::onClickJavascript()
+{
+	LLNotificationsUtil::add("DisableJavascriptBreaksSearch");
 }
 
 /*
@@ -1534,8 +1595,6 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	getChild<LLUICtrl>("online_visibility")->setLabelArg("[DIR_VIS]", mDirectoryVisibility);
 	getChildView("send_im_to_email")->setEnabled(TRUE);
 	getChild<LLUICtrl>("send_im_to_email")->setValue(im_via_email);
-	getChildView("plain_text_chat_history")->setEnabled(TRUE);
-	getChild<LLUICtrl>("plain_text_chat_history")->setValue(gSavedSettings.getBOOL("PlainTextChatHistory"));
 	getChildView("log_instant_messages")->setEnabled(TRUE);
 //	getChildView("log_chat")->setEnabled(TRUE);
 //	getChildView("busy_response")->setEnabled(TRUE);

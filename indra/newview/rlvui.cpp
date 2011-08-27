@@ -169,14 +169,13 @@ void RlvUIEnabler::onToggleRez()
 // Checked: 2011-05-28 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
 void RlvUIEnabler::onToggleSetDebug()
 {
-	// AO: comment until we figure out how to support this compiler extension without breaking other code
-	//bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SETDEBUG);
-	//for (std::map<std::string, S16>::const_iterator itSetting = RlvExtGetSet::m_DbgAllowed.cbegin(); 
-	//		itSetting != RlvExtGetSet::m_DbgAllowed.cend(); ++itSetting)
-	//{
-	//	if (itSetting->second & RlvExtGetSet::DBG_WRITE)
-	//		gSavedSettings.getControl(itSetting->first)->setHiddenFromSettingsEditor(!fEnable);
-	//}
+	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SETDEBUG);
+	for (std::map<std::string, S16>::const_iterator itSetting = RlvExtGetSet::m_DbgAllowed.begin(); 
+			itSetting != RlvExtGetSet::m_DbgAllowed.end(); ++itSetting)
+	{
+		if (itSetting->second & RlvExtGetSet::DBG_WRITE)
+			gSavedSettings.getControl(itSetting->first)->setHiddenFromSettingsEditor(!fEnable);
+	}
 }
 
 // Checked: 2010-03-17 (RLVa-1.2.0a) | Added: RLVa-1.2.0a

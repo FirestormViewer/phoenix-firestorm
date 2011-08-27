@@ -217,7 +217,8 @@ static void request(
 	Injector* body_injector,
 	LLCurl::ResponderPtr responder,
 	const F32 timeout = HTTP_REQUEST_EXPIRY_SECS,
-	const LLSD& headers = LLSD()
+	const LLSD& headers = LLSD(),
+	const time_t &if_modified_since = 0
     )
 {
 	if (!LLHTTPClient::hasPump())
@@ -263,6 +264,11 @@ static void request(
             req->addHeader(header.str().c_str());
         }
     }
+
+	if(if_modified_since)
+	{
+		req->setModifiedSince(if_modified_since);
+	}
 
 	// Check to see if we have already set Accept or not. If no one
 	// set it, set it to application/llsd+xml since that's what we
@@ -343,6 +349,14 @@ void LLHTTPClient::get(const std::string& url, ResponderPtr responder, const LLS
 {
 	request(url, LLURLRequest::HTTP_GET, NULL, responder, timeout, headers);
 }
+
+// <AW: opensim>
+void LLHTTPClient::getIfModified(const std::string& url, ResponderPtr responder, const time_t &if_modified_since, const LLSD& headers, const F32 timeout)
+{
+	request(url, LLURLRequest::HTTP_GET, NULL, responder, timeout, headers,  if_modified_since);
+}
+// </AW: opensim>
+
 void LLHTTPClient::getHeaderOnly(const std::string& url, ResponderPtr responder, const LLSD& headers, const F32 timeout)
 {
 	request(url, LLURLRequest::HTTP_HEAD, NULL, responder, timeout, headers);

@@ -648,7 +648,7 @@ bool LLNearbyChat::isChatMultiTab()
 
 void LLNearbyChat::setDocked(bool docked, bool pop_on_undock)
 {
-	if(!isChatMultiTab())
+	if((!isChatMultiTab()) && gSavedSettings.getBOOL("ChatHistoryTornOff"))
 	{
 		LLDockableFloater::setDocked(docked, pop_on_undock);
 	}

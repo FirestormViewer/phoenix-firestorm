@@ -1662,7 +1662,9 @@ LLViewerWindow::LLViewerWindow(
 								mDisplayScale.mV[VX],
 								mDisplayScale.mV[VY],
 								gDirUtilp->getAppRODataDir(),
-								LLUI::getXUIPaths());
+								LLUI::getXUIPaths(),
+								gSavedSettings.getString("PhoenixFontSettingsFile"),
+								gSavedSettings.getF32("PhoenixFontSizeAdjustment"));
 	
 	// Create container for all sub-views
 	LLView::Params rvp;
@@ -2181,7 +2183,7 @@ void LLViewerWindow::setNormalControlsVisible( BOOL visible )
 
 		// ...and set the menu color appropriately.
 		setMenuBackgroundColor(gAgent.getGodLevel() > GOD_NOT, 
-			LLGridManager::getInstance()->isInProductionGrid());
+			!LLGridManager::getInstance()->isInSLBeta());
 	}
         
 	if ( gStatusBar )
@@ -2207,11 +2209,11 @@ void LLViewerWindow::setMenuBackgroundColor(bool god_mode, bool dev_grid)
 	bool isProject = (channel.find("Project") != std::string::npos);
 	
 	// god more important than project, proj more important than grid
-    if(god_mode && LLGridManager::getInstance()->isInProductionGrid())
+    if(god_mode && !LLGridManager::getInstance()->isInSLBeta())
     {
         new_bg_color = LLUIColorTable::instance().getColor( "MenuBarGodBgColor" );
     }
-    else if(god_mode && !LLGridManager::getInstance()->isInProductionGrid())
+    else if(god_mode && LLGridManager::getInstance()->isInSLBeta())
     {
         new_bg_color = LLUIColorTable::instance().getColor( "MenuNonProductionGodBgColor" );
     }
@@ -2219,7 +2221,7 @@ void LLViewerWindow::setMenuBackgroundColor(bool god_mode, bool dev_grid)
 	{
 		new_bg_color = LLUIColorTable::instance().getColor( "MenuBarProjectBgColor" );
     }
-    else if(!god_mode && !LLGridManager::getInstance()->isInProductionGrid())
+    else if(!god_mode && LLGridManager::getInstance()->isInSLBeta())
     {
         new_bg_color = LLUIColorTable::instance().getColor( "MenuNonProductionBgColor" );
     }
@@ -4763,7 +4765,9 @@ void LLViewerWindow::initFonts(F32 zoom_factor)
 								mDisplayScale.mV[VX] * zoom_factor,
 								mDisplayScale.mV[VY] * zoom_factor,
 								gDirUtilp->getAppRODataDir(),
-								LLUI::getXUIPaths());
+								LLUI::getXUIPaths(),
+								gSavedSettings.getString("PhoenixFontSettingsFile"),
+								gSavedSettings.getF32("PhoenixFontSizeAdjustment"));
 	// Force font reloads, which can be very slow
 	LLFontGL::loadDefaultFonts();
 }
