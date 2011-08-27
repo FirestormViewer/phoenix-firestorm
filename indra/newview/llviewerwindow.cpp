@@ -3810,7 +3810,12 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 // [/RLVa:KB]
 		if (!found) // if not found in HUD, look in world:
 		{
-			found = NULL;
+                     found = gPipeline.lineSegmentIntersectInWorld(mouse_world_start, mouse_world_end, pick_transparent,
+								face_hit, intersection, uv, normal, binormal);
+                       if (found && !pick_transparent)
+                      {
+                             gDebugRaycastIntersection = *intersection;
+                      }
 		}
 
 // [RLVa:KB] - Checked: 2010-01-02 (RLVa-1.1.0l) | Added: RLVa-1.1.0l
