@@ -153,6 +153,14 @@
      name="icon_DamageNo"
      translate="false"
      value="Parcel_DamageNo_Dark" />
+    <string
+     name="icon_SeeAVs_Off"
+     translate="false"
+     value="Parcel_SeeAVsOff_Dark" />
+    <string
+     name="icon_SeeAVs_On"
+     translate="false"
+     value="Parcel_SeeAVsOn_Dark" />
     <button
      follows="top|right"
      height="24"
