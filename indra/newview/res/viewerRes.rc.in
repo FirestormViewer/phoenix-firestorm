@@ -54,8 +54,8 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_LL_ICON             ICON                    "ll_icon.ico"
-IDI_LCD_LL_ICON         ICON                    "icon1.ico"
+IDI_LL_ICON             ICON                    "firestorm_icon.ico"
+IDI_LCD_LL_ICON         ICON                    "firestorm_icon.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
