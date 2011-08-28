@@ -174,6 +174,8 @@ public:
 	void onClickProxySettings();
 	void applyUIColor(LLUICtrl* ctrl, const LLSD& param);
 	void getUIColor(LLUICtrl* ctrl, const LLSD& param);
+//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
+	void onChangeDoubleClickSettings();
 	
 	void buildPopupLists();
 	static void refreshSkin(void* data);

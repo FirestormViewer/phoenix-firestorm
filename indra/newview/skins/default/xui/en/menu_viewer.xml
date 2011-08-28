@@ -2222,7 +2222,20 @@
                  parameter="UseDebugMenus" />
             </menu_item_check>
 
-            <menu_item_separator/>
+          <!--   	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] -->
+          <menu_item_check
+           label="DoubleClick Teleport"
+           name="DoubleClick Teleport"
+           shortcut="control|shift|D">
+            <on_check
+               function="CheckControl"
+               parameter="DoubleClickTeleport" />
+            <on_click
+               function="Advanced.ToggleDoubleClickTeleport"/>
+          </menu_item_check>
+          <!--   	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] -->
+
+          <menu_item_separator/>
 
             <menu_item_check
              label="Always Run"

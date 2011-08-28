@@ -7283,6 +7283,25 @@ class LLAdvancedClickRenderShadowOption: public view_listener_t
 	}
 };
 
+//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
+class LLAdvancedToggleDoubleClickTeleport: public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		
+		BOOL checked = gSavedSettings.getBOOL( "DoubleClickTeleport" );
+		if (checked)
+		{
+		   gSavedSettings.setBOOL( "DoubleClickTeleport", false );
+		}
+		else
+		{
+           gSavedSettings.setBOOL( "DoubleClickTeleport", true );
+		   gSavedSettings.setBOOL( "DoubleClickAutoPilot", false );
+		}
+		return true;
+	}
+};
 void menu_toggle_attached_lights(void* user_data)
 {
 	LLPipeline::sRenderAttachedLights = gSavedSettings.getBOOL("RenderAttachedLights");
@@ -8800,7 +8819,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAdvancedHandleAttachedLightParticles(), "Advanced.HandleAttachedLightParticles");
 	view_listener_t::addMenu(new LLAdvancedCheckRenderShadowOption(), "Advanced.CheckRenderShadowOption");
 	view_listener_t::addMenu(new LLAdvancedClickRenderShadowOption(), "Advanced.ClickRenderShadowOption");
-	
+	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
+	view_listener_t::addMenu(new LLAdvancedToggleDoubleClickTeleport, "Advanced.ToggleDoubleClickTeleport");
 
 	#ifdef TOGGLE_HACKED_GODLIKE_VIEWER
 	view_listener_t::addMenu(new LLAdvancedHandleToggleHackedGodmode(), "Advanced.HandleToggleHackedGodmode");

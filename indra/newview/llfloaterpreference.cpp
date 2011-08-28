@@ -372,6 +372,10 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
 	gSavedSettings.getControl("UseDisplayNames")->getCommitSignal()->connect(boost::bind(&handleDisplayNamesOptionChanged,  _2));
 
+	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
+	gSavedSettings.getControl("DoubleClickTeleport")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onChangeDoubleClickSettings, this));
+
+
 	LLAvatarPropertiesProcessor::getInstance()->addObserver( gAgent.getID(), this );
 }
 
@@ -1735,6 +1739,32 @@ void LLFloaterPreference::updateDoubleClickSettings()
 		gSavedSettings.setBOOL( "DoubleClickTeleport", teleport_selected );
 		gSavedSettings.setBOOL( "DoubleClickAutoPilot", !teleport_selected );
 	}
+}
+
+//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
+void LLFloaterPreference::onChangeDoubleClickSettings()
+{
+	bool double_click_action_enabled = gSavedSettings.getBOOL("DoubleClickAutoPilot") || gSavedSettings.getBOOL("DoubleClickTeleport");
+	LLCheckBoxCtrl* double_click_action_cb = getChild<LLCheckBoxCtrl>("double_click_chkbox");
+	if (double_click_action_cb)
+	{
+		// check checkbox if one of double-click actions settings enabled, uncheck otherwise
+		double_click_action_cb->setValue(double_click_action_enabled);
+	}
+	LLRadioGroup* double_click_action_radio = getChild<LLRadioGroup>("double_click_action");
+	if (!double_click_action_radio) return;
+	// set radio-group enabled if one of double-click actions settings enabled
+	double_click_action_radio->setEnabled(double_click_action_enabled);
+	if (gSavedSettings.getBOOL("DoubleClickTeleport"))
+	{
+		double_click_action_radio->setSelectedIndex(0);
+	}
+	else
+	{
+		double_click_action_radio->setSelectedIndex(1);
+	}
+
+
 }
 
 void LLFloaterPreference::onClickProxySettings()
