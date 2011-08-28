@@ -218,9 +218,14 @@ void LLSideTrayTab::toggleTabDocked(bool toggle_floater /* = true */)
 
 	LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", tab_name);
 	if (!floater_tab) return;
+
+// AO: Don't automatically unminimize. This interferes with saving window minimization
+// state from login to login, where the tab has to be automatically undocked each time.
+// anyone calling toggleTabDocked must insure on their own it's (un)minimized properly.
+	
 // [RLVa:KB] - Checked: 2010-12-14 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
-	if (floater_tab->isMinimized())
-		floater_tab->setMinimized(FALSE);
+//	if (floater_tab->isMinimized())
+//		floater_tab->setMinimized(FALSE);
 // [/RLVa:KB]
 
 	LLSideTray* pSideTray = getSideTray();
@@ -829,6 +834,7 @@ LLPanel* LLSideTray::openChildPanel(LLSideTrayTab* tab, const std::string& panel
 		// Restore the floater if it was minimized.
 		if (floater_tab->isMinimized())
 		{
+			llinfos << "unminimizing..." << llendl;
 			floater_tab->setMinimized(FALSE);
 		}
 
@@ -1516,6 +1522,7 @@ void LLSideTray::togglePanel(LLPanel* &sub_panel, const std::string& panel_name,
 			if(tab)
 			{
 				LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", tab->getName());
+				llinfos << "togglePanel: unminimizing..." << llendl;
 				floater_tab->setMinimized(!(floater_tab->isMinimized()));
 				//tab->minimizeTab();
 			}
