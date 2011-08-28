@@ -46,6 +46,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>FSMeshUploadPossible</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, shows dummy (preview) avatars in radar.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>FSAdvancedTooltips</key>
   <map>
     <key>Comment</key>
