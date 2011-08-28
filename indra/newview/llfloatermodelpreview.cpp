@@ -2971,7 +2971,12 @@ LLModelPreview::~LLModelPreview()
 		mModelLoader->mPreview = NULL;
 		mModelLoader = NULL;
 	}
+
+	// WS: Mark the preview avatar as dead, when the floater closes. Prevents memleak!
+	mPreviewAvatar->markDead();
+
 	//*HACK : *TODO : turn this back on when we understand why this crashes
+	
 	//glodShutdown();
 }
 

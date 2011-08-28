@@ -938,7 +938,14 @@ void LLPanelPeople::updateNearbyList()
 		LLViewerRegion *reg	 = world->getRegionFromPosGlobal(avPos);
 		if ((!reg) || (!av)) // don't update this radar listing if data is inaccessible
 			continue;
-		
+
+		// WS: If we have a dummy avatar. Then Don't display it in th
+		static LLUICachedControl<BOOL> showdummyav("FSShowDummyAVsinRadar");
+		if(!showdummyav){
+			LLVOAvatar* voav = (LLVOAvatar*)gObjectList.findObject(avId);
+			if(voav && voav->mIsDummy) continue;
+		}
+
 		avRegion = reg->getRegionID();
 		if (lastRadarSweep.count(avId) > 1) // if we detect a multiple ID situation, get lastSeenTime from our cache instead
 		{
