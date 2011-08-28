@@ -714,42 +714,19 @@ bool LLAppViewer::init()
 	{
 		mPurgeSettings = true;
 		llinfos << "Purging configuration..." << llendl;
-		std::string delem = gDirUtilp->getDirDelimiter();
+		//std::string delem = gDirUtilp->getDirDelimiter();
 
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"CLEAR"));
 		
 		//[ADD - Clear Usersettings : SJ] - Delete directories beams, beamsColors, windlight in usersettings
-		std::string beams_dir = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beams");
-		beams_dir += gDirUtilp->getDirDelimiter();
-		gDirUtilp->deleteFilesInDir(beams_dir, "*.*");
 		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beams") );
-		
-		std::string beamscolors_dir = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors");
-		beamscolors_dir += gDirUtilp->getDirDelimiter();
-		gDirUtilp->deleteFilesInDir(beamscolors_dir, "*.*");
 		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors") );
-		
-		std::string windlight_water_dir = gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/water", "");
-		windlight_water_dir += gDirUtilp->getDirDelimiter();
-		gDirUtilp->deleteFilesInDir(windlight_water_dir, "*.*");
 		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight/water") );
-		
-		std::string windlight_days_dir = gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/days", "");
-		windlight_days_dir += gDirUtilp->getDirDelimiter();
-		gDirUtilp->deleteFilesInDir(windlight_days_dir, "*.*");
 		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight/days") );
-		
-		std::string windlight_skies_dir = gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/skies", "");
-		windlight_skies_dir += gDirUtilp->getDirDelimiter();
-		gDirUtilp->deleteFilesInDir(windlight_skies_dir, "*.*");
 		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight/skies") );
-		
-		std::string windlight_dir = gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight", "");
-		windlight_dir += gDirUtilp->getDirDelimiter();
-		gDirUtilp->deleteFilesInDir(windlight_dir, "*.*");  
 		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight") );		
 	
-		std::string user_dir = gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "", "") + delem;
+		std::string user_dir = gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "", "");
 
 		// We don't delete the entire folder to avoid data loss of config files unrelated to the current binary. -AO
 		//gDirUtilp->deleteFilesInDir(user_dir, "*.*");
@@ -762,9 +739,11 @@ bool LLAppViewer::init()
 
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "colors.xml"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.xml"));
+				LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.user.xml"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "agents.xml"));
-	        gDirUtilp->deleteFilesInDir(user_dir, "feature*.txt");
-	        gDirUtilp->deleteFilesInDir(user_dir, "gpu*.txt");
+	            gDirUtilp->deleteFilesInDir(user_dir, "feature*.txt");
+	            gDirUtilp->deleteFilesInDir(user_dir, "gpu*.txt");
+
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "releases.xml"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_phoenix.xml"));
@@ -1568,7 +1547,8 @@ bool LLAppViewer::cleanup()
 	if (! isError())
 	{
 		std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
-		logdir += gDirUtilp->getDirDelimiter();
+		//[FIX - SJ] No Delimiter needed gDirUtilp adds a delimiter between path and mask. Windows will otherwise fail
+		//logdir += gDirUtilp->getDirDelimiter();
 		gDirUtilp->deleteFilesInDir(logdir, "*-*-*-*-*.dmp");
 	}
 
@@ -1836,8 +1816,9 @@ bool LLAppViewer::cleanup()
 	if (mPurgeOnExit)
 	{
 		llinfos << "Purging all cache files on exit" << llendflush;
-		std::string mask = gDirUtilp->getDirDelimiter() + "*.*";
-		gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,""),mask);
+		//[FIX - SJ] No Delimiter needed gDirUtilp adds a delimiter between path and mask. Windows will otherwise fail
+		//std::string mask = gDirUtilp->getDirDelimiter() + "*.*";
+		gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,""),"*.*");
 	}
 
 	removeMarkerFile(); // Any crashes from here on we'll just have to ignore
@@ -3141,8 +3122,9 @@ void LLAppViewer::cleanupSavedSettings()
 
 void LLAppViewer::removeCacheFiles(const std::string& file_mask)
 {
-	std::string mask = gDirUtilp->getDirDelimiter() + file_mask;
-	gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE, ""), mask);
+	//[FIX - SJ] No Delimiter needed gDirUtilp adds a delimiter between path and mask. Windows will otherwise fail
+	//std::string mask = gDirUtilp->getDirDelimiter() + file_mask;
+	gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE, ""), file_mask);
 }
 
 void LLAppViewer::writeSystemInfo()
