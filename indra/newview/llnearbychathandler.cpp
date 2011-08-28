@@ -539,17 +539,8 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,		// WARNING - not 
 	if(chat_msg.mText.empty())
 		return;//don't process empty messages
 
-	// Handle irc styled messages for toast panel
-	// HACK ALERT - changes mText, stripping out IRC style "/me" prefixes
 	LLChat& tmp_chat = const_cast<LLChat&>(chat_msg);
 	std::string original_message = tmp_chat.mText;			// Save un-modified version of chat text
-	if (tmp_chat.mChatStyle == CHAT_STYLE_IRC)
-	{
-		if(!tmp_chat.mFromName.empty())
-			tmp_chat.mText = tmp_chat.mFromName + tmp_chat.mText.substr(3);
-		else
-			tmp_chat.mText = tmp_chat.mText.substr(3);
-	}
 
 // [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
 	if (rlv_handler_t::isEnabled())
@@ -626,6 +617,17 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,		// WARNING - not 
 	}
 
 	nearby_chat->addMessage(chat_msg, true, args);
+
+	// Handle irc styled messages for toast panel
+	// HACK ALERT - changes mText, stripping out IRC style "/me" prefixes
+	if ((tmp_chat.mChatStyle == CHAT_STYLE_IRC) &&
+		!PhoenixUseNearbyChatConsole)
+	{
+		if(!tmp_chat.mFromName.empty())
+			tmp_chat.mText = tmp_chat.mFromName + tmp_chat.mText.substr(3);
+		else
+			tmp_chat.mText = tmp_chat.mText.substr(3);
+	}
 
 	if(chat_msg.mSourceType == CHAT_SOURCE_AGENT 
 		&& chat_msg.mFromID.notNull() 
@@ -733,21 +735,12 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,		// WARNING - not 
 	else
 	{
 		// Toasts mode...
-
+		
 		if( nearby_chat->getVisible()
 			|| ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
 				&& gSavedSettings.getBOOL("UseChatBubbles") )
 			|| !mChannel->getShowToasts() ) // to prevent toasts in Busy mode
 			return;//no need in toast if chat is visible or if bubble chat is enabled
-
-		// Handle irc styled messages for toast panel
-		if (tmp_chat.mChatStyle == CHAT_STYLE_IRC)
-		{
-			if(!tmp_chat.mFromName.empty())
-				tmp_chat.mText = tmp_chat.mFromName + tmp_chat.mText.substr(3);
-			else
-				tmp_chat.mText = tmp_chat.mText.substr(3);
-		}
 
 		// arrange a channel on a screen
 		if(!mChannel->getVisible())
@@ -776,7 +769,7 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,		// WARNING - not 
 		{
 			//LLSD notification;
 			notification["id"] = id;
-			//notification["message"] = chat_msg.mText;
+			notification["message"] = chat_msg.mText;
 			//notification["from"] = chat_msg.mFromName;
 			//notification["from_id"] = chat_msg.mFromID;
 			//notification["time"] = chat_msg.mTime;
