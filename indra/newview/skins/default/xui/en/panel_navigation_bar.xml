@@ -85,9 +85,9 @@
 	     tool_tip="Pops up Sky Editor window"
 	     top_delta="0"
 	     width="30">
-		 <button.init_callback
-               function="Button.SetFloaterToggle"
-               parameter="env_windlight" />
+		 <button.commit_callback
+               function="World.EnvPreset"
+               parameter="edit_sky" />
 		 </button>
           <!-- end of Windlight Button -->
 
