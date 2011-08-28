@@ -137,8 +137,8 @@ void LLConsole::setFontSize(S32 size_index)
 void LLConsole::draw()
 {
 	// Units in pixels
-	static const F32 padding_horizontal = 10;
-	static const F32 padding_vertical = 3;
+	static const F32 padding_horizontal = 15;
+	static const F32 padding_vertical = 8;
 	LLGLSUIDefault gls_ui;
 
 	// skip lines added more than mLinePersistTime ago
@@ -183,7 +183,7 @@ void LLConsole::draw()
 	// draw remaining lines
 	F32 y_pos = 0.f;
 
-	LLUIImagePtr imagep = LLUI::getUIImage("transparent");
+	LLUIImagePtr imagep = LLUI::getUIImage("Rounded_Square");
 
 	//AO: Unify colors and opacity with the color preferences control for all onscreen overlay background
 	//    console/bubblechat/tag backgrounds. FIRE-969
