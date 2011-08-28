@@ -323,11 +323,31 @@ LLSLURL::LLSLURL(const std::string& slurl)
 			LL_DEBUGS("SLURL") << "mRegion: "  << mRegion << LL_ENDL;
 
 			path_array.erase(0);
-
-			// if x, y and z were not fully passed in, go to the middle of the region.
-			// teleport will adjust the actual location to make sure you're on the ground
-			// and such
-			mPosition = LLVector3(REGION_WIDTH_METERS/2, REGION_WIDTH_METERS/2, 0);
+			
+			// parse the x, y, z
+			if(path_array.size() >= 3)
+			{	
+			  
+			  mPosition = LLVector3(path_array);
+			  if((F32(mPosition[VX]) < 0.f) || 
+                             (mPosition[VX] > REGION_WIDTH_METERS) ||
+			     (F32(mPosition[VY]) < 0.f) || 
+                             (mPosition[VY] > REGION_WIDTH_METERS) ||
+			     (F32(mPosition[VZ]) < 0.f) || 
+                             (mPosition[VZ] > REGION_HEIGHT_METERS))
+			    {
+			      mType = INVALID;
+			      return;
+			    }
+ 
+			}
+			else
+			{
+				// if x, y and z were not fully passed in, go to the middle of the region.
+				// teleport will adjust the actual location to make sure you're on the ground
+				// and such
+				mPosition = LLVector3(REGION_WIDTH_METERS/2, REGION_WIDTH_METERS/2, 0);
+			}
 		}
 	}
 }
