@@ -104,7 +104,9 @@
 #include "llviewernetwork.h"
 #include "glod/glod.h"
 #include <boost/algorithm/string.hpp>
-
+// <AW: opensim-limits>
+#include "llworld.h"
+// </AW: opensim-limits>
 
 const S32 SLM_SUPPORTED_VERSION = 2;
 
@@ -3210,7 +3212,12 @@ void LLModelPreview::rebuildUploadData()
 		}
 	}
 
-	F32 max_import_scale = DEFAULT_MAX_PRIM_SCALE/max_scale;
+
+// <AW: opensim-limits>
+	//F32 max_import_scale = DEFAULT_MAX_PRIM_SCALE/max_scale;
+	F32 region_max_prim_scale = LLWorld::getInstance()->getRegionMaxPrimScale();
+	F32 max_import_scale = region_max_prim_scale/max_scale;
+// </AW: opensim-limits>
 
 	scale_spinner->setMaxValue(max_import_scale);
 

@@ -63,7 +63,10 @@ const F32 CUT_MAX = 1.f;
 const F32 MIN_CUT_DELTA = 0.02f;
 
 const F32 HOLLOW_MIN = 0.f;
-const F32 HOLLOW_MAX = 0.95f;
+// <AW: opensim-limits>
+//const F32 HOLLOW_MAX = 0.95f;
+const F32 HOLLOW_MAX = 0.99f;
+// <AW: opensim-limits>
 const F32 HOLLOW_MAX_SQUARE	= 0.7f;
 
 const F32 TWIST_MIN = -1.f;
@@ -71,11 +74,16 @@ const F32 TWIST_MAX =  1.f;
 
 const F32 RATIO_MIN = 0.f;
 const F32 RATIO_MAX = 2.f; // Tom Y: Inverted sense here: 0 = top taper, 2 = bottom taper
-
-const F32 HOLE_X_MIN= 0.05f;
+// <AW: opensim-limits>
+//const F32 HOLE_X_MIN= 0.05f;
+const F32 HOLE_X_MIN= 0.01f;
+// <AW: opensim-limits>
 const F32 HOLE_X_MAX= 1.0f;
 
-const F32 HOLE_Y_MIN= 0.05f;
+// <AW: opensim-limits>
+//const F32 HOLE_Y_MIN= 0.05f;
+const F32 HOLE_Y_MIN= 0.01f;
+// <AW: opensim-limits>
 const F32 HOLE_Y_MAX= 0.5f;
 
 const F32 SHEAR_MIN = -0.5f;

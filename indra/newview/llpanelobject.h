@@ -54,6 +54,7 @@ public:
 	virtual void	draw();
 	virtual void 	clearCtrls();
 
+	void 			updateLimits();// <AW: opensim-limits>
 	void			refresh();
 
 	static bool		precommitValidate(const LLSD& data);
@@ -126,10 +127,19 @@ protected:
 	LLTextBox*		mLabelCut;
 	LLSpinCtrl*		mSpinCutBegin;
 	LLSpinCtrl*		mSpinCutEnd;
+// <AW: opensim-limits>
+	bool mLimitsNeedUpdate;
+	F32			mRegionMaxHeight;
 
+	F32			mMinScale;
+	F32			mMaxScale;
+
+	F32			mMaxHollowSize;
+// </AW: opensim-limits>
 	LLTextBox*		mLabelHollow;
 	LLSpinCtrl*		mSpinHollow;
 
+	F32			mMinHoleSize;// <AW: opensim-limits>
 	LLTextBox*		mLabelHoleType;
 	LLComboBox*		mComboHoleType;
 

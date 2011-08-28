@@ -95,11 +95,17 @@ F32 get_default_max_prim_scale(bool is_flora)
 	if (gMeshRepo.meshRezEnabled() &&
 		!is_flora)
 	{
-		return DEFAULT_MAX_PRIM_SCALE;
+// <AW: opensim-limits>
+//		return DEFAULT_MAX_PRIM_SCALE;
+		return LLWorld::getInstance()->getRegionMaxPrimScale();
+// </AW: opensim-limits>
 	}
 	else
-	{	
-		return DEFAULT_MAX_PRIM_SCALE_NO_MESH;
+	{
+// <AW: opensim-limits>
+//		return DEFAULT_MAX_PRIM_SCALE_NO_MESH;
+		return LLWorld::getInstance()->getRegionMaxPrimScaleNoMesh();
+// </AW: opensim-limits>
 	}
 }
 
@@ -975,8 +981,12 @@ void LLManipScale::dragCorner( S32 x, S32 y )
 		mInSnapRegime = FALSE;
 	}
 
-	F32 max_scale_factor = get_default_max_prim_scale() / MIN_PRIM_SCALE;
-	F32 min_scale_factor = MIN_PRIM_SCALE / get_default_max_prim_scale();
+// <AW: opensim-limits>
+//	F32 max_scale_factor = get_default_max_prim_scale() / MIN_PRIM_SCALE;
+//	F32 min_scale_factor = MIN_PRIM_SCALE / get_default_max_prim_scale();
+	F32 max_scale_factor = LLWorld::getInstance()->getRegionMaxPrimScale() / LLWorld::getInstance()->getRegionMinPrimScale();
+	F32 min_scale_factor = LLWorld::getInstance()->getRegionMinPrimScale() / LLWorld::getInstance()->getRegionMaxPrimScale();
+// </AW: opensim-limits>
 
 	// find max and min scale factors that will make biggest object hit max absolute scale and smallest object hit min absolute scale
 	for (LLObjectSelection::iterator iter = mObjectSelection->begin();
@@ -990,8 +1000,10 @@ void LLManipScale::dragCorner( S32 x, S32 y )
 
 			F32 cur_max_scale_factor = llmin( get_default_max_prim_scale(LLPickInfo::isFlora(cur)) / scale.mV[VX], get_default_max_prim_scale(LLPickInfo::isFlora(cur)) / scale.mV[VY], get_default_max_prim_scale(LLPickInfo::isFlora(cur)) / scale.mV[VZ] );
 			max_scale_factor = llmin( max_scale_factor, cur_max_scale_factor );
-
-			F32 cur_min_scale_factor = llmax( MIN_PRIM_SCALE / scale.mV[VX], MIN_PRIM_SCALE / scale.mV[VY], MIN_PRIM_SCALE / scale.mV[VZ] );
+// <AW: opensim-limits>
+//			F32 cur_min_scale_factor = llmax( MIN_PRIM_SCALE / scale.mV[VX], MIN_PRIM_SCALE / scale.mV[VY], MIN_PRIM_SCALE / scale.mV[VZ] );
+			F32 cur_min_scale_factor = llmax( LLWorld::getInstance()->getRegionMinPrimScale() / scale.mV[VX], LLWorld::getInstance()->getRegionMinPrimScale() / scale.mV[VY], LLWorld::getInstance()->getRegionMinPrimScale() / scale.mV[VZ] );
+// </AW: opensim-limits>
 			min_scale_factor = llmax( min_scale_factor, cur_min_scale_factor );
 		}
 	}
@@ -1285,7 +1297,10 @@ void LLManipScale::stretchFace( const LLVector3& drag_start_agent, const LLVecto
 
 			F32 denom = axis * dir_local;
 			F32 desired_delta_size	= is_approx_zero(denom) ? 0.f : (delta_local_mag / denom);  // in meters
-			F32 desired_scale		= llclamp(selectNode->mSavedScale.mV[axis_index] + desired_delta_size, MIN_PRIM_SCALE, get_default_max_prim_scale(LLPickInfo::isFlora(cur)));
+// <AW: opensim-limits>
+//			F32 desired_scale		= llclamp(selectNode->mSavedScale.mV[axis_index] + desired_delta_size, MIN_PRIM_SCALE, get_default_max_prim_scale(LLPickInfo::isFlora(cur)));
+			F32 desired_scale		= llclamp(selectNode->mSavedScale.mV[axis_index] + desired_delta_size, LLWorld::getInstance()->getRegionMinPrimScale(), get_default_max_prim_scale(LLPickInfo::isFlora(cur)));
+// </AW: opensim-limits>
 			// propagate scale constraint back to position offset
 			desired_delta_size		= desired_scale - selectNode->mSavedScale.mV[axis_index]; // propagate constraint back to position
 
@@ -2008,8 +2023,10 @@ F32		LLManipScale::partToMinScale( S32 part, const LLBBox &bbox ) const
 			min_extent = bbox_extents.mV[i];
 		}
 	}
-	F32 min_scale_factor = bbox_extents.magVec() * MIN_PRIM_SCALE / min_extent;
-
+// <AW: opensim-limits>
+//	F32 min_scale_factor = bbox_extents.magVec() * MIN_PRIM_SCALE / min_extent;
+	F32 min_scale_factor = bbox_extents.magVec() * LLWorld::getInstance()->getRegionMinPrimScale() / min_extent;
+// </AW: opensim-limits>
 	if (getUniform())
 	{
 		min_scale_factor *= 0.5f;
