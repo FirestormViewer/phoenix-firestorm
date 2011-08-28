@@ -27,4 +27,4 @@
         <on_click
          function="Gear.Copy" />
     </menu_item_call>
-</menu>
+</toggleable_menu>
