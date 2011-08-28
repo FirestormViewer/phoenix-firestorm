@@ -79,7 +79,10 @@ getArgs()
               config)   WANTS_CONFIG=$TRUE;;
               version)  WANTS_VERSION=$TRUE;;
               chan)     CHANNEL="$OPTARG";;
-              btype)    BTYPE="$OPTARG";;
+              btype)    if [ \( "$OPTARG" == "Release" \) -o \( "$OPTARG" == "RelWithDebInfo" \) -o \( "$OPTARG" == "Debug" \) ] ; then
+	      			BTYPE="$OPTARG"
+			fi
+	      		;;
               kdu)      WANTS_KDU=$TRUE;;
 	      fmod)	WANTS_FMOD=$TRUE;;
 	      package)	WANTS_PACKAGE=$TRUE;;
@@ -91,6 +94,7 @@ getArgs()
               -*)       showUsage && exit 1;;
               *)        showUsage && exit 1;;            
               esac
+	      
           done
           shift $[OPTIND-1]
           if [ $OPTIND -le 1 ] ; then
