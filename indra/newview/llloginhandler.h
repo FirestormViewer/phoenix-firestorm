@@ -44,6 +44,9 @@ class LLLoginHandler : public LLCommandHandler
 	// Web-based login unsupported
 	//LLUUID getWebLoginKey() const { return mWebLoginKey; }
 
+	LLPointer<LLCredential> loadSavedUserLoginInfo();  
+	LLPointer<LLCredential> initializeLoginInfo();
+
 private:
 	void parse(const LLSD& queryMap);
 

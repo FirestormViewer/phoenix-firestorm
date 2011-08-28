@@ -790,7 +790,7 @@ bool idle_startup()
 		//
 		if (gUserCredential.isNull())
 		{
-			gUserCredential = gSecAPIHandler->loadCredential(gSavedSettings.getString("UserLoginInfo"));                       
+			gUserCredential = gLoginHandler.initializeLoginInfo();                    
 		}
 		// Previous initializeLoginInfo may have generated user credentials.  Re-check them.
 		if (gUserCredential.isNull())

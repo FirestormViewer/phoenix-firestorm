@@ -13886,6 +13886,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string />
     </map>
+    <key>UserLoginInfo1</key>
+    <map>
+      <key>Comment</key>
+      <string>Users loging data.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>LLSD</string>
+      <key>Value</key>
+    </map>
     <key>UseLSLBridge</key>
     <map>
       <key>Comment</key>
