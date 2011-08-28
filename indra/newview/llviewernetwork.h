@@ -170,7 +170,10 @@ public:
 	bool isSystemGrid() { return isSystemGrid(mGrid); }
 	// Mark this grid as a favorite that should be persisited on 'save'
 	// this is currently used to persist a grid after a successful login
-	void setFavorite() { mGridList[mGrid][GRID_IS_FAVORITE_VALUE] = TRUE; }
+// <AW: opensim>
+	// Not used anymore, keeping commented as reminder for merge conflicts
+	//void setFavorite() { mGridList[mGrid][GRID_IS_FAVORITE_VALUE] = TRUE; }
+// </AW opensim>
 	
 // <AW opensim>
 	bool isInSLMain();

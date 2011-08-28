@@ -1457,25 +1457,30 @@ void LLViewerMedia::setOpenIDCookie()
 			new LLViewerMediaWebProfileResponder(raw_profile_url.getAuthority()),
 			headers);
 
-// AO, conflicts with opengrid patch
-//		std::string url = "https://marketplace.secondlife.com/";
-//
-//		if (!LLGridManager::getInstance()->isInProductionGrid())
-//		{
-//			std::string gridLabel = LLGridManager::getInstance()->getGridLabel();
-//			url = llformat("https://marketplace.%s.lindenlab.com/", utf8str_tolower(gridLabel).c_str());
-//		}
-//	
-//		url += "api/1/users/";
-//		url += gAgent.getID().getString();
-//		url += "/user_status";
-//
-//		headers = LLSD::emptyMap();
-//		headers["Accept"] = "*/*";
-//		headers["Cookie"] = sOpenIDCookie;
-//		headers["User-Agent"] = getCurrentUserAgent();
-//
-//		LLHTTPClient::get(url, new LLInventoryUserStatusResponder(), headers);
+		std::string url = "https://marketplace.secondlife.com/";
+
+// 		if (LLGridManager::getInstance()->isInProductionGrid())
+		if (LLGridManager::getInstance()->isInSLBeta())// <AW opensim>
+		{
+			std::string gridLabel = LLGridManager::getInstance()->getGridLabel();
+			url = llformat("https://marketplace.%s.lindenlab.com/", utf8str_tolower(gridLabel).c_str());
+		}
+
+		// <AW opensim> needs coordinating with opensim devs
+		if (!LLGridManager::getInstance()->isInOpenSim())// <AW opensim>
+		{
+			url += "api/1/users/";
+			url += gAgent.getID().getString();
+			url += "/user_status";
+	
+			headers = LLSD::emptyMap();
+			headers["Accept"] = "*/*";
+			headers["Cookie"] = sOpenIDCookie;
+			headers["User-Agent"] = getCurrentUserAgent();
+	
+			LLHTTPClient::get(url, new LLInventoryUserStatusResponder(), headers);
+		}
+		
 	}
 }
 
