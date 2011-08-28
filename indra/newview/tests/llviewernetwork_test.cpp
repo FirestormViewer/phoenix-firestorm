@@ -454,7 +454,7 @@ namespace tut
 					  std::string("http://viewer-login.agni.lindenlab.com/"));
 		ensure_equals("getLoginPage2", LLGridManager::getInstance()->getLoginPage("util.agni.lindenlab.com"), 
 					  std::string("http://viewer-login.agni.lindenlab.com/"));
-		ensure("Is Agni a production grid", LLGridManager::getInstance()->isInProductionGrid());		
+		ensure("Is Agni a production grid", LLGridManager::getInstance()->isInSLMain());		
 		std::vector<std::string> uris;
 		LLGridManager::getInstance()->getLoginURIs(uris);
 		ensure_equals("getLoginURIs size", uris.size(), 1);
@@ -462,7 +462,7 @@ namespace tut
 					  std::string("https://login.agni.lindenlab.com/cgi-bin/login.cgi"));
 		LLGridManager::getInstance()->setGridChoice("myaddedgrid");
 		ensure_equals("getGridLabel", LLGridManager::getInstance()->getGridLabel(), std::string("myaddedgrid"));		
-		ensure("Is myaddedgrid a production grid", !LLGridManager::getInstance()->isInProductionGrid());
+		ensure("Is myaddedgrid a production grid", !LLGridManager::getInstance()->isInSLMain());
 		
 		LLGridManager::getInstance()->setFavorite();
 		LLGridManager::getInstance()->getGridInfo("myaddedgrid", grid);

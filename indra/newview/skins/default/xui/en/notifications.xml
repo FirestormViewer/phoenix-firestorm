@@ -8210,4 +8210,16 @@ Phantom mode off.
   </notification>
 <!-- Firestorm Reset Settings -->
 
+<!-- AW: opensim -->
+  <notification icon="alertmodal.tga"
+		name="CantAddGrid"
+		type="alertmodal">
+Could not add [GRID] to the grid list.
+[REASON] contact support of [GRID].
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+<!-- AW: opensim -->
+
 </notifications>

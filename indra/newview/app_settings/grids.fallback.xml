@@ -28,7 +28,7 @@
         <key>register</key>
             <string>http://craft-world.org:8002/wifi/user/account</string>
         <key>slurl_base</key>
-            <string>hop://craft-world.org:8002/</string>
+            <string>https://craft-world.org:8002/</string>
         </map>
     <key>grid.3rdrockgrid.com:8002</key>
         <map>
@@ -62,7 +62,7 @@
         <key>register</key>
             <string>http://3rdrockgrid.com/</string>
         <key>slurl_base</key>
-            <string>hop://grid.3rdrockgrid.com:8002/</string>
+            <string>https://grid.3rdrockgrid.com:8002/</string>
         </map>
     <key>grid.roleplayworlds.net:8002</key>
         <map>
@@ -96,7 +96,7 @@
         <key>register</key>
             <string>http://roleplayworlds.net/register</string>
         <key>slurl_base</key>
-            <string>hop://grid.roleplayworlds.net:8002/</string>
+            <string>https://grid.roleplayworlds.net:8002/</string>
         </map>
     <key>grid01.from-ne.com:8002</key>
         <map>
@@ -124,7 +124,7 @@
         <key>name</key>
             <string>grid01.from-ne.com:8002</string>
         <key>slurl_base</key>
-            <string>hop://grid01.from-ne.com:8002/</string>
+            <string>https://grid01.from-ne.com:8002/</string>
         </map>
     <key>inworldz.com:8002</key>
         <map>
@@ -158,7 +158,7 @@
         <key>register</key>
             <string>http://inworldz.com/register.php</string>
         <key>slurl_base</key>
-            <string>hop://inworldz.com:8002/</string>
+            <string>https://inworldz.com:8002/</string>
         </map>
     <key>localhost:9000</key>
         <map>
@@ -182,7 +182,7 @@
         <key>name</key>
             <string>localhost:9000</string>
         <key>slurl_base</key>
-            <string>hop://localhost:9000/</string>
+            <string>https://localhost:9000/</string>
         </map>
     <key>login.danger.osgrid.org</key>
         <map>
@@ -216,41 +216,7 @@
         <key>register</key>
             <string>http://www.danger.osgrid.org/</string>
         <key>slurl_base</key>
-            <string>hop://login.danger.osgrid.org/</string>
-        </map>
-    <key>login.meta7.com</key>
-        <map>
-        <key>about</key>
-            <string>http://www.meta7.com</string>
-        <key>grid_login_id</key>
-            <string>login.meta7.com</string>
-        <key>gridname</key>
-            <string>Meta 7</string>
-        <key>gridnick</key>
-            <string>Meta7</string>
-        <key>help</key>
-            <string>http://www.meta7.com</string>
-        <key>helperuri</key>
-            <string>https://secure.meta7.com</string>
-        <key>login_identifier_types</key>
-            <array>
-                <string>agent</string>
-                <string>account</string>
-            </array>
-        <key>loginpage</key>
-            <string>http://www.meta7.com</string>
-        <key>loginuri</key>
-            <array>
-                <string>login.meta7.com</string>
-            </array>
-        <key>name</key>
-            <string>login.meta7.com</string>
-        <key>password</key>
-            <string>http://www.meta7.com</string>
-        <key>register</key>
-            <string>http://www.meta7.com</string>
-        <key>slurl_base</key>
-            <string>hop://login.meta7.com/</string>
+            <string>https://login.danger.osgrid.org/</string>
         </map>
     <key>login.osgrid.org</key>
         <map>
@@ -284,7 +250,7 @@
         <key>register</key>
             <string>http://www.osgrid.org/</string>
         <key>slurl_base</key>
-            <string>hop://login.osgrid.org/</string>
+            <string>https://login.osgrid.org/</string>
         </map>
     <key>reactiongrid.com:8008</key>
         <map>
@@ -318,7 +284,7 @@
         <key>register</key>
             <string>http://reactiongrid.com/Register.aspx</string>
         <key>slurl_base</key>
-            <string>hop://reactiongrid.com:8008/</string>
+            <string>https://reactiongrid.com:8008/</string>
         </map>
     <key>util.aditi.lindenlab.com</key>
         <map>

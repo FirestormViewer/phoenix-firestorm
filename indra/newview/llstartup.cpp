@@ -666,10 +666,7 @@ bool idle_startup()
 
 		LLStartUp::handleSocksProxy();
 
-		//-------------------------------------------------
-		// Init audio, which may be needed for prefs dialog
-		// or audio cues in connection UI.
-		//-------------------------------------------------
+
 
 // <AW: opensim>
 		if(!gSavedSettings.getBOOL("GridListDownload"))
@@ -714,10 +711,24 @@ bool idle_startup()
 			return FALSE;
 		}
 	}
-// </AW: opensim>
 
 	if (STATE_AUDIO_INIT == LLStartUp::getStartupState())
 	{
+
+		// parsing slurls depending on the grid obviously 
+		// only works after we have a grid list
+		// Anyway this belongs into the gridmanager as soon as 
+		// it is cleaner
+		if(!LLStartUp::sStartSLURLString.empty())
+		{
+			LLStartUp::setStartSLURL(LLStartUp::sStartSLURLString);
+		}
+// </AW: opensim>
+
+		//-------------------------------------------------
+		// Init audio, which may be needed for prefs dialog
+		// or audio cues in connection UI.
+		//-------------------------------------------------
 
 		if (FALSE == gSavedSettings.getBOOL("NoAudio"))
 		{
@@ -1162,7 +1173,9 @@ bool idle_startup()
 		// This call to LLLoginInstance::connect() starts the 
 		// authentication process.
 		login->connect(gUserCredential);
-
+// <AW: opensim>
+		LLGridManager::getInstance()->saveGridList();
+// </AW: opensim>
 		LLStartUp::setStartupState( STATE_LOGIN_CURL_UNSTUCK );
 		return FALSE;
 	}
@@ -1307,7 +1320,10 @@ bool idle_startup()
 				LLVoiceClient::getInstance()->userAuthorized(gUserCredential->userID(), gAgentID);
 				// create the default proximal channel
 				LLVoiceChannel::initClass();
-				LLGridManager::getInstance()->setFavorite(); 
+// <AW: opensim>
+				// Not used anymore
+				//LLGridManager::getInstance()->setFavorite();
+ // </AW: opensim>
 				gSecAPIHandler->saveCredential(gUserCredential, gRememberPassword);  
 				LLStartUp::setStartupState( STATE_WORLD_INIT);
 			}
@@ -3436,42 +3452,25 @@ bool process_login_success_response()
 
 	// Request the map server url
 	// Non-agni grids have a different default location.
-	//if (!LLGridManager::getInstance()->isInProductionGrid())
-	//{
-	//	gSavedSettings.setString("MapServerURL", "http://test.map.secondlife.com.s3.amazonaws.com/");
-	//}
-	//std::string map_server_url = response["map-server-url"];
-	//if(!map_server_url.empty())
-	//{
-	//	// We got an answer from the grid -> use that for map for the current session
-	//	gSavedSettings.setString("CurrentMapServerURL", map_server_url); 
-	//	LL_INFOS("LLStartup") << "map-server-url : we got an answer from the grid : " << map_server_url << LL_ENDL;
-	//}
-	//else
-	//{
-	//	// No answer from the grid -> use the default setting for current session 
-	//	map_server_url = gSavedSettings.getString("MapServerURL"); 
-	//	gSavedSettings.setString("CurrentMapServerURL", map_server_url); 
-	//	LL_INFOS("LLStartup") << "map-server-url : no map-server-url answer, we use the default setting for the map : " << map_server_url << LL_ENDL;
-	//}
+	if (LLGridManager::getInstance()->isInSLBeta())
+	{
+		gSavedSettings.setString("MapServerURL", "http://test.map.secondlife.com.s3.amazonaws.com/");
+	}
+	std::string map_server_url = response["map-server-url"];
+	if(!map_server_url.empty())
+	{
+		// We got an answer from the grid -> use that for map for the current session
+		gSavedSettings.setString("CurrentMapServerURL", map_server_url); 
+		LL_INFOS("LLStartup") << "map-server-url : we got an answer from the grid : " << map_server_url << LL_ENDL;
+	}
+	else
+	{
+		// No answer from the grid -> use the default setting for current session 
+		map_server_url = gSavedSettings.getString("MapServerURL"); 
+		gSavedSettings.setString("CurrentMapServerURL", map_server_url); 
+		LL_INFOS("LLStartup") << "map-server-url : no map-server-url answer, we use the default setting for the map : " << map_server_url << LL_ENDL;
+	}
 
-	// Request the map server url
-        std::string map_server_url = response["map-server-url"];
-        if(!map_server_url.empty())
-        {
-                // We got an answer from the grid -> use that for map for the current session
-                gSavedSettings.setString("CurrentMapServerURL", map_server_url);
-                LL_INFOS("LLStartup") << "map-server-url : we got an answer from the grid : " << map_server_url << LL_ENDL;
-        }
-        else
-        {
-                // No answer from the grid -> use the default setting for current session 
-                map_server_url = gSavedSettings.getString("MapServerURL");
-                gSavedSettings.setString("CurrentMapServerURL", map_server_url);
-                LL_INFOS("LLStartup") << "map-server-url : no map-server-url answer, we use the default setting for the map : " << map_server_url << LL_ENDL;
-        }
-
-	
 	// Default male and female avatars allowing the user to choose their avatar on first login.
 	// These may be passed up by SLE to allow choice of enterprise avatars instead of the standard
 	// "new ruth."  Not to be confused with 'initial-outfit' below 
