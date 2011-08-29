@@ -59,44 +59,65 @@
         follows="left|right"
           />
     </layout_panel>
+
+    <!--
+         This 5px Panel is an indicator of where the resize handle is.
+         The panel provides a gap between the resize handle icon and a button to the right.  
+        -->
+
+    
+    <layout_panel
+     auto_resize="false"
+     layout="topleft"
+     max_width="5"
+     min_width="5"
+     name="chat_bar_resize_handle_panel"
+     user_resize="false"
+     width="5">
+      <icon
+       follows="top|right"
+       height="25"
+       image_name="ChatBarHandle"
+       layout="topleft"
+       left="-7"
+       name="resize_handle"
+       top="4"
+       width="5" />
+    </layout_panel>
+               
     <layout_panel
      auto_resize="false"
      follows="right"
      height="28"
      layout="topleft"
      min_height="28"
-     min_width="80"
+     min_width="40"
      mouse_opaque="false"
      name="gesture_panel"
      top_delta="0"
      user_resize="false"
-     width="76">
+     width="40">
       <gesture_combo_list
        follows="left|right"
        height="23"
-       label="Gestures"
-       image_overlay="gesture_18"
-       image_pressed="PushButton_Press"
-       image_pressed_selected="PushButton_Selected_Press"
-       image_selected="PushButton_Selected_Press"
        layout="topleft"
        left="0"
        name="Gesture"
        tool_tip="Shows/hides gestures"
        top="5"
-       width="76">
+       width="36">
         <combo_button
-         pad_right="10"
+         height="23"
+         image_overlay="gesture_18"
+         image_pressed="PushButton_Press"
+         image_pressed_selected="PushButton_Selected_Press"
+         image_selected="PushButton_Selected_Press"
          use_ellipses="true" />
         <combo_list
          page_lines="17" />
       </gesture_combo_list>
     </layout_panel>
 
-
-    <!--
-        There is resize bar after the chat bar. It has 2px width (is is set as 2*UIResizeBarOverlap)
-        -->
     <layout_panel
      auto_resize="false"
      follows="left|right"
