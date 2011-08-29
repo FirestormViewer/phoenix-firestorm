@@ -9,7 +9,7 @@
 <floater
  legacy_header_height="18"
  follows="left|top|right"
- height="588"
+ height="618"
  layout="topleft"
  name="toolbox floater"
  help_topic="toolbox_floater"
@@ -59,10 +59,6 @@
      name="status_selectprimequiv">
         , [SEL_WEIGHT] prim equivs
     </floater.string>
-	<floater.string
-	  name="selected_objects">
-		Selected objects:
-	</floater.string>
 	<floater.string
 	  name="link_number">
 		Link number:
@@ -260,12 +256,12 @@
     <check_box
      left="5"
      follows="left|top"
-     height="28"
+     height="19"
 	 control_name="EditLinkedParts"
      label="Edit linked"
      layout="topleft"     
      name="checkbox edit linked parts"
-     top_pad="-18">
+     top_pad="0">
 		  <check_box.commit_callback
 			function="BuildTool.selectComponent"/>
 	</check_box>
@@ -274,9 +270,8 @@
      follows="left|top"
      height="20"
      label="Link"
-     top="108"
+     top_pad="0"
      layout="topleft"
-     left="143"
      name="link_btn"
      width="50">
 	  <button.commit_callback
@@ -342,7 +337,8 @@
      width="134" />
     <button
      left_pad="0"
-     label="Options..."
+     image_selected="ForwardArrow_Press"
+     image_unselected="ForwardArrow_Off"   
      layout="topleft"
      follows="top|left"
      name="Options..."
@@ -354,30 +350,6 @@
 	 <button.commit_callback
 	     function="BuildTool.gridOptions"/>
 	</button>
-    <combo_box
-	 left="115"
-     height="23"
-     layout="topleft"
-     follows="left|top"
-     name="combobox grid mode"
-     tool_tip="Choose the type of grid ruler for positioning the object"
-     top="135"
-     width="84">
-        <combo_box.item
-         label="World"
-         name="World"
-         value="World" />
-        <combo_box.item
-         label="Local"
-         name="Local"
-         value="Local" />
-        <combo_box.item
-         label="Reference"
-         name="Reference"
-         value="Reference" />
-		 <combo_box.commit_callback
-	     function="BuildTool.gridMode"/>
-    </combo_box>
    <button
      follows="left|top"
      height="20"
@@ -759,9 +731,9 @@
      length="1"
      height="10"
      follows="left|top"
-     halign="right"
      layout="topleft"
-     right="-10"
+     top="168"
+     left="10"
      name="link_num_obj_count"
 	 tooltip="Link number may not be accurate."
      width="143">
@@ -777,7 +749,7 @@
 	  layout="topleft"
 	  left="10"
 	  name="selection_empty"
-	  top_pad="0"
+	  top_pad="5"
 	  width="100">
 		Nothing selected.
 	</text>
@@ -810,32 +782,6 @@
 	  width="280">
 	  Physics weight [PHYS_WEIGHT], Render Cost [DISP_WEIGHT].
 	</text>
-    <!-- <text -->
-    <!-- text_color="LtGray_50" -->
-    <!--  type="string" -->
-    <!--  length="1" -->
-    <!--  height="10" -->
-    <!--  follows="left|top" -->
-    <!--  halign="right" -->
-    <!--  layout="topleft" -->
-    <!--  right="-10" -->
-    <!--  name="obj_count" -->
-    <!--  top_pad="5" -->
-    <!--  width="143"> -->
-    <!--     Objects: [COUNT] -->
-    <!-- </text> -->
-    <!-- <text -->
-    <!-- text_color="LtGray_50" -->
-    <!--  type="string" -->
-    <!--  length="1" -->
-    <!--  follows="left|top" -->
-    <!--  halign="right" -->
-    <!--  layout="topleft" -->
-    <!--  right="-10" -->
-    <!--  name="prim_count" -->
-    <!--  width="143"> -->
-    <!--     Prims: [COUNT] -->
-    <!-- </text> -->
     <view_border
     bevel_style="none"
     follows="top|left"
@@ -843,7 +789,7 @@
     layout="topleft"
     left="6"
     name="cost_text_border"
-    top="135"
+    top="165"
     width="282"/>
     <tab_container
      follows="left|top"
@@ -856,7 +802,7 @@
      tab_min_width="40"
      tab_position="top"
      tab_height="20"
-     top="173"
+     top="203"
      width="295">
 	
 <panel
@@ -1122,6 +1068,7 @@
              layout="topleft"
              name="clickaction"
              width="148"
+             top_delta="-4"
              left_pad="10">
                 <combo_box.item
                  label="Touch  (default)"

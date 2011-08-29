@@ -460,6 +460,7 @@ void LLFloaterTools::refresh()
 
 	std::string desc_string;
 	std::string num_string;
+	bool enable_link_count = true;
 	S32 prim_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
 	if (prim_count == 1 && LLToolMgr::getInstance()->getCurrentTool() == LLToolFace::getInstance())
 	{
@@ -518,8 +519,7 @@ void LLFloaterTools::refresh()
 	}
 	else
 	{
-		desc_string = getString("selected_objects");
-		LLResMgr::getInstance()->getIntegerString(num_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
+		enable_link_count = false;
 	}
 	getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[DESC]", desc_string);
 	getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[NUM]", num_string);
@@ -604,7 +604,7 @@ void LLFloaterTools::refresh()
 	// disable the object and prim counts if nothing selected
 	bool have_selection = ! LLSelectMgr::getInstance()->getSelection()->isEmpty();
 	//getChildView("obj_count")->setEnabled(have_selection);
-	getChildView("link_num_obj_count")->setEnabled(have_selection);
+	getChildView("link_num_obj_count")->setEnabled(have_selection && enable_link_count);
 	getChildView("prim_count")->setEnabled(have_selection);
 	getChildView("RenderingCost")->setEnabled(have_selection && sShowObjectCost);
 
