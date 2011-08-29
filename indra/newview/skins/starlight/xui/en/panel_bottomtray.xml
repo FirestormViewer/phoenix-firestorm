@@ -253,7 +253,7 @@
              layout="topleft"
              left="0"
              name="sidebar_people_btn"
-             tool_tip="Shows/hides people panel"
+             tool_tip="Shows/hides people panel (Ctrl+Shift+A)"
              top="5"
              enabled="true"
              use_ellipses="true"
@@ -409,7 +409,7 @@
              layout="topleft"
              left="0"
              name="snapshots"
-             tool_tip="Take snapshot"
+             tool_tip="Take snapshot (Ctrl+Shift+S)"
              top="5"
              width="40">
                 <init_callback
@@ -440,7 +440,7 @@
              layout="topleft"
              left="0"
              name="build_btn"
-             tool_tip="Shows/hides Build Tools"
+             tool_tip="Shows/hides Build Tools (Ctrl+3)"
              top="5"
              use_ellipses="true"
              width="40">
@@ -471,7 +471,7 @@
              layout="topleft"
              left="0"
              name="search_btn"
-             tool_tip="Shows/hides Search"
+             tool_tip="Shows/hides Search (Ctrl+F)"
              top="5"
              use_ellipses="true"
              width="40">
@@ -502,7 +502,7 @@
              layout="topleft"
              left="0"
              name="world_map_btn"
-             tool_tip="Shows/hides World Map"
+             tool_tip="Shows/hides World Map (Ctrl+M)"
              top="5"
              use_ellipses="true"
              width="40">
@@ -533,7 +533,7 @@
              layout="topleft"
              left="0"
              name="mini_map_btn"
-             tool_tip="Shows/hides Mini-Map"
+             tool_tip="Shows/hides Mini-Map (Ctrl+Shift+M)"
              top="5"
              use_ellipses="true"
              width="40">
@@ -597,7 +597,7 @@
              layout="topleft"
              left="0"
              name="sidebar_inv_btn"
-             tool_tip="Shows/hides inventory"
+             tool_tip="Shows/hides inventory (Ctrl+I)"
              top="5"
              enabled="true"
              use_ellipses="true"
