@@ -2665,7 +2665,7 @@ even though the user gets a free copy.
              height="19"
              increment="0.01"
              initial_value="0"
-             label="Restitution"
+             label="Bounciness"
              label_width="70"
              layout="topleft"
              left_delta="0"
