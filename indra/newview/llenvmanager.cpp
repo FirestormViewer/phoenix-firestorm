@@ -484,7 +484,10 @@ void LLEnvManagerNew::onRegionSettingsResponse(const LLSD& content)
 	LLWLParamManager::instance().refreshRegionPresets();
 
 	// If using server settings, update managers.
-	if (getUseRegionSettings())
+//	if (getUseRegionSettings())
+// [RLVa:KB] - Checked: 2011-08-29 (RLVa-1.4.1a) | Added: RLVa-1.4.1a
+	if ( (getUseRegionSettings()) && (LLWLParamManager::getInstance()->mAnimator.getIsRunning()) )
+// [/RLVa:KB]
 	{
 		updateManagersFromPrefs(mInterpNextChangeMessage);
 	}

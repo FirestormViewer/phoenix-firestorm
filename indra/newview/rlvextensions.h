@@ -41,9 +41,6 @@ protected:
 	ERlvCmdRet  onSetDebug(std::string strSetting, const std::string& strValue);
 	ERlvCmdRet  onSetPseudoDebug(const std::string& strSetting, const std::string& strValue);
 
-	std::string onGetEnv(std::string strSetting);
-	ERlvCmdRet  onSetEnv(std::string strSetting, const std::string& strValue);
-
 	bool processCommand(const RlvCommand& rlvCmd, ERlvCmdRet& eRet);
 
 public:
