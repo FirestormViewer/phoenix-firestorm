@@ -501,7 +501,7 @@ void LLFloaterTools::refresh()
 			if (children.empty())
 				num_string = "0"; //a childless prim is always link zero, and unhappy
 			else if (objectp->getRootEdit()->isSelected())
-				num_string = "1"; //root prim is always link one
+				num_string = "0"; //root prim is always link zero
 			else
 			{
 				S32 index = 1;
