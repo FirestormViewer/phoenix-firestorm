@@ -2643,7 +2643,9 @@ bool LLAppViewer::initConfiguration()
 	// crash as this dialog is always frontmost.
 	std::string splash_msg;
 	LLStringUtil::format_map_t args;
-	args["[APP_NAME]"] = LLTrans::getString("SECOND_LIFE");
+	//args["[APP_NAME]"] = LLTrans::getString("SECOND_LIFE");
+	//[FIX FIRE-2852] Changed function to find the right Gridname
+	args["[APP_NAME]"] = LLGridManager::getInstance()->getGridLabel();
 	splash_msg = LLTrans::getString("StartupLoading", args);
 	LLSplashScreen::show();
 	LLSplashScreen::update(splash_msg);

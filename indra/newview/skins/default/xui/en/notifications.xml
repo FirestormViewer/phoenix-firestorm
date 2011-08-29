@@ -524,7 +524,7 @@ Your selling price will be L$[SALE_PRICE] and will be authorized for sale to [NA
    icon="alertmodal.tga"
    name="ConfirmLandSaleToAnyoneChange"
    type="alertmodal">
-ATTENTION: Clicking &apos;Sell to anyone&apos; makes your land available to the entire [SECOND_LIFE] community, even those not in this region.
+ATTENTION: Clicking &apos;Sell to anyone&apos; makes your land available to the entire [CURRENT_GRID] community, even those not in this region.
 
 The selected [LAND_SIZE] m² land is being set for sale.
 Your selling price will be L$[SALE_PRICE] and will be authorized for sale to [NAME].
@@ -751,7 +751,7 @@ There was a problem uploading a report screenshot due to the following reason: [
    name="MustAgreeToLogIn"
    type="alertmodal">
    <tag>fail</tag>
-You must agree to the Terms of Service to continue logging into [SECOND_LIFE].
+You must agree to the Terms of Service to continue logging into [CURRENT_GRID].
   </notification>
 
   <notification
@@ -794,7 +794,7 @@ You cannot wear this item because it has not yet loaded. Please try again in a m
    type="alertmodal">
 You need to enter the Username name of your avatar.
 
-You need an account to enter [SECOND_LIFE]. Would you like to create one now?
+You need an account to enter [CURRENT_GRID]. Would you like to create one now?
     <tag>confirm</tag>
     <url
 	option="0"
@@ -913,7 +913,7 @@ Delete pick &lt;nolink&gt;[PICK]&lt;/nolink&gt;?
    icon="alertmodal.tga"
    name="PromptGoToEventsPage"
    type="alertmodal">
-Go to the [SECOND_LIFE] events web page?
+Go to the [CURRENT_GRID] events web page?
     <tag>confirm</tag>
     <url option="0" name="url">
 
@@ -1019,7 +1019,7 @@ The selected language will be applied after restarting [APP_NAME].
    icon="alertmodal.tga"
    name="GoToAuctionPage"
    type="alertmodal">
-    Go to the [SECOND_LIFE] web page to see auction details or make a bid?
+    Go to the [CURRENT_GRID] web page to see auction details or make a bid?
     <tag>confirm</tag>
     <url option="0" name="url">
 			http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
@@ -2310,7 +2310,7 @@ This is usually a temporary failure. Please customize and save the wearable agai
    icon="alertmodal.tga"
    name="YouHaveBeenLoggedOut"
    type="alertmodal">
-You have been logged out of [SECOND_LIFE].
+You have been logged out of [CURRENT_GRID].
             [MESSAGE]
     <usetemplate
      name="okcancelbuttons"
@@ -2790,7 +2790,7 @@ You can use [APP_NAME] normally and other people will see you correctly.
 
 [APP_NAME] installation is complete.
 
-If this is your first time using [SECOND_LIFE], you will need to create an account before you can log in.
+If this is your first time using [CURRENT_GRID], you will need to create an account before you can log in.
 Return to [http://join.secondlife.com secondlife.com] to create a new account?
     <tag>confirm</tag>
     <usetemplate
@@ -2835,7 +2835,7 @@ You can either check your Internet connection and try again in a few minutes, cl
 Your character will appear in a moment.
 
 Use arrow keys to walk.
-Press the F1 key at any time for help or to learn more about [SECOND_LIFE].
+Press the F1 key at any time for help or to learn more about [CURRENT_GRID].
 Please choose the male or female avatar. You can change your mind later.
     <usetemplate
      name="okcancelbuttons"
@@ -3369,7 +3369,7 @@ Go to your [http://secondlife.com/account/ Dashboard] to manage your account?
    icon="alertmodal.tga"
    name="WebLaunchSecurityIssues"
    type="alertmodal">
-Visit the [SECOND_LIFE] Wiki for details of how to report a security issue.
+Visit the [CURRENT_GRID] Wiki for details of how to report a security issue.
     <tag>confirm</tag>
     <usetemplate
      ignoretext="Launch my browser to learn how to report a Security Issue"
@@ -3382,7 +3382,7 @@ Visit the [SECOND_LIFE] Wiki for details of how to report a security issue.
    icon="alertmodal.tga"
    name="WebLaunchQAWiki"
    type="alertmodal">
-Visit the [SECOND_LIFE] QA Wiki.
+Visit the [CURRENT_GRID] QA Wiki.
     <tag>confirm</tag>
     <usetemplate
      ignoretext="Launch my browser to view the QA Wiki"
@@ -3395,7 +3395,7 @@ Visit the [SECOND_LIFE] QA Wiki.
    icon="alertmodal.tga"
    name="WebLaunchPublicIssue"
    type="alertmodal">
-Visit the [SECOND_LIFE] Public Issue Tracker, where you can report bugs and other issues.
+Visit the [CURRENT_GRID] Public Issue Tracker, where you can report bugs and other issues.
     <tag>confirm</tag>
     <usetemplate
      ignoretext="Launch my browser to use the Public Issue Tracker"
@@ -4817,9 +4817,9 @@ Dear Resident,
 
 You appear to be reporting intellectual property infringement. Please make sure you are reporting it correctly:
 
-(1) The Abuse Process. You may submit an abuse report if you believe a resident is exploiting the [SECOND_LIFE] permissions system, for example, by using CopyBot or similar copying tools, to infringe intellectual property rights. The Abuse Team investigates and issues appropriate disciplinary action for behavior that violates the [SECOND_LIFE] [http://secondlife.com/corporate/tos.php Terms of Service] or [http://secondlife.com/corporate/cs.php Community Standards]. However, the Abuse Team does not handle and will not respond to requests to remove content from the [SECOND_LIFE] world.
+(1) The Abuse Process. You may submit an abuse report if you believe a resident is exploiting the [CURRENT_GRID] permissions system, for example, by using CopyBot or similar copying tools, to infringe intellectual property rights. The Abuse Team investigates and issues appropriate disciplinary action for behavior that violates the [CURRENT_GRID] [http://secondlife.com/corporate/tos.php Terms of Service] or [http://secondlife.com/corporate/cs.php Community Standards]. However, the Abuse Team does not handle and will not respond to requests to remove content from the [CURRENT_GRID] world.
 
-(2) The DMCA or Content Removal Process. To request removal of content from [SECOND_LIFE], you MUST submit a valid notification of infringement as provided in our [http://secondlife.com/corporate/dmca.php DMCA Policy].
+(2) The DMCA or Content Removal Process. To request removal of content from [CURRENT_GRID], you MUST submit a valid notification of infringement as provided in our [http://secondlife.com/corporate/dmca.php DMCA Policy].
 
 If you still wish to continue with the abuse process, please close this window and finish submitting your report.  You may need to select the specific category &apos;CopyBot or Permissions Exploit&apos;.
 
@@ -5161,7 +5161,7 @@ Note this will launch your web browser.
    icon="alertmodal.tga"
    name="Cannot enter parcel: no payment info on file"
    type="alertmodal">
-You must have payment information on file to visit this area.  Do you want to go to the [SECOND_LIFE] website and set this up?
+You must have payment information on file to visit this area.  Do you want to go to the [CURRENT_GRID] website and set this up?
 
 [_URL]
     <tag>confirm</tag>

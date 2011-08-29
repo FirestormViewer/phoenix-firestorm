@@ -62,6 +62,9 @@
 
 #include "llsidetray.h"//for blocked objects panel
 
+// llviewernetwork.h : SJ: Needed to find the grid we are running on
+#include "llviewernetwork.h"
+
 static LLDefaultChildRegistry::Register<LLChatHistory> r("chat_history");
 
 const static std::string NEW_LINE(rawstr_to_utf8("\n"));
@@ -283,7 +286,9 @@ public:
 			|| mSourceType == CHAT_SOURCE_SYSTEM
 			|| mAvatarID.isNull())
 		{
-			mFrom = LLTrans::getString("SECOND_LIFE");
+			//mFrom = LLTrans::getString("SECOND_LIFE");
+			//[FIX FIRE-2852] Changed function to find the right Gridname
+			mFrom = LLGridManager::getInstance()->getGridLabel();
 			user_name->setValue(mFrom);
 			updateMinUserNameWidth();
 		}
