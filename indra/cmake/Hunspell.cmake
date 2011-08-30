@@ -1,0 +1,21 @@
+# -*- cmake -*-
+include(Prebuilt)
+
+set(HUNSPELL_FIND_QUIETLY ON)
+set(HUNSPELL_FIND_REQUIRED ON)
+
+if (STANDALONE)
+  include(FindHUNSPELL)
+else (STANDALONE)
+  use_prebuilt_binary(libhunspell)
+  if (WINDOWS)
+    set(HUNSPELL_LIBRARIES libhunspell)
+    set(HUNSPELL_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include)
+  elseif(DARWIN)
+    set(HUNSPELL_LIBRARIES libhunspell)
+    set(HUNSPELL_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include)
+  else()
+    set(HUNSPELL_LIBRARIES libhunspell)
+    set(HUNSPELL_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include)
+  endif()
+endif (STANDALONE)
