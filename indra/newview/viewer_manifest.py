@@ -653,8 +653,7 @@ class DarwinManifest(ViewerManifest):
 
             # copy additional libs in <bundle>/Contents/MacOS/
             self.path("../packages/lib/release/libndofdev.dylib", dst="Resources/libndofdev.dylib")
-	    self.path("../packages/lib/release/libhunspell-1.3.dylib", dst="Resources/llibhunspell-1.3.dylib")
-
+            self.path("../packages/lib/release/libhunspell-1.3.dylib", dst="Resources/llibhunspell-1.3.dylib")
             self.path("../viewer_components/updater/scripts/darwin/update_install", "MacOS/update_install")
 
             # most everything goes in the Resources directory
@@ -668,7 +667,7 @@ class DarwinManifest(ViewerManifest):
                 self.path("licenses-mac.txt", dst="licenses.txt")
                 self.path("featuretable_mac.txt")
                 self.path("Firestorm.nib")
-		self.path("VivoxAUP.txt")
+                self.path("VivoxAUP.txt")
 
                 # If we are not using the default channel, use the 'Firstlook
                 # icon' to show that it isn't a stable release.
@@ -862,7 +861,8 @@ class DarwinManifest(ViewerManifest):
             for s,d in {self.get_dst_prefix():app_name + ".app",
                         os.path.join(dmg_template, "_VolumeIcon.icns"): ".VolumeIcon.icns",
                         os.path.join(dmg_template, "background.jpg"): "background.jpg",
-			os.path.join(dmg_template, "VivoxAUP.txt"): "Vivox (Voice Services) Usage Policy.txt",
+						os.path.join(dmg_template, "VivoxAUP.txt"): "Vivox (Voice Services) Usage Policy.txt",
+						os.path.join(dmg_template, "LGPL-license.txt"): "LGPL License.txt",
                         os.path.join(dmg_template, "_DS_Store"): ".DS_Store"}.items():
                 print "Copying to dmg", s, d
                 self.copy_action(self.src_path_of(s), os.path.join(volpath, d))
