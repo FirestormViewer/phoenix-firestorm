@@ -279,6 +279,7 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
 	echo "Cleaning $PLATFORM...."
 	wdir=`pwd`
 	cd ..
+	rm -rf packages 
 	if [ $PLATFORM == "darwin" ] ; then
 	    if [ -d build-darwin-i386/packages ] ; then
 	    	mv build-darwin-i386/packages packages
@@ -286,7 +287,7 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
 	    rm -rf build-darwin-i386/*
 	    if [ -d packages ] ; then
 	        mv packages build-darwin-i386/packages
-		mkdir packages build-darwin-i386/logs
+		mkdir build-darwin-i386/logs
             fi
 	elif [ $PLATFORM == "win32" ] ; then
             if [ -d build-vc100/packages ] ; then
@@ -295,7 +296,7 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
             rm -rf build-vc100/*
             if [ -d packages ] ; then                
 		mv packages build-vc100/packages
-		mkdir packages build-vc100/logs
+		mkdir build-vc100/logs
             fi
 	elif [ $PLATFORM == "linux32" ] ; then
             if [ -d build-linux-i686/packages ] ; then
@@ -304,7 +305,7 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
             rm -rf build-linux-i686/*
             if [ -d packages ] ; then                
 	    	mv packages build-linux-i686/packages
-		mkdir packages build-linux-i686/logs
+		mkdir build-linux-i686/logs
 	    fi
 	fi
 
