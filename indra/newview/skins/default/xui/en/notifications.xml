@@ -7218,7 +7218,8 @@ With the following residents:
 [RESIDENTS]
   <tag>confirm</tag>
 	<usetemplate
-     name="okcancelbuttons"
+     ignoretext="Confirm before I share an item"
+     name="okcancelignore"
      notext="Cancel"
      yestext="Ok"/>
   </notification>
