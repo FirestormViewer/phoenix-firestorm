@@ -33,6 +33,7 @@ include(LLXML)
 include(LLXUIXML)
 include(LScript)
 include(Linking)
+include(HUNSPELL)
 include(NDOF)
 include(GooglePerfTools)
 include(TemplateCheck)
@@ -1815,6 +1816,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${LLMATH_LIBRARIES}
     ${LLCOMMON_LIBRARIES}
     ${NDOF_LIBRARY}
+    ${HUNSPELL_LIBRARY}
     ${viewer_LIBRARIES}
     ${BOOST_PROGRAM_OPTIONS_LIBRARY}
     ${BOOST_REGEX_LIBRARY}

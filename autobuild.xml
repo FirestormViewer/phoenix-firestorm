@@ -1603,6 +1603,57 @@
           </map>
         </map>
       </map>
+
+      <key>libhunspell</key>
+      <map>
+        <key>license</key>
+        <string>MPL_LGPL</string>
+        <key>license_file</key>
+        <string>LICENSES/license.hunspell</string>
+        <key>name</key>
+        <string>libhunspell</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>34498e92a98171150b2266baca618a2a</string>
+              <key>url</key>
+              <string>http://phoenixviewer.com/app/packages/libhunspell_FS_darwin_i686_1.3.2.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin</string>
+          </map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>cf0f4dd52633b933f8f38b66fe6faa39</string>
+              <key>url</key>
+              <string>http://phoenixviewer.com/app/packages/libhunspell_FS_linux_i686_1.3.2.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>0c7829cf6804b28a5f962496176c4949</string>
+              <key>url</key>
+              <string>http://phoenixviewer.com/app/packages/libhunspell_FS_win32_i686_1.3.2.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+      </map>
+
+
       <key>tcmalloc</key>
       <map>
         <key>license</key>
