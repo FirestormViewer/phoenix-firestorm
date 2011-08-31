@@ -166,7 +166,7 @@ WindLightUseAtmosShaders	1	1
 WLSkyDetail					1	48
 RenderDeferred				1	0
 RenderDeferredSSAO			1	0
-RenderShadowDetail			1	2
+RenderShadowDetail			1	0
 RenderFSAASamples			1	4
 
 //
@@ -197,8 +197,8 @@ WindLightUseAtmosShaders	1	1
 WLSkyDetail					1	128
 RenderDeferred				1	0
 RenderDeferredSSAO			1	0
-RenderShadowDetail			1	2
-RenderFSAASamples			1	8
+RenderShadowDetail			1	0
+RenderFSAASamples			1	4
 
 //
 // Class Unknown Hardware (unknown)
