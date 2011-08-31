@@ -2631,7 +2631,7 @@ even though the user gets a free copy.
              fallback_image="locked_image.j2c"
              follows="left|top"
              height="80"
-             label="Texture"
+             label="Textura"
              layout="topleft"
              left="10"
              name="texture control"
@@ -2902,7 +2902,7 @@ even though the user gets a free copy.
              follows="top|left"
              height="16"
              initial_value="false"
-             label="Align planar faces"
+             label="Alinear caras planas"
              layout="topleft"
              left="17"
              name="checkbox planar align"
@@ -2920,7 +2920,7 @@ even though the user gets a free copy.
              text_readonly_color="LabelDisabledColor"
              top_pad="2"
              width="140">
-                Repeats / Face
+                Repeticiones por cara
             </text>
             <spinner
              follows="left|top"
@@ -2967,7 +2967,7 @@ even though the user gets a free copy.
              height="19"
              increment="1"
              initial_value="0"
-			 label="Rotación ˚"
+			 label="Rotación (en grados)"
              layout="topleft"
 			 label_width="125"
              left="10"
@@ -2981,7 +2981,7 @@ even though the user gets a free copy.
              follows="left|top"
              height="23"
              initial_value="1"
-			 label="Repeticiones/Metro"
+			 label="Repeticiones / metro"
              layout="topleft"
 			 label_width="125"
              left="10"
@@ -3008,7 +3008,7 @@ even though the user gets a free copy.
              name="tex offset"
              text_readonly_color="LabelDisabledColor"
              width="200">
-                Desplazamiento de la textura
+                Despl. de la textura
             </text>
             <text
              type="string"
@@ -3021,7 +3021,7 @@ even though the user gets a free copy.
 	     halign="right"
              name="tex params"
              width="100">
-                Parámetros de la textura
+                Params. de textura
             </text>
             <spinner
              follows="left|top"
