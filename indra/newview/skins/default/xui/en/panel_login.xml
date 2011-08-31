@@ -80,18 +80,6 @@ width="150">
   <combo_box.drop_down_button
    visible ="true"/>
 </combo_box>
-  <combo_box
-  allow_text_entry="false"
-  font="SansSerifSmall"
-  follows="left|bottom"
-  height="23"
-  max_chars="256"
-  layout="topleft"
-  left_pad="-26"
-  name="saved_logins_combo"
-  width="23"
-  visible="false"
-  />
   <button
   follows="left|bottom"
   height="16"

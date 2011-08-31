@@ -876,7 +876,7 @@ bool idle_startup()
 			// connect dialog is already shown, so fill in the names
 			if (gUserCredential.notNull())                                                                         
 			{                                                                                                      
-				LLPanelLogin::setFields( gUserCredential, gRememberPassword);                                  
+				LLPanelLogin::setFields( gUserCredential );                                  
 			}     
 			LLPanelLogin::giveFocus();
 

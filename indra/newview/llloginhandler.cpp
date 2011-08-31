@@ -164,11 +164,7 @@ LLPointer<LLCredential> LLLoginHandler::initializeLoginInfo()
 {                                                                                                                           
 	LLPointer<LLCredential> result = NULL;                                                                               
 	// so try to load it from the UserLoginInfo                                                                          
-	result = loadSavedUserLoginInfo();                                                                                   
-	if (result.isNull())                                                                                                 
-	{                                                                                                                    
-		result =  gSecAPIHandler->loadCredential(LLGridManager::getInstance()->getGrid());                       
-	}                                                                                                                    
+	result = loadSavedUserLoginInfo();                                                                                                                 
 	
 	return result;                                                                                                       
 } 
@@ -196,7 +192,7 @@ LLPointer<LLCredential> LLLoginHandler::loadSavedUserLoginInfo()
 		authenticator["secret"] = md5pass;
 		// yuck, we'll fix this with mani's changes.
 		gSavedSettings.setBOOL("AutoLogin", TRUE);
-		return gSecAPIHandler->createCredential(LLGridManager::getInstance()->getGrid(), 
+		return gSecAPIHandler->createCredential(identifier["first_name"].asString()+" "+identifier["last_name"].asString()+"@"+LLGridManager::getInstance()->getGrid(), 
 													   identifier, authenticator);
 	}
 	return NULL;
