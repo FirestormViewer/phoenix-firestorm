@@ -1226,7 +1226,10 @@ void LLSecAPIBasicHandler::init()
 }
 LLSecAPIBasicHandler::~LLSecAPIBasicHandler()
 {
-	_writeProtectedData();
+	// SA: no reason to write to data store during destruction. In particular this implies erasing all credentials
+	// if the viewer was previously unable to decode the existing file, which would happen if the network interface changed, for instance.
+	//
+	//_writeProtectedData();
 }
 
 void LLSecAPIBasicHandler::_readProtectedData()

@@ -1622,7 +1622,9 @@ Unable to encode file: [FILE]
    icon="alertmodal.tga"
    name="CorruptedProtectedDataStore"
    type="alertmodal">
-   We cannot fill in your username and password.  This may happen when you change network setup.
+   We were unable to decode the file storing your saved login credentials. At this point saving or deleting credentials will erase all those that were previously stored.
+   This may happen when you change network setup. Restarting the viewer with previous network configuration may help recovering your saved login credentials.
+    
   <tag>fail</tag>
     <usetemplate
      name="okbutton"
