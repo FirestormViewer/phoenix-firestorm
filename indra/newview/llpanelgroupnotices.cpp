@@ -1,4 +1,4 @@
-/** 
+/**
  * @file llpanelgroupnotices.cpp
  * @brief A panel to display group notices.
  *
@@ -200,9 +200,12 @@ std::string build_notice_date(const U32& the_time)
 		time(&t);
 	}
 	
-	std::string dateStr = "["+LLTrans::getString("LTimeMthNum")+"]/["
-								+LLTrans::getString("LTimeDay")+"]/["
-								+LLTrans::getString("LTimeYear")+"]";
+        std::string dateStr = "["+LLTrans::getString("LTimeYear")+"]/["
+                                                                +LLTrans::getString("LTimeMthNum")+"]/["
+                                                                +LLTrans::getString("LTimeDay")+"] ["
+                                                                +LLTrans::getString("LTimeHour")+"]:["
+                                                                +LLTrans::getString("LTimeMin")+"]:["
+                                                                +LLTrans::getString("LTimeSec")+"]";
 	LLSD substitution;
 	substitution["datetime"] = (S32) t;
 	LLStringUtil::format (dateStr, substitution);

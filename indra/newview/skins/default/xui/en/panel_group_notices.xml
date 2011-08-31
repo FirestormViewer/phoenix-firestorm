@@ -52,11 +52,11 @@ Maximum 200 per group daily
         <scroll_list.columns
          label="Subject"
          name="subject"
-         width="110" />
+         width="135" />
         <scroll_list.columns
          label="From"
          name="from"
-         width="100" />
+         width="135" />
         <scroll_list.columns
          label="Date"
          name="date"
