@@ -80,6 +80,7 @@
 #include "rlvhandler.h"
 
 #include "llagentcamera.h"
+#include "lggcontactsetsfloater.h"
 
 
 void cmdline_printchat(std::string message);
@@ -905,6 +906,12 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				//Thanks to the pimp's horrible code for shutting down the site...
 				cmdline_printchat("Pimps can't code.");
 				return true;//dont block chat
+			}
+			else if(revised_text == "/cs")
+			{
+				lggContactSetsFloater::showFloater();
+				cmdline_printchat("Displaying Contact Sets Floater.");
+				return false;
 			}
 #ifdef LGG_AUTO_CORRECT
 			else if(revised_text == "/ac")

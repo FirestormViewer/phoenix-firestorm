@@ -39,6 +39,7 @@
 #include "llhttpnode.h"
 #include "llnotificationsutil.h"
 #include "llui.h"					// getLanguage()
+#include "lggcontactsets.h"
 
 namespace LLViewerDisplayName
 {
@@ -191,7 +192,14 @@ class LLDisplayNameUpdate : public LLHTTPNode
 		args["OLD_NAME"] = old_display_name;
 		args["SLID"] = av_name.mUsername;
 		args["NEW_NAME"] = av_name.mDisplayName;
-		LLNotificationsUtil::add("DisplayNameUpdate", args);
+		if(LGGContactSets::getInstance()->hasPseudonym(agent_id))
+		{
+			LLSD payload;
+			payload["agent_id"] = agent_id;
+			LLNotificationsUtil::add("DisplayNameUpdateRemoveAlias", args, payload,
+				boost::bind(&LGGContactSets::callbackAliasReset, LGGContactSets::getInstance(), _1, _2));
+		}else
+			LLNotificationsUtil::add("DisplayNameUpdate", args);
 		if (agent_id == gAgent.getID())
 		{
 			LLViewerDisplayName::sNameChangedSignal();

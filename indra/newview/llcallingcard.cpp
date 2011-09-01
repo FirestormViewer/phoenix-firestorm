@@ -61,6 +61,7 @@
 #include "llviewerwindow.h"
 #include "llvoavatar.h"
 #include "llavataractions.h"
+#include "lggcontactsets.h"
 
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
@@ -754,7 +755,7 @@ void LLAvatarTracker::processNotify(LLMessageSystem* msg, bool online)
 			// *TODO: get actual inventory id
 			gInventory.addChangedMask(LLInventoryObserver::CALLING_CARD, LLUUID::null);
 		}
-		if(chat_notify)
+		if(chat_notify||LGGContactSets::getInstance()->notifyForFriend(agent_id))
 		{
 			// Look up the name of this agent for the notification
 			LLAvatarNameCache::get(agent_id,

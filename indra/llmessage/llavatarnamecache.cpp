@@ -38,6 +38,7 @@
 
 #include <map>
 #include <set>
+#include "../newview/lggcontactsets.h"
 
 namespace LLAvatarNameCache
 {
@@ -620,6 +621,13 @@ bool LLAvatarNameCache::get(const LLUUID& agent_id, LLAvatarName *av_name)
 			if (it != sCache.end())
 			{
 				*av_name = it->second;
+				if(LGGContactSets::getInstance()->hasPseudonym(agent_id))
+				{
+					LLSD info = av_name->asLLSD();
+					info["is_display_name_default"]=LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id);
+					info["display_name"]=LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id)?(info["legacy_first_name"].asString()+" "+info["legacy_last_name"].asString()):LGGContactSets::getInstance()->getPseudonym(agent_id);
+					av_name->fromLLSD(info);
+				}
 
 				// re-request name if entry is expired
 				if (av_name->mExpires < LLFrameTimer::getTotalSeconds())
@@ -679,7 +687,14 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 			std::map<LLUUID,LLAvatarName>::iterator it = sCache.find(agent_id);
 			if (it != sCache.end())
 			{
-				const LLAvatarName& av_name = it->second;
+				LLAvatarName& av_name = it->second;
+				if(LGGContactSets::getInstance()->hasPseudonym(agent_id))
+				{
+					LLSD info = av_name.asLLSD();
+					info["is_display_name_default"]=LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id);
+					info["display_name"]=LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id)?(info["legacy_first_name"].asString()+" "+info["legacy_last_name"].asString()):LGGContactSets::getInstance()->getPseudonym(agent_id);
+					av_name.fromLLSD(info);
+				}
 				
 				if (av_name.mExpires > LLFrameTimer::getTotalSeconds())
 				{

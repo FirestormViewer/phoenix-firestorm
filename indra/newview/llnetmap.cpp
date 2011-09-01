@@ -71,6 +71,7 @@
 #include "llavatarlistitem.h"
 #include "llpanelpeople.h"
 #include "llsidetray.h"
+#include "lggcontactsets.h"
 
 static LLDefaultChildRegistry::Register<LLNetMap> r1("net_map");
 
@@ -363,6 +364,8 @@ void LLNetMap::draw()
 		F32 closest_dist_squared = F32_MAX; // value will be overridden in the loop
 		F32 min_pick_dist_squared = (mDotRadius * MIN_PICK_SCALE) * (mDotRadius * MIN_PICK_SCALE);
 
+		static LLCachedControl<bool> contactSetsColorize(gSavedSettings,"PhoenixContactSetsColorizeMiniMap");
+
 		// Draw avatars
 		for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
 			 iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
@@ -441,6 +444,14 @@ void LLNetMap::draw()
 					if (LLNetMap::sAvatarMarksMap.find(uuid) != LLNetMap::sAvatarMarksMap.end())
 					{
 						color = LLNetMap::sAvatarMarksMap[uuid];
+					}
+					
+					//color based on contact sets prefs
+					if(contactSetsColorize)
+					{
+						LLColor4 fgColor = LGGContactSets::getInstance()->getFriendColor(uuid);
+						if(fgColor!=LGGContactSets::getInstance()->getDefaultColor())
+							color=fgColor;
 					}
 				}
 

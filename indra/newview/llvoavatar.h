@@ -891,6 +891,7 @@ private:
 	bool			mNameFriend;
 	bool			mNameCloud;
 	F32				mNameAlpha;
+	LLColor4		mNameColor;
 	BOOL      		mRenderGroupTitles;
 
 	//--------------------------------------------------------------------

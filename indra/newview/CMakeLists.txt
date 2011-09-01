@@ -98,6 +98,8 @@ set(viewer_SOURCE_FILES
     lggbeammaps.cpp
     lggbeamscolors.cpp
     lggbeamcolormapfloater.cpp
+	lggcontactsets.cpp
+	lggcontactsetsfloater.cpp
     llagent.cpp
     llagentaccess.cpp
     llagentcamera.cpp
@@ -696,6 +698,8 @@ set(viewer_HEADER_FILES
     lggbeammaps.h
     lggbeamscolors.h
     lggbeamcolormapfloater.h
+	lggcontactsets.h
+	lggcontactsetsfloater.h
     llagent.h
     llagentaccess.h
     llagentcamera.h

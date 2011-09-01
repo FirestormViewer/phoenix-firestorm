@@ -80,6 +80,8 @@
 #include "llnearbychatbar.h"
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
+#include "llcontrol.h"
+#include "lggcontactsets.h"
 using namespace std;
 using namespace boost;
 
@@ -926,6 +928,9 @@ void LLPanelPeople::updateNearbyList()
 	std::vector<LLUUID>::const_iterator
 		item_it = avatar_ids.begin(),
 		item_end = avatar_ids.end();
+
+	static LLCachedControl<bool> contactSetsColorize(gSavedSettings,"PhoenixContactSetsColorizeRadar");
+	
 	for (;pos_it != pos_end && item_it != item_end; ++pos_it, ++item_it )
 	{
 		//2a. gather necessary model data
@@ -1045,6 +1050,14 @@ void LLPanelPeople::updateNearbyList()
 			radarNameCell->setFontStyle(LLFontGL::BOLD);
 		else
 			radarNameCell->setFontStyle(LLFontGL::NORMAL);
+
+		if(contactSetsColorize&&
+			(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)))
+		{
+			LLColor4 fgColor = LGGContactSets::getInstance()->getFriendColor(avId);
+			if(fgColor!=LGGContactSets::getInstance()->getDefaultColor())
+				radarNameCell->setColor(fgColor);
+		}
 		//AO: Preserve selection
 		if (lastRadarSelectedItem)
 			if (avId == selected_id)

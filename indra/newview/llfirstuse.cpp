@@ -101,6 +101,23 @@ void LLFirstUse::useSandbox()
 {
 	firstUseNotification("FirstSandbox", true, "FirstSandbox", LLSD().with("HOURS", SANDBOX_CLEAN_FREQ).with("TIME", SANDBOX_FIRST_CLEAN_HOUR));
 }
+// static
+void LLFirstUse::usePhoenixContactSet()
+{
+	firstUseNotification("FirstPhoenixContactSetOpen", true, "FirstPhoenixContactSetOpen");
+}
+
+//static
+void LLFirstUse::usePhoenixFriendsNonFriend()
+{
+	firstUseNotification("FirstPhoenixContactSetNonFriend",true,"FirstPhoenixContactSetNonFriend");
+}
+
+// static 
+void LLFirstUse::usePhoenixContactSetRename()
+{
+	firstUseNotification("FirstPhoenixContactSetRename",true,"FirstPhoenixContactSetRename");
+}
 
 // static
 void LLFirstUse::notUsingDestinationGuide(bool enable)

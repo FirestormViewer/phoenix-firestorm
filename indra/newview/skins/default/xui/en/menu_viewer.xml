@@ -381,6 +381,17 @@
              function="Floater.Toggle"
              parameter="imcontacts" />
             </menu_item_check>
+      <menu_item_check
+         label="Contact Sets"
+         name="Contact Sets"
+         shortcut="control|alt|shift|C">
+        <menu_item_check.on_check
+         function="Floater.Visible"
+         parameter="contactsets" />
+        <menu_item_check.on_click
+         function="Floater.Toggle"
+         parameter="contactsets" />
+      </menu_item_check>
         <menu_item_call
          label="Groups"
          name="My Groups"

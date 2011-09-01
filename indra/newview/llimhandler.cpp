@@ -39,6 +39,7 @@
 #include "llfloaterreg.h"
 #include "llnearbychat.h"
 #include "rlvhandler.h"
+#include "lggcontactsets.h"
 
 using namespace LLNotificationsUI;
 
@@ -215,8 +216,17 @@ void LLIMHandler::onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName&
 			{
 				senderName = RlvStrings::getAnonym(senderName);
 			}
-
-			gConsole->addConsoleLine("IM: " + senderName + delimiter + message, LLUIColorTable::instance().getColor("AgentChatColor"));
+			LLColor4 textColor = LLUIColorTable::instance().getColor("AgentChatColor");
+			//color based on contact sets prefs
+			static LLCachedControl<bool> contactSetsColorize(gSavedSettings,"PhoenixContactSetsColorizeMiniMap");
+			if(contactSetsColorize &&
+				(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)))
+			{
+				LLColor4 fgColor = LGGContactSets::getInstance()->getFriendColor(agent_id);
+				if(fgColor!=LGGContactSets::getInstance()->getDefaultColor())
+					textColor=fgColor;
+			}
+			gConsole->addConsoleLine("IM: " + senderName + delimiter + message, textColor);
 
 			LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
 			gConsole->setVisible(!nearby_chat->getVisible());
