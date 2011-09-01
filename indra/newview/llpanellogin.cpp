@@ -1180,8 +1180,7 @@ void LLPanelLogin::updateSavedLoginsCombo()
 				LLSD grid_info;
 				LLGridManager::getInstance()->getGridData(gridname,grid_info);
 				name = (grid_info["gridname"].asString()=="Second Life")?name:name+" @ "+grid_info["gridname"].asString();
-				// AO: unused 
-				//LLScrollListItem* item = saved_logins_combo->add(name,LLSD(credname)); 
+				saved_logins_combo->add(name,LLSD(credname)); 
 			}
 	}
 
