@@ -634,17 +634,33 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
 	}
 
 	switch(LLSLURL(sInstance->getChild<LLComboBox>("start_location_combo")->getValue()).getType())
-    {
-    case LLSLURL::HOME_LOCATION:
-      {
-		identifier["startlocation"] = LLSLURL::SIM_LOCATION_HOME;
-		break;
-      }
-    case LLSLURL::LAST_LOCATION:
-      {
-		identifier["startlocation"] = LLSLURL::SIM_LOCATION_LAST;
-		break;
-	  }
+	{
+		case LLSLURL::HOME_LOCATION:
+		{
+			identifier["startlocation"] = LLSLURL::SIM_LOCATION_HOME;
+			break;
+      		}
+		case LLSLURL::LAST_LOCATION:
+		{
+			identifier["startlocation"] = LLSLURL::SIM_LOCATION_LAST;
+			break;
+	  	}
+		case LLSLURL::INVALID:
+		{
+			break;
+		}
+		case LLSLURL::LOCATION:
+		{
+			break;
+		}
+		case LLSLURL::APP:
+		{
+			break;
+		}
+		case LLSLURL::HELP: 
+		{
+			break;
+		}
 	}
 
 	
@@ -1164,7 +1180,8 @@ void LLPanelLogin::updateSavedLoginsCombo()
 				LLSD grid_info;
 				LLGridManager::getInstance()->getGridData(gridname,grid_info);
 				name = (grid_info["gridname"].asString()=="Second Life")?name:name+" @ "+grid_info["gridname"].asString();
-				LLScrollListItem* item = saved_logins_combo->add(name,LLSD(credname));
+				// AO: unused 
+				//LLScrollListItem* item = saved_logins_combo->add(name,LLSD(credname)); 
 			}
 	}
 
