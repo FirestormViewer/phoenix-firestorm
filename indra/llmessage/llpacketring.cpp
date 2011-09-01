@@ -28,20 +28,11 @@
 
 #include "llpacketring.h"
 
-#if LL_WINDOWS
-	#include <winsock2.h>
-#else
-	#include <sys/socket.h>
-	#include <netinet/in.h>
-#endif
-
 // linden library includes
 #include "llerror.h"
 #include "lltimer.h"
-#include "llproxy.h"
-#include "llrand.h"
-#include "message.h"
 #include "timing.h"
+#include "llrand.h"
 #include "u64.h"
 
 ///////////////////////////////////////////////////////////
@@ -225,30 +216,8 @@ S32 LLPacketRing::receivePacket (S32 socket, char *datap)
 	else
 	{
 		// no delay, pull straight from net
-		if (LLProxy::isEnabled())
-		{
-			U8 buffer[NET_BUFFER_SIZE];
-			packet_size = receive_packet(socket, reinterpret_cast<char *>(buffer));
-			
-			if (packet_size > 10)
-			{
-				// *FIX We are assuming ATYP is 0x01 (IPv4), not 0x03 (hostname) or 0x04 (IPv6)
-				memcpy(datap, buffer + 10, packet_size - 10);
-				proxywrap_t * header = reinterpret_cast<proxywrap_t *>(buffer);
-				mLastSender.setAddress(header->addr);
-				mLastSender.setPort(ntohs(header->port));
-			}
-			else
-			{
-				packet_size = 0;
-			}
-		}
-		else
-		{
-			packet_size = receive_packet(socket, datap);
-			mLastSender = ::get_sender();
-		}
-
+		packet_size = receive_packet(socket, datap);		
+		mLastSender = ::get_sender();
 		mLastReceivingIF = ::get_receiving_interface();
 
 		if (packet_size)  // did we actually get a packet?
@@ -274,7 +243,7 @@ BOOL LLPacketRing::sendPacket(int h_socket, char * send_buffer, S32 buf_size, LL
 	BOOL status = TRUE;
 	if (!mUseOutThrottle)
 	{
-		return doSendPacket(h_socket, send_buffer, buf_size, host );
+		return send_packet(h_socket, send_buffer, buf_size, host.getAddress(), host.getPort() );
 	}
 	else
 	{
@@ -295,7 +264,7 @@ BOOL LLPacketRing::sendPacket(int h_socket, char * send_buffer, S32 buf_size, LL
 				mOutBufferLength -= packetp->getSize();
 				packet_size = packetp->getSize();
 
-				status = doSendPacket(h_socket, packetp->getData(), packet_size, packetp->getHost());
+				status = send_packet(h_socket, packetp->getData(), packet_size, packetp->getHost().getAddress(), packetp->getHost().getPort());
 				
 				delete packetp;
 				// Update the throttle
@@ -304,7 +273,7 @@ BOOL LLPacketRing::sendPacket(int h_socket, char * send_buffer, S32 buf_size, LL
 			else
 			{
 				// If the queue's empty, we can just send this packet right away.
-				status =  doSendPacket(h_socket, send_buffer, buf_size, host );
+				status = send_packet(h_socket, send_buffer, buf_size, host.getAddress(), host.getPort() );
 				packet_size = buf_size;
 
 				// Update the throttle
@@ -341,24 +310,4 @@ BOOL LLPacketRing::sendPacket(int h_socket, char * send_buffer, S32 buf_size, LL
 	}
 
 	return status;
-}
-
-BOOL LLPacketRing::doSendPacket(int h_socket, const char * send_buffer, S32 buf_size, LLHost host)
-{
-	
-	if (!LLProxy::isEnabled())
-	{
-		return send_packet(h_socket, send_buffer, buf_size, host.getAddress(), host.getPort());
-	}
-
-	proxywrap_t *socks_header = (proxywrap_t *)&mProxyWrappedSendBuffer;
-	socks_header->rsv   = 0;
-	socks_header->addr  = host.getAddress();
-	socks_header->port  = htons(host.getPort());
-	socks_header->atype = ADDRESS_IPV4;
-	socks_header->frag  = 0;
-
-	memcpy(mProxyWrappedSendBuffer + 10, send_buffer, buf_size);
-
-	return send_packet(h_socket,(const char*) mProxyWrappedSendBuffer, buf_size + 10, LLProxy::getInstance()->getUDPProxy().getAddress(), LLProxy::getInstance()->getUDPProxy().getPort());
 }

@@ -41,8 +41,6 @@
 #include "llappviewer.h"
 #include "lltrans.h"
 
-#include "llproxy.h"
-
 // Static instance of LLXMLRPCListener declared here so that every time we
 // bring in this code, we instantiate a listener. If we put the static
 // instance of LLXMLRPCListener into llxmlrpclistener.cpp, the linker would
@@ -309,27 +307,18 @@ void LLXMLRPCTransaction::Impl::init(XMLRPC_REQUEST request, bool useGzip)
 	}
 	mErrorCert = NULL;
 	
-	if (LLProxy::getInstance()->isHTTPProxyEnabled())
+	if (gSavedSettings.getBOOL("BrowserProxyEnabled"))
 	{
-		std::string address = LLProxy::getInstance()->getHTTPProxy().getIPString();
-		U16 port = LLProxy::getInstance()->getHTTPProxy().getPort();
-		mCurlRequest->setoptString(CURLOPT_PROXY, address.c_str());
+		mProxyAddress = gSavedSettings.getString("BrowserProxyAddress");
+		S32 port = gSavedSettings.getS32 ( "BrowserProxyPort" );
+
+		// tell curl about the settings
+		mCurlRequest->setoptString(CURLOPT_PROXY, mProxyAddress);
 		mCurlRequest->setopt(CURLOPT_PROXYPORT, port);
-		if (LLProxy::getInstance()->getHTTPProxyType() == LLPROXY_SOCKS)
-		{
-			mCurlRequest->setopt(CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
-			if(LLProxy::getInstance()->getSelectedAuthMethod()==METHOD_PASSWORD)
-			{
-				mCurlRequest->setoptString(CURLOPT_PROXYUSERPWD,LLProxy::getInstance()->getProxyUserPwdCURL());
-			}
-		}
-		else
-		{
-			mCurlRequest->setopt(CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
-		}
+		mCurlRequest->setopt(CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
 	}
 
-//	mCurlRequest->setopt(CURLOPT_VERBOSE, 1); // useful for debugging
+//	mCurlRequest->setopt(CURLOPT_VERBOSE, 1); // usefull for debugging
 	mCurlRequest->setopt(CURLOPT_NOSIGNAL, 1);
 	mCurlRequest->setWriteCallback(&curlDownloadCallback, (void*)this);
 	BOOL vefifySSLCert = !gSavedSettings.getBOOL("NoVerifySSLCert");

@@ -47,12 +47,10 @@
 #endif
 
 #include "llbufferstream.h"
+#include "llstl.h"
 #include "llsdserialize.h"
-#include "llsdserialize.h"
-#include "llproxy.h"
 #include "llthread.h"
 #include "lltimer.h"
-
 
 //////////////////////////////////////////////////////////////////////////////
 /*
@@ -540,27 +538,6 @@ void LLCurl::Easy::prepRequest(const std::string& url,
 
 	//setopt(CURLOPT_VERBOSE, 1); // usefull for debugging
 	setopt(CURLOPT_NOSIGNAL, 1);
-
-	// Set the CURL options for either Socks or HTTP proxy
-	if (LLProxy::getInstance()->isHTTPProxyEnabled())
-	{
-		std::string address = LLProxy::getInstance()->getHTTPProxy().getIPString();
-		U16 port = LLProxy::getInstance()->getHTTPProxy().getPort();
-		setoptString(CURLOPT_PROXY, address.c_str());
-		setopt(CURLOPT_PROXYPORT, port);
-		if (LLProxy::getInstance()->getHTTPProxyType() == LLPROXY_SOCKS)
-		{
-			setopt(CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
-			if(LLProxy::getInstance()->getSelectedAuthMethod()==METHOD_PASSWORD)
-			{
-				setoptString(CURLOPT_PROXYUSERPWD, LLProxy::getInstance()->getProxyUserPwdCURL());
-			}
-		}
-		else
-		{
-			setopt(CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
-		}
-	}
 
 	mOutput.reset(new LLBufferArray);
 	setopt(CURLOPT_WRITEFUNCTION, (void*)&curlWriteCallback);

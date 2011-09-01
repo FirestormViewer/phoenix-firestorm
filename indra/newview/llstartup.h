@@ -123,8 +123,6 @@ public:
 	static void setStartSLURL(const LLSLURL& slurl);
 	static LLSLURL& getStartSLURL() { return sStartSLURL; } 
 
-	static bool handleSocksProxy(); // Initialize the SOCKS 5 proxy
-
 private:
 	static LLSLURL sStartSLURL;
 
