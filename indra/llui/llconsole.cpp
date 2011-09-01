@@ -181,7 +181,8 @@ void LLConsole::draw()
 	}
 	
 	// draw remaining lines
-	F32 y_pos = 0.f;
+	//[FIX  FIRE-2822 SJ] Start a little bit higher with the Console not to let it blend with the stand button when Avatar is sitting
+	F32 y_pos = 10.f;
 
 	LLUIImagePtr imagep = LLUI::getUIImage("Rounded_Square");
 
