@@ -404,6 +404,41 @@
 			 value="3"
 			 width="150" />
 		</radio_group>
+		
+		<text
+		 left="5"
+		 top_pad="10"
+		 follows="left|top"
+		 height="12"
+		 name="SurfaceAreaThreshholdLabel"
+		 width="300">
+		 Texture Lag Protection (may break some objects):
+		 </text>
+		 <check_box
+		 top_pad="10"
+		 left="20"
+		 label="Automatically hide large objects with high texture area. Treshhold: "
+		 control_name="RenderVolumeSAProtection"
+		 follows="left|top"
+		 height="16"
+		 name="RenderVolumeSAProtection"
+		 width="380" />
+		 	<spinner
+			 top_delta="-5"
+			 control_name="RenderVolumeSAFrameMax"
+			 decimal_digits="0"
+			 layout="topleft"
+			 follows="left|top"
+			 height="18"
+			 left_pad="5"
+			 increment="1"
+			 initial_val="5000"
+			 max_val="2000"
+			 min_val="500"
+			 name="RenderVolumeSAFrameMax"
+			 width="90" />
+		
+		
 	</panel>
 
 

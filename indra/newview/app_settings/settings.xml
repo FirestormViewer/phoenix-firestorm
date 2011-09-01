@@ -753,6 +753,19 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
+
+  <key>RenderVolumeSAProtection</key>
+    <map>
+      <key>Comment</key>
+      <string>Enables automatic derendering of prims with high surface area (can protect against some video card crashers)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+
   <key>RenderVolumeSAThreshold</key>
     <map>
       <key>Comment</key>
@@ -784,7 +797,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1000.0</real>
+      <real>5000.0</real>
     </map>
     <key>EnableGroupChatPopups</key>
     <map>
