@@ -83,7 +83,6 @@ std::string LGGContactSets::getFileName()
 std::string LGGContactSets::getOldFileName()
 {
 	std::string path = gDirUtilp->getOSUserDir()+gDirUtilp->getDirDelimiter()+"SecondLife"+gDirUtilp->getDirDelimiter();
-	//path is now like C:\Users\LGG\AppData\Roaming\SecondLife\
 	
 	std::string normalPath=gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "");
 	//we want to steal the last directory off this one
