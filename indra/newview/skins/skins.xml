@@ -96,6 +96,12 @@
                 <key>folder</key>
                     <string>original_teal</string>
                 </map>
+		<map>
+                <key>name</key>
+                    <string>Mono Teal</string>
+                <key>folder</key>
+                    <string>mono_teal</string>
+                </map>
                 <map>
                 <key>name</key>
                     <string>Nostalgia Blue</string>

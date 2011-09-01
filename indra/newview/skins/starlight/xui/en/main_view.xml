@@ -173,6 +173,15 @@
          name="login_panel_holder"
          width="1024"/>
 		 
+		 <!-- where the debug floaters appear on the screen -->
+      <debug_view follows="all"
+                  left="0"
+                  top="0"
+                  mouse_opaque="false"
+                  height="500"
+                  name="DebugView"
+                  width="1024"/>
+		 
       <panel follows="all"
                     height="500"
                     left="0"
@@ -192,14 +201,6 @@
                       top="0"
                       width="1024"/>
       </panel>
-<!-- where the debug floaters appear on the screen -->
-      <debug_view follows="all"
-                  left="0"
-                  top="0"
-                  mouse_opaque="false"
-                  height="500"
-                  name="DebugView"
-                  width="1024"/>
     </layout_panel>
   </layout_stack>
 <!-- description of very top of the screen - above nav-bar! -->

@@ -86,9 +86,9 @@
 	     width="38">
 		 <button.init_callback
                function="Button.SetFloaterToggle"
-               parameter="env_windlight" />
+               parameter="env_settings" />
 		 </button>
-          <!-- end of Windlight Button -->
+           <!-- end of Windlight Button -->
 
              <!---prefs button-->
                      <button
@@ -97,7 +97,7 @@
 	     layout="topleft"
 	     left_pad="5"
 	     name="Prefs"
-	     image_overlay="Prefs_btn"	
+	     image_overlay="Edit_Prefs_Wrench"	
 	     tool_tip="Open preferences window"
 	     top_delta="0"
 	     width="38">
@@ -147,7 +147,7 @@
 
 	</panel>
   <favorites_bar
-     follows="left|top|right"
+     follows="left|right|top"
      top_pad="2"
      font="SansSerifSmall"
      height="15"
@@ -156,16 +156,16 @@
      name="favorite"
      image_drag_indication="Accordion_ArrowOpened_Off"
      tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
-     width="1024">
+     width="590">
         <label
          follows="left|top"
          height="15"
          layout="topleft"
-         top_pad="2"
          left="10"
          name="favorites_bar_label"
          text_color="LtGray"
          tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
+		 top="12"
          width="102">
           Favorites Bar
         </label>
@@ -176,6 +176,7 @@
              follows="left|bottom"
              tool_tip="Show more of My Favorites"
              width="15"
+			 top="15"
              height="15"/>
   </favorites_bar>
 </panel>
