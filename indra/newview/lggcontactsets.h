@@ -26,7 +26,7 @@ class LGGContactSets
 	static LGGContactSets* sInstance;
 public:
 	static LGGContactSets* getInstance();
-	static LLColor4 toneDownColor(LLColor4 inColor, float strength);
+	static LLColor4 toneDownColor(LLColor4 inColor, float strength, bool usedForBackground=FALSE);
 
 	BOOL saveGroupToDisk(std::string groupName, std::string fileName);
 	LLSD exportGroup(std::string groupName);

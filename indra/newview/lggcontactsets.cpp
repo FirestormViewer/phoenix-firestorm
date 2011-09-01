@@ -48,9 +48,16 @@ LGGContactSets* LGGContactSets::getInstance()
 		return sInstance;
 	}
 }
-LLColor4 LGGContactSets::toneDownColor(LLColor4 inColor, float strength)
+LLColor4 LGGContactSets::toneDownColor(LLColor4 inColor, float strength, bool usedForBackground)
 {
-	if(strength<.4f)strength=.4f;
+	if(usedForBackground)
+	{
+		if(strength<.4f)strength=.4f;
+		static LLCachedControl<S32> maxAlphaInt(gSavedSettings,"PhoenixContactSetsMaxColorStrength");
+		strength *= ((F32)maxAlphaInt/100.0f);
+	}
+	
+
 	return LLColor4(LLColor3(inColor),strength);
 }
 bool LGGContactSets::callbackAliasReset(const LLSD& notification, const LLSD& response)

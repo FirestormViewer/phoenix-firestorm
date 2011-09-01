@@ -327,17 +327,28 @@
     <key>Value</key>
     <integer>1</integer>
   </map>
-	<key>PhoenixContactSetsScrollSpeed</key>
-    <map>
-      <key>Comment</key>
-      <string>How fast to scroll the friends groups list while hovering over the bar 1-100</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>50</integer>
-    </map>
+  <key>PhoenixContactSetsScrollSpeed</key>
+  <map>
+    <key>Comment</key>
+    <string>How fast to scroll the friends groups list while hovering over the bar 1-100</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>50</integer>
+  </map>
+  <key>PhoenixContactSetsMaxColorStrength</key>
+  <map>
+    <key>Comment</key>
+    <string>How bright we let the background of the contacts sets be 1-100</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>100</integer>
+  </map>
     <key>PhoenixContactSetsColorizeMiniMap</key>
     <map>
       <key>Comment</key>
