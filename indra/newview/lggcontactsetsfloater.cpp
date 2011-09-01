@@ -122,7 +122,7 @@ lggContactSetsFloater::~lggContactSetsFloater()
 lggContactSetsFloater::lggContactSetsFloater(const LLSD& seed)
 :LLFloater(seed),mouse_x(0),mouse_y(900),hovered(0.f),justClicked(FALSE),scrollLoc(0),
 showRightClick(FALSE),maxSize(0),scrollStarted(0),currentFilter(""),
-currentRightClickText("")
+currentRightClickText(""),mouseInWindow(FALSE)
 {
 	if(sInstance)delete sInstance;
 	sInstance = this;
@@ -902,7 +902,6 @@ void lggContactSetsFloater::draw()
 	LLFontGL* bigFont = LLFontGL::getFontSansSerifBig();
 	LLFontGL* hugeFont = LLFontGL::getFontSansSerifHuge();
 
-
 	static LLCachedControl<std::string> currentGroup(gSavedSettings, "PhoenixContactSetsSelectedGroup");
 	static LLCachedControl<bool> textNotBg(gSavedSettings, "PhoenixContactSetsColorizeText");
 	static LLCachedControl<bool> barNotBg(gSavedSettings, "PhoenixContactSetsColorizeBar");
@@ -944,7 +943,7 @@ void lggContactSetsFloater::draw()
 		//need scroll bars
 		sizeV=minSize;
 //#pragma region ScrollBars
-		if(this->hasFocus())
+		if(this->hasFocus()&&mouseInWindow)
 		{
 			LLUIImage *arrowUpImage = LLUI::getUIImage("map_avatar_above_32.tga");
 			LLUIImage *arrowDownImage = LLUI::getUIImage("map_avatar_below_32.tga");
@@ -954,7 +953,7 @@ void lggContactSetsFloater::draw()
 			float speedFraction = ((F32)(scrollSpeedSetting))/100.0f;
 
 			LLColor4 useColor = unactive;
-			if(mouse_y<topScroll.mTop&& mouse_y > topScroll.mBottom)
+			if(topScroll.pointInRect(mouse_x,mouse_y))
 			{
 				useColor=active;
 				scrollLoc-=llclamp((S32)((((F32)numberOfPanels)/4.0f)*speedFraction),1,100);
@@ -979,7 +978,7 @@ void lggContactSetsFloater::draw()
 			int maxS =((numberOfPanels*11)+200-(rec.getHeight()));
 			if(!(doZoom))maxS=((numberOfPanels*(minSize+2))+10-(rec.getHeight()));
 			useColor=unactive;
-			if(mouse_y<bottomScroll.mTop && mouse_y > bottomScroll.mBottom)
+			if(bottomScroll.pointInRect(mouse_x,mouse_y))
 			{
 				useColor=active;
 				scrollLoc+=llclamp((S32)((((F32)numberOfPanels)/4.0f)*speedFraction),1,100);
@@ -1009,7 +1008,7 @@ void lggContactSetsFloater::draw()
 		scrollLoc=0;
 	}
 	float top=rec.mTop+scrollLoc;//sizeV+12;
-	if(mouse_y<15)mouse_y=15;
+	//if(mouse_y<15)mouse_y=15;
 	for(int f=0; f< (int)allFolders.size();f++)
 	{
 		float thisSize = sizeV;
@@ -1687,10 +1686,19 @@ BOOL lggContactSetsFloater::handleDoubleClick(S32 x, S32 y, MASK mask)
 }
 BOOL lggContactSetsFloater::handleHover(S32 x,S32 y,MASK mask)
 {
+	sInstance->mouseInWindow=TRUE;
 	mouse_x=x;
 	mouse_y=y;
 	hovered=gFrameTimeSeconds;
 	return LLFloater::handleHover(x,y,mask);
+}
+void lggContactSetsFloater::onMouseLeave(S32 x, S32 y, MASK mask)
+{
+	sInstance->mouseInWindow=FALSE;
+}
+void lggContactSetsFloater::onMouseEnter(S32 x, S32 y, MASK mask)
+{
+	sInstance->mouseInWindow=TRUE;
 }
 BOOL lggContactSetsFloater::compareAv(LLUUID av1, LLUUID av2)
 {
