@@ -3263,7 +3263,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 				LLColor4 new_chat = LLUIColorTable::instance().getColor( isSelf() ? "UserChatColor" : "AgentChatColor" );
 				//color based on contact sets prefs
-				static LLCachedControl<bool> contactSetsColorize(gSavedSettings,"PhoenixContactSetsColorizeMiniMap");
+				static LLCachedControl<bool> contactSetsColorize(gSavedSettings,"PhoenixContactSetsColorizeChat");
 				if(contactSetsColorize&&
 					(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)))
 				{

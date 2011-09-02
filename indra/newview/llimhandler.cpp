@@ -218,7 +218,7 @@ void LLIMHandler::onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName&
 			}
 			LLColor4 textColor = LLUIColorTable::instance().getColor("AgentChatColor");
 			//color based on contact sets prefs
-			static LLCachedControl<bool> contactSetsColorize(gSavedSettings,"PhoenixContactSetsColorizeMiniMap");
+			static LLCachedControl<bool> contactSetsColorize(gSavedSettings,"PhoenixContactSetsColorizeChat");
 			if(contactSetsColorize &&
 				(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)))
 			{
