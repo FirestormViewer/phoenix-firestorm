@@ -1133,7 +1133,7 @@ Sie müssen eventuell ein neues Zuhause festlegen.
 	</notification>
 	<notification name="ClothingLoading">
 		Ihre Kleidung wird noch heruntergeladen.
-Sie können [CURRENT_GRID] normal verwenden. Andere Benutzer können Sie korrekt dargestellt sehen.
+Sie können [APP_NAME] normal verwenden. Andere Benutzer können Sie korrekt dargestellt sehen.
 		<form name="form">
 			<ignore name="ignore" text="Das Herunterladen der Kleidung dauert lange"/>
 		</form>
