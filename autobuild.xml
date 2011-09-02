@@ -1038,9 +1038,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f194ba857ca8dd86483a3ef24535d0db</string>
+              <string>73a1892bcbaaecdf369a7884efb46049</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-libpng/rev/226532/arch/CYGWIN/installer/libpng-1.5.1-windows-20110413.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/libpng-1.5.1-windows-20110619.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1182,9 +1182,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>92f1dff3249024c1534b55343ed79ea3</string>
+              <string>2fb7013f67a9353f39f9b616ce4fd203</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llconvexdecompositionstub/rev/227399/arch/CYGWIN/installer/llconvexdecompositionstub-0.3-windows-20110421.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/llconvexdecompositionstub-0.1-windows-20110806.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2303,11 +2303,23 @@
               </map>
               <key>configure</key>
               <map>
+                <key>arguments</key>
+                <array>
+                  <string>..\indra</string>
+                  <string>&amp;&amp;</string>
+                  <string>..\indra\tools\vstool\VSTool.exe</string>
+                  <string>--solution</string>
+                  <string>SecondLife.sln</string>
+                  <string>--config</string>
+                  <string>Debug</string>
+                  <string>--startup</string>
+                  <string>secondlife-bin</string>
+                </array>
                 <key>options</key>
                 <array>
                   <string>-G</string>
                   <string>"Visual Studio 10"</string>
-                  <string>-DUNATTENDED:BOOL=ON</string>
+                  <string>-DUNATTENDED:BOOL=OFF</string>
                   <string>-DUSE_KDU=FALSE</string>
                   <string>-DFMOD=FALSE</string>
                 </array>
@@ -2379,11 +2391,23 @@
               </map>
               <key>configure</key>
               <map>
+                <key>arguments</key>
+                <array>
+                  <string>..\indra</string>
+                  <string>&amp;&amp;</string>
+                  <string>..\indra\tools\vstool\VSTool.exe</string>
+                  <string>--solution</string>
+                  <string>SecondLife.sln</string>
+                  <string>--config</string>
+                  <string>RelWithDebInfo</string>
+                  <string>--startup</string>
+                  <string>secondlife-bin</string>
+                </array>
                 <key>options</key>
                 <array>
                   <string>-G</string>
                   <string>"Visual Studio 10"</string>
-                  <string>-DUNATTENDED:BOOL=ON</string>
+                  <string>-DUNATTENDED:BOOL=OFF</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
                   <string>-DFMOD=FALSE</string>
@@ -2455,14 +2479,26 @@
               </map>
               <key>configure</key>
               <map>
+                <key>arguments</key>
+                <array>
+                  <string>..\indra</string>
+                  <string>&amp;&amp;</string>
+                  <string>..\indra\tools\vstool\VSTool.exe</string>
+                  <string>--solution</string>
+                  <string>SecondLife.sln</string>
+                  <string>--config</string>
+                  <string>Release</string>
+                  <string>--startup</string>
+                  <string>secondlife-bin</string>
+                </array>
                 <key>options</key>
                 <array>
                   <string>-G</string>
                   <string>"Visual Studio 10"</string>
-                  <string>-DUNATTENDED:BOOL=ON</string>
+                  <string>-DUNATTENDED:BOOL=OFF</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
-                  <string>-DFMOD=FALSE</string>
+                  <string>-DFMOD=TRUE</string>
                 </array>
               </map>
               <key>name</key>
