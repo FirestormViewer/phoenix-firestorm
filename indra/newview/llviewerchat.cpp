@@ -73,12 +73,9 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 						r_color = LLUIColorTable::instance().getColor("AgentChatColor");
 					}
 					//color based on contact sets prefs
-					static LLCachedControl<bool> contactSetsColorize(gSavedSettings,"PhoenixContactSetsColorizeChat");
-					if(contactSetsColorize&&(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)))
+					if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(chat.mFromID,TRUE))
 					{
-						LLColor4 fgColor = LGGContactSets::getInstance()->getFriendColor(chat.mFromID);
-						if(fgColor!=LGGContactSets::getInstance()->getDefaultColor())
-							r_color=fgColor;
+						r_color = LGGContactSets::getInstance()->getFriendColor(chat.mFromID);
 					}
 				}
 				break;
