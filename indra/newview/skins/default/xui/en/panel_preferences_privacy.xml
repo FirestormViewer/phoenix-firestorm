@@ -85,12 +85,22 @@
     <check_box
      control_name="PrivateLookAtTarget"
      height="16"
-     label="Don't send my camera target hints"
+     label="Don't send my actual camera target hints to others"
      layout="topleft"
      left="30"
      name="privatelookat"
      top_pad="4"
      width="350" />
+     
+    <check_box
+     control_name="PrivateLocalLookAtTarget"
+     height="16"
+     label="Don't show any camera target hints even on my own screen."
+     layout="topleft"
+     left="30"
+     name="privatelookat"
+     top_pad="4"
+     width="400" />
   
     <check_box
      control_name="PrivatePointAtTarget"

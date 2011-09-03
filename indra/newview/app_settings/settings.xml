@@ -1524,10 +1524,22 @@
       <key>Value</key>
     <integer>0</integer>
   </map>
+
   <key>PrivateLookAtTarget</key>
   <map>
     <key>Comment</key>
     <string>If true, viewer shows simulated look-at behavior to others.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>PrivateLocalLookAtTarget</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, your avatar's lookat target will not affect your local display. Head/Eye movement that normally would follow a lookat target will not be shown to you.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>

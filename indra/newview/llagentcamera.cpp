@@ -2663,7 +2663,17 @@ void LLAgentCamera::setFocusOnAvatar(BOOL focus_on_avatar, BOOL animate)
 
 BOOL LLAgentCamera::setLookAt(ELookAtType target_type, LLViewerObject *object, LLVector3 position)
 {
-	if(object && object->isAttachment())
+	static LLCachedControl<bool> isLocalPrivate(gSavedSettings, "PrivateLocalLookAtTarget", false);
+	
+	// AO, set to absolutely nothing if local lookats are disabled.
+	if(isLocalPrivate)
+	{
+			position.clearVec();
+			target_type = LOOKAT_TARGET_NONE;
+			object = gAgentAvatarp;
+	}
+	
+	else if(object && object->isAttachment())
 	{
 		LLViewerObject* parent = object;
 		while(parent)
@@ -2677,6 +2687,7 @@ BOOL LLAgentCamera::setLookAt(ELookAtType target_type, LLViewerObject *object, L
 			parent = (LLViewerObject*)parent->getParent();
 		}
 	}
+	
 	if(!mLookAt || mLookAt->isDead())
 	{
 		mLookAt = (LLHUDEffectLookAt *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_LOOKAT);
