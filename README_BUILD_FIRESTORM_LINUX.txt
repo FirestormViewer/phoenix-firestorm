@@ -20,7 +20,7 @@ Available premade firestorm-specific build targets:
 
 	ReleaseFS		(includes KDU, FMOD)
 	ReleaseFS_open		(no KDU, no FMOD)
-	RelWithDebInfo_open	(no KDU, no FMOD)
+	RelWithDebInfoFS_open	(no KDU, no FMOD)
 
 To build firestorm:
 
