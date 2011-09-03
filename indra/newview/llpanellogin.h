@@ -127,7 +127,4 @@ private:
 	std::string mLoginPage; // <AW: opensim>
 };
 
-std::string load_password_from_disk(void);
-void save_password_to_disk(const char* hashed_password);
-
 #endif
