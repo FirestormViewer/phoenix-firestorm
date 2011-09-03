@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ legacy_header_height="18"
+ background_visible="true"
+ default_tab_group="1"
+ follows="all"
+ height="300"
+ layout="topleft"
+ left="0"
+ name="nearby_chat"
+ title="Главный чат"
+ top="0"
+ can_dock="false"
+ can_close="true"
+ can_minimize="false"
+ single_instance="true"
+ save_rect="true"
+ save_visibility="true"
+ save_dock_state="true"
+ visible="false"
+ width="394"
+ can_resize="true"
+ min_width="250"
+ min_height="190">
+  <layout_stack
+   animate="false" 
+   default_tab_group="2"
+  follows="all"
+  height="300"
+  width="394"
+  layout="topleft"
+  orientation="horizontal"
+  name="im_panels"
+  tab_group="1"
+  top="20"
+  left="0">
+
+    <layout_panel
+       default_tab_group="3"
+       left="0"
+       tab_group="2"
+       top="0"
+       height="300"
+	     width="254"
+       user_resize="true">
+        <button
+          height="20"
+          follows="left|top"
+          top="0"
+          left="2"
+          image_overlay="TabIcon_Open_Off"
+          layout="topleft"
+          width="25"
+          name="slide_left_btn" />
+         <button
+          height="20"
+          follows="left|top"
+          top="0"
+          left="2"
+          image_overlay="TabIcon_Close_Off"
+          width="25"
+          name="slide_right_btn" />
+          <button
+          height="20"
+          follows="left|top"
+          top="0"
+          left="2"
+          image_overlay="TabIcon_Translate_Off"
+          width="25"
+          control_name="TranslateChat"
+          is_toggle="true"
+          image_pressed="PushButton_Press"
+          image_pressed_selected="PushButton_Selected_Press"
+          image_selected="PushButton_Selected_Press"
+          tool_tip="Использовать переводчик Google"
+          name="translate_btn"/>
+        <chat_history
+	 font="SansSerifSmall"
+         follows="left|right|top|bottom"
+         height="255"
+         name="chat_history"
+         parse_highlights="true"
+         parse_urls="true"
+         left="1"
+         width="250">
+        </chat_history>
+    </layout_panel>
+  </layout_stack>
+
+</floater>

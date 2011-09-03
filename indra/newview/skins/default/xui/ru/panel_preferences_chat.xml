@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border="true"
+ follows="left|top|right|bottom"
+ height="408"
+ label="Чат"
+ layout="topleft"
+ left="102"
+ name="chat"
+ top="1"
+ width="517">
+  <text
+   follows="left|top"
+   layout="topleft"
+   left="30"
+   height="12"
+   name="font_size"
+   width="170"
+   top="10">
+    Размер шрифта окна чата:
+  </text>
+  <radio_group
+     height="20"
+     layout="topleft"
+     left_delta="160"
+	   control_name="ChatFontSize"
+     name="chat_font_size"
+     top="10"
+     width="400">
+        <radio_item
+         height="16"
+         label="Маленький"
+         layout="topleft"
+         left="0"
+         name="radio"
+         value="0"
+         top_delta="20"
+         width="60" />
+        <radio_item
+         height="16"
+         label="Средний"
+         layout="topleft"
+         left_delta="90"
+         name="radio2"
+         value="1"
+         top_delta="0"
+         width="75" />
+        <radio_item
+         height="16"
+         label="Большой"
+         layout="topleft"
+         left_delta="75"
+         name="radio3"
+         value="2"
+         top_delta="0"
+         width="60" />
+    </radio_group>
+  <text
+   follows="left|top"
+   layout="topleft"
+   left="30"
+   height="12"
+   name="console_font_size"
+   width="150"
+   top="30">
+    Размер шрифта на экране:
+  </text>
+  <radio_group
+     height="20"
+     layout="topleft"
+     left_delta="160"
+	   control_name="ChatConsoleFontSize"
+     name="chat_console_font_size"
+     top="30"
+     width="380">
+        <radio_item
+         height="16"
+         label="Маленький"
+         layout="topleft"
+         left="0"
+         name="consradio"
+         value="0"
+         top_delta="20"
+         width="90" />
+        <radio_item
+         height="16"
+         label="Средний"
+         layout="topleft"
+         left_delta="90"
+         name="consradio2"
+         value="1"
+         top_delta="0"
+         width="75" />
+        <radio_item
+         height="16"
+         label="Большой"
+         layout="topleft"
+         left_delta="75"
+         name="consradio3"
+         value="2"
+         top_delta="0"
+         width="60" />
+    </radio_group>
+
+
+    <check_box
+     control_name="CloseChatOnReturn"
+     follows="left|top"
+     height="20"
+     label="Не выделять чат после отправки сообщения"
+     layout="topleft"
+     left="30"
+     name="CloseChatOnReturn"
+     top_delta="25"
+     width="256" />
+    <check_box
+     control_name="PlayTypingAnim"
+     height="16"
+     initial_value="true"
+     label="Воспроизводить анимацию набора когда пишете"
+     layout="topleft"
+     left="30"
+     name="play_typing_animation"
+     top_pad="5"
+     width="400" />
+    <check_box
+     control_name="PhoenixPlayChatAnimation"
+     follows="left|top"
+     height="16"
+     label="Воспроизводить анимации аватара (например, если кричит)"
+     layout="topleft"
+     left_delta="0"
+     top_pad="5"
+     name="play_avatar_animations"
+     width="400" /> 
+    <check_box
+     enabled="false"
+     height="16"
+     label="Отправлять ЛС на E-Mail, если я offline"
+     layout="topleft"
+     left_delta="0"
+     name="send_im_to_email"
+     top_pad="5"
+     width="400" />
+    <check_box
+     enabled="true"
+     height="16"
+     label="Убрать заголовки чата (вернуться к стилю V1)"
+     layout="topleft"
+     left_delta="0"
+     name="plain_text_chat_history"
+     top_pad="5"
+     width="400" />
+     <check_box
+     control_name="ShowChatMiniIcons"
+     height="16"
+     initial_value="false"
+     label="При использовании заголовков чата показывать мини-ярлыки"
+     layout="topleft"
+     left="30"
+     name="ShowChatMiniIcons"
+     top_pad="5"
+     width="400" />
+    
+    <check_box
+     control_name="UseChatBubbles"
+     follows="left|top"
+     height="16"
+     label="Показывать чат в виде пузырьков над аватаром"
+     layout="topleft"
+     left_delta="0"
+     top_pad="5"
+     name="bubble_text_chat"
+     width="150" /> 
+    
+   	<text
+	 type="string"
+	 length="1"
+	 follows="left|top"
+	 height="15"
+	 layout="topleft"
+	 left="30"
+	 name="inworld_typing_rg_label"
+	 top_pad="10"
+	 width="120">
+       При нажатии букв:
+   </text>
+    <radio_group
+     control_name="LetterKeysFocusChatBar" 
+     width="310"
+     height="16"
+     layout="topleft"
+     left_delta="120"
+     top_delta="-5" 
+     name="inworld_typing_preference">
+        <radio_item
+         label="Начать общий чат"
+         name="radio_start_chat"
+         top_delta="20" 
+         layout="topleft"
+         height="16" 
+         left="0" 
+         value="1"
+         width="120" />
+        <radio_item
+         label="Влияет на движение (папример WASD)"
+         left_pad="5"
+         layout="topleft"
+         top_delta="0" 
+         height="16" 
+         name="radio_move"
+         value="0"
+         width="75" />
+    </radio_group>
+    
+    
+    
+    <text
+     name="show_ims_in_label"
+     follows="left|top"
+     layout="topleft"
+     left="30"
+     height="20"
+     width="90"
+     top_pad="14">
+     Показать ЛС в:
+    </text>    
+
+      
+    <radio_group
+     height="16"
+     layout="topleft"
+     left_pad="30"
+     top_delta="0"
+     control_name="ChatWindow"
+     name="chat_window"
+     tool_tip="Отображать ваши ЛС в отдельных окнах или в виде вкладок (Требуется перезагрузка)"
+     width="180">
+     <radio_item
+      height="16"
+      label="Отдельном окне"
+      layout="topleft"
+      left="0"
+      name="radio"
+      value="0"
+      top="0"
+      width="50" />
+     <radio_item
+      height="16"
+      label="Закладках"
+      layout="topleft"
+      left_delta="125"
+      name="radio2"
+      value="1"
+      width="80" />
+    </radio_group>
+    <text
+     name="req_restart"
+     follows="left|top"
+     layout="topleft"
+     left_pad="45"
+     top_delta="0"
+     text_color="White_50"
+     height="16"
+     width="150">
+     (Требуется перезагрузка) 
+     </text>
+    
+    <text
+     name="disable_toast_label"
+     follows="left|top"
+     layout="topleft"
+     top_pad="14" 
+     left="30" 
+     height="10"
+     width="180">
+      Включить входящие всплывающие окна чата:
+      </text>
+    <check_box
+     control_name="EnableGroupChatPopups"
+     name="EnableGroupChatPopups"
+     label="Чаты групп" 
+     layout="topleft"
+     top_pad="5" 
+     left_delta="10" 
+     height="20"
+     tool_tip="Выберете, чтобы видеть всплывающие окна, когда сообщение поступает в чат группы"
+     width="400" />
+    <check_box
+     control_name="EnableIMChatPopups"
+     name="EnableIMChatPopups"
+     label="Личные сообщения (ЛС)" 
+     layout="topleft"
+     top_pad="5"
+     height="16"
+     tool_tip="Выберете, чтобы видеть всплывающие окна, когда Вы получаете ЛС"
+     width="400" />
+    
+    <check_box
+     control_name="TranslateChat"
+     enabled="true"
+     height="16"
+     label="Использовать переводчик, когда общаетесь (технология Google)"
+     layout="topleft"
+     left="30"
+     name="translate_chat_checkbox"
+     width="400" />
+    <text
+     name="translate_language_text"
+     follows="left|top"
+     layout="topleft"
+     top_delta="15"
+     left_delta="20"
+     height="20"
+     width="110">
+     Переводить чат на: 
+    </text>
+    <combo_box
+     allow_text_entry="true"
+     control_name="TranslateLanguage"
+     enabled="true"
+     follows="left|top"
+     layout="topleft"
+     height="23"
+     left="165"
+     top_delta="0"
+     max_chars="135"
+     mouse_opaque="true"
+     name="translate_language_combobox"
+     width="146">
+        <combo_box.item
+         label="По умолчанию"
+         name="System Default Language"
+         value="default" />
+        <combo_box.item
+         label="English"
+         name="English"
+         value="en" />
+        <!-- After "System Default" and "English", please keep the rest of these combo_box.items in alphabetical order by the first character in the string. -->
+        <combo_box.item
+         label="Dansk (Danish)"
+         name="Danish"
+         value="da" />
+        <combo_box.item
+         label="Deutsch (German)"
+         name="German"
+         value="de" />
+        <combo_box.item
+         label="Español (Spanish)"
+         name="Spanish"
+         value="es" />
+        <combo_box.item
+         label="Français (French)"
+         name="French"
+         value="fr" />
+        <combo_box.item
+         label="Italiano (Italian)"
+         name="Italian"
+         value="it" />
+        <combo_box.item
+         label="Magyar (Hungarian)"
+         name="Hungarian"
+         value="hu" />
+        <combo_box.item
+         label="Nederlands (Dutch)"
+         name="Dutch"
+         value="nl" />
+        <combo_box.item
+         label="Polski (Polish)"
+         name="Polish"
+         value="pl" />
+        <combo_box.item
+         label="Português (Portuguese)"
+         name="Portugese"
+         value="pt" />
+        <combo_box.item
+         label="Русский (Russian)"
+         name="Russian"
+         value="ru" />
+        <combo_box.item
+         label="Türkçe (Turkish)"
+         name="Turkish"
+         value="tr" />
+        <combo_box.item
+         label="Українська (Ukrainian)"
+         name="Ukrainian"
+         value="uk" />
+        <combo_box.item
+         label="中文 (简体) (Chinese)"
+         name="Chinese"
+         value="zh" />
+        <combo_box.item
+         label="日本語 (Japanese)"
+         name="Japanese"
+         value="ja" />
+        <combo_box.item
+         label="한국어 (Korean)"
+         name="Korean"
+         value="ko" />
+    </combo_box>
+</panel>

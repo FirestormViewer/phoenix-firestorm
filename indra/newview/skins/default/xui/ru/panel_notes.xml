@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ follows="all"
+ height="450"
+ label="Заметки и Конфиденциальность"
+ layout="topleft"
+ left="0"
+ name="panel_notes"
+ top="0"
+ width="430"
+>
+            <text
+             follows="left|top|right"
+             height="16"
+             layout="topleft"
+             left="6"
+             name="status_message"
+             top="6"
+	     font.style="BOLD"
+             value="Частные заметки этого аватара:"
+             right="-6" />
+            <text_editor
+             follows="all"
+             height="335"
+             layout="topleft"
+             left="6"
+             max_length="1000"
+             name="notes_edit"
+             text_color="DkGray"
+             top_pad="4"
+             right="-6"
+             word_wrap="true" />
+            <text
+             follows="left|bottom|right"
+             height="16"
+             layout="topleft"
+             left="6"
+             name="status_message2"
+             top_pad="8"
+             font.style="BOLD"
+             value="Разрешить этому аватару:"
+             right="-6"/>
+            <check_box
+             enabled="false"
+             height="16"
+             label="Видеть, когда я online"
+             layout="topleft"
+             left="10"
+             name="status_check"
+             follows="left|bottom|right"
+             width="293" />
+            <check_box
+             enabled="false"
+             height="16"
+             label="Найти меня на карте мира"
+             layout="topleft"
+             left="10"
+             name="map_check"
+             follows="left|bottom|right"
+             width="293" />
+            <check_box
+             enabled="false"
+             height="16"
+             label="Править, удалять или брать мои объекты"
+             layout="topleft"
+             left="10"
+             name="objects_check"
+             follows="left|bottom|right"
+             width="293" />
+</panel>
