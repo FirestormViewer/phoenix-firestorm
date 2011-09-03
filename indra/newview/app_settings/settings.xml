@@ -2,6 +2,18 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
+
+  <key>UsePieMenu</key>
+  <map>
+    <key>Comment</key>
+    <string>Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
   <key>GridListDownload</key>
   <map>
     <key>Comment</key>
