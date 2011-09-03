@@ -1592,7 +1592,11 @@ void LLSideTray::setTabDocked(const std::string& tab_name, bool dock, bool toggl
 		}
 	}
 
-	llassert(tab != NULL);
+	if(tab==NULL)
+	{
+		llwarns << "Tab not found by name: '" << tab_name << "'." << llendl;
+		return;
+	}
 
 	// Toggle its dock state.
 	if (tab && tab->isDocked() != dock)
