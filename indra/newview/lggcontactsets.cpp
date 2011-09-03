@@ -25,6 +25,7 @@
 #include "lldir.h"
 #include "llcallingcard.h"
 #include "llavatarnamecache.h"
+#include "rlvhandler.h"
 
 LGGContactSets* LGGContactSets::sInstance;
 
@@ -48,9 +49,16 @@ LGGContactSets* LGGContactSets::getInstance()
 		return sInstance;
 	}
 }
-LLColor4 LGGContactSets::toneDownColor(LLColor4 inColor, float strength)
+LLColor4 LGGContactSets::toneDownColor(LLColor4 inColor, float strength, bool usedForBackground)
 {
-	if(strength<.4f)strength=.4f;
+	if(usedForBackground)
+	{
+		if(strength<.4f)strength=.4f;
+		static LLCachedControl<S32> maxAlphaInt(gSavedSettings,"PhoenixContactSetsMaxColorStrength");
+		strength *= ((F32)maxAlphaInt/100.0f);
+	}
+	
+
 	return LLColor4(LLColor3(inColor),strength);
 }
 bool LGGContactSets::callbackAliasReset(const LLSD& notification, const LLSD& response)
@@ -272,11 +280,19 @@ LLColor4 LGGContactSets::getFriendColor(
 			return LLColor4(mContactSets[ignoredGroupName]["color"]);
 	return toReturn;
 }
-BOOL LGGContactSets::hasFriendColorThatShouldShow(LLUUID friend_id)
+BOOL LGGContactSets::hasFriendColorThatShouldShow(LLUUID friend_id,bool chat, bool tag, bool radar, bool miniMap)
 {
+	if(gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))return FALSE;//don't show colors if we cant show names
 	static LLCachedControl<bool> sPhoenixColorContactSetsChat(gSavedSettings, "PhoenixContactSetsColorizeChat");
+	static LLCachedControl<bool> contactSetsColorizeTag(gSavedSettings,"PhoenixContactSetsColorizeNameTag");
+	static LLCachedControl<bool> contactSetsColorizeRadar(gSavedSettings,"PhoenixContactSetsColorizeRadar");
+	static LLCachedControl<bool> contactSetsColorizeMiniMap(gSavedSettings,"PhoenixContactSetsColorizeMiniMap");
 
-	if(!(sPhoenixColorContactSetsChat))return FALSE;
+	if(miniMap&&!contactSetsColorizeMiniMap)return FALSE;
+	if(tag&&!contactSetsColorizeTag)return FALSE;
+	if(chat &&!(sPhoenixColorContactSetsChat))return FALSE;
+	if(radar && !contactSetsColorizeRadar)return FALSE;
+
 	if(getFriendColor(friend_id)==getDefaultColor())return FALSE;
 	return TRUE;
 }

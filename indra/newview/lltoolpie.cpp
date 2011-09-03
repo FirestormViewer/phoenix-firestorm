@@ -1836,7 +1836,7 @@ BOOL LLToolPie::handleRightClickPick()
 		LLParcelSelectionHandle selection = LLViewerParcelMgr::getInstance()->selectParcelAt( mPick.mPosGlobal );
 		gMenuHolder->setParcelSelection(selection);
 		// ## Zi: Pie menu
-		if(gSavedPerAccountSettings.getBOOL("UsePieMenu"))
+		if(gSavedSettings.getBOOL("UsePieMenu"))
 			gPieMenuLand->show(x, y);
 		// ## Zi: Pie menu
 		else
@@ -1848,7 +1848,7 @@ BOOL LLToolPie::handleRightClickPick()
 	else if (mPick.mObjectID == gAgent.getID() )
 	{
 		// ## Zi: Pie menu
-		if(gSavedPerAccountSettings.getBOOL("UsePieMenu"))
+		if(gSavedSettings.getBOOL("UsePieMenu"))
 		{
 			if(!gPieMenuAvatarSelf)
 			{
@@ -1915,7 +1915,7 @@ BOOL LLToolPie::handleRightClickPick()
 				{
 					gMenuAttachmentOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
 					// ## Zi: Pie menu
-					if(gSavedPerAccountSettings.getBOOL("UsePieMenu"))
+					if(gSavedSettings.getBOOL("UsePieMenu"))
 						gPieMenuAttachmentOther->show(x, y);
 					// ## Zi: Pie menu
 					else
@@ -1925,7 +1925,7 @@ BOOL LLToolPie::handleRightClickPick()
 				{
 					gMenuAvatarOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
 					// ## Zi: Pie menu
-					if(gSavedPerAccountSettings.getBOOL("UsePieMenu"))
+					if(gSavedSettings.getBOOL("UsePieMenu"))
 						gPieMenuAvatarOther->show(x, y);
 					// ## Zi: Pie menu
 					else
@@ -1942,7 +1942,7 @@ BOOL LLToolPie::handleRightClickPick()
 		else if (object->isAttachment())
 		{
 			// ## Zi: Pie menu
-			if(gSavedPerAccountSettings.getBOOL("UsePieMenu"))
+			if(gSavedSettings.getBOOL("UsePieMenu"))
 				gPieMenuAttachmentSelf->show(x, y);
 			// ## Zi: Pie menu
 			else
@@ -1976,7 +1976,7 @@ BOOL LLToolPie::handleRightClickPick()
 // [/RLVa:KB]
 				gMenuHolder->getChild<LLUICtrl>("Object Mute")->setValue(mute_msg);
 				// ## Zi: Pie menu
-				if(gSavedPerAccountSettings.getBOOL("UsePieMenu"))
+				if(gSavedSettings.getBOOL("UsePieMenu"))
 					gPieMenuObject->show(x, y);
 				// ## Zi: Pie menu
 				else

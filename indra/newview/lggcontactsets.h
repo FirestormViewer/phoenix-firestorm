@@ -26,14 +26,14 @@ class LGGContactSets
 	static LGGContactSets* sInstance;
 public:
 	static LGGContactSets* getInstance();
-	static LLColor4 toneDownColor(LLColor4 inColor, float strength);
+	static LLColor4 toneDownColor(LLColor4 inColor, float strength, bool usedForBackground=FALSE);
 
 	BOOL saveGroupToDisk(std::string groupName, std::string fileName);
 	LLSD exportGroup(std::string groupName);
 	LLSD getContactSets();
 	LLColor4 getGroupColor(std::string groupName);
 	LLColor4 getFriendColor(LLUUID friend_id, std::string ignoredGroupName="");
-	BOOL hasFriendColorThatShouldShow(LLUUID friend_id);
+	BOOL hasFriendColorThatShouldShow(LLUUID friend_id,bool chat=FALSE, bool tag=FALSE, bool radar=FALSE, bool miniMap=FALSE);
 	LLColor4 getDefaultColor();
 	void setDefaultColor(LLColor4 dColor);
 	std::vector<std::string> getInnerGroups(std::string groupName);

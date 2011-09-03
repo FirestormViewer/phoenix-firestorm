@@ -39,20 +39,9 @@ BOOL PanelPreferenceFirestorm::postBuild()
 	getChild<LLUICtrl>("lgg_ac_showgui")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onAutoCorrectSettings, this));
 
 
-	// m_calcLineEditor = getChild<LLLineEditor>("PhoenixCmdLineCalc");
-	m_acLineEditor = getChild<LLLineEditor>("PhoenixCmdLineAutocorrect");
 	m_tp2LineEditor = getChild<LLLineEditor>("PhoenixCmdLineTP2");
 	m_clearchatLineEditor = getChild<LLLineEditor>("PhoenixCmdLineClearChat");
 	m_musicLineEditor = getChild<LLLineEditor>("PhoenixCmdLineMusic");
-	m_aoLineEditor = getChild<LLLineEditor>("PhoenixCmdLineAO");
-	// if(m_calcLineEditor)
-	// {
-		// m_calcLineEditor->setEnabled(FALSE);
-	// }
-	if(m_acLineEditor)
-	{
-		m_acLineEditor->setEnabled(FALSE);
-	}
 	if(m_tp2LineEditor)
 	{
 		m_tp2LineEditor->setEnabled(FALSE);
@@ -64,10 +53,6 @@ BOOL PanelPreferenceFirestorm::postBuild()
 	if(m_musicLineEditor)
 	{
 		m_musicLineEditor->setEnabled(FALSE);
-	}
-	if(m_aoLineEditor)
-	{
-		m_aoLineEditor->setEnabled(FALSE);
 	}
 	
 	

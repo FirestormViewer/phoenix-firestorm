@@ -218,13 +218,9 @@ void LLIMHandler::onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName&
 			}
 			LLColor4 textColor = LLUIColorTable::instance().getColor("AgentChatColor");
 			//color based on contact sets prefs
-			static LLCachedControl<bool> contactSetsColorize(gSavedSettings,"PhoenixContactSetsColorizeMiniMap");
-			if(contactSetsColorize &&
-				(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)))
+			if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(agent_id,TRUE))
 			{
-				LLColor4 fgColor = LGGContactSets::getInstance()->getFriendColor(agent_id);
-				if(fgColor!=LGGContactSets::getInstance()->getDefaultColor())
-					textColor=fgColor;
+				textColor = LGGContactSets::getInstance()->getFriendColor(agent_id);
 			}
 			gConsole->addConsoleLine("IM: " + senderName + delimiter + message, textColor);
 

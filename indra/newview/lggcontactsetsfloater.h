@@ -49,6 +49,8 @@ public:
 	BOOL handleHover(S32 x, S32 y, MASK mask);
 	BOOL handleUnicodeCharHere(llwchar uni_char);
 	BOOL handleScrollWheel(S32 x, S32 y, S32 clicks);
+	void onMouseLeave(S32 x, S32 y, MASK mask);
+	void onMouseEnter(S32 x, S32 y, MASK mask);
 
 	BOOL generateCurrentList();
 	void draw();
@@ -98,6 +100,7 @@ private:
 	S32 scrollLoc;
 	BOOL showRightClick;
 	BOOL justClicked;
+	BOOL mouseInWindow;
 };
 
 class lggContactSetsFloaterSettings : public LLFloater

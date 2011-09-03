@@ -3078,7 +3078,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	// if we aren't self, if we use colored Clienttags and if we have a color
 	// then use that color as name_tag_color
 	static LLUICachedControl<bool> show_friends("NameTagShowFriends");
-	if(mClientTagData.has("color") && !(show_friends && (is_friend||LGGContactSets::getInstance()->isNonFriend(getID()))) && gSavedSettings.getU32("FSColorClienttags")>0 && !this->isSelf()){
+	if(mClientTagData.has("color") && !(show_friends && (is_friend||LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(),FALSE,TRUE))) && gSavedSettings.getU32("FSColorClienttags")>0 && !this->isSelf()){
 		name_tag_color = mClientTagData["color"]; 
 	}
 
@@ -3263,13 +3263,9 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 				LLColor4 new_chat = LLUIColorTable::instance().getColor( isSelf() ? "UserChatColor" : "AgentChatColor" );
 				//color based on contact sets prefs
-				static LLCachedControl<bool> contactSetsColorize(gSavedSettings,"PhoenixContactSetsColorizeMiniMap");
-				if(contactSetsColorize&&
-					(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)))
+				if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(),TRUE))
 				{
-					LLColor4 fgColor = LGGContactSets::getInstance()->getFriendColor(getID());
-					if(fgColor!=LGGContactSets::getInstance()->getDefaultColor())
-						new_chat=fgColor;
+					new_chat = LGGContactSets::getInstance()->getFriendColor(getID());
 				}
 				LLColor4 normal_chat = lerp(new_chat, LLColor4(0.8f, 0.8f, 0.8f, 1.f), 0.7f);
 				LLColor4 old_chat = lerp(normal_chat, LLColor4(0.6f, 0.6f, 0.6f, 1.f), 0.7f);
@@ -3433,7 +3429,6 @@ LLColor4 LLVOAvatar::getNameTagColor(bool is_friend)
 {
 	static LLUICachedControl<bool> show_friends("NameTagShowFriends");
 	static LLUICachedControl<bool> use_old_color("FSUseV1TagColor");
-	static LLCachedControl<bool> contactSetsColorize(gSavedSettings,"PhoenixContactSetsColorizeNameTag");
 	
 	// ...not using display names
 	const char* color_name= "NameTagLegacy";
@@ -3457,11 +3452,9 @@ LLColor4 LLVOAvatar::getNameTagColor(bool is_friend)
 		}
 	}
 	
-	if(contactSetsColorize)
+	if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(),FALSE,TRUE))
 	{
-		LLColor4 fgColor = LGGContactSets::getInstance()->getFriendColor(getID());
-		if(fgColor!=LGGContactSets::getInstance()->getDefaultColor())
-			return fgColor;
+		return LGGContactSets::getInstance()->getFriendColor(getID());
 	}
 
 	//Wolfspirit: If we don't display a friend, then use "NameTagV1"

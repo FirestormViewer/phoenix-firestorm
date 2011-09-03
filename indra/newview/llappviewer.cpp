@@ -2381,6 +2381,11 @@ bool LLAppViewer::initConfiguration()
 
 	
 	loadSettingsFromDirectory("UserSession");
+	
+	//AO: Re-read user settings again. This is a Firestorm hack to get user settings to override modes
+	//Todo, find a cleaner way of doing this via the various set_default arguments.
+	loadSettingsFromDirectory("User");
+	
 
 	// - apply command line settings 
 	clp.notify(); 
@@ -2646,6 +2651,8 @@ bool LLAppViewer::initConfiguration()
 	//args["[APP_NAME]"] = LLTrans::getString("SECOND_LIFE");
 	//[FIX FIRE-2852] Changed function to find the right Gridname
 	args["[APP_NAME]"] = LLGridManager::getInstance()->getGridLabel();
+	//[FIX FIRE-2919] Making sure Current_grid has the right value
+	args["[CURRENT_GRID]"] = LLGridManager::getInstance()->getGridLabel();
 	splash_msg = LLTrans::getString("StartupLoading", args);
 	LLSplashScreen::show();
 	LLSplashScreen::update(splash_msg);
@@ -4082,11 +4089,15 @@ void LLAppViewer::forceDisconnect(const std::string& mesg)
 	{
 		// Tell users what happened
 		args["ERROR_MESSAGE"] = big_reason;
+		//[FIX FIRE-2919] Making sure Current_grid has the right value
+		args["CURRENT_GRID"] = LLGridManager::getInstance()->getGridLabel();
 		LLNotificationsUtil::add("ErrorMessage", args, LLSD(), &finish_forced_disconnect);
 	}
 	else
 	{
 		args["MESSAGE"] = big_reason;
+		//[FIX FIRE-2919] Making sure Current_grid has the right value
+		args["CURRENT_GRID"] = LLGridManager::getInstance()->getGridLabel();
 		LLNotificationsUtil::add("YouHaveBeenLoggedOut", args, LLSD(), &finish_disconnect );
 	}
 }

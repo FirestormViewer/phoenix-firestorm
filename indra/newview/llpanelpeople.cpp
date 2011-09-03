@@ -929,8 +929,6 @@ void LLPanelPeople::updateNearbyList()
 		item_it = avatar_ids.begin(),
 		item_end = avatar_ids.end();
 
-	static LLCachedControl<bool> contactSetsColorize(gSavedSettings,"PhoenixContactSetsColorizeRadar");
-	
 	for (;pos_it != pos_end && item_it != item_end; ++pos_it, ++item_it )
 	{
 		//2a. gather necessary model data
@@ -1051,12 +1049,9 @@ void LLPanelPeople::updateNearbyList()
 		else
 			radarNameCell->setFontStyle(LLFontGL::NORMAL);
 
-		if(contactSetsColorize&&
-			(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)))
+		if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId,FALSE,FALSE,TRUE))
 		{
-			LLColor4 fgColor = LGGContactSets::getInstance()->getFriendColor(avId);
-			if(fgColor!=LGGContactSets::getInstance()->getDefaultColor())
-				radarNameCell->setColor(fgColor);
+			radarNameCell->setColor(LGGContactSets::getInstance()->getFriendColor(avId));
 		}
 		//AO: Preserve selection
 		if (lastRadarSelectedItem)

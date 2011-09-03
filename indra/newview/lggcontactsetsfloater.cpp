@@ -122,7 +122,7 @@ lggContactSetsFloater::~lggContactSetsFloater()
 lggContactSetsFloater::lggContactSetsFloater(const LLSD& seed)
 :LLFloater(seed),mouse_x(0),mouse_y(900),hovered(0.f),justClicked(FALSE),scrollLoc(0),
 showRightClick(FALSE),maxSize(0),scrollStarted(0),currentFilter(""),
-currentRightClickText("")
+currentRightClickText(""),mouseInWindow(FALSE)
 {
 	if(sInstance)delete sInstance;
 	sInstance = this;
@@ -902,7 +902,6 @@ void lggContactSetsFloater::draw()
 	LLFontGL* bigFont = LLFontGL::getFontSansSerifBig();
 	LLFontGL* hugeFont = LLFontGL::getFontSansSerifHuge();
 
-
 	static LLCachedControl<std::string> currentGroup(gSavedSettings, "PhoenixContactSetsSelectedGroup");
 	static LLCachedControl<bool> textNotBg(gSavedSettings, "PhoenixContactSetsColorizeText");
 	static LLCachedControl<bool> barNotBg(gSavedSettings, "PhoenixContactSetsColorizeBar");
@@ -910,6 +909,7 @@ void lggContactSetsFloater::draw()
 	static LLCachedControl<bool> doZoom(gSavedSettings, "PhoenixContactSetsDoZoom");
 	static LLCachedControl<bool> doColorChange(gSavedSettings, "PhoenixContactSetsUseColorHighlight");
 	static LLCachedControl<bool> drawProfileIcon(gSavedSettings, "PhoenixContactSetsDrawProfileIcon");
+	static LLCachedControl<bool> showOtherGroups(gSavedSettings, "PhoenixContactSetsShowOtherGroups");
 
 	int roomForBar = 0;//used to move text and icon over away from the little bar on the left
 	if((barNotBg)||(textNotBg))roomForBar=10+2;
@@ -943,7 +943,7 @@ void lggContactSetsFloater::draw()
 		//need scroll bars
 		sizeV=minSize;
 //#pragma region ScrollBars
-		if(this->hasFocus())
+		if(this->hasFocus()&&mouseInWindow)
 		{
 			LLUIImage *arrowUpImage = LLUI::getUIImage("map_avatar_above_32.tga");
 			LLUIImage *arrowDownImage = LLUI::getUIImage("map_avatar_below_32.tga");
@@ -953,7 +953,7 @@ void lggContactSetsFloater::draw()
 			float speedFraction = ((F32)(scrollSpeedSetting))/100.0f;
 
 			LLColor4 useColor = unactive;
-			if(mouse_y<topScroll.mTop&& mouse_y > topScroll.mBottom)
+			if(topScroll.pointInRect(mouse_x,mouse_y))
 			{
 				useColor=active;
 				scrollLoc-=llclamp((S32)((((F32)numberOfPanels)/4.0f)*speedFraction),1,100);
@@ -978,7 +978,7 @@ void lggContactSetsFloater::draw()
 			int maxS =((numberOfPanels*11)+200-(rec.getHeight()));
 			if(!(doZoom))maxS=((numberOfPanels*(minSize+2))+10-(rec.getHeight()));
 			useColor=unactive;
-			if(mouse_y<bottomScroll.mTop && mouse_y > bottomScroll.mBottom)
+			if(bottomScroll.pointInRect(mouse_x,mouse_y))
 			{
 				useColor=active;
 				scrollLoc+=llclamp((S32)((((F32)numberOfPanels)/4.0f)*speedFraction),1,100);
@@ -1008,7 +1008,7 @@ void lggContactSetsFloater::draw()
 		scrollLoc=0;
 	}
 	float top=rec.mTop+scrollLoc;//sizeV+12;
-	if(mouse_y<15)mouse_y=15;
+	//if(mouse_y<15)mouse_y=15;
 	for(int f=0; f< (int)allFolders.size();f++)
 	{
 		float thisSize = sizeV;
@@ -1032,8 +1032,8 @@ void lggContactSetsFloater::draw()
 
 			LLColor4 color = LGGContactSets::getInstance()->getGroupColor(folder);
 			
-			if(doColorChange)
-				color = LGGContactSets::toneDownColor(color,((F32)bubble+.001)/(1.0f));
+			color = LGGContactSets::toneDownColor(color,
+				doColorChange?((F32)bubble+.001)/(1.0f)*1.0f:1.0f,TRUE);
 
 			gGL.color4fv(color.mV);			
 			if(!(barNotBg) && !(textNotBg))
@@ -1045,7 +1045,7 @@ void lggContactSetsFloater::draw()
 				smallBox.setLeftTopAndSize(box.mLeft,box.mTop,10+(bubble/2),box.getHeight());
 				gl_rect_2d(smallBox);
 				smallBox.setLeftTopAndSize(box.mLeft+10+(bubble/2),box.mTop,box.getWidth()-(10+(bubble/2)),box.getHeight());
-				gGL.color4fv(LGGContactSets::toneDownColor(LGGContactSets::getInstance()->getDefaultColor(),(doColorChange)?(((F32)bubble)/(1)):1).mV);
+				gGL.color4fv(LGGContactSets::toneDownColor(LGGContactSets::getInstance()->getDefaultColor(),(doColorChange)?(((F32)bubble)/(1)*1.0f):1.0f,TRUE).mV);
 				gl_rect_2d(smallBox);
 			}
 			if(box.pointInRect(mouse_x,mouse_y))
@@ -1137,18 +1137,19 @@ void lggContactSetsFloater::draw()
 
 			LLUUID agent_id = workingList[p];
 
-			LLCachedControl<bool> showOtherGroups(gSavedSettings, "PhoenixContactSetsShowOtherGroups");
 			std::vector<std::string> groupsIsIn;				
 			groupsIsIn= LGGContactSets::getInstance()->getFriendGroups(agent_id);
 
 			LLColor4 color = LGGContactSets::getInstance()->getGroupColor(currentGroup);
 			if(!LGGContactSets::getInstance()->isFriendInGroup(agent_id,currentGroup))
 				color = LGGContactSets::getInstance()->getDefaultColor();
-			if(showOtherGroups)color = LGGContactSets::getInstance()->
+			if(showOtherGroups||(currentGroup()=="All Groups"))color = LGGContactSets::getInstance()->
 				getFriendColor(agent_id,currentGroup);
 
-			if(!iAMSelected&&(doColorChange))
-				color = LGGContactSets::toneDownColor(color,((F32)bubble+.001)/(1.0f));
+			
+			color = LGGContactSets::toneDownColor(color,
+				(!iAMSelected&&(doColorChange))?
+				((F32)bubble+.001)/(1.0f)*1.0f:1.0f,TRUE);
 			
 			gGL.color4fv(color.mV);			
 			if(!(barNotBg) && !(textNotBg))
@@ -1160,7 +1161,7 @@ void lggContactSetsFloater::draw()
 				smallBox.setLeftTopAndSize(box.mLeft,box.mTop,10+(bubble/2),box.getHeight());
 				gl_rect_2d(smallBox);
 				smallBox.setLeftTopAndSize(box.mLeft+10+(bubble/2),box.mTop,box.getWidth()-(10+(bubble/2)),box.getHeight());
-				gGL.color4fv(LGGContactSets::toneDownColor(LGGContactSets::getInstance()->getDefaultColor(),(doColorChange)?(((F32)bubble)/(1)):1).mV);
+				gGL.color4fv(LGGContactSets::toneDownColor(LGGContactSets::getInstance()->getDefaultColor(),(doColorChange)?(((F32)bubble)/(1)*1.0f):1.0f,TRUE).mV);
 				gl_rect_2d(smallBox);
 			}
 			int roomForIcon = 0;
@@ -1211,7 +1212,9 @@ void lggContactSetsFloater::draw()
 				if(box.getHeight()>35)breathingRoom=4;
 
 				//move it away from the image.. but not all the way
-				int w =box.mLeft+breathingRoom+roomForBar+(S32)(roomForIcon/1.5f);
+				int w =box.mLeft+breathingRoom+roomForBar+
+					(S32)(roomForIcon/(1.0f))//make room for the icon
+					-(doZoom?((S32)(roomForIcon*bubble)):0);//if we got allot of room, move it back
 				int sizePerOGroup = 40;
 				for(int gr=0;gr<(int)groupsIsIn.size();gr++)
 				{
@@ -1683,10 +1686,19 @@ BOOL lggContactSetsFloater::handleDoubleClick(S32 x, S32 y, MASK mask)
 }
 BOOL lggContactSetsFloater::handleHover(S32 x,S32 y,MASK mask)
 {
+	sInstance->mouseInWindow=TRUE;
 	mouse_x=x;
 	mouse_y=y;
 	hovered=gFrameTimeSeconds;
 	return LLFloater::handleHover(x,y,mask);
+}
+void lggContactSetsFloater::onMouseLeave(S32 x, S32 y, MASK mask)
+{
+	sInstance->mouseInWindow=FALSE;
+}
+void lggContactSetsFloater::onMouseEnter(S32 x, S32 y, MASK mask)
+{
+	sInstance->mouseInWindow=TRUE;
 }
 BOOL lggContactSetsFloater::compareAv(LLUUID av1, LLUUID av2)
 {
