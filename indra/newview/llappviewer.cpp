@@ -2381,6 +2381,11 @@ bool LLAppViewer::initConfiguration()
 
 	
 	loadSettingsFromDirectory("UserSession");
+	
+	//AO: Re-read user settings again. This is a Firestorm hack to get user settings to override modes
+	//Todo, find a cleaner way of doing this via the various set_default arguments.
+	loadSettingsFromDirectory("User");
+	
 
 	// - apply command line settings 
 	clp.notify(); 

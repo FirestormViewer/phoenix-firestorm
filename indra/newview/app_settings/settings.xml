@@ -1367,7 +1367,7 @@
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <real>3600</real>
+      <real>0</real>
     </map>
     <key>AdminMenu</key>
     <map>
