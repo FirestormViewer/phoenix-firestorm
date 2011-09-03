@@ -100,7 +100,17 @@
      left="30"
      name="privatepointat"
      top_pad="4"
-     width="350" />   
+     width="350" />
+
+	 <check_box
+     control_name="AutoAcceptNewInventory"
+     height="16"
+     label="Auto Accept New Inventory Items"
+     layout="topleft"
+     left="30"
+     name="Auto_Accept_New_Inventory"
+     top_pad="4"
+     width="350" />
    
     <check_box
      control_name="ShowFavoritesOnLogin"
@@ -194,7 +204,7 @@
      layout="topleft"
      left="30"
      name="block_list"
-     top_pad="28"
+     top_pad="-10"
      width="255">
         <!--<button.commit_callback
          function="SideTray.ShowPanel"-->
