@@ -11,7 +11,38 @@
  help_topic="texture_picker"
  title="PICK: TEXTURE"
  width="410">
-    <floater.string
+ 
+<!--  top static -->
+   <radio_group
+     control_name="mode_selection"
+     height="20"
+     layout="topleft"
+     left="165"
+     top="4"
+     name="mode_selection"
+     follows="right|top">
+        <radio_item
+         label="Inventory"
+         name="inventory"
+         tool_tip="Select texture from your inventory."
+         top_delta="20" 
+         layout="topleft"
+         height="16" 
+         left="0" 
+         value="0"
+         width="80" />
+        <radio_item
+         label="Computer"
+         name="local"
+         tool_tip="Select texture from your own computer. Note: Only you will see the texture."
+         left_pad="15"
+         layout="topleft"
+         top_delta="0" 
+         height="16" 
+         value="1"
+         width="75" />
+    </radio_group>
+ <floater.string
      name="choose_picture">
         Click to choose a picture
     </floater.string>
@@ -43,61 +74,52 @@
      left_delta="0"
      name="unknown"
      top_pad="80"
-     width="163">
+     width="">
         Size: [DIMENSIONS]
     </text>
+    
+<!--  middle: inventory mode -->
     <button
      enabled="false"
-     follows="left|bottom"
-     height="20"
+     follows="left|top"
+     height="18"
      label="Default"
      label_selected="Default"
      layout="topleft"
-     left_delta="0"
+     left_delta="90"
      name="Default"
-     top_pad="4"
-     width="80" />
+     width="73" />
     <button
-     enabled="false"
-     follows="left|bottom"
-     height="20"
-     label="None"
-     label_selected="None"
-     layout="topleft"
-     left_pad="4"
-     name="None"
-     top_delta="0"
-     width="80" />
-    <button
-     follows="left|bottom"
+     follows="left|top"
      height="20"
      label="Blank"
      label_selected="Blank"
      layout="topleft"
-     left="4"
+     left_delta="0"
      name="Blank"
      top_pad="5"
-     width="80" />
-         <button
-     follows="left|bottom"
+     width="73" />
+     <button
+     enabled="false"
+     follows="left|top"
+     height="20"
+     label="None"
+     label_selected="None"
+     layout="topleft"
+     left_delta="0"
+     name="None"
+     top_pad="5"
+     width="73" />
+    <button
+     follows="left|top"
      height="28"
      image_selected="eye_button_active.tga"
      image_unselected="eye_button_inactive.tga"
      layout="topleft"
-     left_pad="50"
-     top_delta="3"
+     left_delta="-80"
+     top_delta="-25"
      name="Pipette"
      width="28" />
-   <check_box
-     follows="left|bottom"
-     height="20"
-     initial_value="true"
-     label="Apply now"
-     layout="topleft"
-     left="4"
-     name="apply_immediate_check"
-     top="262"
-     width="120" />
     <filter_editor
      follows="left|top|right"
      height="23"
@@ -128,23 +150,89 @@
      top_pad="0"
      left_delta="-3"
      width="200" />
-         <button
-     follows="right|bottom"
+
+<!--  middle: local mode -->
+    <button
+     follows="left|top"
+     height="18"
+     label="Add"
+     label_selected="Add"
+     layout="topleft"
+     left="94"
+     top="-101"
+     name="l_add_btn"
+     width="73"
+     visible="false"/>
+    <button
+     enabled="false"
+     follows="left|top"
+     height="20"
+     label="Remove"
+     label_selected="Remove"
+     layout="topleft"
+     left_delta="0"
+     name="l_rem_btn"
+     top_pad="5"
+     width="73"
+     visible="false"/>
+    <button
+     enabled="false"
+     follows="left|top"
+     height="20"
+     label="Upload"
+     label_selected="Upload"
+     layout="topleft"
+     left_delta="0"
+     name="l_upl_btn"
+     top_pad="5"
+     width="73"
+     visible="false"/>
+    <scroll_list
+     name="l_name_list"
+     left="170"
+     top="22"
+     width="235"
+     height="233"
+     follows="left|top|right|bottom"
+     column_padding="0"
+     can_resize="false"
+     draw_heading="true"
+     multi_select="true"
+     search_column="1"
+     visible="false">
+        <column name="unit_name" label="Name" dynamicwidth="true" />
+        <column name="unit_id_HIDDEN" label="ID" width="0" />
+    </scroll_list>
+     
+<!-- bottom static -->
+    <button
+     follows="bottom"
      height="20"
      label="OK"
      label_selected="OK"
      layout="topleft"
-     right="-120"
+     left="95"
+     top="-30"
      name="Select"
      width="100" />
     <button
-     follows="right|bottom"
+     follows="bottom"
      height="20"
      label="Cancel"
      label_selected="Cancel"
      layout="topleft"
-     right="-10"
-     left_pad="5"
+     left_delta="120"
+     top_delta="0"
      name="Cancel"
      width="100" />
+    <check_box
+     follows="left|bottom"
+     height="20"
+     initial_value="true"
+     label="Apply now"
+     layout="topleft"
+     left="6"
+     name="apply_immediate_check"
+     top_delta="0"
+     width="120" />
 </floater>
