@@ -178,12 +178,13 @@ void RlvUIEnabler::onToggleSetDebug()
 	}
 }
 
-// Checked: 2010-03-17 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// Checked: 2011-09-04 (RLVa-1.4.1a) | Modified: RLVa-1.4.1a
 void RlvUIEnabler::onToggleSetEnv()
 {
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SETENV);
 
-	const std::string strEnvFloaters[] = { "env_day_cycle", /*"env_post_process",*/ "env_settings", "env_water", "env_windlight" };
+	const std::string strEnvFloaters[] = 
+		{ "env_post_process", "env_settings", "env_delete_preset", "env_edit_sky", "env_edit_water", "env_edit_day_cycle" };
 	for (int idxFloater = 0, cntFloater = sizeof(strEnvFloaters) / sizeof(std::string); idxFloater < cntFloater; idxFloater++)
 	{
 		if (!fEnable)

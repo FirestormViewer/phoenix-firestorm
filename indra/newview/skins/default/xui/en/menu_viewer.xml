@@ -491,6 +491,9 @@
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="sunrise" />
+                <menu_item_call.on_enable
+                 function="RLV.EnableIfNot"
+                 parameter="setenv" />
             </menu_item_call>
             <menu_item_call
              label="Midday"
@@ -499,6 +502,9 @@
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="noon" />
+                <menu_item_call.on_enable
+                 function="RLV.EnableIfNot"
+                 parameter="setenv" />
             </menu_item_call>
             <menu_item_call
              label="Sunset"
@@ -507,6 +513,9 @@
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="sunset" />
+                <menu_item_call.on_enable
+                 function="RLV.EnableIfNot"
+                 parameter="setenv" />
             </menu_item_call>
             <menu_item_call
              label="Midnight"
@@ -514,6 +523,9 @@
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="midnight" />
+                <menu_item_call.on_enable
+                 function="RLV.EnableIfNot"
+                 parameter="setenv" />
             </menu_item_call>
             <menu_item_separator/>
             <menu_item_call
@@ -522,6 +534,9 @@
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="default" />
+                <menu_item_call.on_enable
+                 function="RLV.EnableIfNot"
+                 parameter="setenv" />
             </menu_item_call>
         </menu>
 	    
@@ -538,6 +553,9 @@
 	     	 	<menu_item_call.on_click
 	     	 	 function="World.EnvSettings"
                  parameter="editor"/>
+          <menu_item_call.on_enable
+           function="RLV.EnableIfNot"
+           parameter="setenv" />
 	     	</menu_item_call>
 	     	
 	     	<menu_item_separator/>
@@ -551,6 +569,9 @@
 	     	 	 	<menu_item_call.on_click
 	     	 	 	function="World.EnvPreset"
 	     	 	 	parameter="new_water"/>
+            <menu_item_call.on_enable
+            function="RLV.EnableIfNot"
+            parameter="setenv" />
 	     	 	</menu_item_call>
 	     	 	<menu_item_call
 	     	 	 label="Edit preset..."
@@ -558,7 +579,10 @@
 	     	 	 	<menu_item_call.on_click
 	     	 	 	function="World.EnvPreset"
 	     	 	 	parameter="edit_water"/>
-	     	 	</menu_item_call>
+            <menu_item_call.on_enable
+            function="RLV.EnableIfNot"
+            parameter="setenv" />
+          </menu_item_call>
 	     	 	<menu_item_call
 	     	 	 label="Delete preset..."
 	     	 	 name="delete_water_preset">
@@ -580,14 +604,20 @@
 	     	 	 	<menu_item_call.on_click
 	     	 	 	function="World.EnvPreset"
 	     	 	 	parameter="new_sky"/>
-	     	 	</menu_item_call>
+            <menu_item_call.on_enable
+            function="RLV.EnableIfNot"
+            parameter="setenv" />
+          </menu_item_call>
 	     	 	<menu_item_call
 	     	 	 label="Edit preset..."
 	     	 	 name="edit_sky_preset">
 	     	 	 	<menu_item_call.on_click
 	     	 	 	function="World.EnvPreset"
 	     	 	 	parameter="edit_sky"/>
-	     	 	</menu_item_call>
+            <menu_item_call.on_enable
+            function="RLV.EnableIfNot"
+            parameter="setenv" />
+          </menu_item_call>
 	     	 	<menu_item_call
 	     	 	 label="Delete preset..."
 	     	 	 name="delete_sky_preset">
@@ -609,14 +639,20 @@
 	     	 	 	<menu_item_call.on_click
 	     	 	 	function="World.EnvPreset"
 	     	 	 	parameter="new_day_cycle"/>
-	     	 	</menu_item_call>
+            <menu_item_call.on_enable
+            function="RLV.EnableIfNot"
+            parameter="setenv" />
+          </menu_item_call>
 	     	 	<menu_item_call
 	     	 	 label="Edit preset..."
 	     	 	 name="edit_day_preset">
 	     	 	 	<menu_item_call.on_click
 	     	 	 	function="World.EnvPreset"
 	     	 	 	parameter="edit_day_cycle"/>
-	     	 	</menu_item_call>
+            <menu_item_call.on_enable
+            function="RLV.EnableIfNot"
+            parameter="setenv" />
+          </menu_item_call>
 	     	 	<menu_item_call
 	     	 	 label="Delete preset..."
 	     	 	 name="delete_day_preset">
