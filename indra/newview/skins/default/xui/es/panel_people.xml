@@ -1,93 +1,99 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Side tray panel -->
 <panel label="Gente" name="people_panel">
-	<string name="no_recent_people" value="No hay nadie reciente. ¿Buscas gente con la que pasar el rato? Prueba la [secondlife:///app/search/people Búsqueda] o el [secondlife:///app/worldmap Mapa del mundo]."/>
-	<string name="no_filtered_recent_people" value="¿No encuentras lo que buscas? Prueba con [secondlife:///app/search/people/[SEARCH_TERM] Buscar]."/>
-	<string name="no_one_near" value="No hay nadie cerca. ¿Buscas gente con la que pasar el rato? Prueba la [secondlife:///app/search/people Búsqueda] o el [secondlife:///app/worldmap Mapa del mundo]."/>
-	<string name="no_one_filtered_near" value="¿No encuentras lo que buscas? Prueba con [secondlife:///app/search/people/[SEARCH_TERM] Buscar]."/>
+	<string name="no_recent_people" value="No hay gente reciente. ¿Buscas gente con la que pasar el rato? Usa la búsqueda para encontrar temas o contenidos en los que puedas estar interesado, y visita los lugares para conocer gente con interesses similares."/>
+	<string name="no_filtered_recent_people" value="¿No encuentras lo que buscas? Prueba la [secondlife:///app/search/people/[SEARCH_TERM] Búsqueda]."/>
+	<string name="no_one_near" value="No han nadie cerca. ¿Buscas gente con la que pasar el rato? Usa la búsqueda para encontrar temas o contenidos en los que puedas estar interesado, y visita los lugares para conocer gente con interesses similares."/>
+	<string name="no_one_filtered_near" value="¿No encuentras lo que buscas? Prueba la [secondlife:///app/search/people/[SEARCH_TERM] Búsqueda]."/>
 	<string name="no_friends_online" value="No hay amigos conectados"/>
 	<string name="no_friends" value="No hay amigos"/>
 	<string name="no_friends_msg">
-		Busca amigos usando la [secondlife:///app/search/people Búsqueda] o pulsa con el botón derecho del ratón en un Residente para añadirle como amigo.
-¿Buscas gente con la que pasar el rato? Prueba el [secondlife:///app/worldmap Mapa del mundo].
+		Busca amigos usando la [secondlife:///app/search/people Búsqueda] o pulsa con el botón derecho del ratón en un residente para añadirle como amigo.
+¿Buscas gente con la que pasar el rato? Usa la búsqueda para encontrar temas o contenidos en los que puedas estar interesado, y visita los lugares para conocer gente con intereses similares.
 	</string>
 	<string name="no_filtered_friends_msg">
-		¿No encuentras lo que buscas? Prueba con [secondlife:///app/search/people/[SEARCH_TERM] Buscar].
+		¿No encuentras lo que buscas? Prueba la [secondlife:///app/search/people/[SEARCH_TERM] Búsqueda].
 	</string>
-	<string name="people_filter_label" value="Filtrar a la gente"/>
-	<string name="groups_filter_label" value="Filtrar a los grupos"/>
-	<string name="no_filtered_groups_msg" value="¿No encuentras lo que buscas? Prueba con [secondlife:///app/search/groups/[SEARCH_TERM] Buscar]."/>
+	<string name="people_filter_label" value="Filtrar gente"/>
+	<string name="groups_filter_label" value="Filtrar grupos"/>
+	<string name="no_filtered_groups_msg" value="¿No encuentras lo que buscas? Prueba la [secondlife:///app/search/people/[SEARCH_TERM] Búsqueda]."/>
 	<string name="no_groups_msg" value="¿Buscas grupos en que participar? Prueba la [secondlife:///app/search/groups Búsqueda]."/>
-	<string name="MiniMapToolTipMsg" value="[REGION](Pulsa dos veces para abrir el mapa, pulsa mayús y arrastra para obtener una panorámica)"/>
-	<string name="AltMiniMapToolTipMsg" value="[REGION](Pulsa dos veces para teleportarte, pulsa mayús y arrastra para obtener una panorámica)"/>
+	<string name="MiniMapToolTipMsg" value="[REGION](Haz doble clic para abrir el mapa, pulsa mayúsculas y arrastra para obtener una panorámica)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION](Haz doble clic para teleportarte, pulsa mayúsculas y arrastra para obtener una panorámica)"/>
 	<filter_editor label="Filtrar" name="filter_input"/>
 	<tab_container name="tabs">
 		<panel label="CERCANA" name="nearby_panel">
+			<layout_stack>
+				<layout_panel name="radarlayout">
+					<radar_list name="radar_list">
+						<radar_list.columns label="NOMBRE" name="name"/>
+						<radar_list.columns label="M" name="flags"/>
+						<radar_list.columns label="EDAD" name="age"/>
+						<radar_list.columns label="VISTO" name="seen"/>
+						<radar_list.columns label="DIST." name="range"/>
+						<radar_list.columns label="CLAVE" name="uuid"/>
+					</radar_list>
+				</layout_panel>
+			</layout_stack>
 			<panel label="bottom_panel" name="bottom_panel">
-				<menu_button name="nearby_view_sort_btn" tool_tip="Opciones"/>
-				<button name="add_friend_btn" tool_tip="Añadir al Residente seleccionado a la lista de tus amigos"/>
+				<menu_button name="view_sort_btn" tool_tip="Opciones"/>
+				<button name="add_friend_btn" tool_tip="Ofrecer amistad al residente seleccionado"/>
+				<slider label="Alcance (m):" name="NearMeRange"/>
 			</panel>
 		</panel>
 		<panel label="MIS AMIGOS" name="friends_panel">
-			<accordion name="friends_accordion">
-				<accordion_tab name="tab_online" title="Conectado"/>
-				<accordion_tab name="tab_all" title="Todos"/>
-			</accordion>
+			<tab_container name="friends_accordion">
+				<panel name="tab_online" title="Conectados"/>
+				<panel name="tab_all" title="Todos"/>
+			</tab_container>
 			<panel label="bottom_panel" name="bottom_panel">
-				<layout_stack name="bottom_panel">
-					<layout_panel name="options_gear_btn_panel">
-						<menu_button name="friends_viewsort_btn" tool_tip="Ver más opciones"/>
-					</layout_panel>
-					<layout_panel name="add_btn_panel">
-						<button name="add_btn" tool_tip="Ofrecer amistad a un Residente"/>
-					</layout_panel>
-					<layout_panel name="trash_btn_panel">
-						<dnd_button name="del_btn" tool_tip="Quitar a la persona seleccionada de tu lista de amigos"/>
-					</layout_panel>
-				</layout_stack>
+				<menu_button tool_tip="Opciones" name="friends_viewsort_btn"/>
+				<button name="add_btn" tool_tip="Ofrecer amistad a un residente"/>
+				<button name="GlobalOnlineStatusToggle" tool_tip="Activar/desactivar la visibilidad global"/>
+				<dnd_button name="del_btn" tool_tip="Disolver la amistad con el residente seleccionado"/>
 			</panel>
 		</panel>
 		<panel label="MIS GRUPOS" name="groups_panel">
 			<panel label="bottom_panel" name="bottom_panel">
-				<menu_button name="groups_viewsort_btn" tool_tip="Opciones"/>
-				<button name="plus_btn" tool_tip="Entrar en un grupo o crear uno"/>
+				<menu_button tool_tip="Opciones" name="groups_viewsort_btn"/>
+				<button name="plus_btn" tool_tip="Unirse a un grupo o crear uno nuevo"/>
 				<button name="activate_btn" tool_tip="Activar el grupo seleccionado"/>
 			</panel>
 		</panel>
 		<panel label="RECIENTE" name="recent_panel">
 			<panel label="bottom_panel" name="bottom_panel">
-				<menu_button name="recent_viewsort_btn" tool_tip="Opciones"/>
-				<button name="add_friend_btn" tool_tip="Añadir al Residente seleccionado a la lista de tus amigos"/>
+				<menu_button tool_tip="Opciones" name="recent_viewsort_btn"/>
+				<button name="recent_add_friend_btn" tool_tip="Ofrecer amistad al residente seleccionado"/>
 			</panel>
 		</panel>
 	</tab_container>
 	<panel name="button_bar">
 		<layout_stack name="bottom_bar_ls">
 			<layout_panel name="view_profile_btn_lp">
-				<button label="Perfil" name="view_profile_btn" tool_tip="Mostrar imágenes, grupos y otra información del Residente"/>
+				<button label="Perfil" name="view_profile_btn" tool_tip="Mostrar la imagen, grupos y otra información del residente"/>
 			</layout_panel>
-			<layout_panel name="im_btn_lp">
-				<button label="MI" name="im_btn" tool_tip="Abrir una sesión de mensajes instantáneos"/>
+			<layout_panel name="chat_btn_lp">
+				<button label="MI" name="im_btn" tool_tip="Abrir una sesión de mensajería instantánea con el residente seleccionado"/>
 			</layout_panel>
-			<layout_panel name="call_btn_lp">
-				<button label="Llamar" name="call_btn" tool_tip="Llamar a este Residente"/>
+			<layout_panel name="chat_btn_lp">
+				<button label="Llamar" name="call_btn" tool_tip="Llamar al residente seleccionado"/>
 			</layout_panel>
-			<layout_panel name="share_btn_lp">
-				<button label="Compartir" name="share_btn" tool_tip="Compartir un objeto del inventario"/>
+			<layout_panel name="chat_btn_lp">
+				<button label="Compartir" name="share_btn" tool_tip="Compartir un objeto del inventario con el residente seleccionado"/>
 			</layout_panel>
-			<layout_panel name="teleport_btn_lp">
-				<button label="Teleportarte" name="teleport_btn" tool_tip="Ofrecer teleporte"/>
+			<layout_panel name="chat_btn_lp">
+				<button label="Teleporte" name="teleport_btn" tool_tip="Ofrecer teleporte al residente seleccionado"/>
 			</layout_panel>
 		</layout_stack>
 		<layout_stack name="bottom_bar_ls1">
 			<layout_panel name="group_info_btn_lp">
-				<button label="Perfil del grupo" name="group_info_btn" tool_tip="Ver la información del grupo"/>
+				<button label="Perfil del grupo" name="group_info_btn" tool_tip="Mostrar la información del grupo seleccionado"/>
 			</layout_panel>
 			<layout_panel name="chat_btn_lp">
-				<button label="Chat de grupo" name="chat_btn" tool_tip="Abrir el chat"/>
+				<button label="Chat de grupo" name="chat_btn" tool_tip="Abrir sesión de chat con el grupo seleccionado"/>
 			</layout_panel>
 			<layout_panel name="group_call_btn_lp">
-				<button label="Llamar al grupo" name="group_call_btn" tool_tip="Llama a este grupo"/>
+				<button label="Llamar al grupo" name="group_call_btn" tool_tip="Llamar al grupo seleccionado"/>
 			</layout_panel>
 		</layout_stack>
 	</panel>

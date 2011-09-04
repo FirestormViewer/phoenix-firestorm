@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_group_plus">
-	<menu_item_check label="Ordenar según las intervenciones recientes" name="sort_by_recent_speakers"/>
-	<menu_item_check label="Ordenar alfabéticamente" name="sort_name"/>
-	<menu_item_check label="Ordenar según distancia" name="sort_distance"/>
-	<menu_item_check label="Ver los iconos de la gente" name="view_icons"/>
-	<menu_item_check label="Ver mapa" name="view_map"/>
-	<menu_item_call label="Ver la lista de Residentes y Objetos ignorados" name="show_blocked_list"/>
+	<menu_item_check label="Mostrar minimapa sobre el radar" name="ShowRadarMinimap"/>
+	<menu_item_check label="Limitar el alcance de los resultados" name="LimitRadarByRange"/>
+	<menu label="Formato de los nombres" name="radarNameFormat">
+		<menu_item_call label="DisplayName" name="radarFmtDN"/>
+		<menu_item_call label="Nombre de usuario" name="radarFmtUN"/>
+		<menu_item_call label="DisplayName (Nombre de usuario)" name="radarFmtDNUN"/>
+		<menu_item_call label="Nombre de usuario (DisplayName)" name="radarFmtUNDN"/>
+	</menu>
+	<menu_item_check label="Mostrar alcance del chat local en el minimapa" name="MiniMapChatRing"/>
+	<menu_item_check label="Reportar los que cruzan el límite de la distancia de dibujo" name="RadarReportDrawRange"/>
+	<menu_item_check label="Reportar los que cruzan el límite del chat local" name="RadarReportChatRange"/>
+	<menu_item_check label="Reportar los que cruzan los límites de la región" name="RadarReportSimRange"/>
+	<menu_item_check label="Reportar a los scripts los que entran en la región" name="RadarEnterChannelAlert"/>
+	<menu_item_check label="Reportar a los scripts los que salen de la región" name="RadarLeaveChannelAlert"/>
+	<menu_item_call label="Mostrar residentes y objetos bloqueados" name="show_blocked_list"/>
 </toggleable_menu>
