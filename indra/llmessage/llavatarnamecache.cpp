@@ -442,6 +442,8 @@ void LLAvatarNameCache::requestNamesViaLegacy()
 void LLAvatarNameCache::initClass(bool running)
 {
 	sRunning = running;
+	//[Caching DN : SJ] Check if caching names is running
+	llinfos << "Caching DN :  sRunning =  " << sRunning << llendl;
 }
 
 void LLAvatarNameCache::cleanupClass()
@@ -683,11 +685,14 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 		// ...only do immediate lookups when cache is running
 		if (useDisplayNames())
 		{
+			//llinfos << "Cashing DN: ..." << agent_id << llendl;
 			// ...use new cache
 			std::map<LLUUID,LLAvatarName>::iterator it = sCache.find(agent_id);
 			if (it != sCache.end())
 			{
 				LLAvatarName& av_name = it->second;
+				LLSD test = av_name.asLLSD();
+				//llinfos << "Cashing DN: Avatarname :" << test["display_name"].asString()+" (" + test["legacy_first_name"].asString()+" "+test["legacy_last_name"].asString()+")"  << llendl;
 				if(LGGContactSets::getInstance()->hasPseudonym(agent_id))
 				{
 					LLSD info = av_name.asLLSD();
@@ -702,7 +707,32 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 					fireSignal(agent_id, slot, av_name);
 					return;
 				}
+				else
+				{
+  				 	
+ 				 	
+ 					int expireseconds = av_name.mExpires;
+ 					llinfos << "Cashing DN: Expireseconds : is " << expireseconds << " > " << LLFrameTimer::getTotalSeconds() << llendl;	  				 	
+					if (!isRequestPending(agent_id))
+						{
+							//[FIX Caching DN : SJ] When the request for agent-id expires fire a new request
+							//llinfos << "Cashing DN: ...queue request for agent expired :" << agent_id << llendl;
+							sAskQueue.insert(agent_id);
+							return;
+						}
+				}
 			}
+			else
+			{
+	  			if (!isRequestPending(agent_id))
+				{
+					//[FIX Caching DN : SJ] When the agent-id can't be found in cache fire a new request
+					//llinfos << "Cashing DN: ...queue request for not in cache :" << agent_id << llendl;
+					sAskQueue.insert(agent_id);
+					return;
+				}
+			}
+			
 		}
 		else
 		{
@@ -716,14 +746,14 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 				return;
 			}
 		}
+	
 	}
-
 	// schedule a request
 	if (!isRequestPending(agent_id))
 	{
 		sAskQueue.insert(agent_id);
 	}
-
+	
 	// always store additional callback, even if request is pending
 	signal_map_t::iterator sig_it = sSignalMap.find(agent_id);
 	if (sig_it == sSignalMap.end())
