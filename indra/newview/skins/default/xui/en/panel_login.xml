@@ -154,9 +154,9 @@ label="Remember password"
   name="Phoenix"
   value="settings_phoenix.xml" />
 <combo_box.item
-  label="V2"
-  name="V2"
-  value="settings_v2.xml" />
+  label="V3"
+  name="V3"
+  value="settings_v3.xml" />
 <combo_box.item
   label="Hybrid"
   name="Hybrid"

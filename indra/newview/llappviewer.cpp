@@ -748,7 +748,7 @@ bool LLAppViewer::init()
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_phoenix.xml"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_hybrid.xml"));
-                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_v2.xml"));
+                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_v3.xml"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_minimal.xml"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "account_settings_phoenix.xml"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_autocorrect.xml"));

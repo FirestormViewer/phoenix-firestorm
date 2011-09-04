@@ -1482,7 +1482,7 @@ set(viewer_APPSETTINGS_FILES
     app_settings/account_settings_phoenix.xml
     app_settings/settings_hybrid.xml
     app_settings/settings_phoenix.xml
-    app_settings/settings_v2.xml
+    app_settings/settings_v3.xml
     app_settings/settings.xml
     app_settings/settings_autocorrect.xml
     app_settings/settings_crash_behavior.xml
