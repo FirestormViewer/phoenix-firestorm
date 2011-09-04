@@ -407,7 +407,7 @@ ERlvCmdRet RlvHandler::processClearCommand(const RlvCommand& rlvCmd)
 // Externally invoked event handlers
 //
 
-// Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+// Checked: 2011-05-22 (RLVa-1.4.1a) | Added: RLVa-1.3.1b
 bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& sdUserdata)
 {
 	// If the user managed to change their active group (= newly joined or created group) we need to reactivate the previous one
@@ -1251,7 +1251,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 					RlvBehaviourNotifyHandler::getInstance()->removeNotify(rlvCmd.getObjectID(), nChannel, strFilter);
 			}
 			break;
-		case RLV_BHVR_SETGROUP:				// @setgroup=n|y					- Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+		case RLV_BHVR_SETGROUP:				// @setgroup=n|y					- Checked: 2011-05-22 (RLVa-1.4.1a) | Added: RLVa-1.3.1b
 			{
 				VERIFY_OPTION_REF(strOption.empty());
 
@@ -1617,7 +1617,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 					eRet = onForceRemOutfit(rlvCmd);
 			}
 			break;
-		case RLV_BHVR_SETGROUP:		// @setgroup:<uuid|name>=force			- Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+		case RLV_BHVR_SETGROUP:		// @setgroup:<uuid|name>=force			- Checked: 2011-03-28 (RLVa-1.4.1a) | Added: RLVa-1.3.0f
 			eRet = onForceGroup(rlvCmd);
 			break;
 		case RLV_BHVR_UNSIT:		// @unsit=force							- Checked: 2010-03-18 (RLVa-1.2.0c) | Modified: RLVa-0.2.0g
@@ -1754,18 +1754,15 @@ ERlvCmdRet RlvHandler::onForceRemOutfit(const RlvCommand& rlvCmd) const
 	return RLV_RET_SUCCESS;
 }
 
-// Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+// Checked: 2011-07-23 (RLVa-1.4.1a) | Modified: RLVa-1.4.1a
 ERlvCmdRet RlvHandler::onForceGroup(const RlvCommand& rlvCmd) const
 {
-	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption()); 
-
 	LLUUID idGroup; bool fValid = false;
-	if (rlvCmdOption.isUUID())
+	if (idGroup.set(rlvCmd.getOption()))
 	{
-		idGroup = rlvCmdOption.getUUID();
 		fValid = (idGroup.isNull()) || (gAgent.isInGroup(idGroup, true));
 	}
-	else if (rlvCmdOption.isString())
+	else
 	{
 		for (S32 idxGroup = 0, cntGroup = gAgent.mGroups.count(); (idxGroup < cntGroup) && (idGroup.isNull()); idxGroup++)
 			if (boost::iequals(gAgent.mGroups.get(idxGroup).mName, rlvCmd.getOption()))
@@ -1902,7 +1899,7 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 		case RLV_BHVR_GETINVWORN:		// @getinvworn[:<path>]=<channel>
 			eRet = onGetInvWorn(rlvCmd, strReply);
 			break;
-		case RLV_BHVR_GETGROUP:			// @getgroup=<channel>					- Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+		case RLV_BHVR_GETGROUP:			// @getgroup=<channel>					- Checked: 2011-03-28 (RLVa-1.4.1a) | Added: RLVa-1.3.0f
 			strReply = (gAgent.getGroupID().notNull()) ? gAgent.getGroupName() : "none";
 			break;
 		case RLV_BHVR_GETSITID:			// @getsitid=<channel>					- Checked: 2010-03-09 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a

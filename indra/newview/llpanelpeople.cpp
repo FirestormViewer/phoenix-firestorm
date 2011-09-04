@@ -883,7 +883,7 @@ void LLPanelPeople::updateButtons()
 
 		LLPanel* groups_panel = mTabContainer->getCurrentPanel();
 //		groups_panel->getChildView("activate_btn")->setEnabled(item_selected && !cur_group_active); // "none" or a non-active group selected
-// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.4.1a) | Added: RLVa-1.3.0f
 		groups_panel->getChildView("activate_btn")->setEnabled(
 			item_selected && !cur_group_active && !gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP)); // "none" or a non-active group selected
 // [/RLVa:KB]
