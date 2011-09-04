@@ -80,7 +80,7 @@ LLLocalBitmap::LLLocalBitmap(std::string filename)
 	mFilename       = filename;
 	mShortName      = gDirUtilp->getBaseFileName(filename, true);
 	mValid          = false;
-	mLastModified   = NULL;
+	mLastModified   = 0;
 	mLinkStatus     = LS_ON;
 	mUpdateRetries  = LL_LOCAL_UPDATE_RETRIES;
 	mTrackingID.generate();
