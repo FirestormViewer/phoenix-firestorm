@@ -7998,6 +7998,12 @@ class LLWorldEnvSettings : public view_listener_t
 		{
 			LLEnvManagerNew::instance().setUseSkyPreset("Midnight");
 		}
+// [RLVa:KB] - Checked: 2011-09-03 (RLVa-1.4.1a) | Added: RLVa-1.4.1a
+		else if ("default" == tod)
+		{
+			LLEnvManagerNew::instance().setUseRegionSettings(true);
+		}
+// [/RLVa:KB]
 		else
 		{
 			LLEnvManagerNew::instance().setUseDayCycle(LLEnvManagerNew::instance().getDayCycleName());
