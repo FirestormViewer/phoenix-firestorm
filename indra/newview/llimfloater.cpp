@@ -444,7 +444,7 @@ void LLIMFloater::onSysinfoButtonClicked()
 	support <<
 		info["CHANNEL"] << " " << info["VIEWER_VERSION_STR"] << "\n" <<
 		"Sim: " << info["HOSTNAME"] << "(" << info["HOSTIP"] << ") " << info["SERVER_VERSION"] << "\n" <<
-		"Packet loss: " << info["PACKETS_PCT"].asReal() << "% (" << info["PACKETS_IN"].asReal() << "/" << info["PACKETS_LOST"].asReal() << ")\n" <<
+		"Packet loss: " << info["PACKETS_PCT"].asReal() << "% (" << info["PACKETS_LOST"].asReal() << "/" << info["PACKETS_IN"].asReal() << ")\n" <<
 		"CPU: " << info["CPU"] << "\n" <<
 		"Memory: " << info["MEMORY_MB"] << "\n" <<
 		"OS: " << info["OS_VERSION"] << "\n" <<
