@@ -79,6 +79,12 @@
          function="Floater.Show"
          parameter="inspect" />
       </menu_item_call>
+	   <menu_item_call
+	      enabled="true"
+	      label="Script Info"
+	      name="ScriptInfo">
+	    <menu_item_call.on_click
+	      function="Tools.ScriptInfo" />
    <menu_item_separator layout="topleft" />
       <menu_item_call
          enabled="false"
@@ -199,6 +205,7 @@
       function="Object.Derender" />
    </menu_item_call>
    <!-- /Derender -->
+   
    <menu_item_call
       enabled="false"
       label="Return"

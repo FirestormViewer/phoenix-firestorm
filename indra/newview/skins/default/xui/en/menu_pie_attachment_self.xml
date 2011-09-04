@@ -23,7 +23,13 @@
         label="More &gt;">
 
         <pie_separator />
-        <pie_separator name="script_count_placeholder" />
+        <pie_slice
+            enabled="true"
+            label="Script Info"
+            name="ScriptInfo">
+            <pie_slice.on_click
+                function="Tools.ScriptInfo" />
+        </pie_slice>
         <pie_slice
             enabled="false"
             label="Touch"

@@ -103,7 +103,13 @@
                 <pie_slice.on_visible
                     function="IsGodCustomerService"/>
             </pie_slice>
-            <pie_separator name="script count placeholder" />
+            <pie_slice
+	            enabled="true"
+	            label="Script Info"
+	            name="ScriptInfo">
+	            <pie_slice.on_click
+	                function="Tools.ScriptInfo" />
+	        </pie_slice>
             <pie_slice
                 label="Call"
                 name="Call">

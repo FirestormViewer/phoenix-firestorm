@@ -158,7 +158,13 @@
             <pie_slice.on_enable
                 function="Object.EnableMute" />
         </pie_slice>
-        <pie_separator name="script_count_placeholder" />
+        <pie_slice
+            enabled="true"
+            label="Script Info"
+            name="ScriptInfo">
+            <pie_slice.on_click
+                function="Tools.ScriptInfo" />
+        </pie_slice>
         <pie_slice
             label="Inspect"
             name="Object Inspect">
@@ -166,6 +172,7 @@
                 function="Floater.Show"
                 parameter="inspect" />
         </pie_slice>
+
 
     </pie_menu>
 

@@ -238,7 +238,13 @@
         <pie_slice.on_enable
             function="Self.EnableStandUp" />
     </pie_slice>
-    <pie_separator name="script_count_placeholder" />
+    <pie_slice
+        enabled="true"
+        label="Script Info"
+        name="ScriptInfo">
+        <pie_slice.on_click
+            function="Tools.ScriptInfo" />
+    </pie_slice>
     <pie_slice
         label="Gestures..."
         name="Gestures">

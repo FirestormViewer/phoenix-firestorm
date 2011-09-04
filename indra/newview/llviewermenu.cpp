@@ -5712,6 +5712,17 @@ class LLWorldPlaceProfile : public view_listener_t
 	}
 };
 
+void handle_script_info()
+{
+	LLUUID object_id;
+	if (LLSelectMgr::getInstance()->getSelection()->getPrimaryObject())
+	{
+		object_id = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject()->mID;
+		llinfos << "Reporting Script Info for object: " << object_id.asString() << llendl;
+		FSLSLBridge::instance().viewerToLSL("getScriptInfo|" + object_id.asString());
+	}
+}
+
 void handle_look_at_selection(const LLSD& param)
 {
 	const F32 PADDING_FACTOR = 1.75f;
@@ -8757,6 +8768,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLToolsReleaseKeys(), "Tools.ReleaseKeys");
 	view_listener_t::addMenu(new LLToolsEnableReleaseKeys(), "Tools.EnableReleaseKeys");	
 	commit.add("Tools.LookAtSelection", boost::bind(&handle_look_at_selection, _2));
+	commit.add("Tools.ScriptInfo",boost::bind(&handle_script_info));
 	commit.add("Tools.BuyOrTake", boost::bind(&handle_buy_or_take));
 	commit.add("Tools.TakeCopy", boost::bind(&handle_take_copy));
 	view_listener_t::addMenu(new LLToolsSaveToInventory(), "Tools.SaveToInventory");

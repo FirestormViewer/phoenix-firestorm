@@ -124,6 +124,13 @@
          <menu_item_call.on_enable
           function="Object.EnableInspect" />
    </menu_item_call>
+  <menu_item_call 
+      enabled="true"
+      label="Script Info"
+      name="ScriptInfo">
+      <menu_item_call.on_click
+       function="Tools.ScriptInfo" />
+  </menu_item_call>
     <menu_item_call 
     enabled="true"
     label="Derender"
