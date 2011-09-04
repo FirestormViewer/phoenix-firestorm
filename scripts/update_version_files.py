@@ -174,10 +174,10 @@ re_map['indra/newview/Info-Firestorm.plist'] = \
 
 # This will probably only work as long as InfoPlist.strings is NOT UTF16, which is should be...
 re_map['indra/newview/English.lproj/InfoPlist.strings'] = \
-    (('CFBundleShortVersionString = "Second Life version [0-9.]+";',
-      'CFBundleShortVersionString = "Second Life version %(VER_MAJOR)s.%(VER_MINOR)s.%(VER_PATCH)s.%(VER_BUILD)s";'),
-     ('CFBundleGetInfoString = "Second Life version [0-9.]+',
-      'CFBundleGetInfoString = "Second Life version %(VER_MAJOR)s.%(VER_MINOR)s.%(VER_PATCH)s.%(VER_BUILD)s'))
+    (('CFBundleShortVersionString = "Firestorm version [0-9.]+";',
+      'CFBundleShortVersionString = "Firestorm version %(VER_MAJOR)s.%(VER_MINOR)s.%(VER_PATCH)s.%(VER_BUILD)s";'),
+     ('CFBundleGetInfoString = "Firestorm version [0-9.]+',
+      'CFBundleGetInfoString = "Firestorm version %(VER_MAJOR)s.%(VER_MINOR)s.%(VER_PATCH)s.%(VER_BUILD)s'))
 
 
 version_re = re.compile('(\d+).(\d+).(\d+).(\d+)')
