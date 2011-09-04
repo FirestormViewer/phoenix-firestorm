@@ -222,7 +222,7 @@ void LLGroupActions::leave(const LLUUID& group_id)
 {
 //	if (group_id.isNull())
 //		return;
-// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.4.1a) | Added: RLVa-1.3.0f
 	if ( (group_id.isNull()) || ((gAgent.getGroupID() == group_id) && (gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP))) )
 		return;
 // [/RLVa:KB]
@@ -247,7 +247,7 @@ void LLGroupActions::leave(const LLUUID& group_id)
 // static
 void LLGroupActions::activate(const LLUUID& group_id)
 {
-// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.4.1a) | Added: RLVa-1.3.0f
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP))
 		return;
 // [/RLVa:KB]
