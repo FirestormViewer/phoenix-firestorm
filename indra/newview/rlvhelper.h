@@ -369,23 +369,6 @@ private:
 };
 
 // ============================================================================
-// RlvWLSnapshot
-//
-
-class RlvWLSnapshot
-{
-public:
-	static void           restoreSnapshot(const RlvWLSnapshot* pWLSnapshot);
-	static RlvWLSnapshot* takeSnapshot();
-private:
-	RlvWLSnapshot() {}
-
-	bool		 fIsRunning;
-	bool		 fUseLindenTime;
-	LLWLParamSet WLParams;
-};
-
-// ============================================================================
 // Various helper classes/timers/functors
 //
 

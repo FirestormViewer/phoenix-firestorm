@@ -1056,39 +1056,6 @@ void RlvBehaviourNotifyHandler::onReattach(const LLViewerJointAttachment* pAttac
 	sendNotification(llformat("reattached %s %s", (fAllowed) ? "legally" : "illegally", pAttachPt->getName().c_str()));
 }
 
-// ============================================================================
-// RlvWLSnapshot
-//
-
-// Checked: 2010-03-18 (RLVa-1.2.0e) | Added: RLVa-0.2.0h
-void RlvWLSnapshot::restoreSnapshot(const RlvWLSnapshot* pWLSnapshot)
-{
-//	LLWLParamManager* pWLParams = LLWLParamManager::instance();
-//	if ( (pWLSnapshot) && (pWLParams) )
-//	{
-//		pWLParams->mAnimator.mIsRunning = pWLSnapshot->fIsRunning;
-//		pWLParams->mAnimator.mUseLindenTime = pWLSnapshot->fUseLindenTime;
-//		pWLParams->mCurParams = pWLSnapshot->WLParams;
-//		pWLParams->propagateParameters();
-//	}
-}
-
-// Checked: 2010-03-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
-RlvWLSnapshot* RlvWLSnapshot::takeSnapshot()
-{
-//	RlvWLSnapshot* pWLSnapshot = NULL;
-//	LLWLParamManager* pWLParams = LLWLParamManager::instance();
-//	if (pWLParams)
-//	{
-//		pWLSnapshot = new RlvWLSnapshot();
-//		pWLSnapshot->fIsRunning = pWLParams->mAnimator.mIsRunning;
-//		pWLSnapshot->fUseLindenTime = pWLParams->mAnimator.mUseLindenTime;
-//		pWLSnapshot->WLParams = pWLParams->mCurParams;
-//	}
-//	return pWLSnapshot;
-	return NULL;
-}
-
 // =========================================================================
 // Various helper classes/timers/functors
 //

@@ -72,7 +72,7 @@ static bool rlvParseNotifyOption(const std::string& strOption, S32& nChannel, st
 //
 
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.0.1d
-RlvHandler::RlvHandler() : m_fCanCancelTp(true), m_posSitSource(), m_pGCTimer(NULL), m_pWLSnapshot(NULL)
+RlvHandler::RlvHandler() : m_fCanCancelTp(true), m_posSitSource(), m_pGCTimer(NULL)
 {
 	gAgent.addListener(this, "new group");
 
@@ -86,7 +86,6 @@ RlvHandler::~RlvHandler()
 	gAgent.removeListener(this);
 
 	//delete m_pGCTimer;	// <- deletes itself
-	delete m_pWLSnapshot;	// <- delete on NULL is harmless
 }
 
 // ============================================================================
@@ -1103,8 +1102,6 @@ void RlvHandler::clearState()
 	// Clear dynamically allocated memory
 	delete m_pGCTimer;
 	m_pGCTimer = NULL;
-	delete m_pWLSnapshot;
-	m_pWLSnapshot = NULL;
 */
 }
 
@@ -1146,8 +1143,15 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		case RLV_BHVR_DETACHALLTHISEXCEPT:	// @detachallthisexcept[:<option>]=n|y
 			eRet = onAddRemFolderLockException(rlvCmd, fRefCount);
 			break;
-		case RLV_BHVR_SETENV:				// @setenv=n|y
-			eRet = onAddRemSetEnv(rlvCmd, fRefCount);
+		case RLV_BHVR_SETENV:				// @setenv=n|y						- Checked: 2011-09-04 (RLVa-1.4.1a) | Modified: RLVa-1.4.1a
+			{
+				if (RlvSettings::getNoSetEnv())
+				{
+					eRet = RLV_RET_FAILED_DISABLED;
+					break;
+				}
+				VERIFY_OPTION_REF(strOption.empty());
+			}
 			break;
 		case RLV_BHVR_ADDOUTFIT:			// @addoutfit[:<layer>]=n|y			- Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 		case RLV_BHVR_REMOUTFIT:			// @remoutfit[:<layer>]=n|y			- Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
@@ -1554,35 +1558,6 @@ ERlvCmdRet RlvHandler::onAddRemFolderLockException(const RlvCommand& rlvCmd, boo
 		RlvFolderLocks::instance().removeFolderLock(lockSource, eLockPermission, eLockScope, rlvCmd.getObjectID(), eLockType);
 
 	fRefCount = true;
-	return RLV_RET_SUCCESS;
-}
-
-// Checked: 2010-03-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0a
-ERlvCmdRet RlvHandler::onAddRemSetEnv(const RlvCommand& rlvCmd, bool& fRefCount)
-{
-	// Sanity check - there shouldn't be an option
-	if (!rlvCmd.getOption().empty())
-		return RLV_RET_FAILED_OPTION;
-	if (RlvSettings::getNoSetEnv())
-		return RLV_RET_FAILED_DISABLED;
-
-	if (RLV_TYPE_ADD == rlvCmd.getParamType())
-	{
-		// Save the current WindLight params so we can restore them on @setenv=y
-		RLV_ASSERT(!m_pWLSnapshot);
-		if (m_pWLSnapshot)
-			delete m_pWLSnapshot;
-		m_pWLSnapshot = RlvWLSnapshot::takeSnapshot();
-	}
-	else
-	{
-		// Restore WindLight parameters to what they were before @setenv=n was issued
-		RlvWLSnapshot::restoreSnapshot(m_pWLSnapshot);
-		delete m_pWLSnapshot;
-		m_pWLSnapshot = NULL;
-	}
-	fRefCount = true;
-
 	return RLV_RET_SUCCESS;
 }
 

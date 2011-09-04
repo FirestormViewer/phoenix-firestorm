@@ -56,7 +56,6 @@ struct RlvException;
 typedef boost::variant<std::string, LLUUID, S32, ERlvBehaviour> RlvExceptionOption;
 
 class RlvGCTimer;
-class RlvWLSnapshot;
 
 // ============================================================================
 // RlvSettings

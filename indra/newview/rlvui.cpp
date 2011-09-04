@@ -21,6 +21,7 @@
 #include "llbottomtray.h"
 #include "llbutton.h"
 #include "llcallfloater.h"
+#include "llenvmanager.h"				// LLEnvManagerNew
 #include "llhudtext.h"
 #include "llinventorypanel.h"
 #include "llimview.h"					// LLIMMgr
@@ -204,6 +205,10 @@ void RlvUIEnabler::onToggleSetEnv()
 	// Don't allow toggling "Basic Shaders" and/or "Atmopsheric Shaders" through the debug settings under @setenv=n
 	gSavedSettings.getControl("VertexShaderEnable")->setHiddenFromSettingsEditor(!fEnable);
 	gSavedSettings.getControl("WindLightUseAtmosShaders")->setHiddenFromSettingsEditor(!fEnable);
+
+	// Restore the user's WindLight preferences when releasing
+	if (fEnable)
+		LLEnvManagerNew::instance().usePrefs();
 }
 
 // Checked: 2010-09-07 (RLVa-1.4.0a) | Modified: RLVa-1.2.1a
