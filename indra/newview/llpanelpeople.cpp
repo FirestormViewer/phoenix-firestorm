@@ -943,7 +943,7 @@ void LLPanelPeople::updateNearbyList()
 			continue;
 
 		// WS: If we have a dummy avatar. Then Don't display it in th
-		static LLUICachedControl<BOOL> showdummyav("FSShowDummyAVsinRadar");
+		static LLUICachedControl<bool> showdummyav("FSShowDummyAVsinRadar");
 		if(!showdummyav){
 			LLVOAvatar* voav = (LLVOAvatar*)gObjectList.findObject(avId);
 			if(voav && voav->mIsDummy) continue;
