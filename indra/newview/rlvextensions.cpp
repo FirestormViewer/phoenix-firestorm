@@ -17,6 +17,7 @@
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "lldaycyclemanager.h"
 #include "llviewercontrol.h"
 #include "llvoavatarself.h"
 #include "llwlparammanager.h"
@@ -264,7 +265,7 @@ bool RlvWindLight::setValue(const std::string& strRlvName, const std::string& st
 	F32 nValue = 0.0f;
 	// Sanity check - make sure strValue specifies a number for all settings except "preset" and "daycycle"
 	if ( (RlvSettings::getNoSetEnv()) || 
-		 ( (!LLStringUtil::convertToF32(strValue, nValue)) && (("preset" != strRlvName) || ("daycycle" != strRlvName)) ) )
+		 ( (!LLStringUtil::convertToF32(strValue, nValue)) && (("preset" != strRlvName) && ("daycycle" != strRlvName)) ) )
  	{
 		return false;
 	}
@@ -288,13 +289,17 @@ bool RlvWindLight::setValue(const std::string& strRlvName, const std::string& st
 	}
 	else if ("preset" == strRlvName)
 	{
-		pEnvMgr->useSkyPreset(strValue);
-		return true;
+		std::string strPresetName = pWLParams->findPreset(strValue, LLEnvKey::SCOPE_LOCAL);
+		if (!strPresetName.empty())
+			pEnvMgr->useSkyPreset(strPresetName);
+		return !strPresetName.empty();
 	}
 	else if ("daycycle" == strRlvName)
 	{
-		pEnvMgr->useDayCycle(strValue, LLEnvKey::SCOPE_LOCAL);
-		return true;
+		std::string strPresetName = LLDayCycleManager::instance().findPreset(strValue);
+		if (!strPresetName.empty())
+			pEnvMgr->useDayCycle(strValue, LLEnvKey::SCOPE_LOCAL);
+		return !strPresetName.empty();
 	}
 
 	bool fError = false;
