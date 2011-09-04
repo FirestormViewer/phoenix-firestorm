@@ -2370,7 +2370,7 @@ bool LLAppViewer::initConfiguration()
 		llinfos	<< "Using session settings filename: " 
 			<< session_settings_filename << llendl;
 	}
-	loadSettingsFromDirectory("Session");
+	loadSettingsFromDirectory("Session",true); // AO The session file turns into the new defaults
 
 	if (clp.hasOption("usersessionsettings"))
 	{
