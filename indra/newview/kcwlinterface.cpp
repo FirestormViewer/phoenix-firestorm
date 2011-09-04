@@ -34,6 +34,7 @@
 #include "llviewermenu.h" // is_agent_friend
 #include "llviewerparcelmgr.h"
 #include "llwlparammanager.h"
+#include "llwaterparammanager.h"
 
 #include <boost/regex.hpp>
 
@@ -144,12 +145,11 @@ void KCWindlightInterface::ApplySettings(const LLSD& settings)
 	
 		ApplySkySettings(settings);
 	
-		// AO: This didn't survive the 2.7 merge
-		//if (settings.has("water"))
-		//{
-		//	LLWaterParamManager::instance()->loadPreset(settings["water"].asString(), true);
-		//	setWL_Status(true);
-		//}
+		if (settings.has("water"))
+		{
+			LLEnvManagerNew::instance().setUseWaterPreset(settings["water"].asString());
+			setWL_Status(true);
+		}
 	}
 }
 
@@ -188,12 +188,11 @@ void KCWindlightInterface::ApplySkySettings(const LLSD& settings)
 			//llinfos << "WL set : " << settings["sky_default"] << llendl;
 			ApplyWindLightPreset(settings["sky_default"].asString());
 		}
-		// AO: Needs rework after 2.7 merge
-		//else if (!LLWLParamManager::instance()->mAnimator.mUseLindenTime) //reset to default
-		//{
-		//	//llinfos << "WL set : Default" << llendl;
-		//	ApplyWindLightPreset("Default");
-		//}
+		else // if (!LLWLParamManager::instance()->mAnimator.mUseLindenTime) //reset to default
+		{
+			//llinfos << "WL set : Default" << llendl;
+			ApplyWindLightPreset("Default");
+		}
 	}
 }
 
@@ -202,28 +201,29 @@ void KCWindlightInterface::ApplyWindLightPreset(const std::string& preset)
 	if (rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV))
 		return;
 
-	//AO 2.7 Merge 
-/*
-	LLWLParamManager* wlprammgr = LLWLParamManager::instance();
-	if ( (preset != "Default") && (wlprammgr->mParamList.find(preset) != wlprammgr->mParamList.end()) )
+	LLWLParamManager::preset_name_list_t user_presets, sys_presets, region_presets;
+	LLWLParamManager::instance().getPresetNames(region_presets, user_presets, sys_presets);
+	if ( (preset != "Default") &&
+        	( (std::find(user_presets.begin(),user_presets.end(),preset) != user_presets.end()) ||
+        	(std::find(sys_presets.begin(),sys_presets.end(),preset) != sys_presets.end()) ||
+        	(std::find(region_presets.begin(),region_presets.end(),preset) != region_presets.end()) ) )
 	{
-		wlprammgr->mAnimator.mIsRunning = false;
-		wlprammgr->mAnimator.mUseLindenTime = false;
-		wlprammgr->loadPreset(preset);
+		//envprammgr->mAnimator.mIsRunning = false;
+		//envprammgr->mAnimator.mUseLindenTime = false;
+		LLEnvManagerNew::instance().setUseSkyPreset(preset);
 		setWL_Status(true);
 		mWeChangedIt = true;
 	}
 	else
 	{
-		wlprammgr->mAnimator.mIsRunning = true;
-		wlprammgr->mAnimator.mUseLindenTime = true;
-		wlprammgr->loadPreset("Default", true);
+		//envprammgr->mAnimator.mIsRunning = true;
+		//envprammgr->mAnimator.mUseLindenTime = true;
+		LLEnvManagerNew::instance().setUseRegionSettings(true);
 		//KC: reset last to Default
 		gSavedPerAccountSettings.setString("PhoenixLastWLsetting", "Default");
 		setWL_Status(false);
 		mWeChangedIt = false;
 	}
-*/
 }
 
 void KCWindlightInterface::ResetToRegion(bool force)
@@ -236,8 +236,7 @@ void KCWindlightInterface::ResetToRegion(bool force)
 	{
 		ApplyWindLightPreset("Default");
 
-		//AO: Didn't survive 2.7 merge, no more water
-		//LLWaterParamManager::instance()->loadPreset("Default", true);
+		LLEnvManagerNew::instance().setUseRegionSettings(true);
 
 		//KC: reset last to Default
 		gSavedPerAccountSettings.setString("PhoenixLastWWsetting", "Default");
@@ -360,11 +359,11 @@ bool KCWindlightInterface::ParsePacelForWLSettings(const std::string& desc, LLSD
 			std::string data1(mat_block[1].first, mat_block[1].second);
 			//llinfos << "found parcel flags block: " << mat_block[1] << llendl;
 			
-			//AO: wl sky is different in 2.7, needs rework
-			//S32 sky_index = 0;
-			//LLWLParamManager* wlprammgr = LLWLParamManager::instance();
-			//AO No more water in 2.7 merge
-			//LLWaterParamManager* wwprammgr = LLWaterParamManager::instance();
+			S32 sky_index = 0;
+			LLWLParamManager::preset_name_list_t user_presets, sys_presets, region_presets;
+			LLWLParamManager::instance().getPresetNames(region_presets, user_presets, sys_presets);
+			std::list<std::string> user_water_presets, sys_water_presets;
+			LLWaterParamManager::instance().getPresetNames(user_water_presets, sys_water_presets);
 			boost::smatch match;
 			std::string::const_iterator start = mat_block[1].first;
 			std::string::const_iterator end = mat_block[1].second;
@@ -377,9 +376,12 @@ bool KCWindlightInterface::ParsePacelForWLSettings(const std::string& desc, LLSD
 					//llinfos << "sky flag: " << match[1] << " : " << match[2] << " : " << match[3] << " : " << match[5] << llendl;
 
 					std::string preset(match[5]);
-					// AO: Merge casualty
-					/*
-					if(wlprammgr->mParamList.find(preset) != wlprammgr->mParamList.end())
+					if ( (std::find(user_presets.begin(),user_presets.end(),preset) !=
+			        		user_presets.end()) ||
+			        	(std::find(sys_presets.begin(),sys_presets.end(),preset) !=
+			        		sys_presets.end()) ||
+			        	(std::find(region_presets.begin(),region_presets.end(),preset) !=
+			        		region_presets.end()) )
 					{
 						if (match[2].matched && match[3].matched)
 						{
@@ -403,18 +405,19 @@ bool KCWindlightInterface::ParsePacelForWLSettings(const std::string& desc, LLSD
 							found_settings = true;
 						}
 					}
-					*/
 				}
 				else if (match[4].matched)
 				{
 					std::string preset(match[5]);
-					//AO: No more water in 2.7 merge
 					//llinfos << "got water: " << preset << llendl;
-					//if(wwprammgr->mParamList.find(preset) != wwprammgr->mParamList.end())
-					//{
-					//	settings["water"] = preset;
-					//	found_settings = true;
-					//}
+					if ( (std::find(user_water_presets.begin(),user_water_presets.end(),preset) !=
+			        		user_water_presets.end()) ||
+			        	(std::find(sys_water_presets.begin(),sys_water_presets.end(),preset) !=
+			        		sys_water_presets.end()) )
+					{
+						settings["water"] = preset;
+						found_settings = true;
+					}
 				}
 				
 				// update search position 
