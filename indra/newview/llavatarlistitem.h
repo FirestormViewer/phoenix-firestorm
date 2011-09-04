@@ -39,6 +39,7 @@
 class LLAvatarIconCtrl;
 class LLAvatarName;
 class LLIconCtrl;
+class LLUICtrl;
 
 class LLAvatarListItem : public LLPanel, public LLFriendObserver, public LLAvatarPropertiesObserver
 {
@@ -101,6 +102,7 @@ public:
 	//Show/hide profile/info btn, translating speaker indicator and avatar name coordinates accordingly
 	void setShowProfileBtn(bool show);
 	void setShowInfoBtn(bool show);
+	void setShowVoiceVolume(bool show);
 	void showSpeakingIndicator(bool show);
 	void showRange(bool show);
 	void setRange(F32 distance);
@@ -133,6 +135,7 @@ public:
 	bool getShowingBothNames() const;
 
 	void onInfoBtnClick();
+	void onVolumeChange(const LLSD& data);
 	void onProfileBtnClick();
 	void onPermissionOnlineClick();
 	void onPermissionEditMineClick();
@@ -258,6 +261,7 @@ private:
 	
 	LLButton* mInfoBtn;
 	LLButton* mProfileBtn;
+	LLUICtrl* mVoiceSlider;
 
 	LLUUID	mAvatarId;
 	time_t	mFirstSeen;
@@ -271,6 +275,7 @@ private:
 	//Flag indicating that info/profile button shouldn't be shown at all.
 	//Speaker indicator and avatar name coords are translated accordingly
 	bool mShowInfoBtn;
+	bool mShowVoiceVolume;
 	bool mShowProfileBtn;
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	bool mRlvCheckShowNames;

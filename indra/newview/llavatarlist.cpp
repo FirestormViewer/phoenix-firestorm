@@ -250,6 +250,7 @@ LLAvatarList::LLAvatarList(const Params& p)
 // [Ansariel: Colorful radar]
 , mUseRangeColors(false)
 // [Ansariel: Colorful radar]
+, mShowVoiceVolume(false)
 {
 	setCommitOnSelectionChange(true);
 
@@ -267,11 +268,13 @@ LLAvatarList::LLAvatarList(const Params& p)
 	// one-off exceptions here
 	if (getName() == "speakers_list")
 	{
-		mShowInfoBtn = true;
+		mShowVoiceVolume = true;
+		mShowInfoBtn = false;
 	}
 	else 
 	{
 		mShowInfoBtn = false;
+		mShowVoiceVolume = false;
 	}
 
 
@@ -649,6 +652,7 @@ void LLAvatarList::addNewItem(const LLUUID& id, const std::string& name, BOOL is
 
 	item->setAvatarIconVisible(mShowIcons);
 	item->setShowInfoBtn(mShowInfoBtn);
+	item->setShowVoiceVolume(mShowVoiceVolume);
 	item->setShowProfileBtn(mShowProfileBtn);
 	item->showSpeakingIndicator(mShowSpeakingIndicator);
 	item->setShowPermissions(mShowPermissions);

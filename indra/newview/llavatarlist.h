@@ -142,6 +142,7 @@ private:
 	bool mShowIcons;
 	bool mShowInfoBtn;
 	bool mShowProfileBtn;
+	bool mShowVoiceVolume;
 	bool mShowSpeakingIndicator;
 	bool mShowPermissions;
 	bool mShowRange;

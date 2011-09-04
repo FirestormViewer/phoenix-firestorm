@@ -51,6 +51,7 @@
 #include "llavatarconstants.h"
 #include "indra_constants.h"
 #include "llnotificationsutil.h"
+#include "llvoiceclient.h"
 
 bool LLAvatarListItem::sStaticInitialized = false;
 S32 LLAvatarListItem::sLeftPadding = 0;
@@ -84,6 +85,7 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	mProfileBtn(NULL),
 	mOnlineStatus(E_UNKNOWN),
 	mShowInfoBtn(true),
+	mShowVoiceVolume(false),
 	mShowProfileBtn(true),
 	mNearbyRange(false),
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
@@ -171,6 +173,10 @@ BOOL  LLAvatarListItem::postBuild()
 	
 	mInfoBtn->setVisible(false); // AO: enable this by calling setShowInfoButton
 	mInfoBtn->setClickedCallback(boost::bind(&LLAvatarListItem::onInfoBtnClick, this));
+	
+	mVoiceSlider = getChild<LLUICtrl>("volume_slider");
+	mVoiceSlider->setVisible(false);
+	mVoiceSlider->setCommitCallback(boost::bind(&LLAvatarListItem::onVolumeChange, this, _2));
 
 	mProfileBtn->setVisible(false);
 	mProfileBtn->setClickedCallback(boost::bind(&LLAvatarListItem::onProfileBtnClick, this));
@@ -188,6 +194,12 @@ BOOL  LLAvatarListItem::postBuild()
 	}
 
 	return TRUE;
+}
+
+void LLAvatarListItem::onVolumeChange(const LLSD& data)
+{
+	F32 volume = (F32)data.asReal();
+	LLVoiceClient::getInstance()->setUserVolume(mAvatarId, volume);
 }
 
 S32 LLAvatarListItem::notifyParent(const LLSD& info)
@@ -357,6 +369,12 @@ void LLAvatarListItem::setShowInfoBtn(bool show)
 {
 	mShowInfoBtn = show;
 	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+}
+
+void LLAvatarListItem::setShowVoiceVolume(bool show)
+{
+	mShowVoiceVolume = show;
+	mVoiceSlider->setVisible( (mShowVoiceVolume) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
 }
 
 void LLAvatarListItem::setShowProfileBtn(bool show)
@@ -758,7 +776,12 @@ void LLAvatarListItem::initChildrenWidths(LLAvatarListItem* avatar_item)
 	S32 profile_btn_width = 18;
 	
 	//info btn width + padding
-	S32 info_btn_width = 20;
+	S32 info_btn_width = 0;
+	if (avatar_item->mInfoBtn->getVisible()) info_btn_width = 20;
+	
+	//volume slider width + padding
+	S32 volume_slider_width = 0;
+	if (avatar_item->mVoiceSlider->getVisible()) volume_slider_width = 90;
 	
 	// online permission icon width + padding
 	//S32 permission_online_width = avatar_item->mInfoBtn->getRect().mLeft - avatar_item->mIconPermissionOnline->getRect().mLeft;
@@ -795,6 +818,7 @@ void LLAvatarListItem::initChildrenWidths(LLAvatarListItem* avatar_item)
 	sChildrenWidths[--index] = permission_edit_mine_width;
 	sChildrenWidths[--index] = permission_map_width;
 	sChildrenWidths[--index] = permission_online_width;
+	sChildrenWidths[--index] = volume_slider_width;
 	sChildrenWidths[--index] = info_btn_width;
 	sChildrenWidths[--index] = profile_btn_width;
 	sChildrenWidths[--index] = speaking_indicator_width;
