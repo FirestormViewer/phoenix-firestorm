@@ -1776,17 +1776,19 @@ bool LLAppViewer::cleanup()
 	
 	LLUIColorTable::instance().saveUserSettings();
 
-//-TT This is a really horrible hack for the preview - we wipe out the color settings for the old skin 
-//if you change to another. 
-//TODO:FIXME and whatever other tags so that this gets fixed ASAP
+//<Firestorm Skin Cleanup>
 	std::string skinSaved = gSavedSettings.getString("SkinCurrent");
 	std::string themeSaved = gSavedSettings.getString("SkinCurrentTheme");
 	if ((skinSaved != mCurrentSkin) || (themeSaved != mCurrentSkinTheme))
 	{
-		const std::string& filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "colors.xml");
-		LLFile::remove(filename);
+		llinfos << "Clearing skin colors." << llendflush;
+		// Implementation to only purge skin colors
+		LLUIColorTable::instance().saveUserSettingsPaletteOnly();
+
 	}
-//-TT
+//</Firestorm Skip Cleanup>
+	
+	
 	// PerAccountSettingsFile should be empty if no user has been logged on.
 	// *FIX:Mani This should get really saved in a "logoff" mode. 
 	if (gSavedSettings.getString("PerAccountSettingsFile").empty())
