@@ -53,19 +53,20 @@
 
 #include <boost/regex.hpp>
 
-#define phoenix_bridge_name "#LSL<->Client Bridge v0.12"
+//#define phoenix_bridge_name "#LSL<->Client Bridge v0.12"
 #define phoenix_folder_name "#Phoenix"
 
 #define LIB_ROCK_NAME "Rock - medium, round"
 
 //#define ROOT_FIRESTORM_FOLDER "#Firestorm"	//moved to llinventoryfunctions to synch with the AO object
 #define FS_BRIDGE_FOLDER "#LSL Bridge"
-// If you change this, change it in llappearancemgr.cpp too. -- TS
 #define FS_BRIDGE_NAME "#Firestorm LSL Bridge v"
 #define FS_BRIDGE_MAJOR_VERSION 1
-#define FS_BRIDGE_MINOR_VERSION 7
+#define FS_BRIDGE_MINOR_VERSION 9
 
-const std::string UPLOAD_SCRIPT_1_7 = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
+//current script version is 1.9
+const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
+
 const boost::regex FSBridgePattern("^#Firestorm LSL Bridge v*.*");
 
 
@@ -99,7 +100,8 @@ private:
 //
 FSLSLBridge :: FSLSLBridge():
 					mBridgeCreating(false),
-					mpBridge(NULL)
+					mpBridge(NULL),
+					mIsFirstCallDone(false)
 {
 	llinfos << "Initializing fsbridge class" << llendl;
 	std::stringstream sstr;
@@ -127,6 +129,7 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 	llinfos << message << llendl;
 
 	std::string tag = message.substr(0,11);
+	bool status = false;
 
 	if (tag == "<bridgeURL>")
 	{
@@ -142,9 +145,18 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 			if (fsBridge != NULL)
 				mpBridge = fsBridge;
 		}
-		return viewerToLSL("URL Confirmed", new FSLSLBridgeRequestResponder());
+		status = true;
+		if (!mIsFirstCallDone)
+		{
+			//on first call from bridge, confirm that we are here
+			//then check options use
+			viewerToLSL("URL Confirmed", new FSLSLBridgeRequestResponder());
+			updateBoolSettingValue("UseLSLFlightAssist");
+
+			mIsFirstCallDone = true;
+		}
 	}
-	return false;
+	return status;
 }
 
 bool FSLSLBridge :: viewerToLSL(std::string message, FSLSLBridgeRequestResponder *responder)
@@ -157,6 +169,26 @@ bool FSLSLBridge :: viewerToLSL(std::string message, FSLSLBridgeRequestResponder
 	LLHTTPClient::post(mCurrentURL, LLSD(message), responder);
 
 	return true;
+}
+
+bool FSLSLBridge :: updateBoolSettingValue(std::string msgVal)
+{
+	std::string boolVal = "0";
+
+	if (gSavedSettings.getBOOL(msgVal))
+		boolVal = "1";
+
+	return viewerToLSL( msgVal+"|"+boolVal, new FSLSLBridgeRequestResponder());
+}
+
+bool FSLSLBridge :: updateBoolSettingValue(std::string msgVal, bool contentVal)
+{
+	std::string boolVal = "0";
+
+	if (contentVal)
+		boolVal = "1";
+
+	return viewerToLSL( msgVal+"|"+boolVal, new FSLSLBridgeRequestResponder());
 }
 
 //
@@ -530,8 +562,8 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 
 std::string FSLSLBridgeScriptCallback::prepUploadFile()
 {
-	std::string fName = gDirUtilp->getExpandedFilename(LL_PATH_FS_RESOURCES, UPLOAD_SCRIPT_1_7);
-	std::string fNew = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,UPLOAD_SCRIPT_1_7);
+	std::string fName = gDirUtilp->getExpandedFilename(LL_PATH_FS_RESOURCES, UPLOAD_SCRIPT_CURRENT);
+	std::string fNew = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,UPLOAD_SCRIPT_CURRENT);
 
 	//open script text file
 	typedef std::istream_iterator<char> istream_iterator;
@@ -551,9 +583,9 @@ void FSLSLBridge :: checkBridgeScriptName(std::string fileName)
 	if ((fileName.length() == 0) || !mBridgeCreating)
 		return;
 	//need to parse out the last length of a GUID and compare to saved possible names.
-	std::string fileOnly = fileName.substr(fileName.length()-UPLOAD_SCRIPT_1_7.length(), UPLOAD_SCRIPT_1_7.length());
+	std::string fileOnly = fileName.substr(fileName.length()-UPLOAD_SCRIPT_CURRENT.length(), UPLOAD_SCRIPT_CURRENT.length());
 
-	if (fileOnly == UPLOAD_SCRIPT_1_7)
+	if (fileOnly == UPLOAD_SCRIPT_CURRENT)
 	{
 		//this is our script upload
 		LLViewerObject* obj = gAgentAvatarp->getWornAttachment(mpBridge->getUUID());
@@ -596,6 +628,7 @@ void FSLSLBridge :: finishBridge()
 
 	mBridgeCreating = false;
 	//removeVOInventoryListener();
+	cleanUpOldVersions();
 	cleanUpBridgeFolder();
 }
 //
@@ -686,27 +719,60 @@ void FSLSLBridge :: reportToNearbyChat(std::string message)
 	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 }
 
-void FSLSLBridge :: cleanUpBridgeFolder()
+void FSLSLBridge :: cleanUpBridgeFolder(std::string nameToCleanUp)
 {
-	llinfos << "Cleaning leftover scripts and bridges..." << llendl;
+	llinfos << "Cleaning leftover scripts and bridges... for " << nameToCleanUp << llendl;
 	
 	LLUUID catID = findFSCategory();
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
 
 	//find all bridge and script duplicates and delete them
-	NameCollectFunctor namefunctor(mCurrentFullName);
+	//NameCollectFunctor namefunctor(mCurrentFullName);
+	NameCollectFunctor namefunctor(nameToCleanUp);
 	gInventory.collectDescendentsIf(catID,cats,items,FALSE,namefunctor);
 
 	for (S32 iIndex = 0; iIndex < items.count(); iIndex++)
 	{
 		const LLViewerInventoryItem* itemp = items.get(iIndex);
+		if (get_is_item_worn(itemp->getUUID()))
+		{
+			LLVOAvatarSelf::detachAttachmentIntoInventory(itemp->getUUID());
+		}
+
 		if (!itemp->getIsLinkType()  && (itemp->getUUID() != mpBridge->getUUID()))
 		{
 			gInventory.purgeObject(itemp->getUUID());
 		}
 	}
 	gInventory.notifyObservers();
+}
+
+void FSLSLBridge :: cleanUpBridgeFolder()
+{
+	cleanUpBridgeFolder(mCurrentFullName);
+
+}
+
+void FSLSLBridge :: cleanUpOldVersions()
+{
+	std::string mProcessingName;
+
+	for(int i = 1; i <= FS_BRIDGE_MAJOR_VERSION; i++)
+	{
+		for (int j = 1; j < FS_BRIDGE_MINOR_VERSION; j++)
+		{
+			std::stringstream sstr;
+	
+			sstr << FS_BRIDGE_NAME;
+			sstr << i;
+			sstr << ".";
+			sstr << j;
+
+			mProcessingName = sstr.str();
+			cleanUpBridgeFolder(mProcessingName);
+		}
+	}
 }
 
 bool FSLSLBridge :: isOldBridgeVersion(LLInventoryItem *item)

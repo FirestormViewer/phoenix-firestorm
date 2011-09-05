@@ -114,6 +114,9 @@
 
 #include "lllogininstance.h"        // to check if logged in yet
 #include "llsdserialize.h"
+//-TT Client LSL Bridge
+#include "fslslbridge.h"
+//-TT
 
 const F32 MAX_USER_FAR_CLIP = 512.f;
 const F32 MIN_USER_FAR_CLIP = 64.f;
@@ -192,6 +195,7 @@ void LLVoiceSetKeyDialog::onCancel(void* user_data)
 
 void handleNameTagOptionChanged(const LLSD& newvalue);	
 void handleDisplayNamesOptionChanged(const LLSD& newvalue);	
+void handleFlightAssistOptionChanged(const LLSD& newvalue);
 bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response);
 bool callback_clear_cache(const LLSD& notification, const LLSD& response);
 bool callback_clear_settings(const LLSD& notification, const LLSD& response);
@@ -252,6 +256,13 @@ void handleDisplayNamesOptionChanged(const LLSD& newvalue)
 	LLAvatarNameCache::setUseDisplayNames(newvalue.asBoolean());
 	LLVOAvatar::invalidateNameTags();
 }
+
+//-TT Client LSL Bridge
+void handleFlightAssistOptionChanged(const LLSD& newvalue)
+{
+	FSLSLBridge::instance().updateBoolSettingValue("UseLSLFlightAssist", newvalue.asBoolean());
+}
+//-TT
 
 
 /*bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater)
@@ -372,6 +383,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
 	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
 	gSavedSettings.getControl("UseDisplayNames")->getCommitSignal()->connect(boost::bind(&handleDisplayNamesOptionChanged,  _2));
+	gSavedSettings.getControl("UseLSLFlightAssist")->getCommitSignal()->connect(boost::bind(&handleFlightAssistOptionChanged,  _2));
 
 	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
 	gSavedSettings.getControl("DoubleClickTeleport")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onChangeDoubleClickSettings, this));

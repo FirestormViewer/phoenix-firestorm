@@ -324,6 +324,16 @@
 		left="15"
 		width="270"
 		tool_tip="Allows the Viewer to use a scripted attachment (Bridge) to extend its features"/>
+    <check_box
+      control_name="UseLSLFlightAssist"
+      enabled_control="UseLSLBridge"
+      layout="topleft"
+      left_delta="200"
+      height="16"
+      initial_value="false"
+      label="Enable Bridge Flight Assist"
+      width="270"
+      tool_tip="Enables the script that assists flying and hovering at extended altitudes"/>
 	</panel>
 
 

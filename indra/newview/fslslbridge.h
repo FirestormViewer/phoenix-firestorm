@@ -55,6 +55,9 @@ public:
 	bool lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID);
 	bool viewerToLSL(std::string message, FSLSLBridgeRequestResponder *responder = NULL);
 
+	bool updateBoolSettingValue(std::string msgVal);
+	bool updateBoolSettingValue(std::string msgVal, bool contentVal);
+	
 	void initBridge();
 	void recreateBridge();
 	void processAttach(LLViewerObject *object, const LLViewerJointAttachment *attachment);
@@ -80,6 +83,8 @@ private:
 	LLUUID					mScriptItemID;	//internal script ID
 	LLUUID					mBridgeFolderID;
 
+	bool					mIsFirstCallDone; //initialization conversation
+
 protected:
 	LLViewerInventoryItem* findInvObject(std::string obj_name, LLUUID catID, LLAssetType::EType type);
 	LLUUID findFSCategory();
@@ -90,11 +95,13 @@ protected:
 	bool isOldBridgeVersion(LLInventoryItem *item);
 	void reportToNearbyChat(std::string message);
 	void cleanUpBridgeFolder();
+	void cleanUpBridgeFolder(std::string nameToCleanUp);
 	void setupBridgePrim(LLViewerObject *object);
 	void initCreationStep();
 	void cleanUpBridge();
 	void startCreation();
 	void finishBridge();
+	void cleanUpOldVersions();
 
 	/*virtual*/ void inventoryChanged(LLViewerObject* obj,
 									 LLInventoryObject::object_list_t* inv,

@@ -3502,7 +3502,7 @@ bool LLAgent::teleportBridgeGlobal(const LLVector3d& pos_global)
 	return teleportBridgeLocal(pos_local);
 
 }
-//-TT Client LSL Bridge
+//-TT Client LSL Bridge 
 
 // teleportCore() - stuff to do on any teleport
 // protected

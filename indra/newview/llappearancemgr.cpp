@@ -58,10 +58,6 @@
 #include "fslslbridge.h"
 //-TT
 
-// Firestorm bridge name prefix. MUST correspond to the same variable in
-//  fslslbridge.cpp. -- TS
-#define FS_BRIDGE_NAME "#Firestorm LSL Bridge v"
-
 // RAII thingy to guarantee that a variable gets reset when the Setter
 // goes out of scope.  More general utility would be handy - TODO:
 // check boost.
@@ -1265,12 +1261,11 @@ void LLAppearanceMgr::shallowCopyCategoryContents(const LLUUID& src_id, const LL
 	{
 		const LLViewerInventoryItem* item = (*iter);
 		std::string item_name = item->getName();
-		size_t bridge_name_len = sizeof(FS_BRIDGE_NAME) - 1;
 		switch (item->getActualType())
 		{
 			case LLAssetType::AT_LINK:
 			{
-				if (item_name.substr(0,bridge_name_len) != FS_BRIDGE_NAME)
+				if (item_name != FSLSLBridge::instance().currentFullName())
 				{
 					llinfos << "copying inventory link " << item_name << llendl;
 					//LLInventoryItem::getDescription() is used for a new description 
@@ -1304,7 +1299,7 @@ void LLAppearanceMgr::shallowCopyCategoryContents(const LLUUID& src_id, const LL
 			case LLAssetType::AT_BODYPART:
 			case LLAssetType::AT_GESTURE:
 			{
-				if (item_name.substr(0,bridge_name_len) != FS_BRIDGE_NAME)
+				if (item_name != FSLSLBridge::instance().currentFullName())
 				{
 					llinfos << "copying inventory item " << item_name << llendl;
 					copy_inventory_item(gAgent.getID(),

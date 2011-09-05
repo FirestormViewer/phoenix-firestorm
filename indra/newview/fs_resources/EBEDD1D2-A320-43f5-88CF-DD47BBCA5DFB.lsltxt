@@ -1,4 +1,4 @@
-//http bridge script 3.0.1.22450 
+//http bridge script v.1.9
 //Firestorm
 //Tozh Taurog, Arrehn Oberlander
 
@@ -154,12 +154,17 @@
             useFlightAssist = llList2Integer(commandList,1);
             if (useFlightAssist)
             {
-                flight_init();
+		debugOutput("Flight assist true, going to flight_init");
+               flight_init();
             }
             else
             {
+                 debugOutput("Flight assist false, removing flag");
                 if (timerMask & TIMER_FLIGHT)
+                {
+                    debugOutput("timerMask & TIMER_FLIGHT");
                     timerMask = timerMask ^ TIMER_FLIGHT; // remove flight from event counter
+		}
             }
         }
     
@@ -474,7 +479,7 @@ default
             controls = 0;
             if(level & CONTROL_UP) controls++;
             if(level & CONTROL_DOWN) controls--;
-            if (controls > 0)
+            if ((controls > 0) && useFlightAssist)
                 flight_check_boost();
         }
     }
