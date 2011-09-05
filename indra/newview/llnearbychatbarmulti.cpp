@@ -40,10 +40,18 @@ BOOL LLNearbyChatBarMulti::postBuild()
 BOOL LLNearbyChatBarMulti::handleKeyHere(KEY key, MASK mask)
 {
 	BOOL handled = FALSE;
-	if ( (KEY_RETURN == key) && (MASK_CONTROL == mask) )
+	if (KEY_RETURN == key)
 	{
-		sendChat(CHAT_TYPE_SHOUT);
-		handled = TRUE;
+		if (MASK_CONTROL == mask)
+		{
+			sendChat(CHAT_TYPE_SHOUT);
+			handled = TRUE;
+		}
+		else if (MASK_SHIFT == mask)
+		{
+			sendChat(CHAT_TYPE_WHISPER);
+			handled = TRUE;
+		}
 	}
 	else if ( (KEY_UP == key) && (MASK_CONTROL == mask) )
 	{
