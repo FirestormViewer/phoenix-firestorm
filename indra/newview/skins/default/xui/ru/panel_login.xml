@@ -44,15 +44,14 @@ name="login_widgets"
 layout="topleft"
 orientation="horizontal"
 top="519"
-width="996"
+width="980"
 height="80">
 <layout_panel
 auto_resize="false"
-follows="left|bottom"
+follows="left|bottom|right"
 name="login"
-layout="topleft"
-width="720"
-min_width="720"
+width="845"
+min_width="845"
 user_resize="false"
 height="80">
 <text
@@ -71,22 +70,33 @@ follows="left|bottom"
 height="22"
 left_delta="0"
 max_chars="128"
-prevalidate_callback="ascii"
-select_on_focus="true"
-tool_tip="The account name you chose when you registered, like bobsmith12 or Steller Sunshine"
+combo_editor.prevalidate_callback="ascii"
+tool_tip="Имя пользователя, которое вы выбрали при регистрации, например bobsmith12 или Steller Sunshine"
 top_pad="0"
 name="username_combo"
-width="178">
+width="150">
   <combo_box.combo_button
-   visible ="false"/>
+   visible ="true"/>
   <combo_box.drop_down_button
-   visible ="false"/>
+   visible ="true"/>
 </combo_box>
+  <button
+  follows="left|bottom"
+  height="23"
+  image_selected="PushButton_On_Selected"
+  label="Удалить эту запись"
+  label_color="White"
+  layout="topleft"
+  top_pad="0"
+left="18"
+  name="delete_saved_login_btn"
+  width="150"
+  tab_stop="false" />
 <text
 follows="left|bottom"
 font="SansSerifSmall"
 height="15"
-left_pad="-19"
+left_pad="5"
 name="password_text"
 top="20"
     width="150">
@@ -100,7 +110,7 @@ name="password_edit"
 is_password="true" 
 select_on_focus="true"
   top_pad="0"
-  width="135" />
+  width="150" />
  <check_box
 control_name="RememberPassword"
 follows="left|bottom"
@@ -109,18 +119,49 @@ height="16"
 label="Запомнить пароль"
   top_pad="3"
   name="remember_check"
- width="135" />
+ width="150" />
 <button
   follows="left|bottom"
   height="23"
   image_selected="PushButton_On_Selected"
-  label="Вход"
+  label="Войти"
   label_color="White"
   layout="topleft"
   left_pad="8"
   name="connect_btn"
   top="35"
   width="90" />
+ <text
+  follows="left|bottom"
+  font="SansSerifSmall"
+  height="15"
+  left_pad="10"
+  name="mode_selection_text"
+  top="20"
+  width="170">
+      Установки по умолчанию: 
+ </text>
+<combo_box
+  follows="left|bottom"
+  height="23"
+  max_chars="128"
+  tool_tip="Выберите стиль клиента с которым вы лучше всего знакомы, чтобы сбросить настройки по умолчанию."
+  top_pad="0"
+  name="mode_combo"
+  width="170">
+<combo_box.item
+  label="Phoenix"
+  name="Phoenix"
+  value="settings_phoenix.xml" />
+<combo_box.item
+  label="V2"
+  name="V2"
+  value="settings_v2.xml" />
+<combo_box.item
+  label="Гибрид"
+  name="Hybrid"
+  value="settings_hybrid.xml" />
+</combo_box>
   <text
   follows="left|bottom"
   font="SansSerifSmall"
@@ -159,27 +200,28 @@ height="15"
 left_pad="8"
 name="grid_selection_text"
 top="20"
-width="100">
-    Вход на Grid:
+width="110"
+visible="true">
+    Подключиться к сетке:
   </text>
 <combo_box
 allow_text_entry="true"
 font="SansSerifSmall"
-   follows="left|right|bottom"
+   follows="left|bottom"
    height="23"
    max_chars="256"
 layout="topleft"
 top_pad="0"
 name="server_combo"
-width="120"
-  visible="false" />
+width="110"
+  visible="true" />
 </layout_panel>
 <layout_panel
 tab_stop="false"
 follows="right|bottom"
 name="links"
-width="205"
-min_width="205"
+width="135"
+min_width="135"
 user_resize="false"
 height="80">
    <text
@@ -191,7 +233,7 @@ height="16"
 top="12"
 right="-10"
 name="create_new_account_text"
-  width="200">
+  width="100">
        Зарегистрироваться
  </text>
 <text
@@ -203,7 +245,7 @@ height="16"
 name="forgot_password_text"
 top_pad="12"
 right="-10"
-  width="200">
+  width="100">
        Забыли имя пользователя или пароль?
 </text>
 <text
@@ -215,7 +257,7 @@ height="16"
 name="login_help"
 top_pad="2"
 right="-10"
-    width="200">
+    width="100">
        Нужна помощь в регистрации?   
 </text>
 <!--  <text

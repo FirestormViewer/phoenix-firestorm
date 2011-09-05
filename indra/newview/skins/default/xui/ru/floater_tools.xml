@@ -9,7 +9,7 @@
 <floater
  legacy_header_height="18"
  follows="left|top|right"
- height="600"
+ height="650"
  layout="topleft"
  name="toolbox floater"
  help_topic="toolbox_floater"
@@ -52,29 +52,13 @@
         Нажмите и тяните для выделения земли
     </floater.string>
     <floater.string
-     name="grid_screen_text">
-        Экран
+     name="status_selectcount">
+        [OBJ_COUNT] объектов ( [PRIM_COUNT] примов[PE_STRING] ) выделено
     </floater.string>
     <floater.string
-     name="grid_local_text">
-        Локально
+     name="status_selectprimequiv">
+        , [SEL_WEIGHT] эквивалентных
     </floater.string>
-    <floater.string
-     name="grid_world_text">
-        Мир
-    </floater.string>
-    <floater.string
-     name="grid_reference_text">
-        Точка отсчета
-    </floater.string>
-    <floater.string
-     name="grid_attachment_text">
-        Вложение
-    </floater.string>
-	<floater.string
-	  name="selected_objects">
-		Выбранные объекты:
-	</floater.string>
 	<floater.string
 	  name="link_number">
 		Номер ссылки:
@@ -170,8 +154,8 @@
      left="8"
      name="text status"
      top_pad="3"
-     width="300">
-        Тяните для перемещения, Shift + тяните, для копирования
+     width="285">
+        Drag to move, shift-drag to copy
     </text>
    <radio_group
      layout="topleft"
@@ -205,9 +189,9 @@
      layout="topleft"
      max_val="0.5"
      top_delta="-2"
-     left_delta="120"
+     left_delta="100"
      name="slider zoom"
-     width="170">
+     width="134">
 	 <slider_bar.commit_callback
 	     function="BuildTool.commitZoom"/>
 	</slider_bar>
@@ -238,7 +222,7 @@
 	<radio_group
      follows="left|top"
 	 left="5"
-	 top="59"
+	 top="55"
 	 height="70"
      layout="topleft"
 	 name="edit_radio_group">
@@ -272,23 +256,22 @@
     <check_box
      left="5"
      follows="left|top"
-     height="28"
+     height="19"
 	 control_name="EditLinkedParts"
      label="Редактировать отдельно"
      layout="topleft"     
      name="checkbox edit linked parts"
-     top_pad="-10">
+     top_pad="0">
 		  <check_box.commit_callback
 			function="BuildTool.selectComponent"/>
 	</check_box>
 
    <button
      follows="left|top"
-     height="23"
+     height="20"
      label="Объеденить"
-     top_pad="2"
+     top_pad="0"
      layout="topleft"
-     left="5"
      name="link_btn"
      width="80">
 	  <button.commit_callback
@@ -296,35 +279,23 @@
     </button>
     <button
      follows="left|top"
-     height="23"
+     height="20"
      label="Разъеденить"
      layout="topleft"
      left_pad="2"
      name="unlink_btn"
-     width="85">
+     width="80">
 	  <button.commit_callback
 	     function="BuildTool.UnlinkObjects"/>
     </button>
-    <text
-	   text_color="LtGray_50"
-	   follows="top|left"
-	   halign="left"
-	   left_pad="7"
-	   name="RenderingCost"
-	   tool_tip="Показывает значение отрисовки, рассчитанное для этого объекта"
-	   top_delta="11"
-	   type="string"
-	   width="100">
-	   þ: [COUNT]
-	   </text>
-	<check_box
+    <check_box
      control_name="ScaleUniform"
      height="19"
      label="Растягивать в обе стороны"
      layout="topleft"
      left="180"
      name="checkbox uniform"
-	 top="50"
+     top="48"
      width="20" />
     <check_box
      control_name="ScaleStretchTextures"
@@ -335,6 +306,7 @@
      left="180"
      name="checkbox stretch textures"
      top_pad="-2"
+     follows="left|top"
      width="134" />
    <check_box
      control_name="SnapEnabled"
@@ -345,7 +317,6 @@
      top_pad="-2"
      name="checkbox snap to grid"
      width="134" />
-
   <check_box
      control_name="PhoenixBuildPrefs_ActualRoot"
      height="18"
@@ -367,9 +338,9 @@
     <button
      left_pad="0"
      image_selected="ForwardArrow_Press"
-     image_unselected="ForwardArrow_Off"
+     image_unselected="ForwardArrow_Off"   
      layout="topleft"
-     follows="left|top"
+     follows="top|left"
      name="Options..."
      tool_tip="Показать больше опций сетки"
      top="80"
@@ -379,30 +350,6 @@
 	 <button.commit_callback
 	     function="BuildTool.gridOptions"/>
 	</button>
-    <combo_box
-	 left="180"
-     height="23"
-     layout="topleft"
-     follows="left|top"
-     name="combobox grid mode"
-     tool_tip="Выберите тип сетки для позиционирования объекта"
-     top="135"
-     width="100">
-        <combo_box.item
-         label="Мир"
-         name="World"
-         value="Мир" />
-        <combo_box.item
-         label="Локальная"
-         name="Local"
-         value="Локальная" />
-        <combo_box.item
-         label="Точка отсчета"
-         name="Reference"
-         value="Точка отсчета" />
-		 <combo_box.commit_callback
-	     function="BuildTool.gridMode"/>
-    </combo_box>
    <button
      follows="left|top"
      height="20"
@@ -414,7 +361,7 @@
      left="10"
      name="ToolCube"
      tool_tip="Куб"
-     top="51"
+     top="58"
      width="20" />
     <button
      follows="left|top"
@@ -476,10 +423,10 @@
      image_selected="Object_Hemi_Cylinder_Selected"
      image_unselected="Object_Hemi_Cylinder"
      layout="topleft"
-     left_delta="29"
+     left="10"
      name="ToolHemiCylinder"
      tool_tip="Полуцилиндр"
-     top_delta="0"
+     top="84"
      width="20" />
     <button
      follows="left|top"
@@ -544,7 +491,7 @@
      left="10"
      name="ToolTorus"
      tool_tip="Тор"
-     top="77"
+     top="109"
      width="20" />
     <button
      follows="left|top"
@@ -604,9 +551,9 @@
      height="19"
      label="Оставить инструмент выбранным"
      layout="topleft"
-     left="4"
+     left="155"
      name="checkbox sticky"
-     top="101"
+     top="55"
      width="128" />
     <check_box
      control_name="CreateToolCopySelection"
@@ -625,7 +572,7 @@
      layout="topleft"
      left_delta="18"
      name="checkbox copy centers"
-     top="132"
+     top="85"
      width="134" />
     <check_box
      control_name="CreateToolCopyRotates"
@@ -636,7 +583,7 @@
      name="checkbox copy rotates"
      top_delta="16"
      width="134" />
-    <radio_group
+     <radio_group
      height="105"
      layout="topleft"
      left="4"
@@ -711,7 +658,7 @@
      left="150"
      name="Bulldozer:"
      top="57"
-     width="85">
+     width="100">
         Бульдозер:
     </text>
     <text
@@ -723,7 +670,7 @@
      name="Dozer Size:"
      left="150"
      top_pad="5"
-     width="85">
+     width="50">
         Размер
     </text>
     <slider_bar
@@ -737,7 +684,7 @@
      left_pad="0"
      name="slider brush size"
      top_delta="-3"
-     width="120" />
+     width="80" />
     <text
      type="string"
      length="1"
@@ -747,7 +694,7 @@
      name="Strength:"
      left="150"
      top_pad="5"
-     width="85">
+     width="50">
         Сила
     </text>
     <slider_bar
@@ -760,7 +707,7 @@
      min_val="-1"
      name="slider force"
      top_delta="-3"
-     width="120" >
+     width="80" >
 	  <slider_bar.commit_callback
 	     function="BuildTool.LandBrushForce"/>
     </slider_bar>
@@ -774,7 +721,7 @@
      left="150"
      name="button apply to selection"
      tool_tip="Изменить выбранную землю"
-     width="120">
+     width="82">
 	  <button.commit_callback
 	     function="BuildTool.applyToSelection"/>
     </button>
@@ -784,28 +731,66 @@
      length="1"
      height="10"
      follows="left|top"
-     halign="right"
      layout="topleft"
-     right="-10"
-     name="prim_count"
-     top_pad="7"
-     width="180">
-        Примы: [COUNT]
-    </text>
-    <text
-    text_color="LtGray_50"
-     type="string"
-     length="1"
-     height="10"
-     follows="left|top"
-     halign="right"
-     layout="topleft"
-     right="-10"
+     top="168"
+     left="10"
      name="link_num_obj_count"
 	 tooltip="Link number may not be accurate."
-     width="180">
+     width="143">
         [DESC] [NUM]
     </text>
+	<text
+	 text_color="LtGray_50"
+	  type="string"
+	  length="1"
+	  height="16"
+	  follows="left|top"
+	  font="SansSerifSmall"
+	  layout="topleft"
+	  left="10"
+	  name="selection_empty"
+	  top_pad="5"
+	  width="100">
+		Ничего не выбрано.
+	</text>
+	<text
+	 text_color="LtGray_50"
+	  type="string"
+	  length="1"
+	  height="16"
+	  follows="left|top"
+	  font="SansSerifSmall"
+	  layout="topleft"
+	  left="10"
+	  name="selection_count"
+	  top_delta="0"
+	  visible="false"
+	  width="280">
+	</text>
+	<text
+	 text_color="LtGray_50"
+	  type="string"
+	  length="1"
+	  height="16"
+	  follows="left|top"
+	  font="SansSerifSmall"
+	  layout="topleft"
+	  left="10"
+	  name="selection_weight"
+	  top_pad="0"
+	  visible="false"
+	  width="280">
+	  Physics weight [PHYS_WEIGHT], Render Cost [DISP_WEIGHT].
+	</text>
+    <view_border
+    bevel_style="none"
+    follows="top|left"
+    height="0"
+    layout="topleft"
+    left="6"
+    name="cost_text_border"
+    top="165"
+    width="282"/>
     <tab_container
      follows="left|top"
      height="410"
@@ -817,9 +802,10 @@
      tab_min_width="40"
      tab_position="top"
      tab_height="20"
-     top="173"
+     top="203"
      width="380">
-	<panel
+	
+<panel
 	 border="false"
 	 follows="all"
 	 label="Основное"
@@ -1367,7 +1353,7 @@ even though the user gets a free copy.
       <panel
          border="false"
          follows="all"
-         height="367"
+         height="567"
          label="Объект"
          layout="topleft"
          left_delta="0"
@@ -1398,7 +1384,7 @@ even though the user gets a free copy.
              label="Временный"
              layout="topleft"
              name="Temporary Checkbox Ctrl"
-             tool_tip="Заставляет объект удалиться через минуту после создания."
+             tool_tip="Заставляет объект удалиться через минуту после создания"
              top_pad="0"
              width="123" />
             <check_box
@@ -1406,7 +1392,7 @@ even though the user gets a free copy.
              label="Фантомный"
              layout="topleft"
              name="Phantom Checkbox Ctrl"
-             tool_tip="Объект не будет сталкиваться с другими объектами или аватарами."
+             tool_tip="Объект не будет сталкиваться с другими объектами или аватарами"
              top_pad="0"
              width="123" />
 
@@ -1419,7 +1405,7 @@ even though the user gets a free copy.
              name="label position"
              top_pad="10"
              width="150">
-                Позиция (метры)
+                 Позиция (метры)
             </text> 
             <spinner
              decimal_digits="4"
@@ -1493,7 +1479,7 @@ even though the user gets a free copy.
              mouse_opaque="true"
              name="pasteposclip"
              enabled="true"
-             tool_tip="Вставить позицию из буфера обмена"
+             tool_tip="Вставить из буфера обмена"
              width="20" />
             <text
              type="string"
@@ -1517,7 +1503,7 @@ even though the user gets a free copy.
              label_width="10"
              layout="topleft"
              left_delta="0"
-             max_val="10"
+             max_val="64"
              min_val="0.01"
              name="Scale X"
              text_enabled_color="White"
@@ -1542,7 +1528,7 @@ even though the user gets a free copy.
              label_width="10"
              layout="topleft"
              left="10"
-             max_val="10"
+             max_val="64"
              min_val="0.01"
              name="Scale Y"
              text_enabled_color="White"
@@ -1567,7 +1553,7 @@ even though the user gets a free copy.
              label_width="10"
              layout="topleft"
              left="10"
-             max_val="10"
+             max_val="64"
              min_val="0.01"
              name="Scale Z"
              text_enabled_color="White"
@@ -1580,7 +1566,7 @@ even though the user gets a free copy.
              mouse_opaque="true"
              name="pastesizeclip"
              enabled="true"
-             tool_tip="Вставить размер из буфера обмена"
+             tool_tip="Вставить размер из бувера обмена"
              width="20" />
             <text
              type="string"
@@ -1592,7 +1578,7 @@ even though the user gets a free copy.
              name="label rotation"
              top_pad="10"
              width="150">
-                Поворот (градусы)
+               Поворот (градусы)
             </text>
             <spinner
              decimal_digits="3"
@@ -1697,7 +1683,7 @@ even though the user gets a free copy.
 			</text>
 			<button
 			 follows="top|right"
-			 height="23"
+			 height="16"
 			 label="Копировать"
 			 layout="topleft"
 			 left="5"
@@ -1707,7 +1693,7 @@ even though the user gets a free copy.
 			</button>
 			<button
 			 follows="top|right"
-			 height="23"
+			 height="16"
 			 label="Вставить"
 			 layout="topleft"
 			 left_pad="10"
@@ -1812,41 +1798,6 @@ even though the user gets a free copy.
 				 value="Path33Profile5"
 				 label="33->Полукруг" />
 <!-- End Working33 by Gregory Maurer -->
-            </combo_box>
-            <combo_box
-             height="19"
-             layout="topleft"
-             name="material"
-             top_pad="5"
-             width="180">
-                <combo_box.item
-                 label="Камень"
-                 name="Stone"
-                 value="Stone" />
-                <combo_box.item
-                 label="Метал"
-                 name="Metal"
-                 value="Metal" />
-                <combo_box.item
-                 label="Стекло"
-                 name="Glass"
-                 value="Glass" />
-                <combo_box.item
-                 label="Дерево"
-                 name="Wood"
-                 value="Wood" />
-                <combo_box.item
-                 label="Плоть"
-                 name="Flesh"
-                 value="Flesh" />
-                <combo_box.item
-                 label="Пластик"
-                 name="Plastic"
-                 value="Plastic" />
-                <combo_box.item
-                 label="Резина"
-                 name="Rubber"
-                 value="Rubber" />
             </combo_box>
             <text
              type="string"
@@ -2353,6 +2304,9 @@ even though the user gets a free copy.
          name="Features"
          top_delta="0"
          width="380">
+	<panel.string name="None">Нет</panel.string>
+	<panel.string name="Prim">Прим</panel.string>
+	<panel.string name="Convex Hull">Выпуклый каркас</panel.string>
             <text
              type="string"
              length="1"
@@ -2392,108 +2346,109 @@ even though the user gets a free copy.
              increment="1"
              initial_value="2"
              label="Мягкость"
-             label_width="120"
+             label_width="70"
              layout="topleft"
              left_delta="0"
              max_val="3"
              name="FlexNumSections"
              top_pad="10"
-             width="250" />
+             width="128" />
             <spinner
              follows="left|top"
              height="19"
              increment="0.5"
              initial_value="0.3"
              label="Гравитация"
-             label_width="120"
+             label_width="70"
              layout="topleft"
              left_delta="0"
              max_val="10"
              min_val="-10"
              name="FlexGravity"
              top_pad="4"
-             width="250" />
+             width="128" />
             <spinner
              follows="left|top"
              height="19"
              increment="0.5"
              initial_value="2"
              label="Перетягивание"
-             label_width="120"
+             label_width="70"
              layout="topleft"
              left_delta="0"
              max_val="10"
              name="FlexFriction"
              top_pad="4"
-             width="250" />
+             width="128" />
             <spinner
              follows="left|top"
              height="19"
              increment="0.5"
              initial_value="0"
              label="Ветер"
-             label_width="120"
+             label_width="70"
              layout="topleft"
              left_delta="0"
              max_val="10"
              name="FlexWind"
              top_pad="4"
-             width="250" />
+             width="128" />
             <spinner
              follows="left|top"
              height="19"
              increment="0.5"
              initial_value="1"
              label="Упругость"
-             label_width="120"
+             label_width="70"
              layout="topleft"
              left_delta="0"
              max_val="10"
              name="FlexTension"
              top_pad="4"
-             width="250" />
+             width="128" />
             <spinner
              follows="left|top"
              height="19"
              increment="0.01"
              initial_value="0"
-             label="Воздействие по X"
-             label_width="120"
+             label="Ось X"
+             label_width="70"
              layout="topleft"
              left_delta="0"
              max_val="10"
              min_val="-10"
              name="FlexForceX"
              top_pad="4"
-             width="250" />
+             width="128" />
             <spinner
              follows="left|top"
              height="19"
              increment="0.01"
              initial_value="0"
-             label="Воздействие по Y"
-             label_width="120"
+             label="Ось Y"
+             label_width="70"
              layout="topleft"
              left_delta="0"
              max_val="10"
              min_val="-10"
              name="FlexForceY"
              top_pad="4"
-             width="250" />
+             width="128" />
             <spinner
              follows="left|top"
              height="19"
              increment="0.01"
              initial_value="0"
-             label="Воздействие по Z"
-             label_width="120"
+             label="Ось Z"
+             label_width="70"
              layout="topleft"
              left_delta="0"
              max_val="10"
              min_val="-10"
              name="FlexForceZ"
              top_pad="4"
-             width="250" />
+             width="128" />
+
             <check_box
              height="16"
              label="Свет"
@@ -2508,9 +2463,9 @@ even though the user gets a free copy.
              color="SL-MidDkGray"
 	       border.border_thickness="0"
              follows="left|top"
-             height="65"
+             height="50"
              layout="topleft"
-             left_pad="110"
+             left_pad="10"
              top_pad="-17"
              name="colorswatch"
              tool_tip="Нажмите, чтобы открыть палитру цветов"
@@ -2533,12 +2488,12 @@ even though the user gets a free copy.
              height="19"
              initial_value="0.5"
              label="Интенсивность"
-             label_width="120"
+             label_width="70"
              layout="topleft"
              left="10"
              name="Light Intensity"
              top_pad="3"
-             width="250" />
+             width="128" />
           <spinner bottom_delta="0"
                    decimal_digits="3"
                    follows="left|top"
@@ -2557,13 +2512,13 @@ even though the user gets a free copy.
                    height="19"
                    initial_value="5"
                    label="Радиус"
-                   label_width="120"
+                   label_width="70"
                    layout="topleft"
                    left="10"
                    max_val="20"
                    name="Light Radius"
                    top_pad="3"
-                   width="250" />
+                   width="128" />
           <spinner bottom_delta="0"
                    decimal_digits="3"
                    follows="left|top"
@@ -2583,13 +2538,13 @@ even though the user gets a free copy.
                    increment="0.25"
                    initial_value="1"
                    label="Затухание"
-                   label_width="120"
+                   label_width="70"
                    layout="topleft"
                    left="10"
                    max_val="2"
                    name="Light Falloff"
                    top_pad="3"
-                   width="250" />
+                   width="128" />
           <spinner bottom_delta="0"
                    decimal_digits="3"
                    follows="left|top"
@@ -2604,6 +2559,120 @@ even though the user gets a free copy.
                    mouse_opaque="true"
                    name="Light Ambiance"
                    width="120" />
+            <text
+             type="string"
+             length="1"
+             follows="left|top"
+             height="10"
+             layout="topleft"
+             name="label physicsshapetype"
+             top="38"
+             width="150">
+                Тип физики фигуры:
+            </text>
+			<combo_box
+			   height="19"
+			   top_delta="15" 
+			   layout="topleft"
+			   follows="left|top"
+			   name="Physics Shape Type Combo Ctrl"
+			   tool_tip="Выберите тип физики фигуры"
+			   width="108"/>
+            <combo_box
+             height="19"
+             layout="topleft"
+             name="material"
+             top_pad="5"
+             width="150">
+                <combo_box.item
+                 label="Камень"
+                 name="Stone"
+                 value="Stone" />
+                <combo_box.item
+                 label="Метал"
+                 name="Metal"
+                 value="Metal" />
+                <combo_box.item
+                 label="Стекло"
+                 name="Glass"
+                 value="Glass" />
+                <combo_box.item
+                 label="Дерево"
+                 name="Wood"
+                 value="Wood" />
+                <combo_box.item
+                 label="Плоть"
+                 name="Flesh"
+                 value="Flesh" />
+                <combo_box.item
+                 label="Пластик"
+                 name="Plastic"
+                 value="Plastic" />
+                <combo_box.item
+                 label="Резина"
+                 name="Rubber"
+                 value="Rubber" />
+            </combo_box>
+
+            <spinner
+             follows="left|top"
+             height="19"
+             increment="1"
+             initial_value="1"
+             label="Гравитация"
+             label_width="70"
+             layout="topleft"
+             min_val="-1"
+             max_val="28"
+             name="Physics Gravity"
+             top_pad="10"
+             width="132" />
+
+            <spinner
+             follows="left|top"
+             height="19"
+             increment="0.1"
+             initial_value="0"
+             label="Трение"
+             label_width="70"
+             layout="topleft"
+             left_delta="0"
+             max_val="255"
+             min_val="0"
+             name="Physics Friction"
+             top_pad="4"
+             width="132" />
+
+            <spinner
+             follows="left|top"
+             height="19"
+             increment="0.1"
+             initial_value="0"
+             label="Плотность в 100 кг / м ^ 3"
+             label_width="70"
+             label_wrap="true"
+             layout="topleft"
+             left_delta="0"
+             max_val="22587"
+             min_val="1"
+             name="Physics Density"
+             top_pad="4"
+             width="132" />
+
+            <spinner
+             follows="left|top"
+             height="19"
+             increment="0.01"
+             initial_value="0"
+             label="Bounciness"
+             label_width="70"
+             layout="topleft"
+             left_delta="0"
+             max_val="1"
+             min_val="0"
+             name="Physics Restitution"
+             top_pad="8"
+             width="132" />
         </panel>
           <panel
          border="false"
