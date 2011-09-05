@@ -1,82 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- follows="right"
- height="170"
- layout="topleft"
- name="build options floater"
- help_topic="build_options_floater"
- save_rect="true"
- title="OPCIONES DE LA REJILLA"
- width="265">
-    <spinner
-     control_name="GridResolution"
-     follows="left|top"
-     height="23"
-     initial_value="1"
-     label="Unidades de la rejilla (en metros)"
-     label_width="185"
-     layout="topleft"
-     left="10"
-     max_val="5"
-     min_val="0.01"
-     name="GridResolution"
-     top="25"
-     width="240" />
-    <spinner
-     control_name="GridDrawSize"
-     decimal_digits="1"
-     follows="left|top"
-     height="23"
-     increment="0.5"
-     initial_value="5"
-     label="Alcance de la rejilla (en metros)"
-     label_width="185"
-     layout="topleft"
-     left_delta="0"
-     max_val="50"
-     min_val="1"
-     name="GridDrawSize"
-     top_pad="0"
-     width="240" />
-    <check_box
-     control_name="GridSubUnit"
-     height="16"
-     label="Ajustar a subunidades"
-     layout="topleft"
-     name="GridSubUnit"
-     top_pad="0"
-     width="200" />
-    <check_box
-     control_name="GridCrossSections"
-     height="16"
-     label="Ver sección transversal"
-     layout="topleft"
-     name="GridCrossSection"
-     top_pad="5"
-     width="200" />
-   <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="16"
-         layout="topleft"
-         left="10"
-         tool_tip="Opacidad de la rejilla"
-         name="grid_opacity_label"
-         top_pad="5"
-         width="128">
-            Opacidad de la rejilla:
-   </text>
-    <slider
-     control_name="GridOpacity"
-     follows="left"
-     height="18"
-     increment="0.05"
-     initial_value="0.7"
-     layout="topleft"
-     name="GridOpacity"
-     show_text="false"
-     top_pad="0"
-     width="210" />
+<floater name="build options floater" title="OPCIONES DE LA REJILLA">
+ 	<floater.string name="grid_screen_text">
+		Pantalla
+	</floater.string>
+	<floater.string name="grid_local_text">
+		Local
+	</floater.string>
+	<floater.string name="grid_world_text">
+		Mundo
+	</floater.string>
+	<floater.string name="grid_reference_text">
+		Referencia
+	</floater.string>
+	<floater.string name="grid_attachment_text">
+		Accesorio
+	</floater.string>
+	<text name="grid_mode_label">
+		Modo
+	</text>
+	<combo_box name="combobox grid mode" tool_tip="Elegir el tipo de ajuste de rejilla para posicionar el objeto.">
+		<combo_box.item label="Rejilla mundial" name="World"/>
+		<combo_box.item label="Rejilla local" name="Local"/>
+		<combo_box.item label="Rejilla de referencia" name="Reference"/>
+	</combo_box>
+	<spinner label="Unidades (metros)" name="GridResolution"/>
+	<spinner label="Alcance (metros)" name="GridDrawSize"/>
+	<check_box label="Ajustar a subunidades" name="GridSubUnit"/>
+	<check_box label="Ver sección transversal" name="GridCrossSection"/>
+	<text tool_tip="Opacidad de la rejilla" name="grid_opacity_label">
+		Opacidad:
+	</text>
 </floater>

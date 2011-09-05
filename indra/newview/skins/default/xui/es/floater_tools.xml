@@ -1,3260 +1,413 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<!-- floater
- legacy_header_height="18"
- follows="left|top|right"
- height="580"
- layout="topleft"
- bg_opaque_image="Window_NoTitle_Foreground"
- bg_alpha_image="Window_NoTitle_Background" -->
-<floater
- legacy_header_height="18"
- follows="left|top|right"
- height="588"
- layout="topleft"
- name="toolbox floater"
- help_topic="toolbox_floater"
- save_rect="true"
- short_title="HERRAMIENTAS DE CONSTRUCCIÓN"
- single_instance="true"
- save_visibility="true"
- sound_flags="0"
- width="295">
-    <floater.string
-     name="status_rotate">
-        Arrastra las bandas de color para girar el objeto.
-    </floater.string>
-    <floater.string
-     name="status_scale">
-        Pulsa y arrastra para estirar el lado seleccionado.
-    </floater.string>
-    <floater.string
-     name="status_move">
-        Arrastrar para mover, Mayús.+arrastrar para copiar.
-    </floater.string>
-    <floater.string
-     name="status_modifyland">
-        Mantén pulsado para modificar el terreno.
-    </floater.string>
-    <floater.string
-     name="status_camera">
-        Pulsa y arrastra para mover la cámara.
-    </floater.string>
-    <floater.string
-     name="status_grab">
-        Arrastrar para mover: Ctrl, verticalmente; Ctrl-Mayús., girando.
-    </floater.string>
-    <floater.string
-     name="status_place">
-        Pulsa en el mundo para construir.
-    </floater.string>
-    <floater.string
-     name="status_selectland">
-        Pulsa y arrastra para seleccionar el terreno.
-    </floater.string>
-    <floater.string
-     name="grid_screen_text">
-        Pantalla
-    </floater.string>
-    <floater.string
-     name="grid_local_text">
-        Local
-    </floater.string>
-    <floater.string
-     name="grid_world_text">
-        Mundo
-    </floater.string>
-    <floater.string
-     name="grid_reference_text">
-        Referencia
-    </floater.string>
-    <floater.string
-     name="grid_attachment_text">
-        Añadido
-    </floater.string>
-	<floater.string
-	  name="selected_objects">
-		Objs. seleccionados:
+<floater name="toolbox floater" short_title="HERRAMIENTAS DE CONSTRUCCIÓN">
+	<floater.string name="status_rotate">
+		Arrastra las bandas de color para girar el objeto.
 	</floater.string>
-	<floater.string
-	  name="link_number">
+	<floater.string name="status_scale">
+		Arrastra las bandas de color para girar el objeto.
+	</floater.string>
+	<floater.string name="status_move">
+		Arrastra para mover, Mayús.+arrastrar para copiar.
+	</floater.string>
+	<floater.string name="status_modifyland">
+		Mantén pulsado para modificar el terreno.
+	</floater.string>
+	<floater.string name="status_camera">
+		Pulsa y arrastra para mover la cámara.
+	</floater.string>
+	<floater.string name="status_grab">
+                Arrastra para mover: Ctrl, verticalmente; Ctrl+Mayúscula, girando.
+	</floater.string>
+	<floater.string name="status_place">
+		Pulsa en el mundo para construir.
+	</floater.string>
+	<floater.string name="status_selectland">
+		Pulsa y arrastra para seleccionar el terreno.
+	</floater.string>
+	<floater.string name="status_selectcount">
+                Sel. [OBJ_COUNT] objetos ([PRIM_COUNT] prims[PE_STRING])
+	</floater.string>
+	<floater.string name="status_selectprimequiv">
+                , equiv. a [SEL_WEIGHT] prims.
+	</floater.string>
+	<floater.string name="link_number">
 		Número de grupo:
 	</floater.string>
-	<floater.string
-	  name="selected_faces">
+	<floater.string name="selected_faces">
 		Caras:
 	</floater.string>
-    <button
-     follows="left|top"
-     height="25"
-     image_bottom_pad="1"
-     image_overlay="Tool_Zoom"
-     image_selected="PushButton_Selected_Press"
-     layout="topleft"
-     left="10"
-     name="button focus"
-     tool_tip="Visión"
-     width="35">
-	  <button.commit_callback
-	     function="BuildTool.setTool"
-	     parameter="Focus" />
-	</button>
-    <button
-     follows="left|top"
-      height="25"
-     image_bottom_pad="1"
-     image_overlay="Tool_Grab"
-     image_selected="PushButton_Selected_Press"
-     layout="topleft"
-     left_pad="10"
-     name="button move"
-     tool_tip="Mover"
-     width="35">
-	  <button.commit_callback
-	     function="BuildTool.setTool"
-	     parameter="Move" />
-	</button>
-    <button
-     follows="left|top"
-     height="25"
-     image_bottom_pad="1"
-     image_overlay="Tool_Face"
-     image_selected="PushButton_Selected_Press"
-     layout="topleft"
-     left_pad="10"
-     name="button edit"
-     tool_tip="Editar"
-     width="35">
-	  <button.commit_callback
-	     function="BuildTool.setTool"
-	     parameter="Edit" />
-	</button>
-    <button
-     follows="left|top"
-      height="25"
-     image_bottom_pad="1"
-     image_overlay="Tool_Create"
-     image_selected="PushButton_Selected_Press"
-     layout="topleft"
-     left_pad="10"
-     name="button create"
-     tool_tip="Crear"
-     width="35">
-	  <button.commit_callback
-	     function="BuildTool.setTool"
-	     parameter="Create" />
-	</button>
-    <button
-     follows="left|top"
-      height="25"
-     image_bottom_pad="1"
-     image_overlay="Tool_Dozer"
-     image_selected="PushButton_Selected_Press"
-     layout="topleft"
-     left_pad="10"
-     name="button land"
-     tool_tip="Terreno"
-     width="35">
-	  <button.commit_callback
-	     function="BuildTool.setTool"
-	     parameter="Land" />
-	</button>
-    <text
-     height="30"
-     word_wrap="true"
-     use_ellipses="true"
-     type="string"
-     text_color="LabelSelectedDisabledColor"
-     length="1"
-     follows="left|top"
-     layout="topleft"
-     left="8"
-     name="text status"
-     top_pad="3"
-     width="285">
-        Arrastrar para mover, Mayús.+arrastrar para copiar.
-    </text>
-   <radio_group
-     layout="topleft"
-     left="10"
-      height="70"
-      top="59"
-     name="focus_radio_group">
-        <radio_item
-         top_pad="6"
-         label="Zoom"
-         layout="topleft"
-         name="radio zoom" />
-        <radio_item
-         top_pad="6"
-         label="Órbita (Ctrl)"
-         layout="topleft"
-         name="radio orbit" />
-        <radio_item
-         top_pad="6"
-         label="Panorámica (Ctrl+Shift)"
-         layout="topleft"
-         name="radio pan" />
-		 <radio_group.commit_callback
-	     function="BuildTool.commitRadioFocus"/>
-    </radio_group>
-   <slider_bar
-     follows="left|top"
-     height="14"
-     increment="0.01"
-     initial_value="0.125"
-     layout="topleft"
-     max_val="0.5"
-     top_delta="-2"
-     left_delta="100"
-     name="slider zoom"
-     width="134">
-	 <slider_bar.commit_callback
-	     function="BuildTool.commitZoom"/>
-	</slider_bar>
-   <radio_group
-      left="10"
-      height="70"
-      top="59"
-     layout="topleft"
-     name="move_radio_group">
-        <radio_item
-         top_pad="6"
-         label="Mover"
-         layout="topleft"
-         name="radio move" />
-        <radio_item
-		 top_pad="6"
-         label="Vertical (Ctrl)"
-         layout="topleft"
-         name="radio lift" />
-        <radio_item
-         top_pad="6"
-         label="Horizontal (Ctrl+Mayús.)"
-         layout="topleft"
-         name="radio spin" />
-		 <radio_group.commit_callback
-			function="BuildTool.commitRadioMove"/>
+	<button name="button focus" tool_tip="Visión"/>
+	<button name="button move" tool_tip="Mover"/>
+	<button name="button edit" tool_tip="Editar"/>
+	<button name="button create" tool_tip="Crear"/>
+	<button name="button land" tool_tip="Terreno"/>
+	<text name="text status">
+		Arrastra para mover, Mayús.+arrastrar para copiar.
+	</text>
+	<radio_group name="focus_radio_group">
+		<radio_item label="Zoom" name="radio zoom"/>
+		<radio_item label="Órbita (Ctrl)" name="radio orbit"/>
+                <radio_item label="Panorámica (Ctrl+Mayúscula)" name="radio pan"/>
 	</radio_group>
-	<radio_group
-     	follows="left|top"
-	 left="5"
-	 top="59"
-	 height="70"
-     	 layout="topleft"
-	 name="edit_radio_group">
-        <radio_item
-		 label="Mover"
-		 layout="topleft"
-		 name="radio position" />
-        <radio_item
-		 top_pad="5"
-         label="Girar (Ctrl)"
-         layout="topleft"
-         name="radio rotate" />
-        <radio_item
-		 top_pad="5"
-         label="Estirar (Ctrl+Mayús.)"
-         layout="topleft"
-         name="radio stretch" />
-        <radio_item
-		 top_pad="5"
-         label="Elegir la cara"
-         layout="topleft"
-         name="radio select face" />
-        <radio_item
-		 top_pad="5"
-         label="Alinear"
-         layout="topleft"
-         name="radio align" />
-			<radio_group.commit_callback
-			function="BuildTool.commitRadioEdit"/>
-    </radio_group>
-    <check_box
-     top="86"
-     left="5"
-     follows="left|top"
-     height="28"
-	 control_name="EditLinkedParts"
-     label="Editar partes"
-     layout="topleft"     
-     name="checkbox edit linked parts"
-     top_pad="-10">
-		  <check_box.commit_callback
-			function="BuildTool.selectComponent"/>
-	</check_box>
-
-   <button
-     follows="left|top"
-     height="23"
-     label="Enlazar"
-     top_pad="2"
-     layout="topleft"
-     left="5"
-     name="link_btn"
-     width="50">
-	  <button.commit_callback
-	     function="BuildTool.LinkObjects"/>
-    </button>
-    <button
-     follows="left|top"
-     height="23"
-     label="Desenl."
-     layout="topleft"
-     left_pad="2"
-     name="unlink_btn"
-     width="50">
-	  <button.commit_callback
-	     function="BuildTool.UnlinkObjects"/>
-    </button>
-    <text
-	   text_color="LtGray_50"
-	   follows="top|left"
-	   halign="left"
-	   left_pad="3"
-	   name="RenderingCost"
-	   tool_tip="Muestra el cálculo de cuańto cuesta renderizar este objeto"
-	   top_delta="11"
-	   type="string"
-	   width="100">
-	   þ: [COUNT]
-	   </text>
-	<check_box
-     control_name="ScaleUniform"
-     height="19"
-     label="Estirar ambos lados"
-     layout="topleft"
-     left="143"
-     name="checkbox uniform"
-	 top="50"
-     width="20" />
-    <check_box
-     control_name="ScaleStretchTextures"
-     height="19"
-     initial_value="true"
-     label="Estirar las texturas"
-     layout="topleft"
-     left="143"
-     name="checkbox stretch textures"
-     top_pad="-2"
-     width="134" />
-   <check_box
-     control_name="SnapEnabled"
-     height="18"
-     initial_value="true"
-     label="Ajustar a la rejilla"
-     layout="topleft"
-     top_pad="-2"
-     name="checkbox snap to grid"
-     width="134" />
-  <check_box
-     control_name="PhoenixBuildPrefs_ActualRoot"
-     height="18"
-     initial_value="false"
-     label="Eje en prim raíz"
-     layout="topleft"
-     top_pad="-2"
-     name="checkbox actual root"
-     width="134" />
-  <check_box
-     control_name="RenderHighlightSelections"
-     height="18"
-     initial_value="true"
-     label="Resaltar"
-     layout="topleft"
-     top_pad="-2"
-     name="checkbox show highlight"
-     width="134" />
-    <button
-     left_pad="0"
-     image_selected="ForwardArrow_Press"
-     image_unselected="ForwardArrow_Off"
-     layout="topleft"
-     follows="left|top"
-     name="Opciones..."
-     tool_tip="Mostrar más opciones de rejilla"
-     top="80"
-     right="-10"
-     width="18"
-     height="23" >
-	 <button.commit_callback
-	     function="BuildTool.gridOptions"/>
-	</button>
-    <combo_box
-	 left="115"
-     height="23"
-     layout="topleft"
-     follows="left|top"
-     name="combobox grid mode"
-     tool_tip="Selecciona el tipo de regla de rejilla para posicionar el objeto"
-     top="135"
-     width="84">
-        <combo_box.item
-         label="Mundo"
-         name="World"
-         value="World" />
-        <combo_box.item
-         label="Local"
-         name="Local"
-         value="Local" />
-        <combo_box.item
-         label="Referencia"
-         name="Reference"
-         value="Reference" />
-		 <combo_box.commit_callback
-	     function="BuildTool.gridMode"/>
-    </combo_box>
-   <button
-     follows="left|top"
-     height="20"
-     image_disabled="Object_Cube"
-     image_disabled_selected="Object_Cube"
-     image_selected="Object_Cube_Selected"
-     image_unselected="Object_Cube"
-     layout="topleft"
-     left="10"
-     name="ToolCube"
-     tool_tip="Cubo"
-     top="51"
-     width="20" />
-    <button
-     follows="left|top"
-     height="20"
-     image_disabled="Object_Prism"
-     image_disabled_selected="Object_Prism"
-     image_selected="Object_Prism_Selected"
-     image_unselected="Object_Prism"
-     layout="topleft"
-     left_delta="29"
-     name="ToolPrism"
-     tool_tip="Prisma"
-     top_delta="0"
-     width="20" />
-    <button
-     follows="left|top"
-     height="20"
-     image_disabled="Object_Pyramid"
-     image_disabled_selected="Object_Pyramid"
-     image_selected="Object_Pyramid_Selected"
-     image_unselected="Object_Pyramid"
-     layout="topleft"
-     left_delta="29"
-     name="ToolPyramid"
-     tool_tip="Pirámide"
-     top_delta="0"
-     width="20" />
-    <button
-     follows="left|top"
-     height="20"
-     image_disabled="Object_Tetrahedron"
-     image_disabled_selected="Object_Tetrahedron"
-     image_selected="Object_Tetrahedron_Selected"
-     image_unselected="Object_Tetrahedron"
-     layout="topleft"
-     left_delta="29"
-     name="ToolTetrahedron"
-     tool_tip="Tetraedro"
-     top_delta="0"
-     width="20" />
-    <button
-     follows="left|top"
-     height="20"
-     image_disabled="Object_Cylinder"
-     image_disabled_selected="Object_Cylinder"
-     image_selected="Object_Cylinder_Selected"
-     image_unselected="Object_Cylinder"
-     layout="topleft"
-     left_delta="29"
-     name="ToolCylinder"
-     tool_tip="Cilindro"
-     top_delta="0"
-     width="20" />
-    <button
-     follows="left|top"
-     height="20"
-     image_disabled="Object_Hemi_Cylinder"
-     image_disabled_selected="Object_Hemi_Cylinder"
-     image_selected="Object_Hemi_Cylinder_Selected"
-     image_unselected="Object_Hemi_Cylinder"
-     layout="topleft"
-     left_delta="29"
-     name="ToolHemiCylinder"
-     tool_tip="Semicilindro"
-     top_delta="0"
-     width="20" />
-    <button
-     follows="left|top"
-     height="20"
-     image_disabled="Object_Cone"
-     image_disabled_selected="Object_Cone"
-     image_selected="Object_Cone_Selected"
-     image_unselected="Object_Cone"
-     layout="topleft"
-     left_delta="29"
-     name="ToolCone"
-     tool_tip="Cono"
-     top_delta="0"
-     width="20" />
-    <button
-     follows="left|top"
-     height="20"
-     image_disabled="Object_Hemi_Cone"
-     image_disabled_selected="Object_Hemi_Cone"
-     image_selected="Object_Hemi_Cone_Selected"
-     image_unselected="Object_Hemi_Cone"
-     layout="topleft"
-     left_delta="29"
-     name="ToolHemiCone"
-     tool_tip="Semicono"
-     top_delta="0"
-     width="20" />
-    <button
-     follows="left|top"
-     height="20"
-     image_disabled="Object_Sphere"
-     image_disabled_selected="Object_Sphere"
-     image_selected="Object_Sphere_Selected"
-     image_unselected="Object_Sphere"
-     layout="topleft"
-     left_delta="29"
-     name="ToolSphere"
-     tool_tip="Esfera"
-     top_delta="0"
-     width="20" />
-    <button
-     follows="left|top"
-     height="20"
-     image_disabled="Object_Hemi_Sphere"
-     image_disabled_selected="Object_Hemi_Sphere"
-     image_selected="Object_Hemi_Sphere_Selected"
-     image_unselected="Object_Hemi_Sphere"
-     layout="topleft"
-     left_delta="29"
-     name="ToolHemiSphere"
-     tool_tip="Semiesfera"
-     top_delta="0"
-     width="20" />
-    <button
-     follows="left|top"
-     height="20"
-     image_disabled="Object_Torus"
-     image_disabled_selected="Object_Torus"
-     image_selected="Object_Torus_Selected"
-     image_unselected="Object_Torus"
-     layout="topleft"
-     left="10"
-     name="ToolTorus"
-     tool_tip="Toroide"
-     top="77"
-     width="20" />
-    <button
-     follows="left|top"
-     height="20"
-     image_disabled="Object_Tube"
-     image_disabled_selected="Object_Tube"
-     image_selected="Object_Tube_Selected"
-     image_unselected="Object_Tube"
-     layout="topleft"
-     left_delta="29"
-     name="ToolTube"
-     tool_tip="Tubo"
-     top_delta="0"
-     width="20" />
-    <button
-     follows="left|top"
-     height="20"
-     image_disabled="Object_Ring"
-     image_disabled_selected="Object_Ring"
-     image_selected="Object_Ring_Selected"
-     image_unselected="Object_Ring"
-     layout="topleft"
-     left_delta="29"
-     name="ToolRing"
-     tool_tip="Anillo"
-     top_delta="0"
-     width="20" />
-    <button
-     follows="left|top"
-     height="20"
-     image_disabled="Object_Tree"
-     image_disabled_selected="Object_Tree"
-     image_selected="Object_Tree_Selected"
-     image_unselected="Object_Tree"
-     layout="topleft"
-     left_delta="29"
-     name="ToolTree"
-     tool_tip="Árbol"
-     top_delta="0"
-     width="20" />
-    <button
-     follows="left|top"
-     height="20"
-     image_disabled="Object_Grass"
-     image_disabled_selected="Object_Grass"
-     image_selected="Object_Grass_Selected"
-     image_unselected="Object_Grass"
-     image_overlay_color="Red"
-     layout="topleft"
-     left_delta="29"
-     name="ToolGrass"
-     tool_tip="Hierba"
-     top_delta="0"
-     width="20" />
-    <check_box
-     control_name="CreateToolKeepSelected"
-     height="19"
-     label="Mantener la herramienta elegida"
-     layout="topleft"
-     left="4"
-     name="checkbox sticky"
-     top="101"
-     width="128" />
-    <check_box
-     control_name="CreateToolCopySelection"
-     height="19"
-     label="Copiar la selección"
-     layout="topleft"
-     left_delta="0"
-     name="checkbox copy selection"
-     top_delta="15"
-     width="134" />
-    <check_box
-     control_name="CreateToolCopyCenters"
-     height="19"
-     initial_value="true"
-     label="Copia centrada"
-     layout="topleft"
-     left_delta="18"
-     name="checkbox copy centers"
-     top="132"
-     width="134" />
-    <check_box
-     control_name="CreateToolCopyRotates"
-     height="19"
-     label="Copia girada"
-     layout="topleft"
-     left_delta="0"
-     name="checkbox copy rotates"
-     top_delta="16"
-     width="134" />
-    <radio_group
-     height="105"
-     layout="topleft"
-     left="4"
-     name="land_radio_group"
-     top="54"
-     width="114">
-        <radio_item
-         height="19"
-         label="Seleccionar terreno"
-         layout="topleft"
-         left="0"
-         name="radio select land"
-         top="-106"
-         width="134" />
-        <radio_item
-         height="19"
-         label="Nivelar"
-         layout="topleft"
-         left_delta="0"
-         name="radio flatten"
-         top_delta="15"
-         width="114" />
-        <radio_item
-         height="19"
-         label="Elevar"
-         layout="topleft"
-         left_delta="0"
-         name="radio raise"
-         top_delta="15"
-         width="114" />
-        <radio_item
-         height="19"
-         label="Rebajar"
-         layout="topleft"
-         left_delta="0"
-         name="radio lower"
-         top_delta="15"
-         width="114" />
-        <radio_item
-         height="19"
-         label="Suavizar"
-         layout="topleft"
-         left_delta="0"
-         name="radio smooth"
-         top_delta="15"
-         width="114" />
-        <radio_item
-         height="19"
-         label="Escarpar"
-         layout="topleft"
-         left_delta="0"
-         name="radio noise"
-         top_delta="15"
-         width="114" />
-        <radio_item
-         height="19"
-         label="Restablecer"
-         layout="topleft"
-         left_delta="0"
-         name="radio revert"
-         top_delta="15"
-         width="114" />
-		 <radio_group.commit_callback
-	     function="BuildTool.commitRadioLand"/>
-    </radio_group>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="12"
-     layout="topleft"
-     left="135"
-     name="Bulldozer:"
-     top="57"
-     width="100">
-        Excavadora:
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="12"
-     layout="topleft"
-     name="Dozer Size:"
-     left="135"
-     top_pad="5"
-     width="50">
-        Tamaño
-    </text>
-    <slider_bar
-	 control_name ="LandBrushSize"
-     follows="left|top"
-     height="19"
-     initial_value="2.0"
-     layout="topleft"
-     max_val="11"
-     min_val="1"
-     left_pad="0"
-     name="slider brush size"
-     top_delta="-3"
-     width="80" />
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="12"
-     layout="topleft"
-     name="Strength:"
-     left="135"
-     top_pad="5"
-     width="50">
-        Fuerza
-    </text>
-    <slider_bar
-     follows="left|top"
-     height="19"
-     left_pad="0"
-     initial_value="0.00"
-     layout="topleft"
-     max_val="2"
-     min_val="-1"
-     name="slider force"
-     top_delta="-3"
-     width="80" >
-	  <slider_bar.commit_callback
-	     function="BuildTool.LandBrushForce"/>
-    </slider_bar>
-    <button
-     follows="left|top"
-     height="23"
-     label="Aplicar"
-     label_selected="Aplicar"
-     top_pad="5"
-     layout="topleft"
-     left="135"
-     name="button apply to selection"
-     tool_tip="Modificar el terreno seleccionado"
-     width="82">
-	  <button.commit_callback
-	     function="BuildTool.applyToSelection"/>
-    </button>
-    <text
-     text_color="LtGray_50"
-     type="string"
-     length="1"
-     height="10"
-     follows="left|top"
-     halign="right"
-     layout="topleft"
-     right="-10"
-     name="prim_count"
-     width="143">
-        Primitivas: [COUNT]
-    </text>
-    <text
-    text_color="LtGray_50"
-     type="string"
-     length="1"
-     height="10"
-     follows="left|top"
-     halign="right"
-     layout="topleft"
-     right="-10"
-     name="link_num_obj_count"
-	 tooltip="El número de objetos enlazados puede ser impreciso."
-     width="143">
-        [DESC] [NUM]
-    </text>
-    <tab_container
-     follows="left|top"
-     height="410"
-     halign="center"
-     left="0"
-     name="Object Info Tabs"
-     tab_drag_commit="true"
-     tab_max_width="100"
-     tab_min_width="40"
-     tab_position="top"
-     tab_height="20"
-     top="173"
-     width="295">
-	<panel
-	 border="false"
-	 follows="all"
-	 label="General"
-	 layout="topleft"
-	 mouse_opaque="false"
-	 help_topic="toolbox_general_tab"
-	 name="General"
-	 top="16"
-	 width="295">
-<panel.string
-	  name="text deed continued">
-		Ceder
-	 </panel.string>
-	<panel.string
-	 name="text deed">
-		Ceder
-	</panel.string>
-            <panel.string
-             name="text modify info 1">
-                Puedes modificar este objeto
-            </panel.string>
-            <panel.string
-             name="text modify info 2">
-                Puedes modificar estos objetos
-            </panel.string>
-            <panel.string
-             name="text modify info 3">
-                No puedes modificar este objeto
-            </panel.string>
-            <panel.string
-             name="text modify info 4">
-                No puedes modificar estos objetos
-            </panel.string>
-            <panel.string
-             name="text modify warning">
-                Para configurar los permisos, debes seleccionar el objeto completo
-            </panel.string>
-            <panel.string
-             name="Cost Default">
-                Precio: L$
-            </panel.string>
-            <panel.string
-             name="Cost Total">
-                Precio total: L$
-            </panel.string>
-            <panel.string
-             name="Cost Per Unit">
-                Precio por: L$
-            </panel.string>
-            <panel.string
-             name="Cost Mixed">
-                Precio variable
-            </panel.string>
-            <panel.string
-             name="Sale Mixed">
-                Venta variable
-            </panel.string>
-            <panel.string
-             name="multiple selection">
-                Selección múltiple
-            </panel.string>
-            <text
-             follows="left|top"
-             height="10"
-             left="10"
-             name="Name:"
-             top="5"
-             width="90">
-                Nombre:
-            </text>
-            <line_editor
-             follows="left|top|right"
-             height="19"
-             left_pad="0"
-             max_length_bytes="63"
-             name="Object Name"
-             select_on_focus="true"
-             top_delta="0"
-             width="190" />
-            <text
-             follows="left|top"
-             height="10"
-             left="10"
-             name="Description:"
-             top_pad="3"
-             width="90">
-                Descripción:
-            </text>
-            <line_editor
-             follows="left|top|right"
-             height="19"
-             left_pad="0"
-             max_length_bytes="127"
-             name="Object Description"
-             select_on_focus="true"
-             top_delta="0"
-             width="190" />
-            <text
-             type="string"
-             left="10"
-             length="1"
-             follows="left|top"
-             height="19"
-             layout="topleft"
-             name="Creator:"
-             width="75">
-                Creador:
-            </text>
-            <!-- *NOTE: Intentionally wide for long names -->
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             left_pad="0"
-             height="24"
-             layout="topleft"
-             name="Creator Name"
-             top_delta="0"
-             translate="false"
-             width="190"
-             word_wrap="true"
-             use_ellipses="true">
-                secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect TestString PleaseIgnore (please.ignore)
-            </text>
-            <text
-             type="string"
-             length="1"
-             left="10"
-             follows="left|top"
-             height="19"
-             layout="topleft"
-             name="Owner:"
-             top_pad="7"
-             width="75">
-                Propietario:
-            </text>
-            <!-- *NOTE: Intentionally wide for long names -->
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="24"
-             layout="topleft"
-             name="Owner Name"
-             left_pad="0"
-             top_delta="0"
-             translate="false"
-             width="190"
-             word_wrap="true"
-             use_ellipses="true">
-                secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect TestString PleaseIgnore (please.ignore)
-            </text>
-            <text
-             type="string"
-             length="1"
-             left="10"
-             follows="left|top"
-             height="19"
-             layout="topleft"
-             name="Last Owner:"
-             top_pad="7"
-             width="75">
-                Prop. anterior:
-            </text>
-            <!-- *NOTE: Intentionally wide for long names -->
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="22"
-             layout="topleft"
-             name="Last Owner Name"
-             left_pad="0"
-             top_delta="0"
-             translate="false"
-             width="190">
-                secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect TestString PleaseIgnore (please.ignore)
-            </text>
-           <text
-             type="string"
-             length="1"
-             follows="left|top"
-             layout="topleft"
-             left="10"
-             height="18"
-             name="Group:"
-             top_pad="-2"
-             width="75">
-                Grupo:
-            </text>
-            <!--<name_box
-             follows="left|top"
-             height="18"
-             initial_value="Cargando..."
-             layout="topleft"
-             left_pad="23"
-             name="Group Name Proxy"
-             width="142" />-->
-			 <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="22"
-             layout="topleft"
-             name="Group Name"
-             left_pad="0"
-             top_delta="0"
-             translate="false"
-             width="170"
-             use_ellipses="true">
-                secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect Loading...
-            </text>
-            <button
-			 follows="top|right"
-			 height="18"
-			 image_overlay="Edit_Wrench"
-			 layout="topleft"
-			 right="-5"
-			 top_delta="0"
-			 name="button set group"
-			 tab_stop="false"
-			 tool_tip="Elige un grupo con el que compartir los permisos de este objeto"
-			 width="18" />
-            <check_box
-             height="19"
-             follows="left|top"
-             label="Compartir"
-             layout="topleft"
-             name="checkbox share with group"
-             tool_tip="Permite que todos los miembros del grupo compartan tus permisos de modificación en este objeto. Debes cederlo para activar las restricciones según los roles."
-             top_pad="3"
-             left="85"
-             width="87" />
-            <button
-             follows="top|right"
-             height="19"
-             label="Ceder"
-             label_selected="Ceder"
-             layout="topleft"
-             name="button deed"
-             right="-5"
-			 top_delta="-1"
-             tool_tip="La cesión entrega este objeto con los permisos de  próximo propietario. Los objetos cedidos al grupo pueden ser a su vez cedidos por un oficial del mismo."
-             width="80" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="16"
-             layout="topleft"
-             top_pad="10"
-             left="10"
-             name="label click action"
-             width="118">
-                Al tocarlo:
-            </text>
-            <combo_box
-             follows="left|top"
-             height="23"
-             layout="topleft"
-             name="clickaction"
-             width="148"
-             left_pad="10">
-                <combo_box.item
-                 label="Tocarlo (por defecto)"
-                 name="Touch/grab(default)"
-                 value="Touch" />
-                <combo_box.item
-                 label="Sentarse en el objeto"
-                 name="Sitonobject"
-                 value="Sit" />
-                <combo_box.item
-                 label="Comprar el objeto"
-                 name="Buyobject"
-                 value="Buy" />
-                <combo_box.item
-                 label="Pagar al objeto"
-                 name="Payobject"
-                 value="Pay" />
-                <combo_box.item
-                 label="Abrir el objeto"
-                 name="Open"
-                 value="Open" />
-		<combo_box.item
-                 label="Zoom"
-                 name="Zoom"
-                 value="Zoom" />
-            </combo_box>
-			<view_border
-			 left="5"
-			 right="-5"
-			 bevel_style="none"
-			 border_thickness="1"
-			 follows="left|top|right"
-			 height="55"
-			 name="SaleBorder"
-			 width="235"/>
-            <check_box
-			 top_delta="3"
-             height="23"
-             label="En venta:"
-             layout="topleft"
-             name="checkbox for sale"
-             left="7"
-             width="100" />
-<!-- NEW SALE TYPE COMBO BOX -->
-      <combo_box
-            left_pad="10"
-            layout="topleft"
-            follows="left|top"
-            allow_text_entry="false"
-            height="23"
-            initial_value="2"
-            max_chars="20"
-            mouse_opaque="true"
-            name="sale type"
-            width="168">
-        <combo_box.item
-           name="Copy"
-           label="Copia"
-           value="2" />
-        <combo_box.item
-           name="Contents"
-           label="Contenidos"
-           value="3" />
-        <combo_box.item
-           name="Original"
-           label="Original"
-           value="1" />
-      </combo_box>
-<!-- NEW PRICE SPINNER
-Objects are allowed to be for sale for L$0 to invoke buy UI behavior
-even though the user gets a free copy.
--->
-    <spinner
-        follows="left|top"
-        decimal_digits="0"
-        increment="1"
-        top_pad="8"
-        left="10"
-        control_name="Edit Cost"
-        name="Edit Cost"
-        label="Precio: L$"
-        label_width="65"
-        width="165"
-        min_val="0"
-        height="20"
-        max_val="999999999" />
-	<button
-	 left_pad="10"
-	 enabled="false"
-	 follows="top|right"
-	 height="20"
-	 label="Aplicar"
-	 name="button mark for sale"
-	 tool_tip="Marcar/Actualizar objeto(s) en venta."
-	 width="100">
-		<button.commit_callback
-		function="BuildTool.ApplySale"/>
-	</button>
-	<button
-	 top_pad="7"
-	 left="10"
-	 follows="top|right"
-	 height="20"
-	 label="Copiar claves"
-	 name="btnCopyKeys"
-	 tool_tip="Copia la clave de los objetos seleccionados al portapapeles."
-	 width="90">
-		<button.commit_callback
-		function="BuildTool.CopyKeys"/>
-	</button>
-      <check_box
-	   height="15"
-	   width="110"
-	   label="Mostrar en la búsqueda"
-       layout="topleft"
-	   left_pad="15"
-       name="search_check"
-       tool_tip="Permitir que la gente vea este objeto en los resultados de la búsqueda" />
-		<panel
-         border="false"
-         follows="left|top"
-         layout="topleft"
-         mouse_opaque="false"
-         background_visible="true"
-         bg_alpha_color="Black_10"
-         name="perms_build"
-         left="0"
-         top_pad="4"
-         height="105"
-         width="290">
-            <text
-             type="string"
-             length="1"
-             left="10"
-             top_pad="9"
-             text_color="EmphasisColor"
-             height="16"
-             follows="left|top|right"
-             layout="topleft"
-             name="perm_modify"
-             width="264">
-                Puedes modificar este objeto
-            </text>
-            <text
-               type="string"
-               follows="left|top"
-               name="Anyone can:"
-               width="250"
-               left="10">
-                 Cualquiera puede:
-            </text>
-            <check_box
-             height="19"
-             label="Moverlo"
-             layout="topleft"
-             name="checkbox allow everyone move"
-             left="10"
-             width="85" />
-            <check_box
-             height="19"
-             label="Copiarlo"
-             layout="topleft"
-             left_pad="0"
-             name="checkbox allow everyone copy"
-             width="90" />
-            <text
-               type="string"
-               follows="left|top"
-               height="19"
-               name="Next owner can:"
-               width="250"
-               left="10">
-                  El próximo propietario puede:
-            </text>
-            <check_box
-             follows="left|top|right"
-             label="Modificarlo"
-             layout="topleft"
-             left="10"
-             name="checkbox next owner can modify"
-             width="85" />
-            <check_box
-             follows="left|top|right"
-             height="19"
-             label="Copiarlo"
-             layout="topleft"
-             left_pad="0"
-             name="checkbox next owner can copy"
-             width="80" />
-            <check_box
-             follows="left|top|right"
-             height="19"
-             label="Transferirlo"
-             layout="topleft"
-             name="checkbox next owner can transfer"
-             left_pad="0"
-             top_delta="0"
-             tool_tip="El próximo propietario puede dar o revender este objeto"
-             width="100" />
-<!-- *NOTE: These "B/O/G/E/N/F fields may overlap "perm_modify" above, 
-     but that's OK, this is used only for debugging. -->
-            <text
-             type="string"
-             text_color="EmphasisColor"
-             length="1"
-             top="9"
-             follows="left|top"
-             layout="topleft"
-             left="230"
-             name="B:"
-             height="10"
-             width="80">
-                B:
-            </text>
-            <text
-             type="string"
-             text_color="White"
-             length="1"
-             follows="left|top"
-             layout="topleft"
-             left_delta="0"
-             top_pad="2"
-             name="O:"
-             height="10"
-             width="80">
-                O:
-            </text>
-            <text
-             type="string"
-             text_color="EmphasisColor"
-             length="1"
-             follows="left|top"
-             layout="topleft"
-             left_delta="0"
-             top_pad="2"
-             name="G:"
-             height="10"
-             width="80">
-                G:
-            </text>
-            <text
-             type="string"
-             text_color="White"
-             length="1"
-             follows="left|top"
-             left_delta="0"
-             top_pad="2"
-             layout="topleft"
-             name="E:"
-             height="10"
-             width="80">
-                E:
-            </text>
-            <text
-             type="string"
-             text_color="EmphasisColor"
-             length="1"
-             follows="left|top"
-             layout="topleft"
-             left_delta="0"
-             top_pad="2"
-             name="N:"
-             height="10"
-             width="80">
-                N:
-            </text>
-            <text
-             type="string"
-             text_color="White"
-             length="1"
-             follows="left|top"
-             layout="topleft"
-             left_delta="0"
-             top_pad="2"
-             name="F:"
-             height="10"
-             width="80">
-                F:
-            </text>
-        </panel>
-      </panel>
-      <!-- Object tab -->
-      <panel
-         border="false"
-         follows="all"
-         height="367"
-         label="Objeto"
-         layout="topleft"
-         left_delta="0"
-         mouse_opaque="false"
-         help_topic="toolbox_object_tab"
-         name="Object"
-         top="16"
-         width="295">
-            <check_box
-             height="19"
-             label="Bloqueado"
-             layout="topleft"
-             name="checkbox locked"
-             tool_tip="Previene que el objeto sea movido o borrado. Suele ser útil mientras se construye, para prevenir que se modifique o elimine sin querer."
-             top_pad="5"
-             left="10"
-             width="123" />
-            <check_box
-             height="19"
-             label="Material"
-             layout="topleft"
-             name="Physical Checkbox Ctrl"
-             tool_tip="Permite que el objeto pueda ser empujado y se someta a las leyes de la gravedad."
-             top_pad="0"
-             width="123" />
-            <check_box
-             height="19"
-             label="Temporal"
-             layout="topleft"
-             name="Temporary Checkbox Ctrl"
-             tool_tip="Provoca que el objeto desaparezca 1 minuto después de ser creado."
-             top_pad="0"
-             width="123" />
-            <check_box
-             height="19"
-             label="Inmaterial"
-             layout="topleft"
-             name="Phantom Checkbox Ctrl"
-             tool_tip="Evita que el objeto no colisione con otros objetos o avatares."
-             top_pad="0"
-             width="123" />
-
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             name="label position"
-             top_pad="10"
-             width="121">
-                Posición (en metros)
-            </text> 
-            <spinner
-             decimal_digits="4"
-             follows="left|top"
-             height="19"
-             increment="0.01"
-             initial_value="0"
-             label="X"
-             label_width="10"
-             layout="topleft"
-             left_delta="0"
-             max_val="512"
-             min_val="-256"
-             name="Pos X"
-             text_enabled_color="Red"
-             top_pad="5"
-             width="87" />
-            <button follows="top|right"
-             height="18" 
-             label="C"
-             left_pad="5"
-             mouse_opaque="true"
-             name="copypos"
-             enabled="true"
-             tool_tip="Copiar posición"
-             width="20" />
-            <spinner
-             decimal_digits="4"
-             follows="left|top"
-             height="19"
-             increment="0.01"
-             initial_value="0"
-             label="Y"
-             label_width="10"
-             layout="topleft"
-             left="10"
-             max_val="512"
-             min_val="-256"
-             name="Pos Y"
-             text_enabled_color="EmphasisColor"
-             top_pad="3"
-             width="87" />
-            <button follows="top|right"
-             height="18"
-             label="P"
-             left_pad="5"
-             mouse_opaque="true"
-             name="pastepos"
-             enabled="true"
-             tool_tip="Pegar posición"
-             width="20" />
-            <spinner
-             decimal_digits="4"
-             follows="left|top"
-             height="19"
-             increment="0.01"
-             initial_value="0"
-             label="Z"
-             label_width="10"
-             layout="topleft"
-             left="10"
-             max_val="4096"
-             name="Pos Z"
-             text_enabled_color="SL-MidBlue"
-             top_pad="3"
-             width="87" />
-            <button follows="top|right"
-             height="18"
-             label="p"
-             left_pad="5"
-             mouse_opaque="true"
-             name="pasteposclip"
-             enabled="true"
-             tool_tip="Pegar posición desde el portapapeles"
-             width="20" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="10"
-             name="label size"
-             top_pad="6"
-             width="121">
-                Tamaño (en metros)
-            </text>
-            <spinner
-             decimal_digits="4"
-             follows="left|top"
-             height="19"
-             increment="0.01"
-             initial_value="0"
-             label="X"
-             label_width="10"
-             layout="topleft"
-             left_delta="0"
-             max_val="64"
-             min_val="0.01"
-             name="Scale X"
-             text_enabled_color="White"
-             top_pad="5"
-             width="87" />
-            <button follows="top|right"
-             height="18" 
-             label="C"
-             left_pad="5"
-             mouse_opaque="true"
-             name="copysize"
-             enabled="true"
-             tool_tip="Copiar tamaño"
-             width="20" />
-            <spinner
-             decimal_digits="4"
-             follows="left|top"
-             height="19"
-             increment="0.01"
-             initial_value="0"
-             label="Y"
-             label_width="10"
-             layout="topleft"
-             left="10"
-             max_val="64"
-             min_val="0.01"
-             name="Scale Y"
-             text_enabled_color="White"
-             top_pad="3"
-             width="87" />
-            <button follows="top|right"
-             height="18"
-             label="P"
-             left_pad="5"
-             mouse_opaque="true"
-             name="pastesize"
-             enabled="true"
-             tool_tip="Pegar tamaño"
-             width="20" />
-            <spinner
-             decimal_digits="4"
-             follows="left|top"
-             height="19"
-             increment="0.01"
-             initial_value="0"
-             label="Z"
-             label_width="10"
-             layout="topleft"
-             left="10"
-             max_val="64"
-             min_val="0.01"
-             name="Scale Z"
-             text_enabled_color="White"
-             top_pad="3"
-             width="87" />
-            <button follows="top|right"
-             height="18"
-             label="p"
-             left_pad="5"
-             mouse_opaque="true"
-             name="pastesizeclip"
-             enabled="true"
-             tool_tip="Pegar tamaño desde el portapapeles"
-             width="20" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="10"
-             name="label rotation"
-             top_pad="10"
-             width="121">
-                Rotación (en grados)
-            </text>
-            <spinner
-             decimal_digits="3"
-             follows="left|top"
-             height="19"
-             increment="1"
-             initial_value="0"
-             label="X"
-             label_width="10"
-             layout="topleft"
-             left_delta="0"
-             max_val="9999"
-             min_val="-9999"
-             name="Rot X"
-             text_enabled_color="White"
-             top_pad="5"
-             width="87" />
-            <button follows="top|right"
-             height="18"
-             label="C"
-             left_pad="5"
-             mouse_opaque="true"
-             name="copyrot"
-             enabled="true"
-             tool_tip="Copiar rotación"
-             width="20" />
-            <spinner
-             decimal_digits="3"
-             follows="left|top"
-             height="19"
-             increment="1"
-             initial_value="0"
-             label="Y"
-             label_width="10"
-             layout="topleft"
-             left="10"
-             max_val="9999"
-             min_val="-9999"
-             name="Rot Y"
-             text_enabled_color="White"
-             top_pad="3"
-             width="87" />
-            <button follows="top|right"
-             height="18"
-             label="P"
-             left_pad="5"
-             mouse_opaque="true"
-             name="pasterot"
-             enabled="true"
-             tool_tip="Pegar rotación"
-             width="20" />
-            <spinner
-             decimal_digits="3"
-             follows="left|top"
-             height="19"
-             increment="1"
-             initial_value="0"
-             label="Z"
-             label_width="10"
-             layout="topleft"
-             left="10"
-             max_val="9999"
-             min_val="-9999"
-             name="Rot Z"
-             text_enabled_color="White"
-             top_pad="3"
-             width="87" />
-            <button follows="top|right"
-             height="18"
-             label="p"
-             left_pad="5"
-             mouse_opaque="true"
-             name="pasterotclip"
-             enabled="true"
-             tool_tip="Pegar rotación desde el portapapeles"
-             width="20" />
-
- <!--           <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="125"
-             name="label basetype"
-             top="5"
-             width="150">
-                Prim Type
-            </text>-->
-			<text
-			 type="string"
-			 length="1"
-			 follows="left|top"
-			 height="10"
-			 bottom="-15"
-			 layout="topleft"
-			 left="10"
-			 name="edit_object"
-			 top_pad="8"
-			 width="121">
-			  Params. del objeto:
->>>>>>> other
+	<radio_group name="move_radio_group">
+		<radio_item label="Mover" name="radio move"/>
+		<radio_item label="Vertical (Ctrl)" name="radio lift"/>
+                <radio_item label="Horizontal (Ctrl+Mayúscula)" name="radio spin"/>
+	</radio_group>
+	<radio_group name="edit_radio_group">
+		<radio_item label="Mover" name="radio position"/>
+		<radio_item label="Girar (Ctrl)" name="radio rotate"/>
+		<radio_item label="Estirar (Ctrl+Mayús.)" name="radio stretch"/>
+		<radio_item label="Elegir la cara" name="radio select face"/>
+		<radio_item label="Alinear" name="radio align"/>
+	</radio_group>
+	<check_box label="Editar partes" name="checkbox edit linked parts"/>
+	<button label="Enlazar" name="link_btn"/>
+        <button label="Desenlazar" name="unlink_btn"/>
+	<check_box label="Estirar ambos lados" name="checkbox uniform"/>
+	<check_box label="Estirar texturas" name="checkbox stretch textures"/>
+	<check_box label="Ajustar a la rejilla" name="checkbox snap to grid"/>
+        <check_box label="Eje en primitiva raíz" name="checkbox actual root"/>
+	<check_box label="Resaltar" name="checkbox show highlight"/>
+        <button name="Options..." tool_tip="Mostrar opciones de rejilla."/>
+	<button name="ToolCube" tool_tip="Cubo"/>
+	<button name="ToolPrism" tool_tip="Prisma"/>
+	<button name="ToolPyramid" tool_tip="Pirámide"/>
+	<button name="ToolTetrahedron" tool_tip="Tetraedro"/>
+	<button name="ToolCylinder" tool_tip="Cilindro"/>
+	<button name="ToolHemiCylinder" tool_tip="Semicilindro"/>
+	<button name="ToolCone" tool_tip="Cono"/>
+	<button name="ToolHemiCone" tool_tip="Semicono"/>
+	<button name="ToolSphere" tool_tip="Esfera"/>
+	<button name="ToolHemiSphere" tool_tip="Semiesfera"/>
+	<button name="ToolTorus" tool_tip="Toroide"/>
+	<button name="ToolTube" tool_tip="Tubo"/>
+	<button name="ToolRing" tool_tip="Anillo"/>
+	<button name="ToolTree" tool_tip="Árbol"/>
+	<button name="ToolGrass" tool_tip="Hierba"/>
+        <check_box label="Mant. herramienta" name="checkbox sticky"/>
+	<check_box label="Copiar selección" name="checkbox copy selection"/>
+	<check_box label="Copia centrada" name="checkbox copy centers"/>
+	<check_box label="Copia girada" name="checkbox copy rotates"/>
+	<radio_group name="land_radio_group">
+		<radio_item label="Seleccionar terreno" name="radio select land"/>
+                <radio_item label="Nivelar" name="radio flatten"/>
+		<radio_item label="Elevar" name="radio raise"/>
+		<radio_item label="Rebajar" name="radio lower"/>
+		<radio_item label="Suavizar" name="radio smooth"/>
+		<radio_item label="Escarpar" name="radio noise"/>
+		<radio_item label="Restablecer" name="radio revert"/>
+	</radio_group>
+	<text name="Bulldozer:">
+		Excavadora:
+	</text>
+	<text name="Dozer Size:">
+		Tamaño:
+	</text>
+	<text name="Strength:">
+		Fuerza:
+	</text>
+	<button label="Aplicar" label_selected="Aplicar" name="button apply to selection" tool_tip="Modificar el terreno seleccionado."/>
+	<text name="link_num_obj_count" tooltip="El número de objetos enlazados puede ser impreciso.">
+		[DESC] [NUM]
+	</text>
+	<text name="selection_empty">
+		Nada seleccionado.
+	</text>
+	<text name="selection_weight">
+	  Peso de la física [PHYS_WEIGHT], Coste de dibujo [DISP_WEIGHT].
+	</text>
+	<tab_container name="Object Info Tabs">
+		<panel label="General" name="General">
+			<panel.string name="text deed continued">
+				Ceder
+	 		</panel.string>
+			<panel.string name="text deed">
+				Ceder
+			</panel.string>
+			<panel.string name="text modify info 1">
+				Puedes modificar este objeto
+			</panel.string>
+			<panel.string name="text modify info 2">
+				Puedes modificar estos objetos
+			</panel.string>
+			<panel.string name="text modify info 3">
+				No puedes modificar este objeto
+			</panel.string>
+			<panel.string name="text modify info 4">
+				No puedes modificar estos objetos
+			</panel.string>
+			<panel.string name="text modify warning">
+				Para configurar los permisos, debes seleccionar el objeto completo
+			</panel.string>
+			<panel.string name="Cost Default">
+				Precio: L$
+			</panel.string>
+			<panel.string name="Cost Total">
+				Precio total: L$
+			</panel.string>
+			<panel.string name="Cost Per Unit">
+				Precio por: L$
+			</panel.string>
+			<panel.string name="Cost Mixed">
+				Precio variable
+			</panel.string>
+			<panel.string name="Sale Mixed">
+				Venta variable
+			</panel.string>
+			<panel.string name="multiple selection">
+				Selección múltiple
+			</panel.string>
+			<text name="Name:">
+				Nombre:
 			</text>
-			<button
-			 follows="top|right"
-			 height="16"
-			 label="Copiar"
-			 layout="topleft"
-			 left="5"
-			 name="copyparams"
-			 tool_tip="Copiar parámetros al portapapeles"
-			 width="52">
-			</button>
-			<button
-			 follows="top|right"
-			 height="16"
-			 label="Pegar"
-			 layout="topleft"
-			 left_pad="10"
-			 name="pasteparams"
-			 tool_tip="Pegar parámetros desde el portapapeles"
-			 width="52">
-			</button>
-            <combo_box
-             height="19"
-             layout="topleft"
-             name="comboBaseType"
-             top="6"
-             left="125"
-             width="150">
-                <combo_box.item
-                 label="Cubo"
-                 name="Box"
-                 value="Box" />
-                <combo_box.item
-                 label="Cilindro"
-                 name="Cylinder"
-                 value="Cylinder" />
-                <combo_box.item
-                 label="Prisma"
-                 name="Prism"
-                 value="Prism" />
-                <combo_box.item
-                 label="Esfera"
-                 name="Sphere"
-                 value="Sphere" />
-                <combo_box.item
-                 label="Toroide"
-                 name="Torus"
-                 value="Torus" />
-                <combo_box.item
-                 label="Tubo"
-                 name="Tube"
-                 value="Tube" />
-                <combo_box.item
-                 label="Anillo"
-                 name="Ring"
-                 value="Ring" />
-                <combo_box.item
-                 label="Esculpido"
-                 name="Sculpted"
-                 value="Sculpted" />
-		<combo_item
-		 name="PathLineProfileHalfCircle"
-		 value="PathLineProfileHalfCircle"
-		 label="Línea->Semicírculo" />
-		<combo_item
-		 name="PathCircleProfileHalfCircle"
-		 value="PathCircleProfileHalfCircle"
-		 label="Círculo->Semicírculo" />
-		<combo_item
-		 name="PathCircle2ProfileSquare"
-		 value="PathCircle2ProfileSquare"
-		 label="Círculo2->Cuadrado" />
-		<combo_item
-		 name="PathCircle2ProfileTriangle"
-		 value="PathCircle2ProfileTriangle"
-		 label="Círculo2->Triángulo" />
-		<combo_item
-		 name="PathCircle2ProfileCircle"
-		 value="PathCircle2ProfileCircle"
-		 label="Círculo2->Círculo" />
-		<combo_item
-		 name="PathCircle2ProfileHalfCircle"
-		 value="PathCircle2ProfileHalfCircle"
-		 label="Círculo2->Semicírculo" />
-		<combo_item
-		 name="PathTestProfileSquare"
-		 value="PathTestProfileSquare"
-		 label="Test->Cuadrado" />
-		<combo_item
-		 name="PathTestProfileTriangle"
-		 value="PathTestProfileTriangle"
-		 label="Test->Triángulo" />
-		<combo_item
-		 name="PathTestProfileCircle"
-		 value="PathTestProfileCircle"
-		 label="Test->Círculo" />
-		<combo_item
-		 name="PathTestProfileHalfCircle"
-		 value="PathTestProfileHalfCircle"
-		 label="Test->Semicírculo" />
-		<!-- Working33 by Gregory Maurer -->
-		<combo_item
-		 name="Path33Profile0"
-		 value="Path33Profile0"
-		 label="33->Círculo" />
-		<combo_item
-		 name="Path33Profile1"
-		 value="Path33Profile1"
-		 label="33->Cuadrado" />
-		<combo_item
-		 name="Path33Profile2"
-		 value="Path33Profile2"
-		 label="33->Triángulo" />
-		<combo_item
-		 name="Path33Profile5"
-		 value="Path33Profile5"
-		 label="33->Semicírculo" />
-		<!-- End Working33 by Gregory Maurer -->
-            </combo_box>
-            <combo_box
-             height="19"
-             layout="topleft"
-             name="material"
-             top_pad="5"
-             width="150">
-                <combo_box.item
-                 label="Piedra"
-                 name="Stone"
-                 value="Stone" />
-                <combo_box.item
-                 label="Metal"
-                 name="Metal"
-                 value="Metal" />
-                <combo_box.item
-                 label="Vidrio"
-                 name="Glass"
-                 value="Glass" />
-                <combo_box.item
-                 label="Madera"
-                 name="Wood"
-                 value="Wood" />
-                <combo_box.item
-                 label="Carne"
-                 name="Flesh"
-                 value="Flesh" />
-                <combo_box.item
-                 label="Plástico"
-                 name="Plastic"
-                 value="Plastic" />
-                <combo_box.item
-                 label="Goma"
-                 name="Rubber"
-                 value="Rubber" />
-            </combo_box>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left_delta="0"
-             name="text cut"
-             top_pad="5"
-             width="150">
-                Corte (inicio/fin)
-            </text>
-            <spinner
-             follows="left|top"
-             height="16"
-             increment="0.025"
-             initial_value="0"
-             label="I"
-             label_width="10"
-             layout="topleft"
-             left_delta="0"
-             max_val="0.98"
-             name="cut begin"
-             top_pad="4"
-             width="68" />
-            <spinner
-             follows="left|top"
-             height="16"
-             increment="0.025"
-             initial_value="1"
-             label="F"
-             label_width="10"
-             layout="topleft"
-             left_pad="10"
-             min_val="0.02"
-             name="cut end"
-             top_delta="0"
-             width="68" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="125"
-             name="text hollow"
-             top_pad="6"
-             width="68">
-                Hueco
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left_pad="10"
-             name="text skew"
-             width="63">
-                Sesgo
-            </text>
-            <spinner
-             decimal_digits="1"
-             follows="left|top"
-             height="19"
-             increment="5"
-             initial_value="0"
-             layout="topleft"
-             left="125"
-             max_val="95"
-             name="Scale 1"
-             top_pad="4"
-             width="68" />
-            <spinner
-             decimal_digits="2"
-             follows="left|top"
-             height="19"
-             increment="0.05"
-             initial_value="0"
-             layout="topleft"
-             left_pad="10"
-             max_val="0.95"
-             min_val="-0.95"
-             name="Skew"
-             top_delta="0"
-             width="68" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="15"
-             layout="topleft"
-             left="125"
-             name="Hollow Shape"
-             top_pad="4"
-             width="150">
-                Forma del hueco
-            </text>
-            <combo_box
-             height="23"
-             layout="topleft"
-             left_delta="0"
-             name="hole"
-             top_pad="-2"
-             width="150">
-                <combo_box.item
-                 label="Por defecto"
-                 name="Default"
-                 value="Default" />
-                <combo_box.item
-                 label="Circular"
-                 name="Circle"
-                 value="Circle" />
-                <combo_box.item
-                 label="Cuadrado"
-                 name="Square"
-                 value="Square" />
-                <combo_box.item
-                 label="Triangular"
-                 name="Triangle"
-                 value="Triangle" />
-            </combo_box>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left_delta="0"
-             name="text twist"
-             top_pad="5"
-             width="150">
-                Torsión (inicio/fin)
-            </text>
-            <spinner
-             decimal_digits="0"
-             follows="left|top"
-             height="19"
-             increment="9"
-             initial_value="0"
-             label="I"
-             label_width="10"
-             layout="topleft"
-             left_delta="0"
-             max_val="180"
-             min_val="-180"
-             name="Twist Begin"
-             top_pad="4"
-             width="68" />
-            <spinner
-             decimal_digits="0"
-             follows="left|top"
-             height="19"
-             increment="9"
-             initial_value="0"
-             label="F"
-             label_width="10"
-             layout="topleft"
-             left_pad="10"
-             max_val="180"
-             min_val="-180"
-             name="Twist End"
-             top_delta="0"
-             width="68" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="125"
-             name="scale_taper"
-             top_pad="3"
-             width="150">
-                Biselado
-            </text>
-            <text
-	     visible="false"
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left_delta="0"
-             name="scale_hole"
-             top_delta="0"
-             width="150">
-                Tamaño del hueco
-            </text>
-            <spinner
-             decimal_digits="2"
-             follows="left|top"
-             height="19"
-             increment="0.05"
-             initial_value="0"
-             label="X"
-             label_width="10"
-             layout="topleft"
-             left_delta="0"
-             min_val="-1"
-             name="Taper Scale X"
-             top_pad="4"
-             width="68" />
-            <spinner
-             decimal_digits="2"
-             follows="left|top"
-             height="19"
-             increment="0.05"
-             initial_value="0"
-             label="Y"
-             label_width="10"
-             layout="topleft"
-             left_pad="10"
-             min_val="-1"
-             name="Taper Scale Y"
-             top_delta="0"
-             width="68" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="125"
-             name="text topshear"
-             top_pad="3"
-             width="141">
-                Inclinación superior
-            </text>
-            <spinner
-             decimal_digits="2"
-             follows="left|top"
-             height="19"
-             increment="0.05"
-             initial_value="0"
-             label="X"
-             label_width="10"
-             layout="topleft"
-             left_delta="0"
-             max_val="0.5"
-             min_val="-0.5"
-             name="Shear X"
-             top_pad="4"
-             width="68" />
-            <spinner
-             decimal_digits="2"
-             follows="left|top"
-             height="19"
-             increment="0.05"
-             initial_value="0"
-             label="Y"
-             label_width="10"
-             layout="topleft"
-             left_pad="10"
-             max_val="0.5"
-             min_val="-0.5"
-             name="Shear Y"
-             top_delta="0"
-             width="68" />
-            <text
-	     visible="false"
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="125"
-             name="advanced_cut"
-             top_pad="3"
-             width="150">
-                Corte del perfil (inicio/fin)
-            </text>
-            <text
-	     visible="false"
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left_delta="0"
-             name="advanced_dimple"
-             top_delta="0"
-             width="150">
-                Abolladura (inicio/fin)
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left_delta="0"
-             name="advanced_slice"
-             top_delta="0"
-             width="150">
-                Troceado (inicio/fin)
-            </text>
-            <spinner
-             follows="left|top"
-             height="19"
-             increment="0.02"
-             initial_value="0"
-             label="I"
-             label_width="10"
-             layout="topleft"
-             left_delta="0"
-             max_val="0.98"
-             name="Path Limit Begin"
-             top_pad="3"
-             width="68" />
-            <spinner
-             follows="left|top"
-             height="19"
-             increment="0.02"
-             initial_value="1"
-             label="F"
-             label_width="10"
-             layout="topleft"
-             left_pad="10"
-             min_val="0.02"
-             name="Path Limit End"
-             top_delta="0"
-             width="68" />
-            <text
-	     visible="false"
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="125"
-             name="text taper2"
-             top_pad="3"
-	     tool_tip="No funciona en todos los tipos de primitiva."
-             width="150">
-                Biselado del perfil
-            </text>
-            <spinner
-	     visible="false"
-             decimal_digits="2"
-             follows="left|top"
-             height="19"
-             increment="0.05"
-             initial_value="0"
-             label="X"
-             label_width="10"
-             layout="topleft"
-             left_delta="0"
-             min_val="-1"
-             name="Taper X"
-             top_pad="3"
-             width="68" />
-            <spinner
-	     visible="false"
-             decimal_digits="2"
-             follows="left|top"
-             height="19"
-             increment="0.05"
-             initial_value="0"
-             label="Y"
-             label_width="10"
-             layout="topleft"
-             left_pad="10"
-             min_val="-1"
-             name="Taper Y"
-             top_delta="0"
-             width="68" />
-            <text
-	     visible="false"
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="125"
-             name="text radius delta"
-             top_pad="2"
-             width="78">
-                Radio
-            </text>
-            <text
-	     visible="false"
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left_delta="78"
-             name="text revolutions"
-             width="68">
-                Giros
-            </text>
-            <spinner
-	     visible="false"
-             follows="left|top"
-             height="19"
-             increment="0.05"
-             initial_value="0"
-             layout="topleft"
-             left="125"
-             min_val="-1"
-             name="Radius Offset"
-             top_pad="4"
-             width="68" />
-            <spinner
-	     visible="false"
-             decimal_digits="2"
-             follows="left|top"
-             height="19"
-             initial_value="1"
-             layout="topleft"
-             left_pad="10"
-             max_val="4"
-             min_val="1"
-             name="Revolutions"
-             top_delta="0"
-             width="68" />
-            <texture_picker
-             can_apply_immediately="true"
-             default_image_name="Default"
-             follows="left|top"
-             height="141"
-             label="Textura para escultura"
-             layout="topleft"
-             left="125"
-             name="sculpt texture control"
-             tool_tip="Pulse para elegir una imagen"
-             top="70"
-             visible="false"
-             width="145" />
-            <check_box
-             height="19"
-             label="Reflejar"
-             layout="topleft"
-             left_delta="0"
-             name="sculpt mirror control"
-             tool_tip="Voltea la primitiva esculpida siguiendo el eje X"
-             top_pad="8"
-             visible="false"
-             width="130" />
-            <check_box
-             height="19"
-             label="Volver del revés"
-             layout="topleft"
-             left_delta="0"
-             name="sculpt invert control"
-             tool_tip="Invierte los valores de las primitivas esculpidas, haciendo aparecer fuera lo de dentro"
-             top_pad="4"
-             visible="false"
-             width="121" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left_delta="0"
-             name="label sculpt type"
-             top_pad="10"
-             visible="false"
-             width="130">
-                Tipo de unión
-            </text>
-            <combo_box
-             height="19"
-             layout="topleft"
-             left_delta="0"
-             name="sculpt type control"
-             top_pad="4"
-             visible="false"
-             width="150">
-                <combo_box.item
-                 label="(ninguno)"
-                 name="None"
-                 value="None" />
-                <combo_box.item
-                 label="Esfera"
-                 name="Sphere"
-                 value="Sphere" />
-                <combo_box.item
-                 label="Toroide"
-                 name="Torus"
-                 value="Torus" />
-                <combo_box.item
-                 label="Plano"
-                 name="Plane"
-                 value="Plane" />
-                <combo_box.item
-                 label="Cilindro"
-                 name="Cylinder"
-                 value="Cylinder" />
-            </combo_box>
-        </panel>
-        <panel
-         border="false"
-         follows="all"
-         height="367"
-         label="Caracter."
-         layout="topleft"
-         left_delta="0"
-         mouse_opaque="false"
-         help_topic="toolbox_features_tab"
-         name="Features"
-         top_delta="0"
-         width="295">
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="10"
-             name="select_single"
-             top="5"
-             width="270">
-                Selecciona una sola primitiva para poder editarla.
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="10"
-             name="edit_object"
-             top="5"
-             width="252">
-                Editar las características del objeto:
-            </text>
-            <check_box
-             height="19"
-             label="Flexibilidad"
-             layout="topleft"
-             left="10"
-             name="Flexible1D Checkbox Ctrl"
-             tool_tip="Permite que el objeto flexione en el eje Z (sólo del lado del cliente)"
-             top_pad="10"
-             width="121" />
-            <spinner
-             follows="left|top"
-             height="19"
-             increment="1"
-             initial_value="2"
-             label="Blandura"
-             label_width="70"
-             layout="topleft"
-             left_delta="0"
-             max_val="3"
-             name="FlexNumSections"
-             top_pad="10"
-             width="128" />
-            <spinner
-             follows="left|top"
-             height="19"
-             increment="0.5"
-             initial_value="0.3"
-             label="Gravedad"
-             label_width="70"
-             layout="topleft"
-             left_delta="0"
-             max_val="10"
-             min_val="-10"
-             name="FlexGravity"
-             top_pad="4"
-             width="128" />
-            <spinner
-             follows="left|top"
-             height="19"
-             increment="0.5"
-             initial_value="2"
-             label="Fricción"
-             label_width="70"
-             layout="topleft"
-             left_delta="0"
-             max_val="10"
-             name="FlexFriction"
-             top_pad="4"
-             width="128" />
-            <spinner
-             follows="left|top"
-             height="19"
-             increment="0.5"
-             initial_value="0"
-             label="Viento"
-             label_width="70"
-             layout="topleft"
-             left_delta="0"
-             max_val="10"
-             name="FlexWind"
-             top_pad="4"
-             width="128" />
-            <spinner
-             follows="left|top"
-             height="19"
-             increment="0.5"
-             initial_value="1"
-             label="Tirantez"
-             label_width="70"
-             layout="topleft"
-             left_delta="0"
-             max_val="10"
-             name="FlexTension"
-             top_pad="4"
-             width="128" />
-            <spinner
-             follows="left|top"
-             height="19"
-             increment="0.01"
-             initial_value="0"
-             label="Fuerza en X"
-             label_width="70"
-             layout="topleft"
-             left_delta="0"
-             max_val="10"
-             min_val="-10"
-             name="FlexForceX"
-             top_pad="4"
-             width="128" />
-            <spinner
-             follows="left|top"
-             height="19"
-             increment="0.01"
-             initial_value="0"
-             label="Fuerza en Y"
-             label_width="70"
-             layout="topleft"
-             left_delta="0"
-             max_val="10"
-             min_val="-10"
-             name="FlexForceY"
-             top_pad="4"
-             width="128" />
-            <spinner
-             follows="left|top"
-             height="19"
-             increment="0.01"
-             initial_value="0"
-             label="Fuerza en Z"
-             label_width="70"
-             layout="topleft"
-             left_delta="0"
-             max_val="10"
-             min_val="-10"
-             name="FlexForceZ"
-             top_pad="4"
-             width="128" />
-            <check_box
-             height="16"
-             label="Luz"
-             layout="topleft"
-             left="10"
-             name="Light Checkbox Ctrl"
-             tool_tip="Provoca que el objeto emita luz"
-             top_pad="15"
-             width="60" />
-            <color_swatch
-             can_apply_immediately="true"
-             color="SL-MidDkGray"
-	       border.border_thickness="0"
-             follows="left|top"
-             height="50"
-             layout="topleft"
-             left_pad="10"
-             top_pad="-17"
-             name="colorswatch"
-             tool_tip="Pulsa para elegir el color"
-             width="40" />
-         <texture_picker
-            allow_no_texture="true"
-            top_delta="0"
-            can_apply_immediately="true"
-            default_image_name="Default"
-            follows="left|top"
-            height="48"
-            label=""
-            left_delta="57"
-            mouse_opaque="true"
-            name="light texture control"
-            tool_tip="Pulsa para elegir una imagen para proyectar (sólo tiene efecto con la renderización deferida activada)"
-            width="32" />
-          <spinner
-             follows="left|top"
-             height="19"
-             initial_value="0.5"
-             label="Intensidad"
-             label_width="70"
-             layout="topleft"
-             left="10"
-             name="Light Intensity"
-             top_pad="3"
-             width="128" />
-          <spinner bottom_delta="0"
-                   decimal_digits="3"
-                   follows="left|top"
-                   height="16"
-                   increment="0.1"
-                   initial_value="0.5"
-                   label="FOV"
-                   label_width="55"
-                   left="144"
-                   max_val="3"
-                   min_val="0"
-                   mouse_opaque="true"
-                   name="Light FOV"
-                   width="120" />
-          <spinner follows="left|top"
-                   height="19"
-                   initial_value="5"
-                   label="Radio"
-                   label_width="70"
-                   layout="topleft"
-                   left="10"
-                   max_val="20"
-                   name="Light Radius"
-                   top_pad="3"
-                   width="128" />
-          <spinner bottom_delta="0"
-                   decimal_digits="3"
-                   follows="left|top"
-                   height="16"
-                   increment="0.5"
-                   initial_value="0.5"
-                   label="Foco"
-                   label_width="55"
-                   left="144"
-                   max_val="20"
-                   min_val="-20"
-                   mouse_opaque="true"
-                   name="Light Focus"
-                   width="120" />
-          <spinner follows="left|top"
-                   height="19"
-                   increment="0.25"
-                   initial_value="1"
-                   label="Atenuación"
-                   label_width="70"
-                   layout="topleft"
-                   left="10"
-                   max_val="2"
-                   name="Light Falloff"
-                   top_pad="3"
-                   width="128" />
-          <spinner bottom_delta="0"
-                   decimal_digits="3"
-                   follows="left|top"
-                   height="16"
-                   increment="0.05"
-                   initial_value="1"
-                   label="Ambiental"
-                   label_width="55"
-                   left="144"
-                   max_val="1"
-                   min_val="0"
-                   mouse_opaque="true"
-                   name="Light Ambiance"
-                   width="120" />
-        </panel>
-          <panel
-         border="false"
-         follows="all"
-         height="367"
-         label="Textura"
-         layout="topleft"
-         left_delta="0"
-         mouse_opaque="false"
-         help_topic="toolbox_texture_tab"
-         name="Texture"
-         top_delta="0"
-         width="295">
-            <panel.string
-             name="string repeats per meter">
-                Repeats Per Meter
-            </panel.string>
-            <panel.string
-             name="string repeats per face">
-                Repeats Per Face
-            </panel.string>
-            <texture_picker
-             can_apply_immediately="true"
-             default_image_name="Default"
-             fallback_image="locked_image.j2c"
-             follows="left|top"
-             height="80"
-             label="Textura"
-             layout="topleft"
-             left="10"
-             name="texture control"
-             tool_tip="PUlsa para elegir una imagen"
-             top="8"
-             width="64" />
-            <color_swatch
-             can_apply_immediately="true"
-             follows="left|top"
-             height="80"
-             label="Color"
-             layout="topleft"
-             left_pad="15"
-             name="colorswatch"
-             tool_tip="Pulsa para elegir el color"
-             top_delta="0"
-             width="64" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left_pad="15"
-             name="color trans"
-             text_readonly_color="LabelDisabledColor"
-             top="6"
-             width="110">
-                Transparencia %
-            </text>
-            <spinner
-             decimal_digits="0"
-             follows="left|top"
-             height="19"
-             increment="2"
-             initial_value="0"
-             layout="topleft"
-             left_delta="0"
-             max_val="100"
-             name="ColorTrans"
-             top_pad="4"
-             width="80" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left_delta="0"
-             name="glow label"
-             text_readonly_color="LabelDisabledColor"
-             top_pad="8"
-             width="80">
-                Resplandor
-            </text>
-            <spinner
-             decimal_digits="2"
-             follows="left|top"
-             height="19"
-             initial_value="0"
-             layout="topleft"
-             left_delta="0"
-             name="glow"
-             top_pad="4"
-             width="80" />
-            <check_box
-             height="19"
-             label="Brillo al máximo"
-             layout="topleft"
-             left_delta="-5"
-             name="checkbox fullbright"
-             top_pad="4"
-             width="81" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="10"
-             name="tex gen"
-             text_readonly_color="LabelDisabledColor"
-             top_pad="5"
-             width="90">
-                Trazado
-            </text>
-            <combo_box
-             height="23"
-             layout="topleft"
-             left_delta="0"
-             name="combobox texgen"
-             top_pad="4"
-             width="90">
-                <combo_box.item
-                 label="Por defecto"
-                 name="Default"
-                 value="Default" />
-                <combo_box.item
-                 label="Plano"
-                 name="Planar"
-                 value="Planar" />
-            </combo_box>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             name="label shininess"
-             left_pad="4"
-             text_readonly_color="LabelDisabledColor"
-             top_pad="-37"
-             width="90">
-                Brillo
-            </text>
-            <combo_box
-             height="23"
-             layout="topleft"
-             left_delta="0"
-             name="combobox shininess"
-             top_pad="4"
-             width="90">
-                <combo_box.item
-                 label="Ninguno"
-                 name="None"
-                 value="None" />
-                <combo_box.item
-                 label="Bajo"
-                 name="Low"
-                 value="Low" />
-                <combo_box.item
-                 label="Medio"
-                 name="Medium"
-                 value="Medium" />
-                <combo_box.item
-                 label="Alto"
-                 name="High"
-                 value="High" />
-            </combo_box>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left_pad="4"
-             name="label bumpiness"
-             text_readonly_color="LabelDisabledColor"
-             top_pad="-37"
-             width="90">
-                Relieve
-            </text>
-            <combo_box
-             height="23"
-             layout="topleft"
-             left_delta="0"
-             name="combobox bumpiness"
-             top_pad="4"
-             width="90">
-                <combo_box.item
-                 label="Ninguno"
-                 name="None"
-                 value="None" />
-                <combo_box.item
-                 label="Brillo"
-                 name="Brightness"
-                 value="Brightness" />
-                <combo_box.item
-                 label="Oscuridad"
-                 name="Darkness"
-                 value="Darkness" />
-                <combo_box.item
-                 label="Símil madera"
-                 name="woodgrain"
-                 value="woodgrain" />
-                <combo_box.item
-                 label="Corteza"
-                 name="bark"
-                 value="bark" />
-                <combo_box.item
-                 label="Ladrillos"
-                 name="bricks"
-                 value="bricks" />
-                <combo_box.item
-                 label="Ajedrezado"
-                 name="checker"
-                 value="checker" />
-                <combo_box.item
-                 label="Hormigón"
-                 name="concrete"
-                 value="concrete" />
-                <combo_box.item
-                 label="Alicatado"
-                 name="crustytile"
-                 value="crustytile" />
-                <combo_box.item
-                 label="Piedra cortada"
-                 name="cutstone"
-                 value="cutstone" />
-                <combo_box.item
-                 label="Discos"
-                 name="discs"
-                 value="discs" />
-                <combo_box.item
-                 label="Grava"
-                 name="gravel"
-                 value="gravel" />
-                <combo_box.item
-                 label="Placa de Petri"
-                 name="petridish"
-                 value="petridish" />
-                <combo_box.item
-                 label="Revestimiento"
-                 name="siding"
-                 value="siding" />
-                <combo_box.item
-                 label="Baldosa de piedra"
-                 name="stonetile"
-                 value="stonetile" />
-                <combo_box.item
-                 label="Estuco"
-                 name="stucco"
-                 value="stucco" />
-                <combo_box.item
-                 label="Succión"
-                 name="suction"
-                 value="suction" />
-                <combo_box.item
-                 label="Tejido"
-                 name="weave"
-                 value="weave" />
-            </combo_box>
-          <!--
-            <line_editor
-             bevel_style="in"
-             border_style="line"
-             border_thickness="1"
-             follows="left|top"
-             height="16"
-             layout="topleft"
-             left="10"
-             max_length_bytes="63"
-             name="Home Url"
-             select_on_focus="true"
-             top="134"
-             width="250" />
-            <check_box
-             height="16"
-             label="Media Face"
-             layout="topleft"
-             left_delta="0"
-             name="has media"
-             top_pad="6"
-             width="70" />
-            <button
-             follows="left|top"
-             font="SansSerifSmall"
-             height="20"
-             label="Set Media Info"
-             label_selected="Set Media Info"
-             layout="topleft"
-             left_pad="60"
-             name="media info set"
-             top_delta="-4"
-             width="120" />
--->
-            <check_box
-             follows="top|left"
-             height="16"
-             initial_value="false"
-             label="Alinear caras planas"
-             layout="topleft"
-             left="17"
-             name="checkbox planar align"
-             tool_tip="Alinear texturas en todas las caras seleccionadas con la última cara seleccionada. Requiere la representación de texturas en plano."
-             top_delta="26"
-             width="140" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="10"
-             name="rpt"
-             text_readonly_color="LabelDisabledColor"
-             top_pad="2"
-             width="140">
-                Repeticiones por cara
-            </text>
-            <spinner
-             follows="left|top"
-             height="19"
-             initial_value="0"
-             label="Horizontal (U)"
-             label_width="115"
-             layout="topleft"
-             left="20"
-             max_val="1000"
-             name="TexScaleU"
-             top_pad="5"
-             width="185" />
-            <check_box
-             height="19"
-             label="Voltear"
-             layout="topleft"
-             left_pad="5"
-             name="checkbox flip s"
-             top_delta="0"
-             width="70" />
-            <spinner
-             follows="left|top"
-             height="19"
-             initial_value="0"
-             label="Vertical (V)"
-             label_width="115"
-             layout="topleft"
-             left="20"
-             max_val="1000"
-             name="TexScaleV"
-             width="185" />
-            <check_box
-             height="19"
-             label="Voltear"
-             layout="topleft"
-             left_pad="5"
-             name="checkbox flip t"
-             top_delta="0"
-             width="70" />
-            <spinner
-             decimal_digits="2"
-             follows="left|top"
-             height="19"
-             increment="1"
-             initial_value="0"
-			 label="Rotación (en grados)"
-             layout="topleft"
-			 label_width="125"
-             left="10"
-             max_val="9999"
-             min_val="-9999"
-             name="TexRot"
-             width="185" />
-
-            <spinner
-             decimal_digits="1"
-             follows="left|top"
-             height="23"
-             initial_value="1"
-			 label="Repeticiones / metro"
-             layout="topleft"
-			 label_width="125"
-             left="10"
-             max_val="10"
-             min_val="0.1"
-             name="rptctrl"
-             width="185" />
-            <button
-             follows="left|top"
-             height="23"
-             label="Aplicar"
-             label_selected="Aplicar"
-             layout="topleft"
-             left_pad="5"
-             name="button apply"
-             width="75" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="10"
-             name="tex offset"
-             text_readonly_color="LabelDisabledColor"
-             width="200">
-                Despl. de la textura
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="right|top"
-             height="10"
-             layout="topleft"
-             right="-10"
-	     top_delta="0"
-	     halign="right"
-             name="tex params"
-             width="100">
-                Params. de textura
-            </text>
-            <spinner
-             follows="left|top"
-             height="19"
-             initial_value="0"
-             label="Horizontal (U)"
-             label_width="115"
-             layout="topleft"
-             left="20"
-             min_val="-1"
-             name="TexOffsetU"
-             width="185" />
-            <button
-             follows="top|right"
-             height="19"
-             label="Copiar"
-             layout="topleft"
-             left_pad="10"
-             name="copytextures"
-             tool_tip="Copiar los parámetros al portapapeles"
-             width="68">
-            </button>
-            <spinner
-             follows="left|top"
-             height="19"
-             initial_value="0"
-             label="Vertical (V)"
-             label_width="115"
-             layout="topleft"
-             left="20"
-             min_val="-1"
-             name="TexOffsetV"
-             top_pad="1"
-             width="185" />
-            <button
-             follows="top|right"
-             height="20"
-             label="Pegar"
-             layout="topleft"
-             left_pad="10"
-             name="pastetextures"
-             tool_tip="Pegar los parámetros desde el portapapeles"
-             width="68">
-            </button>
-        <panel
-         border="false"
-         follows="left|top"
-         layout="topleft"
-         mouse_opaque="false"
-         background_visible="true"
-         bg_alpha_color="Black_10"
-         name="Add_Media"
-         left="0"
-         height="47"
-         width="290">
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="18"
-             layout="topleft"
-             left="10"
-             top_pad="3"
-             name="media_tex"
-             width="190">
-              Medios
+			<text name="Description:">
+				Descripción:
 			</text>
-			<button
-			 follows="top|left"
-			 height="18"
-			 image_selected="AddItem_Press"
-			 image_unselected="AddItem_Off"
-			 image_disabled="AddItem_Disabled"
-			 layout="topleft"
-			 left_pad="0"
-			 name="add_media"
-			 tab_stop="false"
-			 top_delta="0"
-			 tool_tip="Añadir medio"
-			 width="18">
-				<button.commit_callback
-				function="BuildTool.AddMedia"/>
-			</button>
-			<button
-			 follows="top|left"
-			 height="18"
-			 image_selected="TrashItem_Press"
-			 image_unselected="TrashItem_Off"
-			 layout="topleft"
-			 left_pad="5"
-			 name="delete_media"
-			 tool_tip="Borrar esta textura de medio"
-			 top_delta="0"
-			 width="18">
-				<button.commit_callback
-				function="BuildTool.DeleteMedia"/>
-			</button>
-			<button
-			 follows="top|left"
-			 tool_tip="Editar este medio"
-			 height="12"
-             image_disabled="Icon_Gear_Background"
-             image_selected="Icon_Gear_Press"
-             image_unselected="Icon_Gear_Foreground"
-			 layout="topleft"
-			 left_pad="10"
-			 name="edit_media"
-			 top_delta="3"
-			 width="12">
-				<button.commit_callback
-				function="BuildTool.EditMedia"/>
-			</button>
-      <text
-			 follows="left|top|right"
-			 height="9"
-			 layout="topleft"
-			 left="10"
-                         use_ellipses="true"
-			 read_only="true"
-			 name="media_info"
-			 width="280" />
-      <web_browser
-        visible="false"
-        enabled="false"
-        border_visible="true"
-        bottom_delta="0"
-        follows="top|left"
-        left="0"
-        name="title_media"
-        width="4"
-        height="4"
-        start_url="about:blank"
-        decouple_texture_size="true" />
-     <button
-			 follows="right|top"
-			 height="22"
-			 label="Alinear"
-			 label_selected="Alinear"
-			 layout="topleft"
-			 right="-16"
-			 name="button align"
-			 top_delta="-4"
-			 tool_tip="Alinear la textura de medio (primero debe cargarse)"
-			 width="80" />
+			<text name="Creator:">
+				Creador:
+			</text>
+			<text name="Owner:">
+				Propietario:
+			</text>
+			<text name="Last Owner:">
+                                Prop. Ant.:
+			</text>
+			<text name="Group:">
+				Grupo:
+			</text>
+			<button name="button set group" tool_tip="Elige un grupo con el que compartir los permisos de este objeto."/>
+			<check_box label="Compartir" name="checkbox share with group" tool_tip="Permite que todos los miembros del grupo compartan tus permisos de modificación en este objeto. Debes cederlo para activar las restricciones según los roles."/>
+			<button label="Ceder" label_selected="Ceder" name="button deed" tool_tip="La cesión entrega este objeto con los permisos de  próximo propietario. Los objetos cedidos al grupo pueden ser a su vez cedidos por un oficial del mismo."/>
+			<text name="label click action">
+				Al tocarlo:
+			</text>
+			<combo_box name="clickaction">
+				<combo_box.item label="Tocarlo (por defecto)" name="Touch/grab(default)"/>
+				<combo_box.item label="Sentarse en el objeto" name="Sitonobject"/>
+				<combo_box.item label="Comprar el objeto" name="Buyobject"/>
+				<combo_box.item label="Pagar al objeto" name="Payobject"/>
+				<combo_box.item label="Abrir el objeto" name="Open"/>
+				<combo_box.item label="Enfocar el objeto" name="Zoom"/>
+			</combo_box>
+			<check_box label="En venta:" name="checkbox for sale"/>
+	  		<combo_box name="sale type">
+				<combo_box.item name="Copy" label="Copia"/>
+                                <combo_box.item name="Contents" label="Contenido"/>
+				<combo_box.item name="Original" label="Original"/>
+			</combo_box>
+			<spinner name="Edit Cost" label="Precio: L$"/>
+			<button label="Aplicar" name="button mark for sale" tool_tip="Marcar/Actualizar objeto(s) en venta."/>
+			<button label="Copiar claves" name="btnCopyKeys" tool_tip="Copia la clave de los objetos seleccionados al portapapeles."/>
+			<check_box label="Mostrar en la búsqueda" name="search_check" tool_tip="Permitir que la gente vea este objeto en los resultados de la búsqueda."/>
+			<panel name="perms_build">
+				<text name="perm_modify">
+					Puedes modificar este objeto
+				</text>
+				<text name="Anyone can:">
+					Cualquiera puede:
+				</text>
+				<check_box label="Moverlo" name="checkbox allow everyone move"/>
+				<check_box label="Copiarlo" name="checkbox allow everyone copy"/>
+				<text name="Next owner can:">
+					El próximo propietario puede:
+				</text>
+				<check_box label="Modificarlo" name="checkbox next owner can modify"/>
+				<check_box label="Copiarlo" name="checkbox next owner can copy"/>
+				<check_box label="Transferirlo" name="checkbox next owner can transfer" tool_tip="El próximo propietario puede dar o revender este objeto."/>
+				<text name="B:">
+					B:
+				</text>
+				<text name="O:">
+					O:
+				</text>
+				<text name="G:">
+					G:
+				</text>
+				<text name="E:">
+					E:
+				</text>
+				<text name="N:">
+					N:
+				</text>
+				<text name="F:">
+					F:
+				</text>
+			</panel>
+	  	</panel>
+		<panel label="Objeto" name="Object">
+			<check_box label="Bloqueado" name="checkbox locked" tool_tip="Evita que el objeto sea movido o borrado. Suele ser útil mientras se construye, para prevenir que se modifique o elimine sin querer."/>
+			<check_box label="Físico" name="Physical Checkbox Ctrl" tool_tip="Permite que el objeto pueda ser empujado y se someta a las leyes de la gravedad."/>
+			<check_box label="Temporal" name="Temporary Checkbox Ctrl" tool_tip="Provoca que el objeto desaparezca 1 minuto después de ser creado."/>
+			<check_box label="Inmaterial" name="Phantom Checkbox Ctrl" tool_tip="Evita que el objeto no colisione con otros objetos o avatares."/>
+			<text name="label position">
+                                Posición (metros)
+			</text>
+			<spinner label="X" name="Pos X"/>
+			<button  label="C" name="copypos" tool_tip="Copiar posición."/>
+                        <spinner label="Y" name="Pos Y"/>
+			<button label="P" name="pastepos" tool_tip="Copiar posición."/>
+			<spinner label="Z" name="Pos Z"/>
+			<button label="p" name="pasteposclip" tool_tip="Pegar posición desde el portapapeles."/>
+			<text name="label size">
+                                Tamaño (metros)
+			</text>
+			<spinner label="X" name="Scale X"/>
+			<button label="C" name="copysize" tool_tip="Copiar tamaño."/>
+			<spinner label="Y" name="Scale Y"/>
+			<button label="P" name="pastesize" tool_tip="Pegar tamaño."/>
+			<spinner label="Z" name="Scale Z"/>
+			<button label="p" name="pastesizeclip" tool_tip="Pegar tamaño desde el portapapeles."/>
+			<text name="label rotation">
+                                Rotación (grados)
+			</text>
+			<spinner label="X" name="Rot X"/>
+			<button label="C" name="copyrot" tool_tip="Copiar rotación."/>
+			<spinner label="Y" name="Rot Y"/>
+			<button label="P" name="pasterot" tool_tip="Pegar rotación."/>
+			<spinner label="Z" name="Rot Z"/>
+			<button label="p" name="pasterotclip" tool_tip="Pegar rotación desde el portapapeles."/>
+			<text name="edit_object">
+				Paráms. del objeto:
+			</text>
+			<button label="Copiar" name="copyparams" tool_tip="Copiar parámetros al portapapeles."/>
+                        <button label="Pegar" name="pasteparams" tool_tip="Pegar parámetros desde el portapapeles."/>
+			<combo_box name="comboBaseType">
+				<combo_box.item label="Cubo" name="Box"/>
+				<combo_box.item label="Cilindro" name="Cylinder"/>
+				<combo_box.item label="Prisma" name="Prism"/>
+				<combo_box.item label="Esfera" name="Sphere"/>
+				<combo_box.item label="Toroide" name="Torus"/>
+				<combo_box.item label="Tubo" name="Tube"/>
+                                <combo_box.item label="Anillo" name="Ring"/>
+				<combo_box.item label="Esculpido" name="Sculpted"/>
+				<combo_item name="PathLineProfileHalfCircle" label="Línea->Semicírculo"/>
+				<combo_item name="PathCircleProfileHalfCircle" label="Círculo->Semicírculo"/>
+				<combo_item name="PathCircle2ProfileSquare" label="Círculo2->Cuadrado"/>
+				<combo_item name="PathCircle2ProfileTriangle" label="Círculo2->Triángulo"/>
+				<combo_item name="PathCircle2ProfileCircle" label="Círculo2->Círculo"/>
+				<combo_item name="PathCircle2ProfileHalfCircle" label="Círculo2->Semicírculo"/>
+				<combo_item name="PathTestProfileSquare" label="Test->Cuadrado"/>
+				<combo_item name="PathTestProfileTriangle" label="Test->Triángulo"/>
+				<combo_item name="PathTestProfileCircle" label="Test->Círculo"/>
+				<combo_item name="PathTestProfileHalfCircle" label="Test->Semicírculo"/>
+				<combo_item name="Path33Profile0" label="33->Círculo"/>
+				<combo_item name="Path33Profile1" label="33->Cuadrado"/>
+				<combo_item name="Path33Profile2" label="33->Triángulo"/>
+				<combo_item name="Path33Profile5" label="33->Semicírculo" />
+			</combo_box>
+			<text name="text cut">
+				Corte (inicio/fin)
+			</text>
+			<spinner label="I" name="cut begin"/>
+			<spinner label="F" name="cut end"/>
+			<text name="text hollow">
+				Hueco
+			</text>
+			<text name="text skew">
+				Sesgo
+			</text>
+			<text name="Hollow Shape">
+				Forma del hueco
+			</text>
+			<combo_box name="hole">
+				<combo_box.item label="Por defecto" name="Default"/>
+                                <combo_box.item label="Circular" name="Circle"/>
+				<combo_box.item label="Cuadrado" name="Square"/>
+                                <combo_box.item label="Triangular" name="Triangle"/>
+			</combo_box>
+			<text name="text twist">
+				Torsión (inicio/fin)
+			</text>
+			<spinner label="I" name="Twist Begin"/>
+			<spinner label="F" name="Twist End"/>
+			<text name="scale_taper">
+				Biselado
+			</text>
+			<text name="scale_hole">
+				Tamaño del hueco
+			</text>
+			<spinner label="X" name="Taper Scale X"/>
+			<spinner label="Y" name="Taper Scale Y"/>
+			<text name="text topshear">
+				Inclinación superior
+			</text>
+			<spinner label="X" name="Shear X"/>
+			<spinner label="Y" name="Shear Y"/>
+			<text name="advanced_cut">
+				Corte del perfil (inicio/fin)
+			</text>
+			<text name="advanced_dimple">
+				Abolladura (inicio/fin)
+			</text>
+                        <text name="advanced_slice">
+				Troceado (inicio/fin)
+			</text>
+			<spinner label="I" name="Path Limit Begin"/>
+			<spinner label="F" name="Path Limit End"/>
+			<text name="text taper2" tool_tip="No funciona en todos los tipos de primitiva.">
+				Perfil del biselado
+			</text>
+			<spinner label="X" name="Taper X"/>
+			<spinner label="Y" name="Taper Y"/>
+                        <text name="text radius delta">
+				Radio
+			</text>
+			<text name="text revolutions">
+				Giros
+			</text>
+                        <texture_picker label="Textura para escultura" name="sculpt texture control" tool_tip="Pulse para elegir una imagen"/>
+			<check_box label="Reflejar" name="sculpt mirror control" tool_tip="Voltea la primitiva esculpida siguiendo el eje X"/>
+			<check_box label="Volver del revés" name="sculpt invert control" tool_tip="Invierte los valores de las primitivas esculpidas, haciendo aparecer fuera lo de dentro"/>
+			<text name="label sculpt type">
+				Tipo de unión
+			</text>
+			<combo_box name="sculpt type control">
+				<combo_box.item label="(ninguno)" name="None"/>
+				<combo_box.item label="Esfera" name="Sphere"/>
+				<combo_box.item label="Toroide" name="Torus"/>
+				<combo_box.item label="Plano" name="Plane"/>
+				<combo_box.item label="Cilindro" name="Cylinder"/>
+			</combo_box>
 		</panel>
-	   </panel>
-       <panel
-         border="false"
-         follows="all"
-         label="Contenido"
-         layout="topleft"
-         left_delta="0"
-         mouse_opaque="false"
-         help_topic="toolbox_contents_tab"
-         name="Contents"
-         top_delta="0"
-         width="295">
-            <button
-             follows="left|top"
-             height="23"
-             label="Script nuevo"
-             label_selected="Script nuevo"
-             layout="topleft"
-             left="10"
-             name="button new script"
-             top="10"
-             width="90" />
-            <button
-             follows="left|top"
-             height="23"
-             label="Permisos"
-             layout="topleft"
-             left_pad="8"
-             name="button permissions"
-             width="90" />
-            <button
-             follows="left|top"
-             height="23"
-             label="Refrescar"
-             layout="topleft"
-             left_pad="8"
-             name="button refresh"
-             width="75" />
-            <panel_inventory_object
-             border="true"
-             border_visible="true"
-             bevel_style="in"
-             follows="left|top|right"
-             height="325"
-             layout="topleft"
-             left="10"
-             name="contents_inventory"
-             top="50"
-             width="275" />
-		</panel>
-		<panel label="Caracter." name="Features">
-			<panel.string name="None">
-				Ninguno
-			</panel.string>
-			<panel.string name="Prim">
-				Prim
-			</panel.string>
-			<panel.string name="Convex Hull">
-				Apariencia convexa
-			</panel.string>
+		<panel label="Caract." name="Features">
+                        <panel.string name="None">
+                                Ninguno
+                        </panel.string>
+                        <panel.string name="Prim">
+                                Prim
+                        </panel.string>
+                        <panel.string name="Convex Hull">
+                                Convexo
+                        </panel.string>
 			<text name="select_single">
-				Selecciona un sólo prim para editarlo.
+				Selecciona una sola primitiva para poder editarla.
 			</text>
 			<text name="edit_object">
 				Editar las características del objeto:
 			</text>
-			<check_box label="Flexibilidad" name="Flexible1D Checkbox Ctrl" tool_tip="Permite que el objeto flexione en el eje Z (sólo del lado del cliente)"/>
+			<check_box label="Flexibilidad" name="Flexible1D Checkbox Ctrl" tool_tip="Permite que el objeto flexione en el eje Z (sólo del lado del cliente)."/>
 			<spinner label="Blandura" name="FlexNumSections"/>
-			<spinner label="Gravedad" name="FlexGravity"/>
+                        <spinner label="Gravedad" name="FlexGravity"/>
 			<spinner label="Fricción" name="FlexFriction"/>
 			<spinner label="Viento" name="FlexWind"/>
 			<spinner label="Tirantez" name="FlexTension"/>
 			<spinner label="Fuerza en X" name="FlexForceX"/>
 			<spinner label="Fuerza en Y" name="FlexForceY"/>
 			<spinner label="Fuerza en Z" name="FlexForceZ"/>
-			<check_box label="Luz" name="Light Checkbox Ctrl" tool_tip="Hace que el objeto emita luz"/>
-			<color_swatch label="" name="colorswatch" tool_tip="Pulsa para abrir el selector de color"/>
-			<texture_picker label="" name="light texture control" tool_tip="Pulsa para elegir una proyección de imagen (sólo tiene efecto con renderización deferida activada)"/>
-			<spinner label="Intensidad" name="Light Intensity"/>
-			<spinner label="FOV" name="Light FOV"/>
-			<spinner label="Radio" name="Light Radius"/>
-			<spinner label="Visión" name="Light Focus"/>
-			<spinner label="Atenuación" name="Light Falloff"/>
-			<spinner label="Ambiental" name="Light Ambiance"/>
+                        <check_box label="Luz" name="Light Checkbox Ctrl" tool_tip="Permite que el objeto emita luz."/>
+			<color_swatch name="colorswatch" tool_tip="Pulsa para elegir el color."/>
+		 	<texture_picker name="light texture control" tool_tip="Pulsa para elegir una imagen para proyectar (sólo tiene efecto con la renderización deferida activada)."/>
+		  	<spinner label="Intensidad" name="Light Intensity"/>
+		  	<spinner label="FOV" name="Light FOV"/>
+		  	<spinner label="Radio" name="Light Radius"/>
+		  	<spinner label="Foco" name="Light Focus"/>
+		  	<spinner label="Atenuación" name="Light Falloff"/>
+		  	<spinner label="Ambiental" name="Light Ambiance"/>
 			<text name="label physicsshapetype">
 				Tipo de forma física:
 			</text>
-			<combo_box name="Physics Shape Type Combo Ctrl" tool_tip="Selecciona el tipo de forma física"/>
+			<combo_box name="Physics Shape Type Combo Ctrl" tool_tip="Elige el tipo de forma física."/>
 			<combo_box name="material">
 				<combo_box.item label="Piedra" name="Stone"/>
 				<combo_box.item label="Metal" name="Metal"/>
@@ -3266,25 +419,25 @@ even though the user gets a free copy.
 			</combo_box>
 			<spinner label="Gravedad" name="Physics Gravity"/>
 			<spinner label="Fricción" name="Physics Friction"/>
-			<spinner label="Densidad en 100 kg/m^3" name="Physics Density"/>
-			<spinner label="Reemplazo" name="Physics Restitution"/>
+                        <spinner label="Densidad *100 kg/m^3" name="Physics Density"/>
+			<spinner label="Rebote" name="Physics Restitution"/>
 		</panel>
 		<panel label="Textura" name="Texture">
 			<panel.string name="string repeats per meter">
-				Repeticiones por m.
+				Repeticiones/metro
 			</panel.string>
 			<panel.string name="string repeats per face">
-				Repeticiones por cara
+				Repeticiones/cara
 			</panel.string>
-			<texture_picker label="Textura" name="texture control" tool_tip="Pulse para elegir una imagen"/>
-			<color_swatch label="Color" name="colorswatch" tool_tip="Pulsa para abrir el selector de color"/>
+                        <texture_picker label="Textura" name="texture control" tool_tip="Pulsa para elegir una imagen."/>
+                        <color_swatch label="Color" name="colorswatch" tool_tip="Pulsa para abrir el selector de color."/>
 			<text name="color trans">
 				Transparencia %
 			</text>
 			<text name="glow label">
 				Resplandor
 			</text>
-			<check_box bottom_delta="-21" label="Brillo al  máximo" name="checkbox fullbright"/>
+			<check_box label="Brillo al máximo" name="checkbox fullbright"/>
 			<text name="tex gen">
 				Detallado
 			</text>
@@ -3299,7 +452,7 @@ even though the user gets a free copy.
 				<combo_box.item label="Ninguna" name="None"/>
 				<combo_box.item label="Baja" name="Low"/>
 				<combo_box.item label="Media" name="Medium"/>
-				<combo_box.item label="Alta" name="High"/>
+                                <combo_box.item label="Alta" name="High"/>
 			</combo_box>
 			<text name="label bumpiness">
 				Relieve
@@ -3308,51 +461,57 @@ even though the user gets a free copy.
 				<combo_box.item label="Ninguno" name="None"/>
 				<combo_box.item label="Brillo" name="Brightness"/>
 				<combo_box.item label="Oscuro" name="Darkness"/>
-				<combo_box.item label="grano de madera" name="woodgrain"/>
-				<combo_box.item label="corteza" name="bark"/>
-				<combo_box.item label="ladrillos" name="bricks"/>
-				<combo_box.item label="cajero" name="checker"/>
-				<combo_box.item label="cemento" name="concrete"/>
-				<combo_box.item label="azulejería" name="crustytile"/>
-				<combo_box.item label="piedra cortada" name="cutstone"/>
-				<combo_box.item label="discos" name="discs"/>
-				<combo_box.item label="grava" name="gravel"/>
-				<combo_box.item label="placa de Petri" name="petridish"/>
-				<combo_box.item label="revestimiento" name="siding"/>
-				<combo_box.item label="baldosa de piedra" name="stonetile"/>
-				<combo_box.item label="estuco" name="stucco"/>
-				<combo_box.item label="succión" name="suction"/>
-				<combo_box.item label="tejido" name="weave"/>
+				<combo_box.item label="Grano de madera" name="woodgrain"/>
+				<combo_box.item label="Corteza" name="bark"/>
+				<combo_box.item label="Ladrillos" name="bricks"/>
+				<combo_box.item label="Ajedrezado" name="checker"/>
+				<combo_box.item label="Hormigón" name="concrete"/>
+				<combo_box.item label="Alicatado" name="crustytile"/>
+				<combo_box.item label="Piedra cortada" name="cutstone"/>
+				<combo_box.item label="Discos" name="discs"/>
+				<combo_box.item label="Grava" name="gravel"/>
+				<combo_box.item label="Placa de Petri" name="petridish"/>
+				<combo_box.item label="Revestimiento" name="siding"/>
+				<combo_box.item label="Baldosa de piedra" name="stonetile"/>
+				<combo_box.item label="Estucado" name="stucco"/>
+				<combo_box.item label="Succión" name="suction"/>
+				<combo_box.item label="Tejido" name="weave"/>
 			</combo_box>
-			<check_box initial_value="falso" label="Alinear caras del plano" name="checkbox planar align" tool_tip="Alinear texturas en todas las caras seleccionadas con la última cara seleccionada. Requiere la representación de texturas en el plano."/>
+			<check_box label="Alinear las caras del plano" name="checkbox planar align" tool_tip="Alinear texturas en todas las caras seleccionadas con la última cara seleccionada. Requiere la representación de texturas en el plano."/>
 			<text name="rpt">
-				Repeticiones por cara
+				Repeticiones/cara
 			</text>
 			<spinner label="Horizontal (U)" name="TexScaleU"/>
 			<check_box label="Voltear" name="checkbox flip s"/>
 			<spinner label="Vertical (V)" name="TexScaleV"/>
 			<check_box label="Voltear" name="checkbox flip t"/>
-			<spinner label="Rotación" name="TexRot"/>
-			<spinner label="Repeticiones / Metro" name="rptctrl"/>
+			<spinner label="Rotación˚" name="TexRot"/>
+			<spinner label="Repeticiones/metro" name="rptctrl"/>
 			<button label="Aplicar" label_selected="Aplicar" name="button apply"/>
 			<text name="tex offset">
-				Desplazar
+				Despl. de textura
+			</text>
+			<text name="tex params">
+				Parám. de textura
 			</text>
 			<spinner label="Horizontal (U)" name="TexOffsetU"/>
+			<button label="Copiar" name="copytextures" tool_tip="Copiar parámetros al portapapeles."/>
 			<spinner label="Vertical (V)" name="TexOffsetV"/>
+			<button label="Pegar" name="pastetextures" tool_tip="Pegar parámetros desde el portapapeles"/>
 			<panel name="Add_Media">
 				<text name="media_tex">
-					Media
+			  		Medios
 				</text>
-				<button name="add_media" tool_tip="Añadir un media"/>
-				<button name="delete_media" tool_tip="Borrar esta textura para media"/>
-				<button name="edit_media" tool_tip="Editar este media"/>
-				<button label="Centrar" label_selected="Centrar los media" name="button align" tool_tip="Centrar esta textura para media (primero debe cargarse)"/>
+				<button name="add_media" tool_tip="Añadir medio."/>
+				<button name="delete_media" tool_tip="Borrar esta textura de medio."/>
+				<button tool_tip="Editar este medio." name="edit_media"/>
+                                <button label="Alinear" label_selected="Alinear" name="button align" tool_tip="Alinear la textura de medio (primero debe cargarse)."/>
 			</panel>
-		</panel>
-		<panel label="Contenido " name="Contents">
-			<button label="Script nuevo" label_selected="Script nuevo" name="button new script"/>
+	   	</panel>
+	   	<panel label="Contenido" name="Contents">
+			<button label="Nuevo script" label_selected="Nuevo script" name="button new script"/>
 			<button label="Permisos" name="button permissions"/>
+			<button label="Refrescar" name="button refresh"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">
@@ -3360,22 +519,22 @@ even though the user gets a free copy.
 			Información de la parcela
 		</text>
 		<text name="label_area_price">
-			Precio: [PRICE] L$ por [AREA] m²
+			Precio: L$[PRICE] por [AREA] m²
 		</text>
 		<text name="label_area">
 			Área: [AREA] m²
 		</text>
 		<button label="Acerca del terreno" label_selected="Acerca del terreno" name="button about land"/>
-		<check_box label="Mostrar los propietarios" name="checkbox show owners" tool_tip="El color de las parcelas es según su propietario:   Verde = Su terreno  Agua = Terreno de sus grupos  Rojo = Propiedad de otros  Amarillo = En venta  Morado = Para subasta  Gris = Público"/>
+		<check_box label="Mostrar propietarios" name="checkbox show owners" tool_tip="Colorear las parcelas según su propietario: Verde = Su terreno / Agua = Terreno de sus grupos / Rojo = Propiedad de otros / Amarillo = En venta / Morado = Para subasta / Gris = Público"/>
 		<text name="label_parcel_modify">
-			Modificar la parcela
+			Modificar parcela
 		</text>
-		<button label="Dividir" label_selected="Dividir" name="button subdivide land"/>
+		<button label="Segregar" label_selected="Segregar" name="button subdivide land"/>
 		<button label="Unir" label_selected="Unir" name="button join land"/>
 		<text name="label_parcel_trans">
 			Transacciones de terreno
 		</text>
 		<button label="Comprar terreno" label_selected="Comprar terreno" name="button buy land"/>
-		<button label="Abandonar el terreno" label_selected="Abandonar el terreno" name="button abandon land"/>
+		<button label="Abandonar terreno" label_selected="Abandonar terreno" name="button abandon land"/>
 	</panel>
 </floater>
