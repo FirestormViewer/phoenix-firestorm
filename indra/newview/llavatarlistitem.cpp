@@ -776,12 +776,12 @@ void LLAvatarListItem::initChildrenWidths(LLAvatarListItem* avatar_item)
 	S32 profile_btn_width = 18;
 	
 	//info btn width + padding
-	S32 info_btn_width = 0;
-	if (avatar_item->mInfoBtn->getVisible()) info_btn_width = 20;
+	S32 info_btn_width = 20;
+	//if (avatar_item->mInfoBtn->getVisible()) info_btn_width = 20;
 	
 	//volume slider width + padding
-	S32 volume_slider_width = 0;
-	if (avatar_item->mVoiceSlider->getVisible()) volume_slider_width = 90;
+	S32 volume_slider_width = 90;
+	//if (avatar_item->mVoiceSlider->getVisible()) volume_slider_width = 90;
 	
 	// online permission icon width + padding
 	//S32 permission_online_width = avatar_item->mInfoBtn->getRect().mLeft - avatar_item->mIconPermissionOnline->getRect().mLeft;

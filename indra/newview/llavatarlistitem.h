@@ -198,6 +198,7 @@ private:
 	 * Enumeration of item elements in order from right to left.
 	 * 
 	 * updateChildren() assumes that indexes are in the such order to process avatar icon easier.
+	 * assume that child indexes are in back order: the first in Enum is the last (right) in the item
 	 *
 	 * @see updateChildren()
 	 */
