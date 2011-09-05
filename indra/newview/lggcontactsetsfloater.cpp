@@ -326,7 +326,7 @@ void lggContactSetsFloater::drawRightClick()
 				isNonFriend++;
 		}
 	}
-	if(currentGroup()!="All Groups" && currentGroup() != "No Groups" && currentGroup() != "")
+	if(currentGroup()!="All Sets" && currentGroup() != "No Sets" && currentGroup() != "")
 	{
 		drawRemove=TRUE;
 		extras+=2;
@@ -383,14 +383,15 @@ void lggContactSetsFloater::drawRightClick()
 				selected.clear();
 			}
 		}
-
-		LLFontGL::getFontSansSerif()->renderUTF8(
-			std::string("Add to: "+groups[i])
-			, 0,
+		LLFontGL::getFontSansSerif()->render(
+			utf8str_to_wstring(std::string("Add to: "+groups[i])),0,
 			contextRect.mLeft,
 			top-(heightPer/2)-2,
 			LLColor4::white, LLFontGL::LEFT,
-			LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
+			LLFontGL::BASELINE, 
+			LLFontGL::NORMAL,//style
+			LLFontGL::DROP_SHADOW//shadow
+			);
 
 		top-=heightPer;
 	}
@@ -423,15 +424,15 @@ void lggContactSetsFloater::drawRightClick()
 				selected.clear();
 			}
 		}
-
-		LLFontGL::getFontSansSerif()->renderUTF8(
-			std::string("Remove From: "+currentGroup())
-			, 0,
+		LLFontGL::getFontSansSerif()->render(
+			utf8str_to_wstring(std::string("Remove From: "+currentGroup())),0,
 			contextRect.mLeft,
 			top-(heightPer/2)-2,
 			LLColor4::white, LLFontGL::LEFT,
-			LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
-
+			LLFontGL::BASELINE,
+			LLFontGL::NORMAL,//style
+			LLFontGL::DROP_SHADOW//shadow
+			);
 		top-=heightPer;
 	}
 	top-=heightPer;
@@ -457,13 +458,16 @@ void lggContactSetsFloater::drawRightClick()
 				//no
 			}
 		}
-		LLFontGL::getFontSansSerif()->renderUTF8(
-			avName
-			, 0,
+		LLFontGL::getFontSansSerif()->render(
+			utf8str_to_wstring(avName),0,
 			contextRect.mLeft,
 			top-(heightPer/2)-2,
 			LLColor4::white, LLFontGL::LEFT,
-			LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
+			LLFontGL::BASELINE,
+			LLFontGL::BOLD,//style
+			LLFontGL::DROP_SHADOW//shadow
+			);
+		
 		top-=heightPer;
 		
 		//rename start
@@ -514,13 +518,16 @@ void lggContactSetsFloater::drawRightClick()
 				}
 			}
 		}
-		LLFontGL::getFontSansSerif()->renderUTF8(
-			"Remove Display Name"
-			, 0,
+		LLFontGL::getFontSansSerif()->render(
+			utf8str_to_wstring(std::string("Remove Display Name")),0,
 			contextRect.mLeft,
 			top-(heightPer/2)-2,
 			LLColor4::white, LLFontGL::LEFT,
-			LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
+			LLFontGL::BASELINE,
+			LLFontGL::NORMAL,//style
+			LLFontGL::DROP_SHADOW//shadow
+			);
+		
 		top-=heightPer;
 
 		if(LGGContactSets::getInstance()->hasPseudonym(selected[0]))
@@ -541,16 +548,16 @@ void lggContactSetsFloater::drawRightClick()
 					sInstance->updateGroupsList();
 				}
 			}
-			LLFontGL::getFontSansSerif()->renderUTF8(
-				"Remove Alias"
-				, 0,
+			LLFontGL::getFontSansSerif()->render(
+				utf8str_to_wstring(std::string("Reset Name Modification")),0,
 				contextRect.mLeft,
 				top-(heightPer/2)-2,
 				LLColor4::white, LLFontGL::LEFT,
-				LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
+				LLFontGL::BASELINE,
+				LLFontGL::NORMAL,//style
+				LLFontGL::DROP_SHADOW//shadow
+				);
 			top-=heightPer;
-
-
 		}
 		if(isNonFriend)
 		{
@@ -567,13 +574,15 @@ void lggContactSetsFloater::drawRightClick()
 					sInstance->generateCurrentList();
 				}
 			}
-			LLFontGL::getFontSansSerif()->renderUTF8(
-				"Remove From List"
-				, 0,
+			LLFontGL::getFontSansSerif()->render(
+				utf8str_to_wstring(std::string("Remove From List")),0,
 				contextRect.mLeft,
 				top-(heightPer/2)-2,
 				LLColor4::white, LLFontGL::LEFT,
-				LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
+				LLFontGL::BASELINE,
+				LLFontGL::NORMAL,//style
+				LLFontGL::DROP_SHADOW//shadow
+				);
 			top-=heightPer;
 		}
 
@@ -595,13 +604,16 @@ void lggContactSetsFloater::drawRightClick()
 				LLAvatarActions::showProfile(selected[0]);
 			}
 		}
-		LLFontGL::getFontSansSerif()->renderUTF8(
-			std::string("View Profile")
-			, 0,
+		LLFontGL::getFontSansSerif()->render(
+			utf8str_to_wstring(std::string("View Profile")),0,
 			contextRect.mLeft,
 			top-(heightPer/2)-2,
 			LLColor4::white, LLFontGL::LEFT,
-			LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
+			LLFontGL::BASELINE,
+			LLFontGL::NORMAL,//style
+			LLFontGL::DROP_SHADOW//shadow
+			);
+		
 		top-=heightPer;
 
 		//// map
@@ -627,13 +639,16 @@ void lggContactSetsFloater::drawRightClick()
 
 				}
 			}
-			LLFontGL::getFontSansSerif()->renderUTF8(
-				std::string("Map Avatar")
-				, 0,
+			LLFontGL::getFontSansSerif()->render(
+				utf8str_to_wstring(std::string("Map Avatar")),0,
 				contextRect.mLeft,
 				top-(heightPer/2)-2,
 				LLColor4::white, LLFontGL::LEFT,
-				LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
+				LLFontGL::BASELINE,
+				LLFontGL::NORMAL,//style
+				LLFontGL::DROP_SHADOW//shadow
+				);
+			
 			top-=heightPer;
 		}
 
@@ -651,13 +666,15 @@ void lggContactSetsFloater::drawRightClick()
 				LLAvatarActions::startIM(selected[0]);
 			}
 		}
-		LLFontGL::getFontSansSerif()->renderUTF8(
-			std::string("Instant Message")
-			, 0,
+		LLFontGL::getFontSansSerif()->render(
+			utf8str_to_wstring(std::string("Instant Message")), 0,
 			contextRect.mLeft,
 			top-(heightPer/2)-2,
 			LLColor4::white, LLFontGL::LEFT,
-			LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
+			LLFontGL::BASELINE,
+			LLFontGL::NORMAL,//style
+			LLFontGL::DROP_SHADOW//shadow
+			);
 		top-=heightPer;
 
 		remBackGround.setLeftTopAndSize(contextRect.mLeft,top,width,heightPer);
@@ -674,14 +691,15 @@ void lggContactSetsFloater::drawRightClick()
 				handle_lure(selected[0]);
 			}
 		}
-		LLFontGL::getFontSansSerif()->renderUTF8(
-			std::string("Teleport Avatar")
-			, 0,
+		LLFontGL::getFontSansSerif()->render(
+			utf8str_to_wstring(std::string("Teleport Avatar")), 0,
 			contextRect.mLeft,
 			top-(heightPer/2)-2,
 			LLColor4::white, LLFontGL::LEFT,
-			LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
-		
+			LLFontGL::BASELINE,
+			LLFontGL::NORMAL,//style
+			LLFontGL::DROP_SHADOW//shadow
+			);		
 	}
 	//group of avatars
 	if(selected.size()>1)
@@ -708,13 +726,16 @@ void lggContactSetsFloater::drawRightClick()
 				//no
 			}
 		}
-		LLFontGL::getFontSansSerif()->renderUTF8(
-			std::string(llformat("All %d Selected",ids.size()))
-			, 0,
+		LLFontGL::getFontSansSerif()->render(
+			utf8str_to_wstring(std::string(llformat("All %d Selected",ids.size()))), 0,
 			contextRect.mLeft,
 			top-(heightPer/2)-2,
 			LLColor4::white, LLFontGL::LEFT,
-			LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
+			LLFontGL::BASELINE,
+			LLFontGL::NORMAL,//style
+			LLFontGL::DROP_SHADOW//shadow
+			);		
+		
 		top-=heightPer;
 
 		remBackGround.setLeftTopAndSize(contextRect.mLeft,top,width,heightPer);
@@ -731,13 +752,15 @@ void lggContactSetsFloater::drawRightClick()
 				LLAvatarActions::startConference(ids);
 			}
 		}
-		LLFontGL::getFontSansSerif()->renderUTF8(
-			std::string(llformat("Start Conference Call (%d)",ids.size()))
-			, 0, 
+		LLFontGL::getFontSansSerif()->render(
+			utf8str_to_wstring(std::string(llformat("Start Conference Call (%d)",ids.size()))), 0,
 			contextRect.mLeft,
 			top-(heightPer/2)-2,
 			LLColor4::white, LLFontGL::LEFT,
-			LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
+			LLFontGL::BASELINE,
+			LLFontGL::NORMAL,//style
+			LLFontGL::DROP_SHADOW//shadow
+			);
 		top-=heightPer;
 
 		remBackGround.setLeftTopAndSize(contextRect.mLeft,top,width,heightPer);
@@ -754,16 +777,15 @@ void lggContactSetsFloater::drawRightClick()
 				handle_lure(ids);
 			}
 		}
-		LLFontGL::getFontSansSerif()->renderUTF8(
-			std::string(llformat("Send Mass TP (%d)",ids.size()))
-			, 0,
+		LLFontGL::getFontSansSerif()->render(
+			utf8str_to_wstring(std::string(llformat("Send Mass TP (%d)",ids.size()))), 0,
 			contextRect.mLeft,
 			top-(heightPer/2)-2,
 			LLColor4::white, LLFontGL::LEFT,
-			LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
-		
-
-
+			LLFontGL::BASELINE,
+			LLFontGL::NORMAL,//style
+			LLFontGL::DROP_SHADOW//shadow
+			);
 	}
 
 	top-=heightPer;
@@ -777,13 +799,15 @@ void lggContactSetsFloater::drawRightClick()
 		if(justClicked)
 			selected.clear();
 	}
-	LLFontGL::getFontSansSerif()->renderUTF8(
-		std::string(llformat("Deselect All (%d)",selected.size()))
-		, 0,
+	LLFontGL::getFontSansSerif()->render(
+		utf8str_to_wstring(std::string(llformat("Deselect All (%d)",selected.size()))), 0,
 		contextRect.mLeft,
 		top-(heightPer/2)-2,
 		LLColor4::white, LLFontGL::LEFT,
-		LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
+		LLFontGL::BASELINE,
+		LLFontGL::NORMAL,//style
+		LLFontGL::DROP_SHADOW//shadow
+		);
 	top-=heightPer;
 
 	remBackGround.setLeftTopAndSize(contextRect.mLeft,top,width,heightPer);
@@ -803,13 +827,15 @@ void lggContactSetsFloater::drawRightClick()
 			sInstance->selected=sInstance->currentList;
 		}
 	}
-	LLFontGL::getFontSansSerif()->renderUTF8(
-		std::string(llformat("Select All (%d)",currentList.size()-selected.size()))
-		, 0,
+	LLFontGL::getFontSansSerif()->render(
+		utf8str_to_wstring(std::string(llformat("Select All (%d)",currentList.size()-selected.size()))), 0,
 		contextRect.mLeft,
 		top-(heightPer/2)-2,
 		LLColor4::white, LLFontGL::LEFT,
-		LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
+		LLFontGL::BASELINE,
+		LLFontGL::NORMAL,//style
+		LLFontGL::DROP_SHADOW//shadow
+		);
 
 	top-=heightPer;
 	top-=heightPer;
@@ -827,14 +853,15 @@ void lggContactSetsFloater::drawRightClick()
 			
 		}
 	}
-	LLFontGL::getFontSansSerif()->renderUTF8(
-		"Add New Avatar"
-		, 0,
+	LLFontGL::getFontSansSerif()->render(
+		utf8str_to_wstring(std::string("Add New Avatar")), 0,
 		contextRect.mLeft,
 		top-(heightPer/2)-2,
 		LLColor4::white, LLFontGL::LEFT,
-		LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
-	
+		LLFontGL::BASELINE,
+		LLFontGL::NORMAL,//style
+		LLFontGL::DROP_SHADOW//shadow
+		);
 
 	if(justClicked)
 	{
@@ -876,22 +903,25 @@ void lggContactSetsFloater::drawFilter()
 	filterTextBox.setLeftTopAndSize(fullTextBox.mLeft+width1,fullTextBox.mTop,width2,tSize);
 	gl_rect_2d(filterTextBox);	
 	
-	LLFontGL::getFontSansSerif()->renderUTF8(
-		preText
-		, 0,
+	LLFontGL::getFontSansSerif()->render(
+		utf8str_to_wstring(preText), 0,
 		fullTextBox.mLeft+4,
 		fullTextBox.mBottom+4,
 		foreGround, LLFontGL::LEFT,
-		LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
-	LLFontGL::getFontSansSerif()->renderUTF8(
-		sInstance->currentFilter
-		, 0,
+		LLFontGL::BASELINE,
+		LLFontGL::NORMAL,//style
+		LLFontGL::DROP_SHADOW//shadow
+		);
+
+	LLFontGL::getFontSansSerif()->render(
+		utf8str_to_wstring(sInstance->currentFilter), 0,
 		filterTextBox.mLeft+4,
 		filterTextBox.mBottom+4,
 		backGround, LLFontGL::LEFT,
-		LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
-
-
+		LLFontGL::BASELINE,
+		LLFontGL::NORMAL,//style
+		LLFontGL::DROP_SHADOW//shadow
+		);
 }
 void lggContactSetsFloater::draw()
 {
@@ -1077,7 +1107,7 @@ void lggContactSetsFloater::draw()
 
 			int xLoc = box.mLeft+roomForBar;//size;
 			LLUIImage *selectedImage = LLUI::getUIImage("TabIcon_Close_Off");
-			if(folder=="All Groups") selectedImage = LLUI::getUIImage("TabIcon_Open_Off");
+			if(folder=="All Sets") selectedImage = LLUI::getUIImage("TabIcon_Open_Off");
 			LLRect imageBox;
 			imageBox.setLeftTopAndSize(xLoc,(box.getHeight()/2)+0+box.mBottom+(size/2),size,size);			
 			gl_draw_scaled_image_with_border(imageBox.mLeft,imageBox.mBottom,
@@ -1089,14 +1119,15 @@ void lggContactSetsFloater::draw()
 			LLColor4 groupTextColor = LLColor4::white;
 			if((textNotBg))groupTextColor=LGGContactSets::toneDownColor(color,1.0f);
 
-			useFont->renderUTF8(
-				folder
-				, 0,
+			useFont->render(
+				utf8str_to_wstring(folder), 0,
 				box.mLeft+roomForBar+size+2,
 				top-(thisSize/2)+((doZoom)?-2:2),
 				groupTextColor, LLFontGL::LEFT,
-				LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
-
+				LLFontGL::BASELINE,
+				LLFontGL::NORMAL,//style
+				LLFontGL::DROP_SHADOW//shadow
+				);
 		}
 
 		top-=(thisSize+1);
@@ -1143,7 +1174,7 @@ void lggContactSetsFloater::draw()
 			LLColor4 color = LGGContactSets::getInstance()->getGroupColor(currentGroup);
 			if(!LGGContactSets::getInstance()->isFriendInGroup(agent_id,currentGroup))
 				color = LGGContactSets::getInstance()->getDefaultColor();
-			if(showOtherGroups||(currentGroup()=="All Groups"))color = LGGContactSets::getInstance()->
+			if(showOtherGroups||(currentGroup()=="All Sets"))color = LGGContactSets::getInstance()->
 				getFriendColor(agent_id,currentGroup);
 
 			
@@ -1221,20 +1252,22 @@ void lggContactSetsFloater::draw()
 					std::string oGroupName = groupsIsIn[gr];
 					sizePerOGroup=
 						LLFontGL::getFontSansSerifSmall()->getWidth(oGroupName)+8;
-					LLColor4 oGroupColor = LGGContactSets::getInstance()->getGroupColor(oGroupName);
+					LLColor4 oGroupColor = LGGContactSets::toneDownColor(LGGContactSets::getInstance()->getGroupColor(oGroupName),1.0f,TRUE);
 					LLRect oGroupArea;
 					oGroupArea.setLeftTopAndSize(w,box.mBottom+12+breathingRoom,sizePerOGroup,12+(breathingRoom/2));
 					gGL.color4fv(oGroupColor.mV);			
 					gl_rect_2d(oGroupArea);
 					gGL.color4fv(LLColor4(1,1,1,.5).mV);			
 					gl_rect_2d(oGroupArea,FALSE);
-					LLFontGL::getFontSansSerifSmall()->renderUTF8(
-						oGroupName
-						, 0,
-						w+4,
+					LLFontGL::getFontSansSerifSmall()->render(
+						utf8str_to_wstring(oGroupName), 0,w+4,
 						box.mBottom+breathingRoom,
 						LLColor4::white, LLFontGL::LEFT,
-						LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
+						LLFontGL::BASELINE,
+						LLFontGL::NORMAL,//style
+						LLFontGL::DROP_SHADOW//shadow
+						);
+					
 					if(oGroupArea.pointInRect(mouse_x,mouse_y))
 					{
 						gGL.color4fv(LLColor4(1,1,1,1.0).mV);			
@@ -1254,6 +1287,7 @@ void lggContactSetsFloater::draw()
 			}
 			//draw icons
 			//not to small if we can, but not to big, but still have a good zoom effect
+			LLColor4 imageColor = LLColor4::white;
 			int size =llclamp(thisSize+(bubble*bMag/2),
 				llmax(10.0f,llmin((((F32)box.getHeight())/1.0f),20.0f)),
 				llmin(20+(bubble*bMag/2),thisSize+(bubble*bMag/2)));
@@ -1272,10 +1306,15 @@ void lggContactSetsFloater::draw()
 			gGL.color4fv(LLColor4::white.mV);
 			
 			imageBox.setLeftTopAndSize(xLoc,(box.getHeight()/2)+0+box.mBottom+(size/2),size,size);			
+			gl_draw_scaled_image_with_border(imageBox.mLeft-1,imageBox.mBottom-1,
+				imageBox.getWidth(),imageBox.getHeight(),
+				selectedImage->getImage(),
+				LLColor4::black,
+				FALSE);
 			gl_draw_scaled_image_with_border(imageBox.mLeft,imageBox.mBottom,
 				imageBox.getWidth(),imageBox.getHeight(),
 				selectedImage->getImage(),
-				LLColor4::white,
+				imageColor,
 				FALSE);
 			if(imageBox.pointInRect(mouse_x,mouse_y))
 			{
@@ -1290,7 +1329,7 @@ void lggContactSetsFloater::draw()
 
 			LLUIImage *onlineImage = LLUI::getUIImage("Permission_Visible_Online");
 			toolTipText = "Friend is Online";
-			LLColor4 overlay = LLColor4::white;
+			LLColor4 overlay = imageColor;
 			if(LGGContactSets::getInstance()->isNonFriend(agent_id))
 			{
 				//onlineImage = LLUI::getUIImage("icon_avatar_offline.tga");
@@ -1301,15 +1340,20 @@ void lggContactSetsFloater::draw()
 			{
 				//onlineImage = LLUI::getUIImage("icon_avatar_offline.tga");
 				toolTipText="Friend is Offline";
-				overlay = LGGContactSets::toneDownColor(LLColor4::white,.3f);
+				overlay = LGGContactSets::toneDownColor(imageColor,.3f);
 			}
 			
 			imageBox.setLeftTopAndSize(xLoc-=(1+size),(box.getHeight()/2)+0+box.mBottom+(size/2),size,size);			
+			gl_draw_scaled_image_with_border(imageBox.mLeft-1,imageBox.mBottom-1,
+				imageBox.getWidth(),imageBox.getHeight(),
+				onlineImage->getImage(), 
+				LLColor4::black,
+				FALSE);
 			gl_draw_scaled_image_with_border(imageBox.mLeft,imageBox.mBottom,
 				imageBox.getWidth(),imageBox.getHeight(),
 				onlineImage->getImage(), 
 				overlay,
-				FALSE);
+				FALSE);			
 			if(imageBox.pointInRect(mouse_x,mouse_y))
 			{
 				toDisplayToolTipText=toolTipText;
@@ -1319,10 +1363,15 @@ void lggContactSetsFloater::draw()
 			LLUIImage *imImage = LLUI::getUIImage("TabIcon_Translate_Off");
 
 			imageBox.setLeftTopAndSize(xLoc-=(1+size),(box.getHeight()/2)+0+box.mBottom+(size/2),size,size);			
+			gl_draw_scaled_image_with_border(imageBox.mLeft-1,imageBox.mBottom-1,
+				imageBox.getWidth(),imageBox.getHeight(),
+				imImage->getImage(),
+				LLColor4::black,
+				FALSE); 
 			gl_draw_scaled_image_with_border(imageBox.mLeft,imageBox.mBottom,
 				imageBox.getWidth(),imageBox.getHeight(),
 				imImage->getImage(),
-				LLColor4::white,
+				imageColor,
 				FALSE); 
 			if(imageBox.pointInRect(mouse_x,mouse_y))
 			{
@@ -1337,10 +1386,15 @@ void lggContactSetsFloater::draw()
 			//profile button
 			LLUIImage *profileImage = LLUI::getUIImage("profile_icon_24x24");
 			imageBox.setLeftTopAndSize(xLoc-=(1+size),(box.getHeight()/2)+0+box.mBottom+(size/2),size,size);			
+			gl_draw_scaled_image_with_border(imageBox.mLeft-1,imageBox.mBottom-1,
+				imageBox.getWidth(),imageBox.getHeight(),
+				profileImage->getImage(),
+				LLColor4::black,
+				FALSE); 
 			gl_draw_scaled_image_with_border(imageBox.mLeft,imageBox.mBottom,
 				imageBox.getWidth(),imageBox.getHeight(),
 				profileImage->getImage(),
-				LLColor4::white,
+				imageColor,
 				FALSE); 
 			if(imageBox.pointInRect(mouse_x,mouse_y))
 			{
@@ -1359,9 +1413,14 @@ void lggContactSetsFloater::draw()
 				LLUIImage *profileImage = LLUI::getUIImage("icn_voice-localchat.tga");
 				imageBox.setLeftTopAndSize(xLoc-=(1+size),(box.getHeight()/2)+0+box.mBottom+(size/2),size,size);			
 				gl_draw_scaled_image_with_border(imageBox.mLeft,imageBox.mBottom,
+					imageBox.getWidth()-1,imageBox.getHeight()-1,
+					profileImage->getImage(),
+					LLColor4::black,
+					FALSE);
+				gl_draw_scaled_image_with_border(imageBox.mLeft,imageBox.mBottom,
 					imageBox.getWidth(),imageBox.getHeight(),
 					profileImage->getImage(),
-					LLColor4::white,
+					imageColor,
 					FALSE); 
 				if(imageBox.pointInRect(mouse_x,mouse_y))
 				{
@@ -1414,11 +1473,14 @@ void lggContactSetsFloater::draw()
 				gl_rect_2d(toolRect);
 				//gGL.color4fv(LLColor4::yellow.mV);
 				gl_rect_2d(toolRect,FALSE);
-				LLFontGL::getFontSansSerifSmall()->renderUTF8(toDisplayToolTipText
-					, 0,toolRect.mLeft+4,
+				LLFontGL::getFontSansSerifSmall()->render(
+					utf8str_to_wstring(toDisplayToolTipText), 0,toolRect.mLeft+4,
 					toolRect.mBottom+2,
 					LLColor4::white, LLFontGL::LEFT,
-					LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
+					LLFontGL::BASELINE,
+					LLFontGL::BOLD,//style
+					LLFontGL::DROP_SHADOW//shadow
+					);
 			}
 
 			if(thisSize>8)//draw name
@@ -1452,13 +1514,17 @@ void lggContactSetsFloater::draw()
 				LLColor4 nameTextColor = LLColor4::white;
 				if((textNotBg)&(groupsIsIn.size()>0))nameTextColor=LGGContactSets::toneDownColor(color,1.0f);
 
-				useFont->renderUTF8(
-					text
-					, 0,
-					box.mLeft+roomForBar+roomForIcon,
-					top-(thisSize/2)+((doZoom)?-2:2),
-					nameTextColor, LLFontGL::LEFT,
-					LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
+				
+				useFont->render(utf8str_to_wstring(text),0,
+					box.mLeft+roomForBar+roomForIcon,//x
+					top-(thisSize/2)+((doZoom)?-2:2),//y
+					nameTextColor,//color
+					LLFontGL::LEFT,//halign
+					LLFontGL::BASELINE,//valign
+					LLFontGL::NORMAL,//style
+					LLFontGL::DROP_SHADOW//shadow
+					);
+				
 
 				//useFont->renderUTF8(llformat(" %d ",p),0,box.mLeft+0,top-(thisSize/2),LLColor4::white,LLFontGL::LEFT,
 				//	LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);

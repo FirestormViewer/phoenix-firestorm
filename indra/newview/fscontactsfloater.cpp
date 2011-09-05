@@ -52,6 +52,7 @@
 #include "llstartup.h"
 #include "llviewercontrol.h"
 #include "llvoiceclient.h"
+#include "lggcontactsetsfloater.h"
 
 //Maximum number of people you can select to do an operation on at once.
 #define MAX_FRIEND_SELECT 20
@@ -139,6 +140,8 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsTab->childSetAction("remove_btn", boost::bind(&FSFloaterContacts::onDeleteFriendButtonClicked, this));
 	mFriendsTab->childSetAction("add_btn", boost::bind(&FSFloaterContacts::onAddFriendWizButtonClicked, this));
 	
+	mFriendsTab->childSetAction("lgg_fg_openFG", boost::bind(&FSFloaterContacts::onContactSetsButtonClicked, this));
+
 	mGroupsTab = getChild<LLPanel>(GROUP_TAB_NAME);
 	mGroupList = mGroupsTab->getChild<LLGroupList>("group_list");
 	mGroupList->setNoItemsMsg(getString("no_groups_msg"));
@@ -318,6 +321,11 @@ void FSFloaterContacts::onAddFriendWizButtonClicked()
 	{
 		root_floater->addDependentFloater(picker);
 	}
+}
+
+void FSFloaterContacts::onContactSetsButtonClicked()
+{
+	lggContactSetsFloater::showFloater();
 }
 
 //

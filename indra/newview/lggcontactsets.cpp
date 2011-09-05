@@ -245,7 +245,7 @@ LLSD LGGContactSets::getExampleLLSD()
 
 LLColor4 LGGContactSets::getGroupColor(std::string groupName)
 {
-	if(groupName!="" && groupName!="All Groups" && groupName !="globalSettings" && groupName!="No Groups" && groupName!="ReNamed" && groupName!="Non Friends")
+	if(groupName!="" && groupName!="All Sets" && groupName!="All Groups"  && groupName !="globalSettings" && groupName!="No Sets" && groupName!="ReNamed" && groupName!="Non Friends")
 		if(mContactSets[groupName].has("color"))
 			return LLColor4(mContactSets[groupName]["color"]);
 	return getDefaultColor();
@@ -254,7 +254,7 @@ LLColor4 LGGContactSets::getFriendColor(
 	LLUUID friend_id, std::string ignoredGroupName)
 {
 	LLColor4 toReturn = getDefaultColor();
-	if(ignoredGroupName=="No Groups") return toReturn;
+	if(ignoredGroupName=="No Sets") return toReturn;
 	int lowest = 9999;
 	std::vector<std::string> groups = getFriendGroups(friend_id);
 	for(int i =0;i<(int)groups.size();i++)
@@ -275,11 +275,12 @@ LLColor4 LGGContactSets::getFriendColor(
 		}
 	}
 	if(lowest==9999)
-	if(isFriendInGroup(friend_id,ignoredGroupName)  && ignoredGroupName!="globalSettings" && ignoredGroupName!="Non Friends" &&ignoredGroupName!="All Groups" && ignoredGroupName!="No Groups" &&ignoredGroupName!="ReNamed" &&ignoredGroupName!="")
+	if(isFriendInGroup(friend_id,ignoredGroupName)  && ignoredGroupName!="globalSettings" && ignoredGroupName!="Non Friends" &&ignoredGroupName!="All Sets" &&ignoredGroupName!="All Groups" && ignoredGroupName!="No Sets" &&ignoredGroupName!="ReNamed" &&ignoredGroupName!="")
 		if(mContactSets[ignoredGroupName].has("color"))
 			return LLColor4(mContactSets[ignoredGroupName]["color"]);
 	return toReturn;
 }
+//handle all settings and rlv that would prevent us from showing the cs color
 BOOL LGGContactSets::hasFriendColorThatShouldShow(LLUUID friend_id,bool chat, bool tag, bool radar, bool miniMap)
 {
 	if(gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))return FALSE;//don't show colors if we cant show names
@@ -320,7 +321,7 @@ std::vector<std::string> LGGContactSets::getInnerGroups(std::string groupName)
 
 	std::set<std::string> newGroups;
 	newGroups.clear();
-	if(groupName!="All Groups" && getAllGroups(FALSE).size()>0)newGroups.insert("All Groups");
+	if(groupName!="All Sets" && getAllGroups(FALSE).size()>0)newGroups.insert("All Sets");
 	std::vector<LLUUID> freindsInGroup = getFriendsInGroup(groupName);
 	for(int fn = 0; fn<(int)freindsInGroup.size();fn++)
 	{
@@ -351,7 +352,7 @@ std::vector<std::string> LGGContactSets::getFriendGroups(LLUUID friend_id)
 	for ( ; loc_it != loc_end; ++loc_it)
 	{
 		const std::string& groupName = (*loc_it).first;
-		if(groupName!="" && groupName !="globalSettings" && groupName!="All Groups" && groupName!="No Groups" && groupName!="ReNamed" && groupName!="Non Friends" && groupName!="extraAvs" && groupName!="pseudonym")
+		if(groupName!="" && groupName !="globalSettings" && groupName!="All Sets" && groupName!="All Groups" && groupName!="All Groups"  && groupName!="No Sets" && groupName!="ReNamed" && groupName!="Non Friends" && groupName!="extraAvs" && groupName!="pseudonym")
 			if(mContactSets[groupName]["friends"].has(friend_id.asString()))
 				toReturn.push_back(groupName);
 	}
@@ -361,8 +362,8 @@ std::vector<LLUUID> LGGContactSets::getFriendsInGroup(std::string groupName)
 {
 	std::vector<LLUUID> toReturn;
 	toReturn.clear();
-	if(groupName=="All Groups")return getFriendsInAnyGroup();
-	if(groupName=="No Groups")return toReturn;
+	if(groupName=="All Sets")return getFriendsInAnyGroup();
+	if(groupName=="No Sets")return toReturn;
 	if(groupName=="pseudonym"||groupName=="ReNamed")return getListOfPseudonymAvs();
 	if(groupName=="Non Friends")return getListOfNonFriends();
 
@@ -386,8 +387,8 @@ std::vector<std::string> LGGContactSets::getAllGroups(BOOL extraGroups)
 	{
 		if(getAllGroups(FALSE).size()>0)
 		{
-			toReturn.push_back("All Groups");
-			toReturn.push_back("No Groups");
+			toReturn.push_back("All Sets");
+			toReturn.push_back("No Sets");
 		}
 		if(getListOfPseudonymAvs().size()>0)
 			toReturn.push_back("ReNamed");
@@ -400,7 +401,7 @@ std::vector<std::string> LGGContactSets::getAllGroups(BOOL extraGroups)
 	for ( ; loc_it != loc_end; ++loc_it)
 	{
 		const std::string& groupName = (*loc_it).first;
-		if((groupName!="globalSettings")&&(groupName!="ReNamed")&&(groupName!="Non Friends")&&(groupName!="")&&(groupName!="extraAvs")&&(groupName!="pseudonym")&&(groupName!="All Groups")&&groupName!="No Groups")
+		if((groupName!="globalSettings")&&(groupName!="ReNamed")&&(groupName!="All Groups")&&(groupName!="No Groups")&&(groupName!="Non Friends")&&(groupName!="")&&(groupName!="extraAvs")&&(groupName!="pseudonym")&&(groupName!="All Sets")&&groupName!="No Sets")
 			toReturn.push_back(groupName);
 	}
 
@@ -436,8 +437,8 @@ BOOL LGGContactSets::isFriendInAnyGroup(LLUUID friend_id)
 }
 BOOL LGGContactSets::isFriendInGroup(LLUUID friend_id, std::string groupName)
 {	
-	if(groupName=="All Groups") return isFriendInAnyGroup(friend_id);
-	if(groupName=="No Groups") return !isFriendInAnyGroup(friend_id);
+	if(groupName=="All Sets") return isFriendInAnyGroup(friend_id);
+	if(groupName=="No Sets") return !isFriendInAnyGroup(friend_id);
 	if(groupName=="ReNamed") return hasPseudonym(friend_id);
 	if(groupName=="Non Friends") return isNonFriend(friend_id);
 	return mContactSets[groupName]["friends"].has(friend_id.asString());
@@ -454,7 +455,7 @@ BOOL LGGContactSets::notifyForFriend(LLUUID friend_id)
 }
 void LGGContactSets::addFriendToGroup(LLUUID friend_id, std::string groupName)
 {
-	if(friend_id.notNull() && groupName!="" && groupName !="globalSettings" && groupName!="No Groups" && groupName!="All Groups" && groupName!="ReNamed" && groupName!="Non Friends")
+	if(friend_id.notNull() && groupName!="" && groupName !="globalSettings" && groupName!="No Sets" && groupName!="All Sets" && groupName!="All Groups"  && groupName!="ReNamed" && groupName!="Non Friends")
 	{
 		mContactSets[groupName]["friends"][friend_id.asString()]="";
 		save();
@@ -613,7 +614,7 @@ void LGGContactSets::deleteGroup(std::string groupName)
 }
 void LGGContactSets::setNotifyForGroup(std::string groupName, BOOL notify)
 {
-	if(groupName=="All Groups" || groupName =="globalSettings" || groupName == "" || groupName =="No Groups"||groupName=="ReNamed"||groupName=="Non Friends")return;
+	if(groupName=="All Sets" || groupName =="globalSettings" || groupName == "" || groupName =="No Sets"||groupName=="ReNamed"||groupName=="Non Friends")return;
 
 	if(mContactSets.has(groupName))
 	{
@@ -634,7 +635,7 @@ BOOL LGGContactSets::getNotifyForGroup(std::string groupName)
 }
 void LGGContactSets::setGroupColor(std::string groupName, LLColor4 color)
 {
-	if(groupName=="All Groups" ||   groupName =="globalSettings" || groupName == "" || groupName =="No Groups"||groupName=="ReNamed"||groupName=="Non Friends")return;
+	if(groupName=="All Sets" ||   groupName =="globalSettings" || groupName == "" || groupName =="No Sets"||groupName=="ReNamed"||groupName=="Non Friends")return;
 
 	if(mContactSets.has(groupName))
 	{

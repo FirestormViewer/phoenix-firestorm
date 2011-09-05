@@ -796,7 +796,7 @@
      name="Antialiasing:"
      top_pad="7"
      width="180">
-        Сглаживание (треб. рестарта):
+        Сглаживание (требуется перезагрузка):
     </text>
     <combo_box
      control_name="RenderFSAASamples"
@@ -1361,6 +1361,112 @@
         top_pad="5"
         width="413" />
        </panel>
+	   	   <panel
+	    border="true"
+	    follows="all"
+	    label="Глубина резкости"
+	    layout="topleft"
+	    mouse_opaque="false"
+	    name="DOF panel"
+	    top="16"
+	    width="400">
+	  <check_box
+	    control_name="RenderDepthOfField"
+	    height="16"
+	    initial_value="true"
+	    label="Глубина резкости (ГР) включена"
+	    layout="topleft"
+	    top_pad="20"
+	    left="10"
+	    name="DOFEnabled"
+	    tool_tip="Render Depth of Field in deferred rendering."
+	    width="325"/>
+	   <slider
+	    control_name="CameraFNumber"
+	    decimal_digits="2"
+	    follows="left|top"
+	    height="16"
+	    increment="1"
+	    initial_value="9.00"
+	    label="Номер Ф-Камеры:"
+	    label_width="200"
+	    layout="topleft"
+	    left="10"
+	    max_val="64"
+	    min_val="1"
+	    name="CameraFNum"
+	    tool_tip="Camera f-number value for DoF effect"
+	    top_pad="16"
+	    width="374"/>
+	   <slider
+	    control_name="CameraFocalLength"
+	    decimal_digits="1"
+	    follows="left|top"
+	    height="16"
+	    increment="1"
+	    initial_value="50"
+	    label="Длина фокусировки камеры (мм):"
+	    label_width="200"
+	    layout="topleft"
+	    left="10"
+	    max_val="1000"
+	    min_val="1"
+	    name="CameraFocal"
+	    tool_tip="Camera focal length for DoF effect (in millimeters)"
+	    top_pad="5"
+	    width="374"/>
+	   <slider
+	    control_name="CameraFieldOfView"
+	    decimal_digits="2"
+	    follows="left|top"
+	    height="16"
+	    increment="1"
+	    initial_value="60"
+	    label="Поле зрения камеры (градусов):"
+	    label_width="200"
+	    layout="topleft"
+	    left="10"
+	    max_val="200"
+	    min_val="10"
+	    name="Camera FOV"
+	    tool_tip="Vertical camera field of view for DoF effect (in degrees)"
+	    top_pad="5"
+	    width="374"/>
+	   <slider
+	    control_name="CameraAspectRatio"
+	    decimal_digits="2"
+	    follows="left|top"
+	    height="16"
+	    increment="0.05"
+	    initial_value="1.5"
+	    label="Соотношение сторон камеры:"
+	    label_width="200"
+	    layout="topleft"
+	    left="10"
+	    max_val="5"
+	    min_val="0"
+	    name="CameraAspectRatio"
+	    tool_tip="Camera aspect ratio for DoF effect"
+	    top_pad="5"
+	    width="374"/>
+	   <slider
+	    control_name="CameraFocusTransitionTime"
+	    decimal_digits="2"
+	    follows="left|top"
+	    height="16"
+	    increment="0.01"
+	    initial_value="0.5"
+	    label="(ГР) Время прехода фокусировки:"
+	    label_width="200"
+	    layout="topleft"
+	    left="10"
+	    max_val="10"
+	    min_val="0.1"
+	    name="CameraFocusTrans"
+	    tool_tip="Time taken to alter focus from one place to the next"
+	    top_pad="5"
+	    width="374"/>
+	  </panel>
 
   </tab_container>
 </panel>
