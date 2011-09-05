@@ -67,7 +67,7 @@
 //current script version is 1.9
 const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 
-const boost::regex FSBridgePattern("^#Firestorm LSL Bridge v*.*");
+const boost::regex FSBridgePattern("^#Firestorm LSL Bridge v[0-9]*\\.[0-9]*");
 
 
 //
