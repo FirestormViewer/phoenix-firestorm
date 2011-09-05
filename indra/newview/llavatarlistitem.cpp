@@ -1100,6 +1100,9 @@ LLView* LLAvatarListItem::getItemChildView(EAvatarListItemChildIndex child_view_
 	case ALIC_PROFILE_BUTTON:
 		child_view = mProfileBtn;
 		break;
+	case ALIC_VOLUME_SLIDER:
+		child_view = mVoiceSlider;
+		break;
 	default:
 		LL_WARNS("AvatarItemReshape") << "Unexpected child view index is passed: " << child_view_index << LL_ENDL;
 		// leave child_view untouched
