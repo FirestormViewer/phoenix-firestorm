@@ -25,6 +25,8 @@ OS バージョン： [OS_VERSION]
 	<floater.string name="AboutLibs">
 		OpenGL バージョン： [OPENGL_VERSION]
 
+Viewer Skin: [SKIN] ([THEME])
+RestrainedLove API: [RLV_VERSION]
 libcurl バージョン： [LIBCURL_VERSION]
 J2C デコーダバージョン： [J2C_VERSION]
 オーディオドライババージョン： [AUDIO_DRIVER_VERSION]

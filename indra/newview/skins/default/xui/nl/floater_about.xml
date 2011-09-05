@@ -25,6 +25,8 @@ Grafische Kaard: [GRAPHICS_CARD]
 	<floater.string name="AboutLibs">
 		OpenGL Versie: [OPENGL_VERSION]
 
+Viewer Skin: [SKIN] ([THEME])
+RestrainedLove API: [RLV_VERSION]
 libcurl Versie: [LIBCURL_VERSION]
 J2C Decoder Versie: [J2C_VERSION]
 Audio Driver Versie: [AUDIO_DRIVER_VERSION]
