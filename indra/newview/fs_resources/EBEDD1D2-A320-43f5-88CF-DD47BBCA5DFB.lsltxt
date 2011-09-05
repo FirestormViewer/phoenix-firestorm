@@ -9,8 +9,9 @@
     integer timerMask;        // Every function that shares the timer needs a TIMER_ entry below.
     float   timerInterval;    // float, seconds. Always set this when using llSetTimerEvent
     float   timerElapsed;    // floats, seconds since last tick.
-    integer TIMER_TP = 1;
-    integer TIMER_FLIGHT = 2;
+    integer TIMER_TYPE_NONE = 0;
+    integer TIMER_TYPE_TP = 1;
+    integer TIMER_TYPE_FLIGHT = 2;
         
     
     // Bridge platform
@@ -26,14 +27,12 @@
     integer keyViewerHandshake;
     integer tryHandshakeOnce = TRUE;
     key owner;
+    integer timerType = TIMER_TYPE_NONE;
 
     // Teleport 
     integer MAX_TIME_TO_TP = 10;     // (seconds) should be set to 10 for normal use
     float   TP_TIMER_TICK = 0.05;
-    integer TIMER_TYPE_NONE = 0;
-    integer TIMER_TYPE_TP = 1;
-    integer TIMER_TYPE_FLIGHT = 2;
-    integer timerType = TIMER_TYPE_NONE;
+
     vector  mttVector;               // target for llMoveToTarget() teleport
     integer startTPTimer;
     
@@ -160,10 +159,10 @@
             else
             {
                  debugOutput("Flight assist false, removing flag");
-                if (timerMask & TIMER_FLIGHT)
+                if (timerMask & TIMER_TYPE_FLIGHT)
                 {
                     debugOutput("timerMask & TIMER_FLIGHT");
-                    timerMask = timerMask ^ TIMER_FLIGHT; // remove flight from event counter
+                    timerMask = timerMask ^ TIMER_TYPE_FLIGHT; // remove flight from event counter
 		}
             }
         }
@@ -178,7 +177,7 @@
             startTPTimer = llGetUnixTime();
               
               // tp commands immediately configure a TP timer consumer
-              timerMask = timerMask | TIMER_TP;
+              timerMask = timerMask | TIMER_TYPE_TP;
               if ((timerInterval > TP_TIMER_TICK) || (timerInterval == 0))
               {
                 timerInterval = TP_TIMER_TICK;
@@ -252,21 +251,22 @@
         if((dist < 2.0) ||  (llGetUnixTime() - MAX_TIME_TO_TP > startTPTimer) || (mttVector == loc))
         {    
             llStopMoveToTarget();
-            timerMask = timerMask ^ TIMER_TP; // remove our timer if we finish
-	    return;
-        }
-        
-        if (dist < 65)
-        {
-            debugOutput("One jump to :" + (string)mttVector);
-            llMoveToTarget(mttVector, TP_TIMER_TICK);
+            timerMask = timerMask ^ TIMER_TYPE_TP; // remove our timer if we finish
         }
         else
         {
-            debugOutput("Multiple jump to :" + (string)(loc+llVecNorm(targ)*60));
-            llMoveToTarget(loc+llVecNorm(targ)*60, TP_TIMER_TICK);
+            if (dist < 65)
+            {
+                debugOutput("One jump to :" + (string)mttVector);
+                llMoveToTarget(mttVector, TP_TIMER_TICK);
+            }
+            else
+            {
+                debugOutput("Multiple jump to :" + (string)(loc+llVecNorm(targ)*60));
+                llMoveToTarget(loc+llVecNorm(targ)*60, TP_TIMER_TICK);
+            }
         }
-        
+            
         // if we get this far, set our the timer for the next tick
         if ((timerInterval > TP_TIMER_TICK) || (timerInterval < 0.1))
         {
@@ -296,9 +296,9 @@
     {
         debugOutput("Flight:set_tick " + (string)tick);
         
-        timerMask = timerMask | TIMER_FLIGHT;
+        timerMask = timerMask | TIMER_TYPE_FLIGHT;
         timerInterval = tick;
-        if (timerMask == TIMER_FLIGHT)
+        if (timerMask == TIMER_TYPE_FLIGHT)
         {
             llSetTimerEvent(timerInterval);
         }
@@ -311,12 +311,7 @@
     flight_check_boost()
     {
         debugOutput("Flight:check_boost ");         
-        // Sleep if we don't have controls
-        if(controls <= 0)
-        {
-            flight_set_tick(SLOW_TICK);
-            return;
-        } 
+
         
         flying = 1;
         falling = 0;
@@ -333,6 +328,14 @@
             flight_set_tick(SLOW_TICK);
             return;
         }
+            
+        // Sleep if we don't have controls
+        if(controls <= 0)
+        {
+            debugOutput("no controls");
+            flight_set_tick(SLOW_TICK);
+            return;
+        } 
         
         // Otherwise, we may be flying = look up further details
         vector pos = llGetPos();
@@ -515,14 +518,14 @@ default
         // All consumers should have an entry here, and must manage their interval.
         // Consumers should reset the timer only of they need it faster, otherwise
         // leave it as it is.  Order this list by fastest timer consumers first. 
-        if (timerMask & TIMER_TP)
+        if (timerMask & TIMER_TYPE_TP)
         {
             if (timerElapsed > TP_TIMER_TICK)
                 tpMoveStep();
                 return; // teleports shortcut other timers
         }
     
-        if (timerMask & TIMER_FLIGHT)
+        if (timerMask & TIMER_TYPE_FLIGHT)
         {
             flight_check_boost();
         }   
