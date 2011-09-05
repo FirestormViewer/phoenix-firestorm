@@ -131,6 +131,7 @@ public:
 	
 	const LLUUID& getAvatarId() const;
 	std::string getAvatarName() const;
+	std::string getUserName() const { return mUserName; }
 	std::string getAvatarToolTip() const;
 	bool getShowingBothNames() const;
 
@@ -282,6 +283,7 @@ private:
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	bool mRlvCheckShowNames;
 // [/RLVa:KB]
+	std::string mUserName; //KC - username cache used for sorting
 
 	/// indicates whether to show icons representing permissions granted
 	bool mShowPermissions;

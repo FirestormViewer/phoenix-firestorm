@@ -673,6 +673,9 @@ void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
 	mAvatarIcon->setDrawTooltip(!fRlvFilter);
 // [/RLVa:KB]
 
+	//KC - store the username for use in sorting
+	mUserName = av_name.mUsername;
+
 	//requesting the list to resort
 	notifyParent(LLSD().with("sort", LLSD()));
 	
