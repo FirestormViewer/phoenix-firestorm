@@ -95,8 +95,9 @@ void LLConsole::reshape(S32 width, S32 height, BOOL called_from_parent)
 	LLUICtrl::reshape(new_width, new_height, called_from_parent);
 	
 	for(paragraph_t::iterator paragraph_it = mParagraphs.begin(); paragraph_it != mParagraphs.end(); paragraph_it++)
-	{
-		(*paragraph_it).updateLines((F32)getRect().getWidth(), mFont, true);
+	{		
+		// Ansariel: Added styleflags parameter for style customization
+		(*paragraph_it).updateLines((F32)getRect().getWidth(), mFont, (*paragraph_it).mLines.front().mStyleFlags, true);
 	}
 }
 
@@ -130,7 +131,8 @@ void LLConsole::setFontSize(S32 size_index)
 	
 	for(paragraph_t::iterator paragraph_it = mParagraphs.begin(); paragraph_it != mParagraphs.end(); paragraph_it++)
 	{
-		(*paragraph_it).updateLines((F32)getRect().getWidth(), mFont, true);
+		// Ansariel: Added styleflags parameter for style customization
+		(*paragraph_it).updateLines((F32)getRect().getWidth(), mFont, (*paragraph_it).mLines.front().mStyleFlags, true);
 	}
 }
 
@@ -237,7 +239,7 @@ void LLConsole::draw()
 							(*seg_it).mColor.mV[VALPHA]*alpha),
 						LLFontGL::LEFT, 
 						LLFontGL::BASELINE,
-						LLFontGL::NORMAL,
+						(*line_it).mStyleFlags, // Ansariel: Custom style flags for the font
 						LLFontGL::DROP_SHADOW,
 						S32_MAX,
 						target_width
@@ -250,13 +252,15 @@ void LLConsole::draw()
 	}
 }
 
-void LLConsole::addConsoleLine(const std::string& utf8line, const LLColor4 &color)
+// Ansariel: Added styleflags parameter for style customization
+void LLConsole::addConsoleLine(const std::string& utf8line, const LLColor4 &color, LLFontGL::StyleFlags styleflags)
 {
 	LLWString wline = utf8str_to_wstring(utf8line);
-	addConsoleLine(wline, color);
+	addConsoleLine(wline, color, styleflags);
 }
 
-void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color)
+// Ansariel: Added styleflags parameter for style customization
+void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color, LLFontGL::StyleFlags styleflags)
 {
 	if (wline.empty())
 	{
@@ -265,23 +269,25 @@ void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color)
 
 	removeExtraLines();
 
-	mMutex.lock() ;
+	mMutex.lock();
 	mLines.push_back(wline);
 	mLineLengths.push_back((S32)wline.length());
 	mAddTimes.push_back(mTimer.getElapsedTimeF32());
 	mLineColors.push_back(color);
-	mMutex.unlock() ;
+	mLineStyle.push_back(styleflags);
+	mMutex.unlock();
 }
 
 void LLConsole::clear()
 {
 	llinfos << "Clearing Console..." << llendflush;
-	mMutex.lock() ;
+	mMutex.lock();
 	mLines.clear();
 	mAddTimes.clear();
 	mLineLengths.clear();
 	mLineColors.clear();
-	mMutex.unlock() ;
+	mLineStyle.clear();
+	mMutex.unlock();
 
 	mTimer.reset();
 }
@@ -313,7 +319,8 @@ void LLConsole::Paragraph::makeParagraphColorSegments (const LLColor4 &color)
 }
 
 //Called when a paragraph is added to the console or window is resized.
-void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, bool force_resize)
+// Ansariel: Added styleflags parameter for style customization
+void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, LLFontGL::StyleFlags styleflags, bool force_resize)
 {
 	if ( !force_resize )
 	{
@@ -366,6 +373,7 @@ void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, b
 			
 			mMaxWidth = llmax( mMaxWidth, (F32)font->getWidth( mParagraphText.substr( paragraph_offset, drawable ).c_str() ) );
 			Line line;
+			line.mStyleFlags = styleflags; // Ansariel: Add styleflags to every new line
 			
 			U32 left_to_draw = drawable;
 			U32 drawn = 0;
@@ -408,11 +416,12 @@ void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, b
 }
 
 //Pass in the string and the default color for this block of text.
-LLConsole::Paragraph::Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width) 
+// Ansariel: Added styleflags parameter for style customization
+LLConsole::Paragraph::Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width, LLFontGL::StyleFlags styleflags) 
 :	mParagraphText(str), mAddTime(add_time), mMaxWidth(-1)
 {
 	makeParagraphColorSegments(color);
-	updateLines( screen_width, font );
+	updateLines( screen_width, font, styleflags );
 }
 	
 // called once per frame regardless of console visibility
@@ -437,10 +446,13 @@ void LLConsole::update()
 							(!mLineColors.empty() ? mLineColors.front() : LLColor4::white),
 							mTimer.getElapsedTimeF32(), 
 							mFont, 
-							(F32)getRect().getWidth()));
+							(F32)getRect().getWidth(),
+							(!mLineStyle.empty() ? mLineStyle.front() : LLFontGL::NORMAL)));
 			mLines.pop_front();
 			if (!mLineColors.empty())
 				mLineColors.pop_front();
+			if (!mLineStyle.empty())
+				mLineStyle.pop_front();
 		}
 	}
 
@@ -453,13 +465,14 @@ void LLConsole::update()
 
 void LLConsole::removeExtraLines()
 {
-	mMutex.lock() ;
+	mMutex.lock();
 	while ((S32)mLines.size() > llmax((S32)0, (S32)(mMaxLines - 1)))
 	{
 		mLines.pop_front();
 		mAddTimes.pop_front();
 		mLineLengths.pop_front();
 		mLineColors.pop_front();
+		mLineStyle.pop_front();
 	}
-	mMutex.unlock() ;
+	mMutex.unlock();
 }
