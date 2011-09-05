@@ -1099,7 +1099,7 @@ void FSContactList::onChange(EStatusType status, const std::string &channelURI, 
 }
 
 
-FSContactSet::FSContactSet(/*const Params& p /*= LLPanel::Params()*/)
+FSContactSet::FSContactSet(/*const Params& p = LLPanel::Params()*/)
 : LLPanel()
 , mAvatarList(NULL)
 , mViewOptionMenuButton(NULL)
