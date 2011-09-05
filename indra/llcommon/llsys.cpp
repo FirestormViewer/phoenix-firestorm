@@ -352,7 +352,7 @@ LLOSInfo::LLOSInfo() :
 	std::string compatibility_mode;
 	if(got_shell32_version)
 	{
-		if(osvi.dwMajorVersion != shell32_major || osvi.dwMinorVersion != shell32_minor)
+		if(shell32_build > 4000)
 		{
 			if(osvi.dwMajorVersion != shell32_major || osvi.dwMinorVersion != shell32_minor )
 			{
