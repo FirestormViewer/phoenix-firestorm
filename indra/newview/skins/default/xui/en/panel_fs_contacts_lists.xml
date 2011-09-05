@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ width="550"
+ height="600"
+ layout="topleft"
+ mouse_opaque="true"
+ name="contacts"
+ follows="all">
+
+	<panel
+     top="5"
+     left="4"
+     right="-4"
+     bottom="-2"
+	 follows="all"
+	 layout="topleft"
+	 class="contact_list"
+	 filename="panel_contact_list.xml"
+	 name="contacts_lists" />
+
+</panel>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!-- *NOTE: this xml is intended to be used inside panel_contact_list.xml for each contact set-->
+<!-- All accordion tabs in the Friends/Contacts list panel will be created from this one at runtime-->
+<!-- Non of string values of controls below are visible to user. They are not need to be translated. -->
+<accordion_tab
+ height="80"
+ width="0"
+ follows="all"
+ layout="topleft"
+ name="contact_tab"
+ selection_enabled="true"
+ tab_stop="false"
+ title="Mockup Tab"
+ translate="false">
+ <!-- 
+    <flat_list_view
+     allow_select="true"
+	 item_pad="3"
+     follows="all"
+     multi_select="true"
+	 keep_selection_visible_on_reshape="true"
+     name="contact_set_list"
+     translate="false"
+     standalone="false">
+		<flat_list_view.no_items_text
+		 value="No contacts to show" />
+	</flat_list_view>
+    <string
+     name="no_friends"
+     value="No friends" />
+-->
+	<!-- <panel
+	 follows="all"
+	 layout="topleft"
+	 name="contact_list_set"
+	 filename="panel_contact_list_set.xml" /> -->
+</accordion_tab>

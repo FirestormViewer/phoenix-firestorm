@@ -1,6 +1,6 @@
 /** 
- * @file 
- * @brief 
+ * @file fscontactsfloater.cpp
+ * @brief Firestorm contacts floater
  *
  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -35,6 +35,11 @@
 #include "llfloaterreg.h"
 #include "llfloater.h"
 #include "lltabcontainer.h"
+
+// #include "llaccordionctrl.h"
+// #include "llaccordionctrltab.h"
+// #include "llflatlistview.h"
+#include "fscontactlist.h"
 
 #include "llavataractions.h"
 #include "llavatarlist.h"
@@ -81,6 +86,7 @@ protected:
 	FSFloaterContacts* mFloater;
 };
 
+
 //
 // FSFloaterContacts
 //
@@ -90,6 +96,8 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	mTabContainer(NULL),
 	mObserver(NULL),
 	mFriendsList(NULL),
+	mContactsList(NULL),
+	// mFriendsListAccordion(NULL),
 	mGroupList(NULL),
 	mAllowRightsChange(TRUE),
 	mNumRightsChanged(0),
@@ -113,6 +121,9 @@ BOOL FSFloaterContacts::postBuild()
 {
 	mTabContainer = getChild<LLTabContainer>("friends_and_groups");
 	mFriendsTab = getChild<LLPanel>(FRIENDS_TAB_NAME);
+	
+	//KC - incomplete
+	mContactsList = mFriendsTab->findChild<FSContactList>("contacts_lists_panel");
 
 	mFriendsList = mFriendsTab->getChild<LLScrollListCtrl>("friend_list");
 	mFriendsList->setMaxSelectable(MAX_FRIEND_SELECT);

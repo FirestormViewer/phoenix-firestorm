@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu
+ bottom="806"
+ layout="topleft"
+ left="0"
+ mouse_opaque="false"
+ name="menu_contact_set_gear"
+ visible="false">
+  <menu_item_check
+   label="Show Offline"
+   layout="topleft"
+   name="show_offline">
+    <on_click
+       function="ContactSet.ViewOption.Action"
+       parameter="show_offline" />
+    <on_check
+       function="ContactSet.ViewOption.Check"
+       parameter="show_offline" />
+    <on_enable
+			 function="ContactSet.ViewOption.Enabled"
+			 parameter="show_offline" />
+  </menu_item_check>
+</toggleable_menu>

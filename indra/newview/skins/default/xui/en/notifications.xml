@@ -8339,6 +8339,25 @@ Could not add [GRID] to the grid list.
     You may remove this name by right clicking the name and choosing Remove Alias.
   </notification>
 
-
+  <notification
+   icon="alertmodal.tga"
+   label="Create Contact Set"
+   name="CreateContactSet"
+   type="alertmodal">
+    New contact set name:
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="new_name" type="text" width="300" />
+      <button
+       default="true"
+       index="0"
+       name="OK"
+       text="OK"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
 
 </notifications>

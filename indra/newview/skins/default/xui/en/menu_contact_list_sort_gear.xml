@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu
+ bottom="806"
+ layout="topleft"
+ left="0"
+ mouse_opaque="false"
+ name="menu_contact_list_sort_gear"
+ visible="false">
+	
+	<menu_item_check
+	 label="Sort By Status &amp; Display Name"
+	 layout="topleft"
+	 name="sortby_name">
+		<on_click
+		 function="ContactList.ViewOption.Action"
+		 parameter="sortby_statusname" />
+		<on_check
+		 function="ContactList.ViewOption.Check"
+		 parameter="sortby_statusname" />
+	</menu_item_check>
+	
+	<menu_item_check
+	 label="Sort By Status &amp; User Name"
+	 layout="topleft"
+	 name="sortby_statususername">
+		<on_click
+		 function="ContactList.ViewOption.Action"
+		 parameter="sortby_statususername" />
+		<on_check
+		 function="ContactList.ViewOption.Check"
+		 parameter="sortby_statususername" />
+	</menu_item_check>
+	
+	<menu_item_check
+	 label="Sort By Display Name"
+	 layout="topleft"
+	 name="sortby_name">
+		<on_click
+		 function="ContactList.ViewOption.Action"
+		 parameter="sortby_name" />
+		<on_check
+		 function="ContactList.ViewOption.Check"
+		 parameter="sortby_name" />
+	</menu_item_check>
+	
+	<menu_item_check
+	 label="Sort By User Name"
+	 layout="topleft"
+	 name="sortby_username">
+		<on_click
+		 function="ContactList.ViewOption.Action"
+		 parameter="sortby_username" />
+		<on_check
+		 function="ContactList.ViewOption.Check"
+		 parameter="sortby_username" />
+	</menu_item_check>
+	
+	<menu_item_separator layout="topleft" />
+	
+	<menu_item_check name="view_icons" label="View People Icons">
+	
+	<menu_item_check.on_click
+		 function="ContactList.ViewOption.Action"
+		 parameter="view_icons" />
+		<menu_item_check.on_check
+		 function="CheckControl"
+		 parameter="FriendsListShowIcons" />
+	</menu_item_check>
+	
+	<menu_item_check name="view_permissions" label="View Permissions Granted">
+		<menu_item_check.on_click
+		 function="ContactList.ViewOption.Action"
+		 parameter="view_permissions" />
+		<menu_item_check.on_check
+		 function="CheckControl"
+		 parameter="FriendsListShowPermissions" />
+	</menu_item_check>
+	
+	<menu_item_separator layout="topleft" />
+	
+	<menu_item_call name="show_blocked_list" label="Show Blocked Residents &amp; Objects">
+		<menu_item_call.on_click
+		 function="SideTray.ShowPanel"
+		 parameter="panel_block_list_sidetray" />
+	</menu_item_call>
+	
+	<menu_item_separator layout="topleft" />
+	
+	<menu_item_call name="create_set" label="Create New Contact Set">
+		<menu_item_call.on_click
+		 function="ContactList.CreateSet.Action" />
+		<menu_item_call.on_enable
+		 function="ContactList.CreateSet.Enabled" />
+	</menu_item_call>
+  
+</toggleable_menu>

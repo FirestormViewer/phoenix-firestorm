@@ -1,6 +1,6 @@
 /** 
  * @file fscontactsfloater.h
- * @brief 
+ * @brief Firestorm contacts floater
  *
  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -44,6 +44,7 @@ class LLGroupList;
 class LLRelationship;
 class LLPanel;
 class LLTabContainer;
+class FSContactList;
 
 class FSFloaterContacts : public LLFloater
 {
@@ -131,6 +132,9 @@ private:
 	void					updateButtons();
 
 	LLTabContainer*			mTabContainer;
+	
+	FSContactList*		mContactsList;
+	// FSContactList*		mFriendsListAccordion;
 
 	LLFriendObserver*		mObserver;
 	BOOL					mAllowRightsChange;
