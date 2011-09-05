@@ -196,7 +196,11 @@ public:
 	/*virtual*/ void result(const LLSD& content)
 	{
 		// Pull expiration out of headers if available
-		F64 expires = LLAvatarNameCache::nameExpirationFromHeaders(mHeaders);
+		
+		// AO: SL's expiration is 120 seconds, too short
+		//F64 expires = LLAvatarNameCache::nameExpirationFromHeaders(mHeaders);
+		F64 expires = 60 * 60;
+		
 		F64 now = LLFrameTimer::getTotalSeconds();
 
 		LLSD agents = content["agents"];
@@ -210,7 +214,7 @@ public:
 			av_name.fromLLSD(row);
 
 			// Use expiration time from header
-			av_name.mExpires = expires;
+			av_name.mExpires = expires + now;
 
 			// Some avatars don't have explicit display names set
 			if (av_name.mDisplayName.empty())
@@ -221,7 +225,7 @@ public:
 			LL_DEBUGS("AvNameCache") << "LLAvatarNameResponder::result for " << agent_id << " "
 									 << "user '" << av_name.mUsername << "' "
 									 << "display '" << av_name.mDisplayName << "' "
-									 << "expires in " << expires - now << " seconds"
+									 << "expires in " << av_name.mExpires - now << " seconds"
 									 << LL_ENDL;
 			
 			// cache it and fire signals
@@ -287,7 +291,7 @@ void LLAvatarNameCache::handleAgentError(const LLUUID& agent_id)
     }
 	else
     {
-        // we have a chached (but probably expired) entry - since that would have
+        // we have a cached (but probably expired) entry - since that would have
         // been returned by the get method, there is no need to signal anyone
 
         // Clear this agent from the pending list
@@ -541,7 +545,10 @@ void LLAvatarNameCache::idle()
 bool LLAvatarNameCache::isRequestPending(const LLUUID& agent_id)
 {
 	bool isPending = false;
-	const F64 PENDING_TIMEOUT_SECS = 5.0 * 60.0;
+	
+	// AO SL timeout is too long
+	//const F64 PENDING_TIMEOUT_SECS = 5.0 * 60.0;
+	const F64 PENDING_TIMEOUT_SECS = 60.0;
 
 	pending_queue_t::const_iterator it = sPendingQueue.find(agent_id);
 	if (it != sPendingQueue.end())
@@ -685,54 +692,39 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 		// ...only do immediate lookups when cache is running
 		if (useDisplayNames())
 		{
-			//llinfos << "Cashing DN: ..." << agent_id << llendl;
+			LL_DEBUGS("AvNameCache") << "DN cache lookup for " << agent_id << llendl;
 			// ...use new cache
 			std::map<LLUUID,LLAvatarName>::iterator it = sCache.find(agent_id);
 			if (it != sCache.end())
 			{
 				LLAvatarName& av_name = it->second;
 				LLSD test = av_name.asLLSD();
-				//llinfos << "Cashing DN: Avatarname :" << test["display_name"].asString()+" (" + test["legacy_first_name"].asString()+" "+test["legacy_last_name"].asString()+")"  << llendl;
+				LL_DEBUGS("AvNameCache") << "DN cache hit for :" << test["display_name"].asString()+" (" + test["legacy_first_name"].asString()+" "+test["legacy_last_name"].asString()+")"  << llendl;
+				
 				if(LGGContactSets::getInstance()->hasPseudonym(agent_id))
 				{
+					LL_DEBUGS("AvNameCache") << "DN cache hit via alias" << llendl;
 					LLSD info = av_name.asLLSD();
 					info["is_display_name_default"]=LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id);
 					info["display_name"]=LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id)?(info["legacy_first_name"].asString()+" "+info["legacy_last_name"].asString()):LGGContactSets::getInstance()->getPseudonym(agent_id);
 					av_name.fromLLSD(info);
+					fireSignal(agent_id, slot, av_name);
 				}
 				
 				if (av_name.mExpires > LLFrameTimer::getTotalSeconds())
 				{
 					// ...name already exists in cache, fire callback now
+					LL_DEBUGS("AvNameCache") << "DN cache hit valid" << llendl;
 					fireSignal(agent_id, slot, av_name);
 					return;
 				}
-				else
-				{
-  				 	
- 				 	
- 					int expireseconds = av_name.mExpires;
- 					llinfos << "Cashing DN: Expireseconds : is " << expireseconds << " > " << LLFrameTimer::getTotalSeconds() << llendl;	  				 	
-					if (!isRequestPending(agent_id))
-						{
-							//[FIX Caching DN : SJ] When the request for agent-id expires fire a new request
-							//llinfos << "Cashing DN: ...queue request for agent expired :" << agent_id << llendl;
-							sAskQueue.insert(agent_id);
-							return;
-						}
-				}
-			}
-			else
-			{
-	  			if (!isRequestPending(agent_id))
-				{
-					//[FIX Caching DN : SJ] When the agent-id can't be found in cache fire a new request
-					//llinfos << "Cashing DN: ...queue request for not in cache :" << agent_id << llendl;
-					sAskQueue.insert(agent_id);
-					return;
-				}
-			}
 			
+				// If we get here, our DN is expired. 
+				//Consider it a cache miss, handle as if sRunning was false.
+				LL_DEBUGS("AvNameCache") << "DN cache hit expired. " << av_name.mExpires << " vs. " << LLFrameTimer::getTotalSeconds() << llendl;
+			}
+			//If we get here, cache miss. We'll schedule it below
+				
 		}
 		else
 		{
@@ -748,11 +740,18 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 		}
 	
 	}
+		
 	// schedule a request
 	if (!isRequestPending(agent_id))
 	{
+		LL_DEBUGS("AvNameCache") << "DN scheduling lookup for" << agent_id << llendl;
 		sAskQueue.insert(agent_id);
 	}
+	else 
+	{
+		LL_DEBUGS("AvNameCache") << "DN lookup for " << agent_id << " already in progress. Returning." << llendl;
+	}
+
 	
 	// always store additional callback, even if request is pending
 	signal_map_t::iterator sig_it = sSignalMap.find(agent_id);
@@ -828,17 +827,21 @@ void LLAvatarNameCache::insert(const LLUUID& agent_id, const LLAvatarName& av_na
 
 F64 LLAvatarNameCache::nameExpirationFromHeaders(LLSD headers)
 {
+	const F64 DEFAULT_EXPIRES = 60.0 * 60.0 + LLFrameTimer::getTotalSeconds();
+	
 	F64 expires = 0.0;
 	if (expirationFromCacheControl(headers, &expires))
 	{
+		//AO make sure cache expiration is at least 1HR
+		if (expires < DEFAULT_EXPIRES) {expires = DEFAULT_EXPIRES;}
 		return expires;
 	}
 	else
 	{
 		// With no expiration info, default to an hour
-		const F64 DEFAULT_EXPIRES = 60.0 * 60.0;
-		F64 now = LLFrameTimer::getTotalSeconds();
-		return now + DEFAULT_EXPIRES;
+		//F64 now = LLFrameTimer::getTotalSeconds();
+		//return now + DEFAULT_EXPIRES;
+		return DEFAULT_EXPIRES;
 	}
 }
 
