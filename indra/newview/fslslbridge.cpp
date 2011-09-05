@@ -145,12 +145,12 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 			if (fsBridge != NULL)
 				mpBridge = fsBridge;
 		}
-		status = true;
+		//status = true;
+		status = viewerToLSL("URL Confirmed", new FSLSLBridgeRequestResponder());
 		if (!mIsFirstCallDone)
 		{
 			//on first call from bridge, confirm that we are here
 			//then check options use
-			viewerToLSL("URL Confirmed", new FSLSLBridgeRequestResponder());
 			updateBoolSettingValue("UseLSLFlightAssist");
 
 			mIsFirstCallDone = true;
@@ -242,6 +242,10 @@ void FSLSLBridge :: startCreation()
 	LLUUID catID = findFSCategory();
 
 	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
+
+	//detach everything else
+	detachOtherBridges();
+
 	if (fsBridge == NULL)
 	{
 		llinfos << "bridge not found, creating new" << llendl;
@@ -411,6 +415,7 @@ void FSLSLBridge :: processDetach(LLViewerObject *object, const LLViewerJointAtt
 	{
 		mpBridge = NULL;
 		reportToNearbyChat("Bridge detached.");
+		mIsFirstCallDone = false;
 		if (mBridgeCreating)
 		{
 			reportToNearbyChat("Bridge has not finished creating, you might need to recreate it before using");
@@ -627,6 +632,7 @@ void FSLSLBridge :: finishBridge()
 	reportToNearbyChat("Bridge created.");
 
 	mBridgeCreating = false;
+	mIsFirstCallDone = false;
 	//removeVOInventoryListener();
 	cleanUpOldVersions();
 	cleanUpBridgeFolder();
@@ -735,11 +741,6 @@ void FSLSLBridge :: cleanUpBridgeFolder(std::string nameToCleanUp)
 	for (S32 iIndex = 0; iIndex < items.count(); iIndex++)
 	{
 		const LLViewerInventoryItem* itemp = items.get(iIndex);
-		if (get_is_item_worn(itemp->getUUID()) && (itemp->getUUID() != mpBridge->getUUID()))
-		{
-			LLVOAvatarSelf::detachAttachmentIntoInventory(itemp->getUUID());
-		}
-
 		if (!itemp->getIsLinkType()  && (itemp->getUUID() != mpBridge->getUUID()))
 		{
 			gInventory.purgeObject(itemp->getUUID());
@@ -800,3 +801,24 @@ bool FSLSLBridge :: isOldBridgeVersion(LLInventoryItem *item)
 	return false;
 }
 
+void FSLSLBridge :: detachOtherBridges()
+{
+	LLUUID catID = findFSCategory();
+	LLViewerInventoryCategory::cat_array_t cats;
+	LLViewerInventoryItem::item_array_t items;
+
+	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
+
+	//detach everything except current valid bridge - if any
+	gInventory.collectDescendents(catID,cats,items,FALSE);
+
+	for (S32 iIndex = 0; iIndex < items.count(); iIndex++)
+	{
+		const LLViewerInventoryItem* itemp = items.get(iIndex);
+		if (get_is_item_worn(itemp->getUUID()) &&
+			((fsBridge == NULL) || (itemp->getUUID() != fsBridge->getUUID())))
+		{
+			LLVOAvatarSelf::detachAttachmentIntoInventory(itemp->getUUID());
+		}
+	}
+}

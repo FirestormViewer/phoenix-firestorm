@@ -102,6 +102,7 @@ protected:
 	void startCreation();
 	void finishBridge();
 	void cleanUpOldVersions();
+	void detachOtherBridges();
 
 	/*virtual*/ void inventoryChanged(LLViewerObject* obj,
 									 LLInventoryObject::object_list_t* inv,
