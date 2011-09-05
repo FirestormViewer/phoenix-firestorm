@@ -49,14 +49,6 @@
       
 	  <panel
 	   bottom="0"
-	   filename="panel_fs_contacts_lists.xml"
-	   label="Friends &amp; Contacts"
-	   left="0"
-	   right="-1"
-	   name="contacts_lists_panel" />
-	   
-	  <panel
-	   bottom="0"
 	   filename="panel_fs_contacts_friends.xml"
 	   label="Friends"
 	   left="0"
@@ -70,6 +62,14 @@
        left="0"
 	   right="-1"
        name="groups_panel"/>
+	   
+	  <panel
+	   bottom="0"
+	   filename="panel_fs_contacts_lists.xml"
+	   label="Friends &amp; Contacts"
+	   left="0"
+	   right="-1"
+	   name="contacts_lists_panel" />
 	   
     </tab_container>
 </floater>

@@ -6,9 +6,25 @@
  mouse_opaque="true"
  name="contacts"
  follows="all">
-
+	
+	<text
+	 top="5"
+	 left="5"
+	 right="-5"
+	 height="20"
+	 follows="top|left|right"
+	 layout="topleft"
+	 type="string"
+	 halign="center"
+	 font="SansSerifMedium"
+	 font.style.="BOLD"
+	 length="1"
+	 name="list_info_text">
+	   WARNING: Unfinsihed! Has known issues! Use at own risk!
+	</text>
+	
 	<panel
-     top="5"
+     top="25"
      left="4"
      right="-4"
      bottom="-2"
