@@ -268,7 +268,7 @@
         }
         
         // if we get this far, set our the timer for the next tick
-        if (timerInterval > TP_TIMER_TICK)
+        if ((timerInterval > TP_TIMER_TICK) || (timerInterval < 0.1))
         {
             timerInterval = TP_TIMER_TICK;
             llSetTimerEvent(timerInterval);
