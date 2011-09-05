@@ -85,6 +85,7 @@
 	      name="ScriptInfo">
 	    <menu_item_call.on_click
 	      function="Tools.ScriptInfo" />
+	   </menu_item_call>
    <menu_item_separator layout="topleft" />
       <menu_item_call
          enabled="false"
