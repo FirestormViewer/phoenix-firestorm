@@ -60,6 +60,7 @@
 
 //#define ROOT_FIRESTORM_FOLDER "#Firestorm"	//moved to llinventoryfunctions to synch with the AO object
 #define FS_BRIDGE_FOLDER "#LSL Bridge"
+// If you change this, change it in llappearancemgr.cpp too. -- TS
 #define FS_BRIDGE_NAME "#Firestorm LSL Bridge v"
 #define FS_BRIDGE_MAJOR_VERSION 1
 #define FS_BRIDGE_MINOR_VERSION 7
