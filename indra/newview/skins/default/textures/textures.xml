@@ -460,6 +460,11 @@ with the same filename but different name
   <texture name="Permission_Visible_Map" file_name="icons/see_on_map.png" preload="false" />
   <texture name="Permission_Edit_Objects_Mine" file_name="icons/edit_mine.png" preload="false" />
   <texture name="Permission_Edit_Objects_Theirs" file_name="icons/edit_theirs.png" preload="false" />
+  <texture name="Permission_Visible_Online_h" file_name="icons/see_me_online_h.png" preload="false" />
+  <texture name="Permission_Visible_Map_h" file_name="icons/see_on_map_h.png" preload="false" />
+  <texture name="Permission_Edit_Objects_Mine_h" file_name="icons/edit_mine_h.png" preload="false" />
+  <texture name="Permission_Edit_Objects_Theirs_h" file_name="icons/edit_theirs_h.png" preload="false" />
+
   <texture name="Person_Check" file_name="icons/Person_Check.png" preload="false" />
   <texture name="Person_Star" file_name="icons/Person_Star.png" preload="false" />
 

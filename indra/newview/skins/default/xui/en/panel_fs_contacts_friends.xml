@@ -252,15 +252,15 @@
      bottom="-5"
 	 follows="all"
 	 layout="topleft"
-     column_padding="0"
+     column_padding="1"
      draw_heading="true"
-	 heading_height="20"
+	 heading_height="24"
 	 multi_select="true"
      name="friend_list"
      tool_tip="Select an object from this list to highlight it in-world" >
 		<scroll_list.column
-		 image="legacy/ff_online_status_button.tga"
 		 name="icon_online_status"
+		 image="legacy/icon_avatar_online_h.tga"
 		 tool_tip="Online status"
 		 width="20" />
 		<scroll_list.column
@@ -274,30 +274,30 @@
 		 name="full_name"
 		 tool_tip="This contact's chosen display name." />
 		<scroll_list.column
-		 image="legacy/ff_visible_online_button.tga"
 		 name="icon_visible_online"
+		 image="Permission_Visible_Online_h"
 		 tool_tip="Friend can see when you&apos;re online"
-		 width="20" />
+		 width="16" />
 		<scroll_list.column
-		 image="legacy/ff_visible_map_button.tga"
 		 name="icon_visible_map"
+		 image="Permission_Visible_Map_h"
 		 tool_tip="Friend can locate you on the map"
-		 width="20" />
+		 width="16" />
 		<scroll_list.column
-		 image="legacy/ff_edit_mine_button.tga"
 		 name="icon_edit_mine"
+		 image="Permission_Edit_Objects_Mine_h"
 		 tool_tip="Friend can edit, delete or take objects"
-		 width="20" />
+		 width="16" />
 		<scroll_list.column
-		 image="legacy/ff_visible_map_button_theirs.tga"
 		 name="icon_visible_map_theirs"
+		 image="Permission_Visible_Map_h"
 		 tool_tip="You can locate them on the map"
-		 width="20" />
+		 width="16" />
 		<scroll_list.column
-		 image="legacy/ff_edit_theirs_button.tga"
 		 name="icon_edit_theirs"
+		 image="Permission_Edit_Objects_Theirs_h"
 		 tool_tip="You can edit this friend&apos;s objects"
-		 width="20" />
+		 width="16" />
 		<scroll_list.column
 		 name="friend_last_update_generation"
 		 width="0" />
