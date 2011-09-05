@@ -425,17 +425,18 @@ Push $2
 	; Otherwise (preview/dmz etc) just remove cache
 
         # Local Settings directory is the cache, there is no "cache" subdir
-        RMDir /r "$2\Local Settings\Application Data\Firestorm"
+        RMDir /r "$2\Local Settings\Application Data\Firestorm\user_settings"
+	RMDir /r "$2\Local Settings\Application Data\Firestorm\data"
         # Vista version of the same
-        RMDir /r "$2\AppData\Local\Firestorm"
-        Delete "$2\Application Data\Firestorm\user_settings\settings_windlight.xml"
+        RMDir /r "$2\AppData\Local\Firestorm\user_settings"
+	RMDir /r "$2\AppData\Local\Firestorm\data"
 
   CONTINUE:
     IntOp $0 $0 + 1
     Goto LOOP
   DONE:
   
-  MessageBox MB_OK "This uninstall will NOT delete your Firestorm chat logs and other private files. If you want to do that yourself, delete the folder $2\Local Settings\Application Data\Firestorm (XP) or $2\AppData\Local\Firestorm (Vista and newer)"
+  MessageBox MB_OK "This uninstall will NOT delete your Firestorm chat logs and other private files. If you want to do that yourself, delete the Firestorm folder within your user Application data folder"
 
 Pop $2
 Pop $1
