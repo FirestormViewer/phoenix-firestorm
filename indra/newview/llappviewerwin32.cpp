@@ -445,6 +445,7 @@ bool LLAppViewerWin32::initHardwareTest()
 		std::string splash_msg;
 		LLStringUtil::format_map_t args;
 		args["[APP_NAME]"] = LLAppViewer::instance()->getSecondLifeTitle();
+		args["[CURRENT_GRID]"] = LLGridManager::getInstance()->getGridLabel();
 		splash_msg = LLTrans::getString("StartupLoading", args);
 
 		LLSplashScreen::update(splash_msg);
