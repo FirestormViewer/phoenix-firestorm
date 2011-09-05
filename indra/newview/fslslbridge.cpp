@@ -735,7 +735,7 @@ void FSLSLBridge :: cleanUpBridgeFolder(std::string nameToCleanUp)
 	for (S32 iIndex = 0; iIndex < items.count(); iIndex++)
 	{
 		const LLViewerInventoryItem* itemp = items.get(iIndex);
-		if (get_is_item_worn(itemp->getUUID()))
+		if (get_is_item_worn(itemp->getUUID()) && (itemp->getUUID() != mpBridge->getUUID()))
 		{
 			LLVOAvatarSelf::detachAttachmentIntoInventory(itemp->getUUID());
 		}

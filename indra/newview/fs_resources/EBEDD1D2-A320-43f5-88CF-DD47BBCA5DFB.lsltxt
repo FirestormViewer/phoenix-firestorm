@@ -253,6 +253,7 @@
         {    
             llStopMoveToTarget();
             timerMask = timerMask ^ TIMER_TP; // remove our timer if we finish
+	    return;
         }
         
         if (dist < 65)
