@@ -98,7 +98,7 @@
      label="Don't show any camera target hints even on my own screen."
      layout="topleft"
      left="30"
-     name="privatelookat"
+     name="privateLocalLookat"
      top_pad="4"
      width="400" />
   
@@ -214,7 +214,7 @@
      layout="topleft"
      left="30"
      name="block_list"
-     top_pad="-10"
+     top_pad="-25"
      width="255">
         <!--<button.commit_callback
          function="SideTray.ShowPanel"-->
