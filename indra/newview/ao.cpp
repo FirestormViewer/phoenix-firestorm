@@ -368,7 +368,8 @@ LLScrollListItem* FloaterAO::addAnimation(const std::string name)
 
 	row["columns"][1]["type"]="text";
 	row["columns"][1]["value"]=name;
-	row["columns"][1]["width"]=120;			// 170 later
+	//[FIX FIRE-2835 : SJ] Changed the textcolumn from 120 to 200
+	row["columns"][1]["width"]=200;			// 170 later
 
 	return mAnimationList->addElement(row);
 }
@@ -394,7 +395,8 @@ void FloaterAO::onSelectState()
 */
 		row["columns"][0]["type"]="text";
 		row["columns"][0]["value"]="no_animations_loaded";  // 		getString("no_animations_loaded"));
-		row["columns"][0]["width"]=190;
+		//[FIX FIRE-2835 : SJ] Changed the textcolumn from 120 to 200
+		row["columns"][0]["width"]=200;
 		mAnimationList->addElement(row);
 		return;
 	}
