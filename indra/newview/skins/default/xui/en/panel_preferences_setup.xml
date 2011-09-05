@@ -99,15 +99,15 @@
    decimal_digits="0"
    follows="left|top"
    height="15"
-   increment="16"
-   initial_value="512"
+   increment="64"
+   initial_value="1024"
    layout="topleft"
    left_delta="140"
-   max_val="1024"
-   min_val="32"
+   max_val="10240"
+   min_val="64"
    name="cache_size"
    top_delta="-2"
-   width="172" />
+   width="179" />
   <text
    type="string"
    length="1"
