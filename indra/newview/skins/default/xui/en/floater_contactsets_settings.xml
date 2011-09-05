@@ -21,8 +21,8 @@
   <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Draw Profile Icons Next To Names" left="5" mouse_opaque="true" name="PhoenixContactSetsDrawProfileIcon" visible="true" radio_style="false" width="270" control_name="PhoenixContactSetsDrawProfileIcon"/>
   <text type="string" length="1" follows="left|top" height="10" layout="topleft" left="5" name="lgg_fg_text3" mouse_opaque="false" top_delta="27" width="90">Name Format:</text>
   <combo_box height="20" layout="topleft" left_delta="80" name="lgg_fg_dispName" control_name="PhoenixContactSetsNameFormat" top_delta="-4" width="150">
-  <combo_item name="Old Names" value="0">
-    Old Names
+  <combo_item name="Legacy Names" value="0">
+    Legacy Names
   </combo_item>
   <combo_item name="Display Names (with Username)" value="1">
     Display Names (with Username)
@@ -33,8 +33,8 @@
   </combo_box>
   <text type="string" length="1" follows="left|top" height="10" layout="topleft" left_delta="170" name="lgg_fg_text4" mouse_opaque="false" top_delta="4" width="90">Sort by:</text>
   <combo_box height="20" layout="topleft" left_delta="45" name="lgg_fg_sortName" control_name="PhoenixContactSetSortNameFormat" top_delta="-4" width="150" >
-  <combo_item name="Old Names" value="Old Names">
-    Old Names
+  <combo_item name="Legacy Names" value="Old Names">
+    Legacy Names
   </combo_item>
   <combo_item name="Display Names (with Username)" value="Display Names (with Username)">
     Display Names (with Username)

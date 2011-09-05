@@ -119,6 +119,7 @@ private:
 	void					onPayButtonClicked();
 	void					onDeleteFriendButtonClicked();
 	void					onAddFriendWizButtonClicked();
+	void					onContactSetsButtonClicked();
 	
 	// group buttons
 	void					onGroupChatButtonClicked();
