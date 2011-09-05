@@ -249,6 +249,9 @@ public:
 		Optional<LLUIColor>		cursor_color,
 								text_color,
 								text_readonly_color,
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-05 (Catznip-2.8.0b) | Added: Catznip-2.8.0b
+								text_label_color,
+// [/SL:KB]
 								bg_readonly_color,
 								bg_writeable_color,
 								bg_focus_color,
@@ -571,6 +574,11 @@ protected:
 	S32							mReflowIndex;		// index at which to start reflow.  S32_MAX indicates no reflow needed.
 	bool						mScrollNeeded;		// need to change scroll region because of change to cursor position
 	S32							mScrollIndex;		// index of first character to keep visible in scroll region
+
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-05 (Catznip-2.8.0b) | Added: Catznip-2.8.0b
+	LLUIString					mLabel;
+	LLUIColor					mLabelColor;
+// [/SL:KB]
 
 	// Fired when a URL link is clicked
 	commit_signal_t*			mURLClickSignal;
