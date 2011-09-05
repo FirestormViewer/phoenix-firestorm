@@ -398,7 +398,7 @@ private:
 
 //=============================================================================
 
-const LLAccordionCtrlTab::Params& get_accordion_tab_params()
+const LLAccordionCtrlTab::Params& get_contact_accordion_tab_params()
 {
 	static LLAccordionCtrlTab::Params tab_params;
 	static bool initialized = false;
@@ -523,7 +523,7 @@ void FSContactList::onContactSetCreate(const LLSD& notification, const LLSD& res
 
 FSContactSet*	 FSContactList::addContactSet(const LLUUID& sub_folder_ID, const std::string& set_name)
 {
-	LLAccordionCtrlTab::Params tab_params(get_accordion_tab_params());
+	LLAccordionCtrlTab::Params tab_params(get_contact_accordion_tab_params());
 	LLAccordionCtrlTab* tab = LLUICtrlFactory::create<LLAccordionCtrlTab>(tab_params);
 	if (!tab) return NULL;
 	
