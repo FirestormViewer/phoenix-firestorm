@@ -35,6 +35,7 @@
 #include "llwaterparammanager.h"
 #include "llwlhandlers.h"
 #include "llwlparammanager.h"
+#include "kcwlinterface.h"
 
 std::string LLEnvPrefs::getWaterPresetName() const
 {
@@ -189,7 +190,7 @@ bool LLEnvManagerNew::useWaterParams(const LLSD& params)
 	return true;
 }
 
-bool LLEnvManagerNew::useSkyPreset(const std::string& name)
+bool LLEnvManagerNew::useSkyPreset(const std::string& name, bool interpolate /*= false*/)
 {
 	LLWLParamManager& sky_mgr = LLWLParamManager::instance();
 	LLWLParamSet param_set;
@@ -201,7 +202,7 @@ bool LLEnvManagerNew::useSkyPreset(const std::string& name)
 	}
 
 	LL_DEBUGS("Windlight") << "Displaying sky preset " << name << LL_ENDL;
-	sky_mgr.applySkyParams(param_set.getAll());
+	sky_mgr.applySkyParams(param_set.getAll(), interpolate);
 	return true;
 }
 
@@ -243,14 +244,14 @@ bool LLEnvManagerNew::useDayCycleParams(const LLSD& params, LLEnvKey::EScope sco
 	return LLWLParamManager::instance().applyDayCycleParams(params, scope);
 }
 
-void LLEnvManagerNew::setUseRegionSettings(bool val)
+void LLEnvManagerNew::setUseRegionSettings(bool val, bool interpolate /*= false*/)
 {
 	mUserPrefs.setUseRegionSettings(val);
 	saveUserPrefs();
-	updateManagersFromPrefs(false);
+	updateManagersFromPrefs(interpolate);
 }
 
-void LLEnvManagerNew::setUseWaterPreset(const std::string& name)
+void LLEnvManagerNew::setUseWaterPreset(const std::string& name, bool interpolate /*= false*/)
 {
 	// *TODO: make sure the preset exists.
 	if (name.empty())
@@ -261,10 +262,10 @@ void LLEnvManagerNew::setUseWaterPreset(const std::string& name)
 
 	mUserPrefs.setUseWaterPreset(name);
 	saveUserPrefs();
-	updateManagersFromPrefs(false);
+	updateManagersFromPrefs(interpolate);
 }
 
-void LLEnvManagerNew::setUseSkyPreset(const std::string& name)
+void LLEnvManagerNew::setUseSkyPreset(const std::string& name, bool interpolate /*= false*/)
 {
 	// *TODO: make sure the preset exists.
 	if (name.empty())
@@ -275,10 +276,10 @@ void LLEnvManagerNew::setUseSkyPreset(const std::string& name)
 
 	mUserPrefs.setUseSkyPreset(name);
 	saveUserPrefs();
-	updateManagersFromPrefs(false);
+	updateManagersFromPrefs(interpolate);
 }
 
-void LLEnvManagerNew::setUseDayCycle(const std::string& name)
+void LLEnvManagerNew::setUseDayCycle(const std::string& name, bool interpolate /*= false*/)
 {
 	if (!LLDayCycleManager::instance().presetExists(name))
 	{
@@ -288,7 +289,7 @@ void LLEnvManagerNew::setUseDayCycle(const std::string& name)
 
 	mUserPrefs.setUseDayCycle(name);
 	saveUserPrefs();
-	updateManagersFromPrefs(false);
+	updateManagersFromPrefs(interpolate);
 }
 
 void LLEnvManagerNew::loadUserPrefs()
@@ -483,10 +484,19 @@ void LLEnvManagerNew::onRegionSettingsResponse(const LLSD& content)
 	// Load region sky presets.
 	LLWLParamManager::instance().refreshRegionPresets();
 
-	// If using server settings, update managers.
-	if (getUseRegionSettings())
+	// Use the region settings if parcel settings didnt override it already -KC
+	if (KCWindlightInterface::instance().haveParcelOverride(new_settings))
 	{
-		updateManagersFromPrefs(mInterpNextChangeMessage);
+		// If using server settings, update managers.
+		if (getUseRegionSettings())
+		{
+			updateManagersFromPrefs(mInterpNextChangeMessage);
+		}
+		//bit of a hacky override since I've repurposed many of the settings and methods here -KC
+		else if (gSavedSettings.getBOOL("UseEnvironmentFromRegionAlways"))
+		{
+			setUseRegionSettings(true, mInterpNextChangeMessage);
+		}
 	}
 
 	// Let interested parties know about the region settings update.
@@ -516,7 +526,7 @@ void LLEnvManagerNew::initSingleton()
 	loadUserPrefs();
 }
 
-void LLEnvManagerNew::updateSkyFromPrefs()
+void LLEnvManagerNew::updateSkyFromPrefs(bool interpolate /*= false*/)
 {
 	bool success = true;
 
@@ -533,7 +543,7 @@ void LLEnvManagerNew::updateSkyFromPrefs()
 		}
 		else
 		{
-			success = useSkyPreset(getSkyPresetName());
+			success = useSkyPreset(getSkyPresetName(), interpolate);
 		}
 	}
 
@@ -598,7 +608,7 @@ void LLEnvManagerNew::updateManagersFromPrefs(bool interpolate)
 	updateWaterFromPrefs(interpolate);
 
 	// Apply sky settings.
-	updateSkyFromPrefs();
+	updateSkyFromPrefs(interpolate);
 }
 
 bool LLEnvManagerNew::useRegionSky()

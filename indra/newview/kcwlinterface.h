@@ -30,6 +30,8 @@
 #include <string>
 
 class LLParcel;
+class LLViewerRegion;
+class LLEnvironmentSettings;
 
 class KCWindlightInterface : public LLSingleton<KCWindlightInterface>,LLEventTimer
 {
@@ -47,6 +49,7 @@ public:
 	void onClickWLStatusButton();
 	bool WLset; //display the status bar icon?
 	void setTPing(bool value) { mTPing = value; }
+	bool haveParcelOverride(const LLEnvironmentSettings& new_settings);
 	
 private:
 	bool callbackParcelWL(const LLSD& notification, const LLSD& response);
@@ -67,4 +70,7 @@ protected:
 	S32 mLastZ;
 	bool mWeChangedIt; //dont reset anything if we didnt do it
 	bool mTPing; //agent just TP'd (hack, might be better way)
+	LLViewerRegion* mLastRegion;
+	bool mRegionOverride;
+	bool mHaveRegionSettings;
 };

@@ -196,16 +196,16 @@ public:
 	bool useRegionSettings();
 	bool useWaterPreset(const std::string& name);
 	bool useWaterParams(const LLSD& params);
-	bool useSkyPreset(const std::string& name);
+	bool useSkyPreset(const std::string& name, bool interpolate = false);
 	bool useSkyParams(const LLSD& params);
 	bool useDayCycle(const std::string& name, LLEnvKey::EScope scope);
 	bool useDayCycleParams(const LLSD& params, LLEnvKey::EScope scope, F32 time = 0.5);
 
 	// setters for user env. preferences
-	void setUseRegionSettings(bool val);
-	void setUseWaterPreset(const std::string& name);
-	void setUseSkyPreset(const std::string& name);
-	void setUseDayCycle(const std::string& name);
+	void setUseRegionSettings(bool val, bool interpolate = false);
+	void setUseWaterPreset(const std::string& name, bool interpolate = false);
+	void setUseSkyPreset(const std::string& name, bool interpolate = false);
+	void setUseDayCycle(const std::string& name, bool interpolate = false);
 	void setUserPrefs(
 		const std::string& water_preset,
 		const std::string& sky_preset,
@@ -241,13 +241,15 @@ private:
 	void loadUserPrefs();
 	void saveUserPrefs();
 
-	void updateSkyFromPrefs();
+	void updateSkyFromPrefs(bool interpolate = false);
 	void updateWaterFromPrefs(bool interpolate);
 	void updateManagersFromPrefs(bool interpolate);
 
+public:
 	bool useRegionSky();
 	bool useRegionWater();
 
+private:
 	bool useDefaultSky();
 	bool useDefaultWater();
 
