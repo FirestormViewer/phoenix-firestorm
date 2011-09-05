@@ -45,7 +45,8 @@ LLFlatListView::Params::Params()
 	multi_select("multi_select"),
 	keep_one_selected("keep_one_selected"),
 	keep_selection_visible_on_reshape("keep_selection_visible_on_reshape",false),
-	no_items_text("no_items_text")
+	no_items_text("no_items_text"),
+	magical_hacky_height_padding("magical_hacky_height_padding")
 {};
 
 void LLFlatListView::reshape(S32 width, S32 height, BOOL called_from_parent /* = TRUE */)
@@ -384,6 +385,7 @@ LLFlatListView::LLFlatListView(const LLFlatListView::Params& p)
   , mNoItemsCommentTextbox(NULL)
   , mIsConsecutiveSelection(false)
   , mKeepSelectionVisibleOnReshape(p.keep_selection_visible_on_reshape)
+  , mMagicalHackyHeightPadding(p.magical_hacky_height_padding)
 {
 	mBorderThickness = getBorderWidth();
 
@@ -1070,7 +1072,7 @@ void LLFlatListView::notifyParentItemsRectChanged()
 	LLSD params;
 	params["action"] = "size_changes";
 	params["width"] = req_rect.getWidth();
-	params["height"] = req_rect.getHeight();
+	params["height"] = req_rect.getHeight() + mMagicalHackyHeightPadding;
 
 	if (getParent()) // dummy widgets don't have a parent
 		getParent()->notifyParent(params);
