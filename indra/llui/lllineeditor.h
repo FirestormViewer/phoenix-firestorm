@@ -299,6 +299,10 @@ private:
 	// Draw the background image depending on enabled/focused state.
 	void			drawBackground();
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	void			onSpellCheckSettingsChange();
+// [/SL:KB]
+
 	//
 	// private data members
 	//

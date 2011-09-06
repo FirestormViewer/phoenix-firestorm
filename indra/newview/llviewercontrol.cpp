@@ -524,19 +524,17 @@ bool handleForceShowGrid(const LLSD& newvalue)
 	return true;
 }
 
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-07-02 (Catznip-2.7.0a) | Added: Catznip-2.7.0a
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Modified: Catznip-2.8.0a
 bool handleSpellCheckChanged(const LLSD& sdValue)
 {
-	LLHunspellWrapper::setUseSpellCheck(sdValue.asBoolean());
+	LLHunspellWrapper::setUseSpellCheck((sdValue.asBoolean()) ? gSavedSettings.getString("SpellCheckDictionary") : LLStringUtil::null);
 	return true;
 }
 
 bool handleSpellCheckDictChanged(const LLSD& sdValue)
 {
-	if (LLHunspellWrapper::useSpellCheck())
-	{
-		LLHunspellWrapper::instance().setCurrentDictionary(sdValue.asString());
-	}
+	if (gSavedSettings.getBOOL("SpellCheck"))
+		LLHunspellWrapper::setUseSpellCheck(sdValue.asString());
 	return true;
 }
 // [/SL:KB]
@@ -758,7 +756,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("UpdaterServiceSetting")->getSignal()->connect(boost::bind(&toggle_updater_service_active, _2));
 	gSavedSettings.getControl("ForceShowGrid")->getSignal()->connect(boost::bind(&handleForceShowGrid, _2));
 	gSavedSettings.getControl("RenderTransparentWater")->getSignal()->connect(boost::bind(&handleRenderTransparentWaterChanged, _2));
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-07-02 (Catznip-2.7.0a) | Added: Catznip-2.7.0a
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-07-02 (Catznip-2.8.0a) | Added: Catznip-2.7.0a
 	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged, _2));
 	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckDictChanged, _2));
 // [/SL:KB]

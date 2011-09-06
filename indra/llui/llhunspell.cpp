@@ -32,8 +32,6 @@
 // Static variables
 //
 
-bool LLHunspellWrapper::s_fSpellCheck = false;
-
 static const std::string c_strDictCustomSuffix = "_custom";
 static const std::string c_strDictIgnoreSuffix = "_ignore";
 
@@ -71,15 +69,11 @@ LLHunspellWrapper::~LLHunspellWrapper()
 // Checked: 2010-12-23 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
 bool LLHunspellWrapper::checkSpelling(const std::string& strWord) const
 {
-	if ( (!s_fSpellCheck) || (!m_pHunspell) || (strWord.length() < 3) )
+	if ( (!m_pHunspell) || (strWord.length() < 3) || (0 != m_pHunspell->spell(strWord.c_str())) )
 	{
 		return true;
 	}
-	if (0 != m_pHunspell->spell(strWord.c_str()))
-	{
-		return true;
-	}
-	if (m_IgnoreList.size())
+	if (m_IgnoreList.size() > 0)
 	{
 		std::string strWordLower(strWord);
 		LLStringUtil::toLower(strWordLower);
@@ -90,7 +84,7 @@ bool LLHunspellWrapper::checkSpelling(const std::string& strWord) const
 
 S32 LLHunspellWrapper::getSuggestions(const std::string& strWord, std::vector<std::string>& strSuggestionList) const
 {
-	if ( (!s_fSpellCheck) || (!m_pHunspell) || (strWord.length() < 3) )
+	if ( (!m_pHunspell) || (strWord.length() < 3) )
 		return 0;
 
 	strSuggestionList.clear();
@@ -139,6 +133,10 @@ S32 LLHunspellWrapper::getInstalledDictionaries(std::vector<std::string>& strDic
 // Checked: 2010-12-23 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
 bool LLHunspellWrapper::setCurrentDictionary(const std::string& strDictionary)
 {
+	if (strDictionary == m_strDictionaryName)
+		return false;
+	s_SettingsChangeSignal();
+
 	if (m_pHunspell)
 	{
 		delete m_pHunspell;
@@ -147,7 +145,7 @@ bool LLHunspellWrapper::setCurrentDictionary(const std::string& strDictionary)
 		m_IgnoreList.clear();
 	}
 
-	if ( (!useSpellCheck()) || (strDictionary.empty()) )
+	if (strDictionary.empty())
 		return false;
 
 	LLSD sdDictInfo;
@@ -161,12 +159,14 @@ bool LLHunspellWrapper::setCurrentDictionary(const std::string& strDictionary)
 
 	if (sdDictInfo.has("name"))
 	{
+		std::string strPathAff = m_strDictionaryPath + sdDictInfo["name"].asString() + ".aff";
+		std::string strPathDic = m_strDictionaryPath + sdDictInfo["name"].asString() + ".dic";
+		m_pHunspell = new Hunspell(strPathAff.c_str(), strPathDic.c_str());
+		if (!m_pHunspell)
+			return false;
+
 		m_strDictionaryName = strDictionary;
 		m_strDictionaryFile = sdDictInfo["name"].asString();
-
-		std::string strPathAff = m_strDictionaryPath + m_strDictionaryFile + ".aff";
-		std::string strPathDic = m_strDictionaryPath + m_strDictionaryFile + ".dic";
-		m_pHunspell = new Hunspell(strPathAff.c_str(), strPathDic.c_str());
 
 		// Add the custom dictionary (if there is one)
 		if (sdDictInfo["has_custom"].asBoolean())
@@ -265,12 +265,22 @@ void LLHunspellWrapper::addToDictFile(const std::string& strDictPath, const std:
 // Static member functions
 //
 
-void LLHunspellWrapper::setUseSpellCheck(bool fSpellCheck)
-{
-	s_fSpellCheck = fSpellCheck;
+LLHunspellWrapper::settings_change_signal_t LLHunspellWrapper::s_SettingsChangeSignal;
 
-	if ( (!s_fSpellCheck) && (LLHunspellWrapper::instanceExists()) )
-		LLHunspellWrapper::instance().setCurrentDictionary(LLStringUtil::null);
+boost::signals2::connection LLHunspellWrapper::setSettingsChangeCallback(const settings_change_signal_t::slot_type& cb)
+{
+	return s_SettingsChangeSignal.connect(cb);
+}
+
+bool LLHunspellWrapper::useSpellCheck()
+{
+	return (LLHunspellWrapper::instanceExists()) || (LLHunspellWrapper::instance().m_pHunspell);
+}
+
+void LLHunspellWrapper::setUseSpellCheck(const std::string& strDictionary)
+{
+	if ( ((strDictionary.empty()) && (useSpellCheck())) || (!strDictionary.empty()) )
+		LLHunspellWrapper::instance().setCurrentDictionary(strDictionary);
 }
 
 // ============================================================================

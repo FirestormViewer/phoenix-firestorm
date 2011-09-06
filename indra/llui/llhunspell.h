@@ -18,6 +18,7 @@
 #define LLHUNSËLL_H
 
 #include "llsingleton.h"
+#include <boost/signals2.hpp>
 
 class Hunspell;
 
@@ -41,19 +42,26 @@ public:
 	const std::string	getCurrentDictionary() const					{ return m_strDictionaryName; }
 	S32					getDictionaries(std::vector<std::string>& strDictionaryList) const;
 	S32					getInstalledDictionaries(std::vector<std::string>& strDictionaryList) const;
-	bool				setCurrentDictionary(const std::string& strDictionary);
 
 	void				addToCustomDictionary(const std::string& strWord);
 	void				addToIgnoreList(const std::string& strWord);
 protected:
 	void				addToDictFile(const std::string& strDictPath, const std::string& strWord);
+	bool				setCurrentDictionary(const std::string& strDictionary);
+
+	/*
+	 * Event callbacks
+	 */
+public:
+	typedef boost::signals2::signal<void()> settings_change_signal_t;
+	static boost::signals2::connection setSettingsChangeCallback(const settings_change_signal_t::slot_type& cb);
 
 	/*
 	 * Static member functions
 	 */
 public:
-	static bool			useSpellCheck()									{ return s_fSpellCheck; }
-	static void			setUseSpellCheck(bool fSpellCheck);
+	static bool useSpellCheck();
+	static void setUseSpellCheck(const std::string& strDictionary);
 
 	/*
 	 * Member variables
@@ -66,7 +74,7 @@ protected:
 	LLSD						m_sdDictionaryMap;
 	std::vector<std::string>	m_IgnoreList;
 
-	static bool					s_fSpellCheck;
+	static settings_change_signal_t	s_SettingsChangeSignal;
 };
 
 // ============================================================================

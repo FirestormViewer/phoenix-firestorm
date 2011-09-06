@@ -169,7 +169,9 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 
 	mScrollTimer.reset();
 	mTripleClickTimer.reset();
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-25 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Modified: Catznip-2.8.0a
+	if (mSpellCheck)
+		LLHunspellWrapper::setSettingsChangeCallback(boost::bind(&LLLineEditor::onSpellCheckSettingsChange, this));
 	mSpellCheckTimer.reset();
 // [/SL:KB]
 	setText(p.default_text());
@@ -627,6 +629,13 @@ bool LLLineEditor::isMisspelledWord(U32 posCursor) const
 			return true;
 	}
 	return false;
+}
+
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+void LLLineEditor::onSpellCheckSettingsChange()
+{
+	// Recheck the spelling on every change
+	mNeedsSpellCheck = TRUE;
 }
 // [/SL:KB]
 
