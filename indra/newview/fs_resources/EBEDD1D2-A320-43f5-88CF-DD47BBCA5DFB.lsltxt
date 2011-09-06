@@ -163,21 +163,25 @@
         {
             string params = "<" + llList2String(commandList,1) + ">";
             debugOutput("Parsing params: " + params);
-            useFlightAssist = llList2Integer(commandList,1);
-            if (useFlightAssist)
-            {
-		              debugOutput("Flight assist true, going to flight_init");
-               flight_init();
-            }
-            else
-            {
-                debugOutput("Flight assist false, removing flag");
-                if (timerMask & TIMER_TYPE_FLIGHT)
-                {
-                    debugOutput("timerMask & TIMER_FLIGHT");
-                    timerMask = timerMask ^ TIMER_TYPE_FLIGHT; // remove flight from event counter
-		               }
-            }
+            integer newstatus = llList2Integer(commandList,1);
+            if (newstatus != useFlightAssist)
+	    {            	
+	            useFlightAssist = newstatus;
+	            if (useFlightAssist)
+	            {
+			    	debugOutput("Flight assist true, going to flight_init");
+	            	flight_init();
+	            }
+	            else
+	            {
+	                debugOutput("Flight assist false, removing flag");
+	                if (timerMask & TIMER_TYPE_FLIGHT)
+	                {
+	                    debugOutput("timerMask & TIMER_FLIGHT");
+	                    timerMask = timerMask ^ TIMER_TYPE_FLIGHT; // remove flight from event counter
+		        }
+	            }
+	     }
         }
     
         else if (cmd == "llMoveToTarget")
@@ -285,6 +289,11 @@
         {
             timerInterval = TP_TIMER_TICK;
             llSetTimerEvent(timerInterval);
+        }
+        else
+        {
+        	//else no more timers. In this case, make EXTRA sure that we're not moving.
+        	llStopMoveToTarget();
         }
     }
 
@@ -534,9 +543,8 @@ default
         // leave it as it is.  Order this list by fastest timer consumers first. 
         if (timerMask & TIMER_TYPE_TP)
         {
-            if (timerElapsed > TP_TIMER_TICK)
-                tpMoveStep();
-                return; // teleports shortcut other timers
+            tpMoveStep();
+            return; // teleports shortcut other timers
         }
     
         if (timerMask & TIMER_TYPE_FLIGHT)
