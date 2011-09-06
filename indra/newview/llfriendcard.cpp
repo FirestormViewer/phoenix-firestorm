@@ -427,33 +427,39 @@ void LLFriendCardsManager::collectFriendsLists(folderid_buddies_map_t& folderBud
 	folderBuddiesMap.clear();
 
 	LLInventoryModel::cat_array_t* listFolders;
-	LLInventoryModel::item_array_t* fakeItems;
+	LLInventoryModel::item_array_t* items;
 
 	// get folders in the Friend folder. Items should be NULL due to Cards should be in lists.
-	gInventory.getDirectDescendentsOf(findFriendFolderUUIDImpl(), listFolders, fakeItems);
+	gInventory.getDirectDescendentsOf(findFriendFolderUUIDImpl(), listFolders, items);
 
 	if (NULL == listFolders)
 		return;
 
 	LLInventoryModel::cat_array_t::const_iterator itCats;	// to iterate Friend Lists (categories)
 	LLInventoryModel::item_array_t::const_iterator itBuddy;	// to iterate Buddies in each List
-	
+	LLInventoryModel::cat_array_t* fakeCatsArg;
 	for (itCats = listFolders->begin(); itCats != listFolders->end(); ++itCats)
 	{
-
+		if (items)
+			items->clear();
+		
 		// Everything but Friends/All content will collected here
 		// Friends/All will be handled by LLAvatarTracker
 		if ((*itCats)->getUUID() == findFriendAllSubfolderUUIDImpl())
 			continue;
 		
 		//NOTE* getDirectDescendentsOf is not used here as it was not returning all items most of the time.
-		LLInventoryModel::cat_array_t fakeCatsArg;
-		LLInventoryModel::item_array_t items;
-		LLFindFriendCallingCard collector;
-		gInventory.collectDescendentsIf((*itCats)->getUUID(), fakeCatsArg, items, LLInventoryModel::EXCLUDE_TRASH, collector);
+		//LLInventoryModel::cat_array_t fakeCatsArg;
+		//LLInventoryModel::item_array_t items;
+		//LLFindFriendCallingCard collector;
+		//gInventory.collectDescendentsIf((*itCats)->getUUID(), fakeCatsArg, items, LLInventoryModel::EXCLUDE_TRASH, collector);
+		gInventory.getDirectDescendentsOf((*itCats)->getUUID(), fakeCatsArg, items);
 
+		if (NULL == items)
+			continue;
+		
 		uuid_vec_t buddyUUIDs;
-		for (itBuddy = items.begin(); itBuddy != items.end(); ++itBuddy)
+		for (itBuddy = items->begin(); itBuddy != items->end(); ++itBuddy)
 		{
 			buddyUUIDs.push_back((*itBuddy)->getCreatorUUID());
 		}

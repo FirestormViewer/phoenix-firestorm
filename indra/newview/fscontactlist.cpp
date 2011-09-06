@@ -607,25 +607,27 @@ FSContactSet* FSContactList::getOrCreateConstactSet(const LLUUID& sub_folder_ID)
 
 void FSContactList::updateFriendList()
 {
-	
-	LLFriendCardsManager::folderid_buddies_map_t listMap;
-	LLFriendCardsManager::instance().collectFriendsLists(listMap);
-	
-	if (listMap.size() > 0)
+	if (mIsFriendsLoaded)
 	{
-		lldebugs << "Friends Cards were found, count: " << listMap.begin()->second.size() << llendl;
+		LLFriendCardsManager::folderid_buddies_map_t listMap;
+		LLFriendCardsManager::instance().collectFriendsLists(listMap);
 		
-		LLFriendCardsManager::folderid_buddies_map_t::iterator dir_it;
-		for (dir_it = listMap.begin(); dir_it != listMap.end(); ++dir_it)
+		if (listMap.size() > 0)
 		{
-			FSContactSet* contact_list_set = getOrCreateConstactSet(dir_it->first);
-			contact_list_set->update(dir_it->second);
+			lldebugs << "Friends Cards were found, count: " << listMap.begin()->second.size() << llendl;
+			
+			LLFriendCardsManager::folderid_buddies_map_t::iterator dir_it;
+			for (dir_it = listMap.begin(); dir_it != listMap.end(); ++dir_it)
+			{
+				FSContactSet* contact_list_set = getOrCreateConstactSet(dir_it->first);
+				contact_list_set->update(dir_it->second);
+			}
+		}
+		else
+		{
+			llinfos << "Friends Cards were not found" << llendl;
 		}
 	}
-	else
- 	{
-		llinfos << "Friends Cards were not found" << llendl;
- 	}
 	
 	// Friends/All is processed from LLAvatarTracker instead for reliablity and speed reasons
 	// Calling Cards takes time to fetch and it could take several minutes from login for to load
