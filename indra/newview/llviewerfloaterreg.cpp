@@ -80,6 +80,7 @@
 #include "llfloaterlagmeter.h"
 #include "llfloaterland.h"
 #include "llfloaterlandholdings.h"
+#include "llfloaterlocalbitmap.h"
 #include "llfloatermap.h"
 #include "llfloatermemleak.h"
 #include "llfloatermodelwizard.h"
@@ -253,6 +254,8 @@ void LLViewerFloaterReg::registerFloaters()
 	
 	LLFloaterReg::add("lagmeter", "floater_lagmeter.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLagMeter>);
 	LLFloaterReg::add("land_holdings", "floater_land_holdings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLandHoldings>);
+
+	LLFloaterReg::add("local_bitmap_browser", "floater_local_bitmap.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLocalBitmapBrowser>);
 
 	LLFloaterReg::add("lgg_beamcolormap", "floater_beamcolor.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggBeamColorMapFloater>);
 	LLFloaterReg::add("lgg_beamshape", "floater_beamshape.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggBeamMapFloater>);

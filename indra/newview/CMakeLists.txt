@@ -227,6 +227,7 @@ set(viewer_SOURCE_FILES
     llfloaterlagmeter.cpp
     llfloaterland.cpp
     llfloaterlandholdings.cpp
+	llfloaterlocalbitmap.cpp
     llfloatermap.cpp
     llfloatermediabrowser.cpp
     llfloatermediasettings.cpp
@@ -829,6 +830,7 @@ set(viewer_HEADER_FILES
     llfloaterlagmeter.h
     llfloaterland.h
     llfloaterlandholdings.h
+	llfloaterlocalbitmap.h
     llfloatermap.h
     llfloatermediabrowser.h
     llfloatermediasettings.h
