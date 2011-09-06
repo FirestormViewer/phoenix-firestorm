@@ -516,12 +516,11 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 	bool isOnline = relationInfo->isOnline();
 
 	LLAvatarName av_name;
-	//AO: always use the callback
-	//if (!LLAvatarNameCache::get(agent_id, &av_name))
-	//{
+	if (!LLAvatarNameCache::get(agent_id, &av_name))
+	{
 		const LLRelationship* info = LLAvatarTracker::instance().getBuddyInfo(agent_id);
 		LLAvatarNameCache::get(agent_id, boost::bind(&FSFloaterContacts::updateFriendItem, this, agent_id, info));
-	//}
+	}
 
 	LLSD element;
 	element["id"] = agent_id;
@@ -597,11 +596,9 @@ void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelatio
 	bool isOnline = info->isOnline();
 
 	LLAvatarName av_name;
-	if ((!LLAvatarNameCache::get(agent_id, &av_name)) || (av_name.mUsername.compare("") == 0))
+	if (!LLAvatarNameCache::get(agent_id, &av_name))
 	{
 		LLAvatarNameCache::get(agent_id, boost::bind(&FSFloaterContacts::updateFriendItem, this, agent_id, info));
-		llinfos << "no name yet" << llendl;
-		return;
 	}
 
 	// Name of the status icon to use
