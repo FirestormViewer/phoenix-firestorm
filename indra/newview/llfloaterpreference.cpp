@@ -109,6 +109,10 @@
 #include "lllogininstance.h"        // to check if logged in yet
 #include "llsdserialize.h"
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+#include "llhunspell.h"
+// [/SL:KB]
+
 const F32 MAX_USER_FAR_CLIP = 512.f;
 const F32 MIN_USER_FAR_CLIP = 64.f;
 const F32 BANDWIDTH_UPDATER_TIMEOUT = 0.5f;
@@ -1702,6 +1706,21 @@ BOOL LLPanelPreference::postBuild()
 		mBandWidthUpdater = new LLPanelPreference::Updater(boost::bind(&handleBandwidthChanged, _1), BANDWIDTH_UPDATER_TIMEOUT);
 		gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&LLPanelPreference::Updater::update, mBandWidthUpdater, _2));
 	}
+
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	//////////////////////PanelSpellCheck//////////////////////
+	if (hasChild("checkSpellCheck"))
+	{
+		std::vector<std::string> dictList;
+		if (LLHunspellWrapper::instance().getInstalledDictionaries(dictList))
+		{
+			LLComboBox* pMainDictionaryList = findChild<LLComboBox>("comboDictionaryMain");
+			for (std::vector<std::string>::const_iterator itDict = dictList.begin(); itDict != dictList.end(); ++itDict)
+				pMainDictionaryList->add(*itDict);
+			pMainDictionaryList->setControlName("SpellCheckDictionary");
+		}
+	}
+// [/SL:KB]
 
 	apply();
 	return true;
