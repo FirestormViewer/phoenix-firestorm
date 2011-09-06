@@ -826,7 +826,7 @@ void LLFloaterTexturePicker::onBtnUpload(void *userdata)
 // static
 void LLFloaterTexturePicker::onBtnBrowser(void *userdata)
 {
-	LLFloaterReg::showInstance("local_bitmap_browser", NULL); // NULL works but i don't feel comfortable with it.
+	LLFloaterReg::showInstance("local_bitmap_browser", 0);
 }
 
 // static
