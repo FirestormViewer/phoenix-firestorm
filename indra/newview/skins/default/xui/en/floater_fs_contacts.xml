@@ -25,21 +25,21 @@
      name="no_groups_msg"
      value="Looking for Groups to join? Try [secondlife:///app/search/groups Search]." />
     <tab_container
-     top="1"
-	 bottom="-1"
-     left="1"
-	 right="-1"
      follows="all"
+     height="390"
      layout="topleft"
+     left="4"
      name="friends_and_groups"
      tab_position="top"
      tab_width="80"
-     tab_max_width = "120"
+     tab_max_width = "80"
      tab_height="20"
      use_custom_icon_ctrl="false"
      tab_icon_ctrl_pad="2"
      halign="left"
-     use_ellipses="true">
+     use_ellipses="true"
+     top="0"
+     width="393">
       <first_tab
        tab_bottom_image_flash="Toolbar_Left_Flash"/>
       <middle_tab
