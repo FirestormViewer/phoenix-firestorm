@@ -19,6 +19,7 @@
      layout="topleft"
      left="165"
      top="4"
+     visible="false"
      name="mode_selection"
      follows="right|top">
         <radio_item
