@@ -1,6 +1,30 @@
 <llsd>
 <map>
 
+  <key>OnlineOfflinetoNearbyChat</key>
+    <map>
+      <key>Comment</key>
+      <string>Send online/offline notifications to Nearby Chat panel (v1-style behavior)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+
+    <key>ChatOnlineNotification</key>
+    <map>
+      <key>Comment</key>
+      <string>Provide notifications for when friend log on and off of SL</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+
   <key>OpenSidePanelsInFloaters</key>
   <map>
     <key>Comment</key>
