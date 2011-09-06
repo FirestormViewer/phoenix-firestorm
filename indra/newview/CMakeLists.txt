@@ -321,7 +321,6 @@ set(viewer_SOURCE_FILES
     lllistbrowser.cpp
     lllistcontextmenu.cpp
     lllistview.cpp
-    lllocalbitmaps.cpp
     lllocaltextureobject.cpp
     lllocationhistory.cpp
     lllocationinputctrl.cpp
@@ -924,7 +923,6 @@ set(viewer_HEADER_FILES
     lllistbrowser.h
     lllistcontextmenu.h
     lllistview.h
-    lllocalbitmaps.h
     lllocaltextureobject.h
     lllocationhistory.h
     lllocationinputctrl.h

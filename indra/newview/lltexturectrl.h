@@ -161,7 +161,7 @@ public:
 	void			closeDependentFloater();
 
 	void			onFloaterClose();
-	void			onFloaterCommit(ETexturePickOp op, LLUUID id = LLUUID::null);
+	void			onFloaterCommit(ETexturePickOp op);
 
 	// This call is returned when a drag is detected. Your callback
 	// should return TRUE if the drag is acceptable.
