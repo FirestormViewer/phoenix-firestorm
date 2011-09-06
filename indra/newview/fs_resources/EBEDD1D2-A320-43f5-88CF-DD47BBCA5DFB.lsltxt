@@ -52,7 +52,7 @@
     float   LONG_TIME = 5.0;         // reset boost if no work in a long time
     float   MIN_BOOST_HEIGHT = 72.0;
     float   MIN_BOOST_CLEARANCE = 36.0;
-    integer useFlightAssist = 1;
+    integer useFlightAssist = FALSE;
     integer pendingFlightFeather = 0;
     float   last_alt;
     float   last_time;
@@ -96,6 +96,7 @@
         llSetScale(<0.01,0.01,0.01>);
         llSetPos(<0.0,0.0,-0.15>);
         llSetObjectDesc(llGetObjectName());
+        llStopMoveToTarget();
 
     }
 
@@ -105,6 +106,11 @@
         debugOutput("rezzed");
         owner = llGetOwner();
         
+        // Disable all secondary stateful services
+        llSetTimerEvent(0);
+        llStopMoveToTarget();
+        flight_set_hover(FALSE);
+        
         if(llGetAttached() != 0)
         {
             llRequestPermissions(llGetOwner(),PERMISSION_TAKE_CONTROLS);
@@ -112,6 +118,13 @@
     
         //assume the worst and let the viewer convince us otherwise
         keyViewerHandshake = UNKNOWN_VIEWER;
+        
+        // if we were last flying reinitialize ourself    
+        if (useFlightAssist)
+        {
+            debugOutput("Flight assist true, going to flight_init");
+            flight_init();
+        }
     }
 
     saveNewURL(string url)
@@ -153,17 +166,17 @@
             useFlightAssist = llList2Integer(commandList,1);
             if (useFlightAssist)
             {
-		debugOutput("Flight assist true, going to flight_init");
+		              debugOutput("Flight assist true, going to flight_init");
                flight_init();
             }
             else
             {
-                 debugOutput("Flight assist false, removing flag");
+                debugOutput("Flight assist false, removing flag");
                 if (timerMask & TIMER_TYPE_FLIGHT)
                 {
                     debugOutput("timerMask & TIMER_FLIGHT");
                     timerMask = timerMask ^ TIMER_TYPE_FLIGHT; // remove flight from event counter
-		}
+		               }
             }
         }
     
@@ -416,6 +429,7 @@
     flight_init()
     {
         debugOutput("Flight:init ");
+        flight_set_hover(FALSE);
             
         // initialize flight vars
         useFlightAssist = TRUE;
@@ -478,12 +492,12 @@ default
         
     control(key id, integer level, integer edge)
     {
-        if(llGetAgentInfo(owner) & AGENT_FLYING)
+        if((llGetAgentInfo(owner) & AGENT_FLYING) && useFlightAssist)
         {
             controls = 0;
             if(level & CONTROL_UP) controls++;
             if(level & CONTROL_DOWN) controls--;
-            if ((controls > 0) && useFlightAssist)
+            if (controls > 0)
                 flight_check_boost();
         }
     }
