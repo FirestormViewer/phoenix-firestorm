@@ -1776,7 +1776,7 @@ if (WINDOWS)
           --configuration=${CMAKE_CFG_INTDIR}
           --dest=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}
           --grid=${GRID}
-          --login_channel=${VIEWER_LOGIN_CHANNEL}
+          --login_channel=${VIEWER_CHANNEL}
           --source=${CMAKE_CURRENT_SOURCE_DIR}
           --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/touched.bat
           --version=${viewer_VERSION}
@@ -1891,7 +1891,7 @@ if (LINUX)
         --dest=${CMAKE_CURRENT_BINARY_DIR}/packaged
         --grid=${GRID}
         --installer_name=${product}
-        --login_channel=${VIEWER_LOGIN_CHANNEL}
+        --login_channel=${VIEWER_CHANNEL}
         --source=${CMAKE_CURRENT_SOURCE_DIR}
         --version=${viewer_VERSION}
         --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.touched
@@ -1916,7 +1916,7 @@ if (LINUX)
       --source=${CMAKE_CURRENT_SOURCE_DIR}
       --channel=${VIEWER_CHANNEL}
       --version=${viewer_VERSION}
-      --login_channel=${VIEWER_LOGIN_CHANNEL}
+      --login_channel=${VIEWER_CHANNEL}
     DEPENDS 
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
       ${COPY_INPUT_DEPENDENCIES}
@@ -1984,7 +1984,7 @@ if (DARWIN)
           --configuration=${CMAKE_CFG_INTDIR}
           --dest=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${product}.app
           --grid=${GRID}
-          --login_channel=${VIEWER_LOGIN_CHANNEL}
+          --login_channel=${VIEWER_CHANNEL}
           --source=${CMAKE_CURRENT_SOURCE_DIR}
           --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.touched
           --version=${viewer_VERSION}
