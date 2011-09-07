@@ -558,35 +558,36 @@ void LLTextBase::drawText()
 			const LLWString& wstrText = getWText(); 
 			mMisspellRanges.clear();
 
-			segment_set_t::iterator itSegment = getSegIterContaining(idxStart);
-			while ( (mSegments.end() != itSegment) && ((*itSegment)->getEnd() < idxEnd) )
+			segment_set_t::iterator itSegment = getSegIterContaining(idxStart); LLTextSegmentPtr pSegment;
+			while ( (mSegments.end() != itSegment) && (pSegment = *itSegment) && (pSegment->getEnd() < idxEnd) )
 			{
-				LLTextSegmentPtr pSegment = *itSegment;
-
-				U32 idxWordStart = pSegment->getStart(), idxWordEnd = -1, idxSegmentEnd = pSegment->getEnd();
-				while (idxWordStart < idxSegmentEnd)
+				if (pSegment->canSpellCheck())
 				{
-					// Find the end of the current word (special case handling for "'" when it's used as a contraction)
-					idxWordEnd = idxWordStart + 1;
-					while ( (idxWordEnd < idxSegmentEnd) && 
-							((LLWStringUtil::isPartOfWord(wstrText[idxWordEnd])) ||
-							 ((L'\'' == wstrText[idxWordEnd]) && 
-							  (LLStringOps::isAlnum(wstrText[idxWordEnd - 1])) && (LLStringOps::isAlnum(wstrText[idxWordEnd + 1])))) )
+					U32 idxWordStart = pSegment->getStart(), idxWordEnd = -1, idxSegmentEnd = pSegment->getEnd();
+					while (idxWordStart < idxSegmentEnd)
 					{
-						idxWordEnd++;
+						// Find the end of the current word (special case handling for "'" when it's used as a contraction)
+						idxWordEnd = idxWordStart + 1;
+						while ( (idxWordEnd < idxSegmentEnd) && 
+								((LLWStringUtil::isPartOfWord(wstrText[idxWordEnd])) ||
+								 ((L'\'' == wstrText[idxWordEnd]) && 
+								  (LLStringOps::isAlnum(wstrText[idxWordEnd - 1])) && (LLStringOps::isAlnum(wstrText[idxWordEnd + 1])))) )
+						{
+							idxWordEnd++;
+						}
+						if (idxWordEnd > idxSegmentEnd)
+							break;
+
+						// Don't process words shorter than 3 characters
+						std::string strWord = wstring_to_utf8str(wstrText.substr(idxWordStart, idxWordEnd - idxWordStart));
+						if ( (strWord.length() >= 3) && (!LLHunspellWrapper::instance().checkSpelling(strWord)) )
+							mMisspellRanges.push_back(std::pair<U32, U32>(idxWordStart, idxWordEnd));
+
+						// Find the start of the next word
+						idxWordStart = idxWordEnd + 1;
+						while ( (idxWordStart < idxSegmentEnd) && (!LLWStringUtil::isPartOfWord(wstrText[idxWordStart])) )
+							idxWordStart++;
 					}
-					if (idxWordEnd > idxSegmentEnd)
-						break;
-
-					// Don't process words shorter than 3 characters
-					std::string strWord = wstring_to_utf8str(wstrText.substr(idxWordStart, idxWordEnd - idxWordStart));
-					if ( (strWord.length() >= 3) && (!LLHunspellWrapper::instance().checkSpelling(strWord)) )
-						mMisspellRanges.push_back(std::pair<U32, U32>(idxWordStart, idxWordEnd));
-
-					// Find the start of the next word
-					idxWordStart = idxWordEnd + 1;
-					while ( (idxWordStart < idxSegmentEnd) && (!LLWStringUtil::isPartOfWord(wstrText[idxWordStart])) )
-						idxWordStart++;
 				}
 				++itSegment;
 			}
@@ -2600,6 +2601,9 @@ S32	LLTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 line_offs
 void LLTextSegment::updateLayout(const LLTextBase& editor) {}
 F32	LLTextSegment::draw(S32 start, S32 end, S32 selection_start, S32 selection_end, const LLRect& draw_rect) { return draw_rect.mLeft; }
 bool LLTextSegment::canEdit() const { return false; }
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+bool LLTextSegment::canSpellCheck() const { return false; }
+// [/SL:KB]
 void LLTextSegment::unlinkFromDocument(LLTextBase*) {}
 void LLTextSegment::linkToDocument(LLTextBase*) {}
 const LLColor4& LLTextSegment::getColor() const { return LLColor4::white; }

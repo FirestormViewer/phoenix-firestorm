@@ -64,6 +64,9 @@ public:
 	virtual void				updateLayout(const class LLTextBase& editor);
 	virtual F32					draw(S32 start, S32 end, S32 selection_start, S32 selection_end, const LLRect& draw_rect);
 	virtual bool				canEdit() const;
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	virtual bool				canSpellCheck() const;
+// [/SL:KB]
 	virtual void				unlinkFromDocument(class LLTextBase* editor);
 	virtual void				linkToDocument(class LLTextBase* editor);
 
@@ -115,6 +118,9 @@ public:
 	/*virtual*/ S32					getNumChars(S32 num_pixels, S32 segment_offset, S32 line_offset, S32 max_chars) const;
 	/*virtual*/ F32					draw(S32 start, S32 end, S32 selection_start, S32 selection_end, const LLRect& draw_rect);
 	/*virtual*/ bool				canEdit() const { return true; }
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	/*virtual*/ bool				canSpellCheck() const { return true; }
+// [/SL:KB]
 	/*virtual*/ const LLColor4&		getColor() const					{ return mStyle->getColor(); }
 	/*virtual*/ LLStyleConstSP		getStyle() const					{ return mStyle; }
 	/*virtual*/ void 				setStyle(LLStyleConstSP style)	{ mStyle = style; }
