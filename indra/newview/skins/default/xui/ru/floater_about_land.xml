@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  can_tear_off="false"
- height="420"
+ height="450"
  layout="topleft"
  name="floaterland"
  help_topic="floaterland"
@@ -38,7 +38,7 @@
     </floater.string>
     <tab_container
      follows="all"
-     height="410"
+     height="440"
      layout="topleft"
      left="0"
      name="landtab"
@@ -793,368 +793,7 @@
                 Земля в этом регионе не может быть объеденена/разделена.
             </text>
         </panel>
-        <panel
-         border="true"
-         follows="all"
-         label="Объекты"
-         layout="topleft"
-         left="0"
-         top="0"
-         help_topic="land_objects_tab"
-         name="land_objects_panel">
-            <panel.string
-             name="objects_available_text">
-                [COUNT] из [MAX] ([AVAILABLE] доступных)
-            </panel.string>
-            <panel.string
-             name="objects_deleted_text">
-                [COUNT] из [MAX] ([DELETED] будут удалены)
-            </panel.string>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="16"
-             layout="topleft"
-             left="10"
-             name="parcel_object_bonus"
-             top="4"
-             visible="false"
-             width="364">
-                Бонусный множитель для объектов: [BONUS]
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="16"
-             layout="topleft"
-             left_delta="0"
-             name="Simulator primitive usage:"
-             top_pad="4"
-             width="364">
-               Примов использовано:
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="16"
-             layout="topleft"
-             left_delta="190"
-             name="objects_available"
-             top_delta="0"
-             width="260">
-                [COUNT] из [MAX] ([AVAILABLE] доступных)
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="16"
-             layout="topleft"
-             left="10"
-             name="Primitives parcel supports:"
-             top="44"
-             width="152">
-                Участок поддерживает примов:
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="16"
-             layout="topleft"
-             left_delta="190"
-             name="object_contrib_text"
-             top_delta="0"
-             width="212">
-                [COUNT]
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="16"
-             layout="topleft"
-             left="10"
-             name="Primitives on parcel:"
-             top="64"
-             width="152">
-                Примов на участке:
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="16"
-             layout="topleft"
-             left_delta="190"
-             name="total_objects_text"
-             top_delta="0"
-             width="48">
-                [COUNT]
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="23"
-             layout="topleft"
-             left="28"
-             name="Owned by parcel owner:"
-             top="84"
-             width="176">
-                Установленных владельцем:
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="23"
-             layout="topleft"
-             left_delta="172"
-             name="owner_objects_text"
-             top_delta="0"
-             width="48">
-                [COUNT]
-            </text>
-            <button
-             bottom="100"
-             enabled="false"
-             follows="left|top"
-             height="23"
-             label="Показать"
-             label_selected="Show"
-             layout="topleft"
-             name="ShowOwner"
-             right="-140"
-             width="60"
-             top_delta="-6"/>
-            <button
-             bottom="100"
-             enabled="false"
-             follows="left|top"
-             height="23"
-             label="Вернуть"
-             layout="topleft"
-             name="ReturnOwner..."
-             right="-10"
-             tool_tip="Return objects to their owners."
-             width="119"
-             top_delta="0"/>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="23"
-             layout="topleft"
-             left="28"
-             name="Set to group:"
-             top_pad="5"
-             width="176">
-                Установленных группой:
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="23"
-             layout="topleft"
-             left_delta="172"
-             name="group_objects_text"
-             top_delta="0"
-             width="48">
-                [COUNT]
-            </text>
-            <button
-             bottom="120"
-             enabled="false"
-             follows="left|top"
-             label="Показать"
-             height="23"
-             label_selected="Show"
-             layout="topleft"
-             name="ShowGroup"
-             right="-140"
-             width="60"
-             top_delta="-6"/>
-            <button
-             bottom="120"
-             enabled="false"
-             follows="left|top"
-             height="23"
-             label="Вернуть"
-             layout="topleft"
-             name="ReturnGroup..."
-             right="-10"
-             tool_tip="Вернуть объекты их владельцам."
-             width="119"
-             top_delta="0"/>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="23"
-             layout="topleft"
-             left="28"
-             name="Owned by others:"
-             top_pad="5"
-             width="176">
-                Установленных другими пользователями:
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="23"
-             layout="topleft"
-             left_delta="172"
-             name="other_objects_text"
-             top_delta="0"
-             width="48">
-                [COUNT]
-            </text>
-            <button
-             bottom="140"
-             enabled="false"
-             follows="left|top"
-             height="23"
-             label="Показать"
-             label_selected="Show"
-             layout="topleft"
-             name="ShowOther"
-             right="-140"
-             width="60"
-             top_delta="-6"/>
-            <button
-             bottom="140"
-             enabled="false"
-             follows="left|top"
-             height="23"
-             label="Вернуть"
-             layout="topleft"
-             name="ReturnOther..."
-             right="-10"
-             tool_tip="Return objects to their owners."
-             width="119"
-             top_delta="0"/>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="23"
-             layout="topleft"
-             left="28"
-             name="Selected / sat upon:"
-             top_pad="5"
-             width="230">
-                Выбрано / sat upon:
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="23"
-             layout="topleft"
-             left_delta="220"
-             name="selected_objects_text"
-             top_delta="0"
-             width="48">
-                [COUNT]
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="23"
-             layout="topleft"
-             left="10"
-             name="Autoreturn"
-             top_pad="0"
-             width="412"
-             wrap="true">
-                Автовозвращение объектов пользователям&apos; (минут, 0 - если выключено):
-            </text>
-            <line_editor
-             border_style="line"
-             border_thickness="1"
-             bottom="180"
-             follows="left|top"
-             height="23"
-             layout="topleft"
-             max_length="6"
-             name="clean other time"
-             left_pad="0"
-             width="46"
-             top_delta="-2"/>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="23"
-             layout="topleft"
-             left="10"
-             name="Object Owners:"
-             top_pad="10"
-             width="104">
-                Владельцы объектов:
-            </text>
-             <button
-     follows="top|right"
-     height="23"
-     image_overlay="Refresh_Off"
-     layout="topleft"
-     name="Обновить список"
-     left_pad="5"
-     right="-183"
-     tool_tip="Обновить список объектов"
-     width="20"
-  top_delta="-6"/>
-            <button
-             enabled="false"
-             follows="left|top"
-             height="23"
-             label="Вернуть объекты"
-             layout="topleft"
-             left_pad="6"
-             name="Return objects..."
-             top_delta="0"
-             right="-10"
-             width="164" />
-            <name_list
-             column_padding="0"
-             draw_heading="true"
-             follows="all"
-             height="180"
-             layout="topleft"
-             left="10"
-             name="owner list"
-             name_column="name"
-             width="470">
-                <name_list.columns
-                 label="Тип"
-                 name="type"
-                 sort_column="online_status"
-                 width="50" />
-                <name_list.columns
-                 name="online_status"
-                 width="-1" />
-                <name_list.columns
-                 dynamic_width="true"
-                 label="Имя"
-                 name="name" />
-                <name_list.columns
-                 label="Count"
-                 name="count"
-                 width="67" />
-                <name_list.columns
-                 label="Последний объект"
-                 name="mostrecent"
-                 width="163" />
-            </name_list>
-        </panel>
-        <panel
+       <panel
          border="true"
          follows="all"
          label="Опции"
@@ -1203,6 +842,10 @@
             <panel.string
              name="push_restrict_region_text">
                 Не толкаться (Region Override)
+            </panel.string>
+			<panel.string
+             name="see_avs_text">
+                 Видеть и общаться с жителями этого участка.
             </panel.string>
             <text
              type="string"
@@ -1268,7 +911,7 @@
              left="14"
              name="allow_label3"
              width="150">
-                Выкладывать объекты:
+                Вступление объектов:
             </text>
             <check_box
              height="16"
@@ -1506,15 +1149,37 @@
              type="string"
              length="1"
              follows="left|top"
+             text_color="white"
              height="16"
              layout="topleft"
-             left="220"
-             top="180"
+             left="230"
+             top="174"
+             name="allow_label5"
+             width="278">
+              Разрешить другим резидинтам на других участах:
+            </text>
+            <check_box
+             height="16"
+             label="See Avatars"
+             follows="top"
+             layout="topleft"
+             left="230"
+             name="SeeAvatarsCheck"
+             tool_tip="Разрешить ли другим резидентам видеть вас и писать с других участков."
+             width="120" />
+            <text
+             type="string"
+             length="1"
+             follows="left|top"
+             height="16"
+             layout="topleft"
+             left="230"
+             top="230"
              text_color="white"
              name="landing_point"
              word_wrap="true"
              width="200">
-                Точка входа: [LANDING]
+                Точка посадки: [LANDING]
             </text>
             <button
              follows="right|top"
@@ -1523,19 +1188,18 @@
              label_selected="Set"
              layout="topleft"
              name="Set"
-             right="-68"
-             tool_tip="Установить точку входа, для прибывших пользователей."
+             left="230"
+             tool_tip="Sets the landing point where visitors arrive. Sets to your avatar&apos;s location inside this parcel."
              width="50" />
             <button
              follows="right|top"
              height="23"
-             label="Очистить"
-             label_selected="Очистить"
+             label="Clear"
+             label_selected="Clear"
              layout="topleft"
              left_pad="5"
              name="Clear"
-             tool_tip="Убрать точку входа"
-             right="-10"
+             tool_tip="Clear the landing point"
              width="55" />
             <text
              type="string"
@@ -1544,7 +1208,7 @@
              follows="left|top"
              height="16"
              layout="topleft"
-             left="220"
+             left="230"
              top_pad="10"
              name="Teleport Routing: "
              width="200">
@@ -1555,21 +1219,21 @@
              layout="topleft"
              name="landing type"
              top_pad="3"
-             tool_tip="Вариант телепортации -- выберите, каким образом будет производиться телепортация на вашу землю"
+             tool_tip="Teleport Routing -- select how to handle teleports onto your land"
              width="120">
                 <combo_box.item
                  enabled="true"
-                 label="Заблокировано"
+                 label="Blocked"
                  name="Blocked"
                  value="Blocked" />
                 <combo_box.item
                  enabled="true"
-                 label="В точку телепортации"
+                 label="Landing Point"
                  name="LandingPoint"
                  value="Landing Point" />
                 <combo_box.item
                  enabled="true"
-                 label="В любое место"
+                 label="Anywhere"
                  name="Anywhere"
                  value="Anywhere" />
             </combo_box>
