@@ -43,6 +43,10 @@
 #include "llwindow.h"
 #include <boost/bind.hpp>
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+#include "llhunspell.h"
+// [/SL:KB]
+
 const F32	CURSOR_FLASH_DELAY = 1.0f;  // in seconds
 const S32	CURSOR_THICKNESS = 2;
 
@@ -155,6 +159,9 @@ LLTextBase::Params::Params()
 	plain_text("plain_text",false),
 	track_end("track_end", false),
 	read_only("read_only", false),
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	spellcheck("spellcheck", false),
+// [/SL:KB]
 	v_pad("v_pad", 0),
 	h_pad("h_pad", 0),
 	clip("clip", true),
@@ -181,6 +188,10 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 	mFontShadow(p.font_shadow),
 	mPopupMenu(NULL),
 	mReadOnly(p.read_only),
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	mSpellCheck(p.spellcheck),
+	mNeedsSpellCheck( FALSE ),
+// [/SL:KB]
 	mCursorColor(p.cursor_color),
 	mFgColor(p.text_color),
 	mBorderVisible( p.border_visible ),
@@ -235,6 +246,11 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 	view_params.name = "text_contents";
 	view_params.rect =  LLRect(0, 500, 500, 0);
 	view_params.mouse_opaque = false;
+
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	if (mSpellCheck)
+		LLHunspellWrapper::setSettingsChangeCallback(boost::bind(&LLTextBase::onSpellCheckSettingsChange, this));
+// [/SL:KB]
 
 	mDocumentView = LLUICtrlFactory::create<LLView>(view_params);
 	if (mScroller)
@@ -530,8 +546,63 @@ void LLTextBase::drawText()
 		return;
 	}
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	// Perform spell check if needed
+	if ( (useSpellCheck()) && (getWText().length() > 2) )
+	{
+		U32 idxStart = getLineStart(llmax(first_line - 1, 0)); static U32 idxPrevStart = -1;
+		U32 idxEnd = getLineEnd(llmin((U32)last_line + 1, (U32)mLineInfoList.size() - 1)); static U32 idxPrevEnd = -1;
+
+		if ( (mNeedsSpellCheck) || (idxStart != idxPrevStart) || (idxEnd != idxPrevEnd) )
+		{
+			const LLWString& wstrText = getWText(); 
+			mMisspellRanges.clear();
+
+			segment_set_t::iterator itSegment = getSegIterContaining(idxStart);
+			while ( (mSegments.end() != itSegment) && ((*itSegment)->getEnd() < idxEnd) )
+			{
+				LLTextSegmentPtr pSegment = *itSegment;
+
+				U32 idxWordStart = pSegment->getStart(), idxWordEnd = -1, idxSegmentEnd = pSegment->getEnd();
+				while (idxWordStart < idxSegmentEnd)
+				{
+					// Find the end of the current word (special case handling for "'" when it's used as a contraction)
+					idxWordEnd = idxWordStart + 1;
+					while ( (idxWordEnd < idxSegmentEnd) && 
+							((LLWStringUtil::isPartOfWord(wstrText[idxWordEnd])) ||
+							 ((L'\'' == wstrText[idxWordEnd]) && 
+							  (LLStringOps::isAlnum(wstrText[idxWordEnd - 1])) && (LLStringOps::isAlnum(wstrText[idxWordEnd + 1])))) )
+					{
+						idxWordEnd++;
+					}
+					if (idxWordEnd > idxSegmentEnd)
+						break;
+
+					// Don't process words shorter than 3 characters
+					std::string strWord = wstring_to_utf8str(wstrText.substr(idxWordStart, idxWordEnd - idxWordStart));
+					if ( (strWord.length() >= 3) && (!LLHunspellWrapper::instance().checkSpelling(strWord)) )
+						mMisspellRanges.push_back(std::pair<U32, U32>(idxWordStart, idxWordEnd));
+
+					// Find the start of the next word
+					idxWordStart = idxWordEnd + 1;
+					while ( (idxWordStart < idxSegmentEnd) && (!LLWStringUtil::isPartOfWord(wstrText[idxWordStart])) )
+						idxWordStart++;
+				}
+				++itSegment;
+			}
+
+			idxPrevStart = idxStart;
+			idxPrevEnd = idxEnd;
+			mNeedsSpellCheck = FALSE;
+		}
+	}
+// [/SL:KB]
+
 	LLTextSegmentPtr cur_segment = *seg_iter;
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	std::list<std::pair<U32, U32> >::const_iterator itMisspell = mMisspellRanges.begin();
+// [/SL:KB]
 	for (S32 cur_line = first_line; cur_line < last_line; cur_line++)
 	{
 		S32 next_line = cur_line + 1;
@@ -577,6 +648,25 @@ void LLTextBase::drawText()
 				// so shrink text rect to force ellipses
 				text_rect.mRight -= 2;
 			}
+
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+			// Draw squiggly lines under any (visible) misspelled words
+			for (; (itMisspell != mMisspellRanges.end()) && ((itMisspell->first < line_end) && (itMisspell->second > line_start)); ++itMisspell)
+			{
+				S32 pxStart, pxEnd, pxTemp;
+				cur_segment->getDimensions(seg_start - cur_segment->getStart(), itMisspell->first - seg_start + 1, pxStart, pxTemp);
+				cur_segment->getDimensions(itMisspell->first - seg_start + 1, itMisspell->second - itMisspell->first, pxEnd, pxTemp);
+				pxEnd += pxStart;
+
+				gGL.color4ub(255, 0, 0, 200);
+				while (pxStart < pxEnd)
+				{
+					gl_line_2d(pxStart, text_rect.mBottom - 2, pxStart + 3, text_rect.mBottom + 1);
+					gl_line_2d(pxStart + 3, text_rect.mBottom + 1, pxStart + 6, text_rect.mBottom - 2);
+					pxStart += 6;
+				}
+			}
+// [/SL:KB]
 
 			text_rect.mLeft = (S32)(cur_segment->draw(seg_start - cur_segment->getStart(), clipped_end, selection_left, selection_right, text_rect));
 
@@ -1103,6 +1193,18 @@ void LLTextBase::deselect()
 	mIsSelecting = FALSE;
 }
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+bool LLTextBase::useSpellCheck() const
+{
+	return (LLHunspellWrapper::useSpellCheck()) && (!mReadOnly) && (mSpellCheck);
+}
+
+void LLTextBase::onSpellCheckSettingsChange()
+{
+	// Recheck the spelling on every change
+	mNeedsSpellCheck = TRUE;
+}
+// [/SL:KB]
 
 // Sets the scrollbar from the cursor position
 void LLTextBase::updateScrollFromCursor()

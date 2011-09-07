@@ -30,6 +30,9 @@
 
 #include "v4color.h"
 #include "lleditmenuhandler.h"
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+#include "llspellcheckmenuhandler.h"
+// [/SL:KB]
 #include "llstyle.h"
 #include "llkeywords.h"
 #include "llpanel.h"
@@ -231,6 +234,9 @@ typedef LLPointer<LLTextSegment> LLTextSegmentPtr;
 class LLTextBase 
 :	public LLUICtrl,
 	protected LLEditMenuHandler
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+,	protected LLSpellCheckMenuHandler
+// [/SL:KB]
 {
 public:
 	friend class LLTextSegment;
@@ -259,6 +265,9 @@ public:
 								border_visible,
 								track_end,
 								read_only,
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+								spellcheck,
+// [/SL:KB]
 								allow_scroll,
 								plain_text,
 								wrap,
@@ -310,6 +319,11 @@ public:
 	// LLEditMenuHandler interface
 	/*virtual*/ BOOL		canDeselect() const;
 	/*virtual*/ void		deselect();
+
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	// LLSpellCheckMenuHandler overrides
+	/*virtual*/ bool		useSpellCheck() const;
+// [/SL:KB]
 
 	// used by LLTextSegment layout code
 	bool					getWordWrap() { return mWordWrap; }
@@ -495,6 +509,10 @@ protected:
 	void							updateRects();
 	void							needsScroll() { mScrollNeeded = TRUE; }
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	void							onSpellCheckSettingsChange();
+// [/SL:KB]
+
 	struct URLLabelCallback;
 	// Replace a URL with a new icon and label, for example, when
 	// avatar names are looked up.
@@ -537,6 +555,12 @@ protected:
 	S32							mSelectionEnd;
 	
 	BOOL						mIsSelecting;		// Are we in the middle of a drag-select? 
+
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	BOOL						mSpellCheck;
+	BOOL						mNeedsSpellCheck;
+	std::list<std::pair<U32, U32> > mMisspellRanges;
+// [/SL:KB]
 
 	// configuration
 	S32							mHPad;				// padding on left of text
