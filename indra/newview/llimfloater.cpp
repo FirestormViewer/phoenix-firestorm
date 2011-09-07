@@ -499,7 +499,7 @@ void LLIMFloater::onSysinfoButtonVisibilityChanged(const LLSD& yes)
 
 void LLIMFloater::onChange(EStatusType status, const std::string &channelURI, bool proximal)
 {
-	llinfos << "LLIMFloater::onChange" << llendl;
+	// llinfos << "LLIMFloater::onChange" << llendl;
 	if(status == STATUS_JOINING || status == STATUS_LEFT_CHANNEL)
 	{
 		return;
@@ -510,7 +510,7 @@ void LLIMFloater::onChange(EStatusType status, const std::string &channelURI, bo
 
 void LLIMFloater::updateCallButton()
 {
-	llinfos << "LLIMFloater::updateCallButton" << llendl;
+	// llinfos << "LLIMFloater::updateCallButton" << llendl;
 	// hide/show call button
 	bool voice_enabled = LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
 	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSessionID);
