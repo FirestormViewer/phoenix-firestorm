@@ -67,7 +67,7 @@
 		  Chat Tab Mode Orientation:
 		</text>
 		<text
-		 name="requires_restart_label"
+		 name="tab_direction_requires_restart"
 		 follows="left|top"
 		 layout="topleft"
 		 left_pad="5"
@@ -225,6 +225,7 @@
 		follows="left|top"
 		height="16"
 		initial_value="false"
+		name="ShowNetStats"
 		label="Show lag meter"
 		left="15"
 		width="270"
@@ -284,7 +285,7 @@
 		</text>
 
     <text
-     name="requires_restart_label"
+     name="Search_Label_requires_restart"
      follows="left|top"
      layout="topleft"
      left_delta ="115"
@@ -320,6 +321,7 @@
 		follows="left|top"
 		height="16"
 		initial_value="true"
+		name="UseLSLBridge"
 		label="Enable LSL-Client Bridge"
 		left="15"
 		width="270"
@@ -331,6 +333,7 @@
       left_delta="200"
       height="16"
       initial_value="false"
+	  name="UseLSLFlightAssist"
       label="Enable Bridge Flight Assist"
       width="270"
       tool_tip="Enables the script that assists flying and hovering at extended altitudes"/>
@@ -368,7 +371,7 @@
 		 top_pad="10"
 		 follows="left|top"
 		 height="12"
-		 name="TextText"
+		 name="revokepermissions_txt"
 		 width="200">
 		 Revoke Permissions:
 		 </text>
@@ -385,7 +388,7 @@
 			 height="16"
 			 label="Never (Original behaviour)"
 			 layout="topleft"
-			 name="radio_horizontal"
+			 name="never_radio"
 			 value="0"
 			 top_pad="0"
 			 width="150" />
@@ -394,7 +397,7 @@
 			 label="Revoke on SIT"
 			 layout="topleft"
 			 top_pad="0"
-			 name="radio_vertical"
+			 name="sit_radio"
 			 value="1"
 			 width="150" />
 			<radio_item
@@ -402,7 +405,7 @@
 			 label="Revoke on STAND"
 			 layout="topleft"
 			 top_pad="0"
-			 name="radio_vertical"
+			 name="stand_radio"
 			 value="2"
 			 width="150" />
 			<radio_item
@@ -410,7 +413,7 @@
 			 label="Revoke on SIT and STAND"
 			 layout="topleft"
 			 top_pad="0"
-			 name="radio_vertical"
+			 name="sitnstand_radio"
 			 value="3"
 			 width="150" />
 		</radio_group>
@@ -421,7 +424,7 @@
 		 follows="left|top"
 		 height="12"
 		 name="SurfaceAreaThreshholdLabel"
-		 width="300">
+		 width="360">
 		 Texture Lag Protection (may break some objects):
 		 </text>
 		 <check_box
@@ -512,7 +515,7 @@
 			tool_tip="Ignores the 'push' the simulator applies to your camera to keep it out of objects."/>
 
 		<text
-			name="requires_restart_label"
+			name="ignorecameraconstraints_requires_restart"
 			follows="left|top"
 			layout="topleft"
 			left_pad="10"
@@ -791,7 +794,7 @@
 		 name="ChatGeneral" >
 
 			<text
-			 name="chat_and_in_enhancements"
+			 name="chat_and_im_enhancements"
 			 follows="left|top"
 			 layout="topleft"
 			 top_pad="5"
@@ -871,10 +874,11 @@
 			 width="250"
 			 height="20"
 			 control_name="PhoenixNearbyChatbar"
+			 name="PhoenixNearbyChatbar"
 			 label="Add a chatbar in the Nearby Chat window"/>
 			<text
 			 top_delta="2"
-			 name="requires_restart_label"
+			 name="PhoenixNearbyChatbar_requires_restart"
 			 follows="left|top"
 			 layout="topleft"
 			 left_pad="0"
@@ -1107,6 +1111,7 @@
 			 width="50"
 			 height="20"
 			 control_name="PhoenixKeywordOn"
+			 name="PhoenixKeywordOn"
 			 label="Enable Keyword Alerts"/>
 			<check_box
 			 layout="topleft"
@@ -1116,6 +1121,7 @@
 			 width="50"
 			 height="20"
 			 control_name="PhoenixKeywordInChat"
+			 name="PhoenixKeywordInChat"
 			 label="Look for Keywords In Local Chat"/>
 			<check_box
 			 layout="topleft"
@@ -1125,6 +1131,7 @@
 			 width="150"
 			 height="20"
 			 control_name="PhoenixKeywordInIM"
+			 name="PhoenixKeywordInIM"
 			 label="Look for Keywords In IMs and Group Chat"/>
 			<text
 			 layout="topleft"
@@ -1154,6 +1161,7 @@
 			 width="50"
 			 height="20"
 			 control_name="PhoenixKeywordChangeColor"
+			 name="PhoenixKeywordChangeColor"
 			 label="Enable Color Alert"/>
 
 			<color_swatch
@@ -1177,6 +1185,7 @@
 			 width="50"
 			 height="20"
 			 control_name="PhoenixKeywordPlaySound"
+			 name="PhoenixKeywordPlaySound"
 			 label="PhoenixKeywordPlaySound"/>
 
 			<text
@@ -1237,7 +1246,7 @@
 		 follows="left|top"
 		 height="16"
 		 left="10"
-		 name="loltxt2"
+		 name="PhoenixCmdLinePos_txt">
 		 width="250">
 		 Teleport within sim (usage: cmd x y z)
 		</text>
@@ -1247,6 +1256,7 @@
 		 height="20"
 		 max_length="256"
 		 name="PhoenixCmdLinePos"
+		 tool_tip=""
 		 control_name="PhoenixCmdLinePos"
 		 width="200"/>
 
@@ -1254,7 +1264,7 @@
 		 top_pad="5"
 		 follows="left|top"
 		 height="16"
-		 name="loltxt3"
+		 name="PhoenixCmdLineGround_txt"
 		 width="250">
 		 Teleport to ground (usage: cmd)
 		</text>
@@ -1264,6 +1274,7 @@
 		 height="20"
 		 max_length="256"
 		 name="PhoenixCmdLineGround"
+		 tool_tip=""
 		 control_name="PhoenixCmdLineGround"
 		 width="200"/>
 
@@ -1271,7 +1282,7 @@
 		 top_pad="5"
 		 follows="left|top"
 		 height="16"
-		 name="loltxt4"
+		 name="PhoenixCmdLineHeight_txt"
 		 width="250">
 		Teleport to altitude (usage: cmd z)
 		</text>
@@ -1281,6 +1292,7 @@
 		 height="20"
 		 max_length="256"
 		 name="PhoenixCmdLineHeight"
+		 tool_tip=""
 		 control_name="PhoenixCmdLineHeight"
 		 width="200"/>
 
@@ -1288,7 +1300,7 @@
 		 top_pad="5"
 		 follows="left|top"
 		 height="16"
-		 name="loltxt5"
+		 name="PhoenixCmdLineTeleportHome_txt"
 		 width="250">
 		 Teleport home (usage: cmd)
 		 </text>
@@ -1298,6 +1310,7 @@
 		 height="20"
 		 max_length="256"
 		 name="PhoenixCmdLineTeleportHome"
+		 tool_tip=""
 		 control_name="PhoenixCmdLineTeleportHome"
 		 width="200"/>
 
@@ -1305,7 +1318,7 @@
 		 top_pad="5"
 		 follows="left|top"
 		 height="16"
-		 name="loltxt4"
+		 name="PhoenixCmdLineRezPlatform_txt"
 		 width="250">
 		Rez a platform (usage: cmd 0 - 30)
 		</text>
@@ -1315,6 +1328,7 @@
 		 height="20"
 		 max_length="256"
 		 name="PhoenixCmdLineRezPlatform"
+		 tool_tip=""
 		 control_name="PhoenixCmdLineRezPlatform"
 		 width="200"/>
 		<slider
@@ -1339,7 +1353,7 @@
 		 top_pad="5"
 		 follows="left|top"
 		 height="16"
-		 name="loltxt4"
+		 name="PhoenixCmdLineMapTo_txt"
 		 width="250">
 		Teleport to sim x (usage: cmd simname)
 		</text>
@@ -1349,6 +1363,7 @@
 		 height="20"
 		 max_length="256"
 		 name="PhoenixCmdLineMapTo"
+		 tool_tip=""
 		 control_name="PhoenixCmdLineMapTo"
 		 width="200"/>
 		<check_box
@@ -1364,7 +1379,7 @@
 		 top_pad="5"
 		 follows="left|top"
 		 height="16"
-		 name="loltxt4"
+		 name="PhoenixCmdLineCalc_txt"
 		 width="250">
 		Calc. expressions (usage: cmd SIN(2+2))
 		</text>
@@ -1374,6 +1389,7 @@
 		 height="20"
 		 max_length="256"
 		 name="PhoenixCmdLineCalc"
+		 tool_tip=""
 		 control_name="PhoenixCmdLineCalc"
 		 width="200"/>
 
@@ -1381,7 +1397,7 @@
 		 top_pad="5"
 		 follows="left|top"
 		 height="16"
-		 name="loltxt4"
+		 name="PhoenixCmdLineAutocorrect_txt"
 		 width="250">
 		Add autocorrect word(cmd list|bad|good)
 		</text>
@@ -1391,6 +1407,7 @@
 		 height="20"
 		 max_length="256"
 		 name="PhoenixCmdLineAutocorrect"
+		 tool_tip=""
 		 control_name="PhoenixCmdLineAutocorrect"
 		 width="200"/>
 
@@ -1409,7 +1426,7 @@
 		 follows="left|top"
 		 height="16"
 		 left_delta="10"
-		 name="loltxt9"
+		 name="PhoenixCmdLineDrawDistance_txt"
 		 width="250">
 		 Change Draw Distance (usage: cmd meters)
 		</text>
@@ -1419,6 +1436,7 @@
 		 height="20"
 		 max_length="256"
 		 name="PhoenixCmdLineDrawDistance"
+		 tool_tip=""
 		 control_name="PhoenixCmdLineDrawDistance"
 		 width="200"/>
 
@@ -1426,7 +1444,7 @@
 		 top_pad="5"
 		 follows="left|top"
 		 height="16"
-		 name="loltxt10"
+		 name="PhoenixCmdTeleportToCam_txt"
 		 width="250">
 		 Teleport to cam position (usage: cmd)
 		</text>
@@ -1436,6 +1454,7 @@
 		 height="20"
 		 max_length="256"
 		 name="PhoenixCmdTeleportToCam"
+		 tool_tip=""
 		 control_name="PhoenixCmdTeleportToCam"
 		 width="200"/>
 
@@ -1443,7 +1462,7 @@
 		 top_pad="5"
 		 follows="left|top"
 		 height="16"
-		 name="loltxt11"
+		 name="PhoenixCmdLineKeyToName_txt"
 		 width="250">
 		 Get avatar name from key (usage: cmd key)
 		</text>
@@ -1453,6 +1472,7 @@
 		 height="20"
 		 max_length="256"
 		 name="PhoenixCmdLineKeyToName"
+		 tool_tip=""
 		 control_name="PhoenixCmdLineKeyToName"
 		 width="200"/>
 
@@ -1460,7 +1480,7 @@
 		 top_pad="5"
 		 follows="left|top"
 		 height="16"
-		 name="loltxt12"
+		 name="PhoenixCmdLineOfferTp_txt"
 		 width="250">
 		 Offer teleport to avatar (usage: cmd key)
 		</text>
@@ -1470,6 +1490,7 @@
 		 height="20"
 		 max_length="256"
 		 name="PhoenixCmdLineOfferTp"
+		 tool_tip=""
 		 control_name="PhoenixCmdLineOfferTp"
 		 width="200"/>
 
@@ -1477,7 +1498,7 @@
 		 top_pad="5"
 		 follows="left|top"
 		 height="16"
-		 name="loltxt13"
+		 name="PhoenixCmdLineTP2_txt"
 		 width="250">
 		 Teleport to avatar (usage: cmd name)
 		</text>
@@ -1495,7 +1516,7 @@
 		 top_pad="5"
 		 follows="left|top"
 		 height="16"
-		 name="loltxt14"
+		 name="PhoenixCmdLineAO_txt"
 		 width="250">
 		 Turn AO on/off (usage: cmd on/off)
 		</text>
@@ -1505,6 +1526,7 @@
 		 height="20"
 		 max_length="256"
 		 name="PhoenixCmdLineAO"
+		 tool_tip=""
 		 control_name="PhoenixCmdLineAO"
 		 width="200"/>
 
@@ -1512,7 +1534,7 @@
 		 top_pad="5"
 		 follows="left|top"
 		 height="16"
-		 name="loltxt15"
+		 name="PhoenixCmdLineClearChat_txt"
 		 width="250">
 		 Clear the chat history (usage: cmd)
 		</text>
@@ -1530,7 +1552,7 @@
 		 top_pad="5"
 		 follows="left|top"
 		 height="16"
-		 name="loltxt15"
+		 name="PhoenixCmdLineMedia_txt"
 		 width="250">
 		 Set the media url (usage: cmd url type)
 		</text>
@@ -1548,7 +1570,7 @@
 		 top_pad="5"
 		 follows="left|top"
 		 height="16"
-		 name="loltxt15"
+		 name="PhoenixCmdLineMusic_txt"
 		 width="250">
 		 Set the music stream url (usage: cmd url)
 		</text>
@@ -1582,8 +1604,8 @@
 		 left="10"
 		 follows="left|top"
 		 height="12"
-		 name="TextText"
-		 width="200">
+		 name="phoenixWLshare_txt"
+		 width="250">
 		 Phoenix WL Share (Experimental)
 		 </text>
 		<check_box
@@ -1905,7 +1927,7 @@
 		 height="15"
 		 layout="topleft"
 		 left="20"
-		 name="uselistfortags"
+		 name="listtodisplayviewertags_txt"
 		 top_pad="10"
 		 width="220">
       Use a list to display Viewertags?
@@ -1932,7 +1954,7 @@
 		 height="15"
 		 layout="topleft"
 		 left="20"
-		 name="uselistfortags"
+		 name="chooseyourcolor_txt"
 		 top_pad="10"
 		 width="220">
       Choose your color:

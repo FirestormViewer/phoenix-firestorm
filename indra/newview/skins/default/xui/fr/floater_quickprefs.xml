@@ -2,7 +2,7 @@
 <!--alba-->
 <floater name="quickprefs"
     title="Préférences Rapides">
-	<panl name="quickprefs">
+	<panel name="quickprefs">
         <text name="Draw Distance"
 			tool_tip="Distance d'affichage. Si Préférences → FS → CmdLine est activé, taper dd [nb m] en chat (Ex : dd 128 = distance d'affichage à 128m)">
             Dist. d'affichage

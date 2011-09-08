@@ -1,0 +1,536 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!--alba-->
+<panel name="firestorm">
+<tab_container name="tabs">
+
+<!--General-->
+	<panel name="tab-general"
+		label="Général">
+		<check_box name="checkMiscRLVa"
+			label="Autoriser le contrôle à distance du viewer (RLVa)"/>
+		<text name="textMiscRLVaRestart"
+			left_pad="20">
+			(Reconnexion)
+		</text>
+		<text name="tab_direction_label">
+			Onglets de Conversation
+		</text>
+		<text name="tab_direction_requires_restart"
+			left_pad="0">
+			(Reconnexion)
+		</text>
+		<radio_group name="chat_tab_direction"
+				tool_tip="Changer le positionnement des onglets dans la fenêtre Conversation.">
+			<radio_item name="radio_horizontal"
+				label="Horizontaux"/>
+			<radio_item name="radio_vertical"
+				label="Verticaux"/>
+		</radio_group>
+		<check_box name="tp_screen_toggle"
+			label="Désactiver l'écran de téléportation"
+			tool_tip="Lors de la téléportation, remplacer l'écran et la barre de progression par une image fixe."/>
+		<check_box name="login_screen_toggle"
+			label="Désactiver l'écran de connexion"
+			tool_tip="Lors de la connexion, remplacer l'écran et la barre de progression par une image fixe."/>
+		<check_box name="logout_screen_toggle"
+			label="Désactiver l'écran de déconnexion"
+			tool_tip="Lors de la déconnexion, remplacer l'écran et la barre de progression par une image fixe."/>
+		<check_box name="grouplandrez"
+			label="Toujours attribuer aux objets le groupe propriétaire du terrain"
+			tool_tip="Par défaut et sous condition que vôtre rôle le permette, attribuer à l'objet créé ou posé le groupe propriétaire du terrain, sans tenir compte de celui que vous portez. (Cela ne le transfère pas au groupe)"/>
+		<check_box name="WorldmapFilterDuplicateLandmarks"
+			label="Filtrer sur la Carte les repères dupliqués"
+			tool_tip="N'afficher dans la liste à choix de la Carte du Monde qu'un repère pour les destinations identiques."/>
+		<check_box name="backwardsturnavatar"
+			label="Pivoter l'avatar lorsqu'il recule"
+			tool_tip="Forcer l'avatar à faire face à la caméra lorsqu'il marche vers l'arrière."/>
+		<check_box name="showlookat"
+			label="Afficher la focalisation du regard (look at)."
+			tool_tip="Activer un pointeur indiquant la focalisation du regard."/>
+		<text name="lookatshownames">
+			Nom affiché sur le pointeur
+		</text>
+		<combo_box name="lookatshownames_combobox">
+			<combo_box.item name="None"
+				label="Aucun"/>
+			<combo_box.item name="Complete_Name"
+				label="Nom complet"/>
+			<combo_box.item name="Display_Name"
+				label="Nom d'affichage"/>
+			<combo_box.item name="Legacy_Name"
+				label="Nom hérité"/>
+			<combo_box.item name="User_Name"
+				label="Nom d'utilisateur"/>
+		</combo_box>
+		<check_box name="ShowNetStats"
+			label="Afficher le lagmètre"
+			tool_tip="Afficher un indicateur de lag dans le coin supérieur droit de la fenêtre."/>
+		<check_box name="dontsendavphysics"
+			label="Bloquer l'envoi des effets physiques (Compatible aux anciens viewer)"
+			tool_tip="Désactiver l'envoi de vos effets physiques vers les serveurs. Restaure la compatibilité avec les viewers ne disposant pas de cette fonction. (1e génération, non mis à jour)"/>
+		<check_box name="sortcontactsbyun"
+			label="Trier les contacts par nom d'utilisateur même si 'Nom d'affichage' est sélectionné"
+			tool_tip="Forcer le tri par nom d'utilisateur dans les listes de contacts en ignorant les noms d'affichage (display names).">
+		</check_box>
+		<check_box name="ShowMutedAvatarsAsCloud"
+			label="Afficher des particules pour les avatars bloqués"
+			tool_tip="Afficher les avatars bloqués (mutés) comme des nuages de particules.">
+		</check_box>
+	<!--To be removed when LL migrates beta search to stable-->
+		<text name="Search_Label"
+			tool_tip="Bien que l'URL vers la Recherche Bêta donne souvent un résultat plus précis, il n'est pas toujours disponible...">
+			Recherche par défaut
+		</text>
+		<text name="Search_Label_requires_restart"
+			left_delta="125">
+			(Reconnexion)
+		</text>
+		<combo_box name="SearchURL">
+			<combo_box.item name="Standard V2 search"
+				label="Standard"/>
+			<combo_box.item name="Beta V2 Search"
+				label="Bêta"/>
+		</combo_box>
+		<check_box name="UseLSLBridge"
+			label="Activer le 'LSL-Client Bridge'"
+			tool_tip="Autoriser le viewer à utiliser un attachement scripté (le bridge) améliorant ses performances."/>
+		<check_box name="UseLSLFlightAssist"
+			label="Activer l'assist. de vol du Bridge"
+			tool_tip="Activer le script d'assistance au vol et au vol stationnaire à altitude élevée."/>
+		<check_box name="UseLSLFlightAssist"
+			label="Activer l'assistant de vol du Bridge"
+			tool_tip="Activer le script pour l'assistance au vol et le vol stationnaire à haute altitude."/>
+
+
+			</panel>
+
+<!--Protection-->
+	<panel name="ProtectionTab"
+		label="Protection">
+		<check_box name="PhoenixBlockClickSit"
+			label="Bloquer l'action automatique du clic-g pour s'asseoir"/>
+		<check_box name="ScriptsCanShowUI"
+			label="Autoriser les scripts à ouvrir la Carte (llMapDestination)"/>
+		<text name="revokepermissions_txt">
+			Révocation des permissions
+		 </text>
+		<radio_group name="PhoenixRevokePerms"
+			tool_tip="Cocher une option bloque l'action correspondante.">
+			<radio_item name="never_radio"
+				label="Aucune (comportement d'origine)"/>
+			<radio_item name="sit_radio"
+				label="Pour asseoir l'avatar"/>
+			<radio_item name="stand_radio"
+				label="Pour lever l'avatar"/>
+			<radio_item name="sitnstand_radio"
+				label="Pour asseoir et lever l'avatar"/>
+		</radio_group>
+		<text name="SurfaceAreaThreshholdLabel">
+			Lag dû aux textures (peut casser l'affichage de certains objets)
+		 </text>
+		 <check_box name="RenderVolumeSAProtection"
+			label="Masquer les grands objets à larges zones de texture.             Seuil"/>
+	</panel>
+
+<!--View-->
+	<panel name="firestorm_view"
+		label="Vision">
+		<text name="camera_options_label">
+			Options de la caméra
+		</text>
+		<check_box name="backwardsturnavatar"
+			label="Cliquer sur votre avatar recentre la caméra"
+			tool_tip="Par défaut, cliquer sur votre avatar le positionne dos à la caméra. Cette option annule ce comportement et pointe la caméra sur lui."/>
+		<check_box name="disableminzoomdist"
+			label="Désactiver la distance minimale de zoom"
+			tool_tip="Désactiver la contrainte de distance minimale imposée à la caméra lorsqu'elle s'approche d'un objet ou d'un avatar."/>
+		<check_box name="ignorecameraconstraints"
+			label="Permettre à la caméra de traverser les objets sans contrainte"
+			tool_tip="Ignorer la poussée imposée par le simulateur pour maintenir la caméra hors des objets."/>
+		<text name="ignorecameraconstraints_requires_restart"
+			left_pad="10">
+			(Reconnexion)
+		</text>
+		<check_box name="minimaprotate"
+			label="Activer la rotation de la mini carte"
+			tool_tip="Orienter la mini carte en fonction de la rotation de votre avatar."/>
+		<check_box name="MiniMapChatRing"
+			label="Afficher sur la mini carte les distances chat (20m) et radar (96m)"/>
+		<check_box name="FSAdvancedTooltips"
+			label="Afficher les informations complètes dans les info-bulles (style Phoenix)"/>
+	<!-- LGG Color Beams -->
+        <text name="BeamPrefs">
+			Effets du faisceau de sélection
+		</text>
+		<button name="BeamColor_delete"
+			label="Suppr."
+			tool_tip="Supprimer la présélection de couleurs actuellement sélectionnée."/>
+        <combo_box name="BeamColor_combo"
+			tool_tip="Choisir une présélection de couleurs."/>
+		<button name="BeamColor_new"
+			label="Créer"
+			tool_tip="Créer une présélection de couleurs."/>
+		<button name="BeamColor_refresh"
+			label="Rafraîchir"
+			tool_tip="Rafraîchir la liste de présélections de couleurs."/>
+		<button name="PhoenixBeamPrev_rainbow"
+			label=""/>
+        <slider name="PhoenixMaxBeamsPerSecond"
+			label="Emission/sec"
+			tool_tip="Fréquence d'émission des particules du faisceau. (Défaut 40)" />
+        <check_box name="SLPartBeam"
+			label="Activer le faisceau de sélection"/>
+        <check_box name="PhoenixParticleChat"
+			label="Activer les particules de chat"/>
+		<combo_box
+			name="PhoenixBeamShape_combo"
+			tool_tip="Choisir la forme du faisceau." />
+		<button name="delete_beam"
+			label="Suppr."
+			tool_tip="Supprimer la forme de faisceau actuellement sélectionnée."/>
+		<button name="custom_beam_btn"
+			label="Créer"
+			tool_tip="Créer une forme de faisceau."/>
+        <button name="refresh_beams"
+			label="Rafraîchir"
+			tool_tip="Rafraîchir la liste de formes du faisceau."/>
+         <button name="PhoenixBeamPrev_Phoenix"
+			label=""/>
+        <slider name="PhoenixBeamShapeScale"
+			label="Taille"
+			tool_tip="Changer la taille du faisceau." />
+	</panel>
+
+<!--Chat-->
+	<panel name="firestorm_chat"
+		label="Chat / MI">
+		<tab_container name="tabs"
+			label="Firestorm Prefs">
+	<!--Chat: General-->
+		<panel name="ChatGeneral"
+			label="Général">
+			<text name="chat_and_im_enhancements">
+				Amélioration du Chat et des Messages Instantanés
+			</text>
+			<check_box name="AllowMUpose"
+				label="Utiliser &quot;:&quot; comme synonyme de &quot;/me&quot;"/>
+			<check_box name="EmotesUseItalic"
+			 label="Utiliser l'italique à la 3e personne (/me)"/>
+			<check_box name="AutoCloseOOC"
+			 label="Auto-compléter les parenthèses ((RP))"/>
+			<check_box name="OnlineOfflinetoNearbyChat"
+			 label="Notifier en console chat le statut en/hors ligne des contacts"/>
+			<check_box name="ShowStreamMetadata"
+			 label="Afficher en console chat le titre joué en stream"/>
+			<check_box name="StreamMetadataAnnounceToChat"
+			 label="Annoncer le titre joué dans le canal"/>
+			<spinner name="StreamMetadataAnnounceChannel"/>
+			<check_box name="PhoenixNearbyChatbar"
+				label="Ajouter un champ de saisie à la fenêtre de chat"/>
+			<text name="PhoenixNearbyChatbar_requires_restart"
+				left_pad="35">
+				(Reconnexion)
+			</text>
+			<check_box name="FSShowIMInChatHistory"
+				label="Afficher les conversations dans la fenêtre de chat"/>
+			<check_box name="FSLogIMInChatHistory"
+				label="Enregistrer les conversations dans le chat local"/>
+			<text name="requires_save_chat_logs"
+				left_pad="130">
+				(Demande d'enreg. le chat local)
+			</text>
+			<check_box name="PhoenixUseNearbyChatConsole"
+				label="Afficher les popups en console chat plutôt que dans le toaster (style Phoenix)"/>
+			<check_box name="PhoenixLogImToChatConsole"
+				label="Afficher les conversations en console chat"/>
+			<check_box name="ChatFullWidth"
+				label="Utiliser toute la largeur de l'écran pour la console chat"/>
+			<text name="ChatFullWidth_requires_restart"
+				left_pad="10">
+				(Reconnexion)
+			</text>
+			<spinner name="fade_chat_time"
+				label="Estomper après"/>
+			<text name="text_box4">
+				sec. Afficher
+			</text>
+			<spinner name="max_chat_count"/>
+			<text name="text_box5"
+				width="70">
+				lignes maxi.
+			</text>
+			<check_box name="PhoenixBoldGroupMods"
+				label="Afficher le texte des modérateurs en gras"/>
+			<check_box name="FSPaymentInfoInChat"
+				label="Afficher en console chat les transactions de L$ plutôt que dans le toaster (style Phoenix)"/>
+			<check_box name="PhoenixMuteAllGroups"
+				label="Désactiver tous les chats de groupe"/>
+			<check_box name="PhoenixMuteGroupWhenNoticesDisabled"
+				label="Désactiver le chat de groupe lorsque 'Recevoir les notices' est décoché"/>
+			<button name="lgg_ac_showgui"
+                label="Paramètres d'autocorrection"
+                tool_tip="Cliquer ici pour ouvrir les paramètres des macros d'autocorrection."/>
+		</panel>
+	<!--Chat: Radar-->
+		<panel name="ChatRadar"
+			label="Radar">
+			<check_box name="reportChatRange"
+				label="Annoncer qu'un avatar entre/sort de la distance de chat"/>
+			<check_box name="reportDrawRange"
+				label="Annoncer qu'un avatar entre/sort de la distance d'affichage"/>
+			<check_box name="RadarReportSimRange"
+				label="Annoncer qu'un avatar entre/sort de la région"/>
+		</panel>
+	<!--Chat: Keyword Alerts-->
+		<panel name="ChatKeywordAlerts"
+			label="Alerte">
+			<check_box name="PhoenixKeywordOn"
+				label="Activer l'alerte par mot-clé"/>
+			<check_box name="PhoenixKeywordInChat"
+				label="Surveiller le chat local"/>
+			<check_box name="PhoenixKeywordInIM"
+				label="Surveiller le chat local et de groupe"/>
+			<text name="textPhoenixKeywords">
+				Mots-clés (séparés par des vigules)
+			</text>
+			<line_editor name="PhoenixKeywords"/>
+			<check_box name="PhoenixKeywordChangeColor"
+				label="Colorer les alertes"/>
+			<color_swatch name="colorswatch"
+				tool_tip="Cliquer pour ouvrir le sélecteur de couleurs."/>
+			<check_box name="PhoenixKeywordPlaySound"
+				label="Activer les alertes sonores"/>
+			<text name="textPhoenixKeywordSound">
+				UUID du son d'alerte
+			</text>
+			<line_editor name="PhoenixKeywordSound"/>
+		</panel>
+		</tab_container>
+	</panel>
+
+<!--CmdLine-->
+	<panel name="tab1-3"
+		label="LigneCmd">
+		<check_box name="chat_cmd_toggle"
+			label="Utiliser la ligne de chat comme ligne de commande"
+			tool_tip="Dans le champ de saisie, vous pouvez changer la commande par défaut en y entrant celle de votre choix."/>
+		<button name="PhoenixHelp_CmdLine"
+			label="?"
+			tool_tip="Cliquer ici pour obtenir une aide sur les paramètres de cette page (EN)."/>
+		<text name="PhoenixCmdLinePos_txt">
+			TP interne au sim (taper cmd x y z)
+		</text>
+		<line_editor name="PhoenixCmdLinePos"
+			tool_tip="Téléportation interne au sim, selon les coordonnées entrées."/>
+		<text name="PhoenixCmdLineGround_txt">
+			TP au sol (taper cmd)
+		</text>
+		<line_editor name="PhoenixCmdLineGround"
+			tool_tip="Téléportation vers le sol, à la verticale de votre position actuelle."/>
+		<text name="PhoenixCmdLineHeight_txt">
+			TP en altitude (Taper cmd z)
+		</text>
+		<line_editor name="PhoenixCmdLineHeight"
+			tool_tip="Téléportation vers l'altitude entrée, à la verticale de votre position actuelle."/>
+		<text name="PhoenixCmdLineTeleportHome_txt">
+			TP au domicile (Taper cmd)
+		</text>
+		<line_editor name="PhoenixCmdLineTeleportHome"
+			tool_tip="Téléportation vers votre domicile."/>
+		<text name="PhoenixCmdLineRezPlatform_txt">
+			Plateforme (Taper cmd 0 à 30)
+		</text>
+		<line_editor name="PhoenixCmdLineRezPlatform"
+			tool_tip="Créer une plateforme sous vos pieds."/>
+		<slider name="PhoenixCmdLinePlatformSize"
+			label="Largeur"
+			tool_tip="Diamètre de la plateforme à créer. (Maxi 30m)"/>
+		<text name="PhoenixCmdLineMapTo_txt">
+			TP vers le sim x (Taper cmd NomDuSim)
+		</text>
+		<line_editor name="PhoenixCmdLineMapTo"
+			tool_tip="Téléportation vers le sim entré. Sans coordonnées précises, arrivée au centre du sim, ou au point de TP si bloqué."/>
+		<check_box name="toggle"
+			label="Conserver la pos. entre sims"/>
+		<text name="PhoenixCmdLineCalc_txt">
+			Express. math. (Taper cmd SIN(2+2))
+		</text>
+		<line_editor name="PhoenixCmdLineCalc"
+			tool_tip="Utiliser la ligne de chat comme ligne d'entrée de calcul."/>
+		<text name="PhoenixCmdLineAutocorrect_txt">
+			Autocorrect. (Taper cmd liste|faux|juste)
+		</text>
+		<line_editor name="PhoenixCmdLineAutocorrect"
+			tool_tip="Ajouter un mot dans l'autocorrecteur (v. aussi l'onglet Chat/MI). La syntaxe est /addac NomDeLaListe|MotFaux|MotJuste. Par exemple : si vous tapez '/addac Abbreviations|bjr|bonjour', vous obtenez 'bonjour' lorsque vous tapez 'bjr' suivi d'un espace."/>
+		<text name="PhoenixCmdLineDrawDistance_txt">
+			Distance d'affichage (Taper cmd dist.)
+		</text>
+		<line_editor name="PhoenixCmdLineDrawDistance"
+			tool_tip="Ajuster instantanément l'affichage à la distance entrée (mètre)."/>
+		<text name="PhoenixCmdTeleportToCam_txt">
+			TP à la pos. de la cam. (Taper cmd)
+		</text>
+		<line_editor name="PhoenixCmdTeleportToCam"
+			tool_tip="Téléportation à la position de la caméra. Zoomer très près pour une téléportation plus précise."/>
+		<text name="PhoenixCmdLineKeyToName_txt">
+			Nom depuis la clé UUID (Taper cmd clé)
+		</text>
+		<line_editor name="PhoenixCmdLineKeyToName"
+			tool_tip="Donne le nom de l'avatar correspondant à la clé UUID entrée."/>
+		<text name="PhoenixCmdLineOfferTp_txt">
+			Envoyer un TP (Taper cmd clé)
+		</text>
+		<line_editor name="PhoenixCmdLineOfferTp"
+			tool_tip="Inviter un avatar à se téléporter vers vous."/>
+		<text name="PhoenixCmdLineTP2_txt">
+			Vous TP vers... (Taper cmd nom)
+		</text>
+		<line_editor name="PhoenixCmdLineTP2"
+			tool_tip="Cette commande accepte les noms partiels et est insensible à la casse (majuscule/minuscule). Un meilleur résultat s'obtient avec le radar ouvert (Ctl-Maj-A)."/>
+		<text name="PhoenixCmdLineAO_txt">
+			AO en/hors (Taper cmd on/off)
+		</text>
+		<line_editor name="PhoenixCmdLineAO"
+		 tool_tip="Activer / désactiver l'Animation Overrider intégré."/>
+		<text name="PhoenixCmdLineClearChat_txt">
+			Purger l'histo. du chat (Taper cmd)
+		</text>
+		<line_editor name="PhoenixCmdLineClearChat"
+			tool_tip="Purger l'historique de chat pour vous prémunir du lag dû aux spammers de chat."/>
+		<text name="PhoenixCmdLineMedia_txt">
+			Changer l'URL média (Taper cmd url)
+		</text>
+		<line_editor name="PhoenixCmdLineMedia"
+			tool_tip="Entrer et faire jouer un URL dans le stream média de la parcelle."/>
+		<text name="PhoenixCmdLineMusic_txt">
+			Changer l'URL musique (Taper cmd url)
+		</text>
+		<line_editor name="PhoenixCmdLineMusic"
+			tool_tip="Entrer et faire jouer un URL dans le stream audio de la parcelle."/>
+	</panel>
+
+<!--Windlight-->
+	<panel name="WindlightTab"
+		label="WindLight">
+	<!--Todo:KC
+		<text >General</text>
+		<check_box name="PhoenixRestoreLastWLsettingsOnLogin" 
+			label="Save Windlight settings on logout"/>
+	-->
+		<text name="phoenixWLshare_txt">
+			Partage WL Phoenix (Experimental)
+		</text>
+		<check_box name="PhoenixWLParcelEnabled"
+			label="Activer le partage parcellaire WindLight Phoenix"/>
+		<check_box name="PhoenixWLWhitelistFriends"
+			label="Pour les terrains de vos amis"/>
+		<check_box name="PhoenixWLWhitelistGroups"
+			label="Pour les terrains de vos groupes"/>
+		<check_box name="PhoenixWLWhitelistAll"
+			label="Pour tous les terrains"/>
+	</panel>
+
+<!--Build-->
+	<panel name="BuildTab"
+		label="Build">
+		<text name="text_box_objprams">
+			Paramètres par défaut
+		</text>
+		<spinner name="X size"
+			label="Taille X"/>
+		<spinner name="Y size"
+			label="Taille Y"/>
+		<spinner name="Z size"
+			label="Taille Z"/>
+		<text name="text_box_objmaterial">
+			Matière
+		</text>
+		<combo_box name="material"
+			control_name="PhoenixBuildPrefs_Material">
+			<combo_item name="Stone" value="Stone">Pierre</combo_item>
+			<combo_item name="Metal" value="Metal">Métal</combo_item>
+			<combo_item name="Glass" value="Glass">Verre</combo_item>
+			<combo_item name="Wood" value="Wood">Bois</combo_item>
+			<combo_item name="Flesh" value="Flesh">Chair</combo_item>
+			<combo_item name="Plastic" value="Plastic">Plastique</combo_item>
+			<combo_item name="Rubber" value="Rubber">Caoutchouc</combo_item>
+		</combo_box>
+		<text name="text_box_pivotpoint">
+			Point de pivot
+		</text>
+		<check_box name="EmBuildPrefsActualRoot_toggle"
+			label="Axes sur le prim racine"
+			tool_tip="Par défaut, les axes sont au centre mathématique d'un objet lié. Activer cette option fixe les axes sur le prim racine."/>
+		<spinner name="X pos"
+			label="Pos X"/>
+		<spinner name="Y pos"
+			label="Pos Y"/>
+		<spinner name="Z pos"
+			label="Pos Z"/>
+		<check_box name="EmPivotPercToggle"
+			label="Exprimé en %"
+			tool_tip="Par défaut, ces valeur sont en % et chaque axe est défini à 50%"/>
+		<check_box name="EmBuildPrefsRenderHighlight_toggle"
+			label="Activer le contour lumineux de la sélection"
+			tool_tip="Désactivé, les contours bleu et jaune ne sont plus affichés, améliorant la vision lors de l'édition de nombreux prim rapprochés, comme les cheveux, par ex."/>
+		<check_box name="PhoenixCommitForSaleOnChange_toggle"
+			label="Utiliser l'ancien procédé pour la mise en vente d'objets (style Phoenix)"
+			tool_tip="Cette option sauvegarde immédiatement les changements lors de la mise en vente d'un objet au lieu d'en demander confirmation."/>
+		<check_box name="FSSaveInventoryScriptsAsMono_toggle"
+			label="Enregistrer les scripts édités depuis l'inventaire en Mono"
+			tool_tip="Si activé, éditer et enregistrer un script directement depuis l'inventaire se fait en Mono plutôt qu'en LSL."/>
+	</panel>
+	
+<!--Tags-->
+	<panel name="TagTab"
+		label="Label">
+    <text name="whattagstoshow">
+		Quel Label afficher ?
+    </text>
+    <combo_box name="ClientTagsVisibility">
+		<combo_item name="No Viewertags" value="0">Pas de label de viewer</combo_item>
+		<combo_item name="TPVD Viewer" value="1">Viewers du TPVD (utilise une liste)</combo_item>
+		<combo_item name="All known Viewers" value="2">Tout viewer connu (utilise une liste)</combo_item>
+		<combo_item name="All Viewers" value="3">Tous les viewers</combo_item>
+    </combo_box>   
+    <text name="colorbasedonviewer">
+		Couleur d'après le viewer ?
+	</text>
+    <combo_box name="ColorClienttags">
+		<combo_item name="Color not based on Viewer" value="0">Non basée sur le viewer</combo_item>
+		<combo_item name="Single color per Viewer" value="1">Unique par viewer</combo_item>
+		<combo_item name="Multiple colors per Viewer" value="2">Multiple par viewer</combo_item>
+		<combo_item name="Userdefined color" value="3">Définie par l'utilisateur</combo_item>
+    </combo_box>
+    <text name="listtodisplayviewertags_txt">
+		Utiliser une liste de labels ?
+    </text>
+    <combo_box name="UseLegacyClienttags">
+		<combo_item name="Don't use a list" value="0">Pas de liste</combo_item>
+		<combo_item name="Local Clienttags" value="1">Liste locale</combo_item>
+		<combo_item name="Download Clienttags" value="2">Télécharger au lancement</combo_item>
+    </combo_box>
+    <text name="chooseyourcolor_txt">
+		Choissez votre couleur
+    </text>
+    <combo_box name="ClientTagColor">
+		<combo_item name="red">Rouge</combo_item>
+		<combo_item name="blue">Bleu</combo_item>
+		<combo_item name="yellow">Jaune</combo_item>
+		<combo_item name="purple">Violet</combo_item>
+		<combo_item name="pink">Rose</combo_item>
+		<combo_item name="white">Blanc</combo_item>
+		<combo_item name="orange">Orange</combo_item>
+		<combo_item name="green">Vert</combo_item>
+    </combo_box>
+    <check_box name="FSShowOwnTagColor_toggle"
+		label="Afficher votre couleur"
+		tool_tip="Afficher votre label selon le choix donné."/>
+    <check_box name="FSColorUsername_toggle"
+		label="Colorer les noms d'utilisateurs"
+		tool_tip="Afficher le nom d'utilisateur d'une autre couleur en surpassant la couleur du viewer."/>
+    <color_swatch name="usernamecolorswatch"
+		tool_tip="Cliquer pour ouvrir le sélecteur de couleurs."/>
+  </panel>
+</tab_container>
+</panel>
