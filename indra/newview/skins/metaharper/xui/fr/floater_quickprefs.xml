@@ -10,7 +10,7 @@ title="Préférences Rapides">
           tool_tip="Nombre de particules maximum affichées. Dépasser 4096 peut provoquer du lag">
           Maxi Particules
         </text>
-        <text name="Avatar Physics LOD"
+        <text name="Avatar Physics LOD">
             LOD Effets Phys
         </text>
         <text name="LOD Factor"
