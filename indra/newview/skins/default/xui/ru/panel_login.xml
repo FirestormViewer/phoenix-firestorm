@@ -1,276 +1,74 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
-follows="all"
-height="600"
-layout="topleft"
-left="0"
-name="panel_login"
-focus_root="true" 
-top="600"
- width="996">
-<panel.string
-     name="create_account_url">
-       http://join.secondlife.com/
-</panel.string>
-<panel.string
-     name="real_url" translate="false">
-       http://phoenixviewer.com/app/loginFSbeta/
-</panel.string>
-    <string name="reg_in_client_url" translate="false">
-     http://secondlife.eniac15.lindenlab.com/reg-in-client/
-</string>
-<panel.string
-     name="forgot_password_url">
-       http://secondlife.com/account/request.php
-</panel.string>
-<!-- *NOTE: Custom resize logic for login_html in llpanellogin.cpp -->
-<web_browser
-  tab_stop="false" 
-trusted_content="true" 
-bg_opaque_color="Black"
-border_visible="false"
-bottom="600"
-follows="all"
-hide_loading="true"
-left="0"
-name="login_html"
-start_url=""
-top="0"
-height="600"
-     width="980" />
-<layout_stack
-follows="left|bottom|right"
-name="login_widgets"
-layout="topleft"
-orientation="horizontal"
-top="519"
-width="980"
-height="80">
-<layout_panel
-auto_resize="false"
-follows="left|bottom|right"
-name="login"
-width="845"
-min_width="845"
-user_resize="false"
-height="80">
-<text
-follows="left|bottom"
-font="SansSerifSmall"
-height="16"
-name="username_text"
-top="20"
-left="20"
-width="150">
-Имя пользователя:
-</text>
-<combo_box
-allow_text_entry="true"
-follows="left|bottom"
-height="22"
-left_delta="0"
-max_chars="128"
-combo_editor.prevalidate_callback="ascii"
-tool_tip="Имя пользователя, которое вы выбрали при регистрации, например bobsmith12 или Steller Sunshine"
-top_pad="0"
-name="username_combo"
-width="150">
-  <combo_box.combo_button
-   visible ="true"/>
-  <combo_box.drop_down_button
-   visible ="true"/>
-</combo_box>
-  <button
-  follows="left|bottom"
-  height="23"
-  image_selected="PushButton_On_Selected"
-  label="Удалить эту запись"
-  label_color="White"
-  layout="topleft"
-  top_pad="0"
-left="18"
-  name="delete_saved_login_btn"
-  width="150"
-  tab_stop="false" />
-<text
-follows="left|bottom"
-font="SansSerifSmall"
-height="15"
-left_pad="5"
-name="password_text"
-top="20"
-    width="150">
-       Пароль:
-</text>
-<line_editor
-follows="left|bottom"
-  height="22"
-  max_length_bytes="16"
-name="password_edit"
-is_password="true" 
-select_on_focus="true"
-  top_pad="0"
-  width="150" />
- <check_box
-control_name="RememberPassword"
-follows="left|bottom"
-font="SansSerifSmall"
-height="16"
-label="Запомнить пароль"
-  top_pad="3"
-  name="remember_check"
- width="150" />
-<button
-  follows="left|bottom"
-  height="23"
-  image_selected="PushButton_On_Selected"
-  label="Войти"
-  label_color="White"
-  layout="topleft"
-  left_pad="8"
-  name="connect_btn"
-  top="35"
-  width="90" />
- <text
-  follows="left|bottom"
-  font="SansSerifSmall"
-  height="15"
-  left_pad="10"
-  name="mode_selection_text"
-  top="20"
-  width="170">
-      Установки по умолчанию: 
- </text>
-<combo_box
-  follows="left|bottom"
-  height="23"
-  max_chars="128"
-  tool_tip="Выберите стиль клиента с которым вы лучше всего знакомы, чтобы сбросить настройки по умолчанию."
-  top_pad="0"
-  name="mode_combo"
-  width="170">
-<combo_box.item
-  label="Phoenix"
-  name="Phoenix"
-  value="settings_phoenix.xml" />
-<combo_box.item
-  label="V2"
-  name="V2"
-  value="settings_v2.xml" />
-<combo_box.item
-  label="Гибрид"
-  name="Hybrid"
-  value="settings_hybrid.xml" />
-</combo_box>
-  <text
-  follows="left|bottom"
-  font="SansSerifSmall"
-  height="15"
-  left_pad="8"
-  name="start_location_text"
-top="20"
-  width="170">
-       Начать с:
- </text>
-<combo_box
-allow_text_entry="true"
-control_name="NextLoginLocation"
-  follows="left|bottom"
-  height="23"
-max_chars="128"
-top_pad="0"
-name="start_location_combo"
-     width="170">
-<combo_box.item
-label="Последнего места"
-name="MyLastLocation"
-         value="last" />
-<combo_box.item
-label="Дома"
-name="MyHome"
-         value="home" />
-<combo_box.item
-label="&lt;Ввести название региона&gt;"
-name="Typeregionname"   value="" />
-</combo_box>
-  <text
-follows="left|bottom"
-font="SansSerifSmall"
-height="15"
-left_pad="8"
-name="grid_selection_text"
-top="20"
-width="110"
-visible="true">
-    Подключиться к сетке:
-  </text>
-<combo_box
-allow_text_entry="true"
-font="SansSerifSmall"
-   follows="left|bottom"
-   height="23"
-   max_chars="256"
-layout="topleft"
-top_pad="0"
-name="server_combo"
-width="110"
-  visible="true" />
-</layout_panel>
-<layout_panel
-tab_stop="false"
-follows="right|bottom"
-name="links"
-width="135"
-min_width="135"
-user_resize="false"
-height="80">
-   <text
-follows="right|bottom"
-font="SansSerifSmall"
-text_color="SchemeLightest"
-halign="right"
-height="16"
-top="12"
-right="-10"
-name="create_new_account_text"
-  width="100">
-       Зарегистрироваться
- </text>
-<text
-follows="right|bottom"
-font="SansSerifSmall"
-text_color="SchemeLightest"
-halign="right"
-height="16"
-name="forgot_password_text"
-top_pad="12"
-right="-10"
-  width="100">
-       Забыли имя пользователя или пароль?
-</text>
-<text
-follows="right|bottom"
-font="SansSerifSmall"
-text_color="SchemeLightest"
-halign="right"
-height="16"
-name="login_help"
-top_pad="2"
-right="-10"
-    width="100">
-       Нужна помощь в регистрации?   
-</text>
-<!--  <text
-    follows="right|bottom"
-    font="SansSerifSmall"
-    halign="right"
-    height="28"
-    top_pad="2"
-    name="channel_text"
-    width="180"
-    word_wrap="true">
-       [VERSION]
-   </text>-->
-   </layout_panel>
-</layout_stack>
+<panel name="panel_login" >
+  <panel.string
+       name="create_account_url">
+         http://join.secondlife.com/
+  </panel.string>
+  <panel.string
+       name="real_url" translate="false">
+         http://phoenixviewer.com/app/loginFSbeta/
+  </panel.string>
+      <string name="reg_in_client_url" translate="false">
+       http://secondlife.eniac15.lindenlab.com/reg-in-client/
+  </string>
+  <panel.string
+       name="forgot_password_url">
+         http://secondlife.com/account/request.php
+  </panel.string>
+  <!-- *NOTE: Custom resize logic for login_html in llpanellogin.cpp -->
+  <web_browser name="login_html" />
+  <layout_stack name="login_widgets" >
+    <layout_panel name="login" width="925" min_width="925" >
+      <text name="username_text">
+        Имя пользователя:
+      </text>
+      <combo_box tool_tip="Имя пользователя, которое вы выбрали при регистрации, например bobsmith12 или Steller Sunshine" name="username_combo" >
+      <combo_box.combo_button visible ="true"/>
+      <combo_box.drop_down_button visible ="true"/>
+      </combo_box>
+        <button height="23" label="Удалить эту запись" name="delete_saved_login_btn" />
+      <text name="password_text" >
+        Пароль:
+      </text>
+      <line_editor name="password_edit" />
+      <check_box label="Запомнить пароль"  name="remember_check" />
+      <button  label="Войти" name="connect_btn" />
+      <text  name="mode_selection_text" >
+        Установки по умолчанию: 
+      </text>
+      <combo_box tool_tip="Выберите стиль клиента с которым вы лучше всего знакомы, чтобы сбросить настройки по умолчанию." name="mode_combo" width="170">
+      <combo_box.item name="Phoenix" />
+      <combo_box.item name="V3" />
+      <combo_box.item label="Гибрид" name="Hybrid" />
+      </combo_box>
+      <text name="start_location_text" >
+        Начать с:
+      </text>
+      <combo_box name="start_location_combo" >
+      <combo_box.item
+      label="Последнего места"
+      name="MyLastLocation"/>
+      <combo_box.item
+      label="Дома"
+      name="MyHome"/>
+      <combo_box.item
+      label="&lt;Ввести название региона&gt;" name="Typeregionname" />
+      </combo_box>
+      <text name="grid_selection_text" width="130">
+        Подключиться к сетке:
+      </text>
+      <combo_box name="server_combo" />
+    </layout_panel>
+    <layout_panel name="links" >
+      <text name="create_new_account_text" >
+        Зарегистрироваться
+      </text>
+      <text name="forgot_password_text" >
+        Забыли имя пользователя или пароль?
+      </text>
+      <text name="login_help" >
+        Нужна помощь в регистрации?   
+      </text>
+    </layout_panel>
+  </layout_stack>
 </panel>
