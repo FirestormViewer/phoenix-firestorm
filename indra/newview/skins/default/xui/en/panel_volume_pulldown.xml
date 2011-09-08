@@ -167,7 +167,7 @@
     height="16"
     layout="topleft"
     left_pad="5"
-    tool_tip="Enable this to hear sounds from gestures"
+    tool_tip="Enable sounds from gestures"
     top_delta="2"
     width="350"/>
     <slider
