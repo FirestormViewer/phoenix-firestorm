@@ -50,6 +50,10 @@
 const F32	CURSOR_FLASH_DELAY = 1.0f;  // in seconds
 const S32	CURSOR_THICKNESS = 2;
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-08 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+const F32 LLTextBase::SPELLCHECK_DELAY = 0.5f;	// Delay between the last keypress and showing spell checking feedback for the word the cursor is on
+// [/SL:KB]
+
 LLTextBase::line_info::line_info(S32 index_start, S32 index_end, LLRect rect, S32 line_num) 
 :	mDocIndexStart(index_start), 
 	mDocIndexEnd(index_end),
@@ -250,6 +254,7 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
 	if (mSpellCheck)
 		LLHunspellWrapper::setSettingsChangeCallback(boost::bind(&LLTextBase::onSpellCheckSettingsChange, this));
+	mSpellCheckTimer.reset();
 // [/SL:KB]
 
 	mDocumentView = LLUICtrlFactory::create<LLView>(view_params);
@@ -654,6 +659,10 @@ void LLTextBase::drawText()
 			// Draw squiggly lines under any (visible) misspelled words
 			for (; (itMisspell != mMisspellRanges.end()) && ((itMisspell->first < line_end) && (itMisspell->second > line_start)); ++itMisspell)
 			{
+				// Skip the current word if the user is still busy editing it
+				if ( (!mSpellCheckTimer.hasExpired()) && (itMisspell->first <= (U32)mCursorPos) && (itMisspell->second >= (U32)mCursorPos) )
+ 					continue;
+
 				S32 pxStart, pxEnd, pxTemp;
 				cur_segment->getDimensions(seg_start - cur_segment->getStart(), itMisspell->first - seg_start + 1, pxStart, pxTemp);
 				cur_segment->getDimensions(itMisspell->first - seg_start + 1, itMisspell->second - itMisspell->first, pxEnd, pxTemp);

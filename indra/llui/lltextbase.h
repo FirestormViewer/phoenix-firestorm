@@ -565,7 +565,11 @@ protected:
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
 	BOOL						mSpellCheck;
 	BOOL						mNeedsSpellCheck;
+	LLTimer						mSpellCheckTimer;
 	std::list<std::pair<U32, U32> > mMisspellRanges;
+
+	// Constant
+	static const F32 SPELLCHECK_DELAY;
 // [/SL:KB]
 
 	// configuration

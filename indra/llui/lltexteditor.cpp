@@ -2830,6 +2830,10 @@ void LLTextEditor::setKeystrokeCallback(const keystroke_signal_t::slot_type& cal
 void LLTextEditor::onKeyStroke()
 {
 	mKeystrokeSignal(this);
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-08 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	mNeedsSpellCheck = TRUE;
+	mSpellCheckTimer.setTimerExpirySec(SPELLCHECK_DELAY);
+// [/SL:KB]
 }
 
 //virtual
