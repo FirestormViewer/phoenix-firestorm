@@ -555,8 +555,8 @@ void LLTextBase::drawText()
 	// Perform spell check if needed
 	if ( (useSpellCheck()) && (getWText().length() > 2) )
 	{
-		U32 idxStart = getLineStart(llmax(first_line - 1, 0)); static U32 idxPrevStart = -1;
-		U32 idxEnd = getLineEnd(llmin((U32)last_line + 1, (U32)mLineInfoList.size() - 1)); static U32 idxPrevEnd = -1;
+		S32 idxStart = getLineStart(llmax(first_line - 1, 0)); static S32 idxPrevStart = -1;
+		S32 idxEnd = getLineEnd(llmin(last_line + 1, (S32)mLineInfoList.size() - 1)); static S32 idxPrevEnd = -1;
 
 		if ( (mNeedsSpellCheck) || (idxStart != idxPrevStart) || (idxEnd != idxPrevEnd) )
 		{
@@ -564,37 +564,47 @@ void LLTextBase::drawText()
 			mMisspellRanges.clear();
 
 			segment_set_t::iterator itSegment = getSegIterContaining(idxStart); LLTextSegmentPtr pSegment;
-			while ( (mSegments.end() != itSegment) && (pSegment = *itSegment) && (pSegment->getEnd() < idxEnd) )
+			while ( (mSegments.end() != itSegment) && (pSegment = *itSegment) && (pSegment->getStart() < idxEnd) )
 			{
-				if (pSegment->canSpellCheck())
+				if (!pSegment->canSpellCheck())
 				{
-					U32 idxWordStart = pSegment->getStart(), idxWordEnd = -1, idxSegmentEnd = pSegment->getEnd();
-					while (idxWordStart < idxSegmentEnd)
-					{
-						// Find the end of the current word (special case handling for "'" when it's used as a contraction)
-						idxWordEnd = idxWordStart + 1;
-						while ( (idxWordEnd < idxSegmentEnd) && 
-								((LLWStringUtil::isPartOfWord(wstrText[idxWordEnd])) ||
-								 ((L'\'' == wstrText[idxWordEnd]) && 
-								  (LLStringOps::isAlnum(wstrText[idxWordEnd - 1])) && (LLStringOps::isAlnum(wstrText[idxWordEnd + 1])))) )
-						{
-							idxWordEnd++;
-						}
-						if (idxWordEnd > idxSegmentEnd)
-							break;
-
-						// Don't process words shorter than 3 characters
-						std::string strWord = wstring_to_utf8str(wstrText.substr(idxWordStart, idxWordEnd - idxWordStart));
-						if ( (strWord.length() >= 3) && (!LLHunspellWrapper::instance().checkSpelling(strWord)) )
-							mMisspellRanges.push_back(std::pair<U32, U32>(idxWordStart, idxWordEnd));
-
-						// Find the start of the next word
-						idxWordStart = idxWordEnd + 1;
-						while ( (idxWordStart < idxSegmentEnd) && (!LLWStringUtil::isPartOfWord(wstrText[idxWordStart])) )
-							idxWordStart++;
-					}
+					++itSegment;
+					continue;
 				}
-				++itSegment;
+
+				// Combine adjoining text segments into one (newly typed text will be one letter per text segment)
+				U32 idxSegmentStart = pSegment->getStart(), idxSegmentEnd = llmin(pSegment->getEnd(), idxEnd);
+				while ( (mSegments.end() != ++itSegment) && 
+					    (pSegment = *itSegment) && (pSegment->canSpellCheck()) && (pSegment->getStart() < idxEnd) )
+				{
+					idxSegmentEnd = llmin(pSegment->getEnd(), idxEnd);
+				}
+
+				U32 idxWordStart = idxSegmentStart, idxWordEnd = -1;
+				while (idxWordStart < idxSegmentEnd)
+				{
+					// Find the end of the current word (special case handling for "'" when it's used as a contraction)
+					idxWordEnd = idxWordStart + 1;
+					while ( (idxWordEnd < idxSegmentEnd) && 
+							((LLWStringUtil::isPartOfWord(wstrText[idxWordEnd])) ||
+								((L'\'' == wstrText[idxWordEnd]) && 
+								(LLStringOps::isAlnum(wstrText[idxWordEnd - 1])) && (LLStringOps::isAlnum(wstrText[idxWordEnd + 1])))) )
+					{
+						idxWordEnd++;
+					}
+					if (idxWordEnd > idxSegmentEnd)
+						break;
+
+					// Don't process words shorter than 3 characters
+					std::string strWord = wstring_to_utf8str(wstrText.substr(idxWordStart, idxWordEnd - idxWordStart));
+					if ( (strWord.length() >= 3) && (!LLHunspellWrapper::instance().checkSpelling(strWord)) )
+						mMisspellRanges.push_back(std::pair<U32, U32>(idxWordStart, idxWordEnd));
+
+					// Find the start of the next word
+					idxWordStart = idxWordEnd + 1;
+					while ( (idxWordStart < idxSegmentEnd) && (!LLWStringUtil::isPartOfWord(wstrText[idxWordStart])) )
+						idxWordStart++;
+				}
 			}
 
 			idxPrevStart = idxStart;
