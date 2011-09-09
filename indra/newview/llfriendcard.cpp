@@ -322,12 +322,6 @@ void LLFriendCardsManager::syncFriendCardsFolders()
 }
 
 
-		if (items)
-			items->clear();
-		gInventory.getDirectDescendentsOf((*itCats)->getUUID(), fakeCatsArg, items);
-
-		if (NULL == items)
-			continue;
 /************************************************************************/
 /*		Private Methods                                                 */
 /************************************************************************/
