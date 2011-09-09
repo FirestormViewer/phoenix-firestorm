@@ -85,7 +85,6 @@ set(viewer_SOURCE_FILES
     chatbar_as_cmdline.cpp
     kcwlinterface.cpp
     floatermedialists.cpp
-    fscontactlist.cpp
     fscontactsfloater.cpp
     fsareasearch.cpp
     fsdata.cpp
@@ -687,7 +686,6 @@ set(viewer_HEADER_FILES
     chatbar_as_cmdline.h
     kcwlinterface.h
     floatermedialists.h
-    fscontactlist.h
     fscontactsfloater.h
     fsradarlistctrl.h
     fsareasearch.h
