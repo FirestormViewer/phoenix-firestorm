@@ -195,7 +195,7 @@
             initial_value="12"
             layout="topleft"
             left_delta="79"
-            max_val="50"
+            max_val="65"
             min_val="1"
             name="RenderAvatarMaxVisible"
             top_delta="-2"
