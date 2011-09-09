@@ -27,7 +27,6 @@
 #ifndef LL_LLFRIENDCARD_H
 #define LL_LLFRIENDCARD_H
 
-#include <boost/signals2.hpp>
 
 #include "llcallingcard.h"
 #include "llinventorymodel.h" // for LLInventoryModel::item_array_t
@@ -45,8 +44,6 @@ class LLFriendCardsManager
 
 public:
 	typedef std::map<LLUUID, uuid_vec_t > folderid_buddies_map_t;
-	typedef boost::function<void()> callback_t;
-	typedef boost::signals2::signal<void()> friends_loaded_signal_t;
 
 	// LLFriendObserver implementation
 	void changed(U32 mask)
@@ -81,29 +78,9 @@ public:
 	 *	(creates them otherwise) and fetches their contents to synchronize with Agent's Friends List.
 	 */
 	void syncFriendCardsFolders();
-	
-	
-	const LLUUID& findFriendSubfolderUUID(const std::string& nonLocalizedName) const;
-	// void getOrCreateFriendSubfolder(LLUUID& sub_folder_ID, const std::string& nonLocalizedName, callback_t cb);
-	void createFriendSubfolder(const std::string& nonLocalizedName);
-	boost::signals2::connection setFriendsDirLoadedCallback(const friends_loaded_signal_t::slot_type& cb);
-	//void collectFriendSet(const LLUUID& sub_folder_ID, uuid_vec_t buddyUUIDs) const;
-	
-	/*!
-	 * \brief
-	 * Collects folders' IDs with the buddies' IDs in the Inventory Calling Card/Friends folder.
-	 * 
-	 * \param folderBuddiesMap
-	 * map into collected data will be put. It will be cleared before adding new data.
-	 * 
-	 * Each item in the out map is a pair where first is an LLViewerInventoryCategory UUID,
-	 * second is a vector with UUID of Avatars from this folder.
-	 * 
-	 * NOTE* Friends/All is excluded in folderBuddiesMap, LLAvatarTracker should be used instead
-	 */
-	void collectFriendsLists(folderid_buddies_map_t& folderBuddiesMap) const;
 
 private:
+	typedef boost::function<void()> callback_t;
 
 	LLFriendCardsManager();
 	~LLFriendCardsManager();
@@ -167,8 +144,6 @@ private:
 	typedef std::set<LLUUID> avatar_uuid_set_t;
 
 	avatar_uuid_set_t mBuddyIDSet;
-	
-	friends_loaded_signal_t mFriendsLoadedSignal;
 };
 
 #endif // LL_LLFRIENDCARD_H

@@ -126,29 +126,6 @@ bool LLFindAgentCallingCard::operator()(LLInventoryCategory* cat, LLInventoryIte
 }
 
 /**
- * Class LLFindAgentCallingCard
- *
- * An inventory collector functor for checking that agent's own calling card
- * exists within the Calling Cards category and its sub-folders.
- */
-class LLFindFriendCallingCard : public LLInventoryCollectFunctor
-{
-public:
-	LLFindFriendCallingCard() {}
-	virtual ~LLFindFriendCallingCard() {}
-	virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item);
-};
-
-bool LLFindFriendCallingCard::operator()(LLInventoryCategory* cat, LLInventoryItem* item)
-{
-	if (item && item->getType() == LLAssetType::AT_CALLINGCARD && item->getCreatorUUID() != gAgentID)
-	{
-		return true;
-	}
-	return false;
-}
-
-/**
  * Class for fetching initial friend cards data
  *
  * Implemented to fix an issue when Inventory folders are in incomplete state.
@@ -345,131 +322,12 @@ void LLFriendCardsManager::syncFriendCardsFolders()
 }
 
 
-const LLUUID& LLFriendCardsManager::findFriendSubfolderUUID(const std::string& nonLocalizedName) const
-{
-	LLUUID friendFolderUUID = findFriendFolderUUIDImpl();
-
-	return findChildFolderUUID(friendFolderUUID, nonLocalizedName);
-}
-
-//Unused ast this time
-#if 0
-void LLFriendCardsManager::getOrCreateFriendSubfolder(LLUUID& sub_folder_ID, const std::string& nonLocalizedName, callback_t cb)
-{
-	sub_folder_ID = findFriendSubfolderUUID(nonLocalizedName);
-	
-	if (!sub_folder_ID.notNull())
-	{
-		LLUUID friends_folder_ID = findFriendFolderUUIDImpl();
-
-		if (!gInventory.isCategoryComplete(friends_folder_ID))
-		{
-			LLViewerInventoryCategory* cat = gInventory.getCategory(friends_folder_ID);
-			std::string cat_name = cat ? cat->getName() : "unknown";
-			llwarns << "Failed to find \"" << cat_name << "\" category descendents in Category Tree." << llendl;
-		}
-
-		sub_folder_ID = gInventory.createNewCategory(friends_folder_ID,
-			LLFolderType::FT_CALLINGCARD, nonLocalizedName);
-	}
-	
-	if (sub_folder_ID.notNull())
-	{
-		fetchAndCheckFolderDescendents(sub_folder_ID, cb);
-	}
-}
-#endif
-
-void LLFriendCardsManager::createFriendSubfolder(const std::string& nonLocalizedName)
-{
-	LLUUID sub_folder_ID = findFriendSubfolderUUID(nonLocalizedName);
-	
-	if (!sub_folder_ID.notNull())
-	{
-		LLUUID friends_folder_ID = findFriendFolderUUIDImpl();
-
-		if (!gInventory.isCategoryComplete(friends_folder_ID))
-		{
-			LLViewerInventoryCategory* cat = gInventory.getCategory(friends_folder_ID);
-			std::string cat_name = cat ? cat->getName() : "unknown";
-			llwarns << "Failed to find \"" << cat_name << "\" category descendents in Category Tree." << llendl;
-		}
-
-		sub_folder_ID = gInventory.createNewCategory(friends_folder_ID,
-			LLFolderType::FT_CALLINGCARD, nonLocalizedName);
-	}
-}
-
-boost::signals2::connection LLFriendCardsManager::setFriendsDirLoadedCallback(const friends_loaded_signal_t::slot_type& cb)
-{
-	return mFriendsLoadedSignal.connect(cb);
-}
-
-//Unused at this time
-#if 0
-void LLFriendCardsManager::collectFriendSet(const LLUUID& sub_folder_ID, uuid_vec_t buddyUUIDs) const
-{
-	LLInventoryModel::item_array_t* items;
-	LLInventoryModel::cat_array_t* fakeCatsArg;
-	LLInventoryModel::item_array_t::const_iterator itBuddy;	// to iterate Buddies in each List
-
-	gInventory.getDirectDescendentsOf(sub_folder_ID, fakeCatsArg, items);
-
-	for (itBuddy = items->begin(); itBuddy != items->end(); ++itBuddy)
-	{
-		buddyUUIDs.push_back((*itBuddy)->getCreatorUUID());
-	}
-}
-#endif
-
-void LLFriendCardsManager::collectFriendsLists(folderid_buddies_map_t& folderBuddiesMap) const
-{
-	folderBuddiesMap.clear();
-
-	LLInventoryModel::cat_array_t* listFolders;
-	LLInventoryModel::item_array_t* items;
-
-	// get folders in the Friend folder. Items should be NULL due to Cards should be in lists.
-	gInventory.getDirectDescendentsOf(findFriendFolderUUIDImpl(), listFolders, items);
-
-	if (NULL == listFolders)
-		return;
-
-	LLInventoryModel::cat_array_t::const_iterator itCats;	// to iterate Friend Lists (categories)
-	LLInventoryModel::item_array_t::const_iterator itBuddy;	// to iterate Buddies in each List
-	LLInventoryModel::cat_array_t* fakeCatsArg;
-	for (itCats = listFolders->begin(); itCats != listFolders->end(); ++itCats)
-	{
 		if (items)
 			items->clear();
-		
-		// Everything but Friends/All content will collected here
-		// Friends/All will be handled by LLAvatarTracker
-		if ((*itCats)->getUUID() == findFriendAllSubfolderUUIDImpl())
-			continue;
-		
-		//NOTE* getDirectDescendentsOf is not used here as it was not returning all items most of the time.
-		//LLInventoryModel::cat_array_t fakeCatsArg;
-		//LLInventoryModel::item_array_t items;
-		//LLFindFriendCallingCard collector;
-		//gInventory.collectDescendentsIf((*itCats)->getUUID(), fakeCatsArg, items, LLInventoryModel::EXCLUDE_TRASH, collector);
 		gInventory.getDirectDescendentsOf((*itCats)->getUUID(), fakeCatsArg, items);
 
 		if (NULL == items)
 			continue;
-		
-		uuid_vec_t buddyUUIDs;
-		for (itBuddy = items->begin(); itBuddy != items->end(); ++itBuddy)
-		{
-			buddyUUIDs.push_back((*itBuddy)->getCreatorUUID());
-		}
-
-		folderBuddiesMap.insert(make_pair((*itCats)->getUUID(), buddyUUIDs));
-	}
-}
-
-
-
 /************************************************************************/
 /*		Private Methods                                                 */
 /************************************************************************/
@@ -661,10 +519,6 @@ void LLFriendCardsManager::syncFriendsFolder()
 		const LLUUID& buddy_id = (*buddy_it).first;
 		addFriendCardToInventory(buddy_id);
 	}
-	
-	mFriendsLoadedSignal();
-	// This is a single-shot signal. Forget callbacks to save resources.
-	mFriendsLoadedSignal.disconnect_all_slots();
 }
 
 class CreateFriendCardCallback : public LLInventoryCallback
