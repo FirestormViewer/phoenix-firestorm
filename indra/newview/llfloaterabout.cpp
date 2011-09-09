@@ -41,7 +41,7 @@
 #include "llviewerregion.h"
 #include "llversioninfo.h"
 #include "llweb.h"
-// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0e)
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.4.0a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -257,11 +257,8 @@ LLSD LLFloaterAbout::getInfo()
     }
 #endif
 
-// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
-	if (rlv_handler_t::isEnabled())
-		info["RLV_VERSION"] = RlvStrings::getVersionAbout();
-	else
-		info["RLV_VERSION"] = "(disabled)";
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.4.0a) | Added: RLVa-1.2.0e
+	info["RLV_VERSION"] = (rlv_handler_t::isEnabled()) ? RlvStrings::getVersionAbout() : "(disabled)";
 // [/RLVa:KB]
 	info["OPENGL_VERSION"] = (const char*)(glGetString(GL_VERSION));
 	info["LIBCURL_VERSION"] = LLCurl::getVersionString();

@@ -652,7 +652,7 @@ bool LLSelectMgr::enableLinkObjects()
 	{
 		// Allow only if the avie isn't sitting on any of the selected objects
 		LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
-		RlvSelectIsSittingOn f(gAgentAvatarp->getRoot());
+		RlvSelectIsSittingOn f(gAgentAvatarp);
 		if (hSel->getFirstRootNode(&f, TRUE) != NULL)
 			new_value = false;
 	}
@@ -672,7 +672,7 @@ bool LLSelectMgr::enableUnlinkObjects()
 	{
 		// Allow only if the avie isn't sitting on any of the selected objects
 		LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
-		RlvSelectIsSittingOn f(gAgentAvatarp->getRoot());
+		RlvSelectIsSittingOn f(gAgentAvatarp);
 		if (hSel->getFirstRootNode(&f, TRUE) != NULL)
 			new_value = false;
 	}
