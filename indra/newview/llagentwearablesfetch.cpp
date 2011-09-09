@@ -33,7 +33,9 @@
 #include "llinventoryfunctions.h"
 #include "llstartup.h"
 #include "llvoavatarself.h"
-
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2011-09-10 (Catznip-3.0.0a)
+#include "llviewercontrol.h"
+// [/SL:KB]
 
 class LLOrderMyOutfitsOnDestroy: public LLInventoryCallback
 {
@@ -122,7 +124,7 @@ void LLInitialWearablesFetch::processContents()
 // [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-05-18 (Catznip-2.6.0a) | Modified: Catznip-2.0.0h
 	// NOTE: don't use the current COF contents if 'wearable_array' is empty (ie first logon with 2.0 or some other problem)
 	bool fUpdateFromCOF = !wearable_array.empty();
-	if (fUpdateFromCOF)
+	if ( (fUpdateFromCOF) && (gSavedSettings.getBOOL("VerifyInitialWearables")) )
 	{
 		LLAppearanceMgr::wearables_by_type_t items_by_type(LLWearableType::WT_COUNT);
 		LLAppearanceMgr::sortItemsByActualDescription(wearable_array);
