@@ -34,7 +34,9 @@
 #include "llwlparamset.h"
 #include "llwlparammanager.h"
 #include "llwaterparammanager.h"
-
+#include "llfloatereditsky.h"
+#include "llmultisliderctrl.h"
+#include "lltimectrl.h"
 
 FloaterQuickPrefs::FloaterQuickPrefs(const LLSD& key)
 :	LLTransientDockableFloater(NULL,true,key)
@@ -54,12 +56,15 @@ void FloaterQuickPrefs::onOpen(const LLSD& key)
 
 
 void FloaterQuickPrefs::initCallbacks(void) {
+	LLWLParamManager& param_mgr = LLWLParamManager::instance();
 	getChild<LLUICtrl>("WaterPresetsCombo")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeWaterPreset, this, _1));
 	getChild<LLUICtrl>("WLPresetsCombo")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeSkyPreset, this, _1));
 	getChild<LLUICtrl>("WLPrevPreset")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickSkyPrev, this));
 	getChild<LLUICtrl>("WLNextPreset")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickSkyNext, this));
 	getChild<LLUICtrl>("WWPrevPreset")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickWaterPrev, this));
 	getChild<LLUICtrl>("WWNextPreset")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickWaterNext, this));
+	getChild<LLUICtrl>("UseRegionWL")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickRegionWL, this));
+	getChild<LLUICtrl>("WLSunPos")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onSunMoved, this, _1, &param_mgr.mLightnorm));
 }
 
 BOOL FloaterQuickPrefs::postBuild()
@@ -115,6 +120,7 @@ BOOL FloaterQuickPrefs::postBuild()
 		}
 		WLcomboBox->selectByValue(env_mgr.getSkyPresetName());
 	}
+		getChild<LLMultiSliderCtrl>("WLSunPos")->addSlider(12.f);
 		initCallbacks();
 	return LLDockableFloater::postBuild();
 }
@@ -220,4 +226,53 @@ void FloaterQuickPrefs::onClickSkyNext()
 	else if(curid>lastitem) curid=0;
 	box->setCurrentByIndex(curid);
 	LLEnvManagerNew::instance().setUseSkyPreset(box->getValue().asString());
+}
+
+void FloaterQuickPrefs::draw()
+{
+	syncControls();
+	LLFloater::draw();
+}
+
+static F32 time24_to_sun_pos(F32 time24)
+{
+	F32 sun_pos = fmodf((time24 - 6) / 24.0f, 1.0f);
+	if (sun_pos < 0) ++sun_pos;
+	return sun_pos;
+}
+
+static F32 sun_pos_to_time24(F32 sun_pos)
+{
+	return fmodf(sun_pos * 24.0f + 6, 24.0f);
+}
+
+void FloaterQuickPrefs::syncControls()
+{
+	bool err;
+
+	LLWLParamManager * param_mgr = LLWLParamManager::getInstance();
+	LLWLParamSet& cur_params = param_mgr->mCurParams;
+
+	F32 time24 = sun_pos_to_time24(param_mgr->mCurParams.getFloat("sun_angle",err) / F_TWO_PI);
+	getChild<LLMultiSliderCtrl>("WLSunPos")->setCurSliderValue(time24, TRUE);
+
+}
+
+void FloaterQuickPrefs::onSunMoved(LLUICtrl* ctrl, void* userdata)
+{
+	LLWLParamManager::getInstance()->mAnimator.deactivate();
+
+	LLMultiSliderCtrl* sun_msldr = getChild<LLMultiSliderCtrl>("WLSunPos");
+	F32 time24  = sun_msldr->getCurSliderValue();
+
+	LLWLParamManager * param_mgr = LLWLParamManager::getInstance();
+
+	param_mgr->mCurParams.setSunAngle(F_TWO_PI * time24_to_sun_pos(time24));
+	param_mgr->propagateParameters();
+}
+
+void FloaterQuickPrefs::onClickRegionWL()
+{
+	LLEnvManagerNew& env_mgr = LLEnvManagerNew::instance();
+	env_mgr.useRegionSettings();
 }

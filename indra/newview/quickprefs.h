@@ -38,9 +38,12 @@ class FloaterQuickPrefs : public LLTransientDockableFloater
 	private:
 		FloaterQuickPrefs(const LLSD& key);
 		~FloaterQuickPrefs();
+	void onSunMoved(LLUICtrl* ctrl, void* userdata);
 
 	public:
 		/*virtual*/ BOOL postBuild();
+		/*virtual*/ void	draw();
+		void syncControls();
 		virtual void onOpen(const LLSD& key);
 
 		void initCallbacks(void);
@@ -51,6 +54,7 @@ class FloaterQuickPrefs : public LLTransientDockableFloater
 		void onClickSkyNext();
 		void onClickWaterPrev();
 		void onClickWaterNext();
+		void onClickRegionWL();
 
 };
 #endif
