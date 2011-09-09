@@ -251,7 +251,6 @@ void FloaterQuickPrefs::syncControls()
 	bool err;
 
 	LLWLParamManager * param_mgr = LLWLParamManager::getInstance();
-	LLWLParamSet& cur_params = param_mgr->mCurParams;
 
 	F32 time24 = sun_pos_to_time24(param_mgr->mCurParams.getFloat("sun_angle",err) / F_TWO_PI);
 	getChild<LLMultiSliderCtrl>("WLSunPos")->setCurSliderValue(time24, TRUE);
