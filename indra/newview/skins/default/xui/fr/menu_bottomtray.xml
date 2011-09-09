@@ -2,55 +2,53 @@
 <!--alba-->
 <menu name="hide_camera_move_controls_menu"
 	label="Barre de boutons">
-
     <menu_item_chek name="ShowSpeakButton"
          label="Parler"/>
 	<menu_item_check name="ShowGestureButton"
-         label="Gestes / Ctl-G"/>
+         label="Gestes"/>
     <menu_item_check name="ShowMoveButton"
-         label="Contrôle Mouv."/>
+         label="Contrôle Mouvement"/>
     <menu_item_check name="ShowCameraButton"
          label="Contrôle Caméra"/>
     <menu_item_check name="ShowSnapshotButton"
-         label="Photo / Ctl-Maj-S"/>
+         label="Photo"/>
     <menu_item_check name="ShowBuildButton"
-		label="Construire / Ctl-B"/>
+		label="Construire"/>
     <menu_item_check name="ShowSearchButton"
-		label="Recherche / Ctl-F"/>
+		label="Recherche"/>
     <menu_item_check name="ShowWorldMapButton"
-		label="Carte / Ctl-M"/>
+		label="Carte"/>
     <menu_item_check name="ShowMiniMapButton"
-		label="Mini carte / Ctl-Maj-M"/>
+		label="Mini carte"/>
     <menu_item_check name="ShowHomeButton"
-		label="Domicile / Ctl-Maj-H"/>
+		label="Accueil"/>
     <menu_item_check name="ShowMeButton"
-		label="Profil / Clic-dr. s/soi"/>
+		label="Profil (clic-d avatar)"/>
     <menu_item_check name="ShowPlacesButton"
 		label="Endroits"/>
 <!-- ## Zi: Animation Overrider -->
     <menu_item_check name="ShowAOButton"
-		label="AO"/>
+		label="AO (cao on/off)"/>
 <!-- ## Zi: Animation Overrider -->
 <!-- Quick Preferences panel -Wolf -->
 	<menu_item_check name="ShowQuickPrefsButton"
 		label="Préférences rapides"/>
 <!-- Quick Preferences panel -Wolf -->
 	<menu_item_check name="ShowPeopleButton"
-		label="Personnes / Ctl-F"/>
+		label="Personnes"/>
     <menu_item_check name="ShowAppearanceButton"
-		label="Apparence / Clic-dr. s/soi"/>
+		label="Apparence (clic-d avatar)"/>
     <menu_item_check name="ShowInventoryButton"
-		label="Inventaire Ctl-I"/>
-<!--???-->
+		label="Inventaire"/>
+<!--chat-->
     <menu_item_call name="NearbyChatBar_Cut"
-		label="Couper Ctl-X"/>
+		label="Couper"/>
     <menu_item_call name="NearbyChatBar_Copy"
-		label="Copier Ctl-C"/>
+		label="Copier"/>
     <menu_item_call name="NearbyChatBar_Paste"
-		label="Coller Ctl-V"/>
+		label="Coller"/>
     <menu_item_call name="NearbyChatBar_Delete"
-		label="Supprimer Del"/>
+		label="Supprimer"/>
     <menu_item_call name="NearbyChatBar_Select_All"
-		label="Tout sélect. Ctl-A"/>
-
+		label="Tout sélectionner"/>
 </menu>
