@@ -241,7 +241,7 @@ class LLTextBase
 :	public LLUICtrl,
 	protected LLEditMenuHandler
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-,	protected LLSpellCheckMenuHandler
+,	public LLSpellCheckMenuHandler
 // [/SL:KB]
 {
 public:
