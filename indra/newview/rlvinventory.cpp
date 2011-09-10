@@ -668,7 +668,8 @@ bool RlvWearableItemCollector::onCollectFolder(const LLInventoryCategory* pFolde
 		}
 	}
 	else if ( (RLV_FOLDER_PREFIX_HIDDEN != strFolder[0]) && 					// Collect from any non-hidden child folder for *all
-		      ( (fMatchAll) || (fLinkedFolder) ) )								// ... and collect from linked folders
+		      ( (fMatchAll) || (fLinkedFolder) ) && 							// ... and collect from linked folders
+			  (!isLinkedFolder(pFolder->getParentUUID())) )						// ... but never from non-folded linked folder descendents
 	{
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		if ( (!RlvSettings::getEnableComposites()) ||							// ... if we're not checking composite folders
