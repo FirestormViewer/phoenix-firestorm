@@ -323,7 +323,7 @@
             scale_image="true" />
         <icon
             height="15"
-            image_name="icon_diurnal.tga"
+            image_name="icon_day_cycle_12am.tga"
             layout="topleft"
             left="10"
             top_pad="5"

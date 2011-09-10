@@ -234,13 +234,6 @@ void FloaterQuickPrefs::draw()
 	LLFloater::draw();
 }
 
-static F32 time24_to_sun_pos(F32 time24)
-{
-	F32 sun_pos = fmodf((time24 - 6) / 24.0f, 1.0f);
-	if (sun_pos < 0) ++sun_pos;
-	return sun_pos;
-}
-
 static F32 sun_pos_to_time24(F32 sun_pos)
 {
 	return fmodf(sun_pos * 24.0f + 6, 24.0f);
@@ -254,24 +247,24 @@ void FloaterQuickPrefs::syncControls()
 
 	F32 time24 = sun_pos_to_time24(param_mgr->mCurParams.getFloat("sun_angle",err) / F_TWO_PI);
 	getChild<LLMultiSliderCtrl>("WLSunPos")->setCurSliderValue(time24, TRUE);
-
 }
 
 void FloaterQuickPrefs::onSunMoved(LLUICtrl* ctrl, void* userdata)
 {
-	LLWLParamManager::getInstance()->mAnimator.deactivate();
-
 	LLMultiSliderCtrl* sun_msldr = getChild<LLMultiSliderCtrl>("WLSunPos");
-	F32 time24  = sun_msldr->getCurSliderValue();
-
-	LLWLParamManager * param_mgr = LLWLParamManager::getInstance();
-
-	param_mgr->mCurParams.setSunAngle(F_TWO_PI * time24_to_sun_pos(time24));
-	param_mgr->propagateParameters();
+		F32 val = sun_msldr->getCurSliderValue() / 24.0f;
+	LLWLParamManager::getInstance()->mAnimator.setDayTime((F64)val);
+	LLWLParamManager::getInstance()->mAnimator.deactivate();
+	LLWLParamManager::getInstance()->mAnimator.update(
+		LLWLParamManager::getInstance()->mCurParams);
 }
 
 void FloaterQuickPrefs::onClickRegionWL()
 {
+	LLComboBox* WLbox = getChild<LLComboBox>("WLPresetsCombo");
+	LLComboBox* WWbox = getChild<LLComboBox>("WaterPresetsCombo");
+	WLbox->setSimple(LLStringExplicit("Default"));
+	WWbox->setSimple(LLStringExplicit("Default"));
 	LLEnvManagerNew& env_mgr = LLEnvManagerNew::instance();
 	env_mgr.useRegionSettings();
 }
