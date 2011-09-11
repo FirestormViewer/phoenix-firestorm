@@ -9,8 +9,8 @@
  can_resize="true"
  can_close="false"
  follows="bottom"
- height="85"
- min_height="85"
+ height="72"
+ min_height="20"
  layout="topleft"
  name="camera_floater"
  help_topic="camera_floater"
@@ -18,7 +18,8 @@
  save_visibility="true"
  save_dock_state="true"
  single_instance="true"
- width="222">
+ width="155"
+ min_width="155">
     <!-- presence of the string "use_flat_ui" allows a cam floater without mode switches  -->
     <floater.string
      name="use_flat_ui">
@@ -59,24 +60,24 @@ free_mode_title
     <panel
        border="false"
        class="camera_zoom_panel"
-       height="80"
+       height="50"
        layout="topleft"
        left="2"
        mouse_opaque="false"
        name="zoom"
        follows="all"
-       top="2"
-       width="176">
+       top="20"
+       width="150">
 
        <layout_stack
              top="0"
              enabled="true"
-             height="80"
+             height="50"
              left="0"
              mouse_opaque="true"
              name="camera_view_layout_stack"
              orientation="horizontal"
-             width="176"
+             width="150"
              follows="all">
 
             <layout_panel
@@ -189,13 +190,13 @@ free_mode_title
     
         <panel
      border="false"
-     height="60"
+     height="18"
      layout="topleft"
-     right="-25"
-     top="25"
-     follows="top|right"
+     left="5"
+     top="5"
+     follows="top|left"
      name="buttons_view"
-     width="18">
+     width="55">
         <panel_camera_item
           name="front_view"
           tool_tip="Front view"
@@ -232,8 +233,8 @@ free_mode_title
           width="18"
           height="18"
           layout="topleft"
-          left="0"
-          top_pad="3">
+          left_delta="20"
+          top_delta="0">
             <panel_camera_item.mousedown_callback
             function="CameraPresets.ChangeView"
             parameter="group_view" />
@@ -263,8 +264,8 @@ free_mode_title
           width="18"
           height="18"
           layout="topleft"
-          left="0"
-          top_pad="2">
+          left_delta="20"
+          top_delta="0">
             <panel_camera_item.mousedown_callback
             function="CameraPresets.ChangeView"
             parameter="rear_view" />
@@ -292,20 +293,20 @@ free_mode_title
     
     <panel
      border="false"
-     height="60"
+     height="18"
      layout="topleft"
-     follows="top|right"
-     left_pad="2"
-     top="25"
+     follows="top|left"
+     left_pad="4"
+     top="5"
      name="buttons"
-     width="18">
+     width="55">
         <panel_camera_item
           name="object_view"
           tool_tip="Object view"
           width="18"
           height="18"
           layout="topleft"
-          left="0"
+          left_delta="0"
           top_pad="4">
             <panel_camera_item.mousedown_callback
             function="CameraPresets.ChangeView"
@@ -336,8 +337,8 @@ free_mode_title
           width="18"
           height="18"
           layout="topleft"
-          left="0"
-          top_pad="3">
+          left_delta="20"
+          top_delta="0">
             <panel_camera_item.mousedown_callback
             function="CameraPresets.ChangeView"
             parameter="mouselook_view" />
@@ -367,8 +368,8 @@ free_mode_title
           width="18"
           height="18"
           layout="topleft"
-          left="0"
-          top_pad="2">
+          left_delta="20"
+          top_delta="0">
             <panel_camera_item.mousedown_callback
             function="CameraPresets.ChangeView"
             parameter="reset_view" />
