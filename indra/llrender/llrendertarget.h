@@ -63,7 +63,7 @@ class LLRenderTarget
 {
 public:
 	//whether or not to use FBO implementation
-	static bool sUseFBO; 
+	static BOOL sUseFBO; 
 
 	LLRenderTarget();
 	~LLRenderTarget();
@@ -143,9 +143,9 @@ protected:
 	std::vector<U32> mTex;
 	U32 mFBO;
 	U32 mDepth;
-	bool mStencil;
-	bool mUseDepth;
-	bool mRenderDepth;
+	BOOL mStencil;
+	BOOL mUseDepth;
+	BOOL mRenderDepth;
 	LLTexUnit::eTextureType mUsage;
 	U32 mSamples;
 	

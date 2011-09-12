@@ -51,7 +51,7 @@ void check_framebuffer_status()
 	}
 }
 
-bool LLRenderTarget::sUseFBO = false;
+BOOL LLRenderTarget::sUseFBO = false;
 
 LLRenderTarget::LLRenderTarget() :
 	mResX(0),
