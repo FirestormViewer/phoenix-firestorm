@@ -3707,11 +3707,32 @@ class FSSelfTogglePhantom : public view_listener_t
         }
     };
 
+
 class FSSelfCheckPhantom : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
 		bool new_value = gAgent.getPhantom();
+		return new_value;
+	}
+};
+
+// [SJ - Adding IgnorePrejump in Menu ]
+class FSSelfToggleIgnorePreJump : public view_listener_t
+    {
+        bool handleEvent(const LLSD& userdata)
+        {
+			gSavedSettings.setBOOL("PhoenixIgnoreFinishAnimation", !gSavedSettings.getBOOL("PhoenixIgnoreFinishAnimation"));
+            return true;
+        }
+    };
+
+// [SJ - Adding IgnorePrejump in Menu ]
+class FSSelfCheckIgnorePreJump : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool new_value = gSavedSettings.getBOOL("PhoenixIgnoreFinishAnimation");
 		return new_value;
 	}
 };
@@ -8972,6 +8993,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new FSSelfCheckForceSit(), "Self.getForceSit"); //KC
 	view_listener_t::addMenu(new FSSelfTogglePhantom(), "Self.togglePhantom"); //KC
 	view_listener_t::addMenu(new FSSelfCheckPhantom(), "Self.getPhantom"); //KC
+	view_listener_t::addMenu(new FSSelfToggleIgnorePreJump(), "Self.toggleIgnorePreJump"); //SJ
+	view_listener_t::addMenu(new FSSelfCheckIgnorePreJump(), "Self.getIgnorePreJump"); //SJ
 	view_listener_t::addMenu(new LLSelfRemoveAllAttachments(), "Self.RemoveAllAttachments");
 
 	view_listener_t::addMenu(new LLSelfEnableRemoveAllAttachments(), "Self.EnableRemoveAllAttachments");
