@@ -27,13 +27,13 @@
 #ifndef LL_LLFLOATERABOUT_H
 #define LL_LLFLOATERABOUT_H
 
-#include "llfloater.h"
+#include "llfloater.h" //leave here -TM
 
 namespace LLFloaterAboutUtil
 {
 	void registerFloater();
 }
-
+//Leave this class here for fsdata to work. -TM
 ///----------------------------------------------------------------------------
 /// Class LLFloaterAbout
 ///----------------------------------------------------------------------------
