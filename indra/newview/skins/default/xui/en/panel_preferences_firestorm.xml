@@ -450,8 +450,6 @@
 			 min_val="500"
 			 name="RenderVolumeSAFrameMax"
 			 width="90" />
-		
-		
 	</panel>
 
 
@@ -1246,7 +1244,7 @@
 		 follows="left|top"
 		 height="16"
 		 left="10"
-		 name="PhoenixCmdLinePos_txt">
+		 name="PhoenixCmdLinePos_txt"
 		 width="250">
 		 Teleport within sim (usage: cmd x y z)
 		</text>
