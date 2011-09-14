@@ -297,86 +297,85 @@ NVIDIA 310						.*NVIDIA.*GeForce 310.*						3		1
 NVIDIA 315M						.*NVIDIA.*GeForce 315M.*					2		1
 NVIDIA 315						.*NVIDIA.*GeForce 315.*						3		1
 NVIDIA 320M						.*NVIDIA.*GeForce 320M.*					2		1
-NVIDIA G100M					.*NVIDIA *(GeForce)? *(G)? ?100M.*			0		1
-NVIDIA G100						.*NVIDIA *(GeForce)? *(G)? ?100.*			0		1
-NVIDIA G102M					.*NVIDIA *(GeForce)? *(G)? ?102M.*			0		1
-NVIDIA G103M					.*NVIDIA *(GeForce)? *(G)? ?103M.*			0		1
-NVIDIA G105M					.*NVIDIA *(GeForce)? *(G)? ?105M.*			0		1
-NVIDIA G 110M					.*NVIDIA *(GeForce)? *(G)? ?110M.*			0		1
-NVIDIA G 120M					.*NVIDIA *(GeForce)? *(G)? ?120M.*			1		1
-NVIDIA G 200					.*NVIDIA *(GeForce)? *(G)? ?200(M)?.*		0		1
-NVIDIA G 205M					.*NVIDIA *(GeForce)? *(G)? ?205(M)?.*		0		1
-NVIDIA G 210					.*NVIDIA *(GeForce)? *(G)? ?210(M)?.*		1		1
-NVIDIA 305M						.*NVIDIA *(GeForce)? *(G)? ?305(M)?.*		1		1
-NVIDIA G 310M					.*NVIDIA *(GeForce)? *(G)? ?310(M)?.*		2		1
-NVIDIA G 315					.*NVIDIA *(GeForce)? *(G)? ?315(M)?.*		2		1
-NVIDIA G 320M					.*NVIDIA *(GeForce)? *(G)? ?320(M)?.*		2		1
-NVIDIA G 405					.*NVIDIA *(GeForce)? *(G)? ?405(M)?.*		1		1
-NVIDIA G 410M					.*NVIDIA *(GeForce)? *(G)? ?410(M)?.*		1		1
-NVIDIA GT 120M					.*NVIDIA *(GeForce)? *GT *120(M)?.*			2		1
-NVIDIA GT 120					.*NVIDIA.*GT.*120							2		1
-NVIDIA GT 130M					.*NVIDIA *(GeForce)? *GT *130(M)?.*			2		1
-NVIDIA GT 140M					.*NVIDIA *(GeForce)? *GT *140(M)?.*			2		1
-NVIDIA GT 150M					.*NVIDIA *(GeForce)? *GT(S)? *150(M)?.*		2		1
-NVIDIA GT 160M					.*NVIDIA *(GeForce)? *GT *160(M)?.*			2		1
-NVIDIA GT 220M					.*NVIDIA *(GeForce)? *GT *220(M)?.*			2		1
-NVIDIA GT 230M					.*NVIDIA *(GeForce)? *GT *230(M)?.*			2		1
-NVIDIA GT 240M					.*NVIDIA *(GeForce)? *GT *240(M)?.*			2		1
-NVIDIA GT 250M					.*NVIDIA *(GeForce)? *GT *250(M)?.*			2		1
-NVIDIA GT 260M					.*NVIDIA *(GeForce)? *GT *260(M)?.*			2		1
-NVIDIA GT 320M					.*NVIDIA *(GeForce)? *GT *320(M)?.*			2		1
-NVIDIA GT 325M					.*NVIDIA *(GeForce)? *GT *325(M)?.*			0		1
-NVIDIA GT 330M					.*NVIDIA *(GeForce)? *GT *330(M)?.*			3		1
-NVIDIA GT 335M					.*NVIDIA *(GeForce)? *GT *335(M)?.*			1		1
-NVIDIA GT 340M					.*NVIDIA *(GeForce)? *GT *340(M)?.*			2		1
-NVIDIA GT 415M					.*NVIDIA *(GeForce)? *GT *415(M)?.*			2		1
-NVIDIA GT 420M					.*NVIDIA *(GeForce)? *GT *420(M)?.*			2		1
-NVIDIA GT 425M					.*NVIDIA *(GeForce)? *GT *425(M)?.*			3		1
-NVIDIA GT 430M					.*NVIDIA *(GeForce)? *GT *430(M)?.*			3		1
-NVIDIA GT 435M					.*NVIDIA *(GeForce)? *GT *435(M)?.*			3		1
-NVIDIA GT 440M					.*NVIDIA *(GeForce)? *GT *440(M)?.*			3		1
-NVIDIA GT 445M					.*NVIDIA *(GeForce)? *GT *445(M)?.*			3		1
-NVIDIA GT 450M					.*NVIDIA *(GeForce)? *GT *450(M)?.*			3		1
-NVIDIA GT 520M					.*NVIDIA *(GeForce)? *GT *520(M)?.*			3		1
-NVIDIA GT 525M					.*NVIDIA *(GeForce)? *GT *525(M)?.*			3		1
-NVIDIA GT 540M					.*NVIDIA *(GeForce)? *GT *540(M)?.*			3		1
-NVIDIA GT 550M					.*NVIDIA *(GeForce)? *GT *550(M)?.*			3		1
-NVIDIA GT 555M					.*NVIDIA *(GeForce)? *GT *555(M)?.*			3		1
-NVIDIA GTS 160M					.*NVIDIA *(GeForce)? *GT(S)? *160(M)?.*		2		1
-NVIDIA GTS 240					.*NVIDIA *(GeForce)? *GTS *24.*				3		1
-NVIDIA GTS 250					.*NVIDIA *(GeForce)? *GTS *25.*				3		1
-NVIDIA GTS 350M					.*NVIDIA *(GeForce)? *GTS *350M.*			3		1
-NVIDIA GTS 360M					.*NVIDIA *(GeForce)? *GTS *360M.*			3		1
-NVIDIA GTS 360					.*NVIDIA *(GeForce)? *GTS *360.*			3		1
-NVIDIA GTS 450					.*NVIDIA *(GeForce)? *GTS *45.*				3		1
-NVIDIA GTX 260					.*NVIDIA *(GeForce)? *GTX *26.*				3		1
-NVIDIA GTX 275					.*NVIDIA *(GeForce)? *GTX *275.*			3		1
-NVIDIA GTX 270					.*NVIDIA *(GeForce)? *GTX *27.*				3		1
-NVIDIA GTX 285					.*NVIDIA *(GeForce)? *GTX *285.*			3		1
-NVIDIA GTX 280					.*NVIDIA *(GeForce)? *GTX *280.*			3		1
-NVIDIA GTX 290					.*NVIDIA *(GeForce)? *GTX *290.*			3		1
-NVIDIA GTX 295					.*NVIDIA *(GeForce)? *GTX *295.*			3		1
-NVIDIA GTX 460M					.*NVIDIA *(GeForce)? *GTX *460M.*			3		1
-NVIDIA GTX 465					.*NVIDIA *(GeForce)? *GTX *465.*			3		1
-NVIDIA GTX 460					.*NVIDIA *(GeForce)? *GTX *46.*				3		1
-NVIDIA GTX 470M					.*NVIDIA *(GeForce)? *GTX *470M.*			3		1
-NVIDIA GTX 470					.*NVIDIA *(GeForce)? *GTX *47.*				3		1
-NVIDIA GTX 480M					.*NVIDIA *(GeForce)? *GTX *480M.*			3		1
-NVIDIA GTX 485M					.*NVIDIA *(GeForce)? *GTX *485M.*			3		1
-NVIDIA GTX 480					.*NVIDIA *(GeForce)? *GTX *48.*				3		1
-NVIDIA GTX 530					.*NVIDIA *(GeForce)? *GTX *53.*				3		1
-NVIDIA GTX 550					.*NVIDIA *(GeForce)? *GTX *55.*				3		1
-NVIDIA GTX 560					.*NVIDIA *(GeForce)? *GTX *56.*				3		1
-NVIDIA GTX 570					.*NVIDIA *(GeForce)? *GTX *57.*				3		1
-NVIDIA GTX 580M					.*NVIDIA *(GeForce)? *GTX *580M.*			3		1
-NVIDIA GTX 580					.*NVIDIA *(GeForce)? *GTX *58.*				3		1
-NVIDIA GTX 590					.*NVIDIA *(GeForce)? *GTX *59.*				3		1
-NVIDIA C51						.*NVIDIA *(GeForce)? *C51.*					0		1
-NVIDIA G72						.*NVIDIA *(GeForce)? *G72.*					1		1
-NVIDIA G73						.*NVIDIA *(GeForce)? *G73.*					1		1
-NVIDIA G84						.*NVIDIA *(GeForce)? *G84.*					2		1
-NVIDIA G86						.*NVIDIA *(GeForce)? *G86.*					3		1
-NVIDIA G92						.*NVIDIA *(GeForce)? *G92.*					3		1
+NVIDIA G100M					.*NVIDIA.*(GeForce)? *(G)? ?100M.*			0		1
+NVIDIA G100						.*NVIDIA.*(GeForce)? *(G)? ?100.*			0		1
+NVIDIA G102M					.*NVIDIA.*(GeForce)? *(G)? ?102M.*			0		1
+NVIDIA G103M					.*NVIDIA.*(GeForce)? *(G)? ?103M.*			0		1
+NVIDIA G105M					.*NVIDIA.*(GeForce)? *(G)? ?105M.*			0		1
+NVIDIA G 110M					.*NVIDIA.*(GeForce)? *(G)? ?110M.*			0		1
+NVIDIA G 120M					.*NVIDIA.*(GeForce)? *(G)? ?120M.*			1		1
+NVIDIA G 200					.*NVIDIA.*(GeForce)? *(G)? ?200(M)?.*		0		1
+NVIDIA G 205M					.*NVIDIA.*(GeForce)? *(G)? ?205(M)?.*		0		1
+NVIDIA G 210					.*NVIDIA.*(GeForce)? *(G)? ?210(M)?.*		1		1
+NVIDIA 305M						.*NVIDIA.*(GeForce)? *(G)? ?305(M)?.*		1		1
+NVIDIA G 310M					.*NVIDIA.*(GeForce)? *(G)? ?310(M)?.*		2		1
+NVIDIA G 315					.*NVIDIA.*(GeForce)? *(G)? ?315(M)?.*		2		1
+NVIDIA G 320M					.*NVIDIA.*(GeForce)? *(G)? ?320(M)?.*		2		1
+NVIDIA G 405					.*NVIDIA.*(GeForce)? *(G)? ?405(M)?.*		1		1
+NVIDIA G 410M					.*NVIDIA.*(GeForce)? *(G)? ?410(M)?.*		1		1
+NVIDIA GT 120M					.*NVIDIA.*(GeForce)? *GT *120(M)?.*			2		1
+NVIDIA GT 130M					.*NVIDIA.*(GeForce)? *GT *130(M)?.*			2		1
+NVIDIA GT 140M					.*NVIDIA.*(GeForce)? *GT *140(M)?.*			2		1
+NVIDIA GT 150M					.*NVIDIA.*(GeForce)? *GT(S)? *150(M)?.*		2		1
+NVIDIA GT 160M					.*NVIDIA.*(GeForce)? *GT *160(M)?.*			2		1
+NVIDIA GT 220M					.*NVIDIA.*(GeForce)? *GT *220(M)?.*			2		1
+NVIDIA GT 230M					.*NVIDIA.*(GeForce)? *GT *230(M)?.*			2		1
+NVIDIA GT 240M					.*NVIDIA.*(GeForce)? *GT *240(M)?.*			2		1
+NVIDIA GT 250M					.*NVIDIA.*(GeForce)? *GT *250(M)?.*			2		1
+NVIDIA GT 260M					.*NVIDIA.*(GeForce)? *GT *260(M)?.*			2		1
+NVIDIA GT 320M					.*NVIDIA.*(GeForce)? *GT *320(M)?.*			2		1
+NVIDIA GT 325M					.*NVIDIA.*(GeForce)? *GT *325(M)?.*			0		1
+NVIDIA GT 330M					.*NVIDIA.*(GeForce)? *GT *330(M)?.*			3		1
+NVIDIA GT 335M					.*NVIDIA.*(GeForce)? *GT *335(M)?.*			1		1
+NVIDIA GT 340M					.*NVIDIA.*(GeForce)? *GT *340(M)?.*			2		1
+NVIDIA GT 415M					.*NVIDIA.*(GeForce)? *GT *415(M)?.*			2		1
+NVIDIA GT 420M					.*NVIDIA.*(GeForce)? *GT *420(M)?.*			2		1
+NVIDIA GT 425M					.*NVIDIA.*(GeForce)? *GT *425(M)?.*			3		1
+NVIDIA GT 430M					.*NVIDIA.*(GeForce)? *GT *430(M)?.*			3		1
+NVIDIA GT 435M					.*NVIDIA.*(GeForce)? *GT *435(M)?.*			3		1
+NVIDIA GT 440M					.*NVIDIA.*(GeForce)? *GT *440(M)?.*			3		1
+NVIDIA GT 445M					.*NVIDIA.*(GeForce)? *GT *445(M)?.*			3		1
+NVIDIA GT 450M					.*NVIDIA.*(GeForce)? *GT *450(M)?.*			3		1
+NVIDIA GT 520M					.*NVIDIA.*(GeForce)? *GT *520(M)?.*			3		1
+NVIDIA GT 525M					.*NVIDIA.*(GeForce)? *GT *525(M)?.*			3		1
+NVIDIA GT 540M					.*NVIDIA.*(GeForce)? *GT *540(M)?.*			3		1
+NVIDIA GT 550M					.*NVIDIA.*(GeForce)? *GT *550(M)?.*			3		1
+NVIDIA GT 555M					.*NVIDIA.*(GeForce)? *GT *555(M)?.*			3		1
+NVIDIA GTS 160M					.*NVIDIA.*(GeForce)? *GT(S)? *160(M)?.*		2		1
+NVIDIA GTS 240					.*NVIDIA.*(GeForce)? *GTS *24.*				3		1
+NVIDIA GTS 250					.*NVIDIA.*(GeForce)? *GTS *25.*				3		1
+NVIDIA GTS 350M					.*NVIDIA.*(GeForce)? *GTS *350M.*			3		1
+NVIDIA GTS 360M					.*NVIDIA.*(GeForce)? *GTS *360M.*			3		1
+NVIDIA GTS 360					.*NVIDIA.*(GeForce)? *GTS *360.*			3		1
+NVIDIA GTS 450					.*NVIDIA.*(GeForce)? *GTS *45.*				3		1
+NVIDIA GTX 260					.*NVIDIA.*(GeForce)? *GTX *26.*				3		1
+NVIDIA GTX 275					.*NVIDIA.*(GeForce)? *GTX *275.*			3		1
+NVIDIA GTX 270					.*NVIDIA.*(GeForce)? *GTX *27.*				3		1
+NVIDIA GTX 285					.*NVIDIA.*(GeForce)? *GTX *285.*			3		1
+NVIDIA GTX 280					.*NVIDIA.*(GeForce)? *GTX *280.*			3		1
+NVIDIA GTX 290					.*NVIDIA.*(GeForce)? *GTX *290.*			3		1
+NVIDIA GTX 295					.*NVIDIA.*(GeForce)? *GTX *295.*			3		1
+NVIDIA GTX 460M					.*NVIDIA.*(GeForce)? *GTX *460M.*			3		1
+NVIDIA GTX 465					.*NVIDIA.*(GeForce)? *GTX *465.*			3		1
+NVIDIA GTX 460					.*NVIDIA.*(GeForce)? *GTX *46.*				3		1
+NVIDIA GTX 470M					.*NVIDIA.*(GeForce)? *GTX *470M.*			3		1
+NVIDIA GTX 470					.*NVIDIA.*(GeForce)? *GTX *47.*				3		1
+NVIDIA GTX 480M					.*NVIDIA.*(GeForce)? *GTX *480M.*			3		1
+NVIDIA GTX 485M					.*NVIDIA.*(GeForce)? *GTX *485M.*			3		1
+NVIDIA GTX 480					.*NVIDIA.*(GeForce)? *GTX *48.*				3		1
+NVIDIA GTX 530					.*NVIDIA.*(GeForce)? *GTX *53.*				3		1
+NVIDIA GTX 550					.*NVIDIA.*(GeForce)? *GTX *55.*				3		1
+NVIDIA GTX 560					.*NVIDIA.*(GeForce)? *GTX *56.*				3		1
+NVIDIA GTX 570					.*NVIDIA.*(GeForce)? *GTX *57.*				3		1
+NVIDIA GTX 580M					.*NVIDIA.*(GeForce)? *GTX *580M.*			3		1
+NVIDIA GTX 580					.*NVIDIA.*(GeForce)? *GTX *58.*				3		1
+NVIDIA GTX 590					.*NVIDIA.*(GeForce)? *GTX *59.*				3		1
+NVIDIA C51						.*NVIDIA.*(GeForce)? *C51.*					0		1
+NVIDIA G72						.*NVIDIA.*(GeForce)? *G72.*					1		1
+NVIDIA G73						.*NVIDIA.*(GeForce)? *G73.*					1		1
+NVIDIA G84						.*NVIDIA.*(GeForce)? *G84.*					2		1
+NVIDIA G86						.*NVIDIA.*(GeForce)? *G86.*					3		1
+NVIDIA G92						.*NVIDIA.*(GeForce)? *G92.*					3		1
 NVIDIA GeForce					.*GeForce 256.*								0		0
 NVIDIA GeForce 2				.*GeForce ?2 ?.*							0		1
 NVIDIA GeForce 3				.*GeForce ?3 ?.*							0		1
