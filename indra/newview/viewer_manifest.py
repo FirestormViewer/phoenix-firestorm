@@ -64,6 +64,8 @@ class ViewerManifest(LLManifest):
                 self.path("shaders")
                 # ... and the entire windlight directory
                 self.path("windlight")
+                # ... and the pre-installed spell checking dictionaries
+                self.path("hunspell")
                 self.end_prefix("app_settings")
 
             if self.prefix(src="character"):
