@@ -39,17 +39,17 @@ public:
 	 * Member functions
 	 */
 public:
-	std::string        asString() const;
-	const std::string& getBehaviour() const		{ return m_strBehaviour; }
-	ERlvBehaviour      getBehaviourType() const	{ return m_eBehaviour; }
-	const LLUUID&      getObjectID() const		{ return m_idObj; }
-	const std::string& getOption() const		{ return m_strOption; }
-	const std::string& getParam() const			{ return m_strParam; }
-	ERlvParamType      getParamType() const		{ return m_eParamType; }
+	std::string			asString() const;
+	const std::string&	getBehaviour() const		{ return m_strBehaviour; }
+	ERlvBehaviour		getBehaviourType() const	{ return m_eBehaviour; }
+	const LLUUID&		getObjectID() const			{ return m_idObj; }
+	const std::string&	getOption() const			{ return m_strOption; }
+	const std::string&	getParam() const			{ return m_strParam; }
+	ERlvParamType		getParamType() const		{ return m_eParamType; }
 	ERlvCmdRet         getReturnType() const	{ return m_eRet; }
 	bool               hasOption() const		{ return !m_strOption.empty(); }
-	bool               isStrict() const			{ return m_fStrict; }
-	bool               isValid() const			{ return m_fValid; }
+	bool				isStrict() const			{ return m_fStrict; }
+	bool				isValid() const				{ return m_fValid; }
 
 	typedef std::map<std::string, ERlvBehaviour> bhvr_map_t;
 	static ERlvBehaviour		getBehaviourFromString(const std::string& strBhvr, bool* pfStrict = NULL);
@@ -71,14 +71,14 @@ public:
 	 * Member variables
 	 */
 protected:
-	bool          m_fValid;
-	LLUUID        m_idObj;
-	std::string   m_strBehaviour;
-	ERlvBehaviour m_eBehaviour;
-	bool          m_fStrict;
-	std::string   m_strOption;
-	std::string   m_strParam;
-	ERlvParamType m_eParamType;
+	bool			m_fValid;
+	LLUUID			m_idObj;
+	std::string		m_strBehaviour;
+	ERlvBehaviour	m_eBehaviour;
+	bool			m_fStrict;
+	std::string		m_strOption;
+	std::string		m_strParam;
+	ERlvParamType	m_eParamType;
 	ERlvCmdRet    m_eRet;
 
 	static bhvr_map_t m_BhvrMap;
