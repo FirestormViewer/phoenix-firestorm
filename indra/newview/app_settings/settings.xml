@@ -939,6 +939,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+  <key>FSHideTimestampsIM</key>
+    <map>
+      <key>Comment</key>
+      <string>Hide timestamps in IM</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
   <key>FSHideTimestampsNearbyChat</key>
     <map>
       <key>Comment</key>
@@ -5560,17 +5571,6 @@
       <string>String</string>
       <key>Value</key>
       <string />
-    </map>
-    <key>IMShowTimestamps</key>
-    <map>
-      <key>Comment</key>
-      <string>Show timestamps in IM</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
     </map>
     <key>IMShowControlPanel</key>
     <map>

@@ -471,7 +471,7 @@ void LLFloaterIMPanel::addHistoryLine(const std::string &utf8msg, const LLColor4
 	// Actually add the line
 	std::string timestring;
 	bool prepend_newline = true;
-	if (gSavedSettings.getBOOL("IMShowTimestamps"))
+	if (!gSavedSettings.getBOOL("FSHideTimestampsIM"))
 	{
 		timestring = mHistoryEditor->appendTime(prepend_newline);
 		prepend_newline = false;

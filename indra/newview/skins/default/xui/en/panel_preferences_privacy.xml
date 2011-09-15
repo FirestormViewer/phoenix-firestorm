@@ -187,15 +187,6 @@
      name="seconds_in_timestamps"
      top_pad="4"
      width="237" />
-    <check_box
-     control_name="FSHideTimestampsNearbyChat"
-     height="16"
-     label="Hide timestamp in Nearby Chat"
-     layout="topleft"
-     left_delta="0"
-     name="hide_timestamps_nearby_chat"
-     top_pad="4"
-     width="237" />
 	<check_box
      control_name="LogFileNamewithDate"
      enabled="false"

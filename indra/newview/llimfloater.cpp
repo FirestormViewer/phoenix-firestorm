@@ -1160,6 +1160,7 @@ void LLIMFloater::updateMessages()
 {
 	bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
 	bool bold_mods_chat = gSavedSettings.getBOOL("PhoenixBoldGroupMods");
+	bool hide_timestamps_nearby_chat = gSavedSettings.getBOOL("FSHideTimestampsIM");
 
 	std::list<LLSD> messages;
 
@@ -1177,6 +1178,7 @@ void LLIMFloater::updateMessages()
 	{
 		LLSD chat_args;
 		chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
+		chat_args["hide_timestamps_nearby_chat"] = hide_timestamps_nearby_chat;
 		
 		LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
 		RLV_ASSERT(pIMSession);
