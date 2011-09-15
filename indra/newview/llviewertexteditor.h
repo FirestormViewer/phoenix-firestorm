@@ -133,6 +133,10 @@ private:
 	//
 
 	class TextCmdInsertEmbeddedItem;
+
+// [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-12 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
+	friend class LLEmbeddedItemSegment;
+// [/SL:KB]
 };
 
 #endif  // LL_VIEWERTEXTEDITOR_H

@@ -4,9 +4,9 @@
  default_tab_group="1"
  height="120"
  layout="topleft"
- name="script search"
- help_topic="script_search"
- title="SCRIPT SEARCH"
+ name="search replace"
+ help_topic="search_replace"
+ title="Search / Replace"
  width="300">
     <check_box
      control_name="LSLFindCaseInsensitivity"
@@ -16,7 +16,16 @@
      left="55"
      name="case_text"
      top="61"
-     width="240" />
+     width="120" />
+    <check_box
+     control_name="LSLFindDirection"
+     height="16"
+     label="Search Up"
+     layout="topleft"
+     left_pad="0"
+     name="find_previous"
+     top="61"
+     width="120" />
     <button
      height="24"
      label="Search"

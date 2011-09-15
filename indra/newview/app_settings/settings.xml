@@ -4515,6 +4515,28 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>EmbeddedLandmarkCopyToInventory</key>
+    <map>
+      <key>Comment</key>
+      <string>Copies an embedded landmark to inventory before previewing it</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>EmbeddedTextureStealsFocus</key>
+    <map>
+      <key>Comment</key>
+      <string>Embedded texture preview will receive focus when opened</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>EmotesUseItalic</key>
     <map>
       <key>Comment</key>
@@ -5966,7 +5988,18 @@
     <key>LSLFindCaseInsensitivity</key>
         <map>
         <key>Comment</key>
-            <string>Use case insensitivity when searching in LSL editor</string>
+            <string>Use case insensitivity when searching for text</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
+    <key>LSLFindDirection</key>
+        <map>
+        <key>Comment</key>
+            <string>Direction text will be searched for a match (0: down ; 1: up)</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>

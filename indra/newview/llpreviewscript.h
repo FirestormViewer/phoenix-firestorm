@@ -44,7 +44,7 @@ class LLScrollListCtrl;
 class LLViewerObject;
 struct 	LLEntryAndEdCore;
 class LLMenuBarGL;
-class LLFloaterScriptSearch;
+//class LLFloaterScriptSearch;
 class LLKeywordToken;
 class LLVFS;
 class LLViewerInventoryItem;
@@ -56,7 +56,7 @@ class LLScriptEdCore : public LLPanel
 	friend class LLPreviewScript;
 	friend class LLPreviewLSL;
 	friend class LLLiveLSLEditor;
-	friend class LLFloaterScriptSearch;
+//	friend class LLFloaterScriptSearch;
 	friend class LLScriptEdContainer;
 
 protected:
@@ -169,6 +169,10 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+	LLTextEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
+// [/SL:KB]
+
 protected:
 	virtual BOOL canClose();
 	void closeIfNeeded();
@@ -230,6 +234,10 @@ public:
 							const std::string& is_mono,
 							BOOL is_running);
 //-TT
+
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+	LLTextEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
+// [/SL:KB]
 
 private:
 	virtual BOOL canClose();
