@@ -3166,12 +3166,6 @@ void LLViewerWindow::updateLayout()
 		//gMenuBarView->setItemVisible("BuildTools", gFloaterTools->getVisible());
 	}
 
-	LLFloaterBuildOptions* build_options_floater = LLFloaterReg::getTypedInstance<LLFloaterBuildOptions>("build_options");
-	if (build_options_floater && build_options_floater->getVisible())
-	{
-		build_options_floater->updateGridMode();
-	}
-
 	// Always update console
 	if(gConsole)
 	{

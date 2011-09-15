@@ -67,6 +67,26 @@
 	  name="selected_faces">
 		Faces:
 	</floater.string>
+    	<floater.string
+     name="grid_screen_text">
+        Screen
+    </floater.string>
+    <floater.string
+     name="grid_local_text">
+        Local
+    </floater.string>
+    <floater.string
+     name="grid_world_text">
+        World
+    </floater.string>
+    <floater.string
+     name="grid_reference_text">
+        Reference
+    </floater.string>
+    <floater.string
+     name="grid_attachment_text">
+        Attachment
+    </floater.string>
     <button
      follows="left|top"
      height="25"
@@ -288,6 +308,30 @@
 	  <button.commit_callback
 	     function="BuildTool.UnlinkObjects"/>
     </button>
+        <combo_box
+     height="20"
+     layout="topleft"
+     left_pad="20"
+     follows="left|top"
+     name="combobox grid mode"
+     tool_tip="Choose the type of grid ruler for positioning the object"
+     top_delta="0"
+     width="108">
+      <combo_box.item
+       label="World grid"
+       name="World"
+       value="World" />
+      <combo_box.item
+       label="Local grid"
+       name="Local"
+       value="Local" />
+      <combo_box.item
+       label="Reference grid"
+       name="Reference"
+       value="Reference" />
+       <combo_box.commit_callback
+      function="BuildTool.gridMode"/>
+    </combo_box>
     <check_box
      control_name="ScaleUniform"
      height="19"

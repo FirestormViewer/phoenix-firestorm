@@ -36,6 +36,7 @@
 #include "llagentcamera.h"
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
+#include "llcombobox.h"
 #include "lldraghandle.h"
 #include "llerror.h"
 #include "llfloaterbuildoptions.h"
@@ -118,6 +119,7 @@ void commit_radio_group_focus(LLUICtrl* ctrl);
 void commit_radio_group_move(LLUICtrl* ctrl);
 void commit_radio_group_edit(LLUICtrl* ctrl);
 void commit_radio_group_land(LLUICtrl* ctrl);
+void commit_grid_mode(LLUICtrl *);
 void commit_slider_zoom(LLUICtrl *ctrl);
 
 
@@ -234,6 +236,8 @@ BOOL	LLFloaterTools::postBuild()
 	mCheckStretchUniform	= getChild<LLCheckBoxCtrl>("checkbox uniform");
 	getChild<LLUICtrl>("checkbox uniform")->setValue((BOOL)gSavedSettings.getBOOL("ScaleUniform"));
 	mCheckStretchTexture	= getChild<LLCheckBoxCtrl>("checkbox stretch textures");
+	mComboGridMode			= getChild<LLComboBox>("combobox grid mode");
+
 	getChild<LLUICtrl>("checkbox stretch textures")->setValue((BOOL)gSavedSettings.getBOOL("ScaleStretchTextures"));
 
 	//Phoenix:KC show highlight
@@ -338,6 +342,7 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mCheckSnapToGrid(NULL),
 	mBtnGridOptions(NULL),
 	mTitleMedia(NULL),
+	mComboGridMode(NULL),
 	mCheckStretchUniform(NULL),
 	mCheckStretchTexture(NULL),
 	mCheckShowHighlight(NULL), //Phoenix:KC
@@ -395,6 +400,7 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mCommitCallbackRegistrar.add("BuildTool.selectComponent",	boost::bind(&commit_select_component, this));
 	mCommitCallbackRegistrar.add("BuildTool.gridOptions",		boost::bind(&LLFloaterTools::onClickGridOptions,this));
 	mCommitCallbackRegistrar.add("BuildTool.applyToSelection",	boost::bind(&click_apply_to_selection, this));
+	mCommitCallbackRegistrar.add("BuildTool.gridMode",			boost::bind(&commit_grid_mode,_1));
 	mCommitCallbackRegistrar.add("BuildTool.commitRadioLand",	boost::bind(&commit_radio_group_land,_1));
 	mCommitCallbackRegistrar.add("BuildTool.LandBrushForce",	boost::bind(&commit_slider_dozer_force,_1));
 	mCommitCallbackRegistrar.add("BuildTool.AddMedia",			boost::bind(&LLFloaterTools::onClickBtnAddMedia,this));
@@ -775,6 +781,34 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 		mRadioGroupEdit->setValue("radio align");
 	}
 
+		if (mComboGridMode) 
+	{
+		mComboGridMode->setVisible( edit_visible );
+		S32 index = mComboGridMode->getCurrentIndex();
+		mComboGridMode->removeall();
+
+		switch (mObjectSelection->getSelectType())
+		{
+		case SELECT_TYPE_HUD:
+		  mComboGridMode->add(getString("grid_screen_text"));
+		  mComboGridMode->add(getString("grid_local_text"));
+		  //mComboGridMode->add(getString("grid_reference_text"));
+		  break;
+		case SELECT_TYPE_WORLD:
+		  mComboGridMode->add(getString("grid_world_text"));
+		  mComboGridMode->add(getString("grid_local_text"));
+		  mComboGridMode->add(getString("grid_reference_text"));
+		  break;
+		case SELECT_TYPE_ATTACHMENT:
+		  mComboGridMode->add(getString("grid_attachment_text"));
+		  mComboGridMode->add(getString("grid_local_text"));
+		  mComboGridMode->add(getString("grid_reference_text"));
+		  break;
+		}
+
+		mComboGridMode->setCurrentByIndex(index);
+	}
+
 	// Snap to grid disabled for grab tool - very confusing
 	if (mCheckSnapToGrid) mCheckSnapToGrid->setVisible( edit_visible /* || tool == LLToolGrab::getInstance() */ );
 	if (mBtnGridOptions) mBtnGridOptions->setVisible( edit_visible /* || tool == LLToolGrab::getInstance() */ );
@@ -1140,6 +1174,13 @@ void commit_select_component(void *data)
 		LLSelectMgr::getInstance()->promoteSelectionToRoot();
 	}
 }
+
+void commit_grid_mode(LLUICtrl *ctrl)   
+{   
+	LLComboBox* combo = (LLComboBox*)ctrl;   
+    
+	LLSelectMgr::getInstance()->setGridMode((EGridMode)combo->getCurrentIndex());
+} 
 
 // static 
 void LLFloaterTools::setObjectType( LLPCode pcode )

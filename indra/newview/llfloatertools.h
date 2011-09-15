@@ -32,6 +32,7 @@
 #include "llparcelselection.h"
 
 class LLButton;
+class LLComboBox;
 class LLCheckBoxCtrl;
 class LLPanelPermissions;
 class LLPanelObject;
@@ -142,6 +143,7 @@ public:
 
 	LLCheckBoxCtrl*	mCheckSnapToGrid;
 	LLButton*		mBtnGridOptions;
+	LLComboBox*		mComboGridMode;
 	LLCheckBoxCtrl*	mCheckStretchUniform;
 	LLCheckBoxCtrl*	mCheckStretchTexture;
 	LLCheckBoxCtrl*	mCheckShowHighlight; //Phoenix:KC
