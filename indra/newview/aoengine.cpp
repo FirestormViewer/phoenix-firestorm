@@ -500,7 +500,8 @@ void AOEngine::cycle(eCycleMode cycleMode)
 		return;
 	}
 
-	if(!state->mCycle)
+	// make sure we disable cycling only for timed cycle, so manual cycling still works, even with cycling switched off
+	if(!state->mCycle && cycleMode==CycleAny)
 	{
 		lldebugs << "cycle timeout, but state is set to not cycling." << llendl;
 		return;
