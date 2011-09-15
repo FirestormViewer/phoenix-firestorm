@@ -460,7 +460,7 @@ void AOEngine::cycleTimeout(const AOSet* set)
 
 	if(set!=mCurrentSet)
 	{
-		llwarns << "cycleTimeout for set " << set->getName() << " but ouot current set is " << mCurrentSet->getName() << llendl;
+		llwarns << "cycleTimeout for set " << set->getName() << " but current set is " << mCurrentSet->getName() << llendl;
 		return;
 	}
 
