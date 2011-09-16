@@ -39,6 +39,6 @@ PieSeparator::PieSeparator(const PieSeparator::Params& p) :
 
 // pick up parameters from the XUI definition
 PieSeparator::Params::Params()
-:	name("name","")
 {
+	name="pie_separator";
 }

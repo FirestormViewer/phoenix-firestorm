@@ -38,8 +38,6 @@ class PieSeparator : public LLUICtrl
 		// parameter block for the XUI factory
 		struct Params : public LLInitParam::Block<Params, LLUICtrl::Params>
 		{
-			Optional<std::string> name;
-
 			Params();
 		};
 
