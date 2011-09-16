@@ -20,7 +20,7 @@
      name="r_val_text"
      top="25"
      width="413">
-        Red:
+        Красный:
     </text>
     <spinner
      decimal_digits="0"
@@ -44,7 +44,7 @@
      mouse_opaque="false"
      name="g_val_text"
      width="413">
-        Green:
+        Зеленый:
     </text>
     <spinner
      decimal_digits="0"
@@ -68,7 +68,7 @@
      mouse_opaque="false"
      name="b_val_text"
      width="413">
-        Blue:
+        Синий:
     </text>
     <spinner
      decimal_digits="0"
@@ -157,7 +157,7 @@
     <check_box
      follows="left|bottom"
      height="20"
-     label="Apply now"
+     label="Применить"
      layout="topleft"
      left="10"
      name="apply_immediate"
@@ -185,7 +185,7 @@
     <button
      follows="right|bottom"
      height="23"
-     label="Cancel"
+     label="Отмена"
      label_selected="Cancel"
      layout="topleft"
      left_pad="5"
@@ -202,7 +202,7 @@
      name="Current color:"
      top="172"
      width="110">
-        Current color:
+        Текущий цвет:
     </text>
     <text
      type="string"
@@ -215,6 +215,6 @@
      top_pad="66"
      width="130"
      wrap="true">
-        (Drag below to save)
+        (чтобы сохранить)
     </text>
 </floater>

@@ -7,7 +7,7 @@
 	enabled="true"
 	height="300"
     name="floatermedialists"
-	title="Media Lists"
+	title="Списки медиа"
     width="460"
 	rect_control="MediaListRect">
 
@@ -39,7 +39,7 @@
 		font="SansSerifSmall"
 		mouse_opaque="true"
 		name="whitelist_text">
-		Allowed Domains:
+		Разрешенные домены:
 	</text>
 
 	<scroll_list
@@ -85,7 +85,7 @@
 		follows="all"
 		font="SansSerifSmall"
 		halign="center"
-		label="Add..."
+		label="Доб..."
 		label_selected="Add..."
 		mouse_opaque="true"
 		name="add_whitelist" />
@@ -108,7 +108,7 @@
 		follows="all"
 		font="SansSerifSmall"
 		halign="center"
-		label="Remove"
+		label="Убрать"
 		label_selected="Remove"
 		mouse_opaque="true"
 		name="remove_whitelist" />
@@ -136,7 +136,7 @@
 		font="SansSerifSmall"
 		mouse_opaque="true"
 		name="blacklist_text">
-		Blocked Domains:
+		Заблокированные домены:
 	</text>
 
 	<scroll_list
@@ -182,7 +182,7 @@
 		follows="all"
 		font="SansSerifSmall"
 		halign="center"
-		label="Add..."
+		label="Доб..."
 		label_selected="Add..."
 		mouse_opaque="true"
 		name="add_blacklist" />
@@ -205,7 +205,7 @@
 		follows="all"
 		font="SansSerifSmall"
 		halign="center"
-		label="Remove"
+		label="Убрать"
 		label_selected="Remove"
 		mouse_opaque="true"
 		name="remove_blacklist" />

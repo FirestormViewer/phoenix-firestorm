@@ -10,19 +10,19 @@
  width="300">
     <floater.string
      name="nothing_to_modify_text">
-        Selection contains no editable contents.
+        Выбор не содержит редактируемое содержание.
     </floater.string>
     <floater.string
      name="status_text">
-        Setting permissions on [NAME]
+        Настройка прав доступа на [NAME]
     </floater.string>
     <floater.string
      name="start_text">
-        Starting permission change requests...
+        Запрос изменения ...
     </floater.string>
     <floater.string
      name="done_text">
-        Finished permission change requests.
+        Запрос разрешения окончен.
     </floater.string>
 
     <check_box
@@ -37,7 +37,7 @@
      image_name="Inv_Animation"
      mouse_opaque="true"
      name="icon_animation"
-     tool_tip="Animation"
+     tool_tip="анимация"
      left_pad="5" />
     <check_box
      control_name="BulkChangeIncludeBodyParts"
@@ -49,7 +49,7 @@
     <icon
      height="16"
      image_name="Inv_Eye"
-     tool_tip="Body Parts"
+     tool_tip="Части тела"
      mouse_opaque="true"
      name="icon_bodypart"
      left_pad="2" />
@@ -65,7 +65,7 @@
      image_name="Inv_Shirt"
      mouse_opaque="true"
      name="icon_clothing"
-     tool_tip="Clothing"
+     tool_tip="одежда"
      left_pad="2" />
       <check_box
      control_name="BulkChangeIncludeGestures"
@@ -80,7 +80,7 @@
      layout="topleft"
      mouse_opaque="true"
      name="icon_gesture"
-     tool_tip="Gestures"
+     tool_tip="Жесты"
      left_pad="2" />
     <check_box
      control_name="BulkChangeIncludeNotecards"
@@ -96,7 +96,7 @@
      layout="topleft"
      mouse_opaque="true"
      name="icon_notecard"
-     tool_tip="Notecards"
+     tool_tip="Заметки"
      left_pad="4" />
    <check_box
      control_name="BulkChangeIncludeObjects"
@@ -110,7 +110,7 @@
      image_name="Inv_Object"
      mouse_opaque="true"
      name="icon_object"
-     tool_tip="Objects"
+     tool_tip="Объекты"
      left_pad="2" />
     <check_box
      control_name="BulkChangeIncludeScripts"
@@ -126,7 +126,7 @@
      layout="topleft"
      mouse_opaque="true"
      name="icon_script"
-     tool_tip="Scripts"
+     tool_tip="Скрипты"
      left_pad="4" />
     <check_box
      control_name="BulkChangeIncludeSounds"
@@ -140,7 +140,7 @@
      image_name="Inv_Sound"
      mouse_opaque="true"
      name="icon_sound"
-     tool_tip="Sounds"
+     tool_tip="Звуки"
      left_pad="4" />
     <check_box
      control_name="BulkChangeIncludeTextures"
@@ -161,7 +161,7 @@
       height="23"
     layout="topleft"
    name="check_all"
-     label="√ All"
+     label="√ Все"
      left="180"
      top="26"
      width="115">
@@ -171,7 +171,7 @@
     <button
      follows="left|top"
      height="23"
-     label="Clear"
+     label="Очистить"
      label_selected="None"
      layout="topleft"
      top_pad="8"
@@ -192,7 +192,7 @@
      name="newperms"
      top="90"
      width="250">
-        New Content Permissions
+        Новые разрешения Содержимого
     </text>
       <text
        type="string"
@@ -204,12 +204,12 @@
       name="GroupLabel"
       width="92"
       word_wrap="true">
-       Group:
+       Группа:
     </text>
     <check_box
      control_name="BulkChangeShareWithGroup"
      height="16"
-     label="Share"
+     label="Делить"
      layout="topleft"
      top_pad="0"
      name="share_with_group"
@@ -225,7 +225,7 @@
      top="110"
      width="92"
      word_wrap="true">
-        Anyone:
+        Все:
     </text>
     <check_box
      control_name="BulkChangeEveryoneCopy"
@@ -246,12 +246,12 @@
      left="189"
      width="92"
      word_wrap="true">
-        Next owner:
+        Слд. владелец:
     </text>
     <check_box
      control_name="BulkChangeNextOwnerModify"
      height="16"
-     label="Modify"
+     label="Мод."
      layout="topleft"
      name="next_owner_modify"
      top_pad="0"
@@ -259,7 +259,7 @@
     <check_box
      control_name="BulkChangeNextOwnerCopy"
      height="16"
-     label="Copy"
+     label="Копировать"
      layout="topleft"
      top_pad="0"
      name="next_owner_copy"
@@ -273,7 +273,7 @@
      height="16"
      top_pad="0"
      initial_value="true"
-     label="Transfer"
+     label="Передать"
      layout="topleft"
      name="next_owner_transfer"
      tool_tip="Next owner can give away or resell this object"
@@ -302,7 +302,7 @@
     <button
      follows="left|top"
      height="23"
-     label="Cancel"
+     label="Отмена"
      layout="topleft"
      left_pad="5"
      name="close"

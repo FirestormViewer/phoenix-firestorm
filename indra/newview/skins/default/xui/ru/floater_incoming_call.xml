@@ -16,31 +16,31 @@
     </floater.string>
     <floater.string
      name="localchat">
-        Nearby Voice Chat
+        Голосового чат рядом
     </floater.string>
     <floater.string
      name="anonymous">
-        anonymous
+        анонимный
     </floater.string>
     <floater.string
      name="VoiceInviteP2P">
-        is calling.
+        звонит.
     </floater.string>
     <floater.string
      name="VoiceInviteAdHoc">
-        has joined a Voice Chat call with a conference chat.
+        присоединился в голосовой чат.
     </floater.string>
     <floater.string
      name="VoiceInviteGroup">
-      just joined '[GROUP]' voice channel.
+      только что присоединился '[GROUP]' речевой канал.
     </floater.string>
     <floater.string
      name="VoiceInviteQuestionGroup">
-      Would you like to leave [CURRENT_CHAT] and join the call with '[GROUP]'?
+      Хотите оставить [CURRENT_CHAT] и присоединиться к призыву с '[GROUP]'?
     </floater.string>
     <floater.string
      name="VoiceInviteQuestionDefault">
-      Do you want to leave [CURRENT_CHAT] and join this voice chat?
+      Хотите оставить [CURRENT_CHAT] и присоединиться к этому голосовому чату?
     </floater.string>
     <avatar_icon
      enabled="false"
@@ -80,7 +80,7 @@
      use_ellipses="true"
      width="315"
      word_wrap="true">
-     Do you want to leave [CURRENT_CHAT] and join this voice chat?
+     Хотите оставить [CURRENT_CHAT] и присоединиться к этому голосовому чат?
     </text>
     <button
      height="24"

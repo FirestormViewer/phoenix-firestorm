@@ -12,7 +12,7 @@
  width="420">
     <floater.string
      name="already for sale">
-        You cannot auction parcels which are already for sale.
+        Уже в продаже.
     </floater.string>
     <icon
      bottom="280"
@@ -35,7 +35,7 @@
      follows="left|bottom"
      height="16"
      initial_value="true"
-     label="Include yellow selection fence"
+     label="Включите желтый забор выбора"
      layout="topleft"
      left_delta="0"
      name="fence_check"
@@ -44,7 +44,7 @@
     <button
      follows="left|bottom"
      height="20"
-     label="Snapshot"
+     label="Снимок"
      label_selected="Snapshot"
      layout="topleft"
      left_delta="0"
@@ -57,7 +57,7 @@
     <button
      follows="left|bottom"
      height="20"
-     label="Sell to Anyone"
+     label="Продать любому"
      label_selected="Sell to Anyone"
      layout="topleft"
      left_delta="0"
@@ -70,7 +70,7 @@
     <button
      follows="left|bottom"
      height="20"
-     label="Clear Settings"
+     label="Сбросить настройки"
      label_selected="Clear Settings"
      layout="topleft"
      left_delta="0"
@@ -83,7 +83,7 @@
     <button
      follows="left|bottom"
      height="20"
-     label="Start Auction"
+     label="Начало аукциона"
      label_selected="Start Auction"
      layout="topleft"
      left_pad="4"

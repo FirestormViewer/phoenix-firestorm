@@ -16,7 +16,7 @@
      layout="topleft"
      left="10"
      name="name_label">
-        Name:
+        Имя:
     </text>
     <line_editor
      follows="top|left|right"
@@ -34,7 +34,7 @@
      height="15"
      layout="topleft"
      name="description_label">
-        Description:
+        Описание:
     </text>
     <line_editor
      follows="top|left|right"
@@ -54,54 +54,54 @@
      word_wrap="true"
      layout="topleft"
      name="preview_label">
-        Preview image as:
+        Просмотр изображения в качестве:
     </text>
     <combo_box
      height="18"
-     label="Clothing Type"
+     label="Тип одежды"
      layout="topleft"
      left_delta="110"
      name="clothing_type_combo"
      top_delta="3"
      width="160">
         <item
-         label="Image"
+         label="изображение"
          value="Image"
          name="Image" />
         <item
-         label="Hair"
+         label="волосы"
          value="Hair"
          name="Hair" />
         <item
-         label="Female Head"
+         label="Женская голова"
          value="Female Head"
          name="FemaleHead" />
         <item
-         label="Female Upper Body"
+         label="Женская Верхняя часть тела"
          value="Female Upper Body"
          name="FemaleUpperBody" />
         <item
-         label="Female Lower Body"
+         label="Женская Нижняя часть тела"
          value="Female Lower Body"
          name="FemaleLowerBody" />
         <item
-         label="Male Head"
+         label="Мужская глава"
          value="Male Head"
          name="MaleHead" />
         <item
-         label="Male Upper Body"
+         label="Мужская Верхняя часть тела"
          value="Male Upper Body"
          name="MaleUpperBody" />
         <item
-         label="Male Lower Body"
+         label="Мужская Нижняя часть тела"
          value="Male Lower Body"
          name="MaleLowerBody" />
         <item
-         label="Skirt"
+         label="юбка"
          value="Skirt"
          name="Skirt" />
         <item
-         label="Sculpted Prim"
+         label="Скульптовый Prim"
          value="Sculpted Prim"
          name="SculptedPrim" />
     </combo_box>
@@ -115,16 +115,16 @@
      layout="topleft"
      left="10"
      name="bad_image_text">
-        Unable to read image.
+        Невозможно прочитать изображение.
 
-Try saving image as 24 bit Targa (.tga).
+Попробуйте сохранить изображение как 24-битный Targa(.tga).
     </text>
     <check_box
      control_name="LosslessJ2CUpload"
      enabled="false"
      follows="bottom|left"
      height="16"
-     label="Use lossless compression"
+     label="Сжатие без потерь"
      layout="topleft"
      left_delta="2"
      name="lossless_check"
@@ -138,7 +138,7 @@ Try saving image as 24 bit Targa (.tga).
     <button
      follows="bottom|right"
      height="20"
-     label="Cancel"
+     label="Отмена"
      layout="topleft"
      left="165"
      name="cancel_btn"
@@ -147,7 +147,7 @@ Try saving image as 24 bit Targa (.tga).
     <button
      follows="bottom|left"
      height="20"
-     label="Upload (L$[AMOUNT])"
+     label="Загрузка (L$[AMOUNT])"
      layout="topleft"
      left_delta="-150"
      name="ok_btn"

@@ -12,26 +12,26 @@
  width="500">
     <floater.string
      name="not_found">
-        &apos;[TEXT]&apos; not found
+        &apos;[TEXT]&apos; не найден
     </floater.string>
     <floater.string
      name="no_one_near">
-        No one near
+        Никто не рядом
     </floater.string>
     <floater.string
      name="no_results">
-        No results
+        Нет результатов
     </floater.string>
     <floater.string
      name="searching">
-        Searching...
+        Идет поиск ...
     </floater.string>
     <!-- For multiple person selection, use "Select" and "Close" 
       instead of "OK" and "Cancel" because "Cancel" still keeps the ones 
       you have already selected.  The code will show the appropriate
       set of buttons. -->
-    <string name="Select">Select</string>
-    <string name="Close">Close</string>
+    <string name="Select">Выбрать</string>
+    <string name="Close">Закрыть</string>
     <tab_container
      follows="all"
      height="300"
@@ -45,7 +45,7 @@
         <panel
          border="none"
          height="150"
-         label="Search"
+         label="Поиск"
          layout="topleft"
          left="6"
          help_topic="avatarpicker"
@@ -62,7 +62,7 @@
              name="InstructSearchResidentName"
              top="8"
              width="220">
-                Type part of a person&apos;s name:
+                Введите часть имени человека:
             </text>
             <line_editor
 	     bevel_style="none"
@@ -78,7 +78,7 @@
             <button
              follows="top|right"
              height="23"
-             label="Go"
+             label="Го"
              label_selected="Go"
              layout="topleft"
              left_pad="5"
@@ -94,11 +94,11 @@
            top="52"
            width="132">
             <columns
-              label="Name"
+              label="Имя"
               name="name"
               width="150" />
             <columns
-              label="Username"
+              label="Имя пользователя"
               name="username"
               width="150" />
           </scroll_list>
@@ -106,7 +106,7 @@
         <panel
          border="none"
          height="150"
-         label="Friends"
+         label="Друзья"
          layout="topleft"
          left="6"
          help_topic="avatarpicker"
@@ -123,7 +123,7 @@
              name="InstructSelectFriend"
              top="5"
              width="200">
-                Select a person:
+                Выберите:
             </text>
             <button
              follows="top|right"
@@ -152,7 +152,7 @@
         <panel
          border="none"
          height="150"
-         label="Near Me"
+         label="Близко"
          layout="topleft"
          left="6"
          help_topic="avatarpicker"
@@ -169,7 +169,7 @@
              name="InstructSelectResident"
              top="8"
              width="220">
-                Select a person nearby:
+                Найти в близи:
             </text>
             <slider
              control_name="NearMeRange"
@@ -178,7 +178,7 @@
              height="18"
              increment="1"
              initial_value="20"
-             label="Range"
+             label="Дальность"
              layout="topleft"
              left="10"
              max_val="130"
@@ -195,7 +195,7 @@
              left_pad="0"
              name="meters"
              width="60">
-                Meters
+                Метров
             </text>
             <button
              follows="top|left"
@@ -217,11 +217,11 @@
              top="52"
              width="132">
             <columns
-              label="Name"
+              label="Имя"
               name="name"
               width="150" />
             <columns
-              label="Username"
+              label="Имя пользователя"
               name="username"
               width="150" />
           </scroll_list>
@@ -239,7 +239,7 @@
     <button
      follows="left|bottom"
      height="23"
-     label="Cancel"
+     label="Отмена"
      label_selected="Cancel"
      name="cancel_btn"
      width="100"

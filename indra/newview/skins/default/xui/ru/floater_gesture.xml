@@ -15,7 +15,7 @@
  width="313">
     <floater.string
      name="loading">
-        Loading...
+        Загрузка...
     </floater.string>
     <floater.string
      name="playing">
@@ -23,7 +23,7 @@
     </floater.string>
     <!-- It's used to build new name for gesture created by "Copy" menu item -->
     <floater.string
-     name="copy_name">Copy of [COPY_NAME]</floater.string>
+     name="copy_name">Копия [COPY_NAME]</floater.string>
     <scroll_list
      bottom_delta="400"
      draw_heading="true"
@@ -34,11 +34,11 @@
      top="20"
      name="gesture_list">
         <scroll_list.columns
-         label="Name"
+         label="Имя"
          name="name"
          width="153" />
         <scroll_list.columns
-         label="Chat"
+         label="Чат"
          name="trigger"
          width="80" />
        <scroll_list.columns
@@ -46,7 +46,7 @@
          name="key"
          width="-1" />
         <scroll_list.columns
-         label="Key"
+         label="Кей"
          name="shortcut"
          width="80" />
     </scroll_list>
@@ -117,7 +117,7 @@
     <button
      follows="left|bottom"
      height="23"
-     label="Edit"
+     label="правка"
      layout="topleft"
      left="6"
      name="edit_btn"
@@ -126,7 +126,7 @@
     <button
      follows="left|bottom"
      height="23"
-     label="Play"
+     label="Плей"
      layout="topleft"
      left_pad="6"
      name="play_btn"
@@ -135,7 +135,7 @@
     <button
      follows="left|bottom"
      height="23"
-     label="Stop"
+     label="Стоп"
      layout="topleft"
      left_delta="0"
      name="stop_btn"

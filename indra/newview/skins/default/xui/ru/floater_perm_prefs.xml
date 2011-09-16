@@ -20,7 +20,7 @@
         <check_box
          control_name="ShareWithGroup"
          height="16"
-         label="Share with group"
+         label="Права группе"
          layout="topleft"
          left="10"
          name="share_with_group"
@@ -29,7 +29,7 @@
         <check_box
          control_name="EveryoneCopy"
          height="16"
-         label="Allow anyone to copy"
+         label="Дать возможность брать копии всем"
          layout="topleft"
          left_delta="0"
          name="everyone_copy"
@@ -45,12 +45,12 @@
          name="NextOwnerLabel"
          top_pad="5"
          width="200">
-            Next owner can:
+            След. владелец может:
         </text>
         <check_box
          control_name="NextOwnerModify"
          height="16"
-         label="Modify"
+         label="Мод."
          layout="topleft"
          left_delta="0"
          name="next_owner_modify"
@@ -59,7 +59,7 @@
         <check_box
          control_name="NextOwnerCopy"
          height="16"
-         label="Copy"
+         label="Копировать"
          layout="topleft"
          left_delta="0"
          name="next_owner_copy"
@@ -74,7 +74,7 @@
          enabled="false"
          height="16"
          initial_value="true"
-         label="Resell/Give away"
+         label="Передать"
          layout="topleft"
          left_delta="0"
          name="next_owner_transfer"
@@ -95,7 +95,7 @@
 	</button>
     <button
      height="20"
-     label="Cancel"
+     label="Отмена"
      label_selected="Cancel"
      layout="topleft"
      left_pad="5"
