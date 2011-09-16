@@ -212,6 +212,7 @@ void AOEngine::enable(BOOL yes)
 			else if(mLastMotion==ANIM_AGENT_SIT)
 			{
 				stopAllSitVariants();
+				gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC,ANIM_REQUEST_START);
 			}
 			else
 				llwarns << "Unhandled last motion id " << mLastMotion << llendl;
@@ -221,6 +222,7 @@ void AOEngine::enable(BOOL yes)
 	}
 	else
 	{
+		gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC,ANIM_REQUEST_STOP);
 		// stop all overriders, catch leftovers
 		for(S32 index=0;index<AOSet::AOSTATES_MAX;index++)
 		{
@@ -376,8 +378,14 @@ const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
 
 		setStateCycleTimer(state);
 
-		if(motion==ANIM_AGENT_SIT && mCurrentSet->getSmart())
-			mSitCancelTimer.oneShot();
+		if(motion==ANIM_AGENT_SIT)
+		{
+			// Use ANIM_AGENT_SIT_GENERIC, so we don't create an overrider loop with ANIM_AGENT_SIT
+			// while still having a base sitting pose to cover up cycle points
+			gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC,ANIM_REQUEST_START);
+			if(mCurrentSet->getSmart())
+				mSitCancelTimer.oneShot();
+		}
 		// special treatment for "transient animations" because the viewer needs the Linden animation to know the agent's state
 		else if(motion==ANIM_AGENT_SIT_GROUND ||
 				motion==ANIM_AGENT_PRE_JUMP ||
@@ -447,8 +455,12 @@ void AOEngine::checkSitCancel()
 		{
 			lldebugs << "Stopping sit animation due to foreign animations running" << llendl;
 			gAgent.sendAnimationRequest(animation,ANIM_REQUEST_STOP);
+			// remove cycle point cover-up
+			gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC,ANIM_REQUEST_STOP);
 			gAgentAvatarp->LLCharacter::stopMotion(animation);
 			mSitCancelTimer.stop();
+			// stop cycle tiemr
+			mCurrentSet->stopTimer();
 		}
 	}
 }
