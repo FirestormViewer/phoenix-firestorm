@@ -2612,10 +2612,10 @@ void LLLineEditor::showContextMenu(S32 x, S32 y)
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-21 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
 		// Move the cursor to where the user right-clicked (clear the current selection if the user right-clicked outside of it)
 		setCursorAtLocalPos(x);
-		if ( (mCursorPos < mSelectionStart) || (mCursorPos > mSelectionEnd) )
+		if ( (mCursorPos < llmin(mSelectionStart, mSelectionEnd)) || (mCursorPos > llmax(mSelectionStart, mSelectionEnd)) )
 			deselect();
 		else
-			setCursor(mSelectionEnd);
+			setCursor(llmax(mSelectionStart, mSelectionEnd));
 
 		bool fUseSpellCheck = useSpellCheck(), fMisspelledWord = false;
 		if (fUseSpellCheck)
