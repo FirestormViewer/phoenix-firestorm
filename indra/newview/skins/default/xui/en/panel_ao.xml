@@ -29,6 +29,7 @@
 			right="-24"
 			height="20"
 			allow_text_entry="true"
+			max_chars="256"
 			follows="left|right|top"
 			layout="topleft" />
 
