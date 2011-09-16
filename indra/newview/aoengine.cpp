@@ -507,17 +507,12 @@ void AOEngine::cycle(eCycleMode cycleMode)
 		return;
 	}
 
-	LLUUID animation=state->mCurrentAnimationID;
-	if(!animation.isNull())
-	{
-		gAgent.sendAnimationRequest(animation,ANIM_REQUEST_STOP);
-		gAgentAvatarp->LLCharacter::stopMotion(animation);
-		state->mCurrentAnimationID.setNull();
-	}
+	LLUUID oldAnimation=state->mCurrentAnimationID;
+	LLUUID animation;
 
 	if(cycleMode==CycleAny)
 	{
-		animation=override(motion,TRUE);
+		animation=mCurrentSet->getAnimationForState(state);
 	}
 	else
 	{
@@ -539,7 +534,19 @@ void AOEngine::cycle(eCycleMode cycleMode)
 
 	state->mCurrentAnimationID=animation;
 	if(!animation.isNull())
+	{
+		lldebugs << "requesting animation start for motion " << gAnimLibrary.animationName(motion) << ": " << animation << llendl;
 		gAgent.sendAnimationRequest(animation,ANIM_REQUEST_START);
+	}
+	else
+		lldebugs << "overrider came back with NULL animation for motion " << gAnimLibrary.animationName(motion) << "." << llendl;
+
+	if(!oldAnimation.isNull())
+	{
+		lldebugs << "Cycling state " << state->mName << " - stopping animation " << oldAnimation << llendl;
+		gAgent.sendAnimationRequest(oldAnimation,ANIM_REQUEST_STOP);
+		gAgentAvatarp->LLCharacter::stopMotion(oldAnimation);
+	}
 }
 
 void AOEngine::updateSortOrder(AOSet::AOState* state)
