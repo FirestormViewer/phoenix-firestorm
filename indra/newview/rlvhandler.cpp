@@ -72,7 +72,7 @@ static bool rlvParseNotifyOption(const std::string& strOption, S32& nChannel, st
 //
 
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.0.1d
-RlvHandler::RlvHandler() : m_fCanCancelTp(true), m_posSitSource(), m_pGCTimer(NULL), m_pWLSnapshot(NULL)
+RlvHandler::RlvHandler() : m_fCanCancelTp(true), m_posSitSource(), m_pGCTimer(NULL)
 {
 	gAgent.addListener(this, "new group");
 
@@ -86,7 +86,6 @@ RlvHandler::~RlvHandler()
 	gAgent.removeListener(this);
 
 	//delete m_pGCTimer;	// <- deletes itself
-	delete m_pWLSnapshot;	// <- delete on NULL is harmless
 }
 
 // ============================================================================
@@ -407,7 +406,7 @@ ERlvCmdRet RlvHandler::processClearCommand(const RlvCommand& rlvCmd)
 // Externally invoked event handlers
 //
 
-// Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+// Checked: 2011-05-22 (RLVa-1.4.1a) | Added: RLVa-1.3.1b
 bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& sdUserdata)
 {
 	// If the user managed to change their active group (= newly joined or created group) we need to reactivate the previous one
@@ -1103,8 +1102,6 @@ void RlvHandler::clearState()
 	// Clear dynamically allocated memory
 	delete m_pGCTimer;
 	m_pGCTimer = NULL;
-	delete m_pWLSnapshot;
-	m_pWLSnapshot = NULL;
 */
 }
 
@@ -1146,8 +1143,15 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		case RLV_BHVR_DETACHALLTHISEXCEPT:	// @detachallthisexcept[:<option>]=n|y
 			eRet = onAddRemFolderLockException(rlvCmd, fRefCount);
 			break;
-		case RLV_BHVR_SETENV:				// @setenv=n|y
-			eRet = onAddRemSetEnv(rlvCmd, fRefCount);
+		case RLV_BHVR_SETENV:				// @setenv=n|y						- Checked: 2011-09-04 (RLVa-1.4.1a) | Modified: RLVa-1.4.1a
+			{
+				if (RlvSettings::getNoSetEnv())
+				{
+					eRet = RLV_RET_FAILED_DISABLED;
+					break;
+				}
+				VERIFY_OPTION_REF(strOption.empty());
+			}
 			break;
 		case RLV_BHVR_ADDOUTFIT:			// @addoutfit[:<layer>]=n|y			- Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 		case RLV_BHVR_REMOUTFIT:			// @remoutfit[:<layer>]=n|y			- Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
@@ -1251,7 +1255,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 					RlvBehaviourNotifyHandler::getInstance()->removeNotify(rlvCmd.getObjectID(), nChannel, strFilter);
 			}
 			break;
-		case RLV_BHVR_SETGROUP:				// @setgroup=n|y					- Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+		case RLV_BHVR_SETGROUP:				// @setgroup=n|y					- Checked: 2011-05-22 (RLVa-1.4.1a) | Added: RLVa-1.3.1b
 			{
 				VERIFY_OPTION_REF(strOption.empty());
 
@@ -1557,35 +1561,6 @@ ERlvCmdRet RlvHandler::onAddRemFolderLockException(const RlvCommand& rlvCmd, boo
 	return RLV_RET_SUCCESS;
 }
 
-// Checked: 2010-03-18 (RLVa-1.2.0e) | Modified: RLVa-1.2.0a
-ERlvCmdRet RlvHandler::onAddRemSetEnv(const RlvCommand& rlvCmd, bool& fRefCount)
-{
-	// Sanity check - there shouldn't be an option
-	if (!rlvCmd.getOption().empty())
-		return RLV_RET_FAILED_OPTION;
-	if (RlvSettings::getNoSetEnv())
-		return RLV_RET_FAILED_DISABLED;
-
-	if (RLV_TYPE_ADD == rlvCmd.getParamType())
-	{
-		// Save the current WindLight params so we can restore them on @setenv=y
-		RLV_ASSERT(!m_pWLSnapshot);
-		if (m_pWLSnapshot)
-			delete m_pWLSnapshot;
-		m_pWLSnapshot = RlvWLSnapshot::takeSnapshot();
-	}
-	else
-	{
-		// Restore WindLight parameters to what they were before @setenv=n was issued
-		RlvWLSnapshot::restoreSnapshot(m_pWLSnapshot);
-		delete m_pWLSnapshot;
-		m_pWLSnapshot = NULL;
-	}
-	fRefCount = true;
-
-	return RLV_RET_SUCCESS;
-}
-
 // ============================================================================
 // Command handlers (RLV_TYPE_FORCE)
 //
@@ -1617,7 +1592,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 					eRet = onForceRemOutfit(rlvCmd);
 			}
 			break;
-		case RLV_BHVR_SETGROUP:		// @setgroup:<uuid|name>=force			- Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+		case RLV_BHVR_SETGROUP:		// @setgroup:<uuid|name>=force			- Checked: 2011-03-28 (RLVa-1.4.1a) | Added: RLVa-1.3.0f
 			eRet = onForceGroup(rlvCmd);
 			break;
 		case RLV_BHVR_UNSIT:		// @unsit=force							- Checked: 2010-03-18 (RLVa-1.2.0c) | Modified: RLVa-0.2.0g
@@ -1754,18 +1729,15 @@ ERlvCmdRet RlvHandler::onForceRemOutfit(const RlvCommand& rlvCmd) const
 	return RLV_RET_SUCCESS;
 }
 
-// Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+// Checked: 2011-07-23 (RLVa-1.4.1a) | Modified: RLVa-1.4.1a
 ERlvCmdRet RlvHandler::onForceGroup(const RlvCommand& rlvCmd) const
 {
-	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption()); 
-
 	LLUUID idGroup; bool fValid = false;
-	if (rlvCmdOption.isUUID())
+	if (idGroup.set(rlvCmd.getOption()))
 	{
-		idGroup = rlvCmdOption.getUUID();
 		fValid = (idGroup.isNull()) || (gAgent.isInGroup(idGroup, true));
 	}
-	else if (rlvCmdOption.isString())
+	else
 	{
 		for (S32 idxGroup = 0, cntGroup = gAgent.mGroups.count(); (idxGroup < cntGroup) && (idGroup.isNull()); idxGroup++)
 			if (boost::iequals(gAgent.mGroups.get(idxGroup).mName, rlvCmd.getOption()))
@@ -1857,12 +1829,12 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 	ERlvCmdRet eRet = RLV_RET_SUCCESS; std::string strReply;
 	switch (rlvCmd.getBehaviourType())
 	{
-		case RLV_BHVR_VERSION:			// @version=<channel>					- Checked: 2010-03-27 (RLVa-1.2.0b)
-		case RLV_BHVR_VERSIONNEW:		// @versionnew=<channel>				- Checked: 2010-03-27 (RLVa-1.2.0b) | Added: RLVa-1.2.0b
+		case RLV_BHVR_VERSION:			// @version=<channel>					- Checked: 2010-03-27 (RLVa-1.4.0a)
+		case RLV_BHVR_VERSIONNEW:		// @versionnew=<channel>				- Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.2.0b
 			// NOTE: RLV will respond even if there's an option
 			strReply = RlvStrings::getVersion(RLV_BHVR_VERSION == rlvCmd.getBehaviourType());
 			break;
-		case RLV_BHVR_VERSIONNUM:		// @versionnum=<channel>				- Checked: 2010-03-27 (RLVa-1.2.0b) | Added: RLVa-1.0.4b
+		case RLV_BHVR_VERSIONNUM:		// @versionnum=<channel>				- Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.0.4b
 			// NOTE: RLV will respond even if there's an option
 			strReply = RlvStrings::getVersionNum();
 			break;
@@ -1902,7 +1874,7 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 		case RLV_BHVR_GETINVWORN:		// @getinvworn[:<path>]=<channel>
 			eRet = onGetInvWorn(rlvCmd, strReply);
 			break;
-		case RLV_BHVR_GETGROUP:			// @getgroup=<channel>					- Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+		case RLV_BHVR_GETGROUP:			// @getgroup=<channel>					- Checked: 2011-03-28 (RLVa-1.4.1a) | Added: RLVa-1.3.0f
 			strReply = (gAgent.getGroupID().notNull()) ? gAgent.getGroupName() : "none";
 			break;
 		case RLV_BHVR_GETSITID:			// @getsitid=<channel>					- Checked: 2010-03-09 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
@@ -2002,7 +1974,7 @@ ERlvCmdRet RlvHandler::onFindFolder(const RlvCommand& rlvCmd, std::string& strRe
 	return RLV_RET_SUCCESS;
 }
 
-// Checked: 2010-03-19 (RLVa-1.2.0c) | Modified: RLVa-1.1.0e
+// Checked: 2010-03-19 (RLVa-1.4.0a) | Modified: RLVa-1.1.0e
 ERlvCmdRet RlvHandler::onGetAttach(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
@@ -2012,8 +1984,8 @@ ERlvCmdRet RlvHandler::onGetAttach(const RlvCommand& rlvCmd, std::string& strRep
 		return RLV_RET_FAILED;
 
 	// Sanity check - <option> should specify an attachment point or be empty
-	S32 idxAttachPt = RlvAttachPtLookup::getAttachPointIndex(rlvCmd.getOption());
-	if ( (idxAttachPt == 0) && (!rlvCmd.getOption().empty()) )
+	S32 idxAttachPt = 0;
+	if ( (rlvCmd.hasOption()) && ((idxAttachPt = RlvAttachPtLookup::getAttachPointIndex(rlvCmd.getOption())) == 0) )
 		return RLV_RET_FAILED_OPTION;
 
 	// If we're fetching all worn attachments then the reply should start with 0
@@ -2026,7 +1998,7 @@ ERlvCmdRet RlvHandler::onGetAttach(const RlvCommand& rlvCmd, std::string& strRep
 		const LLViewerJointAttachment* pAttachPt = itAttach->second;
 		if ( (0 == idxAttachPt) || (itAttach->first == idxAttachPt) )
 		{
-			bool fWorn = (pAttachPt->getNumObjects()) && 
+			bool fWorn = (pAttachPt->getNumObjects() > 0) && 
 				( (!RlvSettings::getHideLockedAttach()) || (RlvForceWear::isForceDetachable(pAttachPt, true, rlvCmd.getObjectID())) );
 			strReply.push_back( (fWorn) ? '1' : '0' );
 		}
@@ -2034,7 +2006,7 @@ ERlvCmdRet RlvHandler::onGetAttach(const RlvCommand& rlvCmd, std::string& strRep
 	return RLV_RET_SUCCESS;
 }
 
-// Checked: 2010-03-19 (RLVa-1.2.0a) | Added: RLVa-1.1.0e
+// Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
 ERlvCmdRet RlvHandler::onGetAttachNames(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
@@ -2054,18 +2026,14 @@ ERlvCmdRet RlvHandler::onGetAttachNames(const RlvCommand& rlvCmd, std::string& s
 			bool fAdd = false;
 			switch (rlvCmd.getBehaviourType())
 			{
-				case RLV_BHVR_GETATTACHNAMES:		// Every attachment point that has an attached object (locked or unlocked)
-					fAdd = (pAttachPt->getNumObjects());
+				case RLV_BHVR_GETATTACHNAMES:		// Every attachment point that has an attached object
+					fAdd = (pAttachPt->getNumObjects() > 0);
 					break;
-/*
-				case RLV_BHVR_GETADDATTACHNAMES:	// Every attachment point that can be worn on (but ignore any locks set by the issuer)
-					fAdd = (!isLockedAttachmentExcept(itAttach->first, RLV_LOCK_ADD, gObjectList.findObject(idObj))) &&
-						   ( (pAttachPt->getObject() == NULL) || 
-						     (!isLockedAttachmentExcept(itAttach->first, RLV_LOCK_REMOVE, gObjectList.findObject(idObj))) );
+				case RLV_BHVR_GETADDATTACHNAMES:	// Every attachment point that can be attached to (wear replace OR wear add)
+					fAdd = (gRlvAttachmentLocks.canAttach(pAttachPt) & RLV_WEAR);
 					break;
-*/
-				case RLV_BHVR_GETREMATTACHNAMES:	// Every attachment point that can be detached (but ignore any locks set by the issuer)
-					fAdd = RlvForceWear::isForceDetachable(pAttachPt, true, rlvCmd.getObjectID());
+				case RLV_BHVR_GETREMATTACHNAMES:	// Every attachment point that has at least one attachment that can be force-detached
+					fAdd = RlvForceWear::isForceDetachable(pAttachPt);
 					break;
 				default:
 					break;
@@ -2192,15 +2160,15 @@ ERlvCmdRet RlvHandler::onGetInvWorn(const RlvCommand& rlvCmd, std::string& strRe
 	return RLV_RET_SUCCESS;
 }
 
-// Checked: 2010-03-19 (RLVa-1.2.0c) | Modified: RLVa-1.2.0a
+// Checked: 2010-03-19 (RLVa-1.4.0a) | Modified: RLVa-1.2.0a
 ERlvCmdRet RlvHandler::onGetOutfit(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
 	RLV_ASSERT(RLV_BHVR_GETOUTFIT == rlvCmd.getBehaviourType());
 
 	// (Compatibility: RLV-1.16.1 will execute @getoutfit=<channel> if <layer> is invalid while we just return failure)
-	LLWearableType::EType wtType = LLWearableType::typeNameToType(rlvCmd.getOption());
-	if ( (LLWearableType::WT_INVALID == wtType) && (!rlvCmd.getOption().empty()) )
+	LLWearableType::EType wtType = LLWearableType::WT_INVALID;
+	if ( (rlvCmd.hasOption()) && ((wtType = LLWearableType::typeNameToType(rlvCmd.getOption())) == LLWearableType::WT_INVALID) )
 		return RLV_RET_FAILED_OPTION;
 
 	const LLWearableType::EType wtRlvTypes[] =
@@ -2208,9 +2176,7 @@ ERlvCmdRet RlvHandler::onGetOutfit(const RlvCommand& rlvCmd, std::string& strRep
 			LLWearableType::WT_GLOVES, LLWearableType::WT_JACKET, LLWearableType::WT_PANTS, LLWearableType::WT_SHIRT, 
 			LLWearableType::WT_SHOES, LLWearableType::WT_SKIRT, LLWearableType::WT_SOCKS, LLWearableType::WT_UNDERPANTS, 
 			LLWearableType::WT_UNDERSHIRT, LLWearableType::WT_SKIN, LLWearableType::WT_EYES, LLWearableType::WT_HAIR, 
-			//FIRE-985 Satomi Ahn
-			//LLWearableType::WT_SHAPE, LLWearableType::WT_ALPHA, LLWearableType::WT_TATTOO
-			LLWearableType::WT_SHAPE, LLWearableType::WT_ALPHA, LLWearableType::WT_TATTOO,  LLWearableType::WT_PHYSICS
+			LLWearableType::WT_SHAPE, LLWearableType::WT_ALPHA, LLWearableType::WT_TATTOO, LLWearableType::WT_PHYSICS
 		};
 
 	for (int idxType = 0, cntType = sizeof(wtRlvTypes) / sizeof(LLWearableType::EType); idxType < cntType; idxType++)
@@ -2229,7 +2195,7 @@ ERlvCmdRet RlvHandler::onGetOutfit(const RlvCommand& rlvCmd, std::string& strRep
 	return RLV_RET_SUCCESS;
 }
 
-// Checked: 2009-11-21 (RLVa-1.1.0f) | Added: RLVa-1.1.0e
+// Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
 ERlvCmdRet RlvHandler::onGetOutfitNames(const RlvCommand& rlvCmd, std::string& strReply) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
@@ -2237,24 +2203,21 @@ ERlvCmdRet RlvHandler::onGetOutfitNames(const RlvCommand& rlvCmd, std::string& s
 		        (RLV_BHVR_GETREMOUTFITNAMES == rlvCmd.getBehaviourType()) );
 
 	// Sanity check - all these commands are optionless
-	if (!rlvCmd.getOption().empty())
+	if (rlvCmd.hasOption())
 		return RLV_RET_FAILED_OPTION;
 
-	// RELEASE-RLVa: [SL-2.0.0] Needs revisiting/rewriting once 'LLAgentWearables::MAX_WEARABLES_PER_TYPE > 1'
 	for (int idxType = 0; idxType < LLWearableType::WT_COUNT; idxType++)
 	{
 		bool fAdd = false; LLWearableType::EType wtType = (LLWearableType::EType)idxType;
 		switch (rlvCmd.getBehaviourType())
 		{
-			case RLV_BHVR_GETOUTFITNAMES:		// Every layer that's worn
+			case RLV_BHVR_GETOUTFITNAMES:		// Every layer that has at least one worn wearable
 				fAdd = (gAgentWearables.getWearableCount(wtType) > 0);
 				break;
-/*
-			case RLV_BHVR_GETADDOUTFITNAMES:	// Every layer that can be worn on (but ignore any locks set by the issuer)
-				fAdd = (isWearable(wtType)) && ( (gAgent.getWearable(wtType) == NULL) || (isRemovableExcept(wtType, idObj)) );
+			case RLV_BHVR_GETADDOUTFITNAMES:	// Every layer that can be worn on (wear replace OR wear add)
+				fAdd = (gRlvWearableLocks.canWear(wtType) & RLV_WEAR);
 				break;
-*/
-			case RLV_BHVR_GETREMOUTFITNAMES:	// Every layer that can be removed (but ignore any locks set by the issuer)
+			case RLV_BHVR_GETREMOUTFITNAMES:	// Every layer that has at least one wearable that can be force-removed
 				fAdd = RlvForceWear::isForceRemovable(wtType);
 				break;
 			default:
@@ -2265,7 +2228,7 @@ ERlvCmdRet RlvHandler::onGetOutfitNames(const RlvCommand& rlvCmd, std::string& s
 		{
 			if (!strReply.empty())
 				strReply.push_back(',');
-			strReply.append(LLWearableType::getTypeName((LLWearableType::EType)idxType));
+			strReply.append(LLWearableType::getTypeName(wtType));
 		}
 	}
 	return RLV_RET_SUCCESS;

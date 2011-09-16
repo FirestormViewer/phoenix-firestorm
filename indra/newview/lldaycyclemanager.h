@@ -51,6 +51,9 @@ public:
 	void getPresetNames(preset_name_list_t& names) const;
 	void getPresetNames(preset_name_list_t& user, preset_name_list_t& sys) const;
 	void getUserPresetNames(preset_name_list_t& user) const;
+// [RLVa:KB] - Checked: 2011-09-04 (RLVa-1.4.1a) | Added: RLVa-1.4.1a
+	const std::string& findPreset(const std::string& strPresetName);
+// [/RLVa:KB]
 
 	bool getPreset(const std::string name, LLWLDayCycle& day_cycle) const;
 	bool getPreset(const std::string name, LLSD& day_cycle) const;

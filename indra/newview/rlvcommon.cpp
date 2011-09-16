@@ -251,8 +251,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 	return NULL;
 }
 
-// Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0b
-std::string RlvStrings::getVersion(bool fLegacy /*=false*/) 
+// Checked: 2010-03-27 (RLVa-1.4.0a) | Modified: RLVa-1.2.0b
+std::string RlvStrings::getVersion(bool fLegacy)
 {
 	return llformat("%s viewer v%d.%d.%d (%s %d.%d.%d.%d - RLVa %d.%d.%d)",
 		( (!fLegacy) ? "RestrainedLove" : "RestrainedLife" ),
@@ -261,7 +261,7 @@ std::string RlvStrings::getVersion(bool fLegacy /*=false*/)
 		RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH);
 }
 
-// Checked: 2010-04-18 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
+// Checked: 2010-04-18 (RLVa-1.4.0a) | Added: RLVa-1.2.0e
 std::string RlvStrings::getVersionAbout()
 {
 	return llformat("RLV v%d.%d.%d / RLVa v%d.%d.%d%c" , 
@@ -269,9 +269,8 @@ std::string RlvStrings::getVersionAbout()
 		RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH, 'a' + RLVa_VERSION_BUILD);
 }
 
-
-// Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.1.0a
-std::string RlvStrings::getVersionNum() 
+// Checked: 2010-03-27 (RLVa-1.4.0a) | Modified: RLVa-1.1.0a
+std::string RlvStrings::getVersionNum()
 {
 	return llformat("%d%02d%02d%02d", RLV_VERSION_MAJOR, RLV_VERSION_MINOR, RLV_VERSION_PATCH, RLV_VERSION_BUILD);
 }
@@ -505,30 +504,19 @@ bool rlvMenuEnableIfNot(const LLSD& sdParam)
 // Selection functors
 //
 
-// Checked: 2010-04-11 (RLVa-1.2.0b) | Modified: RLVa-0.2.0g
+// Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
 bool rlvCanDeleteOrReturn()
 {
-	bool fIsAllowed = true;
-
-	if (gRlvHandler.hasBehaviour(RLV_BHVR_REZ))
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) )
 	{
-		// We'll allow if none of the prims are owned by the avie or group owned
-		LLObjectSelectionHandle handleSel = LLSelectMgr::getInstance()->getSelection();
-		RlvSelectIsOwnedByOrGroupOwned f(gAgent.getID());
-		if ( (handleSel.notNull()) && ((0 == handleSel->getRootObjectCount()) || (NULL != handleSel->getFirstRootNode(&f, FALSE))) )
-			fIsAllowed = false;
+		struct RlvCanDeleteOrReturn : public LLSelectedObjectFunctor
+		{
+			/*virtual*/ bool apply(LLViewerObject* pObj) { return pObj->isReturnable(); }
+		} f;
+		LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
+		return (hSel.notNull()) && (0 != hSel->getRootObjectCount()) && (hSel->applyToRootObjects(&f, false));
 	}
-	
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (isAgentAvatarValid()) )
-	{
-		// We'll allow if the avie isn't sitting on any of the selected objects
-		LLObjectSelectionHandle handleSel = LLSelectMgr::getInstance()->getSelection();
-		RlvSelectIsSittingOn f(gAgentAvatarp->getRoot());
-		if ( (handleSel.notNull()) && (handleSel->getFirstRootNode(&f, TRUE)) )
-			fIsAllowed = false;
-	}
-
-	return fIsAllowed;
+	return true;
 }
 
 // Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-0.2.0f
@@ -544,16 +532,10 @@ bool RlvSelectIsEditable::apply(LLSelectNode* pNode)
 	return (pObj) && (!gRlvHandler.canEdit(pObj));
 }
 
-// Checked: 2009-07-05 (RLVa-1.0.0b) | Modified: RLVa-0.2.0f
-bool RlvSelectIsOwnedByOrGroupOwned::apply(LLSelectNode* pNode)
-{
-	return (pNode->mPermissions->isGroupOwned()) || (pNode->mPermissions->getOwner() == m_idAgent);
-}
-
-// Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.0f
+// Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
 bool RlvSelectIsSittingOn::apply(LLSelectNode* pNode)
 {
-	return (pNode->getObject()) && (pNode->getObject()->getRootEdit() == m_pObject);
+	return (pNode->getObject()) && (pNode->getObject()->getRootEdit()->isChild(m_pAvatar));
 }
 
 // ============================================================================

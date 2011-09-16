@@ -164,7 +164,6 @@ protected:
 	ERlvCmdRet onAddRemDetach(const RlvCommand& rlvCmd, bool& fRefCount);
 	ERlvCmdRet onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCount);
 	ERlvCmdRet onAddRemFolderLockException(const RlvCommand& rlvCmd, bool& fRefCount);
-	ERlvCmdRet onAddRemSetEnv(const RlvCommand& rlvCmd, bool& fRefCount);
 	// Command handlers (RLV_TYPE_FORCE)
 	ERlvCmdRet processForceCommand(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceRemAttach(const RlvCommand& rlvCmd) const;
@@ -198,7 +197,6 @@ protected:
 
 	rlv_command_list_t    m_Retained;
 	RlvGCTimer*           m_pGCTimer;
-	RlvWLSnapshot*        m_pWLSnapshot;
 
 	std::stack<const RlvCommand*> m_CurCommandStack;// Convenience (see @tpto)
 	std::stack<LLUUID>    m_CurObjectStack;			// Convenience (see @tpto)

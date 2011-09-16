@@ -301,11 +301,11 @@ bool LLGroupList::onContextMenuItemEnable(const LLSD& userdata)
 	// each group including "none" can be activated
 //	if (userdata.asString() == "activate")
 //		return gAgent.getGroupID() != selected_group_id;
-// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.4.1a) | Added: RLVa-1.3.0f
 	if (userdata.asString() == "activate")
 		return (gAgent.getGroupID() != selected_group_id) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP));
 	else if (userdata.asString() == "leave")
-		return (gAgent.getGroupID() != selected_group_id) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP));
+		return (real_group_selected) && ((gAgent.getGroupID() != selected_group_id) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP)));
 // [/RLVa:KB]
 
 	if (userdata.asString() == "call")

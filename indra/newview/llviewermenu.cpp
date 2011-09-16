@@ -4556,7 +4556,7 @@ void handle_take_copy()
 	{
 		// Allow only if the avie isn't sitting on any of the selected objects
 		LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
-		RlvSelectIsSittingOn f(gAgentAvatarp->getRoot());
+		RlvSelectIsSittingOn f(gAgentAvatarp);
 		if ( (hSel.notNull()) && (hSel->getFirstRootNode(&f, TRUE) != NULL) )
 			return;
 	}
@@ -4572,7 +4572,7 @@ class LLObjectReturn : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
 		if (LLSelectMgr::getInstance()->getSelection()->isEmpty()) return true;
-// [RLVa:KB] - Checked: 2010-03-24 (RLVa-1.2.0e) | Modified: RLVa-1.0.0b
+// [RLVa:KB] - Checked: 2010-03-24 (RLVa-1.4.0a) | Modified: RLVa-1.0.0b
 		if ( (rlv_handler_t::isEnabled()) && (!rlvCanDeleteOrReturn()) ) return true;
 // [/RLVa:KB]
 
@@ -4607,6 +4607,17 @@ class LLObjectEnableReturn : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
+		if (LLSelectMgr::getInstance()->getSelection()->isEmpty())
+		{
+			// Do not enable if nothing selected
+			return false;
+		}
+// [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
+		if ( (rlv_handler_t::isEnabled()) && (!rlvCanDeleteOrReturn()) )
+		{
+			return false;
+		}
+// [/RLVa:KB]
 #ifdef HACKED_GODLIKE_VIEWER
 		bool new_value = true;
 #else
@@ -4642,9 +4653,6 @@ class LLObjectEnableReturn : public view_listener_t
 			}
 		}
 #endif
-// [RLVa:KB] - Checked: 2010-03-24 (RLVa-1.2.0e) | Modified: RLVa-1.0.0b
-		new_value &= (!rlv_handler_t::isEnabled()) || (rlvCanDeleteOrReturn());
-// [/RLVa:KB]
 		return new_value;
 	}
 };
@@ -8428,6 +8436,12 @@ class LLWorldEnvSettings : public view_listener_t
 		{
 			LLEnvManagerNew::instance().setUseSkyPreset("Midnight");
 		}
+// [RLVa:KB] - Checked: 2011-09-03 (RLVa-1.4.1a) | Added: RLVa-1.4.1a
+		else if ("default" == tod)
+		{
+			LLEnvManagerNew::instance().setUseRegionSettings(true);
+		}
+// [/RLVa:KB]
 		else
 		{
 			LLEnvManagerNew::instance().setUseDayCycle(LLEnvManagerNew::instance().getDayCycleName());

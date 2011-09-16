@@ -56,7 +56,6 @@ struct RlvException;
 typedef boost::variant<std::string, LLUUID, S32, ERlvBehaviour> RlvExceptionOption;
 
 class RlvGCTimer;
-class RlvWLSnapshot;
 
 // ============================================================================
 // RlvSettings
@@ -215,20 +214,12 @@ struct RlvSelectIsEditable : public LLSelectedNodeFunctor
 	/*virtual*/ bool apply(LLSelectNode* pNode);
 };
 
-struct RlvSelectIsOwnedByOrGroupOwned : public LLSelectedNodeFunctor
-{
-	RlvSelectIsOwnedByOrGroupOwned(const LLUUID& uuid) : m_idAgent(uuid) {}
-	virtual bool apply(LLSelectNode* pNode);
-protected:
-	LLUUID m_idAgent;
-};
-
 struct RlvSelectIsSittingOn : public LLSelectedNodeFunctor
 {
-	RlvSelectIsSittingOn(LLXform* pObject) : m_pObject(pObject) {}
-	virtual bool apply(LLSelectNode* pNode);
+	RlvSelectIsSittingOn(const LLVOAvatar* pAvatar) : m_pAvatar(pAvatar) {}
+	/*virtual*/ bool apply(LLSelectNode* pNode);
 protected:
-	LLXform* m_pObject;
+	const LLVOAvatar* m_pAvatar;
 };
 
 // ============================================================================
