@@ -107,6 +107,18 @@ void PieMenu::removeChild(LLView* child)
 	reshape(PIE_OUTER_SIZE*2,PIE_OUTER_SIZE*2,FALSE);
 }
 
+void PieMenu::childSetText(const std::string& sliceName,const std::string& newText)
+{
+	for(slice_list_t::iterator item_iter=mSlices->begin();item_iter!=mSlices->end();item_iter++)
+	{
+		if((*item_iter)->getName()==sliceName)
+		{
+			static_cast<PieSlice*>(*item_iter)->setLabel(newText);
+			return;
+		}
+	}
+}
+
 BOOL PieMenu::handleHover(S32 x,S32 y,MASK mask)
 {
 	// do nothing

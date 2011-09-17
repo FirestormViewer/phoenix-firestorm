@@ -113,9 +113,27 @@ void PieSlice::updateVisible()
 }
 
 // accessor
-std::string PieSlice::getLabel()
+LLSD PieSlice::getValue() const
+{
+	return getLabel();
+}
+
+// accessor
+void PieSlice::setValue(const LLSD& value)
+{
+	setLabel(value.asString());
+}
+
+// accessor
+std::string PieSlice::getLabel() const
 {
 	return mLabel;
+}
+
+// accessor
+void PieSlice::setLabel(const std::string newLabel)
+{
+	mLabel=newLabel;
 }
 
 // accessor

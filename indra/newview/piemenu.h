@@ -60,6 +60,9 @@ class PieMenu : public LLContextMenu
 		/*virtual*/ bool addChild(LLView* child,S32 tab_group=0);
 		/*virtual*/ void removeChild(LLView* child);
 
+		// rename pie slice, used for touch and sit text
+		void childSetText(const std::string& sliceName,const std::string& newText);
+
 		/*virtual*/ BOOL handleHover(S32 x,S32 y,MASK mask);
 		/*virtual*/ BOOL handleMouseUp(S32 x,S32 y,MASK mask);
 		/*virtual*/ BOOL handleRightMouseUp(S32 x,S32 y,MASK mask);

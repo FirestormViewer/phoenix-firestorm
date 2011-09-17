@@ -65,8 +65,12 @@ class PieSlice : public LLUICtrl
 		// initialisation, taking care of optional parameters and setting up the callback
 		void initFromParams(const Params& p);
 
-		// accessor to expose the label to the outside
-		std::string getLabel();
+		// accessor to expose the label to the outside (value is the same as label)
+		std::string getLabel() const;
+		void setLabel(const std::string newLabel);
+		LLSD getValue() const;
+		void setValue(const LLSD& value);
+
 		// accessor to expose the autohide feature
 		BOOL getStartAutohide();
 		BOOL getAutohide();
