@@ -44,10 +44,10 @@
 		 tool_tip="Online status"
 		 width="20" />
 		<scroll_list.column
-		 dynamicwidth="true"
 		 label="Username"
 		 name="user_name"
-		 tool_tip="This contact's username." />
+		 tool_tip="This contact's username."
+		 width="-1" />
 		<scroll_list.column
 		 dynamicwidth="true"
 		 label="Display Name"
@@ -80,7 +80,7 @@
 		 width="16" />
 		<scroll_list.column
 		 name="friend_last_update_generation"
-		 width="0" />
+		 width="-1" />
 	</scroll_list>
 	<button
 	 top="10"
