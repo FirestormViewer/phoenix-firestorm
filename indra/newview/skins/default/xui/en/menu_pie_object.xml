@@ -22,7 +22,7 @@
     <pie_slice
         enabled="false"
         label="Touch"
-        name="Object Touch">
+        name="Pie Object Touch">
         <pie_slice.on_click
             function="Object.Touch" />
         <pie_slice.on_enable
@@ -34,7 +34,7 @@
         enabled="false"
         start_autohide="true"
         label="Sit Here"
-        name="Object Sit">
+        name="Pie Object Sit">
         <pie_slice.on_click
             function="Object.SitOrStand" />
         <pie_slice.on_enable
