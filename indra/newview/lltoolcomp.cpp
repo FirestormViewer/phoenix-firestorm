@@ -52,6 +52,10 @@
 #include "llfloatertools.h"
 #include "llviewercontrol.h"
 
+// NaCl - Mousewheel zoom - Moy Loon
+#include "llviewercamera.h"
+// NaCl End
+
 const S32 BUTTON_HEIGHT = 16;
 const S32 BUTTON_WIDTH_SMALL = 32;
 const S32 BUTTON_WIDTH_BIG = 48;
@@ -777,6 +781,16 @@ void	LLToolCompGun::handleDeselect()
 
 BOOL LLToolCompGun::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
+	// NaCl - Mousewheel zoom - Moy Loon
+	if(gSavedSettings.getBOOL("_NACL_MLActive")==1)
+	{
+		if(clicks>0)gSavedSettings.setF32("_NACL_MLFov",gSavedSettings.getF32("_NACL_MLFov")/1.1);
+		if(clicks<0)gSavedSettings.setF32("_NACL_MLFov",gSavedSettings.getF32("_NACL_MLFov")*1.1);
+		LLViewerCamera::getInstance()->setDefaultFOV(gSavedSettings.getF32("_NACL_MLDefFov")/gSavedSettings.getF32("_NACL_MLFov"));
+		return TRUE;
+	}
+	// NaCl End
+
 	if (clicks > 0)
 	{
 		gAgentCamera.changeCameraToDefault();
