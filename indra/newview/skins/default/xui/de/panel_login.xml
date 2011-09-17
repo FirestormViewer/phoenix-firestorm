@@ -12,6 +12,7 @@
 				Benutzername:
 			</text>
 			<combo_box name="username_combo" tool_tip="Bei der Registrierung gewählter Benutzername wie „berndschmidt12“ oder „Liebe Sonne“"/>
+			<button label="Eintrag löschen" name="delete_saved_login_btn"/>
 			<text name="password_text">
 				Kennwort:
 			</text>

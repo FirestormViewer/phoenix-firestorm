@@ -890,7 +890,6 @@
           function="Floater.Toggle"
           parameter="area_search" />
       </menu_item_call>
-      <menu_item_separator/>
     
     </menu>
     <menu
@@ -1559,8 +1558,6 @@
         </menu_item_call>
     </menu>
     
-    <!-- Advanced Menu -->
-    
     <menu
      create_jump_keys="true"
      label="RLVa"
@@ -1739,6 +1736,10 @@
       	 parameter="rlv_behaviours" />
       </menu_item_check>
     </menu>
+
+	
+    <!-- Advanced Menu -->
+    
     <menu
      create_jump_keys="true"
      label="Advanced"

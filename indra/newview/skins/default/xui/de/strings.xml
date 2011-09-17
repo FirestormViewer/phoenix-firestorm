@@ -82,6 +82,12 @@
 	<string name="LoginQuicktimeOK">
 		QuickTime wurde initialisiert.
 	</string>
+	<string name="LoginRequestSeedCapGrant">
+		Fähigkeiten der Region werden ermittelt...
+	</string>
+	<string name="LoginRetrySeedCapGrant">
+		Fähigkeiten der Region werden ermittelt, Versuch [NUMBER]...
+	</string>
 	<string name="LoginWaitingForRegionHandshake">
 		Region-Handshake...
 	</string>

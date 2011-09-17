@@ -35,6 +35,7 @@
 			<menu_item_call label="Bild ([COST] L$)..." name="Upload Image"/>
 			<menu_item_call label="Sound ([COST] L$)..." name="Upload Sound"/>
 			<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
+			<menu_item_call label="Modell..." name="Upload Model"/>
 			<menu_item_call label="Mehrfach-Upload..." name="Bulk Upload"/>
 			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
 		</menu>
@@ -45,6 +46,7 @@
 	<menu label="Unterhalten" name="Communicate">
 		<menu_item_call label="Meine Freunde" name="My Friends"/>
 		<menu_item_check label="Kontakte" name="Contacts"/>
+		<menu_item_check label="Kontakt-Sets" name="Contact Sets"/>
 		<menu_item_call label="Meine Gruppen" name="My Groups"/>
 		<menu_item_check label="Chat in der Nähe" name="Nearby Chat"/>
         <menu_item_check label="Gespräche" name="Conversations"/>
@@ -169,6 +171,7 @@
 		</menu>
 		<menu_item_call label="Rückgängig" name="Undo"/>
 		<menu_item_call label="Wiederholen" name="Redo"/>
+        <menu_item_call label="Lokaler Bitmap-Browser" name="Local Bitmap Browser"/>
 	</menu>
 	<menu label="Inhalt" name="Content">
 		<menu_item_check label="Suchen" name="Search"/>
@@ -177,13 +180,36 @@
 		<menu_item_check label="Skript-Datenbank" name="Script Library"/>
 	</menu>
 	<menu label="Hilfe" name="Help">
+		<menu_item_check label="Hinweise aktivieren" name="Enable Hints"/>
+		<menu_item_check label="Firestorm-Wiki" name="Firestorm Wiki"/>
 		<menu_item_call label="[SECOND_LIFE]-Hilfe" name="Second Life Help"/>
+        <menu_item_call label="[CURRENT_GRID]-Hilfe" name="current_grid_help"/>
+        <menu_item_call label="Über [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Grid-Status prüfen" name="Grid Status"/>
 		<menu_item_call label="Missbrauch melden" name="Report Abuse"/>
 		<menu_item_call label="Fehler melden" name="Report Bug"/>
         <menu_item_check label="Sysinfo-Button aktivieren" name="Enable Sysinfo Button"/>
 		<menu_item_call label="INFO ÜBER [APP_NAME]" name="About Second Life"/>
-		<menu_item_check label="Hinweise aktivieren" name="Enable Hints"/>
+	</menu>
+	<menu label="RLVa" name="RLVa Main">
+		<menu label="Debug" name="Debug">
+			<menu_item_check label="RLVa-Menü in Menüleiste anzeigen" name="Show Top-level RLVa Menu"/>
+			<menu_item_check label="Debug-Meldungen anzeigen" name="Show Debug Messages"/>
+			<menu_item_check label="Deaktivierungs- oder doppelte Nachrichten verstecken" name="Hide Unset or Duplicate Messages"/>
+			<menu_item_check label="Assertion-Fehler anzeigen" name="Show Assertion Failures"/>
+			<menu_item_check label="Altes Namensschame verwenden" name="Enable Legacy Naming"/>
+			<menu_item_check label="Teilen von Kleidung aktivieren" name="Enable Shared Wear"/>
+			<menu_item_check label="Geteilte Gegenstände beim Tragen umbenennen" name="Rename Shared Items on Wear"/>
+			<menu_item_check label="Sperren..." name="Locks"/>
+		</menu>
+		<menu_item_check label="Gesperrte Layer ausblenden" name="Hide Locked Layers"/>
+		<menu_item_check label="Gesperrte Anhänge ausblenden" name="Hide Locked Attachments"/>
+		<menu_item_check label="OOC-Chat erlauben" name="Allow OOC Chat"/>
+		<menu_item_check label="Übergabe an #RLV-Ordner verbieten" name="Forbid Give to #RLV"/>
+		<menu_item_check label="Gefilterten Chat anzeigen" name="Show Filtered Chat"/>
+		<menu_item_check label="Namensschilder anzeigen" name="Show Name Tags"/>
+		<menu_item_check label="Anziehen ersetzt nicht-gesperrte Kleidung" name="Wear Replaces Unlocked"/>
+		<menu_item_check label="Beschränkungen..." name="Restrictions"/>
 	</menu>
 	<menu label="Erweitert" name="Advanced">
 		<menu_item_call label="Textur neu laden" name="Rebake Texture"/>
@@ -194,7 +220,7 @@
 		<menu_item_check label="Foto (hohe Auflösung)" name="HighResSnapshot"/>
 		<menu_item_check label="Fotos auf Festplatte leise speichern" name="QuietSnapshotsToDisk"/>
 		<menu_item_check label="Fotos auf Festplatte komprimieren" name="CompressSnapshotsToDisk"/>
-		<menu label="Performance Tools" name="Performance Tools">
+		<menu label="Performance-Tools" name="Performance Tools">
 			<menu_item_call label="Lag-Anzeige" name="Lag Meter"/>
 			<menu_item_check label="Statistikleiste" name="Statistics Bar"/>
 			<menu_item_check label="Avatar-Darstellungskosten anzeigen" name="Avatar Rendering Cost"/>
@@ -232,9 +258,12 @@
 			<menu_item_check label="FRInfo testen" name="Test FRInfo"/>
 			<menu_item_check label="Flexible Objekte" name="Flexible Objects"/>
 		</menu>
-		<menu label="RLVa" name="RLVa">
+		<menu label="RLVa" name="RLVa Embedded">
 			<menu label="Debug" name="Debug">
+				<menu_item_check label="RLVa-Menü in Menüleiste anzeigen" name="Show Top-level RLVa Menu"/>
 				<menu_item_check label="Debug-Meldungen anzeigen" name="Show Debug Messages"/>
+				<menu_item_check label="Deaktivierungs- oder doppelte Nachrichten verstecken" name="Hide Unset or Duplicate Messages"/>
+				<menu_item_check label="Assertion-Fehler anzeigen" name="Show Assertion Failures"/>
 				<menu_item_check label="Altes Namensschame verwenden" name="Enable Legacy Naming"/>
 				<menu_item_check label="Teilen von Kleidung aktivieren" name="Enable Shared Wear"/>
 				<menu_item_check label="Geteilte Gegenstände beim Tragen umbenennen" name="Rename Shared Items on Wear"/>
@@ -242,8 +271,11 @@
 			</menu>
 			<menu_item_check label="Gesperrte Layer ausblenden" name="Hide Locked Layers"/>
 			<menu_item_check label="Gesperrte Anhänge ausblenden" name="Hide Locked Attachments"/>
+			<menu_item_check label="OOC-Chat erlauben" name="Allow OOC Chat"/>
 			<menu_item_check label="Übergabe an #RLV-Ordner verbieten" name="Forbid Give to #RLV"/>
+			<menu_item_check label="Gefilterten Chat anzeigen" name="Show Filtered Chat"/>
 			<menu_item_check label="Namensschilder anzeigen" name="Show Name Tags"/>
+			<menu_item_check label="Anziehen ersetzt nicht-gesperrte Kleidung" name="Wear Replaces Unlocked"/>
 			<menu_item_check label="Beschränkungen..." name="Restrictions"/>
 		</menu>
 		<menu_item_check label="Plugin-Read-Thread verwenden" name="Use Plugin Read Thread"/>
@@ -400,6 +432,8 @@
 			<menu_item_call label="Ausgewählte Objektinfo drucken" name="Print Selected Object Info"/>
 			<menu_item_call label="Agent-Info drucken" name="Print Agent Info"/>
 			<menu_item_call label="Speicher-Stats" name="Memory Stats"/>
+			<menu_item_check label="Doppel-Klick-Auto-Pilot" name="Double-ClickAuto-Pilot"/>
+			<menu_item_check label="Doppel-Klick-Teleport" name="DoubleClick Teleport"/>
 			<menu_item_check label="Regions-Debug-Konsole" name="Region Debug Console"/>
 			<menu_item_check label="Fehler in SelectMgr beseitigen" name="Debug SelectMgr"/>
 			<menu_item_check label="Fehler in Klicks beseitigen" name="Debug Clicks"/>
