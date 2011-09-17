@@ -394,7 +394,9 @@ void LLAvatarActions::showProfile(const LLUUID& id)
 	if (id.notNull())
 	{
 // [SL:KB] - Patch : UI-ProfileGroupFloater | 
-		if ( (!gSavedSettings.getBOOL("ShowProfileFloaters")) || ((gAgent.getID() == id)) )
+		if ( (!gSavedSettings.getBOOL("ShowProfileFloaters") &&
+			!gSavedSettings.getBOOL("FSUseWebProfiles")) ||
+			(gAgent.getID() == id) )
 		{
 // [/SL:KB]		
 			LLSD params;
@@ -414,34 +416,38 @@ void LLAvatarActions::showProfile(const LLUUID& id)
 		}
 		else
 		{
-			/* AO: Ignore web profile
-			// PROFILES: open in webkit window
-			std::string full_name;
-			if (gCacheName->getFullName(id,full_name))
+			// TS: Show web profile if user desires
+			if (gSavedSettings.getBOOL("FSUseWebProfiles"))
 			{
-				std::string agent_name = LLCacheName::buildUsername(full_name);
-				llinfos << "opening web profile for " << agent_name << llendl;		
-				std::string url = getProfileURL(agent_name);
-				LLWeb::loadWebURLInternal(url);
+				// PROFILES: open in webkit window
+				std::string full_name;
+				if (gCacheName->getFullName(id,full_name))
+				{
+					std::string agent_name = LLCacheName::buildUsername(full_name);
+					llinfos << "opening web profile for " << agent_name << llendl;		
+					std::string url = getProfileURL(agent_name);
+					LLWeb::loadWebURLInternal(url);
+				}
+				else
+				{
+					llwarns << "no name info for agent id " << id << llendl;
+				}
 			}
 			else
 			{
-				llwarns << "no name info for agent id " << id << llendl;
-			}
-			*/
-			
-			LLSD params;
-                        params["id"] = id;
-                        params["open_tab_name"] = "panel_profile";
-			//Show own profile
-			if(gAgent.getID() == id)
-			{
-				LLSideTray::getInstance()->showPanel("panel_me", params);
-			}
-			else
-			{
-				// [SL:KB] - Patch : UI-ProfileGroupFloater
-				LLFloaterReg::showInstance("floater_profile_view", LLSD().with("id", id));
+				LLSD params;
+				params["id"] = id;
+	                        params["open_tab_name"] = "panel_profile";
+				//Show own profile
+				if(gAgent.getID() == id)
+				{
+					LLSideTray::getInstance()->showPanel("panel_me", params);
+				}
+				else
+				{
+					// [SL:KB] - Patch : UI-ProfileGroupFloater
+					LLFloaterReg::showInstance("floater_profile_view", LLSD().with("id", id));
+				}
 			}
 		}
 	}
