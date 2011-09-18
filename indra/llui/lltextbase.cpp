@@ -580,7 +580,11 @@ void LLTextBase::drawText()
 					idxSegmentEnd = llmin(pSegment->getEnd(), idxEnd);
 				}
 
+				// Find the start of the first word
 				U32 idxWordStart = idxSegmentStart, idxWordEnd = -1;
+				while ( (idxWordStart < wstrText.length()) && (!LLStringOps::isAlpha(wstrText[idxWordStart])) )
+					idxWordStart++;
+				// Iterate over all words in the text block and check them one by one
 				while (idxWordStart < idxSegmentEnd)
 				{
 					// Find the end of the current word (special case handling for "'" when it's used as a contraction)

@@ -1935,7 +1935,11 @@ void LLLineEditor::draw()
 		{
 			const LLWString& wstrText = mText.getWString().substr(idxStart, idxEnd);
 
+			// Find the start of the first word
 			U32 idxWordStart = 0, idxWordEnd = 0;
+			while ( (idxWordStart < wstrText.length()) && (!LLStringOps::isAlpha(wstrText[idxWordStart])) )
+				idxWordStart++;
+			// Iterate over all words in the text block and check them one by one
 			mMisspellRanges.clear();
 			while (idxWordStart < wstrText.length())
 			{
