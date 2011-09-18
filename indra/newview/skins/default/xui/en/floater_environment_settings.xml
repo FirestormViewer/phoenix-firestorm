@@ -30,13 +30,26 @@
   name="border"
   top_pad="8"
   width="500"/>  
+
+ <check_box
+  control_name="UseEnvironmentFromRegionAlways"
+  height="16"
+  initial_value="true"
+  label="Automatically change environment to use region/parcel settings."
+  layout="topleft"
+  left_delta="10"
+  name="use_env_from_region_always"
+  tool_tip="Checking this option will make environment always use the below settings."
+  top_delta="15"
+  width="256" />
+
  <radio_group
   follows="top|left"
-  height="45"
+  height="40"
   layout="topleft"
   left_delta="10"
   name="region_settings_radio_group"
-  top_delta="20"
+  top_pad="10"
   width="200">
     <radio_item
   	 label="Use region settings"
@@ -46,11 +59,11 @@
   	 label="Customize my environment"
   	 layout="topleft"
   	 name="use_my_settings"
-  	 top_pad="20"/>
+  	 top_pad="15"/>
   </radio_group>
 
  <panel
-  height="170"
+  height="160"
   layout="topleft"
   left="50"
   name="user_environment_settings"
@@ -77,7 +90,7 @@
   height="16"
   layout="topleft"
   left="50"
-  top="40"
+  top="30"
   width="200">
   		Water Setting
   </text>
@@ -100,7 +113,7 @@
   height="16"
   layout="topleft"
   left="50"
-  top_pad="20"
+  top_pad="15"
   width="100">
   		Sky / Day Cycle
   </text>

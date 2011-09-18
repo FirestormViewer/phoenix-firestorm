@@ -873,7 +873,7 @@ void LLStatusBar::updateParcelIcons()
 		bool allow_build	= vpm->allowAgentBuild(current_parcel); // true when anyone is allowed to build. See EXT-4610.
 		bool allow_scripts	= vpm->allowAgentScripts(agent_region, current_parcel);
 		bool allow_damage	= vpm->allowAgentDamage(agent_region, current_parcel);
-		bool has_pwl		= KCWindlightInterface::instance().WLset;
+		bool has_pwl		= KCWindlightInterface::instance().getWLset();
 
 		// Most icons are "block this ability"
 		mParcelIcon[VOICE_ICON]->setVisible(   !allow_voice );

@@ -47,9 +47,10 @@ public:
 	bool LoadFromPacel(LLParcel *parcel);
 	bool ParsePacelForWLSettings(const std::string& desc, LLSD& settings);
 	void onClickWLStatusButton();
-	bool WLset; //display the status bar icon?
 	void setTPing(bool value) { mTPing = value; }
 	bool haveParcelOverride(const LLEnvironmentSettings& new_settings);
+	
+	bool getWLset() { return mWLset; }
 	
 private:
 	bool callbackParcelWL(const LLSD& notification, const LLSD& response);
@@ -58,8 +59,10 @@ private:
 	LLUUID getOwnerID(LLParcel *parcel);
 	std::string getOwnerName(LLParcel *parcel);
 	void setWL_Status(bool pwl_status);
+	bool checkSettings();
 
 protected:
+	bool mWLset; //display the status bar icon?
 	std::set<LLUUID> mAllowedLand;
 	LLNotificationPtr mSetWLNotification;
 	LLNotificationPtr mClearWLNotification;
@@ -73,4 +76,5 @@ protected:
 	LLViewerRegion* mLastRegion;
 	bool mRegionOverride;
 	bool mHaveRegionSettings;
+	bool mDisabled; // control bool to clear all states after being disabled
 };

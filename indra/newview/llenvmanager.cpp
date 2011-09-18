@@ -500,7 +500,9 @@ void LLEnvManagerNew::onRegionSettingsResponse(const LLSD& content)
 			updateManagersFromPrefs(mInterpNextChangeMessage);
 		}
 		//bit of a hacky override since I've repurposed many of the settings and methods here -KC
-		else if (gSavedSettings.getBOOL("UseEnvironmentFromRegionAlways"))
+		//NOTE* It might not be a good idea to do this if under RLV_BHVR_SETENV -KC
+		else if (gSavedSettings.getBOOL("UseEnvironmentFromRegionAlways") 
+		 && !(rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)))
 		{
 			setUseRegionSettings(true, mInterpNextChangeMessage);
 		}

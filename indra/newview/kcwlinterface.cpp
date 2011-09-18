@@ -46,7 +46,7 @@ const S32 PARCEL_WL_MIN_ALT_CHANGE = 3;
 
 KCWindlightInterface::KCWindlightInterface() :
 	LLEventTimer(PARCEL_WL_CHECK_TIME),
-	WLset(FALSE),
+	mWLset(false),
 	mWeChangedIt(false),
 	mCurrentSpace(-2.f),
 	mLastParcelID(-1),
@@ -54,14 +54,20 @@ KCWindlightInterface::KCWindlightInterface() :
 	mRegionOverride(false),
 	mHaveRegionSettings(false)
 {
-
+	if (!gSavedSettings.getBOOL("PhoenixWLParcelEnabled") ||
+	!gSavedSettings.getBOOL("UseEnvironmentFromRegionAlways"))
+	{
+		mEventTimer.stop();
+		mDisabled = true;
+	}
 }
 
 void KCWindlightInterface::ParcelChange()
 {
-	if (!gSavedSettings.getBOOL("PhoenixWLParcelEnabled") ||
-	(rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) )
+	if (checkSettings())
 		return;
+	
+	mDisabled = false;
 
 	LLParcel *parcel = NULL;
 	S32 this_parcel_id = 0;
@@ -118,7 +124,7 @@ void KCWindlightInterface::ParcelChange()
 
 BOOL KCWindlightInterface::tick()
 {
-	if(LLStartUp::getStartupState() < STATE_STARTED)
+	if ((LLStartUp::getStartupState() < STATE_STARTED) || checkSettings())
 		return FALSE;
 	
 	//TODO: there has to be a better way of doing this...
@@ -443,7 +449,7 @@ void KCWindlightInterface::onClickWLStatusButton()
 		mClearWLNotification->respond(response);
 	}
 
-	if (WLset)
+	if (mWLset)
 	{
 		LLParcel *parcel = NULL;
  		parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
@@ -571,6 +577,33 @@ bool KCWindlightInterface::haveParcelOverride(const LLEnvironmentSettings& new_s
 
 void KCWindlightInterface::setWL_Status(bool pwl_status)
 {
-	WLset = pwl_status;
+	mWLset = pwl_status;
 	gStatusBar->updateParcelIcons();
+}
+
+bool KCWindlightInterface::checkSettings()
+{
+	static LLCachedControl<bool> sPhoenixWLParcelEnabled(gSavedSettings, "PhoenixWLParcelEnabled");
+	static LLCachedControl<bool> sUseEnvironmentFromRegionAlways(gSavedSettings, "UseEnvironmentFromRegionAlways");
+	if (!sPhoenixWLParcelEnabled || !sUseEnvironmentFromRegionAlways ||
+	(rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)))
+	{
+		// The setting changed, clear everything
+		if (!mDisabled)
+		{
+			mCurrentSettings.clear();
+			mWeChangedIt = false;
+			mCurrentSpace = -2.f;
+			mLastParcelID = -1;
+			mRegionOverride = false;
+			mHaveRegionSettings = false;
+			mLastRegion = NULL;
+			mEventTimer.stop();
+			setWL_Status(false);
+			mDisabled = true;
+		}
+		return true;
+	}
+	mDisabled = false;
+	return false;
 }
