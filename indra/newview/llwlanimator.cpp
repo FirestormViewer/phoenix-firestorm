@@ -122,7 +122,9 @@ void LLWLAnimator::update(LLWLParamSet& curParams)
 			if (mIsInterpolatingSky)
 			{
 				deactivate();
-				// curParams.setAll(*mInterpEndWL);
+				// FIRE-3245: Some settings do not get fully mixed properly (possibly due to value extremes)
+				// at the end of the interp cycle, force the end settings to get applied
+				curParams.setAll(mInterpEndWL->getAll());
 			}
 			mIsInterpolating = false;
 			mIsInterpolatingSky = false;
