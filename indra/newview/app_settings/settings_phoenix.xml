@@ -215,5 +215,17 @@
     <integer>0</integer>
   </map>
 
+  <key>PhoenixFontChatLineSpacing</key>
+  <map>
+    <key>Comment</key>
+    <string>Line spacing multiplier for chat text (requires restart)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <integer>1.05</integer>
+  </map>
+
 </map>
 </llsd>
