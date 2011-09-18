@@ -40,7 +40,7 @@ static const std::string c_strDictIgnoreSuffix = "_ignore";
 LLHunspellWrapper::LLHunspellWrapper()
 	: m_pHunspell(NULL)
 {
-	m_strDictionaryPath = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "hunspell", "");
+	m_strDictionaryPath = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "dictionaries", "");
 
 	// Load dictionary information (file name, friendly name, ...)
 	llifstream fileDictMap(m_strDictionaryPath + "dictionaries.xml", std::ios::binary);

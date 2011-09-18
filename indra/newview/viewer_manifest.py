@@ -65,7 +65,7 @@ class ViewerManifest(LLManifest):
                 # ... and the entire windlight directory
                 self.path("windlight")
                 # ... and the pre-installed spell checking dictionaries
-                self.path("hunspell")
+                self.path("dictionaries")
                 self.end_prefix("app_settings")
 
             if self.prefix(src="character"):
