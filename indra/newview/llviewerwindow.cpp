@@ -980,17 +980,6 @@ BOOL LLViewerWindow::handleMouseUp(LLWindow *window,  LLCoordGL pos, MASK mask)
 
 BOOL LLViewerWindow::handleRightMouseDown(LLWindow *window,  LLCoordGL pos, MASK mask)
 {
-    // NaCl - Mousewheel zoom - Moy Loon
-	gSavedSettings.setBOOL("_NACL_MLRightMouseDown",1);
-	if(gAgentCamera.cameraMouselook()&&gSavedSettings.getBOOL("_NACL_MLActive")==0)
-	{
-		gSavedSettings.setBOOL("_NACL_MLActive",1);
-		F32 deffov=LLViewerCamera::getInstance()->getDefaultFOV();
-		gSavedSettings.setF32("_NACL_MLDefFov",deffov);
-		LLViewerCamera::getInstance()->setDefaultFOV(gSavedSettings.getF32("_NACL_MLDefFov")/gSavedSettings.getF32("_NACL_MLFov"));
-	}
-	// NaCl End
-
 	S32 x = pos.mX;
 	S32 y = pos.mY;
 	x = llround((F32)x / mDisplayScale.mV[VX]);
@@ -1017,16 +1006,6 @@ BOOL LLViewerWindow::handleRightMouseDown(LLWindow *window,  LLCoordGL pos, MASK
 
 BOOL LLViewerWindow::handleRightMouseUp(LLWindow *window,  LLCoordGL pos, MASK mask)
 {
-	// NaCl - Mousewheel zoom - Moy Loon
-	gSavedSettings.setBOOL("NACL_MLRightMouseDown",0);
-	if(gSavedSettings.getBOOL("_NACL_MLActive")==1)
-	{
-		gSavedSettings.setBOOL("_NACL_MLActive",0);
-		LLViewerCamera::getInstance()->setDefaultFOV(gSavedSettings.getF32("_NACL_MLDefFov"));
-	}
-	// NaCl End
-
-	
 	BOOL down = FALSE;
  	return handleAnyMouseClick(window,pos,mask,LLMouseHandler::CLICK_RIGHT,down);
 }
