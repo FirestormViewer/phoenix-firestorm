@@ -205,6 +205,7 @@ void LLHunspellWrapper::addToCustomDictionary(const std::string& strWord)
 	if (m_pHunspell)
 		m_pHunspell->add(strWord.c_str());
 	addToDictFile(m_strDictionaryPath + m_strDictionaryFile + c_strDictCustomSuffix + ".dic", strWord);
+	s_SettingsChangeSignal();
 }
 
 // Checked: 2010-12-23 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
@@ -216,6 +217,7 @@ void LLHunspellWrapper::addToIgnoreList(const std::string& strWord)
 	{
 		m_IgnoreList.push_back(strWordLower);
 		addToDictFile(m_strDictionaryPath + m_strDictionaryFile + c_strDictIgnoreSuffix + ".dic", strWordLower);
+		s_SettingsChangeSignal();
 	}
 }
 
