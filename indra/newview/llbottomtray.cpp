@@ -497,7 +497,7 @@ void LLBottomTray::showBottomTrayContextMenu(S32 x, S32 y, MASK mask)
 	{
 		    //there are no other context menu (IM chiclet etc ), so we can show BottomTrayContextMenu
 
-		    updateContextMenu(x, y, mask);
+//		    updateContextMenu(x, y, mask);
 			mBottomTrayContextMenu->buildDrawLabels();
 			mBottomTrayContextMenu->updateParent(LLMenuGL::sMenuContainer);
 			LLMenuGL::showPopup(this, mBottomTrayContextMenu, x, y);
@@ -505,22 +505,22 @@ void LLBottomTray::showBottomTrayContextMenu(S32 x, S32 y, MASK mask)
 	}
 }
 
-void LLBottomTray::updateContextMenu(S32 x, S32 y, MASK mask)
-{
-	LLUICtrl* edit_box = mNearbyChatBar->getChild<LLUICtrl>("chat_box");
-
-	S32 local_x = x - mChatBarContainer->getRect().mLeft - edit_box->getRect().mLeft;
-	S32 local_y = y - mChatBarContainer->getRect().mBottom - edit_box->getRect().mBottom;
-
-	bool in_edit_box = edit_box->pointInView(local_x, local_y);
-
-	mBottomTrayContextMenu->setItemVisible("Separator", in_edit_box);
-	mBottomTrayContextMenu->setItemVisible("NearbyChatBar_Cut", in_edit_box);
-	mBottomTrayContextMenu->setItemVisible("NearbyChatBar_Copy", in_edit_box);
-	mBottomTrayContextMenu->setItemVisible("NearbyChatBar_Paste", in_edit_box);
-	mBottomTrayContextMenu->setItemVisible("NearbyChatBar_Delete", in_edit_box);
-	mBottomTrayContextMenu->setItemVisible("NearbyChatBar_Select_All", in_edit_box);
-}
+//void LLBottomTray::updateContextMenu(S32 x, S32 y, MASK mask)
+//{
+//	LLUICtrl* edit_box = mNearbyChatBar->getChild<LLUICtrl>("chat_box");
+//
+//	S32 local_x = x - mChatBarContainer->getRect().mLeft - edit_box->getRect().mLeft;
+//	S32 local_y = y - mChatBarContainer->getRect().mBottom - edit_box->getRect().mBottom;
+//
+//	bool in_edit_box = edit_box->pointInView(local_x, local_y);
+//
+//	mBottomTrayContextMenu->setItemVisible("Separator", in_edit_box);
+//	mBottomTrayContextMenu->setItemVisible("NearbyChatBar_Cut", in_edit_box);
+//	mBottomTrayContextMenu->setItemVisible("NearbyChatBar_Copy", in_edit_box);
+//	mBottomTrayContextMenu->setItemVisible("NearbyChatBar_Paste", in_edit_box);
+//	mBottomTrayContextMenu->setItemVisible("NearbyChatBar_Delete", in_edit_box);
+//	mBottomTrayContextMenu->setItemVisible("NearbyChatBar_Select_All", in_edit_box);
+//}
 //void  LLBottomTray::showVoiceButton(BOOL visible)
 //{
 //	setTrayButtonVisibleIfPossible(RS_BUTTON_SPEAK, visible);
@@ -570,8 +570,8 @@ BOOL LLBottomTray::postBuild()
 	LLHints::registerHintTarget("dest_guide_btn", getChild<LLUICtrl>("destination_btn")->getHandle());
 	LLHints::registerHintTarget("avatar_picker_btn", getChild<LLUICtrl>("avatar_btn")->getHandle());
 
-	LLUICtrl::CommitCallbackRegistry::currentRegistrar().add("NearbyChatBar.Action", boost::bind(&LLBottomTray::onContextMenuItemClicked, this, _2));
-	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("NearbyChatBar.EnableMenuItem", boost::bind(&LLBottomTray::onContextMenuItemEnabled, this, _2));
+//	LLUICtrl::CommitCallbackRegistry::currentRegistrar().add("NearbyChatBar.Action", boost::bind(&LLBottomTray::onContextMenuItemClicked, this, _2));
+//	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("NearbyChatBar.EnableMenuItem", boost::bind(&LLBottomTray::onContextMenuItemEnabled, this, _2));
 
 	mBottomTrayContextMenu =  LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_bottomtray.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	gMenuHolder->addChild(mBottomTrayContextMenu);
@@ -619,7 +619,7 @@ BOOL LLBottomTray::postBuild()
 	gSavedSettings.getControl("ShowSpeakButton")->getSignal()->connect(boost::bind(&LLBottomTray::handleVoiceEnabledToggle,  _2));
 // [/SL:KB]
 
-	mNearbyChatBar->getChatBox()->setContextMenu(NULL);
+//	mNearbyChatBar->getChatBox()->setContextMenu(NULL);
 
 	mChicletPanel = getChild<LLChicletPanel>("chiclet_list");
 
@@ -961,33 +961,33 @@ void LLBottomTray::draw()
 
 }
 
-bool LLBottomTray::onContextMenuItemEnabled(const LLSD& userdata)
-{
-	std::string item = userdata.asString();
-	LLLineEditor* edit_box = mNearbyChatBar->findChild<LLLineEditor>("chat_box");
-	
-	if (item == "can_cut")
-	{
-		return edit_box->canCut();
-	}
-	else if (item == "can_copy")
-	{
-		return edit_box->canCopy();
-	}
-	else if (item == "can_paste")
-	{
-		return edit_box->canPaste();
-	}
-	else if (item == "can_delete")
-	{
-		return edit_box->canDoDelete();
-	}
-	else if (item == "can_select_all")
-	{
-		return edit_box->canSelectAll() && (edit_box->getLength()>0);
-	}
-	return true;
-}
+//bool LLBottomTray::onContextMenuItemEnabled(const LLSD& userdata)
+//{
+//	std::string item = userdata.asString();
+//	LLLineEditor* edit_box = mNearbyChatBar->findChild<LLLineEditor>("chat_box");
+//	
+//	if (item == "can_cut")
+//	{
+//		return edit_box->canCut();
+//	}
+//	else if (item == "can_copy")
+//	{
+//		return edit_box->canCopy();
+//	}
+//	else if (item == "can_paste")
+//	{
+//		return edit_box->canPaste();
+//	}
+//	else if (item == "can_delete")
+//	{
+//		return edit_box->canDoDelete();
+//	}
+//	else if (item == "can_select_all")
+//	{
+//		return edit_box->canSelectAll() && (edit_box->getLength()>0);
+//	}
+//	return true;
+//}
 
 
 // used to manage the bottom bar icons specific to sidebar panels.
@@ -1083,33 +1083,33 @@ void LLBottomTray::showSidebarPanel(const LLSD& panel_name)
 //-TT
 }
 
-void LLBottomTray::onContextMenuItemClicked(const LLSD& userdata)
-{
-	std::string item = userdata.asString();
-	LLLineEditor* edit_box = mNearbyChatBar->findChild<LLLineEditor>("chat_box");
-
-	if (item == "cut")
-	{
-		edit_box->cut();
-	}
-	else if (item == "copy")
-	{
-		edit_box->copy();
-	}
-	else if (item == "paste")
-	{
-		edit_box->paste();
-		edit_box->setFocus(TRUE);
-	}
-	else if (item == "delete")
-	{
-		edit_box->doDelete();
-	}
-	else if (item == "select_all")
-	{
-		edit_box->selectAll();
-	}
-}
+//void LLBottomTray::onContextMenuItemClicked(const LLSD& userdata)
+//{
+//	std::string item = userdata.asString();
+//	LLLineEditor* edit_box = mNearbyChatBar->findChild<LLLineEditor>("chat_box");
+//
+//	if (item == "cut")
+//	{
+//		edit_box->cut();
+//	}
+//	else if (item == "copy")
+//	{
+//		edit_box->copy();
+//	}
+//	else if (item == "paste")
+//	{
+//		edit_box->paste();
+//		edit_box->setFocus(TRUE);
+//	}
+//	else if (item == "delete")
+//	{
+//		edit_box->doDelete();
+//	}
+//	else if (item == "select_all")
+//	{
+//		edit_box->selectAll();
+//	}
+//}
 
 void LLBottomTray::log(LLView* panel, const std::string& descr)
 {

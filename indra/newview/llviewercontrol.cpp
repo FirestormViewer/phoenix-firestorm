@@ -75,6 +75,9 @@
 #include "llstatusbar.h"
 #include "llupdaterservice.h"
 #include "lltexturefetch.h"
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-07-02 (Catznip-2.7.0a) | Added: Catznip-2.7.0a
+#include "llhunspell.h"
+// [/SL:KB]
 
 #ifdef TOGGLE_HACKED_GODLIKE_VIEWER
 BOOL 				gHackGodmode = FALSE;
@@ -541,6 +544,21 @@ bool handleForceShowGrid(const LLSD& newvalue)
 	return true;
 }
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Modified: Catznip-2.8.0a
+bool handleSpellCheckChanged(const LLSD& sdValue)
+{
+	LLHunspellWrapper::setUseSpellCheck((sdValue.asBoolean()) ? gSavedSettings.getString("SpellCheckDictionary") : LLStringUtil::null);
+	return true;
+}
+
+bool handleSpellCheckDictChanged(const LLSD& sdValue)
+{
+	if (gSavedSettings.getBOOL("SpellCheck"))
+		LLHunspellWrapper::setUseSpellCheck(sdValue.asString());
+	return true;
+}
+// [/SL:KB]
+
 bool toggle_agent_pause(const LLSD& newvalue)
 {
 	if ( newvalue.asBoolean() )
@@ -788,6 +806,10 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderTransparentWater")->getSignal()->connect(boost::bind(&handleRenderTransparentWaterChanged, _2));
 // [SL:KB] - Patch: UI-DndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
 	gSavedSettings.getControl("DragAndDropCommitDelay")->getSignal()->connect(boost::bind(&handleSettingF32Change, _2, &DELAY_DRAG_HOVER_COMMIT));
+// [/SL:KB]
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-07-02 (Catznip-2.8.0a) | Added: Catznip-2.7.0a
+	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged, _2));
+	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckDictChanged, _2));
 // [/SL:KB]
 	gSavedSettings.getControl("ImagePipelineHTTPMaxFailCountFallback")->getSignal()->connect(boost::bind(&handleImagePipelineHTTPMaxFailCountFallback, _2));
 	gSavedSettings.getControl("AvatarZOffset")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // ## Zi: Moved Avatar Z offset from RLVa to here

@@ -351,6 +351,7 @@
          label="To"
          layout="bottomleft"
 	 select_on_focus="true"
+         spellcheck="true"
          name="chat_editor"
          tab_group="3"
          width="249">

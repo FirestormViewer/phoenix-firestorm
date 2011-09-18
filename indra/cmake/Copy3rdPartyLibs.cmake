@@ -43,6 +43,7 @@ if(WINDOWS)
         libeay32.dll
         libcollada14dom22-d.dll
         glod.dll	
+        libhunspell.dll
         )
 
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
@@ -55,6 +56,7 @@ if(WINDOWS)
         libeay32.dll
         libcollada14dom22.dll
         glod.dll
+        libhunspell.dll
         )
 
     if(USE_GOOGLE_PERFTOOLS)

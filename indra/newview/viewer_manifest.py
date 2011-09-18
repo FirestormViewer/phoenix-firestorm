@@ -97,7 +97,8 @@ class ViewerManifest(LLManifest):
 
                 # ... and the entire windlight directory
                 self.path("windlight")
-
+                # ... and the pre-installed spell checking dictionaries
+                self.path("hunspell")
                 # include the entire beams directory
                 self.path("beams")
                 self.path("beamsColors")
@@ -410,6 +411,9 @@ class WindowsManifest(ViewerManifest):
             # Security
             self.path("ssleay32.dll")
             self.path("libeay32.dll")
+
+            # Hunspell
+            self.path("libhunspell.dll")
 
             # For google-perftools tcmalloc allocator.
             try:
