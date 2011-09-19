@@ -237,7 +237,7 @@ LLTextEditor::Params::Params()
 	show_line_numbers("show_line_numbers", false),
 	default_color("default_color"),
     commit_on_focus_lost("commit_on_focus_lost", false),
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
     commit_on_return("commit_on_return", false),
 // [/SL:KB]
 	show_context_menu("show_context_menu")
@@ -253,7 +253,7 @@ LLTextEditor::LLTextEditor(const LLTextEditor::Params& p) :
 	mDefaultColor(		p.default_color() ),
 	mShowLineNumbers ( p.show_line_numbers ),
 	mCommitOnFocusLost( p.commit_on_focus_lost),
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 	mCommitOnReturn(p.commit_on_return),
 // [/SL:KB]
 	mAllowEmbeddedItems( p.embedded_items ),
@@ -1616,7 +1616,7 @@ BOOL LLTextEditor::handleSpecialKey(const KEY key, const MASK mask)
 	case KEY_RETURN:
 		if (mask == MASK_NONE)
 		{
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 			if (!mCommitOnReturn)
 			{
 // [/SL:KB]
@@ -1625,7 +1625,7 @@ BOOL LLTextEditor::handleSpecialKey(const KEY key, const MASK mask)
 					deleteSelection(FALSE);
 				}
 				autoIndent(); // TODO: make this optional
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 			}
 			else
 			{

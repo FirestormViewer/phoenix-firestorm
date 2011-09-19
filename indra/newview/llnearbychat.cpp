@@ -52,7 +52,7 @@
 
 #include "llbottomtray.h"
 #include "llnearbychatbar.h"
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 #include "llnearbychatbarmulti.h"
 // [/SL:KB]
 #include "llfloaterreg.h"
@@ -64,7 +64,7 @@ LLNearbyChat::LLNearbyChat(const LLSD& key)
 	: LLDockableFloater(NULL, false, false, key)
 	,mChatHistory(NULL)
 {
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 	mFactoryMap["panel_chat_bar_single"] = LLCallbackMap(LLNearbyChat::createChatBarSingle, NULL);
 	mFactoryMap["panel_chat_bar_multi"] = LLCallbackMap(LLNearbyChat::createChatBarMulti, NULL);
 // [/SL:KB]
@@ -389,7 +389,7 @@ void LLNearbyChat::draw()
 	LLDockableFloater::draw();
 }
 
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 void* LLNearbyChat::createChatBarSingle(void*)
 {
 	return new LLNearbyChatBar();

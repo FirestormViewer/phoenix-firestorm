@@ -35,7 +35,7 @@
 #include "lloutputmonitorctrl.h"
 #include "llspeakers.h"
 #include "llbottomtray.h"
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 #include "llnearbychatbarbase.h"
 // [/SL:KB]
 
@@ -96,7 +96,7 @@ private:
 
 class LLNearbyChatBar
 :	public LLPanel
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 ,	public LLNearbyChatBarBase
 // [/SL:KB]
 {
@@ -131,7 +131,7 @@ protected:
 //	void onChatBoxFocusReceived();
 
 //	void sendChat( EChatType type );
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 	void sendChat(EChatType type) { LLNearbyChatBarBase::sendChat(mChatBox, type); }
 // [/SL:KB]
 	void onChatBoxCommit();
@@ -142,7 +142,7 @@ protected:
 
 	void displaySpeakingIndicator();
 
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 	// LLNearbyChatBarBase
 	/*virtual*/ LLWString getChatBoxText()						 { return mChatBox->getConvertedText(); }
 	/*virtual*/ void      setChatBoxText(LLStringExplicit& text) { mChatBox->setText(text); }

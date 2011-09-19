@@ -2430,14 +2430,14 @@ void LLTextBase::endSelection()
 	}
 }
 
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 void LLTextBase::setSelection(S32 start, S32 end)
 {
 	S32 len = getLength();
 
 	mIsSelecting = TRUE;
-	mSelectionStart = llclamp(end, 0, len);
-	mSelectionEnd = llclamp(start, 0, len);
+	mSelectionStart = llclamp(start, 0, len);
+	mSelectionEnd = llclamp(end, 0, len);
 
 	setCursorPos(mSelectionEnd);
 }

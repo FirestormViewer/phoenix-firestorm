@@ -177,7 +177,7 @@ void LLViewerFloaterReg::registerFloaters()
 
 	LLFloaterReg::add("camera", "floater_camera.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCamera>);
 //	LLFloaterReg::add("nearby_chat", "floater_nearby_chat.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLNearbyChat>);
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-24 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-24 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 	LLFloaterReg::addWithFileCallback("nearby_chat", &LLNearbyChat::getFloaterXMLFile, (LLFloaterBuildFunc)&LLFloaterReg::build<LLNearbyChat>);
 // [/SL:KB]
 

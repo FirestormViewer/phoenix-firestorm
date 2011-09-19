@@ -23,16 +23,6 @@ BOOL LLNearbyChatBarMulti::postBuild()
 
 	m_pChatEditor->setCommitOnFocusLost(FALSE);
 
-/*
-	mChatBox->setIgnoreArrowKeys( FALSE ); 
-	mChatBox->setRevertOnEsc( FALSE );
-	mChatBox->setIgnoreTab(TRUE);
-	mChatBox->setPassDelete(TRUE);
-	mChatBox->setReplaceNewlinesWithSpaces(FALSE);
-	mChatBox->setEnableLineHistory(TRUE);
-	mChatBox->setFont(LLViewerChat::getChatFont());
-*/
-
 	return TRUE;
 }
 
