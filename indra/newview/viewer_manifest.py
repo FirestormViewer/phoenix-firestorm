@@ -98,7 +98,7 @@ class ViewerManifest(LLManifest):
                 # ... and the entire windlight directory
                 self.path("windlight")
                 # ... and the pre-installed spell checking dictionaries
-                self.path("hunspell")
+                self.path("dictionaries")
                 # include the entire beams directory
                 self.path("beams")
                 self.path("beamsColors")
