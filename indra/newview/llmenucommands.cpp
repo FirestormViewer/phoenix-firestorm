@@ -63,32 +63,33 @@ void handle_mouselook(void*)
 	gAgentCamera.changeCameraToMouselook();
 }
 
+// [SL:KB] - Dead code
+//void handle_chat(void*)
+//{
+//	// give focus to chatbar if it's open but not focused
+//	if (gSavedSettings.getBOOL("ChatVisible") && 
+//		gFocusMgr.childHasKeyboardFocus(LLNearbyChatBar::getInstance()->getChatBox()))
+//	{
+//		LLNearbyChatBar::stopChat();
+//	}
+//	else
+//	{
+//		LLNearbyChatBar::startChat(NULL);
+//	}
+//}
 
-void handle_chat(void*)
-{
-	// give focus to chatbar if it's open but not focused
-	if (gSavedSettings.getBOOL("ChatVisible") && 
-		gFocusMgr.childHasKeyboardFocus(LLNearbyChatBar::getInstance()->getChatBox()))
-	{
-		LLNearbyChatBar::stopChat();
-	}
-	else
-	{
-		LLNearbyChatBar::startChat(NULL);
-	}
-}
-
-void handle_slash_key(void*)
-{
-	// LLBottomTray::startChat("/");
-	//
-	// Don't do this, it results in a double-slash in the input field.
-	// Another "/" will be automatically typed for us, because the WM_KEYDOWN event
-	// that generated the menu accelerator call (and hence puts focus in
-	// the chat edtior) will be followed by a "/" WM_CHAR character message,
-	// which will type the slash.  Yes, it's weird.  It only matters for
-	// menu accelerators that put input focus into a field.   And Mac works
-	// the same way.  JC
-
-	LLNearbyChatBar::startChat(NULL);
-}
+// [SL:KB] - Dead code
+//void handle_slash_key(void*)
+//{
+//	// LLBottomTray::startChat("/");
+//	//
+//	// Don't do this, it results in a double-slash in the input field.
+//	// Another "/" will be automatically typed for us, because the WM_KEYDOWN event
+//	// that generated the menu accelerator call (and hence puts focus in
+//	// the chat edtior) will be followed by a "/" WM_CHAR character message,
+//	// which will type the slash.  Yes, it's weird.  It only matters for
+//	// menu accelerators that put input focus into a field.   And Mac works
+//	// the same way.  JC
+//
+//	LLNearbyChatBar::startChat(NULL);
+//}
