@@ -238,6 +238,18 @@
     <key>Value</key>
     <integer>1</integer>
   </map>
+  
+  <key>PhoenixFontChatLineSpacingPixels</key>
+  <map>
+    <key>Comment</key>
+    <string>Line spacing pixels for chat text (requires restart)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
 
 </map>
 </llsd>

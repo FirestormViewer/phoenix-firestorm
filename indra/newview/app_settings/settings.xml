@@ -16320,16 +16320,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>fonts.xml</string>
     </map>
-    <key>PhoenixFontChatLineSpacing</key>
+    <key>PhoenixFontChatLineSpacingPixels</key>
     <map>
       <key>Comment</key>
-      <string>Line spacing multiplier for chat text (requires restart)</string>
+      <string>Line spacing pixels for chat text (requires restart)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>F32</string>
+      <string>S32</string>
       <key>Value</key>
-      <integer>1.05</integer>
+      <integer>2</integer>
     </map>
     <key>PhoenixFontSizeAdjustment</key>
     <map>
