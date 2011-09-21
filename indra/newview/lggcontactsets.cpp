@@ -353,8 +353,9 @@ std::vector<std::string> LGGContactSets::getFriendGroups(LLUUID friend_id)
 	{
 		const std::string& groupName = (*loc_it).first;
 		if(groupName!="" && groupName !="globalSettings" && groupName!="All Sets" && groupName!="All Groups" && groupName!="All Groups"  && groupName!="No Sets" && groupName!="ReNamed" && groupName!="Non Friends" && groupName!="extraAvs" && groupName!="pseudonym")
-			if(mContactSets[groupName]["friends"].has(friend_id.asString()))
-				toReturn.push_back(groupName);
+			if(mContactSets[groupName].has("friends"))
+				if(mContactSets[groupName]["friends"].has(friend_id.asString()))
+					toReturn.push_back(groupName);
 	}
 	return toReturn;
 }
@@ -430,8 +431,9 @@ BOOL LGGContactSets::isFriendInAnyGroup(LLUUID friend_id)
 	std::vector<std::string> groups = getAllGroups(FALSE);
 	for(int g=0;g<(int)groups.size();g++)
 	{
-		if(mContactSets[groups[g]]["friends"].has(friend_id.asString()))
-			return TRUE;
+		if(mContactSets[groups[g]].has("friends"))
+			if(mContactSets[groups[g]]["friends"].has(friend_id.asString()))
+				return TRUE;
 	}
 	return FALSE;
 }
@@ -441,7 +443,9 @@ BOOL LGGContactSets::isFriendInGroup(LLUUID friend_id, std::string groupName)
 	if(groupName=="No Sets") return !isFriendInAnyGroup(friend_id);
 	if(groupName=="ReNamed") return hasPseudonym(friend_id);
 	if(groupName=="Non Friends") return isNonFriend(friend_id);
-	return mContactSets[groupName]["friends"].has(friend_id.asString());
+	if(mContactSets[groupName].has("friends"))
+		return mContactSets[groupName]["friends"].has(friend_id.asString());
+	return FALSE;
 }
 BOOL LGGContactSets::notifyForFriend(LLUUID friend_id)
 {
@@ -455,7 +459,7 @@ BOOL LGGContactSets::notifyForFriend(LLUUID friend_id)
 }
 void LGGContactSets::addFriendToGroup(LLUUID friend_id, std::string groupName)
 {
-	if(friend_id.notNull() && groupName!="" && groupName !="globalSettings" && groupName!="No Sets" && groupName!="All Sets" && groupName!="All Groups"  && groupName!="ReNamed" && groupName!="Non Friends")
+	if(friend_id.notNull() && groupName!="" && groupName != "extraAvs" && groupName!="pseudonym" && groupName !="globalSettings" && groupName!="No Sets" && groupName!="All Sets" && groupName!="All Groups"  && groupName!="ReNamed" && groupName!="Non Friends")
 	{
 		mContactSets[groupName]["friends"][friend_id.asString()]="";
 		save();
@@ -504,6 +508,11 @@ std::vector<LLUUID> LGGContactSets::getListOfNonFriends()
 	for ( ; loc_it != loc_end; ++loc_it)
 	{
 		const LLSD& friendID = (*loc_it).first;
+		if(friendID.asString()=="friends")
+		{
+			friends.erase(friendID.asString());
+			continue;
+		}
 		if(friendID.asUUID().notNull())
 			if(!LLAvatarTracker::instance().isBuddy(friendID))
 				toReturn.push_back(friendID.asUUID());
@@ -522,6 +531,11 @@ std::vector<LLUUID> LGGContactSets::getListOfPseudonymAvs()
 	for ( ; loc_it != loc_end; ++loc_it)
 	{
 		const LLSD& friendID = (*loc_it).first;
+		if(friendID.asString()=="friends")
+		{
+			friends.erase(friendID.asString());
+			continue;
+		}
 		if(friendID.asUUID().notNull())
 			toReturn.push_back(friendID.asUUID());
 	}	
@@ -573,7 +587,7 @@ void LGGContactSets::removeFriendFromGroup(LLUUID friend_id, std::string groupNa
 	{
 		return removeNonFriendFromList(friend_id);
 	}
-	if(groupName=="ReNamed")
+	if(groupName=="ReNamed" || groupName=="pseudonym")
 	{
 		return clearPseudonym(friend_id);
 	}
