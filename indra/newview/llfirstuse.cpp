@@ -104,19 +104,19 @@ void LLFirstUse::useSandbox()
 // static
 void LLFirstUse::usePhoenixContactSet()
 {
-	firstUseNotification("FirstPhoenixContactSetOpen", true, "FirstPhoenixContactSetOpen");
+	firstUseNotification("FirstPhoenixContactSetOpen", true, "FirstPhoenixContactSetOpen",LLSD(),LLSD().with("direction", "top"));
 }
 
 //static
 void LLFirstUse::usePhoenixFriendsNonFriend()
 {
-	firstUseNotification("FirstPhoenixContactSetNonFriend",true,"FirstPhoenixContactSetNonFriend");
+	firstUseNotification("FirstPhoenixContactSetNonFriend",true,"FirstPhoenixContactSetNonFriend",LLSD(),LLSD().with("direction", "top"));
 }
 
 // static 
 void LLFirstUse::usePhoenixContactSetRename()
 {
-	firstUseNotification("FirstPhoenixContactSetRename",true,"FirstPhoenixContactSetRename");
+	firstUseNotification("FirstPhoenixContactSetRename",true,"FirstPhoenixContactSetRename",LLSD(),LLSD().with("direction", "top"));
 }
 
 // static

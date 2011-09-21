@@ -8303,7 +8303,8 @@ Could not add [GRID] to the grid list.
   <notification
    icon="notify.tga"
    name="FirstPhoenixContactSetOpen"
-   type="notify">
+   type="hint"
+  unique="true">
     This is your first time opening the Contact Sets floater!
     This floater will allow you to organize your friends into groups.
 
@@ -8319,7 +8320,8 @@ Could not add [GRID] to the grid list.
   <notification
    icon="notify.tga"
    name="FirstPhoenixContactSetNonFriend"
-   type="notify">
+   type="hint"
+  unique="true">
     You just added someone not on your friends list, to the Contact Sets floater!
     You can use this to colorize and rename people
     Please be aware that mass tp and confrence calls will still only use people from your friends list.
@@ -8330,7 +8332,8 @@ Could not add [GRID] to the grid list.
   <notification
    icon="notify.tga"
    name="FirstPhoenixContactSetRename"
-   type="notify">
+   type="hint"
+  unique="true">
     You just renamed an avatar!
     This will replace this avatars display name with the one you choose.
 
