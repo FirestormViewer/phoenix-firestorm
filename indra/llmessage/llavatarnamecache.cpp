@@ -708,7 +708,6 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 					info["is_display_name_default"]=LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id);
 					info["display_name"]=LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id)?(info["legacy_first_name"].asString()+" "+info["legacy_last_name"].asString()):LGGContactSets::getInstance()->getPseudonym(agent_id);
 					av_name.fromLLSD(info);
-					fireSignal(agent_id, slot, av_name);
 				}
 				
 				if (av_name.mExpires > LLFrameTimer::getTotalSeconds())
