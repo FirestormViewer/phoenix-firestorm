@@ -14,8 +14,8 @@
  * 
  */
 
-#ifndef LLHUNSPELL_H
-#define LLHUNSËLL_H
+#ifndef LL_HUNSPELL_H
+#define LL_HUNSPELL_H
 
 #include "llsingleton.h"
 #include <boost/signals2.hpp>
@@ -80,4 +80,4 @@ protected:
 
 // ============================================================================
 
-#endif // LLHUNSPELL_H
+#endif // LL_HUNSPELL_H
