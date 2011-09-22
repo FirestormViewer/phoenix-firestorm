@@ -52,6 +52,9 @@
 
 #include "llbottomtray.h"
 #include "llnearbychatbar.h"
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+#include "llnearbychatbarmulti.h"
+// [/SL:KB]
 #include "llfloaterreg.h"
 #include "lltrans.h"
 
@@ -61,7 +64,10 @@ LLNearbyChat::LLNearbyChat(const LLSD& key)
 	: LLDockableFloater(NULL, false, false, key)
 	,mChatHistory(NULL)
 {
-	
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+	mFactoryMap["panel_chat_bar_single"] = LLCallbackMap(LLNearbyChat::createChatBarSingle, NULL);
+	mFactoryMap["panel_chat_bar_multi"] = LLCallbackMap(LLNearbyChat::createChatBarMulti, NULL);
+// [/SL:KB]
 }
 
 LLNearbyChat::~LLNearbyChat()
@@ -382,3 +388,34 @@ void LLNearbyChat::draw()
 
 	LLDockableFloater::draw();
 }
+
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+void* LLNearbyChat::createChatBarSingle(void*)
+{
+	return new LLNearbyChatBar();
+}
+
+void* LLNearbyChat::createChatBarMulti(void*)
+{
+	return new LLNearbyChatBarMulti();
+}
+
+const std::string& LLNearbyChat::getFloaterXMLFile()
+{
+	static std::string strFile;
+	switch (gSavedSettings.getS32("NearbyChatFloaterBarType"))
+	{
+		case 1:		// Single-line
+			strFile = "floater_nearby_chat_single.xml";
+			break;
+		case 2:		// Multi-line
+			strFile = "floater_nearby_chat_multi.xml";
+			break;
+		case 0:		// None (default)
+		default:
+			strFile = "floater_nearby_chat.xml";
+			break;
+	}
+	return strFile;
+}
+// [/SL:KB]

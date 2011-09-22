@@ -30,8 +30,8 @@
 class LLUUID;
 
 void handle_mouselook(void*);
-void handle_chat(void*);
+//void handle_chat(void*);
 void handle_return_key(void*);
-void handle_slash_key(void*);
+//void handle_slash_key(void*);
 
 #endif
