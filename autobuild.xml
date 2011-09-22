@@ -1619,9 +1619,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>34498e92a98171150b2266baca618a2a</string>
+              <string>1e3cf916c8330a871be14b7023d2a442</string>
               <key>url</key>
-              <string>http://phoenixviewer.com/app/packages/libhunspell_FS_darwin_i686_1.3.2.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/libhunspell-1.3.2-darwin-20110919.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1631,9 +1631,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>cf0f4dd52633b933f8f38b66fe6faa39</string>
+              <string>535036d910262c5f10da0215bdde38f1</string>
               <key>url</key>
-              <string>http://phoenixviewer.com/app/packages/libhunspell_FS_linux_i686_1.3.2.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/libhunspell-1.3.2-linux-20110919.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1643,9 +1643,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0c7829cf6804b28a5f962496176c4949</string>
+              <string>52aabfc137a0091f35cda7089a95d7d2</string>
               <key>url</key>
-              <string>http://phoenixviewer.com/app/packages/libhunspell_FS_win32_i686_1.3.2.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/libhunspell-1.3.2-windows-20110919.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
