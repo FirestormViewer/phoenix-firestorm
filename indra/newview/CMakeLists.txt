@@ -13,6 +13,7 @@ include(EXPAT)
 include(FMOD)
 include(OPENAL)
 include(FindOpenGL)
+include(Hunspell)
 include(JsonCpp)
 include(LLAudio)
 include(LLConvexDecomposition)
@@ -33,7 +34,6 @@ include(LLXML)
 include(LLXUIXML)
 include(LScript)
 include(Linking)
-include(Hunspell)
 include(NDOF)
 include(GooglePerfTools)
 include(TemplateCheck)
@@ -70,6 +70,7 @@ include_directories(
     ${LSCRIPT_INCLUDE_DIRS}
     ${LSCRIPT_INCLUDE_DIRS}/lscript_compile
     ${LLLOGIN_INCLUDE_DIRS}
+    ${LIBS_PREBUILD_DIR}/include/hunspell
     ${LIBS_PREBUILT_DIR}/include/collada
     ${UPDATER_INCLUDE_DIRS}
     ${OPENAL_LIB_INCLUDE_DIRS}

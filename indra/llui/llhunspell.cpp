@@ -40,24 +40,28 @@ static const std::string c_strDictIgnoreSuffix = "_ignore";
 LLHunspellWrapper::LLHunspellWrapper()
 	: m_pHunspell(NULL)
 {
-	m_strDictionaryPath = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "dictionaries", "");
+	m_strDictionaryAppPath = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "dictionaries", "");
+	m_strDictionaryUserPath = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "dictionaries", "");
+	if (!gDirUtilp->fileExists(m_strDictionaryUserPath))
+		LLFile::mkdir(m_strDictionaryUserPath);		
 
 	// Load dictionary information (file name, friendly name, ...)
-	llifstream fileDictMap(m_strDictionaryPath + "dictionaries.xml", std::ios::binary);
+	llifstream fileDictMap(m_strDictionaryAppPath + "dictionaries.xml", std::ios::binary);
 	if (fileDictMap.is_open())
 		LLSDSerialize::fromXMLDocument(m_sdDictionaryMap, fileDictMap);
 
 	// Look for installed dictionaries
-	std::string strTempPath;
+	std::string strTempAppPath, strTempUserPath;
 	for (LLSD::array_iterator itDictInfo = m_sdDictionaryMap.beginArray(), endDictInfo = m_sdDictionaryMap.endArray();
 			itDictInfo != endDictInfo; ++itDictInfo)
 	{
 		LLSD& sdDict = *itDictInfo;
-		strTempPath = (sdDict.has("name")) ? m_strDictionaryPath + sdDict["name"].asString() : LLStringUtil::null;
+		strTempAppPath = (sdDict.has("name")) ? m_strDictionaryAppPath + sdDict["name"].asString() : LLStringUtil::null;
+		strTempUserPath = (sdDict.has("name")) ? m_strDictionaryUserPath + sdDict["name"].asString() : LLStringUtil::null;
 		sdDict["installed"] = 
-			(!strTempPath.empty()) && (gDirUtilp->fileExists(strTempPath + ".aff")) && (gDirUtilp->fileExists(strTempPath + ".dic"));
-		sdDict["has_custom"] = (!strTempPath.empty()) && (gDirUtilp->fileExists(strTempPath + c_strDictCustomSuffix + ".dic"));
-		sdDict["has_ignore"] = (!strTempPath.empty()) && (gDirUtilp->fileExists(strTempPath + c_strDictIgnoreSuffix + ".dic"));
+			(!strTempAppPath.empty()) && (gDirUtilp->fileExists(strTempAppPath + ".aff")) && (gDirUtilp->fileExists(strTempAppPath + ".dic"));
+		sdDict["has_custom"] = (!strTempUserPath.empty()) && (gDirUtilp->fileExists(strTempUserPath + c_strDictCustomSuffix + ".dic"));
+		sdDict["has_ignore"] = (!strTempUserPath.empty()) && (gDirUtilp->fileExists(strTempUserPath + c_strDictIgnoreSuffix + ".dic"));
 	}
 }
 
@@ -159,8 +163,8 @@ bool LLHunspellWrapper::setCurrentDictionary(const std::string& strDictionary)
 
 	if (sdDictInfo.has("name"))
 	{
-		std::string strPathAff = m_strDictionaryPath + sdDictInfo["name"].asString() + ".aff";
-		std::string strPathDic = m_strDictionaryPath + sdDictInfo["name"].asString() + ".dic";
+		std::string strPathAff = m_strDictionaryAppPath + sdDictInfo["name"].asString() + ".aff";
+		std::string strPathDic = m_strDictionaryAppPath + sdDictInfo["name"].asString() + ".dic";
 		m_pHunspell = new Hunspell(strPathAff.c_str(), strPathDic.c_str());
 		if (!m_pHunspell)
 			return false;
@@ -171,14 +175,14 @@ bool LLHunspellWrapper::setCurrentDictionary(const std::string& strDictionary)
 		// Add the custom dictionary (if there is one)
 		if (sdDictInfo["has_custom"].asBoolean())
 		{
-			std::string strPathCustomDic = m_strDictionaryPath + m_strDictionaryFile + c_strDictCustomSuffix + ".dic";
+			std::string strPathCustomDic = m_strDictionaryUserPath + m_strDictionaryFile + c_strDictCustomSuffix + ".dic";
 			m_pHunspell->add_dic(strPathCustomDic.c_str());
 		}
 
 		// Load the ignore list (if there is one)
 		if (sdDictInfo["has_ignore"].asBoolean())
 		{
-			llifstream fileDictIgnore(m_strDictionaryPath + m_strDictionaryFile + c_strDictIgnoreSuffix + ".dic", std::ios::in);
+			llifstream fileDictIgnore(m_strDictionaryUserPath + m_strDictionaryFile + c_strDictIgnoreSuffix + ".dic", std::ios::in);
 			if (fileDictIgnore.is_open())
 			{
 				std::string strWord; int idxLine = 0;
@@ -204,7 +208,7 @@ void LLHunspellWrapper::addToCustomDictionary(const std::string& strWord)
 {
 	if (m_pHunspell)
 		m_pHunspell->add(strWord.c_str());
-	addToDictFile(m_strDictionaryPath + m_strDictionaryFile + c_strDictCustomSuffix + ".dic", strWord);
+	addToDictFile(m_strDictionaryUserPath + m_strDictionaryFile + c_strDictCustomSuffix + ".dic", strWord);
 	s_SettingsChangeSignal();
 }
 
@@ -216,7 +220,7 @@ void LLHunspellWrapper::addToIgnoreList(const std::string& strWord)
 	if (std::find(m_IgnoreList.begin(), m_IgnoreList.end(), strWordLower) == m_IgnoreList.end())
 	{
 		m_IgnoreList.push_back(strWordLower);
-		addToDictFile(m_strDictionaryPath + m_strDictionaryFile + c_strDictIgnoreSuffix + ".dic", strWordLower);
+		addToDictFile(m_strDictionaryUserPath + m_strDictionaryFile + c_strDictIgnoreSuffix + ".dic", strWordLower);
 		s_SettingsChangeSignal();
 	}
 }

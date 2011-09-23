@@ -14,8 +14,8 @@
  * 
  */
 
-#ifndef LLHUNSPELL_H
-#define LLHUNSËLL_H
+#ifndef LL_HUNSPELL_H
+#define LL_HUNSPELL_H
 
 #include "llsingleton.h"
 #include <boost/signals2.hpp>
@@ -70,7 +70,8 @@ protected:
 	Hunspell*					m_pHunspell;
 	std::string					m_strDictionaryName;
 	std::string					m_strDictionaryFile;
-	std::string					m_strDictionaryPath;
+	std::string					m_strDictionaryAppPath;
+	std::string					m_strDictionaryUserPath;
 	LLSD						m_sdDictionaryMap;
 	std::vector<std::string>	m_IgnoreList;
 
@@ -79,4 +80,4 @@ protected:
 
 // ============================================================================
 
-#endif // LLHUNSPELL_H
+#endif // LL_HUNSPELL_H
