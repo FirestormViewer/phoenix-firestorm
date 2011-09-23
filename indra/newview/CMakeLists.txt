@@ -13,6 +13,7 @@ include(EXPAT)
 include(FMOD)
 include(OPENAL)
 include(FindOpenGL)
+include(Hunspell)
 include(JsonCpp)
 include(LLAudio)
 include(LLConvexDecomposition)
@@ -33,7 +34,6 @@ include(LLXML)
 include(LLXUIXML)
 include(LScript)
 include(Linking)
-include(Hunspell)
 include(NDOF)
 include(GooglePerfTools)
 include(TemplateCheck)
@@ -70,6 +70,7 @@ include_directories(
     ${LSCRIPT_INCLUDE_DIRS}
     ${LSCRIPT_INCLUDE_DIRS}/lscript_compile
     ${LLLOGIN_INCLUDE_DIRS}
+    ${LIBS_PREBUILD_DIR}/include/hunspell
     ${LIBS_PREBUILT_DIR}/include/collada
     ${UPDATER_INCLUDE_DIRS}
     ${OPENAL_LIB_INCLUDE_DIRS}
@@ -1642,6 +1643,9 @@ if (WINDOWS)
       ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/msvcp100.dll
       ${SHARED_LIB_STAGING_DIR}/Debug/msvcr100d.dll
       ${SHARED_LIB_STAGING_DIR}/Debug/msvcp100d.dll
+      ${SHARED_LIB_STAGING_DIR}/Release/libhunspell.dll
+      ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libhunspell.dll
+      ${SHARED_LIB_STAGING_DIR}/Debug/libhunspell.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/SLVoice.exe
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/alut.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/wrap_oal.dll
