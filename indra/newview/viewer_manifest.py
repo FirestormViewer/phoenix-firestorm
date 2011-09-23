@@ -599,6 +599,7 @@ class DarwinManifest(ViewerManifest):
 
             # copy additional libs in <bundle>/Contents/MacOS/
             self.path("../packages/lib/release/libndofdev.dylib", dst="Resources/libndofdev.dylib")
+            self.path("../packages/lib/release/libhunspell-1.3.dylib", dst="Resources/libhunspell-1.3.dylib")
 
             self.path("../viewer_components/updater/scripts/darwin/update_install", "MacOS/update_install")
 
@@ -988,6 +989,8 @@ class Linux_i686Manifest(LinuxManifest):
             self.path("libopenjpeg.so.1.4.0")
             self.path("libopenjpeg.so.1")
             self.path("libopenjpeg.so")
+            self.path("libhunspell-1.3.so")
+            self.path("libhunspell-1.3.so.0")
             self.path("libalut.so")
             self.path("libopenal.so", "libopenal.so.1")
             self.path("libopenal.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
