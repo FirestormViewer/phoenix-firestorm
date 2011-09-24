@@ -103,7 +103,7 @@ public:
 
 	virtual void reshape(S32 width, S32 height, BOOL called_from_parent);
 
-	virtual void setVisible(BOOL visible);
+	void setChatBarVisible(BOOL visible);
 
 	/*virtual*/ S32 notifyParent(const LLSD& info);
 
@@ -536,6 +536,7 @@ protected:
 	void showSidebarPanel(const LLSD& panel_name);
 //-TT 
 	bool onContextMenuItemEnabled(const LLSD& userdata);
+	void onAutohideChatBarChanged();
 
 	// Either default or saved after user's manual resize width of nearby chat.
 	// Nearby chat will not always have it, because sometimes it can be shrunk on resize,
@@ -552,6 +553,7 @@ protected:
 	LLButton*			mCamButton;
 	LLButton*			mMovementButton;
 	LLBottomTrayLite*   mBottomTrayLite;
+	LLBottomTrayLite*   mPopupChatBar;
 	LLButton*			mAOToggleButton;			// ## Zi: Animation Overrider
 	bool                mIsInLiteMode;
 

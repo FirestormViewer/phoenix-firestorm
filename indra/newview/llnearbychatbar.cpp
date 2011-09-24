@@ -917,7 +917,7 @@ void LLNearbyChatBar::startChat(const char* line)
 	if (!cb )
 		return;
 
-	bt->setVisible(TRUE);
+	bt->setChatBarVisible(TRUE);
 	cb->mChatBox->setFocus(TRUE);
 
 	if (line)
@@ -943,6 +943,7 @@ void LLNearbyChatBar::stopChat()
 	if (!cb)
 		return;
 
+	bt->setChatBarVisible(FALSE);
 	cb->mChatBox->setFocus(FALSE);
 
  	// stop typing animation

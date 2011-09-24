@@ -901,6 +901,17 @@
               (requires restart)
             </text>
             <check_box
+             control_name="AutohideChatBar"
+             height="16"
+             initial_value="false"
+             label="Autohide Main Chatbar"
+             layout="topleft"
+             left="20"
+             name="AutohideChatBar"
+             tool_tip="Hide the chat bar from the bottom button bar and only show it as an overlay when needed."
+             top_pad="0"
+             width="256" />
+            <check_box
              layout="topleft"
              follows="left|top"
              top_pad="0"

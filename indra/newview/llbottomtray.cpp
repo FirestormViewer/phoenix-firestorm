@@ -201,10 +201,7 @@ public:
 
 	void onFocusLost()
 	{
-		if (gAgentCamera.cameraMouselook())
-		{
-			LLBottomTray::getInstance()->setVisible(FALSE);
-		}
+		setVisible(FALSE);
 	}
 
 	LLNearbyChatBar*	mNearbyChatBar;
@@ -225,6 +222,7 @@ LLBottomTray::LLBottomTray(const LLSD&)
 	mBottomTrayContextMenu(NULL),
 	mCamButton(NULL),
 	mBottomTrayLite(NULL),
+	mPopupChatBar(NULL),
 	mIsInLiteMode(false),
 	mDragStarted(false),
 	mDraggedItem(NULL),
@@ -237,7 +235,6 @@ LLBottomTray::LLBottomTray(const LLSD&)
 
 	mFactoryMap["chat_bar"] = LLCallbackMap(LLBottomTray::createNearbyChatBar, NULL);
 
-	buildFromFile("panel_bottomtray.xml");
 // <AW: Flat cam floater>
 	// find this callback registered in llfloatercamera.cpp now
 //	LLUICtrl::CommitCallbackRegistry::defaultRegistrar().add("CameraPresets.ChangeView", boost::bind(&LLFloaterCamera::onClickCameraItem, _2));
@@ -251,7 +248,13 @@ LLBottomTray::LLBottomTray(const LLSD&)
 		mBottomTrayLite = new LLBottomTrayLite();
 		mBottomTrayLite->setFollowsAll();
 		mBottomTrayLite->setVisible(FALSE);
+
+		mPopupChatBar = new LLBottomTrayLite();
+		mPopupChatBar->setFollowsAll();
+		mPopupChatBar->setVisible(FALSE);
 	}
+
+	buildFromFile("panel_bottomtray.xml");
 
 	mImageDragIndication = LLUI::getUIImage(getString("DragIndicationImageName"));
 	mDesiredNearbyChatWidth = mNearbyChatBar ? mNearbyChatBar->getRect().getWidth() : 0;
@@ -288,7 +291,13 @@ void* LLBottomTray::createNearbyChatBar(void* userdata)
 
 LLNearbyChatBar* LLBottomTray::getNearbyChatBar()
 {
-	return mIsInLiteMode ? mBottomTrayLite->mNearbyChatBar : mNearbyChatBar;
+	if(mIsInLiteMode)
+		return mBottomTrayLite->mNearbyChatBar;
+
+	if(gSavedSettings.getBOOL("AutohideChatBar"))
+		return mPopupChatBar->mNearbyChatBar;
+
+	return mNearbyChatBar;
 }
 
 LLIMChiclet* LLBottomTray::createIMChiclet(const LLUUID& session_id)
@@ -421,6 +430,7 @@ void LLBottomTray::onMouselookModeOut()
 	mIsInLiteMode = false;
 	mBottomTrayLite->setVisible(FALSE);
 	mNearbyChatBar->getChatBox()->setText(mBottomTrayLite->mNearbyChatBar->getChatBox()->getText());
+	mPopupChatBar->mNearbyChatBar->getChatBox()->setText(mBottomTrayLite->mNearbyChatBar->getChatBox()->getText());
 	setVisible(TRUE);
 }
 
@@ -433,30 +443,38 @@ void LLBottomTray::onMouselookModeIn()
 		getParent()->addChild(mBottomTrayLite);
 
 	mBottomTrayLite->setShape(getLocalRect());
-	mBottomTrayLite->mNearbyChatBar->getChatBox()->setText(mNearbyChatBar->getChatBox()->getText());
+	if(gSavedSettings.getBOOL("AutohideChatBar"))
+		mBottomTrayLite->mNearbyChatBar->getChatBox()->setText(mPopupChatBar->mNearbyChatBar->getChatBox()->getText());		
+	else
+		mBottomTrayLite->mNearbyChatBar->getChatBox()->setText(mNearbyChatBar->getChatBox()->getText());
 	mBottomTrayLite->mGesturePanel->setVisible(gSavedSettings.getBOOL("ShowGestureButton"));
 
 	mIsInLiteMode = true;
 }
 
-//virtual
-// setVisible used instead of onVisibilityChange, since LLAgent calls it on entering/leaving mouselook mode.
-// If bottom tray is already visible in mouselook mode, then onVisibilityChange will not be called from setVisible(true),
-void LLBottomTray::setVisible(BOOL visible)
+void LLBottomTray::setChatBarVisible(BOOL visible)
 {
 	if (mIsInLiteMode)
 	{
 		mBottomTrayLite->setVisible(visible);
 	}
-	else 
+	else if(gSavedSettings.getBOOL("AutohideChatBar"))
 	{
-		LLPanel::setVisible(visible);
+		// Attach the lite bottom tray
+		if (getParent() && mPopupChatBar->getParent() != getParent())
+			getParent()->addChild(mPopupChatBar);
+
+		if(visible)
+		{
+			if(mPopupChatBar->getVisible())
+				return;
+
+			mPopupChatBar->setShape(getLocalRect());
+			mPopupChatBar->mGesturePanel->setVisible(gSavedSettings.getBOOL("ShowGestureButton"));
+		}
+
+		mPopupChatBar->setVisible(visible);
 	}
-	//-TT 2.6.9 - removed?
-	//if(visible)
-	//	gFloaterView->setSnapOffsetBottom(getRect().getHeight());
-	//else
-	//	gFloaterView->setSnapOffsetBottom(0);
 }
 
 S32 LLBottomTray::notifyParent(const LLSD& info)
@@ -649,7 +667,25 @@ BOOL LLBottomTray::postBuild()
 	mAOToggleButton->setCommitCallback(boost::bind(&LLBottomTray::toggleAO,this));
 	mAOToggleButton->setToggleState(gSavedPerAccountSettings.getBOOL("UseAO"));
 	// ## Zi: Animation Overrider
+
+	gSavedSettings.getControl("AutohideChatBar")->getSignal()->connect(boost::bind(&LLBottomTray::onAutohideChatBarChanged, this));
+	onAutohideChatBarChanged();
+
 	return TRUE;
+}
+
+void LLBottomTray::onAutohideChatBarChanged()
+{
+	if(gSavedSettings.getBOOL("AutohideChatBar"))
+	{
+		mChatBarContainer->setVisible(FALSE);
+		mNearbyCharResizeHandlePanel->setVisible(FALSE);
+	}
+	else
+	{
+		mChatBarContainer->setVisible(TRUE);
+		mNearbyCharResizeHandlePanel->setVisible(TRUE);
+	}
 }
 
 //Drag-n-drop
