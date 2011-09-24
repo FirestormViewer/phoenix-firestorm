@@ -151,7 +151,7 @@
          label="Use Pie Menu"
          layout="topleft"
          left_delta="0"
-         name="ShowHoverTips"
+         name="UsePieMenu"
          tool_tip="Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments."
          top_pad="7"
          width="256" />
