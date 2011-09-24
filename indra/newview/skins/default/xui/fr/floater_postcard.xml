@@ -20,12 +20,12 @@
 		Saisir ici votre message
 	</text_editor>
 	<text name="fine_print">
-		Si le destinataire s&apos;inscrit sur [SECOND_LIFE], vous recevrez un bonus.
+		Si le destinataire s&apos;inscrit sur [CURRENT_GRID], vous recevrez un bonus.
 	</text>
 	<button label="Annuler" name="cancel_btn"/>
 	<button label="Envoyer" name="send_btn"/>
 	<string name="default_subject">
-		Carte postale de [SECOND_LIFE].
+		Carte postale de [CURRENT_GRID].
 	</string>
 	<string name="default_message">
 		Ouvrez-moi !

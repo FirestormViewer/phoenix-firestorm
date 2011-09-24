@@ -145,7 +145,7 @@
 		<menu_item_call label="Rehacer" name="Redo"/>
 	</menu>
 	<menu label="Ayuda" name="Help">
-		<menu_item_call label="Ayuda de [SECOND_LIFE]" name="Second Life Help"/>
+		<menu_item_call label="Ayuda de [CURRENT_GRID]" name="Second Life Help"/>
 		<menu_item_check label="Permitir consejos" name="Enable Hints"/>
 		<menu_item_call label="Denunciar una infracción" name="Report Abuse"/>
 		<menu_item_call label="Informar de un fallo" name="Report Bug"/>

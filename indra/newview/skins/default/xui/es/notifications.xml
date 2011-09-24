@@ -205,7 +205,7 @@ El precio de venta será de [SALE_PRICE] L$, y se autorizará la compra sólo a 
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
-		ATENCIÓN: Marcando &apos;vender a cualquiera&apos; hace que tu terreno esté disponible para toda la comunidad de [SECOND_LIFE], incluso para quienes no están en esta región.
+		ATENCIÓN: Marcando &apos;vender a cualquiera&apos; hace que tu terreno esté disponible para toda la comunidad de [CURRENT_GRID], incluso para quienes no están en esta región.
 
 Los [LAND_SIZE] m² seleccionados de terreno se van a poner a la venta.
 El precio de venta será de [SALE_PRICE] L$ y se autoriza la compra a [NAME].
@@ -301,7 +301,7 @@ debes estar dentro de ella.
 		Hubo un problema al subir la captura de pantalla del informe por la siguiente razón: [REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
-		Debes estar de acuerdo con las Condiciones del Servicio para continuar el inicio de sesión en [SECOND_LIFE].
+		Debes estar de acuerdo con las Condiciones del Servicio para continuar el inicio de sesión en [CURRENT_GRID].
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		No se ha podido poner el vestuario.
@@ -321,7 +321,7 @@ Se ha superado el límite máximo de [MAX_ATTACHMENTS] objetos. Por favor, quít
 		Lo sentimos. Se ha quedado algún espacio en blanco.
 Tienes que volver a introducir el nombre de usuario de tu avatar.
 
-Necesitas una cuenta para acceder a [SECOND_LIFE]. ¿Te gustaría crear una ahora?
+Necesitas una cuenta para acceder a [CURRENT_GRID]. ¿Te gustaría crear una ahora?
 		<url name="url">
 			https://join.secondlife.com/index.php?lang=es-ES
 		</url>
@@ -357,7 +357,7 @@ No se reembolsan las cuotas pagadas.
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
 	</notification>
 	<notification name="PromptGoToEventsPage">
-		¿Ir a la web de eventos de [SECOND_LIFE]?
+		¿Ir a la web de eventos de [CURRENT_GRID]?
 		<url name="url">
 			http://secondlife.com/events/?lang=es-ES
 		</url>
@@ -386,7 +386,7 @@ Nota: esto vaciará la caché.
 		El cambio de idioma tendrá efecto cuando reinicies [APP_NAME].
 	</notification>
 	<notification name="GoToAuctionPage">
-		¿Ir a la página web de [SECOND_LIFE] para ver los detalles de la subasta
+		¿Ir a la página web de [CURRENT_GRID] para ver los detalles de la subasta
 o hacer una puja?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
 	</notification>
@@ -917,7 +917,7 @@ Deberás reconfigurar el nombre y las opciones de la nueva parcela.
 Generalmente, esto es un fallo pasajero. Por favor, personaliza y guarda el ítem de aquí a unos minutos.
 	</notification>
 	<notification name="YouHaveBeenLoggedOut">
-		Vaya, se ha cerrado tu sesión en [SECOND_LIFE].
+		Vaya, se ha cerrado tu sesión en [CURRENT_GRID].
             [MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="Salir" yestext="Ver MI y Chat"/>
 	</notification>
@@ -1123,15 +1123,15 @@ Quizá quieras configurar una nueva posición para tu Base.
 	</notification>
 	<notification name="ClothingLoading">
 		Aún está descargándose tu ropa.
-Puedes usar [SECOND_LIFE] de forma normal; los demás residentes te verán correctamente.
+Puedes usar [CURRENT_GRID] de forma normal; los demás residentes te verán correctamente.
 		<form name="form">
 			<ignore name="ignore" text="La ropa está tardando mucho en descargarse"/>
 		</form>
 	</notification>
 	<notification name="FirstRun">
-		Se ha completado la instalación de [SECOND_LIFE].
+		Se ha completado la instalación de [CURRENT_GRID].
 
-Si es la primera vez que usas [SECOND_LIFE], debes crear una cuenta antes de poder iniciar una sesión.
+Si es la primera vez que usas [CURRENT_GRID], debes crear una cuenta antes de poder iniciar una sesión.
 ¿Volver a [http://join.secondlife.com secondlife.com] para crear una cuenta nueva?
 		<usetemplate name="okcancelbuttons" notext="Continuar" yestext="Cuenta nueva..."/>
 	</notification>
@@ -1152,7 +1152,7 @@ Puedes revisar tu conexión a Internet y volver a intentarlo en unos minutos, pu
 		Tu personaje aparecerá en un momento.
 
 Para caminar, usa las teclas del cursor.
-En cualquier momento, puedes pulsar la tecla F1 para conseguir ayuda o para aprender más acerca de [SECOND_LIFE].
+En cualquier momento, puedes pulsar la tecla F1 para conseguir ayuda o para aprender más acerca de [CURRENT_GRID].
 Por favor, elige el avatar masculino o femenino.
 Puedes cambiar más adelante tu elección.
 		<usetemplate name="okcancelbuttons" notext="Mujer" yestext="Varón"/>
@@ -1279,51 +1279,51 @@ Por favor, pon en venta el objeto y vuelve a intentarlo.
 [DOWNLOAD_PATH].
 	</notification>
 	<notification name="DownloadWindowsMandatory">
-		Hay una versión nueva de [SECOND_LIFE] disponible.
+		Hay una versión nueva de [CURRENT_GRID] disponible.
 [MESSAGE]
-Debes descargar esta actualización para usar [SECOND_LIFE].
+Debes descargar esta actualización para usar [CURRENT_GRID].
 		<usetemplate name="okcancelbuttons" notext="Salir" yestext="Descargarla"/>
 	</notification>
 	<notification name="DownloadWindows">
-		Hay una versión actualizada de [SECOND_LIFE] disponible.
+		Hay una versión actualizada de [CURRENT_GRID] disponible.
 [MESSAGE]
 Esta actualización no es obligatoria, pero te sugerimos instalarla para mejorar el rendimiento y la estabilidad.
 		<usetemplate name="okcancelbuttons" notext="Continuar" yestext="Descargarla"/>
 	</notification>
 	<notification name="DownloadWindowsReleaseForDownload">
-		Hay una versión actualizada de [SECOND_LIFE] disponible.
+		Hay una versión actualizada de [CURRENT_GRID] disponible.
 [MESSAGE]
 Esta actualización no es obligatoria, pero te sugerimos instalarla para mejorar el rendimiento y la estabilidad.
 		<usetemplate name="okcancelbuttons" notext="Continuar" yestext="Descargarla"/>
 	</notification>
 	<notification name="DownloadLinuxMandatory">
-		Hay una versión nueva de [SECOND_LIFE] disponible.
+		Hay una versión nueva de [CURRENT_GRID] disponible.
 [MESSAGE]
-Debes descargar esta actualización para usar [SECOND_LIFE].
+Debes descargar esta actualización para usar [CURRENT_GRID].
 		<usetemplate name="okcancelbuttons" notext="Salir" yestext="Descargar"/>
 	</notification>
 	<notification name="DownloadLinux">
-		Hay una versión actualizada de [SECOND_LIFE] disponible.
+		Hay una versión actualizada de [CURRENT_GRID] disponible.
 [MESSAGE]
 Esta actualización no es obligatoria, pero te sugerimos instalarla para mejorar el rendimiento y la estabilidad.
 		<usetemplate name="okcancelbuttons" notext="Continuar" yestext="Descargar"/>
 	</notification>
 	<notification name="DownloadLinuxReleaseForDownload">
-		Hay una versión actualizada de [SECOND_LIFE] disponible.
+		Hay una versión actualizada de [CURRENT_GRID] disponible.
 [MESSAGE]
 Esta actualización no es obligatoria, pero te sugerimos instalarla para mejorar el rendimiento y la estabilidad.
 		<usetemplate name="okcancelbuttons" notext="Continuar" yestext="Descargar"/>
 	</notification>
 	<notification name="DownloadMacMandatory">
-		Hay una versión nueva de [SECOND_LIFE] disponible.
+		Hay una versión nueva de [CURRENT_GRID] disponible.
 [MESSAGE]
-Debes descargar esta actualización para usar [SECOND_LIFE].
+Debes descargar esta actualización para usar [CURRENT_GRID].
 
 ¿Descargarla a tu carpeta de Programas?
 		<usetemplate name="okcancelbuttons" notext="Salir" yestext="Descargarla"/>
 	</notification>
 	<notification name="DownloadMac">
-		Hay una versión actualizada de [SECOND_LIFE] disponible.
+		Hay una versión actualizada de [CURRENT_GRID] disponible.
 [MESSAGE]
 Esta actualización no es obligatoria, pero te sugerimos instalarla para mejorar el rendimiento y la estabilidad.
 
@@ -1331,7 +1331,7 @@ Esta actualización no es obligatoria, pero te sugerimos instalarla para mejorar
 		<usetemplate name="okcancelbuttons" notext="Continuar" yestext="Descargarla"/>
 	</notification>
 	<notification name="DownloadMacReleaseForDownload">
-		Hay una versión actualizada de [SECOND_LIFE] disponible.
+		Hay una versión actualizada de [CURRENT_GRID] disponible.
 [MESSAGE]
 Esta actualización no es obligatoria, pero te sugerimos instalarla para mejorar el rendimiento y la estabilidad.
 
@@ -1394,15 +1394,15 @@ Debemos reiniciar [APP_NAME] para instalar la actualización.
 		<usetemplate ignoretext="Abrir mi navegador para administrar mi cuenta" name="okcancelignore" notext="Cancelar" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
-		Visita el wiki de [SECOND_LIFE] para más detalles sobre cómo informar de una cuestión de seguridad.
+		Visita el wiki de [CURRENT_GRID] para más detalles sobre cómo informar de una cuestión de seguridad.
 		<usetemplate ignoretext="Abrir mi navegador para informar de un fallo de seguridad" name="okcancelignore" notext="Cancelar" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchQAWiki">
-		Visita el wiki QA de [SECOND_LIFE].
+		Visita el wiki QA de [CURRENT_GRID].
 		<usetemplate ignoretext="Abrir mi navegador para el ver el wiki de &apos;QA&apos; (Control de Calidad)" name="okcancelignore" notext="Cancelar" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchPublicIssue">
-		Visita el Public Issue Tracker (sistema público de seguimiento de incidencias) de [SECOND_LIFE], donde podrás informar de errores y otros asuntos.
+		Visita el Public Issue Tracker (sistema público de seguimiento de incidencias) de [CURRENT_GRID], donde podrás informar de errores y otros asuntos.
 		<usetemplate ignoretext="Abrir mi navegador para usar el &apos;Public Issue Tracker&apos;" name="okcancelignore" notext="Cancelar" yestext="Ir a la página"/>
 	</notification>
 	<notification name="WebLaunchSupportWiki">
@@ -1941,9 +1941,9 @@ Aportar una descripción precisa nos ayuda a clasificar y procesar las denuncias
 
 Parece que estás denunciando una violación de la propiedad intelectual. Por favor, asegúrate de que tu denuncia es correcta.
 
-(1) El proceso de la denuncia. Debes enviar una denuncia de infracción si crees que un Residente está reventando el sistema de permisos de [SECOND_LIFE], usando, por ejemplo, un CopyBot u otras herramientas parecidas para copiar, infringiendo los derechos de propiedad intelectual. El Equipo de Infracciones (&apos;Abuse Team&apos;) investiga y lleva a cabo las acciones disciplinarias apropiadas ante toda acción que viole las [http://secondlife.com/corporate/tos.php Condiciones de Servicio] o las [http://secondlife.com/corporate/cs.php Normas de la Comunidad] de [SECOND_LIFE]. Sin embargo, el Equipo de Infracciones ni gestiona ni responde a las solicitudes de eliminar contenidos del mundo de [SECOND_LIFE].
+(1) El proceso de la denuncia. Debes enviar una denuncia de infracción si crees que un Residente está reventando el sistema de permisos de [CURRENT_GRID], usando, por ejemplo, un CopyBot u otras herramientas parecidas para copiar, infringiendo los derechos de propiedad intelectual. El Equipo de Infracciones (&apos;Abuse Team&apos;) investiga y lleva a cabo las acciones disciplinarias apropiadas ante toda acción que viole las [http://secondlife.com/corporate/tos.php Condiciones de Servicio] o las [http://secondlife.com/corporate/cs.php Normas de la Comunidad] de [CURRENT_GRID]. Sin embargo, el Equipo de Infracciones ni gestiona ni responde a las solicitudes de eliminar contenidos del mundo de [CURRENT_GRID].
 
-(2) El DMCA o Proceso de Eliminación de Contenido. Para solicitar que se elimine algún contenido de [SECOND_LIFE], DEBES enviar una notificación válida de infracción tal y como se explica en nuestra [http://secondlife.com/corporate/dmca.php &apos;DMCA Policy&apos;].
+(2) El DMCA o Proceso de Eliminación de Contenido. Para solicitar que se elimine algún contenido de [CURRENT_GRID], DEBES enviar una notificación válida de infracción tal y como se explica en nuestra [http://secondlife.com/corporate/dmca.php &apos;DMCA Policy&apos;].
 
 Si todavía quieres seguir con el proceso de infracción, por favor, cierra esta ventana y acaba de enviar tu denuncia.  En concreto, debes seleccionar la categoría &apos;CopyBot o Programa para saltarse los permisos&apos;.
 
@@ -2066,7 +2066,7 @@ Publícala en una página web para que otros puedan acceder fácilmente a esta p
 		<usetemplate ignoretext="Ponerme la ropa que estoy creando mientras modifico mi apariencia" name="okcancelignore" notext="No" yestext="Sí"/>
 	</notification>
 	<notification name="NotAgeVerified">
-		Debes haber verificado tu edad para visitar este sitio.  ¿Quieres ir al sitio web de [SECOND_LIFE] y verificarla?
+		Debes haber verificado tu edad para visitar este sitio.  ¿Quieres ir al sitio web de [CURRENT_GRID] y verificarla?
 
 [_URL]
 		<url name="url" option="0">
@@ -2075,7 +2075,7 @@ Publícala en una página web para que otros puedan acceder fácilmente a esta p
 		<usetemplate ignoretext="No he verificado mi edad" name="okcancelignore" notext="No" yestext="Sí"/>
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
-		Para visitar este sitio debes haber aportado información de pago en tu cuenta.  ¿Quieres ir al sitio web de [SECOND_LIFE] y configurar esto?
+		Para visitar este sitio debes haber aportado información de pago en tu cuenta.  ¿Quieres ir al sitio web de [CURRENT_GRID] y configurar esto?
 
 [_URL]
 		<url name="url" option="0">
@@ -2409,13 +2409,13 @@ Por favor, vuelve a intentarlo en unos momentos.
 		No se puede crear la conexión.
 	</notification>
 	<notification name="InternalUsherError">
-		Se ha producido un error interno al intentar acceder al destino de tu teleporte. Puede que, en este momento, el servicio de [SECOND_LIFE] tenga problemas.
+		Se ha producido un error interno al intentar acceder al destino de tu teleporte. Puede que, en este momento, el servicio de [CURRENT_GRID] tenga problemas.
 	</notification>
 	<notification name="NoGoodTPDestination">
 		No se puede encontrar en esta región un buen destino para el teleporte.
 	</notification>
 	<notification name="InternalErrorRegionResolver">
-		Se ha producido un error interno al manejar las coordenadas globales de tu petición de teleporte. Puede que, en este momento, el servicio de [SECOND_LIFE] tenga problemas.
+		Se ha producido un error interno al manejar las coordenadas globales de tu petición de teleporte. Puede que, en este momento, el servicio de [CURRENT_GRID] tenga problemas.
 	</notification>
 	<notification name="NoValidLanding">
 		No se ha podido encontrar un punto de aterrizaje válido.

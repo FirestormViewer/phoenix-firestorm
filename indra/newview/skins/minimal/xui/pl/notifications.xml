@@ -211,7 +211,7 @@ Cena wynosi [SALE_PRICE]L$ i sprzedaż będzie autoryzowana dla [NAME].
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
-		UWAGA: Wybierając opcję &quot;Sprzedaj Każdemu&quot; udostępniasz swoją posiadłość do sprzedaży dla jakiegokolwiek Rezydenta [SECOND_LIFE] , nawet osób nieobecnych w tym regionie.
+		UWAGA: Wybierając opcję &quot;Sprzedaj Każdemu&quot; udostępniasz swoją posiadłość do sprzedaży dla jakiegokolwiek Rezydenta [CURRENT_GRID] , nawet osób nieobecnych w tym regionie.
 
 Posiadłość o powierzchni [LAND_SIZE] m² zostaje wystawiona na sprzedaż.
 Cena wynosi [SALE_PRICE]L$ i sprzedaż będzie autoryzowana dla [NAME].
@@ -305,7 +305,7 @@ W celu umieszczenia mediów tylko na jednej powierzchni skorzystaj z Wybierz pow
 		W trakcie ładowania zdjęcia ekranu do raportu pojawił się problem z następującego powodu: [REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
-		Musisz zaakceptować Warunki Umowy (Terms of Service) by kontynuować logowanie się do [SECOND_LIFE].
+		Musisz zaakceptować Warunki Umowy (Terms of Service) by kontynuować logowanie się do [CURRENT_GRID].
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Założenie stroju nie powiodło się.
@@ -325,7 +325,7 @@ Limit [MAX_ATTACHMENTS] załączników został przekroczony. Proszę najpierw od
 		Oops! Brakuje czegoś.
 Należy wprowadzić nazwę użytkownika.
 
-Potrzebujesz konta aby się zalogować do [SECOND_LIFE]. Czy chcesz utworzyć je teraz?
+Potrzebujesz konta aby się zalogować do [CURRENT_GRID]. Czy chcesz utworzyć je teraz?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="InvalidCredentialFormat">
@@ -358,7 +358,7 @@ Czy na pewno chcesz kontynuować?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="PromptGoToEventsPage">
-		Odwiedzić internetową stronę Imprez [SECOND_LIFE]?
+		Odwiedzić internetową stronę Imprez [CURRENT_GRID]?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="SelectProposalToView">
@@ -384,7 +384,7 @@ Pamiętaj: Opcja ta wyczyszcza bufor danych.
 		Zmiana języka zadziała po restarcie [APP_NAME].
 	</notification>
 	<notification name="GoToAuctionPage">
-		Odwiedzić stronę internetową [SECOND_LIFE] żeby zobaczyć szczgóły aukcji lub zrobić ofertę?
+		Odwiedzić stronę internetową [CURRENT_GRID] żeby zobaczyć szczgóły aukcji lub zrobić ofertę?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="SaveChanges">
@@ -895,7 +895,7 @@ Połączyć posiadłości?
 Zazwyczaj jest to tymczasowy problem. Możesz kontynuować modyfikacje i zapisać strój ponownie za kilka minut.
 	</notification>
 	<notification name="YouHaveBeenLoggedOut">
-		Nastąpiło wylogowanie z [SECOND_LIFE]
+		Nastąpiło wylogowanie z [CURRENT_GRID]
             [MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="Wyłącz" yestext="Kontynuuj"/>
 	</notification>
@@ -904,7 +904,7 @@ Zazwyczaj jest to tymczasowy problem. Możesz kontynuować modyfikacje i zapisa�
 Nie masz praw kupowania posiadłości dla Twojej aktywnej grupy.
 	</notification>
 	<notification label="Add Friend" name="AddFriendWithMessage">
-		Znajomi mogą pozwalać na odnajdywanie się wzajemnie na mapie i na otrzymywanie notyfikacji o logowaniu do [SECOND_LIFE].
+		Znajomi mogą pozwalać na odnajdywanie się wzajemnie na mapie i na otrzymywanie notyfikacji o logowaniu do [CURRENT_GRID].
 
 Zaproponować znajomość [NAME]?
 		<form name="form">
@@ -1097,7 +1097,7 @@ Możesz ustawić nowe miejsce startu.
 	</notification>
 	<notification name="ClothingLoading">
 		Twoje ubranie wciąż się ładuje.
-Możesz normalnie używać [SECOND_LIFE], inni użytkownicy będą Cię widzieli poprawnie.
+Możesz normalnie używać [CURRENT_GRID], inni użytkownicy będą Cię widzieli poprawnie.
 		<form name="form">
 			<ignore name="ignore" text="Ładowanie ubrań nadal trwa"/>
 		</form>
@@ -1105,7 +1105,7 @@ Możesz normalnie używać [SECOND_LIFE], inni użytkownicy będą Cię widzieli
 	<notification name="FirstRun">
 		Instalacja [APP_NAME] zakończona.
 
-Jeżeli używasz [SECOND_LIFE] po raz pierwszy to musisz stworzyć konto żeby móc się zalogować.
+Jeżeli używasz [CURRENT_GRID] po raz pierwszy to musisz stworzyć konto żeby móc się zalogować.
 Czy chcesz przejść na stronę [http://join.secondlife.com secondlife.com] żeby stworzyć nowe konto?
 		<usetemplate name="okcancelbuttons" notext="Kontynuuj" yestext="Nowe konto..."/>
 	</notification>
@@ -1123,7 +1123,7 @@ Możesz sprawdzić swoje połączenie z Internetem i spróbować ponownie za kil
 		Twoja postać pojawi się za moment.
 
 Używaj strzałek żeby sie poruszać.
-Naciśnij F1 w dowolnej chwili po pomoc albo żeby dowiedzieć się więcej o [SECOND_LIFE].
+Naciśnij F1 w dowolnej chwili po pomoc albo żeby dowiedzieć się więcej o [CURRENT_GRID].
 Wybierz awatara właściwej płci.
 Ten wybór będzie można później zmienić.
 		<usetemplate name="okcancelbuttons" notext="Kobieta" yestext="Mężczyzna"/>
@@ -1355,15 +1355,15 @@ W celu instalacji aktualizacji musi zostać wykonany restart [APP_NAME].
 		<usetemplate ignoretext="Uruchom przeglądarkę internetową by dokonać zmian w konfiguracji mojego konta" name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
-		Odwiedź [SECOND_LIFE] Wiki i zobacz jak zgłaszać problemy z bezpieczeństwem danych.
+		Odwiedź [CURRENT_GRID] Wiki i zobacz jak zgłaszać problemy z bezpieczeństwem danych.
 		<usetemplate ignoretext="Uruchom przeglądarkę internetową by dowiedzieć się więcej na temat zgłaszania problemów bezpieczeństwa" name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchQAWiki">
-		Odwiedź [SECOND_LIFE] Wiki pytań i odpowiedzi.
+		Odwiedź [CURRENT_GRID] Wiki pytań i odpowiedzi.
 		<usetemplate ignoretext="Uruchom przeglądarkę internetową by zobaczyć QA Wiki" name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchPublicIssue">
-		Odwiedź [SECOND_LIFE] katalog publicznych problemów, gdzie możesz zgłaszać błędy i inne problemy.
+		Odwiedź [CURRENT_GRID] katalog publicznych problemów, gdzie możesz zgłaszać błędy i inne problemy.
 		<usetemplate ignoretext="Uruchom przeglądarkę internetową by wysłać Błędy klienta" name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchSupportWiki">
@@ -1615,17 +1615,17 @@ Kontynuować?
 	<notification name="RegionEntryAccessBlocked">
 		Ze względu na Twój wiek, nie jesteś uprawniony do przebywania w tym regionie. Może być to wynikiem braku informacji na temat weryfikacji Twojego wieku.
 
-Upewnij się, że masz zainstalowaną najnowszą wersję klienta i skorzystaj z [SECOND_LIFE]:Pomoc by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
+Upewnij się, że masz zainstalowaną najnowszą wersję klienta i skorzystaj z [CURRENT_GRID]:Pomoc by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="RegionEntryAccessBlocked_KB">
 		Ze względu na Twój wiek, nie jesteś uprawniony do przebywania w tym regionie. 
 
-Skorzystaj z [SECOND_LIFE]:Pomoc by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
+Skorzystaj z [CURRENT_GRID]:Pomoc by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
 		<url name="url">
 			https://support.secondlife.com/ics/support/default.asp?deptID=4417&amp;task=knowledge&amp;questionID=6010
 		</url>
-		<usetemplate ignoretext="Ze względu na Twój wiek, nie jesteś uprawniony do przebywania w tym regionie. Może być to wynikiem braku informacji na temat weryfikacji Twojego wieku." name="okcancelignore" notext="Zamknij" yestext="[SECOND_LIFE]:Pomoc"/>
+		<usetemplate ignoretext="Ze względu na Twój wiek, nie jesteś uprawniony do przebywania w tym regionie. Może być to wynikiem braku informacji na temat weryfikacji Twojego wieku." name="okcancelignore" notext="Zamknij" yestext="[CURRENT_GRID]:Pomoc"/>
 	</notification>
 	<notification name="RegionEntryAccessBlocked_Notify">
 		Ze względu na Twój wiek, nie jesteś uprawniony do przebywania w tym regionie.
@@ -1646,17 +1646,17 @@ W celu uzyskania dostępu do tego regiony zmień proszę swój status ustawień 
 	<notification name="LandClaimAccessBlocked">
 		W związku ze statusem ustawień Twojego wieku, nie możesz odzyskać tej posiadłości. Możesz potrzebować weryfikacji wieku bądź instalacji najnowszej wersji klienta.
 
-Upewnij się, że masz zainstalowaną najnowszą wersję klienta i skorzystaj z [SECOND_LIFE]:Pomoc by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
+Upewnij się, że masz zainstalowaną najnowszą wersję klienta i skorzystaj z [CURRENT_GRID]:Pomoc by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LandClaimAccessBlocked_KB">
 		Ze względu na Twój wiek, nie możesz odzyskać tej posiadłości. 
 
-Skorzystaj z [SECOND_LIFE]:Pomoc by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
+Skorzystaj z [CURRENT_GRID]:Pomoc by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
 		<url name="url">
 			https://support.secondlife.com/ics/support/default.asp?deptID=4417&amp;task=knowledge&amp;questionID=6010
 		</url>
-		<usetemplate ignoretext="W związku ze statusem ustawień Twojego wieku, nie możesz odzyskać tej posiadłości." name="okcancelignore" notext="Zamknij" yestext="[SECOND_LIFE]:Pomoc"/>
+		<usetemplate ignoretext="W związku ze statusem ustawień Twojego wieku, nie możesz odzyskać tej posiadłości." name="okcancelignore" notext="Zamknij" yestext="[CURRENT_GRID]:Pomoc"/>
 	</notification>
 	<notification name="LandClaimAccessBlocked_Notify">
 		Ze względu na Twój wiek, nie możesz odzyskać tej posiadłości.
@@ -1670,17 +1670,17 @@ Możesz wybrać &apos;Zmień Ustawienia&apos; by dokonać zmian w ustawieniach T
 	<notification name="LandBuyAccessBlocked">
 		Ze względu na Twój wiek, nie możesz kupić tej posiadłości. Może być to wynikiem braku informacji na temat weryfikacji Twojego wieku.
 
-Upewnij się, że masz zainstalowaną najnowszą wersję klienta i skorzystaj z [SECOND_LIFE]:Pomoc by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
+Upewnij się, że masz zainstalowaną najnowszą wersję klienta i skorzystaj z [CURRENT_GRID]:Pomoc by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LandBuyAccessBlocked_KB">
 		Ze względu na Twój wiek, nie możesz kupić tej posiadłości. 
 
-Skorzystaj z [SECOND_LIFE]:Pomoc by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
+Skorzystaj z [CURRENT_GRID]:Pomoc by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
 		<url name="url">
 			https://support.secondlife.com/ics/support/default.asp?deptID=4417&amp;task=knowledge&amp;questionID=6010
 		</url>
-		<usetemplate ignoretext="Ze względu na Twój wiek, nie możesz kupić tej posiadłości." name="okcancelignore" notext="Zamknij" yestext="[SECOND_LIFE]:Pomoc"/>
+		<usetemplate ignoretext="Ze względu na Twój wiek, nie możesz kupić tej posiadłości." name="okcancelignore" notext="Zamknij" yestext="[CURRENT_GRID]:Pomoc"/>
 	</notification>
 	<notification name="LandBuyAccessBlocked_Notify">
 		Ze względu na Twój wiek, nie możesz kupić tej posiadłości.
@@ -1896,9 +1896,9 @@ Dokładne dane pomogą nam w klasyfikacji i prztwarzaniu raportu.
 
 Jeżeli składasz raport dotyczący naruszenia praw autorskich proszę się upewnić, że robisz to poprawnie:
 
-(1) Przypadek Nadużycia. Możesz złożyć raport jeżeli sądzisz, że Rezydent narusza system przywilejów [SECOND_LIFE], na przykład używając CopyBot lub podobnych narzędzi robiących kopie, naruszając prawa autorskie. Komisja Nadużyć bada wykroczenia i stosuje akcje dyscyplinarne za zachowania sprzeczne z zasadami Warunków Umowy [SECOND_LIFE] [http://secondlife.com/corporate/tos.php Terms of Service] i Standardów Społeczeństwa [http://secondlife.com/corporate/cs.php Community Standards]. Komisja Nadużyć nie zajmuje się i nie odpowiada na żądania usunięcia treści ze środowiska [SECOND_LIFE].
+(1) Przypadek Nadużycia. Możesz złożyć raport jeżeli sądzisz, że Rezydent narusza system przywilejów [CURRENT_GRID], na przykład używając CopyBot lub podobnych narzędzi robiących kopie, naruszając prawa autorskie. Komisja Nadużyć bada wykroczenia i stosuje akcje dyscyplinarne za zachowania sprzeczne z zasadami Warunków Umowy [CURRENT_GRID] [http://secondlife.com/corporate/tos.php Terms of Service] i Standardów Społeczeństwa [http://secondlife.com/corporate/cs.php Community Standards]. Komisja Nadużyć nie zajmuje się i nie odpowiada na żądania usunięcia treści ze środowiska [CURRENT_GRID].
 
-(2) Przypadek DMCA lub Usuwanie Treści. Aby wystąpić z żądaniem o usunięcie treści ze środowiska [SECOND_LIFE] MUSISZ przedłożyć ważne zawiadomienie o nadużyciu zgodne z naszą polityką DMCA [http://secondlife.com/corporate/dmca.php DMCA Policy].
+(2) Przypadek DMCA lub Usuwanie Treści. Aby wystąpić z żądaniem o usunięcie treści ze środowiska [CURRENT_GRID] MUSISZ przedłożyć ważne zawiadomienie o nadużyciu zgodne z naszą polityką DMCA [http://secondlife.com/corporate/dmca.php DMCA Policy].
 
 Jeżeli chcesz kontynuować dalej zamknij to okno i dokończ wysyłanie raportu. Może być potrzebny wybór kategorii &apos;CopyBot albo Nadużycie Przywilejów&apos;.
 
@@ -2036,7 +2036,7 @@ Zamieść go na stronie internetowej żeby umożliwić innym łatwy dostęp do t
 		<usetemplate ignoretext="Załóż ubranie automatycznie będąc w trybie Edycji Wyglądu" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
 	<notification name="NotAgeVerified">
-		Nie masz dostępu do tej posiadłości ze względu na brak weryfikacji Twojego wieku. Czy chcesz odwiedzić stronę [SECOND_LIFE] żeby to zmienić?
+		Nie masz dostępu do tej posiadłości ze względu na brak weryfikacji Twojego wieku. Czy chcesz odwiedzić stronę [CURRENT_GRID] żeby to zmienić?
 
 [_URL]
 		<url name="url" option="0">
@@ -2045,7 +2045,7 @@ Zamieść go na stronie internetowej żeby umożliwić innym łatwy dostęp do t
 		<usetemplate ignoretext="Brak weryfikacji wieku" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
-		Nie masz dostępu do tej posiadłości ze względu na brak danych o Twoim koncie. Czy chcesz odwiedzić stronę [SECOND_LIFE] żeby to zmienić?
+		Nie masz dostępu do tej posiadłości ze względu na brak danych o Twoim koncie. Czy chcesz odwiedzić stronę [CURRENT_GRID] żeby to zmienić?
 
 [_URL]
 		<url name="url" option="0">
@@ -2311,7 +2311,7 @@ Nie możesz tutaj latać.
 	<notification name="RegionTPAccessBlocked">
 		Ze względu na Twój wiek, nie jesteś uprawniony do przebywania w tym regionie. Możesz potrzebować weryfikacji wieku bądź instalacji najnowszej wersji klienta.
 
-Skorzystaj z [SECOND_LIFE]:Pomoc by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
+Skorzystaj z [CURRENT_GRID]:Pomoc by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
 	</notification>
 	<notification name="URBannedFromRegion">
 		Zostałeś zbanowany w regionie.

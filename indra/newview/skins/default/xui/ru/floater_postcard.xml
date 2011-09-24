@@ -14,7 +14,7 @@
  width="450">
     <floater.string
      name="default_subject">
-        Postcard from [SECOND_LIFE].
+        Postcard from [CURRENT_GRID].
     </floater.string>
     <floater.string
      name="default_message">

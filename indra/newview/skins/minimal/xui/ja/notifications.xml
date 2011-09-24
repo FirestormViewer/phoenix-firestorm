@@ -223,7 +223,7 @@ L$ が不足しているのでこのグループに参加することができ�
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
-		注意： 「誰にでも販売」をクリックすることで、あなたの土地はこのリージョンにいる人に限らず [SECOND_LIFE] コミュニティ全体で利用可能となります。
+		注意： 「誰にでも販売」をクリックすることで、あなたの土地はこのリージョンにいる人に限らず [CURRENT_GRID] コミュニティ全体で利用可能となります。
 
 選択した [LAND_SIZE] 平方メートルの土地は、販売対象に設定されました。
 販売価格 L$ [SALE_PRICE] で、[NAME] が販売対象者となります。
@@ -326,7 +326,7 @@ L$ が不足しているのでこのグループに参加することができ�
 		次の理由で、レポートのスクリーンショットのアップロード時に問題が起こりました。 [REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
-		[SECOND_LIFE] へのログインを続けるには、利用規約に同意してください。
+		[CURRENT_GRID] へのログインを続けるには、利用規約に同意してください。
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		アウトフィットを装着できません。
@@ -346,7 +346,7 @@ L$ が不足しているのでこのグループに参加することができ�
 		注意：記入漏れの箇所があります。
 アバターのユーザー名を入力してください。
 
-[SECOND_LIFE] に入るにはアカウントが必要です。今すぐアカウントを作成しますか？
+[CURRENT_GRID] に入るにはアカウントが必要です。今すぐアカウントを作成しますか？
 		<url name="url">
 			https://join.secondlife.com/index.php?lang=ja-JP
 		</url>
@@ -382,7 +382,7 @@ L$ が不足しているのでこのグループに参加することができ�
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="PromptGoToEventsPage">
-		[SECOND_LIFE] イベント Web ページに移動しますか？
+		[CURRENT_GRID] イベント Web ページに移動しますか？
 		<url name="url">
 			http://secondlife.com/events/?lang=ja-JP
 		</url>
@@ -411,7 +411,7 @@ L$ が不足しているのでこのグループに参加することができ�
 		言語の変更は [APP_NAME] を再起動後に反映されます。
 	</notification>
 	<notification name="GoToAuctionPage">
-		[SECOND_LIFE]の Web ページに移動し、入札あるいはオークションの詳細を確認しますか？
+		[CURRENT_GRID]の Web ページに移動し、入札あるいはオークションの詳細を確認しますか？
 		<url name="url">
 			http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
 		</url>
@@ -946,7 +946,7 @@ L$ は返金されません。
 通常これは一時的なエラーです。 数分後にもう一度着用物をカスタマイズ・保存してください。
 	</notification>
 	<notification name="YouHaveBeenLoggedOut">
-		しまった、 [SECOND_LIFE] からログアウトされてしまいました。
+		しまった、 [CURRENT_GRID] からログアウトされてしまいました。
             [MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="終了" yestext="IMとチャットを表示"/>
 	</notification>
@@ -1153,7 +1153,7 @@ L$ は返金されません。
 	</notification>
 	<notification name="ClothingLoading">
 		現在衣類をダウンロード中です。
-このまま [SECOND_LIFE] を通常通りご使用いただけます。他人からはあなたは正しく表示されます。
+このまま [CURRENT_GRID] を通常通りご使用いただけます。他人からはあなたは正しく表示されます。
 		<form name="form">
 			<ignore name="ignore" text="衣類がダウンロードされるまで時間がかかっているとき"/>
 		</form>
@@ -1161,7 +1161,7 @@ L$ は返金されません。
 	<notification name="FirstRun">
 		[APP_NAME] のインストールが完了しました。
 
-[SECOND_LIFE] を使ったことがない場合は、ログインする前にアカウントの作成を行ってください。
+[CURRENT_GRID] を使ったことがない場合は、ログインする前にアカウントの作成を行ってください。
 [http://join.secondlife.com/?lang=ja-JP] で新しいアカウントを作成しますか？
 		<usetemplate name="okcancelbuttons" notext="続行" yestext="新規アカウント..."/>
 	</notification>
@@ -1182,7 +1182,7 @@ L$ は返金されません。
 		まもなくあなたのアバターが表示されます。
 
 矢印キーを使用して歩きます。
-ヘルプが必要なときや [SECOND_LIFE] について知りたいときは、
+ヘルプが必要なときや [CURRENT_GRID] について知りたいときは、
 F1 キーを押してください。
 男性あるいは女性のアバターを選択してください。
 あなたの決定は後で変更できます。
@@ -1422,15 +1422,15 @@ http://secondlife.com/download から最新バージョンをダウンロード�
 		<usetemplate ignoretext="ブラウザを起動してアカウントを管理するとき" name="okcancelignore" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
-		[SECOND_LIFE] Wiki で、セキュリティ問題を報告する方法をご覧ください。
+		[CURRENT_GRID] Wiki で、セキュリティ問題を報告する方法をご覧ください。
 		<usetemplate ignoretext="ブラウザを起動してセキュリティ問題の報告の仕方を確認するとき" name="okcancelignore" notext="キャンセル" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchQAWiki">
-		[SECOND_LIFE] 品質保証関連 Wiki をご覧ください。
+		[CURRENT_GRID] 品質保証関連 Wiki をご覧ください。
 		<usetemplate ignoretext="ブラウザを起動して QA Wiki を見るとき" name="okcancelignore" notext="キャンセル" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchPublicIssue">
-		[SECOND_LIFE] のパブリック問題トラッカーで、
+		[CURRENT_GRID] のパブリック問題トラッカーで、
 バグやその他の問題を報告できます。
 		<usetemplate ignoretext="ブラウザを起動してパブリック問題トラッカーを使用するとき" name="okcancelignore" notext="キャンセル" yestext="ページへ行く"/>
 	</notification>
@@ -1973,9 +1973,9 @@ Adult 専用リージョンに入るには、住人のアカウントが年齢�
 
 知的財産権の侵害を報告しようとしています。 正確に報告するために、以下をご確認ください：
 
-(1) 嫌がらせの報告の手順 住人が [SECOND_LIFE] の権限システムを悪用しているのを見つけたら、嫌がらせの報告をすることができます。例えば、CopyBot や似たようなコピーツールを使用して知的財産権を侵害している場合です。 担当チームは調査を行い、[SECOND_LIFE] [http://secondlife.com/corporate/tos.php 利用規約] や [http://jp.secondlife.com/corporate/cs.php コミュニティスタンダード] に違反する行為に対する適切な処罰を下します。  ただし、担当チームは [SECOND_LIFE] の世界からコンテンツを削除して欲しいというリクエストには応じません。
+(1) 嫌がらせの報告の手順 住人が [CURRENT_GRID] の権限システムを悪用しているのを見つけたら、嫌がらせの報告をすることができます。例えば、CopyBot や似たようなコピーツールを使用して知的財産権を侵害している場合です。 担当チームは調査を行い、[CURRENT_GRID] [http://secondlife.com/corporate/tos.php 利用規約] や [http://jp.secondlife.com/corporate/cs.php コミュニティスタンダード] に違反する行為に対する適切な処罰を下します。  ただし、担当チームは [CURRENT_GRID] の世界からコンテンツを削除して欲しいというリクエストには応じません。
 
-(2) DMCA またはコンテンツの撤去の手順 コンテンツを [SECOND_LIFE] から削除して欲しいというリクエストをするには、弊社 [http://secondlife.com/corporate/dmca.php DMCA ポリシー] で提示されているとおり、有効な侵害の通知を提出しなければなりません。.
+(2) DMCA またはコンテンツの撤去の手順 コンテンツを [CURRENT_GRID] から削除して欲しいというリクエストをするには、弊社 [http://secondlife.com/corporate/dmca.php DMCA ポリシー] で提示されているとおり、有効な侵害の通知を提出しなければなりません。.
 
 このまま嫌がらせの報告を続けたい場合は、このウィンドウを閉じて報告を送ってください。  「コピー Bot 及び権限の悪用」のカテゴリを選んだ方が適切の場合があります。
 
@@ -2114,7 +2114,7 @@ Web ページにリンクすると、他人がこの場所に簡単にアクセ�
 		<usetemplate ignoretext="「容姿」を編集中に、作成する衣類を装着するとき" name="okcancelignore" notext="いいえ" yestext="はい"/>
 	</notification>
 	<notification name="NotAgeVerified">
-		年齢確認を済ませていないとこの区画を訪れることができません。  [SECOND_LIFE] サイトで年齢の確認を行いますか？
+		年齢確認を済ませていないとこの区画を訪れることができません。  [CURRENT_GRID] サイトで年齢の確認を行いますか？
 
 [_URL]
 		<url name="url" option="0">
@@ -2123,7 +2123,7 @@ Web ページにリンクすると、他人がこの場所に簡単にアクセ�
 		<usetemplate ignoretext="年齢の確認を済ませていないとき" name="okcancelignore" notext="いいえ" yestext="はい"/>
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
-		支払情報が登録されていないとこのエリアを訪れることができません。  [SECOND_LIFE] サイトで登録を行いますか？
+		支払情報が登録されていないとこのエリアを訪れることができません。  [CURRENT_GRID] サイトで登録を行いますか？
 
 [_URL]
 		<url name="url" option="0">

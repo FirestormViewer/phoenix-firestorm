@@ -6,7 +6,7 @@
 		<button name="home_btn" tool_tip="Zu meinem Zuhause teleportieren"/>
 		<location_input label="Standort" name="location_combo"/>
 		<search_combo_box label="Suche" name="search_combo_box" tool_tip="Suche">
-			<combo_editor label="[SECOND_LIFE] durchsuchen" name="search_combo_editor"/>
+			<combo_editor label="[CURRENT_GRID] durchsuchen" name="search_combo_editor"/>
 		</search_combo_box>
 	</panel>
 	<favorites_bar name="favorite" tool_tip="Ziehen Sie Landmarken hier hin, damit Sie schnell zu Ihren Lieblingsplätzen in Second Life gelangen können!">

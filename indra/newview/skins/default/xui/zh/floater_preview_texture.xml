@@ -22,7 +22,7 @@
 		<combo_item name="1:1" tool_tip="Group insignia or Real World profile">
 			1:1
 		</combo_item>
-		<combo_item name="4:3" tool_tip="[SECOND_LIFE] 檔案">
+		<combo_item name="4:3" tool_tip="[CURRENT_GRID] 檔案">
 			4:3
 		</combo_item>
 		<combo_item name="10:7" tool_tip="Classifieds and search listings, landmarks">

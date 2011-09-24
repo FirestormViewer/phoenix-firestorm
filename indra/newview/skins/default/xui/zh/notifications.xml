@@ -209,7 +209,7 @@ Your selling price will be L$[SALE_PRICE] and will be authorized for sale to [NA
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
-		ATTENTION: Clicking &apos;sell to anyone&apos; makes your land available to the entire [SECOND_LIFE] community, even those not in this region.
+		ATTENTION: Clicking &apos;sell to anyone&apos; makes your land available to the entire [CURRENT_GRID] community, even those not in this region.
 
 The selected [LAND_SIZE] m² land is being set for sale.
 Your selling price will be L$[SALE_PRICE] and will be authorized for sale to [NAME].
@@ -304,7 +304,7 @@ To place the media on only one face, choose Select Face and click on the desired
 		There was a problem uploading a report screenshot due to the following reason: [REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
-		You must agree to the Terms of Service to continue logging into [SECOND_LIFE].
+		You must agree to the Terms of Service to continue logging into [CURRENT_GRID].
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Could not put on outfit.
@@ -324,7 +324,7 @@ Exceeds the attachments limit of [MAX_ATTACHMENTS] objects. Please detach anothe
 		Oops! Something was left blank.
 You need to enter the Username name of your avatar.
 
-You need an account to enter [SECOND_LIFE]. Would you like to create one now?
+You need an account to enter [CURRENT_GRID]. Would you like to create one now?
 		<url name="url">
 			http://join.secondlife.com/
 		</url>
@@ -360,7 +360,7 @@ Are you sure you want to continue?
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="PromptGoToEventsPage">
-		前往 [SECOND_LIFE] 事件網頁？
+		前往 [CURRENT_GRID] 事件網頁？
 		<url name="url">
 			http://secondlife.com/events/
 		</url>
@@ -389,7 +389,7 @@ Note: This will clear the cache.
 		Changing language will take effect after you restart [APP_NAME].
 	</notification>
 	<notification name="GoToAuctionPage">
-		前往 [SECOND_LIFE] 網頁去察看拍賣細節或下標？
+		前往 [CURRENT_GRID] 網頁去察看拍賣細節或下標？
 		<url name="url">
 			http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
 		</url>
@@ -915,7 +915,7 @@ Join land?
 This is usually a temporary failure. Please customize and save the wearable again in a few minutes.
 	</notification>
 	<notification name="YouHaveBeenLoggedOut">
-		Darn. You have been logged out of [SECOND_LIFE]
+		Darn. You have been logged out of [CURRENT_GRID]
             [MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="結束退出" yestext="View IM &amp; Chat"/>
 	</notification>
@@ -1119,7 +1119,7 @@ You may want to set a new home location.
 	</notification>
 	<notification name="ClothingLoading">
 		你的服裝仍在下載中。
-你可以正常使用 [SECOND_LIFE]，而且其他人看到你也是正常的。
+你可以正常使用 [CURRENT_GRID]，而且其他人看到你也是正常的。
 		<form name="form">
 			<ignore name="ignore" text="服裝花太多時間下載"/>
 		</form>
@@ -1127,7 +1127,7 @@ You may want to set a new home location.
 	<notification name="FirstRun">
 		[APP_NAME] 安裝完成。
 
-If this is your first time using [SECOND_LIFE], you will need to create an account before you can log in.
+If this is your first time using [CURRENT_GRID], you will need to create an account before you can log in.
 Return to [http://join.secondlife.com secondlife.com] to create a new account?
 		<usetemplate name="okcancelbuttons" notext="繼續" yestext="新帳戶..."/>
 	</notification>
@@ -1148,7 +1148,7 @@ You can either check your Internet connection and try again in a few minutes, cl
 		Your character will appear in a moment.
 
 Use arrow keys to walk.
-Press the F1 key at any time for help or to learn more about [SECOND_LIFE].
+Press the F1 key at any time for help or to learn more about [CURRENT_GRID].
 Please choose the male or female avatar. You can change your mind later.
 		<usetemplate name="okcancelbuttons" notext="女性" yestext="男性"/>
 	</notification>
@@ -1388,15 +1388,15 @@ We must restart [APP_NAME] to install the update.
 		<usetemplate ignoretext="啟動我的瀏覽器以管理我的帳戶" name="okcancelignore" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
-		Visit the [SECOND_LIFE] Wiki for details of how to report a security issue.
+		Visit the [CURRENT_GRID] Wiki for details of how to report a security issue.
 		<usetemplate ignoretext="Launch my browser to learn how to report a Security Issue" name="okcancelignore" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="WebLaunchQAWiki">
-		Visit the [SECOND_LIFE] QA Wiki.
+		Visit the [CURRENT_GRID] QA Wiki.
 		<usetemplate ignoretext="Launch my browser to view the QA Wiki" name="okcancelignore" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="WebLaunchPublicIssue">
-		Visit the [SECOND_LIFE] Public Issue Tracker, where you can report bugs and other issues.
+		Visit the [CURRENT_GRID] Public Issue Tracker, where you can report bugs and other issues.
 		<usetemplate ignoretext="Launch my browser to use the Public Issue Tracker" name="okcancelignore" notext="取消" yestext="前往頁面"/>
 	</notification>
 	<notification name="WebLaunchSupportWiki">
@@ -1927,9 +1927,9 @@ Entering an accurate description helps us file and process abuse reports.
 
 You appear to be reporting intellectual property infringement. Please make sure you are reporting it correctly:
 
-(1) The Abuse Process. You may submit an abuse report if you believe a Resident is exploiting the [SECOND_LIFE] permissions system, for example, by using CopyBot or similar copying tools, to infringe intellectual property rights. The Abuse Team investigates and issues appropriate disciplinary action for behavior that violates the [SECOND_LIFE] [http://secondlife.com/corporate/tos.php Terms of Service] or [http://secondlife.com/corporate/cs.php Community Standards]. However, the Abuse Team does not handle and will not respond to requests to remove content from the [SECOND_LIFE] world.
+(1) The Abuse Process. You may submit an abuse report if you believe a Resident is exploiting the [CURRENT_GRID] permissions system, for example, by using CopyBot or similar copying tools, to infringe intellectual property rights. The Abuse Team investigates and issues appropriate disciplinary action for behavior that violates the [CURRENT_GRID] [http://secondlife.com/corporate/tos.php Terms of Service] or [http://secondlife.com/corporate/cs.php Community Standards]. However, the Abuse Team does not handle and will not respond to requests to remove content from the [CURRENT_GRID] world.
 
-(2) The DMCA or Content Removal Process. To request removal of content from [SECOND_LIFE], you MUST submit a valid notification of infringement as provided in our [http://secondlife.com/corporate/dmca.php DMCA Policy].
+(2) The DMCA or Content Removal Process. To request removal of content from [CURRENT_GRID], you MUST submit a valid notification of infringement as provided in our [http://secondlife.com/corporate/dmca.php DMCA Policy].
 
 If you still wish to continue with the abuse process, please close this window and finish submitting your report.  You may need to select the specific category &apos;CopyBot or Permissions Exploit&apos;.
 
@@ -2067,7 +2067,7 @@ Link to this from a web page to give others easy access to this location, or try
 		<usetemplate ignoretext="編輯外觀時能穿上我所創造的服裝" name="okcancelignore" notext="否" yestext="是"/>
 	</notification>
 	<notification name="NotAgeVerified">
-		You must be age-verified to visit this area.  Do you want to go to the [SECOND_LIFE] website and verify your age?
+		You must be age-verified to visit this area.  Do you want to go to the [CURRENT_GRID] website and verify your age?
 
 [_URL]
 		<url name="url">
@@ -2076,7 +2076,7 @@ Link to this from a web page to give others easy access to this location, or try
 		<usetemplate ignoretext="I have not verified my age" name="okcancelignore" notext="否" yestext="是"/>
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
-		You must have payment information on file to visit this area.  Do you want to go to the [SECOND_LIFE] website and set this up?
+		You must have payment information on file to visit this area.  Do you want to go to the [CURRENT_GRID] website and set this up?
 
 [_URL]
 		<url name="url">

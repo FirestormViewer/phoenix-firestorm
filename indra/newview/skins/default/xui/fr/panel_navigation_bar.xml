@@ -6,7 +6,7 @@
 		<button name="home_btn" tool_tip="Me téléporter jusqu&apos;à mon domicile"/>
 		<location_input label="Emplacement" name="location_combo"/>
 		<search_combo_box label="Rechercher" name="search_combo_box" tool_tip="Rechercher">
-			<combo_editor label="Rechercher dans [SECOND_LIFE]" name="search_combo_editor"/>
+			<combo_editor label="Rechercher dans [CURRENT_GRID]" name="search_combo_editor"/>
 		</search_combo_box>
 	</panel>
 	<favorites_bar name="favorite" tool_tip="Faites glisser des repères ici pour un accès rapide à vos lieux favoris dans Second Life.">

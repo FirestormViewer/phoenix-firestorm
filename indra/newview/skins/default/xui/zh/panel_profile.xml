@@ -27,7 +27,7 @@
 			<scroll_container name="profile_scroll">
 				<panel name="profile_scroll_panel">
 					<panel name="second_life_image_panel">
-						<text name="title_sl_descr_text" value="[SECOND_LIFE]:"/>
+						<text name="title_sl_descr_text" value="[CURRENT_GRID]:"/>
 					</panel>
 					<panel name="first_life_image_panel">
 						<text name="title_rw_descr_text" value="真實世界："/>

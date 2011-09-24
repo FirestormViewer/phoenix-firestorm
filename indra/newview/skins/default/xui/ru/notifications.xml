@@ -523,7 +523,7 @@
    icon="alertmodal.tga"
    name="ConfirmLandSaleToAnyoneChange"
    type="alertmodal">
-ВНИМАНИЕ: Выбор &apos;продавать кому угодно&apos; сделает вашу землю доступной всему сообществу [SECOND_LIFE], даже тем, кто находится не в этом регионе.
+ВНИМАНИЕ: Выбор &apos;продавать кому угодно&apos; сделает вашу землю доступной всему сообществу [CURRENT_GRID], даже тем, кто находится не в этом регионе.
 
 Выбранные [LAND_SIZE] м² земли будут выставлены на продажу.
 Ваша цена на землю - L$[SALE_PRICE], и вы продаете ее [NAME].
@@ -750,7 +750,7 @@ There was a problem uploading a report screenshot due to the following reason: [
    name="MustAgreeToLogIn"
    type="alertmodal">
    <tag>fail</tag>
-Вы должны принять Пользовательское Соглашение прежде, чем сможете продолжить вход в [SECOND_LIFE].
+Вы должны принять Пользовательское Соглашение прежде, чем сможете продолжить вход в [CURRENT_GRID].
   </notification>
 
   <notification
@@ -795,7 +795,7 @@ There was a problem uploading a report screenshot due to the following reason: [
 Ой! Кое-что осталось пустым.
 Вам нужно ввести имя, под которым вы регистрировали вашего аватара.
 
-Для входа в [SECOND_LIFE] вам нужен аккаунт. Хотите зарегистрировать его сейчас?
+Для входа в [CURRENT_GRID] вам нужен аккаунт. Хотите зарегистрировать его сейчас?
     <tag>confirm</tag>
     <url
 	option="0"
@@ -899,7 +899,7 @@ There was a problem uploading a report screenshot due to the following reason: [
    icon="alertmodal.tga"
    name="PromptGoToEventsPage"
    type="alertmodal">
-Перейти на страницу событий [SECOND_LIFE]?
+Перейти на страницу событий [CURRENT_GRID]?
     <tag>confirm</tag>
     <url option="0" name="url">
 
@@ -991,7 +991,7 @@ Would you like to disable all popups which can be skipped?
    icon="alertmodal.tga"
    name="GoToAuctionPage"
    type="alertmodal">
-Перейти на страницу [SECOND_LIFE], чтобы посмотреть подробности аукциона или сделать ставку?
+Перейти на страницу [CURRENT_GRID], чтобы посмотреть подробности аукциона или сделать ставку?
     <tag>confirm</tag>
     <url option="0" name="url">
 
@@ -2217,7 +2217,7 @@ This is usually a temporary failure. Please customize and save the wearable agai
    icon="alertmodal.tga"
    name="YouHaveBeenLoggedOut"
    type="alertmodal">
-Черт! Вас выкинуло из [SECOND_LIFE]
+Черт! Вас выкинуло из [CURRENT_GRID]
             [MESSAGE]
     <usetemplate
      name="okcancelbuttons"
@@ -2683,7 +2683,7 @@ Deed this [AREA] м² of land to the group &apos;[GROUP_NAME]&apos;?
    type="alertmodal">
    <tag>fail</tag>
 Ваша одежда все еще загружается.
-Вы можете использовать [SECOND_LIFE] как обычно. Другие люди будут видеть вас нормально.
+Вы можете использовать [CURRENT_GRID] как обычно. Другие люди будут видеть вас нормально.
     <form name="form">
       <ignore name="ignore"
        text="Загрузка одежды занимает долгое время"/>
@@ -2697,7 +2697,7 @@ Deed this [AREA] м² of land to the group &apos;[GROUP_NAME]&apos;?
 
 Установка [APP_NAME] завершена.
 
-Если вы в первый раз пользуетесь [SECOND_LIFE], то, возможно, вам нужно будет создать аккаунт для того, чтобы войти.
+Если вы в первый раз пользуетесь [CURRENT_GRID], то, возможно, вам нужно будет создать аккаунт для того, чтобы войти.
 Пройти на [http://join.secondlife.com secondlife.com] для создания нового аккаунта?
     <tag>confirm</tag>
     <usetemplate
@@ -2742,7 +2742,7 @@ Deed this [AREA] м² of land to the group &apos;[GROUP_NAME]&apos;?
 Ваш персонаж появится через мгновение.
 
 Используйте стрелки для перемещения.
-Нажатие клавиши F1 в любое время предоставит вам помощь по [SECOND_LIFE].
+Нажатие клавиши F1 в любое время предоставит вам помощь по [CURRENT_GRID].
 Пожалуйста, выберите пол вашего аватара. Вы можете поменять его в любой момент.
     <usetemplate
      name="okcancelbuttons"
@@ -3275,7 +3275,7 @@ Deeding this object will cause the group to:
    icon="alertmodal.tga"
    name="WebLaunchSecurityIssues"
    type="alertmodal">
-Visit the [SECOND_LIFE] Wiki for details of how to report a security issue.
+Visit the [CURRENT_GRID] Wiki for details of how to report a security issue.
     <tag>confirm</tag>
     <usetemplate
      ignoretext="Launch my browser to learn how to report a Security Issue"
@@ -3288,7 +3288,7 @@ Visit the [SECOND_LIFE] Wiki for details of how to report a security issue.
    icon="alertmodal.tga"
    name="WebLaunchQAWiki"
    type="alertmodal">
-Посетить [SECOND_LIFE] QA Wiki.
+Посетить [CURRENT_GRID] QA Wiki.
     <tag>confirm</tag>
     <usetemplate
      ignoretext="Запуск браузера для просмотра QA Wiki"
@@ -3301,7 +3301,7 @@ Visit the [SECOND_LIFE] Wiki for details of how to report a security issue.
    icon="alertmodal.tga"
    name="WebLaunchPublicIssue"
    type="alertmodal">
-Visit the [SECOND_LIFE] Public Issue Tracker, where you can report bugs and other issues.
+Visit the [CURRENT_GRID] Public Issue Tracker, where you can report bugs and other issues.
     <tag>confirm</tag>
     <usetemplate
      ignoretext="Launch my browser to use the Public Issue Tracker"
@@ -4655,9 +4655,9 @@ Dear Resident,
 
 You appear to be reporting intellectual property infringement. Please make sure you are reporting it correctly:
 
-(1) The Abuse Process. You may submit an abuse report if you believe a Resident is exploiting the [SECOND_LIFE] permissions system, for example, by using CopyBot or similar copying tools, to infringe intellectual property rights. The Abuse Team investigates and issues appropriate disciplinary action for behavior that violates the [SECOND_LIFE] [http://secondlife.com/corporate/tos.php Terms of Service] or [http://secondlife.com/corporate/cs.php Community Standards]. However, the Abuse Team does not handle and will not respond to requests to remove content from the [SECOND_LIFE] world.
+(1) The Abuse Process. You may submit an abuse report if you believe a Resident is exploiting the [CURRENT_GRID] permissions system, for example, by using CopyBot or similar copying tools, to infringe intellectual property rights. The Abuse Team investigates and issues appropriate disciplinary action for behavior that violates the [CURRENT_GRID] [http://secondlife.com/corporate/tos.php Terms of Service] or [http://secondlife.com/corporate/cs.php Community Standards]. However, the Abuse Team does not handle and will not respond to requests to remove content from the [CURRENT_GRID] world.
 
-(2) The DMCA or Content Removal Process. To request removal of content from [SECOND_LIFE], you MUST submit a valid notification of infringement as provided in our [http://secondlife.com/corporate/dmca.php DMCA Policy].
+(2) The DMCA or Content Removal Process. To request removal of content from [CURRENT_GRID], you MUST submit a valid notification of infringement as provided in our [http://secondlife.com/corporate/dmca.php DMCA Policy].
 
 If you still wish to continue with the abuse process, please close this window and finish submitting your report.  You may need to select the specific category &apos;CopyBot or Permissions Exploit&apos;.
 
@@ -5020,7 +5020,7 @@ Granting this request gives a script ongoing permission to take Linden dollars (
    name="NotAgeVerified"
    type="alertmodal">
    <tag>fail</tag>
-Вы должны подтвердить свой возраст перед посещением этой области. Вы хотите перейти на сайт [SECOND_LIFE] и подтвердить возраст?
+Вы должны подтвердить свой возраст перед посещением этой области. Вы хотите перейти на сайт [CURRENT_GRID] и подтвердить возраст?
 
 [_URL]
     <tag>confirm</tag>
@@ -5039,7 +5039,7 @@ Granting this request gives a script ongoing permission to take Linden dollars (
    icon="alertmodal.tga"
    name="Cannot enter parcel: no payment info on file"
    type="alertmodal">
-У вас должна быть информация о платежах для посещения этой области. Вы хотите перейти на сайт [SECOND_LIFE] и сделать это?
+У вас должна быть информация о платежах для посещения этой области. Вы хотите перейти на сайт [CURRENT_GRID] и сделать это?
 
 [_URL]
     <tag>confirm</tag>

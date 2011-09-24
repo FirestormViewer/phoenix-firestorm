@@ -679,7 +679,7 @@ Returns the rotation velocity in radians per second
 	</string>
 	<string name="LSLTipText_llGetTimeOfDay" translate="false">
 float llGetTimeOfDay()
-Returns the time in seconds since [SECOND_LIFE] server midnight or since region up-time, whichever is smaller
+Returns the time in seconds since [CURRENT_GRID] server midnight or since region up-time, whichever is smaller
 	</string>
 	<string name="LSLTipText_llGetWallclock" translate="false">
 float llGetWallclock()
