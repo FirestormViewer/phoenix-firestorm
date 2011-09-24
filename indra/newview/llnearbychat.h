@@ -63,6 +63,9 @@ public:
 	virtual void updateChatHistoryStyle();
 
 	static void processChatHistoryStyleUpdate(const LLSD& newvalue);
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-24 (Catznip-3.0.0a) | Modified: Catznip-3.0.0a
+	static void processChatBarTypeChanged(const LLSD& newvalue);
+// [/SL:KB]
 
 	void loadHistory();
 

@@ -2,4 +2,4 @@
 - added : single-line chat bar to the nearby chat floater
 - added : multi-line chat bar to the nearby chat floater
 - added : "NearbyChatFloaterBarType" setting to control the appearance of the chat bar in the nearby chat floater
-    -> 0 - none; 1 - single line; 2 - multi line
+    -> 0 - none; 1 - single line; 2 - multi line (can be toggled at run-time)

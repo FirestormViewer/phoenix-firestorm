@@ -274,6 +274,30 @@ void LLNearbyChat::processChatHistoryStyleUpdate(const LLSD& newvalue)
 		nearby_chat->updateChatHistoryStyle();
 }
 
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-24 (Catznip-3.0.0a) | Added: Catznip-3.0.0a
+//static 
+void LLNearbyChat::processChatBarTypeChanged(const LLSD& newvalue)
+{
+	// We only need to do anything if an instance of the nearby chat floater already exists
+	LLNearbyChat* pNearbyChat = LLFloaterReg::findTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+	if (pNearbyChat)
+	{
+		bool fVisible = pNearbyChat->getVisible();
+		std::vector<LLChat> msgArchive = pNearbyChat->mMessageArchive;
+
+		LLFloaterReg::destroyInstance("nearby_chat", LLSD());
+
+		if ((pNearbyChat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD())) != NULL)
+		{
+			pNearbyChat->mMessageArchive = msgArchive;
+			pNearbyChat->updateChatHistoryStyle();
+			if (fVisible)
+				pNearbyChat->openFloater(LLSD());
+		}
+	}
+}
+// [/SL:KB]
+
 bool isWordsName(const std::string& name)
 {
 	// checking to see if it's display name plus username in parentheses 
