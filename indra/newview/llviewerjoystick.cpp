@@ -39,7 +39,7 @@
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llfocusmgr.h"
-
+#include "llmoveview.h"
 
 // ----------------------------------------------------------------------------
 // Constants
@@ -999,6 +999,7 @@ bool LLViewerJoystick::toggleFlycam()
 	if (!gSavedSettings.getBOOL("JoystickEnabled") || !gSavedSettings.getBOOL("JoystickFlycamEnabled"))
 	{
 		mOverrideCamera = false;
+		LLPanelStandStopFlying::clearStandStopFlyingMode(LLPanelStandStopFlying::SSFM_FLYCAM);
 		return false;
 	}
 
@@ -1016,7 +1017,7 @@ bool LLViewerJoystick::toggleFlycam()
 	if (mOverrideCamera)
 	{
 		moveFlycam(true);
-		
+		LLPanelStandStopFlying::setStandStopFlyingMode(LLPanelStandStopFlying::SSFM_FLYCAM);
 	}
 	else 
 	{
@@ -1024,6 +1025,7 @@ bool LLViewerJoystick::toggleFlycam()
 		// the main camera until the avatar moves, we need to track this situation.
 		setCameraNeedsUpdate(false);
 		setNeedsReset(true);
+		LLPanelStandStopFlying::clearStandStopFlyingMode(LLPanelStandStopFlying::SSFM_FLYCAM);
 	}
 	return true;
 }

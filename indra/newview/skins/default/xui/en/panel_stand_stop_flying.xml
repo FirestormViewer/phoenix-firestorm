@@ -6,7 +6,7 @@
  name="panel_stand_stop_flying"
  mouse_opaque="false"
  visible="true"
- width="78">
+ width="160">
     <button
      follows="left|bottom"
      height="19"
@@ -29,4 +29,18 @@
      top="2"
      visible="false"
      width="77" />
+    <button
+     follows="left|bottom"
+     height="19"
+     label="Flycam"
+     layout="topleft"
+     left="80"
+     name="flycam_btn"
+     tool_tip="Stop Flycam Mode"
+     top="2"
+     visible="true"
+     width="77">
+        <commit_callback
+         function="View.JoystickFlycam" />
+    </button>
 </panel>

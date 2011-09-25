@@ -597,14 +597,20 @@ void LLPanelStandStopFlying::setStandStopFlyingMode(EStandStopFlyingMode mode)
 {
 	LLPanelStandStopFlying* panel = getInstance();
 
-	if (mode == SSFM_STAND)
+	if (mode == SSFM_FLYCAM)
 	{
-		LLFirstUse::sit();
-		LLFirstUse::notMoving(false);
+		panel->mFlycamButton->setVisible(TRUE);
 	}
-	panel->mStandButton->setVisible(SSFM_STAND == mode);
-	panel->mStopFlyingButton->setVisible(SSFM_STOP_FLYING == mode);
-
+	else
+	{
+		if (mode == SSFM_STAND)
+		{
+			LLFirstUse::sit();
+			LLFirstUse::notMoving(false);
+		}
+		panel->mStandButton->setVisible(SSFM_STAND == mode);
+		panel->mStopFlyingButton->setVisible(SSFM_STOP_FLYING == mode);
+	}
 	//visibility of it should be updated after updating visibility of the buttons
 	panel->setVisible(TRUE);
 }
@@ -619,6 +625,10 @@ void LLPanelStandStopFlying::clearStandStopFlyingMode(EStandStopFlyingMode mode)
 		break;
 	case SSFM_STOP_FLYING:
 		panel->mStopFlyingButton->setVisible(FALSE);
+		break;
+	case SSFM_FLYCAM:
+		panel->mFlycamButton->setVisible(FALSE);
+		panel->setFocus(FALSE);
 		break;
 	default:
 		llerrs << "Unexpected EStandStopFlyingMode is passed: " << mode << llendl;
@@ -638,7 +648,10 @@ BOOL LLPanelStandStopFlying::postBuild()
 	//mStopFlyingButton->setCommitCallback(boost::bind(&LLFloaterMove::setFlyingMode, FALSE));
 	mStopFlyingButton->setCommitCallback(boost::bind(&LLPanelStandStopFlying::onStopFlyingButtonClick, this));
 	mStopFlyingButton->setVisible(FALSE);
-	
+
+	mFlycamButton = getChild<LLButton>("flycam_btn");
+	mFlycamButton->setVisible(FALSE);
+
 	return TRUE;
 }
 
