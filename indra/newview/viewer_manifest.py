@@ -706,7 +706,7 @@ class DarwinManifest(ViewerManifest):
 
             # copy additional libs in <bundle>/Contents/MacOS/
             self.path("../packages/lib/release/libndofdev.dylib", dst="Resources/libndofdev.dylib")
-            self.path("../packages/lib/release/libhunspell-1.3.dylib", dst="Resources/libhunspell-1.3.dylib")
+            self.path("../packages/lib/release/libhunspell-1.3.0.dylib", dst="Resources/libhunspell-1.3.0.dylib")
             self.path("../viewer_components/updater/scripts/darwin/update_install", "MacOS/update_install")
 
             # most everything goes in the Resources directory

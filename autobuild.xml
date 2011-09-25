@@ -1619,9 +1619,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1e3cf916c8330a871be14b7023d2a442</string>
+              <string>aeab54c3a956acdc0f004e28e4feffdb</string>
               <key>url</key>
-              <string>http://phoenixviewer.com/app/packages/libhunspell-1.3.2-darwin-20110919.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/libhunspell-1.3.2-darwin-20110925.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
