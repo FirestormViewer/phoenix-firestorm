@@ -823,7 +823,7 @@
      name="Antialiasing:"
      top_pad="7"
      width="180">
-        Antialiasing (requires restart):
+        Antialiasing:
     </text>
     <combo_box
      control_name="RenderFSAASamples"
