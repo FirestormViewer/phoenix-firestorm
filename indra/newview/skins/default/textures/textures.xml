@@ -464,6 +464,7 @@ with the same filename but different name
   <texture name="Permission_Visible_Map_h" file_name="icons/see_on_map_h.png" preload="false" />
   <texture name="Permission_Edit_Objects_Mine_h" file_name="icons/edit_mine_h.png" preload="false" />
   <texture name="Permission_Edit_Objects_Theirs_h" file_name="icons/edit_theirs_h.png" preload="false" />
+  <texture name="icon_avatar_online_h" file_name="legacy/icon_avatar_online_h.tga" />
 
   <texture name="Person_Check" file_name="icons/Person_Check.png" preload="false" />
   <texture name="Person_Star" file_name="icons/Person_Star.png" preload="false" />
