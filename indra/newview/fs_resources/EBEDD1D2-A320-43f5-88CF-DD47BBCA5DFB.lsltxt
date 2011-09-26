@@ -247,7 +247,7 @@
                         OBJECT_TOTAL_SCRIPT_COUNT, OBJECT_RUNNING_SCRIPT_COUNT, OBJECT_SCRIPT_MEMORY, OBJECT_SCRIPT_TIME]));
         llOwnerSay("'"+(string)llList2String(details,0) +
                    "' [" + (string)llList2Integer(details,2) + "/" + (string)llList2Integer(details,1) + "] running scripts. " +
-                   (string)(llList2Integer(details,3)/1024) + "Kb consumed for " + (string)llList2Float(details,4) + " seconds of cpu time.");
+                   (string)(llList2Integer(details,3)/1024) + "Kb consumed for " + (string)(llList2Float(details,4)*1000.0) + "ms of cpu time.");
     }    
     
 //
