@@ -141,7 +141,7 @@
     </pie_menu>
 
     <pie_slice
-        label="ИМ"
+        label="Приват (ЛС) "
         name="Send IM...">
         <pie_slice.on_click
             function="Avatar.SendIM" />

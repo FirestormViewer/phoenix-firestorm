@@ -269,7 +269,7 @@
    <button
      follows="left|top"
      height="20"
-     label="Объеденить"
+     label="Объединить"
      top_pad="0"
      layout="topleft"
      name="link_btn"
@@ -280,7 +280,7 @@
     <button
      follows="left|top"
      height="20"
-     label="Разъеденить"
+     label="Разъединить"
      layout="topleft"
      left_pad="2"
      name="unlink_btn"

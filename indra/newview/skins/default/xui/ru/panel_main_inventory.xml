@@ -115,7 +115,7 @@
      bevel_style="none"
      follows="all"
      height="338"
-     label="Одетые"
+     label="Надетые"
      help_topic="worn_inventory_tab"
      layout="topleft"
      left_delta="0"

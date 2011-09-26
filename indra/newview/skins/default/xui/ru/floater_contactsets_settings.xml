@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater border="true" can_close="true" can_minimize="true" bottom="400" left="300" can_resize="false" height="310" width="530" name="lgg_fg_floater_settings" title="Contact Sets Settings" help_topic="fs_contact_sets">
+  <color_swatch bottom_delta="50" can_apply_immediately="true" color="1, 1, 1, 1" follows="left|top" height="40" label="" left_delta="5" mouse_opaque="true" name="colordefault" tool_tip="Default color for friends not in a group. Affects only the FriendGroups list display." width="65" control_name="lgg_fg_groupColor"/>
+  <text bottom_delta="-30" follows="left|top" font="SansSerifSmall" height="10" left_delta="70" name="lgg_fg_text2a" width="110">Цвет для</text>
+  <text bottom_delta="11" follows="left|top" font="SansSerifSmall" height="10" left_delta="0" name="lgg_fg_text2b" width="120">всех контактов</text>
+  <slider can_edit_text="false" control_name="PhoenixContactSetsScrollSpeed" decimal_digits="0" follows="left|top" height="15" increment="1" initial_value="100" layout="topleft" left_delta="150" max_val="100" min_val="1" name="PhoenixContactSetsScrollSpeed" bottom_delta="0" width="250" label="Скорость" label_width="80" tool_tip="How fast to scroll through the list."/>
+  <check_box bottom_delta="30" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Показать уведомления для всех друзей " left="5" mouse_opaque="true" name="ChatOnlineNotification" visible="true" radio_style="false" width="270" control_name="ChatOnlineNotification"/>
+  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Покрасить цвет значка друга на Мини-карте в зависимости от их сета контактов" left="5" mouse_opaque="true" name="PhoenixContactSetsColorizeMiniMap" visible="true" radio_style="false" width="270" control_name="PhoenixContactSetsColorizeMiniMap"/>
+  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Покрасить цвет имени друга в зависимости от их сета контактов" left="5" mouse_opaque="true" name="PhoenixContactSetsColorizeNameTag" visible="true" radio_style="false" width="270" control_name="PhoenixContactSetsColorizeNameTag"/>
+  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Покрасить список радара в зависимости от их сета контактов" left="5" mouse_opaque="true" name="PhoenixContactSetsColorizeRadar" visible="true" radio_style="false" width="270" control_name="PhoenixContactSetsColorizeRadar"/>
+  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Покрасить чат в зависимости от их сета контактов" left="5" mouse_opaque="true" name="PhoenixContactSetsColorizeChat" visible="true" radio_style="false" width="270" control_name="PhoenixContactSetsColorizeChat"/>
+
+  <check_box bottom_delta="30" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Покрасить только небольшой участок фона" left="5" mouse_opaque="true" name="PhoenixContactSetsColorizeBar" visible="true" radio_style="false" width="270" control_name="PhoenixContactSetsColorizeBar"/>
+  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Покрасить фон за контактами в базовый фон" left="25" mouse_opaque="true" name="PhoenixContactSetsColorizeText" visible="true" radio_style="false" width="270" control_name="PhoenixContactSetsColorizeText"/>
+  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Требовать нажатия клавиши CTRL, чтобы иметь возможность множественного выбора" left="5" mouse_opaque="true" name="PhoenixContactSetsRequireCTRL" visible="true" radio_style="false" width="270" control_name="PhoenixContactSetsRequireCTRL"/>
+  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Эффект увеличения  " left="5" mouse_opaque="true" name="PhoenixContactSetsDoZoom" visible="true" radio_style="false" width="270" control_name="PhoenixContactSetsDoZoom"/>
+  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Эффект выделения светлым цветом " left="5" mouse_opaque="true" name="PhoenixContactSetsUseColorHighlight" visible="true" radio_style="false" width="270" control_name="PhoenixContactSetsUseColorHighlight"/>
+  <slider can_edit_text="false" control_name="PhoenixContactSetsMaxColorStrength" decimal_digits="0" follows="left|top" height="15" increment="1" initial_value="100" layout="topleft" left="270" max_val="100" min_val="1" name="PhoenixContactSetsMaxColorStrength" bottom_delta="0" width="190" label="Прозрачность" label_width="80" tool_tip="How strong do you want the color of the background to be."/>
+
+  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Показать сеты выше контактов" left="5" mouse_opaque="true" name="PhoenixContactSetsShowFolders" visible="true" radio_style="false" width="270" control_name="PhoenixContactSetsShowFolders"/>
+  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Draw Profile Icons Next To Names" left="5" mouse_opaque="true" name="PhoenixContactSetsDrawProfileIcon" visible="true" radio_style="false" width="270" control_name="PhoenixContactSetsDrawProfileIcon"/>
+  <text type="string" length="1" follows="left|top" height="10" layout="topleft" left="5" name="lgg_fg_text3" mouse_opaque="false" top_delta="27" width="90">формат:</text>
+  <combo_box height="20" layout="topleft" left_delta="80" name="lgg_fg_dispName" control_name="PhoenixContactSetsNameFormat" top_delta="-4" width="150">
+  <combo_item name="Legacy Names" value="0">
+    Старые названия
+  </combo_item>
+  <combo_item name="Display Names (with Username)" value="1">
+    Отображаемые имена (с именем пользевателя)
+  </combo_item>
+  <combo_item name="Display Names only" value="2">
+    Только Отображаемые имена
+  </combo_item>
+  </combo_box>
+  <text type="string" length="1" follows="left|top" height="10" layout="topleft" left_delta="160" name="lgg_fg_text4" mouse_opaque="false" top_delta="4" width="90">Сортиров.:</text>
+  <combo_box height="20" layout="topleft" left_delta="68" name="lgg_fg_sortName" control_name="PhoenixContactSetSortNameFormat" top_delta="-4" width="150" >
+  <combo_item name="Legacy Names" value="Old Names">
+    Старые названия
+  </combo_item>
+  <combo_item name="Display Names (with Username)" value="Display Names (with Username)">
+    Отображаемые имена (с именем пользевателя)
+  </combo_item>
+  <combo_item name="Display Names only" value="Display Names only">
+    Только Отображаемые имена
+  </combo_item>
+  </combo_box>
+  <button bottom_delta="40" follows="top|left" font="SansSerifSmall" height="20" label="Ok" name="lgg_fg_okButton" left="195" width="40"/>
+</floater>

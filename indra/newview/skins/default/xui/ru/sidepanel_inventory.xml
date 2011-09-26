@@ -117,11 +117,11 @@
                          enabled="false"
                          follows="bottom|left|right"
                          height="23"
-                         label="Одеть"
+                         label="Надеть"
                          layout="topleft"
                          left="1"
                          name="wear_btn"
-                         tool_tip="Одеть выбранный костюм"
+                         tool_tip="Надеть выбранный костюм"
                          top="0"
                          width="99" />
                     <button
