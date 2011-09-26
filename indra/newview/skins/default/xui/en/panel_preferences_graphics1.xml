@@ -1130,6 +1130,23 @@
 		width="50">
 			seconds
 		</text>
+		<slider
+        control_name="RenderShadowResolutionScale"
+        decimal_digits="1"
+        follows="left|top"
+        height="16"
+        increment="0.1"
+        initial_value="1"
+        label="Quality of the Shadows"
+		tool_tip="What is the quality of the Shadows (default is 1)"
+        label_width="300"
+        layout="topleft"
+        left="20"
+		min_val="1.0"
+        max_val="4"
+        name="ShadowResolution"
+        top_pad="3"
+        width="405" />
         <slider
         control_name="RenderTerrainScale"
         decimal_digits="0"
