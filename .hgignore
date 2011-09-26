@@ -21,10 +21,7 @@ indra/newview/info-Firestorm.plist
 indra/.distcc
 build-linux-*
 build-darwin-*
-build-vc80/
-build-vc100/
-indra/build-vc[0-9]*
-indra/build-VC[0-9]*
+build-vc[0-9]*
 indra/CMakeFiles
 indra/lib/mono/1.0/*.dll
 indra/lib/mono/indra/*.dll
