@@ -201,6 +201,16 @@
      name="bubble_text_chat"
      width="150" /> 
     
+    <check_box
+     control_name="UseTypingBubbles"
+     follows="left|top"
+     height="16"
+     label="Show typing indicator in bubbles above avatars"
+     layout="topleft"
+     left_delta="0"
+     top_pad="5"
+     name="bubble_text_typing"
+     width="150" /> 
    	<text
 	 type="string"
 	 length="1"

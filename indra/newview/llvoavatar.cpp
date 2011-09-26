@@ -2918,7 +2918,9 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 // [/RLVa:KB]
 	BOOL visible_avatar = isVisible() || mNeedsAnimUpdate;
 	BOOL visible_chat = gSavedSettings.getBOOL("UseChatBubbles") && (mChats.size() || mTyping);
+	BOOL visible_typing = gSavedSettings.getBOOL("UseTypingBubbles") && mTyping;
 	BOOL render_name =	visible_chat ||
+				visible_typing ||
 		                (visible_avatar &&
 // [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.2a) | Added: RLVa-1.0.0h
 						( (!fRlvShowNames) || (RlvSettings::getShowNameTags()) ) &&
@@ -2953,6 +2955,11 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 			mVisibleChat = visible_chat;
 			new_name = TRUE;
 		}
+		if (visible_typing != mVisibleTyping)
+		{
+			mVisibleTyping = visible_typing;
+			new_name = TRUE;
+		}
 		
 // [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.2a) | Added: RLVa-0.2.0b
 		if (fRlvShowNames)
@@ -2977,7 +2984,7 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 			if (mAppAngle > 5.f)
 			{
 				const F32 START_FADE_TIME = NAME_SHOW_TIME - FADE_DURATION;
-				if (!visible_chat && sRenderName == RENDER_NAME_FADE && time_visible > START_FADE_TIME)
+				if (!visible_chat && !visible_typing && sRenderName == RENDER_NAME_FADE && time_visible > START_FADE_TIME)
 				{
 					alpha = 1.f - (time_visible - START_FADE_TIME) / FADE_DURATION;
 				}
@@ -3250,7 +3257,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 
 	
-	if (mVisibleChat)
+	if (mVisibleChat || mVisibleTyping)
 			{
 				mNameText->setFont(LLFontGL::getFontSansSerif());
 				mNameText->setTextAlignment(LLHUDNameTag::ALIGN_TEXT_LEFT);
@@ -3267,6 +3274,9 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				{
 					new_chat = LGGContactSets::getInstance()->getFriendColor(getID());
 				}
+		
+		if (mVisibleChat)
+		{
 				LLColor4 normal_chat = lerp(new_chat, LLColor4(0.8f, 0.8f, 0.8f, 1.f), 0.7f);
 				LLColor4 old_chat = lerp(normal_chat, LLColor4(0.6f, 0.6f, 0.6f, 1.f), 0.7f);
 				if (mTyping && mChats.size() >= MAX_BUBBLE_CHAT_UTTERANCES) 
@@ -3306,9 +3316,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 						mNameText->addLine(chat_iter->mText, old_chat, style);
 					}
 				}
+		}
 				mNameText->setVisibleOffScreen(TRUE);
 
-				if (mTyping)
+		if (mVisibleTyping && mTyping)
 				{
 					S32 dot_count = (llfloor(mTypingTimer.getElapsedTimeF32() * 3.f) + 2) % 3 + 1;
 					switch(dot_count)
@@ -3323,7 +3334,6 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 							mNameText->addLine("...", new_chat);
 							break;
 					}
-
 				}
 			}
 			else
@@ -3338,7 +3348,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 void LLVOAvatar::addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font)
 {
 	llassert(mNameText);
-	if (mVisibleChat)
+	if (mVisibleChat || mVisibleTyping)
 	{
 		mNameText->addLabel(line);
 	}

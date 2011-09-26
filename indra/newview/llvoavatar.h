@@ -779,6 +779,7 @@ public:
 	void			stopTyping() { mTyping = FALSE; }
 private:
 	BOOL			mVisibleChat;
+	BOOL			mVisibleTyping;
 
 	//--------------------------------------------------------------------
 	// Lip synch morphs
