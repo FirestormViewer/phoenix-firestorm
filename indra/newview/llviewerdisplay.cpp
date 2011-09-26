@@ -380,6 +380,16 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		case LLAgent::TELEPORT_START:
 			// Transition to REQUESTED.  Viewer has sent some kind
 			// of TeleportRequest to the source simulator
+
+			// Reset view angle if in mouselook. Fixes camera angle getting stuck on teleport. -Zi
+			if(gAgentCamera.cameraMouselook())
+			{
+				// If someone knows how to call "View.ZoomDefault" by hand, we should do that instead of
+				// replicating the behavior here. -Zi
+				LLViewerCamera::getInstance()->setDefaultFOV(DEFAULT_FIELD_OF_VIEW);
+				gSavedSettings.setF32("CameraAngle", LLViewerCamera::getInstance()->getView());
+			}
+
 			gTeleportDisplayTimer.reset();
 			if(!gSavedSettings.getBOOL("PhoenixDisableTeleportScreens"))
 			{
