@@ -24,7 +24,7 @@
    font="SansSerif"
    name="user_label"
    text_color="White"
-   top_pad="7" 
+   top_pad="2" 
    value="Name:"
    width="70"/>
   <text
@@ -40,31 +40,38 @@
    width="50" />
   <text
    follows="top|left|right"
-   height="25"
+   height="18"
    layout="topleft"
    left_pad="3"
    name="complete_name"
    text_color="White"
    font="SansSerifBigBold"
-   top_pad="5"
+   top_pad="2"
    translate="false"
    use_ellipses="true"
    value="Loading..."
    width="295" 
    wrap="false"/>
   <button
-         name="copy_to_clipboard"
-         layout="topleft"
-         follows="top|right"
-         image_overlay="Copy"
-         top_delta="0"
-         right="-15"
-         height="21"
-         width="21"
-         tab_stop="false" 
-         tool_tip="Copy to Clipboard"/>
-
-
+   name="copy_to_clipboard"
+   layout="topleft"
+   follows="top|right"
+   image_overlay="Copy"
+   top_delta="0"
+   right="-15"
+   height="18"
+   width="21"
+   tab_stop="false" 
+   tool_tip="Copy to Clipboard"/>         
+   <text
+    top_delta="0"
+	left="12"
+    height="16"
+    bg_visible="false"
+    enabled="true"
+    follows="left|top|right"
+    name="web_profile_text"
+    value="" />
    <tab_container
    follows="all"
    height="514"
@@ -76,7 +83,7 @@
    tab_min_width="80"
    tab_height="23"
    tab_position="top"
-   top_pad="10"
+   top_pad="2"
    width="317">
     <panel
      class="panel_profile"
