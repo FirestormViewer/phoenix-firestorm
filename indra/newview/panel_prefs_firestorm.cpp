@@ -62,6 +62,10 @@ BOOL PanelPreferenceFirestorm::postBuild()
 	m_ClientTagsVisibility = getChild<LLComboBox>("ClientTagsVisibility");	
 	refreshTagCombos();
 
+    // disable the prefs for features that are disabled by the global auto env being disabled
+    getChild<LLUICtrl>("UseEnvironmentFromRegionAlways")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onUseEnvironmentFromRegionAlways, this));
+    // init the enable state of the related wl prefs
+    onUseEnvironmentFromRegionAlways();
 
 	return LLPanelPreference::postBuild();	
 }
@@ -175,6 +179,16 @@ void PanelPreferenceFirestorm::onAutoCorrectSettings()
 	LGGAutoCorrectFloater::showFloater();
 }
 
+void PanelPreferenceFirestorm::onUseEnvironmentFromRegionAlways()
+{
+	const bool auto_env = gSavedSettings.getBOOL("UseEnvironmentFromRegionAlways");
+
+    getChild<LLUICtrl>("PhoenixWLParcelEnabled")->setEnabled(auto_env);
+    getChild<LLUICtrl>("PhoenixWLWhitelistFriends")->setEnabled(auto_env);
+    getChild<LLUICtrl>("PhoenixWLWhitelistGroups")->setEnabled(auto_env);
+    getChild<LLUICtrl>("PhoenixWLWhitelistAll")->setEnabled(auto_env);
+    getChild<LLUICtrl>("PhoenixInterpolateParcelWL")->setEnabled(auto_env);
+}
 
 
 void PanelPreferenceFirestorm::refreshTagCombos()

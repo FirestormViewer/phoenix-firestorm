@@ -20,6 +20,8 @@ public:
 	void onBeamDelete();
 
 	void onAutoCorrectSettings();
+    
+	void onUseEnvironmentFromRegionAlways();
 
 	
 	void refreshTagCombos();
