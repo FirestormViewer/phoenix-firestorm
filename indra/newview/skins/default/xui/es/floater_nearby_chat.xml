@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="nearby_chat" title="CHAT">
-	<check_box label="Traducir chat (mediante Google)" name="translate_chat_checkbox"/>
+	<layout_stack name="im_panels">
+		<layout_panel>
+			<button tool_tip="Usar servicio de traducción de Google" name="translate_btn"/>
+			<line_editor label="Decir en el chat local" name="chat_box"/>
+		</layout_panel>
+	</layout_stack>
 </floater>
