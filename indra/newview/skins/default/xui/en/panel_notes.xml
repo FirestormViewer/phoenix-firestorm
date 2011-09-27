@@ -26,7 +26,6 @@
              left="6"
              max_length="1000"
              name="notes_edit"
-             text_color="DkGray"
              top_pad="4"
              right="-6"
              word_wrap="true" />
