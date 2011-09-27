@@ -186,7 +186,11 @@ public:
 		mNearbyChatBar = findChild<LLNearbyChatBar>("chat_bar");
 		mChatBarContainer = getChild<LLLayoutPanel>("chat_bar_layout_panel");
 		mGesturePanel = getChild<LLPanel>("gesture_panel");
+		return TRUE;
+	}
 
+	void hideNearbyChatButton()
+	{
 		// Hide "show_nearby_chat" button 
 		if (mNearbyChatBar)
 		{
@@ -196,7 +200,6 @@ public:
 			show_btn->setVisible(FALSE);
 			chat_box->reshape(chat_box->getRect().getWidth() + delta_width, chat_box->getRect().getHeight());
 		}
-		return TRUE;
 	}
 
 	void onFocusLost()
@@ -247,6 +250,7 @@ LLBottomTray::LLBottomTray(const LLSD&)
 	{
 		mBottomTrayLite = new LLBottomTrayLite();
 		mBottomTrayLite->setFollowsAll();
+		mBottomTrayLite->hideNearbyChatButton();
 		mBottomTrayLite->setVisible(FALSE);
 
 		mPopupChatBar = new LLBottomTrayLite();
