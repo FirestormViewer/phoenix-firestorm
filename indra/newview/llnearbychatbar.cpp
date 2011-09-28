@@ -501,6 +501,14 @@ BOOL LLNearbyChatBar::handleKeyHere( KEY key, MASK mask )
 		sendChat(CHAT_TYPE_SHOUT);
 		handled = TRUE;
 	}
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+	if ( (KEY_RETURN == key) && (mask == MASK_SHIFT) )
+	{
+		// Whisper
+		sendChat(CHAT_TYPE_WHISPER);
+		handled = TRUE;
+	}
+// [/SL:KB]
 
 	return handled;
 }

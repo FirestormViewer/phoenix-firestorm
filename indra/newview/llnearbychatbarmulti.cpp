@@ -16,7 +16,7 @@ BOOL LLNearbyChatBarMulti::postBuild()
 {
 	m_pChatEditor = findChild<LLTextEditor>("chat_editor");
 
-	m_pChatEditor->setCommitCallback(boost::bind(&LLNearbyChatBarMulti::onChatBoxCommit, this));
+	m_pChatEditor->setCommitCallback(boost::bind(&LLNearbyChatBarMulti::onChatBoxCommit, this, CHAT_TYPE_NORMAL));
 	m_pChatEditor->setKeystrokeCallback(boost::bind(&LLNearbyChatBarMulti::onChatBoxKeystroke, this, _1));
 	m_pChatEditor->setFocusLostCallback(boost::bind(&onChatBoxFocusLost, m_pChatEditor));
 	m_pChatEditor->setFocusReceivedCallback(boost::bind(&onChatBoxFocusReceived, m_pChatEditor));
@@ -30,10 +30,18 @@ BOOL LLNearbyChatBarMulti::postBuild()
 BOOL LLNearbyChatBarMulti::handleKeyHere(KEY key, MASK mask)
 {
 	BOOL handled = FALSE;
-	if ( (KEY_RETURN == key) && (MASK_CONTROL == mask) )
+	if (KEY_RETURN == key)
 	{
-		sendChat(CHAT_TYPE_SHOUT);
-		handled = TRUE;
+		if (MASK_CONTROL == mask)
+		{
+			onChatBoxCommit(CHAT_TYPE_SHOUT);
+			handled = TRUE;
+		}
+		else if (MASK_SHIFT == mask)
+		{
+			onChatBoxCommit(CHAT_TYPE_WHISPER);
+			handled = TRUE;
+		}
 	}
 	else if ( (KEY_UP == key) && (MASK_CONTROL == mask) )
 	{
@@ -64,7 +72,7 @@ BOOL LLNearbyChatBarMulti::handleKeyHere(KEY key, MASK mask)
 	return handled;
 }
 
-void LLNearbyChatBarMulti::onChatBoxCommit()
+void LLNearbyChatBarMulti::onChatBoxCommit(EChatType eChatType)
 {
 	if (m_pChatEditor->getLength() > 0)
 	{
@@ -93,7 +101,7 @@ void LLNearbyChatBarMulti::onChatBoxCommit()
 		mCurrentHistoryLine = mLineHistory.end() - 1;
 
 		// Send the chat
-		sendChat(CHAT_TYPE_NORMAL);
+		LLNearbyChatBarBase::sendChat(m_pChatEditor, eChatType);
 	}
 
 	gAgent.stopTyping();

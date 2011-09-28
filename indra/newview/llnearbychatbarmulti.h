@@ -17,10 +17,8 @@ public:
 	virtual BOOL postBuild();
 
 protected:
-	void onChatBoxCommit();
+	void onChatBoxCommit(EChatType eChatType);
 	void onChatBoxKeystroke(LLTextEditor* pTextCtrl);
-
-	void sendChat(EChatType type) { LLNearbyChatBarBase::sendChat(m_pChatEditor, type); }
 
 	/*virtual*/ BOOL		handleKeyHere(KEY key, MASK mask);
 

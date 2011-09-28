@@ -87,14 +87,13 @@
 				 commit_on_return="true"
 				 follows="all"
 				 height="45"
+				 label="Click here to chat"
 				 layout="topleft"
 				 max_length="1024"
 				 name="chat_editor"
 				 use_ellipses="false"
 				 width="310"
-				 word_wrap="true">
-					Click here to chat
-				</text_editor>
+				 word_wrap="true" />
 			</panel>
 		</layout_panel>
 
