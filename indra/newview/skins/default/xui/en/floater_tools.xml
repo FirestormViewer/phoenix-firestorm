@@ -776,7 +776,7 @@
      height="10"
      follows="left|top"
      layout="topleft"
-     top="168"
+     top="167"
      left="10"
      name="link_num_obj_count"
 	 tooltip="Link number may not be accurate."
@@ -793,7 +793,7 @@
 	  layout="topleft"
 	  left="10"
 	  name="selection_empty"
-	  top_pad="5"
+	  top_pad="2"
 	  width="100">
 		Nothing selected.
 	</text>
@@ -821,7 +821,7 @@
 	  layout="topleft"
 	  left="10"
 	  name="selection_weight"
-	  top_pad="0"
+	  top_pad="-4"
 	  visible="false"
 	  width="280">
 	  Physics weight [PHYS_WEIGHT], Render Cost [DISP_WEIGHT].
