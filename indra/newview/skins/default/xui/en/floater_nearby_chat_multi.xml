@@ -10,7 +10,8 @@
  can_close="false"
  can_dock="true"
  bevel_style="in"
- height="380"
+ height="350"
+ min_height="300"
  min_width="235"
  layout="topleft"
  name="nearby_chat"
@@ -22,18 +23,22 @@
  single_instance="true"
  width="320">
 	<layout_stack
-	 animate="false"
+	 clip="false"
 	 follows="all"
-	 height="350"
-	 width="320"
+	 height="320"
 	 layout="topleft"
-	 orientation="vertical"
+	 left="0"
+	 mouse_opaque="false"
 	 name="im_panels"
+	 orientation="vertical"
 	 top="20"
-	 left="0">
+	 width="320">
 		<layout_panel
-		 height="290"
+		 height="270"
+		 layout="topleft"
 		 left="0"
+		 min_dim="200"
+		 mouse_opaque="false"
 		 top="0"
 		 width="320"
 		 user_resize="true">
@@ -53,7 +58,7 @@
 			 follows="all"
 			 layout="topleft"
 			 left="5"
-			 height="260"
+			 height="255"
 			 name="chat_history"
 			 parse_highlights="true"
 			 text_color="ChatHistoryTextColor"
@@ -63,52 +68,30 @@
 			 width="315" />
 		</layout_panel>
 
-<!--
 		<layout_panel
-		 auto_resize="false"
-		 bottom_pad="5"
+		 height="50"
 		 layout="topleft"
 		 left="0"
-		 max_height="5"
-		 min_height="5"
-		 name="chat_bar_resize_handle_panel"
-		 top_pad="5"
-		 user_resize="false"
+		 min_dim="35"
+		 mouse_opaque="false"
 		 width="320"
-		 height="5">
-			<icon
-			 follows="left|right|bottom"
-			 height="5"
-			 left="5"
-			 image_name="ChatBarHandle_Vert"
-			 layout="topleft"
-			 name="resize_handle"
-			 width="315" />
-		</layout_panel>
--->
-
-		<layout_panel
-		 height="70"
-		 left="0"
-		 width="320"
-		 auto_resize="false"
-		 user_resize="false">
+		 user_resize="true">
 			<panel
-			 follows="left|right|bottom"
-			 height="60"
+			 follows="all"
+			 height="45"
 			 layout="topleft"
-			 left="10"
+			 left="5"
 			 name="panel_chat_bar_multi"
-			 width="300" >
+			 width="310" >
 				<text_editor
 				 commit_on_return="true"
-				 follows="left|right|bottom"
-				 height="50"
+				 follows="all"
+				 height="45"
 				 layout="topleft"
 				 max_length="1024"
 				 name="chat_editor"
 				 use_ellipses="false"
-				 width="300"
+				 width="310"
 				 word_wrap="true">
 					Click here to chat
 				</text_editor>
