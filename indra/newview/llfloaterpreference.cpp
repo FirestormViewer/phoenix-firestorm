@@ -782,22 +782,6 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 
 void LLFloaterPreference::onVertexShaderEnable()
 {
-
-	// AO warn users that shadows can harm stability	
-	if (gSavedSettings.getBOOL("RenderDeferred") == TRUE)
-	{
-		llinfos << "AO: Enabling Deferred Rendering" << llendl;
-		LLSD args;
-		args["MESSAGE"] = 
-		llformat("Caution: The shadow renderer is unsupported and increases your likelyhood of crashing. Use at your own risk! For maximum stability, do not use this option." );
-		LLNotificationsUtil::add("GenericAlert", args);
-	}
-	else // AO When we untoggle lighting, turn of frame buffer objects as well
-	{
-		gSavedSettings.setBOOL("RenderUseFBO", FALSE);
-	}
-	// /AO
-
 	refreshEnabledGraphics();
 }
 
