@@ -965,9 +965,10 @@ class LinuxManifest(ViewerManifest):
         super(LinuxManifest, self).construct()
         self.path("licenses-linux.txt","licenses.txt")
         self.path("VivoxAUP.txt")
-        self.path("res/firestorm_icon.png","secondlife_icon.png")
+        self.path("res/firestorm_icon.png","firestorm_icon.png")
         if self.prefix("linux_tools", dst=""):
             self.path("client-readme.txt","README-linux.txt")
+	    self.path("FIRESTORM_DESKTOPINSTALL.txt","FIRESTORM_DESKTOPINSTALL.txt")
             self.path("client-readme-voice.txt","README-linux-voice.txt")
             self.path("client-readme-joystick.txt","README-linux-joystick.txt")
             self.path("wrapper.sh","firestorm")

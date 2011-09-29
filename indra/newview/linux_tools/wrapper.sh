@@ -86,7 +86,8 @@ cd "${RUN_PATH}"
 ./etc/register_secondlifeprotocol.sh
 
 # Re-register the application with the desktop system every launch, for now.
-./etc/refresh_desktop_app_entry.sh
+# AO: Disabled don't install by default
+#./etc/refresh_desktop_app_entry.sh
 
 ## Before we mess with LD_LIBRARY_PATH, save the old one to restore for
 ##  subprocesses that care.
@@ -128,7 +129,7 @@ if [ -n "$LL_RUN_ERR" ]; then
 		if [ "`uname -m`" = "x86_64" ]; then
 			echo
 			cat << EOFMARKER
-You are running the Second Life Viewer on a x86_64 platform.  The
+You are running the Firestorm Viewer on a x86_64 platform.  The
 most common problems when launching the Viewer (particularly
 'bin/do-not-directly-run-firestorm-bin: not found' and 'error while
 loading shared libraries') may be solved by installing your Linux
@@ -141,9 +142,3 @@ EOFMARKER
 fi
 	
 
-echo
-echo '*******************************************************'
-echo 'This is a BETA release of the Second Life linux client.'
-echo 'Thank you for testing!'
-echo 'Please see README-linux.txt before reporting problems.'
-echo
