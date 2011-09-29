@@ -56,6 +56,42 @@
    follows="top|left"
    layout="topleft" />
 
+  <text
+   name="filter_label"
+   value="Filter:"
+   width="40"
+   height="16"
+   left_pad="4"
+   follows="top|left"
+   layout="topleft" />
+
+  <combo_box
+   name="filter_combo_box"
+   width="80"
+   height="16"
+   left_pad="4"
+   follows="top|left"
+   layout="topleft">
+
+  <combo_box.item value="filter_type_all" label="All Types" />
+  <combo_box.item value="filter_separator" label="------------" enabled="false" />
+  <combo_box.item value="filter_type_animations" label="Animations" />
+  <combo_box.item value="filter_type_calling_cards" label="Calling Cards" />
+  <combo_box.item value="filter_type_clothing" label="Clothing / Body Parts" />
+  <combo_box.item value="filter_type_gestures" label="Gestures" />
+  <combo_box.item value="filter_type_landmarks" label="Landmarks" />
+  <combo_box.item value="filter_type_notecards" label="Notecards" />
+  <combo_box.item value="filter_type_objects" label="Objects" />
+  <combo_box.item value="filter_type_scripts" label="Scripts" />
+  <combo_box.item value="filter_type_sounds" label="Sounds" />
+  <combo_box.item value="filter_type_textures" label="Textures" />
+  <combo_box.item value="filter_type_snapshots" label="Snapshots" />
+  <combo_box.item value="filter_type_meshes" label="Meshes" />
+  <combo_box.item value="filter_separator" label="------------" enabled="false" />
+  <combo_box.item value="filter_type_custom" label="Custom..." />
+
+  </combo_box>
+
   <tab_container
      bg_alpha_color="DkGray"
      bg_opaque_color="DkGray"

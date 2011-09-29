@@ -44,6 +44,7 @@ class LLMenuButton;
 class LLMenuGL;
 class LLToggleableMenu;
 class LLFloater;
+class LLComboBox;	// ## Zi: Filter dropdown
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLPanelMainInventory
@@ -82,6 +83,12 @@ public:
 	void setSelectCallback(const LLFolderView::signal_t::slot_type& cb);
 
 	void onFilterEdit(const std::string& search_string );
+
+	// ## Zi: Filter dropdown
+	void onFilterTypeSelected(const std::string& filter_type_name);
+	void updateFilterDropdown(const LLInventoryFilter* filter);
+	// ## Zi: Filter dropdown
+
 protected:
 	//
 	// Misc functions
@@ -132,6 +139,11 @@ private:
 	std::string					mFilterText;
 	std::string					mFilterSubString;
 
+	// ## Zi: Filter dropdown
+	LLComboBox*					mFilterComboBox;
+	std::map<std::string,U64>	mFilterMap;			// contains name-to-number mapping for dropdown filter types
+	U64							mFilterMask;		// contains the cumulated bit filter for all dropdown filter types
+	// ## Zi: Filter dropdown
 
 	//////////////////////////////////////////////////////////////////////////////////
 	// List Commands                                                                //
