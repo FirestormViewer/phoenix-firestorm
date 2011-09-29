@@ -80,7 +80,8 @@ private:
 
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 public:
-	static const std::string& getFloaterXMLFile();
+	static const std::string&	getFloaterXMLFile();
+	static bool					isTabbedNearbyChat();
 protected:
 	static void* createChatBarSingle(void*);
 	static void* createChatBarMulti(void*);
