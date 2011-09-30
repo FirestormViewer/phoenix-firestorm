@@ -523,10 +523,26 @@ void LLIMFloater::updateCallButton()
 	
 	bool session_initialized = session->mSessionInitialized;
 	bool callback_enabled = session->mCallBackEnabled;
-	
-	BOOL enable_connect = session_initialized
-	&& voice_enabled
+
+	//[Possible FIX-FIRE-2012] GROUP and Ad-Hoc don't have session initialized --> removing that from the condition to enable_connect
+	//BOOL enable_connect = session_initialized
+	//&& voice_enabled
+	//&& callback_enabled;
+	BOOL enable_connect = voice_enabled
 	&& callback_enabled;
+	//if (voice_enabled) 
+	//{
+	//	llinfos << "LLIMFloater::updateCallButton - voice enabled" << llendl;
+	//}
+	//if (session_initialized) 
+	//{
+	//	llinfos << "LLIMFloater::updateCallButton - session_initialized" << llendl;
+	//}
+	//if (callback_enabled) 
+	//{
+	//	llinfos << "LLIMFloater::updateCallButton - callback_enabled" << llendl;
+	//}
+
 	getChild<LLButton>("call_btn")->setEnabled(enable_connect);
 }
 
