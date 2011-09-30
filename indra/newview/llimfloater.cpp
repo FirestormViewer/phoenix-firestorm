@@ -521,7 +521,7 @@ void LLIMFloater::updateCallButton()
 		return;
 	}
 	
-	bool session_initialized = session->mSessionInitialized;
+	//bool session_initialized = session->mSessionInitialized;
 	bool callback_enabled = session->mCallBackEnabled;
 
 	//[Possible FIX-FIRE-2012] GROUP and Ad-Hoc don't have session initialized --> removing that from the condition to enable_connect
