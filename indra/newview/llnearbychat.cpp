@@ -313,7 +313,7 @@ void LLNearbyChat::processChatHistoryStyleUpdate(const LLSD& newvalue)
 
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-29 (Catznip-3.0.0a) | Added: Catznip-3.0.0a
 //static 
-void LLNearbyChat::processChatBarTypeChanged(const LLSD& newvalue)
+void LLNearbyChat::processFloaterTypeChanged()
 {
 	// We only need to do anything if an instance of the nearby chat floater already exists
 	LLNearbyChat* pNearbyChat = LLFloaterReg::findTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
