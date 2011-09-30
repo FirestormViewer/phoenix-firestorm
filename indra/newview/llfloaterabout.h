@@ -53,6 +53,11 @@ public:
 	static LLSD getInfo();
 	static std::string buildAbout(const LLSD& info);
 	void onClickCopyToClipboard();
+
+		void updateServerReleaseNotesURL(const std::string& url);
+
+private:
+	void setSupportText(const std::string& server_release_notes_url);
 };
 
 #endif // LL_LLFLOATERABOUT_H
