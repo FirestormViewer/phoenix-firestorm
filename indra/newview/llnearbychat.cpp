@@ -95,20 +95,25 @@ BOOL LLNearbyChat::postBuild()
 
 	mChatHistory = getChild<LLChatHistory>("chat_history");
 
-	if(!LLDockableFloater::postBuild())
-		return false;
-
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-29 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+	// Initalize certain parameters depending on docked vs embedded state
 	bool fTabbedNearbyChat = isTabbedNearbyChat();
 	setCanClose(fTabbedNearbyChat);
 	setCanDock(!fTabbedNearbyChat);
 	setCanMinimize(!fTabbedNearbyChat);
 	setCanTearOff(fTabbedNearbyChat);
-	if (fTabbedNearbyChat)
-	{
-		mDocStateControl.clear();
-	}
 
+	if (!fTabbedNearbyChat)
+		mTearOffStateControl.clear();
+	else
+		mDocStateControl.clear();
+// [/SL:KB]
+
+	if(!LLDockableFloater::postBuild())
+		return false;
+
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-29 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+	// Dock us to the bottom tray nearby chat bar or embedd us into the conversations floater
 	if (!fTabbedNearbyChat)
 	{
 // [/SL:KB]
@@ -144,37 +149,45 @@ void    LLNearbyChat::applySavedVariables()
 //	if (mRectControl.size() > 1)
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-29 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 	bool fTabbedNearbyChat = isTabbedNearbyChat();
-	if ( (mRectControl.size() > 1) && (!fTabbedNearbyChat) )
+//	if ( (mRectControl.size() > 1) && (!fTabbedNearbyChat) )
 // [/SL:KB]
-	{
-		const LLRect& rect = LLFloater::getControlGroup()->getRect(mRectControl);
-		if(!rect.isEmpty() && rect.isValid())
-		{
-			reshape(rect.getWidth(), rect.getHeight());
-			setRect(rect);
-		}
-	}
+//	{
+//		const LLRect& rect = LLFloater::getControlGroup()->getRect(mRectControl);
+//		if(!rect.isEmpty() && rect.isValid())
+//		{
+//			reshape(rect.getWidth(), rect.getHeight());
+//			setRect(rect);
+//		}
+//	}
 
 
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-29 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 	if (!fTabbedNearbyChat)
 	{
-// [/SL:KB]
-		if(!LLFloater::getControlGroup()->controlExists(mDocStateControl))
-		{
+		applyRectControl();
+
+		if (!LLFloater::getControlGroup()->controlExists(mDocStateControl))
 			setDocked(true);
-		}
 		else
-		{
-			if (mDocStateControl.size() > 1)
-			{
-				bool dockState = LLFloater::getControlGroup()->getBOOL(mDocStateControl);
-				setDocked(dockState);
-			}
-		}
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-29 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+			applyDockState();
+	}
+	else
+	{
+		applyTearOffState();
 	}
 // [/SL:KB]
+//	if(!LLFloater::getControlGroup()->controlExists(mDocStateControl))
+//	{
+//		setDocked(true);
+//	}
+//	else
+//	{
+//		if (mDocStateControl.size() > 1)
+//		{
+//			bool dockState = LLFloater::getControlGroup()->getBOOL(mDocStateControl);
+//			setDocked(dockState);
+//		}
+//	}
 }
 
 std::string appendTime()
