@@ -236,7 +236,8 @@ BOOL LLPanelMainInventory::postBuild()
 	}
 
 	// ## Zi: Filter dropdown
-	if(mFilterComboBox=getChild<LLComboBox>("filter_combo_box"))
+	mFilterComboBox=getChild<LLComboBox>("filter_combo_box");
+	if(mFilterComboBox)
 		mFilterComboBox->setCommitCallback(boost::bind(&LLPanelMainInventory::onFilterTypeSelected, this, _2));
 	// ## Zi: Filter dropdown
 
