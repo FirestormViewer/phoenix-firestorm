@@ -12,6 +12,22 @@
  name="bottom_tray"
  top="28"
  width="1310">
+<button
+ name="conversations_btn"
+ control_name="floater_vis_imcontacts"
+ image_overlay="conversations_18"
+ image_pressed="PushButton_Press"
+ image_pressed_selected="PushButton_Selected_Press"
+ image_selected="PushButton_Selected_Press"
+ left="0"
+ top="5"
+ width="36"
+ height="23"
+ follows="top|left">
+<commit_callback
+ function="Floater.Toggle"
+ parameter="im_container" />
+</button>
   <string
      name="DragIndicationImageName"
      value="Accordion_ArrowOpened_Off" />
@@ -21,39 +37,37 @@
   <string
      name="VoiceControlBtnToolTip"
      value="Shows/hides voice control panel" />
+
+  <!-- Do not try to use left_pad here, it creates strange results -Zi -->
   <layout_stack
      border_size="0"
      clip="false"
      follows="all"
      height="28"
      layout="topleft"
-    left="0"
+     left="40"
      mouse_opaque="false"
      name="toolbar_stack"
      orientation="horizontal"
      top="0"
-     width="1310">
-    <layout_panel
-         auto_resize="false"
-         user_resize="false"
-         min_width="2"
-         width="2" />
+     width="1270">
     <layout_panel
          auto_resize="false"
          layout="topleft"
-         max_width="320"
+         max_width="260"
          min_width="25"
          height="28" 
          mouse_opaque="false"
 		 name="chat_bar_layout_panel"
          user_resize="true"
-     width="310" >
+     width="250" >
+
           <panel
             name="chat_bar"
             filename="panel_nearby_chat_bar.xml"
-            left="0"
+            left="50"
             height="28"
-        width="308"
+        width="258"
             top="0"
             mouse_opaque="false"
             follows="left|right"
