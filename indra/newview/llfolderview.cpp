@@ -2182,8 +2182,12 @@ void LLFolderView::doIdle()
 	mFilter->clearModified();
 	BOOL filter_modified_and_active = mCompletedFilterGeneration < mFilter->getCurrentGeneration() && 
 										mFilter->isNotDefault();
+//	mNeedsAutoSelect = filter_modified_and_active &&
+//							!(gFocusMgr.childHasKeyboardFocus(this) || gFocusMgr.getMouseCapture());
+// [SL:KB] - Patch: Inventory-Selection | Checked: 2011-10-01 (Catznip-3.0.0a) | Added: Catznip-3.0.0a
 	mNeedsAutoSelect = filter_modified_and_active &&
-							!(gFocusMgr.childHasKeyboardFocus(this) || gFocusMgr.getMouseCapture());
+							!(gFocusMgr.childHasKeyboardFocus(mParentPanel) || gFocusMgr.getMouseCapture());
+// [/SL:KB]
 
 	// filter to determine visiblity before arranging
 	filterFromRoot();
