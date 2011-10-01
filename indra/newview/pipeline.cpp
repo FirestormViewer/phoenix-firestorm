@@ -3262,7 +3262,8 @@ void LLPipeline::postSort(LLCamera& camera)
 	}
 	llpushcallstacks ;
 	// only render if the flag is set. The flag is only set if we are in edit mode or the toggle is set in the menus
-	if (LLFloaterReg::instanceVisible("beacons") && !sShadowRender)
+	// Ansariel: Make beacons also show when beacons floater is closed.
+	if (/*LLFloaterReg::instanceVisible("beacons") &&*/ !sShadowRender)
 	{
 		if (sRenderScriptedTouchBeacons)
 		{
