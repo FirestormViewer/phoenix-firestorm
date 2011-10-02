@@ -4,6 +4,9 @@
 ## These options are for self-assisted troubleshooting during this beta
 ## testing phase; you should not usually need to touch them.
 
+## AO: TCMALLOC Tuning as suggested by Henri Beauchamp for more aggressive garbage collection
+export TCMALLOC_RELEASE_RATE=10000
+
 ## - Avoids using any OpenAL audio driver.
 #export LL_BAD_OPENAL_DRIVER=x
 ## - Avoids using any FMOD audio driver.
