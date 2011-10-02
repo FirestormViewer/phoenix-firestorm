@@ -2,115 +2,102 @@
 <!--alba: modified text + see comments below-->
 <floater name="worldmap" 
 title="CARTE DU MONDE">
+	<layout_stack name="resizing_stack">
+		<layout_panel name="map_panel">
+			<panel name="map_details_selection">
+				<button name="Show Map details" tool_tip="Show or hide details next to the World Map"/>
+			</panel>
+			<panel name="layout_panel_6">
+				<slider label="Zoom" name="zoom slider"/>
+			</panel>
+		</layout_panel>
+		<layout_panel name="map_details_panel">
 
-	<panel name="layout_panel_1">
-		<text name="events_label">
-		Légende</text>
-	</panel>
+			<panel name="layout_panel_1">
+				<text name="events_label">
+				Légende</text>
+			</panel>
 
-	<panel name="layout_panel_2">
-		<button name="Show Current Location" 
-		tool_tip="Centrer la carte sur votre position">
-		</button>
-		<text name="me_label">
-		Votre position
-		</text>
-		<text name="person_label">
-		Résident
-		</text>
-		<text name="infohub_label">
-		Infohub
-		</text>
-		<text name="land_sale_label">
-		Terrain à vendre
-		</text>
-		<text name="auction_label">
-		Vente s/enchères
-		</text>
-		<text name="by_owner_label">
-		Surface en vente
-		</text>
-		<button name="Go Home" 
-		tool_tip="Vous téléporter à votre domicile">
-		</button>
-		<text name="Home_label">
-		Domicile
-		</text>
-		<text name="events_label">
-		Evènements
-		</text>
-		<text name="pg_label">
-		Général
-		</text>
-		<text name="events_mature_label">
-		Mature
-		</text>
-		<text name="events_adult_label">
-		Adulte
-		</text>
-	</panel>
+			<panel name="layout_panel_2">
+				<button name="Show Current Location" 
+				tool_tip="Centrer la carte sur votre position">
+				</button>
+				<text name="me_label">
+				Votre position
+				</text>
+				<text name="person_label">
+				Résident
+				</text>
+				<text name="infohub_label">
+				Infohub
+				</text>
+				<text name="land_sale_label">
+				Terrain à vendre
+				</text>
+				<text name="auction_label">
+				Vente s/enchères
+				</text>
+				<text name="by_owner_label">
+				Surface en vente
+				</text>
+				<button name="Go Home" 
+				tool_tip="Vous téléporter à votre domicile">
+				</button>
+				<text name="Home_label">
+				Domicile
+				</text>
+				<text name="events_label">
+				Evènements
+				</text>
+				<text name="pg_label">
+				Général
+				</text>
+				<text name="events_mature_label">
+				Mature
+				</text>
+				<text name="events_adult_label">
+				Adulte
+				</text>
+			</panel>
 
-	<panel name="layout_panel_3">
-		<text name="find_on_map_label">
-		Situer sur la carte
-		</text>
-	</panel>
+			<panel name="layout_panel_3">
+				<text name="find_on_map_label">
+				Situer sur la carte
+				</text>
+			</panel>
 
-	<panel name="layout_panel_4">
-		<combo_box name="friend combo" 
-		label="Amis connectés" 
-		tool_tip="Sélectionner dans la liste l'ami que vous voulez retrouver sur la carte.">
-			<combo_box.item name="item1"
-			label="Amis connectés"/>
-		</combo_box>
-		<combo_box name="landmark combo" 
-		label="Repères" 
-		tool_tip="Sélectionner dans la liste le repère que vous voulez afficher sur la carte.">
-			<combo_box.item name="item1"
-			label="Repères"/>
-		</combo_box>
-		<search_editor name="location" 
-		label="Région par nom" 
-		tool_tip="Entrer le nom d&apos;une région"/>
-		<button name="DoSearch" 
-		label="Chercher" 
-		tool_tip="Lancer une recherche sur le nom de la région">
-		</button>
-		<text name="events_label">
-		Position
-		</text>
-<!--alba: Due to MetaHarper skins, the next 4 buttons have to be reproduced. See below-->
-		<button name="Clear" 
-		label="Purger" 
-		tool_tip="Purger les champs de recherche et d'affichage des régions">
-		</button>
-		<button name="Teleport" 
-		label="Téléportation" 
-		tool_tip="Vous téléporter à la position du marqueur">
-		</button>
-		<button name="copy_slurl" 
-		label="Copier le SLurl" 
-		tool_tip="Copier la position du marqueur en tant que SLurl utilisable sur le Web et sur SL">
-		</button>
-		<button name="Show Destination" 
-		label="Centrer la carte" 
-		tool_tip="Centrer la carte sur la position du marqueur. (Cliquer sur la carte pour définir un marqueur.)">
-		</button>
-<!--alba: End of repro-->
-		<layout_stack>
-			<layout_panel name="layoutstackpanel_left">
-<!--alba: Here we go again-->
+			<panel name="layout_panel_4">
+				<combo_box name="friend combo" 
+				label="Amis connectés" 
+				tool_tip="Sélectionner dans la liste l'ami que vous voulez retrouver sur la carte.">
+					<combo_box.item name="item1"
+					label="Amis connectés"/>
+				</combo_box>
+				<combo_box name="landmark combo" 
+				label="Repères" 
+				tool_tip="Sélectionner dans la liste le repère que vous voulez afficher sur la carte.">
+					<combo_box.item name="item1"
+					label="Repères"/>
+				</combo_box>
+				<search_editor name="location" 
+				label="Région par nom" 
+				tool_tip="Entrer le nom d&apos;une région"/>
+				<button name="DoSearch" 
+				label="Chercher" 
+				tool_tip="Lancer une recherche sur le nom de la région">
+				</button>
+				<text name="events_label">
+				Position
+				</text>
+		<!--alba: Due to MetaHarper skins, the next 4 buttons have to be reproduced. See below-->
 				<button name="Clear" 
-				label="Effacer" 
+				label="Purger" 
 				tool_tip="Purger les champs de recherche et d'affichage des régions">
 				</button>
 				<button name="Teleport" 
 				label="Téléportation" 
-				tool_tip="Vous téléporter à la position du marqueur. (Cliquer sur la carte pour définir un marqueur.)">
+				tool_tip="Vous téléporter à la position du marqueur">
 				</button>
-			</layout_panel>
-
-			<layout_panel name="layoutstackpanel_right">
 				<button name="copy_slurl" 
 				label="Copier le SLurl" 
 				tool_tip="Copier la position du marqueur en tant que SLurl utilisable sur le Web et sur SL">
@@ -119,15 +106,35 @@ title="CARTE DU MONDE">
 				label="Centrer la carte" 
 				tool_tip="Centrer la carte sur la position du marqueur. (Cliquer sur la carte pour définir un marqueur.)">
 				</button>
-<!--alba: End of repro-->
-				</layout_panel>
-		</layout_stack>
-	</panel>
+		<!--alba: End of repro-->
+				<layout_stack>
+					<layout_panel name="layoutstackpanel_left">
+		<!--alba: Here we go again-->
+						<button name="Clear" 
+						label="Effacer" 
+						tool_tip="Purger les champs de recherche et d'affichage des régions">
+						</button>
+						<button name="Teleport" 
+						label="Téléportation" 
+						tool_tip="Vous téléporter à la position du marqueur. (Cliquer sur la carte pour définir un marqueur.)">
+						</button>
+					</layout_panel>
 
-	<panel name="layout_panel_5">
-		<text name="zoom_label">
-		Zoom
-		</text>
-	</panel>
+					<layout_panel name="layoutstackpanel_right">
+						<button name="copy_slurl" 
+						label="Copier le SLurl" 
+						tool_tip="Copier la position du marqueur en tant que SLurl utilisable sur le Web et sur SL">
+						</button>
+						<button name="Show Destination" 
+						label="Centrer la carte" 
+						tool_tip="Centrer la carte sur la position du marqueur. (Cliquer sur la carte pour définir un marqueur.)">
+						</button>
+		<!--alba: End of repro-->
+						</layout_panel>
+				</layout_stack>
+			</panel>
+
+		</layout_panel> 
+	</layout_stack> 
 
 </floater>
