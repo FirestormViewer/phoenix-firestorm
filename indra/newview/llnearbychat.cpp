@@ -32,6 +32,7 @@
 #include "llrootview.h"
 //#include "llchatitemscontainerctrl.h"
 #include "lliconctrl.h"
+#include "llspinctrl.h"
 #include "llsidetray.h"
 #include "llfocusmgr.h"
 #include "llresizebar.h"
@@ -149,6 +150,8 @@ BOOL LLNearbyChat::postBuild()
 	mInputEditor->setPassDelete( TRUE );
 	mInputEditor->setEnabled(TRUE);
 	
+	// chat channel spinner - TS
+	getChild<LLSpinCtrl>("ChatChannel")->setEnabled(gSavedSettings.getBOOL("PhoenixShowChatChannel"));
 	
 	// extra icon controls -AO
 	LLButton* transl = getChild<LLButton>("translate_btn");
@@ -444,11 +447,7 @@ void LLNearbyChat::onInputEditorFocusLost(LLFocusableElement* caller, void* user
 void LLNearbyChat::onInputEditorKeystroke(LLLineEditor* caller, void* userdata)
 {
 	LLNearbyChat* self = (LLNearbyChat*)userdata;
-	std::string text = self->mInputEditor->getText();
-	
 	LLWString raw_text = self->mInputEditor->getWText();
-	LLNearbyChatBar* masterBar = LLNearbyChatBar::getInstance();
-	masterBar->setText(self->mInputEditor->getText());
 	
 	// Can't trim the end, because that will cause autocompletion
 	// to eat trailing spaces that might be part of a gesture.
@@ -483,7 +482,6 @@ void LLNearbyChat::onInputEditorKeystroke(LLLineEditor* caller, void* userdata)
 		{
 			std::string rest_of_match = utf8_out_str.substr(utf8_trigger.size());
 			self->mInputEditor->setText(utf8_trigger + rest_of_match); // keep original capitalization for user-entered part
-			masterBar->setText(self->mInputEditor->getText());
 			S32 outlength = self->mInputEditor->getLength(); // in characters
 			
 			// Select to end of line, starting from the character
@@ -494,7 +492,6 @@ void LLNearbyChat::onInputEditorKeystroke(LLLineEditor* caller, void* userdata)
 		{
 			std::string rest_of_match = utf8_out_str.substr(utf8_trigger.size());
 			self->mInputEditor->setText(utf8_trigger + rest_of_match + " "); // keep original capitalization for user-entered part
-			masterBar->setText(self->mInputEditor->getText());
 			self->mInputEditor->setCursorToEnd();
 		}
 	}
@@ -502,8 +499,13 @@ void LLNearbyChat::onInputEditorKeystroke(LLLineEditor* caller, void* userdata)
 void LLNearbyChat::onSendMsg( LLUICtrl* ctrl, void* userdata )
 {
 	LLNearbyChat* self = (LLNearbyChat*)userdata;
-	LLNearbyChatBar::getInstance()->sendChat(CHAT_TYPE_NORMAL);
+	LLNearbyChatBar* masterBar = LLNearbyChatBar::getInstance();
+	std::string masterText = masterBar->getCurrentChat();
+	std::string sendText = self->mInputEditor->getText();
+	masterBar->setText(sendText);
+	masterBar->sendChat(CHAT_TYPE_NORMAL);
 	self->mInputEditor->setText(LLStringExplicit(""));
+	masterBar->setText(masterText);
 }
 
 // virtual

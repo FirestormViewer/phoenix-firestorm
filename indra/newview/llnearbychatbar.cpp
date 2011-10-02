@@ -45,6 +45,8 @@
 #include "llviewercontrol.h"
 #include "llnavigationbar.h"
 #include "llwindow.h"
+#include "llspinctrl.h"
+#include "llnearbychat.h"
 #include "llviewerwindow.h"
 #include "llrootview.h"
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b)
@@ -695,6 +697,14 @@ void LLNearbyChatBar::sendChat( EChatType type )
 			// Check if this is destined for another channel
 			S32 channel = 0;
 			stripChannelNumber(text, &channel);
+			// If "/<number>" is not specified, see if a channel has been set in
+			//  the spinner.
+			if (gSavedSettings.getBOOL("PhoenixNearbyChatbar") &&
+				gSavedSettings.getBOOL("PhoenixShowChatChannel") &&
+				(channel == 0))
+			{
+				channel = (S32)(LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+			}
 			
 			std::string utf8text = wstring_to_utf8str(text);
 			// Try to trigger a gesture, if not chat to a script.
@@ -845,6 +855,14 @@ void LLNearbyChatBar::sendChatFromViewer(const LLWString &wtext, EChatType type,
 	// Look for "/20 foo" channel chats.
 	S32 channel = 0;
 	LLWString out_text = stripChannelNumber(wtext, &channel);
+	// If "/<number>" is not specified, see if a channel has been set in
+	//  the spinner.
+	if (gSavedSettings.getBOOL("PhoenixNearbyChatbar") &&
+		gSavedSettings.getBOOL("PhoenixShowChatChannel") &&
+		(channel == 0))
+	{
+		channel = (S32)(LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+	}
 	std::string utf8_out_text = wstring_to_utf8str(out_text);
 	std::string utf8_text = wstring_to_utf8str(wtext);
 

@@ -856,18 +856,19 @@
              layout="topleft"
              top_pad="0"
              height="18"
-             width="400" />
+             width="200" />
             <check_box
              control_name="StreamMetadataAnnounceToChat"
              name="StreamMetadataAnnounceToChat"
-             label="Announce stream title to chat channel:"
+             label="Send stream title to channel:"
              layout="topleft"
-             top_pad="0"
+             left_delta="200"
              height="18"
-             width="240" />
+             width="180" />
             <spinner
-             top_delta="-2"
+             top_delta="-4"
              control_name="StreamMetadataAnnounceChannel"
+             enabled_control="StreamMetadataAnnounceToChat"
              decimal_digits="0"
              layout="topleft"
              follows="left|top"
@@ -900,6 +901,17 @@
              text_color="White_25">
               (requires restart)
             </text>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="30"
+             width="250"
+             height="20"
+             control_name="PhoenixShowChatChannel"
+             enabled_control="PhoenixNearbyChatbar"
+             name="PhoenixShowChatChannel"
+             label="Show channel selection in chat bar"/>
             <check_box
              control_name="AutohideChatBar"
              height="16"

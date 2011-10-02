@@ -22,8 +22,8 @@ public:
 	void onAutoCorrectSettings();
     
 	void onUseEnvironmentFromRegionAlways();
+	void onPhoenixShowChatChannel();
 
-	
 	void refreshTagCombos();
 	void applyTagCombos();
 
