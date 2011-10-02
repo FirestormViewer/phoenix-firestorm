@@ -96,8 +96,25 @@
          layout="bottomleft"
          name="chat_box"
          tab_group="3"
-         width="249">
+         width="140">
       </line_editor>
+      <spinner
+         bottom_delta="0"
+         right="-1"
+         decimal_digits="0"
+         follows="right|bottom"
+         height="20" 
+         increment="1.00"
+         initial_val="0"
+         label="Chan"
+         label_width="29"
+         max_val="2147483647"
+         min_val="-2147483647"
+         mouse_opaque="true"
+         name="ChatChannel"
+         width="109"
+         tool_tip="Channel to send chat on. Enabled in Preferences->Firestorm->Chat->Show channel selection in chat bar.">
+      </spinner>
     </layout_panel>
   </layout_stack>
 
