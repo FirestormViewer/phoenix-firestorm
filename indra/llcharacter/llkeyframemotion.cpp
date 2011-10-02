@@ -42,12 +42,15 @@
 #include "llvfile.h"
 #include "m3math.h"
 #include "message.h"
+#include "lltimer.h"
 
 //-----------------------------------------------------------------------------
 // Static Definitions
 //-----------------------------------------------------------------------------
 LLVFS*				LLKeyframeMotion::sVFS = NULL;
 LLKeyframeDataCache::keyframe_data_map_t	LLKeyframeDataCache::sKeyframeDataMap;
+LLKeyframeDataCache::tGarbage	LLKeyframeDataCache::mGarbage;
+
 
 //-----------------------------------------------------------------------------
 // Globals
@@ -62,6 +65,9 @@ static F32 MIN_ACCELERATION_SQUARED = 0.0005f * 0.0005f;
 
 static F32 MAX_CONSTRAINTS = 10;
 
+static U32 const MAX_CACHE_TIME_IN_SECONDS = 45*60;
+static U32 const SCAN_CACHE_INTERVAL = 31;
+
 //-----------------------------------------------------------------------------
 // JointMotionList
 //-----------------------------------------------------------------------------
@@ -74,7 +80,8 @@ LLKeyframeMotion::JointMotionList::JointMotionList()
 	  mEaseOutDuration(0.f),
 	  mBasePriority(LLJoint::LOW_PRIORITY),
 	  mHandPose(LLHandMotion::HAND_POSE_SPREAD),
-	  mMaxPriority(LLJoint::LOW_PRIORITY)
+	  mMaxPriority(LLJoint::LOW_PRIORITY),
+	  mLocks(0)
 {
 }
 
@@ -1849,7 +1856,7 @@ BOOL LLKeyframeMotion::deserialize(LLDataPacker& dp)
 	}
 
 	// *FIX: support cleanup of old keyframe data
-	LLKeyframeDataCache::addKeyframeData(getID(),  mJointMotionList);
+	LLKeyframeDataCache::addKeyframeData(getID(),  mJointMotionList.get());
 	mAssetStatus = ASSET_LOADED;
 
 	setupPose();
@@ -2208,7 +2215,7 @@ void LLKeyframeDataCache::dumpDiagInfo()
 	{
 		U32 joint_motion_kb;
 
-		LLKeyframeMotion::JointMotionList *motion_list_p = map_it->second;
+		LLKeyframeMotion::JointMotionList *motion_list_p = map_it->second.mList;
 
 		llinfos << "Motion: " << map_it->first << llendl;
 
@@ -2230,7 +2237,18 @@ void LLKeyframeDataCache::dumpDiagInfo()
 //--------------------------------------------------------------------
 void LLKeyframeDataCache::addKeyframeData(const LLUUID& id, LLKeyframeMotion::JointMotionList* joint_motion_listp)
 {
-	sKeyframeDataMap[id] = joint_motion_listp;
+	keyframe_data_map_t::iterator itr  = sKeyframeDataMap.find(id);
+	if( sKeyframeDataMap.end() != itr )
+	{
+		mGarbage.push_back( itr->second.mList );
+		sKeyframeDataMap.erase(itr);
+	}
+
+	JointMotionListCacheEntry oCacheEntry;
+	oCacheEntry.mList = joint_motion_listp;
+	oCacheEntry.mLastAccessed = LLTimer::getTotalSeconds();
+	sKeyframeDataMap[id] = oCacheEntry;
+	tryShrinkCache();
 }
 
 //--------------------------------------------------------------------
@@ -2241,9 +2259,11 @@ void LLKeyframeDataCache::removeKeyframeData(const LLUUID& id)
 	keyframe_data_map_t::iterator found_data = sKeyframeDataMap.find(id);
 	if (found_data != sKeyframeDataMap.end())
 	{
-		delete found_data->second;
+		delete found_data->second.mList;
 		sKeyframeDataMap.erase(found_data);
 	}
+
+	tryShrinkCache();
 }
 
 //--------------------------------------------------------------------
@@ -2256,7 +2276,11 @@ LLKeyframeMotion::JointMotionList* LLKeyframeDataCache::getKeyframeData(const LL
 	{
 		return NULL;
 	}
-	return found_data->second;
+
+	found_data->second.mLastAccessed = LLTimer::getTotalSeconds();
+
+	tryShrinkCache();
+	return found_data->second.mList;
 }
 
 //--------------------------------------------------------------------
@@ -2272,8 +2296,59 @@ LLKeyframeDataCache::~LLKeyframeDataCache()
 //-----------------------------------------------------------------------------
 void LLKeyframeDataCache::clear()
 {
-	for_each(sKeyframeDataMap.begin(), sKeyframeDataMap.end(), DeletePairedPointer());
+	for( keyframe_data_map_t::iterator itr = sKeyframeDataMap.begin(); sKeyframeDataMap.end() != itr; ++itr )
+		delete itr->second.mList;
+
 	sKeyframeDataMap.clear();
+}
+
+void LLKeyframeDataCache::tryShrinkCache()
+{
+	static U64 sLastRun(0);
+
+	U64 nNow = LLTimer::getTotalSeconds();
+
+	if( (sLastRun - nNow) < SCAN_CACHE_INTERVAL )
+		return;
+	
+	tryDeleteGarbage();
+
+	int nKilled = 0;
+	for( keyframe_data_map_t::iterator itr = sKeyframeDataMap.begin(); sKeyframeDataMap.end() != itr; ++itr )
+	{
+		JointMotionListCacheEntry &oCacheEntry = itr->second;
+		if( !oCacheEntry.mList || oCacheEntry.mList->isLocked() )
+			continue;
+
+		if( (nNow - oCacheEntry.mLastAccessed) > MAX_CACHE_TIME_IN_SECONDS )
+		{
+			mGarbage.push_back( oCacheEntry.mList );
+			sKeyframeDataMap.erase( itr );
+			itr = sKeyframeDataMap.begin();
+			++nKilled;
+		}
+	}
+
+	sLastRun = LLTimer::getTotalSeconds();
+}
+
+void LLKeyframeDataCache::tryDeleteGarbage()
+{
+	tGarbage dqGarbage;
+	int nZombies = 0;
+
+	for( tGarbage::iterator itr = mGarbage.begin(); mGarbage.end() != itr; ++itr )
+	{
+		if( (*itr)->isLocked() )
+		{
+			dqGarbage.push_back( *itr );
+			++nZombies;
+		}
+		else
+			delete *itr;
+	}
+
+	mGarbage = dqGarbage;
 }
 
 //-----------------------------------------------------------------------------
