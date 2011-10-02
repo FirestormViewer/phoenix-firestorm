@@ -412,6 +412,15 @@ void LLPipeline::init()
 	sRenderAttachedLights = gSavedSettings.getBOOL("RenderAttachedLights");
 	sRenderAttachedParticles = gSavedSettings.getBOOL("RenderAttachedParticles");
 
+	sRenderMOAPBeacons = gSavedSettings.getBOOL("moapbeacon");
+	sRenderPhysicalBeacons = gSavedSettings.getBOOL("physicalbeacon");
+	sRenderScriptedBeacons = gSavedSettings.getBOOL("scriptsbeacon");
+	sRenderScriptedTouchBeacons = gSavedSettings.getBOOL("scripttouchbeacon");
+	sRenderParticleBeacons = gSavedSettings.getBOOL("particlesbeacon");
+	sRenderSoundBeacons = gSavedSettings.getBOOL("soundsbeacon");
+	sRenderBeacons = gSavedSettings.getBOOL("renderbeacons");
+	sRenderHighlight = gSavedSettings.getBOOL("renderhighlights");
+
 	mInitialized = TRUE;
 	
 	stop_glerror();
