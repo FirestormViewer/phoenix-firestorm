@@ -1727,9 +1727,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8308f7bd68bb7083655753b7abe7225f</string>
+              <string>7ac1221eb506fb89332e498b92baa62a</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-google-perftools/rev/226287/arch/CYGWIN/installer/google_perftools-1.7-windows-20110411.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/google_perftools-1.8-fs-windows-20111005.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
