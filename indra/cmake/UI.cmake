@@ -34,6 +34,7 @@ else (STANDALONE)
   use_prebuilt_binary(gtk-atk-pango-glib)
   if (LINUX)
     set(UI_LIBRARIES
+        freetype
         atk-1.0
         gdk-x11-2.0
         gdk_pixbuf-2.0
