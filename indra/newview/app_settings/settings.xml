@@ -16445,6 +16445,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <real>1.047197551</real>
       <real>0.0</real>
     </array>
-  </map>  
+  </map> 
+    <key>FSUseV1Menus</key>
+    <map>
+      <key>Comment</key>
+      <string>Toggles the display of V1-like viewer menus</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
 </map>
 </llsd>

@@ -813,6 +813,7 @@ void settings_setup_listeners()
 // [/SL:KB]
 	gSavedSettings.getControl("ImagePipelineHTTPMaxFailCountFallback")->getSignal()->connect(boost::bind(&handleImagePipelineHTTPMaxFailCountFallback, _2));
 	gSavedSettings.getControl("AvatarZOffset")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // ## Zi: Moved Avatar Z offset from RLVa to here
+	gSavedSettings.getControl("FSUseV1Menus")->getSignal()->connect(boost::bind(&show_v1_menus));	// V1 menu system	-WoLf
 }
 
 #if TEST_CACHED_CONTROL

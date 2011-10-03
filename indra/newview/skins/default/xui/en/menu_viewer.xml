@@ -3,11 +3,13 @@
  bg_visible="false"
  follows="left|top|right"
  name="Main Menu">
+ <!-- #####  When editing entries in the menu, please also edit the V1 section below  ##### -->
     <menu
      create_jump_keys="true"
      label="Avatar"
      name="Me"
-     tear_off="true">
+     tear_off="true"
+     visible="true">
         
         <menu_item_call
              label="Account"
@@ -341,7 +343,8 @@
      create_jump_keys="true"
      label="Comm"
      name="Communicate"
-     tear_off="true">
+     tear_off="true"
+     visible="true">
      
         <menu
          create_jump_keys="true"
@@ -485,7 +488,8 @@
      create_jump_keys="true"
      label="World"
      name="World"
-     tear_off="true">
+     tear_off="true"
+     visible="true">
      
         <menu_item_call
             label="Nearby Avatars"
@@ -1405,7 +1409,8 @@
     	create_jump_keys="true"
     	label="Content"
     	name="Content"
-    	tear_off="true">
+    	tear_off="true"
+        visible="true">
 <!--
         <menu_item_call
              label="Search"
@@ -1461,7 +1466,8 @@
      create_jump_keys="true"
      label="Help"
      name="Help"
-     tear_off="true">
+     tear_off="true"
+     visible="true">
         <menu_item_check
          label="Enable Viewer UI Hints"
          name="Enable Hints">
@@ -2522,6 +2528,17 @@
              function="ToggleControl"
              parameter="QAMode" />
         </menu_item_check>
+     <menu_item_check
+         label="Use V1 Menus"
+         name="V1 Menus">
+            <menu_item_check.on_check
+             function="CheckControl"
+             parameter="FSUseV1Menus" />
+            <menu_item_check.on_click
+             function="ToggleControl"
+             parameter="FSUseV1Menus" />
+        </menu_item_check>
+
     </menu>
     <menu
      create_jump_keys="true"
@@ -4355,4 +4372,82 @@
             </menu>
         </menu>
     </menu>
+    
+    <!-- BEGIN: V1 Menu System -WoLf -->
+    <!-- V1 menu: File -->
+    <menu
+     create_jump_keys="true"
+     label="File"
+     name="V1-File"
+     tear_off="true"
+     visible="false">
+    </menu>
+    <!-- V1 menu: Edit -->
+    <menu
+     create_jump_keys="true"
+     label="Edit"
+     name="V1-Edit"
+     tear_off="true"
+     visible="false">
+    </menu>
+    <!-- V1 menu: View -->
+    <menu
+     create_jump_keys="true"
+     label="View"
+     name="V1-View"
+     tear_off="true"
+     visible="false">
+    </menu>
+    <!-- V1 menu: World -->
+    <menu
+     create_jump_keys="true"
+     label="World"
+     name="V1-World"
+     tear_off="true"
+     visible="false">
+    </menu>
+    <!-- V1 menu: Tools -->
+    <menu
+     create_jump_keys="true"
+     label="Tools"
+     name="V1-Tools"
+     tear_off="true"
+     visible="false">
+    </menu>
+    <!-- V1 menu: Help -->
+    <menu
+     create_jump_keys="true"
+     label="Help"
+     name="V1-Help"
+     tear_off="true"
+     visible="false">
+    </menu>
+    <!-- V1 menu: Firestorm -->
+    <menu
+     create_jump_keys="true"
+     label="Firestorm"
+     name="V1-Firestorm"
+     tear_off="true"
+     visible="false">
+    </menu>
+    <!-- V1 menu: Advanced -->
+    <menu
+     create_jump_keys="true"
+     label="Advanced"
+     name="V1-Advanced"
+     tear_off="true"
+     visible="false">
+     <menu_item_check
+         label="Use V1 Menus"
+         name="V1 Menus">
+            <menu_item_check.on_check
+             function="CheckControl"
+             parameter="FSUseV1Menus" />
+            <menu_item_check.on_click
+             function="ToggleControl"
+             parameter="FSUseV1Menus" />
+        </menu_item_check>
+    </menu>
+    <!-- END: V1 Menu System -WoLf -->    
+    
 </menu_bar>

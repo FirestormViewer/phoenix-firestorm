@@ -5632,6 +5632,60 @@ void toggle_debug_menus(void*)
 	show_debug_menus();
 }
 
+void toggle_v1_menus(void*)	// V1 menu system	-WoLf
+{
+	BOOL visible = ! gSavedSettings.getBOOL("FSUseV1Menus");
+	gSavedSettings.setBOOL("FSUseV1Menus", visible);
+	show_v1_menus();
+}
+
+void show_v1_menus()	// V1 menu system	-WoLf
+{
+	BOOL V1 = gSavedSettings.getBOOL("FSUseV1Menus");
+	if ( gMenuBarView )
+	{
+	// The original menu system
+		gMenuBarView->setItemVisible("Me", !V1);
+		gMenuBarView->setItemEnabled("Me", !V1);
+		gMenuBarView->setItemVisible("Communicate", !V1);
+		gMenuBarView->setItemEnabled("Communicate", !V1);
+		gMenuBarView->setItemVisible("World", !V1);
+		gMenuBarView->setItemEnabled("World", !V1);
+		gMenuBarView->setItemVisible("BuildTools", !V1);
+		gMenuBarView->setItemEnabled("BuildTools", !V1);
+		gMenuBarView->setItemVisible("Content", !V1);
+		gMenuBarView->setItemEnabled("Content", !V1);
+		gMenuBarView->setItemVisible("Help", !V1);
+		gMenuBarView->setItemEnabled("Help", !V1);
+		gMenuBarView->setItemVisible("Advanced", !V1);
+		gMenuBarView->setItemEnabled("Advanced", !V1);
+		gMenuBarView->setItemVisible("Develop", !V1);
+		gMenuBarView->setItemEnabled("Develop", !V1);
+
+	// The V1 menu system
+		gMenuBarView->setItemVisible("V1-File", V1);
+		gMenuBarView->setItemEnabled("V1-File", V1);
+		gMenuBarView->setItemVisible("V1-Edit", V1);
+		gMenuBarView->setItemEnabled("V1-Edit", V1);
+		gMenuBarView->setItemVisible("V1-View", V1);
+		gMenuBarView->setItemEnabled("V1-View", V1);
+		gMenuBarView->setItemVisible("V1-World", V1);
+		gMenuBarView->setItemEnabled("V1-World", V1);
+		gMenuBarView->setItemVisible("V1-Tools", V1);
+		gMenuBarView->setItemEnabled("V1-Tools", V1);
+		gMenuBarView->setItemVisible("V1-Help", V1);
+		gMenuBarView->setItemEnabled("V1-Help", V1);
+		gMenuBarView->setItemVisible("V1-Firestorm", V1);
+		gMenuBarView->setItemEnabled("V1-Firestorm", V1);
+		gMenuBarView->setItemVisible("V1-Advanced", V1);
+		gMenuBarView->setItemEnabled("V1-Advanced", V1);
+
+		if (V1 == false)
+		{
+			show_debug_menus();
+		}
+	}
+}
 
 // LLUUID gExporterRequestID;
 // std::string gExportDirectory;
