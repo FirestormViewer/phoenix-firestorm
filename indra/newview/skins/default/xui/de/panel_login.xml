@@ -21,9 +21,7 @@
 			<text name="mode_selection_text">
 				Modus:
 			</text>
-			<combo_box name="mode_combo" tool_tip="Wählen Sie den gewünschten Modus aus. Basis: Second Life schnell und einfach erkunden und chatten. Erweitert: Zugriff auf zusätzliche Funktionen.">
-				<combo_box.item label="Basis" name="Basic"/>
-				<combo_box.item label="Erweitert" name="Advanced"/>
+			<combo_box name="mode_combo" tool_tip="Wählen Sie welcher Viewer Style ihnen am meisten vertraut ist, um die Standards ihren bedürfnissen anzupassen.">
 			</combo_box>
 			<text name="start_location_text">
 				Hier anfangen:
