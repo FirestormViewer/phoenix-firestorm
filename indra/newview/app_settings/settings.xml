@@ -15211,6 +15211,8 @@ Change of this parameter will affect the layout of buttons in notification toast
 	      <string>snapshot</string>
 	      <string>postcard</string>
 	      <string>mini_map</string>
+	      <string>nearby_chat</string>
+	      <string>im_container</string>
       </array>
     </map>
     <key>LandmarksSortedByDate</key>
