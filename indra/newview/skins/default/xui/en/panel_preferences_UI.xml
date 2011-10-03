@@ -687,7 +687,7 @@
          length="1"
          line_spacing.pixels="5" >
            pt (requires restart)
-Defualt 0. Larger values may not work well.
+Default 0. Larger values may not work well.
         </text>
 
         <text
@@ -727,8 +727,8 @@ Defualt 0. Larger values may not work well.
          type="string"
          length="1"
          line_spacing.pixels="5">
-          pixes (requires restart)
-V2/3 defualt 0. V1 default [TODO: unknown].
+          pixels (requires restart)
+V2/3 default 0. V1 default [TODO: unknown].
         </text>
 
 <!-- not a live preview

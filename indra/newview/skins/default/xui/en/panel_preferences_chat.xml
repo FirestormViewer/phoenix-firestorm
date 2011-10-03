@@ -219,7 +219,7 @@
 	 layout="topleft"
 	 left="30"
 	 name="inworld_typing_rg_label"
-	 top_pad="10"
+	 top_pad="6"
 	 width="120">
        Pressing letter keys:
    </text>
@@ -260,7 +260,7 @@
      left="30"
      height="20"
      width="80"
-     top_pad="14">
+     top_pad="8">
      Show IMs in:
     </text>    
 
@@ -308,7 +308,7 @@
      name="disable_toast_label"
      follows="left|top"
      layout="topleft"
-     top_pad="14" 
+     top_pad="6" 
      left="30" 
      height="10"
      width="180">
