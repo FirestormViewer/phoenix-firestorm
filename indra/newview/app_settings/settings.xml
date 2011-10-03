@@ -8239,7 +8239,7 @@ Change of this parameter will affect the layout of buttons in notification toast
    <key>PostFirstLoginIntroURL</key>
    <map>
      <key>Comment</key>
-     <string>URL of intro presenatation after first time users first login</string>
+     <string>URL of intro presentation after first time users first login</string>
      <key>Persist</key>
      <integer>1</integer>
      <key>Type</key>
@@ -8250,7 +8250,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>PostFirstLoginIntroViewed</key>
   <map>
     <key>Comment</key>
-    <string>Flag indicating if user has seen intro presenatation after first time users first login</string>
+    <string>Flag indicating if user has seen intro presentation after first time users first login</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -8302,7 +8302,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>PreviewDiffuse0</key>
   <map>
     <key>Comment</key>
-    <string>Diffise color of preview light 0.</string>
+    <string>Diffuse color of preview light 0.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -8319,7 +8319,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>PreviewDiffuse1</key>
   <map>
     <key>Comment</key>
-    <string>Diffise color of preview light 1.</string>
+    <string>Diffuse color of preview light 1.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -8336,7 +8336,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>PreviewDiffuse2</key>
   <map>
     <key>Comment</key>
-    <string>Diffise color of preview light 2.</string>
+    <string>Diffuse color of preview light 2.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -8353,7 +8353,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>PreviewSpecular0</key>
   <map>
     <key>Comment</key>
-    <string>Diffise color of preview light 0.</string>
+    <string>Diffuse color of preview light 0.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -8370,7 +8370,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>PreviewSpecular1</key>
   <map>
     <key>Comment</key>
-    <string>Diffise color of preview light 1.</string>
+    <string>Diffuse color of preview light 1.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -8387,7 +8387,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>PreviewSpecular2</key>
   <map>
     <key>Comment</key>
-    <string>Diffise color of preview light 2.</string>
+    <string>Diffuse color of preview light 2.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
