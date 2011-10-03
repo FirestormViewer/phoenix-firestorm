@@ -94,6 +94,7 @@
          max_length_bytes="1024"
 	 label="To local chat"
          layout="bottomleft"
+         spellcheck="true"
          name="chat_box"
          tab_group="3"
          width="140">
