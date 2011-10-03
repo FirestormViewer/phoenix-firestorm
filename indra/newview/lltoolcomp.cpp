@@ -52,6 +52,10 @@
 #include "llfloatertools.h"
 #include "llviewercontrol.h"
 
+// NaCl - Rightclick-mousewheel zoom
+#include "llviewercamera.h"
+// NaCl End
+
 const S32 BUTTON_HEIGHT = 16;
 const S32 BUTTON_WIDTH_SMALL = 32;
 const S32 BUTTON_WIDTH_BIG = 48;
@@ -805,7 +809,7 @@ BOOL LLToolCompGun::handleScrollWheel(S32 x, S32 y, S32 clicks)
 	vTemp.mV[1]=CameraAngle;
 	if(vTemp.mV[2] > 0.0f)
 	{
-		vTemp.mV[1]+=clicks*0.1;
+		vTemp.mV[1]=llclamp((vTemp.mV[1])+(F32)(clicks*0.1),LLViewerCamera::getInstance()->getMinView(),LLViewerCamera::getInstance()->getMaxView());
 		gSavedSettings.setVector3("_NACL_MLFovValues",vTemp);
 		gSavedSettings.setF32("CameraAngle",vTemp.mV[1]);
 	}
