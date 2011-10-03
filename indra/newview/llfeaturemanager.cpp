@@ -72,7 +72,7 @@ const char FEATURE_TABLE_VER_FILENAME[] = "featuretable%s.%s.txt";
 #endif
 
 const char GPU_TABLE_FILENAME[] = "gpu_table.txt";
-const char GPU_TABLE_VER_FILENAME[] = "gpu_table.%s.txt";
+//const char GPU_TABLE_VER_FILENAME[] = "gpu_table.%s.txt";
 
 LLFeatureInfo::LLFeatureInfo(const std::string& name, const BOOL available, const F32 level)
 	: mValid(TRUE), mName(name), mAvailable(available), mRecommendedLevel(level)
@@ -347,22 +347,24 @@ void LLFeatureManager::loadGPUClass()
 	app_path += gDirUtilp->getDirDelimiter();
 	app_path += GPU_TABLE_FILENAME;
 	
+	// [FIX-FIRE-2209 Don't download GPU_Tables from HTTP force
 	// second table is downloaded with HTTP
-	std::string http_filename = llformat(GPU_TABLE_VER_FILENAME, LLVersionInfo::getVersion().c_str());
-	std::string http_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, http_filename);
+	//std::string http_filename = llformat(GPU_TABLE_VER_FILENAME, LLVersionInfo::getVersion().c_str());
+	//std::string http_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, http_filename);
 
 	// use HTTP table if it exists
-	std::string path;
-	if (gDirUtilp->fileExists(http_path))
-	{
-		path = http_path;
-	}
-	else
-	{
-		path = app_path;
-	}
-
-	parseGPUTable(path);
+	//std::string path;
+	//if (gDirUtilp->fileExists(http_path))
+	//{
+	//	path = http_path;
+	//}
+	//else
+	//{
+	//	path = app_path;
+	//}
+    //
+	// parseGPUTable(path);
+	parseGPUTable(app_path);
 }
 
 	
