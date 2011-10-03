@@ -544,7 +544,7 @@
      reference="DkGray" />
     <color
      name="HTMLLinkColor"
-     reference="EmphasisColor" />
+     value="0.113 0.210 0.170 1" />
     <color
      name="HealthTextColor"
      reference="White" />
@@ -697,7 +697,7 @@
      reference="Yellow" />
     <color
       name="NameTagBackground"
-      value="0 0 0 1" />
+      value="0.25 0.25 0.25 1" />
     <color
      name="NameTagChat"
      reference="EmphasisColor" />
@@ -856,7 +856,7 @@
      reference="White" />
     <color
      name="llOwnerSayChatColor"
-     reference="LtYellow" />
+     value="0 0.2 0 1" />
 
     <!-- New Colors -->
     <color
