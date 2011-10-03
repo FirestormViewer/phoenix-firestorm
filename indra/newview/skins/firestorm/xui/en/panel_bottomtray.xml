@@ -12,22 +12,7 @@
  name="bottom_tray"
  top="28"
  width="1310">
-<button
- name="conversations_btn"
- control_name="floater_vis_imcontacts"
- image_overlay="conversations_18"
- image_pressed="PushButton_Press"
- image_pressed_selected="PushButton_Selected_Press"
- image_selected="PushButton_Selected_Press"
- left="0"
- top="5"
- width="36"
- height="23"
- follows="top|left">
-<commit_callback
- function="Floater.Toggle"
- parameter="im_container" />
-</button>
+
   <string
    name="DragIndicationImageName"
    value="Accordion_ArrowOpened_Off" />
@@ -38,40 +23,59 @@
    name="VoiceControlBtnToolTip"
    value="Shows/hides voice control panel" />
 
-  <!-- Do not try to use left_pad here, it creates strange results -Zi -->
   <layout_stack
    border_size="0"
    clip="false"
    follows="all"
    height="28"
    layout="topleft"
-   left="40"
+   left="2"
    mouse_opaque="false"
    name="toolbar_stack"
    orientation="horizontal"
    top="0"
    width="1270">
     <layout_panel
-     auto_resize="false"
-     layout="topleft"
-     max_width="320"
-     min_width="25"
-     height="28"
-     mouse_opaque="false"
- name="chat_bar_layout_panel"
-     user_resize="true"
-     width="308" >
-      <panel
-     name="chat_bar"
-        filename="panel_nearby_chat_bar.xml"
-        left="0"
-        height="28"
-        width="310"
-        top="0"
-        mouse_opaque="false"
-        follows="left|right"
+         auto_resize="false"
+         layout="topleft"
+         max_width="284"
+         min_width="34"
+         height="28" 
+         mouse_opaque="false"
+		 name="chat_bar_layout_panel"
+         user_resize="true"
+     width="284" >
+
+          <panel
+            name="chat_bar"
+            filename="panel_nearby_chat_bar.xml"
+            left="0"
+            height="28"
+        	width="252"
+            top="0"
+            mouse_opaque="false"
+            follows="left|right"
           />
-    </layout_panel>
+          
+          <button
+			 name="conversations_btn"
+			 control_name="floater_vis_imcontacts"
+			 image_overlay="conversations_18"
+			 image_pressed="PushButton_Press"
+			 image_pressed_selected="PushButton_Selected_Press"
+			 image_selected="PushButton_Selected_Press"
+			 right="280"
+			 top="5"
+			 width="30"
+			 min_width="30"
+			 height="23"
+			 follows="right">
+			<commit_callback
+			 function="Floater.Toggle"
+			 parameter="im_container" />
+			</button>
+          
+        </layout_panel>
 
     <!--
          This 5px Panel is an indicator of where the resize handle is.
@@ -131,46 +135,49 @@
       </gesture_combo_list>
     </layout_panel>
 
-    <layout_panel
-     auto_resize="false"
-     follows="left|right"
-     height="28"
-     layout="topleft"
-     min_height="28"
-     min_width="79"
-     mouse_opaque="false"
-     name="speak_panel"
-     top_delta="0"
-     user_resize="true"
-     width="50">
-      <talk_button
-       follows="left|right"
-       height="23"
-       layout="topleft"
-       left="2"
-       name="talk"
-       top="5"
-       width="45">
-        <show_button
-         tab_stop="true">
-          <init_callback
-           function="Button.SetDockableFloaterToggle"
-           parameter="voice_controls" />
-        </show_button>
-      </talk_button>
-        <bottomtray_button follows="left"
-            left_delta="2"
-            bottom="-3"
-            width="16"
-            height="16"
-            is_toggle="true"
-            image_selected="ptt_lock_on.tga"
-            image_unselected="ptt_lock_off.tga"
-            label=""
-            name="ptt_lock"
-            scale_image="true"
-            control_name="PushToTalkToggle">
-        </bottomtray_button>
+        <layout_panel
+         auto_resize="false"
+         follows="left|right"
+         height="28"
+         layout="topleft"
+         min_height="28"
+         left_delta="0"
+         mouse_opaque="false"
+         name="speak_panel"
+         top_delta="0"
+         user_resize="true"
+         min_width="68"
+         width="68">
+            <talk_button
+             follows="left|right"
+             height="23"
+             layout="topleft"
+             left="0"
+             name="talk"
+             top="5"
+             width="64">
+                <show_button
+                 tab_stop="true">
+                    <init_callback
+                     function="Button.SetDockableFloaterToggle"
+                     parameter="voice_controls" />
+                </show_button>
+            </talk_button>
+            <bottomtray_button follows="left"
+                left="6"
+                bottom="-3"
+                width="16"
+                height="16"
+                is_toggle="true"
+                image_selected="ptt_lock_on.tga"
+                image_unselected="ptt_lock_off.tga"
+                label=""
+                name="ptt_lock"
+                scale_image="true"
+                control_name="PushToTalkToggle">
+            </bottomtray_button>
+	    <!-- do not remove halign attribute with default value. otherwise it can't be overridden in other locales.
+                 & pad_right is default value for long label which can be right aligned. See EXT-6318 -->
            <speak_button
             halign="center"
             label="Speak"
@@ -179,7 +186,7 @@
             pad_right="20"
             tab_stop="true"
             use_ellipses="true" />
-    </layout_panel>
+        </layout_panel>
 
 
     <layout_panel

@@ -604,6 +604,7 @@ BOOL LLBottomTray::postBuild()
 	mListener.reset(new LLNearbyChatBarListener(*mNearbyChatBar));
 
 	mChatBarContainer = getChild<LLLayoutPanel>("chat_bar_layout_panel");
+	mChatbarWidth = mChatBarContainer->getRect().getWidth();
 	mNearbyCharResizeHandlePanel = getChild<LLPanel>("chat_bar_resize_handle_panel");
 
 	mToolbarStack = getChild<LLLayoutStack>("toolbar_stack");
@@ -682,12 +683,15 @@ void LLBottomTray::onAutohideChatBarChanged()
 {
 	if(gSavedSettings.getBOOL("AutohideChatBar"))
 	{
-		mChatBarContainer->setVisible(FALSE);
+		mChatbarWidth = mChatBarContainer->getRect().getWidth();
+		mChatBarContainer->reshape(30,mChatBarContainer->getRect().getHeight());
+		//mChatBarContainer->setVisible(FALSE);
 		mNearbyCharResizeHandlePanel->setVisible(FALSE);
 	}
 	else
 	{
-		mChatBarContainer->setVisible(TRUE);
+		mChatBarContainer->reshape(mChatbarWidth,mChatBarContainer->getRect().getHeight());
+		//mChatBarContainer->setVisible(TRUE);
 		mNearbyCharResizeHandlePanel->setVisible(TRUE);
 	}
 }

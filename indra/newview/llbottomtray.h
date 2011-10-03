@@ -556,6 +556,7 @@ protected:
 	LLBottomTrayLite*   mPopupChatBar;
 	LLButton*			mAOToggleButton;			// ## Zi: Animation Overrider
 	bool                mIsInLiteMode;
+	U32					mChatbarWidth;
 
 	// Drag'n'Drop
 
