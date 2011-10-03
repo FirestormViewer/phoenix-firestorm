@@ -56,21 +56,22 @@
 #include "lldxhardware.h"
 #endif
 
-
+// [FIX-FIRE-2209 Don't download feature_Tables from HTTP 
 #if LL_DARWIN
 const char FEATURE_TABLE_FILENAME[] = "featuretable_mac.txt";
-const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_mac.%s.txt";
+//const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_mac.%s.txt";
 #elif LL_LINUX
 const char FEATURE_TABLE_FILENAME[] = "featuretable_linux.txt";
-const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_linux.%s.txt";
+//const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_linux.%s.txt";
 #elif LL_SOLARIS
 const char FEATURE_TABLE_FILENAME[] = "featuretable_solaris.txt";
-const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_solaris.%s.txt";
+//const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_solaris.%s.txt";
 #else
 const char FEATURE_TABLE_FILENAME[] = "featuretable%s.txt";
-const char FEATURE_TABLE_VER_FILENAME[] = "featuretable%s.%s.txt";
+//const char FEATURE_TABLE_VER_FILENAME[] = "featuretable%s.%s.txt";
 #endif
 
+// [FIX-FIRE-2209 Don't download gpu_tables from HTTP 
 const char GPU_TABLE_FILENAME[] = "gpu_table.txt";
 //const char GPU_TABLE_VER_FILENAME[] = "gpu_table.%s.txt";
 
@@ -221,44 +222,45 @@ BOOL LLFeatureManager::loadFeatureTables()
 	std::string app_path = gDirUtilp->getAppRODataDir();
 	app_path += gDirUtilp->getDirDelimiter();
 
+	// [FIX-FIRE-2209 Don't download feature_Tables from HTTP 
 	std::string filename;
-	std::string http_filename; 
+	// std::string http_filename; 
 #if LL_WINDOWS
 	std::string os_string = LLAppViewer::instance()->getOSInfo().getOSStringSimple();
 	if (os_string.find("Microsoft Windows XP") == 0)
 	{
 		filename = llformat(FEATURE_TABLE_FILENAME, "_xp");
-		http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "_xp", LLVersionInfo::getVersion().c_str());
+		// http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "_xp", LLVersionInfo::getVersion().c_str());
 	}
 	else
 	{
 		filename = llformat(FEATURE_TABLE_FILENAME, "");
-		http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "", LLVersionInfo::getVersion().c_str());
+		// http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "", LLVersionInfo::getVersion().c_str());
 	}
 #else
 	filename = FEATURE_TABLE_FILENAME;
-	http_filename = llformat(FEATURE_TABLE_VER_FILENAME, LLVersionInfo::getVersion().c_str());
+	//http_filename = llformat(FEATURE_TABLE_VER_FILENAME, LLVersionInfo::getVersion().c_str());
 #endif
 
 	app_path += filename;
 
 	
 	// second table is downloaded with HTTP
-	std::string http_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, http_filename);
+	//std::string http_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, http_filename);
 
 	// use HTTP table if it exists
-	std::string path;
-	if (gDirUtilp->fileExists(http_path))
-	{
-		path = http_path;
-	}
-	else
-	{
-		path = app_path;
-	}
+	// std::string path;
+	// if (gDirUtilp->fileExists(http_path))
+	//{
+	//	path = http_path;
+	//}
+	//else
+	//{
+	//	path = app_path;
+	//}
 
 	
-	return parseFeatureTable(path);
+	return parseFeatureTable(app_path);
 }
 
 
@@ -347,7 +349,7 @@ void LLFeatureManager::loadGPUClass()
 	app_path += gDirUtilp->getDirDelimiter();
 	app_path += GPU_TABLE_FILENAME;
 	
-	// [FIX-FIRE-2209 Don't download GPU_Tables from HTTP force
+	// [FIX-FIRE-2209 Don't download GPU_Tables from HTTP 
 	// second table is downloaded with HTTP
 	//std::string http_filename = llformat(GPU_TABLE_VER_FILENAME, LLVersionInfo::getVersion().c_str());
 	//std::string http_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, http_filename);
