@@ -4,7 +4,7 @@
     can_resize="false"
     can_dock="true"
     can_close="false"
-    height="230"
+    height="258"
     width="260"
     layout="topleft"
     name="quickprefs"
@@ -19,7 +19,7 @@
     left="0"
     top="16"
     width="260"
-    height="215"
+    height="229"
     follows="all"
     layout="topleft">
         <text
@@ -30,7 +30,7 @@
             layout="topleft"
             left="5"
             name="Draw Distance"
-            tool_tip=""
+            tool_tip="Change your Draw Distance"
             mouse_opaque="false"
             top="10"
             width="90">
@@ -60,7 +60,7 @@
             layout="topleft"
             left="5"
             name="Maximum bandwidth"
-            tool_tip=""
+            tool_tip="Set your Network bandwidth in Kbps (kilobits per second)"
             mouse_opaque="false"
             top_delta="20"
             width="90">
@@ -80,7 +80,7 @@
             min_val="100"
             name="max_bandwidth"
             top_delta="-2"
-            width="150" />
+            width="149" />
         <text
             type="string"
             length="1"
@@ -89,7 +89,7 @@
             layout="topleft"
             left="5"
             name="Particles"
-            tool_tip=""
+            tool_tip="Amount of particles to render"
             mouse_opaque="false"
             top_delta="20"
             width="90">
@@ -111,6 +111,36 @@
             top_delta="-2"
             width="150"
             label_width="3"/>
+			<text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left="5"
+            name="Avatar Physics LOD"
+            tool_tip="Controls level of detail of avatar physics (such as breast physics)"
+            mouse_opaque="false"
+            top_delta="20"
+            width="90">
+            Av Physics LOD:
+        </text>
+        <slider
+            can_edit_text="true"
+            control_name="RenderAvatarPhysicsLODFactor"
+            decimal_digits="2"
+            follows="left|top"
+            height="15"
+            increment="0.05"
+            initial_value="1"
+            layout="topleft"
+            left_delta="93"
+            max_val="1"
+            min_val="0"
+            name="RenderAvatarPhysicsLOD"
+            top_delta="-2"
+            width="147"
+            label_width="3"/>
         <text
             type="string"
             length="1"
@@ -119,7 +149,7 @@
             layout="topleft"
             left="5"
             name="LOD Factor"
-            tool_tip=""
+            tool_tip="Controls level of detail of primitives (multiplier for current screen area when calculated level of detail) [Default varies]"
             mouse_opaque="false"
             top_delta="20"
             width="90">
@@ -128,7 +158,7 @@
         <slider
             can_edit_text="true"
             control_name="RenderVolumeLODFactor"
-            decimal_digits="1"
+            decimal_digits="2"
             follows="left|top"
             height="15"
             increment="0.1"
@@ -139,7 +169,7 @@
             min_val="0"
             name="RenderVolumeLODFactor"
             top_delta="-2"
-            width="150"
+            width="158"
             label_width="14"/>
         <text
             type="string"
@@ -149,7 +179,7 @@
             layout="topleft"
             left="5"
             name="Max Avatars"
-            tool_tip=""
+            tool_tip="How many avatars to fully render on screen. Lowering this greatly improves FPS in crowded situations. Requires Avatar Imposters to be on. [Default 12]"
             mouse_opaque="false"
             top_delta="20"
             width="90">
@@ -169,7 +199,7 @@
             min_val="1"
             name="RenderAvatarMaxVisible"
             top_delta="-2"
-            width="150"
+            width="152"
             label_width="17"/>
         <text
             type="string"
@@ -179,7 +209,7 @@
             layout="topleft"
             left="5"
             name="Height Offset"
-            tool_tip=""
+            tool_tip="Use this to manipulate, to a degree, your avatar bounding box. This can be used to distort orbiters, or to raise you up or down without altering your shape."
             mouse_opaque="false"
             top_delta="20"
             width="90">
@@ -199,8 +229,46 @@
             min_val="-2"
             name="AvatarZOffset"
             top_delta="-2"
-            width="164"
+            width="165"
             label_width="17"/>
+		<text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="0"
+            layout="topleft"
+            left="5"
+            name="name_tags_textbox"
+			top_pad="8"
+            width="400">
+            Name tags:
+        </text>
+		<radio_group
+            control_name="AvatarNameTagMode"
+            height="20"
+            layout="topleft"
+            left="35"
+            top_pad="0" 
+            name="Name_Tag_Preference">
+         <radio_item
+            label="On"
+            name="radio"
+            top_delta="20" 
+            layout="topleft"
+            height="16" 
+            left="72" 
+            value="1"
+            width="75" />
+         <radio_item
+            label="Off"
+            left_pad="-10"
+            layout="topleft"
+            top_delta="0" 
+            height="16" 
+            name="radio2"
+            value="0"
+            width="75" />
+        </radio_group>
         <text
             type="string"
             length="1"
@@ -209,7 +277,7 @@
             layout="topleft"
             left="5"
             name="WL Sky"
-            tool_tip=""
+            tool_tip="Windlight presets for your sky"
             mouse_opaque="false"
             top_delta="27"
             width="90">
@@ -254,7 +322,7 @@
             layout="topleft"
             left="5"
             name="WL Water"
-			tool_tip=""
+			tool_tip="Windlight presets for your water"
             mouse_opaque="false"
             top_delta="25"
             width="90">
