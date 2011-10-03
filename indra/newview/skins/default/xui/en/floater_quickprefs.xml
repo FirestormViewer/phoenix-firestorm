@@ -118,36 +118,6 @@
             height="10"
             layout="topleft"
             left="5"
-            name="Max Node"
-            tool_tip=""
-            mouse_opaque="false"
-            top_delta="20"
-            width="90">
-            Max Node size:
-        </text>
-        <slider
-            can_edit_text="true"
-            control_name="RenderMaxNodeSize"
-            decimal_digits="0"
-            follows="left|top"
-            height="15"
-            increment="64"
-            initial_value="8192"
-            layout="topleft"
-            left_delta="100"
-            max_val="16382"
-            min_val="64"
-            name="RenderMaxNodeSize"
-            top_delta="-2"
-            width="150"
-            label_width="0"/>
-        <text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="10"
-            layout="topleft"
-            left="5"
             name="LOD Factor"
             tool_tip=""
             mouse_opaque="false"
