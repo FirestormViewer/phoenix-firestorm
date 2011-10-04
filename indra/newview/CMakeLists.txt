@@ -75,6 +75,7 @@ include_directories(
     ${UPDATER_INCLUDE_DIRS}
     ${OPENAL_LIB_INCLUDE_DIRS}
     ${LIBS_PREBUILT_DIR}/include/collada/1.4
+	${HACD_INCLUDE_DIR}
     )
 
 set(viewer_SOURCE_FILES
@@ -1850,6 +1851,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${GOOGLE_PERFTOOLS_LIBRARIES}
     ${LLCONVEXDECOMP_LIBRARY}
     ${TCMALLOC_LIBRARIES}
+    ${HACD_LIBRARY}
     )
 
 if (USE_KDU)

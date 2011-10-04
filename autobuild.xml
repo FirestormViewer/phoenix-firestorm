@@ -1653,12 +1653,12 @@
         </map>
       </map>
 
-      <key>hacd</key>
+      <key>nd_hacdConvexDecomposition</key>
       <map>
         <key>license</key>
         <string>BSD</string>
         <key>name</key>
-        <string>hacd</string>
+        <string>nd_hacdConvexDecomposition</string>
         <key>platforms</key>
         <map>
           <key>darwin</key>
@@ -1666,9 +1666,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9800844ebc75edc5f6f1433e37c5f398</string>
+              <string>18f3e50246c13a20044dd7b19d53c412</string>
               <key>url</key>
-              <string>http://phoenixviewer.com/app/packages/hacd_darwin_r133_20111001.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/hacd_darwin_20111003.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1680,7 +1680,7 @@
               <key>hash</key>
               <string>2e22d4a8ac522bbb75dd91a7309761ac</string>
               <key>url</key>
-              <string>http://phoenixviewer.com/app/packages/hacd_linux32_r133_20111001.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/hacd_linux32_20111003.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1690,9 +1690,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c8ffd7e98ba3be9459574adc34c23c9b</string>
+              <string>b0e6c3120de2a22078d52caf1a1a04d3</string>
               <key>url</key>
-              <string>http://phoenixviewer.com/app/packages/hacd_win32_r133_20111001.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/hacd_win32_20111003.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>

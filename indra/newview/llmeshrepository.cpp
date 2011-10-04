@@ -2898,8 +2898,41 @@ S32 LLPhysicsDecomp::llcdCallback(const char* status, S32 p1, S32 p2)
 	return 1;
 }
 
+bool needTriangles( LLConvexDecomposition *aDC )
+{
+	if( !aDC )
+		return false;
+
+	LLCDParam const  *pParams(0);
+	int nParams = aDC->getParameters( &pParams );
+
+	if( nParams <= 0 )
+		return false;
+
+	for( int i = 0; i < nParams; ++i )
+	{
+		if( pParams[i].mName && strcmp( "nd_AlwaysNeedTriangles", pParams[i].mName ) == 0 )
+		{
+			if( LLCDParam::LLCD_BOOLEAN == pParams[i].mType && pParams[i].mDefault.mBool )
+				return true;
+			else
+				return false;
+		}
+	}
+
+	return false;
+}
+
 void LLPhysicsDecomp::setMeshData(LLCDMeshData& mesh, bool vertex_based)
 {
+	LLConvexDecomposition *pDeComp = LLConvexDecomposition::getInstance();
+
+	if( !pDeComp )
+		return;
+
+	if( vertex_based )
+		vertex_based = !needTriangles( pDeComp );
+
 	mesh.mVertexBase = mCurRequest->mPositions[0].mV;
 	mesh.mVertexStrideBytes = 12;
 	mesh.mNumVertices = mCurRequest->mPositions.size();
@@ -2916,15 +2949,10 @@ void LLPhysicsDecomp::setMeshData(LLCDMeshData& mesh, bool vertex_based)
 	if ((vertex_based || mesh.mNumTriangles > 0) && mesh.mNumVertices > 2)
 	{
 		LLCDResult ret = LLCD_OK;
-		if (LLConvexDecomposition::getInstance() != NULL)
-		{
-			ret  = LLConvexDecomposition::getInstance()->setMeshData(&mesh, vertex_based);
-		}
+		ret  = LLConvexDecomposition::getInstance()->setMeshData(&mesh, vertex_based);
 
 		if (ret)
-		{
 			llerrs << "Convex Decomposition thread valid but could not set mesh data" << llendl;
-		}
 	}
 }
 
@@ -3250,6 +3278,56 @@ void LLPhysicsDecomp::doDecompositionSingleHull()
 	}
 }
 
+#ifdef ND_HASCONVEXDECOMP_TRACER
+
+class ndDecompTracer: public ndConvexDecompositionTracer
+{
+	int mRefCount;
+
+public:
+	ndDecompTracer()
+		: mRefCount(0)
+	{
+	}
+
+	virtual void trace( char const *a_strMsg )
+	{
+		llinfos << a_strMsg << llendl;
+	}
+
+	virtual void startTraceData( char const *a_strWhat)
+	{
+		llinfos << a_strWhat << llendl;
+	}
+
+	virtual void traceData( char const *a_strData )
+	{
+		llinfos << a_strData << llendl;
+	}
+
+	virtual void endTraceData()
+	{
+	}
+
+	virtual int getLevel()
+	{
+		return eTraceFunctions;// | eTraceData;
+	}
+
+	virtual void addref()
+	{
+		++mRefCount;
+	}
+
+	virtual void release()
+	{
+		--mRefCount;
+		if( mRefCount == 0 )
+			delete this;
+	}
+};
+
+#endif
 
 void LLPhysicsDecomp::run()
 {
@@ -3261,6 +3339,13 @@ void LLPhysicsDecomp::run()
 		mInited = true;
 		return;
 	}
+
+#ifdef ND_HASCONVEXDECOMP_TRACER
+	ndConvexDecompositionTracable *pTraceable = dynamic_cast< ndConvexDecompositionTracable* >( decomp );
+
+	if( pTraceable )
+		pTraceable->setTracer( new ndDecompTracer() );
+#endif
 
 	decomp->initThread();
 	mInited = true;
