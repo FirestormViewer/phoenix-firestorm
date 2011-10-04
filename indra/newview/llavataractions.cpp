@@ -394,9 +394,8 @@ void LLAvatarActions::showProfile(const LLUUID& id)
 	if (id.notNull())
 	{
 // [SL:KB] - Patch : UI-ProfileGroupFloater | 
-		if ( (!gSavedSettings.getBOOL("ShowProfileFloaters") &&
-			!gSavedSettings.getBOOL("FSUseWebProfiles")) ||
-			(gAgent.getID() == id) )
+		if (!gSavedSettings.getBOOL("ShowProfileFloaters") &&
+			!gSavedSettings.getBOOL("FSUseWebProfiles"))
 		{
 // [/SL:KB]		
 			LLSD params;
