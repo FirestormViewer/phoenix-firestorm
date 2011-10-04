@@ -1,28 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="build options floater" title="OPCIONES DE LA REJILLA">
- 	<floater.string name="grid_screen_text">
-		Pantalla
-	</floater.string>
-	<floater.string name="grid_local_text">
-		Local
-	</floater.string>
-	<floater.string name="grid_world_text">
-		Mundo
-	</floater.string>
-	<floater.string name="grid_reference_text">
-		Referencia
-	</floater.string>
-	<floater.string name="grid_attachment_text">
-		Accesorio
-	</floater.string>
-	<text name="grid_mode_label">
-		Modo
-	</text>
-	<combo_box name="combobox grid mode" tool_tip="Elegir el tipo de ajuste de rejilla para posicionar el objeto.">
-		<combo_box.item label="Rejilla mundial" name="World"/>
-		<combo_box.item label="Rejilla local" name="Local"/>
-		<combo_box.item label="Rejilla de referencia" name="Reference"/>
-	</combo_box>
 	<spinner label="Unidades (metros)" name="GridResolution"/>
 	<spinner label="Alcance (metros)" name="GridDrawSize"/>
 	<check_box label="Ajustar a subunidades" name="GridSubUnit"/>

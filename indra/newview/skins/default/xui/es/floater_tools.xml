@@ -36,6 +36,21 @@
 	<floater.string name="selected_faces">
 		Caras:
 	</floater.string>
+ 	<floater.string name="grid_screen_text">
+		Pantalla
+	</floater.string>
+	<floater.string name="grid_local_text">
+		Local
+	</floater.string>
+	<floater.string name="grid_world_text">
+		Mundo
+	</floater.string>
+	<floater.string name="grid_reference_text">
+		Referencia
+	</floater.string>
+	<floater.string name="grid_attachment_text">
+		Accesorio
+	</floater.string>
 	<button name="button focus" tool_tip="Visión"/>
 	<button name="button move" tool_tip="Mover"/>
 	<button name="button edit" tool_tip="Editar"/>
@@ -64,6 +79,11 @@
 	<check_box label="Editar partes" name="checkbox edit linked parts"/>
 	<button label="Enlazar" name="link_btn"/>
         <button label="Desenlazar" name="unlink_btn"/>
+	<combo_box name="combobox grid mode" tool_tip="Elegir el tipo de ajuste de rejilla para posicionar el objeto.">
+		<combo_box.item label="Rejilla mundial" name="World"/>
+		<combo_box.item label="Rejilla local" name="Local"/>
+		<combo_box.item label="Rejilla de referencia" name="Reference"/>
+	</combo_box>
 	<check_box label="Estirar ambos lados" name="checkbox uniform"/>
 	<check_box label="Estirar texturas" name="checkbox stretch textures"/>
 	<check_box label="Ajustar a la rejilla" name="checkbox snap to grid"/>

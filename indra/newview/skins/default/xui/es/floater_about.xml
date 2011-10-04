@@ -1,24 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater
-	legacy_header_height="18"
-	height="440"
-	layout="topleft"
-	name="floater_about"
-	help_topic="floater_about"
-	save_rect="true"
-	title="ACERCA DE [CAPITALIZED_APP_NAME]"
-	width="470">
-	<floater.string
-		name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([CHANNEL])
-[[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
-	
-	</floater.string>
-	<floater.string
-		name="AboutCompiler">
-		Compilado con [COMPILER], versión [COMPILER_VERSION]
-	
-	</floater.string>
+<floater name="floater_about" title="ACERCA DE [CAPITALIZED_APP_NAME]">
 	<floater.string
 		name="AboutPosition">
 		Estás en la posición: [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1], de [REGION], alojada en &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
