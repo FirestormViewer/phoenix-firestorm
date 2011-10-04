@@ -34,7 +34,7 @@
    name="toolbar_stack"
    orientation="horizontal"
    top="0"
-   width="1270">
+   width="1310">
     <layout_panel
          auto_resize="false"
          layout="topleft"
@@ -876,6 +876,6 @@ image_pressed_selected  "Lit" + "Selected" - there are new messages and the Well
        user_resize="false"
        min_width="4"
        name="DUMMY2"
-       width="8" />
+       width="4" />
   </layout_stack>
 </panel>
