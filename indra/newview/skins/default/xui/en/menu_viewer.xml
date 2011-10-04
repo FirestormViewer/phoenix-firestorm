@@ -278,7 +278,7 @@
                  function="Upload.CalculateCosts"
                  parameter="Upload Animation" />
             </menu_item_call>
-	   <!-- <menu_item_call
+	    <menu_item_call
              label="Mesh Model..."
              layout="topleft"
              name="Upload Model">
@@ -289,7 +289,7 @@
              function="File.EnableUploadModel" />
             <menu_item_call.on_visible
             function="File.VisibleUploadModel"/>
-            </menu_item_call> -->
+            </menu_item_call>
             <menu_item_call
              label="Bulk (Multi-file) upload..."
              layout="topleft"
@@ -1343,7 +1343,7 @@
                  function="Upload.CalculateCosts"
                  parameter="Upload Animation" />
             </menu_item_call>
-        <!--    <menu_item_call
+            <menu_item_call
              label="Mesh Model..."
              layout="topleft"
              name="Upload Model">
@@ -1354,7 +1354,7 @@
              function="File.EnableUploadModel" />
             <menu_item_call.on_visible
             function="File.VisibleUploadModel"/>
-            </menu_item_call> -->
+            </menu_item_call>
 	   <menu_item_call
              label="Bulk (L$[COST] per file)..."
              layout="topleft"
