@@ -1656,7 +1656,11 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 	{
 		if(mSource == SOURCE_LIBRARY)
 		{
-			LLPointer<LLInventoryCallback> cb = new RezAttachmentCallback(0);
+//			LLPointer<LLInventoryCallback> cb = new RezAttachmentCallback(0);
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
+			// Make this behave consistent with dad3dWearItem
+			LLPointer<LLInventoryCallback> cb = new RezAttachmentCallback(0, !(mask & MASK_CONTROL));
+// [/SL:KB]
 			copy_inventory_item(
 				gAgent.getID(),
 				item->getPermissions().getOwner(),
@@ -1667,7 +1671,11 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 		}
 		else
 		{
-			rez_attachment(item, 0);
+//			rez_attachment(item, 0);
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
+			// Make this behave consistent with dad3dWearItem
+			rez_attachment(item, 0, !(mask & MASK_CONTROL));
+// [/SL:KB]
 		}
 	}
 	return ACCEPT_YES_SINGLE;
