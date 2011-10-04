@@ -60,12 +60,13 @@
           
           <button
 			 name="conversations_btn"
+			 tool_tip="Shows/hides conversations window"
 			 control_name="floater_vis_imcontacts"
 			 image_overlay="conversations_18"
 			 image_pressed="PushButton_Press"
 			 image_pressed_selected="PushButton_Selected_Press"
 			 image_selected="PushButton_Selected_Press"
-			 right="280"
+			 right="310"
 			 top="5"
 			 width="30"
 			 min_width="30"
@@ -74,6 +75,25 @@
 			<commit_callback
 			 function="Floater.Toggle"
 			 parameter="im_container" />
+			</button>          
+          <button
+			 name="show_nearby_chat"
+			 tool_tip="Shows/hides nearby chat window"
+			 control_name="floater_vis_imcontacts"
+			 image_overlay="nearbychat_18"
+			 image_pressed="PushButton_Press"
+			 image_pressed_selected="PushButton_Selected_Press"
+			 image_selected="PushButton_Selected_Press"
+			 right="280"
+			 top="5"
+			 width="30"
+			 min_width="30"
+			 height="23"
+			 
+			 follows="right">
+			<commit_callback
+			 function="Floater.Toggle"
+			 parameter="nearby_chat" />
 			</button>
           
         </layout_panel>
@@ -837,6 +857,6 @@ image_pressed_selected  "Lit" + "Selected" - there are new messages and the Well
 		   user_resize="false"
 		   min_width="4"
 		   name="DUMMY2"
-		   width="4" />
+		   width="8" />
   </layout_stack>
 </panel>

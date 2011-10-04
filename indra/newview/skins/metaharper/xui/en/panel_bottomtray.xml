@@ -11,7 +11,7 @@
  left="0"
  name="bottom_tray"
  top="28"
- width="1310">
+ width="1340">
 
   <string
      name="DragIndicationImageName"
@@ -35,17 +35,17 @@
      name="toolbar_stack"
      orientation="horizontal"
      top="0"
-     width="1310">
+     width="1340">
     <layout_panel
          auto_resize="false"
          layout="topleft"
-         max_width="284"
+         max_width="314"
          min_width="34"
          height="28" 
          mouse_opaque="false"
 		 name="chat_bar_layout_panel"
          user_resize="true"
-     width="284" >
+     width="314" >
 
           <panel
             name="chat_bar"
@@ -57,15 +57,15 @@
             mouse_opaque="false"
             follows="left|right"
           />
-          
           <button
 			 name="conversations_btn"
+			 tool_tip="Shows/hides conversations window"
 			 control_name="floater_vis_imcontacts"
 			 image_overlay="conversations_18"
 			 image_pressed="PushButton_Press"
 			 image_pressed_selected="PushButton_Selected_Press"
 			 image_selected="PushButton_Selected_Press"
-			 right="280"
+			 right="310"
 			 top="5"
 			 width="30"
 			 min_width="30"
@@ -74,6 +74,25 @@
 			<commit_callback
 			 function="Floater.Toggle"
 			 parameter="im_container" />
+			</button>          
+          <button
+			 name="show_nearby_chat"
+			 tool_tip="Shows/hides nearby chat window"
+			 control_name="floater_vis_imcontacts"
+			 image_overlay="nearbychat_18"
+			 image_pressed="PushButton_Press"
+			 image_pressed_selected="PushButton_Selected_Press"
+			 image_selected="PushButton_Selected_Press"
+			 right="280"
+			 top="5"
+			 width="30"
+			 min_width="30"
+			 height="23"
+			 
+			 follows="right">
+			<commit_callback
+			 function="Floater.Toggle"
+			 parameter="nearby_chat" />
 			</button>
           
         </layout_panel>
