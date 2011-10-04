@@ -51,7 +51,7 @@ public:
 	typedef std::vector<LLInventoryModel::item_array_t> wearables_by_type_t;
 
 	void updateAppearanceFromCOF(bool update_base_outfit_ordering = false);
-// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-02 (Catznip-2.6.0a) | Added: Catznip-2.0.0a
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-02 (Catznip-3.0.0a) | Added: Catznip-2.0.0a
 	void updateAppearanceFromInitialWearables(LLInventoryModel::item_array_t& initial_items);
 // [/SL:KB]
 	bool needToSaveCOF();
