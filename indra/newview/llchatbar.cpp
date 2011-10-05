@@ -65,6 +65,11 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
+// ## Zi: for chat channel spinner, typing animation
+#include "llnearbychat.h"
+#include "llspinctrl.h"
+// ## Zi: for chat channel spinner, typing animation
+
 //
 // Globals
 //
@@ -564,13 +569,30 @@ void LLChatBar::onInputEditorKeystroke( LLLineEditor* caller, void* userdata )
 
 	S32 length = raw_text.length();
 
+	// Get the currently selected channel from the channel spinner in the nearby chat bar, if present and used.
+	// NOTE: Parts of the gAgent.startTyping() code are duplicated in 3 places:
+	// - llnearbychatbar.cpp
+	// - llchatbar.cpp
+	// - llnearbychat.cpp
+	// So be sure to look in all three places if changes are needed. This needs to be addressed at some point.
+	// -Zi
+	S32 channel=0;
+	if (gSavedSettings.getBOOL("PhoenixNearbyChatbar") &&
+		gSavedSettings.getBOOL("PhoenixShowChatChannel"))
+	{
+		channel = (S32)(LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+	}
+	// -Zi
+
 //	if( (length > 0) && (raw_text[0] != '/') )  // forward slash is used for escape (eg. emote) sequences
 // [RLVa:KB] - Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.0d
 	// RELEASE-RLVa: [SL-2.0.0] This entire class appears to be dead/non-functional?
 	if ( (length > 0) && (raw_text[0] != '/') && (!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT)) )
 // [/RLVa:KB]
 	{
-		gAgent.startTyping();
+		// only start typing animation if we are chatting without / on channel 0 -Zi
+		if(channel==0)
+			gAgent.startTyping();
 	}
 	else
 	{
