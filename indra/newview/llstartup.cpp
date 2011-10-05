@@ -425,7 +425,9 @@ bool idle_startup()
 		//
 		// Initialize stuff that doesn't need data from simulators
 		//
-
+		std::string lastGPU = gSavedSettings.getString("LastGPUString");
+		std::string thisGPU = LLFeatureManager::getInstance()->getGPUString();
+		
 		// fsdata: load dynamic xml data
 		FSData::getInstance()->startDownload();
 
@@ -445,10 +447,12 @@ bool idle_startup()
 		{
 			LLNotificationsUtil::add("DisplaySetToRecommended");
 		}
-		else if ((gSavedSettings.getS32("LastGPUClass") != LLFeatureManager::getInstance()->getGPUClass()) &&
-				 (gSavedSettings.getS32("LastGPUClass") != -1))
+		else if ( ! lastGPU.empty() && (lastGPU != thisGPU))
 		{
-			LLNotificationsUtil::add("DisplaySetToRecommended");
+			LLSD subs;
+			subs["LAST_GPU"] = lastGPU;
+			subs["THIS_GPU"] = thisGPU;
+			LLNotificationsUtil::add("DisplaySetToRecommendedGPUChange", subs);
 		}
 		else if (!gViewerWindow->getInitAlert().empty())
 		{
@@ -464,7 +468,7 @@ bool idle_startup()
 		LLStartUp::startLLProxy();
 
 		gSavedSettings.setS32("LastFeatureVersion", LLFeatureManager::getInstance()->getVersion());
-		gSavedSettings.setS32("LastGPUClass", LLFeatureManager::getInstance()->getGPUClass());
+		gSavedSettings.setString("LastGPUString", thisGPU);
 
 		// load dynamic GPU/feature tables from website (S3)
 		LLFeatureManager::getInstance()->fetchHTTPTables();
