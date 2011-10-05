@@ -684,14 +684,12 @@ void LLBottomTray::onAutohideChatBarChanged()
 	if(gSavedSettings.getBOOL("AutohideChatBar"))
 	{
 		mChatbarWidth = mChatBarContainer->getRect().getWidth();
-		mChatBarContainer->reshape(30,mChatBarContainer->getRect().getHeight());
-		//mChatBarContainer->setVisible(FALSE);
+		mChatBarContainer->setVisible(FALSE);
 		mNearbyCharResizeHandlePanel->setVisible(FALSE);
 	}
 	else
 	{
-		mChatBarContainer->reshape(mChatbarWidth,mChatBarContainer->getRect().getHeight());
-		//mChatBarContainer->setVisible(TRUE);
+		mChatBarContainer->setVisible(TRUE);
 		mNearbyCharResizeHandlePanel->setVisible(TRUE);
 	}
 }
