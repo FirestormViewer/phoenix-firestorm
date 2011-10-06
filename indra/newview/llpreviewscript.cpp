@@ -1055,7 +1055,9 @@ BOOL LLPreviewLSL::postBuild()
 void LLPreviewLSL::callbackLSLCompileSucceeded()
 {
 	llinfos << "LSL Bytecode saved" << llendl;
-	mScriptEd->mErrorList->setCommentText(LLTrans::getString("CompileSuccessful"));
+//	## Zi: setCommentText() only allows one line anyway, so we just remove the compile
+//	       successful message here, since it's meaningless anyway.
+//	mScriptEd->mErrorList->setCommentText(LLTrans::getString("CompileSuccessful"));
 	mScriptEd->mErrorList->setCommentText(LLTrans::getString("SaveComplete"));
 	closeIfNeeded();
 }
@@ -1190,6 +1192,7 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
 	mPendingUploads = 0;
 	mScriptEd->mErrorList->deleteAllItems();
 	mScriptEd->mEditor->makePristine();
+	mScriptEd->mErrorList->setCommentText(std::string());	// ## Zi: Clear out comment overlay, too.
 
 	// save off asset into file
 	LLTransactionID tid;
@@ -1922,6 +1925,7 @@ void LLLiveLSLEditor::saveIfNeeded(bool sync /*= true*/)
 	mScriptEd->enableSave(FALSE);
 	mScriptEd->mEditor->makePristine();
 	mScriptEd->mErrorList->deleteAllItems();
+	mScriptEd->mErrorList->setCommentText(std::string());	// ## Zi: Clear out comment overlay, too.
 
 	// set up the save on the local machine.
 	mScriptEd->mEditor->makePristine();
