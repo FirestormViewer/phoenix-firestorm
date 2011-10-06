@@ -14836,10 +14836,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>WindowFullScreen</key>
+    <key>FullScreen</key>
     <map>
-      <key>Comment</key>
-      <string>SL viewer window full screen</string>
+    <key>Comment</key>
+      <string>run a fullscreen session</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
