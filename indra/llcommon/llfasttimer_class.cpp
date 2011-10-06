@@ -68,7 +68,7 @@ std::queue<LLSD> LLFastTimer::sLogQueue;
 
 #ifdef LL_DARWIN
 #define USE_RDTSC 1
-#elif
+#else
 #define USE_RDTSC 0
 #endif
 
