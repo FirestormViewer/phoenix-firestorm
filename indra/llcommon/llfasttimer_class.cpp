@@ -45,6 +45,8 @@
 #elif LL_DARWIN
 #include <sys/time.h>
 #include "lltimer.h"	// get_clock_count()
+#include <mach/clock.h>
+#include <mach/mach.h>
 #else 
 #error "architecture not supported"
 #endif
@@ -64,7 +66,11 @@ BOOL LLFastTimer::sMetricLog = FALSE;
 LLMutex* LLFastTimer::sLogLock = NULL;
 std::queue<LLSD> LLFastTimer::sLogQueue;
 
+#ifdef LL_DARWIN
+#define USE_RDTSC 1
+#elif
 #define USE_RDTSC 0
+#endif
 
 #if LL_LINUX || LL_SOLARIS
 U64 LLFastTimer::sClockResolution = 1000000000; // Nanosecond resolution
@@ -874,8 +880,10 @@ std::string LLFastTimer::sClockType = "QueryPerformanceCounter";
 
 #endif
 
+//ND: avoid RDTSC for linux & mac
+//#if (LL_LINUX || LL_SOLARIS) && !(defined(__i386__) || defined(__amd64__))
+#if (LL_LINUX || LL_SOLARIS || LL_DARWIN) && (!(defined(__i386__) || defined(__amd64__)) || !USE_RDTSC)
 
-#if (LL_LINUX || LL_SOLARIS) && !(defined(__i386__) || defined(__amd64__))
 //
 // Linux and Solaris implementation of CPU clock - non-x86.
 // This is accurate but SLOW!  Only use out of desperation.
@@ -893,8 +901,17 @@ U64 LLFastTimer::getCPUClockCount64()
 #ifdef CLOCK_MONOTONIC // MONOTONIC supported at build-time?
 	if (-1 == clock_gettime(CLOCK_MONOTONIC,&tp)) // if MONOTONIC isn't supported at runtime then ouch, try REALTIME
 #endif
+#ifdef LL_DARWIN
+		clock_serv_t cclock;
+		mach_timespec_t mts;
+		host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+		clock_get_time(cclock, &mts);
+		mach_port_deallocate(mach_task_self(), cclock);
+		tp.tv_sec = mts.tv_sec;
+		tp.tv_nsec = mts.tv_nsec;
+#else
 		clock_gettime(CLOCK_REALTIME,&tp);
-
+#endif
 	return (tp.tv_sec*LLFastTimer::sClockResolution)+tp.tv_nsec;        
 }
 
@@ -907,8 +924,9 @@ std::string LLFastTimer::sClockType = "clock_gettime";
 
 #endif // (LL_LINUX || LL_SOLARIS) && !(defined(__i386__) || defined(__amd64__))
 
-
-#if (LL_LINUX || LL_SOLARIS || LL_DARWIN) && (defined(__i386__) || defined(__amd64__))
+//ND: Avoid RDTSC for Linux & Mac
+//#if (LL_LINUX || LL_SOLARIS || LL_DARWIN) && (defined(__i386__) || defined(__amd64__))
+#if (LL_LINUX || LL_SOLARIS || LL_DARWIN) && (defined(__i386__) || defined(__amd64__)) && USE_RDTSC
 //
 // Mac+Linux+Solaris FAST x86 implementation of CPU clock
 U32 LLFastTimer::getCPUClockCount32()
