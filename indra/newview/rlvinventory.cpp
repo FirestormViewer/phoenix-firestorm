@@ -242,7 +242,7 @@ bool RlvInventory::getPath(const uuid_vec_t& idItems, LLInventoryModel::cat_arra
 	return (folders.count() != 0);
 }
 
-// Checked: 2011-03-28 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+// Checked: 2011-10-06 (RLVa-1.4.2a) | Modified: RLVa-1.4.2a
 const LLUUID& RlvInventory::getSharedRootID() const
 {
 	if ( (m_idRlvRoot.isNull()) && (gInventory.isInventoryUsable()) )
@@ -251,17 +251,19 @@ const LLUUID& RlvInventory::getSharedRootID() const
 		gInventory.getDirectDescendentsOf(gInventory.getRootFolderID(), pFolders, pItems);
 		if (pFolders)
 		{
-			// NOTE: we might have multiple #RLV folders so we'll just go with the first one we come across
+			// NOTE: we might have multiple #RLV folders (pick the first one with sub-folders; otherwise the last one with no sub-folders)
 			const LLViewerInventoryCategory* pFolder;
 			for (S32 idxFolder = 0, cntFolder = pFolders->count(); idxFolder < cntFolder; idxFolder++)
 			{
 				if ( ((pFolder = pFolders->get(idxFolder)) != NULL) && (cstrSharedRoot == pFolder->getName()) )
 				{
-					if (!gInventory.containsObserver((RlvInventory*)this))
-						gInventory.addObserver((RlvInventory*)this);
 					m_idRlvRoot = pFolder->getUUID();
+					if (getDirectDescendentsFolderCount(pFolder) > 0)
+						break;
 				}
 			}
+			if ( (m_idRlvRoot.notNull()) && (!gInventory.containsObserver((RlvInventory*)this)) )
+				gInventory.addObserver((RlvInventory*)this);
 		}
 	}
 	return m_idRlvRoot;
@@ -349,8 +351,17 @@ std::string RlvInventory::getSharedPath(const LLViewerInventoryCategory* pFolder
 	return strPath.erase(0, 1);
 }
 
+// Checked: 2011-10-06 (RLVa-1.4.2a) | Added: RLVa-1.4.2a
+S32 RlvInventory::getDirectDescendentsFolderCount(const LLInventoryCategory* pFolder)
+{
+	LLInventoryModel::cat_array_t* pFolders = NULL; LLInventoryModel::item_array_t* pItems = NULL;
+	if (pFolder)
+		gInventory.getDirectDescendentsOf(pFolder->getUUID(), pFolders, pItems);
+	return (pFolders) ? pFolders->size() : 0;
+}
+
 // Checked: 2009-05-26 (RLVa-0.2.0d) | Modified: RLVa-0.2.0d
-S32 RlvInventory::getDirectDescendentsCount(const LLInventoryCategory* pFolder, LLAssetType::EType filterType)
+S32 RlvInventory::getDirectDescendentsItemCount(const LLInventoryCategory* pFolder, LLAssetType::EType filterType)
 {
 	S32 cntType = 0;
 	if (pFolder)
@@ -450,7 +461,7 @@ void RlvRenameOnWearObserver::doneIdle()
 					// Rename the item's parent folder if it's called "New Folder", isn't directly under #RLV and contains exactly 1 object
 					if ( (LLViewerFolderType::lookupNewCategoryName(LLFolderType::FT_NONE) == pFolder->getName()) && 
 						 (pFolder->getParentUUID() != pRlvRoot->getUUID()) && 
-						 (1 == RlvInventory::getDirectDescendentsCount(pFolder, LLAssetType::AT_OBJECT)) )
+						 (1 == RlvInventory::getDirectDescendentsItemCount(pFolder, LLAssetType::AT_OBJECT)) )
 					{
 						pFolder->rename(strFolderName);
 						pFolder->updateServer(FALSE);
@@ -661,7 +672,7 @@ bool RlvWearableItemCollector::onCollectFolder(const LLInventoryCategory* pFolde
 
 	if ( (!fLinkedFolder) && (RlvInventory::isFoldedFolder(pFolder, false)) )	// Check for folder that should get folded under its parent
 	{
-		if ( (!fAttach) || (1 == RlvInventory::getDirectDescendentsCount(pFolder, LLAssetType::AT_OBJECT)) )
+		if ( (!fAttach) || (1 == RlvInventory::getDirectDescendentsItemCount(pFolder, LLAssetType::AT_OBJECT)) )
 		{																		// When attaching there should only be 1 attachment in it
 			m_Folded.push_front(pFolder->getUUID());
 			m_FoldingMap.insert(std::pair<LLUUID, LLUUID>(pFolder->getUUID(), pFolder->getParentUUID()));
