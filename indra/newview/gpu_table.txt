@@ -338,6 +338,7 @@ NVIDIA GT 445M					.*NVIDIA.*(GeForce)? *GT *445(M)?.*			3		1
 NVIDIA GT 450M					.*NVIDIA.*(GeForce)? *GT *450(M)?.*			3		1
 NVIDIA GT 520M					.*NVIDIA.*(GeForce)? *GT *520(M)?.*			3		1
 NVIDIA GT 525M					.*NVIDIA.*(GeForce)? *GT *525(M)?.*			3		1
+NVIDIA GT 530M					.*NVIDIA.*(GeForce)? *GT *530(M)?.*			3		1
 NVIDIA GT 540M					.*NVIDIA.*(GeForce)? *GT *540(M)?.*			3		1
 NVIDIA GT 550M					.*NVIDIA.*(GeForce)? *GT *550(M)?.*			3		1
 NVIDIA GT 555M					.*NVIDIA.*(GeForce)? *GT *555(M)?.*			3		1
