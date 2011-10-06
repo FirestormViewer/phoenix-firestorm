@@ -166,6 +166,10 @@ void LLProgressView::setStartupComplete()
 		mFadeFromLoginTimer.stop();
 		mFadeToWorldTimer.start();
 	}
+
+	// NickyD: FIRE-3063; Enable Audio for all media sources again. They got disabled during postBuild(), but as we never reach LLProgressView::draw
+	// if the progress is disabled, we would never get media audio back.
+	LLViewerMedia::setOnlyAudibleMediaTextureID(LLUUID::null);
 }
 
 void LLProgressView::setVisible(BOOL visible)
