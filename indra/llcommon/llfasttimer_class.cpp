@@ -45,8 +45,7 @@
 #elif LL_DARWIN
 #include <sys/time.h>
 #include "lltimer.h"	// get_clock_count()
-#include <mach/clock.h>
-#include <mach/mach.h>
+#include <mach/mach_time.h>
 #else 
 #error "architecture not supported"
 #endif
@@ -67,12 +66,13 @@ LLMutex* LLFastTimer::sLogLock = NULL;
 std::queue<LLSD> LLFastTimer::sLogQueue;
 
 #ifdef LL_DARWIN
-#define USE_RDTSC 1
+//AO: Added ability to test this separately from other OS's
+#define USE_RDTSC 0
 #else
 #define USE_RDTSC 0
 #endif
 
-#if LL_LINUX || LL_SOLARIS
+#if LL_LINUX || LL_SOLARIS || LL_DARWIN // AO: Add LL_DARWIN to this list now
 U64 LLFastTimer::sClockResolution = 1000000000; // Nanosecond resolution
 #else
 U64 LLFastTimer::sClockResolution = 1000000; // Microsecond resolution
@@ -896,35 +896,34 @@ std::string LLFastTimer::sClockType = "QueryPerformanceCounter";
 // the system time.
 U64 LLFastTimer::getCPUClockCount64()
 {
-	struct timespec tp;
-	
-#ifdef CLOCK_MONOTONIC // MONOTONIC supported at build-time?
-	if (-1 == clock_gettime(CLOCK_MONOTONIC,&tp)) // if MONOTONIC isn't supported at runtime then ouch, try REALTIME
-#endif
 #ifdef LL_DARWIN
-		clock_serv_t cclock;
-		mach_timespec_t mts;
-		host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
-		clock_get_time(cclock, &mts);
-		mach_port_deallocate(mach_task_self(), cclock);
-		tp.tv_sec = mts.tv_sec;
-		tp.tv_nsec = mts.tv_nsec;
+		// AO: Experimental
+		return mach_absolute_time();
 #else
+	struct timespec tp;
+	#ifdef CLOCK_MONOTONIC // MONOTONIC supported at build-time?
+	if (-1 == clock_gettime(CLOCK_MONOTONIC,&tp)) // if MONOTONIC isn't supported at runtime then ouch, try REALTIME
+	#endif	
 		clock_gettime(CLOCK_REALTIME,&tp);
+	return (tp.tv_sec*LLFastTimer::sClockResolution)+tp.tv_nsec;
 #endif
-	return (tp.tv_sec*LLFastTimer::sClockResolution)+tp.tv_nsec;        
 }
 
 U32 LLFastTimer::getCPUClockCount32()
 {
+#ifdef LL_DARWIN
+	// AO: Experimental
+	return (U32)(mach_absolute_time() >> 8);
+#else
 	return (U32)(LLFastTimer::getCPUClockCount64() >> 8);
+#endif
 }
 
 std::string LLFastTimer::sClockType = "clock_gettime";
 
 #endif // (LL_LINUX || LL_SOLARIS) && !(defined(__i386__) || defined(__amd64__))
 
-//ND: Avoid RDTSC for Linux & Mac
+//ND: Make use of RDTSC respect use of USE_RDTSC define
 //#if (LL_LINUX || LL_SOLARIS || LL_DARWIN) && (defined(__i386__) || defined(__amd64__))
 #if (LL_LINUX || LL_SOLARIS || LL_DARWIN) && (defined(__i386__) || defined(__amd64__)) && USE_RDTSC
 //
