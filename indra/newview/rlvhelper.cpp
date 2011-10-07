@@ -1128,9 +1128,9 @@ std::string rlvGetFirstParenthesisedText(const std::string& strText, std::string
 		return std::string();
 
 	const char* pstrText = strText.c_str(); idxIt = idxStart;
-	while ( (cntLevel > 0) && (idxIt < strText.length()) )
+	while ( (cntLevel > 0) && (++idxIt < strText.length()) )
 	{
-		if ('(' == pstrText[++idxIt])
+		if ('(' == pstrText[idxIt])
 			cntLevel++;
 		else if (')' == pstrText[idxIt])
 			cntLevel--;
@@ -1157,9 +1157,9 @@ std::string rlvGetLastParenthesisedText(const std::string& strText, std::string:
 		return std::string();
 
 	const char* pstrText = strText.c_str(); idxIt = idxEnd;
-	while ( (cntLevel > 0) && (idxIt >= 0) )
+	while ( (cntLevel > 0) && (--idxIt >= 0) && (idxIt < strText.length()) )
 	{
-		if (')' == pstrText[--idxIt])
+		if (')' == pstrText[idxIt])
 			cntLevel++;
 		else if ('(' == pstrText[idxIt])
 			cntLevel--;

@@ -74,8 +74,10 @@ protected:
 	 * General purpose helper functions
 	 */
 public:
-	// Returns the number of direct descendents of pFolder that have the specified type asset type
-	static S32 getDirectDescendentsCount(const LLInventoryCategory* pFolder, LLAssetType::EType filterType);
+	// Returns the number of sub-folders of the specified folder
+	static S32 getDirectDescendentsFolderCount(const LLInventoryCategory* pFolder);
+	// Returns the number of direct descendents of the specified folder that have the specified type asset type
+	static S32 getDirectDescendentsItemCount(const LLInventoryCategory* pFolder, LLAssetType::EType filterType);
 	// A "folded folder" is a folder whose items logically belong to the grandparent rather than the parent
 	static bool isFoldedFolder(const LLInventoryCategory* pFolder, bool fCheckComposite);
 
