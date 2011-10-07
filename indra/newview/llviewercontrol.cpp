@@ -79,6 +79,10 @@
 #include "llhunspell.h"
 // [/SL:KB]
 
+// NaCl - Antispam Registry
+#include "NACLantispam.h"
+// NaCl End
+
 #ifdef TOGGLE_HACKED_GODLIKE_VIEWER
 BOOL 				gHackGodmode = FALSE;
 #endif
@@ -497,6 +501,24 @@ bool handleVoiceClientPrefsChanged(const LLSD& newvalue)
 	return true;
 }
 
+// NaCl - Antispam Registry
+bool handleNaclAntiSpamGlobalQueueChanged(const LLSD& newvalue)
+{
+	NACLAntiSpamRegistry::setGlobalQueue(newvalue.asBoolean());
+	return true;
+}
+bool handleNaclAntiSpamTimeChanged(const LLSD& newvalue)
+{
+	NACLAntiSpamRegistry::setAllQueueTimes(newvalue.asInteger());
+	return true;
+}
+bool handleNaclAntiSpamAmountChanged(const LLSD& newvalue)
+{
+	NACLAntiSpamRegistry::setAllQueueAmounts(newvalue.asInteger());
+	return true;
+}
+// NaCl End 
+
 bool handleVelocityInterpolate(const LLSD& newvalue)
 {
 	LLMessageSystem* msg = gMessageSystem;
@@ -814,6 +836,11 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("ImagePipelineHTTPMaxFailCountFallback")->getSignal()->connect(boost::bind(&handleImagePipelineHTTPMaxFailCountFallback, _2));
 	gSavedSettings.getControl("AvatarZOffset")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // ## Zi: Moved Avatar Z offset from RLVa to here
 	gSavedSettings.getControl("FSUseV1Menus")->getSignal()->connect(boost::bind(&show_v1_menus));	// V1 menu system	-WoLf
+	// NaCl - Antispam Registry
+	gSavedSettings.getControl("_NACL_AntiSpamGlobalQueue")->getSignal()->connect(boost::bind(&handleNaclAntiSpamGlobalQueueChanged, _2));
+	gSavedSettings.getControl("_NACL_AntiSpamTime")->getSignal()->connect(boost::bind(&handleNaclAntiSpamTimeChanged, _2));
+	gSavedSettings.getControl("_NACL_AntiSpamAmount")->getSignal()->connect(boost::bind(&handleNaclAntiSpamAmountChanged, _2));
+	// NaCl End
 }
 
 #if TEST_CACHED_CONTROL

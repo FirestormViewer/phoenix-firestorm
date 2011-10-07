@@ -100,6 +100,10 @@
 // [/RLVa:KB]
 
 
+// NaCl - Antispam Registry
+#include "NACLantispam.h"
+// NaCl End
+
 using namespace LLVOAvatarDefines;
 
 extern LLMenuBarGL* gMenuBarView;
@@ -691,6 +695,9 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
 				<< " located at " << ip << llendl;
 		if (mRegionp)
 		{
+			// NaCl - Antispam Registry
+			NACLAntiSpamRegistry::purgeAllQueues();
+			// NaCl End
 			// We've changed regions, we're now going to change our agent coordinate frame.
 			mAgentOriginGlobal = regionp->getOriginGlobal();
 			LLVector3d agent_offset_global = mRegionp->getOriginGlobal();
