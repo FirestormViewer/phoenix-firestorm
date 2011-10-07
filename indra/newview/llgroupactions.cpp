@@ -306,7 +306,8 @@ static bool isGroupVisible(const LLUUID& group_id)
 	else
 	{
 		bool vis = LLFloaterReg::instanceVisible("floater_group_view", LLSD().with("group_id", group_id));
-		llinfos << "checking visibility for group ID: " << group_id << " visible =" << vis << llendl;
+		//AO: spams log for each notice in well during login, bad!
+		//llinfos << "checking visibility for group ID: " << group_id << " visible =" << vis << llendl;
 		return vis;
 
 		//LLFloater *floater = LLFloaterReg::getInstance("floater_group_view", LLSD().with("group_id", group_id));
