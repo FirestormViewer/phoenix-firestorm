@@ -659,6 +659,7 @@ set(viewer_SOURCE_FILES
     rlvfloaters.cpp
     rlvui.cpp
     streamtitledisplay.cpp
+    NACLantispam.cpp
     )
 
 set(VIEWER_BINARY_NAME "firestorm-bin" CACHE STRING
@@ -1260,6 +1261,7 @@ set(viewer_HEADER_FILES
     kvflickr.h
     kvfloaterflickrauth.h
     kvfloaterflickrupload.h
+    NACLantispam.h
     )
 
 # AO Get our viewer version & channel at this point

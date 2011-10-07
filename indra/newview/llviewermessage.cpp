@@ -119,6 +119,15 @@
 #include "fsareasearch.h"
 #include "fsdata.h"
 
+// NaCl - Antispam Registry
+#include "NACLantispam.h"
+#include "sound_ids.h"
+// NaCl End
+// NaCl - Newline flood protection
+#include <boost/regex.hpp>
+const static boost::regex NEWLINES("\\n{1}");
+// NaCl End
+
 #include <boost/algorithm/string/split.hpp> //
 #include <boost/regex.hpp>
 
@@ -1957,6 +1966,10 @@ void LLOfferInfo::initRespondFunctionMap()
 
 void inventory_offer_handler(LLOfferInfo* info)
 {
+	// NaCl - Antispam Registry
+	if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_INVENTORY,info->mFromID)) return;
+	// NaCl End
+	
 	//Until throttling is implmented, busy mode should reject inventory instead of silently
 	//accepting it.  SEE SL-39554
 	if (gAgent.getBusy())
@@ -2404,12 +2417,42 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	//msg->getData("MessageBlock", "Count",		&count);
 	msg->getStringFast(_PREHASH_MessageBlock, _PREHASH_FromAgentName, name);
 	msg->getStringFast(_PREHASH_MessageBlock, _PREHASH_Message,		message);
+	// NaCl - Newline flood protection
+	LLViewerObject* obj=gObjectList.findObject(from_id);
+	bool doCheck=true;
+	if(from_id.isNull())
+		doCheck=false;
+	if(gAgent.getID() == from_id)
+		doCheck=false;
+	if(obj)
+		if(obj->permYouOwner())
+			doCheck=false;
+	if(doCheck)
+	{
+		static LLCachedControl<U32> _NACL_AntiSpamNewlines(gSavedSettings,"_NACL_AntiSpamNewlines");
+		boost::sregex_iterator iter(message.begin(), message.end(), NEWLINES);
+		if(std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines)
+		{
+			NACLAntiSpamRegistry::blockOnQueue((U32)NACLAntiSpamRegistry::QUEUE_IM,from_id);
+			LLSD args;
+			args["MESSAGE"] = "Message: Blocked newline flood from "+from_id.asString();
+			LLNotificationsUtil::add("SystemMessageTip", args);
+			return;
+		}
+	}
+	// NaCl End
 	msg->getU32Fast(_PREHASH_MessageBlock, _PREHASH_ParentEstateID, parent_estate_id);
 	msg->getUUIDFast(_PREHASH_MessageBlock, _PREHASH_RegionID, region_id);
 	msg->getVector3Fast(_PREHASH_MessageBlock, _PREHASH_Position, position);
 	msg->getBinaryDataFast(  _PREHASH_MessageBlock, _PREHASH_BinaryBucket, binary_bucket, 0, 0, MTUBYTES);
 	binary_bucket_size = msg->getSizeFast(_PREHASH_MessageBlock, _PREHASH_BinaryBucket);
 	EInstantMessage dialog = (EInstantMessage)d;
+	// NaCl - Antispam Registry
+	if(dialog != IM_TYPING_START && dialog != IM_TYPING_STOP)
+	{
+		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_IM,from_id)) return;
+	}
+	// NaCl End
 
     // make sure that we don't have an empty or all-whitespace name
 	LLStringUtil::trim(name);
@@ -3366,6 +3409,9 @@ void process_offer_callingcard(LLMessageSystem* msg, void**)
 
 	LLUUID source_id;
 	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, source_id);
+	// NaCl - Antispam Registry
+	if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_CALLING_CARD,source_id)) return;
+	// NaCl End
 	LLUUID tid;
 	msg->getUUIDFast(_PREHASH_AgentBlock, _PREHASH_TransactionID, tid);
 
@@ -3489,6 +3535,20 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 
 	msg->getU8("ChatData", "ChatType", type_temp);
 	chat.mChatType = (EChatType)type_temp;
+	
+	// NaCL - Antispam Registry
+	if(chat.mChatType != CHAT_TYPE_START && chat.mChatType != CHAT_TYPE_STOP)
+	{
+		if(owner_id.isNull())
+		{
+			if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_CHAT,from_id)) return;
+		}
+		else
+		{
+			if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_CHAT,owner_id)) return;
+		}
+	}
+	// NaCl End
 
 	msg->getU8Fast(_PREHASH_ChatData, _PREHASH_Audible, audible_temp);
 	chat.mAudible = (EChatAudible)audible_temp;
@@ -3584,6 +3644,30 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 
 		color.setVec(1.f,1.f,1.f,1.f);
 		msg->getStringFast(_PREHASH_ChatData, _PREHASH_Message, mesg);
+		// NaCl - Newline flood protection
+		LLViewerObject* obj=gObjectList.findObject(from_id);
+		bool doCheck=true;
+		if(from_id.isNull())
+			doCheck=false;
+		if(gAgent.getID() == from_id)
+			doCheck=false;
+		if(obj)
+			if(obj->permYouOwner())
+				doCheck=false;
+		if(doCheck)
+		{
+			static LLCachedControl<U32> _NACL_AntiSpamNewlines(gSavedSettings,"_NACL_AntiSpamNewlines");
+			boost::sregex_iterator iter(mesg.begin(), mesg.end(), NEWLINES);
+			if(std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines)
+			{
+				NACLAntiSpamRegistry::blockOnQueue((U32)NACLAntiSpamRegistry::QUEUE_CHAT,owner_id);
+				LLSD args;
+				args["MESSAGE"] = "Chat: Blocked newline flood from "+owner_id.asString();
+				LLNotificationsUtil::add("SystemMessageTip", args);
+				return;
+			}
+		}
+		// NaCl End
 
 // [RLVa:KB] - Checked: 2010-04-23 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
 		if ( (rlv_handler_t::isEnabled()) && (CHAT_TYPE_START != chat.mChatType) && (CHAT_TYPE_STOP != chat.mChatType) )
@@ -4855,6 +4939,21 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_SoundID, sound_id);
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_OwnerID, owner_id);
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_ObjectID, object_id);
+	// NaCl - Antispam Registry
+	/*if(owner_id.isNull())
+	{*/
+	bool bDoSpamCheck=1;
+	std::string sSound=sound_id.asString();
+ 	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings,"_NACL_AntiSpamSoundMulti");
+	for(int i=0;i< COLLISION_SOUNDS_SIZE;i++)
+		if(COLLISION_SOUNDS[i] == sSound)
+			bDoSpamCheck=0;
+		if(bDoSpamCheck)
+			if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND,object_id, _NACL_AntiSpamSoundMulti,true)) return;
+	/*}
+	else
+		if(NACLAntiSpamRegistry::checkQueue("Soundspam",owner_id)) return;*/
+	// NaCl End
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_ParentID, parent_id);
 	msg->getU64Fast(_PREHASH_SoundData, _PREHASH_Handle, region_handle);
 	msg->getVector3Fast(_PREHASH_SoundData, _PREHASH_Position, pos_local);
@@ -4922,6 +5021,15 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_SoundID, sound_id);
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_ObjectID, object_id);
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_OwnerID, owner_id);
+	// NaCl - Antispam Registry
+	static LLCachedControl<U32> _NACL_AntiSpamSoundPreloadMulti(gSavedSettings,"_NACL_AntiSpamSoundPreloadMulti");
+	if(owner_id.isNull())
+	{
+		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND_PRELOAD,object_id,_NACL_AntiSpamSoundPreloadMulti)) return;
+	}
+	else
+		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND_PRELOAD,owner_id,_NACL_AntiSpamSoundPreloadMulti)) return;
+	// NaCl End
 
 	LLViewerObject *objectp = gObjectList.findObject(object_id);
 	if (!objectp) return;
@@ -4958,6 +5066,15 @@ void process_attached_sound(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_SoundID, sound_id);
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_ObjectID, object_id);
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_OwnerID, owner_id);
+	// NaCl - Antispam Registry
+	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings,"_NACL_AntiSpamSoundMulti");
+	/*if(owner_id.isNull())
+	{*/
+		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND,object_id, _NACL_AntiSpamSoundMulti)) return;
+	/*}
+	else
+		if(NACLAntiSpamRegistry::checkQueue("Soundspam",owner_id)) return;*/
+	// NaCl End
 	msg->getF32Fast(_PREHASH_DataBlock, _PREHASH_Gain, gain);
 	msg->getU8Fast(_PREHASH_DataBlock, _PREHASH_Flags, flags);
 
@@ -6278,6 +6395,10 @@ void process_economy_data(LLMessageSystem *msg, void** /*user_data*/)
 
 void notify_cautioned_script_question(const LLSD& notification, const LLSD& response, S32 orig_questions, BOOL granted)
 {
+	// NaCl - Antispam Registry
+	LLUUID task_id = notification["payload"]["task_id"].asUUID();
+	if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SCRIPT_DIALOG,task_id)) return;
+	// NaCl End
 	// only continue if at least some permissions were requested
 	if (orig_questions)
 	{
@@ -6458,6 +6579,14 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_Data, _PREHASH_TaskID, taskid );
 	// itemid -> script asset key of script requesting permissions
 	msg->getUUIDFast(_PREHASH_Data, _PREHASH_ItemID, itemid );
+	// NaCl - Antispam Registry
+	if(taskid.isNull())
+	{
+		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SCRIPT_DIALOG,itemid)) return;
+	}
+	else
+		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SCRIPT_DIALOG,taskid)) return;
+	// NaCl End
 	msg->getStringFast(_PREHASH_Data, _PREHASH_ObjectName, object_name);
 	msg->getStringFast(_PREHASH_Data, _PREHASH_ObjectOwner, owner_name);
 	msg->getS32Fast(_PREHASH_Data, _PREHASH_Questions, questions );
@@ -7191,12 +7320,18 @@ void process_script_dialog(LLMessageSystem* msg, void**)
 
 	LLUUID object_id;
 	msg->getUUID("Data", "ObjectID", object_id);
+	// NaCl - Antispam Registry
+	if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SCRIPT_DIALOG,object_id)) return;
+	// NaCl End
 
 //	For compability with OS grids first check for presence of extended packet before fetching data.
     LLUUID owner_id;
 	if (gMessageSystem->getNumberOfBlocks("OwnerData") > 0)
 	{
     msg->getUUID("OwnerData", "OwnerID", owner_id);
+	// NaCl - Antispam Registry
+	if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SCRIPT_DIALOG,owner_id)) return;
+	// NaCl End
 	}
 
 	if (LLMuteList::getInstance()->isMuted(object_id) || LLMuteList::getInstance()->isMuted(owner_id))
@@ -7331,6 +7466,14 @@ void process_load_url(LLMessageSystem* msg, void**)
 	msg->getString("Data", "ObjectName", 256, object_name);
 	msg->getUUID(  "Data", "ObjectID", object_id);
 	msg->getUUID(  "Data", "OwnerID", owner_id);
+	// NaCl - Antispam Registry
+	if(owner_id.isNull())
+	{
+		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SCRIPT_DIALOG,object_id)) return;
+	}
+	else
+		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SCRIPT_DIALOG,owner_id)) return;
+	// NaCl End
 	msg->getBOOL(  "Data", "OwnerIsGroup", owner_is_group);
 	msg->getString("Data", "Message", 256, message);
 	msg->getString("Data", "URL", 256, url);
