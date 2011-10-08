@@ -279,52 +279,7 @@
             <check_box.commit_callback
              function="FS.ToggleSortContacts" />
         </check_box>
-<!--To be removed when LL migrates beta serch to stable-->
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="15"
-         layout="topleft"
-         left="30"
-         name="Search_Label"
-         top_delta="25"
-         width="130"
-         tool_tip="While the beta URL often provides more accurate search results, it may not always be available.">
-          Default Search URL:
-        </text>
 
-        <text
-         name="Search_Label_requires_restart"
-         follows="left|top"
-         layout="topleft"
-         left_delta ="115"
-         height="20"
-         width="90"
-         text_color="White_25">
-          (requires restart)
-         </text>
-
-        <combo_box
-         control_name="SearchURL"
-         follows="left|top"
-         height="23"
-         layout="topleft"
-         left_delta="95"
-         max_chars="135"
-         name="SearchURL"
-         width="150">
-            <combo_box.item
-             enabled="true"
-             label="Standard SL search"
-             name="Standard V2 search"
-             value="http://search.secondlife.com/viewer/[CATEGORY]/?q=[QUERY]&amp;p=[AUTH_TOKEN]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;sid=[SESSION_ID]" />
-            <combo_box.item
-             enabled="true"
-             label="Beta SL Search"
-             name="Beta V2 Search"
-             value="http://search-beta.secondlife.com/viewer/[CATEGORY]/?q=[QUERY]&amp;p=[AUTH_TOKEN]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;g=[GODLIKE]&amp;sid=[SESSION_ID]&amp;rid=[REGION_ID]&amp;pid=[PARCEL_ID]&amp;channel=[CHANNEL]&amp;version=[VERSION]&amp;major=[VERSION_MAJOR]&amp;minor=[VERSION_MINOR]&amp;patch=[VERSION_PATCH]&amp;build=[VERSION_BUILD]" />
-        </combo_box>
         <check_box
          top_pad="15"
          control_name="UseLSLBridge"
