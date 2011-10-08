@@ -175,6 +175,11 @@ ATI Radeon HD 6600				.*ATI.*Radeon HD *66..						3		1
 ATI Radeon HD 6700				.*ATI.*Radeon HD *67..						3		1
 ATI Radeon HD 6800				.*ATI.*Radeon HD *68..						3		1
 ATI Radeon HD 6900				.*ATI.*Radeon HD *69..						3		1
+ATI Radeon HD 7500				.*ATI.*Radeon HD *75..						3		1
+ATI Radeon HD 7600				.*ATI.*Radeon HD *76..						3		1
+ATI Radeon HD 7700				.*ATI.*Radeon HD *77..						3		1
+ATI Radeon HD 7800				.*ATI.*Radeon HD *78..						3		1
+ATI Radeon HD 7900				.*ATI.*Radeon HD *79..						3		1
 ATI Radeon OpenGL				.*ATI.*Radeon OpenGL.*						0		0
 ATI Radeon 2100					.*ATI.*Radeon 21..							0		1
 ATI Radeon 3000					.*ATI.*Radeon 30..							0		1
