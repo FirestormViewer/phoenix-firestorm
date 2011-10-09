@@ -11,7 +11,7 @@
   <floater.string
      name="AboutHeader">
 [APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([CHANNEL])
-[[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
+[[VIEWER_RELEASE_NOTES_URL] Release Notes]
 
 </floater.string>
   <floater.string
