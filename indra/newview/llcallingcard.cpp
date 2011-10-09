@@ -755,7 +755,8 @@ void LLAvatarTracker::processNotify(LLMessageSystem* msg, bool online)
 			// *TODO: get actual inventory id
 			gInventory.addChangedMask(LLInventoryObserver::CALLING_CARD, LLUUID::null);
 		}
-		if(chat_notify||LGGContactSets::getInstance()->notifyForFriend(agent_id))
+		//[FIX FIRE-3522 : SJ] Notify Online/Offline to Nearby Chat even if chat_notify isnt true
+		if(chat_notify||LGGContactSets::getInstance()->notifyForFriend(agent_id)||gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat"))
 		{
 			// Look up the name of this agent for the notification
 			LLAvatarNameCache::get(agent_id,
@@ -793,6 +794,8 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	}
 
 	LLNotificationPtr notification;
+
+
 	if (online)
 	{
 		notification =
@@ -806,15 +809,15 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 		notification =
 			LLNotificationsUtil::add("FriendOffline", args, payload);
 	}
-
+	
 	// If there's an open IM session with this agent, send a notification there too.
 	LLUUID session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, agent_id);
 	std::string notify_msg = notification->getMessage();
 	LLIMModel::instance().proccessOnlineOfflineNotification(session_id, notify_msg);
-
 	// If desired, also send it to nearby chat, this allows friends'
 	// online/offline times to be referenced in chat & logged.
-	if (gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat")) {
+	if (gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat")) 
+	{
 		LLChat chat;
 		chat.mText = notify_msg;
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;

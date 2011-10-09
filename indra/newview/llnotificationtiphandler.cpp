@@ -127,6 +127,12 @@ bool LLTipHandler::processNotification(const LLSD& notify)
 			return false;
 		}
 
+		// [FIRE-3522 : SJ] Don't show Online/Offline toast when ChatOnlineNotification is not enabled
+		if (("FriendOffline" == notification->getName() || "FriendOnline" == notification->getName()) && !gSavedSettings.getBOOL("ChatOnlineNotification"))
+		{
+			return false;
+		}
+
 		LLToastPanel* notify_box = LLToastPanel::buidPanelFromNotification(notification);
 
 		LLToast::Params p;
