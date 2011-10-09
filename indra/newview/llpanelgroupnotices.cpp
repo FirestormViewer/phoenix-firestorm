@@ -1,4 +1,4 @@
-/** 
+/**
  * @file llpanelgroupnotices.cpp
  * @brief A panel to display group notices.
  *
@@ -154,6 +154,7 @@ BOOL LLGroupDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 		case DAD_ANIMATION:
 		case DAD_GESTURE:
 		case DAD_CALLINGCARD:
+		case DAD_MESH:
 		{
 			LLViewerInventoryItem* inv_item = (LLViewerInventoryItem*)cargo_data;
 			if(gInventory.getItem(inv_item->getUUID())
@@ -199,9 +200,12 @@ std::string build_notice_date(const U32& the_time)
 		time(&t);
 	}
 	
-	std::string dateStr = "["+LLTrans::getString("LTimeMthNum")+"]/["
-								+LLTrans::getString("LTimeDay")+"]/["
-								+LLTrans::getString("LTimeYear")+"]";
+        std::string dateStr = "["+LLTrans::getString("LTimeYear")+"]/["
+                                                                +LLTrans::getString("LTimeMthNum")+"]/["
+                                                                +LLTrans::getString("LTimeDay")+"] ["
+                                                                +LLTrans::getString("LTimeHour")+"]:["
+                                                                +LLTrans::getString("LTimeMin")+"]:["
+                                                                +LLTrans::getString("LTimeSec")+"]";
 	LLSD substitution;
 	substitution["datetime"] = (S32) t;
 	LLStringUtil::format (dateStr, substitution);

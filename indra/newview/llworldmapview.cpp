@@ -80,6 +80,7 @@ LLUIImagePtr LLWorldMapView::sAvatarYouLargeImage = NULL;
 LLUIImagePtr LLWorldMapView::sAvatarLevelImage = NULL;
 LLUIImagePtr LLWorldMapView::sAvatarAboveImage = NULL;
 LLUIImagePtr LLWorldMapView::sAvatarBelowImage = NULL;
+LLUIImagePtr LLWorldMapView::sAvatarHeightUnknownImage = NULL;
 
 LLUIImagePtr LLWorldMapView::sTelehubImage = NULL;
 LLUIImagePtr LLWorldMapView::sInfohubImage = NULL;
@@ -123,6 +124,7 @@ void LLWorldMapView::initClass()
 	sAvatarLevelImage =		LLUI::getUIImage("map_avatar_32.tga");
 	sAvatarAboveImage =		LLUI::getUIImage("map_avatar_above_32.tga");
 	sAvatarBelowImage =		LLUI::getUIImage("map_avatar_below_32.tga");
+	sAvatarHeightUnknownImage = LLUI::getUIImage("map_avatar_unknown.tga");
 
 	sHomeImage =			LLUI::getUIImage("map_home.tga");
 	sTelehubImage = 		LLUI::getUIImage("map_telehub.tga");
@@ -140,7 +142,9 @@ void LLWorldMapView::initClass()
 	sForSaleAdultImage =    LLUI::getUIImage("icon_for_sale_adult.tga");
 	
 	sStringsMap["loading"] = LLTrans::getString("texture_loading");
-	sStringsMap["offline"] = LLTrans::getString("worldmap_offline");
+	
+	// Missing translation for agent position
+	sStringsMap["agent_position"] = LLTrans::getString("worldmap_agent_position");
 }
 
 // static
@@ -152,6 +156,7 @@ void LLWorldMapView::cleanupClass()
 	sAvatarLevelImage = NULL;
 	sAvatarAboveImage = NULL;
 	sAvatarBelowImage = NULL;
+	sAvatarHeightUnknownImage = NULL;
 
 	sTelehubImage = NULL;
 	sInfohubImage = NULL;
@@ -452,13 +457,35 @@ void LLWorldMapView::draw()
 		{
 			LLFontGL* font = LLFontGL::getFont(LLFontDescriptor("SansSerif", "Small", LLFontGL::BOLD));
 			std::string mesg;
-			if (info->isDown())
+// [RLVa:KB]
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 			{
-				mesg = llformat( "%s (%s)", info->getName().c_str(), sStringsMap["offline"].c_str());
+				mesg = RlvStrings::getString(RLV_STRING_HIDDEN);
 			}
+// [/RLVa:KB]
 			else
 			{
 				mesg = info->getName();
+
+				// Only show agent count when region is online
+				if (!info->isDown())
+				{
+					S32 agent_count = info->getAgentCount();
+					LLViewerRegion *region = gAgent.getRegion();
+					if (region && region->getHandle() == info->getHandle())
+					{
+						++agent_count; // Bump by 1 if we're in this region
+					}
+					if (agent_count > 0)
+					{
+						mesg += llformat(" (%d)", agent_count);
+					}
+				}
+				
+				// Let the LLSimInfo instance do the translation;
+				// it knows everything needed for this, including
+				// offline status!
+				mesg += llformat(" (%s)", info->getAccessString().c_str());
 			}
 			if (!mesg.empty())
 			{
@@ -514,7 +541,7 @@ void LLWorldMapView::draw()
 		drawTracking(pos_global,
 					 lerp(LLColor4::yellow, LLColor4::orange, 0.4f),
 					 TRUE,
-					 "You are here",
+					 sStringsMap["agent_position"].c_str(),
 					 "",
 					 llround(LLFontGL::getFontSansSerifSmall()->getLineHeight())); // offset vertically by one line, to avoid overlap with target tracking
 	}
@@ -1161,11 +1188,18 @@ void LLWorldMapView::drawAvatar(F32 x_pixels,
 								F32 y_pixels,
 								const LLColor4& color,
 								F32 relative_z,
-								F32 dot_radius)
+								F32 dot_radius,
+								bool heightUnknown) // Ansariel: For drawing unknown height indicator
 {
 	const F32 HEIGHT_THRESHOLD = 7.f;
 	LLUIImagePtr dot_image = sAvatarLevelImage;
-	if(relative_z < -HEIGHT_THRESHOLD) 
+
+	// Ansariel: If height is unknown, draw our special icon
+	if (heightUnknown)
+	{
+		dot_image = sAvatarHeightUnknownImage;
+	}
+	else if(relative_z < -HEIGHT_THRESHOLD) 
 	{
 		dot_image = sAvatarBelowImage; 
 	}
@@ -1759,20 +1793,20 @@ BOOL LLWorldMapView::handleDoubleClick( S32 x, S32 y, MASK mask )
 				// Invoke the event details floater if someone is clicking on an event.
 				LLSD params(LLSD::emptyArray());
 				params.append(event_id);
-				LLCommandDispatcher::dispatch("event", params, LLSD(), NULL, true);
+				LLCommandDispatcher::dispatch("event", params, LLSD(), NULL, "clicked", true);
 				break;
 			}
 		case MAP_ITEM_LAND_FOR_SALE:
 		case MAP_ITEM_LAND_FOR_SALE_ADULT:
 			{
 				LLFloaterReg::hideInstance("world_map");
-				LLFloaterReg::showInstance("search", LLSD().with("category", "destinations").with("id", id));
+				LLFloaterReg::showInstance("search", LLSD().with("category", "destinations").with("query", id));
 				break;
 			}
 		case MAP_ITEM_CLASSIFIED:
 			{
 				LLFloaterReg::hideInstance("world_map");
-				LLFloaterReg::showInstance("search", LLSD().with("category", "classifieds").with("id", id));
+				LLFloaterReg::showInstance("search", LLSD().with("category", "classifieds").with("query", id));
 				break;
 			}
 		default:

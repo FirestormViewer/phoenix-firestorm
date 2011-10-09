@@ -37,6 +37,7 @@
 #include "llgl.h"
 #include "lltimer.h"
 
+#include "llcalc.h"
 //#include "llclipboard.h"
 #include "llcontrol.h"
 #include "llbutton.h"
@@ -50,6 +51,11 @@
 #include "lluictrlfactory.h"
 #include "llclipboard.h"
 #include "llmenugl.h"
+#include "../newview/lggautocorrect.h"
+#include "../newview/llviewercontrol.h"
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.7.0a)
+#include "llhunspell.h"
+// [/SL:KB]
 
 //
 // Imported globals
@@ -64,6 +70,9 @@ const S32	SCROLL_INCREMENT_ADD = 0;	// make space for typing
 const S32   SCROLL_INCREMENT_DEL = 4;	// make space for baskspacing
 const F32   AUTO_SCROLL_TIME = 0.05f;
 const F32	TRIPLE_CLICK_INTERVAL = 0.3f;	// delay between double and triple click. *TODO: make this equal to the double click interval?
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-24 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
+const F32	SPELLCHECK_DELAY = 0.5f;	// delay between the last keypress and showing spell checking feedback for the word the cursor is on
+// [/SL:KB]
 
 const std::string PASSWORD_ASTERISK( "\xE2\x80\xA2" ); // U+2022 BULLET
 
@@ -81,13 +90,18 @@ LLLineEditor::Params::Params()
 :	max_length(""),
     keystroke_callback("keystroke_callback"),
 	prevalidate_callback("prevalidate_callback"),
+	prevalidate_input_callback("prevalidate_input_callback"),
 	background_image("background_image"),
 	background_image_disabled("background_image_disabled"),
 	background_image_focused("background_image_focused"),
 	select_on_focus("select_on_focus", false),
 	revert_on_esc("revert_on_esc", true),
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
+	spellcheck("spellcheck", false),
+// [/SL:KB]
 	commit_on_focus_lost("commit_on_focus_lost", true),
 	ignore_tab("ignore_tab", true),
+	is_password("is_password", false),
 	cursor_color("cursor_color"),
 	text_color("text_color"),
 	text_readonly_color("text_readonly_color"),
@@ -129,8 +143,13 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 	mBorderThickness( 0 ),
 	mIgnoreArrowKeys( FALSE ),
 	mIgnoreTab( p.ignore_tab ),
-	mDrawAsterixes( FALSE ),
+	mDrawAsterixes( p.is_password ),
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
+	mSpellCheck( p.spellcheck ),
+	mNeedsSpellCheck( FALSE ),
+// [/SL:KB]
 	mSelectAllonFocusReceived( p.select_on_focus ),
+	mSelectAllonCommit( TRUE ),
 	mPassDelete(FALSE),
 	mReadOnly(FALSE),
 	mBgImage( p.background_image ),
@@ -152,6 +171,11 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 
 	mScrollTimer.reset();
 	mTripleClickTimer.reset();
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Modified: Catznip-2.8.0a
+	if (mSpellCheck)
+		LLHunspellWrapper::setSettingsChangeCallback(boost::bind(&LLLineEditor::onSpellCheckSettingsChange, this));
+	mSpellCheckTimer.reset();
+// [/SL:KB]
 	setText(p.default_text());
 
 	// Initialize current history line iterator
@@ -172,6 +196,7 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 	updateTextPadding();
 	setCursor(mText.length());
 
+	setPrevalidateInput(p.prevalidate_input_callback());
 	setPrevalidate(p.prevalidate_callback());
 
 	LLContextMenu* menu = LLUICtrlFactory::instance().createFromFile<LLContextMenu>
@@ -188,7 +213,47 @@ LLLineEditor::~LLLineEditor()
 	// calls onCommit() while LLLineEditor still valid
 	gFocusMgr.releaseFocusIfNeeded( this );
 }
+void LLLineEditor::autoCorrectText()
+{
+	static LLCachedControl<bool> doAnything(gSavedSettings, "PhoenixEnableAutoCorrect");
+	if( (!mReadOnly) && (doAnything))// && (isDirty()))
+	{
+		S32 wordStart = 0;
+		S32 wordEnd = mCursorPos-1;
+		//llinfos <<"Checking Word, Cursor is at "<<mCursorPos<<" and text is "<<mText.getString().c_str()<<llendl;
+		if(wordEnd<1)return;
+		const LLWString& text = mText.getWString();
+		if(text.size()<1)return;
+		if( LLWStringUtil::isPartOfWord( text[wordEnd] )) return;//we only check on word breaks
+		wordEnd--;
+		if( LLWStringUtil::isPartOfWord( text[wordEnd] ) )
+		{
+			while ((wordEnd > 0) && (' '!=text[wordEnd-1]))
+			{
+				wordEnd--;
+			}
+			wordStart=wordEnd;		
+			while ((wordEnd < (S32)text.length()) && (' '!=text[wordEnd] ) )
+			{
+				wordEnd++;
+			}
+			std::string lastTypedWord(std::string(text.begin(), 
+				text.end()).substr(wordStart,wordEnd-wordStart));
+			//llinfos << " The last typed word has been chosen, it is "<<lastTypedWord.c_str()<<llendl;
 
+			std::string correctedWord(LGGAutoCorrect::getInstance()->replaceWord(lastTypedWord));
+			if(correctedWord!=lastTypedWord)
+			{
+				int dif = correctedWord.length()-lastTypedWord.length();
+				std::string regText(mText);
+				//int wordStart = regText.find(lastTypedWord);
+				regText.replace(wordStart,lastTypedWord.length(),correctedWord);
+				mText=regText;
+				mCursorPos+=dif;
+			}
+		}
+	}
+}
 
 void LLLineEditor::onFocusReceived()
 {
@@ -227,7 +292,10 @@ void LLLineEditor::onCommit()
 
 	setControlValue(getValue());
 	LLUICtrl::onCommit();
-	selectAll();
+
+	// Selection on commit needs to be turned off when evaluating maths
+	// expressions, to allow indication of the error position
+	if (mSelectAllonCommit) selectAll();
 }
 
 // Returns TRUE if user changed value at all
@@ -388,7 +456,11 @@ void LLLineEditor::setText(const LLStringExplicit &new_text)
 	setCursor(llmin((S32)mText.length(), getCursor()));
 
 	// Set current history line to end of history.
-	if(mLineHistory.end() != mLineHistory.begin())
+	if (mLineHistory.empty())
+	{
+		mCurrentHistoryLine = mLineHistory.end();
+	}
+	else
 	{
 		mCurrentHistoryLine = mLineHistory.end() - 1;
 	}
@@ -400,23 +472,15 @@ void LLLineEditor::setText(const LLStringExplicit &new_text)
 // Picks a new cursor position based on the actual screen size of text being drawn.
 void LLLineEditor::setCursorAtLocalPos( S32 local_mouse_x )
 {
-	const llwchar* wtext = mText.getWString().c_str();
-	LLWString asterix_text;
-	if (mDrawAsterixes)
-	{
-		for (S32 i = 0; i < mText.length(); i++)
-		{
-			asterix_text += utf8str_to_wstring(PASSWORD_ASTERISK);
-		}
-		wtext = asterix_text.c_str();
-	}
+	S32 cursor_pos = calcCursorPos(local_mouse_x);
 
-	S32 cursor_pos =
-		mScrollHPos + 
-		mGLFont->charFromPixelOffset(
-			wtext, mScrollHPos,
-			(F32)(local_mouse_x - mTextLeftEdge),
-			(F32)(mTextRightEdge - mTextLeftEdge + 1)); // min-max range is inclusive
+	S32 left_pos = llmin( mSelectionStart, cursor_pos );
+	S32 length = llabs( mSelectionStart - cursor_pos );
+	const LLWString& substr = mText.getWString().substr(left_pos, length);
+
+	if (mIsSelecting && !prevalidateInput(substr))
+		return;
+
 	setCursor(cursor_pos);
 }
 
@@ -500,6 +564,11 @@ BOOL LLLineEditor::canSelectAll() const
 
 void LLLineEditor::selectAll()
 {
+	if (!prevalidateInput(mText.getWString()))
+	{
+		return;
+	}
+
 	mSelectionStart = mText.length();
 	mSelectionEnd = 0;
 	setCursor(mSelectionEnd);
@@ -508,6 +577,109 @@ void LLLineEditor::selectAll()
 	updatePrimary();
 }
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
+
+// Checked: 2010-12-19 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
+bool LLLineEditor::useSpellCheck() const
+{
+	return (LLHunspellWrapper::useSpellCheck()) && (!mReadOnly) && (mSpellCheck);
+}
+
+// Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+std::string	LLLineEditor::getSuggestion(U32 idxSuggestion) const
+{
+	return (idxSuggestion < mSuggestionList.size()) ? mSuggestionList[idxSuggestion] : LLStringUtil::null;
+}
+
+// Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+U32 LLLineEditor::getSuggestionCount() const
+{
+	return mSuggestionList.size();
+}
+
+// Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+void LLLineEditor::replaceWithSuggestion(U32 idxSuggestion)
+{
+	for (std::list<std::pair<U32, U32> >::const_iterator itMisspell = mMisspellRanges.begin(); 
+			itMisspell != mMisspellRanges.end(); ++itMisspell)
+	{
+		if ( (itMisspell->first <= (U32)mCursorPos) && (itMisspell->second >= (U32)mCursorPos) )
+		{
+			deselect();
+
+			// Delete the misspelled word
+			mText.erase(itMisspell->first, itMisspell->second - itMisspell->first);
+			setCursor(itMisspell->first);
+
+			// Insert the suggestion in its place
+			LLWString wstrSuggestion = utf8str_to_wstring(mSuggestionList[idxSuggestion]);
+			mText.insert(getCursor(), wstrSuggestion);
+
+			setCursor(mCursorPos + (S32)wstrSuggestion.length());
+
+			break;
+		}
+	}
+	mNeedsSpellCheck = TRUE;
+}
+
+// Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+void LLLineEditor::addToDictionary()
+{
+	if (canAddToDictionary())
+		LLHunspellWrapper::instance().addToCustomDictionary(getMisspelledWord(mCursorPos));
+}
+
+// Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+bool LLLineEditor::canAddToDictionary() const
+{
+	return (useSpellCheck()) && (isMisspelledWord(mCursorPos));
+}
+
+// Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+void LLLineEditor::addToIgnore()
+{
+	if (canAddToIgnore())
+		LLHunspellWrapper::instance().addToIgnoreList(getMisspelledWord(mCursorPos));
+}
+
+// Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+bool LLLineEditor::canAddToIgnore() const
+{
+	return (useSpellCheck()) && (isMisspelledWord(mCursorPos));
+}
+
+// Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+std::string LLLineEditor::getMisspelledWord(U32 posCursor) const
+{
+	for (std::list<std::pair<U32, U32> >::const_iterator itMisspell = mMisspellRanges.begin(); 
+			itMisspell != mMisspellRanges.end(); ++itMisspell)
+	{
+		if ( (itMisspell->first <= posCursor) && (itMisspell->second >= posCursor) )
+			return wstring_to_utf8str(mText.getWString().substr(itMisspell->first, itMisspell->second - itMisspell->first));
+	}
+	return LLStringUtil::null;
+}
+
+// Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+bool LLLineEditor::isMisspelledWord(U32 posCursor) const
+{
+	for (std::list<std::pair<U32, U32> >::const_iterator itMisspell = mMisspellRanges.begin(); 
+			itMisspell != mMisspellRanges.end(); ++itMisspell)
+	{
+		if ( (itMisspell->first <= posCursor) && (itMisspell->second >= posCursor) )
+			return true;
+	}
+	return false;
+}
+
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+void LLLineEditor::onSpellCheckSettingsChange()
+{
+	// Recheck the spelling on every change
+	mNeedsSpellCheck = TRUE;
+}
+// [/SL:KB]
 
 BOOL LLLineEditor::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
@@ -585,6 +757,9 @@ BOOL LLLineEditor::handleMouseDown(S32 x, S32 y, MASK mask)
 
 		if (mask & MASK_SHIFT)
 		{
+			// assume we're starting a drag select
+			mIsSelecting = TRUE;
+
 			// Handle selection extension
 			S32 old_cursor_pos = getCursor();
 			setCursorAtLocalPos(x);
@@ -619,8 +794,6 @@ BOOL LLLineEditor::handleMouseDown(S32 x, S32 y, MASK mask)
 				mSelectionStart = old_cursor_pos;
 				mSelectionEnd = getCursor();
 			}
-			// assume we're starting a drag select
-			mIsSelecting = TRUE;
 		}
 		else
 		{
@@ -791,6 +964,9 @@ void LLLineEditor::removeChar()
 {
 	if( getCursor() > 0 )
 	{
+		if (!prevalidateInput(mText.getWString().substr(getCursor()-1, 1)))
+			return;
+
 		mText.erase(getCursor() - 1, 1);
 
 		setCursor(getCursor() - 1);
@@ -811,6 +987,9 @@ void LLLineEditor::addChar(const llwchar uni_char)
 	}
 	else if (LL_KIM_OVERWRITE == gKeyboard->getInsertMode())
 	{
+		if (!prevalidateInput(mText.getWString().substr(getCursor(), 1)))
+			return;
+
 		mText.erase(getCursor(), 1);
 	}
 
@@ -848,6 +1027,8 @@ void LLLineEditor::addChar(const llwchar uni_char)
 		LLUI::reportBadKeystroke();
 	}
 
+	autoCorrectText();
+
 	getWindow()->hideCursorUntilMouseMove();
 }
 
@@ -859,6 +1040,13 @@ void LLLineEditor::extendSelection( S32 new_cursor_pos )
 		startSelection();
 	}
 	
+	S32 left_pos = llmin( mSelectionStart, new_cursor_pos );
+	S32 selection_length = llabs( mSelectionStart - new_cursor_pos );
+	const LLWString& selection = mText.getWString().substr(left_pos, selection_length);
+
+	if (!prevalidateInput(selection))
+		return;
+
 	setCursor(new_cursor_pos);
 	mSelectionEnd = getCursor();
 }
@@ -989,8 +1177,12 @@ void LLLineEditor::deleteSelection()
 {
 	if( !mReadOnly && hasSelection() )
 	{
-		S32 left_pos = llmin( mSelectionStart, mSelectionEnd );
-		S32 selection_length = llabs( mSelectionStart - mSelectionEnd );
+		S32 left_pos, selection_length;
+		getSelectionRange(&left_pos, &selection_length);
+		const LLWString& selection = mText.getWString().substr(left_pos, selection_length);
+
+		if (!prevalidateInput(selection))
+			return;
 
 		mText.erase(left_pos, selection_length);
 		deselect();
@@ -1008,12 +1200,16 @@ void LLLineEditor::cut()
 {
 	if( canCut() )
 	{
+		S32 left_pos, length;
+		getSelectionRange(&left_pos, &length);
+		const LLWString& selection = mText.getWString().substr(left_pos, length);
+
+		if (!prevalidateInput(selection))
+			return;
+
 		// Prepare for possible rollback
 		LLLineEditorRollback rollback( this );
 
-
-		S32 left_pos = llmin( mSelectionStart, mSelectionEnd );
-		S32 length = llabs( mSelectionStart - mSelectionEnd );
 		gClipboard.copyFromSubstring( mText.getWString(), left_pos, length );
 		deleteSelection();
 
@@ -1093,6 +1289,9 @@ void LLLineEditor::pasteHelper(bool is_primary)
 
 		if (!paste.empty())
 		{
+			if (!prevalidateInput(paste))
+				return;
+
 			// Prepare for possible rollback
 			LLLineEditorRollback rollback(this);
 			
@@ -1418,6 +1617,13 @@ BOOL LLLineEditor::handleKeyHere(KEY key, MASK mask )
 				{
 					mKeystrokeCallback(this);
 				}
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-24 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+				// We're only interested in the backspace key
+				if ( (!selection_modified) && (KEY_BACKSPACE == key) )
+				{
+					mSpellCheckTimer.setTimerExpirySec(SPELLCHECK_DELAY);
+				}
+// [/SL:KB]
 			}
 		}
 	}
@@ -1440,6 +1646,13 @@ BOOL LLLineEditor::handleUnicodeCharHere(llwchar uni_char)
 		handled = TRUE;
 
 		LLLineEditorRollback rollback( this );
+
+		{
+			LLWString u_char;
+			u_char.assign(1, uni_char);
+			if (!prevalidateInput(u_char))
+				return handled;
+		}
 
 		addChar(uni_char);
 
@@ -1468,6 +1681,9 @@ BOOL LLLineEditor::handleUnicodeCharHere(llwchar uni_char)
 				// We'll have to do something about this if something ever changes! - Doug
 				mKeystrokeCallback( this );
 			}
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-24 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+			mSpellCheckTimer.setTimerExpirySec(SPELLCHECK_DELAY);
+// [/SL:KB]
 		}
 	}
 	return handled;
@@ -1492,6 +1708,15 @@ void LLLineEditor::doDelete()
 		}
 		else if ( getCursor() < mText.length())
 		{	
+			const LLWString& text_to_delete = mText.getWString().substr(getCursor(), 1);
+
+			if (!prevalidateInput(text_to_delete))
+			{
+				if( mKeystrokeCallback )
+					mKeystrokeCallback( this );
+
+				return;
+			}
 			setCursor(getCursor() + 1);
 			removeChar();
 		}
@@ -1509,6 +1734,9 @@ void LLLineEditor::doDelete()
 			{
 				mKeystrokeCallback( this );
 			}
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-24 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+			mSpellCheckTimer.setTimerExpirySec(SPELLCHECK_DELAY);
+// [/SL:KB]
 		}
 	}
 }
@@ -1530,6 +1758,8 @@ void LLLineEditor::drawBackground()
 	{
 		image = mBgImage;
 	}
+
+	if (!image) return;
 	
 	F32 alpha = getCurrentTransparency();
 
@@ -1703,7 +1933,10 @@ void LLLineEditor::draw()
 		if( (rendered_pixels_right < (F32)mTextRightEdge) && (rendered_text < text_len) )
 		{
 			// unselected, right side
-			mGLFont->render( 
+//			mGLFont->render( 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
+			rendered_text += mGLFont->render( 
+// [/SL:KB]
 				mText, mScrollHPos + rendered_text,
 				rendered_pixels_right, text_bottom,
 				text_color,
@@ -1717,7 +1950,10 @@ void LLLineEditor::draw()
 	}
 	else
 	{
-		mGLFont->render( 
+//		mGLFont->render( 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
+		rendered_text = mGLFont->render( 
+// [/SL:KB]
 			mText, mScrollHPos, 
 			rendered_pixels_right, text_bottom,
 			text_color,
@@ -1731,6 +1967,85 @@ void LLLineEditor::draw()
 #if 1 // for when we're ready for image art.
 	mBorder->setVisible(FALSE); // no more programmatic art.
 #endif
+
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
+	if ( (useSpellCheck()) && (mText.length() > 2) )
+	{
+		// Calculate start and end (character) indices for the first and last visible word
+		U32 idxStart = prevWordPos(mScrollHPos); static U32 idxPrevStart = -1;
+		U32 idxEnd = nextWordPos(mScrollHPos + rendered_text); static U32 idxPrevEnd = -1;
+
+		// Perform spell check if needed
+		if ( (mNeedsSpellCheck) || (idxStart != idxPrevStart) || (idxEnd != idxPrevEnd) )
+		{
+			const LLWString& wstrText = mText.getWString().substr(idxStart, idxEnd);
+
+			// Find the start of the first word
+			U32 idxWordStart = 0, idxWordEnd = 0;
+			while ( (idxWordStart < wstrText.length()) && (!LLStringOps::isAlpha(wstrText[idxWordStart])) )
+				idxWordStart++;
+			// Iterate over all words in the text block and check them one by one
+			mMisspellRanges.clear();
+			while (idxWordStart < wstrText.length())
+			{
+				// Find the end of the current word (special case handling for "'" when it's used as a contraction)
+				idxWordEnd = idxWordStart + 1;
+				while ( (idxWordEnd < wstrText.length()) && 
+					    ((LLWStringUtil::isPartOfWord(wstrText[idxWordEnd])) ||
+						 ((L'\'' == wstrText[idxWordEnd]) && 
+						  (LLStringOps::isAlnum(wstrText[idxWordEnd - 1])) && (LLStringOps::isAlnum(wstrText[idxWordEnd + 1])))) )
+				{
+					idxWordEnd++;
+				}
+				if (idxWordEnd > wstrText.length())
+					break;
+
+				// Don't process words shorter than 3 characters
+				std::string strWord = wstring_to_utf8str(wstrText.substr(idxWordStart, idxWordEnd - idxWordStart));
+				if ( (strWord.length() >= 3) && (!LLHunspellWrapper::instance().checkSpelling(strWord)) )
+					mMisspellRanges.push_back(std::pair<U32, U32>(idxStart + idxWordStart, idxStart + idxWordEnd));
+
+				// Find the start of the next word
+				idxWordStart = idxWordEnd + 1;
+				while ( (idxWordStart < wstrText.length()) && (!LLWStringUtil::isPartOfWord(wstrText[idxWordStart])) )
+					idxWordStart++;
+			}
+
+			idxPrevStart = idxStart;
+			idxPrevEnd = idxEnd;
+			mNeedsSpellCheck = FALSE;
+		}
+
+		// Draw squiggly lines under any (visible) misspelled words
+		for (std::list<std::pair<U32, U32> >::const_iterator itMisspell = mMisspellRanges.begin(); 
+				itMisspell != mMisspellRanges.end(); ++itMisspell)
+		{
+			// Skip over words that aren't (partially) visible
+			if ( ((itMisspell->first < idxStart) && (itMisspell->second < idxStart)) || (itMisspell->first > idxEnd) )
+				continue;
+
+			// Skip the current word if the user is still busy editing it
+			if ( (!mSpellCheckTimer.hasExpired()) && (itMisspell->first <= (U32)mCursorPos) && (itMisspell->second >= (U32)mCursorPos) )
+ 				continue;
+
+			S32 pxWidth = getRect().getWidth();
+			S32 pxStart = findPixelNearestPos(itMisspell->first - getCursor());
+			if (pxStart > pxWidth)
+				continue;
+			S32 pxEnd = findPixelNearestPos(itMisspell->second - getCursor());
+			if (pxEnd > pxWidth)
+				pxEnd = pxWidth;
+
+			gGL.color4ub(255, 0, 0, 200);
+			while (pxStart < pxEnd)
+			{
+				gl_line_2d(pxStart, text_bottom - 2, pxStart + 3, text_bottom + 1);
+				gl_line_2d(pxStart + 3, text_bottom + 1, pxStart + 6, text_bottom - 2);
+				pxStart += 6;
+			}
+		}
+	}
+// [/SL:KB]
 
 	// If we're editing...
 	if( hasFocus())
@@ -1837,6 +2152,27 @@ S32 LLLineEditor::findPixelNearestPos(const S32 cursor_offset) const
 	return result;
 }
 
+S32 LLLineEditor::calcCursorPos(S32 mouse_x)
+{
+	const llwchar* wtext = mText.getWString().c_str();
+	LLWString asterix_text;
+	if (mDrawAsterixes)
+	{
+		for (S32 i = 0; i < mText.length(); i++)
+		{
+			asterix_text += utf8str_to_wstring(PASSWORD_ASTERISK);
+		}
+		wtext = asterix_text.c_str();
+	}
+
+	S32 cur_pos = mScrollHPos +
+			mGLFont->charFromPixelOffset(
+				wtext, mScrollHPos,
+				(F32)(mouse_x - mTextLeftEdge),
+				(F32)(mTextRightEdge - mTextLeftEdge + 1)); // min-max range is inclusive
+
+	return cur_pos;
+}
 //virtual
 void LLLineEditor::clear()
 {
@@ -1930,6 +2266,22 @@ void LLLineEditor::setPrevalidate(LLTextValidate::validate_func_t func)
 	updateAllowingLanguageInput();
 }
 
+void LLLineEditor::setPrevalidateInput(LLTextValidate::validate_func_t func)
+{
+	mPrevalidateInputFunc = func;
+	updateAllowingLanguageInput();
+}
+
+bool LLLineEditor::prevalidateInput(const LLWString& wstr)
+{
+	if (mPrevalidateInputFunc && !mPrevalidateInputFunc(wstr))
+	{
+		return false;
+	}
+
+	return true;
+}
+
 // static
 BOOL LLLineEditor::postvalidateFloat(const std::string &str)
 {
@@ -1985,6 +2337,32 @@ BOOL LLLineEditor::postvalidateFloat(const std::string &str)
 
 	// Gotta have at least one
 	success = has_digit;
+
+	return success;
+}
+
+BOOL LLLineEditor::evaluateFloat()
+{
+	bool success;
+	F32 result = 0.f;
+	std::string expr = getText();
+	LLStringUtil::toUpper(expr);
+
+	success = LLCalc::getInstance()->evalString(expr, result);
+
+	if (!success)
+	{
+		// Move the cursor to near the error on failure
+		setCursor(LLCalc::getInstance()->getLastErrorPos());
+		// *TODO: Translated error message indicating the type of error? Select error text?
+	}
+	else
+	{
+		// Replace the expression with the result
+		std::string result_str = llformat("%f",result);
+		setText(result_str);
+		selectAll();
+	}
 
 	return success;
 }
@@ -2126,6 +2504,9 @@ void LLLineEditor::updatePreedit(const LLWString &preedit_string,
 	{
 		mKeystrokeCallback( this );
 	}
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-24 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+	mSpellCheckTimer.setTimerExpirySec(SPELLCHECK_DELAY);
+// [/SL:KB]
 }
 
 BOOL LLLineEditor::getPreeditLocation(S32 query_offset, LLCoordGL *coord, LLRect *bounds, LLRect *control) const
@@ -2277,6 +2658,32 @@ void LLLineEditor::showContextMenu(S32 x, S32 y)
 
 		S32 screen_x, screen_y;
 		localPointToScreen(x, y, &screen_x, &screen_y);
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-21 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
+		// Move the cursor to where the user right-clicked (clear the current selection if the user right-clicked outside of it)
+		setCursorAtLocalPos(x);
+		if ( (mCursorPos < llmin(mSelectionStart, mSelectionEnd)) || (mCursorPos > llmax(mSelectionStart, mSelectionEnd)) )
+			deselect();
+		else
+			setCursor(llmax(mSelectionStart, mSelectionEnd));
+
+		bool fUseSpellCheck = useSpellCheck(), fMisspelledWord = false;
+		if (fUseSpellCheck)
+		{
+			mSuggestionList.clear();
+
+			// If the cursor is on a misspelled word, retrieve suggestions for it
+			std::string strMisspelledWord = getMisspelledWord(mCursorPos);
+			if ((fMisspelledWord = !strMisspelledWord.empty()) == true)
+				LLHunspellWrapper::instance().getSuggestions(strMisspelledWord, mSuggestionList);
+		}
+
+		// Show/hide spell checking related menu items
+		menu->setItemVisible("Suggestion Separator", (fUseSpellCheck) && (!mSuggestionList.empty()));
+		menu->setItemVisible("Add to Dictionary", (fUseSpellCheck) && (fMisspelledWord));
+		menu->setItemVisible("Add to Ignore", (fUseSpellCheck) && (fMisspelledWord));
+		menu->setItemVisible("Spellcheck Separator", (fUseSpellCheck) && (fMisspelledWord));
+		menu->setSpawningView(getHandle());
+// [/SL:KB]
 		menu->show(screen_x, screen_y);
 	}
 }
@@ -2287,4 +2694,9 @@ void LLLineEditor::setContextMenu(LLContextMenu* new_context_menu)
 		mContextMenuHandle = new_context_menu->getHandle();
 	else
 		mContextMenuHandle.markDead();
+}
+
+void LLLineEditor::setFont(const LLFontGL* font)
+{
+	mGLFont = font;
 }

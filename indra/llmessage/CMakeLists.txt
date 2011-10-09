@@ -10,7 +10,9 @@ include(LLMath)
 include(LLMessage)
 include(LLVFS)
 include(LLAddBuildTest)
+include(Python)
 include(Tut)
+include(Python)
 
 include_directories (${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -63,6 +65,7 @@ set(llmessage_SOURCE_FILES
     llpacketbuffer.cpp
     llpacketring.cpp
     llpartdata.cpp
+    llproxy.cpp
     llpumpio.cpp
     llregionpresenceverifier.cpp
     llsdappservices.cpp
@@ -159,6 +162,7 @@ set(llmessage_HEADER_FILES
     llpacketring.h
     llpartdata.h
     llpumpio.h
+    llproxy.h
     llqueryflags.h
     llregionflags.h
     llregionhandle.h

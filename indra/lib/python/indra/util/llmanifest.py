@@ -78,7 +78,7 @@ def get_default_platform(dummy):
 
 def get_default_version(srctree):
     # look up llversion.h and parse out the version info
-    paths = [os.path.join(srctree, x, 'llversionviewer.cpp') for x in ['llcommon', '../llcommon', '../../indra/llcommon.h']]
+    paths = [os.path.join(srctree, x, 'llversionviewer.h') for x in ['llcommon', '../llcommon', '../../indra/llcommon.h']]
     for p in paths:
         if os.path.exists(p):
             contents = open(p, 'r').read()

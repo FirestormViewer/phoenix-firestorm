@@ -43,6 +43,10 @@
 #include "message.h"
 
 // newview includes
+#include "aoengine.h"			// ## Zi: Animation Overrider
+//-TT Client LSL Bridge
+#include "fslslbridge.h"		
+//-TT
 #include "llappearancemgr.h"
 #include "llappviewer.h"
 //#include "llfirstuse.h"
@@ -80,6 +84,10 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llwearablelist.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 BOOL LLInventoryState::sWearNewClothing = FALSE;
 LLUUID LLInventoryState::sWearNewClothingTransactionID;
@@ -112,6 +120,17 @@ void change_item_parent(LLInventoryModel* model,
 {
 	if (item->getParentUUID() != new_parent_id)
 	{
+		// ## Zi: Animation Overrider
+		if(model->isObjectDescendentOf(item->getUUID(),AOEngine::instance().getAOFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+			return;
+		// ## Zi: Animation Overrider
+//-TT Client LSL Bridge
+		if(model->isObjectDescendentOf(item->getUUID(),FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+			return;
+//-TT
+
 		LLInventoryModel::update_list_t update;
 		LLInventoryModel::LLCategoryUpdate old_folder(item->getParentUUID(),-1);
 		update.push_back(old_folder);
@@ -142,6 +161,17 @@ void change_category_parent(LLInventoryModel* model,
 	{
 		return;
 	}
+
+	// ## Zi: Animation Overrider
+	if((model->isObjectDescendentOf(cat->getUUID(),AOEngine::instance().getAOFolder())
+		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+//-TT Client LSL Bridge
+		|| (model->isObjectDescendentOf(cat->getUUID(),FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+//-TT
+		)
+		return;
+	// ## Zi: Animation Overrider
 
 	LLInventoryModel::update_list_t update;
 	LLInventoryModel::LLCategoryUpdate old_folder(cat->getParentUUID(), -1);
@@ -322,6 +352,17 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 		return FALSE;
 	}
 
+	// ## Zi: Animation Overrider
+	if((model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder())
+		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+//-TT Client LSL Bridge
+		|| (model->isObjectDescendentOf(id,FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		)
+//-TT
+		return FALSE;
+	// ## Zi: Animation Overrider
+
 	// Disable delete from COF folder; have users explicitly choose "detach/take off",
 	// unless the item is not worn but in the COF (i.e. is bugged).
 	if (LLAppearanceMgr::instance().getIsProtectedCOFItem(id))
@@ -331,6 +372,14 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 			return FALSE;
 		}
 	}
+
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+	if ( (rlv_handler_t::isEnabled()) && 
+		 (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) && (!RlvFolderLocks::instance().canRemoveItem(id)) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
 
 	const LLInventoryObject *obj = model->getItem(id);
 	if (obj && obj->getIsLinkType())
@@ -359,6 +408,25 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 	{
 		return FALSE;
 	}
+
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+	if ( ((rlv_handler_t::isEnabled()) && 
+		 (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) && (!RlvFolderLocks::instance().canRemoveFolder(id))) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
+
+	// ## Zi: Animation Overrider
+	if(((id==AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder()))
+		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+//-TT Client LSL Bridge
+		|| (id==FSLSLBridge::instance().getBridgeFolder() || model->isObjectDescendentOf(id,FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		)
+//-TT
+		return FALSE;
+	// ## Zi: Animation Overrider
 
 	if (!isAgentAvatarValid()) return FALSE;
 
@@ -394,6 +462,24 @@ BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 	{
 		return FALSE;
 	}
+
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+	if ( (rlv_handler_t::isEnabled()) && (model == &gInventory) && (!RlvFolderLocks::instance().canRenameFolder(id)) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
+
+	// ## Zi: Animation Overrider
+	if(((id==AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder()))
+		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+//-TT Client LSL Bridge
+		|| (id==FSLSLBridge::instance().getBridgeFolder() || model->isObjectDescendentOf(id,FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		)
+//-TT
+		return FALSE;
+	// ## Zi: Animation Overrider
 
 	LLViewerInventoryCategory* cat = model->getCategory(id);
 
@@ -484,9 +570,6 @@ bool LLInventoryCollectFunctor::itemTransferCommonlyAllowed(const LLInventoryIte
 
 	switch(item->getType())
 	{
-		case LLAssetType::AT_CALLINGCARD:
-			return false;
-			break;
 		case LLAssetType::AT_OBJECT:
 		case LLAssetType::AT_BODYPART:
 		case LLAssetType::AT_CLOTHING:
@@ -687,6 +770,12 @@ bool LLFindWearablesEx::operator()(LLInventoryCategory* cat, LLInventoryItem* it
 		return false;
 	}
 
+	// Skip broken links.
+	if (vitem->getIsBrokenLink())
+	{
+		return false;
+	}
+
 	return (bool) get_is_item_worn(item->getUUID()) == mIsWorn;
 }
 
@@ -851,3 +940,4 @@ void LLOpenFoldersWithSelection::doFolder(LLFolderViewFolder* folder)
 		folder->getParentFolder()->setOpenArrangeRecursively(TRUE, LLFolderViewFolder::RECURSE_UP);
 	}
 }
+

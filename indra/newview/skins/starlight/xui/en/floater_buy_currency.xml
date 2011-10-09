@@ -20,6 +20,7 @@
      left="0"
      name="normal_background"
      top="17"
+	 use_draw_context_alpha="false"
      width="350" />
    <text
      type="string"
@@ -246,10 +247,10 @@ Re-enter amount to see the latest exchange rate.
      follows="top|left"
      layout="topleft"
      halign="right"
-     top="213"
+     top="208"
      left="10"
      width="310"
-     height="30"
+     height="35"
      name="purchase_warning_repurchase">
         Confirming this purchase only buys L$, not the object.
     </text>
@@ -292,12 +293,13 @@ Re-enter amount to see the latest exchange rate.
      left="0"
      name="error_background"
      top="15"
+	 use_draw_context_alpha="false"
      width="350"/>
     <text
      type="string"
      font="SansSerifHuge"
      left="165"
-     width="170"
+     width="360"
      height="25"
      top="25"
      name="info_cannot_buy">

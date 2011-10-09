@@ -30,6 +30,7 @@
 #include "lltexteditor.h"
 #include "lltextbox.h"
 #include "llviewerchat.h"
+#include "llavatarname.h"
 
 //Chat log widget allowing addition of a message as a widget 
 class LLChatHistory : public LLUICtrl
@@ -94,7 +95,9 @@ class LLChatHistory : public LLUICtrl
 		 * Builds a message header.
 		 * @return pointer to LLView header object.
 		 */
-		LLView* getHeader(const LLChat& chat,const LLStyle::Params& style_params);
+
+		void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+		LLView* getHeader(const LLChat& chat,const LLStyle::Params& style_params, const LLSD& args);
 
 		void onClickMoreText();
 
@@ -116,7 +119,10 @@ class LLChatHistory : public LLUICtrl
 		 */
 		void appendMessage(const LLChat& chat, const LLSD &args = LLSD(), const LLStyle::Params& input_append_params = LLStyle::Params());
 		/*virtual*/ void clear();
-
+//-TT Display names timing in chat
+		void lookupDisplayNames(const LLChat& chat);
+		bool checkDisplayName();
+//-TT
 	private:
 		std::string mLastFromName;
 		LLUUID mLastFromID;
@@ -137,6 +143,9 @@ class LLChatHistory : public LLUICtrl
 		S32 mBottomSeparatorPad;
 		S32 mTopHeaderPad;
 		S32 mBottomHeaderPad;
+	
+		std::string mDisplayName;
+		std::string mDisplayName_Username;
 
 		class LLLayoutPanel*	mMoreChatPanel;
 		LLTextBox*		mMoreChatText;

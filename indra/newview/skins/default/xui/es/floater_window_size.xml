@@ -7,10 +7,7 @@
 		Definir el tamaño de la ventana:
 	</text>
 	<combo_box name="window_size_combo" tool_tip="ancho x alto">
-		<combo_box.item label="1000 x 700 (por defecto)" name="item0"/>
-		<combo_box.item label="1024 x 768" name="item1"/>
-		<combo_box.item label="1280 x 720 (720 p)" name="item2"/>
-		<combo_box.item label="1920 x 1080 (1080 p)" name="item3"/>
+		<combo_box.item label="1000 x 700 (por defecto)" name="item1"/>
 	</combo_box>
 	<button label="Configurar" name="set_btn"/>
 	<button label="Cancelar" name="cancel_btn"/>

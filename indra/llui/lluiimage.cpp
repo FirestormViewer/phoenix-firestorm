@@ -155,32 +155,32 @@ void LLUIImage::onImageLoaded()
 
 namespace LLInitParam
 {
-	void TypedParam<LLUIImage*>::setValueFromBlock() const
+	void ParamValue<LLUIImage*, TypeValues<LLUIImage*> >::updateValueFromBlock()
 	{
 		// The keyword "none" is specifically requesting a null image
 		// do not default to current value. Used to overwrite template images. 
 		if (name() == "none")
 		{
-			mData.mValue = NULL;
+			updateValue(NULL);
 			return;
 		}
 
 		LLUIImage* imagep =  LLUI::getUIImage(name());
 		if (imagep)
 		{
-			mData.mValue = imagep;
+			updateValue(imagep);
 		}
 	}
 	
-	void TypedParam<LLUIImage*>::setBlockFromValue()
+	void ParamValue<LLUIImage*, TypeValues<LLUIImage*> >::updateBlockFromValue(bool make_block_authoritative)
 	{
-		if (mData.mValue == NULL)
+		if (getValue() == NULL)
 		{
-			name.set("none", false);
+			name.set("none", make_block_authoritative);
 		}
 		else
 		{
-			name.set(mData.mValue->getName(), false);
+			name.set(getValue()->getName(), make_block_authoritative);
 		}
 	}
 

@@ -15,7 +15,8 @@
 		<combo_box.item label="Polski (Polonais) - Bêta" name="Polish"/>
 		<combo_box.item label="Português (Portugais) - Bêta" name="Portugese"/>
 		<combo_box.item label="日本語 (Japonais) - Bêta" name="(Japanese)"/>
-	</combo_box>
+    <combo_box.item label="Русский (Russe) - Beta v2.0" name="Russian" />
+  </combo_box>
 	<text name="language_textbox2">
 		(redémarrage requis)
 	</text>

@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <floater
- height="600"
+ height="500"
  layout="topleft"
- min_height="350"
- width="343"
+ min_height="520"
+ width="470"
  can_close="true"
- can_resize="true">
+ can_resize="true"
+ min_width="470">
     <panel
      background_visible="false"
      top="5"
-     height="590"
+     height="493"
+     right="-10"
      left="5"
      class="panel_group_info_sidetray"
      name="panel_group_info_sidetray"

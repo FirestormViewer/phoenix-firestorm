@@ -54,7 +54,6 @@
 #include "llviewerobject.h"
 #include "llviewerobjectlist.h" 
 #include "llviewerregion.h"
-#include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llworld.h"
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e)
@@ -394,22 +393,7 @@ void LLToolGrab::startGrab()
 	mDragStartPointGlobal = grab_start_global;
 	mDragStartFromCamera = grab_start_global - gAgentCamera.getCameraPositionGlobal();
 
-	LLMessageSystem	*msg = gMessageSystem;
-	msg->newMessageFast(_PREHASH_ObjectGrab);
-	msg->nextBlockFast(_PREHASH_AgentData);
-	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-	msg->nextBlockFast(_PREHASH_ObjectData);
-	msg->addU32Fast(_PREHASH_LocalID, objectp->mLocalID);
-	msg->addVector3Fast(_PREHASH_GrabOffset, grab_offset );
-	msg->nextBlock("SurfaceInfo");
-	msg->addVector3("UVCoord", LLVector3(mGrabPick.mUVCoords));
-	msg->addVector3("STCoord", LLVector3(mGrabPick.mSTCoords));
-	msg->addS32Fast(_PREHASH_FaceIndex, mGrabPick.mObjectFace);
-	msg->addVector3("Position", mGrabPick.mIntersection);
-	msg->addVector3("Normal", mGrabPick.mNormal);
-	msg->addVector3("Binormal", mGrabPick.mBinormal);
-	msg->sendMessage( objectp->getRegion()->getHost());
+	send_ObjectGrab_message(objectp, mGrabPick, grab_offset);
 
 	mGrabOffsetFromCenterInitial = grab_offset;
 	mGrabHiddenOffsetFromCamera = mDragStartFromCamera;
@@ -643,11 +627,16 @@ void LLToolGrab::handleHoverActive(S32 x, S32 y, MASK mask)
 			}
 
 			// For safety, cap heights where objects can be dragged
-			if (grab_point_global.mdV[VZ] > MAX_OBJECT_Z)
+// <AW: opensim-limits>
+// 			if (grab_point_global.mdV[VZ] > MAX_OBJECT_Z)
+//  			{
+// 				grab_point_global.mdV[VZ] = MAX_OBJECT_Z;
+//  			}
+			if (grab_point_global.mdV[VZ] > LLWorld::getInstance()->getRegionMaxHeight())
 			{
-				grab_point_global.mdV[VZ] = MAX_OBJECT_Z;
+				grab_point_global.mdV[VZ] = LLWorld::getInstance()->getRegionMaxHeight();
 			}
-
+// </AW: opensim-limits>
 			grab_point_global = LLWorld::getInstance()->clipToVisibleRegions(mDragStartPointGlobal, grab_point_global);
 			// propagate constrained grab point back to grab offset
 			mGrabHiddenOffsetFromCamera = grab_point_global - gAgentCamera.getCameraPositionGlobal();
@@ -1059,28 +1048,12 @@ void LLToolGrab::stopGrab()
 	}
 
 	// Next, send messages to simulator
-	LLMessageSystem *msg = gMessageSystem;
 	switch(mMode)
 	{
 	case GRAB_ACTIVE_CENTER:
 	case GRAB_NONPHYSICAL:
 	case GRAB_LOCKED:
-		msg->newMessageFast(_PREHASH_ObjectDeGrab);
-		msg->nextBlockFast(_PREHASH_AgentData);
-		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-		msg->nextBlockFast(_PREHASH_ObjectData);
-		msg->addU32Fast(_PREHASH_LocalID, objectp->mLocalID);
-		msg->nextBlock("SurfaceInfo");
-		msg->addVector3("UVCoord", LLVector3(pick.mUVCoords));
-		msg->addVector3("STCoord", LLVector3(pick.mSTCoords));
-		msg->addS32Fast(_PREHASH_FaceIndex, pick.mObjectFace);
-		msg->addVector3("Position", pick.mIntersection);
-		msg->addVector3("Normal", pick.mNormal);
-		msg->addVector3("Binormal", pick.mBinormal);
-
-		msg->sendMessage(objectp->getRegion()->getHost());
-
+		send_ObjectDeGrab_message(objectp, pick);
 		mVerticalDragging = FALSE;
 		break;
 
@@ -1132,3 +1105,66 @@ LLVector3d LLToolGrab::getGrabPointGlobal()
 		return gAgent.getPositionGlobal();
 	}
 }
+
+
+void send_ObjectGrab_message(LLViewerObject* object, const LLPickInfo & pick, const LLVector3 &grab_offset)
+{
+	if (!object) return;
+
+	LLMessageSystem	*msg = gMessageSystem;
+
+	msg->newMessageFast(_PREHASH_ObjectGrab);
+	msg->nextBlockFast( _PREHASH_AgentData);
+	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	msg->nextBlockFast( _PREHASH_ObjectData);
+	msg->addU32Fast(    _PREHASH_LocalID, object->mLocalID);
+	msg->addVector3Fast(_PREHASH_GrabOffset, grab_offset);
+	msg->nextBlock("SurfaceInfo");
+	msg->addVector3("UVCoord", LLVector3(pick.mUVCoords));
+	msg->addVector3("STCoord", LLVector3(pick.mSTCoords));
+	msg->addS32Fast(_PREHASH_FaceIndex, pick.mObjectFace);
+	msg->addVector3("Position", pick.mIntersection);
+	msg->addVector3("Normal", pick.mNormal);
+	msg->addVector3("Binormal", pick.mBinormal);
+	msg->sendMessage( object->getRegion()->getHost());
+
+	/*  Diagnostic code
+	llinfos << "mUVCoords: " << pick.mUVCoords
+			<< ", mSTCoords: " << pick.mSTCoords
+			<< ", mObjectFace: " << pick.mObjectFace
+			<< ", mIntersection: " << pick.mIntersection
+			<< ", mNormal: " << pick.mNormal
+			<< ", mBinormal: " << pick.mBinormal
+			<< llendl;
+
+	llinfos << "Avatar pos: " << gAgent.getPositionAgent() << llendl;
+	llinfos << "Object pos: " << object->getPosition() << llendl;
+	*/
+}
+
+
+void send_ObjectDeGrab_message(LLViewerObject* object, const LLPickInfo & pick)
+{
+	if (!object) return;
+
+	LLMessageSystem	*msg = gMessageSystem;
+
+	msg->newMessageFast(_PREHASH_ObjectDeGrab);
+	msg->nextBlockFast(_PREHASH_AgentData);
+	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	msg->nextBlockFast(_PREHASH_ObjectData);
+	msg->addU32Fast(_PREHASH_LocalID, object->mLocalID);
+	msg->nextBlock("SurfaceInfo");
+	msg->addVector3("UVCoord", LLVector3(pick.mUVCoords));
+	msg->addVector3("STCoord", LLVector3(pick.mSTCoords));
+	msg->addS32Fast(_PREHASH_FaceIndex, pick.mObjectFace);
+	msg->addVector3("Position", pick.mIntersection);
+	msg->addVector3("Normal", pick.mNormal);
+	msg->addVector3("Binormal", pick.mBinormal);
+	msg->sendMessage(object->getRegion()->getHost());
+}
+
+
+

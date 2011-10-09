@@ -32,6 +32,7 @@
 #include "llcoord.h"
 //#include "llgl.h"
 
+#include "llagent.h"
 #include "llagentcamera.h"
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
@@ -85,6 +86,9 @@
 #include "llvovolume.h"
 #include "lluictrlfactory.h"
 #include "qtoolalign.h"
+#include "llselectmgr.h"
+#include "llaccountingquotamanager.h"
+#include "llmeshrepository.h"
 
 // Globals
 LLFloaterTools *gFloaterTools = NULL;
@@ -99,9 +103,10 @@ const std::string PANEL_NAMES[LLFloaterTools::PANEL_COUNT] =
 	std::string("Content"),	// PANEL_CONTENTS,
 };
 
+
 // Local prototypes
 void commit_select_component(void *data);
-void click_show_more(void*);
+//void click_show_more(void*);
 void click_popup_info(void*);
 void click_popup_done(void*);
 void click_popup_minimize(void*);
@@ -221,6 +226,8 @@ BOOL	LLFloaterTools::postBuild()
 	mRadioGroupEdit		= getChild<LLRadioGroup>("edit_radio_group");
 	mBtnGridOptions		= getChild<LLButton>("Options...");
 	mTitleMedia			= getChild<LLMediaCtrl>("title_media");
+	mBtnLink			= getChild<LLButton>("link_btn");
+	mBtnUnlink			= getChild<LLButton>("unlink_btn");
 	
 	mCheckSelectIndividual	= getChild<LLCheckBoxCtrl>("checkbox edit linked parts");	
 	getChild<LLUICtrl>("checkbox edit linked parts")->setValue((BOOL)gSavedSettings.getBOOL("EditLinkedParts"));
@@ -229,9 +236,19 @@ BOOL	LLFloaterTools::postBuild()
 	mCheckStretchUniform	= getChild<LLCheckBoxCtrl>("checkbox uniform");
 	getChild<LLUICtrl>("checkbox uniform")->setValue((BOOL)gSavedSettings.getBOOL("ScaleUniform"));
 	mCheckStretchTexture	= getChild<LLCheckBoxCtrl>("checkbox stretch textures");
-	getChild<LLUICtrl>("checkbox stretch textures")->setValue((BOOL)gSavedSettings.getBOOL("ScaleStretchTextures"));
 	mComboGridMode			= getChild<LLComboBox>("combobox grid mode");
-	mCheckStretchUniformLabel = getChild<LLTextBox>("checkbox uniform label");
+
+	getChild<LLUICtrl>("checkbox stretch textures")->setValue((BOOL)gSavedSettings.getBOOL("ScaleStretchTextures"));
+
+	//Phoenix:KC show highlight
+	mCheckShowHighlight = getChild<LLCheckBoxCtrl>("checkbox show highlight");
+	mOrginalShowHighlight = gSavedSettings.getBOOL("RenderHighlightSelections");
+	mCheckShowHighlight->setValue(mOrginalShowHighlight);
+
+	mCheckActualRoot = getChild<LLCheckBoxCtrl>("checkbox actual root");
+
+	//mCheckStretchUniformLabel = getChild<LLTextBox>("checkbox uniform label");
+
 
 	//
 	// Create Buttons
@@ -265,11 +282,13 @@ BOOL	LLFloaterTools::postBuild()
 	// the setting stores the actual force multiplier, but the slider is logarithmic, so we convert here
 	getChild<LLUICtrl>("slider force")->setValue(log10(gSavedSettings.getF32("LandBrushForce")));
 
+	mCostTextBorder = getChild<LLViewBorder>("cost_text_border");
+
 	mTab = getChild<LLTabContainer>("Object Info Tabs");
 	if(mTab)
 	{
-		mTab->setFollows(FOLLOWS_TOP | FOLLOWS_LEFT);
-		mTab->setBorderVisible(FALSE);
+		//mTab->setFollows(FOLLOWS_TOP | FOLLOWS_LEFT);
+		//mTab->setBorderVisible(FALSE);
 		mTab->selectFirstTab();
 	}
 
@@ -284,6 +303,22 @@ BOOL	LLFloaterTools::postBuild()
 
 	sShowObjectCost = gSavedSettings.getBOOL("ShowObjectRenderingCost");
 	
+	//Phoenix:KC - added back more/less button
+	LLButton* btnExpand = getChild<LLButton>("btnExpand");
+	if (btnExpand)
+	{
+		mExpandedHeight = getRect().getHeight();
+		if (mTab) mCollapsedHeight = mExpandedHeight - mTab->getRect().getHeight() + btnExpand->getRect().getHeight();
+		if(!gSavedSettings.getBOOL("PhoenixToolboxExpanded"))
+		{
+			btnExpand->setImageOverlay("Arrow_Down", btnExpand->getImageOverlayHAlign());
+		}
+	}
+	else
+	{
+		gSavedSettings.setBOOL("PhoenixToolboxExpanded", TRUE);
+	}
+
 	return TRUE;
 }
 
@@ -310,11 +345,15 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mComboGridMode(NULL),
 	mCheckStretchUniform(NULL),
 	mCheckStretchTexture(NULL),
-	mCheckStretchUniformLabel(NULL),
+	mCheckShowHighlight(NULL), //Phoenix:KC
+	mCheckActualRoot(NULL), //Phoenix:KC
 
 	mBtnRotateLeft(NULL),
 	mBtnRotateReset(NULL),
 	mBtnRotateRight(NULL),
+
+	mBtnLink(NULL),
+	mBtnUnlink(NULL),
 
 	mBtnDelete(NULL),
 	mBtnDuplicate(NULL),
@@ -337,12 +376,13 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mPanelFace(NULL),
 	mPanelLandInfo(NULL),
 
+	mCostTextBorder(NULL),
 	mTabLand(NULL),
 	mDirty(TRUE),
 	mNeedMediaTitle(TRUE)
 {
 	gFloaterTools = this;
-	
+
 	setAutoFocus(FALSE);
 	mFactoryMap["General"] = LLCallbackMap(createPanelPermissions, this);//LLPanelPermissions
 	mFactoryMap["Object"] = LLCallbackMap(createPanelObject, this);//LLPanelObject
@@ -367,6 +407,11 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mCommitCallbackRegistrar.add("BuildTool.DeleteMedia",		boost::bind(&LLFloaterTools::onClickBtnDeleteMedia,this));
 	mCommitCallbackRegistrar.add("BuildTool.EditMedia",			boost::bind(&LLFloaterTools::onClickBtnEditMedia,this));
 
+	mCommitCallbackRegistrar.add("BuildTool.LinkObjects",		boost::bind(&LLSelectMgr::linkObjects, LLSelectMgr::getInstance()));
+	mCommitCallbackRegistrar.add("BuildTool.UnlinkObjects",		boost::bind(&LLSelectMgr::unlinkObjects, LLSelectMgr::getInstance()));
+
+	mCommitCallbackRegistrar.add("BuildTool.CopyKeys",			boost::bind(&LLFloaterTools::onClickBtnCopyKeys,this));
+	mCommitCallbackRegistrar.add("BuildTool.Expand",			boost::bind(&LLFloaterTools::onClickExpand,this));
 }
 
 LLFloaterTools::~LLFloaterTools()
@@ -413,25 +458,159 @@ void LLFloaterTools::refresh()
 
 	// Refresh object and prim count labels
 	LLLocale locale(LLLocale::USER_LOCALE);
-	std::string obj_count_string;
-	LLResMgr::getInstance()->getIntegerString(obj_count_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
-	getChild<LLUICtrl>("obj_count")->setTextArg("[COUNT]", obj_count_string);	
-	std::string prim_count_string;
-	LLResMgr::getInstance()->getIntegerString(prim_count_string, LLSelectMgr::getInstance()->getSelection()->getObjectCount());
-	getChild<LLUICtrl>("prim_count")->setTextArg("[COUNT]", prim_count_string);
+	
+	//-TT 2.8.2 - from KC
+	//std::string obj_count_string;
+	//LLResMgr::getInstance()->getIntegerString(obj_count_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
+	//getChild<LLUICtrl>("obj_count")->setTextArg("[COUNT]", obj_count_string);	
 
-	// calculate selection rendering cost
-	if (sShowObjectCost)
+	std::string desc_string;
+	std::string num_string;
+	bool enable_link_count = true;
+	S32 prim_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
+	if (prim_count == 1 && LLToolMgr::getInstance()->getCurrentTool() == LLToolFace::getInstance())
 	{
-		std::string prim_cost_string;
-		LLResMgr::getInstance()->getIntegerString(prim_cost_string, calcRenderCost());
-		getChild<LLUICtrl>("RenderingCost")->setTextArg("[COUNT]", prim_cost_string);
-	}
+		desc_string = getString("selected_faces");
+		
+		LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getFirstRootObject();
+		LLSelectNode* nodep = LLSelectMgr::getInstance()->getSelection()->getFirstRootNode();
+		if(!objectp || !nodep)
+		{
+			objectp = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
+			nodep = LLSelectMgr::getInstance()->getSelection()->getFirstNode();
+		}
 
+		if (objectp && objectp->getNumTEs() == LLSelectMgr::getInstance()->getSelection()->getTECount())
+			num_string = "ALL_SIDES";
+		else if (objectp && nodep)
+		{
+			//S32 count = 0;
+			for (S32 i = 0; i < objectp->getNumTEs(); i++)
+			{
+				if (nodep->isTESelected(i))
+				{
+					if (!num_string.empty())
+						num_string.append(", ");
+					num_string.append(llformat("%d", i));
+					//count++;
+				}
+			}
+		}
+	}
+	else if (prim_count == 1 && gSavedSettings.getBOOL("EditLinkedParts"))
+	{
+		desc_string = getString("link_number");
+		LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
+		if (objectp && objectp->getRootEdit())
+		{
+			LLViewerObject::child_list_t children = objectp->getRootEdit()->getChildren();
+			if (children.empty())
+				num_string = "0"; //a childless prim is always link zero, and unhappy
+			else if (objectp->getRootEdit()->isSelected())
+				num_string = "1"; //root prim is always link one
+			else
+			{
+				S32 index = 1;
+				for (LLViewerObject::child_list_t::iterator iter = children.begin(); iter != children.end(); ++iter)
+				{
+					index++;
+					if ((*iter)->isSelected())
+					{
+						LLResMgr::getInstance()->getIntegerString(num_string, index);
+						break;
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		enable_link_count = false;
+	}
+	getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[DESC]", desc_string);
+	getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[NUM]", num_string);
+	// - KC
+	std::string prim_count_string;
+	LLResMgr::getInstance()->getIntegerString(prim_count_string, prim_count);
+	getChild<LLUICtrl>("prim_count")->setTextArg("[COUNT]", prim_count_string);
+#if 0
+	if (!gMeshRepo.meshRezEnabled())
+	{		
+		std::string obj_count_string;
+		LLResMgr::getInstance()->getIntegerString(obj_count_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
+		getChild<LLUICtrl>("selection_count")->setTextArg("[OBJ_COUNT]", obj_count_string);
+		std::string prim_count_string;
+		LLResMgr::getInstance()->getIntegerString(prim_count_string, LLSelectMgr::getInstance()->getSelection()->getObjectCount());
+		getChild<LLUICtrl>("selection_count")->setTextArg("[PRIM_COUNT]", prim_count_string);
+
+		// calculate selection rendering cost
+		if (sShowObjectCost)
+		{
+			std::string prim_cost_string;
+			LLResMgr::getInstance()->getIntegerString(prim_cost_string, calcRenderCost());
+			getChild<LLUICtrl>("RenderingCost")->setTextArg("[COUNT]", prim_cost_string);
+		}
+		
+		// disable the object and prim counts if nothing selected
+		bool have_selection = ! LLSelectMgr::getInstance()->getSelection()->isEmpty();
+		getChildView("link_num_obj_count")->setEnabled(have_selection);
+		//getChildView("obj_count")->setEnabled(have_selection);
+		getChildView("prim_count")->setEnabled(have_selection);
+		getChildView("RenderingCost")->setEnabled(have_selection && sShowObjectCost);
+	}
+	else
+#endif
+	{
+		F32 link_phys_cost  = LLSelectMgr::getInstance()->getSelection()->getSelectedLinksetPhysicsCost();
+		F32 link_cost  = LLSelectMgr::getInstance()->getSelection()->getSelectedLinksetCost();
+		S32 prim_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
+		S32 link_count = LLSelectMgr::getInstance()->getSelection()->getRootObjectCount();
+
+		LLStringUtil::format_map_t selection_args;
+		selection_args["OBJ_COUNT"] = llformat("%.1d", link_count);
+		selection_args["PRIM_COUNT"] = llformat("%.1d", prim_count);
+
+		std::ostringstream selection_info;
+
+		bool show_adv_weight = gSavedSettings.getBOOL("ShowAdvancedBuilderOptions");
+		bool show_mesh_cost = gMeshRepo.meshRezEnabled();
+
+		if (show_mesh_cost)
+		{
+			LLStringUtil::format_map_t prim_equiv_args;
+			prim_equiv_args["SEL_WEIGHT"] = llformat("%.1d", (S32)link_cost);
+			selection_args["PE_STRING"] = getString("status_selectprimequiv", prim_equiv_args);
+		}
+		else
+		{
+			selection_args["PE_STRING"] = "";
+		}
+
+		selection_info << getString("status_selectcount", selection_args);
+
+		if (show_adv_weight)
+		{
+			selection_info << ",";
+
+			childSetTextArg("selection_weight", "[PHYS_WEIGHT]", llformat("%.1f", link_phys_cost));
+			childSetTextArg("selection_weight", "[DISP_WEIGHT]", llformat("%.1d", calcRenderCost()));
+		}
+		else
+		{
+			selection_info<<".";
+		}
+		getChild<LLTextBox>("selection_count")->setText(selection_info.str());
+
+		bool have_selection = !LLSelectMgr::getInstance()->getSelection()->isEmpty();
+		childSetVisible("selection_count",  have_selection);
+		childSetVisible("selection_weight", have_selection && show_adv_weight);
+		childSetVisible("selection_empty", !have_selection);
+	}
 
 	// disable the object and prim counts if nothing selected
 	bool have_selection = ! LLSelectMgr::getInstance()->getSelection()->isEmpty();
-	getChildView("obj_count")->setEnabled(have_selection);
+	//getChildView("obj_count")->setEnabled(have_selection);
+	getChildView("link_num_obj_count")->setEnabled(have_selection && enable_link_count);
 	getChildView("prim_count")->setEnabled(have_selection);
 	getChildView("RenderingCost")->setEnabled(have_selection && sShowObjectCost);
 
@@ -565,8 +744,15 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 
 	mBtnEdit	->setToggleState( edit_visible );
 	mRadioGroupEdit->setVisible( edit_visible );
-	bool linked_parts = gSavedSettings.getBOOL("EditLinkedParts");
+	//bool linked_parts = gSavedSettings.getBOOL("EditLinkedParts");
+	static LLCachedControl<bool> linked_parts(gSavedSettings,  "EditLinkedParts");
 	getChildView("RenderingCost")->setVisible( !linked_parts && (edit_visible || focus_visible || move_visible) && sShowObjectCost);
+
+	mBtnLink->setVisible(edit_visible);
+	mBtnUnlink->setVisible(edit_visible);
+
+	mBtnLink->setEnabled(LLSelectMgr::instance().enableLinkObjects());
+	mBtnUnlink->setEnabled(LLSelectMgr::instance().enableUnlinkObjects());
 
 	if (mCheckSelectIndividual)
 	{
@@ -595,7 +781,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 		mRadioGroupEdit->setValue("radio align");
 	}
 
-	if (mComboGridMode) 
+		if (mComboGridMode) 
 	{
 		mComboGridMode->setVisible( edit_visible );
 		S32 index = mComboGridMode->getCurrentIndex();
@@ -622,6 +808,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 
 		mComboGridMode->setCurrentByIndex(index);
 	}
+
 	// Snap to grid disabled for grab tool - very confusing
 	if (mCheckSnapToGrid) mCheckSnapToGrid->setVisible( edit_visible /* || tool == LLToolGrab::getInstance() */ );
 	if (mBtnGridOptions) mBtnGridOptions->setVisible( edit_visible /* || tool == LLToolGrab::getInstance() */ );
@@ -629,7 +816,8 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	//mCheckSelectLinked	->setVisible( edit_visible );
 	if (mCheckStretchUniform) mCheckStretchUniform->setVisible( edit_visible );
 	if (mCheckStretchTexture) mCheckStretchTexture->setVisible( edit_visible );
-	if (mCheckStretchUniformLabel) mCheckStretchUniformLabel->setVisible( edit_visible );
+	if (mCheckShowHighlight) mCheckShowHighlight->setVisible( edit_visible ); //Phoenix:KC
+	if (mCheckActualRoot) mCheckActualRoot->setVisible( edit_visible ); //Phoenix:KC
 
 	// Create buttons
 	BOOL create_visible = (tool == LLToolCompCreate::getInstance());
@@ -670,6 +858,8 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	// Land buttons
 	BOOL land_visible = (tool == LLToolBrushLand::getInstance() || tool == LLToolSelectLand::getInstance() );
 
+	mCostTextBorder->setVisible(!land_visible);
+
 	if (mBtnLand)	mBtnLand	->setToggleState( land_visible );
 
 	mRadioGroupLand->setVisible( land_visible );
@@ -679,7 +869,8 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	}
 	else if ( tool == LLToolBrushLand::getInstance() )
 	{
-		S32 dozer_mode = gSavedSettings.getS32("RadioLandBrushAction");
+		//S32 dozer_mode = gSavedSettings.getS32("RadioLandBrushAction");
+		static LLCachedControl<S32> dozer_mode(gSavedSettings,  "RadioLandBrushAction");
 		switch(dozer_mode)
 		{
 		case 0:
@@ -722,10 +913,22 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 		getChildView("Strength:")->setVisible( land_visible);
 	}
 
-	getChildView("obj_count")->setVisible( !land_visible);
+	//getChildView("link_num_obj_count")->setVisible( !land_visible);
 	getChildView("prim_count")->setVisible( !land_visible);
-	mTab->setVisible(!land_visible);
-	mPanelLandInfo->setVisible(land_visible);
+
+	static LLCachedControl<bool> sPhoenixToolboxExpanded(gSavedSettings,  "PhoenixToolboxExpanded", TRUE);
+	mTab->setVisible(!land_visible && sPhoenixToolboxExpanded);
+	mPanelLandInfo->setVisible(land_visible && sPhoenixToolboxExpanded);
+
+	bool have_selection = !LLSelectMgr::getInstance()->getSelection()->isEmpty();
+
+	getChildView("selection_count")->setVisible(!land_visible && have_selection);
+	getChildView("selection_weight")->setVisible(!land_visible && have_selection && gSavedSettings.getBOOL("ShowAdvancedBuilderOptions"));
+	getChildView("selection_empty")->setVisible(!land_visible && !have_selection);
+	
+	//mTab->setVisible(!land_visible);
+	//mPanelLandInfo->setVisible(land_visible);
+
 }
 
 
@@ -742,6 +945,15 @@ void LLFloaterTools::onOpen(const LLSD& key)
 	mParcelSelection = LLViewerParcelMgr::getInstance()->getFloatingParcelSelection();
 	mObjectSelection = LLSelectMgr::getInstance()->getEditSelection();
 	
+	//Phoenix:KC - set the check box value from the saved setting
+	// this function runs on selection change
+	if (!mOpen)
+	{
+		mOpen = TRUE;
+		mOrginalShowHighlight = gSavedSettings.getBOOL("RenderHighlightSelections");
+		mCheckShowHighlight->setValue(mOrginalShowHighlight);
+	}
+
 	std::string panel = key.asString();
 	if (!panel.empty())
 	{
@@ -769,6 +981,10 @@ void LLFloaterTools::onClose(bool app_quitting)
 	// exit component selection mode
 	LLSelectMgr::getInstance()->promoteSelectionToRoot();
 	gSavedSettings.setBOOL("EditLinkedParts", FALSE);
+
+	//Reset silhouette override -KC
+	gSavedSettings.setBOOL("RenderHighlightSelections", mOrginalShowHighlight);
+	mOpen = FALSE; //hack cause onOpen runs on every selection change but onClose doesnt.
 
 	gViewerWindow->showCursor();
 
@@ -984,29 +1200,32 @@ void LLFloaterTools::onClickGridOptions()
 
 S32 LLFloaterTools::calcRenderCost()
 {
-	S32 cost = 0;
-	std::set<LLUUID> textures;
+       S32 cost = 0;
+       std::set<LLUUID> textures;
 
-	for (LLObjectSelection::iterator selection_iter = LLSelectMgr::getInstance()->getSelection()->begin();
-		  selection_iter != LLSelectMgr::getInstance()->getSelection()->end();
-		  ++selection_iter)
-	{
-		LLSelectNode *select_node = *selection_iter;
-		if (select_node)
-		{
-			LLVOVolume *viewer_volume = (LLVOVolume*)select_node->getObject();
-			if (viewer_volume)
-			{
-				cost += viewer_volume->getRenderCost(textures);
-				cost += textures.size() * LLVOVolume::ARC_TEXTURE_COST;
-				textures.clear();
-			}
-		}
-	}
+       for (LLObjectSelection::iterator selection_iter = LLSelectMgr::getInstance()->getSelection()->begin();
+                 selection_iter != LLSelectMgr::getInstance()->getSelection()->end();
+                 ++selection_iter)
+       {
+               LLSelectNode *select_node = *selection_iter;
+               if (select_node)
+               {
+                       LLViewerObject *vobj = select_node->getObject();
+                       if (vobj->getVolume())
+                       {
+                               LLVOVolume* volume = (LLVOVolume*) vobj;
+
+                               cost += volume->getRenderCost(textures);
+							   cost += textures.size() * LLVOVolume::ARC_TEXTURE_COST;
+							   textures.clear();
+                       }
+               }
+       }
 
 
-	return cost;
+       return cost;
 }
+
 
 // static
 void LLFloaterTools::setEditTool(void* tool_pointer)
@@ -1862,3 +2081,53 @@ void LLFloaterTools::updateMediaSettings()
     mMediaSettings[ base_key + std::string( LLPanelContents::TENTATIVE_SUFFIX ) ] = ! identical;
 }
 
+struct LLFloaterToolsCopyKeysFunctor : public LLSelectedObjectFunctor
+{
+	LLFloaterToolsCopyKeysFunctor(std::string& strOut, std::string& strSep) : mOutput(strOut), mSep(strSep) {}
+	virtual bool apply(LLViewerObject* object)
+	{
+		if (!mOutput.empty())
+			mOutput.append(mSep);
+
+		mOutput.append(object->getID().asString());
+
+		return true;
+	}
+private:
+	std::string& mOutput;
+	std::string& mSep;
+};
+
+void LLFloaterTools::onClickBtnCopyKeys()
+{
+	std::string separator = gSavedSettings.getString("PhoenixCopyObjKeySeparator");
+	std::string stringKeys;
+	LLFloaterToolsCopyKeysFunctor copy_keys(stringKeys, separator);
+	bool copied = LLSelectMgr::getInstance()->getSelection()->applyToObjects(&copy_keys);
+	if (copied)
+	{
+		LLView::getWindow()->copyTextToClipboard(utf8str_to_wstring(stringKeys));
+	}
+}
+
+void LLFloaterTools::onClickExpand()
+{
+	BOOL show_more = !gSavedSettings.getBOOL("PhoenixToolboxExpanded");
+	gSavedSettings.setBOOL("PhoenixToolboxExpanded", show_more);
+
+	LLButton* btnExpand = getChild<LLButton>("btnExpand");
+	if (show_more)
+	{
+		mTab->setVisible(TRUE);
+		reshape( getRect().getWidth(), mExpandedHeight);
+		translate( 0, mCollapsedHeight - mExpandedHeight );
+		btnExpand->setImageOverlay("Arrow_Up", btnExpand->getImageOverlayHAlign());
+	}
+	else
+	{
+		mTab->setVisible(FALSE);
+		reshape( getRect().getWidth(), mCollapsedHeight);
+		translate( 0, mExpandedHeight - mCollapsedHeight );
+		btnExpand->setImageOverlay("Arrow_Down", btnExpand->getImageOverlayHAlign());
+	}
+}

@@ -14,6 +14,9 @@
  can_close="true"
  can_minimize="false"
  single_instance="true"
+ save_rect="true"
+ save_visibility="true"
+ save_dock_state="true"
  visible="false"
  width="394"
  can_resize="true"
@@ -80,8 +83,7 @@
          parse_highlights="true"
          parse_urls="true"
          left="1"
-         width="249"
-		 value="test1">
+         width="249">
         </chat_history>
       <line_editor
          bottom="0"
@@ -89,12 +91,30 @@
 	 font="SansSerifSmall"
          height="20"
 	 max_length_bytes="1024"
-         label="To local chat"
+         label="To nearby chat"
          layout="bottomleft"
+         spellcheck="true"
          name="chat_box"
          tab_group="3"
-         width="249">
+         width="140">
       </line_editor>
+      <spinner
+         bottom_delta="0"
+         right="-1"
+         decimal_digits="0"
+         follows="right|bottom"
+         height="20" 
+         increment="1.00"
+         initial_val="0"
+         label="Chan"
+         label_width="29"
+         max_val="2147483647"
+         min_val="-2147483647"
+         mouse_opaque="true"
+         name="ChatChannel"
+         width="109"
+         tool_tip="Channel to send chat on. Enabled in Preferences->Firestorm->Chat->Show channel selection in chat bar.">
+      </spinner>
     </layout_panel>
   </layout_stack>
 

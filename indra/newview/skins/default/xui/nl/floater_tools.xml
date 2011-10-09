@@ -33,10 +33,7 @@
 		<combo_box.item name="Reference" label="Referentie"
 		/>
 	</combo_box>
-	<check_box left="136" name="checkbox uniform"/>
-	<text name="checkbox uniform label">
-		Beide zijden uitrekken
-	</text>
+	<check_box left="136" name="checkbox uniform" label="Rek beide zijden"/>
 	<check_box left="136" label="Texturen uitrekken" name="checkbox stretch textures"/>
 	<check_box left="136" label="Gebruik grid" name="checkbox snap to grid"/>
 	<button label="Opties..." label_selected="Opties..." name="Options..." height="18" bottom_delta="-15"/>
@@ -98,15 +95,9 @@
 			<text name="Creator:">
 				Maker:
 			</text>
-			<text name="Creator Name">
-				Thrax Linden
-			</text>
 			<button label="Profiel..." label_selected="Profiel..." name="button creator profile"/>
 			<text name="Owner:">
 				Eigenaar:
-			</text>
-			<text name="Owner Name">
-				Thrax Linden
 			</text>
 			<button label="Profiel..." label_selected="Profiel..." name="button owner profile"/>
 			<text name="Group:">

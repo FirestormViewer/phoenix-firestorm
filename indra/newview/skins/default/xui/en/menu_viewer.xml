@@ -3,11 +3,13 @@
  bg_visible="false"
  follows="left|top|right"
  name="Main Menu">
+ <!-- #####  When editing entries in the menu, please also edit the V1 section below  ##### -->
     <menu
      create_jump_keys="true"
      label="Avatar"
      name="Me"
-     tear_off="true">
+     tear_off="true"
+     visible="true">
         
         <menu_item_call
              label="Account"
@@ -45,7 +47,7 @@
         </menu_item_call>
         
         <menu_item_call
-         label="Outfit"
+         label="Appearance"
          name="ChangeOutfit">
             <menu_item_call.on_click
              function="CustomizeAvatar" />
@@ -66,7 +68,7 @@
          label="Inventory"
          name="Inventory"
          shortcut="control|shift|I"
-		 visible="true">
+		 visible="false">
             <menu_item_check.on_check
              function="Floater.Visible"
              parameter="inventory" />
@@ -79,7 +81,7 @@
          label="Inventory"
          name="ShowSidetrayInventory"
          shortcut="control|I"
-		 visible="false">
+		 visible="true">
             <menu_item_check.on_check
              function="SidetrayPanelVisible"
              parameter="sidepanel_inventory" />
@@ -135,6 +137,34 @@
                 <menu_item_check.on_click
                  function="World.AlwaysRun" />
             </menu_item_check>
+          <menu_item_check
+             label="Force Ground Sit"
+             shortcut="control|alt|S"
+             name="Force Toggle Sitting">
+                <menu_item_check.on_check
+                 function="Self.getForceSit" />
+                <menu_item_check.on_click
+                 function="Self.ForceSit"/>
+                <menu_item_check.on_enable
+                 function="Self.EnableForceSit" />
+           </menu_item_check>
+		   <menu_item_check
+			 label="Phantom"
+             shortcut="control|alt|P"
+			 name="Avatar Phantom">
+                <menu_item_check.on_check
+                   function="Self.getPhantom" />
+                <menu_item_check.on_click
+                   function="Self.togglePhantom" />
+			</menu_item_check>
+			<menu_item_check
+			 label="Quickjump"
+             name="Avatar Ignore Prejump">
+                <menu_item_check.on_check
+                   function="Self.getIgnorePreJump" />
+                <menu_item_check.on_click
+                   function="Self.toggleIgnorePreJump" />
+			</menu_item_check>
 	</menu>
         
         <menu_item_check
@@ -153,23 +183,30 @@
          name="avhealth"
          tear_off="true">
    	        <menu_item_call
-	         label="Stop Avatar Animatons"
+	         label="Stop Avatar Animations"
 	         name="Stop Animating My Avatar">
 	            <menu_item_call.on_click
 	             function="Tools.StopAllAnimations" />
 	        </menu_item_call>
 	        <menu_item_call
-	         label="Force Appearance Update"
-	         name="Rebake Texture">
+	         label="Force Appearance Update (Rebake)"
+	         name="Rebake Texture"
+		 shortcut="control|alt|R">
 	            <menu_item_call.on_click
 	             function="Advanced.RebakeTextures" />
 	        </menu_item_call>
 		<menu_item_call
-                    label="Reset Default Avatar"
+                    label="Reset Default Male Avatar (Character Test)"
                     name="ResetDefaultAvM">
                     <menu_item_call.on_click
                      function="Advanced.TestMale" />
 		</menu_item_call>
+          <menu_item_call
+                          label="Reset Default Female Avatar (Character Test)"
+                          name="ResetDefaultAvF">
+            <menu_item_call.on_click
+             function="Advanced.TestFemale" />
+          </menu_item_call>
 	        <menu_item_check
 	         label="Show Avatar Rendering Cost"
 	         name="Avatar Rendering Cost">
@@ -187,7 +224,90 @@
                  function="Floater.Show"
                  parameter="lagmeter" />
             </menu_item_call>
+          <menu_item_call
+             label="Recreate LSL Bridge"
+             name="Recreate LSL Bridge">
+            <menu_item_call.on_click
+             function="RecreateLSLBridge"/>
+          </menu_item_call>
         </menu>
+        
+        <menu
+         create_jump_keys="true"
+         label="Upload"
+         layout="topleft"
+         name="Upload"
+         tear_off="true">
+            <menu_item_call
+             label="Image (L$[COST])..."
+             layout="topleft"
+             name="Upload Image"
+             shortcut="control|U">
+                <menu_item_call.on_click
+                 function="File.UploadImage"
+                 parameter="" />
+                <menu_item_call.on_enable
+                 function="File.EnableUpload" />
+                <menu_item_call.on_visible
+                 function="Upload.CalculateCosts"
+                 parameter="Upload Image" />
+            </menu_item_call>
+            <menu_item_call
+             label="Sound (L$[COST])..."
+             layout="topleft"
+             name="Upload Sound">
+                <menu_item_call.on_click
+                 function="File.UploadSound"
+                 parameter="" />
+                <menu_item_call.on_enable
+                 function="File.EnableUpload" />
+                <menu_item_call.on_visible
+                 function="Upload.CalculateCosts"
+                 parameter="Upload Sound" />
+            </menu_item_call>
+            <menu_item_call
+             label="Animation (L$[COST])..."
+             layout="topleft"
+             name="Upload Animation">
+                <menu_item_call.on_click
+                 function="File.UploadAnim"
+                 parameter="" />
+                <menu_item_call.on_enable
+                 function="File.EnableUpload" />
+                <menu_item_call.on_visible
+                 function="Upload.CalculateCosts"
+                 parameter="Upload Animation" />
+            </menu_item_call>
+	    <menu_item_call
+             label="Mesh Model..."
+             layout="topleft"
+             name="Upload Model">
+            <menu_item_call.on_click
+             function="File.UploadModel"
+             parameter="" />
+            <menu_item_call.on_enable
+             function="File.EnableUploadModel" />
+            <menu_item_call.on_visible
+            function="File.VisibleUploadModel"/>
+            </menu_item_call>
+            <menu_item_call
+             label="Bulk (Multi-file) upload..."
+             layout="topleft"
+             name="Bulk Upload">
+                <menu_item_call.on_click
+                 function="File.UploadBulk"
+                 parameter="" />
+            </menu_item_call>
+            <menu_item_call
+             label="Set Default Upload Permissions"
+             name="perm prefs">
+                <menu_item_call.on_click
+                 function="Floater.Toggle"
+                 parameter="perm_prefs" />
+            </menu_item_call>
+        </menu>
+
+        
         <menu_item_call
          label="Request Admin Status"
          name="Request Admin Options"
@@ -221,40 +341,11 @@
     
     <menu
      create_jump_keys="true"
-     label="Communicate"
+     label="Comm"
      name="Communicate"
-     tear_off="true">
-        <menu_item_call
-         label="Friends"
-         name="My Friends"
-         shortcut="control|shift|F">
-            <menu_item_call.on_click
-             function="SideTray.PanelPeopleTab"
-             parameter="friends_panel" />
-            </menu_item_call>
-        <menu_item_call
-         label="Groups"
-         name="My Groups"
-         shortcut="control|shift|G">
-            <menu_item_call.on_click
-             function="SideTray.PanelPeopleTab"
-             parameter="groups_panel" />
-        </menu_item_call>
-        <menu_item_check
-         label="Nearby Chat"
-         name="Nearby Chat"
-         shortcut="control|H"
-         use_mac_ctrl="true">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="nearby_chat" />
-            <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="nearby_chat" />
-        </menu_item_check>
-
-        <menu_item_separator/>
-        
+     tear_off="true"
+     visible="true">
+     
         <menu
          create_jump_keys="true"
          label="Online Status"
@@ -281,6 +372,71 @@
         </menu>
         
         <menu_item_separator/>
+             
+        <menu_item_call
+         label="Friends"
+         name="My Friends"
+         shortcut="control|shift|F">
+            <menu_item_call.on_click
+             function="SideTray.PanelPeopleTab"
+             parameter="friends_panel" />
+            </menu_item_call>
+        <menu_item_check
+         label="Contacts"
+         name="Contacts"
+         shortcut="control|alt|shift|F">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="imcontacts" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="imcontacts" />
+            </menu_item_check>
+      <menu_item_check
+         label="Contact Sets"
+         name="Contact Sets"
+         shortcut="control|alt|shift|C">
+        <menu_item_check.on_check
+         function="Floater.Visible"
+         parameter="contactsets" />
+        <menu_item_check.on_click
+         function="Floater.Toggle"
+         parameter="contactsets" />
+      </menu_item_check>
+        <menu_item_call
+         label="Groups"
+         name="My Groups"
+         shortcut="control|shift|G">
+            <menu_item_call.on_click
+             function="SideTray.PanelPeopleTab"
+             parameter="groups_panel" />
+        </menu_item_call>
+        <menu_item_check
+         label="Nearby Chat"
+         name="Nearby Chat"
+         shortcut="control|H"
+         use_mac_ctrl="true">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="nearby_chat" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="nearby_chat" />
+        </menu_item_check>
+        <menu_item_check
+         label="Conversations"
+         name="Conversations"
+         shortcut="control|T"
+         use_mac_ctrl="true">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="im_container" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="im_container" />
+        </menu_item_check>
+
+        <menu_item_separator/>
 
         <menu_item_check
          label="Gestures"
@@ -305,6 +461,18 @@
              function="Floater.Toggle"
              parameter="voice_effect" />
         </menu_item_check>
+
+        <menu_item_check
+         label="Nearby Voice"
+         name="Nearby Voice">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="voice_controls" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="voice_controls" />
+        </menu_item_check>
+
         
         <!--menu_item_call
          label="Chat"
@@ -320,7 +488,8 @@
      create_jump_keys="true"
      label="World"
      name="World"
-     tear_off="true">
+     tear_off="true"
+     visible="true">
      
         <menu_item_call
             label="Nearby Avatars"
@@ -355,7 +524,6 @@
              function="Floater.Toggle"
              parameter="world_map" />
         </menu_item_check>
-
         <menu_item_separator/>
         
         <menu_item_call
@@ -368,7 +536,7 @@
         </menu_item_call>
 
         <menu_item_call
-         label="Place Profile"
+         label="Location Profile"
          layout="topleft"
          name="Place Profile">
             <menu_item_call.on_click
@@ -385,7 +553,7 @@
         
         <menu_item_call
          label="Region Details"
-         name="egion/Estate">
+         name="Region/Estate">
             <menu_item_call.on_click
              function="Floater.Show"
              parameter="region_info" />
@@ -535,7 +703,7 @@
         </menu_item_check>
         <menu_item_separator/>-->
 
-    <menu
+      <menu
          create_jump_keys="true"
          label="Sun Position"
          name="Environment Settings"
@@ -546,6 +714,9 @@
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="sunrise" />
+                <menu_item_call.on_enable
+                 function="RLV.EnableIfNot"
+                 parameter="setenv" />
             </menu_item_call>
             <menu_item_call
              label="Midday"
@@ -554,6 +725,9 @@
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="noon" />
+                <menu_item_call.on_enable
+                 function="RLV.EnableIfNot"
+                 parameter="setenv" />
             </menu_item_call>
             <menu_item_call
              label="Sunset"
@@ -562,6 +736,9 @@
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="sunset" />
+                <menu_item_call.on_enable
+                 function="RLV.EnableIfNot"
+                 parameter="setenv" />
             </menu_item_call>
             <menu_item_call
              label="Midnight"
@@ -569,22 +746,155 @@
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="midnight" />
+                <menu_item_call.on_enable
+                 function="RLV.EnableIfNot"
+                 parameter="setenv" />
             </menu_item_call>
+            <menu_item_separator/>
             <menu_item_call
-             label="Region Standard"
+             label="Estate Time"
              name="Revert to Region Default">
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="default" />
+                <menu_item_call.on_enable
+                 function="RLV.EnableIfNot"
+                 parameter="setenv" />
             </menu_item_call>
         </menu>
-        <menu_item_call
-         label="Environment Editor"
-         name="Environment Editor">
-            <menu_item_call.on_click
-             function="World.EnvSettings"
-             parameter="editor" />
-        </menu_item_call>
+
+	    <menu
+	     create_jump_keys="true"
+	     label="Enviroment Editor"
+	     name="Enviroment Editor"
+	     tear_off="true">
+	     	
+	     	<menu_item_call
+	     	 label="Enviroment Settings..."
+	     	 name="Enviroment Settings">
+	     	 	<menu_item_call.on_click
+	     	 	 function="World.EnvSettings"
+                 parameter="editor"/>
+          <menu_item_call.on_enable
+           function="RLV.EnableIfNot"
+           parameter="setenv" />
+	     	</menu_item_call>
+	     	
+	     	<menu_item_separator/>
+	     	
+	     	<menu
+	     	 name="Water Presets"
+	     	 label="Water Presets">
+	     	 	<menu_item_call
+	     	 	 label="New preset..."
+	     	 	 name="new_water_preset">
+	     	 	 	<menu_item_call.on_click
+	     	 	 	function="World.EnvPreset"
+	     	 	 	parameter="new_water"/>
+            <menu_item_call.on_enable
+            function="RLV.EnableIfNot"
+            parameter="setenv" />
+	     	 	</menu_item_call>
+	     	 	<menu_item_call
+	     	 	 label="Edit preset..."
+	     	 	 name="edit_water_preset">
+	     	 	 	<menu_item_call.on_click
+	     	 	 	function="World.EnvPreset"
+	     	 	 	parameter="edit_water"/>
+            <menu_item_call.on_enable
+            function="RLV.EnableIfNot"
+            parameter="setenv" />
+          </menu_item_call>
+	     	 	<menu_item_call
+	     	 	 label="Delete preset..."
+	     	 	 name="delete_water_preset">
+	     	 	 	<menu_item_call.on_click
+	     	 	 	function="World.EnvPreset"
+	     	 	 	parameter="delete_water"/>
+	     	 	 	<menu_item_call.on_enable
+	     	 	 	function="World.EnableEnvPreset"
+	     	 	 	parameter="delete_water"/>
+	     	 	</menu_item_call>
+	     	</menu>
+	     	
+	     	<menu
+	     	 name="Sky Presets"
+	     	 label="Sky Presets">
+	     	 	<menu_item_call
+	     	 	 label="New preset..."
+	     	 	 name="new_sky_preset">
+	     	 	 	<menu_item_call.on_click
+	     	 	 	function="World.EnvPreset"
+	     	 	 	parameter="new_sky"/>
+            <menu_item_call.on_enable
+            function="RLV.EnableIfNot"
+            parameter="setenv" />
+          </menu_item_call>
+	     	 	<menu_item_call
+	     	 	 label="Edit preset..."
+	     	 	 name="edit_sky_preset">
+	     	 	 	<menu_item_call.on_click
+	     	 	 	function="World.EnvPreset"
+	     	 	 	parameter="edit_sky"/>
+            <menu_item_call.on_enable
+            function="RLV.EnableIfNot"
+            parameter="setenv" />
+          </menu_item_call>
+	     	 	<menu_item_call
+	     	 	 label="Delete preset..."
+	     	 	 name="delete_sky_preset">
+	     	 	 	<menu_item_call.on_click
+	     	 	 	function="World.EnvPreset"
+	     	 	 	parameter="delete_sky"/>
+	     	 	 	<menu_item_call.on_enable
+	     	 	 	function="World.EnableEnvPreset"
+	     	 	 	parameter="delete_sky"/>
+	     	 	</menu_item_call>
+	     	</menu>
+	     	
+	     	<menu
+	     	 name="Day Presets"
+	     	 label="Day Presets">
+	     	 	<menu_item_call
+	     	 	 label="New preset..."
+	     	 	 name="new_day_preset">
+	     	 	 	<menu_item_call.on_click
+	     	 	 	function="World.EnvPreset"
+	     	 	 	parameter="new_day_cycle"/>
+            <menu_item_call.on_enable
+            function="RLV.EnableIfNot"
+            parameter="setenv" />
+          </menu_item_call>
+	     	 	<menu_item_call
+	     	 	 label="Edit preset..."
+	     	 	 name="edit_day_preset">
+	     	 	 	<menu_item_call.on_click
+	     	 	 	function="World.EnvPreset"
+	     	 	 	parameter="edit_day_cycle"/>
+            <menu_item_call.on_enable
+            function="RLV.EnableIfNot"
+            parameter="setenv" />
+          </menu_item_call>
+	     	 	<menu_item_call
+	     	 	 label="Delete preset..."
+	     	 	 name="delete_day_preset">
+	     	 	 	<menu_item_call.on_click
+	     	 	 	function="World.EnvPreset"
+	     	 	 	parameter="delete_day_cycle"/>
+	     	 	 	<menu_item_call.on_enable
+	     	 	 	function="World.EnableEnvPreset"
+	     	 	 	parameter="delete_day_cycle"/>
+	     	 	</menu_item_call>
+	     	</menu>
+	    </menu>
+      <menu_item_call
+        label="Area Search"
+        name="area_search">
+        <menu_item_call.on_click
+          function="Floater.Toggle"
+          parameter="area_search" />
+      </menu_item_call>
+    
     </menu>
     <menu
      create_jump_keys="true"
@@ -1034,6 +1344,18 @@
                  parameter="Upload Animation" />
             </menu_item_call>
             <menu_item_call
+             label="Mesh Model..."
+             layout="topleft"
+             name="Upload Model">
+            <menu_item_call.on_click
+             function="File.UploadModel"
+             parameter="" />
+            <menu_item_call.on_enable
+             function="File.EnableUploadModel" />
+            <menu_item_call.on_visible
+            function="File.VisibleUploadModel"/>
+            </menu_item_call>
+	   <menu_item_call
              label="Bulk (L$[COST] per file)..."
              layout="topleft"
              name="Bulk Upload">
@@ -1049,6 +1371,36 @@
                  parameter="perm_prefs" />
             </menu_item_call>
         </menu>
+        <menu_item_separator/>
+        <menu_item_call
+         enabled="false"
+         label="Undo"
+         name="Undo"
+         shortcut="control|Z">
+            <on_click
+             function="Edit.Undo"
+             userdata="" />
+            <on_enable
+             function="Edit.EnableUndo" />
+        </menu_item_call>
+        <menu_item_call
+         enabled="false"
+         label="Redo"
+         name="Redo"
+         shortcut="control|Y">
+            <on_click
+             function="Edit.Redo"
+             userdata="" />
+            <on_enable
+             function="Edit.EnableRedo" />
+        </menu_item_call>        
+        <menu_item_call
+         label="Local Bitmap Browser"
+         name="Local Bitmap Browser">
+            <menu_item_call.on_click
+             function="Floater.Show"
+             parameter="local_bitmap_browser" />
+        </menu_item_call>     
     </menu>
     
     <!-- Content Menu -->
@@ -1057,7 +1409,9 @@
     	create_jump_keys="true"
     	label="Content"
     	name="Content"
-    	tear_off="true">
+    	tear_off="true"
+        visible="true">
+<!--
         <menu_item_call
              label="Search"
              name="Search">
@@ -1065,6 +1419,20 @@
                  function="Floater.Show"
                  parameter="search"/>
        </menu_item_call>
+-->
+        <menu_item_check
+        label="Search"
+        name="Search"
+        shortcut="control|F">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="search" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="search" />
+            </menu_item_check>
+
+
     	<menu_item_call
              label="SL Marketplace"
              name="SL Marketplace">
@@ -1098,16 +1466,49 @@
      create_jump_keys="true"
      label="Help"
      name="Help"
-     tear_off="true">
+     tear_off="true"
+     visible="true">
+        <menu_item_check
+         label="Enable Viewer UI Hints"
+         name="Enable Hints">
+          <on_check
+            control="EnableUIHints"/>
+          <on_click
+            function="ToggleUIHints"/>
+        </menu_item_check>
+        
         <menu_item_call
-             label="Firestorm Wiki"
-             name="Firestorm Wiki"
+         label="Firestorm Wiki"
+         name="Firestorm Wiki"
 	     shortcut="F1">
              <menu_item_call.on_click
              function="PromptShowURL"
              name="script_library_url"
              parameter="WebLaunchExternalTarget,http://wiki.phoenixviewer.com/doku.php?id=firestorm" />
        </menu_item_call>
+<!--       <menu_item_call
+         label="Second Life Help"
+         name="Second Life Help">
+             <menu_item_call.on_click
+             function="PromptShowURL"
+             name="script_library_url"
+             parameter="WebLaunchExternalTarget,https://support.secondlife.com/" />
+        </menu_item_call>-->
+        <menu_item_separator name="grid_help_seperator"/>
+        <menu_item_call
+         label="[CURRENT_GRID] Help"
+         name="current_grid_help">
+            <menu_item_call.on_click
+             function="ShowHelp"
+             parameter="grid_help" />
+        </menu_item_call>
+        <menu_item_call
+         label="About [CURRENT_GRID]"
+         name="current_grid_about">
+            <menu_item_call.on_click
+             function="ShowHelp"
+             parameter="grid_about" />
+        </menu_item_call>
 <!--        <menu_item_call
          label="Tutorial"
          name="Tutorial">
@@ -1136,8 +1537,21 @@
              name="Report Bug">
                 <menu_item_call.on_click
                  function="ShowHelp"
-                 parameter="report_bug" />
+                 parameter="file_a_jira" />
             </menu_item_call>
+
+        <menu_item_separator/>
+
+        <menu_item_check
+            label="Enable Sysinfo Button"
+            name="Enable Sysinfo Button">
+            <menu_item_check.on_check
+                function="CheckControl"
+                parameter="SysinfoButtonInIM" />
+            <menu_item_check.on_click
+                function="ToggleControl"
+                parameter="SysinfoButtonInIM" />
+        </menu_item_check>
 
         <menu_item_separator/>
 
@@ -1148,16 +1562,188 @@
              function="Floater.Show"
              parameter="sl_about" />
         </menu_item_call>
-        <menu_item_check
-         label="Enable Tooltips"
-         name="Enable Hints">
-          <on_check
-            control="EnableUIHints"/>
-          <on_click
-            function="ToggleUIHints"/>
-        </menu_item_check>
     </menu>
     
+    <menu
+     create_jump_keys="true"
+     label="RLVa"
+     name="RLVa Main"
+     tear_off="true"
+     visible="true">
+      <menu
+       label="Debug"
+       name="Debug"
+       tear_off="true">
+        <menu_item_check
+         label="Show Top-level RLVa Menu"
+         name="Show Top-level RLVa Menu">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaTopLevelMenu" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaTopLevelMenu" />
+        </menu_item_check>
+      	<menu_item_separator/>
+      	<menu_item_check
+      	 label="Show Debug Messages"
+      	 name="Show Debug Messages">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RestrainedLoveDebug" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RestrainedLoveDebug" />
+      	</menu_item_check>
+      	<menu_item_check
+      	 label="Hide Unset or Duplicate Messages"
+      	 name="Hide Unset or Duplicate Messages">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaDebugHideUnsetDuplicate" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaDebugHideUnsetDuplicate" />
+      	</menu_item_check>
+      	<menu_item_check
+      	 label="Show Assertion Failures"
+      	 name="Show Assertion Failures">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaShowAssertionFailures" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaShowAssertionFailures" />
+      	</menu_item_check>
+      	<menu_item_separator/>
+      	<menu_item_check
+      	 label="Enable Legacy Naming"
+      	 name="Enable Legacy Naming">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaEnableLegacyNaming" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaEnableLegacyNaming" />
+      	</menu_item_check>
+        <menu_item_check
+      	 label="Enable Shared Wear"
+      	 name="Enable Shared Wear">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaEnableSharedWear" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaEnableSharedWear" />
+        </menu_item_check>
+        <menu_item_check
+      	 label="Rename Shared Items on Wear"
+      	 name="Rename Shared Items on Wear">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaSharedInvAutoRename" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaSharedInvAutoRename" />
+      	</menu_item_check>
+      	<menu_item_separator/>
+      	<menu_item_check
+      	 label="Locks..."
+      	 name="Locks">
+          <menu_item_check.on_check
+           function="Floater.Visible"
+           parameter="rlv_locks" />
+          <menu_item_check.on_click
+           function="Floater.Toggle"
+           parameter="rlv_locks" />
+      	</menu_item_check>
+      </menu>
+      <menu_item_separator/>
+      <menu_item_check
+       label="Hide Locked Layers"
+       name="Hide Locked Layers">
+      	<menu_item_check.on_check
+      	 function="CheckControl"
+      	 parameter="RLVaHideLockedLayers" />
+      	<menu_item_check.on_click
+      	 function="ToggleControl"
+      	 parameter="RLVaHideLockedLayers" />
+      </menu_item_check>
+      <menu_item_check
+       label="Hide Locked Attachments"
+       name="Hide Locked Attachments">
+      	<menu_item_check.on_check
+      	 function="CheckControl"
+      	 parameter="RLVaHideLockedAttachments" />
+      	<menu_item_check.on_click
+      	 function="ToggleControl"
+      	 parameter="RLVaHideLockedAttachments" />
+      </menu_item_check>
+      <menu_item_separator/>
+      <menu_item_check
+       label="Allow OOC Chat"
+       name="Allow OOC Chat">
+      	<menu_item_check.on_check
+      	 function="CheckControl"
+      	 parameter="RestrainedLoveCanOOC" />
+      	<menu_item_check.on_click
+      	 function="ToggleControl"
+      	 parameter="RestrainedLoveCanOOC" />
+      </menu_item_check>
+      <menu_item_check
+       label="Forbid Give to #RLV"
+       name="Forbid Give to #RLV">
+      	<menu_item_check.on_check
+      	 function="CheckControl"
+      	 parameter="RestrainedLoveForbidGiveToRLV" />
+      	<menu_item_check.on_click
+      	 function="ToggleControl"
+      	 parameter="RestrainedLoveForbidGiveToRLV" />
+      </menu_item_check>
+      <menu_item_check
+       label="Show Filtered Chat"
+       name="Show Filtered Chat">
+      	<menu_item_check.on_check
+      	 function="CheckControl"
+      	 parameter="RestrainedLoveShowEllipsis" />
+      	<menu_item_check.on_click
+      	 function="ToggleControl"
+      	 parameter="RestrainedLoveShowEllipsis" />
+      </menu_item_check>
+      <menu_item_check
+       label="Show Name Tags"
+       name="Show Name Tags">
+      	<menu_item_check.on_check
+      	 function="CheckControl"
+      	 parameter="RLVaShowNameTags" />
+      	<menu_item_check.on_click
+      	 function="ToggleControl"
+      	 parameter="RLVaShowNameTags" />
+      </menu_item_check>
+      <menu_item_check
+       label="Wear Replaces Unlocked"
+       name="Wear Replaces Unlocked">
+      	<menu_item_check.on_check
+      	 function="CheckControl"
+      	 parameter="RLVaWearReplaceUnlocked" />
+      	<menu_item_check.on_click
+      	 function="ToggleControl"
+      	 parameter="RLVaWearReplaceUnlocked" />
+      </menu_item_check>
+      <menu_item_separator />
+      <menu_item_check
+       label="Restrictions..."
+       name="Restrictions">
+      	<menu_item_check.on_check
+      	 function="Floater.Visible"
+      	 parameter="rlv_behaviours" />
+      	<menu_item_check.on_click
+      	 function="Floater.Toggle"
+      	 parameter="rlv_behaviours" />
+      </menu_item_check>
+    </menu>
+
+	
     <!-- Advanced Menu -->
     
     <menu
@@ -1168,8 +1754,7 @@
      visible="false">
         <menu_item_call
          label="Rebake Textures"
-         name="Rebake Texture"
-         shortcut="control|alt|R">
+         name="Rebake Texture">
             <menu_item_call.on_click
              function="Advanced.RebakeTextures" />
         </menu_item_call>
@@ -1209,7 +1794,7 @@
              function="ToggleControl"
              parameter="DisableCameraConstraints" />
         </menu_item_check>
-
+        
         <menu_item_separator/>
 
         <menu_item_check
@@ -1436,15 +2021,15 @@
                  parameter="character" />
             </menu_item_check>
             <menu_item_check
-             label="SurfacePath"
-             name="SurfacePath"
+             label="Surface Patch"
+             name="Surface Patch"
              shortcut="control|alt|shift|5">
                 <menu_item_check.on_check
                  function="Advanced.CheckRenderType"
-                 parameter="surfacePath" />
+                 parameter="surfacePatch" />
                 <menu_item_check.on_click
                  function="Advanced.ToggleRenderType"
-                 parameter="surfacePath" />
+                 parameter="surfacePatch" />
             </menu_item_check>
             <menu_item_check
              label="Sky"
@@ -1629,122 +2214,11 @@
                  parameter="flexible" />
             </menu_item_check>
         </menu>        
-		<menu
-		 label="RLVa"
-		 name="RLVa"
-		 tear_off="true"
-		 visible="false">
-			<menu
-			 label="Debug"
-			 name="Debug"
-			 tear_off="true">
-				<menu_item_check
-				 label="Show Debug Messages"
-				 name="Show Debug Messages">
-					<menu_item_check.on_check
-					 function="CheckControl"
-					 parameter="RestrainedLoveDebug" />
-					<menu_item_check.on_click
-					 function="ToggleControl"
-					 parameter="RestrainedLoveDebug" />
-				</menu_item_check>
-				<menu_item_separator/>
-				<menu_item_check
-				 label="Enable Legacy Naming"
-				 name="Enable Legacy Naming">
-					<menu_item_check.on_check
-					 function="CheckControl"
-					 parameter="RLVaEnableLegacyNaming" />
-					<menu_item_check.on_click
-					 function="ToggleControl"
-					 parameter="RLVaEnableLegacyNaming" />
-				</menu_item_check>
-        <menu_item_check
-				 label="Enable Shared Wear"
-				 name="Enable Shared Wear">
-          <menu_item_check.on_check
-					 function="CheckControl"
-					 parameter="RLVaEnableSharedWear" />
-          <menu_item_check.on_click
-					 function="ToggleControl"
-					 parameter="RLVaEnableSharedWear" />
-        </menu_item_check>
-        <menu_item_check
-				 label="Rename Shared Items on Wear"
-				 name="Rename Shared Items on Wear">
-					<menu_item_check.on_check
-					 function="CheckControl"
-					 parameter="RLVaSharedInvAutoRename" />
-					<menu_item_check.on_click
-					 function="ToggleControl"
-					 parameter="RLVaSharedInvAutoRename" />
-				</menu_item_check>
-				<menu_item_separator/>
-				<menu_item_check
-				 label="Locks..."
-				 name="Locks">
-					<menu_item_check.on_check
-					 function="Floater.Visible"
-					 parameter="rlv_locks" />
-					<menu_item_check.on_click
-					 function="Floater.Toggle"
-					 parameter="rlv_locks" />
-				</menu_item_check>
-			</menu>
-			<menu_item_separator/>
-			<menu_item_check
-			 label="Hide Locked Layers"
-			 name="Hide Locked Layers">
-				<menu_item_check.on_check
-				 function="CheckControl"
-				 parameter="RLVaHideLockedLayers" />
-				<menu_item_check.on_click
-				 function="ToggleControl"
-				 parameter="RLVaHideLockedLayers" />
-			</menu_item_check>
-			<menu_item_check
-			 label="Hide Locked Attachments"
-			 name="Hide Locked Attachments">
-				<menu_item_check.on_check
-				 function="CheckControl"
-				 parameter="RLVaHideLockedAttachments" />
-				<menu_item_check.on_click
-				 function="ToggleControl"
-				 parameter="RLVaHideLockedAttachments" />
-			</menu_item_check>
-			<menu_item_separator/>
-			<menu_item_check
-			 label="Forbid Give to #RLV"
-			 name="Forbid Give to #RLV">
-				<menu_item_check.on_check
-				 function="CheckControl"
-				 parameter="RestrainedLoveForbidGiveToRLV" />
-				<menu_item_check.on_click
-				 function="ToggleControl"
-				 parameter="RestrainedLoveForbidGiveToRLV" />
-			</menu_item_check>
-			<menu_item_check
-			 label="Show Name Tags"
-			 name="Show Name Tags">
-				<menu_item_check.on_check
-				 function="CheckControl"
-				 parameter="RLVaShowNameTags" />
-				<menu_item_check.on_click
-				 function="ToggleControl"
-				 parameter="RLVaShowNameTags" />
-			</menu_item_check>
-			<menu_item_separator/>
-			<menu_item_check
-			 label="Restrictions..."
-			 name="Restrictions">
-				<menu_item_check.on_check
-				 function="Floater.Visible"
-				 parameter="rlv_behaviours" />
-				<menu_item_check.on_click
-				 function="Floater.Toggle"
-				 parameter="rlv_behaviours" />
-			</menu_item_check>
-		</menu>
+        <menu
+         label="RLVa"
+         name="RLVa Embedded"
+         tear_off="true"
+         visible="true" />
         <menu_item_check
          label="Use Plugin Read Thread"
          name="Use Plugin Read Thread">
@@ -1782,7 +2256,7 @@
          tear_off="true"
          visible="false">
           <menu_item_call
-             label="Image (L$[COST])..."
+             label="Upload Image (L$[COST])..."
              name="Upload Image"
              shortcut="control|U">
             <menu_item_call.on_click
@@ -1832,7 +2306,20 @@
                  parameter="UseDebugMenus" />
             </menu_item_check>
 
-            <menu_item_separator/>
+          <!--   	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] -->
+          <menu_item_check
+           label="DoubleClick Teleport"
+           name="DoubleClick Teleport"
+           shortcut="control|shift|D">
+            <on_check
+               function="CheckControl"
+               parameter="DoubleClickTeleport" />
+            <on_click
+               function="Advanced.ToggleDoubleClickTeleport"/>
+          </menu_item_check>
+          <!--   	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] -->
+
+          <menu_item_separator/>
 
             <menu_item_check
              label="Always Run"
@@ -1866,7 +2353,7 @@
                 <menu_item_call.on_enable
                  function="File.EnableCloseWindow" />
             </menu_item_call>
-            <menu_item_call
+            <!--<menu_item_call
              label="Close All Windows"
              name="Close All Windows"
              shortcut="control|shift|W">
@@ -1874,7 +2361,7 @@
                  function="File.CloseAllWindows" />
                 <menu_item_call.on_enable
                  function="File.EnableCloseAllWindows" />
-            </menu_item_call>
+            </menu_item_call> -->
 
             <menu_item_separator/>
 
@@ -2001,8 +2488,21 @@
         </menu> <!--Shortcuts-->
 
         <menu_item_separator/>
+
         <menu_item_check
-           label="RestrainedLove API"
+         label="Fly Override"
+         name="Fly Override"
+	 shortcut="control|alt|V">
+            <menu_item_check.on_check
+             function="CheckControl"
+             parameter="PhoenixAlwaysFly" />
+            <menu_item_check.on_click
+             function="ToggleControl" 
+             parameter="PhoenixAlwaysFly" />
+        </menu_item_check>
+
+        <menu_item_check
+           label="RestrainedLove API (RLVa)"
            name="RLV API">
               <menu_item_check.on_check
                function="RLV.CheckEnabled" />
@@ -2011,6 +2511,7 @@
         </menu_item_check>
         <menu_item_call
          label="Show Debug Settings"
+         shortcut="control|alt|shift|S"
          name="Debug Settings">
             <menu_item_call.on_click
              function="Advanced.ShowDebugSettings"
@@ -2027,6 +2528,17 @@
              function="ToggleControl"
              parameter="QAMode" />
         </menu_item_check>
+     <menu_item_check
+         label="Use V1 Menus"
+         name="V1 Menus">
+            <menu_item_check.on_check
+             function="CheckControl"
+             parameter="FSUseV1Menus" />
+            <menu_item_check.on_click
+             function="ToggleControl"
+             parameter="FSUseV1Menus" />
+        </menu_item_check>
+
     </menu>
     <menu
      create_jump_keys="true"
@@ -2117,6 +2629,16 @@
                  function="Advanced.ToggleConsole"
                  parameter="memory view" />
             </menu_item_check>
+            <menu_item_check
+               label="Scene Statistics"
+               name="Scene Statistics">
+              <menu_item_check.on_check
+               function="Advanced.CheckConsole"
+               parameter="scene view" />
+              <menu_item_check.on_click
+               function="Advanced.ToggleConsole"
+               parameter="scene view" />
+            </menu_item_check>
 
             <menu_item_separator/>
 
@@ -2198,6 +2720,16 @@
                  function="ToggleControl"
                  parameter="DebugShowTime" />
             </menu_item_check>
+          <menu_item_check
+             label="Show Upload Cost"
+             name="Show Upload Cost">
+              <menu_item_check.on_check
+             function="CheckControl"
+             parameter="DebugShowUploadCost" />
+            <menu_item_check.on_click
+                 function="ToggleControl"
+                 parameter="DebugShowUploadCost" />
+            </menu_item_check>
             <menu_item_check
              label="Show Texture Info"
              name="Show Texture Info">
@@ -2237,6 +2769,16 @@
                 <menu_item_check.on_click
                  function="ToggleControl"
                  parameter="DebugShowColor" />
+            </menu_item_check>
+            <menu_item_check
+               label="Show Memory"
+               name="Show Memory">
+              <menu_item_check.on_check
+               function="CheckControl"
+               parameter="DebugShowMemory" />
+              <menu_item_check.on_click
+               function="ToggleControl"
+               parameter="DebugShowMemory" />
             </menu_item_check>
 
             <menu_item_separator/>
@@ -2371,6 +2913,16 @@
          parameter="bboxes" />
         </menu_item_check>
         <menu_item_check
+         label="Normals"
+         name="Normals">
+          <menu_item_check.on_check
+           function="Advanced.CheckInfoDisplay"
+           parameter="normals" />
+          <menu_item_check.on_click
+           function="Advanced.ToggleInfoDisplay"
+           parameter="normals" />
+        </menu_item_check>
+        <menu_item_check
          label="Octree"
          name="Octree">
           <menu_item_check.on_check
@@ -2391,6 +2943,16 @@
            parameter="shadow frusta" />
         </menu_item_check>
         <menu_item_check
+         label="Physics Shapes"
+         name="Physics Shapes">
+          <menu_item_check.on_check
+           function="Advanced.CheckInfoDisplay"
+           parameter="physics shapes" />
+          <menu_item_check.on_click
+           function="Advanced.ToggleInfoDisplay"
+           parameter="physics shapes" />
+        </menu_item_check>
+        <menu_item_check
          label="Occlusion"
          name="Occlusion">
           <menu_item_check.on_check
@@ -2409,6 +2971,16 @@
           <menu_item_check.on_click
            function="Advanced.ToggleInfoDisplay"
            parameter="render batches" />
+        </menu_item_check>
+        <menu_item_check
+         label="Update Type"
+         name="Update Type">
+          <menu_item_check.on_check
+           function="Advanced.CheckInfoDisplay"
+           parameter="update type" />
+          <menu_item_check.on_click
+           function="Advanced.ToggleInfoDisplay"
+           parameter="update type" />
         </menu_item_check>
         <menu_item_check
          label="Texture Anim"
@@ -2451,6 +3023,26 @@
            parameter="face area" />
         </menu_item_check>
         <menu_item_check
+         label="LOD Info"
+         name="LOD Info">
+          <menu_item_check.on_check
+           function="Advanced.CheckInfoDisplay"
+           parameter="lod info" />
+          <menu_item_check.on_click
+           function="Advanced.ToggleInfoDisplay"
+           parameter="lod info" />
+        </menu_item_check>
+        <menu_item_check
+         label="Build Queue"
+         name="Build Queue">
+          <menu_item_check.on_check
+           function="Advanced.CheckInfoDisplay"
+           parameter="build queue" />
+          <menu_item_check.on_click
+           function="Advanced.ToggleInfoDisplay"
+           parameter="build queue" />
+        </menu_item_check>
+        <menu_item_check
          label="Lights"
          name="Lights">
           <menu_item_check.on_check
@@ -2480,6 +3072,16 @@
            function="Advanced.ToggleInfoDisplay"
            parameter="raycast" />
         </menu_item_check>
+		<menu_item_check
+         label="Sculpt"
+         name="Sculpt">
+          <menu_item_check.on_check
+           function="Advanced.CheckInfoDisplay"
+           parameter="sculpt" />
+          <menu_item_check.on_click
+           function="Advanced.ToggleInfoDisplay"
+           parameter="sculpt" />
+		</menu_item_check>
       </menu>
         <menu
          create_jump_keys="true"
@@ -2536,19 +3138,6 @@
                 <menu_item_check.on_enable
                  function="Advanced.EnableObjectObjectOcclusion" />
             </menu_item_check>
-          <menu_item_check
-             label="Framebuffer Objects"
-             name="Framebuffer Objects">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="RenderUseFBO" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="RenderUseFBO" />
-            <menu_item_check.on_enable
-                 function="Advanced.EnableRenderFBO" />
-           </menu_item_check>
-
           <menu_item_separator />
 
           <menu_item_check
@@ -2663,8 +3252,8 @@
                  parameter="TextureDisable" />
             </menu_item_check>
             <menu_item_check
-              label="Full Res Textures"
-             name="Rull Res Textures">
+              label="Full Res Textures (dangerous)"
+             name="Full Res Textures">
                 <menu_item_check.on_check
                  function="CheckControl"
                  parameter="TextureLoadFullRes" />
@@ -2904,13 +3493,21 @@
                  parameter="BottomPanelNew" />
             </menu_item_check>-->
             <menu_item_call
-             label="Web Browser Test"
+             label="Media Browser Test"
              name="Web Browser Test">
                 <menu_item_call.on_click
                  function="Advanced.WebBrowserTest"
                  parameter="http://secondlife.com/app/search/slurls.html"/>
             </menu_item_call>
-            <menu_item_call
+          <menu_item_call
+           label="Web Content Browser"
+           name="Web Content Browser"
+           shortcut="control|shift|Z">
+            <menu_item_call.on_click
+             function="Advanced.WebContentTest"
+             parameter="http://google.com"/>
+          </menu_item_call>
+          <menu_item_call
              label="Dump SelectMgr"
              name="Dump SelectMgr">
                 <menu_item_call.on_click
@@ -2956,7 +3553,7 @@
                  function="Advanced.PrintTextureMemoryStats" />
             </menu_item_call>
             <menu_item_check
-             label="Double-ClickAuto-Pilot"
+             label="Double-Click Auto-Pilot"
              name="Double-ClickAuto-Pilot">
                 <menu_item_check.on_check
                  function="CheckControl"
@@ -2975,7 +3572,6 @@
                  function="ToggleControl"
                  parameter="DoubleClickTeleport" />
             </menu_item_check>
-
             <menu_item_separator />
 
             <menu_item_check
@@ -3034,7 +3630,7 @@
                  function="Advanced.ToggleDebugKeys" />
             </menu_item_check>
             <menu_item_check
-             label="Debug WindowProc"
+             label="Debug Window Process"
              name="Debug WindowProc">
                 <menu_item_check.on_check
                  function="Advanced.CheckDebugWindowProc"
@@ -3328,8 +3924,13 @@
                 <menu_item_call.on_click
                  function="Advanced.DumpAvatarLocalTextures" />
             </menu_item_call>
-        </menu>
-
+			<menu_item_call
+			 label="Reload Avatar Cloud Particle"
+			 name="Reload Avatar Cloud Particle">
+				<menu_item_call.on_click
+				 function="Advanced.ReloadAvatarCloudParticle" />
+			</menu_item_call>
+		</menu>
         <menu_item_separator/>
 
         <menu_item_check
@@ -3341,6 +3942,16 @@
             <menu_item_check.on_click
              function="ToggleControl"
              parameter="ImagePipelineUseHTTP" />
+        </menu_item_check>
+        <menu_item_check
+         label="HTTP Inventory"
+         name="HTTP Inventory">
+            <menu_item_check.on_check
+             function="CheckControl"
+             parameter="UseHTTPInventory" />
+            <menu_item_check.on_click
+             function="ToggleControl"
+             parameter="UseHTTPInventory" />
         </menu_item_check>
         <menu_item_call
          label="Compress Images"
@@ -3385,7 +3996,7 @@
             <menu_item_call.on_click
              function="Advanced.LeaveAdminStatus" />
         </menu_item_call>
-        <menu_item_check
+		<menu_item_check
          label="Show Admin Menu"
          name="View Admin Options">
             <menu_item_check.on_enable
@@ -3662,6 +4273,16 @@
                  parameter="tattoo" />
             </menu_item_call>
             <menu_item_call
+             label="Physics"
+             name="Physics">
+                <menu_item_call.on_click
+                 function="Edit.TakeOff"
+                 parameter="physics" />
+                <menu_item_call.on_enable
+                 function="Edit.EnableTakeOff"
+                 parameter="physics" />
+            </menu_item_call>
+            <menu_item_call
              label="All Clothes"
              name="All Clothes">
                 <menu_item_call.on_click
@@ -3741,4 +4362,82 @@
             </menu>
         </menu>
     </menu>
+    
+    <!-- BEGIN: V1 Menu System -WoLf -->
+    <!-- V1 menu: File -->
+    <menu
+     create_jump_keys="true"
+     label="File"
+     name="V1-File"
+     tear_off="true"
+     visible="false">
+    </menu>
+    <!-- V1 menu: Edit -->
+    <menu
+     create_jump_keys="true"
+     label="Edit"
+     name="V1-Edit"
+     tear_off="true"
+     visible="false">
+    </menu>
+    <!-- V1 menu: View -->
+    <menu
+     create_jump_keys="true"
+     label="View"
+     name="V1-View"
+     tear_off="true"
+     visible="false">
+    </menu>
+    <!-- V1 menu: World -->
+    <menu
+     create_jump_keys="true"
+     label="World"
+     name="V1-World"
+     tear_off="true"
+     visible="false">
+    </menu>
+    <!-- V1 menu: Tools -->
+    <menu
+     create_jump_keys="true"
+     label="Tools"
+     name="V1-Tools"
+     tear_off="true"
+     visible="false">
+    </menu>
+    <!-- V1 menu: Help -->
+    <menu
+     create_jump_keys="true"
+     label="Help"
+     name="V1-Help"
+     tear_off="true"
+     visible="false">
+    </menu>
+    <!-- V1 menu: Firestorm -->
+    <menu
+     create_jump_keys="true"
+     label="Firestorm"
+     name="V1-Firestorm"
+     tear_off="true"
+     visible="false">
+    </menu>
+    <!-- V1 menu: Advanced -->
+    <menu
+     create_jump_keys="true"
+     label="Advanced"
+     name="V1-Advanced"
+     tear_off="true"
+     visible="false">
+     <menu_item_check
+         label="Use V1 Menus"
+         name="V1 Menus">
+            <menu_item_check.on_check
+             function="CheckControl"
+             parameter="FSUseV1Menus" />
+            <menu_item_check.on_click
+             function="ToggleControl"
+             parameter="FSUseV1Menus" />
+        </menu_item_check>
+    </menu>
+    <!-- END: V1 Menu System -WoLf -->    
+    
 </menu_bar>

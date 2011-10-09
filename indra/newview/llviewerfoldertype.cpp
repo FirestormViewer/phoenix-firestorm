@@ -108,27 +108,36 @@ LLViewerFolderDictionary::LLViewerFolderDictionary()
 	//      												  		     |-------------------------|-----------------------|----------------------|-----------|
 	addEntry(LLFolderType::FT_TEXTURE, 				new ViewerFolderEntry("Textures",				"Inv_TexturesOpen",		"Inv_TexturesClosed",	FALSE));
 	addEntry(LLFolderType::FT_SOUND, 				new ViewerFolderEntry("Sounds",					"Inv_SoundOpen",		"Inv_SoundClosed",		FALSE));
-	addEntry(LLFolderType::FT_CALLINGCARD, 			new ViewerFolderEntry("Calling Cards",			"Inv_CallingCardOpen",	"Inv_CallingCardClosed",	FALSE));
+	addEntry(LLFolderType::FT_CALLINGCARD, 			new ViewerFolderEntry("Calling Cards",			"Inv_CallingCardOpen",	"Inv_CallingCardClosed",FALSE));
 	addEntry(LLFolderType::FT_LANDMARK, 			new ViewerFolderEntry("Landmarks",				"Inv_LandmarksOpen",	"Inv_LandmarksClosed",	FALSE));
 	addEntry(LLFolderType::FT_CLOTHING, 			new ViewerFolderEntry("Clothing",				"Inv_ClothingOpen",		"Inv_ClothingClosed",	FALSE));
 	addEntry(LLFolderType::FT_OBJECT, 				new ViewerFolderEntry("Objects",				"Inv_ObjectsOpen",		"Inv_ObjectsClosed",	FALSE));
-	addEntry(LLFolderType::FT_NOTECARD, 			new ViewerFolderEntry("Notecards",				"Inv_NotecardsOpen",	"Inv_NotecardsClosed",		FALSE));
+	addEntry(LLFolderType::FT_NOTECARD, 			new ViewerFolderEntry("Notecards",				"Inv_NotecardsOpen",	"Inv_NotecardsClosed",	FALSE));
 	addEntry(LLFolderType::FT_ROOT_INVENTORY, 		new ViewerFolderEntry("My Inventory",			"Inv_SysOpen",			"Inv_SysClosed",		FALSE));
-	addEntry(LLFolderType::FT_LSL_TEXT, 			new ViewerFolderEntry("Scripts",				"Inv_ScriptsOpen",		"Inv_ScriptsClosed",		FALSE));
-	addEntry(LLFolderType::FT_BODYPART, 			new ViewerFolderEntry("Body Parts",				"Inv_BodyPartsOpen",	"Inv_BodyPartsClosed",		FALSE));
+	addEntry(LLFolderType::FT_LSL_TEXT, 			new ViewerFolderEntry("Scripts",				"Inv_ScriptsOpen",		"Inv_ScriptsClosed",	FALSE));
+	addEntry(LLFolderType::FT_BODYPART, 			new ViewerFolderEntry("Body Parts",				"Inv_BodyPartsOpen",	"Inv_BodyPartsClosed",	FALSE));
 	addEntry(LLFolderType::FT_TRASH, 				new ViewerFolderEntry("Trash",					"Inv_TrashOpen",		"Inv_TrashClosed",		TRUE));
-	addEntry(LLFolderType::FT_SNAPSHOT_CATEGORY, 	new ViewerFolderEntry("Photo Album",			"Inv_SnapshotsOpen",	"Inv_SnapshotsClosed",		FALSE));
+	addEntry(LLFolderType::FT_SNAPSHOT_CATEGORY, 	new ViewerFolderEntry("Photo Album",			"Inv_SnapshotsOpen",	"Inv_SnapshotsClosed",	FALSE));
 	addEntry(LLFolderType::FT_LOST_AND_FOUND, 		new ViewerFolderEntry("Lost And Found",	   		"Inv_LostOpen",			"Inv_LostClosed",		TRUE));
-	addEntry(LLFolderType::FT_ANIMATION, 			new ViewerFolderEntry("Animations",				"Inv_AnimationsOpen",	"Inv_AnimationsClosed",		FALSE));
-	addEntry(LLFolderType::FT_GESTURE, 				new ViewerFolderEntry("Gestures",				"Inv_GesturesOpen",		"Inv_GesturesClosed",		FALSE));
-	addEntry(LLFolderType::FT_FAVORITE, 			new ViewerFolderEntry("Favorites",				"Inv_FavoritesOpen",	"Inv_FavoritesClosed",		FALSE));
+	addEntry(LLFolderType::FT_ANIMATION, 			new ViewerFolderEntry("Animations",				"Inv_AnimationsOpen",	"Inv_AnimationsClosed",	FALSE));
+	addEntry(LLFolderType::FT_GESTURE, 				new ViewerFolderEntry("Gestures",				"Inv_GesturesOpen",		"Inv_GesturesClosed",	FALSE));
+	addEntry(LLFolderType::FT_FAVORITE, 			new ViewerFolderEntry("Favorites",				"Inv_FavoritesOpen",	"Inv_FavoritesClosed",	FALSE));
 
-	addEntry(LLFolderType::FT_CURRENT_OUTFIT, 		new ViewerFolderEntry("Current Outfit",			"Inv_LookFolderOpen",	"Inv_LookFolderClosed",		TRUE));
+	addEntry(LLFolderType::FT_CURRENT_OUTFIT, 		new ViewerFolderEntry("Current Outfit",			"Inv_LookFolderOpen",	"Inv_LookFolderClosed",	TRUE));
 	addEntry(LLFolderType::FT_OUTFIT, 				new ViewerFolderEntry("New Outfit",				"Inv_LookFolderOpen",	"Inv_LookFolderClosed",	TRUE));
-	addEntry(LLFolderType::FT_MY_OUTFITS, 			new ViewerFolderEntry("My Outfits",				"Inv_LookFolderOpen",	"Inv_LookFolderClosed",		TRUE));
-	addEntry(LLFolderType::FT_INBOX, 				new ViewerFolderEntry("Inbox",					"Inv_InboxOpen",		"Inv_InboxClosed",		FALSE));
+	addEntry(LLFolderType::FT_MY_OUTFITS, 			new ViewerFolderEntry("My Outfits",				"Inv_LookFolderOpen",	"Inv_LookFolderClosed",	TRUE));
+	addEntry(LLFolderType::FT_MESH, 				new ViewerFolderEntry("Meshes",					"Inv_SysOpen",			"Inv_SysClosed",		FALSE));
+	
+	addEntry(LLFolderType::FT_INBOX, 				new ViewerFolderEntry("Inbox",					"Inv_SysOpen",			"Inv_SysClosed",		FALSE));
+	addEntry(LLFolderType::FT_OUTBOX, 				new ViewerFolderEntry("Outbox",					"Inv_SysOpen",			"Inv_SysClosed",		FALSE));
+
+	addEntry(LLFolderType::FT_BASIC_ROOT, 			new ViewerFolderEntry("Basic Root",				"Inv_SysOpen",			"Inv_SysClosed",		FALSE));
 		 
 	addEntry(LLFolderType::FT_NONE, 				new ViewerFolderEntry("New Folder",				"Inv_FolderOpen",		"Inv_FolderClosed",		FALSE, "default"));
+
+	addEntry(LLFolderType::FT_FIRESTORM, 			new ViewerFolderEntry("Firestorm",				"Inv_FirestormOpen",	"Inv_FirestormClosed",	FALSE));
+	addEntry(LLFolderType::FT_PHOENIX, 				new ViewerFolderEntry("Phoenix",				"Inv_PhoenixOpen",		"Inv_PhoenixClosed",	FALSE));
+	addEntry(LLFolderType::FT_RLV,					new ViewerFolderEntry("RLV",					"Inv_RLVOpen",			"Inv_RLVClosed",		FALSE));
 
 #if SUPPORT_ENSEMBLES
 	initEnsemblesFromFile();

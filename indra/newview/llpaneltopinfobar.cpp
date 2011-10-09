@@ -39,6 +39,7 @@
 #include "llsidetray.h"
 #include "llslurl.h"
 #include "llstatusbar.h"
+#include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
 #include "llviewermenu.h"
@@ -102,6 +103,15 @@ void LLPanelTopInfoBar::initParcelIcons()
 	mParcelIcon[BUILD_ICON] = getChild<LLIconCtrl>("build_icon");
 	mParcelIcon[SCRIPTS_ICON] = getChild<LLIconCtrl>("scripts_icon");
 	mParcelIcon[DAMAGE_ICON] = getChild<LLIconCtrl>("damage_icon");
+	mParcelIcon[SEE_AVATARS_ICON] = getChild<LLIconCtrl>("see_avatars_icon");
+
+	mParcelIcon[VOICE_ICON]->setToolTip(LLTrans::getString("LocationCtrlVoiceTooltip"));
+	mParcelIcon[FLY_ICON]->setToolTip(LLTrans::getString("LocationCtrlFlyTooltip"));
+	mParcelIcon[PUSH_ICON]->setToolTip(LLTrans::getString("LocationCtrlPushTooltip"));
+	mParcelIcon[BUILD_ICON]->setToolTip(LLTrans::getString("LocationCtrlBuildTooltip"));
+	mParcelIcon[SCRIPTS_ICON]->setToolTip(LLTrans::getString("LocationCtrlScriptsTooltip"));
+	mParcelIcon[DAMAGE_ICON]->setToolTip(LLTrans::getString("LocationCtrlDamageTooltip"));
+	mParcelIcon[SEE_AVATARS_ICON]->setToolTip(LLTrans::getString("LocationCtrlSeeAVsTooltip"));
 
 	mParcelIcon[VOICE_ICON]->setMouseDownCallback(boost::bind(&LLPanelTopInfoBar::onParcelIconClick, this, VOICE_ICON));
 	mParcelIcon[FLY_ICON]->setMouseDownCallback(boost::bind(&LLPanelTopInfoBar::onParcelIconClick, this, FLY_ICON));
@@ -109,6 +119,7 @@ void LLPanelTopInfoBar::initParcelIcons()
 	mParcelIcon[BUILD_ICON]->setMouseDownCallback(boost::bind(&LLPanelTopInfoBar::onParcelIconClick, this, BUILD_ICON));
 	mParcelIcon[SCRIPTS_ICON]->setMouseDownCallback(boost::bind(&LLPanelTopInfoBar::onParcelIconClick, this, SCRIPTS_ICON));
 	mParcelIcon[DAMAGE_ICON]->setMouseDownCallback(boost::bind(&LLPanelTopInfoBar::onParcelIconClick, this, DAMAGE_ICON));
+	mParcelIcon[SEE_AVATARS_ICON]->setMouseDownCallback(boost::bind(&LLPanelTopInfoBar::onParcelIconClick, this, SEE_AVATARS_ICON));
 
 	mDamageText->setText(LLStringExplicit("100%"));
 }
@@ -130,6 +141,7 @@ BOOL LLPanelTopInfoBar::postBuild()
 {
 	mInfoBtn = getChild<LLButton>("place_info_btn");
 	mInfoBtn->setClickedCallback(boost::bind(&LLPanelTopInfoBar::onInfoButtonClicked, this));
+	mInfoBtn->setToolTip(LLTrans::getString("LocationCtrlInfoBtnTooltip"));
 
 	mParcelInfoText = getChild<LLTextBox>("parcel_info_text");
 	mDamageText = getChild<LLTextBox>("damage_text");
@@ -287,6 +299,7 @@ void LLPanelTopInfoBar::updateParcelIcons()
 		bool allow_build	= vpm->allowAgentBuild(current_parcel); // true when anyone is allowed to build. See EXT-4610.
 		bool allow_scripts	= vpm->allowAgentScripts(agent_region, current_parcel);
 		bool allow_damage	= vpm->allowAgentDamage(agent_region, current_parcel);
+		bool see_avs        = current_parcel->getSeeAVs();
 
 		// Most icons are "block this ability"
 		mParcelIcon[VOICE_ICON]->setVisible(   !allow_voice );
@@ -296,6 +309,7 @@ void LLPanelTopInfoBar::updateParcelIcons()
 		mParcelIcon[SCRIPTS_ICON]->setVisible( !allow_scripts );
 		mParcelIcon[DAMAGE_ICON]->setVisible(  allow_damage );
 		mDamageText->setVisible(allow_damage);
+		mParcelIcon[SEE_AVATARS_ICON]->setVisible( !see_avs );
 
 		layoutParcelIcons();
 	}
@@ -400,6 +414,9 @@ void LLPanelTopInfoBar::onParcelIconClick(EParcelIcon icon)
 	}
 	case DAMAGE_ICON:
 		LLNotificationsUtil::add("NotSafe");
+		break;
+	case SEE_AVATARS_ICON:
+		LLNotificationsUtil::add("SeeAvatars");
 		break;
 	case ICON_COUNT:
 		break;

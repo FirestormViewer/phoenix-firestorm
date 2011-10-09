@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--alba-->
 <floater name="Snapshot" title="APERÇU DE LA PHOTO" width="247">
 	<floater.string name="unknown">
 		inconnu
 	</floater.string>
 	<radio_group label="Type de photo" name="snapshot_type_radio">
-		<radio_item label="E-mail" name="postcard"/>
-		<radio_item label="Mon inventaire ([AMOUNT] L$)" name="texture"/>
-		<radio_item label="Enregistrer sur mon ordinateur" name="local"/>
+		<radio_item label="Env. par e-mail" name="postcard"/>
+		<radio_item label="Enr. dans l'inventaire ([AMOUNT] L$)" name="texture"/>
+		<radio_item label="Enr. sur l'ordinateur" name="local"/>
+		<radio_item label="Env. vers Flickr" name="flickr"/>
 	</radio_group>
 	<text name="file_size_label">
 		[SIZE] Ko
 	</text>
 	<button label="Rafraîchir" name="new_snapshot_btn"/>
 	<button label="Envoyer" name="send_btn"/>
-	<button label="Enreg. ([AMOUNT] L$)" name="upload_btn"/>
+	<button label="Enreg." name="upload_btn"/>
 	<flyout_button label="Enregistrer" name="save_btn" tool_tip="Enregistrer l&apos;image sous forme de fichier">
 		<flyout_button.item label="Enregistrer" name="save_item"/>
 		<flyout_button.item label="Enregistrer sous..." name="saveas_item"/>
@@ -61,7 +63,7 @@
 	<check_box label="Contraindre les proportions" name="keep_aspect_check"/>
 	<slider label="Qualité de l&apos;image" name="image_quality_slider"/>
 	<text name="layer_type_label">
-		Capturer :
+		Capture :
 	</text>
 	<combo_box label="Couches d&apos;images" name="layer_types">
 		<combo_box.item label="Couleurs" name="Colors"/>
@@ -72,4 +74,6 @@
 	<check_box label="Garder ouvert après enregistrement" name="keep_open_check"/>
 	<check_box label="Arrêt sur image (plein écran)" name="freeze_frame_check"/>
 	<check_box label="Actualisation automatique" name="auto_snapshot_check"/>
+	<check_box name="temp_check" label="Image temporaire (Gratuit)"
+		tooltip="Définit l'instantané en tant qu'image temporaire. Elle est gratuite, mais n'est valide que sur une courte période avant de disparaître."/>
 </floater>

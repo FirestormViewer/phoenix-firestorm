@@ -55,6 +55,17 @@
         <key>Value</key>
             <string />
         </map>
+    <key>LastInventoryInboxExpand</key>
+       <map>
+            <key>Comment</key>
+            <string>The last time the received items inbox was expanded.</string>
+            <key>Persist</key>
+            <integer>1</integer>
+            <key>Type</key>
+            <string>String</string>
+            <key>Value</key>
+            <string />
+        </map>
     <key>LastLogoff</key>
         <map>
         <key>Comment</key>
@@ -66,6 +77,17 @@
         <key>Value</key>
             <integer>0</integer>
         </map>
+    <key>LastPostcardRecipient</key>
+      <map>
+        <key>Comment</key>
+          <string>Last recipient of postcard</string>
+        <key>Persist</key>
+          <integer>1</integer>
+        <key>Type</key>
+          <string>String</string>
+        <key>Value</key>
+          <string />
+      </map>
     <key>LogNearbyChat</key>
         <map>
         <key>Comment</key>
@@ -75,7 +97,7 @@
         <key>Type</key>
             <string>Boolean</string>
         <key>Value</key>
-            <integer>1</integer>
+            <integer>0</integer>
         </map>
     <key>LogTimestamp</key>
         <map>
@@ -182,6 +204,225 @@
         <key>Value</key>
             <integer>0</integer>
         </map>
+      <key>ShowFavoritesOnLogin</key>
+        <map>
+        <key>Comment</key>
+             <string>Determines whether favorites of last logged in user will be saved on exit from viewer and shown on login screen</string>
+        <key>Persist</key>
+             <integer>1</integer>
+        <key>Type</key>
+             <string>Boolean</string>
+        <key>Value</key>
+             <integer>0</integer>
+        </map>
     <!-- End of back compatibility settings -->
+    
+    <!-- Firestorm settings -->
+    <key>KittyFlickrToken</key>
+    <map>
+      <key>Comment</key>
+          <string>Token used to authenticate with Flickr</string>
+      <key>Persist</key>
+          <integer>1</integer>
+      <key>Type</key>
+          <string>String</string>
+      <key>Value</key>
+          <string></string>
+    </map>
+    <key>KittyFlickrUsername</key>
+    <map>
+      <key>Comment</key>
+          <string>Username associated with Flickr account</string>
+      <key>Persist</key>
+          <integer>1</integer>
+      <key>Type</key>
+          <string>String</string>
+      <key>Value</key>
+          <string></string>
+    </map>
+    <key>KittyFlickrNSID</key>
+    <map>
+      <key>Comment</key>
+          <string>NSID associated with Flickr account</string>
+      <key>Persist</key>
+          <integer>1</integer>
+      <key>Type</key>
+          <string>String</string>
+      <key>Value</key>
+          <string></string>
+    </map>
+    <key>DebugLookAt</key>
+        <map>
+        <key>Comment</key>
+            <string>Show Debug LookAt targets</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
+    <key>DebugLookAtHideOwn</key>
+        <map>
+        <key>Comment</key>
+            <string>Don't show own LookAt target with DebugLookAt</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>1</integer>
+        </map>
+    <key>UseAO</key>
+        <map>
+        <key>Comment</key>
+            <string>Use the viewer side Animation Overrider</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
+    <key>UseFullAOInterface</key>
+        <map>
+        <key>Comment</key>
+            <string>Use the full Animation Overrider interface (TRUE) or the small, reduced interface (FALSE).</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
+    <key>ProtectAOFolders</key>
+        <map>
+        <key>Comment</key>
+            <string>Keep the AO folders in Inventory safe from manual changes.</string>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>1</integer>
+        </map>
+    <key>floater_rect_animation_overrider_full</key>
+        <map>
+        <key>Comment</key>
+            <string>Position and size for the full Animation Overrider interface. The defaults are just dummy values.</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Rect</string>
+        <key>Value</key>
+            <array>
+                <integer>0</integer>
+                <integer>0</integer>
+                <integer>0</integer>
+                <integer>0</integer>
+            </array>
+        </map>
+    <key>ProtectBridgeFolder</key>
+        <map>
+        <key>Comment</key>
+            <string>Keep the Bridge folder in Inventory safe from manual changes.</string>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>1</integer>
+        </map>
+	
+	<key>PhoenixKeywordOn</key>
+	<map>
+		<key>Comment</key>
+			<string>Turns on keyword alerts</string>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<integer>0</integer>
+	</map>
+	<key>PhoenixKeywordInChat</key>
+	<map>
+		<key>Comment</key>
+			<string>Look for keywords in local chat</string>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<integer>0</integer>
+	</map>
+	<key>PhoenixKeywordInIM</key>
+	<map>
+		<key>Comment</key>
+			<string>Look for keywords in IMs and group chats</string>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<integer>0</integer>
+	</map>
+	<key>PhoenixKeywords</key>
+	<map>
+		<key>Comment</key>
+			<string>Comma seperated list of keywords</string>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Type</key>
+			<string>String</string>
+		<key>Value</key>
+			<string></string>
+	</map>
+	<key>PhoenixKeywordPlaySound</key>
+	<map>
+		<key>Comment</key>
+			<string>Play a sound when a keyword is found</string>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<integer>0</integer>
+		</map>
+	<key>PhoenixKeywordSound</key>
+	<map>
+		<key>Comment</key>
+			<string>UUID of sound to play</string>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Type</key>
+			<string>String</string>
+		<key>Value</key>
+			<string>a3f48b85-c29f-1f97-ebb6-644b7c053512</string>
+	</map>
+	<key>PhoenixKeywordChangeColor</key>
+	<map>
+		<key>Comment</key>
+			<string>change message color if keyword found</string>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<integer>0</integer>
+	</map>
+	<key>PhoenixKeywordColor</key>
+	<map>
+		<key>Comment</key>
+			<string>Color of keyword detects messages</string>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Type</key>
+			<string>Color4</string>
+		<key>Value</key>
+		<array>
+			<real>1.0</real>
+			<real>0.600000023842</real>
+			<real>0.0</real>
+			<real>1.0</real>
+		</array>
+	</map>
+    <!-- End of Firestorm settings -->
     </map>
 </llsd>

@@ -23,6 +23,14 @@
 	[REG_DATE] ([AGE])
    </string> 
    <string
+    name="name_text_args">
+	[NAME]
+   </string>
+   <string
+    name="display_name_text_args">
+	[DISPLAY_NAME]
+   </string>
+   <string
     name="AcctTypeResident"
     value="Resident" />
    <string

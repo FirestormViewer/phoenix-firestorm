@@ -100,11 +100,6 @@ public:
 
 		void onAvatarNameCache(const LLUUID& avatar_id, const LLAvatarName& av_name);
 
-		void onAdHocNameCache(const LLAvatarName& av_name);
-
-		//*TODO make private
-		static std::string generateHash(const std::set<LLUUID>& sorted_uuids);
-
 		LLUUID mSessionID;
 		std::string mName;
 		EInstantMessage mType;
@@ -139,6 +134,11 @@ public:
 
 		//if IM session is created for a voice call
 		bool mStartedAsIMCall;
+
+	private:
+		void onAdHocNameCache(const LLAvatarName& av_name);
+
+		static std::string generateHash(const std::set<LLUUID>& sorted_uuids);
 	};
 	
 
@@ -300,12 +300,7 @@ private:
 	/**
 	 * Add message to a list of message associated with session specified by session_id
 	 */
-	bool addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text); 
-
-	/**
-	 * Save an IM message into a file
-	 */
-	bool logToFile(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text);
+	bool addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text);
 };
 
 class LLIMSessionObserver
@@ -549,6 +544,7 @@ public:
 	static void onReject(void* user_data);
 	static void onStartIM(void* user_data);
 
+	static void processCallResponse(S32 response, const LLSD& payload);
 private:
 	void setCallerName(const std::string& ui_title,
 		const std::string& ui_label,
@@ -558,7 +554,6 @@ private:
 		const std::string& call_type);
 
 	/*virtual*/ void onLifetimeExpired();
-	void processCallResponse(S32 response);
 };
 
 class LLOutgoingCallDialog : public LLCallDialog

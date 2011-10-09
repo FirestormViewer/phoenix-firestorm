@@ -62,6 +62,10 @@
 #include <queue>
 #include "llcombobox.h"
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+#include "llhunspell.h"
+// [/SL:KB]
+
 // 
 // Globals
 //
@@ -334,7 +338,10 @@ void LLTextEditor::setText(const LLStringExplicit &utf8str, const LLStyle::Param
 	resetDirty();
 }
 
-void LLTextEditor::selectNext(const std::string& search_text_in, BOOL case_insensitive, BOOL wrap)
+//void LLTextEditor::selectNext(const std::string& search_text_in, BOOL case_insensitive, BOOL wrap)
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+void LLTextEditor::selectNext(const std::string& search_text_in, BOOL case_insensitive, BOOL wrap, BOOL search_up)
+// [/SL:KB]
 {
 	if (search_text_in.empty())
 	{
@@ -355,17 +362,35 @@ void LLTextEditor::selectNext(const std::string& search_text_in, BOOL case_insen
 		
 		if (selected_text == search_text)
 		{
-			// We already have this word selected, we are searching for the next.
-			setCursorPos(mCursorPos + search_text.size());
+//			// We already have this word selected, we are searching for the next.
+//			setCursorPos(mCursorPos + search_text.size());
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+			if (search_up)
+			{
+				// We already have this word selected, we are searching for the previous.
+				setCursorPos(llmax(0, mCursorPos - 1));
+			}
+			else
+			{
+				// We already have this word selected, we are searching for the next.
+				setCursorPos(mCursorPos + search_text.size());
+			}
+// [/SL:KB]
 		}
 	}
 	
-	S32 loc = text.find(search_text,mCursorPos);
-	
+//	S32 loc = text.find(search_text,mCursorPos);
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+	S32 loc = (search_up) ? text.rfind(search_text, llmax(0, mCursorPos - (S32)search_text.size())) : text.find(search_text,mCursorPos);
+// [/SL:KB]
+
 	// If Maybe we wrapped, search again
 	if (wrap && (-1 == loc))
 	{	
-		loc = text.find(search_text);
+//		loc = text.find(search_text);
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+		loc = (search_up) ? text.rfind(search_text) : text.find(search_text);
+// [/SL:KB]
 	}
 	
 	// If still -1, then search_text just isn't found.
@@ -378,14 +403,24 @@ void LLTextEditor::selectNext(const std::string& search_text_in, BOOL case_insen
 	}
 
 	setCursorPos(loc);
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+	if (mReadOnly)
+	{
+		updateScrollFromCursor();
+	}
+// [/SL:KB]
 	
 	mIsSelecting = TRUE;
 	mSelectionEnd = mCursorPos;
 	mSelectionStart = llmin((S32)getLength(), (S32)(mCursorPos + search_text.size()));
 }
 
+//BOOL LLTextEditor::replaceText(const std::string& search_text_in, const std::string& replace_text,
+//							   BOOL case_insensitive, BOOL wrap)
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
 BOOL LLTextEditor::replaceText(const std::string& search_text_in, const std::string& replace_text,
-							   BOOL case_insensitive, BOOL wrap)
+							   BOOL case_insensitive, BOOL wrap, BOOL search_up)
+// [/SL:KB]
 {
 	BOOL replaced = FALSE;
 
@@ -413,7 +448,10 @@ BOOL LLTextEditor::replaceText(const std::string& search_text_in, const std::str
 		}
 	}
 
-	selectNext(search_text_in, case_insensitive, wrap);
+//	selectNext(search_text_in, case_insensitive, wrap);
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+	selectNext(search_text_in, case_insensitive, wrap, search_up);
+// [/SL:KB]
 	return replaced;
 }
 
@@ -592,6 +630,10 @@ void LLTextEditor::indentSelectedLines( S32 spaces )
 			}
 		}
 
+		// Disabling parsing on the fly to avoid updating text segments
+		// until all indentation commands are executed.
+		mParseOnTheFly = FALSE;
+
 		// Find each start-of-line and indent it
 		do
 		{
@@ -616,6 +658,8 @@ void LLTextEditor::indentSelectedLines( S32 spaces )
 			}
 		}
 		while( cur < right );
+
+		mParseOnTheFly = TRUE;
 
 		if( (right < getLength()) && (text[right] == '\n') )
 		{
@@ -651,6 +695,95 @@ void LLTextEditor::selectAll()
 	setCursorPos(mSelectionEnd);
 	updatePrimary();
 }
+
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+
+// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+std::string LLTextEditor::getSuggestion(U32 idxSuggestion) const
+{
+	return (idxSuggestion < mSuggestionList.size()) ? mSuggestionList[idxSuggestion] : LLStringUtil::null;
+}
+
+// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+U32 LLTextEditor::getSuggestionCount() const
+{
+	return mSuggestionList.size();
+}
+
+// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+void LLTextEditor::replaceWithSuggestion(U32 idxSuggestion)
+{
+	for (std::list<std::pair<U32, U32> >::const_iterator itMisspell = mMisspellRanges.begin(); 
+			itMisspell != mMisspellRanges.end(); ++itMisspell)
+	{
+		if ( (itMisspell->first <= (U32)mCursorPos) && (itMisspell->second >= (U32)mCursorPos) )
+		{
+			deselect();
+
+			// Delete the misspelled word
+			remove(itMisspell->first, itMisspell->second - itMisspell->first, TRUE);
+			setCursorPos(itMisspell->first);
+
+			// Insert the suggestion in its place
+			S32 cntCh = insert(mCursorPos, utf8str_to_wstring(mSuggestionList[idxSuggestion]), FALSE, LLTextSegmentPtr());
+			setCursorPos(mCursorPos + cntCh);
+
+			break;
+		}
+	}
+	mNeedsSpellCheck = TRUE;
+}
+
+// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+void LLTextEditor::addToDictionary()
+{
+	if (canAddToDictionary())
+		LLHunspellWrapper::instance().addToCustomDictionary(getMisspelledWord(mCursorPos));
+}
+
+// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+bool LLTextEditor::canAddToDictionary() const
+{
+	return (useSpellCheck()) && (isMisspelledWord(mCursorPos));
+}
+
+// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+void LLTextEditor::addToIgnore()
+{
+	if (canAddToIgnore())
+		LLHunspellWrapper::instance().addToIgnoreList(getMisspelledWord(mCursorPos));
+}
+
+// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+bool LLTextEditor::canAddToIgnore() const
+{
+	return (useSpellCheck()) && (isMisspelledWord(mCursorPos));
+}
+
+// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+std::string LLTextEditor::getMisspelledWord(U32 posCursor) const
+{
+	for (std::list<std::pair<U32, U32> >::const_iterator itMisspell = mMisspellRanges.begin(); 
+			itMisspell != mMisspellRanges.end(); ++itMisspell)
+	{
+		if ( (itMisspell->first <= posCursor) && (itMisspell->second >= posCursor) )
+			return wstring_to_utf8str(getWText().substr(itMisspell->first, itMisspell->second - itMisspell->first));
+	}
+	return LLStringUtil::null;
+}
+
+// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+bool LLTextEditor::isMisspelledWord(U32 posCursor) const
+{
+	for (std::list<std::pair<U32, U32> >::const_iterator itMisspell = mMisspellRanges.begin(); 
+			itMisspell != mMisspellRanges.end(); ++itMisspell)
+	{
+		if ( (itMisspell->first <= posCursor) && (itMisspell->second >= posCursor) )
+			return true;
+	}
+	return false;
+}
+// [/SL:KB]
 
 BOOL LLTextEditor::handleMouseDown(S32 x, S32 y, MASK mask)
 {
@@ -717,6 +850,9 @@ BOOL LLTextEditor::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	{
 		setFocus(TRUE);
 	}
+// [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-12 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
+	setCursorAtLocalPos(x, y, FALSE);
+// [/SL:KB]
 	// Prefer editor menu if it has selection. See EXT-6806.
 	if (hasSelection() || !LLTextBase::handleRightMouseDown(x, y, mask))
 	{
@@ -1959,6 +2095,32 @@ void LLTextEditor::showContextMenu(S32 x, S32 y)
 
 	S32 screen_x, screen_y;
 	localPointToScreen(x, y, &screen_x, &screen_y);
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	// Move the cursor to where the user right-clicked (clear the current selection if the user right-clicked outside of it)
+	setCursorAtLocalPos(x, y, false);
+	if ( (mCursorPos < llmin(mSelectionStart, mSelectionEnd)) || (mCursorPos > llmax(mSelectionStart, mSelectionEnd)) )
+		deselect();
+	else
+		setCursorPos(llmax(mSelectionStart, mSelectionEnd));
+
+	bool fUseSpellCheck = useSpellCheck(), fMisspelledWord = false;
+	if (fUseSpellCheck)
+	{
+		mSuggestionList.clear();
+
+		// If the cursor is on a misspelled word, retrieve suggestions for it
+		std::string strMisspelledWord = getMisspelledWord(mCursorPos);
+		if ((fMisspelledWord = !strMisspelledWord.empty()) == true)
+			LLHunspellWrapper::instance().getSuggestions(strMisspelledWord, mSuggestionList);
+	}
+
+	// Show/hide spell checking related menu items
+	mContextMenu->setItemVisible("Suggestion Separator", (fUseSpellCheck) && (!mSuggestionList.empty()));
+	mContextMenu->setItemVisible("Add to Dictionary", (fUseSpellCheck) && (fMisspelledWord));
+	mContextMenu->setItemVisible("Add to Ignore", (fUseSpellCheck) && (fMisspelledWord));
+	mContextMenu->setItemVisible("Spellcheck Separator", (fUseSpellCheck) && (fMisspelledWord));
+	mContextMenu->setSpawningView(getHandle());
+// [/SL:KB]
 	mContextMenu->show(screen_x, screen_y);
 }
 
@@ -2828,6 +2990,10 @@ void LLTextEditor::setKeystrokeCallback(const keystroke_signal_t::slot_type& cal
 void LLTextEditor::onKeyStroke()
 {
 	mKeystrokeSignal(this);
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-08 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	mNeedsSpellCheck = TRUE;
+	mSpellCheckTimer.setTimerExpirySec(SPELLCHECK_DELAY);
+// [/SL:KB]
 }
 
 //virtual

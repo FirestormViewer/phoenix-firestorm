@@ -81,6 +81,9 @@
 	 name="Green"
 	 value="0 1 0 1" />
 	<color
+	 name="LtGreen"
+	 value="0.79 1 0.79 1" />
+	<color
 	 name="Transparent"
 	 value="0 0 0 0" />
 	<color
@@ -122,6 +125,9 @@
 	<color
 	 name="SL-Background_66"
 	 value="0.125 0.125 0.125 0.66" />
+	<color
+	 name="SL-Background_86"
+	 value="0.125 0.125 0.125 0.86" />
 	<color
 	 name="SL-Foreground"
 	 value="0.375 0.120 0.400 1" />
@@ -204,7 +210,7 @@
 
     <color
      name="ChicletFlashColor"
-     value="0.114 0.65 0.1" />
+     reference="EmphasisColor" />
     <color
      name="GroupNotifyBoxColor"
      value="0.3344 0.5456 0.5159 1" />
@@ -229,7 +235,6 @@
     <color
      name="NetMapOtherOwnAboveWater"
      reference="SL-DkTitanium" />
-<!-- Changed Color -->
     <color
      name="NetMapOtherOwnBelowWater"
      value="DkGray" />
@@ -299,11 +304,7 @@
     <color
      name="AgentLinkColor"
      reference="White" />
-<!-- Changed Color -->
-    <color
-     name="AlertTextColor"
-     reference="SL-MidBlue" />
-    <color
+	 <color
      name="AvatarListItemIconDefaultColor"
      reference="SL-White" />
     <color
@@ -322,6 +323,15 @@
      name="AvatarListItemIconVoiceLeftColor"
      reference="AvatarListItemIconOfflineColor" />
     <color
+     name="BadgeImageColor"
+     value="1.0 0.40 0.0 1.0" />
+    <color
+     name="BadgeBorderColor"
+     value="0.9 0.9 0.9 1.0" />
+    <color
+     name="BadgeLabelColor"
+     reference="White" />
+    <color
      name="ButtonBorderColor"
      reference="Unused?" />
     <color
@@ -332,8 +342,7 @@
      reference="Unused?" />
     <color
      name="ButtonFlashBgColor"
-     reference="Unused?" />
-<!-- Color Changed -->
+     reference="EmphasisColor" />
     <color
      name="ButtonImageColor"
      reference="SL-White" />
@@ -429,7 +438,7 @@
      reference="Red" />
     <color
      name="ColorPaletteEntry20"
-     reference=".5 .5 1 0" />
+     value=".5 .5 1 0" />
     <color
      name="ColorPaletteEntry21"
      reference="Green" />
@@ -502,11 +511,9 @@
     <color
      name="FloaterDefaultBackgroundColor"
      reference="SL-Background" />
-<!-- Changed Color -->
     <color
      name="FloaterFocusBackgroundColor"
      reference="SL-Background" />
-<!-- Changed Color -->
     <color
      name="FloaterFocusBorderColor"
      reference="SL-Background_50" />
@@ -633,14 +640,12 @@
     <color
      name="MapFrustumColor"
      reference="White_10" />
-<!-- Changed Color -->
     <color
      name="MapFrustumRotatingColor"
      reference="White_25" />
     <color
      name="MapTrackColor"
      reference="Red" />
-<!-- Changed Color -->
     <color
      name="MapTrackDisabledColor"
      reference="BrickBrown" />
@@ -673,27 +678,22 @@
 	  reference="DkGray2" />
     <color
      name="MultiSliderDisabledThumbColor"
-     reference="Unused?" />
+     reference="Black" />
     <color
      name="MultiSliderThumbCenterColor"
-     reference="Unused?" />
+     reference="White" />
     <color
      name="MultiSliderThumbCenterSelectedColor"
-     reference="Unused?" />
+     reference="Green" />
     <color
      name="MultiSliderThumbOutlineColor"
      reference="Unused?" />
     <color
      name="MultiSliderTrackColor"
-     reference="Unused?" />
+     reference="LtGray" />
     <color
      name="MultiSliderTriangleColor"
-     reference="Unused?" />
-  <!--
-    <color
-      name="NameTagBackground"
-      value="0.85 0.85 0.85 0.80" />
-      -->
+     reference="Yellow" />
     <color
       name="NameTagBackground"
       value="0 0 0 1" />
@@ -712,7 +712,6 @@
     <color
      name="NameTagMismatch"
      reference="LtOrange" />
-<!-- Changed Color -->
     <color
      name="NetMapBackgroundColor"
      reference="Black_25" />
@@ -791,7 +790,6 @@
     <color
      name="SelectedOutfitTextColor"
      reference="EmphasisColor" />
-<!-- Color Changed -->
     <color
      name="SilhouetteChildColor"
      reference="SL-MidBlue" />
@@ -833,7 +831,7 @@
      reference="Black" />
     <color
      name="TextEmbeddedItemReadOnlyColor"
-     reference="Unused?" />
+     reference="EmphasisColor35" />
     <color
      name="TextFgReadOnlyColor"
      reference="LtGray" />
@@ -875,4 +873,82 @@
     <color
      name="MenuBarProjectBgColor"
      reference="MdBlue" />
+    <color
+      name="MeshImportTableNormalColor"
+      reference="White"/>
+    <color
+      name="MeshImportTableHighlightColor"
+      value="0.2 0.8 1 1"/> 
+    <color
+     name="DirectChatColor"
+     reference="LtOrange" />
+	    
+    <!-- Generic colour names (legacy) -->
+  <color
+    name="white"
+    value="1 1 1 1"/>
+  <color
+    name="black"
+    value="0 0 0 1"/>
+  <color
+    name="red"
+    value="1 0 0 1"/>
+  <color
+    name="green"
+    value="0 1 0 1"/>
+  <color
+    name="blue"
+    value="0 0 1 1"/>
+		    
+    <!-- Colours for Firestorm - change for each theme as necessary -->	
+	<color
+     name="ScriptDialog"
+     value="0.275 0.667 1 1" />
+    <color
+     name="ScriptDialogFg"
+     reference="Black" />
+    <color
+     name="AlertTextColor"
+     reference="White" />
+	<color
+	 name="AvatarListItemShoutRange"
+	 reference="Lime" />
+	<color
+	 name="AvatarListItemBeyondShoutRange"
+	 reference="LtYellow" />
+	 
+    <!-- Colours for Firestorm - same for all themes -->	
+    <color
+     name="SchemeLightest"
+     reference="EmphasisColor" />	
+	<color
+	 name="HintTitle"
+	 reference="EmphasisColor" />
+	<color
+	 name="HintText"
+	 reference="LtGray" />
+	<color
+	 name="HintBg"
+	 reference="Black" />
+	<color
+	 name="AccentColor"
+	 reference="EmphasisColor" />
+    <color
+     name="BackgroundChatColor"
+     reference="DkGray" />
+	<color
+     name="ChatNameColor"
+     reference="White" />
+	<color
+     name="ChatToastAgentNameColor"
+     reference="EmphasisColor" />
+	 
+	    <!-- Colours for Kirstens Viewer - all themes -->	
+     <color
+     name="MapChatRingColor"
+     value="0.6 0.2 0.8 0.3" />
+	 <color
+     name="PieMenuTextColor"
+     value="1 1 1 0.85" />	
 </colors>
+

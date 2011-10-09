@@ -90,7 +90,7 @@ class LLGroupListItem : public LLPanel
 	, public LLGroupMgrObserver
 {
 public:
-	LLGroupListItem();
+	LLGroupListItem(bool for_agent);
 	~LLGroupListItem();
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void setValue(const LLSD& value);

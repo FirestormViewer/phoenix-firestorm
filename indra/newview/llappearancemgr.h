@@ -51,7 +51,7 @@ public:
 	typedef std::vector<LLInventoryModel::item_array_t> wearables_by_type_t;
 
 	void updateAppearanceFromCOF(bool update_base_outfit_ordering = false);
-// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-02 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-02 (Catznip-2.6.0a) | Added: Catznip-2.0.0a
 	void updateAppearanceFromInitialWearables(LLInventoryModel::item_array_t& initial_items);
 // [/SL:KB]
 	bool needToSaveCOF();
@@ -62,8 +62,17 @@ public:
 				   bool append = false, const LLUUID& idOutfit = LLUUID::null);
 // [/RLVa:KB]
 	void wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append);
+//-TT Patch: ReplaceWornItemsOnly
+	void wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append, bool items);
+//-TT 
 	void wearInventoryCategoryOnAvatar(LLInventoryCategory* category, bool append);
 	void wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append);
+//-TT Patch: ReplaceWornItemsOnly
+	void wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append, bool items);
+//-TT 
+//-TT Patch: ReplaceWornItemsOnly
+	void replaceCategoryInCurrentOutfit(const LLUUID& cat_id);
+//-TT 
 	void wearOutfitByName(const std::string& name);
 	void changeOutfit(bool proceed, const LLUUID& category, bool append);
 	void replaceCurrentOutfit(const LLUUID& new_outfit);
@@ -229,7 +238,7 @@ private:
 
 	std::auto_ptr<LLOutfitUnLockTimer> mUnlockOutfitTimer;
 
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.2.0a) | Modified: Catznip-2.1.2e
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.6.0a) | Modified: Catznip-2.1.2e
 public:
 	void linkPendingAttachments();
 	void onRegisterAttachmentComplete(const LLUUID& idItem);
@@ -263,7 +272,7 @@ private:
 	bool mUpdateBaseOrder;
 };
 
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-2.6.0a) | Added: Catznip-2.1.2a
 class LLRegisterAttachmentCallback : public LLInventoryCallback
 {
 public:
@@ -280,15 +289,6 @@ public:
 #define SUPPORT_ENSEMBLES 0
 
 LLUUID findDescendentCategoryIDByName(const LLUUID& parent_id,const std::string& name);
-
-typedef boost::function<void ()> nullary_func_t;
-typedef boost::function<bool ()> bool_func_t;
-
-// Call a given callable once in idle loop.
-void doOnIdleOneTime(nullary_func_t callable);
-
-// Repeatedly call a callable in idle loop until it returns true.
-void doOnIdleRepeating(bool_func_t callable);
 
 // Invoke a given callable after category contents are fully fetched.
 void callAfterCategoryFetch(const LLUUID& cat_id, nullary_func_t cb);

@@ -38,6 +38,8 @@ class LLColor4U;
 class LLCoordGL;
 class LLImageRaw;
 class LLViewerTexture;
+class LLFloaterMap;
+class LLMenuGL;
 
 class LLNetMap : public LLUICtrl
 {
@@ -70,10 +72,16 @@ public:
 	/*virtual*/ BOOL	handleHover( S32 x, S32 y, MASK mask );
 	/*virtual*/ BOOL	handleToolTip( S32 x, S32 y, MASK mask);
 	/*virtual*/ void	reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
-	
+
+	/*virtual*/ BOOL 	postBuild();
+	/*virtual*/ BOOL	handleRightMouseDown( S32 x, S32 y, MASK mask );
+	/*virtual*/ BOOL	handleClick(S32 x, S32 y, MASK mask);
+	/*virtual*/ BOOL	handleDoubleClick( S32 x, S32 y, MASK mask );
+
 	void			setScale( F32 scale );
 	void			setToolTipMsg(const std::string& msg) { mToolTipMsg = msg; }
 	void			renderScaledPointGlobal( const LLVector3d& pos, const LLColor4U &color, F32 radius );
+	LLVector3d		viewPosToGlobal(S32 x,S32 y);
 
 private:
 	const LLVector3d& getObjectImageCenterGlobal()	{ return mObjectImageCenterGlobal; }
@@ -81,11 +89,11 @@ private:
 								S32 diameter, S32 relative_height = 0);
 
 	LLVector3		globalPosToView(const LLVector3d& global_pos);
-	LLVector3d		viewPosToGlobal(S32 x,S32 y);
 
 	void			drawTracking( const LLVector3d& pos_global, 
 								  const LLColor4& color,
 								  BOOL draw_arrow = TRUE);
+	void			drawRing(const F32 radius, LLVector3 pos_map, const LLUIColor& color);
 	BOOL			handleToolTipAgent(const LLUUID& avatar_id);
 	static void		showAvatarInspector(const LLUUID& avatar_id);
 
@@ -117,7 +125,26 @@ private:
 	LLUUID			mClosestAgentToCursor;
 	LLUUID			mClosestAgentAtLastRightClick;
 
+	LLVector3d		mClosestAgentPosition;
+
 	std::string		mToolTipMsg;
+
+	static std::map<LLUUID, LLColor4> sAvatarMarksMap;
+
+public:
+	void			setSelected(uuid_vec_t uuids) { gmSelected=uuids; };
+	void			setAvatarMark(const LLSD& userdata);
+	void			saveClosestAgentAtLastRightClick();
+	void			clearAvatarMarks();
+
+private:
+	void handleZoom(const LLSD& userdata);
+	void handleStopTracking (const LLSD& userdata);
+	void handleMark(const LLSD& userdata);
+	void handleClearMarks();
+
+	LLMenuGL*		mPopupMenu;
+	uuid_vec_t		gmSelected;
 };
 
 

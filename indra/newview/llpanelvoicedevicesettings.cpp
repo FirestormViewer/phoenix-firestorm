@@ -41,6 +41,7 @@
 
 
 static LLRegisterPanelClassWrapper<LLPanelVoiceDeviceSettings> t_panel_group_general("panel_voice_device_settings");
+static const std::string DEFAULT_DEVICE("Default");
 
 
 LLPanelVoiceDeviceSettings::LLPanelVoiceDeviceSettings()
@@ -51,6 +52,7 @@ LLPanelVoiceDeviceSettings::LLPanelVoiceDeviceSettings()
 	mInputDevice = gSavedSettings.getString("VoiceInputAudioDevice");
 	mOutputDevice = gSavedSettings.getString("VoiceOutputAudioDevice");
 	mDevicesUpdated = FALSE;
+	mUseTuningMode = true;
 
 	// grab "live" mic volume level
 	mMicVolume = gSavedSettings.getF32("AudioLevelMic");
@@ -67,10 +69,17 @@ BOOL LLPanelVoiceDeviceSettings::postBuild()
 	// set mic volume tuning slider based on last mic volume setting
 	volume_slider->setValue(mMicVolume);
 
-	getChild<LLComboBox>("voice_input_device")->setCommitCallback(
+	mCtrlInputDevices = getChild<LLComboBox>("voice_input_device");
+	mCtrlOutputDevices = getChild<LLComboBox>("voice_output_device");
+
+	mCtrlInputDevices->setCommitCallback(
 		boost::bind(&LLPanelVoiceDeviceSettings::onCommitInputDevice, this));
-	getChild<LLComboBox>("voice_output_device")->setCommitCallback(
+	mCtrlOutputDevices->setCommitCallback(
 		boost::bind(&LLPanelVoiceDeviceSettings::onCommitOutputDevice, this));
+
+	mLocalizedDeviceNames[DEFAULT_DEVICE]				= getString("default_text");
+	mLocalizedDeviceNames["No Device"]					= getString("name_no_device");
+	mLocalizedDeviceNames["Default System Device"]		= getString("name_default_system_device");
 	
 	return TRUE;
 }
@@ -96,7 +105,7 @@ void LLPanelVoiceDeviceSettings::draw()
 
 	// let user know that volume indicator is not yet available
 	bool is_in_tuning_mode = LLVoiceClient::getInstance()->inTuningMode();
-	getChildView("wait_text")->setVisible( !is_in_tuning_mode);
+	getChildView("wait_text")->setVisible( !is_in_tuning_mode && mUseTuningMode);
 
 	LLPanel::draw();
 
@@ -137,14 +146,14 @@ void LLPanelVoiceDeviceSettings::apply()
 	std::string s;
 	if(mCtrlInputDevices)
 	{
-		s = mCtrlInputDevices->getSimple();
+		s = mCtrlInputDevices->getValue().asString();
 		gSavedSettings.setString("VoiceInputAudioDevice", s);
 		mInputDevice = s;
 	}
 
 	if(mCtrlOutputDevices)
 	{
-		s = mCtrlOutputDevices->getSimple();
+		s = mCtrlOutputDevices->getValue().asString();
 		gSavedSettings.setString("VoiceOutputAudioDevice", s);
 		mOutputDevice = s;
 	}
@@ -165,10 +174,10 @@ void LLPanelVoiceDeviceSettings::cancel()
 	gSavedSettings.setString("VoiceOutputAudioDevice", mOutputDevice);
 
 	if(mCtrlInputDevices)
-		mCtrlInputDevices->setSimple(mInputDevice);
+		mCtrlInputDevices->setValue(mInputDevice);
 
 	if(mCtrlOutputDevices)
-		mCtrlOutputDevices->setSimple(mOutputDevice);
+		mCtrlOutputDevices->setValue(mOutputDevice);
 
 	gSavedSettings.setF32("AudioLevelMic", mMicVolume);
 	LLSlider* volume_slider = getChild<LLSlider>("mic_volume_slider");
@@ -187,25 +196,37 @@ void LLPanelVoiceDeviceSettings::refresh()
 	LLVoiceClient::getInstance()->tuningSetMicVolume(current_volume);
 
 	// Fill in popup menus
-	mCtrlInputDevices = getChild<LLComboBox>("voice_input_device");
-	mCtrlOutputDevices = getChild<LLComboBox>("voice_output_device");
+	bool device_settings_available = LLVoiceClient::getInstance()->deviceSettingsAvailable();
 
-	if(!LLVoiceClient::getInstance()->deviceSettingsAvailable())
+	if (mCtrlInputDevices)
+	{
+		mCtrlInputDevices->setEnabled(device_settings_available);
+	}
+
+	if (mCtrlOutputDevices)
+	{
+		mCtrlOutputDevices->setEnabled(device_settings_available);
+	}
+
+	getChild<LLSlider>("mic_volume_slider")->setEnabled(device_settings_available);
+
+	if(!device_settings_available)
 	{
 		// The combo boxes are disabled, since we can't get the device settings from the daemon just now.
 		// Put the currently set default (ONLY) in the box, and select it.
 		if(mCtrlInputDevices)
 		{
 			mCtrlInputDevices->removeall();
-			mCtrlInputDevices->add( mInputDevice, ADD_BOTTOM );
-			mCtrlInputDevices->setSimple(mInputDevice);
+			mCtrlInputDevices->add(getLocalizedDeviceName(mInputDevice), mInputDevice, ADD_BOTTOM);
+			mCtrlInputDevices->setValue(mInputDevice);
 		}
 		if(mCtrlOutputDevices)
 		{
 			mCtrlOutputDevices->removeall();
-			mCtrlOutputDevices->add( mOutputDevice, ADD_BOTTOM );
-			mCtrlOutputDevices->setSimple(mOutputDevice);
+			mCtrlOutputDevices->add(getLocalizedDeviceName(mOutputDevice), mOutputDevice, ADD_BOTTOM);
+			mCtrlOutputDevices->setValue(mOutputDevice);
 		}
+		mDevicesUpdated = FALSE;
 	}
 	else if (!mDevicesUpdated)
 	{
@@ -214,67 +235,41 @@ void LLPanelVoiceDeviceSettings::refresh()
 		if(mCtrlInputDevices)
 		{
 			mCtrlInputDevices->removeall();
-			mCtrlInputDevices->add( getString("default_text"), ADD_BOTTOM );
+			mCtrlInputDevices->add(getLocalizedDeviceName(DEFAULT_DEVICE), DEFAULT_DEVICE, ADD_BOTTOM);
 
 			for(iter=LLVoiceClient::getInstance()->getCaptureDevices().begin(); 
 				iter != LLVoiceClient::getInstance()->getCaptureDevices().end();
 				iter++)
 			{
-				// Lets try to localize some system device names. EXT-8375
-				std::string device_name = *iter;
-				LLStringUtil::toLower(device_name); //compare in low case
-				if ("default system device" == device_name)
-				{
-					device_name = getString(device_name);
-				}
-				else if ("no device" == device_name)
-				{
-					device_name = getString(device_name);
-				}
-				else
-				{
-					// restore original value
-					device_name = *iter;
-				}
-				mCtrlInputDevices->add(device_name, ADD_BOTTOM );
+				mCtrlInputDevices->add(getLocalizedDeviceName(*iter), *iter, ADD_BOTTOM);
 			}
 
-			if(!mCtrlInputDevices->setSimple(mInputDevice))
+			// Fix invalid input audio device preference.
+			if (!mCtrlInputDevices->setSelectedByValue(mInputDevice, TRUE))
 			{
-				mCtrlInputDevices->setSimple(getString("default_text"));
+				mCtrlInputDevices->setValue(DEFAULT_DEVICE);
+				gSavedSettings.setString("VoiceInputAudioDevice", DEFAULT_DEVICE);
+				mInputDevice = DEFAULT_DEVICE;
 			}
 		}
 		
 		if(mCtrlOutputDevices)
 		{
 			mCtrlOutputDevices->removeall();
-			mCtrlOutputDevices->add( getString("default_text"), ADD_BOTTOM );
+			mCtrlOutputDevices->add(getLocalizedDeviceName(DEFAULT_DEVICE), DEFAULT_DEVICE, ADD_BOTTOM);
 
 			for(iter= LLVoiceClient::getInstance()->getRenderDevices().begin(); 
 				iter !=  LLVoiceClient::getInstance()->getRenderDevices().end(); iter++)
 			{
-				// Lets try to localize some system device names. EXT-8375
-				std::string device_name = *iter;
-				LLStringUtil::toLower(device_name); //compare in low case
-				if ("default system device" == device_name)
-				{
-					device_name = getString(device_name);
-				}
-				else if ("no device" == device_name)
-				{
-					device_name = getString(device_name);
-				}
-				else
-				{
-					// restore original value
-					device_name = *iter;
-				}
-				mCtrlOutputDevices->add(device_name, ADD_BOTTOM );
+				mCtrlOutputDevices->add(getLocalizedDeviceName(*iter), *iter, ADD_BOTTOM);
 			}
 
-			if(!mCtrlOutputDevices->setSimple(mOutputDevice))
+			// Fix invalid output audio device preference.
+			if (!mCtrlOutputDevices->setSelectedByValue(mOutputDevice, TRUE))
 			{
-				mCtrlOutputDevices->setSimple(getString("default_text"));
+				mCtrlOutputDevices->setValue(DEFAULT_DEVICE);
+				gSavedSettings.setString("VoiceOutputAudioDevice", DEFAULT_DEVICE);
+				mOutputDevice = DEFAULT_DEVICE;
 			}
 		}
 		mDevicesUpdated = TRUE;
@@ -292,14 +287,27 @@ void LLPanelVoiceDeviceSettings::initialize()
 	LLVoiceClient::getInstance()->refreshDeviceLists();
 
 	// put voice client in "tuning" mode
-	LLVoiceClient::getInstance()->tuningStart();
-	LLVoiceChannel::suspend();
+	if (mUseTuningMode)
+	{
+		LLVoiceClient::getInstance()->tuningStart();
+		LLVoiceChannel::suspend();
+	}
 }
 
 void LLPanelVoiceDeviceSettings::cleanup()
 {
-	LLVoiceClient::getInstance()->tuningStop();
-	LLVoiceChannel::resume();
+	if (mUseTuningMode)
+	{
+		LLVoiceClient::getInstance()->tuningStop();
+		LLVoiceChannel::resume();
+	}
+}
+
+// returns English name if no translation found
+std::string LLPanelVoiceDeviceSettings::getLocalizedDeviceName(const std::string& en_dev_name)
+{
+	std::map<std::string, std::string>::const_iterator it = mLocalizedDeviceNames.find(en_dev_name);
+	return it != mLocalizedDeviceNames.end() ? it->second : en_dev_name;
 }
 
 void LLPanelVoiceDeviceSettings::onCommitInputDevice()
@@ -307,7 +315,7 @@ void LLPanelVoiceDeviceSettings::onCommitInputDevice()
 	if(LLVoiceClient::getInstance())
 	{
 		LLVoiceClient::getInstance()->setCaptureDevice(
-			getChild<LLComboBox>("voice_input_device")->getValue().asString());
+			mCtrlInputDevices->getValue().asString());
 	}
 }
 
@@ -316,6 +324,6 @@ void LLPanelVoiceDeviceSettings::onCommitOutputDevice()
 	if(LLVoiceClient::getInstance())
 	{
 		LLVoiceClient::getInstance()->setRenderDevice(
-			getChild<LLComboBox>("voice_input_device")->getValue().asString());
+			mCtrlInputDevices->getValue().asString());
 	}
 }

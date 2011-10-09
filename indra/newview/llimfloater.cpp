@@ -37,6 +37,7 @@
 #include "llbottomtray.h"
 #include "llchannelmanager.h"
 #include "llchiclet.h"
+#include "llfloaterabout.h"		// for sysinfo button -Zi
 #include "llfloaterreg.h"
 #include "llimfloatercontainer.h" // to replace separate IM Floaters with multifloater container
 #include "llinventoryfunctions.h"
@@ -56,6 +57,7 @@
 #include "llrootview.h"
 #include "llspeakers.h"
 #include "llsidetray.h"
+#include "llviewerchat.h"
 
 //AO: For moving callbacks from control panel into this class
 #include "llavataractions.h"
@@ -287,8 +289,8 @@ void LLIMFloater::sendMsg()
 			// Truncate for transport
 			utf8_text = utf8str_truncate(utf8_text, MAX_MSG_BUF_SIZE - 1);
 			
-// [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
-			if (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM))
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+			if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIMTO)) )
 			{
 				LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
 				RLV_ASSERT(pIMSession);
@@ -298,13 +300,13 @@ void LLIMFloater::sendMsg()
 				{
 					switch (pIMSession->mSessionType)
 					{
-						case LLIMModel::LLIMSession::P2P_SESSION:	// One-on-one IM: allow if recipient is a sendim exception
-							fRlvFilter = !gRlvHandler.isException(RLV_BHVR_SENDIM, mOtherParticipantUUID);
+						case LLIMModel::LLIMSession::P2P_SESSION:	// One-on-one IM
+							fRlvFilter = !gRlvHandler.canSendIM(mOtherParticipantUUID);
 							break;
-						case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat: allow if group is a sendim exception
-							fRlvFilter = !gRlvHandler.isException(RLV_BHVR_SENDIM, mSessionID);
+						case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat
+							fRlvFilter = !gRlvHandler.canSendIM(mSessionID);
 							break;
-						case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat: allow if all participants are sendim exceptions
+						case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat: allow if all participants can be sent an IM
 							{
 								if (!pIMSession->mSpeakers)
 								{
@@ -318,7 +320,7 @@ void LLIMFloater::sendMsg()
 										itSpeaker != speakers.end(); ++itSpeaker)
 								{
 									const LLSpeaker* pSpeaker = *itSpeaker;
-									if ( (gAgent.getID() != pSpeaker->mID) && (!gRlvHandler.isException(RLV_BHVR_SENDIM, pSpeaker->mID)) )
+									if ( (gAgent.getID() != pSpeaker->mID) && (!gRlvHandler.canSendIM(pSpeaker->mID)) )
 									{
 										fRlvFilter = true;
 										break;
@@ -385,9 +387,12 @@ void LLIMFloater::onViewProfileButtonClicked()
 void LLIMFloater::onAddFriendButtonClicked()
 {
 	llinfos << "LLIMFloater::onAddFriendButtonClicked" << llendl;
-	LLAvatarIconCtrl* avatar_icon = getChild<LLAvatarIconCtrl>("avatar_icon");
-	std::string full_name = avatar_icon->getFullName();
-	LLAvatarActions::requestFriendshipDialog(mOtherParticipantUUID, full_name);
+	//[FIX FIRE-2009: SJ] Offering friendship gives wrong status message. full_name was emtpy on call but was also obsolete
+	//                    
+	//LLAvatarIconCtrl* avatar_icon = getChild<LLAvatarIconCtrl>("avatar_icon");
+	//std::string full_name = avatar_icon->getFullName();
+	//LLAvatarActions::requestFriendshipDialog(mOtherParticipantUUID, full_name);
+	LLAvatarActions::requestFriendshipDialog(mOtherParticipantUUID);
 }
 void LLIMFloater::onShareButtonClicked()
 {
@@ -430,9 +435,71 @@ void LLIMFloater::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_s
 	updateButtons(new_state >= LLVoiceChannel::STATE_CALL_STARTED);
 }
 
+// support sysinfo button -Zi
+void LLIMFloater::onSysinfoButtonClicked()
+{
+	LLSD info=LLFloaterAbout::getInfo();
+
+	std::ostringstream support;
+	support <<
+		info["CHANNEL"] << " " << info["VIEWER_VERSION_STR"] << "\n" <<
+		"Sim: " << info["HOSTNAME"] << "(" << info["HOSTIP"] << ") " << info["SERVER_VERSION"] << "\n" <<
+		"Packet loss: " << info["PACKETS_PCT"].asReal() << "% (" << info["PACKETS_LOST"].asReal() << "/" << info["PACKETS_IN"].asReal() << ")\n" <<
+		"CPU: " << info["CPU"] << "\n" <<
+		"Memory: " << info["MEMORY_MB"] << "\n" <<
+		"OS: " << info["OS_VERSION"] << "\n" <<
+		"GPU: " << info["GRAPHICS_CARD_VENDOR"] << " " << info["GRAPHICS_CARD"] << "\n";
+
+	if(info.has("GRAPHICS_DRIVER_VERSION"))
+		support << "Driver: " << info["GRAPHICS_DRIVER_VERSION"] << "\n";
+
+	support <<
+		"OpenGL: " << info["OPENGL_VERSION"] << "\n" <<
+		"Skin: " << info["SKIN"] << "(" << info["THEME"] << ")\n" <<
+		"RLV: " << info["RLV_VERSION"] << "\n" <<
+		"Curl: " << info ["LIBCURL_VERSION"] << "\n" <<
+		"J2C: " << info["J2C_VERSION"] << "\n" <<
+		"Audio: " << info["AUDIO_DRIVER_VERSION"] << "\n" <<
+		"Webkit: " << info["QT_WEBKIT_VERSION"] << "\n" <<
+		"Voice: " << info["VOICE_VERSION"] << "\n" <<
+		"Compiler: " << info["COMPILER"] << " Version " << info["COMPILER_VERSION"].asInteger() << "\n"
+		;
+
+	LLSD args;
+	args["SYSINFO"]=support.str();
+	LLNotificationsUtil::add("SendSysinfoToIM",args,LLSD(),boost::bind(&LLIMFloater::onSendSysinfo,this,_1,_2));
+}
+
+BOOL LLIMFloater::onSendSysinfo(const LLSD& notification, const LLSD& response)
+{
+	S32 option=LLNotificationsUtil::getSelectedOption(notification,response);
+
+	if(option==0)
+	{
+		std::string text=notification["substitutions"]["SYSINFO"];
+		if (mSessionInitialized)
+		{
+			LLIMModel::sendMessage(text, mSessionID,mOtherParticipantUUID,mDialog);
+		}
+		else
+		{
+			//queue up the message to send once the session is initialized
+			mQueuedMsgsForInit.append(text);
+		}
+		return TRUE;
+	}
+	return FALSE;
+}
+
+void LLIMFloater::onSysinfoButtonVisibilityChanged(const LLSD& yes)
+{
+	mSysinfoButton->setVisible(yes.asBoolean() /* && mIsSupportIM */);
+}
+// support sysinfo button -Zi
+
 void LLIMFloater::onChange(EStatusType status, const std::string &channelURI, bool proximal)
 {
-	llinfos << "LLIMFloater::onChange" << llendl;
+	// llinfos << "LLIMFloater::onChange" << llendl;
 	if(status == STATUS_JOINING || status == STATUS_LEFT_CHANNEL)
 	{
 		return;
@@ -443,7 +510,7 @@ void LLIMFloater::onChange(EStatusType status, const std::string &channelURI, bo
 
 void LLIMFloater::updateCallButton()
 {
-	llinfos << "LLIMFloater::updateCallButton" << llendl;
+	// llinfos << "LLIMFloater::updateCallButton" << llendl;
 	// hide/show call button
 	bool voice_enabled = LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
 	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSessionID);
@@ -454,12 +521,28 @@ void LLIMFloater::updateCallButton()
 		return;
 	}
 	
-	bool session_initialized = session->mSessionInitialized;
+	//bool session_initialized = session->mSessionInitialized;
 	bool callback_enabled = session->mCallBackEnabled;
-	
-	BOOL enable_connect = session_initialized
-	&& voice_enabled
+
+	//[Possible FIX-FIRE-2012] GROUP and Ad-Hoc don't have session initialized --> removing that from the condition to enable_connect
+	//BOOL enable_connect = session_initialized
+	//&& voice_enabled
+	//&& callback_enabled;
+	BOOL enable_connect = voice_enabled
 	&& callback_enabled;
+	//if (voice_enabled) 
+	//{
+	//	llinfos << "LLIMFloater::updateCallButton - voice enabled" << llendl;
+	//}
+	//if (session_initialized) 
+	//{
+	//	llinfos << "LLIMFloater::updateCallButton - session_initialized" << llendl;
+	//}
+	//if (callback_enabled) 
+	//{
+	//	llinfos << "LLIMFloater::updateCallButton - callback_enabled" << llendl;
+	//}
+
 	getChild<LLButton>("call_btn")->setEnabled(enable_connect);
 }
 
@@ -575,6 +658,10 @@ BOOL LLIMFloater::postBuild()
 	LLButton* add_friend = getChild<LLButton>("add_friend_btn");
 	add_friend->setClickedCallback(boost::bind(&LLIMFloater::onAddFriendButtonClicked, this));
 	
+	// support sysinfo button -Zi
+	mSysinfoButton=getChild<LLButton>("send_sysinfo_btn");
+	onSysinfoButtonVisibilityChanged(FALSE);
+
 	// extra icon controls -AO
 	LLButton* transl = getChild<LLButton>("translate_btn");
 //TT
@@ -611,6 +698,17 @@ BOOL LLIMFloater::postBuild()
 					llinfos << "LLAvatarActions::isFriend - tp button" << llendl;
 					getChild<LLButton>("teleport_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID));
 				}
+
+				// support sysinfo button -Zi
+				mSysinfoButton->setClickedCallback(boost::bind(&LLIMFloater::onSysinfoButtonClicked, this));
+				// [FIRE-1168 -SJ] Set focus back to Chatline when switching to IM
+				mSysinfoButton->setFocusReceivedCallback(boost::bind(&LLIMFloater::onSysinfoButtonFocusReceived, _1, this) );
+				// this needs to be extended to fsdata awareness, once we have it. -Zi
+				// mIsSupportIM=fsdata(partnerUUID).isSupport(); // pseudocode something like this
+				onSysinfoButtonVisibilityChanged(gSavedSettings.getBOOL("SysinfoButtonInIM"));
+				gSavedSettings.getControl("SysinfoButtonInIM")->getCommitSignal()->connect(boost::bind(&LLIMFloater::onSysinfoButtonVisibilityChanged,this,_2));
+				// support sysinfo button -Zi
+
 				break;
 			}
 			case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat
@@ -670,7 +768,9 @@ BOOL LLIMFloater::postBuild()
 	mInputEditor->setMaxTextLength(1023);
 	// enable line history support for instant message bar
 	mInputEditor->setEnableLineHistory(TRUE);
-	
+
+	LLFontGL* font = LLViewerChat::getChatFont();
+	mInputEditor->setFont(font);	
 	
 	mInputEditor->setFocusReceivedCallback( boost::bind(onInputEditorFocusReceived, _1, this) );
 	mInputEditor->setFocusLostCallback( boost::bind(onInputEditorFocusLost, _1, this) );
@@ -735,9 +835,14 @@ void LLIMFloater::onAvatarNameCache(const LLUUID& agent_id,
 {
 	// Use the display name for titles and tabs, because the full username is already in every line header.
 	// This especially makes vertical tabs IMs more readable. -AO
-	std::string ui_title = av_name.mDisplayName;
-	updateSessionName(ui_title, av_name.mDisplayName);
-	mTypingStart.setArg("[NAME]", ui_title);
+	std::string name = av_name.getLegacyName();
+	if (LLAvatarNameCache::useDisplayNames() && (!av_name.mDisplayName.empty()))
+	{
+		name = av_name.mDisplayName;
+	}
+	updateSessionName(name, name);
+	mTypingStart.setArg("[NAME]", name);
+	llinfos << "Setting IM tab name to '" << name << "'" << llendl;
 }
 
 // virtual
@@ -867,14 +972,14 @@ LLIMFloater* LLIMFloater::show(const LLUUID& session_id)
 		}
 
 		// window is positioned, now we can show it.
+		floater->setVisible(TRUE);
 	}
-	floater->setVisible(TRUE);
 
 	return floater;
 }
 
 //static
-bool LLIMFloater::resetAllowedRectPadding(const LLSD& newvalue)
+bool LLIMFloater::resetAllowedRectPadding()
 {
 	//reset allowed rect right padding if "SidebarCameraMovement" option 
 	//or sidebar state changed
@@ -886,10 +991,10 @@ void LLIMFloater::getAllowedRect(LLRect& rect)
 {
 	if (sAllowedRectRightPadding == RECT_PADDING_NOT_INIT) //wasn't initialized
 	{
-		gSavedSettings.getControl("SidebarCameraMovement")->getSignal()->connect(boost::bind(&LLIMFloater::resetAllowedRectPadding, _2));
+		gSavedSettings.getControl("SidebarCameraMovement")->getSignal()->connect(boost::bind(&LLIMFloater::resetAllowedRectPadding));
 
 		LLSideTray*	side_bar = LLSideTray::getInstance();
-		side_bar->getCollapseSignal().connect(boost::bind(&LLIMFloater::resetAllowedRectPadding, _2));
+		side_bar->setVisibleWidthChangeCallback(boost::bind(&LLIMFloater::resetAllowedRectPadding));
 		sAllowedRectRightPadding = RECT_PADDING_NEED_RECALC;
 	}
 
@@ -904,10 +1009,7 @@ void LLIMFloater::getAllowedRect(LLRect& rect)
 
 		if (gSavedSettings.getBOOL("SidebarCameraMovement") == FALSE)
 		{
-			LLSideTray*	side_bar = LLSideTray::getInstance();
-
-			if (side_bar->getVisible() && !side_bar->getCollapsed())
-				sAllowedRectRightPadding += side_bar->getRect().getWidth();
+			sAllowedRectRightPadding += LLSideTray::getInstance()->getVisibleWidth();
 		}
 	}
 	rect.mRight -= sAllowedRectRightPadding;
@@ -955,8 +1057,12 @@ void LLIMFloater::setVisible(BOOL visible)
 	{
 		//only if floater was construced and initialized from xml
 		updateMessages();
+		LLIMFloaterContainer* im_container = LLIMFloaterContainer::getInstance();
+		
 		//prevent stealing focus when opening a background IM tab (EXT-5387, checking focus for EXT-6781)
-		if (!isChatMultiTab() || hasFocus())
+		// If this is docked, is the selected tab, and the im container has focus, put focus in the input ctrl -KC
+		bool is_active = im_container->getActiveFloater() == this && im_container->hasFocus();
+		if (!isChatMultiTab() || is_active || hasFocus())
 		{
 			mInputEditor->setFocus(TRUE);
 		}
@@ -1069,6 +1175,8 @@ void LLIMFloater::sessionInitReplyReceived(const LLUUID& im_session_id)
 void LLIMFloater::updateMessages()
 {
 	bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
+	bool bold_mods_chat = gSavedSettings.getBOOL("PhoenixBoldGroupMods");
+	bool hide_timestamps_nearby_chat = gSavedSettings.getBOOL("FSHideTimestampsIM");
 
 	std::list<LLSD> messages;
 
@@ -1086,6 +1194,10 @@ void LLIMFloater::updateMessages()
 	{
 		LLSD chat_args;
 		chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
+		chat_args["hide_timestamps_nearby_chat"] = hide_timestamps_nearby_chat;
+		
+		LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
+		RLV_ASSERT(pIMSession);
 
 		std::ostringstream message;
 		std::list<LLSD>::const_reverse_iterator iter = messages.rbegin();
@@ -1106,6 +1218,16 @@ void LLIMFloater::updateMessages()
 			chat.mFromName = from;
 			chat.mTimeStr = time;
 			chat.mChatStyle = is_history ? CHAT_STYLE_HISTORY : chat.mChatStyle;
+			
+			// Bold group moderators' chat -KC
+			if (!is_history && bold_mods_chat && pIMSession && pIMSession->mSpeakers)
+			{
+				LLPointer<LLSpeaker> speakerp = pIMSession->mSpeakers->findSpeaker(from_id);
+				if (speakerp && speakerp->mIsModerator)
+				{
+					chat.mChatStyle = CHAT_STYLE_MODERATOR;
+				}
+			}
 
 			// process offer notification
 			if (msg.has("notification_id"))
@@ -1198,6 +1320,15 @@ void LLIMFloater::onSlideRightFocusReceived(LLFocusableElement* caller, void* us
 
 // static
 void LLIMFloater::onViewProfileFocusReceived(LLFocusableElement* caller, void* userdata)
+{
+	LLIMFloater* self= (LLIMFloater*) userdata;
+	LLLineEditor* inputEditor = 
+		self->getChild<LLLineEditor>("chat_editor");
+	inputEditor->setFocus(TRUE);
+}
+
+void LLIMFloater::onSysinfoButtonFocusReceived(LLFocusableElement* caller, void* userdata)
+// [FIRE-1168 -SJ] Set focus back to Chatline when switching to IM
 {
 	LLIMFloater* self= (LLIMFloater*) userdata;
 	LLLineEditor* inputEditor = 
@@ -1325,6 +1456,7 @@ void LLIMFloater::updateChatHistoryStyle()
 
 void LLIMFloater::processChatHistoryStyleUpdate(const LLSD& newvalue)
 {
+	LLFontGL* font = LLViewerChat::getChatFont();
 	LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("impanel");
 	for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin();
 		 iter != inst_list.end(); ++iter)
@@ -1333,6 +1465,7 @@ void LLIMFloater::processChatHistoryStyleUpdate(const LLSD& newvalue)
 		if (floater)
 		{
 			floater->updateChatHistoryStyle();
+			floater->mInputEditor->setFont(font);
 		}
 	}
 

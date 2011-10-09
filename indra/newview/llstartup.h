@@ -45,6 +45,10 @@ extern std::string SCREEN_LAST_FILENAME;
 
 typedef enum {
 	STATE_FIRST,					// Initial startup
+// <AW: opensim>
+	STATE_FETCH_GRID_INFO,		// wait for the grid infos to load
+	STATE_AUDIO_INIT,			//init audio
+// </AW: opensim>
 	STATE_BROWSER_INIT,             // Initialize web browser for login screen
 	STATE_LOGIN_SHOW,				// Show login screen
 	STATE_LOGIN_WAIT,				// Wait for user input at login screen
@@ -110,8 +114,16 @@ public:
 		// the viewer, dispatch it
 
 	static void postStartupState();
-	static void setStartSLURL(const LLSLURL& slurl); 
+
+// <AW: opensim>
+	static void setStartSLURLString(const std::string& slurl_string){sStartSLURLString = slurl_string;}
+	static std::string sStartSLURLString; 
+// </AW: opensim>
+
+	static void setStartSLURL(const LLSLURL& slurl);
 	static LLSLURL& getStartSLURL() { return sStartSLURL; } 
+
+	static bool startLLProxy(); // Initialize the SOCKS 5 proxy
 
 private:
 	static LLSLURL sStartSLURL;

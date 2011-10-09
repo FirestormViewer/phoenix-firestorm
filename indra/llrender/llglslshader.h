@@ -42,8 +42,12 @@ public:
 	bool hasWaterFog; // implies no gamma
 	bool hasTransport; // implies no lighting (it's possible to have neither though)
 	bool hasSkinning;	
+	bool hasObjectSkinning;
 	bool hasAtmospherics;
 	bool hasGamma;
+	S32 mIndexedTextureChannels;
+	bool disableTextureIndex;
+	bool hasAlphaMask;
 
 	// char numLights;
 	
@@ -62,6 +66,11 @@ public:
 	};
 	
 	LLGLSLShader();
+
+	static GLhandleARB sCurBoundShader;
+	static LLGLSLShader* sCurBoundShaderPtr;
+
+	static bool sNoFixedFunction;
 
 	void unload();
 	BOOL createShader(std::vector<std::string> * attributes,
@@ -99,11 +108,13 @@ public:
 	void uniformMatrix3fv(const std::string& uniform, U32 count, GLboolean transpose, const GLfloat *v);
 	void uniformMatrix4fv(const std::string& uniform, U32 count, GLboolean transpose, const GLfloat *v);
 
+	void setAlphaRange(F32 minimum, F32 maximum);
+
 	void vertexAttrib4f(U32 index, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
 	void vertexAttrib4fv(U32 index, GLfloat* v);
 	
 	GLint getUniformLocation(const std::string& uniform);
-	
+	GLint getAttribLocation(U32 attrib);
 	GLint mapUniformTextureChannel(GLint location, GLenum type);
 	
 
@@ -135,5 +146,11 @@ public:
 	std::vector< std::pair< std::string, GLenum > > mShaderFiles;
 	std::string mName;
 };
+
+//UI shader (declared here so llui_libtest will link properly)
+extern LLGLSLShader			gUIProgram;
+//output vec4(color.rgb,color.a*tex0[tc0].a)
+extern LLGLSLShader			gSolidColorProgram;
+
 
 #endif

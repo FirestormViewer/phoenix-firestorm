@@ -3,7 +3,7 @@
  background_visible="false"
  height="20"
  layout="topleft"
- width="210">
+ width="150">
   <panel_camera_item.icon_over
    follows="top|left"
      height="20"
@@ -15,7 +15,7 @@
      top="20"
      scale_image="true"
      visible="false"
-     width="212" />
+     width="152" />
   <panel_camera_item.icon_selected
    follows="top|left"
      height="20"
@@ -27,7 +27,7 @@
      top="20"
      scale_image="true"
      visible="false"
-     width="212" />
+     width="152" />
   <panel_camera_item.picture
      follows="top|left"
      height="20"
@@ -63,7 +63,7 @@
      text_color="White"
      top="16"
      use_ellipses="true"
-     width="170"
+     width="120"
      word_wrap="false" >
    Text
    </panel_camera_item.text>

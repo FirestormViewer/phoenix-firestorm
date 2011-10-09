@@ -13,7 +13,7 @@
 	</text>
 	<button label="Actualizar la foto" name="new_snapshot_btn"/>
 	<button label="Enviar" name="send_btn"/>
-	<button label="Ahorro ([AMOUNT] L$)" name="upload_btn"/>
+	<button label="Ahorro" name="upload_btn"/>
 	<flyout_button label="Guardar" name="save_btn" tool_tip="Guardar la imagen en un archivo">
 		<flyout_button.item label="Guardar" name="save_item"/>
 		<flyout_button.item label="Guardar como..." name="saveas_item"/>

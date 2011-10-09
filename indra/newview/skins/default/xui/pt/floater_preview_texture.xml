@@ -22,7 +22,7 @@
 		<combo_item name="1:1" tool_tip="Símbolo ou perfil RW do grupo">
 			1:1
 		</combo_item>
-		<combo_item name="4:3" tool_tip="[SECOND_LIFE] perfil">
+		<combo_item name="4:3" tool_tip="[CURRENT_GRID] perfil">
 			4:3
 		</combo_item>
 		<combo_item name="10:7" tool_tip="Procurar anúncios classificados e marcos">

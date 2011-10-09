@@ -46,7 +46,7 @@
    label="Filter Inventory"
    layout="topleft"
    left="10"
-   max_length="300"
+   max_length_chars="300"
    name="inventory search editor"
    top="18"
    width="303" />
@@ -61,7 +61,8 @@
      layout="topleft"
      left="7"
      name="inventory filter tabs"
-     tab_height="30"
+     tab_drag_commit="true"
+     tab_height="23"
      tab_group="1"
      tab_position="top"
      tab_min_width="100"
@@ -74,7 +75,7 @@
      bevel_style="none"
      follows="all"
      height="338"
-     label="MY INVENTORY"
+     label="INVENTORY"
      help_topic="my_inventory_tab"
      layout="topleft"
      left="0"
@@ -97,20 +98,37 @@
      name="Recent Items"
 	 show_item_link_overlays="true"
      width="290" />
+	<worn_inventory_panel
+     bg_alpha_color="SL-Background_66"
+     bg_opaque_color="SL-Background_66"
+     border="false"
+     bevel_style="none"
+     follows="all"
+     height="338"
+     label="WORN"
+     help_topic="worn_inventory_tab"
+     layout="topleft"
+     left_delta="0"
+     name="Worn Items"
+	 show_item_link_overlays="true"
+     width="290" />
   </tab_container>
-  <layout_stack
+  <panel
    animate="false"
    border_size="0"
    follows="left|right|bottom"
    height="25"
    layout="topleft"
    orientation="horizontal"
+   auto_resize="true"
    top_pad="0"
    left="10"
    name="bottom_panel"
    width="307">
-      <layout_panel
+      <panel
        auto_resize="false"
+	   follows="top|left"
+       left="0"
        height="25"
        layout="topleft"
        name="options_gear_btn_panel"
@@ -129,9 +147,11 @@
            name="options_gear_btn"
            top="0"
            width="31" />
-      </layout_panel>
-      <layout_panel
+      </panel>
+      <panel
        auto_resize="false"
+	   follows="top|left"
+       left_pad="0"
        height="25"
        layout="topleft"
        name="add_btn_panel"
@@ -150,33 +170,101 @@
            tool_tip="Add new item"
            top="0"
            width="31" />
-      </layout_panel>
-      <layout_panel
-       auto_resize="true"
+      </panel>
+	  <panel
+   	  auto_resize="true"
+	  follows="top|left"
+       left_pad="0"
        height="25"
        layout="topleft"
-       name="dummy_panel"
+       name="new_inventory_panel"
+       width="32">
+          <button
+           follows="bottom|left"
+           height="25"
+           image_hover_unselected="Toolbar_Middle_Over"
+           image_overlay="inventory_18"
+           image_selected="Toolbar_Middle_Selected"
+           image_unselected="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           name="new_inv_btn"
+           tool_tip="Additional Inventory Window"
+           top="0"
+           width="31">
+           <button.init_callback
+                 function="Button.SetDockableFloaterToggle"
+                 parameter="inventory" />
+           </button>
+      </panel>
+      <panel
+	   auto_resize="true"
+	   follows="top|left"
+       left_pad="0"
+       height="25"
+       layout="topleft"
+	   user_resize="false"
+       name="collapse_panel"
+       width="90">
+	      <button
+		   auto_resize="true"
+           follows="bottom|left|right"
+           height="25"
+           image_hover_unselected="Toolbar_Middle_Over"
+		   label="Collapse All"
+           image_selected="Toolbar_Middle_Selected"
+           image_unselected="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           name="collapse_btn"
+           tool_tip="Collapse Folders"
+           top="0"
+           width="89" />
+	  </panel>	   
+      <panel
+	   auto_resize="false"
+	   follows="top|left|right"
+       left_pad="0"
+       height="25"
+       layout="topleft"
+       name="expand_panel"
        user_resize="false"
-       width="212">
-          <icon
+       width="90">
+		  <button
+		   auto_resize="true"
+           follows="bottom|left|right"
+           height="25"
+           image_hover_unselected="Toolbar_Middle_Over"
+		   label="Expand All"
+           image_selected="Toolbar_Middle_Selected"
+           image_unselected="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           name="expand_btn"
+           tool_tip="Expand Folders"
+           top="0"
+           width="89" />
+          <!-- icon
            follows="bottom|left|right"
            height="25"
            image_name="Toolbar_Middle_Off"
            layout="topleft"
-           left="0"
+           left_pad="1"
            top="0"
            name="dummy_icon"
-           width="211" />
-      </layout_panel>
-      <layout_panel
+           width="59" / -->
+      </panel>
+      <panel
        auto_resize="false"
+	   follows="top|right"
+       left_pad="0"
        height="25"
        layout="topleft"
        name="trash_btn_panel"
        user_resize="false"
        width="31">
           <dnd_button
-           follows="bottom|left"
+           follows="top|right"
            height="25"
            image_hover_unselected="Toolbar_Right_Over"
            image_overlay="TrashItem_Off"
@@ -188,6 +276,6 @@
            tool_tip="Remove selected item"
            top="0"
            width="31"/>
-      </layout_panel>
-  </layout_stack>
+      </panel>
+  </panel>
 </panel>

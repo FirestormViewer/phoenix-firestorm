@@ -5,6 +5,7 @@ height="600"
 layout="topleft"
 left="0"
 name="panel_login"
+focus_root="true" 
 top="600"
  width="996">
 <panel.string
@@ -13,7 +14,7 @@ top="600"
 </panel.string>
 <panel.string
      name="real_url" translate="false">
-       http://phoenixviewer.com/app/loginFS/
+       http://phoenixviewer.com/app/loginFSbeta/
 </panel.string>
     <string name="reg_in_client_url" translate="false">
      http://secondlife.eniac15.lindenlab.com/reg-in-client/
@@ -43,15 +44,14 @@ name="login_widgets"
 layout="topleft"
 orientation="horizontal"
 top="519"
-width="996"
+width="980"
 height="80">
 <layout_panel
 auto_resize="false"
-follows="left|bottom"
+follows="left|bottom|right"
 name="login"
-layout="topleft"
-width="720"
-min_width="720"
+width="845"
+min_width="845"
 user_resize="false"
 height="80">
 <text
@@ -64,22 +64,39 @@ left="20"
 width="150">
 Username:
 </text>
-<line_editor
+<combo_box
+allow_text_entry="true"
 follows="left|bottom"
 height="22"
-label="bobsmith12 or Steller Sunshine"
 left_delta="0"
-name="username_edit"
-prevalidate_callback="ascii" 
-select_on_focus="true"
+max_chars="128"
+combo_editor.prevalidate_callback="ascii"
 tool_tip="The account name you chose when you registered, like bobsmith12 or Steller Sunshine"
 top_pad="0"
-width="150" />
+name="username_combo"
+width="150">
+  <combo_box.combo_button
+   visible ="true"/>
+  <combo_box.drop_down_button
+   visible ="true"/>
+</combo_box>
+  <button
+  follows="left|bottom"
+  height="16"
+  image_selected="PushButton_On_Selected"
+  label="Delete this entry"
+  label_color="White"
+  layout="topleft"
+  top_pad="0"
+left="18"
+  name="delete_saved_login_btn"
+  width="150"
+  tab_stop="false" />
 <text
 follows="left|bottom"
 font="SansSerifSmall"
 height="15"
-left_pad="8"
+left_pad="5"
 name="password_text"
 top="20"
     width="150">
@@ -88,10 +105,12 @@ top="20"
 <line_editor
 follows="left|bottom"
   height="22"
+  max_length_bytes="16"
 name="password_edit"
+is_password="true" 
 select_on_focus="true"
   top_pad="0"
-  width="135" />
+  width="150" />
  <check_box
 control_name="RememberPassword"
 follows="left|bottom"
@@ -100,11 +119,10 @@ height="16"
 label="Remember password"
   top_pad="3"
   name="remember_check"
- width="135" />
+ width="150" />
 <button
   follows="left|bottom"
   height="23"
-  image_unselected="PushButton_On"
   image_selected="PushButton_On_Selected"
   label="Log In"
   label_color="White"
@@ -113,6 +131,37 @@ label="Remember password"
   name="connect_btn"
   top="35"
   width="90" />
+ <text
+  follows="left|bottom"
+  font="SansSerifSmall"
+  height="15"
+  left_pad="10"
+  name="mode_selection_text"
+  top="20"
+  width="110">
+      Default Settings: 
+ </text>
+<combo_box
+  follows="left|bottom"
+  height="23"
+  max_chars="128"
+  tool_tip="Select which style of viewer you are most familiar with to set your defaults to appropriately."
+  top_pad="0"
+  name="mode_combo"
+  width="110">
+<combo_box.item
+  label="Phoenix"
+  name="Phoenix"
+  value="settings_phoenix.xml" />
+<combo_box.item
+  label="V3"
+  name="V3"
+  value="settings_v3.xml" />
+<combo_box.item
+  label="Hybrid"
+  name="Hybrid"
+  value="settings_hybrid.xml" />
+</combo_box>
   <text
   follows="left|bottom"
   font="SansSerifSmall"
@@ -151,27 +200,28 @@ height="15"
 left_pad="8"
 name="grid_selection_text"
 top="20"
-width="100">
+width="110"
+visible="true">
     Log onto Grid:
   </text>
 <combo_box
 allow_text_entry="true"
 font="SansSerifSmall"
-   follows="left|right|bottom"
+   follows="left|bottom"
    height="23"
    max_chars="256"
 layout="topleft"
 top_pad="0"
 name="server_combo"
-width="120"
-  visible="false" />
+width="110"
+  visible="true" />
 </layout_panel>
 <layout_panel
 tab_stop="false"
 follows="right|bottom"
 name="links"
-width="205"
-min_width="205"
+width="135"
+min_width="135"
 user_resize="false"
 height="80">
    <text
@@ -183,7 +233,7 @@ height="16"
 top="12"
 right="-10"
 name="create_new_account_text"
-  width="200">
+  width="100">
        Sign up
  </text>
 <text
@@ -195,8 +245,8 @@ height="16"
 name="forgot_password_text"
 top_pad="12"
 right="-10"
-  width="200">
-       Forgot your username or password?
+  width="100">
+       Forgot password?
 </text>
 <text
 follows="right|bottom"
@@ -207,7 +257,7 @@ height="16"
 name="login_help"
 top_pad="2"
 right="-10"
-    width="200">
+    width="100">
        Need help logging in?   
 </text>
 <!--  <text

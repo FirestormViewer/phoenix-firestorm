@@ -52,16 +52,24 @@
 #include "llviewerregion.h"
 #include "llwebsharing.h"	// For LLWebSharing::setOpenIDCookie(), *TODO: find a better way to do this!
 #include "llfilepicker.h"
-
+#include "llnotifications.h"
+#include "lldir.h"
+#include "lldiriterator.h"
 #include "llevent.h"		// LLSimpleListener
 #include "llnotificationsutil.h"
 #include "lluuid.h"
 #include "llkeyboard.h"
 #include "llmutelist.h"
+#include "llpanelprofile.h"
+#include "llappviewer.h"
+#include "lllogininstance.h" 
 //#include "llfirstuse.h"
+#include "llviewernetwork.h"
 #include "llwindow.h"
 
+
 #include "llfloatermediabrowser.h"	// for handling window close requests and geometry change requests in media browser windows.
+#include "llfloaterwebcontent.h"	// for handling window close requests and geometry change requests in media browser windows.
 
 #include <boost/bind.hpp>	// for SkinFolder listener
 #include <boost/signals2.hpp>
@@ -290,14 +298,54 @@ public:
 
 };
 
+class LLViewerMediaWebProfileResponder : public LLHTTPClient::Responder
+{
+LOG_CLASS(LLViewerMediaWebProfileResponder);
+public:
+	LLViewerMediaWebProfileResponder(std::string host)
+	{
+		mHost = host;
+	}
+
+	~LLViewerMediaWebProfileResponder()
+	{
+	}
+
+	/* virtual */ void completedHeader(U32 status, const std::string& reason, const LLSD& content)
+	{
+		LL_WARNS("MediaAuth") << "status = " << status << ", reason = " << reason << LL_ENDL;
+		LL_WARNS("MediaAuth") << content << LL_ENDL;
+
+		std::string cookie = content["set-cookie"].asString();
+
+		LLViewerMedia::getCookieStore()->setCookiesFromHost(cookie, mHost);
+	}
+
+	 void completedRaw(
+		U32 status,
+		const std::string& reason,
+		const LLChannelDescriptors& channels,
+		const LLIOPipe::buffer_ptr_t& buffer)
+	{
+		// This is just here to disable the default behavior (attempting to parse the response as llsd).
+		// We don't care about the content of the response, only the set-cookie header.
+	}
+
+	std::string mHost;
+};
+
+
 LLPluginCookieStore *LLViewerMedia::sCookieStore = NULL;
 LLURL LLViewerMedia::sOpenIDURL;
 std::string LLViewerMedia::sOpenIDCookie;
+LLPluginClassMedia* LLViewerMedia::sSpareBrowserMediaSource = NULL;
 static LLViewerMedia::impl_list sViewerMediaImplList;
 static LLViewerMedia::impl_id_map sViewerMediaTextureIDMap;
 static LLTimer sMediaCreateTimer;
 static const F32 LLVIEWERMEDIA_CREATE_DELAY = 1.0f;
 static F32 sGlobalVolume = 1.0f;
+static bool sForceUpdate = false;
+static LLUUID sOnlyAudibleTextureID = LLUUID::null;
 static F64 sLowestLoadableImplInterest = 0.0f;
 static bool sAnyMediaShowing = false;
 static boost::signals2::connection sTeleportFinishConnection;
@@ -372,7 +420,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 	// Try to find media with the same media ID
 	viewer_media_t media_impl = getMediaImplFromTextureID(media_entry->getMediaID());
 	
-	lldebugs << "called, current URL is \"" << media_entry->getCurrentURL() 
+	llinfos << "called, current URL is \"" << media_entry->getCurrentURL() 
 			<< "\", previous URL is \"" << previous_url 
 			<< "\", update_from_self is " << (update_from_self?"true":"false")
 			<< llendl;
@@ -407,7 +455,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 				// The current media URL is now empty.  Unload the media source.
 				media_impl->unload();
 			
-				lldebugs << "Unloading media instance (new current URL is empty)." << llendl;
+				llinfos << "Unloading media instance (new current URL is empty)." << llendl;
 			}
 		}
 		else
@@ -421,7 +469,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 				needs_navigate = url_changed;
 			}
 			
-			lldebugs << "was_loaded is " << (was_loaded?"true":"false") 
+			llinfos << "was_loaded is " << (was_loaded?"true":"false") 
 					<< ", auto_play is " << (auto_play?"true":"false") 
 					<< ", needs_navigate is " << (needs_navigate?"true":"false") << llendl;
 		}
@@ -449,7 +497,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 		if(needs_navigate)
 		{
 			media_impl->navigateTo(media_impl->mMediaEntryURL, "", true, true);
-			lldebugs << "navigating to URL " << media_impl->mMediaEntryURL << llendl;
+			llinfos << "navigating to URL " << media_impl->mMediaEntryURL << llendl;
 		}
 		else if(!media_impl->mMediaURL.empty() && (media_impl->mMediaURL != media_impl->mMediaEntryURL))
 		{
@@ -459,7 +507,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 			// If this causes a navigate at some point (such as after a reload), it should be considered server-driven so it isn't broadcast.
 			media_impl->mNavigateServerRequest = true;
 
-			lldebugs << "updating URL in the media impl to " << media_impl->mMediaEntryURL << llendl;
+			llinfos << "updating URL in the media impl to " << media_impl->mMediaEntryURL << llendl;
 		}
 	}
 	
@@ -560,7 +608,7 @@ bool LLViewerMedia::textureHasMedia(const LLUUID& texture_id)
 // static
 void LLViewerMedia::setVolume(F32 volume)
 {
-	if(volume != sGlobalVolume)
+	if(volume != sGlobalVolume || sForceUpdate)
 	{
 		sGlobalVolume = volume;
 		impl_list::iterator iter = sViewerMediaImplList.begin();
@@ -571,6 +619,8 @@ void LLViewerMedia::setVolume(F32 volume)
 			LLViewerMediaImpl* pimpl = *iter;
 			pimpl->updateVolume();
 		}
+
+		sForceUpdate = false;
 	}
 }
 
@@ -742,6 +792,9 @@ void LLViewerMedia::updateMedia(void *dummy_arg)
 	// Enable/disable the plugin read thread
 	LLPluginProcessParent::setUseReadThread(gSavedSettings.getBOOL("PluginUseReadThread"));
 	
+	// HACK: we always try to keep a spare running webkit plugin around to improve launch times.
+	createSpareBrowserMediaSource();
+	
 	sAnyMediaShowing = false;
 	sUpdatedCookies = getCookieStore()->getChangedCookies();
 	if(!sUpdatedCookies.empty())
@@ -758,6 +811,12 @@ void LLViewerMedia::updateMedia(void *dummy_arg)
 		LLViewerMediaImpl* pimpl = *iter++;
 		pimpl->update();
 		pimpl->calculateInterest();
+	}
+	
+	// Let the spare media source actually launch
+	if(sSpareBrowserMediaSource)
+	{
+		sSpareBrowserMediaSource->idle();
 	}
 		
 	// Sort the static instance list using our interest criteria
@@ -862,7 +921,7 @@ void LLViewerMedia::updateMedia(void *dummy_arg)
 				
 				// Set the low priority size for downsampling to approximately the size the texture is displayed at.
 				{
-					F32 approximate_interest_dimension = fsqrtf(pimpl->getInterest());
+					F32 approximate_interest_dimension = (F32) sqrt(pimpl->getInterest());
 					
 					pimpl->setLowPrioritySizeLimit(llround(approximate_interest_dimension));
 				}
@@ -1002,21 +1061,37 @@ void LLViewerMedia::setAllMediaEnabled(bool val)
 	{
 		if (!LLViewerMedia::isParcelMediaPlaying() && LLViewerMedia::hasParcelMedia())
 		{	
-			LLViewerParcelMedia::play(LLViewerParcelMgr::getInstance()->getAgentParcel());
+			if (gSavedSettings.getBOOL("MediaEnableFilter"))
+			{
+				LLViewerParcelMedia::filterMediaUrl(LLViewerParcelMgr::getInstance()->getAgentParcel());
+			}
+			else
+			{
+				LLViewerParcelMedia::play(LLViewerParcelMgr::getInstance()->getAgentParcel());
+			}
 		}
-		
+		/* ## Zi: Media/Stream separation
 		if (gSavedSettings.getBOOL("AudioStreamingMusic") &&
 			!LLViewerMedia::isParcelAudioPlaying() &&
 			gAudiop && 
 			LLViewerMedia::hasParcelAudio())
 		{
-			gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
+			if (gSavedSettings.getBOOL("MediaEnableFilter"))
+			{
+				LLViewerParcelMedia::filterAudioUrl(LLViewerMedia::getParcelAudioURL());
+			}
+			else
+			{
+				gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
+			}
 		}
+		## Zi: Media/Stream separation
+		*/
 	}
 	else {
 		// This actually unloads the impl, as opposed to "stop"ping the media
 		LLViewerParcelMedia::stop();
-		if (gAudiop) gAudiop->stopInternetStream();
+//		if (gAudiop) gAudiop->stopInternetStream();	// ## Zi: Media/Stream separation
 	}
 }
 
@@ -1032,6 +1107,26 @@ bool LLViewerMedia::isParcelMediaPlaying()
 bool LLViewerMedia::isParcelAudioPlaying()
 {
 	return (LLViewerMedia::hasParcelAudio() && gAudiop && LLAudioEngine::AUDIO_PLAYING == gAudiop->isInternetStreamPlaying());
+}
+
+void LLViewerMedia::onAuthSubmit(const LLSD& notification, const LLSD& response)
+{
+	LLViewerMediaImpl *impl = LLViewerMedia::getMediaImplFromTextureID(notification["payload"]["media_id"]);
+	if(impl)
+	{
+		LLPluginClassMedia* media = impl->getMediaPlugin();
+		if(media)
+		{
+			if (response["ok"])
+			{
+				media->sendAuthResponse(true, response["username"], response["password"]);
+			}
+			else
+			{
+				media->sendAuthResponse(false, "", "");
+			}
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -1083,7 +1178,8 @@ void LLViewerMedia::clearAllCookies()
 	}
 	
 	// the hard part: iterate over all user directories and delete the cookie file from each one
-	while(gDirUtilp->getNextFileInDir(base_dir, "*_*", filename))
+	LLDirIterator dir_iter(base_dir, "*_*");
+	while (dir_iter.next(filename))
 	{
 		target = base_dir;
 		target += filename;
@@ -1286,6 +1382,34 @@ void LLViewerMedia::removeCookie(const std::string &name, const std::string &dom
 }
 
 
+class LLInventoryUserStatusResponder : public LLHTTPClient::Responder
+{
+public:
+	LLInventoryUserStatusResponder()
+		: LLCurl::Responder()
+	{
+	}
+
+	void completed(U32 status, const std::string& reason, const LLSD& content)
+	{
+		if (isGoodStatus(status))
+		{
+			// Complete success
+			gSavedSettings.setBOOL("InventoryDisplayInbox", true);
+		}
+		else if (status == 401)
+		{
+			// API is available for use but OpenID authorization failed
+			gSavedSettings.setBOOL("InventoryDisplayInbox", true);
+		}
+		else
+		{
+			// API in unavailable
+			llinfos << "Marketplace API is unavailable -- Inbox may be disabled, status = " << status << ", reason = " << reason << llendl;
+		}
+	}
+};
+
 /////////////////////////////////////////////////////////////////////////////////////////
 // static
 void LLViewerMedia::setOpenIDCookie()
@@ -1319,6 +1443,44 @@ void LLViewerMedia::setOpenIDCookie()
 
 		// *HACK: Doing this here is nasty, find a better way.
 		LLWebSharing::instance().setOpenIDCookie(sOpenIDCookie);
+
+		// Do a web profile get so we can store the cookie 
+		LLSD headers = LLSD::emptyMap();
+		headers["Accept"] = "*/*";
+		headers["Cookie"] = sOpenIDCookie;
+		headers["User-Agent"] = getCurrentUserAgent();
+
+		std::string profile_url = getProfileURL("");
+		LLURL raw_profile_url( profile_url.c_str() );
+
+		LLHTTPClient::get(profile_url,  
+			new LLViewerMediaWebProfileResponder(raw_profile_url.getAuthority()),
+			headers);
+
+		std::string url = "https://marketplace.secondlife.com/";
+
+// 		if (LLGridManager::getInstance()->isInProductionGrid())
+		if (LLGridManager::getInstance()->isInSLBeta())// <AW opensim>
+		{
+			std::string gridLabel = LLGridManager::getInstance()->getGridLabel();
+			url = llformat("https://marketplace.%s.lindenlab.com/", utf8str_tolower(gridLabel).c_str());
+		}
+
+		// <AW opensim> needs coordinating with opensim devs
+		if (!LLGridManager::getInstance()->isInOpenSim())// <AW opensim>
+		{
+			url += "api/1/users/";
+			url += gAgent.getID().getString();
+			url += "/user_status";
+	
+			headers = LLSD::emptyMap();
+			headers["Accept"] = "*/*";
+			headers["Cookie"] = sOpenIDCookie;
+			headers["User-Agent"] = getCurrentUserAgent();
+	
+			LLHTTPClient::get(url, new LLInventoryUserStatusResponder(), headers);
+		}
+		
 	}
 }
 
@@ -1400,6 +1562,32 @@ void LLViewerMedia::proxyWindowClosed(const std::string &uuid)
 	}
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
+// static
+void LLViewerMedia::createSpareBrowserMediaSource()
+{
+	// If we don't have a spare browser media source, create one.
+	// However, if PluginAttachDebuggerToPlugins is set then don't spawn a spare
+	// SLPlugin process in order to not be confused by an unrelated gdb terminal
+	// popping up at the moment we start a media plugin.
+	if (!sSpareBrowserMediaSource && !gSavedSettings.getBOOL("PluginAttachDebuggerToPlugins"))
+	{
+		// The null owner will keep the browser plugin from fully initializing 
+		// (specifically, it keeps LLPluginClassMedia from negotiating a size change, 
+		// which keeps MediaPluginWebkit::initBrowserWindow from doing anything until we have some necessary data, like the background color)
+		sSpareBrowserMediaSource = LLViewerMediaImpl::newSourceFromMediaType("text/html", NULL, 0, 0);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// static
+LLPluginClassMedia* LLViewerMedia::getSpareBrowserMediaSource() 
+{
+	LLPluginClassMedia* result = sSpareBrowserMediaSource;
+	sSpareBrowserMediaSource = NULL;
+	return result; 
+};
+
 bool LLViewerMedia::hasInWorldMedia()
 {
 	if (sInWorldMediaDisabled) return false;
@@ -1462,6 +1650,15 @@ void LLViewerMedia::onTeleportFinished()
 {
 	// On teleport, clear this setting (i.e. set it to true)
 	gSavedSettings.setBOOL("MediaTentativeAutoPlay", true);
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// static
+void LLViewerMedia::setOnlyAudibleMediaTextureID(const LLUUID& texture_id)
+{
+	sOnlyAudibleTextureID = texture_id;
+	sForceUpdate = true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1601,6 +1798,7 @@ void LLViewerMediaImpl::createMediaSource()
 			LL_WARNS("Media") << "Failed to initialize media for mime type " << mMimeType << LL_ENDL;
 		}
 	}
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1636,6 +1834,22 @@ void LLViewerMediaImpl::setMediaType(const std::string& media_type)
 LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_type, LLPluginClassMediaOwner *owner /* may be NULL */, S32 default_width, S32 default_height, const std::string target)
 {
 	std::string plugin_basename = LLMIMETypes::implType(media_type);
+	LLPluginClassMedia* media_source = NULL;
+	
+	// HACK: we always try to keep a spare running webkit plugin around to improve launch times.
+	// If a spare was already created before PluginAttachDebuggerToPlugins was set, don't use it.
+	if(plugin_basename == "media_plugin_webkit" && !gSavedSettings.getBOOL("PluginAttachDebuggerToPlugins"))
+	{
+		media_source = LLViewerMedia::getSpareBrowserMediaSource();
+		if(media_source)
+		{
+			media_source->setOwner(owner);
+			media_source->setTarget(target);
+			media_source->setSize(default_width, default_height);
+						
+			return media_source;
+		}
+	}
 	
 	if(plugin_basename.empty())
 	{
@@ -1673,7 +1887,7 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
 		}
 		else
 		{
-			LLPluginClassMedia* media_source = new LLPluginClassMedia(owner);
+			media_source = new LLPluginClassMedia(owner);
 			media_source->setSize(default_width, default_height);
 			media_source->setUserDataPath(user_data_path);
 			media_source->setLanguageCode(LLUI::getLanguage());
@@ -1689,10 +1903,14 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
 			// collect 'javascript enabled' setting from prefs and send to embedded browser
 			bool javascript_enabled = gSavedSettings.getBOOL( "BrowserJavascriptEnabled" );
 			media_source->setJavascriptEnabled( javascript_enabled );
-			
+		
+			bool media_plugin_debugging_enabled = gSavedSettings.getBOOL("MediaPluginDebugging");
+			media_source->enableMediaPluginDebugging( media_plugin_debugging_enabled );
+
 			media_source->setTarget(target);
 			
-			if (media_source->init(launcher_name, plugin_name, gSavedSettings.getBOOL("PluginAttachDebuggerToPlugins")))
+			const std::string plugin_dir = gDirUtilp->getLLPluginDir();
+			if (media_source->init(launcher_name, plugin_dir, plugin_name, gSavedSettings.getBOOL("PluginAttachDebuggerToPlugins")))
 			{
 				return media_source;
 			}
@@ -1753,6 +1971,18 @@ bool LLViewerMediaImpl::initializePlugin(const std::string& media_type)
 		media_source->focus(mHasFocus);
 		media_source->setBackgroundColor(mBackgroundColor);
 		
+		if(gSavedSettings.getBOOL("BrowserIgnoreSSLCertErrors"))
+		{
+			media_source->ignore_ssl_cert_errors(true);
+		}
+
+		// the correct way to deal with certs it to load ours from CA.pem and append them to the ones
+		// Qt/WebKit loads from your system location.
+		// Note: This needs the new CA.pem file with the Equifax Secure Certificate Authority 
+		// cert at the bottom: (MIIDIDCCAomgAwIBAgIENd70zzANBg)
+		std::string ca_path = gDirUtilp->getExpandedFilename( LL_PATH_APP_SETTINGS, "CA.pem" );
+		media_source->addCertificateFilePath( ca_path );
+
 		media_source->proxy_setup(gSavedSettings.getBOOL("BrowserProxyEnabled"), gSavedSettings.getString("BrowserProxyAddress"), gSavedSettings.getS32("BrowserProxyPort"));
 		
 		if(mClearCache)
@@ -1846,6 +2076,18 @@ void LLViewerMediaImpl::setSize(int width, int height)
 	{
 		mMediaSource->setSize(width, height);
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+void LLViewerMediaImpl::showNotification(LLNotificationPtr notify)
+{
+	mNotification = notify;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+void LLViewerMediaImpl::hideNotification()
+{
+	mNotification.reset();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1985,7 +2227,14 @@ void LLViewerMediaImpl::updateVolume()
 			}
 		}
 
-		mMediaSource->setVolume(volume);
+		if (sOnlyAudibleTextureID == LLUUID::null || sOnlyAudibleTextureID == mTextureId)
+		{
+			mMediaSource->setVolume(volume);
+		}
+		else
+		{
+			mMediaSource->setVolume(0.0f);
+		}
 	}
 }
 
@@ -2190,6 +2439,64 @@ BOOL LLViewerMediaImpl::handleMouseUp(S32 x, S32 y, MASK mask)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
+void LLViewerMediaImpl::updateJavascriptObject()
+{
+	if ( mMediaSource )
+	{
+		// flag to expose this information to internal browser or not.
+		bool enable = gSavedSettings.getBOOL("BrowserEnableJSObject");
+		mMediaSource->jsEnableObject( enable );
+
+		// these values are only menaingful after login so don't set them before
+		bool logged_in = LLLoginInstance::getInstance()->authSuccess();
+		if ( logged_in )
+		{
+		// current location within a region
+		LLVector3 agent_pos = gAgent.getPositionAgent();
+		double x = agent_pos.mV[ VX ];
+		double y = agent_pos.mV[ VY ];
+		double z = agent_pos.mV[ VZ ];
+		mMediaSource->jsAgentLocationEvent( x, y, z );
+
+		// current location within the grid
+		LLVector3d agent_pos_global = gAgent.getLastPositionGlobal();
+		double global_x = agent_pos_global.mdV[ VX ];
+		double global_y = agent_pos_global.mdV[ VY ];
+		double global_z = agent_pos_global.mdV[ VZ ];
+		mMediaSource->jsAgentGlobalLocationEvent( global_x, global_y, global_z );
+
+		// current agent orientation
+		double rotation = atan2( gAgent.getAtAxis().mV[VX], gAgent.getAtAxis().mV[VY] );
+		double angle = rotation * RAD_TO_DEG;
+		if ( angle < 0.0f ) angle = 360.0f + angle;	// TODO: has to be a better way to get orientation!
+		mMediaSource->jsAgentOrientationEvent( angle );
+
+		// current region agent is in
+		std::string region_name("");
+		LLViewerRegion* region = gAgent.getRegion();
+		if ( region )
+		{
+			region_name = region->getName();
+		};
+		mMediaSource->jsAgentRegionEvent( region_name );
+		}
+
+		// language code the viewer is set to
+		mMediaSource->jsAgentLanguageEvent( LLUI::getLanguage() );
+
+		// maturity setting the agent has selected
+		if ( gAgent.prefersAdult() )
+			mMediaSource->jsAgentMaturityEvent( "GMA" );	// Adult means see adult, mature and general content
+		else
+		if ( gAgent.prefersMature() )
+			mMediaSource->jsAgentMaturityEvent( "GM" );	// Mature means see mature and general content
+		else
+		if ( gAgent.prefersPG() )
+			mMediaSource->jsAgentMaturityEvent( "G" );	// PG means only see General content
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
 std::string LLViewerMediaImpl::getName() const 
 { 
 	if (mMediaSource)
@@ -2280,7 +2587,7 @@ void LLViewerMediaImpl::navigateTo(const std::string& url, const std::string& mi
 		
 		return;
 	}
-
+	
 	navigateInternal();
 }
 
@@ -2392,23 +2699,7 @@ bool LLViewerMediaImpl::handleKeyHere(KEY key, MASK mask)
 		// Menu keys should be handled by the menu system and not passed to UI elements, but this is how LLTextEditor and LLLineEditor do it...
 		if( MASK_CONTROL & mask )
 		{
-			if( 'C' == key )
-			{
-				mMediaSource->copy();
-				result = true;
-			}
-			else
-			if( 'V' == key )
-			{
-				mMediaSource->paste();
-				result = true;
-			}
-			else
-			if( 'X' == key )
-			{
-				mMediaSource->cut();
-				result = true;
-			}
+			result = true;
 		}
 		
 		if(!result)
@@ -2502,6 +2793,9 @@ void LLViewerMediaImpl::update()
 	else
 	{
 		updateVolume();
+
+		// TODO: this is updated every frame - is this bad?
+		updateJavascriptObject();
 
 		// If we didn't just create the impl, it may need to get cookie updates.
 		if(!sUpdatedCookies.empty())
@@ -2849,8 +3143,8 @@ void LLViewerMediaImpl::handleMediaEvent(LLPluginClassMedia* plugin, LLPluginCla
 		{
 			LL_DEBUGS("Media") << "MEDIA_EVENT_CLICK_LINK_NOFOLLOW, uri is: " << plugin->getClickURL() << LL_ENDL; 
 			std::string url = plugin->getClickURL();
-			LLURLDispatcher::dispatch(url, NULL, mTrustedBrowser);
-
+			std::string nav_type = plugin->getClickNavType();
+			LLURLDispatcher::dispatch(url, nav_type, NULL, mTrustedBrowser);
 		}
 		break;
 		case MEDIA_EVENT_CLICK_LINK_HREF:
@@ -2913,6 +3207,7 @@ void LLViewerMediaImpl::handleMediaEvent(LLPluginClassMedia* plugin, LLPluginCla
 		case LLViewerMediaObserver::MEDIA_EVENT_NAVIGATE_BEGIN:
 		{
 			LL_DEBUGS("Media") << "MEDIA_EVENT_NAVIGATE_BEGIN, uri is: " << plugin->getNavigateURI() << LL_ENDL;
+			hideNotification();
 
 			if(getNavState() == MEDIANAVSTATE_SERVER_SENT)
 			{
@@ -3003,7 +3298,26 @@ void LLViewerMediaImpl::handleMediaEvent(LLPluginClassMedia* plugin, LLPluginCla
 			plugin->sendPickFileResponse(response);
 		}
 		break;
-		
+
+
+		case LLViewerMediaObserver::MEDIA_EVENT_AUTH_REQUEST:
+		{
+			LLNotification::Params auth_request_params;
+			auth_request_params.name = "AuthRequest";
+
+			// pass in host name and realm for site (may be zero length but will always exist)
+			LLSD args;
+			LLURL raw_url( plugin->getAuthURL().c_str() );
+			args["HOST_NAME"] = raw_url.getAuthority();
+			args["REALM"] = plugin->getAuthRealm();
+			auth_request_params.substitutions = args;
+
+			auth_request_params.payload = LLSD().with("media_id", mTextureId);
+			auth_request_params.functor.function = boost::bind(&LLViewerMedia::onAuthSubmit, _1, _2);
+			LLNotifications::instance().add(auth_request_params);
+		};
+		break;
+
 		case LLViewerMediaObserver::MEDIA_EVENT_CLOSE_REQUEST:
 		{
 			std::string uuid = plugin->getClickUUID();
@@ -3019,6 +3333,7 @@ void LLViewerMediaImpl::handleMediaEvent(LLPluginClassMedia* plugin, LLPluginCla
 				// This close request is directed at another instance
 				pass_through = false;
 				LLFloaterMediaBrowser::closeRequest(uuid);
+				LLFloaterWebContent::closeRequest(uuid);
 			}
 		}
 		break;
@@ -3038,6 +3353,7 @@ void LLViewerMediaImpl::handleMediaEvent(LLPluginClassMedia* plugin, LLPluginCla
 				// This request is directed at another instance
 				pass_through = false;
 				LLFloaterMediaBrowser::geometryChanged(uuid, plugin->getGeometryX(), plugin->getGeometryY(), plugin->getGeometryWidth(), plugin->getGeometryHeight());
+				LLFloaterWebContent::geometryChanged(uuid, plugin->getGeometryX(), plugin->getGeometryY(), plugin->getGeometryWidth(), plugin->getGeometryHeight());
 			}
 		}
 		break;
@@ -3519,6 +3835,11 @@ bool LLViewerMediaImpl::isInAgentParcel() const
 		}
 	}
 	return result;
+}
+
+LLNotificationPtr LLViewerMediaImpl::getCurrentNotification() const
+{
+	return mNotification;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,625 @@
+//http bridge script v.1.9
+//Firestorm
+//Tozh Taurog, Arrehn Oberlander
+
+//
+// Global Variables and CONSTANTS
+//
+    // Shared
+    integer timerMask;        // Every function that shares the timer needs a TIMER_ entry below.
+    float   timerInterval;    // float, seconds. Always set this when using llSetTimerEvent
+    float   timerElapsed;    // floats, seconds since last tick.
+    integer TIMER_TYPE_NONE = 0;
+    integer TIMER_TYPE_TP = 1;
+    integer TIMER_TYPE_FLIGHT = 2;
+        
+    
+    // Bridge platform
+    integer FIRESTORM_VIEWER = 0;
+    integer UNKNOWN_VIEWER = 1;
+    integer META_CONTROL = 1024;     //control value to do nothing; for no-script sims
+    string  bridgeURL;
+    string  latestURL;
+    integer channel = 99;
+    integer debug = FALSE;
+    integer httpStatus = 200;
+    //key httpReqID;
+    integer keyViewerHandshake;
+    integer tryHandshakeOnce = TRUE;
+    key owner;
+    integer timerType = TIMER_TYPE_NONE;
+
+    // Teleport 
+    integer MAX_TIME_TO_TP = 10;     // (seconds) should be set to 10 for normal use
+    float   TP_TIMER_TICK = 0.05;
+
+    vector  mttVector;               // target for llMoveToTarget() teleport
+    integer startTPTimer;
+    
+    // Object details (improved radar)
+    vector  opVector;                // object position for llGetobjectDetails()
+    key     opUUID;                  // key for llGetobjectDetails()
+    list    opObjDetails;            // result for llGetobjectDetails()
+
+    // Flight assist
+    float   MIN_SPEED = 2.0;
+    float   WANT_SPEED = 20.0;
+    float   MAX_SPEED = 25.0;
+    float   MIN_TIME = 1.0;
+    float   DEFAULT_BOOST = 0.5;
+    float   FAST_TICK = 0.1;
+    float   SLOW_TICK = 1.0;
+    float   LONG_TIME = 5.0;         // reset boost if no work in a long time
+    float   MIN_BOOST_HEIGHT = 72.0;
+    float   MIN_BOOST_CLEARANCE = 36.0;
+    integer useFlightAssist = FALSE;
+    integer pendingFlightFeather = 0;
+    float   last_alt;
+    float   last_time;
+    float   last_move;
+    float   boost;
+    integer controls;
+    integer flying = -1;
+    integer falling = -1;
+    integer hovering = -1;
+    integer dimmed = -1;
+    float   last_boost_height;
+    float   average_boost;
+    
+
+//
+// Bridge platform helper functions
+//
+    makeSane()
+    // try and resist "accidental" damage from other scripts
+    // reset persistent prim attributes frequently set via scripts, try and stop other scripts
+    {
+        string myName = llGetScriptName();
+        integer n = llGetInventoryNumber(INVENTORY_SCRIPT);
+        if (n > 1)
+        {
+            llOwnerSay("NOTICE: One or more scripts have been added to your Firestorm bridge! If you did not expect this message, use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option re-create your bridge now.");
+            llSleep(1.0);
+            while(n)
+            {
+                string s = llGetInventoryName(INVENTORY_SCRIPT,--n);
+                if (s != myName)
+                    llSetScriptState(s,FALSE);
+            }
+        }
+        llParticleSystem([]);
+        llSetText("",ZERO_VECTOR,0.0);
+        llSetTexture("757c276e-6409-ad54-a862-ca89c04e4940",ALL_SIDES);
+        llSetTextureAnim(0,ALL_SIDES,1,1,1.0,1.0,1.0);
+        llAllowInventoryDrop(FALSE);
+        // make bridge inconspicuous
+        llSetScale(<0.01,0.01,0.01>);
+        llSetPos(<0.0,0.0,-0.15>);
+        llSetObjectDesc(llGetObjectName());
+        llStopMoveToTarget();
+
+    }
+
+    initBridge()
+    {
+        llRequestURL();
+        debugOutput("rezzed");
+        owner = llGetOwner();
+        
+        // Disable all secondary stateful services
+        llSetTimerEvent(0);
+        llStopMoveToTarget();
+        flight_set_hover(FALSE);
+        
+        if(llGetAttached() != 0)
+        {
+            llRequestPermissions(llGetOwner(),PERMISSION_TAKE_CONTROLS);
+        }
+    
+        //assume the worst and let the viewer convince us otherwise
+        keyViewerHandshake = UNKNOWN_VIEWER;
+        
+        // if we were last flying reinitialize ourself    
+        if (useFlightAssist)
+        {
+            debugOutput("Flight assist true, going to flight_init");
+            flight_init();
+        }
+    }
+
+    saveNewURL(string url)
+    {
+        latestURL = url;
+    }
+    
+    parseCommand(key httpReqID, string msg)
+    {
+        debugOutput("Parsing original input: " + msg);
+        //remove the <llsd> </llsd> wrapper
+        integer end = llStringLength(msg) - llStringLength("</llsd>") -1;        
+        string inner = llGetSubString(msg, 6, end - 1);
+        
+        debugOutput("Parsing inner string: " + inner);
+        //remove the <string> </string> wrapper
+        end = llStringLength(inner) - llStringLength("</string>") -1;
+        string msgClean = llGetSubString(inner, 8, end);
+        
+        debugOutput("Parsing final string: " + msgClean);
+        list commandList = llParseString2List(msgClean,["|"],[]);
+        //get command name
+        string cmd = llList2String(commandList,0);
+        
+        debugOutput("Parsing command: " + cmd);
+ 
+        //Large If statement for command processing. Shame on you, LSL!
+        if (cmd == "URL Confirmed")
+        {
+                //we're in the right viewer, go on.
+                keyViewerHandshake = FIRESTORM_VIEWER;
+            
+        } // URL Confirmed
+        
+        if (cmd == "UseLSLFlightAssist")
+        {
+            string params = "<" + llList2String(commandList,1) + ">";
+            debugOutput("Parsing params: " + params);
+            integer newstatus = llList2Integer(commandList,1);
+            if (newstatus != useFlightAssist)
+	    {            	
+	            useFlightAssist = newstatus;
+	            if (useFlightAssist)
+	            {
+			    	debugOutput("Flight assist true, going to flight_init");
+	            	flight_init();
+	            }
+	            else
+	            {
+	                debugOutput("Flight assist false, removing flag");
+	                if (timerMask & TIMER_TYPE_FLIGHT)
+	                {
+	                    debugOutput("timerMask & TIMER_FLIGHT");
+	                    timerMask = timerMask ^ TIMER_TYPE_FLIGHT; // remove flight from event counter
+		        }
+	            }
+	     }
+        }
+    
+        else if (cmd == "llMoveToTarget")
+        {
+            // Get parameters
+            string params = "<" + llList2String(commandList,1) + ">";
+            debugOutput("Parsing params: " + params);
+            mttVector=(vector)params;
+            debugOutput("Parsing vector: " + (string)mttVector);
+            startTPTimer = llGetUnixTime();
+              
+              // tp commands immediately configure a TP timer consumer
+              timerMask = timerMask | TIMER_TYPE_TP;
+              if ((timerInterval > TP_TIMER_TICK) || (timerInterval == 0))
+              {
+                timerInterval = TP_TIMER_TICK;
+                llSetTimerEvent(timerInterval);
+              }
+              
+            //llHTTPResponse(httpReqID, httpStatus, "<llsd><string>test response from llMoveToTarget</string></llsd>");
+        }// "llMoveToTarget"
+        
+        else if (cmd == "llGetObjectDetails")
+        {
+            // Get parameters
+            opUUID = (key)llList2String(commandList, 1);
+        
+            //string opV = "<" + llList2String(commandList,2) + ">";
+            //debugOutput("Parsing params: " + opV);
+        
+            //opVector=(vector)opV;
+            //debugOutput("Parsing vector: " + (string)opVector);
+        
+            opObjDetails = llGetObjectDetails(opUUID, ([OBJECT_POS]));
+            string body = "<llsd><string>" + llList2String(opObjDetails,0) + "</string></llsd>";
+            llHTTPResponse(httpReqID, httpStatus, body);
+ 
+        }// "llGetObjectDetails"
+ 
+        else if ( cmd == "getScriptInfo")
+        {
+            key target = (key)llList2String(commandList, 1);
+            getScriptInfo(target);
+        }
+
+    }
+
+    debugOutput(string msg)
+    {
+        if (debug)
+        {
+            llOwnerSay("BridgeDebug: " + msg);
+        }
+    }
+
+//
+//  Get Script Count
+//
+
+    getScriptInfo(key target)
+    {
+        list details = llGetObjectDetails(target, ([OBJECT_NAME, 
+                        OBJECT_TOTAL_SCRIPT_COUNT, OBJECT_RUNNING_SCRIPT_COUNT, OBJECT_SCRIPT_MEMORY, OBJECT_SCRIPT_TIME]));
+        llOwnerSay("'"+(string)llList2String(details,0) +
+                   "' [" + (string)llList2Integer(details,2) + "/" + (string)llList2Integer(details,1) + "] running scripts. " +
+                   (string)(llList2Integer(details,3)/1024) + "Kb consumed for " + (string)(llList2Float(details,4)*1000.0) + "ms of cpu time.");
+    }    
+    
+//
+// Teleport Helper functions
+//    
+    
+    
+    tpMoveStep()
+    {        
+        vector loc = llGetPos();     // current position        
+        vector targ = mttVector - loc;
+        //has to be less than 65m
+        float dist = llVecMag(targ);
+        
+        debugOutput("current: " + (string)loc + " target: " + (string)targ + " tp distance: " + (string)dist);
+        
+        //if we are out of time or distance - stop
+        if((dist < 2.0) ||  (llGetUnixTime() - MAX_TIME_TO_TP > startTPTimer) || (mttVector == loc))
+        {    
+            llStopMoveToTarget();
+            timerMask = timerMask ^ TIMER_TYPE_TP; // remove our timer if we finish
+        }
+        else
+        {
+            if (dist < 65)
+            {
+                debugOutput("One jump to :" + (string)mttVector);
+                llMoveToTarget(mttVector, TP_TIMER_TICK);
+            }
+            else
+            {
+                debugOutput("Multiple jump to :" + (string)(loc+llVecNorm(targ)*60));
+                llMoveToTarget(loc+llVecNorm(targ)*60, TP_TIMER_TICK);
+            }
+        }
+            
+        // if we get this far, set our the timer for the next tick
+        if ((timerInterval > TP_TIMER_TICK) || (timerInterval < 0.1))
+        {
+            timerInterval = TP_TIMER_TICK;
+            llSetTimerEvent(timerInterval);
+        }
+        else
+        {
+        	//else no more timers. In this case, make EXTRA sure that we're not moving.
+        	llStopMoveToTarget();
+        }
+    }
+
+//
+// Flight Assist Functions
+//
+
+    flight_set_hover(integer active)
+    {
+        debugOutput("Flight:set_hover " + (string)active);
+
+        if(active == hovering) return;
+        hovering = active;
+        if(hovering)
+            llSetForce(<0,0,9.8> * llGetMass(), FALSE);
+        else
+            llSetForce(<0,0,0>, FALSE);
+    }
+             
+    flight_set_tick(float tick)
+    // positively intializes a spot for us in the eventTimer.
+    {
+        debugOutput("Flight:set_tick " + (string)tick);
+        
+        timerMask = timerMask | TIMER_TYPE_FLIGHT;
+        timerInterval = tick;
+        if (timerMask == TIMER_TYPE_FLIGHT)
+        {
+            llSetTimerEvent(timerInterval);
+        }
+        else if ((timerInterval > tick) || (timerInterval < 0.1))
+        {   
+            llSetTimerEvent(timerInterval);
+        }
+    }
+        
+    flight_check_boost()
+    {
+        debugOutput("Flight:check_boost ");         
+
+        
+        flying = 1;
+        falling = 0;
+        integer info = llGetAgentInfo(owner);
+        
+        // Sleep if not flying
+        if((info & AGENT_FLYING) == 0)
+        {
+            debugOutput("not flying");
+            flight_set_hover(FALSE);
+            falling = (info & AGENT_IN_AIR) != 0;
+            flying = 0;
+            boost = 0;
+            flight_set_tick(SLOW_TICK);
+            return;
+        }
+            
+        // Sleep if we don't have controls
+        if(controls <= 0)
+        {
+            debugOutput("no controls");
+            flight_set_tick(SLOW_TICK);
+            return;
+        } 
+        
+        // Otherwise, we may be flying = look up further details
+        vector pos = llGetPos();
+        if(pos.z < last_boost_height / 2) // trim running average of boost if big altitude drop
+            average_boost = average_boost * (pos.z / last_boost_height)
+                          + DEFAULT_BOOST * (1.0 - pos.z / last_boost_height);
+        
+        // Sleep if low to the ground
+        if(pos.z < MIN_BOOST_HEIGHT || pos.z - llGround(<0,0,0>) < MIN_BOOST_CLEARANCE)
+        {
+            flight_set_hover(FALSE);
+            flight_set_tick(SLOW_TICK);
+            boost = 0;
+            return;
+        }
+        
+        // Otherwise hover and get even more details
+        flight_set_hover(TRUE);
+        vector vel = llGetVel();
+        float time = llGetTime();
+        float speed = vel.z;
+        float target = WANT_SPEED;
+        float window = WANT_SPEED / 20;
+        
+        if(speed > 0)
+            last_move = time;
+        if(time - last_time >= LONG_TIME)
+            boost = 0;
+        else
+        {
+            if(speed < target - window)
+            {
+                if(boost == 0)
+                    boost = average_boost;
+                if(time - last_move > MIN_TIME) boost += 0.4;
+                else if(speed < target * 0.25) boost += 0.2;
+                else if(speed < target * 0.5 ) boost += 0.1;
+                else if(speed < target * 0.75) boost += 0.05;
+                else if(speed < target - window * 4) boost += 0.02;
+                else boost += 0.01;
+            }
+            else if(speed > MAX_SPEED) boost -= 0.5;
+            else if(speed > target + window * 4) boost -= 0.1;
+            else if(speed > target + window * 2) boost -= 0.03;
+            else if(speed > target + window) boost -= 0.01;
+            if(boost <= 0)
+                boost = 0;
+            if(boost > 0) 
+            {
+                llApplyImpulse(<0,0,boost> * llGetMass(), FALSE);
+                average_boost = average_boost * 0.9 + boost * 0.1; // 10 sample running average
+                last_boost_height = pos.z;
+            }
+        }
+        
+        // If we find we need a correction
+        if(boost) 
+        {
+            flight_set_tick(FAST_TICK);
+        }
+        else 
+            flight_set_tick(SLOW_TICK);
+        
+        last_alt = pos.z;
+        last_time = time;
+    }
+        
+    flight_take_controls()
+    {
+        llTakeControls(CONTROL_UP|CONTROL_DOWN,TRUE,TRUE);
+    }    
+
+    flight_request_perms()
+    {
+        flight_take_controls();
+    }
+            
+    flight_init()
+    {
+        debugOutput("Flight:init ");
+        flight_set_hover(FALSE);
+            
+        // initialize flight vars
+        useFlightAssist = TRUE;
+        boost = 0;
+        flying = -1;
+        falling = -1;
+        hovering = -1;
+        if(llGetAttached()) 
+            flight_request_perms();
+        flight_set_tick(SLOW_TICK);
+    }
+        
+//
+// MAIN
+//
+
+default
+{
+    state_entry()
+    {
+        makeSane();
+        initBridge();
+
+    }
+    
+    on_rez(integer i)
+    // We don't want to be rezzed without being attached. Insure we don't create litter.
+    {
+        llSetPrimitiveParams([PRIM_TEMP_ON_REZ,TRUE]);
+    }
+    
+    attach(key k)
+    // Initialize bridge functionality when worn as an attachment
+    {
+        if (k != NULL_KEY)
+        {
+            tryHandshakeOnce = TRUE;
+            initBridge();
+        }
+    }
+    
+    touch_start(integer total_number)
+    {
+        debugOutput("touched");
+    }
+    
+    run_time_permissions(integer i)
+    {
+        if (i)
+        {
+            if(useFlightAssist) 
+                flight_take_controls();
+            else
+            {
+                //take control for value that does nothing, in order to work in no-script sims
+                llTakeControls(META_CONTROL,TRUE,TRUE);
+            }
+        }
+    }
+        
+    control(key id, integer level, integer edge)
+    {
+        if((llGetAgentInfo(owner) & AGENT_FLYING) && useFlightAssist)
+        {
+            controls = 0;
+            if(level & CONTROL_UP) controls++;
+            if(level & CONTROL_DOWN) controls--;
+            if (controls > 0)
+                flight_check_boost();
+        }
+    }
+        
+    changed(integer change)
+    {
+        if (change & CHANGED_REGION) 
+        {
+            llRequestURL();
+            debugOutput("The region the bridge is in has changed.");
+        }
+        if (change & CHANGED_INVENTORY)
+        {
+            makeSane();
+        }
+    }
+    
+    timer()
+    {
+        debugOutput("tick. mask = "+(string)timerMask);
+        // Multiple functions may have to share the timer
+        // Do not assume you know the timer interval in advance.
+        // Each consumer will have to check whether the interval that has passed
+        // since last tick is long enough to trigger functionality.
+        
+        // every tick, stop ourself. Consumers are responsible for restarting the timer
+        // each time they get a tick, if they still need it
+        llSetTimerEvent(0);
+        timerInterval = 0;
+        timerElapsed = llGetAndResetTime();
+        
+        // All consumers should have an entry here, and must manage their interval.
+        // Consumers should reset the timer only of they need it faster, otherwise
+        // leave it as it is.  Order this list by fastest timer consumers first. 
+        if (timerMask & TIMER_TYPE_TP)
+        {
+            tpMoveStep();
+            return; // teleports shortcut other timers
+        }
+    
+        if (timerMask & TIMER_TYPE_FLIGHT)
+        {
+            flight_check_boost();
+        }   
+    }
+    
+    http_request(key ID, string Method, string Body) 
+    {
+        //httpReqID = ID;
+        debugOutput("Received HTTP " + Method + " message. Command body: " + Body);
+        
+       if (Method == URL_REQUEST_GRANTED) 
+        {
+            saveNewURL(Body);
+
+            debugOutput ("keyViewerHandshake " + (string)keyViewerHandshake + " tryHandshakeOnce " + (string)tryHandshakeOnce);
+            //Saying URL to owner
+           if (keyViewerHandshake == FIRESTORM_VIEWER || tryHandshakeOnce == 1)
+            {
+                debugOutput ("Firestorm viewer and handshake");
+		llOwnerSay("<bridgeURL>" + latestURL+ "</bridgeURL>");
+                tryHandshakeOnce = 0;
+            }
+            else
+            {
+                //we're in a wrong viewer. just sit quietly
+                llDetachFromAvatar();
+            }
+        }
+        else if (Method == URL_REQUEST_DENIED) 
+        {
+            saveNewURL("");
+
+            debugOutput("No URLs free !");
+            //keep trying?
+            llRequestURL();
+        }
+        else if (Method == "GET") 
+        {
+            parseCommand(ID, Body);
+            llHTTPResponse(ID, httpStatus, "<llsd><string> command=\"GET\" text=\"get - Hello Bridge!</string></llsd>");
+        }
+        else if (Method == "PUT")
+        {
+            llHTTPResponse(ID, httpStatus, "<llsd><string>PUT - Hello Bridge!</string></llsd>");
+        }
+        else if (Method == "POST")
+        {
+            parseCommand(ID, Body);
+            llHTTPResponse(ID, httpStatus, "<llsd><string>POST - Hello Bridge!</string></llsd>");
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+//
+//Flight assist code 
+//
+//Copyright (c) 2005, Argent Stonecutter & player
+//All rights reserved.
+//
+//Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+//
+//    * Redistributions in modifiable form must retain the above copyright notice, this list of conditions and the following disclaimer.
+//    * Redistributions in non-modifiable form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+//    * Neither the name of Argent Stonecutter nor his player may be used to endorse or promote products derived from this software without specific prior written permission.
+//
+//THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// END //

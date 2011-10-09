@@ -64,13 +64,12 @@
 		<radio_item label="Wybierz teksturę" name="radio select face"/>
 	</radio_group>
 	<check_box label="Edytuj połączone części" name="checkbox edit linked parts"/>
+	<button label="Linkuj" name="link_btn"/>
+	<button label="Rozlinkuj" name="unlink_btn"/>
 	<text name="RenderingCost" tool_tip="Pokazuje koszt renderowania tego obiektu">
 		þ: [COUNT]
 	</text>
-	<check_box label="" name="checkbox uniform"/>
-	<text label="Rozciągnij 2 strony" name="checkbox uniform label">
-		Rozciągnij 2 strony
-	</text>
+	<check_box label="Rozciągnij 2 strony" name="checkbox uniform"/>
 	<check_box initial_value="true" label="Rozciągnij teksturę" name="checkbox stretch textures"/>
 	<check_box initial_value="true" label="Użyj siatki" name="checkbox snap to grid"/>
 	<combo_box name="combobox grid mode" tool_tip="Wybierz rodzaj linijki siatki dla pozycjonowania obiektu">
@@ -173,14 +172,8 @@
 			<text name="Creator:">
 				Twórca:
 			</text>
-			<text name="Creator Name">
-				Pani Esbee Linden (esbee.linden)
-			</text>
 			<text name="Owner:">
 				Właściciel:
-			</text>
-			<text name="Owner Name">
-				Pani Erica &quot;Moose&quot; Linden (erica.linden)
 			</text>
 			<text name="Group:">
 				Grupa:
@@ -307,7 +300,7 @@
 				<combo_box.item label="Kwadrat" name="Square"/>
 				<combo_box.item label="Trójkąt" name="Triangle"/>
 			</combo_box>
-			<text name="text twist" left_delta="-5" width="160">
+			<text left_delta="-5" name="text twist" width="160">
 				Skręcenie (początek/koniec)
 			</text>
 			<spinner label="P" name="Twist Begin"/>

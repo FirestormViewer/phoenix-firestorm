@@ -5,6 +5,7 @@
 	 name="object properties"
 	 help_topic="object_properties"
 	 title="Object Profile"
+	 follows="all"
 	 width="333">
 	 <panel.string
 	  name="text deed continued">
@@ -55,7 +56,7 @@
                 Mixed Sale
             </panel.string>
     <button
-     follows="top|right"
+     follows="top|left"
      height="24"
      image_hover_unselected="BackButton_Over"
      image_pressed="BackButton_Press"
@@ -78,16 +79,16 @@
      top="0"
      use_ellipses="true"
      value="Object Profile"
-     width="290" />
+     right="-10" />
 	    <text
-     follows="top|left"
+     follows="top|left|right"
      height="13"
      layout="topleft"
      left="45"
      name="where"
      text_color="LtGray_50"
      value="(Inworld)"
-     width="150" />
+     right="-10" />
 	<panel
          follows="all"
          height="490"
@@ -97,7 +98,7 @@
          help_topic=""
          name="properties_panel"
          top="45"
-         width="313"
+         right="-10"
    background_visible="true"
    bg_alpha_color="SL-Background">
 	    	    <text
@@ -168,9 +169,10 @@
      left_pad="0"
              name="Creator Name"
 		     top_delta="0"
+		     translate="false"
          use_ellipses="true" 
 		     width="225">
-	        Erica Linden
+	        (loading ...)
 	     </text>
 	    <text
 			 type="string"
@@ -193,9 +195,10 @@
 			    left_pad="0"
 			    name="Owner Name"
 			    top_delta="0"
+			    translate="false"
           use_ellipses="true" 
 			    width="225">
-			    Erica Linden
+			    (loading ...)
 	     </text>
 	    	    <text
 			 type="string"
@@ -305,7 +308,7 @@
              follows="left|top|right"
              layout="topleft"
              name="perm_modify"
-             width="310">
+             width="280">
                 You can modify this object
             </text>
 	  	    <text
@@ -519,12 +522,12 @@
             </text>
 		</panel>
     <panel
-		 height="25"
-		 layout="bottomright"
-		 name="button_panel"
-		 left="5"
-		 bottom="5"
-		 width="313">
+         height="25"
+         layout="bottomright"
+         name="button_panel"
+         left="5"
+         bottom="5"
+         width="313">
         <button
 		     follows="bottom|left"
 		     height="23"
@@ -533,7 +536,7 @@
 		     left="5"
 		     name="open_btn"
 		     top="0"
-		     width="100" />
+		     width="73" />
 	    <button
 		     follows="bottom|left"
 		     height="23"
@@ -542,7 +545,7 @@
 		     left_pad="5"
 		     name="pay_btn"
 		     top="0"
-		     width="100" />
+		     width="73" />
 	    <button
 		     follows="bottom|left"
 		     height="23"
@@ -551,17 +554,16 @@
 		     left_pad="5"
 		     name="buy_btn"
 		     top="0"
-		     width="100" />
+		     width="73" />
         <button
 		     follows="bottom|left"
 		     height="23"
 		     label="Details"
 		     layout="topleft"
-		     left="5"
+		     left_pad="5"
 		     name="details_btn"
 		     top="0"
-		     width="100"
-			 visible="false" />
+		     width="74" />
 
-	</panel>
+    </panel>
 </panel>

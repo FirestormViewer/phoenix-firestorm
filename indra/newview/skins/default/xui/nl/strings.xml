@@ -548,6 +548,12 @@
 	<string name="worldmap_results_none_found">
 		Geen gevonden.
 	</string>
+	<string name="worldmap_agent_position">
+		U bent hier
+	</string>
+	<string name="minimap_distance">
+		(Afstand: [DISTANCE] m)
+	</string>
 	<string name="Ok">
 		OK
 	</string>
@@ -665,7 +671,7 @@
 	<string name="xml_file">
 		XML bestand
 	</string>
-	<string name="dot_raw_file">
+	<string name="raw_file">
 		RAW bestand
 	</string>
 	<string name="compressed_image_files">
@@ -849,9 +855,6 @@
 	<string name="InvFolder My Inventory">
 		Mijn Inventaris
 	</string>
-	<string name="InvFolder My Favorites">
-		Mijn Favorieten
-	</string>
 	<string name="InvFolder Library">
 		Bibliotheek
 	</string>
@@ -910,10 +913,10 @@
 		Gebaren
 	</string>
 	<string name="InvFolder Favorite">
-		Favoriten
+		Mijn Favorieten
 	</string>
 	<string name="InvFolder favorite">
-		Favoriten
+		Mijn Favorieten
 	</string>
 	<string name="InvFolder Current Outfit">
 		Huidige Uitrusting
@@ -1054,7 +1057,7 @@
 		Right Pec
 	</string>
 	<string name="YearsMonthsOld">
-		[AGEYEARS] [AGEMONTHS] oud
+		[AGEYEARS] [AGEMONTHS]
 	</string>
 	<string name="YearsOld">
 		[AGEYEARS] oud
@@ -1231,8 +1234,8 @@
 	<string name="Unknown">
 		(Unknown)
 	</string>
-	<string name="SummaryForTheWeek" value="Samenvatting voor deze week, vanaf"/>
-	<string name="NextStipendDay" value="The next stipend day is"/>
+	<string name="SummaryForTheWeek" value="Samenvatting voor deze week, vanaf "/>
+	<string name="NextStipendDay" value=". The next stipend day is "/>
 	<string name="GroupIndividualShare" value="Groep       Individueel Aandeel"/>
 	<string name="Balance">
 		Banksaldo
@@ -1441,34 +1444,34 @@ Verwacht .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="PDT">
 		PDT
 	</string>
-	<string name="Forward">
+	<string name="Direction_Forward">
 		Vooruit
 	</string>
-	<string name="Left">
+	<string name="Direction_Left">
 		Links
 	</string>
-	<string name="Right">
+	<string name="Direction_Right">
 		Rechts
 	</string>
-	<string name="Back">
+	<string name="Direction_Back">
 		Achteruit
 	</string>
-	<string name="North">
+	<string name="Direction_North">
 		Noord
 	</string>
-	<string name="South">
+	<string name="Direction_South">
 		Zuid
 	</string>
-	<string name="West">
+	<string name="Direction_West">
 		West
 	</string>
-	<string name="East">
+	<string name="Direction_East">
 		Oost
 	</string>
-	<string name="Up">
+	<string name="Direction_Up">
 		Omhoog
 	</string>
-	<string name="Down">
+	<string name="Direction_Down">
 		Omlaag
 	</string>
 	<string name="Any Category">

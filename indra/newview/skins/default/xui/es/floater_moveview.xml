@@ -49,13 +49,10 @@
 		Agacharse (pulsa C)
 	</string>
 	<string name="walk_title">
-		Caminar
 	</string>
 	<string name="run_title">
-		Correr
 	</string>
 	<string name="fly_title">
-		Volar
 	</string>
 	<panel name="panel_actions">
 		<button label="" label_selected="" name="move up btn" tool_tip="Volar (pulsa E para subir)"/>

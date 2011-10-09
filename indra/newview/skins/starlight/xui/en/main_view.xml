@@ -8,7 +8,7 @@
  tab_stop="false" 
  name="main_view"
  width="1024">
-<!-- menu stack of the screen layout except the top menu-bar -->
+ 
   <layout_stack border_size="0"
                 follows="all"
                 mouse_opaque="false"
@@ -82,22 +82,27 @@
                    tab_stop="false"
                    mouse_opaque="false"
                    user_resize="false"
-                name="hud container"
+                   name="hud container"
                    width="500">
+		
+<!-- New in 2.6 -->
+              <view top="0"
+                    follows="all"
+                    height="500"
+                    left="0"
+                    mouse_opaque="false"
+                    name="floater_snap_region"
+                    width="500"/>
+					
 <!-- first element on rest of screen is top info bar - so is just below nav bar -->
             <panel follows="left|top|right"
-                   height="55"
-					background_opaque="true"
-					background_visible="false"
-					bg_opaque_color="red"
-					bg_alpha_color="red"
-					color="red"
+                   height="42"
                    left="0"
                    mouse_opaque="false"
                    name="topinfo_bar_container"
                    tab_stop="false"
                    top="0"
-                   visible="true"
+                   visible="false"
                    width="1024"/>
 <!-- second element on rest of screen is stand/stop/flying container - only really contains a button -->
               <panel bottom="500"
@@ -160,6 +165,23 @@
             width="333"/>
 	   </layout_stack>
  <!-- controls floaters only appearing on the screen -->
+ 
+      <panel top="0"
+         follows="all"
+         height="500"
+         mouse_opaque="false"
+         name="login_panel_holder"
+         width="1024"/>
+		 
+		 <!-- where the debug floaters appear on the screen -->
+      <debug_view follows="all"
+                  left="0"
+                  top="0"
+                  mouse_opaque="false"
+                  height="500"
+                  name="DebugView"
+                  width="1024"/>
+		 
       <panel follows="all"
                     height="500"
                     left="0"
@@ -179,14 +201,6 @@
                       top="0"
                       width="1024"/>
       </panel>
-<!-- where the debug floaters appear on the screen -->
-      <debug_view follows="all"
-                  left="0"
-                  top="0"
-                  mouse_opaque="false"
-                  height="500"
-                  name="DebugView"
-                  width="1024"/>
     </layout_panel>
   </layout_stack>
 <!-- description of very top of the screen - above nav-bar! -->

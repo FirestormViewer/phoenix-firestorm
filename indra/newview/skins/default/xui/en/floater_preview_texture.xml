@@ -4,13 +4,13 @@
  auto_tile="true"
  can_resize="true"
  follows="left|top"
- height="350"
+ height="495"
  layout="topleft"
  min_height="200"
- min_width="370"
+ min_width="475"
  name="preview_texture"
  help_topic="preview_texture"
- width="370">
+ width="555">
    <floater.string
      name="Title">
         Texture: [NAME]
@@ -35,43 +35,43 @@
     <line_editor
      border_style="line"
      border_thickness="1"
-     follows="left|top|right"
+     follows="right|left|top"
      font="SansSerif"
      height="19"
      layout="topleft"
      left_pad="0"
      max_length="127"
      name="desc"
-     width="190" />
+     width="440" />
     <text
      type="string"
-     halign="right"
+     halign="left"
      length="1"
-     follows="right|bottom"
+     follows="left|bottom"
      height="16"
      layout="topleft"
-     left="110"
+     left="10"
      name="dimensions"
-     top="255"
+     bottom="-40"
      width="200">
         [WIDTH]px x [HEIGHT]px
     </text>
     <text
+	 top_delta="0"
      type="string"
      halign="right"
      length="1"
      follows="right|bottom"
      height="16"
      layout="topleft"
-     left_delta="-110"
+     right="-128"
      name="aspect_ratio"
-     top_pad="5"
      width="200">
         Preview aspect ratio
     </text>
     <combo_box
      allow_text_entry="true" 
-     top_delta="-3" 
+     top_delta="-4" 
      follows="right|bottom" 
      height="23"
      left_pad="10"
@@ -84,10 +84,10 @@
     	<combo_item name="Unconstrained" value="Unconstrained">
     		Unconstrained
     	</combo_item>
-   	<combo_item name="1:1" value="1:1" tool_tip="Group insignia or Real World profile">
+   	<combo_item name="1:1" value="1:1" tool_tip="Group insignia or Additional profile info">
 		1:1
 	</combo_item>
-	<combo_item name="4:3" value="4:3" tool_tip="[SECOND_LIFE] profile">
+	<combo_item name="4:3" value="4:3" tool_tip="[CURRENT_GRID] profile">
 		4:3
 	</combo_item>
 	<combo_item name="10:7" value="10:7" tool_tip="Classifieds and search listings, landmarks">
@@ -107,16 +107,16 @@
 	</combo_item>
 	</combo_box>
     <button
-     follows="right|bottom"
+     follows="left|bottom"
      height="22"
      label="OK"
      layout="topleft"
      left="6"
      name="Keep"
-     top_pad="5"
+     bottom="-10"
      width="110" />
     <button
-     follows="right|bottom"
+     follows="left|bottom"
      height="22"
      label="Discard"
      layout="topleft"
@@ -124,13 +124,22 @@
      name="Discard"
      top_delta="0"
      width="110" />
-    <button
-     follows="right|bottom"
+    <flyout_button
+     follows="left|bottom"
      height="22"
-     label="Save As"
+     label="Save As TGA"
      layout="topleft"
      left_pad="5"
      name="save_tex_btn"
      top_delta="0"
-     width="110" />
+     width="110">
+		<flyout_button.item
+		 label="Save As TGA"
+		 name="save_item_tga"
+		 value="format_tga" />
+		<flyout_button.item
+		 label="Save As PNG"
+		 name="save_item_png"
+		 value="format_png" />	 
+	</flyout_button>
 </floater>

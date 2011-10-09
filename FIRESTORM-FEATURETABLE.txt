@@ -51,3 +51,74 @@ UpdatedWebKit		LGPL
 Progress_screens	LGPL
 Prim_align_tool		third party viewers (imprudence, Kirsten's, etc, etc, etc) please feel free to include this code into yours.
 Temp_Uploads		LGPL (from Dolphin Viewer 2.4)
+StreamTitles		BSD
+LessCameraConstraints	LGPL
+TabbedOutfits&Shape	LGPL
+MediaFilter		LGPL
+ResizableCamaeraControl	LGPL
+FolderStyleOutfits	LGPL
+PrivateLookat		LGPL (from ArminW/Kokua)
+PreviewAnimations	LGPL (from ArminW/Kokua)
+LSLmediaToggle		LGPL
+ImprovedRadar		LGPL
+Resizable_Profiles	LGPL
+Derender		LGPL
+RezUnderLandGroup	LGPL
+JiraLinkParsing		LGPL
+AreaSearch		BSD (from Emerald/CoolVL/Phoenix)
+ConsoleChat		LGPL
+SitOnAway		LGPL
+FlikrUploadsSupport	LGPL (from Katharine Berry)
+ImprovedTextureRepeats  LGPL
+Fly Override		LGPL
+KDU decoder support	Kakadu
+ForceGroundSit		LGPL
+PhantomMode		LGPL
+AdjustableToastWidth	LGPL
+Collapse/ExpandInv	LGPL
+CrashServerOptions	LGPL
+KillTeleportFX		LGPL
+ScriptDialogColorPrefs	LGPL
+KeywordAlerts		LGPL
+ClickableFriendPerms	LGPL
+SeparateMusicPlay	LGPL
+SaveCommDocks		LGPL
+LookAtNameText		LGPL
+V1CompatAvatarParams	LGPL
+AdvancedAO		LGPL
+AutoUDPFallback		LGPL
+BoldModeratorChat	LGPL
+CacheClearOnNewDecoder	LGPL
+MoreWindlightPresets	LGPL
+SysinfoButton		LGPL
+ExtendedGraphicsPrefs	LGPL
+GridSelector		LGPL
+ContactsSortByUsername	LGPL
+SpreadsheetCtrlRadar	LGPL
+RadarUUIDChat		LGPL
+RadarIMChatFmtOptions	LGPL
+RadarEstateControls	LGPL
+DynamicMotD&Support	LGPL
+LSLBridge		LGPL
+Br_AccurateTeleports	LGPL
+RestoreToLastPosition	LGPL
+V1StyleGroupNotices	LGPL
+QuickPreferences	LGPL
+Build_ObjectHighlight	LGPL
+Build_PivotPoint	LGPL
+Build_DefaultSize	LGPL
+Build_ShowLinkNumber	LGPL
+Build_CopyPasteParams	LGPL
+WindlightScrollButtons	LGPL
+Build_Calculations	LGPL
+Build_IncrementModKeys	LGPL
+Build_HighPrecision	LGPL
+Build_ExtraShapes	LGPL
+SafeSalePricing		LGPL
+MoreLookatOptions	LGPL
+ZoffsetControl		LGPL
+Build_LastOwner		LGPL
+ChatSecondsDisplay	LGPL
+Build_ShowFaceNumbers	LGPL
+BlockClickSit		LGPL
+ExtWindlightPresets	LGPL

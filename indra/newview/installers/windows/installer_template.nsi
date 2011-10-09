@@ -218,6 +218,25 @@ continue_install:
 FunctionEnd
 	
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Checks for CPU valid (must have SSE2 support)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Function CheckCPUFlags
+    Call GetWindowsVersion
+    Pop $R0
+    StrCmp $R0 "2000" OK_SSE  ; sse check not available on win2k.
+
+    Push $1
+    System::Call 'kernel32::IsProcessorFeaturePresent(i) i(10) .r1'
+    IntCmp $1 1 OK_SSE
+    MessageBox MB_OKCANCEL $(MissingSSE2) /SD IDOK IDOK OK_SSE
+    Quit
+
+  OK_SSE:
+    Pop $1
+    Return
+FunctionEnd
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Close the program, if running. Modifies no variables.
 ; Allows user to bail out of install process.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -406,17 +425,18 @@ Push $2
 	; Otherwise (preview/dmz etc) just remove cache
 
         # Local Settings directory is the cache, there is no "cache" subdir
-        RMDir /r "$2\Local Settings\Application Data\Firestorm"
+        RMDir /r "$2\Local Settings\Application Data\Firestorm\user_settings"
+	RMDir /r "$2\Local Settings\Application Data\Firestorm\data"
         # Vista version of the same
-        RMDir /r "$2\AppData\Local\Firestorm"
-        Delete "$2\Application Data\Firestorm\user_settings\settings_windlight.xml"
+        RMDir /r "$2\AppData\Local\Firestorm\user_settings"
+	RMDir /r "$2\AppData\Local\Firestorm\data"
 
   CONTINUE:
     IntOp $0 $0 + 1
     Goto LOOP
   DONE:
   
-  MessageBox MB_OK "This uninstall will NOT delete your Firestorm chat logs and other private files. If you want to do that yourself, delete the folder $2\Local Settings\Application Data\Firestorm (XP) or $2\AppData\Local\Firestorm (Vista and newer)"
+  MessageBox MB_OK "This uninstall will NOT delete your Firestorm chat logs and other private files. If you want to do that yourself, delete the Firestorm folder within your user Application data folder"
 
 Pop $2
 Pop $1
@@ -752,6 +772,7 @@ StrCpy $INSTEXE "${INSTEXE}"
 StrCpy $INSTSHORTCUT "${SHORTCUT}"
 
 Call CheckWindowsVersion		; warn if on Windows 98/ME
+Call CheckCPUFlags			; Make sure we have SSE2 support
 Call CheckIfAdministrator		; Make sure the user can install/uninstall
 Call CheckIfAlreadyCurrent		; Make sure that we haven't already installed this version
 Call CloseSecondLife			; Make sure we're not running

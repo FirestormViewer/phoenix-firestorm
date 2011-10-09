@@ -88,13 +88,13 @@ Gå til &apos;Verden&apos; &gt; &apos;Om land&apos; eller vælg en anden parcel 
 				Ejer:
 			</text>
 			<text name="OwnerText">
-				Leyla Linden
+				Loading...
 			</text>
 			<text name="Group:">
 				Gruppe:
 			</text>
 			<text name="GroupText">
-				Leyla Linden
+				Loading...
 			</text>
 			<button label="Vælg" name="Set..."/>
 			<check_box label="Tillad dedikering til gruppe" name="check deed" tool_tip="En gruppe administrator kan dedikere denne jord til gruppen, så det vil blive støttet af gruppen&apos;s jord tildeling."/>
@@ -313,22 +313,26 @@ Kun større parceller kan vises i søgning.
 			<panel.string name="push_restrict_region_text">
 				Skub forbudt (Uanset region indstilling)
 			</panel.string>
+      <panel.string
+        name="see_avs_text">
+        Se og chatte med beboere på denne parcel
+      </panel.string>
 			<text name="allow_label">
 				Tillad andre beboere at:
 			</text>
 			<check_box label="Redigere terræn" name="edit land check" tool_tip="Hvis dette er valg, kan enhver redigere dit land. Det er bedst ikke at vælge her, da det altid er muligt for dig som ejer at ændre terræn på dit eget land."/>
 			<check_box label="Flyve" name="check fly" tool_tip="Hvis valgt, kan beboere flyve på dit land. Hvis ikke valgt kan beboere kun flyve ind på dit land og over dit land."/>
-			<text left="194" name="allow_label2">
+			<text name="allow_label2">
 				Lave objekter:
 			</text>
 			<check_box label="Alle beboere" name="edit objects check"/>
 			<check_box label="Gruppe" name="edit group objects check"/>
-			<text left="170" name="allow_label3">
+			<text name="allow_label3">
 				Anbringe objekter:
 			</text>
 			<check_box label="Alle beboere" name="all object entry check"/>
 			<check_box label="Gruppe" name="group object entry check"/>
-			<text left="200" name="allow_label4">
+			<text name="allow_label4">
 				Køre scripts:
 			</text>
 			<check_box label="Alle beboere" name="check other scripts"/>
@@ -352,6 +356,7 @@ Kun større parceller kan vises i søgning.
 				<combo_box.item label="Parker &amp; natur" name="item9"/>
 				<combo_box.item label="Beboelse" name="item10"/>
 				<combo_box.item label="Indkøb" name="item11"/>
+				<combo_box.item label="Leje" name="item13"/>
 				<combo_box.item label="Andet" name="item12"/>
 			</combo_box>
 			<combo_box name="land category">
@@ -366,6 +371,7 @@ Kun større parceller kan vises i søgning.
 				<combo_box.item label="Parker &amp; natur" name="item9"/>
 				<combo_box.item label="Beboelse" name="item10"/>
 				<combo_box.item label="Indkøb" name="item11"/>
+				<combo_box.item label="Leje" name="item13"/>
 				<combo_box.item label="Andet" name="item12"/>
 			</combo_box>
 			<check_box label="Mature indhold" name="MatureCheck" tool_tip=""/>
@@ -373,6 +379,10 @@ Kun større parceller kan vises i søgning.
 				Foto:
 			</text>
 			<texture_picker label="" name="snapshot_ctrl" tool_tip="Klik for at vælge et billede"/>
+      <text name="allow_label5">
+        Tillad beboere på andre parceller til:
+      </text>
+      <check_box label="Se avatarer" name="SeeAvatarsCheck" tool_tip="Giver mulighed for beboere på andre parceller at se og chatte med beboere på denne parcel, og du kan se og chatte med dem." />
 			<text name="landing_point">
 				Landingspunkt: [LANDING]
 			</text>
@@ -396,7 +406,6 @@ Kun større parceller kan vises i søgning.
 				Hjemmeside:
 			</text>
 			<button label="Vælg" name="set_media_url"/>
-			<check_box label="Skjul medie URL" name="hide_media_url" tool_tip="Klik her for at skjule medie adressen så det kun er dig og evt. parcel gruppens ejer/administratorer der kan se den."/>
 			<text left="4" name="Description:">
 				Beskrivelse:
 			</text>
@@ -406,9 +415,8 @@ Kun større parceller kan vises i søgning.
 			</text>
 			<texture_picker label="" name="media texture" tool_tip="Klik for at vælge billede"/>
 			<text name="replace_texture_help">
-				Objekter der har denne tekstur vil vise filmen eller web-siden, efter du klikker på play knappen. Vælg 
-				Objects using this texture will show the movie or web page after you click the play arrow.  Select the thumbnail for at vælge anden tekstur.
-			</text>
+        Objekter der har denne tekstur vil vise filmen eller web-siden, efter du klikker på play knappen. Marker miniaturen til at vælge en anden tekstur.
+      </text>
 			<check_box label="Auto skalér" name="media_auto_scale" tool_tip="Vælg denne mulighed for at skalere indholdet for dette parcel automatisk. Det kan være lidt langsommere og have lavere kvalitet, men ingen anden tekstur skalering eller tilpasning vil være nødvendigt."/>
 			<text name="media_size" tool_tip="Størrelse for rendering af Web medie, benyt 0 for standard." width="105">
 				Medie Størrelse:
@@ -424,7 +432,21 @@ Kun større parceller kan vises i søgning.
 			<check_box label="Gentag afspil" name="media_loop" tool_tip="Gentager automatisk medie, når det er færdigt med at spille starter det automatisk forfra."/>
 		</panel>
 		<panel label="LYD" name="land_audio_panel">
-			<check_box label="Skjul URL" name="hide_music_url" tool_tip="Ved at vælge her, vil musik URL skjules for alle ikke autoriserede brugere der læser denne parcels information."/>
+      <text name="MusicURL:">
+        Musik URL:
+      </text>
+      <text name="Sound:">
+        Lyd:
+      </text>
+      <check_box label="Begræns gestus og objekt lyd til dette parcel" name="check sound local" />
+      <text name="Avatar Sounds:">
+        Avatar lyde:
+      </text>
+      <check_box label="Alle beboere" name="all av sound check" />
+      <check_box label="Gruppe" name="group av sound check" />
+      <text name="Voice settings:">
+        Stemme:
+      </text>
 			<check_box label="Tillad stemmer" name="parcel_enable_voice_channel"/>
 			<check_box label="Tillad stemmer (håndteret af estate)" name="parcel_enable_voice_channel_is_estate_disabled"/>
 			<check_box label="Begræns stemme chat til denne parcel" name="parcel_enable_voice_channel_local"/>
@@ -434,7 +456,7 @@ Kun større parceller kan vises i søgning.
 				(Defineret via estate)
 			</panel.string>
 			<panel.string name="allow_public_access">
-				Tillad adgang for alle ([MATURITY])
+				Tillad offentlig adgang ([MATURITY]) (Bemærk: Ellers oprettes blokeringslinier)
 			</panel.string>
 			<panel.string name="estate_override">
 				En eller flere af disse valg er indstillet på estate niveau

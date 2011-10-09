@@ -150,6 +150,7 @@ private:
 	LLRect						mDefaultNpRect;
 	LLRect						mDefaultNavContainerRect;
 	LLRect						mDefaultFpRect;
+	LLRect						mDefaultFrameRect;
 	boost::signals2::connection	mTeleportFailedConnection;
 	boost::signals2::connection	mTeleportFinishConnection;
 	boost::signals2::connection	mHistoryMenuConnection;

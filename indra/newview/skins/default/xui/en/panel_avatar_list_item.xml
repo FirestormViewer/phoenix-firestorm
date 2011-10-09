@@ -6,7 +6,7 @@
  left="0"
  name="avatar_list_item"
  top="0"
- width="320">
+ width="360">
     <!-- 
     Strings used to localize last interaction time.
     See last_interaction textbox below.
@@ -33,7 +33,7 @@
      name="hovered_icon"
      top="0"
      visible="false"
-     width="320" />
+     width="360" />
     <icon
      height="24"
      follows="top|right|left"
@@ -43,7 +43,7 @@
      name="selected_icon"
      top="0"
      visible="false"
-     width="320" />
+     width="360" />
     <avatar_icon
      follows="top|left"
      height="20"
@@ -51,7 +51,7 @@
      layout="topleft"
      left="5"
      mouse_opaque="true"
-     top="2"
+     top="0"
      width="20" />
     <text
      follows="left|right"
@@ -60,10 +60,57 @@
      layout="topleft"
      left_pad="5"
      name="avatar_name"
-     top="6"
+     top="5"
+     clip_partial="false"
      use_ellipses="true"
-     value="Unknown"
-     width="180" />
+     value="(loading)"
+     width="50" />
+    <icon
+     height="16"
+     follows="right"
+     image_name="payment_info_used.tga"
+     layout="topleft"
+     right="-154"
+     name="payment_info"
+     tool_tip="Payment info on file"
+     top="0"
+     width="16" />  
+    <text
+     follows="right"
+     font="SansSerifSmall"
+     height="15"
+     top="5"
+     layout="topleft"
+     left_pad="5"
+     right="-110"
+     name="avatar_age"
+     text_color="LtGray_50"
+     value="0000"
+     width="40" />  
+    <text
+     follows="right"
+     font="SansSerifSmall"
+     height="15"
+     top="5"
+     layout="topleft"
+     left_pad="5"
+     right="-50"
+     name="first_seen"
+     text_color="LtGray_50"
+     value="0000"
+     width="60" />  
+    <text
+     follows="right"
+     font="SansSerifSmall"
+     height="15"
+     top="5"
+     layout="topleft"
+     left_pad="5"
+     right="-24"
+     name="radar_range"
+     text_color="LtGray_50"
+     value="12345678901234567890W"
+     width="30" />
     <text
      follows="right"
      font="SansSerifSmall"
@@ -86,39 +133,57 @@
      tool_tip="You can edit this friend&apos;s objects"
      top="4"
      width="16" />
-    <icon
+    <button
      height="16"
      follows="right"
-     image_name="Permission_Edit_Objects_Mine"
+     image_pressed="Permission_Edit_Objects_Mine"
+     image_unselected="Permission_Edit_Objects_Mine"
      layout="topleft"
      left_pad="3"
      right="-110"
-     name="permission_edit_mine_icon"
+     name="permission_edit_mine_btn"
      tool_tip="This friend can edit, delete or take your objects"
      top_delta="0"
      width="16" />
-    <icon
+    <button
      height="16"
      follows="right"
-     image_name="Permission_Visible_Map"
+     image_pressed="Permission_Visible_Map"
+     image_unselected="Permission_Visible_Map"
      layout="topleft"
      left_pad="3"
      tool_tip="This friend can locate you on the map"
      right="-91"
-     name="permission_map_icon"
+     name="permission_map_btn"
      top_delta="0"
      width="16" />
-    <icon
+    <button
      height="16"
      follows="right"
-     image_name="Permission_Visible_Online"
+     image_pressed="Permission_Visible_Online"
+     image_unselected="Permission_Visible_Online"
      layout="topleft"
      left_pad="3"
      right="-72"
-     name="permission_online_icon"
+     name="permission_online_btn"
      tool_tip="This friend can see when you&apos;re online"
      top_delta="0"
      width="16" />
+    <slider
+     visible="false"
+     enabled="true"
+     follows="right"
+     height="16"
+     increment="0.01"
+     left_pad="3"
+     right="-10"
+     max_val="0.95"
+     min_val="0.05"
+     name="volume_slider"
+     show_text="false"
+     tool_tip="Voice volume"
+     value="0.5"
+     width="90"/>
     <button
      follows="right"
      height="16"
@@ -134,7 +199,7 @@
     <button
      follows="right"
      height="20"
-     image_overlay="ForwardArrow_Off"
+     image_overlay="Web_Profile_Off"
      layout="topleft"
      left_pad="5"
      right="-28"

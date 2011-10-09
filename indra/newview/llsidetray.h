@@ -33,6 +33,20 @@
 class LLAccordionCtrl;
 class LLSideTrayTab;
 
+// Define an interface for side tab button badge values
+class LLSideTrayTabBadgeDriver
+{
+public:
+	virtual std::string getBadgeString() const = 0;
+};
+
+// Deal with LLSideTrayTab being opaque. Generic do-nothing cast...
+template <class T>
+T tab_cast(LLSideTrayTab* tab) { return tab; }
+// specialized for implementation in presence of LLSideTrayTab definition
+template <>
+LLPanel* tab_cast<LLPanel*>(LLSideTrayTab* tab);
+
 // added inheritance from LLDestroyClass<LLSideTray> to enable Side Tray perform necessary actions 
 // while disconnecting viewer in LLAppViewer::disconnectViewer().
 // LLDestroyClassList::instance().fireCallbacks() calls destroyClass method. See EXT-245.
@@ -97,6 +111,8 @@ public:
 	 */
 	LLPanel*	showPanel		(const std::string& panel_name, const LLSD& params = LLSD());
 
+	bool		hidePanel		(const std::string& panel_name);
+
 	/**
 	 * Toggling Side Tray tab which contains "sub_panel" child of "panel_name" panel.
 	 * If "sub_panel" is not visible Side Tray is opened to display it,
@@ -112,6 +128,8 @@ public:
     LLPanel*	getActivePanel	();
     std::string		getActivePanelName ();
     bool		isPanelActive	(const std::string& panel_name);
+
+	void		setTabDocked(const std::string& tab_name, bool dock, bool toggle_floater = true);
 
 	/*
 	 * get the panel of given type T (don't show it or do anything else with it)
@@ -131,7 +149,7 @@ public:
 	/*
 	 * get currently active tab
 	 */
-// [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 	// *sighs* LLSideTrayTab is defined in llsidetray.cpp... we can make do with an LLPanel* though 
 	const LLPanel*	getActiveTab() const;
 // [/RLVa:KB]
@@ -161,15 +179,20 @@ public:
 	}
 
 	LLPanel*	getButtonsPanel() { return mButtonsPanel; }
-// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 	LLButton*	getButtonFromName(const std::string& strName)
 	{ 
-		std::map<std::string, LLButton*>::const_iterator itBtn = mTabButtons.find(strName);
+		button_map_t::const_iterator itBtn = mTabButtons.find(strName);
 		return (mTabButtons.end() != itBtn) ? itBtn->second : NULL;
 	}
 // [/RLVa:KB]
 
-	bool		getCollapsed() { return mCollapsed; }
+//	bool		getCollapsed() { return mCollapsed; }
+// [SL:KB] - Patch: UI-SideTrayDndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	bool		getCollapsed() const { return mCollapsed; }
+// [/SL:KB]
+
+	void		setTabButtonBadgeDriver(std::string tabName, LLSideTrayTabBadgeDriver* driver);
 
 public:
 	virtual ~LLSideTray(){};
@@ -181,9 +204,18 @@ public:
 	void		reshape			(S32 width, S32 height, BOOL called_from_parent = TRUE);
 
 
-	void		updateSidetrayVisibility();
+	/**
+	 * @return side tray width if it's visible and expanded, 0 otherwise.
+	 *
+	 * Not that width of the tab buttons is not included.
+	 *
+	 * @see setVisibleWidthChangeCallback()
+	 */
+	S32			getVisibleWidth();
 
-	commit_signal_t& getCollapseSignal() { return mCollapseSignal; }
+	void		setVisibleWidthChangeCallback(const commit_signal_t::slot_type& cb);
+
+	void		updateSidetrayVisibility();
 
 	void		handleLoginComplete();
 
@@ -197,6 +229,10 @@ public:
 	void 		toggleTabDocked(const std::string& strTabName);
 // [/RLVa:KB]
 
+//-TT Toggle sidebar panels with buttons
+static bool		isFloaterPanelVisible(const std::string& panel_name);
+//-TT
+
 protected:
 	bool		addChild		(LLView* view, S32 tab_group);
 	bool		removeTab		(LLSideTrayTab* tab); // Used to detach tabs temporarily
@@ -208,8 +244,6 @@ protected:
 
 	void		createButtons	();
 
-	LLButton*	createButton	(const std::string& name,const std::string& image,const std::string& tooltip,
-									LLUICtrl::commit_callback_t callback);
 	void		arrange			();
 	void		detachTabs		();
 	void		reflectCollapseChange();
@@ -220,11 +254,13 @@ protected:
 	LLPanel*	openChildPanel	(LLSideTrayTab* tab, const std::string& panel_name, const LLSD& params);
 
 	void		onTabButtonClick(std::string name);
-// [RLVa:KB] - Checked: 2010-12-13 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+// [RLVa:KB] - Checked: 2010-12-13 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
 	bool		onTabDestroy	(const LLSideTrayTab* tab);
 // [/RLVa:KB]
 	void		onToggleCollapse();
-
+//-TT Toggle sidebar panels with buttons
+	LLSideTrayTab* getTabByPanel(const std::string& panel_name);
+//-TT
 private:
 	// Implementation of LLDestroyClass<LLSideTray>
 	static void destroyClass()
@@ -233,17 +269,22 @@ private:
 		if (LLSideTray::instanceCreated())
 			LLSideTray::getInstance()->setEnabled(FALSE);
 	}
-	
+
 private:
+	// Since we provide no public way to query mTabs and mDetachedTabs, give
+	// LLSideTrayListener friend access.
+	friend class LLSideTrayListener;
 	LLPanel*						mButtonsPanel;
 	typedef std::map<std::string,LLButton*> button_map_t;
 	button_map_t					mTabButtons;
+	typedef std::map<std::string,LLSideTrayTabBadgeDriver*> badge_map_t;
+	badge_map_t						mTabButtonBadgeDrivers;
 	child_vector_t					mTabs;
 	child_vector_t					mDetachedTabs;
 	tab_order_vector_t				mOriginalTabOrder;
 	LLSideTrayTab*					mActiveTab;	
 	
-	commit_signal_t					mCollapseSignal;
+	commit_signal_t					mVisibleWidthChangeSignal;
 
 	LLButton*						mCollapseButton;
 	bool							mCollapsed;

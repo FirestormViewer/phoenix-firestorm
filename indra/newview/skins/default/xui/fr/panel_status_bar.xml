@@ -22,12 +22,14 @@
 		[AMT] L$
 	</panel.string>
 	<panel name="balance_bg">
-		<text name="balance" tool_tip="Mon solde" value="20 L$"/>
+		<text name="balance" tool_tip="Cliquer sur ce bouton pour actualiser votre solde en L$." value="??? L$"/>
 		<button label="ACHETER L$" name="buyL" tool_tip="Cliquer pour acheter plus de L$"/>
 	</panel>
 	<text name="TimeText" tool_tip="Heure actuelle (Pacifique)">
 		00h00 PST
 	</text>
-	<button name="media_toggle_btn" tool_tip="Arrêter tous les médias (musique, vidéo, pages web)"/>
-	<button name="volume_btn" tool_tip="Contrôle du volume global"/>
+	<panel name="time_and_media_bg">
+		<button name="media_toggle_btn" tool_tip="Arrêter tous les médias (musique, vidéo, pages web)"/>
+		<button name="volume_btn" tool_tip="Contrôle du volume global"/>
+	</panel>
 </panel>

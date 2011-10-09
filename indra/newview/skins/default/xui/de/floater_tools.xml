@@ -39,6 +39,22 @@
 	<floater.string name="grid_attachment_text">
 		Anhang
 	</floater.string>
+    <floater.string
+     name="status_selectcount">
+        [OBJ_COUNT] Objekt(e) ([PRIM_COUNT] Prims[PE_STRING]) ausgewählt
+    </floater.string>
+    <floater.string
+     name="status_selectprimequiv">
+        , [SEL_WEIGHT] Prim-Equiv.
+    </floater.string>
+	<floater.string
+	  name="link_number">
+		Link-Nummer:
+	</floater.string>
+	<floater.string
+	  name="selected_faces">
+		Fläche:
+	</floater.string>
 	<button label="" label_selected="" name="button focus" tool_tip="Fokus"/>
 	<button label="" label_selected="" name="button move" tool_tip="Verschieben"/>
 	<button label="" label_selected="" name="button edit" tool_tip="Bearbeiten"/>
@@ -60,25 +76,27 @@
 	<radio_group name="edit_radio_group">
 		<radio_item label="Bewegen" name="radio position"/>
 		<radio_item label="Drehen (Strg)" name="radio rotate"/>
-		<radio_item label="Dehnen (Strg+Umschalt)" name="radio stretch"/>
+		<radio_item label="Dehnen (Strg+Umsch)" name="radio stretch"/>
 		<radio_item label="Fläche auswählen" name="radio select face"/>
+		<radio_item label="Ausrichten" name="radio align"/>
 	</radio_group>
-	<check_box label="Verknüpfte Teile bearbeiten" name="checkbox edit linked parts"/>
+	<check_box label="Teile bearbeiten" name="checkbox edit linked parts"/>
+	<button label="Verkn." name="link_btn" width="50"/>
+    <button label="Trennen" name="unlink_btn" width="55"/>
 	<text name="RenderingCost" tool_tip="Zeigt die errechneten Wiedergabekosten für dieses Objekt">
 		þ: [COUNT]
 	</text>
-	<check_box label="" name="checkbox uniform"/>
-	<text label="Beide Seiten dehnen" name="checkbox uniform label">
-		Beide Seiten dehnen
-	</text>
-	<check_box initial_value="true" label="Texturen dehnen" name="checkbox stretch textures" top_pad="-5"/>
-	<check_box initial_value="true" label="An Raster ausrichten" name="checkbox snap to grid" top_pad="15"/>
+	<check_box name="checkbox uniform" label="Beide Seiten dehnen"/>
+	<check_box initial_value="true" label="Texturen dehnen" name="checkbox stretch textures"/>
+	<check_box initial_value="true" label="An Raster ausrichten" name="checkbox snap to grid"/>
+    <check_box initial_value="false" label="Achse an Wurzel edit." name="checkbox actual root"/>
+	<check_box initial_value="true" label="Aktiviere Hervorhebung" name="checkbox show highlight"/>
 	<combo_box name="combobox grid mode" tool_tip="Wählen Sie ein Rasterlineal zum Positionieren des Objekts aus.">
 		<combo_box.item label="Globales Raster" name="World"/>
 		<combo_box.item label="Lokales Raster" name="Local"/>
 		<combo_box.item label="Referenzraster" name="Reference"/>
 	</combo_box>
-	<button label="Optionen..." label_selected="Optionen..." name="Options..." tool_tip="Mehr Raster-Optionen anzeigen"/>
+	<button label="Optionen..." label_selected="Optionen..." name="Options..." tool_tip="Mehr Raster-Optionen anzeigen" top="63"/>
 	<button label="" label_selected="" name="ToolCube" tool_tip="Würfel"/>
 	<button label="" label_selected="" name="ToolPrism" tool_tip="Prisma"/>
 	<button label="" label_selected="" name="ToolPyramid" tool_tip="Pyramide"/>
@@ -94,7 +112,7 @@
 	<button label="" label_selected="" name="ToolRing" tool_tip="Ring"/>
 	<button label="" label_selected="" name="ToolTree" tool_tip="Baum"/>
 	<button label="" label_selected="" name="ToolGrass" tool_tip="Gras"/>
-	<check_box label="Ausgewähltes Werkzeug beibehalten" name="checkbox sticky"/>
+	<check_box label="Werkzeug beibehalten" name="checkbox sticky" left="150"/>
 	<check_box label="Auswahl kopieren" name="checkbox copy selection"/>
 	<check_box initial_value="true" label="Kopie zentrieren" name="checkbox copy centers"/>
 	<check_box label="Kopie drehen" name="checkbox copy rotates"/>
@@ -117,11 +135,23 @@
 		Stärke
 	</text>
 	<button label="Übernehmen" label_selected="Übernehmen" name="button apply to selection" tool_tip="Ausgewähltes Land bearbeiten"/>
-	<text name="obj_count">
-		Objekte: [COUNT]
+	<text name="selection_empty">
+		Nichts ausgewählt.
 	</text>
 	<text name="prim_count">
 		Primitive: [COUNT]
+	</text>
+	<text name="linked_set_count">
+		Verknüpfte Sätze: [COUNT]
+	</text>
+	<text name="linked_set_cost" tool_tip="Kosten der gegenwärtig ausgewählten verknüpften Sätze als [Prims],[Komplexität der Physik]">
+		Kosten: [COST] / [PHYSICS]
+	</text>
+	<text name="object_count">
+		Objekte: [COUNT]
+	</text>
+	<text name="object_cost" tool_tip="Kosten der gegenwärtig ausgewählten Objekte als [Prims] / [Komplexität der Physik]">
+		Kosten: [COST] / [PHYSICS]
 	</text>
 	<tab_container name="Object Info Tabs">
 		<panel label="Allgemein" name="General">
@@ -170,14 +200,11 @@
 			<text name="Creator:">
 				Ersteller:
 			</text>
-			<text name="Creator Name">
-				Frau Esbee Linden (esbee.linden)
-			</text>
 			<text name="Owner:">
 				Eigentümer:
 			</text>
-			<text name="Owner Name">
-				Frau Erica &quot;Elch&quot; Linden (erica.linden)
+			<text name="Last Owner:">
+				Vorbesitzer:
 			</text>
 			<text name="Group:">
 				Gruppe:
@@ -204,6 +231,8 @@
 				<combo_box.item label="Original" name="Original"/>
 			</combo_box>
 			<spinner label="Preis: L$" name="Edit Cost"/>
+			<button label="Anwenden" name="button mark for sale" tool_tip="Objekt(e) zum Verkauf anbieten/aktualisieren."/>
+			<button label="UUIDs kopieren" name="btnCopyKeys" tool_tip="Kopiert die Schüssel der ausgewählten Objekte in die Zwischenablage." width="110"/>
 			<check_box label="In Suche anzeigen" name="search_check" tool_tip="Dieses Objekt in Suchergebnissen anzeigen"/>
 			<panel name="perms_build">
 				<text name="perm_modify">
@@ -249,20 +278,34 @@
 				Position (Meter)
 			</text>
 			<spinner label="X" name="Pos X"/>
+			<button label="K" name="copypos" tool_tip="Position kopieren"/>
 			<spinner label="Y" name="Pos Y"/>
+			<button label="E" name="pastepos" tool_tip="Position einfügen"/>
 			<spinner label="Z" name="Pos Z"/>
+			<button label="e" name="pasteposclip"  tool_tip="Position aus Zwischenablage einfügen"/>
 			<text name="label size">
 				Größe (Meter)
 			</text>
 			<spinner label="X" name="Scale X"/>
+			<button label="K" name="copysize" tool_tip="Größe kopieren"/>
 			<spinner label="Y" name="Scale Y"/>
+			<button label="E" name="pastesize" tool_tip="Größe einfügen"/>
 			<spinner label="Z" name="Scale Z"/>
+			<button label="e" name="pastesizeclip" tool_tip="Größe aus Zwischenablage einfügen"/>
 			<text name="label rotation">
 				Rotation (Grad)
 			</text>
 			<spinner label="X" name="Rot X"/>
+			<button label="K" name="copyrot" tool_tip="Rotation kopieren"/>
 			<spinner label="Y" name="Rot Y"/>
+			<button label="E" name="pasterot" tool_tip="Rotation einfügen"/>
 			<spinner label="Z" name="Rot Z"/>
+			<button label="e" name="pasterotclip" tool_tip="Rotation aus Zwischenablage einfügen"/>
+			<text name="edit_object">
+				Objekt-Parameter:
+			</text>
+			<button label="Kop." name="copyparams" tool_tip="Objekt-Parameter in Zwischenablage kopieren"/>
+			<button label="Einf." name="pasteparams" tool_tip="Objekt-Parameters aus Zwischenablage einfügen"/>
 			<combo_box name="comboBaseType">
 				<combo_box.item label="Quader" name="Box"/>
 				<combo_box.item label="Zylinder" name="Cylinder"/>
@@ -272,15 +315,6 @@
 				<combo_box.item label="Rohr" name="Tube"/>
 				<combo_box.item label="Ring" name="Ring"/>
 				<combo_box.item label="Geformt" name="Sculpted"/>
-			</combo_box>
-			<combo_box name="material">
-				<combo_box.item label="Stein" name="Stone"/>
-				<combo_box.item label="Metall" name="Metal"/>
-				<combo_box.item label="Glas" name="Glass"/>
-				<combo_box.item label="Holz" name="Wood"/>
-				<combo_box.item label="Fleisch" name="Flesh"/>
-				<combo_box.item label="Kunststoff" name="Plastic"/>
-				<combo_box.item label="Gummi" name="Rubber"/>
 			</combo_box>
 			<text name="text cut">
 				Pfadschnitt (Anfang/Ende)
@@ -333,7 +367,7 @@
 			</text>
 			<spinner label="B" name="Path Limit Begin"/>
 			<spinner label="E" name="Path Limit End"/>
-			<text name="text taper2">
+			<text name="text taper2" tool_tip="Funktioniert nicht mit allen Prim-Typen">
 				Verjüngung
 			</text>
 			<spinner label="X" name="Taper X"/>
@@ -357,11 +391,21 @@
 				<combo_box.item label="Torus" name="Torus"/>
 				<combo_box.item label="Fläche" name="Plane"/>
 				<combo_box.item label="Zylinder" name="Cylinder"/>
+				<combo_box.item label="Netz" name="Mesh"/>
 			</combo_box>
 		</panel>
-		<panel label="Eigenschaften" name="Features">
+		<panel label="Eigensch." name="Features">
+			<panel.string name="None">
+				Keine
+			</panel.string>
+			<panel.string name="Prim">
+				Prim
+			</panel.string>
+			<panel.string name="Convex Hull">
+				Konvexe Hülle
+			</panel.string>
 			<text name="select_single">
-				Wählen Sie nur einen einzelnen Baustein aus, um Eigenschaften zu bearbeiten.
+				Nur einen Baustein zum Bearbeiten auswählen.
 			</text>
 			<text name="edit_object">
 				Objekteigenschaften bearbeiten:
@@ -384,6 +428,23 @@
 			<spinner label="Fokus" name="Light Focus"/>
 			<spinner label="Abnehmend" name="Light Falloff"/>
 			<spinner label="Ambiente" name="Light Ambiance"/>
+			<text name="label physicsshapetype">
+				Art der physischen Form:
+			</text>
+			<combo_box name="Physics Shape Type Combo Ctrl" tool_tip="Art der physischen Form auswählen"/>
+			<combo_box name="material">
+				<combo_box.item label="Stein" name="Stone"/>
+				<combo_box.item label="Metall" name="Metal"/>
+				<combo_box.item label="Glas" name="Glass"/>
+				<combo_box.item label="Holz" name="Wood"/>
+				<combo_box.item label="Fleisch" name="Flesh"/>
+				<combo_box.item label="Plastik" name="Plastic"/>
+				<combo_box.item label="Gummi" name="Rubber"/>
+			</combo_box>
+			<spinner label="Schwerkraft" name="Physics Gravity"/>
+			<spinner label="Reibung" name="Physics Friction"/>
+			<spinner label="Dichte in 100 kg/m^3" name="Physics Density"/>
+			<spinner label="Restitution" name="Physics Restitution"/>
 		</panel>
 		<panel label="Textur" name="Texture">
 			<panel.string name="string repeats per meter">
@@ -441,7 +502,7 @@
 				<combo_box.item label="gewoben" name="weave"/>
 			</combo_box>
 			<check_box initial_value="falsch" label="Flache Oberflächen ausrichten" name="checkbox planar align" tool_tip="Texturen auf allen ausgewählten Oberflächen an der zuletzt ausgewählten Oberfläche ausrichten. Planar Texture Mapping erforderlich."/>
-			<text name="rpt">
+			<text name="rpt" width="165">
 				Wiederholungen / Oberfläche
 			</text>
 			<spinner label="Horizontal (U)" name="TexScaleU"/>
@@ -449,13 +510,18 @@
 			<spinner label="Vertikal (V)" name="TexScaleV"/>
 			<check_box label="Umkehren" name="checkbox flip t"/>
 			<spinner label="Rotation˚" name="TexRot"/>
-			<spinner label="Wiederholungen / Meter" name="rptctrl"/>
-			<button label="Übernehmen" label_selected="Übernehmen" name="button apply"/>
+			<spinner label="Wiederh. / Meter" name="rptctrl"/>
+			<button label="Übernehmen" label_selected="Übernehmen" name="button apply" width="85"/>
 			<text name="tex offset">
-				Texture-Versatz
+				Textur-Versatz
+			</text>
+			<text name="tex params">
+				Textur-Parameter
 			</text>
 			<spinner label="Horizontal (U)" name="TexOffsetU"/>
+			<button  label="Kopieren" name="copytextures" tool_tip="Parameter in Zwischenablage kopieren"/>
 			<spinner label="Vertikal (V)" name="TexOffsetV"/>
+			<button label="Einfügen" name="pastetextures" tool_tip="Parameter aus Zwischenablage einfügen"/>
 			<panel name="Add_Media">
 				<text name="media_tex">
 					Medien
@@ -467,8 +533,9 @@
 			</panel>
 		</panel>
 		<panel label="Inhalt" name="Contents">
-			<button label="Neues Skript" label_selected="Neues Skript" name="button new script"/>
-			<button label="Berechtigungen" name="button permissions"/>
+			<button label="Neues Skript" label_selected="Neues Skript" name="button new script" width="85"/>
+			<button label="Berechtigungen" name="button permissions" width="95" left_pad="6"/>
+			<button label="Aktualisieren" name="button refresh" width="80" left_pad="6"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

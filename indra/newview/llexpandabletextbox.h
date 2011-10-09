@@ -77,6 +77,12 @@ protected:
 		 */
 		void hideExpandText();
 
+		/**
+		 * Shows the "More" link if the text is too high to be completely
+		 * visible without expanding the text box. Hides that link otherwise.
+		 */
+		void hideOrShowExpandTextAsNeeded();
+
 	protected:
 
 		LLTextBoxEx(const Params& p);
@@ -137,6 +143,10 @@ public:
 	 */
 	/*virtual*/ void onTopLost();
 
+	/**
+	 * *HACK: Update the inner textbox shape.
+	 */
+	void updateTextShape();
 
 	/**
 	 * Draws text box, collapses text box if its expanded and its parent's position changed

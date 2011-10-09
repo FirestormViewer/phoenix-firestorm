@@ -24,25 +24,24 @@
      follows="all"
      height="539"
      layout="topleft"
-     left="5"
+     left="4"
      name="appearance_tabs"
-     tab_min_width="150"
-     tab_height="30"
      tab_position="top"
      halign="center"
      top="8"
-     width="315">
+     right="-1">
          <panel
            class="outfits_list"
            filename="panel_outfits_list.xml"
            height="520"
            name="outfitslist_tab"
-           background_visible="false"
+           background_visible="true"
+           bg_alpha_color="SL-Background_66"
            help_topic="my_outfits_tab"
            follows="all"
            label="MY OUTFITS"
            layout="topleft"
-           width="315" />
+           right="-1" />
          <panel
            background_visible="true"
            bg_alpha_color="SL-Background_66"
@@ -54,7 +53,7 @@
            label="WEARING"
            layout="topleft"
            name="cof_tab"
-           width="315" />
+           right="-1" />
    </tab_container>
 
    <panel
@@ -62,40 +61,40 @@
        follows="bottom|left|right"
        height="27"
        layout="topleft"
-       left="9"
+       left="0"
        top_pad="1"
        visible="true"
        name="bottom_panel"
-       width="310">
+       width="320">
 			<layout_stack
      	         follows="bottom|left|right"
 		         height="23"
 		         layout="topleft"
 		         mouse_opaque="false"
 		         name="bottom_panel_ls"
-		         left="0"
+		         left="4"
 		         orientation="horizontal"
 		         top="0"
-		         width="313">	
+                 width="316">
 			    <layout_panel
 			         follows="bottom|left|right"
 			         height="23"
                      layout="bottomleft"
-                     left="0"			
+                     left="0"
                      mouse_opaque="false"
                      name="save_btn_lp"
-                     user_resize="false" 
+                     user_resize="false"
                      auto_resize="true"
                      width="156">
                     <button
                          follows="bottom|left|right"
                          height="23"
                          label="Save As"
-                         left="1"
+                         left="4"
                          layout="topleft"
                          name="save_btn"
                          top="0"
-                         width="155" />
+                         right="-1" />
                     <button
                          follows="bottom|right"
                          height="23"
@@ -115,21 +114,21 @@
                      follows="bottom|left|right"
                      height="23"
                      layout="bottomleft"
-                     left_pad="3"			
+                     left_pad="4"
                      mouse_opaque="false"
                      name="wear_btn_lp"
-                     user_resize="false" 
+                     user_resize="false"
                      auto_resize="true"
-                     width="152">
+                     width="156">
                     <button
                          follows="bottom|left|right"
                          height="23"
                          label="Wear"
                          layout="topleft"
                          name="wear_btn"
-                         left="0"
+                         left="1"
                          top="0"
-                         width="152" />
+                         right="-2" />
 			    </layout_panel>
 			</layout_stack>
    </panel>

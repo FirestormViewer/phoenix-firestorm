@@ -62,6 +62,7 @@ public:
 	virtual const std::string& getName() const;
 	virtual S32 getSortField() const;
 	virtual void setSortField(S32 sortField);
+	virtual void getSLURL(); //Caches SLURL for landmark. //*TODO: Find a better way to do it and remove this method from here.
 	virtual const LLPermissions& getPermissions() const;
 	virtual const bool getIsFullPerm() const; // 'fullperm' in the popular sense: modify-ok & copy-ok & transfer-ok, no special god rules applied
 	virtual const LLUUID& getCreatorUUID() const;
@@ -263,7 +264,7 @@ class RezAttachmentCallback : public LLInventoryCallback
 {
 public:
 //	RezAttachmentCallback(LLViewerJointAttachment *attachmentp);
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.2.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
 	RezAttachmentCallback(LLViewerJointAttachment *attachmentp, bool replace = false);
 // [/SL:KB]
 	void fire(const LLUUID& inv_item);
@@ -273,7 +274,7 @@ protected:
 
 private:
 	LLViewerJointAttachment* mAttach;
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.2.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
 	bool mReplace;
 // [/SL:KB]
 };

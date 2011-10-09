@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="status">
+   <panel name="parcel_info_panel">
+   <button name="status_wl_btn" tool_tip="Участок имеет настройки WL" />
+  <text name="damage_text"/>
+     <text tool_tip="Название участка, на котором Вы стоите. Нажмите О Земле." name="parcel_info_text" value="(Загрузка...)"/>
+   </panel>
+
+    <panel.string name="packet_loss_tooltip">
+        Потеря пакетов
+    </panel.string>
+    <panel.string name="bandwidth_tooltip">
+        Пропускная способность
+    </panel.string>
+  <panel name="balance_bg">
+    <text name="balance" tool_tip="Нажмите, чтоб обновить ваш баланс L$"/>
+    <button label="Купить L$" name="buyL" tool_tip="Нажмите, чтобы купить L$"/>
+  </panel>
+  
+  <panel name="time_and_media_bg">
+    <text name="TimeText" tool_tip="Текущее время (Тихоокеанское)">
+        24:00 AM PST
+    </text>
+    <button name="stream_toggle_btn" tool_tip="Запустить/Остановить аудио поток участка" >
+    </button>
+    <button name="media_toggle_btn" tool_tip="Запустить/Остановить все медиа участка (Музыка, видео, Web страницы)">
+    </button>
+    <button name="volume_btn" tool_tip="Регулятор громкости" />
+  </panel>
+</panel>

@@ -58,6 +58,7 @@ public:
 	 * Show group information panel.
 	 */
 	static void show(const LLUUID& group_id);
+	static void show(const LLUUID& group_id, const std::string& tab_name);
 
 	/**
 	 * Show group inspector floater.
@@ -87,7 +88,7 @@ public:
 	/**
 	 * Start group instant messaging session.
 	 */
-	static void startIM(const LLUUID& group_id);
+	static LLUUID startIM(const LLUUID& group_id);
 
 	/**
 	 * End group instant messaging session.

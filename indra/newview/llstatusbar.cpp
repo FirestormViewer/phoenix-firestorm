@@ -31,6 +31,7 @@
 // viewer includes
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "llaudioengine.h"
 #include "llbutton.h"
 #include "llcommandhandler.h"
 #include "llfirstuse.h"
@@ -52,6 +53,7 @@
 #include "llsd.h"
 #include "lltextbox.h"
 #include "llui.h"
+#include "llviewerparcelmedia.h"
 #include "llviewerparceloverlay.h"
 #include "llviewerregion.h"
 #include "llviewerstats.h"
@@ -80,6 +82,9 @@
 #include "llfocusmgr.h"
 #include "llappviewer.h"
 #include "lltrans.h"
+
+
+#include "kcwlinterface.h"
 
 // library includes
 #include "imageids.h"
@@ -140,10 +145,12 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mSGBandwidth(NULL),
 	mSGPacketLoss(NULL),
 	mBtnVolume(NULL),
+	mBoxBalance(NULL),
 	mBalance(0),
 	mHealth(100),
 	mSquareMetersCredit(0),
-	mSquareMetersCommitted(0)
+	mSquareMetersCommitted(0),
+	mAudioStreamEnabled(FALSE)	// ## Zi: Media/Stream separation
 {
 	setRect(rect);
 	
@@ -219,9 +226,17 @@ BOOL LLStatusBar::postBuild()
 	getChild<LLUICtrl>("buyL")->setCommitCallback(
 		boost::bind(&LLStatusBar::onClickBuyCurrency, this));
 
+	mBoxBalance = getChild<LLTextBox>("balance");
+	mBoxBalance->setClickedCallback( &LLStatusBar::onClickBalance, this );
+
 	mBtnVolume = getChild<LLButton>( "volume_btn" );
 	mBtnVolume->setClickedCallback( onClickVolume, this );
 	mBtnVolume->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterVolume, this));
+
+	// ## Zi: Media/Stream separation
+	mStreamToggle = getChild<LLButton>("stream_toggle_btn");
+	mStreamToggle->setClickedCallback( &LLStatusBar::onClickStreamToggle, this );
+	// ## Zi: Media/Stream separation
 
 	mMediaToggle = getChild<LLButton>("media_toggle_btn");
 	mMediaToggle->setClickedCallback( &LLStatusBar::onClickMediaToggle, this );
@@ -280,11 +295,18 @@ BOOL LLStatusBar::postBuild()
 
 	mScriptOut = getChildView("scriptout");
 	
-	mInfoBtn = getChild<LLButton>("place_info_btn");
-	mInfoBtn->setClickedCallback(boost::bind(&LLStatusBar::onInfoButtonClicked, this));
-
+	mParcelInfoPanel = getChild<LLPanel>("parcel_info_panel");
 	mParcelInfoText = getChild<LLTextBox>("parcel_info_text");
+
+	// Ansariel: Removed the info button in favor of clickable parcel info text
+	mParcelInfoText->setClickedCallback(boost::bind(&LLStatusBar::onInfoButtonClicked, this));
+
 	mDamageText = getChild<LLTextBox>("damage_text");
+
+	mPWLBtn = getChild<LLButton>("status_wl_btn");
+	mPWLBtn->setClickedCallback(boost::bind(&LLStatusBar::onParcelWLClicked, this));
+
+	mBalancePanel = getChild<LLPanel>("balance_bg");
 
 	initParcelIcons();
 
@@ -358,6 +380,11 @@ void LLStatusBar::refresh()
 	{
 		gMenuBarView->reshape(MENU_RIGHT, gMenuBarView->getRect().getHeight());
 	}
+	// also update the parcel info panel pos -KC
+	if ((MENU_RIGHT + MENU_PARCEL_SPACING) != mParcelInfoPanel->getRect().mLeft)
+	{
+		updateParcelPanel();
+	}
 
 	mSGBandwidth->setVisible(net_stats_visible);
 	mSGPacketLoss->setVisible(net_stats_visible);
@@ -369,21 +396,30 @@ void LLStatusBar::refresh()
 	
 	// Disable media toggle if there's no media, parcel media, and no parcel audio
 	// (or if media is disabled)
-	bool button_enabled = (gSavedSettings.getBOOL("AudioStreamingMusic")||gSavedSettings.getBOOL("AudioStreamingMedia")) && 
-						  (LLViewerMedia::hasInWorldMedia() || LLViewerMedia::hasParcelMedia() || LLViewerMedia::hasParcelAudio());
+	bool button_enabled = (gSavedSettings.getBOOL("AudioStreamingMedia")) && 	// ## Zi: Media/Stream separation
+						  (LLViewerMedia::hasInWorldMedia() || LLViewerMedia::hasParcelMedia()	// || LLViewerMedia::hasParcelAudio()	// ## Zi: Media/Stream separation
+						  );
 	mMediaToggle->setEnabled(button_enabled);
 	// Note the "sense" of the toggle is opposite whether media is playing or not
 	bool any_media_playing = (LLViewerMedia::isAnyMediaShowing() || 
-							  LLViewerMedia::isParcelMediaPlaying() ||
-							  LLViewerMedia::isParcelAudioPlaying());
+							  LLViewerMedia::isParcelMediaPlaying());
 	mMediaToggle->setValue(!any_media_playing);
+
+	// ## Zi: Media/Stream separation
+	button_enabled = (gSavedSettings.getBOOL("AudioStreamingMusic") && LLViewerMedia::hasParcelAudio());
+
+	mStreamToggle->setEnabled(button_enabled);
+	mStreamToggle->setValue(!LLViewerMedia::isParcelAudioPlaying());
+	// ## Zi: Media/Stream separation
 }
 
 void LLStatusBar::setVisibleForMouselook(bool visible)
 {
 	mTextTime->setVisible(visible);
 	getChild<LLUICtrl>("balance_bg")->setVisible(visible);
+	mBoxBalance->setVisible(visible);
 	mBtnVolume->setVisible(visible);
+	mStreamToggle->setVisible(visible);		// ## Zi: Media/Stream separation
 	mMediaToggle->setVisible(visible);
 	mSGBandwidth->setVisible(visible);
 	mSGPacketLoss->setVisible(visible);
@@ -409,16 +445,15 @@ void LLStatusBar::setBalance(S32 balance)
 
 	std::string money_str = LLResMgr::getInstance()->getMonetaryString( balance );
 
-	LLTextBox* balance_box = getChild<LLTextBox>("balance");
 	LLStringUtil::format_map_t string_args;
 	string_args["[AMT]"] = llformat("%s", money_str.c_str());
 	std::string label_str = getString("buycurrencylabel", string_args);
-	balance_box->setValue(label_str);
+	mBoxBalance->setValue(label_str);
 
 	// Resize the L$ balance background to be wide enough for your balance plus the buy button
 	{
 		const S32 HPAD = 24;
-		LLRect balance_rect = balance_box->getTextBoundingRect();
+		LLRect balance_rect = mBoxBalance->getTextBoundingRect();
 		LLRect buy_rect = getChildView("buyL")->getRect();
 		LLView* balance_bg_view = getChildView("balance_bg");
 		LLRect balance_bg_rect = balance_bg_view->getRect();
@@ -536,9 +571,12 @@ void LLStatusBar::onMouseEnterVolume()
 {
 	LLButton* volbtn =  getChild<LLButton>( "volume_btn" );
 	LLRect vol_btn_rect = volbtn->getRect();
+	LLPanel* media_panel = getChild<LLPanel>("time_and_media_bg");
+	LLRect media_panel_rect = media_panel->getRect();
 	LLRect volume_pulldown_rect = mPanelVolumePulldown->getRect();
-	volume_pulldown_rect.setLeftTopAndSize(vol_btn_rect.mLeft -
-	     (volume_pulldown_rect.getWidth() - vol_btn_rect.getWidth())/2,
+	volume_pulldown_rect.setLeftTopAndSize(
+		(vol_btn_rect.mLeft + media_panel_rect.mLeft) -
+		(volume_pulldown_rect.getWidth() - vol_btn_rect.getWidth()),
 			       vol_btn_rect.mBottom,
 			       volume_pulldown_rect.getWidth(),
 			       volume_pulldown_rect.getHeight());
@@ -585,6 +623,14 @@ static void onClickVolume(void* data)
 }
 
 //static 
+void LLStatusBar::onClickBalance(void* )
+{
+	// Force a balance request message:
+	LLStatusBar::sendMoneyBalanceRequest();
+	// The refresh of the display (call to setBalance()) will be done by process_money_balance_reply()
+}
+
+//static 
 void LLStatusBar::onClickMediaToggle(void* data)
 {
 	LLStatusBar *status_bar = (LLStatusBar*)data;
@@ -592,6 +638,49 @@ void LLStatusBar::onClickMediaToggle(void* data)
 	bool enable = ! status_bar->mMediaToggle->getValue();
 	LLViewerMedia::setAllMediaEnabled(enable);
 }
+
+// ## Zi: Media/Stream separation
+// static
+void LLStatusBar::onClickStreamToggle(void* data)
+{
+	if (!gAudiop)
+		return;
+
+	LLStatusBar *status_bar = (LLStatusBar*)data;
+	bool enable = ! status_bar->mStreamToggle->getValue();
+
+	if(enable)
+	{
+		if (LLAudioEngine::AUDIO_PAUSED == gAudiop->isInternetStreamPlaying())
+		{
+			// 'false' means unpause
+			//gAudiop->pauseInternetStream(false);
+			gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
+		}
+		else {
+			if (gSavedSettings.getBOOL("MediaEnableFilter"))
+			{
+				LLViewerParcelMedia::filterAudioUrl(LLViewerMedia::getParcelAudioURL());
+			}
+			else
+			{
+				gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
+			}
+		}
+	}
+	else
+	{
+		gAudiop->stopInternetStream();
+	}
+
+	status_bar->mAudioStreamEnabled = enable;
+}
+
+BOOL LLStatusBar::getAudioStreamEnabled() const
+{
+	return mAudioStreamEnabled;
+}
+// ## Zi: Media/Stream separation
 
 BOOL can_afford_transaction(S32 cost)
 {
@@ -663,8 +752,13 @@ void LLStatusBar::onNavBarShowParcelPropertiesCtrlChanged()
 
 void LLStatusBar::buildLocationString(std::string& loc_str, bool show_coords)
 {
-	LLAgentUI::ELocationFormat format =
-		(show_coords ? LLAgentUI::LOCATION_FORMAT_FULL : LLAgentUI::LOCATION_FORMAT_NO_COORDS);
+	// Ansariel: Use V1 layout for location string in status bar so
+	//           that the most important information dont't get lost:
+	//           First region name, followed by location, maturity
+	//           rating and at the end the parcel description.
+	//LLAgentUI::ELocationFormat format =
+	//	(show_coords ? LLAgentUI::LOCATION_FORMAT_FULL : LLAgentUI::LOCATION_FORMAT_NO_COORDS);
+	LLAgentUI::ELocationFormat format = LLAgentUI::LOCATION_FORMAT_V1_STATUSBAR;
 
 	if (!LLAgentUI::buildLocationString(loc_str, format))
 	{
@@ -674,6 +768,7 @@ void LLStatusBar::buildLocationString(std::string& loc_str, bool show_coords)
 
 void LLStatusBar::setParcelInfoText(const std::string& new_text)
 {
+	const S32 ParcelInfoSpacing = 5;
 	const LLFontGL* font = mParcelInfoText->getDefaultFont();
 	S32 new_text_width = font->getWidth(new_text);
 
@@ -682,34 +777,65 @@ void LLStatusBar::setParcelInfoText(const std::string& new_text)
 	LLRect rect = mParcelInfoText->getRect();
 	rect.setOriginAndSize(rect.mLeft, rect.mBottom, new_text_width, rect.getHeight());
 
+	// Ansariel: Recalculate panel size so we are able to click the whole text
+	LLRect panelParcelInfoRect = mParcelInfoPanel->getRect();
+	LLRect panelBalanceRect = mBalancePanel->getRect();
+	panelParcelInfoRect.mRight = panelParcelInfoRect.mLeft + rect.mRight;
+	S32 borderRight = panelBalanceRect.mLeft - ParcelInfoSpacing;
+
+	// If we're about to float away under the L$ balance, cut off
+	// the parcel description so it doesn't happen.
+	if (panelParcelInfoRect.mRight > borderRight)
+	{
+		panelParcelInfoRect.mRight = borderRight;
+		rect.mRight = panelParcelInfoRect.getWidth();
+	}
+
 	mParcelInfoText->reshape(rect.getWidth(), rect.getHeight(), TRUE);
 	mParcelInfoText->setRect(rect);
-	layoutParcelIcons();
+	mParcelInfoPanel->setRect(panelParcelInfoRect);
 }
 
 void LLStatusBar::update()
 {
 	std::string new_text;
 
+	updateParcelIcons();
+
 	// don't need to have separate show_coords variable; if user requested the coords to be shown
 	// they will be added during the next call to the draw() method.
 	buildLocationString(new_text, false);
 	setParcelInfoText(new_text);
 
-	updateParcelIcons();
+	updateParcelPanel();
+}
+
+void LLStatusBar::updateParcelPanel()
+{
+	const S32 MENU_RIGHT = gMenuBarView->getRightmostMenuEdge();
+	S32 left = MENU_RIGHT + MENU_PARCEL_SPACING;
+	LLRect rect = mParcelInfoPanel->getRect();
+	rect.mRight = left + rect.getWidth();
+	rect.mLeft = left;
+	
+	mParcelInfoPanel->setRect(rect);
 }
 
 void LLStatusBar::updateParcelInfoText()
 {
 	static LLUICachedControl<bool> show_coords("NavBarShowCoordinates", false);
 
-	if (show_coords)
-	{
+	// Ansariel: This doesn't make sense at all. The location in the statusbar
+	//           has ever shown coordinates and why should one have to enable
+	//           the navigation bar to configure a setting that has effect on
+	//           the statusbar?
+	// if (show_coords)
+	// {
 		std::string new_text;
 
 		buildLocationString(new_text, show_coords);
 		setParcelInfoText(new_text);
-	}
+	// }
 }
 
 void LLStatusBar::updateParcelIcons()
@@ -748,6 +874,7 @@ void LLStatusBar::updateParcelIcons()
 		bool allow_build	= vpm->allowAgentBuild(current_parcel); // true when anyone is allowed to build. See EXT-4610.
 		bool allow_scripts	= vpm->allowAgentScripts(agent_region, current_parcel);
 		bool allow_damage	= vpm->allowAgentDamage(agent_region, current_parcel);
+		bool has_pwl		= KCWindlightInterface::instance().getWLset();
 
 		// Most icons are "block this ability"
 		mParcelIcon[VOICE_ICON]->setVisible(   !allow_voice );
@@ -757,6 +884,8 @@ void LLStatusBar::updateParcelIcons()
 		mParcelIcon[SCRIPTS_ICON]->setVisible( !allow_scripts );
 		mParcelIcon[DAMAGE_ICON]->setVisible(  allow_damage );
 		mDamageText->setVisible(allow_damage);
+		mPWLBtn->setVisible(has_pwl);
+		mPWLBtn->setEnabled(has_pwl);
 
 		layoutParcelIcons();
 	}
@@ -791,10 +920,13 @@ void LLStatusBar::updateHealth()
 void LLStatusBar::layoutParcelIcons()
 {
 	// TODO: remove hard-coded values and read them as xml parameters
-	static const int FIRST_ICON_HPAD = 16;
+	static const int FIRST_ICON_HPAD = 2; // 2 padding; See also ICON_HEAD
 	// Kadah - not needed static const int LAST_ICON_HPAD = 11;
 
-	S32 left = mParcelInfoText->getRect().mRight + FIRST_ICON_HPAD;
+	// Ansariel: Changed order to be more Viewer 1 like and keep important
+	//           information visible: Parcel power icons first, then parcel
+	//           info text!
+	S32 left = FIRST_ICON_HPAD;
 
 	left = layoutWidget(mDamageText, left);
 
@@ -802,6 +934,11 @@ void LLStatusBar::layoutParcelIcons()
 	{
 		left = layoutWidget(mParcelIcon[i], left);
 	}
+	left = layoutWidget(mPWLBtn, left);
+
+	LLRect infoTextRect = mParcelInfoText->getRect();
+	infoTextRect.mLeft = left;
+	mParcelInfoText->setRect(infoTextRect);
 }
 
 S32 LLStatusBar::layoutWidget(LLUICtrl* ctrl, S32 left)
@@ -899,4 +1036,17 @@ void LLStatusBar::onInfoButtonClicked()
 {
 	//LLSideTray::getInstance()->showPanel("panel_places", LLSD().with("type", "agent"));
 	LLFloaterReg::showInstance("about_land");
+}
+
+void LLStatusBar::onParcelWLClicked()
+{
+	KCWindlightInterface::instance().onClickWLStatusButton();
+}
+
+// hack -KC
+void LLStatusBar::setBackgroundColor( const LLColor4& color )
+{
+	LLPanel::setBackgroundColor(color);
+	getChild<LLPanel>("balance_bg")->setBackgroundColor(color);
+	getChild<LLPanel>("time_and_media_bg")->setBackgroundColor(color);
 }

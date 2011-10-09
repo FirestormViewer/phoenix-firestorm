@@ -4,16 +4,17 @@
 		unbekannt
 	</floater.string>
 	<radio_group label="Fototyp" name="snapshot_type_radio">
-		<radio_item label="Email" name="postcard"/>
+		<radio_item label="E-Mail" name="postcard"/>
 		<radio_item label="Mein Inventar ([AMOUNT] L$)" name="texture"/>
 		<radio_item label="Auf meinem Computer speichern" name="local"/>
+		<radio_item label="Auf Flickr hochladen" name="flickr"/>
 	</radio_group>
 	<text name="file_size_label">
 		[SIZE] KB
 	</text>
 	<button label="Foto aktualisieren" name="new_snapshot_btn"/>
 	<button label="Senden" name="send_btn"/>
-	<button label="Speichern ([AMOUNT] L$)" name="upload_btn"/>
+	<button label="Speichern" name="upload_btn"/>
 	<flyout_button label="Speichern" name="save_btn" tool_tip="Bild als Datei speichern">
 		<flyout_button.item label="Speichern" name="save_item"/>
 		<flyout_button.item label="Speichern unter..." name="saveas_item"/>

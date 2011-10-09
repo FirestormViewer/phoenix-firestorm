@@ -28,6 +28,7 @@
 #define LL_LLHUDEFFECTLOOKAT_H
 
 #include "llhudeffect.h"
+#include "llcontrol.h"
 
 class LLViewerObject;
 class LLVOAvatar;
@@ -79,7 +80,8 @@ protected:
 	void setTargetPosGlobal(const LLVector3d &target_pos_global);
 
 public:
-	static BOOL sDebugLookAt;
+	//static BOOL sDebugLookAt;
+	LLCachedControl<bool> mDebugLookAt;
 
 private:
 	ELookAtType					mTargetType;

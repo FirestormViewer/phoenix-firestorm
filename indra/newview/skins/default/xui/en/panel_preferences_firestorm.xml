@@ -1,147 +1,2037 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  border="true"
- follows="left|top|right|bottom"
- height="408"
+ follows="all"
+ height="440"
  label="Firestorm"
  layout="topleft"
- left="102"
+ left="1"
  name="firestorm"
  top="1"
- width="517">
+ width="535">
 
-    <check_box
-     control_name="RestrainedLove"
-     layout="topleft"
-     follows="left|top"
-     top_pad="20"
-     left_delta="20"
-     width="175"
-     height="20"
-     name="checkMiscRLVa"
-     label="Allow Remote Scripted Viewer Controls  (RLVa)"
-    >
-    <check_box.commit_callback
-     function="RLV.ToggleEnabled" />
-    <check_box.enabled_callback
-     function="RLV.CheckEnabled" />
-    </check_box>
-    
-    <text
+<tab_container
+ label="Firestorm Prefs"
+ layout="topleft"
+ follows="all"
+ top="5"
+ bottom="-10"
+ left="1"
+ right="-1"
+ name="tabs"
+ tab_min_width="50"
+ tab_position="top" >
+
+    <!--General-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="General"
+     name="tab-general" >
+        <check_box
+         control_name="RestrainedLove"
          layout="topleft"
          follows="left|top"
-         top_delta="6" 
-         left_pad="100" 
+         top_pad="10"
+         left="20"
+         width="270"
+         height="20"
+         name="checkMiscRLVa"
+         label="Allow Remote Scripted Viewer Controls  (RLVa)" >
+            <check_box.commit_callback
+             function="RLV.ToggleEnabled" />
+            <check_box.enabled_callback
+             function="RLV.CheckEnabled" />
+        </check_box>
+        <text
+         layout="topleft"
+         follows="left|top"
+         left_pad="3"
          height="20"
          width="150"
          name="textMiscRLVaRestart"
-         text_color="White_25"
-        >
-                                            (requires restart)
-    </text>
-  
-     <text
-      follows="left|top"
-      layout="topleft"
-      left="24"
-      height="12"
-      name="tab_direction_label"
-      width="150"
-      top_pad="10">
-      Chat Tab Mode Orientation:
-    </text>
-    <text
-     name="requires_restart_label"
-     follows="left|top"
-     layout="topleft"
-     top_delta="0"
-     left="180"
-        height="20"
-          width="130"
-     text_color="White_25">
-      (requires restart)
-    </text>
-    <radio_group
-     height="16"
-     layout="topleft"
-     left="40"
-     control_name="ChatTabDirection"
-     name="chat_tab_direction"
-     top_pad="0"
-     tool_tip="Change flow of the chat/IM tabs between horizontal and vertical when consolidated tab mode is active.
-(Requires restart)"
-     width="331">
-     <radio_item
-       height="16"
-       label="Horizontal"
-       layout="topleft"
-       left="0"
-       name="radio_horizontal"
-       value="0"
-       top="0"
-       width="150" />
-     <radio_item
-       height="16"
-       label="Vertical"
-       layout="topleft"
-       left_delta="160"
-       name="radio_vertical"
-       value="1"
-       width="150" />
-    </radio_group>
+         text_color="White_25">
+        (requires restart)
+        </text>
+        <text
+         follows="left|top"
+         layout="topleft"
+         left="20"
+         height="20"
+         name="tab_direction_label"
+         width="150"
+         top_pad="5">
+          Chat Tab Mode Orientation:
+        </text>
+        <text
+         name="tab_direction_requires_restart"
+         follows="left|top"
+         layout="topleft"
+         left_pad="5"
+         height="20"
+         width="130"
+         text_color="White_25">
+          (requires restart)
+        </text>
+        <radio_group
+         height="16"
+         layout="topleft"
+         left="40"
+         control_name="ChatTabDirection"
+         name="chat_tab_direction"
+         top_pad="0"
+         tool_tip="Change flow of the chat/IM tabs between horizontal and vertical when consolidated tab mode is active. (Requires restart)"
+         width="331">
+            <radio_item
+             height="16"
+             label="Horizontal"
+             layout="topleft"
+             left="0"
+             name="radio_horizontal"
+             value="0"
+             top="0"
+             width="150" />
+            <radio_item
+             height="16"
+             label="Vertical"
+             layout="topleft"
+             left_delta="160"
+             name="radio_vertical"
+             value="1"
+             width="150" />
+        </radio_group>
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Disable Teleport Screens"
+         left="15"
+         name="tp_screen_toggle"
+         width="270"
+         control_name="PhoenixDisableTeleportScreens"
+         tool_tip="Disables the black teleport screen during all teleports."/>
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Disable Login Progress Screen"
+         left_delta="0"
+         name="login_screen_toggle"
+         width="270"
+         control_name="PhoenixDisableLoginScreens"
+         tool_tip="Disables the black login progress Screen"/>
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Disable Logout Progress Screen"
+         left_delta="0"
+         name="logout_screen_toggle"
+         width="270"
+         control_name="PhoenixDisableLogoutScreens"
+         tool_tip="Disables the black Logout progress screen."/>
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Always rez objects under the land group if possible"
+         left="15"
+         name="grouplandrez"
+         width="270"
+         control_name="RezUnderLandGroup"
+         tool_tip="Attempts to rez objects under the land group if you're in the land group regardless of which current group tag you're wearing."/>
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Filter duplicate Landmarks on World Map"
+         left="15"
+         name="WorldmapFilterDuplicateLandmarks"
+         width="270"
+         control_name="WorldmapFilterDuplicateLandmarks"
+         tool_tip="Filters duplicate Landmark entries in the Landmark list on the World Map."/>
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Turn avatar around when walking backwards"
+         left="15"
+         name="backwardsturnavatar"
+         width="270"
+         control_name="TurnAroundWhenWalkingBackwards"
+         tool_tip="Turns your avatar around to face the camera when you are walking backwards."/>
+        <check_box
+         top_pad="5"
+         control_name="FSUseWebProfiles"
+         follows="left|top"
+         height="16"
+         name="FSUseWebProfiles"
+         label="Use web profiles"
+         left="15"
+         width="270"
+         tool_tip="Shows profiles as a web page instead of a v1-style panel"/>
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Show look at target"
+         left="15"
+         name="showlookat"
+         width="270"
+         control_name="DebugLookAt"
+         tool_tip="Enable crosshairs marking where people are looking."/>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="30"
+         name="lookatshownames"
+         top_pad="5"
+         width="200">
+            Show names for look at target:
+        </text>
+        <combo_box
+         control_name="DebugLookAtShowNames"
+         follows="left|top"
+         height="23"
+         layout="topleft"
+         left_pad="7"
+         max_chars="135"
+         name="lookatshownames_combobox"
+         width="150">
+            <combo_box.item
+             enabled="true"
+             label="None"
+             name="None"
+             value="0" />
+            <combo_box.item
+             enabled="true"
+             label="Complete name"
+             name="Complete_Name"
+             value="1" />
+            <combo_box.item
+             enabled="true"
+             label="Display name"
+             name="Display_Name"
+             value="2" />
+            <combo_box.item
+             enabled="true"
+             label="Legacy name"
+             name="Legacy_Name"
+             value="3" />
+            <combo_box.item
+             enabled="true"
+             label="Username"
+             name="User_Name"
+             value="4" />
+        </combo_box>
 
-    <check_box
-     layout="topleft"
-     follows="left|top"
-     bottom_delta="30"
-     left_delta="-10"
-     width="50"
-     height="16"
-     control_name="PhoenixNearbyChatbar"
-     label="Add a chatbar in the Nearby Chat window"/>
-    <text
-     name="requires_restart_label"
-     follows="left|bottom"
-     layout="topleft"
-     top_delta="0"
-     left_delta="250"
-        height="18"
-          width="130"
-     text_color="White_25">
-      (requires restart)
-    </text>
+        <check_box
+         top_pad="5"
+         control_name="ShowNetStats"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         name="ShowNetStats"
+         label="Show lag meter"
+         left="15"
+         width="270"
+         tool_tip="Show lag meter in the Status Overlay"/>
 
-    <check_box bottom_delta="-30" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Teleport Screens" left="15" mouse_opaque="true" name="tp_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableTeleportScreens" tool_tip="Disables the black teleport screen during all teleports."/>
-    <check_box bottom_delta="-20" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Login Progress Screen" left_delta="0" mouse_opaque="true" name="login_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableLoginScreens" tool_tip="Disables the black login progress Screen"/>
-    <check_box bottom_delta="-20" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Disable Logout Progress Screen" left_delta="0" mouse_opaque="true" name="logout_screen_toggle" radio_style="false" width="270" control_name="PhoenixDisableLogoutScreens" tool_tip="Disables the black Logout progress screen."/>
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Don't send avatar physics to server (old V1 client compatibility)"
+         left="15"
+         name="dontsendavphysics"
+         width="270"
+         control_name="FSDontSendAvPhysicsParms"
+         tool_tip="Disables sending your avatar physics information to the Second Life server, for compatibility with version 1 viewers"/>
 
-  <text
-   name="chat_and_in_enhancements"
-   follows="left|top"
-   layout="topleft"
-   top_delta="30"
-   left="24"
-   height="10"
-   width="180">
-      Chat and IM enhancements:
-  </text>
-  <check_box
-   control_name="AllowMUpose"
-   name="AllowMUpose"
-   label="&quot;:&quot; as a synonym for &quot;/me&quot;"
-   layout="topleft"
-   top_delta="18"
-   left="30"
-   height="20"
-   width="400" />
-  <check_box
-   control_name="AutoCloseOOC"
-   name="AutoCloseOOC"
-   label="Auto-close ((OOC)) parenthesis"
-   layout="topleft"
-   top_delta="22"
-   left="30"
-   height="20"
-   width="400" />
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Sort contact lists by username even when display names are shown"
+         left="15"
+         name="sortcontactsbyun"
+         width="270"
+         control_name="FSSortContactsByUserName"
+         tool_tip="If this is checked, all contact lists are always sorted by username">
+            <check_box.commit_callback
+             function="FS.ToggleSortContacts" />
+        </check_box>
 
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Render blocked avatars as particle cloud"
+         left="15"
+         name="ShowMutedAvatarsAsCloud"
+         width="270"
+         control_name="ShowMutedAvatarsAsCloud"
+         tool_tip="Blocked avatars will be rendered as a particle cloud in special color.">
+            <check_box.commit_callback
+             function="FS.ToggleSortContacts" />
+        </check_box>
+
+        <check_box
+         top_pad="15"
+         control_name="UseLSLBridge"
+         follows="left|top"
+         height="16"
+         initial_value="true"
+         name="UseLSLBridge"
+         label="Enable LSL-Client Bridge"
+         left="15"
+         width="270"
+         tool_tip="Allows the Viewer to use a scripted attachment (Bridge) to extend its features"/>
+        <check_box
+         control_name="UseLSLFlightAssist"
+         enabled_control="UseLSLBridge"
+         layout="topleft"
+         left_delta="200"
+         height="16"
+         initial_value="false"
+         name="UseLSLFlightAssist"
+         label="Enable Bridge Flight Assist"
+         width="270"
+         tool_tip="Enables the script that assists flying and hovering at extended altitudes"/>
+    </panel>
+
+
+    <!--Protection-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Protection"
+     name="ProtectionTab">
+        <check_box
+         top_pad="12"
+         left="10"
+         label="Block left-click sitting on objects"
+         control_name="PhoenixBlockClickSit"
+         follows="left|top"
+         height="16"
+         name="PhoenixBlockClickSit"
+         width="256" />
+        <check_box
+         top_pad="8"
+         label="Allow scripts to show map UI (llMapDestination)"
+         control_name="ScriptsCanShowUI"
+         follows="left|top"
+         height="16"
+         name="ScriptsCanShowUI"
+         width="256" />
+
+        <text
+         top_pad="10"
+         follows="left|top"
+         height="12"
+         name="revokepermissions_txt"
+         width="200">
+         Revoke Permissions:
+         </text>
+        <radio_group
+         top_pad="5"
+         left="20"
+         height="62"
+         layout="topleft"
+         control_name="PhoenixRevokePerms"
+         name="PhoenixRevokePerms"
+         tool_tip="PhoenixRevokePerms"
+         width="331">
+            <radio_item
+             height="16"
+             label="Never (Original behaviour)"
+             layout="topleft"
+             name="never_radio"
+             value="0"
+             top_pad="0"
+             width="150" />
+            <radio_item
+             height="16"
+             label="Revoke on SIT"
+             layout="topleft"
+             top_pad="0"
+             name="sit_radio"
+             value="1"
+             width="150" />
+            <radio_item
+             height="16"
+             label="Revoke on STAND"
+             layout="topleft"
+             top_pad="0"
+             name="stand_radio"
+             value="2"
+             width="150" />
+            <radio_item
+             height="16"
+             label="Revoke on SIT and STAND"
+             layout="topleft"
+             top_pad="0"
+             name="sitnstand_radio"
+             value="3"
+             width="150" />
+        </radio_group>
+        
+        <text
+         left="5"
+         top_pad="10"
+         follows="left|top"
+         height="12"
+         name="SurfaceAreaThreshholdLabel"
+         width="360">
+         Texture Lag Protection (may break some objects):
+         </text>
+         <check_box
+         top_pad="10"
+         left="20"
+         label="Automatically hide large objects with high texture area. Treshold: "
+         control_name="RenderVolumeSAProtection"
+         follows="left|top"
+         height="16"
+         name="RenderVolumeSAProtection"
+         width="380" />
+        <spinner
+         top_delta="-5"
+         control_name="RenderVolumeSAFrameMax"
+         decimal_digits="0"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         left_pad="5"
+         increment="1"
+         initial_val="5000"
+         max_val="2000"
+         min_val="500"
+         name="RenderVolumeSAFrameMax"
+         width="90" />
+    </panel>
+
+
+    <!--View-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="View"
+     name="firestorm_view" >
+
+        <text
+         top_pad="10"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="15"
+         name="camera_options_label"
+         width="200">
+           Camera options:
+        </text>
+
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Clicking your avatar keeps camera position"
+         layout="topleft"
+         left="30"
+         name="backwardsturnavatar"
+         width="270"
+         control_name="ClickOnAvatarKeepsCamera"
+         tool_tip="Normally, clicking on your avatar resets the camera position. This option removes this behavior."/>
+
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Disable minimum camera zoom distance"
+         layout="topleft"
+         left="30"
+         name="disableminzoomdist"
+         width="270"
+         control_name="PhoenixDisableMinZoomDist"
+         tool_tip="Disable the constraint on the closest distance the camera is allowed to get to an object."/>
+
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Allow the camera to move without constraints through prims"
+         layout="topleft"
+         left="30"
+         name="ignorecameraconstraints"
+         width="350"
+         control_name="PhoenixIgnoreSimulatorCameraConstraints"
+         tool_tip="Ignores the 'push' the simulator applies to your camera to keep it out of objects."/>
+
+        <text
+         name="ignorecameraconstraints_requires_restart"
+         follows="left|top"
+         layout="topleft"
+         left_pad="10"
+         top_delta="0"
+         height="20"
+         width="130"
+         text_color="White_25">
+            (requires restart)
+        </text>
+
+        <check_box
+         top_pad="12"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Enable Minimap rotation"
+         layout="topleft"
+         left="15"
+         name="minimaprotate"
+         width="350"
+         control_name="MiniMapRotate"
+         tool_tip="Rotate miniature world map to avatar direction."/>
+
+        <check_box
+         control_name="MiniMapChatRing"
+         name="MiniMapChatRing"
+         label="Display a ring on the Minimap indicating local chat range"
+         layout="topleft"
+         top_pad="0"
+         height="20"
+         width="350" />
+
+        <check_box
+         control_name="FSAdvancedTooltips"
+         name="FSAdvancedTooltips"
+         label="Show extended information in hovertips (classic Phoenix style)"
+         layout="topleft"
+         top_pad="0"
+         height="20"
+         width="350" />
+         
+        <!-- LGG Color Beams -->
+        <text
+         name="BeamPrefs"
+         follows="left|top"
+         left="15"
+         bottom_delta="25" >
+            Selection beam particle effects
+        </text>
+        <view_border
+         bevel_style="none"
+         border_thickness="1"
+         top_delta="15"
+         follows="top|left"
+         height="0"
+         left="15"
+         name="BeamDivisor"
+         width="490" />
+
+        <button
+         name="BeamColor_delete"
+         label="Delete"
+         tool_tip="Remove this preset"
+         left="15"
+         top_delta="10"
+         width="55"
+         height="20"
+         follows="left|top" />
+
+        <combo_box
+         allow_text_entry="false"
+         top_delta="0"
+         left_delta="60"
+         follows="left|top"
+         height="20"    
+         max_chars="20"
+         name="BeamColor_combo"
+         width="170"
+         control_name="PhoenixBeamColorFile"
+         tool_tip="Select the color preset for the selection beam"/>
+        
+        <button
+         name="BeamColor_new"
+         label="Create New"
+         tool_tip="Create a new color preset"
+         left="15"
+         bottom_delta="25"
+         width="75"
+         height="20"
+         follows="left|top" />
+         
+        <button
+         name="BeamColor_refresh"
+         label="Refresh List"
+         tool_tip="Refresh the preset list"
+         left="15"
+         bottom_delta="25"
+         width="75"
+         height="20"
+         follows="left|top" />
+        
+        <button
+         left="100"
+         top_delta="-25"
+         follows="left|top"
+         width="130"
+         height="80"
+         name="PhoenixBeamPrev_rainbow"
+         label=""
+         scale_image="true"
+         image_selected="beam_rainbow.png"
+         image_unselected="beam_rainbow.png"
+         image_hover_selected="beam_rainbow.png"
+         image_hover_unselected="beam_rainbow.png" />
+
+        <slider
+         bottom_delta="25"
+         left="15"
+         name="PhoenixMaxBeamsPerSecond"
+         control_name="PhoenixMaxBeamsPerSecond"
+         decimal_digits="0"
+         enabled="true"
+         follows="left|top"
+         height="18"
+         increment="1"
+         initial_val="4"
+         label="Beam updates/sec:"
+         label_width="100"
+         max_val="200"
+         min_val="4"
+         show_text="true"
+         width="250"
+         auto_resize="false"
+         tool_tip="How many beam updates to send in a second. Default 40" />
+
+        <check_box
+         bottom_delta="18"
+         enabled="true"
+         follows="left|top"
+         height="16"
+         initial_value="true"
+         label="Enable selection beam"
+         left="15"
+         name="SLPartBeam"
+         width="250"
+         control_name="ShowSelectionBeam" />
+
+        <check_box
+         bottom_delta="18"
+         enabled="true"
+         follows="left|top"
+         height="16"
+         initial_value="true"
+         label="SL Particle Chat"
+         left="15"
+         name="PhoenixParticleChat"
+         width="250"
+         control_name="PhoenixParticleChat" />
+
+        <view_border
+         bevel_style="none"
+         border_thickness="1"
+         top_delta="-160"
+         follows="top|left"
+         height="180"
+         left="260"
+         name="BeamDivisor2"
+         width="0" />
+ 
+        <combo_box
+         allow_text_entry="false"
+         bottom_delta="-150"
+         left="275"
+         follows="left|top"
+         height="20"
+         max_chars="20"
+         name="PhoenixBeamShape_combo"
+         width="170"
+         control_name="PhoenixBeamShape"
+         tool_tip="Select the shape for the particle beam" />
+
+        <button
+         name="delete_beam"
+         label="Delete"
+         tool_tip="Remove this beam"
+         left_delta="175"
+         bottom_delta="0"
+         width="55"
+         height="20"
+         follows="left|top" />
+
+        <button
+         name="custom_beam_btn"
+         label="Create New"
+         tool_tip="Customize the beam shape"
+         left_delta="-20"
+         bottom_delta="25"
+         width="75"
+         height="20"
+         follows="left|top"/>
+
+        <button
+         name="refresh_beams"
+         label="Refresh List"
+         tool_tip="Refresh the beam list"
+         left_delta="0"
+         bottom_delta="25"
+         width="75"
+         height="20"
+         follows="left|top" />
+
+        <button
+         left="290"
+         top_delta="-25"
+         follows="left|top"
+         width="130"
+         height="80"
+         name="PhoenixBeamPrev_Phoenix"
+         label=""
+         scale_image="true"
+         image_selected="beam_phoenix.png"
+         image_unselected="beam_phoenix.png"
+         image_hover_selected="beam_phoenix.png"
+         image_hover_unselected="beam_phoenix.png" />
+
+        <slider
+         bottom_delta="25"
+         left_delta="-15"
+         name="PhoenixBeamShapeScale"
+         control_name="PhoenixBeamShapeScale"
+         decimal_digits="1"
+         enabled="true"
+         follows="left|top"
+         height="18"
+         increment="0.1"
+         initial_val="1"
+         label="Scale:"
+         label_width="35"
+         max_val="4"
+         min_val="0.1"
+         show_text="true"
+         width="150"
+         auto_resize="false"
+         tool_tip="Change the scale of the shape used for the Phoenix Shaped Beam" />
+
+    </panel>
+
+    <!--Chat-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Chat"
+     name="firestorm_chat" >
+
+        <tab_container
+         label="Firestorm Prefs"
+         top_pad="5"
+         bottom="-1"
+         left="1"
+         right="-1"
+         follows="all"
+         name="tabs"
+         tab_min_width="50"
+         tab_position="top" >
+
+        <!--Chat: General-->
+        <panel
+         border="true"
+         top_pad="1"
+         bottom="-1"
+         left="1"
+         right="-1"
+         follows="all"
+         label="General"
+         name="ChatGeneral" >
+
+            <text
+             name="chat_and_im_enhancements"
+             follows="left|top"
+             layout="topleft"
+             top_pad="5"
+             left="19"
+             height="10"
+             width="180">
+              Chat and IM enhancements:
+            </text>
+            <check_box
+             control_name="AllowMUpose"
+             name="AllowMUpose"
+             label="&quot;:&quot; as a synonym for &quot;/me&quot;"
+             layout="topleft"
+             top_pad="0"
+             left="30"
+             height="18"
+             width="200" />
+            <check_box
+             control_name="EmotesUseItalic"
+             name="EmotesUseItalic"
+             label="Emotes use italic font"
+             layout="topleft"
+			 left_delta="200"
+             height="18"
+             width="180" />
+            <check_box
+             control_name="AutoCloseOOC"
+             name="AutoCloseOOC"
+             label="Auto-close ((OOC)) parentheses"
+             layout="topleft"
+             top_pad="0"
+ 			 left="30"
+             height="18"
+             width="400" />
+            <check_box
+             control_name="OnlineOfflinetoNearbyChat"
+             name="OnlineOfflinetoNearbyChat"
+             label="Friend on/off-line notices to Nearby Chat"
+             layout="topleft"
+             top_pad="0"
+             height="18"
+             width="400" />
+            <check_box
+             control_name="ShowStreamMetadata"
+             name="ShowStreamMetadata"
+             label="Show stream title in local chat"
+             layout="topleft"
+             top_pad="0"
+             height="18"
+             width="200" />
+            <check_box
+             control_name="StreamMetadataAnnounceToChat"
+             name="StreamMetadataAnnounceToChat"
+             label="Send stream title to channel:"
+             layout="topleft"
+             left_delta="200"
+             height="18"
+             width="180" />
+            <spinner
+             top_delta="-4"
+             control_name="StreamMetadataAnnounceChannel"
+             enabled_control="StreamMetadataAnnounceToChat"
+             decimal_digits="0"
+             layout="topleft"
+             follows="left|top"
+             height="18"
+             left_pad="5"
+             increment="1"
+             initial_val="362394"
+             max_val="2147483647"
+             min_val="1"
+             name="StreamMetadataAnnounceChannel"
+             width="90" />
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="5"
+             left="30"
+             width="250"
+             height="18"
+             control_name="PhoenixNearbyChatbar"
+             name="PhoenixNearbyChatbar"
+             label="Add a chatbar in the Nearby Chat window"/>
+            <text
+             top_delta="2"
+             name="PhoenixNearbyChatbar_requires_restart"
+             follows="left|top"
+             layout="topleft"
+             left_pad="0"
+             height="18"
+             width="130"
+             text_color="White_25">
+              (requires restart)
+            </text>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="30"
+             width="250"
+             height="18"
+             control_name="PhoenixShowChatChannel"
+             enabled_control="PhoenixNearbyChatbar"
+             name="PhoenixShowChatChannel"
+             label="Show channel selection in chat bar"/>
+            <check_box
+             control_name="AutohideChatBar"
+             height="18"
+             initial_value="false"
+             label="Autohide Main Chatbar"
+             layout="topleft"
+             left="30"
+             name="AutohideChatBar"
+             tool_tip="Hide the chat bar from the bottom button bar and only show it as an overlay when needed."
+             top_pad="0"
+             width="256" />
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="30"
+             width="400"
+             height="18"
+             name="FSShowIMInChatHistory"
+             control_name="FSShowIMInChatHistory"
+             label="Show IMs in nearby chat window"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="50"
+             width="155"
+             height="18"
+             name="FSLogIMInChatHistory"
+             control_name="FSLogIMInChatHistory"
+             label="Save IMs in nearby chat"/>
+            <text
+             top_delta="2"
+             name="requires_save_chat_logs"
+             follows="left|top"
+             layout="topleft"
+             left_pad="0"
+             height="18"
+             width="200"
+             text_color="White_25">
+              (requires saving nearby chat logs)
+            </text>
+			<check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="30"
+             width="400"
+             height="18"
+             name="FSMarkObjects"
+             control_name="FSMarkObjects"
+             label="Mark objects with (no name) when they speak to avoid spoofing"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="20"
+             width="400"
+             height="18"
+             name="PhoenixUseNearbyChatConsole"
+             control_name="PhoenixUseNearbyChatConsole"
+             label="Use console for chat popups instead of floating toasts (Viewer 1.x style)"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             width="50"
+             height="18"
+             name="PhoenixLogImToChatConsole"
+             control_name="PhoenixLogImToChatConsole"
+             label="Show IMs and group chat in chat console"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             width="200"
+             height="18"
+             name="ChatFullWidth"
+             control_name="ChatFullWidth"
+             label="Use full screen width for console"/>
+            <text
+             top_delta="2"
+             name="requires_restart_label2"
+             follows="left|top"
+             layout="topleft"
+             left_pad="0"
+             height="20"
+             width="130"
+             text_color="White_25">
+              (requires restart)
+            </text>
+
+            <spinner
+             top_pad="0"
+             control_name="NearbyToastLifeTime"
+             decimal_digits="0"
+             follows="left|top"
+             height="20"
+             increment="1"
+             initial_val="10"
+             label="Fade chat after"
+             label_width="90"
+             left="35"
+             max_val="60"
+             min_val="2"
+             name="fade_chat_time"
+             width="130" />
+            <text
+             follows="left|top"
+             height="20"
+             left_pad="3"
+             name="text_box4"
+             width="70">
+                (seconds)
+            </text>
+            <spinner
+             decimal_digits="0"
+             control_name="ConsoleMaxLines"
+             follows="left|top"
+             height="20"
+             increment="1"
+             initial_val="10"
+             left_pad="0"
+             max_val="50"
+             min_val="1"
+             name="max_chat_count"
+             width="60" />
+            <text
+             follows="left|top"
+             height="20"
+             left_pad="3"
+             name="text_box5"
+             width="60">
+                (# lines)
+            </text>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="20"
+             width="50"
+             height="20"
+             control_name="PhoenixBoldGroupMods"
+             name="PhoenixBoldGroupMods"
+             label="Show group moderator messages in bold"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="20"
+             width="50"
+             height="18"
+             control_name="FSPaymentInfoInChat"
+             name="FSPaymentInfoInChat"
+             label="Show L$ transactions in local chat instead of toasts"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             width="50"
+             height="18"
+             control_name="PhoenixMuteAllGroups"
+             name="PhoenixMuteAllGroups"
+             label="Disable ALL group chats"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             width="50"
+             height="18"
+             control_name="PhoenixMuteGroupWhenNoticesDisabled"
+             name="PhoenixMuteGroupWhenNoticesDisabled"
+             label="When 'Receive group notices' is disabled, disable group chat as well"/>
+            <button
+             layout="topleft"
+             follows="left|top"
+             top_pad="5"
+             width="250"
+             height="22"
+             name="lgg_ac_showgui"
+             label="Show AutoCorrect Settings"
+             tool_tip="Click this show the options for autocorrection macros."/>
+        </panel>
+
+        <!--Chat: Radar-->
+        <panel
+         border="true"
+         top_pad="5"
+         bottom="-1"
+         left="1"
+         right="-1"
+         follows="all"
+         label="Radar"
+         name="ChatRadar" >
+
+            <check_box
+             control_name="RadarReportChatRange"
+             name="reportChatRange"
+             label="Radar reports when avatars enter/leave chat range"
+             layout="topleft"
+             left="24"
+             top_pad="15"
+             height="20"
+             width="400" />
+            <check_box
+             control_name="RadarReportDrawRange"
+             name="reportDrawRange"
+             label="Radar reports when avatars enter/leave draw distance"
+             layout="topleft"
+             top_pad="0"
+             height="20"
+             width="400" />
+            <check_box
+             control_name="RadarReportSimRange"
+             name="RadarReportSimRange"
+             label="Radar reports when avatars enter/leave the region"
+             layout="topleft"
+             top_pad="0"
+             height="20"
+             width="400" />
+
+        </panel>
+
+        <!--Chat: Keyword Alerts-->
+        <panel
+         border="true"
+         top_pad="5"
+         bottom="-1"
+         left="1"
+         right="-1"
+         follows="all"
+         label="Keyword Alerts"
+         name="ChatKeywordAlerts">
+
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top="10"
+             left="20"
+             width="50"
+             height="20"
+             control_name="PhoenixKeywordOn"
+             name="PhoenixKeywordOn"
+             label="Enable Keyword Alerts"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_delta="25"
+             left="20"
+             width="50"
+             height="20"
+             control_name="PhoenixKeywordInChat"
+             name="PhoenixKeywordInChat"
+             label="Look for Keywords In Local Chat"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_delta="25"
+             left="20"
+             width="150"
+             height="20"
+             control_name="PhoenixKeywordInIM"
+             name="PhoenixKeywordInIM"
+             label="Look for Keywords In IMs and Group Chat"/>
+            <text
+             layout="topleft"
+             follows="left|top"
+             top_delta="30"
+             left="20"
+             height="20"
+             width="220"
+             name="textPhoenixKeywords">
+              Keywords (separated by commas):
+            </text>
+            <line_editor
+             follows="left|top"
+             top_delta="25"
+             left="20"
+             height="20"
+             max_length="256"
+             name="PhoenixKeywords"
+             control_name="PhoenixKeywords"
+             width="450"/>
+
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_delta="25"
+             left="20"
+             width="50"
+             height="20"
+             control_name="PhoenixKeywordChangeColor"
+             name="PhoenixKeywordChangeColor"
+             label="Enable Color Alert"/>
+
+            <color_swatch
+             control_name="PhoenixKeywordColor"
+             border.border_thickness="0"
+             label_height="0"
+             layout="topleft"
+             follows="left|top"
+             top_delta="0"
+             left="150"
+             height="15"
+             width="15"
+             name="colorswatch"
+             tool_tip="Click to open color picker"/>
+
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_delta="25"
+             left="20"
+             width="50"
+             height="20"
+             control_name="PhoenixKeywordPlaySound"
+             name="PhoenixKeywordPlaySound"
+             label="PhoenixKeywordPlaySound"/>
+
+            <text
+             layout="topleft"
+             follows="left|top"
+             top_delta="30"
+             left="20"
+             height="20"
+             width="120"
+             name="textPhoenixKeywordSound">
+              Alert Sound UUID:
+            </text>
+            <line_editor
+             follows="left|top"
+             left_pad="5"
+             height="20"
+             max_length="256"
+             name="PhoenixKeywordSound"
+             control_name="PhoenixKeywordSound"
+             width="250"/>
+
+        </panel>
+        </tab_container>
+    </panel>
+
+
+    <!--CmdLine-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="CmdLine"
+     name="tab1-3" >
+
+        <check_box
+         top="5"
+         follows="left|top"
+         height="16"
+         label="Enable usage of chat bar as a command line"
+         left="5"
+         name="chat_cmd_toggle"
+         width="270"
+         control_name="PhoenixCmdLine"/>
+        <button
+         top="5"
+         follows="top|right"
+         height="18"
+         label="?"
+         name="PhoenixHelp_CmdLine"
+         tool_tip="Click here for help regarding the settings in this page."
+         right="-35"
+         width="18"/>
+
+        <text
+         top="25"
+         follows="left|top"
+         height="16"
+         left="10"
+         name="PhoenixCmdLinePos_txt"
+         width="250">
+         Teleport within sim (usage: cmd x y z)
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         name="PhoenixCmdLinePos"
+         tool_tip=""
+         control_name="PhoenixCmdLinePos"
+         width="200"/>
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         name="PhoenixCmdLineGround_txt"
+         width="250">
+         Teleport to ground (usage: cmd)
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         name="PhoenixCmdLineGround"
+         tool_tip=""
+         control_name="PhoenixCmdLineGround"
+         width="200"/>
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         name="PhoenixCmdLineHeight_txt"
+         width="250">
+        Teleport to altitude (usage: cmd z)
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         name="PhoenixCmdLineHeight"
+         tool_tip=""
+         control_name="PhoenixCmdLineHeight"
+         width="200"/>
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         name="PhoenixCmdLineTeleportHome_txt"
+         width="250">
+         Teleport home (usage: cmd)
+         </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         name="PhoenixCmdLineTeleportHome"
+         tool_tip=""
+         control_name="PhoenixCmdLineTeleportHome"
+         width="200"/>
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         name="PhoenixCmdLineRezPlatform_txt"
+         width="250">
+          Rez a platform (usage: cmd 0 - 30)
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         name="PhoenixCmdLineRezPlatform"
+         tool_tip=""
+         control_name="PhoenixCmdLineRezPlatform"
+         width="200"/>
+        <slider
+         top_pad="4"
+         name="PhoenixCmdLinePlatformSize"
+         control_name="PhoenixCmdLinePlatformSize"
+         decimal_digits="1"
+         follows="left|top"
+         height="18"
+         increment="0.5"
+         initial_val="5"
+         label="Width"
+         label_width="30"
+         max_val="30"
+         min_val="5"
+         show_text="true"
+         width="200"
+         auto_resize="false"
+         tool_tip="How big do you want the platform to appear to be?"/>
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         name="PhoenixCmdLineMapTo_txt"
+         width="250">
+           Teleport to sim x (usage: cmd simname)
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         name="PhoenixCmdLineMapTo"
+         tool_tip=""
+         control_name="PhoenixCmdLineMapTo"
+         width="200"/>
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         label="Use same position between sims"
+         name="toggle"
+         width="270"
+         control_name="PhoenixCmdLineMapToKeepPos"/>
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         name="PhoenixCmdLineCalc_txt"
+         width="250">
+           Calc. expressions (usage: cmd SIN(2+2))
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         name="PhoenixCmdLineCalc"
+         tool_tip=""
+         control_name="PhoenixCmdLineCalc"
+         width="200"/>
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         name="PhoenixCmdLineAutocorrect_txt"
+         width="250">
+           Add autocorrect word(cmd list|bad|good)
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         name="PhoenixCmdLineAutocorrect"
+         tool_tip=""
+         control_name="PhoenixCmdLineAutocorrect"
+         width="200"/>
+
+        <view_border
+         bevel_style="none"
+         border_thickness="1"
+         top="25"
+         left="240"
+         bottom="-25"
+         width="0"
+         follows="top|left|bottom"
+         name="EmDivisor"/>
+
+        <text
+         top="25"
+         follows="left|top"
+         height="16"
+         left_delta="10"
+         name="PhoenixCmdLineDrawDistance_txt"
+         width="250">
+          Change Draw Distance (usage: cmd meters)
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         name="PhoenixCmdLineDrawDistance"
+         tool_tip=""
+         control_name="PhoenixCmdLineDrawDistance"
+         width="200"/>
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         name="PhoenixCmdTeleportToCam_txt"
+         width="250">
+          Teleport to cam position (usage: cmd)
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         name="PhoenixCmdTeleportToCam"
+         tool_tip=""
+         control_name="PhoenixCmdTeleportToCam"
+         width="200"/>
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         name="PhoenixCmdLineKeyToName_txt"
+         width="250">
+          Get avatar name from key (usage: cmd key)
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         name="PhoenixCmdLineKeyToName"
+         tool_tip=""
+         control_name="PhoenixCmdLineKeyToName"
+         width="200"/>
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         name="PhoenixCmdLineOfferTp_txt"
+         width="250">
+          Offer teleport to avatar (usage: cmd key)
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         name="PhoenixCmdLineOfferTp"
+         tool_tip=""
+         control_name="PhoenixCmdLineOfferTp"
+         width="200"/>
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         name="PhoenixCmdLineTP2_txt"
+         width="250">
+          Teleport to avatar (usage: cmd name)
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         tool_tip="The syntax of this command allows partial names and is not case sensitive. Better results if used while the Radar is open."
+         name="PhoenixCmdLineTP2"
+         control_name="PhoenixCmdLineTP2"
+         width="200"/>
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         name="PhoenixCmdLineAO_txt"
+         width="250">
+          Turn AO on/off (usage: cmd on/off)
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         name="PhoenixCmdLineAO"
+         tool_tip=""
+         control_name="PhoenixCmdLineAO"
+         width="200"/>
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         name="PhoenixCmdLineClearChat_txt"
+         width="250">
+          Clear the chat history (usage: cmd)
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         tool_tip="Clears the Chat History to prevent lag effects from chat spammers."
+         name="PhoenixCmdLineClearChat"
+         control_name="PhoenixCmdLineClearChat"
+         width="200"/>
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         name="PhoenixCmdLineMedia_txt"
+         width="250">
+          Set the media url (usage: cmd url type)
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         tool_tip="Sets and plays your media stream to the entered url"
+         name="PhoenixCmdLineMedia"
+         control_name="PhoenixCmdLineMedia"
+         width="200"/>
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         name="PhoenixCmdLineMusic_txt"
+         width="250">
+          Set the music stream url (usage: cmd url)
+        </text>
+        <line_editor
+         top_pad="0"
+         follows="left|top"
+         height="20"
+         max_length="256"
+         tool_tip="sets and plays your music stream to the entered url"
+         name="PhoenixCmdLineMusic"
+         control_name="PhoenixCmdLineMusic"
+         width="200"/>
+    </panel>
+
+
+    <!--Windlight-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Windlight"
+     name="WindlightTab">
+        
+        <check_box
+         top_pad="8"
+         label="Automatically change environment to use region/parcel settings."
+         control_name="UseEnvironmentFromRegionAlways"
+         follows="left|top"
+         height="16"
+         name="UseEnvironmentFromRegionAlways"
+         width="256" />
+        
+        <check_box
+         top_pad="8"
+         label="Crossfade region environment sky preset changes made from quick prefs"
+         control_name="PhoenixInterpolateSky"
+         follows="left|top"
+         height="16"
+         name="PhoenixInterpolateSky"
+         width="256"
+         tool_tip="This controls the fancy blending between WL settings on change. The effect may cause slower computers to drop FPS for a few seconds while changing settings. Disable these 2 options to skip the effect and apply instantly." />
+        <check_box
+         top_pad="8"
+         label="Crossfade region environment water preset changes made from quick prefs"
+         control_name="PhoenixInterpolateWater"
+         follows="left|top"
+         height="16"
+         name="PhoenixInterpolateWater"
+         width="256"
+         tool_tip="Same as above but for the water." />
+        
+        
+        <text
+         top_pad="10"
+         left="10"
+         follows="left|top"
+         height="12"
+         name="phoenixWLshare_txt"
+         width="250">
+          Phoenix WL Share (Experimental)
+        </text>
+        <check_box
+         top_pad="8"
+         label="Use Phoenix Parcel Windlight Sharing (Experimental)"
+         control_name="PhoenixWLParcelEnabled"
+         follows="left|top"
+         height="16"
+         name="PhoenixWLParcelEnabled"
+         width="256" />
+        <check_box
+         top_pad="5"
+         left="15"
+         label="Auto apply WL settings from friend's land"
+         control_name="PhoenixWLWhitelistFriends"
+         follows="left|top"
+         height="16"
+         name="PhoenixWLWhitelistFriends"
+         width="256" />
+        <check_box
+         top_pad="5"
+         label="Auto apply WL settings from my groups' land"
+         control_name="PhoenixWLWhitelistGroups"
+         follows="left|top"
+         height="16"
+         name="PhoenixWLWhitelistGroups"
+         width="256" />
+        <check_box
+         top_pad="5"
+         label="Auto apply WL settings from any parcel"
+         control_name="PhoenixWLWhitelistAll"
+         follows="left|top"
+         height="16"
+         name="PhoenixWLWhitelistAll"
+         width="256" />
+        <check_box
+         top_pad="5"
+         label="Crossfade region environment changes for Parcel WL"
+         control_name="PhoenixInterpolateParcelWL"
+         follows="left|top"
+         height="16"
+         name="PhoenixInterpolateParcelWL"
+         width="256"
+         tool_tip="Same as above options for Interpolation but for the ParcelWL." />
+        
+    </panel>
+    
+    <!--Build-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Build"
+     name="BuildTab">
+
+        <text
+         top="20"
+         follows="left|top|right"
+         height="10"
+         left="10"
+         name="text_box_objprams"
+         width="175">
+         Default Object Parameters
+         </text>
+        <view_border
+         top_pad="5"
+         left="10"
+         right="-10"
+         height="75"
+         follows="left|top|right"
+         bevel_style="none"
+         border_thickness="1"
+         name="SizeBorder"/>
+        <spinner
+         top_delta="10"
+         left_delta="5"
+         decimal_digits="5"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="X size"
+         label_width="40"
+         max_val="10"
+         min_val="0.01"
+         name="X size"
+         width="120"
+         control_name="PhoenixBuildPrefs_Xsize"/>
+        <spinner
+         top_pad="3"
+         decimal_digits="5"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Y size"
+         label_width="40"
+         max_val="10"
+         min_val="0.01"
+         name="Y size"
+         width="120"
+         control_name="PhoenixBuildPrefs_Ysize"/>
+        <spinner
+         top_pad="3"
+         decimal_digits="5"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Z size"
+         label_width="40"
+         max_val="10"
+         min_val="0.01"
+         name="Z size"
+         width="120"
+         control_name="PhoenixBuildPrefs_Zsize"/>
+        <text
+         top="45"
+         left_pad="15"
+         follows="left|top"
+         height="15"
+         name="text_box_objmaterial"
+         width="50">
+         Material:
+         </text>
+        <combo_box
+         left_pad="2"
+         height="18"
+         width="80"
+         allow_text_entry="false"
+         follows="left|top"
+         name="material"
+         control_name="PhoenixBuildPrefs_Material">
+             <combo_item name="Stone" value="Stone">Stone</combo_item>
+             <combo_item name="Metal" value="Metal">Metal</combo_item>
+             <combo_item name="Glass" value="Glass">Glass</combo_item>
+             <combo_item name="Wood" value="Wood">Wood</combo_item>
+             <combo_item name="Flesh" value="Flesh">Flesh</combo_item>
+             <combo_item name="Plastic" value="Plastic">Plastic</combo_item>
+             <combo_item name="Rubber" value="Rubber">Rubber</combo_item>
+        </combo_box>
+
+        <text
+         top="125"
+         left="10"
+         follows="left|top"
+         height="10"
+         name="text_box_pivotpoint"
+         width="135">
+          Pivot Point
+        </text>
+        <view_border
+         top_pad="5"
+         bevel_style="none"
+         border_thickness="1"
+         follows="top|left"
+         height="110"
+         name="SizeBorder"
+         width="235"/>
+        <check_box
+         top_delta="10"
+         follows="left|top"
+         label="Show axis arrow on root prim position"
+         tool_tip="Default behaviour is to show the axis on the center of mass of a linkset. If enabled, the axis will be shown on the root prim of the linkset instead."
+         name="EmBuildPrefsActualRoot_toggle"
+         control_name="PhoenixBuildPrefs_ActualRoot"/>
+        <spinner
+         top_pad="5"
+         left_delta="5"
+         decimal_digits="5"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="X pos"
+         label_width="40"
+         max_val="256"
+         min_val="-256"
+         name="X pos"
+         width="120"
+         control_name="PhoenixBuildPrefs_PivotX"/>
+        <spinner
+         top_pad="3"
+         decimal_digits="5"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Y pos"
+         label_width="40"
+         max_val="256"
+         min_val="-256"
+         name="Y pos"
+         width="120"
+         control_name="PhoenixBuildPrefs_PivotY"/>
+        <spinner
+         top_pad="3"
+         decimal_digits="5"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Z pos"
+         label_width="40"
+         max_val="256"
+         min_val="-256"
+         name="Z pos"
+         width="120"
+         control_name="PhoenixBuildPrefs_PivotZ"/>
+        <check_box
+         top_pad="10"
+         left_delta="-5"
+         enabled="true"
+         follows="left|top"
+         height="16"
+         label="Values are percent"
+         tool_tip="Default settings are Percentages and every axis set at 50"
+         name="EmPivotPercToggle"
+         width="100"
+         control_name="PhoenixBuildPrefs_PivotIsPercent"/>
+         
+        <check_box
+         top_pad="20"
+         follows="left|top"
+         height="16"
+         label="Enable highlighting of selected prims"
+         tool_tip="When unchecked, the yellow/blue outline effects are not rendered, improving performance when large numbers of prims are selected."
+         name="EmBuildPrefsRenderHighlight_toggle"
+         control_name="RenderHighlightSelections"/>
+
+        <check_box
+         follows="left|top"
+         height="16"
+         label="Use old &quot;Set Object For Sale&quot; behavior"
+         tool_tip="When checked, object for sale info is saved on change instead of requiring a confirm."
+         name="PhoenixCommitForSaleOnChange_toggle"
+         control_name="PhoenixCommitForSaleOnChange"/>
+    
+        <check_box
+         follows="left|top"
+         height="16"
+         label="Save scripts edited from inventory as Mono"
+         tool_tip="When checked, editing a script directly from inventory and then saving it saves as Mono instead of LSL."
+         name="FSSaveInventoryScriptsAsMono_toggle"
+         control_name="FSSaveInventoryScriptsAsMono"/>
+    
+    </panel>
+
+
+    <!--Tags-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Tags"
+     name="TagTab">
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="20"
+         name="whattagstoshow"
+         top_pad="20"
+         width="220">
+          What tags do you want to see?
+        </text>
+
+        <combo_box
+         follows="left|top"
+         height="23"
+         layout="topleft"
+         left_pad="2"
+         max_chars="135"
+         width="220"
+         allow_text_entry="false"
+         name="ClientTagsVisibility">
+          <combo_item name="No Viewertags" value="0">No Viewertags</combo_item>
+          <combo_item name="TPVD Viewer" value="1">TPVD Viewers (using a list)</combo_item>
+          <combo_item name="All known Viewers" value="2">All known Viewers (using a list)</combo_item>
+          <combo_item name="All Viewers" value="3">All Viewers</combo_item>
+        </combo_box>   
+    
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="20"
+         name="colorbasedonviewer"
+         top_pad="10"
+         width="220">
+          Tag Color based on Viewer?
+        </text>
+
+        <combo_box
+         follows="left|top"
+         height="23"
+         layout="topleft"
+         left_pad="2"
+         max_chars="135"
+         width="220"
+         allow_text_entry="false"
+         name="ColorClienttags">
+          <combo_item name="Color not based on Viewer" value="0">Color not based on Viewer</combo_item>
+          <combo_item name="Single color per Viewer" value="1">Single color per Viewer</combo_item>
+          <combo_item name="Multiple colors per Viewer" value="2">Multiple colors per Viewer</combo_item>
+          <combo_item name="Userdefined color" value="3">Userdefined Color</combo_item>
+        </combo_box>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="20"
+         name="listtodisplayviewertags_txt"
+         top_pad="10"
+         width="220">
+          Use a list to display Viewertags?
+        </text>
+
+        <combo_box
+         follows="left|top"
+         height="23"
+         layout="topleft"
+         left_pad="2"
+         max_chars="135"
+         width="220"
+         allow_text_entry="false"
+         name="UseLegacyClienttags">
+          <combo_item name="Don't use a list" value="0">Don't use a list</combo_item>
+          <combo_item name="Local Clienttags" value="1">Local Tag List</combo_item>
+          <combo_item name="Download Clienttags" value="2">Download Tag List at Viewer Start</combo_item>
+        </combo_box>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="20"
+         name="chooseyourcolor_txt"
+         top_pad="10"
+         width="220">
+          Choose your color:
+        </text>
+
+        <combo_box
+         height="23"
+         layout="topleft"
+         follows="left|top"
+         left_pad="2"
+         max_chars="135"
+         width="220"
+         allow_text_entry="false"
+         name="ClientTagColor">
+          <combo_item name="red">Red</combo_item>
+          <combo_item name="blue">Blue</combo_item>
+          <combo_item name="yellow">Yellow</combo_item>
+          <combo_item name="purple">Purple</combo_item>
+          <combo_item name="pink">Pink</combo_item>
+          <combo_item name="white">White</combo_item>
+          <combo_item name="orange">Orange</combo_item>
+          <combo_item name="green">Green</combo_item>
+        </combo_box>
+
+        <check_box
+         left="20"
+         top_pad="10"
+         follows="left|top"
+         height="16"
+         width="220"
+         label="Show your own color"
+         name="FSShowOwnTagColor_toggle"
+         tool_tip="When checked, your Tag will be shown in the given color." />
+
+        <check_box
+         top_pad="10"
+         follows="left|top"
+         height="16"
+         width="220"
+         label="Color usernames differently"
+         name="FSColorUsername_toggle"
+         tool_tip="Displays usernames in a different color (this overrides client tag colors for usernames)" />
+
+        <color_swatch
+         border.border_thickness="0"
+         label_height="0"
+         layout="topleft"
+         follows="left|top"
+         top_delta="0"
+         left_pad="2"
+         height="15"
+         width="15"
+         name="usernamecolorswatch"
+         tool_tip="Click to open color picker"/>
+
+  </panel>
+</tab_container>
 </panel>

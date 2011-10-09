@@ -36,6 +36,8 @@
 #include "llinstantmessage.h"
 #include "llnotificationptr.h"
 
+#include "llavatarname.h"
+
 class LLIMFloater;
 
 namespace LLNotificationsUI
@@ -154,10 +156,23 @@ public:
 
 	// base interface functions
 	virtual bool processNotification(const LLSD& notify);
+	
+	void updatePhoenixLogImToChatConsole(const LLSD &data);
 
 protected:
 	virtual void onDeleteToast(LLToast* toast);
 	virtual void initChannel();
+
+//	<Ansariel>: removed local DN processing in favor of onAvatarNameLookup
+//	void lookupDisplayNames(const LLUUID& agent_id);
+//	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+//	bool checkDisplayName();
+//	LLAvatarName mAvatarName;
+//	</Ansariel>
+
+	void onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str);
+
+	BOOL PhoenixLogImToChatConsole;
 };
 
 /**
@@ -199,7 +214,6 @@ protected:
 	// own handlers
 	void onRejectToast(LLUUID& id);
 };
-
 
 /**
  * Handler for group system notices.
@@ -404,6 +418,13 @@ private:
 	 * Find IM floater based on "from_id"
 	 */
 	static LLIMFloater* findIMFloater(const LLNotificationPtr& notification);
+
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+	/**
+	 * Checks whether the user has opted to embed (certain) notifications in IM sessions
+	 */
+	static bool canEmbedNotificationInIM(const LLNotificationPtr& notification);
+// [/SL:KB]
 
 };
 

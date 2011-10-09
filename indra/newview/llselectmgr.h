@@ -134,6 +134,7 @@ public:
 	BOOL isTESelected(S32 te_index);
 	S32 getLastSelectedTE();
 	S32 getTESelectMask() { return mTESelectMask; }
+	void renderOneWireframe(const LLColor4& color);
 	void renderOneSilhouette(const LLColor4 &color);
 	void setTransient(BOOL transient) { mTransient = transient; }
 	BOOL isTransient() { return mTransient; }
@@ -181,7 +182,6 @@ public:
 	std::vector<LLVector3>  mTextureScaleRatios;
 	std::vector<LLVector3>	mSilhouetteVertices;	// array of vertices to render silhouette of object
 	std::vector<LLVector3>	mSilhouetteNormals;	// array of normals to render silhouette of object
-	std::vector<S32>		mSilhouetteSegments;	// array of normals to render silhouette of object
 	BOOL					mSilhouetteExists;	// need to generate silhouette?
 
 protected:
@@ -235,7 +235,7 @@ public:
 	{
 		bool operator()(LLSelectNode* node);
 	};
-	typedef boost::filter_iterator<is_root, list_t::iterator > valid_root_iterator;
+	typedef boost::filter_iterator<is_valid_root, list_t::iterator > valid_root_iterator;
 	valid_root_iterator valid_root_begin() { return valid_root_iterator(mList.begin(), mList.end()); }
 	valid_root_iterator valid_root_end() { return valid_root_iterator(mList.end(), mList.end()); }
 	
@@ -279,6 +279,15 @@ public:
 
 	// count members
 	S32 getObjectCount();
+	F32 getSelectedObjectCost();
+	F32 getSelectedLinksetCost();
+	F32 getSelectedPhysicsCost();
+	F32 getSelectedLinksetPhysicsCost();
+	S32 getSelectedObjectRenderCost();
+	
+	F32 getSelectedObjectStreamingCost(S32* total_bytes = NULL, S32* visible_bytes = NULL);
+	U32 getSelectedObjectTriangleCount();
+
 	S32 getTECount();
 	S32 getRootObjectCount();
 
@@ -440,8 +449,20 @@ public:
 	BOOL removeObjectFromSelections(const LLUUID &id);
 
 	////////////////////////////////////////////////////////////////
+	// Selection editing
+	////////////////////////////////////////////////////////////////
+	bool linkObjects();
+
+	bool unlinkObjects();
+
+	bool enableLinkObjects();
+
+	bool enableUnlinkObjects();
+
+	////////////////////////////////////////////////////////////////
 	// Selection accessors
 	////////////////////////////////////////////////////////////////
+	LLObjectSelectionHandle	getHoverObjects() { return mHoverObjects; }
 	LLObjectSelectionHandle	getSelection() { return mSelectedObjects; }
 	// right now this just renders the selection with root/child colors instead of a single color
 	LLObjectSelectionHandle	getEditSelection() { convertTransient(); return mSelectedObjects; }
@@ -489,6 +510,11 @@ public:
 	bool selectionGetIncludeInSearch(bool* include_in_search_out); // true if all selected objects have same
 	BOOL selectionGetGlow(F32 *glow);
 
+	void selectionSetPhysicsType(U8 type);
+	void selectionSetGravity(F32 gravity);
+	void selectionSetFriction(F32 friction);
+	void selectionSetDensity(F32 density);
+	void selectionSetRestitution(F32 restitution);
 	void selectionSetMaterial(U8 material);
 	void selectionSetImage(const LLUUID& imageid); // could be item or asset id
 	void selectionSetColor(const LLColor4 &color);

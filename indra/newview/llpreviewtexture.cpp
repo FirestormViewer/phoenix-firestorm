@@ -35,6 +35,7 @@
 #include "llcombobox.h"
 #include "llfilepicker.h"
 #include "llfloaterreg.h"
+#include "llimagepng.h"
 #include "llimagetga.h"
 #include "llinventory.h"
 #include "llnotificationsutil.h"
@@ -111,7 +112,7 @@ BOOL LLPreviewTexture::postBuild()
 		getChildView("Discard")->setVisible( false);
 	}
 	
-	childSetAction("save_tex_btn", LLPreviewTexture::onSaveAsBtn, this);
+	childSetCommitCallback("save_tex_btn", onSaveAsBtn, this);
 	getChildView("save_tex_btn")->setVisible( true);
 	getChildView("save_tex_btn")->setEnabled(canSaveAs());
 	
@@ -135,18 +136,27 @@ BOOL LLPreviewTexture::postBuild()
 }
 
 // static
-void LLPreviewTexture::onSaveAsBtn(void* data)
+void LLPreviewTexture::onSaveAsBtn(LLUICtrl* ctrl, void* data)
 {
 	LLPreviewTexture* self = (LLPreviewTexture*)data;
-	self->saveAs();
+	std::string value = ctrl->getValue().asString();
+	if (value == "format_png")
+	{
+		self->saveAs(LLPreviewTexture::FORMAT_PNG);
+	}
+	else if (value == "format_tga")
+	{
+		self->saveAs(LLPreviewTexture::FORMAT_TGA);
+	}
+	else
+	{
+		self->saveAs(LLPreviewTexture::FORMAT_TGA);
+	}
 }
 
 void LLPreviewTexture::draw()
 {
-	if (mUpdateDimensions)
-	{
-		updateDimensions();
-	}
+	updateDimensions();
 	
 	LLPreview::draw();
 
@@ -255,27 +265,49 @@ BOOL LLPreviewTexture::canSaveAs() const
 	return mIsCopyable && !mLoadingFullImage && mImage.notNull() && !mImage->isMissingAsset();
 }
 
-
 // virtual
 void LLPreviewTexture::saveAs()
+{
+	saveAs(LLPreviewTexture::FORMAT_TGA);
+}
+
+void LLPreviewTexture::saveAs(EFileformatType format)
 {
 	if( mLoadingFullImage )
 		return;
 
 	LLFilePicker& file_picker = LLFilePicker::instance();
-	const LLInventoryItem* item = getItem() ;
-	if( !file_picker.getSaveFile( LLFilePicker::FFSAVE_TGA, item ? LLDir::getScrubbedFileName(item->getName()) : LLStringUtil::null) )
+	const LLInventoryItem* item = getItem();
+
+	loaded_callback_func callback;
+	LLFilePicker::ESaveFilter saveFilter;
+
+	switch (format)
+	{
+		case LLPreviewTexture::FORMAT_PNG:
+			callback = LLPreviewTexture::onFileLoadedForSavePNG;
+			saveFilter = LLFilePicker::FFSAVE_PNG;
+			break;
+		case LLPreviewTexture::FORMAT_TGA:
+		default:
+			callback = LLPreviewTexture::onFileLoadedForSaveTGA;
+			saveFilter = LLFilePicker::FFSAVE_TGA;
+			break;
+	}
+
+	if( !file_picker.getSaveFile( saveFilter, item ? LLDir::getScrubbedFileName(item->getName()) : LLStringUtil::null) )
 	{
 		// User canceled or we failed to acquire save file.
 		return;
 	}
+
 	// remember the user-approved/edited file name.
 	mSaveFileName = file_picker.getFirstFile();
 	mLoadingFullImage = TRUE;
 	getWindow()->incBusyCount();
 
 	mImage->forceToSaveRawImage(0) ;//re-fetch the raw image if the old one is removed.
-	mImage->setLoadedCallback( LLPreviewTexture::onFileLoadedForSave, 
+	mImage->setLoadedCallback( callback, 
 								0, TRUE, FALSE, new LLUUID( mItemUUID ), &mCallbackTextureList );
 }
 
@@ -324,7 +356,7 @@ void LLPreviewTexture::reshape(S32 width, S32 height, BOOL called_from_parent)
 		}
 	}
 
-	mClientRect.setLeftTopAndSize(client_rect.getCenterX() - (client_width / 2), client_rect.getCenterY() +  (client_height / 2), client_width, client_height);	
+	mClientRect.setLeftTopAndSize(client_rect.getCenterX() - (client_width / 2), client_rect.getCenterY() +  (client_height / 2), client_width, client_height);
 
 }
 
@@ -340,7 +372,7 @@ void LLPreviewTexture::openToSave()
 }
 
 // static
-void LLPreviewTexture::onFileLoadedForSave(BOOL success, 
+void LLPreviewTexture::onFileLoadedForSaveTGA(BOOL success, 
 					   LLViewerFetchedTexture *src_vi,
 					   LLImageRaw* src, 
 					   LLImageRaw* aux_src, 
@@ -394,102 +426,91 @@ void LLPreviewTexture::onFileLoadedForSave(BOOL success,
 
 }
 
+// static
+void LLPreviewTexture::onFileLoadedForSavePNG(BOOL success, 
+											LLViewerFetchedTexture *src_vi,
+											LLImageRaw* src, 
+											LLImageRaw* aux_src, 
+											S32 discard_level,
+											BOOL final,
+											void* userdata)
+{
+	LLUUID* item_uuid = (LLUUID*) userdata;
+
+	LLPreviewTexture* self = LLFloaterReg::findTypedInstance<LLPreviewTexture>("preview_texture", *item_uuid);
+
+	if( final || !success )
+	{
+		delete item_uuid;
+
+		if( self )
+		{
+			self->getWindow()->decBusyCount();
+			self->mLoadingFullImage = FALSE;
+		}
+	}
+
+	if( self && final && success )
+	{
+		LLPointer<LLImagePNG> image_png = new LLImagePNG;
+		if( !image_png->encode( src, 0.0 ) )
+		{
+			LLSD args;
+			args["FILE"] = self->mSaveFileName;
+			LLNotificationsUtil::add("CannotEncodeFile", args);
+		}
+		else if( !image_png->save( self->mSaveFileName ) )
+		{
+			LLSD args;
+			args["FILE"] = self->mSaveFileName;
+			LLNotificationsUtil::add("CannotWriteFile", args);
+		}
+		else
+		{
+			self->mSavedFileTimer.reset();
+			self->mSavedFileTimer.setTimerExpirySec( SECONDS_TO_SHOW_FILE_SAVED_MSG );
+		}
+
+		self->mSaveFileName.clear();
+	}
+
+	if( self && !success )
+	{
+		LLNotificationsUtil::add("CannotDownloadFile");
+	}
+}
 
 // It takes a while until we get height and width information.
 // When we receive it, reshape the window accordingly.
 void LLPreviewTexture::updateDimensions()
 {
 	if (!mImage)
-		return;
-
-	if(mImage->getFullWidth() == 0 || mImage->getFullHeight() == 0)
 	{
 		return;
 	}
-
+	if ((mImage->getFullWidth() * mImage->getFullHeight()) == 0)
+	{
+		return;
+	}
 	
-	mUpdateDimensions = FALSE;
-
-	getChild<LLUICtrl>("dimensions")->setTextArg("[WIDTH]", llformat("%d", mImage->getFullWidth()));
+	// Update the width/height display every time
+	getChild<LLUICtrl>("dimensions")->setTextArg("[WIDTH]",  llformat("%d", mImage->getFullWidth()));
 	getChild<LLUICtrl>("dimensions")->setTextArg("[HEIGHT]", llformat("%d", mImage->getFullHeight()));
 
-	
-	LLRect dim_rect(getChildView("dimensions")->getRect());
-
-	S32 horiz_pad = 2 * (LLPANEL_BORDER_WIDTH + PREVIEW_PAD) + PREVIEW_RESIZE_HANDLE_SIZE;
-
-	// add space for dimensions and aspect ratio
-	S32 info_height = dim_rect.mTop + CLIENT_RECT_VPAD;
-
-	S32 screen_width = gFloaterView->getSnapRect().getWidth();
-	S32 screen_height = gFloaterView->getSnapRect().getHeight();
-
-	S32 max_image_width = screen_width - 2*horiz_pad;
-	S32 max_image_height = screen_height - (PREVIEW_HEADER_SIZE + CLIENT_RECT_VPAD) 
-		- (PREVIEW_BORDER + CLIENT_RECT_VPAD + info_height);
-
-	S32 client_width = llmin(max_image_width,mImage->getFullWidth());
-	S32 client_height = llmin(max_image_height,mImage->getFullHeight());
-
-	if (mAspectRatio > 0.f)
+	// Reshape the floater only when required
+	if (mUpdateDimensions)
 	{
-		if(mAspectRatio > 1.f)
-		{
-			client_height = llceil((F32)client_width / mAspectRatio);
-			if(client_height > max_image_height)
-			{
-				client_height = max_image_height;
-				client_width = llceil((F32)client_height * mAspectRatio);
-			}
-		}
-		else//mAspectRatio < 1.f
-		{
-			client_width = llceil((F32)client_height * mAspectRatio);
-			if(client_width > max_image_width)
-			{
-				client_width = max_image_width;
-				client_height = llceil((F32)client_width / mAspectRatio);
-			}
-		}
-	}
-	else
-	{
-
-		if(client_height > max_image_height)
-		{
-			F32 ratio = (F32)max_image_height/client_height;
-			client_height = max_image_height;
-			client_width = llceil((F32)client_height * ratio);
-		}
+		mUpdateDimensions = FALSE;
 		
-		if(client_width > max_image_width)
-		{
-			F32 ratio = (F32)max_image_width/client_width;
-			client_width = max_image_width;
-			client_height = llceil((F32)client_width * ratio);
-		}
+		//reshape floater
+		reshape(getRect().getWidth(), getRect().getHeight());
+
+		gFloaterView->adjustToFitScreen(this, FALSE);
+
+		LLRect dim_rect(getChildView("dimensions")->getRect());
+		LLRect aspect_label_rect(getChildView("aspect_ratio")->getRect());
+		getChildView("aspect_ratio")->setVisible( dim_rect.mRight < aspect_label_rect.mLeft);
 	}
-
-	//now back to whole floater
-	S32 floater_width = llmax(getMinWidth(),client_width + 2*horiz_pad);
-	S32 floater_height = llmax(getMinHeight(),client_height + (PREVIEW_HEADER_SIZE + CLIENT_RECT_VPAD)
-		+ (PREVIEW_BORDER + CLIENT_RECT_VPAD + info_height));
-
-	//reshape floater
-	reshape( floater_width, floater_height );
-	gFloaterView->adjustToFitScreen(this, FALSE);
-
-	//setup image rect...
-	LLRect client_rect(horiz_pad, getRect().getHeight(), getRect().getWidth() - horiz_pad, 0);
-	client_rect.mTop -= (PREVIEW_HEADER_SIZE + CLIENT_RECT_VPAD);
-	client_rect.mBottom += PREVIEW_BORDER + CLIENT_RECT_VPAD + info_height ;
-
-	mClientRect.setLeftTopAndSize(client_rect.getCenterX() - (client_width / 2), client_rect.getCenterY() +  (client_height / 2), client_width, client_height);	
-
-	// Hide the aspect ratio label if the window is too narrow
-	// Assumes the label should be to the right of the dimensions
-	LLRect aspect_label_rect(getChildView("aspect_ratio")->getRect());
-	getChildView("aspect_ratio")->setVisible( dim_rect.mRight < aspect_label_rect.mLeft);
 }
 
 

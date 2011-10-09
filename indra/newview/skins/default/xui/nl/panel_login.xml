@@ -10,11 +10,11 @@
 		<text name="first_name_text">
 			Voornaam:
 		</text>
-		<line_editor name="first_name_edit" tool_tip="[SECOND_LIFE] Voornaam"/>
+		<line_editor name="first_name_edit" tool_tip="[CURRENT_GRID] Voornaam"/>
 		<text name="last_name_text">
 			Achternaam:
 		</text>
-		<line_editor name="last_name_edit" tool_tip="[SECOND_LIFE] Achternaam"/>
+		<line_editor name="last_name_edit" tool_tip="[CURRENT_GRID] Achternaam"/>
 		<text name="password_text">
 			Paswoord:
 		</text>

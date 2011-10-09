@@ -124,7 +124,7 @@ public:
 	static void reshape();
 	static void setDisplayText(BOOL flag) { sDisplayText = flag ; }
 
-// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.2a) | Added: RLVa-1.0.0f
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.0.0f
 	const std::string& getObjectText() const						{ return mObjText; }
 	void               setObjectText(const std::string &utf8string)	{ mObjText = utf8string; }
 	static void        refreshAllObjectText();
@@ -166,7 +166,7 @@ private:
 	ETextAlignment	mTextAlignment;
 	EVertAlignment	mVertAlignment;
 	BOOL			mHidden;
-// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.2a) | Added: RLVa-1.0.0f
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.0.0f
 	std::string     mObjText;
 // [/RLVa:KB]
 

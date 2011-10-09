@@ -3,4 +3,6 @@
 	<menu_item_check label="Navigationsleiste anzeigen" name="ShowNavbarNavigationPanel"/>
 	<menu_item_check label="Favoritenleiste anzeigen" name="ShowNavbarFavoritesPanel"/>
 	<menu_item_check label="Mini-Standortleiste anzeigen" name="ShowMiniLocationPanel"/>
+	<menu_item_check label="Suchleiste anzeigen" name="ShowSearchTopBar"/>
+	<menu_item_check label="Position in Menüleiste anzeigen" name="ShowMenuBarLocation"/>
 </menu>

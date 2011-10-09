@@ -94,7 +94,8 @@ public:
 	{
 		Optional<std::string>			label;
 		Optional<bool>					tab_stop,
-										chrome;
+										chrome,
+										requests_front;
 		Optional<LLSD>					initial_value;
 
 		Optional<CommitCallbackParam>	init_callback,
@@ -143,6 +144,8 @@ protected:
 	virtual LLViewModel* getViewModel() const;
     // We shouldn't ever need to set this directly
     //virtual void    setViewModel(const LLViewModelPtr&);
+
+	virtual BOOL	postBuild();
 	
 public:
 	// LLView interface
@@ -209,7 +212,8 @@ public:
 
 	virtual void	setColor(const LLColor4& color);
 
-	F32 			getCurrentTransparency();
+	// Ansariel: Changed to virtual. We might want to change the transparency ourself!
+	virtual F32 	getCurrentTransparency();
 
 	void				setTransparencyType(ETypeTransparency type);
 	ETypeTransparency	getTransparencyType() const {return mTransparencyType;}
@@ -301,8 +305,9 @@ protected:
 
 private:
 
-	BOOL			mTabStop;
 	BOOL			mIsChrome;
+	BOOL			mRequestsFront;
+	BOOL			mTabStop;
 	BOOL			mTentative;
 	LLRootHandle<LLUICtrl> mUICtrlHandle;
 

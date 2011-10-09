@@ -152,6 +152,18 @@
                 </menu_item_call>
                <menu_item_call
                  enabled="false"
+                 label="Physics"
+                 layout="topleft"
+                 name="Self Physics">
+                    <menu_item_call.on_click
+                     function="Edit.TakeOff"
+                     parameter="physics" />
+                    <menu_item_call.on_enable
+                     function="Edit.EnableTakeOff"
+                     parameter="physics" />
+                </menu_item_call>
+               <menu_item_call
+                 enabled="false"
                  label="Alpha"
                  layout="topleft"
                  name="Self Alpha">
@@ -248,5 +260,12 @@
              function="Avatar.Debug" />
             <menu_item_call.on_visible
              function="IsGodCustomerService"/>
+    </menu_item_call>
+    <menu_item_call 
+      enabled="true"
+      label="Script Info"
+      name="ScriptInfo">
+      <menu_item_call.on_click
+       function="Tools.ScriptInfo" />
     </menu_item_call>
 </context_menu>

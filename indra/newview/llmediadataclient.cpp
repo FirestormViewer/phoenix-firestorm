@@ -39,6 +39,8 @@
 #include "llsdutil.h"
 #include "llmediaentry.h"
 #include "lltextureentry.h"
+#include "llviewercontrol.h"
+#include "llviewerparcelmedia.h"
 #include "llviewerregion.h"
 
 //
@@ -311,8 +313,7 @@ void LLMediaDataClient::serviceQueue()
 	if (!url.empty())
 	{
 		const LLSD &sd_payload = request->getPayload();
-		//Gah! Kill spammy message.
-		//LL_INFOS("LLMediaDataClient") << "Sending request for " << *request << LL_ENDL;
+		LL_INFOS("LLMediaDataClient") << "Sending request for " << *request << LL_ENDL;
 		
 		// Add this request to the non-queued tracking list
 		trackRequest(request);
@@ -975,9 +976,26 @@ void LLObjectMediaNavigateClient::enqueue(Request *request)
 
 void LLObjectMediaNavigateClient::navigate(LLMediaDataClientObject *object, U8 texture_index, const std::string &url)
 {
+	LL_INFOS("LLMediaDataClient") << "navigate() initiated: url='" << url << "', object=" << object->getID() << LL_ENDL;
 
-//	LL_INFOS("LLMediaDataClient") << "navigate() initiated: " << ll_print_sd(sd_payload) << LL_ENDL;
-	
+#if 0 // TS: disable MOAP filtering until we figure out how to do it right
+
+	if (gSavedSettings.getBOOL("MediaEnableFilter"))
+	{
+		// Media filter is active, so filter it.
+		LLViewerParcelMedia::filterMOAPUrl(object, this, texture_index, url);
+	}
+	else
+#endif
+	{
+		// Create a get request and put it in the queue.
+		enqueue(new RequestNavigate(object, this, texture_index, url));
+	}
+}
+
+// called if the media filter passes the request
+void LLObjectMediaNavigateClient::doNavigate(LLMediaDataClientObject *object, U8 texture_index, const std::string &url)
+{
 	// Create a get request and put it in the queue.
 	enqueue(new RequestNavigate(object, this, texture_index, url));
 }

@@ -170,6 +170,20 @@ LLSD LLControlVariable::getComparableValue(const LLSD& value)
 			storable_value = false;
 		}
 	}
+	else if (TYPE_LLSD == type() && value.isString())
+	{
+		LLPointer<LLSDNotationParser> parser = new LLSDNotationParser;
+		LLSD result;
+		std::stringstream value_stream(value.asString());
+		if (parser->parse(value_stream, result, LLSDSerialize::SIZE_UNLIMITED) != LLSDParser::PARSE_FAILURE)
+		{
+			storable_value = result;
+		}
+		else
+		{
+			storable_value = value;
+		}
+	}
 	else
 	{
 		storable_value = value;
@@ -821,11 +835,9 @@ U32 LLControlGroup::saveToFile(const std::string& filename, BOOL nondefault_only
 	return num_saved;
 }
 
-U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_values)
+U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_values, bool save_values)
 {
-	std::string name;
 	LLSD settings;
-	LLSD control_map;
 	llifstream infile;
 	infile.open(filename);
 	if(!infile.is_open())
@@ -849,8 +861,8 @@ U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_v
 	for(LLSD::map_const_iterator itr = settings.beginMap(); itr != settings.endMap(); ++itr)
 	{
 		bool persist = true;
-		name = (*itr).first;
-		control_map = (*itr).second;
+		std::string const & name = itr->first;
+		LLSD const & control_map = itr->second;
 		
 		if(control_map.has("Persist")) 
 		{
@@ -894,8 +906,7 @@ U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_v
 			}
 			else if(existing_control->isPersisted())
 			{
-				
-				existing_control->setValue(control_map["Value"]);
+				existing_control->setValue(control_map["Value"], save_values);
 			}
 			// *NOTE: If not persisted and not setting defaults, 
 			// the value should not get loaded.

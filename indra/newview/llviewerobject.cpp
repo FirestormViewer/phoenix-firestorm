@@ -47,6 +47,7 @@
 #include "llprimitive.h"
 #include "llquantize.h"
 #include "llregionhandle.h"
+#include "llsdserialize.h"
 #include "lltree_common.h"
 #include "llxfermanager.h"
 #include "message.h"
@@ -62,6 +63,7 @@
 #include "lldrawable.h"
 #include "llface.h"
 #include "llfloaterproperties.h"
+#include "llfloatertools.h"
 #include "llfollowcam.h"
 #include "llhudtext.h"
 #include "llselectmgr.h"
@@ -79,7 +81,6 @@
 #include "llviewerwindow.h" // For getSpinAxis
 #include "llvoavatar.h"
 #include "llvoavatarself.h"
-#include "llvoclouds.h"
 #include "llvograss.h"
 #include "llvoground.h"
 #include "llvolume.h"
@@ -87,7 +88,6 @@
 #include "llvopartgroup.h"
 #include "llvosky.h"
 #include "llvosurfacepatch.h"
-#include "llvotextbubble.h"
 #include "llvotree.h"
 #include "llvovolume.h"
 #include "llvowater.h"
@@ -100,8 +100,14 @@
 #include "lltrans.h"
 #include "llsdutil.h"
 #include "llmediaentry.h"
-// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
+#include "llaccountingquota.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
 
 //#define DEBUG_UPDATE_TYPE
@@ -168,10 +174,6 @@ LLViewerObject *LLViewerObject::createObject(const LLUUID &id, const LLPCode pco
 // 	  llwarns << "Creating new tree!" << llendl;
 // 	  res = new LLVOTree(id, pcode, regionp); break;
 	  res = NULL; break;
-	case LL_PCODE_LEGACY_TEXT_BUBBLE:
-	  res = new LLVOTextBubble(id, pcode, regionp); break;
-	case LL_VO_CLOUDS:
-	  res = new LLVOClouds(id, pcode, regionp); break;
 	case LL_VO_SURFACE_PATCH:
 	  res = new LLVOSurfacePatch(id, pcode, regionp); break;
 	case LL_VO_SKY:
@@ -205,6 +207,11 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mGLName(0),
 	mbCanSelect(TRUE),
 	mFlags(0),
+	mPhysicsShapeType(0),
+	mPhysicsGravity(0),
+	mPhysicsFriction(0),
+	mPhysicsDensity(0),
+	mPhysicsRestitution(0),
 	mDrawable(),
 	mCreateSelected(FALSE),
 	mRenderMedia(FALSE),
@@ -213,7 +220,6 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mLastInterpUpdateSecs(0.f),
 	mLastMessageUpdateSecs(0.f),
 	mLatestRecvPacketID(0),
-	mCircuitPacketCount(0),
 	mData(NULL),
 	mAudioSourcep(NULL),
 	mAudioGain(1.f),
@@ -237,7 +243,15 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mState(0),
 	mMedia(NULL),
 	mClickAction(0),
-	mAttachmentItemID(LLUUID::null)
+	mObjectCost(0),
+	mLinksetCost(0),
+	mPhysicsCost(0),
+	mLinksetPhysicsCost(0.f),
+	mCostStale(true),
+	mPhysicsShapeUnknown(true),
+	mAttachmentItemID(LLUUID::null),
+	mLastUpdateType(OUT_UNKNOWN),
+	mLastUpdateCached(FALSE)
 {
 	if (!is_global)
 	{
@@ -471,15 +485,9 @@ void LLViewerObject::initVOClasses()
 	// Initialized shared class stuff first.
 	LLVOAvatar::initClass();
 	LLVOTree::initClass();
-	if (gNoRender)
-	{
-		// Don't init anything else in drone mode
-		return;
-	}
 	llinfos << "Viewer Object size: " << sizeof(LLViewerObject) << llendl;
 	LLVOGrass::initClass();
 	LLVOWater::initClass();
-	LLVOSky::initClass();
 	LLVOVolume::initClass();
 }
 
@@ -516,23 +524,125 @@ void LLViewerObject::setNameValueList(const std::string& name_value_list)
 	}
 }
 
-
 // This method returns true if the object is over land owned by the
 // agent.
-BOOL LLViewerObject::isOverAgentOwnedLand() const
+bool LLViewerObject::isReturnable()
 {
-	return mRegionp
-		&& mRegionp->getParcelOverlay()
-		&& mRegionp->getParcelOverlay()->isOwnedSelf(getPositionRegion());
+	if (isAttachment())
+	{
+		return false;
+	}
+		
+// [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+	// Block if: @rez=n restricted and owned by us or a group *or* @unsit=n restricted and being sat on by us
+	if ( (rlv_handler_t::isEnabled()) &&
+		 ( ((gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) && ((permYouOwner() || permGroupOwner()))) ||
+		   ((gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (isAgentAvatarValid()) && (getRootEdit()->isChild(gAgentAvatarp))) ) )
+	{
+		return false;
+	}
+// [/RLVa:KB]
+	std::vector<LLBBox> boxes;
+	boxes.push_back(LLBBox(getPositionRegion(), getRotationRegion(), getScale() * -0.5f, getScale() * 0.5f).getAxisAligned());
+	for (child_list_t::iterator iter = mChildList.begin();
+		 iter != mChildList.end(); iter++)
+	{
+		LLViewerObject* child = *iter;
+		boxes.push_back( LLBBox(child->getPositionRegion(), child->getRotationRegion(), child->getScale() * -0.5f, child->getScale() * 0.5f).getAxisAligned());
+	}
+
+	bool result = (mRegionp && mRegionp->objectIsReturnable(getPositionRegion(), boxes)) ? 1 : 0;
+	
+	if ( !result )
+	{		
+		//Get list of neighboring regions relative to this vo's region
+		std::vector<LLViewerRegion*> uniqueRegions;
+		mRegionp->getNeighboringRegions( uniqueRegions );
+	
+		//Build aabb's - for root and all children
+		std::vector<PotentialReturnableObject> returnables;
+		typedef std::vector<LLViewerRegion*>::iterator RegionIt;
+		RegionIt regionStart = uniqueRegions.begin();
+		RegionIt regionEnd   = uniqueRegions.end();
+		
+		for (; regionStart != regionEnd; ++regionStart )
+		{
+			LLViewerRegion* pTargetRegion = *regionStart;
+			//Add the root vo as there may be no children and we still want
+			//to test for any edge overlap
+			buildReturnablesForChildrenVO( returnables, this, pTargetRegion );
+			//Add it's children
+			for (child_list_t::iterator iter = mChildList.begin();  iter != mChildList.end(); iter++)
+			{
+				LLViewerObject* pChild = *iter;		
+				buildReturnablesForChildrenVO( returnables, pChild, pTargetRegion );
+			}
+		}	
+	
+		//TBD#Eventually create a region -> box list map 
+		typedef std::vector<PotentialReturnableObject>::iterator ReturnablesIt;
+		ReturnablesIt retCurrentIt = returnables.begin();
+		ReturnablesIt retEndIt = returnables.end();
+	
+		for ( ; retCurrentIt !=retEndIt; ++retCurrentIt )
+		{
+			boxes.clear();
+			LLViewerRegion* pRegion = (*retCurrentIt).pRegion;
+			boxes.push_back( (*retCurrentIt).box );	
+			bool retResult = 	pRegion
+							 && pRegion->childrenObjectReturnable( boxes )
+							 && pRegion->canManageEstate();
+			if ( retResult )
+			{ 
+				result = true;
+				break;
+			}
+		}
+	}
+	return result;
 }
 
-// This method returns true if the object is over land owned by the
-// agent.
-BOOL LLViewerObject::isOverGroupOwnedLand() const
+void LLViewerObject::buildReturnablesForChildrenVO( std::vector<PotentialReturnableObject>& returnables, LLViewerObject* pChild, LLViewerRegion* pTargetRegion )
 {
-	return mRegionp 
-		&& mRegionp->getParcelOverlay()
-		&& mRegionp->getParcelOverlay()->isOwnedGroup(getPositionRegion());
+	if ( !pChild )
+	{
+		llerrs<<"child viewerobject is NULL "<<llendl;
+	}
+	
+	constructAndAddReturnable( returnables, pChild, pTargetRegion );
+	
+	//We want to handle any children VO's as well
+	for (child_list_t::iterator iter = pChild->mChildList.begin();  iter != pChild->mChildList.end(); iter++)
+	{
+		LLViewerObject* pChildofChild = *iter;
+		buildReturnablesForChildrenVO( returnables, pChildofChild, pTargetRegion );
+	}
+}
+
+void LLViewerObject::constructAndAddReturnable( std::vector<PotentialReturnableObject>& returnables, LLViewerObject* pChild, LLViewerRegion* pTargetRegion )
+{
+	
+	LLVector3 targetRegionPos;
+	targetRegionPos.setVec( pChild->getPositionGlobal() );	
+	
+	LLBBox childBBox = LLBBox( targetRegionPos, pChild->getRotationRegion(), pChild->getScale() * -0.5f, 
+							    pChild->getScale() * 0.5f).getAxisAligned();
+	
+	LLVector3 edgeA = targetRegionPos + childBBox.getMinLocal();
+	LLVector3 edgeB = targetRegionPos + childBBox.getMaxLocal();
+	
+	LLVector3d edgeAd, edgeBd;
+	edgeAd.setVec(edgeA);
+	edgeBd.setVec(edgeB);
+	
+	//Only add the box when either of the extents are in a neighboring region
+	if ( pTargetRegion->pointInRegionGlobal( edgeAd ) || pTargetRegion->pointInRegionGlobal( edgeBd ) )
+	{
+		PotentialReturnableObject returnableObj;
+		returnableObj.box		= childBBox;
+		returnableObj.pRegion	= pTargetRegion;
+		returnables.push_back( returnableObj );
+	}
 }
 
 BOOL LLViewerObject::setParent(LLViewerObject* parent)
@@ -635,7 +745,10 @@ void LLViewerObject::addThisAndNonJointChildren(std::vector<LLViewerObject*>& ob
 	}
 }
 
-BOOL LLViewerObject::isChild(LLViewerObject *childp) const
+//BOOL LLViewerObject::isChild(LLViewerObject *childp) const
+// [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+BOOL LLViewerObject::isChild(const LLViewerObject *childp) const
+// [/RLVa:KB]
 {
 	for (child_list_t::const_iterator iter = mChildList.begin();
 		 iter != mChildList.end(); iter++)
@@ -850,6 +963,13 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 #ifdef DEBUG_UPDATE_TYPE
 				llinfos << "Full:" << getID() << llendl;
 #endif
+				//clear cost and linkset cost
+				mCostStale = true;
+				if (isSelected())
+				{
+					gFloaterTools->dirty();
+				}
+
 				LLUUID audio_uuid;
 				LLUUID owner_id;	// only valid if audio_uuid or particle system is not null
 				F32    gain;
@@ -1105,7 +1225,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					coloru.mV[3] = 255 - coloru.mV[3];
 					mText->setColor(LLColor4(coloru));
 					mText->setString(temp_string);
-// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Added: RLVa-1.0.0f
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.0.0f
 					if (rlv_handler_t::isEnabled())
 					{
 						mText->setObjectText(temp_string);
@@ -1421,6 +1541,13 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 #ifdef DEBUG_UPDATE_TYPE
 				llinfos << "CompFull:" << getID() << llendl;
 #endif
+				mCostStale = true;
+
+				if (isSelected())
+				{
+					gFloaterTools->dirty();
+				}
+	
 				dp->unpackU32(crc, "CRC");
 				mTotalCRC = crc;
 				dp->unpackU8(material, "Material");
@@ -1503,7 +1630,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					coloru.mV[3] = 255 - coloru.mV[3];
 					mText->setColor(LLColor4(coloru));
 					mText->setString(temp_string);
-// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Added: RLVa-1.0.0f
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.0.0f
 					if (rlv_handler_t::isEnabled())
 					{
 						mText->setObjectText(temp_string);
@@ -1902,7 +2029,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 	//
 	//
 
-	// WTF?   If we're going to skip this message, why are we 
+	// If we're going to skip this message, why are we 
 	// doing all the parenting, etc above?
 	U32 packet_id = mesgsys->getCurrentRecvPacketID(); 
 	if (packet_id < mLatestRecvPacketID && 
@@ -1913,7 +2040,6 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 	}
 
 	mLatestRecvPacketID = packet_id;
-	mCircuitPacketCount = 0;
 
 	// Set the change flags for scale
 	if (new_scale != getScale())
@@ -1982,23 +2108,16 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 
 	if ( gShowObjectUpdates )
 	{
-		if (!((mPrimitiveCode == LL_PCODE_LEGACY_AVATAR) && (((LLVOAvatar *) this)->isSelf()))
-			&& mRegionp)
+		LLColor4 color;
+		if (update_type == OUT_TERSE_IMPROVED)
 		{
-			LLViewerObject* object = gObjectList.createObjectViewer(LL_PCODE_LEGACY_TEXT_BUBBLE, mRegionp);
-			LLVOTextBubble* bubble = (LLVOTextBubble*) object;
-
-			if (update_type == OUT_TERSE_IMPROVED)
-			{
-				bubble->mColor.setVec(0.f, 0.f, 1.f, 1.f);
-			}
-			else
-			{
-				bubble->mColor.setVec(1.f, 0.f, 0.f, 1.f);
-			}
-			object->setPositionGlobal(getPositionGlobal());
-			gPipeline.addObject(object);
+			color.setVec(0.f, 0.f, 1.f, 1.f);
 		}
+		else
+		{
+			color.setVec(1.f, 0.f, 0.f, 1.f);
+		}
+		gPipeline.addDebugBlip(getPositionAgent(), color);
 	}
 
 	if ((0.0f == vel_mag_sq) && 
@@ -2182,12 +2301,6 @@ BOOL LLViewerObject::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
 		}
 	}
 
-	if (gNoRender)
-	{
-		// Skip drawable stuff if not rendering.
-		return TRUE;
-	}
-
 	updateDrawable(FALSE);
 
 	return TRUE;
@@ -2236,7 +2349,8 @@ void LLViewerObject::interpolateLinearMotion(const F64 & time, const F32 & dt)
 		LLVector3 new_pos = (vel + (0.5f * (dt-PHYSICS_TIMESTEP)) * accel) * dt;	
 		LLVector3 new_v = accel * dt;
 
-		if (time_since_last_update > sPhaseOutUpdateInterpolationTime)
+		if (time_since_last_update > sPhaseOutUpdateInterpolationTime &&
+			sPhaseOutUpdateInterpolationTime > 0.0)
 		{	// Haven't seen a viewer update in a while, check to see if the ciruit is still active
 			if (mRegionp)
 			{	// The simulator will NOT send updates if the object continues normally on the path
@@ -2245,9 +2359,12 @@ void LLViewerObject::interpolateLinearMotion(const F64 & time, const F32 & dt)
 				LLCircuitData *cdp = gMessageSystem->mCircuitInfo.findCircuit( mRegionp->getHost() );
 				if (cdp)
 				{
+					// Find out how many seconds since last packet arrived on the circuit
+					F64 time_since_last_packet = LLMessageSystem::getMessageTimeSeconds() - cdp->getLastPacketInTime();
+
 					if (!cdp->isAlive() ||		// Circuit is dead or blocked
 						 cdp->isBlocked() ||	// or doesn't seem to be getting any packets
-						 (mCircuitPacketCount > 0 && mCircuitPacketCount == cdp->getPacketsIn()))
+						 (time_since_last_packet > sPhaseOutUpdateInterpolationTime))
 					{
 						// Start to reduce motion interpolation since we haven't seen a server update in a while
 						F64 time_since_last_interpolation = time - mLastInterpUpdateSecs;
@@ -2278,9 +2395,6 @@ void LLViewerObject::interpolateLinearMotion(const F64 & time, const F32 & dt)
 						new_pos = new_pos * ((F32) phase_out);
 						new_v = new_v * ((F32) phase_out);
 					}
-
-					// Save current circuit packet count to see if it changes 
-					mCircuitPacketCount = cdp->getPacketsIn();
 				}
 			}
 		}
@@ -3039,6 +3153,8 @@ void LLViewerObject::setScale(const LLVector3 &scale, BOOL damped)
 		{
 			if (!mOnMap)
 			{
+				llassert_always(LLWorld::getInstance()->getRegionFromHandle(getRegion()->getHandle()));
+
 				gObjectList.addToMap(this);
 				mOnMap = TRUE;
 			}
@@ -3054,21 +3170,126 @@ void LLViewerObject::setScale(const LLVector3 &scale, BOOL damped)
 	}
 }
 
-void LLViewerObject::updateSpatialExtents(LLVector3& newMin, LLVector3 &newMax)
+void LLViewerObject::setObjectCost(F32 cost)
 {
-	LLVector3 center = getRenderPosition();
-	LLVector3 size = getScale();
-	newMin.setVec(center-size);
-	newMax.setVec(center+size);
-	mDrawable->setPositionGroup((newMin + newMax) * 0.5f);
+	mObjectCost = cost;
+	mCostStale = false;
+
+	if (isSelected())
+	{
+		gFloaterTools->dirty();
+	}
+}
+
+void LLViewerObject::setLinksetCost(F32 cost)
+{
+	mLinksetCost = cost;
+	mCostStale = false;
+	
+	if (isSelected())
+	{
+		gFloaterTools->dirty();
+	}
+}
+
+void LLViewerObject::setPhysicsCost(F32 cost)
+{
+	mPhysicsCost = cost;
+	mCostStale = false;
+
+	if (isSelected())
+	{
+		gFloaterTools->dirty();
+	}
+}
+
+void LLViewerObject::setLinksetPhysicsCost(F32 cost)
+{
+	mLinksetPhysicsCost = cost;
+	mCostStale = false;
+	
+	if (isSelected())
+	{
+		gFloaterTools->dirty();
+	}
+}
+
+
+F32 LLViewerObject::getObjectCost()
+{
+	if (mCostStale)
+	{
+		gObjectList.updateObjectCost(this);
+	}
+	
+	return mObjectCost;
+}
+
+F32 LLViewerObject::getLinksetCost()
+{
+	if (mCostStale)
+	{
+		gObjectList.updateObjectCost(this);
+	}
+
+	return mLinksetCost;
+}
+
+F32 LLViewerObject::getPhysicsCost()
+{
+	if (mCostStale)
+	{
+		gObjectList.updateObjectCost(this);
+	}
+	
+	return mPhysicsCost;
+}
+
+F32 LLViewerObject::getLinksetPhysicsCost()
+{
+	if (mCostStale)
+	{
+		gObjectList.updateObjectCost(this);
+	}
+
+	return mLinksetPhysicsCost;
+}
+
+F32 LLViewerObject::getStreamingCost(S32* bytes, S32* visible_bytes)
+{
+	return 0.f;
+}
+
+U32 LLViewerObject::getTriangleCount()
+{
+	return 0;
+}
+
+U32 LLViewerObject::getHighLODTriangleCount()
+{
+	return 0;
+}
+
+void LLViewerObject::updateSpatialExtents(LLVector4a& newMin, LLVector4a &newMax)
+{
+	LLVector4a center;
+	center.load3(getRenderPosition().mV);
+	LLVector4a size;
+	size.load3(getScale().mV);
+	newMin.setSub(center, size);
+	newMax.setAdd(center, size);
+	
+	mDrawable->setPositionGroup(center);
 }
 
 F32 LLViewerObject::getBinRadius()
 {
 	if (mDrawable.notNull())
 	{
-		const LLVector3* ext = mDrawable->getSpatialExtents();
-		return (ext[1]-ext[0]).magVec();
+		const LLVector4a* ext = mDrawable->getSpatialExtents();
+		LLVector4a diff;
+		diff.setSub(ext[1], ext[0]);
+		return diff.getLength3().getF32();
 	}
 	
 	return getScale().magVec();
@@ -3134,7 +3355,7 @@ void LLViewerObject::boostTexturePriority(BOOL boost_children /* = TRUE */)
  		getTEImage(i)->setBoostLevel(LLViewerTexture::BOOST_SELECTED);
 	}
 
-	if (isSculpted())
+	if (isSculpted() && !isMesh())
 	{
 		LLSculptParams *sculpt_params = (LLSculptParams *)getParameterEntry(LLNetworkData::PARAMS_SCULPT);
 		LLUUID sculpt_id = sculpt_params->getSculptTexture();
@@ -3274,6 +3495,11 @@ LLNameValue *LLViewerObject::getNVPair(const std::string& name) const
 	char		*canonical_name;
 
 	canonical_name = gNVNameTable.addString(name);
+	// It's possible for addString to return NULL.
+	if (canonical_name == NULL)
+	{
+		return NULL;
+	}
 
 	// If you access a map with a name that isn't in it, it will add the name and a null pointer.
 	// So first check if the data is in the map.
@@ -3374,6 +3600,15 @@ const LLVector3 LLViewerObject::getPositionEdit() const
 
 const LLVector3 LLViewerObject::getRenderPosition() const
 {
+	if (mDrawable.notNull() && mDrawable->isState(LLDrawable::RIGGED))
+	{
+		LLVOAvatar* avatar = getAvatar();
+		if (avatar)
+		{
+			return avatar->getPositionAgent();
+		}
+	}
+
 	if (mDrawable.isNull() || mDrawable->getGeneration() < 0)
 	{
 		return getPositionAgent();
@@ -3392,6 +3627,11 @@ const LLVector3 LLViewerObject::getPivotPositionAgent() const
 const LLQuaternion LLViewerObject::getRenderRotation() const
 {
 	LLQuaternion ret;
+	if (mDrawable.notNull() && mDrawable->isState(LLDrawable::RIGGED))
+	{
+		return ret;
+	}
+	
 	if (mDrawable.isNull() || mDrawable->isStatic())
 	{
 		ret = getRotationEdit();
@@ -3566,8 +3806,8 @@ void LLViewerObject::setPositionParent(const LLVector3 &pos_parent, BOOL damped)
 	// Set position relative to parent, if no parent, relative to region
 	if (!isRoot())
 	{
-		LLViewerObject::setPosition(pos_parent);
-		updateDrawable(damped);
+		LLViewerObject::setPosition(pos_parent, damped);
+		//updateDrawable(damped);
 	}
 	else
 	{
@@ -3608,6 +3848,7 @@ void LLViewerObject::setPositionEdit(const LLVector3 &pos_edit, BOOL damped)
 		LLVector3 position_offset = getPosition() * getParent()->getRotation();
 
 		((LLViewerObject *)getParent())->setPositionEdit(pos_edit - position_offset);
+		updateDrawable(damped);
 	}
 	else if (isJointChild())
 	{
@@ -3616,15 +3857,14 @@ void LLViewerObject::setPositionEdit(const LLVector3 &pos_edit, BOOL damped)
 		LLQuaternion inv_parent_rot = parent->getRotation();
 		inv_parent_rot.transQuat();
 		LLVector3 pos_parent = (pos_edit - parent->getPositionRegion()) * inv_parent_rot;
-		LLViewerObject::setPosition(pos_parent);
+		LLViewerObject::setPosition(pos_parent, damped);
 	}
 	else
 	{
-		LLViewerObject::setPosition(pos_edit);
+		LLViewerObject::setPosition(pos_edit, damped);
 		mPositionRegion = pos_edit;
 		mPositionAgent = mRegionp->getPosAgentFromRegion(mPositionRegion);
-	}
-	updateDrawable(damped);
+	}	
 }
 
 
@@ -3660,12 +3900,21 @@ BOOL LLViewerObject::lineSegmentBoundingBox(const LLVector3& start, const LLVect
 		return FALSE;
 	}
 
-	const LLVector3* ext = mDrawable->getSpatialExtents();
+	const LLVector4a* ext = mDrawable->getSpatialExtents();
 
-	LLVector3 center = (ext[1]+ext[0])*0.5f;
-	LLVector3 size = (ext[1]-ext[0])*0.5f;
+	//VECTORIZE THIS
+	LLVector4a center;
+	center.setAdd(ext[1], ext[0]);
+	center.mul(0.5f);
+	LLVector4a size;
+	size.setSub(ext[1], ext[0]);
+	size.mul(0.5f);
 
-	return LLLineSegmentBoxIntersect(start, end, center, size);
+	LLVector4a starta, enda;
+	starta.load3(start.mV);
+	enda.load3(end.mV);
+
+	return LLLineSegmentBoxIntersect(starta, enda, center, size);
 }
 
 U8 LLViewerObject::getMediaType() const
@@ -4429,7 +4678,7 @@ void LLViewerObject::setParticleSource(const LLPartSysData& particle_parameters,
 			LLViewerTexture* image;
 			if (mPartSourcep->mPartSysData.mPartImageID == LLUUID::null)
 			{
-				image = LLViewerTextureManager::getFetchedTextureFromFile("pixiesmall.tga");
+				image = LLViewerTextureManager::getFetchedTextureFromFile("pixiesmall.j2c");
 			}
 			else
 			{
@@ -4684,6 +4933,10 @@ void LLViewerObject::adjustAudioGain(const F32 gain)
 
 bool LLViewerObject::unpackParameterEntry(U16 param_type, LLDataPacker *dp)
 {
+	if (LLNetworkData::PARAMS_MESH == param_type)
+	{
+		param_type = LLNetworkData::PARAMS_SCULPT;
+	}
 	ExtraParameter* param = getExtraParameterEntryCreate(param_type);
 	if (param)
 	{
@@ -4927,7 +5180,7 @@ BOOL LLViewerObject::permYouOwner() const
 		return TRUE;
 #else
 # ifdef TOGGLE_HACKED_GODLIKE_VIEWER
-		if (!LLGridManager::getInstance()->isInProductionGrid()
+		if (LLGridManager::getInstance()->isInSLBeta()
             && (gAgent.getGodLevel() >= GOD_MAINTENANCE))
 		{
 			return TRUE;
@@ -4964,7 +5217,7 @@ BOOL LLViewerObject::permOwnerModify() const
 		return TRUE;
 #else
 # ifdef TOGGLE_HACKED_GODLIKE_VIEWER
-		if (!LLGridManager::getInstance()->isInProductionGrid()
+		if (LLGridManager::getInstance()->isInSLBeta()
             && (gAgent.getGodLevel() >= GOD_MAINTENANCE))
 	{
 			return TRUE;
@@ -4988,7 +5241,7 @@ BOOL LLViewerObject::permModify() const
 		return TRUE;
 #else
 # ifdef TOGGLE_HACKED_GODLIKE_VIEWER
-		if (!LLGridManager::getInstance()->isInProductionGrid()
+		if (LLGridManager::getInstance()->isInSLBeta()
             && (gAgent.getGodLevel() >= GOD_MAINTENANCE))
 	{
 			return TRUE;
@@ -5012,7 +5265,7 @@ BOOL LLViewerObject::permCopy() const
 		return TRUE;
 #else
 # ifdef TOGGLE_HACKED_GODLIKE_VIEWER
-		if (!LLGridManager::getInstance()->isInProductionGrid()
+		if (LLGridManager::getInstance()->isInSLBeta()
             && (gAgent.getGodLevel() >= GOD_MAINTENANCE))
 		{
 			return TRUE;
@@ -5036,7 +5289,7 @@ BOOL LLViewerObject::permMove() const
 		return TRUE;
 #else
 # ifdef TOGGLE_HACKED_GODLIKE_VIEWER
-		if (!LLGridManager::getInstance()->isInProductionGrid()
+		if (LLGridManager::getInstance()->isInSLBeta()
             && (gAgent.getGodLevel() >= GOD_MAINTENANCE))
 		{
 			return TRUE;
@@ -5060,7 +5313,7 @@ BOOL LLViewerObject::permTransfer() const
 		return TRUE;
 #else
 # ifdef TOGGLE_HACKED_GODLIKE_VIEWER
-		if (!LLGridManager::getInstance()->isInProductionGrid()
+		if (LLGridManager::getInstance()->isInSLBeta()
             && (gAgent.getGodLevel() >= GOD_MAINTENANCE))
 		{
 			return TRUE;
@@ -5079,8 +5332,8 @@ BOOL LLViewerObject::permTransfer() const
 // given you modify rights to.  JC
 BOOL LLViewerObject::allowOpen() const
 {
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.0.0b
-	return !flagInventoryEmpty() && (permYouOwner() || permModify()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT));
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+	return !flagInventoryEmpty() && (permYouOwner() || permModify()) && ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canEdit(this)));
 // [/RLVa:KB]
 //	return !flagInventoryEmpty() && (permYouOwner() || permModify());
 }
@@ -5137,7 +5390,6 @@ void LLViewerObject::setRegion(LLViewerRegion *regionp)
 	}
 	
 	mLatestRecvPacketID = 0;
-	mCircuitPacketCount = 0;
 	mRegionp = regionp;
 
 	for (child_list_t::iterator i = mChildList.begin(); i != mChildList.end(); ++i)
@@ -5171,7 +5423,7 @@ bool LLViewerObject::specialHoverCursor() const
 			|| (mClickAction != 0);
 }
 
-void LLViewerObject::updateFlags()
+void LLViewerObject::updateFlags(BOOL physics_changed)
 {
 	LLViewerRegion* regionp = getRegion();
 	if(!regionp) return;
@@ -5184,6 +5436,15 @@ void LLViewerObject::updateFlags()
 	gMessageSystem->addBOOL("IsTemporary", flagTemporaryOnRez() );
 	gMessageSystem->addBOOL("IsPhantom", flagPhantom() );
 	gMessageSystem->addBOOL("CastsShadows", flagCastShadows() );
+	if (physics_changed)
+	{
+		gMessageSystem->nextBlock("ExtraPhysics");
+		gMessageSystem->addU8("PhysicsShapeType", getPhysicsShapeType() );
+		gMessageSystem->addF32("Density", getPhysicsDensity() );
+		gMessageSystem->addF32("Friction", getPhysicsFriction() );
+		gMessageSystem->addF32("Restitution", getPhysicsRestitution() );
+		gMessageSystem->addF32("GravityMultiplier", getPhysicsGravity() );
+	}
 	gMessageSystem->sendReliable( regionp->getHost() );
 }
 
@@ -5214,6 +5475,44 @@ BOOL LLViewerObject::setFlags(U32 flags, BOOL state)
 		updateFlags();
 	}
 	return setit;
+}
+
+void LLViewerObject::setPhysicsShapeType(U8 type)
+{
+	mPhysicsShapeUnknown = false;
+	mPhysicsShapeType = type;
+	mCostStale = true;
+}
+
+void LLViewerObject::setPhysicsGravity(F32 gravity)
+{
+	mPhysicsGravity = gravity;
+}
+
+void LLViewerObject::setPhysicsFriction(F32 friction)
+{
+	mPhysicsFriction = friction;
+}
+
+void LLViewerObject::setPhysicsDensity(F32 density)
+{
+	mPhysicsDensity = density;
+}
+
+void LLViewerObject::setPhysicsRestitution(F32 restitution)
+{
+	mPhysicsRestitution = restitution;
+}
+
+U8 LLViewerObject::getPhysicsShapeType() const
+{ 
+	if (mPhysicsShapeUnknown)
+	{
+		mPhysicsShapeUnknown = false;
+		gObjectList.updatePhysicsFlags(this);
+	}
+
+	return mPhysicsShapeType; 
 }
 
 void LLViewerObject::applyAngularVelocity(F32 dt)
@@ -5437,6 +5736,26 @@ void LLViewerObject::setAttachmentItemID(const LLUUID &id)
 	mAttachmentItemID = id;
 }
 
+EObjectUpdateType LLViewerObject::getLastUpdateType() const
+{
+	return mLastUpdateType;
+}
+
+void LLViewerObject::setLastUpdateType(EObjectUpdateType last_update_type)
+{
+	mLastUpdateType = last_update_type;
+}
+
+BOOL LLViewerObject::getLastUpdateCached() const
+{
+	return mLastUpdateCached;
+}
+
+void LLViewerObject::setLastUpdateCached(BOOL last_update_cached)
+{
+	mLastUpdateCached = last_update_cached;
+}
+
 const LLUUID &LLViewerObject::extractAttachmentItemID()
 {
 	LLUUID item_id = LLUUID::null;
@@ -5451,4 +5770,83 @@ const LLUUID &LLViewerObject::extractAttachmentItemID()
 	}
 	setAttachmentItemID(item_id);
 	return getAttachmentItemID();
+}
+
+//virtual
+LLVOAvatar* LLViewerObject::getAvatar() const
+{
+	if (isAttachment())
+	{
+		LLViewerObject* vobj = (LLViewerObject*) getParent();
+
+		while (vobj && !vobj->asAvatar())
+		{
+			vobj = (LLViewerObject*) vobj->getParent();
+		}
+
+		return (LLVOAvatar*) vobj;
+	}
+
+	return NULL;
+}
+
+
+class ObjectPhysicsProperties : public LLHTTPNode
+{
+public:
+	virtual void post(
+		ResponsePtr responder,
+		const LLSD& context,
+		const LLSD& input) const
+	{
+		LLSD object_data = input["body"]["ObjectData"];
+		S32 num_entries = object_data.size();
+		
+		for ( S32 i = 0; i < num_entries; i++ )
+		{
+			LLSD& curr_object_data = object_data[i];
+			U32 local_id = curr_object_data["LocalID"].asInteger();
+
+			// Iterate through nodes at end, since it can be on both the regular AND hover list
+			struct f : public LLSelectedNodeFunctor
+			{
+				U32 mID;
+				f(const U32& id) : mID(id) {}
+				virtual bool apply(LLSelectNode* node)
+				{
+					return (node->getObject() && node->getObject()->mLocalID == mID );
+				}
+			} func(local_id);
+
+			LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstNode(&func);
+
+			if (node)
+			{
+				// The LLSD message builder doesn't know how to handle U8, so we need to send as S8 and cast
+				U8 type = (U8)curr_object_data["PhysicsShapeType"].asInteger();
+				F32 density = (F32)curr_object_data["Density"].asReal();
+				F32 friction = (F32)curr_object_data["Friction"].asReal();
+				F32 restitution = (F32)curr_object_data["Restitution"].asReal();
+				F32 gravity = (F32)curr_object_data["GravityMultiplier"].asReal();
+
+				node->getObject()->setPhysicsShapeType(type);
+				node->getObject()->setPhysicsGravity(gravity);
+				node->getObject()->setPhysicsFriction(friction);
+				node->getObject()->setPhysicsDensity(density);
+				node->getObject()->setPhysicsRestitution(restitution);
+			}	
+		}
+		
+		dialog_refresh_all();
+	};
+};
+
+LLHTTPRegistration<ObjectPhysicsProperties>
+	gHTTPRegistrationObjectPhysicsProperties("/message/ObjectPhysicsProperties");
+
+
+void LLViewerObject::updateQuota( const SelectionQuota& quota )
+{
+	//update quotas
+	mSelectionQuota = quota;
 }

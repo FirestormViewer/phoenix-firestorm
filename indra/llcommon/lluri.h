@@ -94,8 +94,9 @@ public:
 	std::string opaque() const;		///< everything after the colon
   
   // for schemes that follow path like syntax (http, https, ftp)
-  std::string authority() const;	// ex.: "host.com:80"
+  std::string authority() const;	// ex.: "user:pass@host.com:80"
   std::string hostName() const;	// ex.: "host.com"
+  std::string hostNameAndPort() const;	// ex.: "host.com:80"
   std::string userName() const;
   std::string password() const;
   U16 hostPort() const;			// ex.: 80, will include implicit port
@@ -133,6 +134,28 @@ public:
 	 * @return Returns the rfc 1738 escaped uri or an empty string.
 	 */
 	static std::string escape(const std::string& str);
+
+	/**
+	 * @brief The same as escape, but also does not escape:
+	 *  :@!$'()*+,=
+	 *
+	 * @see http://www.ietf.org/rfc/rfc1738.txt
+	 *
+	 * @param str The raw URI to escape.
+	 * @return Returns the escaped uri or an empty string.
+	 */
+	static std::string escapeQueryValue(const std::string& str);
+
+	/**
+	 * @brief The same as escape, but also does not escape:
+	 *  :@!$'()*+,
+	 *
+	 * @see http://www.ietf.org/rfc/rfc1738.txt
+	 *
+	 * @param str The raw URI to escape.
+	 * @return Returns the escaped uri or an empty string.
+	 */
+	static std::string escapeQueryVariable(const std::string& str);
 
 	/**
 	 * @brief Escape a string with a specified set of allowed characters.

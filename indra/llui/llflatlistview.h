@@ -108,6 +108,9 @@ public:
 
 		/** textbox with info message when list is empty*/
 		Optional<LLTextBox::Params> no_items_text;
+		
+		//KC *hack*
+		Optional<U32> magical_hacky_height_padding; 
 
 		Params();
 	};
@@ -434,6 +437,9 @@ private:
 	LLViewBorder* mSelectedItemsBorder;
 
 	commit_signal_t	mOnReturnSignal;
+	
+	//KC *hack*
+	S32 mMagicalHackyHeightPadding;
 };
 
 /**
@@ -450,8 +456,9 @@ private:
  */
 class LLFlatListViewEx : public LLFlatListView
 {
-	LOG_CLASS(LLFlatListViewEx);
 public:
+	LOG_CLASS(LLFlatListViewEx);
+
 	struct Params : public LLInitParam::Block<Params, LLFlatListView::Params>
 	{
 		/**

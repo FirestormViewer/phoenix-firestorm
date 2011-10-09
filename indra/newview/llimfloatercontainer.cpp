@@ -38,6 +38,7 @@
 #include "llnearbychat.h"
 #include "fscontactsfloater.h"
 #include "llfloater.h"
+#include "llviewercontrol.h"
 
 //
 // LLIMFloaterContainer
@@ -57,7 +58,10 @@ LLIMFloaterContainer::~LLIMFloaterContainer()
 BOOL LLIMFloaterContainer::postBuild()
 {
 	
-	addFloater(FSFloaterContacts::getInstance(), TRUE);
+	if (!gSavedSettings.getBOOL("ContactsTornOff"))
+	{
+		addFloater(FSFloaterContacts::getInstance(), TRUE);
+	}
 
 	LLIMModel::instance().mNewMsgSignal.connect(boost::bind(&LLIMFloaterContainer::onNewMessageReceived, this, _1));
 	// Do not call base postBuild to not connect to mCloseSignal to not close all floaters via Close button
@@ -73,10 +77,27 @@ void LLIMFloaterContainer::onOpen(const LLSD& key)
 
 	// If we're using multitabs, and we open up for the first time
 	// Add localchat by default if it's not already on the screen somewhere else. -AO	
+	// But only if it hasnt been already so we can reopen it to the same tab -KC
+	// Improved handling to leave most of the work to the LL tear-off code -Zi
 	LLFloater* floater = LLNearbyChat::getInstance();
-	if (! LLFloater::isVisible(floater))
+	if (! LLFloater::isVisible(floater) && (floater->getHost() != this))
 	{
-		LLMultiFloater::showFloater(floater, LLTabContainer::START);
+		if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
+		{
+			// first set the tear-off host to this floater
+			floater->setHost(this);
+			// clear the tear-off host right after, the "last host used" will still stick
+			floater->setHost(NULL);
+			// reparent to floater view
+			gFloaterView->addChild(floater);
+			// and remember we are torn off
+			floater->setTornOff(TRUE);
+		}
+		else
+		{
+			floater->setTornOff(FALSE);
+			LLMultiFloater::showFloater(floater);
+		}
 	}
 	
 	
@@ -92,6 +113,25 @@ void LLIMFloaterContainer::onOpen(const LLSD& key)
 */
 }
 
+void LLIMFloaterContainer::removeFloater(LLFloater* floaterp)
+{
+	if (floaterp->getName() == "nearby_chat")
+	{
+		// only my friends floater now locked
+		mTabContainer->lockTabs(mTabContainer->getNumLockedTabs() - 1);
+		gSavedSettings.setBOOL("ChatHistoryTornOff", TRUE);
+		floaterp->setCanClose(TRUE);
+	}
+	else if (floaterp->getName() == "imcontacts")
+	{
+		// only chat floater now locked
+		mTabContainer->lockTabs(mTabContainer->getNumLockedTabs() - 1);
+		gSavedSettings.setBOOL("ContactsTornOff", TRUE);
+		floaterp->setCanClose(TRUE);
+	}
+	LLMultiFloater::removeFloater(floaterp);
+}
+
 void LLIMFloaterContainer::addFloater(LLFloater* floaterp, 
 									BOOL select_added_floater, 
 									LLTabContainer::eInsertionPoint insertion_point)
@@ -105,15 +145,35 @@ void LLIMFloaterContainer::addFloater(LLFloater* floaterp,
 		return;
 	}
 	
-	if (floaterp->getName() == "imcontacts")
+	if (floaterp->getName() == "imcontacts" || floaterp->getName() == "nearby_chat")
 	{
 		S32 num_locked_tabs = mTabContainer->getNumLockedTabs();
 		mTabContainer->unlockTabs();
 		// add contacts window as first tab
-		LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
+		if (floaterp->getName() == "imcontacts")
+		{
+			LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
+			gSavedSettings.setBOOL("ContactsTornOff", FALSE);
+		}
+		else
+		{
+			// add chat history as second tab if contact window is present, first tab otherwise
+			if (getChildView("imcontacts"))
+			{
+				// assuming contacts window is first tab, select it
+				mTabContainer->selectFirstTab();
+				// and add ourselves after
+				LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::RIGHT_OF_CURRENT);
+			}
+			else
+			{
+				LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
+			}
+			gSavedSettings.setBOOL("ChatHistoryTornOff", FALSE);
+		}
 		// make sure first two tabs are now locked
 		mTabContainer->lockTabs(num_locked_tabs + 1);
-		//gSavedSettings.setBOOL("ContactsTornOff", FALSE);
+		
 		floaterp->setCanClose(FALSE);
 		return;
 	}

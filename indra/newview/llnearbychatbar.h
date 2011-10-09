@@ -46,6 +46,8 @@ public:
 	{
 		Optional<LLBottomtrayButton::Params>			combo_button;
 		Optional<LLScrollListCtrl::Params>	combo_list;
+		Optional<bool>						get_more,
+											view_all;
 		
 		Params();
 	};
@@ -56,6 +58,8 @@ protected:
 	LLGestureComboList(const Params&);
 	std::vector<LLMultiGesture*> mGestures;
 	std::string mLabel;
+	bool			mShowViewAll;
+	bool			mShowGetMore;
 	LLSD::Integer mViewAllItemIndex;
 	LLSD::Integer mGetMoreItemIndex;
 
@@ -67,6 +71,8 @@ public:
 	virtual void	showList();
 	virtual void	hideList();
 	virtual BOOL	handleKeyHere(KEY key, MASK mask);
+
+	virtual void	draw();
 
 	S32				getCurrentIndex() const;
 	void			onItemSelected(const LLSD& data);
@@ -113,18 +119,22 @@ public:
 	static void sendChatFromViewer(const std::string &utf8text, EChatType type, BOOL animate);
 	static void sendChatFromViewer(const LLWString &wtext, EChatType type, BOOL animate);
 	
-	// AO, moved to public so we can relay from other textentries.
+	// <AO>, moved to public so we can relay from other textentries.
 	static void onChatBoxFocusLost(LLFocusableElement* caller, void* userdata);
-	void onChatBoxFocusReceived();
-	void onChatBoxCommit();
+        void onChatBoxFocusReceived();
+        void onChatBoxCommit();
+	// </AO>
 	void setText(const LLStringExplicit &new_text);
+
+	void sendChat( EChatType type );
+	void updatePhoenixPlayChatAnimation(const LLSD &data);
 
 protected:
 	static BOOL matchChatTypeTrigger(const std::string& in_str, std::string* out_str);
 	static void onChatBoxKeystroke(LLLineEditor* caller, void* userdata);
 
-
-	void sendChat( EChatType type );
+	//void onChatBoxCommit(); // moved to public
+	void onChatFontChange(LLFontGL* fontp);
 
 	static LLWString stripChannelNumber(const LLWString &mesg, S32* channel);
 	EChatType processChatTypeTriggers(EChatType type, std::string &str);
@@ -137,6 +147,8 @@ protected:
 	LLLineEditor*		mChatBox;
 	LLOutputMonitorCtrl* mOutputMonitor;
 	LLLocalSpeakerMgr*  mSpeakerMgr;
+
+	BOOL			PhoenixPlayChatAnimation;
 };
 
 #endif

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu name="Gear Menu">
+<toggleable_menu name="Gear Menu">
 	<menu_item_call label="Dotknij" name="touch"/>
 	<menu_item_call label="Usiądź" name="sit"/>
 	<menu_item_call label="Zapłać" name="pay"/>
@@ -15,4 +15,4 @@
 	<menu_item_call label="Przybliż" name="zoom_in"/>
 	<menu_item_call label="Usuń" name="remove"/>
 	<menu_item_call label="Więcej informacji" name="more_info"/>
-</menu>
+</toggleable_menu>

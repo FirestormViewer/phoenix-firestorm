@@ -28,6 +28,9 @@ include_directories(
 set(llui_SOURCE_FILES
     llaccordionctrl.cpp
     llaccordionctrltab.cpp
+    llbadge.cpp
+	llbadgeholder.cpp
+    llbadgeowner.cpp
     llbutton.cpp
     llcheckboxctrl.cpp
     llclipboard.cpp
@@ -48,6 +51,7 @@ set(llui_SOURCE_FILES
     llflyoutbutton.cpp 
     llfocusmgr.cpp
     llfunctorregistry.cpp
+    llhunspell.cpp
     lliconctrl.cpp
     llkeywords.cpp
     lllayoutstack.cpp
@@ -93,6 +97,7 @@ set(llui_SOURCE_FILES
     lltextparser.cpp
     lltextutil.cpp
     lltextvalidate.cpp
+    lltimectrl.cpp
     lltransutil.cpp
     lltoggleablemenu.cpp
     lltooltip.cpp
@@ -111,6 +116,7 @@ set(llui_SOURCE_FILES
     llviewmodel.cpp
     llview.cpp
     llviewquery.cpp
+    llwindowshade.cpp
     )
     
 set(llui_HEADER_FILES
@@ -118,6 +124,9 @@ set(llui_HEADER_FILES
 
     llaccordionctrl.h
     llaccordionctrltab.h
+    llbadge.h
+	llbadgeholder.h
+    llbadgeowner.h
     llbutton.h
     llcallbackmap.h
     llcheckboxctrl.h
@@ -141,6 +150,7 @@ set(llui_HEADER_FILES
     llfunctorregistry.h
     llhandle.h
     llhelp.h
+    llhunspell.h
     lliconctrl.h
     llkeywords.h
     lllayoutstack.h
@@ -159,6 +169,7 @@ set(llui_HEADER_FILES
     llnotificationslistener.h
     llnotificationsutil.h
     llnotificationtemplate.h
+	llnotificationvisibilityrule.h
     llpanel.h
     llprogressbar.h
     llradiogroup.h
@@ -177,6 +188,7 @@ set(llui_HEADER_FILES
     llsdparam.h
     llsliderctrl.h
     llslider.h
+    llspellcheckmenuhandler.h
     llspinctrl.h
     llstatbar.h
     llstatgraph.h
@@ -189,6 +201,7 @@ set(llui_HEADER_FILES
     lltextparser.h
     lltextutil.h
     lltextvalidate.h
+    lltimectrl.h
     lltoggleablemenu.h
     lltooltip.h
     lltransutil.h
@@ -209,6 +222,7 @@ set(llui_HEADER_FILES
     llviewmodel.h
     llview.h
     llviewquery.h
+    llwindowshade.h
     )
 
 set_source_files_properties(${llui_HEADER_FILES}
@@ -241,8 +255,8 @@ target_link_libraries(llui
     ${LLCOMMON_LIBRARIES} # must be after llimage, llwindow, llrender
     )
 
+# Add tests
 if(LL_TESTS)
-  # Add tests
   include(LLAddBuildTest)
   SET(llui_TEST_SOURCE_FILES
       llurlmatch.cpp

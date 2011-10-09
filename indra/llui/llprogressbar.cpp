@@ -38,6 +38,7 @@
 
 #include "llfocusmgr.h"
 #include "lluictrlfactory.h"
+#include "lluiimage.h"
 
 static LLDefaultChildRegistry::Register<LLProgressBar> r("progress_bar");
 
@@ -50,7 +51,7 @@ LLProgressBar::Params::Params()
 
 
 LLProgressBar::LLProgressBar(const LLProgressBar::Params& p) 
-:	LLView(p),
+:	LLUICtrl(p),
 	mImageBar(p.image_bar),
 	mImageFill(p.image_fill),
 	mColorBackground(p.color_bg()),
@@ -80,7 +81,7 @@ void LLProgressBar::draw()
 	mImageFill->draw(progress_rect, bar_color);
 }
 
-void LLProgressBar::setPercent(const F32 percent)
+void LLProgressBar::setValue(const LLSD& value)
 {
-	mPercentDone = llclamp(percent, 0.f, 100.f);
+	mPercentDone = llclamp((F32)value.asReal(), 0.f, 100.f);
 }

@@ -44,6 +44,9 @@
 #include "lltextbox.h"
 #include "llviewermenu.h"
 
+#include "llagent.h"
+#include "llfloaterworldmap.h"
+
 //
 // Constants
 //
@@ -61,7 +64,6 @@ const S32 MAP_PADDING_BOTTOM = 0;
 
 LLFloaterMap::LLFloaterMap(const LLSD& key) 
 	: LLFloater(key),
-	  mPopupMenu(NULL),
 	  mTextBoxEast(NULL),
 	  mTextBoxNorth(NULL),
 	  mTextBoxWest(NULL),
@@ -70,6 +72,7 @@ LLFloaterMap::LLFloaterMap(const LLSD& key)
 	  mTextBoxNorthEast(NULL),
 	  mTextBoxNorthWest(NULL),
 	  mTextBoxSouthWest(NULL),
+	  mPopupMenu(NULL),
 	  mMap(NULL)
 {
 }
@@ -81,8 +84,14 @@ LLFloaterMap::~LLFloaterMap()
 BOOL LLFloaterMap::postBuild()
 {
 	mMap = getChild<LLNetMap>("Net Map");
-	mMap->setScale(gSavedSettings.getF32("MiniMapScale"));
-	mMap->setToolTipMsg(getString("ToolTipMsg"));	
+	if (gSavedSettings.getBOOL("DoubleClickTeleport"))
+	{
+		mMap->setToolTipMsg(getString("AltToolTipMsg"));
+	}
+	else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
+	{
+		mMap->setToolTipMsg(getString("ToolTipMsg"));
+	}
 	sendChildToBack(mMap);
 	
 	mTextBoxNorth = getChild<LLTextBox> ("floater_map_north");
@@ -94,16 +103,21 @@ BOOL LLFloaterMap::postBuild()
 	mTextBoxSouthWest = getChild<LLTextBox> ("floater_map_southwest");
 	mTextBoxNorthWest = getChild<LLTextBox> ("floater_map_northwest");
 
+	// <Firestorm Minimap changes>
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 	
 	registrar.add("Minimap.Zoom", boost::bind(&LLFloaterMap::handleZoom, this, _2));
 	registrar.add("Minimap.Tracker", boost::bind(&LLFloaterMap::handleStopTracking, this, _2));
+
+	registrar.add("Minimap.Mark", boost::bind(&LLFloaterMap::handleMark, this, _2));
+	registrar.add("Minimap.ClearMarks", boost::bind(&LLFloaterMap::handleClearMarks, this));
 
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if (mPopupMenu && !LLTracker::isTracking(0))
 	{
 		mPopupMenu->setItemEnabled ("Stop Tracking", false);
 	}
+	// </Firestorm minimap changes>
 
 	stretchMiniMap(getRect().getWidth() - MAP_PADDING_LEFT - MAP_PADDING_RIGHT
 		,getRect().getHeight() - MAP_PADDING_TOP - MAP_PADDING_BOTTOM);
@@ -124,19 +138,46 @@ BOOL LLFloaterMap::postBuild()
 
 BOOL LLFloaterMap::handleDoubleClick( S32 x, S32 y, MASK mask )
 {
-	// If floater is minimized, minimap should be shown on doubleclick (STORM-299)
-	std::string floater_to_show = this->isMinimized() ? "mini_map" : "world_map";
-	LLFloaterReg::showInstance(floater_to_show);
-	return TRUE;
+    // If floater is minimized, minimap should be shown on doubleclick (STORM-299)
+    if (isMinimized())
+    {
+        setMinimized(FALSE);
+        return TRUE;
+    }
+
+    LLVector3d pos_global = mMap->viewPosToGlobal(x, y);
+    
+    // If we're not tracking a beacon already, double-click will set one 
+    if (!LLTracker::isTracking(NULL))
+    {
+        LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
+        if (world_map)
+        {
+            world_map->trackLocation(pos_global);
+        }
+    }
+    
+    if (gSavedSettings.getBOOL("DoubleClickTeleport"))
+    {
+        // If DoubleClickTeleport is on, double clicking the minimap will teleport there
+        gAgent.teleportViaLocationLookAt(pos_global);
+    }
+    else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
+    {
+        LLFloaterReg::showInstance("world_map");
+    }
+    return TRUE;
 }
 
 BOOL LLFloaterMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
+	mMap->saveClosestAgentAtLastRightClick();
+
 	if (mPopupMenu)
 	{
 		mPopupMenu->buildDrawLabels();
-		mPopupMenu->updateParent(LLMenuGL::sMenuContainer);
-		LLMenuGL::showPopup(this, mPopupMenu, x, y);
+ 		mPopupMenu->updateParent(LLMenuGL::sMenuContainer);
+ 		LLMenuGL::showPopup(this, mPopupMenu, x, y);
 	}
 	return TRUE;
 }
@@ -210,11 +251,12 @@ void LLFloaterMap::draw()
 		setMouseOpaque(TRUE);
 		getDragHandle()->setMouseOpaque(TRUE);
 	}
-	
-	if (LLTracker::isTracking(0))
-	{
-		mPopupMenu->setItemEnabled ("Stop Tracking", true);
-	}
+
+        if (LLTracker::isTracking(0))
+        {
+                mPopupMenu->setItemEnabled ("Stop Tracking", true);
+        }
+
 	
 	LLFloater::draw();
 }
@@ -261,7 +303,17 @@ void LLFloaterMap::handleZoom(const LLSD& userdata)
 	std::string level = userdata.asString();
 	
 	F32 scale = 0.0f;
-	if (level == std::string("close"))
+
+	if (level == std::string("default"))
+	{
+		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
+		if(pvar)
+		{
+			pvar->resetToDefault();
+			scale = gSavedSettings.getF32("MiniMapScale");
+		}
+	}
+	else if (level == std::string("close"))
 		scale = LLNetMap::MAP_SCALE_MAX;
 	else if (level == std::string("medium"))
 		scale = LLNetMap::MAP_SCALE_MID;
@@ -269,19 +321,10 @@ void LLFloaterMap::handleZoom(const LLSD& userdata)
 		scale = LLNetMap::MAP_SCALE_MIN;
 	if (scale != 0.0f)
 	{
-		gSavedSettings.setF32("MiniMapScale", scale );
 		mMap->setScale(scale);
 	}
 }
 
-void LLFloaterMap::handleStopTracking (const LLSD& userdata)
-{
-	if (mPopupMenu)
-	{
-		mPopupMenu->setItemEnabled ("Stop Tracking", false);
-		LLTracker::stopTracking ((void*)LLTracker::isTracking(NULL));
-	}
-}
 void	LLFloaterMap::setMinimized(BOOL b)
 {
 	LLFloater::setMinimized(b);
@@ -292,5 +335,24 @@ void	LLFloaterMap::setMinimized(BOOL b)
 	else
 	{
 		setTitle("");
+	}
+}
+
+void LLFloaterMap::handleMark(const LLSD& userdata)
+{
+	mMap->setAvatarMark(userdata);
+}
+
+void LLFloaterMap::handleClearMarks()
+{
+	mMap->clearAvatarMarks();
+}
+
+void LLFloaterMap::handleStopTracking (const LLSD& userdata)
+{
+	if (mPopupMenu)
+	{
+		mPopupMenu->setItemEnabled ("Stop Tracking", false);
+		LLTracker::stopTracking ((void*)LLTracker::isTracking(NULL));
 	}
 }

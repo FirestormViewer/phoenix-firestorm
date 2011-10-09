@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<menu
+<toggleable_menu
  layout="topleft"
  visible="false"
  name="Gear Wearing">
@@ -20,4 +20,11 @@
          function="Gear.OnEnable"
          parameter="take_off" />
     </menu_item_call>
-</menu>
+    <menu_item_call
+     label="Copy outfit list to clipboard"
+     layout="topleft"
+     name="copy">
+        <on_click
+         function="Gear.Copy" />
+    </menu_item_call>
+</toggleable_menu>

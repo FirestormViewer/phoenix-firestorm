@@ -31,6 +31,9 @@
 #include "lluuid.h"
 #include "lluicolor.h"
 #include "llstyle.h"
+
+#include "llhost.h" // for resolving parcel name by parcel id
+
 #include <boost/signals2.hpp>
 #include <boost/regex.hpp>
 #include <string>
@@ -93,6 +96,8 @@ public:
 	virtual bool underlineOnHoverOnly(const std::string &string) const { return false; }
 
 	virtual LLUUID	getID(const std::string &string) const { return LLUUID::null; }
+
+	bool isLinkDisabled() const;
 
 protected:
 	std::string getIDStringFromUrl(const std::string &url) const;
@@ -298,8 +303,44 @@ private:
 class LLUrlEntryParcel : public LLUrlEntryBase
 {
 public:
+	struct LLParcelData
+	{
+		LLUUID		parcel_id;
+		std::string	name;
+		std::string	sim_name;
+		F32			global_x;
+		F32			global_y;
+		F32			global_z;
+	};
+
 	LLUrlEntryParcel();
+	~LLUrlEntryParcel();
 	/*virtual*/ std::string getLabel(const std::string &url, const LLUrlLabelCallback &cb);
+
+	// Sends a parcel info request to sim.
+	void sendParcelInfoRequest(const LLUUID& parcel_id);
+
+	// Calls observers of certain parcel id providing them with parcel label.
+	void onParcelInfoReceived(const std::string &id, const std::string &label);
+
+	// Processes parcel label and triggers notifying observers.
+	static void processParcelInfo(const LLParcelData& parcel_data);
+
+	// Next 4 setters are used to update agent and viewer connection information
+	// upon events like user login, viewer disconnect and user changing region host.
+	// These setters are made public to be accessible from newview and should not be
+	// used in other cases.
+	static void setAgentID(const LLUUID& id) { sAgentID = id; }
+	static void setSessionID(const LLUUID& id) { sSessionID = id; }
+	static void setRegionHost(const LLHost& host) { sRegionHost = host; }
+	static void setDisconnected(bool disconnected) { sDisconnected = disconnected; }
+
+private:
+	static LLUUID						sAgentID;
+	static LLUUID						sSessionID;
+	static LLHost						sRegionHost;
+	static bool							sDisconnected;
+	static std::set<LLUrlEntryParcel*>	sParcelInfoObservers;
 };
 
 ///
@@ -310,6 +351,18 @@ class LLUrlEntryPlace : public LLUrlEntryBase
 {
 public:
 	LLUrlEntryPlace();
+	/*virtual*/ std::string getLabel(const std::string &url, const LLUrlLabelCallback &cb);
+	/*virtual*/ std::string getLocation(const std::string &url) const;
+};
+
+///
+/// LLUrlEntryRegion Describes a Second Life location Url, e.g.,
+/// secondlife:///app/region/Ahern/128/128/0
+///
+class LLUrlEntryRegion : public LLUrlEntryBase
+{
+public:
+	LLUrlEntryRegion();
 	/*virtual*/ std::string getLabel(const std::string &url, const LLUrlLabelCallback &cb);
 	/*virtual*/ std::string getLocation(const std::string &url) const;
 };
@@ -387,5 +440,16 @@ public:
 	/*virtual*/ std::string getIcon(const std::string &url);
 };
 
+///
+/// LLUrlEntryJira Describes Jira issue names -KC
+///
+class LLUrlEntryJira : public LLUrlEntryBase
+{
+public:
+	LLUrlEntryJira();
+	/*virtual*/ std::string getLabel(const std::string &url, const LLUrlLabelCallback &cb);
+	/*virtual*/ std::string getTooltip(const std::string &string) const;
+	/*virtual*/ std::string getUrl(const std::string &string) const;
+};
 
 #endif

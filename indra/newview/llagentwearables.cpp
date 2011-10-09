@@ -33,7 +33,6 @@
 #include "llagentwearablesfetch.h"
 #include "llappearancemgr.h"
 #include "llcallbacklist.h"
-#include "llfolderview.h"
 #include "llgesturemgr.h"
 #include "llinventorybridge.h"
 #include "llinventoryfunctions.h"
@@ -45,12 +44,14 @@
 #include "llsidepanelappearance.h"
 #include "llsidetray.h"
 #include "lltexlayer.h"
+#include "lltooldraganddrop.h"
 #include "llviewerregion.h"
 #include "llvoavatarself.h"
 #include "llwearable.h"
 #include "llwearablelist.h"
-// [RLVa:KB] - Checked: RLVa-1.2.0a (2010-03-04)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
 
 #include <boost/scoped_ptr.hpp>
@@ -58,7 +59,7 @@
 LLAgentWearables gAgentWearables;
 
 BOOL LLAgentWearables::mInitialWearablesUpdateReceived = FALSE;
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.2.0a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.6.0a) | Added: Catznip-2.1.1d
 bool LLAgentWearables::mInitialWearablesLoaded = false;
 // [/SL:KB]
 
@@ -843,7 +844,7 @@ void LLAgentWearables::popWearable(const LLWearableType::EType type, U32 index)
 	}
 }
 
-U32	LLAgentWearables::getWearableIndex(LLWearable *wearable)
+U32	LLAgentWearables::getWearableIndex(const LLWearable *wearable) const
 {
 	if (wearable == NULL)
 	{
@@ -944,6 +945,30 @@ const LLUUID LLAgentWearables::getWearableItemID(LLWearableType::EType type, U32
 	else
 		return LLUUID();
 }
+
+// [RLVa:KB] - Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+void LLAgentWearables::getWearableItemIDs(uuid_vec_t& idItems) const
+{
+	for (wearableentry_map_t::const_iterator itWearableType = mWearableDatas.begin(); 
+			itWearableType != mWearableDatas.end(); ++itWearableType)
+	{
+		getWearableItemIDs(itWearableType->first, idItems);
+	}
+}
+
+void LLAgentWearables::getWearableItemIDs(LLWearableType::EType eType, uuid_vec_t& idItems) const
+{
+	wearableentry_map_t::const_iterator itWearableType = mWearableDatas.find(eType);
+	if (mWearableDatas.end() != itWearableType)
+	{
+		for (wearableentry_vec_t::const_iterator itWearable = itWearableType->second.begin(), endWearable = itWearableType->second.end();
+				itWearable != endWearable; ++itWearable)
+		{
+			idItems.push_back((*itWearable)->getItemID());
+		}
+	}
+}
+// [/RLVa:KB]
 
 const LLUUID LLAgentWearables::getWearableAssetID(LLWearableType::EType type, U32 index) const
 {
@@ -1531,7 +1556,7 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 	// Start rendering & update the server
 	mWearablesLoaded = TRUE; 
 	checkWearablesLoaded();
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-09-22 (Catznip-2.2.0a) | Modified: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-09-22 (Catznip-2.6.0a) | Modified: Catznip-2.2.0a
 	if (!mInitialWearablesLoaded)
 	{
 		mInitialWearablesLoaded = true;
@@ -1773,60 +1798,60 @@ LLUUID LLAgentWearables::computeBakedTextureHash(LLVOAvatarDefines::EBakedTextur
 
 // User has picked "remove from avatar" from a menu.
 // static
-void LLAgentWearables::userRemoveWearable(const LLWearableType::EType &type, const U32 &index)
-{
-	if (!(type==LLWearableType::WT_SHAPE || type==LLWearableType::WT_SKIN || type==LLWearableType::WT_HAIR || type==LLWearableType::WT_EYES)) //&&
-		//!((!gAgent.isTeen()) && (type==LLWearableType::WT_UNDERPANTS || type==LLWearableType::WT_UNDERSHIRT)))
-	{
-		gAgentWearables.removeWearable(type,false,index);
-	}
-}
+//void LLAgentWearables::userRemoveWearable(const LLWearableType::EType &type, const U32 &index)
+//{
+//	if (!(type==LLWearableType::WT_SHAPE || type==LLWearableType::WT_SKIN || type==LLWearableType::WT_HAIR || type==LLWearableType::WT_EYES)) //&&
+//		//!((!gAgent.isTeen()) && (type==LLWearableType::WT_UNDERPANTS || type==LLWearableType::WT_UNDERSHIRT)))
+//	{
+//		gAgentWearables.removeWearable(type,false,index);
+//	}
+//}
 
 //static 
-void LLAgentWearables::userRemoveWearablesOfType(const LLWearableType::EType &type)
-{
-	if (!(type==LLWearableType::WT_SHAPE || type==LLWearableType::WT_SKIN || type==LLWearableType::WT_HAIR || type==LLWearableType::WT_EYES)) //&&
-		//!((!gAgent.isTeen()) && (type==LLWearableType::WT_UNDERPANTS || type==LLWearableType::WT_UNDERSHIRT)))
-	{
-		gAgentWearables.removeWearable(type,true,0);
-	}
-}
+//void LLAgentWearables::userRemoveWearablesOfType(const LLWearableType::EType &type)
+//{
+//	if (!(type==LLWearableType::WT_SHAPE || type==LLWearableType::WT_SKIN || type==LLWearableType::WT_HAIR || type==LLWearableType::WT_EYES)) //&&
+//		//!((!gAgent.isTeen()) && (type==LLWearableType::WT_UNDERPANTS || type==LLWearableType::WT_UNDERSHIRT)))
+//	{
+//		gAgentWearables.removeWearable(type,true,0);
+//	}
+//}
 
 // static
-void LLAgentWearables::userRemoveAllClothes()
-{
-	// We have to do this up front to avoid having to deal with the case of multiple wearables being dirty.
-	if (gAgentCamera.cameraCustomizeAvatar())
-	{
-		// switching to outfit editor should automagically save any currently edited wearable
-		LLSideTray::getInstance()->showPanel("sidepanel_appearance", LLSD().with("type", "edit_outfit"));
-	}
-	userRemoveAllClothesStep2(TRUE);
-}
+//void LLAgentWearables::userRemoveAllClothes()
+//{
+//	// We have to do this up front to avoid having to deal with the case of multiple wearables being dirty.
+//	if (gAgentCamera.cameraCustomizeAvatar())
+//	{
+//		// switching to outfit editor should automagically save any currently edited wearable
+//		LLSideTray::getInstance()->showPanel("sidepanel_appearance", LLSD().with("type", "edit_outfit"));
+//	}
+//	userRemoveAllClothesStep2(TRUE);
+//}
 
 // static
-void LLAgentWearables::userRemoveAllClothesStep2(BOOL proceed)
-{
-	if (proceed)
-	{
-		gAgentWearables.removeWearable(LLWearableType::WT_SHIRT,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_PANTS,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_SHOES,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_SOCKS,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_JACKET,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_GLOVES,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_UNDERSHIRT,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_UNDERPANTS,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_SKIRT,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_ALPHA,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_TATTOO,true,0);
-	}
-}
+//void LLAgentWearables::userRemoveAllClothesStep2(BOOL proceed)
+//{
+//	if (proceed)
+//	{
+//		gAgentWearables.removeWearable(LLWearableType::WT_SHIRT,true,0);
+//		gAgentWearables.removeWearable(LLWearableType::WT_PANTS,true,0);
+//		gAgentWearables.removeWearable(LLWearableType::WT_SHOES,true,0);
+//		gAgentWearables.removeWearable(LLWearableType::WT_SOCKS,true,0);
+//		gAgentWearables.removeWearable(LLWearableType::WT_JACKET,true,0);
+//		gAgentWearables.removeWearable(LLWearableType::WT_GLOVES,true,0);
+//		gAgentWearables.removeWearable(LLWearableType::WT_UNDERSHIRT,true,0);
+//		gAgentWearables.removeWearable(LLWearableType::WT_UNDERPANTS,true,0);
+//		gAgentWearables.removeWearable(LLWearableType::WT_SKIRT,true,0);
+//		gAgentWearables.removeWearable(LLWearableType::WT_ALPHA,true,0);
+//		gAgentWearables.removeWearable(LLWearableType::WT_TATTOO,true,0);
+//	}
+//}
 
 // Combines userRemoveAllAttachments() and userAttachMultipleAttachments() logic to
 // get attachments into desired state with minimal number of adds/removes.
 //void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array)
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.2.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
 void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array, bool fAttachOnly)
 // [/SL:KB]
 {
@@ -1894,7 +1919,7 @@ void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj
 
 	// Remove everything in objects_to_remove
 //	userRemoveMultipleAttachments(objects_to_remove);
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.2.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
 	if (!fAttachOnly)
 	{
 		userRemoveMultipleAttachments(objects_to_remove);
@@ -1983,9 +2008,11 @@ void LLAgentWearables::userRemoveAllAttachments()
 
 void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_array_t& obj_item_array)
 {
-// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-	// RELEASE-RLVa: [SL-2.0.0] Check our callers and verify that erasing elements from the passed vector won't break random things
-	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+	static bool sInitialAttachmentsRequested = false;
+
+	// RELEASE-RLVa: [SL-2.5.2] Check our callers and verify that erasing elements from the passed vector won't break random things
+	if ( (rlv_handler_t::isEnabled()) && (sInitialAttachmentsRequested) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 	{
 		// Fall-back code: everything should really already have been pruned before we get this far
 		for (S32 idxItem = obj_item_array.count() - 1; idxItem >= 0; idxItem--)
@@ -2037,8 +2064,8 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 		msg->addUUIDFast(_PREHASH_ItemID, item->getLinkedUUID());
 		msg->addUUIDFast(_PREHASH_OwnerID, item->getPermissions().getOwner());
 		msg->addU8Fast(_PREHASH_AttachmentPt, 0 | ATTACHMENT_ADD);	// Wear at the previous or default attachment point
-// [RLVa:KB] - Checked: 2010-07-28 (RLVa-1.2.0i) | Added: RLVa-1.2.0i
-		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+		if ( (rlv_handler_t::isEnabled()) && (sInitialAttachmentsRequested) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 		{
 			RlvAttachmentLockWatchdog::instance().onWearAttachment(item, RLV_WEAR_ADD);
 		}
@@ -2053,6 +2080,10 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 			msg->sendReliable( gAgent.getRegion()->getHost() );
 		}
 	}
+
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+	sInitialAttachmentsRequested = true;
+// [/RLVa:KB]
 }
 
 void LLAgentWearables::checkWearablesLoaded() const
@@ -2205,8 +2236,9 @@ void LLAgentWearables::editWearable(const LLUUID& item_id)
 		return;
 	}
 
+	const BOOL disable_camera_switch = LLWearableType::getDisableCameraSwitch(wearable->getType());
 	LLPanel* panel = LLSideTray::getInstance()->getPanel("sidepanel_appearance");
-	LLSidepanelAppearance::editWearable(wearable, panel);
+	LLSidepanelAppearance::editWearable(wearable, panel, disable_camera_switch);
 }
 
 // Request editing the item after it gets worn.
@@ -2260,7 +2292,7 @@ boost::signals2::connection LLAgentWearables::addLoadedCallback(loaded_callback_
 	return mLoadedSignal.connect(cb);
 }
 
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.2.0a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.6.0a) | Added: Catznip-2.1.1d
 boost::signals2::connection LLAgentWearables::addInitialWearablesLoadedCallback(loaded_callback_t cb)
 {
 	return mInitialWearablesLoadedSignal.connect(cb);

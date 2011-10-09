@@ -59,8 +59,9 @@
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
 #include "llworld.h"
-// [RLVa:KB] - Checked: 2010-03-31 (RLVa-1.2.0c)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
 
 //
@@ -87,6 +88,7 @@ BOOL LLPanelContents::postBuild()
 
 	childSetAction("button new script",&LLPanelContents::onClickNewScript, this);
 	childSetAction("button permissions",&LLPanelContents::onClickPermissions, this);
+	childSetAction("button refresh",&LLPanelContents::onClickRefresh, this);
 
 	mPanelInventoryObject = getChild<LLPanelObjectInventory>("contents_inventory");
 
@@ -234,4 +236,11 @@ void LLPanelContents::onClickPermissions(void *userdata)
 {
 	LLPanelContents* self = (LLPanelContents*)userdata;
 	gFloaterView->getParentFloater(self)->addDependentFloater(LLFloaterReg::showInstance("bulk_perms"));
+}
+
+// static
+void LLPanelContents::onClickRefresh(void *userdata)
+{
+	LLPanelContents* self = (LLPanelContents*)userdata;
+	self->refresh();
 }

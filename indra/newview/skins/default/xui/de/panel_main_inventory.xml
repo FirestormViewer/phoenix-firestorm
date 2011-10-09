@@ -10,19 +10,30 @@
 		Objekte:
 	</text>
 	<filter_editor label="Inventar filtern" name="inventory search editor"/>
+	<button name="collapse_btn" label="Einklappen" />
+	<button name="expand_btn" label="Ausklappen" />
 	<tab_container name="inventory filter tabs">
-		<inventory_panel label="MEIN INVENTAR" name="All Items"/>
+		<inventory_panel label="INVENTAR" name="All Items"/>
 		<recent_inventory_panel label="AKTUELL" name="Recent Items"/>
+		<worn_inventory_panel label="ANGEZOGEN" name="Worn Items"/>		
 	</tab_container>
-	<layout_stack name="bottom_panel">
-		<layout_panel name="options_gear_btn_panel">
-			<button name="options_gear_btn" tool_tip="Zusätzliche Optionen anzeigen"/>
-		</layout_panel>
-		<layout_panel name="add_btn_panel">
+	<panel name="bottom_panel">
+		<panel name="options_gear_btn_panel">
+			<menu_button name="options_gear_btn" tool_tip="Zusätzliche Optionen anzeigen"/>
+		</panel>
+		<panel name="add_btn_panel">
 			<button name="add_btn" tool_tip="Neues Objekt hinzufügen"/>
-		</layout_panel>
-		<layout_panel name="trash_btn_panel">
+		</panel>
+		<panel name="new_inventory_panel">
+			<button name="new_inv_btn" tool_tip="Zusätzliches Inventar-Fenster"/>
+		</panel>
+		<panel name="dummy_panel">
+			<text name="ItemcountText">
+				Objekte
+			</text>
+		</panel>
+		<panel name="trash_btn_panel">
 			<dnd_button name="trash_btn" tool_tip="Auswahl löschen"/>
-		</layout_panel>
-	</layout_stack>
+		</panel>
+	</panel>
 </panel>

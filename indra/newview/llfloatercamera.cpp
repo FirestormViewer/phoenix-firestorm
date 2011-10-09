@@ -40,6 +40,8 @@
 #include "lltoolmgr.h"
 #include "lltoolfocus.h"
 #include "llslider.h"
+#include "llfirstuse.h"
+#include "llhints.h"
 
 static LLDefaultChildRegistry::Register<LLPanelCameraItem> r("panel_camera_item");
 
@@ -73,6 +75,8 @@ protected:
 	void	onZoomPlusHeldDown();
 	void	onZoomMinusHeldDown();
 	void	onSliderValueChanged();
+	void	onCameraTrack();
+	void	onCameraRotate();
 	F32		getOrbitRate(F32 time);
 
 private:
@@ -113,6 +117,11 @@ LLPanelCameraItem::LLPanelCameraItem(const LLPanelCameraItem::Params& p)
 	LLTextBox::Params text_params = p.text;
 	mText = LLUICtrlFactory::create<LLTextBox>(text_params);
 	addChild(mText);
+
+// <AW: Flat cam floater>
+	//used to be registered in llbottomtray.cpp
+  	LLUICtrl::CommitCallbackRegistry::defaultRegistrar().add("CameraPresets.ChangeView", boost::bind(&LLFloaterCamera::onClickCameraItem, _2));
+// </AW: Flat cam floater>
 
 	if (p.mousedown_callback.isProvided())
 	{
@@ -162,6 +171,8 @@ LLPanelCameraZoom::LLPanelCameraZoom()
 	mCommitCallbackRegistrar.add("Zoom.minus", boost::bind(&LLPanelCameraZoom::onZoomMinusHeldDown, this));
 	mCommitCallbackRegistrar.add("Zoom.plus", boost::bind(&LLPanelCameraZoom::onZoomPlusHeldDown, this));
 	mCommitCallbackRegistrar.add("Slider.value_changed", boost::bind(&LLPanelCameraZoom::onSliderValueChanged, this));
+	mCommitCallbackRegistrar.add("Camera.track", boost::bind(&LLPanelCameraZoom::onCameraTrack, this));
+	mCommitCallbackRegistrar.add("Camera.rotate", boost::bind(&LLPanelCameraZoom::onCameraRotate, this));
 }
 
 BOOL LLPanelCameraZoom::postBuild()
@@ -196,6 +207,18 @@ void LLPanelCameraZoom::onZoomMinusHeldDown()
 	F32 time = mMinusBtn->getHeldDownTime();
 	gAgentCamera.unlockView();
 	gAgentCamera.setOrbitOutKey(getOrbitRate(time));
+}
+
+void LLPanelCameraZoom::onCameraTrack()
+{
+	// EXP-202 when camera panning activated, remove the hint
+	LLFirstUse::viewPopup( false );
+}
+
+void LLPanelCameraZoom::onCameraRotate()
+{
+	// EXP-202 when camera rotation activated, remove the hint
+	LLFirstUse::viewPopup( false );
 }
 
 F32 LLPanelCameraZoom::getOrbitRate(F32 time)
@@ -294,6 +317,8 @@ LLFloaterCamera* LLFloaterCamera::findInstance()
 
 void LLFloaterCamera::onOpen(const LLSD& key)
 {
+	LLFirstUse::viewPopup();
+
 	LLButton *anchor_panel = LLBottomTray::getInstance()->getChild<LLButton>("camera_btn");
 
 	setDockControl(new LLDockControl(
@@ -333,9 +358,11 @@ void LLFloaterCamera::onClose(bool app_quitting)
 LLFloaterCamera::LLFloaterCamera(const LLSD& val)
 :	LLTransientDockableFloater(NULL, true, val),
 	mClosed(FALSE),
+	mUseFlatUI(false),	// <AW: Flat cam floater>
 	mCurrMode(CAMERA_CTRL_MODE_PAN),
 	mPrevMode(CAMERA_CTRL_MODE_PAN)
 {
+	LLHints::registerHintTarget("view_popup", LLView::getHandle());
 }
 
 // virtual
@@ -348,10 +375,18 @@ BOOL LLFloaterCamera::postBuild()
 	mRotate = getChild<LLJoystickCameraRotate>(ORBIT);
 	mZoom = findChild<LLPanelCameraZoom>(ZOOM);
 	mTrack = getChild<LLJoystickCameraTrack>(PAN);
-
-	assignButton2Mode(CAMERA_CTRL_MODE_MODES,			"avatarview_btn");
-	assignButton2Mode(CAMERA_CTRL_MODE_PAN,				"pan_btn");
-	assignButton2Mode(CAMERA_CTRL_MODE_PRESETS,		"presets_btn");
+// <AW: Flat cam floater>
+	if (hasString("use_flat_ui"))
+	{
+		mUseFlatUI = true;
+	}
+	else
+// </AW: Flat cam floater>
+	{
+		assignButton2Mode(CAMERA_CTRL_MODE_MODES,			"avatarview_btn");
+		assignButton2Mode(CAMERA_CTRL_MODE_PAN,				"pan_btn");
+		assignButton2Mode(CAMERA_CTRL_MODE_PRESETS,		"presets_btn");
+	}
 
 	update();
 
@@ -425,20 +460,29 @@ void LLFloaterCamera::setMode(ECameraControlMode mode)
 
 void LLFloaterCamera::setModeTitle(const ECameraControlMode mode)
 {
-	std::string title; 
-	switch(mode)
+	std::string title;
+// <AW: Flat cam floater>
+	if (mUseFlatUI)
 	{
-	case CAMERA_CTRL_MODE_MODES:
-		title = getString("camera_modes_title");
-		break;
-	case CAMERA_CTRL_MODE_PAN:
-		title = getString("pan_mode_title");
-		break;
-	case CAMERA_CTRL_MODE_PRESETS:
-		title = getString("presets_mode_title");
-		break;
-	default:
-		break;
+		title = getString("flat_ui_title");
+	}
+	else
+// </AW: Flat cam floater>
+	{
+		switch(mode)
+		{
+		case CAMERA_CTRL_MODE_MODES:
+			title = getString("camera_modes_title");
+			break;
+		case CAMERA_CTRL_MODE_PAN:
+			title = getString("pan_mode_title");
+			break;
+		case CAMERA_CTRL_MODE_PRESETS:
+			title = getString("presets_mode_title");
+			break;
+		default:
+			break;
+		}
 	}
 	setTitle(title);
 }
@@ -499,6 +543,14 @@ void LLFloaterCamera::assignButton2Mode(ECameraControlMode mode, const std::stri
 
 void LLFloaterCamera::updateState()
 {
+// <AW: Flat cam floater>
+	if (mUseFlatUI)
+	{
+		setModeTitle(mCurrMode);
+		return;
+	}
+// </AW: Flat cam floater>
+
 	getChildView(ZOOM)->setVisible(CAMERA_CTRL_MODE_PAN == mCurrMode);
 	
 	bool show_presets = (CAMERA_CTRL_MODE_PRESETS == mCurrMode) || (CAMERA_CTRL_MODE_FREE_CAMERA == mCurrMode
@@ -541,26 +593,52 @@ void LLFloaterCamera::updateItemsSelection()
 	getChild<LLPanelCameraItem>("object_view")->setValue(argument);
 }
 
+/*static*/
 void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 {
 	std::string name = param.asString();
 
-	if ("mouselook_view" == name)
+// <AW: Flat cam floater>
+	//if ("mouselook_view" == name)
+	LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
+ 
+	if ("reset_view" == name)
+	{
+		gAgentCamera.switchCameraPreset(CAMERA_PRESET_REAR_VIEW);
+		gAgentCamera.changeCameraToDefault();
+		if (camera_floater)
+			camera_floater->switchMode(CAMERA_CTRL_MODE_PAN);
+	}
+	else if ("mouselook_view" == name)
+// </AW: Flat cam floater>
 	{
 		gAgentCamera.changeCameraToMouselook();
 	}
-	else if ("object_view" == name)
+// <AW: Flat cam floater>
+// 	else if ("object_view" == name)
+// 	{
+// 		LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
+// 		if (camera_floater)
+// 			camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+// 	}
+	else if ("object_view" == name && camera_floater)
 	{
-		LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
-		if (camera_floater)
-		camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+		if (camera_floater->mUseFlatUI)
+		{
+			camera_floater->mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA ? camera_floater->switchMode(CAMERA_CTRL_MODE_PAN) : camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+		}
+		else
+		{
+			camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+		}
 	}
+// </AW: Flat cam floater>
 	else
 	{
 		switchToPreset(name);
 	}
 
-	LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
+// 	LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();// <AW: Flat cam floater>
 	if (camera_floater)
 	{
 		camera_floater->updateItemsSelection();
@@ -589,7 +667,14 @@ void LLFloaterCamera::switchToPreset(const std::string& name)
 
 void LLFloaterCamera::fromFreeToPresets()
 {
-	if (!sFreeCamera && mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA && mPrevMode == CAMERA_CTRL_MODE_PRESETS)
+// <AW: Flat cam floater>
+//	if (!sFreeCamera && mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA && mPrevMode == CAMERA_CTRL_MODE_PRESETS)
+	if(mUseFlatUI && !sFreeCamera && mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA && mPrevMode == CAMERA_CTRL_MODE_PAN)
+	{
+		switchMode(CAMERA_CTRL_MODE_PAN);
+	}
+	else if (!sFreeCamera && mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA && mPrevMode == CAMERA_CTRL_MODE_PRESETS)
+// </AW: Flat cam floater>
 	{
 		switchMode(CAMERA_CTRL_MODE_PRESETS);
 	}

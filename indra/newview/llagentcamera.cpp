@@ -29,6 +29,7 @@
 
 #include "pipeline.h"
 
+#include "aoengine.h"			// ## Zi: Animation Overrider
 #include "llagent.h"
 #include "llanimationstates.h"
 #include "llfloatercamera.h"
@@ -175,7 +176,9 @@ LLAgentCamera::LLAgentCamera() :
 	mPanLeftKey(0.f),
 	mPanRightKey(0.f),
 	mPanInKey(0.f),
-	mPanOutKey(0.f)
+	mPanOutKey(0.f),
+
+	mPointAtObject(NULL)
 {
 	mFollowCam.setMaxCameraDistantFromSubject( MAX_CAMERA_DISTANCE_FROM_AGENT );
 
@@ -285,25 +288,22 @@ void LLAgentCamera::resetView(BOOL reset_camera, BOOL change_camera)
 		gAgent.stopAutoPilot(TRUE);
 	}
 
-	if (!gNoRender)
+	LLSelectMgr::getInstance()->unhighlightAll();
+
+	// By popular request, keep land selection while walking around. JC
+	// LLViewerParcelMgr::getInstance()->deselectLand();
+
+	// force deselect when walking and attachment is selected
+	// this is so people don't wig out when their avatar moves without animating
+	if (LLSelectMgr::getInstance()->getSelection()->isAttachment())
 	{
-		LLSelectMgr::getInstance()->unhighlightAll();
+		LLSelectMgr::getInstance()->deselectAll();
+	}
 
-		// By popular request, keep land selection while walking around. JC
-		// LLViewerParcelMgr::getInstance()->deselectLand();
-
-		// force deselect when walking and attachment is selected
-		// this is so people don't wig out when their avatar moves without animating
-		if (LLSelectMgr::getInstance()->getSelection()->isAttachment())
-		{
-			LLSelectMgr::getInstance()->deselectAll();
-		}
-
-		if (gMenuHolder != NULL)
-		{
-			// Hide all popup menus
-			gMenuHolder->hideMenus();
-		}
+	if (gMenuHolder != NULL)
+	{
+		// Hide all popup menus
+		gMenuHolder->hideMenus();
 	}
 
 	if (change_camera && !gSavedSettings.getBOOL("FreezeTime"))
@@ -396,10 +396,10 @@ LLVector3 LLAgentCamera::calcFocusOffset(LLViewerObject *object, LLVector3 origi
 	{
 		return original_focus_point - obj_pos;
 	}
-
 	
 	LLQuaternion inv_obj_rot = ~obj_rot; // get inverse of rotation
-	LLVector3 object_extents = object->getScale();
+	LLVector3 object_extents = object->getScale();	
+	
 	// make sure they object extents are non-zero
 	object_extents.clamp(0.001f, F32_MAX);
 
@@ -557,7 +557,9 @@ BOOL LLAgentCamera::calcCameraMinDistance(F32 &obj_min_distance)
 {
 	BOOL soft_limit = FALSE; // is the bounding box to be treated literally (volumes) or as an approximation (avatars)
 
-	if (!mFocusObject || mFocusObject->isDead())
+	if (!mFocusObject || mFocusObject->isDead() || 
+		mFocusObject->isMesh() ||
+		gSavedSettings.getBOOL("DisableCameraConstraints"))
 	{
 		obj_min_distance = 0.f;
 		return TRUE;
@@ -906,6 +908,10 @@ void LLAgentCamera::cameraZoomIn(const F32 fraction)
 	F32 current_distance = (F32)camera_offset_unit.normalize();
 	F32 new_distance = current_distance * fraction;
 
+	// Freeing the camera movement some more -KC
+	static LLCachedControl<bool> disable_minconstraints(gSavedSettings,"PhoenixDisableMinZoomDist");
+	if (!disable_minconstraints)
+	{
 	// Don't move through focus point
 	if (mFocusObject)
 	{
@@ -921,13 +927,16 @@ void LLAgentCamera::cameraZoomIn(const F32 fraction)
 		}
 	}
 
-	new_distance = llmax(new_distance, min_zoom); 
+	new_distance = llmax(new_distance, min_zoom);
+	}	
 
 	// Don't zoom too far back
 	const F32 DIST_FUDGE = 16.f; // meters
-	F32 max_distance = llmin(mDrawDistance - DIST_FUDGE, 
+	// Freeing the camera movement some more... ok, a lot -KC
+	static LLCachedControl<bool> disable_constraints(gSavedSettings,"DisableCameraConstraints");
+	F32 max_distance = disable_constraints ? INT_MAX : llmin(mDrawDistance - DIST_FUDGE, 
 							 LLWorld::getInstance()->getRegionWidthInMeters() - DIST_FUDGE );
-
+	
 	if (new_distance > max_distance)
 	{
 		new_distance = max_distance;
@@ -974,6 +983,11 @@ void LLAgentCamera::cameraOrbitIn(const F32 meters)
 		LLVector3d	camera_offset_unit(mCameraFocusOffsetTarget);
 		F32 current_distance = (F32)camera_offset_unit.normalize();
 		F32 new_distance = current_distance - meters;
+		
+		// Freeing the camera movement some more -KC
+		static LLCachedControl<bool> disable_minconstraints(gSavedSettings,"PhoenixDisableMinZoomDist");
+		if (!disable_minconstraints)
+        {
 		F32 min_zoom = LAND_MIN_ZOOM;
 		
 		// Don't move through focus point
@@ -990,16 +1004,19 @@ void LLAgentCamera::cameraOrbitIn(const F32 meters)
 		}
 
 		new_distance = llmax(new_distance, min_zoom);
+		}
 
 		// Don't zoom too far back
 		const F32 DIST_FUDGE = 16.f; // meters
-		F32 max_distance = llmin(mDrawDistance - DIST_FUDGE, 
+		// Freeing the camera movement some more... ok, a lot -KC
+		static LLCachedControl<bool> disable_constraints(gSavedSettings,"DisableCameraConstraints");
+		F32 max_distance = disable_constraints ? INT_MAX : llmin(mDrawDistance - DIST_FUDGE, 
 								 LLWorld::getInstance()->getRegionWidthInMeters() - DIST_FUDGE );
 
 		if (new_distance > max_distance)
 		{
 			// Unless camera is unlocked
-			if (!gSavedSettings.getBOOL("DisableCameraConstraints"))
+			if (!disable_constraints)
 			{
 				return;
 			}
@@ -1663,7 +1680,10 @@ F32	LLAgentCamera::calcCameraFOVZoomFactor()
 		// don't FOV zoom on mostly transparent objects
 		LLVector3 focus_offset = mFocusObjectOffset;
 		F32 obj_min_dist = 0.f;
-		calcCameraMinDistance(obj_min_dist);
+		// Freeing the camera movement some more -KC
+		static LLCachedControl<bool> disable_minconstraints(gSavedSettings,"PhoenixDisableMinZoomDist");
+		if (!disable_minconstraints)
+			calcCameraMinDistance(obj_min_dist);
 		F32 current_distance = llmax(0.001f, camera_offset_dir.magVec());
 
 		mFocusObjectDist = obj_min_dist - current_distance;
@@ -1921,19 +1941,19 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 //
 //				isConstrained = TRUE;
 //			}
+	
+
+		// Don't let camera go underground
+		F32 camera_min_off_ground = getCameraMinOffGround();
+
+		camera_land_height = LLWorld::getInstance()->resolveLandHeightGlobal(camera_position_global);
+
+		if (camera_position_global.mdV[VZ] < camera_land_height + camera_min_off_ground)
+		{
+			camera_position_global.mdV[VZ] = camera_land_height + camera_min_off_ground;
+			isConstrained = TRUE;
+		}
 	}
-
-	// Don't let camera go underground
-	F32 camera_min_off_ground = getCameraMinOffGround();
-
-	camera_land_height = LLWorld::getInstance()->resolveLandHeightGlobal(camera_position_global);
-
-	if (camera_position_global.mdV[VZ] < camera_land_height + camera_min_off_ground)
-	{
-		camera_position_global.mdV[VZ] = camera_land_height + camera_min_off_ground;
-		isConstrained = TRUE;
-	}
-
 
 	if (hit_limit)
 	{
@@ -2044,7 +2064,7 @@ void LLAgentCamera::resetCamera()
 //-----------------------------------------------------------------------------
 void LLAgentCamera::changeCameraToMouselook(BOOL animate)
 {
-	if (LLViewerJoystick::getInstance()->getOverrideCamera())
+	if (!gSavedSettings.getBOOL("EnableMouselook") || LLViewerJoystick::getInstance()->getOverrideCamera())
 	{
 		return;
 	}
@@ -2078,6 +2098,7 @@ void LLAgentCamera::changeCameraToMouselook(BOOL animate)
 		
 		updateLastCamera();
 		mCameraMode = CAMERA_MODE_MOUSELOOK;
+		AOEngine::getInstance()->inMouselook(TRUE);			// ## Zi: Animation Overrider
 		const U32 old_flags = gAgent.getControlFlags();
 		gAgent.setControlFlags(AGENT_CONTROL_MOUSELOOK);
 		if (old_flags != gAgent.getControlFlags())
@@ -2139,6 +2160,7 @@ void LLAgentCamera::changeCameraToFollow(BOOL animate)
 
 		updateLastCamera();
 		mCameraMode = CAMERA_MODE_FOLLOW;
+		AOEngine::getInstance()->inMouselook(FALSE);			// ## Zi: Animation Overrider
 
 		// bang-in the current focus, position, and up vector of the follow cam
 		mFollowCam.reset(mCameraPositionAgent, LLViewerCamera::getInstance()->getPointOfInterest(), LLVector3::z_axis);
@@ -2217,6 +2239,7 @@ void LLAgentCamera::changeCameraToThirdPerson(BOOL animate)
 		}
 		updateLastCamera();
 		mCameraMode = CAMERA_MODE_THIRD_PERSON;
+		AOEngine::getInstance()->inMouselook(FALSE);			// ## Zi: Animation Overrider
 		gAgent.clearControlFlags(AGENT_CONTROL_MOUSELOOK);
 	}
 
@@ -2545,7 +2568,8 @@ void LLAgentCamera::setCameraPosAndFocusGlobal(const LLVector3d& camera_pos, con
 	{
 		const F64 ANIM_METERS_PER_SECOND = 10.0;
 		const F64 MIN_ANIM_SECONDS = 0.5;
-		const F64 MAX_ANIM_SECONDS = 10.0;
+		//const F64 MAX_ANIM_SECONDS = 10.0;
+		F64 MAX_ANIM_SECONDS = 1.0; // Andromeda radar cam patch, make camming faster
 		F64 anim_duration = llmax( MIN_ANIM_SECONDS, sqrt(focus_delta_squared) / ANIM_METERS_PER_SECOND );
 		anim_duration = llmin( anim_duration, MAX_ANIM_SECONDS );
 		setAnimationDuration( (F32)anim_duration );
@@ -2639,7 +2663,17 @@ void LLAgentCamera::setFocusOnAvatar(BOOL focus_on_avatar, BOOL animate)
 
 BOOL LLAgentCamera::setLookAt(ELookAtType target_type, LLViewerObject *object, LLVector3 position)
 {
-	if(object && object->isAttachment())
+	static LLCachedControl<bool> isLocalPrivate(gSavedSettings, "PrivateLocalLookAtTarget", false);
+	
+	// AO, set to absolutely nothing if local lookats are disabled.
+	if(isLocalPrivate)
+	{
+			position.clearVec();
+			target_type = LOOKAT_TARGET_NONE;
+			object = gAgentAvatarp;
+	}
+	
+	else if(object && object->isAttachment())
 	{
 		LLViewerObject* parent = object;
 		while(parent)
@@ -2653,6 +2687,7 @@ BOOL LLAgentCamera::setLookAt(ELookAtType target_type, LLViewerObject *object, L
 			parent = (LLViewerObject*)parent->getParent();
 		}
 	}
+	
 	if(!mLookAt || mLookAt->isDead())
 	{
 		mLookAt = (LLHUDEffectLookAt *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_LOOKAT);
@@ -2705,6 +2740,9 @@ void LLAgentCamera::lookAtLastChat()
 		new_camera_pos -= delta_pos * 0.4f;
 		new_camera_pos += left * 0.3f;
 		new_camera_pos += up * 0.2f;
+
+		setFocusOnAvatar(FALSE, FALSE);
+
 		if (chatter_av->mHeadp)
 		{
 			setFocusGlobal(gAgent.getPosGlobalFromAgent(chatter_av->mHeadp->getWorldPosition()), gAgent.getLastChatter());
@@ -2715,7 +2753,6 @@ void LLAgentCamera::lookAtLastChat()
 			setFocusGlobal(chatter->getPositionGlobal(), gAgent.getLastChatter());
 			mCameraFocusOffsetTarget = gAgent.getPosGlobalFromAgent(new_camera_pos) - chatter->getPositionGlobal();
 		}
-		setFocusOnAvatar(FALSE, TRUE);
 	}
 	else
 	{
@@ -2735,16 +2772,22 @@ void LLAgentCamera::lookAtLastChat()
 		new_camera_pos += left * 0.3f;
 		new_camera_pos += up * 0.2f;
 
+		setFocusOnAvatar(FALSE, FALSE);
+
 		setFocusGlobal(chatter->getPositionGlobal(), gAgent.getLastChatter());
 		mCameraFocusOffsetTarget = gAgent.getPosGlobalFromAgent(new_camera_pos) - chatter->getPositionGlobal();
-		setFocusOnAvatar(FALSE, TRUE);
 	}
 }
 
 BOOL LLAgentCamera::setPointAt(EPointAtType target_type, LLViewerObject *object, LLVector3 position)
 {
+	// Ansariel: Remember the current object point pointed at - we might need it later
+	mPointAtObject = object;
+
 	// disallow pointing at attachments and avatars
-	if (object && (object->isAttachment() || object->isAvatar()))
+	//this is the editing arm motion
+	static LLCachedControl<bool> private_pointat(gSavedSettings, "PrivatePointAtTarget", false);
+	if (object && (object->isAttachment() || object->isAvatar() || private_pointat))
 	{
 		return FALSE;
 	}

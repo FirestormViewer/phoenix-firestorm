@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  background_opaque="true"
- background_visible="false"
- bg_opaque_color="green"
- bg_alpha_color="green"
+ background_visible="true"
+ bg_opaque_color="MouseGray"
  follows="left|bottom|right"
- height="50"
- bottom="5"
+ focus_root="true"
+ height="37"
  layout="topleft"
  name="navigation_bar"
  chrome="true"
  width="1024">
 
 	<panel
-	 background_visible="true"
-	 bg_opaque_color="DkGray"
-	 bg_alpha_color="DkGray"
-	 background_opaque="true"
+	 background_visible="false"
 	 follows="left|top|right"
-	 height="30"
-	 top="0"
+	 height="22"
 	 layout="topleft"
+	 top_delta="0"
+	 top_pad="0"
 	 name="navigation_panel"
-	 width="2054">
+	 width="1024">
 	     <pull_button
 	     follows="left|top"
 	     direction="down"
@@ -30,10 +27,10 @@
 	     image_overlay="Arrow_Left_Off"
 	     image_bottom_pad="1"
 	     layout="topleft"
-	     left="10"
+	     left="5"
 	     name="back_btn"
 	     tool_tip="Go back to previous location"
-	     top="2"
+	     top="0"
 	     width="31" />
 	    <pull_button
 	     follows="left|top"
@@ -47,29 +44,28 @@
 	     tool_tip="Go forward one location"
 	     top_delta="0"
 	     width="31" />
-	    <button
+	   	    <button
 	     follows="left|top"
 	     height="23"
 	     image_bottom_pad="1"
 	     image_overlay="Home_Off"
 	     layout="topleft"
-	     left_pad="7"
+	     left_pad="5"
 	     name="home_btn"
-	     tool_tip="Teleport to home location"
+	     tool_tip="Teleport to my home location"
 	     top_delta="0"
-	     width="32" />
+	     width="38" />
           <!-- About Land Button here -->         
 	    <button
 	     follows="left|top"
 	     height="23"
-           use_ellipses="true"
 	     layout="topleft"
-	     left_pad="7"
+	     left_pad="5"
 	     name="About_Land"
-	     label="Land" 
-	     tool_tip="Pops up Land Information window"
+	     image_overlay="Info_Over"
+	     tool_tip="About Land"
 	     top_delta="0"
-	     width="43">
+	     width="38">
 		 <button.init_callback
                function="Button.SetFloaterToggle"
                parameter="about_land" />
@@ -80,23 +76,39 @@
 	    <button
 	     follows="left|top"
 	     height="23"
-           use_ellipses="true"
+           
 	     layout="topleft"
-	     left_pad="7"
+	     left_pad="5"
 	     name="Sky"
-	     label="Sky" 
+	     image_overlay="Windlight_btn"
 	     tool_tip="Pops up Sky Editor window"
 	     top_delta="0"
-	     width="30">
+	     width="38">
 		 <button.init_callback
                function="Button.SetFloaterToggle"
-               parameter="env_windlight" />
+               parameter="env_settings" />
 		 </button>
-          <!-- end of Windlight Button -->
+           <!-- end of Windlight Button -->
 
+             <!---prefs button-->
+                     <button
+	     follows="left|top"
+	     height="23"
+	     layout="topleft"
+	     left_pad="5"
+	     name="Prefs"
+	     image_overlay="Edit_Prefs_Wrench"	
+	     tool_tip="Open preferences window"
+	     top_delta="0"
+	     width="38">
+	               <button.init_callback
+                function="Button.SetFloaterToggle"
+                parameter="preferences" />
+	                 </button>
+             <!-- end of Prefs Button -->
 
 	    <location_input
-	     follows="left|top|right"
+	     follows="left|right|top"
 	     halign="right"
 	     height="23"
 	     label="Location"
@@ -106,22 +118,22 @@
 	     mouse_opaque="false"
 	     name="location_combo"
 	     top_delta="0"
-	     width="80">
+	     width="50">
 	    </location_input>
          <combo_list
          mouse_wheel_opaque="true"/>
         <search_combo_box
+	     follows="right|top"
 	     halign="right"
-	     follows="top|right"
 	     height="23"
+		 left_pad="10"
 	     label="Search"
 	     layout="topleft"
 	     mouse_opaque="false"
 	     name="search_combo_box"
 	     tool_tip="Search"
 	     top_delta="0"
-	     right="480"
-	     width="200" >
+	     width="175" >
          <combo_editor
           label="Search MetaVerse"
           name="search_combo_editor"/>
@@ -132,15 +144,11 @@
           border.shadow_light_color="FocusColor"
           border.shadow_dark_color="FocusColor"/>
         </search_combo_box>
+
 	</panel>
   <favorites_bar
-  	 auto_resize="true"
-	 background_visible="true"
-	 bg_opaque_color="green"
-	 bg_alpha_color="green"
-	 background_opaque="true"
-     follows="left|top|right"
-     top_pad="3"
+     follows="left|right|top"
+     top_pad="2"
      font="SansSerifSmall"
      height="15"
      layout="topleft"
@@ -148,7 +156,7 @@
      name="favorite"
      image_drag_indication="Accordion_ArrowOpened_Off"
      tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
-     width="1024">
+     width="590">
         <label
          follows="left|top"
          height="15"
@@ -157,6 +165,7 @@
          name="favorites_bar_label"
          text_color="LtGray"
          tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
+		 top="12"
          width="102">
           Favorites Bar
         </label>
@@ -167,6 +176,7 @@
              follows="left|bottom"
              tool_tip="Show more of My Favorites"
              width="15"
+			 top="15"
              height="15"/>
   </favorites_bar>
 </panel>

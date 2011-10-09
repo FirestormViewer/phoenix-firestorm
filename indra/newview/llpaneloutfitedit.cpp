@@ -36,7 +36,7 @@
 #include "lloutfitobserver.h"
 #include "llcofwearables.h"
 #include "llfilteredwearablelist.h"
-#include "llfolderviewitem.h"
+#include "llfolderview.h"
 #include "llinventory.h"
 #include "llinventoryitemslist.h"
 #include "llviewercontrol.h"
@@ -189,14 +189,8 @@ private:
 	// Populate the menu with items like "New Skin", "New Pants", etc.
 	static void populateCreateWearableSubmenus(LLMenuGL* menu)
 	{
-		LLView* menu_clothes	= gMenuHolder->findChildView("COF.Gear.New_Clothes", FALSE);
-		LLView* menu_bp			= gMenuHolder->findChildView("COF.Geear.New_Body_Parts", FALSE);
-
-		if (!menu_clothes || !menu_bp)
-		{
-			llassert(menu_clothes && menu_bp);
-			return;
-		}
+		LLView* menu_clothes	= gMenuHolder->getChildView("COF.Gear.New_Clothes", FALSE);
+		LLView* menu_bp			= gMenuHolder->getChildView("COF.Geear.New_Body_Parts", FALSE);
 
 		for (U8 i = LLWearableType::WT_SHAPE; i != (U8) LLWearableType::WT_COUNT; ++i)
 		{
@@ -475,6 +469,7 @@ BOOL LLPanelOutfitEdit::postBuild()
 	mListViewItemTypes.push_back(new LLFilterItem(LLTrans::getString("skirt"), new LLFindActualWearablesOfType(LLWearableType::WT_SKIRT)));
 	mListViewItemTypes.push_back(new LLFilterItem(LLTrans::getString("alpha"), new LLFindActualWearablesOfType(LLWearableType::WT_ALPHA)));
 	mListViewItemTypes.push_back(new LLFilterItem(LLTrans::getString("tattoo"), new LLFindActualWearablesOfType(LLWearableType::WT_TATTOO)));
+	mListViewItemTypes.push_back(new LLFilterItem(LLTrans::getString("physics"), new LLFindActualWearablesOfType(LLWearableType::WT_PHYSICS)));
 
 	mCurrentOutfitName = getChild<LLTextBox>("curr_outfit_name"); 
 	mStatus = getChild<LLTextBox>("status");
@@ -1336,19 +1331,19 @@ void LLPanelOutfitEdit::getCurrentItemUUID(LLUUID& selected_id)
 
 void LLPanelOutfitEdit::getSelectedItemsUUID(uuid_vec_t& uuid_list)
 {
+	void (uuid_vec_t::* tmp)(LLUUID const &) = &uuid_vec_t::push_back;
 	if (mInventoryItemsPanel->getVisible())
 	{
 		std::set<LLUUID> item_set = mInventoryItemsPanel->getRootFolder()->getSelectionList();
 
-		std::for_each(item_set.begin(), item_set.end(), boost::bind( &uuid_vec_t::push_back, &uuid_list, _1));
+		std::for_each(item_set.begin(), item_set.end(), boost::bind( tmp, &uuid_list, _1));
 	}
 	else if (mWearablesListViewPanel->getVisible())
 	{
 		std::vector<LLSD> item_set;
 		mWearableItemsList->getSelectedValues(item_set);
 
-		std::for_each(item_set.begin(), item_set.end(), boost::bind( &uuid_vec_t::push_back, &uuid_list, boost::bind(&LLSD::asUUID, _1 )));
-
+		std::for_each(item_set.begin(), item_set.end(), boost::bind( tmp, &uuid_list, boost::bind(&LLSD::asUUID, _1 )));
 	}
 
 //	return selected_id;

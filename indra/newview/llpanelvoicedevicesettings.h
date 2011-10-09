@@ -45,8 +45,12 @@ public:
 	void cleanup();
 
 	/*virtual*/ void handleVisibilityChange ( BOOL new_visibility );
+
+	void setUseTuningMode(bool use) { mUseTuningMode = use; };
 	
 protected:
+	std::string getLocalizedDeviceName(const std::string& en_dev_name);
+
 	void onCommitInputDevice();
 	void onCommitOutputDevice();
 
@@ -56,6 +60,8 @@ protected:
 	class LLComboBox		*mCtrlInputDevices;
 	class LLComboBox		*mCtrlOutputDevices;
 	BOOL mDevicesUpdated;
+	bool mUseTuningMode;
+	std::map<std::string, std::string> mLocalizedDeviceNames;
 };
 
 #endif // LL_LLPANELVOICEDEVICESETTINGS_H

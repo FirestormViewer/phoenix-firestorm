@@ -72,8 +72,13 @@ const F32 PARCEL_POST_HEIGHT = 0.666f;
 // Returns true if you got at least one object
 void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 {
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
-	if ( (rlv_handler_t::isEnabled()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT))) )
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+	// Block rectangle selection if:
+	//   - prevented from editing and no exceptions are set (see below for the case where exceptions are set)
+	//   - prevented from interacting at all
+	if ( (rlv_handler_t::isEnabled()) && 
+		 ( ((gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) && (!gRlvHandler.hasException(RLV_BHVR_EDIT))) || 
+		   (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) ) )
 	{
 		return;
 	}
@@ -237,6 +242,13 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 			{
 				continue;
 			}
+
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
+			if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canEdit(vobjp)) )
+			{
+				continue;
+			}
+// [/RLVa:KB]
 
 			S32 result = LLViewerCamera::getInstance()->sphereInFrustum(drawable->getPositionAgent(), drawable->getRadius());
 			if (result)
@@ -651,7 +663,7 @@ void LLViewerParcelMgr::renderCollisionSegments(U8* segments, BOOL use_pass, LLV
 	F32 pos_y = pos.mV[VY];
 
 	LLGLSUIDefault gls_ui;
-	LLGLDepthTest gls_depth(GL_TRUE);
+	LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE);
 	LLGLDisable cull(GL_CULL_FACE);
 	
 	if (mCollisionBanned == BA_BANNED)

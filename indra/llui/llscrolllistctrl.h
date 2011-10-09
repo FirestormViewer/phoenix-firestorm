@@ -412,6 +412,7 @@ protected:
 	typedef std::deque<LLScrollListItem *> item_list;
 	item_list&		getItemList() { return mItemList; }
 
+public:
 	void			updateLineHeight();
 
 private:
@@ -491,7 +492,7 @@ private:
 
 	mutable bool	mSorted;
 	
-	typedef std::map<std::string, LLScrollListColumn> column_map_t;
+	typedef std::map<std::string, LLScrollListColumn*> column_map_t;
 	column_map_t mColumns;
 
 	BOOL			mDirty;

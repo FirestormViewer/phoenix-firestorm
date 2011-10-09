@@ -44,9 +44,6 @@
 	 name="EmphasisColor_35"
 	 value="0.950 0.412 0.173 0.35" />
 	<color
-	 name="white"
-	 value="0 0 0 1" />
-	<color
 	 name="White"
 	 value="1 1 1 1" />
 	<color
@@ -413,102 +410,6 @@
     <color
      name="ColorDropShadow"
      reference="Black_50" />
-    <color
-     name="ColorPaletteEntry01"
-     reference="Black" />
-    <color
-     name="ColorPaletteEntry02"
-     reference="SL-MidDkGray" />
-    <color
-     name="ColorPaletteEntry03"
-     value="0.3344 0.5456 0.5159 1" />
-    <color
-     name="ColorPaletteEntry04"
-     value="0.5 0.5 0 1" />
-    <color
-     name="ColorPaletteEntry05"
-     value="0 0.5 0 1" />
-    <color
-     name="ColorPaletteEntry06"
-     value="0 0.5 0.5 1" />
-    <color
-     name="ColorPaletteEntry07"
-     value="0 0 0.5 1" />
-    <color
-     name="ColorPaletteEntry08"
-     value="0.5 0 0.5 1" />
-    <color
-     name="ColorPaletteEntry09"
-     value="0.5 0.5 0 1" />
-    <color
-     name="ColorPaletteEntry10"
-     value="0 0.25 0.25 1" />
-    <color
-     name="ColorPaletteEntry11"
-     value="0 0.5 1 1" />
-    <color
-     name="ColorPaletteEntry12"
-     value="0 0.25 0.5 1" />
-    <color
-     name="ColorPaletteEntry13"
-     value="0.5 0 1 1" />
-    <color
-     name="ColorPaletteEntry14"
-     value="0.5 0.25 0 1" />
-    <color
-     name="ColorPaletteEntry15"
-     reference="White" />
-    <color
-     name="ColorPaletteEntry16"
-     reference="LtYellow" />
-    <color
-     name="ColorPaletteEntry17"
-     reference="LtGreen" />
-    <color
-     name="ColorPaletteEntry18"
-     reference="LtGray" />
-    <color
-     name="ColorPaletteEntry19"
-     reference="Red" />
-    <color
-     name="ColorPaletteEntry20"
-     reference=".5 .5 1 0" />
-    <color
-     name="ColorPaletteEntry21"
-     reference="Green" />
-    <color
-     name="ColorPaletteEntry22"
-     value="0 1 1 1" />
-    <color
-     name="ColorPaletteEntry23"
-     reference="Blue" />
-    <color
-     name="ColorPaletteEntry24"
-     reference="Purple" />
-    <color
-     name="ColorPaletteEntry25"
-     value="1 1 0.5 1" />
-    <color
-     name="ColorPaletteEntry26"
-     value="0 1 0.5 1" />
-    <color
-     name="ColorPaletteEntry27"
-     value="0.5 1 1 1" />
-    <color
-     name="ColorPaletteEntry28"
-     value="0.5 0.5 1 1" />
-    <color
-     name="ColorPaletteEntry29"
-     value="1 0 0.5 1" />
-    <color
-     name="ColorPaletteEntry30"
-     value="1 0.5 0 1" />
-    <color
-     name="ColorPaletteEntry31"
-     reference="White" />
-    <color
-     name="ColorPaletteEntry32"
-     reference="White" />
     <color
      name="ComboListBgColor"
      reference="DkGray" />

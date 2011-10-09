@@ -967,12 +967,14 @@ BOOL LLImageGL::setSubImage(const U8* datap, S32 data_width, S32 data_height, S3
 	}
 	if (mTexName == 0)
 	{
-		llwarns << "Setting subimage on image without GL texture" << llendl;
+		// *TODO: Re-enable warning?  Ran into thread locking issues? DK 2011-02-18
+		//llwarns << "Setting subimage on image without GL texture" << llendl;
 		return FALSE;
 	}
 	if (datap == NULL)
 	{
-		llwarns << "Setting subimage on image with NULL datap" << llendl;
+		// *TODO: Re-enable warning?  Ran into thread locking issues? DK 2011-02-18
+		//llwarns << "Setting subimage on image with NULL datap" << llendl;
 		return FALSE;
 	}
 	
@@ -1063,16 +1065,6 @@ BOOL LLImageGL::setSubImageFromFrameBuffer(S32 fb_x, S32 fb_y, S32 x_pos, S32 y_
 {
 	if (gGL.getTexUnit(0)->bind(this, false, true))
 	{
-		if(gGLManager.mDebugGPU)
-		{
-			llinfos << "Calling glCopyTexSubImage2D(...)" << llendl ;
-			checkTexSize(true) ;
-			llcallstacks << fb_x << " : " << fb_y << " : " << x_pos << " : " << y_pos << " : " << width << " : " << height <<
-				" : " << (S32)mComponents << llcallstacksendl ;
-
-			log_glerror() ;
-		}
-
 		glCopyTexSubImage2D(GL_TEXTURE_2D, 0, fb_x, fb_y, x_pos, y_pos, width, height);
 		mGLTextureCreated = true;
 		stop_glerror();
@@ -1091,11 +1083,16 @@ void LLImageGL::generateTextures(S32 numTextures, U32 *textures)
 }
 
 // static
-void LLImageGL::deleteTextures(S32 numTextures, U32 *textures)
+void LLImageGL::deleteTextures(S32 numTextures, U32 *textures, bool immediate)
 {
 	for (S32 i = 0; i < numTextures; i++)
 	{
 		sDeadTextureList.push_back(textures[i]);
+	}
+
+	if (immediate)
+	{
+		LLImageGL::deleteDeadTextures();
 	}
 }
 
@@ -1110,6 +1107,7 @@ void LLImageGL::setManualImage(U32 target, S32 miplevel, S32 intformat, S32 widt
 //the texture is assiciate with some image by calling glTexImage outside LLImageGL
 BOOL LLImageGL::createGLTexture()
 {
+	if (gHeadlessClient) return FALSE;
 	if (gGLManager.mIsDisabled)
 	{
 		llwarns << "Trying to create a texture while GL is disabled!" << llendl;
@@ -1138,6 +1136,7 @@ BOOL LLImageGL::createGLTexture()
 
 BOOL LLImageGL::createGLTexture(S32 discard_level, const LLImageRaw* imageraw, S32 usename/*=0*/, BOOL to_create, S32 category)
 {
+	if (gHeadlessClient) return FALSE;
 	if (gGLManager.mIsDisabled)
 	{
 		llwarns << "Trying to create a texture while GL is disabled!" << llendl;
@@ -1415,21 +1414,35 @@ BOOL LLImageGL::readBackRaw(S32 discard_level, LLImageRaw* imageraw, bool compre
 
 void LLImageGL::deleteDeadTextures()
 {
+	bool reset = false;
+
 	while (!sDeadTextureList.empty())
 	{
 		GLuint tex = sDeadTextureList.front();
 		sDeadTextureList.pop_front();
-		for (int i = 0; i < gGLManager.mNumTextureUnits; i++)
+		for (int i = 0; i < gGLManager.mNumTextureImageUnits; i++)
 		{
-			if (sCurrentBoundTextures[i] == tex)
+			LLTexUnit* tex_unit = gGL.getTexUnit(i);
+
+			if (tex_unit && tex_unit->getCurrTexture() == tex)
 			{
-				gGL.getTexUnit(i)->unbind(LLTexUnit::TT_TEXTURE);
+				tex_unit->unbind(tex_unit->getCurrType());
 				stop_glerror();
+
+				if (i > 0)
+				{
+					reset = true;
+				}
 			}
 		}
 		
 		glDeleteTextures(1, &tex);
 		stop_glerror();
+	}
+
+	if (reset)
+	{
+		gGL.getTexUnit(0)->activate();
 	}
 }
 		
@@ -1716,6 +1729,7 @@ void LLImageGL::analyzeAlpha(const void* data_in, U32 w, U32 h)
 				sample[asum/(16*4)] += 4;
 			}
 			
+			
 			rowstart += 2 * w * mAlphaStride;
 		}
 		length *= 2; // we sampled everything twice, essentially
@@ -1873,6 +1887,7 @@ BOOL LLImageGL::getMask(const LLVector2 &tc)
 
 void LLImageGL::setCategory(S32 category) 
 {
+#if 0 //turn this off temporarily because it is not in use now.
 	if(!gAuditTexture)
 	{
 		return ;
@@ -1893,6 +1908,7 @@ void LLImageGL::setCategory(S32 category)
 			mCategory = -1 ;
 		}
 	}
+#endif
 }
 
 //for debug use 

@@ -35,12 +35,23 @@
 #include "lltextutil.h"
 
 #include "llagent.h"
+#include "llslurl.h" // AO: Used for confirm modify rights
 #include "llavatarnamecache.h"
 #include "llavatariconctrl.h"
 #include "lloutputmonitorctrl.h"
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
+// [SL:KB] - Patch: UI-AvatarListDndShare | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+#include "lltooldraganddrop.h"
+// [/SL:KB]
+#include  <time.h>
+#include "llavatarpropertiesprocessor.h"
+#include "lldateutil.h"
+#include "llavatarconstants.h"
+#include "indra_constants.h"
+#include "llnotificationsutil.h"
+#include "llvoiceclient.h"
 
 bool LLAvatarListItem::sStaticInitialized = false;
 S32 LLAvatarListItem::sLeftPadding = 0;
@@ -65,21 +76,38 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	mAvatarIcon(NULL),
 	mAvatarName(NULL),
 	mLastInteractionTime(NULL),
-	mIconPermissionOnline(NULL),
-	mIconPermissionMap(NULL),
-	mIconPermissionEditMine(NULL),
+	mBtnPermissionOnline(NULL),
+	mBtnPermissionMap(NULL),
+	mBtnPermissionEditMine(NULL),
 	mIconPermissionEditTheirs(NULL),
 	mSpeakingIndicator(NULL),
 	mInfoBtn(NULL),
 	mProfileBtn(NULL),
 	mOnlineStatus(E_UNKNOWN),
 	mShowInfoBtn(true),
+	mShowVoiceVolume(false),
 	mShowProfileBtn(true),
+	mNearbyRange(false),
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	mRlvCheckShowNames(false),
 // [/RLVa:KB]
 	mShowPermissions(false),
-	mHovered(false)
+	mHovered(false),
+	mShowDisplayName(true),
+	mShowUsername(true),
+	mFirstSeen(time(NULL)),
+	mAvStatus(0),
+	mAvPosition(LLVector3d(0.0f,0.0f,0.0f)),
+	mShowFirstSeen(false),
+	mShowStatusFlags(false),
+	mShowAvatarAge(false),
+	mShowPaymentStatus(false),
+	mPaymentStatus(NULL),
+	mAvatarAge(0),
+	// [Ansariel: Colorful radar]
+	mUseRangeColors(false),
+	// [Ansariel: Colorful radar]
+	mDistance(99999.9f) // arbitary large number to insure new avatars are considered outside close range until we know for sure.
 {
 	if (not_from_ui_factory)
 	{
@@ -95,6 +123,7 @@ LLAvatarListItem::~LLAvatarListItem()
 	{
 		LLAvatarTracker::instance().removeParticularFriendObserver(mAvatarId, this);
 		LLAvatarTracker::instance().removeFriendPermissionObserver(mAvatarId, this);
+		LLAvatarPropertiesProcessor::getInstance()->removeObserver(mAvatarId, this); // may try to remove null observer
 	}
 }
 
@@ -104,22 +133,50 @@ BOOL  LLAvatarListItem::postBuild()
 	mAvatarName = getChild<LLTextBox>("avatar_name");
 	mLastInteractionTime = getChild<LLTextBox>("last_interaction");
 
-	mIconPermissionOnline = getChild<LLIconCtrl>("permission_online_icon");
-	mIconPermissionMap = getChild<LLIconCtrl>("permission_map_icon");
-	mIconPermissionEditMine = getChild<LLIconCtrl>("permission_edit_mine_icon");
+	// permissions
+	mBtnPermissionOnline = getChild<LLButton>("permission_online_btn");
+	mBtnPermissionMap = getChild<LLButton>("permission_map_btn");
+	mBtnPermissionEditMine = getChild<LLButton>("permission_edit_mine_btn");
 	mIconPermissionEditTheirs = getChild<LLIconCtrl>("permission_edit_theirs_icon");
 	
-	mIconPermissionOnline->setVisible(false);
-	mIconPermissionMap->setVisible(false);
-	mIconPermissionEditMine->setVisible(false);
+	mBtnPermissionOnline->setClickedCallback(boost::bind(&LLAvatarListItem::onPermissionOnlineClick, this));
+	mBtnPermissionMap->setClickedCallback(boost::bind(&LLAvatarListItem::onPermissionMapClick, this));
+	mBtnPermissionEditMine->setClickedCallback(boost::bind(&LLAvatarListItem::onPermissionEditMineClick, this));
+	
+	mBtnPermissionOnline->setVisible(false);
+	mBtnPermissionOnline->setIsChrome(TRUE);
+	mBtnPermissionMap->setVisible(false);
+	mBtnPermissionMap->setIsChrome(TRUE);
+	mBtnPermissionEditMine->setVisible(false);
+	mBtnPermissionEditMine->setIsChrome(TRUE);
 	mIconPermissionEditTheirs->setVisible(false);
+	
+	
+	// radar
+	mNearbyRange = getChild<LLTextBox>("radar_range");
+	mNearbyRange->setValue("N/A");
+	mNearbyRange->setVisible(false);
+	mFirstSeenDisplay = getChild<LLTextBox>("first_seen");
+	mFirstSeenDisplay->setValue("");
+	mFirstSeenDisplay->setVisible(false);
+	mAvatarAgeDisplay = getChild<LLTextBox>("avatar_age");
+	mAvatarAgeDisplay->setVisible(false);
+	mAvatarAgeDisplay->setValue("N/A");
+	mPaymentStatus = getChild<LLIconCtrl>("payment_info");
+	mPaymentStatus->setVisible(false);
+	
+	// TODO: Status flags
 
 	mSpeakingIndicator = getChild<LLOutputMonitorCtrl>("speaking_indicator");
 	mInfoBtn = getChild<LLButton>("info_btn");
 	mProfileBtn = getChild<LLButton>("profile_btn");
-
-	mInfoBtn->setVisible(false);
+	
+	mInfoBtn->setVisible(false); // AO: enable this by calling setShowInfoButton
 	mInfoBtn->setClickedCallback(boost::bind(&LLAvatarListItem::onInfoBtnClick, this));
+	
+	mVoiceSlider = getChild<LLUICtrl>("volume_slider");
+	mVoiceSlider->setVisible(false);
+	mVoiceSlider->setCommitCallback(boost::bind(&LLAvatarListItem::onVolumeChange, this, _2));
 
 	mProfileBtn->setVisible(false);
 	mProfileBtn->setClickedCallback(boost::bind(&LLAvatarListItem::onProfileBtnClick, this));
@@ -139,6 +196,12 @@ BOOL  LLAvatarListItem::postBuild()
 	return TRUE;
 }
 
+void LLAvatarListItem::onVolumeChange(const LLSD& data)
+{
+	F32 volume = (F32)data.asReal();
+	LLVoiceClient::getInstance()->setUserVolume(mAvatarId, volume);
+}
+
 S32 LLAvatarListItem::notifyParent(const LLSD& info)
 {
 	if (info.has("visibility_changed"))
@@ -152,37 +215,32 @@ S32 LLAvatarListItem::notifyParent(const LLSD& info)
 void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( true);
-	
-	// AO: behave differently based on which avlist we are. Should move this into XUI or subclasses.
-	std::string listName = getParent()->getParent()->getName();	
+
+	// AO, removed on-hover visibility. Don't do this. instead flip info buttons on full-time in postbuild.
 //	mInfoBtn->setVisible(mShowInfoBtn);
 //	mProfileBtn->setVisible(mShowProfileBtn);
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
-	
-	// AO - V1 UI, icon space is at a premium. Remove the hover-context icons, use right-click context menu instead.
-	if ( listName == "speakers_list" )
-		mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
-	
-	//mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+//	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+//	mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
 // [/RLVa:KB]
 
 	mHovered = true;
 	LLPanel::onMouseEnter(x, y, mask);
 
-	showPermissions(gSavedSettings.getBOOL("FriendsListShowPermissions"));
+//  AO don't update these on-hover, because we want to give users instant feedback when they change a permission state, even if the
+//  process takes n-seconds to complete. Hover-reprocessing can confuse the user if it takes place before the async permissions change
+//  goes through, appearing to mysteriously erase the user's choice.
+//	showPermissions(mShowPermissions && gSavedSettings.getBOOL("FriendsListShowPermissions"));
 	updateChildren();
 }
 
 void LLAvatarListItem::onMouseLeave(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( false);
-	mInfoBtn->setVisible(false);
-	mProfileBtn->setVisible(false);
 
+//	mInfoBtn->setVisible(false); // commented out to have the info button always shown	-WoLf
 	mHovered = false;
 	LLPanel::onMouseLeave(x, y, mask);
-
-	//showPermissions(false); AO- persist permissions display
 	updateChildren();
 }
 
@@ -194,9 +252,7 @@ void LLAvatarListItem::changed(U32 mask)
 
 	if ((mask & LLFriendObserver::POWERS) || (mask & LLFriendObserver::PERMS)) 
 	{
-		//showPermissions(mShowPermissions && mHovered);   AO- Keep icons around persistently.
-		llinfos << "Permissions changed, updating Children." << llendl;
-		showPermissions(gSavedSettings.getBOOL("FriendsListShowPermissions"));
+		showPermissions(mShowPermissions && gSavedSettings.getBOOL("FriendsListShowPermissions"));
 		updateChildren();
 	}
 }
@@ -294,7 +350,7 @@ void LLAvatarListItem::setAvatarId(const LLUUID& id, const LLUUID& session_id, b
 	
 	// AO: Always show permissions icons, like in V1.
 	// we put this here so because it's the nearest update point where we have good av data.
-	showPermissions(gSavedSettings.getBOOL("FriendsListShowPermissions"));
+	showPermissions(mShowPermissions && gSavedSettings.getBOOL("FriendsListShowPermissions"));
 	updateChildren();
 }
 
@@ -312,6 +368,13 @@ void LLAvatarListItem::setLastInteractionTime(U32 secs_since)
 void LLAvatarListItem::setShowInfoBtn(bool show)
 {
 	mShowInfoBtn = show;
+	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+}
+
+void LLAvatarListItem::setShowVoiceVolume(bool show)
+{
+	mShowVoiceVolume = show;
+	mVoiceSlider->setVisible( (mShowVoiceVolume) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
 }
 
 void LLAvatarListItem::setShowProfileBtn(bool show)
@@ -330,6 +393,101 @@ void LLAvatarListItem::showSpeakingIndicator(bool visible)
 //	updateChildren();
 }
 
+void LLAvatarListItem::showRange(bool show)
+{
+	mNearbyRange->setVisible(show);
+}
+
+void LLAvatarListItem::showFirstSeen(bool show)
+{
+	mFirstSeenDisplay->setVisible(show);
+}
+
+void LLAvatarListItem::showPaymentStatus(bool show)
+{
+	mShowPaymentStatus=show;
+	updateAvatarProperties();
+}
+
+void LLAvatarListItem::showStatusFlags(bool show)
+{
+	mShowStatusFlags=show;
+}
+
+void LLAvatarListItem::updateFirstSeen()
+{
+	S32 seentime = (S32)difftime(time(NULL), mFirstSeen);
+	S32 hours = (S32)(seentime / 3600);
+	S32 mins = (S32)((seentime - hours * 3600) / 60);
+	S32 secs = (S32)((seentime - hours * 3600 - mins * 60));
+	mFirstSeenDisplay->setValue(llformat("%d:%02d:%02d", hours, mins, secs));
+	updateChildren();
+}
+
+std::string LLAvatarListItem::getSeen()
+{
+	return mFirstSeenDisplay->getValue();
+}
+
+void LLAvatarListItem::setRange(F32 distance)
+{
+	mDistance = distance;
+	
+	// [Ansariel: Colorful radar]
+	// Get default style params
+	LLStyle::Params rangeHighlight = LLStyle::Params();
+	
+	if (mUseRangeColors && mDistance > CHAT_NORMAL_RADIUS)
+	{
+		if (mDistance < CHAT_SHOUT_RADIUS)
+		{
+			rangeHighlight.color = mShoutRangeColor;
+		}
+		else
+		{
+			rangeHighlight.color = mBeyondShoutRangeColor;
+		}
+	}
+	
+	mNearbyRange->setText(llformat("%3.2f", mDistance), rangeHighlight);
+	// [Ansariel: Colorful radar]
+}
+
+F32 LLAvatarListItem::getRange()
+{
+	return mDistance;
+}
+
+void LLAvatarListItem::setPosition(LLVector3d pos)
+{
+	mAvPosition = pos;
+}
+
+LLVector3d LLAvatarListItem::getPosition()
+{
+	return mAvPosition;
+}
+
+void LLAvatarListItem::setAvStatus(S32 statusFlags)
+{
+	mAvStatus = statusFlags;
+}
+
+S32 LLAvatarListItem::getAvStatus()
+{
+	return mAvStatus;
+}
+
+time_t LLAvatarListItem::getFirstSeen()
+{
+	return mFirstSeen;
+}
+
+void LLAvatarListItem::setFirstSeen(time_t seentime)
+{
+	mFirstSeen = seentime;
+}
+
 void LLAvatarListItem::setAvatarIconVisible(bool visible)
 {
 	// Already done? Then do nothing.
@@ -342,6 +500,35 @@ void LLAvatarListItem::setAvatarIconVisible(bool visible)
 	mAvatarIcon->setVisible(visible);
 	updateChildren();
 }
+
+void LLAvatarListItem::showDisplayName(bool show)
+{
+	mShowDisplayName = show;
+	updateAvatarName();
+}
+
+void LLAvatarListItem::showUsername(bool show)
+{
+	mShowUsername = show;
+	updateAvatarName();
+}
+
+// [Ansariel: Colorful radar]
+void LLAvatarListItem::setShoutRangeColor(const LLUIColor& shoutRangeColor)
+{
+	mShoutRangeColor = shoutRangeColor;
+}
+
+void LLAvatarListItem::setBeyondShoutRangeColor(const LLUIColor& beyondShoutRangeColor)
+{
+	mBeyondShoutRangeColor = beyondShoutRangeColor;
+}
+
+void LLAvatarListItem::setUseRangeColors(bool UseRangeColors)
+{
+	mUseRangeColors = UseRangeColors;
+}
+// [Ansariel: Colorful radar]
 
 void LLAvatarListItem::onInfoBtnClick()
 {
@@ -374,6 +561,15 @@ BOOL LLAvatarListItem::handleDoubleClick(S32 x, S32 y, MASK mask)
 	return LLPanel::handleDoubleClick(x, y, mask);
 }
 
+// [SL:KB] - Patch: UI-AvatarListDndShare | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+BOOL LLAvatarListItem::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDropType cargo_type, void *cargo_data, 
+	                                     EAcceptance *accept, std::string& tooltip_msg)
+{
+	notifyParent(LLSD().with("select", mAvatarId));
+	return LLToolDragAndDrop::handleGiveDragAndDrop(mAvatarId, LLUUID::null, drop, cargo_type, cargo_data, accept, getAvatarName());
+}
+// [/SL:KB]
+
 void LLAvatarListItem::setValue( const LLSD& value )
 {
 	if (!value.isMap()) return;;
@@ -396,13 +592,61 @@ std::string LLAvatarListItem::getAvatarToolTip() const
 	return mAvatarName->getToolTip();
 }
 
+bool LLAvatarListItem::getShowingBothNames() const
+{
+	return (mShowDisplayName && mShowUsername);
+}
+
 void LLAvatarListItem::updateAvatarName()
 {
 	LLAvatarNameCache::get(getAvatarId(),
 			boost::bind(&LLAvatarListItem::onAvatarNameCache, this, _2));
 }
 
+void LLAvatarListItem::showAvatarAge(bool display)
+{
+	mAvatarAgeDisplay->setVisible(display);
+	updateAvatarProperties();
+}
+
+std::string LLAvatarListItem::getAvatarAge()
+{
+	return mAvatarAgeDisplay->getValue();
+}
+
+void LLAvatarListItem::updateAvatarProperties()
+{
+	// NOTE: typically we request these once on creation to avoid excess traffic/processing. 
+	//This means updates to these properties won't typically be seen while target is in nearby range.
+	LLAvatarPropertiesProcessor* processor = LLAvatarPropertiesProcessor::getInstance();
+	processor->addObserver(mAvatarId, this);
+	processor->sendAvatarPropertiesRequest(mAvatarId);
+}
+
 //== PRIVATE SECITON ==========================================================
+
+
+void LLAvatarListItem::processProperties(void* data, EAvatarProcessorType type)
+{
+	
+	// route the data to the inspector
+	if (data
+		&& type == APT_PROPERTIES)
+	{
+		LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
+		mAvatarAge = ((LLDate::now().secondsSinceEpoch()  - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
+		mAvatarAgeDisplay->setValue(mAvatarAge);
+
+		if (mShowPaymentStatus)
+		{
+			mPaymentStatus->setVisible(avatar_data->flags & AVATAR_IDENTIFIED);
+		}
+		
+		mAvStatus = avatar_data->flags;
+		
+	}
+}
+
 
 void LLAvatarListItem::setNameInternal(const std::string& name, const std::string& highlight)
 {
@@ -415,15 +659,28 @@ void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
 //	setAvatarToolTip(av_name.mUsername);
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 	bool fRlvFilter = (mRlvCheckShowNames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
-	//setAvatarName( (!fRlvFilter) ? av_name.mDisplayName : RlvStrings::getAnonym(av_name) );
-	setAvatarName( (!fRlvFilter) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
+	if (mShowDisplayName && !mShowUsername)
+		setAvatarName( (!fRlvFilter) ? av_name.mDisplayName : RlvStrings::getAnonym(av_name) );
+	else if (!mShowDisplayName && mShowUsername)
+		setAvatarName( (!fRlvFilter) ? av_name.mUsername : RlvStrings::getAnonym(av_name) );
+	else 
+		setAvatarName( (!fRlvFilter) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
+
+	// NOTE: If you change this, you will break sorting the contacts list
+	//  by username unless you go change the comparator too. -- TS	
 	setAvatarToolTip( (!fRlvFilter) ? av_name.mUsername : RlvStrings::getAnonym(av_name) );
 	// TODO-RLVa: bit of a hack putting this here. Maybe find a better way?
 	mAvatarIcon->setDrawTooltip(!fRlvFilter);
 // [/RLVa:KB]
 
+	//KC - store the username for use in sorting
+	mUserName = av_name.mUsername;
+
 	//requesting the list to resort
 	notifyParent(LLSD().with("sort", LLSD()));
+	
+	//update children, because this call tends to effect the size of the name field width
+	updateChildren();
 }
 
 // Convert given number of seconds to a string like "23 minutes", "15 hours" or "3 years",
@@ -507,38 +764,54 @@ LLAvatarListItem::icon_color_map_t& LLAvatarListItem::getItemIconColorMap()
 	return item_icon_color_map;
 }
 
+
+
 // static
 void LLAvatarListItem::initChildrenWidths(LLAvatarListItem* avatar_item)
 {
+
 	//speaking indicator width + padding
-	S32 speaking_indicator_width = avatar_item->getRect().getWidth() - avatar_item->mSpeakingIndicator->getRect().mLeft;
+	//S32 speaking_indicator_width = avatar_item->getRect().getWidth() - avatar_item->mSpeakingIndicator->getRect().mLeft;
+	S32 speaking_indicator_width = 20;
 
 	//profile btn width + padding
-	S32 profile_btn_width = avatar_item->mSpeakingIndicator->getRect().mLeft - avatar_item->mProfileBtn->getRect().mLeft;
-
+	//S32 profile_btn_width = avatar_item->mSpeakingIndicator->getRect().mLeft - avatar_item->mProfileBtn->getRect().mLeft;
+	S32 profile_btn_width = 18;
+	
 	//info btn width + padding
-	S32 info_btn_width = avatar_item->mProfileBtn->getRect().mLeft - avatar_item->mInfoBtn->getRect().mLeft;
-
+	S32 info_btn_width = 20;
+	//if (avatar_item->mInfoBtn->getVisible()) info_btn_width = 20;
+	
+	//volume slider width + padding
+	S32 volume_slider_width = 90;
+	//if (avatar_item->mVoiceSlider->getVisible()) volume_slider_width = 90;
+	
 	// online permission icon width + padding
-	S32 permission_online_width = avatar_item->mInfoBtn->getRect().mLeft - avatar_item->mIconPermissionOnline->getRect().mLeft;
-
+	//S32 permission_online_width = avatar_item->mInfoBtn->getRect().mLeft - avatar_item->mIconPermissionOnline->getRect().mLeft;
+	S32 permission_online_width = 18;
+	
 	// map permission icon width + padding
-	S32 permission_map_width = avatar_item->mIconPermissionOnline->getRect().mLeft - avatar_item->mIconPermissionMap->getRect().mLeft;
-
+	//S32 permission_map_width = avatar_item->mIconPermissionOnline->getRect().mLeft - avatar_item->mIconPermissionMap->getRect().mLeft;
+	S32 permission_map_width = 18;
+	
 	// edit my objects permission icon width + padding
-	S32 permission_edit_mine_width = avatar_item->mIconPermissionMap->getRect().mLeft - avatar_item->mIconPermissionEditMine->getRect().mLeft;
-
+	//S32 permission_edit_mine_width = avatar_item->mIconPermissionMap->getRect().mLeft - avatar_item->mIconPermissionEditMine->getRect().mLeft;
+	S32 permission_edit_mine_width = 18;
+	
 	// edit their objects permission icon width + padding
-	S32 permission_edit_theirs_width = avatar_item->mIconPermissionEditMine->getRect().mLeft - avatar_item->mIconPermissionEditTheirs->getRect().mLeft;
-
+	//S32 permission_edit_theirs_width = avatar_item->mIconPermissionEditMine->getRect().mLeft - avatar_item->mIconPermissionEditTheirs->getRect().mLeft;
+	S32 permission_edit_theirs_width = 18;
+	
 	// last interaction time textbox width + padding
-	S32 last_interaction_time_width = avatar_item->mIconPermissionEditTheirs->getRect().mLeft - avatar_item->mLastInteractionTime->getRect().mLeft;
-
+	//S32 last_interaction_time_width = avatar_item->mIconPermissionEditTheirs->getRect().mLeft - avatar_item->mLastInteractionTime->getRect().mLeft;
+	S32 last_interaction_time_width = 37;
+	
 	// avatar icon width + padding
 	S32 icon_width = avatar_item->mAvatarName->getRect().mLeft - avatar_item->mAvatarIcon->getRect().mLeft;
 
 	sLeftPadding = avatar_item->mAvatarIcon->getRect().mLeft;
-	sNameRightPadding = avatar_item->mLastInteractionTime->getRect().mLeft - avatar_item->mAvatarName->getRect().mRight;
+	//sNameRightPadding = avatar_item->mLastInteractionTime->getRect().mLeft - avatar_item->mAvatarName->getRect().mRight;
+	sNameRightPadding = 0;
 
 	S32 index = ALIC_COUNT;
 	sChildrenWidths[--index] = icon_width;
@@ -548,10 +821,12 @@ void LLAvatarListItem::initChildrenWidths(LLAvatarListItem* avatar_item)
 	sChildrenWidths[--index] = permission_edit_mine_width;
 	sChildrenWidths[--index] = permission_map_width;
 	sChildrenWidths[--index] = permission_online_width;
+	sChildrenWidths[--index] = volume_slider_width;
 	sChildrenWidths[--index] = info_btn_width;
 	sChildrenWidths[--index] = profile_btn_width;
 	sChildrenWidths[--index] = speaking_indicator_width;
-	llassert(index == 0);
+	//llassert(index == 0);
+	
 }
 
 void LLAvatarListItem::updateChildren()
@@ -623,11 +898,18 @@ void LLAvatarListItem::updateChildren()
 		name_new_left,
 		name_view_rect.mTop,
 		name_new_width,
+		//40,
 		name_view_rect.getHeight());
 
 	name_view->setShape(name_view_rect);
 
 	LL_DEBUGS("AvatarItemReshape") << "name rect after: " << name_view_rect << LL_ENDL;
+}
+
+void LLAvatarListItem::setShowPermissions(bool show)
+{
+	mShowPermissions=show;
+	showPermissions(show);
 }
 
 bool LLAvatarListItem::showPermissions(bool visible)
@@ -650,41 +932,139 @@ bool LLAvatarListItem::showPermissions(bool visible)
 		*/ 
 		
 		if (!relation->isRightGrantedTo(LLRelationship::GRANT_ONLINE_STATUS))
-			mIconPermissionOnline->setColor(LLUIColorTable::instance().getColor("White_10"));
+			mBtnPermissionOnline->setColor(LLUIColorTable::instance().getColor("White_10"));
 		else 
-			mIconPermissionOnline->setColor(LLUIColorTable::instance().getColor("White"));
+			mBtnPermissionOnline->setColor(LLUIColorTable::instance().getColor("White"));
 		
 		if (!relation->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION))
-			mIconPermissionMap->setColor(LLUIColorTable::instance().getColor("White_10"));			
+			mBtnPermissionMap->setColor(LLUIColorTable::instance().getColor("White_10"));			
 		else
-			mIconPermissionMap->setColor(LLUIColorTable::instance().getColor("White"));
+			mBtnPermissionMap->setColor(LLUIColorTable::instance().getColor("White"));
 			
 		if (!relation->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS))
-			mIconPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White_10"));
+			mBtnPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White_10"));
 		else
-			mIconPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White"));
+			mBtnPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White"));
 				
 		if (!relation->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS))
 			mIconPermissionEditTheirs->setColor(LLUIColorTable::instance().getColor("White_10"));
 		else
 			mIconPermissionEditTheirs->setColor(LLUIColorTable::instance().getColor("White"));
 		
-		mIconPermissionOnline->setVisible(true);
-		mIconPermissionMap->setVisible(true);
-		mIconPermissionEditMine->setVisible(true);
+		mBtnPermissionOnline->setVisible(true);
+		mBtnPermissionMap->setVisible(true);
+		mBtnPermissionEditMine->setVisible(true);
 		mIconPermissionEditTheirs->setVisible(true);
 			
 	}
 	else
 	{
-		mIconPermissionOnline->setVisible(false);
-		mIconPermissionMap->setVisible(false);
-		mIconPermissionEditMine->setVisible(false);
+		mBtnPermissionOnline->setVisible(false);
+		mBtnPermissionMap->setVisible(false);
+		mBtnPermissionEditMine->setVisible(false);
 		mIconPermissionEditTheirs->setVisible(false);
 	}
 	
 	updateChildren();
 	return NULL != relation;
+}
+
+void LLAvatarListItem::onPermissionOnlineClick()
+{
+	const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
+	if(relation)
+	{
+		S32 cur_rights = relation->getRightsGrantedTo();
+		S32 new_rights = 0;
+		if (!relation->isRightGrantedTo(LLRelationship::GRANT_ONLINE_STATUS))
+		{
+			new_rights = LLRelationship::GRANT_ONLINE_STATUS + (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
+			mBtnPermissionOnline->setColor(LLUIColorTable::instance().getColor("White"));
+		}
+		else
+		{
+			new_rights = (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
+			mBtnPermissionOnline->setColor(LLUIColorTable::instance().getColor("White_10"));
+		}
+		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(),new_rights);
+		mBtnPermissionOnline->setFocus(FALSE);
+	}
+}
+
+void LLAvatarListItem::onPermissionMapClick()
+{
+	const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
+	if(relation)
+	{
+		S32 cur_rights = relation->getRightsGrantedTo();
+		S32 new_rights = 0;
+		if (!relation->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION))
+		{
+			new_rights = LLRelationship::GRANT_MAP_LOCATION + (cur_rights &  LLRelationship::GRANT_ONLINE_STATUS) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
+			mBtnPermissionMap->setColor(LLUIColorTable::instance().getColor("White"));
+		}
+		else 
+		{
+			new_rights = (cur_rights &  LLRelationship::GRANT_ONLINE_STATUS) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
+			mBtnPermissionMap->setColor(LLUIColorTable::instance().getColor("White_10"));
+		}
+		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(),new_rights);
+		mBtnPermissionMap->setFocus(FALSE);
+	}
+}
+
+void LLAvatarListItem::onPermissionEditMineClick()
+{
+	const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
+	if(relation)
+	{
+		S32 cur_rights = relation->getRightsGrantedTo();
+		S32 new_rights = 0;
+		if (!relation->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS))
+		{
+			new_rights = LLRelationship::GRANT_MODIFY_OBJECTS + (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_ONLINE_STATUS);			
+			confirmModifyRights(true, new_rights);
+		}
+		else
+		{
+			new_rights = (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_ONLINE_STATUS);
+			mBtnPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White_10"));
+			LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(),new_rights);
+		}
+		
+		mBtnPermissionEditMine->setFocus(FALSE);
+	}
+}
+
+void LLAvatarListItem::confirmModifyRights(bool grant, S32 rights)
+// Same as llpanelavatar::confirmModifyRights
+{
+	LLSD args;
+	args["NAME"] = LLSLURL("agent", getAvatarId(), "displayname").getSLURLString();
+	
+	if (grant)
+	{
+		LLNotificationsUtil::add("GrantModifyRights", args, LLSD(),
+								 boost::bind(&LLAvatarListItem::rightsConfirmationCallback, this,
+											 _1, _2, rights));
+	}
+	else
+	{
+		LLNotificationsUtil::add("RevokeModifyRights", args, LLSD(),
+								 boost::bind(&LLAvatarListItem::rightsConfirmationCallback, this,
+											 _1, _2, rights));
+	}
+}
+
+void LLAvatarListItem::rightsConfirmationCallback(const LLSD& notification,
+													const LLSD& response, S32 rights)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option == 0)
+	{
+		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(), rights);
+		mBtnPermissionEditMine->setColor(LLUIColorTable::instance().getColor("White"));
+	}
 }
 
 LLView* LLAvatarListItem::getItemChildView(EAvatarListItemChildIndex child_view_index)
@@ -706,13 +1086,13 @@ LLView* LLAvatarListItem::getItemChildView(EAvatarListItemChildIndex child_view_
 		child_view = mSpeakingIndicator;
 		break;
 	case ALIC_PERMISSION_ONLINE:
-		child_view = mIconPermissionOnline;
+		child_view = mBtnPermissionOnline;
 		break;
 	case ALIC_PERMISSION_MAP:
-		child_view = mIconPermissionMap;
+		child_view = mBtnPermissionMap;
 		break;
 	case ALIC_PERMISSION_EDIT_MINE:
-		child_view = mIconPermissionEditMine;
+		child_view = mBtnPermissionEditMine;
 		break;
 	case ALIC_PERMISSION_EDIT_THEIRS:
 		child_view = mIconPermissionEditTheirs;
@@ -722,6 +1102,9 @@ LLView* LLAvatarListItem::getItemChildView(EAvatarListItemChildIndex child_view_
 		break;
 	case ALIC_PROFILE_BUTTON:
 		child_view = mProfileBtn;
+		break;
+	case ALIC_VOLUME_SLIDER:
+		child_view = mVoiceSlider;
 		break;
 	default:
 		LL_WARNS("AvatarItemReshape") << "Unexpected child view index is passed: " << child_view_index << LL_ENDL;

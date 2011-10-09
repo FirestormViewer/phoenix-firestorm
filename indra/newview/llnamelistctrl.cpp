@@ -143,6 +143,30 @@ void	LLNameListCtrl::mouseOverHighlightNthItem( S32 target_index )
 	S32 cur_index = getHighlightedItemInx();
 	if (cur_index != target_index)
 	{
+		bool is_mouse_over_name_cell = false;
+
+		S32 mouse_x, mouse_y;
+		LLUI::getMousePositionLocal(this, &mouse_x, &mouse_y);
+
+		S32 column_index = getColumnIndexFromOffset(mouse_x);
+		LLScrollListItem* hit_item = hitItem(mouse_x, mouse_y);
+		if (hit_item && column_index == mNameColumnIndex)
+		{
+			// Get the name cell which is currently under the mouse pointer.
+			LLScrollListCell* hit_cell = hit_item->getColumn(column_index);
+			if (hit_cell)
+			{
+				is_mouse_over_name_cell = getCellRect(cur_index, column_index).pointInRect(mouse_x, mouse_y);
+			}
+		}
+
+		// If the tool tip is visible and the mouse is over the currently highlighted item's name cell,
+		// we should not reset the highlighted item index i.e. set mHighlightedItem = -1
+		// and should not increase the width of the text inside the cell because it may
+		// overlap the tool tip icon.
+		if (LLToolTipMgr::getInstance()->toolTipVisible() && is_mouse_over_name_cell)
+			return;
+
 		if(0 <= cur_index && cur_index < (S32)getItemList().size())
 		{
 			LLScrollListItem* item = getItemList()[cur_index];
@@ -311,9 +335,12 @@ LLScrollListItem* LLNameListCtrl::addNameItemRow(
 			else
 			{
 				// ...schedule a callback
-				LLAvatarNameCache::get(id,
-					boost::bind(&LLNameListCtrl::onAvatarNameCache,
-						this, _1, _2));
+//				LLAvatarNameCache::get(id,
+//					boost::bind(&LLNameListCtrl::onAvatarNameCache,
+//						this, _1, _2));
+// [SL:KB] - Patch: UI-GroupPanel | Checked: 2011-05-30 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+				LLAvatarNameCache::get(id, boost::bind(&LLNameListItem::onAvatarNameCache, item, mNameColumnIndex, mShortNames, _1, _2));
+// [/SL:KB]
 			}
 			break;
 		}
@@ -368,31 +395,31 @@ void LLNameListCtrl::removeNameItem(const LLUUID& agent_id)
 	}
 }
 
-void LLNameListCtrl::onAvatarNameCache(const LLUUID& agent_id,
-									   const LLAvatarName& av_name)
-{
-	std::string name;
-	if (mShortNames)
-		name = av_name.mDisplayName;
-	else
-		name = av_name.getCompleteName();
-
-	item_list::iterator iter;
-	for (iter = getItemList().begin(); iter != getItemList().end(); iter++)
-	{
-		LLScrollListItem* item = *iter;
-		if (item->getUUID() == agent_id)
-		{
-			LLScrollListCell* cell = item->getColumn(mNameColumnIndex);
-			if (cell)
-			{
-				cell->setValue(name);
-			}
-		}
-	}
-
-	dirtyColumns();
-}
+//void LLNameListCtrl::onAvatarNameCache(const LLUUID& agent_id,
+//									   const LLAvatarName& av_name)
+//{
+//	std::string name;
+//	if (mShortNames)
+//		name = av_name.mDisplayName;
+//	else
+//		name = av_name.getCompleteName();
+//
+//	item_list::iterator iter;
+//	for (iter = getItemList().begin(); iter != getItemList().end(); iter++)
+//	{
+//		LLScrollListItem* item = *iter;
+//		if (item->getUUID() == agent_id)
+//		{
+//			LLScrollListCell* cell = item->getColumn(mNameColumnIndex);
+//			if (cell)
+//			{
+//				cell->setValue(name);
+//			}
+//		}
+//	}
+//
+//	dirtyColumns();
+//}
 
 
 void LLNameListCtrl::updateColumns()
@@ -408,3 +435,11 @@ void LLNameListCtrl::updateColumns()
 		}
 	}
 }
+
+// [SL:KB] - Patch: UI-GroupPanel | Checked: 2011-05-30 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+void LLNameListItem::onAvatarNameCache(S32 idxNameColumn, bool useShortNames, const LLUUID& idAgent, const LLAvatarName& avName)
+{
+	if (LLScrollListCell* pCell = getColumn(idxNameColumn))
+		pCell->setValue( (useShortNames) ? avName.mDisplayName : avName.getCompleteName() );
+}
+// [/SL:KB]

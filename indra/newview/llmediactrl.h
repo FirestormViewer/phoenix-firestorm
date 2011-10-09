@@ -34,6 +34,7 @@
 
 class LLViewBorder;
 class LLUICtrlFactory;
+class LLContextMenu;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -53,7 +54,8 @@ public:
 								ignore_ui_scale,
 								hide_loading,
 								decouple_texture_size,
-								trusted_content;
+								trusted_content,
+								focus_on_click;
 								
 		Optional<S32>			texture_width,
 								texture_height;
@@ -62,6 +64,7 @@ public:
 
 		Optional<std::string>	initial_mime_type;
 		Optional<std::string>	media_id;
+		Optional<std::string>	error_page_url;
 		
 		Params();
 	};
@@ -89,6 +92,7 @@ public:
 		virtual BOOL handleRightMouseUp(S32 x, S32 y, MASK mask);
 		virtual BOOL handleDoubleClick( S32 x, S32 y, MASK mask );
 		virtual BOOL handleScrollWheel( S32 x, S32 y, S32 clicks );
+		virtual BOOL handleToolTip(S32 x, S32 y, MASK mask);
 
 		// navigation
 		void navigateTo( std::string url_in, std::string mime_type = "");
@@ -111,10 +115,9 @@ public:
 
 		void setTarget(const std::string& target);
 
-		// set/clear URL to visit when a 404 page is reached
-		void set404RedirectUrl( std::string redirect_url );
-		void clr404RedirectUrl();
-		
+		void setErrorPageURL(const std::string& url);
+		const std::string& getErrorPageURL();
+
 		// Clear the browser cache when the instance gets loaded
 		void clearCache();
 
@@ -146,6 +149,8 @@ public:
 		void showNotification(boost::shared_ptr<class LLNotification> notify);
 		void hideNotification();
 
+		void setTrustedContent(bool trusted);
+
 		// over-rides
 		virtual BOOL handleKeyHere( KEY key, MASK mask);
 		virtual void handleVisibilityChange ( BOOL new_visibility );
@@ -161,25 +166,28 @@ public:
 		// Incoming media event dispatcher
 		virtual void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event);
 
+		// right click debugging item
+		void onOpenWebInspector();
+
+		LLUUID getTextureID() {return mMediaTextureID;}
+
 	protected:
 		void convertInputCoords(S32& x, S32& y);
 
 	private:
 		void onVisibilityChange ( const LLSD& new_visibility );
 		void onPopup(const LLSD& notification, const LLSD& response);
-		void onCloseNotification();
-		void onClickNotificationButton(const std::string& name);
-		void onClickIgnore(LLUICtrl* ctrl);
 
 		const S32 mTextureDepthBytes;
 		LLUUID mMediaTextureID;
 		LLViewBorder* mBorder;
 		bool mFrequentUpdates;
 		bool mForceUpdate;
-		const bool mTrusted;
+		bool mTrusted;
 		std::string mHomePageUrl;
 		std::string mHomePageMimeType;
 		std::string mCurrentNavUrl;
+		std::string mErrorPageURL;
 		std::string mTarget;
 		bool mIgnoreUIScale;
 		bool mAlwaysRefresh;
@@ -193,7 +201,9 @@ public:
 		S32 mTextureWidth;
 		S32 mTextureHeight;
 		bool mClearCache;
-		boost::shared_ptr<class LLNotification> mCurNotification;
+		class LLWindowShade* mWindowShade;
+		bool mHoverTextChanged;
+		LLContextMenu* mContextMenu;
 };
 
 #endif // LL_LLMediaCtrl_H

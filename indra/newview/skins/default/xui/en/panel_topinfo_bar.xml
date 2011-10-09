@@ -19,7 +19,7 @@
     image_unselected="Info_Off"
     left="11"
     name="place_info_btn"
-    top="1"
+    top="2"
     width="16"/>
    <text
      follows="left|top|right"
@@ -29,9 +29,10 @@
      left_pad="11"
      length="1"
      name="parcel_info_text"
-     top="1"
+     top="4"
      type="string"
-     width="1"/>
+     value="(loading...)"
+     width="250"/>
   <icon
     enabled="true"
     follows="right|top"
@@ -39,7 +40,8 @@
     image_name="Parcel_VoiceNo_Dark"
     name="voice_icon"
     top="1"
-    visible="false"
+    visible="true"
+    left="266"
     width="22"
     />
   <icon
@@ -48,7 +50,8 @@
     image_name="Parcel_FlyNo_Dark"
     name="fly_icon"
     top="1"
-    visible="false"
+    visible="true"
+    left="288"
     width="22"
     />
   <icon
@@ -57,7 +60,8 @@
     image_name="Parcel_PushNo_Dark"
     name="push_icon"
     top="1"
-    visible="false"
+    visible="true"
+    left="310"
     width="22"
     />
   <icon
@@ -66,7 +70,8 @@
     image_name="Parcel_BuildNo_Dark"
     name="build_icon"
     top="1"
-    visible="false"
+    visible="true"
+    left="332"
     width="22"
     />
   <icon
@@ -75,15 +80,26 @@
     image_name="Parcel_ScriptsNo_Dark"
     name="scripts_icon"
     top="1"
-    visible="false"
+    visible="true"
+    left="354"
     width="22"
     />
   <icon
     follows="right|top"
     height="13"
     image_name="Parcel_Health_Dark"
-    left="2"
     name="damage_icon"
+    top="4"
+    visible="true"
+    left="376"
+    width="14"
+    />
+  <icon
+    follows="right|top"
+    height="13"
+    image_name="Parcel_SeeAVsOff_Light"
+    left="2"
+    name="see_avatars_icon"
     top="3"
     visible="false"
     width="14"
@@ -92,10 +108,12 @@
     follows="right|top"
     font="SansSerifSmall"
     halign="right"
-    height="18"
+    height="17"
     name="damage_text"
     top="5"
-    visible="false"
+    visible="true"
+    value="100%"
+    left="390"
     width="35"
     />
 </panel>

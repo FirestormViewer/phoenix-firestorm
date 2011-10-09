@@ -60,7 +60,10 @@ public:
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ void setDocked(bool docked, bool pop_on_undock = true);
 
-	static void sUpdateFlyingStatus();
+//	static void sUpdateFlyingStatus();
+// [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+	static void sUpdateMovementStatus();
+// [/RLVa:KB]
 
 protected:
 	void turnLeft();
@@ -124,7 +127,8 @@ public:
 	typedef enum stand_stop_flying_mode_t
 	{
 		SSFM_STAND,
-		SSFM_STOP_FLYING
+		SSFM_STOP_FLYING,
+		SSFM_FLYCAM
 	} EStandStopFlyingMode;
 
 	/**
@@ -164,6 +168,7 @@ private:
 
 	LLButton* mStandButton;
 	LLButton* mStopFlyingButton;
+	LLButton* mFlycamButton;
 
 	/**
 	 * The original parent of the panel.

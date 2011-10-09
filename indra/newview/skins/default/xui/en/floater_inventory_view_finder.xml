@@ -2,20 +2,20 @@
 <floater
  legacy_header_height="18"
  can_minimize="false"
- height="408"
+ height="410"
  layout="topleft"
  name="Inventory Finder"
  help_topic="inventory_finder"
  title="INVENTORY_RECENT_ITEMS"
- width="280">
+ width="154">
     <icon
      height="16"
      image_name="Inv_Animation"
      layout="topleft"
-     left="8"
+     left="4"
      mouse_opaque="true"
      name="icon_animation"
-     top="22"
+     top="24"
      width="16" />
     <check_box
      height="16"
@@ -29,10 +29,10 @@
      height="16"
      image_name="Inv_CallingCard"
      layout="topleft"
-     left="8"
+     left="4"
      mouse_opaque="true"
      name="icon_calling_card"
-     top="42"
+     top_pad="2"
      width="16" />
     <check_box
      height="16"
@@ -46,10 +46,10 @@
      height="16"
      image_name="Inv_Shirt"
      layout="topleft"
-     left="8"
+     left="4"
      mouse_opaque="true"
      name="icon_clothing"
-     top="62"
+     top_pad="2"
      width="16" />
     <check_box
      height="16"
@@ -63,10 +63,10 @@
      height="16"
      image_name="Inv_Gesture"
      layout="topleft"
-     left="8"
+     left="4"
      mouse_opaque="true"
      name="icon_gesture"
-     top="82"
+     top_pad="2"
      width="16" />
     <check_box
      height="16"
@@ -80,10 +80,10 @@
      height="16"
      image_name="Inv_Landmark"
      layout="topleft"
-     left="8"
+     left="4"
      mouse_opaque="true"
      name="icon_landmark"
-     top="102"
+     top_pad="2"
      width="16" />
     <check_box
      height="16"
@@ -95,12 +95,29 @@
      width="126" />
     <icon
      height="16"
+     image_name="Inv_Mesh"
+     layout="topleft"
+     left="4"
+     mouse_opaque="true"
+     name="icon_mesh"
+     top_pad="2"
+     width="16" />
+    <check_box
+     height="16"
+     label="Meshes"
+     layout="topleft"
+     left_pad="2"
+     name="check_mesh"
+     top_delta="0"
+     width="126" />
+    <icon
+     height="16"
      image_name="Inv_Notecard"
      layout="topleft"
-     left="8"
+     left="4"
      mouse_opaque="true"
      name="icon_notecard"
-     top="122"
+     top_pad="2"
      width="16" />
     <check_box
      height="16"
@@ -114,10 +131,10 @@
      height="16"
      image_name="Inv_Object"
      layout="topleft"
-     left="8"
+     left="4"
      mouse_opaque="true"
      name="icon_object"
-     top="142"
+     top_pad="2"
      width="16" />
     <check_box
      height="16"
@@ -131,10 +148,10 @@
      height="16"
      image_name="Inv_Script"
      layout="topleft"
-     left="8"
+     left="4"
      mouse_opaque="true"
      name="icon_script"
-     top="162"
+     top_pad="2"
      width="16" />
     <check_box
      height="16"
@@ -148,10 +165,10 @@
      height="16"
      image_name="Inv_Sound"
      layout="topleft"
-     left="8"
+     left="4"
      mouse_opaque="true"
      name="icon_sound"
-     top="182"
+     top_pad="2"
      width="16" />
     <check_box
      height="16"
@@ -165,10 +182,10 @@
      height="16"
      image_name="Inv_Texture"
      layout="topleft"
-     left="8"
+     left="4"
      mouse_opaque="true"
      name="icon_texture"
-     top="202"
+     top_pad="2"
      width="16" />
     <check_box
      height="16"
@@ -182,10 +199,10 @@
      height="16"
      image_name="Inv_Snapshot"
      layout="topleft"
-     left="8"
+     left="4"
      mouse_opaque="true"
      name="icon_snapshot"
-     top="222"
+     top_pad="2"
      width="16" />
     <check_box
      height="16"
@@ -201,9 +218,9 @@
      label="All"
      label_selected="All"
      layout="topleft"
-     left="8"
+     left="4"
      name="All"
-     top="242"
+     top_pad="4"
      width="100" />
     <button
      follows="left|top"
@@ -271,13 +288,13 @@
      top_pad="4"
      width="144" />
     <button
-     follows="top|right"
+     follows="top|left"
      height="20"
      label="Close"
      label_selected="Close"
      layout="topleft"
      name="Close"
-     right="-6"
-     top="382"
+     left_pad="-76"
+     top_pad="10"
      width="76" />
 </floater>

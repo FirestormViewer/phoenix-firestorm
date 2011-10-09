@@ -47,13 +47,13 @@ class LLColor4U
 {
 public:
 
-	union
-	{
+	//	union
+	//	{
 		U8         mV[LENGTHOFCOLOR4U];
-		U32        mAll;
-		LLColor4*  mSources;
-		LLColor4U* mSourcesU;
-	};
+	//		U32        mAll;
+	//		LLColor4*  mSources;
+	//		LLColor4U* mSourcesU;
+	//	};
 
 
 	LLColor4U();						// Initializes LLColor4U to (0, 0, 0, 1)
@@ -82,6 +82,9 @@ public:
 		ret[3] = mV[3];
 		return ret;
 	}
+
+	U32 asRGBA() const;
+	void fromRGBA( U32 aVal );
 
 	const LLColor4U&	setToBlack();						// zero LLColor4U to (0, 0, 0, 1)
 	const LLColor4U&	setToWhite();						// zero LLColor4U to (0, 0, 0, 1)
@@ -294,7 +297,7 @@ inline const LLColor4U&	LLColor4U::setAlpha(U8 a)
 
 inline F32		LLColor4U::length(void) const
 {
-	return fsqrtf( ((F32)mV[VX]) * mV[VX] + ((F32)mV[VY]) * mV[VY] + ((F32)mV[VZ]) * mV[VZ] );
+	return (F32) sqrt( ((F32)mV[VX]) * mV[VX] + ((F32)mV[VY]) * mV[VY] + ((F32)mV[VZ]) * mV[VZ] );
 }
 
 inline F32		LLColor4U::lengthSquared(void) const
@@ -305,7 +308,7 @@ inline F32		LLColor4U::lengthSquared(void) const
 // deprecated
 inline F32		LLColor4U::magVec(void) const
 {
-	return fsqrtf( ((F32)mV[VX]) * mV[VX] + ((F32)mV[VY]) * mV[VY] + ((F32)mV[VZ]) * mV[VZ] );
+	return (F32) sqrt( ((F32)mV[VX]) * mV[VX] + ((F32)mV[VY]) * mV[VY] + ((F32)mV[VZ]) * mV[VZ] );
 }
 
 // deprecated

@@ -39,6 +39,7 @@
 #include "llinventoryobserver.h"
 #include "lllineeditor.h"
 #include "llradiogroup.h"
+#include "llslurl.h"
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
 #include "llviewerobjectlist.h"
@@ -73,12 +74,12 @@ void LLItemPropertiesObserver::changed(U32 mask)
 	const std::set<LLUUID>& mChangedItemIDs = gInventory.getChangedIDs();
 	std::set<LLUUID>::const_iterator it;
 
-	const LLUUID& object_id = mFloater->getObjectID();
+	const LLUUID& item_id = mFloater->getItemID();
 
 	for (it = mChangedItemIDs.begin(); it != mChangedItemIDs.end(); it++)
 	{
 		// set dirty for 'item profile panel' only if changed item is the item for which 'item profile panel' is shown (STORM-288)
-		if (*it == object_id)
+		if (*it == item_id)
 		{
 			// if there's a change we're interested in.
 			if((mask & (LLInventoryObserver::LABEL | LLInventoryObserver::INTERNAL | LLInventoryObserver::REMOVE)) != 0)
@@ -131,9 +132,10 @@ void LLObjectInventoryObserver::inventoryChanged(LLViewerObject* object,
 static LLRegisterPanelClassWrapper<LLSidepanelItemInfo> t_item_info("sidepanel_item_info");
 
 // Default constructor
-LLSidepanelItemInfo::LLSidepanelItemInfo()
-  : mItemID(LLUUID::null)
-  , mObjectInventoryObserver(NULL)
+LLSidepanelItemInfo::LLSidepanelItemInfo(const LLPanel::Params& p)
+	: LLSidepanelInventorySubpanel(p)
+	, mItemID(LLUUID::null)
+	, mObjectInventoryObserver(NULL)
 {
 	mPropertiesObserver = new LLItemPropertiesObserver(this);
 }
@@ -196,6 +198,11 @@ void LLSidepanelItemInfo::setItemID(const LLUUID& item_id)
 const LLUUID& LLSidepanelItemInfo::getObjectID() const
 {
 	return mObjectID;
+}
+
+const LLUUID& LLSidepanelItemInfo::getItemID() const
+{
+	return mItemID;
 }
 
 void LLSidepanelItemInfo::reset()

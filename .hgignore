@@ -9,18 +9,25 @@ syntax: glob
 .*.swp
 #OSX image cache file
 *.DS_Store
+*.orig
 LICENSES
+scripts/install.cache.*
+indra/newview/res/viewerRes.rc
+indra/llcommon/llversionserver.h
+indra/llcommon/llversionviewer.h
+indra/llcommon/res/llcommon.rc
+indra/newview/Info-SecondLife.plist
+indra/newview/info-Firestorm.plist
 indra/.distcc
-indra/build-darwin-*
-indra/build-vc[0-9]*
+build-linux-*
+build-darwin-*
+build-vc[0-9]*
 indra/CMakeFiles
 indra/lib/mono/1.0/*.dll
 indra/lib/mono/indra/*.dll
 indra/lib/mono/indra/*.exe
 indra/lib/mono/indra/*.pdb
 indra/lib/python/eventlet/
-indra/llcommon/llversionviewer.cpp
-indra/llcommon/llversionviewer.cpp.built
 indra/llwindow/glh/glh_linear.h
 indra/newview/app_settings/mozilla
 indra/newview/app_settings/mozilla-runtime-*
@@ -33,6 +40,8 @@ indra/newview/mozilla-theme
 indra/newview/mozilla-universal-darwin.tgz
 indra/newview/res-sdl
 indra/newview/vivox-runtime
+indra/newview/English.lproj/InfoPlist.strings
+indra/newview/Info-Firestorm.plist
 indra/server-linux-*
 indra/temp
 indra/test/linden_file.dat
@@ -65,3 +74,4 @@ glob:indra/newview/search_history.txt
 glob:indra/newview/filters.xml
 glob:indra/newview/avatar_icons_cache.txt
 glob:indra/newview/avatar_lad.log
+glob:fmod*

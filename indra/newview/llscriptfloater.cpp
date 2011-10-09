@@ -111,6 +111,21 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	if(LLScriptFloaterManager::OBJ_SCRIPT == LLScriptFloaterManager::getObjectType(notification_id))
 	{
 		floater->setSavePosition(true);
+		if(gSavedSettings.getBOOL("ShowScriptDialogsTopRight"))
+		{
+			// undock the dialog
+			floater->setDocked(false,true);
+			LLRect pos=floater->getRect();
+
+			S32 width=pos.getWidth();
+			S32 height=pos.getHeight();
+			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width,
+								 gViewerWindow->getWorldViewHeightScaled()-height,
+								 width,height);
+			floater->setRect(pos);
+			floater->savePosition();
+		}
+
 		floater->restorePosition();
 	}
 	else
@@ -260,6 +275,21 @@ void LLScriptFloater::restorePosition()
 	else
 	{
 		dockToChiclet(true);
+	}
+}
+
+// Ansariel: Override base method so we have the option to ignore
+// the global transparency settings and show the script dialog
+// always on opaque background.
+F32 LLScriptFloater::getCurrentTransparency()
+{
+	if (gSavedSettings.getBOOL("FSScriptDialogNoTransparency"))
+	{
+		return 1.0;
+	}
+	else
+	{
+		return LLUICtrl::getCurrentTransparency();
 	}
 }
 

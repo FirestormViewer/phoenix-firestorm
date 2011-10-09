@@ -70,6 +70,14 @@
 	<texture name="Inv_FolderClosed"		file_name="legacy/inv_folder_plain_closed.tga" />
 	<texture name="Inv_FolderOpen"			file_name="legacy/inv_folder_plain_open.tga" />
 
+	<!-- Firstorm virtual system folders -->
+	<texture name="Inv_FirestormOpen"		file_name="legacy/inv_folder_firestorm.tga" />
+	<texture name="Inv_FirestormClosed"		file_name="legacy/inv_folder_firestorm.tga" />
+	<texture name="Inv_PhoenixOpen"			file_name="legacy/inv_folder_phoenix.tga" />
+	<texture name="Inv_PhoenixClosed"		file_name="legacy/inv_folder_phoenix.tga" />
+	<texture name="Inv_RLVOpen"			file_name="legacy/inv_folder_RLVa.tga" />
+	<texture name="Inv_RLVClosed"			file_name="legacy/inv_folder_RLVa.tga" />
+
 	<texture name="Parcel_Build_Dark"		file_name="legacy/status_build.png" />
 	<texture name="Parcel_BuildNo_Dark"		file_name="legacy/status_no_build.tga" />
 	<texture name="Parcel_Damage_Dark"		file_name="icons/Parcel_Damage_Dark.png" />

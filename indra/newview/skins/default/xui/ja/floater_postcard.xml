@@ -31,7 +31,7 @@
 	<button bottom_delta="-52" label="取り消し" name="cancel_btn"/>
 	<button label="送信" name="send_btn"/>
 	<text name="default_subject">
-		[SECOND_LIFE] からのポストカードです。
+		[CURRENT_GRID] からのポストカードです。
 	</text>
 	<text name="default_message">
 		これは絶対チェック！

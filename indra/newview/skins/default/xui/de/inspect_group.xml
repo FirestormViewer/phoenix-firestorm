@@ -16,9 +16,6 @@
 	<string name="YouAreMember">
 		Sie sind Mitglied
 	</string>
-	<text name="group_name">
-		Grumpitys schlecht gelaunte Elche
-	</text>
 	<text name="group_subtitle">
 		123 Mitglieder
 	</text>
@@ -29,7 +26,7 @@ Hoch solln sie leben!  Elche forever! Und auch Mungos!
 	<text name="group_cost">
 		Mitgliedschaft: 123 L$
 	</text>
-	<button label="Zusammen" name="join_btn"/>
+	<button label="Beitreten" name="join_btn"/>
 	<button label="Verlassen" name="leave_btn"/>
 	<button label="Profil anzeigen" name="view_profile_btn"/>
 </floater>

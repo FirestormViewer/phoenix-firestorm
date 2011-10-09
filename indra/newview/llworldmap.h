@@ -117,6 +117,7 @@ public:
 	bool isName(const std::string& name) const;
 	bool isDown() { return (mAccess == SIM_ACCESS_DOWN); }
 	bool isPG() { return (mAccess <= SIM_ACCESS_PG); }
+	bool isMature() { return (mAccess == SIM_ACCESS_MATURE); }
 	bool isAdult() { return (mAccess == SIM_ACCESS_ADULT); }
 
 	// Debug only
@@ -143,6 +144,8 @@ public:
 	const LLSimInfo::item_info_list_t& getLandForSale() const { return mLandForSale; }
 	const LLSimInfo::item_info_list_t& getLandForSaleAdult() const { return mLandForSaleAdult; }
 	const LLSimInfo::item_info_list_t& getAgentLocation() const { return mAgentLocations; }
+
+	const U64 		&getHandle() const 			{ return mHandle; }
 
 private:
 	U64 mHandle;				// This is a hash of the X and Y world coordinates of the SW corner of the sim

@@ -188,9 +188,25 @@
      layout="topleft"
      left="10"
      name="restart_btn"
-     tool_tip="Give 2 minute countdown and restart region"
+     tool_tip="Give countdown of selected seconds and restart region"
      top_pad="5"
      width="130" />
+	<text follows="left|top" top_delta="5" left_delta="135" width="50" name="label_restart_delay">
+		Seconds:
+	</text>
+	<spinner
+	 bottom_delta="0"
+	 decimal_digits="0"
+	 follows="left|top"
+	 height="16"
+	 increment="1"
+	 initial_value="120"
+	 left_delta="55"
+	 max_val="3600"
+	 min_val="15"
+	 mouse_opaque="true"
+	 name="restart_delay"
+	 width="50"/>	 
     <button
      follows="left|top"
      height="20"
@@ -199,6 +215,6 @@
      left="10"
      name="cancel_restart_btn"
      tool_tip="Delay region restart by one hour"
-     top_pad="5"
+     top_pad="10"
      width="130" />
 </panel>

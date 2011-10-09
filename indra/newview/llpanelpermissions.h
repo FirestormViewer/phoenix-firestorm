@@ -36,7 +36,8 @@
 // Panel for permissions of an object.
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-class LLNameBox;
+//class LLNameBox;
+class LLViewerObject;
 
 class LLPanelPermissions : public LLPanel
 {
@@ -70,9 +71,10 @@ protected:
 	static void onCommitName(LLUICtrl* ctrl, void* data);
 	static void onCommitDesc(LLUICtrl* ctrl, void* data);
 
-	static void onCommitSaleInfo(LLUICtrl* ctrl, void* data);
-	static void onCommitSaleType(LLUICtrl* ctrl, void* data);	
+	void onCommitForSale();
+	void onCommitSaleInfo();
 	void setAllSaleInfo();
+	void showMarkForSale(BOOL show);
 
 	static void	onCommitClickAction(LLUICtrl* ctrl, void*);
 	static void onCommitIncludeInSearch(LLUICtrl* ctrl, void*);
@@ -81,11 +83,13 @@ protected:
 	void disableAll();
 	
 private:
-	LLNameBox*		mLabelGroupName;		// group name
+	// LLNameBox*		mLabelGroupName;		// group name
 
 	LLUUID			mCreatorID;
 	LLUUID			mOwnerID;
 	LLUUID			mLastOwnerID;
+
+	LLPointer<LLViewerObject> mLastSelectedObject;
 };
 
 

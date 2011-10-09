@@ -1209,12 +1209,12 @@ void LLSecAPIBasicHandler::init()
 		// with the product
 		std::string ca_file_path = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "CA.pem");
 		llinfos << "app path " << ca_file_path << llendl;
-		LLBasicCertificateStore app_ca_store = LLBasicCertificateStore(ca_file_path);	
+		LLPointer<LLBasicCertificateStore> app_ca_store = new LLBasicCertificateStore(ca_file_path);
 		
 		// push the applicate CA files into the store, therefore adding any new CA certs that 
 		// updated
-		for(LLCertificateVector::iterator i = app_ca_store.begin();
-			i != app_ca_store.end();
+		for(LLCertificateVector::iterator i = app_ca_store->begin();
+			i != app_ca_store->end();
 			i++)
 		{
 			mStore->add(*i);
@@ -1226,7 +1226,10 @@ void LLSecAPIBasicHandler::init()
 }
 LLSecAPIBasicHandler::~LLSecAPIBasicHandler()
 {
-	_writeProtectedData();
+	// SA: no reason to write to data store during destruction. In particular this implies erasing all credentials
+	// if the viewer was previously unable to decode the existing file, which would happen if the network interface changed, for instance.
+	//
+	//_writeProtectedData();
 }
 
 void LLSecAPIBasicHandler::_readProtectedData()
@@ -1445,21 +1448,21 @@ void LLSecAPIBasicHandler::setProtectedData(const std::string& data_type,
 
 //
 // Create a credential object from an identifier and authenticator.  credentials are
-// per grid.
-LLPointer<LLCredential> LLSecAPIBasicHandler::createCredential(const std::string& grid,
+// per credential name (was: grid).
+LLPointer<LLCredential> LLSecAPIBasicHandler::createCredential(const std::string& credName,
 															   const LLSD& identifier, 
 															   const LLSD& authenticator)
 {
-	LLPointer<LLSecAPIBasicCredential> result = new LLSecAPIBasicCredential(grid);
+	LLPointer<LLSecAPIBasicCredential> result = new LLSecAPIBasicCredential(credName);
 	result->setCredentialData(identifier, authenticator);
 	return result;
 }
 
-// Load a credential from the credential store, given the grid
-LLPointer<LLCredential> LLSecAPIBasicHandler::loadCredential(const std::string& grid)
+// Load a credential from the credential store, given the credential name
+LLPointer<LLCredential> LLSecAPIBasicHandler::loadCredential(const std::string& credName)
 {
-	LLSD credential = getProtectedData("credential", grid);
-	LLPointer<LLSecAPIBasicCredential> result = new LLSecAPIBasicCredential(grid);
+	LLSD credential = getProtectedData("credential", credName);
+	LLPointer<LLSecAPIBasicCredential> result = new LLSecAPIBasicCredential(credName);
 	if(credential.isMap() && 
 	   credential.has("identifier"))
 	{
@@ -1512,8 +1515,8 @@ void LLSecAPIBasicHandler::saveCredential(LLPointer<LLCredential> cred, bool sav
 	{
 		credential["authenticator"] = cred->getAuthenticator();
 	}
-	LL_DEBUGS("SECAPI") << "Saving Credential " << cred->getGrid() << ":" << cred->userID() << " " << save_authenticator << LL_ENDL;
-	setProtectedData("credential", cred->getGrid(), credential);
+	LL_DEBUGS("SECAPI") << "Saving Credential " << cred->getCredentialName() << ":" << cred->userID() << " " << save_authenticator << LL_ENDL;
+	setProtectedData("credential", cred->getCredentialName(), credential);
 	//*TODO: If we're saving Agni credentials, should we write the
 	// credentials to the legacy password.dat/etc?
 	_writeProtectedData();
@@ -1523,9 +1526,25 @@ void LLSecAPIBasicHandler::saveCredential(LLPointer<LLCredential> cred, bool sav
 void LLSecAPIBasicHandler::deleteCredential(LLPointer<LLCredential> cred)
 {
 	LLSD undefVal;
-	deleteProtectedData("credential", cred->getGrid());
+	deleteProtectedData("credential", cred->getCredentialName());
 	cred->setCredentialData(undefVal, undefVal);
 	_writeProtectedData();
+}
+
+// List saved logins
+std::vector<std::string> LLSecAPIBasicHandler::listCredentials()
+{
+	if (mProtectedDataMap.has("credential") && mProtectedDataMap["credential"].isMap())
+	{
+		std::vector<std::string> logins(mProtectedDataMap["credential"].size());
+		int i = 0;
+		for (LLSD::map_const_iterator it = mProtectedDataMap["credential"].beginMap(); it !=  mProtectedDataMap["credential"].endMap(); ++it)
+		{
+			logins[i++] = it->first;
+		}
+		return logins;
+	}
+	else return std::vector<std::string>();
 }
 
 // load the legacy hash for agni, and decrypt it given the 
@@ -1562,7 +1581,7 @@ std::string LLSecAPIBasicCredential::userID() const
 {
 	if (!mIdentifier.isMap())
 	{
-		return mGrid + "(null)";
+		return mCredentialName + "(null)";
 	}
 	else if ((std::string)mIdentifier["type"] == "agent")
 	{
@@ -1582,18 +1601,18 @@ std::string LLSecAPIBasicCredential::asString() const
 {
 	if (!mIdentifier.isMap())
 	{
-		return mGrid + ":(null)";
+		return mCredentialName + ":(null)";
 	}
 	else if ((std::string)mIdentifier["type"] == "agent")
 	{
-		return mGrid + ":" + (std::string)mIdentifier["first_name"] + " " + (std::string)mIdentifier["last_name"];
+		return mCredentialName + ":" + (std::string)mIdentifier["first_name"] + " " + (std::string)mIdentifier["last_name"];
 	}
 	else if ((std::string)mIdentifier["type"] == "account")
 	{
-		return mGrid + ":" + (std::string)mIdentifier["account_name"];
+		return mCredentialName + ":" + (std::string)mIdentifier["account_name"];
 	}
 
-	return mGrid + ":(unknown type)";
+	return mCredentialName + ":(unknown type)";
 }
 
 

@@ -50,10 +50,16 @@
 #include "llviewerstats.h"
 #include "llvlcomposition.h"
 #include "llvoavatar.h"
+#include "llvocache.h"
 #include "llvowater.h"
 #include "message.h"
 #include "pipeline.h"
 #include "llappviewer.h"		// for do_disconnect()
+#include <deque>
+#include <queue>
+#include <map>
+#include <cstring>
+
 
 //
 // Globals
@@ -86,16 +92,11 @@ LLWorld::LLWorld() :
 	mLastPacketsOut(0),
 	mLastPacketsLost(0),
 	mSpaceTimeUSec(0),
-	mClassicCloudsEnabled(TRUE)
+	mLimitsNeedRefresh(true)// <AW: opensim-limits>
 {
 	for (S32 i = 0; i < 8; i++)
 	{
 		mEdgeWaterObjects[i] = NULL;
-	}
-
-	if (gNoRender)
-	{
-		return;
 	}
 
 	LLPointer<LLImageRaw> raw = new LLImageRaw(1,1,4);
@@ -127,7 +128,44 @@ void LLWorld::destroyClass()
 	}
 	LLViewerPartSim::getInstance()->destroyClass();
 }
+// <AW: opensim-limits>
+void LLWorld::refreshLimits()
+{
+	if(!LLGridManager::getInstance())
+	{
+		return;
+	}
 
+	mLimitsNeedRefresh = false;
+
+	if(LLGridManager::getInstance()->isInOpenSim())
+	{
+		//llmath/xform.h
+		mRegionMaxHeight = OS_MAX_OBJECT_Z; //llmath/xform.h
+		mRegionMinPrimScale = OS_MIN_PRIM_SCALE;
+		mRegionMaxPrimScale = OS_DEFAULT_MAX_PRIM_SCALE;
+		mRegionMaxPrimScaleNoMesh = OS_DEFAULT_MAX_PRIM_SCALE;// no restrictions here
+		mRegionMaxHollowSize = OS_OBJECT_MAX_HOLLOW_SIZE;
+		mRegionMinHoleSize = OS_OBJECT_MIN_HOLE_SIZE;
+	}
+	else
+	{
+		//llmath/xform.h
+		mRegionMaxHeight = SL_MAX_OBJECT_Z;
+		mRegionMinPrimScale = SL_MIN_PRIM_SCALE;
+		mRegionMaxPrimScale = SL_DEFAULT_MAX_PRIM_SCALE;
+		mRegionMaxPrimScaleNoMesh = SL_DEFAULT_MAX_PRIM_SCALE_NO_MESH;
+		//llprimitive/llprimitive.*
+		mRegionMaxHollowSize = SL_OBJECT_MAX_HOLLOW_SIZE;
+		mRegionMinHoleSize = SL_OBJECT_MIN_HOLE_SIZE;
+	}
+	LL_DEBUGS("OS_SETTINGS") << "RegionMaxHeight    " << mRegionMaxHeight << llendl;
+	LL_DEBUGS("OS_SETTINGS") << "RegionMinPrimScale " << mRegionMinPrimScale << llendl;
+	LL_DEBUGS("OS_SETTINGS") << "RegionMaxPrimScale " << mRegionMaxPrimScale << llendl;
+	LL_DEBUGS("OS_SETTINGS") << "RegionMaxHollowSize    " << mRegionMaxHollowSize << llendl;
+	LL_DEBUGS("OS_SETTINGS") << "RegionMinHoleSize  " << mRegionMinHoleSize << llendl;
+}
+// </AW: opensim-limits>
 
 LLViewerRegion* LLWorld::addRegion(const U64 &region_handle, const LLHost &host)
 {
@@ -182,10 +220,6 @@ LLViewerRegion* LLWorld::addRegion(const U64 &region_handle, const LLHost &host)
 		llerrs << "Unable to create new region!" << llendl;
 	}
 
-	regionp->mCloudLayer.create(regionp);
-	regionp->mCloudLayer.setWidth((F32)mWidth);
-	regionp->mCloudLayer.setWindPointer(&regionp->mWind);
-
 	mRegionList.push_back(regionp);
 	mActiveRegionList.push_back(regionp);
 	mCulledRegionList.push_back(regionp);
@@ -222,6 +256,13 @@ LLViewerRegion* LLWorld::addRegion(const U64 &region_handle, const LLHost &host)
 	}
 
 	updateWaterObjects();
+
+// <AW: opensim-limits>
+	if(mLimitsNeedRefresh)
+	{
+		refreshLimits();
+	}
+// </AW: opensim-limits>
 
 	return regionp;
 }
@@ -276,6 +317,10 @@ void LLWorld::removeRegion(const LLHost &host)
 	delete regionp;
 
 	updateWaterObjects();
+
+	//double check all objects of this region are removed.
+	gObjectList.clearAllMapObjectsInRegion(regionp) ;
+	//llassert_always(!gObjectList.hasMapObjectInRegion(regionp)) ;
 }
 
 
@@ -592,7 +637,7 @@ void LLWorld::updateVisibilities()
 		region_list_t::iterator curiter = iter++;
 		LLViewerRegion* regionp = *curiter;
 		F32 height = regionp->getLand().getMaxZ() - regionp->getLand().getMinZ();
-		F32 radius = 0.5f*fsqrtf(height * height + diagonal_squared);
+		F32 radius = 0.5f*(F32) sqrt(height * height + diagonal_squared);
 		if (!regionp->getLand().hasZData()
 			|| LLViewerCamera::getInstance()->sphereInFrustum(regionp->getCenterAgent(), radius))
 		{
@@ -613,14 +658,11 @@ void LLWorld::updateVisibilities()
 		}
 
 		F32 height = regionp->getLand().getMaxZ() - regionp->getLand().getMinZ();
-		F32 radius = 0.5f*fsqrtf(height * height + diagonal_squared);
+		F32 radius = 0.5f*(F32) sqrt(height * height + diagonal_squared);
 		if (LLViewerCamera::getInstance()->sphereInFrustum(regionp->getCenterAgent(), radius))
 		{
 			regionp->calculateCameraDistance();
-			if (!gNoRender)
-			{
-				regionp->getLand().updatePatchVisibilities(gAgent);
-			}
+			regionp->getLand().updatePatchVisibilities(gAgent);
 		}
 		else
 		{
@@ -658,92 +700,6 @@ void LLWorld::updateParticles()
 {
 	LLViewerPartSim::getInstance()->updateSimulation();
 }
-
-void LLWorld::updateClouds(const F32 dt)
-{
-	static LLFastTimer::DeclareTimer ftm("World Clouds");
-	LLFastTimer t(ftm);
-
-	if ( gSavedSettings.getBOOL("FreezeTime") )
-	{
-		// don't move clouds in snapshot mode
-		return;
-	}
-
-	if (
-		mClassicCloudsEnabled !=
-		gSavedSettings.getBOOL("SkyUseClassicClouds") )
-	{
-		// The classic cloud toggle has been flipped
-		// gotta update all of the cloud layers
-		mClassicCloudsEnabled =
-			gSavedSettings.getBOOL("SkyUseClassicClouds");
-
-		if ( !mClassicCloudsEnabled && mActiveRegionList.size() )
-		{
-			// We've transitioned to having classic clouds disabled
-			// reset all cloud layers.
-			for (
-				region_list_t::iterator iter = mActiveRegionList.begin();
-				iter != mActiveRegionList.end();
-				++iter)
-			{
-				LLViewerRegion* regionp = *iter;
-				regionp->mCloudLayer.reset();
-			}
-
-			return;
-		}
-	}
-	else if ( !mClassicCloudsEnabled ) return;
-
-	if (mActiveRegionList.size())
-	{
-		for (region_list_t::iterator iter = mActiveRegionList.begin();
-			 iter != mActiveRegionList.end(); ++iter)
-		{
-			LLViewerRegion* regionp = *iter;
-			regionp->mCloudLayer.updatePuffs(dt);
-		}
-
-		// Reshuffle who owns which puffs
-		for (region_list_t::iterator iter = mActiveRegionList.begin();
-			 iter != mActiveRegionList.end(); ++iter)
-		{
-			LLViewerRegion* regionp = *iter;
-			regionp->mCloudLayer.updatePuffOwnership();
-		}
-
-		// Add new puffs
-		for (region_list_t::iterator iter = mActiveRegionList.begin();
-			 iter != mActiveRegionList.end(); ++iter)
-		{
-			LLViewerRegion* regionp = *iter;
-			regionp->mCloudLayer.updatePuffCount();
-		}
-	}
-}
-
-LLCloudGroup* LLWorld::findCloudGroup(const LLCloudPuff &puff)
-{
-	if (mActiveRegionList.size())
-	{
-		// Update all the cloud puff positions, and timer based stuff
-		// such as death decay
-		for (region_list_t::iterator iter = mActiveRegionList.begin();
-			 iter != mActiveRegionList.end(); ++iter)
-		{
-			LLViewerRegion* regionp = *iter;
-			LLCloudGroup *groupp = regionp->mCloudLayer.findCloudGroup(puff);
-			if (groupp)
-			{
-				return groupp;
-			}
-		}
-	}
-	return NULL;
-}
-
 
 void LLWorld::renderPropertyLines()
 {
@@ -957,8 +913,8 @@ void LLWorld::updateWaterObjects()
 		{
 			// The edge water objects can be dead because they're attached to the region that the
 			// agent was in when they were originally created.
-			mEdgeWaterObjects[dir] = (LLVOWater *)gObjectList.createObjectViewer(LLViewerObject::LL_VO_WATER,
-																				 gAgent.getRegion());
+			mEdgeWaterObjects[dir] = (LLVOWater *)gObjectList.createObjectViewer(LLViewerObject::LL_VO_VOID_WATER,
+				gAgent.getRegion());
 			waterp = mEdgeWaterObjects[dir];
 			waterp->setUseTexture(FALSE);
 			waterp->setIsEdgePatch(TRUE);
@@ -983,6 +939,7 @@ void LLWorld::updateWaterObjects()
 		gObjectList.updateActive(waterp);
 	}
 }
+
 
 void LLWorld::shiftRegions(const LLVector3& offset)
 {
@@ -1217,7 +1174,10 @@ void send_agent_resume()
 	LLAppViewer::instance()->resumeMainloopTimeout();
 }
 
-static LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& region_origin)
+//static LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& region_origin)
+// [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& region_origin)
+// [/SL:KB]
 {
 	LLVector3d pos_global;
 	LLVector3 pos_local;
@@ -1241,6 +1201,8 @@ static LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3
 
 void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positions, const LLVector3d& relative_to, F32 radius) const
 {
+	F32 radius_squared = radius * radius;
+	
 	if(avatar_ids != NULL)
 	{
 		avatar_ids->clear();
@@ -1249,6 +1211,33 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
 	{
 		positions->clear();
 	}
+	// get the list of avatars from the character list first, so distances are correct
+	// when agent is above 1020m and other avatars are nearby
+	for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
+		iter != LLCharacter::sInstances.end(); ++iter)
+	{
+		LLVOAvatar* pVOAvatar = (LLVOAvatar*) *iter;
+		if(!pVOAvatar->isDead() && !pVOAvatar->isSelf())
+		{
+			LLUUID uuid = pVOAvatar->getID();
+			if(!uuid.isNull())
+			{
+				LLVector3d pos_global = pVOAvatar->getPositionGlobal();
+				if(dist_vec_squared(pos_global, relative_to) <= radius_squared)
+				{
+					if(positions != NULL)
+					{
+						positions->push_back(pos_global);
+					}
+					if(avatar_ids !=NULL)
+					{
+						avatar_ids->push_back(uuid);
+					}
+				}
+			}
+		}
+	}
+	// region avatars added for situations where radius is greater than RenderFarClip
 	for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
 		iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
 	{
@@ -1258,50 +1247,16 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
 		for (S32 i = 0; i < count; i++)
 		{
 			LLVector3d pos_global = unpackLocalToGlobalPosition(regionp->mMapAvatars.get(i), origin_global);
-			if(dist_vec(pos_global, relative_to) <= radius)
+			if(dist_vec_squared(pos_global, relative_to) <= radius_squared)
 			{
-				if(positions != NULL)
-				{
-					positions->push_back(pos_global);
-				}
-				if(avatar_ids != NULL)
-				{
-					avatar_ids->push_back(regionp->mMapAvatarIDs.get(i));
-				}
-			}
-		}
-	}
-	// retrieve the list of close avatars from viewer objects as well
-	// for when we are above 1000m, only do this when we are retrieving
-	// uuid's too as there could be duplicates
-	if(avatar_ids != NULL)
-	{
-		for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
-			iter != LLCharacter::sInstances.end(); ++iter)
-		{
-			LLVOAvatar* pVOAvatar = (LLVOAvatar*) *iter;
-			if(pVOAvatar->isDead() || pVOAvatar->isSelf())
-				continue;
-			LLUUID uuid = pVOAvatar->getID();
-			if(uuid.isNull())
-				continue;
-			LLVector3d pos_global = pVOAvatar->getPositionGlobal();
-			if(dist_vec(pos_global, relative_to) <= radius)
-			{
-				bool found = false;
-				uuid_vec_t::iterator sel_iter = avatar_ids->begin();
-				for (; sel_iter != avatar_ids->end(); sel_iter++)
-				{
-					if(*sel_iter == uuid)
-					{
-						found = true;
-						break;
-					}
-				}
-				if(!found)
+				LLUUID uuid = regionp->mMapAvatarIDs.get(i);
+				// if this avatar doesn't already exist in the list, add it
+				if(uuid.notNull() && avatar_ids!=NULL && std::find(avatar_ids->begin(), avatar_ids->end(), uuid) == avatar_ids->end())
 				{
 					if(positions != NULL)
+					{
 						positions->push_back(pos_global);
+					}
 					avatar_ids->push_back(uuid);
 				}
 			}

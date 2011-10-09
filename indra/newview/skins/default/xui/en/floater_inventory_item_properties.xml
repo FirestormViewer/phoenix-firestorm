@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  auto_tile="true"
- height="340"
+ height="350"
  layout="topleft"
  name="item properties"
  help_topic="item_properties"
@@ -106,9 +106,10 @@
      left_delta="78"
      name="LabelCreatorName"
      top_delta="0"
+     translate="false"
      use_ellipses="true" 
      width="170">
-        Nicole Linden
+        TestString PleaseIgnore
     </text>
     <button
      follows="top|right"
@@ -140,9 +141,10 @@
      left_delta="78"
      name="LabelOwnerName"
      top_delta="0"
+     translate="false"
      use_ellipses="true"
      width="170">
-      Thrax Linden
+      TestString PleaseIgnore
     </text>
     <button
      follows="top|right"
@@ -191,7 +193,7 @@
     </text>
     <check_box
      height="16"
-     label="Edit"
+     label="Modify"
      layout="topleft"
      left_pad="5"
      name="CheckOwnerModify"
@@ -207,7 +209,7 @@
      width="88" />
     <check_box
      height="16"
-     label="Resell"
+     label="Transfer"
      layout="topleft"
      left_delta="0"
      name="CheckOwnerTransfer"
@@ -251,7 +253,7 @@
      layout="topleft"
      left_pad="5"
      name="CheckShareWithGroup"
-     top_delta="5"
+     top_delta="0"
      width="106" />
     <text
      type="string"
@@ -268,7 +270,7 @@
     </text>
     <check_box
      height="16"
-     label="Edit"
+     label="Modify"
      layout="topleft"
      left_pad="5"
      name="CheckNextOwnerModify"
@@ -284,7 +286,7 @@
      width="88" />
     <check_box
      height="16"
-     label="Resell"
+     label="Transfer"
      layout="topleft"
      left_delta="0"
      name="CheckNextOwnerTransfer"
@@ -303,16 +305,20 @@
      left_pad="5"
      layout="topleft"
      follows="left|top"
-     name="combobox sale copy"
+     name="ComboSaleType"
      width="110">
+        <combo_box.item
+         label="Original"
+         name="Original"
+         value="Original" />
         <combo_box.item
          label="Copy"
          name="Copy"
          value="Copy" />
         <combo_box.item
-         label="Original"
-         name="Original"
-         value="Original" />
+         label="Contents"
+         name="Contents"
+         value="Contents" />
     </combo_box>
     <spinner
         follows="left|top"
@@ -334,26 +340,14 @@
         height="15"
         follows="left|top"
         layout="topleft"
-        left_delta="82"
+        left_delta="83"
         name="CurrencySymbol"
-        top_delta="1"
+        top_delta="5"
         width="18">
       L$
     </text>
 
-    <!--line_editor
-     border_style="line"
-     border_thickness="1"
-     follows="left|top|right"
-     height="16"
-     layout="topleft"
-     left_pad="5"
-     max_length="25"
-     name="EditPrice"
-     top_delta="0"
-     width="242" /-->
-
-    <!--text
+    <text
      type="string"
      length="1"
      follows="left|top"
@@ -412,59 +406,6 @@
      top_delta="0"
      width="90">
         N:
-    </text-->
-        <!--text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left="10"
-     name="SaleLabel"
-     top_pad="5"
-     width="330">
-        Mark Item:
-    </text-->
-
-
-    <!--radio_group
-     draw_border="false"
-     follows="left|top|right"
-     height="16"
-     layout="topleft"
-     left_delta="78"
-     name="RadioSaleType"
-     top_delta="0"
-     width="252">
-        <radio_item
-         height="16"
-         label="Original"
-         layout="topleft"
-         left="0"
-         name="radio"
-         top="0"
-         width="70" />
-        <radio_item
-         height="16"
-         label="Copy"
-         layout="topleft"
-         left_delta="60"
-         name="radio2"
-         top_delta="0"
-         width="70" />
-    </radio_group-->
-
-    <!--text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="16"
-     layout="topleft"
-     left="10"
-     name="TextPrice"
-     top_pad="5"
-     width="78">
-        Price: L$
-    </text-->
+    </text>
 
 </floater>

@@ -56,23 +56,24 @@
 #include "lldxhardware.h"
 #endif
 
-
+// [FIX-FIRE-2209 Don't download feature_Tables from HTTP 
 #if LL_DARWIN
 const char FEATURE_TABLE_FILENAME[] = "featuretable_mac.txt";
-const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_mac.%s.txt";
+//const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_mac.%s.txt";
 #elif LL_LINUX
 const char FEATURE_TABLE_FILENAME[] = "featuretable_linux.txt";
-const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_linux.%s.txt";
+//const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_linux.%s.txt";
 #elif LL_SOLARIS
 const char FEATURE_TABLE_FILENAME[] = "featuretable_solaris.txt";
-const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_solaris.%s.txt";
+//const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_solaris.%s.txt";
 #else
 const char FEATURE_TABLE_FILENAME[] = "featuretable%s.txt";
-const char FEATURE_TABLE_VER_FILENAME[] = "featuretable%s.%s.txt";
+//const char FEATURE_TABLE_VER_FILENAME[] = "featuretable%s.%s.txt";
 #endif
 
+// [FIX-FIRE-2209 Don't download gpu_tables from HTTP 
 const char GPU_TABLE_FILENAME[] = "gpu_table.txt";
-const char GPU_TABLE_VER_FILENAME[] = "gpu_table.%s.txt";
+//const char GPU_TABLE_VER_FILENAME[] = "gpu_table.%s.txt";
 
 LLFeatureInfo::LLFeatureInfo(const std::string& name, const BOOL available, const F32 level)
 	: mValid(TRUE), mName(name), mAvailable(available), mRecommendedLevel(level)
@@ -106,7 +107,7 @@ BOOL LLFeatureList::isFeatureAvailable(const std::string& name)
 		return mFeatures[name].mAvailable;
 	}
 
-	LL_WARNS("RenderInit") << "Feature " << name << " not on feature list!" << LL_ENDL;
+	LL_WARNS_ONCE("RenderInit") << "Feature " << name << " not on feature list!" << LL_ENDL;
 	
 	// changing this to TRUE so you have to explicitly disable 
 	// something for it to be disabled
@@ -120,7 +121,7 @@ F32 LLFeatureList::getRecommendedValue(const std::string& name)
 		return mFeatures[name].mRecommendedLevel;
 	}
 
-	LL_WARNS("RenderInit") << "Feature " << name << " not on feature list or not available!" << LL_ENDL;
+	LL_WARNS_ONCE("RenderInit") << "Feature " << name << " not on feature list or not available!" << LL_ENDL;
 	return 0;
 }
 
@@ -203,7 +204,7 @@ BOOL LLFeatureManager::maskFeatures(const std::string& name)
  		LL_DEBUGS("RenderInit") << "Unknown feature mask " << name << LL_ENDL;
 		return FALSE;
 	}
-	LL_DEBUGS("RenderInit") << "Applying Feature Mask: " << name << LL_ENDL;
+	LL_INFOS("RenderInit") << "Applying GPU Feature list: " << name << LL_ENDL;
 	return maskList(*maskp);
 }
 
@@ -221,44 +222,45 @@ BOOL LLFeatureManager::loadFeatureTables()
 	std::string app_path = gDirUtilp->getAppRODataDir();
 	app_path += gDirUtilp->getDirDelimiter();
 
+	// [FIX-FIRE-2209 Don't download feature_Tables from HTTP 
 	std::string filename;
-	std::string http_filename; 
+	// std::string http_filename; 
 #if LL_WINDOWS
 	std::string os_string = LLAppViewer::instance()->getOSInfo().getOSStringSimple();
 	if (os_string.find("Microsoft Windows XP") == 0)
 	{
 		filename = llformat(FEATURE_TABLE_FILENAME, "_xp");
-		http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "_xp", LLVersionInfo::getVersion().c_str());
+		// http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "_xp", LLVersionInfo::getVersion().c_str());
 	}
 	else
 	{
 		filename = llformat(FEATURE_TABLE_FILENAME, "");
-		http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "", LLVersionInfo::getVersion().c_str());
+		// http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "", LLVersionInfo::getVersion().c_str());
 	}
 #else
 	filename = FEATURE_TABLE_FILENAME;
-	http_filename = llformat(FEATURE_TABLE_VER_FILENAME, LLVersionInfo::getVersion().c_str());
+	//http_filename = llformat(FEATURE_TABLE_VER_FILENAME, LLVersionInfo::getVersion().c_str());
 #endif
 
 	app_path += filename;
 
 	
 	// second table is downloaded with HTTP
-	std::string http_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, http_filename);
+	//std::string http_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, http_filename);
 
 	// use HTTP table if it exists
-	std::string path;
-	if (gDirUtilp->fileExists(http_path))
-	{
-		path = http_path;
-	}
-	else
-	{
-		path = app_path;
-	}
+	// std::string path;
+	// if (gDirUtilp->fileExists(http_path))
+	//{
+	//	path = http_path;
+	//}
+	//else
+	//{
+	//	path = app_path;
+	//}
 
 	
-	return parseFeatureTable(path);
+	return parseFeatureTable(app_path);
 }
 
 
@@ -290,22 +292,13 @@ BOOL LLFeatureManager::parseFeatureTable(std::string filename)
 	mTableVersion = version;
 
 	LLFeatureList *flp = NULL;
-	while (!file.eof() && file.good())
+	while (file >> name)
 	{
 		char buffer[MAX_STRING];		 /*Flawfinder: ignore*/
-
-		file >> name;
 		
 		if (name.substr(0,2) == "//")
 		{
 			// This is a comment.
-			file.getline(buffer, MAX_STRING);
-			continue;
-		}
-
-		if (name.empty())
-		{
-			// This is a blank line
 			file.getline(buffer, MAX_STRING);
 			continue;
 		}
@@ -356,22 +349,24 @@ void LLFeatureManager::loadGPUClass()
 	app_path += gDirUtilp->getDirDelimiter();
 	app_path += GPU_TABLE_FILENAME;
 	
+	// [FIX-FIRE-2209 Don't download GPU_Tables from HTTP 
 	// second table is downloaded with HTTP
-	std::string http_filename = llformat(GPU_TABLE_VER_FILENAME, LLVersionInfo::getVersion().c_str());
-	std::string http_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, http_filename);
+	//std::string http_filename = llformat(GPU_TABLE_VER_FILENAME, LLVersionInfo::getVersion().c_str());
+	//std::string http_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, http_filename);
 
 	// use HTTP table if it exists
-	std::string path;
-	if (gDirUtilp->fileExists(http_path))
-	{
-		path = http_path;
-	}
-	else
-	{
-		path = app_path;
-	}
-
-	parseGPUTable(path);
+	//std::string path;
+	//if (gDirUtilp->fileExists(http_path))
+	//{
+	//	path = http_path;
+	//}
+	//else
+	//{
+	//	path = app_path;
+	//}
+    //
+	// parseGPUTable(path);
+	parseGPUTable(app_path);
 }
 
 	
@@ -387,13 +382,16 @@ void LLFeatureManager::parseGPUTable(std::string filename)
 		return;
 	}
 
-	std::string renderer = gGLManager.getRawGLString();
+	std::string rawRenderer = gGLManager.getRawGLString();
+	std::string renderer = rawRenderer;
 	for (std::string::iterator i = renderer.begin(); i != renderer.end(); ++i)
 	{
 		*i = tolower(*i);
 	}
-	
-	while (!file.eof())
+
+	bool gpuFound;
+	U32 lineNumber;
+	for (gpuFound = false, lineNumber = 0; !gpuFound && !file.eof(); lineNumber++)
 	{
 		char buffer[MAX_STRING];		 /*Flawfinder: ignore*/
 		buffer[0] = 0;
@@ -440,6 +438,7 @@ void LLFeatureManager::parseGPUTable(std::string filename)
 
 		if (label.empty() || expr.empty() || cls.empty() || supported.empty())
 		{
+			LL_WARNS("RenderInit") << "invald gpu_table.txt:" << lineNumber << ": '" << buffer << "'" << LL_ENDL;
 			continue;
 		}
 	
@@ -453,18 +452,26 @@ void LLFeatureManager::parseGPUTable(std::string filename)
 		if(boost::regex_search(renderer, re))
 		{
 			// if we found it, stop!
-			file.close();
-			LL_INFOS("RenderInit") << "GPU is " << label << llendl;
+			gpuFound = true;
 			mGPUString = label;
 			mGPUClass = (EGPUClass) strtol(cls.c_str(), NULL, 10);
 			mGPUSupported = (BOOL) strtol(supported.c_str(), NULL, 10);
-			file.close();
-			return;
 		}
 	}
 	file.close();
 
-	LL_WARNS("RenderInit") << "Couldn't match GPU to a class: " << gGLManager.getRawGLString() << LL_ENDL;
+	if ( gpuFound )
+	{
+		LL_INFOS("RenderInit") << "GPU '" << rawRenderer << "' recognized as '" << mGPUString << "'" << LL_ENDL;
+		if (!mGPUSupported)
+		{
+			LL_INFOS("RenderInit") << "GPU '" << mGPUString << "' is not supported." << LL_ENDL;
+		}
+	}
+	else
+	{
+		LL_WARNS("RenderInit") << "GPU '" << rawRenderer << "' not recognized" << LL_ENDL;
+	}
 }
 
 // responder saves table into file
@@ -554,8 +561,8 @@ void fetch_gpu_table(std::string table)
 // fetch table(s) from a website (S3)
 void LLFeatureManager::fetchHTTPTables()
 {
-	fetch_feature_table(FEATURE_TABLE_VER_FILENAME);
-	fetch_gpu_table(GPU_TABLE_VER_FILENAME);
+	//fetch_feature_table(FEATURE_TABLE_VER_FILENAME);
+	//fetch_gpu_table(GPU_TABLE_VER_FILENAME);
 }
 
 
@@ -738,6 +745,10 @@ void LLFeatureManager::applyBaseMasks()
 	{
 		maskFeatures("ATI");
 	}
+	if (gGLManager.mHasATIMemInfo && gGLManager.mVRAM < 256)
+	{
+		maskFeatures("ATIVramLT256");
+	}
 	if (gGLManager.mATIOldDriver)
 	{
 		maskFeatures("ATIOldDriver");
@@ -753,6 +764,18 @@ void LLFeatureManager::applyBaseMasks()
 	if (gGLManager.mGLVersion < 1.5f)
 	{
 		maskFeatures("OpenGLPre15");
+	}
+	if (gGLManager.mGLVersion < 3.f)
+	{
+		maskFeatures("OpenGLPre30");
+	}
+	if (gGLManager.mNumTextureImageUnits <= 8)
+	{
+		maskFeatures("TexUnit8orLess");
+	}
+	if (gGLManager.mHasMapBufferRange)
+	{
+		maskFeatures("MapBufferRange");
 	}
 
 	// now mask by gpu string

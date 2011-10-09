@@ -24,6 +24,10 @@
  * $/LicenseInfo$
  */
 
+#include "linden_common.h"
+
+#include "llapp.h"
+
 #include <cstdlib>
 
 #ifdef LL_DARWIN
@@ -31,9 +35,6 @@
 #include <unistd.h>
 #include <sys/sysctl.h>
 #endif
-
-#include "linden_common.h"
-#include "llapp.h"
 
 #include "llcommon.h"
 #include "llapr.h"
@@ -282,7 +283,10 @@ void LLApp::stepFrame()
 }
 
 
-void LLApp::setupErrorHandling()
+//void LLApp::setupErrorHandling()
+// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-12 (Catznip-2.6.0a) | Added: Catznip-2.4.0a
+void LLApp::setupErrorHandling(EMiniDumpType minidump_type)
+// [/SL:KB]
 {
 	// Error handling is done by starting up an error handling thread, which just sleeps and
 	// occasionally checks to see if the app is in an error state, and sees if it needs to be run.
@@ -296,8 +300,27 @@ void LLApp::setupErrorHandling()
 	if(mExceptionHandler == 0)
 	{
 		llwarns << "adding breakpad exception handler" << llendl;
+//		mExceptionHandler = new google_breakpad::ExceptionHandler(
+//			L"C:\\Temp\\", 0, windows_post_minidump_callback, 0, google_breakpad::ExceptionHandler::HANDLER_ALL);
+// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-12 (Catznip-2.6.0a) | Added: Catznip-2.4.0a
+		U32 maskMiniDumpType = MiniDumpNormal | MiniDumpFilterModulePaths;
+		switch (minidump_type)
+		{
+			case MINIDUMP_MINIMAL:
+				maskMiniDumpType |= MiniDumpFilterMemory;
+				break;
+			case MINIDUMP_EXTENDED:
+				maskMiniDumpType |= MiniDumpWithDataSegs | MiniDumpWithIndirectlyReferencedMemory;
+				break;
+			case MINIDUMP_NORMAL:
+			default:
+				break;
+		}
+
 		mExceptionHandler = new google_breakpad::ExceptionHandler(
-			L"C:\\Temp\\", 0, windows_post_minidump_callback, 0, google_breakpad::ExceptionHandler::HANDLER_ALL);
+			L"C:\\Temp\\", 0, windows_post_minidump_callback, 0, google_breakpad::ExceptionHandler::HANDLER_ALL,
+			(MINIDUMP_TYPE)maskMiniDumpType, NULL, NULL);
+// [/SL:KB]
 	}
 
 #else

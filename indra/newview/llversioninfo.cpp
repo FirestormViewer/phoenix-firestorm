@@ -134,3 +134,34 @@ void LLVersionInfo::resetChannel(const std::string& channel)
 	sWorkingChannelName = channel;
 	sVersionChannel.clear(); // Reset version and channel string til next use.
 }
+
+// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-05-08 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+const char* getBuildPlatformString()
+{
+#if LL_WINDOWS
+	#ifndef _WIN64
+			return "Win32";
+	#else
+			return "Win64";
+	#endif // _WIN64
+#elif LL_SDL
+	#if LL_GNUC
+		#if ( defined(__amd64__) || defined(__x86_64__) )
+			return "Linux64";
+		#else
+			return "Linux32";
+		#endif
+	#endif
+#elif LL_DARWIN
+			return "Darwin";
+#else
+			return "Unknown";
+#endif
+}
+
+const std::string& LLVersionInfo::getBuildPlatform()
+{
+	static std::string strPlatform = getBuildPlatformString();
+	return strPlatform;
+}
+// [/SL:KB]

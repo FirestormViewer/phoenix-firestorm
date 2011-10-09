@@ -42,6 +42,7 @@
 
 // Viewer includes
 #include "llagent.h"
+#include "llagentaccess.h"
 #include "llviewerwindow.h"
 #include "llviewercontrol.h"
 //#include "llfirstuse.h"
@@ -54,6 +55,7 @@
 #include "llresmgr.h"
 #include "llsdutil.h"
 #include "llsdutil_math.h"
+#include "llslurl.h"
 #include "llstatusbar.h"
 #include "llui.h"
 #include "llviewertexture.h"
@@ -649,16 +651,16 @@ LLParcel *LLViewerParcelMgr::getAgentParcel() const
 // Return whether the agent can build on the land they are on
 bool LLViewerParcelMgr::allowAgentBuild() const
 {
-	if (mAgentParcel)
+	if (gAgent.isGodlike())
 	{
-		return (gAgent.isGodlike() ||
-				(mAgentParcel->allowModifyBy(gAgent.getID(), gAgent.getGroupID())) ||
-				(isParcelOwnedByAgent(mAgentParcel, GP_LAND_ALLOW_CREATE)));
+		return true;
 	}
-	else
+	else if (!mAgentParcel)
 	{
-		return gAgent.isGodlike();
+		return false;
 	}
+	return (mAgentParcel->allowModifyBy(gAgent.getID(), gAgent.getGroupID()) ||
+			gAgent.hasPowerInGroup(mAgentParcel->getGroupID(), GP_LAND_ALLOW_CREATE));
 }
 
 // Return whether anyone can build on the given parcel
@@ -851,7 +853,7 @@ LLParcel* LLViewerParcelMgr::getCollisionParcel() const
 
 void LLViewerParcelMgr::render()
 {
-	if (mSelected && mRenderSelection)
+	if (mSelected && mRenderSelection && gSavedSettings.getBOOL("RenderParcelSelection"))
 	{
 		// Rendering is done in agent-coordinates, so need to supply
 		// an appropriate offset to the render code.
@@ -1384,11 +1386,6 @@ void LLViewerParcelMgr::setHoverParcel(const LLVector3d& pos)
 // static
 void LLViewerParcelMgr::processParcelOverlay(LLMessageSystem *msg, void **user)
 {
-	if (gNoRender)
-	{
-		return;
-	}
-
 	// Extract the packed overlay information
 	S32 packed_overlay_size = msg->getSizeFast(_PREHASH_ParcelData, _PREHASH_Data);
 
@@ -1788,21 +1785,26 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 
 void optionally_start_music(const std::string& music_url)
 {
-	if (gSavedSettings.getBOOL("AudioStreamingMusic") &&
-	    gSavedSettings.getBOOL("AudioStreamingMedia"))
+	if (gSavedSettings.getBOOL("AudioStreamingMusic"))
 	{
 		// only play music when you enter a new parcel if the UI control for this
 		// was not *explicitly* stopped by the user. (part of SL-4878)
 		LLPanelNearByMedia* nearby_media_panel = gStatusBar->getNearbyMediaPanel();;
-		if ((nearby_media_panel &&
-		     nearby_media_panel->getParcelAudioAutoStart()) ||
+		if (gStatusBar->getAudioStreamEnabled() || 	// ## Zi: Media/Stream separation
 		    // or they have expressed no opinion in the UI, but have autoplay on...
 		    (!nearby_media_panel &&
 		     gSavedSettings.getBOOL(LLViewerMedia::AUTO_PLAY_MEDIA_SETTING) &&
 			 gSavedSettings.getBOOL("MediaTentativeAutoPlay")))
 		{
-			llinfos << "Starting parcel music " << music_url << llendl;
-			gAudiop->startInternetStream(music_url);
+			if (gSavedSettings.getBOOL("MediaEnableFilter"))
+			{
+				LLViewerParcelMedia::filterAudioUrl(music_url);
+			}
+			else
+			{
+				llinfos << "Starting parcel music " << music_url << llendl;
+				gAudiop->startInternetStream(music_url);
+			}
 		}
 	}
 }
@@ -2210,7 +2212,10 @@ bool LLViewerParcelMgr::canAgentBuyParcel(LLParcel* parcel, bool forGroup) const
 		= parcelOwner == (forGroup ? gAgent.getGroupID() : gAgent.getID());
 	
 	bool isAuthorized
-		= (authorizeBuyer.isNull() || (gAgent.getID() == authorizeBuyer));
+			= (authorizeBuyer.isNull()
+				|| (gAgent.getID() == authorizeBuyer)
+				|| (gAgent.hasPowerInGroup(authorizeBuyer,GP_LAND_DEED)
+					&& gAgent.hasPowerInGroup(authorizeBuyer,GP_LAND_SET_SALE_INFO)));
 	
 	return isForSale && !isOwner && isAuthorized  && isEmpowered;
 }

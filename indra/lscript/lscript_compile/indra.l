@@ -8,8 +8,11 @@ FS			(f|F)
 %n 4000
 %p 5000
 
+%top {
+	#include "linden_common.h"
+}
+
 %{
-#include "linden_common.h"
 // Deal with the fact that lex/yacc generates unreachable code
 #ifdef LL_WINDOWS
 #pragma warning (disable : 4018) // warning C4018: signed/unsigned mismatch
@@ -311,6 +314,7 @@ extern "C" { int yyerror(const char *fmt, ...); }
 "ATTACH_HUD_BOTTOM_LEFT" { count(); yylval.ival = 36; return(INTEGER_CONSTANT); }
 "ATTACH_HUD_BOTTOM"		{ count(); yylval.ival = 37; return(INTEGER_CONSTANT); }
 "ATTACH_HUD_BOTTOM_RIGHT"	{ count(); yylval.ival = 38; return(INTEGER_CONSTANT); }
+"ATTACH_BRIDGE"		{ count(); yylval.ival = 127; return(INTEGER_CONSTANT); }
 
 "LAND_LEVEL"		{ count(); yylval.ival = E_LANDBRUSH_LEVEL; return(INTEGER_CONSTANT); }
 "LAND_RAISE"		{ count(); yylval.ival = E_LANDBRUSH_RAISE; return(INTEGER_CONSTANT); }
@@ -600,6 +604,8 @@ extern "C" { int yyerror(const char *fmt, ...); }
 "PARCEL_DETAILS_OWNER"	{ count(); yylval.ival = PARCEL_DETAILS_OWNER; return(INTEGER_CONSTANT); }
 "PARCEL_DETAILS_GROUP"	{ count(); yylval.ival = PARCEL_DETAILS_GROUP; return(INTEGER_CONSTANT); }
 "PARCEL_DETAILS_AREA"	{ count(); yylval.ival = PARCEL_DETAILS_AREA; return(INTEGER_CONSTANT); }
+"PARCEL_DETAILS_ID"		{ count(); yylval.ival = PARCEL_DETAILS_ID; return(INTEGER_CONSTANT); }
+"PARCEL_DETAILS_SEE_AVATARS"	{ count(); yylval.ival = PARCEL_DETAILS_SEE_AVATARS; return(INTEGER_CONSTANT); }
 
 "STRING_TRIM_HEAD"	{ count(); yylval.ival = STRING_TRIM_HEAD; return(INTEGER_CONSTANT); }
 "STRING_TRIM_TAIL"	{ count(); yylval.ival = STRING_TRIM_TAIL; return(INTEGER_CONSTANT); }

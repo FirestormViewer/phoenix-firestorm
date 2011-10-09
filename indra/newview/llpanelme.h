@@ -53,6 +53,9 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 
+protected:
+	void onCopyURI();
+
 private:
 
 	void buildEditPanel();

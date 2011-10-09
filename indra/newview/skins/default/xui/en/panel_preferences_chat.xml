@@ -15,18 +15,18 @@
    left="30"
    height="12"
    name="font_size"
-   width="120"
+   width="130"
    top="10">
-    Font size:
+    Chat window font size:
   </text>
   <radio_group
-     height="30"
+     height="20"
      layout="topleft"
-     left="40"
+     left_delta="170"
 	   control_name="ChatFontSize"
      name="chat_font_size"
-     top_pad="0"
-     width="440">
+     top="10"
+     width="380">
         <radio_item
          height="16"
          label="Small"
@@ -34,26 +34,72 @@
          left="0"
          name="radio"
          value="0"
-         top="10"
-         width="125" />
+         top_delta="20"
+         width="60" />
         <radio_item
          height="16"
          label="Medium"
          layout="topleft"
-         left_delta="145"
+         left_delta="60"
          name="radio2"
          value="1"
          top_delta="0"
-         width="125" />
+         width="75" />
         <radio_item
          height="16"
          label="Large"
          layout="topleft"
-         left_delta="170"
+         left_delta="75"
          name="radio3"
          value="2"
          top_delta="0"
-         width="125" />
+         width="60" />
+    </radio_group>
+  <text
+   follows="left|top"
+   layout="topleft"
+   left="30"
+   height="12"
+   name="console_font_size"
+   width="150"
+   top="30">
+    Onscreen console font size:
+  </text>
+  <radio_group
+     height="20"
+     layout="topleft"
+     left_delta="170"
+	   control_name="ChatConsoleFontSize"
+     name="chat_console_font_size"
+     top="30"
+     width="380">
+        <radio_item
+         height="16"
+         label="Small"
+         layout="topleft"
+         left="0"
+         name="consradio"
+         value="0"
+         top_delta="20"
+         width="60" />
+        <radio_item
+         height="16"
+         label="Medium"
+         layout="topleft"
+         left_delta="60"
+         name="consradio2"
+         value="1"
+         top_delta="0"
+         width="75" />
+        <radio_item
+         height="16"
+         label="Large"
+         layout="topleft"
+         left_delta="75"
+         name="consradio3"
+         value="2"
+         top_delta="0"
+         width="60" />
     </radio_group>
 
 
@@ -65,7 +111,7 @@
      layout="topleft"
      left="30"
      name="CloseChatOnReturn"
-     top_pad="10"
+     top_delta="25"
      width="256" />
     <check_box
      control_name="PlayTypingAnim"
@@ -77,16 +123,26 @@
      name="play_typing_animation"
      top_pad="5"
      width="400" />
-     <check_box
-     control_name="ShowChatMiniIcons"
+    <check_box
+     control_name="PhoenixPlayChatAnimation"
+     follows="left|top"
      height="16"
-     initial_value="false"
-     label="Show icons in chat headers"
+     label="Play avatar animations (such as shouting)"
      layout="topleft"
-     left="30"
-     name="ShowChatMiniIcons"
+     left_delta="0"
      top_pad="5"
-     width="400" />
+     name="play_avatar_animations"
+     width="400" /> 
+    <check_box
+     control_name="FSPlayTypingSound"
+     follows="left|top"
+     height="16"
+     label="Hear typing sound when people type in local chat"
+     layout="topleft"
+     left_delta="0"
+     top_pad="5"
+     name="play_typing_sound"
+     width="400" /> 
     <check_box
      enabled="false"
      height="16"
@@ -99,10 +155,38 @@
     <check_box
      enabled="true"
      height="16"
-     label="Remove chat headers (V1 Style)"
+     label="Remove chat headers (revert to V1 Style)"
      layout="topleft"
      left_delta="0"
      name="plain_text_chat_history"
+     top_pad="5"
+     width="400" />
+     <check_box
+     control_name="ShowChatMiniIcons"
+     height="16"
+     initial_value="false"
+     label="When using chat headers, show mini icons"
+     layout="topleft"
+     left="30"
+     name="ShowChatMiniIcons"
+     top_pad="5"
+     width="400" />
+    <check_box
+     control_name="FSHideTimestampsNearbyChat"
+     height="16"
+     label="Hide timestamp in Nearby Chat"
+     layout="topleft"
+     left="30"
+     name="hide_timestamps_nearby_chat"
+     top_pad="5"
+     width="400" />
+    <check_box
+     control_name="FSHideTimestampsIM"
+     height="16"
+     label="Hide timestamp in IMs"
+     layout="topleft"
+     left="30"
+     name="hide_timestamps_im"
      top_pad="5"
      width="400" />
     
@@ -110,13 +194,23 @@
      control_name="UseChatBubbles"
      follows="left|top"
      height="16"
-     label="Bubble Chat"
+     label="Show chat in bubbles above avatars"
      layout="topleft"
      left_delta="0"
      top_pad="5"
      name="bubble_text_chat"
      width="150" /> 
     
+    <check_box
+     control_name="UseTypingBubbles"
+     follows="left|top"
+     height="16"
+     label="Show typing indicator in bubbles above avatars"
+     layout="topleft"
+     left_delta="0"
+     top_pad="5"
+     name="bubble_text_typing"
+     width="150" /> 
    	<text
 	 type="string"
 	 length="1"
@@ -126,15 +220,16 @@
 	 left="30"
 	 name="inworld_typing_rg_label"
 	 top_pad="6"
-	 width="400">
+	 width="120">
        Pressing letter keys:
    </text>
     <radio_group
      control_name="LetterKeysFocusChatBar" 
+     width="310"
      height="16"
      layout="topleft"
-     left="40"
-     top_pad="0" 
+     left_delta="120"
+     top_delta="-5" 
      name="inworld_typing_preference">
         <radio_item
          label="Starts local chat"
@@ -144,7 +239,7 @@
          height="16" 
          left="0" 
          value="1"
-         width="150" />
+         width="130" />
         <radio_item
          label="Affects movement (i.e. WASD)"
          left_pad="0"
@@ -164,32 +259,21 @@
      layout="topleft"
      left="30"
      height="20"
-     width="170"
-     top_pad="14">
+     width="80"
+     top_pad="8">
      Show IMs in:
     </text>    
-    <text
-     name="requires_restart_label"
-     follows="left|top"
-     layout="topleft"
-     top_delta="0" 
-     left="170" 
-  	 height="20"
-	   width="130"
-     text_color="White_25"
-	  >
-      (requires restart)
-      </text>
+
       
     <radio_group
      height="16"
      layout="topleft"
-     left="40"
+     left_delta="120"
+     top_delta="0"
      control_name="ChatWindow"
      name="chat_window"
-     top_pad="0"
      tool_tip="Show your Instant Messages in separate floaters, or in one floater with many tabs (Requires restart)"
-     width="331">
+     width="180">
      <radio_item
       height="16"
       label="Separate windows"
@@ -198,22 +282,33 @@
       name="radio"
       value="0"
       top="0"
-      width="150" />
+      width="50" />
      <radio_item
       height="16"
       label="Tabs"
       layout="topleft"
-      left_delta="160"
+      left_delta="130"
       name="radio2"
       value="1"
       width="150" />
     </radio_group>
+    <text
+     name="req_restart"
+     follows="left|top"
+     layout="topleft"
+     left_pad="10"
+     top_delta="0"
+     text_color="White_50"
+     height="16"
+     width="100">
+     (requires restart) 
+     </text>
     
     <text
      name="disable_toast_label"
      follows="left|top"
      layout="topleft"
-     top_pad="14" 
+     top_pad="6" 
      left="30" 
      height="10"
      width="180">
@@ -247,13 +342,12 @@
      layout="topleft"
      left="30"
      name="translate_chat_checkbox"
-     bottom_delta="30"
      width="400" />
     <text
-     bottom_delta="30"
      name="translate_language_text"
      follows="left|top"
      layout="topleft"
+     top_delta="15"
      left_delta="20"
      height="20"
      width="110">
@@ -261,12 +355,13 @@
     </text>
     <combo_box
      allow_text_entry="true"
-     bottom_delta="3"
      control_name="TranslateLanguage"
      enabled="true"
      follows="left|top"
+     layout="topleft"
      height="23"
-     left_delta="110"
+     left="165"
+     top_delta="0"
      max_chars="135"
      mouse_opaque="true"
      name="translate_language_combobox"

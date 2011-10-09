@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu
+    name="Object Pie">
+
+   <pie_slice
+     enabled="false"
+     label="Open"
+     name="Open">
+        <pie_slice.on_click
+         function="Object.Open" />
+        <pie_slice.on_enable
+         function="Object.EnableOpen" />
+   </pie_slice>
+   <pie_slice
+        label="Create"
+        name="Build">
+        <pie_slice.on_click
+            function="Object.Build" />
+        <pie_slice.on_enable
+            function="EnableEdit"/>
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="Touch"
+        name="Pie Object Touch">
+        <pie_slice.on_click
+            function="Object.Touch" />
+        <pie_slice.on_enable
+            function="Object.EnableTouch"
+            name="EnableTouch"
+            parameter="Touch" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        start_autohide="true"
+        label="Sit Here"
+        name="Pie Object Sit">
+        <pie_slice.on_click
+            function="Object.SitOrStand" />
+        <pie_slice.on_enable
+            function="Object.EnableSit" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        autohide="true"
+        label="Stand Up"
+        name="Object Stand Up">
+        <pie_slice.on_click
+            function="Object.SitOrStand" />
+        <pie_slice.on_enable
+            function="Object.EnableStandUp" />
+    </pie_slice>
+    <pie_slice
+        start_autohide="true"
+        enabled="false"
+        label="Buy"
+        name="Buy...">
+        <pie_slice.on_click
+            function="Object.Buy" />
+        <pie_slice.on_enable
+            function="Object.EnableBuy" />
+    </pie_slice>
+    <pie_slice
+        autohide="true"
+        label="Take"
+        name="Pie Object Take">
+        <pie_slice.on_click
+            function="Object.Take"/>
+        <pie_slice.on_enable
+            function="Object.VisibleTake"/>
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="Pay"
+        name="Pay...">
+        <pie_slice.on_click
+            function="PayObject" />
+        <pie_slice.on_enable
+            function="EnablePayObject" />
+    </pie_slice>
+
+    <pie_menu
+        label="More >"
+        name="Object Pie More 1">
+
+    <pie_slice
+        enabled="false"
+        label="Delete"
+        name="Delete">
+        <pie_slice.on_click
+            function="Object.Delete" />
+        <pie_slice.on_enable
+            function="Object.EnableDelete" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="Wear"
+        name="Wear">
+        <pie_slice.on_click
+            function="Object.AttachToAvatar" />
+        <pie_slice.on_enable
+            function="Object.EnableWear" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="Take Copy"
+        name="Take Copy">
+        <pie_slice.on_click
+            function="Tools.TakeCopy" />
+        <pie_slice.on_enable
+            function="Tools.EnableTakeCopy" />
+    </pie_slice>
+    <pie_menu
+        label="Attach HUD >"
+        name="Pie Object Attach HUD" />
+    <pie_menu
+        label="Attach >"
+        name="Pie Object Attach" />
+    <pie_slice
+        enabled="false"
+        label="Return"
+        name="Return...">
+        <pie_slice.on_click
+            function="Object.Return" />
+        <pie_slice.on_enable
+            function="Object.EnableReturn" />
+        </pie_slice>
+
+    <pie_menu
+        label="More >"
+        name="Object Pie More 2">
+
+        <pie_separator />
+        <pie_slice
+            enabled="true"
+            label="Derender"
+            name="Derender">
+            <pie_slice.on_click
+                function="Object.Derender" />
+        </pie_slice>
+        <pie_slice
+            enabled="false"
+            label="Report..."
+            name="Report Abuse...">
+            <pie_slice.on_click
+                function="Object.ReportAbuse" />
+            <pie_slice.on_enable
+                function="Object.EnableReportAbuse" />
+        </pie_slice>
+        <pie_separator name="export_placeholder" />
+        <pie_separator name="disable_placeholder" />
+        <pie_slice
+            enabled="false"
+            label="Mute"
+            name="Object Mute">
+            <pie_slice.on_click
+                function="Object.Mute" />
+            <pie_slice.on_enable
+                function="Object.EnableMute" />
+        </pie_slice>
+        <pie_slice
+            enabled="true"
+            label="Script Info"
+            name="ScriptInfo">
+            <pie_slice.on_click
+                function="Tools.ScriptInfo" />
+        </pie_slice>
+        <pie_slice
+            label="Inspect"
+            name="Object Inspect">
+            <pie_slice.on_click
+                function="Floater.Show"
+                parameter="inspect" />
+        </pie_slice>
+
+
+    </pie_menu>
+
+    <pie_slice
+        enabled="false"
+        label="Buy"
+        name="Buy...">
+        <pie_slice.on_click
+            function="Object.Buy" />
+        <pie_slice.on_enable
+            function="Object.EnableBuy" />
+        </pie_slice>
+
+    </pie_menu>
+
+    <pie_slice
+        label="Edit"
+        name="Edit...">
+        <pie_slice.on_click
+            function="Object.Edit" />
+        <pie_slice.on_enable
+            function="EnableEdit"/>
+    </pie_slice>
+
+</pie_menu>

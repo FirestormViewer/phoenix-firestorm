@@ -44,6 +44,7 @@ class LLMenuButton;
 class LLMenuGL;
 class LLToggleableMenu;
 class LLFloater;
+class LLComboBox;	// ## Zi: Filter dropdown
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLPanelMainInventory
@@ -57,7 +58,7 @@ class LLPanelMainInventory : public LLPanel, LLInventoryObserver
 public:
 	friend class LLFloaterInventoryFinder;
 
-	LLPanelMainInventory();
+	LLPanelMainInventory(const LLPanel::Params& p = getDefaultParams());
 	~LLPanelMainInventory();
 
 	BOOL postBuild();
@@ -82,6 +83,12 @@ public:
 	void setSelectCallback(const LLFolderView::signal_t::slot_type& cb);
 
 	void onFilterEdit(const std::string& search_string );
+
+	// ## Zi: Filter dropdown
+	void onFilterTypeSelected(const std::string& filter_type_name);
+	void updateFilterDropdown(const LLInventoryFilter* filter);
+	// ## Zi: Filter dropdown
+
 protected:
 	//
 	// Misc functions
@@ -114,6 +121,12 @@ protected:
 	bool isSaveTextureEnabled(const LLSD& userdata);
 	void updateItemcountText();
 
+	// ## Zi: Inventory Collapse and Expand Buttons
+	void onCollapseButtonClicked();
+	void onExpandButtonClicked();
+	// ## Zi: Inventory Collapse and Expand Buttons
+	void onFocusReceived();
+
 private:
 	LLFloaterInventoryFinder* getFinder();
 
@@ -121,10 +134,16 @@ private:
 	LLTabContainer*				mFilterTabs;
 	LLHandle<LLFloater>			mFinderHandle;
 	LLInventoryPanel*			mActivePanel;
+	bool						mResortActivePanel;
 	LLSaveFolderState*			mSavedFolderState;
 	std::string					mFilterText;
 	std::string					mFilterSubString;
 
+	// ## Zi: Filter dropdown
+	LLComboBox*					mFilterComboBox;
+	std::map<std::string,U64>	mFilterMap;			// contains name-to-number mapping for dropdown filter types
+	U64							mFilterMask;		// contains the cumulated bit filter for all dropdown filter types
+	// ## Zi: Filter dropdown
 
 	//////////////////////////////////////////////////////////////////////////////////
 	// List Commands                                                                //
@@ -148,6 +167,11 @@ private:
 	LLToggleableMenu*			mMenuGearDefault;
 	LLMenuGL*					mMenuAdd;
 	LLMenuButton*				mGearMenuButton;
+
+	// ## Zi: Inventory Collapse and Expand Buttons
+	LLButton*					mCollapseBtn;
+	LLButton*					mExpandBtn;
+	// ## Zi: Inventory Collapse and Expand Buttons
 
 	bool						mNeedUploadCost;
 	// List Commands                                                              //

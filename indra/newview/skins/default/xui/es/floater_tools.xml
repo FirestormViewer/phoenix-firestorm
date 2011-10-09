@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="toolbox floater" short_title="HERRAMIENTAS DE CONSTRUCCIÓN" title="">
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="toolbox floater" short_title="HERRAMIENTAS DE CONSTRUCCIÓN">
 	<floater.string name="status_rotate">
 		Arrastra las bandas de color para girar el objeto.
 	</floater.string>
 	<floater.string name="status_scale">
-		Pulsa y arrastra para estirar el lado seleccionado.
+		Arrastra las bandas de color para girar el objeto.
 	</floater.string>
 	<floater.string name="status_move">
-		Arrastrar para mover, Mayús.+arrastrar para copiar.
+		Arrastra para mover, Mayús.+arrastrar para copiar.
 	</floater.string>
 	<floater.string name="status_modifyland">
 		Mantén pulsado para modificar el terreno.
@@ -16,7 +16,7 @@
 		Pulsa y arrastra para mover la cámara.
 	</floater.string>
 	<floater.string name="status_grab">
-		Arrastrar para mover: Ctrl, verticalmente; Ctrl-Mayús., girando.
+                Arrastra para mover: Ctrl, verticalmente; Ctrl+Mayúscula, girando.
 	</floater.string>
 	<floater.string name="status_place">
 		Pulsa en el mundo para construir.
@@ -24,7 +24,19 @@
 	<floater.string name="status_selectland">
 		Pulsa y arrastra para seleccionar el terreno.
 	</floater.string>
-	<floater.string name="grid_screen_text">
+	<floater.string name="status_selectcount">
+                Sel. [OBJ_COUNT] objetos ([PRIM_COUNT] prims[PE_STRING])
+	</floater.string>
+	<floater.string name="status_selectprimequiv">
+                , equiv. a [SEL_WEIGHT] prims.
+	</floater.string>
+	<floater.string name="link_number">
+		Número de grupo:
+	</floater.string>
+	<floater.string name="selected_faces">
+		Caras:
+	</floater.string>
+ 	<floater.string name="grid_screen_text">
 		Pantalla
 	</floater.string>
 	<floater.string name="grid_local_text">
@@ -37,99 +49,101 @@
 		Referencia
 	</floater.string>
 	<floater.string name="grid_attachment_text">
-		Añadido
+		Accesorio
 	</floater.string>
-	<button label="" label_selected="" name="button focus" tool_tip="Visión"/>
-	<button label="" label_selected="" name="button move" tool_tip="Mover"/>
-	<button label="" label_selected="" name="button edit" tool_tip="Editar"/>
-	<button label="" label_selected="" name="button create" tool_tip="Crear"/>
-	<button label="" label_selected="" name="button land" tool_tip="Terreno"/>
-	<text name="text status" width="280">
-		Arrastrar para mover, Mayús.+arrastrar para copiar.
+	<button name="button focus" tool_tip="Visión"/>
+	<button name="button move" tool_tip="Mover"/>
+	<button name="button edit" tool_tip="Editar"/>
+	<button name="button create" tool_tip="Crear"/>
+	<button name="button land" tool_tip="Terreno"/>
+	<text name="text status">
+		Arrastra para mover, Mayús.+arrastrar para copiar.
 	</text>
 	<radio_group name="focus_radio_group">
 		<radio_item label="Zoom" name="radio zoom"/>
 		<radio_item label="Órbita (Ctrl)" name="radio orbit"/>
-		<radio_item label="Panorámica (Ctrl+Shift)" name="radio pan"/>
+                <radio_item label="Panorámica (Ctrl+Mayúscula)" name="radio pan"/>
 	</radio_group>
 	<radio_group name="move_radio_group">
 		<radio_item label="Mover" name="radio move"/>
 		<radio_item label="Vertical (Ctrl)" name="radio lift"/>
-		<radio_item label="Horizontal (Ctrl+Shift)" name="radio spin"/>
+                <radio_item label="Horizontal (Ctrl+Mayúscula)" name="radio spin"/>
 	</radio_group>
 	<radio_group name="edit_radio_group">
-		<radio_item label="Moverse" name="radio position"/>
+		<radio_item label="Mover" name="radio position"/>
 		<radio_item label="Girar (Ctrl)" name="radio rotate"/>
-		<radio_item label="Estirar (Ctrl+Shift)" name="radio stretch"/>
+		<radio_item label="Estirar (Ctrl+Mayús.)" name="radio stretch"/>
 		<radio_item label="Elegir la cara" name="radio select face"/>
+		<radio_item label="Alinear" name="radio align"/>
 	</radio_group>
-	<check_box label="Editar las partes enlazadas" name="checkbox edit linked parts"/>
-	<text name="RenderingCost" tool_tip="Muestra cuánto se calcula que cuesta renderizar este objeto">
-		þ: [COUNT]
-	</text>
-	<check_box label="" name="checkbox uniform"/>
-	<text label="Estirar ambos lados" name="checkbox uniform label">
-		Estirar ambos lados
-	</text>
-	<check_box initial_value="true" label="Estirar las texturas" name="checkbox stretch textures"/>
-	<check_box initial_value="true" label="Usar la cuadrícula" name="checkbox snap to grid"/>
-	<combo_box name="combobox grid mode" tool_tip="Elige qué cuadricula usar para posicionar el objeto" width="82">
-		<combo_box.item label="Mundo" name="World"/>
-		<combo_box.item label="Local" name="Local"/>
-		<combo_box.item label="Referencia" name="Reference"/>
+	<check_box label="Editar partes" name="checkbox edit linked parts"/>
+	<button label="Enlazar" name="link_btn"/>
+        <button label="Desenlazar" name="unlink_btn"/>
+	<combo_box name="combobox grid mode" tool_tip="Elegir el tipo de ajuste de rejilla para posicionar el objeto.">
+		<combo_box.item label="Rejilla mundial" name="World"/>
+		<combo_box.item label="Rejilla local" name="Local"/>
+		<combo_box.item label="Rejilla de referencia" name="Reference"/>
 	</combo_box>
-	<button label="Opciones..." label_selected="Opciones..." name="Options..." tool_tip="Ver más opciones de la cuadrícula"/>
-	<button label="" label_selected="" name="ToolCube" tool_tip="Cubo"/>
-	<button label="" label_selected="" name="ToolPrism" tool_tip="Prisma"/>
-	<button label="" label_selected="" name="ToolPyramid" tool_tip="Pirámide"/>
-	<button label="" label_selected="" name="ToolTetrahedron" tool_tip="Tetraedro"/>
-	<button label="" label_selected="" name="ToolCylinder" tool_tip="Cilindro"/>
-	<button label="" label_selected="" name="ToolHemiCylinder" tool_tip="Semicilindro"/>
-	<button label="" label_selected="" name="ToolCone" tool_tip="Cono"/>
-	<button label="" label_selected="" name="ToolHemiCone" tool_tip="Semicono"/>
-	<button label="" label_selected="" name="ToolSphere" tool_tip="Esfera"/>
-	<button label="" label_selected="" name="ToolHemiSphere" tool_tip="Semiesfera"/>
-	<button label="" label_selected="" name="ToolTorus" tool_tip="Toroide"/>
-	<button label="" label_selected="" name="ToolTube" tool_tip="Tubo"/>
-	<button label="" label_selected="" name="ToolRing" tool_tip="Cono truncado"/>
-	<button label="" label_selected="" name="ToolTree" tool_tip="Árbol"/>
-	<button label="" label_selected="" name="ToolGrass" tool_tip="Hierba"/>
-	<check_box label="Mantener la herramienta elegida" name="checkbox sticky"/>
-	<check_box label="Copiar la selección" name="checkbox copy selection"/>
-	<check_box initial_value="true" label="Copia centrada" name="checkbox copy centers"/>
+	<check_box label="Estirar ambos lados" name="checkbox uniform"/>
+	<check_box label="Estirar texturas" name="checkbox stretch textures"/>
+	<check_box label="Ajustar a la rejilla" name="checkbox snap to grid"/>
+        <check_box label="Eje en primitiva raíz" name="checkbox actual root"/>
+	<check_box label="Resaltar" name="checkbox show highlight"/>
+        <button name="Options..." tool_tip="Mostrar opciones de rejilla."/>
+	<button name="ToolCube" tool_tip="Cubo"/>
+	<button name="ToolPrism" tool_tip="Prisma"/>
+	<button name="ToolPyramid" tool_tip="Pirámide"/>
+	<button name="ToolTetrahedron" tool_tip="Tetraedro"/>
+	<button name="ToolCylinder" tool_tip="Cilindro"/>
+	<button name="ToolHemiCylinder" tool_tip="Semicilindro"/>
+	<button name="ToolCone" tool_tip="Cono"/>
+	<button name="ToolHemiCone" tool_tip="Semicono"/>
+	<button name="ToolSphere" tool_tip="Esfera"/>
+	<button name="ToolHemiSphere" tool_tip="Semiesfera"/>
+	<button name="ToolTorus" tool_tip="Toroide"/>
+	<button name="ToolTube" tool_tip="Tubo"/>
+	<button name="ToolRing" tool_tip="Anillo"/>
+	<button name="ToolTree" tool_tip="Árbol"/>
+	<button name="ToolGrass" tool_tip="Hierba"/>
+        <check_box label="Mant. herramienta" name="checkbox sticky"/>
+	<check_box label="Copiar selección" name="checkbox copy selection"/>
+	<check_box label="Copia centrada" name="checkbox copy centers"/>
 	<check_box label="Copia girada" name="checkbox copy rotates"/>
 	<radio_group name="land_radio_group">
 		<radio_item label="Seleccionar terreno" name="radio select land"/>
-		<radio_item label="Nivelar" name="radio flatten"/>
+                <radio_item label="Nivelar" name="radio flatten"/>
 		<radio_item label="Elevar" name="radio raise"/>
-		<radio_item label="Bajar" name="radio lower"/>
+		<radio_item label="Rebajar" name="radio lower"/>
 		<radio_item label="Suavizar" name="radio smooth"/>
 		<radio_item label="Escarpar" name="radio noise"/>
 		<radio_item label="Restablecer" name="radio revert"/>
 	</radio_group>
 	<text name="Bulldozer:">
-		Bulldozer:
+		Excavadora:
 	</text>
 	<text name="Dozer Size:">
-		Tamaño
+		Tamaño:
 	</text>
 	<text name="Strength:">
-		Fuerza
+		Fuerza:
 	</text>
-	<button label="Aplicar" label_selected="Aplicar" left="146" name="button apply to selection" tool_tip="Modificar el terreno seleccionado"/>
-	<text left="134" name="obj_count">
-		Objetos: [COUNT]
+	<button label="Aplicar" label_selected="Aplicar" name="button apply to selection" tool_tip="Modificar el terreno seleccionado."/>
+	<text name="link_num_obj_count" tooltip="El número de objetos enlazados puede ser impreciso.">
+		[DESC] [NUM]
 	</text>
-	<text left="134" name="prim_count">
-		Primitivas: [COUNT]
+	<text name="selection_empty">
+		Nada seleccionado.
 	</text>
-	<tab_container name="Object Info Tabs" tab_max_width="62" tab_min_width="30" width="288">
+	<text name="selection_weight">
+	  Peso de la física [PHYS_WEIGHT], Coste de dibujo [DISP_WEIGHT].
+	</text>
+	<tab_container name="Object Info Tabs">
 		<panel label="General" name="General">
 			<panel.string name="text deed continued">
-				Transferir
-			</panel.string>
+				Ceder
+	 		</panel.string>
 			<panel.string name="text deed">
-				Transferir
+				Ceder
 			</panel.string>
 			<panel.string name="text modify info 1">
 				Puedes modificar este objeto
@@ -153,13 +167,16 @@
 				Precio total: L$
 			</panel.string>
 			<panel.string name="Cost Per Unit">
-				Price Per: L$
+				Precio por: L$
 			</panel.string>
 			<panel.string name="Cost Mixed">
 				Precio variable
 			</panel.string>
 			<panel.string name="Sale Mixed">
 				Venta variable
+			</panel.string>
+			<panel.string name="multiple selection">
+				Selección múltiple
 			</panel.string>
 			<text name="Name:">
 				Nombre:
@@ -170,56 +187,54 @@
 			<text name="Creator:">
 				Creador:
 			</text>
-			<text name="Creator Name">
-				Dª Esbee Linden (esbee.linden)
-			</text>
 			<text name="Owner:">
 				Propietario:
 			</text>
-			<text name="Owner Name">
-				Dª Erica &quot;Moose&quot; Linden (erica.linden)
+			<text name="Last Owner:">
+                                Prop. Ant.:
 			</text>
 			<text name="Group:">
 				Grupo:
 			</text>
-			<name_box initial_value="Cargando..." name="Group Name Proxy"/>
-			<button label="Configurar..." label_selected="Configurar..." name="button set group" tool_tip="Elige un grupo con el que compartir los permisos de este objeto"/>
-			<check_box label="Compartir" name="checkbox share with group" tool_tip="Permite que todos los miembros del grupo compartan tus permisos de modificación en este objeto. Debes transferirlo para activar las restricciones según los roles."/>
-			<button label="Transferir" label_selected="Transferir" name="button deed" tool_tip="La transferencia entrega este objeto con los permisos del próximo propietario. Los objetos compartidos por el grupo pueden ser transferidos por un oficial del grupo."/>
-			<text name="label click action" width="180">
+			<button name="button set group" tool_tip="Elige un grupo con el que compartir los permisos de este objeto."/>
+			<check_box label="Compartir" name="checkbox share with group" tool_tip="Permite que todos los miembros del grupo compartan tus permisos de modificación en este objeto. Debes cederlo para activar las restricciones según los roles."/>
+			<button label="Ceder" label_selected="Ceder" name="button deed" tool_tip="La cesión entrega este objeto con los permisos de  próximo propietario. Los objetos cedidos al grupo pueden ser a su vez cedidos por un oficial del mismo."/>
+			<text name="label click action">
 				Al tocarlo:
 			</text>
-			<combo_box name="clickaction" width="192">
+			<combo_box name="clickaction">
 				<combo_box.item label="Tocarlo (por defecto)" name="Touch/grab(default)"/>
 				<combo_box.item label="Sentarse en el objeto" name="Sitonobject"/>
 				<combo_box.item label="Comprar el objeto" name="Buyobject"/>
 				<combo_box.item label="Pagar al objeto" name="Payobject"/>
-				<combo_box.item label="Abrirlo" name="Open"/>
-				<combo_box.item label="Zoom" name="Zoom"/>
+				<combo_box.item label="Abrir el objeto" name="Open"/>
+				<combo_box.item label="Enfocar el objeto" name="Zoom"/>
 			</combo_box>
 			<check_box label="En venta:" name="checkbox for sale"/>
-			<combo_box name="sale type">
-				<combo_box.item label="Copia" name="Copy"/>
-				<combo_box.item label="Contenidos" name="Contents"/>
-				<combo_box.item label="Original" name="Original"/>
+	  		<combo_box name="sale type">
+				<combo_box.item name="Copy" label="Copia"/>
+                                <combo_box.item name="Contents" label="Contenido"/>
+				<combo_box.item name="Original" label="Original"/>
 			</combo_box>
-			<spinner label="Precio: L$" name="Edit Cost"/>
-			<check_box label="Mostrar en la búsqueda" name="search_check" tool_tip="Dejar que la gente vea este objeto en los resultados de la búsqueda"/>
+			<spinner name="Edit Cost" label="Precio: L$"/>
+			<button label="Aplicar" name="button mark for sale" tool_tip="Marcar/Actualizar objeto(s) en venta."/>
+			<button label="Copiar claves" name="btnCopyKeys" tool_tip="Copia la clave de los objetos seleccionados al portapapeles."/>
+			<check_box label="Mostrar en la búsqueda" name="search_check" tool_tip="Permitir que la gente vea este objeto en los resultados de la búsqueda."/>
 			<panel name="perms_build">
 				<text name="perm_modify">
 					Puedes modificar este objeto
 				</text>
 				<text name="Anyone can:">
-					Cualquiera:
+					Cualquiera puede:
 				</text>
 				<check_box label="Moverlo" name="checkbox allow everyone move"/>
 				<check_box label="Copiarlo" name="checkbox allow everyone copy"/>
 				<text name="Next owner can:">
-					Próximo propietario:
+					El próximo propietario puede:
 				</text>
 				<check_box label="Modificarlo" name="checkbox next owner can modify"/>
-				<check_box label="Copiarlo" left_delta="80" name="checkbox next owner can copy"/>
-				<check_box label="Transferirlo" left_delta="67" name="checkbox next owner can transfer" tool_tip="El próximo propietario puede dar o revender este objeto"/>
+				<check_box label="Copiarlo" name="checkbox next owner can copy"/>
+				<check_box label="Transferirlo" name="checkbox next owner can transfer" tool_tip="El próximo propietario puede dar o revender este objeto."/>
 				<text name="B:">
 					B:
 				</text>
@@ -239,48 +254,67 @@
 					F:
 				</text>
 			</panel>
-		</panel>
+	  	</panel>
 		<panel label="Objeto" name="Object">
-			<check_box label="Bloqueado" name="checkbox locked" tool_tip="Previene que el objeto sea movido o borrado. Suele ser útil mientras se construye, para prevenir que se modifique sin querer."/>
-			<check_box label="Material" name="Physical Checkbox Ctrl" tool_tip="Permite que el objeto pueda ser empujado y le afecte la gravedad."/>
-			<check_box label="Temporal" name="Temporary Checkbox Ctrl" tool_tip="Provoca que el objeto desaparezca 1 minuto después de ser creado"/>
-			<check_box label="Inmaterial" name="Phantom Checkbox Ctrl" tool_tip="Hace que el objeto no colisiones con otros objetos o avatares."/>
+			<check_box label="Bloqueado" name="checkbox locked" tool_tip="Evita que el objeto sea movido o borrado. Suele ser útil mientras se construye, para prevenir que se modifique o elimine sin querer."/>
+			<check_box label="Físico" name="Physical Checkbox Ctrl" tool_tip="Permite que el objeto pueda ser empujado y se someta a las leyes de la gravedad."/>
+			<check_box label="Temporal" name="Temporary Checkbox Ctrl" tool_tip="Provoca que el objeto desaparezca 1 minuto después de ser creado."/>
+			<check_box label="Inmaterial" name="Phantom Checkbox Ctrl" tool_tip="Evita que el objeto no colisione con otros objetos o avatares."/>
 			<text name="label position">
-				Posición (metros)
+                                Posición (metros)
 			</text>
 			<spinner label="X" name="Pos X"/>
-			<spinner label="Y" name="Pos Y"/>
+			<button  label="C" name="copypos" tool_tip="Copiar posición."/>
+                        <spinner label="Y" name="Pos Y"/>
+			<button label="P" name="pastepos" tool_tip="Copiar posición."/>
 			<spinner label="Z" name="Pos Z"/>
+			<button label="p" name="pasteposclip" tool_tip="Pegar posición desde el portapapeles."/>
 			<text name="label size">
-				Tamaño (metros)
+                                Tamaño (metros)
 			</text>
 			<spinner label="X" name="Scale X"/>
+			<button label="C" name="copysize" tool_tip="Copiar tamaño."/>
 			<spinner label="Y" name="Scale Y"/>
+			<button label="P" name="pastesize" tool_tip="Pegar tamaño."/>
 			<spinner label="Z" name="Scale Z"/>
+			<button label="p" name="pastesizeclip" tool_tip="Pegar tamaño desde el portapapeles."/>
 			<text name="label rotation">
-				Rotación (grados)
+                                Rotación (grados)
 			</text>
 			<spinner label="X" name="Rot X"/>
+			<button label="C" name="copyrot" tool_tip="Copiar rotación."/>
 			<spinner label="Y" name="Rot Y"/>
+			<button label="P" name="pasterot" tool_tip="Pegar rotación."/>
 			<spinner label="Z" name="Rot Z"/>
+			<button label="p" name="pasterotclip" tool_tip="Pegar rotación desde el portapapeles."/>
+			<text name="edit_object">
+				Paráms. del objeto:
+			</text>
+			<button label="Copiar" name="copyparams" tool_tip="Copiar parámetros al portapapeles."/>
+                        <button label="Pegar" name="pasteparams" tool_tip="Pegar parámetros desde el portapapeles."/>
 			<combo_box name="comboBaseType">
-				<combo_box.item label="Caja" name="Box"/>
+				<combo_box.item label="Cubo" name="Box"/>
 				<combo_box.item label="Cilindro" name="Cylinder"/>
 				<combo_box.item label="Prisma" name="Prism"/>
 				<combo_box.item label="Esfera" name="Sphere"/>
 				<combo_box.item label="Toroide" name="Torus"/>
 				<combo_box.item label="Tubo" name="Tube"/>
-				<combo_box.item label="Cono truncado" name="Ring"/>
-				<combo_box.item label="Sculpted" name="Sculpted"/>
-			</combo_box>
-			<combo_box name="material">
-				<combo_box.item label="Piedra" name="Stone"/>
-				<combo_box.item label="Metal" name="Metal"/>
-				<combo_box.item label="Vidrio" name="Glass"/>
-				<combo_box.item label="Madera" name="Wood"/>
-				<combo_box.item label="Carne" name="Flesh"/>
-				<combo_box.item label="Plástico" name="Plastic"/>
-				<combo_box.item label="Goma" name="Rubber"/>
+                                <combo_box.item label="Anillo" name="Ring"/>
+				<combo_box.item label="Esculpido" name="Sculpted"/>
+				<combo_item name="PathLineProfileHalfCircle" label="Línea->Semicírculo"/>
+				<combo_item name="PathCircleProfileHalfCircle" label="Círculo->Semicírculo"/>
+				<combo_item name="PathCircle2ProfileSquare" label="Círculo2->Cuadrado"/>
+				<combo_item name="PathCircle2ProfileTriangle" label="Círculo2->Triángulo"/>
+				<combo_item name="PathCircle2ProfileCircle" label="Círculo2->Círculo"/>
+				<combo_item name="PathCircle2ProfileHalfCircle" label="Círculo2->Semicírculo"/>
+				<combo_item name="PathTestProfileSquare" label="Test->Cuadrado"/>
+				<combo_item name="PathTestProfileTriangle" label="Test->Triángulo"/>
+				<combo_item name="PathTestProfileCircle" label="Test->Círculo"/>
+				<combo_item name="PathTestProfileHalfCircle" label="Test->Semicírculo"/>
+				<combo_item name="Path33Profile0" label="33->Círculo"/>
+				<combo_item name="Path33Profile1" label="33->Cuadrado"/>
+				<combo_item name="Path33Profile2" label="33->Triángulo"/>
+				<combo_item name="Path33Profile5" label="33->Semicírculo" />
 			</combo_box>
 			<text name="text cut">
 				Corte (inicio/fin)
@@ -298,9 +332,9 @@
 			</text>
 			<combo_box name="hole">
 				<combo_box.item label="Por defecto" name="Default"/>
-				<combo_box.item label="Círculo" name="Circle"/>
+                                <combo_box.item label="Circular" name="Circle"/>
 				<combo_box.item label="Cuadrado" name="Square"/>
-				<combo_box.item label="Triángulo" name="Triangle"/>
+                                <combo_box.item label="Triangular" name="Triangle"/>
 			</combo_box>
 			<text name="text twist">
 				Torsión (inicio/fin)
@@ -308,7 +342,7 @@
 			<spinner label="I" name="Twist Begin"/>
 			<spinner label="F" name="Twist End"/>
 			<text name="scale_taper">
-				Biselar
+				Biselado
 			</text>
 			<text name="scale_hole">
 				Tamaño del hueco
@@ -324,80 +358,106 @@
 				Corte del perfil (inicio/fin)
 			</text>
 			<text name="advanced_dimple">
-				Horadar (inicio/fin)
+				Abolladura (inicio/fin)
 			</text>
-			<text name="advanced_slice">
-				Cortar (inicio/fin)
+                        <text name="advanced_slice">
+				Troceado (inicio/fin)
 			</text>
 			<spinner label="I" name="Path Limit Begin"/>
 			<spinner label="F" name="Path Limit End"/>
-			<text name="text taper2">
-				Biselar
+			<text name="text taper2" tool_tip="No funciona en todos los tipos de primitiva.">
+				Perfil del biselado
 			</text>
 			<spinner label="X" name="Taper X"/>
 			<spinner label="Y" name="Taper Y"/>
-			<text name="text radius delta">
+                        <text name="text radius delta">
 				Radio
 			</text>
 			<text name="text revolutions">
 				Giros
 			</text>
-			<texture_picker label="Textura para sculpted" name="sculpt texture control" tool_tip="Pulse para elegir una imagen"/>
-			<check_box label="Espejo" name="sculpt mirror control" tool_tip="Girar el prim sculpted siguiendo el eje X"/>
-			<check_box label="Dentro-Fuera" name="sculpt invert control" tool_tip="Invertir los valores de los prims sculpted, haciendo aparecer fuera lo de dentro"/>
+                        <texture_picker label="Textura para escultura" name="sculpt texture control" tool_tip="Pulse para elegir una imagen"/>
+			<check_box label="Reflejar" name="sculpt mirror control" tool_tip="Voltea la primitiva esculpida siguiendo el eje X"/>
+			<check_box label="Volver del revés" name="sculpt invert control" tool_tip="Invierte los valores de las primitivas esculpidas, haciendo aparecer fuera lo de dentro"/>
 			<text name="label sculpt type">
 				Tipo de unión
 			</text>
 			<combo_box name="sculpt type control">
-				<combo_box.item label="(ninguna)" name="None"/>
+				<combo_box.item label="(ninguno)" name="None"/>
 				<combo_box.item label="Esfera" name="Sphere"/>
 				<combo_box.item label="Toroide" name="Torus"/>
 				<combo_box.item label="Plano" name="Plane"/>
 				<combo_box.item label="Cilindro" name="Cylinder"/>
 			</combo_box>
 		</panel>
-		<panel label="Caracter." name="Features">
+		<panel label="Caract." name="Features">
+                        <panel.string name="None">
+                                Ninguno
+                        </panel.string>
+                        <panel.string name="Prim">
+                                Prim
+                        </panel.string>
+                        <panel.string name="Convex Hull">
+                                Convexo
+                        </panel.string>
 			<text name="select_single">
-				Selecciona un sólo prim para editarlo.
+				Selecciona una sola primitiva para poder editarla.
 			</text>
 			<text name="edit_object">
 				Editar las características del objeto:
 			</text>
-			<check_box label="Flexibilidad" name="Flexible1D Checkbox Ctrl" tool_tip="Permite que el objeto flexione en el eje Z (sólo del lado del cliente)"/>
+			<check_box label="Flexibilidad" name="Flexible1D Checkbox Ctrl" tool_tip="Permite que el objeto flexione en el eje Z (sólo del lado del cliente)."/>
 			<spinner label="Blandura" name="FlexNumSections"/>
-			<spinner label="Gravedad" name="FlexGravity"/>
+                        <spinner label="Gravedad" name="FlexGravity"/>
 			<spinner label="Fricción" name="FlexFriction"/>
 			<spinner label="Viento" name="FlexWind"/>
 			<spinner label="Tirantez" name="FlexTension"/>
 			<spinner label="Fuerza en X" name="FlexForceX"/>
 			<spinner label="Fuerza en Y" name="FlexForceY"/>
 			<spinner label="Fuerza en Z" name="FlexForceZ"/>
-			<check_box label="Luz" name="Light Checkbox Ctrl" tool_tip="Hace que el objeto emita luz"/>
-			<color_swatch label="" name="colorswatch" tool_tip="Pulsa para abrir el selector de color"/>
-			<texture_picker label="" name="light texture control" tool_tip="Pulsa para elegir una proyección de imagen (sólo tiene efecto con renderización deferida activada)"/>
-			<spinner label="Intensidad" name="Light Intensity"/>
-			<spinner label="FOV" name="Light FOV"/>
-			<spinner label="Radio" name="Light Radius"/>
-			<spinner label="Visión" name="Light Focus"/>
-			<spinner label="Atenuación" name="Light Falloff"/>
-			<spinner label="Ambiental" name="Light Ambiance"/>
+                        <check_box label="Luz" name="Light Checkbox Ctrl" tool_tip="Permite que el objeto emita luz."/>
+			<color_swatch name="colorswatch" tool_tip="Pulsa para elegir el color."/>
+		 	<texture_picker name="light texture control" tool_tip="Pulsa para elegir una imagen para proyectar (sólo tiene efecto con la renderización deferida activada)."/>
+		  	<spinner label="Intensidad" name="Light Intensity"/>
+		  	<spinner label="FOV" name="Light FOV"/>
+		  	<spinner label="Radio" name="Light Radius"/>
+		  	<spinner label="Foco" name="Light Focus"/>
+		  	<spinner label="Atenuación" name="Light Falloff"/>
+		  	<spinner label="Ambiental" name="Light Ambiance"/>
+			<text name="label physicsshapetype">
+				Tipo de forma física:
+			</text>
+			<combo_box name="Physics Shape Type Combo Ctrl" tool_tip="Elige el tipo de forma física."/>
+			<combo_box name="material">
+				<combo_box.item label="Piedra" name="Stone"/>
+				<combo_box.item label="Metal" name="Metal"/>
+				<combo_box.item label="Cristal" name="Glass"/>
+				<combo_box.item label="Madera" name="Wood"/>
+				<combo_box.item label="Carne" name="Flesh"/>
+				<combo_box.item label="Plástico" name="Plastic"/>
+				<combo_box.item label="Goma" name="Rubber"/>
+			</combo_box>
+			<spinner label="Gravedad" name="Physics Gravity"/>
+			<spinner label="Fricción" name="Physics Friction"/>
+                        <spinner label="Densidad *100 kg/m^3" name="Physics Density"/>
+			<spinner label="Rebote" name="Physics Restitution"/>
 		</panel>
 		<panel label="Textura" name="Texture">
 			<panel.string name="string repeats per meter">
-				Repeticiones por m.
+				Repeticiones/metro
 			</panel.string>
 			<panel.string name="string repeats per face">
-				Repeticiones por cara
+				Repeticiones/cara
 			</panel.string>
-			<texture_picker label="Textura" name="texture control" tool_tip="Pulse para elegir una imagen"/>
-			<color_swatch label="Color" name="colorswatch" tool_tip="Pulsa para abrir el selector de color"/>
+                        <texture_picker label="Textura" name="texture control" tool_tip="Pulsa para elegir una imagen."/>
+                        <color_swatch label="Color" name="colorswatch" tool_tip="Pulsa para abrir el selector de color."/>
 			<text name="color trans">
 				Transparencia %
 			</text>
 			<text name="glow label">
 				Resplandor
 			</text>
-			<check_box bottom_delta="-21" label="Brillo al  máximo" name="checkbox fullbright"/>
+			<check_box label="Brillo al máximo" name="checkbox fullbright"/>
 			<text name="tex gen">
 				Detallado
 			</text>
@@ -412,7 +472,7 @@
 				<combo_box.item label="Ninguna" name="None"/>
 				<combo_box.item label="Baja" name="Low"/>
 				<combo_box.item label="Media" name="Medium"/>
-				<combo_box.item label="Alta" name="High"/>
+                                <combo_box.item label="Alta" name="High"/>
 			</combo_box>
 			<text name="label bumpiness">
 				Relieve
@@ -421,51 +481,57 @@
 				<combo_box.item label="Ninguno" name="None"/>
 				<combo_box.item label="Brillo" name="Brightness"/>
 				<combo_box.item label="Oscuro" name="Darkness"/>
-				<combo_box.item label="grano de madera" name="woodgrain"/>
-				<combo_box.item label="corteza" name="bark"/>
-				<combo_box.item label="ladrillos" name="bricks"/>
-				<combo_box.item label="cajero" name="checker"/>
-				<combo_box.item label="cemento" name="concrete"/>
-				<combo_box.item label="azulejería" name="crustytile"/>
-				<combo_box.item label="piedra cortada" name="cutstone"/>
-				<combo_box.item label="discos" name="discs"/>
-				<combo_box.item label="grava" name="gravel"/>
-				<combo_box.item label="placa de Petri" name="petridish"/>
-				<combo_box.item label="revestimiento" name="siding"/>
-				<combo_box.item label="baldosa de piedra" name="stonetile"/>
-				<combo_box.item label="estuco" name="stucco"/>
-				<combo_box.item label="succión" name="suction"/>
-				<combo_box.item label="tejido" name="weave"/>
+				<combo_box.item label="Grano de madera" name="woodgrain"/>
+				<combo_box.item label="Corteza" name="bark"/>
+				<combo_box.item label="Ladrillos" name="bricks"/>
+				<combo_box.item label="Ajedrezado" name="checker"/>
+				<combo_box.item label="Hormigón" name="concrete"/>
+				<combo_box.item label="Alicatado" name="crustytile"/>
+				<combo_box.item label="Piedra cortada" name="cutstone"/>
+				<combo_box.item label="Discos" name="discs"/>
+				<combo_box.item label="Grava" name="gravel"/>
+				<combo_box.item label="Placa de Petri" name="petridish"/>
+				<combo_box.item label="Revestimiento" name="siding"/>
+				<combo_box.item label="Baldosa de piedra" name="stonetile"/>
+				<combo_box.item label="Estucado" name="stucco"/>
+				<combo_box.item label="Succión" name="suction"/>
+				<combo_box.item label="Tejido" name="weave"/>
 			</combo_box>
-			<check_box initial_value="falso" label="Alinear caras del plano" name="checkbox planar align" tool_tip="Alinear texturas en todas las caras seleccionadas con la última cara seleccionada. Requiere la representación de texturas en el plano."/>
+			<check_box label="Alinear las caras del plano" name="checkbox planar align" tool_tip="Alinear texturas en todas las caras seleccionadas con la última cara seleccionada. Requiere la representación de texturas en el plano."/>
 			<text name="rpt">
-				Repeticiones por cara
+				Repeticiones/cara
 			</text>
 			<spinner label="Horizontal (U)" name="TexScaleU"/>
 			<check_box label="Voltear" name="checkbox flip s"/>
 			<spinner label="Vertical (V)" name="TexScaleV"/>
 			<check_box label="Voltear" name="checkbox flip t"/>
-			<spinner label="Rotación" name="TexRot"/>
-			<spinner label="Repeticiones / Metro" name="rptctrl"/>
+			<spinner label="Rotación˚" name="TexRot"/>
+			<spinner label="Repeticiones/metro" name="rptctrl"/>
 			<button label="Aplicar" label_selected="Aplicar" name="button apply"/>
 			<text name="tex offset">
-				Desplazar
+				Despl. de textura
+			</text>
+			<text name="tex params">
+				Parám. de textura
 			</text>
 			<spinner label="Horizontal (U)" name="TexOffsetU"/>
+			<button label="Copiar" name="copytextures" tool_tip="Copiar parámetros al portapapeles."/>
 			<spinner label="Vertical (V)" name="TexOffsetV"/>
+			<button label="Pegar" name="pastetextures" tool_tip="Pegar parámetros desde el portapapeles"/>
 			<panel name="Add_Media">
 				<text name="media_tex">
-					Media
+			  		Medios
 				</text>
-				<button name="add_media" tool_tip="Añadir un media"/>
-				<button name="delete_media" tool_tip="Borrar esta textura para media"/>
-				<button name="edit_media" tool_tip="Editar este media"/>
-				<button label="Centrar" label_selected="Centrar los media" name="button align" tool_tip="Centrar esta textura para media (primero debe cargarse)"/>
+				<button name="add_media" tool_tip="Añadir medio."/>
+				<button name="delete_media" tool_tip="Borrar esta textura de medio."/>
+				<button tool_tip="Editar este medio." name="edit_media"/>
+                                <button label="Alinear" label_selected="Alinear" name="button align" tool_tip="Alinear la textura de medio (primero debe cargarse)."/>
 			</panel>
-		</panel>
-		<panel label="Contenido " name="Contents">
-			<button label="Script nuevo" label_selected="Script nuevo" name="button new script"/>
+	   	</panel>
+	   	<panel label="Contenido" name="Contents">
+			<button label="Nuevo script" label_selected="Nuevo script" name="button new script"/>
 			<button label="Permisos" name="button permissions"/>
+			<button label="Refrescar" name="button refresh"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">
@@ -473,22 +539,22 @@
 			Información de la parcela
 		</text>
 		<text name="label_area_price">
-			Precio: [PRICE] L$ por [AREA] m²
+			Precio: L$[PRICE] por [AREA] m²
 		</text>
 		<text name="label_area">
 			Área: [AREA] m²
 		</text>
 		<button label="Acerca del terreno" label_selected="Acerca del terreno" name="button about land"/>
-		<check_box label="Mostrar los propietarios" name="checkbox show owners" tool_tip="El color de las parcelas es según su propietario:   Verde = Su terreno  Agua = Terreno de sus grupos  Rojo = Propiedad de otros  Amarillo = En venta  Morado = Para subasta  Gris = Público"/>
+		<check_box label="Mostrar propietarios" name="checkbox show owners" tool_tip="Colorear las parcelas según su propietario: Verde = Su terreno / Agua = Terreno de sus grupos / Rojo = Propiedad de otros / Amarillo = En venta / Morado = Para subasta / Gris = Público"/>
 		<text name="label_parcel_modify">
-			Modificar la parcela
+			Modificar parcela
 		</text>
-		<button label="Dividir" label_selected="Dividir" name="button subdivide land"/>
-		<button label="Inscribirse" label_selected="Inscribirse" name="button join land"/>
+		<button label="Segregar" label_selected="Segregar" name="button subdivide land"/>
+		<button label="Unir" label_selected="Unir" name="button join land"/>
 		<text name="label_parcel_trans">
 			Transacciones de terreno
 		</text>
 		<button label="Comprar terreno" label_selected="Comprar terreno" name="button buy land"/>
-		<button label="Abandonar el terreno" label_selected="Abandonar el terreno" name="button abandon land"/>
+		<button label="Abandonar terreno" label_selected="Abandonar terreno" name="button abandon land"/>
 	</panel>
 </floater>

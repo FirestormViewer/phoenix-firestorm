@@ -286,6 +286,18 @@
       
 </layout_stack>
 
+<button
+	follows="right|top"
+	height="20"
+	image_pressed="Info_Press"
+	image_pressed_selected="PushButton_Selected_Press"
+	image_selected="PushButton_Selected_Press"
+	tool_tip="Send System Info"
+	image_overlay="Info_Off"
+	name="send_sysinfo_btn"
+	left_delta="0"
+	right="-1"
+	width="20" />
  
   <layout_stack
    animate="false" 
@@ -341,6 +353,7 @@
          label="To"
          layout="bottomleft"
          name="chat_editor"
+         spellcheck="true"
          tab_group="3"
          width="249">
         </line_editor>

@@ -125,7 +125,7 @@ Maximum 200 per group daily
          layout="topleft"
          name="lbl3"
          top_pad="10"
-         width="60">
+         width="62">
             Subject:
         </text>
         <line_editor
@@ -138,7 +138,8 @@ Maximum 200 per group daily
          max_length_bytes="63"
          name="create_subject"
          prevalidate_callback="ascii"
-         width="220" />
+         spellcheck="true"
+         width="218" />
         <text
          follows="left|top"
          type="string"
@@ -148,7 +149,7 @@ Maximum 200 per group daily
          left="10"
          name="lbl4"
          top_pad="5"
-         width="60">
+         width="62">
             Message:
         </text>
         <text_editor
@@ -158,8 +159,9 @@ Maximum 200 per group daily
          left_pad="3"
          max_length="511"
          name="create_message"
+         spellcheck="true"
          top_delta="0"
-         width="220"
+         width="218"
          word_wrap="true" />
         <text
          follows="left|top"
@@ -280,7 +282,7 @@ Maximum 200 per group daily
          height="16"
          layout="topleft"
          left_delta="0"
-         name="lbl3"
+         name="lbl3b"
          top_pad="15"
          visible="false"
          width="60">
@@ -304,7 +306,7 @@ Maximum 200 per group daily
          height="16"
          layout="topleft"
          left="10"
-         name="lbl4"
+         name="lbl5b"
          top_pad="10"
          visible="false"
          width="60">

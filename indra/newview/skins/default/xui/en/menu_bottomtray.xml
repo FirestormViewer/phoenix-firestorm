@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!--alba: added tear_off and label-->
 <menu
+ tear_off="true"
+ label="Button Bar"
  height="201"
  layout="topleft"
  left="100"
@@ -140,57 +143,64 @@
          function="CheckControl"
          parameter="ShowPlacesButton" />
     </menu_item_check>
-    <menu_item_separator
-     name="Separator" />
-    <menu_item_call
-     label="Cut"
-     name="NearbyChatBar_Cut">
-        <menu_item_call.on_click
-         function="NearbyChatBar.Action"
-         parameter="cut" />
-        <menu_item_call.on_enable
-         function="NearbyChatBar.EnableMenuItem"
-         parameter="can_cut" />
-    </menu_item_call>
-    <menu_item_call
-     label="Copy"
-     name="NearbyChatBar_Copy">
-        <menu_item_call.on_click
-         function="NearbyChatBar.Action"
-         parameter="copy" />
-        <menu_item_call.on_enable
-         function="NearbyChatBar.EnableMenuItem"
-         parameter="can_copy" />
-    </menu_item_call>
-    <menu_item_call
-     label="Paste"
-     name="NearbyChatBar_Paste">
-        <menu_item_call.on_click
-         function="NearbyChatBar.Action"
-         parameter="paste" />
-        <menu_item_call.on_enable
-         function="NearbyChatBar.EnableMenuItem"
-         parameter="can_paste" />
-    </menu_item_call>
-    <menu_item_call
-     label="Delete"
-     name="NearbyChatBar_Delete">
-        <menu_item_call.on_click
-         function="NearbyChatBar.Action"
-         parameter="delete" />
-        <menu_item_call.on_enable
-         function="NearbyChatBar.EnableMenuItem"
-         parameter="can_delete" />
-    </menu_item_call>
-    <menu_item_call
-     label="Select All"
-     name="NearbyChatBar_Select_All">
-        <menu_item_call.on_click
-         function="NearbyChatBar.Action"
-         parameter="select_all" />
-        <menu_item_call.on_enable
-         function="NearbyChatBar.EnableMenuItem"
-         parameter="can_select_all" />
-    </menu_item_call>
+    <!-- ## Zi: Animation Overrider -->
+    <menu_item_check
+     label="AO button"
+     layout="topleft"
+     name="ShowAOButton">
+        <menu_item_check.on_click
+         function="ToggleControl"
+         parameter="ShowAOButton" />
+        <menu_item_check.on_check
+         function="CheckControl"
+         parameter="ShowAOButton" />
+    </menu_item_check>
+    <!-- ## Zi: Animation Overrider -->
+  <!-- Quick Preferences panel  -WoLf -->
+  <menu_item_check
+   label="Quick Preferences"
+   layout="topleft"
+   name="ShowQuickPrefsButton">
+    <menu_item_check.on_click
+     function="ToggleControl"
+     parameter="ShowQuickPrefsButton" />
+    <menu_item_check.on_check
+     function="CheckControl"
+     parameter="ShowQuickPrefsButton" />
+  </menu_item_check>
+  <!-- Quick Preferences panel  -WoLf -->
+  <menu_item_check
+     label="People button"
+     layout="topleft"
+     name="ShowPeopleButton">
+        <menu_item_check.on_click
+         function="ToggleControl"
+         parameter="ShowPeopleButton" />
+        <menu_item_check.on_check
+         function="CheckControl"
+         parameter="ShowPeopleButton" />
+    </menu_item_check>
+    <menu_item_check
+     label="Appearance button"
+     layout="topleft"
+     name="ShowAppearanceButton">
+        <menu_item_check.on_click
+         function="ToggleControl"
+         parameter="ShowAppearanceButton" />
+        <menu_item_check.on_check
+         function="CheckControl"
+         parameter="ShowAppearanceButton" />
+    </menu_item_check>
+    <menu_item_check
+     label="Inventory button"
+     layout="topleft"
+     name="ShowInventoryButton">
+        <menu_item_check.on_click
+         function="ToggleControl"
+         parameter="ShowInventoryButton" />
+        <menu_item_check.on_check
+         function="CheckControl"
+         parameter="ShowInventoryButton" />
+    </menu_item_check>
 
 </menu>

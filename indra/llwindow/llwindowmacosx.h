@@ -111,6 +111,8 @@ public:
 	/*virtual*/ void allowLanguageTextInput(LLPreeditor *preeditor, BOOL b);
 	/*virtual*/ void interruptLanguageTextInput();
 	/*virtual*/ void spawnWebBrowser(const std::string& escaped_url, bool async);
+	/*virtual*/ void openFile(const std::string& file_name);
+	/*virtual*/ void setTitle(const std::string& title);
 
 	static std::vector<std::string> getDynamicFallbackFontList();
 
@@ -156,7 +158,6 @@ protected:
 	static pascal Boolean staticMoveEventComparator( EventRef event, void* data);
 	OSStatus eventHandler (EventHandlerCallRef myHandler, EventRef event);
 	void adjustCursorDecouple(bool warpingMouse = false);
-	void fixWindowSize(void);
 	void stopDockTileBounce();
 	static MASK modifiersToMask(SInt16 modifiers);
 	
@@ -182,6 +183,7 @@ protected:
 	EventComparatorUPP  mMoveEventCampartorUPP;
 	
 	Rect		mOldMouseClip;  // Screen rect to which the mouse cursor was globally constrained before we changed it in clipMouse()
+	Rect		mPreviousWindowRect;  // Save previous window for un-maximize event
 	Str255 		mWindowTitle;
 	double		mOriginalAspectRatio;
 	BOOL		mSimulatedRightClick;
@@ -195,6 +197,7 @@ protected:
 	BOOL		mNeedsResize;		// Constructor figured out the window is too big, it needs a resize.
 	LLCoordScreen   mNeedsResizeSize;
 	F32			mOverrideAspectRatio;
+	BOOL		mMaximized;
 	BOOL		mMinimized;
 	U32			mFSAASamples;
 	BOOL		mForceRebuild;

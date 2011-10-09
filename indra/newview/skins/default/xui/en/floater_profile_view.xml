@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <floater
- height="600"
+ height="470"
  layout="topleft"
- min_height="350"
- width="343"
+ width="420"
+ min_height="490"
+ min_width="420"
  can_close="true"
  can_resize="true">
     <panel
      background_visible="false"
      top="5"
-     height="590"
+     height="460"
      left="5"
+     width="420"
      class="panel_profile_view"
      name="panel_profile_view"
      filename="panel_profile_view.xml"

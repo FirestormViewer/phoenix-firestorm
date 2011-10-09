@@ -35,6 +35,11 @@
 #include "llresmgr.h"
 #include "lltextbox.h"
 #include "llfloaterreg.h"
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+#include "llfloatersearchreplace.h"
+#include "llpreviewnotecard.h"
+#include "llpreviewscript.h"
+// [/SL:KB]
 #include "llfocusmgr.h"
 #include "lltooldraganddrop.h"
 #include "llradiogroup.h"
@@ -112,7 +117,13 @@ const LLInventoryItem *LLPreview::getItem() const
 	else if (mObjectUUID.isNull())
 	{
 		// it's an inventory item, so get the item.
-		item = gInventory.getItem(mItemUUID);
+//		item = gInventory.getItem(mItemUUID);
+// [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-11 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
+		if (LLInventoryType::IT_NONE == mAuxItem->getInventoryType())
+			item = gInventory.getItem(mItemUUID);
+		else
+			item = mAuxItem;
+// [/SL:KB]
 	}
 	else
 	{
@@ -444,22 +455,20 @@ void LLPreview::handleReshape(const LLRect& new_rect, bool by_user)
 LLMultiPreview::LLMultiPreview()
 	: LLMultiFloater(LLSD())
 {
-	// *TODO: There should be a .xml file for this
-	const LLRect& nextrect = LLFloaterReg::getFloaterRect("preview"); // place where the next preview should show up
-	if (nextrect.getWidth() > 0)
+	// start with a rect in the top-left corner ; will get resized
+	LLRect rect;
+	rect.setLeftTopAndSize(0, gViewerWindow->getWindowHeightScaled(), 200, 400);
+	setRect(rect);
+
+	LLFloater* last_floater = LLFloaterReg::getLastFloaterInGroup("preview");
+	if (last_floater)
 	{
-		setRect(nextrect);
-	}
-	else
-	{
-		// start with a rect in the top-left corner ; will get resized
-		LLRect rect;
-		rect.setLeftTopAndSize(0, gViewerWindow->getWindowHeightScaled(), 200, 200);
-		setRect(rect);
+		stackWith(*last_floater);
 	}
 	setTitle(LLTrans::getString("MultiPreviewTitle"));
 	buildTabContainer();
 	setCanResize(TRUE);
+	mAutoResize = FALSE;
 }
 
 void LLMultiPreview::onOpen(const LLSD& key)
@@ -491,6 +500,30 @@ void LLMultiPreview::tabOpen(LLFloater* opened_floater, bool from_click)
 	{
 		opened_preview->loadAsset();
 	}
+
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+	LLFloaterSearchReplace* pSearchFloater = LLFloaterReg::getTypedInstance<LLFloaterSearchReplace>("search_replace");
+	if ( (pSearchFloater) && (pSearchFloater->getDependee() == this) )
+	{
+		LLPreviewNotecard* pPreviewNotecard = NULL; LLPreviewLSL* pPreviewScript = NULL; LLLiveLSLEditor* pPreviewScriptLive = NULL;
+		if ((pPreviewNotecard = dynamic_cast<LLPreviewNotecard*>(opened_preview)) != NULL)
+		{
+			LLFloaterSearchReplace::show(pPreviewNotecard->getEditor());
+		}
+		else if ((pPreviewScript = dynamic_cast<LLPreviewLSL*>(opened_preview)) != NULL)
+		{
+			LLFloaterSearchReplace::show(pPreviewScript->getEditor());
+		}
+		else if ((pPreviewScriptLive = dynamic_cast<LLLiveLSLEditor*>(opened_preview)) != NULL)
+		{
+			LLFloaterSearchReplace::show(pPreviewScriptLive->getEditor());
+		}
+		else
+		{
+			pSearchFloater->setVisible(FALSE);
+		}
+	}
+// [/SL:KB]
 }
 
 

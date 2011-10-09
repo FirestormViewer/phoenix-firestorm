@@ -4,19 +4,22 @@
  bg_alpha_color="Transparent"
  color="Transparent"
  follows="left|bottom|right"
- height="50"
+ focus_root="true"
+ height="37"
  layout="topleft"
  name="navigation_bar"
  chrome="true"
- width="600">
+ width="1024">
 
 	<panel
 	 background_visible="false"
 	 follows="left|top|right"
-	 height="24"
+	 height="22"
 	 layout="topleft"
+	 top_delta="0"
+	 top_pad="0"
 	 name="navigation_panel"
-	 width="600">
+	 width="1024">
 	     <pull_button
 	     follows="left|top"
 	     direction="down"
@@ -24,10 +27,10 @@
 	     image_overlay="Arrow_Left_Off"
 	     image_bottom_pad="1"
 	     layout="topleft"
-	     left="10"
+	     left="5"
 	     name="back_btn"
 	     tool_tip="Go back to previous location"
-	     top="2"
+	     top="0"
 	     width="31" />
 	    <pull_button
 	     follows="left|top"
@@ -82,9 +85,9 @@
 	     tool_tip="Pops up Sky Editor window"
 	     top_delta="0"
 	     width="30">
-		 <button.init_callback
-               function="Button.SetFloaterToggle"
-               parameter="env_windlight" />
+		 <button.commit_callback
+               function="World.EnvPreset"
+               parameter="edit_sky" />
 		 </button>
           <!-- end of Windlight Button -->
 
@@ -100,17 +103,18 @@
 	     mouse_opaque="false"
 	     name="location_combo"
 	     top_delta="0"
-	     width="170">
+	     width="80">
+
 	    </location_input>
          <combo_list
          mouse_wheel_opaque="true"/>
         <search_combo_box
-	     follows="right|top"
+	     follows="top|right"
+	     left_pad="10"
 	     halign="right"
 	     height="23"
 	     label="Search"
 	     layout="topleft"
-	     right="-10"
 	     mouse_opaque="false"
 	     name="search_combo_box"
 	     tool_tip="Search"
@@ -126,13 +130,14 @@
           border.shadow_light_color="FocusColor"
           border.shadow_dark_color="FocusColor"/>
         </search_combo_box>
+
 	</panel>
   <favorites_bar
  	 background_visible="false"
  	 bg_alpha_color="Transparent"
  	 color="Transparent"
      follows="left|top|right"
-     top_pad="3"
+     top_pad="2"
      font="SansSerifSmall"
      height="15"
      layout="topleft"
@@ -140,11 +145,12 @@
      name="favorite"
      image_drag_indication="Accordion_ArrowOpened_Off"
      tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
-     width="590">
+     width="1024">
         <label
          follows="left|top"
          height="15"
          layout="topleft"
+         top_pad="2"
          left="10"
          name="favorites_bar_label"
          text_color="LtGray"

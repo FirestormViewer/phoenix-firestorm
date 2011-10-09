@@ -30,6 +30,7 @@
 #include "llfasttimer.h"
 #include "llmessagebuilder.h"
 #include "llmessagetemplate.h"
+#include "llmath.h"
 #include "llquaternion.h"
 #include "message.h"
 #include "u64.h"
@@ -794,7 +795,7 @@ const char* LLTemplateMessageReader::getMessageName() const
 {
 	if (!mCurrentRMessageTemplate)
 	{
-		llwarns << "no mCurrentRMessageTemplate" << llendl;
+		// no message currently being read
 		return "";
 	}
 	return mCurrentRMessageTemplate->mName;

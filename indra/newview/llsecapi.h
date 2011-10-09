@@ -160,7 +160,7 @@ public:
 // base class for a list of certificates.
 
 
-class LLCertificateVector : public LLRefCount
+class LLCertificateVector : public LLThreadSafeRefCount
 {
 	
 public:
@@ -286,8 +286,8 @@ bool operator!=(const LLCertificateVector::iterator& _lhs, const LLCertificateVe
 #define CRED_AUTHENTICATOR_TYPE_HASH   "hash"
 //
 // LLCredential - interface for credentials providing the following functionality:
-// * persistance of credential information based on grid (for saving username/password)
-// * serialization to an OGP identifier/authenticator pair
+// * Persistence of credential information based on some identifier/grid name (for saving username/password)
+// * Serialization to an OGP identifier/authenticator pair
 // 
 class LLCredential  : public LLRefCount
 {
@@ -295,9 +295,9 @@ public:
 	
 	LLCredential() {}
 	
-	LLCredential(const std::string& grid)
+	LLCredential(const std::string& CredentialName)
 	{
-		mGrid = grid;
+		mCredentialName = CredentialName;
 		mIdentifier = LLSD::emptyMap();
 		mAuthenticator = LLSD::emptyMap();
 	}
@@ -314,7 +314,7 @@ public:
 	virtual LLSD getAuthenticator() { return mAuthenticator; }
 	virtual void authenticatorType(std::string& authType);
 	virtual LLSD getLoginParams();
-	virtual std::string getGrid() { return mGrid; }
+	virtual std::string getCredentialName() { return mCredentialName; }
 	
 
 	virtual void clearAuthenticator() { mAuthenticator = LLSD(); } 
@@ -324,7 +324,7 @@ public:
 protected:
 	LLSD mIdentifier;
 	LLSD mAuthenticator;
-	std::string mGrid;
+	std::string mCredentialName;
 };
 
 std::ostream& operator <<(std::ostream& s, const LLCredential& cred);
@@ -464,11 +464,13 @@ public:
 	virtual void deleteProtectedData(const std::string& data_type,
 									 const std::string& data_id)=0;
 	
-	virtual LLPointer<LLCredential> createCredential(const std::string& grid,
+	virtual LLPointer<LLCredential> createCredential(const std::string& name,
 													 const LLSD& identifier, 
 													 const LLSD& authenticator)=0;
 	
-	virtual LLPointer<LLCredential> loadCredential(const std::string& grid)=0;
+	virtual LLPointer<LLCredential> loadCredential(const std::string& name)=0;
+	
+	virtual std::vector<std::string> listCredentials()=0;
 	
 	virtual void saveCredential(LLPointer<LLCredential> cred, bool save_authenticator)=0;
 	

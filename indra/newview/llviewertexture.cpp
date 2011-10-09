@@ -599,7 +599,7 @@ bool LLViewerTexture::bindDefaultImage(S32 stage)
 	}
 	if (!res && LLViewerTexture::sNullImagep.notNull() && (this != LLViewerTexture::sNullImagep))
 	{
-		res = gGL.getTexUnit(stage)->bind(LLViewerTexture::sNullImagep) ;
+		res = gGL.getTexUnit(stage)->bind(LLViewerTexture::sNullImagep);
 	}
 	if (!res)
 	{
@@ -835,7 +835,7 @@ BOOL LLViewerTexture::createGLTexture(S32 discard_level, const LLImageRaw* image
 	llassert(mGLTexturep.notNull()) ;	
 
 	BOOL ret = mGLTexturep->createGLTexture(discard_level, imageraw, usename, to_create, category) ;
-	
+
 	if(ret)
 	{
 		mFullWidth = mGLTexturep->getCurrentWidth() ;
@@ -1168,6 +1168,7 @@ void LLViewerFetchedTexture::init(bool firstinit)
 	mSavedRawDiscardLevel = -1 ;
 	mDesiredSavedRawDiscardLevel = -1 ;
 	mLastReferencedSavedRawImageTime = 0.0f ;
+	mKeptSavedRawImageTime = 0.f ;
 	mLastCallBackActiveTime = 0.f;
 }
 
@@ -1415,63 +1416,68 @@ BOOL LLViewerFetchedTexture::createTexture(S32 usename/*= 0*/)
 // 						mRawImage->getWidth(), mRawImage->getHeight(),mRawImage->getDataSize())
 // 			<< mID.getString() << llendl;
 	BOOL res = TRUE;
-	if (!gNoRender)
-	{
-		// store original size only for locally-sourced images
-		if (mUrl.compare(0, 7, "file://") == 0)
-		{
-			mOrigWidth = mRawImage->getWidth();
-			mOrigHeight = mRawImage->getHeight();
 
-			// leave black border, do not scale image content
-			mRawImage->expandToPowerOfTwo(MAX_IMAGE_SIZE, FALSE);
+	// store original size only for locally-sourced images
+	if (mUrl.compare(0, 7, "file://") == 0)
+	{
+		mOrigWidth = mRawImage->getWidth();
+		mOrigHeight = mRawImage->getHeight();
+
 			
-			mFullWidth = mRawImage->getWidth();
-			mFullHeight = mRawImage->getHeight();
-			setTexelsPerImage();
+		if (mBoostLevel == BOOST_PREVIEW)
+		{ 
+			mRawImage->biasedScaleToPowerOfTwo(1024);
 		}
 		else
-		{
-			mOrigWidth = mFullWidth;
-			mOrigHeight = mFullHeight;
-		}
-
-		bool size_okay = true;
-		
-		U32 raw_width = mRawImage->getWidth() << mRawDiscardLevel;
-		U32 raw_height = mRawImage->getHeight() << mRawDiscardLevel;
-		if( raw_width > MAX_IMAGE_SIZE || raw_height > MAX_IMAGE_SIZE )
-		{
-			llinfos << "Width or height is greater than " << MAX_IMAGE_SIZE << ": (" << raw_width << "," << raw_height << ")" << llendl;
-			size_okay = false;
+		{ // leave black border, do not scale image content
+			mRawImage->expandToPowerOfTwo(MAX_IMAGE_SIZE, FALSE);
 		}
 		
-		if (!LLImageGL::checkSize(mRawImage->getWidth(), mRawImage->getHeight()))
-		{
-			// A non power-of-two image was uploaded (through a non standard client)
-			llinfos << "Non power of two width or height: (" << mRawImage->getWidth() << "," << mRawImage->getHeight() << ")" << llendl;
-			size_okay = false;
-		}
-		
-		if( !size_okay )
-		{
-			// An inappropriately-sized image was uploaded (through a non standard client)
-			// We treat these images as missing assets which causes them to
-			// be renderd as 'missing image' and to stop requesting data
-			setIsMissingAsset();
-			destroyRawImage();
-			return FALSE;
-		}
-		
-		if(!(res = insertToAtlas()))
-		{
-			res = mGLTexturep->createGLTexture(mRawDiscardLevel, mRawImage, usename, TRUE, mBoostLevel);
-			resetFaceAtlas() ;
-		}
-		setActive() ;
+		mFullWidth = mRawImage->getWidth();
+		mFullHeight = mRawImage->getHeight();
+		setTexelsPerImage();
+	}
+	else
+	{
+		mOrigWidth = mFullWidth;
+		mOrigHeight = mFullHeight;
 	}
 
-	if (!mForceToSaveRawImage)
+	bool size_okay = true;
+	
+	U32 raw_width = mRawImage->getWidth() << mRawDiscardLevel;
+	U32 raw_height = mRawImage->getHeight() << mRawDiscardLevel;
+	if( raw_width > MAX_IMAGE_SIZE || raw_height > MAX_IMAGE_SIZE )
+	{
+		llinfos << "Width or height is greater than " << MAX_IMAGE_SIZE << ": (" << raw_width << "," << raw_height << ")" << llendl;
+		size_okay = false;
+	}
+	
+	if (!LLImageGL::checkSize(mRawImage->getWidth(), mRawImage->getHeight()))
+	{
+		// A non power-of-two image was uploaded (through a non standard client)
+		llinfos << "Non power of two width or height: (" << mRawImage->getWidth() << "," << mRawImage->getHeight() << ")" << llendl;
+		size_okay = false;
+	}
+	
+	if( !size_okay )
+	{
+		// An inappropriately-sized image was uploaded (through a non standard client)
+		// We treat these images as missing assets which causes them to
+		// be renderd as 'missing image' and to stop requesting data
+		setIsMissingAsset();
+		destroyRawImage();
+		return FALSE;
+	}
+	
+	if(!(res = insertToAtlas()))
+	{
+		res = mGLTexturep->createGLTexture(mRawDiscardLevel, mRawImage, usename, TRUE, mBoostLevel);
+		resetFaceAtlas() ;
+	}
+	setActive() ;
+
+	if (!needsToSaveRawImage())
 	{
 		mNeedsAux = FALSE;
 		destroyRawImage();
@@ -1497,57 +1503,56 @@ void LLViewerFetchedTexture::setKnownDrawSize(S32 width, S32 height)
 //virtual
 void LLViewerFetchedTexture::processTextureStats()
 {
-	static LLCachedControl<bool> textures_fullres(gSavedSettings,"TextureLoadFullRes");
-
 	if(mFullyLoaded)
-	{
-		if(needsToSaveRawImage())//needs to reload
+	{		
+		if(mDesiredDiscardLevel > mMinDesiredDiscardLevel)//need to load more
 		{
+			mDesiredDiscardLevel = llmin(mDesiredDiscardLevel, mMinDesiredDiscardLevel) ;
 			mFullyLoaded = FALSE ;
 		}
-		else
-		{
-			return ;
-		}
-	}
-
-	//updateVirtualSize() ;	
-	
-	if (textures_fullres)
-	{
-		mDesiredDiscardLevel = 0;
-	}
-	else if(!mFullWidth || !mFullHeight)
-	{
-		mDesiredDiscardLevel = 	llmin(getMaxDiscardLevel(), (S32)mLoadedCallbackDesiredDiscardLevel) ;
 	}
 	else
-	{	
-		if(!mKnownDrawWidth || !mKnownDrawHeight || mFullWidth <= mKnownDrawWidth || mFullHeight <= mKnownDrawHeight)
+	{
+		updateVirtualSize() ;
+		
+		static LLCachedControl<bool> textures_fullres(gSavedSettings,"TextureLoadFullRes");
+		
+		if (textures_fullres)
 		{
-			if (mFullWidth > MAX_IMAGE_SIZE_DEFAULT || mFullHeight > MAX_IMAGE_SIZE_DEFAULT)
-			{
-				mDesiredDiscardLevel = 1; // MAX_IMAGE_SIZE_DEFAULT = 1024 and max size ever is 2048
-			}
-			else
-			{
-				mDesiredDiscardLevel = 0;
-			}
+			mDesiredDiscardLevel = 0;
 		}
-		else if(mKnownDrawSizeChanged)//known draw size is set
-		{			
-			mDesiredDiscardLevel = (S8)llmin(log((F32)mFullWidth / mKnownDrawWidth) / log_2, 
-												 log((F32)mFullHeight / mKnownDrawHeight) / log_2) ;
-			mDesiredDiscardLevel = 	llclamp(mDesiredDiscardLevel, (S8)0, (S8)getMaxDiscardLevel()) ;
-			mDesiredDiscardLevel = llmin(mDesiredDiscardLevel, mMinDesiredDiscardLevel) ;
-		}
-		mKnownDrawSizeChanged = FALSE ;
-	
-		if(getDiscardLevel() >= 0 && (getDiscardLevel() <= mDesiredDiscardLevel))
+		else if(!mFullWidth || !mFullHeight)
 		{
-			mFullyLoaded = TRUE ;
+			mDesiredDiscardLevel = 	llmin(getMaxDiscardLevel(), (S32)mLoadedCallbackDesiredDiscardLevel) ;
 		}
-	}	
+		else
+		{	
+			if(!mKnownDrawWidth || !mKnownDrawHeight || mFullWidth <= mKnownDrawWidth || mFullHeight <= mKnownDrawHeight)
+			{
+				if (mFullWidth > MAX_IMAGE_SIZE_DEFAULT || mFullHeight > MAX_IMAGE_SIZE_DEFAULT)
+				{
+					mDesiredDiscardLevel = 1; // MAX_IMAGE_SIZE_DEFAULT = 1024 and max size ever is 2048
+				}
+				else
+				{
+					mDesiredDiscardLevel = 0;
+				}
+			}
+			else if(mKnownDrawSizeChanged)//known draw size is set
+			{			
+				mDesiredDiscardLevel = (S8)llmin(log((F32)mFullWidth / mKnownDrawWidth) / log_2, 
+													 log((F32)mFullHeight / mKnownDrawHeight) / log_2) ;
+				mDesiredDiscardLevel = 	llclamp(mDesiredDiscardLevel, (S8)0, (S8)getMaxDiscardLevel()) ;
+				mDesiredDiscardLevel = llmin(mDesiredDiscardLevel, mMinDesiredDiscardLevel) ;
+			}
+			mKnownDrawSizeChanged = FALSE ;
+		
+			if(getDiscardLevel() >= 0 && (getDiscardLevel() <= mDesiredDiscardLevel))
+			{
+				mFullyLoaded = TRUE ;
+			}
+		}
+	}
 
 	if(mForceToSaveRawImage && mDesiredSavedRawDiscardLevel >= 0) //force to refetch the texture.
 	{
@@ -1586,7 +1591,7 @@ F32 LLViewerFetchedTexture::calcDecodePriority()
 
 	S32 cur_discard = getCurrentDiscardLevelForFetching();
 	bool have_all_data = (cur_discard >= 0 && (cur_discard <= mDesiredDiscardLevel));
-	F32 pixel_priority = fsqrtf(mMaxVirtualSize);
+	F32 pixel_priority = (F32) sqrt(mMaxVirtualSize);
 
 	F32 priority = 0.f;
 
@@ -2696,12 +2701,18 @@ void LLViewerFetchedTexture::saveRawImage()
 	mLastReferencedSavedRawImageTime = sCurrentTime ;
 }
 
-void LLViewerFetchedTexture::forceToSaveRawImage(S32 desired_discard, bool from_callback) 
+void LLViewerFetchedTexture::forceToSaveRawImage(S32 desired_discard, F32 kept_time) 
 { 
+	mKeptSavedRawImageTime = kept_time ;
+	mLastReferencedSavedRawImageTime = sCurrentTime ;
+
+	if(mSavedRawDiscardLevel > -1 && mSavedRawDiscardLevel <= desired_discard)
+	{
+		return ; //raw imge is ready.
+	}
+
 	if(!mForceToSaveRawImage || mDesiredSavedRawDiscardLevel < 0 || mDesiredSavedRawDiscardLevel > desired_discard)
 	{
-		llassert_always(from_callback || mBoostLevel == LLViewerTexture::BOOST_PREVIEW) ;
-
 		mForceToSaveRawImage = TRUE ;
 		mDesiredSavedRawDiscardLevel = desired_discard ;
 	
@@ -2715,11 +2726,19 @@ void LLViewerFetchedTexture::forceToSaveRawImage(S32 desired_discard, bool from_
 
 			mRawImage = NULL ;
 			mRawDiscardLevel = INVALID_DISCARD_LEVEL ;
-		}
+		}		
 	}
 }
 void LLViewerFetchedTexture::destroySavedRawImage()
 {
+	if(mLastReferencedSavedRawImageTime < mKeptSavedRawImageTime)
+	{
+		return ; //keep the saved raw image.
+	}
+
+	mForceToSaveRawImage  = FALSE ;
+	mSaveRawImage = FALSE ;
+
 	clearCallbackEntryList() ;
 	
 	mSavedRawImage = NULL ;
@@ -2728,6 +2747,7 @@ void LLViewerFetchedTexture::destroySavedRawImage()
 	mSavedRawDiscardLevel = -1 ;
 	mDesiredSavedRawDiscardLevel = -1 ;
 	mLastReferencedSavedRawImageTime = 0.0f ;
+	mKeptSavedRawImageTime = 0.f ;
 }
 
 LLImageRaw* LLViewerFetchedTexture::getSavedRawImage() 
@@ -2879,7 +2899,7 @@ BOOL LLViewerFetchedTexture::insertToAtlas()
 	}
 
 	//process the waiting_list
-	for(ll_face_list_t::iterator iter = waiting_list.begin(); iter != waiting_list.end(); ++iter)
+	for(std::vector<LLFace*>::iterator iter = waiting_list.begin(); iter != waiting_list.end(); ++iter)
 	{
 		facep = (LLFace*)*iter ;	
 		groupp = facep->getDrawable()->getSpatialGroup() ;

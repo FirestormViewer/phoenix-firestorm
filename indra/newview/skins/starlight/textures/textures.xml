@@ -72,8 +72,26 @@ with the same filename but different name
   <texture name="BackButton_Over" file_name="icons/back_arrow_over.png" preload="false" scale.left="22" scale.top="12" scale.right="25" scale.bottom="12" />
   <texture name="BackButton_Press" file_name="icons/back_arrow_press.png" preload="false" scale.left="22" scale.top="12" scale.right="25" scale.bottom="12" />
 
+  <texture name="Badge_Background" file_name="widgets/Badge_Background.png" preload="true" scale.left="9" scale.top="12" scale.right="248" scale.bottom="12" />
+  <texture name="Badge_Border" file_name="widgets/Badge_Border.png" preload="true" scale.left="9" scale.top="12" scale.right="248" scale.bottom="12" />
+ 
   <texture name="Blank" file_name="Blank.png" preload="false" />
+	
+  <texture name="BreadCrumbBtn_Left_Disabled" file_name="widgets/BreadCrumbBtn_Left_Disabled.png" preload="false"/>
+  <texture name="BreadCrumbBtn_Left_Off" file_name="widgets/BreadCrumbBtn_Left_Off.png" preload="false"/>
+  <texture name="BreadCrumbBtn_Left_Over" file_name="widgets/BreadCrumbBtn_Left_Over.png" preload="false"/>
+  <texture name="BreadCrumbBtn_Left_Press" file_name="widgets/BreadCrumbBtn_Left_Press.png" preload="false"/>
+ 
+  <texture name="BreadCrumbBtn_Middle_Disabled" file_name="widgets/BreadCrumbBtn_Middle_Disabled.png" preload="false"/>
+  <texture name="BreadCrumbBtn_Middle_Off" file_name="widgets/BreadCrumbBtn_Middle_Off.png" preload="false"/>
+  <texture name="BreadCrumbBtn_Middle_Over" file_name="widgets/BreadCrumbBtn_Middle_Over.png" preload="false"/>
+  <texture name="BreadCrumbBtn_Middle_Press" file_name="widgets/BreadCrumbBtn_Middle_Press.png" preload="false"/>
 
+  <texture name="BreadCrumbBtn_Right_Disabled" file_name="widgets/BreadCrumbBtn_Right_Disabled.png" preload="false"/>
+  <texture name="BreadCrumbBtn_Right_Off" file_name="widgets/BreadCrumbBtn_Right_Off.png" preload="false"/>
+  <texture name="BreadCrumbBtn_Right_Over" file_name="widgets/BreadCrumbBtn_Right_Over.png" preload="false"/>
+  <texture name="BreadCrumbBtn_Right_Press" file_name="widgets/BreadCrumbBtn_Right_Press.png" preload="false"/>
+ 
 
   <texture name="BuyArrow_Over" file_name="navbar/BuyArrow_Over.png" preload="true" scale.left="0" scale.top="1" scale.right="0" scale.bottom="0"  />
   <texture name="BuyArrow_Press" file_name="navbar/BuyArrow_Press.png" preload="true" scale.left="1" scale.top="1" scale.right="0" scale.bottom="0"  />
@@ -102,18 +120,21 @@ with the same filename but different name
   <texture name="Checkbox_On" file_name="widgets/Checkbox_On.png" preload="true" />
   <texture name="Checkbox_On_Press" file_name="widgets/Checkbox_On_Press.png" preload="true" />
   <texture name="Checkbox_Press" file_name="widgets/Checkbox_Press.png" preload="true" />
+  <texture name="Check_Mark" file_name="icons/check_mark.png" preload="true" />
 
   <texture name="ComboButton_Disabled" file_name="widgets/ComboButton_Disabled.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_Selected" file_name="widgets/ComboButton_Selected.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_UpSelected" file_name="widgets/ComboButton_UpSelected.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_Up_On_Selected" file_name="widgets/ComboButton_Up_On_Selected.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
+  <texture name="ComboButton_On" file_name="widgets/ComboButton_On.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_Off" file_name="widgets/ComboButton_Off.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_UpOff" file_name="widgets/ComboButton_UpOff.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="Container" file_name="containers/Container.png" preload="false" />
   <texture name="Copy" file_name="icons/Copy.png" preload="false" />
-
+  
   <texture name="DisclosureArrow_Opened_Off" file_name="widgets/DisclosureArrow_Opened_Off.png" preload="true" />
 
+  <texture name="ChatBarHandle" file_name="bottomtray/ChatBarHandle.png" preload="false" />
   <texture name="DownArrow" file_name="bottomtray/DownArrow.png" preload="false" />
   <texture name="DownArrow_Off" file_name="icons/DownArrow_Off.png" preload="false" />
   <texture name="Dragbar" file_name="windows/Dragbar.png" preload="false" scale.left="35" scale.top="5" scale.right="29" scale.bottom="5" />
@@ -164,7 +185,7 @@ with the same filename but different name
   <texture name="Icon_Dock_Foreground" file_name="windows/Icon_Dock_Foreground.png" preload="true" />
   <texture name="Icon_Dock_Press" file_name="windows/Icon_Dock_Press.png" preload="true" />
 
-  <texture name="Icon_For_Sale" file_name="icons/Icon_For_sale.png" preload="false" />
+  <texture name="Icon_For_Sale" file_name="icons/Icon_For_Sale.png" preload="false" />
 
   <texture name="Icon_Gear_Background" file_name="windows/Icon_Gear_Background.png" preload="false" />
   <texture name="Icon_Gear_Foreground" file_name="windows/Icon_Gear_Foreground.png" preload="false" />
@@ -209,10 +230,12 @@ with the same filename but different name
   <texture name="Inv_LostClosed" file_name="icons/Inv_LostClosed.png" preload="false" />
   <texture name="Inv_LostOpen" file_name="icons/Inv_LostOpen.png" preload="false" />
   <texture name="Inv_Landmark" file_name="icons/Inv_Landmark.png" preload="false" />
+  <texture name="Inv_Mesh" file_name="icons/Inv_Mesh.png" preload="false" />  
   <texture name="Inv_Notecard" file_name="icons/Inv_Notecard.png" preload="false" />
   <texture name="Inv_Object" file_name="icons/Inv_Object.png" preload="false" />
   <texture name="Inv_Object_Multi" file_name="icons/Inv_Object_Multi.png" preload="false" />
   <texture name="Inv_Pants" file_name="icons/Inv_Pants.png" preload="false" />
+  <texture name="Inv_Physics" file_name="icons/Inv_Physics.png" preload="false" />
   <texture name="Inv_Script" file_name="icons/Inv_Script.png" preload="false" />
   <texture name="Inv_Shirt" file_name="icons/Inv_Shirt.png" preload="false" />
   <texture name="Inv_Shoe" file_name="icons/Inv_Shoe.png" preload="false" />
@@ -246,6 +269,8 @@ with the same filename but different name
 
   <texture name="Locked_Icon" file_name="icons/Locked_Icon.png" preload="false" />
 
+  <texture name="MarketplaceBtn_Off" file_name="widgets/MarketplaceBtn_Off.png" preload="true" scale.left="30" scale.top="19" scale.right="35" scale.bottom="4" />
+  <texture name="MarketplaceBtn_Selected" file_name="widgets/MarketplaceBtn_Selected.png" preload="true" scale.left="30" scale.top="19" scale.right="35" scale.bottom="4" />
 
   <texture name="Microphone_On" file_name="icons/Microphone_On.png" preload="false" />
 
@@ -255,8 +280,12 @@ with the same filename but different name
 
   <texture name="menu_separator" file_name="navbar/FileMenu_Divider.png" scale.left="4" scale.top="166" scale.right="0" scale.bottom="0" />
 
-  <texture name="MouseLook_View_Off" file_name="bottomtray/MouseLook_view_off.png" preload="false" />
-  <texture name="MouseLook_View_On" file_name="bottomtray/MouseLook_view_on.png" preload="false" />
+  <texture name="ModelImport_Status_Good" file_name="lag_status_good.tga" preload="false"/>
+  <texture name="ModelImport_Status_Warning" file_name="lag_status_warning.tga" preload="false"/>
+  <texture name="ModelImport_Status_Error" file_name="lag_status_critical.tga" preload="false"/>
+  
+  <texture name="MouseLook_View_Off" file_name="bottomtray/Mouselook_View_Off.png" preload="false" />
+  <texture name="MouseLook_View_On" file_name="bottomtray/Mouselook_View_On.png" preload="false" />
 
   <texture name="Move_Fly_Off" file_name="bottomtray/Move_Fly_Off.png" preload="false" />
   <texture name="Move_Run_Off" file_name="bottomtray/Move_Run_Off.png" preload="false" />
@@ -324,6 +353,23 @@ with the same filename but different name
   <texture name="OptionsMenu_Disabled" file_name="icons/OptionsMenu_Disabled.png" preload="false" />
   <texture name="OptionsMenu_Off" file_name="icons/OptionsMenu_Off.png" preload="false" />
   <texture name="OptionsMenu_Press" file_name="icons/OptionsMenu_Press.png" preload="false" />
+  
+  <texture name="OutboxPush_Disabled" file_name="icons/OutboxPush_Disabled.png" preload="true" />
+  <texture name="OutboxPush_Off" file_name="icons/OutboxPush_Off.png" preload="true" />
+  <texture name="OutboxPush_On" file_name="icons/OutboxPush_On.png" preload="true" />
+  <texture name="OutboxPush_On_Over" file_name="icons/OutboxPush_On_Over.png" preload="true" />
+  <texture name="OutboxPush_Over" file_name="icons/OutboxPush_Over.png" preload="true" />
+  <texture name="OutboxPush_Press" file_name="icons/OutboxPush_Press.png" preload="true" />
+  <texture name="OutboxPush_Progress_1" file_name="icons/OutboxPush_Progress_1.png" preload="true" />
+  <texture name="OutboxPush_Progress_2" file_name="icons/OutboxPush_Progress_2.png" preload="true" />
+  <texture name="OutboxPush_Progress_3" file_name="icons/OutboxPush_Progress_3.png" preload="true" />
+  <texture name="OutboxPush_Progress_4" file_name="icons/OutboxPush_Progress_4.png" preload="true" />
+  <texture name="OutboxPush_Progress_5" file_name="icons/OutboxPush_Progress_5.png" preload="true" />
+  <texture name="OutboxPush_Progress_6" file_name="icons/OutboxPush_Progress_6.png" preload="true" />
+  <texture name="OutboxPush_Selected" file_name="icons/OutboxPush_Selected.png" preload="true" />
+  <texture name="OutboxPush_Selected_Disabled" file_name="icons/OutboxPush_Selected_Disabled.png" preload="true" />
+  <texture name="OutboxPush_Selected_Over" file_name="icons/OutboxPush_Selected_Over.png" preload="true" />
+  <texture name="OutboxPush_Selected_Press" file_name="icons/OutboxPush_Selected_Press.png" preload="true" />
 
   <texture name="PanOrbit_Off" file_name="bottomtray/PanOrbit_Off.png" preload="false" />
 
@@ -345,6 +391,11 @@ with the same filename but different name
  <texture name="Parcel_ScriptsNo_Dark" file_name="icons/Parcel_ScriptsNo_Dark.png" preload="false" />
  <texture name="Parcel_Voice_Dark" file_name="icons/Parcel_Voice_Dark.png" preload="false" />
  <texture name="Parcel_VoiceNo_Dark" file_name="icons/Parcel_VoiceNo_Dark.png" preload="false" />
+ 
+ <texture name="Parcel_SeeAVsOff_Dark" file_name="icons/Parcel_SeeAVsOff_Dark.png" preload="false" />
+ <texture name="Parcel_SeeAVsOn_Dark" file_name="icons/Parcel_SeeAVsOn_Dark.png" preload="false" />
+ <texture name="Parcel_SeeAVsOff_Light" file_name="icons/Parcel_SeeAVsOff_Light.png" preload="false" />
+ <texture name="Parcel_SeeAVsOn_Light" file_name="icons/Parcel_SeeAVsOn_Light.png" preload="false" />
 
  <texture name="Parcel_BuildNo_Light" file_name="icons/Parcel_BuildNo_Light.png" preload="false" />
  <texture name="Parcel_FlyNo_Light" file_name="icons/Parcel_FlyNo_Light.png" preload="false" />
@@ -360,18 +411,18 @@ with the same filename but different name
   <texture name="Pause_Off" file_name="icons/Pause_Off.png" preload="false" />
   <texture name="Pause_Over" file_name="icons/Pause_Over.png" preload="false" />
   <texture name="Pause_Press" file_name="icons/Pause_Press.png" preload="false" />
+  <texture name="Person_Check" file_name="icons/Person_Check.png" preload="false" />
+  <texture name="Person_Star" file_name="icons/Person_Star.png" preload="false" />
 
   <texture name="Permission_Visible_Online" file_name="icons/see_me_online.png" preload="false" />
   <texture name="Permission_Visible_Map" file_name="icons/see_on_map.png" preload="false" />
   <texture name="Permission_Edit_Objects_Mine" file_name="icons/edit_mine.png" preload="false" />
   <texture name="Permission_Edit_Objects_Theirs" file_name="icons/edit_theirs.png" preload="false" />
-  <texture name="Person_Check" file_name="icons/Person_Check.png" preload="false" />
-  <texture name="Person_Star" file_name="icons/Person_Star.png" preload="false" />
 
   <texture name="Play_Off" file_name="icons/Play_Off.png" preload="false" />
   <texture name="Play_Over" file_name="icons/Play_Over.png" preload="false" />
   <texture name="Play_Press" file_name="icons/Play_Press.png" preload="false" />
-
+  
   <texture name="ProgressBar" file_name="widgets/ProgressBar.png" preload="true" scale.left="4" scale.top="11" scale.right="48" scale.bottom="3" />
   <texture name="ProgressTrack" file_name="widgets/ProgressTrack.png" preload="true" scale.left="4" scale.top="13" scale.right="148" scale.bottom="2" />
 
@@ -392,11 +443,11 @@ with the same filename but different name
   <texture name="RadioButton_On_Disabled" file_name="widgets/RadioButton_On_Disabled.png" preload="true" />
 
 
-  <texture name="Refresh_Off" file_name="icons/Refresh_Off.png" preload="false" />
+  <texture name="Refresh_Off" file_name="icons/Refresh_Off.png" preload="true" />
 
   <texture name="Resize_Corner" file_name="windows/Resize_Corner.png" preload="true" />
 
- <texture name="Rounded_Rect"	file_name="Rounded_Rect.png" preload="true" scale.left="6" scale.top="24" scale.right="58" scale.bottom="6" />
+  <texture name="Rounded_Rect"	file_name="Rounded_Rect.png" preload="true" scale.left="6" scale.top="24" scale.right="58" scale.bottom="6" />
   <texture name="Rounded_Square"	file_name="rounded_square.j2c" preload="true" scale.left="16" scale.top="16" scale.right="112" scale.bottom="16" />
   <texture name="Row_Selection" file_name="navbar/Row_Selection.png" preload="false" />
 
@@ -459,7 +510,7 @@ with the same filename but different name
   <texture name="OBJECT_Icon" file_name="icons/object_icon.png" preload="true" />
   <texture name="Unknown_Icon" file_name="icons/unknown_icon.png" preload="true" />
 
-  <texture name="Snapshot_Off" file_name="bottomtray/Snapshot_Off.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
+  <texture name="Snapshot_Off" file_name="bottomtray/starlight_snapshot.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
 
   <texture name="startup_logo"  file_name="windows/startup_logo.png" preload="true" />
 
@@ -468,10 +519,19 @@ with the same filename but different name
   <texture name="Stepper_Up_Off" file_name="widgets/Stepper_Up_Off.png" preload="false" />
   <texture name="Stepper_Up_Press" file_name="widgets/Stepper_Up_Press.png" preload="false" />
 
-  <texture name="Stop_Off" file_name="icons/Stop_Off.png" preload="false" />
+  <texture name="Stop_Off" file_name="icons/Stop_Off.png" preload="true" />
   <texture name="StopReload_Off" file_name="icons/StopReload_Off.png" preload="false" />
   <texture name="StopReload_Over" file_name="icons/StopReload_Over.png" preload="false" />
 
+  <texture name="Sync_Disabled" file_name="icons/Sync_Disabled.png" preload="true" />
+  <texture name="Sync_Enabled" file_name="icons/Sync_Enabled.png" preload="true" />
+  <texture name="Sync_Progress_1" file_name="icons/Sync_Progress_1.png" preload="true" />
+  <texture name="Sync_Progress_2" file_name="icons/Sync_Progress_2.png" preload="true" />
+  <texture name="Sync_Progress_3" file_name="icons/Sync_Progress_3.png" preload="true" />
+  <texture name="Sync_Progress_4" file_name="icons/Sync_Progress_4.png" preload="true" />
+  <texture name="Sync_Progress_5" file_name="icons/Sync_Progress_5.png" preload="true" />
+  <texture name="Sync_Progress_6" file_name="icons/Sync_Progress_6.png" preload="true" />
+  
   <texture name="TabIcon_Appearance_Off" file_name="taskpanel/TabIcon_Appearance_Off.png" preload="false" />
   <texture name="TabIcon_Appearance_Selected" file_name="taskpanel/TabIcon_Appearance_Selected.png" preload="false" />
   <texture name="TabIcon_Close_Off" file_name="taskpanel/TabIcon_Close_Off.png" preload="false" />
@@ -553,10 +613,10 @@ with the same filename but different name
 
   <texture name="Wearables_Divider" file_name="windows/Wearables_Divider.png" preload="false" />
 
+  <texture name="Web_Profile_Off" file_name="icons/Web_Profile_Off.png" preload="false" />
+
   <texture name="WellButton_Lit" file_name="bottomtray/WellButton_Lit.png"  preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
   <texture name="WellButton_Lit_Selected" file_name="bottomtray/WellButton_Lit_Selected.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
-
-
 
   <texture name="Window_Background" file_name="windows/Window_Background.png" preload="true"
            scale.left="4" scale.top="24" scale.right="26" scale.bottom="4" />
@@ -623,6 +683,8 @@ with the same filename but different name
   <texture name="icon_for_sale.tga" file_name="icons/Icon_For_Sale.png" />
   <texture name="icon_top_pick.tga" />
 
+  <texture name="inv_folder_mesh.tga"/>
+  <texture name="inv_item_mesh.tga"/>
   <texture name="lag_status_critical.tga" />
   <texture name="lag_status_good.tga" />
   <texture name="lag_status_warning.tga" />
@@ -661,7 +723,7 @@ with the same filename but different name
   <texture name="buy_off" file_name="widgets/buy_off.png" preload="true" scale.left="2" scale.top="15" scale.right="67" scale.bottom="4"/>
   <texture name="buy_over" file_name="widgets/buy_over.png" preload="true" scale.left="2" scale.top="15" scale.right="67" scale.bottom="4"/>
   <texture name="buy_press" file_name="widgets/buy_press.png" preload="true" scale.left="2" scale.top="15" scale.right="67" scale.bottom="4"/>
-
+  
   <texture name="hint_background" file_name="windows/hint_background.png" preload="false" scale.left="8" scale.top="70" scale.right="195" scale.bottom="11"/>
   <texture name="hint_arrow_left" file_name="windows/hint_arrow_left.png" preload="false"/>
   <texture name="hint_arrow_right" file_name="windows/hint_arrow_right.png" preload="false"/>
@@ -671,14 +733,93 @@ with the same filename but different name
 
   <texture name="Yellow_Gradient" file_name="windows/yellow_gradient.png"/>
   <texture name="Popup_Caution" file_name="icons/pop_up_caution.png"/>
+  <texture name="Camera_Drag_Dot" file_name="world/CameraDragDot.png"/>
 
-<!-- StarLight Textures -->
+  <!-- Kats Viewer Art -->
+  <texture name="Inv_WindLight" file_name="icons/Inv_WindLight.png" preload="false" />
+  <texture name="Inv_WaterLight" file_name="icons/Inv_WaterLight.png" preload="false" />
+  <!-- KL viewer Art -->
+  <texture name="Inventory_btn" file_name="icons/icn_toolbar_inventory.tga" preload="false" />
+  <texture name="Minimap_btn" file_name="bottomtray/starlight_minimap.png" preload="false" />
+  <texture name="Search_btn" file_name="bottomtray/starlight_search.png" preload="false" />
+  <texture name="Map_btn" file_name="bottomtray/starlight_map.png" preload="false" />
+  <texture name="Move_btn" file_name="bottomtray/starlight_move.png" preload="false" />
+  <texture name="Camera_btn" file_name="bottomtray/starlight_camera.png" preload="false" />
+  <texture name="Gesture_btn" file_name="icons/Toolbar_Gesture_btn.png" preload="false" />
+  <texture name="Sidebar_btn" file_name="icons/icn_toolbar_sidebar.png" preload="false" />
+  <texture name="Speaking_btn" file_name="icons/icn_toolbar_speak.png" preload="false" />
+  <texture name="Build_btn" file_name="bottomtray/starlight_build.png" preload="false" />
+  <texture name="Windlight_btn" file_name="icons/Inv_WindLight.png" preload="false" />
+  <texture name="Prefs_btn" file_name="icons/Edit_Wrench.png" preload="false" />
+  <texture name="XMPP_Icon" file_name="icons/xmpp_default_icon.jpg" preload="true" />
+    
+  <!-- Firestorm viewer Art --> 
+  <texture name="Inv_CallingCardOffline" file_name="icons/Inv_CallingCard.png" preload="false" />
+  <texture name="Inv_LandmarkVisited" file_name="icons/Inv_Landmark.png" preload="false" />
+  <texture name="Inv_TexturesOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_TexturesClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_SoundOpen"			file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_SoundClosed"		file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_CallingCardOpen"	file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_CallingCardClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_LandmarksOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_LandmarksClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_ClothingOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_ClothingClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_ObjectsOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_ObjectsClosed"		file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_NotecardsOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_NotecardsClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_ScriptsOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_ScriptsClosed"		file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_BodyPartsOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_BodyPartsClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_SnapshotsOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_SnapshotsClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_AnimationsOpen"	file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_AnimationsClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_GesturesOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_GesturesClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_FavoritesOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_FavoritesClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_InboxOpen"			file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_InboxClosed"		file_name="icons/Inv_SysClosed.png" />
+  <texture name="Parcel_Windlight" file_name="icons/Parcel_WindLight.png" preload="false" />
+  <texture name="TabIcon_Translate_Off" file_name="taskpanel/translate_icon_24x24.png" preload="false" />
+  <texture name="ao_toggle_18" file_name="bottomtray/ao_toggle_18.png" preload="false" />
+  <texture name="profile_icon_24x24" file_name="icons/profile_icon_24x24.png" preload="false" />
+  <texture name="sale_icon_24x24" file_name="icons/sale_icon_24x24.png" preload="false" />
+  <texture name="call_icon_24x24" file_name="icons/call_icon_24x24.png" preload="false" />
+  <texture name="call_end_icon_24x24" file_name="icons/call_end_icon_24x24.png" preload="false" />
+  <texture name="teleport_icon_24x24" file_name="icons/genie_icon_24x24.png" preload="false" />
+  <texture name="friends_icon_24x24" file_name="icons/Friends_Icon_24x24.png" preload="false" />
+  <texture name="gift_icon_24x24" file_name="icons/gift_icon_24x24.png" preload="false" />
+  <texture name="Music_Off" file_name="icons/Music_Off.png" preload="true" />
+  <texture name="Music_Over" file_name="icons/Music_Over.png" preload="true" />
+  <texture name="Music_Press" file_name="icons/Music_Press.png" preload="true" />
+  <texture name="phoenix_18" file_name="bottomtray/phoenix_18.png" preload="false" />
+  
+  <texture name="Permission_Visible_Online_h" file_name="icons/see_me_online_h.png" preload="false" />
+  <texture name="Permission_Visible_Map_h" file_name="icons/see_on_map_h.png" preload="false" />
+  <texture name="Permission_Edit_Objects_Mine_h" file_name="icons/edit_mine_h.png" preload="false" />
+  <texture name="Permission_Edit_Objects_Theirs_h" file_name="icons/edit_theirs_h.png" preload="false" />
+  <texture name="icon_avatar_online"			file_name="icons/icon_avatar_online.png"		preload="false" />
+  <texture name="icon_avatar_online_h"			file_name="icons/icon_avatar_online.png"                preload="false" />
+  <texture name="slim_icon_16_viewer"				file_name="slim_icon_16_viewer.tga"					preload="false" />
+  
+  <!-- Firstorm virtual system folders - added in FS 2.6.1 -->
+  <texture name="Inv_FirestormOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_FirestormClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_PhoenixOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_PhoenixClosed"		file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_RLVOpen"			file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_RLVClosed"			file_name="icons/Inv_SysClosed.png" />
+
+<!-- StarLight Textures - rationalise with section above -->
 
   <texture name="SpeakBtn_Left_Selected_Press" file_name="widgets/SpeakBtn_Left_Selected_Press.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
   <texture name="SpeakBtn_Left_Off" file_name="widgets/SpeakBtn_Left_Off.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
-  <texture name="SpeakBtn_Right_Selected_Press" file_name="widgets/SpeakBtn_Right_Selected_Press.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
-  <texture name="SpeakBtn_Right_Off" file_name="widgets/SpeakBtn_Right_Off.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
-
+  <texture name="TabIcon_Things_Bottomtray" file_name="bottomtray/TabIcon_Things_Bottomtray.png" preload="true" />
   <texture name="StarLight_Move" file_name="bottomtray/starlight_move.png" preload="true" />
   <texture name="StarLight_Snapshot" file_name="bottomtray/starlight_snapshot.png" preload="true" />
   <texture name="StarLight_Camera" file_name="bottomtray/starlight_camera.png" preload="true" />
@@ -687,5 +828,10 @@ with the same filename but different name
   <texture name="StarLight_Search" file_name="bottomtray/starlight_search.png" preload="true" />
   <texture name="StarLight_Build" file_name="bottomtray/starlight_build.png" preload="true" />
   <texture name="StarLight_Gesture" file_name="bottomtray/starlight_gesture.png" preload="true" />
+  <texture name="AddItem_Over" file_name="icons/AddItem_Over.png" preload="false" />
+  <texture name="Cam_FreeCam_Off_Pref" file_name="bottomtray/Cam_FreeCam_Off_Pref.png" preload="false" />
+  <texture name="Move_Walk_Off_Pref" file_name="bottomtray/Move_Walk_Off_Pref.png" preload="false" />
+  <texture name="Zoom_Over" file_name="icons/Zoom_Over.png" preload="false" />
+  <texture name="Edit_Prefs_Wrench" file_name="icons/Edit_Prefs_Wrench.png" preload="false" />
   
 </textures>

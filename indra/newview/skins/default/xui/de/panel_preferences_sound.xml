@@ -4,18 +4,25 @@
 		Mittlere Maustaste
 	</panel.string>
 	<slider label="Master-Lautstärke" name="System Volume"/>
-	<check_box initial_value="true" label="Stummschalten, wenn minimiert" name="mute_when_minimized"/>
+	<check_box initial_value="true" name="mute_when_minimized"/>
+	<text name="mute_chb_label">
+		Stummschalten, wenn minimiert
+	</text>
 	<slider label="Schaltflächen" name="UI Volume"/>
 	<slider label="Umgebung" name="Wind Volume"/>
 	<slider label="Soundeffekte" name="SFX Volume"/>
 	<slider label="Musik wird gestreamt" name="Music Volume"/>
-	<check_box label="Aktiviert" name="music_enabled"/>
+	<check_box label="Aktiviert" name="enable_music"/>
 	<slider label="Medien" name="Media Volume"/>
 	<check_box label="Aktiviert" name="enable_media"/>
 	<slider label="Voice-Chat" name="Voice Volume"/>
 	<check_box label="Aktiviert" name="enable_voice_check"/>
 	<check_box label="Automatische Wiedergabe zulassen" name="media_auto_play_btn" tool_tip="Hier aktivieren, um Medien automatisch wiederzugeben." value="true"/>
+	<check_box name="media_allowscript_btn" tool_tip="Erlaubt bzw. verbietet Scripten die Kontrolle über die Medienwiedergabe" label="Skripte erlauben Medien abzuspielen" />
+ 	<check_box name="media_filter" tool_tip="Aktiviert den Medienfilter, der abhängig der Medien-URL die Wiedergabe erlaubt oder verbietet." label="Medienfilter aktivieren (erhöhte Sicherheit)" />
+	<button label="Listen bearbeiten..." name="edit_media_lists_button" />
 	<check_box label="Medien, die an andere Avatare angehängt sind, wiedergeben." name="media_show_on_others_btn" tool_tip="Diese Option deaktivieren, um Medien für andere Avataren, die sich in der Nähe befinden, auszublenden." value="true"/>
+	<check_box label="Sounds von Gesten abspielen" name="gesture_audio_play_btn" tool_tip="Markieren, um Sounds von Gesten zu hören" value="true"/>
 	<text name="voice_chat_settings">
 		Voice-Chat-Einstellungen
 	</text>
@@ -27,33 +34,11 @@
 		<radio_item label="Avatarposition" name="1"/>
 	</radio_group>
 	<check_box label="Avatarlippen beim Sprechen bewegen" name="enable_lip_sync"/>
+	<check_box label="Zeige Voice Indicator und Lippen Bewegungen in P2P und Gruppen Konferenzen." name="Show_Voice_Visualizers_In_Calls" tool_tip="Wenn diese Option aktiviert ist, werden der Voice Indicator und Lippen Bewegungen auch im P2P sowie im Gruppen Chat Angezeigt."/>
 	<check_box label="Sprachfunktion beim Drücken folgender Taste(n) ein-/ausschalten:" name="push_to_talk_toggle_check" tool_tip="Wenn der Umschaltmodus aktiviert ist, drücken Sie die Auslöse-Taste EINMAL, um Ihr Mikrofon ein- oder auszuschalten. Wenn der Umschaltmodus nicht aktiviert ist, ist das Mikrofon nur dann eingeschaltet, wenn Sie die Auslösetaste gedrückt halten."/>
 	<line_editor label="Auslöser für Zum-Sprechen-drücken:" name="modifier_combo"/>
 	<button label="Taste festlegen" name="set_voice_hotkey_button"/>
 	<button name="set_voice_middlemouse_button" tool_tip="Auf mittlere Maustaste zurücksetzen"/>
 	<button label="Eingabe-/Ausgabegeräte" name="device_settings_btn"/>
-	<panel label="Geräte-Einstellungen" name="device_settings_panel">
-		<panel.string name="default_text">
-			Standard
-		</panel.string>
-		<panel.string name="default system device">
-			Standardgerät
-		</panel.string>
-		<panel.string name="no device">
-			Kein Gerät
-		</panel.string>
-		<text name="Input">
-			Eingabe
-		</text>
-		<text name="My volume label">
-			Meine Lautstärke:
-		</text>
-		<slider_bar initial_value="1.0" name="mic_volume_slider" tool_tip="Ändern Sie die Lautstärke mit dem Regler"/>
-		<text name="wait_text">
-			Bitte warten
-		</text>
-		<text name="Output">
-			Ausgabe
-		</text>
-	</panel>
+	<panel label="Geräte-Einstellungen" name="device_settings_panel"/>
 </panel>

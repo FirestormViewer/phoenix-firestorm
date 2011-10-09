@@ -180,6 +180,18 @@ std::string LLURI::escape(const std::string& str)
 	return escape(str, default_allowed, true);
 }
 
+//static
+std::string LLURI::escapeQueryValue(const std::string& s)
+{
+	return ::escapeQueryValue(s);
+}
+
+//static
+std::string LLURI::escapeQueryVariable(const std::string& s)
+{
+	return ::escapeQueryVariable(s);
+}
+
 LLURI::LLURI()
 {
 }
@@ -457,6 +469,15 @@ std::string LLURI::hostName() const
 	return unescape(host);
 }
 
+// <AW: opensim>
+std::string LLURI::hostNameAndPort() const
+{
+	std::string user, host, port;
+	findAuthorityParts(mEscapedAuthority, user, host, port);
+	return port.empty() ? unescape(host) : unescape(host + ":" + port);
+}
+// </AW: opensim>
+
 std::string LLURI::userName() const
 {
 	std::string user, userPass, host, port;
@@ -595,10 +616,10 @@ std::string LLURI::mapToQueryString(const LLSD& queryMap)
 			{
 				ostr << "&";
 			}
-			ostr << escapeQueryVariable(iter->first);
+			ostr << ::escapeQueryVariable(iter->first);
 			if(iter->second.isDefined())
 			{
-				ostr << "=" <<  escapeQueryValue(iter->second.asString());
+				ostr << "=" <<  ::escapeQueryValue(iter->second.asString());
 			}
 		}
 		query_string = ostr.str();

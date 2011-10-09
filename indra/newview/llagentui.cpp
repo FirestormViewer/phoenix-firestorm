@@ -145,6 +145,13 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 				sim_access_string.empty() ? "" : " - ",
 				sim_access_string.c_str());
 			break;
+		case LOCATION_FORMAT_V1_STATUSBAR:
+			buffer = llformat("%s (%d, %d, %d)%s%s",
+				region_name.c_str(),
+				pos_x, pos_y, pos_z,
+				sim_access_string.empty() ? "" : " - ",
+				sim_access_string.c_str());
+			break;
 		}
 	}
 	else
@@ -178,6 +185,14 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 				pos_x, pos_y, pos_z,
 				sim_access_string.empty() ? "" : " - ",
 				sim_access_string.c_str());
+			break;
+		case LOCATION_FORMAT_V1_STATUSBAR:
+			buffer = llformat("%s (%d, %d, %d)%s%s - %s",
+				region_name.c_str(),
+				pos_x, pos_y, pos_z,
+				sim_access_string.empty() ? "" : " - ",
+				sim_access_string.c_str(),
+				parcel_name.c_str());
 			break;
 		}
 	}

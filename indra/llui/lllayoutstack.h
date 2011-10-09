@@ -30,33 +30,41 @@
 
 #include "llpanel.h"
 
-class LLPanel;
 
 class LLLayoutPanel;
+
 
 class LLLayoutStack : public LLView, public LLInstanceTracker<LLLayoutStack>
 {
 public:
-	struct LayoutStackRegistry : public LLChildRegistry<LayoutStackRegistry>
-	{};
-
-	struct Params : public LLInitParam::Block<Params, LLView::Params>
-	{
-		Mandatory<std::string>	orientation;
-		Optional<S32>			border_size;
-		Optional<bool>			animate,
-								clip;
-
-		Params();
-	};
-
-	typedef LayoutStackRegistry child_registry_t;
-
 	typedef enum e_layout_orientation
 	{
 		HORIZONTAL,
 		VERTICAL
 	} ELayoutOrientation;
+
+	struct OrientationNames
+	:	public LLInitParam::TypeValuesHelper<ELayoutOrientation, OrientationNames>
+	{
+		static void declareValues();
+	};
+
+	struct LayoutStackRegistry : public LLChildRegistry<LayoutStackRegistry>
+	{};
+
+	struct Params : public LLInitParam::Block<Params, LLView::Params>
+	{
+		Mandatory<ELayoutOrientation, OrientationNames>	orientation;
+		Optional<S32>			border_size;
+		Optional<bool>			animate,
+								clip;
+		Optional<F32>			open_time_constant,
+								close_time_constant;
+
+		Params();
+	};
+
+	typedef LayoutStackRegistry child_registry_t;
 
 	virtual ~LLLayoutStack();
 
@@ -137,7 +145,10 @@ private:
 	bool mAnimatedThisFrame;
 	bool mAnimate;
 	bool mClip;
+	F32 mOpenTimeConstant;
+	F32 mCloseTimeConstant;
 }; // end class LLLayoutStack
+
 
 class LLLayoutPanel : public LLPanel
 {
@@ -146,13 +157,15 @@ friend class LLUICtrlFactory;
 public:
 	struct Params : public LLInitParam::Block<Params, LLPanel::Params>
 	{
-		Optional<S32>			min_dim,
+		Optional<S32>			expanded_min_dim,
+								min_dim,
 								max_dim;
 		Optional<bool>			user_resize,
 								auto_resize;
 
 		Params()
-		:	min_dim("min_dim", 0),
+		:	expanded_min_dim("expanded_min_dim", 0),
+			min_dim("min_dim", 0),
 			max_dim("max_dim", 0),
 			user_resize("user_resize", true),
 			auto_resize("auto_resize", true)
@@ -167,12 +180,36 @@ public:
 	~LLLayoutPanel();
 
 	void initFromParams(const Params& p);
-protected:
-	LLLayoutPanel(const Params& p)	;
 
+	S32 getMinDim() const { return mMinDim; }
+	void setMinDim(S32 value) { mMinDim = value; if (!mExpandedMinDimSpecified) mExpandedMinDim = value; }
+
+	S32 getMaxDim() const { return mMaxDim; }
+	void setMaxDim(S32 value) { mMaxDim = value; }
+
+	S32 getExpandedMinDim() const { return mExpandedMinDim; }
+	void setExpandedMinDim(S32 value) { mExpandedMinDim = value; mExpandedMinDimSpecified = true; }
+	
+	S32 getRelevantMinDim() const
+	{
+		S32 min_dim = mMinDim;
+		
+		if (!mCollapsed)
+		{
+			min_dim = mExpandedMinDim;
+		}
+		
+		return min_dim;
+	}
+
+protected:
+	LLLayoutPanel(const Params& p);
 	
 	F32 getCollapseFactor(LLLayoutStack::ELayoutOrientation orientation);
 
+	bool mExpandedMinDimSpecified;
+	S32 mExpandedMinDim;
+	
 	S32 mMinDim;
 	S32 mMaxDim;
 	BOOL mAutoResize;

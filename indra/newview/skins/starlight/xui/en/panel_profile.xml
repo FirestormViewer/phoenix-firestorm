@@ -34,6 +34,14 @@
 	 name="RegisterDateFormat">
 	 [REG_DATE] ([AGE])
 	</string>
+	  <string
+  name="name_text_args">
+    [NAME]
+  </string>
+  <string
+    name="display_name_text_args">
+    [DISPLAY_NAME]
+  </string>
    <accordion
     left="0"
     top="0"
@@ -160,7 +168,8 @@
                name="partner_text"
                top="0"
                use_ellipses="true"
-           width="300" />
+			   word_wrap="true"
+               width="300" />
             </panel>
             <text
              follows="left|top"
@@ -170,14 +179,15 @@
              left="4"
              name="About_sl_text"
              text_color="White"
-             top_pad="0"
+             top_pad="-7"
              value="About:"
-             width="309" />
+             width="40" />
               <expandable_text
+			   allow_scroll="true"
                follows="left|top|right"
-               height="170"
+               height="146"
                layout="topleft"
-               left="5"
+               left="3"
                textbox.max_length="512"
                textbox.show_context_menu="true"
                name="sl_description_edit"
@@ -199,21 +209,50 @@
              top_pad="3"
              value="Groups:"
              width="309" />
-            <expandable_text
-            follows="all"
-            height="170"
-            layout="topleft"
-            left="5"
-            name="sl_groups"
-            textbox.max_length="512"
-            textbox.show_context_menu="true"
-            top_pad="0"
-            translate="false"
-            width="290"
-            expanded_bg_visible="true"
-            expanded_bg_color="SL-Background_Light">
-              Lorem ipsum dolor sit amet, consectetur adlkjpiscing elit moose moose. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet. adipiscing elit. Aenean rigviverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet sorbet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. Aenean viverra tulip moosetop. Slan de heelish marfnik tooplod. Sum sum to whop de wompam booster copm.
-            </expandable_text>     
+			<group_list
+			 for_agent="false"
+			 allow_select="true"
+             height="145"
+             follows="all"
+			 left="5"
+			 right="-20"
+			 name="group_list"
+             top_pad="0"
+			 width="290" />
+			<text
+             follows="left|top"
+             font.style="BOLD"
+             height="13"
+             layout="topleft"
+             left="4"
+             name="Key"
+             text_color="White"
+             top_pad="12"
+             value="Resident's Key:"
+             width="140" />
+			<text_editor
+             name="user_key"
+             label="Key:"
+             left="5"
+             top_pad="2"
+             right="-86"
+             height="20"
+             h_pad="0"
+             v_pad="4"
+             bg_visible="true"
+             enabled="false"
+             allow_scroll="false"
+             initial_value="(loading ...)"
+             follows="top|left|right"
+             layout="topleft" />
+            <button
+             name="copy_uri"
+             left_pad="4"
+             right="-4"
+             height="20"
+             label="Copy URI"
+             enabled="false"
+             follows="top|right" />
           </panel>
         </scroll_container>
       </accordion_tab>
@@ -268,7 +307,7 @@
                follows="left|top|right"
                height="220"
                layout="topleft"
-               left="5"
+               left="3"
                top_pad="-3"
                textbox.max_length="512"
                textbox.show_context_menu="true"

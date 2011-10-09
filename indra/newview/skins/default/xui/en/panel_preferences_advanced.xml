@@ -26,8 +26,8 @@
    left="33"
    name="UI Size:"
    top_pad="25"
-   width="100">
-    UI size:
+   width="200">
+    Font Scaling (may have side effects):
   </text>
   <slider
    control_name="UIScaleFactor"
@@ -82,55 +82,97 @@
      left="30"
      name="show_develop_menu_check"
      top_pad="5"
-     width="237"/>         
-    
-    <check_box
-     control_name="ShowScriptErrors"
-     height="20"
-     label="Show script errors in:"
-     layout="topleft"
-     left="30"
-     top_pad="0" 
-     name="show_script_errors"
-     width="256" />
-    <radio_group
-     enabled_control="ShowScriptErrors"
-     control_name="ShowScriptErrorsLocation"
-     follows="top|left"
-     draw_border="false"
-     height="16"
-     layout="topleft"
-     left_delta="50"
-     name="show_location"
-     top_pad="5"
-     width="364">
-        <radio_item
-         height="16"
-         label="Nearby chat"
-         layout="topleft"
-         left="3"
-         name="0"
-         top="0"
-         width="315" />
-        <radio_item
-         height="16"
-         label="Separate window"
-         layout="topleft"
-         left_delta="175"
-         name="1"
-         top_delta="0"
-         width="315" />
-    </radio_group>
-     
- <button
- height="23"
- label="3D Joystick"
- left="30"
- name="joystick_setup_button"
- top="110"
- width="155">
-    <button.commit_callback
-     function="Floater.Show"
-     parameter="pref_joystick" />
-  </button>
-</panel>
+     width="237"/>
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left="15"
+            name="Media Rolloff"
+            mouse_opaque="false"
+            top_delta="40"
+            width="155">
+            Media audio rolloff distance:
+        </text>
+        <slider
+            can_edit_text="true"
+            control_name="MediaRollOffMin"
+            decimal_digits="0"
+            label="Min"
+            follows="left|top"
+            height="15"
+            increment="1"
+            initial_value="5"
+            layout="topleft"
+            left="15"
+            max_val="512"
+            min_val="1"
+            name="MediaRollOffMin"
+            top_delta="20"
+            width="200"
+            label_width="25"
+            tool_tip="Minimum distance from the source for rolloff to begin taking effect."/>
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left_delta="205"
+            name="Meters"
+            mouse_opaque="false"
+            top_delta="2"
+            width="90">
+            meters
+        </text>
+        <slider
+            can_edit_text="true"
+            control_name="MediaRollOffMax"
+            decimal_digits="0"
+            label="Max"
+            follows="left|top"
+            height="15"
+            increment="1"
+            initial_value="30"
+            layout="topleft"
+            left="15"
+            max_val="512"
+            min_val="1"
+            name="MediaRollOffMax"
+            top_delta="15"
+            width="200"
+            label_width="25"
+            tool_tip="Maximum distance from the source for rolloff to completely mute the sound."/>
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left_delta="205"
+            name="Meters"
+            mouse_opaque="false"
+            top_delta="2"
+            width="90">
+            meters
+        </text>
+        <button
+          top="40"
+          enabled="true"
+          follows="left|top"
+          halign="center"
+          height="25"
+          label="Reset All Settings"
+          label_selected="Reset All Settings..."
+          left_delta="0"
+          mouse_opaque="true"
+          name="clear_settings"
+          scale_image="true"
+          width="200" >
+          <button.commit_callback
+           function="Pref.ClearSettings" />
+        </button>
+  
+     </panel>

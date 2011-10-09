@@ -39,6 +39,7 @@
 #include "lltracker.h"
 #include "llslurl.h"
 
+class LLCtrlListInterface;
 class LLFriendObserver;
 class LLInventoryModel;
 class LLInventoryObserver;
@@ -106,6 +107,11 @@ public:
 	// teleport to the tracked item, if there is one
 	void			teleport();
 	void			onChangeMaturity();
+	
+	
+	//Slapp instigated avatar tracking
+	void			avatarTrackFromSlapp( const LLUUID& id ); 
+
 protected:	
 	void			onGoHome();
 
@@ -185,6 +191,10 @@ private:
 	std::string				mTrackedSimName;
 	std::string				mTrackedAvatarName;
 	LLSLURL  				mSLURL;
+
+	LLCtrlListInterface *	mListFriendCombo;
+	LLCtrlListInterface *	mListLandmarkCombo;
+	LLCtrlListInterface *	mListSearchResults;
 };
 
 extern LLFloaterWorldMap* gFloaterWorldMap;

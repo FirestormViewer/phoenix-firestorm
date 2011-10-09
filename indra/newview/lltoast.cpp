@@ -99,7 +99,6 @@ LLToast::Params::Params()
 
 LLToast::LLToast(const LLToast::Params& p) 
 :	LLModalDialog(LLSD(), p.is_modal),
-	mPanel(p.panel), 
 	mToastLifetime(p.lifetime_secs),
 	mToastFadingTime(p.fading_time_secs),
 	mNotificationID(p.notif_id),  
@@ -108,12 +107,13 @@ LLToast::LLToast(const LLToast::Params& p)
 	mCanBeStored(p.can_be_stored),
 	mHideBtnEnabled(p.enable_hide_btn),
 	mHideBtn(NULL),
+	mPanel(NULL),
 	mNotification(p.notification),
 	mIsHidden(false),
 	mHideBtnPressed(false),
 	mIsTip(p.is_tip),
 	mWrapperPanel(NULL),
-	mIsTransparent(false)
+	mIsFading(false)
 {
 	mTimer.reset(new LLToastLifeTimer(this, p.lifetime_secs));
 
@@ -125,9 +125,12 @@ LLToast::LLToast(const LLToast::Params& p)
 	mWrapperPanel->setMouseEnterCallback(boost::bind(&LLToast::onToastMouseEnter, this));
 	mWrapperPanel->setMouseLeaveCallback(boost::bind(&LLToast::onToastMouseLeave, this));
 
-	if(mPanel)
+	setBackgroundOpaque(TRUE); // *TODO: obsolete
+	updateTransparency();
+
+	if(p.panel())
 	{
-		insertPanel(mPanel);
+		insertPanel(p.panel);
 	}
 
 	if(mHideBtnEnabled)
@@ -179,7 +182,7 @@ LLToast::~LLToast()
 void LLToast::hide()
 {
 	setVisible(FALSE);
-	setTransparentState(false);
+	setFading(false);
 	mTimer->stop();
 	mIsHidden = true;
 	mOnFadeSignal(this); 
@@ -190,7 +193,7 @@ void LLToast::onFocusLost()
 	if(mWrapperPanel && !isBackgroundVisible())
 	{
 		// Lets make wrapper panel behave like a floater
-		setBackgroundOpaque(FALSE);
+		updateTransparency();
 	}
 }
 
@@ -199,7 +202,7 @@ void LLToast::onFocusReceived()
 	if(mWrapperPanel && !isBackgroundVisible())
 	{
 		// Lets make wrapper panel behave like a floater
-		setBackgroundOpaque(TRUE);
+		updateTransparency();
 	}
 }
 
@@ -244,22 +247,24 @@ void LLToast::expire()
 {
 	if (mCanFade)
 	{
-		if (mIsTransparent)
+		if (mIsFading)
 		{
+			// Fade timer expired. Time to hide.
 			hide();
 		}
 		else
 		{
-			setTransparentState(true);
+			// "Life" time has ended. Time to fade.
+			setFading(true);
 			mTimer->restart();
 		}
 	}
 }
 
-void LLToast::setTransparentState(bool transparent)
+void LLToast::setFading(bool transparent)
 {
-	setBackgroundOpaque(!transparent);
-	mIsTransparent = transparent;
+	mIsFading = transparent;
+	updateTransparency();
 
 	if (transparent)
 	{
@@ -275,7 +280,7 @@ F32 LLToast::getTimeLeftToLive()
 {
 	F32 time_to_live = mTimer->getRemainingTimeF32();
 
-	if (!mIsTransparent)
+	if (!mIsFading)
 	{
 		time_to_live += mToastFadingTime;
 	}
@@ -304,6 +309,7 @@ void LLToast::reshapeToPanel()
 
 void LLToast::insertPanel(LLPanel* panel)
 {
+	mPanel = panel;
 	mWrapperPanel->addChild(panel);	
 	reshapeToPanel();
 }
@@ -347,7 +353,6 @@ void LLToast::setVisible(BOOL show)
 
 	if(show)
 	{
-		setBackgroundOpaque(TRUE);
 		if(!mTimer->getStarted() && mCanFade)
 		{
 			mTimer->start();
@@ -389,7 +394,7 @@ void LLToast::onToastMouseEnter()
 	{
 		mOnToastHoverSignal(this, MOUSE_ENTER);
 
-		setBackgroundOpaque(TRUE);
+		updateTransparency();
 
 		//toasts fading is management by Screen Channel
 
@@ -418,6 +423,8 @@ void LLToast::onToastMouseLeave()
 	{
 		mOnToastHoverSignal(this, MOUSE_LEAVE);
 
+		updateTransparency();
+
 		//toasts fading is management by Screen Channel
 
 		if(mHideBtn && mHideBtn->getEnabled())
@@ -445,20 +452,45 @@ void LLToast::setBackgroundOpaque(BOOL b)
 	}
 }
 
-void LLNotificationsUI::LLToast::stopFading()
+void LLToast::updateTransparency()
+{
+	ETypeTransparency transparency_type;
+
+	if (mCanFade)
+	{
+		// Notification toasts (including IM/chat toasts) change their transparency on hover.
+		if (isHovered())
+		{
+			transparency_type = TT_ACTIVE;
+		}
+		else
+		{
+			transparency_type = mIsFading ? TT_FADING : TT_INACTIVE;
+		}
+	}
+	else
+	{
+		// Transparency of alert toasts depends on focus.
+		transparency_type = hasFocus() ? TT_ACTIVE : TT_INACTIVE;
+	}
+
+	LLFloater::updateTransparency(transparency_type);
+}
+
+void LLNotificationsUI::LLToast::stopTimer()
 {
 	if(mCanFade)
 	{
-		setTransparentState(false);
+		setFading(false);
 		mTimer->stop();
 	}
 }
 
-void LLNotificationsUI::LLToast::startFading()
+void LLNotificationsUI::LLToast::startTimer()
 {
 	if(mCanFade)
 	{
-		setTransparentState(false);
+		setFading(false);
 		mTimer->start();
 	}
 }

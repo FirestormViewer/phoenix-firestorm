@@ -27,15 +27,13 @@
 #define LLFLOATERREG_H
 
 /// llcommon
-#include "llboost.h"
 #include "llrect.h"
-#include "llstl.h"
 #include "llsd.h"
-
-/// llui
-#include "lluictrl.h"
-
 #include <boost/function.hpp>
+// [RLVa:KB] - Checked: 2011-05-25 (RLVa-1.4.0a)
+#include <boost/signals2.hpp>
+#include "llboost.h"
+// [/RLVa:KB]
 
 //*******************************************************
 //
@@ -43,6 +41,7 @@
 //
 
 class LLFloater;
+class LLUICtrl;
 
 typedef boost::function<LLFloater* (const LLSD& key)> LLFloaterBuildFunc;
 
@@ -75,7 +74,7 @@ private:
 	 */
 	static std::set<std::string> sAlwaysShowableList;
 	
-// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
+// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.4.0a) | Modified: RLVa-1.2.0a
 	// Used to determine whether a floater can be shown
 public:
 	typedef boost::signals2::signal<bool(const std::string&, const LLSD&), boost_boolean_combiner> validate_signal_t;
@@ -99,7 +98,7 @@ public:
 					const std::string& groupname = LLStringUtil::null);
 
 	// Helpers
-	static LLRect getFloaterRect(const std::string& name);
+	static LLFloater* getLastFloaterInGroup(const std::string& name);
 	
 	// Find / get (create) / remove / destroy
 	static LLFloater* findInstance(const std::string& name, const LLSD& key = LLSD());

@@ -34,6 +34,7 @@ else (STANDALONE)
   use_prebuilt_binary(gtk-atk-pango-glib)
   if (LINUX)
     set(UI_LIBRARIES
+        freetype
         atk-1.0
         gdk-x11-2.0
         gdk_pixbuf-2.0
@@ -51,11 +52,11 @@ else (STANDALONE)
   endif (LINUX)
 
   include_directories (
-      ${LIBS_PREBUILT_DIR}/${LL_ARCH_DIR}/include
+      ${LIBS_PREBUILT_DIR}/include
       ${LIBS_PREBUILT_DIR}/include
       )
   foreach(include ${${LL_ARCH}_INCLUDES})
-      include_directories(${LIBS_PREBUILT_DIR}/${LL_ARCH_DIR}/include/${include})
+      include_directories(${LIBS_PREBUILT_DIR}/include/${include})
   endforeach(include)
 endif (STANDALONE)
 

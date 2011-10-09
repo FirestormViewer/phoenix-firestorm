@@ -32,6 +32,10 @@
 #include "llagent.h"
 #include "roles_constants.h"
 
+// for copy URI button
+#include "llclipboard.h"
+
+
 // UI elements
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
@@ -44,6 +48,7 @@
 #include "llnotificationsutil.h"
 #include "llscrolllistitem.h"
 #include "llspinctrl.h"
+#include "llslurl.h"
 #include "lltextbox.h"
 #include "lltexteditor.h"
 #include "lltexturectrl.h"
@@ -96,7 +101,8 @@ BOOL LLPanelGroupGeneral::postBuild()
 		mEditCharter->setFocusReceivedCallback(boost::bind(onFocusEdit, _1, this));
 		mEditCharter->setFocusChangedCallback(boost::bind(onFocusEdit, _1, this));
 	}
-
+	// set up callback for copy URI button
+	childSetCommitCallback("copy_uri",boost::bind(&LLPanelGroupGeneral::onCopyURI,this),NULL);
 
 
 	mListVisibleMembers = getChild<LLNameListCtrl>("visible_members", recurse);
@@ -897,12 +903,28 @@ void	LLPanelGroupGeneral::resetDirty()
 void LLPanelGroupGeneral::setGroupID(const LLUUID& id)
 {
 	LLPanelGroupTab::setGroupID(id);
-
+	// get group key display and copy URI button pointers
+	LLTextEditor* groupKeyEditor = getChild<LLTextEditor>("group_key");
+	LLButton* copyURIButton = getChild<LLButton>("copy_uri");
+	// happens when a new group is created
 	if(id == LLUUID::null)
 	{
+		if (groupKeyEditor)
+			groupKeyEditor->setValue(LLSD());
+
+		if (copyURIButton)
+			copyURIButton->setEnabled(FALSE);
+
 		reset();
 		return;
 	}
+	// fill in group key
+	if (groupKeyEditor)
+		groupKeyEditor->setValue(id.asString());
+
+	// activate copy URI button
+	if (copyURIButton)
+		copyURIButton->setEnabled(TRUE);
 
 	BOOL accept_notices = FALSE;
 	BOOL list_in_profile = FALSE;
@@ -954,4 +976,13 @@ S32 LLPanelGroupGeneral::sortMembersList(S32 col_idx,const LLScrollListItem* i1,
 	}
 
 	return LLStringUtil::compareDict(cell1->getValue().asString(), cell2->getValue().asString());
+}
+
+// protected
+
+// Copy URI button callback
+void LLPanelGroupGeneral::onCopyURI()
+{
+    std::string name = "secondlife:///app/group/"+getChild<LLUICtrl>("group_key")->getValue().asString()+"/about";
+    gClipboard.copyFromString(utf8str_to_wstring(name));
 }

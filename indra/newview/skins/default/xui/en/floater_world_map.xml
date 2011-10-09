@@ -3,10 +3,10 @@
  legacy_header_height="18"
  can_resize="true"
  open_centered="true"
- height="600"
+ height="530"
  layout="topleft"
- min_height="520"
- min_width="520"
+ min_height="386"
+ min_width="263"
  name="worldmap"
  help_topic="worldmap"
  save_rect="true"
@@ -14,24 +14,110 @@
  single_instance="true"
  title="WORLD MAP"
  width="650">
-    <panel
-     filename="panel_world_map.xml"
-     follows="all"
-     height="555"
-     layout="topleft"
-     left="10"
-     name="objects_mapview"
-     top="25"
-     width="375" />
-     <panel
-     name="layout_panel_1"
-     height="22"
-     width="238"
+ <layout_stack
+  follows="all"
+  layout="topleft"
+  width="650"
+  height="512"
+  left="0"
+  orientation="horizontal"
+  top="18"
+  name="resizing_stack">
+  <layout_panel
+   follows="right|left|top|bottom"
+   layout="topleft"
+   can_resize="true"
+   left="0"
+   min_width="5"
+   width="390"
+   height="512"
+   name="map_panel">
+   <panel
+    filename="panel_world_map.xml"
+    follows="all" 
+    height="502"
+    layout="topleft"
+    left="5"
+    name="objects_mapview"
+    top="5"
+    width="381"/>
+   <panel
+    follows="right|top"
+    height="40"
+	left="330"
+	top="10"
+    width="60"
+	layout="topleft"
+	background_visible="true"
+    name="map_details_selection">
+    <button
      follows="right|top"
-     top="25"
-     left_pad="5"
-  background_visible="true"
-  bg_alpha_color="DkGray2">
+     control_name="StarLightShowMapDetails"
+     height="40"
+	 is_toggle="true"
+	 image_unselected="TabIcon_Open_Off"
+	 image_selected="TabIcon_Close_Off"
+     mouse_opaque="false"
+     left="10"
+     layout="topleft"
+     name="Show Map details"
+     tool_tip="Show or hide details next to the World Map"
+     top="6"
+     width="40"/>
+   </panel>
+   <panel
+    follows="right|bottom"
+    height="20"
+	left="195"
+    min_height="20"
+    bottom="487"
+    width="185"
+	background_visible="true"
+    name="layout_panel_6">
+    <icon
+     follows="left|bottom"
+     height="16"
+     image_name="Zoom_Off"
+     layout="topleft"
+     left="19"
+     mouse_opaque="true"
+     name="zoom_icon"
+     top_pad="7"
+     width="16"/>
+    <slider
+     follows="right|bottom"
+     height="16"
+     increment="0.2"
+     initial_value="-2"
+     left_pad="0"
+     layout="topleft"
+     max_val="0"
+     min_val="-8"
+     name="zoom slider"
+     show_text="false"
+     width="150" />
+    </panel>
+   </layout_panel>
+  <layout_panel
+   follows="right|bottom"
+   top="0"	
+   width="258"
+   left_delta="0"
+   min_width="258"
+   max_width="258"
+   height="512"
+   visibility_control="StarLightShowMapDetails"
+   auto_resize="false"
+   name="map_details_panel">
+   <panel
+    name="layout_panel_1"
+    height="22"
+    width="248"
+    follows="right|top"
+    top="7"
+    left_delta="0"
+    background_visible="true"
+    bg_alpha_color="DkGray2">
     <text
      text_color="White"
      font="SansSerifLarge"
@@ -47,28 +133,28 @@
      width="215">
         Legend
     </text>
-    </panel>
-<panel
- follows="right|top"
-  height="126"
-  top_pad="0"
-  width="238"
-  name="layout_panel_2">
-<button
+   </panel>
+   <panel
+    follows="right|top"
+    height="126"
+    top_pad="0"
+    width="248"
+    name="layout_panel_2">
+    <button
      follows="right|top"
      height="22"
      image_overlay="map_avatar_16.tga"
      scale_image="true"
      left="4"
      layout="topleft"
-     name="Show Current Location"
+     name="Show My Location"
      tool_tip="Center map on my avatar&apos;s location"
      top="6"
      width="24" >
 		<button.commit_callback
 		function="WMap.ShowAgent" />
     </button>
-          <text
+    <text
      type="string"
      length="1"
      follows="top|right"
@@ -91,7 +177,7 @@
      top_pad="9"
      width="22" />
     <icon
-     color="0 1 0 1"
+     color="Green"
      follows="top|right"
      height="8"
      image_name="map_avatar_8.tga"
@@ -101,7 +187,7 @@
      name="person"
      top_delta="3"
      width="8" />
-      <text
+    <text
      type="string"
      length="1"
      follows="top|right"
@@ -123,7 +209,7 @@
      name="infohub_chk"
      top_pad="3"
      width="22" />
-         <icon
+    <icon
      follows="top|right"
      height="16"
      image_name="map_infohub.tga"
@@ -133,7 +219,7 @@
      name="infohub"
      top_delta="0"
      width="16" />
- <text
+    <text
      type="string"
      length="1"
      follows="top|right"
@@ -178,8 +264,8 @@
      width="90">
         Land Sale
     </text>
-        <icon
-     color="0.5 0.25 1 1"
+    <icon
+     color="SL-MidBlue"
      follows="top|right"
      height="16"
      image_name="legend.tga"
@@ -202,7 +288,7 @@
         land auction
     </text>
     <icon
-     color="1 1 0.25 1"
+     color="Yellow"
      follows="top|right"
      height="16"
      image_name="legend.tga"
@@ -370,12 +456,12 @@
 
   <panel
    follows="right|top"
-  height="22"
-  top_pad="0"
-  width="238"
-  background_visible="true"
-  bg_alpha_color="DkGray2"
-  name="layout_panel_3">
+   height="22"
+   top_pad="0"
+   width="248"
+   background_visible="true"
+   bg_alpha_color="DkGray2"
+   name="layout_panel_3">
     <text
      text_color="White"
      font="SansSerifLarge"
@@ -392,15 +478,14 @@
         Find on Map
     </text>
   </panel>
-
     <panel
      follows="right|top|bottom"
 	 height="330"
 	 top_pad="0"
-	 width="238"
+	 width="258"
 	 name="layout_panel_4">
-	 <icon
-      color="0.5 0 0 1"
+     <icon
+      color="MapTrackDisabledColor"
       follows="top|right"
       height="16"
       image_name="map_track_16.tga"
@@ -421,16 +506,16 @@
      max_chars="60"
      name="friend combo"
      tool_tip="Show friends on map"
-     width="182">
+     width="227">
         <combo_box.item
-         label="Friends Online"
+         label="My Friends Online"
          name="item1"
          value="None" />
 		<combo_box.commit_callback
 		function="WMap.AvatarCombo"/>
     </combo_box>
    <icon
-     color="0.5 0 0 1"
+     color="MapTrackDisabledColor"
      follows="top|right"
      height="16"
      image_name="map_track_16.tga"
@@ -444,23 +529,23 @@
      allow_text_entry="true"
      follows="top|right"
      height="23"
-     label="Landmarks"
+     label="My Landmarks"
      layout="topleft"
      top_delta="-3"
      left_pad="7"
      max_chars="64"
      name="landmark combo"
      tool_tip="Landmark to show on map"
-     width="182">
+     width="227">
         <combo_box.item
-         label="Landmarks"
+         label="My Landmarks"
          name="item1"
          value="None" />
 		<combo_box.commit_callback
 		function="WMap.Landmark"/>
     </combo_box>
-       <icon
-     color="0.5 0 0 1"
+    <icon
+     color="MaptrackDisabledColor"
      follows="top|right"
      height="16"
      image_name="map_track_16.tga"
@@ -472,9 +557,9 @@
      width="16" />
     <search_editor
      follows="top|right"
-  search_button_visible="false"
+     search_button_visible="false"
      height="22"
-  text_readonly_color="DkGray"
+     text_readonly_color="DkGray"
      label="Regions by Name"
      layout="topleft"
      top_delta="-2"
@@ -482,11 +567,11 @@
      name="location"
      select_on_focus="true"
      tool_tip="Type the name of a region"
-     width="152">
+     width="134">
                <search_editor.commit_callback
                 function="WMap.Location" />
-  </search_editor>
-   <button
+    </search_editor>
+    <button
      follows="top|right"
      height="23"
      label="Find"
@@ -495,22 +580,9 @@
      top_delta="-1"
      name="DoSearch"
      tool_tip="Search for region"
-     width="62">
+     width="87">
 		<button.commit_callback
 		function="WMap.Location" />
-    </button>
-   <button
-     image_overlay="Refresh_Off"
-     follows="top|right"
-     height="23"
-     layout="topleft"
-     left="0"
-     name="Clear"
-     tool_tip="Clear tracking lines and reset map"
-     top_pad="5"
-     width="23">
-		<button.commit_callback
-		function="WMap.Clear" />
     </button>
     <scroll_list
      draw_stripes="false"
@@ -518,19 +590,19 @@
      follows="all"
      height="145"
      layout="topleft"
-     left="28"
+     left="2"
      name="search_results"
-     top_pad="-23"
-     width="209"
+     top_pad="5"
+     width="246"
      sort_column="1">
         <scroll_list.columns
          label=""
-         name="icon"
+         name="scroll_list_icon"
          width="16" />
         <scroll_list.columns
          label=""
          name="sim_name"
-         width="193" />
+         width="230" />
 		<scroll_list.commit_callback
 		function="WMap.SearchResult" />
     </scroll_list>
@@ -541,7 +613,7 @@
       halign="right"
       height="16"
       layout="topleft"
-      left="10"
+      left="0"
       name="events_label"
       top_pad="16"
       width="70">
@@ -555,13 +627,13 @@
         increment="1"
         initial_value="128"
         layout="topleft"
-        left_delta="74"
+        left_pad="4"
         max_val="255"
         min_val="0"
         name="teleport_coordinate_x"
         width="44" >
         <spinner.commit_callback 
-          function="WMap.Coordinates" />
+          function="WMap.Coordinates"/>
       </spinner>
       <spinner
         control_name="Teleport_Coordinate_Y"
@@ -571,12 +643,13 @@
         increment="1"
         initial_value="128"
         layout="topleft"
-        left_delta="47"
+        left_pad="4"
         max_val="255"
         min_val="0"
-        name="teleport_coordinate_y" >
+        name="teleport_coordinate_y"
+		width="44">
         <spinner.commit_callback
-          function="WMap.Coordinates" />
+          function="WMap.Coordinates"/>
       </spinner>
       <spinner
         control_name="Teleport_Coordinate_Z"
@@ -586,107 +659,89 @@
         increment="1"
         initial_value="128"
         layout="topleft"
-        left_delta="47"
+        left_pad="4"
         max_val="5000"
         min_val="0"
         name="teleport_coordinate_z"
-		width="59">
+        right="-9">
         <spinner.commit_callback
-          function="WMap.Coordinates" />
+          function="WMap.Coordinates"/>
       </spinner>
+
+    <layout_stack
+     left="0"
+     top_pad="7"
+     right="-7"
+     height="52"
+     follows="bottom|right"
+     orientation="horizontal"
+     layout="topleft">
+    <layout_panel
+     follows="all"
+     layout="topleft"
+     width="100"
+     height="20"
+	 name="layoutstackpanel_left">
       <button
-     follows="right|bottom"
+     follows="left|right|top"
      height="23"
-     image_unselected="PushButton_On"
      label="Teleport"
      layout="topleft"
-     left="25"
+     left="0"
      name="Teleport"
      tool_tip="Teleport to selected location"
-     top_pad="7"
-     width="104">
-		<button.commit_callback
-		function="WMap.Teleport" />
+     top="0"
+     right="-1">
+        <button.commit_callback
+        function="WMap.Teleport" />
     </button>
     <button
-     follows="right|bottom"
+     follows="left|right|top"
+     height="23"
+     label="Clear"
+     layout="topleft"
+     name="Clear"
+     tool_tip="Clear tracking lines and reset map"
+     top_pad="5"
+     right="-1">
+        <button.commit_callback
+        function="WMap.Clear" />
+    </button>
+    </layout_panel>
+    <layout_panel
+     follows="left|right|top"
+     layout="topleft"
+     width="100"
+     height="20"
+	 name="layoutstackpanel_right">
+    <button
+     follows="left|right|top"
      height="23"
      label="Copy SLurl"
      layout="topleft"
-     left_pad="5"
+     left="0"
      name="copy_slurl"
      tool_tip="Copies current location as SLurl to be used on the web."
-     top_delta="0"
-     width="104">
-		<button.commit_callback
-		function="WMap.CopySLURL" />
+     top="0"
+     right="-1">
+        <button.commit_callback
+        function="WMap.CopySLURL" />
     </button>
     <button
+     follows="left|right|top"
      enabled="false"
-     follows="right|bottom"
      height="23"
      label="Show Selection"
-     left="25"
      top_pad="5"
      name="Show Destination"
      tool_tip="Center map on selected location"
-     width="213">
-		<button.commit_callback
-		function="WMap.ShowTarget" />
+     right="-1">
+        <button.commit_callback
+        function="WMap.ShowTarget" />
     </button>
-    </panel>
-      <panel
-    follows="right|bottom"
-  height="22"
-  top_pad="0"
-  width="238"
-  background_visible="true"
-  bg_alpha_color="DkGray2"
-  name="layout_panel_5">
-    <text
-     text_color="White"
-     font="SansSerifLarge"
-     type="string"
-     length="1"
-     follows="top|right"
-     halign="left"
-     height="16"
-     layout="topleft"
-     left="15"
-     name="zoom_label"
-     top="3"
-     width="210">
-        Zoom
-    </text>
-  </panel>
-    <panel
- follows="right|bottom"
-  height="30"
-  min_height="30"
-  top_pad="0"
-  width="238"
-  name="layout_panel_6">
-  <icon
-     follows="left|bottom"
-     height="16"
-     image_name="Zoom_Off"
-     layout="topleft"
-     left="20"
-     mouse_opaque="true"
-     name="zoom_icon"
-     top_pad="7"
-     width="16" ></icon>
-    <slider
-     follows="left|bottom"
-     height="16"
-     increment="0.2"
-     initial_value="-2"
-     left_pad="0"
-     layout="topleft"
-     max_val="0"
-     min_val="-8"
-     name="zoom slider"
-     show_text="false"
-     width="200" />
-     </panel>
+    </layout_panel>
+    </layout_stack>
+   </panel> 
+  </layout_panel> 
+ </layout_stack> 
 </floater>

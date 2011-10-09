@@ -46,7 +46,7 @@
 	</button>
 	<button
 		name="open_prefs_btn"
-		image_overlay="Icon_Gear_Foreground"
+		image_overlay="Edit_Prefs_Wrench"
 		image_disabled="PushButton_Disabled"
 		image_disabled_selected="PushButton_Disabled"
 		image_selected="PushButton_Selected"
@@ -68,24 +68,12 @@
 		right="-8"
 		width="66"
 		height="22"
+		is_toggle="true"
 		label="More &gt;&gt;"
-		label_selected="Less &lt;&lt;">
+		label_selected="&lt;&lt; Less">
 	  <button.commit_callback
 		  function="MediaListCtrl.MoreLess" />
 	</button>
-  <button
-		name="less_btn"
-		follows="right"
-		tool_tip="Advanced Controls"
-		top_delta="0"
-		right="-8"
-		width="66"
-		height="22"
-		label="More &gt;&gt;"
-		label_selected="Less &lt;&lt;">
-      <button.commit_callback
-        function="MediaListCtrl.MoreLess" />
-  </button>
   </panel>
   <panel
 	  name="nearby_media_panel"
@@ -116,12 +104,12 @@
 		top_pad="15"
 		left="10"
 		name="show_text"
-		width="40">
+		width="62">
 	  Show:
 	</text>
 	<combo_box
 		height="23"
-		left="50"
+		left="72"
 		width="140"
 		top_delta="-5"
 		follows="left|top"
@@ -218,10 +206,10 @@
 			  name="stop_btn"
 			  follows="top"
 			  image_overlay="Stop_Off"
-			  image_disabled="PushButton_Disabled"
-			  image_disabled_selected="PushButton_Disabled"
-			  image_selected="PushButton_Selected"
-			  image_unselected="PushButton_Off"
+			  image_disabled="transparent.j2c"
+			  image_disabled_selected="transparent.j2c"
+			  image_selected="transparent.j2c"
+			  image_unselected="transparent.j2c"
 			  hover_glow_amount="0.25"
 			  layout="topleft"
 			  tool_tip="Stop selected media"
@@ -246,10 +234,10 @@
 			  name="play_btn"
 			  follows="top"
 			  image_overlay="Play_Off"
-			  image_disabled="PushButton_Disabled"
-			  image_disabled_selected="PushButton_Disabled"
-			  image_selected="PushButton_Selected"
-			  image_unselected="PushButton_Off"
+			  image_disabled="transparent.j2c"
+			  image_disabled_selected="transparent.j2c"
+			  image_selected="transparent.j2c"
+			  image_unselected="transparent.j2c"
 			  hover_glow_amount="0.25"
 			  layout="topleft"
 			  tool_tip = "Play selected media"
@@ -273,10 +261,10 @@
 			  name="pause_btn"
 			  follows="top"
 			  image_overlay="Pause_Off"
-			  image_disabled="PushButton_Disabled"
-			  image_disabled_selected="PushButton_Disabled"
-			  image_selected="PushButton_Selected"
-			  image_unselected="PushButton_Off"
+			  image_disabled="transparent.j2c"
+			  image_disabled_selected="transparent.j2c"
+			  image_selected="transparent.j2c"
+			  image_unselected="transparent.j2c"
 			  hover_glow_amount="0.25"
 			  layout="topleft"
 			  top="0"
@@ -355,10 +343,10 @@
 			  name="zoom_btn"
 			  follows="top"
 			  image_overlay="Zoom_Off"
-			  image_disabled="PushButton_Disabled"
-			  image_disabled_selected="PushButton_Disabled"
-			  image_selected="PushButton_Selected"
-			  image_unselected="PushButton_Off"
+			  image_disabled="transparent.j2c"
+			  image_disabled_selected="transparent.j2c"
+			  image_selected="transparent.j2c"
+			  image_unselected="transparent.j2c"
 			  hover_glow_amount="0.25"
 			  top="0"
 			  height="22"
@@ -382,10 +370,10 @@
 			  name="unzoom_btn"
 			  follows="top"
 			  image_overlay="UnZoom_Off"
-			  image_disabled="PushButton_Disabled"
-			  image_disabled_selected="PushButton_Disabled"
-			  image_selected="PushButton_Selected"
-			  image_unselected="PushButton_Off"
+			  image_disabled="transparent.j2c"
+			  image_disabled_selected="transparent.j2c"
+			  image_selected="transparent.j2c"
+			  image_unselected="transparent.j2c"
 			  hover_glow_amount="0.25"
 			  top="0"
 			  height="22"

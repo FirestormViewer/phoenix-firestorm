@@ -35,7 +35,20 @@
 
 const S32 MIN_IMAGE_MIP =  2; // 4x4, only used for expand/contract power of 2
 const S32 MAX_IMAGE_MIP = 11; // 2048x2048
+
+// *TODO : Use MAX_IMAGE_MIP as max discard level and modify j2c management so that the number 
+// of levels is read from the header's file, not inferred from its size.
 const S32 MAX_DISCARD_LEVEL = 5;
+
+// JPEG2000 size constraints
+// Those are declared here as they are germane to other image constraints used in the viewer
+// and declared right here. Some come from the JPEG2000 spec, some conventions specific to SL.
+const S32 MAX_DECOMPOSITION_LEVELS = 32;	// Number of decomposition levels cannot exceed 32 according to jpeg2000 spec
+const S32 MIN_DECOMPOSITION_LEVELS = 5;		// the SL viewer will *crash* trying to decode images with fewer than 5 decomposition levels (unless image is small that is)
+const S32 MAX_PRECINCT_SIZE = 2048;			// No reason to be bigger than MAX_IMAGE_SIZE 
+const S32 MIN_PRECINCT_SIZE = 4;			// Can't be smaller than MIN_BLOCK_SIZE
+const S32 MAX_BLOCK_SIZE = 64;				// Max total block size is 4096, hence 64x64 when using square blocks
+const S32 MIN_BLOCK_SIZE = 4;				// Min block dim is 4 according to jpeg2000 spec
 
 const S32 MIN_IMAGE_SIZE = (1<<MIN_IMAGE_MIP); // 4, only used for expand/contract power of 2
 const S32 MAX_IMAGE_SIZE = (1<<MAX_IMAGE_MIP); // 2048
@@ -164,7 +177,7 @@ public:
 	LLImageRaw(U16 width, U16 height, S8 components);
 	LLImageRaw(U8 *data, U16 width, U16 height, S8 components);
 	// Construct using createFromFile (used by tools)
-	LLImageRaw(const std::string& filename, bool j2c_lowest_mip_only = false);
+	//LLImageRaw(const std::string& filename, bool j2c_lowest_mip_only = false);
 
 	/*virtual*/ void deleteData();
 	/*virtual*/ U8* allocateData(S32 size = -1);
@@ -226,7 +239,7 @@ public:
 
 protected:
 	// Create an image from a local file (generally used in tools)
-	bool createFromFile(const std::string& filename, bool j2c_lowest_mip_only = false);
+	//bool createFromFile(const std::string& filename, bool j2c_lowest_mip_only = false);
 
 	void copyLineScaled( U8* in, U8* out, S32 in_pixel_len, S32 out_pixel_len, S32 in_pixel_step, S32 out_pixel_step );
 	void compositeRowScaled4onto3( U8* in, U8* out, S32 in_pixel_len, S32 out_pixel_len );
@@ -266,13 +279,13 @@ public:
 	// subclasses must return a prefered file extension (lowercase without a leading dot)
 	virtual std::string getExtension() = 0;
 	// calcHeaderSize() returns the maximum size of header;
-	//   0 indicates we don't know have a header and have to lead the entire file
+	//   0 indicates we don't have a header and have to read the entire file
 	virtual S32 calcHeaderSize() { return 0; };
 	// calcDataSize() returns how many bytes to read to load discard_level (including header)
 	virtual S32 calcDataSize(S32 discard_level);
 	// calcDiscardLevelBytes() returns the smallest valid discard level based on the number of input bytes
 	virtual S32 calcDiscardLevelBytes(S32 bytes);
-	// getRawDiscardLevel()by default returns mDiscardLevel, but may be overridden (LLImageJ2C)
+	// getRawDiscardLevel() by default returns mDiscardLevel, but may be overridden (LLImageJ2C)
 	virtual S8  getRawDiscardLevel() { return mDiscardLevel; }
 	
 	BOOL load(const std::string& filename);

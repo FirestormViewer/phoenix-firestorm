@@ -45,6 +45,7 @@ class LLPanelVolumePulldown;
 class LLPanelNearByMedia;
 class LLIconCtrl;
 class LLParcelChangeObserver;
+class LLPanel;
 
 
 class LLRegionDetails
@@ -125,6 +126,9 @@ public:
 	LLRegionDetails mRegionDetails;
 
 	LLPanelNearByMedia* getNearbyMediaPanel() { return mPanelNearByMedia; }
+	BOOL getAudioStreamEnabled() const;
+	
+	void setBackgroundColor( const LLColor4& color );
 
 private:
 	
@@ -135,6 +139,7 @@ private:
 	void onMouseEnterNearbyMedia();
 	void onClickScreen(S32 x, S32 y);
 
+	static void onClickStreamToggle(void* data);		// ## Zi: Media/Stream separation
 	static void onClickMediaToggle(void* data);
 	
 	class LLParcelChangeObserver;
@@ -168,6 +173,11 @@ private:
 	void onInfoButtonClicked();
 
 	/**
+	 * Handles clicks on the parcel wl info button.
+	 */
+	void onParcelWLClicked();
+
+	/**
 	 * Called when agent changes the parcel.
 	 */
 	void onAgentParcelChange();
@@ -192,10 +202,21 @@ private:
 	 */
 	void updateParcelInfoText();
 
+public:
+
+	/**
+	 * Updates parcel panel pos (mParcelPanel).
+	 */
+	void updateParcelPanel();
+
 	/**
 	 * Updates parcel icons (mParcelIcon[]).
 	 */
 	void updateParcelIcons();
+
+	static void onClickBalance(void* data);
+
+private:
 
 	/**
 	 * Updates health information (mDamageText).
@@ -234,6 +255,8 @@ private:
 	LLStatGraph *mSGPacketLoss;
 
 	LLButton	*mBtnVolume;
+	LLTextBox	*mBoxBalance;
+	LLButton	*mStreamToggle;		// ## Zi: Media/Stream separation
 	LLButton	*mMediaToggle;
 	LLView*		mScriptOut;
 	LLFrameTimer	mClockUpdateTimer;
@@ -242,16 +265,20 @@ private:
 	S32				mHealth;
 	S32				mSquareMetersCredit;
 	S32				mSquareMetersCommitted;
+	BOOL			mAudioStreamEnabled;
 	LLFrameTimer*	mBalanceTimer;
 	LLFrameTimer*	mHealthTimer;
 	LLPanelVolumePulldown* mPanelVolumePulldown;
 	LLPanelNearByMedia*	mPanelNearByMedia;
 	
+	LLPanel* 				mParcelInfoPanel;
 	LLButton* 				mInfoBtn;
 	LLTextBox* 				mParcelInfoText;
 	LLTextBox* 				mDamageText;
 	LLIconCtrl*				mParcelIcon[ICON_COUNT];
 	LLParcelChangeObserver*	mParcelChangedObserver;
+	LLButton* 				mPWLBtn;
+	LLPanel*				mBalancePanel;
 
 	boost::signals2::connection	mParcelPropsCtrlConnection;
 	boost::signals2::connection	mShowCoordsCtrlConnection;

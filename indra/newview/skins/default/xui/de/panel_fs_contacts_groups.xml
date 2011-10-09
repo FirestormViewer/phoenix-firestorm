@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ name="groups">
+	<group_list
+	 name="group_list" />
+	<button
+	 label="IM/Anruf"
+	 name="chat_btn"
+	 tool_tip="Öffnet eine Instant-Message-Sitzung"
+	 width="85" />
+	<button
+	 label="Info"
+	 name="info_btn"
+	 width="85" />
+	<!--<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Titles..."
+	 name="titles_btn"
+	 width="80" />-->
+	<button
+	 label="Aktivieren"
+	 name="activate_btn"
+	 width="85" />
+	<button
+	 label="Verlassen"
+	 name="leave_btn"
+	 width="85" />
+	<button
+	 label="Erstellen..."
+	 name="create_btn"
+	 width="85" />
+	<button
+	 label="Suchen..."
+	 name="search_btn"
+	 width="85" />
+	<!--<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 font="SansSerif"
+	 height="22"
+	 label="Invite..."
+	 name="invite_btn"
+	 width="80" />-->
+  <text
+     name="groupcount">
+Du bist Mitglied bei [COUNT] Gruppen von max [MAX]. 
+</text>
+  <!--  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="16"
+   layout="topleft"
+   left="12"
+   name="group_label"
+   top="24"
+   width="50">
+    Total groups: 
+  </text>
+  <text
+   follows="top|left|right"
+   font="SansSerifBigBold"
+   height="29"
+   layout="topleft"
+   left="45"
+   name="group_count"
+   text_color="LtGray"
+   top="22"
+   value="42"
+   use_ellipses="true"
+   word_wrap="true"
+   visible="false"
+   width="255" />
+  <text
+  type="string"
+  length="1"
+  follows="left|top"
+  height="16"
+  layout="topleft"
+  left="12"
+  name="group_label"
+  top="24"
+  width="248">
+    of :
+  </text> <text
+  follows="top|left|right"
+  font="SansSerifBigBold"
+  height="29"
+  layout="topleft"
+  left="45"
+  name="group_count_max"
+  text_color="LtGray"
+  top="22"
+  value="42"
+  use_ellipses="true"
+  word_wrap="true"
+  visible="false"
+  width="255" /> -->
+</panel>

@@ -26,6 +26,7 @@
 		<text name="ShadersText">
 			Cieniowanie pixeli (shadery):
 		</text>
+		<check_box initial_value="prawda" label="Przeźroczystość wody" name="TransparentWater"/>
 		<check_box initial_value="true" label="Mapowanie wypukłości i połysk" name="BumpShiny"/>
 		<check_box initial_value="true" label="Podstawowe shadery" name="BasicShaders" tool_tip="Wyłączenie tej opcji może naprawić błędy niektórych sterowników graficznych."/>
 		<check_box initial_value="true" label="Shadery atmosfery" name="WindLightUseAtmosShaders"/>
@@ -39,6 +40,10 @@
 			<combo_box.item label="Awatary i obiekty" name="3"/>
 			<combo_box.item label="Wszystko" name="4"/>
 		</combo_box>
+		<slider label="Fizyka awatara:" name="AvatarPhysicsDetail"/>
+		<text name="AvatarPhysicsDetailText">
+			Niska
+		</text>
 		<slider label="Pole widzenia:" name="DrawDistance"/>
 		<text name="DrawDistanceMeterText2">
 			m
@@ -77,7 +82,7 @@
 			Mało
 		</text>
 		<text name="AvatarRenderingText">
-			Rendering awatarów
+			Rendering awatara:
 		</text>
 		<check_box initial_value="true" label="Impostoryzacja awatarowa" name="AvatarImpostors"/>
 		<check_box initial_value="true" label="Rendering awatara przez GPU" name="AvatarVertexProgram"/>

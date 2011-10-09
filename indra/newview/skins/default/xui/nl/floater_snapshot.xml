@@ -13,7 +13,7 @@
 	</text>
 	<button label="Ververs foto" name="new_snapshot_btn"/>
 	<button label="Verzenden" name="send_btn"/>
-	<button label="Opslaan (L$[AMOUNT])" name="upload_btn"/>
+	<button label="Opslaan" name="upload_btn"/>
 	<flyout_button label="Opslaan" name="save_btn" tool_tip="Afbeelding in een bestand opslaan">
 		<flyout_button_item name="save_item" label="Opslaan"/>
 		<flyout_button_item name="saveas_item" label="Opslaan als..."/>

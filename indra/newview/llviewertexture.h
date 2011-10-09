@@ -38,8 +38,8 @@
 #include <map>
 #include <list>
 
-#define MIN_VIDEO_RAM_IN_MEGA_BYTES    32
-#define MAX_VIDEO_RAM_IN_MEGA_BYTES    512 // 512MB max for performance reasons.
+#define MIN_VIDEO_RAM_IN_MEGA_BYTES    64
+#define MAX_VIDEO_RAM_IN_MEGA_BYTES    1024 // 512MB max for performance reasons. ~LL //Didn't notice any performance issue at 1024 with a 2GB graphics card. ~TM
 
 class LLFace;
 class LLImageGL ;
@@ -465,7 +465,7 @@ public:
 	S32         getCachedRawImageLevel() const {return mCachedRawDiscardLevel;}
 	BOOL        isCachedRawImageReady() const {return mCachedRawImageReady ;}
 	BOOL        isRawImageValid()const { return mIsRawImageValid ; }	
-	void        forceToSaveRawImage(S32 desired_discard = 0, bool from_callback = false) ;
+	void        forceToSaveRawImage(S32 desired_discard = 0, F32 kept_time = 0.f) ;
 	/*virtual*/ void setCachedRawImage(S32 discard_level, LLImageRaw* imageraw) ;
 	void        destroySavedRawImage() ;
 	LLImageRaw* getSavedRawImage() ;
@@ -550,6 +550,7 @@ protected:
 	S32 mSavedRawDiscardLevel;
 	S32 mDesiredSavedRawDiscardLevel;
 	F32 mLastReferencedSavedRawImageTime ;
+	F32 mKeptSavedRawImageTime ;
 
 	//a small version of the copy of the raw image (<= 64 * 64)
 	LLPointer<LLImageRaw> mCachedRawImage;

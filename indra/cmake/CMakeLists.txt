@@ -20,7 +20,6 @@ set(cmake_SOURCE_FILES
     CSharpMacros.cmake
     DBusGlib.cmake
     DirectX.cmake
-    ELFIO.cmake
     EXPAT.cmake
     FindAPR.cmake
     FindBerkeleyDB.cmake
@@ -29,20 +28,24 @@ set(cmake_SOURCE_FILES
     FindFMOD.cmake
     FindGooglePerfTools.cmake
     FindMono.cmake
-    FindMT.cmake
     FindMySQL.cmake
     FindOpenJPEG.cmake
     FindXmlRpcEpi.cmake
+    FindZLIB.cmake
     FMOD.cmake
     FreeType.cmake
+    GLOD.cmake
     GStreamer010Plugin.cmake
     GooglePerfTools.cmake
     Growl.cmake
+    HACD.cmake
+    Hunspell.cmake
     JPEG.cmake
     LLAddBuildTest.cmake
     LLAudio.cmake
     LLCharacter.cmake
     LLCommon.cmake
+    LLConvexDecomposition.cmake
     LLCrashLogger.cmake
     LLDatabase.cmake
     LLImage.cmake
@@ -77,7 +80,6 @@ set(cmake_SOURCE_FILES
     UI.cmake
     UnixInstall.cmake
     Variables.cmake
-    Versions.cmake
     XmlRpcEpi.cmake
     ZLIB.cmake
     )
@@ -86,7 +88,6 @@ source_group("Shared Rules" FILES ${cmake_SOURCE_FILES})
 
 set(master_SOURCE_FILES
     ../CMakeLists.txt
-    ../develop.py
     )
 
 if (SERVER)

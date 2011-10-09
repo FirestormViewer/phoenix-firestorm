@@ -65,6 +65,11 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
+// ## Zi: for chat channel spinner, typing animation
+#include "llnearbychat.h"
+#include "llspinctrl.h"
+// ## Zi: for chat channel spinner, typing animation
+
 //
 // Globals
 //
@@ -137,6 +142,9 @@ BOOL LLChatBar::postBuild()
 
 	mIsBuilt = TRUE;
 
+	PhoenixPlayChatAnimation = gSavedSettings.getBOOL("PhoenixPlayChatAnimation");
+	gSavedSettings.getControl("PhoenixPlayChatAnimation")->getSignal()->connect(boost::bind(&LLChatBar::updatePhoenixPlayChatAnimation, this, _2));
+
 	return TRUE;
 }
 
@@ -155,6 +163,18 @@ BOOL LLChatBar::handleKeyHere( KEY key, MASK mask )
 		{
 			// shout
 			sendChat(CHAT_TYPE_SHOUT);
+			handled = TRUE;
+		}
+		else if (mask == MASK_SHIFT)
+		{
+			// whisper
+			sendChat(CHAT_TYPE_WHISPER);
+			handled = TRUE;
+		}
+		else if (mask == MASK_ALT)
+		{
+			// OOC
+			sendChat(CHAT_TYPE_OOC);
 			handled = TRUE;
 		}
 		else if (mask == MASK_NONE)
@@ -356,6 +376,10 @@ LLWString LLChatBar::stripChannelNumber(const LLWString &mesg, S32* channel)
 	}
 }
 
+void LLChatBar::updatePhoenixPlayChatAnimation(const LLSD &data)
+{
+	PhoenixPlayChatAnimation = data.asBoolean();
+}
 
 void LLChatBar::sendChat( EChatType type )
 {
@@ -364,6 +388,14 @@ void LLChatBar::sendChat( EChatType type )
 		LLWString text = mInputEditor->getConvertedText();
 		if (!text.empty())
 		{
+			if(type == CHAT_TYPE_OOC)
+			{
+				std::string tempText = mInputEditor->getText();
+				tempText = gSavedSettings.getString("PhoenixOOCPrefix") + " " + tempText + " " + gSavedSettings.getString("PhoenixOOCPostfix");
+				mInputEditor->setText(tempText);
+				text = utf8str_to_wstring(tempText);
+			}
+
 			// store sent line in history, duplicates will get filtered
 			if (mInputEditor) mInputEditor->updateHistory();
 			// Check if this is destined for another channel
@@ -437,10 +469,16 @@ void LLChatBar::sendChat( EChatType type )
 
 			utf8_revised_text = utf8str_trim(utf8_revised_text);
 
+			EChatType nType;
+			if(type == CHAT_TYPE_OOC)
+				nType = CHAT_TYPE_NORMAL;
+			else
+				nType = type;
+
 			if (!utf8_revised_text.empty())
 			{
 				// Chat with animation
-				sendChatFromViewer(utf8_revised_text, type, TRUE);
+				sendChatFromViewer(utf8_revised_text, nType, PhoenixPlayChatAnimation);
 			}
 		}
 	}
@@ -451,7 +489,7 @@ void LLChatBar::sendChat( EChatType type )
 
 	// If the user wants to stop chatting on hitting return, lose focus
 	// and go out of chat mode.
-	if (gChatBar == this && gSavedSettings.getBOOL("CloseChatOnReturn"))
+	if (gChatBar == this && (gSavedSettings.getBOOL("CloseChatOnReturn") || gSavedSettings.getBOOL("AutohideChatBar")))
 	{
 		stopChat();
 	}
@@ -531,13 +569,30 @@ void LLChatBar::onInputEditorKeystroke( LLLineEditor* caller, void* userdata )
 
 	S32 length = raw_text.length();
 
+	// Get the currently selected channel from the channel spinner in the nearby chat bar, if present and used.
+	// NOTE: Parts of the gAgent.startTyping() code are duplicated in 3 places:
+	// - llnearbychatbar.cpp
+	// - llchatbar.cpp
+	// - llnearbychat.cpp
+	// So be sure to look in all three places if changes are needed. This needs to be addressed at some point.
+	// -Zi
+	S32 channel=0;
+	if (gSavedSettings.getBOOL("PhoenixNearbyChatbar") &&
+		gSavedSettings.getBOOL("PhoenixShowChatChannel"))
+	{
+		channel = (S32)(LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+	}
+	// -Zi
+
 //	if( (length > 0) && (raw_text[0] != '/') )  // forward slash is used for escape (eg. emote) sequences
 // [RLVa:KB] - Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.0d
 	// RELEASE-RLVa: [SL-2.0.0] This entire class appears to be dead/non-functional?
 	if ( (length > 0) && (raw_text[0] != '/') && (!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT)) )
 // [/RLVa:KB]
 	{
-		gAgent.startTyping();
+		// only start typing animation if we are chatting without / on channel 0 -Zi
+		if(channel==0)
+			gAgent.startTyping();
 	}
 	else
 	{
@@ -749,6 +804,9 @@ void LLChatBar::onCommitGesture(LLUICtrl* ctrl)
 	}
 }
 
+
+/* Cruft - global gChatHandler declared below has been commented out,
+   so this class is never used.  See similar code in llnearbychatbar.cpp
 class LLChatHandler : public LLCommandHandler
 {
 public:
@@ -769,7 +827,7 @@ public:
 		{
 		S32 channel = tokens[0].asInteger();
 			// VWR-19499 Restrict function to chat channels greater than 0.
-			if ((channel > 0) && (channel < 2147483647))
+			if ((channel > 0) && (channel < CHAT_CHANNEL_DEBUG))
 			{
 				retval = true;
 				// Say mesg on channel
@@ -788,3 +846,4 @@ public:
 
 // Creating the object registers with the dispatcher.
 //LLChatHandler gChatHandler;
+cruft */

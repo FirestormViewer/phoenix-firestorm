@@ -51,6 +51,23 @@
              function="Floater.Show"
              parameter="sl_about" />
         </menu_item_call>
+        <menu_item_separator name="grid_help_seperator_login"/>
+        <menu_item_call
+         label="[CURRENT_GRID] Help"
+         name="current_grid_help_login">
+            <menu_item_call.on_click
+             function="ShowHelp"
+             parameter="grid_help" />
+        </menu_item_call>
+        <menu_item_call
+         label="About [CURRENT_GRID]"
+         name="current_grid_about_login">
+            <menu_item_call.on_click
+             function="ShowHelp"
+             parameter="grid_about" />
+        </menu_item_call>
+	
+        <menu_item_separator/>
     </menu>
     <menu_item_check
       label="Show Debug Menu"
@@ -177,13 +194,19 @@
              parameter="message_critical" />
         </menu_item_call>
         <menu_item_call
-         label="Web Browser Test"
+         label="Media Browser Test"
          name="Web Browser Test">
           <menu_item_call.on_click
            function="Advanced.WebBrowserTest"
            parameter="http://join.secondlife.com/"/>
         </menu_item_call>
-      <menu_item_separator/>
+      <menu_item_call
+       label="Web Content Floater Debug Test"
+       name="Web Content Floater Debug Test">
+        <menu_item_call.on_click
+         function="Advanced.WebContentTest"
+         parameter="http://google.com"/>
+      </menu_item_call>
       <menu_item_check
         label="Show Grid Picker"
         name="Show Grid Picker"

@@ -18,11 +18,12 @@ Maximal 200 pro Gruppe täglich
 		<scroll_list.columns label="Von" name="from"/>
 		<scroll_list.columns label="Datum" name="date"/>
 	</scroll_list>
+	<button label="Neue Mitteilung" label_selected="Neue Mitteilung" name="create_new_notice" tool_tip="Neue Mitteilung erstellen" width="120"/>
+	<button label="Aktualisieren" label_selected="Liste aktualisieren" name="refresh_notices" tool_tip="Mitteilungsliste aktualisieren"/>
 	<text name="notice_list_none_found">
 		Nicht gefunden.
 	</text>
-	<button label="Neue Mitteilung" label_selected="Neue Mitteilung" name="create_new_notice" tool_tip="Neue Mitteilung erstellen"/>
-	<button label="Aktualisieren" label_selected="Liste aktualisieren" name="refresh_notices" tool_tip="Mitteilungsliste aktualisieren"/>
+
 	<panel label="Neue Mitteilung" name="panel_create_new_notice">
 		<text name="lbl">
 			Mitteilung schreiben
@@ -36,7 +37,7 @@ Maximal 200 pro Gruppe täglich
 		<text name="lbl5">
 			Anhängen:
 		</text>
-		<text name="string">
+		<text name="drag_and_drop_help">
 			Das Objekt hierhin ziehen und ablegen, um es anzuhängen:
 		</text>
 		<button label="Inventar" name="open_inventory" tool_tip="Inventar öffnen"/>
@@ -44,18 +45,22 @@ Maximal 200 pro Gruppe täglich
 		<button label="Senden" label_selected="Senden" name="send_notice"/>
 		<group_drop_target name="drop_target" tool_tip="Ziehen Sie ein Objekt aus Ihrem Inventar auf dieses Feld, um es mit dieser Mitteilung zu versenden. Um das Objekt anhängen zu können, müssen Sie die Erlaubnis zum Kopieren und Übertragen besitzen."/>
 	</panel>
+	
 	<panel label="Ältere Notiz anzeigen" name="panel_view_past_notice">
 		<text name="lbl">
 			Archivierte Mitteilung
 		</text>
 		<text name="lbl2">
-			Um eine neue Mitteilung zu senden, klicken Sie die Schaltfläche +
+			Um eine neue Mitteilung zu senden, klicken Sie die + Neue Mitteilung
 		</text>
 		<text name="lbl3">
 			Betreff:
 		</text>
 		<text name="lbl4">
 			Nachricht:
+		</text>
+		<text name="lbl5">
+			Anhang:
 		</text>
 		<button label="Anhang öffnen" label_selected="Anlage öffnen" name="open_attachment"/>
 	</panel>

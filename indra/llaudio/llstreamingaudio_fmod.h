@@ -48,6 +48,9 @@ class LLStreamingAudio_FMOD : public LLStreamingAudioInterface
 	/*virtual*/ void setGain(F32 vol);
 	/*virtual*/ F32 getGain();
 	/*virtual*/ std::string getURL();
+	/*virtual*/ bool hasNewMetadata();
+	/*virtual*/ std::string getCurrentArtist();
+	/*virtual*/ std::string getCurrentTitle();
 
 private:
 	LLAudioStreamManagerFMOD *mCurrentInternetStreamp;

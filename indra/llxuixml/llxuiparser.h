@@ -28,7 +28,6 @@
 #define LLXUIPARSER_H
 
 #include "llinitparam.h"
-#include "llfasttimer.h"
 #include "llregistry.h"
 #include "llpointer.h"
 
@@ -95,6 +94,7 @@ public:
 };
 
 
+class LLXUIParserImpl;
 
 class LLXUIParser : public LLInitParam::Parser
 {
@@ -116,6 +116,7 @@ private:
 	bool readAttributes(LLXMLNodePtr nodep, LLInitParam::BaseBlock& block);
 
 	//reader helper functions
+	static bool readNoValue(Parser& parser, void* val_ptr);
 	static bool readBoolValue(Parser& parser, void* val_ptr);
 	static bool readStringValue(Parser& parser, void* val_ptr);
 	static bool readU8Value(Parser& parser, void* val_ptr);
@@ -132,6 +133,7 @@ private:
 	static bool readSDValue(Parser& parser, void* val_ptr);
 
 	//writer helper functions
+	static bool writeNoValue(Parser& parser, const void* val_ptr, const name_stack_t&);
 	static bool writeBoolValue(Parser& parser, const void* val_ptr, const name_stack_t&);
 	static bool writeStringValue(Parser& parser, const void* val_ptr, const name_stack_t&);
 	static bool writeU8Value(Parser& parser, const void* val_ptr, const name_stack_t&);
@@ -174,6 +176,7 @@ private:
 // ordering of child elements from base file to localized diff file.  Then we can use a pair
 // of coroutines to perform matching of xml nodes during parsing.  Not sure if the overhead
 // of coroutines would offset the gain from SAX parsing
+class LLSimpleXUIParserImpl;
 
 class LLSimpleXUIParser : public LLInitParam::Parser
 {
@@ -194,6 +197,7 @@ public:
 
 private:
 	//reader helper functions
+	static bool readNoValue(Parser&, void* val_ptr);
 	static bool readBoolValue(Parser&, void* val_ptr);
 	static bool readStringValue(Parser&, void* val_ptr);
 	static bool readU8Value(Parser&, void* val_ptr);
@@ -218,7 +222,7 @@ private:
 	void endElement(const char *name);
 	void characterData(const char *s, int len);
 	bool readAttributes(const char **atts);
-	void processText();
+	bool processText();
 
 	Parser::name_stack_t			mNameStack;
 	struct XML_ParserStruct*		mParser;
@@ -230,6 +234,7 @@ private:
 	const char*						mCurAttributeValueBegin;
 	std::vector<S32>				mTokenSizeStack;
 	std::vector<std::string>		mScope;
+	std::vector<bool>				mEmptyLeafNode;
 	element_start_callback_t		mElementCB;
 
 	std::vector<std::pair<LLInitParam::BaseBlock*, S32> > mOutputStack;

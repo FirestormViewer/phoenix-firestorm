@@ -52,6 +52,10 @@
 #include "llfloatertools.h"
 #include "llviewercontrol.h"
 
+// NaCl - Rightclick-mousewheel zoom
+#include "llviewercamera.h"
+// NaCl End
+
 const S32 BUTTON_HEIGHT = 16;
 const S32 BUTTON_WIDTH_SMALL = 32;
 const S32 BUTTON_WIDTH_BIG = 48;
@@ -741,9 +745,30 @@ BOOL LLToolCompGun::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	*/
 
 	// Returning true will suppress the context menu
+	// NaCl - Rightclick-mousewheel zoom
+	static LLCachedControl<LLVector3> _NACL_MLFovValues(gSavedSettings,"_NACL_MLFovValues");
+	static LLCachedControl<F32> CameraAngle(gSavedSettings,"CameraAngle");
+	LLVector3 vTemp=_NACL_MLFovValues;
+	vTemp.mV[0]=CameraAngle;
+	vTemp.mV[2]=1.0f;
+	gSavedSettings.setVector3("_NACL_MLFovValues",vTemp);
+	gSavedSettings.setF32("CameraAngle",vTemp.mV[1]);
+	// NaCl End
 	return TRUE;
 }
-
+// NaCl - Rightclick-mousewheel zoom
+BOOL LLToolCompGun::handleRightMouseUp(S32 x, S32 y, MASK mask)
+{
+	static LLCachedControl<LLVector3> _NACL_MLFovValues(gSavedSettings,"_NACL_MLFovValues");
+	static LLCachedControl<F32> CameraAngle(gSavedSettings,"CameraAngle");
+	LLVector3 vTemp=_NACL_MLFovValues;
+	vTemp.mV[1]=CameraAngle;
+	vTemp.mV[2]=0.0f;
+	gSavedSettings.setVector3("_NACL_MLFovValues",vTemp);
+	gSavedSettings.setF32("CameraAngle",vTemp.mV[0]);
+	return TRUE;
+}
+// NaCl End
 
 BOOL LLToolCompGun::handleMouseUp(S32 x, S32 y, MASK mask)
 {
@@ -777,7 +802,19 @@ void	LLToolCompGun::handleDeselect()
 
 BOOL LLToolCompGun::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
-	if (clicks > 0)
+	// NaCl - Rightclick-mousewheel zoom
+	static LLCachedControl<LLVector3> _NACL_MLFovValues(gSavedSettings,"_NACL_MLFovValues");
+	static LLCachedControl<F32> CameraAngle(gSavedSettings,"CameraAngle");
+	LLVector3 vTemp=_NACL_MLFovValues;
+	vTemp.mV[1]=CameraAngle;
+	if(vTemp.mV[2] > 0.0f)
+	{
+		vTemp.mV[1]=llclamp((vTemp.mV[1])+(F32)(clicks*0.1),LLViewerCamera::getInstance()->getMinView(),LLViewerCamera::getInstance()->getMaxView());
+		gSavedSettings.setVector3("_NACL_MLFovValues",vTemp);
+		gSavedSettings.setF32("CameraAngle",vTemp.mV[1]);
+	}
+	else if (clicks > 0)
+	// NaCl End
 	{
 		gAgentCamera.changeCameraToDefault();
 

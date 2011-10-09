@@ -144,6 +144,7 @@ public:
 	bool buildFromFile(const std::string &filename, LLXMLNodePtr output_node = NULL);
 
 	boost::signals2::connection setMinimizeCallback( const commit_signal_t::slot_type& cb );
+	boost::signals2::connection setCloseCallback( const commit_signal_t::slot_type& cb );
 
 	void initFromParams(const LLFloater::Params& p);
 	bool initFloaterXML(LLXMLNodePtr node, LLView *parent, const std::string& filename, LLXMLNodePtr output_node = NULL);
@@ -253,7 +254,7 @@ public:
 
 	LLHandle<LLFloater> getHandle() const { return mHandle; }
 	const LLSD& 	getKey() { return mKey; }
-	BOOL		 	matchesKey(const LLSD& key) { return mSingleInstance || KeyCompare::equate(key, mKey); }
+	virtual bool	matchesKey(const LLSD& key) { return mSingleInstance || KeyCompare::equate(key, mKey); }
 	
 	const std::string& getInstanceName() { return mInstanceName; }
 	
@@ -264,6 +265,8 @@ public:
 	virtual void    setDocked(bool docked, bool pop_on_undock = true);
 
 	virtual void    setTornOff(bool torn_off) { mTornOff = torn_off; }
+
+	void			stackWith(LLFloater& other);
 
 	// Return a closeable floater, if any, given the current focus.
 	static LLFloater* getClosableFloaterFromFocus(); 
@@ -289,9 +292,6 @@ public:
 	void			updateTransparency(ETypeTransparency transparency_type);
 		
 protected:
-
-	void			setRectControl(const std::string& rectname) { mRectControl = rectname; };
-
 	virtual void    applySavedVariables();
 
 	void			applyRectControl();
@@ -460,8 +460,6 @@ protected:
 public:
 
 	/*virtual*/ void reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
-	void reshapeFloater(S32 width, S32 height, BOOL called_from_parent, BOOL adjust_vertical);
-
 	/*virtual*/ void draw();
 	/*virtual*/ LLRect getSnapRect() const;
 	/*virtual*/ void refresh();
@@ -501,10 +499,10 @@ public:
 	// value is not defined.
 	S32 getZOrder(LLFloater* child);
 
-	void setSnapOffsetBottom(S32 offset) { mSnapOffsetBottom = offset; }
-	void setSnapOffsetRight(S32 offset) { mSnapOffsetRight = offset; }
+	void setFloaterSnapView(LLHandle<LLView> snap_view) {mSnapView = snap_view; }
 
 private:
+	LLHandle<LLView>	mSnapView;
 	BOOL			mFocusCycleMode;
 	S32				mSnapOffsetBottom;
 	S32				mSnapOffsetRight;

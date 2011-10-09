@@ -2,7 +2,7 @@
 	<map>
 		<!-- default-level can be ALL, DEBUG, INFO, WARN, ERROR, or NONE -->
 		<key>default-level</key>    <string>INFO</string>
-		<key>print-location</key>   <boolean>false</boolean>
+		<key>print-location</key>   <boolean>true</boolean>
 		<key>settings</key>
 			<array>
 				<!-- sample entry for changing settings on specific items -->
@@ -20,6 +20,7 @@
 					<key>tags</key>
 						<array>
 							<string>AppInit</string>
+              						<string>Capabilities</string>
 							<string>SystemInfo</string>
 							<string>TextureCache</string>
 							<string>AppCache</string>
@@ -41,6 +42,8 @@
 						</array>
 					<key>tags</key>
 						<array>
+						<string>parseFile</string>
+<!--						<string>AvNameCache</string> -->
 							<!-- sample entry for debugging a specific item	-->
 <!--						<string>Voice</string>							-->
 						</array>

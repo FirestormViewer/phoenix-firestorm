@@ -28,12 +28,14 @@
 #include "llagent.h"
 #include "llcallingcard.h" // isBuddy
 #include "llstartup.h"
+#include "llstatusbar.h"
 #include "llparcel.h"
 #include "llviewercontrol.h" // gSavedSettings, gSavedPerAccountSettings
 #include "llviewermenu.h" // is_agent_friend
 #include "llviewerparcelmgr.h"
 #include "llwlparammanager.h"
 #include "llwaterparammanager.h"
+#include "lldaycyclemanager.h"
 
 #include <boost/regex.hpp>
 
@@ -44,26 +46,44 @@ const S32 PARCEL_WL_MIN_ALT_CHANGE = 3;
 
 KCWindlightInterface::KCWindlightInterface() :
 	LLEventTimer(PARCEL_WL_CHECK_TIME),
-	WLset(FALSE),
+	mWLset(false),
 	mWeChangedIt(false),
 	mCurrentSpace(-2.f),
-	mLastParcelID(-1)
+	mLastParcelID(-1),
+	mLastRegion(NULL),
+	mRegionOverride(false),
+	mHaveRegionSettings(false)
 {
-
+	if (!gSavedSettings.getBOOL("PhoenixWLParcelEnabled") ||
+	!gSavedSettings.getBOOL("UseEnvironmentFromRegionAlways"))
+	{
+		mEventTimer.stop();
+		mDisabled = true;
+	}
 }
 
 void KCWindlightInterface::ParcelChange()
 {
-	if (!gSavedSettings.getBOOL("PhoenixWLParcelEnabled") ||
-	(rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) )
+	if (checkSettings())
 		return;
+	
+	mDisabled = false;
 
 	LLParcel *parcel = NULL;
 	S32 this_parcel_id = 0;
 	std::string desc;
- 
+
  	parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
- 
+
+	// Since we cannot depend on the order in which the EnvironmentSettings cap and parcel info
+	// will come in, we must check if the other has set something before this one for the current region.
+	if (gAgent.getRegion() != mLastRegion)
+	{
+		mRegionOverride = false;
+		mHaveRegionSettings = false;
+		mLastRegion = gAgent.getRegion();
+	}
+
 	if (parcel)
 	{
 		this_parcel_id = parcel->getLocalID();
@@ -78,7 +98,7 @@ void KCWindlightInterface::ParcelChange()
 		mLastParcelDesc = desc;
 		mCurrentSpace = -2.f;
 		mCurrentSettings.clear();
-		WLset = false; //clear the status bar icon
+		setWL_Status(false); //clear the status bar icon
 		const LLVector3& agent_pos_region = gAgent.getPositionAgent();
 		mLastZ = lltrunc( agent_pos_region.mV[VZ] );
 
@@ -92,12 +112,19 @@ void KCWindlightInterface::ParcelChange()
 		
 		mEventTimer.reset();
 		mEventTimer.start();
+		
+		// Apply new WL settings instantly on TP
+		if (mTPing)
+		{
+			mTPing = false;
+			tick();
+		}
 	}
 }
 
 BOOL KCWindlightInterface::tick()
 {
-	if(LLStartUp::getStartupState() < STATE_STARTED)
+	if ((LLStartUp::getStartupState() < STATE_STARTED) || checkSettings())
 		return FALSE;
 	
 	//TODO: there has to be a better way of doing this...
@@ -134,13 +161,15 @@ void KCWindlightInterface::ApplySettings(const LLSD& settings)
 	if (!settings.has("local_id") || (settings["local_id"].asInteger() == parcel->getLocalID()) )
 	{
 		mCurrentSettings = settings;
+		
+		mRegionOverride = settings.has("region_override");
 
 		ApplySkySettings(settings);
 
-		if (settings.has("water"))
+		if (settings.has("water") && (!mHaveRegionSettings || mRegionOverride))
 		{
-			LLWaterParamManager::instance()->loadPreset(settings["water"].asString(), true);
-			WLset = true;
+			LLEnvManagerNew::instance().setUseWaterPreset(settings["water"].asString(), gSavedSettings.getBOOL("PhoenixInterpolateParcelWL"));
+			setWL_Status(true);
 		}
 	}
 }
@@ -163,9 +192,9 @@ void KCWindlightInterface::ApplySkySettings(const LLSD& settings)
 			if ( (z >= lower) && (z <= upper) )
 			{
 				if (lower != mCurrentSpace) //workaround: only apply once
-			{
-				mCurrentSpace = lower; //use lower as an id
-				ApplyWindLightPreset((*space_it)["preset"].asString());
+				{
+					mCurrentSpace = lower; //use lower as an id
+					ApplyWindLightPreset((*space_it)["preset"].asString());
 				}
 				return;
 			}
@@ -175,12 +204,13 @@ void KCWindlightInterface::ApplySkySettings(const LLSD& settings)
 	if (mCurrentSpace != -1.f)
 	{
 		mCurrentSpace = -1.f;
-		if (settings.has("sky_default"))
+		// set notes on KCWindlightInterface::haveParcelOverride
+		if (settings.has("sky_default") && (!mHaveRegionSettings || mRegionOverride))
 		{
 			//llinfos << "WL set : " << settings["sky_default"] << llendl;
 			ApplyWindLightPreset(settings["sky_default"].asString());
 		}
-		else if (!LLWLParamManager::instance()->mAnimator.mUseLindenTime) //reset to default
+		else //reset to default
 		{
 			//llinfos << "WL set : Default" << llendl;
 			ApplyWindLightPreset("Default");
@@ -193,23 +223,19 @@ void KCWindlightInterface::ApplyWindLightPreset(const std::string& preset)
 	if (rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV))
 		return;
 
-	LLWLParamManager* wlprammgr = LLWLParamManager::instance();
-	if ( (preset != "Default") && (wlprammgr->mParamList.find(preset) != wlprammgr->mParamList.end()) )
+	LLWLParamManager* wlprammgr = LLWLParamManager::getInstance();
+	LLWLParamKey key(preset, LLEnvKey::SCOPE_LOCAL);
+	if ( (preset != "Default") && (wlprammgr->hasParamSet(key)) )
 	{
-		wlprammgr->mAnimator.mIsRunning = false;
-		wlprammgr->mAnimator.mUseLindenTime = false;
-		wlprammgr->loadPreset(preset);
-		WLset = true;
+		LLEnvManagerNew::instance().setUseSkyPreset(preset, gSavedSettings.getBOOL("PhoenixInterpolateParcelWL"));
+		setWL_Status(true);
 		mWeChangedIt = true;
 	}
 	else
 	{
-		wlprammgr->mAnimator.mIsRunning = true;
-		wlprammgr->mAnimator.mUseLindenTime = true;
-		wlprammgr->loadPreset("Default", true);
-		//KC: reset last to Default
-		gSavedPerAccountSettings.setString("PhoenixLastWLsetting", "Default");
-		WLset = false;
+		if (!LLEnvManagerNew::instance().getUseRegionSettings())
+			LLEnvManagerNew::instance().setUseRegionSettings(true, gSavedSettings.getBOOL("PhoenixInterpolateParcelWL"));
+		setWL_Status(false);
 		mWeChangedIt = false;
 	}
 }
@@ -223,10 +249,6 @@ void KCWindlightInterface::ResetToRegion(bool force)
 	if (mWeChangedIt || force) //dont reset anything if we didnt do it
 	{
 		ApplyWindLightPreset("Default");
-
-		LLWaterParamManager::instance()->loadPreset("Default", true);
-		//KC: reset last to Default
-		gSavedPerAccountSettings.setString("PhoenixLastWWsetting", "Default");
 	}
 }
 
@@ -347,13 +369,13 @@ bool KCWindlightInterface::ParsePacelForWLSettings(const std::string& desc, LLSD
 			//llinfos << "found parcel flags block: " << mat_block[1] << llendl;
 			
 			S32 sky_index = 0;
-			LLWLParamManager* wlprammgr = LLWLParamManager::instance();
-			LLWaterParamManager* wwprammgr = LLWaterParamManager::instance();
+			LLWLParamManager* wlprammgr = LLWLParamManager::getInstance();
+			LLWaterParamManager* wwprammgr = LLWaterParamManager::getInstance();
 			boost::smatch match;
 			std::string::const_iterator start = mat_block[1].first;
 			std::string::const_iterator end = mat_block[1].second;
 			//Sky: "preset" Water: "preset"
-			const boost::regex key("(?i)(?:(?:(Sky)(?:\\s?@\\s?([\\d]+)m?\\s?(?:to|-)\\s?([\\d]+)m?)?)|(Water))\\s?:\\s?\"([^\"\\r\\n]+)\"");
+			const boost::regex key("(?i)(?:(?:(Sky)(?:\\s?@\\s?([\\d]+)m?\\s?(?:to|-)\\s?([\\d]+)m?)?)|(Water))\\s?:\\s?\"([^\"\\r\\n]+)\"|(RegionOverride)");
 			while (boost::regex_search(start, end, match, key, boost::match_default))
 			{
 				if (match[1].matched)
@@ -361,7 +383,8 @@ bool KCWindlightInterface::ParsePacelForWLSettings(const std::string& desc, LLSD
 					//llinfos << "sky flag: " << match[1] << " : " << match[2] << " : " << match[3] << " : " << match[5] << llendl;
 
 					std::string preset(match[5]);
-					if(wlprammgr->mParamList.find(preset) != wlprammgr->mParamList.end())
+					LLWLParamKey key(preset, LLEnvKey::SCOPE_LOCAL);
+					if(wlprammgr->hasParamSet(key))
 					{
 						if (match[2].matched && match[3].matched)
 						{
@@ -390,11 +413,17 @@ bool KCWindlightInterface::ParsePacelForWLSettings(const std::string& desc, LLSD
 				{
 					std::string preset(match[5]);
 					//llinfos << "got water: " << preset << llendl;
-					if(wwprammgr->mParamList.find(preset) != wwprammgr->mParamList.end())
+					if(wwprammgr->hasParamSet(preset))
 					{
 						settings["water"] = preset;
 						found_settings = true;
 					}
+				}
+				else if (match[6].matched)
+				{
+					std::string preset(match[5]);
+					llinfos << "got region override flag" << llendl;
+					settings["region_override"] = true;
 				}
 				
 				// update search position 
@@ -420,7 +449,7 @@ void KCWindlightInterface::onClickWLStatusButton()
 		mClearWLNotification->respond(response);
 	}
 
-	if (WLset)
+	if (mWLset)
 	{
 		LLParcel *parcel = NULL;
  		parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
@@ -525,3 +554,56 @@ default
     }
 }
 */
+
+// Region settings are prefered for default parcel ones
+// But parcel height mapped skies always override region's
+// And parcels can use the "RegionOverride" in their config line
+bool KCWindlightInterface::haveParcelOverride(const LLEnvironmentSettings& new_settings)
+{
+	// Since we cannot depend on the order in which the EnvironmentSettings cap and parcel info
+	// will come in, we must check if the other has set something before this one for the current region.
+	if (gAgent.getRegion() != mLastRegion)
+	{
+		mRegionOverride = false;
+		mCurrentSettings.clear();
+		mLastRegion = gAgent.getRegion();
+	}
+	
+	//*ASSUMPTION: if region day cycle is empty, its set to default
+	mHaveRegionSettings = new_settings.getWLDayCycle().size() > 0;
+	
+	return  mRegionOverride || mCurrentSpace != -1.f;
+}
+
+void KCWindlightInterface::setWL_Status(bool pwl_status)
+{
+	mWLset = pwl_status;
+	gStatusBar->updateParcelIcons();
+}
+
+bool KCWindlightInterface::checkSettings()
+{
+	static LLCachedControl<bool> sPhoenixWLParcelEnabled(gSavedSettings, "PhoenixWLParcelEnabled");
+	static LLCachedControl<bool> sUseEnvironmentFromRegionAlways(gSavedSettings, "UseEnvironmentFromRegionAlways");
+	if (!sPhoenixWLParcelEnabled || !sUseEnvironmentFromRegionAlways ||
+	(rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)))
+	{
+		// The setting changed, clear everything
+		if (!mDisabled)
+		{
+			mCurrentSettings.clear();
+			mWeChangedIt = false;
+			mCurrentSpace = -2.f;
+			mLastParcelID = -1;
+			mRegionOverride = false;
+			mHaveRegionSettings = false;
+			mLastRegion = NULL;
+			mEventTimer.stop();
+			setWL_Status(false);
+			mDisabled = true;
+		}
+		return true;
+	}
+	mDisabled = false;
+	return false;
+}

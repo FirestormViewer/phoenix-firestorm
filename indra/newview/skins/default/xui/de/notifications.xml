@@ -72,9 +72,9 @@ Fehlerdetails: The notification called &apos;[_NAME]&apos; was not found in noti
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		Eine Verbindung zum [SECOND_LIFE_GRID] konnte nicht hergestellt werden.
-&apos;[DIAGNOSTIC]&apos;
-Bitte vergewissern Sie sich, dass Ihre Internetverbindung funktioniert.
+		Verbindung nicht möglich zum [SECOND_LIFE_GRID].
+    &apos;[DIAGNOSTIC]&apos;
+Stellen Sie sicher, dass Ihre Internetverbindung funktioniert.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="MessageTemplateNotFound">
@@ -108,6 +108,10 @@ Wählen Sie ein einzelnes Objekt aus und versuchen Sie es erneut.
 	<notification name="FriendsAndGroupsOnly">
 		Leute, die nicht auf Ihrer Freundesliste stehen, werden nicht wissen, dass Sie deren Anrufe oder Sofortnachrichten ignoriert haben.
 		<usetemplate name="okbutton" yestext="Ja"/>
+	</notification>
+	<notification name="FavoritesOnLogin">
+		Hinweis: Bei Aktivierung dieser Option sehen alle Personen, die diesen Computer benutzen, Ihre Lieblingsorte.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="GrantModifyRights">
 		Wenn Sie einem anderen Einwohner Änderungsrechte gewähren, dann kann dieser JEDES Objekt, das Sie inworld besitzen, ändern, löschen oder an sich nehmen. Seien Sie daher beim Gewähren dieser Rechte sehr vorsichtig!
@@ -212,7 +216,7 @@ Der Verkaufspreis beträgt [SALE_PRICE] L$. Der Verkauf an [NAME] wird zu diesem
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
-		ACHTUNG: Wenn Sie auf An jeden verkaufen klicken, kann jeder in [SECOND_LIFE] Ihr Land kaufen, auch Einwohner in anderen Regionen.
+		ACHTUNG: Wenn Sie auf An jeden verkaufen klicken, kann jeder in [CURRENT_GRID] Ihr Land kaufen, auch Einwohner in anderen Regionen.
 
 Die ausgewählten [LAND_SIZE] m² Land werden zum Verkauf freigegeben.
 Der Verkaufspreis beträgt [SALE_PRICE] L$. Der Verkauf an [NAME] wird zu diesem Preis freigegeben.
@@ -307,7 +311,7 @@ Um Medien nur auf einer Fläche einzufügen, wählen Sie „Oberfläche auswähl
 		Ein Report-Screenshot konnte aus folgendem Grund nicht hochgeladen werden: [REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
-		Bevor Sie sich in [SECOND_LIFE] anmelden können, müssen Sie den Nutzungsbedingungen zustimmen.
+		Bevor Sie sich in [CURRENT_GRID] anmelden können, müssen Sie den Nutzungsbedingungen zustimmen.
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Outfit konnte nicht angezogen werden.
@@ -327,7 +331,7 @@ Der Outfit-Ordner enthält keine Kleidung, Körperteile oder Anhänge.
 		Sue haben ein Feld leer gelassen.
 Sie müssen den Benutzernamen Ihres Avatars eingeben.
 
-Sie benötigen ein Konto, um [SECOND_LIFE] betreten zu können. Möchten Sie jetzt ein Konto erstellen?
+Sie benötigen ein Konto, um [CURRENT_GRID] betreten zu können. Möchten Sie jetzt ein Konto erstellen?
 		<url name="url">
 			https://join.secondlife.com/index.php?lang=de-DE
 		</url>
@@ -335,13 +339,6 @@ Sie benötigen ein Konto, um [SECOND_LIFE] betreten zu können. Möchten Sie jet
 	</notification>
 	<notification name="InvalidCredentialFormat">
 		Sie müssen entweder den Benutzernamen oder den Vor- und Nachnamen Ihres Avatars in das Feld „Benutzername“ eingeben und die Anmeldung dann erneut versuchen.
-	</notification>
-	<notification name="AddClassified">
-		Anzeigen werden im Suchverzeichnis im Abschnitt „Anzeigen&quot; und auf [http://secondlife.com/community/classifieds secondlife.com] für eine Woche angezeigt.
-Füllen Sie Ihre Anzeige aus und klicken Sie auf &apos;Veröffentlichen...&apos;, um sie zum Verzeichnis hinzuzufügen.
-Sie werden gebeten für die Anzeige zu bezahlen, wenn Sie auf &apos;Veröffentlichen&apos; klicken.
-Wenn Sie mehr bezahlen, erscheint Ihre Anzeige weiter oben in der Liste, ebenso wenn ein Benutzer nach Ihren Suchbegriffen sucht.
-		<usetemplate ignoretext="So wird eine neue Anzeige erstellt" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="DeleteClassified">
 		Anzeige „[NAME]“ löschen?
@@ -370,7 +367,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="PromptGoToEventsPage">
-		Zur [SECOND_LIFE] Events-Webseite?
+		Zur [CURRENT_GRID] Events-Webseite?
 		<url name="url">
 			http://secondlife.com/events/?lang=de-DE
 		</url>
@@ -399,7 +396,7 @@ Hinweis: Der Cache wird dabei gelöscht/geleert.
 		Die Sprachänderung tritt nach Neustart von [APP_NAME] in Kraft.
 	</notification>
 	<notification name="GoToAuctionPage">
-		Zur [SECOND_LIFE]-Webseite, um Auktionen anzuzeigen oder ein Gebot abzugeben?
+		Zur [CURRENT_GRID]-Webseite, um Auktionen anzuzeigen oder ein Gebot abzugeben?
 		<url name="url">
 			http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
 		</url>
@@ -931,7 +928,7 @@ Land zusammenlegen?
 Dies ist ein temporärer Fehler. Bitte passen Sie das Kleidungsstück in einigen Minuten noch einmal an und speichern Sie es erneut.
 	</notification>
 	<notification name="YouHaveBeenLoggedOut">
-		Es tut uns leid! Sie wurden von [SECOND_LIFE] abgemeldet.
+		Es tut uns leid! Sie wurden von [CURRENT_GRID] abgemeldet.
             [MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="Beenden" yestext="IM &amp; Chat anzeigen"/>
 	</notification>
@@ -957,7 +954,7 @@ Sie sind nicht berechtigt, Land für die aktive Gruppe zu kaufen.
 			<input name="message">
 				[DESC] (neu)
 			</input>
-			<button name="Offer" text="OK"/>
+			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
@@ -967,7 +964,7 @@ Sie sind nicht berechtigt, Land für die aktive Gruppe zu kaufen.
 			<input name="message">
 				[DESC] (neu)
 			</input>
-			<button name="Offer" text="OK"/>
+			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
@@ -977,7 +974,7 @@ Sie sind nicht berechtigt, Land für die aktive Gruppe zu kaufen.
 			<input name="new_name">
 				[NAME]
 			</input>
-			<button name="Offer" text="OK"/>
+			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
@@ -1136,7 +1133,7 @@ Sie müssen eventuell ein neues Zuhause festlegen.
 	</notification>
 	<notification name="ClothingLoading">
 		Ihre Kleidung wird noch heruntergeladen.
-Sie können [SECOND_LIFE] normal verwenden. Andere Benutzer können Sie korrekt dargestellt sehen.
+Sie können [APP_NAME] normal verwenden. Andere Benutzer können Sie korrekt dargestellt sehen.
 		<form name="form">
 			<ignore name="ignore" text="Das Herunterladen der Kleidung dauert lange"/>
 		</form>
@@ -1144,7 +1141,7 @@ Sie können [SECOND_LIFE] normal verwenden. Andere Benutzer können Sie korrekt 
 	<notification name="FirstRun">
 		Installation von [APP_NAME] vollständig abgeschlossen.
 
-Falls Sie [SECOND_LIFE] zum ersten Mal verwenden, müssen Sie zuerst ein Konto erstellen, bevor Sie sich anmelden können.
+Falls Sie [CURRENT_GRID] zum ersten Mal verwenden, müssen Sie zuerst ein Konto erstellen, bevor Sie sich anmelden können.
 Zurück zu [http://join.secondlife.com secondlife.com], um ein neues Konto zu erstellen?
 		<usetemplate name="okcancelbuttons" notext="Weiter" yestext="Neues Konto..."/>
 	</notification>
@@ -1165,7 +1162,7 @@ Zurück zu [http://join.secondlife.com secondlife.com], um ein neues Konto zu er
 		Ihr Avatar erscheint jeden Moment.
 
 Benutzen Sie die Pfeiltasten, um sich fortzubewegen.
-Drücken Sie F1 für Hilfe oder für weitere Informationen über [SECOND_LIFE].
+Drücken Sie F1 für Hilfe oder für weitere Informationen über [CURRENT_GRID].
 Bitte wählen Sie einen männlichen oder weiblichen Avatar.
 Sie können sich später noch umentscheiden.
 		<usetemplate name="okcancelbuttons" notext="Weiblich" yestext="Männlich"/>
@@ -1355,9 +1352,39 @@ In Ihren Anwendungsordner herunterladen?
 Laden Sie den neuesten Viewer von http://secondlife.com/download herunter und installieren Sie ihn.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="DownloadBackground">
-		Eine aktualisierte Version von [APP_NAME] wurde heruntergeladen.
-Sie wird beim nächsten Neustart von [APP_NAME] verwendet.
+	<notification name="FailedRequiredUpdateInstall">
+		Ein erforderliches Update konnte nicht installiert werden. 
+Sie können sich erst anmelden, wenn [APP_NAME] aktualisiert wurde.
+
+Laden Sie den neuesten Viewer von http://secondlife.com/download herunter und installieren Sie ihn.
+		<usetemplate name="okbutton" yestext="Beenden"/>
+	</notification>
+	<notification name="UpdaterServiceNotRunning">
+		Für Ihre SecondLife-Installation ist ein Update erforderlich.
+
+Sie können dieses Update von http://www.secondlife.com/downloads herunterladen oder jetzt installieren.
+		<usetemplate name="okcancelbuttons" notext="Second Life beenden" yestext="Jetzt herunterladen und installieren"/>
+	</notification>
+	<notification name="DownloadBackgroundTip">
+		Für Ihre [APP_NAME]-Installation wurde ein Update heruntergeladen.
+Version [VERSION] [[RELEASE_NOTES_FULL_URL] Informationen zu diesem Update]
+		<usetemplate name="okcancelbuttons" notext="Später..." yestext="Jetzt installieren und [APP_NAME] neu starten"/>
+	</notification>
+	<notification name="DownloadBackgroundDialog">
+		Für Ihre [APP_NAME]-Installation wurde ein Update heruntergeladen.
+Version [VERSION] [[RELEASE_NOTES_FULL_URL] Informationen zu diesem Update]
+		<usetemplate name="okcancelbuttons" notext="Später..." yestext="Jetzt installieren und [APP_NAME] neu starten"/>
+	</notification>
+	<notification name="RequiredUpdateDownloadedVerboseDialog">
+		Ein erforderliches Softwareupdate wurde heruntergeladen.
+Version [VERSION]
+
+Zur Installation des Updates muss [APP_NAME] neu gestartet werden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="RequiredUpdateDownloadedDialog">
+		Zur Installation des Updates muss [APP_NAME] neu gestartet werden.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="DeedObjectToGroup">
 		Bei Übertragung dieses Objekts erhält die Gruppe:
@@ -1373,15 +1400,15 @@ Sie wird beim nächsten Neustart von [APP_NAME] verwendet.
 		<usetemplate ignoretext="Meinen Browser starten, um mein Konto zu verwalten" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
-		Informieren Sie sich im [SECOND_LIFE] Wiki, wie man Sicherheitsprobleme richtig meldet.
+		Informieren Sie sich im [CURRENT_GRID] Wiki, wie man Sicherheitsprobleme richtig meldet.
 		<usetemplate ignoretext="Meinen Browser starten, um anzuzeigen, wie ein Sicherheitsproblem gemeldet werden soll" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchQAWiki">
-		Besuchen Sie das [SECOND_LIFE] QA-Wiki.
+		Besuchen Sie das [CURRENT_GRID] QA-Wiki.
 		<usetemplate ignoretext="Meinen Browser starten, um das QA-Wiki anzuzeigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchPublicIssue">
-		Im [SECOND_LIFE] Allgemeine-Fragen-Tracker können Sie Fehler und andere Probleme melden.
+		Im [CURRENT_GRID] Allgemeine-Fragen-Tracker können Sie Fehler und andere Probleme melden.
 		<usetemplate ignoretext="Meinen Browser starten, um die Datenbank für Fehler und Verbesserungsvorschläge anzuzeigen" name="okcancelignore" notext="Abbrechen" yestext="Gehe zu Seite"/>
 	</notification>
 	<notification name="WebLaunchSupportWiki">
@@ -1537,6 +1564,11 @@ Versuchen Sie es später erneut.
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
+	</notification>
+	<notification name="TooManyTeleportOffers">
+		Sie haben versucht, [OFFERS] Teleport-Angebote zu machen,
+womit Sie die Höchstgrenze von [LIMIT] überschreiten.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OfferTeleportFromGod">
 		Einwohner zu Ihrem Standort einladen?
@@ -1914,9 +1946,9 @@ Eine möglichst genaue Beschreibung mit Namen und Einzelheiten hilft uns, Fälle
 
 Sie melden eine Urheberrechtsverletzung. Sind Sie wirklich sicher, dass Sie eine Verletzung des Urheberrechts melden möchten?
 
-1. Missbrauch melden. Wenn Sie der Meinung sind, ein Einwohner nutzt das Berechtigungssystem von [SECOND_LIFE] auf unerlaubte Weise zu seinem Vorteil aus, indem er zum Beispiel einen CopyBot oder ähnliche Kopiertools verwendet und damit eine Urheberrechtsverletzung begeht, können Sie diesen Missbrauch melden. Das Missbrauchsteam untersucht gemeldete Verstöße gegen die  [SECOND_LIFE] [http://secondlife.com/corporate/tos.php Servicebedingungen] oder [http://secondlife.com/corporate/cs.php Community-Standards] und verhängt entsprechende Maßnahmen. Das Missbrauchsteam ist jedoch nicht dafür zuständig, Inhalte aus der  [SECOND_LIFE]-Welt zu entfernen und reagiert auch nicht auf entsprechende Anfragen.
+1. Missbrauch melden. Wenn Sie der Meinung sind, ein Einwohner nutzt das Berechtigungssystem von [CURRENT_GRID] auf unerlaubte Weise zu seinem Vorteil aus, indem er zum Beispiel einen CopyBot oder ähnliche Kopiertools verwendet und damit eine Urheberrechtsverletzung begeht, können Sie diesen Missbrauch melden. Das Missbrauchsteam untersucht gemeldete Verstöße gegen die  [CURRENT_GRID] [http://secondlife.com/corporate/tos.php Servicebedingungen] oder [http://secondlife.com/corporate/cs.php Community-Standards] und verhängt entsprechende Maßnahmen. Das Missbrauchsteam ist jedoch nicht dafür zuständig, Inhalte aus der  [CURRENT_GRID]-Welt zu entfernen und reagiert auch nicht auf entsprechende Anfragen.
 
-2. Der DMCA oder das Entfernen von Inhalten. Sie können das Entfernen von Inhalten aus  [SECOND_LIFE] beantragen. Dazu MÜSSEN Sie eine Urheberrechtsverletzung gemäß den in unserer DMCA-Richtlinie unter  [http://secondlife.com/corporate/dmca.php] dargelegten Anweisungen einreichen.
+2. Der DMCA oder das Entfernen von Inhalten. Sie können das Entfernen von Inhalten aus  [CURRENT_GRID] beantragen. Dazu MÜSSEN Sie eine Urheberrechtsverletzung gemäß den in unserer DMCA-Richtlinie unter  [http://secondlife.com/corporate/dmca.php] dargelegten Anweisungen einreichen.
 
 Wenn Sie mit der Missbrauchmeldung jetzt fortfahren möchten, schließen Sie bitte dieses Fenster und senden Sie Ihren Bericht ein.  Möglicherweise müssen Sie Kategorie „CopyBot oder Berechtigungs-Exploit“ auswählen.
 
@@ -1959,6 +1991,10 @@ Möchten Sie den Bechäftigt-Modus verlassen, bevor Sie diese Transaktion abschl
 		Sind Sie sicher, dass Sie Ihren Reise-, Internet- und Suchverlauf löschen möchten?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="ConfirmClearCache">
+		Möchten Sie Ihren Viewer-Cache wirklich leeren?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmClearCookies">
 		Sind Sie sicher, dass Sie Ihre Cookies löschen möchten?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Ja"/>
@@ -1984,48 +2020,30 @@ Von einer Webseite zu diesem Formular linken, um anderen leichten Zugang zu dies
 		Die gespeicherte Voreinstellung überschreiben?
 		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
 	</notification>
-	<notification name="WLDeletePresetAlert">
-		[SKY] löschen?
-		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
-	</notification>
 	<notification name="WLNoEditDefault">
 		Standardvoreinstellungen können nicht bearbeitet oder gelöscht werden.
 	</notification>
 	<notification name="WLMissingSky">
 		Diese Tageszyklusdatei verweist auf eine fehlende Himmel-Datei: [SKY].
 	</notification>
+	<notification name="WLRegionApplyFail">
+		Die Einstellungen konnten nicht auf die Region angewendet werden.  Verlassen Sie die Region und kehren Sie zurück, um das Problem zu beheben.  Angegebener Grund: [FAIL_REASON]
+	</notification>
+	<notification name="EnvCannotDeleteLastDayCycleKey">
+		Der letzte Schlüssel in diesem Tageszyklus kann nicht gelöscht werden, da ein Tageszyklus nicht leer sein kann.  Statt den letzten verbleibenden Schlüssel zu löschen, versuchen Sie stattdessen, ihn zu modifizieren und dann einen neuen zu erstellen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="DayCycleTooManyKeyframes">
+		Sie können diesem Tageszyklus keine Keyframes mehr hinzufügen.  Die Höchstzahl an Keyframes für Tageszyklen mit Umfang [SCOPE] beträgt [MAX].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="EnvUpdateRate">
+		Sie können die Umgebungseinstellungen der Region nur alle [WAIT] Sekunden aktualisieren.  Warten Sie mindestens so lange und versuchen Sie es dann erneut.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="PPSaveEffectAlert">
 		Post-Processing-Effekt bereits vorhanden. Möchten Sie ihn überschreiben?
 		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
-	</notification>
-	<notification name="NewSkyPreset">
-		Wählen Sie einen Namen für den neuen Himmel.
-		<form name="form">
-			<input name="message">
-				Neue Voreinstellung
-			</input>
-			<button name="OK" text="OK"/>
-			<button name="Cancel" text="Abbrechen"/>
-		</form>
-	</notification>
-	<notification name="ExistsSkyPresetAlert">
-		Voreinstellung bereits vorhanden!
-	</notification>
-	<notification name="NewWaterPreset">
-		Wählen Sie einen Namen für die neue Wasservoreinstellung.
-		<form name="form">
-			<input name="message">
-				Neue Voreinstellung
-			</input>
-			<button name="OK" text="OK"/>
-			<button name="Cancel" text="Abbrechen"/>
-		</form>
-	</notification>
-	<notification name="ExistsWaterPresetAlert">
-		Voreinstellung bereits vorhanden!
-	</notification>
-	<notification name="WaterNoEditDefault">
-		Standardvoreinstellungen können nicht bearbeitet oder gelöscht werden.
 	</notification>
 	<notification name="ChatterBoxSessionStartError">
 		Neue Chat-Sitzung mit [RECIPIENT] konnte nicht gestartet werden.
@@ -2054,7 +2072,7 @@ Von einer Webseite zu diesem Formular linken, um anderen leichten Zugang zu dies
 		<usetemplate ignoretext="Die Kleidung, die während dem Bearbeiten meines Aussehens erstellt wird, sofort anziehen" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
 	<notification name="NotAgeVerified">
-		Sie müssen altersüberprüft sein, um diesen Bereich betreten zu können.  Möchten Sie auf der [SECOND_LIFE]-Webseite Ihr Alter verifizieren lassen?
+		Sie müssen altersüberprüft sein, um diesen Bereich betreten zu können.  Möchten Sie auf der [CURRENT_GRID]-Webseite Ihr Alter verifizieren lassen?
 
 [_URL]
 		<url name="url" option="0">
@@ -2063,7 +2081,7 @@ Von einer Webseite zu diesem Formular linken, um anderen leichten Zugang zu dies
 		<usetemplate ignoretext="Ich habe mein Alter nicht verifizieren lassen" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
-		Um diesen Bereich besuchen zu können, müssen Ihre Zahlungsinformationen gespeichert sein.  Möchten Sie diese Einstellung auf der [SECOND_LIFE]-Webseite einrichten?
+		Um diesen Bereich besuchen zu können, müssen Ihre Zahlungsinformationen gespeichert sein.  Möchten Sie diese Einstellung auf der [CURRENT_GRID]-Webseite einrichten?
 
 [_URL]
 		<url name="url" option="0">
@@ -2145,6 +2163,12 @@ Dies kann die Eingabe Ihres Passworts beeinflussen.
 	<notification name="RezItemNoPermissions">
 		Keine Berechtigung zum Rezzen von Objekten.
 	</notification>
+	<notification name="IMAcrossParentEstates">
+		Senden von IMs über übergeordnete Grundbesitze hinweg nicht möglich.
+	</notification>
+	<notification name="TransferInventoryAcrossParentEstates">
+		Inventarübertragung über übergeordnete Grundbesitze hinweg nicht möglich.
+	</notification>
 	<notification name="UnableToLoadNotecard">
 		Notizkarten-Asset konnte nicht geladen werden.
 	</notification>
@@ -2224,14 +2248,6 @@ Wählen Sie eine kleinere Landfläche.
 	</notification>
 	<notification name="NoContentToSearch">
 		Bitte wählen Sie mindestens eine Inhaltsart für die Suche aus (Generell, Moderat oder Adult).
-	</notification>
-	<notification name="GroupVote">
-		[NAME] hat eine Abstimmung vorgeschlagen über:
-[MESSAGE]
-		<form name="form">
-			<button name="VoteNow" text="Abstimmen"/>
-			<button name="Later" text="Später"/>
-		</form>
 	</notification>
 	<notification name="SystemMessage">
 		[MESSAGE]
@@ -2317,6 +2333,9 @@ Fliegen ist hier nicht möglich.
 	</notification>
 	<notification name="NoBuild">
 		In diesem Bereich ist das Bauen deaktiviert. Sie können keine Objekte bauen oder rezzen.
+	</notification>
+	<notification name="SeeAvatars">
+		Diese Parzelle verbirgt Avatare und Text-Chat vor einer anderen Parzelle.   Sie können Einwohner außerhalb dieser Parzelle weder sehen noch von ihnen gesehen werden.  Regulärer Text-Chat auf Kanal 0 ist ebenfalls blockiert.
 	</notification>
 	<notification name="ScriptsStopped">
 		Ein Administrator hat die Skriptausführung in dieser Region vorübergehend deaktiviert.
@@ -2505,13 +2524,13 @@ In Ihrem Inventar wird ein Lesezeichen erstellt, damit Sie diesem Einwohner schn
 		</form>
 	</notification>
 	<notification name="RegionRestartMinutes">
-		Diese Region wird in [MINUTES] neu gestartet.
-Wenn Sie in dieser Region bleiben, werden Sie abgemeldet.
-	</notification>
+    Diese Region wird in [MINUTES] Minuten neu gestartet.
+    Wenn Sie in dieser Region bleiben, werden Sie abgemeldet.
+  </notification>
 	<notification name="RegionRestartSeconds">
-		Diese Region wird in [SECONDS] neu gestartet.
-Wenn Sie in dieser Region bleiben, werden Sie abgemeldet.
-	</notification>
+    Diese Region wird in [SECONDS] Sekunden neu gestartet.
+    Wenn Sie in dieser Region bleiben, werden Sie abgemeldet.
+  </notification>
 	<notification name="LoadWebPage">
 		Webseite [URL] laden?
 
@@ -2691,9 +2710,6 @@ Klicken Sie auf  &apos;Akzeptieren &apos;, um dem Chat beizutreten, oder auf  &a
 	<notification name="VoiceCallGenericError">
 		Fehler beim Versuch, eine Voice-Chat-Verbindung zu [VOICE_CHANNEL_NAME] herzustellen.  Bitte versuchen Sie es erneut.
 	</notification>
-	<notification name="ServerVersionChanged">
-		Sie haben eine Region betreten, die eine andere Server-Version verwendet. Dies kann sich auf die Leistung auswirken. [[URL] Versionshinweise anzeigen.]
-	</notification>
 	<notification name="UnsupportedCommandSLURL">
 		Die SLurl, auf die Sie geklickt haben, wird nicht unterstützt.
 	</notification>
@@ -2733,6 +2749,10 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 		Sie wurden vom Moderator stummgeschaltet.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="UploadCostConfirmation">
+		Das Hochladen kostet [PRICE] L$. Möchten Sie fortfahren?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Hochladen"/>
+	</notification>
 	<notification name="ConfirmClearTeleportHistory">
 		Möchten Sie Ihre Teleport-Liste löschen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
@@ -2744,12 +2764,17 @@ Die Schaltfläche wird angezeigt, wenn genügend Platz vorhanden ist.
 	<notification name="ShareNotification">
 		Wählen Sie Einwohner aus, für die Sie das Objekt freigeben möchten.
 	</notification>
+	<notification name="MeshUploadError">
+		[LABEL] konnte nicht hochgeladen werden: [MESSAGE] [IDENTIFIER] 
+
+Details finden Sie in der Protokolldatei.
+	</notification>
 	<notification name="ShareItemsConfirmation">
-		Möchten Sie diese Objekte wirklich für andere freigeben:
+		Möchten Sie wirklich die folgenden Objekte:
 
-[ITEMS]
+&lt;nolink&gt;[ITEMS]&lt;/nolink&gt;
 
-Für folgende Einwohner:
+für folgende Einwohner freigeben:
 
 [RESIDENTS]
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
@@ -2759,6 +2784,19 @@ Für folgende Einwohner:
 	</notification>
 	<notification name="DeedToGroupFail">
 		Übertragung an Gruppe ist fehlgeschlagen.
+	</notification>
+	<notification name="ReleaseLandThrottled">
+		Die Parzelle [PARCEL_NAME] kann zurzeit nicht aufgegeben werden.
+	</notification>
+	<notification name="ReleasedLandWithReclaim">
+		Die [AREA] m² große Parzelle „[PARCEL_NAME]“ wurde freigegeben.
+
+Sie haben [RECLAIM_PERIOD] Stunden, um die Parzelle für 0 L$ zurückzufordern, bevor sie zum Verkauf an alle freigegeben wird.
+	</notification>
+	<notification name="ReleasedLandNoReclaim">
+		Die [AREA] m² große Parzelle „[PARCEL_NAME]“ wurde freigegeben.
+
+Sie steht jetzt zum Verkauf an alle zur Verfügung.
 	</notification>
 	<notification name="AvatarRezNotification">
 		(Seit [EXISTENCE] Sekunden inworld )
@@ -2796,9 +2834,7 @@ Avatar &apos;[NAME]&apos; hat Modus „Aussehen bearbeiten&quot; verlassen.
 	<notification name="NoConnect">
 		Es gibt Probleme mit der Verbindung mit [PROTOCOL] [HOSTID].
 Bitte überprüfen Sie Ihre Netzwerk- und Firewalleinstellungen.
-		<form name="form">
-			<button name="OK" text="OK"/>
-		</form>
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect">
 		Verbindung mit Voice-Server ist leider nicht möglich:
@@ -2807,9 +2843,7 @@ Bitte überprüfen Sie Ihre Netzwerk- und Firewalleinstellungen.
 
 Voice-Kommunikation ist leider nicht verfügbar.
 Bitte überprüfen Sie Ihr Netzwerk- und Firewall-Setup.
-		<form name="form">
-			<button name="OK" text="OK"/>
-		</form>
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="AvatarRezLeftNotification">
 		(Seit [EXISTENCE] Sekunden inworld )
@@ -2841,6 +2875,13 @@ Alle stummschalten?
 	<notification label="Stehen" name="HintSit">
 		Um aufzustehen, klicken Sie auf die Schaltfläche „Stehen“.
 	</notification>
+	<notification label="Sprechen" name="HintSpeak">
+		Auf Schaltfläche „Sprechen“ klicken, um das Mikrofon ein- und auszuschalten.
+
+Auf den Pfeil nach oben klicken, um die Sprachsteuerung zu sehen.
+
+Durch Ausblenden der Schaltfläche „Sprechen“ wird die Sprechfunktion deaktiviert.
+	</notification>
 	<notification label="Welt erkunden" name="HintDestinationGuide">
 		Im Reiseführer finden Sie Tausende von interessanten Orten. Wählen Sie einfach einen Ort aus und klicken Sie auf „Teleportieren“.
 	</notification>
@@ -2850,8 +2891,16 @@ Alle stummschalten?
 	<notification label="Bewegen" name="HintMove">
 		Um zu gehen oder zu rennen, öffnen Sie das Bedienfeld „Bewegen“ und klicken Sie auf die Pfeile. Sie können auch die Pfeiltasten auf Ihrer Tastatur verwenden.
 	</notification>
+	<notification label="" name="HintMoveClick">
+		1. Zum Gehen klicken: Auf beliebige Stelle am Boden klicken, um zu dieser Stelle zu gehen.
+
+2. Zum Drehen der Anzeige klicken und ziehen: Auf beliebige Stelle in der Welt klicken und ziehen, um Ihre Ansicht zu ändern.
+	</notification>
 	<notification label="Anzeigename" name="HintDisplayName">
 		Hier können Sie Ihren anpassbaren Anzeigenamen festlegen. Der Anzeigename unterscheidet sich von Ihrem eindeutigen Benutzernamen, der nicht geändert werden kann. In den Einstellungen können Sie festlegen, welcher Name von anderen Einwohnern angezeigt wird.
+	</notification>
+	<notification label="Ansicht" name="HintView">
+		Um die Kameraansicht zu ändern, verwenden Sie die Schwenk- und Kreissteuerungen. Um die Ansicht zurückzusetzen, drücken Sie die Esc-Taste oder laufen Sie einfach.
 	</notification>
 	<notification label="Inventar" name="HintInventory">
 		In Ihrem Inventar befinden sich verschiedene Objekte. Die neuesten Objekte finden Sie in der Registerkarte „Aktuell“.
@@ -2866,9 +2915,63 @@ Alle stummschalten?
 			<button name="open" text="Popup-Fenster öffnen"/>
 		</form>
 	</notification>
-	<global name="UnsupportedCPU">
-		- Ihre CPU-Geschwindigkeit entspricht nicht den Mindestanforderungen.
-	</global>
+	<notification name="AuthRequest">
+		Für die Site „&lt;nolink&gt;[HOST_NAME]&lt;/nolink&gt;“ in der Domäne „[REALM]“ ist ein Benutzername und Kennwort erforderlich.
+		<form name="form">
+			<input name="username" text="Benutzername"/>
+			<input name="password" text="Kennwort"/>
+			<button name="ok" text="Senden"/>
+			<button name="cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification label="" name="ModeChange">
+		Zum Wechsel des Modus müssen Sie das Programm beenden und neu starten.
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
+	<notification label="" name="NoClassifieds">
+		Die Erstellung und Bearbeitung von Anzeigen ist nur im Modus „Erweitert“ möglich. Möchten Sie das Programm beenden und den Modus wechseln? Die Modusauswahl ist auf dem Anmeldebildschirm zu finden.
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
+	<notification label="" name="NoGroupInfo">
+		Die Erstellung und Bearbeitung von Gruppen ist nur im Modus „Erweitert“ möglich. Möchten Sie das Programm beenden und den Modus wechseln? Die Modusauswahl ist auf dem Anmeldebildschirm zu finden.
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
+	<notification label="" name="NoPlaceInfo">
+		Die Anzeige des Ortsprofils ist nur im Modus „Erweitert“ möglich. Möchten Sie das Programm beenden und den Modus wechseln? Die Modusauswahl ist auf dem Anmeldebildschirm zu finden.
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
+	<notification label="" name="NoPicks">
+		Die Erstellung und Bearbeitung von Auswahlen ist nur im Modus „Erweitert“ möglich. Möchten Sie das Programm beenden und den Modus wechseln? Die Modusauswahl ist auf dem Anmeldebildschirm zu finden.
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
+	<notification label="" name="NoWorldMap">
+		Die Anzeige der Weltkarte ist nur im Modus „Erweitert“ möglich. Möchten Sie das Programm beenden und den Modus wechseln? Die Modusauswahl ist auf dem Anmeldebildschirm zu finden.
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
+	<notification label="" name="NoVoiceCall">
+		Voice-Anrufe sind nur im Modus „Erweitert“ möglich. Möchten Sie sich abmelden und den Modus wechseln?
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
+	<notification label="" name="NoAvatarShare">
+		Die Freigabe ist nur im Modus „Erweitert“ möglich. Möchten Sie sich abmelden und den Modus wechseln?
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
+	<notification label="" name="NoAvatarPay">
+		Die Bezahlung anderer Einwohner ist nur im Modus „Erweitert“ möglich. Möchten Sie sich abmelden und den Modus wechseln?
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
+	<notification label="" name="NoInventory">
+		Die Inventaranzeige ist nur im Modus „Erweitert“ möglich. Möchten Sie sich abmelden und den Modus wechseln?
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
+	<notification label="" name="NoAppearance">
+		Das Fenster zum Bearbeiten des Aussehens ist nur im Modus „Erweitert“ verfügbar. Möchten Sie sich abmelden und den Modus wechseln?
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
+	<notification label="" name="NoSearch">
+		Die Suche ist nur im Modus „Erweitert“ möglich. Möchten Sie sich abmelden und den Modus wechseln?
+		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+	</notification>
 	<global name="UnsupportedGLRequirements">
 		Ihr Computer entspricht nicht den Hardwareanforderungen von [APP_NAME]. [APP_NAME] setzt eine OpenGL-Grafikkarte mit Multitextur-Unterstützung voraus. Falls Ihre Grafikkarte diese Funktion unterstützt, installieren Sie die neuesten Treiber sowie die aktuellen Service Packs und Patches für Ihr Betriebssystem.
 
@@ -2893,4 +2996,161 @@ Ansonsten können Sie auf der Karte nachsehen und dort Ort suchen, die als „In
 	<global name="You died and have been teleported to your home location">
 		Sie sind gestorben und wurden zu Ihrem Zuhause teleportiert.
 	</global>
+	
+  <notification name="PhoenixWL">
+&apos;[PARCEL_NAME]&apos;, im Besitz von &apos;[OWNER_NAME]&apos;, möchte deine visuellen Windlight-Umgebungseinstellungen ändern.
+    <form name="form">
+      <button name="Allow" text="Zulassen"/>
+      <button name="Ignore" text="Ignorieren"/>
+    </form>
+  </notification>
+  
+  <notification name="PhoenixWLClear">
+Windlight-Einstellungen für &apos;[PARCEL_NAME]&apos; auf Regionsstandard zurücksetzen?
+    <usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Ja"/>
+  </notification>
+	
+<!-- ## Zi: Animation Overrider -->
+  <notification name="NewAOSet">
+Bitte einen Namen für das neue Animationsset eingeben:
+(Der Name darf kein ":" oder "|" enthalten)
+    <form name="form">
+      <input name="message">
+Neues Animationsset
+      </input>
+      <button
+       name="OK"
+       text="OK"/>
+      <button
+       name="Cancel"
+       text="Abbrechen"/>
+    </form>
+  </notification>
+
+  <notification name="NewAOCantContainColon">
+Ein neues Animationsset mit Namen "[AO_SET_NAME]" konnte nicht angelegt werden.
+Der Name darf kein ":" oder "|" enhalten.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification name="RenameAOCantContainColon">
+Das Animationsset konnte nicht zu "[AO_SET_NAME]" umbenannt werden.
+Der Name darf kein ":" oder "|" enhalten.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+<notification name="RemoveAOSet">
+Animationsset "[AO_SET_NAME]" aus Liste löschen?
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Abbrechen"
+     yestext="Löschen"/>
+  </notification>
+
+  <notification name="AOImportSetAlreadyExists">
+Ein Animationsset mit diesem Namen existiert bereits.
+  </notification>
+
+  <notification name="AOImportPermissionDenied">
+Keine Berechtigung zum Lesen der Notizkarte.
+  </notification>
+
+  <notification name="AOImportCreateSetFailed">
+Fehler beim Erstellen des Importsets.
+  </notification>
+
+  <notification name="AOImportDownloadFailed">
+Notizkarte konnte nicht geladen werden.
+  </notification>
+
+  <notification name="AOImportNoText">
+Notizkarte ist leer or nicht lesbar.
+  </notification>
+
+  <notification name="AOImportNoFolder">
+Ordner zum Laden der Animationen konnte nicht gefunden werden.
+  </notification>
+
+  <notification name="AOImportNoStatePrefix">
+Zeile [LINE] der Notizkarte besitzt keinen gültigen "["-Status-Präfix.
+  </notification>
+
+  <notification name="AOImportNoValidDelimiter">
+Zeile [LINE] der Notizkarte besitzt keinen gültigen "["-Status-Suffix.
+  </notification>
+
+  <notification name="AOImportStateNameNotFound">
+Status [NAME] existiert nicht.
+  </notification>
+
+  <notification name="AOImportAnimationNotFound">
+Animation [NAME] konnte nicht gefunden werden. Bitte sicherstellen, dass sie sich im selben Ordner wie die Notizkarte befindet.
+  </notification>
+
+  <notification name="AOImportInvalid">
+Notizkarte enthält keine verwendbaren Daten. Import wird abgebrochen.
+  </notification>
+
+  <notification name="AOImportRetryCreateSet">
+Import-Ordner für Animationsset [NAME] konnte nicht erstellt werden. Wiederhole...
+  </notification>
+
+  <notification name="AOImportAbortCreateSet">
+Import-Ordner für Animationsset [NAME] konnte nicht erstellt werden. Import wird abgebrochen.
+  </notification>
+
+  <notification name="AOImportLinkFailed">
+Erstellung der Verknüpfung zur Animation [NAME] ist fehlgeschlagen!
+  </notification>
+
+<!-- ## Zi: Animation Overrider -->
+
+<notification name="SendSysinfoToIM">
+Dieses wird die folgenden Informationen an die aktuelle IM-Sitzung senden:
+
+[SYSINFO]
+    <usetemplate name="okcancelbuttons" yestext="Senden" notext="Abbrechen" />
+  </notification>
+
+  <notification name="InvalidGrid" type="alertmodal">
+'[GRID]' ist kein gültiger Gridname oder Adresse.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+<!-- fsdata -->
+  <notification name="BlockLoginInfo">
+    [REASON]
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification name="FireStormReqInfo">
+[NAME] hat die eine Anfrage geschickt, Informationen über deine Firestorm-Konfiguration zu übermitteln.
+(Dies sind dieselben Informationen, die unter Hilfe->INFO ÜBER Firestorm zu finden sind.)
+[REASON]
+Möchtest du diese Informationen übermitteln?
+    <form name="form">
+      <button name="Yes" text="Ja"/>
+      <button name="No" text="Nein"/>
+    </form>
+  </notification>
+
+  <!-- Firestorm Phantom -->
+
+  <notification name="PhantomOn">
+Phantom-Modus eingeschaltet.
+  </notification>
+
+  <notification name="PhantomOff">
+Phantom-Modus ausgeschaltet.
+  </notification>
+
+<!-- Firestorm Phantom -->
 </notifications>

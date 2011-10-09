@@ -8,6 +8,7 @@
  name="floater_im_box"
  save_rect="true"
  save_visibility="true"
+ save_dock_state="true"
  single_instance="true"
  title="CONVERSATIONS"
  width="396">
@@ -18,6 +19,7 @@
      left="1"
      name="im_box_tab_container"
      tab_position="left"
+     tab_drag_commit="true"
      tab_width="115"
      tab_max_width = "115"
      tab_height="20"

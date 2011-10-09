@@ -40,9 +40,12 @@
 #include "llviewercontrol.h"
 #include "llviewerobject.h"
 #include "lluictrlfactory.h"
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "llagent.h"
 // [/RLVa:KB]
+#include "llavatarname.h"
+#include "lltrans.h"
 
 //LLFloaterInspect* LLFloaterInspect::sInstance = NULL;
 
@@ -187,6 +190,15 @@ LLUUID LLFloaterInspect::getSelectedUUID()
 	return LLUUID::null;
 }
 
+void LLFloaterInspect::onGetAvNameCallback(const LLUUID& idCreator, const LLAvatarName& av_name, void* FloaterPtr)
+{
+	if (FloaterPtr)
+	{
+		LLFloaterInspect* floater = (LLFloaterInspect*)FloaterPtr;
+		floater->dirty();
+	}
+}
+
 void LLFloaterInspect::refresh()
 {
 	LLUUID creator_id;
@@ -233,16 +245,40 @@ void LLFloaterInspect::refresh()
 //		creator_name = av_name.getCompleteName();
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 		const LLUUID& idOwner = obj->mPermissions->getOwner();
-		LLAvatarNameCache::get(idOwner, &av_name);
-		bool fRlvFilterOwner = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idOwner != gAgent.getID()) && 
-			(!obj->mPermissions->isGroupOwned());
-		owner_name = (!fRlvFilterOwner) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+
+		// Ansariel - Fixing the avatar name lookup: Only
+		// work with the name if we actually get a result
+		// from the name cache. If not, defer setting the
+		// actual name and set a placeholder.
+		if (LLAvatarNameCache::get(idOwner, &av_name))
+		{
+			bool fRlvFilterOwner = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idOwner != gAgent.getID()) && 
+				(!obj->mPermissions->isGroupOwned());
+			owner_name = (!fRlvFilterOwner) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+		}
+		else
+		{
+			owner_name = LLTrans::getString("RetrievingData");
+			LLAvatarNameCache::get(idOwner, boost::bind(&LLFloaterInspect::onGetAvNameCallback, _1, _2, this));
+		}
 
 		const LLUUID& idCreator = obj->mPermissions->getCreator();
-		LLAvatarNameCache::get(idCreator, &av_name);
-		bool fRlvFilterCreator = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idCreator != gAgent.getID()) && 
-			( (obj->mPermissions->getOwner() == idCreator) || (RlvUtil::isNearbyAgent(idCreator)) );
-		creator_name = (!fRlvFilterCreator) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+
+		// Ansariel - Fixing the avatar name lookup: Only
+		// work with the name if we actually get a result
+		// from the name cache. If not, defer setting the
+		// actual name and set a placeholder.
+		if (LLAvatarNameCache::get(idCreator, &av_name))
+		{
+			bool fRlvFilterCreator = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idCreator != gAgent.getID()) && 
+				( (obj->mPermissions->getOwner() == idCreator) || (RlvUtil::isNearbyAgent(idCreator)) );
+			creator_name = (!fRlvFilterCreator) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+		}
+		else
+		{
+			creator_name = LLTrans::getString("RetrievingData");
+			LLAvatarNameCache::get(idCreator, boost::bind(&LLFloaterInspect::onGetAvNameCallback, _1, _2, this));
+		}
 // [/RLVa:KB]
 
 		row["id"] = obj->getObject()->getID();

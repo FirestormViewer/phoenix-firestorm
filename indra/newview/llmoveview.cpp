@@ -148,7 +148,10 @@ BOOL LLFloaterMove::postBuild()
 
 	initMovementMode();
 
-	LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(LLFloaterMove::sUpdateFlyingStatus);
+//	LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(LLFloaterMove::sUpdateFlyingStatus);
+// [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+	LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(LLFloaterMove::sUpdateMovementStatus);
+// [/RLVa:KB]
 
 	return TRUE;
 }
@@ -325,23 +328,32 @@ void LLFloaterMove::setMovementMode(const EMovementMode mode)
 	{
 	case MM_RUN:
 		gAgent.setAlwaysRun();
-		gAgent.setRunning();
+//		gAgent.setRunning();
 		break;
 	case MM_WALK:
 		gAgent.clearAlwaysRun();
-		gAgent.clearRunning();
+//		gAgent.clearRunning();
 		break;
 	default:
 		//do nothing for other modes (MM_FLY)
 		break;
 	}
 	// tell the simulator.
-	gAgent.sendWalkRun(gAgent.getAlwaysRun());
-	
-	updateButtonsWithMovementMode(mode);
+//	gAgent.sendWalkRun(gAgent.getAlwaysRun());
+//	
+//	updateButtonsWithMovementMode(mode);
+//
+//	bool bHideModeButtons = MM_FLY == mode
+//		|| (isAgentAvatarValid() && gAgentAvatarp->isSitting());
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+	// Running may have been restricted so update walk-vs-run from the agent's actual running state
+	if ( (MM_WALK == mode) || (MM_RUN == mode) )
+		mCurrentMode = (gAgent.getRunning()) ? MM_RUN : MM_WALK;
 
-	bool bHideModeButtons = MM_FLY == mode
-		|| (isAgentAvatarValid() && gAgentAvatarp->isSitting());
+	updateButtonsWithMovementMode(mCurrentMode);
+
+	bool bHideModeButtons = (MM_FLY == mCurrentMode) || (isAgentAvatarValid() && gAgentAvatarp->isSitting());
+// [/RLVa:KB]
 
 	showModeButtons(!bHideModeButtons);
 
@@ -451,26 +463,40 @@ void LLFloaterMove::updatePosition()
 	LLBottomTray* tray = LLBottomTray::getInstance();
 	if (!tray) return;
 
-	LLButton* movement_btn = tray->getChild<LLButton>(BOTTOM_TRAY_BUTTON_NAME);
+	LLButton* movement_btn = tray->findChild<LLButton>(BOTTOM_TRAY_BUTTON_NAME);
 
-	//align centers of a button and a floater
-	S32 x = movement_btn->calcScreenRect().getCenterX() - getRect().getWidth()/2;
-
-	S32 y = 0;
-	if (!mModeActionsPanel->getVisible())
+	if (movement_btn)
 	{
-		y = mModeActionsPanel->getRect().getHeight();
+		//align centers of a button and a floater
+		S32 x = movement_btn->calcScreenRect().getCenterX() - getRect().getWidth()/2;
+
+		S32 y = 0;
+		if (!mModeActionsPanel->getVisible())
+		{
+			y = mModeActionsPanel->getRect().getHeight();
+		}
+		setOrigin(x, y);
 	}
-	setOrigin(x, y);
 }
 
 //static
-void LLFloaterMove::sUpdateFlyingStatus()
+//void LLFloaterMove::sUpdateFlyingStatus()
+//{
+//	LLFloaterMove *floater = LLFloaterReg::findTypedInstance<LLFloaterMove>("moveview");
+//	if (floater) floater->mModeControlButtonMap[MM_FLY]->setEnabled(gAgent.canFly());
+//	
+//}
+// [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+void LLFloaterMove::sUpdateMovementStatus()
 {
-	LLFloaterMove *floater = LLFloaterReg::findTypedInstance<LLFloaterMove>("moveview");
-	if (floater) floater->mModeControlButtonMap[MM_FLY]->setEnabled(gAgent.canFly());
-	
+	LLFloaterMove* pFloater = LLFloaterReg::findTypedInstance<LLFloaterMove>("moveview");
+	if (pFloater)
+	{
+		pFloater->mModeControlButtonMap[MM_RUN]->setEnabled(gRlvHandler.hasBehaviour(RLV_BHVR_ALWAYSRUN));
+		pFloater->mModeControlButtonMap[MM_FLY]->setEnabled(gAgent.canFly());
+	}
 }
+// [/RLVa:KB]
 
 void LLFloaterMove::showModeButtons(BOOL bShow)
 {
@@ -516,7 +542,11 @@ void LLFloaterMove::onOpen(const LLSD& key)
 //		anchor_panel, this,
 //		getDockTongue(), LLDockControl::TOP));
 
-	sUpdateFlyingStatus();
+
+//	sUpdateFlyingStatus();
+// [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+	sUpdateMovementStatus();
+// [/RLVa:KB]
 }
 
 //virtual
@@ -567,14 +597,20 @@ void LLPanelStandStopFlying::setStandStopFlyingMode(EStandStopFlyingMode mode)
 {
 	LLPanelStandStopFlying* panel = getInstance();
 
-	if (mode == SSFM_STAND)
+	if (mode == SSFM_FLYCAM)
 	{
-		LLFirstUse::sit();
-		LLFirstUse::notMoving(false);
+		panel->mFlycamButton->setVisible(TRUE);
 	}
-	panel->mStandButton->setVisible(SSFM_STAND == mode);
-	panel->mStopFlyingButton->setVisible(SSFM_STOP_FLYING == mode);
-
+	else
+	{
+		if (mode == SSFM_STAND)
+		{
+			LLFirstUse::sit();
+			LLFirstUse::notMoving(false);
+		}
+		panel->mStandButton->setVisible(SSFM_STAND == mode);
+		panel->mStopFlyingButton->setVisible(SSFM_STOP_FLYING == mode);
+	}
 	//visibility of it should be updated after updating visibility of the buttons
 	panel->setVisible(TRUE);
 }
@@ -589,6 +625,10 @@ void LLPanelStandStopFlying::clearStandStopFlyingMode(EStandStopFlyingMode mode)
 		break;
 	case SSFM_STOP_FLYING:
 		panel->mStopFlyingButton->setVisible(FALSE);
+		break;
+	case SSFM_FLYCAM:
+		panel->mFlycamButton->setVisible(FALSE);
+		panel->setFocus(FALSE);
 		break;
 	default:
 		llerrs << "Unexpected EStandStopFlyingMode is passed: " << mode << llendl;
@@ -608,7 +648,10 @@ BOOL LLPanelStandStopFlying::postBuild()
 	//mStopFlyingButton->setCommitCallback(boost::bind(&LLFloaterMove::setFlyingMode, FALSE));
 	mStopFlyingButton->setCommitCallback(boost::bind(&LLPanelStandStopFlying::onStopFlyingButtonClick, this));
 	mStopFlyingButton->setVisible(FALSE);
-	
+
+	mFlycamButton = getChild<LLButton>("flycam_btn");
+	mFlycamButton->setVisible(FALSE);
+
 	return TRUE;
 }
 
@@ -746,10 +789,18 @@ void LLPanelStandStopFlying::updatePosition()
 	LLBottomTray* tray = LLBottomTray::getInstance();
 	if (!tray || mAttached) return;
 
-	LLButton* movement_btn = tray->getChild<LLButton>(BOTTOM_TRAY_BUTTON_NAME);
+	LLButton* movement_btn = tray->findChild<LLButton>(BOTTOM_TRAY_BUTTON_NAME);
 
-	// Align centers of the button and the panel.
-	S32 x = movement_btn->calcScreenRect().getCenterX() - getRect().getWidth()/2;
+	S32 x = 0;
+	if (movement_btn)
+	{
+		// Align centers of the button and the panel.
+		x = movement_btn->calcScreenRect().getCenterX() - getRect().getWidth()/2;
+	}
+	else
+	{
+		x = tray->calcScreenRect().getCenterX() - getRect().getWidth()/2;
+	}
 	setOrigin(x, 0);
 }
 

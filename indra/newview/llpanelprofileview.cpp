@@ -48,6 +48,7 @@ static LLRegisterPanelClassWrapper<LLPanelProfileView> t_panel_target_profile("p
 static std::string PANEL_NOTES = "panel_notes";
 static const std::string PANEL_PROFILE = "panel_profile";
 static const std::string PANEL_PICKS = "panel_picks";
+static std::string PANEL_FIRST = "panel_profile_firstlife";
 
 
 class AvatarStatusObserver : public LLAvatarPropertiesObserver
@@ -58,24 +59,48 @@ public:
 		mProfileView = profile_view;
 	}
 
+// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-11-28 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+	~AvatarStatusObserver()
+	{
+		if (mAvatarId.notNull())
+			LLAvatarPropertiesProcessor::instance().removeObserver(mAvatarId, this);
+	}
+// [/SL:KB]
+
 	void processProperties(void* data, EAvatarProcessorType type)
 	{
 		if(APT_PROPERTIES != type) return;
 		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
 		if(avatar_data && mProfileView->getAvatarId() == avatar_data->avatar_id)
 		{
+			llinfos << "processing online status in the AvatarStatusObserver, will remove it." << llendl;
 			mProfileView->processOnlineStatus(avatar_data->flags & AVATAR_ONLINE);
-			LLAvatarPropertiesProcessor::instance().removeObserver(mProfileView->getAvatarId(), this);
+//			LLAvatarPropertiesProcessor::instance().removeObserver(mProfileView->getAvatarId(), this);
 		}
+
+// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-11-28 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+		// Profile view may have switched to a new avatar already so this needs to be outside the check above
+		LLAvatarPropertiesProcessor::instance().removeObserver(mAvatarId, this);
+		mAvatarId.setNull();
+// [/SL:KB]
 	}
 
 	void subscribe()
 	{
-		LLAvatarPropertiesProcessor::instance().addObserver(mProfileView->getAvatarId(), this);
+//		LLAvatarPropertiesProcessor::instance().addObserver(mProfileView->getAvatarId(), this);
+// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-11-28 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+		if (mAvatarId.notNull())
+			LLAvatarPropertiesProcessor::instance().removeObserver(mProfileView->getAvatarId(), this);
+		mAvatarId = mProfileView->getAvatarId();
+		LLAvatarPropertiesProcessor::instance().addObserver(mAvatarId, this);
+// [/SL:KB]
 	}
 
 private:
 	LLPanelProfileView* mProfileView;
+// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-11-28 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+	LLUUID				mAvatarId;
+// [/SL:KB]
 };
 
 LLPanelProfileView::LLPanelProfileView()
@@ -94,6 +119,8 @@ LLPanelProfileView::~LLPanelProfileView(void)
 /*virtual*/ 
 void LLPanelProfileView::onOpen(const LLSD& key)
 {
+	llinfos << "opening profile" << llendl;
+
 	LLUUID id;
 	if(key.has("id"))
 	{
@@ -105,8 +132,12 @@ void LLPanelProfileView::onOpen(const LLSD& key)
 		setAvatarId(id);
 
 		// clear name fields, which might have old data
+		getChild<LLUICtrl>("complete_name")->setValue( LLSD() );
+		getChild<LLUICtrl>("display_name")->setValue( LLSD() );
 		getChild<LLUICtrl>("user_name")->setValue( LLSD() );
-		getChild<LLUICtrl>("user_slid")->setValue( LLSD() );
+		getChild<LLUICtrl>("user_key")->setValue( LLSD() );
+		//[ADD: FIRE-2266: SJ] Adding link to webprofiles on profile which opens Web Profiles in browser
+		getChild<LLUICtrl>("web_profile_text")->setValue( LLSD() );
 	}
 
 	// Update the avatar name.
@@ -114,7 +145,6 @@ void LLPanelProfileView::onOpen(const LLSD& key)
 		boost::bind(&LLPanelProfileView::onAvatarNameCache, this, _1, _2));
 
 	updateOnlineStatus();
-
 
 	LLPanelProfile::onOpen(key);
 }
@@ -124,6 +154,7 @@ BOOL LLPanelProfileView::postBuild()
 	LLPanelProfile::postBuild();
 
 	getTabContainer()[PANEL_NOTES] = findChild<LLPanelAvatarNotes>(PANEL_NOTES);
+	getTabContainer()[PANEL_FIRST] = findChild<LLPanelAvatarFirst>(PANEL_FIRST);
 	
 	//*TODO remove this, according to style guide we don't use status combobox
 	getTabContainer()[PANEL_PROFILE]->getChildView("online_me_status_text")->setVisible( FALSE);
@@ -135,6 +166,10 @@ BOOL LLPanelProfileView::postBuild()
 //	childSetCommitCallback("back",boost::bind(&LLPanelProfileView::onBackBtnClick,this),NULL);
 	childSetCommitCallback("copy_to_clipboard",boost::bind(&LLPanelProfileView::onCopyToClipboard,this),NULL);
 // [SL:KB] - Patch : UI-ProfileGroupFloater 
+
+	// set up callback for copy URI button
+	childSetCommitCallback("copy_uri",boost::bind(&LLPanelProfileView::onCopyURI,this),NULL);
+
 	LLFloater* pParentView = dynamic_cast<LLFloater*>(getParent());
 	if (!pParentView)
 	{
@@ -148,12 +183,14 @@ BOOL LLPanelProfileView::postBuild()
 		// HACK-Catznip: we got rid of the back button so we want to line up the name controls with the rest
 		LLUICtrl* pCtrls[] = 
 			{
+				getChild<LLUICtrl>("complete_name", FALSE),
+				getChild<LLUICtrl>("display_name", FALSE),
 				getChild<LLUICtrl>("user_name", FALSE),
+				getChild<LLUICtrl>("user_key", FALSE),
 				getChild<LLUICtrl>("display_name_label", FALSE),
 				getChild<LLUICtrl>("solo_username_label", FALSE),
 				getChild<LLUICtrl>("user_name_small", FALSE),
-				getChild<LLUICtrl>("user_label", FALSE),
-				getChild<LLUICtrl>("user_slid", FALSE)
+				getChild<LLUICtrl>("user_label", FALSE)
 			};
 		int dX = (NULL != pCtrls[0]) ? 10 - pCtrls[0]->getRect().mLeft : 0;
 		for (int idxCtrl = 0; idxCtrl < sizeof(pCtrls) / sizeof(LLUICtrl*); idxCtrl++)
@@ -185,7 +222,7 @@ void LLPanelProfileView::onBackBtnClick()
 
 void LLPanelProfileView::onCopyToClipboard()
 {
-	std::string name = getChild<LLUICtrl>("user_name")->getValue().asString() + " (" + getChild<LLUICtrl>("user_slid")->getValue().asString() + ")";
+	std::string name = getChild<LLUICtrl>("display_name")->getValue().asString() + " (" + getChild<LLUICtrl>("user_name")->getValue().asString() + ")";
 	gClipboard.copyFromString(utf8str_to_wstring(name));
 }
 
@@ -218,6 +255,7 @@ void LLPanelProfileView::updateOnlineStatus()
 		// subscribe observer to get online status. Request will be sent by LLPanelAvatarProfile itself.
 		// do not subscribe for friend avatar because online status can be wrong overridden
 		// via LLAvatarData::flags if Preferences: "Only Friends & Groups can see when I am online" is set.
+		llinfos << "subscribing to AvatarStatusObserver for the profile" << llendl;
 		mAvatarStatusObserver->subscribe();
 		return;
 	}
@@ -240,6 +278,22 @@ void LLPanelProfileView::processOnlineStatus(bool online)
 void LLPanelProfileView::onAvatarNameCache(const LLUUID& agent_id,
 										   const LLAvatarName& av_name)
 {
+	getChild<LLUICtrl>("complete_name")->setValue( av_name.getCompleteName() );
+	getChild<LLUICtrl>("display_name")->setValue( av_name.mDisplayName );
+	getChild<LLUICtrl>("user_name")->setValue( av_name.mUsername );
+	getChild<LLUICtrl>("user_key")->setValue( agent_id.asString() );
+	getChild<LLUICtrl>("copy_uri")->setEnabled( true );
+	//[ADD: FIRE-2266: SJ] make sure username is always filled even when Displaynames are not enabled
+	std::string username = av_name.mUsername;
+	if (username.empty())
+	{
+		username = LLCacheName::buildUsername(av_name.mDisplayName);
+	}
+
+	//[ADD: FIRE-2266: SJ] Adding link to webprofiles on profile which opens Web Profiles in browser
+	getChild<LLUICtrl>("web_profile_text")->setValue( "https://my.secondlife.com/" + username );
+
+#if 0
 	getChild<LLUICtrl>("user_name")->setValue( av_name.mDisplayName );
 	getChild<LLUICtrl>("user_name_small")->setValue( av_name.mDisplayName );
 	getChild<LLUICtrl>("user_slid")->setValue( av_name.mUsername );
@@ -255,11 +309,12 @@ void LLPanelProfileView::onAvatarNameCache(const LLUUID& agent_id,
 		getChild<LLUICtrl>("user_name_small")->setVisible( false );
 		getChild<LLUICtrl>("user_name")->setVisible( true );
 	}
+#endif
 
 	if (LLAvatarNameCache::useDisplayNames())
 	{
 		getChild<LLUICtrl>("user_label")->setVisible( true );
-		getChild<LLUICtrl>("user_slid")->setVisible( true );
+		getChild<LLUICtrl>("user_name")->setVisible( true );
 		getChild<LLUICtrl>("display_name_label")->setVisible( true );
 		getChild<LLUICtrl>("copy_to_clipboard")->setVisible( true );
 		getChild<LLUICtrl>("copy_to_clipboard")->setEnabled( true );
@@ -268,7 +323,7 @@ void LLPanelProfileView::onAvatarNameCache(const LLUUID& agent_id,
 	else
 	{
 		getChild<LLUICtrl>("user_label")->setVisible( false );
-		getChild<LLUICtrl>("user_slid")->setVisible( false );
+		getChild<LLUICtrl>("user_name")->setVisible( false );
 		getChild<LLUICtrl>("display_name_label")->setVisible( false );
 		getChild<LLUICtrl>("copy_to_clipboard")->setVisible( false );
 		getChild<LLUICtrl>("copy_to_clipboard")->setEnabled( false );
@@ -279,6 +334,13 @@ void LLPanelProfileView::onAvatarNameCache(const LLUUID& agent_id,
 	if (pParentView)
 		pParentView->setTitle(av_name.getCompleteName() + " - " + getLabel());
 // [/SL:KB]
+}
+
+// Copy URI button callback
+void LLPanelProfileView::onCopyURI()
+{
+    std::string name = "secondlife:///app/agent/"+getChild<LLUICtrl>("user_key")->getValue().asString()+"/about";
+    gClipboard.copyFromString(utf8str_to_wstring(name));
 }
 
 // EOF

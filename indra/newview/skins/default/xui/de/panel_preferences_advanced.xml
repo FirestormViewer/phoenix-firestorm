@@ -3,6 +3,19 @@
 	<panel.string name="aspect_ratio_text">
 		[NUM]:[DEN]
 	</panel.string>
+	<text name="Cache:">
+		Cache:
+	</text>
+	<spinner label="Cache-Größe (64 – 9.984 MB)" name="cachesizespinner"/>
+	<text name="text_box5">
+		MB
+	</text>
+	<button label="Cache leeren" label_selected="Cache leeren" name="clear_cache"/>
+	<text name="Cache location">
+		Cache-Ordner:
+	</text>
+	<button label="Durchsuchen" label_selected="Durchsuchen" name="set_cache"/>
+	<button label="Vorgabestandort" label_selected="Vorgabestandort" name="default_cache_location"/>
 	<text name="UI Size:">
 		UI-Größe:
 	</text>
@@ -12,7 +25,7 @@
 		<radio_item label="Getrenntes Fenster" name="1"/>
 	</radio_group>
 	<check_box label="Mehrere Viewer zulassen" name="allow_multiple_viewer_check"/>
-	<check_box label="Bei Anmeldung Rasterauswahl anzeigen" name="show_grid_selection_check"/>
+	<check_box label="Bei Anmeldung Gridauswahl anzeigen" name="show_grid_selection_check"/>
 	<check_box label="Menü „Erweitert“ anzeigen" name="show_advanced_menu_check"/>
 	<check_box label="Menü „Entwickler“ anzeigen" name="show_develop_menu_check"/>
 </panel>

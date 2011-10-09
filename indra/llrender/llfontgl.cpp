@@ -189,6 +189,8 @@ S32 LLFontGL::render(const LLWString &wstr, S32 begin_offset, F32 x, F32 y, cons
 	origin.mV[VX] -= llround((F32)sCurOrigin.mX) - (sCurOrigin.mX);
 	origin.mV[VY] -= llround((F32)sCurOrigin.mY) - (sCurOrigin.mY);
 
+	// don't forget to do the depth translation, too. -Zi
+	gGL.translatef(0.f,0.f,sCurOrigin.mZ);
 
 	S32 chars_drawn = 0;
 	S32 i;
@@ -270,7 +272,6 @@ S32 LLFontGL::render(const LLWString &wstr, S32 begin_offset, F32 x, F32 y, cons
 			draw_ellipses = TRUE;
 		}
 	}
-
 
 	const LLFontGlyphInfo* next_glyph = NULL;
 
@@ -555,7 +556,7 @@ S32 LLFontGL::maxDrawableChars(const llwchar* wchars, F32 max_pixels, S32 max_ch
 	BOOL in_word = FALSE;
 
 	// avoid S32 overflow when max_pixels == S32_MAX by staying in floating point
-	F32 scaled_max_pixels =	ceil(max_pixels * sScaleX);
+	F32 scaled_max_pixels =	max_pixels * sScaleX;
 	F32 width_padding = 0.f;
 	
 	LLFontGlyphInfo* next_glyph = NULL;
@@ -797,7 +798,7 @@ const LLFontDescriptor& LLFontGL::getFontDesc() const
 }
 
 // static
-void LLFontGL::initClass(F32 screen_dpi, F32 x_scale, F32 y_scale, const std::string& app_dir, const std::vector<std::string>& xui_paths, bool create_gl_textures)
+void LLFontGL::initClass(F32 screen_dpi, F32 x_scale, F32 y_scale, const std::string& app_dir, const std::vector<std::string>& xui_paths, const std::string& fonts_file, F32 size_mod, bool create_gl_textures)
 {
 	sVertDPI = (F32)llfloor(screen_dpi * y_scale);
 	sHorizDPI = (F32)llfloor(screen_dpi * x_scale);
@@ -808,8 +809,13 @@ void LLFontGL::initClass(F32 screen_dpi, F32 x_scale, F32 y_scale, const std::st
 	// Font registry init
 	if (!sFontRegistry)
 	{
-		sFontRegistry = new LLFontRegistry(xui_paths, create_gl_textures);
-		sFontRegistry->parseFontInfo("fonts.xml");
+		sFontRegistry = new LLFontRegistry(xui_paths, create_gl_textures, size_mod);
+		// Allow the user to pick the fonts
+		if (!sFontRegistry->parseFontInfo(fonts_file))
+		{
+			// fall back to default if specifed font settings file is not found -KC
+			sFontRegistry->parseFontInfo("fonts.xml");
+		}
 	}
 	else
 	{

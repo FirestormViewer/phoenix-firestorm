@@ -142,7 +142,7 @@ Kies alstublieft slechts één item en probeer het opnieuw.
 	</notification>
 	<notification name="GrantModifyRights">
 		Het geven van wijzigingsrechten aan een andere inwoner, maakt het voor hun mogelijk om elk willekeurig object te wijzigen, te verwijderen of om WILLEKEURIGE objecten die u in wereld heeft terug te nemen. Wees HEEL voorzichtig met het uitgeven van dit recht.
-Wilt u wijzigingsrechten aan [FIRST_NAME] [LAST_NAME] geven?
+Wilt u wijzigingsrechten aan [NAME] geven?
 		<usetemplate name="okcancelbuttons" notext="Nee" yestext="Ja"/>
 	</notification>
 	<notification name="GrantModifyRightsMultiple">
@@ -151,7 +151,7 @@ Wilt u wijzigingsrechten aan de geselecteerde inwoners geven?
 		<usetemplate name="okcancelbuttons" notext="Nee" yestext="Ja"/>
 	</notification>
 	<notification name="RevokeModifyRights">
-		Wilt u de wijzigingsrechten voor [FIRST_NAME] [LAST_NAME] terugnemen?
+		Wilt u de wijzigingsrechten voor [NAME] terugnemen?
 		<usetemplate name="okcancelbuttons" notext="Nee" yestext="Ja"/>
 	</notification>
 	<notification name="RevokeModifyRightsMultiple">
@@ -233,9 +233,9 @@ Het aan vinken van deze optie zal:
 - een link naar mijn profiel in de publieke groep pagina&apos;s
 	</notification>
 	<notification name="ClickPartnerHelpAvatar">
-		U kunt een andere Inwoner ten huwelijk vragen of een bestaand partner schap verbreken via de [SECOND_LIFE] website.
+		U kunt een andere Inwoner ten huwelijk vragen of een bestaand partner schap verbreken via de [CURRENT_GRID] website.
 
-Naar de [SECOND_LIFE] website gaan voor meer informatie over partner schap?
+Naar de [CURRENT_GRID] website gaan voor meer informatie over partner schap?
 		<usetemplate name="okcancelbuttons" notext="Annuleren" yestext="Ga naar Pagina"/>
 	</notification>
 	<notification name="ClickUploadHelpPermissions">
@@ -275,7 +275,7 @@ Uw verkoopprijs is L$[SALE_PRICE] en zal geautoriseerd worden voor verkoop door 
 		<usetemplate name="okcancelbuttons" notext="Annuleren" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
-		ATTENTIE: Het aanklikken van &apos;verkoop aan iedereen&apos; zal uw land beschikbaar maken aan de gehele [SECOND_LIFE] gemeenschap, zo ook diegenen niet in deze regio!
+		ATTENTIE: Het aanklikken van &apos;verkoop aan iedereen&apos; zal uw land beschikbaar maken aan de gehele [CURRENT_GRID] gemeenschap, zo ook diegenen niet in deze regio!
 
 De geselecteerde [LAND_SIZE] m² land is te koop gezet.
 Uw verkoopprijs is L$[SALE_PRICE] en zal geautoriseerd worden voor verkoop door [NAME].
@@ -363,7 +363,7 @@ Scripts moeten toegestaan worden om wapens te kunnen laten werken.
 		Er is een probleem met het uploaden van de rapport foto vanwege de volgende reden: [REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
-		U moet akkoord gaan met de Voorwaarden van Dienstverlening (Terms of Service) om in te kunnen loggen in [SECOND_LIFE].
+		U moet akkoord gaan met de Voorwaarden van Dienstverlening (Terms of Service) om in te kunnen loggen in [CURRENT_GRID].
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Kon de outfit niet aan doen.
@@ -379,7 +379,7 @@ De outfit folder bevat geen kleding, lichaamsdelen of externe bevestigingen.
 		Oeps! Iets is nog leeg.
 U moet zowel de voornaam als de achternaam van uw avatar opgeven.
 
-U heeft een account nodig om [SECOND_LIFE] binnen te gaan. Wilt u er nu een maken?
+U heeft een account nodig om [CURRENT_GRID] binnen te gaan. Wilt u er nu een maken?
 		<url name="url">
 			https://join.secondlife.com/index.php?lang=nl-NL
 		</url>
@@ -406,7 +406,7 @@ Betaalde advertentiekosten zullen niet worden terug gestort.
 		<usetemplate name="okcancelbuttons" notext="Annuleren" yestext="OK"/>
 	</notification>
 	<notification name="PromptGoToEventsPage">
-		Naar de [SECOND_LIFE] evenementen web pagina gaan?
+		Naar de [CURRENT_GRID] evenementen web pagina gaan?
 		<usetemplate name="okcancelbuttons" notext="Annuleren" yestext="OK"/>
 	</notification>
 	<notification name="SelectProposalToView">
@@ -437,7 +437,7 @@ Opmerking: Dit zal de Cache legen.
 		De nieuwe skin zal verschijnen nadat u [APP_NAME] opnieuw start.
 	</notification>
 	<notification name="GoToAuctionPage">
-		Ga naar de [SECOND_LIFE] web pagina om de veiling details te zien of een bod uit te brengen.
+		Ga naar de [CURRENT_GRID] web pagina om de veiling details te zien of een bod uit te brengen.
 		<usetemplate name="okcancelbuttons" notext="Annuleren" yestext="OK"/>
 	</notification>
 	<notification name="SaveChanges">
@@ -957,7 +957,7 @@ Meestal is dit een tijdelijk probleem.
 Wijzig en sla het draagbaar item over een paar minuten opnieuw op.
 	</notification>
 	<notification name="YouHaveBeenLoggedOut">
-		U bent uitgelogd uit [SECOND_LIFE]:
+		U bent uitgelogd uit [CURRENT_GRID]:
 [MESSAGE]
 U kunt uw bestaande IM en chat bekijken door te klikken op &apos;Toon IM &amp; Chat&apos;. Anders, klik op Afsluiten om [APP_NAME] direct te verlaten.
 		<usetemplate name="okcancelbuttons" notext="Afsluiten" yestext="Toon IM &amp; Chat"/>
@@ -985,7 +985,7 @@ Vriendschap aanbieden aan [NAME]?
 		</form>
 	</notification>
 	<notification name="RemoveFromFriends">
-		Wilt u [FIRST_NAME] [LAST_NAME] van uw Vriend lijst verwijderen?
+		Wilt u [NAME] van uw Vriend lijst verwijderen?
 		<usetemplate name="okcancelbuttons" notext="Annuleren" yestext="OK"/>
 	</notification>
 	<notification name="RemoveMultipleFromFriends">
@@ -1102,7 +1102,7 @@ Deze [AREA] m² land overdragen aan de groep &apos;[GROUP_NAME]&apos;?
 	</notification>
 	<notification name="DeedLandToGroupWithContribution">
 		Voor het overdragen van dit perceel zal de groep voldoen land gebruikscredit moeten hebben en onderhouden.
-De overdracht zal een simultane land contributie verlangen van de groep van &apos;[FIRST_NAME] [LAST_NAME]&apos;.
+De overdracht zal een simultane land contributie verlangen van de groep van &apos;[NAME]&apos;.
 Het aankoop bedrag zal niet naar de eigenaar worden terug gestort.
 Indien een overgedragen perceel wordt verkocht, zal het verkoop bedrag gelijkmatig over de groepsleden worden verdeeld.
 
@@ -1125,7 +1125,7 @@ U bent naar een nabij gelegen regio verplaatst.
 	</notification>
 	<notification name="ClothingLoading">
 		Uw kleding wordt nog steeds geladen.
-U kunt [SECOND_LIFE] normaal gebruiken en anderen zullen u correct zien.
+U kunt [CURRENT_GRID] normaal gebruiken en anderen zullen u correct zien.
 		<form name="form">
 			<ignore name="ignore" text="Indien kleding een erg lange tijd in beslag neemt om de laden"/>
 		</form>
@@ -1133,12 +1133,12 @@ U kunt [SECOND_LIFE] normaal gebruiken en anderen zullen u correct zien.
 	<notification name="FirstRun">
 		[APP_NAME] installatie compleet.
 
-Als dit de eerste keer is dat u [SECOND_LIFE] gebruikt, zult u een account aan moeten maken voordat u in kan loggen.
+Als dit de eerste keer is dat u [CURRENT_GRID] gebruikt, zult u een account aan moeten maken voordat u in kan loggen.
 Terugkeren naar [https://join.secondlife.com/index.php?lang=nl-NL secondlife.com] om een nieuw account aan te maken?
 		<usetemplate name="okcancelbuttons" notext="Doorgaan" yestext="Nieuw Account..."/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
-		Wij hebben problemen verbinding te maken. Er zou een probleem kunnen zijn met uw internet verbinding of met de [SECOND_LIFE] servers.
+		Wij hebben problemen verbinding te maken. Er zou een probleem kunnen zijn met uw internet verbinding of met de [CURRENT_GRID] servers.
 
 U kunt uw internet verbinding controleren en het over een paar minuten opnieuw proberen, op Help klikken om verbinding te maken met onze support website, of klik op Teleporteren om een poging te doen naar uw thuis locatie te teleporteren.
 		<form name="form">
@@ -1151,7 +1151,7 @@ U kunt uw internet verbinding controleren en het over een paar minuten opnieuw p
 		Uw avatar zal over enkele ogenblikken verschijnen.
 
 Gebruik de pijltjestoetsen om te lopen.
-Druk op elk gewenst moment op F1 voor Help en om meer te leren over [SECOND_LIFE].
+Druk op elk gewenst moment op F1 voor Help en om meer te leren over [CURRENT_GRID].
 Kies alstublieft een mannelijk of vrouwelijke avatar. U kunt later nog van gedachten veranderen.
 		<usetemplate name="okcancelbuttons" notext="Vrouw" yestext="Man"/>
 	</notification>
@@ -1159,10 +1159,10 @@ Kies alstublieft een mannelijk of vrouwelijke avatar. U kunt later nog van gedac
 		[NAME] L$ [PRICE] U heeft niet genoeg L$ om dit te doen.
 	</notification>
 	<notification name="GrantedModifyRights">
-		U heeft het recht verkregen om objecten van [FIRST_NAME] [LAST_NAME] te wijzigen.
+		U heeft het recht verkregen om objecten van [NAME] te wijzigen.
 	</notification>
 	<notification name="RevokedModifyRights">
-		Uw recht om objecten van [FIRST_NAME] [LAST_NAME] is ingetrokken.
+		Uw recht om objecten van [NAME] is ingetrokken.
 	</notification>
 	<notification name="FlushMapVisibilityCaches">
 		Dit zal de Kaart cache van deze regio opschonen.
@@ -1297,19 +1297,19 @@ Downloaden naar uw Applicatie Data map?
 		<usetemplate ignoretext="Bij openen van webbrowser om uw account te beheren" name="okcancelignore" notext="Annuleren" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
-		Bezoek de [SECOND_LIFE] Wiki voor details over hoe een Veiligheids Probleem (Security Issue) te rapporteren.
+		Bezoek de [CURRENT_GRID] Wiki voor details over hoe een Veiligheids Probleem (Security Issue) te rapporteren.
 		<usetemplate ignoretext="Bij openen webbrowser om de Veiligheids Problemen Wiki (Security Issues Wiki) te bekijken" name="okcancelignore" notext="Annuleren" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchQAWiki">
-		Bezoek de [SECOND_LIFE] QA Wiki (Kwaliteitsbeheersing Wiki).
+		Bezoek de [CURRENT_GRID] QA Wiki (Kwaliteitsbeheersing Wiki).
 		<usetemplate ignoretext="Bij openen webbrowser om de QA Wiki (Kwaliteitsbeheersing Wiki) te bekijken" name="okcancelignore" notext="Annuleren" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchPublicIssue">
-		Bezoek de [SECOND_LIFE] Publieke problemenlijst, waar u Bugs en andere Problemen kunt rapporteren.
+		Bezoek de [CURRENT_GRID] Publieke problemenlijst, waar u Bugs en andere Problemen kunt rapporteren.
 		<usetemplate ignoretext="Bij openen webbrowser om de Publieke problemenlijst te bekijken" name="okcancelignore" notext="Annuleren" yestext="Ga naar pagina"/>
 	</notification>
 	<notification name="WebLaunchPublicIssueHelp">
-		Bezoek de [SECOND_LIFE] Wiki voor informatie over het gebruik van de Publieke problemenlijst.
+		Bezoek de [CURRENT_GRID] Wiki voor informatie over het gebruik van de Publieke problemenlijst.
 		<usetemplate ignoretext="Bij openen webbrowser om de Publieke problemenlijst Wiki te bekijken" name="okcancelignore" notext="Annuleren" yestext="Ga naar pagina"/>
 	</notification>
 	<notification name="WebLaunchSupportWiki">
@@ -2003,12 +2003,12 @@ inventaris item(s) verplaatsen?
 		Er zitten geen items in dit object die u kunt kopiëren.
 	</notification>
 	<notification name="WebLaunchAccountHistory">
-		Naar de [SECOND_LIFE] web site gaan om uw account geschiedenis te bekijken?
+		Naar de [CURRENT_GRID] web site gaan om uw account geschiedenis te bekijken?
 		<usetemplate ignoretext="Bij laden van de account geschiedenis webpagina" name="okcancelignore" notext="Annuleren" yestext="Ga naar pagina"/>
 	</notification>
 	<notification name="ClickOpenF1Help">
-		De [SECOND_LIFE] Support Web site bezoeken?
-		<usetemplate ignoretext="Bij bezoeken van de [SECOND_LIFE] Support Website." name="okcancelignore" notext="Annuleren" yestext="Ga"/>
+		De [CURRENT_GRID] Support Web site bezoeken?
+		<usetemplate ignoretext="Bij bezoeken van de [CURRENT_GRID] Support Website." name="okcancelignore" notext="Annuleren" yestext="Ga"/>
 	</notification>
 	<notification name="ConfirmQuit">
 		Weet u zeker dat u wilt afsluiten?
@@ -2032,7 +2032,7 @@ Als een service aan Inwoners en bezoekers heeft de eigenaar van deze regio er vo
 De regio eigenaar zal de rapporten afhandelen op basis van de regels geldend voor deze regio zoals weergegeven in het Estate Convenant (Bekijk Convenants door naar Wereld te gaan in het menu en te kiezen voor Over Land).
 
 De afhandeling van dit rapport is alleen van toepassing op deze regio.
-Toegang van Inwoners tot andere gebieden van [SECOND_LIFE] zullen niet beïnvloed worden door de uitkomst van dit rapport. Alleen Linden Lab kan de toegang tot geheel [SECOND_LIFE] beperken.
+Toegang van Inwoners tot andere gebieden van [CURRENT_GRID] zullen niet beïnvloed worden door de uitkomst van dit rapport. Alleen Linden Lab kan de toegang tot geheel [CURRENT_GRID] beperken.
 	</notification>
 	<notification name="HelpReportAbuseSelectCategory">
 		Selecteer alstublieft een categorie voor dit misbruik rapport.
@@ -2066,9 +2066,9 @@ Het opgeven van een accurate omschrijving helpt ons met het archiveren en verwer
 
 Het lijkt er op dat u intellectueel eigendoms misbruik rapporteert. Wees er alstublieft van overtuigd dat u dit correct rapporteert:
 
-(1) Het Misbruik Proces. U kunt een misbruik rapport indienen als u er van overtuigd bent dat een Inwoner het [SECOND_LIFE] permissie systeem uitbuit, bijvoorbeeld door gebruik van CopyBot of soortgelijke gereedschappen, daarmee de intellectuele eigendoms rechten overtredend. Het Abuse Team onderzoekt en zal passende maatregelen uitvaardigen tegen gedrag dat de [SECOND_LIFE] Gemeenschaps Standaarden overtreedt. Echter, het Abuse Team zal geen actie ondernemen en niet reageren op verzoeken om inhoud te verwijderen uit de [SECOND_LIFE] wereld.
+(1) Het Misbruik Proces. U kunt een misbruik rapport indienen als u er van overtuigd bent dat een Inwoner het [CURRENT_GRID] permissie systeem uitbuit, bijvoorbeeld door gebruik van CopyBot of soortgelijke gereedschappen, daarmee de intellectuele eigendoms rechten overtredend. Het Abuse Team onderzoekt en zal passende maatregelen uitvaardigen tegen gedrag dat de [CURRENT_GRID] Gemeenschaps Standaarden overtreedt. Echter, het Abuse Team zal geen actie ondernemen en niet reageren op verzoeken om inhoud te verwijderen uit de [CURRENT_GRID] wereld.
 
-(2) Het DMCA of Inhoud Verwijder Proces. Voor een verzoek tot verwijdering van inhoud in [SECOND_LIFE], MOET u een geldige berichtgeving van misbruik indienen zoals voorzien in onze DMCA beleid op http://secondlife.com/corporate/dmca.php.
+(2) Het DMCA of Inhoud Verwijder Proces. Voor een verzoek tot verwijdering van inhoud in [CURRENT_GRID], MOET u een geldige berichtgeving van misbruik indienen zoals voorzien in onze DMCA beleid op http://secondlife.com/corporate/dmca.php.
 
 Indien u nog steeds door wilt gaan met het misbruik proces, sluit dan alstublieft dit venster en maak het indienen van uw rapport af. U zult mogelijk een specifieke catagorie moeten kiezen &apos;CopyBot of Permissie Uitbuiting&apos;.
 
@@ -2190,7 +2190,7 @@ Klik op &quot;Geavanceerde Lucht&quot; om de editor op te roepen voor geavanceer
 Klik op &quot;Geavanceerd Water&quot; om de editor op te roepen voor geavanceerde instellingen voor water.
 	</notification>
 	<notification name="HelpDayCycle">
-		De Dag Cyclus Editor geeft u controle over de lucht gedurende de [SECOND_LIFE]&apos;s dag/nacht cyclus. Dit is de cyclus die gebruikt wordt in de Basis Omgeving Editor&apos;s Tijd van de Dag schuif knop.
+		De Dag Cyclus Editor geeft u controle over de lucht gedurende de [CURRENT_GRID]&apos;s dag/nacht cyclus. Dit is de cyclus die gebruikt wordt in de Basis Omgeving Editor&apos;s Tijd van de Dag schuif knop.
 
 De Dag Cyclus Editor werkt beter met het instellen van gemarkeerde frames. Dit zijn nodes (weergegeven als grijze blips in de tijd weergave) die Hemel voorinstelling met zich geassocieerd hebben. Als de Tijd van de Dag voortschrijdt, &quot;animeert&quot; de WindLight Hemel als het interpoleert tussen de gemarkeerde frames.
 
@@ -2270,7 +2270,7 @@ Gelijkwaardig aan azimut.
 		Bepaald de snelheid van de wolken terwijl zij in Y richting bewegen.
 	</notification>
 	<notification name="HelpClassicClouds">
-		Vink dit aan voor weergave van [SECOND_LIFE]&apos;s oudere klassieke wolken als toevoeging op WindLight&apos;s wolken.
+		Vink dit aan voor weergave van [CURRENT_GRID]&apos;s oudere klassieke wolken als toevoeging op WindLight&apos;s wolken.
 	</notification>
 	<notification name="HelpWaterFogColor">
 		Kiest de kleur van de onder water nevel.
@@ -2369,7 +2369,7 @@ Om dit recht in te trekken, moet de object eigenaar het object verwijderen of de
 	</notification>
 	<notification name="NotAgeVerified">
 		U moet leeftijd geverifieerd zijn om toegang te verkrijgen tot dit perceel.
-Wilt u de [SECOND_LIFE] website bezoeken om uw leeftijd te verifiëren?
+Wilt u de [CURRENT_GRID] website bezoeken om uw leeftijd te verifiëren?
 
 [_URL]
 		<url name="url" option="0">
@@ -2379,7 +2379,7 @@ Wilt u de [SECOND_LIFE] website bezoeken om uw leeftijd te verifiëren?
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
 		Dit perceel verlangd dat u betaal informatie geregistreerd hebt staan alvorens toegang te verkrijgen.
-Wilt u de [SECOND_LIFE] website bezoeken om dit in te stellen?
+Wilt u de [CURRENT_GRID] website bezoeken om dit in te stellen?
 
 [_URL]
 		<url name="url" option="0">
@@ -2409,10 +2409,10 @@ Wilt u de [SECOND_LIFE] website bezoeken om dit in te stellen?
 		Onderwerp: [SUBJECT], Bericht: [MESSAGE]
 	</notification>
 	<notification name="FriendOnline">
-		[FIRST] [LAST] is Online
+		[NAME] is Online
 	</notification>
 	<notification name="FriendOffline">
-		[FIRST] [LAST] is Offline
+		[NAME] is Offline
 	</notification>
 	<notification name="AddSelfFriend">
 		U kunt uzelf niet als vriend toevoegen.
@@ -2571,7 +2571,7 @@ Indien u streaming media wilt zien op percelen die dit ondersteunen, dient u naa
 		De objecten die uw eigendom zijn op het geselecteerde perceel zijn geretourneerd naar uw inventaris.
 	</notification>
 	<notification name="OtherObjectsReturned">
-		De objecten op het geselecteerde perceel dat het eigendom is van [FIRST] [LAST], zijn geretourneerd naar zijn of haar inventaris.
+		De objecten op het geselecteerde perceel dat het eigendom is van [NAME], zijn geretourneerd naar zijn of haar inventaris.
 	</notification>
 	<notification name="OtherObjectsReturned2">
 		De objecten op het geselecteerde perceel dat het eigendom is van inwoner &apos;[NAME]&apos;, zijn geretourneerd naar hun eigenaar.
@@ -2683,13 +2683,13 @@ Probeer het alstublieft opnieuw over enkele ogenblikken.
 		Kan wachtende verbinding niet maken.
 	</notification>
 	<notification name="InternalUsherError">
-		Er is een interne fout opgetreden terwijl geprobeerd werd u naar uw teleportbestemming te begeleiden. [SECOND_LIFE] heeft op dit moment mogelijk problemen met de dienstverlening.
+		Er is een interne fout opgetreden terwijl geprobeerd werd u naar uw teleportbestemming te begeleiden. [CURRENT_GRID] heeft op dit moment mogelijk problemen met de dienstverlening.
 	</notification>
 	<notification name="NoGoodTPDestination">
 		Kan geen goede teleportbestemming vinden in deze regio.
 	</notification>
 	<notification name="InternalErrorRegionResolver">
-		Er is een interne fout opgetreden terwijl de globale coördinaten voor uw teleportverzoek werden bepaald. [SECOND_LIFE] heeft op dit moment mogelijk problemen met de dienstverlening.
+		Er is een interne fout opgetreden terwijl de globale coördinaten voor uw teleportverzoek werden bepaald. [CURRENT_GRID] heeft op dit moment mogelijk problemen met de dienstverlening.
 	</notification>
 	<notification name="NoValidLanding">
 		Er kon geen geldig landingspunt worden gevonden.
@@ -2698,7 +2698,7 @@ Probeer het alstublieft opnieuw over enkele ogenblikken.
 		Geen geldig perceel kon gevonden worden.
 	</notification>
 	<notification name="ObjectGiveItem">
-		Een object genaamd [OBJECTFROMNAME], eigendom van [FIRST] [LAST], heeft u een [OBJECTTYPE] genaamd [OBJECTNAME] gegeven.
+		Een object genaamd [OBJECTFROMNAME], eigendom van [NAME_SLURL], heeft u een [OBJECTTYPE] genaamd [OBJECTNAME] gegeven.
 		<form name="form">
 			<button name="Keep" text="Behouden"/>
 			<button name="Discard" text="Afwijzen"/>
@@ -2837,7 +2837,7 @@ Dit verzoek inwilligen?
 		</form>
 	</notification>
 	<notification name="ScriptDialog">
-		[FIRST] [LAST]&apos;s &apos;[TITLE]&apos;
+		[NAME]&apos;s &apos;[TITLE]&apos;
 [MESSAGE]
 		<form name="form">
 			<button name="Ignore" text="Negeren"/>
@@ -2870,7 +2870,7 @@ Dubbelklik om te teleporteren.
 Gebruik de bedieningselementen aan de rechterkant om dingen te vinden en verschillende achtergronden te tonen.
 	</notification>
 	<notification name="FirstBuild">
-		U kunt nieuwe objecten bouwen in sommige gebieden van [SECOND_LIFE].
+		U kunt nieuwe objecten bouwen in sommige gebieden van [CURRENT_GRID].
 Gebruik de gereedschappen in de linkerbovenhoek om te bouwen en probeer Ctrl en Alt ingedrukt te houden om snel tussen gereedschappen te wisselen.
 Druk Esc om te stoppen met bouwen.
 	</notification>
@@ -2914,7 +2914,7 @@ Flexibele objecten mogen niet fysiek zijn en moeten fantoom zijn tot de &apos;fl
 	</notification>
 	<notification name="FirstDebugMenus">
 		U heeft het menu Geavanceerd geactiveerd.
-Dit menu bevat opties die handig zijn voor ontwikkelaars tijdens het debuggen van [SECOND_LIFE].
+Dit menu bevat opties die handig zijn voor ontwikkelaars tijdens het debuggen van [CURRENT_GRID].
 Om dit menu in en uit te schakelen drukt u binnen Windows Ctrl+Alt+D. Met een Mac drukt u &#8997;&#8984;D.
 	</notification>
 	<notification name="FirstSculptedPrim">
@@ -2938,13 +2938,13 @@ Klik Accepteren om deel te nemen aan dit gesprek of Afwijzen om de uitnodiging a
 		</form>
 	</notification>
 	<notification name="AutoUnmuteByIM">
-		Er is een instant message naar [FIRST] [LAST] gestuurd, waardoor deze automatisch van de negeerlijst is gehaald.
+		Er is een instant message naar [NAME] gestuurd, waardoor deze automatisch van de negeerlijst is gehaald.
 	</notification>
 	<notification name="AutoUnmuteByMoney">
-		Er is geld gegeven aan [FIRST] [LAST], waardoor deze automatisch van de negeerlijst is gehaald.
+		Er is geld gegeven aan [NAME], waardoor deze automatisch van de negeerlijst is gehaald.
 	</notification>
 	<notification name="AutoUnmuteByInventory">
-		Er is inventaris aangeboden aan [FIRST] [LAST], waardoor deze automatisch van de negeerlijst is gehaald.
+		Er is inventaris aangeboden aan [NAME], waardoor deze automatisch van de negeerlijst is gehaald.
 	</notification>
 	<notification name="VoiceInviteGroup">
 		[NAME] doet nu mee met een Voice chat gesprek binnen de groep [GROUP].
@@ -3011,9 +3011,6 @@ Klik Accepteren om deel te nemen aan de chat of Afwijzen om de uitnodiging af te
 	</notification>
 	<notification name="VoiceCallGenericError">
 		Er is een fout opgetreden tijdens het verbinden met voice chat voor [VOICE_CHANNEL_NAME]. Probeert u het later alstublieft opnieuw.
-	</notification>
-	<notification name="ServerVersionChanged">
-		De regio die u bent binnengetreden wordt onder een andere simulatorversie uitgevoerd. Klik dit bericht voor meer details.
 	</notification>
 	<notification name="UnableToOpenCommandURL">
 		De URL die u heeft geklikt kan niet binnen deze webbrowser worden geopend.

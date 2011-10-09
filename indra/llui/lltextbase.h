@@ -30,6 +30,9 @@
 
 #include "v4color.h"
 #include "lleditmenuhandler.h"
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+#include "llspellcheckmenuhandler.h"
+// [/SL:KB]
 #include "llstyle.h"
 #include "llkeywords.h"
 #include "llpanel.h"
@@ -61,6 +64,9 @@ public:
 	virtual void				updateLayout(const class LLTextBase& editor);
 	virtual F32					draw(S32 start, S32 end, S32 selection_start, S32 selection_end, const LLRect& draw_rect);
 	virtual bool				canEdit() const;
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	virtual bool				canSpellCheck() const;
+// [/SL:KB]
 	virtual void				unlinkFromDocument(class LLTextBase* editor);
 	virtual void				linkToDocument(class LLTextBase* editor);
 
@@ -112,6 +118,9 @@ public:
 	/*virtual*/ S32					getNumChars(S32 num_pixels, S32 segment_offset, S32 line_offset, S32 max_chars) const;
 	/*virtual*/ F32					draw(S32 start, S32 end, S32 selection_start, S32 selection_end, const LLRect& draw_rect);
 	/*virtual*/ bool				canEdit() const { return true; }
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	/*virtual*/ bool				canSpellCheck() const { return true; }
+// [/SL:KB]
 	/*virtual*/ const LLColor4&		getColor() const					{ return mStyle->getColor(); }
 	/*virtual*/ LLStyleConstSP		getStyle() const					{ return mStyle; }
 	/*virtual*/ void 				setStyle(LLStyleConstSP style)	{ mStyle = style; }
@@ -231,6 +240,9 @@ typedef LLPointer<LLTextSegment> LLTextSegmentPtr;
 class LLTextBase 
 :	public LLUICtrl,
 	protected LLEditMenuHandler
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+,	public LLSpellCheckMenuHandler
+// [/SL:KB]
 {
 public:
 	friend class LLTextSegment;
@@ -259,12 +271,16 @@ public:
 								border_visible,
 								track_end,
 								read_only,
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+								spellcheck,
+// [/SL:KB]
 								allow_scroll,
 								plain_text,
 								wrap,
 								use_ellipses,
 								parse_urls,
 								parse_highlights,
+								clip,
 								clip_partial;
 								
 		Optional<S32>			v_pad,
@@ -310,6 +326,11 @@ public:
 	/*virtual*/ BOOL		canDeselect() const;
 	/*virtual*/ void		deselect();
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	// LLSpellCheckMenuHandler overrides
+	/*virtual*/ bool		useSpellCheck() const;
+// [/SL:KB]
+
 	// used by LLTextSegment layout code
 	bool					getWordWrap() { return mWordWrap; }
 	bool					getUseEllipses() { return mUseEllipses; }
@@ -338,7 +359,7 @@ public:
 	void					addDocumentChild(LLView* view);
 	void					removeDocumentChild(LLView* view);
 	const LLView*			getDocumentView() const { return mDocumentView; }
-	LLRect					getVisibleTextRect() { return mVisibleTextRect; }
+	LLRect					getVisibleTextRect() const { return mVisibleTextRect; }
 	LLRect					getTextBoundingRect();
 	LLRect					getVisibleDocumentRect() const;
 
@@ -357,6 +378,9 @@ public:
 
 	// cursor manipulation
 	bool					setCursor(S32 row, S32 column);
+// [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-12 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
+	S32						getCursorPos() { return mCursorPos; }
+// [/SL:KB
 	bool					setCursorPos(S32 cursor_pos, bool keep_cursor_offset = false);
 	void					startOfLine();
 	void					endOfLine();
@@ -494,6 +518,10 @@ protected:
 	void							updateRects();
 	void							needsScroll() { mScrollNeeded = TRUE; }
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	void							onSpellCheckSettingsChange();
+// [/SL:KB]
+
 	struct URLLabelCallback;
 	// Replace a URL with a new icon and label, for example, when
 	// avatar names are looked up.
@@ -537,6 +565,16 @@ protected:
 	
 	BOOL						mIsSelecting;		// Are we in the middle of a drag-select? 
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	BOOL						mSpellCheck;
+	BOOL						mNeedsSpellCheck;
+	LLTimer						mSpellCheckTimer;
+	std::list<std::pair<U32, U32> > mMisspellRanges;
+
+	// Constant
+	static const F32 SPELLCHECK_DELAY;
+// [/SL:KB]
+
 	// configuration
 	S32							mHPad;				// padding on left of text
 	S32							mVPad;				// padding above text
@@ -552,6 +590,7 @@ protected:
 	bool						mTrackEnd;			// if true, keeps scroll position at end of document during resize
 	bool						mReadOnly;
 	bool						mBGVisible;			// render background?
+	bool						mClip;				// clip text to widget rect
 	bool						mClipPartial;		// false if we show lines that are partially inside bounding rect
 	bool						mPlainText;			// didn't use Image or Icon segments
 	S32							mMaxTextByteLength;	// Maximum length mText is allowed to be in bytes

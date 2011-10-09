@@ -30,13 +30,13 @@
 
 // viewer includes
 #include "llsecapi.h"
-#include "lllogininstance.h"        // to check if logged in yet
-#include "llpanellogin.h"			// save_password_to_disk()
+#include "lllogininstance.h"		// to check if logged in yet
+#include "llpanellogin.h"
 #include "llstartup.h"				// getStartupState()
 #include "llslurl.h"
 #include "llviewercontrol.h"		// gSavedSettings
 #include "llviewernetwork.h"		// EGridInfo
-#include "llviewerwindow.h"                    // getWindow()
+#include "llviewerwindow.h"			// getWindow()
 
 // library includes
 #include "llmd5.h"
@@ -164,11 +164,7 @@ LLPointer<LLCredential> LLLoginHandler::initializeLoginInfo()
 {                                                                                                                           
 	LLPointer<LLCredential> result = NULL;                                                                               
 	// so try to load it from the UserLoginInfo                                                                          
-	result = loadSavedUserLoginInfo();                                                                                   
-	if (result.isNull())                                                                                                 
-	{                                                                                                                    
-		result =  gSecAPIHandler->loadCredential(LLGridManager::getInstance()->getGrid());                       
-	}                                                                                                                    
+	result = loadSavedUserLoginInfo();                                                                                                                 
 	
 	return result;                                                                                                       
 } 
@@ -178,7 +174,7 @@ LLPointer<LLCredential> LLLoginHandler::loadSavedUserLoginInfo()
 {
   // load the saved user login info into a LLCredential.
   // perhaps this should be moved.
-	LLSD cmd_line_login = gSavedSettings.getLLSD("UserLoginInfo");
+	LLSD cmd_line_login = gSavedSettings.getLLSD("UserLoginInfo1");
 	if (cmd_line_login.size() == 3) 
 	{
 	
@@ -196,7 +192,7 @@ LLPointer<LLCredential> LLLoginHandler::loadSavedUserLoginInfo()
 		authenticator["secret"] = md5pass;
 		// yuck, we'll fix this with mani's changes.
 		gSavedSettings.setBOOL("AutoLogin", TRUE);
-		return gSecAPIHandler->createCredential(LLGridManager::getInstance()->getGrid(), 
+		return gSecAPIHandler->createCredential(identifier["first_name"].asString()+" "+identifier["last_name"].asString()+"@"+LLGridManager::getInstance()->getGrid(), 
 													   identifier, authenticator);
 	}
 	return NULL;

@@ -475,7 +475,7 @@ void LLEventPump::stopListening(const std::string& name)
 *****************************************************************************/
 bool LLEventStream::post(const LLSD& event)
 {
-    if (! mEnabled)
+    if (! mEnabled || !mSignal)
     {
         return false;
     }
@@ -515,6 +515,8 @@ bool LLEventQueue::post(const LLSD& event)
 
 void LLEventQueue::flush()
 {
+	if(!mSignal) return;
+		
     // Consider the case when a given listener on this LLEventQueue posts yet
     // another event on the same queue. If we loop over mEventQueue directly,
     // we'll end up processing all those events during the same flush() call
@@ -585,4 +587,17 @@ void LLReqID::stamp(LLSD& response) const
         return;
     }
     response["reqid"] = mReqid;
+}
+
+bool sendReply(const LLSD& reply, const LLSD& request, const std::string& replyKey)
+{
+    // Copy 'reply' to modify it.
+    LLSD newreply(reply);
+    // Get the ["reqid"] element from request
+    LLReqID reqID(request);
+    // and copy it to 'newreply'.
+    reqID.stamp(newreply);
+    // Send reply on LLEventPump named in request[replyKey]. Don't forget to
+    // send the modified 'newreply' instead of the original 'reply'.
+    return LLEventPumps::instance().obtain(request[replyKey]).post(newreply);
 }

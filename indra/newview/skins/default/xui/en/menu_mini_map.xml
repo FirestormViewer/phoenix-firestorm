@@ -8,7 +8,7 @@
  top="724"
  visible="false"
  width="128">
-    <menu_item_call
+	<menu_item_call
      label="Zoom Close"
      name="Zoom Close">
         <menu_item_call.on_click
@@ -29,7 +29,14 @@
          function="Minimap.Zoom"
          parameter="far" />
     </menu_item_call>
-    <menu_item_separator />
+	<menu_item_call
+     label="Zoom Default"
+     name="Zoom Default">
+		<menu_item_call.on_click
+         function="Minimap.Zoom"
+         parameter="default" />
+	</menu_item_call>
+	<menu_item_separator />
     <menu_item_check
        label="Rotate Map"
        name="Rotate Map">
@@ -48,7 +55,53 @@
              function="ToggleControl"
              parameter="MiniMapAutoCenter" />
     </menu_item_check>
+    <menu_item_check
+       label="Chat Distance Ring"
+       name="Chat Distance Ring">
+          <menu_item_check.on_check
+             control="MiniMapChatRing" />
+          <menu_item_check.on_click
+             function="ToggleControl"
+             parameter="MiniMapChatRing" />
+    </menu_item_check>
     <menu_item_separator />
+	<menu name="MarkAvatar" label="Mark...">
+		<menu_item_call
+		 label="Red"
+		 name="MarkRed">
+			<menu_item_call.on_click
+			 function="Minimap.Mark"
+			 parameter="Red" />
+		</menu_item_call>
+		<menu_item_call
+		 label="Purple"
+		 name="MarkPurple">
+			<menu_item_call.on_click
+			 function="Minimap.Mark"
+			 parameter="Purple" />
+		</menu_item_call>
+		<menu_item_call
+		 label="Green"
+		 name="MarkGreen">
+			<menu_item_call.on_click
+			 function="Minimap.Mark"
+			 parameter="Green" />
+		</menu_item_call>
+		<menu_item_call
+		 label="Yellow"
+		 name="MarkYellow">
+			<menu_item_call.on_click
+			 function="Minimap.Mark"
+			 parameter="LtYellow" />
+		</menu_item_call>
+		<menu_item_separator />
+		<menu_item_call
+		 label="Clear Marks"
+		 name="Clear Marks">
+			<menu_item_call.on_click
+			 function="Minimap.ClearMarks"/>
+		</menu_item_call>
+	</menu>
     <menu_item_call
      label="Stop Tracking"
      name="Stop Tracking">

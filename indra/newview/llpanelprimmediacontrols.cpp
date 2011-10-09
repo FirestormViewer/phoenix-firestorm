@@ -59,7 +59,9 @@
 #include "llvovolume.h"
 #include "llweb.h"
 #include "llwindow.h"
+#include "llwindowshade.h"
 #include "llfloatertools.h"  // to enable hide if build tools are up
+#include "llvector4a.h"
 
 // Functions pulled from pipeline.cpp
 glh::matrix4f glh_get_current_modelview();
@@ -90,7 +92,9 @@ LLPanelPrimMediaControls::LLPanelPrimMediaControls() :
 	mTargetObjectNormal(LLVector3::zero),
 	mZoomObjectID(LLUUID::null),
 	mZoomObjectFace(0),
-	mVolumeSliderVisible(0)
+	mVolumeSliderVisible(0),
+	mWindowShade(NULL),
+	mHideImmediately(false)
 {
 	mCommitCallbackRegistrar.add("MediaCtrl.Close",		boost::bind(&LLPanelPrimMediaControls::onClickClose, this));
 	mCommitCallbackRegistrar.add("MediaCtrl.Back",		boost::bind(&LLPanelPrimMediaControls::onClickBack, this));
@@ -205,6 +209,11 @@ BOOL LLPanelPrimMediaControls::postBuild()
 		
 	mMediaAddress->setFocusReceivedCallback(boost::bind(&LLPanelPrimMediaControls::onInputURL, _1, this ));
 	
+	gAgent.setMouselookModeInCallback(boost::bind(&LLPanelPrimMediaControls::onMouselookModeIn, this));
+
+	LLWindowShade::Params window_shade_params;
+	window_shade_params.name = "window_shade";
+
 	mCurrentZoom = ZOOM_NONE;
 	// clicks on buttons do not remove keyboard focus from media
 	setIsChrome(TRUE);
@@ -519,7 +528,7 @@ void LLPanelPrimMediaControls::updateShape()
 			if(LLPluginClassMediaOwner::MEDIA_LOADING == media_plugin->getStatus())
 			{	
 				mMediaProgressPanel->setVisible(true);
-				mMediaProgressBar->setPercent(media_plugin->getProgressPercent());
+				mMediaProgressBar->setValue(media_plugin->getProgressPercent());
 			}
 			else
 			{
@@ -569,7 +578,9 @@ void LLPanelPrimMediaControls::updateShape()
 		{
 			const LLVolumeFace& vf = volume->getVolumeFace(mTargetObjectFace);
 			
-			const LLVector3* ext = vf.mExtents;
+			LLVector3 ext[2];
+			ext[0].set(vf.mExtents[0].getF32ptr());
+			ext[1].set(vf.mExtents[1].getF32ptr());
 			
 			LLVector3 center = (ext[0]+ext[1])*0.5f;
 			LLVector3 size = (ext[1]-ext[0])*0.5f;
@@ -620,12 +631,12 @@ void LLPanelPrimMediaControls::updateShape()
 		// convert screenspace bbox to pixels (in screen coords)
 		LLRect window_rect = gViewerWindow->getWorldViewRectScaled();
 		LLCoordGL screen_min;
-		screen_min.mX = llround((F32)window_rect.getWidth() * (min.mV[VX] + 1.f) * 0.5f);
-		screen_min.mY = llround((F32)window_rect.getHeight() * (min.mV[VY] + 1.f) * 0.5f);
+		screen_min.mX = llround((F32)window_rect.mLeft + (F32)window_rect.getWidth() * (min.mV[VX] + 1.f) * 0.5f);
+		screen_min.mY = llround((F32)window_rect.mBottom + (F32)window_rect.getHeight() * (min.mV[VY] + 1.f) * 0.5f);
 		
 		LLCoordGL screen_max;
-		screen_max.mX = llround((F32)window_rect.getWidth() * (max.mV[VX] + 1.f) * 0.5f);
-		screen_max.mY = llround((F32)window_rect.getHeight() * (max.mV[VY] + 1.f) * 0.5f);
+		screen_max.mX = llround((F32)window_rect.mLeft + (F32)window_rect.getWidth() * (max.mV[VX] + 1.f) * 0.5f);
+		screen_max.mY = llround((F32)window_rect.mBottom + (F32)window_rect.getHeight() * (max.mV[VY] + 1.f) * 0.5f);
 		
 		// grow panel so that screenspace bounding box fits inside "media_region" element of panel
 		LLRect media_panel_rect;
@@ -698,27 +709,41 @@ void LLPanelPrimMediaControls::updateShape()
 /*virtual*/
 void LLPanelPrimMediaControls::draw()
 {
+	LLViewerMediaImpl* impl = getTargetMediaImpl();
+	if (impl)
+	{
+		LLNotificationPtr notification = impl->getCurrentNotification();
+		if (notification != mActiveNotification)
+		{
+			mActiveNotification = notification;
+			if (notification)
+			{
+				showNotification(notification);
+			}
+			else
+			{
+				hideNotification();
+			}
+		}
+	}
+
 	F32 alpha = getDrawContext().mAlpha;
-	if(mFadeTimer.getStarted())
+	if(mHideImmediately)
+	{
+		//hide this panel
+		clearFaceOnFade();
+
+		mHideImmediately = false;
+	}
+	else if(mFadeTimer.getStarted())
 	{
 		F32 time = mFadeTimer.getElapsedTimeF32();
 		alpha *= llmax(lerp(1.0, 0.0, time / mControlFadeTime), 0.0f);
 
 		if(time >= mControlFadeTime)
 		{
-			if(mClearFaceOnFade)
-			{
-				// Hiding this object makes scroll events go missing after it fades out 
-				// (see DEV-41755 for a full description of the train wreck).
-				// Only hide the controls when we're untargeting.
-				setVisible(FALSE);
-
-				mClearFaceOnFade = false;
-				mVolumeSliderVisible = 0;
-				mTargetImplID = LLUUID::null;
-				mTargetObjectID = LLUUID::null;
-				mTargetObjectFace = 0;
-			}
+			//hide this panel
+			clearFaceOnFade();
 		}
 	}
 	
@@ -1294,4 +1319,63 @@ void LLPanelPrimMediaControls::hideVolumeSlider()
 bool LLPanelPrimMediaControls::shouldVolumeSliderBeVisible()
 {
 	return mVolumeSliderVisible > 0;
+}
+
+
+void LLPanelPrimMediaControls::clearFaceOnFade()
+{
+	if(mClearFaceOnFade)
+	{
+		// Hiding this object makes scroll events go missing after it fades out
+		// (see DEV-41755 for a full description of the train wreck).
+		// Only hide the controls when we're untargeting.
+		setVisible(FALSE);
+
+		mClearFaceOnFade = false;
+		mVolumeSliderVisible = 0;
+		mTargetImplID = LLUUID::null;
+		mTargetObjectID = LLUUID::null;
+		mTargetObjectFace = 0;
+	}
+}
+
+void LLPanelPrimMediaControls::onMouselookModeIn()
+{
+	LLViewerMediaFocus::getInstance()->clearHover();
+	mHideImmediately = true;
+}
+
+void LLPanelPrimMediaControls::showNotification(LLNotificationPtr notify)
+{
+	delete mWindowShade;
+	LLWindowShade::Params params;
+	params.rect = mMediaRegion->getLocalRect();
+	params.follows.flags = FOLLOWS_ALL;
+	params.notification = notify;
+
+	//HACK: don't hardcode this
+	if (notify->getIcon() == "Popup_Caution")
+	{
+		params.bg_image.name = "Yellow_Gradient";
+		params.text_color = LLColor4::black;
+	}
+	else
+	{
+		//HACK: make this a property of the notification itself, "cancellable"
+		params.can_close = false;
+		params.text_color.control = "LabelTextColor";
+	}
+
+	mWindowShade = LLUICtrlFactory::create<LLWindowShade>(params);
+
+	mMediaRegion->addChild(mWindowShade);
+	mWindowShade->show();
+}
+
+void LLPanelPrimMediaControls::hideNotification()
+{
+	if (mWindowShade)
+	{
+		mWindowShade->hide();
+	}
 }

@@ -22,12 +22,14 @@
 		L$ [AMT]
 	</panel.string>
 	<panel name="balance_bg">
-		<text name="balance" tool_tip="残高" value="L$20"/>
+		<text name="balance" tool_tip="クリックして L$ 残高を更新" value="L$???"/>
 		<button label="L$ の購入" name="buyL" tool_tip="クリックして L$ を購入します"/>
 	</panel>
 	<text name="TimeText" tool_tip="現在時刻（太平洋）">
 		24:00 AM PST
 	</text>
-	<button name="media_toggle_btn" tool_tip="すべてのメディアを開始・停止（音楽、ビデオ、Web ページ）"/>
-	<button name="volume_btn" tool_tip="グローバル音量設定"/>
+	<panel name="time_and_media_bg">
+		<button name="media_toggle_btn" tool_tip="すべてのメディアを開始・停止（音楽、ビデオ、Web ページ）"/>
+		<button name="volume_btn" tool_tip="グローバル音量設定"/>
+	</panel>
 </panel>

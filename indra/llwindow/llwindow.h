@@ -36,6 +36,7 @@
 class LLSplashScreen;
 class LLPreeditor;
 class LLWindowCallbacks;
+class LLWindowListener;
 
 // Refer to llwindow_test in test/common/llwindow for usage example
 
@@ -155,12 +156,17 @@ public:
 	virtual void updateLanguageTextInputArea() {}
 	virtual void interruptLanguageTextInput() {}
 	virtual void spawnWebBrowser(const std::string& escaped_url, bool async) {};
+	virtual void openFile(const std::string& file_name) {};
 
 	static std::vector<std::string> getDynamicFallbackFontList();
 	
 	// Provide native key event data
 	virtual LLSD getNativeKeyData() { return LLSD::emptyMap(); }
 
+//-TT Window Title Access
+//this needs to be overridden for all platforms
+	virtual void setTitle(const std::string& win_title) {};
+//-TT
 protected:
 	LLWindow(LLWindowCallbacks* callbacks, BOOL fullscreen, U32 flags);
 	virtual ~LLWindow();
@@ -188,6 +194,7 @@ protected:
 	BOOL		mHideCursorPermanent;
 	U32			mFlags;
 	U16			mHighSurrogate;
+	LLWindowListener* mListener;
 
  	// Handle a UTF-16 encoding unit received from keyboard.
  	// Converting the series of UTF-16 encoding units to UTF-32 data,

@@ -45,4 +45,3 @@ LLFloaterBuildOptions::LLFloaterBuildOptions(const LLSD& key)
 LLFloaterBuildOptions::~LLFloaterBuildOptions()
 {
 }
-

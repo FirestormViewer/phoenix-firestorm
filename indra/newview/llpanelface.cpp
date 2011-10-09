@@ -30,6 +30,7 @@
 #include "llpanelface.h"
  
 // library includes
+#include "llcalc.h"
 #include "llerror.h"
 #include "llfocusmgr.h"
 #include "llrect.h"
@@ -37,6 +38,7 @@
 #include "llfontgl.h"
 
 // project includes
+#include "llagent.h"
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
 #include "llcolorswatch.h"
@@ -61,6 +63,9 @@
 #include "lluictrlfactory.h"
 #include "llpluginclassmedia.h"
 #include "llviewertexturelist.h"
+// clipboad for debugging -KC
+// #include "llwindow.h"
+// #include "llsdserialize.h"
 
 //
 // Methods
@@ -80,6 +85,8 @@ BOOL	LLPanelFace::postBuild()
 	childSetCommitCallback("TexOffsetU",LLPanelFace::onCommitTextureInfo, this);
 	childSetCommitCallback("TexOffsetV",LLPanelFace::onCommitTextureInfo, this);
 	childSetAction("button align",&LLPanelFace::onClickAutoFix,this);
+	childSetAction("copytextures",&LLPanelFace::onClickCopy,this);
+	childSetAction("pastetextures",&LLPanelFace::onClickPaste,this);
 
 	LLRect	rect = this->getRect();
 	LLTextureCtrl*	mTextureCtrl;
@@ -376,6 +383,11 @@ struct LLPanelFaceSetAlignedTEFunctor : public LLSelectedTEFunctor
 			return true;
 		}
 
+		if (facep->getViewerObject()->getVolume()->getNumVolumeFaces() <= te)
+		{
+			return true;
+		}
+
 		bool set_aligned = true;
 		if (facep == mCenterFace)
 		{
@@ -418,6 +430,12 @@ struct LLPanelFaceGetIsAlignedTEFunctor : public LLSelectedTEFunctor
 		{
 			return false;
 		}
+
+		if (facep->getViewerObject()->getVolume()->getNumVolumeFaces() <= te)
+		{ //volume face does not exist, can't be aligned
+			return false;
+		}
+
 		if (facep == mCenterFace)
 		{
 			return true;
@@ -506,6 +524,12 @@ void LLPanelFace::getState()
 		//		
 		//		//mBtnAutoFix->setEnabled ( editable );
 		//	}
+		S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
+		BOOL single_volume = (LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
+						 && (selected_count == 1);
+		getChildView("copytextures")->setEnabled(single_volume && editable);
+		getChildView("pastetextures")->setEnabled(editable);
+		getChildView("textbox params")->setEnabled(single_volume && editable);
 		getChildView("button apply")->setEnabled(editable);
 
 		bool identical;
@@ -915,6 +939,16 @@ void LLPanelFace::getState()
 				getChildView("button apply")->setEnabled(enabled);
 			}
 		}
+
+		// Set variable values for numeric expressions
+		LLCalc* calcp = LLCalc::getInstance();
+		calcp->setVar(LLCalc::TEX_U_SCALE, childGetValue("TexScaleU").asReal());
+		calcp->setVar(LLCalc::TEX_V_SCALE, childGetValue("TexScaleV").asReal());
+		calcp->setVar(LLCalc::TEX_U_OFFSET, childGetValue("TexOffsetU").asReal());
+		calcp->setVar(LLCalc::TEX_V_OFFSET, childGetValue("TexOffsetV").asReal());
+		calcp->setVar(LLCalc::TEX_ROTATION, childGetValue("TexRot").asReal());
+		calcp->setVar(LLCalc::TEX_TRANSPARENCY, childGetValue("ColorTrans").asReal());
+		calcp->setVar(LLCalc::TEX_GLOW, childGetValue("glow").asReal());
 	}
 	else
 	{
@@ -950,6 +984,16 @@ void LLPanelFace::getState()
 		//getChildView("has media")->setEnabled(FALSE);
 		//getChildView("media info set")->setEnabled(FALSE);
 		
+
+		// Set variable values for numeric expressions
+		LLCalc* calcp = LLCalc::getInstance();
+		calcp->clearVar(LLCalc::TEX_U_SCALE);
+		calcp->clearVar(LLCalc::TEX_V_SCALE);
+		calcp->clearVar(LLCalc::TEX_U_OFFSET);
+		calcp->clearVar(LLCalc::TEX_V_OFFSET);
+		calcp->clearVar(LLCalc::TEX_ROTATION);
+		calcp->clearVar(LLCalc::TEX_TRANSPARENCY);
+		calcp->clearVar(LLCalc::TEX_GLOW);		
 	}
 }
 
@@ -1132,9 +1176,6 @@ void LLPanelFace::onClickAutoFix(void* userdata)
 	LLPanelFaceSendFunctor sendfunc;
 	LLSelectMgr::getInstance()->getSelection()->applyToObjects(&sendfunc);
 }
-
-
-
 // TODO: I don't know who put these in or what these are for???
 void LLPanelFace::setMediaURL(const std::string& url)
 {
@@ -1151,3 +1192,90 @@ void LLPanelFace::onCommitPlanarAlign(LLUICtrl* ctrl, void* userdata)
 	self->sendTextureInfo();
 }
 
+
+static LLSD texture_clipboard;
+
+void LLPanelFace::onClickCopy(void* userdata)
+{
+	LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getFirstRootObject();
+	LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstRootNode();
+	if(!objectp || !node)
+	{
+		objectp = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
+		node = LLSelectMgr::getInstance()->getSelection()->getFirstNode();
+		if (!objectp || !node)
+			return;
+	}
+
+	texture_clipboard.clear();
+
+	const BOOL is_fullperm = (gAgent.getID() == node->mPermissions->getOwner()) && (gAgent.getID() == node->mPermissions->getCreator());
+
+	const S32 te_count = objectp->getNumFaces();
+	for (S32 i = 0; i < te_count; i++)
+	{
+		LLSD face = objectp->getTE(i)->asLLSD();
+		if (!is_fullperm)
+			face.erase("imageid");
+
+		//KC: remove media, it does not be applied right on the viewer after pasting
+		//TODO: fix updating media viewer side after pasting
+		face["media_flags"] = 0;
+		face.erase("media_data");
+
+		texture_clipboard.append(face);
+	}
+
+	//debug
+	// std::ostringstream texXML;
+	// LLPointer<LLSDFormatter> formatter = new LLSDXMLFormatter();
+	// formatter->format(texture_clipboard, texXML, LLSDFormatter::OPTIONS_PRETTY);
+	// LLView::getWindow()->copyTextToClipboard(utf8str_to_wstring(texXML.str()));
+}
+
+struct LLPanelFacePasteTexFunctor : public LLSelectedTEFunctor
+{
+	virtual bool apply(LLViewerObject* object, S32 te)
+	{
+		if(texture_clipboard[te])
+		{
+			LLSD face(texture_clipboard[te]);
+
+			//KC: LLTextureEntry::fromLLSD will bail on missing fields
+			//replace the missing imageid with the current face's texture
+			if (!face.has("imageid"))
+				face["imageid"] = object->getTE(te)->getID();
+
+			LLTextureEntry tex;
+			if(tex.fromLLSD(face))
+			{
+				//KC: if setTETexture is not called before setTE
+				//the new texture does not show to the viewer till the selection changes
+				object->setTETexture(U8(te), tex.getID());
+				object->setTE(te, tex);
+				
+				//TODO: This didn't work, but it might be close to a fix for pasting media
+				// LLTextureEntry *tep = object->getTE(te);
+				// if (face.has("media_flags") && face.has(LLTextureEntry::TEXTURE_MEDIA_DATA_KEY))
+				// {
+					// tep->setMediaTexGen(face["media_flags"].asInteger());
+					// tep->updateMediaData(face[LLTextureEntry::TEXTURE_MEDIA_DATA_KEY]);
+				// }
+			}
+			else
+			{
+				llwarns << "LLPanelFace::onClickPaste : LLPanelFacePasteTexFunctor: Failed to read clipboard for face: " << te << llendl;
+			}
+		}
+		return true;
+	};
+};
+
+void LLPanelFace::onClickPaste(void* userdata)
+{
+	LLPanelFacePasteTexFunctor setfunc;
+	LLSelectMgr::getInstance()->getSelection()->applyToTEs(&setfunc);
+
+	LLPanelFaceSendFunctor sendfunc;
+	LLSelectMgr::getInstance()->getSelection()->applyToObjects(&sendfunc);
+}

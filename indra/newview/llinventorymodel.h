@@ -40,6 +40,10 @@
 #include <set>
 #include <string>
 #include <vector>
+//-TT Patch: ReplaceWornItemsOnly
+#include "llviewerobjectlist.h"
+#include "llvoavatarself.h"
+//-TT
 
 class LLInventoryObserver;
 class LLInventoryObject;
@@ -128,6 +132,12 @@ private:
 	LLUUID mRootFolderID;
 	LLUUID mLibraryRootFolderID;
 	LLUUID mLibraryOwnerID;	
+
+//-TT Patch: ReplaceWornItemsOnly
+	item_array_t mItemArray;
+	item_array_t mObjArray;
+	LLDynamicArray<std::string> mAttPoints;
+//-TT
 	
 	//--------------------------------------------------------------------
 	// Structure
@@ -149,6 +159,13 @@ private:
 	typedef std::map<LLUUID, LLPointer<LLViewerInventoryItem> > item_map_t;
 	cat_map_t mCategoryMap;
 	item_map_t mItemMap;
+	
+	//<ND> Link Processsing Efficiency
+	typedef std::set< LLUUID > item_links_set_t;
+	typedef std::map< LLUUID, item_links_set_t > item_links_map_t;
+	item_links_map_t mItemLinks;
+	//</ND>
+	
 	// This last set of indices is used to map parents to children.
 	typedef std::map<LLUUID, cat_array_t*> parent_cat_map_t;
 	typedef std::map<LLUUID, item_array_t*> parent_item_map_t;
@@ -257,6 +274,16 @@ public:
 	// Get the inventoryID or item that this item points to, else just return object_id
 	const LLUUID& getLinkedItemID(const LLUUID& object_id) const;
 	LLViewerInventoryItem* getLinkedItem(const LLUUID& object_id) const;
+
+//-TT Patch: ReplaceWornItemsOnly
+	void wearItemsOnAvatar(LLInventoryCategory* category);
+	void wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object, const LLViewerJointAttachment *attachment);
+
+private:
+	void wearWearablesOnAvatar(LLUUID category_id);
+	void wearAttachmentsOnAvatar(LLUUID category_id);
+	void wearGesturesOnAvatar(LLUUID category_id);
+//-TT
 private:
 	mutable LLPointer<LLViewerInventoryItem> mLastItem; // cache recent lookups	
 
@@ -425,10 +452,10 @@ public:
 	// notifyObservers() manually to update regardless of whether state change 
 	// has been indicated.
 	void idleNotifyObservers();
-
-	// Call to explicitly update everyone on a new state.  The optional argument
-	// 'service_name' is used by Agent Inventory Service [DEV-20328]
-	void notifyObservers(const std::string service_name="");
+	//-TT 2.6.9 - function deprecated
+	void notifyObservers(const std::string service_name);
+	// Call to explicitly update everyone on a new state.
+	void notifyObservers();
 
 	// Allows outsiders to tell the inventory if something has
 	// been changed 'under the hood', but outside the control of the
@@ -494,9 +521,12 @@ protected:
 	//--------------------------------------------------------------------
 public:
 	static void processUpdateCreateInventoryItem(LLMessageSystem* msg, void**);
+	static void removeInventoryItem(LLUUID agent_id, LLMessageSystem* msg, const char* msg_label);
 	static void processRemoveInventoryItem(LLMessageSystem* msg, void**);
 	static void processUpdateInventoryFolder(LLMessageSystem* msg, void**);
+	static void removeInventoryFolder(LLUUID agent_id, LLMessageSystem* msg);
 	static void processRemoveInventoryFolder(LLMessageSystem* msg, void**);
+	static void processRemoveInventoryObjects(LLMessageSystem* msg, void**);
 	static void processSaveAssetIntoInventory(LLMessageSystem* msg, void**);
 	static void processBulkUpdateInventory(LLMessageSystem* msg, void**);
 	static void processInventoryDescendents(LLMessageSystem* msg, void**);

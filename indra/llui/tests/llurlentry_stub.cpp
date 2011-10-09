@@ -30,6 +30,7 @@
 #include "llavatarnamecache.h"
 #include "llcachename.h"
 #include "lluuid.h"
+#include "message.h"
 
 #include <string>
 
@@ -122,32 +123,30 @@ namespace LLInitParam
 		const U8* block_addr = reinterpret_cast<const U8*>(enclosing_block);
 		mEnclosingBlockOffset = (U16)(my_addr - block_addr);
 	}
-	void BaseBlock::setLastChangedParam(const Param& last_param, bool user_provided) {}
+	void BaseBlock::paramChanged(const Param& last_param, bool user_provided) {}
 
-	void BaseBlock::addParam(BlockDescriptor& block_data, const ParamDescriptor& in_param, const char* char_name){}
+	void BaseBlock::addParam(BlockDescriptor& block_data, const ParamDescriptorPtr in_param, const char* char_name){}
+	void BaseBlock::addSynonym(Param& param, const std::string& synonym) {}
 	param_handle_t BaseBlock::getHandleFromParam(const Param* param) const {return 0;}
 	
 	void BaseBlock::init(BlockDescriptor& descriptor, BlockDescriptor& base_descriptor, size_t block_size)
 	{
 		descriptor.mCurrentBlockPtr = this;
 	}
-	bool BaseBlock::deserializeBlock(Parser& p, Parser::name_stack_range_t name_stack){ return true; }
-	bool BaseBlock::serializeBlock(Parser& parser, Parser::name_stack_t name_stack, const LLInitParam::BaseBlock* diff_block) const { return true; }
-	bool BaseBlock::inspectBlock(Parser& parser, Parser::name_stack_t name_stack) const { return true; }
-	bool BaseBlock::merge(BlockDescriptor& block_data, const BaseBlock& other, bool overwrite) { return true; }
+	bool BaseBlock::deserializeBlock(Parser& p, Parser::name_stack_range_t name_stack, S32 generation){ return true; }
+	void BaseBlock::serializeBlock(Parser& parser, Parser::name_stack_t name_stack, const LLInitParam::BaseBlock* diff_block) const {}
+	bool BaseBlock::inspectBlock(Parser& parser, Parser::name_stack_t name_stack, S32 min_value, S32 max_value) const { return true; }
+	bool BaseBlock::mergeBlock(BlockDescriptor& block_data, const BaseBlock& other, bool overwrite) { return true; }
 	bool BaseBlock::validateBlock(bool emit_errors) const { return true; }
 
-	TypedParam<LLUIColor >::TypedParam(BlockDescriptor& descriptor, const char* name, const LLUIColor& value, ParamDescriptor::validation_func_t func, S32 min_count, S32 max_count)
-	:	super_t(descriptor, name, value, func, min_count, max_count)
+	ParamValue<LLUIColor, TypeValues<LLUIColor> >::ParamValue(const LLUIColor& color)
+	:	super_t(color)
 	{}
 
-	void TypedParam<LLUIColor>::setValueFromBlock() const
+	void ParamValue<LLUIColor, TypeValues<LLUIColor> >::updateValueFromBlock() 
 	{}
 	
-	void TypedParam<LLUIColor>::setBlockFromValue()
-	{}
-
-	void TypeValues<LLUIColor>::declareValues()
+	void ParamValue<LLUIColor, TypeValues<LLUIColor> >::updateBlockFromValue(bool)
 	{}
 
 	bool ParamCompare<const LLFontGL*, false>::equals(const LLFontGL* a, const LLFontGL* b)
@@ -155,14 +154,14 @@ namespace LLInitParam
 		return false;
 	}
 
-	TypedParam<const LLFontGL*>::TypedParam(BlockDescriptor& descriptor, const char* _name, const LLFontGL*const value, ParamDescriptor::validation_func_t func, S32 min_count, S32 max_count)
-	:	super_t(descriptor, _name, value, func, min_count, max_count)
+	ParamValue<const LLFontGL*, TypeValues<const LLFontGL*> >::ParamValue(const LLFontGL* fontp)
+	:	super_t(fontp)
 	{}
 
-	void TypedParam<const LLFontGL*>::setValueFromBlock() const
+	void ParamValue<const LLFontGL*, TypeValues<const LLFontGL*> >::updateValueFromBlock()
 	{}
 	
-	void TypedParam<const LLFontGL*>::setBlockFromValue()
+	void ParamValue<const LLFontGL*, TypeValues<const LLFontGL*> >::updateBlockFromValue(bool)
 	{}
 
 	void TypeValues<LLFontGL::HAlign>::declareValues()
@@ -174,10 +173,10 @@ namespace LLInitParam
 	void TypeValues<LLFontGL::ShadowType>::declareValues()
 	{}
 
-	void TypedParam<LLUIImage*>::setValueFromBlock() const
+	void ParamValue<LLUIImage*, TypeValues<LLUIImage*> >::updateValueFromBlock()
 	{}
 	
-	void TypedParam<LLUIImage*>::setBlockFromValue()
+	void ParamValue<LLUIImage*, TypeValues<LLUIImage*> >::updateBlockFromValue(bool)
 	{}
 
 	
@@ -200,3 +199,20 @@ LLFontGL* LLFontGL::getFontDefault()
 {
 	return NULL; 
 }
+
+char const* const _PREHASH_AgentData = (char *)"AgentData";
+char const* const _PREHASH_AgentID = (char *)"AgentID";
+
+LLHost LLHost::invalid(INVALID_PORT,INVALID_HOST_IP_ADDRESS);
+
+LLMessageSystem* gMessageSystem = NULL;
+
+//
+// Stub implementation for LLMessageSystem
+//
+void LLMessageSystem::newMessage(const char *name) { }
+void LLMessageSystem::nextBlockFast(const char *blockname) { }
+void LLMessageSystem::nextBlock(const char *blockname) { }
+void LLMessageSystem::addUUIDFast( const char *varname, const LLUUID& uuid) { }
+void LLMessageSystem::addUUID( const char *varname, const LLUUID& uuid) { }
+S32 LLMessageSystem::sendReliable(const LLHost &host) { return 0; }

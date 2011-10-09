@@ -30,6 +30,7 @@
 
 #include "llcommandlineparser.h"
 
+#include "lldiriterator.h"
 #include "llmemtype.h"
 #include "llurldispatcher.h"		// SLURL from other app instance
 #include "llviewernetwork.h"
@@ -233,7 +234,7 @@ gboolean viewer_app_api_GoSLURL(ViewerAppAPI *obj, gchar *slurl, gboolean **succ
 	std::string url = slurl;
 	LLMediaCtrl* web = NULL;
 	const bool trusted_browser = false;
-	if (LLURLDispatcher::dispatch(url, web, trusted_browser))
+	if (LLURLDispatcher::dispatch(url, "", web, trusted_browser))
 	{
 		// bring window to foreground, as it has just been "launched" from a URL
 		// todo: hmm, how to get there from here?
@@ -360,46 +361,35 @@ void LLAppViewerLinux::handleCrashReporting(bool reportFreeze)
 	}
 	else
 	{
-		const S32 cb = gCrashSettings.getS32(CRASH_BEHAVIOR_SETTING);
-
-		// Always generate the report, have the logger do the asking, and
-		// don't wait for the logger before exiting (-> total cleanup).
-		if (CRASH_BEHAVIOR_NEVER_SEND != cb)
-		{	
-			// launch the actual crash logger
-			const char* ask_dialog = "-dialog";
-			if (CRASH_BEHAVIOR_ASK != cb)
-				ask_dialog = ""; // omit '-dialog' option
-			const char * cmdargv[] =
-				{cmd.c_str(),
-				 ask_dialog,
-				 "-user",
-				 (char*)LLGridManager::getInstance()->getGridLabel().c_str(),
-				 "-name",
-				 LLAppViewer::instance()->getSecondLifeTitle().c_str(),
-				 NULL};
-			fflush(NULL);
-			pid_t pid = fork();
-			if (pid == 0)
-			{ // child
-				execv(cmd.c_str(), (char* const*) cmdargv);		/* Flawfinder: ignore */
-				llwarns << "execv failure when trying to start " << cmd << llendl;
-				_exit(1); // avoid atexit()
+		// launch the actual crash logger
+		const char * cmdargv[] =
+			{cmd.c_str(),
+			 "-user",
+			 (char*)LLGridManager::getInstance()->getGridLabel().c_str(),
+			 "-name",
+			 LLAppViewer::instance()->getSecondLifeTitle().c_str(),
+			 NULL};
+		fflush(NULL);
+		pid_t pid = fork();
+		if (pid == 0)
+		{ // child
+			execv(cmd.c_str(), (char* const*) cmdargv);		/* Flawfinder: ignore */
+			llwarns << "execv failure when trying to start " << cmd << llendl;
+			_exit(1); // avoid atexit()
+		} 
+		else
+		{
+			if (pid > 0)
+			{
+				// DO NOT wait for child proc to die; we want
+				// the logger to outlive us while we quit to
+				// free up the screen/keyboard/etc.
+				////int childExitStatus;
+				////waitpid(pid, &childExitStatus, 0);
 			} 
 			else
 			{
-				if (pid > 0)
-				{
-					// DO NOT wait for child proc to die; we want
-					// the logger to outlive us while we quit to
-					// free up the screen/keyboard/etc.
-					////int childExitStatus;
-					////waitpid(pid, &childExitStatus, 0);
-				} 
-				else
-				{
-					llwarns << "fork failure." << llendl;
-				}
+				llwarns << "fork failure." << llendl;
 			}
 		}
 		// Sometimes signals don't seem to quit the viewer.  Also, we may
@@ -504,7 +494,9 @@ std::string LLAppViewerLinux::generateSerialNumber()
 
 	// trawl /dev/disk/by-uuid looking for a good-looking UUID to grab
 	std::string this_name;
-	while (gDirUtilp->getNextFileInDir(uuiddir, "*", this_name))
+
+	LLDirIterator iter(uuiddir, "*");
+	while (iter.next(this_name))
 	{
 		if (this_name.length() > best.length() ||
 		    (this_name.length() == best.length() &&

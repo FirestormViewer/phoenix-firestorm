@@ -501,6 +501,8 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 	//-----------------------------------------------------------------------
 
 	DEVMODE dev_mode;
+	::ZeroMemory(&dev_mode, sizeof(DEVMODE));
+	dev_mode.dmSize = sizeof(DEVMODE);
 	DWORD current_refresh;
 	if (EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dev_mode))
 	{
@@ -545,7 +547,27 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 		if (closest_refresh == 0)
 		{
 			LL_WARNS("Window") << "Couldn't find display mode " << width << " by " << height << " at " << BITS_PER_PIXEL << " bits per pixel" << LL_ENDL;
-			success = FALSE;
+			//success = FALSE;
+
+			if (!EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dev_mode))
+			{
+				success = FALSE;
+			}
+			else
+			{
+				if (dev_mode.dmBitsPerPel == BITS_PER_PIXEL)
+				{
+					LL_WARNS("Window") << "Current BBP is OK falling back to that" << LL_ENDL;
+					window_rect.right=width=dev_mode.dmPelsWidth;
+					window_rect.bottom=height=dev_mode.dmPelsHeight;
+					success = TRUE;
+				}
+				else
+				{
+					LL_WARNS("Window") << "Current BBP is BAD" << LL_ENDL;
+					success = FALSE;
+				}
+			}
 		}
 
 		// If we found a good resolution, use it.
@@ -859,6 +881,8 @@ BOOL LLWindowWin32::switchContext(BOOL fullscreen, const LLCoordScreen &size, BO
 {
 	GLuint	pixel_format;
 	DEVMODE dev_mode;
+	::ZeroMemory(&dev_mode, sizeof(DEVMODE));
+	dev_mode.dmSize = sizeof(DEVMODE);
 	DWORD	current_refresh;
 	DWORD	dw_ex_style;
 	DWORD	dw_style;
@@ -1149,8 +1173,39 @@ BOOL LLWindowWin32::switchContext(BOOL fullscreen, const LLCoordScreen &size, BO
 
 		// First we try and get a 32 bit depth pixel format
 		BOOL result = wglChoosePixelFormatARB(mhDC, attrib_list, NULL, 256, pixel_formats, &num_formats);
+		
+		while(!result && mFSAASamples > 0) 
+		{
+			llwarns << "FSAASamples: " << mFSAASamples << " not supported." << llendl ;
+
+			mFSAASamples /= 2 ; //try to decrease sample pixel number until to disable anti-aliasing
+			if(mFSAASamples < 2)
+			{
+				mFSAASamples = 0 ;
+			}
+
+			if (mFSAASamples > 0)
+			{
+				attrib_list[end_attrib + 3] = mFSAASamples;
+			}
+			else
+			{
+				cur_attrib = end_attrib ;
+				end_attrib = 0 ;
+				attrib_list[cur_attrib++] = 0 ; //end
+			}
+			result = wglChoosePixelFormatARB(mhDC, attrib_list, NULL, 256, pixel_formats, &num_formats);
+
+			if(result)
+			{
+				llwarns << "Only support FSAASamples: " << mFSAASamples << llendl ;
+			}
+		}
+
 		if (!result)
 		{
+			llwarns << "mFSAASamples: " << mFSAASamples << llendl ;
+
 			close();
 			show_window_creation_error("Error after wglChoosePixelFormatARB 32-bit");
 			return FALSE;
@@ -2703,6 +2758,8 @@ LLWindow::LLWindowResolution* LLWindowWin32::getSupportedResolutions(S32 &num_re
 	{
 		mSupportedResolutions = new LLWindowResolution[MAX_NUM_RESOLUTIONS];
 		DEVMODE dev_mode;
+		::ZeroMemory(&dev_mode, sizeof(DEVMODE));
+		dev_mode.dmSize = sizeof(DEVMODE);
 
 		mNumSupportedResolutions = 0;
 		for (S32 mode_num = 0; mNumSupportedResolutions < MAX_NUM_RESOLUTIONS; mode_num++)
@@ -2778,7 +2835,8 @@ F32 LLWindowWin32::getPixelAspectRatio()
 BOOL LLWindowWin32::setDisplayResolution(S32 width, S32 height, S32 bits, S32 refresh)
 {
 	DEVMODE dev_mode;
-	dev_mode.dmSize = sizeof(dev_mode);
+	::ZeroMemory(&dev_mode, sizeof(DEVMODE));
+	dev_mode.dmSize = sizeof(DEVMODE);
 	BOOL success = FALSE;
 
 	// Don't change anything if we don't have to
@@ -2853,6 +2911,23 @@ void LLWindowWin32::swapBuffers()
 	SwapBuffers(mhDC);
 }
 
+//-TT Window Title Access
+void LLWindowWin32::setTitle(const std::string& win_title)
+{
+	// Set the window title
+	if (win_title.empty())
+	{
+		wsprintf(mWindowTitle, L"OpenGL Window");
+	}
+	else
+	{
+		mbstowcs(mWindowTitle, win_title.c_str(), 255);
+		mWindowTitle[255] = 0;
+	}
+
+	SetWindowText(mWindowHandle, mWindowTitle);
+}
+//-TT
 
 //
 // LLSplashScreenImp
@@ -2969,8 +3044,18 @@ S32 OSMessageBoxWin32(const std::string& text, const std::string& caption, U32 t
 
 	return retval;
 }
-
-
+void LLWindowWin32::openFile(const std::string& file_name )
+{
+	LLWString url_wstring = utf8str_to_wstring( file_name );
+	llutf16string url_utf16 = wstring_to_utf16str( url_wstring );
+	
+	SHELLEXECUTEINFO sei = { sizeof( sei ) };
+	sei.fMask = SEE_MASK_FLAG_DDEWAIT;
+	sei.nShow = SW_SHOWNORMAL;
+	sei.lpVerb = L"open";
+	sei.lpFile = url_utf16.c_str();
+	ShellExecuteEx( &sei );
+}
 void LLWindowWin32::spawnWebBrowser(const std::string& escaped_url, bool async)
 {
 	bool found = false;

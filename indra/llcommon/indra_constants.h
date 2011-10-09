@@ -312,6 +312,14 @@ const F32 CHAT_SHOUT_RADIUS = 100.f;
 const F32 CHAT_MAX_RADIUS = CHAT_SHOUT_RADIUS;
 const F32 CHAT_MAX_RADIUS_BY_TWO = CHAT_MAX_RADIUS / 2.f;
 
+// squared editions of the above for distance checks
+const F32 CHAT_WHISPER_RADIUS_SQUARED = CHAT_WHISPER_RADIUS * CHAT_WHISPER_RADIUS;
+const F32 CHAT_NORMAL_RADIUS_SQUARED = CHAT_NORMAL_RADIUS * CHAT_NORMAL_RADIUS;
+const F32 CHAT_SHOUT_RADIUS_SQUARED = CHAT_SHOUT_RADIUS * CHAT_SHOUT_RADIUS;
+const F32 CHAT_MAX_RADIUS_SQUARED = CHAT_SHOUT_RADIUS_SQUARED;
+const F32 CHAT_MAX_RADIUS_BY_TWO_SQUARED = CHAT_MAX_RADIUS_BY_TWO * CHAT_MAX_RADIUS_BY_TWO;
+
+
 // this times above gives barely audible radius
 const F32 CHAT_BARELY_AUDIBLE_FACTOR = 2.0f;
 
@@ -379,8 +387,8 @@ const S32 MAP_SIM_RETURN_NULL_SIMS 	= 0x00010000;
 const S32 MAP_SIM_PRELUDE 			= 0x00020000;
 
 // Crash reporter behavior
-const char* const CRASH_SETTINGS_FILE = "settings_crash_behavior.xml";
-const char* const CRASH_BEHAVIOR_SETTING = "CrashSubmitBehavior";
+const char* const CRASH_SETTINGS_FILE = "settings_crash_behavior.xml";   // AO legacy from KB
+const char* const CRASH_BEHAVIOR_SETTING = "CrashSubmitBehavior";  // AO legacy from KB
 const S32 CRASH_BEHAVIOR_ASK = 0;
 const S32 CRASH_BEHAVIOR_ALWAYS_SEND = 1;
 const S32 CRASH_BEHAVIOR_NEVER_SEND = 2;

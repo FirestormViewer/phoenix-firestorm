@@ -14,6 +14,9 @@
  can_close="true"
  can_minimize="false"
  single_instance="true"
+ save_rect="true"
+ save_visibility="true"
+ save_dock_state="true"
  visible="false"
  width="394"
  can_resize="true"
@@ -79,8 +82,7 @@
          parse_highlights="true"
          parse_urls="true"
          left="1"
-         width="250"
-		 value="test1">
+         width="250">
         </chat_history>
     </layout_panel>
   </layout_stack>

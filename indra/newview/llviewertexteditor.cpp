@@ -82,6 +82,19 @@ public:
 		key["id"] = landmark_inv_id;
 		LLSideTray::getInstance()->showPanel("panel_places", key);
 	}
+
+// [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-05 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+	static void showInfo(const LLVector3d& global_pos)
+	{
+		LLSD key;
+		key["type"] = "remote_place";
+		key["x"] = global_pos.mdV[0];
+		key["y"] = global_pos.mdV[1];
+		key["z"] = global_pos.mdV[2];
+		LLSideTray::getInstance()->showPanel("panel_places", key);
+	}
+// [/SL:KB]
+
 	static void processForeignLandmark(LLLandmark* landmark,
 			const LLUUID& object_id, const LLUUID& notecard_inventory_id,
 			LLPointer<LLInventoryItem> item_ptr)
@@ -95,7 +108,10 @@ public:
 		{
 			showInfo(agent_lanmark->getUUID());
 		}
-		else
+//		else
+// [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-05 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+		else if (gSavedSettings.getBOOL("EmbeddedLandmarkCopyToInventory"))
+// [/SL:KB]
 		{
 			if (item_ptr.isNull())
 			{
@@ -108,6 +124,12 @@ public:
 				copy_inventory_from_notecard(object_id, notecard_inventory_id, item_ptr.get(), gInventoryCallbacks.registerCB(cb));
 			}
 		}
+// [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-05 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+		else
+		{
+			showInfo(global_pos);
+		}
+// [/SL:KB]
 	}
 };
 ///----------------------------------------------------------------------------
@@ -165,6 +187,9 @@ public:
 		mLabel(utf8str_to_wstring(inv_item->getName())),
 		mItem(inv_item),
 		mEditor(editor),
+// [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-12 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
+		mContextMenu(NULL),
+// [/SL:KB]
 		mHasMouseHover(false)
 	{
 
@@ -248,6 +273,42 @@ public:
 		return FALSE; 
 	}
 
+// [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-12 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
+	/*virtual*/ BOOL			handleRightMouseDown(S32 x, S32 y, MASK mask)
+	{
+		if (!mContextMenu)
+		{
+			LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+			registrar.add("Embedded.Open", boost::bind(&LLEmbeddedItemSegment::onOpen, this));
+			registrar.add("Embedded.CopyToInv", boost::bind(&LLEmbeddedItemSegment::onCopyToInventory, this));
+
+			mContextMenu = LLUICtrlFactory::instance().createFromFile<LLContextMenu>("menu_embedded_item.xml", 
+																					LLMenuGL::sMenuContainer, 
+																					LLMenuHolderGL::child_registry_t::instance());
+		}
+
+		S32 screen_x, screen_y;
+		mEditor.localPointToScreen(x, y, &screen_x, &screen_y);
+		mContextMenu->show(screen_x, screen_y);
+
+		return TRUE;
+	}
+
+	void onOpen()
+	{
+		LLViewerTextEditor* pEditor = dynamic_cast<LLViewerTextEditor*>(&mEditor);
+		if (pEditor)
+			pEditor->openEmbeddedItem(mItem, pEditor->getWText()[pEditor->getCursorPos()]);
+	}
+
+	void onCopyToInventory()
+	{
+		LLViewerTextEditor* pEditor = dynamic_cast<LLViewerTextEditor*>(&mEditor);
+		if (pEditor)
+			pEditor->showCopyToInvDialog(mItem, pEditor->getWText()[pEditor->getCursorPos()]);
+	}
+// [/SL:KB]
+
 	/*virtual*/ LLStyleConstSP		getStyle() const { return mStyle; }
 
 private:
@@ -258,7 +319,9 @@ private:
 	LLPointer<LLInventoryItem> mItem;
 	LLTextEditor&	mEditor;
 	bool			mHasMouseHover;
-
+// [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-12 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
+	LLContextMenu*  mContextMenu;
+// [/SL:KB]
 };
 
 
@@ -537,6 +600,7 @@ LLUIImagePtr LLEmbeddedItems::getItemImage(llwchar ext_char) const
 			case LLAssetType::AT_BODYPART:		img_name = "Inv_Skin";		break;
 			case LLAssetType::AT_ANIMATION:		img_name = "Inv_Animation";	break;
 			case LLAssetType::AT_GESTURE:		img_name = "Inv_Gesture";	break;
+			case LLAssetType::AT_MESH:          img_name = "Inv_Mesh";	    break;
 			default: llassert(0);
 		}
 
@@ -846,17 +910,18 @@ BOOL LLViewerTextEditor::handleDragAndDrop(S32 x, S32 y, MASK mask,
 	{
 		switch( cargo_type )
 		{
-		case DAD_CALLINGCARD:
-		case DAD_TEXTURE:
-		case DAD_SOUND:
-		case DAD_LANDMARK:
-		case DAD_SCRIPT:
-		case DAD_CLOTHING:
-		case DAD_OBJECT:
-		case DAD_NOTECARD:
-		case DAD_BODYPART:
-		case DAD_ANIMATION:
-		case DAD_GESTURE:
+			case DAD_CALLINGCARD:
+			case DAD_TEXTURE:
+			case DAD_SOUND:
+			case DAD_LANDMARK:
+			case DAD_SCRIPT:
+			case DAD_CLOTHING:
+			case DAD_OBJECT:
+			case DAD_NOTECARD:
+			case DAD_BODYPART:
+			case DAD_ANIMATION:
+			case DAD_GESTURE:
+			case DAD_MESH:
 			{
 				LLInventoryItem *item = (LLInventoryItem *)cargo_data;
 				if( item && allowsEmbeddedItems() )
@@ -1132,7 +1197,13 @@ void LLViewerTextEditor::openEmbeddedTexture( LLInventoryItem* item, llwchar wc 
 	// LLPreview constructor ItemUUID parameter.
 	if (!item)
 		return;
-	LLPreviewTexture* preview = LLFloaterReg::showTypedInstance<LLPreviewTexture>("preview_texture", LLSD(item->getAssetUUID()), TAKE_FOCUS_YES);
+//	LLPreviewTexture* preview = LLFloaterReg::showTypedInstance<LLPreviewTexture>("preview_texture", LLSD(item->getAssetUUID()), TAKE_FOCUS_YES);
+// [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-05 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+	// If there's already a preview of the texture open then we do want it to take focus, otherwise leave it up to the debug setting
+	BOOL fHasInstance = (NULL != LLFloaterReg::findTypedInstance<LLPreviewTexture>("preview_texture", LLSD(item->getAssetUUID())));
+	BOOL fTakeFocus = ( (fHasInstance) || (gSavedSettings.getBOOL("EmbeddedTextureStealsFocus")) ) ? TAKE_FOCUS_YES : TAKE_FOCUS_NO;
+	LLPreviewTexture* preview = LLFloaterReg::showTypedInstance<LLPreviewTexture>("preview_texture", LLSD(item->getAssetUUID()), fTakeFocus);
+// [/SL:KB]
 	if (preview)
 	{
 		preview->setAuxItem( item );

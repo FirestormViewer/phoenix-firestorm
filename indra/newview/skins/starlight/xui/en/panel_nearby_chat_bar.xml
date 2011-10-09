@@ -19,6 +19,7 @@
      left="0"
      max_length_bytes="1023"
      name="chat_box"
+     spellcheck="true"
      text_pad_left="5"
      text_pad_right="25"
      tool_tip="Press Enter to say, Ctrl+Enter to shout"
@@ -52,7 +53,7 @@
      name="show_nearby_chat"
      tool_tip="Shows/hides nearby chat log">
         <button.init_callback
-           function="Button.SetDockableFloaterToggle"
+           function="Button.SetFloaterToggle"
            parameter="nearby_chat" />
     </button>
      <icon

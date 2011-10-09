@@ -46,9 +46,15 @@
 #include "llviewerregion.h"
 #include "llcallbacklist.h"
 #include "llvoavatarself.h"
-// [RLVa:KB] - Checked: RLVa-1.2.0a (2010-03-05)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
+//-TT Patch: ReplaceWornItemsOnly
+#include "llviewerobjectlist.h"
+#include "llviewerobject.h"
+#include "llgesturemgr.h"
+//-TT
 
 //#define DIFF_INVENTORY_FILES
 #ifdef DIFF_INVENTORY_FILES
@@ -576,33 +582,45 @@ void LLInventoryModel::addChangedMaskForLinks(const LLUUID& object_id, U32 mask)
 	if (!obj || obj->getIsLinkType())
 		return;
 
-	LLInventoryModel::cat_array_t cat_array;
-	LLInventoryModel::item_array_t item_array;
-	LLLinkedItemIDMatches is_linked_item_match(object_id);
-	collectDescendentsIf(gInventory.getRootFolderID(),
-						 cat_array,
-						 item_array,
-						 LLInventoryModel::INCLUDE_TRASH,
-						 is_linked_item_match);
-	if (cat_array.empty() && item_array.empty())
+//  <ND>: More efficient link updates
+//
+//	LLInventoryModel::cat_array_t cat_array;
+//	LLInventoryModel::item_array_t item_array;
+//	LLLinkedItemIDMatches is_linked_item_match(object_id);
+//	collectDescendentsIf(gInventory.getRootFolderID(),
+//						 cat_array,
+//						 item_array,
+//						 LLInventoryModel::INCLUDE_TRASH,
+//						 is_linked_item_match);
+//	if (cat_array.empty() && item_array.empty())
+//	{
+//		return;
+//	}
+//	for (LLInventoryModel::cat_array_t::iterator cat_iter = cat_array.begin();
+//		 cat_iter != cat_array.end();
+//		 cat_iter++)
+//	{
+//		LLViewerInventoryCategory *linked_cat = (*cat_iter);
+//		addChangedMask(mask, linked_cat->getUUID());
+//	};
+//
+//	for (LLInventoryModel::item_array_t::iterator iter = item_array.begin();
+//		 iter != item_array.end();
+//		 iter++)
+//	{
+//		LLViewerInventoryItem *linked_item = (*iter);
+//		addChangedMask(mask, linked_item->getUUID());
+//	};
+	
+	item_links_map_t::iterator itr = mItemLinks.find( object_id );
+	if( mItemLinks.end() != itr )
 	{
-		return;
-	}
-	for (LLInventoryModel::cat_array_t::iterator cat_iter = cat_array.begin();
-		 cat_iter != cat_array.end();
-		 cat_iter++)
-	{
-		LLViewerInventoryCategory *linked_cat = (*cat_iter);
-		addChangedMask(mask, linked_cat->getUUID());
-	};
+		for( item_links_set_t::iterator itrIds = itr->second.begin(); itr->second.end() != itrIds; ++itrIds )
+			addChangedMask(mask, *itrIds);
+ 	}
+	//</ND>
+	
 
-	for (LLInventoryModel::item_array_t::iterator iter = item_array.begin();
-		 iter != item_array.end();
-		 iter++)
-	{
-		LLViewerInventoryItem *linked_item = (*iter);
-		addChangedMask(mask, linked_item->getUUID());
-	};
 }
 
 const LLUUID& LLInventoryModel::getLinkedItemID(const LLUUID& object_id) const
@@ -663,6 +681,14 @@ U32 LLInventoryModel::updateItem(const LLViewerInventoryItem* item)
 		llwarns << "Inventory is broken." << llendl;
 		return mask;
 	}
+
+	// We're hiding mesh types
+#if 0
+	if (item->getType() == LLAssetType::AT_MESH)
+	{
+		return mask;
+	}
+#endif
 
 	LLViewerInventoryItem* old_item = getItem(item->getUUID());
 	LLPointer<LLViewerInventoryItem> new_item;
@@ -944,6 +970,21 @@ void LLInventoryModel::deleteObject(const LLUUID& id)
 	LLUUID parent_id = obj->getParentUUID();
 	mCategoryMap.erase(id);
 	mItemMap.erase(id);
+	
+	
+	// <ND>: Link processing efficiency
+	if(LLAssetType::lookupIsLinkType(obj->getActualType()))
+	{
+		LLUUID idLinked(obj->getLinkedUUID());
+		item_links_map_t::iterator itr = mItemLinks.find( idLinked );
+		if( mItemLinks.end() != itr )
+			itr->second.erase( id );
+	}
+	else
+		mItemLinks.erase( id );
+	// </ND>
+	
+	
 	//mInventory.erase(id);
 	item_array_t* item_list = getUnlockedItemArray(parent_id);
 	if(item_list)
@@ -1092,12 +1133,18 @@ void LLInventoryModel::idleNotifyObservers()
 	{
 		return;
 	}
-	notifyObservers("");
+	notifyObservers();
+}
+
+//-TT 2.6.9 - function deprecated
+void LLInventoryModel::notifyObservers(const std::string service_name)
+{
+	llinfos << "Calling deprecated function <notifyObservers(const std::string service_name)> with (" << service_name << ") parameter" << llendl;
+	notifyObservers();
 }
 
 // Call this method when it's time to update everyone on a new state.
-// The optional argument 'service_name' is used by Agent Inventory Service [DEV-20328]
-void LLInventoryModel::notifyObservers(const std::string service_name)
+void LLInventoryModel::notifyObservers()
 {
 	if (mIsNotifyObservers)
 	{
@@ -1114,15 +1161,7 @@ void LLInventoryModel::notifyObservers(const std::string service_name)
 	{
 		LLInventoryObserver* observer = *iter;
 		
-		if (service_name.empty())
-		{
-			observer->changed(mModifyMask);
-		}
-		else
-		{
-			observer->mMessageName = service_name;
-			observer->changed(mModifyMask);
-		}
+		observer->changed(mModifyMask);
 
 		// safe way to increment since changed may delete entries! (@!##%@!@&*!)
 		iter = mObservers.upper_bound(observer); 
@@ -1220,7 +1259,7 @@ void  LLInventoryModel::fetchInventoryResponder::result(const LLSD& content)
 	{
 		changes |= gInventory.updateItem(*it);
 	}
-	gInventory.notifyObservers("fetchinventory");
+	gInventory.notifyObservers();
 	gViewerWindow->getWindow()->decBusyCount();
 }
 
@@ -1229,7 +1268,7 @@ void LLInventoryModel::fetchInventoryResponder::error(U32 status, const std::str
 {
 	llinfos << "fetchInventory::error "
 		<< status << ": " << reason << llendl;
-	gInventory.notifyObservers("fetchinventory");
+	gInventory.notifyObservers();
 }
 
 bool LLInventoryModel::fetchDescendentsOf(const LLUUID& folder_id) const
@@ -1305,6 +1344,12 @@ void LLInventoryModel::addCategory(LLViewerInventoryCategory* category)
 	//llinfos << "LLInventoryModel::addCategory()" << llendl;
 	if(category)
 	{
+		// We aren't displaying the Meshes folder
+		if (category->mPreferredType == LLFolderType::FT_MESH)
+		{
+			return;
+		}
+
 		// try to localize default names first. See EXT-8319, EXT-7051.
 		category->localizeName();
 
@@ -1335,6 +1380,11 @@ void LLInventoryModel::addItem(LLViewerInventoryItem* item)
 		{
 			llinfos << "Adding broken link [ name: " << item->getName() << " itemID: " << item->getUUID() << " assetID: " << item->getAssetUUID() << " )  parent: " << item->getParentUUID() << llendl;
 		}
+		
+		//<ND> Link Processing Efficiency
+		if( LLAssetType::lookupIsLinkType(item->getActualType()) )
+			mItemLinks[ item->getLinkedUUID() ].insert( item->getUUID() );
+		//</ND>
 
 		mItemMap[item->getUUID()] = item;
 	}
@@ -1356,6 +1406,7 @@ void LLInventoryModel::empty()
 	mParentChildItemTree.clear();
 	mCategoryMap.clear(); // remove all references (should delete entries)
 	mItemMap.clear(); // remove all references (should delete entries)
+	mItemLinks.clear(); //ND Link Processing Efficiency
 	mLastItem = NULL;
 	//mInventory.clear();
 }
@@ -2196,6 +2247,9 @@ void LLInventoryModel::registerCallbacks(LLMessageSystem* msg)
 	msg->setHandlerFuncFast(_PREHASH_RemoveInventoryFolder,
 						processRemoveInventoryFolder,
 						NULL);
+	msg->setHandlerFuncFast(_PREHASH_RemoveInventoryObjects,
+							processRemoveInventoryObjects,
+							NULL);	
 	//msg->setHandlerFuncFast(_PREHASH_ExchangeCallingCard,
 	//						processExchangeCallingcard,
 	//						NULL);
@@ -2312,6 +2366,37 @@ bool LLInventoryModel::messageUpdateCore(LLMessageSystem* msg, bool account)
 }
 
 // 	static
+void LLInventoryModel::removeInventoryItem(LLUUID agent_id, LLMessageSystem* msg, const char* msg_label)
+{
+	LLUUID item_id;
+	S32 count = msg->getNumberOfBlocksFast(msg_label);
+	lldebugs << "Message has " << count << " item blocks" << llendl;
+	uuid_vec_t item_ids;
+	update_map_t update;
+	for(S32 i = 0; i < count; ++i)
+	{
+		msg->getUUIDFast(msg_label, _PREHASH_ItemID, item_id, i);
+		lldebugs << "Checking for item-to-be-removed " << item_id << llendl;
+		LLViewerInventoryItem* itemp = gInventory.getItem(item_id);
+		if(itemp)
+		{
+		lldebugs << "Item will be removed " << item_id << llendl;
+			// we only bother with the delete and account if we found
+			// the item - this is usually a back-up for permissions,
+			// so frequently the item will already be gone.
+			--update[itemp->getParentUUID()];
+			item_ids.push_back(item_id);
+		}
+	}
+	gInventory.accountForUpdate(update);
+	for(uuid_vec_t::iterator it = item_ids.begin(); it != item_ids.end(); ++it)
+	{
+		lldebugs << "Calling deleteObject " << *it << llendl;
+		gInventory.deleteObject(*it);
+	}
+}
+
+// 	static
 void LLInventoryModel::processRemoveInventoryItem(LLMessageSystem* msg, void**)
 {
 	lldebugs << "LLInventoryModel::processRemoveInventoryItem()" << llendl;
@@ -2323,27 +2408,7 @@ void LLInventoryModel::processRemoveInventoryItem(LLMessageSystem* msg, void**)
 				<< llendl;
 		return;
 	}
-	S32 count = msg->getNumberOfBlocksFast(_PREHASH_InventoryData);
-	uuid_vec_t item_ids;
-	update_map_t update;
-	for(S32 i = 0; i < count; ++i)
-	{
-		msg->getUUIDFast(_PREHASH_InventoryData, _PREHASH_ItemID, item_id, i);
-		LLViewerInventoryItem* itemp = gInventory.getItem(item_id);
-		if(itemp)
-		{
-			// we only bother with the delete and account if we found
-			// the item - this is usually a back-up for permissions,
-			// so frequently the item will already be gone.
-			--update[itemp->getParentUUID()];
-			item_ids.push_back(item_id);
-		}
-	}
-	gInventory.accountForUpdate(update);
-	for(uuid_vec_t::iterator it = item_ids.begin(); it != item_ids.end(); ++it)
-	{
-		gInventory.deleteObject(*it);
-	}
+	LLInventoryModel::removeInventoryItem(agent_id, msg, _PREHASH_InventoryData);
 	gInventory.notifyObservers();
 }
 
@@ -2408,18 +2473,10 @@ void LLInventoryModel::processUpdateInventoryFolder(LLMessageSystem* msg,
 }
 
 // 	static
-void LLInventoryModel::processRemoveInventoryFolder(LLMessageSystem* msg,
-													void**)
+void LLInventoryModel::removeInventoryFolder(LLUUID agent_id,
+											 LLMessageSystem* msg)
 {
-	lldebugs << "LLInventoryModel::processRemoveInventoryFolder()" << llendl;
-	LLUUID agent_id, folder_id;
-	msg->getUUIDFast(_PREHASH_FolderData, _PREHASH_AgentID, agent_id);
-	if(agent_id != gAgent.getID())
-	{
-		llwarns << "Got a RemoveInventoryFolder for the wrong agent."
-				<< llendl;
-		return;
-	}
+	LLUUID folder_id;
 	uuid_vec_t folder_ids;
 	update_map_t update;
 	S32 count = msg->getNumberOfBlocksFast(_PREHASH_FolderData);
@@ -2438,6 +2495,42 @@ void LLInventoryModel::processRemoveInventoryFolder(LLMessageSystem* msg,
 	{
 		gInventory.deleteObject(*it);
 	}
+}
+
+// 	static
+void LLInventoryModel::processRemoveInventoryFolder(LLMessageSystem* msg,
+													void**)
+{
+	lldebugs << "LLInventoryModel::processRemoveInventoryFolder()" << llendl;
+	LLUUID agent_id, session_id;
+	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, agent_id);
+	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_SessionID, session_id);
+	if(agent_id != gAgent.getID())
+	{
+		llwarns << "Got a RemoveInventoryFolder for the wrong agent."
+		<< llendl;
+		return;
+	}
+	LLInventoryModel::removeInventoryFolder( agent_id, msg );
+	gInventory.notifyObservers();
+}
+
+// 	static
+void LLInventoryModel::processRemoveInventoryObjects(LLMessageSystem* msg,
+													void**)
+{
+	lldebugs << "LLInventoryModel::processRemoveInventoryObjects()" << llendl;
+	LLUUID agent_id, session_id;
+	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, agent_id);
+	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_SessionID, session_id);
+	if(agent_id != gAgent.getID())
+	{
+		llwarns << "Got a RemoveInventoryObjects for the wrong agent."
+		<< llendl;
+		return;
+	}
+	LLInventoryModel::removeInventoryFolder( agent_id, msg );
+	LLInventoryModel::removeInventoryItem( agent_id, msg, _PREHASH_ItemData );
 	gInventory.notifyObservers();
 }
 
@@ -2639,7 +2732,7 @@ void LLInventoryModel::processBulkUpdateInventory(LLMessageSystem* msg, void**)
 		LLInventoryState::sWearNewClothing = FALSE;
 	}
 
-	if (tid == LLInventoryState::sWearNewClothingTransactionID)
+	if (tid.notNull() && tid == LLInventoryState::sWearNewClothingTransactionID)
 	{
 		count = wearable_ids.size();
 		for (i = 0; i < count; ++i)
@@ -2947,6 +3040,210 @@ void LLInventoryModel::saveItemsOrder(const LLInventoryModel::item_array_t& item
 }
 
 // See also LLInventorySort where landmarks in the Favorites folder are sorted.
+
+//-TT Patch: ReplaceWornItemsOnly
+// Collect all wearables, objects and gestures in the subtree, then wear them, 
+// replacing only relevant layers and attachment points
+void LLInventoryModel::wearWearablesOnAvatar(LLUUID category_id)
+{
+	LLInventoryModel::cat_array_t cat_array;
+
+	mItemArray.clear();
+	LLFindWearables is_wearable;
+	gInventory.collectDescendentsIf(category_id,
+									cat_array,
+									mItemArray,
+									LLInventoryModel::EXCLUDE_TRASH,
+									is_wearable);
+	S32 i;
+	S32 wearable_count = mItemArray.count();
+
+	if (wearable_count > 0)	//Loop through wearables. 
+	{
+		//llinfos << "ReplaceWornItemsOnly wearable_count" << wearable_count << llendl;
+		int aTypes[LLWearableType::WT_COUNT] = {0};
+		
+		for(i = 0; i  < wearable_count; ++i)
+		{
+			//llinfos << "ReplaceWornItemsOnly wearable_count loop, i=" << i << llendl;
+			LLViewerInventoryItem *item = mItemArray.get(i);
+			int iType = (int)item->getWearableType();
+			//llinfos << "ReplaceWornItemsOnly wearable_count loop, iType=" << iType << llendl;
+			if (item->isWearableType() 
+				&& iType != LLWearableType::WT_INVALID 
+				&& iType != LLWearableType::WT_NONE 
+				&& !get_is_item_worn(item->getUUID())
+				)
+			{
+				aTypes[iType]++;
+				if (aTypes[iType] == 1) //first occurence of type, remove first
+				{
+					U32 count = gAgentWearables.getWearableCount((LLWearableType::EType)iType);
+					//llinfos << "Type: " << iType << " count " << count << llendl;
+
+					for (U32 j=0; j<count; j++) //remove all
+					{
+						//take the first one from the list, since the list is diminishing.
+						LLWearable* wearable = gAgentWearables.getWearable((LLWearableType::EType)iType,0);
+						//if the item is from our folder - don't remove it
+						//for (LLViewerInventoryItem *item = item_array.get(i); 
+						if (mItemArray.find((LLViewerInventoryItem *)wearable) == -1)
+							LLAppearanceMgr::instance().removeItemFromAvatar(wearable->getItemID());
+						//llinfos << "Removing wearable name: " << wearable->getName() << llendl;
+					}
+					//now add the first item (replace just in case)
+					LLAppearanceMgr::instance().wearItemOnAvatar(item->getUUID(), true, true);
+					//llinfos << " Wearing item: " << item->getName() << " with replace=true" << llendl;
+				}
+				else // just add - unless it's body
+				{
+					if (!(iType == LLWearableType::WT_SHAPE) && !(iType == LLWearableType::WT_SKIN) && 
+						!(iType == LLWearableType::WT_HAIR) && !(iType == LLWearableType::WT_EYES))
+							LLAppearanceMgr::instance().wearItemOnAvatar(item->getUUID(), true, false);
+				}
+			}
+		}
+	}
+}
+
+void LLInventoryModel::wearAttachmentsOnAvatar(LLUUID category_id)
+{
+	// Find all the wearables that are in the category's subtree.
+	llinfos << "ReplaceWornItemsOnly find all attachments" << llendl;
+
+	LLInventoryModel::cat_array_t	obj_cat_array;
+	mObjArray.clear();
+	mAttPoints.clear();
+
+	LLIsType is_object( LLAssetType::AT_OBJECT );
+	gInventory.collectDescendentsIf(category_id,
+									obj_cat_array,
+									mObjArray,
+									LLInventoryModel::EXCLUDE_TRASH,
+									is_object);
+	S32 i;
+	S32 obj_count = mObjArray.count();
+
+	if (obj_count > 0)
+	{
+		for(i = 0; i  < obj_count; ++i)
+		{
+			LLViewerInventoryItem *obj_item = mObjArray.get(i);
+
+			if (!get_is_item_worn(obj_item->getUUID()))
+			{
+				// first add all items without removing old ones
+				LLViewerInventoryItem* item_to_wear = gInventory.getItem(obj_item->getUUID());
+				rez_attachment(item_to_wear, NULL, false);
+			}
+		}
+	}
+}
+void LLInventoryModel::wearGesturesOnAvatar(LLUUID category_id)
+{
+	// Find all gestures in this folder
+	LLInventoryModel::cat_array_t	gest_cat_array;
+	LLInventoryModel::item_array_t	gest_item_array;
+	LLIsType is_gesture( LLAssetType::AT_GESTURE );
+	gInventory.collectDescendentsIf(category_id,
+									gest_cat_array,
+									gest_item_array,
+									LLInventoryModel::EXCLUDE_TRASH,
+									is_gesture);
+	S32 i;
+	S32 gest_count = gest_item_array.count();
+
+	if (gest_count > 0)
+	{
+		for(i = 0; i  < gest_count; ++i)
+		{
+			LLViewerInventoryItem *gest_item = gest_item_array.get(i);
+			if (!get_is_item_worn(gest_item->getUUID()))
+			{
+				LLGestureMgr::instance().activateGesture( gest_item->getLinkedUUID() );
+				gInventory.updateItem( gest_item );
+				gInventory.notifyObservers();
+			}
+		}
+	}
+}
+
+
+void LLInventoryModel::wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object, const LLViewerJointAttachment *attachment)
+{
+	//check if the object is in the current list.
+	LLUUID objID = object->getAttachmentItemID();
+	bool isObjectInList = false;
+
+	for(int i = 0; i  < mObjArray.count(); ++i)
+	{
+
+		if (objID == (mObjArray.get(i))->getUUID())
+		{
+			isObjectInList = true;
+			break;
+		}
+	}
+
+	//all attachment points
+	S32 obj_count = mObjArray.count();
+
+	if (isObjectInList && attachment != NULL)
+	{
+		std::string attName = attachment->getName();
+		S32 found = mAttPoints.find(attName);
+
+
+		// we have not encountered this attach point yet
+		if (found == -1)
+		{
+			mAttPoints.insert(mAttPoints.end(),attName);
+			S32 numCnt = attachment->getNumObjects();
+			//check if there are other things on same point already
+			if (numCnt > 1)
+			{
+				for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator iter = attachment->mAttachedObjects.begin();
+					 iter != attachment->mAttachedObjects.end();
+					 ++iter)
+				{
+					LLViewerObject* attached_object = (*iter);
+					LLUUID att_id = attached_object->getAttachmentItemID();
+
+					//if any of those things aren't in our list - remove them
+					bool isFound = false;
+					for(int j = 0; j  < obj_count; ++j)
+					{
+						LLViewerInventoryItem *fold_item = mObjArray.get(j);
+						if (att_id == fold_item->getUUID())
+						{
+							isFound = true;
+							continue;
+						}		
+					}
+					if (!isFound)
+						LLVOAvatarSelf::detachAttachmentIntoInventory(att_id);
+				}
+			}
+		}
+	}
+}
+
+void LLInventoryModel::wearItemsOnAvatar(LLInventoryCategory* category)
+{
+	if(!category) return;
+	llinfos << "ReplaceWornItemsOnly wear_inventory_category_on_avatar( " 
+			 << category->getName() << " )" << llendl;
+
+	LLUUID category_id = category->getUUID();
+
+	wearAttachmentsOnAvatar(category_id);
+
+	wearWearablesOnAvatar(category_id);
+
+	wearGesturesOnAvatar(category_id);
+}
+//-TT
+
 class LLViewerInventoryItemSort
 {
 public:

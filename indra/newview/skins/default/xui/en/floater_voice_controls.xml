@@ -135,7 +135,7 @@
           width="280">
         <avatar_list
          follows="all"
-         height="132"
+         height="120"
          ignore_online_status="true"
          layout="topleft"
          multi_select="true"
@@ -152,4 +152,33 @@
          width="276" />
       </layout_panel>
     </layout_stack>
-</floater>
+    <slider
+     enabled="false"
+     follows="left|bottom|right"
+     height="23"
+     increment="0.01"
+     left="1"
+     max_val="0.95"
+     min_val="0.05"
+     name="volume_slider"
+     show_text="false"
+     tool_tip="Voice volume"
+     bottom_delta="12"
+     value="0.5"
+     width="150"/>
+    <button
+     enabled="false"
+     follows="bottom|left"
+     height="16"
+     image_disabled="Audio_Off"
+     image_disabled_selected="AudioMute_Off"
+     image_hover_selected="AudioMute_Over"
+     image_selected="AudioMute_Off"
+     image_unselected="Audio_Off"
+     is_toggle="true"
+     left_pad="5"
+     top_delta="4"
+     name="mute_btn"
+     width="16"
+     scale_image="false"/>
+     </floater>

@@ -56,6 +56,8 @@ public:
 	/*virtual*/ void resetLastError();
 	/*virtual*/ void setLastError(const std::string& message, const std::string& filename = std::string());
 	
+	BOOL initDecode(LLImageRaw &raw_image, int discard_level, int* region);
+	BOOL initEncode(LLImageRaw &raw_image, int blocks_size, int precincts_size, int levels);
 	
 	// Encode with comment text 
 	BOOL encode(const LLImageRaw *raw_imagep, const char* comment_text, F32 encode_time=0.0);
@@ -72,8 +74,6 @@ public:
 	static S32 calcHeaderSizeJ2C();
 	static S32 calcDataSizeJ2C(S32 w, S32 h, S32 comp, S32 discard_level, F32 rate = 0.f);
 
-	static void openDSO();
-	static void closeDSO();
 	static std::string getEngineInfo();
 
 protected:
@@ -119,6 +119,8 @@ protected:
 	virtual BOOL decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decode_time, S32 first_channel, S32 max_channel_count) = 0;
 	virtual BOOL encodeImpl(LLImageJ2C &base, const LLImageRaw &raw_image, const char* comment_text, F32 encode_time=0.0,
 							BOOL reversible=FALSE) = 0;
+	virtual BOOL initDecode(LLImageJ2C &base, LLImageRaw &raw_image, int discard_level = -1, int* region = NULL) = 0;
+	virtual BOOL initEncode(LLImageJ2C &base, LLImageRaw &raw_image, int blocks_size = -1, int precincts_size = -1, int levels = 0) = 0;
 
 	friend class LLImageJ2C;
 };

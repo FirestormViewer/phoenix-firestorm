@@ -13,6 +13,12 @@
                 <key>folder</key>
                     <string>grey</string>
                 </map>
+                <map>
+                <key>name</key>
+                    <string>Dark</string>
+                <key>folder</key>
+                    <string>dark</string>
+                </map>
             </array>
         </map>
 		
@@ -31,6 +37,7 @@
                 </map>
             </array>
         </map>
+<!--
 
 		<map>
         <key>name</key>
@@ -47,23 +54,7 @@
                 </map>
             </array>
         </map>
-
-		<map>
-        <key>name</key>
-            <string>MetaHarper w/SideTabs</string>
-        <key>folder</key>
-            <string>metaharpersidetabs</string>
-        <key>themes</key>
-            <array>
-                <map>
-                <key>name</key>
-                    <string>AppalachianSky</string>
-                <key>folder</key>
-                    <string>appalachian_sky</string>
-                </map>
-            </array>
-        </map>
-
+-->
         <map>
         <key>name</key>
             <string>MetaHarper Modern</string>
@@ -76,23 +67,33 @@
                     <string>AppalachianSky</string>
                 <key>folder</key>
                     <string>appalachian_sky</string>
+		</map>
+            </array>
+        </map>
+
+        <map>
+        <key>name</key>
+            <string>MetaHarper Modern w/ Sidetabs</string>
+        <key>folder</key>
+            <string>metaharper_sidetabs</string>
+        <key>themes</key>
+            <array>
+                <map>
+                <key>name</key>
+                    <string>AppalachianSky</string>
+                <key>folder</key>
+                    <string>default</string>
                 </map>
             </array>
         </map>
 
-	<map>
+        <map>
         <key>name</key>
             <string>StarLight</string>
         <key>folder</key>
             <string>starlight</string>
         <key>themes</key>
             <array>
-                <map>
-                <key>name</key>
-                    <string>Nostalgia Blue</string>
-                <key>folder</key>
-                    <string>nostalgia_blue</string>
-                </map>
                 <map>
                 <key>name</key>
                     <string>Original Orange</string>
@@ -104,6 +105,18 @@
                     <string>Original Teal</string>
                 <key>folder</key>
                     <string>original_teal</string>
+                </map>
+		<map>
+                <key>name</key>
+                    <string>Mono Teal</string>
+                <key>folder</key>
+                    <string>mono_teal</string>
+                </map>
+                <map>
+                <key>name</key>
+                    <string>Nostalgia Blue</string>
+                <key>folder</key>
+                    <string>nostalgia_blue</string>
                 </map>
                 <map>
                 <key>name</key>
@@ -118,6 +131,22 @@
                     <string>silver_pink</string>
                 </map>
 
+            </array>
+        </map>
+
+        <map>
+            <key>name</key>
+                <string>Droidstorm</string>
+            <key>folder</key>
+                <string>droidstorm</string>
+            <key>themes</key>
+            <array>
+                <map>
+                    <key>name</key>
+                        <string>Default</string>
+                    <key>folder</key>
+                        <string>default</string>
+                </map>
             </array>
         </map>
     </array>

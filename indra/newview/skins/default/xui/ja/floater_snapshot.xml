@@ -13,7 +13,7 @@
 	</text>
 	<button label="スナップショットを更新" name="new_snapshot_btn"/>
 	<button label="送信" name="send_btn"/>
-	<button label="保存（L$[AMOUNT]）" name="upload_btn"/>
+	<button label="保存" name="upload_btn"/>
 	<flyout_button label="保存" name="save_btn" tool_tip="画像をファイルに保存">
 		<flyout_button.item label="保存" name="save_item"/>
 		<flyout_button.item label="別名で保存..." name="saveas_item"/>

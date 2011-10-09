@@ -117,7 +117,9 @@ public:
 		registrar.add("Gear.Create", boost::bind(&LLOutfitListGearMenu::onCreate, this, _2));
 
 		registrar.add("Gear.WearAdd", boost::bind(&LLOutfitListGearMenu::onAdd, this));
-
+//-TT Patch: ReplaceWornItemsOnly
+		registrar.add("Gear.WearReplaceItems",boost::bind(&LLOutfitListGearMenu::onReplaceItems, this));
+//-TT 
 		enable_registrar.add("Gear.OnEnable", boost::bind(&LLOutfitListGearMenu::onEnable, this, _2));
 		enable_registrar.add("Gear.OnVisible", boost::bind(&LLOutfitListGearMenu::onVisible, this, _2));
 
@@ -186,6 +188,17 @@ private:
 		}
 	}
 
+//-TT Patch: ReplaceWornItemsOnly
+	void onReplaceItems()
+	{
+		const LLUUID& selected_id = getSelectedOutfitID();
+
+		if (selected_id.notNull())
+		{
+			//LLAppearanceMgr::getInstance()->replaceCategoryInCurrentOutfit(selected_id);
+		}
+	}
+//-TT
 	void onTakeOff()
 	{
 		// Take off selected outfit.
@@ -279,6 +292,10 @@ protected:
 			boost::bind(&LLAppearanceMgr::replaceCurrentOutfit, &LLAppearanceMgr::instance(), selected_id));
 		registrar.add("Outfit.WearAdd",
 			boost::bind(&LLAppearanceMgr::addCategoryToCurrentOutfit, &LLAppearanceMgr::instance(), selected_id));
+//-TT Patch: ReplaceWornItemsOnly
+		registrar.add("Outfit.WearReplaceItems",
+			boost::bind(&LLAppearanceMgr::replaceCategoryInCurrentOutfit, &LLAppearanceMgr::instance(), selected_id));
+//-TT 
 		registrar.add("Outfit.TakeOff",
 				boost::bind(&LLAppearanceMgr::takeOffOutfit, &LLAppearanceMgr::instance(), selected_id));
 		registrar.add("Outfit.Edit", boost::bind(editOutfit));
@@ -377,8 +394,8 @@ LLOutfitsList::~LLOutfitsList()
 	if (gInventory.containsObserver(mCategoriesObserver))
 	{
 		gInventory.removeObserver(mCategoriesObserver);
-		delete mCategoriesObserver;
 	}
+	delete mCategoriesObserver;
 }
 
 BOOL LLOutfitsList::postBuild()
@@ -625,6 +642,11 @@ void LLOutfitsList::performAction(std::string action)
 	if ("replaceoutfit" == action)
 	{
 		LLAppearanceMgr::instance().wearInventoryCategory( cat, FALSE, FALSE );
+	}
+	if ("replaceitems" == action)
+	{
+		llinfos << "replaceitems" << llendl;
+		LLAppearanceMgr::instance().wearInventoryCategory( cat, FALSE, TRUE );
 	}
 	else if ("addtooutfit" == action)
 	{

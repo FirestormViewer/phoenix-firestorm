@@ -30,7 +30,7 @@
 #include "lltransientdockablefloater.h"
 #include "llnotificationptr.h"
 
-class LLToastNotifyPanel;
+class LLToastPanel;
 
 /**
  * Handles script notifications ("ScriptDialog" and "ScriptDialogGroup")
@@ -178,6 +178,8 @@ public:
 
 	void restorePosition();
 
+	F32 getCurrentTransparency();
+
 protected:
 
 	/**
@@ -206,7 +208,7 @@ protected:
 private:
 	bool isScriptTextbox(LLNotificationPtr notification);
 
-	LLToastNotifyPanel* mScriptForm;
+	LLToastPanel* mScriptForm;
 	LLUUID mNotificationId;
 	LLUUID mObjectId;
 	bool mSaveFloaterPosition;

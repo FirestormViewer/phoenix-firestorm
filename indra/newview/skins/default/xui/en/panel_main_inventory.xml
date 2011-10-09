@@ -25,20 +25,6 @@
    name="ItemcountUnknown">
 
   </panel.string>
-  <text
-		     type="string"
-		     length="1"
-		     follows="left|top"
-		     height="13"
-		     layout="topleft"
-    		 left="12"
-		     name="ItemcountText"
-		     font="SansSerifMedium"
-		     text_color="SchemeLightest"
-		     top_pad="0"
-		     width="300">
-    Items:
-  </text>
   <filter_editor
    text_pad_left="10"
    follows="left|top|right"
@@ -46,10 +32,66 @@
    label="Filter Inventory"
    layout="topleft"
    left="10"
-   max_length="300"
+   max_length_chars="300"
    name="inventory search editor"
-   top="18"
-   width="303" />
+   top_pad="4"
+   width="322" />
+
+  <button
+   name="collapse_btn"
+   label="Collapse"
+   width="80"
+   height="16"
+   left="4"
+   top_pad="4"
+   follows="top|left"
+   layout="topleft"/>
+
+  <button
+   name="expand_btn"
+   label="Expand"
+   width="80"
+   height="16"
+   left_pad="4"
+   follows="top|left"
+   layout="topleft" />
+
+  <text
+   name="filter_label"
+   value="Filter:"
+   width="40"
+   height="16"
+   left_pad="4"
+   follows="top|left"
+   layout="topleft" />
+
+  <combo_box
+   name="filter_combo_box"
+   width="80"
+   height="16"
+   left_pad="4"
+   follows="top|left"
+   layout="topleft">
+
+  <combo_box.item value="filter_type_all" label="All Types" />
+  <combo_box.item value="filter_separator" label="------------" enabled="false" />
+  <combo_box.item value="filter_type_animations" label="Animations" />
+  <combo_box.item value="filter_type_calling_cards" label="Calling Cards" />
+  <combo_box.item value="filter_type_clothing" label="Clothing / Body Parts" />
+  <combo_box.item value="filter_type_gestures" label="Gestures" />
+  <combo_box.item value="filter_type_landmarks" label="Landmarks" />
+  <combo_box.item value="filter_type_notecards" label="Notecards" />
+  <combo_box.item value="filter_type_objects" label="Objects" />
+  <combo_box.item value="filter_type_scripts" label="Scripts" />
+  <combo_box.item value="filter_type_sounds" label="Sounds" />
+  <combo_box.item value="filter_type_textures" label="Textures" />
+  <combo_box.item value="filter_type_snapshots" label="Snapshots" />
+  <combo_box.item value="filter_type_meshes" label="Meshes" />
+  <combo_box.item value="filter_separator" label="------------" enabled="false" />
+  <combo_box.item value="filter_type_custom" label="Custom..." />
+
+  </combo_box>
+
   <tab_container
      bg_alpha_color="DkGray"
      bg_opaque_color="DkGray"
@@ -57,16 +99,15 @@
      background_opaque="true"
      follows="all"
      halign="center"
-     height="339"
+     height="340"
      layout="topleft"
-     left="7"
+     left="4"
      name="inventory filter tabs"
-     tab_height="30"
+     tab_drag_commit="true"
      tab_group="1"
      tab_position="top"
-     tab_min_width="100"
-     top_pad="10"
-     width="312">
+     top_pad="4"
+     width="322">
     <inventory_panel
      bg_opaque_color="DkGray2"
      bg_alpha_color="DkGray2"
@@ -124,9 +165,9 @@
    height="25"
    layout="topleft"
    top_pad="-3"
-   left="9"
+   left="4"
    name="bottom_panel"
-   width="315">
+   width="322">
       <panel
        auto_resize="false"
        follows="top|left"
@@ -134,6 +175,7 @@
        left="0"
        layout="topleft"
        name="options_gear_btn_panel"
+       user_resize="false"
        width="32">
           <menu_button
            follows="top|left"
@@ -156,6 +198,7 @@
        layout="topleft"
        left_pad="0"
        name="add_btn_panel"
+       user_resize="false"
        width="32">
           <button
            follows="top|left"
@@ -202,9 +245,22 @@
        auto_resize="true"
        height="25"
        left_pad="0"
+       right="-33"
        layout="topleft"
-       name="dummy_panel"
-       width="183">
+       name="dummy_panel">
+          <text
+           type="string"
+           length="1"
+           height="13"
+           layout="topleft"
+           left="8"
+           name="ItemcountText"
+           font="SansSerifMedium"
+           top_pad="6"
+           follows="bottom|left|right"
+           width="170">
+          Items
+          </text>
           <icon
            follows="top|left|right"
            height="25"
@@ -212,14 +268,15 @@
            layout="topleft"
            left="0"
            top="0"
-           name="dummy_icon"
-           width="182" />
+           right="-1"
+           name="dummy_icon" />
       </panel>
       <panel
        auto_resize="false"
        follows="top|right"
        height="25"
        left_pad="0"
+       right="-1"
        layout="topleft"
        name="trash_btn_panel"
        width="32">

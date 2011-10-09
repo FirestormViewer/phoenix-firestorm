@@ -54,7 +54,7 @@ public:
 	void	pan(F32 right, F32 up);
 	virtual BOOL needsUpdate() { return mNeedsUpdate; }
 
-	LLVOAvatar* getDummyAvatar() { return mDummyAvatar; }
+	LLVOAvatar* getPreviewAvatar();
 
 protected:
 	BOOL				mNeedsUpdate;
@@ -102,10 +102,8 @@ public:
 	bool validateEaseIn(const LLSD& data);
 	bool validateEaseOut(const LLSD& data);
 	static void	onBtnOK(void*);
-	static void onSaveComplete(const LLUUID& asset_uuid,
-									   LLAssetType::EType type,
-									   void* user_data,
-									   S32 status, LLExtStat ext_status);
+	static void onSaveComplete(const LLUUID& asset_uuid, LLAssetType::EType type, void* user_data, S32 status, LLExtStat ext_status);
+	static bool sUseDummy;
 private:
 	void setAnimCallbacks() ;
 	

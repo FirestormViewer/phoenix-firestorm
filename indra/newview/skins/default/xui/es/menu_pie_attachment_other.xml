@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Avatar Pie">
+	<pie_slice label="Perfil..." name="Profile..."/>
+	<pie_slice label="Bloquear" name="Avatar Mute"/>
+	<pie_slice label="Ir a" name="Go to"/>
+	<pie_slice label="Denunciar..." name="abuse"/>
+	<pie_slice label="Ofrecer amistad..." name="Add Friend"/>
+	<pie_slice label="Pagar..." name="Pay..."/>
+	<pie_menu name="Avatar Pie More 1" label="Más >">
+		<pie_slice label="Congelar" name="Freeze..."/>
+		<pie_slice label="Ofrecer tarjeta" name="Add Calling Card"/>
+		<pie_slice label="Invitar a grupo" name="Group Invite..."/>
+		<pie_menu name="Avatar Pie More 2" label="Más >">
+			<pie_slice label="Depurar texturas" name="Debug..."/>
+			<pie_slice label="Llamar" name="Call"/>
+			<pie_slice label="Enfocar" name="Zoom In"/>
+		</pie_menu>
+		<pie_slice label="Inspeccionar" name="Avatar Inspect"/>
+		<pie_slice label="Desdibujar" name="Derender"/>
+	</pie_menu>
+	<pie_slice label="MI" name="Send IM..."/>
+</pie_menu>

@@ -200,6 +200,14 @@
              function="Inventory.DoCreate"
              parameter="tattoo" />
         </menu_item_call>
+        <menu_item_call
+         label="New Physics"
+         layout="topleft"
+         name="New Physics">
+            <menu_item_call.on_click
+             function="Inventory.DoCreate"
+             parameter="physics" />
+        </menu_item_call>
     </menu>
     <menu
      label="New Body Parts"
@@ -367,6 +375,14 @@
          parameter="addtooutfit" />
     </menu_item_call>
     <menu_item_call
+     label="Wear Items"
+     layout="topleft"
+     name="Wear Items">
+      <menu_item_call.on_click
+       function="Inventory.DoToSelected"
+       parameter="replaceitems" />
+    </menu_item_call>
+    <menu_item_call
      label="Remove From Current Outfit"
      layout="topleft"
      name="Remove From Outfit">
@@ -441,6 +457,14 @@
          function="Inventory.DoToSelected"
          parameter="copy_uuid" />
     </menu_item_call>
+    <menu_item_call
+     label="Restore to Last Position"
+     layout="topleft"
+     name="Restore to Last Position">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="restoreToWorld" />
+    </menu_item_call>
     <menu_item_separator
      layout="topleft" 
      name="Copy Separator" />
@@ -451,6 +475,14 @@
         <menu_item_call.on_click
          function="Inventory.DoToSelected"
          parameter="copy" />
+    </menu_item_call>
+    <menu_item_call
+     label="Cut"
+     layout="topleft"
+     name="Cut">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="cut" />
     </menu_item_call>
     <menu_item_call
      label="Paste"
@@ -608,31 +640,20 @@
      layout="topleft" 
      name="Wearable And Object Separator"/>
     <menu_item_call
-     label="Detach From Yourself"
-     layout="topleft"
-     name="Detach From Yourself">
-        <menu_item_call.on_click
-         function="Inventory.DoToSelected"
-         parameter="detach" />
-    </menu_item_call>
-	<!-- COMMENTED OUT for DEV-32347 -->
-	<!--
-    <menu_item_call
-     label="Restore to Last Position"
-     layout="topleft"
-     name="Restore to Last Position">
-        <menu_item_call.on_click
-         function="Inventory.DoToSelected"
-         parameter="restoreToWorld" />
-    </menu_item_call>
-	-->
-    <menu_item_call
      label="Wear"
      layout="topleft"
      name="Wearable And Object Wear">
         <menu_item_call.on_click
          function="Inventory.DoToSelected"
          parameter="wear" />
+    </menu_item_call>
+    <menu_item_call
+     label="Add"
+     layout="topleft"
+     name="Wearable Add">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="wear_add" />
     </menu_item_call>
     <menu
      label="Attach To"
@@ -651,14 +672,6 @@
          parameter="edit" />
     </menu_item_call>
     <menu_item_call
-     label="Add"
-     layout="topleft"
-     name="Wearable Add">
-        <menu_item_call.on_click
-         function="Inventory.DoToSelected"
-         parameter="wear_add" />
-    </menu_item_call>
-    <menu_item_call
      label="Take Off"
      layout="topleft"
      name="Take Off">
@@ -666,6 +679,25 @@
          function="Inventory.DoToSelected"
          parameter="take_off" />
     </menu_item_call>
+    <menu_item_call
+     label="Detach From Yourself"
+     layout="topleft"
+     name="Detach From Yourself">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="detach" />
+    </menu_item_call>
+	<!-- COMMENTED OUT for DEV-32347 -->
+	<!--
+    <menu_item_call
+     label="Restore to Last Position"
+     layout="topleft"
+     name="Restore to Last Position">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="restoreToWorld" />
+    </menu_item_call>
+	-->
     <menu_item_call
      label="--no options--"
      layout="topleft"

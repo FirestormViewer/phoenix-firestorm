@@ -33,7 +33,7 @@
 
 #include "chatbar_as_cmdline.h"
 
-//#include "llcalc.h"
+#include "llcalc.h"
 
 #include "llchatbar.h"
 #include "llagent.h"
@@ -51,7 +51,7 @@
 #include "llworld.h"
 #include "llworldmap.h"
 //#include "floateravatarlist.h"
-//#include "floaterao.h"
+#include "aoengine.h"
 #include "llviewerobjectlist.h"
 #include "llviewertexteditor.h"
 #include "llvoavatar.h"
@@ -74,12 +74,13 @@
 #include "llaudioengine.h"
 #include "llviewerparcelmediaautoplay.h"
 #include "lloverlaybar.h"
-//#include "lggautocorrectfloater.h"
-//#include "lggautocorrect.h"
+#include "lggautocorrectfloater.h"
+#include "lggautocorrect.h"
 
 #include "rlvhandler.h"
 
 #include "llagentcamera.h"
+#include "lggcontactsetsfloater.h"
 
 
 void cmdline_printchat(std::string message);
@@ -578,7 +579,14 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 						LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 						parcel->setMediaURL(url);
 						parcel->setMediaType(type);
-						LLViewerParcelMedia::play(parcel);
+						if (gSavedSettings.getBOOL("MediaEnableFilter"))
+						{
+							LLViewerParcelMedia::filterMediaUrl(parcel);
+						}
+						else
+						{
+							LLViewerParcelMedia::play(parcel);
+						}
 						LLViewerParcelMediaAutoPlay::playStarted();
 						return false;
 					}
@@ -594,12 +602,18 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					{
 						gOverlayBar->toggleMusicPlay(gOverlayBar);
 					}
-					gAudiop->startInternetStream(status);
+					if (gSavedSettings.getBOOL("MediaEnableFilter"))
+					{
+						LLViewerParcelMedia::filterAudioUrl(parcel);
+					}
+					else
+					{
+						gAudiop->startInternetStream(status);
+					}
 					return false;
 				}
 			}
 #endif
-#ifdef LL_LLFLOATERAO_H
 			else if(command == std::string(sPhoenixCmdLineAO))
             {
 				std::string status;
@@ -607,23 +621,35 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
                 {
 					if (status == "on" )
 					{
-						gSavedPerAccountSettings.setBOOL("PhoenixAOEnabled",TRUE);
-//						LLFloaterAO::init();
-						LLFloaterAO::run();
+						AOEngine::getInstance()->enable(TRUE);
 					}
 					else if (status == "off" )
 					{
-						gSavedPerAccountSettings.setBOOL("PhoenixAOEnabled",FALSE);
-						LLFloaterAO::run();
+						AOEngine::getInstance()->enable(FALSE);
 					}
 					else if (status == "sit" )
 					{
-						gSavedPerAccountSettings.setBOOL("PhoenixAOSitsEnabled",!gSavedPerAccountSettings.getBOOL("PhoenixAOSitsEnabled"));
+						AOSet* tmp;
+						tmp = AOEngine::instance().getSetByName(AOEngine::instance().getCurrentSetName());
+						if(i >> status)
+						{
+							if(status == "off")
+							{
+								AOEngine::instance().setOverrideSits(tmp,TRUE);
+							}
+							else if(status == "on")
+							{
+								AOEngine::instance().setOverrideSits(tmp,FALSE);
+							}
+						}
+						else
+						{
+							AOEngine::instance().setOverrideSits(tmp,!tmp->getSitOverride());
+						}
 					}
 				}
 				return false;
             }
-#endif
 			else if(command == std::string(sPhoenixCmdLineKeyToName))
             {
                 LLUUID targetKey;
@@ -833,12 +859,11 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					}
 
 					url = llformat("secondlife:///app/teleport/%s/%d/%d/%d",region_name.c_str(),agent_x,agent_y,agent_z);
-					LLURLDispatcher::dispatch(url, NULL, true);
+					LLURLDispatcher::dispatch(url, "clicked", NULL, true);
 				}
 				return false;
 			}
-#ifdef LL_CALC_H
-			else if(command == *sPhoenixCmdLineCalc)//Cryogenic Blitz
+			else if(command == std::string(sPhoenixCmdLineCalc))//Cryogenic Blitz
 			{
 				bool success;
 				F32 result = 0.f;
@@ -868,7 +893,6 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					return false;
 				}
 			}
-#endif
 #if 0
 			else if(command == std::string(sPhoenixCmdLineTP2))
 			{
@@ -892,15 +916,27 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				cmdline_printchat("Pimps can't code.");
 				return true;//dont block chat
 			}
+			else if(revised_text == "/cs")
+			{
+				lggContactSetsFloater::showFloater();
+				cmdline_printchat("Displaying Contact Sets Floater.");
+				return false;
+			}
 #ifdef LGG_AUTO_CORRECT
 			else if(revised_text == "/ac")
 			{
-				lggAutoCorrectFloaterStart::show(TRUE,NULL);
+				LGGAutoCorrectFloater::showFloater();
 				cmdline_printchat("Displaying Auto Correction Floater.");
 				return false;
 			}
 			else if(command == std::string(sPhoenixCmdLineAutocorrect))
 			{
+				if (revised_text.length() < (std::string(sPhoenixCmdLineAutocorrect)).length()+2)
+				{
+					cmdline_printchat("Wrong usage, correct usage is"+
+						std::string(sPhoenixCmdLineAutocorrect)+" list Name|wrong word|right word.");
+					return false;
+				}
 				std::string info = revised_text.substr(std::string(sPhoenixCmdLineAutocorrect).length()+1);
 				//addac list name|wrong word|right word
 				int bar = info.find("|");
@@ -910,7 +946,6 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 						std::string(sPhoenixCmdLineAutocorrect)+" list Name|wrong word|right word.");
 					return false;
 				}
-				
 
 				std::string listName = info.substr(0,bar);
 				info = info.substr(bar+1);

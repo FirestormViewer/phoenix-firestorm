@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!--alba-->
+<!-- *NOTE: See also menu_pie_attachment_other.xml -->
+
+<pie_menu name="Avatar Pie">
+	
+    <pie_slice name="Profile..."
+        label="Profil"/>
+    <pie_slice name="Avatar Mute"
+        label="Ignorer"/>
+    <pie_slice name="Go to"
+        label="Aller là"/>
+    <pie_slice name="abuse"
+        label="Signaler"/>
+    <pie_slice name="Add Friend"
+        label="Prendre en ami"/>
+    <pie_slice name="Pay..."
+        label="Payer"/>
+	<pie_slice name="Send IM..."
+        label="Envoyer MI"/>
+	
+    <pie_menu name="Avatar Pie More 1"
+        label="Plus &gt;">
+        <pie_slice name="Freeze..."
+            label="Figer"/>
+        <pie_slice name="Add Calling Card"
+            label="Carte de visite"/>
+        <pie_slice name="Group Invite..."
+            label="Inviter &gt; Groupe"/>
+        <pie_slice name="Eject..."
+            label="Ejecter"/>
+        <pie_slice name="Avatar Inspect"
+            label="Inspecter"/>
+        <pie_slice name="Derender"
+            label="'Derender'"/>
+
+        <pie_menu name="Avatar Pie More 2"
+            label="Plus &gt;">
+            <!-- ## Zi: Is this the right thing to use for avatar textures? -->
+            <pie_slice name="Debug..."
+                label="Débog. textures"/>
+            <pie_slice name="Call"
+                label="Appeler"/>
+            <pie_slice name="Zoom In"
+                label="Zoom Av"/>
+        </pie_menu>
+    </pie_menu>
+</pie_menu>

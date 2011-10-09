@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2010, Kitty Barnett
+ * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -17,40 +17,27 @@
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
 #include "llagentui.h"
-#include "llappviewer.h"
 #include "llavatarnamecache.h"
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
 #include "lluictrlfactory.h"
 #include "llversionviewer.h"
 #include "llviewerparcelmgr.h"
+#include "llviewermenu.h"
 #include "llviewerregion.h"
 #include "llviewerstats.h"
 #include "llworld.h"
 
 #include "rlvcommon.h"
+#include "rlvhelper.h"
 #include "rlvhandler.h"
 #include "rlvlocks.h"
+
+#include <boost/algorithm/string.hpp>
 
 // ============================================================================
 // RlvNotifications
 //
-
-#ifdef RLV_EXTENSION_NOTIFY_BEHAVIOUR
-// Checked: 2009-12-05 (RLVa-1.1.0h) | Added: RLVa-1.1.0h
-/*
-void RlvNotifications::notifyBehaviour(ERlvBehaviour eBhvr, ERlvParamType eType)
-{
-	const std::string& strMsg = RlvStrings::getBehaviourNotificationString(eBhvr, eType);
-	if (!strMsg.empty())
-	{
-		LLSD argsNotify;
-		argsNotify["MESSAGE"] = strMsg;
-		LLNotifications::instance().add("SystemMessageTip", argsNotify);
-	}
-}
-*/
-#endif // RLV_EXTENSION_NOTIFY_BEHAVIOUR
 
 // Checked: 2009-11-13 (RLVa-1.1.0b) | Modified: RLVa-1.1.0b
 /*
@@ -80,6 +67,7 @@ void RlvNotifications::onGiveToRLVConfirmation(const LLSD& notification, const L
 #ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 bool RlvSettings::fCompositeFolders = false;
 #endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
+bool RlvSettings::fCanOOC = true;
 bool RlvSettings::fLegacyNaming = true;
 bool RlvSettings::fNoSetEnv = false;
 bool RlvSettings::fShowNameTags = false;
@@ -100,14 +88,21 @@ void RlvSettings::initClass()
 		if (gSavedSettings.controlExists(RLV_SETTING_ENABLELEGACYNAMING))
 			gSavedSettings.getControl(RLV_SETTING_ENABLELEGACYNAMING)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fLegacyNaming));
 
+		fCanOOC = rlvGetSetting<bool>(RLV_SETTING_CANOOC, true);
 		fNoSetEnv = rlvGetSetting<bool>(RLV_SETTING_NOSETENV, false);
 
 		fShowNameTags = rlvGetSetting<bool>(RLV_SETTING_SHOWNAMETAGS, false);
 		if (gSavedSettings.controlExists(RLV_SETTING_SHOWNAMETAGS))
 			gSavedSettings.getControl(RLV_SETTING_SHOWNAMETAGS)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fShowNameTags));
 
-		if (gSavedSettings.controlExists(RLV_SETTING_AVATAROFFSET_Z))
-			gSavedSettings.getControl(RLV_SETTING_AVATAROFFSET_Z)->getSignal()->connect(boost::bind(&onChangedAvatarOffset, _2));
+#ifdef RLV_EXTENSION_STARTLOCATION
+		// Don't allow toggling RLVaLoginLastLocation from the debug settings floater
+		if (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION))
+			gSavedPerAccountSettings.getControl(RLV_SETTING_LOGINLASTLOCATION)->setHiddenFromSettingsEditor(true);
+#endif // RLV_EXTENSION_STARTLOCATION
+
+		if (gSavedSettings.controlExists(RLV_SETTING_TOPLEVELMENU))
+			gSavedSettings.getControl(RLV_SETTING_TOPLEVELMENU)->getSignal()->connect(boost::bind(&onChangedMenuLevel));
 
 		fInitialized = true;
 	}
@@ -117,7 +112,7 @@ void RlvSettings::initClass()
 	// Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.1d
 	void RlvSettings::updateLoginLastLocation()
 	{
-		if (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION))
+		if ( (!LLApp::isQuitting()) && (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION)) )
 		{
 			BOOL fValue = (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) || (!gRlvHandler.canStand());
 			if (gSavedPerAccountSettings.getBOOL(RLV_SETTING_LOGINLASTLOCATION) != fValue)
@@ -129,10 +124,11 @@ void RlvSettings::initClass()
 	}
 #endif // RLV_EXTENSION_STARTLOCATION
 
-// Checked: 2010-10-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
-bool RlvSettings::onChangedAvatarOffset(const LLSD& sdValue)
+
+// Checked: 2011-08-16 (RLVa-1.4.0b) | Added: RLVa-1.4.0b
+bool RlvSettings::onChangedMenuLevel()
 {
-	gAgent.sendAgentSetAppearance();
+	rlvMenuToggleVisible();
 	return true;
 }
 
@@ -150,10 +146,6 @@ bool RlvSettings::onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting)
 
 std::vector<std::string> RlvStrings::m_Anonyms;
 std::map<std::string, std::string> RlvStrings::m_StringMap;
-#ifdef RLV_EXTENSION_NOTIFY_BEHAVIOUR
-std::map<ERlvBehaviour, std::string> RlvStrings::m_BhvrAddMap;
-std::map<ERlvBehaviour, std::string> RlvStrings::m_BhvrRemMap;
-#endif // RLV_EXTENSION_NOTIFY_BEHAVIOUR
 
 // Checked: 2010-03-09 (RLVa-1.2.0a) | Added: RLVa-1.1.0h
 void RlvStrings::initClass()
@@ -189,25 +181,6 @@ void RlvStrings::initClass()
 					m_Anonyms.push_back(pAnonymNode->getTextContents());
 				}
 			}
-			#ifdef RLV_EXTENSION_NOTIFY_BEHAVIOUR
-			else if (pNode->hasName("behaviour-notifications"))
-			{
-				std::string strBhvr, strType; ERlvBehaviour eBhvr;
-				for (LLXMLNode* pNotifyNode = pNode->getFirstChild(); pNotifyNode != NULL; pNotifyNode = pNotifyNode->getNextSibling())
-				{
-					if ( (!pNotifyNode->hasName("notification")) || (!pNotifyNode->getAttributeString("type", strType)) ||
-						 (!pNotifyNode->getAttributeString("behaviour", strBhvr)) || 
-						 ((eBhvr = RlvCommand::getBehaviourFromString(strBhvr)) == RLV_BHVR_UNKNOWN) )
-					{
-						continue;
-					}
-					if ("add" == strType)
-						m_BhvrAddMap.insert(std::pair<ERlvBehaviour, std::string>(eBhvr, pNotifyNode->getTextContents()));
-					else if ("rem" == strType)
-						m_BhvrRemMap.insert(std::pair<ERlvBehaviour, std::string>(eBhvr, pNotifyNode->getTextContents()));
-				}
-			}
-			#endif // RLV_EXTENSION_NOTIFY_BEHAVIOUR
 		}
 
 		if ( (m_StringMap.empty()) || (m_Anonyms.empty()) )
@@ -232,24 +205,6 @@ const std::string& RlvStrings::getAnonym(const std::string& strName)
 	return m_Anonyms[nHash % m_Anonyms.size()];
 }
 
-#ifdef RLV_EXTENSION_NOTIFY_BEHAVIOUR
-// Checked: 2009-12-05 (RLVa-1.1.0h) | Added: RLVa-1.1.0h
-const std::string& RlvStrings::getBehaviourNotificationString(ERlvBehaviour eBhvr, ERlvParamType eType)
-{
-	if (RLV_TYPE_ADD == eType)
-	{
-		std::map<ERlvBehaviour, std::string>::const_iterator itString = m_BhvrAddMap.find(eBhvr);
-		return (itString != m_BhvrAddMap.end()) ? itString->second : LLStringUtil::null;
-	}
-	else if (RLV_TYPE_REMOVE == eType)
-	{
-		std::map<ERlvBehaviour, std::string>::const_iterator itString = m_BhvrRemMap.find(eBhvr);
-		return (itString != m_BhvrRemMap.end()) ? itString->second : LLStringUtil::null;
-	}
-	return LLStringUtil::null;
-}
-#endif // RLV_EXTENSION_NOTIFY_BEHAVIOUR
-
 // Checked: 2009-11-11 (RLVa-1.1.0a) | Added: RLVa-1.1.0a
 const std::string& RlvStrings::getString(const std::string& strStringName)
 {
@@ -269,7 +224,7 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 		case RLV_RET_SUCCESS_DUPLICATE:
 			return "duplicate";
 		case RLV_RET_FAILED_SYNTAX:
-			return "syntax error";
+			return "thingy error";
 		case RLV_RET_FAILED_OPTION:
 			return "invalid option";
 		case RLV_RET_FAILED_PARAM:
@@ -296,8 +251,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 	return NULL;
 }
 
-// Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0b
-std::string RlvStrings::getVersion(bool fLegacy /*=false*/) 
+// Checked: 2010-03-27 (RLVa-1.4.0a) | Modified: RLVa-1.2.0b
+std::string RlvStrings::getVersion(bool fLegacy)
 {
 	return llformat("%s viewer v%d.%d.%d (%s %d.%d.%d.%d - RLVa %d.%d.%d)",
 		( (!fLegacy) ? "RestrainedLove" : "RestrainedLife" ),
@@ -306,7 +261,7 @@ std::string RlvStrings::getVersion(bool fLegacy /*=false*/)
 		RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH);
 }
 
-// Checked: 2010-04-18 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
+// Checked: 2010-04-18 (RLVa-1.4.0a) | Added: RLVa-1.2.0e
 std::string RlvStrings::getVersionAbout()
 {
 	return llformat("RLV v%d.%d.%d / RLVa v%d.%d.%d%c" , 
@@ -314,9 +269,8 @@ std::string RlvStrings::getVersionAbout()
 		RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH, 'a' + RLVa_VERSION_BUILD);
 }
 
-
-// Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.1.0a
-std::string RlvStrings::getVersionNum() 
+// Checked: 2010-03-27 (RLVa-1.4.0a) | Modified: RLVa-1.1.0a
+std::string RlvStrings::getVersionNum()
 {
 	return llformat("%d%02d%02d%02d", RLV_VERSION_MAJOR, RLV_VERSION_MINOR, RLV_VERSION_PATCH, RLV_VERSION_BUILD);
 }
@@ -336,27 +290,23 @@ bool RlvUtil::m_fForceTp = false;
 // Checked: 2009-07-04 (RLVa-1.0.0a) | Modified: RLVa-1.0.0a
 void RlvUtil::filterLocation(std::string& strUTF8Text)
 {
-	// TODO-RLVa: if either the region or parcel name is a simple word such as "a" or "the" then confusion will ensue?
-	//            -> not sure how you would go about preventing this though :|...
-
 	// Filter any mention of the surrounding region names
 	LLWorld::region_list_t regions = LLWorld::getInstance()->getRegionList();
 	const std::string& strHiddenRegion = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
 	for (LLWorld::region_list_t::const_iterator itRegion = regions.begin(); itRegion != regions.end(); ++itRegion)
-		rlvStringReplace(strUTF8Text, (*itRegion)->getName(), strHiddenRegion);
+		boost::ireplace_all(strUTF8Text, (*itRegion)->getName(), strHiddenRegion);
 
 	// Filter any mention of the parcel name
 	LLViewerParcelMgr* pParcelMgr = LLViewerParcelMgr::getInstance();
 	if (pParcelMgr)
-		rlvStringReplace(strUTF8Text, pParcelMgr->getAgentParcelName(), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
+		boost::ireplace_all(strUTF8Text, pParcelMgr->getAgentParcelName(), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
 }
 
 // Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
 void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 {
-	std::vector<LLUUID> idAgents;
+	uuid_vec_t idAgents;
 	LLWorld::getInstance()->getAvatars(&idAgents, NULL);
-
 	for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
 	{
 		LLAvatarName avName;
@@ -366,21 +316,24 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 
 			// NOTE: if the legacy first and last name are empty we get a legacy name of " " which would replace all spaces in the string
 			std::string strLegacyName;
-			if ( (fFilterLegacy) && (!avName.mIsDisplayNameDefault) && (!avName.mLegacyFirstName.empty()) )
+			if ( (fFilterLegacy) && (!avName.mLegacyFirstName.empty()) &&
+				 ((!avName.mIsDisplayNameDefault) || (LLCacheName::getDefaultLastName() == avName.mLegacyLastName)) )
+			{
 				strLegacyName = avName.getLegacyName();
+			}
 
 			// If the display name is a subset of the legacy name we need to filter that first, otherwise it's the other way around
-			if (std::string::npos != strLegacyName.find(avName.mDisplayName))
+			if (boost::icontains(strLegacyName, avName.mDisplayName))
 			{
 				if (!strLegacyName.empty())
-					rlvStringReplace(strUTF8Text, strLegacyName, strAnonym);
-				rlvStringReplace(strUTF8Text, avName.mDisplayName, strAnonym);
+					boost::ireplace_all(strUTF8Text, strLegacyName, strAnonym);
+				boost::ireplace_all(strUTF8Text, avName.mDisplayName, strAnonym);
 			}
 			else
 			{
-				rlvStringReplace(strUTF8Text, avName.mDisplayName, strAnonym);
+				boost::ireplace_all(strUTF8Text, avName.mDisplayName, strAnonym);
 				if (!strLegacyName.empty())
-					rlvStringReplace(strUTF8Text, strLegacyName, strAnonym);
+					boost::ireplace_all(strUTF8Text, strLegacyName, strAnonym);
 			}
 		}
 	}
@@ -421,38 +374,28 @@ bool RlvUtil::isNearbyRegion(const std::string& strRegion)
 	return false;
 }
 
-// Checked: 2010-10-07 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
-void RlvUtil::notifyBlocked(const std::string& strRlvString)
+// Checked: 2011-04-11 (RLVa-1.3.0h) | Modified: RLVa-1.3.0h
+void RlvUtil::notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs)
 {
-	LLSD argsNotify;
-	argsNotify["MESSAGE"] = RlvStrings::getString(strRlvString);
-	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
-}
+	std::string strMsg = RlvStrings::getString(strNotifcation);
+	LLStringUtil::format(strMsg, sdArgs);
 
-// Checked: 2010-03-01 (RLVa-1.2.0b) | Added: RLVa-1.2.0a
-void RlvUtil::notifyBlockedViewXXX(LLAssetType::EType assetType)
-{
-	if (!RlvStrings::hasString(RLV_STRING_BLOCKED_VIEWXXX))
-		return;
-
-	LLStringUtil::format_map_t argsMsg; std::string strMsg = RlvStrings::getString(RLV_STRING_BLOCKED_VIEWXXX);
-	argsMsg["[TYPE]"] = LLAssetType::lookup(assetType);
-	LLStringUtil::format(strMsg, argsMsg);
-
-	LLSD argsNotify;
-	argsNotify["MESSAGE"] = strMsg;
-	LLNotificationsUtil::add("SystemMessageTip", argsNotify);
+	LLSD sdNotify;
+	sdNotify["MESSAGE"] = strMsg;
+	LLNotificationsUtil::add("SystemMessageTip", sdNotify);
 }
 
 // Checked: 2010-11-11 (RLVa-1.2.1g) | Added: RLVa-1.2.1g
 void RlvUtil::notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine)
 {
+	// Don't show the same assertion over and over, or if the user opted out
 	static std::string strAssertPrev, strFilePrev; static int nLinePrev;
-	if ( (strAssertPrev == strAssert) && (strFile == strFilePrev) && (nLine == nLinePrev) )
+	if ( ((strAssertPrev == strAssert) && (strFile == strFilePrev) && (nLine == nLinePrev)) ||
+		 (!rlvGetSetting<bool>(RLV_SETTING_SHOWASSERTIONFAIL, true)) )
 	{
-		// Don't show the same assertion over and over
 		return;
 	}
+
 	strAssertPrev = strAssert;
 	strFilePrev = strFile;
 	nLinePrev = nLine;
@@ -515,10 +458,34 @@ bool rlvMenuToggleEnabled()
 		llformat("RestrainedLove Support will be %s after you restart", (rlv_handler_t::isEnabled()) ? "disabled" : "enabled" );
 	LLNotificationsUtil::add("GenericAlert", args);
 	
-	// AO 
-	// return true;
-	return gSavedSettings.getBOOL(RLV_SETTING_MAIN);
+	return true;
+}
 
+// Checked: 2011-08-16 (RLVa-1.4.0b) | Added: RLVa-1.4.0b
+void rlvMenuToggleVisible()
+{
+	bool fTopLevel = rlvGetSetting(RLV_SETTING_TOPLEVELMENU, true);
+	bool fRlvEnabled = rlv_handler_t::isEnabled();
+
+	LLMenuGL* pRLVaMenuMain = gMenuBarView->findChildMenuByName("RLVa Main", FALSE);
+	LLMenuGL* pAdvancedMenu = gMenuBarView->findChildMenuByName("Advanced", FALSE);
+	LLMenuGL* pRLVaMenuEmbed = pAdvancedMenu->findChildMenuByName("RLVa Embedded", FALSE);
+
+	gMenuBarView->setItemVisible("RLVa Main", (fRlvEnabled) && (fTopLevel));
+	pAdvancedMenu->setItemVisible("RLVa Embedded", (fRlvEnabled) && (!fTopLevel));
+
+	if ( (rlv_handler_t::isEnabled()) && (pRLVaMenuMain) && (pRLVaMenuEmbed) && 
+		 ( ((fTopLevel) && (1 == pRLVaMenuMain->getItemCount())) || ((!fTopLevel) && (1 == pRLVaMenuEmbed->getItemCount())) ) )
+	{
+		LLMenuGL* pMenuFrom = (fTopLevel) ? pRLVaMenuEmbed : pRLVaMenuMain;
+		LLMenuGL* pMenuTo = (fTopLevel) ? pRLVaMenuMain : pRLVaMenuEmbed;
+		while (LLMenuItemGL* pItem = pMenuFrom->getItem(1))
+		{
+			pMenuFrom->removeChild(pItem);
+			pMenuTo->addChild(pItem);
+			pItem->updateBranchParent(pMenuTo);
+		}
+	}
 }
 
 // Checked: 2010-04-23 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
@@ -537,22 +504,38 @@ bool rlvMenuEnableIfNot(const LLSD& sdParam)
 // Selection functors
 //
 
+// Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
+bool rlvCanDeleteOrReturn()
+{
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) )
+	{
+		struct RlvCanDeleteOrReturn : public LLSelectedObjectFunctor
+		{
+			/*virtual*/ bool apply(LLViewerObject* pObj) { return pObj->isReturnable(); }
+		} f;
+		LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
+		return (hSel.notNull()) && (0 != hSel->getRootObjectCount()) && (hSel->applyToRootObjects(&f, false));
+	}
+	return true;
+}
+
 // Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-0.2.0f
 bool RlvSelectHasLockedAttach::apply(LLSelectNode* pNode)
 {
 	return (pNode->getObject()) ? gRlvAttachmentLocks.isLockedAttachment(pNode->getObject()->getRootEdit()) : false;
 }
 
-// Checked: 2009-07-05 (RLVa-1.0.0b) | Modified: RLVa-0.2.0f
-bool RlvSelectIsOwnedByOrGroupOwned::apply(LLSelectNode* pNode)
+// Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
+bool RlvSelectIsEditable::apply(LLSelectNode* pNode)
 {
-	return (pNode->mPermissions->isGroupOwned()) || (pNode->mPermissions->getOwner() == m_idAgent);
+	const LLViewerObject* pObj = pNode->getObject();
+	return (pObj) && (!gRlvHandler.canEdit(pObj));
 }
 
-// Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.0f
+// Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
 bool RlvSelectIsSittingOn::apply(LLSelectNode* pNode)
 {
-	return (pNode->getObject()) && (pNode->getObject()->getRootEdit() == m_pObject);
+	return (pNode->getObject()) && (pNode->getObject()->getRootEdit()->isChild(m_pAvatar));
 }
 
 // ============================================================================
@@ -615,6 +598,18 @@ bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem)
 bool rlvPredCanNotRemoveItem(const LLViewerInventoryItem* pItem)
 {
 	return !rlvPredCanRemoveItem(pItem);
+}
+
+// Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+RlvPredIsEqualOrLinkedItem::RlvPredIsEqualOrLinkedItem(const LLUUID& idItem)
+{
+	m_pItem = gInventory.getItem(idItem);
+}
+
+// Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+bool RlvPredIsEqualOrLinkedItem::operator()(const LLViewerInventoryItem* pItem) const
+{
+	return (m_pItem) && (pItem) && (m_pItem->getLinkedUUID() == pItem->getLinkedUUID());
 }
 
 // ============================================================================

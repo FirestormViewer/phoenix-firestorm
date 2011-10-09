@@ -45,11 +45,14 @@ typedef enum e_chat_type
 	CHAT_TYPE_WHISPER = 0,
 	CHAT_TYPE_NORMAL = 1,
 	CHAT_TYPE_SHOUT = 2,
+	CHAT_TYPE_OOC = 3,
 	CHAT_TYPE_START = 4,
 	CHAT_TYPE_STOP = 5,
 	CHAT_TYPE_DEBUG_MSG = 6,
 	CHAT_TYPE_REGION = 7,
-	CHAT_TYPE_OWNER = 8
+	CHAT_TYPE_OWNER = 8,
+	CHAT_TYPE_DIRECT = 9,		// From llRegionSayTo()
+	CHAT_TYPE_IM = 10			// Ansariel: Special type for IMs in nearby chat
 } EChatType;
 
 typedef enum e_chat_audible_level
@@ -63,7 +66,8 @@ typedef enum e_chat_style
 {
 	CHAT_STYLE_NORMAL,
 	CHAT_STYLE_IRC,
-	CHAT_STYLE_HISTORY
+	CHAT_STYLE_HISTORY,
+	CHAT_STYLE_MODERATOR
 }EChatStyle;
 
 // A piece of chat

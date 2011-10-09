@@ -72,9 +72,9 @@ Fejl detaljer: Beskeden kaldet &apos;[_NAME]&apos; blev ikke fundet i notificati
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		Kunne ikke oprette forbindelse til [SECOND_LIFE_GRID].
-&apos;[DIAGNOSTIC]&apos;
-Make sure your Internet connection is working properly.
+		Kunne ikke tilslutte til  [SECOND_LIFE_GRID].
+    &apos;[DIAGNOSTIC]&apos;
+Check at Internet forbindelsen fungerer korrekt.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="MessageTemplateNotFound">
@@ -107,6 +107,10 @@ Vælg kun en genstand, og prøv igen.
 	</notification>
 	<notification name="FriendsAndGroupsOnly">
 		&apos;Ikke-venner&apos; vil ikke vide, at du har valgt at ignorere deres opkald og personlige beskeder (IM)
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="FavoritesOnLogin">
+		Bemærk: Når du aktiverer dette valg, kan enhver der bruger denne computer se dine favorit lokationer.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="GrantModifyRights">
@@ -179,7 +183,7 @@ Invitér venligst medlemmer indenfor 48 timer.
 		<usetemplate canceltext="Annullér" name="okcancelbuttons" notext="Annullér" yestext="Oprete en gruppe for L$100"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
-		ADVARSEL: Ved at vælge &apos;sælg til enhver&apos; bliver til land tilgængeligt for alle i hele [SECOND_LIFE], også de som ikke er i denne region.
+		ADVARSEL: Ved at vælge &apos;sælg til enhver&apos; bliver til land tilgængeligt for alle i hele [CURRENT_GRID], også de som ikke er i denne region.
 
 Det valgte antal [LAND_SIZE] m² land bliver sat til salg.
 Salgprisen vil være [SALE_PRICE]L$ og vil være til salg til [NAME].
@@ -205,18 +209,11 @@ Overskrider vedhæftnings begrænsning på [MAX_ATTACHMENTS] objekter. Tag venli
 		Ups. Noget mangler at blive udfyldt.
 Du skal indtaste brugernavnet for din avatar.
 
-Du skal bruge en konto for at benytte [SECOND_LIFE]. Ønsker du at oprette en konto nu?
+Du skal bruge en konto for at benytte [CURRENT_GRID]. Ønsker du at oprette en konto nu?
 		<usetemplate name="okcancelbuttons" notext="Prøv igen" yestext="Lav ny konto"/>
 	</notification>
 	<notification name="InvalidCredentialFormat">
 		Du skal indtaste enten dit brugernavn eller både dit fornavn og efternavn for din avatar i brugernavn feltet, derefter log på igen.
-	</notification>
-	<notification name="AddClassified">
-		Annoncer vil vises i &apos;Annoncer&apos; sektionen i søge biblioteket og på [http://secondlife.com/community/classifieds secondlife.com] i en uge.
-Udfyld din annonce og klik på &apos;Udgiv...&apos; for at tilf&apos;je den til biblioteket.				
-Du vil blive spurgt om en pris når du klikker på &apos;Udgiv&apos;.
-Jo mere du betaler, jo højere oppe på listen vises annoncen, og den vil også optræde højere oppe når personer søger.
-		<usetemplate ignoretext="Hvordan man opretter en annonce" name="okcancelignore" notext="Cancel" yestext="OK"/>
 	</notification>
 	<notification name="DeleteMedia">
 		Du har valgt at slette media tilknyttet denne overflade.
@@ -393,7 +390,7 @@ Kan ikke finde den region landet ligger i.
 Dette er typisk en midlertidig fejl. Venligst rediger og gem igen om et par minutter.
 	</notification>
 	<notification name="YouHaveBeenLoggedOut">
-		Du er blevet logget af [SECOND_LIFE]
+		Du er blevet logget af [CURRENT_GRID]
             [MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="Afslut" yestext="Se PB &amp; Chat"/>
 	</notification>
@@ -416,7 +413,7 @@ Tilbyd venskab til [NAME]?
 			<input name="message">
 				[DESC] (ny)
 			</input>
-			<button name="Offer" text="OK"/>
+			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Annullér"/>
 		</form>
 	</notification>
@@ -426,7 +423,7 @@ Tilbyd venskab til [NAME]?
 			<input name="message">
 				[DESC] (ny)
 			</input>
-			<button name="Offer" text="OK"/>
+			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Annullér"/>
 		</form>
 	</notification>
@@ -436,7 +433,7 @@ Tilbyd venskab til [NAME]?
 			<input name="new_name">
 				[NAME]
 			</input>
-			<button name="Offer" text="OK"/>
+			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Annullér"/>
 		</form>
 	</notification>
@@ -457,6 +454,7 @@ Købsprisen for dette land er ikke refunderet til ejeren. Hvis en dedikeret parv
 Dediker disse [AREA] m² land til gruppen &apos;[GROUP_NAME]&apos;?
 	</notification>
 	<notification name="ErrorMessage">
+		[ERROR_MESSAGE]
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="AvatarMovedDesired">
@@ -474,7 +472,7 @@ Du kan måske ønske at sætte en ny hjemme lokation.
 	</notification>
 	<notification name="ClothingLoading">
 		Dit tøj hentes stadig ned.
-Du kan bruge [SECOND_LIFE] normalt og andre personer vil se dig korrekt.
+Du kan bruge [CURRENT_GRID] normalt og andre personer vil se dig korrekt.
 		<form name="form">
 			<ignore name="ignore" text="Det tager lang tid at hente tøj"/>
 		</form>
@@ -482,7 +480,7 @@ Du kan bruge [SECOND_LIFE] normalt og andre personer vil se dig korrekt.
 	<notification name="FirstRun">
 		[APP_NAME] installationen er færdig.
 
-Hvis det er første gang du bruger [SECOND_LIFE], skal du først oprette en konto for at logge på.
+Hvis det er første gang du bruger [CURRENT_GRID], skal du først oprette en konto for at logge på.
 Vend tilbage til [http://join.secondlife.com secondlife.com] for at oprette en ny konto?
 	</notification>
 	<notification name="LoginPacketNeverReceived">
@@ -598,9 +596,41 @@ Hent og installér venligst den nyeste version fra
 http://secondlife.com/download.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="DownloadBackground">
-		En opdateret version af [APP_NAME] er hentet.
-Den vil blive anvendt næste gang du genstarter [APP_NAME]
+	<notification name="FailedRequiredUpdateInstall">
+		Vi kunne ikke installere en påkrævet opdatering.
+Du kan ikke logge på før [APP_NAME] er blevet opdateret.
+
+Hent og installer venligst den nyeste klien fra
+http://secondlife.com/download.
+		<usetemplate name="okbutton" yestext="Afslut"/>
+	</notification>
+	<notification name="UpdaterServiceNotRunning">
+		Dette er en påkrævet opdatering af din Second Life installation.
+
+Du kan downloade opdateringen fra http://www.secondlife.com/downloads
+eller du kan installere den nu.
+		<usetemplate name="okcancelbuttons" notext="Afslut Second Life" yestext="Hent og installér nu"/>
+	</notification>
+	<notification name="DownloadBackgroundTip">
+		Vi har hentet en opdatering til din [APP_NAME] installation.
+Version [VERSION] [[RELEASE_NOTES_FULL_URL] Information about this update]
+		<usetemplate name="okcancelbuttons" notext="Senere..." yestext="Installér nu og genstart [APP_NAME]"/>
+	</notification>
+	<notification name="DownloadBackgroundDialog">
+		Vi har hentet en opdatering til din [APP_NAME] installation.
+Version [VERSION] [[RELEASE_NOTES_FULL_URL] Information about this update]
+		<usetemplate name="okcancelbuttons" notext="Senere..." yestext="Installér nu og genstart [APP_NAME]"/>
+	</notification>
+	<notification name="RequiredUpdateDownloadedVerboseDialog">
+		Vi har hentet en påkrævet opdatering.
+Version [VERSION]
+
+Du skal genstarte [APP_NAME] for at installere denne opdatering.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="RequiredUpdateDownloadedDialog">
+		Du skal genstarte [APP_NAME] for at installere opdateringen.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="DeedObjectToGroup">
 		<usetemplate ignoretext="Bekræft før jeg dedikerer et objekt til en gruppe" name="okcancelignore" notext="Cancel" yestext="Deed"/>
@@ -712,6 +742,7 @@ Prøv venligst igen senere.
 		[OLD_NAME] ([SLID]) er nu kendt som [NEW_NAME].
 	</notification>
 	<notification name="OfferTeleport">
+		Tilbyd en teleport til din position med følgende besked?
 		<form name="form">
 			<input name="message">
 				Mød mig i [REGION]
@@ -883,9 +914,9 @@ Alle rapporter om krænkninger vil blive undersøgt og behandlet.
 
 Det ser ud til at du indrapporterer krænkelse af ophavsret. Check venligst at du rapporterer korrekt:
 
-(1) Krænkelsesproces. Du må sende en rapport, hvis du mener at en beboer udnytter [SECOND_LIFE] rettighedssystemet, for eksempel via CopyBot eller lignende værktøjer, til at overtræde ophavsretten til objekter.
+(1) Krænkelsesproces. Du må sende en rapport, hvis du mener at en beboer udnytter [CURRENT_GRID] rettighedssystemet, for eksempel via CopyBot eller lignende værktøjer, til at overtræde ophavsretten til objekter.
 
-(2) DCMA (”Digital Millennium Copyright Act”) eller fjernelsesproces. For at kræve at indhold fjernes fra [SECOND_LIFE], SKAL du sende en gyldig besked om overtrædelse som beskrevet i [http://secondlife.com/corporate/dmca.php DMCA Policy].
+(2) DCMA (”Digital Millennium Copyright Act”) eller fjernelsesproces. For at kræve at indhold fjernes fra [CURRENT_GRID], SKAL du sende en gyldig besked om overtrædelse som beskrevet i [http://secondlife.com/corporate/dmca.php DMCA Policy].
 
 Hvis du stadig ønsker at fortsætte med rapportering om overtrædelse, luk venligst dette vindue og afslut afsendelse af rapporten. Du skal muligvis vælge en specifik kategori &apos;CopyBot or Permissions Exploit&apos;.
 
@@ -962,13 +993,13 @@ Henvis til dette fra en hjemmeside for at give andre nem adgang til denne lokati
 		<usetemplate ignoretext="Tag det tøj på jeg laver, mens jeg ændrer udseende" name="okcancelignore" notext="No" yestext="Yes"/>
 	</notification>
 	<notification name="NotAgeVerified">
-		Du skal være alders-checket for at besøge dette område.  Ønsker du at gå til [SECOND_LIFE] hjemmesiden og bekræfte din alder?
+		Du skal være alders-checket for at besøge dette område.  Ønsker du at gå til [CURRENT_GRID] hjemmesiden og bekræfte din alder?
 
 [_URL]
 		<usetemplate ignoretext="Jeg har ikke bekræftet min alder" name="okcancelignore" notext="No" yestext="Yes"/>
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
-		Du skal være betalende medlem for at besøge dette område.  Ønsker du at gå til [SECOND_LIFE] hjemmesiden for at blive dette?
+		Du skal være betalende medlem for at besøge dette område.  Ønsker du at gå til [CURRENT_GRID] hjemmesiden for at blive dette?
 
 [_URL]
 		<usetemplate ignoretext="Du mangler at være betalende medlem" name="okcancelignore" notext="No" yestext="Yes"/>
@@ -1040,6 +1071,12 @@ Det kan påvirke din indtastning af password.
 	</notification>
 	<notification name="RezItemNoPermissions">
 		Utilstrækkelige tilladelser til at danne genstanden.
+	</notification>
+	<notification name="IMAcrossParentEstates">
+		Ikke muligt at sende IM over forældre estates.
+	</notification>
+	<notification name="TransferInventoryAcrossParentEstates">
+		Ikke muligt at overføre din beholdning over forældre parceller.
 	</notification>
 	<notification name="UnableToLoadNotecard">
 		Ikke muligt at indlæse note.
@@ -1122,14 +1159,6 @@ Prøv at vælge mindre stykker land.
 	</notification>
 	<notification name="NoContentToSearch">
 		Vælg venligst mindst en indholdstype for at søge (PG, Mature, or Adult).
-	</notification>
-	<notification name="GroupVote">
-		[NAME] har forslået at stemme for:
-[MESSAGE]
-		<form name="form">
-			<button name="VoteNow" text="Stem nu"/>
-			<button name="Later" text="Senere"/>
-		</form>
 	</notification>
 	<notification name="SystemMessage">
 		[MESSAGE]
@@ -1290,13 +1319,13 @@ Prøv igen om lidt.
 		Kunne ikke skabe fast forbindelse.
 	</notification>
 	<notification name="InternalUsherError">
-		Der opstod en intern fejl ved teleportering til din teleport destination.. Der kan være generelle problemer med [SECOND_LIFE] lige nu.
+		Der opstod en intern fejl ved teleportering til din teleport destination.. Der kan være generelle problemer med [CURRENT_GRID] lige nu.
 	</notification>
 	<notification name="NoGoodTPDestination">
 		Kunne ikke finde et egnet teleport sted i denne region.
 	</notification>
 	<notification name="InternalErrorRegionResolver">
-		Der opstod en intern fejl ved beregning af globale koordinater for din teleport forespørgsel. Der kan være generelle problemer med [SECOND_LIFE] lige nu.
+		Der opstod en intern fejl ved beregning af globale koordinater for din teleport forespørgsel. Der kan være generelle problemer med [CURRENT_GRID] lige nu.
 	</notification>
 	<notification name="NoValidLanding">
 		Kunne ikke finde et gyldigt landingspunkt.
@@ -1580,9 +1609,6 @@ Klik på Acceptér for at deltage eller Afvis for at afvise invitationen. Klik p
 	<notification name="VoiceCallGenericError">
 		En fejl er opstået under forsøget på at koble sig på stemme chatten [VOICE_CHANNEL_NAME].  Pråv venligst senere.
 	</notification>
-	<notification name="ServerVersionChanged">
-		Du er netop ankommet til en region der benytter en anden server version, hvilket kan influere på hastigheden. [[URL] For at se yderligere.]
-	</notification>
 	<notification name="UnsupportedCommandSLURL">
 		Den SLurl du klikkede på understøttes ikke.
 	</notification>
@@ -1622,6 +1648,10 @@ De vil blive blokeret nogle få sekunder af sikkerhedsmæssige årsager.
 		Din stemme er blevet slukket af moderatoren.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="UploadCostConfirmation">
+		Dette upload vil koste L$[PRICE], ønsker du at sende?
+		<usetemplate name="okcancelbuttons" notext="Annullér" yestext="Send"/>
+	</notification>
 	<notification name="ConfirmClearTeleportHistory">
 		Er du sikker på at du vil slette teleport historikken?
 		<usetemplate name="okcancelbuttons" notext="Annullér" yestext="OK"/>
@@ -1633,12 +1663,15 @@ Knappen vil blive vist når der er nok plads til den.
 	<notification name="ShareNotification">
 		Vælg beboere at dele med.
 	</notification>
+	<notification name="MeshUploadError">
+		[LABEL] kunne ikke sendes: [MESSAGE] [IDENTIFIER] [INVALIDITY_IDENTIFIER]
+	</notification>
 	<notification name="ShareItemsConfirmation">
 		Er du sikker på at du vil dele følgende genstande:
 
-[ITEMS]
+&lt;nolink&gt;[ITEMS]&lt;/nolink&gt;
 
-Med følgende beboere:
+Me følgende beboere:
 
 [RESIDENTS]
 		<usetemplate name="okcancelbuttons" notext="Annullér" yestext="Ok"/>
@@ -1648,6 +1681,19 @@ Med følgende beboere:
 	</notification>
 	<notification name="DeedToGroupFail">
 		Dedikering til gruppe fejlede.
+	</notification>
+	<notification name="ReleaseLandThrottled">
+		Parcellen [PARCEL_NAME] kan ikke efterlades på nuværende tidspunkt.
+	</notification>
+	<notification name="ReleasedLandWithReclaim">
+		[AREA] m² parcellen &apos;[PARCEL_NAME]&apos; er blevet frigivet.
+
+Du har [RECLAIM_PERIOD] timer til at få den tilbage for L$0 før den udbydes til salg til andre beboere.
+	</notification>
+	<notification name="ReleasedLandNoReclaim">
+		[AREA] m² parcel &apos;[PARCEL_NAME]&apos; er blevet frigivet.
+
+Parcellen kan nu købes af enhver beboer.
 	</notification>
 	<notification name="AvatarRezNotification">
 		( [EXISTENCE] sekunder i live )
@@ -1685,9 +1731,7 @@ Avatar &apos;[NAME]&apos; har forladt udseende modus.
 	<notification name="NoConnect">
 		Vi har problemer med at oprette forbindelse via [PROTOCOL] [HOSTID].
 Check venligst din netværks- og firewallsetup.
-		<form name="form">
-			<button name="OK" text="OK"/>
-		</form>
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect">
 		Vi har problemer med at oprette forbindelse til din stemme server:
@@ -1696,9 +1740,7 @@ Check venligst din netværks- og firewallsetup.
 
 Stemme kommunikation vil ikke være tilgængelig.
 Check venligst din netværks- og firewall setup.
-		<form name="form">
-			<button name="OK" text="OK"/>
-		</form>
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="AvatarRezLeftNotification">
 		( [EXISTENCE] sekunder i live )
@@ -1731,6 +1773,13 @@ Sluk for alles lyd?
 	<notification label="Stå op" name="HintSit">
 		For at rejse dig op og forlad siddeposition, tryk på &quot;Stå op&quot; knappen.
 	</notification>
+	<notification label="Tal" name="HintSpeak">
+		Klik på tal knappen for at tænde og slukke for din mikrofon.
+
+Klik på den lille pil-op for at se stemme kontrolpanelet.
+
+Skjules tale knappen, vil stemmechat ikke være mulig.
+	</notification>
 	<notification label="Undersøg verden" name="HintDestinationGuide">
 		Destinationsguiden indeholder tusinder af nye steder der kan opleves. Vælg venligst et sted og vælg Teleport for at komme derhen.
 	</notification>
@@ -1740,8 +1789,18 @@ Sluk for alles lyd?
 	<notification label="Flyt" name="HintMove">
 		For at gå eller løbe, åben Flyt panelet for neden og brug pilene til at navigere. Du kan også bruge pile-tasterne på dit tastatur.
 	</notification>
+	<notification label="" name="HintMoveClick">
+		1. Klik for at gå
+Klik et hvorsomhelst på jorden for at gå til dette sted.
+
+2. Klik og træk for at rotere visning
+Klik hvorsomhelst i verden for at rotere din visning
+	</notification>
 	<notification label="Visningsnavn" name="HintDisplayName">
 		Angiv dit konfigurérbare visningsnavn her. Dette er i tillæg til dit unikke brugernavn, som ikke kan ændres. Du kan ændre hvordan du ser andre beboeres navne i dine indstillinger.
+	</notification>
+	<notification label="Se" name="HintView">
+		For at ændre dit kamera-view, benyt kredsløbs og panoreringskontrollerne. Nulstil view ved at trykke Esc eller ved at gå.
 	</notification>
 	<notification label="Beholdning" name="HintInventory">
 		Undersøg din beholdning for at finde ting. Nyeste genstand findes lettes under fanen &quot;Nye ting&quot;
@@ -1755,6 +1814,63 @@ Sluk for alles lyd?
 			<ignore name="ignore" text="Tillad alle pop-ups"/>
 			<button name="open" text="Åben pop-up vindue"/>
 		</form>
+	</notification>
+	<notification name="AuthRequest">
+		Hjemmesiden på  &apos;&lt;nolink&gt;[HOST_NAME]&lt;/nolink&gt;&apos; in realm &apos;[REALM]&apos; kræver et brugernavn og password.
+		<form name="form">
+			<input name="username" text="Brugernavn"/>
+			<input name="password" text="Password"/>
+			<button name="ok" text="Send"/>
+			<button name="cancel" text="Annullér"/>
+		</form>
+	</notification>
+	<notification label="" name="ModeChange">
+		For at skifte tilstand skal du genstarte programmet.
+		<usetemplate name="okcancelbuttons" notext="Afslut ikke" yestext="Afslut"/>
+	</notification>
+	<notification label="" name="NoClassifieds">
+		Oprettelse og redigering af annoncer er kun muligt i avanceret tilstand. Ønsker du at logge ud for at skifte tilstand? Valg af tilstand findes på login skærmbilledet.
+		<usetemplate name="okcancelbuttons" notext="Afslut ikke" yestext="Afslut"/>
+	</notification>
+	<notification label="" name="NoGroupInfo">
+		Oprettelse og redigering af grupper er kun muligt i avanceret tilstand. Ønsker du at logge ud for at skifte tilstand? Valg af tilstand findes på login skærmbilledet.
+		<usetemplate name="okcancelbuttons" notext="Afslut ikke" yestext="Afslut"/>
+	</notification>
+	<notification label="" name="NoPlaceInfo">
+		Det er kun muligt at vise profil for stedet i avanceret opsætning. Ønsker du at logge ud for at skifte tilstand? Valg af tilstand findes på login skærmbilledet.
+		<usetemplate name="okcancelbuttons" notext="Afslut ikke" yestext="Afslut"/>
+	</notification>
+	<notification label="" name="NoPicks">
+		Oprettelse og redigering af favoritter er kun mulig i avanceret tilstand. Ønsker du at logge ud for at skifte tilstand? Valg af tilstand findes på login skærmbilledet.
+		<usetemplate name="okcancelbuttons" notext="Afslut ikke" yestext="Afslut"/>
+	</notification>
+	<notification label="" name="NoWorldMap">
+		Det er kun muligt at se verdenskortet i avanceret tilstand.Ønsker du at logge ud for at skifte tilstand? Valg af tilstand findes på login skærmbilledet.
+		<usetemplate name="okcancelbuttons" notext="Afslut ikke" yestext="Afslut"/>
+	</notification>
+	<notification label="" name="NoVoiceCall">
+		Stemme kald kan kun benttes i avanceret tilstand. Ønsker du at logge ud for at skifte tilstand?
+		<usetemplate name="okcancelbuttons" notext="Afslut ikke" yestext="Afslut"/>
+	</notification>
+	<notification label="" name="NoAvatarShare">
+		Det er kun mulig at dele i avanceret tilstand. Ønsker du at logge ud for at skifte tilstand?
+		<usetemplate name="okcancelbuttons" notext="Afslut ikke" yestext="Afslut"/>
+	</notification>
+	<notification label="" name="NoAvatarPay">
+		Det er kun muligt at betale andre beboere i avanceret tilstand. Ønsker du at logge ud for at skifte tilstand?
+		<usetemplate name="okcancelbuttons" notext="Afslut ikke" yestext="Afslut"/>
+	</notification>
+	<notification label="" name="NoInventory">
+		Det er kun muligt at vise beholdning i avanceret tilstand. Ønsker du at logge ud og logge på i avanceret tilstand.
+		<usetemplate name="okcancelbuttons" notext="Afslut ikke" yestext="Afslut"/>
+	</notification>
+	<notification label="" name="NoAppearance">
+		Udseende opsætning er kun tilgængelig i avanceret tilstand. Ønsker du at logge ud og logge på i avanceret tilstand.
+		<usetemplate name="okcancelbuttons" notext="Afslut ikke" yestext="Afslut"/>
+	</notification>
+	<notification label="" name="NoSearch">
+		Søgning er kun mulig i avanceret tilstand. Ønsker du at logge ud og logge på i avanceret tilstand.
+		<usetemplate name="okcancelbuttons" notext="Afslut ikke" yestext="Afslut"/>
 	</notification>
 	<global name="UnsupportedGLRequirements">
 		Det ser ikke ud til at din hardware opfylder minimumskravene til [APP_NAME]. [APP_NAME] kræver et OpenGL grafikkort som understøter &apos;multitexture&apos;. Check eventuelt om du har de nyeste drivere for grafikkortet, og de nyeste service-packs og patches til dit operativsystem.

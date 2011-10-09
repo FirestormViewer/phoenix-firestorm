@@ -34,6 +34,7 @@
 #define LL_LLFLOATERPREFERENCE_H
 
 #include "llfloater.h"
+#include "llavatarpropertiesprocessor.h"
 
 class LLPanelPreference;
 class LLPanelLCD;
@@ -56,7 +57,7 @@ typedef enum
 
 
 // Floater to control preferences (display, audio, bandwidth, general.
-class LLFloaterPreference : public LLFloater
+class LLFloaterPreference : public LLFloater, public LLAvatarPropertiesObserver
 {
 public: 
 	LLFloaterPreference(const LLSD& key);
@@ -78,13 +79,24 @@ public:
 	// translate user's busy response message according to current locale if message is default, otherwise do nothing
 	static void initBusyResponse();
 
+	void processProperties( void* pData, EAvatarProcessorType type );
+	void processProfileProperties(const LLAvatarData* pAvatarData );
+	void storeAvatarProperties( const LLAvatarData* pAvatarData );
+	void saveAvatarProperties( void );
+
 protected:	
 	void		onBtnOK();
 	void		onBtnCancel();
 	void		onBtnApply();
 
-	void		onClickBrowserClearCache();
+	void		onClickBrowserClearCache();		// Clear web history and caches as well as viewer caches above
 	void		onLanguageChange();
+	void		onNameTagOpacityChange(const LLSD& newvalue);
+
+	// ## Zi: Pie menu
+	// make sure controls get greyed out or enwbled when pie color override is toggled
+	void onPieColorsOverrideChanged();
+	// ## Zi: Pie menu
 
 	// set value of "BusyResponseChanged" in account settings depending on whether busy response
 	// string differs from default after user changes.
@@ -93,7 +105,7 @@ protected:
 	void onChangeCustom();
 	void updateMeterText(LLUICtrl* ctrl);
 	void onOpenHardwareSettings();
-	/// callback for defaults
+	// callback for defaults
 	void setHardwareDefaults();
 	// callback for when client turns on shaders
 	void onVertexShaderEnable();
@@ -116,12 +128,20 @@ public:
 	void setCacheLocation(const LLStringExplicit& location);
 
 	void onClickSetCache();
+	void onClickBrowseCache();
+	void onClickBrowseCrashLogs();
+	void onClickBrowseChatLogDir();
 	void onClickResetCache();
+	void onClickClearCache(); // AO: was protected, moved to public
+	void onClickCookies();
+	void onClickJavascript();
+	void onClickBrowseSettingsDir();
 	void onClickSkin(LLUICtrl* ctrl,const LLSD& userdata);
 	void onSelectSkin();
 	void onClickSetKey();
 	void setKey(KEY key);
 	void onClickSetMiddleMouse();
+	void onClickSetSounds();
 //	void onClickSkipDialogs();
 //	void onClickResetDialogs();
 	void onClickEnablePopup();
@@ -137,6 +157,8 @@ public:
 	void refresh();	// Refresh enable/disable
 	// if the quality radio buttons are changed
 	void onChangeQuality(const LLSD& data);
+	void onClickClearSettings();
+	//void callback_clear_settings(const LLSD& notification, const LLSD& response);
 	
 	void updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box);
 	void onUpdateSliderText(LLUICtrl* ctrl, const LLSD& name);
@@ -148,8 +170,12 @@ public:
 	void applyResolution();
 	void onChangeMaturity();
 	void onClickBlockList();
+	void onClickSortContacts();
+	void onClickProxySettings();
 	void applyUIColor(LLUICtrl* ctrl, const LLSD& param);
 	void getUIColor(LLUICtrl* ctrl, const LLSD& param);
+//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
+	void onChangeDoubleClickSettings();
 	
 	void buildPopupLists();
 	static void refreshSkin(void* data);
@@ -161,9 +187,12 @@ private:
 	bool mGotPersonalInfo;
 	bool mOriginalIMViaEmail;
 	bool mLanguageChanged;
+	bool mAvatarDataInitialized;
 	
 	bool mOriginalHideOnlineStatus;
 	std::string mDirectoryVisibility;
+	
+	LLAvatarData mAvatarProperties;
 };
 
 class LLPanelPreference : public LLPanel
@@ -172,24 +201,38 @@ public:
 	LLPanelPreference();
 	/*virtual*/ BOOL postBuild();
 	
+	virtual ~LLPanelPreference();
+
 	virtual void apply();
 	virtual void cancel();
 	void setControlFalse(const LLSD& user_data);
 	virtual void setHardwareDefaults(){};
 
+	// Disables "Allow Media to auto play" check box only when both
+	// "Streaming Music" and "Media" are unchecked. Otherwise enables it.
+	void updateMediaAutoPlayCheckbox(LLUICtrl* ctrl);
+
 	// This function squirrels away the current values of the controls so that
 	// cancel() can restore them.
 	virtual void saveSettings();
 	
+	class Updater;
 private:
 	//for "Only friends and groups can call or IM me"
 	static void showFriendsOnlyWarning(LLUICtrl*, const LLSD&);
+
+	static void showCustomPortWarning(LLUICtrl*, const LLSD&); // -WoLf
+
+ 	//for "Show my Favorite Landmarks at Login"
+	static void showFavoritesOnLoginWarning(LLUICtrl* checkbox, const LLSD& value);
 
 	typedef std::map<LLControlVariable*, LLSD> control_values_map_t;
 	control_values_map_t mSavedValues;
 
 	typedef std::map<std::string, LLColor4> string_color_map_t;
 	string_color_map_t mSavedColors;
+
+	Updater* mBandWidthUpdater;
 };
 
 class LLPanelPreferenceGraphics : public LLPanelPreference
@@ -228,6 +271,49 @@ protected:
 	std::string m_SkinTheme;
 	LLComboBox* m_pSkinThemeCombo;
 	LLSD        m_SkinsInfo;
+};
+// [/SL:KB]
+
+// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-10-21 (Catznip-2.6.0a) | Added: Catznip-2.2.0c
+class LLPanelPreferenceCrashReports : public LLPanelPreference
+{
+public:
+	LLPanelPreferenceCrashReports();
+
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ void apply();
+	/*virtual*/ void cancel();
+
+	void refresh();
+};
+// [/SL:KB]
+
+class LLFloaterPreferenceProxy : public LLFloater
+{
+public: 
+	LLFloaterPreferenceProxy(const LLSD& key);
+	~LLFloaterPreferenceProxy();
+
+	/// show off our menu
+	static void show();
+	void cancel();
+	
+protected:
+	BOOL postBuild();
+	void onOpen(const LLSD& key);
+	void onClose(bool app_quitting);
+	void saveSettings();
+	void onBtnOk();
+	void onBtnCancel();
+
+	void onChangeSocksSettings();
+
+private:
+	
+	bool mSocksSettingsDirty;
+	typedef std::map<LLControlVariable*, LLSD> control_values_map_t;
+	control_values_map_t mSavedValues;
+
 };
 
 

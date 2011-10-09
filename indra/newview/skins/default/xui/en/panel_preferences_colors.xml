@@ -19,7 +19,7 @@
    name="effects_color_textbox"
    top_pad="10"
    width="200">
-    Selection effects (particle beam):
+    Selection Effects (Particle Beam):
   </text>
   <color_swatch
 	 can_apply_immediately="true"
@@ -46,10 +46,10 @@
    left="30"
    height="12"
    name="font_colors"
-   top_pad="20"
+   top_pad="10"
    width="120"
    >
-    Chat font colors:
+    UI Text Colors:
   </text>
   <color_swatch
    can_apply_immediately="true"
@@ -113,7 +113,7 @@
   </text>
   <color_swatch
    can_apply_immediately="true"
-   color="EmphasisColor_35"
+   color="ObjectChatColor"
    follows="left|top"
    height="24"
    label_height="0"
@@ -234,7 +234,7 @@
      layout="topleft"
      left_pad="5"
      mouse_opaque="false"
-     name="text_box3"
+     name="text_box6"
      top_delta="5"
      width="95">
     Chat Headers
@@ -302,16 +302,113 @@
    width="95">
     URLs
   </text>
+   
+   
+     <color_swatch
+   can_apply_immediately="true"
+   color="DialogColorBg"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="40"
+   name="DialogColorBg"
+   top_pad="22"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="ScriptDialog" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="ScriptDialog" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="ScriptDialogBgLabel"
+   top_delta="5"
+   width="95">
+    Script Dialog Bg
+  </text>
+  <color_swatch
+   can_apply_immediately="true"
+   color="DialogColorFg"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="190"
+   name="ScriptDialogFb"
+   top_pad="-15"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="ScriptDialogFg" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="ScriptDialogFg" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="ScriptDialogFgLabel"
+   top_delta="5"
+   width="95">
+    Script Dialog Fg
+  </text>
+
+<color_swatch
+   can_apply_immediately="true"
+   color="LtOrange"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="360"
+   name="direct"
+   top_pad="-15"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="DirectChatColor" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="DirectChatColor" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="text_box10"
+   top_delta="5"
+   width="95">
+    Direct
+  </text>
+  
   <text
    follows="left|top"
    layout="topleft"
    left="30"
    height="12"
    name="bubble_chat"
-   top_pad="20"
-   width="140"
+   top_pad="25"
+   width="450"
    >
-    Bubble chat background:
+    Name Tag / Bubble Chat / Console Opacity:
   </text>
   <color_swatch
    can_apply_immediately="true"
@@ -322,9 +419,9 @@
    label_height="0"
    layout="topleft"
    left_delta="10"
-   top_pad="5"
+   top_pad="10"
    name="background"
-   tool_tip="Choose color for bubble chat"
+   tool_tip="Choose name tag color"
    width="44">
    <color_swatch.init_callback
     function="Pref.getUIColor"
@@ -344,6 +441,7 @@
    left_pad="10"
    label_width="70"
    name="bubble_chat_opacity"
+   tool_tip="Choose name tag opacity"
    top_delta = "6"
    width="378" />
   <text
@@ -353,9 +451,9 @@
    height="12"
    name="floater_opacity"
    top_pad="15"
-   width="120"
+   width="220"
    >
-    Floater Opacity:
+    Floating Window Opacity:
   </text>
  <slider
    can_edit_text="false"
@@ -393,4 +491,98 @@
    show_text="true"
    top_pad="5"
    width="415" />
+
+  <check_box
+   control_name="FSScriptDialogNoTransparency"
+   follows="left|top"
+   layout="topleft"
+   left="30"
+   height="12"
+   name="FSScriptDialogNoTransparency"
+   top_pad="10"
+   width="450"
+   label="Show script dialogs always on opaque background" />
+
+<!-- ## Zi: Pie menu -->
+  <check_box
+   control_name="OverridePieColors"
+   follows="left|top"
+   layout="topleft"
+   left="30"
+   height="12"
+   name="override_pie_color_checkbox"
+   top_pad="10"
+   width="450"
+   label="Override pie menu background color and opacity:" />
+  <color_swatch
+   can_apply_immediately="true"
+   color="PieMenuBgColorOverride"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left_delta="10"
+   top_pad="5"
+   name="pie_bg_color_override"
+   tool_tip="Choose pie menu background color"
+   width="44">
+  <color_swatch.init_callback
+   function="Pref.getUIColor"
+   parameter="PieMenuBgColorOverride" />
+  <color_swatch.commit_callback
+   function="Pref.applyUIColor"
+   parameter="PieMenuBgColorOverride" />
+  </color_swatch>
+  <color_swatch
+   can_apply_immediately="true"
+   color="PieMenuSelectedColorOverride"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left_pad="4"
+   top_delta="0"
+   name="pie_selected_color_override"
+   tool_tip="Choose pie menu selection color"
+   width="44">
+  <color_swatch.init_callback
+   function="Pref.getUIColor"
+   parameter="PieMenuSelectedColorOverride" />
+  <color_swatch.commit_callback
+   function="Pref.applyUIColor"
+   parameter="PieMenuSelectedColorOverride" />
+  </color_swatch>
+  <slider
+   control_name="PieMenuOpacity"
+   follows="left|top"
+   height="16"
+   increment="0.05"
+   initial_value="0.0"
+   label="Opacity:"
+   layout="topleft"
+   left_pad="10"
+   label_width="70"
+   max_value="1.0"
+   min_value="0.0"
+   name="pie_menu_opacity"
+   tool_tip="Choose pie menu opacity"
+   top_delta = "0"
+   width="330" />
+  <slider
+   control_name="PieMenuFade"
+   follows="left|top"
+   height="16"
+   increment="0.05"
+   initial_value="0.0"
+   label="Fade out:"
+   layout="topleft"
+   label_width="70"
+   max_value="1.0"
+   min_value="0.0"
+   name="pie_menu_fade_out"
+   tool_tip="Choose the amount of fade out to the pie edges"
+   top_pad = "5"
+   width="330" />
+<!-- ## Zi: Pie menu -->
+
 </panel>

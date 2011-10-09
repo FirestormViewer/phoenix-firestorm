@@ -157,7 +157,9 @@ void LLNearbyChatToastPanel::addMessage(LLSD& notification)
 
 		if(notification["chat_style"].asInteger()== CHAT_STYLE_IRC)
 		{
-			style_params.font.style = "ITALIC";
+			// italics for emotes -Zi
+			if(gSavedSettings.getBOOL("EmotesUseItalic"))
+				style_params.font.style = "ITALIC";
 		}
 		else if( chat_type == CHAT_TYPE_SHOUT)
 		{
@@ -221,25 +223,15 @@ void LLNearbyChatToastPanel::init(LLSD& notification)
 		{
 			LLStyle::Params style_params_name;
 
-			std::string href;
-
-			if (mSourceType == CHAT_SOURCE_AGENT)
-			{
-				href = LLSLURL("agent", mFromID, "about").getSLURLString();
-			}
-			else
-			{
-				href = LLSLURL("object", mFromID, "inspect").getSLURLString();
-			}
-
-			style_params_name.color(textColor);
+			LLColor4 user_name_color = LLUIColorTable::instance().getColor("HTMLLinkColor");
+			style_params_name.color(user_name_color);
 
 			std::string font_name = LLFontGL::nameFromFont(messageFont);
 			std::string font_style_size = LLFontGL::sizeFromFont(messageFont);
 			style_params_name.font.name(font_name);
 			style_params_name.font.size(font_style_size);
 
-			style_params_name.link_href = href;
+			style_params_name.link_href = notification["sender_slurl"].asString();
 			style_params_name.is_link = true;
 
 			msg_text->appendText(str_sender, FALSE, style_params_name);

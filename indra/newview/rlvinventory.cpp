@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2010, Kitty Barnett
+ * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -62,6 +62,35 @@ public:
 // ============================================================================
 // RlvInventory member functions
 //
+
+// Checked: 2011-03-28 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+RlvInventory::RlvInventory()
+	: m_fFetchStarted(false), m_fFetchComplete(false)
+{
+}
+
+// Checked: 2011-03-28 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+RlvInventory::~RlvInventory()
+{
+	if (gInventory.containsObserver(this))
+		gInventory.removeObserver(this);
+}
+
+// Checked: 2011-03-28 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+void RlvInventory::changed(U32 mask)
+{
+	const LLInventoryModel::changed_items_t& idsChanged = gInventory.getChangedIDs();
+	if (std::find(idsChanged.begin(), idsChanged.end(), m_idRlvRoot) != idsChanged.end())
+	{
+		gInventory.removeObserver(this);
+
+		LLUUID idRlvRootPrev = m_idRlvRoot;
+		m_idRlvRoot.setNull();
+
+		if (idRlvRootPrev != getSharedRootID())
+			m_OnSharedRootIDChanged();
+	}
+}
 
 // Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.0.0h
 void RlvInventory::fetchSharedInventory()
@@ -213,25 +242,31 @@ bool RlvInventory::getPath(const uuid_vec_t& idItems, LLInventoryModel::cat_arra
 	return (folders.count() != 0);
 }
 
-// Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.0.0h
-LLViewerInventoryCategory* RlvInventory::getSharedRoot() const
+// Checked: 2011-10-06 (RLVa-1.4.2a) | Modified: RLVa-1.4.2a
+const LLUUID& RlvInventory::getSharedRootID() const
 {
-	if (gInventory.isInventoryUsable())
+	if ( (m_idRlvRoot.isNull()) && (gInventory.isInventoryUsable()) )
 	{
 		LLInventoryModel::cat_array_t* pFolders; LLInventoryModel::item_array_t* pItems;
 		gInventory.getDirectDescendentsOf(gInventory.getRootFolderID(), pFolders, pItems);
 		if (pFolders)
 		{
-			// NOTE: we might have multiple #RLV folders so we'll just go with the first one we come across
-			LLViewerInventoryCategory* pFolder;
+			// NOTE: we might have multiple #RLV folders (pick the first one with sub-folders; otherwise the last one with no sub-folders)
+			const LLViewerInventoryCategory* pFolder;
 			for (S32 idxFolder = 0, cntFolder = pFolders->count(); idxFolder < cntFolder; idxFolder++)
 			{
-				if ( ((pFolder = pFolders->get(idxFolder)) != NULL) && (RlvInventory::cstrSharedRoot == pFolder->getName()) )
-					return pFolder;
+				if ( ((pFolder = pFolders->get(idxFolder)) != NULL) && (cstrSharedRoot == pFolder->getName()) )
+				{
+					m_idRlvRoot = pFolder->getUUID();
+					if (getDirectDescendentsFolderCount(pFolder) > 0)
+						break;
+				}
 			}
+			if ( (m_idRlvRoot.notNull()) && (!gInventory.containsObserver((RlvInventory*)this)) )
+				gInventory.addObserver((RlvInventory*)this);
 		}
 	}
-	return NULL;
+	return m_idRlvRoot;
 }
 
 // Checked: 2010-02-28 (RLVa-1.2.0a) | Modified: RLVa-1.0.1a
@@ -316,8 +351,17 @@ std::string RlvInventory::getSharedPath(const LLViewerInventoryCategory* pFolder
 	return strPath.erase(0, 1);
 }
 
+// Checked: 2011-10-06 (RLVa-1.4.2a) | Added: RLVa-1.4.2a
+S32 RlvInventory::getDirectDescendentsFolderCount(const LLInventoryCategory* pFolder)
+{
+	LLInventoryModel::cat_array_t* pFolders = NULL; LLInventoryModel::item_array_t* pItems = NULL;
+	if (pFolder)
+		gInventory.getDirectDescendentsOf(pFolder->getUUID(), pFolders, pItems);
+	return (pFolders) ? pFolders->size() : 0;
+}
+
 // Checked: 2009-05-26 (RLVa-0.2.0d) | Modified: RLVa-0.2.0d
-S32 RlvInventory::getDirectDescendentsCount(const LLInventoryCategory* pFolder, LLAssetType::EType filterType)
+S32 RlvInventory::getDirectDescendentsItemCount(const LLInventoryCategory* pFolder, LLAssetType::EType filterType)
 {
 	S32 cntType = 0;
 	if (pFolder)
@@ -417,7 +461,7 @@ void RlvRenameOnWearObserver::doneIdle()
 					// Rename the item's parent folder if it's called "New Folder", isn't directly under #RLV and contains exactly 1 object
 					if ( (LLViewerFolderType::lookupNewCategoryName(LLFolderType::FT_NONE) == pFolder->getName()) && 
 						 (pFolder->getParentUUID() != pRlvRoot->getUUID()) && 
-						 (1 == RlvInventory::getDirectDescendentsCount(pFolder, LLAssetType::AT_OBJECT)) )
+						 (1 == RlvInventory::getDirectDescendentsItemCount(pFolder, LLAssetType::AT_OBJECT)) )
 					{
 						pFolder->rename(strFolderName);
 						pFolder->updateServer(FALSE);
@@ -497,7 +541,7 @@ void RlvGiveToRLVTaskOffer::doneIdle()
 				pNewFolder->updateServer(FALSE);
 				gInventory.updateCategory(pNewFolder);
 
-				RlvBehaviourNotifyHandler::instance().sendNotification("accepted_in_rlv inv_offer " + pNewFolder->getName());
+				RlvBehaviourNotifyHandler::sendNotification("accepted_in_rlv inv_offer " + pNewFolder->getName());
 
 				gInventory.notifyObservers();
 				break;
@@ -628,14 +672,15 @@ bool RlvWearableItemCollector::onCollectFolder(const LLInventoryCategory* pFolde
 
 	if ( (!fLinkedFolder) && (RlvInventory::isFoldedFolder(pFolder, false)) )	// Check for folder that should get folded under its parent
 	{
-		if ( (!fAttach) || (1 == RlvInventory::getDirectDescendentsCount(pFolder, LLAssetType::AT_OBJECT)) )
+		if ( (!fAttach) || (1 == RlvInventory::getDirectDescendentsItemCount(pFolder, LLAssetType::AT_OBJECT)) )
 		{																		// When attaching there should only be 1 attachment in it
 			m_Folded.push_front(pFolder->getUUID());
 			m_FoldingMap.insert(std::pair<LLUUID, LLUUID>(pFolder->getUUID(), pFolder->getParentUUID()));
 		}
 	}
 	else if ( (RLV_FOLDER_PREFIX_HIDDEN != strFolder[0]) && 					// Collect from any non-hidden child folder for *all
-		      ( (fMatchAll) || (fLinkedFolder) ) )								// ... and collect from linked folders
+		      ( (fMatchAll) || (fLinkedFolder) ) && 							// ... and collect from linked folders
+			  (!isLinkedFolder(pFolder->getParentUUID())) )						// ... but never from non-folded linked folder descendents
 	{
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		if ( (!RlvSettings::getEnableComposites()) ||							// ... if we're not checking composite folders

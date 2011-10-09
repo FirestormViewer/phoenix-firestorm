@@ -24,15 +24,9 @@
 	<text name="LabelCreatorTitle">
 		Ersteller:
 	</text>
-	<text name="LabelCreatorName">
-		Nicole Linden
-	</text>
 	<button label="Profil..." label_selected="" name="BtnCreator"/>
 	<text name="LabelOwnerTitle">
 		Eigentümer:
-	</text>
-	<text name="LabelOwnerName">
-		Thrax Linden
 	</text>
 	<button label="Profil..." label_selected="" name="BtnOwner"/>
 	<text name="LabelAcquiredTitle">
@@ -45,8 +39,8 @@
 		Sie:
 	</text>
 	<check_box label="Bearbeiten" name="CheckOwnerModify"/>
-	<check_box label="Kopieren" left_delta="85" name="CheckOwnerCopy"/>
-	<check_box label="Wiederverkaufen" name="CheckOwnerTransfer"/>
+	<check_box label="Kopieren" name="CheckOwnerCopy"/>
+	<check_box label="Verkaufen/Weggeben" name="CheckOwnerTransfer"/>
 	<text name="AnyoneLabel">
 		Jeder:
 	</text>
@@ -59,10 +53,10 @@
 		Nächster Eigentümer:
 	</text>
 	<check_box label="Bearbeiten" name="CheckNextOwnerModify"/>
-	<check_box label="Kopieren" left_delta="55" name="CheckNextOwnerCopy"/>
-	<check_box label="Wiederverkaufen" name="CheckNextOwnerTransfer"/>
-	<check_box label="Zum Verkauf" name="CheckPurchase"/>
-	<combo_box name="combobox sale copy" left_pad="25">
+	<check_box label="Kopieren" name="CheckNextOwnerCopy"/>
+	<check_box label="Verkaufen/Weggeben" name="CheckNextOwnerTransfer"/>
+	<check_box label="Zum Verkauf" name="CheckPurchase" width="100"/>
+	<combo_box name="combobox sale copy" >
 		<combo_box.item label="Kopieren" name="Copy"/>
 		<combo_box.item label="Original" name="Original"/>
 	</combo_box>

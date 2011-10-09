@@ -32,10 +32,16 @@
 #include <vector>
 
 #include "llfloater.h"
+#include "lleventtimer.h"
+#include "llcallingcard.h"
 
 class LLAvatarList;
 class LLAvatarName;
+class LLAvatarTracker;
+class LLFriendObserver;
+class LLScrollListCtrl;
 class LLGroupList;
+class LLRelationship;
 class LLPanel;
 class LLTabContainer;
 
@@ -45,14 +51,22 @@ public:
 	FSFloaterContacts(const LLSD& seed);
 	virtual ~FSFloaterContacts();
 
+	/** 
+	 * @brief This method is called in response to the LLAvatarTracker
+	 * sending out a changed() message.
+	 */
+	void onFriendListUpdate(U32 changed_mask);
+
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 
 	static FSFloaterContacts* getInstance();
 	static FSFloaterContacts* findInstance();
-	
+
+	void					sortFriendList();
+
 	LLPanel*				mFriendsTab;
-	LLAvatarList*			mFriendList;
+	LLScrollListCtrl*		mFriendsList;
 	LLPanel*				mGroupsTab;
 	LLGroupList*			mGroupList;
 
@@ -61,7 +75,38 @@ private:
 	LLUUID					getCurrentItemID() const;
 	void					getCurrentItemIDs(uuid_vec_t& selected_uuids) const;
 	void					onAvatarListDoubleClicked(LLUICtrl* ctrl);
-	
+
+	enum FRIENDS_COLUMN_ORDER
+	{
+		LIST_ONLINE_STATUS,
+		LIST_FRIEND_USER_NAME,
+		LIST_FRIEND_NAME,
+		LIST_VISIBLE_ONLINE,
+		LIST_VISIBLE_MAP,
+		LIST_EDIT_MINE,
+		LIST_VISIBLE_MAP_THEIRS,
+		LIST_EDIT_THEIRS,
+		LIST_FRIEND_UPDATE_GEN
+	};
+
+	typedef std::map<LLUUID, S32> rights_map_t;
+	void					refreshRightsChangeList();
+	void					refreshUI();
+	void					onSelectName();
+	void					applyRightsToFriends();
+	void					addFriend(const LLUUID& agent_id);	
+	void					updateFriendItem(const LLUUID& agent_id, const LLRelationship* relationship);
+
+	typedef enum 
+	{
+		GRANT,
+		REVOKE
+	} EGrantRevoke;
+	void					confirmModifyRights(rights_map_t& ids, EGrantRevoke command);
+	void					sendRightsGrant(rights_map_t& ids);
+	bool					modifyRightsConfirmation(const LLSD& notification, const LLSD& response, rights_map_t* rights);
+
+
 	bool					isItemsFreeOfFriends(const uuid_vec_t& uuids);
 	
 	// misc callbacks
@@ -74,6 +119,7 @@ private:
 	void					onPayButtonClicked();
 	void					onDeleteFriendButtonClicked();
 	void					onAddFriendWizButtonClicked();
+	void					onContactSetsButtonClicked();
 	
 	// group buttons
 	void					onGroupChatButtonClicked();
@@ -85,7 +131,11 @@ private:
 	void					updateButtons();
 
 	LLTabContainer*			mTabContainer;
-	
+
+	LLFriendObserver*		mObserver;
+	BOOL					mAllowRightsChange;
+	S32						mNumRightsChanged;
+	LLCachedControl<bool>	mSortByUserName;
 };
 
 

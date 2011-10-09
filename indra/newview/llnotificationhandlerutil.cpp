@@ -27,6 +27,16 @@
 
 #include "llviewerprecompiledheaders.h" // must be first include
 
+#include "llavatarnamecache.h"
+
+#include "llfloaterreg.h"
+#include "llnotifications.h"
+#include "llurlaction.h"
+
+#include "llagent.h"
+#include "llimfloater.h"
+#include "llimview.h"
+#include "llnearbychat.h"
 #include "llnotificationhandler.h"
 #include "llnotifications.h"
 #include "llimview.h"
@@ -37,6 +47,9 @@
 #include "llfloaterreg.h"
 #include "llnearbychat.h"
 #include "llimfloater.h"
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 using namespace LLNotificationsUI;
 
@@ -166,25 +179,67 @@ bool LLHandlerUtil::canLogToNearbyChat(const LLNotificationPtr& notification)
 // static
 bool LLHandlerUtil::canSpawnIMSession(const LLNotificationPtr& notification)
 {
-	return OFFER_FRIENDSHIP == notification->getName()
-			|| USER_GIVE_ITEM == notification->getName()
-			|| TELEPORT_OFFERED == notification->getName();
+//	return OFFER_FRIENDSHIP == notification->getName()
+//			|| USER_GIVE_ITEM == notification->getName()
+//			|| TELEPORT_OFFERED == notification->getName();
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+//	return 
+//		(canEmbedNotificationInIM(notification)) && 
+//		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
+//		  (TELEPORT_OFFERED == notification->getName()) );
+// [/SL:KB]
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+	return 
+		(canEmbedNotificationInIM(notification)) && 
+		( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canStartIM(notification->getPayload()["from_id"].asUUID())) ) &&
+		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
+		  (TELEPORT_OFFERED == notification->getName()) );
+// [/RLVa:KB]
 }
+
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+// static
+bool LLHandlerUtil::canEmbedNotificationInIM(const LLNotificationPtr& notification)
+{
+	switch (gSavedSettings.getS32("NotificationCanEmbedInIM"))
+	{
+		case 1:			// Focused
+			return isIMFloaterFocused(notification);
+		case 2:			// Never
+			return false;
+		case 0:			// Always (Viewer 2 default)
+		default:
+			return true;
+	}
+}
+// [/SL:KB]
 
 // static
 bool LLHandlerUtil::canAddNotifPanelToIM(const LLNotificationPtr& notification)
 {
-	return OFFER_FRIENDSHIP == notification->getName()
-					|| USER_GIVE_ITEM == notification->getName()
-					|| TELEPORT_OFFERED == notification->getName();
+//	return OFFER_FRIENDSHIP == notification->getName()
+//					|| USER_GIVE_ITEM == notification->getName()
+//					|| TELEPORT_OFFERED == notification->getName();
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+	return 
+		(canEmbedNotificationInIM(notification)) && 
+		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
+		  (TELEPORT_OFFERED == notification->getName()) );
+// [/SL:KB]
 }
 
 // static
 bool LLHandlerUtil::isNotificationReusable(const LLNotificationPtr& notification)
 {
-	return OFFER_FRIENDSHIP == notification->getName()
-		|| USER_GIVE_ITEM == notification->getName()
-		|| TELEPORT_OFFERED == notification->getName();
+//	return OFFER_FRIENDSHIP == notification->getName()
+//		|| USER_GIVE_ITEM == notification->getName()
+//		|| TELEPORT_OFFERED == notification->getName();
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+	return 
+		(canEmbedNotificationInIM(notification)) && 
+		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
+		  (TELEPORT_OFFERED == notification->getName()) );
+// [/SL:KB]
 }
 
 // static
@@ -214,7 +269,11 @@ bool LLHandlerUtil::canSpawnToast(const LLNotificationPtr& notification)
 		|| TELEPORT_OFFERED == notification->getName())
 	{
 		// When ANY offer arrives, show toast, unless IM window is already open - EXT-5904
-		return ! isIMFloaterOpened(notification);
+//		return ! isIMFloaterOpened(notification);
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+		// Force a toast if the user opted not to embed notifications panels in IMs
+		return (!canEmbedNotificationInIM(notification)) || (!isIMFloaterOpened(notification));
+// [/SL:KB]
 	}
 
 	return true;
@@ -285,6 +344,11 @@ void LLHandlerUtil::logToIM(const EInstantMessage& session_type,
 // [SL:KB] - Patch: Chat-Logs | Checked: 2010-11-18 (Catznip-2.4.0c) | Added: Catznip-2.4.0c
 		LLIMModel::instance().logToFile(file_name, from, from_id, message);
 // [/SL:KB]
+		//-TT 2.8.2 merge changes - left out for now
+		//// Build a new format username or firstname_lastname for legacy names
+		//// to use it for a history log filename.
+		//std::string user_name = LLCacheName::buildUsername(session_name);
+		//LLIMModel::instance().logToFile(user_name, from, from_id, message);
 	}
 	else
 	{

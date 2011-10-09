@@ -14,45 +14,23 @@
  tab_stop="false"
  width="1000">
   <!-- icon
-    top="0" 
+    top="0"
    scale_image="true"
    follows="left|right|top|bottom"
    height="44"
    image_name="menu_bar.tga"
    left="0"
    width="1000" / -->
-   
+
    <panel
     height="18"
     left="500"
     width="95"
-    top="1"
-    follows="left|top" 
-    name="parcel_info_panel" 
+    top="0"
+    follows="left|top"
+    name="parcel_info_panel"
     bg_visible="false"
     background_opaque="false">
-   <button
-    follows="left|top"
-    height="16"
-    hover_glow_amount="0.15"
-    image_disabled="Info_Off"
-    image_disabled_selected="Info_Off"
-    image_selected="Info_Off"
-    image_unselected="Info_Off"
-    left="0"
-    name="place_info_btn"
-    top="2"
-    width="16"/>
-   <text
-     follows="left|top|right"
-     height="16"
-     layout="topleft"
-     left_pad="11"
-     length="1"
-     name="parcel_info_text"
-     top="3"
-     type="string"
-     width="1"/>
   <icon
     enabled="true"
     follows="right|top"
@@ -60,7 +38,8 @@
     image_name="Parcel_VoiceNo_Dark"
     name="voice_icon"
     top="0"
-    visible="false"
+    left="16"
+    visible="true"
     width="22"
 	scale_image="false"
     />
@@ -70,7 +49,8 @@
     image_name="Parcel_FlyNo_Dark"
     name="fly_icon"
     top="0"
-    visible="false"
+    left="38"
+    visible="true"
     width="22"
 	scale_image="false"
     />
@@ -80,7 +60,8 @@
     image_name="Parcel_PushNo_Dark"
     name="push_icon"
     top="0"
-    visible="false"
+    left="60"
+    visible="true"
     width="22"
 	scale_image="false"
     />
@@ -90,7 +71,8 @@
     image_name="Parcel_BuildNo_Dark"
     name="build_icon"
     top="0"
-    visible="false"
+    left="82"
+    visible="true"
     width="22"
 	scale_image="false"
     />
@@ -100,18 +82,32 @@
     image_name="Parcel_ScriptsNo_Dark"
     name="scripts_icon"
     top="0"
-    visible="false"
+    left="104"
+    visible="true"
     width="22"
 	scale_image="false"
     />
+   <button
+    follows="right|top"
+    height="16"
+    hover_glow_amount="0.15"
+    image_disabled="Parcel_Windlight"
+    image_disabled_selected="Parcel_Windlight"
+    image_selected="Parcel_Windlight"
+    image_unselected="Parcel_Windlight"
+    left="126"
+    name="status_wl_btn"
+    top="2"
+    tool_tip="Parcel has WL settings" 
+    width="16"/>
   <icon
     follows="right|top"
     height="13"
     image_name="Parcel_Health_Dark"
-    left="0"
     name="damage_icon"
-    top="3"
-    visible="false"
+    top="4"
+    left="142"
+    visible="true"
     width="14"
 	scale_image="false"
     />
@@ -121,12 +117,29 @@
     halign="right"
     height="18"
     name="damage_text"
+    value="100%"
     top="5"
-    visible="false"
+    left="156"
+    visible="true"
     width="35"
     />
-  </panel>
-	
+     <text
+	   tool_tip="Name of land parcel on which you are standing. Click for About Land."
+	   text_color="White"
+	   hover="true"
+	   hover_color="ParcelHoverColor"
+       follows="left|top|right"
+       height="16"
+       layout="topleft"
+       left="195"
+       length="1"
+       name="parcel_info_text"
+       top="5"
+       value="(loading...)"
+       type="string"
+       width="100"/>
+   </panel>
+
     <panel.string
      name="packet_loss_tooltip">
         Packet Loss
@@ -149,28 +162,28 @@
     </panel.string>
   <panel
     height="18"
-    left="-225"
+    left="-240"
     width="95"
-    top="1"
-    follows="right|top" 
-    name="balance_bg" 
-    bg_visible="true"
-    background_opaque="true" 
-    bg_opaque_image="bevel_background">
+    top="0"
+    follows="right|top"
+    name="balance_bg"
+    background_opaque="true"
+    background_visible="true"
+    bg_opaque_color="MouseGray">
     <text
-     auto_resize="true"
      halign="center"
      font="SansSerifSmall"
      follows="all"
      height="18"
-     left="0" 
+     left="0"
+	 right="30"
      name="balance"
-     tool_tip="Linden Dollar Balance for this Account"
+     tool_tip="Click to refresh your L$ balance"
      v_pad="4"
      top="0"
-     wrap="false" 
-     value="L$???" 
-     width="40" />
+     wrap="false"
+     value="L$???"
+     width="35" />
     <button
      auto_resize="true"
      halign="center"
@@ -182,15 +195,26 @@
      height="18"
      label="BUY L$"
      label_color="White"
-     left_pad="0"
+     left_pad="2"
      label_shadow="true"
      name="buyL"
-     pad_right="0"
-     pad_bottom="2"
+     pad_right="2"
+     pad_bottom="3"
      tool_tip="Click to buy more L$"
-     top="0"
-     width="55" />
+     top="2"
+     width="40" />
   </panel>
+  
+  <panel
+    height="18"
+    left_pad="12"
+    width="130"
+    top="0"
+    follows="right|top"
+    name="time_and_media_bg"
+    background_opaque="true"
+    background_visible="true"
+    bg_opaque_color="MouseGray">
     <text
      type="string"
      font="SansSerifSmall"
@@ -200,12 +224,26 @@
      height="16"
      top="5"
      layout="topleft"
-     left_pad="0"
+     left="0"
      name="TimeText"
      tool_tip="Current time (Pacific)"
-     width="80">
+     width="50">
         24:00 AM PST
     </text>
+    <button
+     follows="right|top"
+     height="16"
+     image_selected="Music_Off"
+     image_unselected="Pause_Off"
+     image_pressed="Pause_Press"
+     image_pressed_selected="Music_Press"
+     is_toggle="true"
+     left_delta="55"
+     top="1"
+     name="stream_toggle_btn"
+     tool_tip="Start/Stop Parcel Audio Stream"
+     width="16" >
+    </button>
     <button
      follows="right|top"
      height="16"
@@ -214,7 +252,8 @@
      image_pressed="Pause_Press"
      image_pressed_selected="Play_Press"
      is_toggle="true"
-     left_delta="85"
+	 left_delta="60"
+     left_pad="2"
      top="1"
      name="media_toggle_btn"
      tool_tip="Start/Stop All Media (Music, Video, Web pages)"
@@ -222,15 +261,15 @@
     </button>
     <button
      follows="right|top"
-     control="MuteAudio"
      height="16"
      image_selected="AudioMute_Off"
      image_pressed="Audio_Press"
      image_unselected="Audio_Off"
      is_toggle="true"
-     left_pad="5"
+     left_pad="4"
      top="2"
      name="volume_btn"
      tool_tip="Global Volume Control"
      width="16" />
+  </panel>
 </panel>

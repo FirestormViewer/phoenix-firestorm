@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2010, Kitty Barnett
+ * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -40,9 +40,6 @@ protected:
 	std::string onGetPseudoDebug(const std::string& strSetting);
 	ERlvCmdRet  onSetDebug(std::string strSetting, const std::string& strValue);
 	ERlvCmdRet  onSetPseudoDebug(const std::string& strSetting, const std::string& strValue);
-
-	std::string onGetEnv(std::string strSetting);
-	ERlvCmdRet  onSetEnv(std::string strSetting, const std::string& strValue);
 
 	bool processCommand(const RlvCommand& rlvCmd, ERlvCmdRet& eRet);
 

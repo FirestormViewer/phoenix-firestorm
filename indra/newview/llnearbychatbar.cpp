@@ -45,12 +45,18 @@
 #include "llviewercontrol.h"
 #include "llnavigationbar.h"
 #include "llwindow.h"
+#include "llspinctrl.h"
+#include "llnearbychat.h"
 #include "llviewerwindow.h"
 #include "llrootview.h"
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b)
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "chatbar_as_cmdline.h"
+#include "llviewerchat.h"
+// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 S32 LLNearbyChatBar::sLastSpecialChatChannel = 0;
 
@@ -101,15 +107,19 @@ public:
 
 LLGestureComboList::Params::Params()
 :	combo_button("combo_button"),
-	combo_list("combo_list")
+	combo_list("combo_list"),
+	get_more("get_more", true),
+	view_all("view_all", true)
 {
 }
 
 LLGestureComboList::LLGestureComboList(const LLGestureComboList::Params& p)
-:	LLUICtrl(p)
-	, mLabel(p.label)
-	, mViewAllItemIndex(0)
-	, mGetMoreItemIndex(0)
+:	LLUICtrl(p),
+	mLabel(p.label),
+	mViewAllItemIndex(-1),
+	mGetMoreItemIndex(-1),
+	mShowViewAll(p.view_all),
+	mShowGetMore(p.get_more)
 {
 	LLBottomtrayButton::Params button_params = p.combo_button;
 	button_params.follows.flags(FOLLOWS_LEFT|FOLLOWS_BOTTOM|FOLLOWS_RIGHT);
@@ -160,6 +170,16 @@ BOOL LLGestureComboList::handleKeyHere(KEY key, MASK mask)
 	return handled; 		
 }
 
+void LLGestureComboList::draw()
+{
+	LLUICtrl::draw();
+
+	if(mButton->getToggleState())
+	{
+		showList();
+	}
+}
+
 void LLGestureComboList::showList()
 {
 	LLRect rect = mList->getRect();
@@ -183,6 +203,7 @@ void LLGestureComboList::showList()
 	// Show the list and push the button down
 	mButton->setToggleState(TRUE);
 	mList->setVisible(TRUE);
+	sendChildToFront(mList);
 	LLUI::addPopup(mList);
 }
 
@@ -293,12 +314,16 @@ void LLGestureComboList::refreshGestures()
 	sortByName();
 
 	// store indices for Get More and View All items (idx is the index followed by the last added Gesture)
-	mGetMoreItemIndex = idx;
-	mViewAllItemIndex = idx + 1;
-
-	// add Get More and View All items at the bottom
-	mList->addSimpleElement(LLTrans::getString("GetMoreGestures"), ADD_BOTTOM, LLSD(mGetMoreItemIndex));
-	mList->addSimpleElement(LLTrans::getString("ViewAllGestures"), ADD_BOTTOM, LLSD(mViewAllItemIndex));
+	if (mShowGetMore)
+	{
+		mGetMoreItemIndex = idx;
+		mList->addSimpleElement(LLTrans::getString("GetMoreGestures"), ADD_BOTTOM, LLSD(mGetMoreItemIndex));
+	}
+	if (mShowViewAll)
+	{
+		mViewAllItemIndex = idx + 1;
+		mList->addSimpleElement(LLTrans::getString("ViewAllGestures"), ADD_BOTTOM, LLSD(mViewAllItemIndex));
+	}
 
 	// Insert label after sorting, at top, with separator below it
 	mList->addSeparator(ADD_TOP);	
@@ -421,11 +446,27 @@ BOOL LLNearbyChatBar::postBuild()
 	mChatBox->setPassDelete(TRUE);
 	mChatBox->setReplaceNewlinesWithSpaces(FALSE);
 	mChatBox->setEnableLineHistory(TRUE);
+	mChatBox->setFont(LLViewerChat::getChatFont());
 
 	mOutputMonitor = getChild<LLOutputMonitorCtrl>("chat_zone_indicator");
 	mOutputMonitor->setVisible(FALSE);
 
+	PhoenixPlayChatAnimation = gSavedSettings.getBOOL("PhoenixPlayChatAnimation");
+	gSavedSettings.getControl("PhoenixPlayChatAnimation")->getSignal()->connect(boost::bind(&LLNearbyChatBar::updatePhoenixPlayChatAnimation, this, _2));
+
+	// Register for font change notifications
+	LLViewerChat::setFontChangedCallback(boost::bind(&LLNearbyChatBar::onChatFontChange, this, _1));
+
 	return TRUE;
+}
+
+void LLNearbyChatBar::onChatFontChange(LLFontGL* fontp)
+{
+	// Update things with the new font whohoo
+	if (mChatBox)
+	{
+		mChatBox->setFont(fontp);
+	}
 }
 
 //static
@@ -456,20 +497,33 @@ BOOL LLNearbyChatBar::handleKeyHere( KEY key, MASK mask )
 {
 	BOOL handled = FALSE;
 
-	if( KEY_RETURN == key && mask == MASK_CONTROL)
+	if( KEY_RETURN == key )
 	{
-		// shout
-		sendChat(CHAT_TYPE_SHOUT);
-		handled = TRUE;
+		if (mask == MASK_CONTROL)
+		{
+			// shout
+			sendChat(CHAT_TYPE_SHOUT);
+			handled = TRUE;
+		}
+		else if (mask == MASK_SHIFT)
+		{
+			// whisper
+			sendChat(CHAT_TYPE_WHISPER);
+			handled = TRUE;
+		}
+		else if (mask == MASK_ALT)
+		{
+			// OOC
+			sendChat(CHAT_TYPE_OOC);
+			handled = TRUE;
+		}
+		else if (mask == MASK_NONE)
+		{
+			// say
+			sendChat( CHAT_TYPE_NORMAL );
+			handled = TRUE;
+		}
 	}
-//-TT Satomi Ahn - Patch MU_OOC	
-	else if( KEY_RETURN == key && mask == MASK_SHIFT)
-	{
-		// whisper
-		sendChat(CHAT_TYPE_WHISPER);
-		handled = TRUE;
-	}
-//-TT Satomi Ahn - Patch MU_OOC	
 
 	return handled;
 }
@@ -511,12 +565,29 @@ void LLNearbyChatBar::onChatBoxKeystroke(LLLineEditor* caller, void* userdata)
 
 	S32 length = raw_text.length();
 
+	// Get the currently selected channel from the channel spinner in the nearby chat bar, if present and used.
+	// NOTE: Parts of the gAgent.startTyping() code are duplicated in 3 places:
+	// - llnearbychatbar.cpp
+	// - llchatbar.cpp
+	// - llnearbychat.cpp
+	// So be sure to look in all three places if changes are needed. This needs to be addressed at some point.
+	// -Zi
+	S32 channel=0;
+	if (gSavedSettings.getBOOL("PhoenixNearbyChatbar") &&
+		gSavedSettings.getBOOL("PhoenixShowChatChannel"))
+	{
+		channel = (S32)(LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+	}
+	// -Zi
+
 //	if( (length > 0) && (raw_text[0] != '/') )  // forward slash is used for escape (eg. emote) sequences
 // [RLVa:KB] - Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.0d
 	if ( (length > 0) && (raw_text[0] != '/') && (!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT)) )
 // [/RLVa:KB]
 	{
-		gAgent.startTyping();
+		// only start typing animation if we are chatting without / on channel 0 -Zi
+		if(channel==0)
+			gAgent.startTyping();
 	}
 	else
 	{
@@ -618,6 +689,11 @@ EChatType LLNearbyChatBar::processChatTypeTriggers(EChatType type, std::string &
 	return type;
 }
 
+void LLNearbyChatBar::updatePhoenixPlayChatAnimation(const LLSD &data)
+{
+	PhoenixPlayChatAnimation = data.asBoolean();
+}
+
 void LLNearbyChatBar::sendChat( EChatType type )
 {
 	if (mChatBox)
@@ -625,11 +701,27 @@ void LLNearbyChatBar::sendChat( EChatType type )
 		LLWString text = mChatBox->getConvertedText();
 		if (!text.empty())
 		{
+			if(type == CHAT_TYPE_OOC)
+			{
+				std::string tempText = mChatBox->getText();
+				tempText = gSavedSettings.getString("PhoenixOOCPrefix") + " " + tempText + " " + gSavedSettings.getString("PhoenixOOCPostfix");
+				mChatBox->setText(tempText);
+				text = utf8str_to_wstring(tempText);
+			}
+
 			// store sent line in history, duplicates will get filtered
 			mChatBox->updateHistory();
 			// Check if this is destined for another channel
 			S32 channel = 0;
 			stripChannelNumber(text, &channel);
+			// If "/<number>" is not specified, see if a channel has been set in
+			//  the spinner.
+			if (gSavedSettings.getBOOL("PhoenixNearbyChatbar") &&
+				gSavedSettings.getBOOL("PhoenixShowChatChannel") &&
+				(channel == 0))
+			{
+				channel = (S32)(LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+			}
 			
 			std::string utf8text = wstring_to_utf8str(text);
 			// Try to trigger a gesture, if not chat to a script.
@@ -697,12 +789,18 @@ void LLNearbyChatBar::sendChat( EChatType type )
 
 			utf8_revised_text = utf8str_trim(utf8_revised_text);
 
-			type = processChatTypeTriggers(type, utf8_revised_text);
+			EChatType nType;
+			if(type == CHAT_TYPE_OOC)
+				nType = CHAT_TYPE_NORMAL;
+			else
+				nType = type;
+
+			type = processChatTypeTriggers(nType, utf8_revised_text);
 
 			if (!utf8_revised_text.empty() && cmd_line_chat(utf8_revised_text, type))
 			{
 				// Chat with animation
-				sendChatFromViewer(utf8_revised_text, type, TRUE);
+				sendChatFromViewer(utf8_revised_text, type, PhoenixPlayChatAnimation);
 			}
 		}
 
@@ -713,7 +811,7 @@ void LLNearbyChatBar::sendChat( EChatType type )
 
 	// If the user wants to stop chatting on hitting return, lose focus
 	// and go out of chat mode.
-	if (gSavedSettings.getBOOL("CloseChatOnReturn"))
+	if (gSavedSettings.getBOOL("CloseChatOnReturn") || gSavedSettings.getBOOL("AutohideChatBar"))
 	{
 		stopChat();
 	}
@@ -774,6 +872,14 @@ void LLNearbyChatBar::sendChatFromViewer(const LLWString &wtext, EChatType type,
 	// Look for "/20 foo" channel chats.
 	S32 channel = 0;
 	LLWString out_text = stripChannelNumber(wtext, &channel);
+	// If "/<number>" is not specified, see if a channel has been set in
+	//  the spinner.
+	if (gSavedSettings.getBOOL("PhoenixNearbyChatbar") &&
+		gSavedSettings.getBOOL("PhoenixShowChatChannel") &&
+		(channel == 0))
+	{
+		channel = (S32)(LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+	}
 	std::string utf8_out_text = wstring_to_utf8str(out_text);
 	std::string utf8_text = wstring_to_utf8str(wtext);
 
@@ -846,7 +952,7 @@ void LLNearbyChatBar::startChat(const char* line)
 	if (!cb )
 		return;
 
-	bt->setVisible(TRUE);
+	bt->setChatBarVisible(TRUE);
 	cb->mChatBox->setFocus(TRUE);
 
 	if (line)
@@ -872,6 +978,7 @@ void LLNearbyChatBar::stopChat()
 	if (!cb)
 		return;
 
+	bt->setChatBarVisible(FALSE);
 	cb->mChatBox->setFocus(FALSE);
 
  	// stop typing animation
@@ -891,11 +998,14 @@ LLWString LLNearbyChatBar::stripChannelNumber(const LLWString &mesg, S32* channe
 	}
 	else if (mesg[0] == '/'
 			 && mesg[1]
-			 && LLStringOps::isDigit(mesg[1]))
+			 && ( LLStringOps::isDigit(mesg[1])
+				 || (mesg[1] == '-'
+				 	&& LLStringOps::isDigit(mesg[2]))))
 	{
 		// This a special "/20" speak on a channel
 		S32 pos = 0;
-
+		if(mesg[1] == '-')
+			pos++;
 		// Copy the channel number into a string
 		LLWString channel_string;
 		llwchar c;
@@ -917,6 +1027,8 @@ LLWString LLNearbyChatBar::stripChannelNumber(const LLWString &mesg, S32* channe
 		}
 		
 		sLastSpecialChatChannel = strtol(wstring_to_utf8str(channel_string).c_str(), NULL, 10);
+		if(mesg[1] == '-')
+			sLastSpecialChatChannel = -sLastSpecialChatChannel;
 		*channel = sLastSpecialChatChannel;
 		return mesg.substr(pos, mesg.length() - pos);
 	}
@@ -980,25 +1092,40 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 // [/RLVa:KB]
 
 	LLMessageSystem* msg = gMessageSystem;
-	msg->newMessageFast(_PREHASH_ChatFromViewer);
-	msg->nextBlockFast(_PREHASH_AgentData);
-	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-	msg->nextBlockFast(_PREHASH_ChatData);
-	msg->addStringFast(_PREHASH_Message, utf8_out_text);
-	msg->addU8Fast(_PREHASH_Type, type);
-	msg->addS32("Channel", channel);
+	if(channel >= 0)
+	{
+		msg->newMessageFast(_PREHASH_ChatFromViewer);
+		msg->nextBlockFast(_PREHASH_AgentData);
+		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		msg->nextBlockFast(_PREHASH_ChatData);
+		msg->addStringFast(_PREHASH_Message, utf8_out_text);
+		msg->addU8Fast(_PREHASH_Type, type);
+		msg->addS32("Channel", channel);
+	}
+	else
+	{
+		msg->newMessage("ScriptDialogReply");
+		msg->nextBlock("AgentData");
+		msg->addUUID("AgentID", gAgent.getID());
+		msg->addUUID("SessionID", gAgent.getSessionID());
+		msg->nextBlock("Data");
+		msg->addUUID("ObjectID", gAgent.getID());
+		msg->addS32("ChatChannel", channel);
+		msg->addS32("ButtonIndex", 0);
+		msg->addString("ButtonLabel", utf8_out_text);
+	}
 
 	gAgent.sendReliableMessage();
 
 	LLViewerStats::getInstance()->incStat(LLViewerStats::ST_CHAT_COUNT);
 }
 
-class LLChatHandler : public LLCommandHandler
+class LLChatCommandHandler : public LLCommandHandler
 {
 public:
 	// not allowed from outside the app
-	LLChatHandler() : LLCommandHandler("chat", UNTRUSTED_BLOCK) { }
+	LLChatCommandHandler() : LLCommandHandler("chat", UNTRUSTED_BLOCK) { }
 
     // Your code here
 	bool handle(const LLSD& tokens, const LLSD& query_map,
@@ -1014,7 +1141,7 @@ public:
 		{
 		S32 channel = tokens[0].asInteger();
 			// VWR-19499 Restrict function to chat channels greater than 0.
-			if ((channel > 0) && (channel < 2147483647))
+			if ((channel > 0) && (channel < CHAT_CHANNEL_DEBUG))
 			{
 				retval = true;
 		// Send unescaped message, see EXT-6353.
@@ -1032,6 +1159,6 @@ public:
 };
 
 // Creating the object registers with the dispatcher.
-LLChatHandler gChatHandler;
+LLChatCommandHandler gChatHandler;
 
 

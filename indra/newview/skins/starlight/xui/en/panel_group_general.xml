@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  label="General"
- height="604"
+ height="644"
  width="304"
  class="panel_group_general"
  name="general_tab">
@@ -21,7 +21,7 @@ Hover your mouse over the options for more help.
     </panel.string>
    <panel
       name="group_info_top"
-      follows="top|left"
+      follows="top|left|right"
       top="0"
       left="0"
       height="129"
@@ -43,7 +43,7 @@ Hover your mouse over the options for more help.
       font="SansSerifSmall"
       text_color="White_50"
       width="190"
-      follows="top|left"
+      follows="top|left|right"
       layout="topleft"
       mouse_opaque="false"
      type="string"
@@ -55,7 +55,7 @@ Hover your mouse over the options for more help.
       Founder:
     </text>
      <text
-      follows="left|top"
+      follows="left|top|right"
      height="16"
      layout="topleft"
      left_delta="-2"
@@ -111,6 +111,7 @@ Hover your mouse over the options for more help.
      layout="topleft"
      left="0"
      name="visible_members"
+     short_names="false" 
      top_pad="2">
         <name_list.columns
          label="Member"
@@ -182,7 +183,7 @@ Hover your mouse over the options for more help.
          border="false"
          bg_alpha_color="FloaterUnfocusBorderColor"
          follows="left|top|right"
-         height="140"
+         height="180"
          width="313"
          layout="topleft"
          left="0"
@@ -263,6 +264,43 @@ Hover your mouse over the options for more help.
          tool_tip="Let people see this group in search results"
          top_pad="4"
          width="300" />
+
+        <text
+		 name="group_key_label"
+		 font.style="BOLD"
+		 left="4"
+		 top_pad="11"
+		 width="68"
+		 height="13"
+		 type="string"
+		 follows="left|top"
+		 layout="topleft">
+		 Group Key:
+		</text>
+
+		<text_editor
+		 name="group_key"
+		 label="Group Key:"
+         left="5"
+         top_pad="2"
+         right="-86"
+         height="20"
+         h_pad="0"
+         v_pad="4"
+         bg_visible="true"
+         enabled="false"
+         allow_scroll="false"
+         initial_value="(loading ...)"
+         follows="top|left|right"
+         layout="topleft" />
+
+		<button
+		 name="copy_uri"
+		 left_pad="4"
+		 right="-14"
+		 height="20"
+		 label="Copy URI"
+		 follows="top|right" />
 
     </panel>
 </panel>

@@ -29,6 +29,7 @@
         <menu_item_call.on_enable
          function="EnableEdit"/>
     </menu_item_call>
+
    <menu_item_call
      enabled="false"
      label="Open"
@@ -38,6 +39,8 @@
         <menu_item_call.on_enable
          function="Object.EnableOpen" />
    </menu_item_call>
+
+<menu_item_separator layout="topleft" />
    <menu_item_call
      enabled="false"
      label="Sit Here"
@@ -47,6 +50,7 @@
         <menu_item_call.on_enable
          function="Object.EnableSit" />
    </menu_item_call>
+<menu_item_separator layout="topleft" />
    <menu_item_call
      enabled="false"
      label="Stand Up"
@@ -56,14 +60,85 @@
         <menu_item_call.on_enable
          function="Object.EnableStandUp" />
    </menu_item_call>
-   <menu_item_call
-       label="Object Profile"
-       name="Object Inspect">
+<menu_item_separator layout="topleft" />
+   <context_menu
+    label="Object"
+    name="Object Features">
+      <menu_item_call
+         label="Profile"
+         name="Object Inspect">
          <menu_item_call.on_click
           function="Object.Inspect" />
          <menu_item_call.on_enable
           function="Object.EnableInspect" />
-   </menu_item_call>
+      </menu_item_call>
+      <menu_item_call
+         label="Inspect"
+         name="Object_Inspect_Floater">
+        <menu_item_call.on_click
+         function="Floater.Show"
+         parameter="inspect" />
+      </menu_item_call>
+	   <menu_item_call
+	      enabled="true"
+	      label="Script Info"
+	      name="ScriptInfo">
+	    <menu_item_call.on_click
+	      function="Tools.ScriptInfo" />
+	   </menu_item_call>
+   <menu_item_separator layout="topleft" />
+      <menu_item_call
+         enabled="false"
+         label="Link"
+         name="Object Link">
+         <menu_item_call.on_click
+            function="Tools.Link" />
+         <menu_item_call.on_enable
+            function="Tools.EnableLink" />
+         </menu_item_call>
+      <menu_item_call
+         enabled="false"
+         label="Unlink"
+         name="Object Unlink">
+         <menu_item_call.on_click
+            function="Tools.Unlink" />
+         <menu_item_call.on_enable
+            function="Tools.EnableUnlink" />
+         </menu_item_call>
+      <menu_item_check label="Edit Linked Parts" name="Object Edit Linked Parts">
+         <menu_item_check.on_check control="EditLinkedParts" />
+         <menu_item_check.on_click function="Tools.EditLinkedParts" parameter="EditLinkedParts" />
+         <menu_item_check.on_enable function="Tools.EnableToolNotPie" />
+         </menu_item_check>
+   <menu_item_separator layout="topleft" />
+       <menu_item_call
+          label="Reset Scripts"
+          name="Object Reset Scripts">
+          <menu_item_call.on_click
+             function="Tools.SelectedScriptAction"
+             parameter="reset" />
+          <menu_item_call.on_enable
+             function="EditableSelected" />
+          </menu_item_call>
+       <menu_item_call
+          label="Run Scripts"
+          name="Object Set Scripts to Running">
+          <menu_item_call.on_click
+             function="Tools.SelectedScriptAction"
+             parameter="start" />
+          <menu_item_call.on_enable
+             function="EditableSelected" />
+           </menu_item_call>
+        <menu_item_call
+           label="Stop Scripts"
+           name="Object Set Scripts to Not Running">
+           <menu_item_call.on_click
+              function="Tools.SelectedScriptAction"
+              parameter="stop" />
+           <menu_item_call.on_enable
+              function="EditableSelected" />
+           </menu_item_call>
+    </context_menu>
   <menu_item_call
        label="Zoom In"
        name="Zoom In">
@@ -100,7 +175,7 @@
          name="Object Attach HUD" />
    </context_menu>
    <context_menu
-         label="Remove"
+         label="Annoyance"
          name="Remove">
    <menu_item_call
          enabled="false"
@@ -120,6 +195,18 @@
              <menu_item_call.on_enable
               function="Object.EnableMute" />
    </menu_item_call>
+    </context_menu>
+   <menu_item_separator layout="topleft" />
+   <!-- Derender -->
+   <menu_item_call
+      enabled="true"
+      label="Derender"
+      name="Derender">
+    <menu_item_call.on_click
+      function="Object.Derender" />
+   </menu_item_call>
+   <!-- /Derender -->
+   
    <menu_item_call
       enabled="false"
       label="Return"
@@ -129,17 +216,6 @@
          <menu_item_call.on_enable
           function="Object.EnableReturn" />
      </menu_item_call>
-     <menu_item_call
-   enabled="false"
-   label="Delete"
-   name="Delete">
-      <menu_item_call.on_click
-       function="Object.Delete" />
-      <menu_item_call.on_enable
-       function="Object.EnableDelete" />
-    </menu_item_call>
-    </context_menu>
-   <menu_item_separator layout="topleft" />
    <menu_item_call
      label="Take"
      layout="topleft"
@@ -177,11 +253,13 @@
        function="Object.EnableBuy" />
    </menu_item_call>
    <menu_item_separator layout="topleft" />
-   <menu_item_call
-      label="Inspect"
-      name="Object Inspect">
-        <menu_item_call.on_click
-         function="Floater.Show"
-         parameter="inspect" />
-   </menu_item_call>
+     <menu_item_call
+   enabled="false"
+   label="Delete"
+   name="Delete">
+      <menu_item_call.on_click
+       function="Object.Delete" />
+      <menu_item_call.on_enable
+       function="Object.EnableDelete" />
+    </menu_item_call>
 </context_menu>

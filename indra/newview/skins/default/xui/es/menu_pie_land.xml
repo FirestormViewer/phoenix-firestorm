@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Land Pie">
+	<pie_slice label="Acerca del terreno..." name="Place Information..."/>
+	<pie_slice label="Construir" name="Create"/>
+	<pie_slice label="Ir aquí" name="Go Here"/>
+	<pie_slice label="Sentarme aquí" name="Sit Here"/>
+	<pie_slice label="Comprar pase" name="Land Buy Pass"/>
+	<pie_slice label="Modificar terreno" name="Edit Terrain"/>
+	<pie_slice label="Comprar terreno" name="Land Buy"/>
+</pie_menu>

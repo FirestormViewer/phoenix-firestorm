@@ -4,6 +4,9 @@
 ## These options are for self-assisted troubleshooting during this beta
 ## testing phase; you should not usually need to touch them.
 
+## AO: TCMALLOC Tuning as suggested by Henri Beauchamp for more aggressive garbage collection
+export TCMALLOC_RELEASE_RATE=10000
+
 ## - Avoids using any OpenAL audio driver.
 #export LL_BAD_OPENAL_DRIVER=x
 ## - Avoids using any FMOD audio driver.
@@ -86,36 +89,39 @@ cd "${RUN_PATH}"
 ./etc/register_secondlifeprotocol.sh
 
 # Re-register the application with the desktop system every launch, for now.
-./etc/refresh_desktop_app_entry.sh
+# AO: Disabled don't install by default
+#./etc/refresh_desktop_app_entry.sh
 
 ## Before we mess with LD_LIBRARY_PATH, save the old one to restore for
 ##  subprocesses that care.
 export SAVED_LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
 
-if [ -n "$LL_TCMALLOC" ]; then
-    tcmalloc_libs='/usr/lib/libtcmalloc.so.0 /usr/lib/libstacktrace.so.0 /lib/libpthread.so.0'
-    all=1
-    for f in $tcmalloc_libs; do
-        if [ ! -f $f ]; then
-	    all=0
-	fi
-    done
-    if [ $all != 1 ]; then
-        echo 'Cannot use tcmalloc libraries: components missing' 1>&2
-    else
-	export LD_PRELOAD=$(echo $tcmalloc_libs | tr ' ' :)
-	if [ -z "$HEAPCHECK" -a -z "$HEAPPROFILE" ]; then
-	    export HEAPCHECK=${HEAPCHECK:-normal}
-	fi
-    fi
-fi
+# if [ -n "$LL_TCMALLOC" ]; then
+#    tcmalloc_libs='/usr/lib/libtcmalloc.so.0 /usr/lib/libstacktrace.so.0 /lib/libpthread.so.0'
+#    all=1
+#    for f in $tcmalloc_libs; do
+#        if [ ! -f $f ]; then
+#	    all=0
+#	fi
+#    done
+#    if [ $all != 1 ]; then
+#        echo 'Cannot use tcmalloc libraries: components missing' 1>&2
+#    else
+#	export LD_PRELOAD=$(echo $tcmalloc_libs | tr ' ' :)
+#	if [ -z "$HEAPCHECK" -a -z "$HEAPPROFILE" ]; then
+#	    export HEAPCHECK=${HEAPCHECK:-normal}
+#	fi
+#    fi
+#fi
 
 export SL_ENV='LD_LIBRARY_PATH="`pwd`"/lib:"${LD_LIBRARY_PATH}"'
 export SL_CMD='$LL_WRAPPER bin/do-not-directly-run-firestorm-bin'
-export SL_OPT="`cat etc/gridargs.dat` $@"
+
+# AO: experimentally removing to allow --settings on the command line w/o error. FIRE-1031
+#export SL_OPT="`cat etc/gridargs.dat` $@"
 
 # Run the program
-eval ${SL_ENV} ${SL_CMD} ${SL_OPT} || LL_RUN_ERR=runerr
+eval ${SL_ENV} ${SL_CMD} $@ ${SL_OPT} || LL_RUN_ERR=runerr
 
 # Handle any resulting errors
 if [ -n "$LL_RUN_ERR" ]; then
@@ -126,7 +132,7 @@ if [ -n "$LL_RUN_ERR" ]; then
 		if [ "`uname -m`" = "x86_64" ]; then
 			echo
 			cat << EOFMARKER
-You are running the Second Life Viewer on a x86_64 platform.  The
+You are running the Firestorm Viewer on a x86_64 platform.  The
 most common problems when launching the Viewer (particularly
 'bin/do-not-directly-run-firestorm-bin: not found' and 'error while
 loading shared libraries') may be solved by installing your Linux
@@ -139,9 +145,3 @@ EOFMARKER
 fi
 	
 
-echo
-echo '*******************************************************'
-echo 'This is a BETA release of the Second Life linux client.'
-echo 'Thank you for testing!'
-echo 'Please see README-linux.txt before reporting problems.'
-echo

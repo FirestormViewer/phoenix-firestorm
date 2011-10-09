@@ -50,6 +50,7 @@ BOOL LLFloaterHelpBrowser::postBuild()
 {
 	mBrowser = getChild<LLMediaCtrl>("browser");
 	mBrowser->addObserver(this);
+	mBrowser->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
 
 	childSetAction("open_browser", onClickOpenWebBrowser, this);
 
@@ -70,9 +71,18 @@ void LLFloaterHelpBrowser::buildURLHistory()
 	}
 }
 
+void LLFloaterHelpBrowser::onOpen(const LLSD& key)
+{
+	gSavedSettings.setBOOL("HelpFloaterOpen", TRUE);
+}
+
 //virtual
 void LLFloaterHelpBrowser::onClose(bool app_quitting)
 {
+	if (!app_quitting)
+	{
+		gSavedSettings.setBOOL("HelpFloaterOpen", FALSE);
+	}
 	// really really destroy the help browser when it's closed, it'll be recreated.
 	destroy(); // really destroy this dialog on closure, it's relatively heavyweight.
 }
@@ -132,9 +142,10 @@ void LLFloaterHelpBrowser::onClickOpenWebBrowser(void* user_data)
 
 void LLFloaterHelpBrowser::openMedia(const std::string& media_url)
 {
-	mBrowser->setHomePageUrl(media_url);
-	//mBrowser->navigateTo("data:text/html;charset=utf-8,I'd really love to be going to:<br><b>" + media_url + "</b>"); // tofu HACK for debugging =:)
-	mBrowser->navigateTo(media_url);
+	// explicitly make the media mime type for this floater since it will
+	// only ever display one type of content (Web).
+	mBrowser->setHomePageUrl(media_url, "text/html");
+	mBrowser->navigateTo(media_url, "text/html");
 	setCurrentURL(media_url);
 }
 

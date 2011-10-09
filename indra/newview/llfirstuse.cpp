@@ -78,6 +78,12 @@ void LLFirstUse::otherAvatarChatFirst(bool enable)
 }
 
 // static
+void LLFirstUse::speak(bool enable)
+{
+	firstUseNotification("FirstSpeak", enable, "HintSpeak", LLSD(), LLSD().with("target", "speak_btn").with("direction", "top"));
+}
+
+// static
 void LLFirstUse::sit(bool enable)
 {
 	firstUseNotification("FirstSit", enable, "HintSit", LLSD(), LLSD().with("target", "stand_btn").with("direction", "top"));
@@ -95,12 +101,29 @@ void LLFirstUse::useSandbox()
 {
 	firstUseNotification("FirstSandbox", true, "FirstSandbox", LLSD().with("HOURS", SANDBOX_CLEAN_FREQ).with("TIME", SANDBOX_FIRST_CLEAN_HOUR));
 }
+// static
+void LLFirstUse::usePhoenixContactSet()
+{
+	firstUseNotification("FirstPhoenixContactSetOpen", true, "FirstPhoenixContactSetOpen",LLSD(),LLSD().with("direction", "top"));
+}
+
+//static
+void LLFirstUse::usePhoenixFriendsNonFriend()
+{
+	firstUseNotification("FirstPhoenixContactSetNonFriend",true,"FirstPhoenixContactSetNonFriend",LLSD(),LLSD().with("direction", "top"));
+}
+
+// static 
+void LLFirstUse::usePhoenixContactSetRename()
+{
+	firstUseNotification("FirstPhoenixContactSetRename",true,"FirstPhoenixContactSetRename",LLSD(),LLSD().with("direction", "top"));
+}
 
 // static
 void LLFirstUse::notUsingDestinationGuide(bool enable)
 {
 	// not doing this yet
-	//firstUseNotification("FirstNotUseDestinationGuide", enable, "HintDestinationGuide", LLSD(), LLSD().with("target", "dest_guide_btn").with("direction", "left"));
+	firstUseNotification("FirstNotUseDestinationGuide", enable, "HintDestinationGuide", LLSD(), LLSD().with("target", "dest_guide_btn").with("direction", "top"));
 }
 
 // static
@@ -113,7 +136,19 @@ void LLFirstUse::notUsingSidePanel(bool enable)
 // static
 void LLFirstUse::notMoving(bool enable)
 {
+	// fire off 2 notifications and rely on filtering to select the relevant one
 	firstUseNotification("FirstNotMoving", enable, "HintMove", LLSD(), LLSD().with("target", "move_btn").with("direction", "top"));
+	firstUseNotification("FirstNotMoving", enable, "HintMoveClick", LLSD(), LLSD()
+		.with("target", "nav_bar")
+		.with("direction", "bottom")
+		.with("hint_image", "click_to_move.png")
+		.with("up_arrow", ""));
+}
+
+// static
+void LLFirstUse::viewPopup(bool enable)
+{
+//	firstUseNotification("FirstViewPopup", enable, "HintView", LLSD(), LLSD().with("target", "view_popup").with("direction", "right"));
 }
 
 // static

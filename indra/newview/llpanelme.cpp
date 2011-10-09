@@ -34,16 +34,13 @@
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llagentwearables.h"
+#include "llclipboard.h"
 #include "llfirstuse.h"
 #include "llfloaterreg.h"
 #include "llhints.h"
 #include "llsidetray.h"
 #include "llviewercontrol.h"
 #include "llviewerdisplayname.h"
-// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a)
-#include "rlvhandler.h"
-#include "rlvui.h"
-// [/RLVa:KB]
 
 // Linden libraries
 #include "llavatarnamecache.h"		// IDEVO
@@ -71,7 +68,13 @@ BOOL LLPanelMe::postBuild()
 {
 	LLPanelProfile::postBuild();
 
+	// set up callback for copy URI button
+	childSetCommitCallback("copy_uri",boost::bind(&LLPanelMe::onCopyURI,this),NULL);
+
 	getTabContainer()[PANEL_PROFILE]->childSetAction("edit_profile_btn", boost::bind(&LLPanelMe::onEditProfileClicked, this), this);
+	getChild<LLUICtrl>("copy_uri")->setEnabled( true );
+	// fill in user key
+	getChild<LLUICtrl>("user_key")->setValue(getAvatarId().asString());
 
 	return TRUE;
 }
@@ -80,17 +83,19 @@ void LLPanelMe::onOpen(const LLSD& key)
 {
 	LLPanelProfile::onOpen(key);
 
-	// Force Edit My Profile if this is the first time when user is opening Me Panel (EXT-5068)
-	bool opened = gSavedSettings.getBOOL("MePanelOpened");
-	// In some cases Side Tray my call onOpen() twice, check getCollapsed() to be sure this
-	// is the last time onOpen() is called
-	if( !opened && !LLSideTray::getInstance()->getCollapsed() )
-	{
-		buildEditPanel();
-		openPanel(mEditPanel, getAvatarId());
-
-		gSavedSettings.setBOOL("MePanelOpened", true);
-	}
+	// Removed this action as per SOCIAL-431 The first time a new resident opens the profile tab 
+	//                                       in the sidebar, they see the old profile editing panel
+	//
+	//// Force Edit My Profile if this is the first time when user is opening Me Panel (EXT-5068)
+	//bool opened = gSavedSettings.getBOOL("MePanelOpened");
+	//// In some cases Side Tray my call onOpen() twice, check getCollapsed() to be sure this
+	//// is the last time onOpen() is called
+	//if( !opened && !LLSideTray::getInstance()->getCollapsed() )
+	//{
+	//	buildEditPanel();
+	//	openPanel(mEditPanel, getAvatarId());
+	//	gSavedSettings.setBOOL("MePanelOpened", true);
+	//}
 }
 
 bool LLPanelMe::notifyChildren(const LLSD& info)
@@ -142,7 +147,6 @@ void LLPanelMe::buildEditPanel()
 	}
 }
 
-
 void LLPanelMe::onEditProfileClicked()
 {
 	buildEditPanel();
@@ -170,6 +174,14 @@ void LLPanelMe::onCancelClicked()
 	togglePanel(mEditPanel); // close
 }
 
+// Copy URI button callback
+void LLPanelMe::onCopyURI()
+{
+    std::string name = "secondlife:///app/agent/"+getChild<LLUICtrl>("user_key")->getValue().asString()+"/about";
+    gClipboard.copyFromString(utf8str_to_wstring(name));
+}
+
+
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -182,9 +194,6 @@ LLPanelMyProfileEdit::LLPanelMyProfileEdit()
 	setAvatarId(gAgent.getID());
 
 	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&LLPanelMyProfileEdit::onAvatarNameChanged, this));
-// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.1a
-	RlvUIEnabler::instance().addBehaviourToggleCallback(RLV_BHVR_DISPLAYNAME, boost::bind(&LLPanelMyProfileEdit::onAvatarNameChanged, this));
-// [/RLVa:KB]
 }
 
 void LLPanelMyProfileEdit::onOpen(const LLSD& key)
@@ -218,10 +227,7 @@ void LLPanelMyProfileEdit::onOpen(const LLSD& key)
 		getChild<LLUICtrl>("user_slid")->setVisible( true );
 		getChild<LLUICtrl>("display_name_label")->setVisible( true );
 		getChild<LLUICtrl>("set_name")->setVisible( true );
-//		getChild<LLUICtrl>("set_name")->setEnabled( true );
-// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.1a
-		getChild<LLUICtrl>("set_name")->setEnabled( !gRlvHandler.hasBehaviour(RLV_BHVR_DISPLAYNAME) );
-// [/RLVa:KB]
+		getChild<LLUICtrl>("set_name")->setEnabled( true );
 		getChild<LLUICtrl>("solo_user_name")->setVisible( false );
 		getChild<LLUICtrl>("solo_username_label")->setVisible( false );
 	}
@@ -293,10 +299,7 @@ void LLPanelMyProfileEdit::onNameCache(const LLUUID& agent_id, const LLAvatarNam
 		getChild<LLUICtrl>("user_slid")->setVisible( true );
 		getChild<LLUICtrl>("display_name_label")->setVisible( true );
 		getChild<LLUICtrl>("set_name")->setVisible( true );
-//		getChild<LLUICtrl>("set_name")->setEnabled( true );
-// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.1a
-		getChild<LLUICtrl>("set_name")->setEnabled( !gRlvHandler.hasBehaviour(RLV_BHVR_DISPLAYNAME) );
-// [/RLVa:KB]
+		getChild<LLUICtrl>("set_name")->setEnabled( true );
 
 		getChild<LLUICtrl>("solo_user_name")->setVisible( false );
 		getChild<LLUICtrl>("solo_username_label")->setVisible( false );

@@ -87,6 +87,7 @@ public:
 
 	// saves colors specified by the user to the users skin directory
 	void saveUserSettings() const;
+	void saveUserSettingsPaletteOnly() const; // AO, saves the user pallete, excluding skips skin-related files
 
 private:
 	bool loadFromFilename(const std::string& filename, string_color_map_t& table);

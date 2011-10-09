@@ -31,10 +31,10 @@
             <avatar_list
              color="DkGray2"
              follows="all"
-             height="100"
+             height="90"
              ignore_online_status="true"
              layout="topleft"
-             name="speakers_list"
+             name="grp_speakers_list"
              opaque="false"
              show_info_btn="true"
              show_profile_btn="false"

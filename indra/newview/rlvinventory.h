@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2010, Kitty Barnett
+ * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -29,30 +29,37 @@
 // RlvInventory class declaration
 //
 
-// TODO-RLVa: [RLVa-1.2.0] Make all of this static rather than a singleton?
-class RlvInventory : public LLSingleton<RlvInventory>
+class RlvInventory : public LLSingleton<RlvInventory>, public LLInventoryObserver
 {
 protected:
-	RlvInventory() : m_fFetchStarted(false), m_fFetchComplete(false) {}
+	RlvInventory();
+public:
+	~RlvInventory();
+
+	// LLInventoryObserver override
+	/*virtual*/ void changed(U32 mask);
 
 	/*
 	 * #RLV Shared inventory
 	 */
 public:
+	typedef boost::signals2::signal<void (void)> callback_signal_t;
+	void						addSharedRootIDChangedCallback(const callback_signal_t::slot_type& cb) { m_OnSharedRootIDChanged.connect(cb); }
 	// Find all folders that match a supplied criteria (clears the output array)
-	bool                       findSharedFolders(const std::string& strCriteria, LLInventoryModel::cat_array_t& folders) const;
+	bool						findSharedFolders(const std::string& strCriteria, LLInventoryModel::cat_array_t& folders) const;
 	// Gets the shared path for any shared items present in idItems (clears the output array)
-	bool                       getPath(const uuid_vec_t& idItems, LLInventoryModel::cat_array_t& folders) const;
+	bool						getPath(const uuid_vec_t& idItems, LLInventoryModel::cat_array_t& folders) const;
 	// Returns a pointer to the shared root folder (if there is one)
-	LLViewerInventoryCategory* getSharedRoot() const;
+	LLViewerInventoryCategory*	getSharedRoot() const;
+	const LLUUID&				getSharedRootID() const;
 	// Returns a subfolder of idParent that starts with strFolderName (exact match > partial match)
-	LLViewerInventoryCategory* getSharedFolder(const LLUUID& idParent, const std::string& strFolderName) const;
+	LLViewerInventoryCategory*	getSharedFolder(const LLUUID& idParent, const std::string& strFolderName) const;
 	// Looks up a folder from a path (relative to the shared root)
-	LLViewerInventoryCategory* getSharedFolder(const std::string& strPath) const;
+	LLViewerInventoryCategory*	getSharedFolder(const std::string& strPath) const;
 	// Returns the path of the supplied folder (relative to the shared root)
-	std::string                getSharedPath(const LLViewerInventoryCategory* pFolder) const;
+	std::string					getSharedPath(const LLViewerInventoryCategory* pFolder) const;
 	// Returns TRUE if the supplied folder is a descendent of the #RLV folder
-	bool                       isSharedFolder(const LLUUID& idFolder);
+	bool						isSharedFolder(const LLUUID& idFolder);
 
 	/*
 	 * Inventory fetching
@@ -67,8 +74,10 @@ protected:
 	 * General purpose helper functions
 	 */
 public:
-	// Returns the number of direct descendents of pFolder that have the specified type asset type
-	static S32 getDirectDescendentsCount(const LLInventoryCategory* pFolder, LLAssetType::EType filterType);
+	// Returns the number of sub-folders of the specified folder
+	static S32 getDirectDescendentsFolderCount(const LLInventoryCategory* pFolder);
+	// Returns the number of direct descendents of the specified folder that have the specified type asset type
+	static S32 getDirectDescendentsItemCount(const LLInventoryCategory* pFolder, LLAssetType::EType filterType);
 	// A "folded folder" is a folder whose items logically belong to the grandparent rather than the parent
 	static bool isFoldedFolder(const LLInventoryCategory* pFolder, bool fCheckComposite);
 
@@ -76,8 +85,10 @@ public:
 	 * Member variables
 	 */
 protected:
-	bool m_fFetchStarted;			// TRUE if we fired off an inventory fetch
-	bool m_fFetchComplete;			// TRUE if everything was fetched
+	bool				m_fFetchStarted;			// TRUE if we fired off an inventory fetch
+	bool				m_fFetchComplete;			// TRUE if everything was fetched
+	mutable LLUUID		m_idRlvRoot;
+	callback_signal_t	m_OnSharedRootIDChanged;
 
 private:
 	static const std::string cstrSharedRoot;
@@ -226,6 +237,13 @@ public:
 // ============================================================================
 // RlvInventory inlined member functions
 //
+
+// Checked: 2011-03-28 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+inline LLViewerInventoryCategory* RlvInventory::getSharedRoot() const
+{
+	const LLUUID& idRlvRoot = getSharedRootID();
+	return (idRlvRoot.notNull()) ? gInventory.getCategory(idRlvRoot) : NULL;
+}
 
 // Checked: 2010-03-19 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
 inline bool RlvInventory::isFoldedFolder(const LLInventoryCategory* pFolder, bool fCheckComposite)

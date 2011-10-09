@@ -13,21 +13,27 @@
 		Bandbreite
 	</panel.string>
 	<panel.string name="time">
-		[hour12, datetime, slt]:[min, datetime, slt] [ampm, datetime, slt] [timezone,datetime, slt]
+		[hour24, datetime, slt]:[min, datetime, slt] [timezone, datetime, slt]
 	</panel.string>
 	<panel.string name="timeTooltip">
-		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]
+		[weekday, datetime, slt], [day, datetime, slt]. [month, datetime, slt] [year, datetime, slt]
 	</panel.string>
 	<panel.string name="buycurrencylabel">
 		[AMT] L$
 	</panel.string>
+	<panel name="parcel_info_panel">
+		<text name="parcel_info_text" value="(laden)" tool_tip="Name der Parzelle, auf der du dich befindest. Klicken öffnet die Land-Informationen."/>
+	</panel>
 	<panel name="balance_bg">
-		<text name="balance" tool_tip="Mein Kontostand" value="20 L$"/>
-		<button label="L$ kaufen" name="buyL" tool_tip="Hier klicken, um mehr L$ zu kaufen"/>
+		<text name="balance" tool_tip="Klicken, um L$-Guthaben zu aktualisieren" value="??? L$"/>
+		<button label="L$-Kauf" name="buyL" tool_tip="Hier klicken, um mehr L$ zu kaufen"/>
 	</panel>
 	<text name="TimeText" tool_tip="Aktuelle Zeit (Pazifik)">
 		24:00 H PST
 	</text>
-	<button name="media_toggle_btn" tool_tip="Alle Medien starten/stoppen (Musik, Video, Webseiten)"/>
-	<button name="volume_btn" tool_tip="Steuerung der Gesamtlautstärke"/>
+	<panel name="time_and_media_bg">
+		<button name="stream_toggle_btn" tool_tip="Audiostream der Parzelle starten/stoppen"/>
+		<button name="media_toggle_btn" tool_tip="Alle Medien starten/stoppen (Musik, Video, Webseiten)"/>
+		<button name="volume_btn" tool_tip="Steuerung der Gesamtlautstärke"/>
+	</panel>
 </panel>

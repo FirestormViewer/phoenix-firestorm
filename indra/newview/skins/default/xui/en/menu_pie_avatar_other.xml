@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!-- *NOTE: See also menu_pie_attachment_other.xml -->
+
+<pie_menu
+    name="Avatar Pie">
+    <pie_slice
+        label="Profile..."
+        name="Profile...">
+        <pie_slice.on_click
+            function="ShowAgentProfile"
+            parameter="hit object" />
+        <pie_slice.on_enable
+            function="RLV.EnableIfNot"
+            parameter="shownames" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="Mute"
+        name="Avatar Mute">
+        <pie_slice.on_click
+            function="Avatar.Mute" />
+        <pie_slice.on_enable
+            function="Avatar.EnableMute" />
+    </pie_slice>
+    <pie_slice
+        enabled="true"
+        label="Go to"
+        name="Go to">
+        <pie_slice.on_click
+            function="GoToObject" />
+    </pie_slice>
+    <pie_slice
+        label="Report..."
+        name="abuse">
+        <pie_slice.on_click
+            function="Avatar.ReportAbuse" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="Add Friend..."
+        name="Add Friend">
+        <pie_slice.on_click
+            function="Avatar.AddFriend" />
+        <pie_slice.on_enable
+            function="Avatar.EnableAddFriend" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="Pay..."
+        name="Pay...">
+        <pie_slice.on_click
+            function="PayObject" />
+        <pie_slice.on_enable
+            function="EnablePayAvatar" />
+    </pie_slice>
+    <pie_menu
+        name="Avatar Pie More 1"
+        label="More >">
+
+        <pie_slice
+            label="Freeze"
+            name="Freeze...">
+            <pie_slice.on_click
+                function="Avatar.Freeze" />
+            <pie_slice.on_enable
+                function="Avatar.EnableFreezeEject"/>
+        </pie_slice>
+        <pie_slice
+            label="Give Card"
+            name="Add Calling Card">
+            <pie_slice.on_click
+                function="Avatar.AddContact" />
+        </pie_slice>
+        <pie_slice
+            label="Invite to Group"
+            name="Group Invite...">
+            <pie_slice.on_click
+                function="Avatar.InviteToGroup" />
+            <pie_slice.on_enable
+                function="RLV.EnableIfNot"
+                parameter="shownames" />
+        </pie_slice>
+        <pie_separator />
+        <pie_slice
+            label="Eject..."
+            name="Eject...">
+            <pie_slice.on_click
+                function="Avatar.Eject" />
+            <pie_slice.on_enable
+                function="Avatar.EnableFreezeEject"/>
+        </pie_slice>
+
+        <pie_menu
+            name="Avatar Pie More 2"
+            label="More >">
+
+            <!-- ## Zi: Is this the right thing to use for avatar textures? -->
+            <pie_slice
+                label="Debug Textures"
+                name="Debug...">
+                <pie_slice.on_click
+                    function="Avatar.Debug" />
+                <pie_slice.on_visible
+                    function="IsGodCustomerService"/>
+            </pie_slice>
+            <pie_slice
+	            enabled="true"
+	            label="Script Info"
+	            name="ScriptInfo">
+	            <pie_slice.on_click
+	                function="Tools.ScriptInfo" />
+	        </pie_slice>
+            <pie_slice
+                label="Call"
+                name="Call">
+                <pie_slice.on_click
+                    function="Avatar.Call" />
+                <pie_slice.on_enable
+                    function="Avatar.EnableCall" />
+            </pie_slice>
+            <pie_slice
+                label="Zoom In"
+                name="Zoom In">
+                <pie_slice.on_click
+                    function="Tools.LookAtSelection"
+                    parameter="zoom" />
+            </pie_slice>
+
+        </pie_menu>
+
+        <pie_slice
+            label="Inspect"
+            name="Avatar Inspect">
+            <pie_slice.on_click
+                function="Object.Inspect" />
+            <pie_slice.on_enable
+                function="Avatar.EnableCall" />
+        </pie_slice>
+        <pie_slice
+            enabled="true"
+            label="Derender"
+            name="Derender">
+            <pie_slice.on_click
+                function="Object.Derender" />
+        </pie_slice>
+        
+        
+    </pie_menu>
+
+    <pie_slice
+        label="IM"
+        name="Send IM...">
+        <pie_slice.on_click
+            function="Avatar.SendIM" />
+        <pie_slice.on_enable
+            function="RLV.EnableIfNot"
+            parameter="shownames" />
+    </pie_slice>
+
+</pie_menu>

@@ -173,25 +173,9 @@ public:
 	virtual void setVoiceEnabled(bool enabled);
 	virtual BOOL lipSyncEnabled();	
 	virtual void setLipSyncEnabled(BOOL enabled);
-	virtual void setMuteMic(bool muted);		// Use this to mute the local mic (for when the client is minimized, etc), ignoring user PTT state.
+	virtual void setMuteMic(bool muted);		// Set the mute state of the local mic.
 	//@}
-	
-	////////////////////////
-	/// @name PTT
-	//@{
-	virtual void setUserPTTState(bool ptt);
-	virtual bool getUserPTTState();
-	virtual void setUsePTT(bool usePTT);
-	virtual void setPTTIsToggle(bool PTTIsToggle);
-	virtual bool getPTTIsToggle();
-	virtual void inputUserControlState(bool down);  // interpret any sort of up-down mic-open control input according to ptt-toggle prefs	
-	virtual void toggleUserPTTState(void);
-	
-	virtual void keyDown(KEY key, MASK mask);
-	virtual void keyUp(KEY key, MASK mask);
-	virtual void middleMouseState(bool down);
-	//@}
-	
+		
 	//////////////////////////
 	/// @name nearby speaker accessors
 	//@{
@@ -396,7 +380,8 @@ protected:
 		stateVoiceFontsWait,		// Awaiting the list of voice fonts
 		stateVoiceFontsReceived,	// List of voice fonts received
 		stateCreatingSessionGroup,	// Creating the main session group
-		stateNoChannel,				// 
+		stateNoChannel,				// Need to join a channel
+		stateRetrievingParcelVoiceInfo,    // waiting for parcel voice info request to return with spatial credentials
 		stateJoiningSession,		// waiting for session handle
 		stateSessionJoined,			// session handle received
 		stateRunning,				// in session, steady state
@@ -534,9 +519,6 @@ protected:
 										// Use this to determine whether to show a "no speech" icon in the menu bar.
 		
 	
-	// PTT
-	void setPTTKey(std::string &key);
-	
 	/////////////////////////////
 	// Recording controls
 	void recordingLoopStart(int seconds = 3600, int deltaFramesPerControlFrame = 200);
@@ -639,6 +621,8 @@ protected:
 	void sessionMediaDisconnectSendMessage(sessionState *session);
 	void sessionTextDisconnectSendMessage(sessionState *session);
 
+	
+	
 	// Pokes the state machine to leave the audio session next time around.
 	void sessionTerminate();	
 	
@@ -647,6 +631,12 @@ protected:
 	
 	// Does the actual work to get out of the audio session
 	void leaveAudioSession();
+	
+	// notifies the voice client that we've received parcel voice info
+	bool parcelVoiceInfoReceived(state requesting_state);
+	
+	friend class LLVivoxVoiceClientCapResponder;
+	
 	
 	void lookupName(const LLUUID &id);
 	void onAvatarNameCache(const LLUUID& id, const LLAvatarName& av_name);
@@ -725,7 +715,7 @@ private:
 	
 	S32 mCurrentParcelLocalID;			// Used to detect parcel boundary crossings
 	std::string mCurrentRegionName;		// Used to detect parcel boundary crossings
-	
+	bool mRegionHasVoice;
 	std::string mConnectorHandle;	// returned by "Create Connector" message
 	std::string mAccountHandle;		// returned by login message		
 	int 		mNumberOfAliases;
@@ -752,9 +742,11 @@ private:
 	bool mCaptureDeviceDirty;
 	bool mRenderDeviceDirty;
 	
+	
+	bool checkParcelChanged(bool update = false);
 	// This should be called when the code detects we have changed parcels.
 	// It initiates the call to the server that gets the parcel channel.
-	void parcelChanged();
+	bool requestParcelVoiceInfo();
 	
 	void switchChannel(std::string uri = std::string(), bool spatial = true, bool no_reconnect = false, bool is_p2p = false, std::string hash = "");
 	void joinSession(sessionState *session);
@@ -800,15 +792,8 @@ private:
 	LLVector3	mAvatarVelocity;
 	LLMatrix3	mAvatarRot;
 	
-	bool		mPTTDirty;
-	bool		mPTT;
-	
-	bool		mUsePTT;
-	bool		mPTTIsMiddleMouse;
-	KEY			mPTTKey;
-	bool		mPTTIsToggle;
-	bool		mUserPTTState;
 	bool		mMuteMic;
+	bool		mMuteMicDirty;
 			
 	// Set to true when the friends list is known to have changed.
 	bool		mFriendsListDirty;

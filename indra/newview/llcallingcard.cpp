@@ -49,6 +49,7 @@
 #include "llbutton.h"
 #include "llinventoryobserver.h"
 #include "llinventorymodel.h"
+#include "llnotificationmanager.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llresmgr.h"
@@ -60,6 +61,7 @@
 #include "llviewerwindow.h"
 #include "llvoavatar.h"
 #include "llavataractions.h"
+#include "lggcontactsets.h"
 
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
@@ -502,7 +504,6 @@ void LLAvatarTracker::addParticularFriendObserver(const LLUUID& buddy_id, LLFrie
 {
 	if (buddy_id.notNull() && observer)
 		mParticularFriendObserverMap[buddy_id].insert(observer);
-	llinfos << "AO DEBUG: postAdd: ob_it->second.size=" << mParticularFriendObserverMap[buddy_id].size() << llendl;
 }
 
 void LLAvatarTracker::removeParticularFriendObserver(const LLUUID& buddy_id, LLFriendObserver* observer)
@@ -513,13 +514,10 @@ void LLAvatarTracker::removeParticularFriendObserver(const LLUUID& buddy_id, LLF
     observer_map_t::iterator obs_it = mParticularFriendObserverMap.find(buddy_id);
     if(obs_it == mParticularFriendObserverMap.end())
 	{
-        llinfos << "AO DEBUG: preremove: no observers found, skipping." << llendl;
 		return;
 	}
 	
-	llinfos << "AO DEBUG: preremove: ob_it->second.size=" << obs_it->second.size() << llendl;
     obs_it->second.erase(observer);
-	llinfos << "AO DEBUG: postremove: ob_it->second.size=" << obs_it->second.size() << llendl;
 
     // purge empty sets from the map
 	// AO: Remove below check as last resort to resolve a crash from dangling pointer.
@@ -536,7 +534,6 @@ void LLAvatarTracker::notifyParticularFriendObservers(const LLUUID& buddy_id)
 
     // Notify observers interested in buddy_id.
     observer_set_t& obs = obs_it->second;
-	llinfos << "AO DEBUG: notifying particularFriends, size=" << obs_it->second.size() << llendl;
     for (observer_set_t::iterator ob_it = obs.begin(); ob_it != obs.end(); ob_it++)
     {
 		if (*ob_it)
@@ -576,14 +573,12 @@ void LLAvatarTracker::notifyFriendPermissionObservers(const LLUUID& buddy_id)
     observer_map_t::iterator obs_it = mFriendPermissionObserverMap.find(buddy_id);
     if(obs_it == mFriendPermissionObserverMap.end())
 	{
-		llinfos << "Not Found: " << buddy_id << llendl;
 		return;
 	}
     // Notify observers interested in buddy_id.
     observer_set_t& obs = obs_it->second;
     for (observer_set_t::iterator ob_it = obs.begin(); ob_it != obs.end(); ob_it++)
     {
-		llinfos << "Notified: " << buddy_id << llendl;
 		(*ob_it)->changed(LLFriendObserver::PERMS);
     }
 }
@@ -678,6 +673,11 @@ void LLAvatarTracker::processChange(LLMessageSystem* msg)
 			if(mBuddyInfo.find(agent_related) != mBuddyInfo.end())
 			{
 				(mBuddyInfo[agent_related])->setRightsTo(new_rights);
+
+				// I'm not totally sure why it adds the agents id to the changed list
+				// nor why it doesn't add the friends's ID.
+				// Add the friend's id to the changed list for contacts list -KC
+				mChangedBuddyIDs.insert(agent_related);
 			}
 		}
 		else
@@ -755,7 +755,7 @@ void LLAvatarTracker::processNotify(LLMessageSystem* msg, bool online)
 			// *TODO: get actual inventory id
 			gInventory.addChangedMask(LLInventoryObserver::CALLING_CARD, LLUUID::null);
 		}
-		if(chat_notify)
+		if(chat_notify||LGGContactSets::getInstance()->notifyForFriend(agent_id))
 		{
 			// Look up the name of this agent for the notification
 			LLAvatarNameCache::get(agent_id,
@@ -776,8 +776,21 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 {
 	// Popup a notify box with online status of this agent
 	// Use display name only because this user is your friend
+	// Ansariel: No please! Take preference settings into account!
 	LLSD args;
-	args["NAME"] = av_name.mDisplayName;
+
+	if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
+	{
+		args["NAME"] = av_name.getCompleteName();
+	}
+	else if (gSavedSettings.getBOOL("UseDisplayNames"))
+	{
+		args["NAME"] = av_name.mDisplayName;
+	}
+	else
+	{
+		args["NAME"] = av_name.getLegacyName();
+	}
 
 	LLNotificationPtr notification;
 	if (online)
@@ -798,6 +811,16 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	LLUUID session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, agent_id);
 	std::string notify_msg = notification->getMessage();
 	LLIMModel::instance().proccessOnlineOfflineNotification(session_id, notify_msg);
+
+	// If desired, also send it to nearby chat, this allows friends'
+	// online/offline times to be referenced in chat & logged.
+	if (gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat")) {
+		LLChat chat;
+		chat.mText = notify_msg;
+		chat.mSourceType = CHAT_SOURCE_SYSTEM;
+		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+	}
 }
 
 void LLAvatarTracker::formFriendship(const LLUUID& id)

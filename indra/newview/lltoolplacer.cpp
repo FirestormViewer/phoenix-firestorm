@@ -34,11 +34,13 @@
 #include "llviewercontrol.h"
 //#include "llfirstuse.h"
 #include "llfloatertools.h"
+#include "llparcel.h"
 #include "llselectmgr.h"
 #include "llstatusbar.h"
 #include "lltoolcomp.h"
 #include "lltoolmgr.h"
 #include "llviewerobject.h"
+#include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
 #include "llworld.h"
@@ -63,6 +65,7 @@
 
 // linden library headers
 #include "llprimitive.h"
+#include "roles_constants.h"
 #include "llwindow.h"			// incBusyCount()
 #include "material_codes.h"
 
@@ -200,8 +203,20 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 
 	// Set params for new object based on its PCode.
 	LLQuaternion	rotation;
-	LLVector3		scale = DEFAULT_OBJECT_SCALE;
+	LLVector3		scale = LLVector3(
+		gSavedSettings.getF32("PhoenixBuildPrefs_Xsize"),
+		gSavedSettings.getF32("PhoenixBuildPrefs_Ysize"),
+		gSavedSettings.getF32("PhoenixBuildPrefs_Zsize"));
+
 	U8				material = LL_MCODE_WOOD;
+	const std::string default_material = gSavedSettings.getString("PhoenixBuildPrefs_Material");
+	if (default_material == "Wood")			material = LL_MCODE_WOOD;
+	else if (default_material == "Stone")	material = LL_MCODE_STONE;
+	else if (default_material == "Metal")	material = LL_MCODE_METAL;
+	else if (default_material == "Flesh")	material = LL_MCODE_FLESH;
+	else if (default_material == "Rubber")	material = LL_MCODE_RUBBER;
+	else if (default_material == "Plastic")	material = LL_MCODE_PLASTIC;
+
 	BOOL			create_selected = FALSE;
 	LLVolumeParams	volume_params;
 	
@@ -242,7 +257,20 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
 	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-	gMessageSystem->addUUIDFast(_PREHASH_GroupID, gAgent.getGroupID());
+	LLUUID group_id = gAgent.getGroupID();
+	LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+	if (gSavedSettings.getBOOL("RezUnderLandGroup"))
+	{
+		if (gAgent.isInGroup(parcel->getGroupID()))
+		{
+			group_id = parcel->getGroupID();
+		}
+		else if (gAgent.isInGroup(parcel->getOwnerID()))
+		{
+			group_id = parcel->getOwnerID();
+		}
+	}
+	gMessageSystem->addUUIDFast(_PREHASH_GroupID, group_id);
 	gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 	gMessageSystem->addU8Fast(_PREHASH_Material,	material);
 

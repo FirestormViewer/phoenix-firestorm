@@ -25,12 +25,14 @@ include_directories(
 set(win_crash_logger_SOURCE_FILES
     win_crash_logger.cpp
     llcrashloggerwindows.cpp
+    llcrashlookupwindows.cpp
     )
 
 set(win_crash_logger_HEADER_FILES
     CMakeLists.txt
 
     llcrashloggerwindows.h
+    llcrashlookupwindows.h
     resource.h
     StdAfx.h
     win_crash_logger.h
@@ -79,6 +81,7 @@ target_link_libraries(windows-crash-logger
     ole32
     oleaut32
     Wldap32
+    dbgeng
     )
     
 if (WINDOWS)

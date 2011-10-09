@@ -28,6 +28,10 @@
 #define LL_LLNEARBYCHATHANDLER_H
 
 #include "llnotificationhandler.h"
+#include "llavatarname.h"
+#include "llchat.h"
+
+class LLEventPump;
 
 //add LLNearbyChatHandler to LLNotificationsUI namespace
 namespace LLNotificationsUI{
@@ -41,9 +45,21 @@ public:
 
 	virtual void processChat(const LLChat& chat_msg, const LLSD &args);
 
+	void updatePhoenixUseNearbyChatConsole(const LLSD &data);
+
 protected:
 	virtual void onDeleteToast(LLToast* toast);
 	virtual void initChannel();
+
+//	<Ansariel> replaced local DN handling with onAvatarNameLookup
+//	void lookupDisplayNames(const LLChat& chat);
+//	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+	void onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const LLChat& chat_msg);
+//	bool checkDisplayName();
+
+	BOOL PhoenixUseNearbyChatConsole;
+
+	static boost::scoped_ptr<LLEventPump> sChatWatcher;
 };
 
 }

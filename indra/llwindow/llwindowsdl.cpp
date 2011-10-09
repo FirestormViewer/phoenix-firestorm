@@ -414,6 +414,11 @@ static int x11_detect_VRAM_kb()
 }
 #endif // LL_X11
 
+void LLWindowSDL::setTitle(const std::string &title)
+{
+	SDL_WM_SetCaption(title.c_str(), title.c_str());
+}
+
 BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, BOOL fullscreen, BOOL disable_vsync)
 {
 	//bool			glneedsinit = false;
@@ -2501,6 +2506,10 @@ void LLWindowSDL::spawnWebBrowser(const std::string& escaped_url, bool async)
 	llinfos << "spawn_web_browser returning." << llendl;
 }
 
+void LLWindowSDL::openFile(const std::string& file_name)
+{
+	spawnWebBrowser(file_name,TRUE);
+}
 
 void *LLWindowSDL::getPlatformWindow()
 {

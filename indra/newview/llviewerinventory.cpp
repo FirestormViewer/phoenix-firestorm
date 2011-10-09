@@ -48,6 +48,7 @@
 #include "llinventorybridge.h"
 #include "llinventorypanel.h"
 #include "llfloaterinventory.h"
+#include "lllandmarkactions.h"
 
 #include "llviewerassettype.h"
 #include "llviewerregion.h"
@@ -59,6 +60,9 @@
 #include "llcommandhandler.h"
 #include "llviewermessage.h"
 #include "llsidepanelappearance.h"
+#include "llavatarnamecache.h"
+#include "llavataractions.h"
+#include "lllogininstance.h"
 
 ///----------------------------------------------------------------------------
 /// Helper class to store special inventory item names and their localized values.
@@ -85,6 +89,7 @@ public:
 		mInventoryItemsDict["New Skirt"]		= LLTrans::getString("New Skirt");
 		mInventoryItemsDict["New Alpha"]		= LLTrans::getString("New Alpha");
 		mInventoryItemsDict["New Tattoo"]		= LLTrans::getString("New Tattoo");
+		mInventoryItemsDict["New Physics"]		= LLTrans::getString("New Physics");
 		mInventoryItemsDict["Invalid Wearable"] = LLTrans::getString("Invalid Wearable");
 
 		mInventoryItemsDict["New Gesture"]		= LLTrans::getString("New Gesture");
@@ -134,7 +139,35 @@ public:
 		mInventoryItemsDict["Female - Shrug"]			= LLTrans::getString("Female - Shrug");
 		mInventoryItemsDict["Female - Stick tougue out"]= LLTrans::getString("Female - Stick tougue out");
 		mInventoryItemsDict["Female - Wow"]				= LLTrans::getString("Female - Wow");
-		
+
+		//common
+		mInventoryItemsDict["/bow"]						= LLTrans::getString("/bow");
+		mInventoryItemsDict["/clap"]					= LLTrans::getString("/clap");
+		mInventoryItemsDict["/count"]					= LLTrans::getString("/count");
+		mInventoryItemsDict["/extinguish"]				= LLTrans::getString("/extinguish");
+		mInventoryItemsDict["/kmb"]						= LLTrans::getString("/kmb");
+		mInventoryItemsDict["/muscle"]					= LLTrans::getString("/muscle");
+		mInventoryItemsDict["/no"]						= LLTrans::getString("/no");
+		mInventoryItemsDict["/no!"]						= LLTrans::getString("/no!");
+		mInventoryItemsDict["/paper"]					= LLTrans::getString("/paper");
+		mInventoryItemsDict["/pointme"]					= LLTrans::getString("/pointme");
+		mInventoryItemsDict["/pointyou"]				= LLTrans::getString("/pointyou");
+		mInventoryItemsDict["/rock"]					= LLTrans::getString("/rock");
+		mInventoryItemsDict["/scissor"]					= LLTrans::getString("/scissor");
+		mInventoryItemsDict["/smoke"]					= LLTrans::getString("/smoke");
+		mInventoryItemsDict["/stretch"]					= LLTrans::getString("/stretch");
+		mInventoryItemsDict["/whistle"]					= LLTrans::getString("/whistle");
+		mInventoryItemsDict["/yes"]						= LLTrans::getString("/yes");
+		mInventoryItemsDict["/yes!"]					= LLTrans::getString("/yes!");
+		mInventoryItemsDict["afk"]						= LLTrans::getString("afk");
+		mInventoryItemsDict["dance1"]					= LLTrans::getString("dance1");
+		mInventoryItemsDict["dance2"]					= LLTrans::getString("dance2");
+		mInventoryItemsDict["dance3"]					= LLTrans::getString("dance3");
+		mInventoryItemsDict["dance4"]					= LLTrans::getString("dance4");
+		mInventoryItemsDict["dance5"]					= LLTrans::getString("dance5");
+		mInventoryItemsDict["dance6"]					= LLTrans::getString("dance6");
+		mInventoryItemsDict["dance7"]					= LLTrans::getString("dance7");
+		mInventoryItemsDict["dance8"]					= LLTrans::getString("dance8");
 	}
 
 	/**
@@ -178,6 +211,12 @@ public:
 			return false;
 		}
 
+		if (!LLUI::sSettingGroups["config"]->getBOOL("EnableInventory"))
+		{
+				LLNotificationsUtil::add("NoInventory", LLSD(), LLSD(), std::string("SwitchToStandardSkinAndQuit"));
+				return true;
+		}
+
 		// support secondlife:///app/inventory/show
 		if (params[0].asString() == "show")
 		{
@@ -210,6 +249,7 @@ public:
 	}
 };
 LLInventoryHandler gInventoryHandler;
+
 
 ///----------------------------------------------------------------------------
 /// Class LLViewerInventoryItem
@@ -323,8 +363,9 @@ void LLViewerInventoryItem::updateServer(BOOL is_new) const
 	{
 		// *FIX: deal with this better.
 		// If we're crashing here then the UI is incorrectly enabled.
-		llerrs << "LLViewerInventoryItem::updateServer() - for incomplete item"
+		llwarns << "LLViewerInventoryItem::updateServer() - for incomplete item"
 			   << llendl;
+                LLNotificationsUtil::add("IncompleteInventoryItem");
 		return;
 	}
 	if(gAgent.getID() != mPermissions.getOwner())
@@ -361,11 +402,11 @@ void LLViewerInventoryItem::fetchFromServer(void) const
 		{
 		  if(gAgent.getID() != mPermissions.getOwner())
 		    {
-		      url = region->getCapability("FetchLib");
+		      url = region->getCapability("FetchLib2");
 		    }
 		  else
 		    {	
-		      url = region->getCapability("FetchInventory");
+		      url = region->getCapability("FetchInventory2");
 		    }
 		}
 		else
@@ -406,6 +447,9 @@ void LLViewerInventoryItem::fetchFromServer(void) const
 BOOL LLViewerInventoryItem::unpackMessage(LLSD item)
 {
 	BOOL rv = LLInventoryItem::fromLLSD(item);
+
+	LLLocalizedInventoryItemsDictionary::getInstance()->localizeInventoryObjectName(mName);
+
 	mIsComplete = TRUE;
 	return rv;
 }
@@ -643,7 +687,7 @@ bool LLViewerInventoryCategory::fetch()
 		std::string url;
 		if (gAgent.getRegion())
 		{
-			url = gAgent.getRegion()->getCapability("WebFetchInventoryDescendents");
+			url = gAgent.getRegion()->getCapability("FetchInventoryDescendents2");
 		}
 		else
 		{
@@ -657,8 +701,7 @@ bool LLViewerInventoryCategory::fetch()
 		{	//Deprecated, but if we don't have a capability, use the old system.
 			
 			//AO: too spammy! 
-			// llinfos << "WebFetchInventoryDescendents capability not found.  Using deprecated UDP message." << llendl;
-			
+			//llinfos << "FetchInventoryDescendents2 capability not found.  Using deprecated UDP message." << llendl;
 			LLMessageSystem* msg = gMessageSystem;
 			msg->newMessage("FetchInventoryDescendents");
 			msg->nextBlock("AgentData");
@@ -945,7 +988,7 @@ void ModifiedCOFCallback::fire(const LLUUID& inv_item)
 }
 
 //RezAttachmentCallback::RezAttachmentCallback(LLViewerJointAttachment *attachmentp)
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.2.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
 RezAttachmentCallback::RezAttachmentCallback(LLViewerJointAttachment *attachmentp, bool replace)
 	: mAttach(attachmentp), mReplace(replace)
 // [/SL:KB]
@@ -965,7 +1008,7 @@ void RezAttachmentCallback::fire(const LLUUID& inv_item)
 	if (item)
 	{
 //		rez_attachment(item, mAttach);
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.2.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
 		rez_attachment(item, mAttach, mReplace);
 // [/SL:KB]
 	}
@@ -1267,7 +1310,7 @@ void menu_create_inventory_item(LLFolderView* root, LLFolderBridge *bridge, cons
 {
 	std::string type_name = userdata.asString();
 	
-	if (("category" == type_name) || ("current" == type_name) || ("outfit" == type_name) || ("my_otfts" == type_name))
+	if (("inbox" == type_name) || ("outbox" == type_name) || ("category" == type_name) || ("current" == type_name) || ("outfit" == type_name) || ("my_otfts" == type_name))
 	{
 		LLFolderType::EType preferred_type = LLFolderType::lookup(type_name);
 
@@ -1424,6 +1467,8 @@ public:
 	S32 getSortIndex(const LLUUID& inv_item_id);
 	void removeSortIndex(const LLUUID& inv_item_id);
 
+	void getSLURL(const LLUUID& asset_id);
+
 	/**
 	 * Implementation of LLDestroyClass. Calls cleanup() instance method.
 	 *
@@ -1450,8 +1495,19 @@ private:
 	void load();
 	void save();
 
+	void saveFavoritesSLURLs();
+
+	// Remove record of current user's favorites from file on disk.
+	void removeFavoritesRecordOfUser();
+
+	void onLandmarkLoaded(const LLUUID& asset_id, LLLandmark* landmark);
+	void storeFavoriteSLURL(const LLUUID& asset_id, std::string& slurl);
+
 	typedef std::map<LLUUID, S32> sort_index_map_t;
 	sort_index_map_t mSortIndexes;
+
+	typedef std::map<LLUUID, std::string> slurls_map_t;
+	slurls_map_t mSLURLs;
 
 	bool mIsDirty;
 
@@ -1507,10 +1563,31 @@ void LLFavoritesOrderStorage::removeSortIndex(const LLUUID& inv_item_id)
 	mIsDirty = true;
 }
 
+void LLFavoritesOrderStorage::getSLURL(const LLUUID& asset_id)
+{
+	slurls_map_t::iterator slurl_iter = mSLURLs.find(asset_id);
+	if (slurl_iter != mSLURLs.end()) return; // SLURL for current landmark is already cached
+
+	LLLandmark* lm = gLandmarkList.getAsset(asset_id,
+			boost::bind(&LLFavoritesOrderStorage::onLandmarkLoaded, this, asset_id, _1));
+	if (lm)
+	{
+		onLandmarkLoaded(asset_id, lm);
+	}
+}
+
 // static
 void LLFavoritesOrderStorage::destroyClass()
 {
 	LLFavoritesOrderStorage::instance().cleanup();
+	if (gSavedPerAccountSettings.getBOOL("ShowFavoritesOnLogin"))
+	{
+		LLFavoritesOrderStorage::instance().saveFavoritesSLURLs();
+	}
+	else
+	{
+		LLFavoritesOrderStorage::instance().removeFavoritesRecordOfUser();
+	}
 }
 
 void LLFavoritesOrderStorage::load()
@@ -1531,6 +1608,98 @@ void LLFavoritesOrderStorage::load()
 	{
 		mSortIndexes.insert(std::make_pair(LLUUID(iter->first), (S32)iter->second.asInteger()));
 	}
+}
+
+void LLFavoritesOrderStorage::saveFavoritesSLURLs()
+{
+	// Do not change the file if we are not logged in yet.
+	if (!LLLoginInstance::getInstance()->authSuccess()) return;
+	
+	std::string user_dir = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "");
+	if (user_dir.empty()) return;
+
+	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
+	llifstream in_file;
+	in_file.open(filename);
+	LLSD fav_llsd;
+	if (in_file.is_open())
+	{
+		LLSDSerialize::fromXML(fav_llsd, in_file);
+	}
+
+	const LLUUID fav_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_FAVORITE);
+	LLInventoryModel::cat_array_t cats;
+	LLInventoryModel::item_array_t items;
+	gInventory.collectDescendents(fav_id, cats, items, LLInventoryModel::EXCLUDE_TRASH);
+
+	LLSD user_llsd;
+	for (LLInventoryModel::item_array_t::iterator it = items.begin(); it != items.end(); it++)
+	{
+		LLSD value;
+		value["name"] = (*it)->getName();
+		value["asset_id"] = (*it)->getAssetUUID();
+
+		slurls_map_t::iterator slurl_iter = mSLURLs.find(value["asset_id"]);
+		if (slurl_iter != mSLURLs.end())
+		{
+			value["slurl"] = slurl_iter->second;
+			user_llsd[(*it)->getSortField()] = value;
+		}
+	}
+
+	LLAvatarName av_name;
+	LLAvatarNameCache::get( gAgentID, &av_name );
+	fav_llsd[av_name.getLegacyName()] = user_llsd;
+
+	llofstream file;
+	file.open(filename);
+	LLSDSerialize::toPrettyXML(fav_llsd, file);
+}
+
+void LLFavoritesOrderStorage::removeFavoritesRecordOfUser()
+{
+	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
+	LLSD fav_llsd;
+	llifstream file;
+	file.open(filename);
+	if (!file.is_open()) return;
+	LLSDSerialize::fromXML(fav_llsd, file);
+
+	LLAvatarName av_name;
+	LLAvatarNameCache::get( gAgentID, &av_name );
+	if (fav_llsd.has(av_name.getLegacyName()))
+	{
+		fav_llsd.erase(av_name.getLegacyName());
+	}
+
+	llofstream out_file;
+	out_file.open(filename);
+	LLSDSerialize::toPrettyXML(fav_llsd, out_file);
+
+}
+
+void LLFavoritesOrderStorage::onLandmarkLoaded(const LLUUID& asset_id, LLLandmark* landmark)
+{
+	if (!landmark) return;
+
+	LLVector3d pos_global;
+	if (!landmark->getGlobalPos(pos_global))
+	{
+		// If global position was unknown on first getGlobalPos() call
+		// it should be set for the subsequent calls.
+		landmark->getGlobalPos(pos_global);
+	}
+
+	if (!pos_global.isExactlyZero())
+	{
+		LLLandmarkActions::getSLURLfromPosGlobal(pos_global,
+				boost::bind(&LLFavoritesOrderStorage::storeFavoriteSLURL, this, asset_id, _1));
+	}
+}
+
+void LLFavoritesOrderStorage::storeFavoriteSLURL(const LLUUID& asset_id, std::string& slurl)
+{
+	mSLURLs[asset_id] = slurl;
 }
 
 void LLFavoritesOrderStorage::save()
@@ -1589,6 +1758,12 @@ S32 LLViewerInventoryItem::getSortField() const
 void LLViewerInventoryItem::setSortField(S32 sortField)
 {
 	LLFavoritesOrderStorage::instance().setSortIndex(mUUID, sortField);
+	getSLURL();
+}
+
+void LLViewerInventoryItem::getSLURL()
+{
+	LLFavoritesOrderStorage::instance().getSLURL(mAssetUUID);
 }
 
 const LLPermissions& LLViewerInventoryItem::getPermissions() const

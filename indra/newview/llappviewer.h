@@ -65,12 +65,14 @@ public:
 	virtual bool mainLoop(); // Override for the application main loop.  Needs to at least gracefully notice the QUITTING state and exit.
 
 	// Application control
+	void flushVFSIO(); // waits for vfs transfers to complete
 	void forceQuit(); // Puts the viewer into 'shutting down without error' mode.
+	void fastQuit(S32 error_code = 0); // Shuts down the viewer immediately after sending a logout message
 	void requestQuit(); // Request a quit. A kinder, gentler quit.
 	void userQuit(); // The users asks to quit. Confirm, then requestQuit()
     void earlyExit(const std::string& name, 
 				   const LLSD& substitutions = LLSD()); // Display an error dialog and forcibly quit.
-    void forceExit(S32 arg); // exit() immediately (after some cleanup).
+	void earlyExitNoNotify(); // Do not display error dialog then forcibly quit.
     void abortQuit();  // Called to abort a quit request.
 
     bool quitRequested() { return mQuitRequested; }
@@ -162,11 +164,15 @@ public:
 	login_completed_signal_t mOnLoginCompleted;
 	boost::signals2::connection setOnLoginCompletedCallback( const login_completed_signal_t::slot_type& cb ) { return mOnLoginCompleted.connect(cb); } 
 
-	void purgeCache(); // Clear the local cache. 
+	void purgeCache(); // Clear the local cache.
 	
 	// mute/unmute the system's master audio
 	virtual void setMasterSystemAudioMute(bool mute);
 	virtual bool getMasterSystemAudioMute();
+
+	// Metrics policy helper statics.
+	static void metricsUpdateRegion(U64 region_handle);
+	static void metricsSend(bool enable_reporting);
 	
 protected:
 	virtual bool initWindow(); // Initialize the viewer's window.
@@ -181,6 +187,7 @@ protected:
 
 	virtual std::string generateSerialNumber() = 0; // Platforms specific classes generate this.
 
+	virtual bool meetsRequirementsForMaximizedStart(); // Used on first login to decide to launch maximized
 
 private:
 
@@ -241,6 +248,7 @@ private:
 
 	std::string mSerialNumber;
 	bool mPurgeCache;
+	bool mPurgeSettings;
     bool mPurgeOnExit;
 
 	bool mSavedFinalSnapshot;
@@ -250,7 +258,7 @@ private:
     bool mQuitRequested;				// User wants to quit, may have modified documents open.
     bool mLogoutRequestSent;			// Disconnect message sent to simulator, no longer safe to send messages to the sim.
     S32 mYieldTime;
-	LLSD mSettingsLocationList;
+	struct SettingsFiles* mSettingsLocationList;
 
 	LLWatchdogTimeout* mMainloopTimeout;
 

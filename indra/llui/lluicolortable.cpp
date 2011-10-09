@@ -263,6 +263,43 @@ void LLUIColorTable::saveUserSettings() const
 	}
 }
 
+void LLUIColorTable::saveUserSettingsPaletteOnly() const
+{
+	Params params;
+	
+	for(string_color_map_t::const_iterator it = mUserSetColors.begin();
+		it != mUserSetColors.end();
+		++it)
+	{
+		ColorEntryParams color_entry;
+		color_entry.name = it->first;
+		color_entry.color.value = it->second;
+		
+		
+		
+		if (((std::string)color_entry.name).compare(0,17,"ColorPaletteEntry") == 0)
+			params.color_entries.add(color_entry);
+	}
+	
+	LLXMLNodePtr output_node = new LLXMLNode("colors", false);
+	LLXUIParser parser;
+	parser.writeXUI(output_node, params);
+	
+	if(!output_node->isNull())
+	{
+		const std::string& filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "colors.xml");
+		LLFILE *fp = LLFile::fopen(filename, "w");
+		
+		if(fp != NULL)
+		{
+			LLXMLNode::writeHeaderToFile(fp);
+			output_node->writeToFile(fp);
+			
+			fclose(fp);
+		}
+	}
+}
+
 bool LLUIColorTable::colorExists(const std::string& color_name) const
 {
 	return ((mLoadedColors.find(color_name) != mLoadedColors.end())

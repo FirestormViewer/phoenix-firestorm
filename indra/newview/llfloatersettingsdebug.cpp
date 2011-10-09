@@ -182,7 +182,7 @@ void LLFloaterSettingsDebug::onClickDefault()
 
 	if (controlp)
 	{
-		controlp->resetToDefault();
+		controlp->resetToDefault(true);
 		updateControl(controlp);
 	}
 }
@@ -213,31 +213,18 @@ void LLFloaterSettingsDebug::updateControl(LLControlVariable* controlp)
 
 	if (controlp)
 	{
-// [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0e) | Modified: RLVa-0.2.1d
-		// TODO-RLVa: [RLVa-1.2.1] Look into rewriting the whole debug setting blocking code
-		if (rlv_handler_t::isEnabled())
-		{
-			// Don't allow changing DBG_WRITE debug settings under @setdebug=n
-			bool fEnable = !( (gRlvHandler.hasBehaviour(RLV_BHVR_SETDEBUG)) && 
-				(RlvExtGetSet::getDebugSettingFlags(controlp->getName()) & RlvExtGetSet::DBG_WRITE) );
-			// Don't allow toggling "Basic Shaders" and/or "Atmopsheric Shaders" through the debug settings under @setenv=n
-			fEnable &= !((gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) && 
-				(("VertexShaderEnable" == controlp->getName()) || ("WindLightUseAtmosShaders" == controlp->getName())));
-#ifdef RLV_EXTENSION_STARTLOCATION
-			// Don't allow toggling RestrainedLoveLoginLastLocation
-			fEnable &= !(RLV_SETTING_LOGINLASTLOCATION == controlp->getName());
-#endif // RLV_EXTENSION_STARTLOCATION
-
-			// NOTE: this runs per-frame so there's no need to explictly handle onCommitSettings() or onClickDefault()
-			spinner1->setEnabled(fEnable);
-			spinner2->setEnabled(fEnable);
-			spinner3->setEnabled(fEnable);
-			spinner4->setEnabled(fEnable);
-			color_swatch->setEnabled(fEnable);
-			childSetEnabled("val_text", fEnable);
-			childSetEnabled("boolean_combo", fEnable);
-			childSetEnabled("default_btn", fEnable);
-		}
+// [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
+		// If "HideFromEditor" was toggled while the floater is open then we need to manually disable access to the control
+		// NOTE: this runs per-frame so there's no need to explictly handle onCommitSettings() or onClickDefault()
+		bool fEnable = !controlp->isHiddenFromSettingsEditor();
+		spinner1->setEnabled(fEnable);
+		spinner2->setEnabled(fEnable);
+		spinner3->setEnabled(fEnable);
+		spinner4->setEnabled(fEnable);
+		color_swatch->setEnabled(fEnable);
+		childSetEnabled("val_text", fEnable);
+		childSetEnabled("boolean_combo", fEnable);
+		childSetEnabled("default_btn", fEnable);
 // [/RLVa:KB]
 
 		eControlType type = controlp->type();

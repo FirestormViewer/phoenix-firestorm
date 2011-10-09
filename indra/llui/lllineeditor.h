@@ -40,7 +40,11 @@
 #include "llframetimer.h"
 
 #include "lleditmenuhandler.h"
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a)
+#include "llspellcheckmenuhandler.h"
+// [/SL:KB]
 #include "lluictrl.h"
+#include "lluiimage.h"
 #include "lluistring.h"
 #include "llviewborder.h"
 
@@ -54,6 +58,9 @@ class LLContextMenu;
 
 class LLLineEditor
 : public LLUICtrl, public LLEditMenuHandler, protected LLPreeditor
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+, public LLSpellCheckMenuHandler
+// [/SL:KB]
 {
 public:
 
@@ -75,6 +82,7 @@ public:
 		Optional<keystroke_callback_t>	keystroke_callback;
 
 		Optional<LLTextValidate::validate_func_t, LLTextValidate::ValidateTextNamedFuncs>	prevalidate_callback;
+		Optional<LLTextValidate::validate_func_t, LLTextValidate::ValidateTextNamedFuncs>	prevalidate_input_callback;
 		
 		Optional<LLViewBorder::Params>	border;
 
@@ -84,8 +92,12 @@ public:
 
 		Optional<bool>					select_on_focus,
 										revert_on_esc,
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
+										spellcheck,
+// [/SL:KB]
 										commit_on_focus_lost,
-										ignore_tab;
+										ignore_tab,
+										is_password;
 
 		// colors
 		Optional<LLUIColor>				cursor_color,
@@ -143,6 +155,25 @@ public:
 	virtual void	deselect();
 	virtual BOOL	canDeselect() const;
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+	// LLSpellCheckMenuHandler overrides
+	/*virtual*/ bool		useSpellCheck() const;
+
+	/*virtual*/ std::string	getSuggestion(U32 idxSuggestion) const;
+	/*virtual*/ U32			getSuggestionCount() const;
+	/*virtual*/ void		replaceWithSuggestion(U32 idxSuggestion);
+
+	/*virtual*/ void		addToDictionary();
+	/*virtual*/ bool		canAddToDictionary() const;
+
+	/*virtual*/ void		addToIgnore();
+	/*virtual*/ bool		canAddToIgnore() const;
+
+	// Spell checking helper functions
+	std::string				getMisspelledWord(U32 posCursor) const;
+	bool					isMisspelledWord(U32 posCursor) const;
+// [/SL:KB]
+
 	// view overrides
 	virtual void	draw();
 	virtual void	reshape(S32 width,S32 height,BOOL called_from_parent=TRUE);
@@ -166,6 +197,7 @@ public:
 	virtual BOOL	setTextArg( const std::string& key, const LLStringExplicit& text );
 	virtual BOOL	setLabelArg( const std::string& key, const LLStringExplicit& text );
 
+	void autoCorrectText();
 	void			setLabel(const LLStringExplicit &new_label) { mLabel = new_label; }
 	const std::string& 	getLabel()	{ return mLabel.getString(); }
 
@@ -200,6 +232,7 @@ public:
 	const LLColor4& getTentativeFgColor() const { return mTentativeFgColor.get(); }
 
 	const LLFontGL* getFont() const { return mGLFont; }
+	void setFont(const LLFontGL* font);
 
 	void			setIgnoreArrowKeys(BOOL b)		{ mIgnoreArrowKeys = b; }
 	void			setIgnoreTab(BOOL b)			{ mIgnoreTab = b; }
@@ -217,6 +250,7 @@ public:
 	void			deleteSelection();
 
 	void			setSelectAllonFocusReceived(BOOL b);
+	void			setSelectAllonCommit(BOOL b) { mSelectAllonCommit = b; }
 	
 	typedef boost::function<void (LLLineEditor* caller, void* user_data)> callback_t;
 	void			setKeystrokeCallback(callback_t callback, void* user_data);
@@ -229,7 +263,16 @@ public:
 
 	// Prevalidation controls which keystrokes can affect the editor
 	void			setPrevalidate( LLTextValidate::validate_func_t func );
+	// This method sets callback that prevents from:
+	// - deleting, selecting, typing, cutting, pasting characters that are not valid.
+	// Also callback that this method sets differs from setPrevalidate in a way that it validates just inputed
+	// symbols, before existing text is modified, but setPrevalidate validates line after it was modified.
+	void			setPrevalidateInput(LLTextValidate::validate_func_t func);
 	static BOOL		postvalidateFloat(const std::string &str);
+
+	bool			prevalidateInput(const LLWString& wstr);
+
+	BOOL			evaluateFloat();
 
 	// line history support:
 	void			setEnableLineHistory( BOOL enabled ) { mHaveHistory = enabled; } // switches line history on or off 
@@ -248,6 +291,7 @@ private:
 	void			addChar(const llwchar c);
 	void			setCursorAtLocalPos(S32 local_mouse_x);
 	S32				findPixelNearestPos(S32 cursor_offset = 0) const;
+	S32				calcCursorPos(S32 mouse_x);
 	BOOL			handleSpecialKey(KEY key, MASK mask);
 	BOOL			handleSelectionKey(KEY key, MASK mask);
 	BOOL			handleControlKey(KEY key, MASK mask);
@@ -256,6 +300,10 @@ private:
 	
 	// Draw the background image depending on enabled/focused state.
 	void			drawBackground();
+
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	void			onSpellCheckSettingsChange();
+// [/SL:KB]
 
 	//
 	// private data members
@@ -309,6 +357,14 @@ protected:
 	S32			mLastSelectionEnd;
 
 	LLTextValidate::validate_func_t mPrevalidateFunc;
+	LLTextValidate::validate_func_t mPrevalidateInputFunc;
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+	BOOL		mSpellCheck;
+	BOOL		mNeedsSpellCheck;
+	LLTimer		mSpellCheckTimer;
+	std::list<std::pair<U32, U32> > mMisspellRanges;
+	std::vector<std::string>		mSuggestionList;
+// [/SL:KB]
 
 	LLFrameTimer mKeystrokeTimer;
 	LLTimer		mTripleClickTimer;
@@ -327,6 +383,7 @@ protected:
 	BOOL		mDrawAsterixes;
 
 	BOOL		mSelectAllonFocusReceived;
+	BOOL		mSelectAllonCommit;
 	BOOL		mPassDelete;
 
 	BOOL		mReadOnly;
@@ -336,7 +393,7 @@ protected:
 	std::vector<S32> mPreeditPositions;
 	LLPreeditor::standouts_t mPreeditStandouts;
 
-	LLHandle<LLView> mContextMenuHandle;
+	LLHandle<LLContextMenu> mContextMenuHandle;
 
 private:
 	// Instances that by default point to the statics but can be overidden in XML.

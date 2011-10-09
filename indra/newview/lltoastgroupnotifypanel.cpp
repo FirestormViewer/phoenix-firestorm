@@ -45,9 +45,12 @@
 
 #include "llglheaders.h"
 #include "llagent.h"
+#include "llslurl.h"
 #include "llavatariconctrl.h"
 #include "llfloaterinventory.h"
 #include "llinventorytype.h"
+
+#include "llgroupactions.h"
 
 const S32 LLToastGroupNotifyPanel::DEFAULT_MESSAGE_MAX_LINE_COUNT	= 7;
 
@@ -55,13 +58,15 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(LLNotificationPtr& notification
 :	LLToastPanel(notification),
 	mInventoryOffer(NULL)
 {
-	buildFromFile( "panel_group_notify.xml");
+	buildFromFile("panel_group_notify.xml");
 	const LLSD& payload = notification->getPayload();
 	LLGroupData groupData;
 	if (!gAgent.getGroupData(payload["group_id"].asUUID(),groupData))
 	{
 		llwarns << "Group notice for unknown group: " << payload["group_id"].asUUID() << llendl;
 	}
+	
+	mGroupID = payload["group_id"].asUUID();
 
 	//group icon
 	LLIconCtrl* pGroupIcon = getChild<LLIconCtrl>("group_icon", TRUE);
@@ -73,24 +78,30 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(LLNotificationPtr& notification
 	{
 		from_name = LLCacheName::buildUsername(from_name);
 	}
-	std::stringstream from;
-	from << from_name << "/" << groupData.mName;
+	std::string from;
+	LLStringUtil::format_map_t args;
+	args["[SENDER]"] = from_name;
+	args["[GROUPNAME]"] = LLSLURL("group", groupData.mID, "inspect").getSLURLString();
+	from = LLTrans::getString("GroupNotifySender", args);
+	
 	LLTextBox* pTitleText = getChild<LLTextBox>("title");
-	pTitleText->setValue(from.str());
+	pTitleText->setValue(from);
+	pTitleText->setToolTip(from);
 
 	//message subject
 	const std::string& subject = payload["subject"].asString();
 	//message body
 	const std::string& message = payload["message"].asString();
 
-	std::string timeStr = "["+LLTrans::getString("UTCTimeWeek")+"],["
-							+LLTrans::getString("UTCTimeDay")+"] ["
-							+LLTrans::getString("UTCTimeMth")+"] ["
-							+LLTrans::getString("UTCTimeYr")+"] ["
-							+LLTrans::getString("UTCTimeHr")+"]:["
-							+LLTrans::getString("UTCTimeMin")+"]:["
-							+LLTrans::getString("UTCTimeSec")+"] ["
-							+LLTrans::getString("UTCTimeTimezone")+"]";
+	std::string timeStr = "["+LLTrans::getString("TimeWeek")+"], ["
+							+LLTrans::getString("TimeMth")+"] ["
+							+LLTrans::getString("TimeDay")+"] ["
+							+LLTrans::getString("TimeYear")+"] ["
+							+LLTrans::getString("TimeHour12")+"]:["
+							+LLTrans::getString("TimeMin")+"]:["
+							+LLTrans::getString("TimeSec")+"] ["
+							+LLTrans::getString("TimeAMPM")+"] ["
+							+LLTrans::getString("TimeTimezone")+"]";
 	const LLDate timeStamp = notification->getDate();
 	LLDate notice_date = timeStamp.notNull() ? timeStamp : LLDate::now();
 	LLSD substitution;
@@ -136,11 +147,23 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(LLNotificationPtr& notification
 												LLInventoryType::IT_TEXTURE);
 		pAttachIcon->setValue(attachIconImg->getName());
 	}
+	else
+	{
+		LLRect message_rect = pMessageText->getRect();
+		message_rect.mBottom -= 20;
+		pMessageText->reshape(message_rect.getWidth(), message_rect.getHeight());
+		pMessageText->setRect(message_rect);
+	}
 
 	//ok button
 	LLButton* pOkBtn = getChild<LLButton>("btn_ok");
 	pOkBtn->setClickedCallback((boost::bind(&LLToastGroupNotifyPanel::onClickOk, this)));
 	setDefaultBtn(pOkBtn);
+
+	//group notices button
+	LLButton* pOkNotices = getChild<LLButton>("btn_notices");
+	if (pOkNotices)
+		pOkNotices->setClickedCallback((boost::bind(&LLToastGroupNotifyPanel::onClickGroupNotices, this)));
 
 	S32 maxLinesCount;
 	std::istringstream ss( getString("message_max_lines_count") );
@@ -175,6 +198,11 @@ void LLToastGroupNotifyPanel::onClickOk()
 	LLSD response = mNotification->getResponseTemplate();
 	mNotification->respond(response);
 	close();
+}
+
+void LLToastGroupNotifyPanel::onClickGroupNotices()
+{
+	LLGroupActions::show(mGroupID, "group_notices_tab_panel");
 }
 
 void LLToastGroupNotifyPanel::onClickAttachment()

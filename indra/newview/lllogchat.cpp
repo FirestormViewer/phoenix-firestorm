@@ -32,6 +32,7 @@
 #include "lltrans.h"
 #include "llviewercontrol.h"
 
+#include "lldiriterator.h"
 #include "llinstantmessage.h"
 #include "llsingleton.h" // for LLSingleton
 
@@ -41,6 +42,7 @@
 #include <boost/regex/v4/match_results.hpp>
 
 #if LL_MSVC
+#pragma warning(push)  
 // disable warning about boost::lexical_cast unreachable code
 // when it fails to parse the string
 #pragma warning (disable:4702)
@@ -83,6 +85,7 @@ const static std::string MULTI_LINE_PREFIX(" ");
  * Note: "You" was used as an avatar names in viewers of previous versions
  */
 const static boost::regex TIMESTAMP_AND_STUFF("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}\\]\\s+)?(.*)$");
+const static boost::regex TIMESTAMP_AND_STUFF_SEC("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}:\\d{2}\\]\\s+)?(.*)$");
 
 /**
  *  Regular expression suitable to match names like
@@ -106,6 +109,8 @@ const static std::string NAME_TEXT_DIVIDER(": ");
 // is used for timestamps adjusting
 const static char* DATE_FORMAT("%Y/%m/%d %H:%M");
 const static char* TIME_FORMAT("%H:%M");
+const static char* DATE_FORMAT_SEC("%Y/%m/%d %H:%M:%S");
+const static char* TIME_FORMAT_SEC("%H:%M:%S");
 
 const static int IDX_TIMESTAMP = 1;
 const static int IDX_STUFF = 2;
@@ -121,9 +126,18 @@ public:
 	LLLogChatTimeScanner()
 	{
 		// Note, date/time facets will be destroyed by string streams
-		mDateStream.imbue(std::locale(mDateStream.getloc(), new date_input_facet(DATE_FORMAT)));
-		mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_facet(TIME_FORMAT)));
-		mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_input_facet(DATE_FORMAT)));
+		if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+		{
+			mDateStream.imbue(std::locale(mDateStream.getloc(), new date_input_facet(DATE_FORMAT_SEC)));
+			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_facet(TIME_FORMAT_SEC)));
+			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_input_facet(DATE_FORMAT_SEC)));
+		}
+		else
+		{
+			mDateStream.imbue(std::locale(mDateStream.getloc(), new date_input_facet(DATE_FORMAT)));
+			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_facet(TIME_FORMAT)));
+			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_input_facet(DATE_FORMAT)));
+		}
 	}
 
 	date getTodayPacificDate()
@@ -229,7 +243,7 @@ std::string LLLogChat::makeLogFileName(std::string filename)
 
 std::string LLLogChat::cleanFileName(std::string filename)
 {
-	std::string invalidChars = "\"\'\\/?*:.<>|";
+    std::string invalidChars = "\"\'\\/?*:.<>|[]{}~"; // Cannot match glob or illegal filename chars
 	std::string::size_type position = filename.find_first_of(invalidChars);
 	while (position != filename.npos)
 	{
@@ -255,11 +269,21 @@ std::string LLLogChat::timestamp(bool withdate)
 				  +LLTrans::getString ("TimeDay")+"] ["
 				  +LLTrans::getString ("TimeHour")+"]:["
 				  +LLTrans::getString ("TimeMin")+"]";
+		if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+		{
+			timeStr += ":["
+				  +LLTrans::getString ("TimeSec")+"]";
+		}
 	}
 	else
 	{
 		timeStr = "[" + LLTrans::getString("TimeHour") + "]:["
-			      + LLTrans::getString ("TimeMin")+"]";
+				  + LLTrans::getString ("TimeMin")+"]";
+		if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+		{
+			timeStr += ":["
+				  +LLTrans::getString ("TimeSec")+"]";
+		}
 	}
 
 	LLStringUtil::format (timeStr, substitution);
@@ -511,7 +535,14 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im)
 
 	//matching a timestamp
 	boost::match_results<std::string::const_iterator> matches;
-	if (!boost::regex_match(raw, matches, TIMESTAMP_AND_STUFF)) return false;
+	if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+	{
+		if (!boost::regex_match(raw, matches, TIMESTAMP_AND_STUFF_SEC)) return false;
+	}
+	else
+	{
+		if (!boost::regex_match(raw, matches, TIMESTAMP_AND_STUFF)) return false;
+	}
 	
 	bool has_timestamp = matches[IDX_TIMESTAMP].matched;
 	if (has_timestamp)
@@ -543,6 +574,18 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im)
 	
 	bool has_name = name_and_text[IDX_NAME].matched;
 	std::string name = name_and_text[IDX_NAME];
+
+	// Ansariel: Handle the case an IM was stored in nearby chat history
+	if (name == "IM:")
+	{
+		U32 divider_pos = stuff.find(NAME_TEXT_DIVIDER, 3);
+		if (divider_pos != std::string::npos && divider_pos < (stuff.length() - NAME_TEXT_DIVIDER.length()))
+		{
+			im[IM_FROM] = stuff.substr(0, divider_pos);
+			im[IM_TEXT] = stuff.substr(divider_pos + NAME_TEXT_DIVIDER.length());
+			return true;
+		}
+	}
 
 	//we don't need a name/text separator
 	if (has_name && name.length() && name[name.length()-1] == ':')
@@ -606,7 +649,8 @@ std::string LLLogChat::oldLogFileName(std::string filename)
 	//LL_INFOS("") << "Checking:" << directory << " for " << pattern << LL_ENDL;/* uncomment if you want to verify step, delete on commit */
 	std::vector<std::string> allfiles;
 
-    while (gDirUtilp->getNextFileInDir(directory, pattern, scanResult))
+	LLDirIterator iter(directory, pattern);
+	while (iter.next(scanResult))
     {
 		//LL_INFOS("") << "Found   :" << scanResult << LL_ENDL;
         allfiles.push_back(scanResult);

@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border="true"
+ follows="left|top|right|bottom"
+ height="408"
+ label="Цвета"
+ layout="topleft"
+ left="102"
+ name="colors_panel"
+ top="1"
+ width="517">
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="15"
+   layout="topleft"
+   left="30"
+   name="effects_color_textbox"
+   top_pad="10"
+   width="200">
+    Выбор эффектов (Частицы):
+  </text>
+  <color_swatch
+	 can_apply_immediately="true"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     layout="topleft"
+     left="40"
+     name="effect_color_swatch"
+     tool_tip="Нажмите, чтобы открыть палитру цветов"
+     width="44">
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="EffectColor" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="EffectColor" />
+    <color_swatch.caption_text
+    height="0" />
+  </color_swatch>
+  <text
+   follows="left|top"
+   layout="topleft"
+   left="30"
+   height="12"
+   name="font_colors"
+   top_pad="10"
+   width="120"
+   >
+    Цвет текста UI:
+  </text>
+  <color_swatch
+   can_apply_immediately="true"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="40"
+   name="user"
+   top_pad="10"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="UserChatColor" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="UserChatColor" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="text_box1"
+   top_delta="5"
+   width="95">
+    Мой текст
+  </text>
+  <color_swatch
+   can_apply_immediately="true"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="190"
+   name="agent"
+   top_pad="-15"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="AgentChatColor" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="AgentChatColor" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="text_box2"
+   top_delta="5"
+   width="95">
+    Других
+  </text>
+  <color_swatch
+   can_apply_immediately="true"
+   color="EmphasisColor_35"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   label_width="60"
+   layout="topleft"
+   left="360"
+   name="Objects"
+   top_pad="-15"
+   width="44">
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="ObjectChatColor" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="ObjectChatColor" />
+  </color_swatch>
+  <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="10"
+     layout="topleft"
+     left_pad="5"
+     mouse_opaque="false"
+     name="text_box3"
+     top_delta="5"
+     width="95">
+    Объектов
+  </text>
+  <color_swatch
+   can_apply_immediately="true"
+   color="LtGray"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   label_width="44"
+   layout="topleft"
+   left="40"
+   name="system"
+   top_pad="22"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="SystemChatColor" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="SystemChatColor" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="text_box4"
+   top_delta="5"
+   width="95">
+    Системы
+  </text>
+  <color_swatch
+   can_apply_immediately="true"
+   color="Red"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="190"
+   name="script_error"
+   top_pad="-15"
+   width="44">
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="ScriptErrorColor" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="ScriptErrorColor" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="text_box5"
+   top_delta="5"
+   width="95">
+    Ошибки
+  </text>
+  
+    <color_swatch
+   can_apply_immediately="true"
+   color="ChatNameColor"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   label_width="60"
+   layout="topleft"
+   left="360"
+   name="ChatNameColor"
+   top_pad="-15"
+   width="44">
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="ChatNameColor" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="ChatNameColor" />
+  </color_swatch>
+  <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="10"
+     layout="topleft"
+     left_pad="5"
+     mouse_opaque="false"
+     name="text_box3"
+     top_delta="5"
+     width="95">
+    Заголовки чатов
+  </text>
+  
+  <color_swatch
+   can_apply_immediately="true"
+   color="LtYellow"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="40"
+   name="owner"
+   top_pad="22"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="llOwnerSayChatColor" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="llOwnerSayChatColor" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="text_box7"
+   top_delta="5"
+   width="95">
+    Владельцев
+  </text>
+  <color_swatch
+   can_apply_immediately="true"
+   color="HTMLLinkColor"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="190"
+   name="links"
+   top_pad="-15"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="HTMLLinkColor" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="HTMLLinkColor" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="text_box9"
+   top_delta="5"
+   width="95">
+    Ссылки
+  </text>
+   
+   
+     <color_swatch
+   can_apply_immediately="true"
+   color="DialogColorBg"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="40"
+   name="DialogColorBg"
+   top_pad="22"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="ScriptDialog" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="ScriptDialog" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="ScriptDialogBgLabel"
+   top_delta="5"
+   width="95">
+    Скрипты Bg
+  </text>
+  <color_swatch
+   can_apply_immediately="true"
+   color="DialogColorFg"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="190"
+   name="ScriptDialogFb"
+   top_pad="-15"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="ScriptDialogFg" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="ScriptDialogFg" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="ScriptDialogFgLabel"
+   top_delta="5"
+   width="95">
+    Скрипты Fg
+  </text>
+  
+  <text
+   follows="left|top"
+   layout="topleft"
+   left="30"
+   height="12"
+   name="bubble_chat"
+   top_pad="25"
+   width="450"
+   >
+    Статус / Чат пузырьками / Прозрачность консоли:
+  </text>
+  <color_swatch
+   can_apply_immediately="true"
+   color="0 0 0 0.5"
+   control_name="NameTagBackground"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left_delta="10"
+   top_pad="10"
+   name="background"
+   tool_tip="Выберите цвет статуса"
+   width="44">
+   <color_swatch.init_callback
+    function="Pref.getUIColor"
+    parameter="NameTagBackground" />
+   <color_swatch.commit_callback
+    function="Pref.applyUIColor"
+    parameter="NameTagBackground" />
+  </color_swatch>
+  <slider
+   control_name="ChatBubbleOpacity"
+   follows="left|top"
+   height="16"
+   increment="0.05"
+   initial_value="1"
+   label="Прозрачность:"
+   layout="topleft"
+   left_pad="10"
+   label_width="90"
+   name="bubble_chat_opacity"
+   tool_tip="Выберите прозрачность статусов"
+   top_delta = "6"
+   width="398" />
+  <text
+   follows="left|top"
+   layout="topleft"
+   left="50"
+   height="12"
+   name="floater_opacity"
+   top_pad="15"
+   width="220"
+   >
+    Прозрачность всплывающих окон:
+  </text>
+ <slider
+   can_edit_text="false"
+   control_name="ActiveFloaterTransparency"
+   decimal_digits="2"
+   follows="left|top"
+   height="16"
+   increment="0.01"
+   initial_value="1.0"
+   layout="topleft"
+   label_width="115"
+   label="Активное:"
+   left="70"
+   max_val="1.00"
+   min_val="0.00"
+   name="active"
+   show_text="true"
+   top_pad="5"
+   width="415" />
+  <slider
+   can_edit_text="false"
+   control_name="InactiveFloaterTransparency"
+   decimal_digits="2"
+   follows="left|top"
+   height="16"
+   increment="0.01"
+   initial_value="0.5"
+   layout="topleft"
+   label_width="115"
+   label="Не активное:"
+   left="70"
+   max_val="1.00"
+   min_val="0.00"
+   name="inactive"
+   show_text="true"
+   top_pad="5"
+   width="415" />
+
+<!-- ## Zi: Pie menu -->
+  <check_box
+   control_name="OverridePieColors"
+   follows="left|top"
+   layout="topleft"
+   left="30"
+   height="12"
+   name="override_pie_color_checkbox"
+   top_pad="15"
+   width="450"
+   label="Цвет, фон и прозрачность меню (Pie Menu) :" />
+  <color_swatch
+   can_apply_immediately="true"
+   color="PieMenuBgColorOverride"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left_delta="10"
+   top_pad="10"
+   name="pie_bg_color_override"
+   tool_tip="Choose pie menu background color"
+   width="44">
+  <color_swatch.init_callback
+   function="Pref.getUIColor"
+   parameter="PieMenuBgColorOverride" />
+  <color_swatch.commit_callback
+   function="Pref.applyUIColor"
+   parameter="PieMenuBgColorOverride" />
+  </color_swatch>
+  <color_swatch
+   can_apply_immediately="true"
+   color="PieMenuSelectedColorOverride"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left_pad="4"
+   top_delta="0"
+   name="pie_selected_color_override"
+   tool_tip="Choose pie menu selection color"
+   width="44">
+  <color_swatch.init_callback
+   function="Pref.getUIColor"
+   parameter="PieMenuSelectedColorOverride" />
+  <color_swatch.commit_callback
+   function="Pref.applyUIColor"
+   parameter="PieMenuSelectedColorOverride" />
+  </color_swatch>
+  <slider
+   control_name="PieMenuOpacity"
+   follows="left|top"
+   height="16"
+   increment="0.05"
+   initial_value="0.0"
+   label="Прозрачность:"
+   layout="topleft"
+   left_pad="10"
+   label_width="90"
+   max_value="1.0"
+   min_value="0.0"
+   name="pie_menu_opacity"
+   tool_tip="Выберите прозрачность меню"
+   top_delta = "0"
+   width="350" />
+  <slider
+   control_name="PieMenuFade"
+   follows="left|top"
+   height="16"
+   increment="0.05"
+   initial_value="0.0"
+   label="Выведение:"
+   layout="topleft"
+   label_width="90"
+   max_value="1.0"
+   min_value="0.0"
+   name="pie_menu_fade_out"
+   tool_tip="Выберите приглушенность границ"
+   top_pad = "5"
+   width="350" />
+<!-- ## Zi: Pie menu -->
+
+</panel>

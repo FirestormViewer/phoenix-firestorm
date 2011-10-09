@@ -34,6 +34,14 @@
 	 name="RegisterDateFormat">
 	 [REG_DATE] ([AGE])
 	</string>
+	    <string
+      name="name_text_args">
+      [NAME]
+    </string>
+    <string
+      name="display_name_text_args">
+      [DISPLAY_NAME]
+    </string>
    <accordion
     left="0"
     top="0"
@@ -170,25 +178,26 @@
              left="4"
              name="About_sl_text"
              text_color="White"
-             top_pad="0"
+             top_pad="-7"
              value="About:"
-             width="100" />
+             width="40" />
               <expandable_text
-               follows="left|top|right"
-               height="170"
+              allow_scroll="true"
+			  follows="top|left|right"
+               height="146"
                layout="topleft"
-               left="5"
+               left="3"
                textbox.max_length="512"
                textbox.show_context_menu="true"
                name="sl_description_edit"
                top_pad="0"
+			   width="290"
                translate="false"
-               width="290"
                expanded_bg_visible="true"
                expanded_bg_color="SL-Background_Light">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean viverra orci et justo sagittis aliquet.Nullamma lesuada mauris sit amet ipsum. adipiscing elit. Ae nean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum.
               </expandable_text>
-            <!-- text
+            <text
              follows="left|top"
              font.style="BOLD"
              height="13"
@@ -198,22 +207,52 @@
              text_color="White"
              top_pad="3"
              value="Groups:"
-             width="290" / -->
-            <expandable_text
-            follows="all"
-            height="150"
-            layout="topleft"
-            left="5"
-            name="sl_groups"
-            textbox.max_length="512"
-            textbox.show_context_menu="true"
-            top_pad="0"
-            translate="false"
-            width="290"
-            expanded_bg_visible="true"
-            expanded_bg_color="SL-Background_Light">
-              Lorem ipsum dolor sit amet, consectetur adlkjpiscing elit moose moose. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet. adipiscing elit. Aenean rigviverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet sorbet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. Aenean viverra tulip moosetop. Slan de heelish marfnik tooplod. Sum sum to whop de wompam booster copm.
-            </expandable_text>     
+             width="290" />
+			<group_list
+             name="group_list"
+			 allow_scroll="true"
+             left_delta="2"
+             top_delta="15"
+             right="-20"
+             height="89"
+			 for_agent="true"
+			 allow_select="true"
+             follows="all"
+             layout="topleft" />
+			<text
+             follows="left|top"
+             font.style="BOLD"
+             height="13"
+             layout="topleft"
+             left="4"
+             name="Key"
+             text_color="White"
+             top_pad="8"
+             value="Key:"
+             width="40" />
+			<text_editor
+             name="user_key"
+             label="Your Key:"
+             left="5"
+             top_pad="2"
+             right="-86"
+             height="20"
+             h_pad="0"
+             v_pad="4"
+             bg_visible="true"
+             enabled="false"
+             allow_scroll="false"
+             initial_value="(loading ...)"
+             follows="top|left|right"
+             layout="topleft" />
+            <button
+             name="copy_uri"
+             left_pad="4"
+             right="-4"
+             height="20"
+             label="Copy URI"
+             enabled="false"
+             follows="top|right" />			 
           </panel>        
         </scroll_container>
       </accordion_tab>
@@ -265,8 +304,10 @@
              value="About:"
              width="290" />
               <expandable_text
-               follows="left|top|right"
+			   allow_scroll="true"
+               follows="top|left|right"
                height="220"
+			   width="290"
                layout="topleft"
                left="5"
                top_pad="-3"
@@ -274,7 +315,6 @@
                textbox.show_context_menu="true"
                name="fl_description_edit"
                translate="false"
-               width="290"
                expanded_bg_visible="true"
                expanded_bg_color="SL-Background_Light">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean viverra orci et justo sagittis aliquet.Nullamma lesuada mauris sit amet ipsum. adipiscing elit. Ae nean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis aliquet. Nullam malesuada mauris sit amet ipsum.
@@ -311,7 +351,7 @@
      height="23"
      layout="topleft"
      left="0"
-     top_pad="1"
+     top_pad="4"
      name="profile_me_buttons_panel"
      visible="false"
      width="315">
@@ -323,6 +363,6 @@
          label="Edit Profile"
          name="edit_profile_btn"
          tool_tip="Edit your personal information"
-         width="152" />
+         width="90" />
  	</panel>
 </panel>

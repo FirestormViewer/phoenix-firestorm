@@ -43,8 +43,16 @@
 #include "llwindow.h"
 #include <boost/bind.hpp>
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+#include "llhunspell.h"
+// [/SL:KB]
+
 const F32	CURSOR_FLASH_DELAY = 1.0f;  // in seconds
 const S32	CURSOR_THICKNESS = 2;
+
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-08 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+const F32 LLTextBase::SPELLCHECK_DELAY = 0.5f;	// Delay between the last keypress and showing spell checking feedback for the word the cursor is on
+// [/SL:KB]
 
 LLTextBase::line_info::line_info(S32 index_start, S32 index_end, LLRect rect, S32 line_num) 
 :	mDocIndexStart(index_start), 
@@ -155,8 +163,12 @@ LLTextBase::Params::Params()
 	plain_text("plain_text",false),
 	track_end("track_end", false),
 	read_only("read_only", false),
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	spellcheck("spellcheck", false),
+// [/SL:KB]
 	v_pad("v_pad", 0),
 	h_pad("h_pad", 0),
+	clip("clip", true),
 	clip_partial("clip_partial", true),
 	line_spacing("line_spacing"),
 	max_text_length("max_length", 255),
@@ -180,6 +192,10 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 	mFontShadow(p.font_shadow),
 	mPopupMenu(NULL),
 	mReadOnly(p.read_only),
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	mSpellCheck(p.spellcheck),
+	mNeedsSpellCheck( FALSE ),
+// [/SL:KB]
 	mCursorColor(p.cursor_color),
 	mFgColor(p.text_color),
 	mBorderVisible( p.border_visible ),
@@ -199,6 +215,7 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 	mVAlign(p.font_valign),
 	mLineSpacingMult(p.line_spacing.multiple),
 	mLineSpacingPixels(p.line_spacing.pixels),
+	mClip(p.clip),
 	mClipPartial(p.clip_partial && !p.allow_scroll),
 	mTrackEnd( p.track_end ),
 	mScrollIndex(-1),
@@ -233,6 +250,12 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 	view_params.name = "text_contents";
 	view_params.rect =  LLRect(0, 500, 500, 0);
 	view_params.mouse_opaque = false;
+
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	if (mSpellCheck)
+		LLHunspellWrapper::setSettingsChangeCallback(boost::bind(&LLTextBase::onSpellCheckSettingsChange, this));
+	mSpellCheckTimer.reset();
+// [/SL:KB]
 
 	mDocumentView = LLUICtrlFactory::create<LLView>(view_params);
 	if (mScroller)
@@ -278,7 +301,7 @@ bool LLTextBase::truncate()
 	if (getLength() >= S32(mMaxTextByteLength / 4))
 	{	
 		// Have to check actual byte size
-        LLWString text(getWText());
+		LLWString text(getWText());
 		S32 utf8_byte_size = wstring_utf8_length(text);
 		if ( utf8_byte_size > mMaxTextByteLength )
 		{
@@ -334,7 +357,7 @@ void LLTextBase::drawSelectionBackground()
 
 		// binary search for line that starts before top of visible buffer
 		line_list_t::const_iterator line_iter = std::lower_bound(mLineInfoList.begin(), mLineInfoList.end(), content_display_rect.mTop, compare_bottom());
-		line_list_t::const_iterator end_iter = std::lower_bound(mLineInfoList.begin(), mLineInfoList.end(), content_display_rect.mBottom, compare_top());
+		line_list_t::const_iterator end_iter = std::upper_bound(mLineInfoList.begin(), mLineInfoList.end(), content_display_rect.mBottom, compare_top());
 
 		bool done = false;
 
@@ -512,7 +535,6 @@ void LLTextBase::drawText()
 		selection_right = llmax( mSelectionStart, mSelectionEnd );
 	}
 
-	LLRect scrolled_view_rect = getVisibleDocumentRect();
 	std::pair<S32, S32> line_range = getVisibleLines(mClipPartial);
 	S32 first_line = line_range.first;
 	S32 last_line = line_range.second;
@@ -529,8 +551,78 @@ void LLTextBase::drawText()
 		return;
 	}
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	// Perform spell check if needed
+	if ( (useSpellCheck()) && (getWText().length() > 2) )
+	{
+		S32 idxStart = getLineStart(llmax(first_line - 1, 0)); static S32 idxPrevStart = -1;
+		S32 idxEnd = getLineEnd(llmin(last_line + 1, (S32)mLineInfoList.size() - 1)); static S32 idxPrevEnd = -1;
+
+		if ( (mNeedsSpellCheck) || (idxStart != idxPrevStart) || (idxEnd != idxPrevEnd) )
+		{
+			const LLWString& wstrText = getWText(); 
+			mMisspellRanges.clear();
+
+			segment_set_t::iterator itSegment = getSegIterContaining(idxStart); LLTextSegmentPtr pSegment;
+			while ( (mSegments.end() != itSegment) && (pSegment = *itSegment) && (pSegment->getStart() < idxEnd) )
+			{
+				if (!pSegment->canSpellCheck())
+				{
+					++itSegment;
+					continue;
+				}
+
+				// Combine adjoining text segments into one (newly typed text will be one letter per text segment)
+				U32 idxSegmentStart = pSegment->getStart(), idxSegmentEnd = llmin(pSegment->getEnd(), idxEnd);
+				while ( (mSegments.end() != ++itSegment) && 
+					    (pSegment = *itSegment) && (pSegment->canSpellCheck()) && (pSegment->getStart() < idxEnd) )
+				{
+					idxSegmentEnd = llmin(pSegment->getEnd(), idxEnd);
+				}
+
+				// Find the start of the first word
+				U32 idxWordStart = idxSegmentStart, idxWordEnd = -1;
+				while ( (idxWordStart < wstrText.length()) && (!LLStringOps::isAlpha(wstrText[idxWordStart])) )
+					idxWordStart++;
+				// Iterate over all words in the text block and check them one by one
+				while (idxWordStart < idxSegmentEnd)
+				{
+					// Find the end of the current word (special case handling for "'" when it's used as a contraction)
+					idxWordEnd = idxWordStart + 1;
+					while ( (idxWordEnd < idxSegmentEnd) && 
+							((LLWStringUtil::isPartOfWord(wstrText[idxWordEnd])) ||
+								((L'\'' == wstrText[idxWordEnd]) && 
+								(LLStringOps::isAlnum(wstrText[idxWordEnd - 1])) && (LLStringOps::isAlnum(wstrText[idxWordEnd + 1])))) )
+					{
+						idxWordEnd++;
+					}
+					if (idxWordEnd > idxSegmentEnd)
+						break;
+
+					// Don't process words shorter than 3 characters
+					std::string strWord = wstring_to_utf8str(wstrText.substr(idxWordStart, idxWordEnd - idxWordStart));
+					if ( (strWord.length() >= 3) && (!LLHunspellWrapper::instance().checkSpelling(strWord)) )
+						mMisspellRanges.push_back(std::pair<U32, U32>(idxWordStart, idxWordEnd));
+
+					// Find the start of the next word
+					idxWordStart = idxWordEnd + 1;
+					while ( (idxWordStart < idxSegmentEnd) && (!LLWStringUtil::isPartOfWord(wstrText[idxWordStart])) )
+						idxWordStart++;
+				}
+			}
+
+			idxPrevStart = idxStart;
+			idxPrevEnd = idxEnd;
+			mNeedsSpellCheck = FALSE;
+		}
+	}
+// [/SL:KB]
+
 	LLTextSegmentPtr cur_segment = *seg_iter;
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	std::list<std::pair<U32, U32> >::const_iterator itMisspell = mMisspellRanges.begin();
+// [/SL:KB]
 	for (S32 cur_line = first_line; cur_line < last_line; cur_line++)
 	{
 		S32 next_line = cur_line + 1;
@@ -545,10 +637,9 @@ void LLTextBase::drawText()
 			line_end = next_start;
 		}
 
-		LLRect text_rect(line.mRect.mLeft + mVisibleTextRect.mLeft - scrolled_view_rect.mLeft,
-						line.mRect.mTop - scrolled_view_rect.mBottom + mVisibleTextRect.mBottom,
-						llmin(mDocumentView->getRect().getWidth(), line.mRect.mRight) - scrolled_view_rect.mLeft,
-						line.mRect.mBottom - scrolled_view_rect.mBottom + mVisibleTextRect.mBottom);
+		LLRect text_rect(line.mRect);
+		text_rect.mRight = mDocumentView->getRect().getWidth(); // clamp right edge to document extents
+		text_rect.translate(mDocumentView->getRect().mLeft, mDocumentView->getRect().mBottom); // adjust by scroll position
 
 		// draw a single line of text
 		S32 seg_start = line_start;
@@ -577,6 +668,29 @@ void LLTextBase::drawText()
 				// so shrink text rect to force ellipses
 				text_rect.mRight -= 2;
 			}
+
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+			// Draw squiggly lines under any (visible) misspelled words
+			for (; (itMisspell != mMisspellRanges.end()) && ((itMisspell->first < line_end) && (itMisspell->second > line_start)); ++itMisspell)
+			{
+				// Skip the current word if the user is still busy editing it
+				if ( (!mSpellCheckTimer.hasExpired()) && (itMisspell->first <= (U32)mCursorPos) && (itMisspell->second >= (U32)mCursorPos) )
+ 					continue;
+
+				S32 pxStart, pxEnd, pxTemp;
+				cur_segment->getDimensions(seg_start - cur_segment->getStart(), itMisspell->first - seg_start + 1, pxStart, pxTemp);
+				cur_segment->getDimensions(itMisspell->first - seg_start + 1, itMisspell->second - itMisspell->first, pxEnd, pxTemp);
+				pxEnd += pxStart;
+
+				gGL.color4ub(255, 0, 0, 200);
+				while (pxStart < pxEnd)
+				{
+					gl_line_2d(pxStart, text_rect.mBottom - 2, pxStart + 3, text_rect.mBottom + 1);
+					gl_line_2d(pxStart + 3, text_rect.mBottom + 1, pxStart + 6, text_rect.mBottom - 2);
+					pxStart += 6;
+				}
+			}
+// [/SL:KB]
 
 			text_rect.mLeft = (S32)(cur_segment->draw(seg_start - cur_segment->getStart(), clipped_end, selection_left, selection_right, text_rect));
 
@@ -654,7 +768,7 @@ S32 LLTextBase::insertStringNoUndo(S32 pos, const LLWString &wstr, LLTextBase::s
 	}
 
 	text.insert(pos, wstr);
-    getViewModel()->setDisplay(text);
+	getViewModel()->setDisplay(text);
 
 	if ( truncate() )
 	{
@@ -669,7 +783,7 @@ S32 LLTextBase::insertStringNoUndo(S32 pos, const LLWString &wstr, LLTextBase::s
 
 S32 LLTextBase::removeStringNoUndo(S32 pos, S32 length)
 {
-    LLWString text(getWText());
+	LLWString text(getWText());
 	segment_set_t::iterator seg_iter = getSegIterContaining(pos);
 	while(seg_iter != mSegments.end())
 	{
@@ -716,7 +830,7 @@ S32 LLTextBase::removeStringNoUndo(S32 pos, S32 length)
 	}
 
 	text.erase(pos, length);
-    getViewModel()->setDisplay(text);
+	getViewModel()->setDisplay(text);
 
 	// recreate default segment in case we erased everything
 	createDefaultSegment();
@@ -733,9 +847,9 @@ S32 LLTextBase::overwriteCharNoUndo(S32 pos, llwchar wc)
 	{
 		return 0;
 	}
-    LLWString text(getWText());
+	LLWString text(getWText());
 	text[pos] = wc;
-    getViewModel()->setDisplay(text);
+	getViewModel()->setDisplay(text);
 
 	onValueChange(pos, pos + 1);
 	needsReflow(pos);
@@ -856,7 +970,7 @@ BOOL LLTextBase::handleMouseUp(S32 x, S32 y, MASK mask)
 		// Did we just click on a link?
 		if (mURLClickSignal
 			&& cur_segment->getStyle()
-		    && cur_segment->getStyle()->isLink())
+			&& cur_segment->getStyle()->isLink())
 		{
 			// *TODO: send URL here?
 			(*mURLClickSignal)(this, LLSD() );
@@ -993,14 +1107,28 @@ void LLTextBase::draw()
 		updateScrollFromCursor();
 	}
 
-	LLRect doc_rect;
+	LLRect text_rect;
 	if (mScroller)
 	{
-		mScroller->localRectToOtherView(mScroller->getContentWindowRect(), &doc_rect, this);
+		mScroller->localRectToOtherView(mScroller->getContentWindowRect(), &text_rect, this);
 	}
 	else
 	{
-		doc_rect = getLocalRect();
+		LLRect visible_lines_rect;
+		std::pair<S32, S32> line_range = getVisibleLines(mClipPartial);
+		for (S32 i = line_range.first; i < line_range.second; i++)
+		{
+			if (visible_lines_rect.isEmpty())
+			{
+				visible_lines_rect = mLineInfoList[i].mRect;
+			}
+			else
+			{
+				visible_lines_rect.unionWith(mLineInfoList[i].mRect);
+			}
+		}
+		text_rect = visible_lines_rect;
+		text_rect.translate(mDocumentView->getRect().mLeft, mDocumentView->getRect().mBottom);
 	}
 
 	if (mBGVisible)
@@ -1010,28 +1138,37 @@ void LLTextBase::draw()
 		LLRect bg_rect = mVisibleTextRect;
 		if (mScroller)
 		{
-			bg_rect.intersectWith(doc_rect);
+			bg_rect.intersectWith(text_rect);
 		}
 		LLColor4 bg_color = mReadOnly 
 							? mReadOnlyBgColor.get()
 							: hasFocus() 
 								? mFocusBgColor.get() 
 								: mWriteableBgColor.get();
-		gl_rect_2d(doc_rect, bg_color % alpha, TRUE);
+		gl_rect_2d(text_rect, bg_color % alpha, TRUE);
 	}
 
-	// draw document view
-	LLUICtrl::draw();
-
-	{
-		// only clip if we support scrolling...
-		// since convention is that text boxes never vertically truncate their contents
-		// regardless of rect bounds
-		LLLocalClipRect clip(doc_rect, mScroller != NULL);
+	bool should_clip = mClip || mScroller != NULL;
+	{ LLLocalClipRect clip(text_rect, should_clip);
+ 
+		// draw document view
+		if (mScroller)
+		{
+			drawChild(mScroller);
+		}
+		else
+		{
+			drawChild(mDocumentView);
+		}
+ 
 		drawSelectionBackground();
 		drawText();
 		drawCursor();
 	}
+ 
+	mDocumentView->setVisible(FALSE);
+	LLUICtrl::draw();
+	mDocumentView->setVisible(TRUE);
 }
 
 
@@ -1080,6 +1217,18 @@ void LLTextBase::deselect()
 	mIsSelecting = FALSE;
 }
 
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+bool LLTextBase::useSpellCheck() const
+{
+	return (LLHunspellWrapper::useSpellCheck()) && (!mReadOnly) && (mSpellCheck);
+}
+
+void LLTextBase::onSpellCheckSettingsChange()
+{
+	// Recheck the spelling on every change
+	mNeedsSpellCheck = TRUE;
+}
+// [/SL:KB]
 
 // Sets the scrollbar from the cursor position
 void LLTextBase::updateScrollFromCursor()
@@ -1095,8 +1244,7 @@ void LLTextBase::updateScrollFromCursor()
 
 	// scroll so that the cursor is at the top of the page
 	LLRect scroller_doc_window = getVisibleDocumentRect();
-	LLRect cursor_rect_doc = getLocalRectFromDocIndex(mCursorPos);
-	cursor_rect_doc.translate(scroller_doc_window.mLeft, scroller_doc_window.mBottom);
+	LLRect cursor_rect_doc = getDocRectFromDocIndex(mCursorPos);
 	mScroller->scrollToShowRect(cursor_rect_doc, LLRect(0, scroller_doc_window.getHeight() - 5, scroller_doc_window.getWidth(), 5));
 }
 
@@ -1140,7 +1288,7 @@ void LLTextBase::reflow()
 	S32 first_line = getFirstVisibleLine();
 
 	// if scroll anchor not on first line, update it to first character of first line
-	if (!mLineInfoList.empty()
+	if ((first_line < mLineInfoList.size())
 		&&	(mScrollIndex <  mLineInfoList[first_line].mDocIndexStart
 			||	mScrollIndex >= mLineInfoList[first_line].mDocIndexEnd))
 	{
@@ -1342,9 +1490,9 @@ S32 LLTextBase::getLineStart( S32 line ) const
 {
 	S32 num_lines = getLineCount();
 	if (num_lines == 0)
-    {
+	{
 		return 0;
-    }
+	}
 
 	line = llclamp(line, 0, num_lines-1);
 	return mLineInfoList[line].mDocIndexStart;
@@ -1354,9 +1502,9 @@ S32 LLTextBase::getLineEnd( S32 line ) const
 {
 	S32 num_lines = getLineCount();
 	if (num_lines == 0)
-    {
+	{
 		return 0;
-    }
+	}
 
 	line = llclamp(line, 0, num_lines-1);
 	return mLineInfoList[line].mDocIndexEnd;
@@ -1415,7 +1563,7 @@ S32	LLTextBase::getFirstVisibleLine() const
 	return iter - mLineInfoList.begin();
 }
 
-std::pair<S32, S32>	LLTextBase::getVisibleLines(bool fully_visible) 
+std::pair<S32, S32>	LLTextBase::getVisibleLines(bool require_fully_visible) 
 {
 	LLRect visible_region = getVisibleDocumentRect();
 	line_list_t::const_iterator first_iter;
@@ -1424,14 +1572,14 @@ std::pair<S32, S32>	LLTextBase::getVisibleLines(bool fully_visible)
 	// make sure we have an up-to-date mLineInfoList
 	reflow();
 
-	if (fully_visible)
+	if (require_fully_visible)
 	{
 		first_iter = std::lower_bound(mLineInfoList.begin(), mLineInfoList.end(), visible_region.mTop, compare_top());
-		last_iter = std::lower_bound(mLineInfoList.begin(), mLineInfoList.end(), visible_region.mBottom, compare_bottom());
+		last_iter = std::upper_bound(mLineInfoList.begin(), mLineInfoList.end(), visible_region.mBottom, compare_bottom());
 	}
 	else
 	{
-		first_iter = std::lower_bound(mLineInfoList.begin(), mLineInfoList.end(), visible_region.mTop, compare_bottom());
+		first_iter = std::upper_bound(mLineInfoList.begin(), mLineInfoList.end(), visible_region.mTop, compare_bottom());
 		last_iter = std::lower_bound(mLineInfoList.begin(), mLineInfoList.end(), visible_region.mBottom, compare_top());
 	}
 	return std::pair<S32, S32>(first_iter - mLineInfoList.begin(), last_iter - mLineInfoList.begin());
@@ -1501,6 +1649,25 @@ LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index)
 	index_segment->setStart(index);
 	index_segment->setEnd(index);
 	segment_set_t::iterator it = mSegments.upper_bound(index_segment);
+
+	// FIXME: I tried to put this into its own function but ended up with errors,
+	//        so this is duplicated in the const version of this function for now. -Zi
+
+	// This goes reports one segment backwards if the cursor is inside a non-editable segment,
+	// but only if that segment is editable -Zi
+	LLTextSegment* seg=*it;
+	if(!seg->canEdit())
+	{
+		if(it!=mSegments.begin())
+		{
+			--it;
+
+			seg=*it;
+			if(!seg->canEdit())
+				++it;
+		}
+	}
+
 	return it;
 }
 
@@ -1516,6 +1683,25 @@ LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 i
 	index_segment->setStart(index);
 	index_segment->setEnd(index);
 	LLTextBase::segment_set_t::const_iterator it =  mSegments.upper_bound(index_segment);
+
+	// FIXME: I tried to put this into its own function but ended up with errors,
+	//        so this is duplicated in the non-const version of this function for now. -Zi
+
+	// This goes reports one segment backwards if the cursor is inside a non-editable segment,
+	// but only if that segment is editable -Zi
+	LLTextSegment* seg=*it;
+	if(!seg->canEdit())
+	{
+		if(it!=mSegments.begin())
+		{
+			--it;
+
+			seg=*it;
+			if(!seg->canEdit())
+				++it;
+		}
+	}
+
 	return it;
 }
 
@@ -1626,14 +1812,17 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 	style_params.fillFrom(getDefaultStyleParams());
 
 	S32 part = (S32)LLTextParser::WHOLE;
-	if(mParseHTML)
+	if (mParseHTML && !style_params.is_link) // Don't search for URLs inside a link segment (STORM-358).
 	{
 		S32 start=0,end=0;
 		LLUrlMatch match;
 		std::string text = new_text;
 		while ( LLUrlRegistry::instance().findUrl(text, match,
-		        boost::bind(&LLTextBase::replaceUrl, this, _1, _2, _3)) )
+				boost::bind(&LLTextBase::replaceUrl, this, _1, _2, _3)) )
 		{
+			
+			LLTextUtil::processUrlMatch(&match,this);
+
 			start = match.getStart();
 			end = match.getEnd()+1;
 
@@ -1655,10 +1844,6 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 				std::string subtext=text.substr(0,start);
 				appendAndHighlightText(subtext, part, style_params); 
 			}
-
-			// inserts an avatar icon preceding the Url if appropriate
-			LLTextUtil::processUrlMatch(&match,this);
-
 			// output the styled Url
 			appendAndHighlightTextImpl(match.getLabel(), part, link_params, match.underlineOnHoverOnly());
 			
@@ -1926,7 +2111,7 @@ void LLTextBase::setWText(const LLWString& text)
 
 const LLWString& LLTextBase::getWText() const
 {
-    return getViewModel()->getDisplay();
+	return getViewModel()->getDisplay();
 }
 
 // If round is true, if the position is on the right half of a character, the cursor
@@ -1937,9 +2122,12 @@ S32 LLTextBase::getDocIndexFromLocalCoord( S32 local_x, S32 local_y, BOOL round,
 {
 	// Figure out which line we're nearest to.
 	LLRect visible_region = getVisibleDocumentRect();
+	LLRect doc_rect = mDocumentView->getRect();
+
+	S32 doc_y = local_y - doc_rect.mBottom;
 	
 	// binary search for line that starts before local_y
-	line_list_t::const_iterator line_iter = std::lower_bound(mLineInfoList.begin(), mLineInfoList.end(), local_y - mVisibleTextRect.mBottom + visible_region.mBottom, compare_bottom());
+	line_list_t::const_iterator line_iter = std::lower_bound(mLineInfoList.begin(), mLineInfoList.end(), doc_y, compare_bottom());
 
 	if (line_iter == mLineInfoList.end())
 	{
@@ -1947,7 +2135,7 @@ S32 LLTextBase::getDocIndexFromLocalCoord( S32 local_x, S32 local_y, BOOL round,
 	}
 	
 	S32 pos = getLength();
-	S32 start_x = mVisibleTextRect.mLeft + line_iter->mRect.mLeft - visible_region.mLeft;
+	S32 start_x = line_iter->mRect.mLeft + doc_rect.mLeft;
 
 	segment_set_t::iterator line_seg_iter;
 	S32 line_seg_offset;
@@ -1969,7 +2157,7 @@ S32 LLTextBase::getDocIndexFromLocalCoord( S32 local_x, S32 local_y, BOOL round,
 		}
 
 		// if we've reached a line of text *below* the mouse cursor, doc index is first character on that line
-		if (hit_past_end_of_line && local_y - mVisibleTextRect.mBottom + visible_region.mBottom > line_iter->mRect.mTop)
+		if (hit_past_end_of_line && doc_y > line_iter->mRect.mTop)
 		{
 			pos = segment_line_start;
 			break;
@@ -1998,11 +2186,19 @@ S32 LLTextBase::getDocIndexFromLocalCoord( S32 local_x, S32 local_y, BOOL round,
 			pos = segment_line_start + offset;
 			break;
 		}
-		else if (hit_past_end_of_line && segmentp->getEnd() > line_iter->mDocIndexEnd - 1)	
+		else if (hit_past_end_of_line && segmentp->getEnd() >= line_iter->mDocIndexEnd)
 		{
-			// segment wraps to next line, so just set doc pos to the end of the line
-			// segment wraps to next line, so just set doc pos to start of next line (represented by mDocIndexEnd)
-			pos = llmin(getLength(), line_iter->mDocIndexEnd);
+			if (getLineNumFromDocIndex(line_iter->mDocIndexEnd - 1) == line_iter->mLineNum)
+			{
+				// if segment wraps to the next line we should step one char back
+				// to compensate for the space char between words
+				// which is removed due to wrapping
+				pos = llclamp(line_iter->mDocIndexEnd - 1, 0, getLength());
+			}
+			else
+			{
+				pos = llclamp(line_iter->mDocIndexEnd, 0, getLength());
+			}
 			break;
 		}
 		start_x += text_width;
@@ -2218,31 +2414,41 @@ bool LLTextBase::scrolledToEnd()
 	return mScroller->isAtBottom();
 }
 
-bool LLTextBase::setCursor(S32 true_row, S32 column)
+bool LLTextBase::setCursor(S32 row, S32 column)
 {
-	if (0 <= true_row && true_row < (S32)mLineInfoList.size())
+	if (row < 0 || column < 0) return false;
+
+	S32 n_lines = mLineInfoList.size();
+	for (S32 line = row; line < n_lines; ++line)
 	{
-		S32 row = true_row;
-		S32 doc_pos;
-		while ( row < (S32)mLineInfoList.size() && mLineInfoList[row].mLineNum < true_row ) row++;
-		while ( row < (S32)mLineInfoList.size() && mLineInfoList[row].mLineNum == true_row )
+		const line_info& li = mLineInfoList[line];
+
+		if (li.mLineNum < row)
 		{
-			S32 line_length = mLineInfoList[row].mDocIndexEnd - mLineInfoList[row].mDocIndexStart;
-			if ( column >=  line_length)
-			{
-				column -= line_length;
-				row ++;
-			}
-			else
-			{
-				doc_pos = mLineInfoList[row].mDocIndexStart + column;
-				updateCursorXPos();
-				return setCursorPos(doc_pos);
-			}
+			continue;
 		}
+		else if (li.mLineNum > row)
+		{
+			break; // invalid column specified
+		}
+
+		// Found the given row.
+		S32 line_length = li.mDocIndexEnd - li.mDocIndexStart;;
+		if (column >= line_length)
+		{
+			column -= line_length;
+			continue;
+		}
+
+		// Found the given column.
+		updateCursorXPos();
+		S32 doc_pos = li.mDocIndexStart + column;
+		return setCursorPos(doc_pos);
 	}
-	return false;
+
+	return false; // invalid row or column specified
 }
+
 
 bool LLTextBase::setCursorPos(S32 cursor_pos, bool keep_cursor_offset)
 {
@@ -2395,10 +2601,37 @@ LLRect LLTextBase::getVisibleDocumentRect() const
 	{
 		return mScroller->getVisibleContentRect();
 	}
-	else
+	else if (mClip)
 	{
-		// entire document rect is visible when not scrolling
+		LLRect visible_text_rect = getVisibleTextRect();
+		LLRect doc_rect = mDocumentView->getRect();
+		visible_text_rect.translate(-doc_rect.mLeft, -doc_rect.mBottom);
+
+		// reject partially visible lines
+		LLRect visible_lines_rect;
+		for (line_list_t::const_iterator it = mLineInfoList.begin(), end_it = mLineInfoList.end();
+			it != end_it;
+			++it)
+		{
+			bool line_visible = mClipPartial ? visible_text_rect.contains(it->mRect) : visible_text_rect.overlaps(it->mRect);
+			if (line_visible)
+			{
+				if (visible_lines_rect.isEmpty())
+				{
+					visible_lines_rect = it->mRect;
+				}
+				else
+				{
+					visible_lines_rect.unionWith(it->mRect);
+				}
+			}
+		}
+		return visible_lines_rect;
+	}
+	else
+	{	// entire document rect is visible
 		// but offset according to height of widget
+	
 		LLRect doc_rect = mDocumentView->getLocalRect();
 		doc_rect.mLeft -= mDocumentView->getRect().mLeft;
 		// adjust for height of text above widget baseline
@@ -2429,6 +2662,9 @@ S32	LLTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 line_offs
 void LLTextSegment::updateLayout(const LLTextBase& editor) {}
 F32	LLTextSegment::draw(S32 start, S32 end, S32 selection_start, S32 selection_end, const LLRect& draw_rect) { return draw_rect.mLeft; }
 bool LLTextSegment::canEdit() const { return false; }
+// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+bool LLTextSegment::canSpellCheck() const { return false; }
+// [/SL:KB]
 void LLTextSegment::unlinkFromDocument(LLTextBase*) {}
 void LLTextSegment::linkToDocument(LLTextBase*) {}
 const LLColor4& LLTextSegment::getColor() const { return LLColor4::white; }
@@ -2516,21 +2752,21 @@ F32 LLNormalTextSegment::drawClippedSegment(S32 seg_start, S32 seg_end, S32 sele
 
 	LLColor4 color = (mEditor.getReadOnly() ? mStyle->getReadOnlyColor() : mStyle->getColor())  % alpha;
 
-  	if( selection_start > seg_start )
+	if( selection_start > seg_start )
 	{
 		// Draw normally
 		S32 start = seg_start;
 		S32 end = llmin( selection_start, seg_end );
 		S32 length =  end - start;
 		font->render(text, start, 
-			     rect, 
-			     color, 
-			     LLFontGL::LEFT, mEditor.mVAlign, 
-			     LLFontGL::NORMAL, 
-			     mStyle->getShadowType(), 
-			     length,
-			     &right_x, 
-			     mEditor.getUseEllipses());
+				 rect, 
+				 color, 
+				 LLFontGL::LEFT, mEditor.mVAlign, 
+				 LLFontGL::NORMAL, 
+				 mStyle->getShadowType(), 
+				 length,
+				 &right_x, 
+				 mEditor.getUseEllipses());
 	}
 	rect.mLeft = (S32)ceil(right_x);
 	
@@ -2542,14 +2778,14 @@ F32 LLNormalTextSegment::drawClippedSegment(S32 seg_start, S32 seg_end, S32 sele
 		S32 length = end - start;
 
 		font->render(text, start, 
-			     rect,
-			     mStyle->getSelectedColor().get(),
-			     LLFontGL::LEFT, mEditor.mVAlign, 
-			     LLFontGL::NORMAL, 
-			     LLFontGL::NO_SHADOW, 
-			     length,
-			     &right_x, 
-			     mEditor.getUseEllipses());
+				 rect,
+				 mStyle->getSelectedColor().get(),
+				 LLFontGL::LEFT, mEditor.mVAlign, 
+				 LLFontGL::NORMAL, 
+				 LLFontGL::NO_SHADOW, 
+				 length,
+				 &right_x, 
+				 mEditor.getUseEllipses());
 	}
 	rect.mLeft = (S32)ceil(right_x);
 	if( selection_end < seg_end )
@@ -2559,14 +2795,14 @@ F32 LLNormalTextSegment::drawClippedSegment(S32 seg_start, S32 seg_end, S32 sele
 		S32 end = seg_end;
 		S32 length = end - start;
 		font->render(text, start, 
-			     rect, 
-			     color, 
-			     LLFontGL::LEFT, mEditor.mVAlign, 
-			     LLFontGL::NORMAL, 
-			     mStyle->getShadowType(), 
-			     length,
-			     &right_x, 
-			     mEditor.getUseEllipses());
+				 rect, 
+				 color, 
+				 LLFontGL::LEFT, mEditor.mVAlign, 
+				 LLFontGL::NORMAL, 
+				 mStyle->getShadowType(), 
+				 length,
+				 &right_x, 
+				 mEditor.getUseEllipses());
 	}
 	return right_x;
 }
@@ -2904,11 +3140,18 @@ bool LLImageTextSegment::getDimensions(S32 first_char, S32 num_chars, S32& width
 S32	 LLImageTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 line_offset, S32 max_chars) const
 {
 	LLUIImagePtr image = mStyle->getImage();
+	
+	if (image.isNull())
+	{
+		return 1;
+	}
+
 	S32 image_width = image->getWidth();
 	if(line_offset == 0 || num_pixels>image_width + IMAGE_HPAD)
 	{
 		return 1;
 	}
+
 	return 0;
 }
 
@@ -2918,18 +3161,21 @@ F32	LLImageTextSegment::draw(S32 start, S32 end, S32 selection_start, S32 select
 	{
 		LLColor4 color = LLColor4::white % mEditor.getDrawContext().mAlpha;
 		LLUIImagePtr image = mStyle->getImage();
-		S32 style_image_height = image->getHeight();
-		S32 style_image_width = image->getWidth();
-		// Text is drawn from the top of the draw_rect downward
-		
-		S32 text_center = draw_rect.mTop - (draw_rect.getHeight() / 2);
-		// Align image to center of draw rect
-		S32 image_bottom = text_center - (style_image_height / 2);
-		image->draw(draw_rect.mLeft, image_bottom, 
-			style_image_width, style_image_height, color);
-		
-		const S32 IMAGE_HPAD = 3;
-		return draw_rect.mLeft + style_image_width + IMAGE_HPAD;
+		if (image.notNull())
+		{
+			S32 style_image_height = image->getHeight();
+			S32 style_image_width = image->getWidth();
+			// Text is drawn from the top of the draw_rect downward
+			
+			S32 text_center = draw_rect.mTop - (draw_rect.getHeight() / 2);
+			// Align image to center of draw rect
+			S32 image_bottom = text_center - (style_image_height / 2);
+			image->draw(draw_rect.mLeft, image_bottom, 
+				style_image_width, style_image_height, color);
+			
+			const S32 IMAGE_HPAD = 3;
+			return draw_rect.mLeft + style_image_width + IMAGE_HPAD;
+		}
 	}
 	return 0.0;
 }

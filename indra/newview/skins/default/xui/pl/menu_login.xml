@@ -5,7 +5,7 @@
 		<menu_item_call label="Wyłącz [APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="Pomoc" name="Help">
-		<menu_item_call label="[SECOND_LIFE]: Pomoc" name="Second Life Help"/>
+		<menu_item_call label="[APP_NAME]: Pomoc" name="Second Life Help"/>
 		<menu_item_call label="O [APP_NAME]" name="About Second Life"/>
 	</menu>
 	<menu_item_check label="Pokaż ustawienia debugowania" name="Show Debug Menu"/>
@@ -16,7 +16,8 @@
 		<menu_item_call label="Ustaw rozmiar interfejsu..." name="Set Window Size..."/>
 		<menu_item_call label="Wyświetl TOS" name="TOS"/>
 		<menu_item_call label="Wyświetl wiadomość krytyczną" name="Critical"/>
-		<menu_item_call label="Test przeglądarki internetowej" name="Web Browser Test"/>
+		<menu_item_call label="Test przeglądarki mediów" name="Web Browser Test"/>
+		<menu_item_call label="Test zawartości strony" name="Web Content Floater Test"/>
 		<menu_item_check label="Pokaż siatkę" name="Show Grid Picker"/>
 		<menu_item_call label="Pokaż konsolę Zawiadomień" name="Show Notifications Console"/>
 	</menu>

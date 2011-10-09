@@ -125,6 +125,8 @@ private:
 	static bool sFreeCamera;
 	static bool sAppearanceEditing;
 	BOOL mClosed;
+
+	bool mUseFlatUI;	// <AW: Flat cam floater>
 	ECameraControlMode mPrevMode;
 	ECameraControlMode mCurrMode;
 	std::map<ECameraControlMode, LLButton*> mMode2Button;

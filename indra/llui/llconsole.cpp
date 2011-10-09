@@ -95,8 +95,9 @@ void LLConsole::reshape(S32 width, S32 height, BOOL called_from_parent)
 	LLUICtrl::reshape(new_width, new_height, called_from_parent);
 	
 	for(paragraph_t::iterator paragraph_it = mParagraphs.begin(); paragraph_it != mParagraphs.end(); paragraph_it++)
-	{
-		(*paragraph_it).updateLines((F32)getRect().getWidth(), mFont, true);
+	{		
+		// Ansariel: Added styleflags parameter for style customization
+		(*paragraph_it).updateLines((F32)getRect().getWidth(), mFont, (*paragraph_it).mLines.front().mStyleFlags, true);
 	}
 }
 
@@ -108,9 +109,13 @@ void LLConsole::setFontSize(S32 size_index)
 	}
 	else if (0 == size_index)
 	{
-		mFont = LLFontGL::getFontSansSerif();
+		mFont = LLFontGL::getFontSansSerifSmall();
 	}
 	else if (1 == size_index)
+	{
+		mFont = LLFontGL::getFontSansSerif();
+	}
+	else if (2 == size_index)
 	{
 		mFont = LLFontGL::getFontSansSerifBig();
 	}
@@ -126,12 +131,16 @@ void LLConsole::setFontSize(S32 size_index)
 	
 	for(paragraph_t::iterator paragraph_it = mParagraphs.begin(); paragraph_it != mParagraphs.end(); paragraph_it++)
 	{
-		(*paragraph_it).updateLines((F32)getRect().getWidth(), mFont, true);
+		// Ansariel: Added styleflags parameter for style customization
+		(*paragraph_it).updateLines((F32)getRect().getWidth(), mFont, (*paragraph_it).mLines.front().mStyleFlags, true);
 	}
 }
 
 void LLConsole::draw()
 {
+	// Units in pixels
+	static const F32 padding_horizontal = 15;
+	static const F32 padding_vertical = 8;
 	LLGLSUIDefault gls_ui;
 
 	// skip lines added more than mLinePersistTime ago
@@ -174,22 +183,27 @@ void LLConsole::draw()
 	}
 	
 	// draw remaining lines
-	F32 y_pos = 0.f;
+	//[FIX  FIRE-2822 SJ] Start a little bit higher with the Console not to let it blend with the stand button when Avatar is sitting
+	F32 y_pos = 10.f;
 
 	LLUIImagePtr imagep = LLUI::getUIImage("Rounded_Square");
 
-//	F32 console_opacity = llclamp(gSavedSettings.getF32("ConsoleBackgroundOpacity"), 0.f, 1.f);
-	F32 console_opacity = llclamp(LLUI::sSettingGroups["config"]->getF32("ConsoleBackgroundOpacity"), 0.f, 1.f);
-//	LLColor4 color = LLUIColorTable::instance().getColor("ConsoleBackground");
-	LLColor4 color = LLUIColorTable::instance().getColor("ConsoleBackground");
+	//AO: Unify colors and opacity with the color preferences control for all onscreen overlay background
+	//    console/bubblechat/tag backgrounds. FIRE-969
+	//	F32 console_opacity = llclamp(gSavedSettings.getF32("ConsoleBackgroundOpacity"), 0.f, 1.f);
+	F32 console_opacity = llclamp(LLUI::sSettingGroups["config"]->getF32("ChatBubbleOpacity"), 0.f, 1.f);
+	//	LLColor4 color = LLUIColorTable::instance().getColor("ConsoleBackground");
+	LLColor4 color = LLUIColorTable::instance().getColor("NameTagBackground");
+	//</AO>
+	
 	color.mV[VALPHA] *= console_opacity;
 
 	F32 line_height = mFont->getLineHeight();
 
 	for(paragraph_it = mParagraphs.rbegin(); paragraph_it != mParagraphs.rend(); paragraph_it++)
 	{
-		S32 target_height = llfloor( (*paragraph_it).mLines.size() * line_height + 8);
-		S32 target_width =  llfloor( (*paragraph_it).mMaxWidth +15);
+		S32 target_height = llfloor( (*paragraph_it).mLines.size() * line_height + padding_vertical);
+		S32 target_width =  llfloor( (*paragraph_it).mMaxWidth + padding_horizontal);
 
 		y_pos += ((*paragraph_it).mLines.size()) * line_height;
 		imagep->drawSolid(-14, (S32)(y_pos + line_height - target_height), target_width, target_height, color);
@@ -225,7 +239,7 @@ void LLConsole::draw()
 							(*seg_it).mColor.mV[VALPHA]*alpha),
 						LLFontGL::LEFT, 
 						LLFontGL::BASELINE,
-						LLFontGL::NORMAL,
+						(*line_it).mStyleFlags, // Ansariel: Custom style flags for the font
 						LLFontGL::DROP_SHADOW,
 						S32_MAX,
 						target_width
@@ -234,8 +248,48 @@ void LLConsole::draw()
 				y_off += line_height;
 			}
 		}
-		y_pos  += 8;
+		y_pos  += padding_vertical;
 	}
+}
+
+// Ansariel: Added styleflags parameter for style customization
+void LLConsole::addConsoleLine(const std::string& utf8line, const LLColor4 &color, LLFontGL::StyleFlags styleflags)
+{
+	LLWString wline = utf8str_to_wstring(utf8line);
+	addConsoleLine(wline, color, styleflags);
+}
+
+// Ansariel: Added styleflags parameter for style customization
+void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color, LLFontGL::StyleFlags styleflags)
+{
+	if (wline.empty())
+	{
+		return;
+	}
+
+	removeExtraLines();
+
+	mMutex.lock();
+	mLines.push_back(wline);
+	mLineLengths.push_back((S32)wline.length());
+	mAddTimes.push_back(mTimer.getElapsedTimeF32());
+	mLineColors.push_back(color);
+	mLineStyle.push_back(styleflags);
+	mMutex.unlock();
+}
+
+void LLConsole::clear()
+{
+	llinfos << "Clearing Console..." << llendflush;
+	mMutex.lock();
+	mLines.clear();
+	mAddTimes.clear();
+	mLineLengths.clear();
+	mLineColors.clear();
+	mLineStyle.clear();
+	mMutex.unlock();
+
+	mTimer.reset();
 }
 
 //Generate highlight color segments for this paragraph.  Pass in default color of paragraph.
@@ -265,7 +319,8 @@ void LLConsole::Paragraph::makeParagraphColorSegments (const LLColor4 &color)
 }
 
 //Called when a paragraph is added to the console or window is resized.
-void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, bool force_resize)
+// Ansariel: Added styleflags parameter for style customization
+void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, LLFontGL::StyleFlags styleflags, bool force_resize)
 {
 	if ( !force_resize )
 	{
@@ -318,6 +373,7 @@ void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, b
 			
 			mMaxWidth = llmax( mMaxWidth, (F32)font->getWidth( mParagraphText.substr( paragraph_offset, drawable ).c_str() ) );
 			Line line;
+			line.mStyleFlags = styleflags; // Ansariel: Add styleflags to every new line
 			
 			U32 left_to_draw = drawable;
 			U32 drawn = 0;
@@ -360,20 +416,19 @@ void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, b
 }
 
 //Pass in the string and the default color for this block of text.
-LLConsole::Paragraph::Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width) 
+// Ansariel: Added styleflags parameter for style customization
+LLConsole::Paragraph::Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width, LLFontGL::StyleFlags styleflags) 
 :	mParagraphText(str), mAddTime(add_time), mMaxWidth(-1)
 {
 	makeParagraphColorSegments(color);
-	updateLines( screen_width, font );
+	updateLines( screen_width, font, styleflags );
 }
 	
 // called once per frame regardless of console visibility
 // static
 void LLConsole::updateClass()
 {	
-	LLInstanceTrackerScopedGuard guard;
-
-	for (instance_iter it = guard.beginInstances(); it != guard.endInstances(); ++it)
+	for (instance_iter it = beginInstances(); it != endInstances(); ++it)
 	{
 		it->update();
 	} 
@@ -388,11 +443,16 @@ void LLConsole::update()
 		{
 			mParagraphs.push_back(
 				Paragraph(	mLines.front(), 
-							LLColor4::white, 
+							(!mLineColors.empty() ? mLineColors.front() : LLColor4::white),
 							mTimer.getElapsedTimeF32(), 
 							mFont, 
-							(F32)getRect().getWidth()));
+							(F32)getRect().getWidth(),
+							(!mLineStyle.empty() ? mLineStyle.front() : LLFontGL::NORMAL)));
 			mLines.pop_front();
+			if (!mLineColors.empty())
+				mLineColors.pop_front();
+			if (!mLineStyle.empty())
+				mLineStyle.pop_front();
 		}
 	}
 
@@ -403,3 +463,16 @@ void LLConsole::update()
 	}
 }
 
+void LLConsole::removeExtraLines()
+{
+	mMutex.lock();
+	while ((S32)mLines.size() > llmax((S32)0, (S32)(mMaxLines - 1)))
+	{
+		mLines.pop_front();
+		mAddTimes.pop_front();
+		mLineLengths.pop_front();
+		mLineColors.pop_front();
+		mLineStyle.pop_front();
+	}
+	mMutex.unlock();
+}

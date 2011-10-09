@@ -152,6 +152,9 @@ public:
 	BOOL unpackBlock(const S32 block_num);
 	BOOL packBlock();
 
+	LLSD asLLSD() const;
+	bool fromLLSD(LLSD& sd);
+
 	static BOOL packNull();
 	static BOOL isNullPS(const S32 block_num); // Returns FALSE if this is a "NULL" particle system (i.e. no system)
 

@@ -29,14 +29,25 @@
 #include "v3math.h"
 #include "m4math.h"
 #include "llquaternion.h"
-
-const F32 MAX_OBJECT_Z 		= 4096.f; // should match REGION_HEIGHT_METERS, Pre-havok4: 768.f
+// <AW: opensim-limits>
+//const F32 MAX_OBJECT_Z 		= 4096.f; // should match REGION_HEIGHT_METERS, Pre-havok4: 768.f
+//const F32 DEFAULT_MAX_PRIM_SCALE = 64.f;
+//const F32 DEFAULT_MAX_PRIM_SCALE_NO_MESH = 10.f;
+//const F32 MIN_PRIM_SCALE = 0.01f;
+//const F32 MAX_PRIM_SCALE = 65536.f;	// something very high but not near FLT_MAX
+const F32 SL_MAX_OBJECT_Z 		= 4096.f;
 const F32 MIN_OBJECT_Z 		= -256.f;
-const F32 DEFAULT_MAX_PRIM_SCALE = 10.f;
-const F32 MIN_PRIM_SCALE = 0.01f;
-const F32 MAX_PRIM_SCALE = 65536.f;	// something very high but not near FLT_MAX
+const F32 SL_DEFAULT_MAX_PRIM_SCALE = 64.f;
+const F32 SL_DEFAULT_MAX_PRIM_SCALE_NO_MESH = 10.f;
+const F32 SL_MIN_PRIM_SCALE = 0.01f;
+const F32 SL_MAX_PRIM_SCALE = 65536.f;	// something very high but not near FLT_MAX
 
-
+const F32 OS_MAX_OBJECT_Z 		= 10000.f;
+const F32 OS_MIN_OBJECT_Z 		= -256.f;
+const F32 OS_DEFAULT_MAX_PRIM_SCALE = 256.f;
+const F32 OS_MIN_PRIM_SCALE = 0.001f;
+const F32 OS_MAX_PRIM_SCALE = 65536.f;	// something very high but not near FLT_MAX
+// <AW: opensim-limits>
 class LLXform
 {
 protected:

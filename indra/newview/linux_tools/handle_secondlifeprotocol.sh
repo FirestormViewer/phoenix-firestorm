@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Send a URL of the form secondlife://... to Second Life.
+# Send a URL of the form secondlife://... to the viewer.
 #
 
 URL="$1"
@@ -13,5 +13,5 @@ fi
 RUN_PATH=`dirname "$0" || echo .`
 cd "${RUN_PATH}/.."
 
-exec ./secondlife -url \'"${URL}"\'
+exec ./firestorm -url \'"${URL}"\'
 

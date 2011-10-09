@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Inventory" title="MON INVENTAIRE">
+<!--alba-->
+<floater name="Inventory" title="INVENTAIRE">
 	<floater.string name="Title">
-		MON INVENTAIRE
+		INVENTAIRE
 	</floater.string>
 	<floater.string name="TitleFetching">
-		MON INVENTAIRE (récupération de [ITEM_COUNT] articles en cours) [FILTER]
+		INVENTAIRE (récupération de [ITEM_COUNT] articles en cours) [FILTER]
 	</floater.string>
 	<floater.string name="TitleCompleted">
-		MON INVENTAIRE ([ITEM_COUNT] articles) [FILTER]
+		INVENTAIRE ([ITEM_COUNT] articles) [FILTER]
 	</floater.string>
 	<floater.string name="Fetched">
 		Récupéré

@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
+ top="0"
  background_visible="true"
- bottom="0"
+ background_opaque="true"
+ bg_opaque_color="TitleBarFocusColor"
  follows="left|top|right"
- height="30"
+ height="20"
  width="333"
  layout="topleft"
  left="0"
+ mouse_opaque="false"
  name="sidetray_tab_panel">
     <text
      follows="left|top|right"
-     font="SansSerifHuge"
-     height="16"
+     font="SansSerifLarge"
+     height="1"
      layout="topleft"
      left="10"
      name="sidetray_tab_title"
      text_color="white"
-     top="4"
+     top="0"
      value="Side Panel"
      width="255" />
- 
-     <button
+
+    <button
      follows="right|top"
      height="16"
      image_selected="Sidebar_Icon_Undock_Press"
@@ -28,12 +31,12 @@
      image_disabled="Sidebar_Icon_Undock_Press"
      layout="topleft"
      name="undock"
-     top="10"
+     top_pad="0"
      right="-28"
      width="16"
      tool_tip="Undock" />
-     
-     <button
+
+    <button
      follows="right|top"
      height="16"
      image_selected="Sidebar_Icon_Dock_Press"
@@ -41,27 +44,29 @@
      image_disabled="Sidebar_Icon_Dock_Press"
      layout="topleft"
      name="dock"
-     top="10"
-     right="-28"
+     top_pad="-16"
+     left_pad="-16"
      width="16"
      tool_tip="Dock"
      visible="false" />
-     
-     <button
-      follows="right|top"
-      height="16"
-      image_selected="Icon_Close_Press"
-      image_unselected="Icon_Close_Foreground"
-      image_disabled="Icon_Close_Press"
-      layout="topleft"
-      name="minimize"
-      top="10"
-      right="-11"
-      width="16"
-      tool_tip="Collapse"
-      visible="true" />    
-      
+
+    <button
+     follows="right|top"
+     height="16"
+     image_selected="Icon_Close_Press"
+     image_unselected="Icon_Close_Foreground"
+     image_disabled="Icon_Close_Press"
+     layout="topleft"
+     name="minimize"
+     left_pad="1"
+     width="16"
+     tool_tip="Collapse"
+     visible="true" />
+<!--
+  What does this do here? It seems to be left over from somewhere.
+
         <button.commit_callback
          function="Button.ShowHelp" />
     </button>
+//-->
 </panel>

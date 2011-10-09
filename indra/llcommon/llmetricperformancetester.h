@@ -27,7 +27,7 @@
 #ifndef LL_METRICPERFORMANCETESTER_H 
 #define LL_METRICPERFORMANCETESTER_H 
 
-const std::string DEFAULT_METRIC_NAME("metric");
+char const* const DEFAULT_METRIC_NAME = "metric";
 
 /**
  * @class LLMetricPerformanceTesterBasic
@@ -61,6 +61,8 @@ public:
 	 * in the increasing order of the LLSD record counter, starting from the first one.
 	 */
 	virtual void analyzePerformance(std::ofstream* os, LLSD* base, LLSD* current) ;
+
+	static void doAnalysisMetrics(std::string baseline, std::string target, std::string output) ;
 
 	/**
 	 * @return Returns the number of the test metrics in this tester instance.
@@ -116,6 +118,7 @@ protected:
 private:
 	void preOutputTestResults(LLSD* sd) ;
 	void postOutputTestResults(LLSD* sd) ;
+	static LLSD analyzeMetricPerformanceLog(std::istream& is) ;
 
 	std::string mName ;							// Name of this tester instance
 	S32 mCount ;								// Current record count
@@ -134,6 +137,12 @@ public:
 	 */
 	static LLMetricPerformanceTesterBasic* getTester(std::string name) ;
 	
+	/**
+	 * @return Delete the named tester from the list 
+	 * @param[in] name - Name of the tester instance to delete.
+	 */
+	static void deleteTester(std::string name);
+
 	/**
 	 * @return Returns TRUE if that metric *or* the default catch all metric has been requested to be logged
 	 * @param[in] name - Name of the tester queried.

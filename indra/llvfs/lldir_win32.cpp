@@ -106,7 +106,7 @@ LLDir_Win32::LLDir_Win32()
 	}
 	else
 	{
-		fprintf(stderr, "Couldn't get APP path, assuming current directory!");
+		LL_WARNS("AppInit") << "Couldn't get APP path, assuming current directory!\n" << LL_ENDL;
 		GetCurrentDirectory(MAX_PATH, w_str);
 		mExecutableDir = utf16str_to_utf8str(llutf16string(w_str));
 		// Assume it's the current directory
@@ -116,16 +116,15 @@ LLDir_Win32::LLDir_Win32()
 	mExecutableDir = utf16str_to_utf8str(llutf16string(w_str));
 #endif
 
-	if (mExecutableDir.find("indra") == std::string::npos)
-	{
-		// Running from installed directory.  Make sure current
-		// directory isn't something crazy (e.g. if invoking from
-		// command line).
-		SetCurrentDirectory(utf8str_to_utf16str(mExecutableDir).c_str());
-		GetCurrentDirectory(MAX_PATH, w_str);
-		mWorkingDir = utf16str_to_utf8str(llutf16string(w_str));
-	}
+	
 	mAppRODataDir = mWorkingDir;	
+
+	if(! LLFile::isdir(mAppRODataDir + mDirDelimiter + "skins") || ! LLFile::isdir(mAppRODataDir + mDirDelimiter + "app_settings"))
+	{
+		// What? No skins or app_settings in the working dir?
+		// Try the executable's directory.
+		mAppRODataDir = mExecutableDir;
+	}
 
 	llinfos << "mAppRODataDir = " << mAppRODataDir << llendl;
 
@@ -206,14 +205,6 @@ void LLDir_Win32::initAppDirs(const std::string &app_name,
 		}
 	}
 	
-	res = LLFile::mkdir(getExpandedFilename(LL_PATH_USER_SKIN,""));
-	if (res == -1)
-	{
-		if (errno != EEXIST)
-		{
-			llwarns << "Couldn't create LL_PATH_SKINS dir " << getExpandedFilename(LL_PATH_USER_SKIN,"") << llendl;
-		}
-	}
 	mCAFile = getExpandedFilename(LL_PATH_APP_SETTINGS, "CA.pem");
 }
 
@@ -246,6 +237,7 @@ U32 LLDir_Win32::countFilesInDir(const std::string &dirname, const std::string &
 
 
 // get the next file in the directory
+// AO: Used by LGG slection beams
 BOOL LLDir_Win32::getNextFileInDir(const std::string &dirname, const std::string &mask, std::string &fname)
 {
     BOOL fileFound = FALSE;

@@ -41,7 +41,7 @@
         <accordion_tab
          layout="topleft"
          name="tab_landmarks"
-         title="My Landmarks">
+         title="Landmarks">
             <places_inventory_panel
              allow_multi_select="true"
              border="false"
@@ -57,7 +57,7 @@
         <accordion_tab
          layout="topleft"
          name="tab_inventory"
-         title="My Inventory">
+         title="Inventory">
             <places_inventory_panel
              allow_multi_select="true"
              border="false"

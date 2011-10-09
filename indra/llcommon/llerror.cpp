@@ -154,6 +154,9 @@ namespace {
 				}
 			}
 			fprintf(stderr, "%s\n", message.c_str());
+#if LL_WINDOWS 
+	fflush(stderr); //Now using a buffer. flush is required. 
+#endif 
 			if (ANSI_YES == mUseANSI) colorANSI("0"); // reset
 		}
 	
@@ -379,7 +382,7 @@ namespace
 	{
 		/* This pattern, of returning a reference to a static function
 		   variable, is to ensure that this global is constructed before
-		   it is used, no matter what the global initializeation sequence
+		   it is used, no matter what the global initialization sequence
 		   is.
 		   See C++ FAQ Lite, sections 10.12 through 10.14
 		*/

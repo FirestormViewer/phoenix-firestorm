@@ -2,6 +2,8 @@
 <floater
  legacy_header_height="18"
  can_resize="true"
+ left="10000"
+ bottom="10000"
  height="600"
  layout="topleft"
  min_height="150"
@@ -36,7 +38,8 @@
          user_resize="false"
          width="620">
             <web_browser
-              trusted_content="true" 
+             trusted_content="true" 
+             initial_mime_type="text/html" 
              bottom="-25"
              follows="left|right|top|bottom"
              layout="topleft"

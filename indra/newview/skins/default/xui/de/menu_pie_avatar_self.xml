@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Self Pie">
+    <pie_slice label="Profil" name="Profile..."/>
+    <pie_slice label="Gruppen" name="Groups..."/>
+    <pie_menu label="Ausziehen >" name="Take Off &gt;">
+        <pie_menu label="Kleidung >" name="Clothes &gt;">
+            <pie_slice label="Hemd" name="Shirt"/>
+            <pie_slice label="Hose" name="Pants"/>
+            <pie_slice label="Schuhe" name="Shoes"/>
+            <pie_slice label="Socken" name="Socks"/>
+            <pie_slice label="Jacke" name="Jacket"/>
+            <pie_slice label="Handschuhe" name="Gloves"/>
+            <pie_menu label="Mehr >" name="Clothes More">
+                <pie_slice label="Unterhemd" name="Self Undershirt"/>
+                <pie_slice label="Alle Kleider" name="All Clothes"/>
+                <pie_slice label="Unterhose" name="Self Underpants"/>
+                <pie_slice label="Tattoo" name="Self Tattoo"/>
+				<pie_slice label="Physik" name="Self Physics"/>
+                <pie_slice label="Alpha" name="Self Alpha"/>
+            </pie_menu>
+            <pie_slice label="Rock" name="Skirt"/>
+        </pie_menu>
+        <pie_menu label="HUD >" name="Pie Object Detach HUD"/>
+        <pie_menu label="Abnehmen >" name="Pie Object Detach"/>
+        <pie_slice label="Alles abnehmen" name="Detach All"/>
+    </pie_menu>
+    <pie_slice label="Hinsetzen" name="Sit Down Here"/>
+    <pie_slice label="Aufstehen" name="Stand Up"/>
+    <pie_separator name="script_count_placeholder" />
+    <pie_slice label="Gesten..." name="Gestures"/>
+	<pie_menu label="Aussehen &gt;" name="Appearance &gt;">
+		<pie_slice label="Form bearbeiten" name="Edit My Shape"/>
+		<pie_slice label="Outfit bearbeiten" name="Edit My Outfit"/>
+	</pie_menu>
+    <pie_slice label="Debug Texturen" name="Debug..."/>
+</pie_menu>

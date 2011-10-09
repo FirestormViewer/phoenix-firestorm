@@ -54,7 +54,9 @@
 #include "llaccordionctrl.h"
 
 #include "lltrans.h"
-
+//-TT - Patch : ShowGroupFloaters
+#include "llviewercontrol.h"
+//-TT
 static LLRegisterPanelClassWrapper<LLPanelGroup> t_panel_group("panel_group_info_sidetray");
 
 
@@ -107,7 +109,15 @@ void LLPanelGroup::onOpen(const LLSD& key)
 {
 	if(!key.has("group_id"))
 		return;
-	
+
+	// open the desired panel
+	if (key.has("open_tab_name"))
+	{
+		// onOpen from selected panel will be called from onTabSelected callback
+		LLTabContainer* tab_ctrl = getChild<LLTabContainer>("groups_accordion");
+		tab_ctrl->selectTabByName(key["open_tab_name"]);
+	}
+
 	LLUUID group_id = key["group_id"];
 	if(!key.has("action"))
 	{
@@ -166,8 +176,20 @@ BOOL LLPanelGroup::postBuild()
 
 	getChild<LLButton>("btn_create")->setVisible(false);
 
-	childSetCommitCallback("back",boost::bind(&LLPanelGroup::onBackBtnClick,this),NULL);
-
+//	childSetCommitCallback("back",boost::bind(&LLPanelGroup::onBackBtnClick,this),NULL);
+//-TT - Patch : ShowGroupFloaters
+	LLFloater* pParentView = dynamic_cast<LLFloater*>(getParent());
+	if (!pParentView)
+	{
+		childSetCommitCallback("back",boost::bind(&LLPanelGroup::onBackBtnClick,this),NULL);
+	}
+	else
+	{
+		pParentView->setTitle(getLabel());
+		childSetVisible("back", false);
+		//Aligning remaining controls here
+	}
+//-TT
 	childSetCommitCallback("btn_create",boost::bind(&LLPanelGroup::onBtnCreate,this),NULL);
 	
 	childSetCommitCallback("btn_cancel",boost::bind(&LLPanelGroup::onBtnCancel,this),NULL);
@@ -612,7 +634,21 @@ void LLPanelGroup::showNotice(const std::string& subject,
 					   const std::string& inventory_name,
 					   LLOfferInfo* inventory_offer)
 {
-	LLPanelGroup* panel = LLSideTray::getInstance()->getPanel<LLPanelGroup>("panel_group_info_sidetray");
+	//LLPanelGroup* panel = LLSideTray::getInstance()->getPanel<LLPanelGroup>("panel_group_info_sidetray");
+//-TT - Patch : ShowGroupFloaters
+	LLPanelGroup* panel;
+
+	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
+	{
+		panel = LLSideTray::getInstance()->getPanel<LLPanelGroup>("panel_group_info_sidetray");
+	}
+	else
+	{
+		LLFloater *floater = LLFloaterReg::getInstance("floater_group_view", LLSD().with("group_id", group_id));
+
+		panel = floater->findChild<LLPanelGroup>("panel_group_info_sidetray");
+	}
+//-TT
 	if(!panel)
 		return;
 

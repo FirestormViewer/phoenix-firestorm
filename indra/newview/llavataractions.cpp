@@ -47,7 +47,9 @@
 #include "llfloatergroups.h"
 #include "llfloaterreg.h"
 #include "llfloaterpay.h"
+#include "llfloaterwebcontent.h"
 #include "llfloaterworldmap.h"
+#include "llfolderview.h"
 #include "llgiveinventory.h"
 #include "llinventorybridge.h"
 #include "llinventorymodel.h"	// for gInventory.findCategoryUUIDForType
@@ -56,18 +58,34 @@
 #include "llmutelist.h"
 #include "llnotificationsutil.h"	// for LLNotificationsUtil
 #include "llpaneloutfitedit.h"
+#include "llpanelprofile.h"
 #include "llrecentpeople.h"
 #include "llsidetray.h"
 #include "lltrans.h"
 // [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-09-08 (Catznip-2.1.2c) | Added: Catznip-2.1.2c
 #include "llviewercontrol.h"
-// [/SL:KB]#include "llviewerobjectlist.h"
+// [/SL:KB]
+#include "llviewerobjectlist.h"
 #include "llviewermessage.h"	// for handle_lure
 #include "llviewerregion.h"
 #include "llimfloater.h"
 #include "lltrans.h"
 #include "llcallingcard.h"
 #include "llslurl.h"			// IDEVO
+#include "llviewercontrol.h"
+#include "llfloaterreporter.h"
+#include "llparcel.h"
+#include "llviewerparcelmgr.h"
+#include "llvoavatar.h"
+#include "llworld.h"
+#include "llviewermenu.h"
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+#include "rlvhandler.h"
+// [/RLVa:KB]
+#include "llsidepanelinventory.h"
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 // static
 void LLAvatarActions::requestFriendshipDialog(const LLUUID& id, const std::string& name)
@@ -191,6 +209,19 @@ void LLAvatarActions::startIM(const LLUUID& id)
 	if (id.isNull())
 		return;
 
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(id)) )
+	{
+		LLUUID idSession = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL, id);
+		if ( (idSession.notNull()) && (!gIMMgr->hasSession(idSession)) )
+		{
+			make_ui_sound("UISndInvalidOp");
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
+			return;
+		}
+	}
+// [/RLVa:KB]
+
 	LLAvatarNameCache::get(id,
 		boost::bind(&on_avatar_name_cache_start_im, _1, _2));
 }
@@ -227,6 +258,20 @@ void LLAvatarActions::startCall(const LLUUID& id)
 	{
 		return;
 	}
+
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(id)) )
+	{
+		LLUUID idSession = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL, id);
+		if ( (idSession.notNull()) && (!gIMMgr->hasSession(idSession)) )
+		{
+			make_ui_sound("UISndInvalidOp");
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
+			return;
+		}
+	}
+// [/RLVa:KB]
+
 	LLAvatarNameCache::get(id,
 		boost::bind(&on_avatar_name_cache_start_call, _1, _2));
 }
@@ -243,7 +288,17 @@ void LLAvatarActions::startAdhocCall(const uuid_vec_t& ids)
 	LLDynamicArray<LLUUID> id_array;
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
-		id_array.push_back(*it);
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+		const LLUUID& idAgent = *it;
+		if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(idAgent)) )
+		{
+			make_ui_sound("UISndInvalidOp");
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF, LLSD().with("RECIPIENT", LLSLURL("agent", idAgent, "completename").getSLURLString()));
+			return;
+		}
+		id_array.push_back(idAgent);
+// [/RLVa:KB]
+//		id_array.push_back(*it);
 	}
 
 	// create the new ad hoc voice session
@@ -278,7 +333,7 @@ bool LLAvatarActions::isCalling(const LLUUID &id)
 //static
 bool LLAvatarActions::canCall()
 {
-		return LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
+	return LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
 }
 
 // static
@@ -288,7 +343,17 @@ void LLAvatarActions::startConference(const uuid_vec_t& ids)
 	LLDynamicArray<LLUUID> id_array;
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
-		id_array.push_back(*it);
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+		const LLUUID& idAgent = *it;
+		if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(idAgent)) )
+		{
+			make_ui_sound("UISndInvalidOp");
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF, LLSD().with("RECIPIENT", LLSLURL("agent", idAgent, "completename").getSLURLString()));
+			return;
+		}
+		id_array.push_back(idAgent);
+// [/RLVa:KB]
+//		id_array.push_back(*it);
 	}
 	const std::string title = LLTrans::getString("conference-title");
 	LLUUID session_id = gIMMgr->addSession(title, IM_SESSION_CONFERENCE_START, ids[0], id_array);
@@ -299,13 +364,38 @@ void LLAvatarActions::startConference(const uuid_vec_t& ids)
 	make_ui_sound("UISndStartIM");
 }
 
+/* Web profiles - here for compatibility only, do not uncomment. //-TT
+static void on_avatar_name_show_profile(const LLUUID& agent_id, const LLAvatarName& av_name)
+{
+	std::string username = av_name.mUsername;
+	if (username.empty())
+	{
+		username = LLCacheName::buildUsername(av_name.mDisplayName);
+	}
+	
+	llinfos << "opening web profile for " << username << llendl;		
+	std::string url = getProfileURL(username);
+
+	// PROFILES: open in webkit window
+	const bool show_chrome = false;
+	static LLCachedControl<LLRect> profile_rect(gSavedSettings, "WebProfileRect");
+	LLFloaterWebContent::create(LLFloaterWebContent::Params().
+							url(url).
+							id(agent_id.asString()).
+							show_chrome(show_chrome).
+							window_class("profile").
+							preferred_media_size(profile_rect));
+}
+*/
+
 // static
 void LLAvatarActions::showProfile(const LLUUID& id)
 {
 	if (id.notNull())
 	{
 // [SL:KB] - Patch : UI-ProfileGroupFloater | 
-		if ( (!gSavedSettings.getBOOL("ShowProfileFloaters")) || ((gAgent.getID() == id)) )
+		if (!gSavedSettings.getBOOL("ShowProfileFloaters") &&
+			!gSavedSettings.getBOOL("FSUseWebProfiles"))
 		{
 // [/SL:KB]		
 			LLSD params;
@@ -322,13 +412,64 @@ void LLAvatarActions::showProfile(const LLUUID& id)
 			{
 				LLSideTray::getInstance()->showPanel("panel_profile_view", params);
 			}
-// [SL:KB] - Patch : UI-ProfileGroupFloater 
 		}
 		else
 		{
-			LLFloaterReg::showInstance("floater_profile_view", LLSD().with("id", id));
+			// TS: Show web profile if user desires
+			if (gSavedSettings.getBOOL("FSUseWebProfiles"))
+			{
+				// PROFILES: open in webkit window
+				std::string full_name;
+				if (gCacheName->getFullName(id,full_name))
+				{
+					std::string agent_name = LLCacheName::buildUsername(full_name);
+					llinfos << "opening web profile for " << agent_name << llendl;		
+					std::string url = getProfileURL(agent_name);
+					LLWeb::loadWebURLInternal(url);
+				}
+				else
+				{
+					llwarns << "no name info for agent id " << id << llendl;
+				}
+			}
+			else
+			{
+				LLSD params;
+				params["id"] = id;
+	                        params["open_tab_name"] = "panel_profile";
+				//Show own profile
+				if(gAgent.getID() == id)
+				{
+					LLSideTray::getInstance()->showPanel("panel_me", params);
+				}
+				else
+				{
+					// [SL:KB] - Patch : UI-ProfileGroupFloater
+					LLFloaterReg::showInstance("floater_profile_view", LLSD().with("id", id));
+				}
+			}
 		}
-// [/SL:KB] 
+	}
+}
+//static 
+bool LLAvatarActions::profileVisible(const LLUUID& id)
+{
+	LLSD sd;
+	sd["id"] = id;
+	LLFloaterWebContent *browser = dynamic_cast<LLFloaterWebContent*> (LLFloaterReg::findInstance("profile", sd));
+	return browser && browser->isShown();
+}
+
+
+//static 
+void LLAvatarActions::hideProfile(const LLUUID& id)
+{
+	LLSD sd;
+	sd["id"] = id;
+	LLFloaterWebContent *browser = dynamic_cast<LLFloaterWebContent*> (LLFloaterReg::findInstance("profile", sd));
+	if (browser)
+	{
+		browser->closeFloater();
 	}
 }
 
@@ -465,42 +606,51 @@ namespace action_give_inventory
 	/**
 	 * Checks My Inventory visibility.
 	 */
-	static bool is_give_inventory_acceptable()
-	{
-		LLInventoryPanel* active_panel = get_active_inventory_panel();
-		if (!active_panel) return false;
 
-		// check selection in the panel
-		const uuid_set_t inventory_selected_uuids = active_panel->getRootFolder()->getSelectionList();
-		if (inventory_selected_uuids.empty()) return false; // nothing selected
+//      static bool is_give_inventory_acceptable()
+// [SL:KB] - Patch: Inventory-ShareSelection | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
+        static bool is_give_inventory_acceptable(const uuid_set_t inventory_selected_uuids)
+// [/SL:KB]
+        {
+//              LLInventoryPanel* active_panel = get_active_inventory_panel();
+//              if (!active_panel) return false;
 
-		bool acceptable = false;
-		uuid_set_t::const_iterator it = inventory_selected_uuids.begin();
-		const uuid_set_t::const_iterator it_end = inventory_selected_uuids.end();
-		for (; it != it_end; ++it)
-		{
-			LLViewerInventoryCategory* inv_cat = gInventory.getCategory(*it);
-			// any category can be offered.
-			if (inv_cat)
-			{
-				acceptable = true;
-				continue;
-			}
+//              // check selection in the panel
+//		const std::set<LLUUID> inventory_selected_uuids = LLAvatarActions::getInventorySelectedUUIDs();
+//
+                if (inventory_selected_uuids.empty()) return false; // nothing selected
 
-			LLViewerInventoryItem* inv_item = gInventory.getItem(*it);
-			// check if inventory item can be given
-			if (LLGiveInventory::isInventoryGiveAcceptable(inv_item))
-			{
-				acceptable = true;
-				continue;
-			}
+                bool acceptable = false;
+//                std::set<LLUUID>::const_iterator it = inventory_selected_uuids.begin();
+//                const std::set<LLUUID>::const_iterator it_end = inventory_selected_uuids.end();
 
-			// there are neither item nor category in inventory
-			acceptable = false;
-			break;
-		}
-		return acceptable;
-	}
+                uuid_set_t::const_iterator it = inventory_selected_uuids.begin();
+                const uuid_set_t::const_iterator it_end = inventory_selected_uuids.end();
+                for (; it != it_end; ++it)
+                {
+                        LLViewerInventoryCategory* inv_cat = gInventory.getCategory(*it);
+                        // any category can be offered.
+                        if (inv_cat)
+                        {
+                                acceptable = true;
+                                continue;
+                        }
+
+                        LLViewerInventoryItem* inv_item = gInventory.getItem(*it);
+                        // check if inventory item can be given
+                        if (LLGiveInventory::isInventoryGiveAcceptable(inv_item))
+                        {
+                                acceptable = true;
+                                continue;
+                        }
+
+                        // there are neither item nor category in inventory
+                        acceptable = false;
+                        break;
+                }
+                return acceptable;
+        }
+
 
 	static void build_residents_string(const std::vector<LLAvatarName> avatar_names, std::string& residents_string)
 	{
@@ -519,12 +669,12 @@ namespace action_give_inventory
 		}
 	}
 
-	static void build_items_string(const uuid_set_t& inventory_selected_uuids , std::string& items_string)
+	static void build_items_string(const std::set<LLUUID>& inventory_selected_uuids , std::string& items_string)
 	{
 		llassert(inventory_selected_uuids.size() > 0);
 
 		const std::string& separator = LLTrans::getString("words_separator");
-		for (uuid_set_t::const_iterator it = inventory_selected_uuids.begin(); ; )
+		for (std::set<LLUUID>::const_iterator it = inventory_selected_uuids.begin(); ; )
 		{
 			LLViewerInventoryCategory* inv_cat = gInventory.getCategory(*it);
 			if (NULL != inv_cat)
@@ -560,10 +710,18 @@ namespace action_give_inventory
 			return;
 		}
 
-		LLInventoryPanel* active_panel = get_active_inventory_panel();
-		if (!active_panel) return;
+//		LLInventoryPanel* active_panel = get_active_inventory_panel();
+//		if (!active_panel) return;
 
-		const uuid_set_t inventory_selected_uuids = active_panel->getRootFolder()->getSelectionList();
+//		const uuid_set_t inventory_selected_uuids = active_panel->getRootFolder()->getSelectionList();
+// [SL:KB] - Patch: Inventory-ShareSelection | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
+		uuid_set_t inventory_selected_uuids; 
+		const LLSD& sdPayload = notification["payload"];
+		for (LLSD::array_const_iterator itItem = sdPayload.beginArray(); itItem != sdPayload.endArray(); ++itItem)
+			inventory_selected_uuids.insert(itItem->asUUID());
+// [/SL:KB]
+		//const std::set<LLUUID> inventory_selected_uuids = LLAvatarActions::getInventorySelectedUUIDs();
+
 		if (inventory_selected_uuids.empty())
 		{
 			return;
@@ -580,8 +738,8 @@ namespace action_give_inventory
 			// We souldn't open IM session, just calculate session ID for logging purpose. See EXT-6710
 			const LLUUID session_id = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL, avatar_uuid);
 
-			uuid_set_t::const_iterator it = inventory_selected_uuids.begin();
-			const uuid_set_t::const_iterator it_end = inventory_selected_uuids.end();
+			std::set<LLUUID>::const_iterator it = inventory_selected_uuids.begin();
+			const std::set<LLUUID>::const_iterator it_end = inventory_selected_uuids.end();
 
 			const std::string& separator = LLTrans::getString("words_separator");
 			std::string noncopy_item_names;
@@ -631,6 +789,16 @@ namespace action_give_inventory
 		}
 	}
 
+// [SL:KB] - Patch: Inventory-ShareSelection | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
+	static const uuid_set_t get_inventory_selection()
+	{
+		LLInventoryPanel* pInvPanel = get_active_inventory_panel();
+		if (pInvPanel)
+			return pInvPanel->getRootFolder()->getSelectionList();
+		return std::set<LLUUID>();
+	}
+// [/SL:KB]
+
 	/**
 	 * Performs "give inventory" operations for provided avatars.
 	 *
@@ -640,14 +808,19 @@ namespace action_give_inventory
 	 * @param avatar_names - avatar names request to be sent.
 	 * @param avatar_uuids - avatar names request to be sent.
 	 */
-	static void give_inventory(const uuid_vec_t& avatar_uuids, const std::vector<LLAvatarName> avatar_names)
+//	static void give_inventory(const uuid_vec_t& avatar_uuids, const std::vector<LLAvatarName> avatar_names)
+// [SL:KB] - Patch: Inventory-ShareSelection | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
+	static void give_inventory(const uuid_vec_t& avatar_uuids, const std::vector<LLAvatarName> avatar_names, const uuid_set_t inventory_selected_uuids)
+// [/SL:KB]
 	{
 		llassert(avatar_names.size() == avatar_uuids.size());
 
-		LLInventoryPanel* active_panel = get_active_inventory_panel();
-		if (!active_panel) return;
+//		LLInventoryPanel* active_panel = get_active_inventory_panel();
+//		if (!active_panel) return;
 
-		const uuid_set_t inventory_selected_uuids = active_panel->getRootFolder()->getSelectionList();
+//		const uuid_set_t inventory_selected_uuids = active_panel->getRootFolder()->getSelectionList();
+		//const std::set<LLUUID> inventory_selected_uuids = LLAvatarActions::getInventorySelectedUUIDs();
+
 		if (inventory_selected_uuids.empty())
 		{
 			return;
@@ -662,10 +835,41 @@ namespace action_give_inventory
 		LLSD substitutions;
 		substitutions["RESIDENTS"] = residents;
 		substitutions["ITEMS"] = items;
+// [SL:KB] - Patch: Inventory-ShareSelection | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
+		LLSD sdPayload;
+		for (uuid_set_t::const_iterator itItem = inventory_selected_uuids.begin(); itItem != inventory_selected_uuids.end(); ++itItem)
+			sdPayload.append(*itItem);
+// [/SL:KB]
 		LLShareInfo::instance().mAvatarNames = avatar_names;
 		LLShareInfo::instance().mAvatarUuids = avatar_uuids;
-		LLNotificationsUtil::add("ShareItemsConfirmation", substitutions, LLSD(), &give_inventory_cb);
+//		LLNotificationsUtil::add("ShareItemsConfirmation", substitutions, LLSD(), &give_inventory_cb);
+// [SL:KB] - Patch: Inventory-ShareSelection | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
+		LLNotificationsUtil::add("ShareItemsConfirmation", substitutions, sdPayload, &give_inventory_cb);
+// [/SL:KB]
 	}
+}
+
+
+
+//static
+std::set<LLUUID> LLAvatarActions::getInventorySelectedUUIDs()
+{
+	std::set<LLUUID> inventory_selected_uuids;
+
+	LLInventoryPanel* active_panel = action_give_inventory::get_active_inventory_panel();
+	if (active_panel)
+	{
+		inventory_selected_uuids = active_panel->getRootFolder()->getSelectionList();
+	}
+
+	if (inventory_selected_uuids.empty())
+	{
+		LLSidepanelInventory * sidepanel_inventory = LLSideTray::getInstance()->getPanel<LLSidepanelInventory>("sidepanel_inventory");
+		
+		inventory_selected_uuids = sidepanel_inventory->getInboxOrOutboxSelectionList();
+	}
+
+	return inventory_selected_uuids;
 }
 
 //static
@@ -673,9 +877,14 @@ void LLAvatarActions::shareWithAvatars()
 {
 	using namespace action_give_inventory;
 
-	LLFloaterAvatarPicker* picker =
-		LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2), TRUE, FALSE);
-	picker->setOkBtnEnableCb(boost::bind(is_give_inventory_acceptable));
+//	LLFloaterAvatarPicker* picker =
+//		LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2), TRUE, FALSE);
+//	picker->setOkBtnEnableCb(boost::bind(is_give_inventory_acceptable));
+// [SL:KB] - Patch: Inventory-ShareSelection | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
+	const uuid_set_t idItems = get_inventory_selection();
+	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2, idItems), TRUE, FALSE);
+	picker->setOkBtnEnableCb(boost::bind(is_give_inventory_acceptable, idItems));
+// [/SL:KB]
 	picker->openFriendsTab();
 	LLNotificationsUtil::add("ShareNotification");
 }
@@ -695,12 +904,12 @@ bool LLAvatarActions::canShareSelectedItems(LLInventoryPanel* inv_panel /* = NUL
 
 	// check selection in the panel
 	LLFolderView* root_folder = inv_panel->getRootFolder();
-	const uuid_set_t inventory_selected_uuids = root_folder->getSelectionList();
+	const std::set<LLUUID> inventory_selected_uuids = root_folder->getSelectionList();
 	if (inventory_selected_uuids.empty()) return false; // nothing selected
 
 	bool can_share = true;
-	uuid_set_t::const_iterator it = inventory_selected_uuids.begin();
-	const uuid_set_t::const_iterator it_end = inventory_selected_uuids.end();
+	std::set<LLUUID>::const_iterator it = inventory_selected_uuids.begin();
+	const std::set<LLUUID>::const_iterator it_end = inventory_selected_uuids.end();
 	for (; it != it_end; ++it)
 	{
 		LLViewerInventoryCategory* inv_cat = gInventory.getCategory(*it);
@@ -763,6 +972,10 @@ bool LLAvatarActions::canOfferTeleport(const LLUUID& id)
 // static
 bool LLAvatarActions::canOfferTeleport(const uuid_vec_t& ids)
 {
+	// We can't send more than 250 lures in a single message, so disable this
+	// button when there are too many id's selected.
+	if(ids.size() > 250) return false;
+	
 	bool result = true;
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
@@ -964,3 +1177,469 @@ bool LLAvatarActions::canBlock(const LLUUID& id)
 	bool is_self = id == gAgentID;
 	return !is_self && !is_linden;
 }
+
+// [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-12-03 (Catznip-2.4.0g) | Modified: Catznip-2.4.0g
+void LLAvatarActions::report(const LLUUID& idAgent)
+{
+	LLAvatarName avName;
+	LLAvatarNameCache::get(idAgent, &avName);
+	
+	LLFloaterReporter::showFromAvatar(idAgent, avName.getCompleteName());
+}
+
+bool LLAvatarActions::canZoomIn(const LLUUID& idAgent)
+{
+	return gObjectList.findObject(idAgent);
+}
+
+void LLAvatarActions::zoomIn(const LLUUID& idAgent)
+{
+	handle_zoom_to_object(idAgent);
+}
+
+
+//
+// Parcel actions
+//
+
+
+// Defined in llworld.cpp
+LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& region_origin);
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+bool getRegionAndPosGlobalFromAgentID(const LLUUID& idAgent, const LLViewerRegion** ppRegion, LLVector3d* pPosGlobal)
+{
+	// Try looking up the agent in gObjectList
+	const LLViewerObject* pAvatarObj = gObjectList.findObject(idAgent);
+	if (pAvatarObj)
+	{
+		if (ppRegion)
+			*ppRegion = pAvatarObj->getRegion();
+		if (pPosGlobal)
+			*pPosGlobal = pAvatarObj->getPositionGlobal();
+		return (pAvatarObj->isAvatar()) && (NULL != pAvatarObj->getRegion());
+	}
+
+	// Walk over each region we're connected to and try finding the agent on one of them
+	LLWorld::region_list_t::const_iterator itRegion = LLWorld::getInstance()->getRegionList().begin();
+	LLWorld::region_list_t::const_iterator endRegion = LLWorld::getInstance()->getRegionList().end();
+	for (; itRegion != endRegion; ++itRegion)
+	{
+		const LLViewerRegion* pRegion = *itRegion;
+		for (S32 idxRegionAgent = 0, cntRegionAgent = pRegion->mMapAvatars.count(); idxRegionAgent < cntRegionAgent; idxRegionAgent++)
+		{
+			if (pRegion->mMapAvatarIDs.get(idxRegionAgent) == idAgent)
+			{
+				if (ppRegion)
+					*ppRegion = pRegion;
+				if (pPosGlobal)
+					*pPosGlobal = unpackLocalToGlobalPosition(pRegion->mMapAvatars.get(idxRegionAgent), pRegion->getOriginGlobal());
+				return (NULL != pRegion);
+			}
+		}
+	}
+
+	// Couldn't find the agent anywhere
+	return false;
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+inline bool getRegionFromAgentID(const LLUUID& idAgent, const LLViewerRegion** ppRegion)
+{
+	return getRegionAndPosGlobalFromAgentID(idAgent, ppRegion, NULL);
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+inline bool getPosGlobalFromAgentID(const LLUUID& idAgent, LLVector3d& posGlobal)
+{
+	return getRegionAndPosGlobalFromAgentID(idAgent, NULL, &posGlobal);
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+bool LLAvatarActions::canLandFreezeOrEject(const LLUUID& idAgent)
+{
+	uuid_vec_t idAgents;
+	idAgents.push_back(idAgent);
+	return canLandFreezeOrEjectMultiple(idAgents);
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+bool LLAvatarActions::canLandFreezeOrEjectMultiple(uuid_vec_t& idAgents, bool fFilter /*=false*/)
+{
+	if (gAgent.isGodlikeWithoutAdminMenuFakery())
+		return true;					// Gods can always freeze
+
+	uuid_vec_t::iterator itAgent = idAgents.begin(); bool fCanFreeze = false;
+	while ( (itAgent != idAgents.end()) && ((fFilter) || (!fCanFreeze)) )
+	{
+		const LLViewerRegion* pRegion = NULL; LLVector3d posGlobal;
+		if (getRegionAndPosGlobalFromAgentID(*itAgent, &pRegion, &posGlobal))
+		{
+			// NOTE: we actually don't always need the parcel, but attempting to get it now will help with setting fBanEnabled when ejecting
+			const LLParcel* pParcel = LLViewerParcelMgr::getInstance()->selectParcelAt(posGlobal)->getParcel();
+			const LLVector3 posRegion = pRegion->getPosRegionFromGlobal(posGlobal);
+			if ( (pRegion->getOwner() == gAgent.getID()) || (pRegion->isEstateManager()) || (pRegion->isOwnedSelf(posRegion)) ||
+				 ((pRegion->isOwnedGroup(posRegion)) && (pParcel) && (gAgent.hasPowerInGroup(pParcel->getOwnerID(), GP_LAND_ADMIN))) )
+			{
+				fCanFreeze = true;
+				++itAgent;
+				continue;
+			}
+		}
+		if (fFilter)
+			itAgent = idAgents.erase(itAgent);
+		else
+			++itAgent;
+	}
+	return fCanFreeze;
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+void LLAvatarActions::landEject(const LLUUID& idAgent)
+{
+	llinfos << "landeject " << idAgent << llendl;
+	uuid_vec_t idAgents;
+	idAgents.push_back(idAgent);
+	landEjectMultiple(idAgents);
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+void LLAvatarActions::landEjectMultiple(const uuid_vec_t& idAgents)
+{
+	uuid_vec_t idEjectAgents(idAgents);
+	if (!canLandFreezeOrEjectMultiple(idEjectAgents, true))
+	{
+		llwarns << "Not allowed to eject" << llendl;
+		return;
+	}
+
+	LLSD args, payload; std::string strMsgName, strResidents; bool fBanEnabled = false;
+	for (uuid_vec_t::const_iterator itAgent = idEjectAgents.begin(); itAgent != idEjectAgents.end(); ++itAgent)
+	{
+		const LLUUID& idAgent = *itAgent; LLVector3d posGlobal;
+		if ( (!fBanEnabled) && (getPosGlobalFromAgentID(idAgent, posGlobal)) )
+		{
+			const LLParcel* pParcel = LLViewerParcelMgr::getInstance()->selectParcelAt(posGlobal)->getParcel();
+			fBanEnabled = (pParcel) && (LLViewerParcelMgr::getInstance()->isParcelOwnedByAgent(pParcel, GP_LAND_MANAGE_BANNED));
+		}
+
+		if (idEjectAgents.begin() != itAgent)
+			strResidents += "\n";
+		strResidents += LLSLURL("agent", idAgent, (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? "completename" : "rlvanonym").getSLURLString();
+		payload["ids"].append(*itAgent);
+	}
+
+	if (1 == payload["ids"].size())
+	{
+		args["AVATAR_NAME"] = strResidents;
+		strMsgName = (fBanEnabled) ? "EjectAvatarFullname" : "EjectAvatarFullnameNoBan";
+	}
+	else
+	{
+		args["RESIDENTS"] = strResidents;
+		strMsgName = (fBanEnabled) ? "EjectAvatarMultiple" : "EjectAvatarMultipleNoBan";
+	}
+
+	payload["ban_enabled"] = fBanEnabled;
+	LLNotificationsUtil::add(strMsgName, args, payload, &callbackLandEject);
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+bool LLAvatarActions::callbackLandEject(const LLSD& notification, const LLSD& response)
+{
+	S32 idxOption = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (2 == idxOption)							// Cancel button.
+		return false;
+
+	bool fBanEnabled = notification["payload"]["ban_enabled"].asBoolean();
+	if ( (0 == idxOption) || (fBanEnabled) )	// Eject button (or Eject + Ban)
+	{
+		const LLSD& idAgents = notification["payload"]["ids"];
+		for (LLSD::array_const_iterator itAgent = idAgents.beginArray(); itAgent != idAgents.endArray(); ++itAgent)
+		{
+			const LLUUID idAgent = itAgent->asUUID(); const LLViewerRegion* pAgentRegion = NULL;
+			if (getRegionFromAgentID(idAgent, &pAgentRegion))
+			{
+				// This is tricky. It is similar to say if it is not an 'Eject' button, and it is also not an 'Cancel' button, 
+				// and ban_enabled==true, it should be the 'Eject and Ban' button.
+				U32 flags = ( (0 != idxOption) && (fBanEnabled)	) ? 0x1 : 0x0;
+
+				gMessageSystem->newMessage("EjectUser");
+				gMessageSystem->nextBlock("AgentData");
+				gMessageSystem->addUUID("AgentID", gAgent.getID());
+				gMessageSystem->addUUID("SessionID", gAgent.getSessionID());
+				gMessageSystem->nextBlock("Data");
+				gMessageSystem->addUUID("TargetID", idAgent);
+				gMessageSystem->addU32("Flags", flags);
+				gMessageSystem->sendReliable(pAgentRegion->getHost());
+			}
+		}
+	}
+	return false;
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+void LLAvatarActions::landFreeze(const LLUUID& idAgent)
+{
+	llinfos << "landfreezing " << idAgent << llendl;
+	uuid_vec_t idAgents;
+	idAgents.push_back(idAgent);
+	landFreezeMultiple(idAgents);
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+void LLAvatarActions::landFreezeMultiple(const uuid_vec_t& idAgents)
+{
+	uuid_vec_t idEjectAgents(idAgents);
+	if (!canLandFreezeOrEjectMultiple(idEjectAgents, true))
+		return;
+
+	LLSD args, payload; std::string strMsgName, strResidents;
+	for (uuid_vec_t::const_iterator itAgent = idEjectAgents.begin(); itAgent != idEjectAgents.end(); ++itAgent)
+	{
+		const LLUUID& idAgent = *itAgent;
+		if (idEjectAgents.begin() != itAgent)
+			strResidents += "\n";
+		strResidents += LLSLURL("agent", idAgent, (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? "completename" : "rlvanonym").getSLURLString();
+		payload["ids"].append(*itAgent);
+	}
+
+	if (1 == payload["ids"].size())
+	{
+		args["AVATAR_NAME"] = strResidents;
+		strMsgName = "FreezeAvatarFullname";
+	}
+	else
+	{
+		args["RESIDENTS"] = strResidents;
+		strMsgName = "FreezeAvatarMultiple";
+	}
+
+	LLNotificationsUtil::add(strMsgName, args, payload, &callbackLandFreeze);
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+bool LLAvatarActions::callbackLandFreeze(const LLSD& notification, const LLSD& response)
+{
+	S32 idxOption = LLNotificationsUtil::getSelectedOption(notification, response);
+	if ( (0 == idxOption) || (1 == idxOption) )
+	{
+		U32 flags = (0 == idxOption) ? 0x0 : 0x1;
+
+		const LLSD& idAgents = notification["payload"]["ids"];
+		for (LLSD::array_const_iterator itAgent = idAgents.beginArray(); itAgent != idAgents.endArray(); ++itAgent)
+		{
+			const LLUUID idAgent = itAgent->asUUID(); const LLViewerRegion* pAgentRegion = NULL;
+			if (getRegionFromAgentID(idAgent, &pAgentRegion))
+			{
+				gMessageSystem->newMessage("FreezeUser");
+				gMessageSystem->nextBlock("AgentData");
+				gMessageSystem->addUUID("AgentID", gAgent.getID());
+				gMessageSystem->addUUID("SessionID", gAgent.getSessionID());
+				gMessageSystem->nextBlock("Data");
+				gMessageSystem->addUUID("TargetID", idAgent);
+				gMessageSystem->addU32("Flags", flags);
+				gMessageSystem->sendReliable(pAgentRegion->getHost());
+			}
+		}
+	}
+	return false;
+}
+
+//
+// Estate actions
+//
+
+typedef std::vector<std::string> strings_t;
+
+// Copy/paste from LLPanelRegionInfo::sendEstateOwnerMessage
+void sendEstateOwnerMessage(const LLViewerRegion* pRegion, const std::string& request, const LLUUID& invoice, const strings_t& strings)
+{
+	if (pRegion)
+	{
+		llinfos << "Sending estate request '" << request << "'" << llendl;
+		gMessageSystem->newMessage("EstateOwnerMessage");
+		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
+		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		gMessageSystem->addUUIDFast(_PREHASH_TransactionID, LLUUID::null); //not used
+		gMessageSystem->nextBlock("MethodData");
+		gMessageSystem->addString("Method", request);
+		gMessageSystem->addUUID("Invoice", invoice);
+		if(strings.empty())
+		{
+			gMessageSystem->nextBlock("ParamList");
+			gMessageSystem->addString("Parameter", NULL);
+		}
+		else
+		{
+			strings_t::const_iterator it = strings.begin();
+			strings_t::const_iterator end = strings.end();
+			for(; it != end; ++it)
+			{
+				gMessageSystem->nextBlock("ParamList");
+				gMessageSystem->addString("Parameter", *it);
+			}
+		}
+		gMessageSystem->sendReliable(pRegion->getHost());
+	}
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+bool LLAvatarActions::canEstateKickOrTeleportHome(const LLUUID& idAgent)
+{
+	uuid_vec_t idAgents;
+	idAgents.push_back(idAgent);
+	return canEstateKickOrTeleportHomeMultiple(idAgents);
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+bool LLAvatarActions::canEstateKickOrTeleportHomeMultiple(uuid_vec_t& idAgents, bool fFilter /*=false*/)
+{
+	if (gAgent.isGodlikeWithoutAdminMenuFakery())
+		return true;		// Gods can always kick
+
+	uuid_vec_t::iterator itAgent = idAgents.begin(); bool fCanKick = false;
+	while ( (itAgent != idAgents.end()) && ((fFilter) || (!fCanKick)) )
+	{
+		const LLViewerRegion* pRegion = NULL;
+		if ( (getRegionFromAgentID(*itAgent, &pRegion)) && ((pRegion->getOwner() == gAgent.getID()) || (pRegion->isEstateManager())) )
+		{
+			fCanKick = true;
+			++itAgent;		// Estate owners/managers can kick
+			continue;
+		}
+
+		if (fFilter)
+			itAgent = idAgents.erase(itAgent);
+		else
+			++itAgent;
+	}
+	return fCanKick;
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+void LLAvatarActions::estateKick(const LLUUID& idAgent)
+{
+	llinfos << "estatekick " << idAgent << llendl;
+	uuid_vec_t idAgents;
+	idAgents.push_back(idAgent);
+	estateKickMultiple(idAgents);
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+void LLAvatarActions::estateKickMultiple(const uuid_vec_t& idAgents)
+{
+	uuid_vec_t idEjectAgents(idAgents);
+	if (!canEstateKickOrTeleportHomeMultiple(idEjectAgents, true))
+		return;
+
+	LLSD args, payload; std::string strMsgName, strResidents;
+	for (uuid_vec_t::const_iterator itAgent = idEjectAgents.begin(); itAgent != idEjectAgents.end(); ++itAgent)
+	{
+		const LLUUID& idAgent = *itAgent;
+		if (idEjectAgents.begin() != itAgent)
+			strResidents += "\n";
+		strResidents += LLSLURL("agent", idAgent, (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? "completename" : "rlvanonym").getSLURLString();
+		payload["ids"].append(*itAgent);
+	}
+
+	if (1 == payload["ids"].size())
+	{
+		args["EVIL_USER"] = strResidents;
+		strMsgName = "EstateKickUser";
+	}
+	else
+	{
+		args["RESIDENTS"] = strResidents;
+		strMsgName = "EstateKickMultiple";
+	}
+
+	LLNotificationsUtil::add(strMsgName, args, payload, &callbackEstateKick);
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+bool LLAvatarActions::callbackEstateKick(const LLSD& notification, const LLSD& response)
+{
+	S32 idxOption = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (0 == idxOption)
+	{
+		const LLSD& idAgents = notification["payload"]["ids"];
+		for (LLSD::array_const_iterator itAgent = idAgents.beginArray(); itAgent != idAgents.endArray(); ++itAgent)
+		{
+			const LLViewerRegion* pRegion = NULL;
+			if (getRegionFromAgentID(itAgent->asUUID(), &pRegion))
+			{
+				strings_t strings;
+				strings.push_back(itAgent->asString());
+
+				sendEstateOwnerMessage(pRegion, "kickestate", LLUUID::generateNewID(), strings);
+			}
+		}
+	}
+	return false;
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+void LLAvatarActions::estateTeleportHome(const LLUUID& idAgent)
+{
+	llinfos << "estateTpHome " << idAgent << llendl;
+	uuid_vec_t idAgents;
+	idAgents.push_back(idAgent);
+	estateTeleportHomeMultiple(idAgents);
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+void LLAvatarActions::estateTeleportHomeMultiple(const uuid_vec_t& idAgents)
+{
+	uuid_vec_t idEjectAgents(idAgents);
+	if (!canEstateKickOrTeleportHomeMultiple(idEjectAgents, true))
+		return;
+
+	LLSD args, payload; std::string strMsgName, strResidents;
+	for (uuid_vec_t::const_iterator itAgent = idEjectAgents.begin(); itAgent != idEjectAgents.end(); ++itAgent)
+	{
+		const LLUUID& idAgent = *itAgent;
+		if (idEjectAgents.begin() != itAgent)
+			strResidents += "\n";
+		strResidents += LLSLURL("agent", idAgent, (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? "completename" : "rlvanonym").getSLURLString();
+		payload["ids"].append(*itAgent);
+	}
+
+	if (1 == payload["ids"].size())
+	{
+		args["AVATAR_NAME"] = strResidents;
+		strMsgName = "EstateTeleportHomeUser";
+	}
+	else
+	{
+		args["RESIDENTS"] = strResidents;
+		strMsgName = "EstateTeleportHomeMultiple";
+	}
+
+	LLNotificationsUtil::add(strMsgName, args, payload, &callbackEstateTeleportHome);
+}
+
+// static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+bool LLAvatarActions::callbackEstateTeleportHome(const LLSD& notification, const LLSD& response)
+{
+	S32 idxOption = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (0 == idxOption)
+	{
+		const LLSD& idAgents = notification["payload"]["ids"];
+		for (LLSD::array_const_iterator itAgent = idAgents.beginArray(); itAgent != idAgents.endArray(); ++itAgent)
+		{
+			const LLViewerRegion* pRegion = NULL;
+			if (getRegionFromAgentID(itAgent->asUUID(), &pRegion))
+			{
+				strings_t strings;
+				strings.push_back(gAgent.getID().asString());
+				strings.push_back(itAgent->asString());
+
+				sendEstateOwnerMessage(pRegion, "teleporthomeuser", LLUUID::generateNewID(), strings);
+			}
+		}
+	}
+	return false;
+}
+// [/SL:KB]

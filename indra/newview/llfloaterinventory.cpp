@@ -30,6 +30,7 @@
 
 #include "llagentcamera.h"
 //#include "llfirstuse.h"
+#include "llfiltereditor.h"
 #include "llfloaterreg.h"
 #include "llinventorymodel.h"
 #include "llpanelmaininventory.h"
@@ -97,4 +98,7 @@ void LLFloaterInventory::cleanup()
 void LLFloaterInventory::onOpen(const LLSD& key)
 {
 	//LLFirstUse::useInventory();
+	// set focus on filter editor when floater inventory shows up
+	LLFilterEditor* filter_editor = mPanelMainInventory->getChild<LLFilterEditor>("inventory search editor");
+	filter_editor->setFocus(TRUE);
 }

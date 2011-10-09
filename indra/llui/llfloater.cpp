@@ -1,4 +1,5 @@
 /** 
+
  * @file llfloater.cpp
  * @brief LLFloater base class
  *
@@ -164,7 +165,7 @@ LLFloater::Params::Params()
 	save_rect("save_rect", false),
 	save_visibility("save_visibility", false),
 	can_dock("can_dock", false),
-	open_centered("open_centered", false),
+	open_centered("open_centered", true),
 	header_height("header_height", 0),
 	legacy_header_height("legacy_header_height", 0),
 	close_image("close_image"),
@@ -244,7 +245,7 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	mAutoFocus(TRUE), // automatically take focus when opened
 	mCanDock(false),
 	mDocked(false),
-	mTornOff(false),
+	mTornOff(true),
 	mHasBeenDraggedWhileMinimized(FALSE),
 	mPreviousMinimizedBottom(0),
 	mPreviousMinimizedLeft(0),
@@ -273,9 +274,6 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	
 	initFromParams(p);
 	
-	// chrome floaters don't take focus at all
-	setFocusRoot(!getIsChrome());
-
 	initFloater(p);
 }
 
@@ -531,7 +529,8 @@ LLFloater::~LLFloater()
 
 void LLFloater::storeRectControl()
 {
-	if( mRectControl.size() > 1 )
+	// do not store rect when attached to another floater -Zi
+	if( mTornOff && mRectControl.size() > 1 )
 	{
 		getControlGroup()->setRect( mRectControl, getRect() );
 	}
@@ -601,6 +600,11 @@ LLControlGroup*	LLFloater::getControlGroup()
 
 void LLFloater::setVisible( BOOL visible )
 {
+	// Ansariel: This method is called everytime the UI updates.
+	//           Why should we want to update visibility even
+	//           if nothing has changed?
+	if (visible == LLPanel::getVisible()) return;
+
 	LLPanel::setVisible(visible); // calls handleVisibilityChange()
 	if( visible && mFirstLook )
 	{
@@ -780,7 +784,6 @@ void LLFloater::closeFloater(bool app_quitting)
 void LLFloater::reshape(S32 width, S32 height, BOOL called_from_parent)
 {
 	LLPanel::reshape(width, height, called_from_parent);
-	storeRectControl();
 }
 
 void LLFloater::releaseFocus()
@@ -853,7 +856,8 @@ void LLFloater::applyRectControl()
 	}
 
 	// override center if we have saved rect control
-	if (mRectControl.size() > 1)
+	// only if we are torn off -Zi
+	if (mTornOff && mRectControl.size() > 1)
 	{
 		const LLRect& rect = getControlGroup()->getRect(mRectControl);
 		if (rect.getWidth() > 0 && rect.getHeight() > 0)
@@ -997,6 +1001,11 @@ void LLFloater::handleReshape(const LLRect& new_rect, bool by_user)
 {
 	const LLRect old_rect = getRect();
 	LLView::handleReshape(new_rect, by_user);
+
+	if (by_user)
+	{
+		storeRectControl();
+	}
 
 	// if not minimized, adjust all snapped dependents to new shape
 	if (!isMinimized())
@@ -1252,7 +1261,7 @@ void LLFloater::setFocus( BOOL b )
 			last_focus->setFocus(TRUE);
 		}
 	}
-	updateTransparency(this, b ? TT_ACTIVE : TT_INACTIVE);
+	updateTransparency(b ? TT_ACTIVE : TT_INACTIVE);
 }
 
 // virtual
@@ -1525,6 +1534,9 @@ void LLFloater::setFrontmost(BOOL take_focus)
 		// there are more than one floater view
 		// so we need to query our parent directly
 		((LLFloaterView*)getParent())->bringToFront(this, take_focus);
+
+		// Make sure to set the appropriate transparency type (STORM-732).
+		updateTransparency(hasFocus() || getIsChrome() ? TT_ACTIVE : TT_INACTIVE);
 	}
 }
 
@@ -1581,12 +1593,22 @@ void LLFloater::onClickTearOff(LLFloater* self)
 
 		self->openFloater(self->getKey());
 		
-		// only force position for floaters that don't have that data saved
+		// get floater rect size from either the rect control or the saved rect -Zi
 		if (self->mRectControl.size() <= 1)
+			// restore old size and position -Zi
+			new_rect=self->getExpandedRect();
+		else
+			new_rect=self->getSavedRect();
+
+		// only force position for floaters that have an empty rect -Zi
+		if(new_rect.isEmpty())
 		{
+			llwarns << "no rect saved yet, so reshape the floater" << llendl;
 			new_rect.setLeftTopAndSize(host_floater->getRect().mLeft + 5, host_floater->getRect().mTop - floater_header_size - 5, self->getRect().getWidth(), self->getRect().getHeight());
-			self->setRect(new_rect);
 		}
+		self->setShape(new_rect);
+		self->storeRectControl();
+
 		gFloaterView->adjustToFitScreen(self, FALSE);
 		// give focus to new window to keep continuity for the user
 		self->setFocus(TRUE);
@@ -1594,6 +1616,12 @@ void LLFloater::onClickTearOff(LLFloater* self)
 	}
 	else  //Attach to parent.
 	{
+		self->storeRectControl();
+		// save the current size and position -Zi
+		self->setExpandedRect(self->getRect());
+		// reset torn off before showing the floater in the new host, so the rect change
+		// doesn't overwrite our remembered rect. -Zi
+		self->setTornOff(false);
 		LLMultiFloater* new_host = (LLMultiFloater*)self->mLastHostHandle.get();
 		if (new_host)
 		{
@@ -1602,7 +1630,6 @@ void LLFloater::onClickTearOff(LLFloater* self)
 			// make sure host is visible
 			new_host->openFloater(new_host->getKey());
 		}
-		self->setTornOff(false);
 	}
 	self->updateTitleButtons();
 }
@@ -2118,7 +2145,6 @@ static LLDefaultChildRegistry::Register<LLFloaterView> r("floater_view");
 
 LLFloaterView::LLFloaterView (const Params& p)
 :	LLUICtrl (p),
-
 	mFocusCycleMode(FALSE),
 	mMinimizePositionVOffset(0),
 	mSnapOffsetBottom(0),
@@ -2128,12 +2154,6 @@ LLFloaterView::LLFloaterView (const Params& p)
 
 // By default, adjust vertical.
 void LLFloaterView::reshape(S32 width, S32 height, BOOL called_from_parent)
-{
-	reshapeFloater(width, height, called_from_parent, ADJUST_VERTICAL_YES);
-}
-
-// When reshaping this view, make the floaters follow their closest edge.
-void LLFloaterView::reshapeFloater(S32 width, S32 height, BOOL called_from_parent, BOOL adjust_vertical)
 {
 	S32 old_width = getRect().getWidth();
 	S32 old_height = getRect().getHeight();
@@ -2179,11 +2199,7 @@ void LLFloaterView::reshapeFloater(S32 width, S32 height, BOOL called_from_paren
 			// "No vertical adjustment" usually means that the bottom of the view
 			// has been pushed up or down.  Hence we want the floaters to follow
 			// the top.
-			if (!adjust_vertical)
-			{
-				follow_flags |= FOLLOWS_TOP;
-			}
-			else if (top_offset < bottom_offset)
+			if (top_offset < bottom_offset)
 			{
 				follow_flags |= FOLLOWS_TOP;
 			}
@@ -2217,7 +2233,15 @@ void LLFloaterView::restoreAll()
 	for ( child_list_const_iter_t child_it = getChildList()->begin(); child_it != getChildList()->end(); ++child_it)
 	{
 		LLFloater* floaterp = (LLFloater*)*child_it;
-		floaterp->setMinimized(FALSE);
+
+		// Ansariel: Don't restore "closed" sidebar floaters that are hidden
+		//           minimized to emulate closed state!
+		std::string pat = "side_bar_tab";
+		size_t found = floaterp->getInstanceName().find(pat);
+		if (found == std::string::npos)
+		{
+			floaterp->setMinimized(FALSE);
+		}
 	}
 
 	// *FIX: make sure dependents are restored
@@ -2672,9 +2696,13 @@ void LLFloaterView::draw()
 
 LLRect LLFloaterView::getSnapRect() const
 {
-	LLRect snap_rect = getRect();
-	snap_rect.mBottom += mSnapOffsetBottom;
-	snap_rect.mRight  -= mSnapOffsetRight;
+	LLRect snap_rect = getLocalRect();
+
+	LLView* snap_view = mSnapView.get();
+	if (snap_view)
+	{
+		snap_view->localRectToOtherView(snap_view->getLocalRect(), &snap_rect, this);
+	}
 
 	return snap_rect;
 }
@@ -2929,7 +2957,7 @@ void LLFloater::initFromParams(const LLFloater::Params& p)
 	mAutoTile = p.auto_tile;
 	mOpenCentered = p.open_centered;
 
-	if (p.save_rect)
+	if (p.save_rect && mRectControl.empty())
 	{
 		mRectControl = "t"; // flag to build mRectControl name once mInstanceName is set
 	}
@@ -2953,7 +2981,7 @@ void LLFloater::initFromParams(const LLFloater::Params& p)
 	// close callback 
 	if (p.close_callback.isProvided())
 	{
-		mCloseSignal.connect(initCommitCallback(p.close_callback));
+		setCloseCallback(initCommitCallback(p.close_callback));
 	}
 }
 
@@ -2963,13 +2991,59 @@ boost::signals2::connection LLFloater::setMinimizeCallback( const commit_signal_
 	return mMinimizeSignal->connect(cb); 
 }
 
+boost::signals2::connection LLFloater::setCloseCallback( const commit_signal_t::slot_type& cb )
+{
+	return mCloseSignal.connect(cb);
+}
+
 LLFastTimer::DeclareTimer POST_BUILD("Floater Post Build");
+static LLFastTimer::DeclareTimer FTM_EXTERNAL_FLOATER_LOAD("Load Extern Floater Reference");
 
 bool LLFloater::initFloaterXML(LLXMLNodePtr node, LLView *parent, const std::string& filename, LLXMLNodePtr output_node)
 {
-	Params params(LLUICtrlFactory::getDefaultParams<LLFloater>());
+	Params default_params(LLUICtrlFactory::getDefaultParams<LLFloater>());
+	Params params(default_params);
+
 	LLXUIParser parser;
 	parser.readXUI(node, params, filename); // *TODO: Error checking
+
+	std::string xml_filename = params.filename;
+
+	if (!xml_filename.empty())
+	{
+		LLXMLNodePtr referenced_xml;
+
+		if (output_node)
+		{
+			//if we are exporting, we want to export the current xml
+			//not the referenced xml
+			Params output_params;
+			parser.readXUI(node, output_params, LLUICtrlFactory::getInstance()->getCurFileName());
+			setupParamsForExport(output_params, parent);
+			output_node->setName(node->getName()->mString);
+			parser.writeXUI(output_node, output_params, &default_params);
+			return TRUE;
+		}
+
+		LLUICtrlFactory::instance().pushFileName(xml_filename);
+
+		LLFastTimer _(FTM_EXTERNAL_FLOATER_LOAD);
+		if (!LLUICtrlFactory::getLayeredXMLNode(xml_filename, referenced_xml))
+		{
+			llwarns << "Couldn't parse panel from: " << xml_filename << llendl;
+
+			return FALSE;
+		}
+
+		parser.readXUI(referenced_xml, params, LLUICtrlFactory::getInstance()->getCurFileName());
+
+		// add children using dimensions from referenced xml for consistent layout
+		setShape(params.rect);
+		LLUICtrlFactory::createChildren(this, referenced_xml, child_registry_t::instance());
+
+		LLUICtrlFactory::instance().popFileName();
+	}
+
 
 	if (output_node)
 	{
@@ -2991,11 +3065,10 @@ bool LLFloater::initFloaterXML(LLXMLNodePtr node, LLView *parent, const std::str
 	{
 		params.rect.left.set(0);
 	}
-
 	params.from_xui = true;
 	applyXUILayout(params, parent);
  	initFromParams(params);
-	
+
 	initFloater(params);
 	
 	LLMultiFloater* last_host = LLFloater::getFloaterHost();
@@ -3134,3 +3207,25 @@ bool LLFloater::buildFromFile(const std::string& filename, LLXMLNodePtr output_n
 	
 	return res;
 }
+
+void LLFloater::stackWith(LLFloater& other)
+{
+	static LLUICachedControl<S32> floater_offset ("UIFloaterOffset", 16);
+
+	LLRect next_rect;
+	if (other.getHost())
+	{
+		next_rect = other.getHost()->getRect();
+	}
+	else
+	{
+		next_rect = other.getRect();
+	}
+	next_rect.translate(floater_offset, -floater_offset);
+
+	next_rect.setLeftTopAndSize(next_rect.mLeft, next_rect.mTop, getRect().getWidth(), getRect().getHeight());
+	
+	mRectControl.clear(); // don't save rect of stacked floaters
+	setShape(next_rect);
+}
+

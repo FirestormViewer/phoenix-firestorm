@@ -38,6 +38,44 @@
      name="friends_online_notify_checkbox"
      top_pad="4"
      width="300" />
+    <check_box
+     control_name="ShowScriptErrors"
+     follows="left|top"
+     height="16"
+     label="When I have Script Errors in:"
+     layout="topleft"
+     left_delta="0"
+     top_pad="4" 
+     name="show_script_errors"
+     width="256" />
+    <radio_group
+     enabled_control="ShowScriptErrors"
+     control_name="ShowScriptErrorsLocation"
+     follows="top|left"
+     draw_border="false"
+     height="16"
+     layout="topleft"
+     left_delta="180"
+     name="show_script_errors_location"
+     width="200">
+        <radio_item
+         height="16"
+         label="Nearby chat"
+         layout="topleft"
+         left_delta="0"
+         name="script_0"
+         top="0"
+         width="100" />
+        <radio_item
+         height="16"
+         label="Separate window"
+         layout="topleft"
+         left_delta="100"
+         name="script_1"
+         top_delta="0"
+         width="100" />
+    </radio_group>
+
     <text
      type="string"
      length="1"
@@ -46,7 +84,7 @@
      layout="topleft"
      left="10"
      name="show_label"
-     top_pad="8"
+     top_pad="10"
      width="450">
         Always show:
     </text>
@@ -67,7 +105,7 @@
      image_overlay="Arrow_Up"
      hover_glow_amount="0.25"
      layout="topleft"
-     left="180"
+     left="200"
      name="enable_this_popup"
      top_pad="5"
      width="40">
@@ -81,7 +119,7 @@
      image_overlay="Arrow_Down"
      hover_glow_amount="0.25"
      layout="topleft"
-     left_pad="40"
+     left_pad="20"
      name="disable_this_popup"
      top_delta="0"
      width="40">

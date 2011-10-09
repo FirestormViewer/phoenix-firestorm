@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ border="false"
+ can_close="true"
+ can_minimize="true"
+ bottom="400"
+ left="300"
+ can_resize="false"
+ height="407"
+ name="BeamCreator"
+ title="Beam Shape Creator"
+ width="410"
+ save_rect="true">
+	<text
+	 font="SansSerifSmall"
+	 name="beamcreator_text"
+	 follows="left|top"
+	 left="10"
+	 bottom="-350"
+	 height="50"
+	 width="300">
+		To create a new beam, left click the panel below to
+define a beam ray of the selected color, or right click to
+remove a ray. Press the Save button when done.
+	</text>
+
+	<color_swatch
+	 border_color="0.45098, 0.517647, 0.607843, 1"
+	 bottom_delta="10"
+	 can_apply_immediately="true"
+	 color="1, 1, 1, 1"
+	 follows="left|top"
+	 height="60"
+	 label="Beam Color"
+	 left_delta="325"
+	 mouse_opaque="true"
+	 name="beam_color_swatch"
+	 tool_tip="Click to open Color Picker to change dot color"
+	 width="65" />
+
+	<panel
+	 name="beamshape_draw"
+	 left="5"
+	 width="400"
+	 height="300"
+	 bottom_delta="300"
+	 border="true"
+	 mouse_opaque="true"
+	 bevel_style="in"
+	 background_visible="false"
+	 background_opaque="true"
+	 follows="left|top"
+	 bg_opaque_color="1,1,1,0"
+	 bg_alpha_color="white"
+	 can_resize="false">
+	</panel>
+
+	<button
+	 bottom_delta="30"
+	 enabled="true"
+	 follows="left|top"
+	 halign="center"
+	 height="22"
+	 label="Save"
+	 left_delta="10"
+	 mouse_opaque="true"
+	 name="beamshape_save"
+	 scale_image="true"
+	 width="85" />
+	<button
+	 bottom_delta="0"
+	 enabled="true"
+	 follows="left|top"
+	 halign="center"
+	 height="22"
+	 label="Load"
+	 left_delta="90"
+	 mouse_opaque="true"
+	 name="beamshape_load"
+	 scale_image="true"
+	 width="85" />
+	<button
+	 bottom_delta="0"
+	 enabled="true"
+	 follows="left|top"
+	 halign="center"
+	 height="22"
+	 label="Clear"
+	 left_delta="100"
+	 mouse_opaque="true"
+	 name="beamshape_clear"
+	 scale_image="true"
+	 width="85" />
+</floater> 

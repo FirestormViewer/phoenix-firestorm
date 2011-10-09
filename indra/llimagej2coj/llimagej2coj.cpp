@@ -90,6 +90,12 @@ void info_callback(const char* msg, void*)
 	lldebugs << "LLImageJ2COJ: " << chomp(msg) << llendl;
 }
 
+// Divide a by 2 to the power of b and round upwards
+int ceildivpow2(int a, int b)
+{
+	return (a + (1 << b) - 1) >> b;
+}
+
 
 LLImageJ2COJ::LLImageJ2COJ()
 	: LLImageJ2CImpl()
@@ -101,6 +107,17 @@ LLImageJ2COJ::~LLImageJ2COJ()
 {
 }
 
+BOOL LLImageJ2COJ::initDecode(LLImageJ2C &base, LLImageRaw &raw_image, int discard_level, int* region)
+{
+	// No specific implementation for this method in the OpenJpeg case
+	return FALSE;
+}
+
+BOOL LLImageJ2COJ::initEncode(LLImageJ2C &base, LLImageRaw &raw_image, int blocks_size, int precincts_size, int levels)
+{
+	// No specific implementation for this method in the OpenJpeg case
+	return FALSE;
+}
 
 BOOL LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decode_time, S32 first_channel, S32 max_channel_count)
 {

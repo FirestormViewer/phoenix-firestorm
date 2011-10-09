@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- legacy_header_height="18"
+ legacy_header_height="20"
  background_visible="true"
+ background_opaque="true"
+ border_visible="false"
+ bg_alpha_color="ScriptDialog"
+ bg_opaque_color="ScriptDialog"
  follows="left|top|right|bottom"
  height="250"
  layout="topleft"
@@ -10,9 +14,10 @@
  top="0"
  can_dock="true"
  can_minimize="true"
- visible="false" 
- width="350"
+ visible="false"
+ width="310"
  can_resize="false"
- min_width="350"
+ header_height="20"
+ min_width="310"
  min_height="200">
 </floater>

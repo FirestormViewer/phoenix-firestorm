@@ -11,6 +11,12 @@
 
 	-->
 	<color
+        name="ScriptDialog"
+        value=".27 .66 1.0 1" />
+    <color 
+        name="ScriptDialogFg"
+        value=".05 .05 .05 1" />
+	<color
 	 name="AccentColor"
 	 value="0.75 0.92 0.49 1.0" />
 	<color
@@ -31,9 +37,6 @@
 	<color
 	 name="EmphasisColor_35"
 	 value="0.950 0.412 0.173 0.35" />
-	<color
-	 name="white"
-	 value="0 0 0 1" />
 	<color
 	 name="White"
 	 value="1 1 1 1" />
@@ -103,6 +106,10 @@
 	<color
 	 name="Green"
 	 value="0 1 0 1" />
+	<!-- Ansariel: Added missing referenced color -->
+	 <color
+	 name="LtGreen"
+	 value="0.79 1 0.79 1" />
 	<color
 	 name="Transparent"
 	 value="0 0 0 0" />
@@ -251,13 +258,22 @@
      value="0 0.78 0.78 1" />
     <color
      name="PieMenuBgColor"
-     value="0.24 0.24 0.24 0.59" />
+     value="0.24 0.24 0.24 0.8" />
+    <color
+     name="PieMenuBgColorOverride"
+     value="0.24 0.24 0.24 1.0" />
     <color
      name="PieMenuLineColor"
      value="0 0 0 0.5" />
     <color
+     name="PieMenuTextColor"
+     reference="SL-White" />
+    <color
      name="PieMenuSelectedColor"
-     value="0.72 0.72 0.74 0.3" />
+     reference="EmphasisColor_35" />
+    <color
+     name="PieMenuSelectedColorOverride"
+     reference="EmphasisColor" />
     <color
      name="PropertyColorAuction"
      value="0.5 0 1 0.4" />
@@ -340,6 +356,24 @@
      name="AvatarListItemIconVoiceLeftColor"
      reference="AvatarListItemIconOfflineColor" />
     <color
+     name="BadgeImageColor"
+     value="1.0 0.40 0.0 1.0" />
+    <color
+     name="BadgeBorderColor"
+     value="0.9 0.9 0.9 1.0" />
+    <color
+     name="BadgeLabelColor"
+     reference="White" />
+    <color
+     name="AvatarListItemChatRange"
+     reference="AccentColor" />
+    <color
+     name="AvatarListItemShoutRange"
+     reference="White" />
+    <color
+     name="AvatarListItemBeyondShoutRange"
+     reference="SL-Silver" />
+    <color
      name="BackgroundChatColor"
      reference="DkGray" />
     <color
@@ -393,13 +427,13 @@
      reference="Black_50" />
     <color
      name="ColorPaletteEntry01"
-     reference="Black" />
+     value="0 0 0 1" />
     <color
      name="ColorPaletteEntry02"
-     reference="SL-MidDkGray" />
+     value="0.5 0.5 0.5 1" />
     <color
      name="ColorPaletteEntry03"
-     value="0.3344 0.5456 0.5159 1" />
+     value="0.5 0 0 1" />
     <color
      name="ColorPaletteEntry04"
      value="0.5 0.5 0 1" />
@@ -435,34 +469,34 @@
      value="0.5 0.25 0 1" />
     <color
      name="ColorPaletteEntry15"
-     reference="White" />
+     value="1 1 1 1" />
     <color
      name="ColorPaletteEntry16"
-     reference="LtYellow" />
+     value="1 1 1 1" />
     <color
      name="ColorPaletteEntry17"
-     reference="LtGreen" />
+     value="1 1 1 1" />
     <color
      name="ColorPaletteEntry18"
-     reference="LtGray" />
+     value="0.75 0.75 0.75 1" />
     <color
      name="ColorPaletteEntry19"
-     reference="Red" />
+     value="1 0 0 1" />
     <color
      name="ColorPaletteEntry20"
-     reference=".5 .5 1 0" />
+     value="1 1 0 0" />
     <color
      name="ColorPaletteEntry21"
-     reference="Green" />
+     value="0 1 0 1" />
     <color
      name="ColorPaletteEntry22"
      value="0 1 1 1" />
     <color
      name="ColorPaletteEntry23"
-     reference="Blue" />
+     value="0 0 1 1" />
     <color
      name="ColorPaletteEntry24"
-     reference="Purple" />
+     value="1 0 1 1" />
     <color
      name="ColorPaletteEntry25"
      value="1 1 0.5 1" />
@@ -483,10 +517,10 @@
      value="1 0.5 0 1" />
     <color
      name="ColorPaletteEntry31"
-     reference="White" />
+     value="1 1 1 1" />
     <color
      name="ColorPaletteEntry32"
-     reference="White" />
+     value="1 1 1 1" />
     <color
      name="ComboListBgColor"
      reference="DkGray" />
@@ -549,6 +583,12 @@
     <color
      name="GroupLinkColor"
      reference="White" />
+    <color
+     name="GridlineShadowColor"
+     value="0 0 0 0.31" />
+    <color
+     name="GroupNotifyBoxColor"
+     value="0.3344 0.5456 0.5159 1" />
     <color
      name="GroupNotifyTextColor"
      reference="White"/>
@@ -616,6 +656,9 @@
      name="InventorySearchStatusColor"
      reference="EmphasisColor" />
     <color
+     name="InventoryProtectedColor"
+     reference="EmphasisColor" />
+    <color
      name="LabelDisabledColor"
 	 reference="White_25" />
     <color
@@ -647,10 +690,16 @@
      reference="White" />
     <color
      name="MapAvatarColor"
-     reference="Green" />
+     reference="Red" />
     <color
      name="MapAvatarFriendColor"
-     reference="Yellow" />
+     reference="Green" />
+    <color
+     name="MapAvatarLindenColor"
+     reference="Blue" />
+    <color
+     name="MapAvatarMutedColor"
+     value="0.4 0.4 0.4 1" />
     <color
      name="MapFrustumColor"
      reference="White_10" />
@@ -665,6 +714,9 @@
     <color
      name="MapTrackDisabledColor"
      reference="BrickBrown" />
+    <color
+     name="MapChatRingColor"
+     value="0 0 1 0.1" />
     <color
      name="MenuBarBgColor"
      reference="DkGray" />
@@ -694,22 +746,22 @@
 	  reference="DkGray2" />
     <color
      name="MultiSliderDisabledThumbColor"
-     reference="Unused?" />
+     reference="Black" />
     <color
      name="MultiSliderThumbCenterColor"
-     reference="Unused?" />
+     reference="White" />
     <color
      name="MultiSliderThumbCenterSelectedColor"
-     reference="Unused?" />
+     reference="Green" />
     <color
      name="MultiSliderThumbOutlineColor"
      reference="Unused?" />
     <color
      name="MultiSliderTrackColor"
-     reference="Unused?" />
+     reference="LtGray" />
     <color
      name="MultiSliderTriangleColor"
-     reference="Unused?" />
+     reference="Yellow" />
   <!--
     <color
       name="NameTagBackground"
@@ -727,6 +779,9 @@
     <color
      name="NameTagLegacy"
      reference="White" />
+    <color
+     name="NameTagV1"
+     value="0.98 0.69 0.36 1.0" />
     <color
      name="NameTagMatch"
      reference="White" />
@@ -902,4 +957,32 @@
     <color
      name="MenuBarProjectBgColor"
      reference="MdBlue" />
+  
+    <color
+      name="MeshImportTableNormalColor"
+      value="1 1 1 1"/>
+    <color
+      name="MeshImportTableHighlightColor"
+      value="0.2 0.8 1 1"/>
+
+    <color
+     name="DirectChatColor"
+     reference="LtOrange" />
+  
+    <!-- Generic color names (legacy) -->
+  <color
+    name="white"
+    value="1 1 1 1"/>
+  <color
+    name="black"
+    value="0 0 0 1"/>
+  <color
+    name="red"
+    value="1 0 0 1"/>
+  <color
+    name="green"
+    value="0 1 0 1"/>
+  <color
+    name="blue"
+    value="0 0 1 1"/>
 </colors>

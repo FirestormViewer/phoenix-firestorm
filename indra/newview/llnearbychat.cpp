@@ -32,6 +32,7 @@
 #include "llrootview.h"
 //#include "llchatitemscontainerctrl.h"
 #include "lliconctrl.h"
+#include "llspinctrl.h"
 #include "llsidetray.h"
 #include "llfocusmgr.h"
 #include "llresizebar.h"
@@ -71,6 +72,9 @@
 #include "llgesturemgr.h"
 #include "llmultigesture.h"
 
+#include "llconsole.h"
+#include "fscontactsfloater.h"
+
 static const S32 RESIZE_BAR_THICKNESS = 3;
 
 struct LLChatTypeTrigger {
@@ -93,6 +97,25 @@ LLNearbyChat::LLNearbyChat(const LLSD& key)
 
 LLNearbyChat::~LLNearbyChat()
 {
+}
+
+void LLNearbyChat::updatePhoenixUseNearbyChatConsole(const LLSD &data)
+{
+	PhoenixUseNearbyChatConsole = data.asBoolean();
+
+	if (PhoenixUseNearbyChatConsole)
+	{
+		LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLUUID(gSavedSettings.getString("NearByChatChannelUUID")));
+		if(chat_channel)
+		{
+			chat_channel->removeToastsFromChannel();
+		}
+		gConsole->setVisible(!getVisible());
+	}
+	else
+	{
+		gConsole->setVisible(FALSE);		
+	}
 }
 
 
@@ -128,6 +151,8 @@ BOOL LLNearbyChat::postBuild()
 	mInputEditor->setPassDelete( TRUE );
 	mInputEditor->setEnabled(TRUE);
 	
+	// chat channel spinner - TS
+	getChild<LLSpinCtrl>("ChatChannel")->setEnabled(gSavedSettings.getBOOL("PhoenixShowChatChannel"));
 	
 	// extra icon controls -AO
 	LLButton* transl = getChild<LLButton>("translate_btn");
@@ -135,6 +160,16 @@ BOOL LLNearbyChat::postBuild()
 	
 	mChatHistory = getChild<LLChatHistory>("chat_history");
 	
+	// Nicky D.; FIRE-3066: Force creation or FSFLoaterContacts here, this way it will register with LLAvatarTracker early enough.
+	// Otherwise it is only create if isChatMultriTab() == true and LLIMFloaterContainer::getInstance is called
+	LLFloater *pContacts(FSFloaterContacts::getInstance());
+	
+	// Do something with pContacts so no overzealous optimizer optimzes our neat little call to FSFloaterContacts::getInstance() away.
+	if( pContacts )
+		llinfos << "Constructed " <<  pContacts->getTitle() << llendl;
+
+	// Nicky D.; End FIRE-3066
+
 	// <vertical tab docking> -AO
 	if(isChatMultiTab())
 	{
@@ -147,13 +182,30 @@ BOOL LLNearbyChat::postBuild()
 		if (getDockControl() == NULL)
 		{
 			LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
-			LLTabContainer::eInsertionPoint i_pt = LLTabContainer::START;
 			if (floater_container)
 			{
-				floater_container->addFloater(this, TRUE, i_pt);
+				if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
+				{
+					// first set the tear-off host to this floater
+					setHost(floater_container);
+					// clear the tear-off host right after, the "last host used" will still stick
+					setHost(NULL);
+					// reparent the floater to the main view
+					gFloaterView->addChild(this);
+					// and remember we are torn off
+					setTornOff(TRUE);
+				}
+				else
+				{
+					setTornOff(FALSE);
+					floater_container->addFloater(this, FALSE);
+				}
+				floater_container->setVisible(FALSE);
 			}
 		}
-		
+
+		PhoenixUseNearbyChatConsole = gSavedSettings.getBOOL("PhoenixUseNearbyChatConsole");
+		gSavedSettings.getControl("PhoenixUseNearbyChatConsole")->getSignal()->connect(boost::bind(&LLNearbyChat::updatePhoenixUseNearbyChatConsole, this, _2));
 		
 		return LLDockableFloater::postBuild();
 	}
@@ -177,34 +229,6 @@ BOOL LLNearbyChat::postBuild()
 	
 	return true;
 }
-void    LLNearbyChat::applySavedVariables()
-{
-	if (mRectControl.size() > 1)
-	{
-		const LLRect& rect = LLFloater::getControlGroup()->getRect(mRectControl);
-		if(!rect.isEmpty() && rect.isValid())
-		{
-			reshape(rect.getWidth(), rect.getHeight());
-			setRect(rect);
-		}
-	}
-
-
-	if(!LLFloater::getControlGroup()->controlExists(mDocStateControl))
-	{
-		setDocked(true);
-	}
-	else
-	{
-		if (mDocStateControl.size() > 1)
-		{
-			bool dockState = LLFloater::getControlGroup()->getBOOL(mDocStateControl);
-			setDocked(dockState);
-		}
-	}
-}
-
-
 
 std::string appendTime()
 {
@@ -212,6 +236,11 @@ std::string appendTime()
 	utc_time = time_corrected();
 	std::string timeStr ="["+ LLTrans::getString("TimeHour")+"]:["
 		+LLTrans::getString("TimeMin")+"]";
+	if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+	{
+		timeStr += ":["
+			+LLTrans::getString("TimeSec")+"]";
+	}
 
 	LLSD substitution;
 
@@ -225,17 +254,22 @@ std::string appendTime()
 void	LLNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 {
 	LLChat& tmp_chat = const_cast<LLChat&>(chat);
-
-	if(tmp_chat.mTimeStr.empty())
-		tmp_chat.mTimeStr = appendTime();
-
 	bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
+	bool hide_timestamps_nearby_chat = gSavedSettings.getBOOL("FSHideTimestampsNearbyChat");
+	// [FIRE-1641 : SJ]: Option to hide timestamps in nearby chat - only add Timestamp when hide_timestamps_nearby_chat is not TRUE
+	if (!hide_timestamps_nearby_chat)
+	{
+		if(tmp_chat.mTimeStr.empty())
+			tmp_chat.mTimeStr = appendTime();
+	}
+
 	
 	if (!chat.mMuted)
 	{
 		tmp_chat.mFromName = chat.mFromName;
 		LLSD chat_args = args;
 		chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
+		chat_args["hide_timestamps_nearby_chat"] = hide_timestamps_nearby_chat;
 		mChatHistory->appendMessage(chat, chat_args);
 	}
 
@@ -251,13 +285,15 @@ void	LLNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 		return;
 	}
 	
-	// IF tab mode active, flash our tab
+	// AO: IF tab mode active, flash our tab
 	if(isChatMultiTab())
 	{
-		LLSD notification;
-		notification["session_id"] = getKey();
-		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
-		floater_container->onNewMessageReceived(notification);
+		LLMultiFloater* hostp = getHost();
+		if( !isInVisibleChain()
+		   && hostp)
+		{
+			hostp->setFloaterFlashing(this, TRUE);
+		}
 	}
 
 	if (gSavedPerAccountSettings.getBOOL("LogNearbyChat"))
@@ -273,6 +309,16 @@ void	LLNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 			if (!av_name.mIsDisplayNameDefault)
 			{
 				from_name = av_name.getCompleteName();
+			}
+
+			// Ansariel: Handle IMs in nearby chat
+			if (gSavedSettings.getBOOL("FSShowIMInChatHistory") && chat.mChatType == CHAT_TYPE_IM)
+			{
+				if (gSavedSettings.getBOOL("FSLogIMInChatHistory"))
+				{
+					from_name = "IM: " + from_name;
+				}
+				else return;
 			}
 		}
 
@@ -305,7 +351,8 @@ void	LLNearbyChat::openFloater(const LLSD& key)
 	if(isChatMultiTab())
 	{
 		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
-		if (floater_container)
+		// only show the floater container if we are actually attached -Zi
+		if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
 			floater_container->showFloater(this, LLTabContainer::START);
 		}
@@ -325,6 +372,11 @@ void	LLNearbyChat::setVisible(BOOL visible)
 		}
 	}
 	LLDockableFloater::setVisible(visible);
+	
+	if (PhoenixUseNearbyChatConsole)
+	{
+		gConsole->setVisible(!visible);
+	}
 }
 
 void	LLNearbyChat::onOpen(const LLSD& key )
@@ -333,7 +385,8 @@ void	LLNearbyChat::onOpen(const LLSD& key )
 	if(isChatMultiTab() && ! isVisible(this))
 	{
 		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
-		if (floater_container)
+		// only show the floater container if we are actually attached -Zi
+		if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
 			floater_container->showFloater(this, LLTabContainer::START);
 		}
@@ -358,9 +411,13 @@ void LLNearbyChat::getAllowedRect(LLRect& rect)
 void LLNearbyChat::updateChatHistoryStyle()
 {
 	mChatHistory->clear();
+
+	LLSD do_not_log;
+	do_not_log["do_not_log"] = true;
 	for(std::vector<LLChat>::iterator it = mMessageArchive.begin();it!=mMessageArchive.end();++it)
 	{
-		addMessage(*it,false);
+		// Update the messages without re-writing them to a log file.
+		addMessage(*it,false, do_not_log);
 	}
 }
 
@@ -401,23 +458,36 @@ void LLNearbyChat::onInputEditorFocusLost(LLFocusableElement* caller, void* user
 void LLNearbyChat::onInputEditorKeystroke(LLLineEditor* caller, void* userdata)
 {
 	LLNearbyChat* self = (LLNearbyChat*)userdata;
-	std::string text = self->mInputEditor->getText();
-	
 	LLWString raw_text = self->mInputEditor->getWText();
-	LLNearbyChatBar* masterBar = LLNearbyChatBar::getInstance();
-	masterBar->setText(self->mInputEditor->getText());
 	
 	// Can't trim the end, because that will cause autocompletion
 	// to eat trailing spaces that might be part of a gesture.
 	LLWStringUtil::trimHead(raw_text);
 	S32 length = raw_text.length();
-	
+
+	// Get the currently selected channel from the channel spinner in the nearby chat bar, if present and used.
+	// NOTE: Parts of the gAgent.startTyping() code are duplicated in 3 places:
+	// - llnearbychatbar.cpp
+	// - llchatbar.cpp
+	// - llnearbychat.cpp
+	// So be sure to look in all three places if changes are needed. This needs to be addressed at some point.
+	// -Zi
+	S32 channel=0;
+	if (gSavedSettings.getBOOL("PhoenixNearbyChatbar") &&
+		gSavedSettings.getBOOL("PhoenixShowChatChannel"))
+	{
+		channel = (S32)(LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+	}
+	// -Zi
+
 	//	if( (length > 0) && (raw_text[0] != '/') )  // forward slash is used for escape (eg. emote) sequences
 	// [RLVa:KB] - Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.0d
 	if ( (length > 0) && (raw_text[0] != '/') && (!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT)) )
 		// [/RLVa:KB]
 	{
-		gAgent.startTyping();
+		// only start typing animation if we are chatting without / on channel 0 -Zi
+		if(channel==0)
+			gAgent.startTyping();
 	}
 	else
 	{
@@ -440,7 +510,6 @@ void LLNearbyChat::onInputEditorKeystroke(LLLineEditor* caller, void* userdata)
 		{
 			std::string rest_of_match = utf8_out_str.substr(utf8_trigger.size());
 			self->mInputEditor->setText(utf8_trigger + rest_of_match); // keep original capitalization for user-entered part
-			masterBar->setText(self->mInputEditor->getText());
 			S32 outlength = self->mInputEditor->getLength(); // in characters
 			
 			// Select to end of line, starting from the character
@@ -451,7 +520,6 @@ void LLNearbyChat::onInputEditorKeystroke(LLLineEditor* caller, void* userdata)
 		{
 			std::string rest_of_match = utf8_out_str.substr(utf8_trigger.size());
 			self->mInputEditor->setText(utf8_trigger + rest_of_match + " "); // keep original capitalization for user-entered part
-			masterBar->setText(self->mInputEditor->getText());
 			self->mInputEditor->setCursorToEnd();
 		}
 	}
@@ -459,8 +527,54 @@ void LLNearbyChat::onInputEditorKeystroke(LLLineEditor* caller, void* userdata)
 void LLNearbyChat::onSendMsg( LLUICtrl* ctrl, void* userdata )
 {
 	LLNearbyChat* self = (LLNearbyChat*)userdata;
-	LLNearbyChatBar::getInstance()->onChatBoxCommit();
+	LLNearbyChatBar* masterBar = LLNearbyChatBar::getInstance();
+	std::string masterText = masterBar->getCurrentChat();
+	std::string sendText = self->mInputEditor->getText();
+	masterBar->setText(sendText);
+	masterBar->sendChat(CHAT_TYPE_NORMAL);
 	self->mInputEditor->setText(LLStringExplicit(""));
+	masterBar->setText(masterText);
+}
+
+// virtual
+BOOL LLNearbyChat::handleKeyHere( KEY key, MASK mask )
+{
+	BOOL handled = FALSE;
+
+	if( KEY_RETURN == key )
+	{
+		if (mask == MASK_CONTROL)
+		{
+			// shout
+			LLNearbyChatBar::getInstance()->sendChat(CHAT_TYPE_SHOUT);
+			handled = TRUE;
+		}
+		else if (mask == MASK_SHIFT)
+		{
+			// whisper
+			LLNearbyChatBar::getInstance()->sendChat(CHAT_TYPE_WHISPER);
+			handled = TRUE;
+		}
+		else if (mask == MASK_ALT)
+		{
+			// OOC
+			LLNearbyChatBar::getInstance()->sendChat(CHAT_TYPE_OOC);
+			handled = TRUE;
+		}
+		// Ansariel: For some reason we don't get an unmasked return here.
+		//           So we use the child commit callback that invokes
+		//           LLNearbyChat::onSendMsg() to handle this case.
+		//else if (mask == MASK_NONE)
+		//{
+		//	// say
+		//	LLNearbyChatBar::getInstance()->sendChat(CHAT_TYPE_NORMAL);
+		//	handled = TRUE;
+		//}
+	}
+
+	if (handled == TRUE) mInputEditor->setText(LLStringExplicit(""));
+
+	return handled;	
 }
 
 BOOL LLNearbyChat::matchChatTypeTrigger(const std::string& in_str, std::string* out_str)
@@ -497,6 +611,7 @@ void LLNearbyChat::loadHistory()
 	std::list<LLSD>::const_iterator it = history.begin();
 	while (it != history.end())
 	{
+		bool im_type = false;
 		const LLSD& msg = *it;
 
 		std::string from = msg[IM_FROM];
@@ -507,6 +622,17 @@ void LLNearbyChat::loadHistory()
 		}
 		else
  		{
+			// Ansariel: Strip IM prefix so we can properly
+			//           retrieve the UUID in case we got a
+			//           saved IM in nearby chat history.
+			std::string im_prefix = "IM: ";
+			size_t im_prefix_found = from.find(im_prefix);
+			if (im_prefix_found != std::string::npos)
+			{
+				from = from.substr(im_prefix.length());
+				im_type = true;
+			}
+
 			std::string legacy_name = gCacheName->buildLegacyName(from);
  			gCacheName->getUUID(legacy_name, from_id);
  		}
@@ -517,6 +643,8 @@ void LLNearbyChat::loadHistory()
 		chat.mText = msg[IM_TEXT].asString();
 		chat.mTimeStr = msg[IM_TIME].asString();
 		chat.mChatStyle = CHAT_STYLE_HISTORY;
+
+		if (im_type) chat.mChatType = CHAT_TYPE_IM;
 
 		chat.mSourceType = CHAT_SOURCE_AGENT;
 		if (from_id.isNull() && SYSTEM_FROM == from)
@@ -550,7 +678,7 @@ bool LLNearbyChat::isChatMultiTab()
 
 void LLNearbyChat::setDocked(bool docked, bool pop_on_undock)
 {
-	if(!isChatMultiTab())
+	if((!isChatMultiTab()) && gSavedSettings.getBOOL("ChatHistoryTornOff"))
 	{
 		LLDockableFloater::setDocked(docked, pop_on_undock);
 	}

@@ -81,6 +81,7 @@ void process_object_update(LLMessageSystem *mesgsys, void **user_data);
 void process_compressed_object_update(LLMessageSystem *mesgsys, void **user_data);
 void process_cached_object_update(LLMessageSystem *mesgsys, void **user_data);
 void process_terse_object_update_improved(LLMessageSystem *mesgsys, void **user_data);
+void process_object_properties_family(LLMessageSystem *msg, void**user_data);
 
 void send_simulator_throttle_settings(const LLHost &host);
 void process_kill_object(	LLMessageSystem *mesgsys, void **user_data);
@@ -117,7 +118,6 @@ void process_alert_core(const std::string& message, BOOL modal);
 typedef std::list<LLMeanCollisionData*> mean_collision_list_t;
 extern mean_collision_list_t gMeanCollisionList;
 
-void handle_show_mean_events(void *);
 void process_mean_collision_alert_message(LLMessageSystem* msg, void**);
 
 void process_frozen_message(LLMessageSystem* msg, void**);
@@ -204,6 +204,8 @@ void open_inventory_offer(const uuid_vec_t& items, const std::string& from_name)
 bool highlight_offered_object(const LLUUID& obj_id);
 
 void set_dad_inventory_item(LLInventoryItem* inv_item, const LLUUID& into_folder_uuid);
+void set_dad_inbox_object(const LLUUID& object_id);
+
 
 class LLOfferInfo : public LLNotificationResponderInterface
 {

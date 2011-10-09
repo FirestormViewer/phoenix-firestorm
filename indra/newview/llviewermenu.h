@@ -37,6 +37,7 @@ class LLView;
 class LLParcelSelection;
 class LLObjectSelection;
 class LLSelectNode;
+class PieMenu;			// ## Zi: Pie Menu
 
 void initialize_edit_menu();
 void init_menus();
@@ -63,6 +64,9 @@ void handle_duplicate(void*);
 void handle_duplicate_in_place(void*);
 BOOL enable_not_have_card(void *userdata);
 void process_grant_godlike_powers(LLMessageSystem* msg, void**);
+void show_v1_menus();	// V1 menu system	-WoLf
+void toggle_v1_menus(void*);	// V1 menu system	-WoLf
+
 
 BOOL enable_cut(void*);
 BOOL enable_copy(void*);
@@ -79,6 +83,9 @@ void handle_detach_from_avatar(const LLSD& user_data);
 void attach_label(std::string& label, const LLSD&);
 void detach_label(std::string& label, const LLSD&);
 void handle_detach(void*);
+// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-08-25 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
+void handle_attachment_edit(const LLUUID& idItem);
+// [/SL:KB]
 BOOL enable_god_full(void* user_data);
 BOOL enable_god_liaison(void* user_data);
 BOOL enable_god_basic(void* user_data);
@@ -97,6 +104,7 @@ void handle_object_open();
 void handle_buy();
 void handle_take_copy();
 void handle_look_at_selection(const LLSD& param);
+void handle_script_info();
 void handle_zoom_to_object(LLUUID object_id);
 
 void handle_buy_land();
@@ -125,6 +133,9 @@ void handle_give_money_dialog();
 bool enable_pay_object();
 bool enable_buy_object();
 bool handle_go_to();
+bool update_grid_help();
+
+void toggle_destination_and_avatar_picker(const LLSD& show);
 
 // Export to XML or Collada
 void handle_export_selected( void * );
@@ -177,11 +188,34 @@ extern LLContextMenu* gDetachPieMenu;
 extern LLContextMenu* gAttachBodyPartPieMenus[8];
 extern LLContextMenu* gDetachBodyPartPieMenus[8];
 
+// ## Zi: Pie Menu
+// Pie menus in 3D scene
+extern PieMenu			*gPieMenuAvatarSelf;
+extern PieMenu			*gPieMenuAvatarOther;
+extern PieMenu			*gPieMenuObject;
+extern PieMenu			*gPieMenuAttachmentSelf;
+extern PieMenu			*gPieMenuAttachmentOther;
+extern PieMenu			*gPieMenuLand;
+
+// Needed to build pie menus when attachment site list available
+extern PieMenu* gPieAttachScreenMenu;
+extern PieMenu* gPieDetachScreenMenu;
+extern PieMenu* gPieAttachMenu;
+extern PieMenu* gPieDetachMenu;
+extern PieMenu* gPieAttachBodyPartMenus[8];
+extern PieMenu* gPieDetachBodyPartMenus[8];
+// ## Zi: Pie Menu
+
 extern LLMenuItemCallGL* gAFKMenu;
 extern LLMenuItemCallGL* gBusyMenu;
 extern LLMenuItemCallGL* gAutorespondMenu;
+
+/*
+// ## Zi: Dead code?
 extern LLMenuItemCallGL* gMutePieMenu;
 extern LLMenuItemCallGL* gMuteObjectPieMenu;
 extern LLMenuItemCallGL* gBuyPassPieMenu;
+// ## Zi: Dead code?
+*/
 
 #endif

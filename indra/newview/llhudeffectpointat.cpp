@@ -48,7 +48,7 @@ const S32 PKT_SIZE = 57;
 // throttle
 const F32 MAX_SENDS_PER_SEC = 4.f;
 
-const F32 MIN_DELTAPOS_FOR_UPDATE = 0.05f;
+const F32 MIN_DELTAPOS_FOR_UPDATE_SQUARED = 0.05f * 0.05f;
 
 // timeouts
 // can't use actual F32_MAX, because we add this to the current frametime
@@ -98,6 +98,30 @@ LLHUDEffectPointAt::~LLHUDEffectPointAt()
 //-----------------------------------------------------------------------------
 void LLHUDEffectPointAt::packData(LLMessageSystem *mesgsys)
 {
+	LLViewerObject* source_object = (LLViewerObject*)mSourceObject; 
+	if (!source_object)  
+	{ 
+		markDead(); 
+		return; 
+	} 
+	else if (!source_object->isAvatar()) 
+	{ 
+		LL_DEBUGS("HUDEffect")<<"Non-Avatar HUDEffectPointAt message for ID: "  
+		<<  source_object->getID().asString()<< LL_ENDL; 
+		markDead(); 
+		return; 
+	} 
+	else  
+	{ 
+		LLVOAvatar* source_avatar = (LLVOAvatar*)source_object; 
+		if (!source_avatar->isSelf()) 
+		{ 
+			LL_DEBUGS("HUDEffect")<<"Non-self HUDEffectPointAt message for ID: "  
+			<< source_avatar->getID().asString()<< LL_ENDL; 
+			markDead(); 
+			return; 
+		} 
+	}
 	// Pack the default data
 	LLHUDEffect::packData(mesgsys);
 
@@ -244,7 +268,7 @@ BOOL LLHUDEffectPointAt::setPointAt(EPointAtType target_type, LLViewerObject *ob
 	BOOL targetTypeChanged = (target_type != mTargetType) ||
 		(object != mTargetObject);
 
-	BOOL targetPosChanged = (dist_vec(position, mLastSentOffsetGlobal) > MIN_DELTAPOS_FOR_UPDATE) && 
+	BOOL targetPosChanged = (dist_vec_squared(position, mLastSentOffsetGlobal) > MIN_DELTAPOS_FOR_UPDATE_SQUARED) && 
 		((current_time - mLastSendTime) > (1.f / MAX_SENDS_PER_SEC));
 
 	if (targetTypeChanged || targetPosChanged)

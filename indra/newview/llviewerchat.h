@@ -35,11 +35,22 @@
 class LLViewerChat 
 {
 public:
-	static void getChatColor(const LLChat& chat, LLColor4& r_color);
+	static void getChatColor(const LLChat& chat, LLColor4& r_color, bool is_local = true);
+	typedef boost::signals2::signal<void (LLFontGL*)> font_change_signal_t;
+
+	// AO deprecated: static void getChatColor(const LLChat& chat, LLColor4& r_color);
 	static void getChatColor(const LLChat& chat, std::string& r_color_name, F32& r_color_alpha);
 	static LLFontGL* getChatFont();
 	static S32 getChatFontSize();
 	static void formatChatMsg(const LLChat& chat, std::string& formated_msg);
+	static std::string getSenderSLURL(const LLChat& chat, const LLSD& args);
+
+	static boost::signals2::connection setFontChangedCallback(const font_change_signal_t::slot_type& cb);
+	static void signalChatFontChanged();
+
+private:
+	static std::string getObjectImSLURL(const LLChat& chat, const LLSD& args);
+	static font_change_signal_t sChatFontChangedSignal;
 
 };
 

@@ -65,6 +65,7 @@ public:
 	LLWorld();
 	void destroyClass();
 
+	void refreshLimits();// <AW: opensim-limits>
 	LLViewerRegion*	addRegion(const U64 &region_handle, const LLHost &host);
 		// safe to call if already present, does the "right thing" if
 		// hosts are same, or if hosts are different, etc...
@@ -113,8 +114,15 @@ public:
 	// region X and Y size in meters
 	F32						getRegionWidthInMeters() const	{ return mWidthInMeters; }
 	F32						getRegionMinHeight() const		{ return -mWidthInMeters; }
-	F32						getRegionMaxHeight() const		{ return MAX_OBJECT_Z; }
-
+// <AW: opensim-limits>
+//	F32						getRegionMaxHeight() const		{ return MAX_OBJECT_Z; }
+	F32 getRegionMaxHeight() const		{ return mRegionMaxHeight; }
+	F32 getRegionMinPrimScale() const	{ return mRegionMinPrimScale; }
+	F32 getRegionMaxPrimScale() const	{ return mRegionMaxPrimScale; }
+	F32 getRegionMaxPrimScaleNoMesh() const	{ return mRegionMaxPrimScaleNoMesh; }
+	F32 getRegionMaxHollowSize() const	{ return mRegionMaxHollowSize; }
+	F32 getRegionMinHoleSize() const	{ return mRegionMinHoleSize; }
+// </AW: opensim-limits>
 	void					updateRegions(F32 max_update_time);
 	void					updateVisibilities();
 	void					updateParticles();
@@ -169,7 +177,15 @@ private:
 	static const F32 mScale;
 
 	static const F32 mWidthInMeters;
-
+// <AW: opensim-limits>
+	F32 mRegionMaxHeight;
+	F32 mRegionMinPrimScale;
+	F32 mRegionMaxPrimScale;
+	F32 mRegionMaxPrimScaleNoMesh;
+	F32 mRegionMaxHollowSize;
+	F32 mRegionMinHoleSize;
+	bool mLimitsNeedRefresh;
+// </AW: opensim-limits>
 	F32 mLandFarClip;					// Far clip distance for land.
 	LLPatchVertexArray		mLandPatch;
 	S32 mLastPacketsIn;

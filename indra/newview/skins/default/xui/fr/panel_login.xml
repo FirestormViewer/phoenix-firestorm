@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--alba-->
 <panel name="panel_login">
 	<panel.string name="create_account_url">
 		http://fr.secondlife.com/registration/
@@ -11,20 +12,31 @@
 			<text name="username_text">
 				Nom d&apos;utilisateur :
 			</text>
-			<line_editor label="bobsmith12 ou Steller Sunshine" name="username_edit" tool_tip="Nom d&apos;utilisateur que vous avez choisi lors de votre inscription (par exemple, bobsmith12 ou Steller Sunshine)."/>
+			<combo_box name="username_combo" tool_tip="Nom d&apos;utilisateur que vous avez choisi lors de votre inscription (par exemple, bobsmith12 ou Steller Sunshine)."/>
+			<button label="Supprimer ce nom" name="delete_saved_login_btn"/>
 			<text name="password_text">
 				Mot de passe :
 			</text>
-			<check_box label="Enregistrer" name="remember_check"/>
+			<check_box label="Enregistrer le mdp" name="remember_check"/>
 			<button label="Connexion" name="connect_btn"/>
+			<text name="mode_selection_text">
+				Mode :
+			</text>
+			<combo_box name="mode_combo" tool_tip="Sélectionnez un mode. Pour une exploration facile et rapide avec chat, choisissez Basique. Pour accéder à plus de fonctionnalités, choisissez Avancé.">
+				<combo_box.item label="Basique" name="Basic"/>
+				<combo_box.item label="Avancé" name="Advanced"/>
+			</combo_box>
 			<text name="start_location_text">
-				Lieu de départ :
+				Point d'entrée :
 			</text>
 			<combo_box name="start_location_combo">
 				<combo_box.item label="Dernier emplacement" name="MyLastLocation"/>
 				<combo_box.item label="Domicile" name="MyHome"/>
 				<combo_box.item label="&lt;Saisir le nom de la région&gt;" name="Typeregionname"/>
 			</combo_box>
+			<text name="grid_selection_text">
+				Grille :
+			</text>
 		</layout_panel>
 		<layout_panel name="links">
 			<text name="create_new_account_text">

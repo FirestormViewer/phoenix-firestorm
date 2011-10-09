@@ -26,8 +26,8 @@
 		Web:
 	</text>
 	<radio_group name="use_external_browser">
-		<radio_item label="Meinen Browser verwenden (IE, Firefox, Safari)" name="external" tool_tip="Standard Webbrowser des Systems verwenden, um die Hilfe, Weblinks usw. anzuzeigen. Bei Vollbildmodus nicht empfohlen." value="1"/>
-		<radio_item label="Integrierten Browser verwenden" name="internal" tool_tip="Integrierten Webbrowser verwenden, um die Hilfe, Weblinks usw. anzuzeigen. Dieser Browser öffnet als neues Fenster innerhalb von [APP_NAME]." value=""/>
+		<radio_item label="In Meinen Browser (IE, Firefox, Safari)" name="external" tool_tip="Standard Webbrowser des Systems verwenden, um die Hilfe, Weblinks usw. anzuzeigen. Bei Vollbildmodus nicht empfohlen." value="1"/>
+		<radio_item label="In Integrierten Browser" name="internal" tool_tip="Integrierten Webbrowser verwenden, um die Hilfe, Weblinks usw. anzuzeigen. Dieser Browser öffnet als neues Fenster innerhalb von [APP_NAME]." value=""/>
 	</radio_group>
 	<check_box initial_value="true" label="Plugins aktivieren" name="browser_plugins_enabled"/>
 	<check_box initial_value="true" label="Cookies annehmen" name="cookies_enabled"/>
@@ -39,5 +39,11 @@
 	</text>
 	<line_editor name="web_proxy_editor" tool_tip="Name oder IP Adresse des Proxyservers, den Sie benutzen möchten"/>
 	<spinner label="Portnummer:" name="web_proxy_port"/>
-	<check_box initial_value="true" label="Updates für [APP_NAME] automatisch herunterladen und installieren" name="updater_service_active"/>
+	<text name="Software updates:">
+		Softwareupdates:
+	</text>
+	<combo_box name="updater_service_combobox">
+		<combo_box.item label="Automatisch installieren" name="Install_automatically"/>
+		<combo_box.item label="Updates manuell herunterladen und installieren" name="Install_manual"/>
+	</combo_box>
 </panel>

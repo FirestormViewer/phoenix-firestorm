@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Login Menu">
-	<menu label="Ich" name="File">
+	<menu label="Viewer" name="File">
 		<menu_item_call label="Einstellungen" name="Preferences..."/>
-		<menu_item_call label="[APP_NAME] schließen" name="Quit"/>
+		<menu_item_call label="[APP_NAME] beenden" name="Quit"/>
 	</menu>
 	<menu label="Hilfe" name="Help">
-		<menu_item_call label="[SECOND_LIFE]-Hilfe" name="Second Life Help"/>
+		<menu_item_call label="[APP_NAME]-Hilfe" name="Second Life Help"/>
 		<menu_item_call label="INFO ÜBER [APP_NAME]" name="About Second Life"/>
 	</menu>
 	<menu_item_check label="Debug-Menü anzeigen" name="Show Debug Menu"/>
@@ -17,7 +17,8 @@
 		<menu_item_call label="Fenstergröße einstellen..." name="Set Window Size..."/>
 		<menu_item_call label="Servicebedingungen anzeigen" name="TOS"/>
 		<menu_item_call label="Wichtige Meldung anzeigen" name="Critical"/>
-		<menu_item_call label="Web-Browser-Test" name="Web Browser Test"/>
+		<menu_item_call label="Test Medienbrowser" name="Web Browser Test"/>
+		<menu_item_call label="Web Content Floater Debug Test" name="Web Content Floater Debug Test"/>
 		<menu_item_check label="Grid-Auswahl anzeigen" name="Show Grid Picker"/>
 		<menu_item_call label="Benachrichtigungs-Konsole anzeigen" name="Show Notifications Console"/>
 	</menu>

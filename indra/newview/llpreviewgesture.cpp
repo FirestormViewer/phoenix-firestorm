@@ -34,6 +34,7 @@
 #include "llassetuploadresponders.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
+#include "lldatapacker.h"
 #include "lldelayedgestureerror.h"
 #include "llfloaterreg.h"
 #include "llgesturemgr.h"
@@ -41,6 +42,7 @@
 #include "llinventoryfunctions.h"
 #include "llinventorymodel.h"
 #include "llinventorymodelbackgroundfetch.h"
+#include "llkeyboard.h"
 #include "llmultigesture.h"
 #include "llnotificationsutil.h"
 #include "llradiogroup.h"
@@ -499,9 +501,17 @@ void LLPreviewGesture::addKeys()
 	LLComboBox* combo = mKeyCombo;
 
 	combo->add( NONE_LABEL );
-	for (KEY key = KEY_F2; key <= KEY_F12; key++)
+	for (KEY key = ' '; key < KEY_NONE; key++)
 	{
-		combo->add( LLKeyboard::stringFromKey(key), ADD_BOTTOM );
+		char buffer[] = {key, '\0'};
+		std::string str_org(buffer);
+		std::string str_translated = LLKeyboard::stringFromKey(key);
+
+		if (str_org == str_translated)
+		{
+			if (key >= ' ' && key <= '~') combo->add( str_translated, ADD_BOTTOM );
+		}
+		else combo->add( str_translated, ADD_BOTTOM );
 	}
 	combo->setCurrentByIndex(0);
 }
@@ -1597,7 +1607,7 @@ std::string LLPreviewGesture::getLabel(std::vector<std::string> labels)
 	
 	if(v_labels[0]=="Chat")
 	{
-		result=LLTrans::getString("Chat");
+		result=LLTrans::getString("Chat Message");
 	}
     else if(v_labels[0]=="Sound")	
 	{

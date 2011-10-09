@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<colors>
+  
+   
+  <color
+	 name="TextFgColor"             
+	 reference="White" />
+	<color
+   name="TextFgReadOnlyColor"
+   reference="LtGray_50" />
+  <color
+   name="TextFgTentativeColor"
+   reference="LtGray_50" />
+  <color
+   name="TextEmbeddedItemColor"
+   reference="White" />
+	<color
+   name="TextBgFocusColor"
+   reference="Black" />
+  <color
+   name="TextBgReadOnlyColor"
+   reference="DkGray" />
+  <color
+   name="TextBgWriteableColor"
+   reference="DkGray" />
+  <color
+   name="TextCursorColor"
+   reference="White" />
+  <color
+   name="TextDefaultColor"
+   reference="White" />
+  <color
+   name="TextFgReadOnlyColor"
+   reference="LtGray_50" />	 
+   
+ 
+  <color
+   name="BackgroundChatColor"
+   reference="DkGray" />
+  <color
+   name="ButtonImageColor"
+   reference="SL-White" />
+  <color
+   name="ButtonLabelColor"
+   reference="LtGray" />
+  <color
+   name="ChatHistoryTextColor"
+   reference="LtGray" />   
+  <color
+   name="MapAvatarColor"
+   reference="Green" />
+  <color
+   name="MapAvatarFriendColor"
+   reference="Yellow" />
+  <color
+   name="ObjectChatColor"
+   reference="EmphasisColor" />
+     
+    
+     
+    
+</colors>

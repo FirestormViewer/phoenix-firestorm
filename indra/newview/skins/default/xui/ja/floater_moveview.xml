@@ -49,13 +49,10 @@
 		かがむ（C を押す）
 	</string>
 	<string name="walk_title">
-		歩く
 	</string>
 	<string name="run_title">
-		走る
 	</string>
 	<string name="fly_title">
-		飛ぶ
 	</string>
 	<panel name="panel_actions">
 		<button label="" label_selected="" name="move up btn" tool_tip="上に移動（E を押す）"/>
