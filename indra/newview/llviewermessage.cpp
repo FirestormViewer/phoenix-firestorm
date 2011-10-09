@@ -4955,7 +4955,7 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 		if(COLLISION_SOUNDS[i] == sSound)
 			bDoSpamCheck=0;
 		if(bDoSpamCheck)
-			if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND,object_id, _NACL_AntiSpamSoundMulti,true)) 
+			if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND,object_id, _NACL_AntiSpamSoundMulti)) 
 				return;
 	// NaCl End
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_ParentID, parent_id);

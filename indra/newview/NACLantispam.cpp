@@ -35,9 +35,12 @@ U32 NACLAntiSpamQueueEntry::getEntryTime()
 {
 	return entryTime;
 }
-void NACLAntiSpamQueueEntry::updateEntry()
+void NACLAntiSpamQueueEntry::updateEntryAmount()
 {
 	entryAmount++;
+}
+void NACLAntiSpamQueueEntry::updateEntryTime()
+{
 	entryTime=time(0);
 }
 void NACLAntiSpamQueueEntry::setBlocked()
@@ -98,7 +101,7 @@ void NACLAntiSpamQueue::blockEntry(LLUUID& source)
 	}
 	entries[source.asString()]->setBlocked();
 }
-int NACLAntiSpamQueue::checkEntry(LLUUID& name, int multiplier)
+int NACLAntiSpamQueue::checkEntry(LLUUID& name, U32 multiplier)
 // Returns 0 if unblocked, 1 if check results in a new block, 2 if by an existing block
 {
 	it=entries.find(name.asString());
@@ -107,11 +110,11 @@ int NACLAntiSpamQueue::checkEntry(LLUUID& name, int multiplier)
 		if(it->second->getBlocked()) 
 			return 2;
 		U32 eTime=it->second->getEntryTime();
-		U32 eAmount=it->second->getEntryAmount();
 		U32 currentTime=time(0);
 		if((currentTime-eTime) <= queueTime)
 		{
-			it->second->updateEntry();
+			it->second->updateEntryAmount();
+			U32 eAmount = it->second->getEntryAmount();
 			if(eAmount > (queueAmount*multiplier))
 			{
 				it->second->setBlocked();
@@ -123,15 +126,17 @@ int NACLAntiSpamQueue::checkEntry(LLUUID& name, int multiplier)
 		else
 		{
 			it->second->clearEntry();
-			it->second->updateEntry();
+			it->second->updateEntryAmount();
+			it->second->updateEntryTime();
 			return 0;
 		}
 	}
 	else
 	{
-		llinfos << "[antispam] New queue entry:" << name.asString() << llendl;
+		lldebugs << "[antispam] New queue entry:" << name.asString() << llendl;
 		entries[name.asString()]=new NACLAntiSpamQueueEntry();
-		entries[name.asString()]->updateEntry();
+		entries[name.asString()]->updateEntryAmount();
+		entries[name.asString()]->updateEntryTime();
 		return 0;
 	}
 }
@@ -269,7 +274,7 @@ void NACLAntiSpamRegistry::blockGlobalEntry(LLUUID& source)
 	globalEntries[source.asString()]->setBlocked();
 }
 
-bool NACLAntiSpamRegistry::checkQueue(U32 name, LLUUID& source, int multiplier, bool silent)
+bool NACLAntiSpamRegistry::checkQueue(U32 name, LLUUID& source, U32 multiplier, bool silent)
 // returns TRUE if blocked, FALSE otherwise
 {
 	if((source.isNull()) || (gAgent.getID() == source)) 
@@ -353,18 +358,18 @@ void NACLAntiSpamRegistry::purgeAllQueues()
 			queues[queue]->purgeEntries();
 		}
 }
-int NACLAntiSpamRegistry::checkGlobalEntry(LLUUID& name, int multiplier)
+int NACLAntiSpamRegistry::checkGlobalEntry(LLUUID& name, U32 multiplier)
 {
 	it2=globalEntries.find(name.asString());
 	if(it2 != globalEntries.end())
 	{
 		if(it2->second->getBlocked()) return 2;
 		U32 eTime=it2->second->getEntryTime();
-		U32 eAmount=it2->second->getEntryAmount();
 		U32 currentTime=time(0);
 		if((currentTime-eTime) <= globalTime)
 		{
-			it2->second->updateEntry();
+			it2->second->updateEntryAmount();
+			U32 eAmount=it2->second->getEntryAmount();
 			if(eAmount > (globalAmount*multiplier))
 				return 1;
 			else
@@ -373,14 +378,16 @@ int NACLAntiSpamRegistry::checkGlobalEntry(LLUUID& name, int multiplier)
 		else
 		{
 			it2->second->clearEntry();
-			it2->second->updateEntry();
+			it2->second->updateEntryAmount();
+			it2->second->updateEntryTime();
 			return 0;
 		}
 	}
 	else
 	{
 		globalEntries[name.asString()]=new NACLAntiSpamQueueEntry();
-		globalEntries[name.asString()]->updateEntry();
+		globalEntries[name.asString()]->updateEntryAmount();
+		globalEntries[name.asString()]->updateEntryTime();
 		return 0;
 	}
 }

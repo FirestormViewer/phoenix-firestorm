@@ -13,7 +13,8 @@ public:
 protected:
 	NACLAntiSpamQueueEntry();
 	void clearEntry();
-	void updateEntry();
+	void updateEntryAmount();
+	void updateEntryTime();
 	bool getBlocked();
 	void setBlocked();
 private:
@@ -34,7 +35,7 @@ protected:
 	void clearEntries();
 	void purgeEntries();
 	void blockEntry(LLUUID& source);
-	int checkEntry(LLUUID& source, int multiplier);
+	int checkEntry(LLUUID& source, U32 multiplier);
 private:
 	std::tr1::unordered_map<std::string,NACLAntiSpamQueueEntry*> entries;
 	std::tr1::unordered_map<std::string,NACLAntiSpamQueueEntry*>::iterator it;
@@ -51,7 +52,7 @@ public:
 	static void setRegisteredQueueAmount(U32 name,U32 amount);
 	static void setAllQueueTimes(U32 amount);
 	static void setAllQueueAmounts(U32 time);
-	static bool checkQueue(U32 name, LLUUID& source, int multiplier=1, bool silent=false);
+	static bool checkQueue(U32 name, LLUUID& source, U32 multiplier=1, bool silent=false);
 	static void clearRegisteredQueue(U32 name);
 	static void purgeRegisteredQueue(U32 name);
 	static void clearAllQueues();
@@ -80,7 +81,7 @@ private:
 	static U32 globalAmount;
 	static bool bGlobalQueue;
 
-	static int checkGlobalEntry(LLUUID& source, int multiplier);
+	static int checkGlobalEntry(LLUUID& source, U32 multiplier);
 	static void clearGlobalEntries();
 	static void purgeGlobalEntries();
 	static void blockGlobalEntry(LLUUID& source);
