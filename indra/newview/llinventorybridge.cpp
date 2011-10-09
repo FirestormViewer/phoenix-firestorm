@@ -205,7 +205,7 @@ void LLInvFVBridge::showProperties()
 	// Disable old properties floater; this is replaced by the sidepanel.
 	/**/
 	//-TT Experiment.
-	  LLFloaterReg::showInstance("properties", mUUID);
+	LLFloaterReg::showInstance("properties", LLSD().with("item_id", mUUID));
 }
 
 void LLInvFVBridge::removeBatch(LLDynamicArray<LLFolderViewEventListener*>& batch)
@@ -647,10 +647,10 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 	addDeleteContextMenuOptions(items, disabled_items);
 
 	// If multiple items are selected, disable properties (if it exists).
-	if ((flags & FIRST_SELECTED_ITEM) == 0)
-	{
-		disabled_items.push_back(std::string("Properties"));
-	}
+//	if ((flags & FIRST_SELECTED_ITEM) == 0)
+//	{
+//		disabled_items.push_back(std::string("Properties"));
+//	}
 }
 
 void LLInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)

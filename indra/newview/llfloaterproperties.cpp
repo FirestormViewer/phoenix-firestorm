@@ -106,11 +106,16 @@ void LLPropertiesObserver::changed(U32 mask)
 ///----------------------------------------------------------------------------
 
 // Default constructor
-LLFloaterProperties::LLFloaterProperties(const LLUUID& item_id)
-  : LLFloater(mItemID),
-	mItemID(item_id),
+LLFloaterProperties::LLFloaterProperties(const LLSD& key)
+  : LLFloater(key),
 	mDirty(TRUE)
 {
+	if (key.has("item_id"))
+	{
+		mItemID = key["item_id"].asUUID();
+		if (key.has("object_id"))
+			mObjectID = key["object_id"].asUUID();
+	}
 	mPropertiesObserver = new LLPropertiesObserver(this);
 }
 
@@ -921,7 +926,7 @@ LLMultiProperties::LLMultiProperties()
 {
 	// start with a small rect in the top-left corner ; will get resized
 	LLRect rect;
-	rect.setLeftTopAndSize(0, gViewerWindow->getWindowHeightScaled(), 20, 20);
+	rect.setLeftTopAndSize(0, gViewerWindow->getWindowHeightScaled(), 350, 350);
 	setRect(rect);
 	LLFloater* last_floater = LLFloaterReg::getLastFloaterInGroup("properties");
 	if (last_floater)
