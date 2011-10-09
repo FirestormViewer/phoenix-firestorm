@@ -126,7 +126,7 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 	if (!gSavedSettings.getBOOL("UseLSLBridge"))
 		return false;
 
-	llinfos << message << llendl;
+	//llinfos << message << llendl; // LO - Comenting out what looks to be a debug line that isnt needed anymore.
 
 	std::string tag = message.substr(0,11);
 	bool status = false;
