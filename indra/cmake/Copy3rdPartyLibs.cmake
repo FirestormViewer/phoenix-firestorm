@@ -48,9 +48,7 @@ if(WINDOWS)
         libhunspell.dll
         )
 
-    # *TODO - update this to use LIBS_PREBUILT_DIR and LL_ARCH_DIR variables
-    # or ARCH_PREBUILT_DIRS
-    set(release_src_dir "${CMAKE_SOURCE_DIR}/../libraries/i686-win32/lib/release")
+    set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     set(release_files
         openjpeg.dll
         libapr-1.dll
