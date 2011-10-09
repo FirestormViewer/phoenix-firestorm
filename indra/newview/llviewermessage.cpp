@@ -1985,6 +1985,8 @@ void inventory_offer_handler(LLOfferInfo* info)
 		return;
 	}
 
+
+	bool bAutoAccept(false);
 	// Avoid the Accept/Discard dialog if the user so desires. JC
 	if (gSavedSettings.getBOOL("AutoAcceptNewInventory")
 		&& (info->mType == LLAssetType::AT_NOTECARD
@@ -1993,8 +1995,7 @@ void inventory_offer_handler(LLOfferInfo* info)
 	{
 		// For certain types, just accept the items into the inventory,
 		// and possibly open them on receipt depending upon "ShowNewInventory".
-		info->forceResponse(IOR_ACCEPT);
-		return;
+		bAutoAccept = true;
 	}
 
 	// Strip any SLURL from the message display. (DEV-2754)
@@ -2065,7 +2066,7 @@ void inventory_offer_handler(LLOfferInfo* info)
 	LLNotification::Params p("ObjectGiveItem");
 
 	// Object -> Agent Inventory Offer
-	if (info->mFromObject)
+	if (info->mFromObject && !bAutoAccept ) // Nicky D. fall into the Avi->Avi branch for auto accepting items.
 	{
 // [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 		// Only filter if the object owner is a nearby agent
@@ -2122,6 +2123,7 @@ void inventory_offer_handler(LLOfferInfo* info)
 		// In viewer 2 we're now auto receiving inventory offers and messaging as such (not sending reject messages).
 		info->send_auto_receive_response();
 
+		if( !bAutoAccept ) // Nicky D. if we auto accept, do not pester the user with stuff in the chicklet.
 		// Inform user that there is a script floater via toast system
 		{
 			payload["give_inventory_notification"] = TRUE;
