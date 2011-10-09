@@ -11,7 +11,9 @@
         <string>A unified notification system for Mac OS X</string>
         <key>license</key>
         <string>bsd</string>
-        <key>packages</key>
+        <key>name</key>
+        <string>Growl</string>
+        <key>platforms</key>
         <map>
           <key>darwin</key>
           <map>
