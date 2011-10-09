@@ -1350,7 +1350,7 @@ if (WINDOWS)
          )
 
     list(APPEND viewer_HEADER_FILES
-         growlmanager.cpp
+         growlmanager.h
          growlnotifierwin.h
          llappviewerwin32.h
          llwindebug.h
