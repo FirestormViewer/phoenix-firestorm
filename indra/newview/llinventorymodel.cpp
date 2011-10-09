@@ -582,33 +582,45 @@ void LLInventoryModel::addChangedMaskForLinks(const LLUUID& object_id, U32 mask)
 	if (!obj || obj->getIsLinkType())
 		return;
 
-	LLInventoryModel::cat_array_t cat_array;
-	LLInventoryModel::item_array_t item_array;
-	LLLinkedItemIDMatches is_linked_item_match(object_id);
-	collectDescendentsIf(gInventory.getRootFolderID(),
-						 cat_array,
-						 item_array,
-						 LLInventoryModel::INCLUDE_TRASH,
-						 is_linked_item_match);
-	if (cat_array.empty() && item_array.empty())
+//  <ND>: More efficient link updates
+//
+//	LLInventoryModel::cat_array_t cat_array;
+//	LLInventoryModel::item_array_t item_array;
+//	LLLinkedItemIDMatches is_linked_item_match(object_id);
+//	collectDescendentsIf(gInventory.getRootFolderID(),
+//						 cat_array,
+//						 item_array,
+//						 LLInventoryModel::INCLUDE_TRASH,
+//						 is_linked_item_match);
+//	if (cat_array.empty() && item_array.empty())
+//	{
+//		return;
+//	}
+//	for (LLInventoryModel::cat_array_t::iterator cat_iter = cat_array.begin();
+//		 cat_iter != cat_array.end();
+//		 cat_iter++)
+//	{
+//		LLViewerInventoryCategory *linked_cat = (*cat_iter);
+//		addChangedMask(mask, linked_cat->getUUID());
+//	};
+//
+//	for (LLInventoryModel::item_array_t::iterator iter = item_array.begin();
+//		 iter != item_array.end();
+//		 iter++)
+//	{
+//		LLViewerInventoryItem *linked_item = (*iter);
+//		addChangedMask(mask, linked_item->getUUID());
+//	};
+	
+	item_links_map_t::iterator itr = mItemLinks.find( object_id );
+	if( mItemLinks.end() != itr )
 	{
-		return;
-	}
-	for (LLInventoryModel::cat_array_t::iterator cat_iter = cat_array.begin();
-		 cat_iter != cat_array.end();
-		 cat_iter++)
-	{
-		LLViewerInventoryCategory *linked_cat = (*cat_iter);
-		addChangedMask(mask, linked_cat->getUUID());
-	};
+		for( item_links_set_t::iterator itrIds = itr->second.begin(); itr->second.end() != itrIds; ++itrIds )
+			addChangedMask(mask, *itrIds);
+ 	}
+	//</ND>
+	
 
-	for (LLInventoryModel::item_array_t::iterator iter = item_array.begin();
-		 iter != item_array.end();
-		 iter++)
-	{
-		LLViewerInventoryItem *linked_item = (*iter);
-		addChangedMask(mask, linked_item->getUUID());
-	};
 }
 
 const LLUUID& LLInventoryModel::getLinkedItemID(const LLUUID& object_id) const
@@ -958,6 +970,21 @@ void LLInventoryModel::deleteObject(const LLUUID& id)
 	LLUUID parent_id = obj->getParentUUID();
 	mCategoryMap.erase(id);
 	mItemMap.erase(id);
+	
+	
+	// <ND>: Link processing efficiency
+	if(LLAssetType::lookupIsLinkType(obj->getActualType()))
+	{
+		LLUUID idLinked(obj->getLinkedUUID());
+		item_links_map_t::iterator itr = mItemLinks.find( idLinked );
+		if( mItemLinks.end() != itr )
+			itr->second.erase( id );
+	}
+	else
+		mItemLinks.erase( id );
+	// </ND>
+	
+	
 	//mInventory.erase(id);
 	item_array_t* item_list = getUnlockedItemArray(parent_id);
 	if(item_list)
@@ -1353,6 +1380,11 @@ void LLInventoryModel::addItem(LLViewerInventoryItem* item)
 		{
 			llinfos << "Adding broken link [ name: " << item->getName() << " itemID: " << item->getUUID() << " assetID: " << item->getAssetUUID() << " )  parent: " << item->getParentUUID() << llendl;
 		}
+		
+		//<ND> Link Processing Efficiency
+		if( LLAssetType::lookupIsLinkType(item->getActualType()) )
+			mItemLinks[ item->getLinkedUUID() ].insert( item->getUUID() );
+		//</ND>
 
 		mItemMap[item->getUUID()] = item;
 	}
@@ -1374,6 +1406,7 @@ void LLInventoryModel::empty()
 	mParentChildItemTree.clear();
 	mCategoryMap.clear(); // remove all references (should delete entries)
 	mItemMap.clear(); // remove all references (should delete entries)
+	mItemLinks.clear(); //ND Link Processing Efficiency
 	mLastItem = NULL;
 	//mInventory.clear();
 }

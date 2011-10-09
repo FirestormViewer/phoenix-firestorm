@@ -159,6 +159,13 @@ private:
 	typedef std::map<LLUUID, LLPointer<LLViewerInventoryItem> > item_map_t;
 	cat_map_t mCategoryMap;
 	item_map_t mItemMap;
+	
+	//<ND> Link Processsing Efficiency
+	typedef std::set< LLUUID > item_links_set_t;
+	typedef std::map< LLUUID, item_links_set_t > item_links_map_t;
+	item_links_map_t mItemLinks;
+	//</ND>
+	
 	// This last set of indices is used to map parents to children.
 	typedef std::map<LLUUID, cat_array_t*> parent_cat_map_t;
 	typedef std::map<LLUUID, item_array_t*> parent_item_map_t;
