@@ -415,6 +415,134 @@
          min_val="500"
          name="RenderVolumeSAFrameMax"
          width="90" />
+         
+        <check_box
+         top_pad="20"
+         left="10"
+         label="Enable Spam Protection"
+         control_name="UseAntiSpam"
+         follows="left|top"
+         height="16"
+         name="UseAntiSpam"
+         width="200" />
+        <text
+         top_pad="5"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left_delta="20"
+         name="AntiSpamText1"
+         width="200">
+           Max lines in a single message:
+        </text>
+        <spinner
+         top_delta="-5"
+         control_name="_NACL_AntiSpamNewlines"
+         decimal_digits="0"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         left_pad="0"
+         increment="1"
+         initial_val="70"
+         max_val="1000"
+         min_val="5"
+         name="_NACL_AntiSpamNewlines"
+         width="50"
+         tool_tip="Maximum number of lines to accept in a single text message [Default: 70]"/>
+        <text
+         top_pad="10"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left_delta="-200"
+         name="AntiSpamText2"
+         width="200">
+           Max events from same source:
+        </text>
+        <spinner
+         top_delta="-5"
+         control_name="_NACL_AntiSpamAmount"
+         decimal_digits="0"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         left_pad="0"
+         increment="1"
+         initial_val="10"
+         max_val="40"
+         min_val="2"
+         name="_NACL_AntiSpamAmount"
+         width="50"
+         tool_tip="Maximum number of similar events to accept within 2 seconds from the same source [Default: 10]"/>
+        <text
+         top_pad="10"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left_delta="-200"
+         name="AntiSpamText3"
+         width="200">
+           Sound play requests multiplier:
+        </text>
+        <spinner
+         top_delta="-5"
+         control_name="_NACL_AntiSpamSoundMulti"
+         decimal_digits="0"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         left_pad="0"
+         increment="1"
+         initial_val="10"
+         max_val="25"
+         min_val="1"
+         name="_NACL_AntiSpamSoundMulti"
+         width="50"
+         tool_tip="Event multiplier for sound play requests [Default: 10]"/>
+        <text
+         top_pad="10"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left_delta="-200"
+         name="AntiSpamText4"
+         width="200">
+           Sound preload requests multiplier:
+        </text>
+        <spinner
+         top_delta="-5"
+         control_name="_NACL_AntiSpamSoundPreloadMulti"
+         decimal_digits="0"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         left_pad="0"
+         increment="1"
+         initial_val="4"
+         max_val="25"
+         min_val="1"
+         name="_NACL_AntiSpamSoundPreloadMulti"
+         width="50"
+         tool_tip="Event multiplier for sound preload requests [Default: 4]"/>
+        <button
+         layout="topleft"
+         follows="left|top"
+         top_pad="10"
+         width="200"
+         height="20"
+         left="40"
+         name="AntiSpamUnblock"
+         label="Unblock all spam sources"
+         commit_callback.function="NACL.AntiSpamUnblock"/>
     </panel>
 
 
