@@ -3,6 +3,48 @@
 <map>
     <key>installables</key>
     <map>
+    <key>Growl</key>
+    <map>
+        <key>copyright</key>
+        <string>The Growl Project</string>
+        <key>description</key>
+        <string>A unified notification system for Mac OS X</string>
+        <key>license</key>
+        <string>bsd</string>
+        <key>packages</key>
+        <map>
+          <key>darwin</key>
+          <map>
+            <key>archive</key>
+            <map>
+                <key>hash</key>
+                <string>f075e96d8e1bfdd1f518829f0d7b74af</string>
+                <key>url</key>
+                <uri>http://downloads.phoenixviewer.com/growl-1.2.1-darwin.tar.gz</uri>
+            </map>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+                <key>hash</key>
+                <string>b017cc5f759eaeb862a8b94d43a39c04</string>
+                <key>url</key>
+                <uri>http://downloads.phoenixviewer.com/lggemwingrowllibraries.tar.bz2</uri>
+            </map>
+          </map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+                <key>hash</key>
+                <string>af06208ec80b1f170cc560141602e2dc</string>
+                <key>url</key>
+                <uri>http://downloads.phoenixviewer.com/libnotify-0.4.4-linux-20101003.tar.bz2</uri>
+            </map>
+            </map>
+        </map>
+      </map>
       <key>GLOD</key>
       <map>
         <key>license</key>
