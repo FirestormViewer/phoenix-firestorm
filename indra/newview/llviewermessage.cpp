@@ -3578,7 +3578,15 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		static const boost::regex whitespace_exp("^\\s*$");
 		if (chat.mSourceType == CHAT_SOURCE_OBJECT && boost::regex_search(from_name, whitespace_exp))
 		{
-			chat.mFromName = NO_NAME_OBJECT;
+			//[FIRE-2434 Mark Unamed Objects based on setting
+			if (gSavedSettings.getBOOL("FSMarkObjects"))
+			{
+				chat.mFromName = NO_NAME_OBJECT;
+			}
+			else
+			{
+				chat.mFromName = "";
+			}
 		}
 		else
 		{
