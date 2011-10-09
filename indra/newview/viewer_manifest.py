@@ -415,6 +415,10 @@ class WindowsManifest(ViewerManifest):
             # Hunspell
             self.path("libhunspell.dll")
 
+            # Growl
+            self.path("lgggrowl.dll")
+            self.path("lgggrowl++.dll")
+
             # For google-perftools tcmalloc allocator.
             try:
                 if self.args['configuration'].lower() == 'debug':
@@ -432,10 +436,6 @@ class WindowsManifest(ViewerManifest):
         self.path("VivoxAUP.txt")
 
         #self.enable_no_crt_manifest_check()
-        if self.prefix(src=os.path.join(os.pardir, os.pardir, 'libraries', 'i686-win32', 'lib', 'release'),dst="./"):
-            self.path("lgggrowl.dll")
-            self.path("lgggrowl++.dll")
-            self.end_prefix()
 
         # Media plugins - QuickTime
         if self.prefix(src='../media_plugins/quicktime/%s' % self.args['configuration'], dst="llplugin"):
