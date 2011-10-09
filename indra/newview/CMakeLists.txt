@@ -44,7 +44,9 @@ include(ViewerMiscLibs)
 include(LLLogin)
 include(GLOD)
 include(CMakeCopyIfDifferent)
+if (WINDOWS)
 include(Growl)
+endif (WINDOWS)
 
 include_directories(
     ${DBUSGLIB_INCLUDE_DIRS}
@@ -96,7 +98,7 @@ set(viewer_SOURCE_FILES
     fslslbridge.cpp
     fslslbridgerequest.cpp
     fsradarlistctrl.cpp
-	growlmanager.cpp
+	#growlmanager.cpp
     lggautocorrect.cpp
     lggautocorrectfloater.cpp
     lggbeammapfloater.cpp
@@ -700,8 +702,8 @@ set(viewer_HEADER_FILES
     fskeywords.h
     fslslbridge.h
     fslslbridgerequest.h
-	growlmanager.h
-	growlnotifier.h
+	#growlmanager.h
+	#growlnotifier.h
     lggautocorrect.h
     lggautocorrectfloater.h
     lggbeammapfloater.h
@@ -1284,10 +1286,10 @@ source_group("CMake Rules" FILES ViewerInstall.cmake)
 
 if (DARWIN)
   LIST(APPEND viewer_SOURCE_FILES llappviewermacosx.cpp)
-  LIST(APPEND viewer_HEADER_FILES growlnotifiermacosx-objc.h)
-  LIST(APPEND viewer_SOURCE_FILES growlnotifiermacosx-objc.mm)
-  LIST(APPEND viewer_SOURCE_FILES growlnotifiermacosx.h)
-  LIST(APPEND viewer_SOURCE_FILES growlnotifiermacosx.cpp)
+  #LIST(APPEND viewer_HEADER_FILES growlnotifiermacosx-objc.h)
+  #LIST(APPEND viewer_SOURCE_FILES growlnotifiermacosx-objc.mm)
+  #LIST(APPEND viewer_SOURCE_FILES growlnotifiermacosx.h)
+  #LIST(APPEND viewer_SOURCE_FILES growlnotifiermacosx.cpp)
 
 
   find_library(AGL_LIBRARY AGL)
@@ -1330,8 +1332,8 @@ endif (DARWIN)
 if (LINUX)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux.cpp)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux_api_dbus.cpp)
-    LIST(APPEND viewer_HEADER_FILES desktopnotifierlinux.h)
-    LIST(APPEND viewer_SOURCE_FILES desktopnotifierlinux.cpp)
+    #LIST(APPEND viewer_HEADER_FILES desktopnotifierlinux.h)
+    #LIST(APPEND viewer_SOURCE_FILES desktopnotifierlinux.cpp)
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
 
     set(viewer_LIBRARIES
@@ -1341,12 +1343,14 @@ endif (LINUX)
 
 if (WINDOWS)
     list(APPEND viewer_SOURCE_FILES
+         growlmanager.cpp
          growlnotifierwin.cpp
          llappviewerwin32.cpp
          llwindebug.cpp
          )
 
     list(APPEND viewer_HEADER_FILES
+         growlmanager.cpp
          growlnotifierwin.h
          llappviewerwin32.h
          llwindebug.h
@@ -1515,8 +1519,12 @@ set(viewer_APPSETTINGS_FILES
     app_settings/viewerart.xml
     ${CMAKE_SOURCE_DIR}/../etc/message.xml
     ${CMAKE_SOURCE_DIR}/../scripts/messages/message_template.msg
-    app_settings/growl_notifications.xml
+    #app_settings/growl_notifications.xml
     )
+	
+if (WINDOWS)
+  LIST(APPEND viewer_APPSETTINGS_FILES app_settings/growl_notifications.xml)
+endif (WINDOWS)
 
 source_group("App Settings" FILES ${viewer_APPSETTINGS_FILES})
 
@@ -1872,6 +1880,12 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${GROWL_LIBRARY}
     ${HACD_LIBRARY}
     )
+	
+if (WINDOWS)
+    target_link_libraries(${VIEWER_BINARY_NAME}
+    ${GROWL_LIBRARY}
+    )
+endif (WINDOWS)
 
 if (USE_KDU)
     target_link_libraries(${VIEWER_BINARY_NAME}
