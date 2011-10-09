@@ -2431,11 +2431,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	{
 		static LLCachedControl<U32> _NACL_AntiSpamNewlines(gSavedSettings,"_NACL_AntiSpamNewlines");
 		boost::sregex_iterator iter(message.begin(), message.end(), NEWLINES);
-		if(std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines)
+		if(std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines && gSavedSettings.getBOOL("UseAntiSpam"))
 		{
 			NACLAntiSpamRegistry::blockOnQueue((U32)NACLAntiSpamRegistry::QUEUE_IM,from_id);
 			LLSD args;
-			args["MESSAGE"] = "Message: Blocked newline flood from "+from_id.asString();
+			args["MESSAGE"] = llformat("AntiSpam: Blocked %s for sending message with %ud lines.",from_id.asString().c_str(),(U32)_NACL_AntiSpamNewlines);
 			LLNotificationsUtil::add("SystemMessageTip", args);
 			return;
 		}
@@ -4940,19 +4940,15 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_OwnerID, owner_id);
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_ObjectID, object_id);
 	// NaCl - Antispam Registry
-	/*if(owner_id.isNull())
-	{*/
 	bool bDoSpamCheck=1;
 	std::string sSound=sound_id.asString();
  	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings,"_NACL_AntiSpamSoundMulti");
-	for(int i=0;i< COLLISION_SOUNDS_SIZE;i++)
+	for(int i=0;i< COLLISION_SOUNDS_SIZE;i++) //AO: Should probably do this as a hashmap O(1) instead of O(n)
 		if(COLLISION_SOUNDS[i] == sSound)
 			bDoSpamCheck=0;
 		if(bDoSpamCheck)
-			if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND,object_id, _NACL_AntiSpamSoundMulti,true)) return;
-	/*}
-	else
-		if(NACLAntiSpamRegistry::checkQueue("Soundspam",owner_id)) return;*/
+			if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND,object_id, _NACL_AntiSpamSoundMulti,true)) 
+				return;
 	// NaCl End
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_ParentID, parent_id);
 	msg->getU64Fast(_PREHASH_SoundData, _PREHASH_Handle, region_handle);
@@ -5025,10 +5021,12 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
 	static LLCachedControl<U32> _NACL_AntiSpamSoundPreloadMulti(gSavedSettings,"_NACL_AntiSpamSoundPreloadMulti");
 	if(owner_id.isNull())
 	{
-		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND_PRELOAD,object_id,_NACL_AntiSpamSoundPreloadMulti)) return;
+		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND_PRELOAD,object_id,_NACL_AntiSpamSoundPreloadMulti)) 
+			return;
 	}
 	else
-		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND_PRELOAD,owner_id,_NACL_AntiSpamSoundPreloadMulti)) return;
+		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND_PRELOAD,owner_id,_NACL_AntiSpamSoundPreloadMulti)) 
+			return;
 	// NaCl End
 
 	LLViewerObject *objectp = gObjectList.findObject(object_id);
@@ -5068,12 +5066,8 @@ void process_attached_sound(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_OwnerID, owner_id);
 	// NaCl - Antispam Registry
 	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings,"_NACL_AntiSpamSoundMulti");
-	/*if(owner_id.isNull())
-	{*/
-		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND,object_id, _NACL_AntiSpamSoundMulti)) return;
-	/*}
-	else
-		if(NACLAntiSpamRegistry::checkQueue("Soundspam",owner_id)) return;*/
+		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND,object_id, _NACL_AntiSpamSoundMulti)) 
+			return;
 	// NaCl End
 	msg->getF32Fast(_PREHASH_DataBlock, _PREHASH_Gain, gain);
 	msg->getU8Fast(_PREHASH_DataBlock, _PREHASH_Flags, flags);

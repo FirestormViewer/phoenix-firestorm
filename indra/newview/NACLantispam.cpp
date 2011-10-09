@@ -64,11 +64,21 @@ void NACLAntiSpamQueue::setTime(U32 time)
 {
 	queueTime=time;
 }
+U32 NACLAntiSpamQueue::getTime()
+{
+	return queueTime;
+}
+U32 NACLAntiSpamQueue::getAmount()
+{
+	return queueAmount;
+}
 void NACLAntiSpamQueue::clearEntries()
 {
 	for(it = entries.begin(); it != entries.end(); it++)
 	{
-		it->second->clearEntry();
+		//AO: Only clear entries that are not blocked.
+		if (!it->second->getBlocked())
+			it->second->clearEntry();
 	}
 }
 void NACLAntiSpamQueue::purgeEntries()
@@ -89,11 +99,13 @@ void NACLAntiSpamQueue::blockEntry(LLUUID& source)
 	entries[source.asString()]->setBlocked();
 }
 int NACLAntiSpamQueue::checkEntry(LLUUID& name, int multiplier)
+// Returns 0 if unblocked, 1 if check results in a new block, 2 if by an existing block
 {
 	it=entries.find(name.asString());
 	if(it != entries.end())
 	{
-		if(it->second->getBlocked()) return 2;
+		if(it->second->getBlocked()) 
+			return 2;
 		U32 eTime=it->second->getEntryTime();
 		U32 eAmount=it->second->getEntryAmount();
 		U32 currentTime=time(0);
@@ -117,7 +129,7 @@ int NACLAntiSpamQueue::checkEntry(LLUUID& name, int multiplier)
 	}
 	else
 	{
-		llinfos << "New entry:" << name.asString() << llendl;
+		llinfos << "[antispam] New queue entry:" << name.asString() << llendl;
 		entries[name.asString()]=new NACLAntiSpamQueueEntry();
 		entries[name.asString()]->updateEntry();
 		return 0;
@@ -256,15 +268,18 @@ void NACLAntiSpamRegistry::blockGlobalEntry(LLUUID& source)
 	}
 	globalEntries[source.asString()]->setBlocked();
 }
+
 bool NACLAntiSpamRegistry::checkQueue(U32 name, LLUUID& source, int multiplier, bool silent)
+// returns TRUE if blocked, FALSE otherwise
 {
-	if(source.isNull()) return false;
-	if(gAgent.getID() == source) return false;
+	if((source.isNull()) || (gAgent.getID() == source)) 
+		return false;
 	LLViewerObject *obj=gObjectList.findObject(source);
 	if(obj)
-		if(obj->permYouOwner()) return false;
+		if(obj->permYouOwner()) 
+			return false;
 	
-	int result;
+	int result = 0;
 	if(bGlobalQueue)
 	{
 		result=NACLAntiSpamRegistry::checkGlobalEntry(source,multiplier);
@@ -278,27 +293,33 @@ bool NACLAntiSpamRegistry::checkQueue(U32 name, LLUUID& source, int multiplier, 
 		}
 		result=queues[name]->checkEntry(source,multiplier);
 	}
-	if(result==0)
-	{
+
+	if (result == 0) // safe
 		return false;
-	}
-	else if(result==2)
+	
+	if (result == 2 ) // previously blocked
 	{
 		return true;
 	}
-	else
+	
+	if (gSavedSettings.getBOOL("UseAntiSpam") == TRUE) // newly blocked, result == 1
 	{
 		if(!silent)
 		{
 		LLSD args;
-		args["MESSAGE"] = std::string(getQueueName(name))+": Blocked object "+source.asString();
+		std::string msg = llformat("AntiSpam: Blocked %s for spamming a %s (%d) times in %d seconds.",source.asString().c_str(), getQueueName(name), multiplier * queues[name]->getAmount(), queues[name]->getTime());
+		args["MESSAGE"] = msg;
+		llinfos << "[antispam] " << msg << llendl;
 		LLNotificationsUtil::add("SystemMessageTip", args);
 		}
 		return true;
 	}
+
+	// fallback, should not get here
+	return false;
 }
 
-// Global queue stoof
+// Global queue
 void NACLAntiSpamRegistry::setGlobalQueue(bool value)
 {
 	NACLAntiSpamRegistry::purgeAllQueues();

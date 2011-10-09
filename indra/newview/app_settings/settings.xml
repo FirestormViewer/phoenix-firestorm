@@ -16466,10 +16466,23 @@ Change of this parameter will affect the layout of buttons in notification toast
       <real>0.0</real>
     </array>
   </map>
+ 
+  <key>UseAntiSpam</key>
+  <map>    
+    <key>Comment</key>    
+    <string>Active the Anti-Spam System</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
   <key>_NACL_AntiSpamGlobalQueue</key>
   <map>
     <key>Comment</key>
-    <string>A comment</string>
+    <string>Do not track types of spam seperately, all actions from a single owner/source will be processed together. Anything triggering spam will cause that source to be blocked from all further methods of input. Use in cases of extreme spam only.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -16480,7 +16493,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>_NACL_AntiSpamTime</key>
   <map>
     <key>Comment</key>
-    <string>A comment</string>
+    <string>Time inverval in seconds by which to track incoming messages. Within this inverval any messages received more than _NACL_ANtiSpamAmount times will trigger a block. Default interval is 2 seconds.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -16491,7 +16504,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>_NACL_AntiSpamAmount</key>
   <map>
     <key>Comment</key>
-    <string>Another comment</string>
+    <string>Number of messages needed over NACL_AntiSpamTime seconds to trigger the spam system</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -16502,7 +16515,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>_NACL_AntiSpamNewlines</key>
   <map>
     <key>Comment</key>
-    <string> </string>
+    <string>Messages with more than these number of lines will be squelched and sender blocked</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -16513,7 +16526,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>_NACL_AntiSpamSoundMulti</key>
   <map>
     <key>Comment</key>
-    <string> </string>
+    <string>Multiplier for _NACL_AntiSpamTime for sounds heard in _NACL_AntiSpamTime interval needed to trigger a block, since sounds are more common</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -16524,7 +16537,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>_NACL_AntiSpamSoundPreloadMulti</key>
   <map>
     <key>Comment</key>
-    <string> </string>
+    <string>Multiplier for _NACL_AntiSpamTime for sound preloads heard in _NACL_AntiSpamTime interval needed to trigger a block, since preloads are more common</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
