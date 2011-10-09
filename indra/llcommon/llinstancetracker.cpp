@@ -35,14 +35,26 @@
 //static 
 void * & LLInstanceTrackerBase::getInstances(std::type_info const & info)
 {
-	static std::map<std::string, void *> instances;
+// <ND> This is called a HUGE amount of times. Just use the name() ptr in a map instead of making expensive string compares each time
+//	static std::map<std::string, void *> instances;
+//
+//	std::string k = info.name();
+//	if(instances.find(k) == instances.end())
+//	{
+//		instances[k] = NULL;
+//	}
+//
+//	return instances[k];
 
-	std::string k = info.name();
-	if(instances.find(k) == instances.end())
+	static std::map<char const*, void *> instances;
+	std::map< char const *, void* >::iterator itr = instances.find( info.name() );
+	//	std::string k = info.name();
+	if(itr == instances.end())
 	{
-		instances[k] = NULL;
+		itr = instances.insert( std::make_pair( info.name(), (void*)0 ) ).first;
 	}
+	return itr->second;
+// </ND>
 
-	return instances[k];
 }
 
