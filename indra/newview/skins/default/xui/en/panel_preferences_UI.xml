@@ -804,6 +804,113 @@ V2/3 default 0. V1 default [TODO: unknown].
 -->
     
     </panel>
+   <!--BottomTray-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Buttons"
+     name="UI-buttons-tab" >
+        <text
+         name="buttons_text1"
+         top_pad="15"
+         left="40"
+         height="12"
+         width="130"
+         layout="topleft"
+         follows="left|top"
+         length="1">
+         Bottom Tray button:
+        </text>
+        <combo_box
+         enabled="false"
+         height="23"
+         layout="topleft"
+         follows="left|top"
+         left_pad="5"
+         top_delta="-5"
+         name="bottomtray_buttons_combo"
+         width="200"/>
+        <check_box
+         enabled="false"
+         height="16"
+         label="Enabled"
+         layout="topleft"
+         left_pad="20"
+         name="bottomtray_buttons_enabled"
+         tool_tip="Show the selected button in the bottom tray"
+         top_delta="5"
+         width="80" />
+        <text
+         name="buttons_text2"
+         top_delta="25"
+         left_delta="-345"
+         height="12"
+         width="120"
+         layout="topleft"
+         follows="left|top"
+         length="1">
+         Show on the button:
+        </text>
+        <check_box
+         enabled="false"
+         height="16"
+         label="Text"
+         layout="topleft"
+         left_pad="5"
+         name="bottomtray_buttons_text"
+         tool_tip=""
+         top_delta="0"
+         width="40" />
+        <text
+         name="buttons_text3"
+         top_delta="0"
+         left_pad="30"
+         height="12"
+         width="30"
+         layout="topleft"
+         follows="left|top"
+         length="1">
+         Icon:
+        </text>
+        <radio_group
+         enabled="false"
+         height="20"
+         layout="topleft"
+         left_pad="10"
+         top_delta="0" 
+         name="bottomtray_buttons_icon">
+         <radio_item
+          label="None"
+          name="none"
+          top_delta="20" 
+          layout="topleft"
+          height="16" 
+          left="0" 
+          value="0"
+          width="60" />
+         <radio_item
+          label="Small"
+          name="small"
+          left_pad="0"
+          layout="topleft"
+          top_delta="0" 
+          height="16" 
+          value="1"
+          width="60" />
+         <radio_item
+          label="Large"
+          name="large"
+          left_pad="0"
+          height="16"
+          layout="topleft"
+          top_delta="0"
+          value="2"
+          width="60" />
+        </radio_group>
+    </panel>
 </tab_container>
 </panel>
 
