@@ -8010,7 +8010,7 @@ You died and have been teleported to your home location.
   </notification>
   <notification
    icon="notify.tga"
-   name="PhoenixWL"
+   name="FSWL"
    type="notify">
 &apos;[PARCEL_NAME]&apos;, owned by &apos;[OWNER_NAME]&apos;, would like to change your Windlight visual environment settings.
     <form name="form">
@@ -8027,7 +8027,7 @@ You died and have been teleported to your home location.
   
   <notification
    icon="notify.tga"
-   name="PhoenixWLClear"
+   name="FSWLClear"
    type="notify">
 Reset WL settings for &apos;[PARCEL_NAME]&apos; to region default?
     <usetemplate

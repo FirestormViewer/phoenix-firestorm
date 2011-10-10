@@ -3725,7 +3725,7 @@ class FSSelfToggleIgnorePreJump : public view_listener_t
     {
         bool handleEvent(const LLSD& userdata)
         {
-			gSavedSettings.setBOOL("PhoenixIgnoreFinishAnimation", !gSavedSettings.getBOOL("PhoenixIgnoreFinishAnimation"));
+			gSavedSettings.setBOOL("FSIgnoreFinishAnimation", !gSavedSettings.getBOOL("FSIgnoreFinishAnimation"));
             return true;
         }
     };
@@ -3735,7 +3735,7 @@ class FSSelfCheckIgnorePreJump : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		bool new_value = gSavedSettings.getBOOL("PhoenixIgnoreFinishAnimation");
+		bool new_value = gSavedSettings.getBOOL("FSIgnoreFinishAnimation");
 		return new_value;
 	}
 };

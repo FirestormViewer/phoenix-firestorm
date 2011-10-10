@@ -1175,7 +1175,7 @@ void LLIMFloater::sessionInitReplyReceived(const LLUUID& im_session_id)
 void LLIMFloater::updateMessages()
 {
 	bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
-	bool bold_mods_chat = gSavedSettings.getBOOL("PhoenixBoldGroupMods");
+	bool bold_mods_chat = gSavedSettings.getBOOL("FSBoldGroupMods");
 	bool hide_timestamps_nearby_chat = gSavedSettings.getBOOL("FSHideTimestampsIM");
 
 	std::list<LLSD> messages;

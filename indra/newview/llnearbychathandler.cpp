@@ -507,17 +507,17 @@ LLNearbyChatHandler::LLNearbyChatHandler(e_notification_type type, const LLSD& i
 
 	mChannel = LLChannelManager::getInstance()->addChannel(channel);
 
-	PhoenixUseNearbyChatConsole = gSavedSettings.getBOOL("PhoenixUseNearbyChatConsole");
-	gSavedSettings.getControl("PhoenixUseNearbyChatConsole")->getSignal()->connect(boost::bind(&LLNearbyChatHandler::updatePhoenixUseNearbyChatConsole, this, _2));
+	FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
+	gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&LLNearbyChatHandler::updateFSUseNearbyChatConsole, this, _2));
 }
 
 LLNearbyChatHandler::~LLNearbyChatHandler()
 {
 }
 
-void LLNearbyChatHandler::updatePhoenixUseNearbyChatConsole(const LLSD &data)
+void LLNearbyChatHandler::updateFSUseNearbyChatConsole(const LLSD &data)
 {
-	PhoenixUseNearbyChatConsole = data.asBoolean();
+	FSUseNearbyChatConsole = data.asBoolean();
 }
 
 void LLNearbyChatHandler::initChannel()
@@ -621,7 +621,7 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,		// WARNING - not 
 	// Handle irc styled messages for toast panel
 	// HACK ALERT - changes mText, stripping out IRC style "/me" prefixes
 	if ((tmp_chat.mChatStyle == CHAT_STYLE_IRC) &&
-		!PhoenixUseNearbyChatConsole)
+		!FSUseNearbyChatConsole)
 	{
 		if(!tmp_chat.mFromName.empty())
 			tmp_chat.mText = tmp_chat.mFromName + tmp_chat.mText.substr(3);
@@ -651,7 +651,7 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,		// WARNING - not 
 		return;//no need in toast if chat is visible or if bubble chat is enabled
 
 	// Ansariel: Use either old style chat output to console or toasts
-	if (PhoenixUseNearbyChatConsole)
+	if (FSUseNearbyChatConsole)
 	{
 		// Don't write to console if avatar chat and user wants
 		// bubble chat or if the user is busy.

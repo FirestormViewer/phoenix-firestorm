@@ -6381,7 +6381,7 @@ void LLVOAvatar::sitOnObject(LLViewerObject *sit_object)
 		}
 
 		//KC: revoke perms on sit
-		U32 revoke_on = gSavedSettings.getU32("PhoenixRevokePerms");
+		U32 revoke_on = gSavedSettings.getU32("FSRevokePerms");
 		if ((revoke_on == 1 || revoke_on == 3) && !sit_object->permYouOwner())
 		{
 			revokePermissionsOnObject(sit_object);
@@ -6477,7 +6477,7 @@ void LLVOAvatar::getOffObject()
 		gAgentCamera.setSitCamera(LLUUID::null);
 
 		//KC: revoke perms on sit
-		U32 revoke_on = gSavedSettings.getU32("PhoenixRevokePerms");
+		U32 revoke_on = gSavedSettings.getU32("FSRevokePerms");
 		if ((revoke_on == 2 || revoke_on == 3) && !sit_object->permYouOwner())
 		{
 			revokePermissionsOnObject(sit_object);

@@ -54,7 +54,7 @@ LLColor4 LGGContactSets::toneDownColor(LLColor4 inColor, float strength, bool us
 	if(usedForBackground)
 	{
 		if(strength<.4f)strength=.4f;
-		static LLCachedControl<S32> maxAlphaInt(gSavedSettings,"PhoenixContactSetsMaxColorStrength");
+		static LLCachedControl<S32> maxAlphaInt(gSavedSettings,"FSContactSetsMaxColorStrength");
 		strength *= ((F32)maxAlphaInt/100.0f);
 	}
 	
@@ -284,10 +284,10 @@ LLColor4 LGGContactSets::getFriendColor(
 BOOL LGGContactSets::hasFriendColorThatShouldShow(LLUUID friend_id,bool chat, bool tag, bool radar, bool miniMap)
 {
 	if(gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))return FALSE;//don't show colors if we cant show names
-	static LLCachedControl<bool> sPhoenixColorContactSetsChat(gSavedSettings, "PhoenixContactSetsColorizeChat");
-	static LLCachedControl<bool> contactSetsColorizeTag(gSavedSettings,"PhoenixContactSetsColorizeNameTag");
-	static LLCachedControl<bool> contactSetsColorizeRadar(gSavedSettings,"PhoenixContactSetsColorizeRadar");
-	static LLCachedControl<bool> contactSetsColorizeMiniMap(gSavedSettings,"PhoenixContactSetsColorizeMiniMap");
+	static LLCachedControl<bool> sPhoenixColorContactSetsChat(gSavedSettings, "FSContactSetsColorizeChat");
+	static LLCachedControl<bool> contactSetsColorizeTag(gSavedSettings,"FSContactSetsColorizeNameTag");
+	static LLCachedControl<bool> contactSetsColorizeRadar(gSavedSettings,"FSContactSetsColorizeRadar");
+	static LLCachedControl<bool> contactSetsColorizeMiniMap(gSavedSettings,"FSContactSetsColorizeMiniMap");
 
 	if(miniMap&&!contactSetsColorizeMiniMap)return FALSE;
 	if(tag&&!contactSetsColorizeTag)return FALSE;
@@ -313,9 +313,9 @@ std::vector<std::string> LGGContactSets::getInnerGroups(std::string groupName)
 {
 	std::vector<std::string> toReturn;
 	toReturn.clear();
-	static LLCachedControl<bool> useFolders(gSavedSettings, "PhoenixContactSetsShowFolders");
-	static LLCachedControl<bool> showOnline(gSavedSettings, "PhoenixContactSetsShowOnline");
-	static LLCachedControl<bool> showOffline(gSavedSettings, "PhoenixContactSetsShowOffline");
+	static LLCachedControl<bool> useFolders(gSavedSettings, "FSContactSetsShowFolders");
+	static LLCachedControl<bool> showOnline(gSavedSettings, "FSContactSetsShowOnline");
+	static LLCachedControl<bool> showOffline(gSavedSettings, "FSContactSetsShowOffline");
 	
 	if(!(useFolders))return toReturn;
 

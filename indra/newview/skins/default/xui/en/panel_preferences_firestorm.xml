@@ -111,7 +111,7 @@
          left="15"
          name="tp_screen_toggle"
          width="270"
-         control_name="PhoenixDisableTeleportScreens"
+         control_name="FSDisableTeleportScreens"
          tool_tip="Disables the black teleport screen during all teleports."/>
         <check_box
          top_pad="5"
@@ -121,7 +121,7 @@
          left_delta="0"
          name="login_screen_toggle"
          width="270"
-         control_name="PhoenixDisableLoginScreens"
+         control_name="FSDisableLoginScreens"
          tool_tip="Disables the black login progress Screen"/>
         <check_box
          top_pad="5"
@@ -131,7 +131,7 @@
          left_delta="0"
          name="logout_screen_toggle"
          width="270"
-         control_name="PhoenixDisableLogoutScreens"
+         control_name="FSDisableLogoutScreens"
          tool_tip="Disables the black Logout progress screen."/>
         <check_box
          top_pad="5"
@@ -318,10 +318,10 @@
          top_pad="12"
          left="10"
          label="Block left-click sitting on objects"
-         control_name="PhoenixBlockClickSit"
+         control_name="FSBlockClickSit"
          follows="left|top"
          height="16"
-         name="PhoenixBlockClickSit"
+         name="FSBlockClickSit"
          width="256" />
         <check_box
          top_pad="8"
@@ -345,9 +345,9 @@
          left="20"
          height="62"
          layout="topleft"
-         control_name="PhoenixRevokePerms"
-         name="PhoenixRevokePerms"
-         tool_tip="PhoenixRevokePerms"
+         control_name="FSRevokePerms"
+         name="FSRevokePerms"
+         tool_tip="FSRevokePerms"
          width="331">
             <radio_item
              height="16"
@@ -592,7 +592,7 @@
          left="30"
          name="disableminzoomdist"
          width="270"
-         control_name="PhoenixDisableMinZoomDist"
+         control_name="FSDisableMinZoomDist"
          tool_tip="Disable the constraint on the closest distance the camera is allowed to get to an object."/>
 
         <check_box
@@ -605,7 +605,7 @@
          left="30"
          name="ignorecameraconstraints"
          width="350"
-         control_name="PhoenixIgnoreSimulatorCameraConstraints"
+         control_name="FSIgnoreSimulatorCameraConstraints"
          tool_tip="Ignores the 'push' the simulator applies to your camera to keep it out of objects."/>
 
         <text
@@ -688,7 +688,7 @@
          max_chars="20"
          name="BeamColor_combo"
          width="170"
-         control_name="PhoenixBeamColorFile"
+         control_name="FSBeamColorFile"
          tool_tip="Select the color preset for the selection beam"/>
         
         <button
@@ -728,8 +728,8 @@
         <slider
          bottom_delta="25"
          left="15"
-         name="PhoenixMaxBeamsPerSecond"
-         control_name="PhoenixMaxBeamsPerSecond"
+         name="FSMaxBeamsPerSecond"
+         control_name="FSMaxBeamsPerSecond"
          decimal_digits="0"
          enabled="true"
          follows="left|top"
@@ -765,9 +765,9 @@
          initial_value="true"
          label="SL Particle Chat"
          left="15"
-         name="PhoenixParticleChat"
+         name="FSParticleChat"
          width="250"
-         control_name="PhoenixParticleChat" />
+         control_name="FSParticleChat" />
 
         <view_border
          bevel_style="none"
@@ -786,9 +786,9 @@
          follows="left|top"
          height="20"
          max_chars="20"
-         name="PhoenixBeamShape_combo"
+         name="FSBeamShape_combo"
          width="170"
-         control_name="PhoenixBeamShape"
+         control_name="FSBeamShape"
          tool_tip="Select the shape for the particle beam" />
 
         <button
@@ -838,8 +838,8 @@
         <slider
          bottom_delta="25"
          left_delta="-15"
-         name="PhoenixBeamShapeScale"
-         control_name="PhoenixBeamShapeScale"
+         name="FSBeamShapeScale"
+         control_name="FSBeamShapeScale"
          decimal_digits="1"
          enabled="true"
          follows="left|top"
@@ -971,12 +971,12 @@
              left="30"
              width="250"
              height="18"
-             control_name="PhoenixNearbyChatbar"
-             name="PhoenixNearbyChatbar"
+             control_name="FSNearbyChatbar"
+             name="FSNearbyChatbar"
              label="Add a chatbar in the Nearby Chat window"/>
             <text
              top_delta="2"
-             name="PhoenixNearbyChatbar_requires_restart"
+             name="FSNearbyChatbar_requires_restart"
              follows="left|top"
              layout="topleft"
              left_pad="0"
@@ -992,9 +992,9 @@
              left="30"
              width="250"
              height="18"
-             control_name="PhoenixShowChatChannel"
-             enabled_control="PhoenixNearbyChatbar"
-             name="PhoenixShowChatChannel"
+             control_name="FSShowChatChannel"
+             enabled_control="FSNearbyChatbar"
+             name="FSShowChatChannel"
              label="Show channel selection in chat bar"/>
             <check_box
              control_name="AutohideChatBar"
@@ -1055,8 +1055,8 @@
              left="20"
              width="400"
              height="18"
-             name="PhoenixUseNearbyChatConsole"
-             control_name="PhoenixUseNearbyChatConsole"
+             name="FSUseNearbyChatConsole"
+             control_name="FSUseNearbyChatConsole"
              label="Use console for chat popups instead of floating toasts (Viewer 1.x style)"/>
             <check_box
              layout="topleft"
@@ -1064,8 +1064,8 @@
              top_pad="0"
              width="50"
              height="18"
-             name="PhoenixLogImToChatConsole"
-             control_name="PhoenixLogImToChatConsole"
+             name="FSLogImToChatConsole"
+             control_name="FSLogImToChatConsole"
              label="Show IMs and group chat in chat console"/>
             <check_box
              layout="topleft"
@@ -1138,8 +1138,8 @@
              left="20"
              width="50"
              height="20"
-             control_name="PhoenixBoldGroupMods"
-             name="PhoenixBoldGroupMods"
+             control_name="FSBoldGroupMods"
+             name="FSBoldGroupMods"
              label="Show group moderator messages in bold"/>
             <check_box
              layout="topleft"
@@ -1157,8 +1157,8 @@
              top_pad="0"
              width="50"
              height="18"
-             control_name="PhoenixMuteAllGroups"
-             name="PhoenixMuteAllGroups"
+             control_name="FSMuteAllGroups"
+             name="FSMuteAllGroups"
              label="Disable ALL group chats"/>
             <check_box
              layout="topleft"
@@ -1166,8 +1166,8 @@
              top_pad="0"
              width="50"
              height="18"
-             control_name="PhoenixMuteGroupWhenNoticesDisabled"
-             name="PhoenixMuteGroupWhenNoticesDisabled"
+             control_name="FSMuteGroupWhenNoticesDisabled"
+             name="FSMuteGroupWhenNoticesDisabled"
              label="When 'Receive group notices' is disabled, disable group chat as well"/>
             <button
              layout="topleft"
@@ -1357,7 +1357,7 @@
          left="5"
          name="chat_cmd_toggle"
          width="270"
-         control_name="PhoenixCmdLine"/>
+         control_name="FSCmdLine"/>
         <button
          top="5"
          follows="top|right"
@@ -1373,7 +1373,7 @@
          follows="left|top"
          height="16"
          left="10"
-         name="PhoenixCmdLinePos_txt"
+         name="FSCmdLinePos_txt"
          width="250">
          Teleport within sim (usage: cmd x y z)
         </text>
@@ -1382,16 +1382,16 @@
          follows="left|top"
          height="20"
          max_length="256"
-         name="PhoenixCmdLinePos"
+         name="FSCmdLinePos"
          tool_tip=""
-         control_name="PhoenixCmdLinePos"
+         control_name="FSCmdLinePos"
          width="200"/>
 
         <text
          top_pad="5"
          follows="left|top"
          height="16"
-         name="PhoenixCmdLineGround_txt"
+         name="FSCmdLineGround_txt"
          width="250">
          Teleport to ground (usage: cmd)
         </text>
@@ -1400,16 +1400,16 @@
          follows="left|top"
          height="20"
          max_length="256"
-         name="PhoenixCmdLineGround"
+         name="FSCmdLineGround"
          tool_tip=""
-         control_name="PhoenixCmdLineGround"
+         control_name="FSCmdLineGround"
          width="200"/>
 
         <text
          top_pad="5"
          follows="left|top"
          height="16"
-         name="PhoenixCmdLineHeight_txt"
+         name="FSCmdLineHeight_txt"
          width="250">
         Teleport to altitude (usage: cmd z)
         </text>
@@ -1418,16 +1418,16 @@
          follows="left|top"
          height="20"
          max_length="256"
-         name="PhoenixCmdLineHeight"
+         name="FSCmdLineHeight"
          tool_tip=""
-         control_name="PhoenixCmdLineHeight"
+         control_name="FSCmdLineHeight"
          width="200"/>
 
         <text
          top_pad="5"
          follows="left|top"
          height="16"
-         name="PhoenixCmdLineTeleportHome_txt"
+         name="FSCmdLineTeleportHome_txt"
          width="250">
          Teleport home (usage: cmd)
          </text>
@@ -1436,16 +1436,16 @@
          follows="left|top"
          height="20"
          max_length="256"
-         name="PhoenixCmdLineTeleportHome"
+         name="FSCmdLineTeleportHome"
          tool_tip=""
-         control_name="PhoenixCmdLineTeleportHome"
+         control_name="FSCmdLineTeleportHome"
          width="200"/>
 
         <text
          top_pad="5"
          follows="left|top"
          height="16"
-         name="PhoenixCmdLineRezPlatform_txt"
+         name="FSCmdLineRezPlatform_txt"
          width="250">
           Rez a platform (usage: cmd 0 - 30)
         </text>
@@ -1454,14 +1454,14 @@
          follows="left|top"
          height="20"
          max_length="256"
-         name="PhoenixCmdLineRezPlatform"
+         name="FSCmdLineRezPlatform"
          tool_tip=""
-         control_name="PhoenixCmdLineRezPlatform"
+         control_name="FSCmdLineRezPlatform"
          width="200"/>
         <slider
          top_pad="4"
-         name="PhoenixCmdLinePlatformSize"
-         control_name="PhoenixCmdLinePlatformSize"
+         name="FSCmdLinePlatformSize"
+         control_name="FSCmdLinePlatformSize"
          decimal_digits="1"
          follows="left|top"
          height="18"
@@ -1480,7 +1480,7 @@
          top_pad="5"
          follows="left|top"
          height="16"
-         name="PhoenixCmdLineMapTo_txt"
+         name="FSCmdLineMapTo_txt"
          width="250">
            Teleport to sim x (usage: cmd simname)
         </text>
@@ -1489,9 +1489,9 @@
          follows="left|top"
          height="20"
          max_length="256"
-         name="PhoenixCmdLineMapTo"
+         name="FSCmdLineMapTo"
          tool_tip=""
-         control_name="PhoenixCmdLineMapTo"
+         control_name="FSCmdLineMapTo"
          width="200"/>
         <check_box
          top_pad="4"
@@ -1500,13 +1500,13 @@
          label="Use same position between sims"
          name="toggle"
          width="270"
-         control_name="PhoenixCmdLineMapToKeepPos"/>
+         control_name="FSCmdLineMapToKeepPos"/>
 
         <text
          top_pad="5"
          follows="left|top"
          height="16"
-         name="PhoenixCmdLineCalc_txt"
+         name="FSCmdLineCalc_txt"
          width="250">
            Calc. expressions (usage: cmd SIN(2+2))
         </text>
@@ -1515,16 +1515,16 @@
          follows="left|top"
          height="20"
          max_length="256"
-         name="PhoenixCmdLineCalc"
+         name="FSCmdLineCalc"
          tool_tip=""
-         control_name="PhoenixCmdLineCalc"
+         control_name="FSCmdLineCalc"
          width="200"/>
 
         <text
          top_pad="5"
          follows="left|top"
          height="16"
-         name="PhoenixCmdLineAutocorrect_txt"
+         name="FSCmdLineAutocorrect_txt"
          width="250">
            Add autocorrect word(cmd list|bad|good)
         </text>
@@ -1533,9 +1533,9 @@
          follows="left|top"
          height="20"
          max_length="256"
-         name="PhoenixCmdLineAutocorrect"
+         name="FSCmdLineAutocorrect"
          tool_tip=""
-         control_name="PhoenixCmdLineAutocorrect"
+         control_name="FSCmdLineAutocorrect"
          width="200"/>
 
         <view_border
@@ -1553,7 +1553,7 @@
          follows="left|top"
          height="16"
          left_delta="10"
-         name="PhoenixCmdLineDrawDistance_txt"
+         name="FSCmdLineDrawDistance_txt"
          width="250">
           Change Draw Distance (usage: cmd meters)
         </text>
@@ -1562,16 +1562,16 @@
          follows="left|top"
          height="20"
          max_length="256"
-         name="PhoenixCmdLineDrawDistance"
+         name="FSCmdLineDrawDistance"
          tool_tip=""
-         control_name="PhoenixCmdLineDrawDistance"
+         control_name="FSCmdLineDrawDistance"
          width="200"/>
 
         <text
          top_pad="5"
          follows="left|top"
          height="16"
-         name="PhoenixCmdTeleportToCam_txt"
+         name="FSCmdTeleportToCam_txt"
          width="250">
           Teleport to cam position (usage: cmd)
         </text>
@@ -1580,16 +1580,16 @@
          follows="left|top"
          height="20"
          max_length="256"
-         name="PhoenixCmdTeleportToCam"
+         name="FSCmdTeleportToCam"
          tool_tip=""
-         control_name="PhoenixCmdTeleportToCam"
+         control_name="FSCmdTeleportToCam"
          width="200"/>
 
         <text
          top_pad="5"
          follows="left|top"
          height="16"
-         name="PhoenixCmdLineKeyToName_txt"
+         name="FSCmdLineKeyToName_txt"
          width="250">
           Get avatar name from key (usage: cmd key)
         </text>
@@ -1598,16 +1598,16 @@
          follows="left|top"
          height="20"
          max_length="256"
-         name="PhoenixCmdLineKeyToName"
+         name="FSCmdLineKeyToName"
          tool_tip=""
-         control_name="PhoenixCmdLineKeyToName"
+         control_name="FSCmdLineKeyToName"
          width="200"/>
 
         <text
          top_pad="5"
          follows="left|top"
          height="16"
-         name="PhoenixCmdLineOfferTp_txt"
+         name="FSCmdLineOfferTp_txt"
          width="250">
           Offer teleport to avatar (usage: cmd key)
         </text>
@@ -1616,16 +1616,16 @@
          follows="left|top"
          height="20"
          max_length="256"
-         name="PhoenixCmdLineOfferTp"
+         name="FSCmdLineOfferTp"
          tool_tip=""
-         control_name="PhoenixCmdLineOfferTp"
+         control_name="FSCmdLineOfferTp"
          width="200"/>
 
         <text
          top_pad="5"
          follows="left|top"
          height="16"
-         name="PhoenixCmdLineTP2_txt"
+         name="FSCmdLineTP2_txt"
          width="250">
           Teleport to avatar (usage: cmd name)
         </text>
@@ -1635,15 +1635,15 @@
          height="20"
          max_length="256"
          tool_tip="The syntax of this command allows partial names and is not case sensitive. Better results if used while the Radar is open."
-         name="PhoenixCmdLineTP2"
-         control_name="PhoenixCmdLineTP2"
+         name="FSCmdLineTP2"
+         control_name="FSCmdLineTP2"
          width="200"/>
 
         <text
          top_pad="5"
          follows="left|top"
          height="16"
-         name="PhoenixCmdLineAO_txt"
+         name="FSCmdLineAO_txt"
          width="250">
           Turn AO on/off (usage: cmd on/off)
         </text>
@@ -1652,16 +1652,16 @@
          follows="left|top"
          height="20"
          max_length="256"
-         name="PhoenixCmdLineAO"
+         name="FSCmdLineAO"
          tool_tip=""
-         control_name="PhoenixCmdLineAO"
+         control_name="FSCmdLineAO"
          width="200"/>
 
         <text
          top_pad="5"
          follows="left|top"
          height="16"
-         name="PhoenixCmdLineClearChat_txt"
+         name="FSCmdLineClearChat_txt"
          width="250">
           Clear the chat history (usage: cmd)
         </text>
@@ -1671,15 +1671,15 @@
          height="20"
          max_length="256"
          tool_tip="Clears the Chat History to prevent lag effects from chat spammers."
-         name="PhoenixCmdLineClearChat"
-         control_name="PhoenixCmdLineClearChat"
+         name="FSCmdLineClearChat"
+         control_name="FSCmdLineClearChat"
          width="200"/>
 
         <text
          top_pad="5"
          follows="left|top"
          height="16"
-         name="PhoenixCmdLineMedia_txt"
+         name="FSCmdLineMedia_txt"
          width="250">
           Set the media url (usage: cmd url type)
         </text>
@@ -1689,15 +1689,15 @@
          height="20"
          max_length="256"
          tool_tip="Sets and plays your media stream to the entered url"
-         name="PhoenixCmdLineMedia"
-         control_name="PhoenixCmdLineMedia"
+         name="FSCmdLineMedia"
+         control_name="FSCmdLineMedia"
          width="200"/>
 
         <text
          top_pad="5"
          follows="left|top"
          height="16"
-         name="PhoenixCmdLineMusic_txt"
+         name="FSCmdLineMusic_txt"
          width="250">
           Set the music stream url (usage: cmd url)
         </text>
@@ -1707,8 +1707,8 @@
          height="20"
          max_length="256"
          tool_tip="sets and plays your music stream to the entered url"
-         name="PhoenixCmdLineMusic"
-         control_name="PhoenixCmdLineMusic"
+         name="FSCmdLineMusic"
+         control_name="FSCmdLineMusic"
          width="200"/>
     </panel>
 
@@ -1735,19 +1735,19 @@
         <check_box
          top_pad="8"
          label="Crossfade region environment sky preset changes made from quick prefs"
-         control_name="PhoenixInterpolateSky"
+         control_name="FSInterpolateSky"
          follows="left|top"
          height="16"
-         name="PhoenixInterpolateSky"
+         name="FSInterpolateSky"
          width="256"
          tool_tip="This controls the fancy blending between WL settings on change. The effect may cause slower computers to drop FPS for a few seconds while changing settings. Disable these 2 options to skip the effect and apply instantly." />
         <check_box
          top_pad="8"
          label="Crossfade region environment water preset changes made from quick prefs"
-         control_name="PhoenixInterpolateWater"
+         control_name="FSInterpolateWater"
          follows="left|top"
          height="16"
-         name="PhoenixInterpolateWater"
+         name="FSInterpolateWater"
          width="256"
          tool_tip="Same as above but for the water." />
         
@@ -1757,50 +1757,50 @@
          left="10"
          follows="left|top"
          height="12"
-         name="phoenixWLshare_txt"
+         name="FSWLshare_txt"
          width="250">
           Phoenix WL Share (Experimental)
         </text>
         <check_box
          top_pad="8"
          label="Use Phoenix Parcel Windlight Sharing (Experimental)"
-         control_name="PhoenixWLParcelEnabled"
+         control_name="FSWLParcelEnabled"
          follows="left|top"
          height="16"
-         name="PhoenixWLParcelEnabled"
+         name="FSWLParcelEnabled"
          width="256" />
         <check_box
          top_pad="5"
          left="15"
          label="Auto apply WL settings from friend's land"
-         control_name="PhoenixWLWhitelistFriends"
+         control_name="FSWLWhitelistFriends"
          follows="left|top"
          height="16"
-         name="PhoenixWLWhitelistFriends"
+         name="FSWLWhitelistFriends"
          width="256" />
         <check_box
          top_pad="5"
          label="Auto apply WL settings from my groups' land"
-         control_name="PhoenixWLWhitelistGroups"
+         control_name="FSWLWhitelistGroups"
          follows="left|top"
          height="16"
-         name="PhoenixWLWhitelistGroups"
+         name="FSWLWhitelistGroups"
          width="256" />
         <check_box
          top_pad="5"
          label="Auto apply WL settings from any parcel"
-         control_name="PhoenixWLWhitelistAll"
+         control_name="FSWLWhitelistAll"
          follows="left|top"
          height="16"
-         name="PhoenixWLWhitelistAll"
+         name="FSWLWhitelistAll"
          width="256" />
         <check_box
          top_pad="5"
          label="Crossfade region environment changes for Parcel WL"
-         control_name="PhoenixInterpolateParcelWL"
+         control_name="FSInterpolateParcelWL"
          follows="left|top"
          height="16"
-         name="PhoenixInterpolateParcelWL"
+         name="FSInterpolateParcelWL"
          width="256"
          tool_tip="Same as above options for Interpolation but for the ParcelWL." />
         
@@ -1847,7 +1847,7 @@
          min_val="0.01"
          name="X size"
          width="120"
-         control_name="PhoenixBuildPrefs_Xsize"/>
+         control_name="FSBuildPrefs_Xsize"/>
         <spinner
          top_pad="3"
          decimal_digits="5"
@@ -1860,7 +1860,7 @@
          min_val="0.01"
          name="Y size"
          width="120"
-         control_name="PhoenixBuildPrefs_Ysize"/>
+         control_name="FSBuildPrefs_Ysize"/>
         <spinner
          top_pad="3"
          decimal_digits="5"
@@ -1873,7 +1873,7 @@
          min_val="0.01"
          name="Z size"
          width="120"
-         control_name="PhoenixBuildPrefs_Zsize"/>
+         control_name="FSBuildPrefs_Zsize"/>
         <text
          top="45"
          left_pad="15"
@@ -1890,7 +1890,7 @@
          allow_text_entry="false"
          follows="left|top"
          name="material"
-         control_name="PhoenixBuildPrefs_Material">
+         control_name="FSBuildPrefs_Material">
              <combo_item name="Stone" value="Stone">Stone</combo_item>
              <combo_item name="Metal" value="Metal">Metal</combo_item>
              <combo_item name="Glass" value="Glass">Glass</combo_item>
@@ -1923,7 +1923,7 @@
          label="Show axis arrow on root prim position"
          tool_tip="Default behaviour is to show the axis on the center of mass of a linkset. If enabled, the axis will be shown on the root prim of the linkset instead."
          name="EmBuildPrefsActualRoot_toggle"
-         control_name="PhoenixBuildPrefs_ActualRoot"/>
+         control_name="FSBuildPrefs_ActualRoot"/>
         <spinner
          top_pad="5"
          left_delta="5"
@@ -1937,7 +1937,7 @@
          min_val="-256"
          name="X pos"
          width="120"
-         control_name="PhoenixBuildPrefs_PivotX"/>
+         control_name="FSBuildPrefs_PivotX"/>
         <spinner
          top_pad="3"
          decimal_digits="5"
@@ -1950,7 +1950,7 @@
          min_val="-256"
          name="Y pos"
          width="120"
-         control_name="PhoenixBuildPrefs_PivotY"/>
+         control_name="FSBuildPrefs_PivotY"/>
         <spinner
          top_pad="3"
          decimal_digits="5"
@@ -1963,7 +1963,7 @@
          min_val="-256"
          name="Z pos"
          width="120"
-         control_name="PhoenixBuildPrefs_PivotZ"/>
+         control_name="FSBuildPrefs_PivotZ"/>
         <check_box
          top_pad="10"
          left_delta="-5"
@@ -1974,7 +1974,7 @@
          tool_tip="Default settings are Percentages and every axis set at 50"
          name="EmPivotPercToggle"
          width="100"
-         control_name="PhoenixBuildPrefs_PivotIsPercent"/>
+         control_name="FSBuildPrefs_PivotIsPercent"/>
          
         <check_box
          top_pad="20"
@@ -1990,8 +1990,8 @@
          height="16"
          label="Use old &quot;Set Object For Sale&quot; behavior"
          tool_tip="When checked, object for sale info is saved on change instead of requiring a confirm."
-         name="PhoenixCommitForSaleOnChange_toggle"
-         control_name="PhoenixCommitForSaleOnChange"/>
+         name="FSCommitForSaleOnChange_toggle"
+         control_name="FSCommitForSaleOnChange"/>
     
         <check_box
          follows="left|top"

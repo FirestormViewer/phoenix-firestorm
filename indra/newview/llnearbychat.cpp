@@ -99,11 +99,11 @@ LLNearbyChat::~LLNearbyChat()
 {
 }
 
-void LLNearbyChat::updatePhoenixUseNearbyChatConsole(const LLSD &data)
+void LLNearbyChat::updateFSUseNearbyChatConsole(const LLSD &data)
 {
-	PhoenixUseNearbyChatConsole = data.asBoolean();
+	FSUseNearbyChatConsole = data.asBoolean();
 
-	if (PhoenixUseNearbyChatConsole)
+	if (FSUseNearbyChatConsole)
 	{
 		LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLUUID(gSavedSettings.getString("NearByChatChannelUUID")));
 		if(chat_channel)
@@ -152,7 +152,7 @@ BOOL LLNearbyChat::postBuild()
 	mInputEditor->setEnabled(TRUE);
 	
 	// chat channel spinner - TS
-	getChild<LLSpinCtrl>("ChatChannel")->setEnabled(gSavedSettings.getBOOL("PhoenixShowChatChannel"));
+	getChild<LLSpinCtrl>("ChatChannel")->setEnabled(gSavedSettings.getBOOL("FSShowChatChannel"));
 	
 	// extra icon controls -AO
 	LLButton* transl = getChild<LLButton>("translate_btn");
@@ -204,8 +204,8 @@ BOOL LLNearbyChat::postBuild()
 			}
 		}
 
-		PhoenixUseNearbyChatConsole = gSavedSettings.getBOOL("PhoenixUseNearbyChatConsole");
-		gSavedSettings.getControl("PhoenixUseNearbyChatConsole")->getSignal()->connect(boost::bind(&LLNearbyChat::updatePhoenixUseNearbyChatConsole, this, _2));
+		FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
+		gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&LLNearbyChat::updateFSUseNearbyChatConsole, this, _2));
 		
 		return LLDockableFloater::postBuild();
 	}
@@ -373,7 +373,7 @@ void	LLNearbyChat::setVisible(BOOL visible)
 	}
 	LLDockableFloater::setVisible(visible);
 	
-	if (PhoenixUseNearbyChatConsole)
+	if (FSUseNearbyChatConsole)
 	{
 		gConsole->setVisible(!visible);
 	}
@@ -473,8 +473,8 @@ void LLNearbyChat::onInputEditorKeystroke(LLLineEditor* caller, void* userdata)
 	// So be sure to look in all three places if changes are needed. This needs to be addressed at some point.
 	// -Zi
 	S32 channel=0;
-	if (gSavedSettings.getBOOL("PhoenixNearbyChatbar") &&
-		gSavedSettings.getBOOL("PhoenixShowChatChannel"))
+	if (gSavedSettings.getBOOL("FSNearbyChatbar") &&
+		gSavedSettings.getBOOL("FSShowChatChannel"))
 	{
 		channel = (S32)(LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
 	}

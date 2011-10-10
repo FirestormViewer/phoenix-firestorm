@@ -1075,7 +1075,7 @@ void LLPanelPermissions::onCommitForSale()
 	//Don't commit sale info on change (STORM-1453)
 	//but allow it to be cleared instantly by unchecking for sale
 	LLCheckBoxCtrl *checkPurchase = getChild<LLCheckBoxCtrl>("checkbox for sale");
-	if(!gSavedSettings.getBOOL("PhoenixCommitForSaleOnChange") && checkPurchase && checkPurchase->get())
+	if(!gSavedSettings.getBOOL("FSCommitForSaleOnChange") && checkPurchase && checkPurchase->get())
 	{
 		getChildView("sale type")->setEnabled(TRUE);
 		getChildView("Edit Cost")->setEnabled(TRUE);
@@ -1090,7 +1090,7 @@ void LLPanelPermissions::onCommitForSale()
 void LLPanelPermissions::onCommitSaleInfo()
 {
 	//Don't commit sale info on change (STORM-1453)
-	if (gSavedSettings.getBOOL("PhoenixCommitForSaleOnChange"))
+	if (gSavedSettings.getBOOL("FSCommitForSaleOnChange"))
 	{
 		setAllSaleInfo();
 	}

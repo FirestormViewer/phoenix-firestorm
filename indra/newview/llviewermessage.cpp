@@ -5410,7 +5410,7 @@ void process_avatar_appearance(LLMessageSystem *mesgsys, void **user_data)
 void process_camera_constraint(LLMessageSystem *mesgsys, void **user_data)
 {
 	//Freeing up the camera movement some more -KC
-	if(gSavedSettings.getBOOL("PhoenixIgnoreSimulatorCameraConstraints"))
+	if(gSavedSettings.getBOOL("FSIgnoreSimulatorCameraConstraints"))
 		return;
 	LLVector4 cameraCollidePlane;
 	mesgsys->getVector4Fast(_PREHASH_CameraCollidePlane, _PREHASH_Plane, cameraCollidePlane);

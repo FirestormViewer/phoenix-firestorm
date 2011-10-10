@@ -124,7 +124,7 @@
      top_pad="5"
      width="400" />
     <check_box
-     control_name="PhoenixPlayChatAnimation"
+     control_name="FSPlayChatAnimation"
      follows="left|top"
      height="16"
      label="Play avatar animations (such as shouting)"

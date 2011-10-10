@@ -1182,7 +1182,7 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 	}
 	if (command_name == "add_objects_on_double_click")
 	{
-		gSavedSettings.setBOOL("PhoenixDoubleClickAddInventoryObjects",!gSavedSettings.getBOOL("PhoenixDoubleClickAddInventoryObjects"));
+		gSavedSettings.setBOOL("FSDoubleClickAddInventoryObjects",!gSavedSettings.getBOOL("FSDoubleClickAddInventoryObjects"));
 	}
 	if (command_name == "show_filters")
 	{
@@ -1383,7 +1383,7 @@ BOOL LLPanelMainInventory::isActionChecked(const LLSD& userdata)
 
 	if (command_name == "add_objects_on_double_click")
 	{
-		return gSavedSettings.getBOOL("PhoenixDoubleClickAddInventoryObjects");
+		return gSavedSettings.getBOOL("FSDoubleClickAddInventoryObjects");
 	}
 
 	return FALSE;

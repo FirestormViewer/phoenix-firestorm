@@ -22,7 +22,7 @@ public:
 	void onAutoCorrectSettings();
     
 	void onUseEnvironmentFromRegionAlways();
-	void onPhoenixShowChatChannel();
+	void onFSShowChatChannel();
 
 	void refreshTagCombos();
 	void applyTagCombos();

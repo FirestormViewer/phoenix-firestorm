@@ -309,14 +309,14 @@ BOOL	LLFloaterTools::postBuild()
 	{
 		mExpandedHeight = getRect().getHeight();
 		if (mTab) mCollapsedHeight = mExpandedHeight - mTab->getRect().getHeight() + btnExpand->getRect().getHeight();
-		if(!gSavedSettings.getBOOL("PhoenixToolboxExpanded"))
+		if(!gSavedSettings.getBOOL("FSToolboxExpanded"))
 		{
 			btnExpand->setImageOverlay("Arrow_Down", btnExpand->getImageOverlayHAlign());
 		}
 	}
 	else
 	{
-		gSavedSettings.setBOOL("PhoenixToolboxExpanded", TRUE);
+		gSavedSettings.setBOOL("FSToolboxExpanded", TRUE);
 	}
 
 	return TRUE;
@@ -916,9 +916,9 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	//getChildView("link_num_obj_count")->setVisible( !land_visible);
 	getChildView("prim_count")->setVisible( !land_visible);
 
-	static LLCachedControl<bool> sPhoenixToolboxExpanded(gSavedSettings,  "PhoenixToolboxExpanded", TRUE);
-	mTab->setVisible(!land_visible && sPhoenixToolboxExpanded);
-	mPanelLandInfo->setVisible(land_visible && sPhoenixToolboxExpanded);
+	static LLCachedControl<bool> sFSToolboxExpanded(gSavedSettings,  "FSToolboxExpanded", TRUE);
+	mTab->setVisible(!land_visible && sFSToolboxExpanded);
+	mPanelLandInfo->setVisible(land_visible && sFSToolboxExpanded);
 
 	bool have_selection = !LLSelectMgr::getInstance()->getSelection()->isEmpty();
 
@@ -2100,7 +2100,7 @@ private:
 
 void LLFloaterTools::onClickBtnCopyKeys()
 {
-	std::string separator = gSavedSettings.getString("PhoenixCopyObjKeySeparator");
+	std::string separator = gSavedSettings.getString("FSCopyObjKeySeparator");
 	std::string stringKeys;
 	LLFloaterToolsCopyKeysFunctor copy_keys(stringKeys, separator);
 	bool copied = LLSelectMgr::getInstance()->getSelection()->applyToObjects(&copy_keys);
@@ -2112,8 +2112,8 @@ void LLFloaterTools::onClickBtnCopyKeys()
 
 void LLFloaterTools::onClickExpand()
 {
-	BOOL show_more = !gSavedSettings.getBOOL("PhoenixToolboxExpanded");
-	gSavedSettings.setBOOL("PhoenixToolboxExpanded", show_more);
+	BOOL show_more = !gSavedSettings.getBOOL("FSToolboxExpanded");
+	gSavedSettings.setBOOL("FSToolboxExpanded", show_more);
 
 	LLButton* btnExpand = getChild<LLButton>("btnExpand");
 	if (show_more)

@@ -391,7 +391,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			}
 
 			gTeleportDisplayTimer.reset();
-			if(!gSavedSettings.getBOOL("PhoenixDisableTeleportScreens"))
+			if(!gSavedSettings.getBOOL("FSDisableTeleportScreens"))
 			{
 				gViewerWindow->setShowProgress(TRUE);
 				gViewerWindow->setProgressPercent(0);
@@ -422,7 +422,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			gAgent.setTeleportMessage(
 				LLAgent::sTeleportProgressMessages["arriving"]);
 			gTextureList.mForceResetTextureStats = TRUE;
-			if(!gSavedSettings.getBOOL("PhoenixDisableTeleportScreens"))
+			if(!gSavedSettings.getBOOL("FSDisableTeleportScreens"))
 			{
 				gAgentCamera.resetView(TRUE, TRUE);
 			}
@@ -432,7 +432,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			// Make the user wait while content "pre-caches"
 			{
 				F32 arrival_fraction = (gTeleportArrivalTimer.getElapsedTimeF32() / TELEPORT_ARRIVAL_DELAY);
-				if( arrival_fraction > 1.f || gSavedSettings.getBOOL("PhoenixDisableTeleportScreens") )
+				if( arrival_fraction > 1.f || gSavedSettings.getBOOL("FSDisableTeleportScreens") )
 				{
 					arrival_fraction = 1.f;
 					//LLFirstUse::useTeleport();

@@ -1080,7 +1080,7 @@ bool idle_startup()
 		{
 			LLSLURL slurl;
 			// WS: Close the Panel only, if we have DisableLoginScreens enabled. Else fade away.
-			if(gSavedSettings.getBOOL("PhoenixDisableLoginScreens")) LLPanelLogin::closePanel();
+			if(gSavedSettings.getBOOL("FSDisableLoginScreens")) LLPanelLogin::closePanel();
 		}
 
 		
@@ -1136,7 +1136,7 @@ bool idle_startup()
 		init_start_screen(agent_location_id);
 
 		// Display the startup progress bar.
-		gViewerWindow->setShowProgress(!gSavedSettings.getBOOL("PhoenixDisableLoginScreens"));
+		gViewerWindow->setShowProgress(!gSavedSettings.getBOOL("FSDisableLoginScreens"));
 		gViewerWindow->setProgressCancelButtonVisible(TRUE, LLTrans::getString("Quit"));
 
 		gViewerWindow->revealIntroPanel();

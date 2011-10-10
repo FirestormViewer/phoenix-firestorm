@@ -659,7 +659,7 @@ LLChatHistory::LLChatHistory(const LLChatHistory::Params& p)
 	mIsLastMessageFromLog(false)
 {
 	LLTextEditor::Params editor_params(p);
-	editor_params.line_spacing.pixels = llclamp(gSavedSettings.getS32("PhoenixFontChatLineSpacingPixels"), 0, 36);
+	editor_params.line_spacing.pixels = llclamp(gSavedSettings.getS32("FSFontChatLineSpacingPixels"), 0, 36);
 	editor_params.rect = getLocalRect();
 	editor_params.follows.flags = FOLLOWS_ALL;
 	editor_params.enabled = false; // read only

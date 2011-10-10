@@ -54,7 +54,7 @@ KCWindlightInterface::KCWindlightInterface() :
 	mRegionOverride(false),
 	mHaveRegionSettings(false)
 {
-	if (!gSavedSettings.getBOOL("PhoenixWLParcelEnabled") ||
+	if (!gSavedSettings.getBOOL("FSWLParcelEnabled") ||
 	!gSavedSettings.getBOOL("UseEnvironmentFromRegionAlways"))
 	{
 		mEventTimer.stop();
@@ -168,7 +168,7 @@ void KCWindlightInterface::ApplySettings(const LLSD& settings)
 
 		if (settings.has("water") && (!mHaveRegionSettings || mRegionOverride))
 		{
-			LLEnvManagerNew::instance().setUseWaterPreset(settings["water"].asString(), gSavedSettings.getBOOL("PhoenixInterpolateParcelWL"));
+			LLEnvManagerNew::instance().setUseWaterPreset(settings["water"].asString(), gSavedSettings.getBOOL("FSInterpolateParcelWL"));
 			setWL_Status(true);
 		}
 	}
@@ -227,14 +227,14 @@ void KCWindlightInterface::ApplyWindLightPreset(const std::string& preset)
 	LLWLParamKey key(preset, LLEnvKey::SCOPE_LOCAL);
 	if ( (preset != "Default") && (wlprammgr->hasParamSet(key)) )
 	{
-		LLEnvManagerNew::instance().setUseSkyPreset(preset, gSavedSettings.getBOOL("PhoenixInterpolateParcelWL"));
+		LLEnvManagerNew::instance().setUseSkyPreset(preset, gSavedSettings.getBOOL("FSInterpolateParcelWL"));
 		setWL_Status(true);
 		mWeChangedIt = true;
 	}
 	else
 	{
 		if (!LLEnvManagerNew::instance().getUseRegionSettings())
-			LLEnvManagerNew::instance().setUseRegionSettings(true, gSavedSettings.getBOOL("PhoenixInterpolateParcelWL"));
+			LLEnvManagerNew::instance().setUseRegionSettings(true, gSavedSettings.getBOOL("FSInterpolateParcelWL"));
 		setWL_Status(false);
 		mWeChangedIt = false;
 	}
@@ -310,7 +310,7 @@ bool KCWindlightInterface::ChatCommand(std::string message, std::string from_nam
 					LLSD args;
 					args["PARCEL_NAME"] = parcel->getName();
 					
-					LLNotifications::instance().add("PhoenixWL", args, payload, boost::bind(&KCWindlightInterface::callbackParcelWL, this, _1, _2));
+					LLNotifications::instance().add("FSWL", args, payload, boost::bind(&KCWindlightInterface::callbackParcelWL, this, _1, _2));
 					SetDialogVisible = true;
 				}
 				return true;
@@ -344,7 +344,7 @@ bool KCWindlightInterface::LoadFromPacel(LLParcel *parcel)
 			payload["local_id"] = parcel->getLocalID();
 			payload["land_owner"] = owner_id;
 
-			mSetWLNotification = LLNotifications::instance().add("PhoenixWL", args, payload, boost::bind(&KCWindlightInterface::callbackParcelWL, this, _1, _2));
+			mSetWLNotification = LLNotifications::instance().add("FSWL", args, payload, boost::bind(&KCWindlightInterface::callbackParcelWL, this, _1, _2));
 		}
 		return true;
 	}
@@ -463,7 +463,7 @@ void KCWindlightInterface::onClickWLStatusButton()
 			LLSD args;
 			args["PARCEL_NAME"] = parcel->getName();
 			
-			mClearWLNotification = LLNotifications::instance().add("PhoenixWLClear", args, payload, boost::bind(&KCWindlightInterface::callbackParcelWLClear, this, _1, _2));
+			mClearWLNotification = LLNotifications::instance().add("FSWLClear", args, payload, boost::bind(&KCWindlightInterface::callbackParcelWLClear, this, _1, _2));
 		}
 	}
 }
@@ -500,10 +500,10 @@ bool KCWindlightInterface::callbackParcelWLClear(const LLSD& notification, const
 
 bool KCWindlightInterface::AllowedLandOwners(const LLUUID& owner_id)
 {
-	if ( gSavedSettings.getBOOL("PhoenixWLWhitelistAll") ||	// auto all
+	if ( gSavedSettings.getBOOL("FSWLWhitelistAll") ||	// auto all
 		(owner_id == gAgent.getID()) ||						// land is owned by agent
-		(LLAvatarTracker::instance().isBuddy(owner_id) && gSavedSettings.getBOOL("PhoenixWLWhitelistFriends")) || // is friend's land
-		(gAgent.isInGroup(owner_id) && gSavedSettings.getBOOL("PhoenixWLWhitelistGroups")) || // is member of land's group
+		(LLAvatarTracker::instance().isBuddy(owner_id) && gSavedSettings.getBOOL("FSWLWhitelistFriends")) || // is friend's land
+		(gAgent.isInGroup(owner_id) && gSavedSettings.getBOOL("FSWLWhitelistGroups")) || // is member of land's group
 		(mAllowedLand.find(owner_id) != mAllowedLand.end()) ) // already on whitelist
 	{
 		return true;
@@ -583,9 +583,9 @@ void KCWindlightInterface::setWL_Status(bool pwl_status)
 
 bool KCWindlightInterface::checkSettings()
 {
-	static LLCachedControl<bool> sPhoenixWLParcelEnabled(gSavedSettings, "PhoenixWLParcelEnabled");
+	static LLCachedControl<bool> sFSWLParcelEnabled(gSavedSettings, "FSWLParcelEnabled");
 	static LLCachedControl<bool> sUseEnvironmentFromRegionAlways(gSavedSettings, "UseEnvironmentFromRegionAlways");
-	if (!sPhoenixWLParcelEnabled || !sUseEnvironmentFromRegionAlways ||
+	if (!sFSWLParcelEnabled || !sUseEnvironmentFromRegionAlways ||
 	(rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)))
 	{
 		// The setting changed, clear everything

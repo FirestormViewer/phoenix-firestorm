@@ -204,12 +204,12 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 	// Set params for new object based on its PCode.
 	LLQuaternion	rotation;
 	LLVector3		scale = LLVector3(
-		gSavedSettings.getF32("PhoenixBuildPrefs_Xsize"),
-		gSavedSettings.getF32("PhoenixBuildPrefs_Ysize"),
-		gSavedSettings.getF32("PhoenixBuildPrefs_Zsize"));
+		gSavedSettings.getF32("FSBuildPrefs_Xsize"),
+		gSavedSettings.getF32("FSBuildPrefs_Ysize"),
+		gSavedSettings.getF32("FSBuildPrefs_Zsize"));
 
 	U8				material = LL_MCODE_WOOD;
-	const std::string default_material = gSavedSettings.getString("PhoenixBuildPrefs_Material");
+	const std::string default_material = gSavedSettings.getString("FSBuildPrefs_Material");
 	if (default_material == "Wood")			material = LL_MCODE_WOOD;
 	else if (default_material == "Stone")	material = LL_MCODE_STONE;
 	else if (default_material == "Metal")	material = LL_MCODE_METAL;

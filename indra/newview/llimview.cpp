@@ -149,7 +149,7 @@ void toast_callback(const LLSD& msg){
 
 	// Skip toasting if we have open window of IM with this session id
 	LLIMFloater* open_im_floater = LLIMFloater::findInstance(msg["session_id"]);
-	if (open_im_floater && open_im_floater->getVisible() && !gSavedSettings.getBOOL("PhoenixLogImToChatConsole"))
+	if (open_im_floater && open_im_floater->getVisible() && !gSavedSettings.getBOOL("FSLogImToChatConsole"))
 	{
 		return;
 	}
@@ -3363,12 +3363,12 @@ public:
 // [/RLVa:KB]
 
 			// Mute group chat port from Phoenix
-			BOOL PhoenixMuteAllGroups = gSavedSettings.getBOOL("PhoenixMuteAllGroups");
-			BOOL PhoenixMuteGroupWhenNoticesDisabled = gSavedSettings.getBOOL("PhoenixMuteGroupWhenNoticesDisabled");
+			BOOL FSMuteAllGroups = gSavedSettings.getBOOL("FSMuteAllGroups");
+			BOOL FSMuteGroupWhenNoticesDisabled = gSavedSettings.getBOOL("FSMuteGroupWhenNoticesDisabled");
 			LLGroupData group_data;
 			if (gAgent.getGroupData(session_id, group_data))
 			{
-				if (PhoenixMuteAllGroups || (PhoenixMuteGroupWhenNoticesDisabled && !group_data.mAcceptNotices))
+				if (FSMuteAllGroups || (FSMuteGroupWhenNoticesDisabled && !group_data.mAcceptNotices))
 				{
 					llinfos << "Firestorm: muting group chat: " << group_data.mName << LL_ENDL;
 					

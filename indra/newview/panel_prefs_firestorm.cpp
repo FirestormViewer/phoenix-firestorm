@@ -41,9 +41,9 @@ BOOL PanelPreferenceFirestorm::postBuild()
 	getChild<LLUICtrl>("lgg_ac_showgui")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onAutoCorrectSettings, this));
 
 
-	m_tp2LineEditor = getChild<LLLineEditor>("PhoenixCmdLineTP2");
-	m_clearchatLineEditor = getChild<LLLineEditor>("PhoenixCmdLineClearChat");
-	m_musicLineEditor = getChild<LLLineEditor>("PhoenixCmdLineMusic");
+	m_tp2LineEditor = getChild<LLLineEditor>("FSCmdLineTP2");
+	m_clearchatLineEditor = getChild<LLLineEditor>("FSCmdLineClearChat");
+	m_musicLineEditor = getChild<LLLineEditor>("FSCmdLineMusic");
 	if(m_tp2LineEditor)
 	{
 		m_tp2LineEditor->setEnabled(FALSE);
@@ -57,7 +57,7 @@ BOOL PanelPreferenceFirestorm::postBuild()
 		m_musicLineEditor->setEnabled(FALSE);
 	}
 
-	getChild<LLUICtrl>("PhoenixShowChatChannel")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onPhoenixShowChatChannel, this));
+	getChild<LLUICtrl>("FSShowChatChannel")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onFSShowChatChannel, this));
 
 	//WS: Set the combo_box vars and refresh/reload them
 	m_UseLegacyClienttags = getChild<LLComboBox>("UseLegacyClienttags");		
@@ -90,7 +90,7 @@ void PanelPreferenceFirestorm::cancel()
 
 void PanelPreferenceFirestorm::refreshBeamLists()
 {
-	LLComboBox* comboBox = getChild<LLComboBox>("PhoenixBeamShape_combo");
+	LLComboBox* comboBox = getChild<LLComboBox>("FSBeamShape_combo");
 
 	if(comboBox != NULL) 
 	{
@@ -101,7 +101,7 @@ void PanelPreferenceFirestorm::refreshBeamLists()
 		{
 			comboBox->add(names[i]);
 		}
-		comboBox->setSimple(gSavedSettings.getString("PhoenixBeamShape"));
+		comboBox->setSimple(gSavedSettings.getString("FSBeamShape"));
 	}
 
 	comboBox = getChild<LLComboBox>("BeamColor_combo");
@@ -114,7 +114,7 @@ void PanelPreferenceFirestorm::refreshBeamLists()
 		{
 			comboBox->add(names[i]);
 		}
-		comboBox->setSimple(gSavedSettings.getString("PhoenixBeamColorFile"));
+		comboBox->setSimple(gSavedSettings.getString("FSBeamColorFile"));
 	}
 }
 
@@ -143,12 +143,12 @@ void PanelPreferenceFirestorm::onBeamColorDelete()
 		if(gDirUtilp->fileExists(path_name1))
 		{
 			LLFile::remove(path_name1);
-			gSavedSettings.setString("PhoenixBeamColorFile","===OFF===");
+			gSavedSettings.setString("FSBeamColorFile","===OFF===");
 		}
 		if(gDirUtilp->fileExists(path_name2))
 		{
 			LLFile::remove(path_name2);
-			gSavedSettings.setString("PhoenixBeamColorFile","===OFF===");
+			gSavedSettings.setString("FSBeamColorFile","===OFF===");
 		}
 	}
 	refreshBeamLists();
@@ -156,7 +156,7 @@ void PanelPreferenceFirestorm::onBeamColorDelete()
 
 void PanelPreferenceFirestorm::onBeamDelete()
 {
-	LLComboBox* comboBox = getChild<LLComboBox>("PhoenixBeamShape_combo");
+	LLComboBox* comboBox = getChild<LLComboBox>("FSBeamShape_combo");
 
 	if(comboBox != NULL) 
 	{
@@ -167,12 +167,12 @@ void PanelPreferenceFirestorm::onBeamDelete()
 		if(gDirUtilp->fileExists(path_name1))
 		{
 			LLFile::remove(path_name1);
-			gSavedSettings.setString("PhoenixBeamShape","===OFF===");
+			gSavedSettings.setString("FSBeamShape","===OFF===");
 		}
 		if(gDirUtilp->fileExists(path_name2))
 		{
 			LLFile::remove(path_name2);
-			gSavedSettings.setString("PhoenixBeamShape","===OFF===");
+			gSavedSettings.setString("FSBeamShape","===OFF===");
 		}
 	}
 	refreshBeamLists();
@@ -186,11 +186,11 @@ void PanelPreferenceFirestorm::onUseEnvironmentFromRegionAlways()
 {
 	const bool auto_env = gSavedSettings.getBOOL("UseEnvironmentFromRegionAlways");
 
-    getChild<LLUICtrl>("PhoenixWLParcelEnabled")->setEnabled(auto_env);
-    getChild<LLUICtrl>("PhoenixWLWhitelistFriends")->setEnabled(auto_env);
-    getChild<LLUICtrl>("PhoenixWLWhitelistGroups")->setEnabled(auto_env);
-    getChild<LLUICtrl>("PhoenixWLWhitelistAll")->setEnabled(auto_env);
-    getChild<LLUICtrl>("PhoenixInterpolateParcelWL")->setEnabled(auto_env);
+    getChild<LLUICtrl>("FSWLParcelEnabled")->setEnabled(auto_env);
+    getChild<LLUICtrl>("FSWLWhitelistFriends")->setEnabled(auto_env);
+    getChild<LLUICtrl>("FSWLWhitelistGroups")->setEnabled(auto_env);
+    getChild<LLUICtrl>("FSWLWhitelistAll")->setEnabled(auto_env);
+    getChild<LLUICtrl>("FSInterpolateParcelWL")->setEnabled(auto_env);
 }
 
 
@@ -282,7 +282,7 @@ void PanelPreferenceFirestorm::applyTagCombos()
 
 }
 
-void PanelPreferenceFirestorm::onPhoenixShowChatChannel()
+void PanelPreferenceFirestorm::onFSShowChatChannel()
 {
-        LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->setEnabled(gSavedSettings.getBOOL("PhoenixShowChatChannel"));
+        LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->setEnabled(gSavedSettings.getBOOL("FSShowChatChannel"));
 }

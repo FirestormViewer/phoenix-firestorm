@@ -178,8 +178,8 @@ void lggContactSetsFloater::changed(U32 mask)
 	}
 	if(mask & (LLFriendObserver::ONLINE))
 	{
-		static LLCachedControl<bool> showOnline(gSavedSettings, "PhoenixContactSetsShowOnline");
-		static LLCachedControl<bool> showOffline(gSavedSettings, "PhoenixContactSetsShowOffline");
+		static LLCachedControl<bool> showOnline(gSavedSettings, "FSContactSetsShowOnline");
+		static LLCachedControl<bool> showOffline(gSavedSettings, "FSContactSetsShowOffline");
 		if(!(showOffline&&showOnline))
 		{
 			sInstance->generateCurrentList();
@@ -189,14 +189,14 @@ void lggContactSetsFloater::changed(U32 mask)
 void lggContactSetsFloater::onBackgroundChange()
 {
 	
-	static LLCachedControl<std::string> currentGroup(gSavedSettings, "PhoenixContactSetsSelectedGroup");
+	static LLCachedControl<std::string> currentGroup(gSavedSettings, "FSContactSetsSelectedGroup");
 
 	LGGContactSets::getInstance()->setGroupColor(currentGroup,sInstance->groupColorBox->get());
 
 }
 void lggContactSetsFloater::onNoticesChange()
 {
-	static LLCachedControl<std::string> currentGroup(gSavedSettings, "PhoenixContactSetsSelectedGroup");
+	static LLCachedControl<std::string> currentGroup(gSavedSettings, "FSContactSetsSelectedGroup");
 	
 	LGGContactSets::getInstance()->setNotifyForGroup(currentGroup,sInstance->noticeBox->getValue().asBoolean());
 }
@@ -216,7 +216,7 @@ void lggContactSetsFloater::onPickAvatar(const std::vector<LLUUID>& ids,
 }
 void lggContactSetsFloater::updateGroupsList()
 {
-	static LLCachedControl<std::string> currentGroup(gSavedSettings, "PhoenixContactSetsSelectedGroup");
+	static LLCachedControl<std::string> currentGroup(gSavedSettings, "FSContactSetsSelectedGroup");
 	LLComboBox * cb = groupsList;
 	//if(	sInstance->groupsList != NULL) cb = sInstance->groupsList;
 
@@ -232,11 +232,11 @@ void lggContactSetsFloater::updateGroupsList()
 		cb->setSimple(LLStringExplicit(currentGroup));
 	}else if(groups.size()>0)
 	{
-		gSavedSettings.setString("PhoenixContactSetsSelectedGroup",groups[0]);
+		gSavedSettings.setString("FSContactSetsSelectedGroup",groups[0]);
 		cb->setSimple(groups[0]);
 		updateGroupGUIs();
 		generateCurrentList();
-	}else gSavedSettings.setString("PhoenixContactSetsSelectedGroup","");
+	}else gSavedSettings.setString("FSContactSetsSelectedGroup","");
 }
 void lggContactSetsFloater::hitSpaceBar()
 {
@@ -257,7 +257,7 @@ void lggContactSetsFloater::hitSpaceBar()
 }
 void lggContactSetsFloater::updateGroupGUIs()
 {
-	static LLCachedControl<std::string> currentGroup(gSavedSettings, "PhoenixContactSetsSelectedGroup");
+	static LLCachedControl<std::string> currentGroup(gSavedSettings, "FSContactSetsSelectedGroup");
 
 	groupColorBox->set(LGGContactSets::getInstance()->getGroupColor(currentGroup),TRUE);	
 	
@@ -267,7 +267,7 @@ void lggContactSetsFloater::updateGroupGUIs()
 }
 void lggContactSetsFloater::onSelectGroup()
 {
-	gSavedSettings.setString("PhoenixContactSetsSelectedGroup",sInstance->groupsList->getSimple());
+	gSavedSettings.setString("FSContactSetsSelectedGroup",sInstance->groupsList->getSimple());
 		sInstance->updateGroupGUIs();
 		sInstance->selected.clear();
 
@@ -280,7 +280,7 @@ void lggContactSetsFloater::drawScrollBars()
 }
 void lggContactSetsFloater::drawRightClick()
 {
-	static LLCachedControl<std::string> currentGroup(gSavedSettings, "PhoenixContactSetsSelectedGroup");
+	static LLCachedControl<std::string> currentGroup(gSavedSettings, "FSContactSetsSelectedGroup");
 	
 	if(!sInstance->hasFocus())
 	{
@@ -932,14 +932,14 @@ void lggContactSetsFloater::draw()
 	LLFontGL* bigFont = LLFontGL::getFontSansSerifBig();
 	LLFontGL* hugeFont = LLFontGL::getFontSansSerifHuge();
 
-	static LLCachedControl<std::string> currentGroup(gSavedSettings, "PhoenixContactSetsSelectedGroup");
-	static LLCachedControl<bool> textNotBg(gSavedSettings, "PhoenixContactSetsColorizeText");
-	static LLCachedControl<bool> barNotBg(gSavedSettings, "PhoenixContactSetsColorizeBar");
-	static LLCachedControl<bool> requireCTRL(gSavedSettings, "PhoenixContactSetsRequireCTRL");
-	static LLCachedControl<bool> doZoom(gSavedSettings, "PhoenixContactSetsDoZoom");
-	static LLCachedControl<bool> doColorChange(gSavedSettings, "PhoenixContactSetsUseColorHighlight");
-	static LLCachedControl<bool> drawProfileIcon(gSavedSettings, "PhoenixContactSetsDrawProfileIcon");
-	static LLCachedControl<bool> showOtherGroups(gSavedSettings, "PhoenixContactSetsShowOtherGroups");
+	static LLCachedControl<std::string> currentGroup(gSavedSettings, "FSContactSetsSelectedGroup");
+	static LLCachedControl<bool> textNotBg(gSavedSettings, "FSContactSetsColorizeText");
+	static LLCachedControl<bool> barNotBg(gSavedSettings, "FSContactSetsColorizeBar");
+	static LLCachedControl<bool> requireCTRL(gSavedSettings, "FSContactSetsRequireCTRL");
+	static LLCachedControl<bool> doZoom(gSavedSettings, "FSContactSetsDoZoom");
+	static LLCachedControl<bool> doColorChange(gSavedSettings, "FSContactSetsUseColorHighlight");
+	static LLCachedControl<bool> drawProfileIcon(gSavedSettings, "FSContactSetsDrawProfileIcon");
+	static LLCachedControl<bool> showOtherGroups(gSavedSettings, "FSContactSetsShowOtherGroups");
 
 	int roomForBar = 0;//used to move text and icon over away from the little bar on the left
 	if((barNotBg)||(textNotBg))roomForBar=10+2;
@@ -979,7 +979,7 @@ void lggContactSetsFloater::draw()
 			LLUIImage *arrowDownImage = LLUI::getUIImage("map_avatar_below_32.tga");
 			LLColor4 active = LGGContactSets::getInstance()->getGroupColor(currentGroup);
 			LLColor4 unactive = LGGContactSets::toneDownColor(active,.5);
-			static LLCachedControl<S32> scrollSpeedSetting(gSavedSettings, "PhoenixContactSetsScrollSpeed");
+			static LLCachedControl<S32> scrollSpeedSetting(gSavedSettings, "FSContactSetsScrollSpeed");
 			float speedFraction = ((F32)(scrollSpeedSetting))/100.0f;
 
 			LLColor4 useColor = unactive;
@@ -1085,7 +1085,7 @@ void lggContactSetsFloater::draw()
 				if(justClicked&&!showRightClick)
 				{
 					justClicked=FALSE;
-					gSavedSettings.setString("PhoenixContactSetsSelectedGroup",folder);
+					gSavedSettings.setString("FSContactSetsSelectedGroup",folder);
 					sInstance->updateGroupGUIs();
 					sInstance->selected.clear();
 					sInstance->generateCurrentList();
@@ -1275,7 +1275,7 @@ void lggContactSetsFloater::draw()
 						if(justClicked)
 						{
 							justClicked=FALSE;
-							gSavedSettings.setString("PhoenixContactSetsSelectedGroup",oGroupName);
+							gSavedSettings.setString("FSContactSetsSelectedGroup",oGroupName);
 							sInstance->updateGroupGUIs();
 							sInstance->selected.clear();
 							sInstance->generateCurrentList();
@@ -1490,7 +1490,7 @@ void lggContactSetsFloater::draw()
 				if (LLAvatarNameCache::get(agent_id, &avatar_name))
 				{
 					std::string fullname;
-					static LLCachedControl<S32> sPhoenixNameSystem(gSavedSettings, "PhoenixContactSetsNameFormat");
+					static LLCachedControl<S32> sPhoenixNameSystem(gSavedSettings, "FSContactSetsNameFormat");
 
 					switch (sPhoenixNameSystem())
 					{
@@ -1607,7 +1607,7 @@ BOOL lggContactSetsFloater::handleScrollWheel(S32 x, S32 y, S32 clicks)
 	LLRect rec  = sInstance->getChild<LLPanel>("draw_region")->getRect();
 
 	int maxS =(((sInstance->currentList.size()+sInstance->allFolders.size())*11)+200-(rec.getHeight()));
-	static LLCachedControl<bool> doZoom(gSavedSettings, "PhoenixContactSetsDoZoom");
+	static LLCachedControl<bool> doZoom(gSavedSettings, "FSContactSetsDoZoom");
 	if(!(doZoom))maxS=(((sInstance->currentList.size()+sInstance->allFolders.size())*(26))+10-(rec.getHeight()));
 
 	int moveAmt=12;
@@ -1668,7 +1668,7 @@ BOOL lggContactSetsFloater::handleKeyHere( KEY key, MASK mask )
 	LLRect rec  = sInstance->getChild<LLPanel>("draw_region")->getRect();
 	
 	int maxS =(((sInstance->currentList.size()+sInstance->allFolders.size())*11)+200-(rec.getHeight()));
-	static LLCachedControl<bool> doZoom(gSavedSettings, "PhoenixContactSetsDoZoom");
+	static LLCachedControl<bool> doZoom(gSavedSettings, "FSContactSetsDoZoom");
 	if(!(doZoom))maxS=(((sInstance->currentList.size()+sInstance->allFolders.size())*(26))+10-(rec.getHeight()));
 	std::string localFilter = sInstance->currentFilter;
 	if(sInstance->showRightClick)localFilter=sInstance->currentRightClickText;
@@ -1738,7 +1738,7 @@ BOOL lggContactSetsFloater::handleDoubleClick(S32 x, S32 y, MASK mask)
 	LLRect bottomScroll = sInstance->getChild<LLPanel>("bottom_region")->getRect();
 
 	int maxS =(((sInstance->currentList.size()+sInstance->allFolders.size())*11)+200-(rec.getHeight()));
-	static LLCachedControl<bool> doZoom(gSavedSettings, "PhoenixContactSetsDoZoom");
+	static LLCachedControl<bool> doZoom(gSavedSettings, "FSContactSetsDoZoom");
 	if(!(doZoom))maxS=(((sInstance->currentList.size()+sInstance->allFolders.size())*(26))+10-(rec.getHeight()));
 	
 	if(bottomScroll.pointInRect(x,y))
@@ -1768,7 +1768,7 @@ void lggContactSetsFloater::onMouseEnter(S32 x, S32 y, MASK mask)
 }
 BOOL lggContactSetsFloater::compareAv(LLUUID av1, LLUUID av2)
 {
-	static LLCachedControl<S32> sPhoenixNameSystem(gSavedSettings, "PhoenixContactSetSortNameFormat");
+	static LLCachedControl<S32> sPhoenixNameSystem(gSavedSettings, "FSContactSetSortNameFormat");
 
 	std::string avN1("");
 	std::string avN2("");
@@ -1806,11 +1806,11 @@ BOOL lggContactSetsFloater::compareAv(LLUUID av1, LLUUID av2)
 }
 BOOL lggContactSetsFloater::generateCurrentList()
 {
-	static LLCachedControl<bool> showOnline(gSavedSettings, "PhoenixContactSetsShowOnline");
-	static LLCachedControl<bool> showOffline(gSavedSettings, "PhoenixContactSetsShowOffline");
-	static LLCachedControl<bool> yshowAllFriends(gSavedSettings, "PhoenixContactSetsShowAllFriends");
-	//static LLCachedControl<bool> showOtherGroups(gSavedSettings, "PhoenixContactSetsShowOtherGroups");
-	static LLCachedControl<std::string> currentGroup(gSavedSettings, "PhoenixContactSetsSelectedGroup");
+	static LLCachedControl<bool> showOnline(gSavedSettings, "FSContactSetsShowOnline");
+	static LLCachedControl<bool> showOffline(gSavedSettings, "FSContactSetsShowOffline");
+	static LLCachedControl<bool> yshowAllFriends(gSavedSettings, "FSContactSetsShowAllFriends");
+	//static LLCachedControl<bool> showOtherGroups(gSavedSettings, "FSContactSetsShowOtherGroups");
+	static LLCachedControl<std::string> currentGroup(gSavedSettings, "FSContactSetsSelectedGroup");
 
 	currentList.clear();
 	std::map<LLUUID, LLRelationship*>::iterator p;
@@ -1853,7 +1853,7 @@ BOOL lggContactSetsFloater::generateCurrentList()
 			if (LLAvatarNameCache::get(currentList[itFilter], &avatar_name))
 			{
 				std::string fullname;
-				static LLCachedControl<S32> sPhoenixNameSystem(gSavedSettings, "PhoenixContactSetsNameFormat");
+				static LLCachedControl<S32> sPhoenixNameSystem(gSavedSettings, "FSContactSetsNameFormat");
 				switch (sPhoenixNameSystem())
 				{
 				case 0 : fullname = avatar_name.getLegacyName(); break;
@@ -1880,10 +1880,10 @@ BOOL lggContactSetsFloater::generateCurrentList()
 }
 void lggContactSetsFloater::onClickDelete(void* data)
 {
-	static LLCachedControl<std::string> currentGroup(gSavedSettings, "PhoenixContactSetsSelectedGroup");
+	static LLCachedControl<std::string> currentGroup(gSavedSettings, "FSContactSetsSelectedGroup");
 
 	LGGContactSets::getInstance()->deleteGroup(currentGroup);
-	gSavedSettings.setString("PhoenixContactSetsSelectedGroup","");
+	gSavedSettings.setString("FSContactSetsSelectedGroup","");
 	sInstance->updateGroupsList();
 }
 void lggContactSetsFloater::onClickNew(void* data)
@@ -1949,10 +1949,10 @@ BOOL lggContactSetsFloaterSettings::postBuild(void)
 
 	LLComboBox *dispName = getChild<LLComboBox>("lgg_fg_dispName");
 	dispName->setCommitCallback(boost::bind(&lggContactSetsFloaterSettings::onSelectNameFormat, this));
-	dispName->setCurrentByIndex(gSavedSettings.getS32("PhoenixContactSetsNameFormat"));
+	dispName->setCurrentByIndex(gSavedSettings.getS32("FSContactSetsNameFormat"));
 	LLComboBox *sortName = getChild<LLComboBox>("lgg_fg_sortName");
 	sortName->setCommitCallback(boost::bind(&lggContactSetsFloaterSettings::onSelectNameFormat, this));
-	sortName->setCurrentByIndex(gSavedSettings.getS32("PhoenixContactSetSortNameFormat"));
+	sortName->setCurrentByIndex(gSavedSettings.getS32("FSContactSetSortNameFormat"));
 	return TRUE;
 }
 void lggContactSetsFloaterSettings::onDefaultBackgroundChange()
@@ -1968,8 +1968,8 @@ void lggContactSetsFloaterSettings::onClickOk(void* data)
 }
 void lggContactSetsFloaterSettings::onSelectNameFormat()
 {
-	gSavedSettings.setS32("PhoenixContactSetsNameFormat",
+	gSavedSettings.setS32("FSContactSetsNameFormat",
 		getChild<LLComboBox>("lgg_fg_dispName")->getCurrentIndex());	
-	gSavedSettings.setS32("PhoenixContactSetSortNameFormat",
+	gSavedSettings.setS32("FSContactSetSortNameFormat",
 		getChild<LLComboBox>("lgg_fg_sortName")->getCurrentIndex());
 }

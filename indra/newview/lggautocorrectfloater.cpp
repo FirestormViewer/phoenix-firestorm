@@ -138,7 +138,7 @@ void LGGAutoCorrectFloater::ResponseItemDrop(LLViewerInventoryItem* item)
 				&onNotecardLoadComplete,
 				(void*)item,
 				TRUE);
-			gSavedSettings.setBOOL("PhoenixEnableAutoCorrect",true);
+			gSavedSettings.setBOOL("FSEnableAutoCorrect",true);
 
 		}
 	}
@@ -213,7 +213,7 @@ void LGGAutoCorrectFloater::updateItemsList()
 	childSetValue("lgg_ac_text_name",listName);
 	childSetValue("lgg_ac_text_author",listData["author"]);
 	childSetValue("lgg_ac_priority",listData["priority"]);
-	static LLCachedControl<S32> countAuto(gSavedSettings, "PhoenixAutoCorrectCount");
+	static LLCachedControl<S32> countAuto(gSavedSettings, "FSAutoCorrectCount");
 	childSetValue("lgg_ac_stats",(S32)countAuto);
 	
 	LLSD autoCorrects = listData["data"];
@@ -244,13 +244,13 @@ void LGGAutoCorrectFloater::updateItemsList()
 void LGGAutoCorrectFloater::updateNamesList()
 {
 	namesList->deleteAllItems();
-	static LLCachedControl<bool> enabledd(gSavedSettings, "PhoenixEnableAutoCorrect");
+	static LLCachedControl<bool> enabledd(gSavedSettings, "FSEnableAutoCorrect");
 	if(!(enabledd))
 	{
 		updateItemsList();
 		return;
 	}
-	static LLCachedControl<S32> countAuto(gSavedSettings, "PhoenixAutoCorrectCount");
+	static LLCachedControl<S32> countAuto(gSavedSettings, "FSAutoCorrectCount");
 	childSetValue("lgg_ac_stats",(S32)countAuto);
 	LLSD autoCorrects = LGGAutoCorrect::getInstance()->getAutoCorrects();
 	LLSD::map_const_iterator loc_it = autoCorrects.beginMap();
@@ -296,7 +296,7 @@ void LGGAutoCorrectFloater::updateListControlsEnabled(BOOL selected)
 }
 void LGGAutoCorrectFloater::updateEnabledStuff()
 {
-	static LLCachedControl<bool> enabledd(gSavedSettings, "PhoenixEnableAutoCorrect");
+	static LLCachedControl<bool> enabledd(gSavedSettings, "FSEnableAutoCorrect");
 	if(!(enabledd))
 	{
 		LLCheckBoxCtrl *enBox = getChild<LLCheckBoxCtrl>("lgg_ac_enable");
@@ -384,7 +384,7 @@ void LGGAutoCorrectFloater::loadList(void* data)
 		LLSDSerialize::fromXMLDocument(blankllsd, file);
 	}
 	file.close();
-	gSavedSettings.setBOOL("PhoenixEnableAutoCorrect",true);
+	gSavedSettings.setBOOL("FSEnableAutoCorrect",true);
 	LGGAutoCorrect::getInstance()->addCorrectionList(blankllsd);
 	if ( data )
 	{
@@ -438,7 +438,7 @@ void LGGAutoCorrectFloater::addEntry(void* data)
 		{
 			std::string listName= self->namesList->getFirstSelected()->getColumn(0)->getValue().asString();
 			LLChat chat;
-			chat.mText ="To add an entry, please type in chat \""+gSavedSettings.getString("PhoenixCmdLineAutocorrect")+" "+listName+"|wrongWord|rightWord\"";
+			chat.mText ="To add an entry, please type in chat \""+gSavedSettings.getString("FSCmdLineAutocorrect")+" "+listName+"|wrongWord|rightWord\"";
 
 			chat.mSourceType = CHAT_SOURCE_SYSTEM;
 			LLSD args;

@@ -78,7 +78,7 @@ public:
 	static void onSendMsg( LLUICtrl*, void*);
 	void sendMsg();
 
-	void updatePhoenixUseNearbyChatConsole(const LLSD &data);
+	void updateFSUseNearbyChatConsole(const LLSD &data);
 
 private:
 	void	getAllowedRect		(LLRect& rect);
@@ -100,7 +100,7 @@ private:
 	std::vector<LLChat> mMessageArchive;
 	LLLineEditor* mInputEditor;
 
-	BOOL PhoenixUseNearbyChatConsole;
+	BOOL FSUseNearbyChatConsole;
 
 };
 
