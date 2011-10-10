@@ -1237,8 +1237,8 @@
              left="20"
              width="50"
              height="20"
-             control_name="PhoenixKeywordOn"
-             name="PhoenixKeywordOn"
+             control_name="FSKeywordOn"
+             name="FSKeywordOn"
              label="Enable Keyword Alerts"/>
             <check_box
              layout="topleft"
@@ -1247,8 +1247,8 @@
              left="20"
              width="50"
              height="20"
-             control_name="PhoenixKeywordInChat"
-             name="PhoenixKeywordInChat"
+             control_name="FSKeywordInChat"
+             name="FSKeywordInChat"
              label="Look for Keywords In Local Chat"/>
             <check_box
              layout="topleft"
@@ -1257,8 +1257,8 @@
              left="20"
              width="150"
              height="20"
-             control_name="PhoenixKeywordInIM"
-             name="PhoenixKeywordInIM"
+             control_name="FSKeywordInIM"
+             name="FSKeywordInIM"
              label="Look for Keywords In IMs and Group Chat"/>
             <text
              layout="topleft"
@@ -1267,7 +1267,7 @@
              left="20"
              height="20"
              width="220"
-             name="textPhoenixKeywords">
+             name="textFSKeywords">
               Keywords (separated by commas):
             </text>
             <line_editor
@@ -1276,8 +1276,8 @@
              left="20"
              height="20"
              max_length="256"
-             name="PhoenixKeywords"
-             control_name="PhoenixKeywords"
+             name="FSKeywords"
+             control_name="FSKeywords"
              width="450"/>
 
             <check_box
@@ -1287,12 +1287,12 @@
              left="20"
              width="50"
              height="20"
-             control_name="PhoenixKeywordChangeColor"
-             name="PhoenixKeywordChangeColor"
+             control_name="FSKeywordChangeColor"
+             name="FSKeywordChangeColor"
              label="Enable Color Alert"/>
 
             <color_swatch
-             control_name="PhoenixKeywordColor"
+             control_name="FSKeywordColor"
              border.border_thickness="0"
              label_height="0"
              layout="topleft"
@@ -1311,9 +1311,9 @@
              left="20"
              width="50"
              height="20"
-             control_name="PhoenixKeywordPlaySound"
-             name="PhoenixKeywordPlaySound"
-             label="PhoenixKeywordPlaySound"/>
+             control_name="FSKeywordPlaySound"
+             name="FSKeywordPlaySound"
+             label="FSKeywordPlaySound"/>
 
             <text
              layout="topleft"
@@ -1322,7 +1322,7 @@
              left="20"
              height="20"
              width="120"
-             name="textPhoenixKeywordSound">
+             name="textFSKeywordSound">
               Alert Sound UUID:
             </text>
             <line_editor
@@ -1330,8 +1330,8 @@
              left_pad="5"
              height="20"
              max_length="256"
-             name="PhoenixKeywordSound"
-             control_name="PhoenixKeywordSound"
+             name="FSKeywordSound"
+             control_name="FSKeywordSound"
              width="250"/>
 
         </panel>

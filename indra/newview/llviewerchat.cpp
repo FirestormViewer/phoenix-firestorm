@@ -104,11 +104,11 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 		//Keyword alerts -KC
 		if ((gAgentID != chat.mFromID) && FSKeywords::getInstance()->chatContainsKeyword(chat, is_local))
 		{
-			static LLCachedControl<bool> sPhoenixKeywordChangeColor(gSavedPerAccountSettings, "PhoenixKeywordChangeColor");
-			if (sPhoenixKeywordChangeColor)
+			static LLCachedControl<bool> sFSKeywordChangeColor(gSavedPerAccountSettings, "FSKeywordChangeColor");
+			if (sFSKeywordChangeColor)
 			{
-				static LLCachedControl<LLColor4> sPhoenixKeywordColor(gSavedPerAccountSettings, "PhoenixKeywordColor");
-				r_color = sPhoenixKeywordColor;
+				static LLCachedControl<LLColor4> sFSKeywordColor(gSavedPerAccountSettings, "FSKeywordColor");
+				r_color = sFSKeywordColor;
 			}
 		}
 		
