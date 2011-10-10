@@ -793,6 +793,8 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 		args["NAME"] = av_name.getLegacyName();
 	}
 
+	args["AGENT-ID"] = agent_id;
+
 	LLNotificationPtr notification;
 
 
@@ -816,7 +818,7 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	LLIMModel::instance().proccessOnlineOfflineNotification(session_id, notify_msg);
 	// If desired, also send it to nearby chat, this allows friends'
 	// online/offline times to be referenced in chat & logged.
-	if (gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat")) 
+	if (gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat")||LGGContactSets::getInstance()->notifyForFriend(agent_id)) 
 	{
 		LLChat chat;
 		chat.mText = notify_msg;

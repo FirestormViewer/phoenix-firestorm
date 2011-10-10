@@ -36,6 +36,7 @@
 #include "llviewerwindow.h"
 #include "llnotificationmanager.h"
 #include "llpaneltiptoast.h"
+#include "lggcontactsets.h"
 
 using namespace LLNotificationsUI;
 
@@ -102,6 +103,8 @@ bool LLTipHandler::processNotification(const LLSD& notify)
 
 		std::string session_name = notification->getPayload()["SESSION_NAME"];
 		const std::string name = notification->getSubstitutions()["NAME"];
+		const LLUUID agent_id = notification->getSubstitutions()["AGENT-ID"];
+		
 		if (session_name.empty())
 		{
 			session_name = name;
@@ -127,10 +130,13 @@ bool LLTipHandler::processNotification(const LLSD& notify)
 			return false;
 		}
 
-		// [FIRE-3522 : SJ] Don't show Online/Offline toast when ChatOnlineNotification is not enabled
-		if (("FriendOffline" == notification->getName() || "FriendOnline" == notification->getName()) && !gSavedSettings.getBOOL("ChatOnlineNotification"))
+		// [FIRE-3522 : SJ] Only show Online/Offline toast when ChatOnlineNotification is enabled or the Friend is one you want to have on/offline notices from
+		if (!gSavedSettings.getBOOL("ChatOnlineNotification") && ("FriendOffline" == notification->getName() || "FriendOnline" == notification->getName()))
 		{
-			return false;
+			if (!LGGContactSets::getInstance()->notifyForFriend(agent_id) )
+			{
+				return false;
+			}
 		}
 
 		LLToastPanel* notify_box = LLToastPanel::buidPanelFromNotification(notification);
