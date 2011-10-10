@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  border="true"
- follows="left|top|right|bottom"
- height="408"
- label="Communication"
+ follows="all"
+ height="440"
  layout="topleft"
- left="102"
- name="im"
+ left="1"
  top="1"
- width="517">
+ width="540"
+ label="Communication"
+ name="im">
     <panel.string
      name="log_in_to_change">
         log in to change
@@ -209,7 +209,7 @@
      width="255">
         <!--<button.commit_callback
          function="SideTray.ShowPanel"-->
-      <button.commit_callback
+        <button.commit_callback
          function="Pref.BlockList"/>
     </button>
-    </panel>
+</panel>

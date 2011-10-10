@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  border="true"
- follows="left|top|right|bottom"
- height="408"
- label="Move"
+ follows="all"
+ height="440"
  layout="topleft"
- left="102"
- name="move_panel"
+ left="1"
  top="1"
- width="517">
-  <icon
+ width="540"
+ label="Move"
+ name="move_panel">
+    <icon
      follows="left|top"
      height="18"
      image_name="Cam_FreeCam_Off"
@@ -20,64 +20,64 @@
      width="18"
      left="30"
      top="10"/>
-  <slider
-   can_edit_text="true"
-   control_name="CameraAngle"
-   decimal_digits="2"
-   follows="left|top"
-   height="16"
-   increment="0.025"
-   initial_value="1.57"
-   layout="topleft"
-   label_width="100"
-   label="View angle"
-   left_pad="30"
-   max_val="2.97"
-   min_val="0.17"
-   name="camera_fov"
-   show_text="false"
-   width="240" />
-  <slider
-   can_edit_text="true"
-   control_name="CameraOffsetScale"
-   decimal_digits="2"
-   follows="left|top"
-   height="16"
-   increment="0.025"
-   initial_value="1"
-   layout="topleft"
-   label="Distance"
-   left_delta="0"
-   label_width="100"
-   max_val="3"
-   min_val="0.5"
-   name="camera_offset_scale"
-   show_text="false"
-   width="240"
-   top_pad="5"/>
-      <check_box
-		control_name="DisableCameraConstraints"
-		height="16"
-		initial_value="true"
-		label="Allow greater camera freedom"
-		layout="topleft"
-		left_delta="0"
-		name="DisableCameraConstraints"
-		tool_tip="Set this to move your camera beyond its normal bounds and below land level. If you are not good at moving the camera, more of your shots may be at bad angles."
-		top_pad="7"
-		width="315"/>
-  <text
-  follows="left|top"
-  type="string"
-  length="1"
-  height="10"
-  left="80"
-  name="heading2"
-  width="300"
-  top_pad="5">
+    <slider
+    can_edit_text="true"
+    control_name="CameraAngle"
+    decimal_digits="2"
+    follows="left|top"
+    height="16"
+    increment="0.025"
+    initial_value="1.57"
+    layout="topleft"
+    label_width="100"
+    label="View angle"
+    left_pad="30"
+    max_val="2.97"
+    min_val="0.17"
+    name="camera_fov"
+    show_text="false"
+    width="240" />
+    <slider
+    can_edit_text="true"
+    control_name="CameraOffsetScale"
+    decimal_digits="2"
+    follows="left|top"
+    height="16"
+    increment="0.025"
+    initial_value="1"
+    layout="topleft"
+    label="Distance"
+    left_delta="0"
+    label_width="100"
+    max_val="3"
+    min_val="0.5"
+    name="camera_offset_scale"
+    show_text="false"
+    width="240"
+    top_pad="5"/>
+    <check_box
+    control_name="DisableCameraConstraints"
+    height="16"
+    initial_value="true"
+    label="Allow greater camera freedom"
+    layout="topleft"
+    left_delta="0"
+    name="DisableCameraConstraints"
+    tool_tip="Set this to move your camera beyond its normal bounds and below land level. If you are not good at moving the camera, more of your shots may be at bad angles."
+    top_pad="7"
+    width="315"/>
+    <text
+    follows="left|top"
+    type="string"
+    length="1"
+    height="10"
+    left="80"
+    name="heading2"
+    width="300"
+    top_pad="5">
     Automatically pose avatar during (select one or more):
-  </text>
-  <check_box
+    </text>
+    <check_box
      control_name="EditCameraMovement"
      height="20"
      follows="left|top"
@@ -88,102 +88,102 @@
      tool_tip="Use automatic camera positioning when entering and exiting edit mode"
      width="280"
      top_pad="5" />
-  <check_box
-   control_name="AppearanceCameraMovement"
-   follows="left|top"
-   height="16"
-   label="Appearance"
-   layout="topleft"
-   name="appearance_camera_movement"
-   tool_tip="Use automatic camera positioning while in edit mode"
-   width="242" />
-  <check_box
-   control_name="SidebarCameraMovement"
-   follows="left|top"
-   height="16"
-   initial_value="true"
-   label="Sidebar"
-   layout="topleft"
-   name="appearance_sidebar_positioning"
-   tool_tip="Use automatic camera positioning for sidebar"
-   width="242" />
+    <check_box
+    control_name="AppearanceCameraMovement"
+    follows="left|top"
+    height="16"
+    label="Appearance"
+    layout="topleft"
+    name="appearance_camera_movement"
+    tool_tip="Use automatic camera positioning while in edit mode"
+    width="242" />
+    <check_box
+    control_name="SidebarCameraMovement"
+    follows="left|top"
+    height="16"
+    initial_value="true"
+    label="Sidebar"
+    layout="topleft"
+    name="appearance_sidebar_positioning"
+    tool_tip="Use automatic camera positioning for sidebar"
+    width="242" />
 
-  <icon
+    <icon
 	 follows="left|top"
 	 height="18"
 	 image_name="Move_Walk_Off"
-   layout="topleft"
+     layout="topleft"
 	 name="avatar_icon"
 	 mouse_opaque="false"
 	 visible="true"
 	 width="18"
-   top_pad="2"
-   left="30" />
-  <check_box
-   control_name="FirstPersonAvatarVisible"
-   follows="top"
-   height="20"
-   label="Show avatar in Mouselook"
-   layout="topleft"
-   left_pad="30"
-   name="first_person_avatar_visible"
-   width="256" />
-  <check_box
- control_name="FSShowMouselookInstructions"
- follows="left|top"
- height="16"
- initial_value="true"
- label="Show Mouselook instructions"
- layout="topleft"
- name="mouselook_instructions_visible"
- tool_tip="Show Mouselook Instructions"
- width="256" />
-  <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="10"
-   layout="topleft"
-   left_delta="3"
-   name=" Mouse Sensitivity"
-   top_pad="5"
-   width="160">
-    Mouselook mouse sensitivity:
-  </text>
-  <slider
-   control_name="MouseSensitivity"
-   follows="left|top"
-   height="15"
-   initial_value="2"
-   layout="topleft"
-   show_text="false"
-   left_pad="5"
-   max_val="15"
-   name="mouse_sensitivity"
-   top_delta="-1"
-   width="145" />
-  <check_box
-   control_name="InvertMouse"
-   height="16"
-   label="Invert"
-   layout="topleft"
-   left_pad="2"
-   name="invert_mouse"
-   top_delta="0"
-   width="128" />
+     top_pad="2"
+     left="30" />
+    <check_box
+    control_name="FirstPersonAvatarVisible"
+    follows="top"
+    height="20"
+    label="Show avatar in Mouselook"
+    layout="topleft"
+    left_pad="30"
+    name="first_person_avatar_visible"
+    width="256" />
+    <check_box
+     control_name="FSShowMouselookInstructions"
+     follows="left|top"
+     height="16"
+     initial_value="true"
+     label="Show Mouselook instructions"
+     layout="topleft"
+     name="mouselook_instructions_visible"
+     tool_tip="Show Mouselook Instructions"
+     width="256" />
+    <text
+    type="string"
+    length="1"
+    follows="left|top"
+    height="10"
+    layout="topleft"
+    left_delta="3"
+    name=" Mouse Sensitivity"
+    top_pad="5"
+    width="160">
+        Mouselook mouse sensitivity:
+    </text>
+    <slider
+    control_name="MouseSensitivity"
+    follows="left|top"
+    height="15"
+    initial_value="2"
+    layout="topleft"
+    show_text="false"
+    left_pad="5"
+    max_val="15"
+    name="mouse_sensitivity"
+    top_delta="-1"
+    width="145" />
+    <check_box
+    control_name="InvertMouse"
+    height="16"
+    label="Invert"
+    layout="topleft"
+    left_pad="2"
+    name="invert_mouse"
+    top_delta="0"
+    width="128" />
   
-<text
-		type="string"
-            left="30"
-            top_pad="12"
-		length="1"
-		follows="left|top"
-		height="12"
-		layout="topleft"
-		name="MovementSettings"
-		width="188">
-			Movement:
-		</text>
+    <text
+     type="string"
+     left="30"
+     top_pad="12"
+     length="1"
+     follows="left|top"
+     height="12"
+     layout="topleft"
+     name="MovementSettings"
+     width="188">
+        Movement:
+    </text>
 	
 <check_box
    control_name="ArrowKeysAlwaysMove"

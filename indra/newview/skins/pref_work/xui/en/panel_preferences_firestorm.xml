@@ -3,12 +3,12 @@
  border="true"
  follows="all"
  height="440"
- label="Firestorm"
  layout="topleft"
  left="1"
- name="firestorm"
  top="1"
- width="535">
+ width="540"
+ label="Firestorm"
+ name="firestorm">
 
 <tab_container
  label="Firestorm Prefs"
@@ -54,7 +54,7 @@
          width="150"
          name="textMiscRLVaRestart"
          text_color="White_25">
-        (requires restart)
+            (requires restart)
         </text>
         <text
          follows="left|top"
@@ -2160,6 +2160,6 @@
          name="usernamecolorswatch"
          tool_tip="Click to open color picker"/>
 
-  </panel>
+    </panel>
 </tab_container>
 </panel>

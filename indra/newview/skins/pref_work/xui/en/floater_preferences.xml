@@ -19,8 +19,7 @@
      right="-200"
      name="Apply"
      top="467"
-     width="90"
-      >
+     width="90">
         <button.commit_callback
          function="Pref.Apply" />
     </button>
@@ -168,5 +167,4 @@
          help_topic="preferences_firestorm_tab"
          name="firestorm" />
     </tab_container>
-
 </floater>

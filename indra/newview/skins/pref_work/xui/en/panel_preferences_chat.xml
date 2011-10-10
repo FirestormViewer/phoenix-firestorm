@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  border="true"
- follows="left|top|right|bottom"
- height="408"
- label="Text Chat"
+ follows="all"
+ height="440"
  layout="topleft"
- left="102"
- name="chat"
+ left="1"
  top="1"
- width="517">
-  <text
-   follows="left|top"
-   layout="topleft"
-   left="30"
-   height="12"
-   name="font_size"
-   width="130"
-   top="10">
+ width="540"
+ label="Text Chat"
+ name="chat">
+    <text
+     follows="left|top"
+     layout="topleft"
+     left="30"
+     height="12"
+     name="font_size"
+     width="130"
+     top="10">
     Chat window font size:
-  </text>
-  <radio_group
+    </text>
+    <radio_group
      height="20"
      layout="topleft"
      left_delta="170"
 	   control_name="ChatFontSize"
      name="chat_font_size"
      top="10"
-     width="380">
+     width="280">
         <radio_item
          height="16"
          label="Small"
@@ -55,24 +55,24 @@
          top_delta="0"
          width="60" />
     </radio_group>
-  <text
-   follows="left|top"
-   layout="topleft"
-   left="30"
-   height="12"
-   name="console_font_size"
-   width="150"
-   top="30">
-    Onscreen console font size:
-  </text>
-  <radio_group
+    <text
+     follows="left|top"
+     layout="topleft"
+     left="30"
+     height="12"
+     name="console_font_size"
+     width="150"
+     top="30">
+        Onscreen console font size:
+    </text>
+    <radio_group
      height="20"
      layout="topleft"
      left_delta="170"
 	   control_name="ChatConsoleFontSize"
      name="chat_console_font_size"
      top="30"
-     width="380">
+     width="280">
         <radio_item
          height="16"
          label="Small"
@@ -222,7 +222,7 @@
 	 top_pad="6"
 	 width="120">
        Pressing letter keys:
-   </text>
+    </text>
     <radio_group
      control_name="LetterKeysFocusChatBar" 
      width="310"
@@ -251,8 +251,6 @@
          width="75" />
     </radio_group>
     
-    
-    
     <text
      name="show_ims_in_label"
      follows="left|top"
@@ -262,9 +260,8 @@
      width="80"
      top_pad="8">
      Show IMs in:
-    </text>    
-
-      
+    </text>
+    
     <radio_group
      height="16"
      layout="topleft"
@@ -274,23 +271,23 @@
      name="chat_window"
      tool_tip="Show your Instant Messages in separate floaters, or in one floater with many tabs (Requires restart)"
      width="180">
-     <radio_item
-      height="16"
-      label="Separate windows"
-      layout="topleft"
-      left="0"
-      name="radio"
-      value="0"
-      top="0"
-      width="50" />
-     <radio_item
-      height="16"
-      label="Tabs"
-      layout="topleft"
-      left_delta="130"
-      name="radio2"
-      value="1"
-      width="150" />
+        <radio_item
+         height="16"
+         label="Separate windows"
+         layout="topleft"
+         left="0"
+         name="radio"
+         value="0"
+         top="0"
+         width="50" />
+        <radio_item
+         height="16"
+         label="Tabs"
+         layout="topleft"
+         left_delta="130"
+         name="radio2"
+         value="1"
+         width="150" />
     </radio_group>
     <text
      name="req_restart"
@@ -302,7 +299,7 @@
      height="16"
      width="100">
      (requires restart) 
-     </text>
+    </text>
     
     <text
      name="disable_toast_label"
@@ -313,7 +310,7 @@
      height="10"
      width="180">
       Enable incoming chat popups:
-      </text>
+    </text>
     <check_box
      control_name="EnableGroupChatPopups"
      name="EnableGroupChatPopups"

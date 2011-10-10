@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  border="true"
- height="408"
- label="Popups"
+ follows="all"
+ height="440"
  layout="topleft"
- left="0"
- name="popups"
- top="500"
- width="517">
+ left="1"
+ top="1"
+ width="540"
+ label="Popups"
+ name="popups">
     <text
      type="string"
      length="1"

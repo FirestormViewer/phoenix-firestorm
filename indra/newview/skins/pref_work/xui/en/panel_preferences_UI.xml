@@ -3,13 +3,12 @@
  border="true"
  follows="all"
  height="440"
- label="UI-Pref"
  layout="topleft"
  left="1"
- name="Display panel"
  top="1"
- width="535">
- 
+ width="540"
+ label="UI-Pref"
+ name="Display panel">
 <tab_container
  label="Firestorm Prefs"
  layout="topleft"
@@ -90,7 +89,7 @@
          top_pad="10"
          width="400">
            Hovertip Trigger Delay:
-       </text>
+        </text>
         <combo_box
          height="23"
          layout="topleft"
