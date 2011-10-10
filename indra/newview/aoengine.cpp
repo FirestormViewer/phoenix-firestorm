@@ -544,6 +544,10 @@ void AOEngine::cycle(eCycleMode cycleMode)
 		animation=state->mAnimations[state->mCurrentAnimation].mAssetUUID;
 	}
 
+	// don't do anything if the animation didn't change
+	if(animation==oldAnimation)
+		return;
+
 	state->mCurrentAnimationID=animation;
 	if(!animation.isNull())
 	{
