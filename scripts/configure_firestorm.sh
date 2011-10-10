@@ -112,6 +112,7 @@ getArgs()
         fi
 
 	LOG="`pwd`/logs/build_$PLATFORM.log"
+	echo "Removing $LOG ..."
 	if [ -r "$LOG" ] ; then
 		rm -f "`pwd`/logs/*" #(remove old logfiles)
 	fi
@@ -249,15 +250,16 @@ function getopt()
 ### 
 
 getArgs $*
-echo -e "	Your platform is: '$PLATFORM'"
-echo -e "	     KDU: `b2a $WANTS_KDU`"
-echo -e "	    FMOD: `b2a $WANTS_FMOD`"
-echo -e "	 PACKAGE: `b2a $WANTS_PACKAGE`"
-echo -e "	   CLEAN: `b2a $WANTS_CLEAN`"
-echo -e "	   BUILD: `b2a $WANTS_BUILD`"
-echo -e "	  CONFIG: `b2a $WANTS_CONFIG`"
-echo -e "	PASSTHRU: $LL_ARGS_PASSTHRU"
-echo -e "	   BTYPE: $BTYPE"
+echo -e "configure_firestorm.py" > $LOG
+echo -e "       PLATFORM: '$PLATFORM'"          >> $LOG
+echo -e "	     KDU: `b2a $WANTS_KDU`"     >> $LOG
+echo -e "	    FMOD: `b2a $WANTS_FMOD`"    >> $LOG
+echo -e "	 PACKAGE: `b2a $WANTS_PACKAGE`" >> $LOG
+echo -e "	   CLEAN: `b2a $WANTS_CLEAN`"   >> $LOG
+echo -e "	   BUILD: `b2a $WANTS_BUILD`"   >> $LOG
+echo -e "	  CONFIG: `b2a $WANTS_CONFIG`"  >> $LOG
+echo -e "	PASSTHRU: $LL_ARGS_PASSTHRU"    >> $LOG
+echo -e "	   BTYPE: $BTYPE"               >> $LOG
 echo -e "       Logging to $LOG"
 
 
