@@ -19,6 +19,13 @@
                 <key>folder</key>
                     <string>dark</string>
                 </map>
+                <!-- Thea Brianna's blue theme -->
+                <map>
+                <key>name</key>
+                    <string>Blue</string>
+                <key>folder</key>
+                    <string>Blue</string>
+                </map>
             </array>
         </map>
 		
