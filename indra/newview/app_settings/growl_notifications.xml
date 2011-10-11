@@ -142,6 +142,15 @@
       <key>GrowlName</key>
       <string>Friendship offer declined</string>
     </map>
+    <key>GodMessage</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Global message</string>
+      <key>GrowlTitle</key>
+      <string>Global message</string>
+      <key>GrowlBody</key>
+      <string>[MESSAGE]</string>
+    </map>
     <key>RegionRestartMinute</key>
     <map>
       <key>GrowlName</key>
