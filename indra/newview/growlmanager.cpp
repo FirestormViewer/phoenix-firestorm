@@ -147,7 +147,7 @@ void GrowlManager::loadConfig()
 
 void GrowlManager::notify(const std::string& notification_title, const std::string& notification_message, const std::string& notification_type)
 {
-	static LLCachedControl<bool> enabled(gSavedSettings, "PhoenixEnableGrowl");
+	static LLCachedControl<bool> enabled(gSavedSettings, "FSEnableGrowl");
 	if(!enabled)
 		return;
 	
@@ -181,7 +181,7 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 {
 	if(notice["sigtype"].asString() != "add")
 		return false;
-	static LLCachedControl<bool> enabled(gSavedSettings, "PhoenixEnableGrowl");
+	static LLCachedControl<bool> enabled(gSavedSettings, "FSEnableGrowl");
 	if(!enabled)
 		return false;
 	if(!shouldNotify())
@@ -244,7 +244,7 @@ void GrowlManager::onInstantMessage(const LLSD& im)
 bool GrowlManager::shouldNotify()
 {
 	// This magic stolen from llappviewer.cpp. LLViewerWindow::getActive lies.
-	static LLCachedControl<bool> activated(gSavedSettings, "PhoenixGrowlWhenActive");
+	static LLCachedControl<bool> activated(gSavedSettings, "FSGrowlWhenActive");
 	return (activated || (!gViewerWindow->mWindow->getVisible()  || !gFocusMgr.getAppHasFocus()));
 }
 
