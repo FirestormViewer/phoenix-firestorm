@@ -9,7 +9,7 @@
  width="540"
  label="Advanced"
  name="advanced">
-	<panel.string
+ <panel.string
      name="aspect_ratio_text">
         [NUM]:[DEN]
     </panel.string>
@@ -172,7 +172,6 @@
      scale_image="true"
      width="200" >
         <button.commit_callback
-        function="Pref.ClearSettings" />
+         function="Pref.ClearSettings" />
     </button>
-  
  </panel>

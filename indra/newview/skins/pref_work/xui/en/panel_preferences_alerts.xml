@@ -46,7 +46,7 @@
      label="When I have Script Errors in:"
      layout="topleft"
      left_delta="0"
-     top_pad="4" 
+     top_pad="4"
      name="show_script_errors"
      width="256" />
     <radio_group
@@ -97,10 +97,10 @@
      multi_select="true"
      name="enabled_popups"
      sort_column="0"
-     sort_ascending="true" 
+     sort_ascending="true"
      width="495" />
-	 <button
-	 enabled_control="FirstSelectedDisabledPopups"
+    <button
+     enabled_control="FirstSelectedDisabledPopups"
      follows="top|left"
      height="23"
      image_overlay="Arrow_Up"
@@ -114,8 +114,8 @@
          function="Pref.ClickEnablePopup" />
     </button>
     <button
-	 enabled_control="FirstSelectedEnabledPopups"
-	 follows="top|left"
+     enabled_control="FirstSelectedEnabledPopups"
+     follows="top|left"
      height="23"
      image_overlay="Arrow_Down"
      hover_glow_amount="0.25"

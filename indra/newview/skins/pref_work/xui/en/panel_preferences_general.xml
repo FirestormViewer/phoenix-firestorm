@@ -116,7 +116,7 @@
      width="200">
         I want to access content rated:
     </text>
-	<text
+    <text
      type="string"
      length="1"
      follows="left|top"
@@ -147,7 +147,7 @@
          name="Desired_PG"
          value="13" />
         <combo_box.commit_callback
-		 function="Pref.MaturitySettings"/>
+         function="Pref.MaturitySettings"/>
     </combo_box>
     <icon
      follows="left|top"
@@ -230,23 +230,23 @@
      height="20"
      layout="topleft"
      left="35"
-     top_pad="0" 
+     top_pad="0"
      name="Name_Tag_Preference">
         <radio_item
          label="Off"
          name="radio"
-         top_delta="20" 
+         top_delta="20"
          layout="topleft"
-         height="16" 
-         left="0" 
+         height="16"
+         left="0"
          value="0"
          width="75" />
         <radio_item
          label="On"
          left_pad="0"
          layout="topleft"
-         top_delta="0" 
-         height="16" 
+         top_delta="0"
+         height="16"
          name="radio2"
          value="1"
          width="75" />
@@ -261,18 +261,18 @@
          width="160" />
     </radio_group>
     <check_box
-	 enabled_control="AvatarNameTagMode"
+     enabled_control="AvatarNameTagMode"
      control_name="RenderNameShowSelf"
      height="16"
      label="My name"
      layout="topleft"
      left="35"
      name="show_my_name_checkbox1"
-	 top_pad="2"
+     top_pad="2"
      width="100" />
     <check_box
      control_name="NameTagShowUsernames"
-	 enabled_control="AvatarNameTagMode"
+     enabled_control="AvatarNameTagMode"
      height="16"
      label="Usernames"
      layout="topleft"
@@ -283,14 +283,14 @@
 
     <check_box
      control_name="NameTagShowGroupTitles"
-	 enabled_control="AvatarNameTagMode"
+     enabled_control="AvatarNameTagMode"
      height="16"
      label="Group titles"
      layout="topleft"
      left="35"
-     width="100" 
+     width="100"
      name="show_all_title_checkbox1"
-	 tool_tip="Show group titles, like Officer or Member"
+     tool_tip="Show group titles, like Officer or Member"
      top_pad="3" />
 
     <check_box
@@ -303,20 +303,20 @@
      name="show_friends"
      tool_tip="Highlight the name tags of your friends" />
 
-	<check_box
-	 control_name="UseDisplayNames"
-	 follows="top|left"
-	 height="16"
-	 label="View Display Names"
-	 layout="topleft"
-	 left="35"
-	 name="display_names_check"
-	 width="100"
-	 tool_tip="Check to use display names in chat, IM, name tags, etc."
-	 top_pad="3">
+    <check_box
+     control_name="UseDisplayNames"
+     follows="top|left"
+     height="16"
+     label="View Display Names"
+     layout="topleft"
+     left="35"
+     name="display_names_check"
+     width="100"
+     tool_tip="Check to use display names in chat, IM, name tags, etc."
+     top_pad="3">
         <check_box.commit_callback
          function="FS.ToggleSortContacts" />
-	</check_box>
+    </check_box>
 
     <text
      type="string"
@@ -327,11 +327,11 @@
      left="30"
      top_pad="10"
      name="title_afk_text"
-     top_delta="0" 
+     top_delta="0"
      width="150">
         Away timeout:
     </text>
-    
+
     <text
      type="string"
      length="1"
@@ -340,11 +340,11 @@
      layout="topleft"
      left_pad="5"
      top_delta="0"
-     name="title_afk_quit_text" 
+     name="title_afk_quit_text"
      width="190">
         Log out after being marked away:
     </text>
-    
+
     <combo_box
      height="23"
      layout="topleft"
@@ -380,7 +380,7 @@
          name="item4"
          value="0" />
     </combo_box>
-  
+
     <combo_box
      height="23"
      layout="topleft"
@@ -406,7 +406,7 @@
          name="item3"
          value="1800" />
     </combo_box>
-  
+
     <check_box
      control_name="AvatarSitOnAway"
      name="AvatarSitOnAway"
@@ -417,7 +417,7 @@
      left_pad="50"
      top_delta="5"
      width="50"/>
-         
+
     <text
      type="string"
      length="1"

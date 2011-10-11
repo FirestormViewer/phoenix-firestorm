@@ -11,9 +11,9 @@
  name="spell_check">
     <check_box
      control_name="SpellCheck"
-	 enabled="true"
-	 follows="top|left"
-	 height="16"
+     enabled="true"
+     follows="top|left"
+     height="16"
      label="Enable spell checking"
      layout="topleft"
      left="30"
@@ -26,9 +26,9 @@
      height="10"
      label="Logs:"
      layout="topleft"
-	 left="80"
+     left="80"
      mouse_opaque="false"
-	 name="textDictionaryMain"
+     name="textDictionaryMain"
      top_pad="15"
      type="string"
      width="90" >
