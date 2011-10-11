@@ -2827,6 +2827,8 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 
 				first_fully_visible = false;
 				LLAppearanceMgr::instance().onFirstFullyVisible();
+
+				AOEngine::instance().onLoginComplete();		// ## Zi: Animation Overrider
 			}
 			deleteParticleSource();
 			updateLOD();

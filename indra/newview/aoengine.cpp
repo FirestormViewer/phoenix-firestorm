@@ -71,6 +71,7 @@ AOEngine::~AOEngine()
 
 void AOEngine::init()
 {
+	enable(mEnabled);
 }
 
 // static
@@ -981,6 +982,7 @@ void AOEngine::update()
 
 		llwarns << "sending update signal" << llendl;
 		mUpdatedSignal();
+		enable(mEnabled);
 	}
 }
 
