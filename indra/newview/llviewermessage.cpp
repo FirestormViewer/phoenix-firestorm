@@ -3800,10 +3800,13 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			case CHAT_TYPE_OWNER:
 //-TT Client LSL Bridge
 				//llinfos << "CHAT_TYPE_OWNER: " << mesg << llendl; // LO - Removing what looks to be an old debug line, but would cause all llOwnerSay messages to be logged to the log file if left in.
-				if (gSavedSettings.getBOOL("UseLSLBridge"))
 				{
-					if(FSLSLBridge::instance().lslToViewer(mesg, from_id, owner_id))
-						return;
+					static LLCachedControl<bool> sUseLSLBridge(gSavedSettings, "UseLSLBridge");
+					if (sUseLSLBridge)
+					{
+						if(FSLSLBridge::instance().lslToViewer(mesg, from_id, owner_id))
+							return;
+					}
 				}
 //-TT
 // [RLVa:KB] - Checked: 2010-02-XX (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
