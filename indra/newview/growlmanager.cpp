@@ -227,17 +227,21 @@ return (pNotification->getDate().secondsSinceEpoch() >= LLDate::now().secondsSin
 
 void GrowlManager::onInstantMessage(const LLSD& im)
 {
-	// Don't show messages from ourselves or the system.
-	LLUUID from_id = im["from_id"];
-	if(from_id == LLUUID::null || from_id == gAgentID)
-		return;
-	std::string message = im["message"];
-	std::string prefix = message.substr(0, 4);
-	if(prefix == "/me " || prefix == "/me'")
+	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(im["session_id"]);
+	if(session->isP2PSessionType())
 	{
-		message = message.substr(3);
+		// Don't show messages from ourselves or the system.
+		LLUUID from_id = im["from_id"];
+		if(from_id == LLUUID::null || from_id == gAgentID)
+			return;
+		std::string message = im["message"];
+		std::string prefix = message.substr(0, 4);
+		if(prefix == "/me " || prefix == "/me'")
+		{
+			message = message.substr(3);
+		}
+		gGrowlManager->notify(im["from"], message, GROWL_IM_MESSAGE_TYPE);
 	}
-	gGrowlManager->notify(im["from"], message, GROWL_IM_MESSAGE_TYPE);
 }
 
 
