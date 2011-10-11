@@ -29,6 +29,7 @@
 
 #ifndef GROWLMANAGER_H
 #define GROWLMANAGER_H
+#include "llnotificationptr.h"
 #include "growlnotifier.h"
 #include "lleventtimer.h"
 #include <map>
