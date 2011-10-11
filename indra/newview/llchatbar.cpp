@@ -142,8 +142,8 @@ BOOL LLChatBar::postBuild()
 
 	mIsBuilt = TRUE;
 
-	PhoenixPlayChatAnimation = gSavedSettings.getBOOL("PhoenixPlayChatAnimation");
-	gSavedSettings.getControl("PhoenixPlayChatAnimation")->getSignal()->connect(boost::bind(&LLChatBar::updatePhoenixPlayChatAnimation, this, _2));
+	FSPlayChatAnimation = gSavedSettings.getBOOL("FSPlayChatAnimation");
+	gSavedSettings.getControl("FSPlayChatAnimation")->getSignal()->connect(boost::bind(&LLChatBar::updateFSPlayChatAnimation, this, _2));
 
 	return TRUE;
 }
@@ -376,9 +376,9 @@ LLWString LLChatBar::stripChannelNumber(const LLWString &mesg, S32* channel)
 	}
 }
 
-void LLChatBar::updatePhoenixPlayChatAnimation(const LLSD &data)
+void LLChatBar::updateFSPlayChatAnimation(const LLSD &data)
 {
-	PhoenixPlayChatAnimation = data.asBoolean();
+	FSPlayChatAnimation = data.asBoolean();
 }
 
 void LLChatBar::sendChat( EChatType type )
@@ -391,7 +391,7 @@ void LLChatBar::sendChat( EChatType type )
 			if(type == CHAT_TYPE_OOC)
 			{
 				std::string tempText = mInputEditor->getText();
-				tempText = gSavedSettings.getString("PhoenixOOCPrefix") + " " + tempText + " " + gSavedSettings.getString("PhoenixOOCPostfix");
+				tempText = gSavedSettings.getString("FSOOCPrefix") + " " + tempText + " " + gSavedSettings.getString("FSOOCPostfix");
 				mInputEditor->setText(tempText);
 				text = utf8str_to_wstring(tempText);
 			}
@@ -478,7 +478,7 @@ void LLChatBar::sendChat( EChatType type )
 			if (!utf8_revised_text.empty())
 			{
 				// Chat with animation
-				sendChatFromViewer(utf8_revised_text, nType, PhoenixPlayChatAnimation);
+				sendChatFromViewer(utf8_revised_text, nType, FSPlayChatAnimation);
 			}
 		}
 	}
@@ -577,8 +577,8 @@ void LLChatBar::onInputEditorKeystroke( LLLineEditor* caller, void* userdata )
 	// So be sure to look in all three places if changes are needed. This needs to be addressed at some point.
 	// -Zi
 	S32 channel=0;
-	if (gSavedSettings.getBOOL("PhoenixNearbyChatbar") &&
-		gSavedSettings.getBOOL("PhoenixShowChatChannel"))
+	if (gSavedSettings.getBOOL("FSNearbyChatbar") &&
+		gSavedSettings.getBOOL("FSShowChatChannel"))
 	{
 		channel = (S32)(LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
 	}

@@ -330,7 +330,7 @@
             <integer>1</integer>
         </map>
 	
-	<key>PhoenixKeywordOn</key>
+	<key>FSKeywordOn</key>
 	<map>
 		<key>Comment</key>
 			<string>Turns on keyword alerts</string>
@@ -341,7 +341,7 @@
 		<key>Value</key>
 			<integer>0</integer>
 	</map>
-	<key>PhoenixKeywordInChat</key>
+	<key>FSKeywordInChat</key>
 	<map>
 		<key>Comment</key>
 			<string>Look for keywords in local chat</string>
@@ -352,7 +352,7 @@
 		<key>Value</key>
 			<integer>0</integer>
 	</map>
-	<key>PhoenixKeywordInIM</key>
+	<key>FSKeywordInIM</key>
 	<map>
 		<key>Comment</key>
 			<string>Look for keywords in IMs and group chats</string>
@@ -363,7 +363,7 @@
 		<key>Value</key>
 			<integer>0</integer>
 	</map>
-	<key>PhoenixKeywords</key>
+	<key>FSKeywords</key>
 	<map>
 		<key>Comment</key>
 			<string>Comma seperated list of keywords</string>
@@ -374,7 +374,7 @@
 		<key>Value</key>
 			<string></string>
 	</map>
-	<key>PhoenixKeywordPlaySound</key>
+	<key>FSKeywordPlaySound</key>
 	<map>
 		<key>Comment</key>
 			<string>Play a sound when a keyword is found</string>
@@ -385,7 +385,7 @@
 		<key>Value</key>
 			<integer>0</integer>
 		</map>
-	<key>PhoenixKeywordSound</key>
+	<key>FSKeywordSound</key>
 	<map>
 		<key>Comment</key>
 			<string>UUID of sound to play</string>
@@ -396,7 +396,7 @@
 		<key>Value</key>
 			<string>a3f48b85-c29f-1f97-ebb6-644b7c053512</string>
 	</map>
-	<key>PhoenixKeywordChangeColor</key>
+	<key>FSKeywordChangeColor</key>
 	<map>
 		<key>Comment</key>
 			<string>change message color if keyword found</string>
@@ -407,7 +407,7 @@
 		<key>Value</key>
 			<integer>0</integer>
 	</map>
-	<key>PhoenixKeywordColor</key>
+	<key>FSKeywordColor</key>
 	<map>
 		<key>Comment</key>
 			<string>Color of keyword detects messages</string>

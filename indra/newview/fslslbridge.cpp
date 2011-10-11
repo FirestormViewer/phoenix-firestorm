@@ -67,9 +67,6 @@
 //current script version is 1.9
 const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 
-const boost::regex FSBridgePattern("^#Firestorm LSL Bridge v[0-9]*\\.[0-9]*");
-
-
 //
 //-TT Client LSL Bridge File
 //
@@ -126,7 +123,7 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 	if (!gSavedSettings.getBOOL("UseLSLBridge"))
 		return false;
 
-	//llinfos << message << llendl; // LO - Comenting out what looks to be a debug line that isnt needed anymore.
+	lldebugs << message << llendl;
 
 	std::string tag = message.substr(0,11);
 	bool status = false;
@@ -147,6 +144,7 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 		}
 		//status = true;
 		status = viewerToLSL("URL Confirmed", new FSLSLBridgeRequestResponder());
+		//updateBoolSettingValue("UseLSLFlightAssist");
 		if (!mIsFirstCallDone)
 		{
 			//on first call from bridge, confirm that we are here
@@ -543,7 +541,7 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 
 	//caps import 
 	std::string url = gAgent.getRegion()->getCapability("UpdateScriptAgent");
-	std::string isMono = "lsl2";  //could also be "mono"
+	std::string isMono = "mono";  //could also be "lsl2"
 	if (!url.empty() && obj != NULL)  
 	{
 		const std::string fName = prepUploadFile();

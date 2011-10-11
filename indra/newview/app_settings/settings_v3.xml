@@ -143,7 +143,7 @@
     <integer>1</integer>
   </map>
 
-  <key>PhoenixUseNearbyChatConsole</key>
+  <key>FSUseNearbyChatConsole</key>
   <map>
     <key>Comment</key>
     <string>Display popup chat embedded into the read-only world console (v1-style) instead of overlayed floaters (v2-style)</string>
@@ -239,7 +239,7 @@
     <integer>1</integer>
   </map>
   
-  <key>PhoenixFontChatLineSpacingPixels</key>
+  <key>FSFontChatLineSpacingPixels</key>
   <map>
     <key>Comment</key>
     <string>Line spacing pixels for chat text (requires restart)</string>

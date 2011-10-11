@@ -2495,10 +2495,10 @@
 	 shortcut="control|alt|V">
             <menu_item_check.on_check
              function="CheckControl"
-             parameter="PhoenixAlwaysFly" />
+             parameter="FSAlwaysFly" />
             <menu_item_check.on_click
              function="ToggleControl" 
-             parameter="PhoenixAlwaysFly" />
+             parameter="FSAlwaysFly" />
         </menu_item_check>
 
         <menu_item_check

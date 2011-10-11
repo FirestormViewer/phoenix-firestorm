@@ -451,8 +451,8 @@ BOOL LLNearbyChatBar::postBuild()
 	mOutputMonitor = getChild<LLOutputMonitorCtrl>("chat_zone_indicator");
 	mOutputMonitor->setVisible(FALSE);
 
-	PhoenixPlayChatAnimation = gSavedSettings.getBOOL("PhoenixPlayChatAnimation");
-	gSavedSettings.getControl("PhoenixPlayChatAnimation")->getSignal()->connect(boost::bind(&LLNearbyChatBar::updatePhoenixPlayChatAnimation, this, _2));
+	FSPlayChatAnimation = gSavedSettings.getBOOL("FSPlayChatAnimation");
+	gSavedSettings.getControl("FSPlayChatAnimation")->getSignal()->connect(boost::bind(&LLNearbyChatBar::updateFSPlayChatAnimation, this, _2));
 
 	// Register for font change notifications
 	LLViewerChat::setFontChangedCallback(boost::bind(&LLNearbyChatBar::onChatFontChange, this, _1));
@@ -573,8 +573,8 @@ void LLNearbyChatBar::onChatBoxKeystroke(LLLineEditor* caller, void* userdata)
 	// So be sure to look in all three places if changes are needed. This needs to be addressed at some point.
 	// -Zi
 	S32 channel=0;
-	if (gSavedSettings.getBOOL("PhoenixNearbyChatbar") &&
-		gSavedSettings.getBOOL("PhoenixShowChatChannel"))
+	if (gSavedSettings.getBOOL("FSNearbyChatbar") &&
+		gSavedSettings.getBOOL("FSShowChatChannel"))
 	{
 		channel = (S32)(LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
 	}
@@ -689,9 +689,9 @@ EChatType LLNearbyChatBar::processChatTypeTriggers(EChatType type, std::string &
 	return type;
 }
 
-void LLNearbyChatBar::updatePhoenixPlayChatAnimation(const LLSD &data)
+void LLNearbyChatBar::updateFSPlayChatAnimation(const LLSD &data)
 {
-	PhoenixPlayChatAnimation = data.asBoolean();
+	FSPlayChatAnimation = data.asBoolean();
 }
 
 void LLNearbyChatBar::sendChat( EChatType type )
@@ -704,7 +704,7 @@ void LLNearbyChatBar::sendChat( EChatType type )
 			if(type == CHAT_TYPE_OOC)
 			{
 				std::string tempText = mChatBox->getText();
-				tempText = gSavedSettings.getString("PhoenixOOCPrefix") + " " + tempText + " " + gSavedSettings.getString("PhoenixOOCPostfix");
+				tempText = gSavedSettings.getString("FSOOCPrefix") + " " + tempText + " " + gSavedSettings.getString("FSOOCPostfix");
 				mChatBox->setText(tempText);
 				text = utf8str_to_wstring(tempText);
 			}
@@ -716,8 +716,8 @@ void LLNearbyChatBar::sendChat( EChatType type )
 			stripChannelNumber(text, &channel);
 			// If "/<number>" is not specified, see if a channel has been set in
 			//  the spinner.
-			if (gSavedSettings.getBOOL("PhoenixNearbyChatbar") &&
-				gSavedSettings.getBOOL("PhoenixShowChatChannel") &&
+			if (gSavedSettings.getBOOL("FSNearbyChatbar") &&
+				gSavedSettings.getBOOL("FSShowChatChannel") &&
 				(channel == 0))
 			{
 				channel = (S32)(LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
@@ -800,7 +800,7 @@ void LLNearbyChatBar::sendChat( EChatType type )
 			if (!utf8_revised_text.empty() && cmd_line_chat(utf8_revised_text, type))
 			{
 				// Chat with animation
-				sendChatFromViewer(utf8_revised_text, type, PhoenixPlayChatAnimation);
+				sendChatFromViewer(utf8_revised_text, type, FSPlayChatAnimation);
 			}
 		}
 
@@ -874,8 +874,8 @@ void LLNearbyChatBar::sendChatFromViewer(const LLWString &wtext, EChatType type,
 	LLWString out_text = stripChannelNumber(wtext, &channel);
 	// If "/<number>" is not specified, see if a channel has been set in
 	//  the spinner.
-	if (gSavedSettings.getBOOL("PhoenixNearbyChatbar") &&
-		gSavedSettings.getBOOL("PhoenixShowChatChannel") &&
+	if (gSavedSettings.getBOOL("FSNearbyChatbar") &&
+		gSavedSettings.getBOOL("FSShowChatChannel") &&
 		(channel == 0))
 	{
 		channel = (S32)(LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());

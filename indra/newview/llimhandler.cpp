@@ -51,8 +51,8 @@ LLIMHandler::LLIMHandler(e_notification_type type, const LLSD& id)
 	// Getting a Channel for our notifications
 	mChannel = LLChannelManager::getInstance()->createNotificationChannel();
 
-	PhoenixLogImToChatConsole = gSavedSettings.getBOOL("PhoenixLogImToChatConsole");
-	gSavedSettings.getControl("PhoenixLogImToChatConsole")->getSignal()->connect(boost::bind(&LLIMHandler::updatePhoenixLogImToChatConsole, this, _2));
+	FSLogImToChatConsole = gSavedSettings.getBOOL("FSLogImToChatConsole");
+	gSavedSettings.getControl("FSLogImToChatConsole")->getSignal()->connect(boost::bind(&LLIMHandler::updateFSLogImToChatConsole, this, _2));
 }
 
 //--------------------------------------------------------------------------
@@ -68,9 +68,9 @@ void LLIMHandler::initChannel()
 	mChannel->init(channel_right_bound - channel_width, channel_right_bound);
 }
 
-void LLIMHandler::updatePhoenixLogImToChatConsole(const LLSD &data)
+void LLIMHandler::updateFSLogImToChatConsole(const LLSD &data)
 {
-	PhoenixLogImToChatConsole = data.asBoolean();
+	FSLogImToChatConsole = data.asBoolean();
 }
 
 //<Ansariel> better DN lookups
@@ -111,7 +111,7 @@ bool LLIMHandler::processNotification(const LLSD& notify)
 	if(!notification)
 		return false;
 
-	if (PhoenixLogImToChatConsole && gSavedSettings.getBOOL("PhoenixUseNearbyChatConsole"))
+	if (FSLogImToChatConsole && gSavedSettings.getBOOL("FSUseNearbyChatConsole"))
 	{
 		if(notify["sigtype"].asString() == "add" || notify["sigtype"].asString() == "change")
 		{

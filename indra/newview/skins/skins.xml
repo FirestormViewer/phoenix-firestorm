@@ -19,6 +19,13 @@
                 <key>folder</key>
                     <string>dark</string>
                 </map>
+                <!-- Thea Brianna's blue theme -->
+                <map>
+                <key>name</key>
+                    <string>Blue</string>
+                <key>folder</key>
+                    <string>Blue</string>
+                </map>
             </array>
         </map>
 		
@@ -139,6 +146,22 @@
                 <string>Droidstorm</string>
             <key>folder</key>
                 <string>droidstorm</string>
+            <key>themes</key>
+            <array>
+                <map>
+                    <key>name</key>
+                        <string>Default</string>
+                    <key>folder</key>
+                        <string>default</string>
+                </map>
+            </array>
+        </map>
+
+        <map>
+            <key>name</key>
+                <string>Pref Refactoring</string>
+            <key>folder</key>
+                <string>pref_work</string>
             <key>themes</key>
             <array>
                 <map>

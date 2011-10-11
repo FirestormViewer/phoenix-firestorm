@@ -350,11 +350,11 @@ LLVector3 LLManip::getPivotPoint()
 	LLVector3 pos;
 	LLVector3 scale;
 	LLQuaternion rot;
-	static LLCachedControl<bool> sActualRoot(gSavedSettings, "PhoenixBuildPrefs_ActualRoot", false);
-	static LLCachedControl<bool> sPivotPerc(gSavedSettings, "PhoenixBuildPrefs_PivotIsPercent", false);
-	static LLCachedControl<F32> sPivotX(gSavedSettings, "PhoenixBuildPrefs_PivotX");
-	static LLCachedControl<F32> sPivotY(gSavedSettings, "PhoenixBuildPrefs_PivotY");
-	static LLCachedControl<F32> sPivotZ(gSavedSettings, "PhoenixBuildPrefs_PivotZ");
+	static LLCachedControl<bool> sActualRoot(gSavedSettings, "FSBuildPrefs_ActualRoot", false);
+	static LLCachedControl<bool> sPivotPerc(gSavedSettings, "FSBuildPrefs_PivotIsPercent", false);
+	static LLCachedControl<F32> sPivotX(gSavedSettings, "FSBuildPrefs_PivotX");
+	static LLCachedControl<F32> sPivotY(gSavedSettings, "FSBuildPrefs_PivotY");
+	static LLCachedControl<F32> sPivotZ(gSavedSettings, "FSBuildPrefs_PivotZ");
 	
 	const BOOL children_ok = TRUE;
 	if (mObjectSelection->getFirstRootObject(children_ok) && (mObjectSelection->getObjectCount() == 1 || sActualRoot) && mObjectSelection->getSelectType() != SELECT_TYPE_HUD)

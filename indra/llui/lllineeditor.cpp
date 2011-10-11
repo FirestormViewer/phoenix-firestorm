@@ -215,7 +215,7 @@ LLLineEditor::~LLLineEditor()
 }
 void LLLineEditor::autoCorrectText()
 {
-	static LLCachedControl<bool> doAnything(gSavedSettings, "PhoenixEnableAutoCorrect");
+	static LLCachedControl<bool> doAnything(gSavedSettings, "FSEnableAutoCorrect");
 	if( (!mReadOnly) && (doAnything))// && (isDirty()))
 	{
 		S32 wordStart = 0;

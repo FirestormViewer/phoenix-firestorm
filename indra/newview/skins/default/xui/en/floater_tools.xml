@@ -362,7 +362,7 @@
      name="checkbox snap to grid"
      width="134" />
   <check_box
-     control_name="PhoenixBuildPrefs_ActualRoot"
+     control_name="FSBuildPrefs_ActualRoot"
      height="18"
      initial_value="false"
      label="Edit axis at root"

@@ -36,6 +36,7 @@
 
 #include "message.h"
 
+#include "llviewertexturelist.h"
 #include "llagent.h"
 #include "llavatarconstants.h"
 #include "llcheckboxctrl.h"
@@ -1143,6 +1144,10 @@ void LLFloaterPreference::buildPopupLists()
 
 void LLFloaterPreference::refreshEnabledState()
 {	
+	S32 min_tex_mem = LLViewerTextureList::getMinVideoRamSetting();
+	S32 max_tex_mem = LLViewerTextureList::getMaxVideoRamSetting();
+	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem);
+	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem);
 	LLComboBox* ctrl_reflections = getChild<LLComboBox>("Reflections");
 	LLRadioGroup* radio_reflection_detail = getChild<LLRadioGroup>("ReflectionDetailRadio");
 	

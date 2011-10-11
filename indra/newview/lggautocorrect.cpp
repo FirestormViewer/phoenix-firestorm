@@ -236,7 +236,7 @@ LLSD LGGAutoCorrect::getAutoCorrectEntries(std::string listName)
 }
 std::string LGGAutoCorrect::replaceWord(std::string currentWord)
 {
-	static LLCachedControl<bool> doAnything(gSavedSettings, "PhoenixEnableAutoCorrect");
+	static LLCachedControl<bool> doAnything(gSavedSettings, "FSEnableAutoCorrect");
 	if(!(doAnything))return currentWord;
 	//loop through priorities
 	for(int currentPriority = 10;currentPriority>=0;currentPriority--)
@@ -283,7 +283,7 @@ std::string LGGAutoCorrect::replaceWord(std::string currentWord)
 						args["REPLACEMENT"]=replacement;
 						LLNotificationsUtil::add("PhoenixAutoReplace",args);
 					}
-					gSavedSettings.setS32("PhoenixAutoCorrectCount",gSavedSettings.getS32("PhoenixAutoCorrectCount")+1);
+					gSavedSettings.setS32("FSAutoCorrectCount",gSavedSettings.getS32("FSAutoCorrectCount")+1);
 					llinfos << "found a word in list " << location.c_str() << " and it will replace  " << currentWord.c_str() << " => " << replacement.c_str() << llendl;
 					return replacement;
 				}
@@ -294,7 +294,7 @@ std::string LGGAutoCorrect::replaceWord(std::string currentWord)
 }
 std::string LGGAutoCorrect::replaceWords(std::string words)
 {
-	static LLCachedControl<bool> doAnything(gSavedSettings, "PhoenixEnableAutoCorrect");
+	static LLCachedControl<bool> doAnything(gSavedSettings, "FSEnableAutoCorrect");
 	if(!(doAnything))return words;
 	//TODO update this function to use the "wordStyle" thing,
 	//but so far this function is never used, so later

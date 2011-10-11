@@ -89,7 +89,7 @@ public:
 	static void startChat(const char* line);
 	static void stopChat();
 
-	void updatePhoenixPlayChatAnimation(const LLSD &data);
+	void updateFSPlayChatAnimation(const LLSD &data);
 
 protected:
 	void sendChat(EChatType type);
@@ -108,7 +108,7 @@ protected:
 
 	LLChatBarGestureObserver* mObserver;
 
-	BOOL			PhoenixPlayChatAnimation;
+	BOOL			FSPlayChatAnimation;
 };
 
 extern LLChatBar *gChatBar;

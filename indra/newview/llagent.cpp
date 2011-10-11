@@ -312,10 +312,10 @@ void LLAgent::init()
 
 	gSavedSettings.getControl("PreferredMaturity")->getValidateSignal()->connect(boost::bind(&LLAgent::validateMaturity, this, _2));
 	gSavedSettings.getControl("PreferredMaturity")->getSignal()->connect(boost::bind(&LLAgent::handleMaturity, this, _2));
-	ignorePrejump = gSavedSettings.getBOOL("PhoenixIgnoreFinishAnimation");
-	gSavedSettings.getControl("PhoenixIgnoreFinishAnimation")->getSignal()->connect(boost::bind(&LLAgent::updateIgnorePrejump, this, _2));
-	PhoenixForceFly = gSavedSettings.getBOOL("PhoenixAlwaysFly");
-	gSavedSettings.getControl("PhoenixAlwaysFly")->getSignal()->connect(boost::bind(&LLAgent::updatePhoenixForceFly, this, _2));
+	ignorePrejump = gSavedSettings.getBOOL("FSIgnoreFinishAnimation");
+	gSavedSettings.getControl("FSIgnoreFinishAnimation")->getSignal()->connect(boost::bind(&LLAgent::updateIgnorePrejump, this, _2));
+	PhoenixForceFly = gSavedSettings.getBOOL("FSAlwaysFly");
+	gSavedSettings.getControl("FSAlwaysFly")->getSignal()->connect(boost::bind(&LLAgent::updatePhoenixForceFly, this, _2));
 
 	mInitialized = TRUE;
 }

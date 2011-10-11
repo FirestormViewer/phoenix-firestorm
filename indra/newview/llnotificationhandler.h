@@ -157,7 +157,7 @@ public:
 	// base interface functions
 	virtual bool processNotification(const LLSD& notify);
 	
-	void updatePhoenixLogImToChatConsole(const LLSD &data);
+	void updateFSLogImToChatConsole(const LLSD &data);
 
 protected:
 	virtual void onDeleteToast(LLToast* toast);
@@ -172,7 +172,7 @@ protected:
 
 	void onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str);
 
-	BOOL PhoenixLogImToChatConsole;
+	BOOL FSLogImToChatConsole;
 };
 
 /**

@@ -127,7 +127,7 @@ public:
 	void setText(const LLStringExplicit &new_text);
 
 	void sendChat( EChatType type );
-	void updatePhoenixPlayChatAnimation(const LLSD &data);
+	void updateFSPlayChatAnimation(const LLSD &data);
 
 protected:
 	static BOOL matchChatTypeTrigger(const std::string& in_str, std::string* out_str);
@@ -148,7 +148,7 @@ protected:
 	LLOutputMonitorCtrl* mOutputMonitor;
 	LLLocalSpeakerMgr*  mSpeakerMgr;
 
-	BOOL			PhoenixPlayChatAnimation;
+	BOOL			FSPlayChatAnimation;
 };
 
 #endif

@@ -71,6 +71,7 @@ AOEngine::~AOEngine()
 
 void AOEngine::init()
 {
+	enable(mEnabled);
 }
 
 // static
@@ -544,6 +545,10 @@ void AOEngine::cycle(eCycleMode cycleMode)
 		animation=state->mAnimations[state->mCurrentAnimation].mAssetUUID;
 	}
 
+	// don't do anything if the animation didn't change
+	if(animation==oldAnimation)
+		return;
+
 	state->mCurrentAnimationID=animation;
 	if(!animation.isNull())
 	{
@@ -977,6 +982,7 @@ void AOEngine::update()
 
 		llwarns << "sending update signal" << llendl;
 		mUpdatedSignal();
+		enable(mEnabled);
 	}
 }
 

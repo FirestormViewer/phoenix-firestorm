@@ -29,7 +29,6 @@
 #include "llappviewer.h"
 
 // Viewer includes
-#include "aoengine.h"			// ## Zi: Animation Overrider
 #include "llversionviewer.h"
 #include "llversioninfo.h"
 #include "llfeaturemanager.h"
@@ -1146,11 +1145,6 @@ bool LLAppViewer::init()
 
 	LLAgentLanguage::init();
 
-	// ## Zi: Animation Overrider
-	setOnLoginCompletedCallback(boost::bind(&AOEngine::onLoginComplete));
-	llwarns << "AO on login callback set up." << llendl;
-	// ## Zi: Animation Overrider
-
 	return true;
 }
 
@@ -1669,7 +1663,7 @@ bool LLAppViewer::cleanup()
 	removeCacheFiles("*.tmp");
 	removeCacheFiles("*.lso");
 	removeCacheFiles("*.out");
-	if(!gSavedSettings.getBOOL("PhoenixKeepUnpackedCacheFiles"))
+	if(!gSavedSettings.getBOOL("FSKeepUnpackedCacheFiles"))
 	{
 		removeCacheFiles("*.dsf");
 	}
@@ -4708,7 +4702,7 @@ void LLAppViewer::idleShutdown()
 		static S32 total_uploads = 0;
 		// Sometimes total upload count can change during logout.
 		total_uploads = llmax(total_uploads, pending_uploads);
-		gViewerWindow->setShowProgress(!gSavedSettings.getBOOL("PhoenixDisableLogoutScreens"));
+		gViewerWindow->setShowProgress(!gSavedSettings.getBOOL("FSDisableLogoutScreens"));
 		S32 finished_uploads = total_uploads - pending_uploads;
 		F32 percent = 100.f * finished_uploads / total_uploads;
 		gViewerWindow->setProgressPercent(percent);
@@ -4722,7 +4716,7 @@ void LLAppViewer::idleShutdown()
 		sendLogoutRequest();
 
 		// Wait for a LogoutReply message
-		gViewerWindow->setShowProgress(!gSavedSettings.getBOOL("PhoenixDisableLogoutScreens"));
+		gViewerWindow->setShowProgress(!gSavedSettings.getBOOL("FSDisableLogoutScreens"));
 		gViewerWindow->setProgressPercent(100.f);
 		gViewerWindow->setProgressString(LLTrans::getString("LoggingOut"));
 		return;

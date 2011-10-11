@@ -244,7 +244,7 @@ void lggBeamMapFloater::onClickSave()
 	export_file.open(filename);
 	LLSDSerialize::toPrettyXML(main, export_file);
 	export_file.close();
-	gSavedSettings.setString("PhoenixBeamShape",gDirUtilp->getBaseFileName(filename,true));
+	gSavedSettings.setString("FSBeamShape",gDirUtilp->getBaseFileName(filename,true));
 
 	if(fspanel)
 	{

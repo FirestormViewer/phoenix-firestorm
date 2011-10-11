@@ -11,7 +11,7 @@
 
 FSKeywords::FSKeywords()
 {
-	gSavedPerAccountSettings.getControl("PhoenixKeywords")->getSignal()->connect(boost::bind(&FSKeywords::updateKeywords, this));
+	gSavedPerAccountSettings.getControl("FSKeywords")->getSignal()->connect(boost::bind(&FSKeywords::updateKeywords, this));
 	updateKeywords();
 }
 
@@ -21,7 +21,7 @@ FSKeywords::~FSKeywords()
 
 void FSKeywords::updateKeywords()
 {
-	std::string s = gSavedPerAccountSettings.getString("PhoenixKeywords");
+	std::string s = gSavedPerAccountSettings.getString("FSKeywords");
 	LLStringUtil::toLower(s);
 	boost::regex re(",");
 	boost::sregex_token_iterator begin(s.begin(), s.end(), re, -1), end;
@@ -34,12 +34,12 @@ void FSKeywords::updateKeywords()
 
 bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
 {
-	static LLCachedControl<bool> sPhoenixKeywordOn(gSavedPerAccountSettings, "PhoenixKeywordOn", false);
-	static LLCachedControl<bool> sPhoenixKeywordInChat(gSavedPerAccountSettings, "PhoenixKeywordInChat", false);
-	static LLCachedControl<bool> sPhoenixKeywordInIM(gSavedPerAccountSettings, "PhoenixKeywordInIM", false);
-	if (!sPhoenixKeywordOn ||
-	(is_local && !sPhoenixKeywordInChat) ||
-	(!is_local && !sPhoenixKeywordInIM))
+	static LLCachedControl<bool> sFSKeywordOn(gSavedPerAccountSettings, "FSKeywordOn", false);
+	static LLCachedControl<bool> sFSKeywordInChat(gSavedPerAccountSettings, "FSKeywordInChat", false);
+	static LLCachedControl<bool> sFSKeywordInIM(gSavedPerAccountSettings, "FSKeywordInIM", false);
+	if (!sFSKeywordOn ||
+	(is_local && !sFSKeywordInChat) ||
+	(!is_local && !sFSKeywordInIM))
 		return FALSE;
 
 	std::string source(chat.mText);
@@ -49,8 +49,8 @@ bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
 	{
 		if(source.find(mWordList[i]) != std::string::npos)
 		{
-			if(gSavedPerAccountSettings.getBOOL("PhoenixKeywordPlaySound"))
-				LLUI::sAudioCallback(LLUUID(gSavedPerAccountSettings.getString("PhoenixKeywordSound")));
+			if(gSavedPerAccountSettings.getBOOL("FSKeywordPlaySound"))
+				LLUI::sAudioCallback(LLUUID(gSavedPerAccountSettings.getString("FSKeywordSound")));
 
 			return true;
 		}

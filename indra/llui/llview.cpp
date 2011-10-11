@@ -706,6 +706,12 @@ BOOL LLView::handleToolTip(S32 x, S32 y, MASK mask)
 {
 	BOOL handled = FALSE;
 
+	// TS: Don't bother with a tooltip unless the app itself has focus.
+	if (!gFocusMgr.getAppHasFocus())
+	{
+		return TRUE;
+	}
+
 	// parents provide tooltips first, which are optionally
 	// overridden by children, in case child is mouse_opaque
 	if (!mToolTipMsg.empty())

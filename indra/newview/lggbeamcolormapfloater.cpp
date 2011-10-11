@@ -367,7 +367,7 @@ void lggBeamColorMapFloater::onClickSave()
 	LLSDSerialize::toPrettyXML(main, export_file);
 	export_file.close();
 
-	gSavedSettings.setString("PhoenixBeamColorFile", gDirUtilp->getBaseFileName(filename,true));
+	gSavedSettings.setString("FSBeamColorFile", gDirUtilp->getBaseFileName(filename,true));
 
 	if (fspanel != NULL)
 	{

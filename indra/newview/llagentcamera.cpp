@@ -909,7 +909,7 @@ void LLAgentCamera::cameraZoomIn(const F32 fraction)
 	F32 new_distance = current_distance * fraction;
 
 	// Freeing the camera movement some more -KC
-	static LLCachedControl<bool> disable_minconstraints(gSavedSettings,"PhoenixDisableMinZoomDist");
+	static LLCachedControl<bool> disable_minconstraints(gSavedSettings,"FSDisableMinZoomDist");
 	if (!disable_minconstraints)
 	{
 	// Don't move through focus point
@@ -985,7 +985,7 @@ void LLAgentCamera::cameraOrbitIn(const F32 meters)
 		F32 new_distance = current_distance - meters;
 		
 		// Freeing the camera movement some more -KC
-		static LLCachedControl<bool> disable_minconstraints(gSavedSettings,"PhoenixDisableMinZoomDist");
+		static LLCachedControl<bool> disable_minconstraints(gSavedSettings,"FSDisableMinZoomDist");
 		if (!disable_minconstraints)
         {
 		F32 min_zoom = LAND_MIN_ZOOM;
@@ -1681,7 +1681,7 @@ F32	LLAgentCamera::calcCameraFOVZoomFactor()
 		LLVector3 focus_offset = mFocusObjectOffset;
 		F32 obj_min_dist = 0.f;
 		// Freeing the camera movement some more -KC
-		static LLCachedControl<bool> disable_minconstraints(gSavedSettings,"PhoenixDisableMinZoomDist");
+		static LLCachedControl<bool> disable_minconstraints(gSavedSettings,"FSDisableMinZoomDist");
 		if (!disable_minconstraints)
 			calcCameraMinDistance(obj_min_dist);
 		F32 current_distance = llmax(0.001f, camera_offset_dir.magVec());
