@@ -73,6 +73,10 @@
 #include "llsidetray.h"
 #include "lggcontactsets.h"
 
+#include "llnotificationsutil.h"
+#include "llnotificationmanager.h"
+#include "llavataractions.h"
+
 static LLDefaultChildRegistry::Register<LLNetMap> r1("net_map");
 
 const F32 LLNetMap::MAP_SCALE_MIN = 32;
@@ -136,6 +140,7 @@ BOOL LLNetMap::postBuild()
 	registrar.add("Minimap.Mark", boost::bind(&LLNetMap::handleMark, this, _2));
 	registrar.add("Minimap.ClearMarks", boost::bind(&LLNetMap::handleClearMarks, this));
 	// </Ansariel>
+	registrar.add("Minimap.Cam", boost::bind(&LLNetMap::handleCam, this));
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	return TRUE;
 }
@@ -539,6 +544,7 @@ void LLNetMap::draw()
 			if(dist_to_cursor_squared < min_pick_dist_squared && dist_to_cursor_squared < closest_dist_squared)
 			{
 				mClosestAgentToCursor = gAgent.getID();
+				mClosestAgentPosition = pos_global;
 			}
 
 			// Draw chat range ring(s)
@@ -1208,6 +1214,7 @@ void LLNetMap::setAvatarMark(const LLSD& userdata)
 void LLNetMap::saveClosestAgentAtLastRightClick()
 {
 	mClosestAgentAtLastRightClick = mClosestAgentToCursor;
+	mClosestAgentAtLastRightClickPos = mClosestAgentPosition;
 }
 
 void LLNetMap::clearAvatarMarks()
@@ -1215,3 +1222,26 @@ void LLNetMap::clearAvatarMarks()
 	LLNetMap::sAvatarMarksMap.clear();
 }
 //</Ansariel>
+
+void LLNetMap::camAvatar()
+{
+	F32 range = dist_vec(mClosestAgentAtLastRightClickPos, gAgent.getPositionGlobal());
+	if (range > gSavedSettings.getF32("RenderFarClip"))
+	{
+		LLChat chat;
+		chat.mText = "The camera cannot focus on user because they are outside your draw distance.";
+		chat.mSourceType = CHAT_SOURCE_SYSTEM;
+		LLSD args;
+		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+	}
+	else
+	{
+		LLAvatarActions::zoomIn(mClosestAgentAtLastRightClick);
+	}
+}
+
+void LLNetMap::handleCam()
+{
+	camAvatar();
+}

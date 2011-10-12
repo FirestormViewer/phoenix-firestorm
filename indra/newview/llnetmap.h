@@ -126,6 +126,7 @@ private:
 	LLUUID			mClosestAgentAtLastRightClick;
 
 	LLVector3d		mClosestAgentPosition;
+	LLVector3d		mClosestAgentAtLastRightClickPos;
 
 	std::string		mToolTipMsg;
 
@@ -136,12 +137,14 @@ public:
 	void			setAvatarMark(const LLSD& userdata);
 	void			saveClosestAgentAtLastRightClick();
 	void			clearAvatarMarks();
+	void			camAvatar();
 
 private:
 	void handleZoom(const LLSD& userdata);
 	void handleStopTracking (const LLSD& userdata);
 	void handleMark(const LLSD& userdata);
 	void handleClearMarks();
+	void handleCam();
 
 	LLMenuGL*		mPopupMenu;
 	uuid_vec_t		gmSelected;
