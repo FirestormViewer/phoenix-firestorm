@@ -112,6 +112,8 @@ BOOL LLFloaterMap::postBuild()
 	registrar.add("Minimap.Mark", boost::bind(&LLFloaterMap::handleMark, this, _2));
 	registrar.add("Minimap.ClearMarks", boost::bind(&LLFloaterMap::handleClearMarks, this));
 
+	registrar.add("Minimap.Cam", boost::bind(&LLFloaterMap::handleCam, this));
+
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if (mPopupMenu && !LLTracker::isTracking(0))
 	{
@@ -346,6 +348,11 @@ void LLFloaterMap::handleMark(const LLSD& userdata)
 void LLFloaterMap::handleClearMarks()
 {
 	mMap->clearAvatarMarks();
+}
+
+void LLFloaterMap::handleCam()
+{
+	mMap->camAvatar();
 }
 
 void LLFloaterMap::handleStopTracking (const LLSD& userdata)
