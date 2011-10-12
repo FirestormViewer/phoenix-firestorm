@@ -1970,7 +1970,7 @@ void LLLiveLSLEditor::uploadAssetViaCapsStatic(const std::string& url,
 {
 	LLSD body;
 	body["item_id"] = item_id;
-	body["target"] = "lsl2";
+	body["target"] = is_mono.c_str();
 	llinfos << "Upload caps body=" << body << " url=" << url << " id= " << item_id << llendl;
 	LLHTTPClient::post(url, body, 
 		new LLUpdateAgentInventoryResponder(body, filename, LLAssetType::AT_LSL_TEXT));
