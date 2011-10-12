@@ -73,4 +73,5 @@
 	<check_box label="Nach dem Speichern offen lassen" name="keep_open_check"/>
 	<check_box label="Frame einfrieren (Vollbild)" name="freeze_frame_check"/>
 	<check_box label="Automatisch aktualisieren" name="auto_snapshot_check"/>
+	<check_box label="Temporäres Foto (kostenlos)" name="temp_check"/>
 </floater>
