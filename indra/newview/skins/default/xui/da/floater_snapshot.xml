@@ -11,7 +11,7 @@
 	<text name="file_size_label">
 		[SIZE] KB
 	</text>
-	<button label="Tag nyt foto" name="new_snapshot_btn"/>
+	<button label="Tag nyt" name="new_snapshot_btn"/>
 	<button label="Send" name="send_btn"/>
 	<button label="Gem" name="upload_btn"/>
 	<flyout_button label="Gem" name="save_btn" tool_tip="Gem billede til en fil">

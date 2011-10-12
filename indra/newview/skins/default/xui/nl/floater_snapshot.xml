@@ -11,7 +11,7 @@
 	<text name="file_size_label">
 		Bestandsgrootte: [SIZE] KB
 	</text>
-	<button label="Ververs foto" name="new_snapshot_btn"/>
+	<button label="Ververs" name="new_snapshot_btn"/>
 	<button label="Verzenden" name="send_btn"/>
 	<button label="Opslaan" name="upload_btn"/>
 	<flyout_button label="Opslaan" name="save_btn" tool_tip="Afbeelding in een bestand opslaan">
