@@ -113,6 +113,10 @@ public:
 	S32  getAvStatus();
 	void setFirstSeen(time_t seenTime);
 	time_t	 getFirstSeen();
+	void setLastZOffsetTime(time_t oTime);
+	time_t	getLastZOffsetTime();
+	void setZOffset(F32 offset);
+	F32  getZOffset();
 	void showDisplayName(bool show);
 	void showFirstSeen(bool show);
 	void showStatusFlags(bool show);
@@ -268,10 +272,12 @@ private:
 
 	LLUUID	mAvatarId;
 	time_t	mFirstSeen;
+	time_t	mLastZOffsetTime;
+	F32	mZOffset;
 	S32	mAvStatus;
 	LLVector3d mAvPosition;
 	S32	mAvatarAge;
-	F32 mDistance;
+	F32 	mDistance;
 	
 	std::string mHighlihtSubstring; // substring to highlight
 	EOnlineStatus mOnlineStatus;

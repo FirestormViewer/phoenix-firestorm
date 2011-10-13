@@ -84,11 +84,11 @@
     <button
      follows="left|top"
      height="22"
-     image_overlay="Refresh_Off"
+     label="Refresh"
      layout="topleft"
      left="10"
      name="new_snapshot_btn"
-     width="23" />
+     width="80" />
     <button
      follows="left|top"
      height="23"

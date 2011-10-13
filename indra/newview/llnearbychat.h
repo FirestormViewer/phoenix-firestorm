@@ -75,6 +75,7 @@ public:
 	void setDocked(bool docked, bool pop_on_undock = true);
 	
 	BOOL getVisible();
+	void doSendMsg( std::string msg, EChatType type);
 	static void onSendMsg( LLUICtrl*, void*);
 	void sendMsg();
 

@@ -96,6 +96,8 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	mShowDisplayName(true),
 	mShowUsername(true),
 	mFirstSeen(time(NULL)),
+	mLastZOffsetTime(time(NULL)),
+	mZOffset(0),
 	mAvStatus(0),
 	mAvPosition(LLVector3d(0.0f,0.0f,0.0f)),
 	mShowFirstSeen(false),
@@ -486,6 +488,26 @@ time_t LLAvatarListItem::getFirstSeen()
 void LLAvatarListItem::setFirstSeen(time_t seentime)
 {
 	mFirstSeen = seentime;
+}
+
+time_t LLAvatarListItem::getLastZOffsetTime()
+{
+	return mLastZOffsetTime;
+}
+
+void LLAvatarListItem::setLastZOffsetTime(time_t oTime)
+{
+	mLastZOffsetTime = oTime;
+}
+
+F32	LLAvatarListItem::getZOffset()
+{
+	return mZOffset;
+}
+
+void LLAvatarListItem::setZOffset(F32 offset)
+{
+	mZOffset = offset;
 }
 
 void LLAvatarListItem::setAvatarIconVisible(bool visible)

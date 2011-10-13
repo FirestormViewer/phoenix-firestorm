@@ -11,7 +11,7 @@
 	<text name="file_size_label">
 		[SIZE] KB
 	</text>
-	<button label="Aggiorna la fotografia" name="new_snapshot_btn"/>
+	<button label="Aggiorna" name="new_snapshot_btn"/>
 	<button label="Invia" name="send_btn"/>
 	<button label="Salva" name="upload_btn"/>
 	<flyout_button label="Salva" name="save_btn" tool_tip="Salva immagine come file">

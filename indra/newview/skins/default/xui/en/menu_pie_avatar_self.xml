@@ -268,7 +268,15 @@
         </pie_slice>
 
         <pie_separator />
-        <pie_separator />
+
+        <pie_slice
+            enabled="true"
+            label="Tex Refresh"
+            name="Texture Refresh">
+            <pie_slice.on_click
+                function="Avatar.TexRefresh" />
+        </pie_slice>
+
         <pie_separator />
 
         <pie_slice label="Edit Outfit"
