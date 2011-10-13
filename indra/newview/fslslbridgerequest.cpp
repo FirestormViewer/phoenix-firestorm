@@ -29,6 +29,13 @@
 #include "fslslbridge.h"
 #include "llagent.h"  // for gAgent
 #include "llhttpclient.h"
+#include <string>
+#include <boost/tokenizer.hpp> // for radar 
+#include "llpanel.h"
+#include "llpanelpeople.h"
+#include "llavatarlist.h"
+#include "llavatarlistitem.h"
+#include "llsidetray.h"
 
 #ifdef LL_STANDALONE
 #include <expat.h>
@@ -80,5 +87,41 @@ void FSLSLBridgeRequestResponder::error(U32 status, const std::string& reason)
 	<< status << ": " << reason << ")" << llendl;
 }
 
+
+// AO: The below handler is used to parse return data from the bridge, requesting bulk ZOffset updates.
+FSLSLBridgeRequestRadarPosResponder::FSLSLBridgeRequestRadarPosResponder()
+{
+}
+void FSLSLBridgeRequestRadarPosResponder::result(const LLSD& content)
+{
+	LLPanel* panel_people = LLSideTray::getInstance()->getPanel("panel_people");
+	if (panel_people)
+	{
+		LLAvatarList* nearbyList = ((LLPanelPeople*)panel_people)->getNearbyList();
+		
+		std::string strContent = content.asString();
+		//llinfos << "Got info: " << strContent << llendl;	
+		// AO: parse content into pairs of [agent UUID,agent zHeight] , update our peoplepanel radar for each one
+		
+		LLUUID targetAv;
+		F32 targetZ;
+		
+		typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+		boost::char_separator<char> sep(", "); 
+		tokenizer tokens(strContent,sep);
+		for (tokenizer::iterator tok_iter=tokens.begin(); tok_iter != tokens.end();++tok_iter)
+		{
+			targetAv = LLUUID(*(tok_iter++));
+			targetZ = (F32)::atof((*tok_iter).c_str());
+			
+			LLAvatarListItem* avListItem = nearbyList->getAvatarListItem(targetAv);
+			if (avListItem != NULL)
+			{
+				avListItem->setZOffset((F32)(targetZ));
+				//llinfos << targetAv << " ::: " << targetZ << llendl;
+			}
+		}
+	}
+}
 
 

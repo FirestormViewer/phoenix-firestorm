@@ -46,7 +46,8 @@ class LLMenuButton;
 class LLMenuGL;
 
 const U32	MAX_AVATARS_PER_ALERT = 7; // maximum number of UUIDs we can cram into a single channel radar alert message
-const U32	COARSE_OFFSET_INTERVAL = 31; // seconds after which we query the bridge for a coarse location adjustment
+const U32	COARSE_OFFSET_INTERVAL = 7; // seconds after which we query the bridge for a coarse location adjustment
+const U32   MAX_OFFSET_REQUESTS = 60; // 2048 / UUID size, leaving overhead space
 const U32	NAMEFORMAT_DISPLAYNAME = 0;
 const U32	RADAR_CHAT_MIN_SPACING = 6; //minimum delay between radar chat messages
 
@@ -179,7 +180,7 @@ private:
 	LLAvatarList*			mRecentList;
 	LLGroupList*			mGroupList;
 	LLRadarListCtrl*		mRadarList;
-	LLNetMap*			mMiniMap;
+	LLNetMap*				mMiniMap;
 
 	LLHandle<LLView>		mGroupPlusMenuHandle;
 	LLHandle<LLView>		mNearbyViewSortMenuHandle;
@@ -208,19 +209,23 @@ private:
 	{
 		std::string avName;
 		F32			lastDistance;
-		LLVector3d		lastGlobalPos;
-		LLUUID			lastRegion;
-		time_t			firstSeen;
+		LLVector3d	lastGlobalPos;
+		LLUUID		lastRegion;
+		time_t		firstSeen;
 		S32			lastStatus;
-		S32			coarseOffset;
+		U32			ZOffset;
+		time_t		lastZOffsetTime;
+		
 	}; 
 	std::multimap < LLUUID, radarFields > lastRadarSweep;
 	std::vector <LLUUID>	mRadarEnterAlerts;
 	std::vector <LLUUID>	mRadarLeaveAlerts;
+	std::vector <LLUUID>	mRadarOffsetRequests;
 	 	
 	S32					mRadarFrameCount;
 	bool				mRadarAlertRequest;
 	F32					mRadarLastRequestTime;
+	U32					mRadarLastBulkOffsetRequestTime;
 };
 
 #endif //LL_LLPANELPEOPLE_H

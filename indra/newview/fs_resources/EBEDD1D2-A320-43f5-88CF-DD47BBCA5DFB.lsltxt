@@ -1,4 +1,4 @@
-//http bridge script v.1.9
+//http bridge script v.2.0
 //Firestorm
 //Tozh Taurog, Arrehn Oberlander
 
@@ -8,9 +8,9 @@
     // Shared
     integer timerMask;        // Every function that shares the timer needs a TIMER_ entry below.
     float   timerInterval;    // float, seconds. Always set this when using llSetTimerEvent
-    float   timerElapsed;    // floats, seconds since last tick.
-    integer TIMER_TYPE_NONE = 0;
-    integer TIMER_TYPE_TP = 1;
+    float   timerElapsed;     // floats, seconds since last tick.
+    integer TIMER_TYPE_NONE   = 0;
+    integer TIMER_TYPE_TP     = 1;
     integer TIMER_TYPE_FLIGHT = 2;
         
     
@@ -20,10 +20,8 @@
     integer META_CONTROL = 1024;     //control value to do nothing; for no-script sims
     string  bridgeURL;
     string  latestURL;
-    integer channel = 99;
     integer debug = FALSE;
     integer httpStatus = 200;
-    //key httpReqID;
     integer keyViewerHandshake;
     integer tryHandshakeOnce = TRUE;
     key owner;
@@ -32,15 +30,9 @@
     // Teleport 
     integer MAX_TIME_TO_TP = 10;     // (seconds) should be set to 10 for normal use
     float   TP_TIMER_TICK = 0.05;
-
     vector  mttVector;               // target for llMoveToTarget() teleport
     integer startTPTimer;
     
-    // Object details (improved radar)
-    vector  opVector;                // object position for llGetobjectDetails()
-    key     opUUID;                  // key for llGetobjectDetails()
-    list    opObjDetails;            // result for llGetobjectDetails()
-
     // Flight assist
     float   MIN_SPEED = 2.0;
     float   WANT_SPEED = 20.0;
@@ -53,7 +45,6 @@
     float   MIN_BOOST_HEIGHT = 72.0;
     float   MIN_BOOST_CLEARANCE = 36.0;
     integer useFlightAssist = FALSE;
-    integer pendingFlightFeather = 0;
     float   last_alt;
     float   last_time;
     float   last_move;
@@ -62,7 +53,6 @@
     integer flying = -1;
     integer falling = -1;
     integer hovering = -1;
-    integer dimmed = -1;
     float   last_boost_height;
     float   average_boost;
     
@@ -103,7 +93,7 @@
     initBridge()
     {
         llRequestURL();
-        debugOutput("rezzed");
+        //debugOutput("rezzed");
         owner = llGetOwner();
         
         // Disable all secondary stateful services
@@ -122,7 +112,7 @@
         // if we were last flying reinitialize ourself    
         if (useFlightAssist)
         {
-            debugOutput("Flight assist true, going to flight_init");
+            //debugOutput("Flight assist true, going to flight_init");
             flight_init();
         }
     }
@@ -134,23 +124,16 @@
     
     parseCommand(key httpReqID, string msg)
     {
-        debugOutput("Parsing original input: " + msg);
-        //remove the <llsd> </llsd> wrapper
-        integer end = llStringLength(msg) - llStringLength("</llsd>") -1;        
-        string inner = llGetSubString(msg, 6, end - 1);
-        
-        debugOutput("Parsing inner string: " + inner);
-        //remove the <string> </string> wrapper
-        end = llStringLength(inner) - llStringLength("</string>") -1;
-        string msgClean = llGetSubString(inner, 8, end);
-        
-        debugOutput("Parsing final string: " + msgClean);
-        list commandList = llParseString2List(msgClean,["|"],[]);
-        //get command name
+        //debugOutput("Parsing original input: " + msg);
+        //remove the <llsd><string> ... </string></llsd> wrapper
+        integer end = llStringLength(msg) - 18;        
+        integer start = 14;
+        //debugOutput("Parsing inner string: " + llGetSubString(msg, start, end));
+        list commandList = llParseString2List(llGetSubString(msg,start,end),["|"],[]);
+        //debugOutput("Parsing command list: " +  (string)commandList);
         string cmd = llList2String(commandList,0);
         
-        debugOutput("Parsing command: " + cmd);
- 
+        //debugOutput("Parsing command: " + cmd);
         //Large If statement for command processing. Shame on you, LSL!
         if (cmd == "URL Confirmed")
         {
@@ -161,36 +144,34 @@
         
         if (cmd == "UseLSLFlightAssist")
         {
-            string params = "<" + llList2String(commandList,1) + ">";
-            debugOutput("Parsing params: " + params);
+            //debugOutput("Parsing params: " + llList2String(commandList,1));
             integer newstatus = llList2Integer(commandList,1);
             if (newstatus != useFlightAssist)
-	    {            	
-	            useFlightAssist = newstatus;
-	            if (useFlightAssist)
-	            {
-			    	debugOutput("Flight assist true, going to flight_init");
-	            	flight_init();
-	            }
-	            else
-	            {
-	                debugOutput("Flight assist false, removing flag");
-	                if (timerMask & TIMER_TYPE_FLIGHT)
-	                {
-	                    debugOutput("timerMask & TIMER_FLIGHT");
-	                    timerMask = timerMask ^ TIMER_TYPE_FLIGHT; // remove flight from event counter
-		        }
-	            }
-	     }
+	           {            	
+	               useFlightAssist = newstatus;
+	               if (useFlightAssist)
+	               {
+			    	             //debugOutput("Flight assist true, going to flight_init");
+	            	      flight_init();
+	               }
+	               else
+	               {
+	                   //debugOutput("Flight assist false, removing flag");
+	                   if (timerMask & TIMER_TYPE_FLIGHT)
+	                   {
+	                       //debugOutput("timerMask & TIMER_FLIGHT");
+	                       timerMask = timerMask ^ TIMER_TYPE_FLIGHT; // remove flight from event counter
+		                  }
+	               }
+	           }
         }
     
         else if (cmd == "llMoveToTarget")
         {
             // Get parameters
             string params = "<" + llList2String(commandList,1) + ">";
-            debugOutput("Parsing params: " + params);
             mttVector=(vector)params;
-            debugOutput("Parsing vector: " + (string)mttVector);
+            //debugOutput("Parsing vector: " + (string)mttVector);
             startTPTimer = llGetUnixTime();
               
               // tp commands immediately configure a TP timer consumer
@@ -204,22 +185,33 @@
             //llHTTPResponse(httpReqID, httpStatus, "<llsd><string>test response from llMoveToTarget</string></llsd>");
         }// "llMoveToTarget"
         
-        else if (cmd == "llGetObjectDetails")
+        else if (cmd == "getZOffsets") 
+        // Radar-specific command to get high-rez altitude data. 
+        // Input is list of UUIDs to query
+        // Output is list of UUID:Altitude pairs
         {
             // Get parameters
-            opUUID = (key)llList2String(commandList, 1);
-        
-            //string opV = "<" + llList2String(commandList,2) + ">";
-            //debugOutput("Parsing params: " + opV);
-        
-            //opVector=(vector)opV;
-            //debugOutput("Parsing vector: " + (string)opVector);
-        
-            opObjDetails = llGetObjectDetails(opUUID, ([OBJECT_POS]));
-            string body = "<llsd><string>" + llList2String(opObjDetails,0) + "</string></llsd>";
+            list    tUUIDs = llCSV2List(llList2String(commandList, 1));
+            commandList=[]; // free memory
+            integer tLength = llGetListLength(tUUIDs);
+            key     tUUID;  // key for llGetobjectDetails()
+            vector  tPos;                  
+            integer i = 0;
+            list    responses;
+            
+            for (i = 0; i < tLength; ++i) 
+            {
+                tUUID = (key)llList2String(tUUIDs,i);
+                tPos = llList2Vector(llGetObjectDetails(tUUID, ([OBJECT_POS])),0);
+                if (tPos.z > 1023) // we only care about results at higher altitudes.
+                    responses = (responses=[]) + responses + tUUID + tPos.z;  //LSO memhack
+            }
+            tUUIDs=[]; // free memory
+            string body = "<llsd><string>" +llList2CSV(responses) + "</string></llsd>";
+            responses=[]; // free memory
             llHTTPResponse(httpReqID, httpStatus, body);
  
-        }// "llGetObjectDetails"
+        }// "getZOffsets"
  
         else if ( cmd == "getScriptInfo")
         {
@@ -257,12 +249,11 @@
     
     tpMoveStep()
     {        
-        vector loc = llGetPos();     // current position        
+        vector loc = llGetPos();          
         vector targ = mttVector - loc;
-        //has to be less than 65m
         float dist = llVecMag(targ);
         
-        debugOutput("current: " + (string)loc + " target: " + (string)targ + " tp distance: " + (string)dist);
+        //debugOutput("current: " + (string)loc + " target: " + (string)targ + " tp distance: " + (string)dist);
         
         //if we are out of time or distance - stop
         if((dist < 2.0) ||  (llGetUnixTime() - MAX_TIME_TO_TP > startTPTimer) || (mttVector == loc))
@@ -274,12 +265,12 @@
         {
             if (dist < 65)
             {
-                debugOutput("One jump to :" + (string)mttVector);
+                //debugOutput("One jump to :" + (string)mttVector);
                 llMoveToTarget(mttVector, TP_TIMER_TICK);
             }
             else
             {
-                debugOutput("Multiple jump to :" + (string)(loc+llVecNorm(targ)*60));
+                //debugOutput("Multiple jump to :" + (string)(loc+llVecNorm(targ)*60));
                 llMoveToTarget(loc+llVecNorm(targ)*60, TP_TIMER_TICK);
             }
         }
@@ -303,7 +294,7 @@
 
     flight_set_hover(integer active)
     {
-        debugOutput("Flight:set_hover " + (string)active);
+        //debugOutput("Flight:set_hover " + (string)active);
 
         if(active == hovering) return;
         hovering = active;
@@ -316,7 +307,7 @@
     flight_set_tick(float tick)
     // positively intializes a spot for us in the eventTimer.
     {
-        debugOutput("Flight:set_tick " + (string)tick);
+        //debugOutput("Flight:set_tick " + (string)tick);
         
         timerMask = timerMask | TIMER_TYPE_FLIGHT;
         timerInterval = tick;
@@ -332,8 +323,7 @@
         
     flight_check_boost()
     {
-        debugOutput("Flight:check_boost ");         
-
+        //debugOutput("Flight:check_boost ");         
         
         flying = 1;
         falling = 0;
@@ -342,7 +332,7 @@
         // Sleep if not flying
         if((info & AGENT_FLYING) == 0)
         {
-            debugOutput("not flying");
+            //debugOutput("not flying");
             flight_set_hover(FALSE);
             falling = (info & AGENT_IN_AIR) != 0;
             flying = 0;
@@ -354,7 +344,7 @@
         // Sleep if we don't have controls
         if(controls <= 0)
         {
-            debugOutput("no controls");
+            //debugOutput("no controls");
             flight_set_tick(SLOW_TICK);
             return;
         } 
@@ -437,7 +427,7 @@
             
     flight_init()
     {
-        debugOutput("Flight:init ");
+        //debugOutput("Flight:init ");
         flight_set_hover(FALSE);
             
         // initialize flight vars
@@ -461,7 +451,7 @@ default
     {
         makeSane();
         initBridge();
-
+        //llOwnerSay((string)llGetFreeMemory());
     }
     
     on_rez(integer i)
@@ -478,11 +468,6 @@ default
             tryHandshakeOnce = TRUE;
             initBridge();
         }
-    }
-    
-    touch_start(integer total_number)
-    {
-        debugOutput("touched");
     }
     
     run_time_permissions(integer i)
@@ -516,7 +501,7 @@ default
         if (change & CHANGED_REGION) 
         {
             llRequestURL();
-            debugOutput("The region the bridge is in has changed.");
+            //debugOutput("The region the bridge is in has changed.");
         }
         if (change & CHANGED_INVENTORY)
         {
@@ -526,7 +511,7 @@ default
     
     timer()
     {
-        debugOutput("tick. mask = "+(string)timerMask);
+        //debugOutput("tick. mask = "+(string)timerMask);
         // Multiple functions may have to share the timer
         // Do not assume you know the timer interval in advance.
         // Each consumer will have to check whether the interval that has passed
@@ -556,18 +541,18 @@ default
     http_request(key ID, string Method, string Body) 
     {
         //httpReqID = ID;
-        debugOutput("Received HTTP " + Method + " message. Command body: " + Body);
+        //debugOutput("Received HTTP " + Method + " message. Command body: " + Body);
         
        if (Method == URL_REQUEST_GRANTED) 
         {
             saveNewURL(Body);
 
-            debugOutput ("keyViewerHandshake " + (string)keyViewerHandshake + " tryHandshakeOnce " + (string)tryHandshakeOnce);
+            //debugOutput ("keyViewerHandshake " + (string)keyViewerHandshake + " tryHandshakeOnce " + (string)tryHandshakeOnce);
             //Saying URL to owner
            if (keyViewerHandshake == FIRESTORM_VIEWER || tryHandshakeOnce == 1)
             {
-                debugOutput ("Firestorm viewer and handshake");
-		llOwnerSay("<bridgeURL>" + latestURL+ "</bridgeURL>");
+                //debugOutput ("Firestorm viewer and handshake");
+		               llOwnerSay("<bridgeURL>" + latestURL+ "</bridgeURL>");
                 tryHandshakeOnce = 0;
             }
             else
@@ -580,7 +565,7 @@ default
         {
             saveNewURL("");
 
-            debugOutput("No URLs free !");
+            //debugOutput("No URLs free !");
             //keep trying?
             llRequestURL();
         }

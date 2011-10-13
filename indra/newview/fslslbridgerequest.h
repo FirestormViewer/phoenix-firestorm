@@ -60,4 +60,19 @@ public:
 	virtual void error(U32 status, const std::string& reason);
 };
 
+
+//
+// Responder used by radar for position lookups
+//
+
+class FSLSLBridgeRequestRadarPosResponder : public FSLSLBridgeRequestResponder
+{
+public:
+	FSLSLBridgeRequestRadarPosResponder(); 
+	//If we get back a normal response, handle it here
+	void result(const LLSD& content);
+};
+
+
+
 #endif // FS_LSLBRIDGEREQUEST_H
