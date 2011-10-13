@@ -524,41 +524,49 @@ void LLNearbyChat::onInputEditorKeystroke(LLLineEditor* caller, void* userdata)
 		}
 	}
 }
+
+void LLNearbyChat::doSendMsg( std::string msg, EChatType type )
+{
+	LLNearbyChatBar* masterBar = LLNearbyChatBar::getInstance();
+	std::string masterText = masterBar->getCurrentChat();
+	masterBar->setText(msg);
+	masterBar->sendChat(type);
+	mInputEditor->setText(LLStringExplicit(""));
+	masterBar->setText(masterText);
+}
+
 void LLNearbyChat::onSendMsg( LLUICtrl* ctrl, void* userdata )
 {
 	LLNearbyChat* self = (LLNearbyChat*)userdata;
-	LLNearbyChatBar* masterBar = LLNearbyChatBar::getInstance();
-	std::string masterText = masterBar->getCurrentChat();
 	std::string sendText = self->mInputEditor->getText();
-	masterBar->setText(sendText);
-	masterBar->sendChat(CHAT_TYPE_NORMAL);
-	self->mInputEditor->setText(LLStringExplicit(""));
-	masterBar->setText(masterText);
+	self->doSendMsg(sendText,CHAT_TYPE_NORMAL);
 }
 
 // virtual
 BOOL LLNearbyChat::handleKeyHere( KEY key, MASK mask )
 {
 	BOOL handled = FALSE;
+	EChatType type = CHAT_TYPE_NORMAL; // won't get used as such
 
 	if( KEY_RETURN == key )
 	{
+		llinfos << "Handling return key, mask=" << mask << llendl;
 		if (mask == MASK_CONTROL)
 		{
 			// shout
-			LLNearbyChatBar::getInstance()->sendChat(CHAT_TYPE_SHOUT);
+			type = CHAT_TYPE_SHOUT;
 			handled = TRUE;
 		}
 		else if (mask == MASK_SHIFT)
 		{
 			// whisper
-			LLNearbyChatBar::getInstance()->sendChat(CHAT_TYPE_WHISPER);
+			type = CHAT_TYPE_WHISPER;
 			handled = TRUE;
 		}
 		else if (mask == MASK_ALT)
 		{
 			// OOC
-			LLNearbyChatBar::getInstance()->sendChat(CHAT_TYPE_OOC);
+			type = CHAT_TYPE_OOC;
 			handled = TRUE;
 		}
 		// Ansariel: For some reason we don't get an unmasked return here.
@@ -567,12 +575,15 @@ BOOL LLNearbyChat::handleKeyHere( KEY key, MASK mask )
 		//else if (mask == MASK_NONE)
 		//{
 		//	// say
-		//	LLNearbyChatBar::getInstance()->sendChat(CHAT_TYPE_NORMAL);
+		//	type = CHAT_TYPE_NORMAL;
 		//	handled = TRUE;
 		//}
 	}
 
-	if (handled == TRUE) mInputEditor->setText(LLStringExplicit(""));
+	if (handled == TRUE)
+	{
+		doSendMsg(mInputEditor->getText(),type);
+	}
 
 	return handled;	
 }
