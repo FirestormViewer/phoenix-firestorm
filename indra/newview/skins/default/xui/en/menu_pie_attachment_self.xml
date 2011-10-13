@@ -22,7 +22,13 @@
         name="Attachment Pie More"
         label="More &gt;">
 
-        <pie_separator />
+        <pie_slice
+            enabled="true"
+            label="Tex Refresh"
+            name="Texture Refresh">
+            <pie_slice.on_click
+                function="Object.TexRefresh" />
+        </pie_slice>
         <pie_slice
             enabled="true"
             label="Script Info"
