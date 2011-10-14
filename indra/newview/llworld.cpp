@@ -923,7 +923,7 @@ void LLWorld::updateWaterObjects()
 
 		waterp->setRegion(gAgent.getRegion());
 		LLVector3d water_pos(water_center_x, water_center_y, 
-			DEFAULT_WATER_HEIGHT+256.f);
+			gAgent.getRegion()->getWaterHeight()+256.f);
 		LLVector3 water_scale((F32) dim[0], (F32) dim[1], 512.f);
 
 		//stretch out to horizon
