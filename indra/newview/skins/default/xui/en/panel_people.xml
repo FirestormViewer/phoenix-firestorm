@@ -11,6 +11,33 @@
  name="people_panel"
  top="0"
  width="333">
+	<string
+	  name="high_server_load"
+	  value="Due to server load, mass toggling visibility can take a while to become effective. Please be patient."/>
+	<string
+	  name="camera_no_focus"
+	  value="The camera cannot focus user [AVATARNAME] because they are outside your draw distance."/>
+	<string
+	  name="entering_draw_distance"
+	  value="[AVATARNAME] entered draw distance ([DISTANCE] m)."/>
+	<string
+	  name="leaving_draw_distance"
+	  value="[AVATARNAME] left draw distance."/>
+	<string
+	  name="entering_chat_range"
+	  value="[AVATARNAME] entered chat range ([DISTANCE] m)."/>
+	<string
+	  name="leaving_chat_range"
+	  value="[AVATARNAME] left chat range."/>
+	<string
+	  name="entering_region"
+	  value="[AVATARNAME] entered the region."/>
+	<string
+	  name="entering_region_distance"
+	  value="[AVATARNAME] entered the region ([DISTANCE] m)."/>
+	<string
+	  name="leaving_region"
+	  value="[AVATARNAME] left the region."/>
     <string
      name="no_recent_people"
      value="No recent people. Looking for people to hang out with? Use the search box to find topics or content you might be interested in, then visit those places to meet people with similar interests." />
