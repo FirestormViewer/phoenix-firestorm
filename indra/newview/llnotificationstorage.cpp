@@ -34,6 +34,7 @@
 #include "llscriptfloater.h"
 #include "llsdserialize.h"
 #include "llviewermessage.h"
+#include "llsyswellwindow.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -159,6 +160,8 @@ void LLPersistentNotificationStorage::loadNotifications()
 
 	LLNotifications& instance = LLNotifications::instance();
 
+	LLNotificationWellWindow::getInstance()->lockWindowUpdate();
+
 	for (LLSD::array_const_iterator notification_it = data.beginArray();
 		notification_it != data.endArray();
 		++notification_it)
@@ -181,6 +184,8 @@ void LLPersistentNotificationStorage::loadNotifications()
 			notification_channel->hideToast(notification->getID());
 		}
 	}
+
+	LLNotificationWellWindow::getInstance()->unlockWindowUpdate();
 }
 
 //////////////////////////////////////////////////////////////////////////
