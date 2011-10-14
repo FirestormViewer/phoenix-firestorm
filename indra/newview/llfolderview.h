@@ -67,6 +67,7 @@ class LLTextBox;
 
 class LLFolderView : public LLFolderViewFolder, public LLEditMenuHandler
 {
+	bool mSelectionChanged;
 public:
 	struct Params : public LLInitParam::Block<Params, LLFolderViewFolder::Params>
 	{

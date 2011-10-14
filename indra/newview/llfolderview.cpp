@@ -206,7 +206,8 @@ LLFolderView::LLFolderView(const Params& p)
 	mParentPanel(p.parent_panel),
 	mUseEllipses(p.use_ellipses),
 	mDraggingOverItem(NULL),
-	mStatusTextBox(NULL)
+	mStatusTextBox(NULL),
+	mSelectionChanged(false)
 {
 	mRoot = this;
 
@@ -549,6 +550,7 @@ void LLFolderView::addToSelectionList(LLFolderViewItem* item)
 	}
 	item->setIsCurSelection(TRUE);
 	mSelectedItems.push_back(item);
+	mSelectionChanged = true;
 }
 
 void LLFolderView::removeFromSelectionList(LLFolderViewItem* item)
@@ -564,6 +566,7 @@ void LLFolderView::removeFromSelectionList(LLFolderViewItem* item)
 		if (*item_iter == item)
 		{
 			item_iter = mSelectedItems.erase(item_iter);
+			mSelectionChanged = true;
 		}
 		else
 		{
@@ -713,6 +716,13 @@ void LLFolderView::extendSelection(LLFolderViewItem* selection, LLFolderViewItem
 static LLFastTimer::DeclareTimer FTM_SANITIZE_SELECTION("Sanitize Selection");
 void LLFolderView::sanitizeSelection()
 {
+	// Nicky D.; Only run this if mSelectionChanged actually changed since our last run of sanitizeSelection.
+	// sanitizeSelection is a very expensive operation for many items (n^2 is n items are selected). In fact it
+	// is a good candidate for further optimizations.
+	if( !mSelectionChanged )
+		return;
+
+	mSelectionChanged = false;
 	LLFastTimer _(FTM_SANITIZE_SELECTION);
 	// store off current item in case it is automatically deselected
 	// and we want to preserve context
@@ -835,6 +845,7 @@ void LLFolderView::clearSelection()
 
 	mSelectedItems.clear();
 	mSelectThisID.setNull();
+	mSelectionChanged = true;
 }
 
 std::set<LLUUID> LLFolderView::getSelectionList() const
@@ -1351,12 +1362,24 @@ BOOL LLFolderView::canPaste() const
 
 	if(getVisible() && getEnabled())
 	{
+		std::set< char const * > stListeners;
+
 		for (selected_items_t::const_iterator item_it = mSelectedItems.begin();
 			 item_it != mSelectedItems.end(); ++item_it)
 		{
 			// *TODO: only check folders and parent folders of items
 			const LLFolderViewItem* item = (*item_it);
 			const LLFolderViewEventListener* listener = item->getListener();
+
+			// Nicky D.; Only run each isClipboardPasteable once for each type of listeners.
+			// isClipboardPasteable is a very expensive operation, and it will always process the whole clipboards contents.
+			// Thus running it for n objects means each object gets n times processed.
+			if( listener && stListeners.end() != stListeners.find( typeid( *listener ).name() ) )
+				continue;
+			else if( listener )
+				stListeners.insert( typeid( *listener ) .name() );
+			//
+
 			if(!listener || !listener->isClipboardPasteable())
 			{
 				const LLFolderViewFolder* folderp = item->getParentFolder();
