@@ -844,6 +844,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="minimap_distance">
 		(Entfernung: [DISTANCE] m)
 	</string>
+	<string name="minimap_no_focus">
+		Die Kamera konnte nicht auf den Einwohner fokussiert werden, da er sich außerhalb der Draw Distance befindet.
+	</string>
 	<string name="Ok">
 		OK
 	</string>

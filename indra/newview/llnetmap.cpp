@@ -1229,7 +1229,7 @@ void LLNetMap::camAvatar()
 	if (range > gSavedSettings.getF32("RenderFarClip"))
 	{
 		LLChat chat;
-		chat.mText = "The camera cannot focus on user because they are outside your draw distance.";
+		chat.mText = LLTrans::getString("minimap_no_focus");
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		LLSD args;
 		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
