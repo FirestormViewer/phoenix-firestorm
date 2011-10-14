@@ -925,6 +925,8 @@
  			 left="30"
              height="18"
              width="400" />
+			 <!--SJ: Moved OnlineOfflinetoNearbyChat to Dialogs preference-->
+			 <!--
             <check_box
              control_name="OnlineOfflinetoNearbyChat"
              name="OnlineOfflinetoNearbyChat"
@@ -933,6 +935,7 @@
              top_pad="0"
              height="18"
              width="400" />
+			 -->
             <check_box
              control_name="ShowStreamMetadata"
              name="ShowStreamMetadata"

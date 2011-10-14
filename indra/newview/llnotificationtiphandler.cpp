@@ -133,7 +133,8 @@ bool LLTipHandler::processNotification(const LLSD& notify)
 		// [FIRE-3522 : SJ] Only show Online/Offline toast when ChatOnlineNotification is enabled or the Friend is one you want to have on/offline notices from
 		if (!gSavedSettings.getBOOL("ChatOnlineNotification") && ("FriendOffline" == notification->getName() || "FriendOnline" == notification->getName()))
 		{
-			if (!LGGContactSets::getInstance()->notifyForFriend(agent_id) )
+			// [FIRE-3522 : SJ] Only show Online/Offline toast for groups which have enabled "Show notice for this set" and in the settingpage of CS is checked that the messages need to be in Toasts
+			if (!(gSavedSettings.getBOOL("FSContactSetsNotificationToast") && LGGContactSets::getInstance()->notifyForFriend(agent_id)))
 			{
 				return false;
 			}
