@@ -865,7 +865,7 @@ void LLWorld::updateWaterObjects()
 				waterp->setUseTexture(FALSE);
 				waterp->setPositionGlobal(LLVector3d(x + rwidth/2,
 													 y + rwidth/2,
-													 256.f+DEFAULT_WATER_HEIGHT));
+													 256.f+gAgent.getRegion()->getWaterHeight()));
 				waterp->setScale(LLVector3((F32)rwidth, (F32)rwidth, 512.f));
 				gPipeline.createObject(waterp);
 				mHoleWaterObjects.push_back(waterp);
