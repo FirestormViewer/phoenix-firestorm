@@ -110,6 +110,8 @@ protected:
  */
 class LLNotificationWellWindow : public LLSysWellWindow
 {
+	bool mUpdateLocked;
+
 public:
 	LLNotificationWellWindow(const LLSD& key);
 	static LLNotificationWellWindow* getInstance(const LLSD& key = LLSD());
@@ -122,6 +124,10 @@ public:
 
 	// Closes all notifications and removes them from the Notification Well
 	void closeAll();
+
+	void lockWindowUpdate()
+	{	mUpdateLocked = true; }
+	void unlockWindowUpdate();
 
 protected:
 	/*virtual*/ const std::string& getAnchorViewName() { return NOTIFICATION_WELL_ANCHOR_NAME; }

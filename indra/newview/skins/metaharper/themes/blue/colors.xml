@@ -80,7 +80,7 @@
 
     <color
      name="BottomTrayAlphaColor"
-     reference="MBlue" />
+     reference="Transparent" />
     <color
      name="BottomTrayOpaqueColor"
      reference="MBlue" />

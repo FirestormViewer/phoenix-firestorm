@@ -448,6 +448,7 @@ LLNotificationWellWindow::LLNotificationWellWindow(const LLSD& key)
 	connectListUpdaterToSignal("notify");
 	connectListUpdaterToSignal("groupnotify");
 	connectListUpdaterToSignal("offer");
+	mUpdateLocked = false;
 }
 
 // static
@@ -485,10 +486,13 @@ void LLNotificationWellWindow::addItem(LLSysWellItem::Params p)
 		return;
 
 	LLSysWellItem* new_item = new LLSysWellItem(p);
-	if (mMessageList->addItem(new_item, value, ADD_TOP))
+	if (mMessageList->addItem(new_item, value, ADD_TOP, mUpdateLocked))
 	{
-		mSysWellChiclet->updateWidget(isWindowEmpty());
-		reshapeWindow();
+		if( !mUpdateLocked )
+		{
+			mSysWellChiclet->updateWidget(isWindowEmpty());
+			reshapeWindow();
+		}
 
 		new_item->setOnItemCloseCallback(boost::bind(&LLNotificationWellWindow::onItemClose, this, _1));
 		new_item->setOnItemClickCallback(boost::bind(&LLNotificationWellWindow::onItemClick, this, _1));
@@ -518,6 +522,13 @@ void LLNotificationWellWindow::closeAll()
 		if (sys_well_item)
 			onItemClose(sys_well_item);
 	}
+}
+
+void LLNotificationWellWindow::unlockWindowUpdate()
+{
+	mUpdateLocked = false;
+	mSysWellChiclet->updateWidget(isWindowEmpty());
+	reshapeWindow();
 }
 
 //////////////////////////////////////////////////////////////////////////

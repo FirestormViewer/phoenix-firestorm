@@ -222,8 +222,14 @@
 	 value=".831 1 0 1" />
 
 
-  <!-- UI Colors only used once - grey shades at top -->
+  <!-- UI Colors -->
 
+    <color
+     name="BottomTrayAlphaColor"
+     reference="ltgrey123" />
+    <color
+     name="BottomTrayOpaqueColor"
+     reference="DkGray" />
     <color
      name="GridlineShadowColor"
      value="0 0 0 0.31" />
@@ -233,7 +239,6 @@
     <color
      name="TextFgColor"
      value="0.102 0.102 0.102 1" />
-
     <color
      name="ChicletFlashColor"
      value="SchemeLightest" />

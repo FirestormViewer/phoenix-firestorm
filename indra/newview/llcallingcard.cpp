@@ -818,7 +818,17 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	LLIMModel::instance().proccessOnlineOfflineNotification(session_id, notify_msg);
 	// If desired, also send it to nearby chat, this allows friends'
 	// online/offline times to be referenced in chat & logged.
-	if (gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat")||LGGContactSets::getInstance()->notifyForFriend(agent_id)) 
+	// [FIRE-3522 : SJ] Only show Online/Offline toast for groups which have enabled "Show notice for this set" and in the settingpage of CS is checked that the messages need to be in Toasts
+	if (gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat")) 
+	{
+		LLChat chat;
+		chat.mText = notify_msg;
+		chat.mSourceType = CHAT_SOURCE_SYSTEM;
+		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+	}
+	// [FIRE-3522 : SJ] show Online/Offline toast for groups which have enabled "Show notice for this set" and in the settingpage of CS is checked that the messages need to be in Nearby Chat
+	if (gSavedSettings.getBOOL("FSContactSetsNotificationNearbyChat") && LGGContactSets::getInstance()->notifyForFriend(agent_id)) 
 	{
 		LLChat chat;
 		chat.mText = notify_msg;
