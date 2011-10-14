@@ -5721,9 +5721,18 @@ void toggle_v1_menus(void*)	// V1 menu system	-WoLf
 	show_v1_menus();
 }
 
+// AO This may be called a few seconds after activations, to reset it back to V2-style
+void menuTimerV1()
+{
+	gSavedSettings.setBOOL("FSUseV1Menus", FALSE);
+	show_v1_menus();
+}
+
 void show_v1_menus()	// V1 menu system	-WoLf
 {
 	BOOL V1 = gSavedSettings.getBOOL("FSUseV1Menus");
+	rlvCallbackTimerOnce(30, boost::bind(&menuTimerV1));
+	
 	if ( gMenuBarView )
 	{
 	// The original menu system

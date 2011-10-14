@@ -66,6 +66,7 @@ BOOL enable_not_have_card(void *userdata);
 void process_grant_godlike_powers(LLMessageSystem* msg, void**);
 void show_v1_menus();	// V1 menu system	-WoLf
 void toggle_v1_menus(void*);	// V1 menu system	-WoLf
+void menuTimerV1();
 
 
 BOOL enable_cut(void*);
