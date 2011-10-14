@@ -118,6 +118,7 @@
 //-TT Client LSL Bridge
 #include "fslslbridge.h"
 //-TT
+#include "NACLantispam.h"
 
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
 #include "llhunspell.h"
@@ -377,6 +378,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.BlockList",				boost::bind(&LLFloaterPreference::onClickBlockList, this));
 	mCommitCallbackRegistrar.add("Pref.Proxy",					boost::bind(&LLFloaterPreference::onClickProxySettings, this));
 	mCommitCallbackRegistrar.add("FS.ToggleSortContacts",		boost::bind(&LLFloaterPreference::onClickSortContacts, this));
+	mCommitCallbackRegistrar.add("NACL.AntiSpamUnblock",		boost::bind(&LLFloaterPreference::onClickClearSpamList, this));
 	//[ADD - Clear Settings : SJ]
 	mCommitCallbackRegistrar.add("Pref.ClearSettings",			boost::bind(&LLFloaterPreference::onClickClearSettings, this));
 	
@@ -1043,6 +1045,11 @@ bool callback_clear_settings(const LLSD& notification, const LLSD& response)
 void LLFloaterPreference::onClickClearSettings()
 {
 	LLNotificationsUtil::add("FirestormClearSettingsPrompt",LLSD(), LLSD(), callback_clear_settings);
+}
+
+void LLFloaterPreference::onClickClearSpamList()
+{
+	NACLAntiSpamRegistry::purgeAllQueues(); 
 }
 
 //[FIX JIRA-1971 : SJ] Show an notify when Cookies setting change

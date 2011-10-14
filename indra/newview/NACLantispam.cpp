@@ -357,6 +357,7 @@ void NACLAntiSpamRegistry::purgeAllQueues()
 		{
 			queues[queue]->purgeEntries();
 		}
+	llinfos << "AntiSpam Queues Purged" << llendl;
 }
 int NACLAntiSpamRegistry::checkGlobalEntry(LLUUID& name, U32 multiplier)
 {
