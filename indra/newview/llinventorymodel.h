@@ -547,8 +547,10 @@ protected:
 	cat_array_t* getUnlockedCatArray(const LLUUID& id);
 	item_array_t* getUnlockedItemArray(const LLUUID& id);
 private:
+#ifdef LL_DEBUG
 	std::map<LLUUID, bool> mCategoryLock;
 	std::map<LLUUID, bool> mItemLock;
+#endif
 	
 	//--------------------------------------------------------------------
 	// Debugging

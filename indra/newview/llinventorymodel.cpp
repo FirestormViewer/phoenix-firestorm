@@ -143,8 +143,10 @@ LLInventoryModel::LLInventoryModel()
 	mChangedItemIDs(),
 	mCategoryMap(),
 	mItemMap(),
+#ifdef LL_DEBUG
 	mCategoryLock(),
 	mItemLock(),
+#endif
 	mLastItem(NULL),
 	mParentChildCategoryTree(),
 	mParentChildItemTree(),
@@ -327,6 +329,8 @@ void LLInventoryModel::lockDirectDescendentArrays(const LLUUID& cat_id,
 												  item_array_t*& items)
 {
 	getDirectDescendentsOf(cat_id, categories, items);
+
+#ifdef LL_DEBUG
 	if (categories)
 	{
 		mCategoryLock[cat_id] = true;
@@ -335,12 +339,15 @@ void LLInventoryModel::lockDirectDescendentArrays(const LLUUID& cat_id,
 	{
 		mItemLock[cat_id] = true;
 	}
+#endif
 }
 
 void LLInventoryModel::unlockDirectDescendentArrays(const LLUUID& cat_id)
 {
+#ifdef LL_DEBUG
 	mCategoryLock[cat_id] = false;
 	mItemLock[cat_id] = false;
+#endif
 }
 
 // findCategoryUUIDForType() returns the uuid of the category that
@@ -825,20 +832,25 @@ U32 LLInventoryModel::updateItem(const LLViewerInventoryItem* item)
 LLInventoryModel::cat_array_t* LLInventoryModel::getUnlockedCatArray(const LLUUID& id)
 {
 	cat_array_t* cat_array = get_ptr_in_map(mParentChildCategoryTree, id);
+#ifdef LL_DEBUG
 	if (cat_array)
 	{
 		llassert_always(mCategoryLock[id] == false);
 	}
+#endif
+
 	return cat_array;
 }
 
 LLInventoryModel::item_array_t* LLInventoryModel::getUnlockedItemArray(const LLUUID& id)
 {
 	item_array_t* item_array = get_ptr_in_map(mParentChildItemTree, id);
+#ifdef LL_DEBUG
 	if (item_array)
 	{
 		llassert_always(mItemLock[id] == false);
 	}
+#endif
 	return item_array;
 }
 
@@ -903,8 +915,10 @@ void LLInventoryModel::updateCategory(const LLViewerInventoryCategory* cat)
 		}
 
 		// make space in the tree for this category's children.
+#ifdef LL_DEBUG
 		llassert_always(mCategoryLock[new_cat->getUUID()] == false);
 		llassert_always(mItemLock[new_cat->getUUID()] == false);
+#endif
 		cat_array_t* catsp = new cat_array_t;
 		item_array_t* itemsp = new item_array_t;
 		mParentChildCategoryTree[new_cat->getUUID()] = catsp;
@@ -1844,13 +1858,17 @@ void LLInventoryModel::buildParentChildMap()
 		cats.put(cat);
 		if (mParentChildCategoryTree.count(cat->getUUID()) == 0)
 		{
+#ifdef LL_DEBUG
 			llassert_always(mCategoryLock[cat->getUUID()] == false);
+#endif
 			catsp = new cat_array_t;
 			mParentChildCategoryTree[cat->getUUID()] = catsp;
 		}
 		if (mParentChildItemTree.count(cat->getUUID()) == 0)
 		{
+#ifdef LL_DEBUG
 			llassert_always(mItemLock[cat->getUUID()] == false);
+#endif
 			itemsp = new item_array_t;
 			mParentChildItemTree[cat->getUUID()] = itemsp;
 		}
