@@ -1002,7 +1002,12 @@ void LLPanelPeople::updateNearbyList()
 			if (gSavedSettings.getBOOL("RadarReportDrawRange") && (avRange <= drawRadius))
 				LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, llformat(" entered draw distance (%3.2f m).",avRange)));
 			if (gSavedSettings.getBOOL("RadarReportSimRange") && (avRegion == regionSelf))
-				LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, llformat(" entered the region (%3.2f m).",avRange)));
+			{
+				if (avPos[2] != 9999) // Don't report an inaccurate range in localchat, if the true range is not known.
+					LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, llformat(" entered the region (%3.2f m).",avRange)));
+				else 
+					LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2," entered the region."));
+			}
 			if (gSavedSettings.getBOOL("RadarEnterChannelAlert") || (alertScripts))
 			{
 				// Autodetect Phoenix chat UUID compatibility. 
