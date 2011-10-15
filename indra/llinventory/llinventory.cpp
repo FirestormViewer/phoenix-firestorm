@@ -576,19 +576,101 @@ BOOL LLInventoryItem::unpackMessage(LLMessageSystem* msg, const char* block, S32
 #endif
 }
 
+// <ND> Helper functions
+inline bool isWS( char aVal )
+{
+	return aVal == ' ' || aVal == '\t' || aVal == '\r' || aVal == '\n';
+}
+
+inline bool isNewLine( char aVal )
+{
+	return aVal == '\r' || aVal == '\n';
+}
+
+void splitCacheDescOrName( char *aBuffer, char *&aJunk, char *&aValue )
+{
+	aJunk = aBuffer;
+	aValue = 0;
+
+	while( *aBuffer && *aBuffer != '\t' )
+		++aBuffer;
+
+	if( *aBuffer == '\t' )
+	{
+		*aBuffer = 0;
+		aValue = ++aBuffer;
+
+		while( *aBuffer && *aBuffer != '|' )
+			++aBuffer;
+
+		*aBuffer = 0;
+	}
+	else
+	{
+		aValue = aJunk;
+		--aBuffer;
+		if( *aBuffer == '|' )
+			*aBuffer = 0;
+	}
+
+}
+
+int splitCacheLine( char *aBuffer, char *&aKeyword, char *&aValue )
+{
+	while( *aBuffer && isWS( *aBuffer ) )
+		++aBuffer;
+
+	if( !*aBuffer )
+		return 0;
+
+	int nKWLen(0);
+	aKeyword = aBuffer;
+
+	while( *aBuffer && !isWS( *aBuffer ) )
+	{
+		++nKWLen;
+		++aBuffer;
+	}
+
+	if( !isWS( *aBuffer ) )
+		return 0;
+
+	*aBuffer = 0;
+	aValue = ++aBuffer;
+
+	// Is this really necessay?
+	while( *aValue && isWS( *aValue ) )
+		++aValue;
+
+	// Searching for trailing newline now.
+	while( *aBuffer && !isNewLine(*aBuffer)   )
+		++aBuffer;
+
+	*aBuffer = 0;	// Kill the newline
+
+	return nKWLen;
+}
+// </ND>
+
 // virtual
 BOOL LLInventoryItem::importFile(LLFILE* fp)
 {
 	// *NOTE: Changing the buffer size will require changing the scanf
 	// calls below.
 	char buffer[MAX_STRING];	/* Flawfinder: ignore */
-	char keyword[MAX_STRING];	/* Flawfinder: ignore */	
-	char valuestr[MAX_STRING];	/* Flawfinder: ignore */
-	char junk[MAX_STRING];	/* Flawfinder: ignore */
+	
+	// <ND> - cache speedups
+	//char keyword[MAX_STRING];	/* Flawfinder: ignore */	
+	//char valuestr[MAX_STRING];	/* Flawfinder: ignore */
+	//char junk[MAX_STRING];	/* Flawfinder: ignore */	
+	//keyword[0] = '\0';
+	//valuestr[0] = '\0'
+	char *keyword;	/* Flawfinder: ignore */	
+	char *valuestr;	/* Flawfinder: ignore */
+	char *junk;	/* Flawfinder: ignore */
+	// </ND>
+	
 	BOOL success = TRUE;
-
-	keyword[0] = '\0';
-	valuestr[0] = '\0';
 
 	mInventoryType = LLInventoryType::IT_NONE;
 	mAssetUUID.setNull();
@@ -599,28 +681,37 @@ BOOL LLInventoryItem::importFile(LLFILE* fp)
 			buffer[0] = '\0';
 		}
 		
-		sscanf(buffer, " %254s %254s", keyword, valuestr);	/* Flawfinder: ignore */
-		if(0 == strcmp("{",keyword))
+		//sscanf(buffer, " %254s %254s", keyword, valuestr);	/* Flawfinder: ignore */
+		//if(0 == strcmp("{",keyword))
+		int nKWLen = splitCacheLine( buffer, keyword, valuestr );
+		if( !nKWLen )
+			continue;
+
+		if( sizeof("{")-1 == nKWLen && 0 == strcmp("{",keyword))
 		{
 			continue;
 		}
-		if(0 == strcmp("}", keyword))
+		//if(0 == strcmp("}", keyword))
+		if( sizeof("}")-1 == nKWLen && 0 == strcmp("}", keyword))
 		{
 			break;
 		}
-		else if(0 == strcmp("item_id", keyword))
+		else if( sizeof("item_id")-1 == nKWLen && 0 == strcmp("item_id", keyword))
 		{
 			mUUID.set(valuestr);
 		}
-		else if(0 == strcmp("parent_id", keyword))
+		//else if(0 == strcmp("parent_id", keyword))
+		else if( sizeof("parent_id")-1 == nKWLen &&  0 == strcmp("parent_id", keyword))
 		{
 			mParentUUID.set(valuestr);
 		}
-		else if(0 == strcmp("permissions", keyword))
+		//else if(0 == strcmp("permissions", keyword))
+		else if( sizeof("permissions" )-1 == nKWLen && 0 == strcmp("permissions", keyword))
 		{
 			success = mPermissions.importFile(fp);
 		}
-		else if(0 == strcmp("sale_info", keyword))
+		//else if(0 == strcmp("sale_info", keyword))
+		else if(sizeof("sale_info")-1 == nKWLen && 0 == strcmp("sale_info", keyword))
 		{
 			// Sale info used to contain next owner perm. It is now in
 			// the permissions. Thus, we read that out, and fix legacy
@@ -643,60 +734,71 @@ BOOL LLInventoryItem::importFile(LLFILE* fp)
 				mPermissions.setMaskNext(perm_mask);
 			}
 		}
-		else if(0 == strcmp("shadow_id", keyword))
+		//else if(0 == strcmp("shadow_id", keyword))
+		else if( sizeof("shadow_id")-1 == nKWLen && 0 == strcmp("shadow_id", keyword))
 		{
 			mAssetUUID.set(valuestr);
 			LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
 			cipher.decrypt(mAssetUUID.mData, UUID_BYTES);
 		}
-		else if(0 == strcmp("asset_id", keyword))
+		//else if(0 == strcmp("asset_id", keyword))
+		else if( sizeof("asset_id")-1 == nKWLen && 0 == strcmp("asset_id", keyword))
 		{
 			mAssetUUID.set(valuestr);
 		}
-		else if(0 == strcmp("type", keyword))
+		//else if(0 == strcmp("type", keyword))
+		else if( sizeof("type")-1 == nKWLen && 0 == strcmp("type", keyword))
 		{
 			mType = LLAssetType::lookup(valuestr);
 		}
-		else if(0 == strcmp("inv_type", keyword))
+		//else if(0 == strcmp("inv_type", keyword))
+		else if( sizeof("inv_type")-1 == nKWLen && 0 == strcmp("inv_type", keyword))
 		{
 			mInventoryType = LLInventoryType::lookup(std::string(valuestr));
 		}
-		else if(0 == strcmp("flags", keyword))
+		//else if(0 == strcmp("flags", keyword))
+		else if( sizeof("flags")-1 == nKWLen && 0 == strcmp("flags", keyword))
 		{
-			sscanf(valuestr, "%x", &mFlags);
+			//sscanf(valuestr, "%x", &mFlags);
+			mFlags = strtol( valuestr, 0, 16 );
 		}
-		else if(0 == strcmp("name", keyword))
+		//else if(0 == strcmp("name", keyword))
+		else if( sizeof("name")-1 == nKWLen && 0 == strcmp("name", keyword))
 		{
 			//strcpy(valuestr, buffer + strlen(keyword) + 3);
 			// *NOTE: Not ANSI C, but widely supported.
-			sscanf(	/* Flawfinder: ignore */
-				buffer,
-				" %254s%254[\t]%254[^|]",
-				keyword, junk, valuestr);
+//			sscanf(	/* Flawfinder: ignore */
+//				buffer,
+//				" %254s%254[\t]%254[^|]",
+//				keyword, junk, valuestr);
 
-			// IW: sscanf chokes and puts | in valuestr if there's no name
-			if (valuestr[0] == '|')
-			{
-				valuestr[0] = '\000';
-			}
+			splitCacheDescOrName( valuestr, junk, valuestr );
+
+//			// IW: sscanf chokes and puts | in valuestr if there's no name
+//			if (valuestr[0] == '|')
+//			{
+//				valuestr[0] = '\000';
+//			}
 
 			mName.assign(valuestr);
 			LLStringUtil::replaceNonstandardASCII(mName, ' ');
 			LLStringUtil::replaceChar(mName, '|', ' ');
 		}
-		else if(0 == strcmp("desc", keyword))
+		//else if(0 == strcmp("desc", keyword))
+		else if( sizeof("desc")-1 == nKWLen && 0 == strcmp("desc", keyword))
 		{
 			//strcpy(valuestr, buffer + strlen(keyword) + 3);
 			// *NOTE: Not ANSI C, but widely supported.
-			sscanf(	/* Flawfinder: ignore */
-				buffer,
-				" %254s%254[\t]%254[^|]",
-				keyword, junk, valuestr);
+//			sscanf(	/* Flawfinder: ignore */
+//				buffer,
+//				" %254s%254[\t]%254[^|]",
+//				keyword, junk, valuestr);
 
-			if (valuestr[0] == '|')
-			{
-				valuestr[0] = '\000';
-			}
+			splitCacheDescOrName( valuestr, junk, valuestr );
+//			if (valuestr[0] == '|')
+//			{
+//				valuestr[0] = '\000';
+//			}
 
 			mDescription.assign(valuestr);
 			LLStringUtil::replaceNonstandardASCII(mDescription, ' ');
@@ -708,11 +810,13 @@ BOOL LLInventoryItem::importFile(LLFILE* fp)
 			}
 			*/
 		}
-		else if(0 == strcmp("creation_date", keyword))
+		//else if(0 == strcmp("creation_date", keyword))
+		else if( sizeof("creation_date")-1 == nKWLen && 0 == strcmp("creation_date", keyword))
 		{
-			S32 date;
-			sscanf(valuestr, "%d", &date);
-			mCreationDate = date;
+			//S32 date;
+			//sscanf(valuestr, "%d", &date);
+			//mCreationDate = date;
+			mCreationDate = atoi(valuestr);
 		}
 		else
 		{
