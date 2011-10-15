@@ -848,7 +848,8 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 			p.message(av_name.getCompleteName());
 		}
 		
-		p.image.name("Inspector_I");
+		// Ansariel: Get rid of the useless and clumsy I-button on the hovertip
+		//p.image.name("Inspector_I");
 		p.click_callback(boost::bind(showAvatarInspector, avatar_id));
 		p.visible_time_near(6.f);
 		p.visible_time_far(3.f);
@@ -1226,7 +1227,7 @@ void LLNetMap::clearAvatarMarks()
 void LLNetMap::camAvatar()
 {
 	F32 range = dist_vec(mClosestAgentAtLastRightClickPos, gAgent.getPositionGlobal());
-	if (range > gSavedSettings.getF32("RenderFarClip"))
+	if (range > gSavedSettings.getF32("RenderFarClip") || gObjectList.findObject(mClosestAgentAtLastRightClick) == NULL)
 	{
 		LLChat chat;
 		chat.mText = LLTrans::getString("minimap_no_focus");
