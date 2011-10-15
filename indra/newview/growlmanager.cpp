@@ -203,15 +203,15 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 			title = notification->getMessage();
 		else if(growl_notification->growlTitle != "")
 		{
-			LLStringUtil::format(growl_notification->growlTitle, substitutions);
 			title = growl_notification->growlTitle;
+			LLStringUtil::format(title, substitutions);
 		}
 		if(growl_notification->useDefaultTextForBody)
 			body = notification->getMessage();
 		else if(growl_notification->growlBody != "")
 		{
-			LLStringUtil::format(growl_notification->growlBody, substitutions);
 			body = growl_notification->growlBody;
+			LLStringUtil::format(body, substitutions);
 		}
 		LL_INFOS("GrowlLLNotification") << "Notice: " << title << ": " << body << LL_ENDL;
 		gGrowlManager->notify(title, body, growl_notification->growlName);
