@@ -740,6 +740,10 @@ LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id)
   				if (new_listener)
   				{
 					LLFolderViewFolder* folderp = createFolderViewFolder(new_listener);
+					// <ND> Subfolder JIT
+					folderp->setPanel(this);
+					folderp->setFolderId( id );
+					// </ND>
   					folderp->setItemSortOrder(mFolderRoot->getSortOrder());
   					itemp = folderp;
   				}
@@ -769,6 +773,19 @@ LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id)
 		}
 	}
 
+	//  <ND> Subfolder JIT
+	if( id == getRootFolderID() )
+		addSubItems( id );
+	// </ND>
+
+	return itemp;
+}
+
+// <ND> JIT subfolder processing
+void LLInventoryPanel::addSubItems(const LLUUID& id)
+{
+ 	LLInventoryObject const* objectp = gInventory.getObject(id);
+
 	// If this is a folder, add the children of the folder and recursively add any 
 	// child folders.
 	if (id.isNull()
@@ -778,7 +795,11 @@ LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id)
 		LLViewerInventoryCategory::cat_array_t* categories;
 		LLViewerInventoryItem::item_array_t* items;
 		mInventory->lockDirectDescendentArrays(id, categories, items);
-		
+		LLFolderViewFolder *parent_folder(0);
+
+		if( items && objectp )
+			parent_folder = (LLFolderViewFolder*)mFolderRoot->getItemByID(objectp->getParentUUID());
+
 		if(categories)
 		{
 			for (LLViewerInventoryCategory::cat_array_t::const_iterator cat_iter = categories->begin();
@@ -786,7 +807,9 @@ LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id)
 				 ++cat_iter)
 			{
 				const LLViewerInventoryCategory* cat = (*cat_iter);
-				buildNewViews(cat->getUUID());
+				//buildNewViews(cat->getUUID());  
+				if( !mFolderRoot->getItemByID( cat->getUUID() ) ) //ND
+					buildNewViews(cat->getUUID());
 			}
 		}
 		
@@ -797,13 +820,13 @@ LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id)
 				 ++item_iter)
 			{
 				const LLViewerInventoryItem* item = (*item_iter);
-				buildNewViews(item->getUUID());
+				//buildNewViews(cat->getUUID());
+				if( !mFolderRoot->getItemByID( item->getUUID() ) ) //ND
+					buildNewViews(item->getUUID());
 			}
 		}
 		mInventory->unlockDirectDescendentArrays(id);
 	}
-	
-	return itemp;
 }
 
 // bit of a hack to make sure the inventory is open.

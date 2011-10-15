@@ -338,6 +338,10 @@ public:
 		EAcceptance* accept,
 		std::string& tooltip_msg);
 
+	// <ND> JIT folders
+	virtual bool isPreCreatedFolder()
+	{ return false; }
+
 private:
 	static std::map<U8, LLFontGL*> sFonts; // map of styles to fonts
 };
@@ -357,6 +361,12 @@ typedef bool (*sort_order_f)(LLFolderViewItem* a, LLFolderViewItem* b);
 
 class LLFolderViewFolder : public LLFolderViewItem
 {
+	// <ND> JIT folders
+	LLUUID mFolderId;
+	class LLInventoryPanel *mParentPanel;
+	bool mIsPopulated;
+	// </ND>
+
 protected:
 	LLFolderViewFolder( const LLFolderViewItem::Params& );
 	friend class LLUICtrlFactory;
@@ -376,6 +386,17 @@ private:
 public:		// Accessed needed by LLFolderViewItem
 	void recursiveIncrementNumDescendantsSelected(S32 increment);
 	S32 numSelected(void) const { return mNumDescendantsSelected + (isSelected() ? 1 : 0); }
+
+	// <ND> JIT Folders
+	void setPanel( LLInventoryPanel* aPanel )
+	{ mParentPanel = aPanel; }
+
+	void setFolderId( LLUUID const &aFolderId )
+	{ mFolderId = aFolderId; }
+
+	virtual bool isPreCreatedFolder()
+	{ return !mIsPopulated; }
+	// </ND>
 
 protected:
 	items_t mItems;
