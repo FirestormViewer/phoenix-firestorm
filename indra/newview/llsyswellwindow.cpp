@@ -486,7 +486,7 @@ void LLNotificationWellWindow::addItem(LLSysWellItem::Params p)
 		return;
 
 	LLSysWellItem* new_item = new LLSysWellItem(p);
-	if (mMessageList->addItem(new_item, value, ADD_TOP, mUpdateLocked))
+	if (mMessageList->addItem(new_item, value, ADD_TOP, !mUpdateLocked))
 	{
 		if( !mUpdateLocked )
 		{
@@ -528,7 +528,14 @@ void LLNotificationWellWindow::unlockWindowUpdate()
 {
 	mUpdateLocked = false;
 	mSysWellChiclet->updateWidget(isWindowEmpty());
+
+	// Let the list rearrange itself. This is normally called during addItem if the window is not locked.
+	LLSD oNotify;
+	oNotify["rearrange"] = 1;
+	mMessageList->notify( oNotify );
+
 	reshapeWindow();
+
 }
 
 //////////////////////////////////////////////////////////////////////////
