@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <floater
- height="500"
+ height="565"
  layout="topleft"
- min_height="520"
+ min_height="565"
  width="470"
  can_close="true"
  can_resize="true"
@@ -10,7 +10,7 @@
     <panel
      background_visible="false"
      top="5"
-     height="493"
+     height="560"
      right="-10"
      left="5"
      class="panel_group_info_sidetray"
