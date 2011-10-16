@@ -63,6 +63,7 @@ RenderDeferred				1	1
 RenderDeferredSSAO			1	0
 RenderShadowDetail			1	0
 RenderFSAASamples			1	0
+RenderMaxTextureIndex		1	16
 
 //
 // Low Graphics Settings
