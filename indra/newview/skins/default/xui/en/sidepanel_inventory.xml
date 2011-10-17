@@ -26,7 +26,7 @@
               top="0"
               orientation="vertical"
               name="inventory_layout_stack"
-              height="535"
+              height="550"
               width="330">
              <layout_panel
                  name="main_inventory_layout_panel"
@@ -238,7 +238,7 @@
 			 layout="topleft"
 			 name="button_panel"
 			 left="9"
-             top_pad="7"
+             top_pad="-8"
 			 width="308">
 			<layout_stack
      	         follows="bottom|left|right"
