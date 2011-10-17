@@ -351,6 +351,15 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TooltipPrimCount">
 		Primitive: [COUNT]
 	</string>
+	<string name="TooltipPrimEquivalent">
+		, [PEWEIGHT] PE
+	</string>
+	<string name="TooltipPrimEquivalentLoading">
+		, lade Prim-Equivalent...
+	</string>
+	<string name="TooltipPrimEquivalentUnavailable">
+		, Prim-Equivalent nicht verfügbar
+	</string>
 	<string name="TooltipDistance">
 		Entfernung: [DISTANCE] m
 	</string>

@@ -172,6 +172,9 @@ Please try logging in again in a minute.</string>
 	<string name="TooltipFlagPhantom">Phantom</string>
 	<string name="TooltipFlagTemporary">Temporary</string>
 	<string name="TooltipPrimCount">Prims: [COUNT]</string>
+	<string name="TooltipPrimEquivalent">, [PEWEIGHT] prim equivs</string>
+	<string name="TooltipPrimEquivalentLoading">, loading prim equivs...</string>
+	<string name="TooltipPrimEquivalentUnavailable">, prim equivs unavailable</string>
 	<string name="TooltipDistance">Distance: [DISTANCE] m</string>
 	<string name="TooltipPosition">Position: [POSITION]</string>
 

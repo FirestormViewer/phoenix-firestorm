@@ -47,6 +47,7 @@
 #include "llkeyboard.h"
 #include "llmediaentry.h"
 #include "llmenugl.h"
+#include "llmeshrepository.h"
 #include "llmutelist.h"
 #include "piemenu.h"	// ## Zi: Pie menu
 #include "llresmgr.h"  // getMonetaryString
@@ -1218,11 +1219,38 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				LLStringUtil::format_map_t args;
 
 				// Get prim count
-				S32 prim_count = LLSelectMgr::getInstance()->getHoverObjects()->getObjectCount();
+				S32 prim_count = LLSelectMgr::getInstance()->getHoverObjects()->getObjectCount();				
 				args["COUNT"] = llformat("%d", prim_count);
 				std::string primlabel = LLTrans::getString("TooltipPrimCount");
 				LLStringUtil::format(primlabel, args);
 				tooltip_msg.append("\n" + primlabel);
+
+				// Display the PE weight for an object if mesh is enabled
+				if (gMeshRepo.meshRezEnabled())
+				{
+					// Ansariel: What a bummer! PE is only available for
+					//           objects in the same region as you!
+					if (hover_object->getRegion()->getRegionID() == gAgent.getRegion()->getRegionID())
+					{
+						S32 link_cost = LLSelectMgr::getInstance()->getHoverObjects()->getSelectedLinksetCost();
+						if (link_cost > 0)
+						{
+							args.clear();
+							args["PEWEIGHT"] = llformat("%d", link_cost);
+							std::string pelabel = LLTrans::getString("TooltipPrimEquivalent");
+							LLStringUtil::format(pelabel, args);
+							tooltip_msg.append(pelabel);
+						}
+						else
+						{
+							tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalentLoading"));
+						}
+					}
+					else
+					{
+						tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalentUnavailable"));
+					}
+				}
 
 				// Get position
 				LLViewerRegion *region = gAgent.getRegion();
