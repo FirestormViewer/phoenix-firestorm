@@ -42,4 +42,10 @@
    font="SansSerifSmall"
    font.style="NORMAL"
    color="SL-MidDkGray"/>
+
+  <!-- TS: styles for GROUP MODERATOR avatar item (FIRE-984)-->
+  <group_moderator_style
+   font="SansSerifSmall"
+   font.style="BOLD"
+   color="White"/>
 </avatar_list_item>

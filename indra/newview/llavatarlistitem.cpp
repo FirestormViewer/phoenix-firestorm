@@ -67,6 +67,7 @@ LLAvatarListItem::Params::Params()
 	voice_call_left_style("voice_call_left_style"),
 	online_style("online_style"),
 	offline_style("offline_style"),
+	group_moderator_style("group_moderator_style"),
 	name_right_pad("name_right_pad",0)
 {};
 
@@ -311,6 +312,9 @@ void LLAvatarListItem::setState(EItemState item_style)
 		break;
 	case IS_OFFLINE:
 		mAvatarNameStyle = params.offline_style();
+		break;
+	case IS_GROUPMOD:
+		mAvatarNameStyle = params.group_moderator_style();
 		break;
 	}
 
@@ -782,6 +786,11 @@ LLAvatarListItem::icon_color_map_t& LLAvatarListItem::getItemIconColorMap()
 	item_icon_color_map.insert(
 		std::make_pair(IS_OFFLINE,
 		LLUIColorTable::instance().getColor("AvatarListItemIconOfflineColor", LLColor4::white)));
+
+	// TS: Group moderators get the online color
+	item_icon_color_map.insert(
+		std::make_pair(IS_GROUPMOD,
+		LLUIColorTable::instance().getColor("AvatarListItemIconOnlineColor", LLColor4::white)));
 
 	return item_icon_color_map;
 }

@@ -347,6 +347,7 @@ void LLParticipantList::onAvatarListRefreshed(LLUICtrl* ctrl, const LLSD& param)
 					tooltip.erase(found, moderator_indicator_len);
 					item->setAvatarToolTip(tooltip);
 				}
+				item->setState(LLAvatarListItem::IS_ONLINE);
 			}
 		}
 
@@ -376,6 +377,7 @@ void LLParticipantList::onAvatarListRefreshed(LLUICtrl* ctrl, const LLSD& param)
 					tooltip += moderator_indicator;
 					item->setAvatarToolTip(tooltip);
 				}
+				item->setState(LLAvatarListItem::IS_GROUPMOD);
 			}
 		}
 
