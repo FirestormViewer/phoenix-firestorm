@@ -456,13 +456,17 @@ void LLIMFloater::onSysinfoButtonClicked()
 	support <<
 		"OpenGL: " << info["OPENGL_VERSION"] << "\n" <<
 		"Skin: " << info["SKIN"] << "(" << info["THEME"] << ")\n" <<
+		"Mode: " << info["MODE"] << "\n" <<
+		"Font: " << info["FONT"] << "\n" <<
+		"Fontsize: " << info["FONT_SIZE"]	<<"\n" <<
+		"Font screen DPI: " << info["FONT_SCREEN_DPI"] << "\n" <<
 		"RLV: " << info["RLV_VERSION"] << "\n" <<
 		"Curl: " << info ["LIBCURL_VERSION"] << "\n" <<
 		"J2C: " << info["J2C_VERSION"] << "\n" <<
 		"Audio: " << info["AUDIO_DRIVER_VERSION"] << "\n" <<
 		"Webkit: " << info["QT_WEBKIT_VERSION"] << "\n" <<
 		"Voice: " << info["VOICE_VERSION"] << "\n" <<
-		"Compiler: " << info["COMPILER"] << " Version " << info["COMPILER_VERSION"].asInteger() << "\n"
+		"Compiler: " << info["COMPILER"] << " Version " << info["COMPILER_VERSION"].asInteger() << "\n"  
 		;
 
 	LLSD args;

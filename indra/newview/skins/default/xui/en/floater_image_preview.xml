@@ -10,7 +10,7 @@
     <text
      type="string"
      length="1"
-     bottom_delta="40"
+     bottom_delta="35"
      follows="top|left"
      height="15"
      layout="topleft"
@@ -24,7 +24,7 @@
      layout="topleft"
      left_delta="0"
      name="name_form"
-     top_pad="5"
+     top_pad="0"
      width="280" />
     <text
      type="string"
@@ -42,7 +42,7 @@
      layout="topleft"
      left_delta="0"
      name="description_form"
-     top_pad="5"
+     top_pad="0"
      width="280" />
     <text
      type="string"
@@ -62,7 +62,7 @@
      layout="topleft"
      left_delta="110"
      name="clothing_type_combo"
-     top_delta="3"
+     top_delta="-2"
      width="160">
         <item
          label="Image"

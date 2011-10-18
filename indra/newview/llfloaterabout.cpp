@@ -219,6 +219,22 @@ LLSD LLFloaterAbout::getInfo()
 	info["SKIN"] = gSavedSettings.getString("SkinCurrent");
 	info["THEME"] = gSavedSettings.getString("SkinCurrentTheme");
 
+	//[FIRE 3113 : SJ] Added Font and fontsize to info
+	info["FONT"] = "Unknown Font";
+	if (gSavedSettings.getString("FSFontSettingsFile") == "fonts.xml") info["FONT"] = "Deja Vu";
+	else if (gSavedSettings.getString("FSFontSettingsFile") == "fonts_ubuntu.xml") info["FONT"] = "Ubuntu Font Family";
+	else if (gSavedSettings.getString("FSFontSettingsFile") == "fonts_liberation.xml") info["FONT"] = "Liberation";
+	else if (gSavedSettings.getString("FSFontSettingsFile") == "fonts_droid.xml") info["FONT"] = "Droid Sans";
+	else if (gSavedSettings.getString("FSFontSettingsFile") == "fonts_mobi.xml") info["FONT"] = "Mobi Sans";
+	
+	info["FONT_SIZE"] = gSavedSettings.getF32("FSFontSizeAdjustment");
+	info["FONT_SCREEN_DPI"] = gSavedSettings.getF32("FontScreenDPI");
+
+	//[FIRE 3113 : SJ] Added Settingsfile to info
+	if (gSavedSettings.getString("SessionSettingsFile") == "settings_phoenix.xml") info["MODE"] = "Phoenix";
+	else if (gSavedSettings.getString("SessionSettingsFile") == "settings_v3.xml") info["MODE"] = "V3";
+	else if (gSavedSettings.getString("SessionSettingsFile") == "settings_hybrid.xml") info["MODE"] = "Hybrid";
+
 	info["VIEWER_RELEASE_NOTES_URL"] = get_viewer_release_notes_url();
 
 #if LL_MSVC

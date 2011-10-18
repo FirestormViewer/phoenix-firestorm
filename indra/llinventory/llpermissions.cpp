@@ -570,6 +570,11 @@ void LLPermissions::unpackMessage(LLMessageSystem* msg, const char* block, S32 b
 // File support
 //
 
+// <ND>
+void splitCacheDescOrName( char *aBuffer, char *&aJunk, char *&aValue );
+int splitCacheLine( char *aBuffer, char *&aKeyword, char *&aValue );
+// </ND>
+
 BOOL LLPermissions::importFile(LLFILE* fp)
 {
 	init(LLUUID::null, LLUUID::null, LLUUID::null, LLUUID::null);
@@ -578,13 +583,18 @@ BOOL LLPermissions::importFile(LLFILE* fp)
 	// *NOTE: Changing the buffer size will require changing the scanf
 	// calls below.
 	char buffer[BUFSIZE];	/* Flawfinder: ignore */
-	char keyword[256];	/* Flawfinder: ignore */
-	char valuestr[256];	/* Flawfinder: ignore */
-	char uuid_str[256];	/* Flawfinder: ignore */
-	U32 mask;
+	
+	//<ND> inventory optimization
+	//char keyword[256];	/* Flawfinder: ignore */
+	//char valuestr[256];	/* Flawfinder: ignore */
+	//U32 mask;
+	//keyword[0]  = '\0';
+	//valuestr[0] = '\0';	
+	//char uuid_str[256];	/* Flawfinder: ignore */
+	char *keyword;	/* Flawfinder: ignore */
+	char *valuestr;	/* Flawfinder: ignore */
+	//</ND>
 
-	keyword[0]  = '\0';
-	valuestr[0] = '\0';
 
 	while (!feof(fp))
 	{
@@ -593,74 +603,103 @@ BOOL LLPermissions::importFile(LLFILE* fp)
 			buffer[0] = '\0';
 		}
 		
-		sscanf( /* Flawfinder: ignore */
-			buffer,
-			" %255s %255s",
-			keyword, valuestr);
-		if (!strcmp("{", keyword))
+//		sscanf( /* Flawfinder: ignore */
+//			buffer,
+//			" %255s %255s",
+//			keyword, valuestr);
+
+		int nKWLen = splitCacheLine( buffer, keyword, valuestr );
+
+		if( !nKWLen )
+			continue;
+
+		if ( sizeof("{")-1 == nKWLen && !strcmp("{", keyword))
 		{
 			continue;
 		}
-		if (!strcmp("}",keyword))
+		//if (!strcmp("}",keyword))
+		if ( sizeof("}")-1 == nKWLen && !strcmp("}",keyword))
 		{
 			break;
 		}
-		else if (!strcmp("creator_mask", keyword))
+		//else if (!strcmp("creator_mask", keyword))
+		else if ( sizeof("creator_mask")-1 == nKWLen && !strcmp("creator_mask", keyword))
 		{
 			// legacy support for "creator" masks
-			sscanf(valuestr, "%x", &mask);
-			mMaskBase = mask;
+			//sscanf(valuestr, "%x", &mask);
+			//mMaskBase = mask;
+			mMaskBase = strtol( valuestr, 0, 16 );
 			fixFairUse();
 		}
-		else if (!strcmp("base_mask", keyword))
+		//else if (!strcmp("base_mask", keyword))
+		else if ( sizeof("base_mask")-1 == nKWLen && !strcmp("base_mask", keyword))
 		{
-			sscanf(valuestr, "%x", &mask);
-			mMaskBase = mask;
+			//sscanf(valuestr, "%x", &mask);
+			//mMaskBase = mask;
+			mMaskBase = strtol( valuestr, 0, 16 );
 			//fixFairUse();
 		}
-		else if (!strcmp("owner_mask", keyword))
+		//else if (!strcmp("owner_mask", keyword))
+		else if ( sizeof("owner_mask")-1 == nKWLen && !strcmp("owner_mask", keyword))
 		{
-			sscanf(valuestr, "%x", &mask);
-			mMaskOwner = mask;
+			//sscanf(valuestr, "%x", &mask);
+			//mMaskOwner = mask;
+			mMaskOwner = strtol( valuestr, 0, 16 );;
 		}
-		else if (!strcmp("group_mask", keyword))
+		//else if (!strcmp("group_mask", keyword))
+		else if ( sizeof("group_mask")-1 == nKWLen && !strcmp("group_mask", keyword))
 		{
-			sscanf(valuestr, "%x", &mask);
-			mMaskGroup = mask;
+			// sscanf(valuestr, "%x", &mask);
+			// mMaskGroup = mask;
+			mMaskGroup = strtol( valuestr, 0, 16 );;
 		}
-		else if (!strcmp("everyone_mask", keyword))
+		//else if (!strcmp("everyone_mask", keyword))
+		else if ( sizeof("everyone_mask")-1 == nKWLen && !strcmp("everyone_mask", keyword))
 		{
-			sscanf(valuestr, "%x", &mask);
-			mMaskEveryone = mask;
+			//sscanf(valuestr, "%x", &mask);
+			//mMaskEveryone = mask;
+			mMaskEveryone = strtol( valuestr, 0, 16 );;
 		}
-		else if (!strcmp("next_owner_mask", keyword))
+		//else if (!strcmp("next_owner_mask", keyword))
+		else if ( sizeof("next_owner_mask")-1 == nKWLen && !strcmp("next_owner_mask", keyword))
 		{
-			sscanf(valuestr, "%x", &mask);
-			mMaskNextOwner = mask;
+			//sscanf(valuestr, "%x", &mask);
+			//mMaskNextOwner = mask;
+			mMaskNextOwner = strtol( valuestr, 0, 16 );;
 		}
-		else if (!strcmp("creator_id", keyword))
+		//else if (!strcmp("creator_id", keyword))
+		else if ( sizeof("creator_id")-1 == nKWLen && !strcmp("creator_id", keyword))
 		{
-			sscanf(valuestr, "%255s", uuid_str); /* Flawfinder: ignore */
-			mCreator.set(uuid_str);
+			//sscanf(valuestr, "%255s", uuid_str); /* Flawfinder: ignore */
+			//mCreator.set(uuid_str);			
+			mCreator.set(valuestr);
 		}
-		else if (!strcmp("owner_id", keyword))
+		//else if (!strcmp("owner_id", keyword))
+		else if ( sizeof("owner_id")-1 == nKWLen && !strcmp("owner_id", keyword))
 		{
-			sscanf(valuestr, "%255s", uuid_str); /* Flawfinder: ignore */
-			mOwner.set(uuid_str);
+			//sscanf(valuestr, "%255s", uuid_str); /* Flawfinder: ignore */
+			//mOwner.set(uuid_str);
+			mOwner.set(valuestr);
 		}
-		else if (!strcmp("last_owner_id", keyword))
+		//else if (!strcmp("last_owner_id", keyword))
+		else if ( sizeof("last_owner_id")-1 == nKWLen && !strcmp("last_owner_id", keyword))
 		{
-			sscanf(valuestr, "%255s", uuid_str); /* Flawfinder: ignore */
-			mLastOwner.set(uuid_str);
+			//sscanf(valuestr, "%255s", uuid_str); /* Flawfinder: ignore */
+			//mLastOwner.set(uuid_str);
+			mLastOwner.set(valuestr);
 		}
-		else if (!strcmp("group_id", keyword))
+		//else if (!strcmp("group_id", keyword))
+		else if ( sizeof("group_id")-1 == nKWLen && !strcmp("group_id", keyword))
 		{
-			sscanf(valuestr, "%255s", uuid_str); /* Flawfinder: ignore */
-			mGroup.set(uuid_str);
+			//sscanf(valuestr, "%255s", uuid_str); /* Flawfinder: ignore */
+			//mGroup.set(uuid_str);
+			mGroup.set(valuestr);
 		}
-		else if (!strcmp("group_owned", keyword))
+		//else if (!strcmp("group_owned", keyword))
+		else if ( sizeof("group_owned")-1 == nKWLen && !strcmp("group_owned", keyword))
 		{
-			sscanf(valuestr, "%d", &mask);
+			//sscanf(valuestr, "%d", &mask);
+			U32 mask( atoi(valuestr) );
 			if(mask) mIsGroupOwned = true;
 			else mIsGroupOwned = false;
 		}

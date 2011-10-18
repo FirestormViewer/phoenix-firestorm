@@ -3510,7 +3510,7 @@ Sorry, you cannot block a Linden.
    label="Block object by name failed"
    name="MuteByNameFailed"
    type="alertmodal">
-You already have blocked this name.
+You already have blocked/muted this name.
   <tag>fail</tag>
     <usetemplate
      name="okbutton"
@@ -6235,12 +6235,12 @@ No valid parcel could be found.
    type="offer">
 An object named &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; owned by [NAME_SLURL] has given you this [OBJECTTYPE]:
 [ITEM_SLURL]
-Do you want to keep it? "Block" will block any more offers or messages from [NAME_SLURL].
+Do you want to keep it? "Mute" will block all future offers or messages from [NAME_SLURL].
     <form name="form">
       <button
        index="0"
        name="Keep"
-       text="Keep"/>
+       text="Accept"/>
       <button
        index="1"
        name="Discard"
@@ -6248,7 +6248,7 @@ Do you want to keep it? "Block" will block any more offers or messages from [NAM
       <button
        index="2"
        name="Mute"
-       text="Block"/>
+       text="Mute Owner"/>
     </form>
   </notification>
 
@@ -6259,12 +6259,12 @@ Do you want to keep it? "Block" will block any more offers or messages from [NAM
    type="offer">
 [NAME_SLURL] has given you this [OBJECTTYPE]:
 [ITEM_SLURL]
-Do you want to keep it? "Block" will block any more offers or messages from [NAME_SLURL].
+Do you want to keep it? "Mute" will block all future offers or messages from [NAME_SLURL].
     <form name="form">
       <button
        index="4"
        name="Show"
-       text="Show"/>
+       text="Accept"/>
       <button
        index="1"
        name="Discard"
@@ -6272,7 +6272,7 @@ Do you want to keep it? "Block" will block any more offers or messages from [NAM
       <button
        index="2"
        name="Mute"
-       text="Block"/>
+       text="Mute Sender"/>
     </form>
   </notification>
 
@@ -6542,7 +6542,7 @@ The item you are trying to wear uses a feature that your viewer cannot read. Ple
 &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, an object owned by &apos;[NAME]&apos;, would like to:
 
 [QUESTIONS]
-Is this OK?
+Is this OK? Selecting "Mute" will block all further messages from &apos;[NAME]&apos;.
   <tag>confirm</tag>
     <form name="form">
       <button
@@ -6556,7 +6556,7 @@ Is this OK?
       <button
        index="2"
        name="Mute"
-       text="Block"/>
+       text="Mute Owner"/>
     </form>
   </notification>
 
@@ -6751,7 +6751,7 @@ You may only select up to [MAX_SELECT] items from this list.
    name="VoiceInviteP2P"
    type="notify">
 [NAME] is inviting you to a Voice Chat call.
-Click Accept to join the call or Decline to decline the invitation. Click Block to block this caller.
+Click Accept to join the call or Decline to decline the invitation. Click mute to permanently block all messages this caller.
     <tag>confirm</tag>
     <tag>voice</tag>
     <unique>
@@ -6769,7 +6769,7 @@ Click Accept to join the call or Decline to decline the invitation. Click Block 
       <button
        index="2"
        name="Mute"
-       text="Block"/>
+       text="Mute"/>
     </form>
   </notification>
 
@@ -6802,7 +6802,7 @@ Click Accept to join the call or Decline to decline the invitation. Click Block 
    name="VoiceInviteGroup"
    type="notify">
 [NAME] has joined a Voice Chat call with the group [GROUP].
-Click Accept to join the call or Decline to decline the invitation. Click Block to block this caller.
+Click Accept to join the call or Decline to decline the invitation. Click mute to permanently block all messages from this caller.
     <tag>group</tag>
     <tag>confirm</tag>
     <tag>voice</tag>
@@ -6822,7 +6822,7 @@ Click Accept to join the call or Decline to decline the invitation. Click Block 
       <button
        index="2"
        name="Mute"
-       text="Block"/>
+       text="Mute"/>
     </form>
   </notification>
 
@@ -6831,7 +6831,7 @@ Click Accept to join the call or Decline to decline the invitation. Click Block 
    name="VoiceInviteAdHoc"
    type="notify">
 [NAME] has joined a voice chat call with a conference chat.
-Click Accept to join the call or Decline to decline the invitation. Click Block to block this caller.
+Click Accept to join the call or Decline to decline the invitation. Click mute to permanently block all message from this caller.
   <tag>confirm</tag>
     <tag>voice</tag>
     <unique>
@@ -6849,7 +6849,7 @@ Click Accept to join the call or Decline to decline the invitation. Click Block 
       <button
        index="2"
        name="Mute"
-       text="Block"/>
+       text="Mute"/>
     </form>
   </notification>
 
@@ -6858,7 +6858,7 @@ Click Accept to join the call or Decline to decline the invitation. Click Block 
    name="InviteAdHoc"
    type="notify">
 [NAME] is inviting you to a conference chat.
-Click Accept to join the chat or Decline to decline the invitation. Click Block to block this caller.
+Click Accept to join the chat or Decline to decline the invitation. Click mute to permanently block all messages this caller.
   <tag>confirm</tag>
     <tag>voice</tag>
     <unique>
@@ -6876,7 +6876,7 @@ Click Accept to join the chat or Decline to decline the invitation. Click Block 
       <button
        index="2"
        name="Mute"
-       text="Block"/>
+       text="Mute"/>
     </form>
   </notification>
 

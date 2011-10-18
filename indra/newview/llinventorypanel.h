@@ -226,6 +226,9 @@ public:
 public:
 	BOOL 				getIsViewsInitialized() const { return mViewsInitialized; }
 	const LLUUID&		getRootFolderID() const;
+
+	void	addSubItems(const LLUUID& id); //ND Just-In-Time subfolder load
+
 protected:
 	// Builds the UI.  Call this once the inventory is usable.
 	void 				initializeViews();

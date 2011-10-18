@@ -140,6 +140,10 @@ extern "C" { int yyerror(const char *fmt, ...); }
 "STATUS_DIE_AT_EDGE"	{ count(); yylval.ival = 0x80; return(INTEGER_CONSTANT); }
 "STATUS_RETURN_AT_EDGE"	{ count(); yylval.ival = 0x100; return(INTEGER_CONSTANT); }
 "STATUS_CAST_SHADOWS"	{ count(); yylval.ival = 0x200; return(INTEGER_CONSTANT); }
+"STATUS_BLOCK_GRAB_OBJECT"	{count(); yylval.ival = 0x400; return(INTEGER_CONSTANT); }
+
+"PROFILE_NONE"			{ count(); yylval.ival = 0; return(INTEGER_CONSTANT); }
+"PROFILE_SCRIPT_MEMORY"		{ count(); yylval.ival = 1; return(INTEGER_CONSTANT); }
 
 "AGENT_FLYING"			{ count(); yylval.ival = AGENT_FLYING; return(INTEGER_CONSTANT); }
 "AGENT_ATTACHMENTS"		{ count(); yylval.ival = AGENT_ATTACHMENTS; return(INTEGER_CONSTANT); }
@@ -187,6 +191,8 @@ extern "C" { int yyerror(const char *fmt, ...); }
 "LINK_THIS"				{ count(); yylval.ival = LSL_LINK_THIS; return(INTEGER_CONSTANT); }
 
 "AGENT"					{ count(); yylval.ival = 0x1; return(INTEGER_CONSTANT); }
+"AGENT_BY_LEGACY_NAME"			{ count(); yylval.ival = 0x1; return(INTEGER_CONSTANT); }
+"AGENT_BY_USERNAME"			{ count(); yylval.ival = 0x10; return(INTEGER_CONSTANT); }
 "ACTIVE"				{ count(); yylval.ival = 0x2; return(INTEGER_CONSTANT); }
 "PASSIVE"				{ count(); yylval.ival = 0x4; return(INTEGER_CONSTANT); }
 "SCRIPTED"				{ count(); yylval.ival = 0x8; return(INTEGER_CONSTANT); }
@@ -249,6 +255,10 @@ extern "C" { int yyerror(const char *fmt, ...); }
 "OBJECT_OWNER"			{ count(); yylval.ival = OBJECT_OWNER; return(INTEGER_CONSTANT); }
 "OBJECT_GROUP"			{ count(); yylval.ival = OBJECT_GROUP; return(INTEGER_CONSTANT); }
 "OBJECT_CREATOR"		{ count(); yylval.ival = OBJECT_CREATOR; return(INTEGER_CONSTANT); }
+"OBJECT_RUNNING_SCRIPT_COUNT"	{ count(); yylval.ival = OBJECT_RUNNING_SCRIPT_COUNT; return(INTEGER_CONSTANT); }
+"OBJECT_TOTAL_SCRIPT_COUNT"	{ count(); yylval.ival = OBJECT_TOTAL_SCRIPT_COUNT; return(INTEGER_CONSTANT); }
+"OBJECT_SCRIPT_MEMORY"		{ count(); yylval.ival = OBJECT_SCRIPT_MEMORY; return(INTEGER_CONSTANT); }
+"OBJECT_SCRIPT_TIME"		{ count(); yylval.ival = OBJECT_SCRIPT_TIME; return(FP_CONSTANT); }
 
 "TYPE_INTEGER"			{ count(); yylval.ival = LST_INTEGER; return(INTEGER_CONSTANT); }	
 "TYPE_FLOAT"			{ count(); yylval.ival = LST_FLOATINGPOINT; return(INTEGER_CONSTANT); }	
@@ -459,6 +469,13 @@ extern "C" { int yyerror(const char *fmt, ...); }
 "PRIM_FULLBRIGHT"		{ count(); yylval.ival = LSL_PRIM_FULLBRIGHT; return(INTEGER_CONSTANT); }
 "PRIM_TEXGEN"			{ count(); yylval.ival = LSL_PRIM_TEXGEN; return(INTEGER_CONSTANT); }
 "PRIM_GLOW"	     		{ count(); yylval.ival = LSL_PRIM_GLOW; return(INTEGER_CONSTANT); }
+"PRIM_TEXT"			{ count(); yylval.ival = LSL_PRIM_TEXT; return(INTEGER_CONSTANT); }
+"PRIM_NAME"			{ count(); yylval.ival = LSL_PRIM_NAME; return(INTEGER_CONSTANT); }
+"PRIM_DESC"			{ count(); yylval.ival = LSL_PRIM_DESC; return(INTEGER_CONSTANT); }
+"PRIM_OMEGA"			{ count(); yylval.ival = LSL_PRIM_OMEGA; return(INTEGER_CONSTANT); }
+"PRIM_POS_LOCAL"		{ count(); yylval.ival = LSL_PRIM_POS_LOCAL; return(INTEGER_CONSTANT); }
+"PRIM_ROT_LOCAL"		{ count(); yylval.ival = LSL_PRIM_ROT_LOCAL; return(INTEGER_CONSTANT); }
+
 
 "PRIM_TYPE_BOX"			{ count(); yylval.ival = LSL_PRIM_TYPE_BOX; return(INTEGER_CONSTANT); }
 "PRIM_TYPE_CYLINDER"	{ count(); yylval.ival = LSL_PRIM_TYPE_CYLINDER; return(INTEGER_CONSTANT); }

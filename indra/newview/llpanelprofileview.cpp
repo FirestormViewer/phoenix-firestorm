@@ -30,6 +30,7 @@
 
 #include "llavatarconstants.h"
 #include "llavatarnamecache.h"	// IDEVO
+#include "llavataractions.h"
 #include "llclipboard.h"
 #include "lluserrelations.h"
 
@@ -169,6 +170,9 @@ BOOL LLPanelProfileView::postBuild()
 
 	// set up callback for copy URI button
 	childSetCommitCallback("copy_uri",boost::bind(&LLPanelProfileView::onCopyURI,this),NULL);
+
+	// set up callback for invite to group button
+	childSetCommitCallback("group_invite",boost::bind(&LLPanelProfileView::onGroupInvite,this),NULL);
 
 	LLFloater* pParentView = dynamic_cast<LLFloater*>(getParent());
 	if (!pParentView)
@@ -341,6 +345,12 @@ void LLPanelProfileView::onCopyURI()
 {
     std::string name = "secondlife:///app/agent/"+getChild<LLUICtrl>("user_key")->getValue().asString()+"/about";
     gClipboard.copyFromString(utf8str_to_wstring(name));
+}
+
+// Group invite button callback
+void LLPanelProfileView::onGroupInvite()
+{
+    LLAvatarActions::inviteToGroup(getAvatarId());
 }
 
 // EOF

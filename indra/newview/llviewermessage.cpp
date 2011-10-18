@@ -99,6 +99,7 @@
 #include "llvlmanager.h"
 #include "llvoavatarself.h"
 #include "llworld.h"
+#include "llworldmap.h"
 #include "pipeline.h"
 #include "llfloaterworldmap.h"
 #include "llviewerdisplay.h"
@@ -4230,6 +4231,13 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 	
 	// Ansariel: New region -> reset fail counter for texture fetcher
 	LLAppViewer::getTextureFetch()->processRegionChanged();
+
+	// Ansariel: Disable teleport beacon after teleport
+	if (gSavedSettings.getBOOL("FSDisableBeaconAfterTeleport"))
+	{
+		LLTracker::stopTracking((void *)(intptr_t)TRUE);
+		LLWorldMap::getInstance()->cancelTracking();
+	}
 
 /*
 	// send camera update to new region

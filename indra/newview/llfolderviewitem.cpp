@@ -45,6 +45,8 @@
 #include "llfocusmgr.h"		// gFocusMgr
 #include "lltrans.h"
 
+#include "llinventorypanel.h"
+
 ///----------------------------------------------------------------------------
 /// Class LLFolderViewItem
 ///----------------------------------------------------------------------------
@@ -897,7 +899,7 @@ void LLFolderViewItem::draw()
 	const bool up_to_date = mListener && mListener->isUpToDate();
 	const bool possibly_has_children = ((up_to_date && hasVisibleChildren()) // we fetched our children and some of them have passed the filter...
 										|| (!up_to_date && mListener && mListener->hasChildren())); // ...or we know we have children but haven't fetched them (doesn't obey filter)
-	if (possibly_has_children)
+	if (possibly_has_children || isPreCreatedFolder() ) // <ND> JIT folders / support for isPreCreatedFolder
 	{
 		LLUIImage* arrow_image = default_params.folder_arrow_image;
 		gl_draw_scaled_rotated_image(
@@ -1144,7 +1146,9 @@ LLFolderViewFolder::LLFolderViewFolder( const LLFolderViewItem::Params& p ):
 	mCompletedFilterGeneration(-1),
 	mMostFilteredDescendantGeneration(-1),
 	mNeedsSort(false),
-	mPassedFolderFilter(FALSE)
+	mPassedFolderFilter(FALSE),
+	mIsPopulated( false ),
+	mParentPanel(0)
 {
 }
 
@@ -2139,6 +2143,15 @@ void LLFolderViewFolder::setOpen(BOOL openitem)
 
 void LLFolderViewFolder::setOpenArrangeRecursively(BOOL openitem, ERecurseType recurse)
 {
+	// <ND> JIT Folders
+	if( !mIsPopulated && mParentPanel )
+	{
+		lldebugs << "Lazy populating " << getName() << llendl;
+		mParentPanel->addSubItems( mFolderId );
+		mIsPopulated = true;
+	}
+	// </ND>
+
 	BOOL was_open = mIsOpen;
 	mIsOpen = openitem;
 	if (mListener)

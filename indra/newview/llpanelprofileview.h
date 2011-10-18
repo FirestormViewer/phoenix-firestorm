@@ -82,6 +82,7 @@ protected:
 	void onBackBtnClick();
 	void onCopyToClipboard();
 	void onCopyURI();
+	void onGroupInvite();
 	bool isGrantedToSeeOnlineStatus();
 
 	/**

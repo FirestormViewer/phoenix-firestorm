@@ -51,7 +51,9 @@ public:
 									voice_call_joined_style,
 									voice_call_left_style,
 									online_style,
-									offline_style;
+									offline_style,
+									group_moderator_style;
+
 
 		Optional<S32>				name_right_pad;
 
@@ -65,6 +67,7 @@ public:
 		IS_VOICE_LEFT,
 		IS_ONLINE,
 		IS_OFFLINE,
+		IS_GROUPMOD,
 	} EItemState;
 
 	/**
