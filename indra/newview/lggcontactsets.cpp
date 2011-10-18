@@ -294,6 +294,12 @@ BOOL LGGContactSets::hasFriendColorThatShouldShow(LLUUID friend_id,bool chat, bo
 	if(chat &&!(sPhoenixColorContactSetsChat))return FALSE;
 	if(radar && !contactSetsColorizeRadar)return FALSE;
 
+	//don't show friend color if they are no longer a friend 
+	//(and if are also not on the "non friends" list)
+	if( (!LLAvatarTracker::instance().isBuddy(friend_id))
+		&&(!isNonFriend(friend_id))) return FALSE;
+
+
 	if(getFriendColor(friend_id)==getDefaultColor())return FALSE;
 	return TRUE;
 }
