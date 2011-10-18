@@ -774,7 +774,8 @@ LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id)
 	}
 
 	//  <ND> Subfolder JIT
-	if( id == getRootFolderID() )
+ 	// FIRE-3615; FIRE-3616: For some panels we get a zero UUID for top level folders here. </ND>
+ 	if( id == getRootFolderID() || getRootFolderID().isNull() || id.isNull() )
 		addSubItems( id );
 	// </ND>
 
@@ -785,6 +786,7 @@ LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id)
 void LLInventoryPanel::addSubItems(const LLUUID& id)
 {
  	LLInventoryObject const* objectp = gInventory.getObject(id);
+ 	LLUUID root_id = mFolderRoot->getListener()->getUUID();
 
 	// If this is a folder, add the children of the folder and recursively add any 
 	// child folders.
@@ -797,7 +799,9 @@ void LLInventoryPanel::addSubItems(const LLUUID& id)
 		mInventory->lockDirectDescendentArrays(id, categories, items);
 		LLFolderViewFolder *parent_folder(0);
 
-		if( items && objectp )
+	 	if (id == root_id)
+	 		parent_folder = mFolderRoot;
+		else if( items && objectp )
 			parent_folder = (LLFolderViewFolder*)mFolderRoot->getItemByID(objectp->getParentUUID());
 
 		if(categories)
@@ -824,6 +828,10 @@ void LLInventoryPanel::addSubItems(const LLUUID& id)
 				if( !mFolderRoot->getItemByID( item->getUUID() ) ) //ND
 					buildNewViews(item->getUUID());
 			}
+		}
+		else if( items )
+		{
+			llwarns << "No parent folder for items" << llendl;
 		}
 		mInventory->unlockDirectDescendentArrays(id);
 	}
