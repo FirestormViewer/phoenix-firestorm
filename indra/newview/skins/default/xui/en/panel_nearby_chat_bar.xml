@@ -31,7 +31,7 @@
      draw_border="false"
      height="16"
      layout="topleft"
-     left_pad="-24"
+     left_pad="-30"
      mouse_opaque="true"
      name="chat_zone_indicator"
      top="6"
