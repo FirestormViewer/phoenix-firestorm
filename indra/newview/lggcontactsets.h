@@ -1,4 +1,3 @@
-#include "v4color.h"
 /* Copyright (C) 2011 Greg Hendrickson (LordGregGreg Back)
 
    This is free software; you can redistribute it and/or modify it
@@ -19,13 +18,19 @@
 
 #ifndef LGG_FRIENDS_GROUPS_H
 #define LGG_FRIENDS_GROUPS_H
-class LGGContactSets
+
+#include "v4color.h"
+//#include "llcallingcard.h"
+class LGGContactSets//:  public LLFriendObserver
 {
 	LGGContactSets();
 	~LGGContactSets();
 	static LGGContactSets* sInstance;
 public:
 	static LGGContactSets* getInstance();
+
+	virtual void changed(U32 mask);
+
 	static LLColor4 toneDownColor(LLColor4 inColor, float strength, bool usedForBackground=FALSE);
 
 	BOOL saveGroupToDisk(std::string groupName, std::string fileName);
