@@ -4412,6 +4412,11 @@ void LLPipeline::renderDebug()
 		}
 	}
 
+	if (mRenderDebugMask & RENDER_DEBUG_WIND_VECTORS)
+	{
+		gAgent.getRegion()->mWind.renderVectors();
+	}
+	
 	if (mRenderDebugMask & RENDER_DEBUG_COMPOSITION)
 	{
 		// Debug composition layers

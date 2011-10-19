@@ -1077,6 +1077,10 @@ U32 info_display_from_string(std::string info_display)
 	{
 		return LLPipeline::RENDER_DEBUG_SCULPTED;
 	}
+	else if ("wind vectors" == info_display)
+	{
+		return LLPipeline::RENDER_DEBUG_WIND_VECTORS;
+	}
 	else
 	{
 		return 0;
@@ -1089,6 +1093,8 @@ class LLAdvancedToggleInfoDisplay : public view_listener_t
 	{
 		U32 info_display = info_display_from_string( userdata.asString() );
 
+		LL_INFOS("ViewerMenu") << "toggle " << userdata.asString() << LL_ENDL;
+		
 		if ( info_display != 0 )
 		{
 			LLPipeline::toggleRenderDebug( (void*)info_display );
@@ -1105,6 +1111,8 @@ class LLAdvancedCheckInfoDisplay : public view_listener_t
 	{
 		U32 info_display = info_display_from_string( userdata.asString() );
 		bool new_value = false;
+
+		LL_INFOS("ViewerMenu") << "check " << userdata.asString() << LL_ENDL;
 
 		if ( info_display != 0 )
 		{
