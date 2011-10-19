@@ -130,6 +130,14 @@ name="Edit Outfit">
       <menu_item_call.on_click
        function="Tools.ScriptInfo" />
   </menu_item_call>
+  <menu_item_call
+      enabled="true"
+      label="Texture Refresh"
+      layout="topleft"
+      name="Texture Refresh">
+      <menu_item_call.on_click
+       function="Object.TexRefresh" />
+   </menu_item_call>
   <menu_item_separator
   layout="topleft" />
   <menu_item_call
