@@ -95,8 +95,18 @@ void LLWearableList::processGetAssetReply( const char* filename, const LLAssetID
 {
 	BOOL isNewWearable = FALSE;
 	LLWearableArrivedData* data = (LLWearableArrivedData*) userdata;
-	LLWearable* wearable = NULL; // NULL indicates failure
-	
+//	LLWearable* wearable = NULL; // NULL indicates failure
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-08-13 (Catznip-3.0.0a) | Added: Catznip-2.1.1d
+	LLWearable* wearable = get_if_there(LLWearableList::instance().mList, uuid, (LLWearable*)NULL);
+	if (wearable)
+	{
+		if(data->mCallback)
+			data->mCallback(wearable, data->mUserdata);
+		delete data;
+		return;
+	}
+// [/SL:KB]
+
 	if( !filename )
 	{
 		LL_WARNS("Wearable") << "Bad Wearable Asset: missing file." << LL_ENDL;
