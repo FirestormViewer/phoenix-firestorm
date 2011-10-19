@@ -86,6 +86,7 @@
 // [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "fslslbridge.h"
 
 // static
 void LLAvatarActions::requestFriendshipDialog(const LLUUID& id, const std::string& name)
@@ -1195,6 +1196,12 @@ bool LLAvatarActions::canZoomIn(const LLUUID& idAgent)
 void LLAvatarActions::zoomIn(const LLUUID& idAgent)
 {
 	handle_zoom_to_object(idAgent);
+}
+
+void LLAvatarActions::getScriptInfo(const LLUUID& idAgent)
+{
+	llinfos << "Reporting Script Info for avatar: " << idAgent.asString() << llendl;
+	FSLSLBridge::instance().viewerToLSL("getScriptInfo|" + idAgent.asString());
 }
 
 

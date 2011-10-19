@@ -99,6 +99,13 @@
         <menu_item_call.on_click
          function="Avatar.GroupInvite" />
     </menu_item_call>
+    <menu_item_call
+     label="Get Script Info"
+     name="ScriptInfo">
+        <menu_item_call.on_click
+         function="Avatar.getScriptInfo" />
+    </menu_item_call>
+
     
     <menu_item_separator />
     

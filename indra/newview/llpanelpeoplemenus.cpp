@@ -65,7 +65,8 @@ LLContextMenu* NearbyMenu::createMenu()
 		registrar.add("Avatar.IM",				boost::bind(&LLAvatarActions::startIM,					id));
 		registrar.add("Avatar.Call",			boost::bind(&LLAvatarActions::startCall,				id));
 		registrar.add("Avatar.OfferTeleport",	boost::bind(&NearbyMenu::offerTeleport,					this));
-		registrar.add("Avatar.GroupInvite",	boost::bind(&LLAvatarActions::inviteToGroup,					id));
+		registrar.add("Avatar.GroupInvite",		boost::bind(&LLAvatarActions::inviteToGroup,			id));
+		registrar.add("Avatar.getScriptInfo",	boost::bind(&LLAvatarActions::getScriptInfo,			id));
 		registrar.add("Avatar.ShowOnMap",		boost::bind(&LLAvatarActions::showOnMap,				id));
 		registrar.add("Avatar.Share",			boost::bind(&LLAvatarActions::share,					id));
 		registrar.add("Avatar.Pay",				boost::bind(&LLAvatarActions::pay,						id));
