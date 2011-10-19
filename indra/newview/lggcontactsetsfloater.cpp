@@ -172,6 +172,18 @@ void lggContactSetsFloater::processProperties(void* data, EAvatarProcessorType t
 
 void lggContactSetsFloater::changed(U32 mask)
 {
+	if(mask & (LLFriendObserver::REMOVE))
+	{
+		const std::set<LLUUID>& changed_items = LLAvatarTracker::instance().getChangedIDs();
+		std::set<LLUUID>::const_iterator id_it = changed_items.begin();
+		std::set<LLUUID>::const_iterator id_end = changed_items.end();
+		for (;id_it != id_end; ++id_it)
+		{
+			//if we are fortunate enough to be the viewer of choice when
+			//someone removes a friend, go and clean up the contact sets
+			LGGContactSets::getInstance()->removeFriendFromAllGroups(*id_it);
+		}		
+	}
 	if(mask & (LLFriendObserver::ADD | LLFriendObserver::REMOVE ))
 	{
 		sInstance->generateCurrentList();
