@@ -1857,13 +1857,16 @@ bool idle_startup()
 		llinfos << " Landmark" << llendl;
 		LLLandmark::registerCallbacks(msg);
 
-		// request mute list
-		llinfos << "Requesting Mute List" << llendl;
-		LLMuteList::getInstance()->requestFromServer(gAgent.getID());
+		// Ansariel: Moved after inventory creation. Otherwise the responses
+		//           from the money balance request and mutelist request
+		//           seem to get lost under certain conditions
+		//// request mute list
+		//llinfos << "Requesting Mute List" << llendl;
+		//LLMuteList::getInstance()->requestFromServer(gAgent.getID());
 
-		// Get L$ and ownership credit information
-		llinfos << "Requesting Money Balance" << llendl;
-		LLStatusBar::sendMoneyBalanceRequest();
+		//// Get L$ and ownership credit information
+		//llinfos << "Requesting Money Balance" << llendl;
+		//LLStatusBar::sendMoneyBalanceRequest();
 
 		// request all group information
 		llinfos << "Requesting Agent Data" << llendl;
@@ -1880,6 +1883,17 @@ bool idle_startup()
 			gIdleCallbacks.addFunction(RlvHandler::onIdleStartup, new LLTimer());
 		}
 // [/RLVa:KB]
+
+		// Ansariel: Moved after inventory creation. Otherwise the responses
+		//           from the money balance request and mutelist request
+		//           seem to get lost under certain conditions
+		// request mute list
+		llinfos << "Requesting Mute List" << llendl;
+		LLMuteList::getInstance()->requestFromServer(gAgent.getID());
+
+		// Get L$ and ownership credit information
+		llinfos << "Requesting Money Balance" << llendl;
+		LLStatusBar::sendMoneyBalanceRequest();
 
 		LLStartUp::setStartupState( STATE_MISC );
 		return FALSE;
