@@ -97,6 +97,7 @@
      name="appearance_camera_movement"
      tool_tip="Use automatic camera positioning while in edit mode"
      width="242" />
+<!-- This does not work.
     <check_box
      control_name="SidebarCameraMovement"
      follows="left|top"
@@ -107,6 +108,7 @@
      name="appearance_sidebar_positioning"
      tool_tip="Use automatic camera positioning for sidebar"
      width="242" />
+-->
 
     <icon
      follows="left|top"
