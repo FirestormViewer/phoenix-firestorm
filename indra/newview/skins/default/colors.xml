@@ -600,7 +600,7 @@
      reference="White"/>
     <color
      name="GroupNotifyDimmedTextColor"
-     reference="DkGray" />
+     value="0.5 0.5 0.5 1" />
     <color
      name="HTMLLinkColor"
      reference="AccentColor" />
