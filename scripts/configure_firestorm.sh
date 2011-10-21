@@ -344,10 +344,12 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 	if [ $WANTS_PACKAGE -eq $TRUE ] ; then
 		PACKAGE="-DPACKAGE:BOOL=ON"
 		# Also delete easy-to-copy resource files, insuring that we properly refresh resoures from the source tree
-		echo "Removing any previously packaged files, will refresh at build time."	
-		if [ -d newview/packaged ] ; then
-			rm -rf newview/packaged/
-		fi
+		echo "Removing select previously packaged resources, they will refresh at build time"
+		for subdir in skins app_settings fs_resources ; do
+			for resourcedir in `find . -type d -name $subdir` ; do 
+				rm -rf $resourcedir ; 
+			done	
+		done
 	else
 		PACKAGE="-DPACKAGE:BOOL=OFF"
 	fi
