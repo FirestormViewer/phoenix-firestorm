@@ -343,6 +343,11 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 	fi
 	if [ $WANTS_PACKAGE -eq $TRUE ] ; then
 		PACKAGE="-DPACKAGE:BOOL=ON"
+		# Also delete easy-to-copy resource files, insuring that we properly refresh resoures from the source tree
+		echo "Removing any previously packaged files, will refresh at build time."	
+		if [ -d newview/packaged ] ; then
+			rm -rf newview/packaged/
+		fi
 	else
 		PACKAGE="-DPACKAGE:BOOL=OFF"
 	fi
