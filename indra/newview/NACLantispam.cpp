@@ -277,6 +277,10 @@ void NACLAntiSpamRegistry::blockGlobalEntry(LLUUID& source)
 bool NACLAntiSpamRegistry::checkQueue(U32 name, LLUUID& source, U32 multiplier, bool silent)
 // returns TRUE if blocked, FALSE otherwise
 {
+	// skip all checks if we're we've been administratively turned off
+	if (gSavedSettings.getBOOL("UseAntiSpam") != TRUE)
+		return false;
+	
 	if((source.isNull()) || (gAgent.getID() == source)) 
 		return false;
 	LLViewerObject *obj=gObjectList.findObject(source);
@@ -307,16 +311,16 @@ bool NACLAntiSpamRegistry::checkQueue(U32 name, LLUUID& source, U32 multiplier, 
 		return true;
 	}
 	
-	if (gSavedSettings.getBOOL("UseAntiSpam") == TRUE) // newly blocked, result == 1
+	if (result == 1) // newly blocked, result == 1
 	{
-		if(!silent)
-		{
-		LLSD args;
 		std::string msg = llformat("AntiSpam: Blocked %s for spamming a %s (%d) times in %d seconds.",source.asString().c_str(), getQueueName(name), multiplier * queues[name]->getAmount(), queues[name]->getTime());
-		args["MESSAGE"] = msg;
-		llinfos << "[antispam] " << msg << llendl;
-		LLNotificationsUtil::add("SystemMessageTip", args);
+		if(silent == false)
+		{
+			LLSD args;
+			args["MESSAGE"] = msg;
+			LLNotificationsUtil::add("SystemMessageTip", args);
 		}
+		llinfos << "[antispam] " << msg << llendl;
 		return true;
 	}
 
