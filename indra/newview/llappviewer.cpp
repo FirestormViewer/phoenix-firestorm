@@ -3405,6 +3405,8 @@ void LLAppViewer::handleViewerCrash()
 
 	llinfos << "Last render pool type: " << LLPipeline::sCurRenderPoolType << llendl ;
 
+	LLMemory::logMemoryInfo(true) ;
+
 	//print out recorded call stacks if there are any.
 	LLError::LLCallStacks::print();
 
