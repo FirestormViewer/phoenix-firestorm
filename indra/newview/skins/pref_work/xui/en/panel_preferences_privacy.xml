@@ -9,12 +9,35 @@
  width="540"
  label="Communication"
  name="im">
+ 
+<tab_container
+ label="Privacy"
+ layout="topleft"
+ follows="all"
+ top="5"
+ bottom="-10"
+ left="1"
+ right="-1"
+ name="tabs"
+ tab_min_width="50"
+ tab_position="top" >
+
+    <!--General-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="General"
+     name="tab-general" >
+
     <panel.string
      name="log_in_to_change">
         log in to change
     </panel.string>
     <button
-     follows="left|bottom"
+     follows="left|top"
      height="23"
      label="Clear History"
      tool_tip="Clear login image, last location, teleport history, web, and texture cache"
@@ -78,36 +101,6 @@
      layout="topleft"
      left="30"
      name="auto_disengage_mic_check"
-     top_pad="4"
-     width="350" />
-
-    <check_box
-     control_name="PrivateLookAtTarget"
-     height="16"
-     label="Don't send my actual camera target hints to others"
-     layout="topleft"
-     left="30"
-     name="privatelookat"
-     top_pad="4"
-     width="350" />
-
-    <check_box
-     control_name="PrivateLocalLookAtTarget"
-     height="16"
-     label="Don't show any camera target hints even on my own screen."
-     layout="topleft"
-     left="30"
-     name="privateLocalLookat"
-     top_pad="4"
-     width="400" />
-
-    <check_box
-     control_name="PrivatePointAtTarget"
-     height="16"
-     label="Don't send my selection target hints"
-     layout="topleft"
-     left="30"
-     name="privatepointat"
      top_pad="4"
      width="350" />
 
@@ -198,7 +191,7 @@
      width="350"/>
 
     <button
-     follows="left|bottom"
+     follows="left|top"
      height="23"
      label="Manage Block / Mute list"
      layout="topleft"
@@ -211,4 +204,104 @@
         <button.commit_callback
          function="Pref.BlockList"/>
     </button>
+    </panel>
+
+    <!--LookAt-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="LookAt"
+     name="tab-lookat" >
+     
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Show look at target"
+         left="15"
+         name="showlookat"
+         width="270"
+         control_name="DebugLookAt"
+         tool_tip="Enable crosshairs marking where people are looking."/>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="30"
+         name="lookatshownames"
+         top_pad="5"
+         width="200">
+            Show names for look at target:
+        </text>
+        <combo_box
+         control_name="DebugLookAtShowNames"
+         follows="left|top"
+         height="23"
+         layout="topleft"
+         left_pad="7"
+         max_chars="135"
+         name="lookatshownames_combobox"
+         width="150">
+            <combo_box.item
+             enabled="true"
+             label="None"
+             name="None"
+             value="0" />
+            <combo_box.item
+             enabled="true"
+             label="Complete name"
+             name="Complete_Name"
+             value="1" />
+            <combo_box.item
+             enabled="true"
+             label="Display name"
+             name="Display_Name"
+             value="2" />
+            <combo_box.item
+             enabled="true"
+             label="Legacy name"
+             name="Legacy_Name"
+             value="3" />
+            <combo_box.item
+             enabled="true"
+             label="Username"
+             name="User_Name"
+             value="4" />
+        </combo_box>
+        <check_box
+         control_name="PrivateLookAtTarget"
+         height="16"
+         label="Don't send my actual camera target hints to others"
+         layout="topleft"
+         left="30"
+         name="privatelookat"
+         top_pad="4"
+         width="350" />
+
+        <check_box
+         control_name="PrivateLocalLookAtTarget"
+         height="16"
+         label="Don't show any camera target hints even on my own screen."
+         layout="topleft"
+         left="30"
+         name="privateLocalLookat"
+         top_pad="4"
+         width="400" />
+
+        <check_box
+         control_name="PrivatePointAtTarget"
+         height="16"
+         label="Don't send my selection target hints"
+         layout="topleft"
+         left="30"
+         name="privatepointat"
+         top_pad="4"
+         width="350" />
+
+    </panel>
+</tab_container>
 </panel>

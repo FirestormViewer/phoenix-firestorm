@@ -2032,20 +2032,29 @@ bool LLAppViewer::initThreads()
 
 void errorCallback(const std::string &error_string)
 {
-#ifndef LL_RELEASE_FOR_DOWNLOAD
+#if !LL_RELEASE_FOR_DOWNLOAD
+	if (OSBTN_CANCEL == OSMessageBox(error_string, LLTrans::getString("MBFatalError"), OSMB_OKCANCEL))
+		return;
+#else
 	OSMessageBox(error_string, LLTrans::getString("MBFatalError"), OSMB_OK);
-#endif
+#endif // !LL_RELEASE_FOR_DOWNLOAD
 
 	//Set the ErrorActivated global so we know to create a marker file
 	gLLErrorActivated = true;
 	
 //	LLError::crashAndLoop(error_string);
 // [SL:KB] - Patch: Viewer-Build | Checked: 2010-12-04 (Catznip-2.6.0a) | Added: Catznip-2.4.0g
-#if !LL_RELEASE_FOR_DOWNLOAD && LL_WINDOWS
+#if !LL_RELEASE_FOR_DOWNLOAD
+#if LL_WINDOWS
 	DebugBreak();
+#elif LL_LINUX
+	raise(SIGINT);
+#else // other OSes could hook in here, too
+	LLError::crashAndLoop(error_string);
+#endif // LL_WINDOWS
 #else
 	LLError::crashAndLoop(error_string);
-#endif // LL_RELEASE_WITH_DEBUG_INFO && LL_WINDOWS
+#endif // !LL_RELEASE_FOR_DOWNLOAD
 // [/SL:KB]
 }
 

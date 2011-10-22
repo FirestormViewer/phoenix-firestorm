@@ -202,6 +202,7 @@ public:
 
 	static bool canZoomIn(const LLUUID& idAgent);
 	static void zoomIn(const LLUUID& idAgent);
+	static void getScriptInfo(const LLUUID& idAgent);
 
 	//
 	// Parcel actions

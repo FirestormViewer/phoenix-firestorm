@@ -167,8 +167,8 @@
          name="speak_panel"
          top_delta="0"
          user_resize="true"
-         min_width="68"
-         width="68">
+         min_width="80"
+         width="80">
             <talk_button
              follows="left|right"
              height="23"
@@ -176,7 +176,7 @@
              left="0"
              name="talk"
              top="5"
-             width="64">
+             width="76">
                 <show_button
                  tab_stop="true">
                     <init_callback

@@ -1710,9 +1710,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>18f3e50246c13a20044dd7b19d53c412</string>
+              <string>c8edc048c7550620f9440663596d30e8</string>
               <key>url</key>
-              <string>http://phoenixviewer.com/app/packages/hacd_darwin_20111003.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/hacd_darwin_20111019.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1722,9 +1722,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>858b1b7615aa2a5f4a0c71d4c967d992</string>
+              <string>2418b0149078fa2294957d8659aeda2c</string>
               <key>url</key>
-              <string>http://phoenixviewer.com/app/packages/hacd_linux32_20111003.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/hacd_linux32_20111019.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1734,9 +1734,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b0e6c3120de2a22078d52caf1a1a04d3</string>
+              <string>f846d26e42c5ddca8d2884fb4931a161</string>
               <key>url</key>
-              <string>http://phoenixviewer.com/app/packages/hacd_win32_20111003.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/hacd_win32_20111019.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>

@@ -2434,10 +2434,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	{
 		static LLCachedControl<U32> _NACL_AntiSpamNewlines(gSavedSettings,"_NACL_AntiSpamNewlines");
 		boost::sregex_iterator iter(message.begin(), message.end(), NEWLINES);
-		if(std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines && gSavedSettings.getBOOL("UseAntiSpam"))
+		if((std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines) && gSavedSettings.getBOOL("UseAntiSpam"))
 		{
 			NACLAntiSpamRegistry::blockOnQueue((U32)NACLAntiSpamRegistry::QUEUE_IM,from_id);
 			LLSD args;
+			llinfos << "[antispam] blocked owner due to too many newlines: " << from_id << llendl;
 			args["MESSAGE"] = llformat("AntiSpam: Blocked %s for sending message with %ud lines.",from_id.asString().c_str(),(U32)_NACL_AntiSpamNewlines);
 			LLNotificationsUtil::add("SystemMessageTip", args);
 			return;

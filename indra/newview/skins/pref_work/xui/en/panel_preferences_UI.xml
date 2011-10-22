@@ -280,7 +280,17 @@
          width="50">
             degrees
         </text>
-
+        <check_box
+         top_pad="5"
+         control_name="ShowNetStats"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         name="ShowNetStats"
+         label="Show lag meter"
+         left="15"
+         width="270"
+         tool_tip="Show lag meter in the Status Overlay"/>
         <text
          type="string"
          left="200"
