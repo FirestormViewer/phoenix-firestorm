@@ -148,7 +148,9 @@ public:
 	void onClickDisablePopup();	
 	void resetAllIgnored();
 	void setAllIgnored();
-	void onClickLogPath();	
+	void onClickLogPath();
+	//[FIX FIRE-2765 : SJ] Making sure Reset button resets works
+	void onClickResetLogPath();
 	void enableHistory();
 	void setPersonalInfo(const std::string& visibility, bool im_via_email, const std::string& email);
 	void refreshEnabledState();

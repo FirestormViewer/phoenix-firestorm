@@ -366,6 +366,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.ClickEnablePopup",		boost::bind(&LLFloaterPreference::onClickEnablePopup, this));
 	mCommitCallbackRegistrar.add("Pref.ClickDisablePopup",		boost::bind(&LLFloaterPreference::onClickDisablePopup, this));	
 	mCommitCallbackRegistrar.add("Pref.LogPath",				boost::bind(&LLFloaterPreference::onClickLogPath, this));
+	//[FIX FIRE-2765 : SJ] Making sure Reset button resets works
+	mCommitCallbackRegistrar.add("Pref.ResetLogPath",			boost::bind(&LLFloaterPreference::onClickResetLogPath, this));
 	mCommitCallbackRegistrar.add("Pref.HardwareSettings",		boost::bind(&LLFloaterPreference::onOpenHardwareSettings, this));
 	mCommitCallbackRegistrar.add("Pref.HardwareDefaults",		boost::bind(&LLFloaterPreference::setHardwareDefaults, this));
 	mCommitCallbackRegistrar.add("Pref.VertexShaderEnable",		boost::bind(&LLFloaterPreference::onVertexShaderEnable, this));
@@ -1578,6 +1580,15 @@ void LLFloaterPreference::onClickLogPath()
 	}
 
 	gSavedPerAccountSettings.setString("InstantMessageLogPath", picker.getDirName());
+	//[FIX FIRE-2765 : SJ] Enable Reset button when own Chatlogdirectory is set
+	getChildView("reset_logpath")->setEnabled(TRUE);
+}
+
+//[FIX FIRE-2765 : SJ] Making sure Reset button resets the chatlogdirectory to the default setting
+void LLFloaterPreference::onClickResetLogPath()
+{
+	gDirUtilp->setChatLogsDir(gDirUtilp->getOSUserAppDir());
+	gSavedPerAccountSettings.setString("InstantMessageLogPath", gDirUtilp->getChatLogsDir());
 }
 
 void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im_via_email, const std::string& email)
@@ -1630,6 +1641,12 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	getChildView("open_log_path_button")->setEnabled(TRUE);
 	getChildView("log_path_button-panelsetup")->setEnabled(TRUE);// second set of controls for panel_preferences_setup  -WoLf
 	getChildView("open_log_path_button-panelsetup")->setEnabled(TRUE);
+	std::string Chatlogsdir = gDirUtilp->getOSUserAppDir();
+	//[FIX FIRE-2765 : SJ] Set Chatlog Reset Button on enabled when Chatlogpath isn't the default folder
+	if (gSavedPerAccountSettings.getString("InstantMessageLogPath") != gDirUtilp->getOSUserAppDir())
+	{
+		getChildView("reset_logpath")->setEnabled(TRUE);
+	}
 	childEnable("logfile_name_datestamp");	
 	std::string display_email(email);
 	getChild<LLUICtrl>("email_address")->setValue(display_email);
