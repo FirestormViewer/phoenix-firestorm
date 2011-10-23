@@ -521,7 +521,7 @@
          layout="topleft"
          height="16"
          name="FSUseWebProfiles"
-         label="Use web profiles"
+         label="Use web profiles by default"
          width="270"
          tool_tip="Shows profiles as a web page instead of a v1-style panel"/>
 
