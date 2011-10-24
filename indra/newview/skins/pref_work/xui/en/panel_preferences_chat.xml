@@ -536,7 +536,6 @@
 
         <!-- Chat: Firestorm -->
         <panel
-         border="true"
          top_pad="1"
          bottom="-1"
          left="1"
@@ -545,51 +544,6 @@
          label="Firestorm"
          name="ChatFirestorm" >
 
-            <check_box
-             control_name="CloseChatOnReturn"
-             follows="left|top"
-             height="20"
-             label="Deselect Chat after sending Messages"
-             layout="topleft"
-             left="30"
-             name="CloseChatOnReturn"
-             top_delta="25"
-             width="256" />
-            <check_box
-             control_name="FSHideTimestampsNearbyChat"
-             height="16"
-             label="Hide timestamp in Nearby Chat"
-             layout="topleft"
-             left="30"
-             name="hide_timestamps_nearby_chat"
-             top_pad="5"
-             width="400" />
-            <check_box
-             control_name="FSHideTimestampsIM"
-             height="16"
-             label="Hide timestamp in IMs"
-             layout="topleft"
-             left="30"
-             name="hide_timestamps_im"
-             top_pad="5"
-             width="400" />
-            
-
-        <!-- Chat: Old Firestorm panel's stuff to sort out -->
-
-            <text
-             top_pad="15"
-             left="10"
-             right="-10"
-             height="18"
-             name="chat_wip"
-             follows="left|top|right"
-             layout="topleft"
-             halign="center"
-             font.style="BOLD">
-              WIP/TODO* Most options in this panel still need to be reorganized. -KC
-            </text>
-            
             <text
              name="chat_and_im_enhancements"
              follows="left|top"
@@ -704,8 +658,98 @@
              tool_tip="Hide the chat bar from the bottom button bar and only show it as an overlay when needed."
              top_pad="0"
              width="256" />
-            
+            <check_box
+             control_name="CloseChatOnReturn"
+             follows="left|top"
+             height="18"
+             label="Deselect Chat after sending Messages"
+             layout="topleft"
+             left="30"
+             name="CloseChatOnReturn"
+             top_pad="0"
+             width="256" />
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="30"
+             width="400"
+             height="18"
+             name="FSMarkObjects"
+             control_name="FSMarkObjects"
+             label="Mark objects with (no name) when they speak to avoid spoofing"/>
+
+            <!-- Groups -->
+            <text
+             name="chat_and_im_enhancements"
+             follows="left|top"
+             layout="topleft"
+             top_pad="5"
+             left="19"
+             height="16"
+             width="180">
+              Group Chat:
+            </text>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="30"
+             width="50"
+             height="20"
+             control_name="FSBoldGroupMods"
+             name="FSBoldGroupMods"
+             label="Show group moderator messages in bold"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="30"
+             width="30"
+             height="18"
+             control_name="FSMuteAllGroups"
+             name="FSMuteAllGroups"
+             label="Disable ALL group chats"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="50"
+             width="30"
+             height="18"
+             control_name="FSMuteGroupWhenNoticesDisabled"
+             name="FSMuteGroupWhenNoticesDisabled"
+             label="When 'Receive group notices' is disabled, disable group chat as well"/>
+
             <!-- Logging -->
+            <text
+             name="chat_and_im_enhancements"
+             follows="left|top"
+             layout="topleft"
+             top_pad="5"
+             left="19"
+             height="16"
+             width="180">
+              Chat Log Extras:
+            </text>
+            <check_box
+             control_name="FSHideTimestampsNearbyChat"
+             height="18"
+             label="Hide timestamp in Nearby Chat"
+             layout="topleft"
+             left="30"
+             name="hide_timestamps_nearby_chat"
+             top_pad="0"
+             width="400" />
+            <check_box
+             control_name="FSHideTimestampsIM"
+             height="18"
+             label="Hide timestamp in IMs"
+             layout="topleft"
+             left="30"
+             name="hide_timestamps_im"
+             top_pad="0"
+             width="400" />
             <check_box
              layout="topleft"
              follows="left|top"
@@ -737,24 +781,23 @@
              text_color="White_25">
               (requires saving nearby chat logs)
             </text>
-            
-            
+
+            <!-- Console -->
+            <text
+             name="chat_and_im_enhancements"
+             follows="left|top"
+             layout="topleft"
+             top_pad="5"
+             left="19"
+             height="16"
+             width="180">
+              Console:
+            </text>
             <check_box
              layout="topleft"
              follows="left|top"
              top_pad="0"
              left="30"
-             width="400"
-             height="18"
-             name="FSMarkObjects"
-             control_name="FSMarkObjects"
-             label="Mark objects with (no name) when they speak to avoid spoofing"/>
-            
-            <!-- Console -->
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="0"
              width="200"
              height="18"
              name="ChatFullWidth"
@@ -814,36 +857,7 @@
              width="60">
                 (# lines)
             </text>
-            
-            <!-- Groups -->
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="0"
-             left="20"
-             width="50"
-             height="20"
-             control_name="FSBoldGroupMods"
-             name="FSBoldGroupMods"
-             label="Show group moderator messages in bold"/>
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="0"
-             width="50"
-             height="18"
-             control_name="FSMuteAllGroups"
-             name="FSMuteAllGroups"
-             label="Disable ALL group chats"/>
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="0"
-             width="50"
-             height="18"
-             control_name="FSMuteGroupWhenNoticesDisabled"
-             name="FSMuteGroupWhenNoticesDisabled"
-             label="When 'Receive group notices' is disabled, disable group chat as well"/>
+
         </panel>
 
         <!-- Chat: Radar -->
