@@ -63,6 +63,9 @@ public:
 	virtual void updateChatHistoryStyle();
 
 	static void processChatHistoryStyleUpdate(const LLSD& newvalue);
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-24 (Catznip-3.0.0a) | Modified: Catznip-3.0.0a
+	static void processFloaterTypeChanged();
+// [/SL:KB]
 
 	void loadHistory();
 
@@ -74,7 +77,15 @@ private:
 	void	getAllowedRect		(LLRect& rect);
 
 	void	onNearbySpeakers	();
-	
+
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+public:
+	static const std::string&	getFloaterXMLFile();
+	static bool					isTabbedNearbyChat();
+protected:
+	static void* createChatBarSingle(void*);
+	static void* createChatBarMulti(void*);
+// [/SL:KB]
 
 private:
 	LLHandle<LLView>	mPopupMenuHandle;

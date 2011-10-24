@@ -35,7 +35,9 @@
 #include "lloutputmonitorctrl.h"
 #include "llspeakers.h"
 #include "llbottomtray.h"
-
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+#include "llnearbychatbarbase.h"
+// [/SL:KB]
 
 class LLGestureComboList
 	: public LLGestureManagerObserver
@@ -94,6 +96,9 @@ private:
 
 class LLNearbyChatBar
 :	public LLPanel
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+,	public LLNearbyChatBarBase
+// [/SL:KB]
 {
 public:
 	// constructor for inline chat-bars (e.g. hosted in chat history window)
@@ -114,28 +119,37 @@ public:
 	virtual BOOL handleKeyHere( KEY key, MASK mask );
 
 	static void startChat(const char* line);
-	static void stopChat();
+//	static void stopChat();
 
-	static void sendChatFromViewer(const std::string &utf8text, EChatType type, BOOL animate);
-	static void sendChatFromViewer(const LLWString &wtext, EChatType type, BOOL animate);
+//	static void sendChatFromViewer(const std::string &utf8text, EChatType type, BOOL animate);
+//	static void sendChatFromViewer(const LLWString &wtext, EChatType type, BOOL animate);
 
 protected:
-	static BOOL matchChatTypeTrigger(const std::string& in_str, std::string* out_str);
+//	static BOOL matchChatTypeTrigger(const std::string& in_str, std::string* out_str);
 	static void onChatBoxKeystroke(LLLineEditor* caller, void* userdata);
-	static void onChatBoxFocusLost(LLFocusableElement* caller, void* userdata);
-	void onChatBoxFocusReceived();
+//	static void onChatBoxFocusLost(LLFocusableElement* caller, void* userdata);
+//	void onChatBoxFocusReceived();
 
-	void sendChat( EChatType type );
+//	void sendChat( EChatType type );
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+	void sendChat(EChatType type) { LLNearbyChatBarBase::sendChat(mChatBox, type); }
+// [/SL:KB]
 	void onChatBoxCommit();
 	void onChatFontChange(LLFontGL* fontp);
 
-	static LLWString stripChannelNumber(const LLWString &mesg, S32* channel);
-	EChatType processChatTypeTriggers(EChatType type, std::string &str);
+//	static LLWString stripChannelNumber(const LLWString &mesg, S32* channel);
+//	EChatType processChatTypeTriggers(EChatType type, std::string &str);
 
 	void displaySpeakingIndicator();
 
-	// Which non-zero channel did we last chat on?
-	static S32 sLastSpecialChatChannel;
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+	// LLNearbyChatBarBase
+	/*virtual*/ LLWString getChatBoxText()						 { return mChatBox->getConvertedText(); }
+	/*virtual*/ void      setChatBoxText(LLStringExplicit& text) { mChatBox->setText(text); }
+// [/SL:KB]
+
+//	// Which non-zero channel did we last chat on?
+//	static S32 sLastSpecialChatChannel;
 
 	LLLineEditor*		mChatBox;
 	LLOutputMonitorCtrl* mOutputMonitor;

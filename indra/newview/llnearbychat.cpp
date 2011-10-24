@@ -52,6 +52,12 @@
 
 #include "llbottomtray.h"
 #include "llnearbychatbar.h"
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+#include "llimfloater.h"
+#include "llimfloatercontainer.h"
+#include "llnearbychatbarmulti.h"
+#include "lltabcontainer.h"
+// [/SL:KB]
 #include "llfloaterreg.h"
 #include "lltrans.h"
 
@@ -61,7 +67,10 @@ LLNearbyChat::LLNearbyChat(const LLSD& key)
 	: LLDockableFloater(NULL, false, false, key)
 	,mChatHistory(NULL)
 {
-	
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+	mFactoryMap["panel_chat_bar_single"] = LLCallbackMap(LLNearbyChat::createChatBarSingle, NULL);
+	mFactoryMap["panel_chat_bar_multi"] = LLCallbackMap(LLNearbyChat::createChatBarMulti, NULL);
+// [/SL:KB]
 }
 
 LLNearbyChat::~LLNearbyChat()
@@ -86,15 +95,43 @@ BOOL LLNearbyChat::postBuild()
 
 	mChatHistory = getChild<LLChatHistory>("chat_history");
 
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-29 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+	// Initalize certain parameters depending on docked vs embedded state
+	bool fTabbedNearbyChat = isTabbedNearbyChat();
+	setCanClose(fTabbedNearbyChat);
+	setCanDock(!fTabbedNearbyChat);
+	setCanMinimize(!fTabbedNearbyChat);
+	setCanTearOff(fTabbedNearbyChat);
+
+	if (!fTabbedNearbyChat)
+		mTearOffStateControl.clear();
+	else
+		mDocStateControl.clear();
+// [/SL:KB]
+
 	if(!LLDockableFloater::postBuild())
 		return false;
 
-	if (getDockControl() == NULL)
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-29 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+	// Dock us to the bottom tray nearby chat bar or embedd us into the conversations floater
+	if (!fTabbedNearbyChat)
 	{
-		setDockControl(new LLDockControl(
-			LLBottomTray::getInstance()->getNearbyChatBar(), this,
-			getDockTongue(), LLDockControl::TOP, boost::bind(&LLNearbyChat::getAllowedRect, this, _1)));
+// [/SL:KB]
+		if (getDockControl() == NULL)
+		{
+			setDockControl(new LLDockControl(
+				LLBottomTray::getInstance()->getNearbyChatBar(), this,
+				getDockTongue(), LLDockControl::TOP, boost::bind(&LLNearbyChat::getAllowedRect, this, _1)));
+		}
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-29 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
 	}
+	else
+	{
+		LLIMFloaterContainer* pConvFloater = LLIMFloaterContainer::getInstance();
+		if (pConvFloater)
+			pConvFloater->LLMultiFloater::addFloater(this, TRUE, LLTabContainer::START);
+	}
+// [/SL:KB]
 
         //fix for EXT-4621 
         //chrome="true" prevents floater from stilling capture
@@ -109,29 +146,48 @@ BOOL LLNearbyChat::postBuild()
 
 void    LLNearbyChat::applySavedVariables()
 {
-	if (mRectControl.size() > 1)
-	{
-		const LLRect& rect = LLFloater::getControlGroup()->getRect(mRectControl);
-		if(!rect.isEmpty() && rect.isValid())
-		{
-			reshape(rect.getWidth(), rect.getHeight());
-			setRect(rect);
-		}
-	}
+//	if (mRectControl.size() > 1)
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-29 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+	bool fTabbedNearbyChat = isTabbedNearbyChat();
+//	if ( (mRectControl.size() > 1) && (!fTabbedNearbyChat) )
+// [/SL:KB]
+//	{
+//		const LLRect& rect = LLFloater::getControlGroup()->getRect(mRectControl);
+//		if(!rect.isEmpty() && rect.isValid())
+//		{
+//			reshape(rect.getWidth(), rect.getHeight());
+//			setRect(rect);
+//		}
+//	}
 
 
-	if(!LLFloater::getControlGroup()->controlExists(mDocStateControl))
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-29 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+	if (!fTabbedNearbyChat)
 	{
-		setDocked(true);
+		applyRectControl();
+
+		if (!LLFloater::getControlGroup()->controlExists(mDocStateControl))
+			setDocked(true);
+		else
+			applyDockState();
 	}
 	else
 	{
-		if (mDocStateControl.size() > 1)
-		{
-			bool dockState = LLFloater::getControlGroup()->getBOOL(mDocStateControl);
-			setDocked(dockState);
-		}
+		applyTearOffState();
 	}
+// [/SL:KB]
+//	if(!LLFloater::getControlGroup()->controlExists(mDocStateControl))
+//	{
+//		setDocked(true);
+//	}
+//	else
+//	{
+//		if (mDocStateControl.size() > 1)
+//		{
+//			bool dockState = LLFloater::getControlGroup()->getBOOL(mDocStateControl);
+//			setDocked(dockState);
+//		}
+//	}
 }
 
 std::string appendTime()
@@ -268,6 +324,35 @@ void LLNearbyChat::processChatHistoryStyleUpdate(const LLSD& newvalue)
 		nearby_chat->updateChatHistoryStyle();
 }
 
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-29 (Catznip-3.0.0a) | Added: Catznip-3.0.0a
+//static 
+void LLNearbyChat::processFloaterTypeChanged()
+{
+	// We only need to do anything if an instance of the nearby chat floater already exists
+	LLNearbyChat* pNearbyChat = LLFloaterReg::findTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+	if (pNearbyChat)
+	{
+		bool fVisible = pNearbyChat->getVisible();
+		std::vector<LLChat> msgArchive = pNearbyChat->mMessageArchive;
+
+		// NOTE: * LLFloater::closeFloater() won't call LLFloater::destroy() since the nearby chat floater is single instaced
+		//       * we can't call LLFloater::destroy() since it will call LLMortician::die() which defers destruction until a later time
+		//   => we'll have created a new instance and the delayed destructor calling LLFloaterReg::removeInstance() will make all future
+		//      LLFloaterReg::getTypedInstance() calls return NULL so we need to destruct manually [see LLFloaterReg::destroyInstance()]
+		pNearbyChat->closeFloater();
+		LLFloaterReg::destroyInstance("nearby_chat", LLSD());
+
+		if ((pNearbyChat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD())) != NULL)
+		{
+			pNearbyChat->mMessageArchive = msgArchive;
+			pNearbyChat->updateChatHistoryStyle();
+			if (fVisible)
+				pNearbyChat->openFloater(LLSD());
+		}
+	}
+}
+// [/SL:KB]
+
 bool isWordsName(const std::string& name)
 {
 	// checking to see if it's display name plus username in parentheses 
@@ -382,3 +467,39 @@ void LLNearbyChat::draw()
 
 	LLDockableFloater::draw();
 }
+
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.0.0a) | Added: Catznip-2.8.0a
+void* LLNearbyChat::createChatBarSingle(void*)
+{
+	return new LLNearbyChatBar();
+}
+
+void* LLNearbyChat::createChatBarMulti(void*)
+{
+	return new LLNearbyChatBarMulti();
+}
+
+bool LLNearbyChat::isTabbedNearbyChat()
+{
+	return (LLIMFloater::isChatMultiTab()) && (gSavedSettings.getBOOL("NearbyChatFloaterWindow"));
+}
+
+const std::string& LLNearbyChat::getFloaterXMLFile()
+{
+	static std::string strFile;
+	switch (gSavedSettings.getS32("NearbyChatFloaterBarType"))
+	{
+		case 1:		// Single-line
+			strFile = "floater_nearby_chat_single.xml";
+			break;
+		case 2:		// Multi-line
+			strFile = "floater_nearby_chat_multi.xml";
+			break;
+		case 0:		// None (default)
+		default:
+			strFile = "floater_nearby_chat.xml";
+			break;
+	}
+	return strFile;
+}
+// [/SL:KB]
