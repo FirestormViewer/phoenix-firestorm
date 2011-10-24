@@ -446,7 +446,7 @@
                  name="Korean"
                  value="ko" />
             </combo_box>
-        
+
         </panel>
 
         <!-- Chat: Notifications -->
@@ -459,11 +459,11 @@
          follows="all"
          label="Notifications"
          name="ChatNotifications" >
-            
+
             <text
              top="15"
              left="30"
-             height="10"
+             height="14"
              width="180"
              name="disable_toast_label"
              follows="left|top"
@@ -475,9 +475,9 @@
              name="EnableGroupChatPopups"
              label="Group Chats"
              layout="topleft"
-             top_pad="5"
-             left_delta="10"
-             height="20"
+             top_pad="0"
+             left="40"
+             height="18"
              tool_tip="Check to see popups when a Group Chat message arrives"
              width="400" />
             <check_box
@@ -485,53 +485,87 @@
              name="EnableIMChatPopups"
              label="IM Chats"
              layout="topleft"
-             top_pad="5"
-             height="16"
+             top_pad="0"
+             left="40"
+             height="18"
              tool_tip="Check to see popups when an instant message arrives"
              width="400" />
-            
             <check_box
              control_name="OnlineOfflinetoNearbyChat"
              name="OnlineOfflinetoNearbyChat"
              label="Friend on/off-line notices to Nearby Chat"
              layout="topleft"
              top_pad="0"
+             left="40"
              height="18"
              width="400" />
-            
+
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="0"
-             left="20"
+             top_pad="5"
+             left="30"
              width="400"
              height="18"
              name="FSUseNearbyChatConsole"
              control_name="FSUseNearbyChatConsole"
              label="Use console for chat popups instead of floating toasts (Viewer 1.x style)"/>
+
             <check_box
              layout="topleft"
              follows="left|top"
              top_pad="0"
+             left="30"
              width="50"
              height="18"
              name="FSLogImToChatConsole"
              control_name="FSLogImToChatConsole"
              label="Show IMs and group chat in chat console"/>
-            
+
             <check_box
              layout="topleft"
              follows="left|top"
              top_pad="0"
-             left="20"
+             left="30"
              width="50"
              height="18"
              control_name="FSPaymentInfoInChat"
              name="FSPaymentInfoInChat"
              label="Show L$ transactions in local chat instead of toasts"/>
-            
-            
-            
+
+            <check_box
+             control_name="ShowStreamMetadata"
+             name="ShowStreamMetadata"
+             label="Show stream title in local chat"
+             layout="topleft"
+             top_pad="0"
+             left="30"
+             height="18"
+             width="200" />
+            <check_box
+             control_name="StreamMetadataAnnounceToChat"
+             name="StreamMetadataAnnounceToChat"
+             label="Send stream title to channel:"
+             layout="topleft"
+             left_delta="200"
+             height="18"
+             width="180" />
+            <spinner
+             top_delta="-4"
+             control_name="StreamMetadataAnnounceChannel"
+             enabled_control="StreamMetadataAnnounceToChat"
+             decimal_digits="0"
+             layout="topleft"
+             follows="left|top"
+             height="18"
+             left_pad="5"
+             increment="1"
+             initial_val="362394"
+             max_val="2147483647"
+             min_val="1"
+             name="StreamMetadataAnnounceChannel"
+             width="90" />
+
         </panel>
 
         <!-- Chat: Firestorm -->
@@ -580,39 +614,7 @@
               left="30"
              height="18"
              width="400" />
-            
-            <check_box
-             control_name="ShowStreamMetadata"
-             name="ShowStreamMetadata"
-             label="Show stream title in local chat"
-             layout="topleft"
-             top_pad="0"
-             height="18"
-             width="200" />
-            <check_box
-             control_name="StreamMetadataAnnounceToChat"
-             name="StreamMetadataAnnounceToChat"
-             label="Send stream title to channel:"
-             layout="topleft"
-             left_delta="200"
-             height="18"
-             width="180" />
-            <spinner
-             top_delta="-4"
-             control_name="StreamMetadataAnnounceChannel"
-             enabled_control="StreamMetadataAnnounceToChat"
-             decimal_digits="0"
-             layout="topleft"
-             follows="left|top"
-             height="18"
-             left_pad="5"
-             increment="1"
-             initial_val="362394"
-             max_val="2147483647"
-             min_val="1"
-             name="StreamMetadataAnnounceChannel"
-             width="90" />
-            
+
             <!-- Localchat chat bar -->
             <check_box
              layout="topleft"
@@ -646,7 +648,7 @@
              enabled_control="FSNearbyChatbar"
              name="FSShowChatChannel"
              label="Show channel selection in chat bar"/>
-            
+
             <check_box
              control_name="AutohideChatBar"
              height="18"
@@ -1025,7 +1027,7 @@
          follows="all"
          label="Spell Check"
          name="ChatSpellCheck" >
-         
+
             <check_box
              control_name="SpellCheck"
              enabled="true"
