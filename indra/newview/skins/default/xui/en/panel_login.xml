@@ -37,21 +37,21 @@ name="login_html"
 start_url=""
 top="0"
 height="600"
-     width="980" />
+     width="990" />
 <layout_stack
 follows="left|bottom|right"
 name="login_widgets"
 layout="topleft"
 orientation="horizontal"
 top="519"
-width="980"
+width="990"
 height="80">
 <layout_panel
 auto_resize="false"
 follows="left|bottom|right"
 name="login"
-width="845"
-min_width="845"
+width="890"
+min_width="890"
 user_resize="false"
 height="80">
 <text
