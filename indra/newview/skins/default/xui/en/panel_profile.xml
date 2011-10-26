@@ -10,9 +10,8 @@
  width="317">
     <string
      name="CaptionTextAcctInfo">
-[ACCTTYPE]
-[PAYMENTINFO]
-[FIRESTORM][FSDEV][FSSUPP]
+        [ACCTTYPE]
+[PAYMENTINFO] [AGEVERIFICATION]
     </string>
     <string
      name="payment_update_link_url">
@@ -43,12 +42,6 @@
     name="display_name_text_args">
     [DISPLAY_NAME]
   </string>
-  <string
-    name="FSDev"
-    value=" Developer" />
-  <string
-    name="FSSupp"
-    value=" Support" />
 
 <!--
     <layout_stack
