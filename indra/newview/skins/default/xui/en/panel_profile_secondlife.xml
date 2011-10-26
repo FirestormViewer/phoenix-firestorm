@@ -12,8 +12,10 @@
      name="CaptionTextAcctInfo">
 [ACCTTYPE]
 [PAYMENTINFO]
-[AGEVERIFICATION]
+[FIRESTORM][FSDEV][FSSUPP]
     </string>
+<!-- [AGEVERIFICATION] moved out of the above, since it's not set anyway. See
+	 LLPanelAvatarProfile::fillAccountStatus() ...TS -->
     <string
      name="payment_update_link_url">
         http://www.secondlife.com/account/billing.php?lang=en
@@ -44,7 +46,12 @@
     name="display_name_text_args">
     [DISPLAY_NAME]
   </string>
-
+  <string
+    name="FSDev"
+    value=" Developer" />
+  <string
+    name="FSSupp"
+    value=" Support" />
 
           <panel
            layout="topleft"

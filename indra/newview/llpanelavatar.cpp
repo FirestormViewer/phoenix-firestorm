@@ -50,6 +50,7 @@
 #include "lltrans.h"
 #include "llgroupactions.h"
 #include "llgrouplist.h"
+#include "fsdata.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLDropTarget
@@ -741,7 +742,34 @@ void LLPanelAvatarProfile::fillAccountStatus(const LLAvatarData* avatar_data)
 	args["[PAYMENTINFO]"] = LLAvatarPropertiesProcessor::paymentInfo(avatar_data);
 	// *NOTE: AVATAR_AGEVERIFIED not currently getting set in 
 	// dataserver/lldataavatar.cpp for privacy considerations
-	args["[AGEVERIFICATION]"] = "";
+	//...so why didn't they comment this out too and take it out of
+	//   the XML, too? Argh. -- TS
+	// args["[AGEVERIFICATION]"] = "";
+	args["[FIRESTORM]"] = "";
+	if (FSData::is_developer(avatar_data->avatar_id))
+	{
+		args["[FIRESTORM]"] = "Firestorm";
+		std::string dev = getString("FSDev");
+		args["[FSDEV]"] = dev;
+	}
+	else
+	{
+		args["[FSDEV]"] = "";
+	}
+	if (FSData::is_support(avatar_data->avatar_id))
+	{
+		args["[FIRESTORM]"] = "Firestorm";
+		std::string supp = getString("FSSupp");
+		if (FSData::is_developer(avatar_data->avatar_id))
+		{
+			supp = " /" + supp;
+		}
+		args["[FSSUPP]"] = supp;
+	}
+	else
+	{
+		args["[FSSUPP]"] = "";
+	}
 	std::string caption_text = getString("CaptionTextAcctInfo", args);
 	getChild<LLUICtrl>("acc_status_text")->setValue(caption_text);
 }
