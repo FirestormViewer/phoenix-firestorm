@@ -2147,7 +2147,7 @@ void LLFolderViewFolder::setOpenArrangeRecursively(BOOL openitem, ERecurseType r
 	if( !mIsPopulated && mParentPanel )
 	{
 		lldebugs << "Lazy populating " << getName() << llendl;
-		mParentPanel->addSubItems( mFolderId );
+		mParentPanel->addSubItems( mFolderId, 0 );
 		mIsPopulated = true;
 	}
 	// </ND>
