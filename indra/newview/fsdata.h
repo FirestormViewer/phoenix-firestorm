@@ -72,11 +72,13 @@ public:
 
 	std::map<LLUUID, U8> personnel;
 	std::map<std::string, U8> versions2;
+	std::set<LLUUID> mSupportGroup;
 
 	static BOOL is_BetaVersion(std::string version);
 	static BOOL is_ReleaseVersion(std::string version);
 	static BOOL is_developer(LLUUID id);
 	static BOOL is_support(LLUUID id);
+	BOOL isSupportGroup(LLUUID id);
 
 	static LLSD allowed_login();
 

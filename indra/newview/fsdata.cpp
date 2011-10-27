@@ -54,6 +54,7 @@
 #include "llsys.h"
 #include "llviewermedia.h"
 #include "llagentui.h"
+#include "llversioninfo.h"
 
 static const std::string versionid = llformat("%s %d.%d.%d (%d)", LL_CHANNEL, LL_VERSION_MAJOR, LL_VERSION_MINOR, LL_VERSION_PATCH, LL_VERSION_BUILD);
 static const std::string fsdata_url = "http://phoenixviewer.com/app/fsdata/data.xml";
@@ -248,6 +249,14 @@ void FSData::processData(U32 status, std::string body)
 							if(content.has("developer"))val = val | EM_DEVELOPER;
 							self->personnel[LLUUID(key)] = val;
 						}
+						
+						LLSD& support_groups = agents["SupportGroups"];
+						self->mSupportGroup.clear();
+						for(LLSD::map_iterator itr = support_groups.beginMap(); itr != support_groups.endMap(); ++itr)
+						{
+							self->mSupportGroup.insert(LLUUID(itr->first));
+						}
+						
 						local_file = true;
 					}
 				}
@@ -343,6 +352,13 @@ void FSData::processAgents(U32 status, std::string body)
 			if(content.has("support"))val = val | EM_SUPPORT;
 			if(content.has("developer"))val = val | EM_DEVELOPER;
 			self->personnel[LLUUID(key)] = val;
+		}
+		
+		LLSD& support_groups = agents["SupportGroups"];
+		self->mSupportGroup.clear();
+		for(LLSD::map_iterator itr = support_groups.beginMap(); itr != support_groups.endMap(); ++itr)
+		{
+			self->mSupportGroup.insert(LLUUID(itr->first));
 		}
 		
 		// save the download to a file
@@ -681,6 +697,11 @@ LLSD FSData::allowed_login()
 	}
 }
 
+BOOL FSData::isSupportGroup(LLUUID id)
+{
+	static LLCachedControl<bool> chat_prefix(gSavedSettings, "FSSupportGroupChatPrefix");
+	return (chat_prefix && mSupportGroup.count(id));
+}
 
 std::string FSData::processRequestForInfo(LLUUID requester, std::string message, std::string name, LLUUID sessionid)
 {
