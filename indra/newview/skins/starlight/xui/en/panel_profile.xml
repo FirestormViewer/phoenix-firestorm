@@ -21,7 +21,6 @@
     <string
       name="FSSupp"
       value=" Support" />
-    </string>
     <string
      name="payment_update_link_url">
         http://www.secondlife.com/account/billing.php?lang=en

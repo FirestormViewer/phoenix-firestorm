@@ -18,7 +18,6 @@
     </string>
 <!-- The previous line was [PAYMENTINFO] [AGEVERIFICATION], but they're not
     sending the latter any more. ...TS -->
-    </string>
     <string
       name="FSDev"
       value=" Developer" />
