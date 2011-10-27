@@ -63,12 +63,15 @@ void handle_mouselook(void*)
 	gAgentCamera.changeCameraToMouselook();
 }
 
-
 void handle_chat(void*)
 {
 	// give focus to chatbar if it's open but not focused
+//	if (gSavedSettings.getBOOL("ChatVisible") && 
+//		gFocusMgr.childHasKeyboardFocus(LLNearbyChatBar::getInstance()->getChatBox()))
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
 	if (gSavedSettings.getBOOL("ChatVisible") && 
-		gFocusMgr.childHasKeyboardFocus(LLNearbyChatBar::getInstance()->getChatBox()))
+		gFocusMgr.childHasKeyboardFocus(LLNearbyChatBar::getInstance()->getChatBarImpl()->getChatBoxCtrl()))
+// [/SL:KB]
 	{
 		LLNearbyChatBar::stopChat();
 	}

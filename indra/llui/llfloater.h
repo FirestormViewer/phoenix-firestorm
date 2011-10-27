@@ -128,6 +128,9 @@ public:
 								save_rect,
 								save_visibility,
 								save_dock_state,
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+								save_tearoff_state,
+// [/SL:KB]
 								can_dock;
 		
 		Optional<LLFloaterEnums::EOpenPositioning>	open_positioning;
@@ -293,7 +296,11 @@ public:
 	bool            isDocked() const { return mDocked; }
 	virtual void    setDocked(bool docked, bool pop_on_undock = true);
 
-	virtual void    setTornOff(bool torn_off) { mTornOff = torn_off; }
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+	bool            isTornOff() const { return mTornOff; }
+	virtual void    setTornOff(bool torn_off);
+// [/SL:KB]
+//	virtual void    setTornOff(bool torn_off) { mTornOff = torn_off; }
 
 	// Return a closeable floater, if any, given the current focus.
 	static LLFloater* getClosableFloaterFromFocus(); 
@@ -329,9 +336,15 @@ protected:
 	virtual bool	applyRectControl();
 	bool			applyDockState();
 	void			applyPositioning(LLFloater* other);
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+	void			applyTearOffState();
+// [/SL:KB]
 	void			storeRectControl();
 	void			storeVisibilityControl();
 	void			storeDockStateControl();
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+	void			storeTearOffStateControl();
+// [/SL:KB]
 
 	void		 	setKey(const LLSD& key);
 	void		 	setInstanceName(const std::string& name);
@@ -395,6 +408,9 @@ protected:
 	std::string		mRectControl;
 	std::string		mVisibilityControl;
 	std::string		mDocStateControl;
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+	std::string		mTearOffStateControl;
+// [/SL:KB]
 	LLSD			mKey;				// Key used for retrieving instances; set (for now) by LLFLoaterReg
 
 	LLDragHandle*	mDragHandle;

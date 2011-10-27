@@ -132,6 +132,11 @@ public:
 	static std::string declareDockStateControl(const std::string& name);
 	static std::string getDockStateControlName(const std::string& name);
 
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+	static std::string declareTearOffStateControl(const std::string& name);
+	static std::string getTearOffStateControlName(const std::string& name);
+// [/SL:KB]
+
 	static void registerControlVariables();
 
 	// Callback wrappers

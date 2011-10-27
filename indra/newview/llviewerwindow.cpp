@@ -2478,17 +2478,26 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	{
 		LLNearbyChatBar* nearby_chat = LLFloaterReg::findTypedInstance<LLNearbyChatBar>("chat_bar");
 
-		if (nearby_chat)
+//		if (nearby_chat)
+//		{
+//			LLLineEditor* chat_editor = nearby_chat->getChatBox();
+//		
+//		// arrow keys move avatar while chatting hack
+//		if (chat_editor && chat_editor->hasFocus())
+//		{
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+		LLNearbyChatBarBase* pChatBarImpl = (nearby_chat) ? nearby_chat->getChatBarImpl() : NULL;
+		if ( (pChatBarImpl) && (pChatBarImpl->getChatBoxCtrl()) && (pChatBarImpl->getChatBoxCtrl()->hasFocus()) )
 		{
-			LLLineEditor* chat_editor = nearby_chat->getChatBox();
-		
-		// arrow keys move avatar while chatting hack
-		if (chat_editor && chat_editor->hasFocus())
-		{
+// [/SL:KB]
 			// If text field is empty, there's no point in trying to move
 			// cursor with arrow keys, so allow movement
-			if (chat_editor->getText().empty() 
+//			if (chat_editor->getText().empty() 
+//				|| gSavedSettings.getBOOL("ArrowKeysAlwaysMove"))
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+			if (pChatBarImpl->getChatBoxText().empty() 
 				|| gSavedSettings.getBOOL("ArrowKeysAlwaysMove"))
+// [/SL:KB]
 			{
 				// let Control-Up and Control-Down through for chat line history,
 				if (!(key == KEY_UP && mask == MASK_CONTROL)
@@ -2511,7 +2520,7 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 					}
 				}
 			}
-		}
+//		}
 		}
 		if (keyboard_focus->handleKey(key, mask, FALSE))
 		{
@@ -2543,11 +2552,18 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	if ( gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
 		!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
 	{
-		LLLineEditor* chat_editor = LLFloaterReg::getTypedInstance<LLNearbyChatBar>("chat_bar")->getChatBox();
-		if (chat_editor)
+//		LLLineEditor* chat_editor = LLFloaterReg::getTypedInstance<LLNearbyChatBar>("chat_bar")->getChatBox();
+//		if (chat_editor)
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+		LLNearbyChatBar* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChatBar>("chat_bar");
+		if (nearby_chat)
+// [/SL:KB]
 		{
 			// passing NULL here, character will be added later when it is handled by character handler.
-			LLNearbyChatBar::getInstance()->startChat(NULL);
+//			LLNearbyChatBar::getInstance()->startChat(NULL);
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+			nearby_chat->startChat(NULL);
+// [/SL:KB]
 			return TRUE;
 		}
 	}
