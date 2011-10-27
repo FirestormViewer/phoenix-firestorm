@@ -101,20 +101,9 @@
      layout="topleft"
      left_pad="10"
      name="language_textbox2"
-     width="150">
+     width="130">
         (Requires restart)
     </text>
-
-    <check_box
-     top_pad="-18"
-     control_name="FSUseWebProfiles"
-     follows="left|top"
-     height="16"
-     name="FSUseWebProfiles"
-     label="Use web profiles"
-     left_pad="10"
-     width="270"
-     tool_tip="Shows profiles as a web page instead of a v1-style panel"/>
 
      <text
      type="string"
@@ -127,16 +116,6 @@
      name="maturity_desired_prompt"
      width="200">
         I want to access content rated:
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="15"
-     layout="topleft"
-     left_pad="5"
-     name="maturity_desired_textbox"
-     width="200">
     </text>
     <combo_box
      control_name="PreferredMaturity"
@@ -161,6 +140,17 @@
         <combo_box.commit_callback
          function="Pref.MaturitySettings"/>
     </combo_box>
+    <!-- this text will never show at the same time as the above combo, they can overlap -->
+    <text
+     top_delta="4"
+     type="string"
+     length="1"
+     follows="left|top"
+     height="15"
+     layout="topleft"
+     name="maturity_desired_textbox"
+     width="200">
+    </text>
     <icon
      follows="left|top"
      height="16"
@@ -195,7 +185,7 @@
      left="30"
      name="start_location_textbox"
      top_pad="8"
-     width="394">
+     width="200">
         Start location:
     </text>
     <combo_box
@@ -234,12 +224,13 @@
      left="30"
      name="name_tags_textbox"
      top_pad="10"
-     width="400">
+     width="200">
        Name tags:
     </text>
     <radio_group
      control_name="AvatarNameTagMode"
      height="20"
+     width="280"
      layout="topleft"
      left="35"
      top_pad="0"
@@ -334,10 +325,50 @@
      type="string"
      length="1"
      follows="left|top"
+     height="15"
+     layout="topleft"
+     left="30"
+     name="inworld_typing_rg_label"
+     top_pad="5"
+     width="200">
+       Pressing letter keys:
+   </text>
+   <radio_group
+     control_name="LetterKeysFocusChatBar"
+     height="34"
+     width="200"
+     layout="topleft"
+     left="35"
+     top_pad="0"
+     name="inworld_typing_preference">
+        <radio_item
+         label="Starts local chat"
+         name="radio_start_chat"
+         top="0"
+         layout="topleft"
+         height="16"
+         left="0"
+         value="1"
+         width="150" />
+        <radio_item
+         label="Affects movement (i.e. WASD)"
+         left="0"
+         layout="topleft"
+         top="18"
+         height="16"
+         name="radio_move"
+         value="0"
+         width="75" />
+    </radio_group>
+
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
      height="13"
      layout="topleft"
      left="30"
-     top_pad="10"
+     top_pad="5"
      name="title_afk_text"
      top_delta="0"
      width="150">
@@ -362,7 +393,7 @@
      layout="topleft"
      control_name="AFKTimeout"
      left="25"
-     top_pad="10"
+     top_pad="5"
      label="Away timeout:"
      top_delta="0"
      name="afk"
@@ -397,7 +428,7 @@
      height="23"
      layout="topleft"
      control_name="QuitAfterSecondsOfAFK"
-     left_pad="30"
+     left_pad="40"
      top_delta="0"
      name="quitafk"
      width="120">
@@ -439,7 +470,7 @@
      left="30"
      mouse_opaque="false"
      name="text_box3"
-     top_pad="20"
+     top_pad="10"
      width="400">
        Autoresponse response (for busy and autorespond online status):
     </text>
@@ -457,4 +488,43 @@
      word_wrap="true">
        log_in_to_change
     </text_editor>
+
+    <panel
+     border="true"
+     bevel_style="none"
+     top="10"
+     right="-10"
+     height="290"
+     width="200"
+     follows="top|right"
+     layout="topleft"
+     name="general_extras" >
+
+        <text
+         top_pad="10"
+         left="5"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         mouse_opaque="false"
+         name="text_box3"
+         width="180">
+           Extras:
+        </text>
+        <check_box
+         top_pad="5"
+         left="5"
+         control_name="FSUseWebProfiles"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         name="FSUseWebProfiles"
+         label="Use web profiles by default"
+         width="270"
+         tool_tip="Shows profiles as a web page instead of a v1-style panel"/>
+
+    </panel>
+
 </panel>

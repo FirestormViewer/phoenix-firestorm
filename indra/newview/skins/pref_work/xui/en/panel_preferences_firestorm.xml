@@ -56,53 +56,7 @@
          text_color="White_25">
             (requires restart)
         </text>
-        <text
-         follows="left|top"
-         layout="topleft"
-         left="20"
-         height="20"
-         name="tab_direction_label"
-         width="150"
-         top_pad="5">
-          Chat Tab Mode Orientation:
-        </text>
-        <text
-         name="tab_direction_requires_restart"
-         follows="left|top"
-         layout="topleft"
-         left_pad="5"
-         height="20"
-         width="130"
-         text_color="White_25">
-          (requires restart)
-        </text>
-        <radio_group
-         height="16"
-         layout="topleft"
-         left="40"
-         control_name="ChatTabDirection"
-         name="chat_tab_direction"
-         top_pad="0"
-         tool_tip="Change flow of the chat/IM tabs between horizontal and vertical when consolidated tab mode is active. (Requires restart)"
-         width="331">
-            <radio_item
-             height="16"
-             label="Horizontal"
-             layout="topleft"
-             left="0"
-             name="radio_horizontal"
-             value="0"
-             top="0"
-             width="150" />
-            <radio_item
-             height="16"
-             label="Vertical"
-             layout="topleft"
-             left_delta="160"
-             name="radio_vertical"
-             value="1"
-             width="150" />
-        </radio_group>
+        
         <check_box
          top_pad="5"
          follows="left|top"
@@ -143,17 +97,6 @@
          width="270"
          control_name="RezUnderLandGroup"
          tool_tip="Attempts to rez objects under the land group if you're in the land group regardless of which current group tag you're wearing."/>
-
-        <check_box
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         label="Don't send avatar physics to server (old V1 client compatibility)"
-         left="15"
-         name="dontsendavphysics"
-         width="270"
-         control_name="FSDontSendAvPhysicsParms"
-         tool_tip="Disables sending your avatar physics information to the Second Life server, for compatibility with version 1 viewers"/>
 
         <check_box
          top_pad="5"
@@ -450,7 +393,7 @@
     </panel>
 
 
-    <!--View-->
+    <!--Avatar-->
     <panel
      top_pad="5"
      bottom="-1"
@@ -459,6 +402,97 @@
      follows="all"
      label="Avatar"
      name="firestorm_avatar" >
+
+        <text
+         type="string"
+         left="5"
+         top_pad="12"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         name="HeadMovement"
+         width="408">
+            Amount that Avatar's head Follows Mouse (set to '0' for no movement):
+        </text>
+        <slider
+         control_name="PitchFromMousePosition"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="15"
+         label="Vertical range that avatar's head follows mouse :"
+         tool_tip="Vertical range that avatar's head follows mouse (pitch) in degrees"
+         label_width="300"
+         layout="topleft"
+         left="15"
+         min_val="0"
+         max_val="120"
+         name="PitchFromMousePositionSlider"
+         top_pad="10"
+         width="471" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="485"
+         name="PitchFromMousePositionText"
+         top_delta="0"
+         width="50">
+            degrees
+        </text>
+        <slider
+         control_name="YawFromMousePosition"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="5"
+         label="Horizontal range that avatar's head follows mouse :"
+         tool_tip="Horizontal range that avatar's head follows mouse (yaw) in degrees"
+         label_width="300"
+         layout="topleft"
+         left="15"
+         min_val="0"
+         max_val="120"
+         name="YawFromMousePositionSlider"
+         top_pad="5"
+         width="471" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="485"
+         name="YawFromMousePositionText"
+         top_delta="0"
+         width="50">
+            degrees
+        </text>
+        <text
+         top_pad="5"
+         left="15"
+         name="note_lookat"
+         follows="left|top"
+         layout="topleft"
+         text_color="White_50"
+         height="12"
+         width="300">
+             (Avatar look at target settings are on the Privacy tab.)
+        </text>
+
+        <check_box
+         top_pad="10"
+         follows="left|top"
+         height="16"
+         label="Don't send avatar physics to server (old V1 client compatibility)"
+         left="10"
+         name="dontsendavphysics"
+         width="270"
+         control_name="FSDontSendAvPhysicsParms"
+         tool_tip="Disables sending your avatar physics information to the Second Life server, for compatibility with version 1 viewers"/>
 
         <!-- LGG Color Beams -->
         <text

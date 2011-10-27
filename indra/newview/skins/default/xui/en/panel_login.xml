@@ -37,21 +37,21 @@ name="login_html"
 start_url=""
 top="0"
 height="600"
-     width="980" />
+     width="990" />
 <layout_stack
 follows="left|bottom|right"
 name="login_widgets"
 layout="topleft"
 orientation="horizontal"
 top="519"
-width="980"
+width="990"
 height="80">
 <layout_panel
 auto_resize="false"
 follows="left|bottom|right"
 name="login"
-width="845"
-min_width="845"
+width="890"
+min_width="890"
 user_resize="false"
 height="80">
 <text
@@ -74,7 +74,7 @@ combo_editor.prevalidate_callback="ascii"
 tool_tip="The account name you chose when you registered, like bobsmith12 or Steller Sunshine"
 top_pad="0"
 name="username_combo"
-width="150">
+width="200">
   <combo_box.combo_button
    visible ="true"/>
   <combo_box.drop_down_button
@@ -96,7 +96,7 @@ left="18"
 follows="left|bottom"
 font="SansSerifSmall"
 height="15"
-left_pad="5"
+left_pad="53"
 name="password_text"
 top="20"
     width="150">

@@ -6,7 +6,7 @@
 #  HACD_LIBRARY, the library needed to use HACD.
 #  HACD_FOUND, If false, do not try to use HACD.
 
-find_path(HACD_INCLUDE_DIR hadHACD.h
+find_path(HACD_INCLUDE_DIR hacdHACD.h
   PATH_SUFFIXES hacd
   )
 

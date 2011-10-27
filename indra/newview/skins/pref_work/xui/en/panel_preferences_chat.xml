@@ -206,16 +206,17 @@
              top_pad="5"
              name="bubble_text_typing"
              width="150" />
+
             <text
              type="string"
              length="1"
              follows="left|top"
-             height="15"
+             height="12"
              layout="topleft"
              left="30"
              name="inworld_typing_rg_label"
-             top_pad="6"
-             width="120">
+             top_pad="8"
+             width="110">
                 Pressing letter keys:
             </text>
             <radio_group
@@ -223,27 +224,26 @@
              width="310"
              height="16"
              layout="topleft"
-             left_delta="120"
-             top_delta="-5"
+             left_pad="10"
              name="inworld_typing_preference">
                 <radio_item
+                 top="0"
+                 left="0"
                  label="Starts local chat"
                  name="radio_start_chat"
-                 top_delta="20"
                  layout="topleft"
                  height="16"
-                 left="0"
                  value="1"
-                 width="130" />
+                 width="125" />
                 <radio_item
+                 top="0"
+                 left="130"
                  label="Affects movement (i.e. WASD)"
-                 left_pad="0"
                  layout="topleft"
-                 top_delta="0"
                  height="16"
                  name="radio_move"
                  value="0"
-                 width="75" />
+                 width="125" />
             </radio_group>
 
             <text
@@ -251,35 +251,34 @@
              follows="left|top"
              layout="topleft"
              left="30"
-             height="20"
+             height="12"
              width="80"
              top_pad="8">
                  Show IMs in:
             </text>
-
             <radio_group
              height="16"
              layout="topleft"
-             left_delta="120"
-             top_delta="0"
+             left_pad="10"
              control_name="ChatWindow"
              name="chat_window"
              tool_tip="Show your Instant Messages in separate floaters, or in one floater with many tabs (Requires restart)"
              width="180">
                 <radio_item
+                 top="0"
+                 left="0"
                  height="16"
                  label="Separate windows"
                  layout="topleft"
-                 left="0"
                  name="radio"
                  value="0"
-                 top="0"
                  width="50" />
                 <radio_item
+                 top="0"
+                 left="130"
                  height="16"
                  label="Tabs"
                  layout="topleft"
-                 left_delta="130"
                  name="radio2"
                  value="1"
                  width="150" />
@@ -289,15 +288,63 @@
              follows="left|top"
              layout="topleft"
              left_pad="10"
-             top_delta="0"
              text_color="White_50"
+             height="12"
+             width="100">
+                 (requires restart)
+            </text>
+
+            <text
+             follows="left|top"
+             layout="topleft"
+             left="30"
+             height="12"
+             name="tab_direction_label"
+             width="150"
+             top_pad="8">
+              Chat Tab Mode Orientation:
+            </text>
+            <radio_group
+             left_pad="10"
              height="16"
+             layout="topleft"
+             control_name="ChatTabDirection"
+             name="chat_tab_direction"
+             tool_tip="Change flow of the chat/IM tabs between horizontal and vertical when consolidated tab mode is active. (Requires restart)"
+             width="160">
+                <radio_item
+                 top="2"
+                 left="0"
+                 height="16"
+                 label="Horizontal"
+                 layout="topleft"
+                 name="radio_horizontal"
+                 value="0"
+                 width="90" />
+                <radio_item
+                 top="2"
+                 left_pad="5"
+                 height="16"
+                 label="Vertical"
+                 layout="topleft"
+                 name="radio_vertical"
+                 value="1"
+                 width="90" />
+            </radio_group>
+            <text
+             name="req_restart"
+             follows="left|top"
+             layout="topleft"
+             left_pad="10"
+             text_color="White_50"
+             height="12"
              width="100">
                  (requires restart)
             </text>
 
 
             <check_box
+             top_pad="8"
              control_name="TranslateChat"
              enabled="true"
              height="16"
@@ -399,7 +446,7 @@
                  name="Korean"
                  value="ko" />
             </combo_box>
-        
+
         </panel>
 
         <!-- Chat: Notifications -->
@@ -412,11 +459,11 @@
          follows="all"
          label="Notifications"
          name="ChatNotifications" >
-            
+
             <text
              top="15"
              left="30"
-             height="10"
+             height="14"
              width="180"
              name="disable_toast_label"
              follows="left|top"
@@ -428,9 +475,9 @@
              name="EnableGroupChatPopups"
              label="Group Chats"
              layout="topleft"
-             top_pad="5"
-             left_delta="10"
-             height="20"
+             top_pad="0"
+             left="40"
+             height="18"
              tool_tip="Check to see popups when a Group Chat message arrives"
              width="400" />
             <check_box
@@ -438,58 +485,91 @@
              name="EnableIMChatPopups"
              label="IM Chats"
              layout="topleft"
-             top_pad="5"
-             height="16"
+             top_pad="0"
+             left="40"
+             height="18"
              tool_tip="Check to see popups when an instant message arrives"
              width="400" />
-            
             <check_box
              control_name="OnlineOfflinetoNearbyChat"
              name="OnlineOfflinetoNearbyChat"
              label="Friend on/off-line notices to Nearby Chat"
              layout="topleft"
              top_pad="0"
+             left="40"
              height="18"
              width="400" />
-            
+
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="0"
-             left="20"
+             top_pad="5"
+             left="30"
              width="400"
              height="18"
              name="FSUseNearbyChatConsole"
              control_name="FSUseNearbyChatConsole"
              label="Use console for chat popups instead of floating toasts (Viewer 1.x style)"/>
+
             <check_box
              layout="topleft"
              follows="left|top"
              top_pad="0"
+             left="30"
              width="50"
              height="18"
              name="FSLogImToChatConsole"
              control_name="FSLogImToChatConsole"
              label="Show IMs and group chat in chat console"/>
-            
+
             <check_box
              layout="topleft"
              follows="left|top"
              top_pad="0"
-             left="20"
+             left="30"
              width="50"
              height="18"
              control_name="FSPaymentInfoInChat"
              name="FSPaymentInfoInChat"
              label="Show L$ transactions in local chat instead of toasts"/>
-            
-            
-            
+
+            <check_box
+             control_name="ShowStreamMetadata"
+             name="ShowStreamMetadata"
+             label="Show stream title in local chat"
+             layout="topleft"
+             top_pad="0"
+             left="30"
+             height="18"
+             width="200" />
+            <check_box
+             control_name="StreamMetadataAnnounceToChat"
+             name="StreamMetadataAnnounceToChat"
+             label="Send stream title to channel:"
+             layout="topleft"
+             left_delta="200"
+             height="18"
+             width="180" />
+            <spinner
+             top_delta="-4"
+             control_name="StreamMetadataAnnounceChannel"
+             enabled_control="StreamMetadataAnnounceToChat"
+             decimal_digits="0"
+             layout="topleft"
+             follows="left|top"
+             height="18"
+             left_pad="5"
+             increment="1"
+             initial_val="362394"
+             max_val="2147483647"
+             min_val="1"
+             name="StreamMetadataAnnounceChannel"
+             width="90" />
+
         </panel>
 
         <!-- Chat: Firestorm -->
         <panel
-         border="true"
          top_pad="1"
          bottom="-1"
          left="1"
@@ -498,51 +578,6 @@
          label="Firestorm"
          name="ChatFirestorm" >
 
-            <check_box
-             control_name="CloseChatOnReturn"
-             follows="left|top"
-             height="20"
-             label="Deselect Chat after sending Messages"
-             layout="topleft"
-             left="30"
-             name="CloseChatOnReturn"
-             top_delta="25"
-             width="256" />
-            <check_box
-             control_name="FSHideTimestampsNearbyChat"
-             height="16"
-             label="Hide timestamp in Nearby Chat"
-             layout="topleft"
-             left="30"
-             name="hide_timestamps_nearby_chat"
-             top_pad="5"
-             width="400" />
-            <check_box
-             control_name="FSHideTimestampsIM"
-             height="16"
-             label="Hide timestamp in IMs"
-             layout="topleft"
-             left="30"
-             name="hide_timestamps_im"
-             top_pad="5"
-             width="400" />
-            
-
-        <!-- Chat: Old Firestorm panel's stuff to sort out -->
-
-            <text
-             top_pad="15"
-             left="10"
-             right="-10"
-             height="18"
-             name="chat_wip"
-             follows="left|top|right"
-             layout="topleft"
-             halign="center"
-             font.style="BOLD">
-              WIP/TODO* Most options in this panel still need to be reorganized. -KC
-            </text>
-            
             <text
              name="chat_and_im_enhancements"
              follows="left|top"
@@ -579,39 +614,7 @@
               left="30"
              height="18"
              width="400" />
-            
-            <check_box
-             control_name="ShowStreamMetadata"
-             name="ShowStreamMetadata"
-             label="Show stream title in local chat"
-             layout="topleft"
-             top_pad="0"
-             height="18"
-             width="200" />
-            <check_box
-             control_name="StreamMetadataAnnounceToChat"
-             name="StreamMetadataAnnounceToChat"
-             label="Send stream title to channel:"
-             layout="topleft"
-             left_delta="200"
-             height="18"
-             width="180" />
-            <spinner
-             top_delta="-4"
-             control_name="StreamMetadataAnnounceChannel"
-             enabled_control="StreamMetadataAnnounceToChat"
-             decimal_digits="0"
-             layout="topleft"
-             follows="left|top"
-             height="18"
-             left_pad="5"
-             increment="1"
-             initial_val="362394"
-             max_val="2147483647"
-             min_val="1"
-             name="StreamMetadataAnnounceChannel"
-             width="90" />
-            
+
             <!-- Localchat chat bar -->
             <check_box
              layout="topleft"
@@ -645,7 +648,7 @@
              enabled_control="FSNearbyChatbar"
              name="FSShowChatChannel"
              label="Show channel selection in chat bar"/>
-            
+
             <check_box
              control_name="AutohideChatBar"
              height="18"
@@ -657,8 +660,98 @@
              tool_tip="Hide the chat bar from the bottom button bar and only show it as an overlay when needed."
              top_pad="0"
              width="256" />
-            
+            <check_box
+             control_name="CloseChatOnReturn"
+             follows="left|top"
+             height="18"
+             label="Deselect Chat after sending Messages"
+             layout="topleft"
+             left="30"
+             name="CloseChatOnReturn"
+             top_pad="0"
+             width="256" />
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="30"
+             width="400"
+             height="18"
+             name="FSMarkObjects"
+             control_name="FSMarkObjects"
+             label="Mark objects with (no name) when they speak to avoid spoofing"/>
+
+            <!-- Groups -->
+            <text
+             name="chat_and_im_enhancements"
+             follows="left|top"
+             layout="topleft"
+             top_pad="5"
+             left="19"
+             height="16"
+             width="180">
+              Group Chat:
+            </text>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="30"
+             width="50"
+             height="20"
+             control_name="FSBoldGroupMods"
+             name="FSBoldGroupMods"
+             label="Show group moderator messages in bold"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="30"
+             width="30"
+             height="18"
+             control_name="FSMuteAllGroups"
+             name="FSMuteAllGroups"
+             label="Disable ALL group chats"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="50"
+             width="30"
+             height="18"
+             control_name="FSMuteGroupWhenNoticesDisabled"
+             name="FSMuteGroupWhenNoticesDisabled"
+             label="When 'Receive group notices' is disabled, disable group chat as well"/>
+
             <!-- Logging -->
+            <text
+             name="chat_and_im_enhancements"
+             follows="left|top"
+             layout="topleft"
+             top_pad="5"
+             left="19"
+             height="16"
+             width="180">
+              Chat Log Extras:
+            </text>
+            <check_box
+             control_name="FSHideTimestampsNearbyChat"
+             height="18"
+             label="Hide timestamp in Nearby Chat"
+             layout="topleft"
+             left="30"
+             name="hide_timestamps_nearby_chat"
+             top_pad="0"
+             width="400" />
+            <check_box
+             control_name="FSHideTimestampsIM"
+             height="18"
+             label="Hide timestamp in IMs"
+             layout="topleft"
+             left="30"
+             name="hide_timestamps_im"
+             top_pad="0"
+             width="400" />
             <check_box
              layout="topleft"
              follows="left|top"
@@ -690,24 +783,23 @@
              text_color="White_25">
               (requires saving nearby chat logs)
             </text>
-            
-            
+
+            <!-- Console -->
+            <text
+             name="chat_and_im_enhancements"
+             follows="left|top"
+             layout="topleft"
+             top_pad="5"
+             left="19"
+             height="16"
+             width="180">
+              Console:
+            </text>
             <check_box
              layout="topleft"
              follows="left|top"
              top_pad="0"
              left="30"
-             width="400"
-             height="18"
-             name="FSMarkObjects"
-             control_name="FSMarkObjects"
-             label="Mark objects with (no name) when they speak to avoid spoofing"/>
-            
-            <!-- Console -->
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="0"
              width="200"
              height="18"
              name="ChatFullWidth"
@@ -767,36 +859,7 @@
              width="60">
                 (# lines)
             </text>
-            
-            <!-- Groups -->
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="0"
-             left="20"
-             width="50"
-             height="20"
-             control_name="FSBoldGroupMods"
-             name="FSBoldGroupMods"
-             label="Show group moderator messages in bold"/>
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="0"
-             width="50"
-             height="18"
-             control_name="FSMuteAllGroups"
-             name="FSMuteAllGroups"
-             label="Disable ALL group chats"/>
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="0"
-             width="50"
-             height="18"
-             control_name="FSMuteGroupWhenNoticesDisabled"
-             name="FSMuteGroupWhenNoticesDisabled"
-             label="When 'Receive group notices' is disabled, disable group chat as well"/>
+
         </panel>
 
         <!-- Chat: Radar -->
@@ -964,7 +1027,7 @@
          follows="all"
          label="Spell Check"
          name="ChatSpellCheck" >
-         
+
             <check_box
              control_name="SpellCheck"
              enabled="true"

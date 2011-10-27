@@ -185,7 +185,7 @@ void LLTeleportHistory::updateCurrentLocation(const LLVector3d& new_pos)
 // [/RLVa:KB]
 	}
 
-	dump();
+	//dump(); // LO - removing the dump from happening every time we TP.
 	
 	if (!mGotInitialUpdate)
 		mGotInitialUpdate = true;

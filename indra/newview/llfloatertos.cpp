@@ -45,6 +45,7 @@
 #include "llvfile.h"
 #include "message.h"
 #include "llstartup.h"              // login_alert_done
+#include "llviewernetwork.h"        // FIX FIRE 3143 SJ
 
 
 LLFloaterTOS::LLFloaterTOS(const LLSD& data)
@@ -214,9 +215,12 @@ void LLFloaterTOS::onContinue( void* userdata )
 // static
 void LLFloaterTOS::onCancel( void* userdata )
 {
+	LLSD args;
 	LLFloaterTOS* self = (LLFloaterTOS*) userdata;
 	LL_INFOS("TOS") << "User disagrees with TOS." << LL_ENDL;
-	LLNotificationsUtil::add("MustAgreeToLogIn", LLSD(), LLSD(), login_alert_done);
+	//[FIX FIRE-3143 SJ] Making sure Current_grid has the right value
+	args["[CURRENT_GRID]"] = LLGridManager::getInstance()->getGridLabel();
+	LLNotificationsUtil::add("MustAgreeToLogIn", args, LLSD(), login_alert_done);
 
 	if(self->mReplyPumpName != "")
 	{

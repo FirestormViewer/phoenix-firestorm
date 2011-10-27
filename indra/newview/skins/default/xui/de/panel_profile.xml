@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Profil" name="panel_profile">
-	<string name="CaptionTextAcctInfo">
-		[ACCTTYPE]
-[PAYMENTINFO] [AGEVERIFICATION]
-	</string>
+    <string
+     name="CaptionTextAcctInfo">
+[ACCTTYPE]
+[PAYMENTINFO]
+[FIRESTORM][FSDEV][FSSUPP]
+    </string>
 	<string name="payment_update_link_url">
 		http://www.secondlife.com/account/billing.php?lang=de-DE
 	</string>
@@ -22,6 +24,12 @@
 	<string name="display_name_text_args">
 		[DISPLAY_NAME]
 	</string>
+  <string
+    name="FSDev"
+    value=" Developer" />
+  <string
+    name="FSSupp"
+    value=" Support" />
 	<layout_stack name="layout">
 		<layout_panel name="profile_stack">
 			<scroll_container name="profile_scroll">
