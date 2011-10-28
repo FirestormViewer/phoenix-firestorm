@@ -22,12 +22,15 @@
  * $/LicenseInfo$
  */
 
+#ifndef LLSIDETRAYTAB
+#define LLSIDETRAYTAB
 
-#include "llsidetray.h"
 #include "llpanel.h"
-
+#include "llbadge.h"
+#include "llfloater.h"
 
 class LLSideTray;
+class LLSideTrayButton;
 
 //////////////////////////////////////////////////////////////////////////////
 // LLSideTrayTab
@@ -36,6 +39,7 @@ class LLSideTray;
 
 class LLSideTrayTab: public LLPanel
 {
+	LOG_CLASS(LLSideTrayTab);
 	friend class LLUICtrlFactory;
 	friend class LLSideTray;
 public:
@@ -88,9 +92,9 @@ public:
 
 	BOOL            handleScrollWheel(S32 x, S32 y, S32 clicks);
 
-	LLPanel		*getPanel();
+	LLPanel*	getPanel();
 
-	LLButton	*createButton(bool allowTearOff, LLUICtrl::commit_callback_t callback);
+	LLButton*	createButton(bool allowTearOff, LLUICtrl::commit_callback_t callback);
 
 private:
 	std::string mTabTitle;
@@ -102,4 +106,6 @@ private:
 
 	bool			mHasBadge;
 	LLBadge::Params	mBadgeParams;
+	LLSideTrayButton*	mSideTrayButton;
 };
+#endif

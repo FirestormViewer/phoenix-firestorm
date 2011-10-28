@@ -540,3 +540,4 @@ VIA								VIA.*										0		0
 Apple Generic					Apple.*Generic.*							0		0
 Apple Software Renderer			Apple.*Software Renderer.*					0		0
 Oracle VirtualBox Graphics		Humper.*									0		1
+Humper							Humper.*									0		1

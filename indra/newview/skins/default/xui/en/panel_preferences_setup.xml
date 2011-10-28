@@ -439,6 +439,30 @@
     top_pad="2"
     name="media_popup_enabled"
     width="200"/>
+<!--
+  <combo_box
+     control_name="UpdaterServiceSetting"
+     follows="left|top"
+     height="23"
+     layout="topleft"
+     left_delta="50"
+     top_pad="5"
+     name="updater_service_combobox"
+     width="300">
+        <combo_box.item
+         label="Install automatically"
+         name="Install_automatically"
+         value="3" />
+        <combo_box.item
+         label="Ask before installing"
+         name="Install_ask"
+         value="1" />
+        <combo_box.item
+         label="Download and install updates manually"
+         name="Install_manual"
+         value="0" />
+  </combo_box>
+-->
   <text
      type="string"
      length="1"
@@ -453,10 +477,10 @@
 		Proxy Settings:
   </text>
   <button
-	  label="Adjust proxy settings"
+	label="Adjust proxy settings"
     follows="left|top"
     height="23"
-	  width="140" 
+	width="140" 
     label_selected="Browse"
     layout="topleft"
     left_delta="50"
@@ -466,5 +490,4 @@
 		<button.commit_callback
 		  function="Pref.Proxy" />
   </button>
-
 </panel>

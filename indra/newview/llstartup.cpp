@@ -669,9 +669,6 @@ bool idle_startup()
 
 		LL_INFOS("AppInit") << "Message System Initialized." << LL_ENDL;
 
-		//-------------------------------------------------
-
-
 // <AW: opensim>
 		if(!gSavedSettings.getBOOL("GridListDownload"))
 		{
@@ -859,7 +856,13 @@ bool idle_startup()
 
 		timeout_count = 0;
 
+		// Login screen needs menus for preferences, but we can enter
+		// this startup phase more than once.
+		if (gLoginMenuBarView == NULL)
+		{
 		initialize_edit_menu();
+			init_menus();
+		}
 
 		if (show_connect_box)
 		{
@@ -894,19 +897,6 @@ bool idle_startup()
 			LLStartUp::setStartupState( STATE_LOGIN_CLEANUP );
 		}
 
-		// *NOTE: This is where LLViewerParcelMgr::getInstance() used to get allocated before becoming LLViewerParcelMgr::getInstance().
-
-		// *NOTE: This is where gHUDManager used to bet allocated before becoming LLHUDManager::getInstance().
-
-		// *NOTE: This is where gMuteList used to get allocated before becoming LLMuteList::getInstance().
-
-		// Login screen needs menus for preferences, but we can enter
-		// this startup phase more than once.
-		if (gLoginMenuBarView == NULL)
-		{
-			init_menus();
-		}
-		
 		gViewerWindow->setNormalControlsVisible( FALSE );	
 		gLoginMenuBarView->setVisible( TRUE );
 		gLoginMenuBarView->setEnabled( TRUE );
@@ -1764,6 +1754,12 @@ bool idle_startup()
  			{
  				LL_WARNS("AppInit") << "Problem loading inventory-skel-targets" << LL_ENDL;
  			}
+ 		}
+
+		LLSD inv_basic = response["inventory-basic"];
+ 		if(inv_basic.isDefined())
+ 		{
+			llinfos << "Basic inventory root folder id is " << inv_basic["folder_id"] << llendl;
  		}
 
 		LLSD buddy_list = response["buddy-list"];
@@ -2732,22 +2728,32 @@ void init_start_screen(S32 location_id)
 	else if(!start_image_bmp->load(temp_str) )
 	{
 		LL_WARNS("AppInit") << "Bitmap load failed" << LL_ENDL;
-		return;
-	}
-
-	gStartImageWidth = start_image_bmp->getWidth();
-	gStartImageHeight = start_image_bmp->getHeight();
-
-	LLPointer<LLImageRaw> raw = new LLImageRaw;
-	if (!start_image_bmp->decode(raw, 0.0f))
-	{
-		LL_WARNS("AppInit") << "Bitmap decode failed" << LL_ENDL;
 		gStartTexture = NULL;
-		return;
+	}
+	else
+	{
+		gStartImageWidth = start_image_bmp->getWidth();
+		gStartImageHeight = start_image_bmp->getHeight();
+
+		LLPointer<LLImageRaw> raw = new LLImageRaw;
+		if (!start_image_bmp->decode(raw, 0.0f))
+		{
+			LL_WARNS("AppInit") << "Bitmap decode failed" << LL_ENDL;
+			gStartTexture = NULL;
+		}
+		else
+		{
+			raw->expandToPowerOfTwo();
+			gStartTexture = LLViewerTextureManager::getLocalTexture(raw.get(), FALSE) ;
+		}
 	}
 
-	raw->expandToPowerOfTwo();
-	gStartTexture = LLViewerTextureManager::getLocalTexture(raw.get(), FALSE) ;
+	if(gStartTexture.isNull())
+	{
+		gStartTexture = LLViewerTexture::sBlackImagep ;
+		gStartImageWidth = gStartTexture->getWidth() ;
+		gStartImageHeight = gStartTexture->getHeight() ;
+	}
 }
 
 

@@ -119,7 +119,7 @@
 	     name="search_combo_box"
 	     tool_tip="Search"
 	     top_delta="0"
-	     width="200" >
+	     width="244" >
          <combo_editor
           label="Search MetaVerse"
           name="search_combo_editor"/>
@@ -128,7 +128,8 @@
           border.highlight_light_color="FocusColor"
           border.highlight_dark_color="FocusColor"
           border.shadow_light_color="FocusColor"
-          border.shadow_dark_color="FocusColor"/>
+          border.shadow_dark_color="FocusColor"
+          mouse_wheel_opaque="true" />
         </search_combo_box>
 
 	</panel>

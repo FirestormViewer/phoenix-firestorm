@@ -202,6 +202,22 @@ class ViewerManifest(LLManifest):
     def channel_lowerword(self):
         return self.channel_oneword().lower()
 
+    def icon_path(self):
+        icon_path="icons/"
+        channel_type=self.channel_lowerword()
+        print "DEBUG: channel_type= %s" % channel_type # AO, for further refining
+        if channel_type == 'release' \
+        or channel_type == 'development' \
+        :
+            icon_path += channel_type
+        elif channel_type == 'betaviewer' :
+            icon_path += 'beta'
+        elif re.match('project.*',channel_type) :
+            icon_path += 'project'
+        else :
+            icon_path += 'private' # FS default
+        return icon_path
+
     def flags_list(self):
         """ Convenience function that returns the command-line flags
         for the grid"""
@@ -722,12 +738,11 @@ class DarwinManifest(ViewerManifest):
                 self.path("Firestorm.nib")
                 self.path("VivoxAUP.txt")
 
-                # If we are not using the default channel, use the 'Firstlook
-                # icon' to show that it isn't a stable release.
-                if self.default_channel() and self.default_grid():
+                icon_path = self.icon_path()
+                if self.prefix(src=icon_path, dst="") :
                     self.path("phoenix_icon.icns")
-                else:
-                    self.path("phoenix_icon.icns", "phoenix_icon.icns") # Does nothing, but we could change it to use a beta icon later. - AO
+                    self.end_prefix(icon_path)
+
                 self.path("Firestorm.nib")
                 
                 # Translations
@@ -802,7 +817,7 @@ class DarwinManifest(ViewerManifest):
                                     "libexpat.1.5.2.dylib",
                                     "libexception_handler.dylib",
                                     "libGLOD.dylib",
-				    "libcollada14dom.dylib"
+                                    "libcollada14dom.dylib"
                                     ):
                         target_lib = os.path.join('../../..', libfile)
                         self.run_command("ln -sf %(target)r %(link)r" % 
@@ -904,9 +919,7 @@ class DarwinManifest(ViewerManifest):
             # will use the release .DS_Store, and will look broken.
             # - Ambroff 2008-08-20
             dmg_template = os.path.join(
-                'installers', 
-                'darwin',
-                '%s-dmg' % "".join(self.channel_unique().split()).lower())
+                'installers', 'darwin', '%s-dmg' % self.channel_lowerword())
 
             if not os.path.exists (self.src_path_of(dmg_template)):
                 dmg_template = os.path.join ('installers', 'darwin', 'release-dmg')
@@ -992,6 +1005,15 @@ class LinuxManifest(ViewerManifest):
             # recurse
             self.end_prefix("res-sdl")
 
+        # Get the icons based on the channel
+        icon_path = self.icon_path()
+        if self.prefix(src=icon_path, dst="") :
+            self.path("firestorm_256.png","firestorm_48.png")
+            if self.prefix(src="",dst="res-sdl") :
+                self.path("firestorm_256.BMP","ll_icon.BMP")
+                self.end_prefix("res-sdl")
+            self.end_prefix(icon_path)
+
         self.path("../viewer_components/updater/scripts/linux/update_install", "bin/update_install")
 
         # plugins
@@ -1075,15 +1097,15 @@ class Linux_i686Manifest(LinuxManifest):
             self.path("libbreakpad_client.so.0.0.0")
             self.path("libbreakpad_client.so.0")
             self.path("libbreakpad_client.so")
-	    self.path("libcollada14dom.so")
+            self.path("libcollada14dom.so")
             self.path("libdb-5.1.so")
             self.path("libdb-5.so")
             self.path("libdb.so")
             self.path("libcrypto.so.1.0.0")
             self.path("libexpat.so.1.5.2")
             self.path("libssl.so.1.0.0")
-	    self.path("libglod.so")
-	    self.path("libminizip.so")
+            self.path("libglod.so")
+            self.path("libminizip.so")
             self.path("libuuid.so")
             self.path("libuuid.so.16")
             self.path("libuuid.so.16.0.22")

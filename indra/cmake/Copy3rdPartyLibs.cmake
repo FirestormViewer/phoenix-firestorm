@@ -75,7 +75,7 @@ if(WINDOWS)
 if (MSVC80)
     FIND_PATH(debug_msvc8_redist_path msvcr80d.dll
         PATHS
-		${MSVC_DEBUG_REDIST_PATH}
+        ${MSVC_DEBUG_REDIST_PATH}
          [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\8.0\\Setup\\VC;ProductDir]/redist/Debug_NonRedist/x86/Microsoft.VC80.DebugCRT
         NO_DEFAULT_PATH
         NO_DEFAULT_PATH
@@ -100,7 +100,7 @@ if (MSVC80)
 
     FIND_PATH(release_msvc8_redist_path msvcr80.dll
         PATHS
-		${MSVC_REDIST_PATH}
+        ${MSVC_REDIST_PATH}
          [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\8.0\\Setup\\VC;ProductDir]/redist/x86/Microsoft.VC80.CRT
         NO_DEFAULT_PATH
         NO_DEFAULT_PATH
@@ -213,12 +213,12 @@ elseif(DARWIN)
         libexpat.1.5.2.dylib
         libexpat.dylib
         libGLOD.dylib
-	libllqtwebkit.dylib
-	libminizip.a
+    libllqtwebkit.dylib
+    libminizip.a
         libndofdev.dylib
         libhunspell-1.3.dylib
         libexception_handler.dylib
-	libcollada14dom.dylib
+    libcollada14dom.dylib
        )
 
     # fmod is statically linked on darwin
@@ -254,19 +254,19 @@ elseif(LINUX)
         libaprutil-1.so.0
         libatk-1.0.so
         libbreakpad_client.so.0
-       	libcollada14dom.so
+        libcollada14dom.so
         libcrypto.so.1.0.0
         libdb-5.1.so
         libexpat.so
         libexpat.so.1
-	libglod.so
+    libglod.so
         libgmock_main.so
         libgmock.so.0
         libgmodule-2.0.so
         libgobject-2.0.so
         libgtest_main.so
         libgtest.so.0
-	libminizip.so
+    libminizip.so
         libopenal.so
         libopenjpeg.so
         libssl.so

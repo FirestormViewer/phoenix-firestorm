@@ -80,7 +80,6 @@ include_directories(
 
 set(viewer_SOURCE_FILES
     groupchatlistener.cpp
-    llaccountingquotamanager.cpp
     ao.cpp
     aoengine.cpp
     aoset.cpp
@@ -102,6 +101,7 @@ set(viewer_SOURCE_FILES
     lggbeamcolormapfloater.cpp
 	lggcontactsets.cpp
 	lggcontactsetsfloater.cpp
+    llaccountingcostmanager.cpp
     llagent.cpp
     llagentaccess.cpp
     llagentcamera.cpp
@@ -238,6 +238,7 @@ set(viewer_SOURCE_FILES
     llfloatermodelwizard.cpp
     llfloaternamedesc.cpp
     llfloaternotificationsconsole.cpp
+    llfloaterobjectweights.cpp
     llfloateropenobject.cpp
     llfloaterpay.cpp
     llfloaterperms.cpp
@@ -394,6 +395,7 @@ set(viewer_SOURCE_FILES
     llpanelmarketplaceinbox.cpp
     llpanelmarketplaceinboxinventory.cpp
     llpanelmarketplaceoutbox.cpp
+    llpanelmarketplaceoutboxinventory.cpp
     llpanelmediasettingsgeneral.cpp
     llpanelmediasettingspermissions.cpp
     llpanelmediasettingssecurity.cpp
@@ -627,6 +629,7 @@ set(viewer_SOURCE_FILES
     llweb.cpp
     llwebsharing.cpp
     llwind.cpp
+    llwindowlistener.cpp
     llwlanimator.cpp
     llwldaycycle.cpp
     llwlhandlers.cpp
@@ -683,7 +686,6 @@ set(viewer_HEADER_FILES
     CMakeLists.txt
     ViewerInstall.cmake
     groupchatlistener.h
-    llaccountingquotamanager.h
     ao.h
     aoengine.h
     aoset.h
@@ -705,6 +707,7 @@ set(viewer_HEADER_FILES
     lggbeamcolormapfloater.h
 	lggcontactsets.h
 	lggcontactsetsfloater.h
+    llaccountingcostmanager.h
     llagent.h
     llagentaccess.h
     llagentcamera.h
@@ -842,6 +845,7 @@ set(viewer_HEADER_FILES
     llfloatermodelwizard.h
     llfloaternamedesc.h
     llfloaternotificationsconsole.h
+    llfloaterobjectweights.h
     llfloateropenobject.h
     llfloaterpay.h
     llfloaterperms.h
@@ -992,6 +996,7 @@ set(viewer_HEADER_FILES
     llpanelmarketplaceinbox.h
     llpanelmarketplaceinboxinventory.h
     llpanelmarketplaceoutbox.h
+    llpanelmarketplaceoutboxinventory.h
     llpanelmediasettingsgeneral.h
     llpanelmediasettingspermissions.h
     llpanelmediasettingssecurity.h
@@ -1225,6 +1230,7 @@ set(viewer_HEADER_FILES
     llweb.h
     llwebsharing.h
     llwind.h
+    llwindowlistener.h
     llwlanimator.h
     llwldaycycle.h
     llwlhandlers.h
@@ -1351,6 +1357,39 @@ if (WINDOWS)
         set(viewer_SOURCE_FILES "${viewer_SOURCE_FILES}" llviewerprecompiledheaders.cpp)
     endif(USE_PRECOMPILED_HEADERS)
     
+
+    # Replace the icons with the appropriate ones for the channel
+    # ('test' is the default)
+    set(ICON_PATH "private")
+    string(TOLOWER ${VIEWER_CHANNEL} channel_lower)
+    if(channel_lower MATCHES "release")
+        set(ICON_PATH "release")
+    elseif(channel_lower MATCHES "beta")
+        set(ICON_PATH "beta")
+    elseif(channel_lower MATCHES "development")
+        set(ICON_PATH "development")
+    elseif(channel_lower MATCHES "test")
+	set(ICON_PATH "test")
+    elseif(channel_lower MATCHES "project")
+        set(ICON_PATH "project")
+    endif()
+    message("Copying icons for ${ICON_PATH}")
+    execute_process(
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_icon.ico"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res/firestorm_icon.ico"
+      )
+    execute_process(
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_256.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res/firestorm_icon.BMP"
+      )
+    execute_process(
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_256.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res-sdl/firestorm_icon.BMP"
+      )
+
     # Add resource files to the project.
     # viewerRes.rc is the only buildable file, but
     # the rest are all dependencies of it.
@@ -1381,6 +1420,7 @@ if (WINDOWS)
         res/lltoolzoomout.cur
         res/firestorm_icon.BMP
         res/firestorm_icon.ico
+        res-sdl/firestorm_icon.BMP
         res/resource.h
         res/toolpickobject.cur
         res/toolpickobject2.cur
@@ -1876,14 +1916,14 @@ if (LINUX)
 
   # These are the generated targets that are copied to package/
   set(COPY_INPUT_DEPENDENCIES
-	${VIEWER_BINARY_NAME}
-	linux-crash-logger
-	linux-updater
-	SLPlugin
-	media_plugin_webkit
-	media_plugin_gstreamer010
-	llcommon
-	)
+    ${VIEWER_BINARY_NAME}
+    linux-crash-logger
+    linux-updater
+    SLPlugin
+    media_plugin_webkit
+    media_plugin_gstreamer010
+    llcommon
+    )
 
   add_custom_command(
       OUTPUT ${product}.tar.bz2
@@ -2147,12 +2187,12 @@ if (LL_TESTS)
     )
 
   LL_ADD_INTEGRATION_TEST(llsimplestat
-	""
+    ""
     "${test_libs}"
     )
 
   LL_ADD_INTEGRATION_TEST(llviewerassetstats
-	llviewerassetstats.cpp
+    llviewerassetstats.cpp
     "${test_libs}"
     )
 

@@ -89,6 +89,8 @@ private:
 	void reshapeBrowser();
 	void addFavoritesToStartLocation();
 	void addUsersWithFavoritesToUsername();
+	void onModeChange(const LLSD& original_value, const LLSD& new_value);
+	void onModeChangeConfirm(const LLSD& original_value, const LLSD& new_value, const LLSD& notification, const LLSD& response);
 	static void onClickConnect(void*);
 	static void onClickNewAccount(void*);
 	static void onClickVersion(void*);
@@ -103,9 +105,6 @@ private:
 	static void updateServerCombo();
 	static void updateSavedLoginsCombo();
 	static void updateStartSLURL();
-	void onModeChange(const LLSD& original_value, const LLSD& new_value);
-	void onModeChangeConfirm(const LLSD& original_value, const LLSD& new_value, const LLSD& notification, const LLSD& response);
-	
 	static void updateLoginPanelLinks();
 
 	// Helper for making a standardized saved login name, depending on user name and grid name

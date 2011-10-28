@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  legacy_header_height="18"
- height="440"
+ height="600"
  layout="topleft"
  name="floater_about"
  help_topic="floater_about"
@@ -69,7 +69,7 @@ Error fetching server release notes URL.
     follows="all" 
     top="25"
     left="10"
-    height="405" 
+    height="565" 
     width="450" 
     name="about_tab"
     tab_position="top">
@@ -78,16 +78,30 @@ Error fetching server release notes URL.
       label="Info"
       help_topic="about_support_tab"
       name="support_panel">
+    <text
+          follows="top|left|right"
+          height="40"
+          layout="topleft"
+          left="5"
+          name="linden_intro"
+          top="20"
+          width="435"
+          wrap="true">
+    
+    For the latest information about Firestorm, visit 
+    http://www.phoenixviewer.com
+    
+    </text>
       <text_editor
         parse_urls="true" 
        follows="top|left"
        font="SansSerif"
-       height="343"
+       height="443"
        bg_readonly_color="Transparent"
        left="5"
        max_length="65536"
        name="support_editor"
-       top="5"
+       top_pad="5"
        width="435"
        word_wrap="true" />
       <button
@@ -106,19 +120,21 @@ Error fetching server release notes URL.
       name="credits_panel">
       <text
           follows="top|left|right"
-          height="10"
+          height="40"
           layout="topleft"
           left="5"
           name="linden_intro"
           top="10"
           width="435"
           wrap="true">
-Second Life is brought to you by the Lindens:
+Firestorm would not be possible without the decision from Linden Lab to make their Second Life viewer source code available.
+
+The Lindens are:
       </text>
       <text_editor
        enabled="false"
        follows="top|left"
-       height="98"
+       height="178"
        bg_readonly_color="Transparent"
        left="5"
        text_color="LtGray"
@@ -138,12 +154,12 @@ Philip, Andrew, Doug, Richard, Phoenix, Ian, Mark, Robin, Dan, Char, Ryan, Eric,
           top_pad="10"
           width="435"
           wrap="true">
-Additional code contributed to Secondlife by:
+with open source contributions from:
       </text>
       <text_editor
-       enabled="false"
+       enabled="false" 
        follows="top|left"
-       height="98"
+       height="178"
        bg_readonly_color="Transparent"
        left="5"
        text_color="LtGray"
@@ -163,10 +179,10 @@ Dummy Name replaced at run time
           top_pad="10"
           width="435"
           wrap="true">
-Translations to Secondlife provided by:
+and translations from:
       </text>
       <text_editor
-       enabled="false"
+       enabled="false" 
        follows="top|left"
        height="98"
        bg_readonly_color="Transparent"
@@ -187,14 +203,16 @@ Dummy Name replaced at run time
       name="fs_credits_panel">
       <text
           follows="top|left|right"
-          height="10"
+          height="90"
           layout="topleft"
           left="5"
           name="firestorm_intro"
           top="10"
           width="435"
           wrap="true">
-Firestorm is brought to you by:
+Firestorm is a community development project to improve the SecondLife(tm) Viewer experience.  We package contributions from various community developers along with code from Linden Lab and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team.  Firestorm is brought to you by The Phoenix Viewer Project, Inc., a non-profit organization.          
+          
+The Firestorm Development Team:
       </text>
       <text_editor
        enabled="false"
@@ -211,15 +229,41 @@ Firestorm is brought to you by:
 LordGregGreg Back, Kitty Barnett, Kadah Coba, Nicky Dasmijn, Tankmaster Finesmith, Ansariel Hiller, Selo Jacobus, WoLf Loonie, Techwolf Lupindo, Jessica Lyon, Wolfspirit Magic, Arrehn Oberlander, Liny Odell, Zi Ree, Mobius Ryba, Tonya Souther, Tozh Taurog.
       </text_editor>
       <text
+          follows="top|left"
+          height="10"
+          layout="topleft"
+          left="5"
+          name="fs_contrib_intro"
+          top_pad="10"
+          width="435"
+          wrap="true">
+Additional code generously contributed to Firestorm by:
+      </text>
+      <text_editor
+       enabled="false"
+       follows="top|left"
+       height="75"
+       bg_readonly_color="Transparent"
+       left="5"
+       text_color="LtGray"
+       max_length="65536"
+       name="fs_contrib_names"
+       top_pad="10"
+       width="435"
+       word_wrap="true">
+Satomi Ahn, Katharine Berry, Alexie Birman, Lance Corrimal, Sunset Faulkes, Whirly Fizzle, Albatroz Hird, Vaalith Jinn, Zwagoth Klaar, Kool Koolhoven, Shyotl Kuhr, Nogardrevlis Lectar, Miguael Liamano, Sione Lomu, Peyton Menges, Kittin Ninetails, Mimika Oh, Andromeda Rage, f0rbidden, programmtest, Mysty Saunders, Thickbrick Sleaford, Hitomi Tiponi, Qwerty Venom, Shin Wasp, Armin Weatherwax, Chalice Yao, Damian Zhaoying, and others.
+      </text_editor>
+
+      <text
     follows="top|left"
-    height="10"
+    height="25"
     layout="topleft"
     left="5"
     name="fs_support_intro"
     top_pad="10"
     width="435"
     wrap="true">
-Special thanks to our Firestorm Support Team:
+Special thanks to our Firestorm Support Team, wiki editors, educators, and translators:
       </text>
       <text_editor
        enabled="false"
@@ -237,14 +281,16 @@ Mister Acacia, AngelBlack123 Akins, Anubi Alter, Atthosz Amiot, Sabah Back, Pole
       </text_editor>
       <text
           follows="top|left"
-          height="10"
+          height="70"
           layout="topleft"
           left="5"
-          name="fs_contrib_intro"
+          name="fs_art_intro"
           top_pad="10"
           width="435"
           wrap="true">
-Additional code contributed to Firestorm by:
+Firestorm includes Starlight, modified for Firestorm.  It is provided by residents for residents, with the intention of providing an alternative, brighter, and hopefully easier to use interface.  For further details see &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
+
+UI Artists and Designers:
       </text>
       <text_editor
        enabled="false"
@@ -254,36 +300,11 @@ Additional code contributed to Firestorm by:
        left="5"
        text_color="LtGray"
        max_length="65536"
-       name="fs_contrib_names"
+       name="fs_artists_names"
        top_pad="10"
        width="435"
        word_wrap="true">
-Satomi Ahn, Katharine Berry, Alexie Birman, Lance Corrimal, Sunset Faulkes, Whirly Fizzle, Albatroz Hird, Vaalith Jinn, Zwagoth Klaar, Kool Koolhoven, Shyotl Kuhr, Nogardrevlis Lectar, Miguael Liamano, Sione Lomu, Peyton Menges, Kittin Ninetails, Mimika Oh, Andromeda Rage, f0rbidden, programmtest, Mysty Saunders, Thickbrick Sleaford, Hitomi Tiponi, Qwerty Venom, Shin Wasp, Armin Weatherwax, Chalice Yao, Damian Zhaoying, and others.
-      </text_editor>
-      <text
-          follows="top|left"
-          height="10"
-          layout="topleft"
-          left="5"
-          name="fs_trans_intro"
-          top_pad="10"
-          width="435"
-          wrap="true">
-Translations to Firestorm provided by:
-      </text>
-      <text_editor
-       enabled="false"
-       follows="top|left"
-       height="75"
-       bg_readonly_color="Transparent"
-       left="5"
-       text_color="LtGray"
-       max_length="65536"
-       name="fs_trans_names"
-       top_pad="10"
-       width="435"
-       word_wrap="true">
-Sunset Faulkes, Ansariel Hiller, Albatroz Hird, Kool Koolhoven, NogarDrevlis Lectar, f0rbidden, Programm, Qwerty Venom, Volli Voom, and others.
+Hitomi Tiponi, KirstenLee Cinquetti, Alexandrea Fride, psi Merlin, Hugh Helendale, samm florian, Digital Scribe, Naomah Beaumont, Nadin, Sammie Benoir, Mobius Ryba, DarkAgent Baphomet
       </text_editor>
     </panel>
     <panel
@@ -294,7 +315,7 @@ Sunset Faulkes, Ansariel Hiller, Albatroz Hird, Kool Koolhoven, NogarDrevlis Lec
       <text_editor
        enabled="false"
        follows="left|top"
-       height="375"
+       height="475"
        bg_readonly_color="Transparent"
        left="5"
        text_color="LtGray"
@@ -324,6 +345,7 @@ SSLeay Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
 xmlrpc-epi Copyright (C) 2000 Epinions, Inc.
 zlib Copyright (C) 1995-2002 Jean-loup Gailly and Mark Adler.
 google-perftools Copyright (c) 2005, Google Inc.
+Some icons by Joseph Wain / glyphish.com
 
 Second Life Viewer uses Havok (TM) Physics. (c)Copyright 1999-2010 Havok.com Inc. (and its Licensors). All Rights Reserved. See www.havok.com for details.
 

@@ -7,8 +7,8 @@
 TRUE=0 # Map the shell's idea of truth to a variable for better documentation
 FALSE=1
 
-echo "DEBUG ARGS: $@"
-echo "DEBUG `pwd`"
+#echo "DEBUG ARGS: $@"
+#echo "DEBUG `pwd`"
 
 # args ../indra
 #                  <string>-DCMAKE_BUILD_TYPE:STRING=Release</string>
@@ -112,9 +112,8 @@ getArgs()
         fi
 
 	LOG="`pwd`/logs/build_$PLATFORM.log"
-	echo "Removing $LOG ..."
 	if [ -r "$LOG" ] ; then
-		rm -f "`pwd`/logs/*" #(remove old logfiles)
+		rm -f `basename "$LOG"`/* #(remove old logfiles)
 	fi
 }
 
@@ -250,16 +249,20 @@ function getopt()
 ### 
 
 getArgs $*
+if [ ! -d `dirname "$LOG"` ] ; then
+        mkdir -p `dirname "$LOG"`
+fi
+
 echo -e "configure_firestorm.py" > $LOG
-echo -e "       PLATFORM: '$PLATFORM'"          >> $LOG
-echo -e "	     KDU: `b2a $WANTS_KDU`"     >> $LOG
-echo -e "	    FMOD: `b2a $WANTS_FMOD`"    >> $LOG
-echo -e "	 PACKAGE: `b2a $WANTS_PACKAGE`" >> $LOG
-echo -e "	   CLEAN: `b2a $WANTS_CLEAN`"   >> $LOG
-echo -e "	   BUILD: `b2a $WANTS_BUILD`"   >> $LOG
-echo -e "	  CONFIG: `b2a $WANTS_CONFIG`"  >> $LOG
-echo -e "	PASSTHRU: $LL_ARGS_PASSTHRU"    >> $LOG
-echo -e "	   BTYPE: $BTYPE"               >> $LOG
+echo -e "       PLATFORM: '$PLATFORM'"          | tee -a $LOG
+echo -e "	     KDU: `b2a $WANTS_KDU`"     | tee -a $LOG
+echo -e "	    FMOD: `b2a $WANTS_FMOD`"    | tee -a $LOG
+echo -e "	 PACKAGE: `b2a $WANTS_PACKAGE`" | tee -a $LOG
+echo -e "	   CLEAN: `b2a $WANTS_CLEAN`"   | tee -a $LOG
+echo -e "	   BUILD: `b2a $WANTS_BUILD`"   | tee -a $LOG
+echo -e "	  CONFIG: `b2a $WANTS_CONFIG`"  | tee -a $LOG
+echo -e "	PASSTHRU: $LL_ARGS_PASSTHRU"    | tee -a $LOG
+echo -e "	   BTYPE: $BTYPE"               | tee -a $LOG
 echo -e "       Logging to $LOG"
 
 
@@ -269,9 +272,6 @@ else
 	FIND=find
 fi
 
-if [ ! -d `dirname $LOG` ] ; then
-	mkdir -p `dirname $LOG`
-fi
 
 if [ -z $CHANNEL ] ; then
 	if [ $PLATFORM == "win32" ] ; then

@@ -114,10 +114,11 @@ LLLineEditor::Params::Params()
 	text_pad_right("text_pad_right"),
 	default_text("default_text")
 {
-	mouse_opaque = true;
+	changeDefault(mouse_opaque, true);
 	addSynonym(select_on_focus, "select_all_on_focus_received");
 	addSynonym(border, "border");
 	addSynonym(label, "watermark_text");
+	addSynonym(max_length.chars, "max_length");
 }
 
 LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
@@ -257,6 +258,7 @@ void LLLineEditor::autoCorrectText()
 
 void LLLineEditor::onFocusReceived()
 {
+	gEditMenuHandler = this;
 	LLUICtrl::onFocusReceived();
 	updateAllowingLanguageInput();
 }

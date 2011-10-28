@@ -62,6 +62,7 @@
      name="avatar_name"
      top="5"
      clip_partial="false"
+     parse_urls="false"
      use_ellipses="true"
      value="(loading)"
      width="50" />

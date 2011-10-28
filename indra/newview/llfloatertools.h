@@ -48,6 +48,7 @@ class LLMediaCtrl;
 class LLTool;
 class LLParcelSelection;
 class LLObjectSelection;
+class LLLandImpactsObserver;
 
 typedef LLSafeHandle<LLObjectSelection> LLObjectSelectionHandle;
 
@@ -104,6 +105,7 @@ public:
 	void updateMediaTitle();
 	void navigateToTitleMedia( const std::string url );
 	bool selectedMediaEditable();
+	void updateLandImpacts();
 
 	void onClickBtnCopyKeys();
 	void onClickExpand();
@@ -117,7 +119,6 @@ private:
 	static bool multipleFacesSelectedConfirm(const LLSD& notification, const LLSD& response);
 	static void setObjectType( LLPCode pcode );
 	void onClickGridOptions();
-	S32 calcRenderCost();
 
 public:
 	LLButton		*mBtnFocus;
@@ -188,6 +189,8 @@ public:
 	LLViewBorder*			mCostTextBorder;
 
 	LLTabContainer*			mTabLand;
+
+	LLLandImpactsObserver*  mLandImpactsObserver;
 
 	LLParcelSelectionHandle	mParcelSelection;
 	LLObjectSelectionHandle	mObjectSelection;

@@ -1817,16 +1817,6 @@
              function="ToggleControl"
              parameter="QuietSnapshotsToDisk" />
         </menu_item_check>
-        <menu_item_check
-         label="Compress Snapshots to Disk"
-         name="CompressSnapshotsToDisk">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="CompressSnapshotsToDisk" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="CompressSnapshotsToDisk" />
-        </menu_item_check>
 
         <menu_item_separator/>
 
@@ -1854,7 +1844,7 @@
                  parameter="stats" />
             </menu_item_check>
       <menu_item_check
-        label="Show Avatar Rendering Cost"
+        label="Show Draw Weight for Avatars"
         name="Avatar Rendering Cost">
            <menu_item_check.on_check
             function="Advanced.CheckInfoDisplay"
@@ -2780,6 +2770,16 @@
                function="ToggleControl"
                parameter="DebugShowMemory" />
             </menu_item_check>
+	     <menu_item_check
+               label="Show Private Mem Info"
+               name="Show Private Mem Info">
+              <menu_item_check.on_check
+               function="CheckControl"
+               parameter="DebugShowPrivateMem" />
+              <menu_item_check.on_click
+               function="ToggleControl"
+               parameter="DebugShowPrivateMem" />
+            </menu_item_check>
 
             <menu_item_separator/>
 
@@ -3071,6 +3071,16 @@
           <menu_item_check.on_click
            function="Advanced.ToggleInfoDisplay"
            parameter="raycast" />
+        </menu_item_check>
+        <menu_item_check
+         label="Render Complexity"
+         name="rendercomplexity">
+          <menu_item_check.on_check
+           function="Advanced.CheckInfoDisplay"
+           parameter="rendercomplexity" />
+          <menu_item_check.on_click
+           function="Advanced.ToggleInfoDisplay"
+           parameter="rendercomplexity" />
         </menu_item_check>
 		<menu_item_check
          label="Sculpt"

@@ -110,10 +110,8 @@
 #include "rlvlocks.h"
 // [/RLVa:KB]
 #include "llcurl.h"
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
-#include "rlvhandler.h"
-#include "rlvlocks.h"
-// [/RLVa:KB]
+#include "llnotifications.h"
+
 
 void check_stack_depth(S32 stack_depth)
 {
@@ -327,6 +325,7 @@ BOOL	LLPipeline::sRenderFrameTest = FALSE;
 BOOL	LLPipeline::sRenderAttachedLights = TRUE;
 BOOL	LLPipeline::sRenderAttachedParticles = TRUE;
 BOOL	LLPipeline::sRenderDeferred = FALSE;
+BOOL    LLPipeline::sMemAllocationThrottled = FALSE;
 S32		LLPipeline::sVisibleLightCount = 0;
 F32		LLPipeline::sMinRenderSize = 0.f;
 F32	LLPipeline::sVolumeSAFrame = 0.f; // ZK LBG
@@ -580,6 +579,24 @@ void LLPipeline::destroyGL()
 }
 
 static LLFastTimer::DeclareTimer FTM_RESIZE_SCREEN_TEXTURE("Resize Screen Texture");
+
+//static
+void LLPipeline::throttleNewMemoryAllocation(BOOL disable)
+{
+	if(sMemAllocationThrottled != disable)
+	{
+		sMemAllocationThrottled = disable ;
+
+		if(sMemAllocationThrottled)
+		{
+			//send out notification
+			LLNotification::Params params("LowMemory");
+			LLNotifications::instance().add(params);
+
+			//release some memory.
+		}
+	}
+}
 
 void LLPipeline::resizeScreenTexture()
 {

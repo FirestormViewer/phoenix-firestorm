@@ -28,17 +28,18 @@
 #define LL_LLSIDETRAY_H_
 
 #include "llpanel.h"
+#include "llsidetraytab.h"
 #include "string"
 
 class LLAccordionCtrl;
-class LLSideTrayTab;
 
 // Define an interface for side tab button badge values
 class LLSideTrayTabBadgeDriver
 {
 public:
-	virtual std::string getBadgeString() const = 0;
+    virtual std::string getBadgeString() const = 0;
 };
+
 
 // Deal with LLSideTrayTab being opaque. Generic do-nothing cast...
 template <class T>

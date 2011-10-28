@@ -211,7 +211,7 @@ void LLPanelContents::onClickNewScript(void *userdata)
 				LLUUID::null,
 				LLAssetType::AT_LSL_TEXT,
 				LLInventoryType::IT_LSL,
-				LLTrans::getString("PanelContentsNewScript"),
+				"New Script",
 				desc,
 				LLSaleInfo::DEFAULT,
 				LLInventoryItemFlags::II_FLAGS_NONE,

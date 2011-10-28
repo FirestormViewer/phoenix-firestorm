@@ -1382,6 +1382,10 @@ void LLViewerMedia::removeCookie(const std::string &name, const std::string &dom
 }
 
 
+// This is defined in two files but I don't want to create a dependence between this and llsidepanelinventory
+// just to be able to temporarily disable the outbox.
+#define ENABLE_INVENTORY_DISPLAY_OUTBOX		0	// keep in sync with ENABLE_MERCHANT_OUTBOX_PANEL, ENABLE_MERCHANT_OUTBOX_CONTEXT_MENU
+
 class LLInventoryUserStatusResponder : public LLHTTPClient::Responder
 {
 public:
@@ -1394,8 +1398,18 @@ public:
 	{
 		if (isGoodStatus(status))
 		{
+			std::string merchantStatus = content[gAgent.getID().getString()].asString();
+			llinfos << "Marketplace merchant status: " << merchantStatus << llendl;
+
+			// Save the merchant status before turning on the display
+			gSavedSettings.setString("InventoryMarketplaceUserStatus", merchantStatus);
+
 			// Complete success
 			gSavedSettings.setBOOL("InventoryDisplayInbox", true);
+
+#if ENABLE_INVENTORY_DISPLAY_OUTBOX
+			gSavedSettings.setBOOL("InventoryDisplayOutbox", true);
+#endif
 		}
 		else if (status == 401)
 		{
@@ -1409,6 +1423,41 @@ public:
 		}
 	}
 };
+
+
+void doOnetimeEarlyHTTPRequests()
+{
+	std::string url = "https://marketplace.secondlife.com/";
+
+//	if (!LLGridManager::getInstance()->isInProductionGrid())
+	if (LLGridManager::getInstance()->isInSLBeta())// <AW opensim>
+	{
+		std::string gridLabel = LLGridManager::getInstance()->getGridLabel();
+		url = llformat("https://marketplace.%s.lindenlab.com/", utf8str_tolower(gridLabel).c_str());
+	}
+	
+// <AW opensim> needs coordinating with opensim devs
+	if (!LLGridManager::getInstance()->isInOpenSim())// <AW opensim>
+	{
+		url += "api/1/users/";
+		url += gAgent.getID().getString();
+		url += "/user_status";
+
+		llinfos << "http get: " << url << llendl;
+		LLHTTPClient::get(url, new LLInventoryUserStatusResponder(), LLViewerMedia::getHeaders());
+	}
+}
+
+
+LLSD LLViewerMedia::getHeaders()
+{
+	LLSD headers = LLSD::emptyMap();
+	headers["Accept"] = "*/*";
+	headers["Cookie"] = sOpenIDCookie;
+	headers["User-Agent"] = getCurrentUserAgent();
+
+	return headers;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // static
@@ -1457,30 +1506,7 @@ void LLViewerMedia::setOpenIDCookie()
 			new LLViewerMediaWebProfileResponder(raw_profile_url.getAuthority()),
 			headers);
 
-		std::string url = "https://marketplace.secondlife.com/";
-
-// 		if (LLGridManager::getInstance()->isInProductionGrid())
-		if (LLGridManager::getInstance()->isInSLBeta())// <AW opensim>
-		{
-			std::string gridLabel = LLGridManager::getInstance()->getGridLabel();
-			url = llformat("https://marketplace.%s.lindenlab.com/", utf8str_tolower(gridLabel).c_str());
-		}
-
-		// <AW opensim> needs coordinating with opensim devs
-		if (!LLGridManager::getInstance()->isInOpenSim())// <AW opensim>
-		{
-			url += "api/1/users/";
-			url += gAgent.getID().getString();
-			url += "/user_status";
-	
-			headers = LLSD::emptyMap();
-			headers["Accept"] = "*/*";
-			headers["Cookie"] = sOpenIDCookie;
-			headers["User-Agent"] = getCurrentUserAgent();
-	
-			LLHTTPClient::get(url, new LLInventoryUserStatusResponder(), headers);
-		}
-		
+		doOnetimeEarlyHTTPRequests();
 	}
 }
 

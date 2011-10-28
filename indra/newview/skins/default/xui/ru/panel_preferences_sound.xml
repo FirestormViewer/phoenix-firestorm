@@ -504,7 +504,6 @@
      width="25">
     <button.commit_callback
     function="Pref.VoiceSetMiddleMouse" />
-  </button>
  </button>
     <panel
      background_visible="false"

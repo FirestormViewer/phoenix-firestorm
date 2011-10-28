@@ -990,7 +990,10 @@ BOOL LLWindowSDL::setSize(const LLCoordScreen size)
 void LLWindowSDL::swapBuffers()
 {
 	if (mWindow)
+	{	
+		glFinish();
 		SDL_GL_SwapBuffers();
+	}
 }
 
 U32 LLWindowSDL::getFSAASamples()

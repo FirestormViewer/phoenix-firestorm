@@ -152,7 +152,6 @@ static bool handleRenderPerfTestChanged(const LLSD& newvalue)
                                                                          LLPipeline::RENDER_TYPE_WATER,
                                                                          LLPipeline::RENDER_TYPE_PASS_GRASS,
                                                                          LLPipeline::RENDER_TYPE_HUD,
-                                                                         LLPipeline::RENDER_TYPE_PARTICLES,
                                                                          LLPipeline::RENDER_TYPE_CLOUDS,
                                                                          LLPipeline::RENDER_TYPE_HUD_PARTICLES,
                                                                          LLPipeline::END_RENDER_TYPES); 
@@ -168,7 +167,6 @@ static bool handleRenderPerfTestChanged(const LLSD& newvalue)
                                                                          LLPipeline::RENDER_TYPE_WATER,
                                                                          LLPipeline::RENDER_TYPE_PASS_GRASS,
                                                                          LLPipeline::RENDER_TYPE_HUD,
-                                                                         LLPipeline::RENDER_TYPE_PARTICLES,
                                                                          LLPipeline::RENDER_TYPE_CLOUDS,
                                                                          LLPipeline::RENDER_TYPE_HUD_PARTICLES,
                                                                          LLPipeline::END_RENDER_TYPES);
@@ -176,6 +174,11 @@ static bool handleRenderPerfTestChanged(const LLSD& newvalue)
        }
 
        return true;
+}
+
+bool handleRenderAvatarComplexityLimitChanged(const LLSD& newvalue)
+{
+	return true;
 }
 
 bool handleRenderTransparentWaterChanged(const LLSD& newvalue)
@@ -695,6 +698,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderGammaFull")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderAvatarMaxVisible")->getSignal()->connect(boost::bind(&handleAvatarMaxVisibleChanged, _2));
+	gSavedSettings.getControl("RenderAvatarComplexityLimit")->getSignal()->connect(boost::bind(&handleRenderAvatarComplexityLimitChanged, _2));
 	gSavedSettings.getControl("RenderVolumeLODFactor")->getSignal()->connect(boost::bind(&handleVolumeLODChanged, _2));
 	gSavedSettings.getControl("RenderAvatarLODFactor")->getSignal()->connect(boost::bind(&handleAvatarLODChanged, _2));
 	gSavedSettings.getControl("RenderAvatarPhysicsLODFactor")->getSignal()->connect(boost::bind(&handleAvatarPhysicsLODChanged, _2));

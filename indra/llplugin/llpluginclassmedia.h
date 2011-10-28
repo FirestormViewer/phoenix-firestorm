@@ -44,7 +44,7 @@ public:
 	~LLPluginClassMedia();
 
 	// local initialization, called by the media manager when creating a source
-	bool init(const std::string &launcher_filename,
+	bool init(const std::string &launcher_filename, 
 					  const std::string &plugin_dir, 
 					  const std::string &plugin_filename, 
 					  bool debug);

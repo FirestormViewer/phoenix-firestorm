@@ -619,6 +619,7 @@ BOOL LLToolDragAndDrop::handleToolTip(S32 x, S32 y, MASK mask)
 {
 	if (!mToolTipMsg.empty())
 	{
+		LLToolTipMgr::instance().unblockToolTips();
 		LLToolTipMgr::instance().show(LLToolTip::Params()
 			.message(mToolTipMsg)
 			.delay_time(gSavedSettings.getF32( "DragAndDropToolTipDelay" )));
@@ -1696,6 +1697,12 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 		return ACCEPT_NO;
 	}
 
+    const LLUUID &outbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_OUTBOX, false);
+    if(gInventory.isObjectDescendentOf(item->getUUID(), outbox_id))
+    {
+        return ACCEPT_NO;
+    }
+
 // [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.2.1f
 	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 	{
@@ -1704,6 +1711,7 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 			return ACCEPT_NO_LOCKED;
 	}
 // [/RLVa:KB]
+
 
 	if( drop )
 	{
@@ -2141,6 +2149,12 @@ EAcceptance LLToolDragAndDrop::dad3dWearCategory(
 	{
 		const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
 		if( gInventory.isObjectDescendentOf( category->getUUID(), trash_id ) )
+		{
+			return ACCEPT_NO;
+		}
+
+		const LLUUID &outbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_OUTBOX, false);
+		if(gInventory.isObjectDescendentOf(category->getUUID(), outbox_id))
 		{
 			return ACCEPT_NO;
 		}

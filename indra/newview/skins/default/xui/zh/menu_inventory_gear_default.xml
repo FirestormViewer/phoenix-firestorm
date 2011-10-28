@@ -6,12 +6,12 @@
 	<menu_item_check label="總是由名稱排序資料夾" name="sort_folders_by_name"/>
 	<menu_item_check label="系統資料夾排序到最上方" name="sort_system_folders_to_top"/>
 	<menu_item_call label="顯示過濾器" name="show_filters"/>
-	<menu_item_call label="Reset Filters" name="reset_filters"/>
+	<menu_item_call label="重設過濾器" name="reset_filters"/>
 	<menu_item_call label="關閉全部資料夾" name="close_folders"/>
 	<menu_item_call label="清空 Lost and Found" name="empty_lostnfound"/>
 	<menu_item_call label="儲存材質為" name="Save Texture As"/>
 	<menu_item_call label="分享" name="Share"/>
-	<menu_item_call label="Find Original" name="Find Original"/>
-	<menu_item_call label="Find All Links" name="Find All Links"/>
+	<menu_item_call label="尋找原件" name="Find Original"/>
+	<menu_item_call label="尋找全部聯結" name="Find All Links"/>
 	<menu_item_call label="清空垃圾筒" name="empty_trash"/>
 </toggleable_menu>

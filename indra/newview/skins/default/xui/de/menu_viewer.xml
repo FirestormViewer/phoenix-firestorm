@@ -165,7 +165,6 @@
 			<menu_item_call label="Sound ([COST] L$)..." name="Upload Sound"/>
 			<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
 			<menu_item_call label="Modell..." name="Upload Model"/>
-			<menu_item_call label="Modellassistent..." name="Upload Model Wizard"/>
 			<menu_item_call label="Mehrfach-Upload ([COST] L$ pro Datei)..." name="Bulk Upload"/>
 			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
 		</menu>
@@ -219,8 +218,7 @@
 		<menu_item_check label="Kamerabeschränkungen deaktivieren" name="Disable Camera Distance"/>
 		<menu_item_check label="Foto (hohe Auflösung)" name="HighResSnapshot"/>
 		<menu_item_check label="Fotos auf Festplatte leise speichern" name="QuietSnapshotsToDisk"/>
-		<menu_item_check label="Fotos auf Festplatte komprimieren" name="CompressSnapshotsToDisk"/>
-		<menu label="Performance-Tools" name="Performance Tools">
+		<menu label="Performance Tools" name="Performance Tools">
 			<menu_item_call label="Lag-Anzeige" name="Lag Meter"/>
 			<menu_item_check label="Statistikleiste" name="Statistics Bar"/>
 			<menu_item_check label="Avatar-Darstellungskosten anzeigen" name="Avatar Rendering Cost"/>
@@ -338,6 +336,7 @@
 			<menu_item_check label="Matrizen anzeigen" name="Show Matrices"/>
 			<menu_item_check label="Farbe unter Cursor anzeigen" name="Show Color Under Cursor"/>
 			<menu_item_check label="Speicher anzeigen" name="Show Memory"/>
+			<menu_item_check label="Info über privaten Speicher anzeigen" name="Show Private Mem Info"/>
 			<menu_item_check label="Akutalisierungen an Objekten anzeigen" name="Show Updates"/>
 		</menu>
 		<menu label="Fehler erzwingen" name="Force Errors">

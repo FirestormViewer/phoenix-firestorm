@@ -157,7 +157,6 @@ public:
 	 */
 	void setNonBlocking();
 
-
 protected:
 	/**
 	 * @brief Protected constructor since should only make sockets

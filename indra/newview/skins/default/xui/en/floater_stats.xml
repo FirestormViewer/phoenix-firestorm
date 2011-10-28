@@ -120,8 +120,8 @@
 				 stat="trianglesdrawnstat"
 				 bar_min="0"
 				 bar_max="200000"
-				 tick_spacing="20000"
-				 label_spacing="40000"
+				 tick_spacing="25000"
+				 label_spacing="50000"
 				 precision="0"
          show_bar="false">
         </stat_bar>
@@ -766,7 +766,7 @@
             </stat_bar>
             <stat_bar
              name="simsimphysicsshapeupdatemsec"
-             label="  Update Physics Shapes"
+             label="  Update Phys Shapes"
              stat="simsimphysicsshapeupdatemsec"
              unit_label="ms"
              precision="3"

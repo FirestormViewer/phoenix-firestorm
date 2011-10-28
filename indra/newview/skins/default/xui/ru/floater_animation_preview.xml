@@ -308,7 +308,7 @@
          name="Typing"
          value="Hands_Typing" />
         <combo_box.item
-         label="Правые &apos;V&apos"
+         label="Правые &apos;V&apos;"
          name="PeaceRight"
          value="Hands_Peace_R" />
     </combo_box>

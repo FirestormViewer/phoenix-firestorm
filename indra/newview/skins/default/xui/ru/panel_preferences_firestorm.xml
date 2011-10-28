@@ -158,7 +158,6 @@
 		 follows="left|top"
 		 height="16"
 		 label="Перевернуть аватара если он идёт задом"
-		 label="Перевернуть аватара если он идёт задом"
 		 left="15"
 		 name="backwardsturnavatar"
 		 width="270"
