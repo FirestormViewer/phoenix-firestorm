@@ -3322,6 +3322,7 @@ public:
 
 	virtual void endTraceData()
 	{
+
 	}
 
 	virtual int getLevel()

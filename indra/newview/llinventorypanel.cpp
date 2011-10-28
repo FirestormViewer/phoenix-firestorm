@@ -438,7 +438,7 @@ void LLInventoryPanel::modelChanged(U32 mask)
 			{
 				view_item->destroyView();
 			}
-			view_item = buildNewViews(item_id);
+			view_item = buildNewViews(item_id,0);
 			view_folder = dynamic_cast<LLFolderViewFolder *>(view_item);
 		}
 
@@ -481,7 +481,7 @@ void LLInventoryPanel::modelChanged(U32 mask)
 			if (model_item && !view_item)
 			{
 				// Add the UI element for this item.
-				buildNewViews(item_id);
+				buildNewViews(item_id,0);
 				// Select any newly created object that has the auto rename at top of folder root set.
 				if(mFolderRoot->getRoot()->needsAutoRename())
 				{
@@ -596,7 +596,7 @@ LLFolderViewItem* LLInventoryPanel::rebuildViewsFor(const LLUUID& id)
 		old_view->destroyView();
 	}
 
-	return buildNewViews(id);
+	return buildNewViews(id,0);
 }
 
 LLFolderView * LLInventoryPanel::createFolderView(LLInvFVBridge * bridge, bool useLabelSuffix)
@@ -663,7 +663,7 @@ LLFolderViewItem * LLInventoryPanel::createFolderViewItem(LLInvFVBridge * bridge
 	return LLUICtrlFactory::create<LLFolderViewItem>(params);
 }
 
-LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id)
+LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id, long aRecursionCount )
 {
  	LLInventoryObject const* objectp = gInventory.getObject(id);
  	LLUUID root_id = mFolderRoot->getListener()->getUUID();
@@ -737,15 +737,15 @@ LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id)
 
 	//  <ND> Subfolder JIT
  	// FIRE-3615; FIRE-3616: For some panels we get a zero UUID for top level folders here. </ND>
- 	if( id == getRootFolderID() || getRootFolderID().isNull() || id.isNull() )
-		addSubItems( id );
+ 	if( (id == getRootFolderID() || getRootFolderID().isNull() || id.isNull()) && aRecursionCount < 1 )
+		addSubItems( id, 0 );
 	// </ND>
 
 	return itemp;
 }
 
 // <ND> JIT subfolder processing
-void LLInventoryPanel::addSubItems(const LLUUID& id)
+void LLInventoryPanel::addSubItems(const LLUUID& id, long aRecursionCount)
 {
  	LLInventoryObject const* objectp = gInventory.getObject(id);
  	LLUUID root_id = mFolderRoot->getListener()->getUUID();
@@ -775,7 +775,7 @@ void LLInventoryPanel::addSubItems(const LLUUID& id)
 				const LLViewerInventoryCategory* cat = (*cat_iter);
 				//buildNewViews(cat->getUUID());  
 				if( !mFolderRoot->getItemByID( cat->getUUID() ) ) //ND
-					buildNewViews(cat->getUUID());
+					buildNewViews(cat->getUUID(), aRecursionCount+1);
 			}
 		}
 		
@@ -788,7 +788,7 @@ void LLInventoryPanel::addSubItems(const LLUUID& id)
 				const LLViewerInventoryItem* item = (*item_iter);
 				//buildNewViews(cat->getUUID());
 				if( !mFolderRoot->getItemByID( item->getUUID() ) ) //ND
-					buildNewViews(item->getUUID());
+					buildNewViews(item->getUUID(), aRecursionCount+1 );
 			}
 		}
 		else if( items )

@@ -68,6 +68,10 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
+//TL: for support group chat prefix
+#include "fsdata.h"
+#include "llversioninfo.h"
+
 static const S32 RECT_PADDING_NOT_INIT = -1;
 static const S32 RECT_PADDING_NEED_RECALC = -2;
 
@@ -285,6 +289,12 @@ void LLIMFloater::sendMsg()
 				}
 			}
 //-TT /Patch MU_OOC from Satomi Ahn
+
+			// TL: Support group chat prefix
+			if (FSData::getInstance()->isSupportGroup(mSessionID))
+			{
+				utf8_text.insert(0,("(FS " + LLVersionInfo::getShortVersion() + ") "));
+			}
 
 			// Truncate for transport
 			utf8_text = utf8str_truncate(utf8_text, MAX_MSG_BUF_SIZE - 1);

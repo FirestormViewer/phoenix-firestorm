@@ -995,6 +995,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+  <key>FSSupportGroupChatPrefix</key>
+    <map>
+      <key>Comment</key>
+      <string>Adds (FS 1.2.3) to support group chat</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
   <key>AutoCloseOOC</key>
     <map>
       <key>Comment</key>
@@ -7280,7 +7291,7 @@
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <real>1</real>
+    <real>0</real>
   </map>
   <key>MeshUploadLogXML</key>
   <map>

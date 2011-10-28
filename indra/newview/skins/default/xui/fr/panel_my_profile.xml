@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Profil" name="panel_profile">
-	<string name="CaptionTextAcctInfo">
-		[ACCTTYPE]
-[PAYMENTINFO] [AGEVERIFICATION]
-	</string>
 	<string name="payment_update_link_url">
 		http://www.secondlife.com/account/billing.php?lang=en
 	</string>

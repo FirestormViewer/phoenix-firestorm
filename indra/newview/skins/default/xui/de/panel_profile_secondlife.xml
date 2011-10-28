@@ -14,7 +14,13 @@
     <string
      name="no_group_text"
      value="Keine" />
-	 
+    <string
+     name="FSDev"
+     value="-Entwickler" />
+	<string
+     name="FSSupp"
+     value="-Support" />
+
           <panel name="second_life_panel">
 
             <text name="Key:" value="UUID:"/>
