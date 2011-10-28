@@ -237,7 +237,9 @@ public:
 		{
 			bool operator()(const LLMemoryBlock* const& lhs, const LLMemoryBlock* const& rhs)
 			{
-				return (U32)lhs->getBuffer() < (U32)rhs->getBuffer();
+				//return (U32)lhs->getBuffer() < (U32)rhs->getBuffer();
+				//<ND/> 64 bit fix
+				return reinterpret_cast<unsigned char*>(lhs->getBuffer()) < reinterpret_cast<unsigned char*>(rhs->getBuffer());
 			}
 		};
 	};
@@ -268,7 +270,8 @@ public:
 		void dump() ;
 
 	private:
-		U32 getPageIndex(U32 addr) ;
+//		U32 getPageIndex(U32 addr) ;
+		U32 getPageIndex(void* addr) ; // <ND/> 64 bit fix
 		U32 getBlockLevel(U32 size) ;
 		U16 getPageLevel(U32 size) ;
 		LLMemoryBlock* addBlock(U32 blk_idx) ;

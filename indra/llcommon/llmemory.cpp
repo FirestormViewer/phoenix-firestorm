@@ -721,7 +721,12 @@ char* LLPrivateMemoryPool::LLMemoryBlock::allocate()
 void  LLPrivateMemoryPool::LLMemoryBlock::freeMem(void* addr) 
 {
 	//bit index
-	U32 idx = ((U32)addr - (U32)mBuffer - mDummySize) / mSlotSize ;
+	//	U32 idx = ((U32)addr - (U32)mBuffer - mDummySize) / mSlotSize ;
+	//<ND> 64 bit fix
+	unsigned char *p1 = reinterpret_cast<unsigned char*>(addr);
+	unsigned char *p2 = reinterpret_cast<unsigned char*>(mBuffer);
+	U32 idx = ( p1 - p2 - mDummySize) / mSlotSize ;
+	//</ND>
 
 	U32* bits = &mUsageBits ;
 	if(idx >= 32)
@@ -903,7 +908,7 @@ char* LLPrivateMemoryPool::LLMemoryChunk::allocate(U32 size)
 
 void LLPrivateMemoryPool::LLMemoryChunk::freeMem(void* addr)
 {	
-	U32 blk_idx = getPageIndex((U32)addr) ;
+	U32 blk_idx = getPageIndex(/*<ND/> 64 bit fix (U32)*/addr) ;
 	LLMemoryBlock* blk = (LLMemoryBlock*)(mMetaBuffer + blk_idx * sizeof(LLMemoryBlock)) ;
 	blk = blk->mSelf ;
 
@@ -928,7 +933,13 @@ bool LLPrivateMemoryPool::LLMemoryChunk::empty()
 
 bool LLPrivateMemoryPool::LLMemoryChunk::containsAddress(const char* addr) const
 {
-	return (U32)mBuffer <= (U32)addr && (U32)mBuffer + mBufferSize > (U32)addr ;
+	//return (U32)mBuffer <= (U32)addr && (U32)mBuffer + mBufferSize > (U32)addr ;
+	//<ND> 64 bit fix
+	unsigned char const *pBuffer = reinterpret_cast<unsigned char const*>( mBuffer );
+	unsigned char const *pAddr = reinterpret_cast<unsigned char const*>( addr );
+
+	return pBuffer <= pAddr && pBuffer + mBufferSize > pAddr ;
+	//</ND>
 }
 
 //debug use
@@ -1285,9 +1296,16 @@ void LLPrivateMemoryPool::LLMemoryChunk::addToAvailBlockList(LLMemoryBlock* blk)
 	return ;
 }
 
-U32 LLPrivateMemoryPool::LLMemoryChunk::getPageIndex(U32 addr)
+//U32 LLPrivateMemoryPool::LLMemoryChunk::getPageIndex(U32 addr)
+U32 LLPrivateMemoryPool::LLMemoryChunk::getPageIndex(void * addr) // <ND/> 64 bit fix
 {
-	return (addr - (U32)mDataBuffer) / mMinBlockSize ;
+	//	return (addr - (U32)mDataBuffer) / mMinBlockSize ;
+	//<ND> 64 bit fix
+	unsigned char *pAddr = reinterpret_cast< unsigned char* >( addr );
+	unsigned char *pBuffer = reinterpret_cast< unsigned char* >( mDataBuffer );
+
+	return (pAddr - pBuffer) / mMinBlockSize ;
+	//</ND>
 }
 
 //for mAvailBlockList
@@ -1625,7 +1643,13 @@ void LLPrivateMemoryPool::removeChunk(LLMemoryChunk* chunk)
 
 U16 LLPrivateMemoryPool::findHashKey(const char* addr)
 {
-	return (((U32)addr) / CHUNK_SIZE) % mHashFactor ;
+	// return (((U32)addr) / CHUNK_SIZE) % mHashFactor ;
+	//<ND> 64 bit fix
+	unsigned char const *pAddr = reinterpret_cast< unsigned char const *>( addr );
+	U64 nAddr = reinterpret_cast<U64>(pAddr);
+
+	return ( nAddr / CHUNK_SIZE) % mHashFactor ;
+	//</ND>
 }
 
 LLPrivateMemoryPool::LLMemoryChunk* LLPrivateMemoryPool::findChunk(const char* addr)
