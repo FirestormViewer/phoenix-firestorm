@@ -737,7 +737,7 @@ LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id, long aRecurs
 
 	//  <ND> Subfolder JIT
  	// FIRE-3615; FIRE-3616: For some panels we get a zero UUID for top level folders here. </ND>
- 	if( (id == getRootFolderID() || getRootFolderID().isNull() || id.isNull()) && aRecursionCount < 1 )
+ 	if( (id == getRootFolderID() || getRootFolderID().isNull() || id.isNull()) /*<ND/>: FIRE-3725, breaks worn tab on deeper nesting levels, remove for now: && aRecursionCount < 1*/ )
 		addSubItems( id, 0 );
 	// </ND>
 
