@@ -147,10 +147,11 @@ public:
 	std::string getLoginPage(const std::string& grid) { return mGridList[grid][GRID_LOGIN_PAGE_VALUE]; }
 	void        getLoginIdentifierTypes(LLSD& idTypes) { idTypes = mGridList[mGrid][GRID_LOGIN_IDENTIFIER_TYPES]; }
 	
-	// build a slurl for the given region within the selected grid
+	// get location slurl base for the given region within the selected grid
 	std::string getSLURLBase(const std::string& grid);
 	std::string getSLURLBase() { return getSLURLBase(mGrid); }
-	
+
+	// get app slurl base for the given region within the selected grid
 	std::string getAppSLURLBase(const std::string& grid);
 	std::string getAppSLURLBase() { return getAppSLURLBase(mGrid); }	
 	std::string getGridByLabel( const std::string &grid_label, bool case_sensitive = false);

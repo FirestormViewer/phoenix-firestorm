@@ -37,11 +37,11 @@
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d)
 #include "rlvhandler.h"
 // [/RLVa:KB]
-
+const char* LLSLURL::HOP_SCHEME		 = "hop"; // <AW: hop:// protocol>
 const char* LLSLURL::SLURL_HTTP_SCHEME		 = "http";
 const char* LLSLURL::SLURL_HTTPS_SCHEME		 = "https";
 const char* LLSLURL::SLURL_SECONDLIFE_SCHEME	 = "secondlife";
-const char* LLSLURL::SLURL_X_GRID_LOCATION_INFO_SCHEME = "x-grid-location-info"; // <AW: opensim>
+const char* LLSLURL::SLURL_X_GRID_LOCATION_INFO_SCHEME = "x-grid-location-info";
 
 // For DnD - even though www.slurl.com redirects to slurl.com in a browser, you can copy and drag
 // text with www.slurl.com or a link explicitly pointing at www.slurl.com so testing for this
@@ -207,6 +207,7 @@ LLSLURL::LLSLURL(const std::string& slurl)
 		else if(   (slurl_uri.scheme() == LLSLURL::SLURL_HTTP_SCHEME)
 		 	|| (slurl_uri.scheme() == LLSLURL::SLURL_HTTPS_SCHEME)
 		 	|| (slurl_uri.scheme() == LLSLURL::SLURL_X_GRID_LOCATION_INFO_SCHEME)
+		 	|| (slurl_uri.scheme() == LLSLURL::HOP_SCHEME	) // <AW: hop:// protocol>
 			)
 		{
 			// We're dealing with either a Standalone style slurl or slurl.com slurl
@@ -275,6 +276,13 @@ LLSLURL::LLSLURL(const std::string& slurl)
 				path_array.erase(0);
 				// leave app appended.
 			}
+// <AW: hop:// protocol>
+			else if ( slurl_uri.scheme() == LLSLURL::HOP_SCHEME)
+			{
+				LL_DEBUGS("SLURL") << "its a location hop"  << LL_ENDL;
+				mType = LOCATION;
+			}
+// </AW: hop:// protocol>
 			else
 			{
 				LL_DEBUGS("SLURL") << "not a valid https/http/x-grid-location-info slurl " 

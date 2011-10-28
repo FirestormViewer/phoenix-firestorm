@@ -35,6 +35,7 @@
 class LLSLURL
 {
 public:
+	static const char* HOP_SCHEME; // <AW: hop:// protocol>
 	static const char* SLURL_HTTPS_SCHEME;
 	static const char* SLURL_HTTP_SCHEME;
 	static const char* SLURL_SL_SCHEME;

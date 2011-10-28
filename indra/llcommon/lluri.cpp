@@ -236,7 +236,7 @@ static BOOL isDefault(const std::string& scheme, U16 port)
 
 void LLURI::parseAuthorityAndPathUsingOpaque()
 {
-	if (mScheme == "http" || mScheme == "https" ||
+	if (mScheme == "http" || mScheme == "https" || mScheme == "hop" ||
 		mScheme == "ftp" || mScheme == "secondlife" || 
 		mScheme == "x-grid-location-info")
 	{
