@@ -41,36 +41,18 @@ Versione Server voice: [VOICE_VERSION]
 	</floater.string>
 	<tab_container name="about_tab">
 		<panel label="Informazioni" name="support_panel">
+		    <text name="support_intro">    
+For the latest information about Firestorm, visit    
+    http://www.phoenixviewer.com
+    </text>
 			<button label="Copia negli appunti" name="copy_btn"/>
 		</panel>
 		<panel label="Ringraziamenti" name="credits_panel">
-			<text_editor name="credits_editor">
-Firestorm is a community development project to improve the SecondLife(tm) Viewer2 experience.  We package contributions from various community developers along with code from Linden Lab and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team.  Firestorm is brought to you by The Phoenix Viewer Project, Inc., a non-profit organization.
-
-The Firestorm development team:
-LordGregGreg Back, Kitty Barnett, Kadah Coba, Tankmaster Finesmith, Ansariel Hiller, WoLf Loonie, Techwolf Lupindo, Jessica Lyon, Wolfspirit Magic, Arrehn Oberlander, Liny Odell, Zi Ree, Mobius Ryba, Tonya Souther, Tozh Taurog.
-
-Additional code contributed by:
-Satomi Ahn, Katharine Berry, Alexie Birman, Lance Corrimal, Nicky Dasmijn, Zwagoth Klaar, Shyotl Kuhr, Sione Lomu, Peyton Menges, Andromeda Rage, Mysty Saunders, Thickbrick Sleaford, Hitomi Tiponi, Shin Wasp, Armin WeatherHax, Chalice Yao, Nogardrevlis Lectar, and others.
-
-Firestorm includes Starlight 2.6.0440, modified for Firestorm, an alternative set of skins for Viewer 2 and associated TPVs.  It is provided by residents for residents, with the intention of providing an alternative, brighter, and hopefully easier to use interface.  For further details see https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight.
-
-The Starlight design and creation is the responsibility of Hitomi Tiponi, and it also utilises the work of various Second Life residents especially the following: KirstenLee Cinquetti, Alexandrea Fride, psi Merlin, Hugh Helendale, samm florian, Digital Scribe, Naomah Beaumont, Nadin.
-
-Additional Artists:
-New icons by Joseph Wain / glyphish.com
-Sammie Bennoir, Mobius Ryba, DarkAgent Baphomet
-Viewer 1 icons, cursors and other art by Linden Lab
-
-Firestorm would not be possible without the decision from Linden Lab to make their Second Life viewer source code available.
-
-</text_editor>
 			<text name="linden_intro">
-				Second Life vi è offerto dai Linden:
-			</text>
-			<text_editor name="linden_names">
-				Philip, Andrew, Doug, Richard, Phoenix, Ian, Mark, Robin, Dan, Char, Ryan, Eric, Jim, Lee, Jeff, Michael, Kelly, Steve, Catherine, Bub, Ramzi, Jill, Jeska, Don, Kona, Callum, Charity, Jack, Shawn, babbage, James, Lauren, Blue, Brent, Reuben, Pathfinder, Jesse, Patsy, Torley, Bo, Cyn, Jonathan, Gia, Annette, Ginsu, Harry, Lex, Runitai, Guy, Cornelius, Beth, Swiss, Thumper, Wendy, Teeple, Seth, Dee, Mia, Sally, Liana, Aura, Beez, Milo, Red, Gulliver, Marius, Joe, Jose, Dore, Justin, Nora, Morpheus, Lexie, Amber, Chris, Xan, Leyla, Walker, Sabin, Joshua, Hiromi, Tofu, Fritz, June, Jean, Ivy, Dez, Ken, Betsy, Which, Spike, Rob, Zee, Dustin, George, Claudia, del, Matthew, jane, jay, Adrian, Yool, Rika, Yoz, siobhan, Qarl, Benjamin, Beast, Everett, madhavi, Christopher, Izzy, stephany, Jeremy, sean, adreanne, Pramod, Tobin, sejong, Iridium, maurice, kj, Meta, kari, JP, bert, kyle, Jon, Socrates, Bridie, Ivan, maria, Aric, Coco, Periapse, sandy, Storrs, Lotte, Colossus, Brad, Pastrami, Zen, BigPapi, Banzai, Sardonyx, Mani, Garry, Jaime, Neuro, Samuel, Niko, CeeLo, Austin, Soft, Poppy, emma, tessa, angelo, kurz, alexa, Sue, CG, Blake, Erica, Brett, Bevis, kristen, Q, simon, Enus, MJ, laurap, Kip, Scouse, Ron, Ram, kend, Marty, Prospero, melissa, kraft, Nat, Seraph, Hamilton, Lordan, Green, miz, Ashlei, Trinity, Ekim, Echo, Charlie, Rowan, Rome, Jt, Doris, benoc, Christy, Bao, Kate, Tj, Patch, Cheah, Johan, Brandy, Angela, Oreh, Cogsworth, Lan, Mitchell, Space, Bambers, Einstein, Bender, Malbers, Matias, Maggie, Rothman, Milton, Niall, Marin, Allison, Mango, Andrea, Katt, Yi, Ambroff, Rico, Raymond, Gail, Christa, William, Dawn, Usi, Dynamike, M, Corr, Dante, Molly, kaylee, Danica, Kelv, Lil, jacob, Nya, Rodney, elsie, Blondin, Grant, Nyx, Devin, Monty, Minerva, Keira, Katie, Jenn, Makai, Clare, Joy, Cody, Gayathri, FJ, spider, Oskar, Landon, Jarv, Noelle, Al, Doc, Gray, Vir, t, Maestro, Simone, Shannon, yang, Courtney, Scott, charlene, Quixote, Susan, Zed, Amanda, Katelin, Esbee, JoRoan, Enkidu, roxie, Scarlet, Merov, Kevin, Judy, Rand, Newell, Les, Dessie, Galen, Michon, Geo, Siz, Calyle, Pete, Praveen, Callen, Sheldon, Pink, Nelson, jenelle, Terrence, Nathan, Juan, Sascha, Huseby, Karina, Kaye, Kotler, Lis, Darv, Charrell, Dakota, Kimmora, Theeba, Taka, Mae, Perry, Ducot, dana, Esther, Dough, gisele, Doten, Viale, Fisher, jessieann, ashley, Torres, delby, rountree, kurt, Slaton, Madison, Rue, Gino, Wen, Casssandra, Brodesky, Squid, Gez, Rakesh, Gecko, Ladan, Tony, Tatem, Squire, Falcon, BK, Crimp, Tiggs, Bacon, Coyot, Carmilla, Webb, Sea, Arch, Jillian, Jason, Bernard, Vogt, Peggy, dragon, Pup, xandix, Wallace, Bewest, Inoshiro, Rhett, AG, Aimee, Ghengis, Itiaes, Eli, Steffan, Epic, Grapes, Stone, Prep, Scobu, Robert, Alain, Carla, Vicky, Tia, Alec, Taras, Lisa, Oz, Ariane, Log, House, Kazu, Kim, Drofnas, Tyler, Campbell, Michele, Madeline, Nelly, Baron, Thor, Lori, Hele, Fredrik, Teddy, Pixie, Berry, Gabrielle, Alfonso, Brooke, Wolf, Ringo, Cru, Charlar, Rodvik, Gibson, Elise, Bagman, Greger, Leonidas, Jerm, Leslie, CB, Brenda, Durian, Carlo, mm, Zeeshan, Caleb, Max, Elikak, Mercille, Steph, Chase
-			</text_editor>
+			Firestorm would not be possible without the decision from Linden Lab to make their Second Life viewer source code available.
+			
+Second Life vi è offerto dai Linden:
+			</text>>
 			<text name="contrib_intro">
 				con contributi open source da:
 			</text>
@@ -84,36 +66,27 @@ Firestorm would not be possible without the decision from Linden Lab to make the
 				Dummy Name sostituito all&apos;avvio
 			</text_editor>
 		</panel>
+<!-- Firestorm Credits -->
+      <panel label="Firestorm" name="fs_credits_panel">      
+			<text name="firestorm_intro" height="100" >
+Firestorm is a community development project to improve the SecondLife(tm) Viewer experience.  We package contributions from various community developers along with code from Linden Lab and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team.  Firestorm is brought to you by The Phoenix Viewer Project, Inc., a non-profit organization.          
+          
+The Firestorm Development Team:
+     		 </text>
+      		<text name="fs_contrib_intro" >
+Additional code generously contributed to Firestorm by:
+      		</text>
+      		<text name="fs_support_intro" >
+Special thanks to our Firestorm Support Team, wiki editors, educators, and translators:
+      		</text>
+      		<text name="fs_art_intro" >
+Firestorm includes Starlight, modified for Firestorm.  It is provided by residents for residents, with the intention of provi ding an alternative, brighter, and hopefully easier to use interface.  For further details see &lt;nolink&gt;https://wiki.sec ondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
+
+UI Artists and Designers:
+      		</text>
+        </panel>	
+        	
 		<panel label="Licenze" name="licenses_panel">
-			<text_editor name="credits_editor">
-				3Dconnexion SDK Copyright (C) 1992-2007 3Dconnexion
-APR Copyright (C) 2000-2004 The Apache Software Foundation
-Collada DOM Copyright 2005 Sony Computer Entertainment Inc.
-cURL Copyright (C) 1996-2002, Daniel Stenberg, (daniel@haxx.se)
-DBus/dbus-glib Copyright (C) 2002, 2003  CodeFactory AB / Copyright (C) 2003, 2004 Red Hat, Inc.
-expat Copyright (C) 1998, 1999, 2000 Thai Open Source Software Center Ltd.
-FreeType Copyright (C) 1996-2002, The FreeType Project (www.freetype.org).
-GL Copyright (C) 1999-2004 Brian Paul.
-GLOD Copyright (C) 2003-04 Jonathan Cohen, Nat Duca, Chris Niski, Johns Hopkins University and David Luebke, Brenden Schubert, University of Virginia.
-google-perftools Copyright (c) 2005, Google Inc.
-Havok.com(TM) Copyright (C) 1999-2001, Telekinesys Research Limited.
-jpeg2000 Copyright (C) 2001, David Taubman, The University of New South Wales (UNSW)
-jpeglib Copyright (C) 1991-1998, Thomas G. Lane.
-ogg/vorbis Copyright (C) 2001, Xiphophorus
-OpenSSL Copyright (C) 1998-2002 The OpenSSL Project.
-PCRE Copyright (c) 1997-2008 University of Cambridge
-SDL Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002 Sam Lantinga
-SSLeay Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
-xmlrpc-epi Copyright (C) 2000 Epinions, Inc.
-zlib Copyright (C) 1995-2002 Jean-loup Gailly and Mark Adler.
-google-perftools Copyright (c) 2005, Google Inc.
-
-Il Viewer Second Life utilizza Havok (TM) Physics. (c)Copyright 1999-2010 Havok.com Inc. (e licenziatari). Tutti i diritti riservati. Per informazioni dettagliate, vedere www.havok.com.
-
-Tutti i diritti riservati.  Per informazioni dettagliate, vedere licenses.txt.
-
-Codifica audio chat vocale: Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
-			</text_editor>
 		</panel>
 	</tab_container>
 </floater>

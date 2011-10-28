@@ -39,46 +39,34 @@ Qt Webkit 版本： [QT_WEBKIT_VERSION]
 	</floater.string>
 	<tab_container name="about_tab">
 		<panel label="資訊" name="support_panel">
+			<text name="support_intro">    
+For the latest information about Firestorm, visit    
+    http://www.phoenixviewer.com
+    		</text>
 			<button label="覆製到剪貼簿" name="copy_btn"/>
 		</panel>
 		<panel label="Credits" name="credits_panel">
-			<text_editor name="credits_editor">
-				Second Life is brought to you by ..., and many others.
-
-Thank you to the following Residents for helping to ensure that this is the best version yet: ..., and many others.
-
-
-
-
-&quot;The work goes on, the cause endures, the hope still lives, and the dreams shall never die&quot; - Edward Kennedy
-			</text_editor>
 		</panel>
+<!-- Firestorm Credits -->
+      <panel label="Firestorm" name="fs_credits_panel">      
+			<text name="firestorm_intro" height="100" >
+Firestorm is a community development project to improve the SecondLife(tm) Viewer experience.  We package contributions from various community developers along with code from Linden Lab and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team.  Firestorm is brought to you by The Phoenix Viewer Project, Inc., a non-profit organization.          
+          
+The Firestorm Development Team:
+     		 </text>
+      		<text name="fs_contrib_intro" >
+Additional code generously contributed to Firestorm by:
+      		</text>
+      		<text name="fs_support_intro" >
+Special thanks to our Firestorm Support Team, wiki editors, educators, and translators:
+      		</text>
+      		<text name="fs_art_intro" >
+Firestorm includes Starlight, modified for Firestorm.  It is provided by residents for residents, with the intention of provi ding an alternative, brighter, and hopefully easier to use interface.  For further details see &lt;nolink&gt;https://wiki.sec ondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
+
+UI Artists and Designers:
+      		</text>
+        </panel>
 		<panel label="Licenses" name="licenses_panel">
-			<text_editor name="credits_editor">
-				3Dconnexion SDK Copyright (C) 1992-2007 3Dconnexion
-APR Copyright (C) 2000-2004 The Apache Software Foundation
-cURL Copyright (C) 1996-2002, Daniel Stenberg, (daniel@haxx.se)
-DBus/dbus-glib Copyright (C) 2002, 2003  CodeFactory AB / Copyright (C) 2003, 2004 Red Hat, Inc.
-expat Copyright (C) 1998, 1999, 2000 Thai Open Source Software Center Ltd.
-FreeType Copyright (C) 1996-2002, The FreeType Project (www.freetype.org).
-GL Copyright (C) 1999-2004 Brian Paul.
-google-perftools Copyright (c) 2005, Google Inc.
-Havok.com(TM) Copyright (C) 1999-2001, Telekinesys Research Limited.
-jpeg2000 Copyright (C) 2001, David Taubman, The University of New South Wales (UNSW)
-jpeglib Copyright (C) 1991-1998, Thomas G. Lane.
-ogg/vorbis Copyright (C) 2001, Xiphophorus
-OpenSSL Copyright (C) 1998-2002 The OpenSSL Project.
-Pth Copyright (C) 1999-2006 Ralf S. Engelschall &lt;rse@gnu.org&gt;
-SDL Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002 Sam Lantinga
-SSLeay Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
-xmlrpc-epi Copyright (C) 2000 Epinions, Inc.
-zlib Copyright (C) 1995-2002 Jean-loup Gailly and Mark Adler.
-google-perftools Copyright (c) 2005, Google Inc.
-
-All rights reserved.  See licenses.txt for details.
-
-語音聊天音頻編碼：Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
-			</text_editor>
 		</panel>
 	</tab_container>
 </floater>
