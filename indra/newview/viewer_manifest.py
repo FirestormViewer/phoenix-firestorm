@@ -963,6 +963,12 @@ class DarwinManifest(ViewerManifest):
 
             # Set the disk image root's custom icon bit
             self.run_command('SetFile -a C %r' % volpath)
+
+            # Set the file labels to gray so they can be seen against the
+            #  black background -- TS
+            self.run_command('osascript %r %r' % 
+                             (self.src_path_of("installers/darwin/set-labels.applescript"),
+                             volname))
         finally:
             # Unmount the image even if exceptions from any of the above 
             self.run_command('hdiutil detach -force %r' % devfile)
