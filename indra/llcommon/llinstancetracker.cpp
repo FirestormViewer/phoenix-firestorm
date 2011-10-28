@@ -35,7 +35,8 @@
 //static 
 void * & LLInstanceTrackerBase::getInstances(std::type_info const & info)
 {
-	typedef std::map<std::string, void *> InstancesMap;
+	//	typedef std::map<std::string, void *> InstancesMap;
+	typedef std::map<char const*, void *> InstancesMap; // <ND/> Do not base this in std::string, instead use the char* to avoid string compares.
 	static InstancesMap instances;
 
 	// std::map::insert() is just what we want here. You attempt to insert a
