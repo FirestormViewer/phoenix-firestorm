@@ -710,7 +710,8 @@
          tear_off="true">
             <menu_item_call
              label="Sunrise"
-             name="Sunrise">
+             name="Sunrise"
+			 shortcut="control|shift|E">
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="sunrise" />
@@ -742,7 +743,8 @@
             </menu_item_call>
             <menu_item_call
              label="Midnight"
-             name="Midnight">
+             name="Midnight"
+			 shortcut="control|shift|Z">
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="midnight" />
