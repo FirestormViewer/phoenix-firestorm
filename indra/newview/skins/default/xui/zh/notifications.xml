@@ -1761,7 +1761,7 @@ Publish this classified now for L$[AMOUNT]?
 		<usetemplate canceltext="取消" name="yesnocancelbuttons" notext="否" yestext="是"/>
 	</notification>
 	<notification label="Confirm restart" name="ConfirmRestart">
-		Do you really want to restart this region in 2 minutes?
+		Do you really want to restart this region?
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification label="Message everyone in this region" name="MessageRegion">

@@ -4265,7 +4265,7 @@ Asset ID for notecard is missing from database.
    label="Confirm restart"
    name="ConfirmRestart"
    type="alert">
-Вы действительно хотите перезапустить этот регион через 2 минуты?
+Вы действительно хотите перезапустить этот регион через?
     <tag>confirm</tag>
     <usetemplate
      name="okcancelbuttons"

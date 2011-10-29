@@ -1787,7 +1787,7 @@ Puedes pulsar &apos;Cambiar las Preferencias&apos; para incrementar las preferen
 		<usetemplate canceltext="Cancelar" name="yesnocancelbuttons" notext="No" yestext="Sí"/>
 	</notification>
 	<notification label="Confirmar el reinicio" name="ConfirmRestart">
-		¿Verdaderamente quieres reiniciar la región de aquí a 2 minutos?
+		¿Verdaderamente quieres reiniciar la región?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
 	</notification>
 	<notification label="Mensaje a toda la región" name="MessageRegion">

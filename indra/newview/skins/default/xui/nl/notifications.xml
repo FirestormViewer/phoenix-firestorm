@@ -1662,7 +1662,7 @@ Advertentie nu Publiceren voor L$[AMOUNT]?
      yestext="Ja"/>
 	</notification>
 	<notification label="Bevestig herstart" name="ConfirmRestart">
-		Wilt u deze regio echt binnen 2 minuten herstarten?
+		Wilt u deze regio echt binnen herstarten?
 		<usetemplate name="okcancelbuttons" notext="Annuleren" yestext="OK"/>
 	</notification>
 	<notification label="Bericht iedereen in deze regio" name="MessageRegion">

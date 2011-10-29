@@ -1731,7 +1731,7 @@ Zamieścić tą reklamę za [AMOUNT]L$?
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Nie" yestext="Tak"/>
 	</notification>
 	<notification label="Potwierdź Restart" name="ConfirmRestart">
-		Na pewno chcesz zrobić restart tego regionu za 2 minuty?
+		Na pewno chcesz zrobić restart tego regionu?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification label="Wiadomość do Wszystkich w tym Regionie" name="MessageRegion">

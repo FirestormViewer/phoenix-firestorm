@@ -1777,7 +1777,7 @@ Publier cette petite annonce maintenant pour [AMOUNT] L$ ?
 		<usetemplate canceltext="Annuler" name="yesnocancelbuttons" notext="Non" yestext="Oui"/>
 	</notification>
 	<notification label="Confirmer le redémarrage" name="ConfirmRestart">
-		Souhaitez-vous vraiment redémarrer cette région dans 2 minutes ?
+		Souhaitez-vous vraiment redémarrer cette région?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification label="Envoyer un message à la région" name="MessageRegion">

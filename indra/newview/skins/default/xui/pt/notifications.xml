@@ -1767,7 +1767,7 @@ Publicar este classificado agora por L$ [AMOUNT]?
 		<usetemplate canceltext="Cancelar" name="yesnocancelbuttons" notext="Não" yestext="Sim"/>
 	</notification>
 	<notification label="Confirmar reiniciar" name="ConfirmRestart">
-		Você quer realmente reiniciar esta região em 2 minutos?
+		Você quer realmente reiniciar esta região?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Reiniciar"/>
 	</notification>
 	<notification label="Mensagem para todos desta Região" name="MessageRegion">

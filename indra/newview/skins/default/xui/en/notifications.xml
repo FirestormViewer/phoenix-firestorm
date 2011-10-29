@@ -4481,7 +4481,7 @@ Does this group contain Moderate content?
    label="Confirm restart"
    name="ConfirmRestart"
    type="alert">
-Do you really want to restart this region in 2 minutes?
+Do you really want to schedule this region to restart?
     <tag>confirm</tag>
     <usetemplate
      name="okcancelbuttons"

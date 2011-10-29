@@ -1783,7 +1783,7 @@ Pubblica questo annuncio adesso per [AMOUNT]L$?
 		<usetemplate canceltext="Annulla" name="yesnocancelbuttons" notext="No" yestext="Si"/>
 	</notification>
 	<notification label="Conferma il riavvio" name="ConfirmRestart">
-		Vuoi veramente far ripartire la regione in 2 minuti?
+		Vuoi veramente far ripartire la regione?
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="OK"/>
 	</notification>
 	<notification label="Manda un messaggio a tutti in questa regione" name="MessageRegion">
