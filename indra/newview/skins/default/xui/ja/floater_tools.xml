@@ -25,10 +25,7 @@
 		土地をクリックし、ドラッグして選択
 	</floater.string>
 	<floater.string name="status_selectcount">
-		[OBJ_COUNT] 個のオブジェクト（[PRIM_COUNT] 個のプリム [PE_STRING]）が選択されています
-	</floater.string>
-	<floater.string name="status_selectprimequiv">
-		, [SEL_WEIGHT] プリム換算値
+		[OBJ_COUNT] 個のオブジェクト [LAND_IMPACT] PE
 	</floater.string>
 	<button label="" label_selected="" name="button focus" tool_tip="フォーカス"/>
 	<button label="" label_selected="" name="button move" tool_tip="動かす"/>

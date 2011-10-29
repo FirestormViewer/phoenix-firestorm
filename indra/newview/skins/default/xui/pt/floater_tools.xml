@@ -25,10 +25,7 @@
 		Clicar e arrastar para selecionar a terra
 	</floater.string>
 	<floater.string name="status_selectcount">
-		[OBJ_COUNT] objetos ( [PRIM_COUNT] prims[PE_STRING] ) selecionados
-	</floater.string>
-	<floater.string name="status_selectprimequiv">
-		, [SEL_WEIGHT] equivalentes de prims
+		[OBJ_COUNT] objetos [LAND_IMPACT] PE
 	</floater.string>
 	<button label="" label_selected="" name="button focus" tool_tip="Foco"/>
 	<button label="" label_selected="" name="button move" tool_tip="Mover"/>

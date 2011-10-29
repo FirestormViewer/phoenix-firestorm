@@ -25,10 +25,7 @@
 		Pulsa y arrastra para seleccionar el terreno.
 	</floater.string>
 	<floater.string name="status_selectcount">
-                Sel. [OBJ_COUNT] objetos ([PRIM_COUNT] prims[PE_STRING])
-	</floater.string>
-	<floater.string name="status_selectprimequiv">
-                , equiv. a [SEL_WEIGHT] prims.
+                Sel. [OBJ_COUNT] objetos [LAND_IMPACT] PE
 	</floater.string>
 	<floater.string name="link_number">
 		Número de grupo:
@@ -38,7 +35,6 @@
 	</floater.string>
  	<floater.string name="grid_screen_text">
 		Pantalla
-		[OBJ_COUNT] objetos ( [PRIM_COUNT] prims[PE_STRING] ) seleccionados
 	</floater.string>
 	<floater.string name="grid_local_text">
 		Local
@@ -51,9 +47,6 @@
 	</floater.string>
 	<floater.string name="grid_attachment_text">
 		Accesorio
-	</floater.string>
-	<floater.string name="status_selectprimequiv">
-		, [SEL_WEIGHT] equivalentes en prim
 	</floater.string>
 	<button name="button focus" tool_tip="Visión"/>
 	<button name="button move" tool_tip="Mover"/>

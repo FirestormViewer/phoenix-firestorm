@@ -24,19 +24,9 @@
 	<floater.string name="status_selectland">
 		Klicken und ziehen, um Land auszuwählen
 	</floater.string>
-	<floater.string name="status_selectcount">
-		[OBJ_COUNT] Objekte ([PRIM_COUNT] Prims [PE_STRING]) ausgewählt
-	</floater.string>
-	<floater.string name="status_selectprimequiv">
-		, Prim-Äquivalenz [SEL_WEIGHT]
-	</floater.string>
     <floater.string
      name="status_selectcount">
-        [OBJ_COUNT] Objekt(e) ([PRIM_COUNT] Prims[PE_STRING]) ausgewählt
-    </floater.string>
-    <floater.string
-     name="status_selectprimequiv">
-        , [SEL_WEIGHT] Prim-Equiv.
+        [OBJ_COUNT] Objekt(e) [LAND_IMPACT] PE
     </floater.string>
 	<floater.string
 	  name="link_number">

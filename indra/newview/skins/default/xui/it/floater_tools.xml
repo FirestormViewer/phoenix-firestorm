@@ -25,10 +25,7 @@
 		Clicca e trascina per selezionare il terreno
 	</floater.string>
 	<floater.string name="status_selectcount">
-		[OBJ_COUNT] oggetti ( [PRIM_COUNT] prim [PE_STRING] ) selezionati
-	</floater.string>
-	<floater.string name="status_selectprimequiv">
-		, [SEL_WEIGHT] prim equivalenti
+		[OBJ_COUNT] oggetti [LAND_IMPACT] PE
 	</floater.string>
 	<button label="" label_selected="" name="button focus" tool_tip="Ingrandisci"/>
 	<button label="" label_selected="" name="button move" tool_tip="Sposta"/>

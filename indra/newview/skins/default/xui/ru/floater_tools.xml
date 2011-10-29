@@ -53,12 +53,9 @@
     </floater.string>
     <floater.string
      name="status_selectcount">
-        [OBJ_COUNT] объектов ( [PRIM_COUNT] примов[PE_STRING] ) выделено
+        [OBJ_COUNT] объектов [LAND_IMPACT] PE
     </floater.string>
     <floater.string
-     name="status_selectprimequiv">
-        , [SEL_WEIGHT] эквивалентных
-    </floater.string>
 	<floater.string
 	  name="link_number">
 		Номер ссылки:
