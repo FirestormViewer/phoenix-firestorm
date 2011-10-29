@@ -56,7 +56,7 @@ showUsage()
         echo "  --kdu       : Build with KDU"
 	echo "  --package   : Build installer"
 	echo "  --fmod      : Build fmod"
-	echo "  --platform  : darwrin | win32 | win64 | linux32 | linux64"
+	echo "  --platform  : darwin | win32 | win64 | linux32 | linux64"
 	echo 
 	echo "All arguments not in the above list will be passed through to LL's configure/build"
 	echo
@@ -274,10 +274,10 @@ fi
 
 
 if [ -z $CHANNEL ] ; then
-	if [ $PLATFORM == "win32" ] ; then
-		CHANNEL="private-`hostname` "
-	else
-		CHANNEL="private-`hostname -s`"
+	if [ $PLATFORM == "darwin" ] ; then
+		CHANNEL="private-`hostname -s` "
+	else 
+		CHANNEL="private-`hostname`"
 	fi
 else
 	CHANNEL=`echo $CHANNEL | sed -e "s/[^a-zA-Z0-9\-]*//g"` # strip out difficult characters from channel
