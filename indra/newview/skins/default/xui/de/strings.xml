@@ -1578,7 +1578,16 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Linke Brust
 	</string>
 	<string name="Right Pec">
-		Rechts
+		Rechte Brust
+	</string>
+	<string name="Bridge">
+		Brücke
+	</string>
+	<string name="Neck">
+		Nacken
+	</string>
+	<string name="Avatar Center">
+		Avatar-Mitte
 	</string>
 	<string name="Invalid Attachment">
 		Ungültige Stelle für Anhang
