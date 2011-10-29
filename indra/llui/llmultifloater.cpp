@@ -31,6 +31,7 @@
 
 #include "llmultifloater.h"
 #include "llresizehandle.h"
+#include "lldraghandle.h"
 
 //
 // LLMultiFloater
@@ -55,7 +56,6 @@ void LLMultiFloater::buildTabContainer()
 	p.name(std::string("Preview Tabs"));
 	p.rect(LLRect(LLPANEL_BORDER_WIDTH, getRect().getHeight() - floater_header_size, getRect().getWidth() - LLPANEL_BORDER_WIDTH, 0));
 	p.follows.flags(FOLLOWS_ALL);
-	p.commit_callback.function(boost::bind(&LLMultiFloater::onTabSelected, this));
 	p.tab_position(mTabPos);
 	
 	// remove existing tab container
@@ -66,8 +66,7 @@ void LLMultiFloater::buildTabContainer()
 		mTabContainer = NULL;
 	}
 	
-	mTabContainer = LLUICtrlFactory::create<LLTabContainer>(p);
-	addChild(mTabContainer);
+	addChild(LLUICtrlFactory::create<LLTabContainer>(p));
 	
 	if (isResizable())
 	{
@@ -197,6 +196,12 @@ void LLMultiFloater::addFloater(LLFloater* floaterp, BOOL select_added_floater, 
 	floater_data.mCanMinimize = floaterp->isMinimizeable();
 	floater_data.mCanResize = floaterp->isResizable();
 
+	// update torn off status and remove title bar
+	floaterp->setTornOff(FALSE);
+	floaterp->setTitleVisible(FALSE);
+	LLRect rect = floaterp->getRect();
+	rect.mTop -= floaterp->getHeaderHeight();
+	floaterp->setRect(rect);
 	// remove minimize and close buttons
 	floaterp->setCanMinimize(FALSE);
 	floaterp->setCanResize(FALSE);
@@ -294,6 +299,13 @@ void LLMultiFloater::removeFloater(LLFloater* floaterp)
 	if (!floaterp || floaterp->getHost() != this )
 		return;
 
+	// update torn off status and add title bar
+	floaterp->setTornOff(TRUE);
+	floaterp->setTitleVisible(TRUE);
+	LLRect rect = floaterp->getRect();
+	rect.mTop += floaterp->getHeaderHeight();
+	floaterp->setRect(rect);
+	
 	floater_data_map_t::iterator found_data_it = mFloaterDataMap.find(floaterp->getHandle());
 	if (found_data_it != mFloaterDataMap.end())
 	{
@@ -439,6 +451,16 @@ void LLMultiFloater::onTabSelected()
 	if (floaterp)
 	{
 		tabOpen(floaterp, true);
+		mDragHandle->setTitle(mTitle.getString() + " - " + floaterp->getTitle());
+	}
+}
+
+void LLMultiFloater::setTabContainer(LLTabContainer* tab_container)
+{
+	if (!mTabContainer)
+	{
+		mTabContainer = tab_container;
+		mTabContainer->setCommitCallback(boost::bind(&LLMultiFloater::onTabSelected, this));
 	}
 }
 
@@ -468,7 +490,7 @@ BOOL LLMultiFloater::postBuild()
 		return TRUE;
 	}
 
-	mTabContainer = getChild<LLTabContainer>("Preview Tabs");
+	setTabContainer(getChild<LLTabContainer>("Preview Tabs"));
 	
 	setCanResize(mResizable);
 	return TRUE;

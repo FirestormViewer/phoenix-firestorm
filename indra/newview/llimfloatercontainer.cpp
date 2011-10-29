@@ -90,12 +90,9 @@ void LLIMFloaterContainer::onOpen(const LLSD& key)
 			floater->setHost(NULL);
 			// reparent to floater view
 			gFloaterView->addChild(floater);
-			// and remember we are torn off
-			floater->setTornOff(TRUE);
 		}
 		else
 		{
-			floater->setTornOff(FALSE);
 			LLMultiFloater::showFloater(floater);
 		}
 	}

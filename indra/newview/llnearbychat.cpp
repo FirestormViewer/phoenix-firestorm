@@ -192,12 +192,9 @@ BOOL LLNearbyChat::postBuild()
 					setHost(NULL);
 					// reparent the floater to the main view
 					gFloaterView->addChild(this);
-					// and remember we are torn off
-					setTornOff(TRUE);
 				}
 				else
 				{
-					setTornOff(FALSE);
 					floater_container->addFloater(this, FALSE);
 				}
 				floater_container->setVisible(FALSE);

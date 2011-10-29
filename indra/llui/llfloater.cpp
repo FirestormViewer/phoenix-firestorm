@@ -1612,16 +1612,12 @@ void LLFloater::onClickTearOff(LLFloater* self)
 		gFloaterView->adjustToFitScreen(self, FALSE);
 		// give focus to new window to keep continuity for the user
 		self->setFocus(TRUE);
-		self->setTornOff(true);
 	}
 	else  //Attach to parent.
 	{
 		self->storeRectControl();
 		// save the current size and position -Zi
 		self->setExpandedRect(self->getRect());
-		// reset torn off before showing the floater in the new host, so the rect change
-		// doesn't overwrite our remembered rect. -Zi
-		self->setTornOff(false);
 		LLMultiFloater* new_host = (LLMultiFloater*)self->mLastHostHandle.get();
 		if (new_host)
 		{
@@ -1780,6 +1776,7 @@ void LLFloater::draw()
 
 			// draw highlight on title bar to indicate focus.  RDW
 			if(hasFocus() 
+				&& mTornOff
 				&& !getIsChrome() 
 				&& !getCurrentTitle().empty())
 			{
@@ -2012,6 +2009,7 @@ void LLFloater::updateTitleButtons()
 			mButtons[i]->setVisible(TRUE);
 			// the restore button should have a tab stop so that it takes action when you Ctrl-Tab to a minimized floater
 			mButtons[i]->setTabStop(i == BUTTON_RESTORE);
+			sendChildToFront(mButtons[i]);
 		}
 		else
 		{

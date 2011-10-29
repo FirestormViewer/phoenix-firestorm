@@ -181,8 +181,6 @@ void FSFloaterContacts::onOpen(const LLSD& key)
 		setHost(NULL);
 		// reparent to floater view
 		gFloaterView->addChild(this);
-		// and remember we are torn off
-		setTornOff(TRUE);
 	}
 	else
 	{
