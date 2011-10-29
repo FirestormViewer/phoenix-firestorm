@@ -2212,6 +2212,8 @@ Returns a string with the requested data about the region
 	<string name="Left Pec">Left Pec</string>
 	<string name="Right Pec">Right Pec</string>
 	<string name="Bridge">Bridge</string>
+	<string name="Neck">Neck</string>
+	<string name="Avatar Center">Avatar Center</string>
 	<string name="Invalid Attachment">Invalid Attachment Point</string>
 
   <!-- Avatar age computation, see LLDateUtil::ageFromDate -->
