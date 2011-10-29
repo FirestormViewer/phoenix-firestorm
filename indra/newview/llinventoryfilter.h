@@ -30,6 +30,10 @@
 #include "llinventorytype.h"
 #include "llpermissionsflags.h"
 
+//	Begin Multi-substring inventory search
+#include <vector>
+//	End Multi-substring inventory search
+
 class LLFolderViewItem;
 class LLFolderViewFolder;
 
@@ -95,6 +99,13 @@ public:
 	const std::string& 	getFilterSubString(BOOL trim = FALSE) const;
 	const std::string& 	getFilterSubStringOrig() const { return mFilterSubStringOrig; } 
 	BOOL 				hasFilterString() const;
+	
+	//	Begin Multi-substring inventory search
+	//	For use by LLFolderViewItem for highlighting
+	U32					getFilterSubStringCount() const;
+	std::string::size_type getFilterSubStringPos(U32 index) const;
+	std::string::size_type getFilterSubStringLen(U32 index) const;
+	//	End Multi-substring inventory search
 
 	void 				setFilterPermissions(PermissionMask perms);
 	PermissionMask 		getFilterPermissions() const;
@@ -203,6 +214,12 @@ private:
 
 	std::string::size_type	mSubStringMatchOffset;
 	std::string				mFilterSubString;
+	
+	//	Begin Multi-substring inventory search
+	std::vector<std::string::size_type>	mSubStringMatchOffsets;
+	std::vector<std::string>			mFilterSubStrings;
+	//	End Multi-substring inventory search
+
 	std::string				mFilterSubStringOrig;
 	const std::string		mName;
 

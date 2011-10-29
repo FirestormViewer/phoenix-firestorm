@@ -70,6 +70,12 @@ LLInventoryFilter::LLInventoryFilter(const std::string& name)
 
 	mSubStringMatchOffset = 0;
 	mFilterSubString.clear();
+
+	//	Begin Multi-substring inventory search
+	mSubStringMatchOffsets.clear();
+	mFilterSubStrings.clear();
+	//	End Multi-substring inventory search
+
 	mFilterGeneration = 0;
 	mMustPassGeneration = S32_MAX;
 	mMinRequiredGeneration = 0;
@@ -95,8 +101,38 @@ BOOL LLInventoryFilter::check(const LLFolderViewItem* item)
 	{
 		return TRUE;
 	}
+	
+	//	Begin Multi-substring inventory search
+	mSubStringMatchOffset = std::string::npos;
+	if (mFilterSubStrings.size())
+	{
+		const std::string& searchLabel = item->getSearchableLabel();
+		
+		U32 index = 0;
+		for (std::vector<std::string>::iterator it=mFilterSubStrings.begin();
+			it<mFilterSubStrings.end(); it++, index++)
+		{
+			std::string::size_type sub_string_offset = searchLabel.find(*it);
 
-	mSubStringMatchOffset = mFilterSubString.size() ? item->getSearchableLabel().find(mFilterSubString) : std::string::npos;
+			mSubStringMatchOffsets[index] = sub_string_offset;
+
+			if (sub_string_offset == std::string::npos)
+			{
+				mSubStringMatchOffset = std::string::npos;
+				for (std::vector<std::string::size_type>::iterator it=mSubStringMatchOffsets.begin();
+					it<mSubStringMatchOffsets.end(); it++)
+				{
+					*it = std::string::npos;
+				}
+				break;
+			}
+			else if (mSubStringMatchOffset == std::string::npos)
+			{
+				mSubStringMatchOffset = sub_string_offset;
+			}
+		}
+	}
+	//	End Multi-substring inventory search
 
 	const BOOL passed_filtertype = checkAgainstFilterType(item);
 	const BOOL passed_permissions = checkAgainstPermissions(item);
@@ -377,14 +413,34 @@ void LLInventoryFilter::setFilterSubString(const std::string& string)
 	mFilterSubStringOrig = string;
 	LLStringUtil::trimHead(filter_sub_string_new);
 	LLStringUtil::toUpper(filter_sub_string_new);
+	
+	//	Begin Multi-substring inventory search
+	//	Cut filter string into several substrings, separated by +
+	{
+		mFilterSubStrings.clear();
+		mSubStringMatchOffsets.clear();
+		std::string::size_type frm = 0;
+		std::string::size_type to;
+		do
+		{
+			to = filter_sub_string_new.find_first_of('+',frm);
+
+			std::string subSubString = (to == std::string::npos) ? filter_sub_string_new.substr(frm, to) : filter_sub_string_new.substr(frm, to-frm);
+		
+			if (subSubString.size())
+			{
+				mFilterSubStrings.push_back(subSubString);
+				mSubStringMatchOffsets.push_back(std::string::npos);
+			}
+
+			frm = to+1;
+		}
+		while (to != std::string::npos);
+	}
+
 
 	if (mFilterSubString != filter_sub_string_new)
 	{
-		std::string filterSubStringNew = string;
-		LLStringUtil::trimHead(filterSubStringNew);
-		mFilterSubStringOrig = filterSubStringNew;
-		LLStringUtil::toUpper(filterSubStringNew);
-
 		// hitting BACKSPACE, for example
 		const BOOL less_restrictive = mFilterSubString.size() >= filter_sub_string_new.size()
 			&& !mFilterSubString.substr(0, filter_sub_string_new.size()).compare(filter_sub_string_new);
@@ -394,6 +450,7 @@ void LLInventoryFilter::setFilterSubString(const std::string& string)
 			&& !filter_sub_string_new.substr(0, mFilterSubString.size()).compare(mFilterSubString);
 
 		mFilterSubString = filter_sub_string_new;
+
 		if (less_restrictive)
 		{
 			setModified(FILTER_LESS_RESTRICTIVE);
@@ -420,6 +477,7 @@ void LLInventoryFilter::setFilterSubString(const std::string& string)
 			mFilterOps.mFilterLinks = FILTERLINK_INCLUDE_LINKS;
 		}
 	}
+	//	End Multi-substring inventory search
 }
 
 void LLInventoryFilter::setFilterPermissions(PermissionMask perms)
@@ -978,3 +1036,25 @@ const std::string& LLInventoryFilter::getEmptyLookupMessage() const
 	return mEmptyLookupMessage;
 
 }
+
+//	Begin Multi-substring inventory search
+
+//	For use by LLFolderViewItem for highlighting
+
+U32	LLInventoryFilter::getFilterSubStringCount() const 
+{
+	return mFilterSubStrings.size();
+}
+
+std::string::size_type LLInventoryFilter::getFilterSubStringPos(U32 index) const
+{
+	if (index < 0 || index >= mSubStringMatchOffsets.size()) return std::string::npos;
+	return mSubStringMatchOffsets[index];
+}
+
+std::string::size_type LLInventoryFilter::getFilterSubStringLen(U32 index) const
+{
+	if (index < 0 || index >= mFilterSubStrings.size()) return 0;
+	return mFilterSubStrings[index].size();
+}
+//	End Multi-substring inventory search

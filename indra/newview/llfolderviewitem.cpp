@@ -472,6 +472,17 @@ void LLFolderViewItem::filter( LLInventoryFilter& filter)
 
 	setFiltered(passed_filter, filter.getCurrentGeneration());
 	mStringMatchOffset = filter.getStringMatchOffset();
+	
+	//	Begin Multi-substring inventory search
+	mStringMatchOffsets.clear();
+	mStringMatchSizes.clear();
+	for (U32 index = 0, max = filter.getFilterSubStringCount(); index < max; index++)
+	{
+		mStringMatchOffsets.push_back(filter.getFilterSubStringPos(index));
+		mStringMatchSizes.push_back(filter.getFilterSubStringLen(index));
+	}
+	//	End Multi-substring inventory search
+
 	filter.decrementFilterCount();
 
 	if (getRoot()->getDebugFilters())
@@ -1116,28 +1127,43 @@ void LLFolderViewItem::draw()
 	//--------------------------------------------------------------------------------//
 	// Highlight string match
 	//
-	if (mStringMatchOffset != std::string::npos)
+	
+	//	Begin Multi-substring inventory search
+	if (mStringMatchOffsets.size())
 	{
-		// don't draw backgrounds for zero-length strings
-		S32 filter_string_length = getRoot()->getFilterSubString().size();
-		if (filter_string_length > 0)
-		{
-			std::string combined_string = mLabel + mLabelSuffix;
-			S32 left = llround(text_left) + font->getWidth(combined_string, 0, mStringMatchOffset) - 1;
-			S32 right = left + font->getWidth(combined_string, mStringMatchOffset, filter_string_length) + 2;
-			S32 bottom = llfloor(getRect().getHeight() - font->getLineHeight() - 3 - TOP_PAD);
-			S32 top = getRect().getHeight() - TOP_PAD;
+		//std::vector<std::string::size_type> mStringMatchOffsets;
+		//std::vector<std::string::size_type> mStringMatchSizes;
+		std::vector<std::string::size_type>::iterator offset_iter = mStringMatchOffsets.begin();
+		std::vector<std::string::size_type>::iterator size_iter = mStringMatchSizes.begin();
 		
-			LLUIImage* box_image = default_params.selection_image;
-			LLRect box_rect(left, top, right, bottom);
-			box_image->draw(box_rect, sFilterBGColor);
-			F32 match_string_left = text_left + font->getWidthF32(combined_string, 0, mStringMatchOffset);
-			F32 yy = (F32)getRect().getHeight() - font->getLineHeight() - (F32)TEXT_PAD - (F32)TOP_PAD;
-			font->renderUTF8( combined_string, mStringMatchOffset, match_string_left, yy,
-							  sFilterTextColor, LLFontGL::LEFT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW,
-							  filter_string_length, S32_MAX, &right_x, FALSE );
+		LLUIImage* box_image = default_params.selection_image;
+
+		while (offset_iter < mStringMatchOffsets.end() && size_iter < mStringMatchSizes.end())
+		{
+			// don't draw backgrounds for zero-length strings
+			S32 filter_string_length = *size_iter;
+			S32 filter_string_offset = *offset_iter;
+			if (filter_string_length > 0 && filter_string_offset != std::string::npos)
+			{
+				std::string combined_string = mLabel + mLabelSuffix;
+				S32 left = llround(text_left) + font->getWidth(combined_string, 0, filter_string_offset) - 1;
+				S32 right = left + font->getWidth(combined_string, filter_string_offset, filter_string_length) + 2;
+				S32 bottom = llfloor(getRect().getHeight() - font->getLineHeight() - 3 - TOP_PAD);
+				S32 top = getRect().getHeight() - TOP_PAD;
+		
+				LLRect box_rect(left, top, right, bottom);
+				box_image->draw(box_rect, sFilterBGColor);
+				F32 match_string_left = text_left + font->getWidthF32(combined_string, 0, filter_string_offset);
+				F32 yy = (F32)getRect().getHeight() - font->getLineHeight() - (F32)TEXT_PAD - (F32)TOP_PAD;
+				font->renderUTF8( combined_string, filter_string_offset, match_string_left, yy,
+								  sFilterTextColor, LLFontGL::LEFT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW,
+								  filter_string_length, S32_MAX, &right_x, FALSE );
+			}
+			offset_iter++;
+			size_iter++;
 		}
 	}
+	//	End Multi-substring inventory search
 }
 
 

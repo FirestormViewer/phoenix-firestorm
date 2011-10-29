@@ -153,6 +153,12 @@ protected:
 	BOOL						mPassedFilter;
 	S32							mLastFilterGeneration;
 	std::string::size_type		mStringMatchOffset;
+
+	//	Begin Multi-substring inventory search
+	std::vector<std::string::size_type> mStringMatchOffsets;
+	std::vector<std::string::size_type> mStringMatchSizes;
+	//	End Multi-substring inventory search
+
 	F32							mControlLabelRotation;
 	LLFolderView*				mRoot;
 	BOOL						mDragAndDropTarget;
