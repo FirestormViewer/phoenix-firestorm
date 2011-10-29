@@ -101,6 +101,7 @@ free_mode_title
          sound_flags="3"
          visible="true"
          tool_tip="Orbit camera around focus"
+		 held_down_delay.seconds="0.0"
          top="0" />
     </layout_panel>
     

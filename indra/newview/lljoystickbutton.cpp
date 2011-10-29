@@ -132,7 +132,7 @@ bool LLJoystick::pointInCircle(S32 x, S32 y) const
 { 
 	if(this->getLocalRect().getHeight() != this->getLocalRect().getWidth())
 	{
-		llwarns << "Joystick shape is not square"<<llendl;
+		lldebugs << "Joystick shape is not square"<<llendl;
 		return true;
 	}
 	//center is x and y coordinates of center of joystick circle, and also its radius
