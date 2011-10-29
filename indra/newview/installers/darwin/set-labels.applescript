@@ -6,10 +6,17 @@
 on run argv
 	tell application "Finder"
 		set diskname to item 1 of argv
+		set file_list to every file in disk diskname
+		repeat with i in file_list
+			if the name of i is "Applications" then
+				set the position of i to {368, 135}
+			else if the name of i ends with ".app" then
+				set the position of i to {134, 135}
+			end if
 		-- The magic happens here: This will set the label color of
-		--  the supplied disk volume name to gray. Change the 7
-		--  to change the color: 0 is no label, then red, orange,
-		--  yellow, green, blue, purple, or gray.
-		set label index of every file of disk diskname to 7
+		--  the file icon. Change the 7 to change the color: 0 is no
+		--  label, then red, orange, yellow, green, blue, purple, or gray.
+			set the label index of i to 7
+		end repeat
 	end tell
 end run

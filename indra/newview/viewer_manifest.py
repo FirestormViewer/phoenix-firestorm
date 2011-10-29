@@ -918,8 +918,13 @@ class DarwinManifest(ViewerManifest):
             # one for release candidate and one for first look. Any other channels
             # will use the release .DS_Store, and will look broken.
             # - Ambroff 2008-08-20
+            # If the channel is "firestorm-private-"anything, then use the
+            #  private folder for .DS_Store and the background image. -- TS
+            template_chan = self.channel_lowerword()
+            if template_chan.startswith("firestorm-private"):
+                template_chan = "firestorm-private"
             dmg_template = os.path.join(
-                'installers', 'darwin', '%s-dmg' % self.channel_lowerword())
+                'installers', 'darwin', '%s-dmg' % template_chan)
 
             if not os.path.exists (self.src_path_of(dmg_template)):
                 dmg_template = os.path.join ('installers', 'darwin', 'release-dmg')
