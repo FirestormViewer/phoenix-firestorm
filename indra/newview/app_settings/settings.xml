@@ -69,6 +69,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>FSRemoveFlyHeightLimit</key>
+  <map>
+    <key>Comment</key>
+    <string>Remove the 4096m high fly limit</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
   <key>FSMeshUploadPossible</key>
   <map>
     <key>Comment</key>
