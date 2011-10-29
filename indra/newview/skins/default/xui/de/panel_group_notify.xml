@@ -8,5 +8,7 @@
 	</panel>
 	<text_editor name="message" value="Nachricht"/>
 	<text name="attachment" value="Anhang"/>
+	<text name="group_notice" value="Gruppenmitteilung"/>
 	<button label="OK" name="btn_ok"/>
+	<button label="Gruppenmitteilungen" name="btn_notices" width="130" />
 </panel>
