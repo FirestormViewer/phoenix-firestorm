@@ -392,7 +392,27 @@
        hud="true"
        max_attachment_offset="2.0"
        visible_in_first_person="true" />
-
+       
+    <attachment_point
+       id="39"
+       group="9"
+       pie_slice="1"
+       name="Neck"
+       joint="mNeck"
+       position="0 0 0"
+       rotation="0 0 0"
+       visible_in_first_person="true" />
+  	
+  	<attachment_point
+       id="40"
+       group="9"
+       pie_slice="2"
+       name="Avatar Center"
+       joint="mRoot"
+       position="0 0 0"
+       rotation="0 0 0"
+       visible_in_first_person="true" />
+  	
     <attachment_point
        id="127"
        group="6"
