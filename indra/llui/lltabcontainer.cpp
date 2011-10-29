@@ -269,13 +269,13 @@ LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 		if (gSavedSettings.getS32("ChatTabDirection") == 1)
 		{
 			mIsVertical = TRUE;
-			mTabPosition = LLTabContainer::BOTTOM;
+			mTabPosition = LLTabContainer::LEFT;
 			
 		}
 		else
 		{
 			mIsVertical = FALSE;
-			mTabPosition = LLTabContainer::LEFT;
+			mTabPosition = LLTabContainer::BOTTOM;
 		}
 	}
 	
@@ -941,12 +941,9 @@ void LLTabContainer::update_images(LLTabTuple* tuple, TabParams params, LLTabCon
 		}
 		else if (pos == LLTabContainer::BOTTOM)
 		{
-			//tuple->mButton->setImageUnselected(static_cast<LLUIImage*>(params.tab_bottom_image_unselected));
-			//tuple->mButton->setImageSelected(static_cast<LLUIImage*>(params.tab_bottom_image_selected));
-			//tuple->mButton->setImageFlash(static_cast<LLUIImage*>(params.tab_bottom_image_flash));
-			tuple->mButton->setImageUnselected(static_cast<LLUIImage*>(params.tab_left_image_unselected));
-			tuple->mButton->setImageSelected(static_cast<LLUIImage*>(params.tab_left_image_selected));
-			tuple->mButton->setImageFlash(static_cast<LLUIImage*>(params.tab_left_image_flash));
+			tuple->mButton->setImageUnselected(static_cast<LLUIImage*>(params.tab_bottom_image_unselected));
+			tuple->mButton->setImageSelected(static_cast<LLUIImage*>(params.tab_bottom_image_selected));
+			tuple->mButton->setImageFlash(static_cast<LLUIImage*>(params.tab_bottom_image_flash));
 		}
 		else if (pos == LLTabContainer::LEFT)
 		{

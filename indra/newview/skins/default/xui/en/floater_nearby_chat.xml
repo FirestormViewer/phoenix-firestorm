@@ -21,7 +21,7 @@
  width="394"
  can_resize="true"
  min_width="250"
- min_height="190">
+ min_height="150">
   <layout_stack
    animate="false" 
    default_tab_group="2"

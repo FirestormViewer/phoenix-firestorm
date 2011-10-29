@@ -127,8 +127,15 @@ void LLMultiFloater::growToFit(S32 content_width, S32 content_height)
 	static LLUICachedControl<S32> tabcntr_close_btn_size ("UITabCntrCloseBtnSize", 0);
 	const LLFloater::Params& default_params = LLFloater::getDefaultParams();
 	S32 floater_header_size = default_params.header_height;
-	S32 tabcntr_header_height = LLPANEL_BORDER_WIDTH + tabcntr_close_btn_size;
-	S32 new_width = llmax(getRect().getWidth(), content_width + LLPANEL_BORDER_WIDTH * 2);
+	S32 tabcntr_header_height =
+		((mTabContainer->getTabPosition() == LLTabContainer::LEFT)
+		?0
+		:(LLPANEL_BORDER_WIDTH + tabcntr_close_btn_size));
+	S32 tabcntr_header_width =
+		((mTabContainer->getTabPosition() == LLTabContainer::LEFT)
+		?mTabContainer->getMinTabWidth()
+		:0);
+	S32 new_width = llmax(getRect().getWidth(), content_width + LLPANEL_BORDER_WIDTH * 2 + tabcntr_header_width);
 	S32 new_height = llmax(getRect().getHeight(), content_height + floater_header_size + tabcntr_header_height);
 
     if (isMinimized())
@@ -501,7 +508,14 @@ void LLMultiFloater::updateResizeLimits()
 	static LLUICachedControl<S32> tabcntr_close_btn_size ("UITabCntrCloseBtnSize", 0);
 	const LLFloater::Params& default_params = LLFloater::getDefaultParams();
 	S32 floater_header_size = default_params.header_height;
-	S32 tabcntr_header_height = LLPANEL_BORDER_WIDTH + tabcntr_close_btn_size;
+	S32 tabcntr_header_height =
+		((mTabContainer->getTabPosition() == LLTabContainer::LEFT)
+		?0
+		:(LLPANEL_BORDER_WIDTH + tabcntr_close_btn_size));
+	S32 tabcntr_header_width =
+		((mTabContainer->getTabPosition() == LLTabContainer::LEFT)
+		?mTabContainer->getMinTabWidth()
+		:0);
 	// initialize minimum size constraint to the original xml values.
 	S32 new_min_width = mOrigMinWidth;
 	S32 new_min_height = mOrigMinHeight;
@@ -511,7 +525,7 @@ void LLMultiFloater::updateResizeLimits()
 		LLFloater* floaterp = (LLFloater*)mTabContainer->getPanelByIndex(tab_idx);
 		if (floaterp)
 		{
-			new_min_width = llmax(new_min_width, floaterp->getMinWidth() + LLPANEL_BORDER_WIDTH * 2);
+			new_min_width = llmax(new_min_width, floaterp->getMinWidth() + tabcntr_header_width + LLPANEL_BORDER_WIDTH * 2);
 			new_min_height = llmax(new_min_height, floaterp->getMinHeight() + floater_header_size + tabcntr_header_height);
 		}
 	}
