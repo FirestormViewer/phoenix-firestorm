@@ -2429,10 +2429,11 @@ void LLViewerObject::interpolateLinearMotion(const F64 & time, const F32 & dt)
 		}
 
 		new_pos.mV[VZ] = llmax(min_height, new_pos.mV[VZ]);
-		 if(!gSavedSettings.getBOOL("FSRemoveFlyHeightLimit"))
-{
-    new_pos.mV[VZ] = llmin(LLWorld::getInstance()->getRegionMaxHeight(), new_pos.mV[VZ]);
-}
+		static LLCachedControl<bool> no_fly_height_limit(gSavedSettings, "FSRemoveFlyHeightLimit");
+		if(!no_fly_height_limit)
+		{
+			new_pos.mV[VZ] = llmin(LLWorld::getInstance()->getRegionMaxHeight(), new_pos.mV[VZ]);
+		}
 
 		// Check to see if it's going off the region
 		LLVector3 temp(new_pos);
