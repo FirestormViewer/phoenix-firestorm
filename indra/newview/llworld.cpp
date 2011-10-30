@@ -800,7 +800,17 @@ F32 LLWorld::getLandFarClip() const
 
 void LLWorld::setLandFarClip(const F32 far_clip)
 {
+	static S32 const rwidth = (S32)REGION_WIDTH_U32;
+	S32 const n1 = (llceil(mLandFarClip) - 1) / rwidth;
+	S32 const n2 = (llceil(far_clip) - 1) / rwidth;
+	bool need_water_objects_update = n1 != n2;
+
 	mLandFarClip = far_clip;
+
+	if (need_water_objects_update)
+	{
+		updateWaterObjects();
+	}
 }
 
 

@@ -4271,7 +4271,8 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 	// Note: Scaling of the UI is currently *not* supported so we limit the output size if UI is requested
 	if (show_ui)
 	{
-			
+		// If the user wants the UI, limit the output size to the available screen size
+		image_width  = llmin(image_width, window_width);
 		image_height = llmin(image_height, window_height);
 	}
 
