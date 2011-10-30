@@ -536,13 +536,14 @@ void LLGLTexMemBar::draw()
 					cache_usage, cache_max_usage, total_texture_downloaded, total_object_downloaded, total_http_requests);
 	//, cache_entries, cache_max_entries
 
-	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*3,
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*4,
 											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
 
 	//----------------------------------------------------------------------------
-#if 0
-	S32 bar_left = 400;
+#if 1
+	S32 bar_left = 0;
 	S32 bar_width = 200;
+	S32 bar_space = 32;
 	S32 top = line_height*3 - 2 + v_offset;
 	S32 bottom = top - 6;
 	S32 left = bar_left;
@@ -555,7 +556,7 @@ void LLGLTexMemBar::draw()
 		
 	left = bar_left;
 	text = "GL";
-	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, line_height*3,
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*3,
 											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
 	
 	left = bar_left+20;
@@ -571,9 +572,9 @@ void LLGLTexMemBar::draw()
 	color = (total_mem < llfloor(max_total_mem * texmem_lower_bound_scale)) ? LLColor4::green :
 		  	(total_mem < max_total_mem) ? LLColor4::yellow : LLColor4::red;
 	color[VALPHA] = .75f;
-	glColor4fv(color.mV);
+	//glColor4fv(color.mV);
 	
-	gl_rect_2d(left, top, right, bottom); // red/yellow/green
+	gl_rect_2d(left, top, right, bottom, color); // red/yellow/green
 
 	//
 	bar_left += bar_width + bar_space;
@@ -582,10 +583,10 @@ void LLGLTexMemBar::draw()
 	// Bound Mem Bar
 
 	left = bar_left;
-	text = "GL";
-	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, line_height*3,
+	text = "Bound";
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*3,
 									 text_color, LLFontGL::LEFT, LLFontGL::TOP);
-	left = bar_left + 20;
+	left = bar_left + 42;
 	right = left + bar_width;
 	
 	gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f);
@@ -594,9 +595,12 @@ void LLGLTexMemBar::draw()
 	color = (bound_mem < llfloor(max_bound_mem * texmem_lower_bound_scale)) ? LLColor4::green :
 		  	(bound_mem < max_bound_mem) ? LLColor4::yellow : LLColor4::red;
 	color[VALPHA] = .75f;
-	glColor4fv(color.mV);
+	//glColor4fv(color.mV);
 
-	gl_rect_2d(left, top, right, bottom);
+	bar_scale = (F32)bar_width / (max_bound_mem * 1.5f);
+	right = left + llfloor(bound_mem * bar_scale);
+
+	gl_rect_2d(left, top, right, bottom, color);
 #else
 	S32 left = 0 ;
 #endif
@@ -617,13 +621,13 @@ void LLGLTexMemBar::draw()
 									 text_color, LLFontGL::LEFT, LLFontGL::TOP);
 
 
-	left = 550;
+	left = 500;
 	F32 bandwidth = LLAppViewer::getTextureFetch()->getTextureBandwidth();
 	F32 max_bandwidth = gSavedSettings.getF32("ThrottleBandwidthKBPS");
 	color = bandwidth > max_bandwidth ? LLColor4::red : bandwidth > max_bandwidth*.75f ? LLColor4::yellow : text_color;
 	color[VALPHA] = text_color[VALPHA];
 	text = llformat("BW:%.0f/%.0f",bandwidth, max_bandwidth);
-	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*2,
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*3,
 											 color, LLFontGL::LEFT, LLFontGL::TOP);
 	
 	S32 dx1 = 0;
