@@ -4,7 +4,7 @@
     can_resize="false"
     can_dock="true"
     can_close="false"
-    height="230"
+    height="258"
     width="260"
     layout="topleft"
     name="quickprefs"
