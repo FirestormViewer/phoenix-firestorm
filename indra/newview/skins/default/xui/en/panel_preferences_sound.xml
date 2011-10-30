@@ -341,8 +341,6 @@
 		value="true"
 		follows="left|bottom|right"
 		height="15"
-		bottom_delta="0"
-		left_delta="245"
 		tool_tip="Check this to enable the filter that allows you to choose whether to play media from a specific host"
 		label="Enable media filter (increased security)"
 		left_pad="1" />
@@ -359,13 +357,14 @@
     <button
      layout="topleft"
 	 follows="left|bottom|right"
-     height="23"
+     height="19"
      label="Manage Media Sites"
      top_delta="-3"
-	 left="-245"
+	 left="-200"
      left_pad="5"
      name="edit_media_lists_button"
-     width="150">
+     width="120"
+	 top_pad="-38">
       <button.commit_callback
       function="Floater.Show"
       parameter="media_lists" />
@@ -380,7 +379,7 @@
      left="25"
      name="voice_chat_settings"
      width="180"
-     top_pad="35">
+     top_pad="60">
 	  Voice Chat Settings
     </text>
     <text
