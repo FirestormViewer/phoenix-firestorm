@@ -66,7 +66,8 @@ public:
 	}
 };
 
-static const LLGroupComparator GROUP_COMPARATOR;
+//static const LLGroupComparator GROUP_COMPARATOR;
+static LLGroupComparator GROUP_COMPARATOR; // <ND/> const makes GCC >= 4.6 very angry about not user defined default ctor.
 
 LLGroupList::Params::Params()
 : for_agent("for_agent", true)

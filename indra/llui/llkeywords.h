@@ -51,7 +51,8 @@ public:
 	 * - TWO_SIDED_DELIMITER are for delimiters that end with a different delimiter than they open with.
 	 * - DOUBLE_QUOTATION_MARKS are for delimiting areas using the same delimiter to open and close.
 	 */
-	typedef enum TOKEN_TYPE
+	// typedef enum TOKEN_TYPE 
+	enum TOKEN_TYPE // <ND/> That typedef makes GCC >= 4.6 really angry, rightfully so.
 	{
 		WORD,
 		LINE,

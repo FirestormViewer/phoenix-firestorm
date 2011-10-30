@@ -52,7 +52,8 @@ static LLDefaultChildRegistry::Register<LLInventoryPanel> r("inventory_panel");
 const std::string LLInventoryPanel::DEFAULT_SORT_ORDER = std::string("InventorySortOrder");
 const std::string LLInventoryPanel::RECENTITEMS_SORT_ORDER = std::string("RecentItemsSortOrder");
 const std::string LLInventoryPanel::INHERIT_SORT_ORDER = std::string("");
-static const LLInventoryFVBridgeBuilder INVENTORY_BRIDGE_BUILDER;
+//static const LLInventoryFVBridgeBuilder INVENTORY_BRIDGE_BUILDER;
+static LLInventoryFVBridgeBuilder INVENTORY_BRIDGE_BUILDER; // <ND/> const makes GCC >= 4.6 very angry about not user defined default ctor.
 
 // [SL:KB] - Patch: Inventory-ActivePanel | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
 bool LLInventoryPanel::s_fActiveSidebar = false;
@@ -1238,7 +1239,8 @@ BOOL LLInventoryPanel::getIsHiddenFolderType(LLFolderType::EType folder_type) co
 class LLInventoryRecentItemsPanel;
 static LLDefaultChildRegistry::Register<LLInventoryRecentItemsPanel> t_recent_inventory_panel("recent_inventory_panel");
 
-static const LLRecentInventoryBridgeBuilder RECENT_ITEMS_BUILDER;
+//static const LLRecentInventoryBridgeBuilder RECENT_ITEMS_BUILDER;
+static LLRecentInventoryBridgeBuilder RECENT_ITEMS_BUILDER; // <ND/> const makes GCC >= 4.6 very angry about not user defined default ctor.
 class LLInventoryRecentItemsPanel : public LLInventoryPanel
 {
 public:
@@ -1270,7 +1272,8 @@ LLInventoryRecentItemsPanel::LLInventoryRecentItemsPanel( const Params& params)
 class LLInventoryWornItemsPanel;
 static LLDefaultChildRegistry::Register<LLInventoryWornItemsPanel> t_worn_inventory_panel("worn_inventory_panel");
 
-static const LLWornInventoryBridgeBuilder WORN_ITEMS_BUILDER;
+//static const LLWornInventoryBridgeBuilder WORN_ITEMS_BUILDER;
+static LLWornInventoryBridgeBuilder WORN_ITEMS_BUILDER; // <ND/> const makes GCC >= 4.6 very angry about not user defined default ctor.
 class LLInventoryWornItemsPanel : public LLInventoryPanel
 {
 public:
