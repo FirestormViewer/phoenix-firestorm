@@ -121,6 +121,20 @@ export SL_CMD='$LL_WRAPPER bin/do-not-directly-run-firestorm-bin'
 # AO: experimentally removing to allow --settings on the command line w/o error. FIRE-1031
 #export SL_OPT="`cat etc/gridargs.dat` $@"
 
+# <ND> [blerg] set LD_PRELOAD so plugins will pick up the correct sll libs, otherwise they will pick up the system versions.
+LLCRYPTO="`pwd`/lib/libcrypto.so.1.0.0"
+LLSSL="`pwd`/lib/libssl.so.1.0.0"
+if [ -f ${LLCRYPTO} ]
+then
+	export LD_PRELOAD="${LD_PRELOAD}:${LLCRYPTO}"
+fi
+if [ -f ${LLSSL} ]
+then
+	export LD_PRELOAD="${LD_PRELOAD}:${LLSSL}"
+fi
+# <ND> End of hack; God will kill a kitten for this :(
+
+
 # Run the program
 eval ${SL_ENV} ${SL_CMD} $@ ${SL_OPT} || LL_RUN_ERR=runerr
 
