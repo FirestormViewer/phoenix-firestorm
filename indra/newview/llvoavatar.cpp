@@ -3202,6 +3202,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 		static LLUICachedControl<bool> show_display_names("NameTagShowDisplayNames");
 		static LLUICachedControl<bool> show_usernames("NameTagShowUsernames");
+		static LLUICachedControl<bool> show_legacynames("FSNameTagShowLegacyUsernames");
 		static LLUICachedControl<bool> FScolor_username("FSColorUsername");
 		static LLUICachedControl<LLColor4> FScolor_username_color("FSColorUsernameColor");
 		
@@ -3244,7 +3245,13 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 					// Wolfspirit: If we want to display the username as orange (like Phoenix).
 					if(!FScolor_username) username_color = name_tag_color * 0.83f;
 					else username_color = FScolor_username_color;
-					addNameTagLine(av_name.mUsername, username_color, LLFontGL::NORMAL,
+					// Show user name as legacy name if selected -- TS
+					std::string username = av_name.mUsername;
+					if (show_legacynames)
+					{
+						username = LLCacheName::buildFullName( firstname->getString(), lastname->getString() );
+					}
+					addNameTagLine(username, username_color, LLFontGL::NORMAL,
 						LLFontGL::getFontSansSerifSmall());
 				}
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
