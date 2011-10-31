@@ -1845,6 +1845,7 @@ void LLPrivateMemoryPool::LLChunkHashElement::remove(LLPrivateMemoryPool::LLMemo
 //class LLPrivateMemoryPoolManager
 //--------------------------------------------------------------------
 LLPrivateMemoryPoolManager* LLPrivateMemoryPoolManager::sInstance = NULL ;
+bool sPrivatePoolEnabled = false; // <ND/> FIRE-3760; keep track if the pool had been enabled, or if all memory is from malloc
 std::vector<LLPrivateMemoryPool*> LLPrivateMemoryPoolManager::sDanglingPoolList ;
 
 LLPrivateMemoryPoolManager::LLPrivateMemoryPoolManager(BOOL enabled, U32 max_pool_size) 
@@ -1917,6 +1918,7 @@ void LLPrivateMemoryPoolManager::initClass(BOOL enabled, U32 max_pool_size)
 	llassert_always(!sInstance) ;
 
 	sInstance = new LLPrivateMemoryPoolManager(enabled, max_pool_size) ;
+	sPrivatePoolEnabled = enabled?true:false;
 }
 
 //static 
@@ -2037,6 +2039,11 @@ void  LLPrivateMemoryPoolManager::freeMem(LLPrivateMemoryPool* poolp, void* addr
 	{
 		poolp->freeMem(addr) ;
 	}
+	// <ND> FIRE-3760; if MemoryPrivatePoolEnabled is set to false, then use just free as the memory is not managed by the pool at all  
+	else if( !sPrivatePoolEnabled )
+	{
+		free( addr );
+	}  // </ND>
 	else
 	{
 		if(!sInstance) //the private memory manager is destroyed, try the dangling list
