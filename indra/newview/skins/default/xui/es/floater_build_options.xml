@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="build options floater" title="OPCIONES DE LA REJILLA">
-	<spinner label="Unidades (metros)" name="GridResolution"/>
-	<spinner label="Alcance (metros)" name="GridDrawSize"/>
-	<check_box label="Ajustar a subunidades" name="GridSubUnit"/>
-	<check_box label="Ver sección transversal" name="GridCrossSection"/>
-	<text tool_tip="Opacidad de la rejilla" name="grid_opacity_label">
 	<floater.string name="grid_screen_text">
 		Pantalla
 	</floater.string>
@@ -18,7 +13,7 @@
 		Referencia
 	</floater.string>
 	<floater.string name="grid_attachment_text">
-		Adjunto
+		Accesorio
 	</floater.string>
 	<text name="grid_mode_label" tool_tip="Opacidad de la cuadrícula">
 		Modo
@@ -28,6 +23,11 @@
 		<combo_box.item label="Local" name="Local"/>
 		<combo_box.item label="Referencia" name="Reference"/>
 	</combo_box>
+	<spinner label="Unidades (metros)" name="GridResolution"/>
+	<spinner label="Alcance (metros)" name="GridDrawSize"/>
+	<check_box label="Ajustar a subunidades" name="GridSubUnit"/>
+	<check_box label="Ver sección transversal" name="GridCrossSection"/>
+	<text tool_tip="Opacidad de la rejilla" name="grid_opacity_label">
 		Opacidad:
 	</text>
 </floater>

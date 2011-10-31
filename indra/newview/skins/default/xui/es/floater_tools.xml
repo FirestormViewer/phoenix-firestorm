@@ -25,8 +25,11 @@
 		Pulsa y arrastra para seleccionar el terreno.
 	</floater.string>
 	<floater.string name="status_selectcount">
-                Sel. [OBJ_COUNT] objetos [LAND_IMPACT] PE
+                [OBJ_COUNT] obj. seleccionados. Impacto en la parcela: [LAND_IMPACT].
 	</floater.string>
+	<floater.string name="status_remaining_capacity">
+		Capacidad restante: [LAND_CAPACITY]. 
+    </floater.string>
 	<floater.string name="link_number">
 		Número de grupo:
 	</floater.string>
@@ -129,13 +132,10 @@
 		[DESC] [NUM]
 	</text>
 	<text name="selection_empty">
-		No está seleccionado nada.
-	</text>
-	<text name="selection_empty">
 		Nada seleccionado.
 	</text>
-	<text name="selection_weight">
-	  Peso de la física [PHYS_WEIGHT], Coste de dibujo [DISP_WEIGHT].
+	<text name="remaining_capacity">
+		[CAPACITY_STRING] [secondlife:///app/openfloater/object_weights Más información]
 	</text>
 	<tab_container name="Object Info Tabs">
 		<panel label="General" name="General">
