@@ -1073,6 +1073,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+  <key>OnlineOfflinetoNearbyChatHistory</key>
+    <map>
+      <key>Comment</key>
+      <string>Show online/offline notifications only in chat history</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
 
   <key>GlobalOnlineStatusToggle</key>
     <map>

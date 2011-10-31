@@ -62,6 +62,8 @@
 #include "llvoavatar.h"
 #include "llavataractions.h"
 #include "lggcontactsets.h"
+#include "llnearbychat.h"
+#include "llfloaterreg.h"
 
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
@@ -822,11 +824,20 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	//                  or for groups which have enabled "Show notice for this set" and in the settingpage of CS is checked that the messages need to be in Nearby Chat
 	if ((gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat")) || (gSavedSettings.getBOOL("FSContactSetsNotificationNearbyChat") && LGGContactSets::getInstance()->notifyForFriend(agent_id)))
 	{
+		static LLCachedControl<bool> history_only(gSavedSettings, "OnlineOfflinetoNearbyChatHistory"); // LO - Adding a setting to show online/offline notices only in chat history. Helps prevent your screen from being filled with online notices on login.
 		LLChat chat;
 		chat.mText = notify_msg;
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
-		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+		if (history_only)
+		{
+			LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+			nearby_chat->addMessage(chat, true, LLSD());
+		}
+		else
+		{
+			LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+		}
 	}
 }
 

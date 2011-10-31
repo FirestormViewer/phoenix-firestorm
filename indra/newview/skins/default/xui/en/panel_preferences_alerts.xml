@@ -46,14 +46,27 @@
      left_delta="0"
      name="OnlineOfflinetoNearbyChat"
      top_pad="4"
-     width="300" />
+     width="300">
+      <check_box.commit_callback
+   function="Pref.Online_Notices" />
+    </check_box>
+    <check_box
+     enabled="false"
+     control_name="OnlineOfflinetoNearbyChatHistory"
+     follows="left|top"
+     height="16"
+     label="Only in chat history"
+     layout="topleft"
+     left_delta="275"
+     name="OnlineOfflinetoNearbyChatHistory"
+     width="256" />
     <check_box
      control_name="ShowScriptErrors"
      follows="left|top"
      height="16"
      label="When I have Script Errors in:"
      layout="topleft"
-     left_delta="0"
+     left_delta="-275"
      top_pad="4" 
      name="show_script_errors"
      width="256" />
