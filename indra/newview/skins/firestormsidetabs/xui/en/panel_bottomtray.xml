@@ -173,6 +173,7 @@
                 image_unselected="ptt_lock_off.tga"
                 label=""
                 name="ptt_lock"
+                tool_tip=""
                 scale_image="true"
                 control_name="PushToTalkToggle">
             </bottomtray_button>
