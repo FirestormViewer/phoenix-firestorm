@@ -105,7 +105,10 @@ LLFolderViewItem::Params::Params()
 	item_height("item_height"),
 	item_top_pad("item_top_pad"),
 	creation_date()
-{}
+{
+	static LLCachedControl<S32> FolderViewItemHeight(gSavedSettings, "FSFolderViewItemHeight");
+	item_height = (S32)FolderViewItemHeight;
+}
 
 // Default constructor
 LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)

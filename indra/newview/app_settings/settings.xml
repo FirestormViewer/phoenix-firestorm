@@ -3,6 +3,17 @@
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
 
+  <key>FSFolderViewItemHeight</key>
+  <map>
+    <key>Comment</key>
+    <string>Controls the height of folder items, for instance in inventory</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>20</integer>
+  </map>
   <key>UsePieMenu</key>
   <map>
     <key>Comment</key>
