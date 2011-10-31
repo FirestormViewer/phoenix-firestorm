@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Side tray panel -->
 <panel label="Gente" name="people_panel">
+	<string name="high_server_load" value="Debido a la carga del servidor, la conmutación de tu visibilidad en masa puede tardar en ser efectuada. Por favor sé paciente."/>
+	<string name="camera_no_focus" value="La cámara no puede enfocar al avatar [AVATARNAME] porque está fuera de tu distancia de dibujo."/>
+	<string name="entering_draw_distance" value="[AVATARNAME] ha entrado en tu distancia de dibujo ([DISTANCE] m)."/>
+	<string name="leaving_draw_distance" value="[AVATARNAME] ha abandonado tu distancia de dibujo."/>
+	<string name="entering_chat_range" value="[AVATARNAME] ha entrado en el alcance del chat ([DISTANCE] m)."/>
+	<string name="leaving_chat_range" value="[AVATARNAME] ha salido del alcance del chat."/>
+	<string name="entering_region" value="[AVATARNAME] ha entrado en la región."/>
+	<string name="entering_region_distance" value="[AVATARNAME] ha entrado en la región ([DISTANCE] m)."/>
+	<string name="leaving_region" value="[AVATARNAME] ha abandonado la región."/>
 	<string name="no_recent_people" value="No hay gente reciente. ¿Buscas gente con la que pasar el rato? Usa la búsqueda para encontrar temas o contenidos en los que puedas estar interesado, y visita los lugares para conocer gente con interesses similares."/>
 	<string name="no_filtered_recent_people" value="¿No encuentras lo que buscas? Prueba la [secondlife:///app/search/people/[SEARCH_TERM] Búsqueda]."/>
 	<string name="no_one_near" value="No han nadie cerca. ¿Buscas gente con la que pasar el rato? Usa la búsqueda para encontrar temas o contenidos en los que puedas estar interesado, y visita los lugares para conocer gente con interesses similares."/>
@@ -23,7 +32,7 @@
 	<filter_editor label="Filtrar" name="filter_input"/>
 	<tab_container name="tabs">
 		<panel label="CERCANA" name="nearby_panel">
-			<layout_stack>
+			<layout_stack name="radar_ls">
 				<layout_panel name="radarlayout">
 					<radar_list name="radar_list">
 						<radar_list.columns label="NOMBRE" name="name"/>
@@ -35,9 +44,9 @@
 					</radar_list>
 				</layout_panel>
 			</layout_stack>
-			<panel label="bottom_panel" name="bottom_panel">
-				<menu_button name="view_sort_btn" tool_tip="Opciones"/>
-				<button name="add_friend_btn" tool_tip="Ofrecer amistad al residente seleccionado"/>
+			<panel label="bottom_panel" name="bottom_panel_nearby">
+				<menu_button name="nearby_view_sort_btn" tool_tip="Opciones"/>
+				<button name="add_friend_btn_nearby" tool_tip="Ofrecer amistad al residente seleccionado"/>
 				<slider label="Alcance (m):" name="NearMeRange"/>
 			</panel>
 		</panel>
@@ -46,7 +55,7 @@
 				<panel name="tab_online" title="Conectados"/>
 				<panel name="tab_all" title="Todos"/>
 			</tab_container>
-			<panel label="bottom_panel" name="bottom_panel">
+			<panel label="bottom_panel" name="bottom_panel_friends">
 				<menu_button tool_tip="Opciones" name="friends_viewsort_btn"/>
 				<button name="add_btn" tool_tip="Ofrecer amistad a un residente"/>
 				<button name="GlobalOnlineStatusToggle" tool_tip="Activar/desactivar la visibilidad global"/>
@@ -54,16 +63,16 @@
 			</panel>
 		</panel>
 		<panel label="MIS GRUPOS" name="groups_panel">
-			<panel label="bottom_panel" name="bottom_panel">
+			<panel label="bottom_panel" name="bottom_panel_groups">
 				<menu_button tool_tip="Opciones" name="groups_viewsort_btn"/>
 				<button name="plus_btn" tool_tip="Unirse a un grupo o crear uno nuevo"/>
 				<button name="activate_btn" tool_tip="Activar el grupo seleccionado"/>
 			</panel>
 		</panel>
 		<panel label="RECIENTE" name="recent_panel">
-			<panel label="bottom_panel" name="bottom_panel">
+			<panel label="bottom_panel" name="bottom_panel_recent">
 				<menu_button tool_tip="Opciones" name="recent_viewsort_btn"/>
-				<button name="recent_add_friend_btn" tool_tip="Ofrecer amistad al residente seleccionado"/>
+				<button name="add_friend_btn_recent" tool_tip="Ofrecer amistad al residente seleccionado"/>
 			</panel>
 		</panel>
 	</tab_container>
@@ -72,16 +81,16 @@
 			<layout_panel name="view_profile_btn_lp">
 				<button label="Perfil" name="view_profile_btn" tool_tip="Mostrar la imagen, grupos y otra información del residente"/>
 			</layout_panel>
-			<layout_panel name="chat_btn_lp">
+			<layout_panel name="im_btn_lp">
 				<button label="MI" name="im_btn" tool_tip="Abrir una sesión de mensajería instantánea con el residente seleccionado"/>
 			</layout_panel>
-			<layout_panel name="chat_btn_lp">
+			<layout_panel name="call_btn_lp">
 				<button label="Llamar" name="call_btn" tool_tip="Llamar al residente seleccionado"/>
 			</layout_panel>
-			<layout_panel name="chat_btn_lp">
-				<button label="Compartir" name="share_btn" tool_tip="Compartir un objeto del inventario con el residente seleccionado"/>
+			<layout_panel name="share_btn_lp">
+				<button label="Compart." name="share_btn" tool_tip="Compartir un objeto del inventario con el residente seleccionado"/>
 			</layout_panel>
-			<layout_panel name="chat_btn_lp">
+			<layout_panel name="tp_btn_lp">
 				<button label="Teleporte" name="teleport_btn" tool_tip="Ofrecer teleporte al residente seleccionado"/>
 			</layout_panel>
 		</layout_stack>

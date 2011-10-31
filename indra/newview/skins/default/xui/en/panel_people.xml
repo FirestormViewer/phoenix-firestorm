@@ -128,7 +128,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
          width="313">
 			
 			
-			<layout_stack orientation="vertical" clip="true" follows="all" layout="topleft" top="0" left="0" height="355" width="313" mouse_opaque="false" auto_resize="false">
+			<layout_stack orientation="vertical" clip="true" follows="all" layout="topleft" top="0" left="0" height="355" width="313" mouse_opaque="false" name="radar_ls" auto_resize="false">
 			<layout_panel layout="topleft" top="0" left="3" height="140" width="307" max_height="140"  follows="top" mouse_opaque="false" visibility_control="ShowRadarMinimap" name="minimaplayout" auto_resize="false">
              <net_map
              bg_color="NetMapBackgroundColor"
@@ -193,7 +193,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              layout="topleft"
              left="3"
              multi_select="true"
-             name="avatar_list"
+             name="nearby_avatar_list"
              visible="false"
              top_pad="0"
              width="307" />
@@ -207,7 +207,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              label="bottom_panel"
              layout="topleft"
              left="3"
-             name="bottom_panel"
+             name="bottom_panel_nearby"
              top_pad="0"
              width="313">
 	             <menu_button
@@ -232,7 +232,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                   image_unselected="Toolbar_Middle_Off"
                  layout="topleft"
                  left_pad="1"
-                 name="add_friend_btn"
+                 name="add_friend_btn_nearby"
                  tool_tip="Add selected Resident to your friends List"
                  width="31">
                	<commit_callback
@@ -370,7 +370,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              label="bottom_panel"
              layout="topleft"
              left="3"
-             name="bottom_panel"
+             name="bottom_panel_friends"
              top_pad="0"
              width="313">
 
@@ -427,7 +427,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                            layout="topleft"
                            left_pad="0"
                            top="0"
-                           name="dummy_icon"
+                           name="friends_dummy_icon"
                            width="211" />
                            
                           <dnd_button
@@ -536,7 +536,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              label="bottom_panel"
              layout="topleft"
              left="0"
-             name="bottom_panel"
+             name="bottom_panel_groups"
              top_pad="0"
              width="313">
                <menu_button
@@ -582,7 +582,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                   image_name="Toolbar_Right_Off"
                   layout="topleft"
                   left_pad="1"
-                  name="dummy_icon"
+                  name="groups_dummy_icon"
                   width="209"
              />
             </panel>
@@ -608,7 +608,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              layout="topleft"
              left="3"
              multi_select="true"
-             name="avatar_list"
+             name="recent_avatar_list"
              show_last_interaction_time="true"
              top="0"
              width="307" />
@@ -619,7 +619,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              label="bottom_panel"
              layout="topleft"
              left="0"
-             name="bottom_panel"
+             name="bottom_panel_recent"
              top_pad="0"
              width="313">
                <menu_button
@@ -644,7 +644,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                  image_unselected="Toolbar_Middle_Off"
                  layout="topleft"
                  left_pad="1"
-                 name="add_friend_btn"
+                 name="add_friend_btn_recent"
                  tool_tip="Add selected Resident to your friends List"
                  width="31">
                 <commit_callback
@@ -656,7 +656,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                   image_name="Toolbar_Right_Off"
                   layout="topleft"
                   left_pad="1"
-                  name="dummy_icon"
+                  name="recent_dummy_icon"
                   width="241"
              />
             </panel>
@@ -708,7 +708,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             height="23"
             layout="bottomleft"
             left_pad="3"
-            name="chat_btn_lp"
+            name="im_btn_lp"
             user_resize="false"
             auto_resize="true"
             width="41">
@@ -729,7 +729,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             height="23"
             layout="bottomleft"
             left_pad="3"
-            name="chat_btn_lp"
+            name="call_btn_lp"
             user_resize="false"
             auto_resize="true"
             width="52">
@@ -750,7 +750,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             height="23"
             layout="bottomleft"
             left_pad="3"
-            name="chat_btn_lp"
+            name="share_btn_lp"
             user_resize="false"
             auto_resize="true"
             width="66">
@@ -771,7 +771,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             height="23"
             layout="bottomleft"
             left_pad="3"
-            name="chat_btn_lp"
+            name="tp_btn_lp"
             user_resize="false"
             auto_resize="true"
             width="77">
