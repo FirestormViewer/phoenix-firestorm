@@ -672,6 +672,47 @@ Default 0. Larger values may not work well.
 V2/3 default 0. V1 default [TODO: unknown].
         </text>
 
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="Label_FolderItemViewHeight"
+         top_pad="15"
+         width="120">
+           Folder Item Height:
+        </text>
+        <spinner
+         top_delta="-5"
+         left_pad="5"
+         height="18"
+         width="50"
+         control_name="FSFolderViewItemHeight"
+         layout="topleft"
+         follows="left|top"
+         increment="1"
+         decimal_digits="0"
+         initial_val="20"
+         min_val="10"
+         max_val="30"
+         name="FSFolderViewItemHeight" />
+        <text
+         name="Label_FolderItemViewHeight_Scale"
+         top_delta="5"
+         left_pad="3"
+         height="36"
+         width="335"
+         layout="topleft"
+         follows="left|top"
+         type="string"
+         length="1"
+         line_spacing.pixels="5">
+          pixels (requires restart)
+V2/3 default 20. V1 default 18.
+        </text>
+
 <!-- not a live preview
         <text
          name="tooltip_textbox"
