@@ -126,10 +126,15 @@ BOOL FSFloaterContacts::postBuild()
 
 	// primary sort = online status, secondary sort = name
 	if (mSortByUserName)
+	{
 		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
+		mFriendsList->sortByColumn(std::string("user_name"), TRUE);
+	}
 	else
+	{
 		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_NAME)->mName;
-	mFriendsList->sortByColumn(std::string("full_name"), TRUE);
+		mFriendsList->sortByColumn(std::string("full_name"), TRUE);
+	}
 	mFriendsList->sortByColumn(std::string("icon_online_status"), FALSE);
 	
 	mFriendsTab->childSetAction("im_btn", boost::bind(&FSFloaterContacts::onImButtonClicked, this));
