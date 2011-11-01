@@ -2908,7 +2908,8 @@ BOOL LLWindowWin32::resetDisplayResolution()
 
 void LLWindowWin32::swapBuffers()
 {
-	glFinish();
+	// Ansariel: Don't call glFinish - this kills parallelism!
+	//glFinish();
 	SwapBuffers(mhDC);
 }
 
