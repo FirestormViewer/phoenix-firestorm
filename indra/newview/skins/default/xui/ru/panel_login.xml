@@ -6,7 +6,7 @@
   </panel.string>
   <panel.string
        name="real_url" translate="false">
-         http://phoenixviewer.com/app/loginFSbeta/
+         http://phoenixviewer.com/app/loginV3/
   </panel.string>
       <string name="reg_in_client_url" translate="false">
        http://secondlife.eniac15.lindenlab.com/reg-in-client/
