@@ -258,6 +258,9 @@ void LLMultiFloater::updateFloaterTitle(LLFloater* floaterp)
 	if (index != -1)
 	{
 		mTabContainer->setPanelTitle(index, floaterp->getShortTitle());
+		// Update the overall title too, since we're showing it
+		//  exclusively now. -- TS
+		mDragHandle->setTitle(mTitle.getString() + " - " + floaterp->getTitle());
 	}
 }
 
