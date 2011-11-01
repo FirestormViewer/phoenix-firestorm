@@ -293,7 +293,14 @@ void LLIMFloater::sendMsg()
 			// TL: Support group chat prefix
 			if (FSData::getInstance()->isSupportGroup(mSessionID))
 			{
-				utf8_text.insert(0,("(FS " + LLVersionInfo::getShortVersion() + ") "));
+				if (utf8_text.find("/me ") == 0)
+				{
+					utf8_text.insert(4,("(FS " + LLVersionInfo::getShortVersion() + ") "));
+				}
+				else
+				{
+					utf8_text.insert(0,("(FS " + LLVersionInfo::getShortVersion() + ") "));
+				}
 			}
 
 			// Truncate for transport
