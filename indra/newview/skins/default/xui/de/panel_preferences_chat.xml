@@ -23,7 +23,10 @@
 	<check_box label="IMs per Email zuschicken, wenn ich offline bin" name="send_im_to_email"/>
 	<check_box label="Kompakten IM- und Text-Chatverlauf aktivieren" name="plain_text_chat_history"/>
 	<check_box label="Miniaturicons anzeigen, falls Chat-Überschriften verwendet werden" name="ShowChatMiniIcons"/>	
+	<check_box label="Zeitstempel im lokalen Chat verbergen" name="hide_timestamps_nearby_chat"/>
+	<check_box label="Zeitstempel in IM's verbergen" name="hide_timestamps_im"/>
 	<check_box label="Blasen-Chat" name="bubble_text_chat"/>
+	<check_box label="Eingabe-Indikator in Blase oberhalb eines Avatars anzeigen" name="bubble_text_typing"/>
 	<text name="inworld_typing_rg_label">
        Buchstabeneingabe:
 	</text>

@@ -322,7 +322,7 @@
 		tool_tip="Check this to automatically start media when you log in or change regions."
 		label="Allow Media to auto-play when entering a region"
 		top_pad="-5"
-    bottom_delta="20"
+		bottom_delta="20"
 		left="25"/>
 	<check_box
 		name="media_allowscript_btn"
@@ -374,7 +374,7 @@
      type="string"
      length="1"
      follows="left|top"
-     height="20"
+     height="10"
      layout="topleft"
      left="25"
      name="voice_chat_settings"
@@ -625,7 +625,7 @@
      type="string"
      length="1"
      follows="left|top"
-     height="16"
+     height="10"
      layout="topleft"
      left_delta="-360"
      name="Volume label"

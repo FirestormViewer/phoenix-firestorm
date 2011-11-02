@@ -78,8 +78,9 @@
 		<combo_box.item label="5 Minuten" name="item1"/>
 		<combo_box.item label="10 Minuten" name="item2"/>
 		<combo_box.item label="30 Minuten" name="item3"/>
+		<combo_box.item label="nie" name="item4"/>
 	</combo_box>
-	<check_box name="AvatarSitOnAway" label="Sitzen wenn abwesend" left_pad="20"/>
+	<check_box name="AvatarSitOnAway" label="Sitzen wenn abwesend" left_pad="30"/>
 	<text name="text_box3">
 		Antwort, wenn im „Beschäftigt“-Modus:
 	</text>
