@@ -27,7 +27,7 @@
      name="System Volume"
      show_text="false"
      slider_label.halign="right"
-     top="10"
+     top="5"
      volume="true"
      width="300">
         <slider.commit_callback
@@ -378,7 +378,7 @@
      left="25"
      name="voice_chat_settings"
      width="180"
-     top_pad="35">
+     top_pad="5">
         Voice Chat Settings
     </text>
     <text
@@ -644,7 +644,7 @@
          max_val="2"
          name="mic_volume_slider"
          tool_tip="Change the volume using this slider"
-         top_pad="-1"
+         top_pad="-5"
          width="220" />
         <text
          type="string"

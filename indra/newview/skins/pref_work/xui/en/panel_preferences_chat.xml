@@ -1073,4 +1073,19 @@
          layout="topleft"
          name="ChatAutoCorrect" />
 </tab_container>
+<!-- Duplicate control to feed to the code to enable the dictionary combobox.
+     For some reason it's not found if inside the tab_container.
+     Please leave this here as a workaround, or amend the code. [WoLf] -->
+    <check_box
+     visible="false"
+     control_name="SpellCheck"
+     enabled="true"
+     follows="top|left"
+     height="16"
+     label="Enable spell checking"
+     layout="topleft"
+     left="30"
+     name="checkSpellCheck"
+     top="30"
+     width="250" />
 </panel>
