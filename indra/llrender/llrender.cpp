@@ -927,13 +927,7 @@ LLRender::LLRender()
     mMode(LLRender::TRIANGLES),
     mCurrTextureUnitIndex(0),
     mMaxAnisotropy(0.f) 
-{
-	mBuffer = new LLVertexBuffer(immediate_mask, 0);
-	mBuffer->allocateBuffer(4096, 0, TRUE);
-	mBuffer->getVertexStrider(mVerticesp);
-	mBuffer->getTexCoord0Strider(mTexcoordsp);
-	mBuffer->getColorStrider(mColorsp);
-	
+{	
 	mTexUnits.reserve(LL_NUM_TEXTURE_LAYERS);
 	for (U32 i = 0; i < LL_NUM_TEXTURE_LAYERS; i++)
 	{
@@ -964,6 +958,17 @@ LLRender::~LLRender()
 	shutdown();
 }
 
+void LLRender::init()
+{
+	llassert_always(mBuffer.isNull()) ;
+
+	mBuffer = new LLVertexBuffer(immediate_mask, 0);
+	mBuffer->allocateBuffer(4096, 0, TRUE);
+	mBuffer->getVertexStrider(mVerticesp);
+	mBuffer->getTexCoord0Strider(mTexcoordsp);
+	mBuffer->getColorStrider(mColorsp);
+}
+
 void LLRender::shutdown()
 {
 	for (U32 i = 0; i < mTexUnits.size(); i++)
@@ -979,6 +984,7 @@ void LLRender::shutdown()
 		delete mLightState[i];
 	}
 	mLightState.clear();
+	mBuffer = NULL ;
 }
 
 void LLRender::refreshState(void)
@@ -1168,6 +1174,11 @@ void LLRender::setAlphaRejectSettings(eCompareFunc func, F32 value)
 {
 	flush();
 
+	if (LLGLSLShader::sNoFixedFunction)
+	{ //glAlphaFunc is deprecated in OpenGL 3.3
+		return;
+	}
+
 	if (mCurrAlphaFunc != func ||
 		mCurrAlphaFuncVal != value)
 	{
@@ -1180,6 +1191,30 @@ void LLRender::setAlphaRejectSettings(eCompareFunc func, F32 value)
 		else
 		{
 			glAlphaFunc(sGLCompareFunc[func], value);
+		}
+	}
+
+	if (gDebugGL)
+	{ //make sure cached state is correct
+		GLint cur_func = 0;
+		glGetIntegerv(GL_ALPHA_TEST_FUNC, &cur_func);
+
+		if (func == CF_DEFAULT)
+		{
+			func = CF_GREATER;
+		}
+
+		if (cur_func != sGLCompareFunc[func])
+		{
+			llerrs << "Alpha test function corrupted!" << llendl;
+		}
+
+		F32 ref = 0.f;
+		glGetFloatv(GL_ALPHA_TEST_REF, &ref);
+
+		if (ref != value)
+		{
+			llerrs << "Alpha test value corrupted!" << llendl;
 		}
 	}
 }

@@ -16,7 +16,7 @@
 		You do not have permission to buy land for your active group.
 	</floater.string>
 	<floater.string name="no_land_selected">
-		No land selected.
+		無土地被選擇。
 	</floater.string>
 	<floater.string name="multiple_parcels_selected">
 		Multiple different parcels selected. 
@@ -26,13 +26,13 @@ Try selecting a smaller area.
 		You do not have permission to buy land for your active group.
 	</floater.string>
 	<floater.string name="parcel_not_for_sale">
-		The selected parcel is not for sale.
+		所選擇的地段不出售。.
 	</floater.string>
 	<floater.string name="group_already_owns">
-		The group already owns the parcel.
+		這個群組已擁有這個地段。
 	</floater.string>
 	<floater.string name="you_already_own">
-		You already own the parcel.
+		你已經擁有這個地段。
 	</floater.string>
 	<floater.string name="set_to_sell_to_other">
 		The selected parcel is set to sell to another party.
@@ -47,7 +47,7 @@ Try selecting a smaller area.
 	<floater.string name="processing">
 		Processing your purchase...
  
-(This may take a minute or two.)
+（過程這將會花費一到兩分鐘）
 	</floater.string>
 	<floater.string name="fetching_error">
 		There has been an error while fetching land buying information.
@@ -62,7 +62,7 @@ Try selecting a smaller area.
 		Cannot buy now:
 	</floater.string>
 	<floater.string name="not_for_sale">
-		Not for sale:
+		不出售：
 	</floater.string>
 	<floater.string name="none_needed">
 		none needed

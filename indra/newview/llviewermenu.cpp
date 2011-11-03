@@ -116,6 +116,8 @@
 
 using namespace LLVOAvatarDefines;
 
+typedef LLPointer<LLViewerObject> LLViewerObjectPtr;
+
 static boost::unordered_map<std::string, LLStringExplicit> sDefaultItemLabels;
 
 BOOL enable_land_build(void*);
@@ -521,7 +523,7 @@ class LLAdvancedToggleConsole : public view_listener_t
 		}
 		else if ("fast timers" == console_type)
 		{
-			toggle_visibility( (void*)gDebugView->mFastTimerView );
+			LLFloaterReg::toggleInstance("fast_timers");
 		}
 		else if ("scene view" == console_type)
 		{
@@ -561,7 +563,7 @@ class LLAdvancedCheckConsole : public view_listener_t
 		}
 		else if ("fast timers" == console_type)
 		{
-			new_value = get_visibility( (void*)gDebugView->mFastTimerView );
+			new_value = LLFloaterReg::instanceVisible("fast_timers");
 		}
 		else if ("scene view" == console_type)
 		{
@@ -832,7 +834,8 @@ U32 feature_from_string(std::string feature)
 };
 
 
-class LLAdvancedToggleFeature : public view_listener_t{
+class LLAdvancedToggleFeature : public view_listener_t
+{
 	bool handleEvent(const LLSD& userdata)
 	{
 		U32 feature = feature_from_string( userdata.asString() );
@@ -845,7 +848,8 @@ class LLAdvancedToggleFeature : public view_listener_t{
 };
 
 class LLAdvancedCheckFeature : public view_listener_t
-{bool handleEvent(const LLSD& userdata)
+{
+	bool handleEvent(const LLSD& userdata)
 {
 	U32 feature = feature_from_string( userdata.asString() );
 	bool new_value = false;
@@ -4008,23 +4012,21 @@ void handle_god_request_avatar_geometry(void *)
 	}
 }
 
-
-void derez_objects(EDeRezDestination dest, const LLUUID& dest_id)
+static bool get_derezzable_objects(
+	EDeRezDestination dest,
+	std::string& error,
+	LLViewerRegion*& first_region,
+	LLDynamicArray<LLViewerObjectPtr>* derez_objectsp,
+	bool only_check = false)
 {
-	if(gAgentCamera.cameraMouselook())
-	{
-		gAgentCamera.changeCameraToDefault();
-	}
-	//gInventoryView->setPanelOpen(TRUE);
+	bool found = false;
 
-	std::string error;
-	LLDynamicArray<LLViewerObject*> derez_objects;
+	LLObjectSelectionHandle selection = LLSelectMgr::getInstance()->getSelection();
 	
 	// Check conditions that we can't deal with, building a list of
 	// everything that we'll actually be derezzing.
-	LLViewerRegion* first_region = NULL;
-	for (LLObjectSelection::valid_root_iterator iter = LLSelectMgr::getInstance()->getSelection()->valid_root_begin();
-		 iter != LLSelectMgr::getInstance()->getSelection()->valid_root_end(); iter++)
+	for (LLObjectSelection::valid_root_iterator iter = selection->valid_root_begin();
+		 iter != selection->valid_root_end(); iter++)
 	{
 		LLSelectNode* node = *iter;
 		LLViewerObject* object = node->getObject();
@@ -4091,8 +4093,53 @@ void derez_objects(EDeRezDestination dest, const LLUUID& dest_id)
 		}
 		if(can_derez_current)
 		{
-			derez_objects.put(object);
+			found = true;
+
+			if (only_check)
+				// one found, no need to traverse to the end
+				break;
+
+			if (derez_objectsp)
+				derez_objectsp->put(object);
+
 		}
+	}
+
+	return found;
+}
+
+static bool can_derez(EDeRezDestination dest)
+{
+	LLViewerRegion* first_region = NULL;
+	std::string error;
+	return get_derezzable_objects(dest, error, first_region, NULL, true);
+}
+
+static void derez_objects(
+	EDeRezDestination dest,
+	const LLUUID& dest_id,
+	LLViewerRegion*& first_region,
+	std::string& error,
+	LLDynamicArray<LLViewerObjectPtr>* objectsp)
+{
+	LLDynamicArray<LLViewerObjectPtr> derez_objects;
+
+	if (!objectsp) // if objects to derez not specified
+	{
+		// get them from selection
+		if (!get_derezzable_objects(dest, error, first_region, &derez_objects, false))
+		{
+			llwarns << "No objects to derez" << llendl;
+			return;
+		}
+
+		objectsp = &derez_objects;
+	}
+
+
+	if(gAgentCamera.cameraMouselook())
+	{
+		gAgentCamera.changeCameraToDefault();
 	}
 
 	// This constant is based on (1200 - HEADER_SIZE) / 4 bytes per
@@ -4102,13 +4149,13 @@ void derez_objects(EDeRezDestination dest, const LLUUID& dest_id)
 	// satisfy anybody.
 	const S32 MAX_ROOTS_PER_PACKET = 250;
 	const S32 MAX_PACKET_COUNT = 254;
-	F32 packets = ceil((F32)derez_objects.count() / (F32)MAX_ROOTS_PER_PACKET);
+	F32 packets = ceil((F32)objectsp->count() / (F32)MAX_ROOTS_PER_PACKET);
 	if(packets > (F32)MAX_PACKET_COUNT)
 	{
 		error = "AcquireErrorTooManyObjects";
 	}
 
-	if(error.empty() && derez_objects.count() > 0)
+	if(error.empty() && objectsp->count() > 0)
 	{
 		U8 d = (U8)dest;
 		LLUUID tid;
@@ -4133,11 +4180,11 @@ void derez_objects(EDeRezDestination dest, const LLUUID& dest_id)
 			msg->addU8Fast(_PREHASH_PacketCount, packet_count);
 			msg->addU8Fast(_PREHASH_PacketNumber, packet_number);
 			objects_in_packet = 0;
-			while((object_index < derez_objects.count())
+			while((object_index < objectsp->count())
 				  && (objects_in_packet++ < MAX_ROOTS_PER_PACKET))
 
 			{
-				LLViewerObject* object = derez_objects.get(object_index++);
+				LLViewerObject* object = objectsp->get(object_index++);
 				msg->nextBlockFast(_PREHASH_ObjectData);
 				msg->addU32Fast(_PREHASH_ObjectLocalID, object->getLocalID());
 				// VEFFECT: DerezObject
@@ -4162,6 +4209,13 @@ void derez_objects(EDeRezDestination dest, const LLUUID& dest_id)
 	}
 }
 
+static void derez_objects(EDeRezDestination dest, const LLUUID& dest_id)
+{
+	LLViewerRegion* first_region = NULL;
+	std::string error;
+	derez_objects(dest, dest_id, first_region, error, NULL);
+}
+
 void handle_take_copy()
 {
 	if (LLSelectMgr::getInstance()->getSelection()->isEmpty()) return;
@@ -4173,11 +4227,18 @@ void handle_take_copy()
 // You can return an object to its owner if it is on your land.
 class LLObjectReturn : public view_listener_t
 {
+public:
+	LLObjectReturn() : mFirstRegion(NULL) {}
+
+private:
 	bool handleEvent(const LLSD& userdata)
 	{
 		if (LLSelectMgr::getInstance()->getSelection()->isEmpty()) return true;
 		
 		mObjectSelection = LLSelectMgr::getInstance()->getEditSelection();
+
+		// Save selected objects, so that we still know what to return after the confirmation dialog resets selection.
+		get_derezzable_objects(DRD_RETURN_TO_OWNER, mError, mFirstRegion, &mReturnableObjects);
 
 		LLNotificationsUtil::add("ReturnToOwner", LLSD(), LLSD(), boost::bind(&LLObjectReturn::onReturnToOwner, this, _1, _2));
 		return true;
@@ -4189,16 +4250,23 @@ class LLObjectReturn : public view_listener_t
 		if (0 == option)
 		{
 			// Ignore category ID for this derez destination.
-			derez_objects(DRD_RETURN_TO_OWNER, LLUUID::null);
+			derez_objects(DRD_RETURN_TO_OWNER, LLUUID::null, mFirstRegion, mError, &mReturnableObjects);
 		}
+
+		mReturnableObjects.clear();
+		mError.clear();
+		mFirstRegion = NULL;
 
 		// drop reference to current selection
 		mObjectSelection = NULL;
 		return false;
 	}
 
-protected:
 	LLObjectSelectionHandle mObjectSelection;
+
+	LLDynamicArray<LLViewerObjectPtr> mReturnableObjects;
+	std::string mError;
+	LLViewerRegion* mFirstRegion;
 };
 
 
@@ -4223,29 +4291,7 @@ class LLObjectEnableReturn : public view_listener_t
 		}
 		else
 		{
-			LLViewerRegion* region = gAgent.getRegion();
-			if (region)
-			{
-				// Estate owners and managers can always return objects.
-				if (region->canManageEstate())
-				{
-					new_value = true;
-				}
-				else
-				{
-					struct f : public LLSelectedObjectFunctor
-					{
-						virtual bool apply(LLViewerObject* obj)
-						{
-							return 
-								obj->permModify() ||
-								obj->isReturnable();
-						}
-					} func;
-					const bool firstonly = true;
-					new_value = LLSelectMgr::getInstance()->getSelection()->applyToRootObjects(&func, firstonly);
-				}
-			}
+			new_value = can_derez(DRD_RETURN_TO_OWNER);
 		}
 #endif
 		return new_value;
@@ -7777,6 +7823,55 @@ class LLToggleUIHints : public view_listener_t
 	}
 };
 
+class LLCheckSessionsSettings : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		std::string expected = userdata.asString();
+		return gSavedSettings.getString("SessionSettingsFile") == expected;
+	}
+};
+
+class LLChangeMode : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		std::string mode = userdata.asString();
+		if (mode == "basic")
+		{
+			if (gSavedSettings.getString("SessionSettingsFile") != "settings_minimal.xml")
+			{
+				LLNotificationsUtil::add("ModeChange", LLSD(), LLSD(), boost::bind(onModeChangeConfirm, "settings_minimal.xml", _1, _2));
+			}
+			return true;
+		}
+		else if (mode == "advanced")
+		{
+			if (gSavedSettings.getString("SessionSettingsFile") != "")
+			{
+				LLNotificationsUtil::add("ModeChange", LLSD(), LLSD(), boost::bind(onModeChangeConfirm, "", _1, _2));
+			}
+			return true;
+		}
+		return false;
+	}	
+	
+	static void onModeChangeConfirm(const std::string& new_session_settings_file, const LLSD& notification, const LLSD& response)
+	{
+		S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+		switch (option)
+		{
+		case 0:
+			gSavedSettings.getControl("SessionSettingsFile")->set(new_session_settings_file);
+			LLAppViewer::instance()->requestQuit();
+			break;
+		case 1:
+		default:
+			break;
+		}
+	}
+};
+
 void LLUploadCostCalculator::calculateCost()
 {
 	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
@@ -8266,6 +8361,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLEditableSelectedMono(), "EditableSelectedMono");
 
 	view_listener_t::addMenu(new LLToggleUIHints(), "ToggleUIHints");
+	view_listener_t::addMenu(new LLCheckSessionsSettings(), "CheckSessionSettings");
+	view_listener_t::addMenu(new LLChangeMode(), "ChangeMode");
 
 	commit.add("Destination.show", boost::bind(&toggle_destination_and_avatar_picker, 0));
 	commit.add("Avatar.show", boost::bind(&toggle_destination_and_avatar_picker, 1));

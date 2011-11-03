@@ -5123,7 +5123,6 @@ void LLSelectMgr::renderSilhouettes(BOOL for_hud)
 
 	gGL.getTexUnit(0)->bind(mSilhouetteImagep);
 	LLGLSPipelineSelection gls_select;
-	gGL.setAlphaRejectSettings(LLRender::CF_GREATER, 0.f);
 	LLGLEnable blend(GL_BLEND);
 	LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE);
 
@@ -5250,7 +5249,6 @@ void LLSelectMgr::renderSilhouettes(BOOL for_hud)
 	}
 
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-	gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
 }
 
 void LLSelectMgr::generateSilhouette(LLSelectNode* nodep, const LLVector3& view_point)
@@ -6522,32 +6520,75 @@ U32 LLObjectSelection::getSelectedObjectTriangleCount()
 	return count;
 }
 
-/*S32 LLObjectSelection::getSelectedObjectRenderCost()
+S32 LLObjectSelection::getSelectedObjectRenderCost()
 {
        S32 cost = 0;
        LLVOVolume::texture_cost_t textures;
+       typedef std::set<LLUUID> uuid_list_t;
+       uuid_list_t computed_objects;
+
+	   typedef std::list<LLPointer<LLViewerObject> > child_list_t;
+	   typedef const child_list_t const_child_list_t;
+
+	   // add render cost of complete linksets first, to get accurate texture counts
        for (list_t::iterator iter = mList.begin(); iter != mList.end(); ++iter)
        {
                LLSelectNode* node = *iter;
+			   
                LLVOVolume* object = (LLVOVolume*)node->getObject();
 
-               if (object)
+               if (object && object->isRootEdit())
                {
-                       cost += object->getRenderCost(textures);
-               }
+				   cost += object->getRenderCost(textures);
+				   computed_objects.insert(object->getID());
 
-               for (LLVOVolume::texture_cost_t::iterator iter = textures.begin(); iter != textures.end(); ++iter)
-               {
-                       // add the cost of each individual texture in the linkset
-                       cost += iter->second;
+				   const_child_list_t children = object->getChildren();
+				   for (const_child_list_t::const_iterator child_iter = children.begin();
+						 child_iter != children.end();
+						 ++child_iter)
+				   {
+					   LLViewerObject* child_obj = *child_iter;
+					   LLVOVolume *child = dynamic_cast<LLVOVolume*>( child_obj );
+					   if (child)
+					   {
+						   cost += child->getRenderCost(textures);
+						   computed_objects.insert(child->getID());
+					   }
+				   }
+
+				   for (LLVOVolume::texture_cost_t::iterator iter = textures.begin(); iter != textures.end(); ++iter)
+				   {
+					   // add the cost of each individual texture in the linkset
+					   cost += iter->second;
+				   }
+
+				   textures.clear();
                }
-               textures.clear();
        }
+	
+	   // add any partial linkset objects, texture cost may be slightly misleading
+		for (list_t::iterator iter = mList.begin(); iter != mList.end(); ++iter)
+		{
+			LLSelectNode* node = *iter;
+			LLVOVolume* object = (LLVOVolume*)node->getObject();
 
+			if (object && computed_objects.find(object->getID()) == computed_objects.end()  )
+			{
+					cost += object->getRenderCost(textures);
+					computed_objects.insert(object->getID());
+			}
+
+			for (LLVOVolume::texture_cost_t::iterator iter = textures.begin(); iter != textures.end(); ++iter)
+			{
+				// add the cost of each individual texture in the linkset
+				cost += iter->second;
+			}
+
+			textures.clear();
+		}
 
        return cost;
-}*/
-
+}
 
 //-----------------------------------------------------------------------------
 // getTECount()

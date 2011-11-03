@@ -138,7 +138,6 @@
 			<menu_item_call label="Son ([COST] L$)..." name="Upload Sound"/>
 			<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
 			<menu_item_call label="Modèle..." name="Upload Model"/>
-			<menu_item_call label="Assistant Modèle..." name="Upload Model Wizard"/>
 			<menu_item_call label="Lot ([COST] L$ par fichier)..." name="Bulk Upload"/>
 		</menu>
 		<menu_item_call label="Annuler" name="Undo"/>
@@ -159,7 +158,6 @@
 		<menu_item_check label="Désactiver les contraintes de la caméra" name="Disable Camera Distance"/>
 		<menu_item_check label="Photo haute résolution" name="HighResSnapshot"/>
 		<menu_item_check label="Photos discrètes sur disque" name="QuietSnapshotsToDisk"/>
-		<menu_item_check label="Compresser les photos sur disque" name="CompressSnapshotsToDisk"/>
 		<menu label="Outils de performance" name="Performance Tools">
 			<menu_item_call label="Mesure du lag" name="Lag Meter"/>
 			<menu_item_check label="Barre de statistiques" name="Statistics Bar"/>
@@ -254,6 +252,7 @@
 			<menu_item_check label="Afficher les matrices" name="Show Matrices"/>
 			<menu_item_check label="Afficher la couleur sous le curseur" name="Show Color Under Cursor"/>
 			<menu_item_check label="Afficher la mémoire" name="Show Memory"/>
+			<menu_item_check label="Afficher les infos de mémoire privées" name="Show Private Mem Info"/>
 			<menu_item_check label="Afficher les mises à jour des objets" name="Show Updates"/>
 		</menu>
 		<menu label="Forcer une erreur" name="Force Errors">

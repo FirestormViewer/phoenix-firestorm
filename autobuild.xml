@@ -1110,9 +1110,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0db10480362168f075c2af0ae302cb74</string>
+              <string>362654a472ef7368d4c803ae3fb89d95</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/3p-llconvexdecomposition/rev/234943/arch/Darwin/installer/llconvexdecomposition-0.1-darwin-20110707.tar.bz2</string>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/3p-llconvexdecomposition/rev/238959/arch/Darwin/installer/llconvexdecomposition-0.1-darwin-20110819.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1122,9 +1122,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f3c667dc159c0537a9122ce6e72e16db</string>
+              <string>c7801d899daec5338fbe95053255b7e7</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/3p-llconvexdecomposition/rev/234943/arch/Linux/installer/llconvexdecomposition-0.1-linux-20110707.tar.bz2</string>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/3p-llconvexdecomposition/rev/238959/arch/Linux/installer/llconvexdecomposition-0.1-linux-20110819.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1134,9 +1134,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>46cac4d667446bbbc9b5023f2848a5ac</string>
+              <string>6ecf2f85f03c5ae87fe45769566a5660</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/3p-llconvexdecomposition/rev/234943/arch/CYGWIN/installer/llconvexdecomposition-0.1-windows-20110707.tar.bz2</string>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/3p-llconvexdecomposition/rev/238959/arch/CYGWIN/installer/llconvexdecomposition-0.1-windows-20110819.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1158,9 +1158,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bc1388fc28dbb3bba1fe7cb8d09f49b4</string>
+              <string>a5f53e09f67271fd50f1131ffdda9d27</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llconvexdecompositionstub/rev/227399/arch/Darwin/installer/llconvexdecompositionstub-0.3-darwin-20110421.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llconvexdecompositionstub/rev/238958/arch/Darwin/installer/llconvexdecompositionstub-0.3-darwin-20110819.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1170,9 +1170,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3295bd4a0514b7c15dda9044f40c175e</string>
+              <string>0006a964f1497f55a5f181b7042d2d22</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llconvexdecompositionstub/rev/227399/arch/Linux/installer/llconvexdecompositionstub-0.3-linux-20110422.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llconvexdecompositionstub/rev/238958/arch/Linux/installer/llconvexdecompositionstub-0.3-linux-20110819.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1182,9 +1182,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2fb7013f67a9353f39f9b616ce4fd203</string>
+              <string>b859e7e3bb03ebb467f0309f46422995</string>
               <key>url</key>
-              <string>http://viewer.catznip.com/downloads/llconvexdecompositionstub-0.1-windows-20110806.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llconvexdecompositionstub/rev/238958/arch/CYGWIN/installer/llconvexdecompositionstub-0.3-windows-20110819.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1206,9 +1206,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a7c80fd8516df3b879b669b2b220067f</string>
+              <string>1b92a69f5eba7cd8b017180659076db5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llqtwebkit/rev/232420/arch/Darwin/installer/llqtwebkit-4.7.1-darwin-20110608.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/roxie_3p-llqtwebkit/rev/242182/arch/Darwin/installer/llqtwebkit-4.7.1-darwin-20111003.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1230,9 +1230,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b9cc0333cc274c9cc40256ab7146b4fc</string>
+              <string>1e7f24b69b0fc751c7e86efe7c621882</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llqtwebkit/rev/232420/arch/CYGWIN/installer/llqtwebkit-4.7.1-windows-20110608.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/roxie_3p-llqtwebkit/rev/242182/arch/CYGWIN/installer/llqtwebkit-4.7.1-windows-20111003.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1486,9 +1486,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ca5765af55f798724d601720afdf6953</string>
+              <string>2fbd3c2523c45923245b55551fae5e53</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/openjpeg-1.4-windows-20110302.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/openjpeg-1.4-windows-20110622.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1630,9 +1630,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8308f7bd68bb7083655753b7abe7225f</string>
+              <string>2c0801deff03c284bb04443e4964f50c</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-google-perftools/rev/226287/arch/CYGWIN/installer/google_perftools-1.7-windows-20110411.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/google_perftools-1.8.3-windows-20110914.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1907,12 +1907,12 @@
             <map>
               <key>build</key>
               <map>
+                <key>command</key>
+                <string>xcodebuild</string>
                 <key>filters</key>
                 <array>
                   <string>setenv</string>
                 </array>
-                <key>command</key>
-                <string>xcodebuild</string>
                 <key>options</key>
                 <array>
                   <string>-configuration Debug</string>
@@ -1961,12 +1961,12 @@
             <map>
               <key>build</key>
               <map>
+                <key>command</key>
+                <string>xcodebuild</string>
                 <key>filters</key>
                 <array>
                   <string>setenv</string>
                 </array>
-                <key>command</key>
-                <string>xcodebuild</string>
                 <key>options</key>
                 <array>
                   <string>-configuration RelWithDebInfo</string>
@@ -2017,12 +2017,12 @@
             <map>
               <key>build</key>
               <map>
+                <key>command</key>
+                <string>xcodebuild</string>
                 <key>filters</key>
                 <array>
                   <string>setenv</string>
                 </array>
-                <key>command</key>
-                <string>xcodebuild</string>
                 <key>options</key>
                 <array>
                   <string>-configuration Release</string>

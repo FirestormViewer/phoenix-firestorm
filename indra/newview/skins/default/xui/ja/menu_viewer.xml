@@ -138,7 +138,6 @@
 			<menu_item_call label="サウンド（L$[COST]）..." name="Upload Sound"/>
 			<menu_item_call label="アニメーション（L$[COST]）..." name="Upload Animation"/>
 			<menu_item_call label="モデル" name="Upload Model"/>
-			<menu_item_call label="モデルウィザード" name="Upload Model Wizard"/>
 			<menu_item_call label="一括 （ファイルにつきL$[COST]）..." name="Bulk Upload"/>
 		</menu>
 		<menu_item_call label="元に戻す" name="Undo"/>
@@ -159,7 +158,6 @@
 		<menu_item_check label="カメラの距離移動を制限しない" name="Disable Camera Distance"/>
 		<menu_item_check label="高解像度スナップショット" name="HighResSnapshot"/>
 		<menu_item_check label="シャッター音とアニメーションなしでスナップショットをディスクに保存する" name="QuietSnapshotsToDisk"/>
-		<menu_item_check label="圧縮してスナップショットをディスクに保存する" name="CompressSnapshotsToDisk"/>
 		<menu label="パフォーマンスツール" name="Performance Tools">
 			<menu_item_call label="ラグ計測器" name="Lag Meter"/>
 			<menu_item_check label="統計バー" name="Statistics Bar"/>
@@ -254,6 +252,7 @@
 			<menu_item_check label="マトリックスを表示する" name="Show Matrices"/>
 			<menu_item_check label="カーソルを乗せた場所の色を表示する" name="Show Color Under Cursor"/>
 			<menu_item_check label="メモリを表示：" name="Show Memory"/>
+			<menu_item_check label="プライベートメモリ情報を表示" name="Show Private Mem Info"/>
 			<menu_item_check label="オブジェクトのアップデートを表示する" name="Show Updates"/>
 		</menu>
 		<menu label="エラー実行" name="Force Errors">

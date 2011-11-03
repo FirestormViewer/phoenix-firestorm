@@ -108,7 +108,6 @@ public:
 
 	// Close all folders in the view
 	void closeAllFolders();
-	void openFolder(const std::string& foldername);
 	void openTopLevelFolders();
 
 	virtual void toggleOpen() {};
@@ -315,6 +314,7 @@ protected:
 	signal_t						mReshapeSignal;
 	S32								mSignalSelectCallback;
 	S32								mMinWidth;
+	S32								mRunningHeight;
 	std::map<LLUUID, LLFolderViewItem*> mItemMap;
 	BOOL							mDragAndDropThisFrame;
 	

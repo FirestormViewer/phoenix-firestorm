@@ -56,7 +56,7 @@ public:
 	LLAgentWearables();
 	virtual ~LLAgentWearables();
 	void 			setAvatarObject(LLVOAvatarSelf *avatar);
-	void			createStandardWearables(BOOL female); 
+	void			createStandardWearables(); 
 	void			cleanup();
 	void			dump();
 
@@ -76,7 +76,7 @@ public:
 
 	BOOL			isWearableCopyable(LLWearableType::EType type, U32 index /*= 0*/) const;
 	BOOL			areWearablesLoaded() const;
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.6.0a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-3.0.0a) | Added: Catznip-2.1.1d
 	bool			areInitalWearablesLoaded() const { return mInitialWearablesLoaded; }
 // [/SL:KB]
 	bool			isCOFChangeInProgress() const { return mCOFChangeInProgress; }
@@ -168,7 +168,6 @@ private:
 	void			removeWearableFinal(const LLWearableType::EType type, bool do_remove_all /*= false*/, U32 index /*= 0*/);
 protected:
 	static bool		onRemoveWearableDialog(const LLSD& notification, const LLSD& response);
-	static void		userRemoveAllClothesStep2(BOOL proceed); // userdata is NULL
 	
 	//--------------------------------------------------------------------
 	// Server Communication
@@ -214,12 +213,11 @@ public:
 public:
 	static void		userRemoveWearable(const LLWearableType::EType &type, const U32 &index);
 	static void		userRemoveWearablesOfType(const LLWearableType::EType &type);
-	static void		userRemoveAllClothes();	
 	
 	typedef std::vector<LLViewerObject*> llvo_vec_t;
 
 //	static void 	userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array);
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-3.0.0a) | Added: Catznip-2.2.0a
 	// Not the best way to go about this but other attempts changed far too much LL code to be a viable solution
 	static void 	userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array, bool fAttachOnly = false);
 // [/SL:KB]
@@ -241,7 +239,7 @@ public:
 	typedef boost::function<void()>			loaded_callback_t;
 	typedef boost::signals2::signal<void()>	loaded_signal_t;
 	boost::signals2::connection				addLoadedCallback(loaded_callback_t cb);
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.6.0a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-3.0.0a) | Added: Catznip-2.1.1d
 	boost::signals2::connection				addInitialWearablesLoadedCallback(loaded_callback_t cb);
 // [/SL:KB]
 
@@ -251,7 +249,7 @@ public:
 private:
 	loading_started_signal_t				mLoadingStartedSignal; // should be called before wearables are changed
 	loaded_signal_t							mLoadedSignal; // emitted when all agent wearables get loaded
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.6.0a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-3.0.0a) | Added: Catznip-2.1.1d
 	loaded_signal_t							mInitialWearablesLoadedSignal; // emitted once when the initial wearables are loaded
 // [/SL:KB]
 
@@ -264,7 +262,7 @@ private:
 	wearableentry_map_t mWearableDatas;
 
 	static BOOL		mInitialWearablesUpdateReceived;
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-3.0.0a) | Added: Catznip-2.2.0a
 	static bool		mInitialWearablesLoaded;
 // [/SL:KB]
 	BOOL			mWearablesLoaded;

@@ -25,6 +25,9 @@
 	<string name="StartupInitializingVFS">
 		Iniciando VFS...
 	</string>
+	<string name="StartupRequireDriverUpdate">
+		Error de inicialización de gráficos. Actualiza tu controlador de gráficos.
+	</string>
 	<string name="ProgressRestoring">
 		Restaurando...
 	</string>
@@ -78,6 +81,12 @@
 	</string>
 	<string name="LoginQuicktimeOK">
 		QuickTime se ha iniciado adecuadamente.
+	</string>
+	<string name="LoginRequestSeedCapGrant">
+		Solicitando capacidades de la región...
+	</string>
+	<string name="LoginRetrySeedCapGrant">
+		Solicitando capacidades de la región, intento [NUMBER]...
 	</string>
 	<string name="LoginWaitingForRegionHandshake">
 		Esperando la conexión con la región...
@@ -318,6 +327,18 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Aquí se puede arrastrar sólo un ítem
 	</string>
 	<string name="TooltipPrice" value="[AMOUNT] L$:"/>
+	<string name="TooltipOutboxNoTransfer">
+		Uno o varios de estos objetos no se pueden vender o transferir a otro usuario.
+	</string>
+	<string name="TooltipOutboxWorn">
+		Llevas puestos uno o más de estos objetos. Quítatelos del avatar y vuelve a intentar moverlos.
+	</string>
+	<string name="TooltipOutboxFolderLevels">
+		Esta carpeta tiene demasiados niveles de subcarpetas. Reorganiza las carpetas interiores de forma que tengas como máximo 4 niveles de profundidad (la carpeta raíz contiene A, que contiene B, que contiene C).
+	</string>
+	<string name="TooltipOutboxTooManyObjects">
+		Esta carpeta contiene más de 200 objetos. Guarda algunos objetos en una caja para disminuir su cantidad.
+	</string>
 	<string name="TooltipHttpUrl">
 		Pulsa para ver esta página web
 	</string>
@@ -1174,8 +1195,65 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="InventoryInboxNoItems">
 		Aquí se entregarán los objetos comprados en el mercado.
 	</string>
+	<string name="MarketplaceURL">
+		http://marketplace.[DOMAIN_NAME]
+	</string>
+	<string name="MarketplaceURL_CreateStore">
+		http://marketplace.[DOMAIN_NAME]/create_store
+	</string>
+	<string name="MarketplaceURL_LearnMore">
+		http://marketplace.[DOMAIN_NAME]/learn_more
+	</string>
+	<string name="InventoryOutboxCreationErrorTitle">
+		Tu Buzón de salida de comerciante no está configurado correctamente
+	</string>
+	<string name="InventoryOutboxCreationErrorTooltip">
+		Error de configuración del Buzón de salida de comerciante
+	</string>
+	<string name="InventoryOutboxCreationError">
+		Ponte en contacto con el servicio de atención al cliente para resolver el problema.
+	</string>
+	<string name="InventoryOutboxNotMerchantTitle">
+		Cualquiera puede vender objetos en el mercado
+	</string>
+	<string name="InventoryOutboxNotMerchantTooltip">
+		¡Hazte comerciante!
+	</string>
+	<string name="InventoryOutboxNotMerchant">
+		[[MARKETPLACE_URL] El Mercado de Second Life] pone en venta más de un millón de productos virtuales, todos ellos creados por residentes. Tú también puedes vender los objetos que crees, así como algunos de los objetos que hayas comprado. Es fácil y es gratuito. [[LEARN_MORE_URL] Más información] o [[CREATE_STORE_URL] crea una tienda] en el mercado para empezar.
+	</string>
+	<string name="InventoryOutboxNoItemsTitle">
+		Una nueva forma para enviar objetos al mercado
+	</string>
+	<string name="InventoryOutboxNoItemsTooltip">
+		Arrastra y coloca aquí los objetos que desees preparar para venderlos en el mercado
+	</string>
 	<string name="InventoryOutboxNoItems">
-		Arrastra objetos aquí para preparar una lista del escaparate de tu mercado.
+		Arrastra a esta zona los objetos o carpetas que desees vender. Aparecerá una copia del objeto, sin quitarlo de tu inventario, salvo que el objeto arrastrado sea &quot;no copiable&quot;. Cuando estés listo para enviar los objetos al mercado, pulsa en el botón Subir. Cuando se hayan trasladado los objetos a tu inventario en el mercado, desaparecerán de esta carpeta.
+	</string>
+	<string name="Marketplace Error None">
+		Sin errores
+	</string>
+	<string name="Marketplace Error Not Merchant">
+		Error: Para poder enviar objetos al mercado, debes registrarte como comerciante (es gratis).
+	</string>
+	<string name="Marketplace Error Empty Folder">
+		Error: Esta carpeta está vacía.
+	</string>
+	<string name="Marketplace Error Unassociated Products">
+		Error: Este objeto no se pudo subir porque tu cuenta de comerciante tiene demasiados objetos que no están asociados a productos. Para corregirlo, inicia sesión en la página web del mercado y asocia más objetos.
+	</string>
+	<string name="Marketplace Error Object Limit">
+		Error: Este elemento contiene demasiados objetos. Para corregir el error, guarda objetos en cajas de forma que el total de objetos sea menor que 200.
+	</string>
+	<string name="Marketplace Error Folder Depth">
+		Error: Este objeto contiene demasiados niveles de carpetas anidadas. Reorganízalo de forma que tenga como máximo 3 niveles de carpetas anidadas.
+	</string>
+	<string name="Marketplace Error Unsellable Item">
+		Error: Este objeto no se puede vender en el mercado.
+	</string>
+	<string name="Marketplace Error Internal Import">
+		Error: Este objeto tiene un problema. Vuelve a intentarlo más tarde.
 	</string>
 	<string name="no_transfer" value="(no transferible)"/>
 	<string name="no_modify" value="(no modificable)"/>
@@ -1613,6 +1691,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="SummaryForTheWeek" value="Resumen de esta semana, empezando el "/>
 	<string name="NextStipendDay" value=". El próximo día de pago es el "/>
+	<string name="GroupPlanningDate">
+		[mthnum,datetime,utc]/[day,datetime,utc]/[year,datetime,utc]
+	</string>
 	<string name="GroupIndividualShare" value="Grupo       Aportaciones individuales"/>
 	<string name="GroupColumn" value="Grupo"/>
 	<string name="Balance">
@@ -1935,6 +2016,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="GroupMoneyDebits">
 		Débitos
+	</string>
+	<string name="GroupMoneyDate">
+		[weekday,datetime,utc] [mth,datetime,utc] [day,datetime,utc], [year,datetime,utc]
 	</string>
 	<string name="ViewerObjectContents">
 		Contenidos
@@ -4073,6 +4157,87 @@ Denuncia de infracción
 	</string>
 	<string name="Female - Wow">
 		Mujer - Admiración
+	</string>
+	<string name="/bow1">
+		/reverencia1
+	</string>
+	<string name="/clap">
+		/aplaudir
+	</string>
+	<string name="/count">
+		/contar
+	</string>
+	<string name="/extinguish">
+		/apagar
+	</string>
+	<string name="/kmb">
+		/bmc
+	</string>
+	<string name="/muscle">
+		/músculo
+	</string>
+	<string name="/no">
+		/no
+	</string>
+	<string name="/no!">
+		/¡no!
+	</string>
+	<string name="/paper">
+		/papel
+	</string>
+	<string name="/pointme">
+		/señalarme
+	</string>
+	<string name="/pointyou">
+		/señalarte
+	</string>
+	<string name="/rock">
+		/piedra
+	</string>
+	<string name="/scissor">
+		/tijera
+	</string>
+	<string name="/smoke">
+		/fumar
+	</string>
+	<string name="/stretch">
+		/estirar
+	</string>
+	<string name="/whistle">
+		/silbar
+	</string>
+	<string name="/yes">
+		/sí
+	</string>
+	<string name="/yes!">
+		/¡sí!
+	</string>
+	<string name="afk">
+		ausente
+	</string>
+	<string name="dance1">
+		baile1
+	</string>
+	<string name="dance2">
+		baile2
+	</string>
+	<string name="dance3">
+		baile3
+	</string>
+	<string name="dance4">
+		baile4
+	</string>
+	<string name="dance5">
+		baile5
+	</string>
+	<string name="dance6">
+		baile6
+	</string>
+	<string name="dance7">
+		baile7
+	</string>
+	<string name="dance8">
+		baile8
 	</string>
 	<string name="AvatarBirthDateFormat">
 		[day,datetime,slt]/[mthnum,datetime,slt]/[year,datetime,slt]

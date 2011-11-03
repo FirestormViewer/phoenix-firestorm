@@ -613,6 +613,7 @@ BOOL LLToolDragAndDrop::handleToolTip(S32 x, S32 y, MASK mask)
 {
 	if (!mToolTipMsg.empty())
 	{
+		LLToolTipMgr::instance().unblockToolTips();
 		LLToolTipMgr::instance().show(LLToolTip::Params()
 			.message(mToolTipMsg)
 			.delay_time(gSavedSettings.getF32( "DragAndDropToolTipDelay" )));
@@ -1651,12 +1652,19 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 		return ACCEPT_NO;
 	}
 
+	const LLUUID &outbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_OUTBOX, false);
+	if(gInventory.isObjectDescendentOf(item->getUUID(), outbox_id))
+	{
+		return ACCEPT_NO;
+	}
+
+
 	if( drop )
 	{
 		if(mSource == SOURCE_LIBRARY)
 		{
 //			LLPointer<LLInventoryCallback> cb = new RezAttachmentCallback(0);
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-DnDWear | Checked: 2010-09-28 (Catznip-3.0.0a) | Added: Catznip-2.2.0a
 			// Make this behave consistent with dad3dWearItem
 			LLPointer<LLInventoryCallback> cb = new RezAttachmentCallback(0, !(mask & MASK_CONTROL));
 // [/SL:KB]
@@ -1671,7 +1679,7 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 		else
 		{
 //			rez_attachment(item, 0);
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-09-28 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-DnDWear | Checked: 2010-09-28 (Catznip-3.0.0a) | Added: Catznip-2.2.0a
 			// Make this behave consistent with dad3dWearItem
 			rez_attachment(item, 0, !(mask & MASK_CONTROL));
 // [/SL:KB]
@@ -2058,6 +2066,12 @@ EAcceptance LLToolDragAndDrop::dad3dWearCategory(
 	{
 		const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
 		if( gInventory.isObjectDescendentOf( category->getUUID(), trash_id ) )
+		{
+			return ACCEPT_NO;
+		}
+
+		const LLUUID &outbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_OUTBOX, false);
+		if(gInventory.isObjectDescendentOf(category->getUUID(), outbox_id))
 		{
 			return ACCEPT_NO;
 		}

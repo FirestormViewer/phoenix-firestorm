@@ -35,6 +35,7 @@
 #include "llcurl.h"
 #include "llioutil.h"
 #include "llmemtype.h"
+#include "llproxy.h"
 #include "llpumpio.h"
 #include "llsd.h"
 #include "llstring.h"

@@ -1193,6 +1193,7 @@ LLViewerRegion::eCacheUpdateResult LLViewerRegion::cacheFullUpdate(LLViewerObjec
 	eCacheUpdateResult result = CACHE_UPDATE_ADDED;
 	if (mImpl->mCacheMap.size() > MAX_OBJECT_CACHE_ENTRIES)
 	{
+		delete mImpl->mCacheMap.begin()->second ;
 		mImpl->mCacheMap.erase(mImpl->mCacheMap.begin());
 		result = CACHE_UPDATE_REPLACED;
 		
@@ -1486,11 +1487,8 @@ void LLViewerRegion::unpackRegionHandshake()
 	msg->sendReliable(host);
 }
 
-	
 void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 {
-	capabilityNames.append("AccountingParcel");
-	capabilityNames.append("AccountingSelection");
 	capabilityNames.append("AttachmentResources");
 	capabilityNames.append("AvatarPickerSearch");
 	capabilityNames.append("ChatSessionRequest");
@@ -1530,6 +1528,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("ProvisionVoiceAccountRequest");
 	capabilityNames.append("RemoteParcelRequest");
 	capabilityNames.append("RequestTextureDownload");
+	capabilityNames.append("ResourceCostSelected");
 	capabilityNames.append("SearchStatRequest");
 	capabilityNames.append("SearchStatTracking");
 	capabilityNames.append("SendPostcard");
@@ -1555,10 +1554,6 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("ViewerMetrics");
 	capabilityNames.append("ViewerStartAuction");
 	capabilityNames.append("ViewerStats");
-	//prep# Finalize these!!!!!!!!!
-	//capabilityNames.append("AccountingVO");	
-	capabilityNames.append("AccountingParcel");
-	capabilityNames.append("AccountingRegion");
 	
 	// Please add new capabilities alphabetically to reduce
 	// merge conflicts.
@@ -1787,6 +1782,11 @@ bool LLViewerRegion::childrenObjectReturnable( const std::vector<LLBBox>& boxes 
 	bool result = false;
 	result = ( mParcelOverlay && mParcelOverlay->encroachesOnUnowned( boxes ) ) ? 1 : 0;
 	return result;
+}
+
+bool LLViewerRegion::objectsCrossParcel(const std::vector<LLBBox>& boxes) const
+{
+	return mParcelOverlay && mParcelOverlay->encroachesOnNearbyParcel(boxes);
 }
 
 void LLViewerRegion::getNeighboringRegions( std::vector<LLViewerRegion*>& uniqueRegions )

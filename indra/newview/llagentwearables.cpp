@@ -55,7 +55,7 @@
 LLAgentWearables gAgentWearables;
 
 BOOL LLAgentWearables::mInitialWearablesUpdateReceived = FALSE;
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.6.0a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-3.0.0a) | Added: Catznip-2.1.1d
 bool LLAgentWearables::mInitialWearablesLoaded = false;
 // [/SL:KB]
 
@@ -1171,14 +1171,11 @@ private:
 	std::vector<LLWearable*> mWearablesAwaitingItems;
 };
 
-void LLAgentWearables::createStandardWearables(BOOL female)
+void LLAgentWearables::createStandardWearables()
 {
-	llwarns << "Creating Standard " << (female ? "female" : "male")
-			<< " Wearables" << llendl;
+	llwarns << "Creating standard wearables" << llendl;
 
 	if (!isAgentAvatarValid()) return;
-
-	gAgentAvatarp->setSex(female ? SEX_FEMALE : SEX_MALE);
 
 	const BOOL create[LLWearableType::WT_COUNT] = 
 		{
@@ -1451,7 +1448,7 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 	// Start rendering & update the server
 	mWearablesLoaded = TRUE; 
 	checkWearablesLoaded();
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-09-22 (Catznip-2.6.0a) | Modified: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-09-22 (Catznip-3.0.0a) | Modified: Catznip-2.2.0a
 	if (!mInitialWearablesLoaded)
 	{
 		mInitialWearablesLoaded = true;
@@ -1702,41 +1699,10 @@ void LLAgentWearables::userRemoveWearablesOfType(const LLWearableType::EType &ty
 	}
 }
 
-// static
-void LLAgentWearables::userRemoveAllClothes()
-{
-	// We have to do this up front to avoid having to deal with the case of multiple wearables being dirty.
-	if (gAgentCamera.cameraCustomizeAvatar())
-	{
-		// switching to outfit editor should automagically save any currently edited wearable
-		LLSideTray::getInstance()->showPanel("sidepanel_appearance", LLSD().with("type", "edit_outfit"));
-	}
-	userRemoveAllClothesStep2(TRUE);
-}
-
-// static
-void LLAgentWearables::userRemoveAllClothesStep2(BOOL proceed)
-{
-	if (proceed)
-	{
-		gAgentWearables.removeWearable(LLWearableType::WT_SHIRT,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_PANTS,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_SHOES,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_SOCKS,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_JACKET,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_GLOVES,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_UNDERSHIRT,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_UNDERPANTS,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_SKIRT,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_ALPHA,true,0);
-		gAgentWearables.removeWearable(LLWearableType::WT_TATTOO,true,0);
-	}
-}
-
 // Combines userRemoveAllAttachments() and userAttachMultipleAttachments() logic to
 // get attachments into desired state with minimal number of adds/removes.
 //void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array)
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-3.0.0a) | Added: Catznip-2.2.0a
 void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array, bool fAttachOnly)
 // [/SL:KB]
 {
@@ -1804,7 +1770,7 @@ void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj
 
 	// Remove everything in objects_to_remove
 //	userRemoveMultipleAttachments(objects_to_remove);
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-3.0.0a) | Added: Catznip-2.2.0a
 	if (!fAttachOnly)
 	{
 		userRemoveMultipleAttachments(objects_to_remove);
@@ -2120,7 +2086,7 @@ boost::signals2::connection LLAgentWearables::addLoadedCallback(loaded_callback_
 	return mLoadedSignal.connect(cb);
 }
 
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.6.0a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-3.0.0a) | Added: Catznip-2.1.1d
 boost::signals2::connection LLAgentWearables::addInitialWearablesLoadedCallback(loaded_callback_t cb)
 {
 	return mInitialWearablesLoadedSignal.connect(cb);

@@ -37,9 +37,7 @@ class LLPanelMarketplaceInbox : public LLPanel, public LLSideTrayTabBadgeDriver
 public:
 
 	struct Params :	public LLInitParam::Block<Params, LLPanel::Params>
-	{
-		Params() {}
-	};
+	{};
 
 	LOG_CLASS(LLPanelMarketplaceInbox);
 
@@ -55,7 +53,7 @@ public:
 
 	/*virtual*/ void draw();
 	
-	void setupInventoryPanel();
+	LLInventoryPanel * setupInventoryPanel();
 
 	U32 getFreshItemCount() const;
 	U32 getTotalItemCount() const;

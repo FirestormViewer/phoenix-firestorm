@@ -30,7 +30,7 @@
 				Anyone
 			</panel.string>
 			<panel.string name="area_text">
-				Area
+				區域
 			</panel.string>
 			<panel.string name="area_size_text">
 				[AREA] m²
@@ -42,7 +42,7 @@
 				You must approve your purchase to modify this land.
 			</panel.string>
 			<panel.string name="group_owned_text">
-				（社團所擁有）
+				（群組所擁有）
 			</panel.string>
 			<panel.string name="profile_text">
 				檔案
@@ -81,28 +81,28 @@
 				分級：
 			</text>
 			<text name="ContentRatingText">
-				成人
+				完全成人
 			</text>
 			<text name="Owner:">
 				擁有者：
 			</text>
 			<text name="Group:">
-				社團：
+				群組：
 			</text>
 			<button label="設定" name="Set..."/>
-			<check_box label="Allow Deed to Group" name="check deed" tool_tip="A group officer can deed this land to the group, so it will be supported by the group&apos;s land allocation."/>
-			<button label="Deed" name="Deed..." tool_tip="You may only deed land if you are an officer in the selected group."/>
+			<check_box label="允許讓渡給群組" name="check deed" tool_tip="A group officer can deed this land to the group, so it will be supported by the group&apos;s land allocation."/>
+			<button label="讓渡" name="Deed..." tool_tip="You may only deed land if you are an officer in the selected group."/>
 			<check_box label="Owner Makes Contribution With Deed" name="check contrib" tool_tip="When the land is deeded to the group, the former owner contributes enough land allocation to support it."/>
 			<text name="For Sale:">
 				出售：
 			</text>
 			<text name="Not for sale.">
-				Not for sale
+				不出售
 			</text>
 			<text name="For Sale: Price L$[PRICE].">
 				Price: L$[PRICE] (L$[PRICE_PER_SQM]/m²)
 			</text>
-			<button label="Sell Land" name="Sell Land..."/>
+			<button label="出售土地" name="Sell Land..."/>
 			<text name="For sale to">
 				出售給：[BUYER]
 			</text>
@@ -133,8 +133,8 @@
 			</text>
 			<button label="購買土地" name="Buy Land..."/>
 			<button label="腳本資訊" name="Scripts..."/>
-			<button label="Buy For Group" name="Buy For Group..."/>
-			<button label="購買通行權" name="Buy Pass..." tool_tip="A pass gives you temporary access to this land."/>
+			<button label="為群組購買" name="Buy For Group..."/>
+			<button label="購買通行權" name="Buy Pass..." tool_tip="通行權允許你暫時可出入這塊土地。"/>
 			<button label="放棄土地" name="Abandon Land..."/>
 			<button label="Reclaim Land" name="Reclaim Land..."/>
 			<button label="Linden Sale" name="Linden Sale..." tool_tip="Land must be owned, set content, and not already for auction."/>
@@ -186,7 +186,7 @@
 				分級：
 			</text>
 			<text name="region_maturity_text">
-				成人
+				完全成人
 			</text>
 			<text name="resellable_lbl">
 				Resale:
@@ -212,47 +212,47 @@
 				Region Object Bonus Factor: [BONUS]
 			</text>
 			<text name="Simulator primitive usage:">
-				Primitive usage:
+				幾何元件使用：
 			</text>
 			<text name="objects_available">
-				[COUNT] out of [MAX] ([AVAILABLE] available)
+				使用　[MAX]　中的 [COUNT] （剩餘 [AVAILABLE] 可用）
 			</text>
 			<text name="Primitives parcel supports:">
-				Prims parcel supports:
+				地段所提供的幾何元件數：
 			</text>
 			<text name="object_contrib_text">
 				[COUNT]
 			</text>
 			<text name="Primitives on parcel:">
-				Prims on parcel:
+				地段上的幾何元件數：
 			</text>
 			<text name="total_objects_text">
 				[COUNT]
 			</text>
 			<text name="Owned by parcel owner:">
-				Owned by parcel owner:
+				地段擁有者所擁有：
 			</text>
 			<text name="owner_objects_text">
 				[COUNT]
 			</text>
 			<button label="顯示" label_selected="顯示" name="ShowOwner"/>
-			<button label="退回" name="ReturnOwner..." tool_tip="Return objects to their owners."/>
+			<button label="退回" name="ReturnOwner..." tool_tip="退回物件給它們的擁有者。"/>
 			<text name="Set to group:">
-				Set to group:
+				設定群組：
 			</text>
 			<text name="group_objects_text">
 				[COUNT]
 			</text>
 			<button label="顯示" label_selected="顯示" name="ShowGroup"/>
-			<button label="退回" name="ReturnGroup..." tool_tip="Return objects to their owners."/>
+			<button label="退回" name="ReturnGroup..." tool_tip="退回物件給它們的擁有者。"/>
 			<text name="Owned by others:">
-				Owned by others:
+				其他人所擁有：
 			</text>
 			<text name="other_objects_text">
 				[COUNT]
 			</text>
 			<button label="顯示" label_selected="顯示" name="ShowOther"/>
-			<button label="退回" name="ReturnOther..." tool_tip="Return objects to their owners."/>
+			<button label="退回" name="ReturnOther..." tool_tip="退回物件給它們的擁有者。"/>
 			<text name="Selected / sat upon:">
 				Selected / sat upon:
 			</text>
@@ -263,9 +263,9 @@
 				Auto return other Residents&apos; objects (minutes, 0 for off):
 			</text>
 			<text name="Object Owners:">
-				Object Owners:
+				物件擁有者：
 			</text>
-			<button name="Refresh List" tool_tip="Refresh Object List"/>
+			<button name="Refresh List" tool_tip="刷新物件清單"/>
 			<button label="退回物件" name="Return objects..."/>
 			<name_list name="owner list">
 				<name_list.columns label="Type" name="type"/>
@@ -276,20 +276,20 @@
 		</panel>
 		<panel label="選項" name="land_options_panel">
 			<panel.string name="search_enabled_tooltip">
-				Let people see this parcel in search results
+				讓其他人可以在搜尋結果中看到這塊地段
 			</panel.string>
 			<panel.string name="search_disabled_small_tooltip">
 				This option is disabled because this parcel&apos;s area is 128 m² or smaller.
 Only large parcels can be listed in search.
 			</panel.string>
 			<panel.string name="search_disabled_permissions_tooltip">
-				This option is disabled because you cannot modify this parcel&apos;s options.
+				這個選項已關閉因為你不能修改這個地段的選項。
 			</panel.string>
 			<panel.string name="mature_check_mature">
-				Moderate Content
+				適度成人內容
 			</panel.string>
 			<panel.string name="mature_check_adult">
-				成人內容
+				完全成人內容
 			</panel.string>
 			<panel.string name="mature_check_mature_tooltip">
 				Your parcel information or content is considered moderate.
@@ -315,59 +315,59 @@ Only large parcels can be listed in search.
 				建造：
 			</text>
 			<check_box label="任何人" name="edit objects check"/>
-			<check_box label="社團" name="edit group objects check"/>
+			<check_box label="群組" name="edit group objects check"/>
 			<text name="allow_label3">
 				物件進入：
 			</text>
 			<check_box label="任何人" name="all object entry check"/>
-			<check_box label="社團" name="group object entry check"/>
+			<check_box label="群組" name="group object entry check"/>
 			<text name="allow_label4">
 				執行腳本：
 			</text>
 			<check_box label="任何人" name="check other scripts"/>
-			<check_box label="社團" name="check group scripts"/>
+			<check_box label="群組" name="check group scripts"/>
 			<text name="land_options_label">
 				土地選項：
 			</text>
 			<check_box label="安全（無傷害）" name="check safe" tool_tip="若勾選則設應土地為安全的，傷害性的戰鬥將被關閉。清除勾選後才能進行傷害性的戰鬥。"/>
 			<check_box label="禁止推撞" name="PushRestrictCheck" tool_tip="防止使用腳本推撞。勾選這個選項將可以有效防止你土地上的破壞行為。"/>
-			<check_box label="將地點刊登顯示在搜尋中（L$30 / 每週）" name="ShowDirectoryCheck" tool_tip="Let people see this parcel in search results"/>
+			<check_box label="將地點刊登顯示在搜尋中（L$30 / 每週）" name="ShowDirectoryCheck" tool_tip="讓其他人可以在搜尋結果中看到這塊地段"/>
 			<combo_box name="land category with adult">
 				<combo_box.item label="任何類別" name="item0"/>
 				<combo_box.item label="Linden Location" name="item1"/>
-				<combo_box.item label="成人" name="item2"/>
-				<combo_box.item label="Arts &amp; Culture" name="item3"/>
-				<combo_box.item label="Business" name="item4"/>
-				<combo_box.item label="Educational" name="item5"/>
-				<combo_box.item label="Gaming" name="item6"/>
+				<combo_box.item label="完全成人" name="item2"/>
+				<combo_box.item label="藝術與文化" name="item3"/>
+				<combo_box.item label="商業" name="item4"/>
+				<combo_box.item label="教育" name="item5"/>
+				<combo_box.item label="遊戲" name="item6"/>
 				<combo_box.item label="聚會所" name="item7"/>
-				<combo_box.item label="Newcomer Friendly" name="item8"/>
-				<combo_box.item label="Parks &amp; Nature" name="item9"/>
-				<combo_box.item label="Residential" name="item10"/>
-				<combo_box.item label="Shopping" name="item11"/>
+				<combo_box.item label="新手友善" name="item8"/>
+				<combo_box.item label="公園與自然" name="item9"/>
+				<combo_box.item label="住宅" name="item10"/>
+				<combo_box.item label="採購" name="item11"/>
 				<combo_box.item label="Rental" name="item13"/>
 				<combo_box.item label="Other" name="item12"/>
 			</combo_box>
 			<combo_box name="land category">
 				<combo_box.item label="任何類別" name="item0"/>
 				<combo_box.item label="Linden Location" name="item1"/>
-				<combo_box.item label="Arts &amp; Culture" name="item3"/>
-				<combo_box.item label="Business" name="item4"/>
-				<combo_box.item label="Educational" name="item5"/>
-				<combo_box.item label="Gaming" name="item6"/>
+				<combo_box.item label="藝術與文化" name="item3"/>
+				<combo_box.item label="商業" name="item4"/>
+				<combo_box.item label="教育" name="item5"/>
+				<combo_box.item label="遊戲" name="item6"/>
 				<combo_box.item label="聚會所" name="item7"/>
-				<combo_box.item label="Newcomer Friendly" name="item8"/>
-				<combo_box.item label="Parks &amp; Nature" name="item9"/>
-				<combo_box.item label="Residential" name="item10"/>
-				<combo_box.item label="Shopping" name="item11"/>
+				<combo_box.item label="新手友善" name="item8"/>
+				<combo_box.item label="公園與自然" name="item9"/>
+				<combo_box.item label="住宅" name="item10"/>
+				<combo_box.item label="採購" name="item11"/>
 				<combo_box.item label="Rental" name="item13"/>
 				<combo_box.item label="Other" name="item12"/>
 			</combo_box>
-			<check_box label="Moderate Content" name="MatureCheck" tool_tip=" "/>
+			<check_box label="適度成人內容" name="MatureCheck" tool_tip=" "/>
 			<text name="Snapshot:">
 				快照：
 			</text>
-			<texture_picker name="snapshot_ctrl" tool_tip="點擊以挑選圖片"/>
+			<texture_picker name="snapshot_ctrl" tool_tip="點擊以挑選圖像"/>
 			<text name="landing_point">
 				登陸點：[LANDING]
 			</text>
@@ -398,7 +398,7 @@ Only large parcels can be listed in search.
 			<text name="Media texture:">
 				取代材質：
 			</text>
-			<texture_picker name="media texture" tool_tip="點擊以挑選圖片"/>
+			<texture_picker name="media texture" tool_tip="點擊以挑選圖像"/>
 			<text name="replace_texture_help">
 				Objects using this texture will show the movie or web page after you click the play arrow.  Select the thumbnail to choose a different texture.
 			</text>
@@ -412,16 +412,16 @@ Only large parcels can be listed in search.
 				像素
 			</text>
 			<text name="Options:">
-				Options:
+				選項：
 			</text>
 			<check_box label="Loop" name="media_loop" tool_tip="Play media in a loop.  When the media has finished playing, it will restart from the beginning."/>
 		</panel>
-		<panel label="SOUND" name="land_audio_panel">
+		<panel label="聲音" name="land_audio_panel">
 			<text name="MusicURL:">
-				Music URL:
+				音樂 URL：
 			</text>
 			<text name="Sound:">
-				Sound:
+				聲音：
 			</text>
 			<check_box label="Restrict gesture and object sounds to this parcel" name="check sound local"/>
 			<text name="Voice settings:">
@@ -442,18 +442,18 @@ Only large parcels can be listed in search.
 				One or more of these options is set at the estate level
 			</panel.string>
 			<text name="Limit access to this parcel to:">
-				Access To This Parcel
+				出入此地段
 			</text>
 			<text name="Only Allow">
 				Restrict Access to Residents verified by:
 			</text>
 			<check_box label="Payment Information on File [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Ban unidentified Residents."/>
 			<check_box label="年齡驗證 [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Ban Residents who have not verified their age. See the [SUPPORT_SITE] for more information."/>
-			<check_box label="Allow Group Access: [GROUP]" name="GroupCheck" tool_tip="Set group in the General tab."/>
-			<check_box label="Sell passes to:" name="PassCheck" tool_tip="Allows temporary access to this parcel"/>
+			<check_box label="允許出入的群組：[GROUP]" name="GroupCheck" tool_tip="設定群組於一般頁籤。"/>
+			<check_box label="出售通行權給：" name="PassCheck" tool_tip="允許暫時出入這個地段"/>
 			<combo_box name="pass_combo">
 				<combo_box.item label="Anyone" name="Anyone"/>
-				<combo_box.item label="社團" name="Group"/>
+				<combo_box.item label="群組" name="Group"/>
 			</combo_box>
 			<spinner label="Price in L$:" name="PriceSpin"/>
 			<spinner label="Hours of access:" name="HoursSpin"/>
@@ -462,11 +462,11 @@ Only large parcels can be listed in search.
 					Allowed Residents
 				</text>
 				<name_list name="AccessList" tool_tip="([LISTED] listed, [MAX] max)"/>
-				<button label="Add" name="add_allowed"/>
-				<button label="Remove" label_selected="Remove" name="remove_allowed"/>
+				<button label="添加" name="add_allowed"/>
+				<button label="移除" label_selected="移除" name="remove_allowed"/>
 			</panel>
 			<panel name="Banned_layout_panel">
-				<text label="Ban" name="BanCheck">
+				<text label="禁止" name="BanCheck">
 					被封鎖的居民
 				</text>
 				<name_list name="BannedList" tool_tip="([LISTED] listed, [MAX] max)"/>

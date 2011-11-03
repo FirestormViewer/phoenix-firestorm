@@ -31,6 +31,9 @@
 	<string name="StartupInitializingVFS">
 		Inizializzazione VFS...
 	</string>
+	<string name="StartupRequireDriverUpdate">
+		Inizializzazione grafica non riuscita. Aggiorna il driver della scheda grafica!
+	</string>
 	<string name="ProgressRestoring">
 		Ripristino in corso...
 	</string>
@@ -84,6 +87,12 @@
 	</string>
 	<string name="LoginQuicktimeOK">
 		QuickTime configurato con successo.
+	</string>
+	<string name="LoginRequestSeedCapGrant">
+		Richiesta capacità regione...
+	</string>
+	<string name="LoginRetrySeedCapGrant">
+		Richiesta capacità regione, tentativo [NUMBER]...
 	</string>
 	<string name="LoginWaitingForRegionHandshake">
 		In attesa della risposta della regione...
@@ -324,6 +333,18 @@ Prova ad accedere nuovamente tra un minuto.
 		Solo un singolo oggetto può essere creato qui
 	</string>
 	<string name="TooltipPrice" value="L$ [AMOUNT]:"/>
+	<string name="TooltipOutboxNoTransfer">
+		Almeno un oggetto non può essere venduto o trasferito a un altro utente.
+	</string>
+	<string name="TooltipOutboxWorn">
+		Stai indossando almeno uno degli oggetti. Rimuovili dall&apos;avatar e prova nuovamente a spostarli.
+	</string>
+	<string name="TooltipOutboxFolderLevels">
+		Questa cartella contiene troppi livelli di cartelle nidificate. Riordina le cartelle interne in modo che non ci siano più di 4 livelli (cartella principale che contiene la cartella A, che contiene la cartella B, che contiene la cartella C).
+	</string>
+	<string name="TooltipOutboxTooManyObjects">
+		Questa cartella contiene più di 200 oggetti. Inserisci alcuni oggetti in scatole per ridurne il numero.
+	</string>
 	<string name="TooltipHttpUrl">
 		Clicca per visitare questa pagina web
 	</string>
@@ -1180,8 +1201,65 @@ Prova ad accedere nuovamente tra un minuto.
 	<string name="InventoryInboxNoItems">
 		Gli elementi acquistati attraverso il mercato verranno consegnati qui
 	</string>
+	<string name="MarketplaceURL">
+		http://marketplace.[DOMAIN_NAME]/learn_more
+	</string>
+	<string name="MarketplaceURL_CreateStore">
+		http://marketplace.[DOMAIN_NAME]/create_store
+	</string>
+	<string name="MarketplaceURL_LearnMore">
+		http://marketplace.[DOMAIN_NAME]/learn_more
+	</string>
+	<string name="InventoryOutboxCreationErrorTitle">
+		La casella in uscita del rivenditore non è configurata correttamente
+	</string>
+	<string name="InventoryOutboxCreationErrorTooltip">
+		Errore di configurazione della casella in uscita del rivenditore
+	</string>
+	<string name="InventoryOutboxCreationError">
+		Contatta l&apos;Assistenza clienti per correggere il problema.
+	</string>
+	<string name="InventoryOutboxNotMerchantTitle">
+		Chiunque può vendere oggetti nel Marketplace
+	</string>
+	<string name="InventoryOutboxNotMerchantTooltip">
+		Diventa un rivenditore!
+	</string>
+	<string name="InventoryOutboxNotMerchant">
+		[[MARKETPLACE_URL] Second Life Marketplace] offre in vendita più di un milione di prodotti virtuali, tutti creati da Residenti. Anche tu puoi vendere gli oggetti che crei, oltre ad alcuni degli oggetti che hai acquistato. È facile da usare e l&apos;impostazione è gratuita. [[LEARN_MORE_URL] Leggi ulteriori informazioni] oppure [[CREATE_STORE_URL] crea un negozio] sul Marketplace per cominciare.
+	</string>
+	<string name="InventoryOutboxNoItemsTitle">
+		Un nuovo modo di inviare oggetti al Marketplace
+	</string>
+	<string name="InventoryOutboxNoItemsTooltip">
+		Trascina gli oggetti qui per prepararli per la vendita nel Marketplace
+	</string>
 	<string name="InventoryOutboxNoItems">
-		Trascina gli elementi qui per poi elencarli nel tuo mercato.
+		Trascina elementi o cartelle che desideri vendere in quest&apos;area. Verrà visualizzata una copia dell&apos;elemento, senza che venga modificato l&apos;inventario, tranne nel caso in cui venga trascinato un oggetto per cui non è permessa la copia. Clicca sul pulsante Carica per caricare gli elementi su Marketplace. Dopo aver spostato gli elementi nell&apos;inventario di Marketplace, non saranno più visibili in questa cartella.
+	</string>
+	<string name="Marketplace Error None">
+		Nessun errore
+	</string>
+	<string name="Marketplace Error Not Merchant">
+		Errore: Prima di inviare elementi al Marketplace devi essere impostato come rivenditore (gratis).
+	</string>
+	<string name="Marketplace Error Empty Folder">
+		Errore: questa cartella non include alcun contenuto.
+	</string>
+	<string name="Marketplace Error Unassociated Products">
+		Errore: Oggetto non caricato perché il tuo account venditore ha troppi oggetti che non sono associati con dei prodotti. Per risolvere questo errore, esegui l&apos;accesso al sito di Marketplace e riduci il numero di oggetti non associati.
+	</string>
+	<string name="Marketplace Error Object Limit">
+		Errore: questo elemento contiene troppi oggetti. Per risolvere questo problema, inserisci più oggetti insieme in una scatola per ridurre a meno di 200 il numero totale di oggetti.
+	</string>
+	<string name="Marketplace Error Folder Depth">
+		Errore: questo elemento contiene troppi livelli di cartelle nidificate. Riorganizzalo per ottenere un massimo di 3 livelli di cartelle nidificate.
+	</string>
+	<string name="Marketplace Error Unsellable Item">
+		Errore: Questo elemento non può essere venduto nel Marketplace.
+	</string>
+	<string name="Marketplace Error Internal Import">
+		Errore: problema con questo elemento. Riprova più tardi.
 	</string>
 	<string name="no_transfer" value="(nessun trasferimento)"/>
 	<string name="no_modify" value="(nessuna modifica)"/>
@@ -1619,6 +1697,9 @@ Prova ad accedere nuovamente tra un minuto.
 	</string>
 	<string name="SummaryForTheWeek" value="Riassunto della settimana, partendo dal "/>
 	<string name="NextStipendDay" value=". Il prossimo giorno di stipendio è "/>
+	<string name="GroupPlanningDate">
+		[mthnum,datetime,utc]/[day,datetime,utc]/[year,datetime,utc]
+	</string>
 	<string name="GroupIndividualShare" value="Gruppo       Dividendi individuali"/>
 	<string name="GroupColumn" value="Gruppo"/>
 	<string name="Balance">
@@ -1855,7 +1936,7 @@ Prova ad accedere nuovamente tra un minuto.
 	<string name="RegionNoCovenantOtherOwner">
 		Non esiste alcun regolamento per questa proprietà. Il terreno di questa proprietà è messo in vendita dal proprietario, non dalla Linden Lab.  Contatta il proprietario del terreno per i dettagli della vendita.
 	</string>
-	<string name="covenant_last_modified" value="Ultima modifica:"/>
+	<string name="covenant_last_modified" value="Ultima modifica: "/>
 	<string name="none_text" value="(nessuno)"/>
 	<string name="never_text" value="(mai)"/>
 	<string name="GroupOwned">
@@ -1941,6 +2022,9 @@ Prova ad accedere nuovamente tra un minuto.
 	</string>
 	<string name="GroupMoneyDebits">
 		Debiti
+	</string>
+	<string name="GroupMoneyDate">
+		[weekday,datetime,utc] [mth,datetime,utc] [day,datetime,utc], [year,datetime,utc]
 	</string>
 	<string name="ViewerObjectContents">
 		Contenuto
@@ -4073,6 +4157,87 @@ Segnala abuso
 	</string>
 	<string name="Female - Wow">
 		Femmina - Accipicchia
+	</string>
+	<string name="/bow1">
+		/inchino
+	</string>
+	<string name="/clap">
+		/applausi
+	</string>
+	<string name="/count">
+		/numero
+	</string>
+	<string name="/extinguish">
+		/estingui
+	</string>
+	<string name="/kmb">
+		/chissene
+	</string>
+	<string name="/muscle">
+		/muscolo
+	</string>
+	<string name="/no">
+		/no
+	</string>
+	<string name="/no!">
+		/no!
+	</string>
+	<string name="/paper">
+		/carta
+	</string>
+	<string name="/pointme">
+		/indicome
+	</string>
+	<string name="/pointyou">
+		/indicotu
+	</string>
+	<string name="/rock">
+		/sasso
+	</string>
+	<string name="/scissor">
+		/forbici
+	</string>
+	<string name="/smoke">
+		/fumo
+	</string>
+	<string name="/stretch">
+		/stiracchiata
+	</string>
+	<string name="/whistle">
+		/fischietto
+	</string>
+	<string name="/yes">
+		/si
+	</string>
+	<string name="/yes!">
+		/si!
+	</string>
+	<string name="afk">
+		non alla tastiera
+	</string>
+	<string name="dance1">
+		danza1
+	</string>
+	<string name="dance2">
+		danza2
+	</string>
+	<string name="dance3">
+		danza3
+	</string>
+	<string name="dance4">
+		danza4
+	</string>
+	<string name="dance5">
+		danza5
+	</string>
+	<string name="dance6">
+		danza6
+	</string>
+	<string name="dance7">
+		danza7
+	</string>
+	<string name="dance8">
+		danza8
 	</string>
 	<string name="AvatarBirthDateFormat">
 		[day,datetime,slt]/[mthnum,datetime,slt]/[year,datetime,slt]

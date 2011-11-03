@@ -2803,7 +2803,10 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 																 LLPartData::LL_PART_EMISSIVE_MASK | // LLPartData::LL_PART_FOLLOW_SRC_MASK |
 																 LLPartData::LL_PART_TARGET_POS_MASK );
 			
-			setParticleSource(particle_parameters, getID());
+			if (!isTooComplex()) // do not generate particles for overly-complex avatars
+			{
+				setParticleSource(particle_parameters, getID());
+			}
 		}
 	}
 }	
@@ -4225,7 +4228,7 @@ U32 LLVOAvatar::renderSkinned(EAvatarRenderPass pass)
 		bool should_alpha_mask = shouldAlphaMask();
 		LLGLState test(GL_ALPHA_TEST, should_alpha_mask);
 		
-		if (should_alpha_mask)
+		if (should_alpha_mask && !LLGLSLShader::sNoFixedFunction)
 		{
 			gGL.setAlphaRejectSettings(LLRender::CF_GREATER, 0.5f);
 		}
@@ -4254,7 +4257,10 @@ U32 LLVOAvatar::renderSkinned(EAvatarRenderPass pass)
 			}
 		}
 
-		gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+		if (should_alpha_mask && !LLGLSLShader::sNoFixedFunction)
+		{
+			gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+		}
 
 		if (!LLDrawPoolAvatar::sSkipTransparent || LLPipeline::sImpostorRender)
 		{
@@ -4337,7 +4343,7 @@ U32 LLVOAvatar::renderRigid()
 	bool should_alpha_mask = shouldAlphaMask();
 	LLGLState test(GL_ALPHA_TEST, should_alpha_mask);
 
-	if (should_alpha_mask)
+	if (should_alpha_mask && !LLGLSLShader::sNoFixedFunction)
 	{
 		gGL.setAlphaRejectSettings(LLRender::CF_GREATER, 0.5f);
 	}
@@ -4348,7 +4354,10 @@ U32 LLVOAvatar::renderRigid()
 		num_indices += mMeshLOD[MESH_ID_EYEBALL_RIGHT]->render(mAdjustedPixelArea, TRUE, mIsDummy);
 	}
 
-	gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+	if (should_alpha_mask && !LLGLSLShader::sNoFixedFunction)
+	{
+		gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+	}
 	
 	return num_indices;
 }
@@ -5956,7 +5965,7 @@ LLViewerJointAttachment* LLVOAvatar::getTargetAttachmentPoint(LLViewerObject* vi
 	{
 		llwarns << "Object attachment point invalid: " << attachmentID << llendl;
 //		attachment = get_if_there(mAttachmentPoints, 1, (LLViewerJointAttachment*)NULL); // Arbitrary using 1 (chest)
-// [SL:KB] - Patch: Appearance-LegacyMultiAttachment | Checked: 2010-08-28 (Catznip-2.6.0a) | Added: Catznip-2.1.2a
+// [SL:KB] - Patch: Appearance-LegacyMultiAttachment | Checked: 2010-08-28 (Catznip-3.0.0a) | Added: Catznip-2.1.2a
 		S32 idxAttachPt = 1;
 		if ( (!isSelf()) && (gSavedSettings.getBOOL("LegacyMultiAttachmentSupport")) && (attachmentID > 38) && (attachmentID <= 68) )
 			idxAttachPt = attachmentID - 38;
@@ -6389,6 +6398,11 @@ BOOL LLVOAvatar::getIsCloud()
 	{
 		return TRUE;
 	}
+
+	if (isTooComplex())
+	{
+		return TRUE;
+	}
 	return FALSE;
 }
 
@@ -6481,13 +6495,23 @@ BOOL LLVOAvatar::isFullyLoaded() const
 //		return TRUE;
 //	else
 //		return mFullyLoaded;
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-3.0.0a) | Added: Catznip-2.2.0a
 	// Changes to LLAppearanceMgr::updateAppearanceFromCOF() expect this function to actually return mFullyLoaded for gAgentAvatarp
 	if ( (!isSelf()) && (gSavedSettings.getBOOL("RenderUnloadedAvatar")) )
 		return TRUE;
 	else
 		return mFullyLoaded;
 // [/SL:KB]
+}
+
+bool LLVOAvatar::isTooComplex() const
+{
+	if (gSavedSettings.getS32("RenderAvatarComplexityLimit") > 0 && mVisualComplexity >= gSavedSettings.getS32("RenderAvatarComplexityLimit"))
+	{
+		return true;
+	}
+
+	return false;
 }
 
 
@@ -8323,7 +8347,7 @@ void LLVOAvatar::getImpostorValues(LLVector4a* extents, LLVector3& angle, F32& d
 
 void LLVOAvatar::idleUpdateRenderCost()
 {
-	static const U32 ARC_BODY_PART_COST = 20;
+	static const U32 ARC_BODY_PART_COST = 200;
 	static const U32 ARC_LIMIT = 2048;
 
 	static std::set<LLUUID> all_textures;
@@ -8334,7 +8358,7 @@ void LLVOAvatar::idleUpdateRenderCost()
 	}
 
 	U32 cost = 0;
-	std::set<LLUUID> textures;
+	LLVOVolume::texture_cost_t textures;
 
 	for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
 	{
@@ -8349,6 +8373,7 @@ void LLVOAvatar::idleUpdateRenderCost()
 		}
 	}
 
+
 	for (attachment_map_t::const_iterator iter = mAttachmentPoints.begin(); 
 		 iter != mAttachmentPoints.end();
 		 ++iter)
@@ -8361,6 +8386,7 @@ void LLVOAvatar::idleUpdateRenderCost()
 			const LLViewerObject* attached_object = (*attachment_iter);
 			if (attached_object && !attached_object->isHUDAttachment())
 			{
+				textures.clear();
 				const LLDrawable* drawable = attached_object->mDrawable;
 				if (drawable)
 				{
@@ -8368,6 +8394,25 @@ void LLVOAvatar::idleUpdateRenderCost()
 					if (volume)
 					{
 						cost += volume->getRenderCost(textures);
+
+						const_child_list_t children = volume->getChildren();
+						for (const_child_list_t::const_iterator child_iter = children.begin();
+							  child_iter != children.end();
+							  ++child_iter)
+						{
+							LLViewerObject* child_obj = *child_iter;
+							LLVOVolume *child = dynamic_cast<LLVOVolume*>( child_obj );
+							if (child)
+							{
+								cost += child->getRenderCost(textures);
+							}
+						}
+
+						for (LLVOVolume::texture_cost_t::iterator iter = textures.begin(); iter != textures.end(); ++iter)
+						{
+							// add the cost of each individual texture in the linkset
+							cost += iter->second;
+						}
 					}
 				}
 			}
@@ -8375,15 +8420,17 @@ void LLVOAvatar::idleUpdateRenderCost()
 
 	}
 
+
+
 	// Diagnostic output to identify all avatar-related textures.
 	// Does not affect rendering cost calculation.
 	// Could be wrapped in a debug option if output becomes problematic.
 	if (isSelf())
 	{
 		// print any attachment textures we didn't already know about.
-		for (std::set<LLUUID>::iterator it = textures.begin(); it != textures.end(); ++it)
+		for (LLVOVolume::texture_cost_t::iterator it = textures.begin(); it != textures.end(); ++it)
 		{
-			LLUUID image_id = *it;
+			LLUUID image_id = it->first;
 			if( image_id.isNull() || image_id == IMG_DEFAULT || image_id == IMG_DEFAULT_AVATAR)
 				continue;
 			if (all_textures.find(image_id) == all_textures.end())
@@ -8415,9 +8462,8 @@ void LLVOAvatar::idleUpdateRenderCost()
 		}
 	}
 
-	cost += textures.size() * LLVOVolume::ARC_TEXTURE_COST;
-
 	setDebugText(llformat("%d", cost));
+	mVisualComplexity = cost;
 	F32 green = 1.f-llclamp(((F32) cost-(F32)ARC_LIMIT)/(F32)ARC_LIMIT, 0.f, 1.f);
 	F32 red = llmin((F32) cost/(F32)ARC_LIMIT, 1.f);
 	mText->setColor(LLColor4(red,green,0,1));
