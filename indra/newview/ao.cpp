@@ -424,7 +424,7 @@ void FloaterAO::onClickReload()
 	mSelectedSet=0;
 	mSelectedState=0;
 
-	AOEngine::instance().reload();
+	AOEngine::instance().reload(false);
 	updateList();
 }
 

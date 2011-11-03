@@ -66,7 +66,7 @@ AOEngine::AOEngine() :
 
 AOEngine::~AOEngine()
 {
-	clear();
+	clear(false);
 }
 
 void AOEngine::init()
@@ -80,10 +80,23 @@ void AOEngine::onLoginComplete()
 	AOEngine::instance().init();
 }
 
-void AOEngine::clear()
+void AOEngine::clear( bool aFromTimer )
 {
+	mOldSets.insert( mOldSets.end(), mSets.begin(), mSets.end() );
 	mSets.clear();
+
 	mCurrentSet=0;
+
+	//<ND/> FIRE-3801; We cannot delete any AOSet object if we're called from a timer tick. AOSet is derived from LLEventTimer and destruction will
+	// fail in ~LLInstanceTracker when a destructor runs during iteration.
+	if( !aFromTimer )
+	{
+		std::for_each( mOldSets.begin(), mOldSets.end(), DeletePointer( ) );
+		mOldSets.clear();
+
+		std::for_each( mOldImportSets.begin(), mOldImportSets.end(), DeletePointer() );
+		mOldImportSets.clear();
+	}
 }
 
 void AOEngine::stopAllStandVariants()
@@ -986,7 +999,7 @@ void AOEngine::update()
 	}
 }
 
-void AOEngine::reload()
+void AOEngine::reload( bool aFromTimer )
 {
 	BOOL wasEnabled=mEnabled;
 
@@ -998,7 +1011,7 @@ void AOEngine::reload()
 	gAgent.stopCurrentAnimations();
 	mLastOverriddenMotion=ANIM_AGENT_STAND;
 
-	clear();
+	clear( aFromTimer );
 	mAOFolder.setNull();
 	mTimerCollection.enableInventoryTimer(TRUE);
 	tick();
@@ -1531,10 +1544,10 @@ void AOEngine::parseNotecard(const char* buffer)
 
 	mTimerCollection.enableImportTimer(TRUE);
 	mImportRetryCount=0;
-	processImport();
+	processImport(false);
 }
 
-void AOEngine::processImport()
+void AOEngine::processImport( bool aFromTimer )
 {
 	if(mImportCategory.isNull())
 	{
@@ -1597,10 +1610,10 @@ void AOEngine::processImport()
 	if(allComplete)
 	{
 		mTimerCollection.enableImportTimer(FALSE);
-		delete mImportSet;
+		mOldImportSets.push_back( mImportSet ); //<ND/> FIRE-3801; Cannot delete here, or LLInstanceTracker gets upset. Just remember and delete mOldImportSets once we can. 
 		mImportSet=0;
 		mImportCategory.setNull();
-		reload();
+		reload( aFromTimer );
 	}
 }
 
@@ -1673,12 +1686,12 @@ BOOL AOTimerCollection::tick()
 	if(mReloadTimer)
 	{
 		lldebugs << "Reload timer tick()" << llendl;
-		AOEngine::instance().reload();
+		AOEngine::instance().reload(true);
 	}
 	if(mImportTimer)
 	{
 		lldebugs << "Import timer tick()" << llendl;
-		AOEngine::instance().processImport();
+		AOEngine::instance().processImport(true);
 	}
 
 // always return FALSE or the LLEventTimer will be deleted -> crash

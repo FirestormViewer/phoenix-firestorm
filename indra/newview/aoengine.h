@@ -101,9 +101,9 @@ class AOEngine
 		const LLUUID override(const LLUUID motion,BOOL start);
 		void tick();
 		void update();
-		void reload();
+		void reload(bool);
 		void reloadStateAnimations(AOSet::AOState* state);
-		void clear();
+		void clear( bool );
 
 		const LLUUID getAOFolder();
 
@@ -116,7 +116,7 @@ class AOEngine
 		void checkBelowWater(BOOL yes);
 
 		BOOL importNotecard(const LLInventoryItem* item);
-		void processImport();
+		void processImport( bool );
 
 		BOOL swapWithPrevious(AOSet::AOState* state,S32 index);
 		BOOL swapWithNext(AOSet::AOState* state,S32 index);
@@ -188,10 +188,12 @@ class AOEngine
 		LLUUID mLastOverriddenMotion;
 
 		std::vector<AOSet*> mSets;
+		std::vector<AOSet*> mOldSets;
 		AOSet* mCurrentSet;
 		AOSet* mDefaultSet;
 
 		AOSet* mImportSet;
+		std::vector<AOSet*> mOldImportSets;
 		LLUUID mImportCategory;
 		S32 mImportRetryCount;
 };
