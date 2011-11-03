@@ -33,7 +33,9 @@
 #include "llinventoryfunctions.h"
 #include "llstartup.h"
 #include "llvoavatarself.h"
-
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2011-09-10 (Catznip-3.0.0a)
+#include "llviewercontrol.h"
+// [/SL:KB]
 
 class LLOrderMyOutfitsOnDestroy: public LLInventoryCallback
 {
@@ -119,10 +121,10 @@ void LLInitialWearablesFetch::processContents()
 	gInventory.collectDescendentsIf(mComplete.front(), cat_array, wearable_array, 
 									LLInventoryModel::EXCLUDE_TRASH, is_wearable);
 
-// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-05-18 (Catznip-2.6.0a) | Modified: Catznip-2.0.0h
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-05-18 (Catznip-3.0.0a) | Modified: Catznip-2.0.0h
 	// NOTE: don't use the current COF contents if 'wearable_array' is empty (ie first logon with 2.0 or some other problem)
 	bool fUpdateFromCOF = !wearable_array.empty();
-	if (fUpdateFromCOF)
+	if ( (fUpdateFromCOF) && (gSavedSettings.getBOOL("VerifyInitialWearables")) )
 	{
 		LLAppearanceMgr::wearables_by_type_t items_by_type(LLWearableType::WT_COUNT);
 		LLAppearanceMgr::sortItemsByActualDescription(wearable_array);
@@ -150,7 +152,7 @@ void LLInitialWearablesFetch::processContents()
 
 	LLAppearanceMgr::instance().setAttachmentInvLinkEnable(true);
 //	if (wearable_array.count() > 0)
-// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-28 (Catznip-2.6.0a) | Modified: Catznip-2.0.0e
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-28 (Catznip-3.0.0a) | Modified: Catznip-2.0.0e
 	if (fUpdateFromCOF)
 // [/SL:KB]
 	{
@@ -180,35 +182,34 @@ public:
 	{
 		gInventory.removeObserver(this);
 /*
-		// Link to all fetched items in COF.
-		LLPointer<LLInventoryCallback> link_waiter = new LLUpdateAppearanceOnDestroy;
-		for (uuid_vec_t::iterator it = mIDs.begin();
-			 it != mIDs.end();
-			 ++it)
-		{
-			LLUUID id = *it;
-			LLViewerInventoryItem *item = gInventory.getItem(*it);
-			if (!item)
-			{
-				llwarns << "fetch failed!" << llendl;
-				continue;
-			}
-
-			link_inventory_item(gAgent.getID(),
-								item->getLinkedUUID(),
-								LLAppearanceMgr::instance().getCOF(),
-								item->getName(),
-								item->getDescription(),
-								LLAssetType::AT_LINK,
-								link_waiter);
-		}
-*/
-// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-08-14 (Catznip-2.6.0a) | Added: Catznip-2.1.1d
+//		// Link to all fetched items in COF.
+//		LLPointer<LLInventoryCallback> link_waiter = new LLUpdateAppearanceOnDestroy;
+//		for (uuid_vec_t::iterator it = mIDs.begin();
+//			 it != mIDs.end();
+//			 ++it)
+//		{
+//			LLUUID id = *it;
+//			LLViewerInventoryItem *item = gInventory.getItem(*it);
+//			if (!item)
+//			{
+//				llwarns << "fetch failed!" << llendl;
+//				continue;
+//			}
+//
+//			link_inventory_item(gAgent.getID(),
+//								item->getLinkedUUID(),
+//								LLAppearanceMgr::instance().getCOF(),
+//								item->getName(),
+//								item->getDescription(),
+//								LLAssetType::AT_LINK,
+//								link_waiter);
+//		}
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-08-14 (Catznip-3.0.0a) | Added: Catznip-2.1.1d
 		doOnIdleOneTime(boost::bind(&LLFetchAndLinkObserver::doneIdle, this));
 // [/SL:KB]
 	}
 
-// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-02 (Catznip-2.6.0a) | Added: Catznip-2.0.0a
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-02 (Catznip-3.0.0a) | Added: Catznip-2.0.0a
 	void doneIdle()
 	{
 		// NOTE: the code above makes the assumption that COF is empty which won't be the case the way it's used now
@@ -241,7 +242,7 @@ void LLInitialWearablesFetch::processWearablesMessage()
 		{
 			// Populate the current outfit folder with links to the wearables passed in the message
 //			InitialWearableData *wearable_data = new InitialWearableData(mAgentInitialWearables[i]); // This will be deleted in the callback.
-// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-05-02 (Catznip-2.6.0a) | Added: Catznip-2.0.0f
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-05-02 (Catznip-3.0.0a) | Added: Catznip-2.0.0f
 			// Fixes minor leak: since COF is used onInitialWearableAssetArrived() will never get called and "wearable_data" leaks
 			InitialWearableData* wearable_data = &mAgentInitialWearables[i];
 // [/SL:KB]
