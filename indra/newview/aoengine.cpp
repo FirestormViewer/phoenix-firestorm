@@ -1480,6 +1480,9 @@ void AOEngine::parseNotecard(const char* buffer)
 		if(index==lines.size()-1)
 			line=line.substr(0,line.size()-1);
 
+		if( line.size() > 0 && line[0] == '#' ) // <ND/> FIRE-3801; skip comments to reduce spam to local chat.
+			continue;
+
 		LLStringUtil::trim(line);
 		if(line.find("[")!=0)
 		{
