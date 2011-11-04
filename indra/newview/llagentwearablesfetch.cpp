@@ -181,7 +181,7 @@ public:
 	virtual void done()
 	{
 		gInventory.removeObserver(this);
-/*
+
 //		// Link to all fetched items in COF.
 //		LLPointer<LLInventoryCallback> link_waiter = new LLUpdateAppearanceOnDestroy;
 //		for (uuid_vec_t::iterator it = mIDs.begin();
