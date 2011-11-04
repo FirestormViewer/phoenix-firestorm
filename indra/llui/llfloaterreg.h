@@ -31,6 +31,10 @@
 #include "llsd.h"
 
 #include <boost/function.hpp>
+// [RLVa:KB] - Checked: 2011-05-25 (RLVa-1.4.0a)
+#include <boost/signals2.hpp>
+#include "llboost.h"
+// [/RLVa:KB]
 
 //*******************************************************
 //
@@ -71,6 +75,15 @@ private:
 	 */
 	static std::set<std::string> sAlwaysShowableList;
 	
+// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.4.0a) | Modified: RLVa-1.2.0a
+	// Used to determine whether a floater can be shown
+public:
+	typedef boost::signals2::signal<bool(const std::string&, const LLSD&), boost_boolean_combiner> validate_signal_t;
+	static boost::signals2::connection setValidateCallback(const validate_signal_t::slot_type& cb) { return mValidateSignal.connect(cb); }
+private:
+	static validate_signal_t mValidateSignal;
+// [/RLVa:KB]
+
 public:
 	// Registration
 	

@@ -36,6 +36,9 @@
 // [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2011-09-10 (Catznip-3.0.0a)
 #include "llviewercontrol.h"
 // [/SL:KB]
+// [RLVa:KB] - Checked: 2010-12-15 (RLVa-1.2.2c)
+#include "rlvhelper.h"
+// [/RLVa:KB]
 
 class LLOrderMyOutfitsOnDestroy: public LLInventoryCallback
 {
@@ -102,7 +105,14 @@ void LLInitialWearablesFetch::done()
 	// gInventory.notifyObservers.  The results will be handled in the next
 	// idle tick instead.
 	gInventory.removeObserver(this);
-	doOnIdleOneTime(boost::bind(&LLInitialWearablesFetch::processContents,this));
+//	doOnIdleOneTime(boost::bind(&LLInitialWearablesFetch::processContents,this));
+// [RLVa:KB] - Checked: 2010-12-15 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+	F32 nDelay = gSavedSettings.getF32("ForceInitialCOFDelay");
+	if (0.0f == nDelay)
+		doOnIdleOneTime(boost::bind(&LLInitialWearablesFetch::processContents,this));
+	else
+		rlvCallbackTimerOnce(nDelay, boost::bind(&LLInitialWearablesFetch::processContents,this));
+// [/RLVa:KB]
 }
 
 void LLInitialWearablesFetch::add(InitialWearableData &data)
@@ -181,7 +191,6 @@ public:
 	virtual void done()
 	{
 		gInventory.removeObserver(this);
-/*
 //		// Link to all fetched items in COF.
 //		LLPointer<LLInventoryCallback> link_waiter = new LLUpdateAppearanceOnDestroy;
 //		for (uuid_vec_t::iterator it = mIDs.begin();
