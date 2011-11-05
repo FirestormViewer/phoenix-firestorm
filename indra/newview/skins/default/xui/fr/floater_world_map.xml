@@ -19,7 +19,7 @@ title="CARTE DU MONDE">
 			</panel>
 
 			<panel name="layout_panel_2">
-				<button name="Show Current Location" 
+				<button name="Show My Location" 
 				tool_tip="Centrer la carte sur votre position">
 				</button>
 				<text name="me_label">

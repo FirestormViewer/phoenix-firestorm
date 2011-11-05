@@ -71,7 +71,7 @@
      scale_image="true"
      left="4"
      layout="topleft"
-     name="Show Current Location"
+     name="Show My Location"
      tool_tip="Center map on my avatar&apos;s location"
      top="6"
      width="24" >
