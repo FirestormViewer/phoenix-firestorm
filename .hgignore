@@ -44,6 +44,8 @@ indra/newview/vivox-runtime
 indra/newview/English.lproj/InfoPlist.strings
 indra/newview/Info-Firestorm.plist
 indra/server-linux-*
+indra/newview/res/firestorm_icon.BMP
+indra/newview/res/firestorm_icon.ico
 indra/temp
 indra/test/linden_file.dat
 indra/test_apps/llmediatest/dependencies/i686-win32
