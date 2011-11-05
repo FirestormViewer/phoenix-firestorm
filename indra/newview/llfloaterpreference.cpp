@@ -237,8 +237,9 @@ bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response
 		LLNavigationBar::getInstance()->clearHistoryCache();
 		
 		// flag client texture cache for clearing next time the client runs
-		gSavedSettings.setBOOL("PurgeCacheOnNextStartup", TRUE);
-		LLNotificationsUtil::add("CacheWillClear");
+		// AO: Don't clear main texture cache on browser cache clear - it's too expensive to be done except explicitly
+		//gSavedSettings.setBOOL("PurgeCacheOnNextStartup", TRUE);
+		//LLNotificationsUtil::add("CacheWillClear");
 
 		LLSearchHistory::getInstance()->clearHistory();
 		LLSearchHistory::getInstance()->save();

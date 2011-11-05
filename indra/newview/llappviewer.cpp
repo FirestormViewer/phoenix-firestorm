@@ -3861,9 +3861,10 @@ void LLAppViewer::migrateCacheDirectory()
 			}
 			llinfos << "Moved " << file_count << " files" << llendl;
 
-			// Nuke the old cache
-			gDirUtilp->setCacheDir(old_cache_dir);
-			purgeCache();
+			// AO: Don't automatically purge old cache
+			//// Nuke the old cache
+			//gDirUtilp->setCacheDir(old_cache_dir);
+			//purgeCache();
 			gDirUtilp->setCacheDir(new_cache_dir);
 
 #if LL_DARWIN
@@ -3965,6 +3966,7 @@ bool LLAppViewer::initCache()
 			gSavedSettings.getBOOL("PurgeCacheOnNextStartup"))
 		{
 			gSavedSettings.setBOOL("PurgeCacheOnNextStartup", false);
+			llinfos << "Scheduling texture purge, based on PurgeCache* settings." << llendl;
 			mPurgeCache = true;
 			// STORM-1141 force purgeAllTextures to get called to prevent a crash here. -brad
 			texture_cache_mismatch = true;
@@ -3975,6 +3977,7 @@ bool LLAppViewer::initCache()
 		const std::string j2c_last = gSavedSettings.getString("LastJ2CVersion");
 		if (j2c_info != j2c_last && !j2c_last.empty())
 		{
+			llinfos << "Scheduling texture purge, based on LastJ2CVersion mismatch." << llendl;
 			mPurgeCache = true;
 		}
 		gSavedSettings.setString("LastJ2CVersion", j2c_info);
@@ -3987,9 +3990,10 @@ bool LLAppViewer::initCache()
 		std::string new_cache_location = gSavedSettings.getString("NewCacheLocation");
 		if (new_cache_location != cache_location)
 		{
-			llwarns << new_cache_location <<  " is not the same as " << cache_location << ". PURGING." << llendl;
-			gDirUtilp->setCacheDir(gSavedSettings.getString("CacheLocation"));
-			purgeCache(); // purge old cache
+			// AO: Don't automatically purge old cache location, has unwanted side effects with shared caches, upgrades
+			//llwarns << new_cache_location <<  " is not the same as " << cache_location << ". PURGING." << llendl;
+			//gDirUtilp->setCacheDir(gSavedSettings.getString("CacheLocation"));
+			//purgeCache(); // purge old cache
 			gSavedSettings.setString("CacheLocation", new_cache_location);
 			gSavedSettings.setString("CacheLocationTopFolder", gDirUtilp->getBaseFileName(new_cache_location));
 		}
