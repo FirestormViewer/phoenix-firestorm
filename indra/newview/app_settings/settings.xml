@@ -8761,7 +8761,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1800</real>
+      <real>0</real>
     </map>
 
     <key>QuitOnLoginActivated</key>
