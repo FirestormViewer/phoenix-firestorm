@@ -255,6 +255,9 @@ void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 			if (pSideTray->getCollapsed())
 				pSideTray->collapseSideBar();			// Fixes a button highlighting glitch when changing the active tab while collapsed
 		}
+
+		// Enable/disable the "Inventory" bottom tray button
+		LLBottomTray::getInstance()->getChild<LLButton>("sidebar_inv_btn")->setEnabled(fEnable);
 	}
 
 	//
