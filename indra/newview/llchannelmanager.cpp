@@ -53,6 +53,7 @@ LLChannelManager::LLChannelManager()
 	}
 }
 
+
 //--------------------------------------------------------------------------
 LLChannelManager::~LLChannelManager()
 {

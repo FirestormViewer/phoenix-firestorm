@@ -27,7 +27,9 @@
 
 #include "llpanel.h"
 #include "llbadge.h"
+
 #include "llfloater.h"
+
 
 class LLSideTray;
 class LLSideTrayButton;

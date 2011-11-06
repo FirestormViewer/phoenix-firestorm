@@ -51,9 +51,11 @@ public:
 		EToastAlignment		toast_align;
 		EChannelAlignment	channel_align;
 
-		Params()
-		:	id(LLUUID("")), display_toasts_always(false), toast_align(NA_BOTTOM), channel_align(CA_LEFT)
-		{}
+		Params():	id(LLUUID("")), display_toasts_always(false), toast_align(NA_BOTTOM), channel_align(CA_LEFT)
+		{
+			if(gSavedSettings.getBOOL("ShowGroupNoticesTopRight"))
+				toast_align = NA_TOP;
+		}
 	};
 
 	struct ChannelElem

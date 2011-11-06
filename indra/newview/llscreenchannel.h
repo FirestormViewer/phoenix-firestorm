@@ -56,6 +56,8 @@ public:
 	LLScreenChannelBase(const LLUUID& id);
 	~LLScreenChannelBase();
 
+	void reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
+
 	// Channel's outfit-functions
 	// update channel's size and position in the World View
 	virtual void		updatePositionAndSize(LLRect old_world_rect, LLRect new_world_rect);
@@ -108,7 +110,8 @@ public:
 	LLUUID	getChannelID() { return mID; }
 
 protected:
-	void	updateBottom();
+	void	updateRect();
+	LLRect	getChannelRect();
 
 	// Channel's flags
 	bool		mControlHovering;

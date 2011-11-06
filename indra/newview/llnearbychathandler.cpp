@@ -91,6 +91,7 @@ public:
 	void addNotification	(LLSD& notification);
 	void arrangeToasts		();
 	void showToastsBottom	();
+	void showToastsTop		();
 	
 	typedef boost::function<LLToastPanelBase* (void )> create_toast_panel_callback_t;
 	void setCreatePanelCallback(create_toast_panel_callback_t value) { m_create_toast_panel_callback_t = value;}
@@ -397,7 +398,10 @@ void LLNearbyChatScreenChannel::arrangeToasts()
 {
 	if(!isHovering())
 	{
-		showToastsBottom();
+		if(gSavedSettings.getBOOL("ShowGroupNoticesTopRight"))
+			showToastsTop();
+		else
+			showToastsBottom();
 	}
 
 	if (m_active_toasts.empty())
@@ -423,16 +427,23 @@ static bool sort_toasts_predicate(LLHandle<LLToast> first, LLHandle<LLToast> sec
 	return v1 > v2;
 }
 
+void LLNearbyChatScreenChannel::showToastsTop()
+{
+	if(mStopProcessing)
+		return;
+
+}
+
 void LLNearbyChatScreenChannel::showToastsBottom()
 {
 	if(mStopProcessing)
 		return;
 
 	LLRect	toast_rect;	
-	updateBottom();
-	S32 channel_bottom = getRect().mBottom;
+	updateRect();
 
-	S32		bottom = channel_bottom;
+	S32		channel_bottom = getRect().mBottom;
+	S32		bottom = channel_bottom + 10;
 	S32		margin = gSavedSettings.getS32("ToastGap");
 
 	//sort active toasts
@@ -474,7 +485,7 @@ void LLNearbyChatScreenChannel::showToastsBottom()
 	{
 		LLToast* toast = it->get();
 		if (toast)
-	{
+		{
 		toast->setIsHidden(false);
 		toast->setVisible(TRUE);
 		}

@@ -144,6 +144,18 @@
          width="256" />
 
         <check_box
+        control_name="ShowGroupNoticesTopRight"
+        height="16"
+        initial_value="true"
+        label="Group Notices in Top Right"
+        layout="topleft"
+        left_delta="0"
+        name="ShowHoverTips"
+        tool_tip="Set this to move group notifications to the top right corner of the screen (Classic V1.x behavior)."
+        top_pad="7"
+        width="256" />
+      
+      <check_box
          control_name="UsePieMenu"
          height="16"
          initial_value="true"
