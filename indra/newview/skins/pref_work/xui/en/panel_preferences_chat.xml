@@ -1017,7 +1017,7 @@
              width="250"/>
         </panel>
 
-        <!-- Chat: Spell Check -->
+        <!-- Chat: Text Input -->
         <panel
          border="true"
          top_pad="1"
@@ -1025,8 +1025,8 @@
          left="1"
          right="-1"
          follows="all"
-         label="Spell Check"
-         name="ChatSpellCheck" >
+         label="Text Input"
+         name="ChatTextInput" >
 
             <check_box
              control_name="SpellCheck"
@@ -1038,17 +1038,17 @@
              left="30"
              name="checkSpellCheck"
              top="30"
-             width="250" />
+             width="150" />
             <text
              enabled_control="SpellCheck"
              follows="top|left"
              height="10"
              label="Logs:"
              layout="topleft"
-             left="80"
+             left_pad="10"
              mouse_opaque="false"
              name="textDictionaryMain"
-             top_pad="15"
+             top_pad="-16"
              type="string"
              width="90" >
                 Main dictionary :
@@ -1063,14 +1063,27 @@
              top_pad="-15"
              width="175" />
 
+            <check_box
+             top_pad="20"
+             left="30"
+             height="16"
+             width="140"
+             follows="left|top"
+             layout="topleft"
+             label="Enable Autocorrect"
+             control_name="FSEnableAutoCorrect"
+             name="lgg_ac_enable"
+             tool_tip="You must have this check box enabled to use any of these settings, it will search your writable text entry, and replace any of the search entries with their replacement"/>
+            <button
+             follows="top|left"
+             height="20"
+             layout="topleft"
+             top_pad="-20"
+             left_pad="5"
+             name="lgg_ac_showgui"
+             label="AutoCorrect Settings"
+             width="150">
+            </button>
         </panel>
-
-        <!--Chat: Auto Correct-->
-        <panel
-         class="panel_preference"
-         filename="panel_autocorrect.xml"
-         label="Auto Correct"
-         layout="topleft"
-         name="ChatAutoCorrect" />
 </tab_container>
 </panel>

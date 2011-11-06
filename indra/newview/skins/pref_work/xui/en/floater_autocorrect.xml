@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ can_close="true"
+ can_minimize="true"
+ bottom="400"
+ left="300"
+ can_resize="false"
+ height="390"
+ width="540"
+ name="autocorrect"
+ title="Autocorrect Settings">
+ 
 <panel
  border="true"
  follows="all"
- height="440"
+ height="388"
  layout="topleft"
  left="1"
  top="1"
- width="540"
+ width="538"
  label="lgg_ac_panel"
  name="Autocorrect Settings">
     <check_box
@@ -329,3 +340,4 @@ Drop a Notecard here to load from it.
          label="Remove Entry"/>
     </panel>
 </panel>
+</floater>
