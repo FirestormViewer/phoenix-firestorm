@@ -32,7 +32,7 @@
 
 
 #include "llsdserialize.h"
-#include "panel_prefs_firestorm.h"
+#include "fspanelprefs.h"
 #include "lggbeamscolors.h"
 #include "llsliderctrl.h"
 #include "llfocusmgr.h"

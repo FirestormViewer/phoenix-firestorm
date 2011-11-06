@@ -1,6 +1,6 @@
 /*${License blank}*/
 #include "llviewerprecompiledheaders.h"
-#include "panel_prefs_firestorm.h"
+#include "fspanelprefs.h"
 #include "llcombobox.h"
 #include "llcolorswatch.h"
 #include "llcheckboxctrl.h"

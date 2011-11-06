@@ -643,7 +643,7 @@ set(viewer_SOURCE_FILES
     llxmlrpclistener.cpp
     llxmlrpctransaction.cpp
     noise.cpp
-    panel_prefs_firestorm.cpp
+    fspanelprefs.cpp
     piemenu.cpp
     pieseparator.cpp
     pieslice.cpp
@@ -1245,7 +1245,7 @@ set(viewer_HEADER_FILES
     llxmlrpctransaction.h
     macmain.h
     noise.h
-    panel_prefs_firestorm.h
+    fspanelprefs.h
     piemenu.h
     pieseparator.h
     pieslice.h

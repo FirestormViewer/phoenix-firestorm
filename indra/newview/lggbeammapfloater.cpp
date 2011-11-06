@@ -30,7 +30,7 @@
 #include "lggbeammaps.h"
 
 #include "llsdserialize.h"
-#include "panel_prefs_firestorm.h"
+#include "fspanelprefs.h"
 #include "llfocusmgr.h"
 
 const F32 CONTEXT_CONE_IN_ALPHA = 0.0f;
