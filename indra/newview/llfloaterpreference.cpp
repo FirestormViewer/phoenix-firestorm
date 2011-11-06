@@ -1935,7 +1935,7 @@ BOOL LLPanelPreference::postBuild()
 
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
 	//////////////////////PanelSpellCheck//////////////////////
-	if (hasChild("checkSpellCheck"))
+	if (hasChild("checkSpellCheck", TRUE))
 	{
 		std::vector<std::string> dictList;
 		if (LLHunspellWrapper::instance().getInstalledDictionaries(dictList))
