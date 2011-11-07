@@ -101,7 +101,7 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 			//if (dist_vec_squared(gAgent.getPositionAgent(), object->getPositionRegion() + pick.mObjectOffset) > 1.5f * 1.5f)
 			if (dist_vec_squared(gAgent.getPositionAgent(), pick.mIntersection) > 1.5f * 1.5f)
 			{
-				if ( (LLFloaterReg::floaterInstanceVisible("build")) && (pick.mKeyMask != MASK_SHIFT) && (pick.mKeyMask != MASK_CONTROL) )
+				if ( (LLFloaterReg::instanceVisible("build")) && (pick.mKeyMask != MASK_SHIFT) && (pick.mKeyMask != MASK_CONTROL) )
 					LLSelectMgr::getInstance()->deselectAll();
 				return LLSelectMgr::getInstance()->getSelection();
 			}
