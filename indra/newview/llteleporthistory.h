@@ -234,6 +234,10 @@ private:
 	 * Using this connection we get notified when a teleport fails.
 	 */
 	boost::signals2::connection	mTeleportFailedConn;
+
+// [RLVa:KB] - Checked: 2010-09-03 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+	friend class RlvUIEnabler;
+// [/RLVa:KB]
 };
 
 #endif
