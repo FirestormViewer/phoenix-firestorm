@@ -1,9 +1,11 @@
 # -*- cmake -*-
-include(Prebuilt)
 
-if (NOT STANDALONE)
+if (STANDALONE)
+  set(GLOD_FIND_REQUIRED true)
+  include(FindGLOD)
+else (STANDALONE)
+  include(Prebuilt)
   use_prebuilt_binary(GLOD)
-endif (NOT STANDALONE)
-
-set(GLOD_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include)
-set(GLOD_LIBRARIES glod)
+  set(GLOD_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include)
+  set(GLOD_LIBRARIES glod)
+endif (STANDALONE)
