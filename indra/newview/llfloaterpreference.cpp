@@ -119,6 +119,7 @@
 #include "fslslbridge.h"
 //-TT
 #include "NACLantispam.h"
+#include "lggautocorrectfloater.h"
 
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
 #include "llhunspell.h"
@@ -396,6 +397,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] no longer exists!
 	//gSavedSettings.getControl("DoubleClickTeleport")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onChangeDoubleClickSettings, this));
 
+    //autocorrect button
+	mCommitCallbackRegistrar.add("FSPref.ShowAC", boost::bind(&LGGAutoCorrectFloater::showFloater));
 
 	LLAvatarPropertiesProcessor::getInstance()->addObserver( gAgent.getID(), this );
 }

@@ -1189,6 +1189,7 @@
              width="250"
              height="22"
              name="lgg_ac_showgui"
+             commit_callback.function="FSPref.ShowAC"
              label="Show AutoCorrect Settings"
              tool_tip="Click this show the options for autocorrection macros."/>
         </panel>

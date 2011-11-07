@@ -1081,6 +1081,7 @@
              top_pad="-20"
              left_pad="5"
              name="lgg_ac_showgui"
+             commit_callback.function="FSPref.ShowAC"
              label="AutoCorrect Settings"
              width="150">
             </button>

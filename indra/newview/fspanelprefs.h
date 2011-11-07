@@ -19,8 +19,6 @@ public:
 	void onBeamColorDelete();
 	void onBeamDelete();
 
-	void onAutoCorrectSettings();
-    
 	void onUseEnvironmentFromRegionAlways();
 	void onFSShowChatChannel();
 

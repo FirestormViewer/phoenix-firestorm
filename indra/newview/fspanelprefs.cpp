@@ -9,7 +9,6 @@
 #include "lggbeammaps.h"
 #include "lggbeammapfloater.h"
 #include "lggbeamcolormapfloater.h"
-#include "lggautocorrectfloater.h"
 #include "llvoavatar.h"
 #include "llvoavatarself.h"
 #include "llnearbychat.h"
@@ -36,10 +35,6 @@ BOOL PanelPreferenceFirestorm::postBuild()
 	getChild<LLUICtrl>("custom_beam_btn")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onBeam_new, this));
 	getChild<LLUICtrl>("refresh_beams")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::refreshBeamLists, this));
 	getChild<LLUICtrl>("delete_beam")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onBeamDelete, this));
-
-	//autocorrect button
-	getChild<LLUICtrl>("lgg_ac_showgui")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onAutoCorrectSettings, this));
-
 
 	m_tp2LineEditor = getChild<LLLineEditor>("FSCmdLineTP2");
 	m_clearchatLineEditor = getChild<LLLineEditor>("FSCmdLineClearChat");
@@ -176,10 +171,6 @@ void PanelPreferenceFirestorm::onBeamDelete()
 		}
 	}
 	refreshBeamLists();
-}
-void PanelPreferenceFirestorm::onAutoCorrectSettings()
-{
-	LGGAutoCorrectFloater::showFloater();
 }
 
 void PanelPreferenceFirestorm::onUseEnvironmentFromRegionAlways()
