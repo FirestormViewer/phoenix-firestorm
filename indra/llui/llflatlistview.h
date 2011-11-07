@@ -123,6 +123,11 @@ public:
 	 */
 	boost::signals2::connection setReturnCallback( const commit_signal_t::slot_type& cb ) { return mOnReturnSignal.connect(cb); }
 
+	/**
+	 * Override callback here to make sure double click events are not raised for the scroll bar -Zi
+	 */
+	boost::signals2::connection setDoubleClickCallback( const mouse_signal_t::slot_type& cb ) { return mItemsPanel->setDoubleClickCallback(cb); }
+
 	/** Overridden LLPanel's reshape, height is ignored, the list sets its height to accommodate all items */
 	virtual void reshape(S32 width, S32 height, BOOL called_from_parent  = TRUE);
 
