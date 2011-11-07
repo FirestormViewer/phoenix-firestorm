@@ -112,6 +112,10 @@ LLToolBar::LLToolBar(const LLToolBar::Params& p)
 	mStartDragItemCallback(NULL),
 	mHandleDragItemCallback(NULL),
 	mHandleDropCallback(NULL),
+	mButtonAddSignal(NULL),
+	mButtonEnterSignal(NULL),
+	mButtonLeaveSignal(NULL),
+	mButtonRemoveSignal(NULL),
 	mDragAndDropTarget(false)
 {
 	mButtonParams[LLToolBarEnums::BTNTYPE_ICONS_WITH_TEXT] = p.button_icon_and_text;
@@ -121,6 +125,10 @@ LLToolBar::LLToolBar(const LLToolBar::Params& p)
 LLToolBar::~LLToolBar()
 {
 	delete mPopupMenuHandle.get();
+	delete mButtonAddSignal;
+	delete mButtonEnterSignal;
+	delete mButtonLeaveSignal;
+	delete mButtonRemoveSignal;
 }
 
 void LLToolBar::createContextMenu()
@@ -212,12 +220,11 @@ bool LLToolBar::addCommand(const LLCommandId& commandId, int rank)
 	mButtonPanel->addChild(button);
 	mButtonMap.insert(std::make_pair(commandId.uuid(), button));
 
-
 	// Insert the command and button in the right place in their respective lists
 	if ((rank >= mButtonCommands.size()) || (rank == RANK_NONE))
 	{
 		// In that case, back load
-		mButtonCommands.push_back(commandId);
+		mButtonCommands.push_back(command->id());
 		mButtons.push_back(button);
 	}
 	else 
@@ -232,11 +239,19 @@ bool LLToolBar::addCommand(const LLCommandId& commandId, int rank)
 			rank--;
 		}
 		// ...then insert
-		mButtonCommands.insert(it_command,commandId);
+		mButtonCommands.insert(it_command, command->id());
 		mButtons.insert(it_button,button);
 	}
 
 	mNeedsLayout = true;
+
+	updateLayoutAsNeeded();
+
+
+	if (mButtonAddSignal)
+	{
+		(*mButtonAddSignal)(button);
+	}
 
 	return true;
 }
@@ -262,6 +277,11 @@ int LLToolBar::removeCommand(const LLCommandId& commandId)
 		++it_button;
 		++it_command;
 		++rank;
+	}
+	
+	if (mButtonRemoveSignal)
+	{
+		(*mButtonRemoveSignal)(*it_button);
 	}
 	
 	// Delete the button and erase the command and button records
@@ -302,7 +322,67 @@ bool LLToolBar::enableCommand(const LLCommandId& commandId, bool enabled)
 		command_id_map::iterator it = mButtonMap.find(commandId.uuid());
 		if (it != mButtonMap.end())
 		{
-			it->second->setEnabled(enabled);
+			command_button = it->second;
+			command_button->setEnabled(enabled);
+		}
+	}
+
+	return (command_button != NULL);
+}
+
+bool LLToolBar::stopCommandInProgress(const LLCommandId& commandId)
+{
+	//
+	// Note from Leslie:
+	//
+	// This implementation was largely put in place to handle EXP-1348 which is related to
+	// dragging and dropping the "speak" button.  The "speak" button can be in one of two
+	// modes, i.e., either a toggle action or a push-to-talk action.  Because of this it
+	// responds to mouse down and mouse up in different ways, based on which behavior the
+	// button is currently set to obey.  This was the simplest way of getting the button
+	// to turn off the microphone for both behaviors without risking duplicate state.
+	//
+
+	LLToolBarButton * command_button = NULL;
+
+	if (commandId != LLCommandId::null)
+	{
+		LLCommand* command = LLCommandManager::instance().getCommand(commandId);
+		llassert(command);
+
+		// If this command has an explicit function for execution stop
+		if (command->executeStopFunctionName().length() > 0)
+		{
+			command_id_map::iterator it = mButtonMap.find(commandId.uuid());
+			if (it != mButtonMap.end())
+			{
+				command_button = it->second;
+				llassert(command_button->mIsRunningSignal);
+
+				// Check to see if it is running
+				if ((*command_button->mIsRunningSignal)(command_button, command->isRunningParameters()))
+				{
+					// Trigger an additional button commit, which calls mouse down, mouse up and commit
+					command_button->onCommit();
+				}
+			}
+		}
+	}
+
+	return (command_button != NULL);
+}
+
+bool LLToolBar::flashCommand(const LLCommandId& commandId, bool flash)
+{
+	LLButton * command_button = NULL;
+
+	if (commandId != LLCommandId::null)
+	{
+		command_id_map::iterator it = mButtonMap.find(commandId.uuid());
+		if (it != mButtonMap.end())
+		{
+			command_button = it->second;
+			command_button->setFlashing(flash ? TRUE : FALSE);
 		}
 	}
 
@@ -747,6 +827,11 @@ void LLToolBar::createButtons()
 {
 	BOOST_FOREACH(LLToolBarButton* button, mButtons)
 	{
+		if (mButtonRemoveSignal)
+		{
+			(*mButtonRemoveSignal)(button);
+		}
+		
 		delete button;
 	}
 	mButtons.clear();
@@ -758,6 +843,11 @@ void LLToolBar::createButtons()
 		mButtons.push_back(button);
 		mButtonPanel->addChild(button);
 		mButtonMap.insert(std::make_pair(command_id.uuid(), button));
+		
+		if (mButtonAddSignal)
+		{
+			(*mButtonAddSignal)(button);
+		}
 	}
 	mNeedsLayout = true;
 }
@@ -778,7 +868,7 @@ LLToolBarButton* LLToolBar::createButton(const LLCommandId& id)
 	if (!commandp) return NULL;
 
 	LLToolBarButton::Params button_p;
-	button_p.name = id.name();
+	button_p.name = commandp->name();
 	button_p.label = LLTrans::getString(commandp->labelRef());
 	button_p.tool_tip = LLTrans::getString(commandp->tooltipRef());
 	button_p.image_overlay = LLUI::getUIImage(commandp->icon());
@@ -827,8 +917,7 @@ LLToolBarButton* LLToolBar::createButton(const LLCommandId& id)
 			button->setCommitCallback(executeParam);
 		}
 
-
-
+		// Set up "is running" query callback
 		const std::string& isRunningFunction = commandp->isRunningFunctionName();
 		if (isRunningFunction.length() > 0)
 		{
@@ -853,6 +942,36 @@ LLToolBarButton* LLToolBar::createButton(const LLCommandId& id)
 	button->setCommandId(id);
 
 	return button;
+}
+
+boost::signals2::connection connectSignal(LLToolBar::button_signal_t*& signal, const LLToolBar::button_signal_t::slot_type& cb)
+{
+	if (!signal)
+	{
+		signal = new LLToolBar::button_signal_t();
+	}
+
+	return signal->connect(cb);
+}
+
+boost::signals2::connection LLToolBar::setButtonAddCallback(const button_signal_t::slot_type& cb)
+{
+	return connectSignal(mButtonAddSignal, cb);
+}
+
+boost::signals2::connection LLToolBar::setButtonEnterCallback(const button_signal_t::slot_type& cb)
+{
+	return connectSignal(mButtonEnterSignal, cb);
+}
+
+boost::signals2::connection LLToolBar::setButtonLeaveCallback(const button_signal_t::slot_type& cb)
+{
+	return connectSignal(mButtonLeaveSignal, cb);
+}
+
+boost::signals2::connection LLToolBar::setButtonRemoveCallback(const button_signal_t::slot_type& cb)
+{
+	return connectSignal(mButtonRemoveSignal, cb);
 }
 
 BOOL LLToolBar::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
@@ -926,8 +1045,6 @@ LLToolBarButton::LLToolBarButton(const Params& p)
 	mOriginalImageOverlayColor(p.image_overlay_color),
 	mOriginalImageOverlaySelectedColor(p.image_overlay_selected_color)
 {
-	mButtonFlashRate = 0.0;
-	mButtonFlashCount = 0;
 }
 
 LLToolBarButton::~LLToolBarButton()
@@ -956,19 +1073,20 @@ BOOL LLToolBarButton::handleHover(S32 x, S32 y, MASK mask)
 	{
 		if (!mIsDragged)
 		{
-			mStartDragItemCallback(x,y,mId.uuid());
+			mStartDragItemCallback(x, y, this);
 			mIsDragged = true;
 			handled = TRUE;
 		}
 		else 
 		{
-			handled = mHandleDragItemCallback(x,y,mId.uuid(),LLAssetType::AT_WIDGET);
+			handled = mHandleDragItemCallback(x, y, mId.uuid(), LLAssetType::AT_WIDGET);
 		}
 	}
 	else
 	{
 		handled = LLButton::handleHover(x, y, mask);
 	}
+
 	return handled;
 }
 
@@ -981,6 +1099,23 @@ void LLToolBarButton::onMouseEnter(S32 x, S32 y, MASK mask)
 	{
 		mNeedsHighlight = TRUE;
 	}
+
+	LLToolBar* parent_toolbar = getParentByType<LLToolBar>();
+	if (parent_toolbar && parent_toolbar->mButtonEnterSignal)
+	{
+		(*(parent_toolbar->mButtonEnterSignal))(this);
+	}
+}
+
+void LLToolBarButton::onMouseLeave(S32 x, S32 y, MASK mask)
+{
+	LLButton::onMouseLeave(x, y, mask);
+	
+	LLToolBar* parent_toolbar = getParentByType<LLToolBar>();
+	if (parent_toolbar && parent_toolbar->mButtonLeaveSignal)
+	{
+		(*(parent_toolbar->mButtonLeaveSignal))(this);
+	}	
 }
 
 void LLToolBarButton::onMouseCaptureLost()
@@ -1029,25 +1164,25 @@ void LLToolBarButton::setEnabled(BOOL enabled)
 	}
 }
 
-
 const std::string LLToolBarButton::getToolTip() const	
 { 
 	std::string tooltip;
+
 	if (labelIsTruncated() || getCurrentLabel().empty())
 	{
-		return LLTrans::getString(LLCommandManager::instance().getCommand(mId)->labelRef()) + " -- " + LLView::getToolTip();
+		tooltip = LLTrans::getString(LLCommandManager::instance().getCommand(mId)->labelRef()) + " -- " + LLView::getToolTip();
 	}
 	else
 	{
-		return LLView::getToolTip();
+		tooltip = LLView::getToolTip();
 	}
+
+	LLToolBar* parent_toolbar = getParentByType<LLToolBar>();
+	if (parent_toolbar && parent_toolbar->mButtonTooltipSuffix.length() > 0)
+	{
+		tooltip = tooltip + "\n(" + parent_toolbar->mButtonTooltipSuffix + ")";
+	}
+
+	return tooltip;
 }
-
-
-
-
-
-
-
-
 
