@@ -20,7 +20,7 @@
 #include "llavatarnamecache.h"
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
-#include "lluictrlfactory.h"
+#include "llsdserialize.h"
 #include "llversionviewer.h"
 #include "llviewerparcelmgr.h"
 #include "llviewermenu.h"
@@ -160,41 +160,17 @@ bool RlvSettings::onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting)
 std::vector<std::string> RlvStrings::m_Anonyms;
 std::map<std::string, std::string> RlvStrings::m_StringMap;
 
-// Checked: 2010-03-09 (RLVa-1.2.0a) | Added: RLVa-1.1.0h
+// Checked: 2011-11-07 (RLVa-1.5.0) | Modified: RLVa-1.5.0
 void RlvStrings::initClass()
 {
 	static bool fInitialized = false;
 	if (!fInitialized)
 	{
-		LLXMLNodePtr xmlRoot;
-		if ( (!LLUICtrlFactory::getLayeredXMLNode("rlva_strings.xml", xmlRoot)) || (xmlRoot.isNull()) || (!xmlRoot->hasName("rlva_strings")) )
-		{
-			RLV_ERRS << "Problem reading RLVa string XML file" << RLV_ENDL;
-			return;
-		}
-
-		for (LLXMLNode* pNode = xmlRoot->getFirstChild(); pNode != NULL; pNode = pNode->getNextSibling())
-		{
-			if (pNode->hasName("strings"))
-			{
-				std::string strName;
-				for (LLXMLNode* pStringNode = pNode->getFirstChild(); pStringNode != NULL; pStringNode = pStringNode->getNextSibling())
-				{
-					if ( (!pStringNode->hasName("string")) || (!pStringNode->getAttributeString("name", strName)) )
-						continue;
-					m_StringMap[strName] = pStringNode->getTextContents();
-				}
-			}
-			else if (pNode->hasName("anonyms"))
-			{
-				for (LLXMLNode* pAnonymNode = pNode->getFirstChild(); pAnonymNode != NULL; pAnonymNode = pAnonymNode->getNextSibling())
-				{
-					if (!pAnonymNode->hasName("anonym"))
-						continue;
-					m_Anonyms.push_back(pAnonymNode->getTextContents());
-				}
-			}
-		}
+		std::string strFilePath = gDirUtilp->findSkinnedFilename(LLUI::getLocalizedSkinPath(), "rlva_strings.xml");
+		if (strFilePath.empty())
+			strFilePath = gDirUtilp->findSkinnedFilename(LLUI::getSkinPath(), "rlva_strings.xml");
+		if (!strFilePath.empty())
+			loadFromFile(strFilePath);
 
 		if ( (m_StringMap.empty()) || (m_Anonyms.empty()) )
 		{
@@ -203,6 +179,31 @@ void RlvStrings::initClass()
 		}
 
 		fInitialized = true;
+	}
+}
+
+// Checked: 2011-11-07 (RLVa-1.5.0) | Modified: RLVa-1.5.0
+void RlvStrings::loadFromFile(const std::string& strFilePath)
+{
+	llifstream fileStream(strFilePath, std::ios::binary); LLSD sdFileData;
+	if ( (!fileStream.is_open()) || (!LLSDSerialize::fromXMLDocument(sdFileData, fileStream)) )
+		return;
+
+	if (sdFileData.has("strings"))
+	{
+		const LLSD& sdStrings = sdFileData["strings"];
+		for (LLSD::map_const_iterator itString = sdStrings.beginMap(); itString != sdStrings.endMap(); ++itString)
+		{
+			m_StringMap[itString->first] = itString->second["value"].asString();
+		}
+	}
+	if (sdFileData.has("anonyms"))
+	{
+		const LLSD& sdAnonyms = sdFileData["anonyms"];
+		for (LLSD::array_const_iterator itAnonym = sdAnonyms.beginArray(); itAnonym != sdAnonyms.endArray(); ++itAnonym)
+		{
+			m_Anonyms.push_back((*itAnonym).asString());
+		}
 	}
 }
 

@@ -125,8 +125,6 @@ protected:
 class RlvStrings
 {
 public:
-	static void initClass();
-
 	static const std::string& getAnonym(const LLAvatarName& avName);		// @shownames
 	static const std::string& getAnonym(const std::string& strName);		// @shownames
 	static const std::string& getBehaviourNotificationString(ERlvBehaviour eBhvr, ERlvParamType eType);
@@ -136,6 +134,10 @@ public:
 	static std::string        getVersionAbout();							// Shown in Help / About
 	static std::string        getVersionNum();								// @versionnum
 	static bool               hasString(const std::string& strStringName);
+
+	static void initClass();
+protected:
+	static void loadFromFile(const std::string& strFilePath);
 
 protected:
 	static std::vector<std::string> m_Anonyms;
