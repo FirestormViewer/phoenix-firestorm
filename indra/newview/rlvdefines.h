@@ -102,6 +102,7 @@ const S32 RLVa_VERSION_BUILD = 0;
 #define RLV_CMD_PREFIX					'@'
 #define RLV_PUTINV_PREFIX				"#RLV/~"
 #define RLV_SETROT_OFFSET				F_PI_BY_TWO		// @setrot is off by 90° with the rest of SL
+#define RLV_STRINGS_FILE				"rlva_strings.xml"
 
 #define RLV_FOLDER_FLAG_NOSTRIP			"nostrip"
 #define RLV_FOLDER_PREFIX_HIDDEN		'.'

@@ -125,23 +125,24 @@ protected:
 class RlvStrings
 {
 public:
+	static void initClass();
+	static void loadFromFile(const std::string& strFilePath, bool fDefault);
+	static void saveToFile(const std::string& strFilePath);
+
 	static const std::string& getAnonym(const LLAvatarName& avName);		// @shownames
 	static const std::string& getAnonym(const std::string& strName);		// @shownames
-	static const std::string& getBehaviourNotificationString(ERlvBehaviour eBhvr, ERlvParamType eType);
 	static const std::string& getString(const std::string& strStringName);
 	static const char*        getStringFromReturnCode(ERlvCmdRet eRet);
 	static std::string        getVersion(bool fLegacy = false);				// @version
 	static std::string        getVersionAbout();							// Shown in Help / About
 	static std::string        getVersionNum();								// @versionnum
-	static bool               hasString(const std::string& strStringName);
-
-	static void initClass();
-protected:
-	static void loadFromFile(const std::string& strFilePath);
+	static bool               hasString(const std::string& strStringName, bool fCheckCustom = false);
+	static void               setCustomString(const std::string& strStringName, const std::string& strStringValue);
 
 protected:
 	static std::vector<std::string> m_Anonyms;
-	static std::map<std::string, std::string> m_StringMap;
+	typedef std::map<std::string, std::list<std::string> > string_map_t;
+	static string_map_t m_StringMap;
 };
 
 // ============================================================================
