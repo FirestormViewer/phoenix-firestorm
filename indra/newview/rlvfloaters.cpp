@@ -15,11 +15,16 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+
 #include "llappearancemgr.h"
 #include "llavatarnamecache.h"
 #include "llclipboard.h"
+#include "llcombobox.h"
 #include "llinventoryfunctions.h"
+#include "llnotificationsutil.h"
 #include "llscrolllistctrl.h"
+#include "llsdserialize.h"
+#include "lltexteditor.h"
 #include "llviewerjointattachment.h"
 #include "llviewerobjectlist.h"
 #include "llvoavatarself.h"
@@ -550,6 +555,99 @@ void RlvFloaterLocks::refreshAll()
 			}
 		}
 	}
+}
+
+// ============================================================================
+// RlvFloaterStrings member functions
+//
+
+// Checked: 2011-11-08 (RLVa-1.5.0) | Added: RLVa-1.5.0
+BOOL RlvFloaterStrings::postBuild()
+{
+	// Set up the UI controls
+	m_pStringList = findChild<LLComboBox>("string_list");
+	m_pStringList->setCommitCallback(boost::bind(&RlvFloaterStrings::onStringSelect, this));
+
+	LLUICtrl* pDefaultBtn = findChild<LLUICtrl>("default_btn");
+	pDefaultBtn->setCommitCallback(boost::bind(&RlvFloaterStrings::onStringRevertDefault, this));
+
+	// Read all string metadata from the default strings file
+	llifstream fileStream(RlvStrings::getStringMapPath(), std::ios::binary); LLSD sdFileData;
+	if ( (fileStream.is_open()) && (LLSDSerialize::fromXMLDocument(sdFileData, fileStream)) )
+	{
+		m_sdStringsInfo = sdFileData["strings"];
+		fileStream.close();
+	}
+
+	// Populate the combo box
+	for (LLSD::map_const_iterator itString = m_sdStringsInfo.beginMap(); itString != m_sdStringsInfo.endMap(); ++itString)
+	{
+		const LLSD& sdStringInfo = itString->second;
+		if ( (!sdStringInfo.has("customizable")) || (!sdStringInfo["customizable"].asBoolean()) )
+			continue;
+		m_pStringList->add( (sdStringInfo.has("label")) ? sdStringInfo["label"] : itString->first, itString->first);
+	}
+	
+	refresh();
+
+	return TRUE;
+}
+
+// Checked: 2011-11-08 (RLVa-1.5.0) | Added: RLVa-1.5.0
+void RlvFloaterStrings::onClose(bool fQuitting)
+{
+	if (m_fDirty)
+	{
+		// Save the custom string overrides
+		RlvStrings::saveToFile(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, RLV_STRINGS_FILE));
+
+		// Remind the user their changes require a relog to take effect
+		LLNotificationsUtil::add("RLVChangeStrings");
+	}
+}
+
+// Checked: 2011-11-08 (RLVa-1.5.0) | Added: RLVa-1.5.0
+void RlvFloaterStrings::onStringRevertDefault()
+{
+	if (!m_strStringCurrent.empty())
+	{
+		RlvStrings::setCustomString(m_strStringCurrent, LLStringUtil::null);
+		m_fDirty = true;
+	}
+	refresh();
+}
+
+// Checked: 2011-11-08 (RLVa-1.5.0) | Added: RLVa-1.5.0
+void RlvFloaterStrings::onStringSelect()
+{
+	LLTextEditor* pStringValue = findChild<LLTextEditor>("string_value");
+	if (!pStringValue->isPristine())
+	{
+		RlvStrings::setCustomString(m_strStringCurrent, pStringValue->getText());
+		m_fDirty = true;
+	}
+	refresh();
+}
+
+// Checked: 2011-11-08 (RLVa-1.5.0) | Added: RLVa-1.5.0
+void RlvFloaterStrings::refresh()
+{
+	m_strStringCurrent = (-1 != m_pStringList->getCurrentIndex()) ? m_pStringList->getSelectedValue().asString() : LLStringUtil::null;
+
+	LLTextEditor* pStringDescr = findChild<LLTextEditor>("string_descr");
+	pStringDescr->clear();
+	LLTextEditor* pStringValue = findChild<LLTextEditor>("string_value");
+	pStringValue->setEnabled(!m_strStringCurrent.empty());
+	pStringValue->clear();
+	if (!m_strStringCurrent.empty())
+	{
+		if (m_sdStringsInfo[m_strStringCurrent].has("description"))
+			pStringDescr->setText(m_sdStringsInfo[m_strStringCurrent]["description"].asString());
+		pStringValue->setText(RlvStrings::getString(m_strStringCurrent));
+		pStringValue->makePristine();
+	}
+
+	findChild<LLUICtrl>("default_btn")->setEnabled(!m_strStringCurrent.empty());
 }
 
 // ============================================================================

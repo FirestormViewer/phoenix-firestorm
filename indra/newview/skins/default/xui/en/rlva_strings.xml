@@ -26,11 +26,23 @@
 		<map>
 			<key>value</key>
 			<string>*** IM blocked by your viewer</string>
+			<key>description</key>
+			<string>Shown in place of the original message when an incoming IM is blocked</string>
+			<key>label</key>
+			<string>Blocked incoming IM message (local)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
 		</map>
 		<key>blocked_sendim</key>
 		<map>
 			<key>value</key>
 			<string>*** IM blocked by sender's viewer</string>
+			<key>description</key>
+			<string>Shown (and sent to the remote party) when an outgoing IM is blocked</string>
+			<key>label</key>
+			<string>Blocked outgoing IM message (local + remote)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
 		</map>
 
 		<!-- Shown as notifications -->
@@ -75,11 +87,23 @@
 		<map>
 			<key>value</key>
 			<string>The Resident you messaged is prevented from reading your instant messages at the moment, please try again later.</string>
+			<key>description</key>
+			<string>Sent to the remote party when their IM was blocked</string>
+			<key>label</key>
+			<string>Blocked incoming IM message (remote)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
 		</map>
 		<key>blocked_tplure_remote</key>
 		<map>
 			<key>value</key>
 			<string>The Resident you invited is prevented from accepting teleport offers. Please try again later.</string>
+			<key>description</key>
+			<string>Sent to the remote party when their teleport offer was blocked</string>
+			<key>label</key>
+			<string>Blocked teleport offer (remote)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
 		</map>
 	</map>
 

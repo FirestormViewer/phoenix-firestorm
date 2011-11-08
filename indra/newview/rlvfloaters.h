@@ -90,5 +90,34 @@ protected:
 };
 
 // ============================================================================
+// RlvFloaterStrings class declaration
+//
+
+class RlvFloaterStrings : public LLFloater
+{
+	friend class LLFloaterReg;
+private:
+	RlvFloaterStrings(const LLSD& sdKey) : LLFloater(sdKey), m_fDirty(false), m_pStringList(NULL) {}
+
+	// LLFloater overrides
+public:
+	/*virtual*/ void onClose(bool fQuitting);
+	/*virtual*/ BOOL postBuild();
+
+	// Member functions
+protected:
+	void onStringRevertDefault();
+	void onStringSelect();
+	void refresh();
+
+	// Member variables
+protected:
+	bool		m_fDirty;
+	std::string m_strStringCurrent;
+	LLComboBox*	m_pStringList;
+	LLSD		m_sdStringsInfo;
+};
+
+// ============================================================================
 
 #endif // RLV_FLOATERS_H

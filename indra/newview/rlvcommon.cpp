@@ -159,6 +159,7 @@ bool RlvSettings::onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting)
 
 std::vector<std::string> RlvStrings::m_Anonyms;
 RlvStrings::string_map_t RlvStrings::m_StringMap;
+std::string RlvStrings::m_StringMapPath;
 
 // Checked: 2011-11-08 (RLVa-1.5.0) | Modified: RLVa-1.5.0
 void RlvStrings::initClass()
@@ -193,6 +194,8 @@ void RlvStrings::loadFromFile(const std::string& strFilePath, bool fDefault)
 	llifstream fileStream(strFilePath, std::ios::binary); LLSD sdFileData;
 	if ( (!fileStream.is_open()) || (!LLSDSerialize::fromXMLDocument(sdFileData, fileStream)) )
 		return;
+	if (fDefault)
+		m_StringMapPath = strFilePath;
 	fileStream.close();
 
 	if (sdFileData.has("strings"))
@@ -200,7 +203,7 @@ void RlvStrings::loadFromFile(const std::string& strFilePath, bool fDefault)
 		const LLSD& sdStrings = sdFileData["strings"];
 		for (LLSD::map_const_iterator itString = sdStrings.beginMap(); itString != sdStrings.endMap(); ++itString)
 		{
-			if ( (!fDefault) && (!hasString(itString->first)) )
+			if ( (!itString->second.has("value")) || ((!fDefault) && (!hasString(itString->first))) )
 				continue;
 			std::list<std::string>& listValues = m_StringMap[itString->first];
 			while ( (!fDefault) && (listValues.size() > 1) )

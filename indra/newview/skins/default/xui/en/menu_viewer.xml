@@ -1507,6 +1507,16 @@
       	 function="Floater.Toggle"
       	 parameter="rlv_behaviours" />
       </menu_item_check>
+      <menu_item_check
+       label="Strings..."
+       name="Strings">
+        <menu_item_check.on_check
+         function="Floater.Visible"
+         parameter="rlv_strings" />
+        <menu_item_check.on_click
+         function="Floater.Toggle"
+         parameter="rlv_strings" />
+      </menu_item_check>
     </menu>
     <menu
      create_jump_keys="true"

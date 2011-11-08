@@ -133,6 +133,7 @@ public:
 	static const std::string& getAnonym(const std::string& strName);		// @shownames
 	static const std::string& getString(const std::string& strStringName);
 	static const char*        getStringFromReturnCode(ERlvCmdRet eRet);
+	static const std::string& getStringMapPath() { return m_StringMapPath; }
 	static std::string        getVersion(bool fLegacy = false);				// @version
 	static std::string        getVersionAbout();							// Shown in Help / About
 	static std::string        getVersionNum();								// @versionnum
@@ -143,6 +144,7 @@ protected:
 	static std::vector<std::string> m_Anonyms;
 	typedef std::map<std::string, std::list<std::string> > string_map_t;
 	static string_map_t m_StringMap;
+	static std::string  m_StringMapPath;
 };
 
 // ============================================================================
