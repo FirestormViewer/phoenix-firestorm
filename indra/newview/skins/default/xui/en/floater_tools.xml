@@ -1512,6 +1512,7 @@ even though the user gets a free copy.
              label_width="10"
              layout="topleft"
              left="10"
+             min_val="-4"
              max_val="4096"
              name="Pos Z"
              text_enabled_color="SL-MidBlue"

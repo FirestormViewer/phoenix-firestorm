@@ -1864,7 +1864,12 @@ void LLPanelObject::sendRotation(BOOL btn_down)
 
 		if (mRootObject != mObject)
 		{
-			rotation = rotation * ~mRootObject->getRotationRegion();
+			// ## Zi: Building spin controls for attachments
+			if(mObject->isAttachment())
+				rotation = rotation * ~mRootObject->getRotation();
+			else
+				rotation = rotation * ~mRootObject->getRotationRegion();
+			// ## Zi: Building spin controls for attachments
 		}
 		std::vector<LLVector3>& child_positions = mObject->mUnselectedChildrenPositions ;
 		std::vector<LLQuaternion> child_rotations;
@@ -1952,15 +1957,24 @@ void LLPanelObject::sendPosition(BOOL btn_down)
 	if (mObject.isNull()) return;
 
 	LLVector3 newpos(mCtrlPosX->get(), mCtrlPosY->get(), mCtrlPosZ->get());
+
 	LLViewerRegion* regionp = mObject->getRegion();
 
-	// Clamp the Z height
-	const F32 height = newpos.mV[VZ];
-	const F32 min_height = LLWorld::getInstance()->getMinAllowedZ(mObject, mObject->getPositionGlobal());
-	const F32 max_height = LLWorld::getInstance()->getRegionMaxHeight();
+	// ## Zi: Building spin controls for attachments
+	LLVector3d new_pos_global;
 
-	if (!mObject->isAttachment())
+	if (mObject->isAttachment())
 	{
+		newpos.clamp(LLVector3(-MAX_ATTACHMENT_DIST,-MAX_ATTACHMENT_DIST,-MAX_ATTACHMENT_DIST),LLVector3(MAX_ATTACHMENT_DIST,MAX_ATTACHMENT_DIST,MAX_ATTACHMENT_DIST));
+	}
+	// ## Zi: Building spin controls for attachments
+	else
+	{
+		// Clamp the Z height
+		const F32 height = newpos.mV[VZ];
+		const F32 min_height = LLWorld::getInstance()->getMinAllowedZ(mObject, mObject->getPositionGlobal());
+		const F32 max_height = LLWorld::getInstance()->getRegionMaxHeight();
+
 		if ( height < min_height)
 		{
 			newpos.mV[VZ] = min_height;
@@ -1977,13 +1991,47 @@ void LLPanelObject::sendPosition(BOOL btn_down)
 		{
 			mCtrlPosZ->set(LLWorld::getInstance()->resolveLandHeightAgent(newpos) + 1.f);
 		}
+		// Make sure new position is in a valid region, so the object
+		// won't get dumped by the simulator.
+		new_pos_global = regionp->getPosGlobalFromRegion(newpos);
 	}
 
-	// Make sure new position is in a valid region, so the object
-	// won't get dumped by the simulator.
-	LLVector3d new_pos_global = regionp->getPosGlobalFromRegion(newpos);
+	// ## Zi: Building spin controls for attachments
+	// partly copied from llmaniptranslate.cpp to get the positioning right
+	if (mObject->isAttachment())
+	{
+		LLVector3 old_position_local=mObject->getPosition();
 
-	if ( LLWorld::getInstance()->positionRegionValidGlobal(new_pos_global) )
+		if(mRootObject!=mObject)
+		{
+			newpos=newpos-mRootObject->getPosition();
+			newpos=newpos*~mRootObject->getRotation();
+			mObject->setPositionParent(newpos);
+		}
+		else
+			mObject->setPosition(newpos);
+		LLManip::rebuild(mObject) ;
+
+		gAgentAvatarp->clampAttachmentPositions();
+
+		LLVector3 new_position_local = mObject->getPosition();
+
+		// for individually selected roots, we need to counter-translate all unselected children
+		if (mObject->isRootEdit())
+		{
+			// counter-translate child objects if we are moving the root as an individual
+			mObject->resetChildrenPosition(old_position_local-new_position_local,TRUE);
+		}
+
+		if(!btn_down)
+		{
+			LLSelectMgr::getInstance()->sendMultipleUpdate(UPD_POSITION);
+		}
+
+		LLSelectMgr::getInstance()->updateSelectionCenter();
+	}
+	// ## Zi: Building spin controls for attachments
+	else if (LLWorld::getInstance()->positionRegionValidGlobal(new_pos_global) )
 	{
 		// send only if the position is changed, that is, the delta vector is not zero
 		LLVector3d old_pos_global = mObject->getPositionGlobal();
