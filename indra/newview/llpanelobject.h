@@ -110,6 +110,11 @@ protected:
 	LLVector3		mClipboardPos;
 	LLVector3		mClipboardSize;
 	LLVector3		mClipboardRot;
+
+	BOOL			mHasPosClipboard;
+	BOOL			mHasSizeClipboard;
+	BOOL			mHasRotClipboard;
+
 	LLSD			mPramsClipboard;
 	LLVolumeParams	mClipboardVolumeParams;
 	BOOL			mHasParamClipboard;
