@@ -931,7 +931,7 @@ class DarwinManifest(ViewerManifest):
 
             for s,d in {self.get_dst_prefix():app_name + ".app",
                         os.path.join(dmg_template, "_VolumeIcon.icns"): ".VolumeIcon.icns",
-                        os.path.join(dmg_template, "background.jpg"): "background.jpg",
+                        os.path.join(dmg_template, "background.png"): "background.png",
 						os.path.join(dmg_template, "VivoxAUP.txt"): "Vivox (Voice Services) Usage Policy.txt",
 						os.path.join(dmg_template, "LGPL-license.txt"): "LGPL License.txt",
                         os.path.join(dmg_template, "_DS_Store"): ".DS_Store"}.items():
@@ -939,7 +939,7 @@ class DarwinManifest(ViewerManifest):
                 self.copy_action(self.src_path_of(s), os.path.join(volpath, d))
 
             # Hide the background image, DS_Store file, and volume icon file (set their "visible" bit)
-            for f in ".VolumeIcon.icns", "background.jpg", ".DS_Store":
+            for f in ".VolumeIcon.icns", "background.png", ".DS_Store":
                 pathname = os.path.join(volpath, f)
                 # We've observed mysterious "no such file" failures of the SetFile
                 # command, especially on the first file listed above -- yet
@@ -969,10 +969,10 @@ class DarwinManifest(ViewerManifest):
             # Set the disk image root's custom icon bit
             self.run_command('SetFile -a C %r' % volpath)
 
-            # Set the file labels to gray so they can be seen against the
-            #  black background -- TS
+            # Set up the installer disk image: set icon positions, folder view
+            #  options, and icon label colors -- TS
             self.run_command('osascript %r %r' % 
-                             (self.src_path_of("installers/darwin/set-labels.applescript"),
+                             (self.src_path_of("installers/darwin/installer-dmg.applescript"),
                              volname))
         finally:
             # Unmount the image even if exceptions from any of the above 
