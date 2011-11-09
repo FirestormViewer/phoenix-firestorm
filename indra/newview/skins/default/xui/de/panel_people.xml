@@ -5,25 +5,25 @@
 	<string name="camera_no_focus" value="Die Kamera kann nicht auf [AVATARNAME] fokussiert werden, da er/sie sich außerhalb der Draw Distance befindet."/>
 	<string
 	  name="entering_draw_distance"
-	  value="[AVATARNAME] kommt in Draw Distance ([DISTANCE] m)."/>
+	  value="kommt in Draw Distance ([DISTANCE] m)."/>
 	<string
 	  name="leaving_draw_distance"
-	  value="[AVATARNAME] hat die Draw Distance verlassen."/>
+	  value="hat die Draw Distance verlassen."/>
 	<string
 	  name="entering_chat_range"
-	  value="[AVATARNAME] kommt in Chat-Reichweite ([DISTANCE] m)."/>
+	  value="kommt in Chat-Reichweite ([DISTANCE] m)."/>
 	<string
 	  name="leaving_chat_range"
-	  value="[AVATARNAME] hat die Chat-Reichweite verlassen."/>
+	  value="hat die Chat-Reichweite verlassen."/>
 	<string
 	  name="entering_region"
-	  value="[AVATARNAME] hat die Region betreten."/>
+	  value="hat die Region betreten."/>
 	<string
 	  name="entering_region_distance"
-	  value="[AVATARNAME] hat die Region betreten ([DISTANCE] m)."/>
+	  value="hat die Region betreten ([DISTANCE] m)."/>
 	<string
 	  name="leaving_region"
-	  value="[AVATARNAME] hat die Region verlassen."/>
+	  value="hat die Region verlassen."/>
 	<string name="no_recent_people" value="Hier sind keine Leute. Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/search/people Suche] oder die [secondlife:///app/worldmap Karte]."/>
 	<string name="no_filtered_recent_people" value="Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/people/[SEARCH_TERM] Suche]."/>
 	<string name="no_one_near" value="Es ist niemand in der Nähe. Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/search/people Suche] oder die [secondlife:///app/worldmap Karte]."/>
