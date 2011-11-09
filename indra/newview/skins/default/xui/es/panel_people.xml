@@ -3,13 +3,13 @@
 <panel label="Gente" name="people_panel">
 	<string name="high_server_load" value="Debido a la carga del servidor, la conmutación de tu visibilidad en masa puede tardar en ser efectuada. Por favor sé paciente."/>
 	<string name="camera_no_focus" value="La cámara no puede enfocar al avatar [AVATARNAME] porque está fuera de tu distancia de dibujo."/>
-	<string name="entering_draw_distance" value="[AVATARNAME] ha entrado en tu distancia de dibujo ([DISTANCE] m)."/>
-	<string name="leaving_draw_distance" value="[AVATARNAME] ha abandonado tu distancia de dibujo."/>
-	<string name="entering_chat_range" value="[AVATARNAME] ha entrado en el alcance del chat ([DISTANCE] m)."/>
-	<string name="leaving_chat_range" value="[AVATARNAME] ha salido del alcance del chat."/>
-	<string name="entering_region" value="[AVATARNAME] ha entrado en la región."/>
-	<string name="entering_region_distance" value="[AVATARNAME] ha entrado en la región ([DISTANCE] m)."/>
-	<string name="leaving_region" value="[AVATARNAME] ha abandonado la región."/>
+	<string name="entering_draw_distance" value="ha entrado en tu distancia de dibujo ([DISTANCE] m)."/>
+	<string name="leaving_draw_distance" value="ha abandonado tu distancia de dibujo."/>
+	<string name="entering_chat_range" value="ha entrado en el alcance del chat ([DISTANCE] m)."/>
+	<string name="leaving_chat_range" value="ha salido del alcance del chat."/>
+	<string name="entering_region" value="ha entrado en la región."/>
+	<string name="entering_region_distance" value="ha entrado en la región ([DISTANCE] m)."/>
+	<string name="leaving_region" value="ha abandonado la región."/>
 	<string name="no_recent_people" value="No hay gente reciente. ¿Buscas gente con la que pasar el rato? Usa la búsqueda para encontrar temas o contenidos en los que puedas estar interesado, y visita los lugares para conocer gente con interesses similares."/>
 	<string name="no_filtered_recent_people" value="¿No encuentras lo que buscas? Prueba la [secondlife:///app/search/people/[SEARCH_TERM] Búsqueda]."/>
 	<string name="no_one_near" value="No han nadie cerca. ¿Buscas gente con la que pasar el rato? Usa la búsqueda para encontrar temas o contenidos en los que puedas estar interesado, y visita los lugares para conocer gente con interesses similares."/>
