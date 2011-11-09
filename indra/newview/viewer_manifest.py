@@ -938,6 +938,18 @@ class DarwinManifest(ViewerManifest):
                 print "Copying to dmg", s, d
                 self.copy_action(self.src_path_of(s), os.path.join(volpath, d))
 
+            # Create the alias file (which is a resource file) from the .r
+            self.run_command('Rez %r -o %r' %
+                             (self.src_path_of("installers/darwin/release-dmg/Applications-alias.r"),
+                              os.path.join(volpath, "Applications")))
+
+            # Set up the installer disk image: set icon positions, folder view
+            #  options, and icon label colors. This must be done before the
+            #  files are hidden.
+            self.run_command('osascript %r %r' % 
+                             (self.src_path_of("installers/darwin/installer-dmg.applescript"),
+                             volname))
+
             # Hide the background image, DS_Store file, and volume icon file (set their "visible" bit)
             for f in ".VolumeIcon.icns", "background.png", ".DS_Store":
                 pathname = os.path.join(volpath, f)
@@ -958,22 +970,12 @@ class DarwinManifest(ViewerManifest):
                 # the original problem manifest by executing the desired command.
                 self.run_command('SetFile -a V %r' % pathname)
 
-            # Create the alias file (which is a resource file) from the .r
-            self.run_command('Rez %r -o %r' %
-                             (self.src_path_of("installers/darwin/release-dmg/Applications-alias.r"),
-                              os.path.join(volpath, "Applications")))
-
             # Set the alias file's alias and custom icon bits
             self.run_command('SetFile -a AC %r' % os.path.join(volpath, "Applications"))
 
             # Set the disk image root's custom icon bit
             self.run_command('SetFile -a C %r' % volpath)
 
-            # Set up the installer disk image: set icon positions, folder view
-            #  options, and icon label colors -- TS
-            self.run_command('osascript %r %r' % 
-                             (self.src_path_of("installers/darwin/installer-dmg.applescript"),
-                             volname))
         finally:
             # Unmount the image even if exceptions from any of the above 
             self.run_command('hdiutil detach -force %r' % devfile)
