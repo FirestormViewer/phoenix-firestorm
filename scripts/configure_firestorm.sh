@@ -378,7 +378,11 @@ fi
 if [ $WANTS_BUILD -eq $TRUE ] ; then
 	echo "Building $PLATFORM..."
 	if [ $PLATFORM == "darwin" ] ; then
-		xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_VERSION=4.2 GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
+		if [ $OSTYPE == "darwin11" ] ; then
+			xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
+		else
+			xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_VERSION=4.2 GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
+		fi
 	elif [ $PLATFORM == "linux32" ] ; then
 		JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
 		make -j $JOBS | tee -a $LOG
