@@ -649,6 +649,12 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 	}
 // [/SL:KB]
 
+	// Display "Cut" menu item, enable only if the item can be moved.
+	if(isItemMovable())
+		items.push_back(std::string("Cut"));
+	else
+		disabled_items.push_back(std::string("Cut"));
+
 	// Don't allow items to be pasted directly into the COF or the inbox
 	if (!isCOFFolder() && !isInboxFolder() && !isOutboxFolder()
 //-TT Client LSL Bridge  (also for #AO)
