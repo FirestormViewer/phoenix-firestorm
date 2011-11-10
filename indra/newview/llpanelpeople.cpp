@@ -779,10 +779,11 @@ void LLPanelPeople::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av
 	//LLStringUtil::format(postMsg, formatargs);
 
 	LLChat chat;
-    chat.mText = postMsg;
+	chat.mText = postMsg;
 	chat.mSourceType = CHAT_SOURCE_SYSTEM;
 	chat.mFromName = getRadarName(av_name);
 	chat.mFromID = agent_id;
+	chat.mChatType = CHAT_TYPE_WHISPER;
 	LLSD args;
 	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
 	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
