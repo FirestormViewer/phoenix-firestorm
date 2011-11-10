@@ -667,7 +667,7 @@ void LLScreenChannel::showToastsTop()
 
 		toast_rect = (*it).toast->getRect();
 
-		toast_rect.setLeftTopAndSize(getRect().mLeft - toast_rect.getWidth() / 2, 
+		toast_rect.setLeftTopAndSize(getRect().mRight - toast_rect.getWidth(), 
 			top - gSavedSettings.getS32("ToastGap"), 
 			toast_rect.getWidth(),
 			toast_rect.getHeight());
