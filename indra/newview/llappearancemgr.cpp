@@ -2661,6 +2661,18 @@ void LLAppearanceMgr::updateIsDirty()
 		gInventory.collectDescendentsIf(base_outfit, outfit_cats, outfit_items,
 									  LLInventoryModel::EXCLUDE_TRASH, collector);
 
+		// FIRE-3018: Ignore the bridge when checking for dirty. -- TS
+		for (U32 i = 0; i < cof_items.size(); ++i)
+		{
+			LLViewerInventoryItem *item = cof_items.get(i);
+
+			if (item->getName() == FSLSLBridge::instance().currentFullName())
+			{
+				cof_items.remove(i);
+				break;
+			}
+		}
+
 		if(outfit_items.count() != cof_items.count())
 		{
 			// Current outfit folder should have one more item than the outfit folder.
