@@ -389,6 +389,10 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 				// replicating the behavior here. -Zi
 				LLViewerCamera::getInstance()->setDefaultFOV(DEFAULT_FIELD_OF_VIEW);
 				gSavedSettings.setF32("CameraAngle", LLViewerCamera::getInstance()->getView());
+				// also, reset the marker for "currently zooming" in the mouselook zoom settings. -Zi
+				LLVector3 vTemp=gSavedSettings.getVector3("_NACL_MLFovValues");
+				vTemp.mV[2]=0.0f;
+				gSavedSettings.setVector3("_NACL_MLFovValues",vTemp);
 			}
 
 			gTeleportDisplayTimer.reset();
