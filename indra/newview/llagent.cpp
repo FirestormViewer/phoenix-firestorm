@@ -1961,6 +1961,10 @@ void LLAgent::endAnimationUpdateUI()
 			{
 				skip_list.insert(LLFloaterReg::findInstance("mini_map"));
 			}
+			if(gSavedSettings.getBOOL("FSShowStatsBarInMouselook"))
+			{
+				skip_list.insert(LLFloaterReg::findInstance("stats"));
+			}
 		
 			gFloaterView->popVisibleAll(skip_list);
 #endif
