@@ -462,7 +462,7 @@ void idle_afk_check()
 
 	// check idle timers
     F32 current_idle = gAwayTriggerTimer.getElapsedTimeF32();
-    F32 afk_timeout  = gSavedSettings.getS32("AFKTimeout");
+    S32 afk_timeout = gSavedSettings.getS32("AFKTimeout");
 
 // [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
 #ifdef RLV_EXTENSION_CMD_ALLOWIDLE
@@ -471,7 +471,8 @@ void idle_afk_check()
 		afk_timeout = 60 * 30;
 #endif // RLV_EXTENSION_CMD_ALLOWIDLE
 // [/RLVa:KB]
-	if (afk_timeout && (current_idle > afk_timeout) && ! gAgent.getAFK())
+        F32 afk_timeout_float  = (F32)afk_timeout;
+	if (afk_timeout && (current_idle > afk_timeout_float) && ! gAgent.getAFK())
 	{
 		LL_INFOS("IdleAway") << "Idle more than " << afk_timeout << " seconds: automatically changing to Away status" << LL_ENDL;
 		gAgent.setAFK();
