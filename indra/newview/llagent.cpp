@@ -2065,10 +2065,18 @@ void LLAgent::endAnimationUpdateUI()
 #if 0 // Use this once all floaters are registered
 		std::set<std::string> exceptions;
 		exceptions.insert("mini_map");
+		if(gSavedSettings.getBOOL("FSShowStatsBarInMouselook"))
+		{
+			exceptions.insert("stats");
+		}
 		LLFloaterReg::hideVisibleInstances(exceptions);
 #else // Use this for now
 		LLFloaterView::skip_list_t skip_list;
 		skip_list.insert(LLFloaterReg::findInstance("mini_map"));
+		if(gSavedSettings.getBOOL("FSShowStatsBarInMouselook"))
+		{
+			skip_list.insert(LLFloaterReg::findInstance("stats"));
+		}
 		gFloaterView->pushVisibleAll(FALSE, skip_list);
 #endif
 
