@@ -1708,6 +1708,11 @@ LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 i
 // Finds the text segment (if any) at the give local screen position
 LLTextSegmentPtr LLTextBase::getSegmentAtLocalPos( S32 x, S32 y, bool hit_past_end_of_line)
 {
+	if (!hasMouseCapture() && !mVisibleTextRect.pointInRect(x, y))
+	{
+		return LLTextSegmentPtr();
+	}
+	
 	// Find the cursor position at the requested local screen position
 	S32 offset = getDocIndexFromLocalCoord( x, y, FALSE, hit_past_end_of_line);
 	segment_set_t::iterator seg_iter = getSegIterContaining(offset);
