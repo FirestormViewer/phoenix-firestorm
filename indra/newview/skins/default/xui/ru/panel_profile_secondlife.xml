@@ -35,13 +35,13 @@
             <text name="partner_label" value="Партнер:"/>
             <text left="9" name="Groups:" value="Группы:"/>
             <group_list left_pad="3" name="group_list"/>
-            <text left="9" name="Про:" value="Info:"/>
+            <text left="9" name="About:" value="Про:"/>
             <view_border left_pad="3" name="info_border"/>
 
             <layout_stack>
 				<layout_panel name="left_buttonstack">
 					<button label="Найти на карте" label_selected="Найти на карте" name="show_on_map_btn" tool_tip="Найдите пользователя на карте."/>
-					<button label="Zahlen" label_selected="Zahlen" name="pay" tool_tip="Заплатить денег или заплатить бабки  пользователю."/>
+					<button label="Платить" label_selected="Платить" name="pay" tool_tip="Заплатить денег или заплатить бабки  пользователю."/>
 				</layout_panel>
 
 				<layout_panel name="middle_buttonstack">
