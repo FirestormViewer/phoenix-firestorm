@@ -723,7 +723,7 @@ void LLScreenChannel::showToastsTop()
 		{
 			// Fixing Z-order of toasts (EXT-4862)
 			// Next toast will be positioned under this one.
-			gFloaterView->sendChildToBack((*it).toast);
+			gFloaterView->sendChildToFront((*it).toast);
 		}
 	}
 
