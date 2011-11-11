@@ -3570,7 +3570,7 @@
       <key>Value</key>
       <integer>-1</integer>
     </map>
-    <key>DebugStatMode</key>
+    <key>DebugStatModePingSim</key>
     <map>
       <key>Comment</key>
       <string>Mode of stat in Statistics floater</string>
@@ -3966,7 +3966,7 @@
       <key>Value</key>
       <integer>-1</integer>
     </map>
-    <key>SimPendingUploads</key>
+    <key>DebugStatModeSimPendingUploads</key>
     <map>
       <key>Comment</key>
       <string>Mode of stat in Statistics floater</string>

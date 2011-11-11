@@ -45,7 +45,8 @@
 			   label_spacing="12"
 			   precision="1"
 			   show_bar="true"
-			   show_history="true">
+			   show_history="true"
+			   setting="DebugStatModeFPS">
 			</stat_bar>
 			<stat_bar
 			   name="bandwidth"
@@ -58,7 +59,8 @@
 			   label_spacing="1000"
 				 precision="0"
 			   show_bar="true"
-			   show_history="false">
+			   show_history="false"
+			   setting="DebugStatModeBandwidth">
 			</stat_bar>
 			<stat_bar
 			   name="packet_loss"
@@ -72,7 +74,8 @@
 			   precision="3"
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="true">
+			   show_mean="true"
+			   setting="DebugStatModePacketLoss">
 			</stat_bar>
 			<stat_bar
 			   name="ping"
@@ -86,7 +89,8 @@
 				 precision="0"
 			   show_bar="false"
 			   show_per_sec="false"
-			   show_mean="false">
+			   show_mean="false"
+			   setting="DebugStatModePingSim">
 			</stat_bar>
 		  </stat_view>
           <!--Advanced Section-->
@@ -111,7 +115,8 @@
 				 label_spacing="2000"
 				 precision="0"
 				 show_per_sec="false"
-         show_bar="false">
+         show_bar="false"
+				 setting="DebugStatModeKTrisDrawnFr">
         </stat_bar>
 			  <stat_bar
 				 name="ktrissec"
@@ -123,7 +128,8 @@
 				 tick_spacing="25000"
 				 label_spacing="50000"
 				 precision="0"
-         show_bar="false">
+         show_bar="false"
+				 setting="DebugStatModeKTrisDrawnSec">
         </stat_bar>
 			  <stat_bar
 				 name="objs"
@@ -136,7 +142,8 @@
 				 label_spacing="10000"
 				 precision="0"
 				 show_per_sec="false"
-				 show_bar="false">
+				 show_bar="false"
+				 setting="DebugStatModeTotalObjs">
 			  </stat_bar>
 			  <stat_bar
 				 name="newobjs"
@@ -148,14 +155,16 @@
 				 tick_spacing="200"
 				 label_spacing="400"
 				 show_per_sec="true"
-				 show_bar="false">
+				 show_bar="false"
+				 setting="DebugStatModeNewObjs">
 			  </stat_bar>
 			</stat_view>
         <!--Texture Stats-->
 			<stat_view
 			   name="texture"
 			   label="Texture"
-			   show_label="true">
+			   show_label="true"
+			   setting="OpenDebugStatTexture">
 			  <stat_bar
 				 name="numimagesstat"
 				 label="Count"
@@ -165,7 +174,8 @@
 				 tick_spacing="2000.f"
 				 label_spacing="4000.f" 
 				 show_per_sec="false"
-				 show_bar="false">
+				 show_bar="false"
+				 setting="DebugStatModeTextureCount">
 			  </stat_bar>
 
 			  <stat_bar
@@ -177,7 +187,8 @@
 				 tick_spacing="2000.f"
 				 label_spacing="4000.f" 
 				 show_per_sec="false"
-				 show_bar="false">
+				 show_bar="false"
+				 setting="DebugStatModeRawCount">
 			  </stat_bar>
 
 			  <stat_bar
@@ -190,7 +201,8 @@
 				 label_spacing="200.f" 
 				 precision="1"
 				 show_per_sec="false" 
-         show_bar="false">
+         show_bar="false"
+				 setting="DebugStatModeGLMem">
         </stat_bar>
 
 			  <stat_bar
@@ -203,7 +215,8 @@
 				 label_spacing="200.f" 
 				 precision="1"
 				 show_per_sec="false" 
-         show_bar="false">
+         show_bar="false"
+				 setting="DebugStatModeFormattedMem">
         </stat_bar>
 
 			  <stat_bar
@@ -216,7 +229,8 @@
 				 label_spacing="200.f" 
 				 precision="1"
 				 show_per_sec="false" 
-         show_bar="false">
+         show_bar="false"
+				 setting="DebugStatModeRawMem">
         </stat_bar>
 
 			  <stat_bar
@@ -229,7 +243,8 @@
 				 label_spacing="200.f" 
 				 precision="1"
 				 show_per_sec="false" 
-         show_bar="false">
+         show_bar="false"
+				 setting="DebugStatModeBoundMem">
         </stat_bar>
 			</stat_view>
         <!--Network Stats-->
@@ -248,7 +263,8 @@
 				 tick_spacing="128.f"
 				 label_spacing="256.f" 
 				 precision="1"
-				 show_bar="false">
+				 show_bar="false"
+				 setting="DebugStatModePacketsIn">
 			  </stat_bar>
 
 			  <stat_bar
@@ -261,7 +277,8 @@
 				 tick_spacing="128.f"
 				 label_spacing="256.f" 
 				 precision="1"
-				 show_bar="false" >
+				 show_bar="false"
+				 setting="DebugStatModePacketsOut">
 			  </stat_bar>
 
 			  <stat_bar
@@ -274,7 +291,8 @@
          tick_spacing="128.f"
          label_spacing="256.f"
          precision="1"
-				 show_bar="false" >
+				 show_bar="false"
+				 setting="DebugStatModeObjects">
 			  </stat_bar>
 
 			  <stat_bar
@@ -287,7 +305,8 @@
          tick_spacing="128.f"
          label_spacing="256.f"
          precision="1"
-				 show_bar="false" >
+				 show_bar="false"
+				 setting="DebugStatModeTexture">
 			  </stat_bar>
 
 			  <stat_bar
@@ -300,7 +319,8 @@
          tick_spacing="128.f"
          label_spacing="256.f"
          precision="1"
-				 show_bar="false" >
+				 show_bar="false"
+				 setting="DebugStatModeAsset">
 			  </stat_bar>
 
 			  <stat_bar
@@ -313,7 +333,8 @@
          tick_spacing="128.f"
          label_spacing="256.f"
          precision="1"
-				 show_bar="false" >
+				 show_bar="false"
+				 setting="DebugStatModeLayers">
 			  </stat_bar>
 
 			  <stat_bar
@@ -327,7 +348,8 @@
          label_spacing="256.f"
          precision="1"
 				 show_bar="false"
-				 show_history="false" >
+				 show_history="false"
+				 setting="DebugStatModeActualIn">
 			  </stat_bar>
 
 			  <stat_bar
@@ -341,7 +363,8 @@
          label_spacing="256.f"
          precision="1"
 				 show_bar="false"
-				 show_history="false">
+				 show_history="false"
+				 setting="DebugStatModeActualOut">
 			  </stat_bar>
 
 			  <stat_bar
@@ -350,7 +373,8 @@
 				 stat="vfspendingoperations"
 				 unit_label=" Ops."
 				 show_per_sec="false"
-				 show_bar="false" >
+				 show_bar="false"
+				 setting="DebugStatModeVFSPendingOps">
 			  </stat_bar>
 			</stat_view>
 		  </stat_view>
@@ -371,7 +395,8 @@
 			   label_spacing="0.33333f" 
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="false" >
+			   show_mean="false"
+			   setting="DebugStatModeTimeDialation">
 			</stat_bar>
 
 			<stat_bar
@@ -385,7 +410,8 @@
 			   label_spacing="15.f" 
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="false" >
+			   show_mean="false"
+			   setting="DebugStatModeSimFPS">
 			</stat_bar>
 
 			<stat_bar
@@ -399,13 +425,15 @@
 			   label_spacing="15.f" 
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="false" >
+			   show_mean="false"
+			   setting="DebugStatModePhysicsFPS">
 			</stat_bar>
 
 			<stat_view
 			   name="physicsdetail"
 			   label="Physics Details"
-			   show_label="true">
+			   show_label="true"
+			   setting="OpenDebugStatPhysicsDetails">
 			  <stat_bar
 				 name="physicspinnedtasks"
 				 label="Pinned Objects"
@@ -417,7 +445,8 @@
 				 label_spacing="100.f" 
 				 show_per_sec="false"
 				 show_bar="false"
-				 show_mean="false" >
+				 show_mean="false"
+				 setting="DebugStatModePinnedObjects">
 			  </stat_bar>
 
 			  <stat_bar
@@ -431,7 +460,8 @@
 				 label_spacing="100.f" 
 				 show_per_sec="false"
 				 show_bar="false"
-				 show_mean="false" >
+				 show_mean="false"
+				 setting="DebugStatModeLowLODObjects">
 			  </stat_bar>
 
 			  <stat_bar
@@ -446,7 +476,8 @@
 				 label_spacing="256.f" 
 				 show_per_sec="false"
 				 show_bar="false"
-				 show_mean="false" >
+				 show_mean="false"
+				 setting="DebugStatModeMemoryAllocated">
 			  </stat_bar>
 		  </stat_view>
 
@@ -461,7 +492,8 @@
 			   label_spacing="50.f" 
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="false" >
+			   show_mean="false"
+			   setting="DebugStatModeAgentUpdatesSec">
 			</stat_bar>
 
 			<stat_bar
@@ -475,7 +507,8 @@
 			   label_spacing="40.f" 
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="false" >
+			   show_mean="false"
+			   setting="DebugStatModeMainAgents">
 			</stat_bar>
 
 			<stat_bar
@@ -489,7 +522,8 @@
 			   label_spacing="10.f" 
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="false" >
+			   show_mean="false"
+			   setting="DebugStatModeChildAgents">
 			</stat_bar>
 
 			<stat_bar
@@ -503,7 +537,8 @@
 			   label_spacing="10000.f" 
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="false" >
+			   show_mean="false"
+			   setting="DebugStatModeSimObjects">
 			</stat_bar>
 
 			<stat_bar
@@ -517,7 +552,8 @@
 			   label_spacing="1250.f" 
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="false" >
+			   show_mean="false"
+			   setting="DebugStatModeSimActiveObjects">
 			</stat_bar>
 
 			<stat_bar
@@ -531,7 +567,8 @@
 			   label_spacing="3750.f"  
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="false" >
+			   show_mean="false"
+			   setting="DebugStatModeSimActiveScripts">
 			</stat_bar>
 
 			<stat_bar
@@ -546,7 +583,8 @@
 			   label_spacing="1250.f"  
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="false" >
+			   show_mean="false"
+			   setting="DebugStatModeSimScriptEvents">
 			</stat_bar>
 
 			<stat_bar
@@ -561,7 +599,8 @@
 			   label_spacing="1000.f" 
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="false" >
+			   show_mean="false"
+			   setting="DebugStatModeSimInPPS">
 			</stat_bar>
 
 			<stat_bar
@@ -576,7 +615,8 @@
 			   label_spacing="1000.f" 
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="false" >
+			   show_mean="false"
+			   setting="DebugStatModeSimOutPPS">
 			</stat_bar>
 
 			<stat_bar
@@ -590,7 +630,8 @@
 			   label_spacing="200.f" 
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="false" >
+			   show_mean="false"
+			   setting="DebugStatModeSimPendingDownloads">
 			</stat_bar>
 
 			<stat_bar
@@ -604,7 +645,8 @@
 			   label_spacing="50.f" 
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="false" >
+			   show_mean="false"
+			   setting="DebugStatModeSimPendingUploads">
 			</stat_bar>
 
 			<stat_bar
@@ -619,13 +661,15 @@
 			   label_spacing="50000.f" 
 			   show_per_sec="false"
 			   show_bar="false"
-			   show_mean="false" >
+			   show_mean="false"
+			   setting="DebugStatModeSimTotalUnackedBytes">
 			</stat_bar>
 
 			<stat_view
 			   name="simperf"
 			   label="Time (ms)"
-			   show_label="true">
+			   show_label="true"
+			   setting="OpenDebugStatSimTime">
 			  <stat_bar
 				 name="simframemsec"
 				 label="Total Frame Time"
@@ -638,7 +682,8 @@
 				 label_spacing="20.f" 
 				 show_per_sec="false"
 				 show_bar="false"
-				 show_mean="false" >
+				 show_mean="false"
+				 setting="DebugStatModeSimFrameMsec">
 			  </stat_bar>
 
 			  <stat_bar
@@ -653,7 +698,8 @@
 				 label_spacing="20.f" 
 				 show_per_sec="false"
 				 show_bar="false"
-				 show_mean="false" >
+				 show_mean="false"
+				 setting="DebugStatModeSimNetMsec">
 			  </stat_bar>
 
 			  <stat_bar
@@ -668,7 +714,8 @@
 				 label_spacing="20.f" 
 				 show_per_sec="false"
 				 show_bar="false"
-				 show_mean="false" >
+				 show_mean="false"
+				 setting="DebugStatModeSimSimPhysicsMsec">
 			  </stat_bar>
 
 			  <stat_bar
@@ -683,7 +730,8 @@
 				 label_spacing="20.f" 
 				 show_per_sec="false"
 				 show_bar="false"
-				 show_mean="false" >
+				 show_mean="false"
+				 setting="DebugStatModeSimSimOtherMsec">
 			  </stat_bar>
 
 			  <stat_bar
@@ -698,7 +746,8 @@
 				 label_spacing="20.f" 
 				 show_per_sec="false"
 				 show_bar="false"
-				 show_mean="false" >
+				 show_mean="false"
+				 setting="DebugStatModeSimAgentMsec">
 			  </stat_bar>
 
 			  <stat_bar
@@ -713,7 +762,8 @@
 				 label_spacing="20.f" 
 				 show_per_sec="false"
 				 show_bar="false"
-				 show_mean="false" >
+				 show_mean="false"
+				 setting="DebugStatModeSimImagesMsec">
 			  </stat_bar>
 
 			  <stat_bar
@@ -728,7 +778,8 @@
 				 label_spacing="20.f" 
 				 show_per_sec="false"
 				 show_bar="false"
-				 show_mean="false" >
+				 show_mean="false"
+				 setting="DebugStatModeSimScriptMsec">
 			  </stat_bar>
 
         <stat_bar
@@ -743,13 +794,15 @@
          label_spacing="20.f"
          show_per_sec="false"
          show_bar="false"
-         show_mean="false" >
+         show_mean="false"
+         setting="DebugStatModeSimSpareMsec">
         </stat_bar>
         <!--2nd level time blocks under 'Details' second-->
           <stat_view
  			     name="timedetails"
 			     label="Time Details (ms)"
-			     show_label="true">
+			     show_label="true"
+			     setting="OpenDebugStatSimTimeDetails">
             <stat_bar
              name="simsimphysicsstepmsec"
              label="  Physics Step"
@@ -762,7 +815,8 @@
              label_spacing="20.f"
              show_per_sec="false"
              show_bar="false"
-             show_mean="false" >
+             show_mean="false"
+             setting="DebugStatModeSimSimPhysicsStepMsec">
             </stat_bar>
             <stat_bar
              name="simsimphysicsshapeupdatemsec"
@@ -776,7 +830,8 @@
              label_spacing="20.f"
              show_per_sec="false"
              show_bar="false"
-             show_mean="false" >
+             show_mean="false"
+             setting="DebugStatModeSimSimPhysicsShapeUpdateMsec">
             </stat_bar>
             <stat_bar
              name="simsimphysicsothermsec"
@@ -790,7 +845,8 @@
              label_spacing="20.f"
              show_per_sec="false"
              show_bar="false"
-             show_mean="false" >
+             show_mean="false"
+             setting="DebugStatModeSimSimPhysicsOtherMsec">
             </stat_bar>
             <stat_bar
              name="simsleepmsec"
@@ -804,7 +860,8 @@
              label_spacing="20.f"
              show_per_sec="false"
              show_bar="false"
-             show_mean="false" >
+             show_mean="false"
+             setting="DebugStatModeSimSleepMsec">
             </stat_bar>
             <stat_bar
              name="simpumpiomsec"
@@ -818,7 +875,8 @@
              label_spacing="20.f"
              show_per_sec="false"
              show_bar="false"
-             show_mean="false" >
+             show_mean="false"
+             setting="DebugStatModeSimPumpIOMsec">
             </stat_bar>
 			</stat_view>
 			</stat_view>

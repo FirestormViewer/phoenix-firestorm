@@ -51,10 +51,49 @@ LLStatBar::LLStatBar(const Params& p)
 	  mPrecision(p.precision),
 	  mUpdatesPerSec(p.update_rate),
 	  mPerSec(p.show_per_sec),
-	  mDisplayBar(p.show_bar),
-	  mDisplayHistory(p.show_history),
-	  mDisplayMean(p.show_mean)
+	  mDisplayMean(p.show_mean),
+	  mSetting(p.setting)
 {
+	S32 setting = LLUI::sSettingGroups["config"]->getS32(mSetting);
+	switch (setting)
+	{
+		default:
+		case -1:
+			mDisplayBar = p.show_bar;
+			mDisplayHistory = p.show_history;
+			break;
+		case 0:
+			mDisplayBar = FALSE;
+			mDisplayHistory = FALSE;
+			break;
+		case 1:
+			mDisplayBar = TRUE;
+			mDisplayHistory = TRUE;
+			break;
+		case 2:
+			mDisplayBar = TRUE;
+			mDisplayHistory = FALSE;
+			break;
+	}
+}
+
+LLStatBar::~LLStatBar()
+{
+	if (mDisplayHistory)
+	{
+		LLUI::sSettingGroups["config"]->setS32(mSetting, 1);
+	}
+	else
+	{
+		if (mDisplayBar)
+		{
+			LLUI::sSettingGroups["config"]->setS32(mSetting, 2);
+		}
+		else
+		{
+			LLUI::sSettingGroups["config"]->setS32(mSetting, 0);
+		}
+	}
 }
 
 BOOL LLStatBar::handleMouseDown(S32 x, S32 y, MASK mask)
