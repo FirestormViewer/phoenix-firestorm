@@ -1916,6 +1916,7 @@ LLPrivateMemoryPoolManager::~LLPrivateMemoryPoolManager()
 void LLPrivateMemoryPoolManager::initClass(BOOL enabled, U32 max_pool_size) 
 {
 	llassert_always(!sInstance) ;
+	enabled = FALSE; // <ND/> FIRE-3834; Always disable the private memory pools for now.
 
 	sInstance = new LLPrivateMemoryPoolManager(enabled, max_pool_size) ;
 	sPrivatePoolEnabled = enabled?true:false;

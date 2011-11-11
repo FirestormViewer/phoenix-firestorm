@@ -1368,7 +1368,7 @@ bool LLAppViewer::mainLoop()
 		llclearcallstacks;
 
 		//check memory availability information
-		checkMemory() ;
+		//		checkMemory() ; // <ND/> FIRE-3834; Disable memory checking for the time being.
 		
 		try
 		{
