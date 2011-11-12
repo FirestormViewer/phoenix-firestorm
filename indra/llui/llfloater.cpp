@@ -268,6 +268,9 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	mHasBeenDraggedWhileMinimized(FALSE),
 	mPreviousMinimizedBottom(0),
 	mPreviousMinimizedLeft(0),
+// [SL:KB] - Patch: UI-FloaterTearOffSignal | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+	mTearOffSignal(NULL),
+// [/SL:KB]
 	mMinimizeSignal(NULL)
 //	mNotificationContext(NULL)
 {
@@ -549,6 +552,9 @@ LLFloater::~LLFloater()
 	storeDockStateControl();
 
 	delete mMinimizeSignal;
+// [SL:KB] - Patch: UI-FloaterTearOffSignal | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+	delete mTearOffSignal;
+// [/SL:KB]
 }
 
 void LLFloater::storeRectControl()
@@ -1648,6 +1654,13 @@ void LLFloater::setTornOff(bool torn_off)
 {
 	if ( (!mCanTearOff) || (mTornOff == torn_off) )
 		return;
+
+// [SL:KB] - Patch: UI-FloaterTearSignal | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+	if (mTearOffSignal)
+	{
+		(*mTearOffSignal)(this, LLSD(torn_off));
+	}
+// [/SL:KB]
 
 	LLMultiFloater* host_floater = getHost();
 	if ( (torn_off) && (host_floater) )		// Tear off
@@ -3123,6 +3136,14 @@ boost::signals2::connection LLFloater::setMinimizeCallback( const commit_signal_
 	if (!mMinimizeSignal) mMinimizeSignal = new commit_signal_t();
 	return mMinimizeSignal->connect(cb); 
 }
+
+// [SL:KB] - Patch: UI-FloaterTearOffSignal | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+boost::signals2::connection LLFloater::setTearOffCallback( const commit_signal_t::slot_type& cb ) 
+{ 
+	if (!mTearOffSignal) mTearOffSignal = new commit_signal_t();
+	return mTearOffSignal->connect(cb); 
+}
+// [/SL:KB]
 
 boost::signals2::connection LLFloater::setOpenCallback( const commit_signal_t::slot_type& cb )
 {

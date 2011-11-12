@@ -178,6 +178,9 @@ public:
 	bool buildFromFile(const std::string &filename, LLXMLNodePtr output_node = NULL);
 
 	boost::signals2::connection setMinimizeCallback( const commit_signal_t::slot_type& cb );
+// [SL:KB] - Patch: UI-FloaterTearOffSignal | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+	boost::signals2::connection setTearOffCallback( const commit_signal_t::slot_type& cb );
+// [/SL:KB]
 	boost::signals2::connection setOpenCallback( const commit_signal_t::slot_type& cb );
 	boost::signals2::connection setCloseCallback( const commit_signal_t::slot_type& cb );
 
@@ -404,6 +407,9 @@ public:
 	commit_signal_t mCloseSignal;		
 
 	commit_signal_t* mMinimizeSignal;
+// [SL:KB] - Patch: UI-FloaterTearOffSignal | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+	commit_signal_t* mTearOffSignal;
+// [/SL:KB]
 
 protected:
 	std::string		mRectControl;

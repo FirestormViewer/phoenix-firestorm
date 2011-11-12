@@ -179,11 +179,40 @@ BOOL LLNearbyChatBar::postBuild()
 				onToggleNearbyChatPanel();
 			pConvFloater->LLMultiFloater::addFloater(this, TRUE, LLTabContainer::START);
 		}
+
+		onTearOff(LLSD(isTornOff()));
+		setTearOffCallback(boost::bind(&LLNearbyChatBar::onTearOff, this, _2));
 	}
 // [/SL:KB]
 
 	return TRUE;
 }
+
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+void LLNearbyChatBar::onTearOff(const LLSD& sdData)
+{
+	static S32 nExpandWidth = 0;
+
+	// Calculate the width of the toggle button as: floater width - button left
+	LLUICtrl* pToggleBtn = findChild<LLUICtrl>("show_nearby_chat");
+	if ( (0 == nExpandWidth) && (pToggleBtn->getVisible()) )
+		nExpandWidth = getRect().getWidth() - pToggleBtn->getRect().mLeft;
+
+	LLUICtrl* pChatBox = mChatBarImpl->getChatBoxCtrl();
+	if (sdData.asBoolean())		// Tearing off
+	{
+		mChatBarImpl->getChatBoxCtrl()->reshape(pChatBox->getRect().getWidth() - nExpandWidth, pChatBox->getRect().getHeight());
+		pToggleBtn->setVisible(TRUE);
+	}
+	else						// Attaching to parent
+	{
+		showHistory();
+
+		mChatBarImpl->getChatBoxCtrl()->reshape(pChatBox->getRect().getWidth() + nExpandWidth, pChatBox->getRect().getHeight());
+		pToggleBtn->setVisible(FALSE);
+	}
+}
+// [/SL:KB]
 
 bool LLNearbyChatBar::applyRectControl()
 {

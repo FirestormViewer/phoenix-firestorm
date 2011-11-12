@@ -106,6 +106,9 @@ protected:
 //	static void onChatBoxKeystroke(LLLineEditor* caller, void* userdata);
 //	static void onChatBoxFocusLost(LLFocusableElement* caller, void* userdata);
 //	void onChatBoxFocusReceived();
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+	void onTearOff(const LLSD& sdData);
+// [/SL:KB]
 
 //	void sendChat( EChatType type );
 //	void onChatBoxCommit();
