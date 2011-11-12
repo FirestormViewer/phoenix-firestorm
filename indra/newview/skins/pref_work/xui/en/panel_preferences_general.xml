@@ -215,6 +215,7 @@
      name="show_location_checkbox"
      top_delta="5"
      width="256" />
+
     <text
      type="string"
      length="1"
@@ -223,7 +224,7 @@
      layout="topleft"
      left="30"
      name="name_tags_textbox"
-     top_pad="10"
+     top_pad="15"
      width="200">
        Name tags:
     </text>
@@ -284,16 +285,6 @@
      tool_tip="Show username, like bobsmith123"
      width="100"
      top_delta="0" />
-   <check_box
-     control_name="FSNameTagShowLegacyUsernames"
-	 enabled_control="NameTagShowUserNames"
-     height="16"
-     label="Legacy names instead"
-     layout="topleft"
-     left_pad="50"
-     name="FSshow_legacyun"
-     tool_tip="Show legacy name (Firstname Lastname) instead of username (firstname.lastname)"
-     top_delta="0" />
 
     <check_box
      control_name="NameTagShowGroupTitles"
@@ -331,6 +322,16 @@
         <check_box.commit_callback
          function="FS.ToggleSortContacts" />
     </check_box>
+   <check_box
+     control_name="FSNameTagShowLegacyUsernames"
+	 enabled_control="NameTagShowUserNames"
+     height="16"
+     label="Legacy names instead"
+     layout="topleft"
+     left_pad="50"
+     name="FSshow_legacyun"
+     tool_tip="Show legacy name (Firstname Lastname) instead of username (firstname.lastname)"
+     top_delta="0" />
     
     <text
      type="string"
@@ -339,7 +340,7 @@
      height="13"
      layout="topleft"
      left="30"
-     top_pad="50"
+     top_pad="40"
      name="title_afk_text"
      width="150">
         Away timeout:
