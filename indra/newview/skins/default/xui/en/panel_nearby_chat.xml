@@ -7,7 +7,7 @@
  help_topic="nearby_chat"
  width="320">
             <check_box
-             bottom_delta="36"
+             top="10"
              control_name="TranslateChat"
              enabled="true"
              height="16"
@@ -22,9 +22,9 @@
     bg_writeable_color="ChatHistoryBgColor"
     follows="all"
     left="5"
-    top_delta="17"
+    top_pad="5"
     layout="topleft"
-    height="260"
+    height="270"
     name="chat_history"
     parse_highlights="true"
     text_color="ChatHistoryTextColor"

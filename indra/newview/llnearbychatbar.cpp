@@ -62,8 +62,11 @@ S32 LLNearbyChatBarBase::sLastSpecialChatChannel = 0;
 // [/SL:KB]
 
 const S32 EXPANDED_HEIGHT = 300;
-const S32 COLLAPSED_HEIGHT = 60;
+//const S32 COLLAPSED_HEIGHT = 60;
 const S32 EXPANDED_MIN_HEIGHT = 150;
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+S32 COLLAPSED_HEIGHT = 60;
+// [/SL:KB]
 
 // legacy callback glue
 void send_chat_from_viewer(const std::string& utf8_out_text, EChatType type, S32 channel);
@@ -153,10 +156,13 @@ BOOL LLNearbyChatBar::postBuild()
 	mNearbyChatContainer = findChild<LLPanel>("panel_nearby_chat");
 	mNearbyChat = findChild<LLNearbyChat>("nearby_chat");
 
-	mChatBarImpl = (hasChild("panel_chat_bar_multi")) ? findChild<LLNearbyChatBarBase>("panel_chat_bar_multi") : findChild<LLNearbyChatBarBase>("panel_chat_bar_single");
+	mChatBarImpl = (hasChild("panel_chat_bar_multi", TRUE)) ? findChild<LLNearbyChatBarBase>("panel_chat_bar_multi", TRUE) : findChild<LLNearbyChatBarBase>("panel_chat_bar_single", TRUE);
 
 	LLUICtrl* show_btn = getChild<LLUICtrl>("show_nearby_chat");
 	show_btn->setCommitCallback(boost::bind(&LLNearbyChatBar::onToggleNearbyChatPanel, this));
+
+	// The collpased height differs between single-line and multi-line so dynamically calculate it from the default sizes
+	COLLAPSED_HEIGHT = getRect().getHeight() - mNearbyChatContainer->getRect().getHeight();
 // [/SL:KB]
 
 	mExpandedHeight = COLLAPSED_HEIGHT + EXPANDED_HEIGHT;
