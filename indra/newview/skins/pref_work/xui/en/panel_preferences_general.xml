@@ -468,7 +468,7 @@
      bevel_style="none"
      top="10"
      right="-10"
-     height="150"
+     height="110"
      width="200"
      follows="top|right"
      layout="topleft"
@@ -498,6 +498,47 @@
          label="Use web profiles by default"
          width="270"
          tool_tip="Shows profiles as a web page instead of a v1-style panel"/>
+
+<!-- This option is duplicated here for ease of locating and to replicate LLv3 -->
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="5"
+         name="inworld_typing_rg_label"
+         top_pad="10"
+         width="200">
+           Pressing letter keys:
+        </text>
+        <radio_group
+         control_name="LetterKeysFocusChatBar"
+         height="34"
+         width="200"
+         layout="topleft"
+         left="10"
+         top_pad="0"
+         name="inworld_typing_preference">
+            <radio_item
+             label="Starts local chat"
+             name="radio_start_chat"
+             top="0"
+             layout="topleft"
+             height="16"
+             left="0"
+             value="1"
+             width="150" />
+            <radio_item
+             label="Affects movement (i.e. WASD)"
+             left="0"
+             layout="topleft"
+             top="18"
+             height="16"
+             name="radio_move"
+             value="0"
+             width="75" />
+        </radio_group>
 
     </panel>
 
