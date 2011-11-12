@@ -36,6 +36,8 @@
 #include "llspeakers.h"
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.2.0a)
 #include "llnearbychatbarbase.h"
+
+class LLNearbyChat;
 // [/SL:KB]
 
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
@@ -135,6 +137,8 @@ protected:
 //	LLOutputMonitorCtrl* mOutputMonitor;
 //	LLLocalSpeakerMgr*  mSpeakerMgr;
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+	LLPanel*			 mNearbyChatContainer;		// "panel_nearby_chat" is the parent panel containing "nearby_chat"
+	LLNearbyChat*		 mNearbyChat;				// "nearby_chat"
 	LLNearbyChatBarBase* mChatBarImpl;
 // [/SL:KB]
 

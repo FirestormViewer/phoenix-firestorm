@@ -92,6 +92,8 @@ LLNearbyChatBar::LLNearbyChatBar(const LLSD& key)
 	: LLFloater(key),
 //	mChatBox(NULL)
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+	mNearbyChatContainer(NULL),
+	mNearbyChat(NULL),
 	mChatBarImpl(NULL)
 // [/SL:KB]
 {
@@ -148,6 +150,9 @@ BOOL LLNearbyChatBarSingle::postBuild()
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
 BOOL LLNearbyChatBar::postBuild()
 {
+	mNearbyChatContainer = findChild<LLPanel>("panel_nearby_chat");
+	mNearbyChat = findChild<LLNearbyChat>("nearby_chat");
+
 	mChatBarImpl = (hasChild("panel_chat_bar_multi")) ? findChild<LLNearbyChatBarBase>("panel_chat_bar_multi") : findChild<LLNearbyChatBarBase>("panel_chat_bar_single");
 
 	LLUICtrl* show_btn = getChild<LLUICtrl>("show_nearby_chat");
@@ -170,7 +175,7 @@ BOOL LLNearbyChatBar::postBuild()
 		LLIMFloaterContainer* pConvFloater = LLIMFloaterContainer::getInstance();
 		if (pConvFloater)
 		{
-			if (!getChildView("nearby_chat")->getVisible())
+			if (!mNearbyChatContainer->getVisible())
 				onToggleNearbyChatPanel();
 			pConvFloater->LLMultiFloater::addFloater(this, TRUE, LLTabContainer::START);
 		}
@@ -191,7 +196,10 @@ bool LLNearbyChatBar::applyRectControl()
 
 	bool rect_controlled = LLFloater::applyRectControl();
 
-	LLView* nearby_chat = getChildView("nearby_chat");	
+//	LLView* nearby_chat = getChildView("nearby_chat");	
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+	LLView* nearby_chat = mNearbyChatContainer;
+// [/SL:KB]
 	if (!nearby_chat->getVisible())
 	{
 		reshape(getRect().getWidth(), getMinHeight());
@@ -203,7 +211,7 @@ bool LLNearbyChatBar::applyRectControl()
 		setResizeLimits(getMinWidth(), EXPANDED_MIN_HEIGHT);
 	}
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-	getChildView("panel_nearby_chat")->setVisible(mExpandedHeight > COLLAPSED_HEIGHT);
+	mNearbyChatContainer->setVisible(mExpandedHeight > COLLAPSED_HEIGHT);
 // [/SL:KB]
 	
 	return rect_controlled;
@@ -231,7 +239,10 @@ void LLNearbyChatBar::showHistory()
 {
 	openFloater();
 
-	if (!getChildView("nearby_chat")->getVisible())
+//	if (!getChildView("nearby_chat")->getVisible())
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+	if (!mNearbyChatContainer->getVisible())
+// [/SL:KB]
 	{
 		onToggleNearbyChatPanel();
 	}
@@ -547,7 +558,7 @@ void LLNearbyChatBar::onToggleNearbyChatPanel()
 {
 //	LLView* nearby_chat = getChildView("nearby_chat");
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-	LLView* nearby_chat = getChildView("panel_nearby_chat");
+	LLView* nearby_chat = mNearbyChatContainer;
 // [/SL:KB]
 
 	if (nearby_chat->getVisible())
@@ -572,16 +583,27 @@ void LLNearbyChatBar::onToggleNearbyChatPanel()
 	}
 }
 
+//void LLNearbyChatBar::setMinimized(BOOL b)
+//{
+//	LLNearbyChat* nearby_chat = getChild<LLNearbyChat>("nearby_chat");
+//	// when unminimizing with nearby chat visible, go ahead and kill off screen chats
+//	if (!b && nearby_chat->getVisible())
+//	{
+//		nearby_chat->removeScreenChat();
+//	}
+//		LLFloater::setMinimized(b);
+//}
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
 void LLNearbyChatBar::setMinimized(BOOL b)
 {
-	LLNearbyChat* nearby_chat = getChild<LLNearbyChat>("nearby_chat");
-	// when unminimizing with nearby chat visible, go ahead and kill off screen chats
-	if (!b && nearby_chat->getVisible())
+	// When unminimizing with nearby chat visible, go ahead and kill off screen chats
+	if ( (isMinimized() != b) && (!b) && (mNearbyChatContainer->getVisible()) )
 	{
-		nearby_chat->removeScreenChat();
+		mNearbyChat->removeScreenChat();
 	}
 		LLFloater::setMinimized(b);
 }
+// [/SL:KB]
 
 //void LLNearbyChatBar::onChatBoxCommit()
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
