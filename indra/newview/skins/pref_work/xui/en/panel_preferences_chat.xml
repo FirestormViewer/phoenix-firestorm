@@ -490,20 +490,21 @@
              height="18"
              tool_tip="Check to see popups when an instant message arrives"
              width="400" />
+
             <check_box
              control_name="OnlineOfflinetoNearbyChat"
              name="OnlineOfflinetoNearbyChat"
-             label="Friend on/off-line notices to Nearby Chat"
+             label="Log Friend on/off-line notices to Nearby Chat"
              layout="topleft"
-             top_pad="0"
-             left="40"
+             top_pad="5"
+             left="30"
              height="18"
              width="400" />
 
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="5"
+             top_pad="0"
              left="30"
              width="400"
              height="18"
