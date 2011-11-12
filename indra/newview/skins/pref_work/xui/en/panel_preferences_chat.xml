@@ -524,17 +524,6 @@
              label="Show IMs and group chat in chat console"/>
 
             <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="0"
-             left="30"
-             width="50"
-             height="18"
-             control_name="FSPaymentInfoInChat"
-             name="FSPaymentInfoInChat"
-             label="Show L$ transactions in local chat instead of toasts"/>
-
-            <check_box
              control_name="ShowStreamMetadata"
              name="ShowStreamMetadata"
              label="Show stream title in local chat"
