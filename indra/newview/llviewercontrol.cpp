@@ -67,6 +67,9 @@
 #include "llvowlsky.h"
 #include "llrender.h"
 #include "llnavigationbar.h"
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-24 (Catznip-3.2.0a)
+#include "llnearbychatbar.h"
+// [/SL:KB]
 #include "llfloatertools.h"
 #include "llpaneloutfitsinventory.h"
 #include "llpanellogin.h"
@@ -735,6 +738,10 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("UpdaterServiceSetting")->getSignal()->connect(boost::bind(&toggle_updater_service_active, _2));
 	gSavedSettings.getControl("ForceShowGrid")->getSignal()->connect(boost::bind(&handleForceShowGrid, _2));
 	gSavedSettings.getControl("RenderTransparentWater")->getSignal()->connect(boost::bind(&handleRenderTransparentWaterChanged, _2));
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-24 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+	gSavedSettings.getControl("NearbyChatFloaterBarType")->getSignal()->connect(boost::bind(&LLNearbyChatBar::processFloaterTypeChanged));
+	gSavedSettings.getControl("NearbyChatFloaterWindow")->getSignal()->connect(boost::bind(&LLNearbyChatBar::processFloaterTypeChanged));
+// [/SL:KB]
 }
 
 #if TEST_CACHED_CONTROL

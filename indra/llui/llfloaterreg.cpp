@@ -425,6 +425,23 @@ std::string LLFloaterReg::getDockStateControlName(const std::string& name)
 	return res;
 }
 
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+//static
+std::string LLFloaterReg::declareTearOffStateControl(const std::string& name)
+{
+	std::string controlname = getTearOffStateControlName(name);
+	LLFloater::getControlGroup()->declareBOOL(controlname, TRUE, llformat("Window Tear Off state for %s", name.c_str()), TRUE);
+	return controlname;
+}
+
+//static
+std::string LLFloaterReg::getTearOffStateControlName(const std::string& name)
+{
+	std::string res = std::string("floater_tearoff_") + name;
+	LLStringUtil::replaceChar(res, ' ', '_');
+	return res;
+}
+// [/SL:KB]
 
 //static
 void LLFloaterReg::registerControlVariables()

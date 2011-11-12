@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ follows="left|right|bottom"
+ height="54"
+ left="0"
+ width="380">
+    <text_editor
+     commit_on_return="true"
+     follows="all"
+     height="46"
+     label="Press Enter to say, Ctrl+Enter to shout"
+     layout="topleft"
+     left_delta="7"
+     max_length="1024"
+     name="chat_editor"
+     top="2"
+     use_ellipses="false"
+     width="335"
+     word_wrap="true" />
+      <button
+        follows="right"
+        is_toggle="true"
+        width="20"
+        top="2"
+        layout="topleft"
+        left_pad="12"
+        image_disabled="ComboButton_UpOff"
+        image_unselected="ComboButton_UpOff"
+        image_selected="ComboButton_On"
+        image_pressed="ComboButton_UpSelected"
+        image_pressed_selected="ComboButton_Selected"
+        height="23"
+        chrome="true"
+        name="show_nearby_chat"
+        tool_tip="Shows/hides nearby chat log">
+      </button>
+</panel>

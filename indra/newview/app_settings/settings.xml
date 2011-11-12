@@ -5943,6 +5943,28 @@
 		<key>Value</key>
 		<integer>0</integer>
 	</map>
+    <key>NearbyChatFloaterBarType</key>
+    <map>
+      <key>Comment</key>
+      <string>Indicates the type of chat bar to use on the nearby chat floater (1 - single line; 2 - multi line)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>2</integer>
+    </map>
+    <key>NearbyChatFloaterWindow</key>
+    <map>
+      <key>Comment</key>
+      <string>Show the nearby chat floater as a separate floater or embedded in the multi-tabbed conversations floater (see ChatWindow)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <boolean>1</boolean>
+    </map>
     <key>NearMeRange</key>
     <map>
       <key>Comment</key>
