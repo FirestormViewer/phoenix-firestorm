@@ -130,7 +130,6 @@
          width="140">
             Script Dialog Placement:
         </text>
-
         <check_box
          control_name="ShowScriptDialogsTopRight"
          height="16"
@@ -142,30 +141,43 @@
          tool_tip="Set this to move script dialog notifications to the top right corner of the screen (Classic V1.x behavior)."
          top_pad="12"
          width="256" />
-
         <check_box
-        control_name="ShowGroupNoticesTopRight"
-        height="16"
-        initial_value="true"
-        label="Group Notices in Top Right"
-        layout="topleft"
-        left_delta="0"
-        name="ShowGroupNoticesTopRight"
-        tool_tip="Set this to move group notifications to the top right corner of the screen (Classic V1.x behavior)."
-        top_pad="7"
-        width="256" />
-      
-      <check_box
+         control_name="ShowGroupNoticesTopRight"
+         height="16"
+         initial_value="true"
+         label="Group Notices in Top Right"
+         layout="topleft"
+         left_delta="0"
+         name="ShowGroupNoticesTopRight"
+         tool_tip="Set this to move group notifications to the top right corner of the screen (Classic V1.x behavior)."
+         top_pad="7"
+         width="256" />
+
+
+        <text
+         type="string"
+         left="5"
+         top_pad="10"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         name="ButtonFlashing"
+         width="128">
+          Pie Menu:
+        </text>
+        <check_box
          control_name="UsePieMenu"
          height="16"
          initial_value="true"
          label="Use Pie Menu"
          layout="topleft"
-         left_delta="0"
+         left="15"
          name="UsePieMenu"
          tool_tip="Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments."
-         top_pad="7"
+         top_pad="5"
          width="256" />
+
 
         <text
          type="string"
