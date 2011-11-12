@@ -50,7 +50,15 @@
      left="30"
      name="friends_online_notify_checkbox"
      top_pad="4"
-     width="300" />
+     width="190" />
+    <check_box
+     control_name="OnlineOfflinetoNearbyChat"
+     name="OnlineOfflinetoNearbyChat"
+     label="Also log to nearby chat"
+     layout="topleft"
+     left_pad="5"
+     height="18"
+     width="400" />
 
     <check_box
      control_name="ShowScriptErrors"
