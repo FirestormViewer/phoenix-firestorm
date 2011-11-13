@@ -143,7 +143,7 @@
         <panel
          class="panel_preference"
          filename="panel_preferences_UI.xml"
-         label="UI Extras"
+         label="User Interface"
          layout="topleft"
          help_topic="preferences_ui_extras_tab"
          name="starlightUI1" />

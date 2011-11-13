@@ -28,13 +28,13 @@
      left="1"
      right="-1"
      follows="all"
-     label="User Interface"
+     label="General"
      name="UI Prefs Panel" >
 
         <text
          type="string"
          left="5"
-         top_pad="5"
+         top_pad="10"
          length="1"
          follows="left|top"
          height="12"
@@ -182,7 +182,7 @@
         <text
          type="string"
          left="5"
-         top_pad="30"
+         top_pad="10"
          length="1"
          follows="left|top"
          height="12"
@@ -205,7 +205,7 @@
          min_val="0"
          max_val="16"
          name="ButtonsFlashCount"
-         top_pad="12"
+         top_pad="5"
          width="471" />
         <slider
          control_name="ButtonFlashRate"
@@ -221,7 +221,7 @@
          min_val="0"
          max_val="4"
          name="ButtonFlashRate"
-         top_pad="5"
+         top_pad="2"
          width="467" />
         <text
          type="string"
@@ -237,7 +237,7 @@
         </text>
 
         <check_box
-         top_pad="5"
+         top_pad="2"
          control_name="ShowNetStats"
          follows="left|top"
          height="16"
@@ -247,10 +247,11 @@
          left="15"
          width="270"
          tool_tip="Show lag meter in the Status Overlay"/>
+
         <text
          type="string"
          left="200"
-         top="5"
+         top="10"
          length="1"
          follows="left|top"
          height="12"
