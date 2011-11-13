@@ -216,7 +216,8 @@
      label="LookAt"
      name="tab-lookat" >
      
-        <check_box top_pad="5"
+        <check_box
+         top="10"
          follows="left|top"
          height="16"
          label="Show look at target"
