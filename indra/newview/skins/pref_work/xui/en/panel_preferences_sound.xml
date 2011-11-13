@@ -342,8 +342,10 @@
      height="16"
      tool_tip="Uncheck this to hide media attached to other avatars nearby"
      label="Play media attached to other avatars"
+     top_pad="1"
      width="230"
      left="25"/>
+
     <check_box
      name="media_filter"
      control_name="MediaEnableFilter"
@@ -352,22 +354,55 @@
      height="16"
      tool_tip="Check this to enable the filter that allows you to choose whether to play media from a specific host"
      label="Enable media filter (increased security)"
-     top_pad="1"
+     top_pad="3"
      left="25"/>
     <button
      layout="topleft"
-     follows="left|bottom|right"
+     follows="left|bottom"
      height="23"
      label="Manage Media Sites"
-     top_delta="-3"
-     left="-245"
-     left_pad="5"
+     top_delta="-5"
+     left_pad="10"
      name="edit_media_lists_button"
      width="150">
         <button.commit_callback
          function="Floater.Show"
          parameter="media_lists" />
     </button>
+    
+    <check_box
+     control_name="ShowStreamMetadata"
+     name="ShowStreamMetadata"
+     label="Show stream title in nearby chat"
+     layout="topleft"
+     top_pad="1"
+     left="25"
+     height="18"
+     width="200" />
+    <check_box
+     top_pad="1"
+     left="45"
+     control_name="StreamMetadataAnnounceToChat"
+     name="StreamMetadataAnnounceToChat"
+     label="Send stream title to channel:"
+     layout="topleft"
+     height="18"
+     width="180" />
+    <spinner
+     top_delta="-4"
+     control_name="StreamMetadataAnnounceChannel"
+     enabled_control="StreamMetadataAnnounceToChat"
+     decimal_digits="0"
+     layout="topleft"
+     follows="left|top"
+     height="18"
+     left_pad="5"
+     increment="1"
+     initial_val="362394"
+     max_val="2147483647"
+     min_val="1"
+     name="StreamMetadataAnnounceChannel"
+     width="90" />
 
     <text
      type="string"
@@ -378,7 +413,7 @@
      left="25"
      name="voice_chat_settings"
      width="180"
-     top_pad="5">
+     top_pad="10">
         Voice Chat Settings
     </text>
     <text

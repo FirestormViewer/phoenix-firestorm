@@ -514,39 +514,6 @@
              control_name="FSLogImToChatConsole"
              label="Show IMs and group chat in chat console"/>
 
-            <check_box
-             control_name="ShowStreamMetadata"
-             name="ShowStreamMetadata"
-             label="Show stream title in local chat"
-             layout="topleft"
-             top_pad="0"
-             left="30"
-             height="18"
-             width="200" />
-            <check_box
-             control_name="StreamMetadataAnnounceToChat"
-             name="StreamMetadataAnnounceToChat"
-             label="Send stream title to channel:"
-             layout="topleft"
-             left_delta="200"
-             height="18"
-             width="180" />
-            <spinner
-             top_delta="-4"
-             control_name="StreamMetadataAnnounceChannel"
-             enabled_control="StreamMetadataAnnounceToChat"
-             decimal_digits="0"
-             layout="topleft"
-             follows="left|top"
-             height="18"
-             left_pad="5"
-             increment="1"
-             initial_val="362394"
-             max_val="2147483647"
-             min_val="1"
-             name="StreamMetadataAnnounceChannel"
-             width="90" />
-
         </panel>
 
         <!-- Chat: Firestorm -->
