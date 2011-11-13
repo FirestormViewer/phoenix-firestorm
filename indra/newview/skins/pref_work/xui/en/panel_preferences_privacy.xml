@@ -220,7 +220,7 @@
          top="10"
          follows="left|top"
          height="16"
-         label="Show look at target"
+         label="Show look at targets"
          left="15"
          name="showlookat"
          width="270"
@@ -236,7 +236,7 @@
          name="lookatshownames"
          top_pad="5"
          width="200">
-            Show names for look at target:
+            Show names for look at targets:
         </text>
         <combo_box
          control_name="DebugLookAtShowNames"
@@ -273,12 +273,25 @@
              name="User_Name"
              value="4" />
         </combo_box>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="15"
+         name="mylookat"
+         top_pad="25"
+         width="200">
+            My LookAt:
+        </text>
         <check_box
          control_name="PrivateLookAtTarget"
          height="16"
          label="Don't send my actual camera target hints to others"
          layout="topleft"
-         left="30"
+         left="20"
          name="privatelookat"
          top_pad="4"
          width="350" />
@@ -288,7 +301,6 @@
          height="16"
          label="Don't show any camera target hints even on my own screen."
          layout="topleft"
-         left="30"
          name="privateLocalLookat"
          top_pad="4"
          width="400" />
@@ -298,7 +310,6 @@
          height="16"
          label="Don't send my selection target hints"
          layout="topleft"
-         left="30"
          name="privatepointat"
          top_pad="4"
          width="350" />
