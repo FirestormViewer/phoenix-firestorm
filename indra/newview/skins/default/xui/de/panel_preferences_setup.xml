@@ -11,6 +11,28 @@
 	</text>
 	<check_box label="Eigener Port" name="connection_port_enabled"/>
 	<spinner label="Port-Nummer:" name="connection_port"/>
+    <text name="cache_size_label_l">
+       Cache-Größe
+    </text>
+    <text name="text_box5">
+        MB
+    </text>
+    <text name="Cache location">
+        Cache-Speicherort:
+    </text>
+    <button label="Öffnen" label_selected="Öffnen" name="open_cache"/>
+    <button label="Setzen" label_selected="Setzen" name="set_cache" width="45"/>
+    <button label="Zurücksetzen" label_selected="Zurücksetzen" name="reset_cache" width="85"/>
+    <button label="Löschen" label_selected="Löschen" name="clear_cache" width="55" left_pad="5"/>
+    <text name="log_path_desc">
+        Chatprotokolle-Speicherort:
+    </text>
+    <button label="Öffnen" label_selected="Öffnen" name="open_log_path_button-panelsetup"/>
+    <button label="Setzen" label_selected="Setzen" name="log_path_button-panelsetup" width="45"/>
+    <button label="Zurücksetzen" label_selected="Zurücksetzen" name="reset_logpath" width="85"/>
+    <button label="Öffne Crash-Protokolle" label_selected="Öffne Crash-Protokolle" name="browse_crashlogs" width="140"/>
+    <button label="Öffne Ordner mit Einstellungen" label_selected="Öffne Ordner mit Einstellungen" name="browse_settingsdir" width="190"/>
+
 	<text name="Web:">
 		Web:
 	</text>
@@ -18,19 +40,21 @@
 		<radio_item label="In Meinen Browser (IE, Firefox, Safari)" name="external" tool_tip="Standard Webbrowser des Systems verwenden, um die Hilfe, Weblinks usw. anzuzeigen. Bei Vollbildmodus nicht empfohlen." value="1"/>
 		<radio_item label="In Integrierten Browser" name="internal" tool_tip="Integrierten Webbrowser verwenden, um die Hilfe, Weblinks usw. anzuzeigen. Dieser Browser öffnet als neues Fenster innerhalb von [APP_NAME]." value=""/>
 	</radio_group>
+    <text name="numberwebfloaters_label">
+        Maximale Anzahl an Webbrowser-Fenstern:
+    </text>
+    <combo_box tool_tip="Maximale Anzahl an Webbrowser-Fenstern, die gleichzeitig geöffnet werden können." name="web_number_combobox">
+        <combo_box.item label="Unbegrenzte Anzahl" name="web_unlimited"/>
+        <combo_box.item label="Ein Fenster" name="web_1"/>
+        <combo_box.item label="Fünf Fenster" name="web_5"/>
+        <combo_box.item label="Zehn Fenster" name="web_10"/>
+    </combo_box>
 	<check_box initial_value="true" label="Plugins aktivieren" name="browser_plugins_enabled"/>
 	<check_box initial_value="true" label="Cookies annehmen" name="cookies_enabled"/>
 	<check_box initial_value="true" label="Javascript aktivieren" name="browser_javascript_enabled"/>
 	<check_box initial_value="false" label="Medienbrowser-Popups aktivieren" name="media_popup_enabled"/>
-	<text name="Software updates:">
-		Softwareupdates:
-	</text>
-	<combo_box name="updater_service_combobox">
-		<combo_box.item label="Automatisch installieren" name="Install_automatically"/>
-		<combo_box.item label="Updates manuell herunterladen und installieren" name="Install_manual"/>
-	</combo_box>
 	<text name="Proxy Settings:">
 		Proxy-Einstellungen:
 	</text>
-	<button label="Proxy-Einstellungen ändern" label_selected="Durchsuchen" name="set_proxy"/>
+	<button label="Proxy-Einstellungen ändern" label_selected="Durchsuchen" name="set_proxy" width="180"/>
 </panel>

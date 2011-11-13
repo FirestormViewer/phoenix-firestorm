@@ -467,7 +467,7 @@
          height="10"
          layout="topleft"
          left_delta="205"
-         name="Meters"
+         name="MinMeters"
          mouse_opaque="false"
          top_delta="2"
          width="90">
@@ -498,7 +498,7 @@
          height="10"
          layout="topleft"
          left_delta="205"
-         name="Meters"
+         name="MaxMeters"
          mouse_opaque="false"
          top_delta="2"
          width="90">
@@ -507,7 +507,6 @@
 
     </panel>
 
-         left="25"
     <!-- Voice -->
     <panel
      top_pad="5"
@@ -672,7 +671,7 @@
          layout="topleft"
          left="10"
          top_pad="20"
-         name="Listen from"
+         name="device_settings"
          width="120">
             Audio Device Settings:
         </text>

@@ -1,36 +1,60 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Kommunikation" name="im">
-	<panel.string name="log_in_to_change">
-		Anmelden, um Änderungen vorzunehmen
-	</panel.string>
-	<button label="Cache leeren" name="clear_cache" tool_tip="Bild bei Anmeldung, letzter Standort, Teleport-Liste, Internet- und Texturen-Cache löschen"/>
-	<text name="cache_size_label_l">
-		(Standorte, Bilder, Web, Suchverlauf)
-	</text>
-	<check_box label="In Suchergebnissen anzeigen" name="online_searchresults"/>
-	<check_box label="Nur Freunde und Gruppen wissen, dass ich online bin" name="online_visibility"/>
-	<check_box label="Nur Freunde und Gruppen können mich anrufen oder mir eine IM schicken" name="voice_call_friends_only_check"/>
-	<check_box label="Mikrofon ausschalten, wenn Anrufe beendet werden" name="auto_disengage_mic_check"/>
-	<check_box label="Kamerafokus anderen nicht anzeigen" name="privatelookat"/>
-	<check_box label="Kamerafokus auch lokal nicht anzeigen" name="privateLocalLookat"/>
-	<check_box label="Auswahl Ziel nicht anzeigen" name="privatepointat"/>
-	<check_box label="Automatisches Akzeptieren von Inventar Angeboten" name="Auto_Accept_New_Inventory"/>
-	<check_box label="Meine Lieblingslandmarken bei Anmeldung anzeigen (im Dropdown-Menü &#10;„Hier anfangen“)" name="favorites_on_login_check" top_pad="15"/>
-	<text name="Logs:">
-		Chatprotokolle:
-	</text>
-	<check_box label="Protokolle von Gesprächen in der Nähe auf meinem Computer speichern" name="log_nearby_chat"/>
-	<check_box label="IM Protokolle auf meinem Computer speichern" name="log_instant_messages"/>
-	<check_box label="Zeitstempel zu jeder Zeile im Chatprotokoll hinzufügen" name="show_timestamps_check_im"/>
-	<check_box label="Zeige Sekunden im chat und Log Zeitstempel" name="seconds_in_timestamps"/>
-	<check_box label="Verstecke Zeitstempel im Chat In Der Nähe" name="hide_timestamps_nearby_chat"/>
-	<check_box label="Datumsstempel zu Protokolldateinamen hinzufügen" name="logfile_name_datestamp"/>
-	<text name="log_path_desc">
-		Protokolle speichern in:
-	</text>
-	<button label="Durchsuchen" label_selected="Durchsuchen" name="log_path_button"/>
-	<button label="Ignorierte Einwohner/Objekte" name="block_list" width="180"/>
-	<text name="block_list_label">
-		(Personen und/oder Objekte, die Sie blockiert haben)
-	</text>
+	<tab_container label="Privacy" name="tabs">
+		<!--General-->
+		<panel label="Allgemein" name="tab-general">
+			<panel.string name="log_in_to_change">
+				Anmelden, um Änderungen vorzunehmen
+			</panel.string>
+			<button label="Cache leeren" name="clear_cache" tool_tip="Bild bei Anmeldung, letzter Standort, Teleport-Liste, Internet- und Texturen-Cache löschen"/>
+			<text name="cache_size_label">
+				(Standorte, Bilder, Web, Suchverlauf)
+			</text>
+			<check_box label="In Suchergebnissen anzeigen" name="online_searchresults"/>
+			<check_box label="Nur Freunde und Gruppen wissen, dass ich online bin" name="online_visibility"/>
+			<check_box label="Nur Freunde und Gruppen können mich anrufen oder mir eine IM schicken" name="voice_call_friends_only_check"/>
+			<check_box label="Mikrofon ausschalten, wenn Anrufe beendet werden" name="auto_disengage_mic_check"/>
+			<check_box label="Kamerafokus anderen nicht anzeigen" name="privatelookat"/>
+			<check_box label="Kamerafokus auch lokal nicht anzeigen" name="privateLocalLookat"/>
+			<check_box label="Auswahl Ziel nicht anzeigen" name="privatepointat"/>
+			<check_box label="Automatisches Akzeptieren von Inventar Angeboten" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Meine Lieblingslandmarken bei Anmeldung anzeigen (im Dropdown-Menü &#10;„Hier anfangen“)" name="favorites_on_login_check" top_pad="15"/>
+			<text name="Logs:">
+				Chatprotokolle:
+			</text>
+			<check_box label="Protokolle von Gesprächen in der Nähe auf meinem Computer speichern" name="log_nearby_chat"/>
+			<check_box label="IM Protokolle auf meinem Computer speichern" name="log_instant_messages"/>
+			<check_box label="Zeitstempel zu jeder Zeile im Chatprotokoll hinzufügen" name="show_timestamps_check_im"/>
+			<check_box label="Zeige Sekunden im chat und Log Zeitstempel" name="seconds_in_timestamps"/>
+			<check_box label="Verstecke Zeitstempel im Chat In Der Nähe" name="hide_timestamps_nearby_chat"/>
+			<check_box label="Datumsstempel zu Protokolldateinamen hinzufügen" name="logfile_name_datestamp"/>
+			<text name="log_path_desc">
+				Protokolle speichern in:
+			</text>
+			<button label="Durchsuchen" label_selected="Durchsuchen" name="log_path_button"/>
+			<button label="Ignorierte Einwohner/Objekte" name="block_list" width="180"/>
+		</panel>
+
+		<!--LookAt-->
+		<panel label="Kamerafokus" name="tab-lookat">
+			<check_box label="Kamerafokus anzeigen" name="showlookat" tool_tip="Aktiviert Fadenkreuze, die die Kamerapositionen anderer Avatare markieren."/>
+			<text name="lookatshownames">
+				Namensanzeige für Kamerafokus:
+			</text>
+			<combo_box name="lookatshownames_combobox">
+				<combo_box.item label="Keine Anzeige" name="None"/>
+				<combo_box.item label="Vollständiger Name" name="Complete_Name"/>
+				<combo_box.item label="Anzeigename" name="Display_Name"/>
+				<combo_box.item label="Altes Namenssystem" name="Legacy_Name"/>
+				<combo_box.item label="Benutzername" name="User_Name"/>
+			</combo_box>
+
+			<text name="mylookat">
+				Eigener Kamerafokus:
+			</text>
+			<check_box label="Eigenen Kamerafokus nicht an andere senden" name="privatelookat"/>
+			<check_box label="Eigenen Kamerafokus auch lokal nicht anzeigen" name="privateLocalLookat"/>
+			<check_box label="Eigene Bearbeitungsauswahl nicht an andere senden" name="privatepointat"/>
+		</panel>
+	</tab_container>
 </panel>

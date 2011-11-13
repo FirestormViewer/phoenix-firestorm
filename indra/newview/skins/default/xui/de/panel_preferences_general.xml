@@ -20,7 +20,7 @@
 		(Erfordert Neustart)
 	</text>
 	<text name="maturity_desired_prompt" width="320">
-		Ich möchte auf Inhalt mit folgender Einstufung zugreifen:
+		Auf Inhalte mit folgender Einstufung zugreifen:
 	</text>
 	<text name="maturity_desired_textbox" width="100"/>
 	<text name="maturity_desired_textbox"/>
@@ -51,6 +51,7 @@
 	<check_box label="Freunde hervorheben" name="show_friends" tool_tip="Avatarnamen Ihrer Freunde hervorheben" left_pad="75"/>
 	<check_box label="Anzeigenamen anzeigen" name="display_names_check" tool_tip="Aktivieren Sie diese Option, um Anzeigenamen in Chat, IM, Avatarnamen usw. zu verwenden."/>
 	<check_box label="Viewer-Kennung anzeigen" name="show_viewerID" tool_tip="Zeigen den namen des erkannten Viewers neben dem Avatarnamen (verzögerter Effekt)" left_pad="75"/>
+	<check_box label="Altes Namensformat verwenden" name="FSshow_legacyun" tool_tip="Zeigt den Avatarnamen im ursprünglichen Namensformat (Vorname Nachname) anstelle des Benutzernames (vorname.nachname)" left_pad="75" />
 
 	<check_box label="Viewer-UI-Tipps aktivieren" name="viewer_hints_check"/>
 	<text name="inworld_typing_rg_label">
@@ -87,4 +88,21 @@
 	<text_editor name="busy_response">
 		log_in_to_change
 	</text_editor>
+
+    <panel name="general_extras">
+        <text name="text_box3">
+           Extras:
+        </text>
+        <check_box name="FSUseWebProfiles" label="Webprofile als Standard nutzen" tool_tip="Zeigt profile als Webseite anstelle des Profilfensters im Viewer-1-Stil"/>
+
+<!-- This option is duplicated here for ease of locating and to replicate LLv3 -->
+        <text name="inworld_typing_rg_label">
+           Buchstabeneingabe:
+        </text>
+        <radio_group name="inworld_typing_preference">
+            <radio_item label="Startet Chat" name="radio_start_chat"/>
+            <radio_item label="Beeinflusst Bewegung" name="radio_move"/>
+        </radio_group>
+
+    </panel>
 </panel>

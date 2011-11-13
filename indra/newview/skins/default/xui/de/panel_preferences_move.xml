@@ -1,29 +1,71 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Bewegen" name="move_panel">
-	<slider label="Sichtwinkel" name="camera_fov"/>
-	<slider label="Abstand" name="camera_offset_scale"/>
-    <check_box label="Kamerabeschränkungen aufheben (Kamera freier bewegen)" name="DisableCameraConstraints" tool_tip="Erlaubt die Bewegungen der Kamera außerhalb der normalen Grenzen und der Erdoberfläche" />
-	<text name="heading2">
-		Automatische Position für:
-	</text>
-	<check_box label="Bauen/Bearbeiten" name="edit_camera_movement" tool_tip="Automatische Kamerapositionierung bei Wechsel in und aus dem Bearbeitungsmodus verwenden"/>
-	<check_box label="Aussehen" name="appearance_camera_movement" tool_tip="Automatische Kamerapositionierung im Bearbeitenmodus verwenden"/>
-	<check_box initial_value="true" label="Seitenleiste" name="appearance_sidebar_positioning" tool_tip="Automatische Kameraposition für Seitenleiste verwenden"/>
-	<check_box label="Mich im Mouselook anzeigen" name="first_person_avatar_visible"/>
-	<text name=" Mouse Sensitivity" width="195">
-		Mausempfindlichkeit für Mouselook:
-	</text>
-	<check_box label="Umkehren" name="invert_mouse"/>
-	<text name="MovementSettings">
-		Bewegung:
-	</text>
-	<check_box label="Mit Pfeiltasten bewegen" name="arrow_keys_move_avatar_check"/>
-	<check_box label="Drücken-drücken-halten, um zu rennen" name="tap_tap_hold_to_run"/>
-	<check_box label="Fliegen/Landen beim Drücken von auf/ab" name="automatic_fly" />
-	<check_box label="Doppelklicken:" name="double_click_chkbox"/>
-	<radio_group name="double_click_action">
-		<radio_item label="Teleportieren" name="radio_teleport"/>
-		<radio_item label="Autopilot" name="radio_autopilot"/>
-	</radio_group>
-	<button label="Andere Geräte" name="joystick_setup_button"/>
+	<tab_container label="Move and View" name="tabs">
+		<!--General-->
+		<panel
+		 top_pad="5"
+		 bottom="-1"
+		 left="1"
+		 right="-1"
+		 follows="all"
+		 label="General"
+		 name="tab-general" >
+			<slider label="Sichtwinkel" name="camera_fov"/>
+			<slider label="Abstand" name="camera_offset_scale"/>
+			<check_box label="Kamerabeschränkungen aufheben (Kamera freier bewegen)" name="DisableCameraConstraints" tool_tip="Erlaubt die Bewegungen der Kamera außerhalb der normalen Grenzen und der Erdoberfläche" />
+			<text name="heading2">
+				Automatische Position für:
+			</text>
+			<check_box label="Bauen/Bearbeiten" name="edit_camera_movement" tool_tip="Automatische Kamerapositionierung bei Wechsel in und aus dem Bearbeitungsmodus verwenden"/>
+			<check_box label="Aussehen" name="appearance_camera_movement" tool_tip="Automatische Kamerapositionierung im Bearbeitenmodus verwenden"/>
+			<check_box initial_value="true" label="Seitenleiste" name="appearance_sidebar_positioning" tool_tip="Automatische Kameraposition für Seitenleiste verwenden"/>
+			<check_box label="Mich im Mouselook anzeigen" name="first_person_avatar_visible"/>
+			<check_box label="Zeige Mouselook-Hilfestellungen" name="mouselook_instructions_visible"/>
+			<text name=" Mouse Sensitivity" width="195">
+				Mausempfindlichkeit für Mouselook:
+			</text>
+			<check_box label="Umkehren" name="invert_mouse"/>
+			<text name="MovementSettings">
+				Bewegung:
+			</text>
+			<check_box label="Mit Pfeiltasten bewegen" name="arrow_keys_move_avatar_check"/>
+			<check_box label="Drücken-drücken-halten, um zu rennen" name="tap_tap_hold_to_run"/>
+			<check_box label="Fliegen/Landen beim Drücken von auf/ab" name="automatic_fly" />
+			<check_box label="Soundeffekte beim Teleportieren abspielen" name="PlayTeleportSound"/>
+			<text name="single_click_action_lbl">
+				Einfacher Klick auf Land:
+			</text>
+			<combo_box name="single_click_action_combo">
+				<combo_box.item label="Keine Aktion" name="0"/>
+				<combo_box.item label="Zur Position gehen" name="1"/>
+			</combo_box>
+			<text name="double_click_action_lbl">
+				Doppelklick auf Land:
+			</text>
+			<combo_box name="double_click_action_combo">
+				<combo_box.item label="Keine Aktion" name="0"/>
+				<combo_box.item label="Zur Position gehen" name="1"/>
+				<combo_box.item label="Zur Position teleportieren" name="2"/>
+			</combo_box>
+			<button label="Andere Geräte" name="joystick_setup_button"/>
+		</panel>
+
+		<!-- Firestorm -->
+		<panel label="Firestorm" name="tab-firestorm">
+			<text name="camera_options_label">
+			   Kamera-Optionen:
+			</text>
+			<check_box label="Klick auf Avatar hält Kameraposition" name="backwardsturnavatar" tool_tip="Normalerweise wir die Kameraposition beim Anklicken des Avatars zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
+			<check_box label="Minimale Zoomdistanz der Kamera aufheben" name="disableminzoomdist" tool_tip="Deaktiviert die minimale Zoomdistanz der Kamera zu einem Objekt."/>
+			<check_box label="Kamerabewegung durch primitive Objekte erlauben" name="ignorecameraconstraints" tool_tip="Ignoriert die Beschränkung, dass die Kamera nicht durch primitive Objekte bewegt werden kann."/>
+			<text name="ignorecameraconstraints_requires_restart">
+				(Erfordert Neustart)
+			</text>
+			<check_box label="Rotation der Minikarte aktivieren" name="minimaprotate" tool_tip="Aktiviert die Rotation der Minikarte bei Drehung des Avatars."/>
+			<check_box name="MiniMapChatRing" label="Chatreichweite auf der Minikarte anzeigen"/>
+			<check_box name="FSAdvancedTooltips" label="Erwiterte Informationen in den Hovertips anzeigen (klassischer Phoenix-Stil)"/>
+			<check_box label="Avatar umdrehen beim Rückwärtsgehen" name="backwardsturnavatar" tool_tip="Dreht den Avatar mit dem Gesicht zur Kamera beim Rückwärtsgehen."/>
+			<check_box label="Doppelte Landmarken auf der Weltkarte filtern" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtert doppelte (identische) Landmarken in der Übersicht der Landmarken auf der Weltkarte."/>
+		</panel>
+	</tab_container>
 </panel>

@@ -1,82 +1,208 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Text-Chat" name="chat">
-	<text name="font_size">
-		Schriftgröße:
-	</text>
-	<radio_group name="chat_font_size">
-		<radio_item label="Klein" name="radio" value="0"/>
-		<radio_item label="Mittel" name="radio2" value="1"/>
-		<radio_item label="Groß" name="radio3" value="2"/>
-	</radio_group>
-	<text name="console_font_size">
-		Schriftgröße für Konsole:
-	</text>
-	<radio_group name="chat_console_font_size">
-		<radio_item label="Klein" name="consradio"/>
-		<radio_item label="Mittel" name="consradio2"/>
-		<radio_item label="Groß" name="consradio3"/>
-	</radio_group>
-	<check_box label="Chateingabe nach Drücken der Returntaste beenden" name="CloseChatOnReturn"/>
-	<check_box initial_value="true" label="Beim Chatten Tippanimation abspielen" name="play_typing_animation"/>
-	<check_box label="Beim Chatten Avataranimation abspielen, z.B. für Rufen" name="play_avatar_animations"/>
-	<check_box label="Tipp-Sound abspielen wenn Personen im lokalen Chat tippen" name="play_typing_sound"/> 
-	<check_box label="IMs per Email zuschicken, wenn ich offline bin" name="send_im_to_email"/>
-	<check_box label="Kompakten IM- und Text-Chatverlauf aktivieren" name="plain_text_chat_history"/>
-	<check_box label="Miniaturicons anzeigen, falls Chat-Überschriften verwendet werden" name="ShowChatMiniIcons"/>	
-	<check_box label="Zeitstempel im lokalen Chat verbergen" name="hide_timestamps_nearby_chat"/>
-	<check_box label="Zeitstempel in IM's verbergen" name="hide_timestamps_im"/>
-	<check_box label="Blasen-Chat" name="bubble_text_chat"/>
-	<check_box label="Eingabe-Indikator in Blase oberhalb eines Avatars anzeigen" name="bubble_text_typing"/>
-	<text name="inworld_typing_rg_label">
-       Buchstabeneingabe:
-	</text>
-	<radio_group name="inworld_typing_preference">
-		<radio_item label="Startet Chat" name="radio_start_chat" width="130"/>
-		<radio_item label="Beeinflusst Bewegung (z.B. WASD)" name="radio_move"/>
-	</radio_group>
-	<text name="show_ims_in_label"
-		  width="90">
-		IMs anzeigen in:
-	</text>
-	<text name="req_restart"
-		  left_pad="55"
-		  width="120">
-		(Neustart erforderlich)
-	</text>
-	<radio_group name="chat_window" tool_tip="Zeigen Sie Ihre Sofortnachrichten (Instant Messages) in einem anderen Fenster oder in einem einzigen Fenster mit vielen Registerkarten an (Neustart erforderlich)."
-				 left_pad="2">
-		<radio_item label="Getrennte Fenster" name="radio" value="0"/>
-		<radio_item label="Registerkarten" name="radio2" value="1"/>
-	</radio_group>
-	<text name="disable_toast_label"
-		  width="220">
-		Popups für eingehende Chats aktivieren:
-	</text>
-	<check_box label="Gruppen-Chats" name="EnableGroupChatPopups" tool_tip="Markieren, um Popups zu sehen, wenn Gruppen-Chat-Message eintrifft"/>
-	<check_box label="IM-Chats" name="EnableIMChatPopups" tool_tip="Markieren, um Popups zu sehen, wenn Instant Message eintrifft"/>
-	<spinner label="Lebenszeit von Toasts für Chat in der Nähe:" name="nearby_toasts_lifetime"/>
-	<spinner label="Ein-/Ausblenddauer von Toasts für Chat in der Nähe:" name="nearby_toasts_fadingtime"/>
-	<check_box label="Beim Chatten Maschinenübersetzung verwenden (von Google bereitgestellt)" name="translate_chat_checkbox"/>
-	<text name="translate_language_text">
-		Chat übersetzen in:
-	</text>
-	<combo_box name="translate_language_combobox" width="200">
-		<combo_box.item label="Systemstandard" name="System Default Language"/>
-		<combo_box.item label="English (Englisch)" name="English"/>
-		<combo_box.item label="Dansk (Dänisch)" name="Danish"/>
-		<combo_box.item label="Deutsch" name="German"/>
-		<combo_box.item label="Español (Spanisch)" name="Spanish"/>
-		<combo_box.item label="Français (Französisch)" name="French"/>
-		<combo_box.item label="Italiano (Italienisch)" name="Italian"/>
-		<combo_box.item label="Magyar (Ungarisch)" name="Hungarian"/>
-		<combo_box.item label="Nederlands (Holländisch)" name="Dutch"/>
-		<combo_box.item label="Polski (Polnisch)" name="Polish"/>
-		<combo_box.item label="Português (Portugiesisch)" name="Portugese"/>
-		<combo_box.item label="Русский (Russisch)" name="Russian"/>
-		<combo_box.item label="Türkçe (Türkisch)" name="Turkish"/>
-		<combo_box.item label="Українська (Ukrainisch)" name="Ukrainian"/>
-		<combo_box.item label="中文 (简体) (Chinesisch)" name="Chinese"/>
-		<combo_box.item label="日本語 (Japanisch)" name="Japanese"/>
-		<combo_box.item label="한국어 (Koreanisch)" name="Korean"/>
-	</combo_box>
+	<tab_container
+	 label="Firestorm Prefs"
+	 layout="topleft"
+	 follows="all"
+	 top="5"
+	 bottom="-10"
+	 left="1"
+	 right="-1"
+	 name="tabs"
+	 tab_min_width="50"
+	 tab_position="top" >
+        <panel label="Allgemein" name="ChatGeneral">
+			<text name="font_size">
+				Schriftgröße:
+			</text>
+			<radio_group name="chat_font_size">
+				<radio_item label="Klein" name="radio" value="0"/>
+				<radio_item label="Mittel" name="radio2" value="1"/>
+				<radio_item label="Groß" name="radio3" value="2"/>
+			</radio_group>
+			<text name="console_font_size">
+				Schriftgröße für Konsole:
+			</text>
+			<radio_group name="chat_console_font_size">
+				<radio_item label="Klein" name="consradio"/>
+				<radio_item label="Mittel" name="consradio2"/>
+				<radio_item label="Groß" name="consradio3"/>
+			</radio_group>
+			<check_box label="Chateingabe nach Drücken der Returntaste beenden" name="CloseChatOnReturn"/>
+			<check_box initial_value="true" label="Beim Chatten Tippanimation abspielen" name="play_typing_animation"/>
+			<check_box label="Beim Chatten Avataranimation abspielen, z.B. für Rufen" name="play_avatar_animations"/>
+			<check_box label="Tipp-Sound abspielen wenn Personen im lokalen Chat tippen" name="play_typing_sound"/> 
+			<check_box label="IMs per Email zuschicken, wenn ich offline bin" name="send_im_to_email"/>
+			<check_box label="Kompakten IM- und Text-Chatverlauf aktivieren" name="plain_text_chat_history"/>
+			<check_box label="Miniaturicons anzeigen, falls Chat-Überschriften verwendet werden" name="ShowChatMiniIcons"/>	
+			<check_box label="Zeitstempel im lokalen Chat verbergen" name="hide_timestamps_nearby_chat"/>
+			<check_box label="Zeitstempel in IM's verbergen" name="hide_timestamps_im"/>
+			<check_box label="Blasen-Chat" name="bubble_text_chat"/>
+			<check_box label="Eingabe-Indikator in Blase oberhalb eines Avatars anzeigen" name="bubble_text_typing"/>
+			<text name="inworld_typing_rg_label" width="115">
+			   Buchstabeneingabe:
+			</text>
+			<radio_group name="inworld_typing_preference">
+				<radio_item label="Startet Chat" name="radio_start_chat" width="130"/>
+				<radio_item label="Beeinflusst Bewegung (z.B. WASD)" name="radio_move"/>
+			</radio_group>
+			<text name="show_ims_in_label"
+				  width="115">
+				IMs anzeigen in:
+			</text>
+			<text name="req_restart_ims"
+				  left_pad="55"
+				  width="120">
+				(Erfordert Neustart)
+			</text>
+			<radio_group name="chat_window" tool_tip="Zeigen Sie Ihre Sofortnachrichten (Instant Messages) in einem anderen Fenster oder in einem einzigen Fenster mit vielen Registerkarten an (Neustart erforderlich)."
+						 left_pad="10">
+				<radio_item label="Getrennte Fenster" name="radio" value="0"/>
+				<radio_item label="Registerkarten" name="radio2" value="1"/>
+			</radio_group>
+            <text name="tab_direction_label" width="160">
+              Chat-Tabmodus-Orientierung:
+            </text>
+            <radio_group name="chat_tab_direction" tool_tip="Ändert die Oriengierung von Chat/Instant-Message-Reiterkarten zwischen horizontal und vertikal wenn kompakter Chat aktiviert ist. (Erfordert Neustart)">
+                <radio_item label="Horizontal" name="radio_horizontal"/>
+                <radio_item label="Vertikal" name="radio_vertical"/>
+            </radio_group>
+            <text
+             name="req_restart_chattabs">
+                 (Erfordert Neustart)
+            </text>
+			<check_box label="Beim Chatten Maschinenübersetzung verwenden (von Google bereitgestellt)" name="translate_chat_checkbox"/>
+			<text name="translate_language_text">
+				Chat übersetzen in:
+			</text>
+			<combo_box name="translate_language_combobox" width="200">
+				<combo_box.item label="Systemstandard" name="System Default Language"/>
+				<combo_box.item label="English (Englisch)" name="English"/>
+				<combo_box.item label="Dansk (Dänisch)" name="Danish"/>
+				<combo_box.item label="Deutsch" name="German"/>
+				<combo_box.item label="Español (Spanisch)" name="Spanish"/>
+				<combo_box.item label="Français (Französisch)" name="French"/>
+				<combo_box.item label="Italiano (Italienisch)" name="Italian"/>
+				<combo_box.item label="Magyar (Ungarisch)" name="Hungarian"/>
+				<combo_box.item label="Nederlands (Holländisch)" name="Dutch"/>
+				<combo_box.item label="Polski (Polnisch)" name="Polish"/>
+				<combo_box.item label="Português (Portugiesisch)" name="Portugese"/>
+				<combo_box.item label="Русский (Russisch)" name="Russian"/>
+				<combo_box.item label="Türkçe (Türkisch)" name="Turkish"/>
+				<combo_box.item label="Українська (Ukrainisch)" name="Ukrainian"/>
+				<combo_box.item label="中文 (简体) (Chinesisch)" name="Chinese"/>
+				<combo_box.item label="日本語 (Japanisch)" name="Japanese"/>
+				<combo_box.item label="한국어 (Koreanisch)" name="Korean"/>
+			</combo_box>
+		</panel>
+		
+        <!-- Chat: Notifications -->
+        <!-- This tab is only for notifications related directly to chat and not for notification options that simply use nearby chat -->
+        <panel label="Benachrichtigungen" name="ChatNotifications">
+            <text name="disable_toast_label">
+                 Chat-Popups aktivieren für eingehende:
+            </text>
+            <check_box name="EnableGroupChatPopups" label="Gruppenchats" tool_tip="Aktivieren um Popups anzuzeigen, wenn neue Gruppennachrichten eintreffen"/>
+            <check_box name="EnableIMChatPopups" label="IM-Chats" tool_tip="Aktivieren um Popups anzuzeigen, wenn Instant Messages eintreffen"/>
+            <check_box name="FSUseNearbyChatConsole" label="Chat-Konsole anstelle von Toasts für Chat-Popups erwenden (Viewer 1.x-Stil)"/>
+            <check_box name="FSLogImToChatConsole" label="Instant Messages und Gruppen-Chats in Chat-Konsole anzeigen"/>
+        </panel>
+		
+        <!-- Chat: Firestorm -->
+        <panel label="Firestorm" name="ChatFirestorm">
+            <text name="chat_and_im_enhancements">
+              Chat- und IM-Erweiterungen:
+            </text>
+            <check_box name="AllowMUpose" label="&quot;:&quot; als Synonym für &quot;/me&quot; verwenden"/>
+            <check_box name="EmotesUseItalic" label="Kursive Schrift für Emotes verwenden" left_delta="250"/>
+            <check_box name="AutoCloseOOC" label="((OOC))-Klammern automatisch schließen"/>
+
+            <!-- Localchat chat bar -->
+            <check_box name="FSNearbyChatbar" label="Eingabezeile zum Fenster Lokaler Chat hinzufügen"/>
+            <text name="FSNearbyChatbar_requires_restart">
+              (Erfordert Neustart)
+            </text>
+            <check_box name="FSShowChatChannel" label="Kanelauswahl in Eingabezeile anzeigen"/>
+            <check_box label="Haupteingabezeile für Chat automatisch verstecken" name="AutohideChatBar" tool_tip="Eingabezeile in der unteren Buttonleiste automatisch verstecken und nur zur Eingabe anzeigen"/>
+            <check_box label="Chatleiste nach Senden deaktivieren" name="CloseChatOnReturn"/>
+            <check_box name="FSMarkObjects" label="Objektename als (no name) anzeigen um Vortäuschungen zu unterbinden"/>
+
+            <!-- Groups -->
+            <text name="group_enhancements">
+              Gruppenchat:
+            </text>
+            <check_box name="FSBoldGroupMods" label="Gruppenmoderatoren in Fettschrift anzeigen"/>
+            <check_box name="FSMuteAllGroups" label="ALLE Gruppenchats deaktivieren"/>
+            <check_box name="FSMuteGroupWhenNoticesDisabled" label="Deaktivierung von 'Gruppennachrichten erhalten' deaktiviert auch Gruppenchat"/>
+
+            <!-- Logging -->
+            <text name="logging_enhancements">
+              Chatprotokoll-Extras:
+            </text>
+            <check_box label="Zeitstempel in lokalem Chat nicht anzeigen" name="hide_timestamps_nearby_chat"/>
+            <check_box label="Zeitstempen in Instant Messages nicht anzeigen" name="hide_timestamps_im"/>
+            <check_box name="FSShowIMInChatHistory" label="Instant Messages in lokalem Chat anzeigen"/>
+            <check_box name="FSLogIMInChatHistory" label="IMs in lokalem Chat speichern" width="190"/>
+            <text name="requires_save_chat_logs" width="280">
+              (Erfordert Speichern von lokalem Chatprotokoll)
+            </text>
+
+            <!-- Console -->
+            <text name="console_enhancements">
+              Konsole:
+            </text>
+            <check_box name="ChatFullWidth" label="Bildschirmbreite für Konsole verwenden" width="240"/>
+            <text name="requires_restart_label2">
+              (Erfordert Neustart)
+            </text>
+            <spinner label="Chat ausblenden nach"
+             label_width="130"
+             name="fade_chat_time"
+             width="180" />
+            <text name="text_box4">
+                (Sekunden)
+            </text>
+            <spinner name="max_chat_count"/>
+            <text name="text_box5">
+                (# Zeilen)
+            </text>
+        </panel>
+
+        <!-- Chat: Radar -->
+        <panel label="Radar" name="ChatRadar">
+            <check_box name="reportChatRange" label="Radar meldet, wenn Avatare die Chatreichweite betreten/verlassen"/>
+            <check_box name="reportDrawRange" label="Radar meldet, wenn Avatare die Draw Distance betreten/verlassen"/>
+            <check_box name="RadarReportSimRange" label="Radar meldet, wenn Avatare die Region betreten/verlassen"/>
+        </panel>
+
+        <!-- Chat: Keyword Alerts -->
+        <panel label="Schlüsselworter" name="ChatKeywordAlerts">
+            <check_box name="FSKeywordOn" label="Schlüsselwort-Benachrichtungen aktivieren"/>
+            <check_box name="FSKeywordInChat" label="Lokalen Chat auf Schüsselwörter prüfen"/>
+            <check_box name="FSKeywordInIM" label="Instant Messages und Gruppenchats auf Schlüsselwörter prüfen"/>
+            <text name="textFSKeywords">
+				Schlüsselwörter (getrennt durch Komma):
+            </text>
+            <check_box name="FSKeywordChangeColor" label="Farbliche Markierung aktivieren"/>
+            <color_swatch name="colorswatch" left="220" tool_tip="Anklicken um Farbauswahl zu öffnen"/>
+            <check_box name="FSKeywordPlaySound" label="Sound abspielen"/>
+            <text name="textFSKeywordSound" width="200">
+              UUID für Soundbenachrichtung:
+            </text>
+        </panel>
+
+        <!-- Chat: Text Input -->
+        <panel label="Texteingabe" name="ChatTextInput">
+            <check_box label="Rechtschreibprüfung aktivieren" name="checkSpellCheck" width="200"/>
+            <text name="textDictionaryMain" width="105">
+                Haupt-Wörterbuch:
+            </text>
+            <check_box label="Auto-Korrektur" name="lgg_ac_enable"
+             tool_tip="Muss aktiviert sein um die Einstellungen für die Auto-Korrektur nutzen zu können"/>
+            <button name="lgg_ac_showgui" label="Auto-Korrektur-Einstellungen"
+             width="170">
+            </button>
+        </panel>
+
+	</tab_container>
 </panel>
