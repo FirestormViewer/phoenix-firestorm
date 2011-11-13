@@ -54,9 +54,7 @@
 		<line_editor label="Auslöser für Zum-Sprechen-drücken:" name="modifier_combo"/>
 		<button label="Taste festlegen" name="set_voice_hotkey_button"/>
 		<button name="set_voice_middlemouse_button" tool_tip="Auf mittlere Maustaste zurücksetzen"/>
-		<text name="device_settings">
-			Geräte-Einstellungen:
-		</text>
+        <button label="Geräte-Einstellungen" name="device_settings_btn"/>
         <panel name="device_settings_panel">
 			<panel.string name="default_text">
 				Standard
