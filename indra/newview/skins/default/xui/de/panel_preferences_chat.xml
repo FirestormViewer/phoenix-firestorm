@@ -187,7 +187,7 @@
             <color_swatch name="colorswatch" left="220" tool_tip="Anklicken um Farbauswahl zu öffnen"/>
             <check_box name="FSKeywordPlaySound" label="Sound abspielen"/>
             <text name="textFSKeywordSound" width="200">
-              UUID für Soundbenachrichtung:
+              UUID für Soundbenachrichtigung:
             </text>
         </panel>
 

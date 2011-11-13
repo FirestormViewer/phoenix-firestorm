@@ -6,9 +6,9 @@
 	<check_box label="Wenn ich L$ ausgebe oder erhalte" name="notify_money_change_checkbox" width="230"/>
     <check_box left_pad="5"
      name="FSPaymentInfoInChat"
-     label="L$-Transaktionen in lokalen Chat anzeigen"/>
+     label="L$-Transaktionen im lokalen Chat anzeigen"/>
 	<check_box label="Wenn Freunde sich an- oder abmelden" name="friends_online_notify_checkbox" width="230"/>
-    <check_box name="OnlineOfflinetoNearbyChat" label="Auch in lokalem Chat anzeigen"/>
+    <check_box name="OnlineOfflinetoNearbyChat" label="Auch im lokalem Chat anzeigen"/>
     <check_box label="Skriptfehler anzeigen in:"
      layout="topleft"
      left="30"
