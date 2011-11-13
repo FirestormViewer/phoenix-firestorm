@@ -450,6 +450,7 @@
         </panel>
 
         <!-- Chat: Notifications -->
+        <!-- This tab is only for notifications related directly to chat and not for notification options that simply use nearby chat -->
         <panel
          border="true"
          top_pad="1"
@@ -492,19 +493,9 @@
              width="400" />
 
             <check_box
-             control_name="OnlineOfflinetoNearbyChat"
-             name="OnlineOfflinetoNearbyChat"
-             label="Log Friend on/off-line notices to Nearby Chat"
-             layout="topleft"
-             top_pad="5"
-             left="30"
-             height="18"
-             width="400" />
-
-            <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="0"
+             top_pad="10"
              left="30"
              width="400"
              height="18"
