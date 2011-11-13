@@ -2609,7 +2609,7 @@ even though the user gets a free copy.
              layout="topleft"
              name="label physicsshapetype"
              top="38"
-             width="121">
+             width="130">
                 Physics Shape Type:
             </text>
 			<combo_box
