@@ -176,7 +176,7 @@
         </panel>
 
         <!-- Chat: Keyword Alerts -->
-        <panel label="Schlüsselworter" name="ChatKeywordAlerts">
+        <panel label="Schlüsselwörter" name="ChatKeywordAlerts">
             <check_box name="FSKeywordOn" label="Schlüsselwort-Benachrichtungen aktivieren"/>
             <check_box name="FSKeywordInChat" label="Lokalen Chat auf Schüsselwörter prüfen"/>
             <check_box name="FSKeywordInIM" label="Instant Messages und Gruppenchats auf Schlüsselwörter prüfen"/>
