@@ -28,6 +28,10 @@
      name="status_selectcount">
         [OBJ_COUNT] Objekt(e) [LAND_IMPACT] PE
     </floater.string>
+    <floater.string
+     name="status_remaining_capacity">
+        Verbleibende Kapazität [LAND_CAPACITY].
+    </floater.string>
 	<floater.string
 	  name="link_number">
 		Link-Nummer:
@@ -36,6 +40,24 @@
 	  name="selected_faces">
 		Fläche:
 	</floater.string>
+	<floater.string name="grid_screen_text">
+		Bildschirm
+	</floater.string>
+	<floater.string name="grid_local_text">
+		Lokal
+	</floater.string>
+	<floater.string name="grid_world_text">
+		Welt
+	</floater.string>
+	<floater.string name="grid_reference_text">
+		Referenz
+	</floater.string>
+	<floater.string name="grid_attachment_text">
+		Anhang
+	</floater.string>
+	<text name="grid_mode_label" tool_tip="Rasteropazität">
+		Modus
+	</text>
 	<button label="" label_selected="" name="button focus" tool_tip="Fokus"/>
 	<button label="" label_selected="" name="button move" tool_tip="Verschieben"/>
 	<button label="" label_selected="" name="button edit" tool_tip="Bearbeiten"/>
@@ -75,7 +97,7 @@
 	<check_box initial_value="true" label="An Raster ausrichten" name="checkbox snap to grid"/>
     <check_box initial_value="false" label="Achse an Wurzel edit." name="checkbox actual root"/>
 	<check_box initial_value="true" label="Aktiviere Hervorhebung" name="checkbox show highlight"/>
-	<combo_box name="combobox grid mode" tool_tip="Wählen Sie ein Rasterlineal zum Positionieren des Objekts aus.">
+	<combo_box name="combobox grid mode" tool_tip="Wählen Sie ein Rasterlineal zum Positionieren des Objekts aus." width="115">
 		<combo_box.item label="Globales Raster" name="World"/>
 		<combo_box.item label="Lokales Raster" name="Local"/>
 		<combo_box.item label="Referenzraster" name="Reference"/>
@@ -123,6 +145,9 @@
 	<button label="Übernehmen" label_selected="Übernehmen" name="button apply to selection" tool_tip="Ausgewähltes Land bearbeiten"/>
 	<text name="selection_empty">
 		Nichts ausgewählt.
+	</text>
+	<text name="remaining_capacity">
+	  [CAPACITY_STRING] [secondlife:///app/openfloater/object_weights Mehr Infos]
 	</text>
 	<text name="selection_weight">
 		Physikgewicht [PHYS_WEIGHT], Darstellungskosten [DISP_WEIGHT].
