@@ -384,7 +384,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("NACL.AntiSpamUnblock",		boost::bind(&LLFloaterPreference::onClickClearSpamList, this));
 	//[ADD - Clear Settings : SJ]
 	mCommitCallbackRegistrar.add("Pref.ClearSettings",			boost::bind(&LLFloaterPreference::onClickClearSettings, this));
-	mCommitCallbackRegistrar.add("Pref.Online_Notices",			boost::bind(&LLFloaterPreference::onClickChatOnlineNotices, this));
 	
 	sSkin = gSavedSettings.getString("SkinCurrent");
 
@@ -1050,11 +1049,6 @@ bool callback_clear_settings(const LLSD& notification, const LLSD& response)
 void LLFloaterPreference::onClickClearSettings()
 {
 	LLNotificationsUtil::add("FirestormClearSettingsPrompt",LLSD(), LLSD(), callback_clear_settings);
-}
-
-void LLFloaterPreference::onClickChatOnlineNotices()
-{
-	getChildView("OnlineOfflinetoNearbyChatHistory")->setEnabled(getChild<LLUICtrl>("OnlineOfflinetoNearbyChat")->getValue().asBoolean());
 }
 
 void LLFloaterPreference::onClickClearSpamList()
