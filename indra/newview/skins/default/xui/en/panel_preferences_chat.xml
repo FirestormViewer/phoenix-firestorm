@@ -225,6 +225,7 @@
              height="16"
              layout="topleft"
              left_pad="10"
+             top_delta="-3"
              name="inworld_typing_preference">
                 <radio_item
                  top="0"
@@ -252,7 +253,7 @@
              layout="topleft"
              left="30"
              height="12"
-             width="80"
+             width="110"
              top_pad="8">
                  Show IMs in:
             </text>
@@ -260,10 +261,11 @@
              height="16"
              layout="topleft"
              left_pad="10"
+             top_delta="-3"
              control_name="ChatWindow"
              name="chat_window"
              tool_tip="Show your Instant Messages in separate floaters, or in one floater with many tabs (Requires restart)"
-             width="180">
+             width="190">
                 <radio_item
                  top="0"
                  left="0"
@@ -288,6 +290,7 @@
              follows="left|top"
              layout="topleft"
              left_pad="10"
+             top_delta="-2"
              text_color="White_50"
              height="12"
              width="100">
@@ -301,17 +304,18 @@
              height="12"
              name="tab_direction_label"
              width="150"
-             top_pad="8">
+             top_pad="10">
               Chat Tab Mode Orientation:
             </text>
             <radio_group
              left_pad="10"
+             top_delta="-3"
              height="16"
              layout="topleft"
              control_name="ChatTabDirection"
              name="chat_tab_direction"
              tool_tip="Change flow of the chat/IM tabs between horizontal and vertical when consolidated tab mode is active. (Requires restart)"
-             width="160">
+             width="150">
                 <radio_item
                  top="2"
                  left="0"
@@ -323,7 +327,7 @@
                  width="90" />
                 <radio_item
                  top="2"
-                 left_pad="5"
+                 left_pad="1"
                  height="16"
                  label="Vertical"
                  layout="topleft"
@@ -336,6 +340,7 @@
              follows="left|top"
              layout="topleft"
              left_pad="10"
+             top_delta="-2"
              text_color="White_50"
              height="12"
              width="100">
@@ -344,7 +349,7 @@
 
 
             <check_box
-             top_pad="8"
+             top_pad="15"
              control_name="TranslateChat"
              enabled="true"
              height="16"
