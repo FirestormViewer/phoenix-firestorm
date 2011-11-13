@@ -1159,6 +1159,28 @@ void LLFloaterPreference::refreshEnabledState()
 	S32 max_tex_mem = LLViewerTextureList::getMaxVideoRamSetting();
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem);
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem);
+    
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderVBOEnable") ||
+		!gGLManager.mHasVertexBufferObject)
+	{
+		getChildView("vbo")->setEnabled(FALSE);
+		getChildView("vbo_stream")->setEnabled(FALSE);
+	}
+	else
+#if LL_DARWIN
+		getChildView("vbo_stream")->setEnabled(FALSE);  //Hardcoded disable on mac
+        getChild<LLUICtrl>("vbo_stream")->setValue((LLSD::Boolean) FALSE);
+#else
+		getChildView("vbo_stream")->setEnabled(LLVertexBuffer::sEnableVBOs);
+#endif
+
+	// if no windlight shaders, turn off nighttime brightness, gamma, and fog distance
+	getChildView("gamma")->setEnabled(!gPipeline.canUseWindLightShaders());
+	getChildView("(brightness, lower is brighter)")->setEnabled(!gPipeline.canUseWindLightShaders());
+	getChildView("fog")->setEnabled(!gPipeline.canUseWindLightShaders());
+	getChildView("fsaa")->setEnabled(gPipeline.canUseAntiAliasing());
+	getChildView("antialiasing restart")->setVisible(!gSavedSettings.getBOOL("RenderDeferred"));
+    
 	LLComboBox* ctrl_reflections = getChild<LLComboBox>("Reflections");
 	LLRadioGroup* radio_reflection_detail = getChild<LLRadioGroup>("ReflectionDetailRadio");
 	
