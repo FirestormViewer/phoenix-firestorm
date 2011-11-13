@@ -812,7 +812,10 @@ LLView* LLView::childrenHandleHover(S32 x, S32 y, MASK mask)
 		}
 
 		// This call differentiates this method from childrenHandleMouseEvent().
-		LLUI::sWindow->setCursor(viewp->getHoverCursor());
+		// FIRE-3798: This call causes the cursor to flicker when
+		//  the mouse is over a touchable object or in a text entry
+		//  area. Commented out by Tank.
+		//LLUI::sWindow->setCursor(viewp->getHoverCursor());
 
 		if (viewp->handleHover(local_x, local_y, mask)
 			|| viewp->blockMouseEvent(local_x, local_y))
