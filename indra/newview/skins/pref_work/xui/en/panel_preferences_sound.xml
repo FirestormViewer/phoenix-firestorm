@@ -27,7 +27,7 @@
      name="System Volume"
      show_text="false"
      slider_label.halign="right"
-     top="5"
+     top="10"
      volume="true"
      width="300">
         <slider.commit_callback
