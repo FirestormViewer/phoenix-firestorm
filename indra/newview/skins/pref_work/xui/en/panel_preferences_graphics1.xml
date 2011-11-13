@@ -739,7 +739,7 @@
          label_selected="Apply"
          layout="topleft"
          left="10"
-         top="383"
+         top="380"
          name="Apply"
          width="115" >
             <button.commit_callback
@@ -752,7 +752,6 @@
          layout="topleft"
          left_pad="3"
          name="Defaults"
-         top="383"
          width="115">
             <button.commit_callback
              function="Pref.HardwareDefaults" />
@@ -766,7 +765,6 @@
          layout="topleft"
          left_pad="35"
          name="Advanced"
-         top_delta="0"
          width="115" />
     </panel>
 
