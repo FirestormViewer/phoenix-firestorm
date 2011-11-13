@@ -812,8 +812,6 @@ LLView* LLView::childrenHandleHover(S32 x, S32 y, MASK mask)
 		}
 
 		// This call differentiates this method from childrenHandleMouseEvent().
-		LLUI::sWindow->setCursor(viewp->getHoverCursor());
-
 		if (viewp->handleHover(local_x, local_y, mask)
 			|| viewp->blockMouseEvent(local_x, local_y))
 		{
