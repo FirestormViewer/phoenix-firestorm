@@ -22,8 +22,7 @@
 	<text name="maturity_desired_prompt" width="320">
 		Auf Inhalte mit folgender Einstufung zugreifen:
 	</text>
-	<text name="maturity_desired_textbox" width="100"/>
-	<text name="maturity_desired_textbox"/>
+	<text name="maturity_desired_textbox" width="200"/>
 	<combo_box name="maturity_desired_combobox">
 		<combo_box.item label="Generell, Moderat, Adult" name="Desired_Adult"/>
 		<combo_box.item label="Generell und Moderat" name="Desired_Mature"/>
