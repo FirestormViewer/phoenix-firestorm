@@ -36,7 +36,7 @@
          layout="topleft"
          follows="left|top"
          top_pad="10"
-         left="20"
+         left="15"
          width="270"
          height="20"
          name="checkMiscRLVa"
@@ -49,8 +49,8 @@
         <text
          layout="topleft"
          follows="left|top"
-         left_pad="3"
-         height="20"
+         left_pad="5"
+         height="16"
          width="150"
          name="textMiscRLVaRestart"
          text_color="White_25">
