@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  border="true"
- height="408"
- label="Popups"
+ follows="all"
+ height="440"
  layout="topleft"
- left="0"
- name="popups"
- top="500"
- width="517">
+ left="1"
+ top="1"
+ width="540"
+ label="Popups"
+ name="popups">
     <text
      type="string"
      length="1"
@@ -20,56 +21,55 @@
      width="300">
         Tell me:
     </text>
+
     <check_box
      control_name="NotifyMoneyChange"
      height="16"
      label="When I spend or get L$"
      layout="topleft"
-     left_delta="50"
+     left="30"
      name="notify_money_change_checkbox"
      top_pad="4"
-     width="300" />
+     width="160" />
+    <check_box
+     enabled_control="NotifyMoneyChange"
+     layout="topleft"
+     follows="left|top"
+     left_pad="5"
+     width="50"
+     height="18"
+     control_name="FSPaymentInfoInChat"
+     name="FSPaymentInfoInChat"
+     label="Show L$ transactions in nearby chat instead of toasts"/>
+
     <check_box
      control_name="ChatOnlineNotification"
      height="16"
-     label="When my friends log in or out  as toasts"
+     label="When my friends log in or out"
      layout="topleft"
-     left_delta="0"
+     left="30"
      name="friends_online_notify_checkbox"
      top_pad="4"
-     width="300" />
-	     <check_box
-     control_name="OnlineOfflinetoNearbyChat"
-     height="16"
-     label="When my friends log in or out in nearby chat"
-     layout="topleft"
-     left_delta="0"
-     name="OnlineOfflinetoNearbyChat"
-     top_pad="4"
-     width="300">
-      <check_box.commit_callback
-   function="Pref.Online_Notices" />
-    </check_box>
+     width="190" />
     <check_box
-     enabled="false"
-     control_name="OnlineOfflinetoNearbyChatHistory"
-     follows="left|top"
-     height="16"
-     label="Only in chat history"
+     control_name="OnlineOfflinetoNearbyChat"
+     name="OnlineOfflinetoNearbyChat"
+     label="Also log to nearby chat"
      layout="topleft"
-     left_delta="275"
-     name="OnlineOfflinetoNearbyChatHistory"
-     width="256" />
+     left_pad="5"
+     height="18"
+     width="400" />
+
     <check_box
      control_name="ShowScriptErrors"
      follows="left|top"
      height="16"
      label="When I have Script Errors in:"
      layout="topleft"
-     left_delta="-275"
-     top_pad="4" 
+     left="30"
+     top_pad="4"
      name="show_script_errors"
-     width="256" />
+     width="180" />
     <radio_group
      enabled_control="ShowScriptErrors"
      control_name="ShowScriptErrorsLocation"
@@ -77,7 +77,7 @@
      draw_border="false"
      height="16"
      layout="topleft"
-     left_delta="180"
+     left_pad="5"
      name="show_script_errors_location"
      width="200">
         <radio_item
@@ -112,16 +112,16 @@
     </text>
     <scroll_list
      follows="top|left|right"
-     height="120"
+     height="140"
      layout="topleft"
      left="10"
      multi_select="true"
      name="enabled_popups"
      sort_column="0"
-     sort_ascending="true" 
+     sort_ascending="true"
      width="495" />
-	 <button
-	 enabled_control="FirstSelectedDisabledPopups"
+    <button
+     enabled_control="FirstSelectedDisabledPopups"
      follows="top|left"
      height="23"
      image_overlay="Arrow_Up"
@@ -135,8 +135,8 @@
          function="Pref.ClickEnablePopup" />
     </button>
     <button
-	 enabled_control="FirstSelectedEnabledPopups"
-	 follows="top|left"
+     enabled_control="FirstSelectedEnabledPopups"
+     follows="top|left"
      height="23"
      image_overlay="Arrow_Down"
      hover_glow_amount="0.25"
@@ -162,7 +162,7 @@
     </text>
     <scroll_list
      follows="top|left|right"
-     height="120"
+     height="140"
      layout="topleft"
      left="10"
      sort_column="0"

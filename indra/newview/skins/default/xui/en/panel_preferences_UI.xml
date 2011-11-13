@@ -3,13 +3,12 @@
  border="true"
  follows="all"
  height="440"
- label="UI-Pref"
  layout="topleft"
  left="1"
- name="Display panel"
  top="1"
- width="535">
- 
+ width="540"
+ label="UI-Pref"
+ name="Display panel">
 <tab_container
  label="Firestorm Prefs"
  layout="topleft"
@@ -78,7 +77,7 @@
          name="ShowLandHoverTips"
          top_pad="7"
          width="256" />
-          
+
         <text
          type="string"
          length="1"
@@ -90,7 +89,7 @@
          top_pad="10"
          width="400">
            Hovertip Trigger Delay:
-       </text>
+        </text>
         <combo_box
          height="23"
          layout="topleft"
@@ -131,7 +130,6 @@
          width="140">
             Script Dialog Placement:
         </text>
-
         <check_box
          control_name="ShowScriptDialogsTopRight"
          height="16"
@@ -143,30 +141,43 @@
          tool_tip="Set this to move script dialog notifications to the top right corner of the screen (Classic V1.x behavior)."
          top_pad="12"
          width="256" />
-
         <check_box
-        control_name="ShowGroupNoticesTopRight"
-        height="16"
-        initial_value="true"
-        label="Group Notices in Top Right"
-        layout="topleft"
-        left_delta="0"
-        name="ShowGroupNoticesTopRight"
-        tool_tip="Set this to move group notifications to the top right corner of the screen (Classic V1.x behavior)."
-        top_pad="7"
-        width="256" />
-      
-      <check_box
+         control_name="ShowGroupNoticesTopRight"
+         height="16"
+         initial_value="true"
+         label="Group Notices in Top Right"
+         layout="topleft"
+         left_delta="0"
+         name="ShowGroupNoticesTopRight"
+         tool_tip="Set this to move group notifications to the top right corner of the screen (Classic V1.x behavior)."
+         top_pad="7"
+         width="256" />
+
+
+        <text
+         type="string"
+         left="5"
+         top_pad="10"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         name="ButtonFlashing"
+         width="128">
+          Pie Menu:
+        </text>
+        <check_box
          control_name="UsePieMenu"
          height="16"
          initial_value="true"
          label="Use Pie Menu"
          layout="topleft"
-         left_delta="0"
+         left="15"
          name="UsePieMenu"
          tool_tip="Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments."
-         top_pad="7"
+         top_pad="5"
          width="256" />
+
 
         <text
          type="string"
@@ -179,7 +190,7 @@
          name="ButtonFlashing"
          width="128">
             Flashing Buttons:
-        </text>    
+        </text>
         <slider
          control_name="ButtonFlashCount"
          decimal_digits="0"
@@ -223,77 +234,19 @@
          top_delta="0"
          width="50">
             Hz
-        </text> 
-
-        <text
-         type="string"
-         left="5"
-         top_pad="12"
-         length="1"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         name="HeadMovement"
-         width="408">
-            Amount that Avatar's head Follows Mouse (set to '0' for no movement):
-        </text>    
-        <slider
-         control_name="PitchFromMousePosition"
-         decimal_digits="0"
-         follows="left|top"
-         height="16"
-         increment="15"
-         label="Vertical range that avatar's head follows mouse :"
-         tool_tip="Vertical range that avatar's head follows mouse (pitch) in degrees"
-         label_width="300"
-         layout="topleft"
-         left="15"
-         min_val="0"
-         max_val="120"
-         name="PitchFromMousePositionSlider"
-         top_pad="12"
-         width="471" />
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="16"
-         layout="topleft"
-         left="485"
-         name="PitchFromMousePositionText"
-         top_delta="0"
-         width="50">
-            degrees
         </text>
-        <slider
-         control_name="YawFromMousePosition"
-         decimal_digits="0"
-         follows="left|top"
-         height="16"
-         increment="5"
-         label="Horizontal range that avatar's head follows mouse :"
-         tool_tip="Horizontal range that avatar's head follows mouse (yaw) in degrees"
-         label_width="300"
-         layout="topleft"
-         left="15"
-         min_val="0"
-         max_val="120"
-         name="YawFromMousePositionSlider"
+
+        <check_box
          top_pad="5"
-         width="471" />
-        <text
-         type="string"
-         length="1"
+         control_name="ShowNetStats"
          follows="left|top"
          height="16"
-         layout="topleft"
-         left="485"
-         name="YawFromMousePositionText"
-         top_delta="0"
-         width="50">
-            degrees
-        </text>
-
+         initial_value="false"
+         name="ShowNetStats"
+         label="Show lag meter"
+         left="15"
+         width="270"
+         tool_tip="Show lag meter in the Status Overlay"/>
         <text
          type="string"
          left="200"
@@ -345,7 +298,7 @@
          top_delta="0"
          width="50">
             pixels
-        </text>    
+        </text>
         <slider
          control_name="NotificationToastLifeTime"
          decimal_digits="0"
@@ -855,114 +808,7 @@ V2/3 default 20. V1 default 18.
            The quick brown fox jumps over the lazy dog.
         </text>
 -->
-    
-    </panel>
-   <!--BottomTray-->
-    <panel
-     top_pad="5"
-     bottom="-1"
-     left="1"
-     right="-1"
-     follows="all"
-     label="Buttons"
-     name="UI-buttons-tab" >
-        <text
-         name="buttons_text1"
-         top_pad="15"
-         left="40"
-         height="12"
-         width="130"
-         layout="topleft"
-         follows="left|top"
-         length="1">
-         Bottom Tray button:
-        </text>
-        <combo_box
-         enabled="false"
-         height="23"
-         layout="topleft"
-         follows="left|top"
-         left_pad="5"
-         top_delta="-5"
-         name="bottomtray_buttons_combo"
-         width="200"/>
-        <check_box
-         enabled="false"
-         height="16"
-         label="Enabled"
-         layout="topleft"
-         left_pad="20"
-         name="bottomtray_buttons_enabled"
-         tool_tip="Show the selected button in the bottom tray"
-         top_delta="5"
-         width="80" />
-        <text
-         name="buttons_text2"
-         top_delta="25"
-         left_delta="-345"
-         height="12"
-         width="120"
-         layout="topleft"
-         follows="left|top"
-         length="1">
-         Show on the button:
-        </text>
-        <check_box
-         enabled="false"
-         height="16"
-         label="Text"
-         layout="topleft"
-         left_pad="5"
-         name="bottomtray_buttons_text"
-         tool_tip=""
-         top_delta="0"
-         width="40" />
-        <text
-         name="buttons_text3"
-         top_delta="0"
-         left_pad="30"
-         height="12"
-         width="30"
-         layout="topleft"
-         follows="left|top"
-         length="1">
-         Icon:
-        </text>
-        <radio_group
-         enabled="false"
-         height="20"
-         layout="topleft"
-         left_pad="10"
-         top_delta="0" 
-         name="bottomtray_buttons_icon">
-         <radio_item
-          label="None"
-          name="none"
-          top_delta="20" 
-          layout="topleft"
-          height="16" 
-          left="0" 
-          value="0"
-          width="60" />
-         <radio_item
-          label="Small"
-          name="small"
-          left_pad="0"
-          layout="topleft"
-          top_delta="0" 
-          height="16" 
-          value="1"
-          width="60" />
-         <radio_item
-          label="Large"
-          name="large"
-          left_pad="0"
-          height="16"
-          layout="topleft"
-          top_delta="0"
-          value="2"
-          width="60" />
-        </radio_group>
+
     </panel>
 </tab_container>
 </panel>

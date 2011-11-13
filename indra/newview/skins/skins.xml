@@ -146,22 +146,6 @@
 
             </array>
         </map>
-
-        <map>
-            <key>name</key>
-                <string>Pref Refactoring</string>
-            <key>folder</key>
-                <string>pref_work</string>
-            <key>themes</key>
-            <array>
-                <map>
-                    <key>name</key>
-                        <string>Default</string>
-                    <key>folder</key>
-                        <string>default</string>
-                </map>
-            </array>
-        </map>
     </array>
 </llsd>
 

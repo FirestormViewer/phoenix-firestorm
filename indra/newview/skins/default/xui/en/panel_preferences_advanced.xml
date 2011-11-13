@@ -2,14 +2,14 @@
 <panel
  border="true"
  follows="all"
- height="408"
- label="Advanced"
+ height="440"
  layout="topleft"
- left="102"
- name="advanced"
+ left="1"
  top="1"
- width="517">
-	<panel.string
+ width="540"
+ label="Advanced"
+ name="advanced">
+ <panel.string
      name="aspect_ratio_text">
         [NUM]:[DEN]
     </panel.string>
@@ -17,32 +17,32 @@
      name="middle_mouse">
         Middle Mouse
     </panel.string>
-   <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="12"
-   layout="topleft"
-   left="33"
-   name="UI Size:"
-   top_pad="25"
-   width="200">
-    Font Scaling (may have side effects):
-  </text>
-  <slider
-   control_name="UIScaleFactor"
-   decimal_digits="2"
-   follows="left|top"
-   height="17"
-   increment="0.025"
-   initial_value="1"
-   layout="topleft"
-   left_pad="0"
-   max_val="1.4"
-   min_val="0.75"
-   name="ui_scale_slider"
-   top_pad="-14"
-   width="250" />
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="12"
+     layout="topleft"
+     left="33"
+     name="UI Size:"
+     top_pad="25"
+     width="200">
+        Font Scaling (may have side effects):
+    </text>
+    <slider
+     control_name="UIScaleFactor"
+     decimal_digits="2"
+     follows="left|top"
+     height="17"
+     increment="0.025"
+     initial_value="1"
+     layout="topleft"
+     left_pad="0"
+     max_val="1.4"
+     min_val="0.75"
+     name="ui_scale_slider"
+     top_pad="-14"
+     width="250" />
     <check_box
      control_name="AllowMultipleViewers"
      follows="top|left"
@@ -83,96 +83,95 @@
      name="show_develop_menu_check"
      top_pad="5"
      width="237"/>
-        <text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="10"
-            layout="topleft"
-            left="15"
-            name="Media Rolloff"
-            mouse_opaque="false"
-            top_delta="40"
-            width="155">
-            Media audio rolloff distance:
-        </text>
-        <slider
-            can_edit_text="true"
-            control_name="MediaRollOffMin"
-            decimal_digits="0"
-            label="Min"
-            follows="left|top"
-            height="15"
-            increment="1"
-            initial_value="5"
-            layout="topleft"
-            left="15"
-            max_val="512"
-            min_val="1"
-            name="MediaRollOffMin"
-            top_delta="20"
-            width="200"
-            label_width="25"
-            tool_tip="Minimum distance from the source for rolloff to begin taking effect."/>
-        <text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="10"
-            layout="topleft"
-            left_delta="205"
-            name="Meters"
-            mouse_opaque="false"
-            top_delta="2"
-            width="90">
-            meters
-        </text>
-        <slider
-            can_edit_text="true"
-            control_name="MediaRollOffMax"
-            decimal_digits="0"
-            label="Max"
-            follows="left|top"
-            height="15"
-            increment="1"
-            initial_value="30"
-            layout="topleft"
-            left="15"
-            max_val="512"
-            min_val="1"
-            name="MediaRollOffMax"
-            top_delta="15"
-            width="200"
-            label_width="25"
-            tool_tip="Maximum distance from the source for rolloff to completely mute the sound."/>
-        <text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="10"
-            layout="topleft"
-            left_delta="205"
-            name="Meters"
-            mouse_opaque="false"
-            top_delta="2"
-            width="90">
-            meters
-        </text>
-        <button
-          top="40"
-          enabled="true"
-          follows="left|top"
-          halign="center"
-          height="25"
-          label="Reset All Settings"
-          label_selected="Reset All Settings..."
-          left_delta="0"
-          mouse_opaque="true"
-          name="clear_settings"
-          scale_image="true"
-          width="200" >
-          <button.commit_callback
-           function="Pref.ClearSettings" />
-        </button>
-  
-     </panel>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="10"
+     layout="topleft"
+     left="15"
+     name="Media Rolloff"
+     mouse_opaque="false"
+     top_delta="40"
+     width="155">
+        Media audio rolloff distance:
+    </text>
+    <slider
+     can_edit_text="true"
+     control_name="MediaRollOffMin"
+     decimal_digits="0"
+     label="Min"
+     follows="left|top"
+     height="15"
+     increment="1"
+     initial_value="5"
+     layout="topleft"
+     left="15"
+     max_val="512"
+     min_val="1"
+     name="MediaRollOffMin"
+     top_delta="20"
+     width="200"
+     label_width="25"
+     tool_tip="Minimum distance from the source for rolloff to begin taking effect."/>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="10"
+     layout="topleft"
+     left_delta="205"
+     name="Meters"
+     mouse_opaque="false"
+     top_delta="2"
+     width="90">
+        meters
+    </text>
+    <slider
+     can_edit_text="true"
+     control_name="MediaRollOffMax"
+     decimal_digits="0"
+     label="Max"
+     follows="left|top"
+     height="15"
+     increment="1"
+     initial_value="30"
+     layout="topleft"
+     left="15"
+     max_val="512"
+     min_val="1"
+     name="MediaRollOffMax"
+     top_delta="15"
+     width="200"
+     label_width="25"
+     tool_tip="Maximum distance from the source for rolloff to completely mute the sound."/>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="10"
+     layout="topleft"
+     left_delta="205"
+     name="Meters"
+     mouse_opaque="false"
+     top_delta="2"
+     width="90">
+        meters
+    </text>
+    <button
+     top="40"
+     enabled="true"
+     follows="left|top"
+     halign="center"
+     height="25"
+     label="Reset All Settings"
+     label_selected="Reset All Settings..."
+     left_delta="0"
+     mouse_opaque="true"
+     name="clear_settings"
+     scale_image="true"
+     width="200" >
+        <button.commit_callback
+         function="Pref.ClearSettings" />
+    </button>
+ </panel>

@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  border="true"
- follows="left|top|right|bottom"
- height="408"
- label="Skins"
+ follows="all"
+ height="440"
  layout="topleft"
- left="102"
- name="skin_panel"
+ left="1"
  top="1"
- width="517">
-
-   <text
+ width="540"
+ label="Skins"
+ name="skin_panel">
+    <text
      type="string"
      length="1"
      follows="left|top"
@@ -20,7 +19,7 @@
      name="skin_textbox"
      top="10"
      width="400">
-        Skin :
+        Skin:
     </text>
     <combo_box
      follows="left|top"
@@ -78,8 +77,8 @@
      width="200">
         (Requires restart)
     </text>
-	
-	<check_box
+
+    <check_box
      control_name="UseLegacyCursors"
      enabled="false"
      follows="left|top"
@@ -104,5 +103,4 @@
      width="200">
         (Requires restart)
     </text>
-
 </panel>
