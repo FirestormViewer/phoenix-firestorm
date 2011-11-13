@@ -17,32 +17,6 @@
      name="middle_mouse">
         Middle Mouse
     </panel.string>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="12"
-     layout="topleft"
-     left="33"
-     name="UI Size:"
-     top_pad="25"
-     width="200">
-        Font Scaling (may have side effects):
-    </text>
-    <slider
-     control_name="UIScaleFactor"
-     decimal_digits="2"
-     follows="left|top"
-     height="17"
-     increment="0.025"
-     initial_value="1"
-     layout="topleft"
-     left_pad="0"
-     max_val="1.4"
-     min_val="0.75"
-     name="ui_scale_slider"
-     top_pad="-14"
-     width="250" />
     <check_box
      control_name="AllowMultipleViewers"
      follows="top|left"

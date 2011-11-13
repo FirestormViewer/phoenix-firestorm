@@ -33,6 +33,33 @@
 
         <text
          type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="30"
+         name="UI Size:"
+         top_pad="10"
+         width="200">
+            UI Scaling (may have side effects):
+        </text>
+        <slider
+         control_name="UIScaleFactor"
+         decimal_digits="2"
+         follows="left|top"
+         height="17"
+         increment="0.025"
+         initial_value="1"
+         layout="topleft"
+         left_pad="0"
+         max_val="1.4"
+         min_val="0.75"
+         name="ui_scale_slider"
+         top_pad="-14"
+         width="250" />
+
+        <text
+         type="string"
          left="5"
          top_pad="10"
          length="1"
@@ -251,7 +278,7 @@
         <text
          type="string"
          left="200"
-         top="10"
+         top="35"
          length="1"
          follows="left|top"
          height="12"
