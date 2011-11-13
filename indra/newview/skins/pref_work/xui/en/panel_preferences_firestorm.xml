@@ -711,7 +711,7 @@
      name="tab1-3" >
 
         <check_box
-         top="5"
+         top="10"
          follows="left|top"
          height="16"
          label="Enable usage of chat bar as a command line"
@@ -1085,7 +1085,8 @@
      name="WindlightTab">
 
         <check_box
-         top_pad="8"
+         top_pad="10"
+         left="10"
          label="Automatically change environment to use region/parcel settings."
          control_name="UseEnvironmentFromRegionAlways"
          follows="left|top"
