@@ -1382,17 +1382,6 @@
      follows="all"
      label="Depth of Field"
      name="DOF panel" >
-        <check_box
-         control_name="RenderDepthOfField"
-         height="16"
-         initial_value="true"
-         label="Depth of Field Enabled"
-         layout="topleft"
-         top_pad="20"
-         left="10"
-         name="DOFEnabled"
-         tool_tip="Render Depth of Field in deferred rendering."
-         width="325"/>
         <slider
          control_name="CameraFNumber"
          decimal_digits="2"
