@@ -719,16 +719,7 @@
          name="chat_cmd_toggle"
          width="270"
          control_name="FSCmdLine"/>
-        <button
-         top="5"
-         follows="top|right"
-         height="18"
-         label="?"
-         name="PhoenixHelp_CmdLine"
-         tool_tip="Click here for help regarding the settings in this page."
-         right="-35"
-         width="18"/>
-
+        
         <text
          top="25"
          follows="left|top"
