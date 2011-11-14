@@ -776,7 +776,7 @@
      height="10"
      follows="left|top"
      layout="topleft"
-     top_pad="20"
+     top_pad="28"
      left="10"
      name="link_num_obj_count"
 	 tooltip="Link number may not be accurate."
@@ -821,7 +821,7 @@
 	  layout="topleft"
 	  left="10"
 	  name="remaining_capacity"
-	  top_pad="-4"
+	  top_pad="-5"
 	  visible="false"
 	  width="280">
 	  [CAPACITY_STRING] [secondlife:///app/openfloater/object_weights More info]
