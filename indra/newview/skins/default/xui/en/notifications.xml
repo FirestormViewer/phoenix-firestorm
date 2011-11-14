@@ -1231,7 +1231,7 @@ Visit [_URL] for more information?
    type="alertmodal">
 Your system contains a graphics card that [APP_NAME] doesn't recognize.
 This is often the case with new hardware that has not been tested yet with [APP_NAME].  It will probably be ok, but you may need to adjust your graphics settings.
-(Me &gt; Preferences &gt; Graphics).
+(Avatar &gt; Preferences &gt; Graphics).
     <form name="form">
       <ignore name="ignore"
        text="My graphics card could not be identified"/>
