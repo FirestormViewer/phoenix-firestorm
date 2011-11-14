@@ -12518,7 +12518,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <boolean>0</boolean>
     </map>
     <key>VerifyInitialWearables</key>
     <map>
