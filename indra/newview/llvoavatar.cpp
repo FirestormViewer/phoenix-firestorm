@@ -5964,13 +5964,7 @@ LLViewerJointAttachment* LLVOAvatar::getTargetAttachmentPoint(LLViewerObject* vi
 	if (!attachment)
 	{
 		llwarns << "Object attachment point invalid: " << attachmentID << llendl;
-//		attachment = get_if_there(mAttachmentPoints, 1, (LLViewerJointAttachment*)NULL); // Arbitrary using 1 (chest)
-// [SL:KB] - Patch: Appearance-LegacyMultiAttachment | Checked: 2010-08-28 (Catznip-3.0.0a) | Added: Catznip-2.1.2a
-		S32 idxAttachPt = 1;
-		if ( (!isSelf()) && (gSavedSettings.getBOOL("LegacyMultiAttachmentSupport")) && (attachmentID > 38) && (attachmentID <= 68) )
-			idxAttachPt = attachmentID - 38;
-		attachment = get_if_there(mAttachmentPoints, idxAttachPt, (LLViewerJointAttachment*)NULL);
-// [/SL:KB]
+		attachment = get_if_there(mAttachmentPoints, 1, (LLViewerJointAttachment*)NULL); // Arbitrary using 1 (chest)
 	}
 
 	return attachment;
