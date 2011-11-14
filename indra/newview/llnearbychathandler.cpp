@@ -718,14 +718,7 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,		// WARNING - not 
 		}
 		else
 		{
-			if(chat_msg.mFromName.empty())
-			{
-				consoleChat = chat_msg.mText;
-			}
-			else
-			{
-				consoleChat = chat_msg.mFromName + " " + chat_msg.mText;
-			}
+			consoleChat = chat_msg.mText;
 
 			//// Get the display name of the sender if required
 			//if (!chat_msg.mRlvNamesFiltered)

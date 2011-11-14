@@ -774,16 +774,13 @@ void LLPanelPeople::onChange(EStatusType status, const std::string &channelURI, 
 
 void LLPanelPeople::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name,std::string postMsg)
 {	
-	//LLStringUtil::format_map_t formatargs;
-	//formatargs["AVATARNAME"] = getRadarName(av_name);
-	//LLStringUtil::format(postMsg, formatargs);
+	LLStringUtil::format_map_t formatargs;
+	formatargs["AVATARNAME"] = getRadarName(av_name);
+	LLStringUtil::format(postMsg, formatargs);
 
 	LLChat chat;
 	chat.mText = postMsg;
 	chat.mSourceType = CHAT_SOURCE_SYSTEM;
-	chat.mFromName = getRadarName(av_name);
-	chat.mFromID = agent_id;
-	chat.mChatType = CHAT_TYPE_WHISPER;
 	LLSD args;
 	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
 	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);

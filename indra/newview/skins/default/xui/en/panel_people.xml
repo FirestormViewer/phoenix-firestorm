@@ -19,25 +19,25 @@
 	  value="The camera cannot focus user [AVATARNAME] because they are outside your draw distance."/>
 	<string
 	  name="entering_draw_distance"
-	  value="entered draw distance ([DISTANCE] m)."/>
+	  value="[AVATARNAME] entered draw distance ([DISTANCE] m)."/>
 	<string
 	  name="leaving_draw_distance"
-	  value="left draw distance."/>
+	  value="[AVATARNAME] left draw distance."/>
 	<string
 	  name="entering_chat_range"
-	  value="entered chat range ([DISTANCE] m)."/>
+	  value="[AVATARNAME] entered chat range ([DISTANCE] m)."/>
 	<string
 	  name="leaving_chat_range"
-	  value="left chat range."/>
+	  value="[AVATARNAME] left chat range."/>
 	<string
 	  name="entering_region"
-	  value="entered the region."/>
+	  value="[AVATARNAME] entered the region."/>
 	<string
 	  name="entering_region_distance"
-	  value="entered the region ([DISTANCE] m)."/>
+	  value="[AVATARNAME] entered the region ([DISTANCE] m)."/>
 	<string
 	  name="leaving_region"
-	  value="left the region."/>
+	  value="[AVATARNAME] left the region."/>
     <string
      name="no_recent_people"
      value="No recent people. Looking for people to hang out with? Use the search box to find topics or content you might be interested in, then visit those places to meet people with similar interests." />
