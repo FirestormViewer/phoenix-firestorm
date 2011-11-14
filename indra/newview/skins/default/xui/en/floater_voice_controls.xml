@@ -97,9 +97,10 @@
          orientation="horizontal"
          width="262">
           <layout_panel
-            height="26"
+            height="30"
             width="200">
             <panel
+			 top="0"
              class="panel_voice_effect"
              name="panel_voice_effect"
              visiblity_control="VoiceMorphingEnabled"
@@ -117,6 +118,7 @@
             <button
              follows="right|top"
              height="23"
+			 top="4"
              label="Leave Call"
              name="leave_call_btn"
              width="100" />
