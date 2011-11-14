@@ -59,7 +59,10 @@ public:
 	static void enableInstance(BOOL bEnable);
 	/*virtual*/ void onOpen(const LLSD& key);
 
-	static void sUpdateFlyingStatus();
+//	static void sUpdateFlyingStatus();
+// [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+	static void sUpdateMovementStatus();
+// [/RLVa:KB]
 
 protected:
 	void turnLeft();
