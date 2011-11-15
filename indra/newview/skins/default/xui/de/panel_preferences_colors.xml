@@ -22,6 +22,9 @@
 	<text name="text_box5">
 		Fehler
 	</text>
+    <text name="text_box6">
+        Chat-Überschriften
+    </text>
 	<text name="text_box10">
 		Direkt
 	</text>
@@ -31,6 +34,12 @@
 	<text name="text_box9">
 		URLs
 	</text>
+    <text name="ScriptDialogBgLabel">
+        Skript-Dialog Hg
+    </text>
+    <text name="ScriptDialogFgLabel">
+        Skript-Dialog Vg
+    </text>
 	<text name="bubble_chat">
 		Hintergrundfarbe für Avatarnamen (wirkt sich auch auf Blasen-Chat aus):
 	</text>

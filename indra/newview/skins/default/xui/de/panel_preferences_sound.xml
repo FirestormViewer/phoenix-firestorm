@@ -23,7 +23,7 @@
 		<check_box label="Medien, die an andere Avatare angehängt sind, wiedergeben." name="media_show_on_others_btn" tool_tip="Diese Option deaktivieren, um Medien für andere Avataren, die sich in der Nähe befinden, auszublenden." value="true"/>
 		<check_box name="media_filter" tool_tip="Aktiviert den Medienfilter, der abhängig der Medien-URL die Wiedergabe erlaubt oder verbietet." label="Medienfilter aktivieren (erhöhte Sicherheit)"/>
 		<button label="Listen bearbeiten..." name="edit_media_lists_button" left_pad="45"/>
-        <check_box name="ShowStreamMetadata" label="Musikstream-Titel in lokalem Chat anzeigen"/>
+        <check_box name="ShowStreamMetadata" label="Musikstream-Titel im lokalem Chat anzeigen"/>
         <check_box name="StreamMetadataAnnounceToChat" label="Stream-Titel an diesen Kanal senden:" width="230"/>
         <text name="Media Rolloff">
             Lautstärkeabfall-Distanz:
@@ -49,7 +49,7 @@
 			<radio_item label="Avatarposition" name="1"/>
 		</radio_group>
 		<check_box label="Avatarlippen beim Sprechen bewegen" name="enable_lip_sync"/>
-		<check_box label="Zeige Voice-Indikator und Lippen Bewegungen in P2P und Gruppen Konferenzen." name="Show_Voice_Visualizers_In_Calls" tool_tip="Wenn diese Option aktiviert ist, werden der Voice Indicator und Lippen Bewegungen auch im P2P sowie im Gruppen Chat Angezeigt."/>
+		<check_box label="Zeige Voice-Indikator und Lippen Bewegungen in P2P- und Gruppenchats." name="Show_Voice_Visualizers_In_Calls" tool_tip="Wenn diese Option aktiviert ist, werden der Voice Indicator und Lippen Bewegungen auch im P2P- sowie im Gruppenchat angezeigt."/>
 		<check_box label="Sprachfunktion beim Drücken folgender Taste(n) ein-/ausschalten:" name="push_to_talk_toggle_check" tool_tip="Wenn der Umschaltmodus aktiviert ist, drücken Sie die Auslöse-Taste EINMAL, um Ihr Mikrofon ein- oder auszuschalten. Wenn der Umschaltmodus nicht aktiviert ist, ist das Mikrofon nur dann eingeschaltet, wenn Sie die Auslösetaste gedrückt halten."/>
 		<line_editor label="Auslöser für Zum-Sprechen-drücken:" name="modifier_combo"/>
 		<button label="Taste festlegen" name="set_voice_hotkey_button"/>

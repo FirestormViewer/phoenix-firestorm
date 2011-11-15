@@ -104,8 +104,8 @@
             </text>
             <check_box name="EnableGroupChatPopups" label="Gruppenchats" tool_tip="Aktivieren um Popups anzuzeigen, wenn neue Gruppennachrichten eintreffen"/>
             <check_box name="EnableIMChatPopups" label="IM-Chats" tool_tip="Aktivieren um Popups anzuzeigen, wenn Instant Messages eintreffen"/>
-            <check_box name="FSUseNearbyChatConsole" label="Chat-Konsole anstelle von Toasts für Chat-Popups erwenden (Viewer 1.x-Stil)"/>
-            <check_box name="FSLogImToChatConsole" label="Instant Messages und Gruppen-Chats in Chat-Konsole anzeigen"/>
+            <check_box name="FSUseNearbyChatConsole" label="Chat-Konsole anstelle von Toasts für Chat-Popups verwenden (Viewer 1.x-Stil)"/>
+            <check_box name="FSLogImToChatConsole" label="Instant Messages und Gruppenchats in Chat-Konsole anzeigen"/>
         </panel>
 		
         <!-- Chat: Firestorm -->
@@ -122,7 +122,7 @@
             <text name="FSNearbyChatbar_requires_restart">
               (Erfordert Neustart)
             </text>
-            <check_box name="FSShowChatChannel" label="Kanelauswahl in Eingabezeile anzeigen"/>
+            <check_box name="FSShowChatChannel" label="Kanalauswahl in Eingabezeile anzeigen"/>
             <check_box label="Haupteingabezeile für Chat automatisch verstecken" name="AutohideChatBar" tool_tip="Eingabezeile in der unteren Buttonleiste automatisch verstecken und nur zur Eingabe anzeigen"/>
             <check_box label="Chatleiste nach Senden deaktivieren" name="CloseChatOnReturn"/>
             <check_box name="FSMarkObjects" label="Objektename als (no name) anzeigen um Vortäuschungen zu unterbinden"/>
@@ -133,16 +133,16 @@
             </text>
             <check_box name="FSBoldGroupMods" label="Gruppenmoderatoren in Fettschrift anzeigen"/>
             <check_box name="FSMuteAllGroups" label="ALLE Gruppenchats deaktivieren"/>
-            <check_box name="FSMuteGroupWhenNoticesDisabled" label="Deaktivierung von 'Gruppennachrichten erhalten' deaktiviert auch Gruppenchat"/>
+            <check_box name="FSMuteGroupWhenNoticesDisabled" label="Deaktivierung von 'Gruppenmitteilungen erhalten' deaktiviert auch Gruppenchat"/>
 
             <!-- Logging -->
             <text name="logging_enhancements">
               Chatprotokoll-Extras:
             </text>
-            <check_box label="Zeitstempel in lokalem Chat nicht anzeigen" name="hide_timestamps_nearby_chat"/>
+            <check_box label="Zeitstempel im lokalem Chat nicht anzeigen" name="hide_timestamps_nearby_chat"/>
             <check_box label="Zeitstempen in Instant Messages nicht anzeigen" name="hide_timestamps_im"/>
-            <check_box name="FSShowIMInChatHistory" label="Instant Messages in lokalem Chat anzeigen"/>
-            <check_box name="FSLogIMInChatHistory" label="IMs in lokalem Chat speichern" width="190"/>
+            <check_box name="FSShowIMInChatHistory" label="Instant Messages im lokalem Chat anzeigen"/>
+            <check_box name="FSLogIMInChatHistory" label="IMs im lokalem Chat speichern" width="190"/>
             <text name="requires_save_chat_logs" width="280">
               (Erfordert Speichern von lokalem Chatprotokoll)
             </text>

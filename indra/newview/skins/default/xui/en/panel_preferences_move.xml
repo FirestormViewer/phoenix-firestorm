@@ -354,7 +354,7 @@
          label="Clicking your avatar keeps camera position"
          layout="topleft"
          left="30"
-         name="backwardsturnavatar"
+         name="clickonavatarkeepscamera"
          width="270"
          control_name="ClickOnAvatarKeepsCamera"
          tool_tip="Normally, clicking on your avatar resets the camera position. This option removes this behavior."/>
