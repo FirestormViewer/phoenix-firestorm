@@ -379,6 +379,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.MaturitySettings",		boost::bind(&LLFloaterPreference::onChangeMaturity, this));
 	mCommitCallbackRegistrar.add("Pref.BlockList",				boost::bind(&LLFloaterPreference::onClickBlockList, this));
 	mCommitCallbackRegistrar.add("Pref.Proxy",					boost::bind(&LLFloaterPreference::onClickProxySettings, this));
+	mCommitCallbackRegistrar.add("Pref.TranslationSettings",	boost::bind(&LLFloaterPreference::onClickTranslationSettings, this));
 	mCommitCallbackRegistrar.add("FS.ToggleSortContacts",		boost::bind(&LLFloaterPreference::onClickSortContacts, this));
 	mCommitCallbackRegistrar.add("NACL.AntiSpamUnblock",		boost::bind(&LLFloaterPreference::onClickClearSpamList, this));
 	//[ADD - Clear Settings : SJ]
@@ -684,6 +685,9 @@ void LLFloaterPreference::cancel()
 	}
 	// hide joystick pref floater
 	LLFloaterReg::hideInstance("pref_joystick");
+
+	// hide translation settings floater
+	LLFloaterReg::hideInstance("prefs_translation");
 	
 	// cancel hardware menu
 	LLFloaterHardwareSettings* hardware_settings = LLFloaterReg::getTypedInstance<LLFloaterHardwareSettings>("prefs_hardware_settings");
@@ -1751,6 +1755,11 @@ void LLFloaterPreference::onClickSortContacts()
 void LLFloaterPreference::onClickProxySettings()
 {
 	LLFloaterReg::showInstance("prefs_proxy");
+}
+
+void LLFloaterPreference::onClickTranslationSettings()
+{
+	LLFloaterReg::showInstance("prefs_translation");
 }
 
 void LLFloaterPreference::onClickActionChange()

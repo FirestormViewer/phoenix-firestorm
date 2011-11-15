@@ -174,6 +174,7 @@ public:
 	void onClickBlockList();
 	void onClickSortContacts();
 	void onClickProxySettings();
+	void onClickTranslationSettings();
 	void applyUIColor(LLUICtrl* ctrl, const LLSD& param);
 	void getUIColor(LLUICtrl* ctrl, const LLSD& param);
 	
