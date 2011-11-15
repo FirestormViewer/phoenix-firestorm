@@ -12,6 +12,25 @@
 	<filter_editor label="Inventar filtern" name="inventory search editor"/>
 	<button name="collapse_btn" label="Einklappen" />
 	<button name="expand_btn" label="Ausklappen" />
+	<text name="filter_label" value="Filter:"/>
+	<combo_box name="filter_combo_box" width="100">
+		<combo_box.item value="filter_type_all" label="Alle Typen" />
+		<combo_box.item value="filter_separator" label="------------" enabled="false" />
+		<combo_box.item value="filter_type_animations" label="Animationen" />
+		<combo_box.item value="filter_type_calling_cards" label="Visitenkarten" />
+		<combo_box.item value="filter_type_clothing" label="Kleidung / Körperteile" />
+		<combo_box.item value="filter_type_gestures" label="Gesten" />
+		<combo_box.item value="filter_type_landmarks" label="Landmarken" />
+		<combo_box.item value="filter_type_notecards" label="Notizkarten" />
+		<combo_box.item value="filter_type_objects" label="Objekte" />
+		<combo_box.item value="filter_type_scripts" label="Skripte" />
+		<combo_box.item value="filter_type_sounds" label="Sounds" />
+		<combo_box.item value="filter_type_textures" label="Texturen" />
+		<combo_box.item value="filter_type_snapshots" label="Fotos" />
+		<combo_box.item value="filter_type_meshes" label="Meshes" />
+		<combo_box.item value="filter_separator" label="------------" enabled="false" />
+		<combo_box.item value="filter_type_custom" label="Benutzerdefiniert..." />
+	</combo_box>
 	<tab_container name="inventory filter tabs">
 		<inventory_panel label="INVENTAR" name="All Items"/>
 		<recent_inventory_panel label="AKTUELL" name="Recent Items"/>
