@@ -300,6 +300,15 @@ void LLWorldMapView::draw()
 {
 	static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
 	
+	// Ansariel: Replaced slow calls to gSavedSettings with faster LLCachedControl
+	static LLCachedControl<bool> mapShowInfohubs(gSavedSettings, "MapShowInfohubs");
+	static LLCachedControl<bool> mapShowTelehubs(gSavedSettings, "MapShowTelehubs");
+	static LLCachedControl<bool> mapShowLandForSale(gSavedSettings, "MapShowLandForSale");
+	static LLCachedControl<bool> mapShowEvents(gSavedSettings, "MapShowEvents");
+	static LLCachedControl<bool> mapShowPeople(gSavedSettings, "MapShowPeople");
+	static LLCachedControl<bool> showMatureEvents(gSavedSettings, "ShowMatureEvents");
+	static LLCachedControl<bool> showAdultEvents(gSavedSettings, "ShowAdultEvents");
+
 	LLTextureView::clearDebugImages();
 
 	F64 current_time = LLTimer::getElapsedSeconds();
@@ -418,7 +427,7 @@ void LLWorldMapView::draw()
 			gGL.end();
 		}
 		 **********************/
-		else if (gSavedSettings.getBOOL("MapShowLandForSale") && (level <= DRAW_LANDFORSALE_THRESHOLD))
+		else if (mapShowLandForSale && (level <= DRAW_LANDFORSALE_THRESHOLD))
 		{
 			// Draw the overlay image "Land for Sale / Land for Auction"
 			LLViewerFetchedTexture* overlayimage = info->getLandForSaleImage();
@@ -514,12 +523,12 @@ void LLWorldMapView::draw()
 	gGL.setSceneBlendType(LLRender::BT_ALPHA);
 
 	// Draw item infos if we're not zoomed out too much and there's something to draw
-	if ((level <= DRAW_SIMINFO_THRESHOLD) && (gSavedSettings.getBOOL("MapShowInfohubs") || 
-											  gSavedSettings.getBOOL("MapShowTelehubs") ||
-											  gSavedSettings.getBOOL("MapShowLandForSale") || 
-											  gSavedSettings.getBOOL("MapShowEvents") || 
-											  gSavedSettings.getBOOL("ShowMatureEvents") ||
-											  gSavedSettings.getBOOL("ShowAdultEvents")))
+	if ((level <= DRAW_SIMINFO_THRESHOLD) && (mapShowInfohubs || 
+											  mapShowTelehubs ||
+											  mapShowLandForSale || 
+											  mapShowEvents || 
+											  showMatureEvents ||
+											  showAdultEvents))
 	{
 		drawItems();
 	}
@@ -551,7 +560,7 @@ void LLWorldMapView::draw()
 
 	// Draw icons for the avatars in each region.
 	// Drawn this after the current agent avatar so one can see nearby people
-	if (gSavedSettings.getBOOL("MapShowPeople") && (level <= DRAW_SIMINFO_THRESHOLD))
+	if (mapShowPeople && (level <= DRAW_SIMINFO_THRESHOLD))
 	{
 		drawAgents();
 	}
@@ -822,8 +831,15 @@ void LLWorldMapView::drawItems()
 	bool mature_enabled = gAgent.canAccessMature();
 	bool adult_enabled = gAgent.canAccessAdult();
 
-    BOOL show_mature = mature_enabled && gSavedSettings.getBOOL("ShowMatureEvents");
-	BOOL show_adult = adult_enabled && gSavedSettings.getBOOL("ShowAdultEvents");
+	// Ansariel: Replaced slow calls to gSavedSettings with faster LLCachedControl
+	static LLCachedControl<bool> mapShowInfohubs(gSavedSettings, "MapShowInfohubs");
+	static LLCachedControl<bool> mapShowTelehubs(gSavedSettings, "MapShowTelehubs");
+	static LLCachedControl<bool> mapShowLandForSale(gSavedSettings, "MapShowLandForSale");
+	static LLCachedControl<bool> mapShowEvents(gSavedSettings, "MapShowEvents");
+	static LLCachedControl<bool> showMatureEvents(gSavedSettings, "ShowMatureEvents");
+	static LLCachedControl<bool> showAdultEvents(gSavedSettings, "ShowAdultEvents");
+    bool show_mature = mature_enabled && showMatureEvents;
+	bool show_adult = adult_enabled && showAdultEvents;
 
 	for (handle_list_t::iterator iter = mVisibleRegions.begin(); iter != mVisibleRegions.end(); ++iter)
 	{
@@ -834,17 +850,17 @@ void LLWorldMapView::drawItems()
 			continue;
 		}
 		// Infohubs
-		if (gSavedSettings.getBOOL("MapShowInfohubs"))
+		if (mapShowInfohubs)
 		{
 			drawGenericItems(info->getInfoHub(), sInfohubImage);
 		}
 		// Telehubs
-		if (gSavedSettings.getBOOL("MapShowTelehubs"))
+		if (mapShowTelehubs)
 		{
 			drawGenericItems(info->getTeleHub(), sTelehubImage);
 		}
 		// Land for sale
-		if (gSavedSettings.getBOOL("MapShowLandForSale"))
+		if (mapShowLandForSale)
 		{
 			drawGenericItems(info->getLandForSale(), sForSaleImage);
 			// for 1.23, we're showing normal land and adult land in the same UI; you don't
@@ -856,7 +872,7 @@ void LLWorldMapView::drawItems()
 			}
 		}
 		// PG Events
-		if (gSavedSettings.getBOOL("MapShowEvents"))
+		if (mapShowEvents)
 		{
 			drawGenericItems(info->getPGEvent(), sEventImage);
 		}
