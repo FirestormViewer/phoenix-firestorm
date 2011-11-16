@@ -99,6 +99,10 @@ std::map<LLUUID, LLColor4> LLNetMap::sAvatarMarksMap; // Ansariel
 LLNetMap::LLNetMap (const Params & p)
 :	LLUICtrl (p),
 	mBackgroundColor (p.bg_color()),
+	// <Ansariel> Fixing borked minimap zoom level persistance
+	//mScale( MAP_SCALE_MID ),
+	//mPixelsPerMeter( MAP_SCALE_MID / REGION_WIDTH_METERS ),
+	// </Ansariel> Fixing borked minimap zoom level persistance
 	mObjectMapTPM(0.f),
 	mObjectMapPixels(0.f),
 	mTargetPan(0.f, 0.f),
@@ -115,19 +119,23 @@ LLNetMap::LLNetMap (const Params & p)
 	mToolTipMsg(),
 	mPopupMenu(NULL)
 {
+	// <Ansariel> Fixing borked minimap zoom level persistance
 	mScale = gSavedSettings.getF32("MiniMapScale");
 	mPixelsPerMeter = mScale / REGION_WIDTH_METERS;
 	mDotRadius = llmax(DOT_SCALE * mPixelsPerMeter, MIN_DOT_RADIUS);
-	// Ansariel: Fixing borked minimap zoom level persistance
+	setScale(mScale);
+	//mDotRadius = llmax(DOT_SCALE * mPixelsPerMeter, MIN_DOT_RADIUS);
 	//setScale(gSavedSettings.getF32("MiniMapScale"));
-	// END Ansariel: Fixing borked minimap zoom level persistance
+	// </Ansariel> Fixing borked minimap zoom level persistance
 }
 
 LLNetMap::~LLNetMap()
 {
-	// Ansariel: Fixing borked minimap zoom level persistance
+	// <Ansariel> Fixing borked minimap zoom level persistance
+	// Since there are two netmap instances, save zoom level in setScale
+	// so we always store the zoom level set last throughout all instances
 	//gSavedSettings.setF32("MiniMapScale", mScale);
-	// END Ansariel: Fixing borked minimap zoom level persistance
+	// </Ansariel> Fixing borked minimap zoom level persistance
 }
 
 BOOL LLNetMap::postBuild()
@@ -151,8 +159,12 @@ void LLNetMap::setScale( F32 scale )
 	mCurPan *= scale / mScale;
 	mScale = scale;
 
+	// <Ansariel> Fixing borked minimap zoom level persistance
+	// Save minimap scale here so we get the latest zoom level
+	// throughout all netmap instances
 	gSavedSettings.setF32("MiniMapScale", mScale);
-	
+	// </Ansariel> Fixing borked minimap zoom level persistance
+
 	if (mObjectImagep.notNull())
 	{
 		F32 width = (F32)(getRect().getWidth());
