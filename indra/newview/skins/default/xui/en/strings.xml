@@ -2039,6 +2039,7 @@ Returns a string with the requested data about the region
 	<string name="BodyPartsLeftLeg">Left Leg</string>
 	<string name="BodyPartsTorso">Torso</string>
 	<string name="BodyPartsRightLeg">Right Leg</string>
+	<string name="BodyPartsOther">Other</string>
 
 	<!-- slider -->
 	<string name="GraphicsQualityLow">Low</string>

@@ -191,18 +191,18 @@ LLMenuGL* gDetachSubMenu = NULL;
 LLMenuGL* gTakeOffClothes = NULL;
 LLContextMenu* gAttachScreenPieMenu = NULL;
 LLContextMenu* gAttachPieMenu = NULL;
-LLContextMenu* gAttachBodyPartPieMenus[8];
+LLContextMenu* gAttachBodyPartPieMenus[10];
 LLContextMenu* gDetachPieMenu = NULL;
 LLContextMenu* gDetachScreenPieMenu = NULL;
-LLContextMenu* gDetachBodyPartPieMenus[8];
+LLContextMenu* gDetachBodyPartPieMenus[10];
 
 // ## Zi: Pie menu
 PieMenu* gPieAttachScreenMenu = NULL;
 PieMenu* gPieAttachMenu = NULL;
-PieMenu* gPieAttachBodyPartMenus[8];
+PieMenu* gPieAttachBodyPartMenus[10];
 PieMenu* gPieDetachMenu = NULL;
 PieMenu* gPieDetachScreenMenu = NULL;
-PieMenu* gPieDetachBodyPartMenus[8];
+PieMenu* gPieDetachBodyPartMenus[10];
 // ## Zi: Pie menu
 
 LLMenuItemCallGL* gAFKMenu = NULL;

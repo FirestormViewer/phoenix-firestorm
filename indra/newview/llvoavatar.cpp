@@ -5755,7 +5755,7 @@ BOOL LLVOAvatar::loadSkeletonNode ()
 			int group = info->mGroup;
 			if (group >= 0)
 			{
-				if (group < 0 || group >= 9)
+				if (group < 0 || group >= 10)
 				{
 					llwarns << "Invalid group number (" << group << ") for attachment point " << info->mName << llendl;
 				}
