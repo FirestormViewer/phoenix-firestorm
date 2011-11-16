@@ -28,6 +28,17 @@
      follows="all"
      label="General"
      name="General" >
+	    <check_box
+		 control_name="FullScreen"
+		 height="16"
+		 initial_value="false"
+		 label="Fullscreen Mode (Requires restart)"
+		 layout="topleft"
+		 left="10"
+		 name="Fullscreen Mode"
+		 tool_tip="Run Firestorm in Fullscreen mode."
+		 top_pad="32"
+		 width="280" />
         <text
          type="string"
          length="1"
