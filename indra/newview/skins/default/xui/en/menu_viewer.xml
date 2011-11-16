@@ -2520,6 +2520,9 @@
              function="ToggleControl"
              parameter="QAMode" />
         </menu_item_check>
+        
+        <!-- Proof of concept V1 menu toggle entry, Disabled for release 
+        
      <menu_item_check
          label="Use V1 Menus"
          name="V1 Menus">
@@ -2531,6 +2534,8 @@
              parameter="FSUseV1Menus" />
         </menu_item_check>
 
+        END: V1 menu toggle entry  -WoLf -->
+        
     </menu>
     <menu
      create_jump_keys="true"
