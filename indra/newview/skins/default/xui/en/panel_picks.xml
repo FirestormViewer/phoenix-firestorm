@@ -118,8 +118,6 @@ background_opaque="false"
       <panel
          bg_opaque_color="SL-Background_66"
          background_visible="true"
-		 top_pad="-2"
-		 width="313">
          follows="bottom|left|right"
          layout="topleft"
          left="6"

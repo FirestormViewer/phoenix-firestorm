@@ -3127,7 +3127,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 			}
 	LLColor4 name_tag_color = getNameTagColor(is_friend);
 
-	if(isSelf() && gSavedSettings.getBOOL("FSShowOwnTagColor")) name_tag_color=gSavedSettings.getColor4("FirestormTagColor");
+	if(isSelf() && gSavedSettings.getBOOL("FSShowOwnTagColor")) name_tag_color=gSavedPerAccountSettings.getColor4("FirestormTagColor");
 
 	// Wolfspirit: If we don't need to display a friend,
 	// if we aren't self, if we use colored Clienttags and if we have a color

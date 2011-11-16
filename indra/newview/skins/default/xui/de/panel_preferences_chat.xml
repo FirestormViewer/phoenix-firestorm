@@ -118,7 +118,7 @@
             <check_box name="AutoCloseOOC" label="((OOC))-Klammern automatisch schließen"/>
 
             <!-- Localchat chat bar -->
-            <check_box name="FSNearbyChatbar" label="Eingabezeile zum Fenster Lokaler Chat hinzufügen"/>
+            <check_box name="FSNearbyChatbar" label="Eingabezeile zum Fenster Lokaler Chat hinzufügen" width="300"/>
             <text name="FSNearbyChatbar_requires_restart">
               (Erfordert Neustart)
             </text>

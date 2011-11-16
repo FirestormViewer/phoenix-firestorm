@@ -234,6 +234,7 @@
          layout="topleft"
          left="30"
          name="lookatshownames"
+		 tool_tip="Select whether to show avatar names on the LookAt crosshairs"
          top_pad="5"
          width="200">
             Show names for look at targets:
@@ -286,6 +287,18 @@
          width="200">
             My LookAt:
         </text>
+		<check_box
+         control_name="DebugLookAtHideOwn"
+         height="16"
+		 initial_value="true"
+         label="Don't show me my lookat target"
+         layout="topleft"
+         left="20"
+         name="LookAtHideOwn"
+		 tool_tip="Don't show me my own camera crosshairs"
+         top_pad="4"
+         width="350" />
+
         <check_box
          control_name="PrivateLookAtTarget"
          height="16"
@@ -293,15 +306,17 @@
          layout="topleft"
          left="20"
          name="privatelookat"
+		 tool_tip="Prevents your camera focus point from showing to others"
          top_pad="4"
          width="350" />
 
         <check_box
          control_name="PrivateLocalLookAtTarget"
          height="16"
-         label="Don't show any camera target hints even on my own screen."
+         label="Don't set any camera target hints even on my own screen."
          layout="topleft"
          name="privateLocalLookat"
+		 tool_tip="Prevents your avatar's head from moving to face a point your camera is focused on in your own view. This head movement is not necessarily visible to others whether or not this option is enabled"
          top_pad="4"
          width="400" />
 
@@ -311,6 +326,7 @@
          label="Don't send my selection target hints"
          layout="topleft"
          name="privatepointat"
+		 tool_tip="Prevents your selection point from showing to others"
          top_pad="4"
          width="350" />
 

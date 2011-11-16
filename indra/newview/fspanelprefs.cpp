@@ -207,17 +207,17 @@ void PanelPreferenceFirestorm::refreshTagCombos()
 	getChild<LLUICtrl>("FSShowOwnTagColor_toggle")->setValue(gSavedSettings.getBOOL("FSShowOwnTagColor"));
 
 
-	LLColor4 tag_color = gSavedSettings.getColor4("FirestormTagColor");
-	if(tag_color==LLColor4::red) getChild<LLComboBox>("ClientTagColor")->setSimple(LLStringExplicit("Red"));
-	if(tag_color==LLColor4::blue) getChild<LLComboBox>("ClientTagColor")->setSimple(LLStringExplicit("Blue"));
-	if(tag_color==LLColor4::yellow) getChild<LLComboBox>("ClientTagColor")->setSimple(LLStringExplicit("Yellow"));
-	if(tag_color==LLColor4::purple) getChild<LLComboBox>("ClientTagColor")->setSimple(LLStringExplicit("Purple"));
-	if(tag_color==LLColor4((F32)0.99,(F32)0.56,(F32)0.65,(F32)1)) getChild<LLComboBox>("ClientTagColor")->setSimple(LLStringExplicit("Pink"));
-	if(tag_color==LLColor4::white) getChild<LLComboBox>("ClientTagColor")->setSimple(LLStringExplicit("White"));
-	if(tag_color==LLColor4((F32)0.99,(F32)0.39,(F32)0.12,(F32)1)) getChild<LLComboBox>("ClientTagColor")->setSimple(LLStringExplicit("Orange"));
-	if(tag_color==LLColor4::green) getChild<LLComboBox>("ClientTagColor")->setSimple(LLStringExplicit("Green"));
+	LLColor4 tag_color = gSavedPerAccountSettings.getColor4("FirestormTagColor");
+	LLSD selectedColor("red"); // default case: red
+	if (tag_color==LLColor4::blue) selectedColor = LLSD("blue");
+	else if (tag_color==LLColor4::yellow) selectedColor = LLSD("yellow");
+	else if (tag_color==LLColor4::purple) selectedColor = LLSD("purple");
+	else if (tag_color==LLColor4((F32)0.99,(F32)0.56,(F32)0.65,(F32)1)) selectedColor = LLSD("pink");
+	else if (tag_color==LLColor4::white) selectedColor = LLSD("white");
+	else if (tag_color==LLColor4((F32)0.99,(F32)0.39,(F32)0.12,(F32)1)) selectedColor = LLSD("orange");
+	else if (tag_color==LLColor4::green) selectedColor = LLSD("green");
 
-
+	getChild<LLComboBox>("ClientTagColor")->setValue(selectedColor);
 }
 
 
@@ -253,24 +253,23 @@ void PanelPreferenceFirestorm::applyTagCombos()
 
 
 	LLColor4 tag_color=LLColor4::red;
-	if(getChild<LLComboBox>("ClientTagColor")->getSimple()=="Blue") tag_color=LLColor4::blue;
-	if(getChild<LLComboBox>("ClientTagColor")->getSimple()=="Yellow") tag_color=LLColor4::yellow;
-	if(getChild<LLComboBox>("ClientTagColor")->getSimple()=="Purple") tag_color=LLColor4::purple;
-	if(getChild<LLComboBox>("ClientTagColor")->getSimple()=="Pink") tag_color=LLColor4((F32)0.99,(F32)0.56,(F32)0.65,(F32)1);
-	if(getChild<LLComboBox>("ClientTagColor")->getSimple()=="White") tag_color=LLColor4::white;
-	if(getChild<LLComboBox>("ClientTagColor")->getSimple()=="Orange") tag_color=LLColor4((F32)0.99,(F32)0.39,(F32)0.12,(F32)1);
-	if(getChild<LLComboBox>("ClientTagColor")->getSimple()=="Green") tag_color=LLColor4::green;
 
+	std::string selectedColor(getChild<LLComboBox>("ClientTagColor")->getValue().asString());
+	if (selectedColor == "blue") tag_color = LLColor4::blue;
+	else if (selectedColor == "yellow") tag_color = LLColor4::yellow;
+	else if (selectedColor == "purple") tag_color = LLColor4::purple;
+	else if (selectedColor == "pink") tag_color = LLColor4((F32)0.99,(F32)0.56,(F32)0.65,(F32)1);
+	else if (selectedColor == "white") tag_color = LLColor4::white;
+	else if (selectedColor == "orange") tag_color = LLColor4((F32)0.99,(F32)0.39,(F32)0.12,(F32)1);
+	else if (selectedColor == "green") tag_color = LLColor4::green;
 
-	if(tag_color!=gSavedSettings.getColor4("FirestormTagColor")){
-		gSavedSettings.setColor4("FirestormTagColor",tag_color);
+	if(tag_color!=gSavedPerAccountSettings.getColor4("FirestormTagColor")){
+		gSavedPerAccountSettings.setColor4("FirestormTagColor",tag_color);
 		if(gAgentAvatarp!=NULL)	gAgentAvatarp->forceBakeAllTextures(true);
 		if(gSavedSettings.getBOOL("FSShowOwnTagColor")) change=true;
 	}
 
-
 	if(change) LLVOAvatar::invalidateNameTags();
-
 }
 
 void PanelPreferenceFirestorm::onFSShowChatChannel()

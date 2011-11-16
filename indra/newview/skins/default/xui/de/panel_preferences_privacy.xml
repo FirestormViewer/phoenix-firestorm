@@ -38,7 +38,7 @@
 		<!--LookAt-->
 		<panel label="Kamerafokus" name="tab-lookat">
 			<check_box label="Kamerafokus anzeigen" name="showlookat" tool_tip="Aktiviert Fadenkreuze, die die Kamerapositionen anderer Avatare markieren."/>
-			<text name="lookatshownames">
+			<text name="lookatshownames" tool_tip="Auswählen, ob Avatarnamen zusätzlich zum Fadenkreuz angezeigt werden soll.">
 				Namensanzeige für Kamerafokus:
 			</text>
 			<combo_box name="lookatshownames_combobox">
@@ -52,9 +52,10 @@
 			<text name="mylookat">
 				Eigener Kamerafokus:
 			</text>
-			<check_box label="Eigenen Kamerafokus nicht an andere senden" name="privatelookat"/>
-			<check_box label="Eigenen Kamerafokus auch lokal nicht anzeigen" name="privateLocalLookat"/>
-			<check_box label="Eigene Bearbeitungsauswahl nicht an andere senden" name="privatepointat"/>
+			<check_box label="Eigenen Kamerafokus nicht anzeigen" name="LookAtHideOwn" tool_tip="Fadenkreuz für den eigenen Kamerafokus nicht anzeigen."/>
+			<check_box label="Eigenen Kamerafokus nicht an andere senden" name="privatelookat" tool_tip="Verhindert, dass der eigene Kamerafokus an andere gesendet wird."/>
+			<check_box label="Eigenen Kamerafokus auch lokal nicht setzen" name="privateLocalLookat" tool_tip="Verhindert, dass der Kopf des eigenen Avatars sich zum fokussierten Punkt der Kamera dreht. Die Kopfbewegung muss zwangsläufig nicht nicht anderen sichtbar sein, unabhängig wie diese Option gesetzt ist!"/>
+			<check_box label="Eigene Bearbeitungsauswahl nicht an andere senden" name="privatepointat" tool_tip="Verhindert, dass die eigene Auswahl an andere gesendet wird."/>
 		</panel>
 	</tab_container>
 </panel>
