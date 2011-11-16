@@ -1472,14 +1472,14 @@
          width="220"
          allow_text_entry="false"
          name="ClientTagColor">
-          <combo_item name="red">Red</combo_item>
-          <combo_item name="blue">Blue</combo_item>
-          <combo_item name="yellow">Yellow</combo_item>
-          <combo_item name="purple">Purple</combo_item>
-          <combo_item name="pink">Pink</combo_item>
-          <combo_item name="white">White</combo_item>
-          <combo_item name="orange">Orange</combo_item>
-          <combo_item name="green">Green</combo_item>
+          <combo_item name="red" value="red" label="Red"/>
+          <combo_item name="blue" value="blue" label="Blue"/>
+          <combo_item name="yellow" value="yellow" label="Yellow"/>
+          <combo_item name="purple" value="purple" label="Purple"/>
+          <combo_item name="pink" value="pink" label="Pink"/>
+          <combo_item name="white" value="white" label="White"/>
+          <combo_item name="orange" value="orange" label="Orange"/>
+          <combo_item name="green" value="green" label="Green"/>
         </combo_box>
 
         <check_box
