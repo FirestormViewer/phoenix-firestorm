@@ -208,9 +208,8 @@ void PanelPreferenceFirestorm::refreshTagCombos()
 
 
 	LLColor4 tag_color = gSavedPerAccountSettings.getColor4("FirestormTagColor");
-	LLSD selectedColor;
-	if (tag_color==LLColor4::red) selectedColor = LLSD("red");
-	else if (tag_color==LLColor4::blue) selectedColor = LLSD("blue");
+	LLSD selectedColor("red"); // default case: red
+	if (tag_color==LLColor4::blue) selectedColor = LLSD("blue");
 	else if (tag_color==LLColor4::yellow) selectedColor = LLSD("yellow");
 	else if (tag_color==LLColor4::purple) selectedColor = LLSD("purple");
 	else if (tag_color==LLColor4((F32)0.99,(F32)0.56,(F32)0.65,(F32)1)) selectedColor = LLSD("pink");
