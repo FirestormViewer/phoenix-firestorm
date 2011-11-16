@@ -207,7 +207,7 @@ void PanelPreferenceFirestorm::refreshTagCombos()
 	getChild<LLUICtrl>("FSShowOwnTagColor_toggle")->setValue(gSavedSettings.getBOOL("FSShowOwnTagColor"));
 
 
-	LLColor4 tag_color = gSavedSettings.getColor4("FirestormTagColor");
+	LLColor4 tag_color = gSavedPerAccountSettings.getColor4("FirestormTagColor");
 	LLSD selectedColor;
 	if (tag_color==LLColor4::red) selectedColor = LLSD("red");
 	else if (tag_color==LLColor4::blue) selectedColor = LLSD("blue");
@@ -264,8 +264,8 @@ void PanelPreferenceFirestorm::applyTagCombos()
 	else if (selectedColor == "orange") tag_color = LLColor4((F32)0.99,(F32)0.39,(F32)0.12,(F32)1);
 	else if (selectedColor == "green") tag_color = LLColor4::green;
 
-	if(tag_color!=gSavedSettings.getColor4("FirestormTagColor")){
-		gSavedSettings.setColor4("FirestormTagColor",tag_color);
+	if(tag_color!=gSavedPerAccountSettings.getColor4("FirestormTagColor")){
+		gSavedPerAccountSettings.setColor4("FirestormTagColor",tag_color);
 		if(gAgentAvatarp!=NULL)	gAgentAvatarp->forceBakeAllTextures(true);
 		if(gSavedSettings.getBOOL("FSShowOwnTagColor")) change=true;
 	}

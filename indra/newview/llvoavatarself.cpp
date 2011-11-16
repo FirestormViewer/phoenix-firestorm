@@ -2757,7 +2757,7 @@ bool LLVOAvatarSelf::sendAppearanceMessage(LLMessageSystem *mesgsys) const
 	const char* tag_client = "Firestorm";
 	LLUUID client_name;
 	strncpy((char*)&client_name.mData[0], tag_client, UUID_BYTES);
-	static LLCachedControl<LLColor4> tag_color(gSavedSettings, "FirestormTagColor", LLColor4(1,0,1,1));
+	static LLCachedControl<LLColor4> tag_color(gSavedPerAccountSettings, "FirestormTagColor", LLColor4(1,0,1,1));
 	entry->setColor(tag_color);
 	//This glow is used to tell if the tag color is set or not.
 	entry->setGlow(0.1f);

@@ -423,6 +423,22 @@
 			<real>1.0</real>
 		</array>
 	</map>
+	<key>FirestormTagColor</key>
+	<map>
+	    <key>Comment</key>
+	    <string>The tag color you wish to have.</string>
+	    <key>Persist</key>
+	    <integer>1</integer>
+	    <key>Type</key>    
+	    <string>Color4</string>
+	    <key>Value</key>
+	    <array>
+	    <real>1</real>
+	    <real>0</real>
+	    <real>0</real>
+	    <real>1.0</real>
+	</array>
+	</map>
     <!-- End of Firestorm settings -->
     </map>
 </llsd>
