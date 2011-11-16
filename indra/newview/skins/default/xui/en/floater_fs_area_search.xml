@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater
  name="area_search"
+ help_topic="fs_area_search"
  title="Area Search for objects"
  min_width="425"
  min_height="250"
