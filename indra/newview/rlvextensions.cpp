@@ -160,7 +160,7 @@ class RlvWindLight : public LLSingleton<RlvWindLight>
 {
 	friend class LLSingleton<RlvWindLight>;
 public:
-	RlvWindLight::RlvWindLight();
+	RlvWindLight();
 
 	std::string	getValue(const std::string& strSetting, bool& fError);
 	bool		setValue(const std::string& strRlvName, const std::string& strValue);
