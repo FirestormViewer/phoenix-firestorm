@@ -172,8 +172,8 @@ BOOL LLNearbyChatBar::postBuild()
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Modified: Catznip-3.2.0a
 	// Initalize certain parameters depending on default vs embedded state
 	bool fTabbedNearbyChat = isTabbedNearbyChat();
-	setCanClose(!fTabbedNearbyChat);
-	setCanMinimize(fTabbedNearbyChat);
+//	setCanClose(!fTabbedNearbyChat);
+//	setCanMinimize(fTabbedNearbyChat);
 	setCanTearOff(fTabbedNearbyChat);
 
 	if (fTabbedNearbyChat)
@@ -628,15 +628,14 @@ void LLNearbyChatBar::onToggleNearbyChatPanel()
 //	}
 //		LLFloater::setMinimized(b);
 //}
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-void LLNearbyChatBar::setMinimized(BOOL b)
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-17 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+void LLNearbyChatBar::onOpen(const LLSD& sdKey)
 {
-	// When unminimizing with nearby chat visible, go ahead and kill off screen chats
-	if ( (isMinimized() != b) && (!b) && (mNearbyChatContainer->getVisible()) )
+	// When open the floater with nearby chat visible, go ahead and kill off screen chats
+	if (mNearbyChatContainer->getVisible())
 	{
 		mNearbyChat->removeScreenChat();
 	}
-		LLFloater::setMinimized(b);
 }
 // [/SL:KB]
 
