@@ -87,9 +87,18 @@ void LLIMFloaterContainer::addFloater(LLFloater* floaterp,
 		return;
 	}
 
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-17 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+	LLUUID session_id = floaterp->getKey();
+	if (session_id.isNull())
+	{
+		// Re-insert the nearby chat floater at the start
+		insertion_point = LLTabContainer::START;
+	}
+// [/SL:KB]
+
 	LLMultiFloater::addFloater(floaterp, select_added_floater, insertion_point);
 
-	LLUUID session_id = floaterp->getKey();
+//	LLUUID session_id = floaterp->getKey();
 
 	LLIconCtrl* icon = 0;
 
