@@ -56,7 +56,22 @@
      label="Also log to nearby chat"
      layout="topleft"
      left_pad="5"
-     height="18"/>
+     height="18"
+     width="150">
+     <check_box.commit_callback
+    function="Pref.Online_Notices" />
+    </check_box>
+    <check_box
+     enabled="false"
+     control_name="OnlineOfflinetoNearbyChatHistory"
+     follows="left|top"
+     height="18"
+     label="Only in nearby chat"
+     layout="topleft"
+     left_pad="5"
+     name="OnlineOfflinetoNearbyChatHistory"
+     width="150" />
+
 
     <check_box
      control_name="ShowScriptErrors"

@@ -159,6 +159,7 @@ public:
 	// if the quality radio buttons are changed
 	void onChangeQuality(const LLSD& data);
 	void onClickClearSettings();
+	void onClickChatOnlineNotices();
 	void onClickClearSpamList();
 	//void callback_clear_settings(const LLSD& notification, const LLSD& response);
 	
