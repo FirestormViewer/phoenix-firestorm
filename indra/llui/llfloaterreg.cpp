@@ -508,7 +508,14 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 	}
 	else
 	{
-		instance->closeFloater();
+//		instance->closeFloater();
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-17 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+		// When toggling *visibility*, close the host instead of the floater when hosted
+		if (instance->getHost())
+			instance->getHost()->closeFloater();
+		else
+			instance->closeFloater();
+// [/SL:KB]
 	}
 }
 
