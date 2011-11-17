@@ -59,10 +59,10 @@ protected:
 
 	// LLNearbyChatBarBase overrides
 public:
-	/*virtual*/ LLUICtrl* getChatBoxCtrl()						 { return mChatBox; }
-	/*virtual*/ LLWString getChatBoxText()						 { return mChatBox->getConvertedText(); }
-	/*virtual*/ void      setChatBoxText(LLStringExplicit& text) { mChatBox->setText(text); }
-	/*virtual*/ void	  setChatBoxCursorToEnd()				 { mChatBox->setCursorToEnd(); }
+	/*virtual*/ LLUICtrl* getChatBoxCtrl()								{ return mChatBox; }
+	/*virtual*/ LLWString getChatBoxText()								{ return mChatBox->getConvertedText(); }
+	/*virtual*/ void      setChatBoxText(const LLStringExplicit& text)	{ mChatBox->setText(text); }
+	/*virtual*/ void	  setChatBoxCursorToEnd()						{ mChatBox->setCursorToEnd(); }
 
 protected:
 	LLLineEditor*		 mChatBox;

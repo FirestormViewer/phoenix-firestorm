@@ -127,7 +127,7 @@ LLWString LLNearbyChatBarMulti::getChatBoxText()
 	return m_pChatEditor->getWText();
 }
 
-void LLNearbyChatBarMulti::setChatBoxText(LLStringExplicit& text)
+void LLNearbyChatBarMulti::setChatBoxText(const LLStringExplicit& text)
 {
 	m_pChatEditor->setText(text);
 

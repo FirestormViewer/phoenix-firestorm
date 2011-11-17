@@ -32,7 +32,7 @@ public:
 
 	virtual LLUICtrl* getChatBoxCtrl() = 0;
 	virtual LLWString getChatBoxText() = 0;
-	virtual void	  setChatBoxText(LLStringExplicit& text) = 0;
+	virtual void	  setChatBoxText(const LLStringExplicit& text) = 0;
 	virtual void	  setChatBoxCursorToEnd() = 0;
 protected:
 	void onChatBoxFocusLost();

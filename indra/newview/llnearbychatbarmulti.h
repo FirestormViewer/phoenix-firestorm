@@ -32,7 +32,7 @@ public:
 
 	/*virtual*/ LLUICtrl* getChatBoxCtrl()				{ return m_pChatEditor; }
 	/*virtual*/ LLWString getChatBoxText();
-	/*virtual*/ void	  setChatBoxText(LLStringExplicit& text);
+	/*virtual*/ void	  setChatBoxText(const LLStringExplicit& text);
 	/*virtual*/ void	  setChatBoxCursorToEnd()		{ m_pChatEditor->endOfDoc(); }
 protected:
 	void onChatBoxCommit(EChatType eChatType);
