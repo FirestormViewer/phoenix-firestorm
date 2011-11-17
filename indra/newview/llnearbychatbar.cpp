@@ -183,7 +183,7 @@ BOOL LLNearbyChatBar::postBuild()
 		{
 			if (!mNearbyChatContainer->getVisible())
 				onToggleNearbyChatPanel();
-			pConvFloater->LLMultiFloater::addFloater(this, TRUE, LLTabContainer::START);
+			pConvFloater->addFloater(this, TRUE, LLTabContainer::START);
 		}
 
 		onTearOff(LLSD(isTornOff()));
