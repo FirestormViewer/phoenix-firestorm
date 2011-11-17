@@ -169,9 +169,6 @@ LLFrameTimer gThrottleTimer;
 const U32 OFFER_THROTTLE_MAX_COUNT=5; //number of items per time period
 const F32 OFFER_THROTTLE_TIME=10.f; //time period in seconds
 
-// no name object substitute name -KC
-const static std::string NO_NAME_OBJECT = "(no name)";
-
 //script permissions
 const std::string SCRIPT_QUESTIONS[SCRIPT_PERMISSION_EOF] = 
 	{ 
@@ -3539,9 +3536,10 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		if (chat.mSourceType == CHAT_SOURCE_OBJECT && boost::regex_search(from_name, whitespace_exp))
 		{
 			//[FIRE-2434 Mark Unamed Objects based on setting
-			if (gSavedSettings.getBOOL("FSMarkObjects"))
+			static LLCachedControl<bool> FSMarkObjects(gSavedSettings, "FSMarkObjects");
+			if (FSMarkObjects)
 			{
-				chat.mFromName = NO_NAME_OBJECT;
+				chat.mFromName = LLTrans::getString("no_name_object");
 			}
 			else
 			{

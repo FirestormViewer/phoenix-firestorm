@@ -880,6 +880,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ST_NO_JOINT">
 		HAUPTVERZEICHNIS oder VERBINDUNG nicht gefunden.
 	</string>
+	<string name="no_name_object">
+		(unbenannt)
+	</string>
 	<string name="whisper">
 		flüstert:
 	</string>
