@@ -27,7 +27,7 @@
 			<menu_item_call label="Aktualisiere Aussehen (Rebake)" name="Rebake Texture"/>
 			<menu_item_call label="Auf männlichen Standard-Avatar zurücksetzen" name="ResetDefaultAvM"/>
             <menu_item_call label="Auf weiblichen Standard-Avatar zurücksetzen" name="ResetDefaultAvF"/>
-			<menu_item_check label="Avatar-Rendering-Kosten (ARC) anzeigen" name="Avatar Rendering Cost"/>
+			<menu_item_check label="Draw-Weight für Avatare anzeigen (Ersatz für ARC)" name="Avatar Rendering Cost"/>
 			<menu_item_call label="Lag-Meter" name="Lag Meter"/>
 			<menu_item_call label="LSL-Bridge neu erstellen" name="Recreate LSL Bridge"/>
 		</menu>
@@ -88,6 +88,7 @@
 			<menu_item_call label="Mittag" name="Noon"/>
 			<menu_item_call label="Sonnenuntergang" name="Sunset"/>
 			<menu_item_call label="Mitternacht" name="Midnight"/>
+            <menu_item_call label="Grundbesitzzeit" name="Revert to Region Default"/>
 		</menu>
 		<menu label="Umgebungs-Editor" name="Enviroment Editor">
 			<menu_item_call label="Umgebungseinstellungen..." name="Enviroment Settings"/>
@@ -313,16 +314,16 @@
 	<menu label="Entwickler" name="Develop">
 		<menu label="Konsolen" name="Consoles">
 			<menu_item_check label="Textur" name="Texture Console"/>
-			<menu_item_check label="Fehler beseitigen" name="Debug Console"/>
+			<menu_item_check label="Debug-Fenster" name="Debug Console"/>
 			<menu_item_call label="Meldungen" name="Notifications"/>
 			<menu_item_check label="Texturgröße" name="Texture Size"/>
 			<menu_item_check label="Texture-Kategorie" name="Texture Category"/>
 			<menu_item_check label="Schnelle Timer" name="Fast Timers"/>
 			<menu_item_check label="Speicher" name="Memory"/>
 			<menu_item_check label="Szenestatistiken" name="Scene Statistics"/>
-			<menu_item_call label="Info zu Region in Fenster Fehler beseitigen" name="Region Info to Debug Console"/>
-			<menu_item_call label="Gruppeninfo in Fenster Fehler beseitigen" name="Group Info to Debug Console"/>
-			<menu_item_call label="Info zu Fähigkeiten in Fenster Fehler beseitigen" name="Capabilities Info to Debug Console"/>
+			<menu_item_call label="Info zu Region in Debug-Fenster" name="Region Info to Debug Console"/>
+			<menu_item_call label="Gruppeninfo in Debug-Fenster" name="Group Info to Debug Console"/>
+			<menu_item_call label="Info zu Fähigkeiten in Debug-Fenster" name="Capabilities Info to Debug Console"/>
 			<menu_item_check label="Kamera" name="Camera"/>
 			<menu_item_check label="Wind" name="Wind"/>
 			<menu_item_check label="FOV" name="FOV"/>
@@ -337,7 +338,7 @@
 			<menu_item_check label="Farbe unter Cursor anzeigen" name="Show Color Under Cursor"/>
 			<menu_item_check label="Speicher anzeigen" name="Show Memory"/>
 			<menu_item_check label="Info über privaten Speicher anzeigen" name="Show Private Mem Info"/>
-			<menu_item_check label="Akutalisierungen an Objekten anzeigen" name="Show Updates"/>
+			<menu_item_check label="Aktualisierungen an Objekten anzeigen" name="Show Updates"/>
 		</menu>
 		<menu label="Fehler erzwingen" name="Force Errors">
 			<menu_item_call label="Haltepunkt erzwingen" name="Force Breakpoint"/>
@@ -385,8 +386,8 @@
 			<menu_item_check label="Schatten von Sonne-/Mond-Projektoren" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="SSAO und Schattenglättung" name="SSAO and Shadow Smoothing"/>
 			<menu_item_check label="Globale Beleuchtung (experimentell)" name="Global Illumination"/>
-			<menu_item_check label="Fehler in GL beseitigen" name="Debug GL"/>
-			<menu_item_check label="Fehler in Pipeline beseitigen" name="Debug Pipeline"/>
+			<menu_item_check label="GL debuggen" name="Debug GL"/>
+			<menu_item_check label="Pipeline debuggen" name="Debug Pipeline"/>
 			<menu_item_check label="Automatische Alpha-Masken (aufgeschoben)" name="Automatic Alpha Masks (deferred)"/>
 			<menu_item_check label="Automatische Alpha-Masken (nicht aufgeschoben)" name="Automatic Alpha Masks (non-deferred)"/>
 			<menu_item_check label="Animationstexturen" name="Animation Textures"/>
@@ -434,13 +435,13 @@
 			<menu_item_check label="Doppel-Klick-Auto-Pilot" name="Double-ClickAuto-Pilot"/>
 			<menu_item_check label="Doppel-Klick-Teleport" name="DoubleClick Teleport"/>
 			<menu_item_check label="Regions-Debug-Konsole" name="Region Debug Console"/>
-			<menu_item_check label="Fehler in SelectMgr beseitigen" name="Debug SelectMgr"/>
-			<menu_item_check label="Fehler in Klicks beseitigen" name="Debug Clicks"/>
+			<menu_item_check label="SelectMgr debuggen" name="Debug SelectMgr"/>
+			<menu_item_check label="Klicks debuggen" name="Debug Clicks"/>
 			<menu_item_check label="Debug-Ansichten" name="Debug Views"/>
 			<menu_item_check label="Kurzinfos: Debug-Namen" name="Debug Name Tooltips"/>
-			<menu_item_check label="Fehler in Maus-Events beseitigen" name="Debug Mouse Events"/>
-			<menu_item_check label="Fehler in Keys beseitigen" name="Debug Keys"/>
-			<menu_item_check label="Fehler in WindowProc beseitigen" name="Debug WindowProc"/>
+			<menu_item_check label="Maus-Events debuggen" name="Debug Mouse Events"/>
+			<menu_item_check label="Keys debuggen" name="Debug Keys"/>
+			<menu_item_check label="WindowProc debuggen" name="Debug WindowProc"/>
 		</menu>
 		<menu label="XUI" name="XUI">
 			<menu_item_call label="Farbeinstellungen neu laden" name="Reload Color Settings"/>
@@ -472,13 +473,13 @@
 			<menu_item_check label="Zeitlupen-Animationen" name="Slow Motion Animations"/>
 			<menu_item_check label="Kamerafokus anzeigen" name="Show Look At"/>
 			<menu_item_check label="Klickpunkt anzeigen" name="Show Point At"/>
-			<menu_item_check label="Fehler in Landaktualisierung beseitigen" name="Debug Joint Updates"/>
+			<menu_item_check label="Landaktualisierung debuggen" name="Debug Joint Updates"/>
 			<menu_item_check label="LOD deaktiveren" name="Disable LOD"/>
-			<menu_item_check label="Fehler für sichtbare Agenten beseitigen" name="Debug Character Vis"/>
+			<menu_item_check label="Sichtbare Agenten debuggen" name="Debug Character Vis"/>
 			<menu_item_check label="Gelenkpunkte anzeigen" name="Show Collision Skeleton"/>
 			<menu_item_check label="Agent-Ziel anzeigen" name="Display Agent Target"/>
 			<menu_item_call label="Anhänge ausgeben" name="Dump Attachments"/>
-			<menu_item_call label="Fehler in Avatar-Texturen beseitigen" name="Debug Avatar Textures"/>
+			<menu_item_call label="Avatar-Texturen debuggen" name="Debug Avatar Textures"/>
 			<menu_item_call label="Lokale Texturen ausgeben" name="Dump Local Textures"/>
 			<menu_item_call label="Avatarwolken-Partikel neu laden" name="Reload Avatar Cloud Particle"/>
 		</menu>
