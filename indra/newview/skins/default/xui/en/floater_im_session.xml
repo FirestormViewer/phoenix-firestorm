@@ -285,6 +285,20 @@
       
 </layout_stack>
 
+    <!-- Checkbox for FS prefix on support groups -->
+    <check_box
+     visible="true"
+     control_name="FSSupportGroupChatPrefix"
+     follows="left|top"
+     height="18"
+     label="Specify viewer type"
+     layout="topleft"
+     left_pad="-50"
+     name="FSSupportGroupChatPrefix_toggle"
+     tool_tip="Add (FS) in front of your messages to help support staff understand whether your question pertains to Phoenix or Firestorm. Your help avoiding confusion is greatly appreciated!"
+     width="150" />
+    <!-- END: FS Prefix -->
+
 <button
 	follows="right|top"
 	height="20"
