@@ -6550,7 +6550,7 @@ If you stay in this region when it shuts down, you will be logged out.
    icon="notify.tga"
    name="LoadWebPage"
    type="notify">
-Load web page [URL]?
+Load web page [URL] ?
 
 [MESSAGE]
 
