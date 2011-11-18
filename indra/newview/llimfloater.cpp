@@ -71,6 +71,7 @@
 //TL: for support group chat prefix
 #include "fsdata.h"
 #include "llversioninfo.h"
+#include "llcheckboxctrl.h"
 
 static const S32 RECT_PADDING_NOT_INIT = -1;
 static const S32 RECT_PADDING_NEED_RECALC = -2;
@@ -804,6 +805,9 @@ BOOL LLIMFloater::postBuild()
 	childSetCommitCallback("chat_editor", onSendMsg, this);
 	
 	mChatHistory = getChild<LLChatHistory>("chat_history");
+
+	LLCheckBoxCtrl* FSPrefixBox = getChild<LLCheckBoxCtrl>("FSSupportGroupChatPrefix_toggle");
+	FSPrefixBox->setVisible(FSData::getInstance()->isSupportGroup(mSessionID));
 
 	setDocked(true);
 
