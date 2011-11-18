@@ -125,7 +125,7 @@
             <check_box name="FSShowChatChannel" label="Kanalauswahl in Eingabezeile anzeigen"/>
             <check_box label="Haupteingabezeile für Chat automatisch verstecken" name="AutohideChatBar" tool_tip="Eingabezeile in der unteren Buttonleiste automatisch verstecken und nur zur Eingabe anzeigen"/>
             <check_box label="Chatleiste nach Senden deaktivieren" name="CloseChatOnReturn"/>
-            <check_box name="FSMarkObjects" label="Objektename als (unbenannt) anzeigen um Vortäuschungen zu unterbinden"/>
+            <check_box name="FSMarkObjects" label="Objektename als (namenlos) anzeigen um Vortäuschungen zu unterbinden"/>
 
             <!-- Groups -->
             <text name="group_enhancements">
