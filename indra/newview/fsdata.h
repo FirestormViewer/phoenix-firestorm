@@ -38,6 +38,12 @@ struct LLSDcontent
 	LLSD content;
 };
 
+struct FSDataAgent
+{
+	bool support;
+	bool developer;
+};
+
 class FSData
 {
 	LOG_CLASS(FSData);
@@ -76,9 +82,10 @@ public:
 
 	static BOOL is_BetaVersion(std::string version);
 	static BOOL is_ReleaseVersion(std::string version);
-	static BOOL is_developer(LLUUID id);
-	static BOOL is_support(LLUUID id);
+	static bool is_developer(LLUUID avatar_id);
+	static bool is_support(LLUUID avatar_id);
 	BOOL isSupportGroup(LLUUID id);
+	FSDataAgent* getAgent(LLUUID avatar_id);
 
 	static LLSD allowed_login();
 
@@ -94,8 +101,10 @@ public:
 	// std::string ms_motd;
 	static BOOL isMSDone() { return msDataDone; }
 private:
+	void processAgentsLLSD(LLSD& agents);
+
 	static BOOL msDataDone;
 	static std::string blacklist_version;
-
-
+	FSDataAgent mSupportAgent;
+	std::map<LLUUID, FSDataAgent> mSupportAgentList;
 };

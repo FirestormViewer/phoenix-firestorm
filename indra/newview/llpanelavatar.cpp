@@ -745,31 +745,41 @@ void LLPanelAvatarProfile::fillAccountStatus(const LLAvatarData* avatar_data)
 	//...so why didn't they comment this out too and take it out of
 	//   the XML, too? Argh. -- TS
 	// args["[AGEVERIFICATION]"] = "";
-	args["[FIRESTORM]"] = "";
-	if (FSData::is_developer(avatar_data->avatar_id))
+
+	FSDataAgent* agent = FSData::getInstance()->getAgent(avatar_data->avatar_id);
+	if (agent)
 	{
 		args["[FIRESTORM]"] = "Firestorm";
-		std::string dev = getString("FSDev");
-		args["[FSDEV]"] = dev;
+		if (agent->developer)
+		{
+			std::string dev = getString("FSDev");
+			args["[FSDEV]"] = dev;
+		}
+		else
+		{
+			args["[FSDEV]"] = "";
+		}
+		if (agent->support)
+		{
+			std::string supp = getString("FSSupp");
+			if (agent->developer)
+			{
+				supp = " /" + supp;
+			}
+			args["[FSSUPP]"] = supp;
+		}
+		else
+		{
+			args["[FSSUPP]"] = "";
+		}
 	}
 	else
 	{
+		args["[FIRESTORM]"] = "";
+		args["[FSSUPP]"] = "";
 		args["[FSDEV]"] = "";
 	}
-	if (FSData::is_support(avatar_data->avatar_id))
-	{
-		args["[FIRESTORM]"] = "Firestorm";
-		std::string supp = getString("FSSupp");
-		if (FSData::is_developer(avatar_data->avatar_id))
-		{
-			supp = " /" + supp;
-		}
-		args["[FSSUPP]"] = supp;
-	}
-	else
-	{
-		args["[FSSUPP]"] = "";
-	}
+	
 	std::string caption_text = getString("CaptionTextAcctInfo", args);
 	getChild<LLUICtrl>("acc_status_text")->setValue(caption_text);
 }

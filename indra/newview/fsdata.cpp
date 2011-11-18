@@ -55,6 +55,7 @@
 #include "llviewermedia.h"
 #include "llagentui.h"
 #include "llversioninfo.h"
+#include "lltrans.h"
 
 static const std::string versionid = llformat("%s %d.%d.%d (%d)", LL_CHANNEL, LL_VERSION_MAJOR, LL_VERSION_MINOR, LL_VERSION_PATCH, LL_VERSION_BUILD);
 static const std::string fsdata_url = "http://phoenixviewer.com/app/fsdata/data.xml";
@@ -238,25 +239,7 @@ void FSData::processData(U32 status, std::string body)
 				{
 					if (fsData["Agents"].asInteger() <= agents["AgentsVersion"].asInteger())
 					{
-						LLSD& support_agents = agents["SupportAgents"];
-						self->personnel.clear();
-						for(LLSD::map_iterator itr = support_agents.beginMap(); itr != support_agents.endMap(); ++itr)
-						{
-							std::string key = (*itr).first;
-							LLSD& content = (*itr).second;
-							U8 val = 0;
-							if(content.has("support"))val = val | EM_SUPPORT;
-							if(content.has("developer"))val = val | EM_DEVELOPER;
-							self->personnel[LLUUID(key)] = val;
-						}
-						
-						LLSD& support_groups = agents["SupportGroups"];
-						self->mSupportGroup.clear();
-						for(LLSD::map_iterator itr = support_groups.beginMap(); itr != support_groups.endMap(); ++itr)
-						{
-							self->mSupportGroup.insert(LLUUID(itr->first));
-						}
-						
+						self->processAgentsLLSD(agents);
 						local_file = true;
 					}
 				}
@@ -342,24 +325,7 @@ void FSData::processAgents(U32 status, std::string body)
 	LLSDSerialize::fromXML(agents, istr);
 	if(agents.isDefined())
 	{
-		LLSD& support_agents = agents["SupportAgents"];
-		self->personnel.clear();
-		for(LLSD::map_iterator itr = support_agents.beginMap(); itr != support_agents.endMap(); ++itr)
-		{
-			std::string key = (*itr).first;
-			LLSD& content = (*itr).second;
-			U8 val = 0;
-			if(content.has("support"))val = val | EM_SUPPORT;
-			if(content.has("developer"))val = val | EM_DEVELOPER;
-			self->personnel[LLUUID(key)] = val;
-		}
-		
-		LLSD& support_groups = agents["SupportGroups"];
-		self->mSupportGroup.clear();
-		for(LLSD::map_iterator itr = support_groups.beginMap(); itr != support_groups.endMap(); ++itr)
-		{
-			self->mSupportGroup.insert(LLUUID(itr->first));
-		}
+		self->processAgentsLLSD(agents);
 		
 		// save the download to a file
 		const std::string agents_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "agents.xml");
@@ -371,6 +337,40 @@ void FSData::processAgents(U32 status, std::string body)
 	}
 }
 
+void FSData::processAgentsLLSD(LLSD& agents)
+{
+	LLSD& support_agents = agents["SupportAgents"];
+	mSupportAgentList.clear();
+	for(LLSD::map_iterator iter = support_agents.beginMap(); iter != support_agents.endMap(); ++iter)
+	{
+		LLUUID key = LLUUID(iter->first);
+		LLSD& content = iter->second;
+		if(content.has("support"))
+		{
+			mSupportAgentList[key].support = true;
+		}
+		else
+		{
+			mSupportAgentList[key].support = false;
+		}
+
+		if(content.has("developer"))
+		{
+			mSupportAgentList[key].developer = true;
+		}
+		else
+		{
+			mSupportAgentList[key].developer = false;
+		}
+	}
+	
+	LLSD& support_groups = agents["SupportGroups"];
+	mSupportGroup.clear();
+	for(LLSD::map_iterator itr = support_groups.beginMap(); itr != support_groups.endMap(); ++itr)
+	{
+		mSupportGroup.insert(LLUUID(itr->first));
+	}
+}
 
 void FSData::downloadClientTags()
 {
@@ -642,14 +642,25 @@ void FSData::msdata(U32 status, std::string body)
 }
 #endif
 
-BOOL FSData::is_support(LLUUID id)
+FSDataAgent* FSData::getAgent(LLUUID avatar_id)
+{
+	std::map<LLUUID, FSDataAgent>::iterator iter = mSupportAgentList.find(avatar_id);
+	if (iter == mSupportAgentList.end())
+	{
+		return NULL;
+	}
+	return &iter->second;
+}
+
+bool FSData::is_support(LLUUID avatar_id)
 {
 	FSData* self = getInstance();
-	if(self->personnel.find(id) != self->personnel.end())
+	std::map<LLUUID, FSDataAgent>::iterator iter = self->mSupportAgentList.find(avatar_id);
+	if (iter == self->mSupportAgentList.end())
 	{
-		return ((self->personnel[id] & EM_SUPPORT) != 0) ? TRUE : FALSE;
+		return false;
 	}
-	return FALSE;
+	return iter->second.support;
 }
 
 BOOL FSData::is_BetaVersion(std::string version)
@@ -672,14 +683,15 @@ BOOL FSData::is_ReleaseVersion(std::string version)
 	return FALSE;
 }
 
-BOOL FSData::is_developer(LLUUID id)
+bool FSData::is_developer(LLUUID avatar_id)
 {
 	FSData* self = getInstance();
-	if(self->personnel.find(id) != self->personnel.end())
+	std::map<LLUUID, FSDataAgent>::iterator iter = self->mSupportAgentList.find(avatar_id);
+	if (iter == self->mSupportAgentList.end())
 	{
-		return ((self->personnel[id] & EM_DEVELOPER) != 0) ? TRUE : FALSE;
+		return false;
 	}
-	return FALSE;
+	return iter->second.developer;
 }
 
 LLSD FSData::allowed_login()
