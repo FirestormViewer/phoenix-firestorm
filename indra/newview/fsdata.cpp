@@ -68,9 +68,10 @@ static const std::string legacy_client_list = "http://phoenixviewer.com/app/clie
 
 class FSDownloader : public LLHTTPClient::Responder
 {
+	LOG_CLASS(FSDownloader);
 public:
-	FSDownloader(std::string filename) :
-		mFilename(filename)
+	FSDownloader(std::string url) :
+		mURL(url)
 	{
 	}
 	
@@ -79,32 +80,54 @@ public:
 				const LLChannelDescriptors& channels,
 				const LLIOPipe::buffer_ptr_t& buffer)
 	{
+		if (!isGoodStatus(status))
+		{
+			llinfos << mURL << " [" << status << "]: " << reason << llendl;
+			if (mURL == legacy_client_list)
+			{
+				LL_WARNS("ClientTags") << "client_list_v2.xml download failed with status of " << status << LL_ENDL;
+				// Wolfspirit: If something failes, try to use the local file
+				FSData::getInstance()->updateClientTagsLocal();
+			}
+			return;
+		}
+	  
+		LLSD content;
 		LLBufferStream istr(channels, buffer.get());
-		std::stringstream strstrm;
-		strstrm << istr.rdbuf();
-		std::string result = std::string(strstrm.str());
-		// hack: use the filename or url passed to determine what function to pass the data onto.
+		if (!LLSDSerialize::fromXML(content, istr))
+		{
+			llinfos << "Failed to deserialize LLSD. " << mURL << " [" << status << "]: " << reason << llendl;
+			if (mURL == legacy_client_list)
+			{
+				LL_WARNS("ClientTags") << "Downloaded client_list_v2.xml decode failed." << LL_ENDL;
+				// Wolfspirit: If something failes, try to use the local file
+				FSData::getInstance()->updateClientTagsLocal();
+			}
+			return;
+		}
+		
+		// hack: use the url passed to determine what function to pass the data onto.
 		// TODO; merge the seperate functions into one.
-		if (mFilename == fsdata_url)
+		if (mURL == fsdata_url)
 		{
-			FSData::getInstance()->processData(status, result);
+			FSData::getInstance()->processData(content);
 		}
-		if (mFilename == releases_url)
+		if (mURL == releases_url)
 		{
-			FSData::getInstance()->processReleases(status, result);
+			FSData::getInstance()->processReleases(content);
 		}
-		if (mFilename == agents_url)
+		if (mURL == agents_url)
 		{
-			FSData::getInstance()->processAgents(status, result);
+			FSData::getInstance()->processAgents(content);
 		}
-		if (mFilename == legacy_client_list)
+		if (mURL == legacy_client_list)
 		{
-			FSData::getInstance()->processClientTags(status, result);
+			FSData::getInstance()->processClientTags(content);
 		}
 	}
 	
 private:
-	std::string mFilename;
+	std::string mURL;
 };
 
 
@@ -123,22 +146,8 @@ void FSData::startDownload()
 	LLHTTPClient::get(fsdata_url,new FSDownloader(fsdata_url),headers);
 }
 	
-void FSData::processData(U32 status, std::string body)
+void FSData::processData(const LLSD& fsData)
 {
-	if(status != 200)
-	{
-		LL_WARNS("Data") << "data.xml download failed with status of " << status << LL_ENDL;
-		return;
-	}
-	LLSD fsData;
-	std::istringstream istr(body);
-	LLSDSerialize::fromXML(fsData, istr);
-	if(!fsData.isDefined())
-	{
-	  LL_WARNS("Data") << "Bad data in data.xml, aborting" << LL_ENDL;
-	  return;
-	}
-
 	// Set Message Of The Day if present
 	if(fsData.has("MOTD"))
 	{
@@ -238,89 +247,68 @@ void FSData::processData(U32 status, std::string body)
 	downloadClientTags();
 }
 
-void FSData::processReleases(U32 status, std::string body)
+void FSData::processReleases(const LLSD& releases)
 {
-  	if(status != 200)
-	{
-		LL_WARNS("Releases") << "releases.xml download failed with status of " << status << LL_ENDL;
-		return;
-	}
-  
 	FSData* self = getInstance();
-	LLSD releases;
-	std::istringstream istr(body);
-	LLSDSerialize::fromXML(releases, istr);
-	if(releases.isDefined())
+
+	const LLSD& fs_versions = releases["FirestormReleases"];
+	self->versions2.clear();
+	for(LLSD::map_const_iterator itr = fs_versions.beginMap(); itr != fs_versions.endMap(); ++itr)
 	{
-		LLSD& fs_versions = releases["FirestormReleases"];
-		self->versions2.clear();
-		for(LLSD::map_iterator itr = fs_versions.beginMap(); itr != fs_versions.endMap(); ++itr)
-		{
-			std::string key = (*itr).first;
-			key += "\n";
-			LLSD& content = (*itr).second;
-			U8 val = 0;
-			if(content.has("beta"))val = val | PH_BETA;
-			if(content.has("release"))val = val | PH_RELEASE;
-			self->versions2[key] = val;
-		}
-		
-		if(releases.has("BlockedReleases"))
-		{
-			LLSD& blocked = releases["BlockedReleases"];
-			self->blocked_versions.clear();
-			for (LLSD::map_iterator itr = blocked.beginMap(); itr != blocked.endMap(); ++itr)
-			{
-				std::string vers = itr->first;
-				LLSD& content = itr->second;
-				self->blocked_versions[vers] = content;
-			}
-		}
-		
-		// save the download to a file
-		const std::string releases_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "releases.xml");
-		LL_INFOS("Data") << "Saving " << releases_filename << LL_ENDL;
-		llofstream releases_file;
-		releases_file.open(releases_filename);
-		LLSDSerialize::toPrettyXML(releases, releases_file);
-		releases_file.close();
+		std::string key = (*itr).first;
+		key += "\n";
+		const LLSD& content = (*itr).second;
+		U8 val = 0;
+		if(content.has("beta"))val = val | PH_BETA;
+		if(content.has("release"))val = val | PH_RELEASE;
+		self->versions2[key] = val;
 	}
+	
+	if(releases.has("BlockedReleases"))
+	{
+		const LLSD& blocked = releases["BlockedReleases"];
+		self->blocked_versions.clear();
+		for (LLSD::map_const_iterator itr = blocked.beginMap(); itr != blocked.endMap(); ++itr)
+		{
+			std::string vers = itr->first;
+			const LLSD& content = itr->second;
+			self->blocked_versions[vers] = content;
+		}
+	}
+	
+	// save the download to a file
+	const std::string releases_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "releases.xml");
+	LL_INFOS("Data") << "Saving " << releases_filename << LL_ENDL;
+	llofstream releases_file;
+	releases_file.open(releases_filename);
+	LLSDSerialize::toPrettyXML(releases, releases_file);
+	releases_file.close();
 }
 
-void FSData::processAgents(U32 status, std::string body)
+void FSData::processAgents(const LLSD& agents)
 {
-  	if(status != 200)
-	{
-		LL_WARNS("Agents") << "agents.xml download failed with status of " << status << LL_ENDL;
-		return;
-	}
-  
 	FSData* self = getInstance();
-	LLSD agents;
-	std::istringstream istr(body);
-	LLSDSerialize::fromXML(agents, istr);
-	if(agents.isDefined())
-	{
-		self->processAgentsLLSD(agents);
-		
-		// save the download to a file
-		const std::string agents_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "agents.xml");
-		LL_INFOS("Data") << "Saving " << agents_filename << LL_ENDL;
-		llofstream agents_file;
-		agents_file.open(agents_filename);
-		LLSDSerialize::toPrettyXML(agents, agents_file);
-		agents_file.close();
-	}
+
+	self->processAgentsLLSD(agents);
+	
+	// save the download to a file
+	const std::string agents_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "agents.xml");
+	LL_INFOS("Data") << "Saving " << agents_filename << LL_ENDL;
+	llofstream agents_file;
+	agents_file.open(agents_filename);
+	LLSDSerialize::toPrettyXML(agents, agents_file);
+	agents_file.close();
+
 }
 
-void FSData::processAgentsLLSD(LLSD& agents)
+void FSData::processAgentsLLSD(const LLSD& agents)
 {
-	LLSD& support_agents = agents["SupportAgents"];
+	const LLSD& support_agents = agents["SupportAgents"];
 	mSupportAgentList.clear();
-	for(LLSD::map_iterator iter = support_agents.beginMap(); iter != support_agents.endMap(); ++iter)
+	for(LLSD::map_const_iterator iter = support_agents.beginMap(); iter != support_agents.endMap(); ++iter)
 	{
 		LLUUID key = LLUUID(iter->first);
-		LLSD& content = iter->second;
+		const LLSD& content = iter->second;
 		if(content.has("support"))
 		{
 			mSupportAgentList[key].support = true;
@@ -340,9 +328,9 @@ void FSData::processAgentsLLSD(LLSD& agents)
 		}
 	}
 	
-	LLSD& support_groups = agents["SupportGroups"];
+	const LLSD& support_groups = agents["SupportGroups"];
 	mSupportGroup.clear();
-	for(LLSD::map_iterator itr = support_groups.beginMap(); itr != support_groups.endMap(); ++itr)
+	for(LLSD::map_const_iterator itr = support_groups.beginMap(); itr != support_groups.endMap(); ++itr)
 	{
 		mSupportGroup.insert(LLUUID(itr->first));
 	}
@@ -350,7 +338,6 @@ void FSData::processAgentsLLSD(LLSD& agents)
 
 void FSData::downloadClientTags()
 {
-
 	if(gSavedSettings.getU32("FSUseLegacyClienttags")>1)
 	{
 		LLSD headers;
@@ -363,40 +350,24 @@ void FSData::downloadClientTags()
 	{
 		updateClientTagsLocal();
 	}
-	
 }
 
 
-void FSData::processClientTags(U32 status,std::string body)
+void FSData::processClientTags(const LLSD& tags)
 {
-	if(status != 200)
-	{
-		LL_WARNS("ClientTags") << "client_list_v2.xml download failed with status of " << status << LL_ENDL;
-		// Wolfspirit: If something failes, try to use the local file
-		updateClientTagsLocal();
-		return;
-	}
-  
 	FSData* self = getInstance();
-	LLSD tags;
-	std::istringstream istr(body);
-	LLSDSerialize::fromXML(tags, istr);
-	if(tags.isDefined())
+
+	if(tags.has("isComplete"))
 	{
-		
-		if(tags.has("isComplete"))
-		{
-			self->LegacyClientList = tags;
-			// save the download to a file
-			const std::string tags_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml");
-			LL_INFOS("Data") << "Saving " << tags_filename << LL_ENDL;
-			llofstream tags_file;
-			tags_file.open(tags_filename);
-			LLSDSerialize::toPrettyXML(tags, tags_file);
-			tags_file.close();
-		}
+		self->LegacyClientList = tags;
+		// save the download to a file
+		const std::string tags_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml");
+		LL_INFOS("Data") << "Saving " << tags_filename << LL_ENDL;
+		llofstream tags_file;
+		tags_file.open(tags_filename);
+		LLSDSerialize::toPrettyXML(tags, tags_file);
+		tags_file.close();
 	}
-	
 }
 
 LLSD FSData::resolveClientTag(LLUUID id){

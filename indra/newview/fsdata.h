@@ -50,13 +50,13 @@ class FSData : public LLSingleton<FSData>
 	LOG_CLASS(FSData);
 public:
 	void startDownload();
-	void processData(U32 status, std::string body);
+	void processData(const LLSD& fsData);
 	void downloadClientTags();
 	bool checkFile(std::string filename);
 
-	static void processReleases(U32 status, std::string body);
-	static void processAgents(U32 status, std::string body);
-	static void processClientTags(U32 status, std::string body);
+	static void processReleases(const LLSD& releases);
+	static void processAgents(const LLSD& agents);
+	static void processClientTags(const LLSD& tags);
 	static void msdata(U32 status, std::string body);
 	static void msblacklist(U32 status, std::string body);
 
@@ -97,7 +97,7 @@ public:
 	// std::string ms_motd;
 	static BOOL isMSDone() { return msDataDone; }
 private:
-	void processAgentsLLSD(LLSD& agents);
+	void processAgentsLLSD(const LLSD& agents);
 
 	static BOOL msDataDone;
 	static std::string blacklist_version;
