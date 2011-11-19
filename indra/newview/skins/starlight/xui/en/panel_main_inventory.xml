@@ -6,7 +6,7 @@
  height="423"
  label="Things"
  layout="topleft"
- min_height="350"
+ min_height="300"
  min_width="240"
  name="main inventory panel"
  width="330">
@@ -48,8 +48,36 @@
    left="10"
    max_length_chars="300"
    name="inventory search editor"
+   tool_tip="Type in one or more words to search for, separated by '+' "
    top="18"
-   width="303" />
+   width="219" />
+  <combo_box
+   name="filter_combo_box"
+   width="80"
+   height="21"
+   top="19"
+   left_pad="4"
+   follows="top|right"
+   layout="topleft">
+
+  <combo_box.item value="filter_type_all" label="All Types" />
+  <combo_box.item value="filter_separator" label="------------" enabled="false" />
+  <combo_box.item value="filter_type_animations" label="Animations" />
+  <combo_box.item value="filter_type_calling_cards" label="Calling Cards" />
+  <combo_box.item value="filter_type_clothing" label="Clothing / Body Parts" />
+  <combo_box.item value="filter_type_gestures" label="Gestures" />
+  <combo_box.item value="filter_type_landmarks" label="Landmarks" />
+  <combo_box.item value="filter_type_notecards" label="Notecards" />
+  <combo_box.item value="filter_type_objects" label="Objects" />
+  <combo_box.item value="filter_type_scripts" label="Scripts" />
+  <combo_box.item value="filter_type_sounds" label="Sounds" />
+  <combo_box.item value="filter_type_textures" label="Textures" />
+  <combo_box.item value="filter_type_snapshots" label="Snapshots" />
+  <combo_box.item value="filter_type_meshes" label="Meshes" />
+  <combo_box.item value="filter_separator" label="------------" enabled="false" />
+  <combo_box.item value="filter_type_custom" label="Custom..." />
+
+  </combo_box>
   <tab_container
      bg_alpha_color="Transparent"
      bg_opaque_color="Transparent"
@@ -85,6 +113,7 @@
      top="16"
      width="288" />
     <recent_inventory_panel
+     accepts_drag_and_drop="false"
      bg_alpha_color="SL-Background_66"
      bg_opaque_color="SL-Background_66"
      border="false"

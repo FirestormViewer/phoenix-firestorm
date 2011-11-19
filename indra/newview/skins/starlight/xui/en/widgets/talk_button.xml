@@ -7,10 +7,10 @@
   -->
   <speak_button
     follows="left|right" 
-                 image_selected="SpeakBtn_Left_Selected_Press"
-                 image_unselected="SpeakBtn_Left_Off"
-		 image_pressed="SpeakBtn_Left_Selected_Press"
-		 image_pressed_selected="SpeakBtn_Left_Selected_Press"
+    image_selected="SpeakBtn_Left_Selected_Press"
+    image_unselected="SpeakBtn_Left_Off"
+	image_pressed="SpeakBtn_Left_Selected_Press"
+    image_pressed_selected="SpeakBtn_Left_Selected_Press"
     tab_stop="false"
     />
   <show_button
@@ -34,7 +34,7 @@
     name="monitor"
     left="0"
     top="18"
-    right="18"
+    right="30"
     bottom="0"
     />
 </talk_button>

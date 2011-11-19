@@ -33,8 +33,14 @@
 	 name="LtGray"
 	 value="0.90 0.90 0.90 1" />
 	<color
+	 name="LtGray_35"
+	 value="0.75 0.75 0.75 0.35" />
+	<color
 	 name="LtGray_50"
-	 value="0.90 0.90 0.90 0.50" />
+	 value="0.75 0.75 0.75 0.50" />
+	<color
+	 name="Gray"
+	 value="0.5 0.5 0.5 1" />
 	<color
 	 name="DkGray"
 	 value="0.125 0.125 0.125 1" />
@@ -77,6 +83,9 @@
 	<color
 	 name="Yellow"
 	 value="1 1 0 1" />
+	<color
+	 name="DrYellow"
+	 value="1 0.86 0 1" />
 	<color
 	 name="Green"
 	 value="0 1 0 1" />
@@ -384,7 +393,7 @@
      reference="Black" />
     <color
      name="ColorPaletteEntry02"
-     reference="SL-MidDkGray" />
+     reference="Gray" />
     <color
      name="ColorPaletteEntry03"
      value="0.3344 0.5456 0.5159 1" />
@@ -598,6 +607,9 @@
     <color
      name="InventoryItemLinkColor"
      reference="LtGray_50" />
+	<color
+     name="InventoryMouseOverColor"
+     reference="LtGray_35" />
     <color
      name="InventorySearchStatusColor"
      reference="EmphasisColor" />
@@ -675,7 +687,10 @@
      reference="Black" />
     <color
      name="MenuPopupBgColor"
-	  reference="DkGray2" />
+	 reference="DkGray2" />
+	<color
+     name="ModelUploaderLabels"
+     value="1 0.6 0 1" />
     <color
      name="MultiSliderDisabledThumbColor"
      reference="Black" />
@@ -881,7 +896,10 @@
       value="0.2 0.8 1 1"/>
     <color
      name="DirectChatColor"
-     reference="LtOrange" />
+     reference="LtOrange" /> 
+	<color
+     name="ToolbarDropZoneColor"
+     value=".48 .69 1 .5" />
 	    
     <!-- Generic colour names (legacy) -->
   <color

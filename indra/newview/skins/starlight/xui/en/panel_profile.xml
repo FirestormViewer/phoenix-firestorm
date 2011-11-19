@@ -10,7 +10,7 @@
  width="313">
     <string
      name="CaptionTextAcctInfo">
-        [ACCTTYPE]
+[ACCTTYPE]
 [PAYMENTINFO] [FIRESTORM][FSDEV][FSSUPP]
     </string>
 <!-- The previous line was [PAYMENTINFO] [AGEVERIFICATION], but they're not
@@ -50,6 +50,12 @@
     name="display_name_text_args">
     [DISPLAY_NAME]
   </string>
+  <string
+    name="FSDev"
+    value=" Developer" />
+  <string
+    name="FSSupp"
+    value=" Support" />
    <accordion
     left="0"
     top="0"
@@ -172,7 +178,7 @@
                initial_value="(retrieving)"
                layout="topleft"
                left="0"
-               link="true"
+               parse_urls="true"
                name="partner_text"
                top="0"
                use_ellipses="true"

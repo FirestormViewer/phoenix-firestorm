@@ -57,7 +57,7 @@
              width="293" />
             <text_editor
              follows="left|top"
-             height="120"
+             height="200"
              layout="topleft"
              left="12"
              max_length="1000"
