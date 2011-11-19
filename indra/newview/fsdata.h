@@ -32,6 +32,7 @@
 #include <map>
 #include <llsd.h>
 #include <llinstantmessage.h>
+#include "llsingleton.h"
 
 struct LLSDcontent
 {
@@ -44,15 +45,10 @@ struct FSDataAgent
 	bool developer;
 };
 
-class FSData
+class FSData : public LLSingleton<FSData>
 {
 	LOG_CLASS(FSData);
-	FSData();
-	~FSData();
-	static FSData* sInstance;
 public:
-	static FSData* getInstance();
-
 	void startDownload();
 	void processData(U32 status, std::string body);
 	void downloadClientTags();

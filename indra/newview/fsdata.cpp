@@ -108,34 +108,10 @@ private:
 };
 
 
-
 std::string FSData::blacklist_version;
 LLSD FSData::blocked_login_info = 0;
 std::map<LLSD, std::string> legacy_tags;
 BOOL FSData::msDataDone = FALSE;
-
-FSData* FSData::sInstance;
-
-FSData::FSData()
-{
-	sInstance = this;
-}
-
-FSData::~FSData()
-{
-	sInstance = NULL;
-}
-
-FSData* FSData::getInstance()
-{
-	if(sInstance)return sInstance;
-	else
-	{
-		sInstance = new FSData();
-		return sInstance;
-	}
-}
-
 
 
 void FSData::startDownload()
