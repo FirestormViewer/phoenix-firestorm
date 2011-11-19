@@ -2960,7 +2960,7 @@ void LLFolderBridge::folderOptionsMenu()
 	// BAP change once we're no longer treating regular categories as ensembles.
 	const bool is_ensemble = (type == LLFolderType::FT_NONE ||
 							  LLFolderType::lookupIsEnsembleType(type));
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-11-24 (Catznip-2.6.0a) | Added: Catznip-2.4.0e
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-11-24 (Catznip-3.0.0a) | Added: Catznip-2.4.0e
 	const bool is_outfit = (type == LLFolderType::FT_OUTFIT);
 // [/SL:KB]
 
@@ -3025,7 +3025,7 @@ void LLFolderBridge::folderOptionsMenu()
 			mDisabledItems.push_back(std::string("Remove From Outfit"));
 		}
 //		if (!LLAppearanceMgr::instance().getCanReplaceCOF(mUUID))
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-11-24 (Catznip-2.6.0a) | Added: Catznip-2.4.0e
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-11-24 (Catznip-3.0.0a) | Added: Catznip-2.4.0e
 		if ( ((is_outfit) && (!LLAppearanceMgr::instance().getCanReplaceCOF(mUUID))) || 
 			 ((!is_outfit) && (gAgentWearables.isCOFChangeInProgress())) )
 // [/SL:KB]
@@ -5110,14 +5110,14 @@ void remove_inventory_category_from_avatar( LLInventoryCategory* category )
 	remove_inventory_category_from_avatar_step2(TRUE, category->getUUID() );
 }
 
-struct OnRemoveStruct
-{
-	LLUUID mUUID;
-	OnRemoveStruct(const LLUUID& uuid):
-		mUUID(uuid)
-	{
-	}
-};
+//struct OnRemoveStruct
+//{
+//	LLUUID mUUID;
+//	OnRemoveStruct(const LLUUID& uuid):
+//		mUUID(uuid)
+//	{
+//	}
+//};
 
 void remove_inventory_category_from_avatar_step2( BOOL proceed, LLUUID category_id)
 {
@@ -5179,7 +5179,7 @@ void remove_inventory_category_from_avatar_step2( BOOL proceed, LLUUID category_
 //														item->getType(),
 //														LLWearableBridge::onRemoveFromAvatarArrived,
 //														new OnRemoveStruct(item->getLinkedUUID()));
-// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-2.6.0a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-3.0.0a) | Added: Catznip-2.1.1d
 					LLAppearanceMgr::instance().removeItemFromAvatar(item->getUUID());
 // [/SL:KB]
 				}
@@ -5604,8 +5604,8 @@ void LLWearableBridge::removeAllClothesFromAvatar()
         for (LLInventoryModel::item_array_t::const_iterator it = clothing_items.begin(); it != clothing_items.end(); ++it)
         {
 // [RLVa:KB] - Checked: 2010-05-14 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
-			if ( (rlv_handler_t::isEnabled()) && (!gRlvWearableLocks.canRemove(*it)) )
-				continue;
+		if ( (rlv_handler_t::isEnabled()) && (!gRlvWearableLocks.canRemove(*it)) )
+			continue;
 // [/RLVa:KB]
             LLAppearanceMgr::instance().removeItemFromAvatar((*it)->getUUID());
         }
@@ -5621,7 +5621,7 @@ void LLWearableBridge::removeItemFromAvatar(LLViewerInventoryItem *item)
 //											item->getType(),
 //											LLWearableBridge::onRemoveFromAvatarArrived,
 //											new OnRemoveStruct(item->getUUID()));
-// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-2.6.0a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-3.0.0a) | Added: Catznip-2.1.1d
 		LLAppearanceMgr::instance().removeItemFromAvatar(item->getUUID());
 // [/SL:KB]
 	}

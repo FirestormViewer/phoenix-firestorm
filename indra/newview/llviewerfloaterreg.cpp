@@ -156,7 +156,6 @@
 #include "fsareasearch.h"
 #include "quickprefs.h"	// Quick Preferences panel	-WoLf
 #include "lggcontactsetsfloater.h"
-
 // handle secondlife:///app/openfloater/{NAME} URLs
 class LLFloaterOpenHandler : public LLCommandHandler
 {
