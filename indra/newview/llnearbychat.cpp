@@ -370,10 +370,25 @@ void	LLNearbyChat::setVisible(BOOL visible)
 	}
 	LLDockableFloater::setVisible(visible);
 	
+	// <Ansariel> Support for chat console
+	static LLCachedControl<bool> chatHistoryTornOff(gSavedSettings, "ChatHistoryTornOff");
 	if (FSUseNearbyChatConsole)
 	{
-		gConsole->setVisible(!visible);
+		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+		if (floater_container && !chatHistoryTornOff && !floater_container->getVisible())
+		{
+			// In case the nearby chat is docked into the IM floater and the
+			// IM floater is invisible, always show the console.
+			gConsole->setVisible(TRUE);
+		}
+		else
+		{
+			// In case the nearby chat is undocked OR docked and the IM floater
+			// is visible, show console only if nearby chat is not visible.
+			gConsole->setVisible(!isVisible(this));
+		}
 	}
+	// </Ansariel> Support for chat console
 }
 
 void	LLNearbyChat::onOpen(const LLSD& key )
