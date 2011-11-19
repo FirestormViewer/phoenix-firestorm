@@ -214,5 +214,18 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
-</map>
+
+  <key>FSFolderViewItemHeight</key>
+  <map>
+    <key>Comment</key>
+    <string>Controls the height of folder items, for instance in inventory</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>18</integer>
+  </map>
+
+  </map>
 </llsd>
