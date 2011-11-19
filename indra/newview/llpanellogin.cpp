@@ -962,7 +962,7 @@ void LLPanelLogin::onClickConnect(void *)
 		std::string username = sInstance->getChild<LLUICtrl>("username_combo")->getValue().asString();
 		gSavedSettings.setString("UserLoginInfo", credential_name());
 
-		LLSD blocked = FSData::allowed_login();
+		LLSD blocked = FSData::getInstance()->allowed_login();
 		if (!blocked.isMap()) //hack for testing for an empty LLSD
 		{
 			if(username.empty())

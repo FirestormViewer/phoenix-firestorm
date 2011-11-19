@@ -130,13 +130,6 @@ private:
 	std::string mURL;
 };
 
-
-std::string FSData::blacklist_version;
-LLSD FSData::blocked_login_info = 0;
-std::map<LLSD, std::string> legacy_tags;
-BOOL FSData::msDataDone = FALSE;
-
-
 void FSData::startDownload()
 {
 	LLSD headers;
@@ -154,7 +147,6 @@ void FSData::processData(const LLSD& fsData)
 		gAgent.mMOTD.assign(fsData["MOTD"]);
 	}
 
-	FSData* self = getInstance();
 	bool local_file = false;
 	if (!(fsData["Releases"].asInteger() == 0))
 	{
@@ -170,7 +162,7 @@ void FSData::processData(const LLSD& fsData)
 					if (fsData["Releases"].asInteger() <= releases["ReleaseVersion"].asInteger())
 					{
 						LLSD& fs_versions = releases["FirestormReleases"];
-						self->versions2.clear();
+						versions2.clear();
 						for(LLSD::map_iterator itr = fs_versions.beginMap(); itr != fs_versions.endMap(); ++itr)
 						{
 							std::string key = (*itr).first;
@@ -179,20 +171,20 @@ void FSData::processData(const LLSD& fsData)
 							U8 val = 0;
 							if(content.has("beta"))val = val | PH_BETA;
 							if(content.has("release"))val = val | PH_RELEASE;
-							self->versions2[key] = val;
+							versions2[key] = val;
 						}
 						
 						if(releases.has("BlockedReleases"))
 						{
 							LLSD& blocked = releases["BlockedReleases"];
-							self->blocked_versions.clear();
+							blocked_versions.clear();
 							for (LLSD::map_iterator itr = blocked.beginMap(); itr != blocked.endMap(); ++itr)
 							{
 								std::string vers = itr->first;
 								LLSD& content = itr->second;
 								//LLSDcontent tmpContent;
 								//tmpContent.content = content;
-								self->blocked_versions[vers] = content;
+								blocked_versions[vers] = content;
 							}
 						}
 						local_file = true;
@@ -224,7 +216,7 @@ void FSData::processData(const LLSD& fsData)
 				{
 					if (fsData["Agents"].asInteger() <= agents["AgentsVersion"].asInteger())
 					{
-						self->processAgentsLLSD(agents);
+						processAgentsLLSD(agents);
 						local_file = true;
 					}
 				}
@@ -249,10 +241,8 @@ void FSData::processData(const LLSD& fsData)
 
 void FSData::processReleases(const LLSD& releases)
 {
-	FSData* self = getInstance();
-
 	const LLSD& fs_versions = releases["FirestormReleases"];
-	self->versions2.clear();
+	versions2.clear();
 	for(LLSD::map_const_iterator itr = fs_versions.beginMap(); itr != fs_versions.endMap(); ++itr)
 	{
 		std::string key = (*itr).first;
@@ -261,18 +251,18 @@ void FSData::processReleases(const LLSD& releases)
 		U8 val = 0;
 		if(content.has("beta"))val = val | PH_BETA;
 		if(content.has("release"))val = val | PH_RELEASE;
-		self->versions2[key] = val;
+		versions2[key] = val;
 	}
 	
 	if(releases.has("BlockedReleases"))
 	{
 		const LLSD& blocked = releases["BlockedReleases"];
-		self->blocked_versions.clear();
+		blocked_versions.clear();
 		for (LLSD::map_const_iterator itr = blocked.beginMap(); itr != blocked.endMap(); ++itr)
 		{
 			std::string vers = itr->first;
 			const LLSD& content = itr->second;
-			self->blocked_versions[vers] = content;
+			blocked_versions[vers] = content;
 		}
 	}
 	
@@ -287,9 +277,7 @@ void FSData::processReleases(const LLSD& releases)
 
 void FSData::processAgents(const LLSD& agents)
 {
-	FSData* self = getInstance();
-
-	self->processAgentsLLSD(agents);
+	processAgentsLLSD(agents);
 	
 	// save the download to a file
 	const std::string agents_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "agents.xml");
@@ -355,11 +343,9 @@ void FSData::downloadClientTags()
 
 void FSData::processClientTags(const LLSD& tags)
 {
-	FSData* self = getInstance();
-
 	if(tags.has("isComplete"))
 	{
-		self->LegacyClientList = tags;
+		LegacyClientList = tags;
 		// save the download to a file
 		const std::string tags_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml");
 		LL_INFOS("Data") << "Saving " << tags_filename << LL_ENDL;
@@ -382,15 +368,20 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color){
 	curtag["id_based"]=new_system;	
 	curtag["tex_color"]=color.getValue();	
 	// If we don't want to display anything...return
-	if(gSavedSettings.getU32("FSClientTagsVisibility")==0) return curtag;
-	
-	FSData* self = getInstance();
+	if(gSavedSettings.getU32("FSClientTagsVisibility") == 0)
+	{
+		return curtag;
+	}
+
 	//WS: Do we want to use Legacy Clienttags?
-	if(gSavedSettings.getU32("FSUseLegacyClienttags")>0){
-		if(self->LegacyClientList.has(id.asString())){
-			curtag=self->LegacyClientList[id.asString()];
+	if(gSavedSettings.getU32("FSUseLegacyClienttags") > 0)
+	{
+		if(LegacyClientList.has(id.asString()))
+		{
+			curtag=LegacyClientList[id.asString()];
 		}
-		else{		
+		else
+		{		
 			if(id == LLUUID("5d9581af-d615-bc16-2667-2f04f8eeefe4"))//green
 			{
 				curtag["name"]="Phoenix";
@@ -471,11 +462,16 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color){
 	
 	// Filtering starts here:
 	//WS: If the current tag has an "alt" definied and we don't want multiple colors. Resolve the alt.
-	if((gSavedSettings.getU32("FSColorClienttags")==1) && curtag.has("alt")) curtag = resolveClientTag(curtag["alt"], new_system, color);
+	if((gSavedSettings.getU32("FSColorClienttags") == 1) && curtag.has("alt"))
+	{
+		curtag = resolveClientTag(curtag["alt"], new_system, color);
+	}
 
 	//WS: If we have a tag using the new system, check if we want to display it's name and/or color
-	if(new_system){
-		if(gSavedSettings.getU32("FSClientTagsVisibility")>=3){
+	if(new_system)
+	{
+		if(gSavedSettings.getU32("FSClientTagsVisibility") >= 3)
+		{
 			// strnlen() doesn't exist on OS X before 10.7. -- TS
 			char tag_temp[UUID_BYTES+1];
 			strncpy(tag_temp,(const char*)&id.mData[0], UUID_BYTES);
@@ -485,37 +481,42 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color){
 			LLStringFn::replace_ascii_controlchars(clienttagname, LL_UNKNOWN_CHAR);
 			curtag["name"] = clienttagname;
 		}
-		if(gSavedSettings.getU32("FSColorClienttags")>=3 || curtag["tpvd"].asBoolean()){
-			if(curtag["tpvd"].asBoolean() && gSavedSettings.getU32("FSColorClienttags")<3){
+		if(gSavedSettings.getU32("FSColorClienttags") >= 3 || curtag["tpvd"].asBoolean())
+		{
+			if(curtag["tpvd"].asBoolean() && gSavedSettings.getU32("FSColorClienttags") < 3)
+			{
 				if(color == LLColor4::blue || color == LLColor4::yellow ||
 				   color == LLColor4::purple || color == LLColor4((F32)0.99,(F32)0.39,(F32)0.12,(F32)1) ||
 				   color == LLColor4::red || color == LLColor4((F32)0.99,(F32)0.56,(F32)0.65,(F32)1) ||
 				   color == LLColor4::white || color == LLColor4::green)
-				   curtag["color"] = color.getValue();
-			} else 
+				{
+					curtag["color"] = color.getValue();
+				}
+			}
+			else 
+			{
 				curtag["color"] = color.getValue();
+			}
 		}
 	}
 
 	//If we only want to display tpvd viewer. And "tpvd" is not available or false, then
 	// clear the data, but keep the basedata (like uuid, id_based and tex_color) for (maybe) later displaying.
-	if(gSavedSettings.getU32("FSClientTagsVisibility")<=1 && (!curtag.has("tpvd") || !curtag["tpvd"].asBoolean())){
+	if(gSavedSettings.getU32("FSClientTagsVisibility") <= 1 && (!curtag.has("tpvd") || !curtag["tpvd"].asBoolean()))
+	{
 		curtag.clear();
 	}
-		curtag["uuid"]=id.asString();
-		curtag["id_based"]=new_system;	
-		curtag["tex_color"]=color.getValue();	
+
+	curtag["uuid"]=id.asString();
+	curtag["id_based"]=new_system;	
+	curtag["tex_color"]=color.getValue();	
 
 	return curtag;
 }
 
-
-
-
 void FSData::updateClientTagsLocal()
 {
 	std::string client_list_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml");
-	FSData* self = getInstance();
 	llifstream xml_file(client_list_filename);
 	LLSD data;
 	if(!xml_file.is_open()) return;
@@ -523,7 +524,7 @@ void FSData::updateClientTagsLocal()
 	{
 		if(data.has("isComplete"))
 		{
-			self->LegacyClientList = data;
+			LegacyClientList = data;
 		}
 
 		xml_file.close();
@@ -601,9 +602,8 @@ FSDataAgent* FSData::getAgent(LLUUID avatar_id)
 
 bool FSData::is_support(LLUUID avatar_id)
 {
-	FSData* self = getInstance();
-	std::map<LLUUID, FSDataAgent>::iterator iter = self->mSupportAgentList.find(avatar_id);
-	if (iter == self->mSupportAgentList.end())
+	std::map<LLUUID, FSDataAgent>::iterator iter = mSupportAgentList.find(avatar_id);
+	if (iter == mSupportAgentList.end())
 	{
 		return false;
 	}
@@ -612,29 +612,26 @@ bool FSData::is_support(LLUUID avatar_id)
 
 BOOL FSData::is_BetaVersion(std::string version)
 {
-	FSData* self = getInstance();
-	if(self->versions2.find(version) != self->versions2.end())
+	if(versions2.find(version) != versions2.end())
 	{
-		return ((self->versions2[version] & PH_BETA) != 0) ? TRUE : FALSE;
+		return ((versions2[version] & PH_BETA) != 0) ? TRUE : FALSE;
 	}
 	return FALSE;
 }
 
 BOOL FSData::is_ReleaseVersion(std::string version)
 {
-	FSData* self = getInstance();
-	if(self->versions2.find(version) != self->versions2.end())
+	if(versions2.find(version) != versions2.end())
 	{
-		return ((self->versions2[version] & PH_RELEASE) != 0) ? TRUE : FALSE;
+		return ((versions2[version] & PH_RELEASE) != 0) ? TRUE : FALSE;
 	}
 	return FALSE;
 }
 
 bool FSData::is_developer(LLUUID avatar_id)
 {
-	FSData* self = getInstance();
-	std::map<LLUUID, FSDataAgent>::iterator iter = self->mSupportAgentList.find(avatar_id);
-	if (iter == self->mSupportAgentList.end())
+	std::map<LLUUID, FSDataAgent>::iterator iter = mSupportAgentList.find(avatar_id);
+	if (iter == mSupportAgentList.end())
 	{
 		return false;
 	}
@@ -643,9 +640,8 @@ bool FSData::is_developer(LLUUID avatar_id)
 
 LLSD FSData::allowed_login()
 {
-	FSData* self = getInstance();
-	std::map<std::string, LLSD>::iterator iter = self->blocked_versions.find(versionid);
-	if (iter == self->blocked_versions.end())
+	std::map<std::string, LLSD>::iterator iter = blocked_versions.find(versionid);
+	if (iter == blocked_versions.end())
 	{
 		LLSD empty;
 		return empty; 

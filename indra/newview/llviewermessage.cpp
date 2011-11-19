@@ -2572,7 +2572,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			if (!mute_im || is_linden) 
 			{
 				// checkfor and process reqinfo
-				message = FSData::processRequestForInfo(from_id,message,name,session_id);
+				message = FSData::getInstance()->processRequestForInfo(from_id,message,name,session_id);
 				buffer = saved + message;
 
 				gIMMgr->addMessage(
