@@ -12,7 +12,7 @@
     <text name="theme_textbox2">
         (Erfordert Neustart)
     </text>
-    <check_box label="Curser im Viewer 1-Stil verwenden" name="use _legacy_cursors"/>
+    <check_box label="Cursor im Viewer 1-Stil verwenden" name="use _legacy_cursors"/>
     <text name="theme_textbox3">
         (Erfordert Neustart)
     </text>
