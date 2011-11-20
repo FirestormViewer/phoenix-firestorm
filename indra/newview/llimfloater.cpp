@@ -304,6 +304,12 @@ void LLIMFloater::sendMsg()
 				}
 			}
 
+			// TL: Allow user to send system info.
+			if(mDialog == IM_NOTHING_SPECIAL && utf8_text.find("/sysinfo") == 0)
+			{
+				utf8_text = FSData::getSystemInfo();
+			}
+
 			// Truncate for transport
 			utf8_text = utf8str_truncate(utf8_text, MAX_MSG_BUF_SIZE - 1);
 			
@@ -456,39 +462,8 @@ void LLIMFloater::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_s
 // support sysinfo button -Zi
 void LLIMFloater::onSysinfoButtonClicked()
 {
-	LLSD info=LLFloaterAbout::getInfo();
-
-	std::ostringstream support;
-	support <<
-		info["CHANNEL"] << " " << info["VIEWER_VERSION_STR"] << "\n" <<
-		"Sim: " << info["HOSTNAME"] << "(" << info["HOSTIP"] << ") " << info["SERVER_VERSION"] << "\n" <<
-		"Packet loss: " << info["PACKETS_PCT"].asReal() << "% (" << info["PACKETS_LOST"].asReal() << "/" << info["PACKETS_IN"].asReal() << ")\n" <<
-		"CPU: " << info["CPU"] << "\n" <<
-		"Memory: " << info["MEMORY_MB"] << "\n" <<
-		"OS: " << info["OS_VERSION"] << "\n" <<
-		"GPU: " << info["GRAPHICS_CARD_VENDOR"] << " " << info["GRAPHICS_CARD"] << "\n";
-
-	if(info.has("GRAPHICS_DRIVER_VERSION"))
-		support << "Driver: " << info["GRAPHICS_DRIVER_VERSION"] << "\n";
-
-	support <<
-		"OpenGL: " << info["OPENGL_VERSION"] << "\n" <<
-		"Skin: " << info["SKIN"] << "(" << info["THEME"] << ")\n" <<
-		"Mode: " << info["MODE"] << "\n" <<
-		"Font: " << info["FONT"] << "\n" <<
-		"Fontsize: " << info["FONT_SIZE"]	<<"\n" <<
-		"Font screen DPI: " << info["FONT_SCREEN_DPI"] << "\n" <<
-		"RLV: " << info["RLV_VERSION"] << "\n" <<
-		"Curl: " << info ["LIBCURL_VERSION"] << "\n" <<
-		"J2C: " << info["J2C_VERSION"] << "\n" <<
-		"Audio: " << info["AUDIO_DRIVER_VERSION"] << "\n" <<
-		"Webkit: " << info["QT_WEBKIT_VERSION"] << "\n" <<
-		"Voice: " << info["VOICE_VERSION"] << "\n" <<
-		"Compiler: " << info["COMPILER"] << " Version " << info["COMPILER_VERSION"].asInteger() << "\n"  
-		;
-
 	LLSD args;
-	args["SYSINFO"]=support.str();
+	args["SYSINFO"] = FSData::getSystemInfo();
 	LLNotificationsUtil::add("SendSysinfoToIM",args,LLSD(),boost::bind(&LLIMFloater::onSendSysinfo,this,_1,_2));
 }
 

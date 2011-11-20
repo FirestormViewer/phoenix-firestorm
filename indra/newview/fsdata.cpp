@@ -616,40 +616,40 @@ BOOL FSData::isSupportGroup(LLUUID id)
 std::string FSData::processRequestForInfo(LLUUID requester, std::string message, std::string name, LLUUID sessionid)
 {
 	std::string detectstring = "/reqsysinfo";
-	if(!message.find(detectstring)==0)
+	if(!message.find(detectstring) == 0)
 	{
-		//llinfos << "sysinfo was not found in this message, it was at " << message.find("/sysinfo") << " pos." << llendl;
 		return message;
 	}
+
 	if(!(is_support(requester)||is_developer(requester)))
 	{
 		return message;
 	}
 
-	//llinfos << "sysinfo was found in this message, it was at " << message.find("/sysinfo") << " pos." << llendl;
 	std::string outmessage("I am requesting information about your system setup.");
 	std::string reason("");
-	if(message.length()>detectstring.length())
+	if(message.length() > detectstring.length())
 	{
 		reason = std::string(message.substr(detectstring.length()));
 		//there is more to it!
-		outmessage = std::string("I am requesting information about your system setup for this reason : "+reason);
-		reason = "The reason provided was : "+reason;
+		outmessage = std::string("I am requesting information about your system setup for this reason : " + reason);
+		reason = "The reason provided was : " + reason;
 	}
+	
 	LLSD args;
-	args["REASON"] =reason;
+	args["REASON"] = reason;
 	args["NAME"] = name;
-	args["FROMUUID"]=requester;
-	args["SESSIONID"]=sessionid;
-	LLNotifications::instance().add("FireStormReqInfo",args,LLSD(), callbackReqInfo);
+	args["FROMUUID"] = requester;
+	args["SESSIONID"] = sessionid;
+	LLNotifications::instance().add("FireStormReqInfo", args, LLSD(), callbackReqInfo);
 
 	return outmessage;
 }
+
+//static
 void FSData::sendInfo(LLUUID destination, LLUUID sessionid, std::string myName, EInstantMessage dialog)
 {
-
-	std::string myInfo1 = getMyInfo(1);
-//	std::string myInfo2 = getMyInfo(2);	
+	std::string SystemInfo = getSystemInfo();
 
 	pack_instant_message(
 		gMessageSystem,
@@ -658,27 +658,18 @@ void FSData::sendInfo(LLUUID destination, LLUUID sessionid, std::string myName, 
 		gAgent.getSessionID(),
 		destination,
 		myName,
-		myInfo1,
+		SystemInfo,
 		IM_ONLINE,
 		dialog,
 		sessionid
 		);
 	gAgent.sendReliableMessage();
-// 	pack_instant_message(
-// 		gMessageSystem,
-// 		gAgent.getID(),
-// 		FALSE,
-// 		gAgent.getSessionID(),
-// 		destination,
-// 		myName,
-// 		myInfo2,
-// 		IM_ONLINE,
-// 		dialog,
-// 		sessionid);
-// 	gAgent.sendReliableMessage();
-	gIMMgr->addMessage(gIMMgr->computeSessionID(dialog,destination),destination,myName,"Information Sent: "+
-		myInfo1); //+"\n"+myInfo2);
+
+	gIMMgr->addMessage(gIMMgr->computeSessionID(dialog,destination),destination,myName,
+				"Information Sent: " + SystemInfo);
 }
+
+//static
 void FSData::callbackReqInfo(const LLSD &notification, const LLSD &response)
 {
 	S32 option = LLNotification::getSelectedOption(notification, response);
@@ -689,14 +680,13 @@ void FSData::callbackReqInfo(const LLSD &notification, const LLSD &response)
 
 	llinfos << "the uuid is " << uid.asString().c_str() << llendl;
 	LLAgentUI::buildFullname(my_name);
-	//LLUUID sessionid = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL,uid);
+
 	if ( option == 0 )//yes
 	{
 		sendInfo(uid,sessionid,my_name,IM_NOTHING_SPECIAL);
 	}
 	else
 	{
-
 		pack_instant_message(
 			gMessageSystem,
 			gAgent.getID(),
@@ -713,11 +703,10 @@ void FSData::callbackReqInfo(const LLSD &notification, const LLSD &response)
 		gIMMgr->addMessage(sessionid,uid,my_name,"Request Denied");
 	}
 }
-//part , 0 for all, 1 for 1st half, 2 for 2nd
-std::string FSData::getMyInfo(int part)
+
+//static
+std::string FSData::getSystemInfo()
 {
-	//copied from Zi llimfloater sendinfobutton function.
-	//TODO: create a single function to elemenate code dupe.
 	LLSD info=LLFloaterAbout::getInfo();
 
 	std::ostringstream support;
@@ -738,14 +727,14 @@ std::string FSData::getMyInfo(int part)
 		"Skin: " << info["SKIN"] << "(" << info["THEME"] << ")\n" <<
 		"Mode: " << info["MODE"] << "\n" <<
 		"Font: " << info["FONT"] << "\n" <<
-		"Fontsize: " << info["FONT_SIZE"]	<<"\n" <<
-		"Font screen DPI: " << info["FONT_SCREEN_DPI"] << "\n" <<
+		"Fontsize: " << info["FONT_SIZE"].asInteger() <<"\n" <<
+		"Font screen DPI: " << info["FONT_SCREEN_DPI"].asInteger() << "\n" <<
 		"RLV: " << info["RLV_VERSION"] << "\n" <<
 		"Curl: " << info ["LIBCURL_VERSION"] << "\n" <<
 		"J2C: " << info["J2C_VERSION"] << "\n" <<
 		"Audio: " << info["AUDIO_DRIVER_VERSION"] << "\n" <<
 		"Webkit: " << info["QT_WEBKIT_VERSION"] << "\n" <<
-		"Voice: " << info["VOICE_VERSION"] << "\n" <<
+		"Voice: " << info["VOICE_VERSION"].asString() << "\n" <<
 		"Compiler: " << info["COMPILER"] << " Version " << info["COMPILER_VERSION"].asInteger() << "\n"  
 		;
 
