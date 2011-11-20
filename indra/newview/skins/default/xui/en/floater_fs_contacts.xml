@@ -62,7 +62,8 @@
        left="0"
 	   right="-1"
        name="groups_panel"/>
-	   
+
+    <!-- Ansariel: Commented out. XML file does not exist. What is it?
 	  <panel
 	   bottom="0"
 	   filename="panel_fs_contacts_lists.xml"
@@ -70,6 +71,7 @@
 	   left="0"
 	   right="-1"
 	   name="contacts_lists_panel" />
+     -->
 	   
     </tab_container>
 </floater>
