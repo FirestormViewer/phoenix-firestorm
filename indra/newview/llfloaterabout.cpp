@@ -432,6 +432,11 @@ void LLFloaterAbout::setSupportText(const std::string& server_release_notes_url)
 		support << "\n" << getString("AboutDriver", args);
 	}
 	support << "\n" << getString("AboutLibs", args);
+	if (info.has("BANDWIDTH"))
+	{
+		support << "\n" << getString("AboutSettings", args);
+	}
+
 	if (info.has("COMPILER"))
 	{
 		support << "\n" << getString("AboutCompiler", args);
