@@ -818,7 +818,7 @@ LLView* LLView::childrenHandleHover(S32 x, S32 y, MASK mask)
 		//LLUI::sWindow->setCursor(viewp->getHoverCursor());
 
 		BOOL blockMouseEventResult;
-		if (blockMouseEventResult = viewp->blockMouseEvent(local_x, local_y))
+		if ((blockMouseEventResult = viewp->blockMouseEvent(local_x, local_y)))
 		{
 			LLUI::sWindow->setCursor(viewp->getHoverCursor());
 		}
