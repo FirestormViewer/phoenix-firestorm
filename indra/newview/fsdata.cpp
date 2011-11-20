@@ -715,7 +715,7 @@ std::string FSData::getSystemInfo()
 		"Sim: " << info["HOSTNAME"] << "(" << info["HOSTIP"] << ") " << info["SERVER_VERSION"] << "\n" <<
 		"Packet loss: " << info["PACKETS_PCT"].asReal() << "% (" << info["PACKETS_LOST"].asReal() << "/" << info["PACKETS_IN"].asReal() << ")\n" <<
 		"CPU: " << info["CPU"] << "\n" <<
-		"Memory: " << info["MEMORY_MB"] << "\n" <<
+		"Memory: " << info["MEMORY_MB"].asInteger() << "\n" <<
 		"OS: " << info["OS_VERSION"] << "\n" <<
 		"GPU: " << info["GRAPHICS_CARD_VENDOR"] << " " << info["GRAPHICS_CARD"] << "\n";
 
@@ -729,12 +729,15 @@ std::string FSData::getSystemInfo()
 		"Font: " << info["FONT"] << "\n" <<
 		"Fontsize: " << info["FONT_SIZE"].asInteger() <<"\n" <<
 		"Font screen DPI: " << info["FONT_SCREEN_DPI"].asInteger() << "\n" <<
+		"Draw distance: " << info["DRAW_DISTANCE"].asInteger() << "\n" <<
+		"Bandwidth: " << info["BANDWIDTH"].asInteger() << "\n" <<
+		"LOD Factor: " << info["LOD"].asReal() << "\n" <<
 		"RLV: " << info["RLV_VERSION"] << "\n" <<
 		"Curl: " << info ["LIBCURL_VERSION"] << "\n" <<
 		"J2C: " << info["J2C_VERSION"] << "\n" <<
 		"Audio: " << info["AUDIO_DRIVER_VERSION"] << "\n" <<
 		"Webkit: " << info["QT_WEBKIT_VERSION"] << "\n" <<
-		"Voice: " << info["VOICE_VERSION"].asString() << "\n" <<
+		"Voice: " << info["VOICE_VERSION"].asString() <<
 		"Compiler: " << info["COMPILER"] << " Version " << info["COMPILER_VERSION"].asInteger() << "\n"  
 		;
 
