@@ -834,7 +834,7 @@
              name="Simulator primitive usage:"
              top_pad="4"
              width="364">
-               Primitive usage:
+               Region capacity:
             </text>
             <text
              type="string"
@@ -858,7 +858,7 @@
              name="Primitives parcel supports:"
              top="44"
              width="152">
-                Prims parcel supports:
+                Prims land capacity:
             </text>
             <text
              type="string"
@@ -882,7 +882,7 @@
              name="Primitives on parcel:"
              top="64"
              width="152">
-                Prims on parcel:
+                Parcel land impact:
             </text>
             <text
              type="string"
@@ -1325,7 +1325,7 @@ Only large parcels can be listed in search.
              follows="left|top"
              height="16"
              layout="topleft"
-             left="10"
+             left="14"
              name="land_options_label"
              width="278">
                 Land Options:
@@ -1343,7 +1343,7 @@ Only large parcels can be listed in search.
              height="16"
              label="No Pushing"
              layout="topleft"
-             left_pad="5"
+             left="230"
              name="PushRestrictCheck"
              tool_tip="Prevents scripts from pushing. Checking this option may be useful for preventing disruptive behavior on your land."
              top_delta="0"

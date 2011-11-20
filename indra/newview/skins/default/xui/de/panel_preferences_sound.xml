@@ -12,7 +12,7 @@
 		<slider label="Umgebung" name="Wind Volume"/>
 		<slider label="Soundeffekte" name="SFX Volume"/>
 		<check_box label="Sounds von Gesten abspielen" name="gesture_audio_play_btn" tool_tip="Markieren, um Sounds von Gesten zu hören" value="true"/>
-		<slider label="Musik wird gestreamt" name="Music Volume"/>
+		<slider label="Musikstream" name="Music Volume"/>
 		<check_box label="Aktiviert" name="enable_music"/>
 		<slider label="Medien" name="Media Volume"/>
 		<check_box label="Aktiviert" name="enable_media"/>

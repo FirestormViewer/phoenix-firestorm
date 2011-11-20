@@ -12,7 +12,7 @@
  name="panel_pick_info"
  help_topic="profile_pick_info"
  top="0"
- width="333">
+ width="308">
     <button
      follows="top|left"
      height="24"
@@ -37,7 +37,7 @@
      top="2"
      value="Pick Info"
      use_ellipses="true"
-     width="275" />
+     width="260" />
     <scroll_container
      color="SL-Background"
      opaque="true"
@@ -47,17 +47,17 @@
      left="8"
      top_pad="10"
      name="profile_scroll"
-     width="312">
-    <panel
-     name="scroll_content_panel"
-     follows="left|top|right"
-     min_height="300"
-     layout="topleft"
-     top="0"
-     background_visible="false"
-     height="400"
-     left="0"
      width="285">
+      <panel
+       name="scroll_content_panel"
+       follows="left|top|right"
+       min_height="300"
+       layout="topleft"
+       top="0"
+       background_visible="false"
+       height="400"
+       left="0"
+       width="285">
         <texture_picker
          fallback_image="default_land_picture.j2c"
          enabled="false"
@@ -116,16 +116,16 @@
          text_readonly_color="White"
          value="[description]"
          wrap="true" />
-    </panel>
+      </panel>
     </scroll_container>
     <panel
      follows="left|right|bottom"
      height="35"
      layout="topleft"
      top_pad="5"
-     left="8"
-     name="buttons">
-       
+     left="5"
+	 width="292"
+     name="buttons"> 
        <layout_stack
 		  follows="bottom|left|right"
 		  height="23"
@@ -134,8 +134,7 @@
 		  left="0"
 		  orientation="horizontal"
 		  top_pad="0"
-		  width="312">
-		  
+		  width="292">		  
 		  <layout_panel
 			  follows="bottom|left|right"
 			  height="23"
@@ -144,16 +143,16 @@
 			  name="layout_panel1"
 		      user_resize="false" 
 		      auto_resize="true"
-			  width="101">
+			  width="95">
 			  <button
 			  	 follows="bottom|left|right"
 		         height="23"
 		         label="Teleport"
 		         layout="topleft"
 		         name="teleport_btn"
-                     left="2"
+                 left="2"
 		         top="0"
-		         width="97" />
+		         width="91" />
 		  </layout_panel>
 		  
 		  <layout_panel
@@ -164,16 +163,16 @@
 			  name="show_on_map_btn_lp"
 		      user_resize="false" 
 		      auto_resize="true"
-			  width="100">
+			  width="95">
 			  <button
 		         follows="bottom|left|right"
 		         height="23"
 		         label="Map"
 		         layout="topleft"
 		         name="show_on_map_btn"
-                     left="2"
+                 left="2"
 		         top_pad="0"
-		         width="96" />
+		         width="91" />
 		  </layout_panel>	  
 		  
 		  <layout_panel
@@ -184,16 +183,16 @@
 			  name="edit_btn_lp"
 		      user_resize="false" 
 		      auto_resize="true"
-			  width="101">
+			  width="95">
 			  <button
 		         follows="bottom|left|right"
 		         height="23"
 		         label="Edit"
 		         layout="topleft"
 		         name="edit_btn"
-                     left="2"
+                 left="2"
 		         top_pad="0"
-		         width="97" />
+		         width="91" />
 		  </layout_panel>
 	   </layout_stack>
     </panel>

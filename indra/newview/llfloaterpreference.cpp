@@ -1987,6 +1987,12 @@ BOOL LLPanelPreference::postBuild()
 	}
 // [/SL:KB]
 
+	////////////////////// PanelAlerts ///////////////////
+	if (hasChild("OnlineOfflinetoNearbyChat", TRUE))
+	{
+		getChildView("OnlineOfflinetoNearbyChatHistory")->setEnabled(getChild<LLUICtrl>("OnlineOfflinetoNearbyChat")->getValue().asBoolean());
+	}
+
 	apply();
 	return true;
 }

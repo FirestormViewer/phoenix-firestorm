@@ -26,12 +26,12 @@
      left="60"
      bottom_delta="18"
      name="buttons"
-     width="77">
+     width="82">
         <button
          height="23"
          label=""
          layout="topleft"
-         left="4"
+         left="1"
          is_toggle="true"
          image_overlay="Cam_Avatar_Off"
          image_selected="PushButton_Selected_Press"
@@ -247,7 +247,8 @@
              visible="true"
              tool_tip="Orbit camera around focus"
              top="0"
-             width="78" />
+             width="78"
+             held_down_delay.seconds="0.0"/>
             </layout_panel>
 
             <!-- Camera zoom layout panel -->

@@ -309,7 +309,7 @@
 	image_overlay="Info_Off"
 	name="send_sysinfo_btn"
 	left_delta="0"
-	right="-1"
+	right="-35"
 	width="20" />
 
   <layout_stack
