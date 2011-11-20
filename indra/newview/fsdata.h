@@ -50,10 +50,8 @@ class FSData : public LLSingleton<FSData>
 	LOG_CLASS(FSData);
 public:
 	void startDownload();
+	void processResponder(const LLSD& content, const std::string& url);
 	void processData(const LLSD& fsData);
-	void downloadClientTags();
-	bool checkFile(std::string filename);
-
 	void processReleases(const LLSD& releases);
 	void processAgents(const LLSD& agents);
 	void processClientTags(const LLSD& tags);
@@ -96,6 +94,8 @@ public:
 
 private:
 	void processAgentsLLSD(const LLSD& agents);
+	void processReleasesLLSD(const LLSD& releases);
+	void saveLLSD(const LLSD& data, const std::string& filename);
 
 	FSDataAgent mSupportAgent;
 	std::map<LLUUID, FSDataAgent> mSupportAgentList;
