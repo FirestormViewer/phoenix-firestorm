@@ -217,6 +217,9 @@ void LLNearbyChatBar::onTearOff(const LLSD& sdData)
 		mChatBarImpl->getChatBoxCtrl()->reshape(pChatBox->getRect().getWidth() + nExpandWidth, pChatBox->getRect().getHeight());
 		pToggleBtn->setVisible(FALSE);
 	}
+
+	// Don't allow closing the nearby chat floater while it's attached
+	setCanClose(!sdData.asBoolean());
 }
 // [/SL:KB]
 
