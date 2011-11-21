@@ -5,10 +5,10 @@
   background_visible="true"
   background_opaque="true"
   show_load_status="true"
-  accepts_drag_and_drop="true"
+  accepts_drag_and_drop="false"
   >
     <scroll
-      name="Inventory Scroller"
+      name="Recent Inventory Scroller"
       follows="all"
       reserve_scroll_corner="true"
       tab_stop="true"
