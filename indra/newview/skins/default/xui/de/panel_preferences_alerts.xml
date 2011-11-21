@@ -3,18 +3,16 @@
 	<text name="tell_me_label">
 		Anzeigen:
 	</text>
-	<check_box label="Wenn ich L$ ausgebe oder erhalte" name="notify_money_change_checkbox" width="230" left="15"/>
-    <check_box left_pad="5"
-     name="FSPaymentInfoInChat"
-     label="L$-Transaktionen im lokalen Chat anzeigen"/>
-	<check_box label="Wenn Freunde sich an- oder abmelden" name="friends_online_notify_checkbox" width="230" left="15"/>
-    <check_box name="OnlineOfflinetoNearbyChat" label="Auch im lokalem Chat" width="145"/>
-    <check_box label="Nur im lokalen Chat" name="OnlineOfflinetoNearbyChatHistory" left_pad="5"/>
-    <check_box label="Skriptfehler anzeigen in:" name="show_script_errors" left="15"/>
-    <radio_group name="show_script_errors_location">
-        <radio_item label="Lokaler Chat" name="script_0"/>
-        <radio_item label="Separates Fenster" name="script_1"/>
-    </radio_group>
+	<check_box label="Wenn ich L$ ausgebe oder erhalte" name="notify_money_change_checkbox" width="225"/>
+	<check_box left_pad="5" name="FSPaymentInfoInChat" label="L$-Transaktionen im lokalen Chat anzeigen"/>
+	<check_box label="Wenn Freunde sich an- oder abmelden" name="friends_online_notify_checkbox" width="230"/>
+	<check_box label="Nur in lokalem Chat" name="OnlineOfflinetoNearbyChatHistory" left_pad="5"/>
+	<check_box name="OnlineOfflinetoNearbyChat" label="In lokalem Chat &amp; Console" width="160"/>
+	<check_box label="Skriptfehler anzeigen in:" name="show_script_errors"/>
+	<radio_group name="show_script_errors_location">
+		<radio_item label="Lokaler Chat" name="script_0"/>
+		<radio_item label="Separates Fenster" name="script_1"/>
+	</radio_group>
 	<text name="show_label">
 		Immer anzeigen:
 	</text>
