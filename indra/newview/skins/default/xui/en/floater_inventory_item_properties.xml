@@ -349,13 +349,13 @@
 
     <text
      type="string"
-     length="1"
+	 length="1"
      follows="left|top"
      height="10"
      layout="topleft"
-     left="10"
+     left="225"
      name="BaseMaskDebug"
-     top="155"
+     top="125"
      width="330">
         B:
     </text>
@@ -365,10 +365,10 @@
      follows="left|top"
      height="10"
      layout="topleft"
-     left_delta="60"
+     left_delta="-1"
      name="OwnerMaskDebug"
-     top_delta="0"
-     width="270">
+     top_pad="8"
+     width="330">
         O:
     </text>
     <text
@@ -377,10 +377,10 @@
      follows="left|top"
      height="10"
      layout="topleft"
-     left_delta="60"
+     left_delta="0"
      name="GroupMaskDebug"
-     top_delta="0"
-     width="210">
+     top_pad="8"
+     width="330">
         G:
     </text>
     <text
@@ -389,10 +389,10 @@
      follows="left|top"
      height="10"
      layout="topleft"
-     left_delta="60"
+     left_delta="1"
      name="EveryoneMaskDebug"
-     top_delta="0"
-     width="150">
+     top_pad="8"
+     width="330">
         E:
     </text>
     <text
@@ -401,10 +401,10 @@
      follows="left|top"
      height="10"
      layout="topleft"
-     left_delta="60"
+     left_delta="0"
      name="NextMaskDebug"
-     top_delta="0"
-     width="90">
+     top_pad="8"
+     width="330">
         N:
     </text>
 
