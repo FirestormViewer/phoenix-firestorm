@@ -49,8 +49,10 @@
 #include "llviewerchat.h"
 #include "llnearbychat.h"
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a)
+#include "llevents.h"
 #include "llimfloater.h"
 #include "llimfloatercontainer.h"
+#include "llmultifloater.h"
 #include "llnearbychatbarmulti.h"
 // [/SL:KB]
 
@@ -184,6 +186,9 @@ BOOL LLNearbyChatBar::postBuild()
 			if (!mNearbyChatContainer->getVisible())
 				onToggleNearbyChatPanel();
 			pConvFloater->addFloater(this, TRUE, LLTabContainer::START);
+
+			LLEventPump& pumpNearbyChat = LLEventPumps::instance().obtain("LLChat");
+			pumpNearbyChat.listen("nearby_chat_bar", boost::bind(&LLNearbyChatBar::onNewNearbyChatMsg, this, _1));
 		}
 
 		onTearOff(LLSD(isTornOff()));
@@ -195,6 +200,21 @@ BOOL LLNearbyChatBar::postBuild()
 }
 
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+bool LLNearbyChatBar::onNewNearbyChatMsg(const LLSD& sdEvent)
+{
+	if ( (!isTornOff()) && (!isInVisibleChain()) )
+	{
+		LLIMFloaterContainer* pConvFloater = LLIMFloaterContainer::getInstance();
+		if (pConvFloater)
+		{
+			if (pConvFloater->isFloaterFlashing(this))
+				pConvFloater->setFloaterFlashing(this, FALSE);
+			pConvFloater->setFloaterFlashing(this, TRUE);
+		}
+	}
+	return false;
+}
+
 void LLNearbyChatBar::onTearOff(const LLSD& sdData)
 {
 	static S32 nExpandWidth = 0;
