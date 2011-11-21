@@ -336,7 +336,7 @@ void QToolAlign::renderManipulators()
 
 			if ((axis == mHighlightedAxis) && (direction == mHighlightedDirection))
 			{
-				size *= 2.0;
+				size *= 1.25;
 				color *= 1.5;
 			}
 
