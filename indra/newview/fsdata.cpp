@@ -711,34 +711,34 @@ std::string FSData::getSystemInfo()
 
 	std::ostringstream support;
 	support <<
-		info["CHANNEL"] << " " << info["VIEWER_VERSION_STR"] << "\n" <<
-		"Sim: " << info["HOSTNAME"] << "(" << info["HOSTIP"] << ") " << info["SERVER_VERSION"] << "\n" <<
+		info["CHANNEL"].asString() << " " << info["VIEWER_VERSION_STR"].asString() << "\n" <<
+		"Sim: " << info["HOSTNAME"].asString() << "(" << info["HOSTIP"].asString() << ") " << info["SERVER_VERSION"].asString() << "\n" <<
 		"Packet loss: " << info["PACKETS_PCT"].asReal() << "% (" << info["PACKETS_LOST"].asReal() << "/" << info["PACKETS_IN"].asReal() << ")\n" <<
-		"CPU: " << info["CPU"] << "\n" <<
+		"CPU: " << info["CPU"].asString() << "\n" <<
 		"Memory: " << info["MEMORY_MB"].asInteger() << "\n" <<
-		"OS: " << info["OS_VERSION"] << "\n" <<
-		"GPU: " << info["GRAPHICS_CARD_VENDOR"] << " " << info["GRAPHICS_CARD"] << "\n";
+		"OS: " << info["OS_VERSION"].asString() << "\n" <<
+		"GPU: " << info["GRAPHICS_CARD_VENDOR"].asString() << " " << info["GRAPHICS_CARD"].asString() << "\n";
 
 	if(info.has("GRAPHICS_DRIVER_VERSION"))
 		support << "Driver: " << info["GRAPHICS_DRIVER_VERSION"] << "\n";
 
 	support <<
-		"OpenGL: " << info["OPENGL_VERSION"] << "\n" <<
-		"Skin: " << info["SKIN"] << "(" << info["THEME"] << ")\n" <<
-		"Mode: " << info["MODE"] << "\n" <<
-		"Font: " << info["FONT"] << "\n" <<
+		"OpenGL: " << info["OPENGL_VERSION"].asString() << "\n" <<
+		"Skin: " << info["SKIN"].asString() << "(" << info["THEME"].asString() << ")\n" <<
+		"Mode: " << info["MODE"].asString() << "\n" <<
+		"Font: " << info["FONT"].asString() << "\n" <<
 		"Fontsize: " << info["FONT_SIZE"].asInteger() <<"\n" <<
 		"Font screen DPI: " << info["FONT_SCREEN_DPI"].asInteger() << "\n" <<
 		"Draw distance: " << info["DRAW_DISTANCE"].asInteger() << "\n" <<
 		"Bandwidth: " << info["BANDWIDTH"].asInteger() << "\n" <<
 		"LOD Factor: " << info["LOD"].asReal() << "\n" <<
-		"RLV: " << info["RLV_VERSION"] << "\n" <<
-		"Curl: " << info ["LIBCURL_VERSION"] << "\n" <<
-		"J2C: " << info["J2C_VERSION"] << "\n" <<
-		"Audio: " << info["AUDIO_DRIVER_VERSION"] << "\n" <<
-		"Webkit: " << info["QT_WEBKIT_VERSION"] << "\n" <<
+		"RLV: " << info["RLV_VERSION"].asString() << "\n" <<
+		"Curl: " << info ["LIBCURL_VERSION"].asString() << "\n" <<
+		"J2C: " << info["J2C_VERSION"].asString() << "\n" <<
+		"Audio: " << info["AUDIO_DRIVER_VERSION"].asString() << "\n" <<
+		"Webkit: " << info["QT_WEBKIT_VERSION"].asString() << "\n" <<
 		"Voice: " << info["VOICE_VERSION"].asString() <<
-		"Compiler: " << info["COMPILER"] << " Version " << info["COMPILER_VERSION"].asInteger() << "\n"  
+		"Compiler: " << info["COMPILER"].asString() << " Version " << info["COMPILER_VERSION"].asInteger() << "\n"  
 		;
 
 	return support.str();
