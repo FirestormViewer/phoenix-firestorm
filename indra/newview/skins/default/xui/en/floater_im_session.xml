@@ -124,7 +124,7 @@
 	          image_pressed="PushButton_Press"
 	          image_pressed_selected="PushButton_Selected_Press"
 	          image_selected="PushButton_Selected_Press"
-	          tool_tip="Use google language translation"
+	          tool_tip="Use selected translation service"
               name="translate_btn"/>       
        </layout_panel>      
       
