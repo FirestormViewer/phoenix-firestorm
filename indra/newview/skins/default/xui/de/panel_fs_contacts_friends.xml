@@ -4,7 +4,7 @@
 	<scroll_list name="friend_list">
 		<scroll_list.column name="icon_online_status" tool_tip="Online-Status"/>
 		<scroll_list.column label="Benutzername" name="user_name" tool_tip="Der Benutzername dieses Freundes."/>
-		<scroll_list.column label="Vollstängier Name" name="full_name" tool_tip="Der vollständige Name dieses Freundes."/>
+		<scroll_list.column label="Name" name="full_name" tool_tip="Der Name dieses Freundes."/>
 		<scroll_list.column name="icon_visible_online" tool_tip="Dieser Freund kann sehen ob sie online sind."/>
 		<scroll_list.column name="icon_visible_map" tool_tip="Dieser Freund kann ihre Position auf der Karte sehen."/>
 		<scroll_list.column name="icon_edit_mine" tool_tip="Dieser Freund kann deine Objekte editieren, löschen oder nehmen."/>
@@ -40,5 +40,10 @@
 	 label="Hinzufügen..."
 	 name="add_btn"
 	 tool_tip="Biete diesem Einwohner deine Freundschaft an"
+	 width="85" />
+	<button
+	 label="Kontakt-Sets"
+	 name="lgg_fg_openFG"
+	 tool_tip="Fasse deine Freunde in Gruppen zusammen"
 	 width="85" />
 </panel>
