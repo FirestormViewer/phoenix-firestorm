@@ -609,8 +609,7 @@ LLSD FSData::allowed_login()
 
 BOOL FSData::isSupportGroup(LLUUID id)
 {
-	static LLCachedControl<bool> chat_prefix(gSavedSettings, "FSSupportGroupChatPrefix");
-	return (chat_prefix && mSupportGroup.count(id));
+	return (mSupportGroup.count(id));
 }
 
 std::string FSData::processRequestForInfo(LLUUID requester, std::string message, std::string name, LLUUID sessionid)
