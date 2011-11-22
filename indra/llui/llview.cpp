@@ -817,16 +817,22 @@ LLView* LLView::childrenHandleHover(S32 x, S32 y, MASK mask)
 		// Fix resembles old algorithm for childrenHandleHover.
 		//LLUI::sWindow->setCursor(viewp->getHoverCursor());
 
-		BOOL blockMouseEventResult;
-		if ((blockMouseEventResult = viewp->blockMouseEvent(local_x, local_y)))
-		{
-			LLUI::sWindow->setCursor(viewp->getHoverCursor());
-		}
+		//if (viewp->handleHover(local_x, local_y, mask)
+		//	|| viewp->blockMouseEvent(local_x, local_y))
+		//{
+		//	viewp->logMouseEvent();
+		//	return viewp;
+		//}
 
-		if (viewp->handleHover(local_x, local_y, mask)
-			|| blockMouseEventResult)
+		if (viewp->handleHover(local_x, local_y, mask))
 		{
 			viewp->logMouseEvent();
+			return viewp;
+		}
+
+		if (viewp->blockMouseEvent(local_x, local_y))
+		{
+			LLUI::sWindow->setCursor(viewp->getHoverCursor());
 			return viewp;
 		}
 		// </Ansariel>

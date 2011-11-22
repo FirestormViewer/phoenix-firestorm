@@ -328,10 +328,19 @@ BOOL LLToolTip::handleHover(S32 x, S32 y, MASK mask)
 	if(mInfoButton)
 		mInfoButton->setHighlight(true);
 	
-	LLPanel::handleHover(x, y, mask);
+	// Ansariel - FIRE-3798:
+	// Don't call handleHover on the panel if we set the cursor ourself!
+	// It will traverse down the control hierarchy and finally the hover
+	// is handled by LLButton, that will set the cursor to UI_CURSOR_ARROW,
+	// resulting in a flickering cursor!
+	//LLPanel::handleHover(x, y, mask);
 	if (mHasClickCallback)
 	{
 		getWindow()->setCursor(UI_CURSOR_HAND);
+	}
+	else
+	{
+		LLPanel::handleHover(x, y, mask);
 	}
 	return TRUE;
 }
