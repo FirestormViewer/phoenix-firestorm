@@ -115,7 +115,7 @@ std::string LLViewerHelp::defaultTopic()
 std::string LLViewerHelp::preLoginTopic()
 {
 	// *hack: to be done properly
-	return "pre_login_help";
+	return "start";
 }
 
 std::string LLViewerHelp::f1HelpTopic()
