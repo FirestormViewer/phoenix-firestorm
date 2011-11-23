@@ -47,7 +47,7 @@
 				<combo_box.item label="Zur Position gehen" name="1"/>
 				<combo_box.item label="Zur Position teleportieren" name="2"/>
 			</combo_box>
-			<button label="Andere Geräte" name="joystick_setup_button"/>
+			<button label="Joystick-Konfiguration" name="joystick_setup_button"/>
 		</panel>
 
 		<!-- Firestorm -->
