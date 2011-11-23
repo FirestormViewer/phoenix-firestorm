@@ -226,5 +226,17 @@
     <key>Value</key>
     <integer>18</integer>
   </map>
+
+  <key>ShowGroupNoticesTopRight</key>
+  <map>
+    <key>Comment</key>
+    <string>Show group notifications to the top right corner of the screen.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
 </map>
 </llsd>
