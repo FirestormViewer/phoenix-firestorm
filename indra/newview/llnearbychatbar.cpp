@@ -239,7 +239,7 @@ void LLNearbyChatBar::onTearOff(const LLSD& sdData)
 	}
 
 	// Don't allow closing the nearby chat floater while it's attached
-	setCanClose(!sdData.asBoolean());
+	setCanClose(sdData.asBoolean());
 }
 // [/SL:KB]
 
