@@ -502,21 +502,25 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 		instance->openFloater(key);
 		instance->setVisibleAndFrontmost();
 	}
-	else if (!instance->isFrontmost())
-	{
-		instance->setVisibleAndFrontmost();
-	}
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-23 (Catznip-3.2.0b) | Modified: Catznip-3.2.0b
 	else
 	{
-//		instance->closeFloater();
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-17 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-		// When toggling *visibility*, close the host instead of the floater when hosted
-		if (instance->getHost())
-			instance->getHost()->closeFloater();
+		// Give focus to, or close, the host rather than the floater when hosted
+		LLFloater* floaterp = (!instance->getHost()) ? instance : instance->getHost();
+		if (!floaterp->isFrontmost())
+			floaterp->setVisibleAndFrontmost();
 		else
-			instance->closeFloater();
-// [/SL:KB]
+			floaterp->closeFloater();
 	}
+// [/SL:KB]
+//	else if (!instance->isFrontmost())
+//	{
+//		instance->setVisibleAndFrontmost();
+//	}
+//	else
+//	{
+//		instance->closeFloater();
+//	}
 }
 
 // static
