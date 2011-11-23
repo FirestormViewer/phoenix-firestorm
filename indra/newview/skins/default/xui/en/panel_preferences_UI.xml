@@ -721,7 +721,7 @@ Default 0. Larger values may not work well.
          length="1"
          line_spacing.pixels="5">
           pixels (requires restart)
-V2/3 default 0. V1 default [TODO: unknown].
+V2/3 default 0. V1 default 2.
         </text>
 
         <text
