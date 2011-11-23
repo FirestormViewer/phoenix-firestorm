@@ -794,8 +794,8 @@ void LLNearbyChatBar::startChat(const char* line)
 	LLNearbyChatBar* pSelf = getInstance();
 	if (!pSelf)
 		return;
-	
-	pSelf->setVisible(TRUE);
+
+	pSelf->openFloater(LLSD());
 	pSelf->setFocus(TRUE);
 	pSelf->mChatBarImpl->getChatBoxCtrl()->setFocus(TRUE);
 
