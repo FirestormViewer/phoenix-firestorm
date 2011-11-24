@@ -897,14 +897,14 @@
          height="20"
          increment="16"
          initial_value="32"
-         label="Texture Memory (MB):"
+         label="Viewer Texture Memory Buffer (MB):"
          label_width="195"
          layout="topleft"
          left="10"
          min_val="64"
-         max_val="1024"
+         max_val="512"
          name="GraphicsCardTextureMemory"
-         tool_tip="Amount of memory to allocate for textures. Defaults to video card memory. Reducing this may improve performance but may also make textures blurry."
+         tool_tip="Amount of memory to allocate for textures. Defaults to video card memory up to 512M. Reducing this may improve performance but may also make textures blurry. Increasing this value beyond 512M is not recommended. Even if your graphics cards supports it, the main memory impact on the viewer is likely to lead to a degraded SL experience."
          top_pad="10"
          width="360" />
         <spinner

@@ -39,7 +39,7 @@
 #include <list>
 
 #define MIN_VIDEO_RAM_IN_MEGA_BYTES    64
-#define MAX_VIDEO_RAM_IN_MEGA_BYTES    1024 // 512MB max for performance reasons. ~LL //Didn't notice any performance issue at 1024 with a 2GB graphics card. ~TM
+#define MAX_VIDEO_RAM_IN_MEGA_BYTES    512 // 512MB max for performance reasons.
 
 class LLFace;
 class LLImageGL ;
