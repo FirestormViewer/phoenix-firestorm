@@ -32,7 +32,7 @@
 		 control_name="FullScreen"
 		 height="16"
 		 initial_value="false"
-		 label="Fullscreen Mode (Requires restart)"
+		 label="Fullscreen Mode (restart required)"
 		 layout="topleft"
 		 left="10"
 		 name="Fullscreen Mode"
@@ -222,7 +222,10 @@
              left_delta="0"
              name="LocalLights"
              top_pad="1"
-             width="256" />
+             width="256">
+		<check_box.commit_callback
+		 function="Pref.LocalLightsEnable" />
+	    </check_box>
 
             <check_box
              control_name="VertexShaderEnable"
@@ -376,12 +379,12 @@
              top_pad="8"
              follows="top|left"
              height="18"
-             width="110"
-             word_wrap="true"
+             width="170"
+             word_wrap="false"
              layout="topleft"
              left="10"
              name="local lights_label">
-                Local Lights:
+                Point Lighting (restart required)
             </text>
             <combo_box
              control_name="RenderShaderLightingMaxLevel"
@@ -392,15 +395,15 @@
              name="LocalLightsDetail"
              width="150">
                 <combo_box.item
-                 label="Maximum"
+                 label="Full (default)"
                  name="3"
                  value="3"/>
                 <combo_box.item
-                 label="Limited"
+                 label="Reduced"
                  name="2"
                  value="2"/>
                 <combo_box.item
-                 label="None"
+                 label="Sun/Moon Only"
                  name="1"
                  value="1"/>
             </combo_box>

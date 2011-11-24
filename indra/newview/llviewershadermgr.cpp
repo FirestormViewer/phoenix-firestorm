@@ -721,9 +721,6 @@ BOOL LLViewerShaderMgr::loadBasicShaders()
 	// Load basic dependency shaders first
 	// All of these have to load for any shaders to function
 	
-#if 0 && LL_DARWIN // Mac couldn't handle all 8 lights before but can now
-	S32 sum_lights_class = 2;
-#else 
 	S32 sum_lights_class = 3;
 
 	// class one cards will get the lower sum lights
@@ -734,7 +731,6 @@ BOOL LLViewerShaderMgr::loadBasicShaders()
 	{
 		sum_lights_class = 2;
 	}
-#endif
 
 	// If we have sun and moon only checked, then only sum those lights.
 	if (gPipeline.getLightingDetail() == 0)

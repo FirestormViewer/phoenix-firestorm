@@ -109,6 +109,8 @@ protected:
 	void setHardwareDefaults();
 	// callback for when client turns on shaders
 	void onVertexShaderEnable();
+	// AO: callback for local lights toggle
+	void onLocalLightsEnable();
 
 	// callback for commit in the "Single click on land" and "Double click on land" comboboxes.
 	void onClickActionChange();
