@@ -1025,7 +1025,7 @@
          word_wrap="true"
          layout="topleft"
          left="20"
-         name="shadows_label">
+         name="TextureDetailLabel">
             Texture Details Loaded:
         </text>
         <combo_box

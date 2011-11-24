@@ -247,7 +247,7 @@
          height="16"
          name="RenderVolumeSAProtection"
          width="380"
-         tool_tip="This protects you from objects with very large textures over large surface areas often designed to crash the viewer. Default is 5000 square meters, but if you find that some objects are not rendering and this option is enabled you may need to lower it."/>
+         tool_tip="This protects you from objects with very large textures over large surface areas often designed to crash the viewer. Default is 5000 square meters, but if you find that some objects are not rendering and this option is enabled you may need to increase it."/>
         <spinner
          top_delta="-5"
          control_name="RenderVolumeSAFrameMax"
@@ -258,7 +258,7 @@
          left_pad="5"
          increment="1"
          initial_val="5000"
-         max_val="2000"
+         max_val="10000"
          min_val="500"
          name="RenderVolumeSAFrameMax"
          width="90" />
@@ -279,7 +279,7 @@
          follows="left|top"
          height="15"
          layout="topleft"
-         left_delta="20"
+         left="30"
          name="AntiSpamText1"
          width="200">
            Max lines in a single message:
@@ -306,7 +306,7 @@
          follows="left|top"
          height="15"
          layout="topleft"
-         left_delta="-200"
+         left="30"
          name="AntiSpamText2"
          width="200">
            Max events from same source:
@@ -333,7 +333,7 @@
          follows="left|top"
          height="15"
          layout="topleft"
-         left_delta="-200"
+         left="30"
          name="AntiSpamText3"
          width="200">
            Sound play requests multiplier:
@@ -360,7 +360,7 @@
          follows="left|top"
          height="15"
          layout="topleft"
-         left_delta="-200"
+         left="30"
          name="AntiSpamText4"
          width="200">
            Sound preload requests multiplier:
@@ -412,7 +412,7 @@
          height="12"
          layout="topleft"
          name="HeadMovement"
-         width="408">
+         width="500">
             Amount that Avatar's head Follows Mouse (set to '0' for no movement):
         </text>
         <slider
@@ -479,7 +479,7 @@
          layout="topleft"
          text_color="White_50"
          height="12"
-         width="300">
+         width="500">
              (Avatar look at target settings are on the Privacy tab.)
         </text>
 
@@ -540,7 +540,7 @@
          tool_tip="Create a new color preset"
          left="15"
          bottom_delta="25"
-         width="75"
+         width="80"
          height="20"
          follows="left|top" />
 
@@ -550,7 +550,7 @@
          tool_tip="Refresh the preset list"
          left="15"
          bottom_delta="25"
-         width="75"
+         width="80"
          height="20"
          follows="left|top" />
 
@@ -650,7 +650,7 @@
          tool_tip="Customize the beam shape"
          left_delta="-20"
          bottom_delta="25"
-         width="75"
+         width="80"
          height="20"
          follows="left|top"/>
 
@@ -660,7 +660,7 @@
          tool_tip="Refresh the beam list"
          left_delta="0"
          bottom_delta="25"
-         width="75"
+         width="80"
          height="20"
          follows="left|top" />
 
