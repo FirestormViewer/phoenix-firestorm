@@ -98,7 +98,7 @@
          height="16"
          initial_value="true"
          label="on Land"
-         tool_tip="Sst this to show hover tips on land"
+         tool_tip="Set this to show hover tips on land"
          layout="topleft"
          left_delta="0"
          name="ShowLandHoverTips"
@@ -189,7 +189,7 @@
          follows="left|top"
          height="12"
          layout="topleft"
-         name="ButtonFlashing"
+         name="UsePieMenuLabel"
          width="128">
           Pie Menu:
         </text>
@@ -606,7 +606,7 @@
          follows="left|top"
          control_name="FSFontSettingsFile"
          left_pad="5"
-         name="Tooltipdelay"
+         name="Fontsettingsfile"
          width="160">
             <combo_box.item
              label="Deja Vu"
