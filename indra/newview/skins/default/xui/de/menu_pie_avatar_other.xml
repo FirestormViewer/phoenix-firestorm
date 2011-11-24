@@ -15,7 +15,7 @@
         <pie_slice label="Hinauswerfen" name="Eject..."/>
         <pie_menu name="Avatar Pie More 2" label="Mehr >">
             <pie_slice label="Debug Texturen" name="Debug..."/>
-            <pie_separator name="script count placeholder" />
+            <pie_slice label="Skript-Info" name="ScriptInfo"/>
             <pie_slice label="Anrufen" name="Call"/>
             <pie_slice label="Hineinzoomen" name="Zoom In"/>
         </pie_menu>

@@ -2,8 +2,8 @@
 <pie_menu name="Object Pie">
    <pie_slice label="Öffnen" name="Open"/>
    <pie_slice label="Erstellen" name="Build"/>
-    <pie_slice label="Berühren" name="Object Touch"/>
-    <pie_slice label="Hier sitzen" name="Object Sit"/>
+    <pie_slice label="Berühren" name="Pie Object Touch"/>
+    <pie_slice label="Hier sitzen" name="Pie Object Sit"/>
     <pie_slice label="Aufstehen" name="Object Stand Up"/>
     <pie_slice label="Kaufen" name="Buy..."/>
     <pie_slice label="Nehmen" name="Pie Object Take"/>
@@ -21,7 +21,7 @@
 			<pie_separator name="export_placeholder" />
 			<pie_separator name="disable_placeholder" />
 			<pie_slice label="Blockieren" name="Object Mute"/>
-			<pie_separator name="script_count_placeholder" />
+			<pie_slice label="Skript-Info" name="ScriptInfo"/>
 			<pie_slice label="Untersuchen" name="Object Inspect"/>
 		</pie_menu>
 		<pie_slice label="Kaufen..." name="Buy..."/>
