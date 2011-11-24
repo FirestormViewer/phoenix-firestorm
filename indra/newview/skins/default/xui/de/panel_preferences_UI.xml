@@ -43,7 +43,7 @@
 		</text>
 		<check_box name="ShowNetStats" label="Laganzeige aktivieren" tool_tip="Aktiviert die Laganzeige in der Statuszeile"/>
 		<text name="ToastSettings">
-			Benachrichtungseinstellungen (Popups, Konsole, Toasts):
+			Benachrichtigungseinstellungen (Popups, Konsole, Toasts):
 		</text>
 		<text name="ToastSpaceTextLabel">
 			Abstand zwischen
