@@ -1,9 +1,10 @@
 # -*- cmake -*-
 
-if(INSTALL_PROPRIETARY)
+#Always download the prebuilt for now
+#if(INSTALL_PROPRIETARY)
   include(Prebuilt)
   use_prebuilt_binary(quicktime)
-endif(INSTALL_PROPRIETARY)
+#endif(INSTALL_PROPRIETARY)
 
 if (DARWIN)
   include(CMakeFindFrameworks)
