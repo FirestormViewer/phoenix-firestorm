@@ -879,6 +879,13 @@ LLMultiFloater* LLFloater::getHost()
 	return (LLMultiFloater*)mHostHandle.get(); 
 }
 
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-25 (Catznip-3.2.0b) | Added: Catznip-3.2.0b
+LLMultiFloater* LLFloater::getLastHost() const
+{
+	return (LLMultiFloater*)mLastHostHandle.get(); 
+}
+// [/SL:KB]
+
 void LLFloater::applyControlsAndPosition(LLFloater* other)
 {
 	if (!applyDockState())
@@ -1655,13 +1662,6 @@ void LLFloater::setTornOff(bool torn_off)
 	if ( (!mCanTearOff) || (mTornOff == torn_off) )
 		return;
 
-// [SL:KB] - Patch: UI-FloaterTearSignal | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-	if (mTearOffSignal)
-	{
-		(*mTearOffSignal)(this, LLSD(torn_off));
-	}
-// [/SL:KB]
-
 	LLMultiFloater* host_floater = getHost();
 	if ( (torn_off) && (host_floater) )		// Tear off
 	{
@@ -1698,6 +1698,11 @@ void LLFloater::setTornOff(bool torn_off)
 	updateTitleButtons();
 
 	storeTearOffStateControl();
+
+// [SL:KB] - Patch: UI-FloaterTearSignal | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+	if ( (mTearOffSignal) && (mTornOff == torn_off) )
+		(*mTearOffSignal)(this, LLSD(torn_off));
+// [/SL:KB]
 }
 
 void LLFloater::onClickTearOff(LLFloater* self)

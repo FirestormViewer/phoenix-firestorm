@@ -210,6 +210,9 @@ public:
 	void			center();
 
 	LLMultiFloater* getHost();
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-25 (Catznip-3.2.0b) | Added: Catznip-3.2.0b
+	LLMultiFloater* getLastHost() const;
+// [/SL:KB]
 
 	void			applyTitle();
 	std::string		getCurrentTitle() const;

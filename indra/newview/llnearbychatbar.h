@@ -101,7 +101,8 @@ public:
 	void showHistory();
 //	/*virtual*/void setMinimized(BOOL b);
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-17 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-	/*virtual*/void onOpen(const LLSD& sdKey);
+	/*virtual*/ BOOL canClose();
+	/*virtual*/ void onOpen(const LLSD& sdKey);
 // [/SL:KB]
 
 protected:

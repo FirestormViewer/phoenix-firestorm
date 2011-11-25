@@ -230,9 +230,9 @@ void LLNearbyChatBar::onTearOff(const LLSD& sdData)
 		mChatBarImpl->getChatBoxCtrl()->reshape(pChatBox->getRect().getWidth() - nExpandWidth, pChatBox->getRect().getHeight());
 		pToggleBtn->setVisible(TRUE);
 
-		getHost()->getTabContainer()->unlockTabs();
+		getLastHost()->getTabContainer()->unlockTabs();
 	}
-	else						// Attaching to parent
+	else						// Attaching
 	{
 		showHistory();
 
@@ -656,6 +656,13 @@ void LLNearbyChatBar::onToggleNearbyChatPanel()
 //		LLFloater::setMinimized(b);
 //}
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-17 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+BOOL LLNearbyChatBar::canClose()
+{
+	if (getHost())
+		return false;
+	return LLFloater::canClose();
+}
+
 void LLNearbyChatBar::onOpen(const LLSD& sdKey)
 {
 	// When open the floater with nearby chat visible, go ahead and kill off screen chats
