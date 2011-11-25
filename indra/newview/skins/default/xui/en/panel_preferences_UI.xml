@@ -179,7 +179,18 @@
          tool_tip="Set this to move group notifications to the top right corner of the screen (Classic V1.x behavior)."
          top_pad="7"
          width="256" />
-
+        <text
+         type="string"
+         left_delta="20"
+         top_pad="-3"
+         width="128"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         text_color="White_50"
+         name="GroupTopRightRequiresRestart">
+            (requires restart)
+        </text>
 
         <text
          type="string"

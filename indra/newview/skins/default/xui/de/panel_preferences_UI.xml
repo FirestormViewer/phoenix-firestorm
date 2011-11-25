@@ -28,6 +28,9 @@
 		</text>
 		<check_box label="Skript-Dialoge oben rechts" name="ShowScriptDialogsTopRight" tool_tip="Aktivieren, um Skript-Dialoge in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
 		<check_box label="Gruppenmitteil. oben rechts" name="ShowGroupNoticesTopRight" tool_tip="Aktivieren, um Gruppenmitteilungen in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
+		<text name="GroupTopRightRequiresRestart">
+			(Erfordert Neustart)
+		</text>
 		<text name="UsePieMenuLabel">
 			Pie-Menü:
 		</text>
