@@ -1076,7 +1076,7 @@ S32 LLViewerTextureList::getMaxVideoRamSetting(bool get_recommended)
 		
 	//AO: If we've manually set texture memory over the normal maximum, use that instead.
 	S32 adj_max = gSavedSettings.getS32("TextureMemory");
-	if (adj_max < MAX_VIDEO_RAM_IN_MEGA_BYTES)
+	if (adj_max <= MAX_VIDEO_RAM_IN_MEGA_BYTES)
 		adj_max = MAX_VIDEO_RAM_IN_MEGA_BYTES;
 	max_texmem = llclamp(max_texmem, getMinVideoRamSetting(), adj_max); 
 	
