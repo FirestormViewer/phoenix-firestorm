@@ -98,7 +98,7 @@
          height="16"
          initial_value="true"
          label="on Land"
-         tool_tip="Sst this to show hover tips on land"
+         tool_tip="Set this to show hover tips on land"
          layout="topleft"
          left_delta="0"
          name="ShowLandHoverTips"
@@ -179,7 +179,18 @@
          tool_tip="Set this to move group notifications to the top right corner of the screen (Classic V1.x behavior)."
          top_pad="7"
          width="256" />
-
+        <text
+         type="string"
+         left_delta="20"
+         top_pad="-3"
+         width="128"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         text_color="White_50"
+         name="GroupTopRightRequiresRestart">
+            (requires restart)
+        </text>
 
         <text
          type="string"
@@ -189,7 +200,7 @@
          follows="left|top"
          height="12"
          layout="topleft"
-         name="ButtonFlashing"
+         name="UsePieMenuLabel"
          width="128">
           Pie Menu:
         </text>
@@ -294,7 +305,7 @@
          height="10"
          layout="topleft"
          left="210"
-         name="ToastSpaceText"
+         name="ToastSpaceTextLabel"
          top_pad="7"
          width="145">
             Space between lowest
@@ -342,7 +353,7 @@
          max_val="300"
          name="ToastLifetime"
          top_pad="7"
-         width="266" />
+         width="273" />
         <text
          type="string"
          length="1"
@@ -561,7 +572,7 @@
          left="210"
          min_val="1"
          max_val="90"
-         name="OverflowToastHeight"
+         name="NearbyToastWidth"
          top_pad="7"
          width="272" />
         <text
@@ -571,7 +582,7 @@
          height="16"
          layout="topleft"
          left_delta="269"
-         name="OverflowToastHeightText"
+         name="NearbyToastWidthText"
          top_delta="0"
          width="50">
             %
@@ -606,7 +617,7 @@
          follows="left|top"
          control_name="FSFontSettingsFile"
          left_pad="5"
-         name="Tooltipdelay"
+         name="Fontsettingsfile"
          width="160">
             <combo_box.item
              label="Deja Vu"
@@ -721,7 +732,7 @@ Default 0. Larger values may not work well.
          length="1"
          line_spacing.pixels="5">
           pixels (requires restart)
-V2/3 default 0. V1 default [TODO: unknown].
+V2/3 default 0. V1 default 2.
         </text>
 
         <text

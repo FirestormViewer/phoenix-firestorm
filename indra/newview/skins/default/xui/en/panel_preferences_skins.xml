@@ -39,7 +39,7 @@
      height="18"
      layout="topleft"
      left_pad="10"
-     name="skin_textbox2"
+     name="skin_textbox1"
      width="200">
         (Requires restart)
     </text>
@@ -54,7 +54,7 @@
      top_pad="15"
      name="theme_textbox"
      width="200">
-        Colour scheme :
+        Colour scheme:
     </text>
     <combo_box
      follows="left|top"
@@ -99,7 +99,7 @@
      height="18"
      layout="topleft"
      left_pad="30"
-     name="theme_textbox2"
+     name="theme_textbox3"
      width="200">
         (Requires restart)
     </text>

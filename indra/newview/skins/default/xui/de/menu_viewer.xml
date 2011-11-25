@@ -27,7 +27,7 @@
 			<menu_item_call label="Aktualisiere Aussehen (Rebake)" name="Rebake Texture"/>
 			<menu_item_call label="Auf männlichen Standard-Avatar zurücksetzen" name="ResetDefaultAvM"/>
             <menu_item_call label="Auf weiblichen Standard-Avatar zurücksetzen" name="ResetDefaultAvF"/>
-			<menu_item_check label="Draw-Weight für Avatare anzeigen (Ersatz für ARC)" name="Avatar Rendering Cost"/>
+			<menu_item_check label="Render-Weight für Avatare anzeigen (Ersatz für ARC)" name="Avatar Rendering Cost"/>
 			<menu_item_call label="Lag-Meter" name="Lag Meter"/>
 			<menu_item_call label="LSL-Bridge neu erstellen" name="Recreate LSL Bridge"/>
 		</menu>
@@ -182,7 +182,6 @@
 	<menu label="Hilfe" name="Help">
 		<menu_item_check label="Hinweise aktivieren" name="Enable Hints"/>
 		<menu_item_check label="Firestorm-Wiki" name="Firestorm Wiki"/>
-		<menu_item_call label="[CURRENT_GRID]-Hilfe" name="Second Life Help"/>
         <menu_item_call label="[CURRENT_GRID]-Hilfe" name="current_grid_help"/>
         <menu_item_call label="Über [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Grid-Status prüfen" name="Grid Status"/>

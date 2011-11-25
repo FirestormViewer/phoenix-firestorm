@@ -162,7 +162,6 @@ with the same filename but different name
   <texture name="ComboButton_Disabled" file_name="widgets/ComboButton_Disabled.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_Selected" file_name="widgets/ComboButton_Selected.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_UpSelected" file_name="widgets/ComboButton_UpSelected.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
-  <texture name="ComboButton_Up_On_Selected" file_name="widgets/ComboButton_Up_On_Selected.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_On" file_name="widgets/ComboButton_On.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_Off" file_name="widgets/ComboButton_Off.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_UpOff" file_name="widgets/ComboButton_UpOff.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
@@ -196,6 +195,10 @@ with the same filename but different name
 
 
   <texture name="Flag" file_name="navbar/Flag.png" preload="false" />
+
+  <texture name="Flyout_Left" file_name="windows/Flyout_Left.png" preload="false" />
+  <texture name="Flyout_Pointer" file_name="windows/Flyout_Pointer.png" preload="false" />
+  <texture name="Flyout_Right" file_name="windows/Flyout_Right.png" preload="false" />
 
   <texture name="Folder_Arrow" file_name="folder_arrow.tga" preload="false" />
   <texture name="ForSale_Badge" file_name="icons/ForSale_Badge.png" preload="false" />
@@ -555,6 +558,10 @@ with the same filename but different name
   <texture name="Unknown_Icon" file_name="icons/unknown_icon.png" preload="true" />
 
   <texture name="Snapshot_Off" file_name="bottomtray/starlight_snapshot.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
+  <texture name="Snapshot_Download" file_name="snapshot_download.png" preload="false" />
+  <texture name="Snapshot_Email" file_name="snapshot_email.png" preload="false" />
+  <texture name="Snapshot_Inventory" file_name="toolbar_icons/inventory.png" preload="false" />
+  <texture name="Snapshot_Profile" file_name="toolbar_icons/profile.png" preload="false" />
 
   <texture name="startup_logo"  file_name="windows/startup_logo.png" preload="true" />
 
@@ -576,21 +583,13 @@ with the same filename but different name
   <texture name="Sync_Progress_5" file_name="icons/Sync_Progress_5.png" preload="true" />
   <texture name="Sync_Progress_6" file_name="icons/Sync_Progress_6.png" preload="true" />
   
-  <texture name="TabIcon_Appearance_Off" file_name="taskpanel/TabIcon_Appearance_Off.png" preload="false" />
-  <texture name="TabIcon_Appearance_Selected" file_name="taskpanel/TabIcon_Appearance_Selected.png" preload="false" />
   <texture name="TabIcon_Close_Off" file_name="taskpanel/TabIcon_Close_Off.png" preload="false" />
-  <texture name="TabIcon_Home_Off" file_name="taskpanel/TabIcon_Home_Off.png" preload="false" />
   <texture name="TabIcon_Home_Selected" file_name="taskpanel/TabIcon_Home_Selected.png" preload="false" />
   <texture name="TabIcon_Me_Off" file_name="taskpanel/TabIcon_Me_Off.png" preload="false" />
-  <texture name="TabIcon_Me_Selected" file_name="taskpanel/TabIcon_Me_Selected.png" preload="false" />
   <texture name="TabIcon_Open_Off" file_name="taskpanel/TabIcon_Open_Off.png" preload="false" />
   <texture name="TabIcon_People_Off" file_name="taskpanel/TabIcon_People_Off.png" preload="false" />
-  <texture name="TabIcon_People_Selected" file_name="taskpanel/TabIcon_People_Selected.png" preload="false" />
-  <texture name="TabIcon_Places_Large" file_name="taskpanel/TabIcon_Places_Large.png" preload="false" />
   <texture name="TabIcon_Places_Off" file_name="taskpanel/TabIcon_Places_Off.png" preload="false" />
-  <texture name="TabIcon_Places_Selected" file_name="taskpanel/TabIcon_Places_Selected.png" preload="false" />
   <texture name="TabIcon_Things_Off" file_name="taskpanel/TabIcon_Things_Off.png" preload="false" />
-  <texture name="TabIcon_Things_Selected" file_name="taskpanel/TabIcon_Things_Selected.png" preload="false" />
 
   <texture name="TabTop_Right_Off" file_name="containers/TabTop_Right_Off.png" preload="false"  scale.left="8" scale.top="8" scale.right="62" scale.bottom="9" />
   <texture name="TabTop_Right_Selected" file_name="containers/TabTop_Right_Selected.png" preload="false"  scale.left="8" scale.top="8" scale.right="62" scale.bottom="9" />
@@ -653,6 +652,12 @@ with the same filename but different name
   <texture name="VoicePTT_Lvl3" file_name="bottomtray/VoicePTT_Lvl3.png" preload="false" />
   <texture name="VoicePTT_Off" file_name="bottomtray/VoicePTT_Off.png" preload="false" />
   <texture name="VoicePTT_On" file_name="bottomtray/VoicePTT_On.png" preload="false" />
+  
+  <texture name="VoicePTT_Lvl1_Dark" file_name="bottomtray/VoicePTT_Lvl1_Dark.png" preload="false" />
+  <texture name="VoicePTT_Lvl2_Dark" file_name="bottomtray/VoicePTT_Lvl2_Dark.png" preload="false" />
+  <texture name="VoicePTT_Lvl3_Dark" file_name="bottomtray/VoicePTT_Lvl3_Dark.png" preload="false" />
+  <texture name="VoicePTT_Off_Dark" file_name="bottomtray/VoicePTT_Off_Dark.png" preload="false" />
+  <texture name="VoicePTT_On_Dark" file_name="bottomtray/VoicePTT_On_Dark.png" preload="false" />
 
   <texture name="Wearables_Divider" file_name="windows/Wearables_Divider.png" preload="false" />
 
@@ -685,9 +690,6 @@ with the same filename but different name
   <!--WARNING OLD ART BELOW *do not use*-->
   <texture name="icn_media_web.tga" preload="true" />
   <texture name="icn_media_movie.tga" preload="true" />
-  <texture name="icn_voice-localchat.tga" />
-  <texture name="icn_voice-groupfocus.tga" />
-  <texture name="icn_voice-pvtfocus.tga" />
 
   <texture name="jump_left_out.tga" file_name="widgets/jump_left_out.png" />
   <texture name="jump_left_in.tga" file_name="widgets/jump_left_in.png" />
@@ -721,7 +723,6 @@ with the same filename but different name
 
   <texture name="icon_avatar_offline.tga" />
   <texture name="icon_avatar_online.tga" />
-  <texture name="icon_day_cycle.tga" />
   <texture name="icon_diurnal.tga" />
   <texture name="icon_for_sale.tga" file_name="icons/Icon_For_Sale.png" />
   <texture name="icon_top_pick.tga" />
@@ -737,7 +738,7 @@ with the same filename but different name
   <texture name="map_avatar_16.tga" />
   <texture name="map_avatar_8.tga" />
   <texture name="map_event.tga" />
-  <texture name="map_event_mature.tga" />
+
   <texture name="map_home.tga" />
   <texture name="map_infohub.tga" />
   <texture name="map_telehub.tga" />
@@ -881,5 +882,23 @@ with the same filename but different name
   <texture name="Zoom_Over" file_name="icons/Zoom_Over.png" preload="false" />
   <texture name="Edit_Prefs_Wrench" file_name="icons/Edit_Prefs_Wrench.png" preload="false" />
   <texture name="inventory_18" file_name="bottomtray/inventory_18.png" preload="false" />
+
+<!-- REMOVE When Firestorm adopts FUI (check no use first) -->
+
+  <texture name="ComboButton_Up_On_Selected" file_name="widgets/ComboButton_Up_On_Selected.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
+
+  <texture name="TabIcon_Appearance_Off" file_name="taskpanel/TabIcon_Appearance_Off.png" preload="false" />
+  <texture name="TabIcon_Appearance_Selected" file_name="taskpanel/TabIcon_Appearance_Selected.png" preload="false" />
+  <texture name="TabIcon_Home_Off" file_name="taskpanel/TabIcon_Home_Off.png" preload="false" />
+  <texture name="TabIcon_Me_Selected" file_name="taskpanel/TabIcon_Me_Selected.png" preload="false" />
+  <texture name="TabIcon_People_Selected" file_name="taskpanel/TabIcon_People_Selected.png" preload="false" />
+  <texture name="TabIcon_Places_Large" file_name="taskpanel/TabIcon_Places_Large.png" preload="false" />
+  <texture name="TabIcon_Places_Selected" file_name="taskpanel/TabIcon_Places_Selected.png" preload="false" />
+  <texture name="TabIcon_Things_Selected" file_name="taskpanel/TabIcon_Things_Selected.png" preload="false" />
   
+  <texture name="icn_voice-localchat.tga" />
+  <texture name="icn_voice-groupfocus.tga" />
+  <texture name="icn_voice-pvtfocus.tga" />
+  <texture name="icon_day_cycle.tga" />
+  <texture name="map_event_mature.tga" />
 </textures>

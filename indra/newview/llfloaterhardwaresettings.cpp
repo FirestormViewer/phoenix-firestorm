@@ -148,7 +148,7 @@ void LLFloaterHardwareSettings::cancel()
 	gSavedSettings.setBOOL("RenderAnisotropic", mUseAniso);
 	gSavedSettings.setU32("RenderFSAASamples", mFSAASamples);
 	gSavedSettings.setF32("RenderGamma", mGamma);
-	gSavedSettings.setS32("TextureMemory", mVideoCardMem);
+	//gSavedSettings.setS32("TextureMemory", mVideoCardMem); AO: Don't set this value except when explicitly changed.
 	gSavedSettings.setF32("RenderFogRatio", mFogRatio);
 	gSavedSettings.setBOOL("ProbeHardwareOnStartup", mProbeHardwareOnStartup );
 

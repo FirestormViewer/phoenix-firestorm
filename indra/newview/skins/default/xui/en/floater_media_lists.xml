@@ -9,14 +9,22 @@
     name="floatermedialists"
 	title="Media Lists"
     width="460"
+    min_height="300"
+    min_width="460"
 	rect_control="MediaListRect">
+	<floater.string name="EnterUrlAllow">
+		Enter domain or URL to always allow:
+	</floater.string>
+	<floater.string name="EnterUrlDeny">
+		Enter domain or URL to never allow:
+	</floater.string>
 
 	<layout_stack
 		name="lists_layout_stack"
 		left="10"
 		top="10"
 		right="-10"
-		height="230"
+		height="234"
 		follows="all"
 		orientation="horizontal"
 		layout="topleft">
@@ -24,7 +32,7 @@
 	<layout_panel
 		name="whitelist_layout_panel"
 		width="220"
-		height="200"
+		height="204"
 		auto_resize="true"
 		follows="all"
 		layout="topleft">
@@ -62,7 +70,7 @@
 		name="whitelist_buttons_layout_stack"
 		left="0"
 		top_pad="4"
-		height="16"
+		height="20"
 		follows="left|right|bottom"
 		orientation="horizontal"
 		layout="topleft">
@@ -70,7 +78,7 @@
 	<layout_panel
 		name="whitelist_buttons_panel_add"
 		width="110"
-		height="16"
+		height="20"
 		user_resize="false"
 		auto_resize="true"
 		follows="all"
@@ -79,7 +87,7 @@
 	<button
 		top="0"
 		left="0"
-		height="16"
+		height="20"
 		right="-2"
 		enabled="true"
 		follows="all"
@@ -94,7 +102,7 @@
 	<layout_panel
 		name="whitelist_buttons_panel_remove"
 		width="110"
-		height="16"
+		height="20"
 		auto_resize="true"
 		follows="all"
 		layout="topleft">
@@ -102,7 +110,7 @@
 	<button
 		top="0"
 		left="2"
-		height="16"
+		height="20"
 		right="-1"
 		enabled="true"
 		follows="all"
@@ -121,7 +129,7 @@
 	<layout_panel
 		name="blacklist_layout_panel"
 		width="220"
-		height="200"
+		height="204"
 		auto_resize="true"
 		follows="all"
 		layout="topleft">
@@ -159,7 +167,7 @@
 		name="blacklist_buttons_layout_stack"
 		left="5"
 		top_pad="4"
-		height="16"
+		height="20"
 		follows="left|right|bottom"
 		orientation="horizontal"
 		layout="topleft">
@@ -167,7 +175,7 @@
 	<layout_panel
 		name="blacklist_buttons_panel_add"
 		width="110"
-		height="16"
+		height="20"
 		user_resize="false"
 		auto_resize="true"
 		follows="all"
@@ -176,7 +184,7 @@
 	<button
 		top="0"
 		left="0"
-		height="16"
+		height="20"
 		right="-2"
 		enabled="true"
 		follows="all"
@@ -191,7 +199,7 @@
 	<layout_panel
 		name="blacklist_buttons_panel_remove"
 		width="110"
-		height="16"
+		height="20"
 		auto_resize="true"
 		follows="all"
 		layout="topleft">
@@ -199,7 +207,7 @@
 	<button
 		top="0"
 		left="2"
-		height="16"
+		height="20"
 		right="-1"
 		enabled="true"
 		follows="all"
@@ -237,7 +245,7 @@
 		top_pad="4"
 		follows="left|bottom|right"
 		font="SansSerifSmall"
-		height="16"
+		height="20"
 		name="input_domain"
 		right="-94"
 		select_all_on_focus_received="true"
@@ -249,7 +257,7 @@
 		follows="bottom|right"
 		font="SansSerifSmall"
 		halign="center"
-		height="16"
+		height="20"
 		left_pad="4"
 		label="Add"
 		label_selected="Add"

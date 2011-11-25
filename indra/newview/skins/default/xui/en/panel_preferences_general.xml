@@ -326,7 +326,7 @@
      control_name="FSNameTagShowLegacyUsernames"
 	 enabled_control="NameTagShowUserNames"
      height="16"
-     label="Legacy names instead"
+     label="Legacy names instead of usernames"
      layout="topleft"
      left_pad="50"
      name="FSshow_legacyun"

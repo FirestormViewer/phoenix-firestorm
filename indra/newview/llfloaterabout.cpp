@@ -230,6 +230,12 @@ LLSD LLFloaterAbout::getInfo()
 	info["FONT_SIZE"] = gSavedSettings.getF32("FSFontSizeAdjustment");
 	info["FONT_SCREEN_DPI"] = gSavedSettings.getF32("FontScreenDPI");
 
+	//[FIRE-3923 : SJ] Added Drawdistance, bandwidth and LOD to info
+	info["DRAW_DISTANCE"] = gSavedSettings.getF32("RenderFarClip");
+	info["BANDWIDTH"] = gSavedSettings.getF32("ThrottleBandwidthKBPS");
+	info["LOD"] =gSavedSettings.getF32("RenderVolumeLODFactor");
+
+
 	//[FIRE 3113 : SJ] Added Settingsfile to info
 	if (gSavedSettings.getString("SessionSettingsFile") == "settings_phoenix.xml") info["MODE"] = "Phoenix";
 	else if (gSavedSettings.getString("SessionSettingsFile") == "settings_v3.xml") info["MODE"] = "V3";
@@ -426,6 +432,11 @@ void LLFloaterAbout::setSupportText(const std::string& server_release_notes_url)
 		support << "\n" << getString("AboutDriver", args);
 	}
 	support << "\n" << getString("AboutLibs", args);
+	if (info.has("BANDWIDTH"))
+	{
+		support << "\n" << getString("AboutSettings", args);
+	}
+
 	if (info.has("COMPILER"))
 	{
 		support << "\n" << getString("AboutCompiler", args);

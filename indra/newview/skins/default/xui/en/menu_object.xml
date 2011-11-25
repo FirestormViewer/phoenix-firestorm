@@ -86,14 +86,7 @@
 	    <menu_item_call.on_click
 	      function="Tools.ScriptInfo" />
 	   </menu_item_call>
-	   <menu_item_call
-	      enabled="true"
-	      label="Texture Refresh"
-	      name="Texture Refresh">
-	    <menu_item_call.on_click
-	      function="Object.TexRefresh" />
-	   </menu_item_call>
-   <menu_item_separator layout="topleft" />
+<menu_item_separator layout="topleft" />
       <menu_item_call
          enabled="false"
          label="Link"
@@ -204,6 +197,13 @@
    </menu_item_call>
     </context_menu>
    <menu_item_separator layout="topleft" />
+   	<menu_item_call
+	   enabled="true"
+	   label="Texture Refresh"
+	   name="Texture Refresh">
+	<menu_item_call.on_click
+	  function="Object.TexRefresh" />
+   </menu_item_call>
    <!-- Derender -->
    <menu_item_call
       enabled="true"

@@ -1074,8 +1074,13 @@ S32 LLViewerTextureList::getMaxVideoRamSetting(bool get_recommended)
 	else
 		max_texmem = llmin(max_texmem, (S32)(system_ram));
 		
-	max_texmem = llclamp(max_texmem, getMinVideoRamSetting(), MAX_VIDEO_RAM_IN_MEGA_BYTES); 
+	//AO: If we've manually set texture memory over the normal maximum, use that instead.
+	S32 adj_max = gSavedSettings.getS32("TextureMemory");
+	if (adj_max <= MAX_VIDEO_RAM_IN_MEGA_BYTES)
+		adj_max = MAX_VIDEO_RAM_IN_MEGA_BYTES;
+	max_texmem = llclamp(max_texmem, getMinVideoRamSetting(), adj_max); 
 	
+	llinfos << "Viewer Texture Mem Pool Max: " << max_texmem << "(" << system_ram << ")" << llendl;
 	return max_texmem;
 }
 
@@ -1151,8 +1156,8 @@ void LLViewerTextureList::updateMaxResidentTexMem(S32 mem)
 		mMaxTotalTextureMemInMegaBytes = system_ram - min_non_texture_mem ;
 	}
 	
-	llinfos << "Total Video Memory set to: " << vb_mem << " MB" << llendl;
-	llinfos << "Available Texture Memory set to: " << (vb_mem - fb_mem) << " MB" << llendl;
+	llinfos << "Total Viewer Video Memory set to: " << vb_mem << " MB" << llendl;
+	llinfos << "Available Viewer Texture Memory set to: " << (vb_mem - fb_mem) << " MB" << llendl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

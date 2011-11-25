@@ -32,7 +32,7 @@
 		 control_name="FullScreen"
 		 height="16"
 		 initial_value="false"
-		 label="Fullscreen Mode (Requires restart)"
+		 label="Fullscreen Mode (restart required)"
 		 layout="topleft"
 		 left="10"
 		 name="Fullscreen Mode"
@@ -222,7 +222,10 @@
              left_delta="0"
              name="LocalLights"
              top_pad="1"
-             width="256" />
+             width="256">
+		<check_box.commit_callback
+		 function="Pref.LocalLightsEnable" />
+	    </check_box>
 
             <check_box
              control_name="VertexShaderEnable"
@@ -376,12 +379,12 @@
              top_pad="8"
              follows="top|left"
              height="18"
-             width="110"
-             word_wrap="true"
+             width="170"
+             word_wrap="false"
              layout="topleft"
              left="10"
              name="local lights_label">
-                Local Lights:
+                Point Lighting (restart required)
             </text>
             <combo_box
              control_name="RenderShaderLightingMaxLevel"
@@ -392,15 +395,15 @@
              name="LocalLightsDetail"
              width="150">
                 <combo_box.item
-                 label="Maximum"
+                 label="Full (default)"
                  name="3"
                  value="3"/>
                 <combo_box.item
-                 label="Limited"
+                 label="Reduced"
                  name="2"
                  value="2"/>
                 <combo_box.item
-                 label="None"
+                 label="Sun/Moon Only"
                  name="1"
                  value="1"/>
             </combo_box>
@@ -897,14 +900,14 @@
          height="20"
          increment="16"
          initial_value="32"
-         label="Texture Memory (MB):"
+         label="Viewer Texture Memory Buffer (MB):"
          label_width="195"
          layout="topleft"
          left="10"
          min_val="64"
-         max_val="1024"
+         max_val="512"
          name="GraphicsCardTextureMemory"
-         tool_tip="Amount of memory to allocate for textures. Defaults to video card memory. Reducing this may improve performance but may also make textures blurry."
+         tool_tip="Amount of memory to allocate for textures. Defaults to video card memory up to 512M. Reducing this may improve performance but may also make textures blurry. Increasing this value beyond 512M is not recommended. Even if your graphics cards supports it, the main memory impact on the viewer is likely to lead to a degraded SL experience."
          top_pad="10"
          width="360" />
         <spinner
@@ -1022,7 +1025,7 @@
          word_wrap="true"
          layout="topleft"
          left="20"
-         name="shadows_label">
+         name="TextureDetailLabel">
             Texture Details Loaded:
         </text>
         <combo_box

@@ -26,7 +26,7 @@
     </pie_menu>
     <pie_slice label="Hinsetzen" name="Sit Down Here"/>
     <pie_slice label="Aufstehen" name="Stand Up"/>
-    <pie_separator name="script_count_placeholder" />
+    <pie_slice label="Skript-Info" name="ScriptInfo"/>
     <pie_slice label="Gesten..." name="Gestures"/>
 	<pie_menu label="Aussehen &gt;" name="Appearance &gt;">
 		<pie_slice label="Form bearbeiten" name="Edit My Shape"/>

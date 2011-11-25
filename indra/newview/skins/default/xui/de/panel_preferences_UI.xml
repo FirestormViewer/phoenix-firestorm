@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="UI-Pref" name="Display panel">
+<tab_container label="Firestorm Prefs" name="tabs">
+
+	<!--General-->
+	<panel label="Allgemein" name="UI Prefs Panel">
+		<text name="UI Size:" width="220">
+			UI-Skalierung (Nebeneffekte möglich):
+		</text>
+		<text name="HoverTipText">
+			Schwebetips:
+		</text>
+		<check_box label="Einfache Schwebetipps (zuerst)" name="ShowHoverTips" tool_tip="Aktivieren, um Schwebetipps für Avatare und andere Dinge anzuzeigen - diese Option zuerst aktivieren"/>
+		<check_box label="für alle Objekte" tool_tip="Aktivieren, um Schwebetipps für Inworld-Objekte anzuzeigen." name="ShowAllHoverTips"/>
+		<check_box label="für Land" tool_tip="Aktivieren, um Schwebetipps für Land anzuzeigen." name="ShowLandHoverTips"/>
+		<text name="tooltip_textbox">
+			Schwebetipps-Verzögerung:
+		</text>
+		<combo_box name="Tooltipdelay">
+			<combo_box.item label="0,7 Sekunden" name="tt_item1"/>
+			<combo_box.item label="1,5 Sekunden" name="tt_item2"/>
+			<combo_box.item label="3 Sekunden" name="tt_item3"/>
+			<combo_box.item label="6 Sekunden" name="tt_item4"/>
+		</combo_box>
+
+		<text name="HoverTipText">
+			Platzierung Skript-Dialoge:
+		</text>
+		<check_box label="Skript-Dialoge oben rechts" name="ShowScriptDialogsTopRight" tool_tip="Aktivieren, um Skript-Dialoge in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
+		<check_box label="Gruppenmitteil. oben rechts" name="ShowGroupNoticesTopRight" tool_tip="Aktivieren, um Gruppenmitteilungen in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
+		<text name="GroupTopRightRequiresRestart">
+			(Erfordert Neustart)
+		</text>
+		<text name="UsePieMenuLabel">
+			Pie-Menü:
+		</text>
+		<check_box label="Pie-Menü aktivieren" name="UsePieMenu" tool_tip="Aktiviert das klassische V1.x-Kontextmenü in Kuchenform anstelle des standardmäßigen Kontextmenüs."/>
+
+		<text name="ButtonFlashing">
+			Blinkende Buttons:
+		</text>
+		<slider label="Wiederholungen blinkende IM-Button:" tool_tip="Anzahl wie oft ein Button für IM-Benachrichtungen blinkt" name="ButtonsFlashCount"/>
+		<slider label="Blinkrate:" tool_tip="Blinkrate in Hz, mit der Buttons blinken" name="ButtonFlashRate"/>
+		<text name="ButtonFlashRateText">
+			Hz
+		</text>
+		<check_box name="ShowNetStats" label="Laganzeige aktivieren" tool_tip="Aktiviert die Laganzeige in der Statuszeile"/>
+		<text name="ToastSettings">
+			Benachrichtigungseinstellungen (Popups, Konsole, Toasts):
+		</text>
+		<text name="ToastSpaceTextLabel">
+			Abstand zwischen
+		</text>
+		<slider label="Toast und unterer UI:" tool_tip="Abstand in Pixeln zwischen dem unteren Teil der UI und dem untersten Toast" name="ToastSpace"/>
+		<text name="ToastSpaceText">
+			Pixel
+		</text>
+		<slider label="Anzeige Toast-Benachricht.:" tool_tip="Anzahl an Sekunden, die ein Benachrichtigungstoast angezeigt wird, bevor es ausgeblendet wird." name="ToastLifetime"/>
+		<text name="ToastLifetimeText">
+			Sek.
+		</text>
+		<slider label="Anzeige Tipp-Toast:" tool_tip="Anzahl an Sekunden, die ein Tipp-Toast angezeigt wird, bevor es ausgeblendet wird." name="TipToastLifetime"/>
+		<text name="TipToastLifetimeText">
+			Sek.
+		</text>
+		<slider label="Anzeige Chat-Toast:" tool_tip="Anzahl an Sekunden, die ein Toast für den Chat in der Nähe angezeigt wird, bevor es ausgeblendet wird." name="NearbyToastLifetime"/>
+		<text name="NearbyToastLifetimeText">
+			Sek.
+		</text>
+		<slider label="Anzeige Startup-Toast:" tool_tip="Anzahl an Sekunden, die ein Toast beim Starten angezeigt wird, bevor es ausgeblendet wird." name="StartupToastLifetime"/>
+		<text name="StartupToastLifetimeText">
+			Sek.
+		</text>
+		<slider label="Ausblendzeit Chat-Toast:" tool_tip="Anzahl an Sekunden, die ein Toast für den Chat in der Nähe benötigt, um vollständig ausgeblendet zu werden." name="NearbyToastFadingTime"/>
+		<text name="NearbyToastFadingTimeText">
+			Sek.
+		</text>
+		<slider label="Ausblendzeit normal. Toast:" tool_tip="Anzahl an Sekunden, die ein normales Toast benötigt, um vollständig ausgeblendet zu werden." name="ToastFadingTime"/>
+		<text name="ToastFadingTimeText">
+			Sek.
+		</text>
+		<slider label="Abstand zwischen Toasts:" tool_tip="Abstand zwischen zwei Toasts in Pixeln." name="ToastGap"/>
+		<text name="ToastGapText">
+			Pixel
+		</text>
+		<slider label="Höhe überlagerndes Toast:" tool_tip="Höhe eines überlagerndes Toast in Pixeln." name="OverflowToastHeight"/>
+		<text name="OverflowToastHeightText">
+			Pixel
+		</text>
+		<slider label="Breite von Chat-Toasts:" tool_tip="Breite der Toasts für den Chat in der Nähe in Prozent der Bildschirmbreite." name="NearbyToastWidth"/>
+		<text name="NearbyToastWidthText">
+			%
+		</text>
+	</panel>
+
+	<!--Font-->
+	<panel label="Schrift" name="UI-font-tab">
+		<text name="tooltip_textbox1">
+			Schriftart-Schema:
+		</text>
+		<text name="tooltip_textbox2">
+			(Erfordert Neustart)
+		</text>
+		<text name="tooltip_textbox5">
+			Größenanpassung:
+		</text>
+		<text name="tooltip_textbox6">
+			Punkt (Erfordert Neustart)
+Standard 0. Größere Werte können nicht korrekt funktionieren.
+		</text>
+		<text name="tooltip_textbox3">
+			Abstand Chatzeilen:
+		</text>
+		<text name="tooltip_textbox4">
+			Pixel (Erfordert Neustart)
+V2/3-Standard 0. V1-Standard 2.
+		</text>
+		<text name="Label_FolderItemViewHeight">
+			Höhe Ordner-Eintrag:
+		</text>
+		<text name="Label_FolderItemViewHeight_Scale">
+			Pixel (Erfordert Neustart)
+V2/3-Standard 20. V1-Standard 18.
+		</text>
+	</panel>
+</tab_container>
+</panel>
+

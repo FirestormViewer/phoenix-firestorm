@@ -60,6 +60,8 @@
 #include "llsdutil.h"
 #include "../newview/llviewercontrol.h"
 
+#include <string.h>
+
 // use this to control "jumping" behavior when Ctrl-Tabbing
 const S32 TABBED_FLOATER_OFFSET = 0;
 
@@ -678,7 +680,13 @@ void LLFloater::openFloater(const LLSD& key)
 	}
 	else
 	{
-		// AO setMinimized(FALSE);
+		// AO: setMinimized(FALSE);
+        
+        // AO: Always unminimize notecards *HACK*
+        if (strcmp(getName().c_str(),"preview notecard") == 0)
+        {
+            setMinimized(FALSE); 
+        }
 		setVisibleAndFrontmost(mAutoFocus);
 	}
 

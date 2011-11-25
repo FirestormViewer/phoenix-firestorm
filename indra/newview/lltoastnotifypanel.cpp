@@ -311,12 +311,12 @@ void LLToastNotifyPanel::updateButtonsLayout(const std::vector<index_button_pair
 	S32 bottom_offset = mIsScriptDialog ? (BTN_HEIGHT + IGNORE_BTN_TOP_DELTA + BOTTOM_PAD) : BOTTOM_PAD;
 	S32 max_width = mControlPanel->getRect().getWidth();
 	LLButton* ignore_btn = NULL;
-	LLButton* mute_btn = NULL;
+	// LLButton* mute_btn = NULL; *spam protection is part of FS now. May be a debug setting in future*
 	for (std::vector<index_button_pair_t>::const_iterator it = buttons.begin(); it != buttons.end(); it++)
 	{
 		if (-2 == it->first)
 		{
-			mute_btn = it->second;
+	//		mute_btn = it->second; *Removing Mute Button*
 			continue;
 		}
 		if (it->first == -1)
@@ -355,24 +355,23 @@ void LLToastNotifyPanel::updateButtonsLayout(const std::vector<index_button_pair
 		ignore_btn_width = ignore_btn_rect.getWidth();
 		mControlPanel->addChild(ignore_btn, -1);
 	}
-
-	if (mIsScriptDialog && mute_btn != NULL)
+	// Commenting all out as mute button is disabled
+	// if (mIsScriptDialog && mute_btn != NULL)
 	{
-		LLRect mute_btn_rect(mute_btn->getRect());
-		S32 buttons_per_row = max_width / BUTTON_WIDTH; //assume that h_pad far less than BUTTON_WIDTH
+	//	LLRect mute_btn_rect(mute_btn->getRect());
+	//	S32 buttons_per_row = max_width / BUTTON_WIDTH; //assume that h_pad far less than BUTTON_WIDTH
 		// Place mute (Block) button to the left of the ignore button.
-		S32 mute_btn_left = buttons_per_row * BUTTON_WIDTH + (buttons_per_row	- 1) * h_pad - mute_btn_rect.getWidth() - ignore_btn_width - (h_pad / 2);
-		if (mute_btn_left + mute_btn_rect.getWidth() > max_width) // make sure that the mute button is in panel
-		{
-			mute_btn_left = max_width - mute_btn_rect.getWidth() - 2 * HPAD;
-		}
-		mute_btn_rect.setOriginAndSize(mute_btn_left, BOTTOM_PAD,// always move mute button at the bottom
-				mute_btn_rect.getWidth(), mute_btn_rect.getHeight());
-		mute_btn->setRect(mute_btn_rect);
-		mControlPanel->addChild(mute_btn);
+	//	S32 mute_btn_left = buttons_per_row * BUTTON_WIDTH + (buttons_per_row	- 1) * h_pad - mute_btn_rect.getWidth() - ignore_btn_width - (h_pad / 2);
+	//	if (mute_btn_left + mute_btn_rect.getWidth() > max_width) // make sure that the mute button is in panel
+	//	{
+	//		mute_btn_left = max_width - mute_btn_rect.getWidth() - 2 * HPAD;
+	//	}
+	//	mute_btn_rect.setOriginAndSize(mute_btn_left, BOTTOM_PAD,// always move mute button at the bottom
+	//			mute_btn_rect.getWidth(), mute_btn_rect.getHeight());
+	//	mute_btn->setRect(mute_btn_rect);
+	//	mControlPanel->addChild(mute_btn); 
 	}
 }
-
 void LLToastNotifyPanel::adjustPanelForScriptNotice(S32 button_panel_width, S32 button_panel_height)
 {
 	//adjust layout

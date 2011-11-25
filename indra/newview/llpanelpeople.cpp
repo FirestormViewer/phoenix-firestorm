@@ -1424,7 +1424,7 @@ void LLPanelPeople::updateButtons()
 	bool nearby_tab_active	= (cur_tab == NEARBY_TAB_NAME);
 	bool friends_tab_active = (cur_tab == FRIENDS_TAB_NAME);
 	bool group_tab_active	= (cur_tab == GROUP_TAB_NAME);
-	//bool recent_tab_active	= (cur_tab == RECENT_TAB_NAME);
+	bool recent_tab_active	= (cur_tab == RECENT_TAB_NAME);
 	LLPanel* cur_panel = mTabContainer->getCurrentPanel();
 	LLUUID selected_id;
 
@@ -1475,8 +1475,21 @@ void LLPanelPeople::updateButtons()
 		{
 //			cur_panel->getChildView("add_friend_btn")->setEnabled(!is_friend);
 // [RLVa:KB] - Checked: 2010-07-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0h
-			cur_panel->getChildView("add_friend_btn")->setEnabled(
-				!is_friend && ((!nearby_tab_active) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))));
+			
+			// Ansariel: Changed after add_friend_btn buttons got renamed
+			//if (
+			//cur_panel->getChildView("add_friend_btn")->setEnabled(
+			//	!is_friend && ((!nearby_tab_active) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))));
+
+			if (nearby_tab_active)
+			{
+				cur_panel->getChildView("add_friend_btn_nearby")->setEnabled(!is_friend && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+			}
+			else if (recent_tab_active)
+			{
+				cur_panel->getChildView("add_friend_btn_recent")->setEnabled(!is_friend);
+			}
+
 // [/RLBa:KB]
 			if (friends_tab_active)
 			{

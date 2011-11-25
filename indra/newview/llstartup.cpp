@@ -1138,6 +1138,12 @@ bool idle_startup()
 
 		gViewerWindow->revealIntroPanel();
 
+		// Ansariel: Update viewer help menu; Needed if logging
+		//           in by autologin or on SL it would show
+		//           the non-functional "About [CURRENT_GRID]"
+		//           and "[CURRENT_GRID] Help" menu entries
+		update_grid_help();
+
 		// Poke the VFS, which could potentially block for a while if
 		// Windows XP is acting up
 		set_startup_status(0.07f, LLTrans::getString("LoginVerifyingCache"), LLStringUtil::null);

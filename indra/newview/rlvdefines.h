@@ -44,7 +44,9 @@
 
 // Experimental commands (not part of the RLV API spec, disabled on public releases)
 #ifdef RLV_EXPERIMENTAL_CMDS
-	#define RLV_EXTENSION_CMD_ALLOWIDLE		// Forces "Away" status when idle (effect is the same as setting AllowIdleAFK to TRUE)
+// <ND/> Disable  RLV_EXTENSION_CMD_ALLOWIDLE for now, it causes FIRE-3863
+//	#define RLV_EXTENSION_CMD_ALLOWIDLE		// Forces "Away" status when idle (effect is the same as setting AllowIdleAFK to TRUE)
+
 	#define RLV_EXTENSION_CMD_GETCOMMAND	// @getcommand:<option>=<channel>
 	#define RLV_EXTENSION_CMD_GETXXXNAMES	// @get[add|rem]attachnames:<option>=<channel> and @get[add|rem]outfitnames=<channel>
 	#define RLV_EXTENSION_CMD_INTERACT		// @interact=n

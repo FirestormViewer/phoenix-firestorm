@@ -32,6 +32,7 @@
 #include <map>
 #include <llsd.h>
 #include <llinstantmessage.h>
+#include "llsingleton.h"
 
 struct LLSDcontent
 {
@@ -44,29 +45,22 @@ struct FSDataAgent
 	bool developer;
 };
 
-class FSData
+class FSData : public LLSingleton<FSData>
 {
 	LOG_CLASS(FSData);
-	FSData();
-	~FSData();
-	static FSData* sInstance;
 public:
-	static FSData* getInstance();
-
 	void startDownload();
-	void processData(U32 status, std::string body);
-	void downloadClientTags();
-	bool checkFile(std::string filename);
-
-	static void processReleases(U32 status, std::string body);
-	static void processAgents(U32 status, std::string body);
-	static void processClientTags(U32 status, std::string body);
+	void processResponder(const LLSD& content, const std::string& url);
+	void processData(const LLSD& fsData);
+	void processReleases(const LLSD& releases);
+	void processAgents(const LLSD& agents);
+	void processClientTags(const LLSD& tags);
 	static void msdata(U32 status, std::string body);
 	static void msblacklist(U32 status, std::string body);
 
-	static void updateClientTagsLocal();
-	static LLSD resolveClientTag(LLUUID id);
-	static LLSD resolveClientTag(LLUUID id, bool new_system, LLColor4 new_system_color);
+	void updateClientTagsLocal();
+	LLSD resolveClientTag(LLUUID id);
+	LLSD resolveClientTag(LLUUID id, bool new_system, LLColor4 new_system_color);
 
 	static const U8 EM_SUPPORT		= 0x01;
 	static const U8 EM_DEVELOPER	= 0x02;
@@ -80,31 +74,29 @@ public:
 	std::map<std::string, U8> versions2;
 	std::set<LLUUID> mSupportGroup;
 
-	static BOOL is_BetaVersion(std::string version);
-	static BOOL is_ReleaseVersion(std::string version);
-	static bool is_developer(LLUUID avatar_id);
-	static bool is_support(LLUUID avatar_id);
+	BOOL is_BetaVersion(std::string version);
+	BOOL is_ReleaseVersion(std::string version);
+	bool is_developer(LLUUID avatar_id);
+	bool is_support(LLUUID avatar_id);
 	BOOL isSupportGroup(LLUUID id);
 	FSDataAgent* getAgent(LLUUID avatar_id);
 
-	static LLSD allowed_login();
+	LLSD allowed_login();
 
-	static std::string processRequestForInfo(LLUUID requester,std::string message, std::string name, LLUUID sessionid);
-	static std::string getMyInfo(int part =0);
+	std::string processRequestForInfo(LLUUID requester,std::string message, std::string name, LLUUID sessionid);
+	static std::string getSystemInfo();
 	static void callbackReqInfo(const LLSD &notification, const LLSD &response);
 	static void sendInfo(LLUUID destination, LLUUID sessionid, std::string myName, EInstantMessage dialog);
 	
 	LLSD LegacyClientList;
 	
 	std::map<std::string, LLSD> blocked_versions;
-	static LLSD blocked_login_info;
-	// std::string ms_motd;
-	static BOOL isMSDone() { return msDataDone; }
-private:
-	void processAgentsLLSD(LLSD& agents);
 
-	static BOOL msDataDone;
-	static std::string blacklist_version;
+private:
+	void processAgentsLLSD(const LLSD& agents);
+	void processReleasesLLSD(const LLSD& releases);
+	void saveLLSD(const LLSD& data, const std::string& filename);
+
 	FSDataAgent mSupportAgent;
 	std::map<LLUUID, FSDataAgent> mSupportAgentList;
 };

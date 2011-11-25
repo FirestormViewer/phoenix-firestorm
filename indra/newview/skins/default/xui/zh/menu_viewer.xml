@@ -125,7 +125,7 @@
 		<menu_item_call label="重做" name="Redo"/>
 	</menu>
 	<menu label="幫助" name="Help">
-		<menu_item_call label="[CURRENT_GRID] 幫助" name="Second Life Help"/>
+		<menu_item_call label="[CURRENT_GRID] 幫助" name="current_grid_help"/>
 		<menu_item_check label="啟用提示" name="Enable Hints"/>
 		<menu_item_call label="舉報濫用" name="Report Abuse"/>
 		<menu_item_call label="回報臭蟲" name="Report Bug"/>

@@ -50,7 +50,7 @@
 	<check_box label="Freunde hervorheben" name="show_friends" tool_tip="Avatarnamen Ihrer Freunde hervorheben" left_pad="75"/>
 	<check_box label="Anzeigenamen anzeigen" name="display_names_check" tool_tip="Aktivieren Sie diese Option, um Anzeigenamen in Chat, IM, Avatarnamen usw. zu verwenden."/>
 	<check_box label="Viewer-Kennung anzeigen" name="show_viewerID" tool_tip="Zeigen den namen des erkannten Viewers neben dem Avatarnamen (verzögerter Effekt)" left_pad="75"/>
-	<check_box label="Altes Namensformat verwenden" name="FSshow_legacyun" tool_tip="Zeigt den Avatarnamen im ursprünglichen Namensformat (Vorname Nachname) anstelle des Benutzernames (vorname.nachname)" left_pad="75" />
+	<check_box label="Altes Namensformat statt Benutzernamen" name="FSshow_legacyun" tool_tip="Zeigt den Avatarnamen im ursprünglichen Namensformat (Vorname Nachname) anstelle des Benutzernames (vorname.nachname)" left_pad="75" />
 
 	<check_box label="Viewer-UI-Tipps aktivieren" name="viewer_hints_check"/>
 	<text name="inworld_typing_rg_label">

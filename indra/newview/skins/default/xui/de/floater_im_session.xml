@@ -8,7 +8,7 @@
 			<button name="view_profile_btn" tool_tip="Zeige Einwohnerprofil"/>
 		</layout_panel>
 		<layout_panel name="trans_panel">
-			<button name="translate_btn" tool_tip="Chat übersetzen (Service von Google)"/>
+			<button name="translate_btn" tool_tip="Chat mit konfiguriertem Dienst übersetzen"/>
 		</layout_panel>
 		<layout_panel name="friend_panel">
 			<button name="add_friend_btn" tool_tip="Einwohner als Freund hinzufügen"/>

@@ -1055,12 +1055,18 @@ void LLFilePicker::chooser_responder(GtkWidget *widget, gint response, gpointer 
 		g_slist_free (file_list);
 	}
 
-	// <ND> FIRE-3827; Only do this if the user accepted the dialog with ok.
+	// <ND>
+	// FIRE-3827; Only do this if the user accepted the dialog with ok.
+	// FIRE-3851, FIRE-3671, CTS-627; gtk_file_chooser_get_current_folder can return 0
 	if( GTK_RESPONSE_ACCEPT == response )
 	{
 		// set the default path for this usage context.
-		picker->mContextToPathMap[picker->mCurContextName] =
-			gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(widget));
+		//		picker->mContextToPathMap[picker->mCurContextName] =
+		//	gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(widget));
+
+		char const *pSelDir(gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(widget)));
+		if( pSelDir )
+			picker->mContextToPathMap[picker->mCurContextName] = pSelDir;
 	}
 
 	gtk_widget_destroy(widget);

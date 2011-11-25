@@ -3156,7 +3156,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 			LLColor4 color;
 			if(mClientTagData.has("tex_color")) color.setValue(mClientTagData["tex_color"]);
 			else color = LLColor4::black;
-			mClientTagData = FSData::resolveClientTag(LLUUID(mClientTagData["uuid"].asString()), mClientTagData["id_based"].asBoolean(),color);
+			mClientTagData = FSData::getInstance()->resolveClientTag(LLUUID(mClientTagData["uuid"].asString()), mClientTagData["id_based"].asBoolean(),color);
 		}
 
 		clearNameTag();

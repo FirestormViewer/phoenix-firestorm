@@ -371,6 +371,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.HardwareSettings",		boost::bind(&LLFloaterPreference::onOpenHardwareSettings, this));
 	mCommitCallbackRegistrar.add("Pref.HardwareDefaults",		boost::bind(&LLFloaterPreference::setHardwareDefaults, this));
 	mCommitCallbackRegistrar.add("Pref.VertexShaderEnable",		boost::bind(&LLFloaterPreference::onVertexShaderEnable, this));
+	mCommitCallbackRegistrar.add("Pref.LocalLightsEnable",		boost::bind(&LLFloaterPreference::onLocalLightsEnable, this));
 	mCommitCallbackRegistrar.add("Pref.WindowedMod",			boost::bind(&LLFloaterPreference::onCommitWindowedMode, this));
 	mCommitCallbackRegistrar.add("Pref.UpdateSliderText",		boost::bind(&LLFloaterPreference::onUpdateSliderText,this, _1,_2));
 	mCommitCallbackRegistrar.add("Pref.QualityPerformance",		boost::bind(&LLFloaterPreference::onChangeQuality, this, _2));
@@ -796,6 +797,14 @@ void LLFloaterPreference::onVertexShaderEnable()
 	refreshEnabledGraphics();
 }
 
+// AO: toggle lighting detail availability in response to local light rendering, to avoid confusion
+void LLFloaterPreference::onLocalLightsEnable()
+{
+	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+        if (instance)
+		getChildView("LocalLightsDetail")->setEnabled(gSavedSettings.getBOOL("RenderLocalLights"));
+}
+
 //static
 void LLFloaterPreference::initBusyResponse()
 	{
@@ -1189,6 +1198,7 @@ void LLFloaterPreference::refreshEnabledState()
 	getChildView("fog")->setEnabled(!gPipeline.canUseWindLightShaders());
 	getChildView("fsaa")->setEnabled(gPipeline.canUseAntiAliasing());
 	getChildView("antialiasing restart")->setVisible(!gSavedSettings.getBOOL("RenderDeferred"));
+	getChildView("LocalLightsDetail")->setEnabled(gSavedSettings.getBOOL("RenderLocalLights"));
     
 	LLComboBox* ctrl_reflections = getChild<LLComboBox>("Reflections");
 	LLRadioGroup* radio_reflection_detail = getChild<LLRadioGroup>("ReflectionDetailRadio");
@@ -1986,6 +1996,12 @@ BOOL LLPanelPreference::postBuild()
 		}
 	}
 // [/SL:KB]
+
+	////////////////////// PanelAlerts ///////////////////
+	if (hasChild("OnlineOfflinetoNearbyChat", TRUE))
+	{
+		getChildView("OnlineOfflinetoNearbyChatHistory")->setEnabled(getChild<LLUICtrl>("OnlineOfflinetoNearbyChat")->getValue().asBoolean());
+	}
 
 	apply();
 	return true;

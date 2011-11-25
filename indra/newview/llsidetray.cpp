@@ -106,6 +106,18 @@ bool	LLSideTray::instanceCreated	()
 class LLSideTrayButton : public LLButton
 {
 public:
+	// <ND> FIRE-3842; handle right mouse here and swallow it, so sidebars do not get confused.
+	BOOL handleRightMouseDown(S32 x, S32 y, MASK mask)
+	{
+		return FALSE;
+	}
+
+	BOOL handleRightMouseUp(S32 x, S32 y, MASK mask)
+	{
+		return FALSE;
+	}
+	// </ND>
+
 	/*virtual*/ BOOL handleMouseDown(S32 x, S32 y, MASK mask)
 	{
 		// Route future Mouse messages here preemptively.  (Release on mouse up.)

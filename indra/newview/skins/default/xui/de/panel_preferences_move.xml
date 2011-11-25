@@ -47,7 +47,7 @@
 				<combo_box.item label="Zur Position gehen" name="1"/>
 				<combo_box.item label="Zur Position teleportieren" name="2"/>
 			</combo_box>
-			<button label="Andere Geräte" name="joystick_setup_button"/>
+			<button label="Joystick-Konfiguration" name="joystick_setup_button"/>
 		</panel>
 
 		<!-- Firestorm -->
@@ -63,7 +63,7 @@
 			</text>
 			<check_box label="Rotation der Minikarte aktivieren" name="minimaprotate" tool_tip="Aktiviert die Rotation der Minikarte bei Drehung des Avatars."/>
 			<check_box name="MiniMapChatRing" label="Chatreichweite auf der Minikarte anzeigen"/>
-			<check_box name="FSAdvancedTooltips" label="Erwiterte Informationen in den Hovertips anzeigen (klassischer Phoenix-Stil)"/>
+			<check_box name="FSAdvancedTooltips" label="Erweiterte Informationen in den Hovertips anzeigen (klassischer Phoenix-Stil)"/>
 			<check_box label="Avatar umdrehen beim Rückwärtsgehen" name="backwardsturnavatar" tool_tip="Dreht den Avatar mit dem Gesicht zur Kamera beim Rückwärtsgehen."/>
 			<check_box label="Doppelte Landmarken auf der Weltkarte filtern" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtert doppelte (identische) Landmarken in der Übersicht der Landmarken auf der Weltkarte."/>
 		</panel>

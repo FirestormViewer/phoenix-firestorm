@@ -144,7 +144,7 @@
 		<menu_item_call label="やり直し" name="Redo"/>
 	</menu>
 	<menu label="ヘルプ" name="Help">
-		<menu_item_call label="[CURRENT_GRID] ヘルプ" name="Second Life Help"/>
+		<menu_item_call label="[CURRENT_GRID] ヘルプ" name="current_grid_help"/>
 		<menu_item_check label="ヒントを有効にする" name="Enable Hints"/>
 		<menu_item_call label="嫌がらせを報告する" name="Report Abuse"/>
 		<menu_item_call label="バグを報告する" name="Report Bug"/>

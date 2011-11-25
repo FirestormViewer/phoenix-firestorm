@@ -13,7 +13,7 @@
      type="string"
      length="1"
      follows="top|left"
-     height="12"
+     height="15"
      layout="topleft"
      left="10"
      name="tell_me_label"
@@ -27,7 +27,7 @@
      height="16"
      label="When I spend or get L$"
      layout="topleft"
-     left="30"
+     left="10"
      name="notify_money_change_checkbox"
      top_pad="4"
      width="160" />
@@ -35,7 +35,7 @@
      enabled_control="NotifyMoneyChange"
      layout="topleft"
      follows="left|top"
-     left_pad="5"
+     left_pad="30"
      height="18"
      control_name="FSPaymentInfoInChat"
      name="FSPaymentInfoInChat"
@@ -46,16 +46,16 @@
      height="16"
      label="When my friends log in or out"
      layout="topleft"
-     left="30"
+     left="10"
      name="friends_online_notify_checkbox"
      top_pad="4"
      width="190" />
     <check_box
      control_name="OnlineOfflinetoNearbyChat"
      name="OnlineOfflinetoNearbyChat"
-     label="Also log to nearby chat"
+     label="Log to nearby chat and console"
      layout="topleft"
-     left_pad="5"
+     left_pad="0"
      height="18"
      width="150">
      <check_box.commit_callback
@@ -68,7 +68,7 @@
      height="18"
      label="Only in nearby chat"
      layout="topleft"
-     left_pad="5"
+     left_pad="50"
      name="OnlineOfflinetoNearbyChatHistory"
      width="150" />
 
@@ -79,7 +79,7 @@
      height="16"
      label="When I have Script Errors in:"
      layout="topleft"
-     left="30"
+     left="10"
      top_pad="4"
      name="show_script_errors"
      width="180" />
@@ -97,7 +97,7 @@
          height="16"
          label="Nearby chat"
          layout="topleft"
-         left_delta="0"
+         left_delta="5"
          name="script_0"
          top="0"
          width="100" />

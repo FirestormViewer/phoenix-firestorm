@@ -50,9 +50,9 @@
 		 width="-1" />
 		<scroll_list.column
 		 dynamicwidth="true"
-		 label="Display Name"
+		 label="Name"
 		 name="full_name"
-		 tool_tip="This contact's chosen display name." />
+		 tool_tip="This contact's chosen name." />
 		<scroll_list.column
 		 image="legacy/ff_visible_online_button.tga"
 		 name="icon_visible_online"

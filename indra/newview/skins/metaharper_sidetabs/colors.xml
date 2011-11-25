@@ -288,7 +288,7 @@
     value="0.45098 0.517647 0.607843 1"/>
     <color
      name="TextEmbeddedItemColor"
-     value="1.00 0.549 0.267 1" />
+     value="0.44 0.17 0 1" />
     <color
      name="ToolTipBgColor"
      value="Purple" />

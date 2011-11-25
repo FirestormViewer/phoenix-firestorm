@@ -608,7 +608,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              layout="topleft"
              left="3"
              multi_select="true"
-             name="recent_avatar_list"
+             name="avatar_list"
              show_last_interaction_time="true"
              top="0"
              width="307" />
