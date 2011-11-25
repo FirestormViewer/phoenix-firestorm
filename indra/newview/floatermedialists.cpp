@@ -107,7 +107,7 @@ void FloaterMediaLists::onWhitelistAdd( void* data )
 	self->getChildView("input_domain")->setVisible(true);
 	self->getChildView("commit_domain")->setVisible(true);
 	self->getChild<LLUICtrl>("add_text")->
-	setValue(std::string("Enter domain or URL to always allow:"));
+	setValue(self->getString("EnterUrlAllow"));
 	self->getChildView("add_text")->setVisible(true);
 	sIsWhitelist = true;
 }
@@ -152,7 +152,7 @@ void FloaterMediaLists::onBlacklistAdd( void* data )
 	self->getChildView("input_domain")->setVisible(true);
 	self->getChildView("commit_domain")->setVisible(true);
 	self->getChild<LLUICtrl>("add_text")->
-	setValue(std::string("Enter domain or URL to never allow:"));
+	setValue(self->getString("EnterUrlDeny"));
 	self->getChildView("add_text")->setVisible(true);
 	self->sIsWhitelist = false;
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floatermedialists" title="Medienlisten">
+	<floater.string name="EnterUrlAllow">
+		Domäne oder URL eingeben, die immer erlaubt wird:
+	</floater.string>
+	<floater.string name="EnterUrlDeny">
+		Domäne oder URL eingeben, die niemals erlaubt wird:
+	</floater.string>
+	<layout_stack name="lists_layout_stack">
+		<layout_panel name="whitelist_layout_panel">
+			<text name="whitelist_text">
+				Erlaubte Domänen:
+			</text>
+			<layout_stack name="whitelist_buttons_layout_stack">
+				<layout_panel name="whitelist_buttons_panel_add">
+					<button label="Hinzufügen..." label_selected="Hinzufügen..." name="add_whitelist"/>
+				</layout_panel>
+				<layout_panel name="whitelist_buttons_panel_remove">
+					<button label="Entfernen" label_selected="Entfernen" name="remove_whitelist"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+
+		<layout_panel name="blacklist_layout_panel">
+			<text name="blacklist_text">
+				Blockierte Domänen:
+			</text>
+			<layout_stack name="blacklist_buttons_layout_stack">
+				<layout_panel name="blacklist_buttons_panel_add">
+					<button label="Hinzufügen..." label_selected="Hinzufügen..." name="add_blacklist"/>
+				</layout_panel>
+				<layout_panel name="blacklist_buttons_panel_remove">
+					<button label="Entfernen" label_selected="Entfernen" name="remove_blacklist"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+
+<!-- This text will be replaced accordingly to ast for a URL/Domain to add to white-/blacklist -->
+	<text initial_value="URL eingeben:" name="add_text"/>
+	<button label="Hinzufügen" label_selected="Hinzufügen" name="commit_domain"/>
+</floater>
