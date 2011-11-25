@@ -159,7 +159,7 @@
     </panel.string>
   <panel
     height="18"
-    left="-250"
+    left="-375"
     width="95"
     top="1"
     follows="right|top" 
@@ -201,6 +201,55 @@
      top="0"
      width="55" />
   </panel>
+  	<!-- Draw distance widget here -->
+   <panel
+    height="17"
+    width="128"
+    top="1"
+	left_pad="12"
+    follows="right|top"
+    name="drawdistance_panel"
+    background_opaque="true"
+    background_visible="true">
+    <icon
+     follows="right|top"
+     height="16"
+     image_name="Draw_Distance"
+     name="dd_icon"
+     tool_tip="Draw Distance"
+     top="1"
+     left="0"
+     visible="true"
+     width="16"
+     scale_image="false"/>
+     <slider
+     control_name="RenderFarClip"
+     decimal_digits="0"
+     text_color="EmphasisColor" 
+     follows="right|top"
+     height="16"
+     increment="16"
+     initial_value="64"
+     layout="topleft"
+     tool_tip="Maximum distance away from camera to be rezzed (meters)"
+     top="4"
+     left_pad="2"
+     max_val="992"
+     min_val="32"
+     name="drawdistance" 
+     top_delta="0"
+     width="98" />
+  </panel>
+  <panel
+    height="18"
+    left_pad="7"
+    width="130"
+    top="0"
+    follows="right|top"
+    name="time_and_media_bg"
+    background_opaque="true"
+    background_visible="true"
+    bg_opaque_color="MouseGray">
     <text
      type="string"
      font="SansSerifSmall"
@@ -210,32 +259,12 @@
      height="16"
      top="5"
      layout="topleft"
-     left_pad="0"
+     left="0"
      name="TimeText"
      tool_tip="Current time (Pacific)"
-     width="80">
+     width="50">
         24:00 AM PST
     </text>
-<!-- Draw distance widget here -->
-     <slider
-     control_name="RenderFarClip"
-     decimal_digits="0"
-     follows="right|top"
-     height="15"
-     increment="16"
-     initial_value="64"
-     layout="topleft"
-     tool_tip="Maximum distance away from camera to be rezzed (meters)"
-     top="5"
-     label="Draw:"
-     label_length="40"
-     left_delta="-260"
-     max_val="992"
-     min_val="32"
-     name="drawdistance" 
-     top_delta="0"
-     width="130" />
-<!-- End Draw distance widget here -->
     <button
      follows="right|top"
      height="16"
@@ -244,7 +273,7 @@
      image_pressed="Pause_Press"
      image_pressed_selected="Music_Press"
      is_toggle="true"
-     left_delta="343"
+     left_delta="55"
      top="1"
      name="stream_toggle_btn"
      tool_tip="Start/Stop Parcel Audio Stream"
@@ -258,6 +287,7 @@
      image_pressed="Pause_Press"
      image_pressed_selected="Play_Press"
      is_toggle="true"
+	 left_delta="60"
      left_pad="2"
      top="1"
      name="media_toggle_btn"
@@ -271,9 +301,10 @@
      image_pressed="Audio_Press"
      image_unselected="Audio_Off"
      is_toggle="true"
-     left_pad="2"
+     left_pad="4"
      top="2"
      name="volume_btn"
      tool_tip="Global Volume Control"
      width="16" />
+  </panel>
 </panel>
