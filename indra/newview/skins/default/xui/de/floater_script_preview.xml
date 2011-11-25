@@ -3,7 +3,8 @@
 	<floater.string name="Title">
 		SKRIPT: [NAME]
 	</floater.string>
-	<text name="desc txt" width="120">
+	<text name="desc txt" width="90">
 		Beschreibung:
 	</text>
+    <line_editor left_delta="90" name="desc"/>
 </floater>
