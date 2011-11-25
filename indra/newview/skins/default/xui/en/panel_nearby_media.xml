@@ -93,7 +93,7 @@
 		font="SansSerif"
 		left="10"
 		name="nearby_media_title"
-		width="100">
+		width="200">
 	  Nearby Media
 	</text>
 	<text
