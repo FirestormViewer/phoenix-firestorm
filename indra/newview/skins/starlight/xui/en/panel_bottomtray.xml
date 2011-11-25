@@ -11,13 +11,13 @@
  left="0"
  name="bottom_tray"
  top="28"
- width="1310">
+ width="1340">
 <icon
    scale_image="true"
    follows="left|right|bottom"
    height="33"
    image_name="BottomTray_BG.png"
-   width="1310" />
+   width="1340" />
     <string
      name="DragIndicationImageName"
      value="Accordion_ArrowOpened_Off" />
@@ -38,17 +38,17 @@
      name="toolbar_stack"
      orientation="horizontal"
      top="0"
-     width="1310">
+     width="1340">
         <layout_panel
          auto_resize="false"
          layout="topleft"
-         max_width="284"
+         max_width="314"
          min_width="34"
          height="30" 
          mouse_opaque="false"
 		 name="chat_bar_layout_panel"
          user_resize="true"
-         width="284" >
+         width="314" >
           <panel
          name="chat_bar"
             filename="panel_nearby_chat_bar.xml"
@@ -60,7 +60,7 @@
             follows="left|right"
           />
 		            
-          <!-- button
+          <button
 			 name="conversations_btn"
 			 tool_tip="Shows/hides conversations window"
 			 control_name="floater_vis_imcontacts"
@@ -77,7 +77,7 @@
 			<commit_callback
 			 function="Floater.Toggle"
 			 parameter="im_container" />
-			</button -->          
+			</button>          
           <button
 			 name="show_nearby_chat"
 			 tool_tip="Shows/hides nearby chat window"
