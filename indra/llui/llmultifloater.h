@@ -70,6 +70,9 @@ public:
 
 	virtual void setFloaterFlashing(LLFloater* floaterp, BOOL flashing);
 	virtual BOOL closeAllFloaters();	//Returns FALSE if the floater could not be closed due to pending confirmation dialogs
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-25 (Catznip-3.2.0b) | Added: Catznip-3.2.0b
+	LLTabContainer* getTabContainer() const { return mTabContainer; }
+// [/SL:KB]
 	void setTabContainer(LLTabContainer* tab_container) { if (!mTabContainer) mTabContainer = tab_container; }
 	void onTabSelected();
 

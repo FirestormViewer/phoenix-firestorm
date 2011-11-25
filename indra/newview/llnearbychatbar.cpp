@@ -229,6 +229,8 @@ void LLNearbyChatBar::onTearOff(const LLSD& sdData)
 	{
 		mChatBarImpl->getChatBoxCtrl()->reshape(pChatBox->getRect().getWidth() - nExpandWidth, pChatBox->getRect().getHeight());
 		pToggleBtn->setVisible(TRUE);
+
+		getHost()->getTabContainer()->unlockTabs();
 	}
 	else						// Attaching to parent
 	{
@@ -236,6 +238,8 @@ void LLNearbyChatBar::onTearOff(const LLSD& sdData)
 
 		mChatBarImpl->getChatBoxCtrl()->reshape(pChatBox->getRect().getWidth() + nExpandWidth, pChatBox->getRect().getHeight());
 		pToggleBtn->setVisible(FALSE);
+
+		getHost()->getTabContainer()->lockTabs(1);
 	}
 
 	// Don't allow closing the nearby chat floater while it's attached
