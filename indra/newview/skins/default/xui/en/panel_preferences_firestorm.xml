@@ -71,6 +71,16 @@
          top_pad="5"
          follows="left|top"
          height="16"
+         label="Disable Teleport Beacons"
+         left="15"
+         name="tp_screen_toggle"
+         width="270"
+         control_name="FSDisableBeaconAfterTeleport"
+         tool_tip="Disables the teleport destination beacons after teleports."/>
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
          label="Disable Login Progress Screen"
          left_delta="0"
          name="login_screen_toggle"
