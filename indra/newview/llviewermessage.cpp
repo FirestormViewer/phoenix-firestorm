@@ -1283,9 +1283,9 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 
 		////////////////////////////////////////////////////////////////////////////////
 		// Highlight item
-		const BOOL auto_open = 
-			gSavedSettings.getBOOL("ShowInInventory") && // don't open if showininventory is false
-			!from_name.empty(); // don't open if it's not from anyone.
+		const BOOL auto_open = gSavedSettings.getBOOL("ShowInInventory"); // AO: don't open if showininventory is false, otherwise ignore from_name.
+			//gSavedSettings.getBOOL("ShowInInventory") && // don't open if showininventory is false
+			//!from_name.empty(); // don't open if it's not from anyone.
 		LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
 		if(active_panel)
 		{
