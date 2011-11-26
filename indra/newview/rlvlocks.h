@@ -353,7 +353,7 @@ public:
 	 */
 protected:
 	bool getLockedFolders(const folderlock_source_t& lockSource, LLInventoryModel::cat_array_t& lockFolders) const;
-	bool getLockedItems(const LLUUID& idFolder, LLInventoryModel::item_array_t& lockItems, bool fFollowLinks) const;
+	bool getLockedItems(const LLUUID& idFolder, LLInventoryModel::item_array_t& lockItems) const;
 	void onNeedsLookupRefresh();
 	void refreshLockedLookups() const;
 
