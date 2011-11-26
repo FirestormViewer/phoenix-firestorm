@@ -648,7 +648,6 @@ void LLScreenChannel::showToastsTop()
 
 	LLRect	toast_rect;	
 	S32		top = getRect().mTop; 
-	S32		bottom = (getRect().mTop - getRect().mBottom)/2 + mToastList[0].toast->getRect().getHeight()/2;
 	S32		toast_margin = 0;
 	std::vector<ToastElem>::reverse_iterator it;
 
@@ -661,7 +660,7 @@ void LLScreenChannel::showToastsTop()
 		if(it != mToastList.rbegin())
 		{
 			LLToast* toast = (*(it-1)).toast;
-			bottom = toast->getRect().mTop - toast->getTopPad();
+			top = toast->getRect().mBottom + toast->getTopPad();
 			toast_margin = gSavedSettings.getS32("ToastGap");
 		}
 
