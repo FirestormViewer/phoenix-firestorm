@@ -26,6 +26,13 @@
                 <key>folder</key>
                     <string>Blue</string>
                 </map>
+				<!-- Ansarial Hiller's high contrast theme -->
+                <map>
+                <key>name</key>
+                    <string>High Contrast</string>
+                <key>folder</key>
+                    <string>highcontrast</string>
+                </map>
             </array>
         </map>
 		
