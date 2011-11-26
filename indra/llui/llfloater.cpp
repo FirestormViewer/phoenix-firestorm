@@ -682,11 +682,13 @@ void LLFloater::openFloater(const LLSD& key)
 	{
 		// AO: setMinimized(FALSE);
         
-        // AO: Always unminimize notecards *HACK*
-        if (strcmp(getName().c_str(),"preview notecard") == 0)
-        {
-            setMinimized(FALSE); 
-        }
+		// AO: Always unminimize notecards *HACK*
+		// TS: scripts too
+		if ((strcmp(getName().c_str(),"preview notecard") == 0) ||
+			(strcmp(getName().c_str(),"preview lsl text") == 0))
+		{
+			setMinimized(FALSE); 
+		}
 		setVisibleAndFrontmost(mAutoFocus);
 	}
 
