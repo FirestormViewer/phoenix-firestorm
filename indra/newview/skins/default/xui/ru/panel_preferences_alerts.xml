@@ -1,151 +1,22 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- border="true"
- height="408"
- label="Popups"
- layout="topleft"
- left="0"
- name="popups"
- top="500"
- width="517">
-    <text
-     type="string"
-     length="1"
-     follows="top|left"
-     height="12"
-     layout="topleft"
-     left="10"
-     name="tell_me_label"
-     top="10"
-     width="300">
-        Сообщить мне:
-    </text>
-    <check_box
-     control_name="NotifyMoneyChange"
-     height="16"
-     label="Когда я трачу или получаю L$"
-     layout="topleft"
-     left_delta="50"
-     name="notify_money_change_checkbox"
-     top_pad="4"
-     width="300" />
-    <check_box
-     control_name="ChatOnlineNotification"
-     height="16"
-     label="Когда мои друзья online или offline"
-     layout="topleft"
-     left_delta="0"
-     name="friends_online_notify_checkbox"
-     top_pad="4"
-     width="300" />
-    <check_box
-     control_name="ShowScriptErrors"
-     follows="left|top"
-     height="16"
-     label="Про ошибки скриптов:"
-     layout="topleft"
-     left_delta="0"
-     top_pad="4" 
-     name="show_script_errors"
-     width="256" />
-    <radio_group
-     enabled_control="ShowScriptErrors"
-     control_name="ShowScriptErrorsLocation"
-     follows="top|left"
-     draw_border="false"
-     height="16"
-     layout="topleft"
-     left_delta="180"
-     name="show_script_errors_location"
-     width="200">
-        <radio_item
-         height="16"
-         label="В чате"
-         layout="topleft"
-         left_delta="0"
-         name="script_0"
-         top="0"
-         width="100" />
-        <radio_item
-         height="16"
-         label="В отдельном окне"
-         layout="topleft"
-         left_delta="100"
-         name="script_1"
-         top_delta="0"
-         width="100" />
-    </radio_group>
-
-    <text
-     type="string"
-     length="1"
-     follows="top|left"
-     height="12"
-     layout="topleft"
-     left="10"
-     name="show_label"
-     top_pad="10"
-     width="450">
-        Всегда показывать:
-    </text>
-    <scroll_list
-     follows="top|left|right"
-     height="140"
-     layout="topleft"
-     left="10"
-     multi_select="true"
-     name="enabled_popups"
-     sort_column="0"
-     sort_ascending="true" 
-     width="495" />
-	 <button
-	 enabled_control="FirstSelectedDisabledPopups"
-     follows="top|left"
-     height="23"
-     image_overlay="Arrow_Up"
-     hover_glow_amount="0.25"
-     layout="topleft"
-     left="200"
-     name="enable_this_popup"
-     top_pad="5"
-     width="40">
-        <button.commit_callback
-         function="Pref.ClickEnablePopup" />
-    </button>
-    <button
-	 enabled_control="FirstSelectedEnabledPopups"
-	 follows="top|left"
-     height="23"
-     image_overlay="Arrow_Down"
-     hover_glow_amount="0.25"
-     layout="topleft"
-     left_pad="20"
-     name="disable_this_popup"
-     top_delta="0"
-     width="40">
-        <button.commit_callback
-         function="Pref.ClickDisablePopup" />
-    </button>
-    <text
-     type="string"
-     length="1"
-     follows="top|left"
-     height="12"
-     layout="topleft"
-     left="10"
-     name="dont_show_label"
-     top_pad="-10"
-     width="450">
-        Никогда не показывать:
-    </text>
-    <scroll_list
-     follows="top|left|right"
-     height="140"
-     layout="topleft"
-     left="10"
-     sort_column="0"
-     sort_ascending="true"
-     multi_select="true"
-     name="disabled_popups"
-     width="495" />
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Popups" name="popups" title="Popups">
+	<text name="tell_me_label">
+		Сообщить мне:
+	</text>
+	<check_box label="Когда я трачу или получаю L$" name="notify_money_change_checkbox" width="225"/>
+	<check_box left_pad="5" name="FSPaymentInfoInChat" label="Показать L$-Сделки в локальном чате"/>
+	<check_box label="Когда мои друзья online или offline" name="friends_online_notify_checkbox" width="230"/>
+	<check_box label="Только в локальном чате" name="OnlineOfflinetoNearbyChatHistory" left_pad="5"/>
+	<check_box name="OnlineOfflinetoNearbyChat" label="В локальном и консолье" width="160"/>
+	<check_box label="Ошибки скриптов в:" name="show_script_errors"/>
+	<radio_group name="show_script_errors_location">
+		<radio_item label="Локоаль. чате"  name="script_0"/>
+		<radio_item label="В отдельном окне" name="script_1"/>
+	</radio_group>
+	<text name="show_label">
+		Всегда показывать:
+	</text>
+	<text name="dont_show_label">
+		Никогда не показывать:
+	</text>
 </panel>

@@ -1,491 +1,60 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- border="true"
- follows="left|top|right|bottom"
- height="408"
- label="Установки"
- layout="topleft"
- left="115"
- name="Input panel"
- top="1"
- width="517">
-  <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="10"
-   layout="topleft"
-   left="15"
-   name="Maximum bandwidth"
-   mouse_opaque="false"
-   top_pad="10"
-   width="250">
-    Максимальная пропускная способность:
-  </text>
-  <slider
-   can_edit_text="true"
-   control_name="ThrottleBandwidthKBPS"
-   decimal_digits="0"
-   follows="left|top"
-   height="15"
-   increment="100"
-   initial_value="500"
-   layout="topleft"
-   left_delta="250"
-   max_val="10000"
-   min_val="100"
-   name="max_bandwidth"
-   top_delta="-2"
-   width="179" />
-  <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="10"
-   layout="topleft"
-   left_pad="6"
-   mouse_opaque="false"
-   name="text_box2"
-   top_delta="1"
-   width="200">
-    kbps
-  </text>
-  <check_box
-   control_name="ConnectionPortEnabled"
- height="16"
-   label="Пользовательский порт"
-   layout="topleft"
-   left="20"
-   name="connection_port_enabled"
-   top_pad="10"
-   width="256">
-    <!-- check_box.commit_callback
-     function="Notification.Show"
- parameter="ChangeConnectionPort" / -->
-  </check_box>
-  <spinner
-   control_name="ConnectionPort"
-   enabled_control="ConnectionPortEnabled"
- decimal_digits="0"
-   follows="left|top"
-   height="23"
-   increment="1"
-   initial_value="13000"
-   label="Номер порта:"
-   label_width="110"
-   layout="topleft"
-   left_delta="250"
-   max_val="13050"
-   min_val="13000"
-   top_delta="0"
-   name="connection_port"
-   width="174" />
-  <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="10"
-   layout="topleft"
-   left="15"
-   mouse_opaque="false"
-   name="cache_size_label_l"
-   top_pad="15"
-   width="200">
-    Объем кэш-памяти:
-  </text>
-  <slider
-   can_edit_text="true"
-   control_name="CacheSize"
-   decimal_digits="0"
-   follows="left|top"
-   height="15"
-   increment="16"
-   initial_value="512"
-   layout="topleft"
-   left_delta="250"
-   max_val="10240"
-   min_val="32"
-   name="cache_size"
-   top_delta="-2"
-   width="172" />
-  <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="10"
-   layout="topleft"
-   left_pad="6"
-   mouse_opaque="false"
-   name="text_box5"
-   width="40">
-    MB
-  </text>
-   <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="10"
-   layout="topleft"
-   left="15"
-   name="Cache location"
-   top_delta="20"
-   width="300">
-    Местоположение кэш файлов:
-  </text>
-  <line_editor
-   control_name="CacheLocationTopFolder"
-   border_style="line"
-   border_thickness="1"
-   follows="left|top"
-   font="SansSerif"
-   height="23"
-   layout="topleft"
-   left="20"
-   max_length="4096"
-   name="cache_location"
-   top_pad="5"
-   width="230" />
-  <button
-  enabled="true"
-   follows="left|top"
-   height="23"
-   label="Открыть"
-   label_selected="Открыть"
-   layout="topleft"
-   left_pad="3"
-   name="open_cache"
-   top_delta="-1"
-   width="60">
-    <button.commit_callback
-     function="Pref.BrowseCache" />
-  </button>
-  <button
-   follows="left|top"
-   height="23"
-   label="Задать"
-   label_selected="Задать"
-   layout="topleft"
-   left_pad="3"
-   name="set_cache"
-   top_delta="-0"
-   width="60">
-    <button.commit_callback
-     function="Pref.SetCache" />
-  </button>
-  <button
-    follows="left|top"
-    height="23"
-    label="Сброс"
-    label_selected="Сброс"
-    layout="topleft"
-    left_pad="3"
-    name="reset_cache"
-    top_delta="0"
-    width="50">
-    <button.commit_callback
-     function="Pref.ResetCache" />
-  </button>
-  <button
-    follows="left|top"
-    height="23"
-    label="Очистить кэш"
-    label_selected="Очистить кэш"
-    layout="topleft"
-    left_pad="3"
-    name="clear_cache"
-    top_delta="0"
-    width="90">
-    <button.commit_callback
-     function="Pref.ClearCache" />
-  </button>
-  <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="10"
-   layout="topleft"
-   left="15"
-   name="log_path_desc"
-   top_delta="35"
-   width="300">
-    Местоположение файлов историй чата и ЛС:
-  </text>
-  <line_editor
-   control_name="InstantMessageLogPath"
-   border_style="line"
-   border_thickness="1"
-   follows="left|top"
-   font="SansSerif"
-   height="23"
-   layout="topleft"
-   left="20"
-   max_length="4096"
-   name="log_path_string-panelsetup"
-   top_pad="5"
-   width="230"/>
-  <button
-  enabled="false"
-   follows="left|top"
-   height="23"
-   label="Открыть"
-   label_selected="Открыть"
-   layout="topleft"
-   left_pad="3"
-   name="open_log_path_button-panelsetup"
-   top_delta="-1"
-   width="60">
-    <button.commit_callback
-     function="Pref.BrowseLogPath" />
-  </button>
-  <button
-  enabled="false"
-   follows="left|top"
-   height="23"
-   label="Задать"
-   label_selected="Задать"
-   layout="topleft"
-   left_pad="3"
-   name="log_path_button-panelsetup"
-   top_delta="0"
-   width="60">
-    <button.commit_callback
-     function="Pref.LogPath" />
-  </button>
-  <button
-  enabled="false"
-    follows="left|top"
-    height="23"
-    label="Сброс"
-    label_selected="Сброс"
-    layout="topleft"
-    left_pad="3"
-    name="reset_logpath"
-    top_delta="0"
-    width="50">
-    <button.commit_callback
-     function="Pref.ResetLogPath" />
-  </button>
-  <button
-  enabled="true"
-    follows="left|top"
-    height="23"
-    label="Открыть журнал ошибок"
-    label_selected="Открыть журнал ошибок"
-    layout="topleft"
-    left="20"
-    name="browse_crashlogs"
-    top_delta="30"
-    width="150">
-    <button.commit_callback
-     function="Pref.BrowseCrashLogs" />
-  </button>
-  <button
-  enabled="true"
-    follows="left|top"
-    height="23"
-    label="Открыть папку настроек"
-    label_selected="Открыть папку настроек"
-    layout="topleft"
-    left_pad="10"
-    name="browse_settingsdir"
-    top_delta="0"
-    width="150">
-    <button.commit_callback
-     function="Pref.BrowseSettingsDir" />
-  </button>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Установки" name="Input panel">
+	<text name="Сеть:">
+		Сеть:
+	</text>
+	<text name="Maximum bandwidth">
+		Max. пропуск.способность:
+	</text>
+	<text name="text_box2">
+		kbit/s
+	</text>
+	<check_box label="Свой порт" name="connection_port_enabled"/>
+	<spinner label="Номер порта:" name="connection_port"/>
+    <text name="cache_size_label_l">
+       Объем кэш-памяти:
+    </text>
+    <text name="text_box5">
+        MB
+    </text>
+    <text name="Cache location">
+         Местоположение кэш файлов:
+    </text>
+    <button label="Открыть" label_selected="Открыть" name="open_cache"/>
+    <button label="Установить" label_selected="Установить" name="set_cache" width="45"/>
+    <button label="Сброс" label_selected="Сброс" name="reset_cache" width="85"/>
+    <button label="Очистить кэш" label_selected="Очистить кэш" name="clear_cache" width="55" left_pad="5"/>
+    <text name="log_path_desc">
+        История чата:
+    </text>
+    <button label="Открыть" label_selected="Открыть" name="open_log_path_button-panelsetup"/>
+    <button label="Установить" label_selected="Установить" name="log_path_button-panelsetup" width="45"/>
+    <button label="Сброс" label_selected="Сброс" name="reset_logpath" width="85"/>
+    <button label="Открыть историю чата" label_selected="Открыть историю чата" name="browse_crashlogs" width="140"/>
+    <button label="Открыть настройки истории чата" label_selected="Открыть настройки истории чата" name="browse_settingsdir" width="190"/>
 
-  <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="10"
-         layout="topleft"
-         left="15"
-         name="Web:"
-         top_pad="10"
-         width="300">
-    Веб браузер:
-   </text>
-  <radio_group
-   control_name="UseExternalBrowser"
-   draw_border="false"
-   follows="top|left"
-   height="20"
-   layout="topleft"
-   left_delta="10"
-   name="use_external_browser"
-   top_pad="4"
-   width="400">
-    <radio_item
-      height="20"
-      label="Встроенный браузер"
-      layout="topleft"
-      left_delta="0"
-      name="internal"
-      value=""
-      tool_tip="Использовать встроенный браузер для просмотра вэб страниц, помощи и т.д.. Этот браузер откроется как новое окно внутри [APP_NAME]."
-      top="0"
-      width="150" />
-    <radio_item
-      height="20"
-      label="Сторонний браузер (Firefox, Safari)"
-      layout="topleft"
-      left_pad="0"
-      name="external"
-      value="1"
-      top_delta="0"
-      tool_tip="Использовать браузер вашей ОС для просмотра вэб страниц, помощи и т.д.. Не рекомендуется при полноэкранном режиме."
-      width="200" />
-  </radio_group>
-
-  <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left="25"
-     name="numberwebfloaters_label"
-     mouse_opaque="false"
-     top_pad="5"
-     width="300">
-    Максимальное количество окон:
-  </text>
-  <combo_box
-     control_name="WebContentWindowLimit"
-     follows="left|top"
-     height="23"
-     layout="topleft"
-     left_delta="0"
-     top_pad="5"
-     tool_tip="Максимальное количество окон, которое можно открыть используя встроенный браузер"
-     name="web_number_combobox"
-     width="200">
-        <combo_box.item
-         label="Неограниченное количество"
-         name="web_unlimited"
-         value="0" />
-        <combo_box.item
-         label="1 окно"
-         name="web_1"
-         value="1" />
-        <combo_box.item
-         label="5 окон"
-         name="web_5"
-         value="5" />
-        <combo_box.item
-         label="10 окон"
-         name="web_10"
-         value="10" />
-  </combo_box>
-
-  <check_box
-    enabled="true"
-    follows="left|top"
-    height="16"
-    initial_value="true"
-    control_name="BrowserPluginsEnabled"
-    label="Включить плагины"
-    left_delta="0"
-    mouse_opaque="true"
-    name="browser_plugins_enabled"
-    radio_style="false"
-    width="200"
-    top_pad="2"/>
-
-  <check_box
-   enabled="true"
-   follows="left|top"
-   height="16"
-   initial_value="true"
-   control_name="CookiesEnabled"
-   label="Принимать Cookies"
-   left_delta="0"
-   mouse_opaque="true" 
-   name="cookies_enabled"
-   radio_style="false"
-   width="200"
-   top_pad="2"/>
-  
-  <check_box
-    enabled="true"
-    follows="left|top"
-    height="16"
-    initial_value="true"
-    control_name="BrowserJavascriptEnabled"
-    label="Включить Javascript"
-    left_delta="0"
-    mouse_opaque="true"
-    name="browser_javascript_enabled"
-    radio_style="false"
-    width="200"
-    top_pad="2"/>
-  <check_box
-    enabled="true"
-    follows="left|top"
-    height="16"
-    initial_value="false"
-    control_name="MediaEnablePopups"
-    label="Включить media browser pop-ups"
-    left_delta="0"
-    mouse_opaque="true"
-    top_pad="2"
-    name="media_popup_enabled"
-    width="200"/>
-
-  <check_box
-    enabled="true"
-    follows="left|top"
-    height="16"
-    initial_value="false"
-    control_name="BrowserProxyEnabled"
-    label="Включить прокси (Proxy)"
-    left_delta="0"
-    mouse_opaque="true"
-    name="web_proxy_enabled"
-    radio_style="false"
-    width="400"
-    top_pad="2"/>
-  <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="16"
-   layout="topleft"
-   left_delta="20"
-   name="Proxy location"
-   top_pad="2"
-   width="300">
-    Местоположение прокси (Proxy):
-  </text>
-  <line_editor
-   control_name="BrowserProxyAddress"
-   enabled_control="BrowserProxyEnabled"
- follows="left|top"
-   font="SansSerif"
-   height="23"
-   layout="topleft"
-   left_delta="0"
-   name="web_proxy_editor"
-   tool_tip="Имя или IP адрес прокси, который вы желаете использовать"
-   top_pad="1"
-   width="200" />
-  <spinner
-   control_name="BrowserProxyPort"
-   enabled_control="BrowserProxyEnabled"
- decimal_digits="0"
-   follows="left|top"
-   height="23"
-   increment="1"
-   initial_value="80"
-   label="Номер порта:"
-   label_width="110"
-   layout="topleft"
-   left_delta="230"
-   max_val="12000"
-   min_val="10"
-   name="web_proxy_port"
-   top_delta="0"
-   width="174" />
-
+	<text name="Web:">
+		Веб браузер:
+	</text>
+	<radio_group name="use_external_browser">
+		<radio_item label="Сторонний браузер (Firefox, Safari)" name="external" tool_tip="Использовать браузер вашей ОС для просмотра вэб страниц, помощи и т.д.. Не рекомендуется при полноэкранном режиме. ОПЕРА РУЛИТ" value="1"/>
+		<radio_item label="Встроенный браузер" name="internal" tool_tip="Использовать встроенный браузер для просмотра вэб страниц, помощи и т.д.. Этот браузер откроется как новое окно внутри [APP_NAME]." value=""/>
+	</radio_group>
+    <text name="numberwebfloaters_label">
+        Максимальное количество окон:
+    </text>
+    <combo_box tool_tip="Maximale Anzahl an Webbrowser-Fenstern, die gleichzeitig geöffnet werden können." name="web_number_combobox">
+        <combo_box.item label="Неограниченное количество" name="web_unlimited"/>
+        <combo_box.item label="1 окно" name="web_1"/>
+        <combo_box.item label="5 окон" name="web_5"/>
+        <combo_box.item label="10 окон" name="web_10"/>
+    </combo_box>
+	<check_box initial_value="true" label="Включить плагины" name="browser_plugins_enabled"/>
+	<check_box initial_value="true" label="Принимать Cookies" name="cookies_enabled"/>
+	<check_box initial_value="true" label="Включить Javascript" name="browser_javascript_enabled"/>
+	<check_box initial_value="false" label="Включить media browser pop-ups" name="media_popup_enabled"/>
+	<text name="Proxy Settings:">
+		Включить прокси (Proxy):
+	</text>
+	<button label="Изменить настройки прокси" label_selected="Открыть" name="set_proxy" width="180"/>
 </panel>

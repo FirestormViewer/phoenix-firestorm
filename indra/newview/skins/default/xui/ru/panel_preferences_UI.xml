@@ -1,576 +1,128 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- border="true"
- follows="left|top|right|bottom"
- height="448"
- label="Графика"
- layout="topleft"
- left="102"
- name="Display panel"
- top="1"
- width="517">
+<panel label="UI-Настройки" name="Display panel">
+<tab_container label="Настройки Файершторм" name="tabs">
 
-    <panel
-     border="false"
-	 follows="top|left"
-     height="432"
-     label="Интерфейс пользователя (UI)"
-     layout="topleft"
-     left="5"
-     name="UI Prefs Panel"
-     top="16"
-     width="485">
-		<text
-		type="string"
-            left="5"
-            top_pad="5"
-		length="1"
-		follows="left|top"
-		height="12"
-		layout="topleft"
-		name="HoverTipText"
-		width="100">
+	<!--General-->
+	<panel label="Основное" name="UI Prefs Panel">
+		<text name="UI Size:" width="220">
+			Интерфейс пользователя (UI):
+		</text>
+		<text name="HoverTipText">
 			Всплывающие подсказки:
 		</text>
+		<check_box label="Стандартные подсказки " name="ShowHoverTips" tool_tip="Установка данного параметра отображает подсказки при наведении на аватаров и другие объекты. Необходимо устанавливать первым"/>
+		<check_box label="На всех объектах" tool_tip="Установите, для отображения всплывающих подсказок на всех объектах." name="ShowAllHoverTips"/>
+		<check_box label="На земле" tool_tip="Установите, для отображения подсказок на земле." name="ShowLandHoverTips"/>
+		<text name="tooltip_textbox">
+			Задержка подсказки:
+		</text>
+		<combo_box name="Tooltipdelay">
+			<combo_box.item label="0,7 секунд" name="tt_item1"/>
+			<combo_box.item label="1,5 секунды" name="tt_item2"/>
+			<combo_box.item label="3 секунды" name="tt_item3"/>
+			<combo_box.item label="6 секунд" name="tt_item4"/>
+		</combo_box>
 
-          <check_box
-          control_name="ShowHoverTips"
-          height="16"
-          initial_value="true"
-          label="Стандартные подсказки (Установите первым)"
-          layout="topleft"
-          left_delta="10"
-          name="ShowHoverTips"
-          tool_tip="Установка данного параметра отображает подсказки при наведении на аватаров и другие объекты. Необходимо устанавливать первым"
-          top_pad="12"
-          width="256" />
-          <check_box
-          control_name="ShowAllObjectHoverTip"
-          height="16"
-          initial_value="true"
-          label="На всех объектах"
-          tool_tip="Установите, для отображения всплывающих подсказок на всех объектах"
-          layout="topleft"
-          left_delta="0"
-          name="ShowAllHoverTips"
-          top_pad="7"
-          width="256" />
-          <check_box
-          control_name="ShowLandHoverTip"
-          height="16"
-          initial_value="true"
-          label="На земле"
-          tool_tip="Установите, для отображения подсказок на земле"
-          layout="topleft"
-          left_delta="0"
-          name="ShowLandHoverTips"
-          top_pad="7"
-          width="256" />
-          
-          <text
-    type="string"
-    length="1"
-    follows="left|top"
-    height="16"
-    layout="topleft"
-    left="5"
-    name="tooltip_textbox"
-    top_pad="10"
-    width="400">
-       Задержка подсказки:
-   </text>
-  <combo_box
-            height="23"
-            layout="topleft"
-    follows="left|top"
-            control_name="ToolTipDelay"
-            left="17"
-            top_pad="5"
-            name="Tooltipdelay"
-            width="160">
-    <combo_box.item
-     label="0.7 секунд"
-     name="tt_item1"
-     value="0.7" />
-    <combo_box.item
-     label="1.5 секунды"
-     name="tt_item2"
-     value="1.5" />
-    <combo_box.item
-     label="3 секунды"
-     name="tt_item3"
-     value="3.0" />
-    <combo_box.item
-     label="6 секунд"
-     name="tt_item4"
-     value="6.0" />
-  </combo_box>
-
-
-		<text
-		type="string"
-            left="5"
-            top_pad="10"
-		length="1"
-		follows="left|top"
-		height="12"
-		layout="topleft"
-		name="HoverTipText"
-		width="140">
+		<text name="HoverTipText">
 			Размещение диалогов скриптов:
 		</text>
+		<check_box label="Справа наверху" name="ShowScriptDialogsTopRight" tool_tip=""/>
+		<check_box label="Нотисы сверху справа" name="ShowGroupNoticesTopRight" tool_tip=""/>
+		<text name="GroupTopRightRequiresRestart">
+			(рестарт)
+		</text>
+		<text name="UsePieMenuLabel">
+			Использовать круглое меню
+		</text>
+		<check_box label="Использовать PIE меню" name="UsePieMenu" tool_tip="Использование классического круглого меню при нажатии правой кнопкой на пользователей, на землю или на объекты"/>
 
-          <check_box
-          control_name="ShowScriptDialogsTopRight"
-          height="16"
-          initial_value="true"
-          label="Справа наверху"
-          layout="topleft"
-          left_delta="10"
-          name="ShowHoverTips"
-          
-          top_pad="12"
-          width="256" />
-
-          <check_box
-          control_name="UsePieMenu"
-          height="16"
-          initial_value="true"
-          label="Использовать PIE меню"
-          layout="topleft"
-          left_delta="0"
-          name="ShowHoverTips"
-          tool_tip="Использование классического круглого меню при нажатии правой кнопкой на пользователей, на землю или на объекты"
-          top_pad="7"
-          width="256" />
-
-		<text
-		type="string"
-            left="5"
-            top_pad="60"
-		length="1"
-		follows="left|top"
-		height="12"
-		layout="topleft"
-		name="ButtonFlashing"
-		width="128">
+		<text name="ButtonFlashing">
 			Мигающие кнопки:
-		</text>    
-		<slider
-		control_name="ButtonFlashCount"
-		decimal_digits="0"
-		follows="left|top"
-		height="16"
-		increment="1"
-		label="Количество миганий ЛС:"
-            
-		label_width="300"
-		layout="topleft"
-            left="15"
-            min_val="0"
-		max_val="16"
-		name="ButtonsFlashCount"
-		top_pad="12"
-		width="471" />
-		<slider
-		control_name="ButtonFlashRate"
-		decimal_digits="0"
-		follows="left|top"
-		height="16"
-		increment="0.25"
-		label="Скорость мигания кнопки:"
-            tool_tip="Скорость мигания кнопки ( Hz) - используется для ЛС"
-		label_width="300"
-		layout="topleft"
-            left="15"
-            min_val="0"
-		max_val="4"
-		name="ButtonFlashRate"
-		top_pad="5"
-		width="467" />
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="16"
-		layout="topleft"
-		left="475"
-		name="ButtonFlashRateText"
-		top_delta="0"
-		width="50">
+		</text>
+		<slider label="Количество миганий ЛС:" tool_tip="" name="ButtonsFlashCount"/>
+		<slider label="Скорость мигания кнопки:" tool_tip="Скорость мигания кнопки ( Hz) - используется для ЛС" name="ButtonFlashRate"/>
+		<text name="ButtonFlashRateText">
 			Hz
-		</text> 
-
-		<text
-		type="string"
-            left="5"
-            top_pad="12"
-		length="1"
-		follows="left|top"
-		height="12"
-		layout="topleft"
-		name="HeadMovement"
-		width="408">
-			Amount that Avatar's head Follows Mouse (set to '0' for no movement):
-		</text>    
-		<slider
-		control_name="PitchFromMousePosition"
-		decimal_digits="0"
-		follows="left|top"
-		height="16"
-		increment="15"
-		label="Vertical range that avatar's head follows mouse :"
-            tool_tip="Vertical range that avatar's head follows mouse (pitch) in degrees"
-		label_width="300"
-		layout="topleft"
-            left="15"
-            min_val="0"
-		max_val="120"
-		name="PitchFromMousePositionSlider"
-		top_pad="12"
-		width="471" />
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="16"
-		layout="topleft"
-		left="485"
-		name="PitchFromMousePositionText"
-		top_delta="0"
-		width="50">
-			degrees
 		</text>
-		<slider
-		control_name="YawFromMousePosition"
-		decimal_digits="0"
-		follows="left|top"
-		height="16"
-		increment="5"
-		label="Horizontal range that avatar's head follows mouse :"
-            tool_tip="Horizontal range that avatar's head follows mouse (yaw) in degrees"
-		label_width="300"
-		layout="topleft"
-            left="15"
-            min_val="0"
-		max_val="120"
-		name="YawFromMousePositionSlider"
-		top_pad="5"
-		width="471" />
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="16"
-		layout="topleft"
-		left="485"
-		name="YawFromMousePositionText"
-		top_delta="0"
-		width="50">
-			degrees
+		<check_box name="ShowNetStats" label="Показать лаги" tool_tip=""/>
+		<text name="ToastSettings">
+			Настройки отображения уведомлений: (Popups, Консоль, Тосты):
 		</text>
-
-		<text
-		type="string"
-            left="200"
-            top="5"
-		length="1"
-		follows="left|top"
-		height="12"
-		layout="topleft"
-		name="ToastSettings"
-		width="330">
-			Настройки отображения уведомлений:
+		<text name="ToastSpaceTextLabel">
+			Раст. среди
 		</text>
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="10"
-		layout="topleft"
-		left="210"
-		name="ToastSpaceText"
-		top_pad="7"
-		width="145">
-			Space between lowest
+		<slider label="тосты и нижний UI:" tool_tip="" name="ToastSpace"/>
+		<text name="ToastSpaceText">
+			пиксельем
 		</text>
-		<slider
-		control_name="ChannelBottomPanelMargin"
-		decimal_digits="0"
-		follows="left|top"
-		height="10"
-		increment="1"
-		label="Toast and bottom:"
-            tool_tip="Space in pixels between the bottom of the UI and the bottom toast"
-		label_width="155"
-		layout="topleft"
-		left="210"
-            min_val="0"
-		max_val="250"
-		name="ToastSpace"
-		top_pad="1"
-		width="273" />
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="10"
-		layout="topleft"
-		left_delta="269"
-		name="ToastSpaceText"
-		top_delta="0"
-		width="50">
-			точек
-		</text>    
-		<slider
-		control_name="NotificationToastLifeTime"
-		decimal_digits="0"
-		follows="left|top"
-		height="16"
-		increment="1"
-		initial_value="5"
-		label="Продолжительность уведомления:"
-            tool_tip="Number of seconds that a notification toast is displayed before fading"
-		label_width="155"
-		layout="topleft"
-		left="210"
-		max_val="300"
-		name="ToastLifetime"
-		top_pad="7"
-		width="266" />
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="16"
-		layout="topleft"
-		left_delta="269"
-		name="ToastLifetimeText"
-		top_delta="0"
-		width="50">
-			секунд
+		<slider label="AПродолжительность уведомления:" tool_tip="" name="ToastLifetime"/>
+		<text name="ToastLifetimeText">
+			сек.
 		</text>
-		<slider
-		control_name="NotificationTipToastLifeTime"
-		decimal_digits="0"
-		follows="left|top"
-		height="16"
-		increment="1"
-		initial_value="5"
-		label="Длительность подсказки:"
-            tool_tip="Number of seconds that a tip toast is displayed before fading"
-		label_width="155"
-		layout="topleft"
-		left="210"
-		max_val="30"
-		name="TipToastLifetime"
-		top_pad="7"
-		width="266" />
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="16"
-		layout="topleft"
-		left_delta="269"
-		name="TipToastLifetimeText"
-		top_delta="0"
-		width="50">
-			секунд
+		<slider label="Длительность подсказки::" tool_tip="" name="TipToastLifetime"/>
+		<text name="TipToastLifetimeText">
+			сек.
 		</text>
-		<slider
-		control_name="NearbyToastLifeTime"
-		decimal_digits="0"
-		follows="left|top"
-		height="16"
-		increment="1"
-		initial_value="5"
-		label="Сообщение чата:"
-            tool_tip="Number of seconds that a nearby chat popup is displayed before fading"
-		label_width="155"
-		layout="topleft"
-		left="210"
-		max_val="30"
-		name="NearbyToastLifetime"
-		top_pad="7"
-		width="266" />
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="16"
-		layout="topleft"
-		left_delta="269"
-		name="NearbyToastLifetimeText"
-		top_delta="0"
-		width="50">
-			секунд
+		<slider label="Сообщение чата:" tool_tip="" name="NearbyToastLifetime"/>
+		<text name="NearbyToastLifetimeText">
+			сек.
 		</text>
-		<slider
-		control_name="StartupToastLifeTime"
-		decimal_digits="0"
-		follows="left|top"
-		height="16"
-		increment="1"
-		initial_value="5"
-		label="Startup Toast life:"
-            tool_tip="Number of seconds that a toast is shown on startup before fading"
-		label_width="155"
-		layout="topleft"
-		left="210"
-		max_val="30"
-		name="StartupToastLifetime"
-		top_pad="7"
-		width="266" />
-	      <text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="16"
-		layout="topleft"
-		left_delta="269"
-		name="StartupToastLifetimeText"
-		top_delta="0"
-		width="50">
-			секунд
+		<slider label="Стартовый тост:" tool_tip="" name="StartupToastLifetime"/>
+		<text name="StartupToastLifetimeText">
+			Sek.
 		</text>
-		<slider
-		control_name="NearbyToastFadingTime"
-		decimal_digits="0"
-		follows="left|top"
-		height="16"
-		increment="1"
-		label="Затухание главного чата:"
-            tool_tip="Number of seconds that a nearby chat popup takes to fade completely"
-		label_width="155"
-		layout="topleft"
-		left="210"
-		max_val="10"
-		name="NearbyToastFadingTime"
-		top_pad="7"
-		width="266" />
-	      <text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="16"
-		layout="topleft"
-		left_delta="269"
-		name="NearbyToastFadingTimeText"
-		top_delta="0"
-		width="50">
-			секунд
+		<slider label="Время глушения тоста чата:" tool_tip="" name="NearbyToastFadingTime"/>
+		<text name="NearbyToastFadingTimeText">
+			Sek.
 		</text>
-		<slider
-		control_name="ToastFadingTime"
-		decimal_digits="0"
-		follows="left|top"
-		height="16"
-		increment="1"
-		label="Normal Toast fade time:"
-            tool_tip="Number of seconds that a normal toast is displayed before fading"
-		label_width="155"
-		layout="topleft"
-		left="210"
-		max_val="10"
-		name="ToastFadingTime"
-		top_pad="7"
-		width="266" />
-	      <text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="16"
-		layout="topleft"
-		left_delta="269"
-		name="ToastFadingTimeText"
-		top_delta="0"
-		width="50">
-			секунд
+		<slider label="Глушение норм. тоста:" tool_tip="" name="ToastFadingTime"/>
+		<text name="ToastFadingTimeText">
+			Sek.
 		</text>
-		<slider
-		control_name="ToastGap"
-		decimal_digits="0"
-		follows="left|top"
-		height="16"
-		increment="1"
-		initial_value="5"
-		label="Gap between Toasts:"
-            tool_tip="Gap between adjacent toasts in pixels"
-		label_width="155"
-		layout="topleft"
-		left="210"
-		max_val="30"
-		name="ToastGap"
-		top_pad="7"
-		width="266" />
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="16"
-		layout="topleft"
-		left_delta="269"
-		name="ToastGapText"
-		top_delta="0"
-		width="50">
-			точек
+		<slider label="Раст. среди тостов:" tool_tip="" name="ToastGap"/>
+		<text name="ToastGapText">
+			Pixel
 		</text>
-		<slider
-		control_name="OverflowToastHeight"
-		decimal_digits="0"
-		follows="left|top"
-		height="16"
-		increment="1"
-		label="Height of Overflow Toast:"
-            tool_tip="Height of an overflow toast in pixels"
-		label_width="155"
-		layout="topleft"
-		left="210"
-		max_val="250"
-		name="OverflowToastHeight"
-		top_pad="7"
-		width="272" />
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="16"
-		layout="topleft"
-		left_delta="269"
-		name="OverflowToastHeightText"
-		top_delta="0"
-		width="50">
-			точек
+		<slider label="Высота от пред. тоста:" tool_tip="" name="OverflowToastHeight"/>
+		<text name="OverflowToastHeightText">
+			Pixel
 		</text>
-		<slider
-		control_name="NearbyToastWidth"
-		decimal_digits="0"
-		follows="left|top"
-		height="16"
-		increment="1"
-		label="Ширина сообщения чата:"
-                tool_tip="Width of a the nearby chat popups in percent of screen width"
-		label_width="155"
-		layout="topleft"
-		left="210"
-		min_val="1"
-		max_val="90"
-		name="OverflowToastHeight"
-		top_pad="7"
-		width="272" />
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="16"
-		layout="topleft"
-		left_delta="269"
-		name="OverflowToastHeightText"
-		top_delta="0"
-		width="50">
+		<slider label="Ширина тостов чата:" tool_tip="" name="NearbyToastWidth"/>
+		<text name="NearbyToastWidthText">
 			%
 		</text>
 	</panel>
+
+	<!--Font-->
+	<panel label="Шрифты" name="UI-font-tab">
+		<text name="tooltip_textbox1">
+			Схема шрифтов:
+		</text>
+		<text name="tooltip_textbox2">
+			(рестарт)
+		</text>
+		<text name="tooltip_textbox5">
+			Изменение размера:
+		</text>
+		<text name="tooltip_textbox6">
+			точка (рестарт)
+Стандарт 0. Более может не работать.
+		</text>
+		<text name="tooltip_textbox3">
+			Раст. среди строками в чате:
+		</text>
+		<text name="tooltip_textbox4">
+			Пиксель (рестарт)
+V2/3-Standard 0. V1-Standard 2.
+		</text>
+		<text name="Label_FolderItemViewHeight">
+			Высота записи папки:
+		</text>
+		<text name="Label_FolderItemViewHeight_Scale">
+			Пиксель (рестарт)
+V2/3-Standard 20. V1-Standard 18.
+		</text>
+	</panel>
+</tab_container>
 </panel>
 

@@ -1,196 +1,61 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- border="true"
- follows="left|top|right|bottom"
- height="408"
- label="Общение"
- layout="topleft"
- left="102"
- name="im"
- top="1"
- width="517">
-    <panel.string
-     name="log_in_to_change">
-        Войдите, чтобы измененить
-    </panel.string>
-    <button
-     follows="left|bottom"
-     height="23"
-     label="Очистить историю"
-     tool_tip="Удалить картинки, последнюю локацию, историю телепортаций, сайты и кэш текстур"
-     layout="topleft"
-     left="30"
-     name="clear_cache"
-     top="1"
-     width="145">
-        <button.commit_callback
-         function="Pref.WebClearCache" />
-    </button>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left_pad="10"
-     mouse_opaque="false"
-     name="cache_size_label"
-     top_delta="35"
-     text_color="LtGray_50"
-     width="300">
-       (Размещение, изображения, веб, историю поиска)
-    </text>
-    
-    
-    <check_box
-	 height="16"
-     enabled="true"
-     label="Показывать меня в результатах поиска"
-     layout="topleft"
-     left="30"
-     name="online_searchresults"
-     top_pad="20"
-     width="350" />
-    <check_box
-	 height="16"
-	 enabled="false"
-     label="Только друзья и группы видят, когда я online"
-     layout="topleft"
-     left="30"
-     name="online_visibility"
-     top_pad="4"
-     width="350" />
-     
-    <check_box
-     enabled_control="EnableVoiceChat"
-     control_name="VoiceCallsFriendsOnly"
-     height="16"
-     label="Только друзья и группы могут мне звонить или писать"
-     layout="topleft"
-     left="30"
-     name="voice_call_friends_only_check"
-     top_pad="4"
-     width="350" />
-     
-    <check_box
-     enabled_control="EnableVoiceChat"
-     control_name="AutoDisengageMic"
-     height="16"
-     label="Отключить микрофон при завершении звонков"
-     layout="topleft"
-     left="30"
-     name="auto_disengage_mic_check"
-     top_pad="4"
-     width="350" />
-     
-    <check_box
-     control_name="PrivateLookAtTarget"
-     height="16"
-     label="Не показывать мою позицию камеры"
-     layout="topleft"
-     left="30"
-     name="privatelookat"
-     top_pad="4"
-     width="350" />
-  
-    <check_box
-     control_name="PrivatePointAtTarget"
-     height="16"
-     label="Не показывать мой выбор целей"
-     layout="topleft"
-     left="30"
-     name="privatepointat"
-     top_pad="4"
-     width="350" />   
-   
-    <check_box
-     control_name="ShowFavoritesOnLogin"
-     enabled="false" 
-     label="Показать любимые места в окне входа («Начать с» выпадающее меню)"
-     layout="topleft"
-     left="30"
-     name="favorites_on_login_check"
-     top_pad="4"
-     height="16"
-     width="350" /> 
-     
-	<text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left="30"
-     mouse_opaque="false"
-     name="Logs:"
-     top_pad="20"
-     width="350">
-        История чата:
-    </text>
-    <check_box
-	 enabled="false"
-     control_name="LogNearbyChat"
-     height="16"
-     label="Сохранять историю общего чата на моем компьютере (может вызвать задержки)"
-     layout="topleft"
-     left="30"
-     name="log_nearby_chat"
-     top_pad="10"
-     width="350">
-    </check_box>
-    <check_box
-	 enabled="false"
-     control_name="LogInstantMessages"
-     height="16"
-     label="Сохранить историю личных сообщений (ЛС) на моем компьютере"
-     layout="topleft"
-     left="30"
-     name="log_instant_messages"
-     top_pad="4"
-     width="350">
-    </check_box>
-    <check_box
-     control_name="LogTimestamp"
-	 enabled="false"
-     height="16"
-     label="Добавлять время в каждую строку чата в истории"
-     layout="topleft"
-     left_delta="0"
-     name="show_timestamps_check_im"
-     top_pad="4"
-     width="237" />
-    <check_box
-     control_name="FSSecondsinChatTimestamps"
-     height="16"
-     label="Показывать секунды в чате"
-     layout="topleft"
-     left_delta="0"
-     name="seconds_in_timestamps"
-     top_pad="4"
-     width="237" />
-	<check_box
-     control_name="LogFileNamewithDate"
-     enabled="false"
-     height="16"
-     label="Добавить дату в имя файла историй."
-     layout="topleft"
-     left_delta="0"
-     name="logfile_name_datestamp"
-     top_pad="4"
-     width="350"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Kommunikation" name="im">
+	<tab_container label="Privacy" name="tabs">
+		<!--General-->
+		<panel label="Allgemein" name="tab-general">
+			<panel.string name="log_in_to_change">
+				Войдите, чтобы измененить
+			</panel.string>
+			<button label="Очистить историю" name="clear_cache" tool_tip="Удалить картинки, последнюю локацию, историю телепортаций, сайты и кэш текстур"/>
+			<text name="cache_size_label">
+				(Размещение, изображения, веб, историю поиска)
+			</text>
+			<check_box label="Показывать меня в результатах поиска" name="online_searchresults"/>
+			<check_box label="Только друзья и группы видят, когда я online" name="online_visibility"/>
+			<check_box label="Только друзья и группы могут мне звонить или писать" name="voice_call_friends_only_check"/>
+			<check_box label="Отключить микрофон при завершении звонков" name="auto_disengage_mic_check"/>
+			<check_box label="Не показывать мою позицию камеры" name="privatelookat"/>
+			<check_box label="Не показывать мой выбор целей" name="privateLocalLookat"/>
+			<check_box label="Не показевать выбор" name="privatepointat"/>
+			<check_box label="Автоматически принимать обьекты" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Показать любимые места в окне входа («Начать с» выпадающее меню)" name="favorites_on_login_check" top_pad="15"/>
+			<text name="Logs:">
+				История чата:
+			</text>
+			<check_box label="Сохранять историю общего чата на моем компьютере (может вызвать задержки)" name="log_nearby_chat"/>
+			<check_box label="Сохранить историю личных сообщений (ЛС) на моем компьютере" name="log_instant_messages"/>
+			<check_box label="Добавлять время в каждую строку чата в истории" name="show_timestamps_check_im"/>
+			<check_box label="Показывать секунды в чате" name="seconds_in_timestamps"/>
+			<check_box label="Добавить дату в имя файла историй." name="hide_timestamps_nearby_chat"/>
+			<check_box label="Добавить дату в имя файла" name="logfile_name_datestamp"/>
+			<text name="log_path_desc">
+				Сохранить историю в:
+			</text>
+			<button label="Открыть" label_selected="Открыть" name="log_path_button"/>
+			<button label="Управление списком заблокированных" name="block_list" width="180"/>
+		</panel>
 
-    <button
-     follows="left|bottom"
-     height="23"
-     label="Управление списком заблокированных"
-     layout="topleft"
-     left="30"
-     name="block_list"
-     top_pad="28"
-     width="255">
-        <!--<button.commit_callback
-         function="SideTray.ShowPanel"-->
-      <button.commit_callback
-         function="Pref.BlockList"/>
-    </button>
-    </panel>
+		<!--LookAt-->
+		<panel label="Фокус камеры (Крестики)" name="tab-lookat">
+			<check_box label="Показать фокус камеры" name="showlookat" tool_tip=""/>
+			<text name="lookatshownames" tool_tip="Auswählen, ob Avatarnamen zusätzlich zum Fadenkreuz angezeigt werden soll.">
+				Имена у фокусировки камеры:
+			</text>
+			<combo_box name="lookatshownames_combobox">
+				<combo_box.item label="не показевать" name="None"/>
+				<combo_box.item label="Полное имя" name="Complete_Name"/>
+				<combo_box.item label="Отображаемое имя" name="Display_Name"/>
+				<combo_box.item label="Старое имя" name="Legacy_Name"/>
+				<combo_box.item label="Имя юзера" name="User_Name"/>
+			</combo_box>
+
+			<text name="mylookat">
+				Свой фокус камеры:
+			</text>
+			<check_box label="Не показевать свой фокус камеры" name="LookAtHideOwn" tool_tip=""/>
+			<check_box label="Не показевать свой фокус камеры другим" name="privatelookat" tool_tip=""/>
+			<check_box label="Не показевать свой фокус камеры локально(для себя)" name="privateLocalLookat" tool_tip=""/>
+			<check_box label="Не посылать иформацию выбора" name="privatepointat" tool_tip=""/>
+		</panel>
+	</tab_container>
+</panel>
