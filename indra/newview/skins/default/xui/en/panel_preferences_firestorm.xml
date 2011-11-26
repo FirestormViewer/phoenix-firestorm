@@ -73,7 +73,7 @@
          height="16"
          label="Disable Teleport Beacons"
          left="15"
-         name="tp_screen_toggle"
+         name="tp_beam_toggle"
          width="270"
          control_name="FSDisableBeaconAfterTeleport"
          tool_tip="Disables the teleport destination beacons after teleports."/>
