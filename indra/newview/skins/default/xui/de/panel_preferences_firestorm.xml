@@ -63,11 +63,11 @@
 		<text name="HeadMovement">
 			Umfang in dem der Avatarkopf der Mausbewegung folgt ('0' für keine Bewegung):
 		</text>
-		<slider label="Vertikaler Bereich der Kopfbewegung:" tool_tip="Vertikaler Bereich indem der Kopf des Avatars der Mausbewegung folgt in Grad." name="PitchFromMousePositionSlider"/>
+		<slider label="Vertikaler Bereich der Kopfbewegung:" tool_tip="Vertikaler Bereich, in dem der Kopf des Avatars der Mausbewegung folgt, in Grad." name="PitchFromMousePositionSlider"/>
 		<text name="PitchFromMousePositionText">
 			Grad
 		</text>
-		<slider label="Horizontaler Bereich der Kopfbewegung:" tool_tip="Vertikaler Bereich indem der Kopf des Avatars der Mausbewegung folgt in Grad." name="YawFromMousePositionSlider"/>
+		<slider label="Horizontaler Bereich der Kopfbewegung:" tool_tip="Horizontaler Bereich, in dem der Kopf des Avatars der Mausbewegung folgt, in Grad." name="YawFromMousePositionSlider"/>
 		<text name="YawFromMousePositionText">
 			Grad
 		</text>
