@@ -1,6 +1,18 @@
 <llsd>
 <map>
 
+    <key>ShowNetStats</key>
+    <map>
+      <key>Comment</key>
+      <string>Show the Status Indicators for the Viewer and Network Usage in the Status Overlay.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+
     <key>ChatOnlineNotification</key>
     <map>
       <key>Comment</key>
@@ -237,6 +249,18 @@
     <string>Boolean</string>
     <key>Value</key>
     <integer>1</integer>
+  </map>
+
+  <key>FSAdvancedTooltips</key>
+  <map>
+    <key>Comment</key>
+    <string>Show extended information in hovertips about objects (classic Phoenix style)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
   </map>
 
   </map>
