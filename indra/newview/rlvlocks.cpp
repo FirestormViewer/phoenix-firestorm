@@ -970,7 +970,7 @@ protected:
 
 // Checked: 2011-03-28 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
 RlvFolderLocks::RlvFolderLocks()
-	: m_fLookupDirty(false), m_fLockedRoot(false)
+	: m_fLookupDirty(false), m_fLockedRoot(false), m_cntLockAdd(0), m_cntLockRem(0)
 {
 	LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&RlvFolderLocks::onNeedsLookupRefresh, this));
 	RlvInventory::instance().addSharedRootIDChangedCallback(boost::bind(&RlvFolderLocks::onNeedsLookupRefresh, this));
@@ -1064,29 +1064,63 @@ bool RlvFolderLocks::getLockedFolders(const folderlock_source_t& lockSource, LLI
 	return cntFolders != lockFolders.count();
 }
 
-// Checked: 2011-03-27 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
-bool RlvFolderLocks::getLockedItems(const LLUUID& idFolder, LLInventoryModel::item_array_t& lockItems, bool fFollowLinks) const
+// Checked: 2011-11-26 (RLVa-1.5.4a) | Modified: RLVa-1.5.4a
+bool RlvFolderLocks::getLockedItems(const LLUUID& idFolder, LLInventoryModel::item_array_t& lockItems) const
 {
 	S32 cntItems = lockItems.count();
 
 	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
-	LLFindWearablesEx f(true, true);	// Collect all worn wearables and body parts
+	LLFindWearablesEx f(true, true);	// Collect all worn items
 	gInventory.collectDescendentsIf(idFolder, folders, items, FALSE, f);
 
-	LLUUID idPrev; bool fPrevLocked = false;
+	// Generally several of the worn items will belong to the same folder so we'll cache the results of each lookup
+	std::map<LLUUID, bool> folderLookups; std::map<LLUUID, bool>::const_iterator itLookup;
+
+	bool fItemLocked = false;
 	for (S32 idxItem = 0, cntItem = items.count(); idxItem < cntItem; idxItem++)
 	{
 		LLViewerInventoryItem* pItem = items.get(idxItem);
-		if ( (fFollowLinks) && (LLAssetType::AT_LINK == pItem->getActualType()) )
+		if (LLAssetType::AT_LINK == pItem->getActualType())
 			pItem = pItem->getLinkedItem();
 		if (!pItem)
 			continue;
-		if (pItem->getParentUUID() != idPrev)
+
+		// Check the actual item's parent folder
+		const LLUUID& idItemParent = RlvInventory::getFoldedParent(pItem->getParentUUID(), true);
+		if ((itLookup = folderLookups.find(idItemParent)) != folderLookups.end())
 		{
-			idPrev = pItem->getParentUUID();
-			fPrevLocked = isLockedFolder(idPrev, RLV_LOCK_REMOVE);
+			fItemLocked = itLookup->second;
 		}
-		if (fPrevLocked)
+		else
+		{
+			fItemLocked = isLockedFolder(idItemParent, RLV_LOCK_REMOVE);
+			folderLookups.insert(std::pair<LLUUID, bool>(idItemParent, fItemLocked));
+		}
+
+		// Check the parent folders of any links to this item that exist under #RLV
+		if (!fItemLocked)
+		{
+			LLInventoryModel::item_array_t itemLinks = 
+				gInventory.collectLinkedItems(pItem->getUUID(), RlvInventory::instance().getSharedRootID());
+			for (LLInventoryModel::item_array_t::iterator itItemLink = itemLinks.begin(); 
+					(itItemLink < itemLinks.end()) && (!fItemLocked); ++itItemLink)
+			{
+				LLViewerInventoryItem* pItemLink = *itItemLink;
+
+				const LLUUID& idItemLinkParent = (pItemLink) ? RlvInventory::getFoldedParent(pItemLink->getParentUUID(), true) : LLUUID::null;
+				if ((itLookup = folderLookups.find(idItemLinkParent)) != folderLookups.end())
+				{
+					fItemLocked = itLookup->second;
+				}
+				else
+				{
+					fItemLocked = isLockedFolder(idItemLinkParent, RLV_LOCK_REMOVE);
+					folderLookups.insert(std::pair<LLUUID, bool>(idItemLinkParent, fItemLocked));
+				}
+			}
+		}
+
+		if (fItemLocked)
 			lockItems.push_back(pItem);
 	}
 
@@ -1127,10 +1161,15 @@ bool RlvFolderLocks::isLockedFolderEntry(const LLUUID& idFolder, int eSourceType
 }
 
 // Checked: 2011-03-27 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
-bool RlvFolderLocks::isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLockTypeMask, int eSourceTypeMask, folderlock_source_t* plockSource) const
+bool RlvFolderLocks::isLockedFolder(LLUUID idFolder, ERlvLockMask eLockTypeMask, int eSourceTypeMask, folderlock_source_t* plockSource) const
 {
 	// Sanity check - if there are no folder locks then we don't have to actually do anything
 	if (!hasLockedFolder(eLockTypeMask))
+		return false;
+
+	// Folded folders will be locked if their "parent" is locked
+	idFolder = RlvInventory::getFoldedParent(idFolder, true);
+	if (idFolder.isNull())
 		return false;
 
 	if (m_fLookupDirty)
@@ -1221,7 +1260,7 @@ void RlvFolderLocks::refreshLockedLookups() const
 	m_LockedWearableRem.clear();
 
 	LLInventoryModel::item_array_t lockedItems;
-	if (getLockedItems(LLAppearanceMgr::instance().getCOF(), lockedItems, true))
+	if (getLockedItems(LLAppearanceMgr::instance().getCOF(), lockedItems))
 	{
 		for (S32 idxItem = 0, cntItem = lockedItems.count(); idxItem < cntItem; idxItem++)
 		{
