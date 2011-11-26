@@ -499,7 +499,7 @@
      value="1 0 0 1" />
     <color
      name="ColorPaletteEntry20"
-     value="1 1 0 0" />
+     reference="Yellow" />
     <color
      name="ColorPaletteEntry21"
      value="0 1 0 1" />
