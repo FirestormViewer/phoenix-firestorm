@@ -970,7 +970,7 @@ protected:
 
 // Checked: 2011-03-28 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
 RlvFolderLocks::RlvFolderLocks()
-	: m_fLookupDirty(false), m_fLockedRoot(false)
+	: m_fLookupDirty(false), m_fLockedRoot(false), m_cntLockAdd(0), m_cntLockRem(0)
 {
 	LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&RlvFolderLocks::onNeedsLookupRefresh, this));
 	RlvInventory::instance().addSharedRootIDChangedCallback(boost::bind(&RlvFolderLocks::onNeedsLookupRefresh, this));
