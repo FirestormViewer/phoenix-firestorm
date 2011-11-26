@@ -1127,10 +1127,15 @@ bool RlvFolderLocks::isLockedFolderEntry(const LLUUID& idFolder, int eSourceType
 }
 
 // Checked: 2011-03-27 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
-bool RlvFolderLocks::isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLockTypeMask, int eSourceTypeMask, folderlock_source_t* plockSource) const
+bool RlvFolderLocks::isLockedFolder(LLUUID idFolder, ERlvLockMask eLockTypeMask, int eSourceTypeMask, folderlock_source_t* plockSource) const
 {
 	// Sanity check - if there are no folder locks then we don't have to actually do anything
 	if (!hasLockedFolder(eLockTypeMask))
+		return false;
+
+	// Folded folders will be locked if their "parent" is locked
+	idFolder = RlvInventory::getFoldedParent(idFolder, true);
+	if (idFolder.isNull())
 		return false;
 
 	if (m_fLookupDirty)

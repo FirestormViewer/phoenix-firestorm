@@ -326,7 +326,7 @@ public:
 	// Returns TRUE if the attachment (specified by item UUID) is non-detachable as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
 	bool isLockedAttachment(const LLUUID& idItem) const;
 	// Returns TRUE if the folder is locked as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
-	bool isLockedFolder(const LLUUID& idFolder, ERlvLockMask eLock, int eSourceTypeMask = ST_MASK_ANY, folderlock_source_t* plockSource = NULL) const;
+	bool isLockedFolder(LLUUID idFolder, ERlvLockMask eLock, int eSourceTypeMask = ST_MASK_ANY, folderlock_source_t* plockSource = NULL) const;
 	// Returns TRUE if the wearable (specified by item UUID) is non-removable as a result of a RLV_LOCK_REMOVE folder PERM_DENY lock
 	bool isLockedWearable(const LLUUID& idItem) const;
 
