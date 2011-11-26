@@ -1,10 +1,9 @@
 # -*- cmake -*-
 
-#Always download the prebuilt for now
-#if(INSTALL_PROPRIETARY)
+if(INSTALL_PROPRIETARY)
   include(Prebuilt)
   use_prebuilt_binary(quicktime)
-#endif(INSTALL_PROPRIETARY)
+endif(INSTALL_PROPRIETARY)
 
 if (DARWIN)
   include(CMakeFindFrameworks)
@@ -15,15 +14,35 @@ elseif (WINDOWS)
 
   find_library(DEBUG_QUICKTIME_LIBRARY qtmlclient.lib
                PATHS
-               ${ARCH_PREBUILT_DIRS_DEBUG}
                "${QUICKTIME_SDK_DIR}\\libraries"
                )
 
   find_library(RELEASE_QUICKTIME_LIBRARY qtmlclient.lib
                PATHS
-               ${ARCH_PREBUILT_DIRS_RELEASE}
                "${QUICKTIME_SDK_DIR}\\libraries"
                )
+
+  if (DEBUG_QUICKTIME_LIBRARY AND RELEASE_QUICKTIME_LIBRARY)
+    message ("Using QuickTime SDK libraries.")
+  else (DEBUG_QUICKTIME_LIBRARY AND RELEASE_QUICKTIME_LIBRARY)
+    message ("Using QuickTime prebuilt libraries.")
+    set (USE_QUICKTIME_PREBUILT ON CACHE BOOL "Using QuickTime prebuilt libraries.")
+
+    if (NOT INSTALL_PROPRIETARY)
+      include(Prebuilt)
+      use_prebuilt_binary(quicktime)
+    endif (NOT INSTALL_PROPRIETARY)
+
+    find_library(DEBUG_QUICKTIME_LIBRARY qtmlclient.lib
+                 PATHS
+                 ${ARCH_PREBUILT_DIRS_RELEASE}
+                 )
+
+    find_library(RELEASE_QUICKTIME_LIBRARY qtmlclient.lib
+                 PATHS
+                 ${ARCH_PREBUILT_DIRS_RELEASE}
+                 )
+  endif (DEBUG_QUICKTIME_LIBRARY AND RELEASE_QUICKTIME_LIBRARY)
 
   if (DEBUG_QUICKTIME_LIBRARY AND RELEASE_QUICKTIME_LIBRARY)
     set(QUICKTIME_LIBRARY 
@@ -33,10 +52,15 @@ elseif (WINDOWS)
         
   endif (DEBUG_QUICKTIME_LIBRARY AND RELEASE_QUICKTIME_LIBRARY)
   
-  include_directories(
-    ${LIBS_PREBUILT_DIR}/include/quicktime
-    "${QUICKTIME_SDK_DIR}\\CIncludes"
+  if (USE_QUICKTIME_PREBUILT)
+    include_directories(
+      ${LIBS_PREBUILT_DIR}/include/quicktime
     )
+  else (USE_QUICKTIME_PREBUILT)
+    include_directories(
+      "${QUICKTIME_SDK_DIR}\\CIncludes"
+    )
+  endif (USE_QUICKTIME_PREBUILT)
 endif (DARWIN)
 
 mark_as_advanced(QUICKTIME_LIBRARY)
