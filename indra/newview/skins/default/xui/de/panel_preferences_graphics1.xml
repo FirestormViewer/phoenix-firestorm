@@ -147,7 +147,7 @@
 			Darstellung von Alpha-Masken:
 		</text>
 		<check_box label="Alpha-Masken wenn 'Licht und Schatten' deaktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls Licht und Schatten nicht aktiviert ist." name="RenderAutoMaskAlphaNonDeferred"/>
-		<check_box label="Alpha-Masken when 'Licht und Schatten' aktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls Licht und Schatten aktiviert ist." name="RenderAutoMaskAlphaDeferred"/>
+		<check_box label="Alpha-Masken wenn 'Licht und Schatten' aktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls Licht und Schatten aktiviert ist." name="RenderAutoMaskAlphaDeferred"/>
 		<text name="Miscellaneous Rendering">
 			Sonstige Darstellungsoptionen:
 		</text>
