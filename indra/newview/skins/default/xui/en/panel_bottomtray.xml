@@ -37,7 +37,7 @@
      top="0"
      width="1310">
     <layout_panel
-         auto_resize="false"
+         auto_resize="true"
          layout="topleft"
          max_width="284"
          min_width="34"
@@ -87,7 +87,7 @@
 			 right="280"
 			 top="5"
 			 width="30"
-			 min_width="30"
+			 min_width="0"
 			 height="23"
 			 
 			 follows="right">

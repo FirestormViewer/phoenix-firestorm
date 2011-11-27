@@ -114,6 +114,9 @@ public:
 // [SL:KB] - Patch: UI-BottomTray | Checked: 2010-11-26 (Catznip-2.4.0f) | Modified: Catznip-2.4.0f
 	static bool handleVoiceEnabledToggle(const LLSD& newvalue);
 // [/SL:KB]
+	
+	//AO adjust chat icons based on whether chat history is torn off or not. 
+	void handleChatHistoryTornOff();
 
 	void showBottomTrayContextMenu(S32 x, S32 y, MASK mask);
 
