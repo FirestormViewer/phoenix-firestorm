@@ -429,6 +429,49 @@ bool LLBottomTray::handleVoiceEnabledToggle(const LLSD& newvalue)
 }
 // [/SL:KB]
 
+// AO: Delicately reshape the chat bar + related icons to handle the various states of docked/undocked nearbychat + autohide
+// This is called whenever autohide or docked state changes, and also on startup. Temporary implementation until we have
+// more robust bottombar/icon support.
+void LLBottomTray::handleChatHistoryTornOff()
+{
+	BOOL showNearbyChatIcon = gSavedSettings.getBOOL("ChatHistoryTornOff");
+	LLButton* nearbyChatButton = findChild<LLButton>("show_nearby_chat");
+	if (nearbyChatButton)
+	{
+		if (showNearbyChatIcon)
+		{
+			// show nearbychat icon, it is in its own floater.
+			nearbyChatButton->reshape(30, nearbyChatButton->getRect().getHeight());
+			mNearbyChatBar->reshape(mChatBarContainer->getRect().getWidth()-62,mNearbyChatBar->getRect().getHeight());
+			if (gSavedSettings.getBOOL("AutohideChatBar"))
+			{
+				mChatBarContainer->reshape(62,mChatBarContainer->getRect().getHeight());
+			}
+			else
+			{
+				mChatBarContainer->reshape(mChatBarContainer->getRect().getWidth(),mChatBarContainer->getRect().getHeight());
+			}
+		}
+		else 
+		{
+			// hide nearbychat, it's handled within the comm window.
+			nearbyChatButton->reshape(1, nearbyChatButton->getRect().getHeight());
+			mNearbyChatBar->reshape(mChatBarContainer->getRect().getWidth()-31,mNearbyChatBar->getRect().getHeight());
+			if (gSavedSettings.getBOOL("AutohideChatBar"))
+			{
+				mChatBarContainer->reshape(31,mChatBarContainer->getRect().getHeight());
+			}
+			else
+			{
+				mChatBarContainer->reshape(mChatBarContainer->getRect().getWidth(),mChatBarContainer->getRect().getHeight());
+			}
+		}
+		nearbyChatButton->setVisible(showNearbyChatIcon);
+	}
+	
+	reshape(getRect().getWidth(), getRect().getHeight(), false);
+}
+
 void LLBottomTray::onMouselookModeOut()
 {
 	mIsInLiteMode = false;
@@ -643,6 +686,9 @@ BOOL LLBottomTray::postBuild()
 // [/SL:KB]
 
 //	mNearbyChatBar->getChatBox()->setContextMenu(NULL);
+	
+	//AO: try to adapt bottom tray icons to whether or not nearbychat is torn off or not.
+	gSavedSettings.getControl("ChatHistoryTornOff")->getSignal()->connect(boost::bind(&LLBottomTray::handleChatHistoryTornOff, this));
 
 	mChicletPanel = getChild<LLChicletPanel>("chiclet_list");
 
@@ -675,6 +721,7 @@ BOOL LLBottomTray::postBuild()
 
 	gSavedSettings.getControl("AutohideChatBar")->getSignal()->connect(boost::bind(&LLBottomTray::onAutohideChatBarChanged, this));
 	onAutohideChatBarChanged();
+	handleChatHistoryTornOff(); //AO, autohide nearbychat button
 
 	return TRUE;
 }
@@ -683,13 +730,17 @@ void LLBottomTray::onAutohideChatBarChanged()
 {
 	if(gSavedSettings.getBOOL("AutohideChatBar"))
 	{
+		//AO: Don't hide the whole chatbar container! It contains an icon to the conversations widnow, which should always remain visible.
+		//Instead of hiding the whole container, we resize it to just show this icon.
 		mChatbarWidth = mChatBarContainer->getRect().getWidth();
-		mChatBarContainer->setVisible(FALSE);
+		handleChatHistoryTornOff();
+		//mChatBarContainer->setVisible(FALSE);
 		mNearbyCharResizeHandlePanel->setVisible(FALSE);
 	}
 	else
 	{
 		mChatBarContainer->setVisible(TRUE);
+		mChatBarContainer->reshape(mChatbarWidth,mChatBarContainer->getRect().getHeight());
 		mNearbyCharResizeHandlePanel->setVisible(TRUE);
 	}
 }
