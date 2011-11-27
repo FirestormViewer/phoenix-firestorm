@@ -18,6 +18,7 @@
 #define RLV_INVENTORY_H
 
 #include "llinventoryfunctions.h"
+#include "llinventorymodel.h"
 #include "llinventoryobserver.h"
 #include "llsingleton.h"
 #include "llviewerinventory.h"
@@ -78,6 +79,8 @@ public:
 	static S32 getDirectDescendentsFolderCount(const LLInventoryCategory* pFolder);
 	// Returns the number of direct descendents of the specified folder that have the specified type asset type
 	static S32 getDirectDescendentsItemCount(const LLInventoryCategory* pFolder, LLAssetType::EType filterType);
+	// Returns the folder the items of the specified folder should folded into (can be the folder itself)
+	static const LLUUID& getFoldedParent(const LLUUID& idFolder, bool fCheckComposite);
 	// A "folded folder" is a folder whose items logically belong to the grandparent rather than the parent
 	static bool isFoldedFolder(const LLInventoryCategory* pFolder, bool fCheckComposite);
 
@@ -243,6 +246,15 @@ inline LLViewerInventoryCategory* RlvInventory::getSharedRoot() const
 {
 	const LLUUID& idRlvRoot = getSharedRootID();
 	return (idRlvRoot.notNull()) ? gInventory.getCategory(idRlvRoot) : NULL;
+}
+
+// Checked: 2011-11-26 (RLVa-1.5.4a) | Added: RLVa-1.5.4a
+inline const LLUUID& RlvInventory::getFoldedParent(const LLUUID& idFolder, bool fCheckComposite)
+{
+	LLViewerInventoryCategory* pFolder = gInventory.getCategory(idFolder);
+	while ((pFolder) && (isFoldedFolder(pFolder, fCheckComposite)))
+		pFolder = gInventory.getCategory(pFolder->getParentUUID());
+	return (pFolder) ? pFolder->getUUID() : LLUUID::null;
 }
 
 // Checked: 2010-03-19 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
