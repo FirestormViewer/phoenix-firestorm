@@ -63,6 +63,7 @@
 #define FS_BRIDGE_NAME "#Firestorm LSL Bridge v"
 #define FS_BRIDGE_MAJOR_VERSION 2
 #define FS_BRIDGE_MINOR_VERSION 0
+#define FS_MAX_MINOR_VERSION 99
 
 //current script version is 2.0
 const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
@@ -759,7 +760,13 @@ void FSLSLBridge :: cleanUpOldVersions()
 
 	for(int i = 1; i <= FS_BRIDGE_MAJOR_VERSION; i++)
 	{
-		for (int j = 1; j < FS_BRIDGE_MINOR_VERSION; j++)
+		int minor_tip;
+		if (i < FS_BRIDGE_MAJOR_VERSION) 
+			minor_tip = FS_MAX_MINOR_VERSION;
+		else
+			minor_tip = FS_BRIDGE_MINOR_VERSION;
+
+		for (int j = 1; j < minor_tip; j++)
 		{
 			std::stringstream sstr;
 	
