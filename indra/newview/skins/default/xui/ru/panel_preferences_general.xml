@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Allgemein" name="general_panel">
+<panel label="Основной" name="general_panel">
 	<text name="language_textbox">
 		Язык:
 	</text>
 	<combo_box name="language_combobox">
-		<combo_box.item label="Системный name="System Default Language"/>
+		<combo_box.item label="Системный" name="System Default Language"/>
 		<combo_box.item label="English (английский)" name="English"/>
 		<combo_box.item label="Dansk (Датский) - Beta" name="Danish"/>
 		<combo_box.item label="Deutsch (Немецкий) - Beta" name="Deutsch(German)"/>
@@ -18,13 +18,12 @@
 		<combo_box.item label="Русский (Русский) - Beta v2.0" name="Russian"/>
 	</combo_box>
 	<text name="language_textbox2">
-		(Требуется перезагрузка)
+		(перезагрузка)
 	</text>
 	<text name="maturity_desired_prompt" width="320">
 		Я хочу получить доступ к содержимому с рейтингом:
 	</text>
-	<text name="maturity_desired_textbox" width="100"/>
-	<text name="maturity_desired_textbox"/>
+	<text name="maturity_desired_textbox" width="200"/>
 	<combo_box name="maturity_desired_combobox">
 		<combo_box.item label="Генерал, Модерат, Взрослый" name="Desired_Adult"/>
 		<combo_box.item label="Генерал и Модерат" name="Desired_Mature"/>
@@ -52,14 +51,15 @@
 	<check_box label="Выделять друзей" name="show_friends" tool_tip="Выделять своих друзей" left_pad="75"/>
 	<check_box label="Измененное имя" name="display_names_check" tool_tip="Вкл. измененное имя. Пример: Шашлык Програмович (ЛС,ЧАТ..) "/>
 	<check_box label="Показать Viewer" name="show_viewerID" tool_tip="Показывает рядом с именем пользователя используемый Viewer" left_pad="75"/>
+	<check_box label="Старый формат" name="FSshow_legacyun" tool_tip="Имя Фамилия в замен имя.фамилия" left_pad="75" />
 
-	<check_box label="Включить отображение подсказок UI" name="viewer_hints_check"/>
+	<check_box label="Viewer-UI-Tipps aktivieren" name="viewer_hints_check"/>
 	<text name="inworld_typing_rg_label">
 		Нажатие букв :
 	</text>
 	<radio_group name="inworld_typing_preference">
-		<radio_item label="Писать в чат" name="radio_start_chat" value="1"/>
-		<radio_item label="Ходить (как в кс WASD)" name="radio_move" value="0"/>
+		<radio_item label="Писать в чат" name="radio_start_chat" value="0"/>
+		<radio_item label="Ходить (как в кс WASD)" name="radio_move" value="1"/>
 	</radio_group>
 	<text name="title_afk_text" width="180">
 		Статус "Отошел" через:
@@ -79,6 +79,7 @@
 		<combo_box.item label="5 минут" name="item1"/>
 		<combo_box.item label="10 минут" name="item2"/>
 		<combo_box.item label="30 минут" name="item3"/>
+		<combo_box.item label="некогда" name="item4"/>
 	</combo_box>
 	<check_box name="AvatarSitOnAway" label="Сесть, если статус 'Отошел'" left_pad="20"/>
 	<text name="text_box3">
@@ -87,4 +88,21 @@
 	<text_editor name="busy_response">
 		log_in_to_change
 	</text_editor>
+
+    <panel name="general_extras">
+        <text name="text_box3">
+           Дополнительно:
+        </text>
+        <check_box name="FSUseWebProfiles" label="Использование Веб профилей" tool_tip="Открыть профиль в браузере"/>
+
+<!-- This option is duplicated here for ease of locating and to replicate LLv3 -->
+        <text name="inworld_typing_rg_label">
+           Нажатие букв:
+        </text>
+        <radio_group name="inworld_typing_preference">
+            <radio_item label="Писать в чат" name="radio_start_chat"/>
+            <radio_item label="Ходить (WASD)" name="radio_move"/>
+        </radio_group>
+
+    </panel>
 </panel>

@@ -1,1472 +1,172 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- border="true"
- follows="left|top|right|bottom"
- height="408"
- label="Графика"
- layout="topleft"
- left="115"
- name="Display panel"
- top="1"
- width="540">
-  <tab_container
-       follows="left|top"
-       height="439"
-       halign="center"
-       left="0"
-       name="Object Info Tabs"
-       tab_max_width="130"
-       tab_min_width="40"
-       tab_position="top"
-       tab_height="25"
-       top="408"
-       width="540">
-    <panel
-     border="true"
-     follows="all"
-     label="Основное"
-     layout="topleft"
-     mouse_opaque="false"
-     name="General"
-     top="16"
-     width="280">
-      <text
-       type="string"
-       length="1"
-       follows="left|top"
-       height="14"
-       layout="topleft"
-       left="10"
-       name="UI Size:"
-       top="17"
-       width="300">
-      </text>
-      <text
-       type="string"
-       length="1"
-       follows="left|top"
-       height="12"
-       layout="topleft"
-       left="15"
-       name="QualitySpeed"
-       top_pad="-20"
-       width="410">
-        Качество визуализации (ниже, как правило, быстрее):
-      </text>
-      <icon
-       color="DkGray"
-       height="14"
-       image_name="Rounded_Square"
-       layout="topleft"
-       left="21"
-       name="LowGraphicsDivet"
-       top_delta="20"
-       width="2" />
-      <icon
-       color="DkGray"
-       height="14"
-       image_name="Rounded_Square"
-       layout="topleft"
-       left_pad="128"
-       name="MidGraphicsDivet"
-       top_delta="0"
-       width="2" />
-      <icon
-       color="DkGray"
-       height="14"
-       image_name="Rounded_Square"
-       layout="topleft"
-       left_pad="128"
-       name="HighGraphicsDivet"
-       top_delta="0"
-       width="2" />
-      <icon
-       color="DkGray"
-       height="14"
-       image_name="Rounded_Square"
-       layout="topleft"
-       left_pad="128"
-       name="UltraGraphicsDivet"
-       top_delta="0"
-       width="2" />
-      <slider
-       control_name="RenderQualityPerformance"
-       decimal_digits="0"
-       follows="left|top"
-       height="16"
-       increment="1"
-       initial_value="0"
-       layout="topleft"
-       left="15"
-       max_val="3"
-       name="QualityPerformanceSelection"
-       show_text="false"
-       top_delta="0"
-       width="405">
-        <slider.commit_callback
-           function="Pref.QualityPerformance"/>
-      </slider>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     halign="center"
-     height="12"
-     layout="topleft"
-     left="15"
-     name="ShadersPrefText"
-     top_delta="18"
-     width="50">
-        Низкое
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     halign="center"
-     height="12"
-     layout="topleft"
-     left_delta="115"
-     name="ShadersPrefText2"
-     top_delta="0"
-     width="50">
-        Среднее
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     halign="center"
-     height="12"
-     layout="topleft"
-     left_delta="130"
-     name="ShadersPrefText3"
-     top_delta="0"
-     width="50">
-        Высокое
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     halign="center"
-     height="12"
-     layout="topleft"
-     left_delta="115"
-     name="ShadersPrefText4"
-     top_delta="0"
-     width="50">
-        Ультра
-    </text>
-    <panel
-	 visiblity_control="ShowAdvancedGraphicsSettings"
-     border="false"
-	 follows="top|left"
-     height="325"
-     label="CustomGraphics"
-     layout="topleft"
-     left="5"
-     name="CustomGraphics Panel"
-     top="65"
-     width="485">
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="12"
-		layout="topleft"
-		left_delta="5"
-		name="ShadersText"
-		top="4"
-		width="128">
-			Шейдеры:
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Графика" name="Display panel">
+<tab_container label="Graphics Prefs" name="tabs">
+	<panel label="Основное" name="General">
+	    <check_box label="Развернурь на весь экран (рестарт)" name="Fullscreen Mode" tool_tip="."/>
+		<text name="QualitySpeed">
+			Качество визуализации (ниже, как правило, быстрее):
 		</text>
-		<check_box
-		 control_name="RenderTransparentWater"
-		 height="16"
-		 initial_value="true"
-		 label="Прозрачность воды"
-		 layout="topleft"
-		 left_delta="0"
-		 name="TransparentWater"
-		 top_pad="7"
-		 width="256" />
-		<check_box
-		control_name="RenderObjectBump"
-		height="16"
-		initial_value="true"
-		label="Отображать блеск и рельеф"
-		layout="topleft"
-		left_delta="0"
-		name="BumpShiny"
-		top_pad="1"
-		width="256" />
-		<check_box
-		control_name="VertexShaderEnable"
-		height="16"
-		initial_value="true"
-		label="Основные шейдеры"
-		layout="topleft"
-		left_delta="0"
-		name="BasicShaders"
-		tool_tip="Отключение этого параметра может предотвратить некоторые драйверы видеокарты от сбоя"
-		top_pad="1"
-		width="315">
-			<check_box.commit_callback
-			function="Pref.VertexShaderEnable" />
-		</check_box>
-		<check_box
-		control_name="WindLightUseAtmosShaders"
-		height="16"
-		initial_value="true"
-		label="Атмосферные шейдеры"
-		layout="topleft"
-		left_delta="0"
-		name="WindLightUseAtmosShaders"
-		top_pad="1"
-		width="256">
-			<check_box.commit_callback
-			function="Pref.VertexShaderEnable" />
-		</check_box>
-
-    <check_box
-		control_name="RenderDeferred"
-		height="16"
-		initial_value="true"
-		label="Освещение и тени"
-		layout="topleft"
-		left_delta="0"
-		name="UseLightShaders"
-		top_pad="1"
-		width="256">
-      <check_box.commit_callback
-			function="Pref.VertexShaderEnable" />
-    </check_box>
-    <check_box
-		control_name="RenderDeferredSSAO"
-		height="16"
-		initial_value="true"
-		label="Окружающая окклюзия"
-		layout="topleft"
-		left_delta="0"
-		name="UseSSAO"
-		top_pad="1"
-		width="256">
-      <check_box.commit_callback
-			function="Pref.VertexShaderEnable" />
-    </check_box>
-
-     <text
-    type="string"
-    length="1"
-    top_pad="8"
-    follows="top|left"
-    height="18"
-    width="110"
-    word_wrap="true"
-    layout="topleft"
-    left="10"
-    name="shadows_label">
-        Тени:
-      </text>
-      <combo_box
-      control_name="RenderShadowDetail"
-      height="23"
-      layout="topleft"
-      left="10"
-      top_pad="0" 
-      name="ShadowDetail"
-      width="150">
-        <combo_box.item
-        label="Нет"
-        name="0"
-        value="0"/>
-        <combo_box.item
-        label="Солнце/Луна"
-        name="1"
-        value="1"/>
-        <combo_box.item
-        label="Солнце/Луна + Прожектора"
-        name="2"
-        value="2"/>
-      </combo_box>
-
-      <text
-  type="string"
-  length="1"
-  top_pad="8"
-  follows="top|left"
-  height="18"
-  width="110"
-  word_wrap="true"
-  layout="topleft"
-  left="10"
-  name="reflection_label">
-        Отражения воды:
-      </text>
-      <combo_box
-      control_name="RenderReflectionDetail"
-      height="23"
-      layout="topleft"
-      left="10"
-      top_pad ="0"
-      name="Reflections"
-      width="150">
-        <combo_box.item
-        label="Минимальные"
-        name="0"
-        value="0"/>
-        <combo_box.item
-        label="Ландшафт и деревья"
-        name="1"
-        value="1"/>
-        <combo_box.item
-        label="Все статические объекты"
-        name="2"
-        value="2"/>
-        <combo_box.item
-        label="Все аватары и объекты"
-        name="3"
-        value="3"/>
-        <combo_box.item
-        label="Все"
-        name="4"
-        value="4"/>
-      </combo_box>
-
-     <text
-    type="string"
-    length="1"
-    top_pad="8"
-    follows="top|left"
-    height="18"
-    width="160"
-    word_wrap="true"
-    layout="topleft"
-    left="10"
-    name="local lights_label">
-        Локальное освещение:
-      </text>
-      <combo_box
-      control_name="RenderShaderLightingMaxLevel"
-      height="23"
-      layout="topleft"
-      left="10"
-      top_pad="0" 
-      name="LocalLightsDetail"
-      width="150">
-        <combo_box.item
-        label="Максимум"
-        name="3"
-        value="3"/>
-        <combo_box.item
-        label="Ограничено"
-        name="2"
-        value="2"/>
-        <combo_box.item
-        label="Нет"
-        name="1"
-        value="1"/>
-      </combo_box>
-
-		<slider
-		control_name="RenderFarClip"
-		decimal_digits="0"
-		follows="left|top"
-		height="15"
-		increment="8"
-		initial_value="160"
-		label="Расстояние прорисовки"
-		label_width="185"
-		layout="topleft"
-		left="200"
-		max_val="1024"
-		min_val="32"
-		name="DrawDistance"
-		top="0"
-		width="303" />
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="12"
-		layout="topleft"
-		left_delta="291"
-		name="DrawDistanceMeterText2"
-		top_delta="0"
-		width="128">
-			м
-		</text>    
-		<slider
-		control_name="RenderMaxPartCount"
-		decimal_digits="0"
-		follows="left|top"
-		height="15"
-		increment="256"
-		initial_value="4096"
-		label="Максимальное кол-во частиц"
-		label_width="185"
-		layout="topleft"
-		left="200"
-		max_val="8192"
-		name="MaxParticleCount"
-		top_pad="6"
-		width="303" />
-    <slider
-    control_name="RenderAvatarMaxVisible"
-    decimal_digits="0"
-    follows="left|top"
-    height="15"
-    increment="1"
-    initial_value="12"
-    label="Максимально 3D-аватаров"
-    label_width="185"
-    layout="topleft"
-    left_delta="0"
-    max_val="65"
-    min_val="1"
-    name="MaxNumberAvatarDrawn"
-    top_pad="3"
-    width="290" />
-		<slider
-		control_name="RenderGlowResolutionPow"
-		decimal_digits="0"
-		follows="left|top"
-		height="15"
-		increment="1"
-		initial_value="8"
-		label="Качество постобработки"
-		label_width="185"
-		layout="topleft"
-		left_delta="0"
-		max_val="9"
-		min_val="8"
-		name="RenderPostProcess"
-		show_text="false"
-		top_pad="3"
-		width="264">
-			<slider.commit_callback
-			function="Pref.UpdateSliderText"
-			parameter="PostProcessText" />
-		</slider>
-        <text
-        type="string"
-        length="1"
-        follows="left|top"
-        height="12"
-        layout="topleft"
-        left="469"
-        name="PostProcessText"
-        top_delta="0"
-        width="128">
-           Низко
-        </text>
-
-        <slider
-        control_name="WLSkyDetail"
-		enabled_control="WindLightUseAtmosShaders"
-        decimal_digits="0"
-        follows="left|top"
-        height="15"
-        increment="8"
-        initial_value="160"
-        label="Детали неба:"
-        label_width="185"
-        layout="topleft"
-        left="200"
-        max_val="128"
-        min_val="16"
-        name="SkyMeshDetail"
-        show_text="true"
-        top_pad="5"
-        width="297">
-           <slider.commit_callback
-            function="Pref.UpdateSliderText"
-            parameter="SkyMeshDetailText" />
-        </slider>
-
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="12"
-		layout="topleft"
-		left="200"
-		name="MeshDetailText"
-		top_pad="10"
-		width="400">
-      Уровень детализации (LOD). Фактор дистанции:
-    </text>
-		<slider
-		control_name="RenderVolumeLODFactor"
-		follows="left|top"
-		height="15"
-		increment="0.125"
-		initial_value="2"
-		label="  Объекты LOD"
-		label_width="140"
-		layout="topleft"
-		left_delta="0"
-		max_val="4"
-		name="ObjectMeshDetail"
-		show_text="true"
-		top_pad="6"
-		width="305">
-			<slider.commit_callback
-			function="Pref.UpdateSliderText"
-			parameter="ObjectMeshDetailText" />
-		</slider>
-		<slider
-		control_name="RenderFlexTimeFactor"
-		follows="left|top"
-		height="15"
-		initial_value="160"
-		label="  Гибкие примы"
-		label_width="140"
-		layout="topleft"
-		left_delta="0"
-		name="FlexibleMeshDetail"
-		show_text="true"
-		top_pad="3"
-		width="305">
-			<slider.commit_callback
-			function="Pref.UpdateSliderText"
-			parameter="FlexibleMeshDetailText" />
-		</slider>
-        <slider
-        control_name="RenderTreeLODFactor"
-        follows="left|top"
-        height="15"
-        increment="0.125"
-        initial_value="160"
-        label="  Деревья"
-        label_width="140"
-        layout="topleft"
-        left_delta="0"
-        name="TreeMeshDetail"
-        show_text="true"
-        top_pad="3"
-        width="305">
-           <slider.commit_callback
-            function="Pref.UpdateSliderText"
-            parameter="TreeMeshDetailText" />
-        </slider>
-        <slider
-        control_name="RenderAvatarLODFactor"
-        follows="left|top"
-        height="15"
-        increment="0.125"
-        initial_value="160"
-        label="  Аватары"
-        label_width="140"
-        layout="topleft"
-        left_delta="0"
-        name="AvatarMeshDetail"
-        show_text="true"
-        top_pad="3"
-        width="305">
-           <slider.commit_callback
-            function="Pref.UpdateSliderText"
-            parameter="AvatarMeshDetailText" />
-        </slider>
-        <slider
-        control_name="RenderTerrainLODFactor"
-        follows="left|top"
-        height="15"
-        increment="0.125"
-        initial_value="160"
-        label="  Ландшафт"
-        label_width="140"
-        layout="topleft"
-        left_delta="0"
-        max_val="4"
-        min_val="1"
-        name="TerrainMeshDetail"
-        show_text="true"
-        top_pad="3"
-        width="305">
-           <slider.commit_callback
-            function="Pref.UpdateSliderText"
-            parameter="TerrainMeshDetailText" />
-        </slider>
-	   <slider
-        control_name="RenderAvatarPhysicsLODFactor"
-        follows="left|top"
-        height="15"
-        decimal_digits="3"
-        initial_value="1"
-	    increment=".05"
-        label="  Физика аватаров"
-        label_width="140"
-        layout="topleft"
-        left_delta="0"
-        name="AvatarPhysicsDetail"
-        show_text="true"
-        top_pad="3"
-        width="305">
-           <slider.commit_callback
-            function="Pref.UpdateSliderText"
-            parameter="AvatarPhysicsDetailText" />
-        </slider>
-        
-        <text
-        type="string"
-        length="1"
-        follows="left|top"
-        height="12"
-        layout="topleft"
-        left_delta="0"
-        name="AvatarPhysicsDetailText"
-        visible="false"
-        top_delta="0"
-        width="0">
-        </text>
-                       
-
-        
-   <text
-      type="string"
-      length="1"
-      follows="left|top"
-      height="12"
-      layout="topleft"
-      left="200"
-      name="AvatarRenderingText"
-      top="232"
-      width="128">
-        Отображение аватаров:
-      </text>
-      <check_box
-      control_name="RenderUseImpostors"
-      height="16"
-      initial_value="true"
-      label="Плоские аватары"
-      layout="topleft"
-      left_delta="0"
-      name="AvatarImpostors"
-      top_pad="7"
-      width="256" />
-      <check_box
-      control_name="RenderAvatarVP"
-      height="16"
-      initial_value="true"
-      label="Аппаратная отрисовка"
-      layout="topleft"
-      left_delta="0"
-      name="AvatarVertexProgram"
-      top_pad="1"
-      width="256">
-        <check_box.commit_callback
-        function="Pref.VertexShaderEnable" />
-      </check_box>
-      <check_box
-      control_name="RenderAvatarCloth"
-      height="16"
-      initial_value="true"
-      label="Одежда аватара"
-      layout="topleft"
-      left_delta="0"
-      name="AvatarCloth"
-      top_pad="1"
-      width="256" />
-        <text
-        type="string"
-        length="1"
-        follows="left|top"
-        height="12"
-        layout="topleft"
-        left="403"
-        name="TerrainDetailText"
-        top="232"
-        width="155">
-           Детали ландшафта:
-        </text>
-        <radio_group
-        control_name="RenderTerrainDetail"
-        draw_border="false"
-        height="38"
-        layout="topleft"
-        left_delta="0"
-        name="TerrainDetailRadio"
-        top_pad="5"
-        width="70">
-           <radio_item
-            height="16"
-            label="Низко"
-            layout="topleft"
-            name="0"
-            top="2"
-            width="50" />
-           <radio_item
-            height="16"
-            label="Средне"
-            layout="topleft"
-            name="2"
-            top_delta="16"
-            width="50" />
-        </radio_group>
+		<text name="FasterText">
+			Быстрее
+		</text>
+		<text name="BetterText">
+			Лучше
+		</text>
+		<text name="ShadersPrefText">
+			Низкое
+		</text>
+		<text name="ShadersPrefText2">
+			Среднее
+		</text>
+		<text name="ShadersPrefText3">
+			Высокое
+		</text>
+		<text name="ShadersPrefText4">
+			Ультра
+		</text>
+		<panel label="CustomGraphics" name="CustomGraphics Panel">
+			<text name="ShadersText">
+				Шейдеры:
+			</text>
+			<check_box initial_value="true" label="Прозрачность воды" name="TransparentWater"/>
+			<check_box initial_value="true" label="Отображать блеск и рельеф" name="BumpShiny"/>
+			<check_box initial_value="true" label="Локальный свет" name="LocalLights"/>
+			<check_box initial_value="true" label="Основные шейдеры" name="BasicShaders" tool_tip="Отключение этого параметра может предотвратить некоторые драйверы видеокарты от сбоя"/>
+			<check_box initial_value="true" label="Aтмосферные шейдеры" name="WindLightUseAtmosShaders"/>
+			<check_box initial_value="true" label="Освещение и тени" name="UseLightShaders"/>
+			<check_box initial_value="true" label="Окружающая окклюзия" name="UseSSAO"/>
+			<check_box initial_value="true" label="Фокус" name="UseDoF"/>
+			<text name="shadows_label">
+				Тени:
+			</text>
+			<combo_box name="ShadowDetail">
+				<combo_box.item label="Нет" name="0"/>
+				<combo_box.item label="Солнце/Луна" name="1"/>
+				<combo_box.item label="Солнце/Луна + Прожектора" name="2"/>
+			</combo_box>
+			<text name="reflection_label">
+				Отражения воды:
+			</text>
+			<combo_box initial_value="true" label="Wasserreflexionen" name="Reflections">
+				<combo_box.item label="Минимальные" name="0"/>
+				<combo_box.item label="Ландшафт и деревья" name="1"/>
+				<combo_box.item label="Все статические объекты" name="2"/>
+				<combo_box.item label="Все аватары и объекты" name="3"/>
+				<combo_box.item label="Все" name="4"/>
+			</combo_box>
+            <text name="local lights_label">
+                Локальное освещение:
+            </text>
+            <combo_box name="LocalLightsDetail">
+                <combo_box.item label="Максимум" name="3"/>
+                <combo_box.item label="Ограничено" name="2"/>
+                <combo_box.item label="только солнце/луна" name="1"/>
+            </combo_box>
+			<slider label="Расстояние прорисовки:" name="DrawDistance"/>
+			<text name="DrawDistanceMeterText2">
+				м
+			</text>
+			<slider label="Максимальное кол-во частиц:" name="MaxParticleCount"/>
+			<slider label="Максимально 3D-аватаров:" label_width="230" name="MaxNumberAvatarDrawn" width="315"/>
+			<slider label="Качество постобработки:" name="RenderPostProcess"/>
+			<text name="PostProcessText">
+				 Низко
+			</text>
+			<slider label="Windlight-Himmelsdetails:" name="SkyMeshDetail"/>
+			<text name="MeshDetailText">
+				Уровень детализации (LOD). Фактор дистанции:
+			</text>
+			<slider label="   Объекты LOD" name="ObjectMeshDetail"/>
+			<slider label="   Гибкие примы:" name="FlexibleMeshDetail"/>
+			<slider label="   Деревья:" name="TreeMeshDetail"/>
+			<slider label="   Аватары:" name="AvatarMeshDetail"/>
+			<slider label="   Ландшафт:" name="TerrainMeshDetail"/>
+			<slider label="   Физика аватаров:" name="AvatarPhysicsDetail"/>
+			<text name="AvatarRenderingText">
+				Отображение аватаров:
+			</text>
+			<check_box initial_value="true" label="Простые аватары" name="AvatarImpostors"/>
+			<check_box initial_value="true" label="Аппаратная отрисовка" name="AvatarVertexProgram"/>
+			<check_box initial_value="true" label="Одежда аватара" name="AvatarCloth"/>
+			<text name="TerrainDetailText">
+				Детали ландшафта:
+			</text>
+			<radio_group name="TerrainDetailRadio">
+				<radio_item label="Низко" name="0"/>
+				<radio_item label="Средне" name="2"/>
+			</radio_group>
+		</panel>
+		<button label="Применить" label_selected="Übernehmen" name="Apply"/>
+		<button label="Сбросить" name="Defaults"/>
+		<button label="Расширенные" name="Advanced"/>
 	</panel>
-	
-        <button
-     follows="left|top"
-     height="23"
-     label="Применить"
-     label_selected="Применить"
-     layout="topleft"
-     left="10"
-     top="383"
-     name="Apply"
-     width="115"
-      >
-        <button.commit_callback
-         function="Pref.Apply" />
-    </button>
-    <button
-     follows="left|top"
-     height="23"
-     label="Сбросить"
-     layout="topleft"
-     left_pad="3"
-     name="Defaults"
-     top="383"
-     width="115">
-        <button.commit_callback
-         function="Pref.HardwareDefaults" />
-    </button>
-    <button
-     control_name="ShowAdvancedGraphicsSettings"
-     follows="left|top"
-     height="23"
-     is_toggle="true"
-     label="Разширеные"
-     layout="topleft"
-     left_pad="35"
-     name="Advanced"
-     top_delta="0"
-     width="115" />
-    </panel>
 
-    <panel
-     border="true"
-     follows="all"
-     label="Аппаратные опции"
-     layout="topleft"
-     mouse_opaque="false"
-     name="Hardware Settings"
-     top="16"
-     width="280">
-    <check_box
-     control_name="RenderAnisotropic"
-     height="16"
-     label="Анизотропная фильтрация (медленнее, когда включен)"
-     layout="topleft"
-     left="10"
-     name="ani"
-     top="20"
-     width="256" />
-    <check_box
-     control_name="RenderVBOEnable"
-     height="16"
-     initial_value="true"
-     label="Включить объекты OpenGL Vertex Buffer"
-     layout="topleft"
-     left="10"
-     top_pad="5"
-     name="vbo"
-     tool_tip="Включение этого на современном оборудовании дает прирост производительности. Однако, старое оборудование часто имеет плохую реализацию VBO и у вас могут быть сбои, когда эта опция включена."
-     width="315" />
-     <check_box  
-      control_name="RenderUseStreamVBO"
-      height="16" 
-      initial_value="false"
-      label="Включить VBOs"
-	  layout="topleft"
-      left="10"
-	  top_pad="5"
-      name="vbo_stream"
-      
-     width="315" />
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="12"
-     layout="topleft"
-     left="10"
-     name="Antialiasing:"
-     top_pad="7"
-     width="180">
-        Сглаживание (требуется перезагрузка):
-    </text>
-    <combo_box
-     control_name="RenderFSAASamples"
-     height="22"
-     initial_value="false"
-     label="Сглаживание"
-     follows="left|top"
-     layout="topleft"
-     left="10"
-     name="fsaa"
-     top_pad="5"
-     width="130">
-        <combo_box.item
-         label="Выкл."
-         name="FSAADisabled"
-         value="0" />
-        <combo_box.item
-         label="2x"
-         name="2x"
-         value="2" />
-        <combo_box.item
-         label="4x"
-         name="4x"
-         value="4" />
-        <combo_box.item
-         label="8x"
-         name="8x"
-         value="8" />
-        <combo_box.item
-         label="16x"
-         name="16x"
-         value="16" />
-    </combo_box>
+	<panel label="Аппаратные опции" name="Hardware Settings">
+		<check_box label="Анизотропная фильтрация (медленнее, когда включен)" name="ani"/>
+		<check_box label="Включить объекты OpenGL Vertex Buffer" name="vbo" tool_tip=" "/>
+        <check_box label="Включить VBOs" name="vbo_stream" tool_tip="На AMD совет выклучить"/>
+		<text name="Antialiasing:">
+			Сглаживание (перезагрузка):
+		</text>
+		<combo_box label="Сглаживание" name="fsaa">
+			<combo_box.item label="Выкл." name="FSAADisabled"/>
+			<combo_box.item label="2x" name="2x"/>
+			<combo_box.item label="4x" name="4x"/>
+			<combo_box.item label="8x" name="8x"/>
+			<combo_box.item label="16x" name="16x"/>
+		</combo_box>
 
-    <spinner
-     control_name="RenderGamma"
-     decimal_digits="2"
-     follows="left|top"
-     height="16"
-     increment="0.01"
-     initial_value="1"
-     label="Гамма:"
-     label_width="198"
-     layout="topleft"
-     left="10"
-     max_val="2"
-     name="gamma"
-     top_pad="10"
-     width="262" />
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="12"
-     layout="topleft"
-     left_pad="10"
-     name="brightness text"
-     top_delta="2"
-     width="385">
-        (0 = яркость по умолчанию, выше = ярче)
-    </text>
-    <slider
-     control_name="TextureMemory"
-     decimal_digits="0"
-     follows="left|top"
-     height="20"
-     increment="16"
-     initial_value="32"
-     label="Память текстур в(MB):"
-     label_width="195"
-     layout="topleft"
-     left="10"
-     min_val="64"
-     max_val="1024"
-     name="GraphicsCardTextureMemory"
-     
-     top_pad="10"
-     width="360" />
-    <spinner
-     control_name="RenderFogRatio"
-     decimal_digits="1"
-     follows="left|top"
-     height="22"
-     initial_value="4"
-     label="Расстояние Тумана:"
-     label_width="198"
-     layout="topleft"
-     left_delta="0"
-     max_val="10"
-     min_val="0.5"
-     name="fog"
-     top_pad="7"
-     width="262" />
-    </panel>
+		<spinner label="Гамма:" name="gamma"/>
+		<text name="brightness text">
+			(0 = яркость по умолчанию, выше = ярче)
+		</text>
+		<slider label="Память текстур в(MB):" name="GraphicsCardTextureMemory" tool_tip=""/>
+		<spinner label="Туман:" name="fog"/>
+	</panel>
 
-    <panel
-     border="true"
-     follows="all"
-     label="Прорисовка"
-     layout="topleft"
-     mouse_opaque="false"
-     name="Rendering"
-     top="16"
-     width="280">
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="12"
-		layout="topleft"
-		left="10"
-		name="World Updating"
-		top_pad="10"
-		width="308">
+	<panel label="Исполнение" name="Rendering">
+		<text name="World Updating">
 			Всемирное Обновление:
 		</text>
-<!-- world pauser -->
-		<check_box
-		control_name="AgentPause"
-		height="16"
-		initial_value="false"
-		label="Замораживание мира (пауза прогрузки)"
-		                           
-		layout="topleft"
-		left_delta="10"
-		name="WorldPause"
-		top_pad="12"
-		width="256"/>
-
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="12"
-		layout="topleft"
-		left="10"
-		name="Texture Rendering"
-		top_pad="20"
-		width="308">
+		<check_box label="Замораживание мира (пауза прогрузки)" tool_tip="" name="WorldPause"/>
+		<text name="Texture Rendering">
 			Прогрузка текстур:
 		</text>
-<!-- texture disabler -->
-		<check_box
-		control_name="TextureDisable"
-		height="16"
-		initial_value="false"
-		label="Минимальная прогрузка текстур" 
-		                          
-		layout="topleft"
-		left_delta="10"
-		name="TexturesLoaded"
-		top_pad="12"
-		width="256"/>  
-<!-- texture disabler -->
-		<check_box
-		control_name="TextureLoadFullRes"
-		height="16"
-		initial_value="false"
-		label="Всегда грузить текстуры в полном разрешении" 
-		                          
-		layout="topleft"
-		left_delta="0"
-		name="TexturesLoadAtFullRes"
-		top_pad="3"
-		width="256"/>
-<!-- HTTP textures -->
-		<check_box
-		control_name="ImagePipelineUseHTTP"
-		height="16"
-		label="Использование HTTP тескстур" 
-		                         
-		layout="topleft"
-		left_delta="0"
-		name="TexturesHTTP"
-		top_pad="3"
-		width="256"/>
-      
-<!-- Max Concurrent HTTP GET requests-->
-      <slider
-      control_name="ImagePipelineUseHTTPFetchMaxRequests"
-      decimal_digits="1"
-      follows="left|top"
-      height="16"
-      increment="1"
-      initial_value="8"
-      label="Maкс. кол-во HTTP GET запросов"
-      label_width="250"
-      layout="topleft"
-      left="20"
-      max_val="8"
-      min_val="1"
-      name="HTTPFetchMaxRequests"
-      top_pad="5"
-      width="375" />
-
-<!-- New Texture detail 5 is lowest, 0 is highest -->
-     <text
-      type="string"
-      length="1"
-      top_pad="5"
-      follows="top|left"
-      height="18"
-      width="250"
-      word_wrap="true"
-      layout="topleft"
-      left="20"
-      name="shadows_label">
-        Прогрузка детальности текстуры:
-      </text>
-      <combo_box
-      control_name="TextureDiscardLevel"
-      height="23"
-      layout="topleft"
-      follows="left|top"
-      left="20"
-      top_pad="0" 
-      name="TextureDetail"
-      width="150">
-        <combo_box.item
-        label="нормально"
-        name="0"
-        value="0"/>
-        <combo_box.item
-        label="минимально"
-        name="3"
-        value="3"/>
-        <combo_box.item
-        label="никакой"
-        name="5"
-        value="5"/>
-      </combo_box>
-
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="12"
-		layout="topleft"
-		left="10"
-		name="Alpha Mask Rendering"
-		top_pad="20"
-		width="308">
+		<check_box label="Минимальная прогрузка текстур" tool_tip="" name="TexturesLoaded"/>
+		<check_box label="Использование HTTP тескстур" tool_tip="" name="TexturesHTTP"/>
+		<slider label="Maкс. кол-во HTTP GET запросов" name="HTTPFetchMaxRequests"/>
+		<text name="TextureDetailLabel">
+			Прогрузка дет. текстуры:
+		</text>
+		<combo_box name="TextureDetail">
+			<combo_box.item label="нормально" name="0"/>
+			<combo_box.item label="минимально" name="3"/>
+			<combo_box.item label="никакой" name="5"/>
+		</combo_box>
+		<text name="Alpha Mask Rendering">
 			Прогрузка альфа маски:
 		</text>
-
-		<check_box
-		control_name="RenderAutoMaskAlphaNonDeferred"
-		height="16"
-		initial_value="false"
-		label="Прогрузка альфа-маски, когда 'Освещение и тени' не включены" 
-		                         
-		layout="topleft"
-		left_delta="10"
-		name="RenderAutoMaskAlphaNonDeferred"
-		top_pad="12"
-		width="256"/>
-		<check_box
-		control_name="RenderAutoMaskAlphaDeferred"
-		height="16"
-		initial_value="false"
-            label="Прогрузка альфа-маски, когда 'Освещение и тени' включены" 
-		                              
-		layout="topleft"
-		left_delta="0"
-		name="RenderAutoMaskAlphaDeferred"
-		top_pad="3"
-		width="256"/>
-
-		<text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="12"
-		layout="topleft"
-		left="10"
-		name="Miscellaneous Rendering"
-		top_pad="20"
-		width="308">
+		<check_box label="Прогрузка альфа-маски, когда 'Освещение и тени' не включены" name="RenderAutoMaskAlphaNonDeferred"/>
+		<check_box label="Прогрузка альфа-маски, когда 'Освещение и тени' включены" tool_tip="" name="RenderAutoMaskAlphaDeferred"/>
+		<text name="Miscellaneous Rendering">
 			Разное:
 		</text>
-
-		<check_box
-		control_name="RenderUIInSnapshot"
-		height="16"
-		initial_value="false"
-		label="Визуализация пользовательского интерфейса в снимках" 
-		                         
-		layout="topleft"
-		left_delta="10"
-		name="UIinSnapshot"
-		top_pad="12"
-		width="256"/>
-		<check_box
-		control_name="RenderUnloadedAvatars"
-		height="16"
-		initial_value="false"
-		label="Показать аватаров, которые еще не загрузились"                           
-		layout="topleft"
-		left_delta="0"
-		name="RenderUnloadedAvatars"
-		top_pad="3"
-		width="256"/>
-		<slider
-		control_name="PrecachingDelay"
-		decimal_digits="0"
-		follows="left|top"
-		height="16"
-		increment="1"
-		initial_value="200"
-		label="Время задержки при пред-кэшировании, прежде чем показать мир"
-            
-		label_width="385"
-		layout="topleft"
-		left_delta="0"
-		max_val="15"
-	      min_val="1"
-		name="PrecachingDelay"
-		top_pad="3"
-		width="465" />
-		<text
-		type="string"
-		follows="left|top"
-		height="16"
-		layout="topleft"
-		left_delta="455"
-		name="PrecachingDelayText"
-		top_delta="0"
-		width="80">
+		<check_box label="Показать аватаров, которые еще не загрузились" name="RenderUnloadedAvatars"/>
+		<slider label="Время задержки при пред-кэшировании, прежде чем показать мир" tool_tip="Setzt die Verzögerung, nach der die Welt angezeigt wird, nachdem man selbst als Online gemeldet wird. (Standard: 6 Sekunden)" name="PrecachingDelay"/>
+		<text name="PrecachingDelayText">
 			секунд
 		</text>
-        <slider
-        control_name="RenderTerrainScale"
-        decimal_digits="0"
-        follows="left|top"
-        height="16"
-        increment="1"
-        initial_value="12"
-        label="Шкала прогрузки текстур местности (Требуется перезапуск)"
-        label_width="385"
-        layout="topleft"
-        left="20"
-        max_val="24"
-        min_val="1"
-        name="RenderTerrainScale"
-        
-        top_pad="3"
-        width="465" />
-    </panel>
-
-       <panel
-       visiblity_control="RenderDeferredGI"
-       border="true"
-       follows="all"
-       label="Освещение (GI)"
-       layout="topleft"
-       mouse_opaque="false"
-       name="GI panel"
-       top="16"
-       width="400">
-    <check_box
-		control_name="RenderDeferredGI"
-		height="16"
-		initial_value="false"
-		label="Глобальное освещение (Требуется мощный компьютер)"
-		layout="topleft"
-		left="30"
-		name="UseGI"
-            
-		top_pad="20"
-		width="280">
-    </check_box>
-        <slider
-        control_name="RenderGIAmbiance"
-        decimal_digits="2"
-        follows="left|top"
-        height="16"
-        increment="0.05"
-        initial_value="0.5"
-        label="Обстановка"
-        label_width="240"
-        layout="topleft"
-        left="10"
-        max_val="1"
-        min_val="0"
-        name="RenderGIAmbiance"
-        top_pad="16"
-        width="420" />
-        <slider
-        control_name="RenderGIAttenuation"
-        decimal_digits="2"
-        follows="left|top"
-        height="16"
-        increment="0.01"
-        initial_value="0.1"
-        label="Дистанция затухания"
-        label_width="240"
-        layout="topleft"
-        left="10"
-        max_val="0.5"
-        min_val="0"
-        name="RenderGIAttenuation"
-        top_pad="5"
-        width="420" />
-        <slider
-        control_name="RenderGIBrightness"
-        decimal_digits="1"
-        follows="left|top"
-        height="16"
-        increment="0.1"
-        initial_value="0.3"
-        label="Яркость"
-        label_width="240"
-        layout="topleft"
-        left="10"
-        max_val="1"
-        min_val="0"
-        name="RenderGIBrightness"
-        top_pad="5"
-        width="413" />
-        <slider
-        control_name="RenderGILuminance"
-        decimal_digits="3"
-        follows="left|top"
-        height="16"
-        increment="0.025"
-        initial_value="0.075"
-        label="Освещенность"
-        label_width="240"
-        layout="topleft"
-        left="10"
-        max_val="0.5"
-        min_val="0"
-        name="RenderGILuminance"
-        top_pad="5"
-        width="427" />
-        <slider
-        control_name="RenderGINoise"
-        decimal_digits="1"
-        follows="left|top"
-        height="16"
-        increment="0.1"
-        initial_value="0.7"
-        label="Шум выбранной позиции"
-        label_width="240"
-        layout="topleft"
-        left="10"
-        max_val="1"
-        min_val="0"
-        name="RenderGINoise"
-        top_pad="5"
-        width="413" />
-        <slider
-        control_name="RenderGIRange"
-        decimal_digits="1"
-        follows="left|top"
-        height="16"
-        increment="1"
-        initial_value="96"
-        label="Диапазон затухания"
-        label_width="240"
-        layout="topleft"
-        left="10"
-        max_val="500"
-        min_val="1"
-        name="RenderGIRange"
-        top_pad="5"
-        width="424" />
-        <slider
-        control_name="RenderGIBlurBrightness"
-        decimal_digits="3"
-        follows="left|top"
-        height="16"
-        increment="0.025"
-        initial_value="1.025"
-        label="Размытость яркости"
-        label_width="240"
-        layout="topleft"
-        left="10"
-        max_val="1.5"
-        min_val="0"
-        name="RenderGIBlurBrightness"
-        top_pad="20"
-        width="427" />
-        <slider
-        control_name="RenderGIBlurEdgeWeight"
-        decimal_digits="1"
-        follows="left|top"
-        height="16"
-        increment="0.1"
-        initial_value="0.8"
-        label="Четкость"
-        label_width="240"
-        layout="topleft"
-        left="10"
-        max_val="1"
-        min_val="0"
-        name="RenderGIBlurEdgeWeight"
-        top_pad="5"
-        width="413" />
-        <slider
-        control_name="RenderGIBlurPasses"
-        decimal_digits="0"
-        follows="left|top"
-        height="16"
-        increment="1"
-        initial_value="4"
-        label="Допуск размытости (Смягчающий эффект)"
-        label_width="240"
-        layout="topleft"
-        left="10"
-        max_val="5"
-        min_val="0"
-        name="RenderGIBlurPasses"
-        top_pad="5"
-        width="403" />
-        <slider
-        control_name="RenderGIBlurSize"
-        decimal_digits="1"
-        follows="left|top"
-        height="16"
-        increment="0.1"
-        initial_value="4"
-        label="Размер размытости (Смягчающий эффект)"
-        label_width="240"
-        layout="topleft"
-        left="10"
-        max_val="5"
-        min_val="0"
-        name="RenderGIBlurSize"
-        top_pad="5"
-        width="413" />
-        <slider
-        control_name="RenderGIBlurSamples"
-        decimal_digits="0"
-        follows="left|top"
-        height="16"
-        increment="1"
-        initial_value="16"
-        label="Шкала размытости образца"
-        label_width="240"
-        layout="topleft"
-        left="10"
-        max_val="16"
-        min_val="1"
-        name="RenderGIBlurSamples"
-        top_pad="5"
-        width="410" />
-        <slider
-        control_name="RenderGIBlurIncrement"
-        decimal_digits="1"
-        follows="left|top"
-        height="16"
-        increment="0.1"
-        initial_value="0.8"
-        label="Прирост масштаба размытости"
-        label_width="240"
-        layout="topleft"
-        left="10"
-        max_val="1"
-        min_val="0"
-        name="RenderGIBlurInc"
-        top_pad="5"
-        width="413" />
-       </panel>
-	   	   <panel
-	    border="true"
-	    follows="all"
-	    label="Глубина резкости"
-	    layout="topleft"
-	    mouse_opaque="false"
-	    name="DOF panel"
-	    top="16"
-	    width="400">
-	  <check_box
-	    control_name="RenderDepthOfField"
-	    height="16"
-	    initial_value="true"
-	    label="Глубина резкости (ГР) включена"
-	    layout="topleft"
-	    top_pad="20"
-	    left="10"
-	    name="DOFEnabled"
-	    tool_tip="Render Depth of Field in deferred rendering."
-	    width="325"/>
-	   <slider
-	    control_name="CameraFNumber"
-	    decimal_digits="2"
-	    follows="left|top"
-	    height="16"
-	    increment="1"
-	    initial_value="9.00"
-	    label="Номер Ф-Камеры:"
-	    label_width="200"
-	    layout="topleft"
-	    left="10"
-	    max_val="64"
-	    min_val="1"
-	    name="CameraFNum"
-	    tool_tip="Camera f-number value for DoF effect"
-	    top_pad="16"
-	    width="374"/>
-	   <slider
-	    control_name="CameraFocalLength"
-	    decimal_digits="1"
-	    follows="left|top"
-	    height="16"
-	    increment="1"
-	    initial_value="50"
-	    label="Длина фокусировки камеры (мм):"
-	    label_width="200"
-	    layout="topleft"
-	    left="10"
-	    max_val="1000"
-	    min_val="1"
-	    name="CameraFocal"
-	    tool_tip="Camera focal length for DoF effect (in millimeters)"
-	    top_pad="5"
-	    width="374"/>
-	   <slider
-	    control_name="CameraFieldOfView"
-	    decimal_digits="2"
-	    follows="left|top"
-	    height="16"
-	    increment="1"
-	    initial_value="60"
-	    label="Поле зрения камеры (градусов):"
-	    label_width="200"
-	    layout="topleft"
-	    left="10"
-	    max_val="200"
-	    min_val="10"
-	    name="Camera FOV"
-	    tool_tip="Vertical camera field of view for DoF effect (in degrees)"
-	    top_pad="5"
-	    width="374"/>
-	   <slider
-	    control_name="CameraAspectRatio"
-	    decimal_digits="2"
-	    follows="left|top"
-	    height="16"
-	    increment="0.05"
-	    initial_value="1.5"
-	    label="Соотношение сторон камеры:"
-	    label_width="200"
-	    layout="topleft"
-	    left="10"
-	    max_val="5"
-	    min_val="0"
-	    name="CameraAspectRatio"
-	    tool_tip="Camera aspect ratio for DoF effect"
-	    top_pad="5"
-	    width="374"/>
-	   <slider
-	    control_name="CameraFocusTransitionTime"
-	    decimal_digits="2"
-	    follows="left|top"
-	    height="16"
-	    increment="0.01"
-	    initial_value="0.5"
-	    label="(ГР) Время прехода фокусировки:"
-	    label_width="200"
-	    layout="topleft"
-	    left="10"
-	    max_val="10"
-	    min_val="0.1"
-	    name="CameraFocusTrans"
-	    tool_tip="Time taken to alter focus from one place to the next"
-	    top_pad="5"
-	    width="374"/>
-	  </panel>
-
-  </tab_container>
+		<slider label="Качество теней" tool_tip="" name="ShadowResolution"/>
+		<slider label="Масштабирование текстур (Ландшафт)" name="RenderTerrainScale" tool_tip=""/>
+	</panel>
+	
+	<panel label="Глубина резкости" name="DOF panel">
+		<slider label="Номер Ф-Камеры::" name="CameraFNum" tool_tip="" label_width="165" width="379"/>
+		<slider label="Длина фокусировки камеры (мм)" name="CameraFocal" tool_tip="" label_width="165" width="379"/>
+		<slider label="Поле зрения камеры (градусов)::" name="Camera FOV" tool_tip="" label_width="165" width="379"/>
+		<slider label="Соотношение сторон камеры:" name="CameraAspectRatio" tool_tip="" label_width="165" width="379"/>
+		<slider label="(ГР) Время прехода фокусировки:" name="CameraFocusTrans" tool_tip="" label_width="165" width="379"/>
+	</panel>
+	
+</tab_container>
 </panel>

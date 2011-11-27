@@ -1,677 +1,84 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- border="true"
- follows="all"
- height="408"
- label="Sounds"
- layout="topleft"
- left="102"
- name="Preference Media panel"
- top="1"
- width="517">
-    <panel.string
-     name="middle_mouse">
-     Cредней кнопки мыши
-    </panel.string>
-    <slider
-     control_name="AudioLevelMaster"
-     follows="left|top"
-     font.style="BOLD"
-     height="15"
-     increment="0.025"
-     initial_value="0.5"
-     label="Общая громкость"
-	   label_width="120"
-     layout="topleft"
-     left="0"
-     name="System Volume"
-     show_text="false"
-     slider_label.halign="right"
-     top="10"
-     volume="true"
-     width="300">
-        <slider.commit_callback
-         function="Pref.setControlFalse"
-         parameter="MuteAudio" />
-    </slider>
-    <button
-     control_name="MuteAudio"
-     follows="top|left"
-     height="16"
-     image_selected="AudioMute_Off"
-     image_unselected="Audio_Off"
-     is_toggle="true"
-     layout="topleft"
-	   left_pad="5"
-     name="mute_audio"
-     tab_stop="false"
-     width="16" />
-    <check_box
-     control_name="MuteWhenMinimized"
-     height="15"
-     initial_value="true"
-     label="Заглушить если свернуть"
-     layout="topleft"
-     name="mute_when_minimized"
-	   top_delta="3"
-     left_pad="5"
-     width="235" />
-	<slider
-		control_name="AudioLevelUI"
-		disabled_control="MuteAudio"
-		follows="left|top"
-		height="15"
-		increment="0.025"
-		initial_value="0.5"
-		label="Кнопки"
-		label_width="120"
-		layout="topleft"
-		left="0"
-		name="UI Volume"
-		show_text="false"
-		slider_label.halign="right"
-		top_pad="4"
-		volume="true"
-		width="300">
-	  <slider.commit_callback
-		  function="Pref.setControlFalse"
-		  parameter="MuteUI" />
-	</slider>
-	<button
-		control_name="MuteUI"
-		disabled_control="MuteAudio"
-		follows="top|left"
-		height="16"
-		image_selected="AudioMute_Off"
-		image_unselected="Audio_Off"
-		is_toggle="true"
-		layout="topleft"
-		left_pad="5"
-		name="mute_audio"
-		tab_stop="false"
-		width="16" />
-    <slider
-     control_name="AudioLevelAmbient"
-     disabled_control="MuteAudio"
-     follows="left|top"
-     height="15"
-     increment="0.025"
-     initial_value="0.5"
-     label="Окружающий"
-     label_width="120"
-     layout="topleft"
-     left="0"
-     name="Wind Volume"
-     show_text="false"
-     slider_label.halign="right"
-     top_pad="4"
-     volume="true"
-     width="300">
-        <slider.commit_callback
-         function="Pref.setControlFalse"
-         parameter="MuteAmbient" />
-    </slider>
-    <button
-     control_name="MuteAmbient"
-     disabled_control="MuteAudio"
-     follows="top|left"
-     height="16"
-     image_selected="AudioMute_Off"
-     image_unselected="Audio_Off"
-     is_toggle="true"
-     layout="topleft"
-     left_pad="5"
-     name="mute_audio"
-     tab_stop="false"
-     width="16" />
-    <slider
-     control_name="AudioLevelSFX"
-     disabled_control="MuteAudio"
-     follows="left|top"
-     height="15"
-     increment="0.025"
-     initial_value="0.5"
-     label="Звуковые эффекты"
-     label_width="120"
-     slider_label.halign="right"
-     layout="topleft"
-     left="0"
-     name="SFX Volume"
-     show_text="false"
-     top_pad="4"
-     volume="true"
-     width="300">
-        <slider.commit_callback
-         function="Pref.setControlFalse"
-         parameter="MuteSounds" />
-    </slider>
-    <button
-     control_name="MuteSounds"
-     disabled_control="MuteAudio"
-     follows="top|left"
-     height="16"
-     image_selected="AudioMute_Off"
-     image_unselected="Audio_Off"
-     is_toggle="true"
-     layout="topleft"
-     left_pad="5"
-     name="mute_audio"
-     tab_stop="false"
-     width="16">
-      <button.commit_callback
-      function="Pref.SetSounds"/>
-    </button>
-    <slider
-     control_name="AudioLevelMusic"
-     disabled_control="MuteAudio"
-     follows="left|top"
-     height="15"
-     increment="0.025"
-     initial_value="0.5"
-     label="Потоковая музыка"
-     label_width="120"
-     layout="topleft"
-     left="0"
-     name="Music Volume"
-     slider_label.halign="right"
-     show_text="false"
-     top_pad="4"
-     volume="true"
-     width="300">
-        <slider.commit_callback
-         function="Pref.setControlFalse"
-         parameter="MuteMusic" />
-	</slider>
-    <button
-     control_name="MuteMusic"
-	   disabled_control="MuteAudio"
-     follows="top|left"
-     height="16"
-     image_selected="AudioMute_Off"
-     image_unselected="Audio_Off"
-     is_toggle="true"
-     layout="topleft"
-	   left_pad="5"
-     name="mute_audio"
-     tab_stop="false"
-	 width="16" />
-	<check_box
-		control_name="AudioStreamingMusic"
-		height="16"
-		label="Включено"
-		layout="topleft"
-		left_pad="5"
-		name="enable_music"
-		top_delta="2"
-		width="350">
-		<check_box.commit_callback
-			function="Pref.updateMediaAutoPlayCheckbox"/>
-	</check_box>
-	<slider
-		control_name="AudioLevelMedia"
-		disabled_control="MuteAudio"
-		follows="left|top"
-		height="16"
-		increment="0.025"
-		initial_value="0.5"
-		label="Медиа"
-		label_width="120"
-		layout="topleft"
-		left="0"
-		name="Media Volume"
-		show_text="false"
-		slider_label.halign="right"
-		top_pad="4"
-		volume="true"
-		width="300">
-	  <slider.commit_callback
-		  function="Pref.setControlFalse"
-		  parameter="MuteMedia" />
-	</slider>
-	<button
-		control_name="MuteMedia"
-		disabled_control="MuteAudio"
-		follows="top|left"
-		height="16"
-		image_selected="AudioMute_Off"
-		image_unselected="Audio_Off"
-		is_toggle="true"
-		layout="topleft"
-		left_pad="5"
-		name="mute_audio"
-		tab_stop="false"
-		width="16" />
-	<check_box
-		label_text.halign="left"
-		follows="left|top"
-		height="16"
-		control_name ="AudioStreamingMedia"
-		label="Включено"
-		layout="topleft"
-		top_delta="2"
-		left_pad="5"
-		name="enable_media"
-		width="110">
-		<check_box.commit_callback
-			function="Pref.updateMediaAutoPlayCheckbox"/>
-	</check_box>
-	<slider
-		control_name="AudioLevelVoice"
-		disabled_control="MuteAudio"
-		follows="left|top"
-		height="16"
-		increment="0.025"
-		initial_value="0.5"
-		label="Голосовой чат"
-		label_width="120"
-		layout="topleft"
-		left="0"
-		top_pad="4"
-		name="Voice Volume"
-		show_text="false"
-		slider_label.halign="right"
-		volume="true"
-		width="300">
-	  <slider.commit_callback
-		  function="Pref.setControlFalse"
-		  parameter="MuteVoice" />
-	</slider>
-	<button
-		control_name="MuteVoice"
-		disabled_control="MuteAudio"
-		follows="top|left"
-		height="16"
-		image_selected="AudioMute_Off"
-		image_unselected="Audio_Off"
-		is_toggle="true"
-		layout="topleft"
-		left_pad="5"
-		name="mute_audio"
-		tab_stop="false"
-		width="16" />
-	<check_box
-		label_text.halign="left"
-		follows="left|top"
-		height="16"
-		control_name ="EnableVoiceChat"
-		disabled_control="CmdLineDisableVoice"
-		label="Включено"
-		layout="topleft"
-		top_delta="2"
-		left_pad="5"
-		name="enable_voice_check"
-		width="110"/>
-	<check_box
-		name="gesture_audio_play_btn"
-		control_name="EnableGestureSounds"
-    disabled_control="MuteAudio"
-		value="true"
-		follows="left|bottom|right"
-		height="15"
-		tool_tip="Установите, чтобы слышать звуки из жестов"
-		label="Воспроизведение звуков из жестов"
-		top_pad="1"
-    bottom_delta="10"
-		left="255"/>
-	<check_box
-		name="media_auto_play_btn"
-		control_name="ParcelMediaAutoPlayEnable"
-		enabled_control="AudioStreamingMedia"
-		value="true"
-		layout="topleft"
-		height="15"
-		tool_tip="Установка галочки позволит вам автоматически воспроизводить медиа при входе или изменении региона."
-		label="Автовоспроизведение медиа"
-		top_pad="1"
-    bottom_delta="30"
-		left="10"/>
-	<check_box
-		name="media_allowscript_btn"
-		control_name="PermAllowScriptedMedia"
-		value="true"
-		follows="left|bottom|right"
-		height="15"
-		bottom_delta="10"
-		tool_tip="Эта установка разрешает / запрещает объектам со скриптами использовать медиа"
-		label="Разрешить медиа для скриптов"
-		top_pad="1"
-		left="10"/>
- 	<check_box
-		name="media_filter"
-		control_name="MediaEnableFilter"
-		value="true"
-		follows="left|bottom|right"
-		height="15"
-		bottom_delta="0"
-		left_delta="245"
-		tool_tip="Установка данного фильтра позволяет вам выбирать в каких регионах воспроизводить медиа"
-		label="Медиа фильтр (Повышенная безопасность)"
-		left_pad="1" />
- 	<check_box
-		name="media_show_on_others_btn"
-		control_name="MediaShowOnOthers"
-		value="true"
-		follows="left|bottom|right"
-		height="15"
-		tool_tip="Отключите данную опцию, чтоб не слышать медиа, которые прикреплены к ближайшим пользователям"
-		label="Воспроизводить медиа других аватаров"
-		width="230"
-		left="10"/>
-    <button
-     layout="topleft"
-	 follows="left|bottom|right"
-     height="23"
-     label="Редактировать список медиа"
-     top_delta="-3"
-	 left="-245"
-     left_pad="5"
-     name="edit_media_lists_button"
-     width="160">
-      <button.commit_callback
-      function="Floater.Show"
-      parameter="media_lists" />
-    </button>
-
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="20"
-     layout="topleft"
-     left="25"
-     name="voice_chat_settings"
-     width="180"
-     top_pad="35">
-	  Настройки голосового чата
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     layout="topleft"
-	   left="46"
-	   top_delta="16"
-     name="Listen from"
-     width="112">
-        Слушать с:
-    </text>
-	<icon
-		follows="left|top"
-		height="18"
-		image_name="Cam_FreeCam_Off"
-		layout="topleft"
-		name="camera_icon"
-		mouse_opaque="false"
-		visible="true"
-		width="18"
-		left_pad="-4"
-		top_delta="-5"/>
-	<icon
-		follows="left|top"
-		height="18"
-		image_name="Move_Walk_Off"
-		layout="topleft"
-    left_pad="170" 
-		name="avatar_icon"
-		mouse_opaque="false"
-		visible="true"
-		width="18"
-		top_delta="0" />
-   <radio_group
-     enabled_control="EnableVoiceChat"
-     control_name="VoiceEarLocation"
-     draw_border="false"
-     follows="left|top"
-     layout="topleft"
-     left_delta="-168"
-     width="221"
-     height="20"
-     name="ear_location">
-    <radio_item
-     height="19"
-     label="Положения камеры"
-     follows="left|top"
-     layout="topleft"
-     name="0"
-     width="200"/>
-    <radio_item
-     height="19"
-     follows="left|top"
-     label="Положения аватара"
-     layout="topleft"
-     left_pad="-16"
-     name="1"
-     top_delta ="0" 
-     width="200" />
-   </radio_group>
-  <check_box
-   control_name="LipSyncEnabled"
-   follows="left|top"
-   height="15"
-   label="Губы аватара двигаются при разговоре"
-   layout="topleft"
-   left="44"
-   name="enable_lip_sync"
-   top_pad="5" 
-   width="237"/>
- <check_box
-  follows="top|left"
-  enabled_control="EnableVoiceChat"
-  control_name="PushToTalkToggle"
-  height="15"
-  label="Включить / Выключить микрофон, при нажатии:"
-  layout="topleft"
-  left="44"
-  name="push_to_talk_toggle_check"
-  width="237"
-  tool_tip="В режиме переключения однократное нажатие и отпускание данной клавиши включает/выключает микрофон. Если режим переключения отключен, то микрофон передает голос только когда клавиша нажата."
-  top_pad="3"/>
-  <line_editor
-   follows="top|left"
-   control_name="PushToTalkButton"
-   enabled="false"
-   enabled_control="EnableVoiceChat"
-   height="23"
-   left="80"
-   max_length_bytes="200"
-   name="modifier_combo"
-   label="Push-to-Speak trigger"
-   top_pad="3"
-   width="200" />
-  <button
-   layout="topleft"
-   follows="top|left"
-   enabled_control="EnableVoiceChat"
-   height="23"
-   label="Установить кнопку"
-   left_pad="5"
-   name="set_voice_hotkey_button"
-   width="120">
-    <button.commit_callback
-    function="Pref.VoiceSetKey" />
-  </button>
-  <button
-     enabled_control="EnableVoiceChat"
-     follows="top|left"
-     halign="center"
-     height="23"
-     image_overlay="Refresh_Off"
-     layout="topleft"
-     tool_tip="Вернуть на 'Среднюю кнопку мыши'"
-     mouse_opaque="true"
-     name="set_voice_middlemouse_button"
-     left_pad="5"
-     width="25">
-    <button.commit_callback
-    function="Pref.VoiceSetMiddleMouse" />
- </button>
-    <panel
-     background_visible="false"
-     bg_alpha_color="DkGray"
-     visiblity_control="ShowDeviceSettings"
-     border="false"
-     follows="top|left"
-     height="100"
-     label="Настройки устройства"
-     layout="topleft"
-     left_delta="-2"
-     name="device_settings_panel"
-     class="panel_voice_device_settings"
-     width="470"
-     top_pad="0">
-      <panel.string
-        name="default_text">
-        Стандарт
-      </panel.string>
-      <panel.string
-        name="default system device">
-        Стандарт
-      </panel.string>
-      <panel.string
-        name="name_default_system_device">
-        Стандартое устройства
-      </panel.string>
-      <panel.string
-        name="no device">
-        Нет устройства
-      </panel.string>
-      <panel.string
-        name="name_no_device">
-        Нет устройства
-      </panel.string>
-
-      <icon
-             height="18"
-             image_name="Microphone_On"
-             left_delta="4"
-             name="microphone_icon"
-             mouse_opaque="false"
-             top="7"
-             visible="true"
-             width="18" />
-    <text
-     type="string"
-     length="1"
-      font.style="BOLD"
-     follows="left|top"
-     height="16"
-     layout="topleft"
-     left_pad="3"
-     name="Input"
-     width="70">
-        Вход
-    </text>
-    <combo_box
-     height="23"
-     control_name="VoiceInputAudioDevice"
-     layout="topleft"
-     left_pad="0"
-     max_chars="128"
-     name="voice_input_device"
-     top_delta="-5"
-     width="150" />
-    <icon
-     height="18"
-     image_name="Parcel_Voice_Light"
-     left="275"
-     name="speaker_icon"
-     mouse_opaque="false"
-     top_pad="-20"
-     visible="true"
-     width="22" />
-    <text
-     font.style="BOLD"
-     type="string"
-     length="1"
-     follows="left|top"
-     height="15"
-     layout="topleft"
-     left_pad="0"
-     name="Output"
-     width="70">
-      Выход
-    </text>
-    <combo_box
-     control_name="VoiceOutputAudioDevice"
-     height="23"
-     layout="topleft"
-     left_pad="0"
-     max_chars="128"
-     name="voice_output_device"
-     top_delta="-3"
-     width="150" />
-   <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="16"
-     layout="topleft"
-     left_delta="-360"
-     name="Volume label"
-     top_pad="4"
-     width="200">
-        Громкость (Красный - слишком громко):
-    </text>
-      <slider_bar
-        control_name="AudioLevelMic"
-     follows="left|top"
-     height="17"
-     increment="0.025"
-     initial_value="1.0"
-     layout="topleft"
-     left_delta="-6"
-     max_val="2"
-     name="mic_volume_slider"
-     tool_tip="Change the volume using this slider"
-     top_pad="-1"
-     width="220" />
-    <text
-     type="string"
-     text_color="EmphasisColor"
-     length="1"
-     follows="left|top"
-     height="18"
-     layout="topleft"
-     left_pad="5"
-     name="wait_text"
-     top_delta="-1"
-     width="110">
-        Пожалуйста, подождите...
-    </text>
-    <locate
-     height="20"
-     layout="topleft"
-     left_delta="0"
-     name="bar0"
-     top_delta="-2"
-     width="20" />
-    <locate
-     height="20"
-     layout="topleft"
-     left_pad="5"
-     name="bar1"
-     top_delta="0"
-     width="20" />
-    <locate
-     height="20"
-     layout="topleft"
-     left_pad="5"
-     name="bar2"
-     top_delta="0"
-     width="20" />
-    <locate
-     height="20"
-     layout="topleft"
-     left_pad="5"
-     name="bar3"
-     top_delta="0"
-     width="20" />
-    <locate
-     height="20"
-     layout="topleft"
-     left_pad="5"
-     name="bar4"
-     top_delta="0"
-     width="20" />
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Sounds" name="Preference Media panel">
+<panel.string name="middle_mouse">
+	Cредней кнопки мыши
+</panel.string>
+<tab_container label="Настройки Файршторма" name="tabs">
+    <!-- General -->
+    <panel label="Основное" name="Media General Panel">
+		<slider label="Общая громкость" name="System Volume"/>
+		<check_box name="mute_when_minimized" label="Заглушить если свернуть"/>
+		<slider label="Кнопки" name="UI Volume"/>
+		<slider label="Окружающий" name="Wind Volume"/>
+		<slider label="Звуковые эффекты" name="SFX Volume"/>
+		<check_box label="Звуки жестов" name="gesture_audio_play_btn" tool_tip="" value="true"/>
+		<slider label="Потоковая музыка" name="Music Volume"/>
+		<check_box label="Aktiviert" name="enable_music"/>
+		<slider label="Медия" name="Media Volume"/>
+		<check_box label="Вкл." name="enable_media"/>
+		<slider label="Голосовой чат" name="Voice Volume"/>
+		<check_box label="Вкл." name="enable_voice_check"/>
+		<check_box label="Разрешить автоматическое воспроизведение" name="media_auto_play_btn" tool_tip="" value="true"/>
+		<check_box name="media_allowscript_btn" tool_tip="Эта установка разрешает / запрещает объектам со скриптами использовать медиа" label="Разрешить медиа для скриптов" />
+		<check_box label="Воспроизводить медиа других аватаров" name="media_show_on_others_btn" tool_tip="Отключите данную опцию, чтоб не слышать медиа, которые прикреплены к ближайшим пользователям" value="true"/>
+		<check_box name="media_filter" tool_tip="Установка данного фильтра позволяет вам выбирать в каких регионах воспроизводить медиа" label="Медиа фильтр (Повышенная безопасность)"/>
+		<button label="Редактировать список медиа..." name="edit_media_lists_button" left_pad="45"/>
+        <check_box name="ShowStreamMetadata" label="Показать титул песни"/>
+        <check_box name="StreamMetadataAnnounceToChat" label="Послать титул песни на канал:" width="230"/>
+        <text name="Media Rolloff">
+            Расстояние слышимости:
+        </text>
+        <slider name="MediaRollOffMin" tool_tip="минимально."/>
+        <text name="MinMeters">
+            Метров
+        </text>
+        <slider name="MediaRollOffMax" tool_tip="максимально."/>
+        <text name="MaxMeters">
+            Метров
+        </text>
     </panel>
-    </panel>
+
+    <!-- Voice -->
+    <panel label="Настройки голоса" name="Media Voice tab">
+        <check_box label="Вкл. голосовой чат" name="enable_voice_check"/>
+		<text name="Listen from">
+			Слушать с:
+		</text>
+		<radio_group name="ear_location">
+			<radio_item label="Положения камеры" name="0"/>
+			<radio_item label="Положения аватара" name="1"/>
+		</radio_group>
+		<check_box label="Губы аватара двигаются при разговоре" name="enable_lip_sync"/>
+		<check_box label="показать индекатор голосового чата в групповом чате." name="Show_Voice_Visualizers_In_Calls" tool_tip=""/>
+		<check_box label="Включить / Выключить микрофон, при нажатии:" name="push_to_talk_toggle_check" tool_tip="В режиме переключения однократное нажатие и отпускание данной клавиши включает/выключает микрофон. Если режим переключения отключен, то микрофон передает голос только когда клавиша нажата."/>
+		<line_editor label="Релиз речи:" name="modifier_combo"/>
+		<button label="Уст. кнопку" name="set_voice_hotkey_button"/>
+		<button name="set_voice_middlemouse_button" tool_tip="Сбросить на <ср. кн. Мыши>"/>
+        <button label="Настройки устройства" name="device_settings_btn"/>
+        <panel name="device_settings_panel">
+			<panel.string name="default_text">
+				Стандарт
+			</panel.string>
+			<string name="name_no_device">
+				Нету устройсва
+			</string>
+			<string name="name_default_system_device">
+				Стандартое устройства
+			</string>
+			<text name="Input">
+				Вход
+			</text>
+			<text name="Output">
+				Выход
+			</text>
+			<text name="Volume label" width="100">
+				Моя громкость:
+			</text>
+			<slider_bar initial_value="1,0" name="mic_volume_slider" tool_tip="Изменить можно этой кнопочкой"/>
+			<text name="wait_text">
+				подождите
+			</text>
+        </panel>
+	</panel>
+		
+</panel>

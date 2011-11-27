@@ -1,87 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<panel
- border="true"
- follows="all"
- height="408"
- label="Дополнительные"
- layout="topleft"
- left="102"
- name="advanced"
- top="1"
- width="517">
-	<panel.string
-     name="aspect_ratio_text">
-        [NUM]:[DEN]
-    </panel.string>
-    <panel.string
-     name="middle_mouse">
-        Middle Mouse
-    </panel.string>
-   <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="12"
-   layout="topleft"
-   left="33"
-   name="UI Size:"
-   top_pad="25"
-   width="350">
-     Масштабирование шрифта (может иметь побочные эффекты):
-  </text>
-  <slider
-   control_name="UIScaleFactor"
-   decimal_digits="2"
-   follows="left|top"
-   height="17"
-   increment="0.025"
-   initial_value="1"
-   layout="topleft"
-   left_pad="0"
-   max_val="1.4"
-   min_val="0.75"
-   name="ui_scale_slider"
-   top_pad="-14"
-   width="150" />
-    <check_box
-     control_name="AllowMultipleViewers"
-     follows="top|left"
-     height="15"
-     label="Разрешить несколько клиентов (Влияет на стабильность и производительность)"
-     layout="topleft"
-     left="30"
-     name="allow_multiple_viewer_check"
-     top_pad="20"
-     width="237"/>
-    <check_box
-     control_name="ForceShowGrid"
-     follows="top|left"
-     height="15"
-     label="Разрешить вход в другие сетки (Не все сетки будут поддерживать Firestorm)"
-     layout="topleft"
-     left="30"
-     name="show_grid_selection_check"
-     top_pad="5"
-     width="237"/>
-    <check_box
-     control_name="UseDebugMenus"
-     follows="top|left"
-     height="15"
-     label="Показать дополнительные меню (Используйте на свой страх и риск!)"
-     layout="topleft"
-     left="30"
-     name="show_advanced_menu_check"
-     top_pad="5"
-     width="237"/>
-    <check_box
-     control_name="QAMode"
-     follows="top|left"
-     height="15"
-     label="Показать меню разработчика"
-     layout="topleft"
-     left="30"
-     name="show_develop_menu_check"
-     top_pad="5"
-     width="237"/>         
-     
+<?xml version="1.0" encoding="utf-8"?>
+<panel label="Дополнительные" name="advanced">
+	<panel.string name="aspect_ratio_text">
+		[NUM]:[DEN]
+	</panel.string>
+	<check_box label="Разрешить несколько клиентов (Влияет на стабильность и производительность)" name="allow_multiple_viewer_check"/>
+	<check_box label="Разрешить вход в другие сетки (Не все сетки будут поддерживать Firestorm)" name="show_grid_selection_check"/>
+	<check_box label="Показать дополнительные меню (Используйте на свой страх и риск!)" name="show_advanced_menu_check"/>
+	<check_box label="Показать меню разработчика" name="show_develop_menu_check"/>
+    <button label="Сбросить" label_selected="Сбросить..." name="clear_settings"/>
 </panel>

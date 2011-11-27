@@ -1,166 +1,18 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- open_centered="true"
- default_tab_group="1"
- height="500"
- layout="topleft"
- name="Preferences"
- help_topic="preferences"
- single_instance="true"
- title="Настройки"
- width="658">
-    <button
-     follows="right|bottom"
-     height="23"
-     label="Применить"
-     label_selected="Apply"
-     layout="topleft"
-     right="-200"
-     name="Apply"
-     top="467"
-     width="90"
-      >
-        <button.commit_callback
-         function="Pref.Apply" />
-    </button>
-    <button
-     follows="right|bottom"
-     height="23"
-     label="Ок"
-     label_selected="OK"
-     layout="topleft"
-     left_pad="5"
-     right="-105"
-     name="OK"
-     width="90">
-        <button.commit_callback
-         function="Pref.OK" />
-    </button>
-    <button
-     follows="right|bottom"
-     height="23"
-     label="Отмена"
-     label_selected="Cancel"
-     layout="topleft"
-     left_pad="5"
-     name="Cancel"
-     right="-10"
-     width="90" >
-        <button.commit_callback
-         function="Pref.Cancel" />
-    </button>
-    <tab_container
-     follows="all"
-     halign="left"
-     height="440"
-     layout="topleft"
-     left="0"
-     name="pref core"
-     tab_group="1"
-     tab_position="left"
-     tab_width="115"
-     tab_padding_right="0"
-     top="21"
-     width="658">
-        <panel
-	 	 class="panel_preference"
-         filename="panel_preferences_general.xml"
-         label="Основное"
-         layout="topleft"
-         help_topic="preferences_general_tab"
-         name="general" />
-        <panel
-		 class="panel_preference"
-         filename="panel_preferences_chat.xml"
-         label="Чат"
-         layout="topleft"
-         help_topic="preferences_chat_tab"
-         name="chat" />
-        <panel
-         class="panel_preference"
-         filename="panel_preferences_colors.xml"
-         label="Цвета"
-         layout="topleft"
-         help_topic="preferences_im_tab"
-         name="colors" />
-        <panel
-	 	 class="panel_preference_graphics"
-         filename="panel_preferences_graphics1.xml"
-         label="Графика"
-         layout="topleft"
-         help_topic="preferences_display_tab"
-         name="display" />
-        <panel
-		 class="panel_preference"
-         filename="panel_preferences_sound.xml"
-         label="Звуки и Медиа"
-         layout="topleft"
-         help_topic="preferences_audio_tab"
-         name="audio" />
-        <panel
-		 class="panel_preference"
-         filename="panel_preferences_setup.xml"
-         label="Сеть и кэш"
-         layout="topleft"
-         help_topic="preferences_input_tab"
-         name="input" />
-        <panel
-		 class="panel_preference"
-         filename="panel_preferences_move.xml"
-         label="Движение и вид"
-         layout="topleft"
-         help_topic="preferences_move_tab"
-         name="move" />
-        <panel
-		 class="panel_preference"
-         filename="panel_preferences_alerts.xml"
-         label="Сообщения предупреждений"
-         layout="topleft"
-         help_topic="preferences_msgs_tab"
-         name="msgs" />
-        <panel
-		 class="panel_preference"
-         filename="panel_preferences_privacy.xml"
-         label="Приватность"
-         layout="topleft"
-         help_topic="preferences_privacy_tab"
-         name="im" />
-        <panel
-		 class="panel_preference"
-         filename="panel_preferences_advanced.xml"
-         label="Дополнительно"
-         layout="topleft"
-         help_topic="preferences_advanced1_tab"
-         name="advanced1" />
-        <panel
-		 class="panel_preference"
-         filename="panel_preferences_UI.xml"
-         label="Дополнения UI"
-         layout="topleft"
-         help_topic="preferences_ui_extras_tab"
-         name="starlightUI1" />
-		<panel
-         class="panel_preference_skins"
-         filename="panel_preferences_skins.xml"
-         label="Темы"
-         layout="topleft"
-         help_topic="preferences_skins_tab"
-         name="skins" /> 
-        <panel
-		 class="panel_preference_crashreports"
-         filename="panel_preferences_crashreports.xml"
-         label="Отчеты сбоев"
-         layout="topleft"
-         help_topic="preferences_crashreports_tab"
-         name="crashreports" />
-		<panel
-         class="panel_preference_firestorm"
-         filename="panel_preferences_firestorm.xml"
-         label="Firestorm"
-         layout="topleft"
-         help_topic="preferences_firestorm_tab"
-         name="firestorm" />
-    </tab_container>
-
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Preferences" title="НАСТРОЙКИ">
+	<button label="Применить" label_selected="Применить" name="Apply"/>
+	<button label="OK" label_selected="OK" name="OK"/>
+	<button label="Отмена" label_selected="Отмена" name="Cancel"/>
+	<tab_container name="pref core">
+		<panel label="Основное" name="general"/>
+		<panel label="Графика" name="display"/>
+		<panel label="Звуки и Медиа" name="audio"/>
+		<panel label="Чат" name="chat"/>
+		<panel label="Движение и вид" name="move"/>
+		<panel label="Сообщения предупреждений" name="msgs"/>
+		<panel label="Цвета" name="colors"/>
+		<panel label="Приватность" name="im"/>
+		<panel label="Конфигурация" name="input"/>
+		<panel label="Дополнительно" name="advanced1"/>
+	</tab_container>
 </floater>

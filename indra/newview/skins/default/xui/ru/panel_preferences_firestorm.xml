@@ -1,1487 +1,263 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- border="true"
- follows="all"
- height="440"
- label="Firestorm"
- layout="topleft"
- left="1"
- name="firestorm"
- top="1"
- width="535">
+<panel label="Firestorm" name="firestorm">
 
-<tab_container
- label="Firestorm Prefs"
- layout="topleft"
- follows="all"
- top="5"
- bottom="-10"
- left="1"
- right="-1"
- name="tabs"
- tab_min_width="50"
- tab_position="top" >
+<tab_container label="Firestorm Настройки" name="tabs">
 
 	<!--General-->
-	<panel
-	 border="true"
-	 top_pad="5"
-	 bottom="-1"
-	 left="1"
-	 right="-1"
-	 follows="all"
-	 label="Основное"
-	 name="tab-general" >
-		<check_box
-		 control_name="RestrainedLove"
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="10"
-		 left="20"
-		 width="270"
-		 height="20"
-		 name="checkMiscRLVa"
-		 label="Разрешить удаленное управления (RLVa)" >
-			<check_box.commit_callback
-			 function="RLV.ToggleEnabled" />
-			<check_box.enabled_callback
-			 function="RLV.CheckEnabled" />
-		</check_box>
-		<text
-		 layout="topleft"
-		 follows="left|top"
-		 left_pad="3"
-		 height="20"
-		 width="150"
-		 name="textMiscRLVaRestart"
-		 text_color="White_25">
-		(требуется перезапуск)
+	<panel label="Основное" name="tab-general" >
+		<check_box name="checkMiscRLVa" label="Контроль скриптами (RLVa)"/>
+		<text name="textMiscRLVaRestart">
+			(требуется перезапуск)
 		</text>
-		<text
-		 follows="left|top"
-		 layout="topleft"
-		 left="20"
-		 height="20"
-		 name="tab_direction_label"
-		 width="150"
-		 top_pad="5">
-		  Режим ориентации чата:
-		</text>
-		<text
-		 name="requires_restart_label"
-		 follows="left|top"
-		 layout="topleft"
-		 left_pad="5"
-		 height="20"
-		 width="150"
-		 text_color="White_25">
-		  (требуется перезапуск)
-		</text>
-		<radio_group
-		 height="16"
-		 layout="topleft"
-		 left="40"
-		 control_name="ChatTabDirection"
-		 name="chat_tab_direction"
-		 top_pad="0"
-		 tool_tip="Change flow of the chat/IM tabs between horizontal and vertical when consolidated tab mode is active. (Requires restart)"
-		 width="331">
-			<radio_item
-			 height="16"
-			 label="Горизонтальный"
-			 layout="topleft"
-			 left="0"
-			 name="radio_horizontal"
-			 value="0"
-			 top="0"
-			 width="150" />
-			<radio_item
-			 height="16"
-			 label="Вертикальный"
-			 layout="topleft"
-			 left_delta="160"
-			 name="radio_vertical"
-			 value="1"
-			 width="150" />
-		</radio_group>
-		<check_box
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 label="Отключить Экраны Телепортов "
-		 left="15"
-		 name="tp_screen_toggle"
-		 width="270"
-		 control_name="PhoenixDisableTeleportScreens"
-		 tool_tip="Disables the black teleport screen during all teleports."/>
-		<check_box
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 label="Отключение экрана входа"
-		 left_delta="0"
-		 name="login_screen_toggle"
-		 width="270"
-		 control_name="PhoenixDisableLoginScreens"
-		 tool_tip="Disables the black login progress Screen"/>
-		<check_box
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 label="Отключение экрана выхода"
-		 left_delta="0"
-		 name="logout_screen_toggle"
-		 width="270"
-		 control_name="PhoenixDisableLogoutScreens"
-		 tool_tip="Disables the black Logout progress screen."/>
-		<check_box
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 label="Строить и выкладывать под группой земли(при возм.)"
-		 left="15"
-		 name="grouplandrez"
-		 width="270"
-		 control_name="RezUnderLandGroup"
-		 tool_tip="Attempts to rez objects under the land group if you're in the land group regardless of which current group tag you're wearing."/>
-		<check_box top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 initial_value="false"
-		 label="Фильтра дубликатов закладок(LM) на карте мира"
-		 left="15"
-		 name="WorldmapFilterDuplicateLandmarks"
-		 width="270"
-		 control_name="WorldmapFilterDuplicateLandmarks"
-		 tool_tip="Filters duplicate Landmark entries in the Landmark list on the World Map."/>
-		<check_box top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 label="Перевернуть аватара если он идёт задом"
-		 left="15"
-		 name="backwardsturnavatar"
-		 width="270"
-		 control_name="TurnAroundWhenWalkingBackwards"
-		 tool_tip="Turns your avatar around to face the camera when you are walking backwards."/>
-
-		 <text
-		 type="string"
-		 length="1"
-		 follows="left|top"
-		 height="15"
-		 layout="topleft"
-		 left="30"
-		 name="lookatshownames"
-		 top_pad="5"
-		 width="250">
-			Показать имена (показать кто смотрит):
-		</text>
-		<combo_box
-		 control_name="DebugLookAtShowNames"
-		 follows="left|top"
-		 height="23"
-		 layout="topleft"
-		 left_pad="2"
-		 max_chars="135"
-		 name="lookatshownames_combobox"
-		 width="150">
-			<combo_box.item
-			 enabled="true"
-			 label="None"
-			 name="None"
-			 value="0" />
-			<combo_box.item
-			 enabled="true"
-			 label="Полное имя"
-			 name="Complete_Name"
-			 value="1" />
-			<combo_box.item
-			 enabled="true"
-			 label="Отображаемое имя"
-			 name="Display_Name"
-			 value="2" />
-			<combo_box.item
-			 enabled="true"
-			 label="Наследственное имя"
-			 name="Legacy_Name"
-			 value="3" />
-			<combo_box.item
-			 enabled="true"
-			 label="Имя пользователя"
-			 name="User_Name"
-			 value="4" />
-		</combo_box>
-
-		<check_box
-		top_pad="5"
-		control_name="ShowNetStats"
-		follows="left|top"
-		height="16"
-		initial_value="false"
-		label="Show lag meter"
-		left="15"
-		width="270"
-		tool_tip="Show lag meter in the Status Overlay"/>
-
-		<check_box
-		top_pad="5"
-		follows="left|top"
-		height="16"
-		label="Не отсылать физику аватара серверу (old V1 client compatibility)"
-		left="15"
-		name="dontsendavphysics"
-		width="270"
-		control_name="FSDontSendAvPhysicsParms"
-		tool_tip="Disables sending your avatar physics information to the Second Life server, for compatibility with version 1 viewers"/>
-
-		<check_box
-		top_pad="5"
-		follows="left|top"
-		height="16"
-		label="Сортировать список контактов по имени пользователя"
-		left="15"
-		name="sortcontactsbyun"
-		width="270"
-		control_name="FSSortContactsByUserName"
-		tool_tip="If this is checked, all contact lists are always sorted by username">
-			<check_box.commit_callback
-			 function="FS.ToggleSortContacts" />
-		</check_box>
-
-		<check_box
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 label="показать заблокированых аватаров, как облако."
-		 left="15"
-		 name="ShowMutedAvatarsAsCloud"
-		 width="270"
-		 control_name="ShowMutedAvatarsAsCloud"
-		 tool_tip="Blocked avatars will be rendered as a particle cloud in special color.">
-			<check_box.commit_callback
-			 function="FS.ToggleSortContacts" />
-		</check_box>
-<!--To be removed when LL migrates beta serch to stable-->
-		<text
-		 type="string"
-		 length="1"
-		 follows="left|top"
-		 height="15"
-		 layout="topleft"
-		 left="30"
-		 name="Search_Label"
-		 top_delta="25"
-		 width="200"
-		 tool_tip="While the beta URL often provides more accurate search results, it may not always be available.">
-		  URL поиска по умолчанию:
-		</text>
-
-		<combo_box
-		 control_name="SearchURL"
-		 follows="left|top"
-		 height="23"
-		 layout="topleft"
-		 left_delta="200"
-		 max_chars="135"
-		 name="SearchURL"
-		 width="150">
-			<combo_box.item
-			 enabled="true"
-			 label="Standard V2 search"
-			 name="Standard V2 search"
-			 value="http://search.secondlife.com/viewer/[CATEGORY]/?q=[QUERY]&amp;p=[AUTH_TOKEN]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;g=[GODLIKE]&amp;sid=[SESSION_ID]&amp;rid=[REGION_ID]&amp;pid=[PARCEL_ID]&amp;channel=[CHANNEL]&amp;version=[VERSION]&amp;major=[VERSION_MAJOR]&amp;minor=[VERSION_MINOR]&amp;patch=[VERSION_PATCH]&amp;build=[VERSION_BUILD]" />
-			<combo_box.item
-			 enabled="true"
-			 label="Beta V2 Search"
-			 name="Beta V2 Search"
-			 value="http://search-beta.secondlife.com/viewer/[CATEGORY]/?q=[QUERY]&amp;p=[AUTH_TOKEN]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;g=[GODLIKE]&amp;sid=[SESSION_ID]&amp;rid=[REGION_ID]&amp;pid=[PARCEL_ID]&amp;channel=[CHANNEL]&amp;version=[VERSION]&amp;major=[VERSION_MAJOR]&amp;minor=[VERSION_MINOR]&amp;patch=[VERSION_PATCH]&amp;build=[VERSION_BUILD]" />
-		</combo_box>
-
+		<check_box label="Отключить Экраны Телепортов" name="tp_screen_toggle" tool_tip=""/>
+		<check_box label="Отключение экрана входа" name="login_screen_toggle" tool_tip=""/>
+		<check_box label="Отключение экрана выхода" name="logout_screen_toggle" tool_tip=""/>
+		<check_box label="Строить и выкладывать под группой земли(при возм.)" name="grouplandrez" tool_tip=""/>
+		<check_box label="сортировать имена всегда по имени" name="sortcontactsbyun" tool_tip=""/>
+		<check_box label="Показать заблокированых аватаров, как облако." name="ShowMutedAvatarsAsCloud" tool_tip=""/>
+		<check_box name="UseLSLBridge" label="Активировать мост LSL" tool_tip=""/>
+		<check_box name="UseLSLFlightAssist" label="Ассистент полёта" tool_tip=""/>
 	</panel>
 
 
 	<!--Protection-->
-	<panel
-	 border="true"
-	 top_pad="5"
-	 bottom="-1"
-	 left="1"
-	 right="-1"
-	 follows="all"
-	 label="Защита"
-	 name="ProtectionTab">
-		<check_box
-		 top_pad="12"
-		 left="10"
-		 label="Блок левой кнопкой (сесть на объекты)"
-		 control_name="PhoenixBlockClickSit"
-		 follows="left|top"
-		 height="16"
-		 name="PhoenixBlockClickSit"
-		 width="256" />
-		<check_box
-		 top_pad="8"
-		 label="Allow scripts to show map UI (llMapDestination)"
-		 control_name="ScriptsCanShowUI"
-		 follows="left|top"
-		 height="16"
-		 name="ScriptsCanShowUI"
-		 width="256" />
-
-		<text
-		 top_pad="10"
-		 follows="left|top"
-		 height="12"
-		 name="TextText"
-		 width="200">
-		 Отменить разрешения:
-		 </text>
-		<radio_group
-		 top_pad="5"
-		 left="20"
-		 height="62"
-		 layout="topleft"
-		 control_name="PhoenixRevokePerms"
-		 name="PhoenixRevokePerms"
-		 tool_tip="PhoenixRevokePerms"
-		 width="331">
-			<radio_item
-			 height="16"
-			 label="Never (Original behaviour)"
-			 layout="topleft"
-			 name="radio_horizontal"
-			 value="0"
-			 top_pad="0"
-			 width="150" />
-			<radio_item
-			 height="16"
-			 label="Revoke on SIT"
-			 layout="topleft"
-			 top_pad="0"
-			 name="radio_vertical"
-			 value="1"
-			 width="150" />
-			<radio_item
-			 height="16"
-			 label="Revoke on STAND"
-			 layout="topleft"
-			 top_pad="0"
-			 name="radio_vertical"
-			 value="2"
-			 width="150" />
-			<radio_item
-			 height="16"
-			 label="Revoke on SIT and STAND"
-			 layout="topleft"
-			 top_pad="0"
-			 name="radio_vertical"
-			 value="3"
-			 width="150" />
+	<panel label="Безопасность" name="ProtectionTab">
+		<check_box label="Блок левой кнопкой (сесть на объекты)" name="FSBlockClickSit"/>
+		<check_box label="Позволить скриптам использевать (llMapDestination)" name="ScriptsCanShowUI"/>
+		<text name="revokepermissions_txt">
+			Отозвать разрешения:
+		</text>
+		<radio_group name="FSRevokePerms">
+			<radio_item label="Некогда" name="never_radio"/>
+			<radio_item label="Сидя" name="sit_radio"/>
+			<radio_item label="Вставая" name="stand_radio"/>
+			<radio_item label="Сидя и Вставая" name="sitnstand_radio"/>
 		</radio_group>
-	</panel>
-
-
-	<!--View-->
-	<panel
-	 border="true"
-	 top_pad="5"
-	 bottom="-1"
-	 left="1"
-	 right="-1"
-	 follows="all"
-	 label="Вид"
-	 name="firestorm_view" >
-
-		<text
-			top_pad="10"
-			type="string"
-			length="1"
-			follows="left|top"
-			height="15"
-			layout="topleft"
-			left="15"
-			name="camera_options_label"
-			width="200">
-			Функции камеры:
+		<text name="SurfaceAreaThreshholdLabel">
+			Безопасность от лаг текстур (может не работать):
 		</text>
-
-		<check_box top_pad="4"
-			follows="left|top"
-			height="16"
-			initial_value="false"
-			label="Нажатие на ваш аватар держит положение камеры"
-			layout="topleft"
-			left="30"
-			name="backwardsturnavatar"
-			width="270"
-			control_name="ClickOnAvatarKeepsCamera"
-			tool_tip="Normally, clicking on your avatar resets the camera position. This option removes this behavior."/>
-
-		<check_box top_pad="4"
-			follows="left|top"
-			height="16"
-			initial_value="false"
-			label="Отключить минимальное расстояние приближения камеры"
-			layout="topleft"
-			left="30"
-			name="disableminzoomdist"
-			width="270"
-			control_name="PhoenixDisableMinZoomDist"
-			tool_tip="Disable the constraint on the closest distance the camera is allowed to get to an object."/>
-
-		<check_box top_pad="4"
-			follows="left|top"
-			height="16"
-			initial_value="false"
-			label="Разрешить двигаться камере без ограничений(не через примитивы)"
-			layout="topleft"
-			left="30"
-			name="ignorecameraconstraints"
-			width="350"
-			control_name="PhoenixIgnoreSimulatorCameraConstraints"
-			tool_tip="Ignores the 'push' the simulator applies to your camera to keep it out of objects."/>
-
-		<text
-			name="requires_restart_label"
-			follows="left|top"
-			layout="topleft"
-			left_pad="10"
-			top_delta="0"
-			height="20"
-			width="130"
-			text_color="White_25">
-			(требуется перезапуск)
+		<check_box label="Скрыть крупные объекты с большой и сложной текстурой. Пар: " name="RenderVolumeSAProtection" tool_tip=""/>
+		<check_box label="Вкл. Антиспам" name="UseAntiSpam"/>
+		<text name="AntiSpamText1" width="250">
+			Максимальное количество строк за сообщение:
 		</text>
-
-		<check_box
-		 top_pad="12"
-		 follows="left|top"
-		 height="16"
-		 initial_value="false"
-		 label="Повернуть радар по поз. аватара"
-		 layout="topleft"
-		 left="15"
-		 name="minimaprotate"
-		 width="350"
-		 control_name="MiniMapRotate"
-		 tool_tip="Rotate miniature world map to avatar direction."/>
-
-		<check_box
-		 control_name="MiniMapChatRing"
-		 name="MiniMapChatRing"
-		 label="Показать кольцо на радаре, который указывает диапазона чата"
-		 layout="topleft"
-		 top_pad="0"
-		 height="20"
-		 width="350" />
-
+		<spinner name="_NACL_AntiSpamNewlines" tool_tip=""/>
+		<text name="AntiSpamText2" width="250">
+			Максимальный поток от того же источника:
+		</text>
+		<spinner name="_NACL_AntiSpamAmount" tool_tip="[Standard: 10]"/>
+		<text name="AntiSpamText3" width="250">
+			Множитель для звукового воспроизведения запросов:
+		</text>
+		<spinner name="_NACL_AntiSpamSoundMulti" tool_tip="[Standard: 10]"/>
+		<text name="AntiSpamText4" width="250">
+			Множитель для запросов предварительной нагрузки:
+		</text>
+		<spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip=" [Standard: 4]"/>
+		<button name="AntiSpamUnblock" label="Разблокировать всех заблокиравоных источников" width="250"/>
 	</panel>
 
-	<!--Chat-->
-	<panel
-	 border="true"
-	 top_pad="5"
-	 bottom="-1"
-	 left="1"
-	 right="-1"
-	 follows="all"
-	 label="Чат"
-	 name="tab1-2" >
 
-		<tab_container
-		 label="Firestorm Prefs"
-		 top_pad="5"
-		 bottom="-1"
-		 left="1"
-		 right="-1"
-		 follows="all"
-		 name="tabs"
-		 tab_min_width="50"
-		 tab_position="top" >
+	<!--Avatar-->
+	<panel label="Аватар" name="firestorm_avatar">
+		<text name="HeadMovement">
+			Радиус поворота головы ('0' вык.):
+		</text>
+		<slider label="Вертикальный диапазон движения головы:" tool_tip="" name="PitchFromMousePositionSlider"/>
+		<text name="PitchFromMousePositionText">
+			грудусов
+		</text>
+		<slider label="Горизонтальное диапазон движения головы::" tool_tip="" name="YawFromMousePositionSlider"/>
+		<text name="YawFromMousePositionText">
+			грудусов
+		</text>
+		<text name="note_lookat">
+			(Настройки фокуса камеры в вкладке приватность)
+		</text>
+		<check_box label="Не посылать инфо физики аватара серверу" name="dontsendavphysics" tool_tip=""/>
 
-		<!--Chat: General-->
-		<panel
-		 border="true"
-		 top_pad="5"
-		 bottom="-1"
-		 left="1"
-		 right="-1"
-		 follows="all"
-		 label="General"
-		 name="ChatGeneral" >
+		<!-- LGG Color Beams -->
+		<text name="BeamPrefs">
+			Луч Выбора:
+		</text>
+		<button name="BeamColor_delete" label="Удалить" tool_tip=""/>
+		<combo_box name="BeamColor_combo" tool_tip=""/>
+		<button name="BeamColor_new" label="Создать" tool_tip=""/>
+		<button name="BeamColor_refresh" label="Обновление" tool_tip=""/>
+		<slider name="FSMaxBeamsPerSecond" label="Обновления / сек:" tool_tip="[Standard: 40]"/>
+		<check_box label="Луч выбора вкл." name="SLPartBeam"/>
+		<check_box label="СЛ-Чат-Частиц вкл." name="FSParticleChat"/>
 
-			<text
-			 name="chat_and_in_enhancements"
-			 follows="left|top"
-			 layout="topleft"
-			 top_pad="15"
-			 left="24"
-			 height="10"
-			 width="180">
-			  Чат и ЛЧ (IM) улучшения:
-			</text>
-			<check_box
-			 control_name="AllowMUpose"
-			 name="AllowMUpose"
-			 label="&quot;:&quot; as a synonym for &quot;/me&quot;"
-			 layout="topleft"
-			 top_pad="0"
-			 left="30"
-			 height="20"
-			 width="400" />
-			<check_box
-			 control_name="EmotesUseItalic"
-			 name="EmotesUseItalic"
-			 label="Эмоциям использовать курсив"
-			 layout="topleft"
-			 top_pad="0"
-			 height="20"
-			 width="400" />
-			<check_box
-			 control_name="AutoCloseOOC"
-			 name="AutoCloseOOC"
-			 label="Auto-close ((OOC)) parentheses"
-			 layout="topleft"
-			 top_pad="0"
-			 height="20"
-			 width="400" />
-			<check_box
-			 control_name="OnlineOfflinetoNearbyChat"
-			 name="OnlineOfflinetoNearbyChat"
-			 label="Выключение строки уведомления друг вышел/зашёл в Чат"
-			 layout="topleft"
-			 top_pad="0"
-			 height="20"
-			 width="400" />
-			<check_box
-			 control_name="ShowStreamMetadata"
-			 name="ShowStreamMetadata"
-			 label="Показать поток и титул песни в местном чате"
-			 layout="topleft"
-			 top_pad="0"
-			 height="20"
-			 width="400" />
-			<check_box
-			 control_name="StreamMetadataAnnounceToChat"
-			 name="StreamMetadataAnnounceToChat"
-			 label="Объявить титул потока на чат-канале:"
-			 layout="topleft"
-			 top_pad="0"
-			 height="20"
-			 width="240" />
-			<spinner
-			 top_delta="-2"
-			 control_name="StreamMetadataAnnounceChannel"
-			 decimal_digits="0"
-			 layout="topleft"
-			 follows="left|top"
-			 height="20"
-			 left_pad="5"
-			 increment="1"
-			 initial_val="362394"
-			 max_val="2147483647"
-			 min_val="1"
-			 name="StreamMetadataAnnounceChannel"
-			 width="90" />
-			<check_box
-			 layout="topleft"
-			 follows="left|top"
-			 top_pad="5"
-			 left="20"
-			 width="250"
-			 height="20"
-			 control_name="PhoenixNearbyChatbar"
-			 label="Add a chatbar in the Nearby Chat window"/>
-			<text
-			 top_delta="2"
-			 name="requires_restart_label"
-			 follows="left|top"
-			 layout="topleft"
-			 left_pad="0"
-			 height="20"
-			 width="130"
-			 text_color="White_25">
-			  (Требуется перезагрузка)
-			</text>
-			<check_box
-			 layout="topleft"
-			 follows="left|top"
-			 top_pad="0"
-			 left="20"
-			 width="400"
-			 height="20"
-			 control_name="PhoenixUseNearbyChatConsole"
-			 label="Использовать консоль для всплывающих окон, а не тосты(Viewer 1.x style)"/>
-			<check_box
-			 layout="topleft"
-			 follows="left|top"
-			 top_pad="0"
-			 width="50"
-			 height="20"
-			 control_name="PhoenixLogImToChatConsole"
-			 label="Показать ЛС (IM) и групповой чат в консоли"/>
-			<check_box
-			 layout="topleft"
-			 follows="left|top"
-			 top_pad="0"
-			 width="200"
-			 height="20"
-			 control_name="ChatFullWidth"
-			 label="Используйте всю ширину экрана для консоля"/>
-			<text
-			 top_delta="2"
-			 name="requires_restart_label2"
-			 follows="left|top"
-			 layout="topleft"
-			 left_pad="0"
-			 height="20"
-			 width="130"
-			 text_color="White_25">
-			  (требуется перезапуск)
-			</text>
-
-			<spinner
-			 top_pad="0"
-			 control_name="NearbyToastLifeTime"
-			 decimal_digits="0"
-			 follows="left|top"
-			 height="20"
-			 increment="1"
-			 initial_val="10"
-			 label="Fade chat after"
-			 label_width="90"
-			 left="35"
-			 max_val="30"
-			 min_val="2"
-			 name="fade_chat_time"
-			 width="130" />
-			<text
-			 follows="left|top"
-			 height="20"
-			 left_pad="3"
-			 name="text_box4"
-			 width="70">
-				(секунд)
-			</text>
-			<spinner
-			 decimal_digits="0"
-			 control_name="ConsoleMaxLines"
-			 follows="left|top"
-			 height="20"
-			 increment="1"
-			 initial_val="10"
-			 left_pad="0"
-			 max_val="50"
-			 min_val="1"
-			 name="max_chat_count"
-			 width="60" />
-			<text
-			 follows="left|top"
-			 height="20"
-			 left_pad="3"
-			 name="text_box5"
-			 width="60">
-				(# линий)
-			</text>
-			<check_box
-			 layout="topleft"
-			 follows="left|top"
-			 top_pad="0"
-			 left="20"
-			 width="50"
-			 height="20"
-			 control_name="PhoenixBoldGroupMods"
-			 label="Показать чат модераторов группы в жирном шрифте"/>
-			<check_box
-			 layout="topleft"
-			 follows="left|top"
-			 top_pad="0"
-			 width="50"
-			 height="20"
-			 control_name="PhoenixMuteAllGroups"
-			 label="Отключить все групповые чаты"/>
-			<check_box
-			 layout="topleft"
-			 follows="left|top"
-			 top_pad="0"
-			 width="50"
-			 height="20"
-			 control_name="PhoenixMuteGroupWhenNoticesDisabled"
-			 label="Когда опция 'Получать нотисы от группы' отключена, отключить чат-группы"/>
-
-		</panel>
-
-		<!--Chat: Radar-->
-		<panel
-		 border="true"
-		 top_pad="5"
-		 bottom="-1"
-		 left="1"
-		 right="-1"
-		 follows="all"
-		 label="Радар"
-		 name="ChatRadar" >
-
-			<check_box
-			 control_name="RadarReportChatRange"
-			 name="reportChatRange"
-			 label="Радар оповещает когда аватар вошёл / вышел из / в диапазона чата"
-			 layout="topleft"
-			 left="24"
-			 top_pad="15"
-			 height="20"
-			 width="400" />
-			<check_box
-			 control_name="RadarReportDrawRange"
-			 name="reportDrawRange"
-			 label="Радар оповещает когда аватар вошёл / вышел из / в дистанции отрисовки"
-			 layout="topleft"
-			 top_pad="0"
-			 height="20"
-			 width="400" />
-			<check_box
-			 control_name="RadarReportSimRange"
-			 name="RadarReportSimRange"
-			 label="Радар оповещает когда аватар вошёл / вышел из региона"
-			 layout="topleft"
-			 top_pad="0"
-			 height="20"
-			 width="400" />
-
-		</panel>
-
-		<!--Chat: Keyword Alerts-->
-		<panel
-		 border="true"
-		 top_pad="5"
-		 bottom="-1"
-		 left="1"
-		 right="-1"
-		 follows="all"
-		 label="Оповещения ключевых слов "
-		 name="ChatKeywordAlerts">
-
-			<check_box
-			 layout="topleft"
-			 follows="left|top"
-			 top="10"
-			 left="20"
-			 width="80"
-			 height="20"
-			 control_name="PhoenixKeywordOn"
-			 label="Вкл. оповещения ключевых слов"/>
-			<check_box
-			 layout="topleft"
-			 follows="left|top"
-			 top_delta="25"
-			 left="20"
-			 width="50"
-			 height="20"
-			 control_name="PhoenixKeywordInChat"
-			 label="Поиск ключевых слов в чате"/>
-			<check_box
-			 layout="topleft"
-			 follows="left|top"
-			 top_delta="25"
-			 left="20"
-			 width="150"
-			 height="20"
-			 control_name="PhoenixKeywordInIM"
-			 label="Поиск ключевых слов в IMs и групповом чате"/>
-			<text
-			 layout="topleft"
-			 follows="left|top"
-			 top_delta="30"
-			 left="20"
-			 height="20"
-			 width="220"
-			 name="textPhoenixKeywords">
-			  Ключевые слова (разделение запятыми):
-			</text>
-			<line_editor
-			 follows="left|top"
-			 top_delta="25"
-			 left="20"
-			 height="20"
-			 max_length="256"
-			 name="PhoenixKeywords"
-			 control_name="PhoenixKeywords"
-			 width="450"/>
-
-			<check_box
-			 layout="topleft"
-			 follows="left|top"
-			 top_delta="25"
-			 left="20"
-			 width="50"
-			 height="20"
-			 control_name="PhoenixKeywordChangeColor"
-			 label="Включить Цвет оповещения"/>
-
-			<color_swatch
-			 control_name="PhoenixKeywordColor"
-			 border.border_thickness="0"
-			 label_height="0"
-			 layout="topleft"
-			 follows="left|top"
-			 top_delta="0"
-			 left="150"
-			 height="15"
-			 width="15"
-			 name="colorswatch"
-			 tool_tip="Click to open color picker"/>
-
-			<check_box
-			 layout="topleft"
-			 follows="left|top"
-			 top_delta="25"
-			 left="20"
-			 width="50"
-			 height="20"
-			 control_name="PhoenixKeywordPlaySound"
-			 label="PhoenixKeywordPlaySound"/>
-
-			<text
-			 layout="topleft"
-			 follows="left|top"
-			 top_delta="30"
-			 left="20"
-			 height="20"
-			 width="120"
-			 name="textPhoenixKeywordSound">
-			  Звук оповещения UUID:
-			</text>
-			<line_editor
-			 follows="left|top"
-			 left_pad="5"
-			 height="20"
-			 max_length="256"
-			 name="PhoenixKeywordSound"
-			 control_name="PhoenixKeywordSound"
-			 width="250"/>
-
-		</panel>
-		</tab_container>
+		<combo_box name="FSBeamShape_combo" tool_tip=""/>
+		<button name="delete_beam" label="Удалить" tool_tip=""/>
+		<button name="custom_beam_btn" label="Создать" tool_tip=""/>
+		<button name="refresh_beams" label="Обновление" tool_tip=""/>
+		<slider name="FSBeamShapeScale" label="Масштабирование:" tool_tip="" label_width="60" width="175"/>
 	</panel>
-
 
 	<!--CmdLine-->
-	<panel
-	 border="true"
-	 top_pad="5"
-	 bottom="-1"
-	 left="1"
-	 right="-1"
-	 follows="all"
-	 label="Команды"
-	 name="tab1-3" >
+	<panel label="Команды" name="tab1-3">
+		<check_box label="Вкл. краткие команды" name="chat_cmd_toggle"/>
 
-		<check_box
-		 top="5"
-		 follows="left|top"
-		 height="16"
-		 label="Enable usage of chat bar as a command line"
-		 left="5"
-		 name="chat_cmd_toggle"
-		 width="270"
-		 control_name="PhoenixCmdLine"/>
-		<button
-		 top="5"
-		 follows="top|right"
-		 height="18"
-		 label="?"
-		 name="PhoenixHelp_CmdLine"
-		 tool_tip="Click here for help regarding the settings in this page."
-		 right="-35"
-		 width="18"/>
-
-		<text
-		 top="25"
-		 follows="left|top"
-		 height="16"
-		 left="10"
-		 name="loltxt2"
-		 width="250">
-		 Teleport within sim (usage: cmd x y z)
+		<text name="FSCmdLinePos_txt">
+			Телепорт (кмд: cmd x z y)
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 name="PhoenixCmdLinePos"
-		 control_name="PhoenixCmdLinePos"
-		 width="200"/>
-
-		<text
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 name="loltxt3"
-		 width="250">
-		 Teleport to ground (usage: cmd)
+		<text name="FSCmdLineGround_txt">
+			Телепорт на поверхность (кмд: cmd)
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 name="PhoenixCmdLineGround"
-		 control_name="PhoenixCmdLineGround"
-		 width="200"/>
-
-		<text
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 name="loltxt4"
-		 width="250">
-		Teleport to altitude (usage: cmd z)
+		<text name="FSCmdLineHeight_txt">
+			Телепорт на высоту (кмд: cmd z)
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 name="PhoenixCmdLineHeight"
-		 control_name="PhoenixCmdLineHeight"
-		 width="200"/>
-
-		<text
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 name="loltxt5"
-		 width="250">
-		 Teleport home (usage: cmd)
-		 </text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 name="PhoenixCmdLineTeleportHome"
-		 control_name="PhoenixCmdLineTeleportHome"
-		 width="200"/>
-
-		<text
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 name="loltxt4"
-		 width="250">
-		Rez a platform (usage: cmd 0 - 30)
+		<text name="FSCmdLineTeleportHome_txt">
+			Телепорт домой (кмд: cmd)
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 name="PhoenixCmdLineRezPlatform"
-		 control_name="PhoenixCmdLineRezPlatform"
-		 width="200"/>
-		<slider
-		 top_pad="4"
-		 name="PhoenixCmdLinePlatformSize"
-		 control_name="PhoenixCmdLinePlatformSize"
-		 decimal_digits="1"
-		 follows="left|top"
-		 height="18"
-		 increment="0.5"
-		 initial_val="5"
-		 label="Width"
-		 label_width="30"
-		 max_val="30"
-		 min_val="5"
-		 show_text="true"
-		 width="200"
-		 auto_resize="false"
-		 tool_tip="How big do you want the platform to appear to be?"/>
-
-		<text
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 name="loltxt4"
-		 width="250">
-		Teleport to sim x (usage: cmd simname)
+		<text name="FSCmdLineRezPlatform_txt">
+			выложить платформу (кмд: cmd 0 - 30)
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 name="PhoenixCmdLineMapTo"
-		 control_name="PhoenixCmdLineMapTo"
-		 width="200"/>
-		<check_box
-		 top_pad="4"
-		 follows="left|top"
-		 height="16"
-		 label="Use same position between sims"
-		 name="toggle"
-		 width="270"
-		 control_name="PhoenixCmdLineMapToKeepPos"/>
-
-		<text
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 name="loltxt4"
-		 width="250">
-		Calc. expressions (usage: cmd SIN(2+2))
+		<slider name="FSCmdLinePlatformSize" label="Ширина" tool_tip=""/>
+		<text name="FSCmdLineMapTo_txt">
+			Телепорт а регион (cmd regionname)
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 name="PhoenixCmdLineCalc"
-		 control_name="PhoenixCmdLineCalc"
-		 width="200"/>
-
-		<text
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 name="loltxt4"
-		 width="250">
-		Add autocorrect word(cmd list|bad|good)
+		<check_box label="Selbe Position auf neuer Region" name="toggle"/>
+		<text name="FSCmdLineCalc_txt">
+			Решить (кмд: cmd SIN(2+2))
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 name="PhoenixCmdLineAutocorrect"
-		 control_name="PhoenixCmdLineAutocorrect"
-		 width="200"/>
-
-		<view_border
-		 bevel_style="none"
-		 border_thickness="1"
-		 top="25"
-		 left="240"
-		 bottom="-25"
-		 width="0"
-		 follows="top|left|bottom"
-		 name="EmDivisor"/>
-
-		<text
-		 top="25"
-		 follows="left|top"
-		 height="16"
-		 left_delta="10"
-		 name="loltxt9"
-		 width="250">
-		 Change Draw Distance (usage: cmd meters)
+		<text name="FSCmdLineAutocorrect_txt">
+			Доб к автоматической коррекции (cmd list|bad|good)
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 name="PhoenixCmdLineDrawDistance"
-		 control_name="PhoenixCmdLineDrawDistance"
-		 width="200"/>
-
-		<text
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 name="loltxt10"
-		 width="250">
-		 Teleport to cam position (usage: cmd)
+		<text name="FSCmdLineDrawDistance_txt">
+			Дальность видемости (кмд: cmd Meter)
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 name="PhoenixCmdTeleportToCam"
-		 control_name="PhoenixCmdTeleportToCam"
-		 width="200"/>
-
-		<text
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 name="loltxt11"
-		 width="250">
-		 Get avatar name from key (usage: cmd key)
+		<text name="FSCmdTeleportToCam_txt">
+			Телепорт к камере (кмд: cmd)
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 name="PhoenixCmdLineKeyToName"
-		 control_name="PhoenixCmdLineKeyToName"
-		 width="200"/>
-
-		<text
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 name="loltxt12"
-		 width="250">
-		 Offer teleport to avatar (usage: cmd key)
+		<text name="FSCmdLineKeyToName_txt">
+			Узнать имя аватара по UUI (кмд: cmd key)
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 name="PhoenixCmdLineOfferTp"
-		 control_name="PhoenixCmdLineOfferTp"
-		 width="200"/>
-
-		<text
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 name="loltxt13"
-		 width="250">
-		 Teleport to avatar (usage: cmd name)
+		<text name="FSCmdLineOfferTp_txt">
+			пред. телепорт аватару (кмд: cmd key)
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 tool_tip="The syntax of this command allows partial names and is not case sensitive. Better results if used while the Radar is open."
-		 name="PhoenixCmdLineTP2"
-		 control_name="PhoenixCmdLineTP2"
-		 width="200"/>
-
-		<text
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 name="loltxt14"
-		 width="250">
-		 Turn AO on/off (usage: cmd on/off)
+		<text name="FSCmdLineTP2_txt">
+			Телепорт к аватару (кмд: cmd name)
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 name="PhoenixCmdLineAO"
-		 control_name="PhoenixCmdLineAO"
-		 width="200"/>
-
-		<text
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 name="loltxt15"
-		 width="250">
-		 Clear the chat history (usage: cmd)
+		<line_editor tool_tip="" name="FSCmdLineTP2"/>
+		<text name="FSCmdLineAO_txt">
+			AO вкл.-/выкл. (кмд: cmd on/off)
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 tool_tip="Clears the Chat History to prevent lag effects from chat spammers."
-		 name="PhoenixCmdLineClearChat"
-		 control_name="PhoenixCmdLineClearChat"
-		 width="200"/>
-
-		<text
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 name="loltxt15"
-		 width="250">
-		 Set the media url (usage: cmd url type)
+		<text name="FSCmdLineClearChat_txt">
+			Удалить историю чата (кмд: cmd)
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 tool_tip="Sets and plays your media stream to the entered url"
-		 name="PhoenixCmdLineMedia"
-		 control_name="PhoenixCmdLineMedia"
-		 width="200"/>
-
-		<text
-		 top_pad="5"
-		 follows="left|top"
-		 height="16"
-		 name="loltxt15"
-		 width="250">
-		 Set the music stream url (usage: cmd url)
+		<line_editor tool_tip="" name="FSCmdLineClearChat"/>
+		<text name="FSCmdLineMedia_txt">
+			Уст. УРЛ медия (кмд: cmd URL Typ)
 		</text>
-		<line_editor
-		 top_pad="0"
-		 follows="left|top"
-		 height="20"
-		 max_length="256"
-		 tool_tip="sets and plays your music stream to the entered url"
-		 name="PhoenixCmdLineMusic"
-		 control_name="PhoenixCmdLineMusic"
-		 width="200"/>
+		<line_editor tool_tip="" name="FSCmdLineMedia"/>
+		<text name="FSCmdLineMusic_txt">
+			уст. УРЛ стрима (usage: cmd URL)
+		</text>
+		<line_editor tool_tip="" name="FSCmdLineMusic"/>
 	</panel>
 
 
 	<!--Windlight-->
-	<panel
-	 border="true"
-	 top_pad="5"
-	 bottom="-1"
-	 left="1"
-	 right="-1"
-	 follows="all"
-	 label="Windlight"
-	 name="WindlightTab">
-		<!--Todo:KC
-		<text bottom="-25" left="10" follows="left|top" height="12" width="128">General</text>
-		<check_box bottom_delta="-25" left_delta="0" label="Save Windlight settings on logout" control_name="PhoenixRestoreLastWLsettingsOnLogin" follows="left|top" height="16" name="PhoenixRestoreLastWLsettingsOnLogin" width="256" />
-		-->
-		<text
-		 top_pad="10"
-		 left="10"
-		 follows="left|top"
-		 height="12"
-		 name="TextText"
-		 width="200">
-		 Phoenix WL Share (Experimental)
-		 </text>
-		<check_box
-		 top_pad="8"
-		 label="Use Phoenix Parcel Windlight Sharing (Experimental)"
-		 control_name="PhoenixWLParcelEnabled"
-		 follows="left|top"
-		 height="16"
-		 name="PhoenixWLParcelEnabled"
-		 width="256" />
-		<check_box
-		 top_pad="5"
-		 left="15"
-		 label="Автоматически применять настройки WL от земли друзей"
-		 control_name="PhoenixWLWhitelistFriends"
-		 follows="left|top"
-		 height="16"
-		 name="PhoenixWLWhitelistFriends"
-		 width="256" />
-		<check_box
-		 top_pad="5"
-		 label="Автоматически применять настройки WL от земли моих групп"
-		 control_name="PhoenixWLWhitelistGroups"
-		 follows="left|top"
-		 height="16"
-		 name="PhoenixWLWhitelistGroups"
-		 width="256" />
-		<check_box
-		 top_pad="5"
-		 label="Автоматически применять настройки WL от всех"
-		 control_name="PhoenixWLWhitelistAll"
-		 follows="left|top"
-		 height="16"
-		 name="PhoenixWLWhitelistAll"
-		 width="256" />
+	<panel label="О.Среда" name="WindlightTab">
+		<check_box label="Авт. уст. окружающую среду в зав. от региона" name="UseEnvironmentFromRegionAlways"/>
+		<check_box label="Переписать окружающую среду своими настройками" name="FSInterpolateSky" tool_tip=""/>
+		<check_box label="Переписать окружающую среду своими настройками воды" name="FSInterpolateWater" tool_tip=""/>
+		<text name="FSWLshare_txt">
+			Phoenix Windlight-Sharing (экспериментальный):
+		</text>
+		<check_box label="активировать ля парселя(экспериментальный)" name="FSWLParcelEnabled"/>
+		<check_box label="Автоматически применять настройки WL от друзей" name="FSWLWhitelistFriends"/>
+		<check_box label="Автоматически применять настройки WL от групп" name="FSWLWhitelistGroups"/>
+		<check_box label="Автоматически применять настройки WL от всех" name="FSWLWhitelistAll"/>
+		<check_box label="игнорировать изменения параметров среды" name="FSInterpolateParcelWL" tool_tip=""/>
 	</panel>
-	
-	<!--Build-->
-	<panel
-		border="true"
-		top_pad="5"
-		bottom="-1"
-		left="1"
-		right="-1"
-		follows="all"
-		label="Строить"
-		name="BuildTab">
 
-		<text
-		 top="20"
-		 follows="left|top|right"
-		 height="10"
-		 left="10"
-		 name="text_box_objprams"
-		 width="175">
-		 Параметры объекта по умолчанию
-		 </text>
-		<view_border
-		 top_pad="5"
-		 left="10"
-		 right="-10"
-		 height="75"
-		 follows="left|top|right"
-		 bevel_style="none"
-		 border_thickness="1"
-		 name="SizeBorder"/>
-		<spinner
-		 top_delta="10"
-		 left_delta="5"
-		 decimal_digits="5"
-		 follows="left|top"
-		 height="16"
-		 increment="0.05"
-		 label="X size"
-		 label_width="40"
-		 max_val="10"
-		 min_val="0.01"
-		 mouse_opaque="true"
-		 name="X size"
-		 width="120"
-		 control_name="PhoenixBuildPrefs_Xsize"/>
-		<spinner
-		 top_pad="3"
-		 decimal_digits="5"
-		 follows="left|top"
-		 height="16"
-		 increment="0.05"
-		 label="Y size"
-		 label_width="40"
-		 max_val="10"
-		 min_val="0.01"
-		 mouse_opaque="true"
-		 name="Y size"
-		 width="120"
-		 control_name="PhoenixBuildPrefs_Ysize"/>
-		<spinner
-		 top_pad="3"
-		 decimal_digits="5"
-		 follows="left|top"
-		 height="16"
-		 increment="0.05"
-		 label="Z size"
-		 label_width="40"
-		 max_val="10"
-		 min_val="0.01"
-		 mouse_opaque="true"
-		 name="Z size"
-		 width="120"
-		 control_name="PhoenixBuildPrefs_Zsize"/>
-		<text
-		 top="45"
-		 left_pad="15"
-		 follows="left|top"
-		 height="15"
-		 name="text_box_objmaterial"
-		 width="50">
-		 Материал:
-		 </text>
-		<combo_box
-		 left_pad="2"
-		 height="18"
-		 width="80"
-		 allow_text_entry="false"
-		 follows="left|top"
-		 name="material"
-		 control_name="PhoenixBuildPrefs_Material">
-			 <combo_item name="Камень" value="Stone">Stone</combo_item>
-			 <combo_item name="Метал" value="Metal">Metal</combo_item>
-			 <combo_item name="Стекло" value="Glass">Glass</combo_item>
-			 <combo_item name="Трава" value="Wood">Wood</combo_item>
-			 <combo_item name="Flesh" value="Flesh">Flesh</combo_item>
-			 <combo_item name="Пластик" value="Plastic">Plastic</combo_item>
-			 <combo_item name="Rubber" value="Rubber">Rubber</combo_item>
+	<!--Build-->
+	<panel label="Строить" name="BuildTab">
+		<text name="text_box_objprams">
+			Параметры объекта по умолчанию
+		</text>
+		<spinner label="X-размер" name="X размер" label_width="50" width="130"/>
+		<spinner label="Y-размер" name="Y размер" label_width="50" width="130"/>
+		<spinner label="Z-размер" name="Z размер" label_width="50" width="130"/>
+		<text name="text_box_objmaterial">
+			Материал:
+		</text>
+		<combo_box name="material">
+			<combo_item name="Stone">Камень</combo_item>
+			<combo_item name="Metal">Метал</combo_item>
+			<combo_item name="Glass">Стекло</combo_item>
+			<combo_item name="Wood">Дерево</combo_item>
+			<combo_item name="Flesh">Мясо</combo_item>
+			<combo_item name="Plastic">Пластик</combo_item>
+			<combo_item name="Rubber">Резина</combo_item>
 		</combo_box>
 
-		<text
-		 top="125"
-		 left="10"
-		 follows="left|top"
-		 height="10"
-		 name="text_box_pivotpoint"
-		 width="135">
-		 Точка Pivot
+		<text name="text_box_pivotpoint">
+			Точка Pivot
 		</text>
-		<view_border
-		 top_pad="5"
-		 bevel_style="none"
-		 border_thickness="1"
-		 follows="top|left"
-		 height="110"
-		 name="SizeBorder"
-		 width="235"/>
-		<check_box
-		 top_delta="10"
-		 follows="left|top"
-		 label="Показать оси на корневом примитиве"
-		 tool_tip="Default behaviour is to show the axis on the center of mass of a linkset. If enabled, the axis will be shown on the root prim of the linkset instead."
-		 name="EmBuildPrefsActualRoot_toggle"
-		 control_name="PhoenixBuildPrefs_ActualRoot"/>
-		<spinner
-		 top_pad="5"
-		 left_delta="5"
-		 decimal_digits="5"
-		 follows="left|top"
-		 height="16"
-		 increment="0.05"
-		 label="X pos"
-		 label_width="40"
-		 mouse_opaque="true"
-		 max_val="256"
-		 min_val="-256"
-		 name="X pos"
-		 width="120"
-		 control_name="PhoenixBuildPrefs_PivotX"/>
-		<spinner
-		 top_pad="3"
-		 decimal_digits="5"
-		 follows="left|top"
-		 height="16"
-		 increment="0.05"
-		 label="Y pos"
-		 label_width="40"
-		 mouse_opaque="true"
-		 max_val="256"
-		 min_val="-256"
-		 name="Y pos"
-		 width="120"
-		 control_name="PhoenixBuildPrefs_PivotY"/>
-		<spinner
-		 top_pad="3"
-		 decimal_digits="5"
-		 follows="left|top"
-		 height="16"
-		 increment="0.05"
-		 label="Z pos"
-		 label_width="40"
-		 mouse_opaque="true"
-		 max_val="256"
-		 min_val="-256"
-		 name="Z pos"
-		 width="120"
-		 control_name="PhoenixBuildPrefs_PivotZ"/>
-		<check_box
-		 top_pad="10"
-		 left_delta="-5"
-		 enabled="true"
-		 follows="left|top"
-		 font="SansSerifSmall"
-		 height="16"
-		 label="Значения процентов"
-		 mouse_opaque="true"
-		 tool_tip="Default settings are Percentages and every axis set at 50"
-		 name="EmPivotPercToggle"
-		 radio_style="false"
-		 width="100"
-		 control_name="PhoenixBuildPrefs_PivotIsPercent"/>
-		 
-		<check_box
-		 top_pad="20"
-		 follows="left|top"
-		 height="16"
-		 label="Включить подсветку выбранного примитива"
-		 tool_tip="When unchecked, the yellow/blue outline effects are not rendered, improving performance when large numbers of prims are selected."
-		 name="EmBuildPrefsRenderHighlight_toggle"
-		 control_name="RenderHighlightSelections"/>
+		<check_box label="Показать оси на корневом примитиве" tool_tip="" name="EmBuildPrefsActualRoot_toggle"/>
+		<spinner label="X-pos" name="X pos" label_width="60" width="140"/>
+		<spinner label="Y-pos" name="Y pos" label_width="60" width="140"/>
+		<spinner label="Z-pos" name="Z pos" label_width="60" width="140"/>
+		<check_box label="Значения процентов" tool_tip="" name="EmPivotPercToggle"/>
+		<check_box label="Включить подсветку выбранного примитива" tool_tip="" name="EmBuildPrefsRenderHighlight_toggle"/>
+		<check_box label="Использование старый &quot;Установить объект на продажу&quot;" tool_tip="" name="FSCommitForSaleOnChange_toggle"/>
+		<check_box label="Сохранять скрипты редактируемые в инвенторе как Моно" tool_tip="Speichert Skripte, die direkt vom Inventar aus bearbeitet werden, als Mono anstatt LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
+	</panel>
 
-		<check_box
-		 follows="left|top"
-		 height="16"
-		 label="Использование старый &quot;Установить объект на продажу&quot; "
-		 tool_tip="When checked, object for sale info is saved on change instead of requiring a confirm."
-		 name="PhoenixCommitForSaleOnChange_toggle"
-		 control_name="PhoenixCommitForSaleOnChange"/>
-	
+
+	<!--Tags-->
+	<panel label="Тэги" name="TagTab">
+		<text name="whattagstoshow">
+			Показать тэги::
+		</text>
+		<combo_box name="ClientTagsVisibility">
+			<combo_item name="No Viewertags">Нет тэга</combo_item>
+			<combo_item name="TPVD Viewer">TPVD-Viewer (из списка)</combo_item>
+			<combo_item name="All known Viewers">Все знакомые (из списка)</combo_item>
+			<combo_item name="All Viewers">Все Виверы</combo_item>
+		</combo_box>
+
+		<text name="colorbasedonviewer">
+			Цвет тэга в зав. от вивера.:
+		</text>
+		<combo_box name="ColorClienttags">
+			<combo_item name="Color not based on Viewer">Цвет не зависит от вивера</combo_item>
+			<combo_item name="Single color per Viewer">Один цвет/ Вивер</combo_item>
+			<combo_item name="Multiple colors per Viewer">Много цветов / Вивер</combo_item>
+			<combo_item name="Userdefined color">Цвет пользевателя</combo_item>
+		</combo_box>
+
+		<text name="listtodisplayviewertags_txt">
+			Список показателя тэгов:
+		</text>
+		<combo_box name="UseLegacyClienttags">
+			<combo_item name="Don't use a list">без списка</combo_item>
+			<combo_item name="Local Clienttags">Локальный список</combo_item>
+			<combo_item name="Download Clienttags">Качать список при входе</combo_item>
+		</combo_box>
+
+		<text name="chooseyourcolor_txt">
+			Свой цвет тэга:
+		</text>
+		<combo_box name="ClientTagColor">
+			<combo_item name="green" label=""/>
+			<combo_item name="red" label="Красный"/>
+			<combo_item name="blue" label="Синий"/>
+			<combo_item name="yellow" label="Жёлтый"/>
+			<combo_item name="purple" label="Лиловый"/>
+			<combo_item name="pink" label="Розовый"/>
+			<combo_item name="white" label="Белый"/>
+			<combo_item name="orange" label="Оранжевый"/>
+			
+		</combo_box>
+
+		<check_box label="Показать свой цвет" name="FSShowOwnTagColor_toggle" tool_tip=""/>
+		<check_box label="Исп. другой цвет для других резидентов" name="FSColorUsername_toggle" tool_tip="" width="270"/>
+		<color_swatch name="usernamecolorswatch" tool_tip="Нажмите для выбора"/>
 	</panel>
 </tab_container>
 </panel>
