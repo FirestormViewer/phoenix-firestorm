@@ -1202,8 +1202,11 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 	if (res)
 	{
 		// Make sure the floater is not minimized (STORM-438).
-		if (active_inv_floaterp && active_inv_floaterp->isMinimized())
+		//if (active_inv_floaterp && active_inv_floaterp->isMinimized())
+		if (auto_open && active_inv_floaterp && active_inv_floaterp->isMinimized()) // AO: additionally only unminimize if we are told we want to see the inventory window.
+		{
 			active_inv_floaterp->setMinimized(FALSE);
+		}
 
 		return res;
 	}
