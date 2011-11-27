@@ -115,6 +115,16 @@
      width="350" />
 
     <check_box
+     control_name="ShowInInventory"
+     height="16"
+     label="Automatically open inventory when receiving items"
+     layout="topleft"
+     left="30"
+     name="Show_In_Inventory"
+     top_pad="4"
+     width="350" />
+
+    <check_box
      control_name="ShowFavoritesOnLogin"
      enabled="false"
      label="Show my Favorite Landmarks at Login (via &apos;Start At&apos; drop-down menu)"
