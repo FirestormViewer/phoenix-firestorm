@@ -251,7 +251,7 @@
          <check_box
          top_pad="10"
          left="20"
-         label="Automatically hide large objects with high texture area. Treshold: "
+         label="Automatically hide large objects with high texture area. Threshold: "
          control_name="RenderVolumeSAProtection"
          follows="left|top"
          height="16"
