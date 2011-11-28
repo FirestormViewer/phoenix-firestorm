@@ -222,34 +222,47 @@ void LLLineEditor::autoCorrectText()
 		S32 wordStart = 0;
 		S32 wordEnd = mCursorPos-1;
 		//llinfos <<"Checking Word, Cursor is at "<<mCursorPos<<" and text is "<<mText.getString().c_str()<<llendl;
-		if(wordEnd<1)return;
-		const LLWString& text = mText.getWString();
-		if(text.size()<1)return;
-		if( LLWStringUtil::isPartOfWord( text[wordEnd] )) return;//we only check on word breaks
+
+		if(wordEnd < 1)
+			return;
+
+		LLWString text = mText.getWString();
+
+		if(text.size()<1)
+			return;
+
+		if( LLWStringUtil::isPartOfWord( text[wordEnd] ))
+			return;//we only check on word breaks
+
 		wordEnd--;
+
 		if( LLWStringUtil::isPartOfWord( text[wordEnd] ) )
 		{
 			while ((wordEnd > 0) && (' '!=text[wordEnd-1]))
 			{
 				wordEnd--;
 			}
+
 			wordStart=wordEnd;		
+
 			while ((wordEnd < (S32)text.length()) && (' '!=text[wordEnd] ) )
 			{
 				wordEnd++;
 			}
-			std::string lastTypedWord(std::string(text.begin(), 
-				text.end()).substr(wordStart,wordEnd-wordStart));
-			//llinfos << " The last typed word has been chosen, it is "<<lastTypedWord.c_str()<<llendl;
 
-			std::string correctedWord(LGGAutoCorrect::getInstance()->replaceWord(lastTypedWord));
+			std::string strLastWord = std::string(text.begin(), text.end());
+			std::string lastTypedWord = strLastWord.substr( wordStart, wordEnd-wordStart);
+			std::string correctedWord( LGGAutoCorrect::getInstance()->replaceWord(lastTypedWord));
+
 			if(correctedWord!=lastTypedWord)
 			{
-				int nDiff = utf8str_to_utf16str( correctedWord ).size() - utf8str_to_utf16str( lastTypedWord ).size();
-				std::string regText(mText);
+				LLWString strNew = utf8str_to_wstring( correctedWord );
+				LLWString strOld = utf8str_to_wstring( lastTypedWord );
+				int nDiff = strNew.size() - strOld.size();
+
 				//int wordStart = regText.find(lastTypedWord);
-				regText.replace(wordStart,lastTypedWord.length(),correctedWord);
-				mText=regText;
+				text.replace(wordStart,lastTypedWord.length(),strNew);
+				mText = wstring_to_utf8str(text);
 				mCursorPos+=nDiff;
 			}
 		}
