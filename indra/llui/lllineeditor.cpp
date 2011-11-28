@@ -245,12 +245,12 @@ void LLLineEditor::autoCorrectText()
 			std::string correctedWord(LGGAutoCorrect::getInstance()->replaceWord(lastTypedWord));
 			if(correctedWord!=lastTypedWord)
 			{
-				int dif = correctedWord.length()-lastTypedWord.length();
+				int nDiff = utf8str_to_utf16str( correctedWord ).size() - utf8str_to_utf16str( lastTypedWord ).size();
 				std::string regText(mText);
 				//int wordStart = regText.find(lastTypedWord);
 				regText.replace(wordStart,lastTypedWord.length(),correctedWord);
 				mText=regText;
-				mCursorPos+=dif;
+				mCursorPos+=nDiff;
 			}
 		}
 	}
