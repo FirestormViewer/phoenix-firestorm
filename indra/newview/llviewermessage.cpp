@@ -2971,6 +2971,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			}
 
 			chat.mSourceType = CHAT_SOURCE_OBJECT;
+			chat.mChatType = CHAT_TYPE_IM;
 
 			if(SYSTEM_FROM == name)
 			{

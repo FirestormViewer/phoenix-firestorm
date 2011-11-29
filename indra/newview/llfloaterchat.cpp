@@ -401,6 +401,10 @@ LLColor4 get_text_color(const LLChat& chat)
 			{
 				text_color = LLUIColorTable::instance().getColor("llOwnerSayChatColor");
 			}
+			else if ( chat.mChatType == CHAT_TYPE_IM )
+			{
+				text_color = LLUIColorTable::instance().getColor("ObjectChatColor");
+			}
 			else
 			{
 				text_color = LLUIColorTable::instance().getColor("ObjectChatColor");

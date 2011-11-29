@@ -208,22 +208,22 @@
 
     <color_swatch
      can_apply_immediately="true"
-     color="ChatNameColor"
+     color="ObjectIMColor"
      follows="left|top"
      height="24"
      label_height="0"
      label_width="60"
      layout="topleft"
      left="360"
-     name="ChatNameColor"
+     name="ObjectIMColor"
      top_pad="-15"
      width="44">
         <color_swatch.init_callback
          function="Pref.getUIColor"
-         parameter="ChatNameColor" />
+         parameter="ObjectIMColor" />
         <color_swatch.commit_callback
          function="Pref.applyUIColor"
-         parameter="ChatNameColor" />
+         parameter="ObjectIMColor" />
     </color_swatch>
     <text
      type="string"
@@ -236,7 +236,7 @@
      name="text_box6"
      top_delta="5"
      width="110">
-        Chat Headers
+        Object IMs
     </text>
 
     <color_swatch
@@ -300,6 +300,38 @@
      top_delta="5"
      width="95">
         URLs
+    </text>
+    <color_swatch
+     can_apply_immediately="true"
+     color="ChatNameColor"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     label_width="60"
+     layout="topleft"
+     left="360"
+     name="ChatNameColor"
+     top_pad="-15"
+     width="44">
+        <color_swatch.init_callback
+         function="Pref.getUIColor"
+         parameter="ChatNameColor" />
+        <color_swatch.commit_callback
+         function="Pref.applyUIColor"
+         parameter="ChatNameColor" />
+    </color_swatch>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="10"
+     layout="topleft"
+     left_pad="5"
+     mouse_opaque="false"
+     name="text_box6"
+     top_delta="5"
+     width="110">
+        Chat Headers
     </text>
 
 
