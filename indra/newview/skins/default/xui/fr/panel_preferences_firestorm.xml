@@ -514,14 +514,14 @@
 		Choissez votre couleur
     </text>
     <combo_box name="ClientTagColor">
-		<combo_item name="red">Rouge</combo_item>
-		<combo_item name="blue">Bleu</combo_item>
-		<combo_item name="yellow">Jaune</combo_item>
-		<combo_item name="purple">Violet</combo_item>
-		<combo_item name="pink">Rose</combo_item>
-		<combo_item name="white">Blanc</combo_item>
-		<combo_item name="orange">Orange</combo_item>
-		<combo_item name="green">Vert</combo_item>
+		<combo_item name="red" label="Rouge"/>
+		<combo_item name="blue" label="Bleu"/>
+		<combo_item name="yellow" label="Jaune"/>
+		<combo_item name="purple" label="Violet"/>
+		<combo_item name="pink" label="Rose"/>
+		<combo_item name="white" label="Blanc"/>
+		<combo_item name="orange" label="Orange"/>
+		<combo_item name="green" label="Vert"/>
     </combo_box>
     <check_box name="FSShowOwnTagColor_toggle"
 		label="Afficher votre couleur"
