@@ -22,6 +22,7 @@
 #ifndef PARTICLEEDITOR_H
 #define PARTICLEEDITOR_H
 
+#include "v4color.h"
 #include "llfloater.h"
 #include "llpartdata.h"
 
@@ -48,14 +49,21 @@ class ParticleEditor : public LLFloater
 	protected:
 		void clearParticles();
 		void updateParticles();
+
 		void onParameterChange();
+		void onCopyButtonClicked();
+
+		std::string lslVector(F32 x,F32 y,F32 z);
+		std::string lslColor(const LLColor4& color);
 
 		LLViewerObject* mObject;
 		LLViewerTexture* mTexture;
+		LLViewerTexture* mDefaultParticleTexture;
 
 		LLPartSysData mParticles;
 
 		std::map<std::string,U8> mPatternMap;
+		std::map<std::string,std::string> mScriptPatternMap;
 
 		LLComboBox* mPatternTypeCombo;
 		LLTextureCtrl* mTexturePicker;

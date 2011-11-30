@@ -8426,6 +8426,17 @@ Could not add [GRID] to the grid list.
     You may remove this name by right clicking the name and choosing Remove Alias.
   </notification>
 
-
+   <!-- ## Zi: Particle Editor -->
+  <notification
+   icon="notify.tga"
+   name="ParticleScriptCopiedToClipboard"
+   type="alertmodal">
+The LSL script to create this particle system has been copied to your clipboard. You can now paste it into a new script to use it.
+   <form name="form">
+      <ignore name="ignore"
+       text="A particle script was copied to my clipboard"/>
+    </form>
+  </notification>
+   <!-- ## Zi: Particle Editor -->
 
 </notifications>
