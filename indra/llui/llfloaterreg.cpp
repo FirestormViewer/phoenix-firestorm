@@ -425,6 +425,23 @@ std::string LLFloaterReg::getDockStateControlName(const std::string& name)
 	return res;
 }
 
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+//static
+std::string LLFloaterReg::declareTearOffStateControl(const std::string& name)
+{
+	std::string controlname = getTearOffStateControlName(name);
+	LLFloater::getControlGroup()->declareBOOL(controlname, TRUE, llformat("Window Tear Off state for %s", name.c_str()), TRUE);
+	return controlname;
+}
+
+//static
+std::string LLFloaterReg::getTearOffStateControlName(const std::string& name)
+{
+	std::string res = std::string("floater_tearoff_") + name;
+	LLStringUtil::replaceChar(res, ' ', '_');
+	return res;
+}
+// [/SL:KB]
 
 //static
 void LLFloaterReg::registerControlVariables()
@@ -485,14 +502,25 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 		instance->openFloater(key);
 		instance->setVisibleAndFrontmost();
 	}
-	else if (!instance->isFrontmost())
-	{
-		instance->setVisibleAndFrontmost();
-	}
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-23 (Catznip-3.2.0b) | Modified: Catznip-3.2.0b
 	else
 	{
-		instance->closeFloater();
+		// Give focus to, or close, the host rather than the floater when hosted
+		LLFloater* floaterp = (!instance->getHost()) ? instance : instance->getHost();
+		if (!floaterp->isFrontmost())
+			floaterp->setVisibleAndFrontmost();
+		else
+			floaterp->closeFloater();
 	}
+// [/SL:KB]
+//	else if (!instance->isFrontmost())
+//	{
+//		instance->setVisibleAndFrontmost();
+//	}
+//	else
+//	{
+//		instance->closeFloater();
+//	}
 }
 
 // static
