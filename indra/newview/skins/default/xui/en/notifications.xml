@@ -6015,6 +6015,7 @@ Your object named &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; has given you th
   <notification
    icon="notify.tga"
    name="UserGiveItem"
+   label="Inventory offer from [NAME_LABEL]"
    type="offer">
 [NAME_SLURL] has given you this [OBJECTTYPE]:
 [ITEM_SLURL]
@@ -6070,6 +6071,7 @@ Your object named &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; has given you th
   <notification
    icon="notify.tga"
    name="TeleportOffered"
+   label="Teleport offer from [NAME_LABEL]"
    type="offer">
 [NAME_SLURL] has offered to teleport you to their location:
 
@@ -6117,6 +6119,7 @@ Your object named &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; has given you th
   <notification
    icon="notify.tga"
    name="OfferFriendship"
+   label="Friendship offer from [NAME_LABEL]"
    type="offer">
     <tag>friendship</tag>
     <tag>confirm</tag>
@@ -6148,6 +6151,7 @@ Your object named &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; has given you th
   <notification
    icon="notify.tga"
    name="OfferFriendshipNoMessage"
+   label="Friendship offer from [NAME_LABEL]"
    persist="true"
    type="notify">
     <tag>friendship</tag>
