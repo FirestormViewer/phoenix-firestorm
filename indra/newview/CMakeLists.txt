@@ -645,6 +645,7 @@ set(viewer_SOURCE_FILES
     llxmlrpctransaction.cpp
     noise.cpp
     fspanelprefs.cpp
+    particleeditor.cpp
     piemenu.cpp
     pieseparator.cpp
     pieslice.cpp
@@ -1248,6 +1249,7 @@ set(viewer_HEADER_FILES
     macmain.h
     noise.h
     fspanelprefs.h
+    particleeditor.h
     piemenu.h
     pieseparator.h
     pieslice.h

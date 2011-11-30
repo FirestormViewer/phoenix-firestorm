@@ -130,6 +130,8 @@
 #include "lltexturecache.h"
 // ## Zi: Texture Refresh
 
+#include "particleeditor.h"
+
 using namespace LLVOAvatarDefines;
 
 typedef LLPointer<LLViewerObject> LLViewerObjectPtr;
@@ -2597,6 +2599,31 @@ class LLObjectDerender : public view_listener_t
         }
         return true;
     }
+};
+
+class LLEnableEditParticleSource : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+		if(LLSelectMgr::getInstance()->getSelection()->isEmpty())
+			return false;
+		return true;
+	}
+};
+
+class LLEditParticleSource : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+		LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+		if (objectp)
+		{
+			ParticleEditor* particleEditor=LLFloaterReg::showTypedInstance<ParticleEditor>("particle_editor", LLSD(objectp->getID()), TAKE_FOCUS_YES);
+			if(particleEditor)
+				particleEditor->setObject(objectp);
+		}
+		return true;
+	}
 };
 
 // ## Zi: Texture Refresh
@@ -9374,7 +9401,9 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLObjectMute(), "Object.Mute");
     view_listener_t::addMenu(new LLObjectDerender(), "Object.Derender");
 	view_listener_t::addMenu(new LLObjectTexRefresh(), "Object.TexRefresh");	// ## Zi: Texture Refresh
-    
+	view_listener_t::addMenu(new LLEditParticleSource(), "Object.EditParticles");
+   	view_listener_t::addMenu(new LLEnableEditParticleSource(), "Edit.EnableEditParticles");
+
 	enable.add("Object.VisibleTake", boost::bind(&visible_take_object));
 	enable.add("Object.VisibleBuy", boost::bind(&visible_buy_object));
 

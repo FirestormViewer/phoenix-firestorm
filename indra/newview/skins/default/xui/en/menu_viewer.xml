@@ -1103,6 +1103,16 @@
             <menu_item_call.on_enable
                function="Edit.EnableDuplicate" />
           </menu_item_call>
+
+          <menu_item_call
+             label="Edit Particles"
+             name="Menu Object Edit Particles">
+            <menu_item_call.on_click
+               function="Object.EditParticles" />
+            <menu_item_call.on_enable
+               function="Object.EnableEditParticles" />
+          </menu_item_call>
+
           <menu_item_call
 			 label="Save Back to Inventory"
 			 name="Save Object Back to My Inventory">
