@@ -168,7 +168,10 @@ void ParticleEditor::updateParticles()
 
 	clearParticles();
 	LLPointer<LLViewerPartSourceScript> pss=LLViewerPartSourceScript::createPSS(mObject,mParticles);
+
 	pss->setOwnerUUID(mObject->getID());
+	pss->setImage(mTexture);
+
 	LLViewerPartSim::getInstance()->addPartSource(pss);
 }
 
@@ -189,6 +192,14 @@ void ParticleEditor::onParameterChange()
 	mParticles.mPattern=mPatternMap[mPatternTypeCombo->getSelectedValue()];
 
 	mParticles.mPartImageID=mTexturePicker->getImageAssetID();
+
+	// remember the selected texture here to give updateParticles() a UUID to work with
+	mTexture=LLViewerTextureManager::getFetchedTexture(mTexturePicker->getImageAssetID());
+
+	if(mTexture->getID()==IMG_DEFAULT || mTexture->getID().isNull())
+		// I don't really like referencing the particle texture name here, but it's being done
+		// like this all over the viewer, so this is apparently how it's meant to be. -Zi
+		mTexture=LLViewerTextureManager::getFetchedTextureFromFile("pixiesmall.j2c");
 
 	mParticles.mBurstRate=mBurstRateSpinner->getValueF32();
 	mParticles.mBurstPartCount=mBurstCountSpinner->getValue().asInteger();

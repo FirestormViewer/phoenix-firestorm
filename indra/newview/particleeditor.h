@@ -33,6 +33,7 @@ class LLLineEditor;
 class LLSpinCtrl;
 class LLTextureCtrl;
 class LLViewerObject;
+class LLViewerTexture;
 
 class ParticleEditor : public LLFloater
 {
@@ -50,6 +51,8 @@ class ParticleEditor : public LLFloater
 		void onParameterChange();
 
 		LLViewerObject* mObject;
+		LLViewerTexture* mTexture;
+
 		LLPartSysData mParticles;
 
 		std::map<std::string,U8> mPatternMap;
