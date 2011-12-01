@@ -2,7 +2,6 @@
 <floater
  legacy_header_height="18"
  background_visible="true"
- default_tab_group="1"
  follows="all"
  height="350"
  layout="topleft"
@@ -21,7 +20,6 @@
    <layout_stack
     border_size="0"
 	animate="false" 
-	default_tab_group="8"
 	follows="top|left"
 	clip="false"
 	height="20"
@@ -295,6 +293,7 @@
      layout="topleft"
      left_pad="-50"
      name="FSSupportGroupChatPrefix_toggle"
+     tab_group="5"
      tool_tip="Add (FS) in front of your messages to help support staff understand whether your question pertains to Phoenix or Firestorm. Your help avoiding confusion is greatly appreciated!"
      width="150" />
     <!-- END: FS Prefix -->
@@ -310,18 +309,17 @@
 	name="send_sysinfo_btn"
 	left_delta="0"
 	right="-35"
+	tab_group="5"
 	width="20" />
 
   <layout_stack
    animate="false" 
-   default_tab_group="2"
   follows="all"
   height="300"
   width="394"
   layout="topleft"
   orientation="horizontal"
   name="im_panels"
-  tab_group="1"
   top="40"
   left="0">
     <layout_panel
@@ -339,9 +337,7 @@
         follows="all"/>
       </layout_panel>
     <layout_panel
-       default_tab_group="3"
        left="0"
-       tab_group="2"
        top="0"
        height="200"
 	   width="254"
@@ -367,7 +363,7 @@
 	 select_on_focus="true"
          spellcheck="true"
          name="chat_editor"
-         tab_group="3"
+         tab_group="1"
          width="249">
         </line_editor>
     </layout_panel>

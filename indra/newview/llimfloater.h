@@ -96,7 +96,8 @@ public:
 	void updateButtons(bool is_call_started);
 	void updateCallButton();
 	void changed(U32 mask);
-	
+	// ## Zi: overridden to fix the IM focus bug - FIRE-3989 etc.
+	BOOL focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
 
 	// called when docked floater's position has been set by chiclet
 	void setPositioned(bool b) { mPositioned = b; };
@@ -154,10 +155,6 @@ private:
 	BOOL inviteToSession(const uuid_vec_t& agent_ids);
 	
 	static void		onInputEditorFocusReceived( LLFocusableElement* caller, void* userdata );
-	static void		onSlideLeftFocusReceived( LLFocusableElement* caller, void* userdata );
-	static void		onSlideRightFocusReceived( LLFocusableElement* caller, void* userdata );
-	static void		onViewProfileFocusReceived( LLFocusableElement* caller, void* userdata );
-	static void		onSysinfoButtonFocusReceived( LLFocusableElement* caller, void* userdata );
 	static void		onInputEditorFocusLost(LLFocusableElement* caller, void* userdata);
 	static void		onInputEditorKeystroke(LLLineEditor* caller, void* userdata);
 	

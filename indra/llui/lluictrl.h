@@ -220,7 +220,9 @@ public:
 
 	BOOL	focusNextItem(BOOL text_entry_only);
 	BOOL	focusPrevItem(BOOL text_entry_only);
-	BOOL 	focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
+
+	// ## Zi: Made this virtual to be able to override it, so we can fix the IM focus issue
+	virtual BOOL 	focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
 	BOOL	focusLastItem(BOOL prefer_text_fields = FALSE);
 
 	// Non Virtuals

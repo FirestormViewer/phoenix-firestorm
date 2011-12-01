@@ -133,6 +133,18 @@ LLIMFloater::LLIMFloater(const LLUUID& session_id)
 	setDocked(true);
 }
 
+// virtual
+BOOL LLIMFloater::focusFirstItem(BOOL prefer_text_fields, BOOL focus_flash)
+{
+	mInputEditor->setFocus(TRUE);
+	onTabInto();
+	if(focus_flash)
+	{
+		gFocusMgr.triggerFocusFlash();
+	}
+	return TRUE;
+}
+
 void LLIMFloater::onFocusLost()
 {
 	LLIMModel::getInstance()->resetActiveSessionID();
@@ -621,16 +633,13 @@ BOOL LLIMFloater::postBuild()
 	LLButton* slide_left = getChild<LLButton>("slide_left_btn");
 	slide_left->setVisible(mControlPanel->getParent()->getVisible());
 	slide_left->setClickedCallback(boost::bind(&LLIMFloater::onSlide, this));
-	slide_left->setFocusReceivedCallback(boost::bind(&LLIMFloater::onSlideLeftFocusReceived, _1, this) );
 
 	LLButton* slide_right = getChild<LLButton>("slide_right_btn");
 	slide_right->setVisible(!mControlPanel->getParent()->getVisible());
 	slide_right->setClickedCallback(boost::bind(&LLIMFloater::onSlide, this));
-	slide_right->setFocusReceivedCallback(boost::bind(&LLIMFloater::onSlideRightFocusReceived, _1, this) );
 	
 	LLButton* view_profile  = getChild<LLButton>("view_profile_btn");
 	view_profile->setClickedCallback(boost::bind(&LLIMFloater::onViewProfileButtonClicked, this));
-	view_profile->setFocusReceivedCallback(boost::bind(&LLIMFloater::onViewProfileFocusReceived, _1, this) );
 	
 	LLButton* group_profile = getChild<LLButton>("group_info_btn");
 	group_profile->setClickedCallback(boost::bind(&LLIMFloater::onGroupInfoButtonClicked, this));
@@ -699,8 +708,6 @@ BOOL LLIMFloater::postBuild()
 
 				// support sysinfo button -Zi
 				mSysinfoButton->setClickedCallback(boost::bind(&LLIMFloater::onSysinfoButtonClicked, this));
-				// [FIRE-1168 -SJ] Set focus back to Chatline when switching to IM
-				mSysinfoButton->setFocusReceivedCallback(boost::bind(&LLIMFloater::onSysinfoButtonFocusReceived, _1, this) );
 				// this needs to be extended to fsdata awareness, once we have it. -Zi
 				// mIsSupportIM=fsdata(partnerUUID).isSupport(); // pseudocode something like this
 				onSysinfoButtonVisibilityChanged(gSavedSettings.getBOOL("SysinfoButtonInIM"));
@@ -1299,42 +1306,6 @@ void LLIMFloater::onInputEditorFocusReceived( LLFocusableElement* caller, void* 
 		//in disconnected state IM input editor should be disabled
 		self->mInputEditor->setEnabled(!gDisconnected);
 	}
-}
-
-// static
-void LLIMFloater::onSlideLeftFocusReceived(LLFocusableElement* caller, void* userdata)
-{
-	LLIMFloater* self= (LLIMFloater*) userdata;
-	LLLineEditor* inputEditor =
-		self->getChild<LLLineEditor>("chat_editor");
-	inputEditor->setFocus(TRUE);
-}
-
-// static
-void LLIMFloater::onSlideRightFocusReceived(LLFocusableElement* caller, void* userdata)
-{
-	LLIMFloater* self= (LLIMFloater*) userdata;
-	LLLineEditor* inputEditor = 
-		self->getChild<LLLineEditor>("chat_editor");
-	inputEditor->setFocus(TRUE);
-}
-
-// static
-void LLIMFloater::onViewProfileFocusReceived(LLFocusableElement* caller, void* userdata)
-{
-	LLIMFloater* self= (LLIMFloater*) userdata;
-	LLLineEditor* inputEditor = 
-		self->getChild<LLLineEditor>("chat_editor");
-	inputEditor->setFocus(TRUE);
-}
-
-void LLIMFloater::onSysinfoButtonFocusReceived(LLFocusableElement* caller, void* userdata)
-// [FIRE-1168 -SJ] Set focus back to Chatline when switching to IM
-{
-	LLIMFloater* self= (LLIMFloater*) userdata;
-	LLLineEditor* inputEditor = 
-		self->getChild<LLLineEditor>("chat_editor");
-	inputEditor->setFocus(TRUE);
 }
 
 // static
