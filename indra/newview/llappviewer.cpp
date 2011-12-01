@@ -1997,6 +1997,7 @@ bool LLAppViewer::cleanup()
 		pending += LLAppViewer::getTextureFetch()->update(1); // unpauses the texture fetch thread
 		pending += LLVFSThread::updateClass(0);
 		pending += LLLFSThread::updateClass(0);
+		pending += LLCurl::getCurlThread()->update(1) ;
 		F64 idle_time = idleTimer.getElapsedTimeF64();
 		if(!pending)
 		{
@@ -2008,6 +2009,7 @@ bool LLAppViewer::cleanup()
 			break;
 		}
 	}
+	LLCurl::getCurlThread()->pause() ;
 
 	// Delete workers first
 	// shotdown all worker threads before deleting them in case of co-dependencies
