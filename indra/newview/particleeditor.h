@@ -56,12 +56,18 @@ class ParticleEditor : public LLFloater
 	protected:
 		void clearParticles();
 		void updateParticles();
+		void updateUI();
 
 		std::string createScript();
 
 		void onParameterChange();
 		void onCopyButtonClicked();
 		void onInjectButtonClicked();
+
+		void onClearTargetButtonClicked();
+		void onTargetPickerButtonClicked();
+		static void startPicking(void* userdata);
+		static void onTargetPicked(void* userdata);
 
 		void callbackReturned(const LLUUID& inv_item);
 		void scriptInjectReturned(const LLSD& content);
@@ -110,6 +116,8 @@ class ParticleEditor : public LLFloater
 		LLCheckBoxCtrl* mWindCheckBox;
 
 		LLLineEditor* mTargetKeyInput;
+		LLButton* mClearTargetButton;
+		LLButton* mPickTargetButton;
 
 		LLSpinCtrl* mAcellerationXSpinner;
 		LLSpinCtrl* mAcellerationYSpinner;

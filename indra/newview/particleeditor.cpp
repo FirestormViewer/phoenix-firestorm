@@ -43,6 +43,8 @@
 #include "llsd.h"
 #include "llspinctrl.h"
 #include "lltexturectrl.h"
+#include "lltoolmgr.h"
+#include "lltoolobjpicker.h"
 #include "llviewerobject.h"
 #include "llviewerpartsim.h"
 #include "llviewerpartsource.h"
@@ -130,6 +132,12 @@ BOOL ParticleEditor::postBuild()
 
 	mInjectScriptButton=panel->getChild<LLButton>("inject_button");
 	mInjectScriptButton->setCommitCallback(boost::bind(&ParticleEditor::onInjectButtonClicked,this));
+
+	mClearTargetButton=panel->getChild<LLButton>("clear_target_button");
+	mClearTargetButton->setCommitCallback(boost::bind(&ParticleEditor::onClearTargetButtonClicked,this));
+
+	mPickTargetButton=panel->getChild<LLButton>("pick_target_button");
+	mPickTargetButton->setCommitCallback(boost::bind(&ParticleEditor::onTargetPickerButtonClicked,this));
 
 	mPatternTypeCombo->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
 	mTexturePicker->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
@@ -266,7 +274,91 @@ void ParticleEditor::onParameterChange()
 	color=mEndColorSelector->get();
 	mParticles.mPartData.setEndColor(LLVector3(color.mV[0],color.mV[1],color.mV[2]));
 
+	updateUI();
 	updateParticles();
+}
+
+void ParticleEditor::updateUI()
+{
+	U8 pattern=mPatternMap[mPatternTypeCombo->getValue()];
+	BOOL dropPattern=(pattern==LLPartSysData::LL_PART_SRC_PATTERN_DROP);
+	BOOL explodePattern=(pattern==LLPartSysData::LL_PART_SRC_PATTERN_EXPLODE);
+	BOOL targetLinear=mTargetLinearCheckBox->getValue();
+	BOOL interpolateColor=mInterpolateColorCheckBox->getValue();
+	BOOL interpolateScale=mInterpolateScaleCheckBox->getValue();
+	BOOL targetEnabled=targetLinear | mTargetPositionCheckBox->getValue();
+
+	mBurstRadiusSpinner->setEnabled(!(targetLinear | mFollowSourceCheckBox->getValue() | dropPattern));
+	mBurstSpeedMinSpinner->setEnabled(!(targetLinear | dropPattern));
+	mBurstSpeedMaxSpinner->setEnabled(!(targetLinear | dropPattern));
+
+	// disabling a color swatch does nothing visually, so we also set alpha
+	LLColor4 endColor=mEndColorSelector->get();
+	endColor.setAlpha(interpolateColor ? 1.0f : 0.0f);
+
+	mEndAlphaSpinner->setEnabled(interpolateColor);
+	mEndColorSelector->set(endColor);
+	mEndColorSelector->setEnabled(interpolateColor);
+
+	mScaleEndXSpinner->setEnabled(interpolateScale);
+	mScaleEndYSpinner->setEnabled(interpolateScale);
+
+	mTargetPositionCheckBox->setEnabled(!targetLinear);
+	mTargetKeyInput->setEnabled(targetEnabled);
+	mPickTargetButton->setEnabled(targetEnabled);
+	mClearTargetButton->setEnabled(targetEnabled);
+
+	mAcellerationXSpinner->setEnabled(!targetLinear);
+	mAcellerationYSpinner->setEnabled(!targetLinear);
+	mAcellerationZSpinner->setEnabled(!targetLinear);
+
+	mOmegaXSpinner->setEnabled(!targetLinear);
+	mOmegaYSpinner->setEnabled(!targetLinear);
+	mOmegaZSpinner->setEnabled(!targetLinear);
+
+	mAngleBeginSpinner->setEnabled(!(explodePattern | dropPattern));
+	mAngleEndSpinner->setEnabled(!(explodePattern | dropPattern));
+}
+
+void ParticleEditor::onClearTargetButtonClicked()
+{
+	mTargetKeyInput->clear();
+	onParameterChange();
+}
+
+void ParticleEditor::onTargetPickerButtonClicked()
+{
+	mPickTargetButton->setToggleState(TRUE);
+	mPickTargetButton->setEnabled(FALSE);
+	startPicking(this);
+}
+
+// inspired by the LLFloaterReporter object picker
+// static
+void ParticleEditor::startPicking(void* userdata)
+{
+	ParticleEditor* self =(ParticleEditor*) userdata;
+	LLToolObjPicker::getInstance()->setExitCallback(ParticleEditor::onTargetPicked,self);
+	LLToolMgr::getInstance()->setTransientTool(LLToolObjPicker::getInstance());
+}
+
+// static
+void ParticleEditor::onTargetPicked(void* userdata)
+{
+	ParticleEditor* self=(ParticleEditor*) userdata;
+
+	LLUUID picked=LLToolObjPicker::getInstance()->getObjectID();
+
+	LLToolMgr::getInstance()->clearTransientTool();
+
+	self->mPickTargetButton->setEnabled(TRUE);
+	self->mPickTargetButton->setToggleState(FALSE);
+
+	if(picked.notNull())
+	{
+		self->mTargetKeyInput->setValue(picked.asString());
+		self->onParameterChange();
+	}
 }
 
 std::string ParticleEditor::lslVector(F32 x,F32 y,F32 z)

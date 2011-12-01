@@ -100,7 +100,7 @@ Pattern:
 
 <spinner
 	follows="left|top"
-	initial_value="0.1"
+	initial_value="0.3"
 	left_pad="0"
 	max_val="1000.0"
 	min_val="0.0"
@@ -121,7 +121,7 @@ Pattern:
 	decimal_digits="0"
 	follows="left|top"
 	increment="1"
-	initial_value="10"
+	initial_value="5"
 	left_pad="0"
 	max_val="1000"
 	min_val="0"
@@ -478,8 +478,25 @@ Pattern:
 	left_pad="0"
 	name="target_key_input"
 	height="20"
-	right="-2"
-	/>
+	right="-48" />
+
+<button
+	follows="right|top"
+	image_overlay="StopReload_Over"
+	left_pad="4"
+	name="clear_target_button"
+	tool_tip="Clear target object or avatar."
+	width="20"
+	height="20" />
+
+<button
+	follows="right|top"
+	image_overlay="Inv_Object"
+	left_pad="2"
+	name="pick_target_button"
+	tool_tip="Click here to select the particle target object or avatar."
+	width="20"
+	height="20" />
 
 <text
 	follows="left|top"
