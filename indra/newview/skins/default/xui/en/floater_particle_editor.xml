@@ -440,10 +440,19 @@ Pattern:
 	follows="left|top"
 	height="24"
 	name="copy_button"
-	label="Copy to LSL"
+	label="Copy"
 	tool_tip="Copies the particle system's parameter as LSL script to the clipboard."
 	top_pad="7"
-	width="120" />
+	width="58" />
+
+<button
+	follows="left|top"
+	height="24"
+	name="inject_button"
+	label="Inject"
+	tool_tip="Inject this particle system into the selected object."
+	left_pad="4"
+	width="58" />
 
 </panel>
 

@@ -22,24 +22,38 @@
 #include "llviewerprecompiledheaders.h"
 #include "particleeditor.h"
 
+#include <iostream>
+#include <fstream>
+
+#include "llagent.h"
+#include "llassetuploadresponders.h"
 #include "llcheckboxctrl.h"
 #include "llclipboard.h"
 #include "llcolorswatch.h"
 #include "llcombobox.h"
+#include "lldir.h"
+#include "llfoldertype.h"
+#include "llhttpclient.h"
+#include "llinventoryfunctions.h"	// for ROOT_FIRESTORM_FOLDER
+#include "llinventorytype.h"
 #include "lllineeditor.h"
 #include "llnotificationsutil.h"
+#include "llpermissions.h"
+#include "llpreviewscript.h"
 #include "llsd.h"
 #include "llspinctrl.h"
 #include "lltexturectrl.h"
 #include "llviewerobject.h"
 #include "llviewerpartsim.h"
 #include "llviewerpartsource.h"
-#include "llv4math.h"
+#include "llviewerregion.h"
 #include "llwindow.h"
+#include "v4math.h"
 
 ParticleEditor::ParticleEditor(const LLSD& key)
 :	LLFloater(key),
-	mObject(0)
+	mObject(0),
+	mParticleScriptInventoryItem(0)
 {
 	mPatternMap["drop"]=LLPartSysData::LL_PART_SRC_PATTERN_DROP;
 	mPatternMap["explode"]=LLPartSysData::LL_PART_SRC_PATTERN_EXPLODE;
@@ -113,6 +127,9 @@ BOOL ParticleEditor::postBuild()
 
 	mCopyToLSLButton=panel->getChild<LLButton>("copy_button");
 	mCopyToLSLButton->setCommitCallback(boost::bind(&ParticleEditor::onCopyButtonClicked,this));
+
+	mInjectScriptButton=panel->getChild<LLButton>("inject_button");
+	mInjectScriptButton->setCommitCallback(boost::bind(&ParticleEditor::onInjectButtonClicked,this));
 
 	mPatternTypeCombo->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
 	mTexturePicker->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
@@ -262,40 +279,40 @@ std::string ParticleEditor::lslColor(const LLColor4& color)
 	return lslVector(color.mV[0],color.mV[1],color.mV[2]);
 }
 
-void ParticleEditor::onCopyButtonClicked()
+std::string ParticleEditor::createScript()
 {
 	std::string script=
 "\
 default\n\
 {\n\
-	state_entry()\n\
-	{\n\
-		llParticleSystem(\n\
-		[\n\
-			PSYS_SRC_PATTERN,[PATTERN],\n\
-			PSYS_SRC_BURST_RADIUS,[BURST_RADIUS],\n\
-			PSYS_SRC_ANGLE_BEGIN,[ANGLE_BEGIN],\n\
-			PSYS_SRC_ANGLE_END,[ANGLE_END],\n\
-			PSYS_SRC_TARGET_KEY,[TARGET_KEY],\n\
-			PSYS_PART_START_COLOR,[START_COLOR],\n\
-			PSYS_PART_END_COLOR,[END_COLOR],\n\
-			PSYS_PART_START_ALPHA,[START_ALPHA],\n\
-			PSYS_PART_END_ALPHA,[END_ALPHA],\n\
-			PSYS_PART_START_SCALE,[START_SCALE],\n\
-			PSYS_PART_END_SCALE,[END_SCALE],\n\
-			PSYS_SRC_TEXTURE,\"[TEXTURE]\",\n\
-			PSYS_SRC_MAX_AGE,[SOURCE_MAX_AGE],\n\
-			PSYS_PART_MAX_AGE,[PART_MAX_AGE],\n\
-			PSYS_SRC_BURST_RATE,[BURST_RATE],\n\
-			PSYS_SRC_BURST_PART_COUNT,[BURST_COUNT],\n\
-			PSYS_SRC_ACCEL,[ACCELERATION],\n\
-			PSYS_SRC_OMEGA,[OMEGA],\n\
-			PSYS_SRC_BURST_SPEED_MIN,[BURST_SPEED_MIN],\n\
-			PSYS_SRC_BURST_SPEED_MAX,[BURST_SPEED_MAX],\n\
-			PSYS_PART_FLAGS,\n\
-				0[FLAGS]\n\
-		]);\n\
-	}\n\
+    state_entry()\n\
+    {\n\
+        llParticleSystem(\n\
+        [\n\
+            PSYS_SRC_PATTERN,[PATTERN],\n\
+            PSYS_SRC_BURST_RADIUS,[BURST_RADIUS],\n\
+            PSYS_SRC_ANGLE_BEGIN,[ANGLE_BEGIN],\n\
+            PSYS_SRC_ANGLE_END,[ANGLE_END],\n\
+            PSYS_SRC_TARGET_KEY,[TARGET_KEY],\n\
+            PSYS_PART_START_COLOR,[START_COLOR],\n\
+            PSYS_PART_END_COLOR,[END_COLOR],\n\
+            PSYS_PART_START_ALPHA,[START_ALPHA],\n\
+            PSYS_PART_END_ALPHA,[END_ALPHA],\n\
+            PSYS_PART_START_SCALE,[START_SCALE],\n\
+            PSYS_PART_END_SCALE,[END_SCALE],\n\
+            PSYS_SRC_TEXTURE,\"[TEXTURE]\",\n\
+            PSYS_SRC_MAX_AGE,[SOURCE_MAX_AGE],\n\
+            PSYS_PART_MAX_AGE,[PART_MAX_AGE],\n\
+            PSYS_SRC_BURST_RATE,[BURST_RATE],\n\
+            PSYS_SRC_BURST_PART_COUNT,[BURST_COUNT],\n\
+            PSYS_SRC_ACCEL,[ACCELERATION],\n\
+            PSYS_SRC_OMEGA,[OMEGA],\n\
+            PSYS_SRC_BURST_SPEED_MIN,[BURST_SPEED_MIN],\n\
+            PSYS_SRC_BURST_SPEED_MAX,[BURST_SPEED_MAX],\n\
+            PSYS_PART_FLAGS,\n\
+                0[FLAGS]\n\
+        ]);\n\
+    }\n\
 }\n";
 
 	LLUUID targetKey=mTargetKeyInput->getValue().asUUID();
@@ -329,7 +346,7 @@ default\n\
 	LLStringUtil::replaceString(script,"[BURST_SPEED_MIN]",mBurstSpeedMinSpinner->getValue().asString());
 	LLStringUtil::replaceString(script,"[BURST_SPEED_MAX]",mBurstSpeedMaxSpinner->getValue().asString());
 
-	std::string delimiter=" |\n\t\t\t\t";
+	std::string delimiter=" |\n                ";
 	std::string flagsString;
 
 	if(mBounceCheckBox->getValue())
@@ -352,10 +369,168 @@ default\n\
 		flagsString+=delimiter+"PSYS_PART_WIND_MASK";
 
 	LLStringUtil::replaceString(script,"[FLAGS]",flagsString);
-
-	getWindow()->copyTextToClipboard(utf8str_to_wstring(script));
-
-	LLNotificationsUtil::add("ParticleScriptCopiedToClipboard");
-
 	lldebugs << "\n" << script << llendl;
+
+	return script;
+}
+
+void ParticleEditor::onCopyButtonClicked()
+{
+	std::string script=createScript();
+	if(!script.empty())
+	{
+		getWindow()->copyTextToClipboard(utf8str_to_wstring(script));
+		LLNotificationsUtil::add("ParticleScriptCopiedToClipboard");
+	}
+}
+
+void ParticleEditor::onInjectButtonClicked()
+{
+	// TODO: move searching and creating the #Firestorm folder into a helper class for all to use
+	LLUUID categoryID;
+
+	// first try to find the #Firestorm folder
+	categoryID=gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER);
+
+	// if no #Firestorm folder was found, create one
+	if(categoryID.isNull())
+		categoryID=gInventory.createNewCategory(gInventory.getRootFolderID(),LLFolderType::FT_NONE,ROOT_FIRESTORM_FOLDER);
+
+	// if still no #Firestorm folder was found, try to find the default "Scripts" folder
+	if(categoryID.isNull())
+	{
+		std::string scriptFolderName=LLFolderType::lookup(LLFolderType::FT_LSL_TEXT);
+		gInventory.findCategoryByName(scriptFolderName);
+	}
+
+	// if still no valid folder found bail out and complain
+	if(categoryID.isNull())
+	{
+		LLNotificationsUtil::add("ParticleScriptFindFolderFailed");
+		return;
+	}
+
+	// setup permissions
+	LLPermissions perm;
+	perm.init(gAgent.getID(),gAgent.getID(),LLUUID::null,LLUUID::null);
+	perm.initMasks(PERM_ALL,PERM_ALL,PERM_ALL,PERM_ALL,PERM_ALL);
+
+	// create new script inventory item and wait for it to come back (callback)
+	LLPointer<LLInventoryCallback> callback=new ParticleScriptCreationCallback(this);
+	create_inventory_item(
+		gAgent.getID(), 
+		gAgent.getSessionID(),
+		categoryID,
+		LLTransactionID::tnull, 
+		PARTICLE_SCRIPT_NAME, 
+		"", 
+		LLAssetType::AT_LSL_TEXT, 
+		LLInventoryType::IT_LSL,
+		NOT_WEARABLE, 
+		perm.getMaskNextOwner(),
+		callback);
+}
+
+void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
+{
+	if(inventoryItemID.isNull())
+	{
+		LLNotificationsUtil::add("ParticleScriptCreationFailed");
+		return;
+	}
+
+	mParticleScriptInventoryItem=gInventory.getItem(inventoryItemID);
+	if(!mParticleScriptInventoryItem) 
+	{
+		LLNotificationsUtil::add("ParticleScriptNotFound");
+		return;
+	}
+    gInventory.updateItem(mParticleScriptInventoryItem);
+    gInventory.notifyObservers();
+
+	//caps import 
+	std::string url=gAgent.getRegion()->getCapability("UpdateScriptAgent");
+
+	if(!url.empty())  
+	{
+		std::string script=createScript();
+
+		std::string tempFileName=gDirUtilp->getExpandedFilename(LL_PATH_CACHE,"particle_script.lsltxt");
+
+		std::ofstream tempFile;
+
+		tempFile.open(tempFileName.c_str());
+		if(!tempFile.is_open())
+		{
+			LLNotificationsUtil::add("ParticleScriptCreateTempFileFailed");
+			return;
+		}
+
+		tempFile << script.c_str();
+		tempFile.close();
+
+		LLSD body;
+		body["task_id"]=mObject->getID();	// probably has no effect
+		body["item_id"]=inventoryItemID;
+		body["target"]="mono";
+		body["is_script_running"]=true;
+
+		// responder will alert us when the job is done
+		LLHTTPClient::post(url,body,new ParticleScriptUploadResponder(body,tempFileName,LLAssetType::AT_LSL_TEXT,this));
+	}
+	else
+	{
+		LLNotificationsUtil::add("ParticleScriptCapsFailed");
+		return;
+	}
+}
+
+void ParticleEditor::scriptInjectReturned(const LLSD& content)
+{
+	// play it safe, because some time may have passed
+	LLViewerObject* object=gObjectList.findObject(mObject->getID());
+	if(!object)
+	{
+		lldebugs << "object went away!" << llendl;
+		return;
+	}
+
+	mObject->saveScript(mParticleScriptInventoryItem,TRUE,FALSE);
+	LLNotificationsUtil::add("ParticleScriptInjected");
+
+	delete this;
+}
+
+// ---------------------------------- Callbacks ----------------------------------
+
+ParticleScriptCreationCallback::ParticleScriptCreationCallback(ParticleEditor* editor)
+{
+	mEditor=editor;
+}
+
+ParticleScriptCreationCallback::~ParticleScriptCreationCallback()
+{
+}
+
+void ParticleScriptCreationCallback::fire(const LLUUID& inventoryItem)
+{
+	mEditor->callbackReturned(inventoryItem);
+}
+
+// ---------------------------------- Responders ----------------------------------
+
+ParticleScriptUploadResponder::ParticleScriptUploadResponder(const LLSD& post_data,
+															 const std::string& file_name,
+															 LLAssetType::EType asset_type,
+															 ParticleEditor* editor
+															) :
+	LLUpdateAgentInventoryResponder(post_data,file_name,asset_type)
+{
+	mEditor=editor;
+}
+
+void ParticleScriptUploadResponder::uploadComplete(const LLSD& content)
+{
+	LLUpdateAgentInventoryResponder::uploadComplete(content);
+	mEditor->scriptInjectReturned(content);
 }

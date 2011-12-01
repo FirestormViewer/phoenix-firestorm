@@ -25,6 +25,10 @@
 #include "v4color.h"
 #include "llfloater.h"
 #include "llpartdata.h"
+#include "llviewerinventory.h"
+#include "llassetuploadresponders.h"
+
+#define PARTICLE_SCRIPT_NAME "New Particle Script"
 
 class LLButton;
 class LLCheckBoxCtrl;
@@ -38,6 +42,9 @@ class LLViewerTexture;
 
 class ParticleEditor : public LLFloater
 {
+	friend class ParticleScriptCreationCallback;
+	friend class ParticleScriptUploadResponder;
+
 	public:
 		ParticleEditor(const LLSD& key);
 		/* virtual */ ~ParticleEditor();
@@ -50,14 +57,22 @@ class ParticleEditor : public LLFloater
 		void clearParticles();
 		void updateParticles();
 
+		std::string createScript();
+
 		void onParameterChange();
 		void onCopyButtonClicked();
+		void onInjectButtonClicked();
+
+		void callbackReturned(const LLUUID& inv_item);
+		void scriptInjectReturned(const LLSD& content);
 
 		std::string lslVector(F32 x,F32 y,F32 z);
 		std::string lslColor(const LLColor4& color);
 
 		LLViewerObject* mObject;
 		LLViewerTexture* mTexture;
+		LLViewerInventoryItem* mParticleScriptInventoryItem;
+
 		LLViewerTexture* mDefaultParticleTexture;
 
 		LLPartSysData mParticles;
@@ -108,6 +123,33 @@ class ParticleEditor : public LLFloater
 		LLColorSwatchCtrl* mEndColorSelector;
 
 		LLButton* mCopyToLSLButton;
+		LLButton* mInjectScriptButton;
+};
+
+class ParticleScriptCreationCallback : public LLInventoryCallback
+{
+	public:
+		ParticleScriptCreationCallback(ParticleEditor* editor);
+		void fire(const LLUUID& inventoryItem);
+
+	protected:
+		~ParticleScriptCreationCallback();
+
+		ParticleEditor* mEditor;
+};
+
+class ParticleScriptUploadResponder : public LLUpdateAgentInventoryResponder
+{
+	public:
+		ParticleScriptUploadResponder(const LLSD& post_data,
+									  const std::string& file_name,
+									  LLAssetType::EType asset_type,
+									  ParticleEditor* editor);
+
+	protected:
+		void uploadComplete(const LLSD& content);
+
+		ParticleEditor* mEditor;
 };
 
 #endif // PARTICLEEDITOR_H
