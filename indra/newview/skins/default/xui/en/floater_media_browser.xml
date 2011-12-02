@@ -196,6 +196,20 @@
          top_delta="0"
          user_resize="false"
          width="540">
+          <text
+            name="plugin_fail_text"
+            follows="all"
+            layout="topleft"
+            left="60"
+            top="60"
+            right="-60"
+            bottom="-60">
+We're sorry but the media browser plugin failed to open. Please visit
+
+http://wiki.phoenixviewer.com/doku.php?id=fs_media
+
+for possible steps to resolve this issue.
+          </text>
           <web_browser
              bottom="-30"
              follows="all"

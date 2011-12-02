@@ -48,6 +48,7 @@
 #include "llwindow.h"
 #include "lllayoutstack.h"
 #include "llcheckboxctrl.h"
+#include "lltextbox.h"
 
 #include "llnotifications.h"
 
@@ -219,6 +220,8 @@ BOOL LLFloaterMediaBrowser::postBuild()
 	mAddressCombo->setCommitCallback(onEnterAddress, this);
 	mAddressCombo->sortByName();
 
+	mPluginFailText = getChild<LLTextBox>("plugin_fail_text");
+
 	childSetAction("back", onClickBack, this);
 	childSetAction("forward", onClickForward, this);
 	childSetAction("reload", onClickRefresh, this);
@@ -231,6 +234,11 @@ BOOL LLFloaterMediaBrowser::postBuild()
 	childSetAction("close", onClickClose, this);
 	childSetAction("open_browser", onClickOpenWebBrowser, this);
 	childSetAction("assign", onClickAssign, this);
+
+	// Hide the web browser initially so the plugin fail text links can be clicked if needed.
+	// A navigationi begin event will swap these around.
+	mBrowser->setVisible( false );
+	mPluginFailText->setVisible( true );
 
 	buildURLHistory();
 
@@ -284,6 +292,12 @@ void LLFloaterMediaBrowser::handleMediaEvent(LLPluginClassMedia* self, EMediaEve
 	if(event == MEDIA_EVENT_LOCATION_CHANGED)
 	{
 		setCurrentURL(self->getLocation());
+	}
+	else if(event == MEDIA_EVENT_NAVIGATE_BEGIN)
+	{
+		// hide the media fail text and bring the web browser to the front
+		mBrowser->setVisible( true );
+		mPluginFailText->setVisible( false );
 	}
 	else if(event == MEDIA_EVENT_NAVIGATE_COMPLETE)
 	{

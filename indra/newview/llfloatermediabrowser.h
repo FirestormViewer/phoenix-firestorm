@@ -34,6 +34,7 @@
 class LLComboBox;
 class LLMediaCtrl;
 class LLNotification;
+class LLTextBox;
 
 class LLFloaterMediaBrowser : 
 	public LLFloater, 
@@ -77,6 +78,7 @@ public:
 private:
 	LLMediaCtrl* mBrowser;
 	LLComboBox* mAddressCombo;
+	LLTextBox* mPluginFailText;
 	std::string mCurrentURL;
 	boost::shared_ptr<LLNotification> mCurNotification;
 	std::string mUUID;
