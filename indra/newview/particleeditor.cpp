@@ -85,6 +85,8 @@ BOOL ParticleEditor::postBuild()
 {
 	LLPanel* panel=getChild<LLPanel>("particle_editor_panel");
 
+	mMainPanel=panel;
+
 	mPatternTypeCombo=panel->getChild<LLComboBox>("pattern_type_combo");
 	mTexturePicker=panel->getChild<LLTextureCtrl>("texture_picker");
 
@@ -521,10 +523,14 @@ void ParticleEditor::onInjectButtonClicked()
 		NOT_WEARABLE, 
 		perm.getMaskNextOwner(),
 		callback);
+
+	setCanClose(FALSE);
 }
 
 void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 {
+	setCanClose(TRUE);
+
 	if(inventoryItemID.isNull())
 	{
 		LLNotificationsUtil::add("ParticleScriptCreationFailed");
@@ -569,6 +575,9 @@ void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 
 		// responder will alert us when the job is done
 		LLHTTPClient::post(url,body,new ParticleScriptUploadResponder(body,tempFileName,LLAssetType::AT_LSL_TEXT,this));
+
+		mMainPanel->setEnabled(FALSE);
+		setCanClose(FALSE);
 	}
 	else
 	{
@@ -579,11 +588,14 @@ void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 
 void ParticleEditor::scriptInjectReturned(const LLSD& content)
 {
+	setCanClose(TRUE);
+
 	// play it safe, because some time may have passed
 	LLViewerObject* object=gObjectList.findObject(mObject->getID());
 	if(!object)
 	{
 		lldebugs << "object went away!" << llendl;
+		mMainPanel->setEnabled(TRUE);
 		return;
 	}
 

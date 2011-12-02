@@ -86,6 +86,8 @@ class ParticleEditor : public LLFloater
 		std::map<std::string,U8> mPatternMap;
 		std::map<std::string,std::string> mScriptPatternMap;
 
+		LLPanel* mMainPanel;
+
 		LLComboBox* mPatternTypeCombo;
 		LLTextureCtrl* mTexturePicker;
 
