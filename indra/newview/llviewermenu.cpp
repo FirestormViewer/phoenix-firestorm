@@ -2605,9 +2605,7 @@ class LLEnableEditParticleSource : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-		if(LLSelectMgr::getInstance()->getSelection()->isEmpty())
-			return false;
-		return true;
+		return (LLSelectMgr::getInstance()->getSelection()->getObjectCount()!=0);
 	}
 };
 
@@ -9402,7 +9400,7 @@ void initialize_menus()
     view_listener_t::addMenu(new LLObjectDerender(), "Object.Derender");
 	view_listener_t::addMenu(new LLObjectTexRefresh(), "Object.TexRefresh");	// ## Zi: Texture Refresh
 	view_listener_t::addMenu(new LLEditParticleSource(), "Object.EditParticles");
-   	view_listener_t::addMenu(new LLEnableEditParticleSource(), "Edit.EnableEditParticles");
+   	view_listener_t::addMenu(new LLEnableEditParticleSource(), "Object.EnableEditParticles");
 
 	enable.add("Object.VisibleTake", boost::bind(&visible_take_object));
 	enable.add("Object.VisibleBuy", boost::bind(&visible_buy_object));
