@@ -286,9 +286,9 @@ void ParticleEditor::updateUI()
 	BOOL targetLinear=mTargetLinearCheckBox->getValue();
 	BOOL interpolateColor=mInterpolateColorCheckBox->getValue();
 	BOOL interpolateScale=mInterpolateScaleCheckBox->getValue();
-	BOOL targetEnabled=targetLinear | mTargetPositionCheckBox->getValue();
+	BOOL targetEnabled=targetLinear | (mTargetPositionCheckBox->getValue().asBoolean() ? TRUE : FALSE);
 
-	mBurstRadiusSpinner->setEnabled(!(targetLinear | mFollowSourceCheckBox->getValue() | dropPattern));
+	mBurstRadiusSpinner->setEnabled(!(targetLinear | (mFollowSourceCheckBox->getValue().asBoolean() ? TRUE : FALSE) | dropPattern));
 	mBurstSpeedMinSpinner->setEnabled(!(targetLinear | dropPattern));
 	mBurstSpeedMaxSpinner->setEnabled(!(targetLinear | dropPattern));
 

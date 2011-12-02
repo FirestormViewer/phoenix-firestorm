@@ -124,7 +124,7 @@ Pattern:
 	initial_value="5"
 	left_pad="0"
 	max_val="1000"
-	min_val="0"
+	min_val="1"
 	name="burst_count_spinner"
 	top_delta="-6"
 	width="60" />
