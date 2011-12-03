@@ -299,6 +299,7 @@
   <menu_holder top="0"
                follows="all"
                height="768"
+               left="0"
                mouse_opaque="false"
                name="Menu Holder"
                width="1024"/>
@@ -306,6 +307,7 @@
   <tooltip_view top="0"
                 follows="all"
                 height="768"
+                left="0"
                 mouse_opaque="false"
                 name="tooltip view"
                 tab_group="-2"
