@@ -55,6 +55,8 @@ class LLScreenChannelBase : public LLUICtrl
 public:
 	LLScreenChannelBase(const LLUUID& id);
 	~LLScreenChannelBase();
+	
+	BOOL postBuild();
 
 	void reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
 
@@ -128,6 +130,9 @@ protected:
 
 	// channel's ID
 	LLUUID	mID;
+
+	LLView*	mFloaterSnapRegion;
+	LLView* mChicletRegion;
 
 	// store a connection to prevent futher crash that is caused by sending a signal to a destroyed channel
 	boost::signals2::connection mWorldViewRectConnection;

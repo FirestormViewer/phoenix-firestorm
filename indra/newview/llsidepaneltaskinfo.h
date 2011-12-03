@@ -37,6 +37,8 @@
 // Panel for permissions of an object.
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+class LLCheckBoxCtrl;
+class LLComboBox;
 class LLNameBox;
 class LLCheckBoxCtrl;
 class LLViewerObject;
@@ -118,7 +120,43 @@ private:
 	LLPointer<LLViewerObject>	mObject;
 	LLObjectSelectionHandle		mObjectSelection;
 	static LLSidepanelTaskInfo* sActivePanel;
+
+private:
+	// Pointers cached here to speed up the "disableAll" function which gets called on idle
+	LLUICtrl*	mDAPermModify;
+	LLView*		mDACreator;
+	LLUICtrl*	mDACreatorName;
+	LLView*		mDAOwner;
+	LLUICtrl*	mDAOwnerName;
+	LLView*		mDAGroup;
+	LLUICtrl*	mDAGroupName;
+	LLView*		mDAButtonSetGroup;
+	LLUICtrl*	mDAObjectName;
+	LLView*		mDAName;
+	LLView*		mDADescription;
+	LLUICtrl*	mDAObjectDescription;
+	LLView*		mDAPermissions;
+	LLUICtrl*	mDACheckboxShareWithGroup;
+	LLView*		mDAButtonDeed;
+	LLUICtrl*	mDACheckboxAllowEveryoneMove;
+	LLUICtrl*	mDACheckboxAllowEveryoneCopy;
+	LLView*		mDANextOwnerCan;
+	LLUICtrl*	mDACheckboxNextOwnerCanModify;
+	LLUICtrl*	mDACheckboxNextOwnerCanCopy;
+	LLUICtrl*	mDACheckboxNextOwnerCanTransfer;
+	LLUICtrl*	mDACheckboxForSale;
+	LLUICtrl*	mDASearchCheck;
+	LLComboBox*	mDAComboSaleType;
+	LLUICtrl*	mDACost;
+	LLUICtrl*	mDAEditCost;
+	LLView*		mDALabelClickAction;
+	LLComboBox*	mDAComboClickAction;
+	LLView*		mDAB;
+	LLView*		mDAO;
+	LLView*		mDAG;
+	LLView*		mDAE;
+	LLView*		mDAN;
+	LLView*		mDAF;
 };
-
-
+ 
 #endif // LL_LLSIDEPANELTASKINFO_H

@@ -97,6 +97,12 @@ protected:
 	LLTextBox* mStatusBarText;
 	LLTextBox* mPluginFailText;
 	LLProgressBar* mStatusBarProgress;
+
+	LLView*			mBtnBack;
+	LLView*			mBtnForward;
+	LLView*			mBtnReload;
+	LLView*			mBtnStop;
+
 	std::string mCurrentURL;
 	std::string mUUID;
 };

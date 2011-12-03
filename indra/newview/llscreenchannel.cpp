@@ -53,17 +53,26 @@ bool LLScreenChannel::mWasStartUpToastShown = false;
 LLFastTimer::DeclareTimer FTM_GET_CHANNEL_RECT("Calculate Notification Channel Region");
 LLRect LLScreenChannelBase::getChannelRect()
 {
-        LLFastTimer _(FTM_GET_CHANNEL_RECT);
-        LLRect channel_rect;
-        LLRect chiclet_rect;
-        LLView* floater_snap_region = gViewerWindow->getRootView()->getChildView("floater_snap_region");
-        floater_snap_region->localRectToScreen(floater_snap_region->getLocalRect(), &channel_rect);
+	LLFastTimer _(FTM_GET_CHANNEL_RECT);
 
-        LLView* chiclet_region = gViewerWindow->getRootView()->getChildView("chiclet_container");
-        chiclet_region->localRectToScreen(chiclet_region->getLocalRect(), &chiclet_rect);
+	if (mFloaterSnapRegion == NULL)
+	{
+		mFloaterSnapRegion = gViewerWindow->getRootView()->getChildView("floater_snap_region");
+	}
+	
+	if (mChicletRegion == NULL)
+	{
+		mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+	}
 
-        channel_rect.mTop = chiclet_rect.mBottom;
-        return channel_rect;
+	LLRect channel_rect;
+	LLRect chiclet_rect;
+
+	mFloaterSnapRegion->localRectToScreen(mFloaterSnapRegion->getLocalRect(), &channel_rect);
+	mChicletRegion->localRectToScreen(mChicletRegion->getLocalRect(), &chiclet_rect);
+
+	channel_rect.mTop = chiclet_rect.mBottom;
+	return channel_rect;
 }
 
 //--------------------------------------------------------------------------
@@ -78,6 +87,8 @@ LLScreenChannelBase::LLScreenChannelBase(const LLUUID& id) :
 												,mHoveredToast(NULL)
 												,mControlHovering(false)
 												,mShowToasts(true)
+												,mFloaterSnapRegion(NULL)
+												,mChicletRegion(NULL)
 {	
 	if(gSavedSettings.getBOOL("ShowGroupNoticesTopRight"))
 		mToastAlignment = NA_TOP;
@@ -88,6 +99,22 @@ LLScreenChannelBase::LLScreenChannelBase(const LLUUID& id) :
 	setMouseOpaque( false );
 	setVisible(FALSE);
 }
+
+BOOL LLScreenChannelBase::postBuild()
+{
+	if (mFloaterSnapRegion == NULL)
+	{
+		mFloaterSnapRegion = gViewerWindow->getRootView()->getChildView("floater_snap_region");
+	}
+	
+	if (mChicletRegion == NULL)
+	{
+		mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+	}
+	
+	return TRUE;
+}
+
 LLScreenChannelBase::~LLScreenChannelBase()
 {
 	mWorldViewRectConnection.disconnect();
