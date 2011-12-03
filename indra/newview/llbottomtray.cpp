@@ -405,13 +405,13 @@ void LLBottomTray::onChange(EStatusType status, const std::string &channelURI, b
 	}
 
 	// We have to enable/disable right and left parts of speak button separately (EXT-4648)
-	getChild<LLButton>("speak_btn")->setEnabled(enable);
+	mSpeakButton->setEnabled(enable);
 
 	// skipped to avoid button blinking
 	if (status != STATUS_JOINING && status!= STATUS_LEFT_CHANNEL)
 	{
 		bool voice_status = LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
-		getChild<LLButton>("speak_flyout_btn")->setEnabled(voice_status);
+		mSpeakFlyoutBtn->setEnabled(voice_status);
 		gMenuBarView->getChild<LLView>("Nearby Voice")->setEnabled(voice_status);
 		if (voice_status)
 		{
@@ -656,6 +656,13 @@ BOOL LLBottomTray::postBuild()
 	mCamButton = getChild<LLButton>("camera_btn");
 	setRightMouseDownCallback(boost::bind(&LLBottomTray::showBottomTrayContextMenu,this, _2, _3,_4));
 
+	mShowPeopleBtn=getChild<LLButton>("show_people_button");
+	mShowProfileBtn=getChild<LLButton>("show_profile_btn");
+	mShowHelpBtn=getChild<LLButton>("show_help_btn");
+	mSpeakButton=getChild<LLButton>("speak_btn");	// mSpeakBtn is taken by "Talk" - to keep changes small I'll leave it at that -Zi
+	mChatZoneIndicator=getChild<LLOutputMonitorCtrl>("chat_zone_indicator");
+	mSpeakFlyoutBtn=getChild<LLButton>("speak_flyout_btn");
+
 	mSpeakPanel = getChild<LLPanel>("speak_panel");
 	mSpeakBtn = findChild<LLSpeakButton>("talk");
 	if (mSpeakBtn)
@@ -668,15 +675,14 @@ BOOL LLBottomTray::postBuild()
 	}	
 	else
 	{
-		LLTransientFloaterMgr::getInstance()->addControlView(getChild<LLButton>("speak_btn"));
+		LLTransientFloaterMgr::getInstance()->addControlView(mSpeakButton);
 		LLTransientFloaterMgr::getInstance()->addControlView(getChild<LLButton>("flyout_btn"));
 	}
 
-
 	// Both parts of speak button should be initially disabled because
 	// it takes some time between logging in to world and connecting to voice channel.
-	getChild<LLButton>("speak_btn")->setEnabled(false);
-	getChild<LLButton>("speak_flyout_btn")->setEnabled(false);
+	mSpeakButton->setEnabled(false);
+	mSpeakFlyoutBtn->setEnabled(false);
 	gMenuBarView->getChild<LLView>("Nearby Voice")->setEnabled(false);
 
 	// Registering Chat Bar to receive Voice client status change notifications.
@@ -1030,27 +1036,27 @@ void LLBottomTray::draw()
 		LLRect rect = mLandingTab->calcScreenRect();
 		mImageDragIndication->draw(rect.mLeft - w/2, rect.getHeight(), w, h);
 	}
-	getChild<LLButton>("show_profile_btn")->setToggleState(LLAvatarActions::profileVisible(gAgent.getID()));
+	mShowProfileBtn->setToggleState(LLAvatarActions::profileVisible(gAgent.getID()));
 
 	LLPanel* panel = LLSideTray::getInstance()->getPanel("panel_people");
 	if (panel && panel->isInVisibleChain())
 	{
-		getChild<LLButton>("show_people_button")->setToggleState(true);
+		mShowPeopleBtn->setToggleState(true);
 	}
 	else
 	{
-		getChild<LLButton>("show_people_button")->setToggleState(false);
+		mShowPeopleBtn->setToggleState(false);
 	}
 
 	LLFloater* help_browser = (LLFloaterReg::findInstance("help_browser"));
 	bool help_floater_visible = (help_browser && help_browser->isInVisibleChain());
 
-	getChild<LLButton>("show_help_btn")->setToggleState(help_floater_visible);
+	mShowHelpBtn->setToggleState(help_floater_visible);
 
 	bool openmic = LLVoiceClient::getInstance()->getUserPTTState();
 	bool voiceenabled = LLVoiceClient::getInstance()->voiceEnabled();
-	getChild<LLButton>("speak_btn")->setToggleState(openmic && voiceenabled);
-	getChild<LLOutputMonitorCtrl>("chat_zone_indicator")->setIsMuted(!voiceenabled);
+	mSpeakButton->setToggleState(openmic && voiceenabled);
+	mChatZoneIndicator->setIsMuted(!voiceenabled);
 
 }
 

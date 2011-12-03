@@ -113,6 +113,7 @@ private:
 
 private:
 	LLPointer<LLUIImage> mLogoImage;
+	LLView* mLoginWidgets;
 	boost::scoped_ptr<LLPanelLoginListener> mListener;
 
 	void			(*mCallback)(S32 option, void *userdata);

@@ -200,6 +200,7 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("login_html");
 	web_browser->addObserver(this);
 
+	mLoginWidgets=getChild<LLView>("login_widgets");
 
 	reshapeBrowser();
 
@@ -323,7 +324,7 @@ void LLPanelLogin::draw()
 		S32 width = getRect().getWidth();
 		S32 height = getRect().getHeight();
 
-		if (getChild<LLView>("login_widgets")->getVisible())
+		if (mLoginWidgets->getVisible())
 		{
 			// draw a background box in black
 			gl_rect_2d( 0, height - 264, width, 264, LLColor4::black );

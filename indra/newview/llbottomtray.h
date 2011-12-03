@@ -40,6 +40,7 @@ class LLBottomTrayLite;
 class LLLayoutPanel;
 class LLMenuGL;
 class LLNearbyChatBarListener;
+class LLOutputMonitorCtrl;
 
 // Build time optimization, generate once in .cpp file
 #ifndef LLBOTTOMTRAY_CPP
@@ -548,6 +549,12 @@ protected:
 	LLChicletPanel* 	mChicletPanel;
 	LLPanel*			mSpeakPanel;
 	LLSpeakButton* 		mSpeakBtn;
+	LLButton*			mSpeakFlyoutBtn;
+	LLButton*			mShowPeopleBtn;
+	LLButton*			mShowProfileBtn;
+	LLButton*			mShowHelpBtn;
+	LLButton*			mSpeakButton;		// mSpeakBtn was taken for the "Talk" button ... I want to keep changes small so I leave it at that. -Zi
+	LLOutputMonitorCtrl*	mChatZoneIndicator;
 	LLNearbyChatBar*	mNearbyChatBar;
 	LLLayoutPanel*		mChatBarContainer;
 	LLPanel*		mNearbyCharResizeHandlePanel;

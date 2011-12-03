@@ -156,6 +156,8 @@ BOOL LLPanelMainInventory::postBuild()
 	mExpandBtn->setClickedCallback(boost::bind(&LLPanelMainInventory::onExpandButtonClicked, this));
 	// ## Zi: Inventory Collapse and Expand Buttons
 
+	mItemcountText=getChild<LLTextBox>("ItemcountText");
+
 	mFilterTabs = getChild<LLTabContainer>("inventory filter tabs");
 	mFilterTabs->setCommitCallback(boost::bind(&LLPanelMainInventory::onFilterSelected, this));
 	
@@ -744,8 +746,7 @@ void LLPanelMainInventory::updateItemcountText()
 		text = getString("ItemcountUnknown");
 	}
 	
-	// *TODO: Cache the LLUICtrl* for the ItemcountText control
-	getChild<LLUICtrl>("ItemcountText")->setValue(text);
+	mItemcountText->setValue(text);
 }
 
 void LLPanelMainInventory::onFocusReceived()

@@ -138,6 +138,7 @@ private:
 	LLSaveFolderState*			mSavedFolderState;
 	std::string					mFilterText;
 	std::string					mFilterSubString;
+	LLTextBox*					mItemcountText;
 
 	// ## Zi: Filter dropdown
 	LLComboBox*					mFilterComboBox;
