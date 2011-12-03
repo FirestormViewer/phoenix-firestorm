@@ -412,9 +412,7 @@ default\n\
 	LLUUID targetKey=mTargetKeyInput->getValue().asUUID();
 	std::string keyString="llGetKey()";
 
-	if(targetKey.isNull())
-		keyString="NULL_KEY";
-	else
+	if(!targetKey.isNull() && targetKey!=mObject->getID())
 		keyString="(key) \""+targetKey.asString()+"\"";
 
 	LLUUID textureKey=mTexture->getID();
