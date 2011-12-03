@@ -562,17 +562,6 @@ LLFloaterPreference::~LLFloaterPreference()
 	}
 }
 
-void LLFloaterPreference::draw()
-{
-	BOOL has_first_selected = (getChildRef<LLScrollListCtrl>("disabled_popups").getFirstSelected()!=NULL);
-	gSavedSettings.setBOOL("FirstSelectedDisabledPopups", has_first_selected);
-	
-	has_first_selected = (getChildRef<LLScrollListCtrl>("enabled_popups").getFirstSelected()!=NULL);
-	gSavedSettings.setBOOL("FirstSelectedEnabledPopups", has_first_selected);
-	
-	LLFloater::draw();
-}
-
 void LLFloaterPreference::saveSettings()
 {
 	LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
