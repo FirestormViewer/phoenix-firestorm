@@ -1552,7 +1552,8 @@ LLViewerWindow::LLViewerWindow(
 	// boost::lambda::var() constructs such a functor on the fly.
 	mWindowListener(new LLWindowListener(this, boost::lambda::var(gKeyboard))),
 	mViewerWindowListener(new LLViewerWindowListener(this)),
-	mProgressView(NULL)
+	mProgressView(NULL),
+	mProgressViewMini(NULL)
 {
 	LLNotificationChannel::buildChannel("VW_alerts", "Visible", LLNotificationFilters::filterBy<std::string>(&LLNotification::getType, "alert"));
 	LLNotificationChannel::buildChannel("VW_alertmodal", "Visible", LLNotificationFilters::filterBy<std::string>(&LLNotification::getType, "alertmodal"));
@@ -1826,8 +1827,13 @@ void LLViewerWindow::initBase()
 
 	// Add the progress bar view (startup view), which overrides everything
 	mProgressView = getRootView()->findChild<LLProgressView>("progress_view");
-	setShowProgress(FALSE);
+	mProgressViewMini = getRootView()->findChild<LLProgressViewMini>("progress_view_mini");
+
+	setShowProgress(FALSE,FALSE);
 	setProgressCancelButtonVisible(FALSE);
+
+	if(mProgressViewMini)
+		mProgressViewMini->setVisible(FALSE);
 
 	gMenuHolder = getRootView()->getChild<LLViewerMenuHolderGL>("Menu Holder");
 
@@ -4614,11 +4620,28 @@ void LLViewerWindow::revealIntroPanel()
 	}
 }
 
-void LLViewerWindow::setShowProgress(const BOOL show)
+void LLViewerWindow::setShowProgress(const BOOL show,BOOL fullscreen)
 {
-	if (mProgressView)
+	if(show)
 	{
-		mProgressView->fade(show);		//		mProgressView->setVisible(show);		// ## Zi: Fade teleport screens
+		if(fullscreen)
+		{
+			if(mProgressView)
+				mProgressView->fade(TRUE);
+		}
+		else
+		{
+			if(mProgressViewMini)
+				mProgressViewMini->setVisible(TRUE);
+		}
+	}
+	else
+	{
+		if(mProgressView && mProgressView->getVisible())
+			mProgressView->fade(FALSE);
+
+		if(mProgressViewMini)
+			mProgressViewMini->setVisible(FALSE);
 	}
 }
 
@@ -4641,6 +4664,11 @@ void LLViewerWindow::setProgressString(const std::string& string)
 	{
 		mProgressView->setText(string);
 	}
+
+	if (mProgressViewMini)
+	{
+		mProgressViewMini->setText(string);
+	}
 }
 
 void LLViewerWindow::setProgressMessage(const std::string& msg)
@@ -4657,6 +4685,11 @@ void LLViewerWindow::setProgressPercent(const F32 percent)
 	{
 		mProgressView->setPercent(percent);
 	}
+
+	if (mProgressViewMini)
+	{
+		mProgressViewMini->setPercent(percent);
+	}
 }
 
 void LLViewerWindow::setProgressCancelButtonVisible( BOOL b, const std::string& label )
@@ -4664,6 +4697,11 @@ void LLViewerWindow::setProgressCancelButtonVisible( BOOL b, const std::string& 
 	if (mProgressView)
 	{
 		mProgressView->setCancelButtonVisible( b, label );
+	}
+
+	if (mProgressViewMini)
+	{
+		mProgressViewMini->setCancelButtonVisible( b, label );
 	}
 }
 
@@ -4780,7 +4818,7 @@ void LLViewerWindow::restoreGL(const std::string& progress_message)
 		{
 			gRestoreGLTimer.reset();
 			gRestoreGL = TRUE;
-			setShowProgress(TRUE);
+			setShowProgress(TRUE,TRUE);
 			setProgressString(progress_message);
 		}
 		llinfos << "...Restoring GL done" << llendl;

@@ -513,7 +513,7 @@ void LLLoginInstance::reconnect()
 	std::vector<std::string> uris;
 	LLGridManager::getInstance()->getLoginURIs(uris);
 	mLoginModule->connect(uris.front(), mRequestData);
-	gViewerWindow->setShowProgress(true);
+	gViewerWindow->setShowProgress(true,!gSavedSettings.getBOOL("FSDisableLoginScreens"));
 }
 
 void LLLoginInstance::disconnect()
@@ -662,7 +662,7 @@ void LLLoginInstance::handleLoginFailure(const LLSD& event)
 		LLSD data(LLSD::emptyMap());
 		data["message"] = message_response;
 		data["reply_pump"] = TOS_REPLY_PUMP;
-		gViewerWindow->setShowProgress(FALSE);
+		gViewerWindow->setShowProgress(FALSE,FALSE);
 		LLFloaterReg::showInstance("message_tos", data);
 		LLEventPumps::instance().obtain(TOS_REPLY_PUMP)
 			.listen(TOS_LISTENER_NAME,
@@ -683,7 +683,7 @@ void LLLoginInstance::handleLoginFailure(const LLSD& event)
 			data["certificate"] = response["certificate"];
 		}
 		
-		gViewerWindow->setShowProgress(FALSE);
+		gViewerWindow->setShowProgress(FALSE,FALSE);
 		LLFloaterReg::showInstance("message_critical", data);
 		LLEventPumps::instance().obtain(TOS_REPLY_PUMP)
 			.listen(TOS_LISTENER_NAME,
@@ -768,7 +768,7 @@ void LLLoginInstance::updateApp(bool mandatory, const std::string& auth_msg)
 {
 	if(mandatory)
 	{
-		gViewerWindow->setShowProgress(false);
+		gViewerWindow->setShowProgress(false,false);
 		MandatoryUpdateMachine * machine = new MandatoryUpdateMachine(*this, *mUpdaterService);
 		mUpdateStateMachine.reset(machine);
 		machine->start();
@@ -832,7 +832,7 @@ void LLLoginInstance::updateApp(bool mandatory, const std::string& auth_msg)
 		mNotifications->add(notification_name, args, payload, 
 			boost::bind(&LLLoginInstance::updateDialogCallback, this, _1, _2));
 
-		gViewerWindow->setShowProgress(false);
+		gViewerWindow->setShowProgress(false,false);
 	}
 }
 

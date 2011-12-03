@@ -54,6 +54,7 @@ class LLView;
 class LLViewerObject;
 class LLUUID;
 class LLProgressView;
+class LLProgressViewMini;
 class LLTool;
 class LLVelocityBar;
 class LLPanel;
@@ -265,7 +266,7 @@ public:
 	BOOL            getCursorHidden() { return mCursorHidden; }
 	void			moveCursorToCenter();								// move to center of window
 													
-	void			setShowProgress(const BOOL show);
+	void			setShowProgress(const BOOL show,BOOL fullscreen);
 	BOOL			getShowProgress() const;
 	void			setProgressString(const std::string& string);
 	void			setProgressPercent(const F32 percent);
@@ -420,6 +421,7 @@ protected:
 	BOOL			mRightMouseDown;
 
 	LLProgressView	*mProgressView;
+	LLProgressViewMini	*mProgressViewMini;
 
 	LLFrameTimer	mToolTipFadeTimer;
 	LLPanel*		mToolTip;

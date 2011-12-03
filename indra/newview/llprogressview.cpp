@@ -53,12 +53,63 @@
 #include "llpanellogin.h"
 
 LLProgressView* LLProgressView::sInstance = NULL;
+LLProgressViewMini* LLProgressViewMini::sInstance = NULL;
 
 S32 gStartImageWidth = 1;
 S32 gStartImageHeight = 1;
 const F32 FADE_TO_WORLD_TIME = 1.0f;
 
 static LLRegisterPanelClassWrapper<LLProgressView> r("progress_view");
+static LLRegisterPanelClassWrapper<LLProgressViewMini> r_mini("progress_view_mini");
+
+LLProgressViewMini::LLProgressViewMini()
+{
+	sInstance=this;
+}
+
+BOOL LLProgressViewMini::postBuild()
+{
+	mCancelBtn=getChild<LLButton>("cancel_btn");
+	mCancelBtn->setClickedCallback(LLProgressViewMini::onCancelButtonClicked,NULL);
+
+	mProgressBar=getChild<LLProgressBar>("progress_bar_mini");
+	mProgressText=getChild<LLTextBox>("progress_text");
+
+	return TRUE;
+}
+
+void LLProgressViewMini::setPercent(const F32 percent)
+{
+	mProgressBar->setValue(percent);
+
+	// hide ourselves when 100% is reached. This is necessary because the login code
+	// expects the fullscreen panel to hide itself when login is completed
+	if(percent==100.0f)
+		setVisible(FALSE);
+}
+
+void LLProgressViewMini::setText(const std::string& text)
+{
+	mProgressText->setValue(text);
+}
+
+void LLProgressViewMini::setCancelButtonVisible(BOOL b, const std::string& label)
+{
+	mCancelBtn->setVisible(b);
+	mCancelBtn->setEnabled(b);
+	mCancelBtn->setLabelSelected(label);
+	mCancelBtn->setLabelUnselected(label);
+}
+
+// static
+void LLProgressViewMini::onCancelButtonClicked(void* dummy)
+{
+	// code reuse is good, even if we have an unnecessary hiding of the full screen tp window there
+	// we might have to reconsider this in case we change setVisible(FALSE) to fade(FALSE) in there. -Zi
+	LLProgressView::onCancelButtonClicked(dummy);
+	sInstance->mCancelBtn->setEnabled(FALSE);
+	sInstance->setVisible(FALSE);
+}
 
 // XUI: Translate
 LLProgressView::LLProgressView() 
@@ -87,6 +138,10 @@ BOOL LLProgressView::postBuild()
 
 	mCancelBtn = getChild<LLButton>("cancel_btn");
 	mCancelBtn->setClickedCallback(  LLProgressView::onCancelButtonClicked, NULL );
+
+	mProgressText=getChild<LLTextBox>("progress_text");
+	mMessageText=getChild<LLTextBox>("message_text");
+
 	mFadeToWorldTimer.stop();
 	mFadeFromLoginTimer.stop();
 
@@ -314,7 +369,7 @@ void LLProgressView::draw()
 
 void LLProgressView::setText(const std::string& text)
 {
-	getChild<LLUICtrl>("progress_text")->setValue(text);
+	mProgressText->setValue(text);
 }
 
 void LLProgressView::setPercent(const F32 percent)
@@ -325,7 +380,7 @@ void LLProgressView::setPercent(const F32 percent)
 void LLProgressView::setMessage(const std::string& msg)
 {
 	mMessage = msg;
-	getChild<LLUICtrl>("message_text")->setValue(mMessage);
+	mMessageText->setValue(mMessage);
 }
 
 void LLProgressView::setCancelButtonVisible(BOOL b, const std::string& label)

@@ -882,7 +882,7 @@ bool idle_startup()
 				LL_WARNS("AppInit") << "Waiting at connection box in headless client.  Did you mean to add autologin params?" << LL_ENDL;
 			}
 			// Make sure the process dialog doesn't hide things
-			gViewerWindow->setShowProgress(FALSE);
+			gViewerWindow->setShowProgress(FALSE,FALSE);
 
 			// Show the login dialog
 			login_show();
@@ -1133,7 +1133,7 @@ bool idle_startup()
 		init_start_screen(agent_location_id);
 
 		// Display the startup progress bar.
-		gViewerWindow->setShowProgress(!gSavedSettings.getBOOL("FSDisableLoginScreens"));
+		gViewerWindow->setShowProgress(TRUE,!gSavedSettings.getBOOL("FSDisableLoginScreens"));
 		gViewerWindow->setProgressCancelButtonVisible(TRUE, LLTrans::getString("Quit"));
 
 		gViewerWindow->revealIntroPanel();

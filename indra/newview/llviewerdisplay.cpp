@@ -396,11 +396,9 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			}
 
 			gTeleportDisplayTimer.reset();
-			if(!gSavedSettings.getBOOL("FSDisableTeleportScreens"))
-			{
-				gViewerWindow->setShowProgress(TRUE);
-				gViewerWindow->setProgressPercent(0);
-			}
+			gViewerWindow->setShowProgress(TRUE,!gSavedSettings.getBOOL("FSDisableTeleportScreens"));
+			gViewerWindow->setProgressPercent(0);
+
 			gAgent.setTeleportState( LLAgent::TELEPORT_REQUESTED );
 			gAgent.setTeleportMessage(
 				LLAgent::sTeleportProgressMessages["requesting"]);
@@ -463,7 +461,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		case LLAgent::TELEPORT_NONE:
 			// No teleport in progress
-			gViewerWindow->setShowProgress(FALSE);
+			gViewerWindow->setShowProgress(FALSE,FALSE);
 			gTeleportDisplay = FALSE;
 			break;
 		}
@@ -491,7 +489,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		F32 percent_done = gRestoreGLTimer.getElapsedTimeF32() * 100.f / RESTORE_GL_TIME;
 		if( percent_done > 100.f )
 		{
-			gViewerWindow->setShowProgress(FALSE);
+			gViewerWindow->setShowProgress(FALSE,FALSE);
 			gRestoreGL = FALSE;
 		}
 		else
