@@ -31,7 +31,6 @@
 #include "llmediactrl.h"
 #include "llframetimer.h"
 #include "llevents.h"
-#include <boost/concept_check.hpp>
 
 class LLImageRaw;
 class LLButton;
