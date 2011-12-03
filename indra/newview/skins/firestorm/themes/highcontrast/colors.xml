@@ -697,6 +697,9 @@
      name="ObjectChatColor"
      value="0.699 0.899 0.699 1" />
     <color
+     name="ObjectIMColor"
+     value="0.714 0.484 0.359 1" />
+    <color
      name="OverdrivenColor"
      reference="Red" />
     <color
