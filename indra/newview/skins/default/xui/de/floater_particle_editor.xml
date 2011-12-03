@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="particle_editor_floater" title="Partikeleditor">
+	<panel name="particle_editor_panel">
+		<panel name="top_left_panel">
+			<text name="Pattern_Label">
+				Muster:
+			</text>
+
+			<combo_box name="pattern_type_combo">
+				<combo_box.item label="Explode" name="explode"/>
+				<combo_box.item label="Angle" name="angle"/>
+				<combo_box.item label="Angle Cone" name="angle_cone"/>
+				<combo_box.item label="Angle Cone Empty" name="angle_cone_empty"/>
+				<combo_box.item label="Drop" name="drop"/>
+			</combo_box>
+
+			<text name="Texture_Label">
+				Textur:
+			</text>
+			<text name="Burst_Rate_Label">
+				Explosionsrate:
+			</text>
+			<text name="Burst_Count_Label">
+				Explosionsanzahl:
+			</text>
+			<text name="Burst_Radius_Label">
+				Explosionsradius:
+			</text>
+			<text name="Angle_Begin_Label">
+				Anfangswinkel:
+			</text>
+			<text name="Burst_Speed_Min_Label">
+				Min. Exp.-Geschw.:
+			</text>
+			<text name="Angle_End_Label">
+				Endwinkel:
+			</text>
+			<text name="Burst_Speed_Max_Label">
+				Max. Exp.-Geschw.:
+			</text>
+			<text name="Source_Max_Age_Label">
+				Max. Quellenalter:
+			</text>
+			<text name="Start_Alpha_Label">
+				Start-Alpha:
+			</text>
+			<text name="Particles_Max_Age_Label">
+				Max. Partikelalter:
+			</text>
+			<text name="End_Alpha_Label">
+				End-Alpha:
+			</text>
+			<text name="Scale_Start_Label">
+				Start-Skalier.:
+			</text>
+			<text name="End_Label" left_pad="5" width="32">
+				Ende:
+			</text>
+		</panel>
+
+		<panel name="top_right_panel">
+			<check_box name="bounce_checkbox" label="Abprallend"/>
+			<check_box name="emissive_checkbox" label="Aussendend"/>
+			<check_box name="follow_source_checkbox" label="Quelle folgen"/>
+			<check_box name="follow_velocity_checkbox" label="Geschwind. folgen"/>
+			<check_box name="interpolate_color_checkbox" label="Farbe interpolieren"/>
+			<check_box name="interpolate_scale_checkbox" label="Skalierung interpol."/>
+			<check_box name="target_position_checkbox" label="Position als Ziel"/>
+			<check_box name="target_linear_checkbox" label="Lineares Ziel"/>
+			<check_box name="wind_checkbox" label="Wind"/>
+			<button name="copy_button" label="Kopieren" tool_tip="Kopiert die Parameter des Partikelsystems als LSL-Skript in die Zwischenablage."/>
+			<button name="inject_button" label="Injizieren" tool_tip="Injiziert dieses Partikelsystem in das ausgewählte Objekt."/>
+		</panel>
+
+		<panel name="bottom_left_panel">
+			<text name="Target_Key_Label">
+				Ziel-UUID:
+			</text>
+
+			<button name="clear_target_button" tool_tip="Löscht das Objekt oder den Avatar als Ziel."/>
+			<button name="pick_target_button" tool_tip="Klicken, um das Objekt oder Avatar als Ziel zu setzen."/>
+
+			<text name="Acceleration_Label">
+				Beschleunig.:
+			</text>
+			<text name="Omega_Label">
+				Omega:
+			</text>
+		</panel>
+
+		<panel name="bottom_right_panel">
+			<color_swatch label="Start-Farbe" name="start_color_selector"/>
+			<color_swatch label="End-Farbe" name="end_color_selector"/>
+		</panel>
+	</panel>
+</floater>

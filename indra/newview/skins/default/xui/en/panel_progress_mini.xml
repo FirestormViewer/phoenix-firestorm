@@ -36,6 +36,6 @@
  name="progress_text"
  right="-64"
  top="5"
- value="Progress ..." />
+ value="Progress..." />
 
 </panel>

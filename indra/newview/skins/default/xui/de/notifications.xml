@@ -3237,4 +3237,46 @@ Phantom-Modus ausgeschaltet.
   </notification>
 
 <!-- Firestorm Phantom -->
+
+  <!-- ## Zi: Particle Editor -->
+  <notification name="ParticleScriptFindFolderFailed">
+Ordner für neues Skript konnte im Inventar nicht gefunden werden.
+  </notification>
+
+  <notification name="ParticleScriptCreationFailed">
+Neues Skript für dieses Partikelsystem konnte nicht erstellt werden.
+  </notification>
+
+  <notification name="ParticleScriptNotFound">
+Neu-erstelltes Skript für dieses Partikelsystem konnte nicht gefunden werden.
+  </notification>
+
+  <notification name="ParticleScriptCreateTempFileFailed">
+Temporäre Datei für Skript-Upload konnte nicht erstellt werden.
+   <form name="form">
+      <ignore name="ignore"
+       text="Ein Partikelskript wurde in die Zwischenablage kopiert."/>
+    </form>
+  </notification>
+
+  <notification name="ParticleScriptInjected">
+Partikelskript erfolgreich injiziert.
+   <form name="form">
+      <ignore name="ignore"
+       text="Ein Partikelskript wurde in ein Objekt injiziert."/>
+    </form>
+  </notification>
+
+  <notification name="ParticleScriptCapsFailed">
+Skript-Injizierung in Objekt fehlgeschlagen. Region unterstützt diese Funktion nicht.
+  </notification>
+
+  <notification name="ParticleScriptCopiedToClipboard">
+Das LSL-Skript zur Generierung dieses Partikelsystems wurde in die Zwischenablage kopiert. Es kann jetzt zur weiteren Verwendung in ein Skript kopiert werden.
+   <form name="form">
+      <ignore name="ignore"
+       text="Ein Partikelskript wurde in die Zwischenablage kopiert."/>
+    </form>
+  </notification>
+  <!-- ## Zi: Particle Editor -->
 </notifications>
