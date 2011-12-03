@@ -682,6 +682,15 @@ void LLNearbyChatBarSingle::onChatBoxCommit()
 	{
 		sendChat(CHAT_TYPE_NORMAL);
 	}
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-12-02 (Catznip-3.2.0d) | Added: Catznip-3.2.0d
+	else if (gSavedSettings.getBOOL("CloseChatOnEmptyReturn"))
+	{
+		// Close if we're the child of a floater
+		LLFloater* pFloater = getParentByType<LLFloater>();
+		if (pFloater)
+			pFloater->closeFloater();
+	}
+// [/SL:KB]
 
 	gAgent.stopTyping();
 }

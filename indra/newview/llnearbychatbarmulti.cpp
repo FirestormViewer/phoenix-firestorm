@@ -17,9 +17,11 @@
 
 #include "llagent.h"
 #include "llfirstuse.h"
+#include "llfloater.h"
 #include "llgesturemgr.h"
 #include "llkeyboard.h"
 #include "llnearbychatbarmulti.h"
+#include "llviewercontrol.h"
 
 LLNearbyChatBarMulti::LLNearbyChatBarMulti()
 {
@@ -117,6 +119,13 @@ void LLNearbyChatBarMulti::onChatBoxCommit(EChatType eChatType)
 
 		// Send the chat
 		LLNearbyChatBarBase::sendChat(eChatType);
+	}
+	else if (gSavedSettings.getBOOL("CloseChatOnEmptyReturn"))
+	{
+		// Close if we're the child of a floater
+		LLFloater* pFloater = getParentByType<LLFloater>();
+		if (pFloater)
+			pFloater->closeFloater();
 	}
 
 	gAgent.stopTyping();
