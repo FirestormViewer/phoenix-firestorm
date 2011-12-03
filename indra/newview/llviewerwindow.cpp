@@ -4618,7 +4618,7 @@ void LLViewerWindow::setShowProgress(const BOOL show)
 {
 	if (mProgressView)
 	{
-		mProgressView->setVisible(show);
+		mProgressView->fade(show);		//		mProgressView->setVisible(show);		// ## Zi: Fade teleport screens
 	}
 }
 

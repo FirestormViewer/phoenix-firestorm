@@ -188,6 +188,23 @@ void LLProgressView::setVisible(BOOL visible)
 	} 
 }
 
+// ## Zi: Fade teleport screens
+void LLProgressView::fade(BOOL in)
+{
+	if(in)
+	{
+		mFadeFromLoginTimer.start();
+		mFadeToWorldTimer.stop();
+		setVisible(TRUE);
+	}
+	else
+	{
+		mFadeFromLoginTimer.stop();
+		mFadeToWorldTimer.start();
+		// set visibility will be done in the draw() method after fade
+	}
+}
+// ## Zi: Fade teleport screens
 
 void LLProgressView::drawStartTexture(F32 alpha)
 {
@@ -218,7 +235,7 @@ void LLProgressView::drawStartTexture(F32 alpha)
 	else
 	{
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-		gGL.color4f(0.f, 0.f, 0.f, 1.f);
+		gGL.color4f(0.f, 0.f, 0.f, alpha);		// ## Zi: Fade teleport screens
 		gl_rect_2d(getRect());
 	}
 	glPopMatrix();

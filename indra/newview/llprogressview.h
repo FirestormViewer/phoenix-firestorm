@@ -31,6 +31,7 @@
 #include "llmediactrl.h"
 #include "llframetimer.h"
 #include "llevents.h"
+#include <boost/concept_check.hpp>
 
 class LLImageRaw;
 class LLButton;
@@ -65,6 +66,8 @@ public:
 	
 	// turns on (under certain circumstances) the into video after login
 	void revealIntroPanel();
+
+	void fade(BOOL in);		// ## Zi: Fade teleport screens
 
 	void setStartupComplete();
 
