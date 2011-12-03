@@ -1665,6 +1665,11 @@ void LLFloater::setTornOff(bool torn_off)
 	LLMultiFloater* host_floater = getHost();
 	if ( (torn_off) && (host_floater) )		// Tear off
 	{
+// [SL:KB] - Patch: UI-FloaterTearSignal | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+		if (mTearOffSignal)
+			(*mTearOffSignal)(this, LLSD(true));
+// [/SL:KB]
+
 		LLRect new_rect;
 		host_floater->removeFloater(this);
 		// reparent to floater view
@@ -1688,6 +1693,11 @@ void LLFloater::setTornOff(bool torn_off)
 		LLMultiFloater* new_host = (LLMultiFloater*)mLastHostHandle.get();
 		if (new_host)
 		{
+// [SL:KB] - Patch: UI-FloaterTearSignal | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+			if (mTearOffSignal)
+				(*mTearOffSignal)(this, LLSD(false));
+// [/SL:KB]
+
 			setMinimized(FALSE); // to reenable minimize button if it was minimized
 			new_host->showFloater(this);
 			// make sure host is visible
@@ -1698,11 +1708,6 @@ void LLFloater::setTornOff(bool torn_off)
 	updateTitleButtons();
 
 	storeTearOffStateControl();
-
-// [SL:KB] - Patch: UI-FloaterTearSignal | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-	if ( (mTearOffSignal) && (mTornOff == torn_off) )
-		(*mTearOffSignal)(this, LLSD(torn_off));
-// [/SL:KB]
 }
 
 void LLFloater::onClickTearOff(LLFloater* self)
