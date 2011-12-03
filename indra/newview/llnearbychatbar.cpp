@@ -217,28 +217,16 @@ bool LLNearbyChatBar::onNewNearbyChatMsg(const LLSD& sdEvent)
 
 void LLNearbyChatBar::onTearOff(const LLSD& sdData)
 {
-	static S32 nExpandWidth = 0;
-
-	// Calculate the width of the toggle button as: floater width - button left
-	LLUICtrl* pToggleBtn = findChild<LLUICtrl>("show_nearby_chat");
-	if ( (0 == nExpandWidth) && (pToggleBtn->getVisible()) )
-		nExpandWidth = getRect().getWidth() - pToggleBtn->getRect().mLeft;
-
-	LLUICtrl* pChatBox = mChatBarImpl->getChatBoxCtrl();
+	LLUICtrl* pTogglePanel = findChild<LLUICtrl>("panel_nearby_chat_toggle");
 	if (sdData.asBoolean())		// Tearing off
 	{
-		mChatBarImpl->getChatBoxCtrl()->reshape(pChatBox->getRect().getWidth() - nExpandWidth, pChatBox->getRect().getHeight());
-		pToggleBtn->setVisible(TRUE);
-
+		pTogglePanel->setVisible(TRUE);
 		getHost()->getTabContainer()->unlockTabs();
 	}
 	else						// Attaching
 	{
 		showHistory();
-
-		mChatBarImpl->getChatBoxCtrl()->reshape(pChatBox->getRect().getWidth() + nExpandWidth, pChatBox->getRect().getHeight());
-		pToggleBtn->setVisible(FALSE);
-
+		pTogglePanel->setVisible(FALSE);
 		getLastHost()->getTabContainer()->lockTabs(1);
 	}
 
