@@ -2123,19 +2123,19 @@ static LLRegisterPanelClassWrapper<LLPanelPreferenceGraphics> t_pref_graph("pane
 
 BOOL LLPanelPreferenceGraphics::postBuild()
 {
+	mButtonApply=findChild<LLButton>("Apply");
+
 	return LLPanelPreference::postBuild();
 }
 void LLPanelPreferenceGraphics::draw()
 {
 	LLPanelPreference::draw();
-	
-	LLButton* button_apply = findChild<LLButton>("Apply");
-	
-	if (button_apply && button_apply->getVisible())
+
+	if (mButtonApply && mButtonApply->getVisible())
 	{
 		bool enable = hasDirtyChilds();
 
-		button_apply->setEnabled(enable);
+		mButtonApply->setEnabled(enable);
 	}
 }
 bool LLPanelPreferenceGraphics::hasDirtyChilds()

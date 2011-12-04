@@ -250,6 +250,8 @@ protected:
 	bool hasDirtyChilds();
 	void resetDirtyChilds();
 	
+
+	LLButton*	mButtonApply;
 };
 
 // [SL:KB] - Catznip Viewer-Skins
