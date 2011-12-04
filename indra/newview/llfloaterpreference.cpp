@@ -492,7 +492,7 @@ BOOL LLFloaterPreference::postBuild()
 		tabcontainer->selectFirstTab();
 	
 	getChild<LLUICtrl>("cache_location")->setEnabled(FALSE); // make it read-only but selectable (STORM-227)
-	getChildView("log_path_string")->setEnabled(FALSE);// do the same for chat logs path
+//	getChildView("log_path_string")->setEnabled(FALSE);// do the same for chat logs path // was removed in prefs refactoring -Zi
 	getChildView("log_path_string-panelsetup")->setEnabled(FALSE);// and the redundant instance -WoLf
 	std::string cache_location = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "");
 	setCacheLocation(cache_location);
@@ -554,12 +554,16 @@ void LLFloaterPreference::onBusyResponseChanged()
 
 LLFloaterPreference::~LLFloaterPreference()
 {
+	/* Dead code - "windowsize combo" is not in any of the skin files, except for the
+	 * dutch translation, which hints at a removed control. Apart from that, I don't
+	 * even understand what this code does O.o -Zi
 	// clean up user data
 	LLComboBox* ctrl_window_size = getChild<LLComboBox>("windowsize combo");
 	for (S32 i = 0; i < ctrl_window_size->getItemCount(); i++)
 	{
 		ctrl_window_size->setCurrentByIndex(i);
 	}
+	*/
 }
 
 void LLFloaterPreference::saveSettings()
