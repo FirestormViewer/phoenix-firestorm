@@ -279,6 +279,7 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	// word wrap was added accroding to the EXT-6841
 	text_p.wrap(true);
 	addChild(LLUICtrlFactory::create<LLTextBox>(text_p));
+	mCommentTextView=getChildView("comment_text");
 }
 
 S32 LLScrollListCtrl::getSearchColumn()
@@ -476,11 +477,6 @@ void LLScrollListCtrl::updateLayout()
 		mBorderThickness,
 		getRect().getWidth() - 2 * mBorderThickness,
 		getRect().getHeight() - (2 * mBorderThickness ) - heading_size );
-
-	if (mCommentTextView == NULL)
-	{
-		mCommentTextView = getChildView("comment_text");
-	}
 
 	mCommentTextView->setShape(mItemListRect);
 
@@ -1497,7 +1493,7 @@ void LLScrollListCtrl::draw()
 		mColumnsDirty = FALSE;
 	}
 
-	getChildView("comment_text")->setVisible(mItemList.empty());
+	mCommentTextView->setVisible(mItemList.empty());
 
 	drawItems();
 

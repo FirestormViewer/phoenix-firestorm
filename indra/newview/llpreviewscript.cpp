@@ -227,6 +227,9 @@ LLScriptEdCore::~LLScriptEdCore()
 
 BOOL LLScriptEdCore::postBuild()
 {
+	mLineCol=getChild<LLTextBox>("line_col");
+	mSaveBtn=getChildView("Save_btn");
+
 	mErrorList = getChild<LLScrollListCtrl>("lsl errors");
 
 	mFunctions = getChild<LLComboBox>( "Insert...");
@@ -456,7 +459,7 @@ bool LLScriptEdCore::hasChanged()
 void LLScriptEdCore::draw()
 {
 	BOOL script_changed	= hasChanged();
-	getChildView("Save_btn")->setEnabled(script_changed);
+	mSaveBtn->setEnabled(script_changed);
 
 	if( mEditor->hasFocus() )
 	{
@@ -468,11 +471,11 @@ void LLScriptEdCore::draw()
 		args["[LINE]"] = llformat ("%d", line);
 		args["[COLUMN]"] = llformat ("%d", column);
 		cursor_pos = LLTrans::getString("CursorPos", args);
-		getChild<LLUICtrl>("line_col")->setValue(cursor_pos);
+		mLineCol->setValue(cursor_pos);
 	}
 	else
 	{
-		getChild<LLUICtrl>("line_col")->setValue(LLStringUtil::null);
+		mLineCol->setValue(LLStringUtil::null);
 	}
 
 	updateDynamicHelp();

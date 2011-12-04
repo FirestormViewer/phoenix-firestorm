@@ -140,6 +140,8 @@ private:
 	BOOL			mEnableSave;
 	BOOL			mHasScriptData;
 	LLLiveLSLFile*	mLiveFile;
+	LLTextBox*		mLineCol;
+	LLView*			mSaveBtn;
 
 	LLScriptEdContainer* mContainer; // parent view
 };
