@@ -2636,16 +2636,16 @@ Web ページにリンクすると、他人がこの場所に簡単にアクセ�
 		[NAME] の「&lt;nolink&gt;[TITLE]&lt;/nolink&gt;」
 [MESSAGE]
 		<form name="form">
-			<button name="Mute" text="ブロック"/>
-			<button name="Ignore" text="無視する"/>
+			<button name="___mute_button___" text="ブロック"/>
+			<button name="___ignore_button___" text="無視する"/>
 		</form>
 	</notification>
 	<notification name="ScriptDialogGroup">
 		[GROUPNAME] の「&lt;nolink&gt;[TITLE]&lt;/nolink&gt;」
 [MESSAGE]
 		<form name="form">
-			<button name="Mute" text="ブロック"/>
-			<button name="Ignore" text="無視する"/>
+			<button name="___mute_button___" text="ブロック"/>
+			<button name="___ignore_button___" text="無視する"/>
 		</form>
 	</notification>
 	<notification name="BuyLindenDollarSuccess">

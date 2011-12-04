@@ -2533,14 +2533,14 @@ Czy się zgadzasz?
 		[NAME]&apos;s &apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos;
 [MESSAGE]
 		<form name="form">
-			<button name="Ignore" text="Zignoruj"/>
+			<button name="___ignore_button___" text="Zignoruj"/>
 		</form>
 	</notification>
 	<notification name="ScriptDialogGroup">
 		[GROUPNAME]&apos;s &apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos;
 [MESSAGE]
 		<form name="form">
-			<button name="Ignore" text="Zignoruj"/>
+			<button name="___ignore_button___" text="Zignoruj"/>
 		</form>
 	</notification>
 	<notification name="BuyLindenDollarSuccess">

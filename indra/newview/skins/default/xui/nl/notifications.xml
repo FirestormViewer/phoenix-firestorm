@@ -2840,14 +2840,14 @@ Dit verzoek inwilligen?
 		[NAME]&apos;s &apos;[TITLE]&apos;
 [MESSAGE]
 		<form name="form">
-			<button name="Ignore" text="Negeren"/>
+			<button name="___ignore_button___" text="Negeren"/>
 		</form>
 	</notification>
 	<notification name="ScriptDialogGroup">
 		[GROUPNAME]&apos;s &apos;[TITLE]&apos;
 [MESSAGE]
 		<form name="form">
-			<button name="Ignore" text="Negeren"/>
+			<button name="___ignore_button___" text="Negeren"/>
 		</form>
 	</notification>
 	<notification name="FirstBalanceIncrease">

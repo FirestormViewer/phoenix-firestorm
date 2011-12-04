@@ -2601,16 +2601,16 @@ Anfrage gestatten?
 		„&lt;nolink&gt;[TITLE]&lt;/nolink&gt;“ von [NAME]
 [MESSAGE]
 		<form name="form">
-			<button name="Mute" text="Blockieren"/>
-			<button name="Ignore" text="Ignorieren"/>
+			<button name="___mute_button___" text="Blockieren"/>
+			<button name="___ignore_button___" text="Ignorieren"/>
 		</form>
 	</notification>
 	<notification name="ScriptDialogGroup">
 		„&lt;nolink&gt;[TITLE]&lt;/nolink&gt;“ von [GROUPNAME]
 [MESSAGE]
 		<form name="form">
-			<button name="Mute" text="Blockieren"/>
-			<button name="Ignore" text="Ignorieren"/>
+			<button name="___mute_button___" text="Blockieren"/>
+			<button name="___ignore_button___" text="Ignorieren"/>
 		</form>
 	</notification>
 	<notification name="BuyLindenDollarSuccess">

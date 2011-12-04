@@ -2595,16 +2595,16 @@ Si no confias en este objeto y en su creador, deberías rehusar esta petición.
 		&apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos; de [NAME]
 [MESSAGE]
 		<form name="form">
-			<button name="Mute" text="Ignorar"/>
-			<button name="Ignore" text="Ignorar"/>
+			<button name="___mute_button___" text="Ignorar"/>
+			<button name="___ignore_button___" text="Ignorar"/>
 		</form>
 	</notification>
 	<notification name="ScriptDialogGroup">
 		&apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos; de [GROUPNAME]
 [MESSAGE]
 		<form name="form">
-			<button name="Mute" text="Ignorar"/>
-			<button name="Ignore" text="Ignorar"/>
+			<button name="___mute_button___" text="Ignorar"/>
+			<button name="___ignore_button___" text="Ignorar"/>
 		</form>
 	</notification>
 	<notification name="BuyLindenDollarSuccess">

@@ -6282,7 +6282,7 @@ No valid parcel could be found.
     <form name="form">
       <button
        index="-1"
-       name="Ignore"
+       name="___ignore_button___"
        text="Игнорировать"/>
     </form>
   </notification>
@@ -6297,7 +6297,7 @@ No valid parcel could be found.
     <form name="form">
       <button
        index="-1"
-       name="Ignore"
+       name="___ignore_button___"
        text="Игнорировать"/>
     </form>
   </notification>
