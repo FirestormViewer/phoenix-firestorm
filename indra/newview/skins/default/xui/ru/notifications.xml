@@ -2590,7 +2590,7 @@ Ist das OK?
 [NAME]&apos;s &apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos;
 [MESSAGE]
 		<form name="form">
-			<button name="Mute" text="Блокировать"/>
+			<button name="___mute_button___" text="Блокировать"/>
 			<button name="___ignore_button___" text="Игнорировать"/>
 		</form>
 	</notification>
@@ -2598,7 +2598,7 @@ Ist das OK?
 [GROUPNAME]&apos;s &apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos;
 [MESSAGE]
 		<form name="form">
-			<button name="Mute" text="Блокировать"/>
+			<button name="___mute_button___" text="Блокировать"/>
 			<button name="___ignore_button___" text="Игнорировать"/>
 		</form>
 	</notification>
