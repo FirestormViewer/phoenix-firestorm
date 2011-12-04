@@ -4,6 +4,11 @@
 	<string name="SpeakBtnToolTip" value="Schaltet Mikrofon ein/aus"/>
 	<string name="VoiceControlBtnToolTip" value="Voice-Chat-Steuerung anzeigen/ausblenden"/>
 	<layout_stack name="toolbar_stack">
+		<layout_panel name="chat_bar_layout_panel">
+			<button name="conversations_btn" tool_tip="Gespräche anzeigen/ausblenden"/>
+			<button name="show_nearby_chat" tool_tip="Chat in der Nähe anzeigen/ausblenden"/>
+		</layout_panel>
+
 		<layout_panel name="speak_panel">
 			<talk_button name="talk">
 				<speak_button label="Sprechen" label_selected="Sprechen" name="speak_btn"/>

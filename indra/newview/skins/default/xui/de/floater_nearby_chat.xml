@@ -4,6 +4,8 @@
 		<layout_panel>
 			<button name="translate_btn" tool_tip="Chat mit konfiguriertem Dienst übersetzen"/>
 			<line_editor name="chat_box" label="An Chat in der Nähe"/>
+			<spinner label="Kanal:" name="ChatChannel" tool_tip="Kanal, an den der Chat gesendet werden soll. Kann unter Einstellungen -> Chat -> Firestorm -> Kanalauswahl in Eingabezeile anzeigen aktiviert werden." label_width="35">
+      </spinner>
 		</layout_panel>
 	</layout_stack>
 </floater>
