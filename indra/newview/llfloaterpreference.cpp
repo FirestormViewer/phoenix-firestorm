@@ -1521,11 +1521,8 @@ void LLFloaterPreference::onClickSetMiddleMouse()
 	p2t_line_editor->setControlValue(MIDDLE_MOUSE_CV);
 
 	//push2talk button "middle mouse" control value is in English, need to localize it for presentation
-	LLPanel* advanced_preferences = dynamic_cast<LLPanel*>(p2t_line_editor->getParent());
-	if (advanced_preferences)
-	{
-		p2t_line_editor->setValue(advanced_preferences->getString("middle_mouse"));
-	}
+	LLPanel* audioPanel=getChild<LLPanel>("audio");
+	p2t_line_editor->setValue(audioPanel->getString("middle_mouse"));
 }
 
 void LLFloaterPreference::onClickSetSounds()
