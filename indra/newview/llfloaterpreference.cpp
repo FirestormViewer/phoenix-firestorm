@@ -1256,7 +1256,7 @@ void LLFloaterPreference::refreshEnabledState()
 	LLCheckBoxCtrl* ctrl_shader_enable   = getChild<LLCheckBoxCtrl>("BasicShaders");
 	// radio set for terrain detail mode
 	LLRadioGroup*   mRadioTerrainDetail = getChild<LLRadioGroup>("TerrainDetailRadio");   // can be linked with control var
-	
+
 //	ctrl_shader_enable->setEnabled(LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable"));
 // [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a) | Modified: RLVa-0.2.0a
 	// "Basic Shaders" can't be disabled - but can be enabled - under @setenv=n
@@ -1264,7 +1264,7 @@ void LLFloaterPreference::refreshEnabledState()
 	ctrl_shader_enable->setEnabled(
 		fCtrlShaderEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("VertexShaderEnable"))) );
 // [/RLVa:KB]
-
+	
 	BOOL shaders = ctrl_shader_enable->get();
 	if (shaders)
 	{
@@ -1303,13 +1303,11 @@ void LLFloaterPreference::refreshEnabledState()
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
 	LLComboBox* ctrl_shadow = getChild<LLComboBox>("ShadowDetail");
-	LLCheckBoxCtrl* ctrl_UseGI = getChild<LLCheckBoxCtrl>("UseGI");
 
 	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO") && (ctrl_deferred->get() ? TRUE : FALSE);
 		
 	ctrl_ssao->setEnabled(enabled);
 	ctrl_dof->setEnabled(enabled);
-	ctrl_UseGI->setEnabled(enabled);
 
 	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail");
 
@@ -1333,7 +1331,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
-	LLCheckBoxCtrl* ctrl_UseGI = getChild<LLCheckBoxCtrl>("UseGI");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
 
 	// if vertex shaders off, disable all shader related products
@@ -1360,9 +1357,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
 
-		ctrl_UseGI->setEnabled(FALSE);
-		ctrl_UseGI->setValue(FALSE);
-
 		ctrl_dof->setEnabled(FALSE);
 		ctrl_dof->setValue(FALSE);
 
@@ -1383,9 +1377,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
 
-		ctrl_UseGI->setEnabled(FALSE);
-		ctrl_UseGI->setValue(FALSE);
-
 		ctrl_dof->setEnabled(FALSE);
 		ctrl_dof->setValue(FALSE);
 
@@ -1403,9 +1394,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
 
-		ctrl_UseGI->setEnabled(FALSE);
-		ctrl_UseGI->setValue(FALSE);
-
 		ctrl_dof->setEnabled(FALSE);
 		ctrl_dof->setValue(FALSE);
 
@@ -1418,9 +1406,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	{
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
-
-		ctrl_UseGI->setEnabled(FALSE);
-		ctrl_UseGI->setValue(FALSE);
 	}
 	
 	// disabled deferred shadows
@@ -1452,9 +1437,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
-		
-		ctrl_UseGI->setEnabled(FALSE);
-		ctrl_UseGI->setValue(FALSE);
 
 		ctrl_dof->setEnabled(FALSE);
 		ctrl_dof->setValue(FALSE);
