@@ -341,7 +341,7 @@ Der Outfit-Ordner enthält keine Kleidung, Körperteile oder Anhänge.
 		Sie können das Objekt nicht anziehen, weil es noch nicht geladen wurde. Warten Sie kurz und versuchen Sie es dann noch einmal.
 	</notification>
 	<notification name="MustHaveAccountToLogIn">
-		Sue haben ein Feld leer gelassen.
+		Sie haben ein Feld leer gelassen.
 Sie müssen den Benutzernamen Ihres Avatars eingeben.
 
 Sie benötigen ein Konto, um [CURRENT_GRID] betreten zu können. Möchten Sie jetzt ein Konto erstellen?
