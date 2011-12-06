@@ -35,7 +35,23 @@
                 </map>
             </array>
         </map>
-		
+
+	<map>
+        <key>name</key>
+            <string>Vintage</string>
+        <key>folder</key>
+            <string>vintage</string>
+        <key>themes</key>
+            <array>
+                <map>
+                <key>name</key>
+                    <string>Classic</string>
+                <key>folder</key>
+                    <string>classic</string>
+                </map>
+            </array>
+        </map>
+
 		<map>
         <key>name</key>
             <string>Firestorm W/SideTabs</string>

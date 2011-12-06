@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<colors>
+	<color
+		name="ltgrey123"
+		value="0.33333  0.33333  0.33333 1.0" />
+	<color
+		name="drkgrey123"
+		value="0.24314  0.24314  0.24314 1.0" />
+	<color
+		name="btncolordisabled123"
+		value="0.00392  0.17647  0.31765 1.0" />
+	<color
+		name="btncolor123"
+		value="0.26667  0.17647  0.98039 1.0" />
+	<color
+		name="OldGray_63"
+		value="0.243 0.243 0.243 0.63" />
+	<color
+		name="BottomTrayAlphaColor"
+		reference="ltgrey123" />
+	<color
+		name="GridlineBGColor"
+		value="0.92 0.92 1 0.78" />
+	<color
+		name="TextFgColor"
+		value="0.102 0.102 0.102 1" />
+	<color
+		name="ChicletFlashColor"
+		value="SchemeLightest" />
+	<color
+		name="GroupNotifyBoxColor"
+		value="0.3344 0.5456 0.5159 1" />
+	<color
+		name="TextEmbeddedItemColor"
+		value="0.44 0.17 0 1" />
+	<color
+		name="ButtonFlashBgColor"
+		reference="White" />
+	<color
+		name="ChatHistoryBgColor"
+		reference="OldGray_63" />
+	<color
+		name="HighlightChildColor"
+		reference="Yellow" />
+	<color
+		name="HighlightInspectColor"
+		reference="Purple" />
+	<color
+		name="IMChatColor"
+		reference="LtGray" />
+	<color
+		name="MapAvatarColor"
+		reference="Green" />
+	<color
+		name="MapAvatarFriendColor"
+		reference="Yellow" />
+	<color
+		name="MultiSliderDisabledThumbColor"
+		reference="Unused?" />
+	<color
+		name="MultiSliderThumbCenterColor"
+		reference="Unused?" />
+	<color
+		name="MultiSliderThumbCenterSelectedColor"
+		reference="Unused?" />
+	<color
+		name="ObjectChatColor"
+		value="0.699 0.899 0.699 1" />
+	<color
+		name="ScrollBGStripeColor"
+		reference="White_10" />
+	<color
+	 name="SL-Background"
+	 value="0.425 0.425 0.425 1" />
+	<color
+		name="SystemChatColor"
+		reference="LtGray" />
+	<color
+		name="TextBgReadOnlyColor"
+		reference="OldGray_63" />
+
+	<!-- Default Opaque Floater Background Color -->
+	<color
+		name="DkGray"
+		value="0.242 0.242 0.242 1" />
+</colors>

@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+	background_visible="true"
+	default_tab_group="1"
+	follows="all"
+	height="423"
+	label="Things"
+	layout="topleft"
+	min_height="300"
+	min_width="240"
+	name="main inventory panel"
+	width="330">
+	<panel.string
+	name="Itemcount">
+	</panel.string>
+	<panel.string
+	name="ItemcountFetching">
+	Fetching [ITEM_COUNT] Items... [FILTER]
+	</panel.string>
+	<panel.string
+	name="ItemcountCompleted">
+	[ITEM_COUNT] Items [FILTER]
+	</panel.string>
+	<panel.string
+	name="ItemcountUnknown">
+
+  </panel.string>
+
+	<menu_bar
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		opaque="false"
+		top="3"
+		left="1"
+		name="inventory_menu_bar"
+		width="200">
+
+	<menu
+		label="Inventory"
+		name="inventory_inventory_menu">
+		<menu_item_call
+			name="inventory_open"
+			label="Open">
+			<menu_item_call.on_click
+				function="Inventory.DoToSelected"
+				parameter="open" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_share"
+			label="Share">
+			<menu_item_call.on_click
+				function="Inventory.Share" />
+		</menu_item_call>
+		<menu_item_separator />
+		<menu_item_call
+			name="inventory_new_window"
+			label="New Window">
+			<menu_item_call.on_click
+				function="Inventory.NewWindow" />
+		</menu_item_call>
+		<menu_item_separator />
+		<menu_item_call
+			name="inventory_show_filters"
+			label="Show Filters">
+			<menu_item_call.on_click
+				function="Inventory.ShowFilters" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_reset_filters"
+			label="Reset Filters">
+			<menu_item_call.on_click
+				function="Inventory.ResetFilters" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_close_all_folders"
+			label="Close All Folders">
+			<menu_item_call.on_click
+				function="Inventory.CloseAllFolders" />
+		</menu_item_call>
+		<menu_item_separator />
+		<menu_item_call
+			name="inventory_empty_trash"
+			label="Empty Trash">
+			<menu_item_call.on_click
+				function="Inventory.EmptyTrash" />
+		</menu_item_call>
+	</menu>
+
+	<menu
+		label="Create"
+		name="inventory_create_menu">
+		<menu_item_call
+			name="inventory_new_folder"
+			label="New Folder">
+			<menu_item_call.on_click
+				function="Inventory.DoCreate"
+				parameter="category" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_new_script"
+			label="New Script">
+			<menu_item_call.on_click
+				function="Inventory.DoCreate"
+				parameter="lsl" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_new_note"
+			label="New Note">
+			<menu_item_call.on_click
+				function="Inventory.DoCreate"
+				parameter="notecard" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_new_gesture"
+			label="New Gesture">
+			<menu_item_call.on_click
+				function="Inventory.DoCreate"
+				parameter="gesture" />
+		</menu_item_call>
+		<menu
+			name="inventory_new_clothes"
+			label="New Clothes">
+			<menu_item_call
+				name="inventory_new_shirt"
+				label="New Shirt">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="shirt" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_pants"
+				label="New Pants">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="pants" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_shoes"
+				label="New Shoes">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="shoes" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_socks"
+				label="New Socks">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="socks" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_jacket"
+				label="New Jacket">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="jacket" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_skirt"
+				label="New Skirt">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="skirt" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_gloves"
+				label="New Gloves">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="gloves" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_undershirt"
+				label="New Undershirt">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="undershirt" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_underpants"
+				label="New Underpants">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="underpants" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_tattoo"
+				label="New Tattoo">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="tattoo" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_alpha"
+				label="New Alpha">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="alpha" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_physics"
+				label="New Physics">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="physics" />
+			</menu_item_call>
+		</menu>
+		<menu
+			name="inventory_new_body_parts"
+			label="New Body Parts">
+			<menu_item_call
+				name="inventory_new_shape"
+				label="New Shape">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="shape" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_skin"
+				label="New Skin">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="skin" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_hair"
+				label="New Hair">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="hair" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_eyes"
+				label="New Eyes">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="eyes" />
+			</menu_item_call>
+		</menu>
+	</menu>
+
+	<!-- TODO: try to make these check items that actually reflect their state -Zi -->
+	<menu
+		label="Sort"
+		name="inventory_sort_menu"
+		top="0">
+		<menu_item_call
+			name="inventory_sort_by_name"
+			label="By Name">
+			<menu_item_call.on_click
+				function="Inventory.SetSortBy"
+				parameter="name" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_sort_by_date"
+			label="By Date">
+			<menu_item_call.on_click
+				function="Inventory.SetSortBy"
+				parameter="date" />
+		</menu_item_call>
+		<menu_item_separator />
+		<menu_item_call
+			name="inventory_sort_folders_by_name"
+			label="Folders Always By Name">
+			<menu_item_call.on_click
+				function="Inventory.SetSortBy"
+				parameter="foldersalwaysbyname" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_sort_system_on_top"
+			label="System Folders To Top">
+			<menu_item_call.on_click
+				function="Inventory.SetSortBy"
+				parameter="systemfolderstotop" />
+		</menu_item_call>
+	</menu>
+
+	<!-- Not implemented yet
+	<menu
+		label="Search"
+		name="inventory_search_menu"
+		top="0">
+	</menu>
+	-->
+
+	</menu_bar>
+
+	<filter_editor
+		text_pad_left="10"
+		follows="left|top|right"
+		height="18"
+		label="Filter Inventory"
+		layout="topleft"
+		left="10"
+		max_length_chars="300"
+		name="inventory search editor"
+		right="-6"
+		tool_tip="Type in one or more words to search for, separated by '+' "
+		top_pad="4">
+		<filter_editor.clear_button
+			rect.height="14"
+			rect.width="14"
+			rect.bottom="3"
+			/>
+	</filter_editor>
+
+	<button
+		name="collapse_btn"
+		label="Collapse"
+		width="60"
+		height="16"
+		left="6"
+		top_pad="4"
+		follows="top|left"
+		layout="topleft"/>
+
+	<button
+		name="expand_btn"
+		label="Expand"
+		width="60"
+		height="16"
+		left_pad="2"
+		follows="top|left"
+		layout="topleft" />
+
+	<text
+		name="filter_label"
+		value="Filter:"
+		width="30"
+		height="16"
+		left_pad="6"
+		follows="top|left"
+		layout="topleft"
+		top_delta="2" />
+
+	<combo_box
+		name="filter_combo_box"
+		height="16"
+		left_pad="4"
+		follows="top|left|right"
+		layout="topleft"
+		right="-6"
+		top_delta="-2">
+
+		<combo_box.item value="filter_type_all" label="All Types" />
+		<combo_box.item value="filter_separator" label="------------" enabled="false" />
+		<combo_box.item value="filter_type_animations" label="Animations" />
+		<combo_box.item value="filter_type_calling_cards" label="Calling Cards" />
+		<combo_box.item value="filter_type_clothing" label="Clothing / Body Parts" />
+		<combo_box.item value="filter_type_gestures" label="Gestures" />
+		<combo_box.item value="filter_type_landmarks" label="Landmarks" />
+		<combo_box.item value="filter_type_notecards" label="Notecards" />
+		<combo_box.item value="filter_type_objects" label="Objects" />
+		<combo_box.item value="filter_type_scripts" label="Scripts" />
+		<combo_box.item value="filter_type_sounds" label="Sounds" />
+		<combo_box.item value="filter_type_textures" label="Textures" />
+		<combo_box.item value="filter_type_snapshots" label="Snapshots" />
+		<combo_box.item value="filter_type_meshes" label="Meshes" />
+		<combo_box.item value="filter_separator" label="------------" enabled="false" />
+		<combo_box.item value="filter_type_custom" label="Custom..." />
+
+	</combo_box>
+
+	<tab_container
+		bg_alpha_color="DkGray"
+		bg_opaque_color="DkGray"
+		background_visible="true"
+		background_opaque="true"
+		follows="all"
+		halign="center"
+		height="343"
+		layout="topleft"
+		left="4"
+		name="inventory filter tabs"
+		tab_drag_commit="true"
+		tab_group="1"
+		tab_position="top"
+		top_pad="4"
+		width="322">
+		<inventory_panel
+			border="false"
+			bevel_style="none"
+			follows="all"
+			height="341"
+			label="INVENTORY"
+			help_topic="my_inventory_tab"
+			layout="topleft"
+			left="0"
+			name="All Items"
+			sort_order_setting="InventorySortOrder"
+			show_item_link_overlays="true"
+			top="16"
+			width="288" />
+		<recent_inventory_panel
+			border="false"
+			bevel_style="none"
+			follows="all"
+			height="341"
+			label="RECENT"
+			help_topic="recent_inventory_tab"
+			layout="topleft"
+			left_delta="0"
+			name="Recent Items"
+			show_item_link_overlays="true"
+			width="290" />
+		<worn_inventory_panel
+			border="false"
+			bevel_style="none"
+			follows="all"
+			height="341"
+			label="WORN"
+			help_topic="worn_inventory_tab"
+			layout="topleft"
+			left_delta="0"
+			name="Worn Items"
+			show_item_link_overlays="true"
+			width="290" />
+	</tab_container>
+
+	<text
+		type="string"
+		length="1"
+		height="16"
+		layout="topleft"
+		top_pad="2"
+		left_delta="2"
+		name="ItemcountText"
+		right="-1"
+		font="SansSerifMedium"
+		follows="bottom|left">
+		Items
+	</text>
+
+</panel>
