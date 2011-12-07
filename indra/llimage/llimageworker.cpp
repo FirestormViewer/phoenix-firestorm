@@ -59,7 +59,8 @@ S32 LLImageDecodeThread::update(U32 max_time_ms)
 		bool res = addRequest(req);
 		if (!res)
 		{
-			llerrs << "request added after LLLFSThread::cleanupClass()" << llendl;
+			llwarns << "request added after LLLFSThread::cleanupClass()" << llendl;
+			return 0;
 		}
 	}
 	mCreationList.clear();

@@ -56,6 +56,7 @@ public:
 	void onSettingSelect();
 	void onCommitSettings();
 	void onClickDefault();
+	void onCopyToClipboard();
 
 private:
 	// key - selects which settings to show, one of:
@@ -81,6 +82,7 @@ protected:
 	LLColorSwatchCtrl* mColorSwatch;
 	LLLineEditor* mValText;
 	LLRadioGroup* mBooleanCombo;
+	LLButton* mCopyButton;
 	LLButton* mDefaultButton;
 };
 

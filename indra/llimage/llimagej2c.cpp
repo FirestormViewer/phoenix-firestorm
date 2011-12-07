@@ -396,6 +396,11 @@ BOOL LLImageJ2C::loadAndValidate(const std::string &filename)
 	else
 	{
 		U8 *data = (U8*)ALLOCATE_MEM(LLImageBase::getPrivatePool(), file_size);
+		if(!data)
+		{
+			llwarns << "couldn't allocate memory for loading file: " << filename << " size: " << file_size << llendl;
+			return FALSE;
+		}
 		apr_size_t bytes_read = file_size;
 		apr_status_t s = apr_file_read(apr_file, data, &bytes_read); // modifies bytes_read	
 		infile.close() ;

@@ -266,7 +266,7 @@ BOOL LLImageTGA::updateData()
 			mColorMap = new U8[ color_map_bytes ];  
 			if (!mColorMap)
 			{
-				llerrs << "Out of Memory in BOOL LLImageTGA::updateData()" << llendl;
+				llwarns << "Out of Memory in BOOL LLImageTGA::updateData(), size: " << color_map_bytes << llendl;
 				return FALSE;
 			}
 			memcpy( mColorMap, getData() + mDataOffset, color_map_bytes );	/* Flawfinder: ignore */
@@ -1043,7 +1043,8 @@ BOOL LLImageTGA::decodeAndProcess( LLImageRaw* raw_image, F32 domain, F32 weight
 	// Only works for unflipped monochrome RLE images
 	if( (getComponents() != 1) || (mImageType != 11) || mOriginTopBit || mOriginRightBit ) 
 	{
-		llerrs << "LLImageTGA trying to alpha-gradient process an image that's not a standard RLE, one component image" << llendl;
+		llwarns << "LLImageTGA trying to alpha-gradient process an image that's not a standard RLE, one component image" << llendl;
+		llwarns << "getComponents(): " << getComponents() << " mImageType: " << mImageType << " mOriginTopBit:" << mOriginTopBit << " mOriginRightBit: " << mOriginRightBit << llendl;
 		return FALSE;
 	}
 
@@ -1163,6 +1164,12 @@ bool LLImageTGA::loadFile( const std::string& path )
 	}
 
 	U8* buffer = allocateData(file_size);
+	if(!buffer)
+	{
+		llwarns << "could not allocate memory for image loading, size: " << file_size << llendl;
+		return false;
+	}
+
 	S32 bytes_read = fread(buffer, 1, file_size, file);
 	if( bytes_read != file_size )
 	{

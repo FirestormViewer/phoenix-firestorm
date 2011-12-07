@@ -126,11 +126,12 @@ BOOL LLImagePNG::encode(const LLImageRaw* raw_image, F32 encode_time)
 
 	// Resize internal buffer and copy from temp
 	U32 encodedSize = pngWrapper.getFinalSize();
-	allocateData(encodedSize);
-	memcpy(getData(), tmpWriteBuffer, encodedSize);
+	if(allocateData(encodedSize))
+		memcpy(getData(), tmpWriteBuffer, encodedSize);
+	else
+		llwarns << "allocateData() falied." << llendl;
 
 	delete[] tmpWriteBuffer;
 
-	return TRUE;
+	return (getData()!=NULL);
 }
-

@@ -197,13 +197,25 @@
 		<button
 			follows="right|bottom"
 			height="22"
+			label="Copy"
+			layout="topleft"
+			right="-104"
+			name="copy_btn"
+			tool_tip="Copies the setting's name to the clipboard."
+			top_pad="10"
+			width="50">
+			<button.commit_callback
+				function="ClickCopy" />
+		</button>
+		<button
+			follows="right|bottom"
+			height="22"
 			label="Reset to default"
 			layout="topleft"
-			right="-1"
+			left_pad="4"
 			name="default_btn"
 			tool_tip="Reset this debug setting to its default value."
-			top_pad="10"
-			width="150">
+			width="100">
 			<button.commit_callback
 				function="ClickDefault" />
 		</button>

@@ -142,13 +142,14 @@ void LLImageBase::sanityCheck()
 		|| mComponents > (S8)MAX_IMAGE_COMPONENTS
 		)
 	{
-		llerrs << "Failed LLImageBase::sanityCheck "
-			   << "width " << mWidth
-			   << "height " << mHeight
-			   << "datasize " << mDataSize
-			   << "components " << mComponents
-			   << "data " << mData
-			   << llendl;
+		// I think this is dead code anyway. Need to investigate later -Zi
+		llwarns << "Failed LLImageBase::sanityCheck "
+			    << "width " << mWidth
+			    << "height " << mHeight
+			    << "datasize " << mDataSize
+			    << "components " << mComponents
+			    << "data " << mData
+			    << llendl;
 	}
 }
 
@@ -170,7 +171,8 @@ U8* LLImageBase::allocateData(S32 size)
 		size = mWidth * mHeight * mComponents;
 		if (size <= 0)
 		{
-			llerrs << llformat("LLImageBase::allocateData called with bad dimensions: %dx%dx%d",mWidth,mHeight,(S32)mComponents) << llendl;
+			llwarns << llformat("LLImageBase::allocateData called with bad dimensions: %dx%dx%d",mWidth,mHeight,(S32)mComponents) << llendl;
+			return NULL;
 		}
 	}
 	
@@ -185,7 +187,8 @@ U8* LLImageBase::allocateData(S32 size)
 		}
 		else
 		{
-			llerrs << "LLImageBase::allocateData: bad size: " << size << llendl;
+			llwarns << "LLImageBase::allocateData: bad size: " << size << llendl;
+			return NULL;
 		}
 	}
 	if (!mData || size != mDataSize)
@@ -195,7 +198,7 @@ U8* LLImageBase::allocateData(S32 size)
 		mData = (U8*)ALLOCATE_MEM(sPrivatePoolp, size);
 		if (!mData)
 		{
-			llwarns << "allocate image data: " << size << llendl;
+			llwarns << "failed to allocate image data, size: " << size <<  " width: " << mWidth << " height: " << mHeight << llendl;
 			size = 0 ;
 			mWidth = mHeight = 0 ;
 			mBadBufferAllocation = true ;
@@ -213,7 +216,7 @@ U8* LLImageBase::reallocateData(S32 size)
 	U8 *new_datap = (U8*)ALLOCATE_MEM(sPrivatePoolp, size);
 	if (!new_datap)
 	{
-		llwarns << "Out of memory in LLImageBase::reallocateData" << llendl;
+		llwarns << "Out of memory in LLImageBase::reallocateData, size: " << size << llendl;
 		return 0;
 	}
 	if (mData)
@@ -231,7 +234,7 @@ const U8* LLImageBase::getData() const
 { 
 	if(mBadBufferAllocation)
 	{
-		llerrs << "Bad memory allocation for the image buffer!" << llendl ;
+		llwarns << "Bad memory allocation for the image buffer!" << llendl ;
 	}
 
 	return mData; 
@@ -241,7 +244,7 @@ U8* LLImageBase::getData()
 { 
 	if(mBadBufferAllocation)
 	{
-		llerrs << "Bad memory allocation for the image buffer!" << llendl ;
+		llwarns << "Bad memory allocation for the image buffer!" << llendl ;
 	}
 
 	return mData; 
@@ -1478,7 +1481,8 @@ BOOL LLImageFormatted::decodeChannels(LLImageRaw* raw_image,F32  decode_time, S3
 U8* LLImageFormatted::allocateData(S32 size)
 {
 	U8* res = LLImageBase::allocateData(size); // calls deleteData()
-	sGlobalFormattedMemory += getDataSize();
+	if(res)
+		sGlobalFormattedMemory += getDataSize();
 	return res;
 }
 
@@ -1487,7 +1491,8 @@ U8* LLImageFormatted::reallocateData(S32 size)
 {
 	sGlobalFormattedMemory -= getDataSize();
 	U8* res = LLImageBase::reallocateData(size);
-	sGlobalFormattedMemory += getDataSize();
+	if(res)
+		sGlobalFormattedMemory += getDataSize();
 	return res;
 }
 
@@ -1507,7 +1512,8 @@ void LLImageFormatted::sanityCheck()
 
 	if (mCodec >= IMG_CODEC_EOF)
 	{
-		llerrs << "Failed LLImageFormatted::sanityCheck "
+		// I think this is dead code anyway. Need to investigate later. -Zi
+		llwarns << "Failed LLImageFormatted::sanityCheck "
 			   << "decoding " << S32(mDecoding)
 			   << "decoded " << S32(mDecoded)
 			   << "codec " << S32(mCodec)
@@ -1675,7 +1681,8 @@ void LLImageBase::generateMip(const U8* indata, U8* mipdata, S32 width, S32 heig
 				*(U8*)data = (U8)(((U32)(indata[0]) + indata[1] + indata[in_width] + indata[in_width+1])>>2);
 				break;
 			  default:
-				llerrs << "generateMmip called with bad num channels" << llendl;
+				llwarns << "generateMmip called with bad num channels: " << nchannels << llendl;
+				return;
 			}
 			indata += nchannels*2;
 			data += nchannels;

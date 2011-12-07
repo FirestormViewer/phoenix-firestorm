@@ -8453,10 +8453,6 @@ Could not find the newly created script for this particle system.
    name="ParticleScriptCreateTempFileFailed"
    type="alertmodal">
 Could not create temporary file for script upload.
-   <form name="form">
-      <ignore name="ignore"
-       text="A particle script was copied to my clipboard"/>
-    </form>
   </notification>
 
   <notification
@@ -8488,5 +8484,29 @@ The LSL script to create this particle system has been copied to your clipboard.
     </form>
   </notification>
   <!-- ## Zi: Particle Editor -->
+
+  <!-- ## Zi: Debug Settings Editor -->
+  <notification
+   icon="notify.tga"
+   name="DebugSettingsWarning"
+   type="alertmodal">
+Warning! The use of the Debug Settings window is unsupported! Changing debug settings can severely impact your experience and might lead to loss of data, functionality or even access to the service. Please do not change any values without knowing exactly what you are doing.
+   <form name="form">
+      <ignore name="ignore"
+       text="Debug Settings warning message"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="ControlNameCopiedToClipboard"
+   type="alertmodal">
+This debug setting's name has been copied to your clipboard. You can now paste it somewhere else to use it.
+   <form name="form">
+      <ignore name="ignore"
+       text="A debug setting's name was copied to my clipboard"/>
+    </form>
+  </notification>
+  <!-- ## Zi: Debug Settings Editor -->
 
 </notifications>

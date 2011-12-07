@@ -374,7 +374,7 @@ boolean LLImageJPEG::encodeEmptyOutputBuffer( j_compress_ptr cinfo )
   U8* new_buffer = new U8[ new_buffer_size ];
   if (!new_buffer)
   {
-  	llerrs << "Out of memory in LLImageJPEG::encodeEmptyOutputBuffer( j_compress_ptr cinfo )" << llendl;
+  	llwarns << "Out of memory in LLImageJPEG::encodeEmptyOutputBuffer( j_compress_ptr cinfo ), size: " << new_buffer_size << llendl;
   	return FALSE;
   }
   memcpy( new_buffer, self->mOutputBuffer, self->mOutputBufferSize );	/* Flawfinder: ignore */
@@ -399,9 +399,10 @@ void LLImageJPEG::encodeTermDestination( j_compress_ptr cinfo )
 	LLImageJPEG* self = (LLImageJPEG*) cinfo->client_data;
 
 	S32 file_bytes = (S32)(self->mOutputBufferSize - cinfo->dest->free_in_buffer);
-	self->allocateData(file_bytes);
-
-	memcpy( self->getData(), self->mOutputBuffer, file_bytes );	/* Flawfinder: ignore */
+	if(self->allocateData(file_bytes))
+		memcpy( self->getData(), self->mOutputBuffer, file_bytes );	/* Flawfinder: ignore */
+	else
+		llwarns << "allocateData() failed." << llendl;
 }
 
 // static 
@@ -491,6 +492,11 @@ BOOL LLImageJPEG::encode( const LLImageRaw* raw_image, F32 encode_time )
 	delete[] mOutputBuffer;
 	mOutputBufferSize = getWidth() * getHeight() * getComponents() + 1024;
 	mOutputBuffer = new U8[ mOutputBufferSize ];
+	if(!mOutputBuffer)
+	{
+		llwarns << "could not allocate memory for image encoding, size:" << mOutputBufferSize << llendl;
+		return FALSE;
+	}
 
 	const U8* raw_image_data = NULL;
 	S32 row_stride = 0;

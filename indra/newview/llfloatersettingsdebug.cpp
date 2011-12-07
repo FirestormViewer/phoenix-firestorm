@@ -55,6 +55,7 @@ LLFloaterSettingsDebug::LLFloaterSettingsDebug(const LLSD& key)
 	mCommitCallbackRegistrar.add("CommitSettings",	boost::bind(&LLFloaterSettingsDebug::onCommitSettings, this));
 	mCommitCallbackRegistrar.add("ClickDefault",	boost::bind(&LLFloaterSettingsDebug::onClickDefault, this));
 	mCommitCallbackRegistrar.add("UpdateFilter",	boost::bind(&LLFloaterSettingsDebug::onUpdateFilter, this));
+	mCommitCallbackRegistrar.add("ClickCopy",		boost::bind(&LLFloaterSettingsDebug::onCopyToClipboard, this));
 }
 
 LLFloaterSettingsDebug::~LLFloaterSettingsDebug()
@@ -102,6 +103,11 @@ void LLFloaterSettingsDebug::onUpdateFilter()
 			mSettingsScrollList->addElement(item,ADD_BOTTOM,it->second);
 		}
 	}
+
+	// if at least one match was found, highlight and select the topmost entry in the list
+	if(mSettingsScrollList->getItemCount())
+		mSettingsScrollList->selectFirstItem();
+
 	onSettingSelect();
 }
 
@@ -117,6 +123,7 @@ BOOL LLFloaterSettingsDebug::postBuild()
 	mColorSwatch = getChild<LLColorSwatchCtrl>("val_color_swatch");
 	mValText = getChild<LLLineEditor>("val_text");
 	mBooleanCombo = getChild<LLRadioGroup>("boolean_combo");
+	mCopyButton = getChild<LLButton>("copy_btn");
 	mDefaultButton = getChild<LLButton>("default_btn");
 
 	// tried to make this an XUI callback, but keystroke_callback doesn't
@@ -148,6 +155,9 @@ BOOL LLFloaterSettingsDebug::postBuild()
 
 	onUpdateFilter();
 	mSettingsScrollList->sortByColumnIndex(0,TRUE);
+
+	LLNotificationsUtil::add("DebugSettingsWarning");
+
 	return TRUE;
 }
 
@@ -224,10 +234,6 @@ void LLFloaterSettingsDebug::onCommitSettings()
 		break;
 	  case TYPE_COL3:
 		controlp->set(mColorSwatch->getValue());
-		//col3.mV[VRED] = (F32)floaterp->getChild<LLUICtrl>("val_spinner_1")->getValue().asC();
-		//col3.mV[VGREEN] = (F32)floaterp->getChild<LLUICtrl>("val_spinner_2")->getValue().asReal();
-		//col3.mV[VBLUE] = (F32)floaterp->getChild<LLUICtrl>("val_spinner_3")->getValue().asReal();
-		//controlp->set(col3.getValue());
 		break;
 	  default:
 		break;
@@ -242,6 +248,17 @@ void LLFloaterSettingsDebug::onClickDefault()
 	{
 		controlp->resetToDefault(true);
 		updateControl(controlp);
+	}
+}
+
+void LLFloaterSettingsDebug::onCopyToClipboard()
+{
+	LLControlVariable* controlp=getControlVariable();
+
+	if(controlp)
+	{
+		getWindow()->copyTextToClipboard(utf8str_to_wstring(controlp->getName()));
+		LLNotificationsUtil::add("ControlNameCopiedToClipboard");
 	}
 }
 
@@ -262,6 +279,7 @@ void LLFloaterSettingsDebug::updateControl(LLControlVariable* controlp)
 	mColorSwatch->setVisible(FALSE);
 	mValText->setVisible( FALSE);
 	mComment->setText(LLStringUtil::null);
+	mCopyButton->setEnabled(FALSE);
 	mDefaultButton->setEnabled(FALSE);
 	mBooleanCombo->setVisible(FALSE);
 
@@ -278,12 +296,14 @@ void LLFloaterSettingsDebug::updateControl(LLControlVariable* controlp)
 		mColorSwatch->setEnabled(fEnable);
 		mValText->setEnabled(fEnable);
 		mBooleanCombo->setEnabled(fEnable);
+		mCopyButton->setEnabled(fEnable);
 		mDefaultButton->setEnabled(fEnable);
 // [/RLVa:KB]
 
 		eControlType type = controlp->type();
 
-		mComment->setText(controlp->getComment());
+		mComment->setText(controlp->getName()+std::string(": ")+controlp->getComment());
+
 		mSpinner1->setMaxValue(F32_MAX);
 		mSpinner2->setMaxValue(F32_MAX);
 		mSpinner3->setMaxValue(F32_MAX);
