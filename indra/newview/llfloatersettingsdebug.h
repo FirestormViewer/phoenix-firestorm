@@ -30,6 +30,16 @@
 #include "llcontrol.h"
 #include "llfloater.h"
 
+class LLTextEditor;
+class LLSpinCtrl;
+class LLColorSwatchCtrl;
+class LLLineEditor;
+class LLRadioGroup;
+class LLButton;
+class LLScrollListCtrl;
+class LLControlVariable;
+class LLSearchEditor;
+
 class LLFloaterSettingsDebug 
 :	public LLFloater
 {
@@ -38,11 +48,12 @@ class LLFloaterSettingsDebug
 public:
 
 	virtual BOOL postBuild();
-	virtual void draw();
 
 	void updateControl(LLControlVariable* control);
 
-	void onSettingSelect(LLUICtrl* ctrl);
+	// updates control filter to display in the controls list on keytroke
+	void onUpdateFilter();
+	void onSettingSelect();
 	void onCommitSettings();
 	void onClickDefault();
 
@@ -51,10 +62,26 @@ private:
 	// "all", "base", "account", "skin"
 	LLFloaterSettingsDebug(const LLSD& key);
 	virtual ~LLFloaterSettingsDebug();
+
+	// returns a pointer to the currently selected control variable, or NULL
+	LLControlVariable* getControlVariable();
 	
 protected:
-	class LLTextEditor* mComment;
+	typedef std::map<std::string,LLControlVariable*> settings_map_t;
+
+	settings_map_t mSettingsMap;
+
+	LLSearchEditor* mSearchSettingsInput;
+	LLScrollListCtrl* mSettingsScrollList;
+	LLTextEditor* mComment;
+	LLSpinCtrl* mSpinner1;
+	LLSpinCtrl* mSpinner2;
+	LLSpinCtrl* mSpinner3;
+	LLSpinCtrl* mSpinner4;
+	LLColorSwatchCtrl* mColorSwatch;
+	LLLineEditor* mValText;
+	LLRadioGroup* mBooleanCombo;
+	LLButton* mDefaultButton;
 };
 
 #endif //LLFLOATERDEBUGSETTINGS_H
-

@@ -1,141 +1,211 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- legacy_header_height="18"
- can_minimize="false"
- height="215"
- layout="topleft"
- name="settings_debug"
- help_topic="settings_debug"
- title="DEBUG SETTINGS"
- width="350">
-    <combo_box
-     allow_text_entry="true"
-     follows="top|left"
-     height="22"
-     layout="topleft"
-     left="15"
-     max_chars="255"
-     name="settings_combo"
-     top="30"
-     width="320">
-      <combo_box.commit_callback
-       function="SettingSelect" />
-    </combo_box>
-    <text_editor
-     enabled="false"
-     height="60"
-     layout="topleft"
-     left_delta="0"
-     name="comment_text"
-     top_pad="10"
-     width="320"
-     word_wrap="true" />
-  <radio_group
-   follows="top|left"
-   height="30"
-   layout="topleft"
-   left_delta="0"
-   name="boolean_combo"
-   top_pad="10"
-   visible="false"
-   tab_stop="true" 
-   width="100">
-    <radio_item
-      top_pad="5" 
-     label="TRUE"
-     name="TRUE"
-     value="true" />
-    <radio_item
-      top_pad="5" 
-     label="FALSE"
-     name="FALSE"
-     value="" />
-    <commit_callback
-      function="CommitSettings" />
-  </radio_group>
-    <line_editor
-     height="20"
-     layout="topleft"
-     left_delta="0"
-     name="val_text"
-     top_delta="0"
-     visible="false"
-     width="300" >
-      <line_editor.commit_callback
-       function="CommitSettings" />
-    </line_editor>
-    <color_swatch
-     bottom="185"
-     can_apply_immediately="true"
-     height="55"
-     name="val_color_swatch"
-     label="Color"
-     layout="topleft"
-     width="37" >
-      <color_swatch.commit_callback
-       function="CommitSettings" />
-    </color_swatch>
-    <spinner
-     height="20"
-     label="x"
-     layout="topleft"
-     left_delta="0"
-     max_val="1e+007"
-     name="val_spinner_1"
-     top_delta="10"
-     visible="false"
-     width="120" >
-      <spinner.commit_callback
-       function="CommitSettings" />
-    </spinner>
-    <spinner
-     height="20"
-     label="x"
-     layout="topleft"
-     left_pad="15"
-     max_val="1e+007"
-     name="val_spinner_2"
-     top_delta="0"
-     visible="false"
-     width="120">
-      <spinner.commit_callback
-       function="CommitSettings" />
-    </spinner>
-    <spinner
-     height="20"
-     label="x"
-     layout="topleft"
-     left="15"
-     max_val="1e+007"
-     name="val_spinner_3"
-     top="160"
-     visible="false"
-     width="120">
-      <spinner.commit_callback
-       function="CommitSettings" />
-    </spinner>
-    <spinner
-     height="20"
-     label="x"
-     layout="topleft"
-     left_pad="15"
-     max_val="1e+007"
-     name="val_spinner_4"
-     top_delta="0"
-     visible="false"
-     width="120" >
-      <spinner.commit_callback
-       function="CommitSettings" />
-    </spinner>
-    <button
-     height="22"
-     label="Reset to default"
-     layout="topleft"
-     left="15"
-     name="default_btn"
-     top="186"
-     width="150" >
-      <button.commit_callback
-       function="ClickDefault" />
-    </button>
+	legacy_header_height="18"
+	can_minimize="false"
+	can_resize="true"
+	height="215"
+	layout="topleft"
+	min_height="160"
+	min_width="430"
+	name="settings_debug"
+	help_topic="settings_debug"
+	title="DEBUG SETTINGS"
+	width="450">
+
+	<panel
+		height="188"
+		follows="left|top|bottom"
+		layout="topleft"
+		left="4"
+		name="debug_settings_search_panel"
+		top="23"
+		width="170">
+
+		<search_editor
+			clear_button_visible="true"
+			follows="left|top"
+			height="18"
+			label="Search Here"
+			layout="topleft"
+			left="0"
+			max_chars="255"
+			name="search_settings_input"
+			right="-1"
+			tool_tip="Type the search term you are interested in here. Results will be displayed for partial fulltext matches within the setting's name or comment."
+			top="3">
+			<!-- commit callback for clear button clicks -->
+			<search_editor.commit_callback
+				function="UpdateFilter" />
+			<!--keystroke_callback did not work as expected, so wired in postBuild() code :( -Zi
+			<search_editor.keystroke_callback
+				function="UpdateFilter" />
+			-->
+			<search_editor.clear_button
+				rect.height="18"
+				rect.width="18"
+				rect.bottom="-1" />
+			<search_editor.search_button
+				rect.height="12"
+				rect.width="12"
+				rect.bottom="-1" />
+		</search_editor>
+
+		<scroll_list
+			height="160"
+			follows="left|top|bottom"
+			layout="topleft"
+			left="0"
+			name="settings_scroll_list"
+			right="-1"
+			top_pad="4">
+			<scroll_list.commit_callback
+				function="SettingSelect" />
+		</scroll_list>
+	</panel>
+
+	<panel
+		height="188"
+		follows="all"
+		layout="topleft"
+		left_pad="8"
+		name="debug_settings_values_panel"
+		right="-3">
+
+		<text_editor
+			bevel_style="in"
+			border_visible="true"
+			enabled="false"
+			follows="all"
+			height="96"
+			layout="topleft"
+			left="0"
+			name="comment_text"
+			right="-1"
+			tool_tip="Debug setting comment. Often gives helpful information on the setting you have selected."
+			top="0"
+			word_wrap="true" />
+
+		<radio_group
+			follows="left|right|bottom"
+			height="30"
+			layout="topleft"
+			left_delta="0"
+			name="boolean_combo"
+			right="-1"
+			top_pad="10"
+			visible="true"
+			tab_stop="true">
+			<radio_item
+				top_pad="5" 
+				label="TRUE"
+				name="TRUE"
+				value="true" />
+			<radio_item
+				top_pad="5" 
+				label="FALSE"
+				name="FALSE"
+				value="" />
+			<commit_callback
+				function="CommitSettings" />
+		</radio_group>
+
+		<line_editor
+			follows="left|right|bottom"
+			height="20"
+			layout="topleft"
+			left_delta="0"
+			name="val_text"
+			right="-1"
+			top_delta="0"
+			visible="true">
+			<line_editor.commit_callback
+			function="CommitSettings" />
+		</line_editor>
+
+		<color_swatch
+			can_apply_immediately="true"
+			height="85"
+			name="val_color_swatch"
+			label="Color"
+			layout="topleft"
+			top_delta="0"
+			width="67" >
+			<color_swatch.commit_callback
+				function="CommitSettings" />
+		</color_swatch>
+
+		<spinner
+			follows="left|bottom"
+			height="20"
+			label="Spin 1"
+			layout="topleft"
+			left="0"
+			max_val="1e+007"
+			name="val_spinner_1"
+			top_delta="0"
+			visible="true"
+			width="120" >
+			<spinner.commit_callback
+				function="CommitSettings" />
+		</spinner>
+
+		<spinner
+			follows="right|bottom"
+			height="20"
+			label="Spin 2"
+			layout="topleft"
+			right="-1"
+			max_val="1e+007"
+			name="val_spinner_2"
+			visible="true"
+			top_delta="0"
+			width="120">
+			<spinner.commit_callback
+				function="CommitSettings" />
+		</spinner>
+
+		<spinner
+			follows="left|bottom"
+			height="20"
+			label="Spin 3"
+			layout="topleft"
+			left="0"
+			max_val="1e+007"
+			name="val_spinner_3"
+			top_pad="8"
+			visible="true"
+			width="120">
+			<spinner.commit_callback
+				function="CommitSettings" />
+		</spinner>
+
+		<spinner
+			follows="right|bottom"
+			height="20"
+			label="Spin 4"
+			layout="topleft"
+			right="-1"
+			max_val="1e+007"
+			name="val_spinner_4"
+			top_delta="0"
+			visible="true"
+			width="120" >
+			<spinner.commit_callback
+				function="CommitSettings" />
+		</spinner>
+
+		<button
+			follows="right|bottom"
+			height="22"
+			label="Reset to default"
+			layout="topleft"
+			right="-1"
+			name="default_btn"
+			tool_tip="Reset this debug setting to its default value."
+			top_pad="10"
+			width="150">
+			<button.commit_callback
+				function="ClickDefault" />
+		</button>
+	</panel>
 </floater>
