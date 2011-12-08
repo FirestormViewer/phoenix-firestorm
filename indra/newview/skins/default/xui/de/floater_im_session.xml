@@ -31,6 +31,9 @@
 		<layout_panel name="voice_ctrls_btn_panel">
 			<button name="voice_ctrls_btn" tool_tip="Anruf-Eigenschaften"/>
 		</layout_panel>
+		<layout_panel name="im_history_btn_panel">
+			<button name="im_history_btn" tool_tip="IM-Protokoll öffnen"/>
+		</layout_panel>
 	</layout_stack>
 
 	<button name="send_sysinfo_btn" tool_tip="System-Informationen übermitteln"/>

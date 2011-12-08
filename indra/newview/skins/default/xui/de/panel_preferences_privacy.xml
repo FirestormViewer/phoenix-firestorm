@@ -24,7 +24,7 @@
 				Chatprotokolle:
 			</text>
 			<check_box label="Protokolle von Gesprächen in der Nähe auf meinem Computer speichern" name="log_nearby_chat"/>
-			<check_box label="IM Protokolle auf meinem Computer speichern" name="log_instant_messages"/>
+			<check_box label="IM-Protokolle auf meinem Computer speichern" name="log_instant_messages"/>
 			<check_box label="Zeitstempel zu jeder Zeile im Chatprotokoll hinzufügen" name="show_timestamps_check_im"/>
 			<check_box label="Zeige Sekunden im chat und Log Zeitstempel" name="seconds_in_timestamps"/>
 			<check_box label="Verstecke Zeitstempel im Chat In Der Nähe" name="hide_timestamps_nearby_chat"/>
