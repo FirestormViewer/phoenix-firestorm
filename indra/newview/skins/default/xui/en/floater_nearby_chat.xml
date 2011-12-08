@@ -80,7 +80,6 @@
           left_pad="2"
           image_overlay="List_View_On"
           width="25"
-          is_toggle="true"
           image_pressed="PushButton_Press"
           image_pressed_selected="PushButton_Selected_Press"
           image_selected="PushButton_Selected_Press"
