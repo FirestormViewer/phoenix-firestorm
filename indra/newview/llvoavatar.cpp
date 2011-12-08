@@ -709,7 +709,8 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mFullyLoadedInitialized(FALSE),
 	mSupportsAlphaLayers(FALSE),
 	mLoadedCallbacksPaused(FALSE),
-	mHasPelvisOffset( FALSE )
+	mHasPelvisOffset( FALSE ),
+	mRenderUnloadedAvatar(LLCachedControl<bool>(gSavedSettings, "RenderUnloadedAvatar"))
 {
 	LLMemType mt(LLMemType::MTYPE_AVATAR);
 	//VTResume();  // VTune
@@ -6771,16 +6772,10 @@ BOOL LLVOAvatar::processFullyLoadedChange(bool loading)
 
 BOOL LLVOAvatar::isFullyLoaded() const
 {
-//	if (gSavedSettings.getBOOL("RenderUnloadedAvatar"))
-//		return TRUE;
-//	else
-//		return mFullyLoaded;
+//	return (mRenderUnloadedAvatar || mFullyLoaded);
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.6.0a) | Added: Catznip-2.2.0a
 	// Changes to LLAppearanceMgr::updateAppearanceFromCOF() expect this function to actually return mFullyLoaded for gAgentAvatarp
-	if ( (!isSelf()) && (gSavedSettings.getBOOL("RenderUnloadedAvatar")) )
-		return TRUE;
-	else
-		return mFullyLoaded;
+	return ( (!isSelf() && mRenderUnloadedAvatar ) || mFullyLoaded);
 // [/SL:KB]
 }
 

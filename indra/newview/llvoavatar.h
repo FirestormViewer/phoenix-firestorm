@@ -38,6 +38,7 @@
 #include "lldrawpoolalpha.h"
 #include "llviewerobject.h"
 #include "llcharacter.h"
+#include "llcontrol.h"
 #include "llviewerjointmesh.h"
 #include "llviewerjointattachment.h"
 #include "llrendertarget.h"
@@ -452,6 +453,8 @@ private:
 	F32			mImpostorDistance;
 	F32			mImpostorPixelArea;
 	LLVector3	mLastAnimExtents[2];  
+
+	LLCachedControl<bool> mRenderUnloadedAvatar;
 
 	//--------------------------------------------------------------------
 	// Wind rippling in clothes
