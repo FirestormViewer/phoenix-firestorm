@@ -1417,7 +1417,9 @@ BOOL LLViewerFetchedTexture::createTexture(S32 usename/*= 0*/)
 	mNeedsCreateTexture	= FALSE;
 	if (mRawImage.isNull())
 	{
-		llerrs << "LLViewerTexture trying to create texture with no Raw Image" << llendl;
+		llwarns << "LLViewerTexture trying to create texture with no Raw Image" << llendl;
+		setIsMissingAsset();
+		return FALSE;
 	}
 // 	llinfos << llformat("IMAGE Creating (%d) [%d x %d] Bytes: %d ",
 // 						mRawDiscardLevel, 
