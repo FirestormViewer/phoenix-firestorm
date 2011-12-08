@@ -375,6 +375,7 @@
 		name="inventory filter tabs"
 		tab_drag_commit="true"
 		tab_group="1"
+		tab_padding="20"
 		tab_position="top"
 		top_pad="4"
 		width="322">

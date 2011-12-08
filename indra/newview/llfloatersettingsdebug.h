@@ -72,6 +72,8 @@ protected:
 
 	settings_map_t mSettingsMap;
 
+	std::string mOldSearchTerm;
+
 	LLSearchEditor* mSearchSettingsInput;
 	LLScrollListCtrl* mSettingsScrollList;
 	LLTextEditor* mComment;

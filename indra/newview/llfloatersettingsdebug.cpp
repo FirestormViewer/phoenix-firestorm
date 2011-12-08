@@ -56,6 +56,9 @@ LLFloaterSettingsDebug::LLFloaterSettingsDebug(const LLSD& key)
 	mCommitCallbackRegistrar.add("ClickDefault",	boost::bind(&LLFloaterSettingsDebug::onClickDefault, this));
 	mCommitCallbackRegistrar.add("UpdateFilter",	boost::bind(&LLFloaterSettingsDebug::onUpdateFilter, this));
 	mCommitCallbackRegistrar.add("ClickCopy",		boost::bind(&LLFloaterSettingsDebug::onCopyToClipboard, this));
+
+	// make sure that the first filter update succeeds
+	mOldSearchTerm=std::string("---");
 }
 
 LLFloaterSettingsDebug::~LLFloaterSettingsDebug()
@@ -63,9 +66,14 @@ LLFloaterSettingsDebug::~LLFloaterSettingsDebug()
 
 void LLFloaterSettingsDebug::onUpdateFilter()
 {
-	mSettingsScrollList->deleteAllItems();
-
 	std::string searchTerm=mSearchSettingsInput->getValue();
+
+	// make sure not to reselect the first item in the list on focus restore
+	if(searchTerm==mOldSearchTerm)
+		return;
+	mOldSearchTerm=searchTerm;
+
+	mSettingsScrollList->deleteAllItems();
 	
 	settings_map_t::iterator it;
 	for(it=mSettingsMap.begin();it!=mSettingsMap.end();it++)
