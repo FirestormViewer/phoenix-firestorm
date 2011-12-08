@@ -133,6 +133,7 @@ public:
 protected:
 	/* virtual */
 	void	onClickCloseBtn();
+
 	// support sysinfo button -Zi
 	void	onSysinfoButtonVisibilityChanged(const LLSD& yes);
 	LLButton* mSysinfoButton;
@@ -165,6 +166,7 @@ private:
 	void onTeleportButtonClicked();
 	void onPayButtonClicked();
 	void onGroupInfoButtonClicked();
+	void onHistoryButtonClicked();
 
 	// support sysinfo button -Zi
 	void onSysinfoButtonClicked();

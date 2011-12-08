@@ -471,6 +471,10 @@ void LLIMFloater::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_s
 	llinfos << "LLIMFloater::onVoiceChannelStateChanged" << llendl;
 	updateButtons(new_state >= LLVoiceChannel::STATE_CALL_STARTED);
 }
+void LLIMFloater::onHistoryButtonClicked()
+{
+	gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(LLIMModel::instance().getHistoryFileName(mSessionID)));
+}
 
 // support sysinfo button -Zi
 void LLIMFloater::onSysinfoButtonClicked()
@@ -664,7 +668,10 @@ BOOL LLIMFloater::postBuild()
 	
 	LLButton* add_friend = getChild<LLButton>("add_friend_btn");
 	add_friend->setClickedCallback(boost::bind(&LLIMFloater::onAddFriendButtonClicked, this));
-	
+
+	LLButton* im_history = getChild<LLButton>("im_history_btn");
+	im_history->setClickedCallback(boost::bind(&LLIMFloater::onHistoryButtonClicked, this));
+
 	// support sysinfo button -Zi
 	mSysinfoButton=getChild<LLButton>("send_sysinfo_btn");
 	onSysinfoButtonVisibilityChanged(FALSE);
@@ -689,7 +696,7 @@ BOOL LLIMFloater::postBuild()
 				getChild<LLLayoutPanel>("gprofile_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
-				getChild<LLLayoutStack>("ls_control_panel")->reshape(180,20,true);
+				getChild<LLLayoutStack>("ls_control_panel")->reshape(200,20,true);
 				
 				llinfos << "AO: adding llimfloater removing/adding particularfriendobserver" << llendl;
 				LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
@@ -726,7 +733,7 @@ BOOL LLIMFloater::postBuild()
 				getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
-				getChild<LLLayoutStack>("ls_control_panel")->reshape(120,20,true);
+				getChild<LLLayoutStack>("ls_control_panel")->reshape(140,20,true);
 				
 				llinfos << "LLIMModel::LLIMSession::GROUP_SESSION end" << llendl;
 				break;
@@ -742,7 +749,7 @@ BOOL LLIMFloater::postBuild()
 				getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
-				getChild<LLLayoutStack>("ls_control_panel")->reshape(100,20,true);
+				getChild<LLLayoutStack>("ls_control_panel")->reshape(120,20,true);
 	llinfos << "LLIMModel::LLIMSession::ADHOC_SESSION end" << llendl;
 				break;
 			}
