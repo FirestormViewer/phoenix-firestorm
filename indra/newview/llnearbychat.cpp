@@ -157,7 +157,9 @@ BOOL LLNearbyChat::postBuild()
 	// extra icon controls -AO
 	LLButton* transl = getChild<LLButton>("translate_btn");
 	transl->setVisible(true);
-	
+
+	childSetCommitCallback("chat_history_btn",onHistoryButtonClicked,this);
+
 	mChatHistory = getChild<LLChatHistory>("chat_history");
 	
 	// Nicky D.; FIRE-3066: Force creation or FSFLoaterContacts here, this way it will register with LLAvatarTracker early enough.
@@ -328,6 +330,12 @@ void LLNearbyChat::onNearbySpeakers()
 	LLSD param;
 	param["people_panel_tab_name"] = "nearby_panel";
 	LLSideTray::getInstance()->showPanel("panel_people",param);
+}
+
+// static
+void LLNearbyChat::onHistoryButtonClicked(LLUICtrl* ctrl, void* userdata)
+{
+	gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName("chat"));
 }
 
 void	LLNearbyChat::onNearbyChatContextMenuItemClicked(const LLSD& userdata)

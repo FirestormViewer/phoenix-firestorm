@@ -79,6 +79,8 @@ public:
 	static void onSendMsg( LLUICtrl*, void*);
 	void sendMsg();
 
+	static void onHistoryButtonClicked(LLUICtrl* ctrl, void* userdata);
+
 	void updateFSUseNearbyChatConsole(const LLSD &data);
 
 private:
