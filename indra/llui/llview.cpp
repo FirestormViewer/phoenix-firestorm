@@ -812,30 +812,14 @@ LLView* LLView::childrenHandleHover(S32 x, S32 y, MASK mask)
 		}
 
 		// This call differentiates this method from childrenHandleMouseEvent().
-		// <Ansariel> Proper fix for FIRE-3798: Original fix by Tank caused
-		// cursor to not properly update when hovering over UI elements.
-		// Fix resembles old algorithm for childrenHandleHover.
-		//LLUI::sWindow->setCursor(viewp->getHoverCursor());
+		LLUI::sWindow->setCursor(viewp->getHoverCursor());
 
-		//if (viewp->handleHover(local_x, local_y, mask)
-		//	|| viewp->blockMouseEvent(local_x, local_y))
-		//{
-		//	viewp->logMouseEvent();
-		//	return viewp;
-		//}
-
-		if (viewp->handleHover(local_x, local_y, mask))
+		if (viewp->handleHover(local_x, local_y, mask)
+			|| viewp->blockMouseEvent(local_x, local_y))
 		{
 			viewp->logMouseEvent();
 			return viewp;
 		}
-
-		if (viewp->blockMouseEvent(local_x, local_y))
-		{
-			LLUI::sWindow->setCursor(viewp->getHoverCursor());
-			return viewp;
-		}
-		// </Ansariel>
 	}
 	return NULL;
 }
