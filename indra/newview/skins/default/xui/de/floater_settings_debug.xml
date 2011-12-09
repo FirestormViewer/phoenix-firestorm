@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="settings_debug" title="DEBUG-EINSTELLUNGEN">
-	<combo_box name="boolean_combo">
-		<combo_box.item label="WAHR" name="TRUE"/>
-		<combo_box.item label="FALSCH" name="FALSE"/>
-	</combo_box>
-	<color_swatch label="Farbe" name="val_color_swatch"/>
-	<spinner label="x" name="val_spinner_1"/>
-	<spinner label="x" name="val_spinner_2"/>
-	<spinner label="x" name="val_spinner_3"/>
-	<spinner label="x" name="val_spinner_4"/>
-	<button label="Standard wiederherstellen" name="default_btn" width="170"/>
+	<panel name="debug_settings_search_panel">
+		<search_editor label="Hier suchen" name="search_settings_input" tool_tip="Den Suchbegriff hier eingeben. Es werden Treffer einer Volltextsuche im Namen und Kommentar einer Einstellung angezeigt."/>
+	</panel>
+
+	<panel name="debug_settings_values_panel">
+		<text_editor name="comment_text" tool_tip="Debug-Einstellung-Kommentar. Gibt oftmals hilfreiche Informationen über die ausgewählte Einstellung."/>
+		<combo_box name="boolean_combo">
+			<combo_box.item label="WAHR" name="TRUE"/>
+			<combo_box.item label="FALSCH" name="FALSE"/>
+		</combo_box>
+		<color_swatch label="Farbe" name="val_color_swatch"/>
+		<spinner label="x" name="val_spinner_1"/>
+		<spinner label="x" name="val_spinner_2"/>
+		<spinner label="x" name="val_spinner_3"/>
+		<spinner label="x" name="val_spinner_4"/>
+		<button label="Kopieren" name="copy_btn" tool_tip="Kopiert den Namen der Einstellung in die Zwischenablage." width="60" right="-135"/>
+		<button label="Standard wiederherst." name="default_btn" width="130"/>
+	</panel>
 </floater>

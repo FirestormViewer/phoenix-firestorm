@@ -3279,4 +3279,22 @@ Das LSL-Skript zur Generierung dieses Partikelsystems wurde in die Zwischenablag
     </form>
   </notification>
   <!-- ## Zi: Particle Editor -->
+
+  <!-- ## Zi: Debug Settings Editor -->
+  <notification name="DebugSettingsWarning">
+Achtung! Für die Verwendung der Debug-Einstellungen wird kein Support geleistet. Änderungen an den Debug-Einstellungen können erhebliche Auswirkungen auf die Verwendung des Viewers haben und können den Verlust von Daten, Funktionalität oder sogar des Zugangs zum Dienst zur Folge haben. Bitte keine Werte ändern, wenn nicht exakt bekannt ist, was die entsprechende Änderung bewirkt!
+   <form name="form">
+      <ignore name="ignore"
+       text="Warnhinweis für Debug-Einstellungen"/>
+    </form>
+  </notification>
+
+  <notification name="ControlNameCopiedToClipboard">
+Der Name der Debug-Einstellung wurde in die Zwischenablage kopiert. Er kann jetzt zur weiteren Verwendung an anderer Stelle eingefügt werden.
+   <form name="form">
+      <ignore name="ignore"
+       text="Der Namen einer Debug-Einstellung wurde in die Zwischenablage kopiert"/>
+    </form>
+  </notification>
+  <!-- ## Zi: Debug Settings Editor -->
 </notifications>

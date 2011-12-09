@@ -3,6 +3,7 @@
 	<layout_stack name="im_panels">
 		<layout_panel>
 			<button name="translate_btn" tool_tip="Chat mit konfiguriertem Dienst übersetzen"/>
+			<button name="chat_history_btn" tool_tip="Protokoll für Chat in der Nähe öffnen"/>
 			<line_editor name="chat_box" label="An Chat in der Nähe"/>
 		</layout_panel>
 	</layout_stack>
