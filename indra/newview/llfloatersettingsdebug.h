@@ -77,7 +77,7 @@ protected:
 	std::string mOldSearchTerm;
 	LLControlVariable* mCurrentControlVariable;
 	LLControlVariable* mOldControlVariable;
-	BOOL mOldVisibility;
+	bool mOldVisibility;
 
 	LLSearchEditor* mSearchSettingsInput;
 	LLScrollListCtrl* mSettingsScrollList;
