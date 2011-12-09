@@ -2523,7 +2523,7 @@ void LLViewerMediaImpl::updateJavascriptObject()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-std::string LLViewerMediaImpl::getName() const 
+const std::string& LLViewerMediaImpl::getName() const 
 { 
 	if (mMediaSource)
 	{
