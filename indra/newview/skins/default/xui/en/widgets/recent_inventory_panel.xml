@@ -5,7 +5,7 @@
   background_visible="true"
   background_opaque="true"
   show_load_status="true"
-  accepts_drag_and_drop="false"
+  accepts_drag_and_drop="true"
   >
     <scroll
       name="Recent Inventory Scroller"
