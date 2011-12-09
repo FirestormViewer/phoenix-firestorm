@@ -47,7 +47,6 @@
 #include "stdenums.h"		// for ADD_BOTTOM
 // [/RLVa:KB]
 
-
 LLFloaterSettingsDebug::LLFloaterSettingsDebug(const LLSD& key) 
 :	LLFloater(key)
 {
@@ -59,10 +58,17 @@ LLFloaterSettingsDebug::LLFloaterSettingsDebug(const LLSD& key)
 
 	// make sure that the first filter update succeeds
 	mOldSearchTerm=std::string("---");
+
+	// proper initialisation
+	mCurrentControlVariable=NULL;
+	mOldControlVariable=NULL;
 }
 
 LLFloaterSettingsDebug::~LLFloaterSettingsDebug()
-{}
+{
+	if(mOldControlVariable)
+		mOldControlVariable->getCommitSignal()->disconnect(boost::bind(&LLFloaterSettingsDebug::onSettingSelect, this));
+}
 
 void LLFloaterSettingsDebug::onUpdateFilter()
 {
@@ -113,7 +119,8 @@ void LLFloaterSettingsDebug::onUpdateFilter()
 	}
 
 	// if at least one match was found, highlight and select the topmost entry in the list
-	if(mSettingsScrollList->getItemCount())
+	// but only if actually a search term was given
+	if(mSettingsScrollList->getItemCount() && !searchTerm.empty())
 		mSettingsScrollList->selectFirstItem();
 
 	onSettingSelect();
@@ -182,13 +189,38 @@ LLControlVariable* LLFloaterSettingsDebug::getControlVariable()
 
 void LLFloaterSettingsDebug::onSettingSelect()
 {
-	updateControl(getControlVariable());
+	mCurrentControlVariable=getControlVariable();
+
+	if(mOldControlVariable!=mCurrentControlVariable)
+	{
+		// unbind change control signal from previously selected control
+		if(mOldControlVariable)
+			mOldControlVariable->getCommitSignal()->disconnect(boost::bind(&LLFloaterSettingsDebug::onSettingSelect, this));
+
+		// bind change control signal, so we can see updates to the current control in realtime
+		if(mCurrentControlVariable)
+			mCurrentControlVariable->getCommitSignal()->connect(boost::bind(&LLFloaterSettingsDebug::onSettingSelect, this));
+
+		mOldControlVariable=mCurrentControlVariable;
+	}
+
+	updateControl();
+}
+
+void LLFloaterSettingsDebug::draw()
+{
+	if(mCurrentControlVariable)
+	{
+		// check for changes in control visibility, like RLVa does
+		if(mCurrentControlVariable->isHiddenFromSettingsEditor()!=mOldVisibility)
+			updateControl();
+	}
+	LLFloater::draw();
 }
 
 void LLFloaterSettingsDebug::onCommitSettings()
 {
-	LLControlVariable* controlp=getControlVariable();
-	if (!controlp)
+	if (!mCurrentControlVariable)
 		return;
 
 	LLVector3 vector;
@@ -199,49 +231,49 @@ void LLFloaterSettingsDebug::onCommitSettings()
 	LLColor4U col4U;
 	LLColor4 color_with_alpha;
 
-	switch(controlp->type())
+	switch(mCurrentControlVariable->type())
 	{		
 	  case TYPE_U32:
-		controlp->set(mSpinner1->getValue());
+		mCurrentControlVariable->set(mSpinner1->getValue());
 		break;
 	  case TYPE_S32:
-		controlp->set(mSpinner1->getValue());
+		mCurrentControlVariable->set(mSpinner1->getValue());
 		break;
 	  case TYPE_F32:
-		controlp->set(LLSD(mSpinner1->getValue().asReal()));
+		mCurrentControlVariable->set(LLSD(mSpinner1->getValue().asReal()));
 		break;
 	  case TYPE_BOOLEAN:
-		controlp->set(mBooleanCombo->getValue());
+		mCurrentControlVariable->set(mBooleanCombo->getValue());
 		break;
 	  case TYPE_STRING:
-		controlp->set(LLSD(mValText->getValue().asString()));
+		mCurrentControlVariable->set(LLSD(mValText->getValue().asString()));
 		break;
 	  case TYPE_VEC3:
 		vector.mV[VX] = (F32) mSpinner1->getValue().asReal();
 		vector.mV[VY] = (F32) mSpinner2->getValue().asReal();
 		vector.mV[VZ] = (F32) mSpinner3->getValue().asReal();
-		controlp->set(vector.getValue());
+		mCurrentControlVariable->set(vector.getValue());
 		break;
 	  case TYPE_VEC3D:
 		vectord.mdV[VX] = mSpinner1->getValue().asReal();
 		vectord.mdV[VY] = mSpinner2->getValue().asReal();
 		vectord.mdV[VZ] = mSpinner3->getValue().asReal();
-		controlp->set(vectord.getValue());
+		mCurrentControlVariable->set(vectord.getValue());
 		break;
 	  case TYPE_RECT:
 		rect.mLeft = mSpinner1->getValue().asInteger();
 		rect.mRight = mSpinner2->getValue().asInteger();
 		rect.mBottom = mSpinner3->getValue().asInteger();
 		rect.mTop = mSpinner4->getValue().asInteger();
-		controlp->set(rect.getValue());
+		mCurrentControlVariable->set(rect.getValue());
 		break;
 	  case TYPE_COL4:
 		col3.setValue(mColorSwatch->getValue());
 		col4 = LLColor4(col3, (F32) mSpinner4->getValue().asReal());
-		controlp->set(col4.getValue());
+		mCurrentControlVariable->set(col4.getValue());
 		break;
 	  case TYPE_COL3:
-		controlp->set(mColorSwatch->getValue());
+		mCurrentControlVariable->set(mColorSwatch->getValue());
 		break;
 	  default:
 		break;
@@ -250,28 +282,24 @@ void LLFloaterSettingsDebug::onCommitSettings()
 
 void LLFloaterSettingsDebug::onClickDefault()
 {
-	LLControlVariable* controlp=getControlVariable();
-
-	if (controlp)
+	if(mCurrentControlVariable)
 	{
-		controlp->resetToDefault(true);
-		updateControl(controlp);
+		mCurrentControlVariable->resetToDefault(true);
+		updateControl();
 	}
 }
 
 void LLFloaterSettingsDebug::onCopyToClipboard()
 {
-	LLControlVariable* controlp=getControlVariable();
-
-	if(controlp)
+	if(mCurrentControlVariable)
 	{
-		getWindow()->copyTextToClipboard(utf8str_to_wstring(controlp->getName()));
+		getWindow()->copyTextToClipboard(utf8str_to_wstring(mCurrentControlVariable->getName()));
 		LLNotificationsUtil::add("ControlNameCopiedToClipboard");
 	}
 }
 
 // we've switched controls, so update spinners, etc.
-void LLFloaterSettingsDebug::updateControl(LLControlVariable* controlp)
+void LLFloaterSettingsDebug::updateControl()
 {
 	if (!mSpinner1 || !mSpinner2 || !mSpinner3 || !mSpinner4 || !mColorSwatch)
 	{
@@ -291,26 +319,26 @@ void LLFloaterSettingsDebug::updateControl(LLControlVariable* controlp)
 	mDefaultButton->setEnabled(FALSE);
 	mBooleanCombo->setVisible(FALSE);
 
-	if (controlp)
+	if(mCurrentControlVariable)
 	{
 // [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
 		// If "HideFromEditor" was toggled while the floater is open then we need to manually disable access to the control
-		// NOTE: this is no longer once per frame, so it might need special handling for RLVa -Zi
-		bool fEnable = !controlp->isHiddenFromSettingsEditor();
-		mSpinner1->setEnabled(fEnable);
-		mSpinner2->setEnabled(fEnable);
-		mSpinner3->setEnabled(fEnable);
-		mSpinner4->setEnabled(fEnable);
-		mColorSwatch->setEnabled(fEnable);
-		mValText->setEnabled(fEnable);
-		mBooleanCombo->setEnabled(fEnable);
-		mCopyButton->setEnabled(fEnable);
-		mDefaultButton->setEnabled(fEnable);
+		mOldVisibility=mCurrentControlVariable->isHiddenFromSettingsEditor();
+		mSpinner1->setEnabled(!mOldVisibility);
+		mSpinner2->setEnabled(!mOldVisibility);
+		mSpinner3->setEnabled(!mOldVisibility);
+		mSpinner4->setEnabled(!mOldVisibility);
+		mColorSwatch->setEnabled(!mOldVisibility);
+		mValText->setEnabled(!mOldVisibility);
+		mBooleanCombo->setEnabled(!mOldVisibility);
+		mDefaultButton->setEnabled(!mOldVisibility);
 // [/RLVa:KB]
 
-		eControlType type = controlp->type();
+		mCopyButton->setEnabled(TRUE);
 
-		mComment->setText(controlp->getName()+std::string(": ")+controlp->getComment());
+		eControlType type=mCurrentControlVariable->type();
+
+		mComment->setText(mCurrentControlVariable->getName()+std::string(": ")+mCurrentControlVariable->getComment());
 
 		mSpinner1->setMaxValue(F32_MAX);
 		mSpinner2->setMaxValue(F32_MAX);
@@ -337,7 +365,7 @@ void LLFloaterSettingsDebug::updateControl(LLControlVariable* controlp)
 			mSpinner4->setIncrement(0.1f);
 		}
 
-		LLSD sd = controlp->get();
+		LLSD sd=mCurrentControlVariable->get();
 		switch(type)
 		{
 		  case TYPE_U32:

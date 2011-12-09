@@ -29,6 +29,7 @@
 
 #include "llcontrol.h"
 #include "llfloater.h"
+#include "../llmath/llmath.h"
 
 class LLTextEditor;
 class LLSpinCtrl;
@@ -48,8 +49,9 @@ class LLFloaterSettingsDebug
 public:
 
 	virtual BOOL postBuild();
+	virtual void draw();
 
-	void updateControl(LLControlVariable* control);
+	void updateControl();
 
 	// updates control filter to display in the controls list on keytroke
 	void onUpdateFilter();
@@ -73,6 +75,9 @@ protected:
 	settings_map_t mSettingsMap;
 
 	std::string mOldSearchTerm;
+	LLControlVariable* mCurrentControlVariable;
+	LLControlVariable* mOldControlVariable;
+	BOOL mOldVisibility;
 
 	LLSearchEditor* mSearchSettingsInput;
 	LLScrollListCtrl* mSettingsScrollList;
