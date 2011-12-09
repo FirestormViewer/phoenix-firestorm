@@ -2839,15 +2839,28 @@ bool LLAppViewer::initConfiguration()
 	// it relies on checking a marker file which will not work when running
 	// out of different directories
 
-	if (LLStartUp::getStartSLURL().isValid() &&
-		(gSavedSettings.getBOOL("SLURLPassToOtherInstance")))
+	// <Ansariel> Since the start SLURL is set in LLStartup because of the
+	//            grid manager, we don't get a valid SLURL here. So we have
+	//            to create a new temporary SLURL to be able to hand off
+	//            SLURLs to already running viewers when opened in a web browser.
+	//if (LLStartUp::getStartSLURL().isValid() &&
+	//	(gSavedSettings.getBOOL("SLURLPassToOtherInstance")))
+	//{
+	//	if (sendURLToOtherInstance(LLStartUp::getStartSLURL().getSLURLString()))
+	//	{
+	//		// successfully handed off URL to existing instance, exit
+	//		return false;
+	//	}
+	//}
+	if ((clp.hasOption("url") || clp.hasOption("slurl")) &&
+		LLSLURL(LLStartUp::getStartSLURLString()).isValid() &&
+		gSavedSettings.getBOOL("SLURLPassToOtherInstance") &&
+		sendURLToOtherInstance(LLStartUp::getStartSLURLString()))
 	{
-		if (sendURLToOtherInstance(LLStartUp::getStartSLURL().getSLURLString()))
-		{
-			// successfully handed off URL to existing instance, exit
-			return false;
-		}
+		// successfully handed off URL to existing instance, exit
+		return false;
 	}
+	// </Ansariel>
 
 	// If automatic login from command line with --login switch
 	// init StartSLURL location. In interactive login, LLPanelLogin

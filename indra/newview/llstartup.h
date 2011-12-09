@@ -115,7 +115,7 @@ public:
 
 // <AW: opensim>
 	static void setStartSLURLString(const std::string& slurl_string){sStartSLURLString = slurl_string;}
-	static std::string sStartSLURLString; 
+	static std::string getStartSLURLString() { return sStartSLURLString; };
 // </AW: opensim>
 
 	static void setStartSLURL(const LLSLURL& slurl);
@@ -125,6 +125,7 @@ public:
 
 private:
 	static LLSLURL sStartSLURL;
+	static std::string sStartSLURLString;
 
 	static std::string startupStateToString(EStartupState state);
 	static EStartupState gStartupState; // Do not set directly, use LLStartup::setStartupState

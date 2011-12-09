@@ -725,12 +725,10 @@ bool idle_startup()
 		// Anyway this belongs into the gridmanager as soon as 
 		// it is cleaner
 		
-		// AO: Armin had this logic in, but it breaks SLURL handling from webbrowsers. Temporarily removing
-		//if(!LLStartUp::sStartSLURLString.empty())
-		//{
-		//	LLStartUp::setStartSLURL(LLStartUp::sStartSLURLString);
-		//}
-		
+		if(!LLStartUp::getStartSLURLString().empty())
+		{
+			LLStartUp::setStartSLURL(LLStartUp::getStartSLURLString());
+		}		
 // </AW: opensim>
 
 		// Init audio, which may be needed for prefs dialog
