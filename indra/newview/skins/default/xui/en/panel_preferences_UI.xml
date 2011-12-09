@@ -570,7 +570,7 @@
          label_width="155"
          layout="topleft"
          left="210"
-         min_val="1"
+         min_val="20"
          max_val="90"
          name="NearbyToastWidth"
          top_pad="7"
