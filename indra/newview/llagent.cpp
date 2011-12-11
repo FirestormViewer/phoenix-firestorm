@@ -226,6 +226,7 @@ LLAgent::LLAgent() :
 
 	mIsBusy(FALSE),
 	mIsAutorespond(FALSE),
+	mIsAutorespondNonFriends(FALSE),
 
 	mControlFlags(0x00000000),
 	mbFlagsDirty(FALSE),
@@ -1369,6 +1370,38 @@ void LLAgent::clearAutorespond()
 BOOL LLAgent::getAutorespond() const
 {
 	return mIsAutorespond;
+}
+
+//-----------------------------------------------------------------------------
+// setAutorespondNonFriends()
+//-----------------------------------------------------------------------------
+void LLAgent::setAutorespondNonFriends()
+{
+	mIsAutorespondNonFriends = TRUE;
+	if (gAutorespondNonFriendsMenu)
+	{
+		gAutorespondNonFriendsMenu->setLabel(LLTrans::getString("AvatarSetNotAutorespondNonFriends"));
+	}
+}
+
+//-----------------------------------------------------------------------------
+// clearAutorespondNonFriends()
+//-----------------------------------------------------------------------------
+void LLAgent::clearAutorespondNonFriends()
+{
+	mIsAutorespondNonFriends = FALSE;
+	if (gAutorespondNonFriendsMenu)
+	{
+		gAutorespondNonFriendsMenu->setLabel(LLTrans::getString("AvatarSetAutorespondNonFriends"));
+	}
+}
+
+//-----------------------------------------------------------------------------
+// getAutorespondNonFriends()
+//-----------------------------------------------------------------------------
+BOOL LLAgent::getAutorespondNonFriends() const
+{
+	return mIsAutorespondNonFriends;
 }
 
 

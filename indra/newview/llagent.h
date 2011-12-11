@@ -388,6 +388,13 @@ public:
 private:
 	BOOL			mIsAutorespond;
 
+public:
+	void			setAutorespondNonFriends();
+	void			clearAutorespondNonFriends();
+	BOOL			getAutorespondNonFriends() const;
+private:
+	BOOL			mIsAutorespondNonFriends;
+
 	//--------------------------------------------------------------------
 	// Grab
 	//--------------------------------------------------------------------

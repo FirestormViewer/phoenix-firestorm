@@ -210,6 +210,7 @@ extern PieMenu* gPieDetachBodyPartMenus[10];
 extern LLMenuItemCallGL* gAFKMenu;
 extern LLMenuItemCallGL* gBusyMenu;
 extern LLMenuItemCallGL* gAutorespondMenu;
+extern LLMenuItemCallGL* gAutorespondNonFriendsMenu;
 
 /*
 // ## Zi: Dead code?

@@ -1955,6 +1955,8 @@ Returns a string with the requested data about the region
 	<string name="AvatarSetBusy">Unavailable</string>
 	<string name="AvatarSetNotAutorespond">Autorespond OFF</string>
 	<string name="AvatarSetAutorespond">Autorespond</string>
+	<string name="AvatarSetNotAutorespondNonFriends">Autorespond to non-friends OFF</string>
+	<string name="AvatarSetAutorespondNonFriends">Autorespond to non-friends</string>
 	
 	<!-- Wearable Types -->
 	<string name="shape">Shape</string>

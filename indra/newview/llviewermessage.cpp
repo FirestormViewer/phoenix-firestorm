@@ -2418,6 +2418,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 	BOOL is_busy = gAgent.getBusy();
 	BOOL is_autorespond = gAgent.getAutorespond();
+	BOOL is_autorespond_nonfriends = gAgent.getAutorespondNonFriends();
 	BOOL is_muted = LLMuteList::getInstance()->isMuted(from_id, name, LLMute::flagTextChat)
 		// object IMs contain sender object id in session_id (STORM-1209)
 		|| dialog == IM_FROM_TASK && LLMuteList::getInstance()->isMuted(session_id);
@@ -2475,7 +2476,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 // [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
 		//else if ( (offline == IM_ONLINE && !is_linden && is_busy && name != SYSTEM_FROM) && (gRlvHandler.canReceiveIM(from_id)) )
 		//AO Autorespond
-		else if ( (offline == IM_ONLINE && !is_linden && (is_busy || is_autorespond) && name != SYSTEM_FROM) && (gRlvHandler.canReceiveIM(from_id)) )
+		//TS Autorespond to non-friends
+		else if ( (offline == IM_ONLINE && !is_linden &&
+		 (is_busy || is_autorespond || (is_autorespond_nonfriends && !is_friend)) && name != SYSTEM_FROM) &&
+		 (gRlvHandler.canReceiveIM(from_id)) )
 // [/RLVa:KB]
 		{
 			// return a standard "busy" message, but only do it to online IM 

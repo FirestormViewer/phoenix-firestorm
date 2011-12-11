@@ -3619,6 +3619,18 @@ Incoming instant messages will now receive your configured autoresponse.
      yestext="OK"/>
   </notification>
 
+    <notification
+   icon="alert.tga"
+   name="AutorespondNonFriendsModeSet"
+   type="alert">
+Autorespond mode for non-friends is set.
+Incoming instant messages from anyone who is not your friend will now receive your configured autoresponse.
+    <usetemplate
+     ignoretext="I change my status to autorespond mode for non-friends"
+     name="okignore"
+     yestext="OK"/>
+  </notification>
+
   <notification
    icon="alert.tga"
    name="JoinedTooManyGroupsMember"

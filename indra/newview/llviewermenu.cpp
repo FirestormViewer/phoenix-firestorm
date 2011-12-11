@@ -210,6 +210,7 @@ PieMenu* gPieDetachBodyPartMenus[10];
 LLMenuItemCallGL* gAFKMenu = NULL;
 LLMenuItemCallGL* gBusyMenu = NULL;
 LLMenuItemCallGL* gAutorespondMenu = NULL;
+LLMenuItemCallGL* gAutorespondNonFriendsMenu = NULL;
 
 //
 // Local prototypes
@@ -6013,6 +6014,23 @@ class LLWorldSetAutorespond : public view_listener_t
 	}
 };
 
+class LLWorldSetAutorespondNonFriends : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		if (gAgent.getAutorespondNonFriends())
+		{
+			gAgent.clearAutorespondNonFriends();
+		}
+		else
+		{
+			gAgent.setAutorespondNonFriends();
+			LLNotificationsUtil::add("AutorespondNonFriendsModeSet");
+		}
+		return true;
+	}
+};
+
 class LLWorldCreateLandmark : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -9127,6 +9145,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLWorldSetAway(), "World.SetAway");
 	view_listener_t::addMenu(new LLWorldSetBusy(), "World.SetBusy");
 	view_listener_t::addMenu(new LLWorldSetAutorespond(), "World.SetAutorespond");
+	view_listener_t::addMenu(new LLWorldSetAutorespondNonFriends(), "World.SetAutorespondNonFriends");
 
 	view_listener_t::addMenu(new LLWorldEnableCreateLandmark(), "World.EnableCreateLandmark");
 	view_listener_t::addMenu(new LLWorldEnableSetHomeLocation(), "World.EnableSetHomeLocation");
