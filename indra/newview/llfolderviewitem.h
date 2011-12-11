@@ -351,6 +351,11 @@ public:
 	virtual bool isPreCreatedFolder()
 	{ return false; }
 
+	// <ND/> Don't bother with tooltips in inventory
+	/*virtual*/ BOOL	handleToolTip(S32 x, S32 y, MASK mask)
+	{ return TRUE; }
+
+
 private:
 	static std::map<U8, LLFontGL*> sFonts; // map of styles to fonts
 };

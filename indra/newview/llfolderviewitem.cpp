@@ -286,7 +286,8 @@ void LLFolderViewItem::refreshFromListener()
 			LLTrans::findString(mLabel, "InvFolder " + mLabel);
 		};
 
-		setToolTip(mLabel);
+		// <ND/> Don't bother with tooltips in inventory
+		//		setToolTip(mLabel);
 		setIcon(mListener->getIcon());
 		time_t creation_date = mListener->getCreationDate();
 		if ((creation_date > 0) && (mCreationDate != creation_date))
