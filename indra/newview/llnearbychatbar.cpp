@@ -221,13 +221,11 @@ void LLNearbyChatBar::onTearOff(const LLSD& sdData)
 	if (sdData.asBoolean())		// Tearing off
 	{
 		pTogglePanel->setVisible(TRUE);
-		getHost()->getTabContainer()->unlockTabs();
 	}
 	else						// Attaching
 	{
 		showHistory();
 		pTogglePanel->setVisible(FALSE);
-		getLastHost()->getTabContainer()->lockTabs(1);
 	}
 
 	// Don't allow closing the nearby chat floater while it's attached
