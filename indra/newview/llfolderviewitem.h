@@ -351,9 +351,9 @@ public:
 	virtual bool isPreCreatedFolder()
 	{ return false; }
 
-	// <ND/> Don't bother with tooltips in inventory
-	/*virtual*/ BOOL	handleToolTip(S32 x, S32 y, MASK mask)
-	{ return TRUE; }
+	// <ND/> Don't bother with unneeded tooltips in inventor
+	/*virtual*/ BOOL handleToolTip(S32 x, S32 y, MASK mask);
+
 
 
 private:
