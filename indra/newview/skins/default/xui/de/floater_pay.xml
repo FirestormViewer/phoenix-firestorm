@@ -20,6 +20,9 @@
 	<text name="amount text">
 		oder Betrag auswählen:
 	</text>
+	<text name="payment_message_label">
+		Nachricht (Optional):
+	</text>
 	<button label="Bezahlen" label_selected="Bezahlen" name="pay btn"/>
 	<button label="Abbrechen" label_selected="Abbrechen" name="cancel btn"/>
 </floater>
