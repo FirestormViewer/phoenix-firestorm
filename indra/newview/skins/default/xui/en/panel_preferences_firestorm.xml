@@ -1278,7 +1278,7 @@
          border_thickness="1"
          follows="top|left"
          height="110"
-         name="SizeBorder"
+         name="PivotBorder"
          width="235"/>
         <check_box
          top_delta="10"

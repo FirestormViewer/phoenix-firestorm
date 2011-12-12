@@ -131,7 +131,7 @@
 	<text name="link_num_obj_count" tooltip="El número de objetos enlazados puede ser impreciso.">
 		[DESC] [NUM]
 	</text>
-	<text name="selection_empty">
+	<text name="selection_empty" width="115">
 		Nada seleccionado.
 	</text>
 	<text name="remaining_capacity">

@@ -630,7 +630,7 @@ things in this group. There&apos;s a broad variety of Abilities.
      layout="topleft">
 //-->
     <panel
-     name="group_roles_layout_panel"
+     name="group_roles_layout_panel2"
      top_pad="4"
      right="-1"
      height="36"

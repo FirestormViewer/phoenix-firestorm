@@ -2,8 +2,8 @@
 <pie_menu name="Object Pie">
 	<pie_slice label="Abrir" name="Open"/>
 	<pie_slice label="Construir" name="Build"/>
-	<pie_slice label="Tocar" name="Object Touch"/>
-	<pie_slice label="Sentarme" name="Object Sit"/>
+	<pie_slice label="Tocar" name="Pie Object Touch"/>
+	<pie_slice label="Sentarme" name="Pie Object Sit"/>
 	<pie_slice label="Levantarme" name="Object Stand Up"/>
 	<pie_slice label="Comprar" name="Buy..."/>
 	<pie_slice label="Tomar" name="Pie Object Take"/>
@@ -16,9 +16,11 @@
 		<pie_menu label="Anexar >" name="Pie Object Attach"/>
 		<pie_slice label="Devolver" name="Return..."/>
 		<pie_menu label="Más >" name="Object Pie More 2">
+			<pie_slice label="Retexturizar" name="Texture Refresh"/>
 			<pie_slice label="Desdibujar" name="Derender"/>
 			<pie_slice label="Denunciar..." name="Report Abuse..."/>
 			<pie_slice label="Bloquear" name="Object Mute"/>
+			<pie_slice label="Info scripts" name="ScriptInfo"/>
 			<pie_slice label="Inspeccionar" name="Object Inspect"/>
 		</pie_menu>
 		<pie_slice label="Comprar" name="Buy..."/>

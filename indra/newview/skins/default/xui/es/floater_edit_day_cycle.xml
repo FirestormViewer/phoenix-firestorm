@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Edit Day cycle" title="Editar ciclo del día">
 	<string name="title_new">
-		Crear un ciclo del día nuevo
+		Crear un nuevo ciclo de día
 	</string>
 	<string name="title_edit">
-		Editar ciclo del día
+		Editar ciclo de día
 	</string>
 	<string name="hint_new">
-		Asigna un nombre al ciclo del día, ajusta los controles para crearlo y selecciona &quot;Guardar&quot;.
+		Asigna un nombre al ciclo de día, ajusta los controles para crearlo y selecciona &quot;Guardar&quot;.
 	</string>
 	<string name="hint_edit">
-		Para editar el ciclo del día, ajusta los controles siguientes y selecciona &quot;Guardar&quot;.
+		Para editar el ciclo de día, ajusta los controles siguientes y selecciona &quot;Guardar&quot;.
 	</string>
 	<string name="combo_label">
 		-Selecciona un valor predefinido-
@@ -28,7 +28,7 @@
 		- Pulsa y arrastra las pestañas para ajustar los tiempos de transición.
 	</text>
 	<text name="hint_item3">
-		- Usa el depurador para obtener una vista previa del ciclo del día.
+		- Usa el depurador para obtener una vista previa del ciclo de día.
 	</text>
 	<panel name="day_cycle_slider_panel">
 		<multi_slider initial_value="0" name="WLTimeSlider"/>
@@ -98,7 +98,7 @@
 		Hora:
 	</text>
 	<time name="time" value="6 AM"/>
-	<check_box label="Convertir en mi nuevo ciclo del día" name="make_default_cb"/>
+	<check_box label="Convertir en mi nuevo ciclo de día" name="make_default_cb"/>
 	<button label="Guardar" name="save"/>
 	<button label="Cancelar" name="cancel"/>
 </floater>

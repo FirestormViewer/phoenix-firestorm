@@ -99,7 +99,7 @@ Rechte in einer Gruppe. Es gibt viele verschiedene Fähigkeiten.
 				Mitglieder in Rolle
 			</text>
 		</panel>
-		<panel name="group_roles_layout_panel">
+		<panel name="group_roles_layout_panel2">
 			<text name="allowed_abilities_label" tool_tip="Eine Liste der Fähigkeiten der aktuell ausgewählten Rolle.">
 				Zulässige Fähigkeiten
 			</text>

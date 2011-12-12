@@ -6,6 +6,15 @@
 	<menu_item_call label="Zoom por defecto" name="Zoom Default"/>
 	<menu_item_check label="Girar el mapa" name="Rotate Map"/>
 	<menu_item_check label="Centrar automáticamente" name="Auto Center"/>
-	<menu_item_call label="Parar la búsqueda" name="Stop Tracking"/>
+	<menu_item_check label="Mostrar alcance del chat" name="Chat Distance Ring"/>
+	<menu name="MarkAvatar" label="Marcar...">
+		<menu_item_call label="Rojo" name="MarkRed"/>
+		<menu_item_call label="Púrpura" name="MarkPurple"/>
+		<menu_item_call label="Verde" name="MarkGreen"/>
+		<menu_item_call label="Amarillo" name="MarkYellow"/>
+		<menu_item_call label="Borrar marcas" name="Clear Marks"/>
+	</menu>
+	<menu_item_call label="Seguir con la cámara" name="Cam"/>
+	<menu_item_call label="Detener seguimiento" name="Stop Tracking"/>
 	<menu_item_call label="Mapa del mundo" name="World Map"/>
 </menu>

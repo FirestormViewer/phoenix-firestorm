@@ -24,7 +24,7 @@
 	<tab_container name="landtab">
 		<panel label="GENERAL" name="land_general_panel">
 			<panel.string name="new users only">
-				Sólo nuevos Residentes
+				Sólo nuevos residentes
 			</panel.string>
 			<panel.string name="anyone">
 				Cualquiera
@@ -64,7 +64,7 @@
 Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver sus características.
 			</panel.string>
 			<panel.string name="time_stamp_template">
-				[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
+				[wkday,datetime,local] [day,datetime,local] [mth,datetime,local] [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
 			</panel.string>
 			<text name="Name:">
 				Nombre:
@@ -76,7 +76,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				Tipo:
 			</text>
 			<text name="LandTypeText">
-				Mainland / Homestead
+				Continente / Residencial
 			</text>
 			<text name="ContentRating">
 				Calificación:
@@ -88,18 +88,18 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				Propietario:
 			</text>
 			<text name="OwnerText">
-				Loading...
+				Cargando...
 			</text>
 			<text name="Group:">
 				Grupo:
 			</text>
 			<text name="GroupText">
-				Loading...
+				Cargando...
 			</text>
 			<button label="Configurar" name="Set..."/>
-			<check_box label="Permitir transferir al grupo" name="check deed" tool_tip="Un oficial del grupo puede transferir este terreno al grupo. El terreno será apoyado por el grupo en sus asignaciones de terreno."/>
-			<button label="Transferir" name="Deed..." tool_tip="Sólo si es usted un oficial del grupo seleccionado puede transferir terreno."/>
-			<check_box label="El propietario hace una contribución transfiriendo" name="check contrib" tool_tip="Cuando el terreno se transfiere al grupo, el antiguo propietario contribuye con una asignación suficiente de terreno."/>
+			<check_box label="Permitir cesión al grupo" name="check deed" tool_tip="Un oficial del grupo puede ceder este terreno al grupo. El terreno será apoyado por el grupo en sus asignaciones de terreno."/>
+			<button label="Ceder" name="Deed..." tool_tip="Sólo si es usted un oficial del grupo seleccionado puede ceder terreno."/>
+			<check_box label="El propietario hace una contribución cediendo" name="check contrib" tool_tip="Cuando el terreno se cede al grupo, el antiguo propietario contribuye con una asignación suficiente de terreno."/>
 			<text name="For Sale:">
 				En venta:
 			</text>
@@ -114,7 +114,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				En venta a: [BUYER]
 			</text>
 			<text name="Sell with landowners objects in parcel.">
-				Objetos incluidos en la venta
+				Objetos incluídos en la venta
 			</text>
 			<text name="Selling with no objects in parcel.">
 				Los objetos no se incluyen en la venta.
@@ -124,7 +124,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				Reclamada:
 			</text>
 			<text name="DateClaimText">
-				Mar 15 Ago 15 13:47:25 2006
+				Mar 15 Ago 2006 13:47:25
 			</text>
 			<text name="PriceLabel">
 				Superficie:
@@ -163,7 +163,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				Estado:
 			</text>
 			<text name="estate_name_text">
-				mainland
+				residencial
 			</text>
 			<text name="estate_owner_lbl">
 				Propietario:
@@ -175,7 +175,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				No se ha aportado un contrato para este estado.
 			</text_editor>
 			<text name="covenant_timestamp_text">
-				Última modificación, Dic Miér 31 16:00:00 1969
+				Última modificación, Mié 31 Dic 1969 16:00:00
 			</text>
 			<text name="region_section_lbl">
 				Región:
@@ -187,7 +187,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				Tipo:
 			</text>
 			<text name="region_landtype_text">
-				Mainland / Homestead
+				Continente / Residencial
 			</text>
 			<text name="region_maturity_lbl">
 				Calificación:
@@ -273,7 +273,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 			<text name="Object Owners:">
 				Propietarios de los objetos:
 			</text>
-			<button label="Actualizar la lista" label_selected="Actualizar la lista" name="Refresh List" tool_tip="Refresh Object List"/>
+			<button label="Actualizar la lista" label_selected="Actualizar la lista" name="Refresh List" tool_tip="Refrescar la lista de objetos"/>
 			<button label="Devolver los objetos" name="Return objects..."/>
 			<name_list name="owner list">
 				<name_list.columns label="Tipo" name="type"/>
@@ -291,7 +291,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 Sólo las parcelas más grandes pueden listarse en la búsqueda.
 			</panel.string>
 			<panel.string name="search_disabled_permissions_tooltip">
-				Esta opción no esta activada porque usted no puede modificar las opciones de la parcela.
+				Esta opción está desactivada porque usted no puede modificar las opciones de la parcela.
 			</panel.string>
 			<panel.string name="mature_check_mature">
 				Contenido Moderado
@@ -312,7 +312,7 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 				Sin &apos;empujones&apos;
 			</panel.string>
 			<panel.string name="push_restrict_region_text">
-				Sin &apos;empujones&apos; (prevalece lo marcado en la región)
+				Sin &apos;empujones&apos; (prevalece lo configurado en la región)
 			</panel.string>
 			<panel.string name="see_avs_text">
 				Ver a los residentes de esta parcela y chatear con ellos
@@ -325,24 +325,24 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 			<text name="allow_label2">
 				Crear objetos:
 			</text>
-			<check_box label="Todos los residentes" name="edit objects check"/>
+			<check_box label="Cualquiera" name="edit objects check"/>
 			<check_box label="El grupo" name="edit group objects check"/>
 			<text name="allow_label3">
 				Dejar objetos:
 			</text>
-			<check_box label="Todos los residentes" name="all object entry check"/>
+			<check_box label="Cualquiera" name="all object entry check"/>
 			<check_box label="El grupo" name="group object entry check"/>
 			<text name="allow_label4">
 				Ejecutar scripts:
 			</text>
-			<check_box label="Todos los residentes" name="check other scripts"/>
+			<check_box label="Cualquiera" name="check other scripts"/>
 			<check_box label="El grupo" name="check group scripts"/>
 			<text name="land_options_label">
 				Opciones del terreno:
 			</text>
 			<check_box label="Seguro (sin daño)" name="check safe" tool_tip="Si se marca, convierte el terreno en &apos;seguro&apos;, desactivando el daño en combate. Si no, se activa el daño en combate."/>
 			<check_box label="Sin &apos;empujones&apos;" name="PushRestrictCheck" tool_tip="Previene scripts que empujen. Marcando esta opción prevendrá que en su terreno haya comportamientos destructivos."/>
-			<check_box label="Mostrar el sitio en la búsqueda (30 L$/semana)" name="ShowDirectoryCheck" tool_tip="Let people see this parcel in search results"/>
+			<check_box label="Mostrar parcela en la búsqueda (30 L$/semana)" name="ShowDirectoryCheck" tool_tip="Permite que la parcela paarezca en resultados de búsqueda"/>
 			<combo_box name="land category with adult">
 				<combo_box.item label="Cualquier categoría" name="item0"/>
 				<combo_box.item label="Localización Linden" name="item1"/>
@@ -386,22 +386,22 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 			<text name="landing_point">
 				Punto de llegada: [LANDING]
 			</text>
-			<button label="Definir" label_selected="Definir" name="Set" tool_tip="Configura el punto de llegada donde aparecerán los visitantes. Configúrelo a la posición de su avatar dentro de esta parcela."/>
+			<button label="Definir" label_selected="Definir" name="Set" tool_tip="Configura el punto de llegada donde aparecerán los visitantes. Se configurará en la posición de su avatar dentro de esta parcela."/>
 			<button label="Borrar" label_selected="Borrar" name="Clear" tool_tip="Borrar el punto de llegada."/>
 			<text name="Teleport Routing: ">
 				Punto de teleporte:
 			</text>
-			<combo_box name="landing type" tool_tip="Punto de teleporte: defina cómo manejar en su terreno los teleportes.">
+			<combo_box name="landing type" tool_tip="Punto de teleporte: defina cómo su terreno maneja los teleportes.">
 				<combo_box.item label="Bloqueado" name="Blocked"/>
 				<combo_box.item label="Punto de llegada" name="LandingPoint"/>
 				<combo_box.item label="Cualquiera" name="Anywhere"/>
 			</combo_box>
 		</panel>
-		<panel label="MEDIA" name="land_media_panel">
+		<panel label="MEDIOS" name="land_media_panel">
 			<text name="with media:" width="85">
-				Tipo de media:
+				Tipo de medio:
 			</text>
-			<combo_box left="97" name="media type" tool_tip="Especifique si la URL es una película, una web, u otro media"/>
+			<combo_box left="97" name="media type" tool_tip="Especifique si la URL es una película, una web, u otro medio"/>
 			<text name="at URL:" width="85">
 				Página inicial:
 			</text>
@@ -417,22 +417,22 @@ la textura:
 			</text>
 			<texture_picker label="" left="97" name="media texture" tool_tip="Pulse para elegir una imagen"/>
 			<text name="replace_texture_help" width="285">
-				Cuando pulses la flecha &apos;play&apos;, los objetos que usen esta textura mostrarán la película o la página web.  Selecciona la miniatura para elegir una textura distinta.
+				Cuando pulses la flecha &apos;play&apos;, los objetos que usen esta textura mostrarán la película o la página web. Selecciona la miniatura para elegir una textura distinta.
 			</text>
 			<check_box label="Escala automática" left="97" name="media_auto_scale" tool_tip="Marcando esta opción, se ajustará el tamaño del contenido automáticamente. Puede ser ligeramente más lento y con menor calidad visual, pero no tendrá que ajustar ni alinear ninguna textura."/>
-			<text left="102" name="media_size" tool_tip="Tamaño en el que mostrar las web (marque 0 para por defecto)." width="120">
-				Tamaño del media:
+			<text left="102" name="media_size" tool_tip="Tamaño en el que mostrar las webs (marque 0 para por defecto)." width="120">
+				Tamaño del medio:
 			</text>
-			<spinner left_delta="104" name="media_size_width" tool_tip="Tamaño en el que mostrar las web (marque 0 para por defecto)."/>
-			<spinner name="media_size_height" tool_tip="Tamaño en el que mostrar las web (marque 0 para por defecto)."/>
+			<spinner left_delta="104" name="media_size_width" tool_tip="Tamaño en el que mostrar las webs (marque 0 para por defecto)."/>
+			<spinner name="media_size_height" tool_tip="Tamaño en el que mostrar las webs (marque 0 para por defecto)."/>
 			<text name="pixels">
 				píxeles
 			</text>
 			<text name="Options:">
 				Opciones de
-los media:
+los medios:
 			</text>
-			<check_box label="Media en bucle" name="media_loop" tool_tip="Ejecuta el media en bucle: cuando acaba su ejecución, vuelve a empezar."/>
+			<check_box label="Reproducción en bucle" name="media_loop" tool_tip="Ejecuta el medio en bucle: cuando termina su ejecución, vuelve a empezar."/>
 		</panel>
 		<panel label="SONIDO" name="land_audio_panel">
 			<text name="MusicURL:">
@@ -471,7 +471,7 @@ los media:
 			<text name="Only Allow">
 				Restringir el acceso a residentes verificados con:
 			</text>
-			<check_box label="Información de pago aportada [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Expulsa a los Residentes no identificados."/>
+			<check_box label="Información de pago aportada [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Expulsa a los Residentes sin información de pago."/>
 			<check_box label="Verificación de edad [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Expulsa a los Residentes que no hayan verificado su edad. Más información en [SUPPORT_SITE]."/>
 			<check_box label="Acceso permitido al grupo: [GROUP]" name="GroupCheck" tool_tip="Elija el grupo en la pestaña General."/>
 			<check_box label="Vender pases a:" name="PassCheck" tool_tip="Permitir acceso temporal a esta parcela"/>

@@ -26,9 +26,11 @@
 	</pie_menu>
 	<pie_slice label="Sentarme" name="Sit Down Here"/>
 	<pie_slice label="Levantarme" name="Stand Up"/>
+	<pie_slice label="Info scripts" name="ScriptInfo"/>
 	<pie_slice label="Gestos..." name="Gestures"/>
 	<pie_menu label="Apariencia >" name="Appearance &gt;">
 		<pie_slice label="Anatomía" name="Edit My Shape"/>
+		<pie_slice label="Retexturizar" name="Texture Refresh"/>
 		<pie_slice label="Vestuario" name="Edit My Outfit"/>
 	</pie_menu>
 	<pie_slice label="Depurar texturas" name="Debug..."/>

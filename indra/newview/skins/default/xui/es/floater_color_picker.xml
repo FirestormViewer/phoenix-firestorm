@@ -18,7 +18,7 @@
 	<text name="l_val_text">
 		Lumin.:
 	</text>
-	<check_box label="Aplicarlo ahora" name="apply_immediate"/>
+	<check_box label="Aplicar ahora" name="apply_immediate"/>
 	<button label="Cancelar" label_selected="Cancelar" name="cancel_btn"/>
 	<button label="OK" label_selected="OK" name="select_btn"/>
 	<text name="Current color:">

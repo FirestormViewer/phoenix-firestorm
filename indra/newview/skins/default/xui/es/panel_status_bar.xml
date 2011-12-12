@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
+	<panel name="parcel_info_panel">
+		<button name="status_wl_btn" tool_tip="La parcela tiene configuración WL"/>
+		<text name="parcel_info_text" tool_tip="Nombre de la parcela en la que te encuentras. Haz clic para obtener información sobre la misma."/>
+	</panel>
 	<panel.string name="packet_loss_tooltip">
 		Pérdida de paquetes
 	</panel.string>
@@ -17,17 +21,14 @@
 	</panel.string>
 	<panel name="balance_bg">
 		<text name="balance" tool_tip="Haz clic para actualizar tu saldo en L$" value="??? L$"/>
-		<button label="COMPRAR L$" name="buyL" tool_tip="Pulsa para comprar más L$"/>
+		<button name="buyL" label="COMPRAR L$" tool_tip="Pulsa para comprar más L$"/>
 	</panel>
-	<combo_box name="mode_combo" tool_tip="Selecciona el modo. Elige Básico para una exploración rápida y fácil y para chatear. Elige Avanzado para tener acceso a más funciones.">
-		<combo_box.item label="Modo Básico" name="Basic"/>
-		<combo_box.item label="Modo Avanzado" name="Advanced"/>
-	</combo_box>
-	<text name="TimeText" tool_tip="Hora actual (Pacífico)">
-		24:00 AM PST
-	</text>
 	<panel name="time_and_media_bg">
-		<button name="media_toggle_btn" tool_tip="Iniciar/Parar todos los media (música, vídeo, páginas web)"/>
+		<text name="TimeText" tool_tip="Hora actual (costa del Pacífico de EEUU)">
+			24:00 AM PST
+		</text>
+		<button name="stream_toggle_btn" tool_tip="Iniciar/detener la reproducción del flujo de audio de la parcela"/>
+		<button name="media_toggle_btn" tool_tip="Iniciar/detener la reproducción de todos los medios (música, vídeo, páginas web)"/>
 		<button name="volume_btn" tool_tip="Control general del volumen"/>
 	</panel>
 </panel>

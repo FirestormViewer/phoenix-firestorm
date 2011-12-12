@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="UI-Pref" name="Display panel">
+	<tab_container label="Prefs Firestorm" name="tabs">
+		<panel label="General" name="UI Prefs Panel">
+			<text name="UI Size:" left="5" width="290">
+				Escalado de la IU (puede tener efectos inesperados):
+			</text>
+			<slider name="ui_scale_slider" width="230"/>
+			<text name="HoverTipText">
+				Bulas:
+			</text>
+			<check_box label="Bulas básicas" name="ShowHoverTips" tool_tip="Activa para mostrar bulas en avatares y algunas otras cosas (es necesario activarlas para que funcionen las otras)"/>
+			<check_box label="en todos los objetos" tool_tip="Activa para motrar bulas en todos los objetos del mundo" name="ShowAllHoverTips"/>
+			<check_box label="en el terreno" tool_tip="Activa para mostrar bulas en el terreno" name="ShowLandHoverTips"/>
+			<text name="tooltip_textbox">
+				Demora en mostrar las bulas:
+			</text>
+			<combo_box name="Tooltipdelay">
+				<combo_box.item label="0,7 segundos" name="tt_item1"/>
+				<combo_box.item label="1,5 segundos" name="tt_item2"/>
+				<combo_box.item label="3 segundos" name="tt_item3"/>
+				<combo_box.item label="6 segundos" name="tt_item4"/>
+			</combo_box>
+			<text name="ScriptDialogPlacementText" height="22" width="160">
+				Mostrar en esquina
+superior derecha:
+			</text>
+			<check_box label="Diálogos de scripts" name="ShowScriptDialogsTopRight" tool_tip="Activa para mover las notificaciones a la esquina superior derecha de la pantalla (comportamiento clásico V1.x)"/>
+			<check_box label="Avisos de grupo" name="ShowGroupNoticesTopRight" tool_tip="Activa para mover los avisos de grupo a la esquina superior derecha de la pantalla (comportamiento clásico V1.x)"/>
+			<text name="GroupTopRightRequiresRestart">
+				(requiere reiniciar)
+			</text>
+			<text name="UsePieMenuLabel">
+				Menús tipo 'tarta':
+			</text>
+			<check_box label="Usar menús tipo 'tarta'" name="UsePieMenu" tool_tip="Usar los clásicos menús circulares V1.x en vez de los menús contextuales rectangulares cuando hagas clic con el botón derecho sobre el terreno, avatares, objetos o accesorios"/>
+			<text name="ButtonFlashing" width="150">
+				Parpadeo de los botones:
+			</text>
+			<slider label="Número de parpadeos de los botones:" tool_tip="Número de veces que los botones parpadean (para las notificar MIs)" name="ButtonsFlashCount" label_width="207" width="378"/>
+			<slider label="Frecuencia de parpadeo:" tool_tip="Frecuencia (en Hz) a la que parpadean los botones para notificar un MI" name="ButtonFlashRate" label_width="207" width="375"/>
+			<text name="ButtonFlashRateText" left="383">
+				Hz
+			</text>
+			<check_box name="ShowNetStats" label="Mostrar medidor de lag" tool_tip="Muestra el medidor de lag en la barra de estado" left="5" top_pad="4"/>
+			<text name="ToastSettings" height="22">
+				Configuración de notificaciones
+(emergentes, en consola, 'tostadas'):
+			</text>
+			<text name="ToastSpaceTextLabel">
+				Espaciado entre tostada
+			</text>
+			<slider label="más baja y el borde inferior:" tool_tip="Espacio en pixels entre el borde inferior de la interfaz de usuario y la tostada inferior" name="ToastSpace" label_width="185" width="307"/>
+			<text name="ToastSpaceText" left_delta="301">
+				px
+			</text>
+			<slider label="Vida de tostadas:" tool_tip="Tiempo en segundos que tarda en desvanecerse una tostada" name="ToastLifetime" label_width="185" width="307"/>
+			<text name="ToastLifetimeText" left_delta="301">
+				s
+			</text>
+			<slider label="Vida de tostadas de aviso:" tool_tip="Tiempo en segundos que tarda en desvanecerse una tostada de aviso" name="TipToastLifetime" label_width="185" width="307"/>
+			<text name="TipToastLifetimeText" left_delta="301">
+				s
+			</text>
+			<slider label="Vida de tostadas de chat:"
+         tool_tip="Tiempo en segundos que tarda en desvanecerse una tostada de chat local" name="NearbyToastLifetime" label_width="185" width="307"/>
+			<text name="NearbyToastLifetimeText" left_delta="301">
+				s
+			</text>
+			<slider label="Vida de tostadas de inicio:"
+         tool_tip="Tiempo en segundos que tardan en desvanecerse las tostadas que se muestran al iniciar sesión" name="StartupToastLifetime" label_width="185" width="307"/>
+			<text name="StartupToastLifetimeText" left_delta="301">
+				s
+			</text>
+			<slider label="Apagado de tostadas de chat:" tool_tip="Tiempo en segundos que tarda en desvanecerse por completo una tostada de chat local" name="NearbyToastFadingTime" label_width="185" width="307"/>
+			<text name="NearbyToastFadingTimeText" left_delta="301">
+				s
+			</text>
+			<slider label="Apagado de tostadas normales:" tool_tip="Timepo en segundos que se muestra una tostada antes de desvanecerse" name="ToastFadingTime" label_width="185" width="307"/>
+			<text name="ToastFadingTimeText" left_delta="301">
+				s
+			</text>
+			<slider label="Espacio entre tostadas:" tool_tip="Espacio en pixels entre tostadas adyacentes" name="ToastGap" label_width="185" width="307"/>
+			<text name="ToastGapText" left_delta="301">
+				px
+			</text>
+			<slider label="Altura de tostadas de desbordamiento:" tool_tip="Altura en pixels de una tostada de desbord." name="OverflowToastHeight" label_width="185" width="307"/>
+			<text name="OverflowToastHeightText" left_delta="301">
+				px
+			</text>
+			<slider label="Anchura de tostadas de chat:" tool_tip="Anchura de las tostadas de chat en porcentaje sobre el ancho de pantalla" name="NearbyToastWidth" label_width="185" width="307"/>
+			<text name="NearbyToastWidthText" left_delta="301">
+				%
+			</text>
+		</panel>
+		<panel label="Fuente" name="UI-font-tab">
+			<text name="tooltip_textbox1" width="165">
+				Esquema de fuentes:
+			</text>
+			<combo_box name="Fontsettingsfile">
+				<combo_box.item label="Deja Vu" name="tt_item1"/>
+				<combo_box.item label="Ubuntu Font Family" name="tt_item2"/>
+				<combo_box.item label="Liberation" name="tt_item3"/>
+				<combo_box.item label="Droid Sans" name="tt_item4"/>
+				<combo_box.item label="Mobi Sans" name="tt_item5"/>
+			</combo_box>
+			<text name="tooltip_textbox2">
+				(Requiere reiniciar)
+			</text>
+			<text name="tooltip_textbox5" width="165">
+				Ajuste de tamaño de fuente:
+			</text>
+			<text name="tooltip_textbox6" line_spacing.pixels="">
+				pt (requiere reiniciar)
+0 por defecto. Valores más altos pueden
+no funcionar bien.
+			</text>
+			<text name="tooltip_textbox3" width="165" top_pad="25">
+				Espaciado de línea en el chat:
+			</text>
+			<text name="tooltip_textbox4" line_spacing.pixels="5">
+				pixels (requiere reiniciar)
+0 por defecto en V2/3 y 2 en V1.
+			</text>
+			<text name="Label_FolderItemViewHeight" width="165">
+				Altura de carpeta:
+			</text>
+			<text name="Label_FolderItemViewHeight_Scale" line_spacing.pixels="5">
+				pixels (requiere reiniciar)
+20 por defecto en V2/3 y 18 en V1.
+			</text>
+		</panel>
+	</tab_container>
+</panel>
+

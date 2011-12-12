@@ -4,7 +4,7 @@
 		<accordion_tab name="tab_favorites" title="Barra de favoritos"/>
 		<accordion_tab name="tab_landmarks" title="Mis hitos"/>
 		<accordion_tab name="tab_inventory" title="Mi Inventario"/>
-		<accordion_tab name="tab_library" title="Biblioteca"/>
+		<accordion_tab name="tab_library" title="Librería"/>
 	</accordion>
 	<panel name="bottom_panel">
 		<layout_stack name="bottom_panel">

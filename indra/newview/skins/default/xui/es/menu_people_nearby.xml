@@ -11,6 +11,8 @@
 	<menu_item_call label="Ofrecer teleporte" name="teleport"/>
 	<menu_item_call label="Teleportarme a su posición" name="teleport_to"/>
 	<menu_item_call label="Enfocar" name="zoom_in"/>
+	<menu_item_call label="Invitar a un grupo" name="GroupInvite"/>
+	<menu_item_call label="Información de scripts" name="ScriptInfo"/>
 	<menu_item_check label="Bloquear/desbloquear" name="Block/Unblock"/>
 	<menu_item_call label="Reportar" name="report"/>
 	<menu_item_call label="Congelar" name="freeze"/>

@@ -4,7 +4,7 @@
 		http://join.secondlife.com/index.php?lang=es-ES
 	</panel.string>
 	<panel.string name="forgot_password_url">
-		http://secondlife.com/account/request.php?lang=es
+		https://secondlife.com/my/account/request.php?lang=es-ES
 	</panel.string>
 	<layout_stack name="login_widgets">
 		<layout_panel name="login">
@@ -12,6 +12,7 @@
 				Nombre de usuario:
 			</text>
 			<combo_box name="username_combo" tool_tip="El nombre de usuario que elegiste al registrarte, como bobsmith12 o Steller Sunshine"/>
+			<button label="Borrar esta entrada" name="delete_saved_login_btn"/>
 			<text name="password_text">
 				Contraseña:
 			</text>
@@ -20,18 +21,22 @@
 			<text name="mode_selection_text">
 				Modo:
 			</text>
-			<combo_box name="mode_combo" tool_tip="Selecciona el modo. Elige Básico para una exploración rápida y fácil y para chatear. Elige Avanzado para tener acceso a más funciones.">
-				<combo_box.item label="Básico" name="Basic"/>
-				<combo_box.item label="Avanzado" name="Advanced"/>
+			<combo_box name="mode_combo" tool_tip="Selecciona con qué estilo de visor estás más familiarizado para seleccionar tus opciones por defecto apropiadamente.">
+				<combo_box.item label="Phoenix" name="Phoenix"/>
+				<combo_box.item label="Oficial V3" name="V3"/>
+				<combo_box.item label="Híbrido" name="Hybrid"/>
 			</combo_box>
 			<text name="start_location_text">
-				Empezar en:
+				Iniciar en:
 			</text>
 			<combo_box name="start_location_combo">
 				<combo_box.item label="Mi última posición" name="MyLastLocation"/>
 				<combo_box.item label="Mi Base" name="MyHome"/>
 				<combo_box.item label="&lt;Escribe en qué región&gt;" name="Typeregionname"/>
 			</combo_box>
+			<text name="grid_selection_text">
+				Iniciar en la red:
+			</text>
 		</layout_panel>
 		<layout_panel name="links">
 			<text name="create_new_account_text">

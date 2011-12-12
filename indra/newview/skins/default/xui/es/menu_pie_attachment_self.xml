@@ -3,6 +3,8 @@
 	<pie_slice label="Perfil..." name="Profile..."/>
 	<pie_slice label="Soltar" name="Drop"/>
 	<pie_menu name="Attachment Pie More" label="Más >">
+		<pie_slice label="Retexturizar" name="Texture Refresh"/>
+		<pie_slice label="Info scripts" name="ScriptInfo"/>
 		<pie_slice label="Tocar" name="Attachment Object Touch"/>
 		<pie_slice label="Desdibujar" name="Derender"/>
 	</pie_menu>

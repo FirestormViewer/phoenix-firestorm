@@ -3,12 +3,22 @@
 	<text name="tell_me_label">
 		Avisarme:
 	</text>
-	<check_box label="Cuando gaste o consiga L$" name="notify_money_change_checkbox"/>
-	<check_box label="Cuando mis amigos se conecten o desconecten" name="friends_online_notify_checkbox"/>
-	<text name="show_label" width="300">
+	<check_box name="notify_money_change_checkbox" label="Cuando gaste o consiga L$"/>
+	<check_box name="FSPaymentInfoInChat" label="Mostrar transacciones de L$ en el chat local en vez de en 'tostadas'" left_pad="" left="10"/>
+	<check_box name="friends_online_notify_checkbox" label="Cuando mis amigos se conecten o desconecten"/>
+	<check_box name="OnlineOfflinetoNearbyChat" label="Mostrar en el chat local y en la consola" top_pad="4" left_pad="" left="30" width="190"/>
+	<check_box label="Sólo en el chat local" name="OnlineOfflinetoNearbyChatHistory"/>
+	<check_box label="Cuando se produzcan errores de script:" name="show_script_errors"/>
+	<radio_group name="show_script_errors_location" left_pad="" top_pad="4" width="400">
+		<radio_item label="En el chat local" name="script_0" left_pad="10" width="200"/>
+		<radio_item label="En una ventana independiente" name="script_1" width="200"/>
+	</radio_group>
+	<text name="show_label">
 		Mostrar siempre:
 	</text>
+	<scroll_list height="110" name="enabled_popups"/>
 	<text name="dont_show_label">
 		No mostrar nunca:
 	</text>
+	<scroll_list height="110" name="disabled_popups"/>
 </panel>

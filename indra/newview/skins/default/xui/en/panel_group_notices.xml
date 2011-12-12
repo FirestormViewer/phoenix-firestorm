@@ -293,7 +293,7 @@ Maximum 200 per group daily
      right="-1"
      visible="false"
      name="panel_view_past_notice"
-     width="313">
+     width="400">
         <text
          type="string"
          font="SansSerifMedium"
@@ -301,7 +301,7 @@ Maximum 200 per group daily
          layout="topleft"
          left="10"
          mouse_opaque="false"
-         name="lbl"
+         name="lbl6"
          text_color="EmphasisColor"
          top_pad="5"
          follows="top|left"
@@ -314,10 +314,10 @@ Maximum 200 per group daily
          word_wrap="true"
          layout="topleft"
          left_delta="0"
-         name="lbl2"
+         name="lbl7"
          top_pad="2"
          follows="top|left"
-         width="265">
+         width="390">
         To send a new notice, click the + button
         </text>
         <text
@@ -326,7 +326,7 @@ Maximum 200 per group daily
          height="16"
          layout="topleft"
          left_delta="0"
-         name="lbl3"
+         name="lbl8"
          top_pad="8"
          visible="true"
          follows="top|left"
@@ -353,7 +353,7 @@ Maximum 200 per group daily
          height="16"
          layout="topleft"
          left="10"
-         name="lbl4"
+         name="lbl9"
          top_pad="4"
          visible="true"
          follows="top|left"
@@ -377,7 +377,7 @@ Maximum 200 per group daily
          height="16"
          layout="topleft"
          left="10"
-         name="lbl5"
+         name="lbl10"
          top_pad="8"
          width="70">
         Attachment:

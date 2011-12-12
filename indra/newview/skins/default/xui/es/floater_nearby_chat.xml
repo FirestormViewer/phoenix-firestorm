@@ -2,8 +2,10 @@
 <floater name="nearby_chat" title="CHAT">
 	<layout_stack name="im_panels">
 		<layout_panel>
-			<button tool_tip="Usar servicio de traducción de Google" name="translate_btn"/>
-			<line_editor label="Decir en el chat local" name="chat_box"/>
+			<button tool_tip="Usar servicio de traducción seleccionado" name="translate_btn"/>
+			<button tool_tip="Abre el historial del chat local" name="chat_history_btn"/>
+			<line_editor label="A la gente cercana" name="chat_box"/>
+			<spinner label="Canal" name="ChatChannel" label_width="32" width="112" tool_tip="Canal al que enviar el chat. Activado mediante Preferencias->Firestorm->Chat->Mostrar selector de canal en la barra de chat."/>
 		</layout_panel>
 	</layout_stack>
 </floater>

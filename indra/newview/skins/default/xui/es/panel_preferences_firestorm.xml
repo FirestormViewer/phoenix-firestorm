@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Firestorm" name="firestorm">
+	<tab_container label="Prefs Firestorm" name="tabs">
+		<panel label="General" name="tab-general">
+			<check_box name="checkMiscRLVa" label="Permitir control remoto del visor mediante scripts (RLVa)" width="330"/>
+			<text name="textMiscRLVaRestart">
+				(requiere reiniciar)
+			</text>
+			<check_box label="Desactivar pantalla de teleporte" name="tp_screen_toggle" tool_tip="Desactiva la pantalla negra durante todos los teleportes."/>
+			<check_box label="Desactivar las balizas de teleporte" name="tp_beam_toggle" tool_tip="Desactiva las balizas de destino de teleporte que se muestran tras teleportarse"/>
+			<check_box label="Desactivar la pantalla de progreso del inicio de sesión" name="login_screen_toggle" tool_tip="Desactiva la pantalla negra que muestra el progreso del inicio de la sesión"/>
+			<check_box label="Desactivar la pantalla de progreso del cierre de sesión" name="logout_screen_toggle" tool_tip="Desactiva la pantalla negra que muestra el progreso del cierre de la sesión."/>
+			<check_box label="Si es posible, rezzear objetos siempre bajo el grupo del terreno" name="grouplandrez" tool_tip="Procura rezzear los objetos bajo el grupo del terreno si perteneces al mismo, aunque no tengas activa la etiqueta correspondiente"/>
+			<check_box label="Ordenar lista de contactos por nombre de usuario aunque se muestren los Displaynames" name="sortcontactsbyun" tool_tip="Si está activado, todas las listas de contactos se ordenan siempre por nombre de usuario"/>
+			<check_box label="Representar avatares bloqueados como nubes de partículas" name="ShowMutedAvatarsAsCloud" tool_tip="Los avatares bloqueados se mostrarán como nubes de partículas de un color especial"/>
+			<check_box name="UseLSLBridge" label="Activar el LSL-Client Bridge" tool_tip="Permite al visor usar un accesorio con scripts (Bridge) para extender sus características"/>
+			<check_box name="UseLSLFlightAssist" label="Activar asistente de vuelo del Bridge" tool_tip="Activa el script que permite volar y flotar a mayor altitud"/>
+		</panel>
+		<panel label="Protección" name="ProtectionTab">
+			<check_box label="Impedir que pueda sentarme con un clic del botón izquierdo del ratón" name="FSBlockClickSit"/>
+			<check_box label="Permitir a los scripts que muestren el IU del mapa (llMapDestination)" name="ScriptsCanShowUI"/>
+			<text name="revokepermissions_txt">
+				Revocar permisos:
+			</text>
+			<radio_group name="FSRevokePerms" tool_tip="FSRevokePerms">
+				<radio_item label="Nunca (comportamiento original)" name="never_radio"/>
+				<radio_item label="Revocar al sentarse" name="sit_radio"/>
+				<radio_item label="Revocar al levantarse" name="stand_radio"/>
+				<radio_item label="Revocar al sentarse y al levantarse" name="sitnstand_radio"/>
+			</radio_group>
+			<text name="SurfaceAreaThreshholdLabel" width="400">
+				Protección contra lag de texturas (puede 'romper' algunos objetos):
+			</text>
+			<check_box label="Ocultar automáticamente con grandes áreas de textura. Umbral:" name="RenderVolumeSAProtection" tool_tip="Te protege de objetos con grandes texturas sobre grandes superficies, a veces diseñados para provocar fallos del visor. El umbral por defecto es de 5.000 metros cuadrados, pero si crees que algunos objetos no se están dibujando y esta opción está activada, puedes necesitar aumentarlo."/>
+			<check_box label="Activar protección contra spam" name="UseAntiSpam"/>
+			<text name="AntiSpamText1" width="305">
+				Máximo de líneas en un solo mensaje:
+			</text>
+			<spinner name="_NACL_AntiSpamNewlines" tool_tip="Máximo número de líneas aceptadas en un único mensaje para no ser considerado spam [Por defecto: 70]"/>
+			<text name="AntiSpamText2" width="305">
+				Máximos eventos de un mismo origen:
+			</text>
+			<spinner name="_NACL_AntiSpamAmount" tool_tip="Máximo número de evento similares a aceptar de un mismo origen en el intérvalo de 2 segundos [Por defecto: 10]"/>
+			<text name="AntiSpamText3" width="305">
+				Multiplicador de peticiones de reproducción de sonido:
+			</text>
+			<spinner name="_NACL_AntiSpamSoundMulti" tool_tip="Multiplicador de eventos para peticiones de reproducción de sonido [Por defecto: 10]"/>
+			<text name="AntiSpamText4" width="305">
+				Multiplicador de peticiones de precarga de sonido:
+			</text>
+			<spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Multiplicador de eventos para peticiones de precarga de sonido [Por defecto: 4]"/>
+			<button name="AntiSpamUnblock" label="Desbloquear todas las fuentes de spam" width="250"/>
+		</panel>
+		<panel label="Avatar" name="firestorm_avatar">
+			<text name="HeadMovement">
+				Movimiento de la cabeza del avatar para seguir al ratón (0 para no seguirlo):
+			</text>
+			<slider label="Rango vertical del seguimiento del ratón con la cabeza:" tool_tip="Rango vertical en que la cabeza del avatar sigue al ratón (en grados)" name="PitchFromMousePositionSlider" label_width="315"/>
+			<text name="PitchFromMousePositionText">
+				grados
+			</text>
+			<slider label="Rango vertical del seguimiento del ratón con la cabeza:" tool_tip="Rango horizontal en que la cabeza del avatar sigue al ratón (en grados)" name="YawFromMousePositionSlider" label_width="315"/>
+			<text name="YawFromMousePositionText">
+				grados
+			</text>
+			<text name="note_lookat">
+				(Configuración de los puntos de mira en la pestaña de Privacidad)
+			</text>
+			<check_box label="No enviar física del avatar al sevidor (compatibilidad con el antiguo cliente V1)" name="dontsendavphysics" tool_tip="Desactiva el envío de información sobre la física de tu avatar al servidor del simulador, para compatibilidad con visores de versión 1"/>
+			<text name="BeamPrefs">
+				Efectos de partículas del rayo de selección
+			</text>
+			<button name="BeamColor_delete" label="Borrar" tool_tip="Eliminar esta configuración"/>
+			<combo_box name="BeamColor_combo" tool_tip="Selecciona la configuración de colores para el rayo de selección"/>
+			<button name="BeamColor_new" label="Crear nuevo" tool_tip="Crear una nueva configuración de color" width="85"/>
+			<button name="BeamColor_refresh" label="Refrescar lista" tool_tip="Refresca la lista de configuraciones" width="85"/>
+			<button left="113" name="PhoenixBeamPrev_rainbow"/>
+			<slider name="FSMaxBeamsPerSecond" label="Frec. de actualización:" tool_tip="Cuántas actualizaciones del rayo enviar por segundo. 40 por defecto" label_width="125"/>
+			<check_box label="Activar rayo de selección" name="SLPartBeam"/>
+			<check_box label="Chat de partículas SL" name="FSParticleChat"/>
+			<combo_box name="FSBeamShape_combo" tool_tip="Selecciona la forma del rayo de partículas"/>
+			<button name="delete_beam" label="Borrar" tool_tip="Elimina este rayo"/>
+			<button name="custom_beam_btn" label="Crear nuevo" tool_tip="Personalizar la forma del rayo" width="85"/>
+			<button name="refresh_beams" label="Refrescar lista" tool_tip="Refrescar la lista de rayos" width="85"/>
+			<button left="277" name="PhoenixBeamPrev_Phoenix"/>
+			<slider name="FSBeamShapeScale" label="Escala:" tool_tip="Cambia la escala de la forma utilizada para el rayo con forma Phoenix" left_delta=""/>
+		</panel>
+		<panel label="CmdLine" name="tab1-3">
+			<check_box label="Activar el uso de la barra de chat como línea de comandos" name="chat_cmd_toggle"/>
+			<text name="FSCmdLinePos_txt">
+				Teleportar dentro del sim (uso: cmd x y z)
+			</text>
+			<text name="FSCmdLineGround_txt">
+				Teleportar al suelo (uso: cmd)
+			</text>
+			<text name="FSCmdLineHeight_txt">
+				Teleportar a altitud (uso: cmd z)
+			</text>
+			<text name="FSCmdLineTeleportHome_txt">
+				Teleportar a mi base (uso: cmd)
+			</text>
+			<text name="FSCmdLineRezPlatform_txt">
+				Crear plataforma (uso: cmd 0 - 30)
+			</text>
+			<slider name="FSCmdLinePlatformSize" label="Diámetro" label_width="60" tool_tip="Diámetro de la plataforma por defecto si no se usa ningún parámetro"/>
+			<text name="FSCmdLineMapTo_txt">
+				Telep. al sim X (uso: cmd nombredelsim)
+			</text>
+			<text name="FSCmdLineCalc_txt">
+				Calc. expresiones (uso: cmd SIN(2+2))
+			</text>
+			<text name="FSCmdLineAutocorrect_txt">
+				Añadir autocorr. (cmd lista|mala|buena)
+			</text>
+			<text name="FSCmdLineDrawDistance_txt" width="270">
+				Cambiar distancia de dibujo (uso: cmd metros)
+			</text>
+			<text name="FSCmdTeleportToCam_txt" width="270">
+				Teleportar a pos. de cámara (uso: cmd)
+			</text>
+			<text name="FSCmdLineKeyToName_txt" width="270">
+				Obt. nombre de av. de la clave (uso: cmd clave)
+			</text>
+			<text name="FSCmdLineOfferTp_txt" width="270">
+				Ofrecer teleporte al avatar (uso: cmd clave)
+			</text>
+			<text name="FSCmdLineTP2_txt" width="270">
+				Teleportar donde el avatar (uso: cmd nombre)
+			</text>
+			<line_editor tool_tip="La sintaxis de este comando permite nombres parciales y no es sensible a mayúsculas. Se obtienen mejores resultados si se usa con el radar abierto." name="FSCmdLineTP2"/>
+			<text name="FSCmdLineAO_txt" width="270">
+				Activar/desactivar el AO (uso: cmd on/off)
+			</text>
+			<text name="FSCmdLineClearChat_txt" width="270">
+				Limpiar el historial de chat (uso: cmd)
+			</text>
+			<line_editor tool_tip="Limpia el historial de chat para prevenir efectos de lag procedentes de spammers." name="FSCmdLineClearChat"/>
+			<text name="FSCmdLineMedia_txt" width="270">
+				Conf. URL de medios (uso: cmd url tipo)
+			</text>
+			<line_editor tool_tip="Establece y reproduce tu flujo de medios a la URL especificada" name="FSCmdLineMedia"/>
+			<text name="FSCmdLineMusic_txt" width="270">
+				Conf. URL del flujo de música (uso: cmd url)
+			</text>
+			<line_editor tool_tip="Establece y reproduce tu flujo de audio a la URL especificada" name="FSCmdLineMusic"/>
+		</panel>
+		<panel label="Windlight" name="WindlightTab">
+			<check_box label="Cambiar automáticamente el entorno al configurado en la región/parcela." name="UseEnvironmentFromRegionAlways"/>
+			<check_box label="Transición entre configuraciones de cielo" name="FSInterpolateSky" tool_tip="Proporciona un efecto de fundido entre las configuraciones de cielo WL al cambiarlas. El efecto puede reducir los FPS durante unos segundos en equipos lentos. Desactivar estas dos opciones para evitar el efecto y aplicar los cambios instantáneamente." />
+			<check_box label="Transición entre configuraciones de agua" name="FSInterpolateWater" tool_tip="Igual que la opción anterior, pero para el agua." />
+			<text name="FSWLshare_txt">
+				Compartición WL de Phoenix (experimental):
+			</text>
+			<check_box label="Usar compartición de Windlight de parcela (Experimental)" name="FSWLParcelEnabled"/>
+			<check_box label="Autoaplicar las configuraciones WL de los terrenos de mis amigos" name="FSWLWhitelistFriends"/>
+			<check_box label="Autoaplicar las configuraciones WL de los terrenos de mis grupos" name="FSWLWhitelistGroups"/>
+			<check_box label="Autoaplicar las configuraciones WL de cualquier parcela" name="FSWLWhitelistAll"/>
+			<check_box label="Interpolar los cambios de entorno de la región con el WL de la parcela" name="FSInterpolateParcelWL" tool_tip="Igual que las opciones anteriores sobre transiciones, pero para la configuración WL de la parcela"/>
+		</panel>
+		<panel label="Construcción" name="BuildTab">
+			<text name="text_box_objprams" width="200">
+				Parámetros de objeto por defecto
+			</text>
+			<spinner label="Tamaño X" name="X size" label_width="60" width="135"/>
+			<spinner label="Tamaño Y" name="Y size" label_width="60" width="135"/>
+			<spinner label="Tamaño Z" name="Z size" label_width="60" width="135"/>
+			<text name="text_box_objmaterial">
+				Material:
+			</text>
+			<combo_box name="material">
+				<combo_item name="Stone">Piedra</combo_item>
+				<combo_item name="Metal" value="Metal">Metal</combo_item>
+				<combo_item name="Glass" value="Glass">Cristal</combo_item>
+				<combo_item name="Wood" value="Wood">Madera</combo_item>
+				<combo_item name="Flesh" value="Flesh">Carne</combo_item>
+				<combo_item name="Plastic" value="Plastic">Plástico</combo_item>
+				<combo_item name="Rubber" value="Rubber">Goma</combo_item>
+			</combo_box>
+			<text name="text_box_pivotpoint">
+				Punto de pivote
+			</text>
+			<view_border name="PivotBorder" width="275"/>
+			<check_box label="Mostrar eje en la posición de la primitiva raíz" tool_tip="El comportamiento por defecto es mostrar el eje en el centro de masa del conjunto. Si lo activas, el eje se mostrará en la primitiva raíz (principal) del conjunto de primitivas enlazadas." name="EmBuildPrefsActualRoot_toggle"/>
+			<spinner label="Pos. X" name="X pos" label_width="60" width="135"/>
+			<spinner label="Pos. Y" name="Y pos" label_width="60" width="135"/>
+			<spinner label="Pos. Z" name="Z pos" label_width="60" width="135"/>
+			<check_box label="Valores porcentuales" tool_tip="Los valores por defecto son porcentajes y cada eje se establece en 50" name="EmPivotPercToggle"/>
+			<check_box label="Resaltar las primitivas seleccionadas" tool_tip="Cuando lo desactivas, no se muestran los efectos amarillos/azules de resaltado, mejorando el rendimiento cuando se selecciona un gran número de primitivas." name="EmBuildPrefsRenderHighlight_toggle"/>
+			<check_box label="Usar comportamiento antiguo de &quot;Poner objeto en venta&quot;" tool_tip="Cuando lo activas, la información de venta del objeto se guarda al cambiarla, en vez de pedir confirmación." name="FSCommitForSaleOnChange_toggle"/>
+			<check_box label="Guardar como Mono los scripts editados desde el inventario" tool_tip="Cuando está activado, al editar un script directamente desde el inventario y luego guardarlo, lo guarda como Mono en vez de como LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
+		</panel>
+		<panel label="Etiquetas" name="TagTab">
+			<text name="whattagstoshow" width="285">
+				¿Qué etiquetas quieres ver?
+			</text>
+			<combo_box name="ClientTagsVisibility">
+				<combo_item name="No Viewertags">Ninguna etiqueta de visor</combo_item>
+				<combo_item name="TPVD Viewer">Visores TPVD (usando una lista)</combo_item>
+				<combo_item name="All known Viewers">Todos los visores conocidos (usando una lista)</combo_item>
+				<combo_item name="All Viewers">Todos los visores</combo_item>
+			</combo_box>
+			<text name="colorbasedonviewer" width="285">
+				¿Basar el color del tag en el visor?
+			</text>
+			<combo_box name="ColorClienttags">
+				<combo_item name="Color not based on Viewer">Color no basado en el visor</combo_item>
+				<combo_item name="Single color per Viewer">Un único color por visor</combo_item>
+				<combo_item name="Multiple colors per Viewer">Múltiples colores por visor</combo_item>
+				<combo_item name="Userdefined color">Color definido por el usuario</combo_item>
+			</combo_box>
+			<text name="listtodisplayviewertags_txt" width="285">
+				¿Usar una lista para mostrar las etiquetas de visor?
+			</text>
+			<combo_box name="UseLegacyClienttags">
+				<combo_item name="Don't use a list">No usar una lista</combo_item>
+				<combo_item name="Local Clienttags">Lista local de etiquetas</combo_item>
+				<combo_item name="Download Clienttags">Descargar la lista al iniciar sesión</combo_item>
+			</combo_box>
+			<text name="chooseyourcolor_txt" width="285">
+				Eligir mi color:
+			</text>
+			<combo_box name="ClientTagColor">
+				<combo_item name="red" label="Rojo"/>
+				<combo_item name="blue" label="Azul"/>
+				<combo_item name="yellow" label="Amarillo"/>
+				<combo_item name="purple" label="Púrpura"/>
+				<combo_item name="pink" label="Rosa"/>
+				<combo_item name="white" label="Blanco"/>
+				<combo_item name="orange" label="Naranja"/>
+				<combo_item name="green" label="Verde"/>
+			</combo_box>
+			<check_box label="Mostrar mi propio color" name="FSShowOwnTagColor_toggle" tool_tip="Cuando lo activas, tu etiqueta se mostrará en el color seleccionado."/>
+			<check_box label="Colorear de forma diferente los nombres de usuario" name="FSColorUsername_toggle" tool_tip="Muestra los nombres de usuario en un color diferente (ignora el color de la etiqueta para los nombres de usuario)" width="310"/>
+			<color_swatch name="usernamecolorswatch" tool_tip="Clic para abrir el selector de color"/>
+		</panel>
+	</tab_container>
+</panel>

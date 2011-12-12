@@ -12,8 +12,10 @@
 		<pie_slice label="Invitar a grupo" name="Group Invite..."/>
 		<pie_menu name="Avatar Pie More 2" label="Más >">
 			<pie_slice label="Depurar texturas" name="Debug..."/>
+			<pie_slice label="Info scripts" name="ScriptInfo"/>
 			<pie_slice label="Llamar" name="Call"/>
 			<pie_slice label="Enfocar" name="Zoom In"/>
+			<pie_slice label="Retexturizar" name="Texture Refresh"/>
 		</pie_menu>
 		<pie_slice label="Inspeccionar" name="Avatar Inspect"/>
 		<pie_slice label="Desdibujar" name="Derender"/>

@@ -18,9 +18,9 @@
 				<stat_view label="Textura" name="texture">
 					<stat_bar label="Número" name="numimagesstat"/>
 					<stat_bar label="Raw: número" name="numrawimagesstat"/>
-					<stat_bar label="GL Mem" name="gltexmemstat"/>
-					<stat_bar label="Formatted Mem" name="formattedmemstat"/>
-					<stat_bar label="Raw Mem" name="rawmemstat"/>
+					<stat_bar label="Mem GL" name="gltexmemstat"/>
+					<stat_bar label="Mem Formateada" name="formattedmemstat"/>
+					<stat_bar label="Mem Raw" name="rawmemstat"/>
 					<stat_bar label="Bound Mem" name="glboundmemstat"/>
 				</stat_view>
 				<stat_view label="Red" name="network">
@@ -28,7 +28,7 @@
 					<stat_bar label="Paquetes entrantes" name="packetsoutstat"/>
 					<stat_bar label="Objetos" name="objectkbitstat"/>
 					<stat_bar label="Textura" name="texturekbitstat"/>
-					<stat_bar label="Asset" name="assetkbitstat"/>
+					<stat_bar label="Activos" name="assetkbitstat"/>
 					<stat_bar label="Capas" name="layerskbitstat"/>
 					<stat_bar label="Entrando ahora" name="actualinkbitstat"/>
 					<stat_bar label="Saliendo ahora" name="actualoutkbitstat"/>
@@ -38,8 +38,8 @@
 			<stat_view label="Simulador" name="sim">
 				<stat_bar label="Tiempo de dilación" name="simtimedilation"/>
 				<stat_bar label="FPS en el Sim" name="simfps"/>
-				<stat_bar label="Physics FPS" name="simphysicsfps"/>
-				<stat_view label="Physics Details" name="physicsdetail">
+				<stat_bar label="FPS Física" name="simphysicsfps"/>
+				<stat_view label="Detalles Física" name="physicsdetail">
 					<stat_bar label="Pin de objetos" name="physicspinnedtasks"/>
 					<stat_bar label="Objetos con bajo nivel de detalle" name="physicslodtasks"/>
 					<stat_bar label="Memoria asignada" name="physicsmemoryallocated"/>
@@ -59,7 +59,7 @@
 				<stat_view label="Tiempo (ms)" name="simperf">
 					<stat_bar label="Tiempo total de los frames" name="simframemsec"/>
 					<stat_bar label="Tiempo de red" name="simnetmsec"/>
-					<stat_bar label="Physics Time" name="simsimphysicsmsec"/>
+					<stat_bar label="Tiempo de Física" name="simsimphysicsmsec"/>
 					<stat_bar label="Tiempo de la simulación" name="simsimothermsec"/>
 					<stat_bar label="Tiempo de los agentes" name="simagentmsec"/>
 					<stat_bar label="Tiempo de las imágenes" name="simimagesmsec"/>
