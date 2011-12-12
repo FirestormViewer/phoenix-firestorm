@@ -324,6 +324,10 @@ def main():
     VIEWER_CHANNEL = viewer_channel
     SERVER_CHANNEL = server_channel
 
+    # ND: Get rid of newlines that can sneak in on windows. See FIRE-3974
+    VIEWER_CHANNEL = VIEWER_CHANNEL.replace( '\r', '' )
+    VIEWER_CHANNEL = VIEWER_CHANNEL.replace( '\n', '' )
+
     # Iterate through all of the files in the map, and apply the
     # substitution filters
     for filename in re_map.keys():
