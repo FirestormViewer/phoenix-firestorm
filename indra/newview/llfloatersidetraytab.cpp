@@ -48,5 +48,5 @@ LLFloaterSideTrayTab::~LLFloaterSideTrayTab()
 void LLFloaterSideTrayTab::onClose(bool app_quitting)
 {
 	// The floater is already being closed, so don't toggle it once more (that may crash viewer).
-	LLSideTray::getInstance()->setTabDocked(getName(), /* dock = */ true, /* toggle_floater = */ false);
+	LLSideTray::getInstance()->setTabDocked(getName(), /* dock = */ true, /* app_quitting = */ app_quitting, /* toggle_floater = */ false); // LO: Fix for FIRE-2613: sidebar tabs and floaters not remembering being open/torn off
 }

@@ -3725,6 +3725,16 @@ void LLAppViewer::requestQuit()
 		{
 			sendLogoutRequest();
 		}
+		else if(LLStartUp::getStartupState() == STATE_STARTED) // LO: Fix for FIRE-2613: sidebar tabs and floaters not remembering being open/torn off
+		{
+			if (gFloaterView)
+			{
+				// application is quitting
+				gFloaterView->closeAllChildren(true);
+			}
+
+			LLSideTray::getInstance()->notifyChildren(LLSD().with("request","quit"));
+		} // ~LO
 		
 		// Quit immediately
 		forceQuit();
@@ -4234,6 +4244,13 @@ bool finish_disconnect(const LLSD& notification, const LLSD& response)
 
 	if (1 == option)
 	{
+		if (gFloaterView)
+		{
+			// application is quitting
+			gFloaterView->closeAllChildren(true);
+		}
+
+		LLSideTray::getInstance()->notifyChildren(LLSD().with("request","quit"));
         LLAppViewer::instance()->forceQuit();
 	}
 	return false;
@@ -4242,6 +4259,13 @@ bool finish_disconnect(const LLSD& notification, const LLSD& response)
 // Callback from an early disconnect dialog, force an exit
 bool finish_forced_disconnect(const LLSD& notification, const LLSD& response)
 {
+	if (gFloaterView)
+	{
+		// application is quitting
+		gFloaterView->closeAllChildren(true);
+	}
+
+	LLSideTray::getInstance()->notifyChildren(LLSD().with("request","quit"));
 	LLAppViewer::instance()->forceQuit();
 	return false;
 }
