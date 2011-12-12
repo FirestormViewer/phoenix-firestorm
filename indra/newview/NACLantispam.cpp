@@ -215,13 +215,19 @@ void NACLAntiSpamRegistry::setAllQueueTimes(U32 time)
 {
 	globalTime=time;
 	for(int queue = 0; queue < QUEUE_MAX; ++queue)
-		queues[queue]->setTime(time);
+	{
+		if( queues[queue] )
+			queues[queue]->setTime(time);
+	}
 }
 void NACLAntiSpamRegistry::setAllQueueAmounts(U32 amount)
 {
 	globalAmount=amount;
 	for(int queue = 0; queue < QUEUE_MAX; ++queue)
 	{
+		if( !queues[queue] )
+			continue;
+
 		if(queue == QUEUE_SOUND || queue == QUEUE_SOUND_PRELOAD)
 			queues[queue]->setAmount(amount*5);
 		else
@@ -349,7 +355,8 @@ void NACLAntiSpamRegistry::clearAllQueues()
 	else
 	for(int queue = 0; queue < QUEUE_MAX; ++queue)
 	{
-		queues[queue]->clearEntries();
+		if( queues[queue] )
+			queues[queue]->clearEntries();
 	}
 }
 void NACLAntiSpamRegistry::purgeAllQueues()
@@ -359,7 +366,8 @@ void NACLAntiSpamRegistry::purgeAllQueues()
 	else
 		for(int queue = 0; queue < QUEUE_MAX; ++queue)
 		{
-			queues[queue]->purgeEntries();
+			if( queues[queue] )
+				queues[queue]->purgeEntries();
 		}
 	llinfos << "AntiSpam Queues Purged" << llendl;
 }
