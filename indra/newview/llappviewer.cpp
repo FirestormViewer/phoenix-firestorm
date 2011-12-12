@@ -115,6 +115,8 @@
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 
+#include "sanitycheck.h"
+
 // Third party library includes
 #include <boost/bind.hpp>
 
@@ -1211,6 +1213,9 @@ bool LLAppViewer::init()
 	}
 
 	LLAgentLanguage::init();
+
+	// initializing the settings sanity checker
+	SanityCheck::instance().init();
 
 	return true;
 }

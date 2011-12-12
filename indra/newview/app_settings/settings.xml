@@ -7851,6 +7851,14 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <integer>33</integer>
+      <key>SanityCheckType</key>
+      <string>GreaterThan</string>
+      <key>SanityValue</key>
+      <array>
+        <integer>19</integer>
+      </array>
+      <key>SanityComment</key>
+      <string>If you make this too small your viewer might crash.</string>
     </map>
     <key>NotifyMoneyChange</key>
     <map>
@@ -8656,6 +8664,14 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+      <key>SanityCheckType</key>
+      <string>Equals</string>
+      <key>SanityValue</key>
+      <array>
+        <integer>0</integer>
+      </array>
+      <key>SanityComment</key>
+      <string>Purging your cache on each login will add more traffic to the asset servers and your world will load a lot slower. Please only clear your cache when you see issues with inventory, texture or sculpties loading.</string>
     </map>
     <key>PushToTalkButton</key>
     <map>
@@ -12679,6 +12695,14 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+      <key>SanityCheckType</key>
+      <string>Equals</string>
+      <key>SanityValue</key>
+      <array>
+        <integer>0</integer>
+      </array>
+      <key>SanityComment</key>
+      <string>This will cause textures not to load at all, sculpties will be deformed or look like spheres.</string>
     </map>
     <key>TextureDiscardLevel</key>
     <map>
@@ -12690,6 +12714,14 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>U32</string>
       <key>Value</key>
       <integer>0</integer>
+      <key>SanityCheckType</key>
+      <string>Equals</string>
+      <key>SanityValue</key>
+      <array>
+        <integer>0</integer>
+      </array>
+      <key>SanityComment</key>
+      <string>This might cause textures to look blurry and sculpties might fail to load properly.</string>
     </map>
     <key>TextureLoadFullRes</key>
     <map>
@@ -12701,6 +12733,14 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+      <key>SanityCheckType</key>
+      <string>Equals</string>
+      <key>SanityValue</key>
+      <array>
+        <integer>0</integer>
+      </array>
+      <key>SanityComment</key>
+      <string>This option is only used for debugging purposes and to stress test the cache system. Please do not enable for regular use, as it can lead to severely degraded performance!</string>
     </map>
     <key>TextureMemory</key>
     <map>

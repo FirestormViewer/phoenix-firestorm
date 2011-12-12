@@ -59,6 +59,7 @@ public:
 	void onCommitSettings();
 	void onClickDefault();
 	void onCopyToClipboard();
+	void onSanityCheck();
 
 private:
 	// key - selects which settings to show, one of:
@@ -91,6 +92,7 @@ protected:
 	LLRadioGroup* mBooleanCombo;
 	LLButton* mCopyButton;
 	LLButton* mDefaultButton;
+	LLButton* mSanityButton;
 };
 
 #endif //LLFLOATERDEBUGSETTINGS_H

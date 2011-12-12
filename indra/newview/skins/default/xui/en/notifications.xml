@@ -8519,6 +8519,23 @@ This debug setting's name has been copied to your clipboard. You can now paste i
        text="A debug setting's name was copied to my clipboard"/>
     </form>
   </notification>
+
+  <notification
+   icon="notify.tga"
+   name="SanityCheck"
+   type="alertmodal">
+[APP_NAME] has detected a possible issue with your settings:
+
+[SANITY_MESSAGE]
+
+Reason: [SANITY_COMMENT]
+
+Current setting: [CURRENT_VALUE]
+   <form name="form">
+      <ignore name="ignore"
+       text="A settings control has failed the sanity check."/>
+    </form>
+  </notification>
   <!-- ## Zi: Debug Settings Editor -->
 
 </notifications>

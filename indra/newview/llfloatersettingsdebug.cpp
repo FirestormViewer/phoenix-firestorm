@@ -44,6 +44,7 @@
 // [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a)
 #include "rlvhandler.h"
 #include "rlvextensions.h"
+#include "sanitycheck.h"
 #include "stdenums.h"		// for ADD_BOTTOM
 // [/RLVa:KB]
 
@@ -55,6 +56,7 @@ LLFloaterSettingsDebug::LLFloaterSettingsDebug(const LLSD& key)
 	mCommitCallbackRegistrar.add("ClickDefault",	boost::bind(&LLFloaterSettingsDebug::onClickDefault, this));
 	mCommitCallbackRegistrar.add("UpdateFilter",	boost::bind(&LLFloaterSettingsDebug::onUpdateFilter, this));
 	mCommitCallbackRegistrar.add("ClickCopy",		boost::bind(&LLFloaterSettingsDebug::onCopyToClipboard, this));
+	mCommitCallbackRegistrar.add("ClickSanityIcon",	boost::bind(&LLFloaterSettingsDebug::onSanityCheck, this));
 
 	// make sure that the first filter update succeeds
 	mOldSearchTerm=std::string("---");
@@ -140,6 +142,7 @@ BOOL LLFloaterSettingsDebug::postBuild()
 	mBooleanCombo = getChild<LLRadioGroup>("boolean_combo");
 	mCopyButton = getChild<LLButton>("copy_btn");
 	mDefaultButton = getChild<LLButton>("default_btn");
+	mSanityButton = getChild<LLButton>("sanity_warning_btn");
 
 	// tried to make this an XUI callback, but keystroke_callback doesn't
 	// seem to work as hoped, so build the callback manually :/ -Zi
@@ -218,6 +221,11 @@ void LLFloaterSettingsDebug::draw()
 	LLFloater::draw();
 }
 
+void LLFloaterSettingsDebug::onSanityCheck()
+{
+	SanityCheck::instance().onSanity(mCurrentControlVariable);
+}
+
 void LLFloaterSettingsDebug::onCommitSettings()
 {
 	if (!mCurrentControlVariable)
@@ -278,6 +286,11 @@ void LLFloaterSettingsDebug::onCommitSettings()
 	  default:
 		break;
 	}
+
+	if(!mCurrentControlVariable->isSane())
+	{
+		onSanityCheck();
+	}
 }
 
 void LLFloaterSettingsDebug::onClickDefault()
@@ -318,6 +331,7 @@ void LLFloaterSettingsDebug::updateControl()
 	mCopyButton->setEnabled(FALSE);
 	mDefaultButton->setEnabled(FALSE);
 	mBooleanCombo->setVisible(FALSE);
+	mSanityButton->setVisible(FALSE);
 
 	if(mCurrentControlVariable)
 	{
@@ -335,6 +349,7 @@ void LLFloaterSettingsDebug::updateControl()
 // [/RLVa:KB]
 
 		mCopyButton->setEnabled(TRUE);
+		mSanityButton->setVisible(!mCurrentControlVariable->isSane());
 
 		eControlType type=mCurrentControlVariable->type();
 

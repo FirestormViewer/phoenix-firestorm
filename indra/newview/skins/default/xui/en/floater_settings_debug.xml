@@ -197,12 +197,26 @@
 		<button
 			follows="right|bottom"
 			height="22"
+			image_overlay="Popup_Caution"
+			image_pressed="PushButton_Press"
+			image_pressed_selected="PushButton_Selected_Press"
+			image_selected="PushButton_Selected_Press"
+			name="sanity_warning_btn"
+			right="-160"
+			top_pad="10"
+			visible="true"
+			width="22">
+			<button.commit_callback
+				function="ClickSanityIcon" />
+		</button>
+		<button
+			follows="right|bottom"
+			height="22"
 			label="Copy"
 			layout="topleft"
-			right="-104"
+			left_pad="4"
 			name="copy_btn"
 			tool_tip="Copies the setting's name to the clipboard."
-			top_pad="10"
 			width="50">
 			<button.commit_callback
 				function="ClickCopy" />
