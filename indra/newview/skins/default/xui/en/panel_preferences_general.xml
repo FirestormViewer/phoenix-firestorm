@@ -447,7 +447,7 @@
      name="text_box3"
      top_pad="10"
      width="400">
-       Autoresponse response (for busy and autorespond online status):
+       Automatic response (for busy online status):
     </text>
     <text_editor
      control_name="BusyModeResponse"

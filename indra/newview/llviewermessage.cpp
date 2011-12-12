@@ -2478,8 +2478,8 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		//AO Autorespond
 		//TS Autorespond to non-friends
 		else if ( (offline == IM_ONLINE && !is_linden &&
-		 (is_busy || is_autorespond || (is_autorespond_nonfriends && !is_friend)) && name != SYSTEM_FROM) &&
-		 (gRlvHandler.canReceiveIM(from_id)) )
+			(is_busy || is_autorespond || (is_autorespond_nonfriends && !is_friend)) && name != SYSTEM_FROM) &&
+			(gRlvHandler.canReceiveIM(from_id)) )
 // [/RLVa:KB]
 		{
 			// return a standard "busy" message, but only do it to online IM 
@@ -2489,8 +2489,20 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				// if there is not a panel for this conversation (i.e. it is a new IM conversation
 				// initiated by the other party) then...
 				std::string my_name;
+				std::string response;
 				LLAgentUI::buildFullname(my_name);
-				std::string response = gSavedPerAccountSettings.getString("BusyModeResponse");
+				if (is_busy)
+				{
+					response = gSavedPerAccountSettings.getString("BusyModeResponse");
+				}
+				else if (is_autorespond)
+				{
+					response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
+				}
+				else if (is_autorespond_nonfriends && !is_friend)
+				{
+					response = gSavedPerAccountSettings.getString("FSAutorespondNonFriendsResponse");
+				}
 				pack_instant_message(
 					gMessageSystem,
 					gAgent.getID(),
@@ -2606,6 +2618,26 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				args["MESSAGE"] = buffer;
 				LLNotificationsUtil::add("SystemMessageTip", args);
 				*/
+				// TS: If the user wants to send a response to muted avatars,
+				//     do so.
+				if (gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse"))
+				{
+					std::string my_name;
+					LLAgentUI::buildFullname(my_name);
+					std::string response = gSavedPerAccountSettings.getString("FSMutedAvatarResponse");
+					pack_instant_message(
+						gMessageSystem,
+						gAgent.getID(),
+						FALSE,
+						gAgent.getSessionID(),
+						from_id,
+						my_name,
+						response,
+						IM_ONLINE,
+						IM_BUSY_AUTO_RESPONSE,
+						session_id);
+					gAgent.sendReliableMessage();
+				}
 			}
 		}
 		break;
