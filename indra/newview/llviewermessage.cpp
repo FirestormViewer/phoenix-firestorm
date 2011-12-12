@@ -2425,7 +2425,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	BOOL is_linden = LLMuteList::getInstance()->isLinden(name);
 	BOOL is_owned_by_me = FALSE;
 	BOOL is_friend = (LLAvatarTracker::instance().getBuddyInfo(from_id) == NULL) ? false : true;
-	BOOL accept_im_from_only_friend = gSavedSettings.getBOOL("VoiceCallsFriendsOnly");
+	static LLCachedControl<bool> accept_im_from_only_friend(gSavedSettings, "VoiceCallsFriendsOnly");
 	
 	chat.mMuted = is_muted && !is_linden;
 	chat.mFromID = from_id;
@@ -2620,7 +2620,8 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				*/
 				// TS: If the user wants to send a response to muted avatars,
 				//     do so.
-				if (gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse"))
+				static LLCachedControl<bool> fsSendMutedAvatarResponse(gSavedPerAccountSettings, "FSSendMutedAvatarResponse");
+				if (fsSendMutedAvatarResponse)
 				{
 					std::string my_name;
 					LLAgentUI::buildFullname(my_name);

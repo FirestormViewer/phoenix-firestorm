@@ -360,9 +360,9 @@
          layout="topleft"
          left="30"
          mouse_opaque="false"
-         name="text_box3"
+         name="autorespond_response_label"
          top="10"
-         width="400">
+         width="450">
            Automatic response (for autorespond online status):
         </text>
         <text_editor
@@ -388,9 +388,9 @@
          layout="topleft"
          left="30"
          mouse_opaque="false"
-         name="text_box3"
+         name="autorespond_nf_response_label"
          top_pad="10"
-         width="400">
+         width="450">
            Automatic response (for autorespond to non-friends online status):
         </text>
         <text_editor
@@ -426,7 +426,7 @@
          layout="topleft"
          left="30"
          mouse_opaque="false"
-         name="text_box3"
+         name="muted_avatar_response_label"
          top_pad="10"
          width="400">
            Automatic response sent to muted avatars:

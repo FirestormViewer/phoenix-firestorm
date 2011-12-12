@@ -1479,9 +1479,19 @@ Diese Gruppe verlassen?
 Chat und Instant Messages werden ausgeblendet. Instant Messages (Sofortnachrichten) erhalten Ihre Beschäftigt-Antwort. Alle Teleport-Angebote werden abgelehnt. Alle Inventar-Angebote werden in Ihren Papierkorb geschoben.
 		<usetemplate ignoretext="Ich ändere meinen Status zu Beschäftigt" name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="AutorespondModeSet">
+		Automatische Antwort eingeschaltet.
+Sender von eingehenden Instant Messages erhalten jetzt die konfigurierte automatische Antwort.
+		<usetemplate ignoretext="Wenn der Onlinestatus auf automatische Antwort gesetzt wird." name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="AutorespondNonFriendsModeSet">
+		Automatische Antwort für Nicht-Freunde eingeschaltet.
+Eingehende Instant Messages von Personen, die sich nicht auf der Freundesliste befinden, erhalten jetzt die konfigurierte automatische Antwort.
+		<usetemplate ignoretext="Wenn die automatische Antwort für Nicht-Freunde eingeschaltet wird." name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="JoinedTooManyGroupsMember">
 		Sie haben die maximale Anzahl an Gruppen erreicht. Bitte verlassen Sie eine andere Gruppe, um dieser beitreten zu können oder lehnen Sie das Angebot ab.
-[NAME]  hat Sie eingeladen, einer Gruppe beizutreten.
+[NAME] hat Sie eingeladen, einer Gruppe beizutreten.
 		<usetemplate name="okcancelbuttons" notext="Ablehnen" yestext="Beitreten"/>
 	</notification>
 	<notification name="JoinedTooManyGroups">

@@ -1033,6 +1033,18 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="AvatarSetBusy">
 		Beschäftigt
 	</string>
+	<string name="AvatarSetNotAutorespond">
+		Automatische Antwort AUS
+	</string>
+	<string name="AvatarSetAutorespond">
+		Automatische Antwort
+	</string>
+	<string name="AvatarSetNotAutorespondNonFriends">
+		Automatische Antwort an Nicht-Freunde AUS
+	</string>
+	<string name="AvatarSetAutorespondNonFriends">
+		Automatische Antwort an Nicht-Freunde
+	</string>
 	<string name="shape">
 		Form
 	</string>

@@ -58,5 +58,19 @@
 			<check_box label="Eigenen Kamerafokus auch lokal nicht setzen" name="privateLocalLookat" tool_tip="Verhindert, dass der Kopf des eigenen Avatars sich zum fokussierten Punkt der Kamera dreht. Die Kopfbewegung muss zwangsläufig nicht nicht anderen sichtbar sein, unabhängig wie diese Option gesetzt ist!"/>
 			<check_box label="Eigene Bearbeitungsauswahl nicht an andere senden" name="privatepointat" tool_tip="Verhindert, dass die eigene Auswahl an andere gesendet wird."/>
 		</panel>
+
+		<!--Autoresponse-->
+		<panel label="Automatische Antwort" name="tab-autoresponse">
+			<text name="autorespond_response_label">
+				Automatische Antwort für Onlinestatus "Automatische Antwort":
+			</text>
+			<text name="autorespond_nf_response_label">
+				Automatische Antwort für Onlinestatus "Automatische Antwort an Nicht-Freunde":
+			</text>
+			<check_box label="Automatische Antwort an geblockte Avatare senden" name="send_muted_av_response" tool_tip="Sendet den unten stehenden Text an die geblockte Person, wenn sie eine Instant Message schickt."/>
+			<text name="muted_avatar_response_label">
+				Automatische Antwort für geblockte Avatare:
+			</text>
+		</panel>
 	</tab_container>
 </panel>
