@@ -518,7 +518,11 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 	notification["chat_type"] = (S32)chat_msg.mChatType;
 	notification["chat_style"] = (S32)chat_msg.mChatStyle;
 	// Pass sender info so that it can be rendered properly (STORM-1021).
-	notification["sender_slurl"] = LLViewerChat::getSenderSLURL(chat_msg, args);
+//	notification["sender_slurl"] = LLViewerChat::getSenderSLURL(chat_msg, args);
+// [RLVa:KB] - Checked: 2011-12-13 (RLVa-1.4.6) | Added: RLVa-1.4.6
+	if ((CHAT_SOURCE_AGENT != chat_msg.mSourceType) || (!chat_msg.mRlvNamesFiltered))
+		notification["sender_slurl"] = LLViewerChat::getSenderSLURL(chat_msg, args);
+// [/RLVa:KB]
 
 	if (chat_msg.mChatType == CHAT_TYPE_DIRECT &&
 		chat_msg.mText.length() > 0 &&
