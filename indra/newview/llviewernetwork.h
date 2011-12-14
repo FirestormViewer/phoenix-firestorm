@@ -146,6 +146,7 @@ public:
 	std::string getGridLoginID() { return mGridList[mGrid][GRID_ID_VALUE]; }	
 	std::string getLoginPage(const std::string& grid) { return mGridList[grid][GRID_LOGIN_PAGE_VALUE]; }
 	void        getLoginIdentifierTypes(LLSD& idTypes) { idTypes = mGridList[mGrid][GRID_LOGIN_IDENTIFIER_TYPES]; }
+	std::string getGridNick() { return mGridList[mGrid][GRID_NICK_VALUE]; }
 	
 	// get location slurl base for the given region within the selected grid
 	std::string getSLURLBase(const std::string& grid);

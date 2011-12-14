@@ -491,17 +491,40 @@ BOOL LLFloaterModelPreview::postBuild()
 			text->setMouseDownCallback(boost::bind(&LLModelPreview::setPreviewLOD, mModelPreview, i));
 		}
 	}
-	std::string current_grid = LLGridManager::getInstance()->getGridLabel();
-	std::transform(current_grid.begin(),current_grid.end(),current_grid.begin(),::tolower);
+
+	// <Ansariel> Changed grid detection and validation URL generation
+	//            because of grid manager. This will need adjustments
+	//            when OpenSims become mesh-capable!
+	//std::string current_grid = LLGridManager::getInstance()->getGridLabel();
+	//std::transform(current_grid.begin(),current_grid.end(),current_grid.begin(),::tolower);
+	//std::string validate_url;
+	//if (current_grid == "agni")
+	//{
+	//	validate_url = "http://secondlife.com/my/account/mesh.php";
+	//}
+	//else
+	//{
+	//	validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php",current_grid.c_str());
+	//}
+
 	std::string validate_url;
-	if (current_grid == "agni")
+	if (LLGridManager::getInstance()->isInSLMain())
 	{
 		validate_url = "http://secondlife.com/my/account/mesh.php";
 	}
+	else if (LLGridManager::getInstance()->isInSLBeta())
+	{
+		std::string grid_nick = LLGridManager::getInstance()->getGridNick();
+		std::transform(grid_nick.begin(), grid_nick.end(), grid_nick.begin(), ::tolower);
+		validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php", grid_nick.c_str());
+	}
 	else
 	{
-		validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php",current_grid.c_str());
+		// TODO: Opensim: Set it to something reasonable
+		validate_url = LLGridManager::getInstance()->getLoginPage();
 	}
+	// </Ansariel>
+
 	getChild<LLTextBox>("warning_message")->setTextArg("[VURL]", validate_url);
 
 	mUploadBtn = getChild<LLButton>("ok_btn");
