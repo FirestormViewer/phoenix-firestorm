@@ -100,10 +100,13 @@ BOOL LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
 			{
 				return FALSE;
 			}
-			
-			if (!shader->attachObject("lighting/sumLightsSpecularV.glsl"))
+		
+			if (!features->isAlphaLighting)
 			{
-				return FALSE;
+				if (!shader->attachObject("lighting/sumLightsSpecularV.glsl"))
+				{
+					return FALSE;
+				}
 			}
 			
 			if (!shader->attachObject("lighting/lightSpecularV.glsl"))
@@ -118,9 +121,12 @@ BOOL LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
 				return FALSE;
 			}
 			
-			if (!shader->attachObject("lighting/sumLightsV.glsl"))
+			if (!features->isAlphaLighting)
 			{
-				return FALSE;
+				if (!shader->attachObject("lighting/sumLightsV.glsl"))
+				{
+					return FALSE;
+				}
 			}
 			
 			if (!shader->attachObject("lighting/lightV.glsl"))
@@ -282,7 +288,7 @@ BOOL LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
 				}
 				shader->mFeatures.mIndexedTextureChannels = gGLManager.mNumTextureImageUnits-1;
 			}
-		}		
+		}
 	}
 	
 	// NOTE order of shader object attaching is VERY IMPORTANT!!!
