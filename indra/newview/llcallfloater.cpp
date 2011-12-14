@@ -42,6 +42,7 @@
 #include "llimfloater.h"
 #include "llfloaterreg.h"
 #include "llparticipantlist.h"
+#include "llsliderctrl.h"
 #include "llspeakers.h"
 #include "lltextutil.h"
 #include "lltransientfloatermgr.h"
@@ -149,10 +150,18 @@ BOOL LLCallFloater::postBuild()
 	mAvatarList = getChild<LLAvatarList>("speakers_list");
 	mAvatarListRefreshConnection = mAvatarList->setRefreshCompleteCallback(boost::bind(&LLCallFloater::onAvatarListRefreshed, this));
 
+	mAvatarList->setCommitCallback(boost::bind(&LLCallFloater::onParticipantSelected,this));
+
 	childSetAction("leave_call_btn", boost::bind(&LLCallFloater::leaveCall, this));
 
 	mNonAvatarCaller = findChild<LLNonAvatarCaller>("non_avatar_caller");
 	mNonAvatarCaller->setVisible(FALSE);
+
+	mVolumeSlider=getChild<LLSliderCtrl>("volume_slider");
+	mVolumeSlider->setCommitCallback(boost::bind(&LLCallFloater::onVolumeChanged,this));
+
+	mMuteButton=getChild<LLButton>("mute_btn");
+	mMuteButton->setCommitCallback(boost::bind(&LLCallFloater::onMuteChanged,this));
 
 	LLView *anchor_panel = LLBottomTray::getInstance()->getChild<LLView>("speak_flyout_btn");
 
@@ -378,6 +387,59 @@ void LLCallFloater::onAvatarListRefreshed()
 	{
 		updateParticipantsVoiceState();
 	}
+}
+
+void LLCallFloater::onParticipantSelected()
+{
+	uuid_vec_t participants;
+	mAvatarList->getSelectedUUIDs(participants);
+
+	mVolumeSlider->setEnabled(FALSE);
+	mMuteButton->setEnabled(FALSE);
+
+	mSelectedParticipant=LLUUID::null;
+
+	if(participants.size()!=1)
+		return;
+
+	mSelectedParticipant=participants[0];
+
+	if(mSelectedParticipant.isNull())
+		return;
+
+	if(!LLVoiceClient::instance().getVoiceEnabled(mSelectedParticipant))
+		return;
+
+	mVolumeSlider->setEnabled(TRUE);
+	mMuteButton->setEnabled(TRUE);
+
+	mMuteButton->setToggleState(LLVoiceClient::instance().getOnMuteList(mSelectedParticipant));
+	mVolumeSlider->setValue(LLVoiceClient::instance().getUserVolume(mSelectedParticipant));
+}
+
+void LLCallFloater::onVolumeChanged()
+{
+	if(mSelectedParticipant.isNull())
+		return;
+
+	LLVoiceClient::instance().setUserVolume(mSelectedParticipant,mVolumeSlider->getValueF32());
+}
+
+void LLCallFloater::onMuteChanged()
+{
+	if(mSelectedParticipant.isNull())
+		return;
+
+	LLAvatarListItem* item=dynamic_cast<LLAvatarListItem*>(mAvatarList->getItemByValue(mSelectedParticipant));
+	if(!item)
+		return;
+
+	LLMute mute(mSelectedParticipant,item->getAvatarName(),LLMute::AGENT);
+
+	if(mMuteButton->getValue().asBoolean())
+		LLMuteList::instance().add(mute,LLMute::flagVoiceChat);
+	else
+		LLMuteList::instance().remove(mute,LLMute::flagVoiceChat);
 }
 
 // static

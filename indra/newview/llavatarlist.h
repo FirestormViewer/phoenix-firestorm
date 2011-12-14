@@ -54,7 +54,9 @@ public:
 						show_info_btn,
 						show_profile_btn,
 						show_speaking_indicator,
-						show_permissions_granted;
+						show_permissions_granted,
+						show_icons,
+						show_voice_volume;
 		Params();
 	};
 
@@ -89,6 +91,7 @@ public:
 	void showDisplayName(bool visible);
 	void showAvatarAge(bool visible);
 	void showUsername(bool visible);
+	void showVoiceVolume(bool visible);
 	void sortByName();
 	void setShowIcons(std::string param_name);
 	bool getIconsVisible() const { return mShowIcons; }

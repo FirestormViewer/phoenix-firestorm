@@ -40,6 +40,7 @@ class LLOutputMonitorCtrl;
 class LLParticipantList;
 class LLSpeakerMgr;
 class LLSpeakersDelayActionsStorage;
+class LLSliderCtrl;
 
 /**
  * The Voice Control Panel is an ambient window summoned by clicking the flyout chevron
@@ -121,6 +122,24 @@ private:
 	 * and updates voice states each time anybody is joined/left voice chat in session.
 	 */
 	void onAvatarListRefreshed();
+
+	/**
+	 * Gets called whenever a selection changes in the nearby voice list.
+	 * 
+	 * This updates the slider and mute button at the lower edge, so the selected participant
+	 * becomes the target of this control.
+	 */
+	void onParticipantSelected();
+
+	/**
+	 * Gets called whenever the volume on the optional single slider control gets changed
+	 */
+	void onVolumeChanged();
+
+	/**
+	 * Gets called whenever the optional single mute button gets toggled
+	 */
+	void onMuteChanged();
 
 	/**
 	 * Updates window title with an avatar name
@@ -237,6 +256,10 @@ private:
 	LLPanel* mAgentPanel;
 	LLOutputMonitorCtrl* mSpeakingIndicator;
 	bool mIsModeratorMutedVoice;
+
+	LLUUID mSelectedParticipant;
+	LLSliderCtrl* mVolumeSlider;
+	LLButton* mMuteButton;
 
 	/**
 	 * Flag indicated that participants voice states should be initialized.

@@ -178,6 +178,11 @@ void LLAvatarList::showUsername(bool visible)
 	mNeedUpdateNames = true;
 }
 
+void LLAvatarList::showVoiceVolume(bool visible)
+{
+	mShowVoiceVolume=visible;
+}
+
 void LLAvatarList::showAvatarAge(bool visible)
 {
 	mShowAge = visible;
@@ -216,10 +221,12 @@ static const LLFlatListView::ItemReverseComparator REVERSE_NAME_COMPARATOR(NAME_
 LLAvatarList::Params::Params()
 : ignore_online_status("ignore_online_status", false)
 , show_last_interaction_time("show_last_interaction_time", false)
-, show_info_btn("show_info_btn", true)
+, show_info_btn("show_info_btn", false)
 , show_profile_btn("show_profile_btn", true)
 , show_speaking_indicator("show_speaking_indicator", true)
 , show_permissions_granted("show_permissions_granted", false)
+, show_icons("show_icons",true)
+, show_voice_volume("show_voice_volume", false)
 {
 }
 
@@ -231,11 +238,12 @@ LLAvatarList::LLAvatarList(const Params& p)
 , mDirty(true) // to force initial update
 , mNeedUpdateNames(false)
 , mLITUpdateTimer(NULL)
-, mShowIcons(true)
+, mShowIcons(p.show_icons)
 , mShowInfoBtn(p.show_info_btn)
 , mShowProfileBtn(p.show_profile_btn)
 , mShowSpeakingIndicator(p.show_speaking_indicator)
 , mShowPermissions(p.show_permissions_granted)
+, mShowVoiceVolume(p.show_voice_volume)
 , mShowRange(false)
 , mShowStatusFlags(false)
 , mShowUsername(true)
@@ -250,7 +258,6 @@ LLAvatarList::LLAvatarList(const Params& p)
 // [Ansariel: Colorful radar]
 , mUseRangeColors(false)
 // [Ansariel: Colorful radar]
-, mShowVoiceVolume(false)
 {
 	setCommitOnSelectionChange(true);
 
@@ -263,22 +270,7 @@ LLAvatarList::LLAvatarList(const Params& p)
 		mLITUpdateTimer->setTimerExpirySec(0); // zero to force initial update
 		mLITUpdateTimer->start();
 	}
-	
-	// AO: Because Avatarlist is shared in so many places, some without good initialization
-	// one-off exceptions here
-	if (getName() == "speakers_list")
-	{
-		mShowVoiceVolume = true;
-		mShowInfoBtn = false;
-	}
-	else 
-	{
-		mShowInfoBtn = false;
-		mShowVoiceVolume = false;
-	}
 
-
-	
 	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&LLAvatarList::handleDisplayNamesOptionChanged, this));
 }
 
