@@ -224,7 +224,7 @@
      width="300"
      height="30"
      name="currency_links">
-      [http://www.secondlife.com/my/account/payment_method_management.php payment method] | [http://www.secondlife.com/my/account/currency.php currency] | [http://www.secondlife.com/my/account/exchange_rates.php exchange rate]
+      [http://www.secondlife.com/my/account/payment_method_management.php payment method]
     </text>
     <text
      type="string"
@@ -292,6 +292,7 @@ Re-enter amount to see the latest exchange rate.
      layout="topleft"
      left="0"
      name="error_background"
+	 color="SL-White"
      top="15"
 	 use_draw_context_alpha="false"
      width="350"/>
@@ -302,6 +303,7 @@ Re-enter amount to see the latest exchange rate.
      width="360"
      height="25"
      top="25"
+	 text_color="Red"
      name="info_cannot_buy">
         Unable to Buy
     </text>
@@ -312,6 +314,7 @@ Re-enter amount to see the latest exchange rate.
       top="60"
       left="165"
       word_wrap="true"
+	  text_color="SL-White"
       follows="bottom|right"
       name="cannot_buy_message">
      </text>
@@ -319,6 +322,7 @@ Re-enter amount to see the latest exchange rate.
       follows="bottom|left"
       height="20"
       label="Continue to the Web"
+	  image_unselected="PushButton_On"
       layout="topleft"
       left="170"
       name="error_web"
