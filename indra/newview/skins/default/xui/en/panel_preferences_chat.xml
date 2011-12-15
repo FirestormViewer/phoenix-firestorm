@@ -157,6 +157,16 @@
              name="play_typing_sound"
              width="400" />
             <check_box
+             control_name="FSSendTypingState"
+             follows="left|top"
+             height="16"
+             label="Send typing notifications to other avatars during IM sessions"
+             layout="topleft"
+             left_delta="0"
+             top_pad="5"
+             name="FSSendTypingState"
+             width="400" />
+            <check_box
              enabled="false"
              height="16"
              label="Email me IMs when I'm offline"
