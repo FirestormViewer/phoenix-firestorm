@@ -15,7 +15,7 @@
 		<spinner label="x" name="val_spinner_2"/>
 		<spinner label="x" name="val_spinner_3"/>
 		<spinner label="x" name="val_spinner_4"/>
-		<button label="Kopieren" name="copy_btn" tool_tip="Kopiert den Namen der Einstellung in die Zwischenablage." width="60" right="-135"/>
-		<button label="Standard wiederherst." name="default_btn" width="130"/>
+		<button label="Kopieren" name="copy_btn" tool_tip="Kopiert den Namen der Einstellung in die Zwischenablage." width="60"/>
+		<button label="Standardwert" name="default_btn" width="85"/>
 	</panel>
 </floater>
