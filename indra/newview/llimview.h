@@ -215,13 +215,15 @@ public:
 	 * and also saved into a file if log2file is specified.
 	 * It sends new message signal for each added message.
 	 */
-	bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true);
+	// Ansariel: Added is_announcement parameter
+	bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true, BOOL is_announcement = FALSE);
 
 	/**
 	 * Similar to addMessage(...) above but won't send a signal about a new message added
 	 */
+	// Ansariel: Added is_announcement parameter
 	LLIMModel::LLIMSession* addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
-		const std::string& utf8_text, bool log2file = true);
+		const std::string& utf8_text, bool log2file = true, BOOL is_announcement = FALSE);
 
 	/**
 	 * Add a system message to an IM Model
@@ -300,7 +302,8 @@ private:
 	/**
 	 * Add message to a list of message associated with session specified by session_id
 	 */
-	bool addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text);
+	// Ansariel: Added is_announcement parameter
+	bool addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text, BOOL is_announcement = FALSE);
 };
 
 class LLIMSessionObserver
@@ -339,7 +342,9 @@ public:
 					U32 parent_estate_id = 0,
 					const LLUUID& region_id = LLUUID::null,
 					const LLVector3& position = LLVector3::zero,
-					bool link_name = false);
+					bool link_name = false,
+					BOOL is_announcement = FALSE // Ansariel: Special parameter indicating announcement
+					);
 
 	void addSystemMessage(const LLUUID& session_id, const std::string& message_name, const LLSD& args);
 

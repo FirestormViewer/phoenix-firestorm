@@ -421,11 +421,22 @@
              follows="left|top"
              top_pad="0"
              left="30"
-             width="50"
+             width="400"
              height="18"
              name="FSLogImToChatConsole"
              control_name="FSLogImToChatConsole"
              label="Show IMs and group chat in chat console"/>
+
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="30"
+             width="400"
+             height="18"
+             name="FSAnnounceIncomingIM"
+             control_name="FSAnnounceIncomingIM"
+             label="Announces incoming IMs as soon as the sender starts typing"/>
 
         </panel>
 
