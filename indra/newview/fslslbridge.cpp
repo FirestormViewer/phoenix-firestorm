@@ -52,6 +52,10 @@
 #include "llviewerobject.h"
 
 #include <boost/regex.hpp>
+#include <string>
+#include <fstream>
+#include <streambuf>
+
 
 //#define phoenix_bridge_name "#LSL<->Client Bridge v0.12"
 #define phoenix_folder_name "#Phoenix"
@@ -62,7 +66,7 @@
 #define FS_BRIDGE_FOLDER "#LSL Bridge"
 #define FS_BRIDGE_NAME "#Firestorm LSL Bridge v"
 #define FS_BRIDGE_MAJOR_VERSION 2
-#define FS_BRIDGE_MINOR_VERSION 0
+#define FS_BRIDGE_MINOR_VERSION 1
 #define FS_MAX_MINOR_VERSION 99
 
 //current script version is 2.0
@@ -101,7 +105,7 @@ FSLSLBridge :: FSLSLBridge():
 					mpBridge(NULL),
 					mIsFirstCallDone(false)
 {
-	llinfos << "Initializing fsbridge class" << llendl;
+	llinfos << "Initializing FSLSLBridge" << llendl;
 	std::stringstream sstr;
 	
 	sstr << FS_BRIDGE_NAME;
@@ -125,15 +129,57 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 		return false;
 
 	lldebugs << message << llendl;
-
+	
 	std::string tag = message.substr(0,11);
 	bool status = false;
-
 	if (tag == "<bridgeURL>")
 	{
-		// get the content of the message, between <tag> and </tag>
-		mCurrentURL = message.substr(tag.length(), message.length() - ((tag.length() * 2) + 1));
-		llinfos << "New URL is: " << mCurrentURL << llendl;
+
+		// brutish parsing
+		S32 urlStart  = message.find("<bridgeURL>") + 11;
+		S32 urlEnd    = message.find("</bridgeURL>");
+		S32 authStart = message.find("<bridgeAuth>") + 12;
+		S32 authEnd   = message.find("</bridgeAuth>");
+		S32 verStart  = message.find("<bridgeVer>") + 11;
+		S32 verEnd    = message.find("</bridgeVer>");
+		std::string bURL = message.substr(urlStart,urlEnd - urlStart);
+		std::string bAuth = message.substr(authStart,authEnd - authStart);
+		std::string bVer = message.substr(verStart,verEnd - verStart);
+
+		// Verify Version
+		// todo
+
+		// Verify Authorization
+		std::string ourBridge = gSavedSettings.getString("FSLSLBridgeUUID");
+		if (ourBridge != bAuth)
+		{
+			llwarns << "BridgeURL message received from ("<< bAuth <<") , but not from our registered bridge ("<< ourBridge <<"). Ignoring." << llendl;
+			// Failing bridge authorization automatically kicks off a bridge rebuild. This correctly handles the
+			// case where a user logs in from multiple computers which cannot have the bridgeAuth ID locally 
+			// synchronized.
+			
+			
+			// If something that looks like our bridge is attached but failed auth, detach and recreated.
+			LLUUID catID = findFSCategory();
+			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
+			if (fsBridge != NULL)
+			{
+				if (get_is_item_worn(fsBridge->getUUID()))
+				{
+					LLVOAvatarSelf::detachAttachmentIntoInventory(fsBridge->getUUID());
+					recreateBridge();
+					return true; 
+				}
+			}
+			
+			// If something that didn't look like our bridge failed auth, don't recreate, just alert.
+			reportToNearbyChat("Warning: Bridge initialization message received from non-bridge.");
+			return false;
+		}
+		
+		// Get URL
+		mCurrentURL = bURL;
+		llinfos << "New Bridge URL is: " << mCurrentURL << llendl;
 		
 		if (mpBridge == NULL)
 		{
@@ -143,7 +189,7 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 			if (fsBridge != NULL)
 				mpBridge = fsBridge;
 		}
-		//status = true;
+
 		status = viewerToLSL("URL Confirmed", new FSLSLBridgeRequestResponder());
 		//updateBoolSettingValue("UseLSLFlightAssist");
 		if (!mIsFirstCallDone)
@@ -151,7 +197,6 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 			//on first call from bridge, confirm that we are here
 			//then check options use
 			updateBoolSettingValue("UseLSLFlightAssist");
-
 			mIsFirstCallDone = true;
 		}
 	}
@@ -200,6 +245,7 @@ void FSLSLBridge :: recreateBridge()
 
 	if (mBridgeCreating)
 	{
+		llwarns << "Bridge creation already in progress, aborting new attempt." << llendl;
 		reportToNearbyChat("Bridge creation in process, can't start another. Please wait a few minutes.");
 		return;
 	}
@@ -247,7 +293,7 @@ void FSLSLBridge :: startCreation()
 
 	if (fsBridge == NULL)
 	{
-		llinfos << "bridge not found, creating new" << llendl;
+		llinfos << "Bridge not found in inventory, creating new one..." << llendl;
 		initCreationStep();
 	}
 	else
@@ -258,7 +304,7 @@ void FSLSLBridge :: startCreation()
 		{
 			//Is this a valid bridge - wear it. 
 			LLAttachmentsMgr::instance().addAttachment(mpBridge->getUUID(), BRIDGE_POINT, FALSE, TRUE);	
-			llinfos << "found a bridge, reattached it" << llendl;
+			llinfos << "Bridge found in inventory, reattaching..." << llendl;
 			//from here, the attach shoould report to ProcessAttach and make sure bridge is valid.
 		}
 	}
@@ -272,8 +318,9 @@ void FSLSLBridge :: initCreationStep()
 
 	if (gSavedSettings.getBOOL("NoInventoryLibrary"))
 	{
-		llwarns << "Asked to create bridge, but we don't have a library" << llendl;
+		llwarns << "Asked to create bridge, but we don't have a library. Aborting." << llendl;
 		reportToNearbyChat("Firestorm could not create an LSL bridge. Please enable your library and relog");
+		mBridgeCreating = false;
 		return;
 	}
 	createNewBridge();
@@ -292,21 +339,37 @@ void FSLSLBridge :: createNewBridge()
 	{
 		//copy the library item to inventory and put it on 
 		LLPointer<LLInventoryCallback> cb = new FSLSLBridgeRezCallback();
-		llinfos << "attach the Linden rock from the library" << llendl;
+		llinfos << "Cloning a new Bridge container from the Library..." << llendl;
 		copy_inventory_item(gAgent.getID(),libRock->getPermissions().getOwner(),libRock->getUUID(),catID,mCurrentFullName,cb);
 	}
 }
 
 void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAttachment *attachment)
 {
-	llinfos << "enter process attach, checking the rock" << llendl;
+	llinfos << "Entering processAttach, checking the bridge container..." << llendl;
 
 	if ((!gAgentAvatarp->isSelf()) || (attachment->getName() != "Bridge"))
+	{
+		llwarns << "Bridge not created. Our bridge container attachment isn't named correctly." << llendl;
+		if (mBridgeCreating)
+		{
+			reportToNearbyChat("Bridge not created. Our bridge isn't named correctly. Please try recreating your bridge.");
+			mBridgeCreating = false; //in case we interrupted the creation
+		}
 		return;
+	}
 
 	LLViewerInventoryItem *fsObject = gInventory.getItem(object->getAttachmentItemID());
 	if (fsObject == NULL) //just in case
+	{
+		llwarns << "Bridge container is still NULL in inventory. Aborting." << llendl;
+		if (mBridgeCreating)
+		{
+			reportToNearbyChat("Bridge not created. Our bridge couldn't be found in inventory. Please try recreating your bridge.");
+			mBridgeCreating = false; //in case we interrupted the creation
+		}
 		return;
+	}
 	if (mpBridge == NULL) //user is attaching an existing bridge?
 	{
 		//is it in the right place?
@@ -315,21 +378,33 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 		{
 			//the object is not where we think it is. Kick it off.
 			LLVOAvatarSelf::detachAttachmentIntoInventory(fsObject->getUUID());
+			llwarns << "Bridge container isn't in the correct inventory location. Detaching it and aborting." << llendl;
+			if (mBridgeCreating)
+			{
+				reportToNearbyChat("Bridge not created. Our bridge wasn't found in the right inventory location. Please try recreating your bridge.");
+				mBridgeCreating = false; //in case we interrupted the creation
+			}
 			return;
 		}
 		mpBridge = fsObject;
 	}
-	llinfos << "rock is attached, mpBridge not NULL, avatar is self, point is bridge" << llendl;
+
+	lldebugs << "Bridge container is attached, mpBridge not NULL, avatar is self, point is bridge, all is good." << llendl;
 
 
 	if (fsObject->getUUID() != mpBridge->getUUID())
 	{
 		//something odd just got attached to bridge?
-		llinfos << "Something unknown just got attached to bridge point, detaching." << llendl;
+		llwarns << "Something unknown just got attached to bridge point, detaching and aborting." << llendl;
+		if (mBridgeCreating)
+		{
+			reportToNearbyChat("Bridge not created, something else was using the bridge attachment point. Please try recreating your bridge.");
+			mBridgeCreating = false; //in case we interrupted the creation
+		}
 		LLVOAvatarSelf::detachAttachmentIntoInventory(mpBridge->getUUID());
 		return;
 	}
-	llinfos << "rock found is the same rock we saved, id matched" << llendl;
+	lldebugs << "Bridge container found is the same bridge we saved, id matched." << llendl;
 
 	if (!mBridgeCreating) //just an attach. See what it is
 	{
@@ -339,7 +414,7 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 
 		if (object->flagInventoryEmpty())
 		{
-			llinfos << "Empty bridge - re-enter creation process" << llendl;
+			llinfos << "Empty bridge detected- re-enter creation process" << llendl;
 			mBridgeCreating = true;
 		}
 		else if (inventory_objects.size() > 0)
@@ -355,29 +430,31 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 					if (item->getCreatorUUID() == gAgent.getID()) 
 						isOurScript = true;
 					else //problem, not our script
-						llwarns << "The bridge inventory contains a script not created by user" << llendl;
+						llwarns << "The bridge inventory contains a script not created by user." << llendl;
 				}
 			}
 			if ((inventory_objects.size() == 1) && isOurScript) //We attached a valid bridge. Run along.
 				return;
 			else 
 			{
-				reportToNearbyChat("The bridge inventory contains unexpected items");
-				llinfos << "The bridge inventory contains items other than bridge script" << llendl;
+				reportToNearbyChat("The bridge inventory contains unexpected items.");
+				llwarns << "The bridge inventory contains items other than bridge script." << llendl;
 				if (!isOurScript)	//some junk but no valid script? Unlikely to happen, but lets add script anyway.
 					mBridgeCreating = true;
 				else //Let the script disable competitors 
+				{
 					return;
+				}
 			}
 		}
 		else
-			llinfos << "Bridge not empty, but we're unable to retrieve contents." << llendl;
+			llwarns << "Bridge not empty, but we're unable to retrieve contents." << llendl;
 	}
 
 	//modify the rock size and texture
 	if ((object != NULL) && (mBridgeCreating))
 	{
-		llinfos << "rock object found after second attachment, resize" << llendl;
+		llinfos << "Bridge container found after second attachment, resizing..." << llendl;
 		setupBridgePrim(object);
 
 		mpBridge->setDescription(mCurrentFullName);
@@ -388,26 +465,33 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 		gInventory.notifyObservers();
 
 		//add bridge script to object
-		llinfos << "go on to create script" << llendl;
+		llinfos << "Creating bridge script..." << llendl;
 		create_script_inner(object);
 	}
 }
 
 void FSLSLBridge :: processDetach(LLViewerObject *object, const LLViewerJointAttachment *attachment)
 {
-	llinfos << "enter process detach" << llendl;
+	llinfos << "Entering processDetach" << llendl;
 
 	if ((!gAgentAvatarp->isSelf()) || (attachment->getName() != "Bridge"))
+	{
+		llwarns << "Couldn't detach bridge, object has wrong name or avatar wasn't self." << llendl;
 		return;
+	}
 
 	LLViewerInventoryItem *fsObject = gInventory.getItem(object->getAttachmentItemID());
 	if (fsObject == NULL) //just in case
+	{
+		llwarns << "Couldn't detach bridge. inventory object was NULL." << llendl;
 		return;
+	}
 	//is it in the right place?
 	LLUUID catID = findFSCategory();
 	if (catID != fsObject->getParentUUID())
 	{
 		//that was in the wrong place. It's not ours.
+		llwarns << "Bridge seems to be the wrong inventory category. Aborting detachment." << llendl;
 		return;
 	}
 	if (mpBridge != NULL && mpBridge->getUUID() == fsObject->getUUID()) 
@@ -417,7 +501,7 @@ void FSLSLBridge :: processDetach(LLViewerObject *object, const LLViewerJointAtt
 		mIsFirstCallDone = false;
 		if (mBridgeCreating)
 		{
-			reportToNearbyChat("Bridge has not finished creating, you might need to recreate it before using");
+			reportToNearbyChat("Bridge has not finished creating, you might need to recreate it before using.");
 			mBridgeCreating = false; //in case we interrupted the creation
 		}
 	}
@@ -426,7 +510,7 @@ void FSLSLBridge :: processDetach(LLViewerObject *object, const LLViewerJointAtt
 
 void FSLSLBridge :: setupBridgePrim(LLViewerObject *object)
 {
-	llinfos << "enter rock change" << llendl;
+	lldebugs << "Entering bridge container setup..." << llendl;
 
 	LLProfileParams profParams(LL_PCODE_PROFILE_CIRCLE, F32(0.230), F32(0.250), F32(0.95));
 	LLPathParams pathParams(LL_PCODE_PATH_CIRCLE, F32(0.2), F32(0.22), 
@@ -455,7 +539,7 @@ void FSLSLBridge :: setupBridgePrim(LLViewerObject *object)
 	object->addFlags(FLAGS_TEMPORARY_ON_REZ);
 	object->updateFlags();
 
-	llinfos << "end rock change" << llendl;
+	lldebugs << "End bridge container setup." << llendl;
 }
 
 void FSLSLBridge :: create_script_inner(LLViewerObject* object)
@@ -491,26 +575,30 @@ void FSLSLBridgeRezCallback :: fire(const LLUUID& inv_item)
 {
 	// this is the first attach - librock got copied and worn on hand - but the ID is now real.
 	if ((FSLSLBridge::instance().getBridge() != NULL) || inv_item.isNull() || !FSLSLBridge::instance().getBridgeCreating())
+	{
+		llinfos << "Ignoring bridgerezcallback, already have bridge, or new bridge is null, or we're not flagged as creating a bridge." << llendl;
 		return;
+	}
 
-	llinfos << "rock attach callback fired, look for object" << llendl;
+	llinfos << "Bridge attach callback fired, looking for object..." << llendl;
 
 	LLViewerObject* obj = gAgentAvatarp->getWornAttachment(inv_item);
 	if (obj != NULL)
 	{
-		llinfos << "rock object found, resize" << llendl;
+		llinfos << "Bridge object found, resizing..." << llendl;
 		FSLSLBridge::instance().setupBridgePrim(obj);
 	}
 	else
-		llinfos << "rock object not found yet, keep going" << llendl;
+		llinfos << "Bridge object not found yet, keep going" << llendl;
 
 	//detach from default and put on the right point
 	LLVOAvatarSelf::detachAttachmentIntoInventory(inv_item);
 	LLViewerInventoryItem *item = gInventory.getItem(inv_item);
+
 	//from this point on, this is our bridge - accept no substitutes!
 	FSLSLBridge::instance().setBridge(item);
 	
-	llinfos << "attaching rock to the right spot now" << llendl;
+	llinfos << "Attaching bridge to the 'bridge' attachmnent point..." << llendl;
 	LLAttachmentsMgr::instance().addAttachment(inv_item, FSLSLBridge::BRIDGE_POINT, TRUE, TRUE);
 }
 
@@ -528,15 +616,20 @@ FSLSLBridgeScriptCallback :: ~FSLSLBridgeScriptCallback()
 void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 {
 	if (inv_item.isNull() || !FSLSLBridge::instance().getBridgeCreating())
+	{
+		llwarns << "BridgeScriptCallback fired, but target item was null or bridge isn't marked as under creation. Ignoring." << llendl;
 		return;
+	}
 
 	LLViewerInventoryItem* item = gInventory.getItem(inv_item);
 	if (!item) 
 	{
+		llwarns << "BridgeScriptCallback Can't find target item in inventory. Ignoring." << llendl;
 		return;
 	}
-    gInventory.updateItem(item);
-    gInventory.notifyObservers();
+	
+	gInventory.updateItem(item);
+	gInventory.notifyObservers();
 
 	LLViewerObject* obj = gAgentAvatarp->getWornAttachment(FSLSLBridge::instance().getBridge()->getUUID());
 
@@ -560,6 +653,7 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 		//also clean up script remains
 		gInventory.purgeObject(item->getUUID());
 		gInventory.notifyObservers();
+		llwarns << "Can't update bridge script. Purging bridge." << llendl;
 		return;
 	}
 }
@@ -575,9 +669,24 @@ std::string FSLSLBridgeScriptCallback::prepUploadFile()
 
 	typedef std::ostream_iterator<char> ostream_iterator;
 	std::ofstream tempFile(fNew.c_str());
+	if (!tempFile)
+	{
+		llwarns << "Cannot open script output file " << fNew.c_str() <<" for writing. Aborting." << llendl;
+		return "";
+	}
+
+	std::string bridgeScript((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+	file.close();
+
+	std::string bridgekey = "BRIDGEKEY";
+	std::string newauth = LLUUID::generateNewID().asString();
+	bridgeScript.replace(bridgeScript.find(bridgekey),bridgekey.length(),newauth);
+	gSavedSettings.setString("FSLSLBridgeUUID",newauth);
+	tempFile.write(bridgeScript.c_str(),std::strlen(bridgeScript.c_str()));
+	tempFile.close();
 	
-	file >> std::noskipws;
-	std::copy(istream_iterator(file), istream_iterator(), ostream_iterator(tempFile));
+	//file >> std::noskipws;
+	//std::copy(istream_iterator(file), istream_iterator(), ostream_iterator(tempFile));
 
 	return fNew;
 }
@@ -585,7 +694,11 @@ std::string FSLSLBridgeScriptCallback::prepUploadFile()
 void FSLSLBridge :: checkBridgeScriptName(std::string fileName)
 {
 	if ((fileName.length() == 0) || !mBridgeCreating)
+	{
+		llwarns << "Bridge script length was zero, or bridge was not marked as under creation. Aborting." << llendl; 
 		return;
+	}
+
 	//need to parse out the last length of a GUID and compare to saved possible names.
 	std::string fileOnly = fileName.substr(fileName.length()-UPLOAD_SCRIPT_CURRENT.length(), UPLOAD_SCRIPT_CURRENT.length());
 
@@ -618,6 +731,7 @@ BOOL FSLSLBridgeCleanupTimer::tick()
 void FSLSLBridge :: cleanUpBridge()
 {
 	//something unexpected went wrong. Try to clean up and not crash.
+	llwarns << "Bridge object not found. Can't proceed with creation, exiting." << llendl;
 	reportToNearbyChat("Bridge object not found. Can't proceed with creation, exiting.");
 	gInventory.purgeObject(mpBridge->getUUID());
 	gInventory.notifyObservers();
@@ -628,6 +742,7 @@ void FSLSLBridge :: cleanUpBridge()
 void FSLSLBridge :: finishBridge()
 {
 	//announce yourself
+	llinfos << "Bridge created." << llendl;
 	reportToNearbyChat("Bridge created.");
 
 	mBridgeCreating = false;
@@ -717,7 +832,7 @@ void FSLSLBridge :: reportToNearbyChat(std::string message)
 // AO small utility method for chat alerts.
 {	
 	LLChat chat;
-    chat.mText = message;
+	chat.mText = message;
 	chat.mSourceType = CHAT_SOURCE_SYSTEM;
 	LLSD args;
 	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
@@ -726,7 +841,7 @@ void FSLSLBridge :: reportToNearbyChat(std::string message)
 
 void FSLSLBridge :: cleanUpBridgeFolder(std::string nameToCleanUp)
 {
-	llinfos << "Cleaning leftover scripts and bridges... for " << nameToCleanUp << llendl;
+	llinfos << "Cleaning leftover scripts and bridges for folder " << nameToCleanUp << llendl;
 	
 	LLUUID catID = findFSCategory();
 	LLViewerInventoryCategory::cat_array_t cats;
@@ -766,7 +881,7 @@ void FSLSLBridge :: cleanUpOldVersions()
 		else
 			minor_tip = FS_BRIDGE_MINOR_VERSION;
 
-		for (int j = 1; j < minor_tip; j++)
+		for (int j = 0; j < minor_tip; j++)
 		{
 			std::stringstream sstr;
 	

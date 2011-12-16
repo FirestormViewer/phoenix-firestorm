@@ -3793,7 +3793,6 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				break;
 			case CHAT_TYPE_OWNER:
 //-TT Client LSL Bridge
-				//llinfos << "CHAT_TYPE_OWNER: " << mesg << llendl; // LO - Removing what looks to be an old debug line, but would cause all llOwnerSay messages to be logged to the log file if left in.
 				{
 					static LLCachedControl<bool> sUseLSLBridge(gSavedSettings, "UseLSLBridge");
 					if (sUseLSLBridge)
