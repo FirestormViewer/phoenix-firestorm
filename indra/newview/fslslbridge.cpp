@@ -159,7 +159,7 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 			// synchronized.
 			
 			
-			// If something that looks like our bridge is attached but failed auth, detach and recreated.
+			// If something that looks like our current bridge is attached but failed auth, detach and recreate.
 			LLUUID catID = findFSCategory();
 			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
 			if (fsBridge != NULL)
@@ -172,9 +172,9 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 				}
 			}
 			
-			// If something that didn't look like our bridge failed auth, don't recreate, just alert.
-			reportToNearbyChat("Warning: Bridge initialization message received from non-bridge.");
-			return false;
+			// If something that didn't look like our current bridge failed auth, don't recreate, it might interfere with a bridge creation in progress
+			// or normal bridge startup.  Bridge creation isn't threadsafe yet.
+			return true;
 		}
 		
 		// Get URL
