@@ -3735,11 +3735,7 @@ void renderRaycast(LLDrawable* drawablep)
 				for (S32 i = 0; i < volume->getNumVolumeFaces(); ++i)
 				{
 					const LLVolumeFace& face = volume->getVolumeFace(i);
-					if (!face.mOctree)
-					{
-						((LLVolumeFace*) &face)->createOctree(); 
-					}
-
+					
 					gGL.pushMatrix();
 					glTranslatef(trans.mV[0], trans.mV[1], trans.mV[2]);					
 					glMultMatrixf((F32*) vobj->getRelativeXform().mMatrix);
@@ -3762,9 +3758,6 @@ void renderRaycast(LLDrawable* drawablep)
 					LLVector4a dir;
 					dir.setSub(enda, starta);
 
-					F32 t = 1.f;
-
-					LLRenderOctreeRaycast render(starta, dir, &t);
 					gGL.flush();
 					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);				
 
@@ -3775,8 +3768,21 @@ void renderRaycast(LLDrawable* drawablep)
 						glVertexPointer(3, GL_FLOAT, sizeof(LLVector4a), face.mPositions);
 						glDrawElements(GL_TRIANGLES, face.mNumIndices, GL_UNSIGNED_SHORT, face.mIndices);
 					}
-						
-					render.traverse(face.mOctree);
+					
+					if (!volume->isUnique())
+					{
+						F32 t = 1.f;
+
+						if (!face.mOctree)
+						{
+							((LLVolumeFace*) &face)->createOctree(); 
+						}
+
+						LLRenderOctreeRaycast render(starta, dir, &t);
+					
+						render.traverse(face.mOctree);
+					}
+
 					gGL.popMatrix();		
 					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 				}
