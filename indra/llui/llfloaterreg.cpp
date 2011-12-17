@@ -474,8 +474,16 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 	}
 	else if (!instance->isShown())
 	{
-		instance->openFloater(key);
-		instance->setVisibleAndFrontmost();
+// [RLVa:KB] - Checked: 2011-12-17 (RLVa-1.4.5a) | Added: RLVa-1.4.5a
+		// [See LLFloaterReg::showInstance()]
+		if ( ((!sBlockShowFloaters) || (sAlwaysShowableList.find(name) != sAlwaysShowableList.end())) && (mValidateSignal(name, key)) )
+		{
+			instance->openFloater(key);
+			instance->setVisibleAndFrontmost();
+		}
+// [/RLVa:KB]
+//		instance->openFloater(key);
+//		instance->setVisibleAndFrontmost();
 	}
 	else if (!instance->isFrontmost())
 	{
