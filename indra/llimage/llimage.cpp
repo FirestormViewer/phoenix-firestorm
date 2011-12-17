@@ -50,6 +50,21 @@ std::string LLImage::sLastErrorMessage;
 LLMutex* LLImage::sMutex = NULL;
 LLPrivateMemoryPool* LLImageBase::sPrivatePoolp = NULL ;
 
+// <ND> Report amount of failed buffer allocations
+
+U32 LLImageBase::mAllocationErrors;
+
+void LLImageBase::addAllocationError()
+{
+	++mAllocationErrors;
+}
+
+U32 LLImageBase::getAllocationErrors()
+{
+	return mAllocationErrors;
+}
+//</ND>
+
 //static
 void LLImage::initClass()
 {
@@ -202,6 +217,7 @@ U8* LLImageBase::allocateData(S32 size)
 			size = 0 ;
 			mWidth = mHeight = 0 ;
 			mBadBufferAllocation = true ;
+			addAllocationError();
 		}
 		mDataSize = size;
 	}

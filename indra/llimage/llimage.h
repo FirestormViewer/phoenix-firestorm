@@ -170,6 +170,13 @@ private:
 	static LLPrivateMemoryPool* sPrivatePoolp ;
 public:
 	LLMemType::DeclareMemType& mMemType; // debug
+
+	// <ND> Report amount of failed buffer allocations
+	static void addAllocationError();
+	static U32 getAllocationErrors();
+private:
+	static U32 mAllocationErrors;
+	// </ND>
 };
 
 // Raw representation of an image (used for textures, and other uncompressed formats

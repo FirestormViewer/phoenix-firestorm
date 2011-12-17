@@ -808,6 +808,11 @@ public:
 				}
 			}
 		}
+		
+		// <ND> Report amount of failed texture buffer allocations if any.
+		if( LLImageBase::getAllocationErrors() )
+			addText( xpos, ypos, llformat( "# textures discared due to insufficent memory %ld", LLImageBase::getAllocationErrors() ) );
+		// </ND>
 	}
 
 	void draw()
