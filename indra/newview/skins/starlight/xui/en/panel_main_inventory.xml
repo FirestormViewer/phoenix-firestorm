@@ -97,9 +97,6 @@
      top_pad="10"
      width="312">
     <inventory_panel
-     bg_alpha_color="SL-Background_66"
-     bg_opaque_color="SL-Background_66"
-     border="false"
      bevel_style="none"
      follows="all"
      height="338"
@@ -113,10 +110,6 @@
      top="16"
      width="288" />
     <recent_inventory_panel
-     accepts_drag_and_drop="false"
-     bg_alpha_color="SL-Background_66"
-     bg_opaque_color="SL-Background_66"
-     border="false"
      bevel_style="none"
      follows="all"
      height="338"
@@ -128,9 +121,6 @@
 	 show_item_link_overlays="true"
      width="290" />
 	<worn_inventory_panel
-     bg_alpha_color="SL-Background_66"
-     bg_opaque_color="SL-Background_66"
-     border="false"
      bevel_style="none"
      follows="all"
      height="338"
