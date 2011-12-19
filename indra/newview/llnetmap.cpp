@@ -149,6 +149,7 @@ BOOL LLNetMap::postBuild()
 	registrar.add("Minimap.ClearMarks", boost::bind(&LLNetMap::handleClearMarks, this));
 	// </Ansariel>
 	registrar.add("Minimap.Cam", boost::bind(&LLNetMap::handleCam, this));
+	registrar.add("Minimap.ShowProfile", boost::bind(&LLNetMap::handleShowProfile, this));
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	return TRUE;
 }
@@ -1258,3 +1259,18 @@ void LLNetMap::handleCam()
 {
 	camAvatar();
 }
+
+
+void LLNetMap::showProfile()
+{
+	if (mClosestAgentAtLastRightClick.notNull())
+	{
+		LLAvatarActions::showProfile(mClosestAgentAtLastRightClick);
+	}
+}
+
+void LLNetMap::handleShowProfile()
+{
+	showProfile();
+}
+

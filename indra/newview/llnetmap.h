@@ -138,6 +138,7 @@ public:
 	void			saveClosestAgentAtLastRightClick();
 	void			clearAvatarMarks();
 	void			camAvatar();
+	void			showProfile();
 
 private:
 	void handleZoom(const LLSD& userdata);
@@ -145,6 +146,7 @@ private:
 	void handleMark(const LLSD& userdata);
 	void handleClearMarks();
 	void handleCam();
+	void handleShowProfile();
 
 	LLMenuGL*		mPopupMenu;
 	uuid_vec_t		gmSelected;

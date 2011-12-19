@@ -60,6 +60,7 @@ private:
 	void handleMark(const LLSD& userdata);
 	void handleClearMarks();
 	void handleCam();
+	void handleShowProfile();
 
 	void stretchMiniMap(S32 width,S32 height);
 	
