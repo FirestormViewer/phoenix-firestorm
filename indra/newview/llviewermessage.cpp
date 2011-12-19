@@ -2495,13 +2495,13 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				{
 					response = gSavedPerAccountSettings.getString("BusyModeResponse");
 				}
-				else if (is_autorespond)
-				{
-					response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
-				}
 				else if (is_autorespond_nonfriends && !is_friend)
 				{
 					response = gSavedPerAccountSettings.getString("FSAutorespondNonFriendsResponse");
+				}
+				else if (is_autorespond)
+				{
+					response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
 				}
 				pack_instant_message(
 					gMessageSystem,

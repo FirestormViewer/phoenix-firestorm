@@ -384,6 +384,7 @@ private:
 public:
 	void			setAutorespond();
 	void			clearAutorespond();
+	void			selectAutorespond(BOOL);
 	BOOL			getAutorespond() const;
 private:
 	BOOL			mIsAutorespond;
@@ -391,6 +392,7 @@ private:
 public:
 	void			setAutorespondNonFriends();
 	void			clearAutorespondNonFriends();
+	void			selectAutorespondNonFriends(BOOL);
 	BOOL			getAutorespondNonFriends() const;
 private:
 	BOOL			mIsAutorespondNonFriends;

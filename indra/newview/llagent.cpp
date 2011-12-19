@@ -319,6 +319,8 @@ void LLAgent::init()
 	gSavedSettings.getControl("FSIgnoreFinishAnimation")->getSignal()->connect(boost::bind(&LLAgent::updateIgnorePrejump, this, _2));
 	PhoenixForceFly = gSavedSettings.getBOOL("FSAlwaysFly");
 	gSavedSettings.getControl("FSAlwaysFly")->getSignal()->connect(boost::bind(&LLAgent::updatePhoenixForceFly, this, _2));
+	selectAutorespond(gSavedPerAccountSettings.getBOOL("FSAutorespondMode"));
+	selectAutorespondNonFriends(gSavedPerAccountSettings.getBOOL("FSAutorespondNonFriendsMode"));
 
 	mInitialized = TRUE;
 }
@@ -1345,11 +1347,7 @@ BOOL LLAgent::getBusy() const
 //-----------------------------------------------------------------------------
 void LLAgent::setAutorespond()
 {
-	mIsAutorespond = TRUE;
-	if (gAutorespondMenu)
-	{
-		gAutorespondMenu->setLabel(LLTrans::getString("AvatarSetNotAutorespond"));
-	}
+	selectAutorespond(TRUE);
 }
 
 //-----------------------------------------------------------------------------
@@ -1357,10 +1355,27 @@ void LLAgent::setAutorespond()
 //-----------------------------------------------------------------------------
 void LLAgent::clearAutorespond()
 {
-	mIsAutorespond = FALSE;
+	selectAutorespond(FALSE);
+}
+
+//-----------------------------------------------------------------------------
+// selectAutorespond()
+//-----------------------------------------------------------------------------
+void LLAgent::selectAutorespond(BOOL selected)
+{
+	llinfos << "Setting autorespond mode to " << selected << llendl;
+	mIsAutorespond = selected;
+	gSavedPerAccountSettings.setBOOL("FSAutorespondMode",selected);
 	if (gAutorespondMenu)
 	{
-		gAutorespondMenu->setLabel(LLTrans::getString("AvatarSetAutorespond"));
+		if (selected)
+		{
+			gAutorespondMenu->setLabel(LLTrans::getString("AvatarSetNotAutorespond"));
+		}
+		else
+		{
+			gAutorespondMenu->setLabel(LLTrans::getString("AvatarSetAutorespond"));
+		}
 	}
 }
 
@@ -1377,11 +1392,7 @@ BOOL LLAgent::getAutorespond() const
 //-----------------------------------------------------------------------------
 void LLAgent::setAutorespondNonFriends()
 {
-	mIsAutorespondNonFriends = TRUE;
-	if (gAutorespondNonFriendsMenu)
-	{
-		gAutorespondNonFriendsMenu->setLabel(LLTrans::getString("AvatarSetNotAutorespondNonFriends"));
-	}
+	selectAutorespondNonFriends(TRUE);
 }
 
 //-----------------------------------------------------------------------------
@@ -1389,10 +1400,27 @@ void LLAgent::setAutorespondNonFriends()
 //-----------------------------------------------------------------------------
 void LLAgent::clearAutorespondNonFriends()
 {
-	mIsAutorespondNonFriends = FALSE;
+	selectAutorespondNonFriends(FALSE);
+}
+
+//-----------------------------------------------------------------------------
+// selectAutorespondNonFriends()
+//-----------------------------------------------------------------------------
+void LLAgent::selectAutorespondNonFriends(BOOL selected)
+{
+	llinfos << "Setting autorespond non-friends mode to " << selected << llendl;
+	mIsAutorespondNonFriends = selected;
+	gSavedPerAccountSettings.setBOOL("FSAutorespondNonFriendsMode",selected);
 	if (gAutorespondNonFriendsMenu)
 	{
-		gAutorespondNonFriendsMenu->setLabel(LLTrans::getString("AvatarSetAutorespondNonFriends"));
+		if (selected)
+		{
+			gAutorespondNonFriendsMenu->setLabel(LLTrans::getString("AvatarSetNotAutorespondNonFriends"));
+		}
+		else
+		{
+			gAutorespondNonFriendsMenu->setLabel(LLTrans::getString("AvatarSetAutorespondNonFriends"));
+		}
 	}
 }
 
