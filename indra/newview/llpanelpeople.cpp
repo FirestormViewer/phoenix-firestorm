@@ -884,7 +884,7 @@ void LLPanelPeople::updateNearbyList()
 	static LLCachedControl<bool> RadarReportDrawRange(gSavedSettings, "RadarReportDrawRange");
 	static LLCachedControl<bool> RadarReportSimRange(gSavedSettings, "RadarReportSimRange");
 	static LLCachedControl<bool> RadarEnterChannelAlert(gSavedSettings, "RadarEnterChannelAlert");
-	static LLCachedControl<bool> RadarLeaveChannelAlert(gSavedSettings, "RadarEnterChannelAlert");
+	static LLCachedControl<bool> RadarLeaveChannelAlert(gSavedSettings, "RadarLeaveChannelAlert");
 
 	static LLCachedControl<F32> RenderFarClip(gSavedSettings, "RenderFarClip");
 	F32 drawRadius = F32(RenderFarClip);
