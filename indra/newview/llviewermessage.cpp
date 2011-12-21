@@ -116,7 +116,8 @@
 //-TT Client LSL Bridge
 #include "fslslbridge.h"
 //-TT
-
+#include "llfloaterreg.h"
+#include "fsmoneytracker.h"
 #include "fsareasearch.h"
 #include "fsdata.h"
 
@@ -5890,6 +5891,22 @@ static void money_balance_avatar_notify(const LLUUID& agent_id,
 		// Notification is either PaymentReceived or PaymentSent
 		LLNotificationsUtil::add(notification, args, payload);
 	}
+	
+	//<AO> TipTracker Support
+	FSMoneyTracker* tipTracker = (FSMoneyTracker*)LLFloaterReg::getInstance("money_tracker");
+	if (tipTracker->isShown() || tipTracker->isMinimized())
+	{
+		args["MESSAGE"] = args["SLURLMESSAGE"]; // Always use slurl forms in money tracking
+		
+		LLChat chat;
+		chat.mText = llformat(args["MESSAGE"].asString().c_str(), av_name.getCompleteName().c_str());
+		chat.mSourceType = CHAT_SOURCE_SYSTEM;
+		LLSD chat_args;
+		chat_args["type"] = LLNotificationsUI::NT_MONEYCHAT;
+		tipTracker->addMessage(chat,false,chat_args);
+	}
+	//</AO>
+	
 }
 
 static void process_money_balance_reply_extended(LLMessageSystem* msg)
@@ -5935,8 +5952,8 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 	}
 	else
 	{
-		source_slurl =
-			LLSLURL( "agent", source_id, "completename").getSLURLString();
+		//source_slurl =LLSLURL( "agent", source_id, "completename").getSLURLString();
+		source_slurl =LLSLURL( "agent", source_id, "inspect").getSLURLString();
 	}
 
 	std::string dest_slurl;
@@ -5947,8 +5964,8 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 	}
 	else
 	{
-		dest_slurl =
-			LLSLURL( "agent", dest_id, "completename").getSLURLString();
+		//dest_slurl = LLSLURL( "agent", dest_id, "completename").getSLURLString();
+		dest_slurl = LLSLURL( "agent", dest_id, "inspect").getSLURLString();
 	}
 
 	std::string reason =
@@ -5997,10 +6014,44 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 				message = LLTrans::getString("you_paid_ldollars_no_info", args);
 			}
 		}
+		
+		//<AO>: Additionally, always add a SLURL-enabled form.
+		args["NAME"] = dest_slurl;
+		is_name_group = is_dest_group;
+		name_id = dest_id;
+		if (!reason.empty())
+		{
+			if (dest_id.notNull())
+			{
+				message = LLTrans::getString("you_paid_ldollars", args);
+			}
+			else
+			{
+				// transaction fee to the system, eg, to create a group
+				message = LLTrans::getString("you_paid_ldollars_no_name", args);
+			}
+		}
+		else
+		{
+			if (dest_id.notNull())
+			{
+				message = LLTrans::getString("you_paid_ldollars_no_reason", args);
+			}
+			else
+			{
+				// no target, no reason, you just paid money
+				message = LLTrans::getString("you_paid_ldollars_no_info", args);
+			}
+		}
+		final_args["SLURLMESSAGE"] = message;
+		//</AO>
+		
+		
 		final_args["MESSAGE"] = message;
 		notification = "PaymentSent";
 	}
-	else {
+	else 
+	{
 		// ...someone paid you
 		args["NAME"] = balance_change_in_chat ? "%s" : source_slurl;
 		is_name_group = is_source_group;
@@ -6009,11 +6060,28 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		{
 			message = LLTrans::getString("paid_you_ldollars", args);
 		}
-		else {
+		else 
+		{
 			message = LLTrans::getString("paid_you_ldollars_no_reason", args);
 		}
 		final_args["MESSAGE"] = message;
-
+		
+		
+		//<AO>: Additionally, always add a SLURL-enabled form.
+		args["NAME"] = source_slurl;
+		is_name_group = is_source_group;
+		name_id = source_id;
+		if (!reason.empty())
+		{
+			message = LLTrans::getString("paid_you_ldollars", args);
+		}
+		else 
+		{
+			message = LLTrans::getString("paid_you_ldollars_no_reason", args);
+		}
+		final_args["SLURLMESSAGE"] = message;
+		//</AO>
+		
 		// make notification loggable
 		payload["from_id"] = source_id;
 		notification = "PaymentReceived";

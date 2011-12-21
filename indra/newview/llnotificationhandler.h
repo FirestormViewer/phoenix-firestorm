@@ -54,7 +54,9 @@ typedef enum e_notification_type
 	NT_NEARBYCHAT, 
 	NT_ALERT,
 	NT_ALERTMODAL,
-	NT_OFFER
+	NT_OFFER,
+	NT_MONEYCHAT,
+	NT_RADARCHAT
 } ENotificationType;
 
 /**

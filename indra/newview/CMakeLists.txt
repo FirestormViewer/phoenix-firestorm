@@ -88,6 +88,7 @@ set(viewer_SOURCE_FILES
     floatermedialists.cpp
     fscontactsfloater.cpp
     fsareasearch.cpp
+    fsmoneytracker.cpp
     fsdata.cpp
     fskeywords.cpp
     fslslbridge.cpp
@@ -698,6 +699,7 @@ set(viewer_HEADER_FILES
     fscontactsfloater.h
     fsradarlistctrl.h
     fsareasearch.h
+    fsmoneytracker.h
     fsdata.h
     fskeywords.h
     fslslbridge.h
@@ -708,8 +710,8 @@ set(viewer_HEADER_FILES
     lggbeammaps.h
     lggbeamscolors.h
     lggbeamcolormapfloater.h
-	lggcontactsets.h
-	lggcontactsetsfloater.h
+    lggcontactsets.h
+    lggcontactsetsfloater.h
     llaccountingcostmanager.h
     llagent.h
     llagentaccess.h
