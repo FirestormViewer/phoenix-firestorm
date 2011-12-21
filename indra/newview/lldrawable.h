@@ -333,21 +333,25 @@ inline LLFace* LLDrawable::getFace(const S32 i) const
 
 	if ((U32) i >= mFaces.size())
 	{
+		LLUUID objectID=getVObj()->getID();
+
 		// if our face list is empty, we have no real choice. -Zi
 		if(mFaces.empty())
 		{
-			llwarns << "Empty face list." << llendl;
+			llwarns << objectID << ": Empty face list." << llendl;
 			return NULL;
 		}
 
 		// otherwise try to return a valid face to avoid crashing. -Zi
-		llwarns << "Invalid face index " << (U32) i << ". Max faces is: " << mFaces.size() << ". Returning face index 0." << llendl;
+		llwarns << objectID << ": Invalid face index " << (U32) i << ". Max faces is: " << mFaces.size() << ". Returning face index 0." << llendl;
 		return mFaces[0];
 	}
 
 	if (!mFaces[i])
 	{
-		llwarns << "Null face found at index " << (U32) i << ". Max faces is: " << mFaces.size() << "." << llendl;
+		LLUUID objectID=getVObj()->getID();
+
+		llwarns << objectID << ": Null face found at index " << (U32) i << ". Max faces is: " << mFaces.size() << "." << llendl;
 		if(i==0)
 		{
 			S32 max=getNumFaces();
