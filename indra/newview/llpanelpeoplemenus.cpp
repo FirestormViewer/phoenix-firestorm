@@ -84,6 +84,7 @@ LLContextMenu* NearbyMenu::createMenu()
 		// [/SL:KB]
 		
 		registrar.add("Nearby.People.TeleportToAvatar", boost::bind(&NearbyMenu::teleportToAvatar,	this));
+		registrar.add("Nearby.People.TrackAvatar", boost::bind(&NearbyMenu::onTrackAvatarMenuItemClick, this));
 
 		registrar.add("Avatar.ZoomIn",                        boost::bind(&LLAvatarActions::zoomIn,                id));
                 enable_registrar.add("Avatar.VisibleZoomIn",        boost::bind(&LLAvatarActions::canZoomIn,            id));
@@ -227,6 +228,13 @@ void NearbyMenu::teleportToAvatar()
 {
 	LLPanelPeople* peoplePanel = dynamic_cast<LLPanelPeople*>(LLSideTray::getInstance()->getPanel("panel_people"));
 	peoplePanel->teleportToAvatar(mUUIDs.front());
+}
+
+// Ansariel: Avatar tracking feature
+void NearbyMenu::onTrackAvatarMenuItemClick()
+{
+	LLPanelPeople* peoplePanel = dynamic_cast<LLPanelPeople*>(LLSideTray::getInstance()->getPanel("panel_people"));
+	peoplePanel->startTracking(mUUIDs.front());
 }
 
 } // namespace LLPanelPeopleMenus

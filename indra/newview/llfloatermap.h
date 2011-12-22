@@ -61,6 +61,7 @@ private:
 	void handleClearMarks();
 	void handleCam();
 	void handleShowProfile();
+	void handleStartTracking();
 
 	void stretchMiniMap(S32 width,S32 height);
 	

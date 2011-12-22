@@ -16,6 +16,7 @@
 	</menu>
 	<menu_item_call label="Mit Kamera verfolgen" name="Cam"/>
 	<menu_item_call label="Profil anzeigen" name="Profile"/>
+	<menu_item_call label="Verfolgung starten" name="Start Tracking"/>
 	<menu_item_call label="Verfolgung abschalten" name="Stop Tracking"/>
 	<menu_item_call label="Weltkarte" name="World Map"/>
 </menu>

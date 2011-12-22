@@ -57,6 +57,13 @@
          parameter="can_show_on_map" />
     </menu_item_call>
     <menu_item_call
+     label="Track"
+     layout="topleft"
+     name="Track">
+        <menu_item_call.on_click
+         function="Nearby.People.TrackAvatar" />
+    </menu_item_call>
+    <menu_item_call
      label="Share"
      layout="topleft"
      name="Share">

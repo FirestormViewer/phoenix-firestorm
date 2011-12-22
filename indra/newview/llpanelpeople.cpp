@@ -84,6 +84,7 @@
 #include "lggcontactsets.h"
 #include "fslslbridge.h"
 #include "fslslbridgerequest.h"
+#include "lltracker.h"
 using namespace std;
 using namespace boost;
 
@@ -1375,6 +1376,7 @@ void LLPanelPeople::updateNearbyList()
 		mMiniMap->setSelected(selected_uuids);
 	}
 	
+	checkTracking();
 }
 
 void LLPanelPeople::updateRecentList()
@@ -2368,5 +2370,44 @@ bool LLPanelPeople::isAccordionCollapsedByUser(const std::string& name)
 {
 	return isAccordionCollapsedByUser(getChild<LLUICtrl>(name));
 }
+
+// <Ansariel> Avatar tracking feature
+void LLPanelPeople::startTracking(const LLUUID& avatar_id)
+{
+	mTrackedAvatarId = avatar_id;
+	updateTracking();
+}
+
+void LLPanelPeople::checkTracking()
+{
+	if (LLTracker::getTrackingStatus() == LLTracker::TRACKING_LOCATION
+		&& LLTracker::getTrackedLocationType() == LLTracker::LOCATION_AVATAR)
+	{
+		updateTracking();
+	}
+}
+
+void LLPanelPeople::updateTracking()
+{
+	std::multimap<LLUUID, radarFields>::const_iterator it;
+	it = lastRadarSweep.find(mTrackedAvatarId);
+	if (it != lastRadarSweep.end())
+	{
+		if (LLTracker::getTrackedPositionGlobal() != it->second.lastGlobalPos)
+		{
+			std::string targetName(it->second.avName);
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+			{
+				targetName = RlvStrings::getAnonym(targetName);
+			}
+			LLTracker::trackLocation(it->second.lastGlobalPos, targetName, "", LLTracker::LOCATION_AVATAR);
+		}
+	}
+	else
+	{
+		LLTracker::stopTracking(NULL);
+	}
+}
+// </Ansariel> Avatar tracking feature
 
 // EOF

@@ -77,6 +77,8 @@ public:
 	LLAvatarList* getNearbyList() { return mNearbyList; }
 // [/RLVa:KB]
 
+	void	startTracking(const LLUUID& avatar_id);
+
 	// internals
 	class Updater;
 
@@ -96,7 +98,9 @@ private:
 	void					updateNearbyList();
 	void					updateRecentList();
 	void					updateNearbyRange();
-
+	void					updateTracking();
+	void					checkTracking();
+	
 	bool					isItemsFreeOfFriends(const uuid_vec_t& uuids);
 
 	void					updateButtons();
@@ -226,6 +230,8 @@ private:
 	bool				mRadarAlertRequest;
 	F32					mRadarLastRequestTime;
 	U32					mRadarLastBulkOffsetRequestTime;
+
+	LLUUID				mTrackedAvatarId;
 };
 
 #endif //LL_LLPANELPEOPLE_H

@@ -150,6 +150,7 @@ BOOL LLNetMap::postBuild()
 	// </Ansariel>
 	registrar.add("Minimap.Cam", boost::bind(&LLNetMap::handleCam, this));
 	registrar.add("Minimap.ShowProfile", boost::bind(&LLNetMap::handleShowProfile, this));
+	registrar.add("Minimap.StartTracking", boost::bind(&LLNetMap::handleStartTracking, this));
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	return TRUE;
 }
@@ -1274,3 +1275,22 @@ void LLNetMap::handleShowProfile()
 	showProfile();
 }
 
+
+// <Ansariel> Avatar tracking feature
+void LLNetMap::handleStartTracking()
+{
+	startTracking();
+}
+
+void LLNetMap::startTracking()
+{
+	if (mClosestAgentAtLastRightClick.notNull())
+	{
+		LLPanelPeople* panel_people = (LLPanelPeople*)LLSideTray::getInstance()->getPanel("panel_people");
+		if (panel_people != NULL)
+		{
+			panel_people->startTracking(mClosestAgentAtLastRightClick);
+		}
+	}
+}
+// </Ansariel> Avatar tracking feature
