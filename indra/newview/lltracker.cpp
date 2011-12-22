@@ -161,7 +161,11 @@ void LLTracker::drawHUDArrow()
 // static 
 void LLTracker::render3D()
 {
-	if (!gFloaterWorldMap || !gSavedSettings.getBOOL("RenderTrackerBeacon"))
+	// Ansariel: Don't go through all this if we don't track anything at all
+	//           and also use LLCachedControl instead of the slow
+	//           gSavedSettings.getBOOL() call.
+	static LLCachedControl<bool> renderTrackerBeacon(gSavedSettings, "RenderTrackerBeacon");
+	if (!instance()->isTracking(NULL) || !gFloaterWorldMap || !renderTrackerBeacon)
 	{
 		return;
 	}

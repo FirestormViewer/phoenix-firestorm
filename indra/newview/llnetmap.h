@@ -139,6 +139,7 @@ public:
 	void			clearAvatarMarks();
 	void			camAvatar();
 	void			showProfile();
+	void			startTracking();
 
 private:
 	void handleZoom(const LLSD& userdata);
@@ -147,6 +148,7 @@ private:
 	void handleClearMarks();
 	void handleCam();
 	void handleShowProfile();
+	void handleStartTracking();
 
 	LLMenuGL*		mPopupMenu;
 	uuid_vec_t		gmSelected;

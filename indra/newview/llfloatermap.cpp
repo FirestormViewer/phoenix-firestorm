@@ -114,6 +114,7 @@ BOOL LLFloaterMap::postBuild()
 
 	registrar.add("Minimap.Cam", boost::bind(&LLFloaterMap::handleCam, this));
 	registrar.add("Minimap.ShowProfile", boost::bind(&LLFloaterMap::handleShowProfile, this));
+	registrar.add("Minimap.StartTracking", boost::bind(&LLFloaterMap::handleStartTracking, this));
 
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if (mPopupMenu && !LLTracker::isTracking(0))
@@ -369,3 +370,10 @@ void LLFloaterMap::handleShowProfile()
 {
 	mMap->showProfile();
 }
+
+// <Ansariel> Avatar tracking feature
+void LLFloaterMap::handleStartTracking()
+{
+	mMap->startTracking();
+}
+// </Ansariel> Avatar tracking feature

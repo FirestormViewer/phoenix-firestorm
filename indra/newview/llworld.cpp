@@ -1192,6 +1192,9 @@ void send_agent_resume()
 LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& region_origin)
 // [/SL:KB]
 {
+	// Ansariel: The old way of unpacking does not work properly and
+	//           sometimes wrong values.
+	/*
 	LLVector3d pos_global;
 	LLVector3 pos_local;
 	U8 bits;
@@ -1209,6 +1212,13 @@ LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& regi
 
 	pos_global.setVec( pos_local );
 	pos_global += region_origin;
+	return pos_global;
+	*/
+
+	LLVector3d pos_global(region_origin);
+	pos_global.mdV[VZ] += F64(compact_local & 0xFF) * 4.f;
+	pos_global.mdV[VY] += F64((compact_local >> 8) & 0xFF);
+	pos_global.mdV[VX] += F64((compact_local >> 16) & 0xFF);
 	return pos_global;
 }
 

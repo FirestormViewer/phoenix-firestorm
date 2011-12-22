@@ -1025,6 +1025,7 @@ void LLWorldMapView::drawTracking(const LLVector3d& pos_global, const LLColor4& 
 		is_in_window = false;
 	}
 	else if (LLTracker::getTrackingStatus() == LLTracker::TRACKING_LOCATION &&
+		LLTracker::getTrackedLocationType() != LLTracker::LOCATION_AVATAR && // Ansariel: For avatar tracking feature
 		LLTracker::getTrackedLocationType() != LLTracker::LOCATION_NOTHING)
 	{
 		drawTrackingCircle( getRect(), x, y, color, 3, 15 );

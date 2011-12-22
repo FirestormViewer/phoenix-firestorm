@@ -115,6 +115,12 @@
          function="Minimap.ShowProfile" />
     </menu_item_call>
     <menu_item_call
+     label="Start Tracking"
+     name="Start Tracking">
+        <menu_item_call.on_click
+         function="Minimap.StartTracking" />
+    </menu_item_call>
+    <menu_item_call
      label="Stop Tracking"
      name="Stop Tracking">
         <menu_item_call.on_click
