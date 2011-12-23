@@ -31,7 +31,7 @@
         <key>Type</key>
             <string>String</string>
         <key>Value</key>
-            <string>The Resident you messaged is in &apos;unavailable mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
+            <string>The Resident you messaged has activated Firestorm viewer&apos;s &apos;unavailable mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
         </map>
     <key>FSAutorespondMode</key>
         <map>
@@ -53,7 +53,7 @@
         <key>Type</key>
             <string>String</string>
         <key>Value</key>
-            <string>The Resident you messaged is in &apos;unavailable mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
+            <string>The Resident you messaged has activated Firestorm viewer&apos;s &apos;autorespond mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
         </map>
     <key>FSAutorespondNonFriendsMode</key>
         <map>
@@ -75,7 +75,7 @@
         <key>Type</key>
             <string>String</string>
         <key>Value</key>
-            <string>The Resident you messaged is in &apos;unavailable mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
+            <string>The Resident you messaged has activated Firestorm viewer&apos;s &apos;autorespond mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
         </map>
     <key>FSMutedAvatarResponse</key>
         <map>
