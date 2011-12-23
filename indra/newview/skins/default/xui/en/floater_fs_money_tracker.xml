@@ -5,6 +5,7 @@
  title="Tip Tracker"
  width="200"
  height="188"
+ save_rect="true"
  can_resize="true"
  can_minimize="true"
  can_close="true"
