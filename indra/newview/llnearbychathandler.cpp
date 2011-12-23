@@ -654,10 +654,11 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,		// WARNING - not 
 	// Send event on to LLEventStream
 	sChatWatcher->post(notification);
 
+	static LLCachedControl<bool> useChatBubbles(gSavedSettings, "UseChatBubbles");
 
 	if( ( nearby_chat->getVisible() && !FSUseNearbyChatConsole) // Ansariel: If nearby chat not visible but we use the console, proceed!
 		|| ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
-			&& gSavedSettings.getBOOL("UseChatBubbles") )
+			&& useChatBubbles )
 		|| !mChannel->getShowToasts() ) // to prevent toasts in Busy mode
 		return;//no need in toast if chat is visible or if bubble chat is enabled
 
@@ -666,7 +667,7 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,		// WARNING - not 
 	{
 		// Don't write to console if avatar chat and user wants
 		// bubble chat or if the user is busy.
-		if ( (chat_msg.mSourceType == CHAT_SOURCE_AGENT && gSavedSettings.getBOOL("UseChatBubbles"))
+		if ( (chat_msg.mSourceType == CHAT_SOURCE_AGENT && useChatBubbles)
 			|| gAgent.getBusy() )
 			return;
 
@@ -727,7 +728,7 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,		// WARNING - not 
 		
 		if( nearby_chat->getVisible()
 			|| ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
-				&& gSavedSettings.getBOOL("UseChatBubbles") )
+				&& useChatBubbles )
 			|| !mChannel->getShowToasts() ) // to prevent toasts in Busy mode
 			return;//no need in toast if chat is visible or if bubble chat is enabled
 
@@ -815,13 +816,15 @@ void LLNearbyChatHandler::onAvatarNameLookup(const LLUUID& agent_id, const LLAva
 	std::string message = irc_me ? chat_msg.mText.substr(3) : chat_msg.mText;
 
 	// Get the display name of the sender if required
+	static LLCachedControl<bool> nameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
+	static LLCachedControl<bool> useDisplayNames(gSavedSettings, "UseDisplayNames");
 	if (!chat_msg.mRlvNamesFiltered)
 	{
-		if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
+		if (nameTagShowUsernames && useDisplayNames)
 		{
 			senderName = av_name.getCompleteName();
 		}
-		else if (gSavedSettings.getBOOL("UseDisplayNames"))
+		else if (useDisplayNames)
 		{
 			senderName = av_name.mDisplayName;
 		}

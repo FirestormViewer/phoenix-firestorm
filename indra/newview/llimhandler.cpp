@@ -73,30 +73,6 @@ void LLIMHandler::updateFSLogImToChatConsole(const LLSD &data)
 	FSLogImToChatConsole = data.asBoolean();
 }
 
-//<Ansariel> better DN lookups
-//void LLIMHandler::lookupDisplayNames(const LLUUID& agent_id)
-//{
-//	LLAvatarNameCache::get(agent_id, boost::bind(&LLIMHandler::onAvatarNameCache, this, _1, _2));
-//}
-//
-//void LLIMHandler::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
-//{
-//	mAvatarName = av_name;
-//}
-//
-//bool LLIMHandler::checkDisplayName()
-//{
-//	for (int i = 0; i <=20; i++)
-//	{
-//		if (mAvatarName.mDisplayName.empty())
-//			ms_sleep(50);
-//		else
-//			return true;
-//	}
-//	return false;
-//}
-
-
 
 //--------------------------------------------------------------------------
 bool LLIMHandler::processNotification(const LLSD& notify)
@@ -111,7 +87,8 @@ bool LLIMHandler::processNotification(const LLSD& notify)
 	if(!notification)
 		return false;
 
-	if (FSLogImToChatConsole && gSavedSettings.getBOOL("FSUseNearbyChatConsole"))
+	static LLCachedControl<bool> fsUseNearbyChatConsole(gSavedSettings, "FSUseNearbyChatConsole");
+	if (FSLogImToChatConsole && fsUseNearbyChatConsole)
 	{
 		if(notify["sigtype"].asString() == "add" || notify["sigtype"].asString() == "change")
 		{
@@ -183,47 +160,49 @@ void LLIMHandler::onDeleteToast(LLToast* toast)
 
 //--------------------------------------------------------------------------
 
+// Ansariel: Name lookup callback for chat console output
 void LLIMHandler::onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str)
-//Ansariel Hiller
 {
-			std::string senderName;
-			std::string message(message_str);
-			std::string delimiter = ": ";
-			std::string prefix = message.substr(0, 4);
-			LLStringUtil::toLower(prefix);
+	std::string senderName;
+	std::string message(message_str);
+	std::string delimiter = ": ";
+	std::string prefix = message.substr(0, 4);
+	LLStringUtil::toLower(prefix);
 
-			// irc styled messages
-			if (prefix == "/me " || prefix == "/me'")
-			{
-				delimiter = LLStringUtil::null;
-				message = message.substr(3);
-			}
+	// irc styled messages
+	if (prefix == "/me " || prefix == "/me'")
+	{
+		delimiter = LLStringUtil::null;
+		message = message.substr(3);
+	}
 
-			if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
-			{
-				senderName = av_name.getCompleteName();
-			}
-			else if (gSavedSettings.getBOOL("UseDisplayNames"))
-			{
-				senderName = av_name.mDisplayName;
-			}
-			else
-			{
-				senderName = av_name.getLegacyName();
-			}
+	static LLCachedControl<bool> nameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
+	static LLCachedControl<bool> useDisplayNames(gSavedSettings, "UseDisplayNames");
+	if (nameTagShowUsernames && useDisplayNames)
+	{
+		senderName = av_name.getCompleteName();
+	}
+	else if (useDisplayNames)
+	{
+		senderName = av_name.mDisplayName;
+	}
+	else
+	{
+		senderName = av_name.getLegacyName();
+	}
 
-			if (rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-			{
-				senderName = RlvStrings::getAnonym(senderName);
-			}
-			LLColor4 textColor = LLUIColorTable::instance().getColor("AgentChatColor");
-			//color based on contact sets prefs
-			if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(agent_id,TRUE))
-			{
-				textColor = LGGContactSets::getInstance()->getFriendColor(agent_id);
-			}
-			gConsole->addConsoleLine("IM: " + senderName + delimiter + message, textColor);
+	if (rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+	{
+		senderName = RlvStrings::getAnonym(senderName);
+	}
+	LLColor4 textColor = LLUIColorTable::instance().getColor("AgentChatColor");
+	//color based on contact sets prefs
+	if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(agent_id,TRUE))
+	{
+		textColor = LGGContactSets::getInstance()->getFriendColor(agent_id);
+	}
+	gConsole->addConsoleLine("IM: " + senderName + delimiter + message, textColor);
 
-			LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
-			gConsole->setVisible(!nearby_chat->getVisible());
+	LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+	gConsole->setVisible(!nearby_chat->getVisible());
 }
