@@ -21,5 +21,13 @@
 		<menu_item_call label="Web Content Floater Debug Test" name="Web Content Floater Debug Test"/>
 		<menu_item_check label="Grid-Auswahl anzeigen" name="Show Grid Picker"/>
 		<menu_item_call label="Benachrichtigungs-Konsole anzeigen" name="Show Notifications Console"/>
+		<menu label="Loglevel" name="Set Loglevel">
+			<menu_item_call label="Alles" name="Debug Level All"/>
+			<menu_item_call label="Debug" name="Debug Level Debug"/>
+			<menu_item_call label="Fehler" name="Debug Level Error"/>
+			<menu_item_call label="Info (Standard)" name="Debug Level Info"/>
+			<menu_item_call label="Warnung" name="Debug Level Warn"/>
+			<menu_item_call label="Nichts" name="Debug Level None"/>
+		</menu>
 	</menu>
 </menu_bar>

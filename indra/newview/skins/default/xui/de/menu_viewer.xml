@@ -31,6 +31,7 @@
 			<menu_item_call label="Lag-Meter" name="Lag Meter"/>
 			<menu_item_call label="LSL-Bridge neu erstellen" name="Recreate LSL Bridge"/>
 		</menu>
+		<menu_item_call label="Tip-Tracker" name="money_tracker"/>
 		<menu label="Hochladen" name="Upload">
 			<menu_item_call label="Bild ([COST] L$)..." name="Upload Image"/>
 			<menu_item_call label="Sound ([COST] L$)..." name="Upload Sound"/>
@@ -312,6 +313,14 @@
         <menu_item_check label="RestrainedLove API" name="RLV API"/>
 		<menu_item_call label="Debug-Einstellungen anzeigen" name="Debug Settings"/>
 		<menu_item_check label="Menü „Entwickler“ anzeigen" name="Debug Mode"/>
+		<menu label="Loglevel" name="Set Loglevel">
+			<menu_item_call label="Alles" name="Debug Level All"/>
+			<menu_item_call label="Debug" name="Debug Level Debug"/>
+			<menu_item_call label="Fehler" name="Debug Level Error"/>
+			<menu_item_call label="Info (Standard)" name="Debug Level Info"/>
+			<menu_item_call label="Warnung" name="Debug Level Warn"/>
+			<menu_item_call label="Nichts" name="Debug Level None"/>
+		</menu>
 	</menu>
 	<menu label="Entwickler" name="Develop">
 		<menu label="Konsolen" name="Consoles">
@@ -323,6 +332,7 @@
 			<menu_item_check label="Schnelle Timer" name="Fast Timers"/>
 			<menu_item_check label="Speicher" name="Memory"/>
 			<menu_item_check label="Szenestatistiken" name="Scene Statistics"/>
+			<menu_item_check label="Region-Debug-Konsole" name="Region Debug Console"/>
 			<menu_item_call label="Info zu Region in Debug-Fenster" name="Region Info to Debug Console"/>
 			<menu_item_call label="Gruppeninfo in Debug-Fenster" name="Group Info to Debug Console"/>
 			<menu_item_call label="Info zu Fähigkeiten in Debug-Fenster" name="Capabilities Info to Debug Console"/>
