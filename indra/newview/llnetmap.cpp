@@ -1070,7 +1070,8 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	{
 		mPopupMenu->buildDrawLabels();
 		mPopupMenu->updateParent(LLMenuGL::sMenuContainer);
-		mPopupMenu->setItemEnabled("Stop Tracking", LLTracker::isTracking(0));
+		mPopupMenu->setItemEnabled("Stop Tracking", LLTracker::isTracking(NULL));
+		mPopupMenu->setItemEnabled("Profile", (mClosestAgentAtLastRightClick.notNull() && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)));
 		LLMenuGL::showPopup(this, mPopupMenu, x, y);
 	}
 	return TRUE;

@@ -82,6 +82,7 @@ public:
 	void			setToolTipMsg(const std::string& msg) { mToolTipMsg = msg; }
 	void			renderScaledPointGlobal( const LLVector3d& pos, const LLColor4U &color, F32 radius );
 	LLVector3d		viewPosToGlobal(S32 x,S32 y);
+	LLUUID			getClosestAgentAtLastRightClick() const { return mClosestAgentAtLastRightClick; }
 
 private:
 	const LLVector3d& getObjectImageCenterGlobal()	{ return mObjectImageCenterGlobal; }

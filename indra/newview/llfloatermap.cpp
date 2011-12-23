@@ -46,6 +46,7 @@
 
 #include "llagent.h"
 #include "llfloaterworldmap.h"
+#include "rlvhandler.h"
 
 //
 // Constants
@@ -181,6 +182,8 @@ BOOL LLFloaterMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	{
 		mPopupMenu->buildDrawLabels();
  		mPopupMenu->updateParent(LLMenuGL::sMenuContainer);
+		mPopupMenu->setItemEnabled("Stop Tracking", LLTracker::isTracking(NULL));
+		mPopupMenu->setItemEnabled("Profile", (mMap->getClosestAgentAtLastRightClick().notNull() && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)));
  		LLMenuGL::showPopup(this, mPopupMenu, x, y);
 	}
 	return TRUE;
