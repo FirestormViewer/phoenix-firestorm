@@ -77,24 +77,25 @@ LLSD lggBeamMaps::getPic(std::string filename)
 }
 LLColor4U lggBeamMaps::getCurrentColor(LLColor4U agentColor)
 {
-	//static std::string* settingName = rebind_llcontrol<std::string >("FSBeamColorFile", &gSavedSettings, true);
-	std::string settingName = gSavedSettings.getString("FSBeamColorFile");
+	static LLCachedControl<std::string> settingName(gSavedSettings, "FSBeamColorFile");
+	std::string setName(settingName);
 
-	if(settingName == "===OFF===") return agentColor;
+	if (setName == "===OFF===")
+	{
+		return agentColor;
+	}
 
-	if(settingName != lastColorFileName)
+	if (setName != lastColorFileName)
 	{
 		lastColorFileName = settingName;
 	
 		std::string path_name(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beamsColors", ""));
-		std::string path_name2(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "beamsColors", ""));
-		std::string filename = path_name + settingName + ".xml";
-		if(gDirUtilp->fileExists(filename))
+		std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "beamsColors", ""));
+		std::string filename = path_name + setName + ".xml";
+		if (!gDirUtilp->fileExists(filename))
 		{
-		}else
-		{
-			filename = path_name2 + settingName + ".xml";
-			if(!gDirUtilp->fileExists(filename))
+			filename = path_name2 + setName + ".xml";
+			if (!gDirUtilp->fileExists(filename))
 			{
 				return agentColor;
 			}
@@ -122,8 +123,8 @@ LLColor4U lggBeamMaps::beamColorFromData(lggBeamsColors data)
 		//full rainbow
 		//liner one
 		hslToRgb(fmod(timeinc,1.0f), 1.0f, 0.5f, r, g, b);
-
-	}else
+	}
+	else
 	{
 		F32 variance = ((data.endHue/360.0f)-(data.startHue/360.0f))/2.0f;
 		hslToRgb((data.startHue/360.0f) + variance + (sinf(timeinc)*(variance)), 1.0f, 0.5f, r, g, b);
@@ -136,7 +137,10 @@ LLColor4U lggBeamMaps::beamColorFromData(lggBeamsColors data)
 }
 void lggBeamMaps::fireCurrentBeams(LLPointer<LLHUDEffectSpiral> mBeam, LLColor4U rgb)
 {
-	if(scale == 0.0f) return;
+	if (scale == 0.0f)
+	{
+		return;
+	}
 
 	static LLCachedControl<std::string> colorf(gSavedSettings, "FSBeamColorFile");
 	bool colorsDisabled = std::string(colorf) == "===OFF===";
@@ -177,12 +181,14 @@ void lggBeamMaps::fireCurrentBeams(LLPointer<LLHUDEffectSpiral> mBeam, LLColor4U
 		myBeam->setDuration(duration* 1.2f);
 	}
 }
+
 void lggBeamMaps::forceUpdate()
 {
 	dots.clear();
 	scale = 0.0f;
 	lastFileName="";
 }
+
 F32 lggBeamMaps::setUpAndGetDuration()
 {
 	static LLCachedControl<std::string> settingNameCached(gSavedSettings, "FSBeamShape");
@@ -194,11 +200,9 @@ F32 lggBeamMaps::setUpAndGetDuration()
 		{
 
 			std::string path_name(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beams", ""));
-			std::string path_name2(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "beams", ""));
+			std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "beams", ""));
 			std::string filename = path_name + settingName + ".xml";
-			if(gDirUtilp->fileExists(filename))
-			{
-			}else
+			if (!gDirUtilp->fileExists(filename))
 			{
 				filename =path_name2 + settingName +".xml";
 			}
@@ -206,7 +210,7 @@ F32 lggBeamMaps::setUpAndGetDuration()
 			scale = (F32)mydata["scale"].asReal()/10.0f;
 			LLSD myPicture = mydata["data"];	
 			dots.clear();
-			for(int i = 0; i < myPicture.size(); i++)
+			for (int i = 0; i < myPicture.size(); i++)
 			{
 				LLSD beamData = myPicture[i];
 				lggBeamData dot;
@@ -222,7 +226,8 @@ F32 lggBeamMaps::setUpAndGetDuration()
 			duration = llceil((F32)(myPicture.size()) / maxBPerQS) * 0.25f;
 			llinfos << "reading it all now size is " << myPicture.size() << " and duration is " << duration << llendl;
 		
-		}else
+		}
+		else
 		{
 			dots.clear();
 			scale = 0.0f;//used as a flag too
@@ -233,7 +238,6 @@ F32 lggBeamMaps::setUpAndGetDuration()
 	//llinfos << "sent final dur of " << duration << llendl;
 		
 	return duration;
-	
 }
 
 
