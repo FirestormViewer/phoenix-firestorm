@@ -6015,6 +6015,9 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 			}
 		}
 		
+		final_args["MESSAGE"] = message;
+		notification = "PaymentSent";
+
 		//<AO>: Additionally, always add a SLURL-enabled form.
 		args["NAME"] = dest_slurl;
 		is_name_group = is_dest_group;
@@ -6045,10 +6048,6 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		}
 		final_args["SLURLMESSAGE"] = message;
 		//</AO>
-		
-		
-		final_args["MESSAGE"] = message;
-		notification = "PaymentSent";
 	}
 	else 
 	{
@@ -6066,6 +6065,9 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		}
 		final_args["MESSAGE"] = message;
 		
+		// make notification loggable
+		payload["from_id"] = source_id;
+		notification = "PaymentReceived";
 		
 		//<AO>: Additionally, always add a SLURL-enabled form.
 		args["NAME"] = source_slurl;
@@ -6080,11 +6082,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 			message = LLTrans::getString("paid_you_ldollars_no_reason", args);
 		}
 		final_args["SLURLMESSAGE"] = message;
-		//</AO>
-		
-		// make notification loggable
-		payload["from_id"] = source_id;
-		notification = "PaymentReceived";
+		//</AO>		
 	}
 
 	// Despite using SLURLs, wait until the name is available before
