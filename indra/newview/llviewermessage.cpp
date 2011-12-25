@@ -5852,7 +5852,7 @@ static void money_balance_group_notify(const LLUUID& group_id,
 	if (balance_change_in_chat)
 	{
 		LLChat chat;
-		chat.mText = args["SLURLMESSAGE"];
+		chat.mText = args["SLURLMESSAGE"].asString();
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		LLSD chat_args;
 		chat_args["type"] = LLNotificationsUI::NT_MONEYCHAT;
@@ -5879,7 +5879,7 @@ static void money_balance_avatar_notify(const LLUUID& agent_id,
 	if (balance_change_in_chat)
 	{
 		LLChat chat;
-		chat.mText = args["SLURLMESSAGE"];
+		chat.mText = args["SLURLMESSAGE"].asString();
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		LLSD chat_args;
 		chat_args["type"] = LLNotificationsUI::NT_MONEYCHAT;
