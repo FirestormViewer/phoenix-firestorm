@@ -5852,10 +5852,11 @@ static void money_balance_group_notify(const LLUUID& group_id,
 	if (balance_change_in_chat)
 	{
 		LLChat chat;
-		chat.mText = llformat(args["MESSAGE"].asString().c_str(), name.c_str());
+		chat.mText = args["SLURLMESSAGE"];
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		LLSD chat_args;
-		chat_args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+		chat_args["type"] = LLNotificationsUI::NT_MONEYCHAT;
+		chat_args["console_message"] = llformat(args["MESSAGE"].asString().c_str(), name.c_str());
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, chat_args);
 	}
 	else
@@ -5878,10 +5879,11 @@ static void money_balance_avatar_notify(const LLUUID& agent_id,
 	if (balance_change_in_chat)
 	{
 		LLChat chat;
-		chat.mText = llformat(args["MESSAGE"].asString().c_str(), av_name.getCompleteName().c_str());
+		chat.mText = args["SLURLMESSAGE"];
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		LLSD chat_args;
-		chat_args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+		chat_args["type"] = LLNotificationsUI::NT_MONEYCHAT;
+		chat_args["console_message"] = llformat(args["MESSAGE"].asString().c_str(), av_name.getCompleteName().c_str());
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, chat_args);
 	}
 	else

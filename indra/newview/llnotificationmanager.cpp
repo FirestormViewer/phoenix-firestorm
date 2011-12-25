@@ -110,6 +110,7 @@ void LLNotificationManager::onChat(const LLChat& msg, const LLSD &args)
 	// check ENotificationType argument
 	switch(args["type"].asInteger())
 	{
+	case NT_MONEYCHAT: // Added by Ansariel for processing L$ balance changes in nearby chat
 	case NT_NEARBYCHAT:
 		{
 			LLNearbyChatHandler* handle = dynamic_cast<LLNearbyChatHandler*>(mNotifyHandlers["nearbychat"].get());

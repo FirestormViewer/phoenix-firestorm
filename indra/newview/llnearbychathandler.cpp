@@ -714,7 +714,15 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,		// WARNING - not 
 		}
 		else
 		{
-			consoleChat = chat_msg.mText;
+			if (chat_msg.mSourceType == CHAT_SOURCE_SYSTEM &&
+				args["type"].asInteger() == LLNotificationsUI::NT_MONEYCHAT)
+			{
+				consoleChat = args["console_message"].asString();
+			}
+			else
+			{
+				consoleChat = chat_msg.mText;
+			}
 
 			LLColor4 chatcolor;
 			LLViewerChat::getChatColor(chat_msg, chatcolor);
