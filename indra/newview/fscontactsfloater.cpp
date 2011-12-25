@@ -692,6 +692,11 @@ void FSFloaterContacts::refreshUI()
 	childSetEnabled("remove_btn", single_selected);
 	childSetEnabled("im_btn", single_selected);
 
+	// Set friend count
+	LLStringUtil::format_map_t args;
+	args["[COUNT]"] = llformat("%d", mFriendsList->getItemCount());
+	mFriendsTab->childSetText("friend_count", mFriendsTab->getString("FriendCount", args));
+
 	refreshRightsChangeList();
 }
 

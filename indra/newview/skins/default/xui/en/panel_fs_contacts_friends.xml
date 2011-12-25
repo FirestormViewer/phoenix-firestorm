@@ -5,6 +5,7 @@
  mouse_opaque="true"
  name="friends"
  width="350">
+	<panel.string name="FriendCount" value="Friends: [COUNT]"/>
 <!--
 	<view_border
 	 top="-9"
@@ -146,4 +147,13 @@
 	 name="lgg_fg_openFG"
 	 tool_tip="List your friends divided in groups"
 	 width="80" />
+	<text
+	 top_pad="10"
+	 follows="top|right"
+	 layout="topleft"
+	 height="20"
+	 name="friend_count"
+	 width="80">
+	 Friends: ...
+	</text>
 </panel>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- name="friends">
+<panel name="friends">
+	<panel.string name="FriendCount" value="Freunde: [COUNT]"/>
 	<scroll_list name="friend_list">
 		<scroll_list.column name="icon_online_status" tool_tip="Online-Status"/>
 		<scroll_list.column label="Benutzername" name="user_name" tool_tip="Der Benutzername dieses Freundes."/>
@@ -46,4 +46,7 @@
 	 name="lgg_fg_openFG"
 	 tool_tip="Fasse deine Freunde in Gruppen zusammen"
 	 width="85" />
+	<text name="friend_count" width="85">
+	 Freunde: ...
+	</text>
 </panel>
