@@ -12,13 +12,15 @@
  can_minimize="true"
  can_close="true"
  can_drag_on_left="false">
+	<floater.string name="ListedPendingTotalBlank" value="Listed/Pending/Total"/>
+	<floater.string name="ListedPendingTotalFilled" value="[LISTED] Listed/[PENDING] Pending/[TOTAL] Total"/>
 	<text
 	 name="name_label"
 	 top_pad="10"
 	 follows="top|left"
 	 height="15"
 	 left="12"
-	 width="120">
+	 width="200">
 	 Name search string:
 	</text>
 	<text
@@ -27,7 +29,7 @@
 	 follows="top|left"
 	 height="15"
 	 left="218"
-	 width="120">
+	 width="200">
 	 Description search string:
 	</text>
 	<line_editor
@@ -63,7 +65,7 @@
 	 follows="top|left"
 	 height="15"
 	 left="12"
-	 width="120">
+	 width="200">
 	 Owner search string:
 	</text>
 	<text
@@ -72,7 +74,7 @@
 	 follows="top|left"
 	 height="15"
 	 left="218"
-	 width="120">
+	 width="200">
 	 Group search string:
 	</text>
 	<line_editor

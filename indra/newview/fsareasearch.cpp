@@ -119,7 +119,7 @@ void FSAreaSearch::checkRegion()
 		mObjectDetails.clear();
 		
 		mResultList->deleteAllItems();
-		mCounterText->setText(std::string("Listed/Pending/Total"));
+		mCounterText->setText(getString("ListedPendingTotalBlank"));
 	}
 }
 
@@ -259,7 +259,11 @@ void FSAreaSearch::results()
 	mResultList->updateSort();
 	mResultList->selectByID(selected);
 	mResultList->setScrollPos(scrollpos);
-	mCounterText->setText(llformat("%d listed/%d pending/%d total", mResultList->getItemCount(), mRequested, mObjectDetails.size()));
+	LLStringUtil::format_map_t args;
+	args["[LISTED]"] = llformat("%d", mResultList->getItemCount());
+	args["[PENDING]"] = llformat("%d", mRequested);
+	args["[TOTAL]"] = llformat("%d", mObjectDetails.size());
+	mCounterText->setText(getString("ListedPendingTotalFilled", args));
 	mLastUpdateTimer.reset();
 }
 
