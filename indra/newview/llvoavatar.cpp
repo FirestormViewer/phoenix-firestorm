@@ -2958,16 +2958,23 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 	{
 		mChats.clear();
 	}
-	
+
+	static LLCachedControl<F32> renderNameShowTime(gSavedSettings, "RenderNameShowTime");
+	static LLCachedControl<F32> renderNameFadeDuration(gSavedSettings, "RenderNameFadeDuration");
+	static LLCachedControl<bool> useChatBubbles(gSavedSettings, "UseChatBubbles");
+	static LLCachedControl<bool> useTypingBubbles(gSavedSettings, "UseTypingBubbles");
+	static LLCachedControl<bool> renderNameShowSelf(gSavedSettings, "RenderNameShowSelf");
+	static LLCachedControl<S32> avatarNameTagMode(gSavedSettings, "AvatarNameTagMode");
+
 	const F32 time_visible = mTimeVisible.getElapsedTimeF32();
-	const F32 NAME_SHOW_TIME = gSavedSettings.getF32("RenderNameShowTime");	// seconds
-	const F32 FADE_DURATION = gSavedSettings.getF32("RenderNameFadeDuration"); // seconds
+	const F32 NAME_SHOW_TIME = F32(renderNameShowTime);	// seconds
+	const F32 FADE_DURATION = F32(renderNameFadeDuration); // seconds
 // [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.2a) | Added: RLVa-0.2.0b
 	bool fRlvShowNames = gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 // [/RLVa:KB]
 	BOOL visible_avatar = isVisible() || mNeedsAnimUpdate;
-	BOOL visible_chat = gSavedSettings.getBOOL("UseChatBubbles") && (mChats.size() || mTyping);
-	BOOL visible_typing = gSavedSettings.getBOOL("UseTypingBubbles") && mTyping;
+	BOOL visible_chat = useChatBubbles && (mChats.size() || mTyping);
+	BOOL visible_typing = useTypingBubbles && mTyping;
 	BOOL render_name =	visible_chat ||
 				visible_typing ||
 		                (visible_avatar &&
@@ -2982,8 +2989,8 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 	{
 		render_name = render_name
 			&& !gAgentCamera.cameraMouselook()
-			&& (visible_chat || (gSavedSettings.getBOOL("RenderNameShowSelf") 
-								 && gSavedSettings.getS32("AvatarNameTagMode") ));
+			&& (visible_chat || (renderNameShowSelf 
+								 && S32(avatarNameTagMode) ));
 	}
 
 	if ( !render_name )
@@ -3104,31 +3111,37 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 // [/RLVa:KB]
 	bool is_cloud = getIsCloud();
 
-			if (gSavedSettings.getBOOL("DebugAvatarRezTime"))
+	static LLCachedControl<bool> debugAvatarRezTime(gSavedSettings, "DebugAvatarRezTime");
+	if (debugAvatarRezTime)
+	{
+		if (is_appearance != mNameAppearance)
+		{
+			if (is_appearance)
 			{
-				if (is_appearance != mNameAppearance)
-				{
-					if (is_appearance)
-					{
-						LLSD args;
-						args["EXISTENCE"] = llformat("%d",(U32)mDebugExistenceTimer.getElapsedTimeF32());
-						args["NAME"] = getFullname();
-						LLNotificationsUtil::add("AvatarRezEnteredAppearanceNotification",args);
-						llinfos << "REZTIME: [ " << (U32)mDebugExistenceTimer.getElapsedTimeF32() << "sec ] Avatar '" << getFullname() << "' entered appearance mode." << llendl;
-					}
-					else
-					{
-						LLSD args;
-						args["EXISTENCE"] = llformat("%d",(U32)mDebugExistenceTimer.getElapsedTimeF32());
-						args["NAME"] = getFullname();
-						LLNotificationsUtil::add("AvatarRezLeftAppearanceNotification",args);
-						llinfos << "REZTIME: [ " << (U32)mDebugExistenceTimer.getElapsedTimeF32() << "sec ] Avatar '" << getFullname() << "' left appearance mode." << llendl;
-					}
-				}
+				LLSD args;
+				args["EXISTENCE"] = llformat("%d",(U32)mDebugExistenceTimer.getElapsedTimeF32());
+				args["NAME"] = getFullname();
+				LLNotificationsUtil::add("AvatarRezEnteredAppearanceNotification",args);
+				llinfos << "REZTIME: [ " << (U32)mDebugExistenceTimer.getElapsedTimeF32() << "sec ] Avatar '" << getFullname() << "' entered appearance mode." << llendl;
 			}
+			else
+			{
+				LLSD args;
+				args["EXISTENCE"] = llformat("%d",(U32)mDebugExistenceTimer.getElapsedTimeF32());
+				args["NAME"] = getFullname();
+				LLNotificationsUtil::add("AvatarRezLeftAppearanceNotification",args);
+				llinfos << "REZTIME: [ " << (U32)mDebugExistenceTimer.getElapsedTimeF32() << "sec ] Avatar '" << getFullname() << "' left appearance mode." << llendl;
+			}
+		}
+	}
 	LLColor4 name_tag_color = getNameTagColor(is_friend);
 
-	if(isSelf() && gSavedSettings.getBOOL("FSShowOwnTagColor")) name_tag_color=gSavedPerAccountSettings.getColor4("FirestormTagColor");
+	static LLCachedControl<bool> fsShowOwnTagColor(gSavedSettings, "FSShowOwnTagColor");
+	if (isSelf() && fsShowOwnTagColor)
+	{
+		static LLCachedControl<LLColor4> firestormTagColor(gSavedPerAccountSettings, "FirestormTagColor");
+		name_tag_color = firestormTagColor;
+	}
 
 	// Wolfspirit: If we don't need to display a friend,
 	// if we aren't self, if we use colored Clienttags and if we have a color
@@ -4994,9 +5007,11 @@ BOOL LLVOAvatar::processSingleAnimationStateChange( const LLUUID& anim_id, BOOL 
 					//	gAudiop->triggerSound(LLUUID(gSavedSettings.getString("UISndTyping")), 1.0f, LLAudioEngine::AUDIO_TYPE_UI);
 					//}
 					//else
-					if(gSavedSettings.getBOOL("FSPlayTypingSound"))
+					static LLCachedControl<bool> fsPlayTypingSound(gSavedSettings, "FSPlayTypingSound");
+					if (fsPlayTypingSound)
 					{
-						LLUUID sound_id = LLUUID(gSavedSettings.getString("UISndTyping"));
+						static LLCachedControl<std::string> uiSndTyping(gSavedSettings, "UISndTyping");
+						LLUUID sound_id = LLUUID(uiSndTyping);
 						gAudiop->triggerSound(sound_id, getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_SFX, char_pos_global);
 					}
 				}
@@ -5058,7 +5073,7 @@ void LLVOAvatar::resetAnimations()
 // animations.
 LLUUID LLVOAvatar::remapMotionID(const LLUUID& id)
 {
-	BOOL use_new_walk_run = gSavedSettings.getBOOL("UseNewWalkRun");
+	static LLCachedControl<bool> use_new_walk_run(gSavedSettings, "UseNewWalkRun");
 	LLUUID result = id;
 
 	// start special case female walk for female avatars
@@ -6781,7 +6796,9 @@ BOOL LLVOAvatar::isFullyLoaded() const
 
 bool LLVOAvatar::isTooComplex() const
 {
-	if (gSavedSettings.getS32("RenderAvatarComplexityLimit") > 0 && mVisualComplexity >= gSavedSettings.getS32("RenderAvatarComplexityLimit"))
+	static LLCachedControl<S32> renderAvatarComplexityLimit(gSavedSettings, "RenderAvatarComplexityLimit");
+	S32 limit(renderAvatarComplexityLimit);
+	if (limit > 0 && mVisualComplexity >= limit)
 	{
 		return true;
 	}
