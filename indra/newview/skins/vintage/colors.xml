@@ -82,9 +82,19 @@
 		name="SystemChatColor"
 		reference="LtGray" />
 	<color
-		name="TextBgReadOnlyColor"
-		reference="OldGray_63" />
-
+		name="TextBgFocusColor"
+		value="0.784 0.812 0.8 1.0" />
+	<!-- New color - compensate for 0.7 alpha being applied in code :( Black is the best we can do here -->
+	<color
+		name="TextBgSelectedColor"
+		reference="Black" />
+	<!-- New color - This is how TextBgFocusColor should be, too, if it wasn't for the alpha in code -->
+	<color
+		name="LineEditorBgSelectedColor"
+		value="0.212 0.176 0.196 1.0" />
+	<color
+		name="TextBgWriteableColor"
+		value="0.729 0.765 0.745 1.0" />
 	<!-- Default Opaque Floater Background Color -->
 	<color
 		name="DkGray"
