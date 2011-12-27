@@ -434,7 +434,8 @@ void LLStatusBar::refresh()
 	
 	// Disable media toggle if there's no media, parcel media, and no parcel audio
 	// (or if media is disabled)
-	bool button_enabled = (gSavedSettings.getBOOL("AudioStreamingMedia")) && 	// ## Zi: Media/Stream separation
+	static LLCachedControl<bool> audio_streaming_media(gSavedSettings, "AudioStreamingMedia");
+	bool button_enabled = (audio_streaming_media) && 	// ## Zi: Media/Stream separation
 						  (LLViewerMedia::hasInWorldMedia() || LLViewerMedia::hasParcelMedia()	// || LLViewerMedia::hasParcelAudio()	// ## Zi: Media/Stream separation
 						  );
 	mMediaToggle->setEnabled(button_enabled);
@@ -444,7 +445,8 @@ void LLStatusBar::refresh()
 	mMediaToggle->setValue(!any_media_playing);
 
 	// ## Zi: Media/Stream separation
-	button_enabled = (gSavedSettings.getBOOL("AudioStreamingMusic") && LLViewerMedia::hasParcelAudio());
+	static LLCachedControl<bool> audio_streaming_music(gSavedSettings, "AudioStreamingMusic");
+	button_enabled = (audio_streaming_music && LLViewerMedia::hasParcelAudio());
 
 	mStreamToggle->setEnabled(button_enabled);
 	mStreamToggle->setValue(!LLViewerMedia::isParcelAudioPlaying());
@@ -454,7 +456,7 @@ void LLStatusBar::refresh()
 void LLStatusBar::setVisibleForMouselook(bool visible)
 {
 	mTextTime->setVisible(visible);
-	getChild<LLUICtrl>("balance_bg")->setVisible(visible);
+	mBalancePanel->setVisible(visible);
 	mBoxBalance->setVisible(visible);
 	mBtnVolume->setVisible(visible);
 	mStreamToggle->setVisible(visible);		// ## Zi: Media/Stream separation
@@ -885,7 +887,8 @@ void LLStatusBar::updateParcelIcons()
 	if (!agent_region || !agent_parcel)
 		return;
 
-	if (gSavedSettings.getBOOL("NavBarShowParcelProperties"))
+	static LLUICachedControl<bool> show_parcel_properties("NavBarShowParcelProperties", true);
+	if (show_parcel_properties)
 	{
 		LLParcel* current_parcel;
 		LLViewerRegion* selection_region = vpm->getSelectionRegion();
@@ -1085,6 +1088,6 @@ void LLStatusBar::onParcelWLClicked()
 void LLStatusBar::setBackgroundColor( const LLColor4& color )
 {
 	LLPanel::setBackgroundColor(color);
-	getChild<LLPanel>("balance_bg")->setBackgroundColor(color);
+	mBalancePanel->setBackgroundColor(color);
 	getChild<LLPanel>("time_and_media_bg")->setBackgroundColor(color);
 }
