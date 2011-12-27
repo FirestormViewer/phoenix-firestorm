@@ -29,7 +29,11 @@
 				Bewegung:
 			</text>
 			<check_box label="Mit Pfeiltasten bewegen" name="arrow_keys_move_avatar_check"/>
-			<check_box label="Drücken-drücken-halten, um zu rennen" name="tap_tap_hold_to_run"/>
+			<check_box label="AZERTY-Tastaturlayout verwenden" name="FSUseAzertyKeyboardLayout" width="200"/>
+			<text name="FSUseAzertyKeyboardLayout_requires_restart">
+				(Erfordert Neustart)
+			</text>
+			<check_box label="Drücken-drücken-halten, um zu rennen" name="tap_tap_hold_to_run" left_delta="-210"/>
 			<check_box label="Fliegen/Landen beim Drücken von auf/ab" name="automatic_fly" />
 			<check_box label="Soundeffekte beim Teleportieren abspielen" name="PlayTeleportSound"/>
 			<text name="single_click_action_lbl">
