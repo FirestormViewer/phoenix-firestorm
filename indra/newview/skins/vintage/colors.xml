@@ -55,6 +55,12 @@
 		name="MapAvatarFriendColor"
 		reference="Yellow" />
 	<color
+		name="MenuBarBgColor"
+		reference="DkGray" />
+	<color
+		name="MenuDefaultBgColor"
+		reference="Black" />
+	<color
 		name="MultiSliderDisabledThumbColor"
 		reference="Unused?" />
 	<color

@@ -493,6 +493,8 @@ void init_menus()
 	///
 	LLColor4 color;
 
+	// do not set colors in code, let the skin decide. -Zi
+	/*
 	LLColor4 context_menu_color = LLUIColorTable::instance().getColor("MenuPopupBgColor");
 	
 	gMenuAvatarSelf->setBackgroundColor( context_menu_color );
@@ -505,19 +507,22 @@ void init_menus()
 
 	color = LLUIColorTable::instance().getColor( "MenuPopupBgColor" );
 	gPopupMenuView->setBackgroundColor( color );
+	*/
 
-	// If we are not in production, use a different color to make it apparent.
-	if (!LLGridManager::getInstance()->isInSLBeta())
-	{
-		color = LLUIColorTable::instance().getColor( "MenuBarBgColor" );
-	}
-	else
-	{
-		color = LLUIColorTable::instance().getColor( "MenuNonProductionBgColor" );
-	}
 	gMenuBarView = LLUICtrlFactory::getInstance()->createFromFile<LLMenuBarGL>("menu_viewer.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	gMenuBarView->setRect(LLRect(0, top, 0, top - MENU_BAR_HEIGHT));
-	gMenuBarView->setBackgroundColor( color );
+
+	// If we are not in production, use a different color to make it apparent.
+	// ONLY change the color IF we are in beta. Otherwise leave it alone so it can use the skinned color. -Zi
+	if(LLGridManager::getInstance()->isInSLBeta())
+/*	{
+		color = LLUIColorTable::instance().getColor( "MenuBarBgColor" );
+	}
+	else */
+	{
+		color = LLUIColorTable::instance().getColor( "MenuNonProductionBgColor" );
+		gMenuBarView->setBackgroundColor( color );
+	}
 
 	LLView* menu_bar_holder = gViewerWindow->getRootView()->getChildView("menu_bar_holder");
 	menu_bar_holder->addChild(gMenuBarView);
@@ -559,7 +564,8 @@ void init_menus()
 	LLRect menuBarRect = gLoginMenuBarView->getRect();
 	menuBarRect.setLeftTopAndSize(0, menu_bar_holder->getRect().getHeight(), menuBarRect.getWidth(), menuBarRect.getHeight());
 	gLoginMenuBarView->setRect(menuBarRect);
-	gLoginMenuBarView->setBackgroundColor( color );
+	// do not set colors in code, always lat the skin decide. -Zi
+	// gLoginMenuBarView->setBackgroundColor( color );
 	menu_bar_holder->addChild(gLoginMenuBarView);
 	
 	// tooltips are on top of EVERYTHING, including menus
