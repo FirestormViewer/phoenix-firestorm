@@ -204,6 +204,8 @@ private:
 	 */
 	void updateParcelInfoText();
 
+	void onBuyLandClicked();
+
 public:
 
 	/**
@@ -281,6 +283,7 @@ private:
 	LLParcelChangeObserver*	mParcelChangedObserver;
 	LLButton* 				mPWLBtn;
 	LLPanel*				mBalancePanel;
+	LLButton*				mBuyParcelBtn;
 
 	boost::signals2::connection	mParcelPropsCtrlConnection;
 	boost::signals2::connection	mShowCoordsCtrlConnection;

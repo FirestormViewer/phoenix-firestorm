@@ -83,7 +83,7 @@
 #include "llappviewer.h"
 #include "lltrans.h"
 
-
+#include "rlvhandler.h"
 #include "kcwlinterface.h"
 
 // library includes
@@ -305,6 +305,9 @@ BOOL LLStatusBar::postBuild()
 
 	mDamageText = getChild<LLTextBox>("damage_text");
 
+	mBuyParcelBtn = getChild<LLButton>("buy_land_btn");
+	mBuyParcelBtn->setClickedCallback(boost::bind(&LLStatusBar::onBuyLandClicked, this));
+
 	mPWLBtn = getChild<LLButton>("status_wl_btn");
 	mPWLBtn->setClickedCallback(boost::bind(&LLStatusBar::onParcelWLClicked, this));
 
@@ -451,6 +454,8 @@ void LLStatusBar::refresh()
 	mStreamToggle->setEnabled(button_enabled);
 	mStreamToggle->setValue(!LLViewerMedia::isParcelAudioPlaying());
 	// ## Zi: Media/Stream separation
+
+	mParcelInfoText->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
 }
 
 void LLStatusBar::setVisibleForMouselook(bool visible)
@@ -915,6 +920,7 @@ void LLStatusBar::updateParcelIcons()
 		bool allow_build	= vpm->allowAgentBuild(current_parcel); // true when anyone is allowed to build. See EXT-4610.
 		bool allow_scripts	= vpm->allowAgentScripts(agent_region, current_parcel);
 		bool allow_damage	= vpm->allowAgentDamage(agent_region, current_parcel);
+		bool is_for_sale	= (!current_parcel->isPublic() && vpm->canAgentBuyParcel(current_parcel, false));
 		bool has_pwl		= KCWindlightInterface::instance().getWLset();
 
 		// Most icons are "block this ability"
@@ -925,6 +931,7 @@ void LLStatusBar::updateParcelIcons()
 		mParcelIcon[SCRIPTS_ICON]->setVisible( !allow_scripts );
 		mParcelIcon[DAMAGE_ICON]->setVisible(  allow_damage );
 		mDamageText->setVisible(allow_damage);
+		mBuyParcelBtn->setVisible(is_for_sale);
 		mPWLBtn->setVisible(has_pwl);
 		mPWLBtn->setEnabled(has_pwl);
 
@@ -975,6 +982,7 @@ void LLStatusBar::layoutParcelIcons()
 	{
 		left = layoutWidget(mParcelIcon[i], left);
 	}
+	left = layoutWidget(mBuyParcelBtn, left);
 	left = layoutWidget(mPWLBtn, left);
 
 	LLRect infoTextRect = mParcelInfoText->getRect();
@@ -1051,16 +1059,19 @@ void LLStatusBar::onContextMenuItemClicked(const LLSD::String& item)
 {
 	if (item == "landmark")
 	{
-		LLViewerInventoryItem* landmark = LLLandmarkActions::findLandmarkForAgentPos();
+		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+		{
+			LLViewerInventoryItem* landmark = LLLandmarkActions::findLandmarkForAgentPos();
 
-		if(landmark == NULL)
-		{
-			LLSideTray::getInstance()->showPanel("panel_places", LLSD().with("type", "create_landmark"));
-		}
-		else
-		{
-			LLSideTray::getInstance()->showPanel("panel_places",
-					LLSD().with("type", "landmark").with("id",landmark->getUUID()));
+			if(landmark == NULL)
+			{
+				LLSideTray::getInstance()->showPanel("panel_places", LLSD().with("type", "create_landmark"));
+			}
+			else
+			{
+				LLSideTray::getInstance()->showPanel("panel_places",
+						LLSD().with("type", "landmark").with("id",landmark->getUUID()));
+			}
 		}
 	}
 	else if (item == "copy")
@@ -1075,6 +1086,10 @@ void LLStatusBar::onContextMenuItemClicked(const LLSD::String& item)
 
 void LLStatusBar::onInfoButtonClicked()
 {
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+	{
+		return;
+	}
 	//LLSideTray::getInstance()->showPanel("panel_places", LLSD().with("type", "agent"));
 	LLFloaterReg::showInstance("about_land");
 }
@@ -1082,6 +1097,15 @@ void LLStatusBar::onInfoButtonClicked()
 void LLStatusBar::onParcelWLClicked()
 {
 	KCWindlightInterface::instance().onClickWLStatusButton();
+}
+
+void LLStatusBar::onBuyLandClicked()
+{
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+	{
+		return;
+	}
+	handle_buy_land();
 }
 
 // hack -KC
