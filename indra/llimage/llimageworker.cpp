@@ -45,7 +45,7 @@ LLImageDecodeThread::~LLImageDecodeThread()
 	delete mCreationMutex ;
 }
 
-S32 LLImageDecodeThread::update(U32 max_time_ms)
+S32 LLImageDecodeThread::update(F32 max_time_ms)
 {
 	LLMutexLock lock(mCreationMutex);
 	for (creation_list_t::iterator iter = mCreationList.begin();
