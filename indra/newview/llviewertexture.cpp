@@ -422,8 +422,6 @@ static LLFastTimer::DeclareTimer FTM_TEXTURE_MEMORY_CHECK("Memory Check");
 //static 
 bool LLViewerTexture::isMemoryForTextureLow()
 {
-	LLFastTimer t(FTM_TEXTURE_MEMORY_CHECK);
-
 	const F32 WAIT_TIME = 1.0f ; //second
 	static LLFrameTimer timer ;
 
@@ -432,6 +430,8 @@ bool LLViewerTexture::isMemoryForTextureLow()
 		return false;
 	}
 	timer.reset() ;
+
+	LLFastTimer t(FTM_TEXTURE_MEMORY_CHECK);
 
 	const S32 MIN_FREE_TEXTURE_MEMORY = 5 ; //MB
 	const S32 MIN_FREE_MAIN_MEMORy = 100 ; //MB	
