@@ -99,5 +99,6 @@
 	<texture name="Parcel_ScriptsNo_Light"	file_name="legacy/status_no_scripts.tga" />
 	<texture name="Parcel_Voice_Light"		file_name="legacy/status_voice.png" />
 	<texture name="Parcel_VoiceNo_Light"	file_name="legacy/status_no_voice.png" />
+	<texture name="Parcel_SeeAVsOff_Dark"	file_name="legacy/status_SeeAVsOff.tga" />
 
 </textures>

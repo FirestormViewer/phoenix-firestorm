@@ -702,7 +702,8 @@ void LLStatusBar::onClickStreamToggle(void* data)
 			//gAudiop->pauseInternetStream(false);
 			gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
 		}
-		else {
+		else
+		{
 			if (gSavedSettings.getBOOL("MediaEnableFilter"))
 			{
 				LLViewerParcelMedia::filterAudioUrl(LLViewerMedia::getParcelAudioURL());
@@ -767,6 +768,7 @@ void LLStatusBar::initParcelIcons()
 	mParcelIcon[BUILD_ICON] = getChild<LLIconCtrl>("build_icon");
 	mParcelIcon[SCRIPTS_ICON] = getChild<LLIconCtrl>("scripts_icon");
 	mParcelIcon[DAMAGE_ICON] = getChild<LLIconCtrl>("damage_icon");
+	mParcelIcon[SEE_AVATARS_ICON] = getChild<LLIconCtrl>("see_avs_icon");
 
 	mParcelIcon[VOICE_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, VOICE_ICON));
 	mParcelIcon[FLY_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, FLY_ICON));
@@ -774,6 +776,7 @@ void LLStatusBar::initParcelIcons()
 	mParcelIcon[BUILD_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, BUILD_ICON));
 	mParcelIcon[SCRIPTS_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, SCRIPTS_ICON));
 	mParcelIcon[DAMAGE_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, DAMAGE_ICON));
+	mParcelIcon[SEE_AVATARS_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, SEE_AVATARS_ICON));
 
 	mDamageText->setText(LLStringExplicit("100%"));
 }
@@ -920,6 +923,7 @@ void LLStatusBar::updateParcelIcons()
 		bool allow_build	= vpm->allowAgentBuild(current_parcel); // true when anyone is allowed to build. See EXT-4610.
 		bool allow_scripts	= vpm->allowAgentScripts(agent_region, current_parcel);
 		bool allow_damage	= vpm->allowAgentDamage(agent_region, current_parcel);
+		BOOL see_avatars	= current_parcel->getSeeAVs();
 		bool is_for_sale	= (!current_parcel->isPublic() && vpm->canAgentBuyParcel(current_parcel, false));
 		bool has_pwl		= KCWindlightInterface::instance().getWLset();
 
@@ -930,6 +934,7 @@ void LLStatusBar::updateParcelIcons()
 		mParcelIcon[BUILD_ICON]->setVisible(   !allow_build );
 		mParcelIcon[SCRIPTS_ICON]->setVisible( !allow_scripts );
 		mParcelIcon[DAMAGE_ICON]->setVisible(  allow_damage );
+		mParcelIcon[SEE_AVATARS_ICON]->setVisible(!see_avatars);
 		mDamageText->setVisible(allow_damage);
 		mBuyParcelBtn->setVisible(is_for_sale);
 		mPWLBtn->setVisible(has_pwl);
@@ -1043,6 +1048,9 @@ void LLStatusBar::onParcelIconClick(EParcelIcon icon)
 	}
 	case DAMAGE_ICON:
 		LLNotificationsUtil::add("NotSafe");
+		break;
+	case SEE_AVATARS_ICON:
+		LLNotificationsUtil::add("SeeAvatars");
 		break;
 	case ICON_COUNT:
 		break;
