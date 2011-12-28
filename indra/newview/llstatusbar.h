@@ -249,6 +249,8 @@ private:
 	 */
 	void setParcelInfoText(const std::string& new_text);
 
+	void updateNetstatVisibility(const LLSD& data);
+
 private:
 	LLTextBox	*mTextBalance;
 	LLTextBox	*mTextHealth;
@@ -285,6 +287,7 @@ private:
 	LLButton* 				mPWLBtn;
 	LLPanel*				mBalancePanel;
 	LLButton*				mBuyParcelBtn;
+	LLPanel*				mTimeMediaPanel;
 
 	boost::signals2::connection	mParcelPropsCtrlConnection;
 	boost::signals2::connection	mShowCoordsCtrlConnection;

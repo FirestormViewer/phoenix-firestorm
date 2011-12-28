@@ -163,6 +163,8 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	LLUICtrl::CommitCallbackRegistry::currentRegistrar()
 			.add("TopInfoBar.Action", boost::bind(&LLStatusBar::onContextMenuItemClicked, this, _2));
 
+	gSavedSettings.getControl("ShowNetStats")->getSignal()->connect(boost::bind(&LLStatusBar::updateNetstatVisibility, this, _2));
+
 	buildFromFile("panel_status_bar.xml");
 }
 
@@ -312,6 +314,7 @@ BOOL LLStatusBar::postBuild()
 	mPWLBtn->setClickedCallback(boost::bind(&LLStatusBar::onParcelWLClicked, this));
 
 	mBalancePanel = getChild<LLPanel>("balance_bg");
+	mTimeMediaPanel = getChild<LLPanel>("time_and_media_bg");
 
 	initParcelIcons();
 
@@ -339,6 +342,10 @@ BOOL LLStatusBar::postBuild()
 	mode_combo.setValue(gSavedSettings.getString("SessionSettingsFile"));
 	mode_combo.setCommitCallback(boost::bind(&LLStatusBar::onModeChange, this, getChild<LLUICtrl>("mode_combo")->getValue(), _2));
 
+	if (!gSavedSettings.getBOOL("ShowNetStats"))
+	{
+		updateNetstatVisibility(LLSD(FALSE));
+	}
 
 	return TRUE;
 }
@@ -421,9 +428,6 @@ void LLStatusBar::refresh()
 	{
 		updateParcelPanel();
 	}
-
-	mSGBandwidth->setVisible(net_stats_visible);
-	mSGPacketLoss->setVisible(net_stats_visible);
 
 	// It seems this button does no longer exist. I believe this was an overlay button on top of
 	// the net stats graphs to call up the lag meter floater. In case someone revives this, make
@@ -1121,5 +1125,23 @@ void LLStatusBar::setBackgroundColor( const LLColor4& color )
 {
 	LLPanel::setBackgroundColor(color);
 	mBalancePanel->setBackgroundColor(color);
-	getChild<LLPanel>("time_and_media_bg")->setBackgroundColor(color);
+	mTimeMediaPanel->setBackgroundColor(color);
+}
+
+void LLStatusBar::updateNetstatVisibility(const LLSD& data)
+{
+	const S32 NETSTAT_WIDTH = (SIM_STAT_WIDTH + 2) * 2;
+	BOOL showNetStat = data.asBoolean();
+	S32 translateFactor = (showNetStat ? -1 : 1);
+
+	mSGBandwidth->setVisible(showNetStat);
+	mSGPacketLoss->setVisible(showNetStat);
+
+	LLRect rect = mTimeMediaPanel->getRect();
+	rect.translate(NETSTAT_WIDTH * translateFactor, 0);
+	mTimeMediaPanel->setRect(rect);
+
+	rect = mBalancePanel->getRect();
+	rect.translate(NETSTAT_WIDTH * translateFactor, 0);
+	mBalancePanel->setRect(rect);
 }
