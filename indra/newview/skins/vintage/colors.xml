@@ -70,6 +70,9 @@
 		name="MultiSliderThumbCenterSelectedColor"
 		reference="Unused?" />
 	<color
+		name="NetMapBackgroundColor"
+		value="0.0 0.0 0.0 0.6" />
+	<color
 		name="ObjectChatColor"
 		value="0.699 0.899 0.699 1" />
 	<color
