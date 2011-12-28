@@ -219,12 +219,16 @@ BOOL LLNearbyChat::postBuild()
 			getDockTongue(), LLDockControl::TOP, boost::bind(&LLNearbyChat::getAllowedRect, this, _1)));
 	}
 
+	// This doesn't seem to apply anymore? It makes the chat and spin box colors
+	// appear wrong when focused and unfocused, so disable this. -Zi
+#if 0
         //fix for EXT-4621 
         //chrome="true" prevents floater from stilling capture
         setIsChrome(true);
 	//chrome="true" hides floater caption 
 	if (mDragHandle)
 		mDragHandle->setTitleVisible(TRUE);
+#endif
 	
 	return true;
 }
@@ -739,6 +743,9 @@ BOOL LLNearbyChat::getVisible()
 	}
 }
 
+// This doesn't seem to apply anymore? It makes the chat and spin box colors
+// appear wrong when focused and unfocused, so disable this. -Zi
+#if 0
 ////////////////////////////////////////////////////////////////////////////////
 //
 void LLNearbyChat::onFocusReceived()
@@ -779,3 +786,4 @@ void LLNearbyChat::draw()
 
 	LLDockableFloater::draw();
 }
+#endif

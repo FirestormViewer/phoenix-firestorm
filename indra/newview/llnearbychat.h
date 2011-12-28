@@ -48,12 +48,16 @@ public:
 	void	onNearbyChatContextMenuItemClicked(const LLSD& userdata);
 	bool	onNearbyChatCheckContextMenuItem(const LLSD& userdata);
 
+	// This doesn't seem to apply anymore? It makes the chat and spin box colors
+	// appear wrong when focused and unfocused, so disable this. -Zi
+#if 0
 	virtual BOOL	handleMouseDown(S32 x, S32 y, MASK mask);
 	virtual void	draw();
 
 	// focus overrides
 	/*virtual*/ void	onFocusLost();
 	/*virtual*/ void	onFocusReceived();
+#endif	
 	
 	/*virtual*/ void	onOpen	(const LLSD& key);
 
