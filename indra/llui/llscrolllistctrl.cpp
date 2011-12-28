@@ -1448,7 +1448,8 @@ void LLScrollListCtrl::drawItems()
 				}
 				else 
 				{
-					if (mDrawStripes && (line % 2 == 0) && (max_columns > 1))
+					// Why no stripes in single columns? This should be decided by the skin. -Zi
+					if (mDrawStripes && (line % 2 == 0)) // && (max_columns > 1))
 					{
 						bg_color = mBgStripeColor.get();
 					}
