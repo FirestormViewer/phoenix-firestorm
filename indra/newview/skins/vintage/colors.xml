@@ -15,6 +15,26 @@
 	<color
 		name="OldGray_63"
 		value="0.243 0.243 0.243 0.63" />
+	<!-- Focused Text editors, scroll lists, notecards etc. -->
+	<color
+		name="UIControlBGLightFocused"
+		value="0.784 0.812 0.8 1.0" />
+	<!-- Scroll list stripes, always focused -->
+	<color
+		name="UIControlBGLightStripe"
+		value="0.723 0.75 0.734 1.0" />
+	<!-- Scroll list stripe hover, always focused -->
+	<color
+		name="UIControlBGLightHover"
+		value="0.746 0.766 0.766 1.0" />
+	<!-- UI control highlight, always focused -->
+	<color
+		name="UIControlBGSelected"
+		value="0.551 0.566 0.762 1.0" />
+	<!-- Unfocused Text editors, scroll lists, notecards etc. -->
+	<color
+		name="UIControlBGLightUnfocused"
+		value="0.727 0.762 0.742 1.0" />
 	<color
 		name="BottomTrayAlphaColor"
 		reference="ltgrey123" />
@@ -23,7 +43,7 @@
 		value="0.92 0.92 1 0.78" />
 	<color
 		name="TextFgColor"
-		value="0.102 0.102 0.102 1" />
+		reference="Black" />
 	<color
 		name="ChicletFlashColor"
 		value="SchemeLightest" />
@@ -76,17 +96,41 @@
 		name="ObjectChatColor"
 		value="0.699 0.899 0.699 1" />
 	<color
-		name="ScrollBGStripeColor"
-		reference="White_10" />
-	<color
 	 name="SL-Background"
 	 value="0.425 0.425 0.425 1" />
 	<color
 		name="SystemChatColor"
 		reference="LtGray" />
 	<color
+		name="ScrollUnselectedColor"
+		reference="TextFgColor" />
+	<color
+		name="ScrollSelectedFGColor"
+		reference="TextFgColor" />
+	<color
+		name="ScrollSelectedBGColor"
+		reference="UIControlBGSelected" />
+	<color
+		name="ScrollDisabledColor"
+		reference="UIControlBGLightFocused" />
+	<color
+		name="ScrollBgWriteableColor"
+		reference="UIControlBGLightFocused" />
+	<color
+		name="ScrollBgReadOnlyColor"
+		reference="UIControlBGLightFocused" />
+	<color
+		name="ScrollBGStripeColor"
+		reference="UIControlBGLightStripe" />
+	<color
+		name="ScrollHoveredColor"
+		reference="UIControlBGLightHover" />
+	<color
+		name="ScrollHighlightedColor"
+		reference="UIControlBGHighlight" />
+	<color
 		name="TextBgFocusColor"
-		value="0.784 0.812 0.8 1.0" />
+		reference="UIControlBGLightFocused" />
 	<!-- New color - compensate for 0.7 alpha being applied in code :( Black is the best we can do here -->
 	<color
 		name="TextBgSelectedColor"
