@@ -1170,19 +1170,22 @@ void LLPanelPeople::updateNearbyList()
 		row["value"] = avId;
 		row["columns"][0]["column"] = "name";
 		row["columns"][0]["value"] = avName;
-		row["columns"][1]["column"] = "flags";
-		row["columns"][1]["value"] = avFlagStr;
-		row["columns"][2]["column"] = "age";
-		row["columns"][2]["value"] = avAgeStr;
-		row["columns"][3]["column"] = "seen";
-		row["columns"][3]["value"] = avSeenStr;
-		row["columns"][4]["column"] = "range";
-		row["columns"][4]["value"] = (avRange > -1 ? llformat("%3.2f", avRange) : llformat(">%3.2f", drawRadius));
-		row["columns"][5]["column"] = "uuid"; // invisible column for referencing av-key the row belongs to
-		row["columns"][5]["value"] = avId;
+		row["columns"][1]["column"] = "in_region";
+		row["columns"][1]["type"] = "icon";
+		row["columns"][1]["value"] = (regionSelf == avRegion ? "avatar_in_region" : "");
+		row["columns"][2]["column"] = "flags";
+		row["columns"][2]["value"] = avFlagStr;
+		row["columns"][3]["column"] = "age";
+		row["columns"][3]["value"] = avAgeStr;
+		row["columns"][4]["column"] = "seen";
+		row["columns"][4]["value"] = avSeenStr;
+		row["columns"][5]["column"] = "range";
+		row["columns"][5]["value"] = (avRange > -1 ? llformat("%3.2f", avRange) : llformat(">%3.2f", drawRadius));
+		row["columns"][6]["column"] = "uuid"; // invisible column for referencing av-key the row belongs to
+		row["columns"][6]["value"] = avId;
 		LLScrollListItem* radarRow = mRadarList->addElement(row);
 		//AO: Set any range colors / styles
-		LLScrollListText* radarRangeCell = (LLScrollListText*)radarRow->getColumn(4);
+		LLScrollListText* radarRangeCell = (LLScrollListText*)radarRow->getColumn(5);
 		if (avRange > -1)
 		{
 			if (avRange <= CHAT_NORMAL_RADIUS)

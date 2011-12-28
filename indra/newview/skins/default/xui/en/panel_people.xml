@@ -163,6 +163,10 @@ Looking for people to hang out with? Use the search box to find topics or conten
 		         relative_width="0.45" />
 		        <radar_list.columns
 		         label=""
+		         name="in_region"
+		         relative_width="0.05" />
+		        <radar_list.columns
+		         label=""
 		         name="flags"
 		         relative_width="0.05" />
 		        <radar_list.columns
