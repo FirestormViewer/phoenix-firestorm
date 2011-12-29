@@ -1382,7 +1382,7 @@ void LLScrollListCtrl::drawItems()
 
 	LLGLSUIDefault gls_ui;
 	
-	F32 alpha = getDrawContext().mAlpha;
+	F32 alpha = getCurrentTransparency(); // Don't rely on the current getDrawContext().mAlpha value -Zi
 
 	{
 		LLLocalClipRect clip(mItemListRect);
