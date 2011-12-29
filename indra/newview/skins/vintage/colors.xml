@@ -102,6 +102,9 @@
 		name="SystemChatColor"
 		reference="LtGray" />
 	<color
+		name="ComboListBgColor"
+		value="0.9 0.9 0.9 1.0" />
+	<color
 		name="ScrollUnselectedColor"
 		reference="TextFgColor" />
 	<color
