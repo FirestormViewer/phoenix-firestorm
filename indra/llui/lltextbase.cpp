@@ -2724,7 +2724,7 @@ LLNormalTextSegment::LLNormalTextSegment( const LLColor4& color, S32 start, S32 
 	mToken(NULL),
 	mEditor(editor)
 {
-	mStyle = new LLStyle(LLStyle::Params().visible(is_visible).color(color));
+	mStyle = new LLStyle(LLStyle::Params().visible(is_visible).color(color).font(editor.getDefaultFont()));
 
 	mFontHeight = llceil(mStyle->getFont()->getLineHeight());
 }
