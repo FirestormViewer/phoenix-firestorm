@@ -907,7 +907,7 @@ void LLPanelPeople::updateNearbyList()
 	S32 lastScroll = mRadarList->getScrollPos();
 	if (lastRadarSelectedItem)
 	{
-		selected_id = lastRadarSelectedItem->getColumn(5)->getValue().asUUID();
+		selected_id = lastRadarSelectedItem->getColumn("uuid")->getValue().asUUID();
 	}
 	mRadarList->clearRows();
 	mRadarEnterAlerts.clear();
@@ -1184,36 +1184,56 @@ void LLPanelPeople::updateNearbyList()
 		row["columns"][6]["column"] = "uuid"; // invisible column for referencing av-key the row belongs to
 		row["columns"][6]["value"] = avId;
 		LLScrollListItem* radarRow = mRadarList->addElement(row);
+
 		//AO: Set any range colors / styles
-		LLScrollListText* radarRangeCell = (LLScrollListText*)radarRow->getColumn(5);
+		LLScrollListText* radarRangeCell = (LLScrollListText*)radarRow->getColumn(5); // Ansariel: Use index-based access here because of speed
 		if (avRange > -1)
 		{
 			if (avRange <= CHAT_NORMAL_RADIUS)
-				radarRangeCell->setColor(LLUIColorTable::instance().getColor("AvatarListItemChatRange",LLColor4::red));
+			{
+				radarRangeCell->setColor(LLUIColorTable::instance().getColor("AvatarListItemChatRange", LLColor4::red));
+			}
 			else if (avRange <= CHAT_SHOUT_RADIUS)
-				radarRangeCell->setColor(LLUIColorTable::instance().getColor("AvatarListItemShoutRange",LLColor4::white));
+			{
+				radarRangeCell->setColor(LLUIColorTable::instance().getColor("AvatarListItemShoutRange", LLColor4::white));
+			}
 			else 
-				radarRangeCell->setColor(LLUIColorTable::instance().getColor("AvatarListItemBeyondShoutRange",LLColor4::white));
+			{
+				radarRangeCell->setColor(LLUIColorTable::instance().getColor("AvatarListItemBeyondShoutRange", LLColor4::white));
+			}
 		}
 		else 
-			radarRangeCell->setColor(LLUIColorTable::instance().getColor("AvatarListItemBeyondShoutRange",LLColor4::white));
-		if (avRange <= drawRadius && avRange > -1)
+		{
+			radarRangeCell->setColor(LLUIColorTable::instance().getColor("AvatarListItemBeyondShoutRange", LLColor4::white));
+		}
+
+		// Check if avatar is in draw distance and a VOAvatar instance actually exists
+		if (avRange <= drawRadius && avRange > -1 && gObjectList.findObject(avId))
+		{
 			radarRangeCell->setFontStyle(LLFontGL::BOLD);
-		else {
+		}
+		else
+		{
 			radarRangeCell->setFontStyle(LLFontGL::NORMAL);
 		}
+
 		//AO: Set friends colors / styles
-		LLScrollListText* radarNameCell = (LLScrollListText*)radarRow->getColumn(0);
+		LLScrollListText* radarNameCell = (LLScrollListText*)radarRow->getColumn(0); // Ansariel: Use index-based access here because of speed
 		const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(avId);
 		if (relation)
+		{
 			radarNameCell->setFontStyle(LLFontGL::BOLD);
+		}
 		else
+		{
 			radarNameCell->setFontStyle(LLFontGL::NORMAL);
-		
-		if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId,FALSE,FALSE,TRUE))
+		}
+
+		if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId, FALSE, FALSE, TRUE))
 		{
 			radarNameCell->setColor(LGGContactSets::getInstance()->getFriendColor(avId));
 		}
+
 		//AO: Preserve selection
 		if (lastRadarSelectedItem)
 		{
@@ -1562,7 +1582,7 @@ LLUUID LLPanelPeople::getCurrentItemID() const
 	{
 		LLScrollListItem* item = mRadarList->getFirstSelected();
 		if (item)
-			return item->getColumn(5)->getValue().asUUID();
+			return item->getColumn("uuid")->getValue().asUUID();
 		else 
 			return LLUUID::null;
 		//return mNearbyList->getSelectedUUID();
@@ -1594,7 +1614,7 @@ void LLPanelPeople::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 		//mNearbyList->getSelectedUUIDs(selected_uuids);
 		LLScrollListItem* item = mRadarList->getFirstSelected();
 		if (item)
-			selected_uuids.push_back(item->getColumn(5)->getValue().asUUID());
+			selected_uuids.push_back(item->getColumn("name")->getValue().asUUID());
 	}
 	else if (cur_tab == RECENT_TAB_NAME)
 		mRecentList->getSelectedUUIDs(selected_uuids);
@@ -1766,17 +1786,18 @@ void LLPanelPeople::onNearbyListDoubleClicked(LLUICtrl* ctrl)
 void LLPanelPeople::onRadarListDoubleClicked()
 {
 	LLScrollListItem* item = mRadarList->getFirstSelected();
-	LLUUID clicked_id = item->getColumn(5)->getValue().asUUID();
-	
-	F32 range = (F32)item->getColumn(4)->getValue().asReal();
-	if (range > gSavedSettings.getF32("RenderFarClip"))
+	LLUUID clicked_id = item->getColumn("uuid")->getValue().asUUID();
+
+	if (gObjectList.findObject(clicked_id))
 	{
-		LLStringUtil::format_map_t args;
-		args["AVATARNAME"] = item->getColumn(0)->getValue().asString();
-		reportToNearbyChat(getString("camera_no_focus", args));
+		LLAvatarActions::zoomIn(clicked_id);
 	}
 	else
-		LLAvatarActions::zoomIn(clicked_id);
+	{
+		LLStringUtil::format_map_t args;
+		args["AVATARNAME"] = item->getColumn("name")->getValue().asString();
+		reportToNearbyChat(getString("camera_no_focus", args));
+	}
 }
 
 void LLPanelPeople::onAvatarListCommitted(LLAvatarList* list)
