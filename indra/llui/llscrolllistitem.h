@@ -105,6 +105,9 @@ public:
 
 	LLScrollListCell *getColumn(const S32 i) const;
 
+	// Ansariel: Return LLScrollListCell by name
+	LLScrollListCell *getColumn(const std::string& name) const;
+
 	std::string getContentsCSV() const;
 
 	virtual void draw(const LLRect& rect, const LLColor4& fg_color, const LLColor4& bg_color, const LLColor4& highlight_color, S32 column_padding);
