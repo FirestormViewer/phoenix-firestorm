@@ -45,6 +45,9 @@
 		name="TextFgColor"
 		reference="Black" />
 	<color
+		name="TextFgDisabledColor"
+		reference="Black_25" />
+	<color
 		name="ChicletFlashColor"
 		value="SchemeLightest" />
 	<color
@@ -107,33 +110,42 @@
 	<color
 		name="InspectorTipTextColor"
 		reference="TextFgColor" />
+	<!-- Normal scroll list item text color -->
 	<color
 		name="ScrollUnselectedColor"
 		reference="TextFgColor" />
+	<!-- Selected scroll list item text color -->
 	<color
 		name="ScrollSelectedFGColor"
 		reference="TextFgColor" />
+	<!-- The currently selected scroll list item's background color -->
 	<color
 		name="ScrollSelectedBGColor"
 		reference="UIControlBGSelected" />
+	<!-- A disabled line in the scroll list gets this text color -->
 	<color
 		name="ScrollDisabledColor"
-		reference="UIControlBGLightFocused" />
+		reference="TextFgDisabledColor" />
+	<!-- The standard, unselected scroll list item background, also overall background -->
 	<color
 		name="ScrollBgWriteableColor"
 		reference="UIControlBGLightFocused" />
+	<!-- A disabled line in the scroll list gets this background color -->
 	<color
 		name="ScrollBgReadOnlyColor"
 		reference="UIControlBGLightFocused" />
+	<!-- Every other unselected line gets this color -->
 	<color
 		name="ScrollBGStripeColor"
 		reference="UIControlBGLightStripe" />
+	<!-- The currently hovered over scroll list item -->
 	<color
 		name="ScrollHoveredColor"
 		reference="UIControlBGLightHover" />
+	<!-- Unknown use, some kind of debug border color used in llview.cpp -->
 	<color
 		name="ScrollHighlightedColor"
-		reference="UIControlBGHighlight" />
+		reference="Unused?" />
 	<color
 		name="ToolTipTextColor"
 		reference="TextFgColor" />
