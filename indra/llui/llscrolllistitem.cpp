@@ -101,22 +101,6 @@ LLScrollListCell* LLScrollListItem::getColumn(const S32 i) const
 	return NULL;
 }
 
-// Ansariel: Return LLScrollListCell by name
-LLScrollListCell* LLScrollListItem::getColumn(const std::string& name) const
-{
-	std::vector<LLScrollListCell *>::const_iterator it = mColumns.begin();
-
-	for (; it < mColumns.end(); it++)
-	{
-		if ((*it)->getName() == name)
-		{
-			return (*it);
-		}
-	}
-
-	return NULL;
-}
-
 std::string LLScrollListItem::getContentsCSV() const
 {
 	std::string ret;

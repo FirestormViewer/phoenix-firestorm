@@ -907,7 +907,7 @@ void LLPanelPeople::updateNearbyList()
 	S32 lastScroll = mRadarList->getScrollPos();
 	if (lastRadarSelectedItem)
 	{
-		selected_id = lastRadarSelectedItem->getColumn("uuid")->getValue().asUUID();
+		selected_id = lastRadarSelectedItem->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID();
 	}
 	mRadarList->clearRows();
 	mRadarEnterAlerts.clear();
@@ -1186,7 +1186,7 @@ void LLPanelPeople::updateNearbyList()
 		LLScrollListItem* radarRow = mRadarList->addElement(row);
 
 		//AO: Set any range colors / styles
-		LLScrollListText* radarRangeCell = (LLScrollListText*)radarRow->getColumn(5); // Ansariel: Use index-based access here because of speed
+		LLScrollListText* radarRangeCell = (LLScrollListText*)radarRow->getColumn(mRadarList->getColumn("range")->mIndex);
 		if (avRange > -1)
 		{
 			if (avRange <= CHAT_NORMAL_RADIUS)
@@ -1218,7 +1218,7 @@ void LLPanelPeople::updateNearbyList()
 		}
 
 		//AO: Set friends colors / styles
-		LLScrollListText* radarNameCell = (LLScrollListText*)radarRow->getColumn(0); // Ansariel: Use index-based access here because of speed
+		LLScrollListText* radarNameCell = (LLScrollListText*)radarRow->getColumn(mRadarList->getColumn("name")->mIndex);
 		const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(avId);
 		if (relation)
 		{
@@ -1582,7 +1582,7 @@ LLUUID LLPanelPeople::getCurrentItemID() const
 	{
 		LLScrollListItem* item = mRadarList->getFirstSelected();
 		if (item)
-			return item->getColumn("uuid")->getValue().asUUID();
+			return item->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID();
 		else 
 			return LLUUID::null;
 		//return mNearbyList->getSelectedUUID();
@@ -1614,7 +1614,7 @@ void LLPanelPeople::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 		//mNearbyList->getSelectedUUIDs(selected_uuids);
 		LLScrollListItem* item = mRadarList->getFirstSelected();
 		if (item)
-			selected_uuids.push_back(item->getColumn("name")->getValue().asUUID());
+			selected_uuids.push_back(item->getColumn(mRadarList->getColumn("name")->mIndex)->getValue().asUUID());
 	}
 	else if (cur_tab == RECENT_TAB_NAME)
 		mRecentList->getSelectedUUIDs(selected_uuids);
@@ -1786,7 +1786,7 @@ void LLPanelPeople::onNearbyListDoubleClicked(LLUICtrl* ctrl)
 void LLPanelPeople::onRadarListDoubleClicked()
 {
 	LLScrollListItem* item = mRadarList->getFirstSelected();
-	LLUUID clicked_id = item->getColumn("uuid")->getValue().asUUID();
+	LLUUID clicked_id = item->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID();
 
 	if (gObjectList.findObject(clicked_id))
 	{
@@ -1795,7 +1795,7 @@ void LLPanelPeople::onRadarListDoubleClicked()
 	else
 	{
 		LLStringUtil::format_map_t args;
-		args["AVATARNAME"] = item->getColumn("name")->getValue().asString();
+		args["AVATARNAME"] = item->getColumn(mRadarList->getColumn("name")->mIndex)->getValue().asString();
 		reportToNearbyChat(getString("camera_no_focus", args));
 	}
 }

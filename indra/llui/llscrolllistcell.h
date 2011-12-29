@@ -110,15 +110,9 @@ public:
 	virtual BOOL			handleClick() { return FALSE; }
 	virtual	void			setEnabled(BOOL enable) { }
 
-	// Ansariel: Return column name the cell belongs to
-	virtual std::string		getName() const { return mColumn; }
-
 private:
 	S32 mWidth;
 	std::string mToolTip;
-
-	// Ansariel: Column name the cell belongs to
-	std::string mColumn;
 };
 
 class LLScrollListSpacer : public LLScrollListCell

@@ -66,8 +66,7 @@ LLScrollListCell* LLScrollListCell::create(const LLScrollListCell::Params& cell_
 
 LLScrollListCell::LLScrollListCell(const LLScrollListCell::Params& p)
 :	mWidth(p.width), 
-	mToolTip(p.tool_tip),
-	mColumn(p.column) 	// Ansariel: Also store the column name the cell belongs to if that info is already provided
+	mToolTip(p.tool_tip)
 {}
 
 // virtual
