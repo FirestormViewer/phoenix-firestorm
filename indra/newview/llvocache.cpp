@@ -294,7 +294,6 @@ void LLVOCache::initCache(ELLPath location, U32 size, U32 cache_version)
 		llwarns << "Not initializing cache: Cache is currently disabled." << llendl;
 		return ;
 	}
-	mInitialized = TRUE ;
 
 	if(mInitialized)
 	{
