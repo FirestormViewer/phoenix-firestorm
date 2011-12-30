@@ -2278,7 +2278,6 @@ void LLViewerFetchedTexture::unpauseLoadedCallbacks(const LLLoadedCallbackEntry:
 	if(!callback_list)
 {
 		mPauseLoadedCallBacks = FALSE ;
-		mLastCallBackActiveTime = sCurrentTime ;
 		return ;
 	}
 
@@ -2297,6 +2296,7 @@ void LLViewerFetchedTexture::unpauseLoadedCallbacks(const LLLoadedCallbackEntry:
 		}
 	}
 	mPauseLoadedCallBacks = FALSE ;
+	mLastCallBackActiveTime = sCurrentTime ;
 	if(need_raw)
 	{
 		mSaveRawImage = TRUE ;
