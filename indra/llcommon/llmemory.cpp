@@ -159,6 +159,7 @@ void LLMemory::logMemoryInfo(BOOL update)
 	if(update)
 	{
 		updateMemoryInfo() ;
+		LLPrivateMemoryPoolManager::getInstance()->updateStatistics() ;
 	}
 
 	llinfos << "Current allocated physical memory(KB): " << sAllocatedMemInKB << llendl ;
@@ -1845,7 +1846,7 @@ void LLPrivateMemoryPool::LLChunkHashElement::remove(LLPrivateMemoryPool::LLMemo
 //class LLPrivateMemoryPoolManager
 //--------------------------------------------------------------------
 LLPrivateMemoryPoolManager* LLPrivateMemoryPoolManager::sInstance = NULL ;
-bool sPrivatePoolEnabled = false; // <ND/> FIRE-3760; keep track if the pool had been enabled, or if all memory is from malloc
+BOOL LLPrivateMemoryPoolManager::sPrivatePoolEnabled = FALSE ;
 std::vector<LLPrivateMemoryPool*> LLPrivateMemoryPoolManager::sDanglingPoolList ;
 
 LLPrivateMemoryPoolManager::LLPrivateMemoryPoolManager(BOOL enabled, U32 max_pool_size) 
@@ -1857,7 +1858,7 @@ LLPrivateMemoryPoolManager::LLPrivateMemoryPoolManager(BOOL enabled, U32 max_poo
 		mPoolList[i] = NULL ;
 	}
 
-	mPrivatePoolEnabled = enabled ;
+	sPrivatePoolEnabled = enabled ;
 
 	const U32 MAX_POOL_SIZE = 256 * 1024 * 1024 ; //256 MB
 	mMaxPrivatePoolSize = llmax(max_pool_size, MAX_POOL_SIZE) ;
@@ -1916,10 +1917,8 @@ LLPrivateMemoryPoolManager::~LLPrivateMemoryPoolManager()
 void LLPrivateMemoryPoolManager::initClass(BOOL enabled, U32 max_pool_size) 
 {
 	llassert_always(!sInstance) ;
-	enabled = FALSE; // <ND/> FIRE-3834; Always disable the private memory pools for now.
 
 	sInstance = new LLPrivateMemoryPoolManager(enabled, max_pool_size) ;
-	sPrivatePoolEnabled = enabled?true:false;
 }
 
 //static 
@@ -1944,7 +1943,7 @@ void LLPrivateMemoryPoolManager::destroyClass()
 
 LLPrivateMemoryPool* LLPrivateMemoryPoolManager::newPool(S32 type) 
 {
-	if(!mPrivatePoolEnabled)
+	if(!sPrivatePoolEnabled)
 	{
 		return NULL ;
 	}
@@ -2040,14 +2039,13 @@ void  LLPrivateMemoryPoolManager::freeMem(LLPrivateMemoryPool* poolp, void* addr
 	{
 		poolp->freeMem(addr) ;
 	}
-	// <ND> FIRE-3760; if MemoryPrivatePoolEnabled is set to false, then use just free as the memory is not managed by the pool at all  
-	else if( !sPrivatePoolEnabled )
-	{
-		free( addr );
-	}  // </ND>
 	else
 	{
-		if(!sInstance) //the private memory manager is destroyed, try the dangling list
+		if(!sPrivatePoolEnabled)
+		{
+			free(addr) ; //private pool is disabled.
+		}
+		else if(!sInstance) //the private memory manager is destroyed, try the dangling list
 		{
 			for(S32 i = 0 ; i < sDanglingPoolList.size(); i++)
 			{
@@ -2068,12 +2066,13 @@ void  LLPrivateMemoryPoolManager::freeMem(LLPrivateMemoryPool* poolp, void* addr
 					addr = NULL ;
 					break ;
 				}
-			}
+			}		
+			llassert_always(!addr) ; //addr should be release before hitting here!
 		}
-
-		llassert_always(!addr) ; //addr should be release before hitting here!
-
-		free(addr) ;
+		else
+		{
+			llerrs << "private pool is used before initialized.!" << llendl ;
+		}
 	}	
 }
 
