@@ -902,13 +902,12 @@ void LLPanelPeople::updateNearbyList()
 	time_t now = time(NULL);
 
 	//STEP 0: Clear model data, saving pieces as needed.
-	LLScrollListItem* lastRadarSelectedItem = mRadarList->getFirstSelected();
-	LLUUID selected_id;
-	S32 lastScroll = mRadarList->getScrollPos();
-	if (lastRadarSelectedItem)
+	std::vector<LLUUID> selected_ids;
+	for(size_t i=0;i<mRadarList->getAllSelected().size();i++)
 	{
-		selected_id = lastRadarSelectedItem->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID();
+		selected_ids.push_back(mRadarList->getAllSelected().at(i)->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID());
 	}
+	S32 lastScroll = mRadarList->getScrollPos();
 	mRadarList->clearRows();
 	mRadarEnterAlerts.clear();
 	mRadarLeaveAlerts.clear();
@@ -1235,17 +1234,25 @@ void LLPanelPeople::updateNearbyList()
 		}
 
 		//AO: Preserve selection
-		if (lastRadarSelectedItem)
+		/*if (lastRadarSelectedItem)
 		{
 			if (avId == selected_id)
 			{
 				mRadarList->selectByID(avId);
 				updateButtons(); // TODO: only update on change, instead of every tick
 			}
-		}
+		}*/
 	} // End STEP 2, all model/presentation row processing complete.
 	//Reset scroll position
 	mRadarList->setScrollPos(lastScroll);
+
+	//Reset selection list
+	//AO: Preserve selection
+	if(!selected_ids.empty())
+	{
+		mRadarList->selectMultiple(selected_ids);
+	}
+	updateButtons();
 	
 	//
 	//STEP 3 , process any bulk actions that require the whole model to be known first
@@ -1480,7 +1487,7 @@ void LLPanelPeople::updateButtons()
 	buttonSetVisible("im_btn",				!group_tab_active);
 	buttonSetVisible("call_btn",			!group_tab_active);
 	buttonSetVisible("group_call_btn",		group_tab_active);
-	buttonSetVisible("teleport_btn",		friends_tab_active);
+	buttonSetVisible("teleport_btn",		nearby_tab_active || friends_tab_active);
 	buttonSetVisible("share_btn",			nearby_tab_active || friends_tab_active);
 		
 	if (group_tab_active)
@@ -1612,9 +1619,10 @@ void LLPanelPeople::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 	{
 		// AO, adapted for scrolllist. No multiselect yet
 		//mNearbyList->getSelectedUUIDs(selected_uuids);
-		LLScrollListItem* item = mRadarList->getFirstSelected();
-		if (item)
-			selected_uuids.push_back(item->getColumn(mRadarList->getColumn("name")->mIndex)->getValue().asUUID());
+		for(size_t i=0;i<mRadarList->getAllSelected().size();i++)
+		{
+			selected_uuids.push_back(mRadarList->getAllSelected().at(i)->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID());
+		}
 	}
 	else if (cur_tab == RECENT_TAB_NAME)
 		mRecentList->getSelectedUUIDs(selected_uuids);

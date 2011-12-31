@@ -155,7 +155,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 		     sort_ascending="true"
 		     name="radar_list"
 		     draw_stripes="true"
-		     multi_select="false"
+		     multi_select="true"
 		     width="311">
 		        <radar_list.columns
 		         label="NAME"

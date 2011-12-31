@@ -68,15 +68,29 @@ BOOL LLRadarListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	if ( (mContextMenu) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
 // [/RLVa:KB-FS]
 	{
-		LLScrollListItem* hit_item = hitItem(x, y);
-		if (hit_item)
+		if(getAllSelected().size() > 1)
 		{
-			llinfos << "Right-click select by value: " << hit_item->getValue() << llendl;
-			selectByID(hit_item->getValue());
-			LLUUID av = hit_item->getValue();
+			//llinfos << "Right-click select by value: (multi-select)" << llendl;
 			uuid_vec_t selected_uuids;
-			selected_uuids.push_back(av);
+			for(size_t i=0;i<getAllSelected().size();i++)
+			{
+				llinfos << "Right-click select by value: " << getAllSelected().at(i)->getColumn(getColumn("uuid")->mIndex)->getValue().asUUID() << llendl;
+				selected_uuids.push_back(getAllSelected().at(i)->getColumn(getColumn("uuid")->mIndex)->getValue().asUUID());
+			}
 			mContextMenu->show(this, selected_uuids, x, y);
+		}
+		else
+		{
+			LLScrollListItem* hit_item = hitItem(x, y);
+			if (hit_item)
+			{
+				llinfos << "Right-click select by value: " << hit_item->getValue() << llendl;
+				selectByID(hit_item->getValue());
+				LLUUID av = hit_item->getValue();
+				uuid_vec_t selected_uuids;
+				selected_uuids.push_back(av);
+				mContextMenu->show(this, selected_uuids, x, y);
+			}
 		}
 	}
 	return handled;
