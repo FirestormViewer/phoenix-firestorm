@@ -306,12 +306,12 @@ void LLThread::wakeLocked()
 LLMutex::LLMutex(apr_pool_t *poolp) :
 	mAPRMutexp(NULL), mCount(0), mLockingThread(NO_THREAD)
 {
-	if (poolp)
-	{
-		mIsLocalPool = FALSE;
-		mAPRPoolp = poolp;
-	}
-	else
+	//if (poolp)
+	//{
+	//	mIsLocalPool = FALSE;
+	//	mAPRPoolp = poolp;
+	//}
+	//else
 	{
 		mIsLocalPool = TRUE;
 		apr_pool_create(&mAPRPoolp, NULL); // Create a subpool for this thread
