@@ -108,6 +108,8 @@ private:
 	LLUIColor		mBackgroundColor;
 
 	F32				mScale;					// Size of a region in pixels
+	static F32		sScale;					// Ansariel: Used to synchronize netmaps throughout instances
+
 	F32				mPixelsPerMeter;		// world meters to map pixels
 	F32				mObjectMapTPM;			// texels per meter on map
 	F32				mObjectMapPixels;		// Width of object map in pixels

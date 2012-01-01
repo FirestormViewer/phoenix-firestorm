@@ -94,15 +94,13 @@ const F32 WIDTH_PIXELS = 2.f;
 const S32 CIRCLE_STEPS = 100;
 
 std::map<LLUUID, LLColor4> LLNetMap::sAvatarMarksMap; // Ansariel
-
+F32 LLNetMap::sScale; // Ansariel: Synchronizing netmaps throughout instances
 
 LLNetMap::LLNetMap (const Params & p)
 :	LLUICtrl (p),
 	mBackgroundColor (p.bg_color()),
-	// <Ansariel> Fixing borked minimap zoom level persistance
-	//mScale( MAP_SCALE_MID ),
-	//mPixelsPerMeter( MAP_SCALE_MID / REGION_WIDTH_METERS ),
-	// </Ansariel> Fixing borked minimap zoom level persistance
+	mScale( MAP_SCALE_MID ),
+	mPixelsPerMeter( MAP_SCALE_MID / REGION_WIDTH_METERS ),
 	mObjectMapTPM(0.f),
 	mObjectMapPixels(0.f),
 	mTargetPan(0.f, 0.f),
@@ -119,22 +117,15 @@ LLNetMap::LLNetMap (const Params & p)
 	mToolTipMsg(),
 	mPopupMenu(NULL)
 {
-	// <Ansariel> Fixing borked minimap zoom level persistance
-	mScale = gSavedSettings.getF32("MiniMapScale");
-	mPixelsPerMeter = mScale / REGION_WIDTH_METERS;
 	mDotRadius = llmax(DOT_SCALE * mPixelsPerMeter, MIN_DOT_RADIUS);
-	setScale(mScale);
-	//mDotRadius = llmax(DOT_SCALE * mPixelsPerMeter, MIN_DOT_RADIUS);
-	//setScale(gSavedSettings.getF32("MiniMapScale"));
-	// </Ansariel> Fixing borked minimap zoom level persistance
+	setScale(gSavedSettings.getF32("MiniMapScale"));
 }
 
 LLNetMap::~LLNetMap()
 {
 	// <Ansariel> Fixing borked minimap zoom level persistance
-	// Since there are two netmap instances, save zoom level in setScale
-	// so we always store the zoom level set last throughout all instances
 	//gSavedSettings.setF32("MiniMapScale", mScale);
+	gSavedSettings.setF32("MiniMapScale", sScale);
 	// </Ansariel> Fixing borked minimap zoom level persistance
 }
 
@@ -160,12 +151,7 @@ void LLNetMap::setScale( F32 scale )
 	scale = llclamp(scale, MAP_SCALE_MIN, MAP_SCALE_MAX);
 	mCurPan *= scale / mScale;
 	mScale = scale;
-
-	// <Ansariel> Fixing borked minimap zoom level persistance
-	// Save minimap scale here so we get the latest zoom level
-	// throughout all netmap instances
-	gSavedSettings.setF32("MiniMapScale", mScale);
-	// </Ansariel> Fixing borked minimap zoom level persistance
+	sScale = scale; // Ansariel: Synchronize scale throughout instances
 
 	if (mObjectImagep.notNull())
 	{
@@ -190,6 +176,12 @@ void LLNetMap::setScale( F32 scale )
 
 void LLNetMap::draw()
 {
+	// Ansariel: Synchronize netmap scale throughout instances
+	if (mScale != sScale)
+	{
+		setScale(sScale);
+	}
+
  	static LLFrameTimer map_timer;
 	static LLUIColor map_avatar_color = LLUIColorTable::instance().getColor("MapAvatarColor", LLColor4::white);
 	static LLUIColor map_avatar_friend_color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white);
