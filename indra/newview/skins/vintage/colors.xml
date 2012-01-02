@@ -167,4 +167,8 @@
 	<color
 		name="DkGray"
 		value="0.242 0.242 0.242 1" />
+	<!-- Floater title bar color, mostly used for sidebar related floaters -->
+	<color
+		name="TitleBarFocusColor"
+		reference="0.333 0.333 0.333 1.0" />
 </colors>

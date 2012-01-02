@@ -835,4 +835,12 @@ with the same filename but different name
 <texture name="ff_edit_theirs_button"			file_name="legacy/ff_edit_theirs_button.tga"		preload="false" />
 <texture name="icon_avatar_online"			file_name="legacy/icon_avatar_online.tga"		preload="false" />
 <texture name="slim_icon_16_viewer"				file_name="slim_icon_16_viewer.tga"					preload="false" />
+
+<!-- Vintage Textures -->
+
+<texture name="floater_background_header"	file_name="windows/floater_background_header.tga"	preload="true"
+	scale.left="2"	scale.bottom="2"	scale.top="6"	scale.right="30" />
+<texture name="floater_background"			file_name="windows/floater_background.tga"			preload="true"
+	scale.left="2"	scale.bottom="2"	scale.top="30"	scale.right="30" />
+
 </textures>
