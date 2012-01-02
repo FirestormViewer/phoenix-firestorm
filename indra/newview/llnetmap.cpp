@@ -1004,7 +1004,9 @@ void LLNetMap::createObjectImage()
 		memset( data, 0, img_size * img_size * 4 );
 		mObjectImagep = LLViewerTextureManager::getLocalTexture( mObjectRawImagep.get(), FALSE);
 	}
-	setScale(mScale);
+	// Ansariel: Synchronize scale throughout instances
+	//setScale(mScale);
+	setScale(sScale);
 	mUpdateNow = true;
 }
 
