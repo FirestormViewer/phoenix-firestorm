@@ -278,6 +278,8 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	text_p.follows.flags(FOLLOWS_ALL);
 	// word wrap was added accroding to the EXT-6841
 	text_p.wrap(true);
+	// set up label text color for empty lists in a way it's always readable -Zi
+	text_p.text_color=mFgUnselectedColor;
 	addChild(LLUICtrlFactory::create<LLTextBox>(text_p));
 }
 
