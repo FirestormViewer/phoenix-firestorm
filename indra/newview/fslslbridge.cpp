@@ -150,7 +150,7 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 		// todo
 
 		// Verify Authorization
-		std::string ourBridge = gSavedSettings.getString("FSLSLBridgeUUID");
+		std::string ourBridge = gSavedPerAccountSettings.getString("FSLSLBridgeUUID");
 		if (ourBridge != bAuth)
 		{
 			llwarns << "BridgeURL message received from ("<< bAuth <<") , but not from our registered bridge ("<< ourBridge <<"). Ignoring." << llendl;
@@ -681,7 +681,7 @@ std::string FSLSLBridgeScriptCallback::prepUploadFile()
 	std::string bridgekey = "BRIDGEKEY";
 	std::string newauth = LLUUID::generateNewID().asString();
 	bridgeScript.replace(bridgeScript.find(bridgekey),bridgekey.length(),newauth);
-	gSavedSettings.setString("FSLSLBridgeUUID",newauth);
+	gSavedPerAccountSettings.setString("FSLSLBridgeUUID",newauth);
 	tempFile.write(bridgeScript.c_str(),std::strlen(bridgeScript.c_str()));
 	tempFile.close();
 	

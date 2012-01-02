@@ -14516,19 +14516,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>    
       </map>
-    <key>FSLSLBridgeUUID</key>
-    <map>
-      <key>Comment</key>
-      <string>Current bridge UUID</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>HideFromEditor</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string>00000</string>
-      </map>
     <key>VFSOldSize</key>
     <map>
       <key>Comment</key>
