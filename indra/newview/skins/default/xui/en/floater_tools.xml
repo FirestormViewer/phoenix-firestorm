@@ -2315,6 +2315,7 @@ even though the user gets a free copy.
              name="sculpt type control"
              top_pad="4"
              visible="false"
+			 tool_tip="The &quot;none&quot; option has been removed because it is identical with &quot;Plane&quot;."
              width="150">
                 <combo_box.item
                  label="Sphere"
@@ -2325,7 +2326,7 @@ even though the user gets a free copy.
                  name="Torus"
                  value="2" />
                 <combo_box.item
-                 label="Plane"
+                 label="Plane / None"
                  name="Plane"
                  value="3" />
                 <combo_box.item

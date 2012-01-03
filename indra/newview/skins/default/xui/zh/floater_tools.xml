@@ -347,10 +347,9 @@
 				Stitching type
 			</text>
 			<combo_box name="sculpt type control">
-				<combo_box.item label="（無）" name="None"/>
 				<combo_box.item label="Sphere" name="Sphere"/>
 				<combo_box.item label="Torus" name="Torus"/>
-				<combo_box.item label="Plane" name="Plane"/>
+				<combo_box.item label="Plane （無）" name="Plane"/>
 				<combo_box.item label="Cylinder" name="Cylinder"/>
 			</combo_box>
 		</panel>

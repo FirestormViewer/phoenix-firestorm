@@ -326,10 +326,9 @@
 				Tipo di congiunzione
 			</text>
 			<combo_box name="sculpt type control">
-				<combo_box.item label="(nessuna)" name="None"/>
 				<combo_box.item label="Sferica" name="Sphere"/>
 				<combo_box.item label="Toroidale" name="Torus"/>
-				<combo_box.item label="Piana" name="Plane"/>
+				<combo_box.item label="Piana / Nessuna" name="Plane"/>
 				<combo_box.item label="Cilindrica" name="Cylinder"/>
 			</combo_box>
 		</panel>

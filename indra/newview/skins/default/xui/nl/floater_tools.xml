@@ -351,16 +351,10 @@
 				Hechtingstype
 			</text>
 			<combo_box name="sculpt type control">
-				<combo_box.item name="None" label="(geen)"
-				/>
-				<combo_box.item name="Sphere" label="Bol"
-				/>
-				<combo_box.item name="Torus" label="Torus"
-				/>
-				<combo_box.item name="Plane" label="Vlak"
-				/>
-				<combo_box.item name="Cylinder" label="Cilinder"
-				/>
+				<combo_box.item name="Sphere" label="Bol"/>
+				<combo_box.item name="Torus" label="Torus"/>
+				<combo_box.item name="Plane / Geen" label="Vlak"/>
+				<combo_box.item name="Cylinder" label="Cilinder"/>
 			</combo_box>
 		</panel>
 		<panel label="Kenmerken" name="Features">

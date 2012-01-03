@@ -342,12 +342,10 @@
 				Sting type
 			</text>
 			<combo_box name="sculpt type control">
-				<combo_box.item label="(ingen)" name="None"/>
 				<combo_box.item label="Sfære" name="Sphere"/>
 				<combo_box.item label="Kuglering" name="Torus"/>
-				<combo_box.item label="Plan" name="Plane"/>
+				<combo_box.item label="Plan / Ingen" name="Plane"/>
 				<combo_box.item label="Cylinder" name="Cylinder"/>
-				<combo_box.item label="Mesh" name="Mesh"/>
 			</combo_box>
 		</panel>
 		<panel label="Features" name="Features">

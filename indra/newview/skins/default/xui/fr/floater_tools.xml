@@ -320,10 +320,9 @@
 				Type de raccord
 			</text>
 			<combo_box name="sculpt type control">
-				<combo_box.item label="(aucun)" name="None"/>
 				<combo_box.item label="Sphère" name="Sphere"/>
 				<combo_box.item label="Tore" name="Torus"/>
-				<combo_box.item label="Plan" name="Plane"/>
+				<combo_box.item label="Plan / Aucun" name="Plane"/>
 				<combo_box.item label="Cylindre" name="Cylinder"/>
 			</combo_box>
 		</panel>

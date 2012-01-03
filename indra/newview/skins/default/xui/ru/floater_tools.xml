@@ -2267,26 +2267,10 @@ even though the user gets a free copy.
              top_pad="4"
              visible="false"
              width="180">
-                <combo_box.item
-                 label="(нет)"
-                 name="None"
-                 value="None" />
-                <combo_box.item
-                 label="Сфера"
-                 name="Sphere"
-                 value="Sphere" />
-                <combo_box.item
-                 label="Тор"
-                 name="Torus"
-                 value="Torus" />
-                <combo_box.item
-                 label="Плоскость"
-                 name="Plane"
-                 value="Plane" />
-                <combo_box.item
-                 label="Цилиндр"
-                 name="Cylinder"
-                 value="Cylinder" />
+                <combo_box.item label="Сфера" name="Sphere"/>
+                <combo_box.item label="Тор" name="Torus"/>
+                <combo_box.item label="Плоскость / нет" name="Plane"/>
+                <combo_box.item label="Цилиндр" name="Cylinder"/>
             </combo_box>
         </panel>
         <panel

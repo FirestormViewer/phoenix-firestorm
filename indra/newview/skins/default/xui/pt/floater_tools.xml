@@ -319,10 +319,9 @@
 				Tipo costura
 			</text>
 			<combo_box name="sculpt type control">
-				<combo_box.item label="(nenhum)" name="None"/>
 				<combo_box.item label="Esfera" name="Sphere"/>
 				<combo_box.item label="Toróide" name="Torus"/>
-				<combo_box.item label="Plano" name="Plane"/>
+				<combo_box.item label="Plano / Nenhum" name="Plane"/>
 				<combo_box.item label="Cilindro" name="Cylinder"/>
 			</combo_box>
 		</panel>

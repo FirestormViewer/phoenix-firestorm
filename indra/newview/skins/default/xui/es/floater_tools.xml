@@ -383,10 +383,9 @@
 				Tipo de unión
 			</text>
 			<combo_box name="sculpt type control">
-				<combo_box.item label="(ninguno)" name="None"/>
 				<combo_box.item label="Esfera" name="Sphere"/>
 				<combo_box.item label="Toroide" name="Torus"/>
-				<combo_box.item label="Plano" name="Plane"/>
+				<combo_box.item label="Plano / Ninguno" name="Plane"/>
 				<combo_box.item label="Cilindro" name="Cylinder"/>
 			</combo_box>
 		</panel>

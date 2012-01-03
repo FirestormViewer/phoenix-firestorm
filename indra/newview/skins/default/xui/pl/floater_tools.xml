@@ -349,10 +349,9 @@
 				Typ ścięgna
 			</text>
 			<combo_box name="sculpt type control">
-				<combo_box.item label="(żadne)" name="None"/>
 				<combo_box.item label="Kula" name="Sphere"/>
 				<combo_box.item label="Torus" name="Torus"/>
-				<combo_box.item label="Płaszczyzna" name="Plane"/>
+				<combo_box.item label="Płaszczyzna / żadne" name="Plane"/>
 				<combo_box.item label="Walec" name="Cylinder"/>
 			</combo_box>
 		</panel>

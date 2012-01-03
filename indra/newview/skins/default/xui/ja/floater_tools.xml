@@ -325,10 +325,9 @@
 				縫い目のタイプ
 			</text>
 			<combo_box name="sculpt type control">
-				<combo_box.item label="（なし）" name="None"/>
 				<combo_box.item label="球体" name="Sphere"/>
 				<combo_box.item label="トーラス" name="Torus"/>
-				<combo_box.item label="平面" name="Plane"/>
+				<combo_box.item label="平面 （なし）" name="Plane"/>
 				<combo_box.item label="シリンダー" name="Cylinder"/>
 			</combo_box>
 		</panel>

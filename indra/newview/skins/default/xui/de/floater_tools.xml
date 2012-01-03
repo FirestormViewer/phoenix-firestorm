@@ -384,11 +384,10 @@
 			<text name="label sculpt type">
 				Naht
 			</text>
-			<combo_box name="sculpt type control">
-				<combo_box.item label="(keiner)" name="None"/>
+			<combo_box name="sculpt type control" tool_tip="Die Option &quot;keine&quot; wurde entfernt, da sie identisch mit &quot;Fläche&quot; ist.">
 				<combo_box.item label="Kugel" name="Sphere"/>
 				<combo_box.item label="Torus" name="Torus"/>
-				<combo_box.item label="Fläche" name="Plane"/>
+				<combo_box.item label="Fläche / Keine" name="Plane"/>
 				<combo_box.item label="Zylinder" name="Cylinder"/>
 			</combo_box>
 		</panel>
