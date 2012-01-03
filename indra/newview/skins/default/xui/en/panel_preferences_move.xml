@@ -56,8 +56,8 @@
          max_val="2.97"
          min_val="0.17"
          name="camera_fov"
-         show_text="false"
-         width="240" />
+         show_text="true"
+         width="275" />
         <slider
          can_edit_text="true"
          control_name="CameraOffsetScale"
@@ -73,8 +73,8 @@
          max_val="3"
          min_val="0.5"
          name="camera_offset_scale"
-         show_text="false"
-         width="240"
+         show_text="true"
+         width="275"
          top_pad="5"/>
         <check_box
          control_name="DisableCameraConstraints"
