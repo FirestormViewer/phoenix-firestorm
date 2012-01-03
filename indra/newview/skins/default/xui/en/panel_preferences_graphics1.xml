@@ -1059,7 +1059,7 @@
          layout="topleft"
          left="10"
          name="Alpha Mask Rendering"
-         top_pad="20"
+         top_pad="13"
          width="308">
             Alpha Mask Rendering:
         </text>
@@ -1095,20 +1095,51 @@
          layout="topleft"
          left="10"
          name="Miscellaneous Rendering"
-         top_pad="20"
+         top_pad="10"
          width="308">
             Miscellaneous Rendering:
         </text>
 
         <check_box
+         control_name="RenderGlow"
+         height="16"
+		 initial_value="true"
+         label="Render glow"
+		 tool_tip="Render glow. Note that strength needs to be set to zero to disable glow when shadows are enabled."
+         layout="topleft"
+         left_delta="10"
+         name="RenderGlow"
+         top_pad="12"
+         width="256"/>
+		<slider
+		control_name="RenderGlowIterations"
+		decimal_digits="0"
+		follows="left|top"
+		can_edit_text="false"
+		height="16"
+		increment="1"
+		initial_val="160"
+		label="Strength:"
+		tool_tip="Glow strength. Higher = wider and smoother (default is 2) "
+		label_width="50"
+		layout="topleft"
+		max_val="3"
+		min_val="0"
+		name="glow_strength"
+		enabled="true"
+		left_delta="150"
+		mouse_opaque="true"
+		show_text="true"
+		width="130" />
+		<check_box
          control_name="RenderUnloadedAvatar"
          height="16"
          initial_value="false"
          label="Show avatars that haven't finished loading"
          layout="topleft"
-         left_delta="10"
+         left_delta="-150"
          name="RenderUnloadedAvatars"
-         top_pad="12"
+         top_pad="3"
          width="256"/>
         <slider
          control_name="PrecachingDelay"
