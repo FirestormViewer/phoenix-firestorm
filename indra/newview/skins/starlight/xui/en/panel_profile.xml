@@ -188,18 +188,18 @@
             <text
              follows="left|top"
              font.style="BOLD"
-             height="13"
+             height="15"
              layout="topleft"
              left="4"
              name="About_sl_text"
              text_color="White"
              top_pad="-7"
              value="About:"
-             width="40" />
+             width="50" />
               <expandable_text
 			   allow_scroll="true"
                follows="left|top|right"
-               height="146"
+               height="144"
                layout="topleft"
                left="3"
                textbox.max_length="512"
@@ -215,23 +215,31 @@
             <text
              follows="left|top"
              font.style="BOLD"
-             height="13"
+             height="18"
              layout="topleft"
              left="4"
              name="title_groups_text"
              text_color="White"
-             top_pad="3"
+             top_pad="1"
              value="Groups:"
-             width="309" />
+             width="180" />
+			 <button
+			  follows="top|right"
+			  left_pad="0"
+			  right="-4"
+			  height="20"
+			  label="Invite to Group"
+			  name="group_invite"
+			  tool_tip="Invite to Group" />
 			<group_list
 			 for_agent="false"
 			 allow_select="true"
-             height="145"
+             height="140"
              follows="all"
 			 left="5"
 			 right="-20"
 			 name="group_list"
-             top_pad="0"
+             top_pad="3"
 			 width="290" />
 			<text
              follows="left|top"
