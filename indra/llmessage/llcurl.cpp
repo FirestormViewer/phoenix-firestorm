@@ -231,10 +231,23 @@ CURL* LLCurl::Easy::allocEasyHandle()
 	if (sFreeHandles.empty())
 	{
 		ret = curl_easy_init();
+
+		// Ansariel: Added some debug code
+		if (!ret)
+		{
+			llwarns << "curl_easy_init() failed!" << llendl;
+		}
 	}
 	else
 	{
 		ret = *(sFreeHandles.begin());
+
+		// Ansariel: Added some debug code
+		if (!ret)
+		{
+			llwarns << "allocEasyHandle() error: sFreeHandles empty" << llendl;
+		}
+
 		sFreeHandles.erase(ret);
 		curl_easy_reset(ret);
 	}
