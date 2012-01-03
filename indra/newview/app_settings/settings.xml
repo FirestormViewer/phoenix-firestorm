@@ -217,6 +217,17 @@
 		<key>Value</key>
 		<integer>1</integer>
 	</map>
+	<key>FSResetCameraOnTP</key>
+	<map>
+		<key>Comment</key>
+		<string>If true the camera will be reset to behind the avatar on teleporting</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>Boolean</string>
+		<key>Value</key>
+		<integer>1</integer>
+	</map>
 	<key>FSShowIMInChatHistory</key>
 	<map>
 		<key>Comment</key>
