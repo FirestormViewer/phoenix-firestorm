@@ -117,10 +117,20 @@
     <check_box
      control_name="ShowInInventory"
      height="16"
-     label="Automatically open inventory when receiving items"
+     label="Automatically show newly accepted items in inventory"
      layout="topleft"
      left="30"
      name="Show_In_Inventory"
+     top_pad="4"
+     width="350" />
+	 
+	 <check_box
+     control_name="ShowNewInventory"
+     height="16"
+     label="Automatically view notecards, textures, landmarks after accepting"
+     layout="topleft"
+     left="30"
+     name="Show_New_Inventory"
      top_pad="4"
      width="350" />
 
