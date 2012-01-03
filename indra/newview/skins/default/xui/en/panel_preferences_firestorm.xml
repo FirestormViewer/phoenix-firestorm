@@ -180,7 +180,7 @@
          name="FSBlockClickSit"
          width="256" />
         <check_box
-         top_pad="8"
+         top_pad="5"
          label="Allow scripts to show map UI (llMapDestination)"
          control_name="ScriptsCanShowUI"
          follows="left|top"
@@ -274,7 +274,7 @@
          width="90" />
 
         <check_box
-         top_pad="20"
+         top_pad="15"
          left="10"
          label="Enable Spam Protection"
          control_name="UseAntiSpam"
@@ -400,7 +400,45 @@
          name="AntiSpamUnblock"
          label="Unblock all spam sources"
          commit_callback.function="NACL.AntiSpamUnblock"/>
-    </panel>
+		 
+        <check_box
+         top_pad="10"
+         left="10"
+         label="Notify about items from objects coming in too fast"
+         control_name="FSNotifyIncomingObjectSpam"
+         follows="left|top"
+         height="16"
+         name="FSNotifyIncomingObjectSpam"
+         width="200" />
+        <check_box
+         top_pad="5"
+         left="10"
+         label="Notify about items from other residents coming in too fast"
+         control_name="FSNotifyIncomingObjectSpamFrom"
+         follows="left|top"
+         height="16"
+         name="FSNotifyIncomingObjectSpamFrom"
+         width="200" />
+        <slider
+         left="10"
+         top_pad="5"
+         name="FSOfferThrottleMaxCount"
+         control_name="FSOfferThrottleMaxCount"
+         decimal_digits="0"
+         enabled="true"
+         follows="left|top"
+         height="18"
+         increment="1"
+         initial_val="5"
+         label="Incoming object offers throttle threshold:"
+         label_width="225"
+         max_val="20"
+         min_val="1"
+         show_text="true"
+         width="350"
+         auto_resize="false"
+         tool_tip="Sets the threshold of incoming object offers within 10 seconds before they get throttled. Default 5" />
+	</panel>
 
 
     <!--Avatar-->

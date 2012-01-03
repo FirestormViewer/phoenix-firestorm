@@ -1134,8 +1134,12 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 		LL_DEBUGS("Messaging") << "Throttle Not Expired, Count: " << throttle_count << LL_ENDL;
 		// When downloading the initial inventory we get a lot of new items
 		// coming in and can't tell that from spam.
+
+		// Ansariel: Customizable throttle!
+		static LLCachedControl<U32> fsOfferThrottleMaxCount(gSavedSettings, "FSOfferThrottleMaxCount");
 		if (LLStartUp::getStartupState() >= STATE_STARTED
-			&& throttle_count >= OFFER_THROTTLE_MAX_COUNT)
+			//&& throttle_count >= OFFER_THROTTLE_MAX_COUNT)
+			&& throttle_count >= U32(fsOfferThrottleMaxCount))
 		{
 			if (!throttle_logged)
 			{
@@ -1150,20 +1154,30 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 				arg["APP_NAME"] = LLAppViewer::instance()->getSecondLifeTitle();
 				arg["TIME"] = time.str();
 
+
 				if (!from_name.empty())
 				{
-					arg["FROM_NAME"] = from_name;
-					log_msg = LLTrans::getString("ItemsComingInTooFastFrom", arg);
+					if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpamFrom"))
+					{
+						arg["FROM_NAME"] = from_name;
+						log_msg = LLTrans::getString("ItemsComingInTooFastFrom", arg);
+					}
 				}
 				else
 				{
-					log_msg = LLTrans::getString("ItemsComingInTooFast", arg);
+					if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpam"))
+					{
+						log_msg = LLTrans::getString("ItemsComingInTooFast", arg);
+					}
 				}
 				
 				//this is kinda important, so actually put it on screen
-				LLSD args;
-				args["MESSAGE"] = log_msg;
-				LLNotificationsUtil::add("SystemMessage", args);
+				if (log_msg != "")
+				{
+					LLSD args;
+					args["MESSAGE"] = log_msg;
+					LLNotificationsUtil::add("SystemMessage", args);
+				}
 
 				throttle_logged=true;
 			}
