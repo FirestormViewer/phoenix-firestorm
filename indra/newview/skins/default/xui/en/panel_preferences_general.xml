@@ -299,14 +299,13 @@
      top_pad="3" />
 
     <check_box
-     control_name="NameTagShowFriends"
-     enabled_control="AvatarNameTagMode"
+     control_name="RenderHideGroupTitle"
      height="16"
-     label="Highlight friends"
+     label="Hide own group title"
      layout="topleft"
      left_pad="50"
-     name="show_friends"
-     tool_tip="Highlight the name tags of your friends" />
+     name="RenderHideGroupTitle"
+     tool_tip="Shows or hides your own group title for yourself and everyone else."/>
 
     <check_box
      control_name="UseDisplayNames"
@@ -333,14 +332,26 @@
      tool_tip="Show legacy name (Firstname Lastname) instead of username (firstname.lastname)"
      top_delta="0" />
     
-    <text
+   <check_box
+     control_name="NameTagShowFriends"
+     enabled_control="AvatarNameTagMode"
+     height="16"
+     label="Highlight friends"
+     layout="topleft"
+     left="35"
+     top_pad="3"
+     name="show_friends"
+     tool_tip="Highlight the name tags of your friends."
+     top_delta="0" />
+	 
+	 <text
      type="string"
      length="1"
      follows="left|top"
      height="13"
      layout="topleft"
      left="30"
-     top_pad="40"
+     top_pad="10"
      name="title_afk_text"
      width="150">
         Away timeout:
