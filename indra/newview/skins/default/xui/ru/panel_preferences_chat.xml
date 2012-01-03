@@ -118,9 +118,6 @@
 
             <!-- Localchat chat bar -->
             <check_box name="FSNearbyChatbar" label="Добавить строку ввода в окно чата" width="300"/>
-            <text name="FSNearbyChatbar_requires_restart">
-              (Требует рестарт)
-            </text>
             <check_box name="FSShowChatChannel" label="Отображать канал в окне чата"/>
             <check_box label="Скрыть главную строку ввода." name="AutohideChatBar" tool_tip="снизу, возле символов."/>
             <check_box label="Выкл. строку ввода после ввода." name="CloseChatOnReturn"/>

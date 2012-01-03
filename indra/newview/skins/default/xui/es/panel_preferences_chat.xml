@@ -75,9 +75,6 @@
 			<check_box name="EmotesUseItalic" label="Narraciones en cursiva" left_delta="210"/>
 			<check_box name="AutoCloseOOC" label="Auto-cerrar paréntesis ((OOC))"/>
 			<check_box name="FSNearbyChatbar" label="Añadir una barra de chat a la ventana de chat local" width="310"/>
-			<text name="FSNearbyChatbar_requires_restart" top_delta="1">
-				(requiere reiniciar)
-			</text>
 			<check_box name="FSShowChatChannel" label="Mostrar selector de canal en la barra de chat"/>
 			<check_box label="Ocultar automáticamente la barra de chat principal" name="AutohideChatBar" tool_tip="Oculta la barra de chat de la barra de botones inferior y sólo la muestra superpuesta cuando es necesaria."/>
 			<check_box label="Deseleccionar el chat tras enviar cada mensaje" name="CloseChatOnReturn"/>

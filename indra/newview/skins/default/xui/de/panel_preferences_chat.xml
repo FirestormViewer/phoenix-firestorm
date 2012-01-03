@@ -99,9 +99,6 @@
 
             <!-- Localchat chat bar -->
             <check_box name="FSNearbyChatbar" label="Eingabezeile zum Fenster Lokaler Chat hinzufügen" width="300"/>
-            <text name="FSNearbyChatbar_requires_restart">
-              (Erfordert Neustart)
-            </text>
             <check_box name="FSShowChatChannel" label="Kanalauswahl in Eingabezeile anzeigen"/>
             <check_box label="Haupteingabezeile für Chat automatisch verstecken" name="AutohideChatBar" tool_tip="Eingabezeile in der unteren Buttonleiste automatisch verstecken und nur zur Eingabe anzeigen"/>
             <check_box label="Chatleiste nach Senden deaktivieren" name="CloseChatOnReturn"/>

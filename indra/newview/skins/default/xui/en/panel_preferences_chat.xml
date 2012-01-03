@@ -508,17 +508,6 @@
              control_name="FSNearbyChatbar"
              name="FSNearbyChatbar"
              label="Add a chatbar in the Nearby Chat window"/>
-            <text
-             top_delta="2"
-             name="FSNearbyChatbar_requires_restart"
-             follows="left|top"
-             layout="topleft"
-             left_pad="0"
-             height="18"
-             width="130"
-             text_color="White_25">
-              (requires restart)
-            </text>
             <check_box
              layout="topleft"
              follows="left|top"
