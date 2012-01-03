@@ -383,7 +383,7 @@ LLIOPipe::EStatus LLURLRequest::process_impl(
 			mState = STATE_HAVE_RESPONSE;
 			context[CONTEXT_REQUEST][CONTEXT_TRANSFERED_BYTES] = mRequestTransferedBytes;
 			context[CONTEXT_RESPONSE][CONTEXT_TRANSFERED_BYTES] = mResponseTransferedBytes;
-			lldebugs << this << "Setting context to " << context << llendl;
+			LL_DEBUGS_ONCE(NULL) << this << "Setting context to " << context << llendl;
 			switch(result)
 			{
 				case CURLE_OK:
@@ -417,7 +417,7 @@ LLIOPipe::EStatus LLURLRequest::process_impl(
 					status = STATUS_NO_CONNECTION;
 					break;
 				default:
-					llwarns << "URLRequest Error: " << result
+					LL_WARNS_ONCE(NULL) << "URLRequest Error: " << result
 							<< ", "
 							<< LLCurl::strerror(result)
 							<< ", "
