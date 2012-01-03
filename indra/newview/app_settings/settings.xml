@@ -785,7 +785,7 @@
   <key>FSShowChatChannel</key>
     <map>
       <key>Comment</key>
-      <string>Enables the channel selector in the Nearby Chat command line</string>
+      <string>Shows/Hides the channel selector in the Nearby Chat command line</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

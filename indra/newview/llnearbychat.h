@@ -48,6 +48,9 @@ public:
 	void	onNearbyChatContextMenuItemClicked(const LLSD& userdata);
 	bool	onNearbyChatCheckContextMenuItem(const LLSD& userdata);
 
+	void	onChatBarVisibilityChanged();
+	void	onChatChannelVisibilityChanged();
+
 	// This doesn't seem to apply anymore? It makes the chat and spin box colors
 	// appear wrong when focused and unfocused, so disable this. -Zi
 #if 0

@@ -151,9 +151,12 @@ BOOL LLNearbyChat::postBuild()
 	mInputEditor->setPassDelete( TRUE );
 	mInputEditor->setEnabled(TRUE);
 	
-	// chat channel spinner - TS
-	getChild<LLSpinCtrl>("ChatChannel")->setEnabled(gSavedSettings.getBOOL("FSShowChatChannel"));
-	
+	gSavedSettings.getControl("FSNearbyChatbar")->getCommitSignal()->connect(boost::bind(&LLNearbyChat::onChatBarVisibilityChanged, this));
+	gSavedSettings.getControl("FSShowChatChannel")->getCommitSignal()->connect(boost::bind(&LLNearbyChat::onChatChannelVisibilityChanged, this));
+
+	onChatBarVisibilityChanged();
+	onChatChannelVisibilityChanged();
+
 	// extra icon controls -AO
 	LLButton* transl = getChild<LLButton>("translate_btn");
 	transl->setVisible(true);
@@ -352,6 +355,16 @@ bool	LLNearbyChat::onNearbyChatCheckContextMenuItem(const LLSD& userdata)
 	if(str == "nearby_people")
 		onNearbySpeakers();	
 	return false;
+}
+
+void LLNearbyChat::onChatBarVisibilityChanged()
+{
+	getChild<LLLayoutPanel>("chat_bar_visibility_panel")->setVisible(gSavedSettings.getBOOL("FSNearbyChatbar"));
+}
+
+void LLNearbyChat::onChatChannelVisibilityChanged()
+{
+	getChild<LLLayoutPanel>("channel_spinner_visibility_panel")->setVisible(gSavedSettings.getBOOL("FSShowChatChannel"));
 }
 
 void	LLNearbyChat::openFloater(const LLSD& key)

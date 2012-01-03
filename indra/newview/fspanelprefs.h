@@ -20,7 +20,6 @@ public:
 	void onBeamDelete();
 
 	void onUseEnvironmentFromRegionAlways();
-	void onFSShowChatChannel();
 
 	void refreshTagCombos();
 	void applyTagCombos();

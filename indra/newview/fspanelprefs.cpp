@@ -52,8 +52,6 @@ BOOL PanelPreferenceFirestorm::postBuild()
 		m_musicLineEditor->setEnabled(FALSE);
 	}
 
-	getChild<LLUICtrl>("FSShowChatChannel")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onFSShowChatChannel, this));
-
 	//WS: Set the combo_box vars and refresh/reload them
 	m_UseLegacyClienttags = getChild<LLComboBox>("UseLegacyClienttags");		
 	m_ColorClienttags = getChild<LLComboBox>("ColorClienttags");		
@@ -270,9 +268,4 @@ void PanelPreferenceFirestorm::applyTagCombos()
 	}
 
 	if(change) LLVOAvatar::invalidateNameTags();
-}
-
-void PanelPreferenceFirestorm::onFSShowChatChannel()
-{
-        LLNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->setEnabled(gSavedSettings.getBOOL("FSShowChatChannel"));
 }
