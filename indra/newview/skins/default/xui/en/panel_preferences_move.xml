@@ -21,15 +21,15 @@
  tab_min_width="50"
  tab_position="top" >
 
-    <!--General-->
+    <!--View-->
     <panel
      top_pad="5"
      bottom="-1"
      left="1"
      right="-1"
      follows="all"
-     label="General"
-     name="tab-general" >
+     label="View"
+     name="tab-view" >
         <icon
          follows="left|top"
          height="18"
@@ -73,6 +73,42 @@
          max_val="3"
          min_val="0.5"
          name="camera_offset_scale"
+         show_text="true"
+         width="275"
+         top_pad="5"/>
+        <slider
+         can_edit_text="true"
+         control_name="ZoomTime"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         initial_value="0.4"
+         layout="topleft"
+         label="Transition Time"
+         left_delta="0"
+         label_width="100"
+         max_val="4"
+         min_val="0"
+         name="camera_transition_time"
+         show_text="true"
+         width="275"
+         top_pad="5"/>
+        <slider
+         can_edit_text="true"
+         control_name="CameraPositionSmoothing"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         initial_value="1"
+         layout="topleft"
+         label="Smoothing"
+         left_delta="0"
+         label_width="100"
+         max_val="9"
+         min_val="0"
+         name="camera_position_smoothing"
          show_text="true"
          width="275"
          top_pad="5"/>
@@ -194,18 +230,17 @@
          name="invert_mouse"
          top_delta="0"
          width="128" />
-        <text
-         type="string"
-         left="30"
-         top_pad="12"
-         length="1"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         name="MovementSettings"
-         width="188">
-         Movement:
-        </text>
+	</panel>
+
+    <!--Movement-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Movement"
+     name="tab-movement" >
         <check_box
          control_name="ArrowKeysAlwaysMove"
          follows="left|top"

@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Bewegen" name="move_panel">
 	<tab_container label="Move and View" name="tabs">
-		<!--General-->
-		<panel
-		 top_pad="5"
-		 bottom="-1"
-		 left="1"
-		 right="-1"
-		 follows="all"
-		 label="General"
-		 name="tab-general" >
+		<!--View-->
+		<panel label="Ansicht" name="tab-view">
 			<slider label="Sichtwinkel" name="camera_fov"/>
 			<slider label="Abstand" name="camera_offset_scale"/>
+			<slider label="Übergangszeit" name="camera_transition_time"/>
+			<slider label="Glättung" name="camera_position_smoothing"/>
 			<check_box label="Kamerabeschränkungen aufheben (Kamera freier bewegen)" name="DisableCameraConstraints" tool_tip="Erlaubt die Bewegungen der Kamera außerhalb der normalen Grenzen und der Erdoberfläche" />
 			<text name="heading2">
 				Automatische Position für:
@@ -25,9 +20,10 @@
 				Mausempfindlichkeit für Mouselook:
 			</text>
 			<check_box label="Umkehren" name="invert_mouse"/>
-			<text name="MovementSettings">
-				Bewegung:
-			</text>
+		</panel>
+		
+		<!--Movement-->
+		<panel label="Bewegung" name="tab-movement">
 			<check_box label="Mit Pfeiltasten bewegen" name="arrow_keys_move_avatar_check"/>
 			<check_box label="AZERTY-Tastaturlayout verwenden" name="FSUseAzertyKeyboardLayout" width="200"/>
 			<text name="FSUseAzertyKeyboardLayout_requires_restart">

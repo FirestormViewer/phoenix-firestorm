@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Движение" name="move_panel">
 	<tab_container label="Move and View" name="tabs">
-		<!--General-->
-		<panel
-		 top_pad="5"
-		 bottom="-1"
-		 left="1"
-		 right="-1"
-		 follows="all"
-		 label="Основной"
-		 name="tab-general" >
+		<!--View-->
+		<panel name="tab-view">
 			<slider label="Угол обзора:" name="camera_fov"/>
 			<slider label="Расстояние:" name="camera_offset_scale"/>
 			<check_box label="Разрешить большую свободу камере" name="DisableCameraConstraints" tool_tip="" />
@@ -25,9 +18,10 @@
 				Чувствительность мыши:
 			</text>
 			<check_box label="Инвертировать" name="invert_mouse"/>
-			<text name="MovementSettings">
-				Движение:
-			</text>
+		</panel>
+
+		<!-- Movement -->
+		<panel label="Движение" name="tab-movement">
 			<check_box label="Клавиши стрелок всегда перемещают меня" name="arrow_keys_move_avatar_check"/>
 			<check_box label="Бег после двойного нажатия на клавишу" name="tap_tap_hold_to_run"/>
 			<check_box label="Взлететь / Приземлиться при удержании вверх / вниз" name="automatic_fly" />

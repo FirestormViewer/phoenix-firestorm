@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Mover" name="move_panel">
 	<tab_container label="Mover y ver" name="tabs">
-		<panel label="General" name="tab-general">
+		<panel name="tab-view">
 			<slider label="Ángulo de visión" name="camera_fov"/>
 			<slider label="Distancia" name="camera_offset_scale"/>
 			<check_box label="Permitir más libertad de cámara" name="DisableCameraConstraints" tool_tip="Activa para mover tu cámara más allá de sus límites normales y bajo el nivel del suelo. Si no se te da bien posicionar la cámara, podrías incrementar el número de fotografías con mal ángulo."/>
@@ -16,9 +16,8 @@
 				Sensibilidad del ratón en vista subjetiva
 			</text>
 			<check_box label="Invertir" name="invert_mouse"/>
-			<text name="MovementSettings">
-				Movimiento:
-			</text>
+		</panel>
+		<panel label="Movimiento" name="tab-movement">
 			<check_box label="Las teclas de cursor siempre me mueven" name="arrow_keys_move_avatar_check"/>
 			<check_box label="Pulsar-pulsar-mantener para correr" name="tap_tap_hold_to_run"/>
 			<check_box label="Volar/aterrizar al mantener Re Pág/Av Pág" name="automatic_fly"/>
