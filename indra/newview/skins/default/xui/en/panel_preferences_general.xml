@@ -398,11 +398,11 @@
          value="1800" />
         <combo_box.item
          label="60 minutes"
-         name="item3"
+         name="item4"
          value="3600" />
         <combo_box.item
          label="never"
-         name="item4"
+         name="item5"
          value="0" />
     </combo_box>
 

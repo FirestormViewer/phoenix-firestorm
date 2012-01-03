@@ -72,7 +72,8 @@
 		<combo_box.item label="5 Minuten" name="item1"/>
 		<combo_box.item label="10 Minuten" name="item2"/>
 		<combo_box.item label="30 Minuten" name="item3"/>
-		<combo_box.item label="nie" name="item4"/>
+		<combo_box.item label="60 Minuten" name="item4"/>
+		<combo_box.item label="nie" name="item5"/>
 	</combo_box>
 	<combo_box  layout="topleft" left_pad="70" name="quitafk">
 		<combo_box.item label="2 Minuten" name="item0"/>
