@@ -3489,6 +3489,10 @@ LLVector3 LLVOAvatar::idleUpdateNameTagPosition(const LLVector3& root_pos_last)
 	name_position += (local_camera_up * root_rot) - (projected_vec(local_camera_at * root_rot, camera_to_av));	
 	name_position += pixel_up_vec * 15.f;
 
+	// Ansariel: Optional Z-offset correction for name tags
+	static LLCachedControl<S32> fsNameTagOffset(gSavedSettings, "FSNameTagZOffsetCorrection");
+	name_position[VZ] += fsNameTagOffset / 10.f;
+
 	return name_position;
 }
 

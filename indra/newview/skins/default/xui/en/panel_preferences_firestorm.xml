@@ -1523,6 +1523,26 @@
          name="usernamecolorswatch"
          tool_tip="Click to open color picker"/>
 
+        <slider
+         left="20"
+         top_pad="10"
+         name="FSNameTagZOffsetCorrection"
+         control_name="FSNameTagZOffsetCorrection"
+         decimal_digits="0"
+         enabled="true"
+         follows="left|top"
+         height="18"
+         increment="1"
+         initial_val="0"
+         label="Z-offset correction:"
+         label_width="110"
+         max_val="5"
+         min_val="-5"
+         show_text="true"
+         width="250"
+         auto_resize="false"
+         tool_tip="Changes the Z-offset for avatar name tags. Default 0" />
+
     </panel>
 </tab_container>
 </panel>

@@ -16880,5 +16880,16 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>FSNameTagZOffsetCorrection</key>
+  <map>
+    <key>Comment</key>
+    <string>Changes the default Z-offset of the avatar nametags.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
 </map>
 </llsd>
