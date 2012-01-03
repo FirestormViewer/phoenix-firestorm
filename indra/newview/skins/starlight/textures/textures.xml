@@ -839,6 +839,7 @@ with the same filename but different name
   <texture name="teleport_icon_24x24" file_name="icons/genie_icon_24x24.png" preload="false" />
   <texture name="friends_icon_24x24" file_name="icons/Friends_Icon_24x24.png" preload="false" />
   <texture name="gift_icon_24x24" file_name="icons/gift_icon_24x24.png" preload="false" />
+  <texture name="avatar_in_region" file_name="green_dot.tga" preload="false" />
   <texture name="Music_Off" file_name="icons/Music_Off.png" preload="true" />
   <texture name="Music_Over" file_name="icons/Music_Over.png" preload="true" />
   <texture name="Music_Press" file_name="icons/Music_Press.png" preload="true" />

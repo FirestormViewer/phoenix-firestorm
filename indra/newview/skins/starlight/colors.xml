@@ -749,6 +749,9 @@
      name="ObjectChatColor"
      reference="EmphasisColor" />
     <color
+     name="ObjectIMColor"
+     reference="EmphasisColor" />
+    <color
      name="OverdrivenColor"
      reference="Red" />
     <color

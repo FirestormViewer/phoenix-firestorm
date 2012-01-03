@@ -275,10 +275,21 @@
          class="progress_view"
          width="1024"
          visible="false"/>
+   <panel top="690"
+         follows="bottom|left|right"
+         height="20"
+         left="412"
+         mouse_opaque="true"
+         name="progress_view_mini"
+         filename="panel_progress_mini.xml"
+         class="progress_view_mini"
+         width="200"
+         visible="false"/>
 <!-- Where the menus can be displayed - the whole screen except bottom-bar -->
   <menu_holder top="0"
                follows="all"
                height="768"
+               left="0"
                mouse_opaque="false"
                name="Menu Holder"
                width="1024"/>
@@ -286,6 +297,7 @@
   <tooltip_view top="0"
                 follows="all"
                 height="768"
+                left="0"
                 mouse_opaque="false"
                 name="tooltip view"
                 tab_group="-2"

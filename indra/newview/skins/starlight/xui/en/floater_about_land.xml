@@ -390,7 +390,7 @@
              left_delta="0"
              name="Sell with landowners objects in parcel."
              top_pad="-2"
-             width="186">
+             width="250">
                 Objects included in sale
             </text>
             <text
@@ -402,7 +402,7 @@
              left_delta="0"
              name="Selling with no objects in parcel."
              top_delta="0"
-             width="186">
+             width="250">
                 Objects not included in sale
             </text>
             <button
@@ -713,7 +713,7 @@
              left_pad="10"
              mouse_opaque="false"
              name="region_landtype_text"
-             width="150">
+             width="200">
                 Mainland / Homestead
             </text>
             <text
@@ -881,7 +881,7 @@
              left="10"
              name="Primitives on parcel:"
              top="64"
-             width="152">
+             width="172">
                 Parcel land impact:
             </text>
             <text
