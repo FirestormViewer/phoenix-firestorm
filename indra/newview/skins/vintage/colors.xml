@@ -110,6 +110,18 @@
 	<color
 		name="InspectorTipTextColor"
 		reference="TextFgColor" />
+	<!-- Avatar list color for agents within chat range -->
+	<color
+		name="AvatarListItemChatRange"
+		reference="Black" />
+	<!-- Avatar list color for agents within shout range -->
+	<color
+		name="AvatarListItemShoutRange"
+		reference="Black_50" />
+	<!-- Avatar list color for agents beyond shout range -->
+	<color
+		name="AvatarListItemBeyondShoutRange"
+		value="0.4 0.0 0.0 0.4" />
 	<!-- Normal scroll list item text color -->
 	<color
 		name="ScrollUnselectedColor"
