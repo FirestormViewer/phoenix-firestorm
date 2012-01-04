@@ -8,6 +8,7 @@
 	<check_box label="Wenn Freunde sich an- oder abmelden" name="friends_online_notify_checkbox" width="230"/>
 	<check_box label="Nur in lokalem Chat" name="OnlineOfflinetoNearbyChatHistory" left_pad="5"/>
 	<check_box name="OnlineOfflinetoNearbyChat" label="In lokalem Chat &amp; Console" width="160"/>
+	<check_box label="Wenn eine Landmarke erstellt wurde" name="landmark_created_checkbox"/>
 	<check_box label="Skriptfehler anzeigen in:" name="show_script_errors"/>
 	<radio_group name="show_script_errors_location">
 		<radio_item label="Lokaler Chat" name="script_0"/>

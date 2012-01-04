@@ -17,7 +17,7 @@
      layout="topleft"
      left="10"
      name="tell_me_label"
-     top="10"
+     top="8"
      width="300">
         Tell me:
     </text>
@@ -29,7 +29,7 @@
      layout="topleft"
      left="10"
      name="notify_money_change_checkbox"
-     top_pad="4"
+     top_pad="2"
      width="160" />
     <check_box
      enabled_control="NotifyMoneyChange"
@@ -48,7 +48,7 @@
      layout="topleft"
      left="10"
      name="friends_online_notify_checkbox"
-     top_pad="4"
+     top_pad="2"
      width="190" />
     <check_box
      control_name="OnlineOfflinetoNearbyChat"
@@ -72,6 +72,15 @@
      name="OnlineOfflinetoNearbyChatHistory"
      width="150" />
 
+    <check_box
+     control_name="FSLandmarkCreatedNotification"
+     height="16"
+     label="When a landmark has been created"
+     layout="topleft"
+     left="10"
+     name="landmark_created_checkbox"
+     top_pad="2"
+     width="190" />
 
     <check_box
      control_name="ShowScriptErrors"
@@ -80,7 +89,7 @@
      label="When I have Script Errors in:"
      layout="topleft"
      left="10"
-     top_pad="4"
+     top_pad="2"
      name="show_script_errors"
      width="180" />
     <radio_group
@@ -119,7 +128,7 @@
      layout="topleft"
      left="10"
      name="show_label"
-     top_pad="10"
+     top_pad="8"
      width="450">
         Always show:
     </text>

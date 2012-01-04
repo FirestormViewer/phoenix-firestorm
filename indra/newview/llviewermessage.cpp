@@ -1250,7 +1250,7 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 
 							continue;
 						}
-						else if(from_name.empty())
+						else if(from_name.empty() && gSavedSettings.getBOOL("FSLandmarkCreatedNotification")) // Ansariel: Make notification optional
 						{
 							std::string folder_name;
 							if (parent_folder)
