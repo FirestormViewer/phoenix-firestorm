@@ -50,6 +50,7 @@
 // [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "llconsole.h"
 
 using namespace LLNotificationsUI;
 
@@ -475,6 +476,15 @@ void LLHandlerUtil::logToNearbyChat(const LLNotificationPtr& notification, EChat
 		chat_msg.mFromName = SYSTEM_FROM;
 		chat_msg.mFromID = LLUUID::null;
 		nearby_chat->addMessage(chat_msg);
+
+		// Ansariel: Also log to console if enabled
+		if (gSavedSettings.getBOOL("FSUseNearbyChatConsole"))
+		{
+			LLColor4 chatcolor;
+			LLViewerChat::getChatColor(chat_msg, chatcolor);
+			gConsole->addConsoleLine(chat_msg.mText, chatcolor);
+			gConsole->setVisible(!nearby_chat->getVisible());
+		}
 	}
 }
 
