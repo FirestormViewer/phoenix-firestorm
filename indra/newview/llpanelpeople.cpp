@@ -1411,7 +1411,8 @@ void LLPanelPeople::updateNearbyList()
 	//
 	
 	// update header w/number of avs detected in this sweep
-	mRadarList->setColumnLabel("name",llformat("NAME [%d]",lastRadarSweep.size()));
+	std::string name_template=getString("avatar_name_count");
+	mRadarList->setColumnLabel("name",llformat(name_template.c_str(),lastRadarSweep.size()));
 	// update minimap with selected avatars
 	uuid_vec_t selected_uuids;
 	LLUUID sVal = mRadarList->getSelectedValue().asUUID();

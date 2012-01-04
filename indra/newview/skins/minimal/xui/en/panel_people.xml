@@ -60,6 +60,9 @@ Looking for people to hang out with? Try the Destinations button below.
 	<string
 	 name="AltMiniMapToolTipMsg"
 	 value="[REGION](Double-click to teleport, shift-drag to pan)"/>
+	<string
+	 name="avatar_name_count"
+	 value="NAME [%d]" />
 	<filter_editor
      follows="left|top|right"
      height="23"
