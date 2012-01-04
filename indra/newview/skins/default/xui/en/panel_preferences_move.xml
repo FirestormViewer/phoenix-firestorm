@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  border="true"
  follows="all"
@@ -420,11 +420,24 @@
          follows="left|top"
          height="16"
          initial_value="false"
+         label="Reset camera position after teleport (within a region)"
+         layout="topleft"
+         left="30"
+         name="FSResetCameraOnTP"
+         width="270"
+         control_name="FSResetCameraOnTP"
+         tool_tip="Normally, the camera position gets reset when teleporting. This option prevents this behavior."/>
+		 
+		<check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         initial_value="false"
          label="Disable minimum camera zoom distance"
          layout="topleft"
          left="30"
          name="disableminzoomdist"
-         width="270"
+         width="350"
          control_name="FSDisableMinZoomDist"
          tool_tip="Disable the constraint on the closest distance the camera is allowed to get to an object."/>
 
