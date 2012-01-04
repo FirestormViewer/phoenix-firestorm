@@ -245,35 +245,47 @@
 		label="Sort"
 		name="inventory_sort_menu"
 		top="0">
-		<menu_item_call
+		<menu_item_check
 			name="inventory_sort_by_name"
 			label="By Name">
-			<menu_item_call.on_click
-				function="Inventory.SetSortBy"
+			<on_click
+				function="Inventory.SortBy.Set"
 				parameter="name" />
-		</menu_item_call>
-		<menu_item_call
+			<on_check
+				function="Inventory.SortBy.Check"
+				parameter="name" />
+		</menu_item_check>
+		<menu_item_check
 			name="inventory_sort_by_date"
 			label="By Date">
-			<menu_item_call.on_click
-				function="Inventory.SetSortBy"
+			<on_click
+				function="Inventory.SortBy.Set"
 				parameter="date" />
-		</menu_item_call>
+			<on_check
+				function="Inventory.SortBy.Check"
+				parameter="date" />
+		</menu_item_check>
 		<menu_item_separator />
-		<menu_item_call
+		<menu_item_check
 			name="inventory_sort_folders_by_name"
 			label="Folders Always By Name">
-			<menu_item_call.on_click
-				function="Inventory.SetSortBy"
+			<on_click
+				function="Inventory.SortBy.Set"
 				parameter="foldersalwaysbyname" />
-		</menu_item_call>
-		<menu_item_call
+			<on_check
+				function="Inventory.SortBy.Check"
+				parameter="foldersalwaysbyname" />
+		</menu_item_check>
+		<menu_item_check
 			name="inventory_sort_system_on_top"
 			label="System Folders To Top">
-			<menu_item_call.on_click
-				function="Inventory.SetSortBy"
+			<on_click
+				function="Inventory.SortBy.Set"
 				parameter="systemfolderstotop" />
-		</menu_item_call>
+			<on_check
+				function="Inventory.SortBy.Check"
+				parameter="systemfolderstotop" />
+		</menu_item_check>
 	</menu>
 
 	<menu

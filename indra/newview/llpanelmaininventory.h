@@ -117,7 +117,12 @@ protected:
 	void newWindow();
 	void doCreate(const LLSD& userdata);
 	void resetFilters();
+
+	// ## Zi: Sort By menu handlers
 	void setSortBy(const LLSD& userdata);
+	BOOL isSortByChecked(const LLSD& userdata);
+	// ## Zi: Sort By menu handlers
+
 	void saveTexture(const LLSD& userdata);
 	bool isSaveTextureEnabled(const LLSD& userdata);
 	void updateItemcountText();

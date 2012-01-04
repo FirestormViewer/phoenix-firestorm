@@ -115,13 +115,19 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
  	mCommitCallbackRegistrar.add("Inventory.NewWindow", boost::bind(&LLPanelMainInventory::newWindow, this));
 	mCommitCallbackRegistrar.add("Inventory.ShowFilters", boost::bind(&LLPanelMainInventory::toggleFindOptions, this));
 	mCommitCallbackRegistrar.add("Inventory.ResetFilters", boost::bind(&LLPanelMainInventory::resetFilters, this));
-	mCommitCallbackRegistrar.add("Inventory.SetSortBy", boost::bind(&LLPanelMainInventory::setSortBy, this, _2));
 	mCommitCallbackRegistrar.add("Inventory.Share",  boost::bind(&LLAvatarActions::shareWithAvatars));
 
 	// ## Zi: Extended Inventory Search
 	mCommitCallbackRegistrar.add("Inventory.SearchTarget.Set", boost::bind(&LLPanelMainInventory::onSearchTargetChecked, this, _2));
 	mEnableCallbackRegistrar.add("Inventory.SearchTarget.Check", boost::bind(&LLPanelMainInventory::isSearchTargetChecked, this, _2));
 	// ## Zi: Extended Inventory Search
+
+	// ## Zi: Sort By menu handlers
+	// we set up our own handlers here because the gear menu handlers are only set up
+	// later in the code, so our XML based menus can't reach them yet.
+	mCommitCallbackRegistrar.add("Inventory.SortBy.Set", boost::bind(&LLPanelMainInventory::setSortBy, this, _2));
+	mEnableCallbackRegistrar.add("Inventory.SortBy.Check", boost::bind(&LLPanelMainInventory::isSortByChecked, this, _2));
+	// ## Zi: Sort By menu handlers
 
 	mSavedFolderState = new LLSaveFolderState();
 	mSavedFolderState->setApply(FALSE);
@@ -402,6 +408,7 @@ void LLPanelMainInventory::resetFilters()
 	setFilterTextFromFilter();
 }
 
+// ## Zi: Sort By menu handlers
 void LLPanelMainInventory::setSortBy(const LLSD& userdata)
 {
 	U32 sort_order_mask = getActivePanel()->getSortOrder();
@@ -440,6 +447,34 @@ void LLPanelMainInventory::setSortBy(const LLSD& userdata)
 	getActivePanel()->setSortOrder(sort_order_mask);
 	gSavedSettings.setU32("InventorySortOrder", sort_order_mask);
 }
+
+BOOL LLPanelMainInventory::isSortByChecked(const LLSD& userdata)
+{
+	U32 sort_order_mask = getActivePanel()->getSortOrder();
+	const std::string command_name = userdata.asString();
+	if (command_name == "name")
+	{
+		return !(sort_order_mask & LLInventoryFilter::SO_DATE);
+	}
+
+	if (command_name == "date")
+	{
+		return (sort_order_mask & LLInventoryFilter::SO_DATE);
+	}
+
+	if (command_name == "foldersalwaysbyname")
+	{
+		return (sort_order_mask & LLInventoryFilter::SO_FOLDERS_BY_NAME);
+	}
+
+	if (command_name == "systemfolderstotop")
+	{
+		return (sort_order_mask & LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP);
+	}
+
+	return FALSE;
+}
+// ## Zi: Sort By menu handlers
 
 // static
 BOOL LLPanelMainInventory::filtersVisible(void* user_data)
