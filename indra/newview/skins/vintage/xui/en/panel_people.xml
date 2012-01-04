@@ -86,10 +86,10 @@ Looking for people to hang out with? Use the search box to find topics or conten
 	 value="[REGION](Double-click to open Map, shift-drag to pan)"/>
 	<string
 	 name="AltMiniMapToolTipMsg"
-	 value="[REGION](Double-click to teleport, shift-drag to pan)"/>
+	 value="[REGION] (Double-click to teleport, shift-drag to pan)"/>
 	<string
 	 name="avatar_name_count"
-	 value="Name [%d/%d/%d]" />
+	 value="Name [[TOTAL] / [IN_REGION] / [IN_CHAT_RANGE]]" />
 	<filter_editor
      follows="left|top|right"
      height="23"
