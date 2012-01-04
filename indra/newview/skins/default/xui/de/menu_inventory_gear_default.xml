@@ -5,6 +5,18 @@
 	<menu_item_check label="Nach aktuellsten Objekten sortieren" name="sort_by_recent"/>
 	<menu_item_check label="Ordner immer nach Namen sortieren" name="sort_folders_by_name"/>
 	<menu_item_check label="Systemordner nach oben" name="sort_system_folders_to_top"/>
+	<!-- ## Zi: Extended Inventory Search -->
+	<menu label="Suchen nach..." name="inventory_search_menu">
+		<menu_item_check name="inventory_search_by_name" label="Name"/>
+		<menu_item_check name="inventory_search_by_creator" label="Ersteller"/>
+		<menu_item_check name="inventory_search_by_description" label="Beschreibung"/>
+		<menu_item_check name="inventory_search_by_uuid" label="UUID"/>
+		<menu_item_check name="inventory_search_by_all" label="Allem"/>
+<!-- Not implemented yet
+		<menu_item_check name="inventory_show_partial_results" label="Zeige unvollständige Suchergebnisse"/>
+-->
+	</menu>
+	<!-- ## Zi: Extended Inventory Search -->
     <menu_item_check label="Objekte hinzufügen per Doppelklick" name="add_inv_toggle"/>
 	<menu_item_call label="Filter anzeigen" name="show_filters"/>
 	<menu_item_call label="Filter zurücksetzen" name="reset_filters"/>
