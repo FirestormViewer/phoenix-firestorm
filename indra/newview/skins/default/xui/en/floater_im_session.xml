@@ -101,7 +101,7 @@
        </layout_panel>
        
 
-       
+<!-- Ansariel: Translation of IMs is currently not available
        <layout_panel
           name="trans_panel"
           auto_resize="false"
@@ -125,7 +125,8 @@
 	          tool_tip="Use selected translation service"
               name="translate_btn"/>       
        </layout_panel>      
-      
+-->
+
         <layout_panel
           name="friend_panel"
           auto_resize="false"
