@@ -20,29 +20,59 @@
         <key>announce</key>
             <integer>0</integer>
         <key>author</key>
-            <string>Wulf</string>
+            <string>Wulf / TankMaster</string>
         <key>data</key>
             <map>
+            <key>afaic</key>
+                <string>As far as I am concerned</string>
+            <key>afaik</key>
+                <string>As far as I know</string>
             <key>afk</key>
                 <string>(Away from Keyboard)</string>
             <key>atm</key>
                 <string>at the moment</string>
+            <key>bbiab</key>
+                <string>(Be back in a bit)</string>
             <key>bbl</key>
                 <string>(Be back later)</string>
             <key>brb</key>
                 <string>(Be Right Back)</string>
+            <key>btw</key>
+                <string>By the way</string>
+            <key>fyi</key>
+                <string>For your information</string>
+            <key>fwiw</key>
+                <string>For what its worth</string>
             <key>gtg</key>
-                <string>Got to go</string>
+                <string>(Got to go)</string>
+            <key>idk</key>
+                <string>I don't know</string>
+            <key>iirc</key>
+                <string>If I recall correctly</string>
+            <key>imho</key>
+                <string>in my humble opinion</string>
+            <key>imo</key>
+                <string>in my opinion</string>
+            <key>irl</key>
+                <string>in real life</string>
+            <key>lol</key>
+                <string>(Laughing out Loud)</string>
             <key>nm</key>
                 <string>Not much</string>
             <key>np</key>
                 <string>No problem</string>
+            <key>nsfw</key>
+                <string>not safe for work</string>
             <key>nvm</key>
                 <string>Nevermind</string>
+            <key>rofl</key>
+                <string>(Rolling on Floor Laughing)</string>
             <key>tc</key>
                 <string>Take care</string>
             <key>thx</key>
                 <string>Thanks</string>
+            <key>ttfn</key>
+                <string>Ta Ta for now</string>
             <key>ttyl</key>
                 <string>Talk to you later</string>
             <key>ty</key>
@@ -53,9 +83,11 @@
                 <string>Welcome back</string>
             <key>yw</key>
                 <string>You&apos;re Welcome</string>
+            <key>yvw</key>
+                <string>You&apos;re very welcome</string>
             </map>
         <key>enabled</key>
-            <integer>0</integer>
+            <integer>1</integer>
         <key>priority</key>
             <integer>4</integer>
         <key>wordStyle</key>
@@ -3949,6 +3981,8 @@
                 <string>hypocrite</string>
             <key>hypocrits</key>
                 <string>hypocrites</string>
+            <key>i</key>
+                <string>I</string>
             <key>iconclastic</key>
                 <string>iconoclastic</string>
             <key>idaeidae</key>
@@ -8255,6 +8289,8 @@
                 <string>working</string>
             <key>wonderfull</key>
                 <string>wonderful</string>
+            <key>wont</key>
+                <string>won&apos;t</string>
             <key>wordlwide</key>
                 <string>worldwide</string>
             <key>workststion</key>
@@ -8308,7 +8344,9 @@
             <key>yersa</key>
                 <string>years</string>
             <key>yotube</key>
-                <string>youtube</string>
+                <string>YouTube</string>
+            <key>youre</key>
+                <string>you&apos;re</string>
             <key>youseff</key>
                 <string>yousef</string>
             <key>youself</key>
