@@ -162,6 +162,7 @@ public:
 		// focus overrides
 		void onFocusLost();
 		void onFocusReceived();
+		void setFocus(BOOL b);
 		
 		// Incoming media event dispatcher
 		virtual void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event);

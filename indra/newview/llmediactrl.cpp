@@ -385,6 +385,23 @@ void LLMediaCtrl::onFocusLost()
 	LLPanel::onFocusLost();
 }
 
+// Ansariel: Workaround for FIRE-3814:
+//           Explicitely call the according event handlers
+//           so the context menu is shown properly.
+//           This might go away later.
+void LLMediaCtrl::setFocus(BOOL b)
+{
+	if (b)
+	{
+		onFocusReceived();
+	}
+	else
+	{
+		onFocusLost();
+	}
+	LLPanel::setFocus(b);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 BOOL LLMediaCtrl::postBuild ()
