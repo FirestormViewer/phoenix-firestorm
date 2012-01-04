@@ -44,6 +44,7 @@
 // [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "llfloaterwebcontent.h"
 
 //
 // Constants
@@ -552,7 +553,18 @@ void start_gesture( EKeystate s )
 	// Ansariel: If avatar is pointing at something, don't start
 	//           gesture. This works around the bug with Shared
 	//           Media prims.
-	if (gAgentCamera.mPointAtObject != NULL) return;
+	if (gAgentCamera.mPointAtObject)
+	{
+		return;
+	}
+
+	// Ansariel: FIRE-4167: Don't start gesture if a floater with
+	//           web content has focus
+	LLFloater* focused_floater = gFloaterView->getFocusedFloater();
+	if (focused_floater && dynamic_cast<LLFloaterWebContent*>(focused_floater))
+	{
+		return;
+	}
 
 	LLUICtrl* focus_ctrlp = dynamic_cast<LLUICtrl*>(gFocusMgr.getKeyboardFocus());
 	if (KEYSTATE_UP == s &&
