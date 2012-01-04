@@ -926,6 +926,9 @@ void LLPanelPeople::updateNearbyList()
 	mNearbyList->getItems(items);
 	
 	//STEP 2: Transform detected model list data into more flexible multimap data structure;
+	//TS: Count avatars in chat range and in the same region
+	U32 inChatRange = 0;
+	U32 inSameRegion = 0;
 	std::vector<LLVector3d>::const_iterator
 		pos_it = positions.begin(),
 		pos_end = positions.end();	
@@ -1171,7 +1174,12 @@ void LLPanelPeople::updateNearbyList()
 		row["columns"][0]["value"] = avName;
 		row["columns"][1]["column"] = "in_region";
 		row["columns"][1]["type"] = "icon";
-		row["columns"][1]["value"] = (regionSelf == avRegion ? "avatar_in_region" : "");
+		row["columns"][1]["value"] = "";
+		if (regionSelf == avRegion)
+		{
+			row["columns"][1]["value"] = "avatar_in_region";
+			inSameRegion++;
+		}
 		row["columns"][2]["column"] = "flags";
 		row["columns"][2]["value"] = avFlagStr;
 		row["columns"][3]["column"] = "age";
@@ -1191,6 +1199,7 @@ void LLPanelPeople::updateNearbyList()
 			if (avRange <= CHAT_NORMAL_RADIUS)
 			{
 				radarRangeCell->setColor(LLUIColorTable::instance().getColor("AvatarListItemChatRange", LLColor4::red));
+				inChatRange++;
 			}
 			else if (avRange <= CHAT_SHOUT_RADIUS)
 			{
@@ -1412,7 +1421,7 @@ void LLPanelPeople::updateNearbyList()
 	
 	// update header w/number of avs detected in this sweep
 	std::string name_template=getString("avatar_name_count");
-	mRadarList->setColumnLabel("name",llformat(name_template.c_str(),lastRadarSweep.size()));
+	mRadarList->setColumnLabel("name",llformat(name_template.c_str(),lastRadarSweep.size(),inSameRegion,inChatRange));
 	// update minimap with selected avatars
 	uuid_vec_t selected_uuids;
 	LLUUID sVal = mRadarList->getSelectedValue().asUUID();
