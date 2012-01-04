@@ -734,7 +734,10 @@
      reference="BrickBrown" />
     <color
      name="MapChatRingColor"
-     value="0 0 1 0.1" />
+     value="1 1 0 0.3" />
+    <color
+     name="MapShoutRingColor"
+     value="1 0 0 0.3" />
     <color
      name="MenuBarBgColor"
      reference="DkGray" />

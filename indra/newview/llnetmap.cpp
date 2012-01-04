@@ -191,7 +191,8 @@ void LLNetMap::draw()
 	static LLUIColor map_track_disabled_color = LLUIColorTable::instance().getColor("MapTrackDisabledColor", LLColor4::white);
 	static LLUIColor map_frustum_color = LLUIColorTable::instance().getColor("MapFrustumColor", LLColor4::white);
 	static LLUIColor map_frustum_rotating_color = LLUIColorTable::instance().getColor("MapFrustumRotatingColor", LLColor4::white);
-	static LLUIColor map_chat_ring_color = LLUIColorTable::instance().getColor("MapChatRingColor", LLColor4::white);
+	static LLUIColor map_chat_ring_color = LLUIColorTable::instance().getColor("MapChatRingColor", LLColor4::yellow);
+	static LLUIColor map_shout_ring_color = LLUIColorTable::instance().getColor("MapShoutRingColor", LLColor4::red);
 	
 	if (mObjectImagep.isNull())
 	{
@@ -558,7 +559,7 @@ void LLNetMap::draw()
 			if(chat_ring)
 			{
 				drawRing(20.0, pos_map, map_chat_ring_color);
-				drawRing(100.0, pos_map, map_chat_ring_color);
+				drawRing(100.0, pos_map, map_shout_ring_color);
 			}
 		}
 

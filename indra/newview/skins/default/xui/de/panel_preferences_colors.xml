@@ -3,7 +3,16 @@
 	<text name="effects_color_textbox">
 		Meine Effekte (Auswahlstrahl):
 	</text>
+	<text name="netmap_color_textbox">
+		Mini-Karte:
+	</text>
 	<color_swatch name="effect_color_swatch" tool_tip="Klicken Sie hier, um die Farbauswahl zu öffnen"/>
+	<text name="netmap_chatring_color_label">
+		Chat-Reichweite
+	</text>
+	<text name="netmap_shoutring_color_label">
+		Ruf-Reichweite
+	</text>
 	<text name="font_colors">
 		Schriftfarben für Chat:
 	</text>
