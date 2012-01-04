@@ -89,7 +89,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 	 value="[REGION](Double-click to teleport, shift-drag to pan)"/>
 	<string
 	 name="avatar_name_count"
-	 value="Name [%d]" />
+	 value="Name [%d/%d/%d]" />
 	<filter_editor
      follows="left|top|right"
      height="23"
