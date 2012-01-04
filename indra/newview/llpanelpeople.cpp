@@ -1420,8 +1420,11 @@ void LLPanelPeople::updateNearbyList()
 	//
 	
 	// update header w/number of avs detected in this sweep
-	std::string name_template=getString("avatar_name_count");
-	mRadarList->setColumnLabel("name",llformat(name_template.c_str(),lastRadarSweep.size(),inSameRegion,inChatRange));
+	LLStringUtil::format_map_t name_count_args;
+	name_count_args["[TOTAL]"] = llformat("%d", lastRadarSweep.size());
+	name_count_args["[IN_REGION]"] = llformat("%d", inSameRegion);
+	name_count_args["[IN_CHAT_RANGE]"] = llformat("%d", inChatRange);
+	mRadarList->setColumnLabel("name", getString("avatar_name_count", name_count_args));
 	// update minimap with selected avatars
 	uuid_vec_t selected_uuids;
 	LLUUID sVal = mRadarList->getSelectedValue().asUUID();
