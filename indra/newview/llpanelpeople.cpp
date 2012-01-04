@@ -1966,7 +1966,15 @@ void LLPanelPeople::teleportToAvatar(LLUUID targetAv)
 		LLAvatarListItem* av = static_cast<LLAvatarListItem*>(*itItem);
 		if (av->getAvatarId() == targetAv)
 		{
-			gAgent.teleportViaLocation(av->getPosition());
+			LLVector3d avpos = av->getPosition();
+			if (avpos.mdV[VZ] == -1)
+			{
+				LLNotificationsUtil::add("TeleportToAvatarNotPossible");
+			}
+			else
+			{
+				gAgent.teleportViaLocation(avpos);
+			}
 			return;
 		}
 	}

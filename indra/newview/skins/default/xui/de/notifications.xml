@@ -3307,4 +3307,8 @@ Der Name der Debug-Einstellung wurde in die Zwischenablage kopiert. Er kann jetz
     </form>
   </notification>
   <!-- ## Zi: Debug Settings Editor -->
+
+  <notification name="TeleportToAvatarNotPossible">
+Teleportieren zum Avatar nicht möglich, da die exakte Position unbekannt ist.
+  </notification>
 </notifications>

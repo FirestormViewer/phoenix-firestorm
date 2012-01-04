@@ -8546,4 +8546,12 @@ Current setting: [CURRENT_VALUE]
   </notification>
   <!-- ## Zi: Debug Settings Editor -->
 
+  <notification
+   icon="alertmodal.tga"
+   name="TeleportToAvatarNotPossible"
+   type="alertmodal">
+Teleport to this avatar not possible, because the exact position is unknown.
+  <tag>fail</tag>
+  </notification>
+
 </notifications>
