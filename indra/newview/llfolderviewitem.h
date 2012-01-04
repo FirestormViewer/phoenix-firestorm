@@ -134,6 +134,14 @@ protected:
 
 	std::string					mLabel;
 	std::string					mSearchableLabel;
+
+	// ## Zi: Extended Inventory Search
+	std::string					mSearchableCreator;
+	std::string					mSearchableDescription;
+	std::string					mSearchableUUID;
+	std::string					mSearchableAll;
+	// ## Zi: Extended Inventory Search
+
 	S32							mLabelWidth;
 	bool						mLabelWidthDirty;
 	time_t						mCreationDate;
@@ -276,6 +284,13 @@ public:
 	const std::string& getName( void ) const;
 
 	const std::string& getSearchableLabel( void ) const;
+
+	// ## Zi: Extended Inventory Search
+	const std::string& getSearchableCreator( void ) const;
+	const std::string& getSearchableDescription( void ) const;
+	const std::string& getSearchableUUID( void ) const;
+	const std::string& getSearchableAll( void ) const;
+	// ## Zi: Extended Inventory Search
 
 	// This method returns the label displayed on the view. This
 	// method was primarily added to allow sorting on the folder

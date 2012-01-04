@@ -329,6 +329,18 @@ void LLInventoryPanel::setFilterSubString(const std::string& string)
 	getFilter()->setFilterSubString(string);
 }
 
+// ## Zi: Extended Inventory Search
+void LLInventoryPanel::setFilterSubStringTarget(const std::string& target)
+{
+	getFilter()->setFilterSubStringTarget(target);
+}
+
+LLInventoryFilter::EFilterSubstringTarget LLInventoryPanel::getFilterSubStringTarget() const
+{
+	return getFilter()->getFilterSubStringTarget();
+}
+// ## Zi: Extended Inventory Search
+
 const std::string LLInventoryPanel::getFilterSubString() 
 { 
 	return mFolderRoot->getFilterSubString(); 

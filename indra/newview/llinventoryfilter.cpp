@@ -64,6 +64,7 @@ LLInventoryFilter::LLInventoryFilter(const std::string& name)
 :	mName(name),
 	mModified(FALSE),
 	mNeedTextRebuild(TRUE),
+	mFilterSubStringTarget(SUBST_TARGET_NAME),	// ## Zi: Extended Inventory Search
 	mEmptyLookupMessage("InventoryNoMatchingItems")
 {
 	mOrder = SO_FOLDERS_BY_NAME; // This gets overridden by a pref immediately
@@ -93,6 +94,47 @@ LLInventoryFilter::~LLInventoryFilter()
 {
 }
 
+// ## Zi: Extended Inventory Search
+void LLInventoryFilter::setFilterSubStringTarget(const std::string& targetName)
+{
+	if(targetName=="name")
+		mFilterSubStringTarget=SUBST_TARGET_NAME;
+	else if(targetName=="creator")
+		mFilterSubStringTarget=SUBST_TARGET_CREATOR;
+	else if(targetName=="description")
+		mFilterSubStringTarget=SUBST_TARGET_DESCRIPTION;
+	else if(targetName=="uuid")
+		mFilterSubStringTarget=SUBST_TARGET_UUID;
+	else if(targetName=="all")
+		mFilterSubStringTarget=SUBST_TARGET_ALL;
+	else
+		llwarns << "Unknown sub string target: " << targetName << llendl;
+}
+
+LLInventoryFilter::EFilterSubstringTarget LLInventoryFilter::getFilterSubStringTarget() const
+{
+	return mFilterSubStringTarget;
+}
+
+// returns one of the searchable strings, depending on the currently selected search type
+const std::string& LLInventoryFilter::getSearchableTarget(const LLFolderViewItem* item) const
+{
+	if(mFilterSubStringTarget==SUBST_TARGET_NAME)
+		return item->getSearchableLabel();
+	else if(mFilterSubStringTarget==SUBST_TARGET_CREATOR)
+		return item->getSearchableCreator();
+	else if(mFilterSubStringTarget==SUBST_TARGET_DESCRIPTION)
+		return item->getSearchableDescription();
+	else if(mFilterSubStringTarget==SUBST_TARGET_UUID)
+		return item->getSearchableUUID();
+	else if(mFilterSubStringTarget==SUBST_TARGET_ALL)
+		return item->getSearchableAll();
+
+	llwarns << "Unknown search substring target: " << mFilterSubStringTarget << llendl;
+	return item->getSearchableLabel();
+}
+// ## Zi: Extended Inventory Search
+
 BOOL LLInventoryFilter::check(const LLFolderViewItem* item) 
 {
 	// If it's a folder and we're showing all folders, return TRUE automatically.
@@ -106,8 +148,8 @@ BOOL LLInventoryFilter::check(const LLFolderViewItem* item)
 	mSubStringMatchOffset = std::string::npos;
 	if (mFilterSubStrings.size())
 	{
-		const std::string& searchLabel = item->getSearchableLabel();
-		
+		const std::string& searchLabel=getSearchableTarget(item);		// ## Zi: Extended Inventory Search
+
 		U32 index = 0;
 		for (std::vector<std::string>::iterator it=mFilterSubStrings.begin();
 			it<mFilterSubStrings.end(); it++, index++)

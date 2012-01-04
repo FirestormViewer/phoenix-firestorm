@@ -145,6 +145,10 @@ public:
 	void setFilterWearableTypes(U64 filter);
 	void setFilterSubString(const std::string& string);
 	const std::string getFilterSubString();
+	// ## Zi: Extended Inventory Search
+	void setFilterSubStringTarget(const std::string& target);
+	LLInventoryFilter::EFilterSubstringTarget getFilterSubStringTarget() const;
+	// ## Zi: Extended Inventory Search
 	void setSinceLogoff(BOOL sl);
 	void setHoursAgo(U32 hours);
 	BOOL getSinceLogoff();

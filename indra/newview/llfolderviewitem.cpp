@@ -311,6 +311,51 @@ void LLFolderViewItem::refresh()
 	searchable_label.append(mLabelSuffix);
 	LLStringUtil::toUpper(searchable_label);
 
+	// ## Zi: Extended Inventory Search
+	LLViewerInventoryItem* item=getInventoryItem();
+	if(item)
+	{
+		// flag to determine if we need to change the mSearchableAll string
+		BOOL change_all=FALSE;
+
+		// creator never changes, so we only take it once
+		if(mSearchableCreator.empty())
+		{
+				std::string creator_name;
+				if(gCacheName->getFullName(item->getCreatorUUID(),creator_name))
+				{
+					mSearchableCreator=creator_name;
+					LLStringUtil::toUpper(mSearchableCreator);
+					change_all=TRUE;
+				}
+		}
+
+		if(!item->getDescription().empty())
+		{
+			mSearchableDescription=item->getDescription();
+			LLStringUtil::toUpper(mSearchableDescription);
+			change_all=TRUE;
+		}
+
+		if(!item->getAssetUUID().isNull())
+		{
+			mSearchableUUID=item->getAssetUUID().asString();
+			LLStringUtil::toUpper(mSearchableUUID);
+			change_all=TRUE;
+		}
+
+		// if any of the above was changed, rebuild the mSearchableAll string
+		// using the + separator because it's used for multi substring search, so
+		// this can't do any harm like searches bleeding over from one field
+		// into the next
+		if(change_all)
+		{
+			mSearchableAll=mSearchableLabel+"+"+mSearchableCreator+"+"+mSearchableDescription+"+"+mSearchableUUID;
+			dirtyFilter();
+		}
+	}
+	// ## Zi: Extended Inventory Search
+
 	if (mSearchableLabel.compare(searchable_label))
 	{
 		mSearchableLabel.assign(searchable_label);
@@ -670,6 +715,28 @@ const std::string& LLFolderViewItem::getSearchableLabel() const
 {
 	return mSearchableLabel;
 }
+
+// ## Zi: Extended Inventory Search
+const std::string& LLFolderViewItem::getSearchableCreator() const
+{
+	return mSearchableCreator;
+}
+
+const std::string& LLFolderViewItem::getSearchableDescription() const
+{
+	return mSearchableDescription;
+}
+
+const std::string& LLFolderViewItem::getSearchableUUID() const
+{
+	return mSearchableUUID;
+}
+
+const std::string& LLFolderViewItem::getSearchableAll() const
+{
+	return mSearchableAll;
+}
+// ## Zi: Extended Inventory Search
 
 LLViewerInventoryItem * LLFolderViewItem::getInventoryItem(void)
 {
@@ -1133,7 +1200,10 @@ void LLFolderViewItem::draw()
 	//
 	
 	//	Begin Multi-substring inventory search
-	if (mStringMatchOffsets.size())
+//	if (mStringMatchOffsets.size())
+
+	// ## Zi: Extended Inventory Search - only highlight when search target is set to "name"
+	if (mStringMatchOffsets.size() && getRoot()->getFilter()->getFilterSubStringTarget()==LLInventoryFilter::SUBST_TARGET_NAME)
 	{
 		//std::vector<std::string::size_type> mStringMatchOffsets;
 		//std::vector<std::string::size_type> mStringMatchSizes;

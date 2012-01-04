@@ -276,13 +276,75 @@
 		</menu_item_call>
 	</menu>
 
-	<!-- Not implemented yet
 	<menu
 		label="Search"
 		name="inventory_search_menu"
 		top="0">
+		<menu_item_check
+			name="inventory_search_by_name"
+			label="By Name">
+			<on_click
+				function="Inventory.SearchTarget.Set"
+				parameter="name" />
+			<on_check
+				function="Inventory.SearchTarget.Check"
+				parameter="name" />
+		</menu_item_check>
+		<menu_item_check
+			name="inventory_search_by_creator"
+			label="By Creator">
+			<on_click
+				function="Inventory.SearchTarget.Set"
+				parameter="creator" />
+			<on_check
+				function="Inventory.SearchTarget.Check"
+				parameter="creator" />
+		</menu_item_check>
+		<menu_item_check
+			name="inventory_search_by_description"
+			label="By Description">
+			<on_click
+				function="Inventory.SearchTarget.Set"
+				parameter="description" />
+			<on_check
+				function="Inventory.SearchTarget.Check"
+				parameter="description" />
+		</menu_item_check>
+		<menu_item_check
+			name="inventory_search_by_uuid"
+			label="By UUID">
+			<on_click
+				function="Inventory.SearchTarget.Set"
+				parameter="uuid" />
+			<on_check
+				function="Inventory.SearchTarget.Check"
+				parameter="uuid" />
+		</menu_item_check>
+		<menu_item_separator />
+		<menu_item_check
+			name="inventory_search_by_all"
+			label="By All">
+			<on_click
+				function="Inventory.SearchTarget.Set"
+				parameter="all" />
+			<on_check
+				function="Inventory.SearchTarget.Check"
+				parameter="all" />
+		</menu_item_check>
+<!-- Not implemented yet
+		<menu_item_separator />
+		<menu_item_check
+			name="inventory_show_partial_results"
+			label="Show Partial Search Results">
+			<menu_item_check.on_click
+				function="Inventory.SearchTarget.Set"
+				parameter="partial" />
+			<menu_item_check.on_check
+				function="Inventory.SearchTarget.Check"
+				parameter="partial" />
+		</menu_item_check>
+-->
 	</menu>
-	-->
 
 	</menu_bar>
 
