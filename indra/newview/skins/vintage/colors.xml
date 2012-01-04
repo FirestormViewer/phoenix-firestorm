@@ -41,12 +41,16 @@
 	<color
 		name="GridlineBGColor"
 		value="0.92 0.92 1 0.78" />
+	<!-- Text color for any type of input widget -->
 	<color
 		name="TextFgColor"
 		reference="Black" />
 	<color
 		name="TextFgDisabledColor"
 		reference="Black_25" />
+	<color
+		name="LabelTextColor"
+		value="0.576 0.663 0.835 1.0" />
 	<color
 		name="ChicletFlashColor"
 		value="SchemeLightest" />
@@ -59,6 +63,14 @@
 	<color
 		name="ButtonFlashBgColor"
 		reference="White" />
+	<!-- Color of the push button label -->
+	<color
+		name="ButtonLabelColor"
+		value="0.862 0.862 0.862 1.0" />
+	<!-- Color of the push button label when disabled -->
+	<color
+		name="ButtonLabelDisabledColor"
+		value="0.549 0.565 0.761 1.0" />
 	<color
 		name="ChatHistoryBgColor"
 		reference="OldGray_63" />

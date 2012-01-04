@@ -1,0 +1,90 @@
+<!-- Vintage Texture Overrides -->
+
+<textures version="101">
+
+	<!-- Floater drag handles -->
+	<texture
+		name="floater_background_header"
+		file_name="windows/floater_background_header.tga"
+		preload="true"
+		scale.left="2"
+		scale.bottom="2"
+		scale.top="6"
+		scale.right="30" />
+
+	<!-- Floater background with black frame around the edges -->
+	<texture name="floater_background"
+		file_name="windows/floater_background.tga"
+		preload="true"
+		scale.left="2"
+		scale.bottom="2"
+		scale.top="30"
+		scale.right="30" />
+
+	<!-- PushButton_On hasn't come up yet -->
+
+	<!-- Idle push button -->
+	<texture
+		name="PushButton_Off"
+		file_name="widgets/PushButton_Off.png"
+		preload="true"
+		scale.left="12"
+		scale.top="12"
+		scale.right="18"
+		scale.bottom="13" />
+
+	<!-- Disabled push button -->
+	<texture
+		name="PushButton_Disabled"
+		file_name="widgets/PushButton_Disabled.png"
+		preload="true"
+		scale.left="12"
+		scale.top="12"
+		scale.right="18"
+		scale.bottom="13" />
+
+	<!-- Pressed / Toggled push button -->
+	<texture
+		name="PushButton_Selected"
+		file_name="widgets/PushButton_Selected.png"
+		preload="true"
+		scale.left="12"
+		scale.top="12"
+		scale.right="18"
+		scale.bottom="13" />
+
+	<!-- Pressed / Toggled push button, variant used in some cases (login screen).
+	     We use the same texture for it. -->
+	<texture
+		name="PushButton_On_Selected"
+		file_name="widgets/PushButton_Selected.png"
+		preload="true"
+		scale.left="12"
+		scale.top="12"
+		scale.right="18"
+		scale.bottom="13" />
+
+	<!-- Pressed / Toggled push button, yet another variant used in some cases (bottom tray).
+	     We use the same texture for it. -->
+	<texture
+		name="PushButton_Selected_Press"
+		file_name="widgets/PushButton_Selected.png"
+		preload="true"
+		scale.left="12"
+		scale.top="12"
+		scale.right="18"
+		scale.bottom="13" />
+
+	<!-- Pressed / Toggled push button, yet another variant used in some cases (bottom tray).
+	     Seems to be used while pressing down the button before toggling into enabled state.
+	     We use the same texture for it. -->
+	<texture
+		name="PushButton_Press"
+		file_name="widgets/PushButton_Selected.png"
+		preload="true"
+		scale.left="12"
+		scale.top="12"
+		scale.right="18"
+		scale.bottom="13" />
+
+</textures>
