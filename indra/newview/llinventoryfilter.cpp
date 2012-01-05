@@ -514,10 +514,13 @@ void LLInventoryFilter::setFilterSubString(const std::string& string)
 			setModified(FILTER_RESTART);
 		}
 
+		// ## Zi: Filter Links Menu
+		// We don't do this anymore, we have a menu option for it now. -Zi
 		// Cancel out filter links once the search string is modified
-		{
-			mFilterOps.mFilterLinks = FILTERLINK_INCLUDE_LINKS;
-		}
+//		{
+//			mFilterOps.mFilterLinks = FILTERLINK_INCLUDE_LINKS;
+//		}
+		// ## Zi: Filter Links Menu
 	}
 	//	End Multi-substring inventory search
 }
@@ -625,8 +628,12 @@ void LLInventoryFilter::setHoursAgo(U32 hours)
 	mFilterOps.mFilterTypes |= FILTERTYPE_DATE;
 }
 
+// ## Zi: Filter Links Menu
 void LLInventoryFilter::setFilterLinks(U64 filter_links)
 {
+	// original LL code
+	/*
+	mFilterOps.mFilterLinks = filter_links;
 	if (mFilterOps.mFilterLinks != filter_links)
 	{
 		if (mFilterOps.mFilterLinks == FILTERLINK_EXCLUDE_LINKS ||
@@ -635,8 +642,27 @@ void LLInventoryFilter::setFilterLinks(U64 filter_links)
 		else
 			setModified(FILTER_LESS_RESTRICTIVE);
 	}
-	mFilterOps.mFilterLinks = filter_links;
+	*/
+
+	if (mFilterOps.mFilterLinks != filter_links)
+	{
+		LLInventoryFilter::EFilterBehavior modifyMode=FILTER_RESTART;
+
+		if(filter_links==FILTERLINK_INCLUDE_LINKS)
+			modifyMode=FILTER_LESS_RESTRICTIVE;
+		else if(mFilterOps.mFilterLinks==FILTERLINK_INCLUDE_LINKS)
+			modifyMode=FILTER_MORE_RESTRICTIVE;
+
+		else if(filter_links==FILTERLINK_EXCLUDE_LINKS && mFilterOps.mFilterLinks==FILTERLINK_INCLUDE_LINKS)
+			modifyMode=FILTER_MORE_RESTRICTIVE;
+		else if(filter_links==FILTERLINK_ONLY_LINKS && mFilterOps.mFilterLinks==FILTERLINK_INCLUDE_LINKS)
+			modifyMode=FILTER_MORE_RESTRICTIVE;
+
+		mFilterOps.mFilterLinks = filter_links;
+		setModified(modifyMode);
+	}
 }
+// ## Zi: Filter Links Menu
 
 void LLInventoryFilter::setShowFolderState(EFolderShow state)
 {

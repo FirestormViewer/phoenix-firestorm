@@ -383,6 +383,13 @@ void LLInventoryPanel::setFilterLinks(U64 filter_links)
 	getFilter()->setFilterLinks(filter_links);
 }
 
+// ## Zi: Filter Links Menu
+U64 LLInventoryPanel::getFilterLinks()
+{
+	return getFilter()->getFilterLinks();
+}
+// ## Zi: Filter Links Menu
+
 void LLInventoryPanel::setShowFolderState(LLInventoryFilter::EFolderShow show)
 {
 	getFilter()->setShowFolderState(show);

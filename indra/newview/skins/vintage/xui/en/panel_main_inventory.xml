@@ -38,6 +38,7 @@
 
 	<menu
 		label="Inventory"
+		tear_off="true"
 		name="inventory_inventory_menu">
 		<menu_item_call
 			name="inventory_open"
@@ -89,6 +90,7 @@
 
 	<menu
 		label="Create"
+		tear_off="true"
 		name="inventory_create_menu">
 		<menu_item_call
 			name="inventory_new_folder"
@@ -244,6 +246,7 @@
 	<menu
 		label="Sort"
 		name="inventory_sort_menu"
+		tear_off="true"
 		top="0">
 		<menu_item_check
 			name="inventory_sort_by_name"
@@ -291,6 +294,7 @@
 	<menu
 		label="Search"
 		name="inventory_search_menu"
+		tear_off="true"
 		top="0">
 		<menu_item_check
 			name="inventory_search_by_name"
@@ -342,6 +346,37 @@
 			<on_check
 				function="Inventory.SearchTarget.Check"
 				parameter="all" />
+		</menu_item_check>
+		<menu_item_separator />
+		<menu_item_check
+			name="inventory_filter_show_links"
+			label="Show Links">
+			<on_click
+				function="Inventory.FilterLinks.Set"
+				parameter="show_links" />
+			<on_check
+				function="Inventory.FilterLinks.Check"
+				parameter="show_links" />
+		</menu_item_check>
+		<menu_item_check
+			name="inventory_filter_only_links"
+			label="Show Only Links">
+			<on_click
+				function="Inventory.FilterLinks.Set"
+				parameter="only_links" />
+			<on_check
+				function="Inventory.FilterLinks.Check"
+				parameter="only_links" />
+		</menu_item_check>
+		<menu_item_check
+			name="inventory_filter_hide_links"
+			label="Hide Links">
+			<on_click
+				function="Inventory.FilterLinks.Set"
+				parameter="hide_links" />
+			<on_check
+				function="Inventory.FilterLinks.Check"
+				parameter="hide_links" />
 		</menu_item_check>
 <!-- Not implemented yet
 		<menu_item_separator />

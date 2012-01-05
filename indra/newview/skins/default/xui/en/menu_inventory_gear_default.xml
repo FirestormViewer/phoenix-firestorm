@@ -233,7 +233,41 @@
     <menu_item_separator
      layout="topleft" />
 
-    <menu_item_call
+	<!-- ## Zi: Filter Links Menu -->
+	<menu_item_check
+		name="inventory_filter_show_links"
+		label="Show Links">
+		<on_click
+			function="Inventory.FilterLinks.Set"
+			parameter="show_links" />
+		<on_check
+			function="Inventory.FilterLinks.Check"
+			parameter="show_links" />
+	</menu_item_check>
+	<menu_item_check
+		name="inventory_filter_only_links"
+		label="Show Only Links">
+		<on_click
+			function="Inventory.FilterLinks.Set"
+			parameter="only_links" />
+		<on_check
+			function="Inventory.FilterLinks.Check"
+			parameter="only_links" />
+	</menu_item_check>
+	<menu_item_check
+		name="inventory_filter_hide_links"
+		label="Hide Links">
+		<on_click
+			function="Inventory.FilterLinks.Set"
+			parameter="hide_links" />
+		<on_check
+			function="Inventory.FilterLinks.Check"
+			parameter="hide_links" />
+	</menu_item_check>
+	<menu_item_separator />
+	<!-- ## Zi: Filter Links Menu -->
+
+	<menu_item_call
      label="Empty Trash"
      layout="topleft"
      name="empty_trash">
