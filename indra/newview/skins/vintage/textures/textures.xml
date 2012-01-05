@@ -87,4 +87,24 @@
 		scale.right="18"
 		scale.bottom="13" />
 
+	<!-- Scrollbar Thumb to grab and scroll, horizontal version -->
+	<texture name="ScrollThumb_Horiz"
+		file_name="widgets/ScrollThumb_Horiz.png"
+		preload="true"
+		scale.left="10"
+		scale.top="4"
+		scale.bottom="4"
+		scale.right="53" />
+
+	<!-- Scrollbar Thumb to grab and scroll, vertical version -->
+	<!-- This is actually the same as in the default skin, but we provide it for completeness sake,
+	     since we had to change the horizontal version. -->
+	<texture name="ScrollThumb_Vert"
+		file_name="widgets/ScrollThumb_Vert.png"
+		preload="true"
+		scale.left="4"
+		scale.top="53"
+		scale.bottom="10"
+		scale.right="4" />
+
 </textures>

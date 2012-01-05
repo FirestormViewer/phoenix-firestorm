@@ -171,6 +171,12 @@
 		name="ScrollHighlightedColor"
 		reference="Unused?" />
 	<color
+		name="ScrollbarThumbColor"
+		reference="White" />
+	<color
+		name="ScrollbarTrackColor"
+		value="0.6 0.6 0.6 1.0" />
+	<color
 		name="ToolTipTextColor"
 		reference="TextFgColor" />
 	<color
