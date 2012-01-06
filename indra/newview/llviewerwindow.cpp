@@ -1781,6 +1781,8 @@ void LLViewerWindow::initBase()
 	cp.name("console");
 	cp.max_lines(gSavedSettings.getS32("ConsoleBufferSize"));
 	cp.rect(getChatConsoleRect());
+	cp.parse_urls(true); // Ansariel: Enable URL parsing for the chat console
+	cp.background_image("Rounded_Square"); // Ansariel: Configurable background for different console types
 	// AO, have console respect/reuse NearbyToastLifeTime for the length popup chat messages are displayed.
 	//cp.persist_time(gSavedSettings.getF32("ChatPersistTime"));
 	cp.persist_time((F32)gSavedSettings.getS32("NearbyToastLifeTime"));

@@ -63,7 +63,9 @@ LLConsole::LLConsole(const LLConsole::Params& p)
 	mLinePersistTime(p.persist_time), // seconds
 	mFont(p.font),
 	mConsoleWidth(0),
-	mConsoleHeight(0)
+	mConsoleHeight(0),
+	mParseUrls(p.parse_urls), // Ansariel: If lines should be parsed for URLs
+	mBackgroundImage(p.background_image) // Ansariel: Configurable background for different console types
 {
 	if (p.font_size_index.isProvided())
 	{
@@ -187,7 +189,7 @@ void LLConsole::draw()
 	//[FIX  FIRE-2822 SJ] Start a little bit higher with the Console not to let it blend with the stand button when Avatar is sitting
 	F32 y_pos = 10.f;
 
-	LLUIImagePtr imagep = LLUI::getUIImage("Rounded_Square");
+	LLUIImagePtr imagep = LLUI::getUIImage(mBackgroundImage);
 
 	//AO: Unify colors and opacity with the color preferences control for all onscreen overlay background
 	//    console/bubblechat/tag backgrounds. FIRE-969
@@ -271,16 +273,19 @@ void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color, LL
 	removeExtraLines();
 
 	// <Ansariel> Parse SLURLs
-	LLUrlMatch urlMatch;
 	LLWString newLine = wline;
-	LLWString workLine = wline;
-	while (LLUrlRegistry::instance().findUrl(workLine, urlMatch))
+	if (mParseUrls)
 	{
-		LLWStringUtil::replaceString(newLine, utf8str_to_wstring(urlMatch.getUrl()), utf8str_to_wstring(urlMatch.getLabel()));
+		LLUrlMatch urlMatch;
+		LLWString workLine = wline;
+		while (LLUrlRegistry::instance().findUrl(workLine, urlMatch))
+		{
+			LLWStringUtil::replaceString(newLine, utf8str_to_wstring(urlMatch.getUrl()), utf8str_to_wstring(urlMatch.getLabel()));
 
-		// Remove the URL from the work line so we don't end in a loop in case of regular URLs!
-		// findUrl will always return the very first URL in a string
-		workLine = workLine.erase(0, urlMatch.getEnd() + 1);
+			// Remove the URL from the work line so we don't end in a loop in case of regular URLs!
+			// findUrl will always return the very first URL in a string
+			workLine = workLine.erase(0, urlMatch.getEnd() + 1);
+		}
 	}
 	// </Ansariel> Parse SLURLs
 

@@ -49,10 +49,15 @@ public:
 		Optional<U32>	max_lines;
 		Optional<F32>	persist_time;
 		Optional<S32>	font_size_index;
+		Optional<bool>	parse_urls; // Ansariel: If lines should be parsed for URLs
+		Optional<std::string> background_image; // Ansariel: Configurable background for different console types
+
 		Params()
 		:	max_lines("max_lines", LLUI::sSettingGroups["config"]->getS32("ConsoleMaxLines")),
 			persist_time("persist_time", 0.f), // forever
-			font_size_index("font_size_index")
+			font_size_index("font_size_index"),
+			parse_urls("parse_urls", false), // Ansariel: If lines should be parsed for URLs
+			background_image("background_image", "transparent") // Ansariel: Configurable background for different console types
 		{
 			changeDefault(mouse_opaque, false);
 		}
@@ -163,7 +168,8 @@ private:
 	const LLFontGL*	mFont;
 	S32			mConsoleWidth;
 	S32			mConsoleHeight;
-
+	bool		mParseUrls; // Ansariel: If lines should be parsed for URLs
+	std::string	mBackgroundImage; // Ansariel: Configurable background for different console types
 };
 
 extern LLConsole* gConsole;
