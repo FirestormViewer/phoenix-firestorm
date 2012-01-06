@@ -60,7 +60,7 @@ const F32 PREVIEW_TEXTURE_MIN_ASPECT = 0.005f;
 
 
 LLPreviewTexture::LLPreviewTexture(const LLSD& key)
-	: LLPreview(key),
+	: LLPreview((key.has("uuid") ? key.get("uuid") : key)), // Changed for texture preview mode
 	  mLoadingFullImage( FALSE ),
 	  mShowKeepDiscard(FALSE),
 	  mCopyToInv(FALSE),
@@ -77,6 +77,14 @@ LLPreviewTexture::LLPreviewTexture(const LLSD& key)
 	if (key.has("save_as"))
 	{
 		mPreviewToSave = TRUE;
+	}
+	// Texture preview mode
+	if (key.has("preview_only"))
+	{
+		mShowKeepDiscard = FALSE;
+		mCopyToInv = FALSE;
+		mIsCopyable = FALSE;
+		mPreviewToSave = FALSE;
 	}
 }
 

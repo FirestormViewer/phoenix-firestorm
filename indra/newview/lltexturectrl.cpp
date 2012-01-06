@@ -992,7 +992,8 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 	mImageAssetID(p.image_id),
 	mDefaultImageAssetID(p.default_image_id),
 	mDefaultImageName(p.default_image_name),
-	mFallbackImage(p.fallback_image)
+	mFallbackImage(p.fallback_image),
+	mPreviewMode(!p.enabled) // For texture preview mode
 {
 	setAllowNoTexture(p.allow_no_texture);
 	setCanApplyImmediately(p.can_apply_immediately);
@@ -1087,7 +1088,9 @@ void LLTextureCtrl::setEnabled( BOOL enabled )
 
 	mCaption->setEnabled( enabled );
 
-	LLView::setEnabled( enabled );
+	// Texture preview mode
+	LLView::setEnabled( (enabled || getValue().asUUID().notNull()) );
+	mPreviewMode = !enabled;
 }
 
 void LLTextureCtrl::setValid(BOOL valid )
@@ -1190,11 +1193,23 @@ BOOL LLTextureCtrl::handleMouseDown(S32 x, S32 y, MASK mask)
 
 	if (!handled && mBorder->parentPointInView(x, y))
 	{
-		showPicker(FALSE);
-		//grab textures first...
-		LLInventoryModelBackgroundFetch::instance().start(gInventory.findCategoryUUIDForType(LLFolderType::FT_TEXTURE));
-		//...then start full inventory fetch.
-		LLInventoryModelBackgroundFetch::instance().start();
+		if (!mPreviewMode)
+		{
+			showPicker(FALSE);
+			//grab textures first...
+			LLInventoryModelBackgroundFetch::instance().start(gInventory.findCategoryUUIDForType(LLFolderType::FT_TEXTURE));
+			//...then start full inventory fetch.
+			LLInventoryModelBackgroundFetch::instance().start();
+		}
+		else
+		{
+			// Open the preview floater for the texture
+			LLSD params;
+			params["uuid"] = getValue();
+			params["preview_only"] = TRUE;
+			LLFloaterReg::showInstance("preview_texture", params, TRUE);
+		}
+
 		handled = TRUE;
 	}
 
@@ -1533,7 +1548,10 @@ BOOL LLTextureCtrl::handleUnicodeCharHere(llwchar uni_char)
 
 void LLTextureCtrl::setValue( const LLSD& value )
 {
-	setImageAssetID(value.asUUID());
+	// Changed for texture preview mode
+	LLUUID uuid = value.asUUID();
+	setImageAssetID(uuid);
+	LLView::setEnabled( (!mPreviewMode || uuid.notNull()) );
 }
 
 LLSD LLTextureCtrl::getValue() const

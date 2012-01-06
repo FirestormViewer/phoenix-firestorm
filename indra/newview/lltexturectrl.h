@@ -208,6 +208,7 @@ private:
 	BOOL					 	mShowLoadingPlaceholder;
 	std::string				 	mLoadingPlaceholderString;
 	S32						 	mLabelWidth;
+	BOOL						mPreviewMode; // If true open texture in preview floater
 };
 
 // XUI HACK: When floaters converted, switch this file to lltexturepicker.h/cpp
