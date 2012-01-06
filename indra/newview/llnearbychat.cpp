@@ -332,6 +332,18 @@ void	LLNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 	}
 }
 
+// virtual
+BOOL LLNearbyChat::focusFirstItem(BOOL prefer_text_fields, BOOL focus_flash)
+{
+	mInputEditor->setFocus(TRUE);
+	onTabInto();
+	if(focus_flash)
+	{
+		gFocusMgr.triggerFocusFlash();
+	}
+	return TRUE;
+}
+
 void LLNearbyChat::onNearbySpeakers()
 {
 	LLSD param;
