@@ -43,6 +43,7 @@
 #include "llsd.h"
 #include "llfontgl.h"
 #include "llmath.h"
+#include "llurlregistry.h" // for SLURL parsing
 
 //#include "llstartup.h"
 
@@ -269,9 +270,23 @@ void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color, LL
 
 	removeExtraLines();
 
+	// <Ansariel> Parse SLURLs
+	LLUrlMatch urlMatch;
+	LLWString newLine = wline;
+	LLWString workLine = wline;
+	while (LLUrlRegistry::instance().findUrl(workLine, urlMatch))
+	{
+		LLWStringUtil::replaceString(newLine, utf8str_to_wstring(urlMatch.getUrl()), utf8str_to_wstring(urlMatch.getLabel()));
+
+		// Remove the URL from the work line so we don't end in a loop in case of regular URLs!
+		// findUrl will always return the very first URL in a string
+		workLine = workLine.erase(0, urlMatch.getEnd() + 1);
+	}
+	// </Ansariel> Parse SLURLs
+
 	mMutex.lock();
-	mLines.push_back(wline);
-	mLineLengths.push_back((S32)wline.length());
+	mLines.push_back(newLine);
+	mLineLengths.push_back((S32)newLine.length());
 	mAddTimes.push_back(mTimer.getElapsedTimeF32());
 	mLineColors.push_back(color);
 	mLineStyle.push_back(styleflags);
