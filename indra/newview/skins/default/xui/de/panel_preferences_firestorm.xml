@@ -203,6 +203,7 @@
 		<text name="text_box_pivotpoint">
 			Drehpunkt
 		</text>
+		<view_border name="PivotBorder" width="240"/>
 		<check_box label="Achsen-Pfeile am Wurzel-Prim anzeigen" tool_tip="Standardverhalten ist, die Achse am Massenzentrum eines Linksets anzuzeigen. Aktivieren, um die Achse am Wurzel-Prim anzuzeigen." name="EmBuildPrefsActualRoot_toggle"/>
 		<spinner label="X-Position" name="X pos" label_width="60" width="140"/>
 		<spinner label="Y-Position" name="Y pos" label_width="60" width="140"/>

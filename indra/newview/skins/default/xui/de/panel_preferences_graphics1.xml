@@ -155,7 +155,7 @@
 		<slider label="Stärke:" tool_tip="Leuchtstärke. Größer = Breitere und weichere Darstellung (Standardwert: 2)" name="glow_strength"/>
 		<check_box label="Avatare anzeigen, die nicht vollständig geladen sind" name="RenderUnloadedAvatars"/>
 		<slider label="Pre-Caching-Verzögerung bevor die Welt angezeigt wird." tool_tip="Setzt die Verzögerung, nach der die Welt angezeigt wird, nachdem man selbst als Online gemeldet wird. (Standard: 6 Sekunden)" name="PrecachingDelay"/>
-		<text name="PrecachingDelayText">
+		<text name="PrecachingDelayText" width="60">
 			Sekunden
 		</text>
 		<slider label="Schattenqualität" tool_tip="Qualität der Schattendarstellung (Standard: 1)" name="ShadowResolution"/>
