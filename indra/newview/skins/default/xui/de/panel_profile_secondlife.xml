@@ -26,7 +26,7 @@
 		<button label="+" label_selected="+" name="group_invite" tool_tip="In Gruppe einladen"/>
 		<group_list left_pad="3" name="group_list"/>
 		<text left="9" name="About:" value="Info:"/>
-		<view_border left_pad="3" name="info_border"/>
+		<view_border left_pad="3" name="info_border5"/>
 
 		<layout_stack>
 			<layout_panel name="left_buttonstack">

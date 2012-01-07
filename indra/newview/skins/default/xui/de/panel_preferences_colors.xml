@@ -31,12 +31,15 @@
 	<text name="text_box5">
 		Fehler
 	</text>
-    <text name="text_box6">
+    <text name="text_box8">
         Chat-Überschriften
     </text>
 	<text name="text_box10">
 		Direkt
 	</text>
+    <text name="text_box6">
+        Objekt-IMs
+    </text>
 	<text name="text_box7">
 		Eigentümer
 	</text>
