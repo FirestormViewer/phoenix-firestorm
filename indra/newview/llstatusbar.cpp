@@ -472,6 +472,7 @@ void LLStatusBar::setVisibleForMouselook(bool visible)
 	mMediaToggle->setVisible(visible);
 	mSGBandwidth->setVisible(visible);
 	mSGPacketLoss->setVisible(visible);
+	mTimeMediaPanel->setVisible(visible);
 	setBackgroundVisible(visible);
 }
 
