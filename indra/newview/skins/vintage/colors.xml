@@ -75,6 +75,15 @@
 		name="ChatHistoryBgColor"
 		reference="OldGray_63" />
 	<color
+		name="GroupNotifyDialogBG"
+		reference="ScriptDialog" />
+	<color
+		name="GroupNotifyTextBG"
+		value="0.855 0.933 1.0 1.0" />
+	<color
+		name="GroupNotifyTextColor"
+		reference="TextFgColor" />
+	<color
 		name="HighlightChildColor"
 		reference="Yellow" />
 	<color

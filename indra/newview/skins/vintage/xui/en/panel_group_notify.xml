@@ -1,115 +1,140 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
- background_visible="true"
- height="260"
- label="instant_message"
- layout="topleft"
- left="0"
- name="panel_group_notify"
- top="0"
- width="400">
-    <string
-     name="message_max_lines_count"
-     value="10" />
-    <string
-     name="subject_font"
-     value="SANSSERIF_BIG" />
-    <string
-     name="date_font"
-     value="SANSSERIF" />
-    <text
-     follows="left|top|right"
-     font="SansSerifHuge"
-     height="20"
-     layout="topleft"
-     left="10"
-     right="-10"
-     name="group_notice"
-     text_color="GroupNotifyTextColor"
-     top_pad="5"
-     use_ellipses="true"
-     value="Group Notice"
-     halign="right" />
-    <text
-     follows="left|top|right"
-     font="SansSerif"
-     height="20"
-     layout="topleft"
-     left="10"
-     right="-10"
-     name="title"
-     text_color="GroupNotifyTextColor"
-     top_pad="5"
-     use_ellipses="true"
-     value="Sent by Sender Name, Group Name" 
-     halign="right" />
-    <icon
-     follows="left|top"
-     height="64"
-     image_name="Generic_Group"
-     layout="topleft"
-     left="5"
-     mouse_opaque="true"
-     name="group_icon"
-     top="50"
-     width="64" />
-    <text_editor
-     parse_urls="true"
-     enabled="true"
-     follows="all"
-     bottom="-58"
-     layout="topleft"
-     left_pad="5"
-     max_length="67108864"
-     name="message"
-     parse_highlights="true"
-     read_only="true"
-     right="-10"
-     text_color="GroupNotifyTextColor"
-     top="50"
-     type="string"
-     use_ellipses="true"
-     value="message"
-     word_wrap="true" >
-    </text_editor>
-    <icon
-     bottom="-36"
-     follows="left|bottom|right"
-     height="15"
-     layout="topleft"
-     left_delta="0"
-     mouse_opaque="true"
-     name="attachment_icon"
-     width="15" />
-    <text
-     bottom_delta="0"
-     follows="left|bottom|right"
-     font="SansSerif"
-     height="15"
-     layout="topleft"
-     left_pad="5"
-     name="attachment"
-     parse_urls="false"
-     right="-10"
-     text_color="GroupNotifyTextColor"
-     value="Attachment"
-     use_ellipses="true" />
-    <button
-     bottom="-10"
-     follows="bottom|right"
-     height="20"
-     label="OK"
-     layout="topleft"
-     left="10"
-     name="btn_ok"
-     width="70" />
-    <button
-     bottom="-10"
-     follows="bottom|right"
-     height="20"
-     label="Group Notices"
-     layout="topleft"
-     left_pad="10"
-     name="btn_notices"
-     width="100" />
+	border_visible="true"
+	border_thickness="1"
+	background_visible="true"
+	background_opaque="true"
+	bg_opaque_color="GroupNotifyDialogBG"
+	height="260"
+	label="instant_message"
+	layout="topleft"
+	left="0"
+	name="panel_group_notify"
+	top="0"
+	width="400">
+	<string
+		name="message_max_lines_count"
+		value="10" />
+	<string
+		name="subject_font"
+		value="SANSSERIF_BIG" />
+	<string
+		name="date_font"
+		value="SANSSERIF" />
+	<text
+		follows="left|top|right"
+		font="SansSerifHuge"
+		height="20"
+		layout="topleft"
+		left="10"
+		right="-10"
+		name="group_notice"
+		text_color="GroupNotifyTextColor"
+		top_pad="15"
+		use_ellipses="true"
+		value="Group Notice"
+		halign="right" />
+	<text
+		follows="left|top|right"
+		font="SansSerif"
+		height="16"
+		layout="topleft"
+		left="10"
+		right="-10"
+		name="title"
+		text_color="GroupNotifyTextColor"
+		top_pad="2"
+		use_ellipses="true"
+		value="Sent by Sender Name, Group Name" 
+		halign="right" />
+	<icon
+		follows="left|top"
+		height="64"
+		image_name="Generic_Group"
+		layout="topleft"
+		left="5"
+		mouse_opaque="true"
+		name="group_icon"
+		top_pad="2"
+		width="64" />
+	<text_editor
+		bg_readonly_color="GroupNotifyTextBG"
+		border_visible="true"
+		parse_urls="true"
+		enabled="true"
+		follows="all"
+		height="160"
+		layout="topleft"
+		left_pad="5"
+		top_delta="0"
+		max_length="67108864"
+		name="message"
+		parse_highlights="true"
+		read_only="true"
+		right="-8"
+		text_readonly_color="GroupNotifyTextColor"
+		type="string"
+		use_ellipses="true"
+		value="message"
+		word_wrap="true" />
+	<text
+		top_pad="2"
+		follows="left|bottom"
+		font="SansSerif"
+		height="15"
+		layout="topleft"
+		name="attachment_label"
+		parse_urls="false"
+		width="60"
+		text_color="GroupNotifyTextColor"
+		value="Attached:" />
+	<panel
+		name="attachment_container"
+		left_pad="4"
+		border_visible="true"
+		background_visible="true"
+		background_opaque="true"
+		bg_opaque_color="GroupNotifyTextBG"
+		follows="left|bottom|right"
+		height="15"
+		layout="topleft"
+		right="-8">
+		<icon
+			top="0"
+			follows="left|top"
+			height="15"
+			layout="topleft"
+			mouse_opaque="true"
+			name="attachment_icon"
+			width="15" />
+		<text
+			left_pad="5"
+			follows="left|right|top"
+			font="SansSerif"
+			height="15"
+			layout="topleft"
+			name="attachment"
+			parse_urls="false"
+			right="-1"
+			text_color="GroupNotifyTextColor"
+			value="Attachment"
+			use_ellipses="true" />
+	</panel>
+	<button
+		bottom="-4"
+		follows="bottom|left"
+		height="20"
+		label="OK"
+		layout="topleft"
+		left="10"
+		name="btn_ok"
+		width="70" />
+	<button
+		follows="bottom|left"
+		height="20"
+		label="Group Notices"
+		layout="topleft"
+		left_pad="5"
+		name="btn_notices"
+		width="100" />
 </panel>
