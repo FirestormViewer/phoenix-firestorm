@@ -470,8 +470,9 @@ void LLStatusBar::setVisibleForMouselook(bool visible)
 	mBtnVolume->setVisible(visible);
 	mStreamToggle->setVisible(visible);		// ## Zi: Media/Stream separation
 	mMediaToggle->setVisible(visible);
-	mSGBandwidth->setVisible(visible);
-	mSGPacketLoss->setVisible(visible);
+	BOOL showNetStats = gSavedSettings.getBOOL("ShowNetStats");
+	mSGBandwidth->setVisible(visible && showNetStats);
+	mSGPacketLoss->setVisible(visible && showNetStats);
 	mTimeMediaPanel->setVisible(visible);
 	setBackgroundVisible(visible);
 }
