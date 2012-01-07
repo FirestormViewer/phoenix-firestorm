@@ -7,11 +7,7 @@
 		<accordion_tab name="tab_classifieds" title="Clasificados"/>
 	</accordion>
 	<panel label="bottom_panel" name="edit_panel">
-		<layout_stack name="edit_panel_ls">
-			<layout_panel name="gear_menu_btn">
-				<button name="new_btn" tool_tip="Crear un nuevo destacado o clasificado de la posición actual"/>
-			</layout_panel>
-		</layout_stack>
+		<button name="new_btn" tool_tip="Crear un nuevo destacado o clasificado de la posición actual"/>
 	</panel>
 	<panel name="buttons_cucks">
 		<layout_stack name="buttons_cucks_ls">

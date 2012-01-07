@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="area_search" title="Buscar objetos en el área">
+	<floater.string name="ListedPendingTotalBlank" value="Listados/Pendientes/Totales"/>
+	<floater.string name="ListedPendingTotalFilled" value="[LISTED] Listados/[PENDING] Pendientes/[TOTAL] Totales"/>
+	<text name="name_label">
+		Buscar por nombre:
+	</text>
+	<text name="desc_label">
+		Buscar por descripción:
+	</text>
+	<text name="owner_label">
+		Buscar por propietario:
+	</text>
+	<text name="group_label">
+		Buscar por grupo:
+	</text>
+	<scroll_list name="result_list">
+		<column name="Name" label="Nombre" tool_tip="Hacer doble clic en cualquier entrada para marcar su posición con una baliza"/>
+		<column name="Description" label="Descripción" tool_tip="Hacer doble clic en cualquier entrada para marcar su posición con una baliza"/>
+		<column name="Owner" label="Propietario" tool_tip="Hacer doble clic en cualquier entrada para marcar su posición con una baliza"/>
+		<column name="Group" label="Grupo" tool_tip="Hacer doble clic en cualquier entrada para marcar su posición con una baliza"/>
+	</scroll_list>
+	<button name="Refresh" label="Actualizar"/>
+	<button name="Stop" label="Detener"/>
+	<text name="counter">
+		Listados/Pendientes/Totales
+	</text>
+</floater>

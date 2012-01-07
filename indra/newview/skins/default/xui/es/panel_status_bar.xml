@@ -21,7 +21,7 @@
 	</panel.string>
 	<panel name="balance_bg">
 		<text name="balance" tool_tip="Haz clic para actualizar tu saldo en L$" value="??? L$"/>
-		<button name="buyL" label="COMPRAR L$" tool_tip="Pulsa para comprar más L$"/>
+		<button name="buyL" label="COMPRAR L$" halign="left" tool_tip="Pulsa para comprar más L$"/>
 	</panel>
 	<panel name="time_and_media_bg">
 		<text name="TimeText" tool_tip="Hora actual (costa del Pacífico de EEUU)">

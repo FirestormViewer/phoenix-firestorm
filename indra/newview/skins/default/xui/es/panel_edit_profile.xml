@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Editar el perfil" name="edit_profile_panel">
+<panel label="Editar mi perfil" name="edit_profile_panel">
 	<string name="CaptionTextAcctInfo">
-		[ACCTTYPE] [PAYMENTINFO] [FIRESTORM][FSDEV][FSSUPP]
-    </string>
-<!-- The previous line was [PAYMENTINFO] [AGEVERIFICATION], but they're not
-    sending the latter any more. ...TS -->
-    <string
-      name="FSDev"
-      value=" Developer" />
-    <string
-      name="FSSupp"
-      value=" Support" />
+		[ACCTTYPE] [PAYMENTINFO] [FSDEV][FSSUPP][FIRESTORM]
+	</string>
+	<string name="FSDev" value="Desarrollador "/>
+	<string name="FSSupp" value="Soporte " />
 	<string name="RegisterDateFormat">
 		[REG_DATE] ([AGE])
 	</string>
@@ -19,43 +13,43 @@
 	<string name="AcctTypeCharterMember" value="Miembro fundador"/>
 	<string name="AcctTypeEmployee" value="Empleado de Linden Lab"/>
 	<string name="PaymentInfoUsed" value="Ha usado una forma de pago"/>
-	<string name="PaymentInfoOnFile" value="Hay infor. de la forma de pago"/>
-	<string name="NoPaymentInfoOnFile" value="Sin infor. de la forma de pago"/>
+	<string name="PaymentInfoOnFile" value="Hay info. de la forma de pago"/>
+	<string name="NoPaymentInfoOnFile" value="Sin info. de la forma de pago"/>
 	<string name="AgeVerified" value="Edad verificada"/>
 	<string name="NotAgeVerified" value="Edad no verificada"/>
 	<string name="partner_edit_link_url">
 		http://www.secondlife.com/account/partners.php?lang=es
 	</string>
-	<string name="no_partner_text" value="Ninguno"/>
-	<scroll_container name="profile_scroll">
-		<panel name="scroll_content_panel">
-			<panel name="data_panel">
-				<text name="display_name_label" value="Nombre mostrado:"/>
-				<text name="solo_username_label" value="Nombre de usuario:"/>
-				<button name="set_name" tool_tip="Configurar nombre mostrado"/>
-				<text name="user_label" value="Nombre de usuario:"/>
-				<panel name="lifes_images_panel">
-					<icon label="" name="2nd_life_edit_icon" tool_tip="Pulsa para elegir una imagen"/>
-				</panel>
-				<panel name="first_life_image_panel">
-					<text name="real_world_photo_title_text" value="Mundo real:"/>
-				</panel>
-				<icon label="" name="real_world_edit_icon" tool_tip="Pulsa para elegir una imagen"/>
-				<text name="title_homepage_text">
-					Web:
-				</text>
-				<check_box label="Mostrarme en los resultados de la búsqueda" name="show_in_search_checkbox"/>
-				<text name="title_acc_status_text" value="Mi cuenta:"/>
-				<text_editor name="acc_status_text" value="Residente. No ha aportado información de pago."/>
-				<text name="my_account_link" value="[[URL] Ir a mi Panel de Control]"/>
-				<text name="title_partner_text" value="Mi compañero/a:"/>
-				<panel name="partner_data_panel">
-					<text initial_value="(obteniendo)" name="partner_text"/>
-				</panel>
-				<text name="partner_edit_link" value="[[URL] Editar]"/>
+	<string name="no_partner_text" value="Ninguna"/>
+	<tab_container name="profile_accordion">
+		<panel name="sl_data_panel" title="Avatar">
+			<text name="display_name_label" value="Displayname:"/>
+			<text name="solo_username_label" value="Nombre de usuario:"/>
+			<button name="set_name" tool_tip="Establecer Displayname"/>
+			<text name="user_name" value="(cargando...)"/>
+			<text name="solo_user_name" value="(cargando...)"/>
+			<text name="user_label" value="Nombre de usuario:"/>
+			<text name="user_slid" value="(cargando...)"/>
+			<panel name="lifes_images_panel">
+				<icon name="2nd_life_edit_icon" tool_tip="Pulsa para elegir una imagen"/>
 			</panel>
+			<check_box label="Mostrarme en resultados de búsqueda" name="show_in_search_checkbox"/>
+			<text name="title_acc_status_text" value="Información de cuenta:"/>
+			<text_editor name="acc_status_text" value="Residente. Sin información de pago."/>
+			<text name="my_account_link" value="[[URL] Ir a mi panel de control]"/>
+			<text name="title_partner_text" value="Pareja:"/>
+			<text name="partner_edit_link" value="[[URL] Editar]"/>
 		</panel>
-	</scroll_container>
+		<panel name="rl_data_panel" title="Más información">
+			<text name="rl_picture_caption" value="Imagen adicional"/>
+			<panel name="first_life_image_panel">
+				<icon name="real_world_edit_icon" tool_tip="Pulsa para elegir una imagen"/>
+			</panel>	
+			<text name="title_homepage_text">
+				Página web:
+			</text>
+		</panel>
+	</tab_container>
 	<panel name="profile_me_buttons_panel">
 		<layout_stack name="bottom_panel_ls">
 			<layout_panel name="save_changes_btn_lp">

@@ -402,7 +402,7 @@
      layout="topleft"
      left_pad="5"
      mouse_opaque="false"
-     name="text_box6"
+     name="text_box8"
      top_delta="5"
      width="110">
         Chat Headers

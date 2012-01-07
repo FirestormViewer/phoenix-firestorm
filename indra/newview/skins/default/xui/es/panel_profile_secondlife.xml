@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile">
+	<string name="CaptionTextAcctInfo">
+		[ACCTTYPE]
+[PAYMENTINFO]
+[FSDEV][FSSUPP][FIRESTORM]
+    </string>
+	<string name="payment_update_link_url">
+		http://www.secondlife.com/account/billing.php?lang=es
+	</string>
+	<string name="partner_edit_link_url">
+		http://www.secondlife.com/account/partners.php?lang=es
+	</string>
+	<string name="my_account_link_url" value="http://secondlife.com/account"/>
+	<string name="no_partner_text" value="Ninguno/a"/>
+	<string name="no_group_text" value="Ninguno"/>
+	<string name="FSDev" value="Desarrollador/a "/>
+	<string name="FSSupp" value="Soporte "/>
+	<panel name="second_life_panel">
+		<text name="Name:" value="Nombre:" width="50"/>
+		<view_border right="-126" name="info_border"/>
+		<text_editor name="complete_name" value="(cargando...)" right="-126"/>
+		<button name="copy_to_clipboard" tool_tip="Copiar al portapapeles"/>
+		<text name="Key:" value="Clave:" width="50" top_pad="4"/>
+		<view_border right="-126" name="info_border2"/>
+		<text_editor name="user_key" value="(cargando...)" right="-126"/>
+		<button name="copy_uri" label="Copiar URI"/>
+		<text name="Web:" value="Web:" width="50" top_pad="0"/>
+		<text name="label" value="Fecha de nacimiento:"/>
+		<text name="label2" value="Cuenta:"/>
+		<text name="partner_label" value="Pareja:"/>
+		<text name="Groups:" value="Grupos:" width="50"/>
+		<button label="+" label_selected="+" name="group_invite" tool_tip="Invitar a un grupo" width="20"/>
+		<group_list left_delta="47" name="group_list"/>
+		<text name="About:" value="Sobre mí:" width="50"/>
+		<layout_stack>
+			<layout_panel name="left_buttonstack">
+				<button label="Buscar en el mapa" label_selected="Buscar en el mapa" name="show_on_map_btn" tool_tip="Localizar a este residente en el mapa"/>
+				<button label="Pagar" label_selected="Pagar" name="pay" tool_tip="Enviar dinero a este residente"/>
+			</layout_panel>
+			<layout_panel name="middle_buttonstack">
+				<button label="Ofrecer teleporte" label_selected="Ofrecer teleporte" name="teleport" tool_tip="Ofrecer a este residente teleportarse a tu posición"/>
+				<button label="Mensaje Instantáneo" label_selected="Mensaje Instantáneo" name="im" tool_tip="Abrir una sesión de mensajería instantánea con este residente"/>
+			</layout_panel>
+			<layout_panel name="right_buttonstack">
+				<button label="Ofrecer amistad" label_selected="Ofrecer amistad" name="add_friend" tool_tip="Ofrecer amistad a este residente"/>
+				<button label="Bloquear" name="block" tool_tip="Bloquear a este residente (su avatar no se dibujará en pantalla, se ignorarán sus MI y sus mensajes en el chat general y los de grupo y sus ofertas de inventario"/>
+				<button label="Desbloquear" name="unblock" tool_tip="Desbloquear a este residente"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

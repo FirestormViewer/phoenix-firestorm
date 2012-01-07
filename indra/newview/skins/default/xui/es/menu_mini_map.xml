@@ -14,7 +14,9 @@
 		<menu_item_call label="Amarillo" name="MarkYellow"/>
 		<menu_item_call label="Borrar marcas" name="Clear Marks"/>
 	</menu>
-	<menu_item_call label="Seguir con la cámara" name="Cam"/>
+	<menu_item_call label="Enfocar con la cámara" name="Cam"/>
+	<menu_item_call label="Perfil" name="Profile"/>
+	<menu_item_call label="Iniciar seguimiento" name="Start Tracking"/>
 	<menu_item_call label="Detener seguimiento" name="Stop Tracking"/>
 	<menu_item_call label="Mapa del mundo" name="World Map"/>
 </menu>

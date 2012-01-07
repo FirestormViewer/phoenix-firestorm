@@ -1471,9 +1471,19 @@ Debemos reiniciar [APP_NAME] para instalar la actualización.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BusyModeSet">
-		Pasar al modo ocupado.
+		Se ha establecido el modo Ocupado.
 Se ocultará el chat y los mensajes instantáneos (éstos recibirán tu Respuesta en el modo ocupado). Se rehusarán todos los ofrecimientos de teleporte. Todas las ofertas de inventario irán a tu Papelera.
-		<usetemplate ignoretext="Cambio mi estado al modo ocupado" name="okignore" yestext="OK"/>
+		<usetemplate ignoretext="Cambio mi estado al modo Ocupado" name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="AutorespondModeSet">
+		Se ha establecido el modo Autorrespuesta.
+Si algún avatar te envía un mensaje instantáneo, recibirá automáticamente la respuesta configurada.
+		<usetemplate ignoretext="Cambio mi estado al modo Autorrespuesta" name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="AutorespondNonFriendsModeSet">
+		Se ha establecido el modo Autorrespuesta para residentes que no están en tu lista de amigos.
+Si algún avatar que no está en tu lista de amigos te envía un mensaje instantáneo, recibirá automáticamente la respuesta configurada.
+		<usetemplate ignoretext="Cambio mi estado al modo Autorrespuesta para avatares que no son mis amigos" name="okignore" yestext="Aceptar"/>
 	</notification>
 	<notification name="JoinedTooManyGroupsMember">
 		Has superado tu número máximo de grupos. Por favor, sal de al menos uno antes de entrar en éste o rehusa la oferta.
@@ -3072,4 +3082,211 @@ También puedes buscar en el Mapa lugares marcados como &quot;Puntos de Informac
 	<global name="You died and have been teleported to your home location">
 		Has muerto y has sido teleportado a tu Base.
 	</global>
+	<notification name="PhoenixAutoReplace">
+		&apos;[BEFORE]&apos; ha sido automáticamente reemplazada por &apos;[REPLACEMENT]&apos;
+basándose en tu lista [LISTNAME] list.
+	</notification>
+	<notification name="FSWL">
+		&apos;[PARCEL_NAME]&apos;, propiedad de &apos;[OWNER_NAME]&apos;, quisiera cambiar tu configuración visual (Windlight).
+		<form name="form">
+			<button name="Allow" text="Permitir"/>
+			<button name="Ignore" text="Ignorar"/>
+		</form>
+	</notification>
+	<notification name="FSWLClear">
+		Restablecer la configuración WL para &apos;[PARCEL_NAME]&apos; a la configuración por defecto de la región?
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Sí"/>
+	</notification>
+	<notification name="NewAOSet">
+		Especifica un nombre para la nueva configuración de AO:
+(El nombre NO puede contener los caracteres ":" o "|").
+		<form name="form">
+			<input name="message">
+				Nuevo AO
+			</input>
+			<button name="OK" text="Aceptar"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="NewAOCantContainColon">
+		No se ha podido crear el nuevo AO "[AO_SET_NAME]".
+El nombre NO puede contener los caracteres ":" o "|".
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification name="RenameAOCantContainColon">
+		No se ha podido renombrar el nueov AO a "[AO_SET_NAME]".
+El nombre NO puede contener los caracteres ":" o "|".
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification name="RemoveAOSet">
+		¿Eliminar la configuración de AO "[AO_SET_NAME]" de la lista?
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Eliminar"/>
+	</notification>
+	<notification name="AOImportSetAlreadyExists">
+		Ya existe una configuración de AO con ese nombre.
+	</notification>
+	<notification name="AOImportPermissionDenied">
+		Permisos insuficientes para leer la nota.
+	</notification>
+	<notification name="AOImportCreateSetFailed">
+		Error importando la configuración.
+	</notification>
+	<notification name="AOImportDownloadFailed">
+		No se ha podido descargar la nota.
+	</notification>
+	<notification name="AOImportNoText">
+		La nota está vacía o es ilegible.
+	</notification>
+	<notification name="AOImportNoFolder">
+		No se ha podido encontrar la carpeta para leer las animaciones.
+	</notification>
+	<notification name="AOImportNoStatePrefix">
+		La línea [LINE] de la nota no tiene un prefijo [ de estado válido.
+	</notification>
+	<notification name="AOImportNoValidDelimiter">
+		La línea [LINE] de la nota no tiene un delimitador ] válido.
+	</notification>
+	<notification name="AOImportStateNameNotFound">
+		Nombre de estado [NAME] no encontrado.
+	</notification>
+	<notification name="AOImportAnimationNotFound">
+		No se ha podido encontrar la animación [NAME]. Asegúrate de que esté presente en la misma carpeta que la nota importada.
+	</notification>
+	<notification name="AOImportInvalid">
+		La nota no contiene ningún dato utilizable. Abortando la importación.
+	</notification>
+	<notification name="AOImportRetryCreateSet">
+		No se ha podido crear la carpeta para importar el conjunto de animaciones [NAME]. Reintentando ...
+	</notification>
+	<notification name="AOImportAbortCreateSet">
+		No se ha podido crear la carpeta para importar el conjunto de animaciones [NAME]. Desistiendo.
+	</notification>
+	<notification name="AOImportLinkFailed">
+		¡La creación del enlace para la animación "[NAME]" ha fallado!
+	</notification>
+	<notification name="SendSysinfoToIM">
+		Se va a enviar la siguiente información a la sesión de MI actual:
+
+[SYSINFO]
+		<usetemplate name="okcancelbuttons" yestext="Enviar" notext="Cancelar"/>
+	</notification>
+	<notification name="InvalidGrid">
+		'[GRID]' no es una red o dirección válida.
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification name="BlockLoginInfo">
+		[REASON]
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification name="FireStormReqInfo">
+		[NAME] te solicita que le envíes información sobre tu configuración de Firestorm (Ésta es la misma información que puedes encontrar en Ayuda->Acerca de Firestorm)    
+[REASON]
+¿Aceptas enviarle esta información?
+		<form name="form">
+			<button name="Yes" text="Sí"/>
+			<button name="No" text="No"/>
+		</form>
+	</notification>
+	<notification name="PhantomOn">
+		Modo fantasma activado.
+	</notification>
+	<notification name="PhantomOff">
+		Modo fantasma desactivado.
+	</notification>
+	<notification label="Restablecer todas las configuraciones" name="FirestormClearSettingsPrompt">
+	Restablecer todas las configuraciones puede ser útil si estás experimentando problemas, aunque tendrás que repetir todas las personalizaciones que hayas podido hacer a la configuración por defecto. 
+
+¿Estás seguro/a de que quieres proceder?
+		<usetemplate name="okcancelbuttons" notext="No" yestext="Sí"/>
+	</notification>
+	<notification name="SettingsWillClear">
+		La configuración será restablecida tras reiniciar [APP_NAME].
+	</notification>
+	<notification name="CantAddGrid">
+No se ha podido añadir [GRID] a la lista de redes.
+[REASON] contactar con el soporte de [GRID].
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification name="FirstPhoenixContactSetOpen">
+	¡Ésta es la primera vez que abres la ventana de Grupos de Contactos!
+Esta ventana te permitirá organizar tus amigos en grupos.
+
+Para empezar, escribe un nombre de grupo,
+y pulsa el botón Crear Grupo.
+
+Para añadir a alguien a ese grupo, haz clic o ctrl+clic en algunos amigos,
+haz clic con el botón derecho del ratón sobre alguno de ellos y añádelos a un grupo.
+
+Para encontrar un amigo determinado, simplemente empieza a escribir su nombre.
+	</notification>
+	<notification name="FirstPhoenixContactSetNonFriend">
+¡Has añadido a la ventana de Grupos de Contactos a alguien que no está en tu lista de amigos!
+Puedes hacerlo con tal de colorear y renombrar gente.
+Ten en cuenta que, de todas formas, los teleportes masivos y las llamadas de conferencia sólo se enviarán a gente de tu lista de amigos.
+
+Puedes eliminarlos de la lista haciéndoles clic con el botón derecho del ratón y eligiendo la opción.
+	</notification>
+	<notification name="FirstPhoenixContactSetRename">
+		¡Has renombrado un avatar!
+Esto reemplazará el displayname del avatar con el que tú elijas.
+
+Ten en cuenta que la propagación del cambio en el resto del visor puede llevar un tiempo.
+
+Puedes eliminar este nombre haciéndole clic con el botón derecho y eligiendo Eliminar alias.
+	</notification>
+	<notification name="ParticleScriptFindFolderFailed">
+		No se ha podido encontrar una carpeta en el inventario para el nuevo script.
+	</notification>
+	<notification name="ParticleScriptCreationFailed">
+		No se ha podido crear el nuevo script para este sistema de partículas.
+	</notification>
+	<notification name="ParticleScriptNotFound">
+		No se ha podido encontrar el recién creado script para este sistema de partículas.
+	</notification>
+	<notification name="ParticleScriptCreateTempFileFailed">
+		No se ha podido crear el fichero temporal para la subida del script.
+	</notification>
+	<notification name="ParticleScriptInjected">
+		Script de partículas inyectado con éxito.
+		<form name="form">
+			<ignore name="ignore" text="Un script de partículas ha sido inyectado en un objeto."/>
+		</form>
+	</notification>
+	<notification name="ParticleScriptCapsFailed">
+		No se ha podido inyectar el script en el objeto. La petición de capacidades obtuvo una dirección vacía.
+	</notification>
+	<notification name="ParticleScriptCopiedToClipboard">
+		El script LSL para crear este sistema de partículas ha sido copiado a tu portapapeles. Ahora puedes pegarlo en un nuevo script para usarlo.
+		<form name="form">
+			<ignore name="ignore" text="Un script de partículas ha sido copiado a mi portapapeles"/>
+		</form>
+	</notification>
+	<notification name="DebugSettingsWarning">
+		¡Cuidado! ¡El uso de la ventana de Configuraciones del Depurador no está soportado! Cambiar estas configuraciones puede impactar severamente en tu experiencia y puede ocasionar pérdia de datos, funcionalidad o incluso el acceso al servicio. Por favor no cambies ningún valor sin saber exactamente lo que estás haciendo.
+		<form name="form">
+			<ignore name="ignore" text="Mensaje de advertencia sobre las Configuraciones del Depurador"/>
+		</form>
+	</notification>
+	<notification name="ControlNameCopiedToClipboard">
+		El nombre de esta configuración del depurador se ha copiado a tu portapapeles. Ahora puedes pegarlo en cualquier otro sitio para usarlo.
+		<form name="form">
+			<ignore name="ignore" text="Un nombre de configuración del depurador se ha copiado a mi portapapeles"/>
+		</form>
+	</notification>
+	<notification name="SanityCheck">
+		[APP_NAME] ha detectado un posible problema en tu configuración:
+
+[SANITY_MESSAGE]
+
+Razón: [SANITY_COMMENT]
+
+Configuración actual: [CURRENT_VALUE]
+		<form name="form">
+			<ignore name="ignore" text="Un control de configuración no ha superado la comprobación de validez."/>
+		</form>
+	</notification>
+	<notification name="TeleportToAvatarNotPossible">
+		No es posible teleportarse a la posición de este avatar porque se desconoce su posición exacta.
+		<tag>fail</tag>
+	</notification>
 </notifications>

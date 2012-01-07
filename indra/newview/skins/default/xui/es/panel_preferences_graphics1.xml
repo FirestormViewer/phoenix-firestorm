@@ -38,7 +38,7 @@
 				<text name="shadows_label">
 					Sombras:
 				</text>
-				<combo_box name="ShadowDetail">
+				<combo_box name="ShadowDetail" width="165">
 					<combo_box.item label="Ninguna" name="0"/>
 					<combo_box.item label="Sol/Luna" name="1"/>
 					<combo_box.item label="Sol/Luna + focos" name="2"/>
@@ -46,7 +46,7 @@
 				<text name="reflection_label">
 					Reflejos en el agua:
 				</text>
-				<combo_box name="Reflections">
+				<combo_box name="Reflections" width="165">
 					<combo_box.item label="Mínimos" name="0"/>
 					<combo_box.item label="Terreno y árboles" name="1"/>
 					<combo_box.item label="Todos los objetos estáticos" name="2"/>
@@ -56,7 +56,7 @@
 				<text name="local lights_label" width="180">
 					Puntos de luz (requiere reiniciar):
 				</text>
-				<combo_box name="LocalLightsDetail">
+				<combo_box name="LocalLightsDetail" width="165">
 					<combo_box.item label="Completo (por defecto)" name="3"/>
 					<combo_box.item label="Reducido" name="2"/>
 					<combo_box.item label="Sólo Sol/Luna" name="1"/>

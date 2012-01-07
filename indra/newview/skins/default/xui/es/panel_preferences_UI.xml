@@ -6,14 +6,14 @@
 				Escalado de la IU (puede tener efectos inesperados):
 			</text>
 			<slider name="ui_scale_slider" width="230"/>
-			<text name="HoverTipText">
-				Bulas:
+			<text name="HoverTipText" width="150">
+				Descripciones emergentes:
 			</text>
-			<check_box label="Bulas básicas" name="ShowHoverTips" tool_tip="Activa para mostrar bulas en avatares y algunas otras cosas (es necesario activarlas para que funcionen las otras)"/>
-			<check_box label="en todos los objetos" tool_tip="Activa para motrar bulas en todos los objetos del mundo" name="ShowAllHoverTips"/>
-			<check_box label="en el terreno" tool_tip="Activa para mostrar bulas en el terreno" name="ShowLandHoverTips"/>
+			<check_box label="Básicas" name="ShowHoverTips" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre avatares o algunas otras cosas (es necesario activarlas para que funcionen las otras)"/>
+			<check_box label="en todos los objetos" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre cualquier objeto del mundo" name="ShowAllHoverTips"/>
+			<check_box label="en el terreno" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre el terreno" name="ShowLandHoverTips"/>
 			<text name="tooltip_textbox">
-				Demora en mostrar las bulas:
+				Demora en mostrarlas:
 			</text>
 			<combo_box name="Tooltipdelay">
 				<combo_box.item label="0,7 segundos" name="tt_item1"/>
@@ -31,9 +31,9 @@ superior derecha:
 				(requiere reiniciar)
 			</text>
 			<text name="UsePieMenuLabel">
-				Menús tipo 'tarta':
+				Menús circulares:
 			</text>
-			<check_box label="Usar menús tipo 'tarta'" name="UsePieMenu" tool_tip="Usar los clásicos menús circulares V1.x en vez de los menús contextuales rectangulares cuando hagas clic con el botón derecho sobre el terreno, avatares, objetos o accesorios"/>
+			<check_box label="Usar menús circulares" name="UsePieMenu" tool_tip="Usar los clásicos menús circulares V1.x (tipo 'tarta') en vez de los menús contextuales rectangulares cuando hagas clic con el botón derecho sobre el terreno, avatares, objetos o accesorios"/>
 			<text name="ButtonFlashing" width="150">
 				Parpadeo de los botones:
 			</text>

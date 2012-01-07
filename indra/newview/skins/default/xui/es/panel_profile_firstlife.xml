@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Perfil" name="panel_profile_firstlife">
+	<panel name="first_life_panel">
+		<text name="homepage_text" value="Página web:"/>
+	</panel>
+</panel>
+

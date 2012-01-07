@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Colores" name="colors_panel">
 	<text name="effects_color_textbox">
-		Mis efectos (rayo indicador):
+		Mis efectos (rayo de partículas):
 	</text>
 	<color_swatch name="effect_color_swatch" tool_tip="Pulsa para abrir el selector de color"/>
-	<text name="font_colors">
-		Colores de fuente del chat:
+	<text name="font_colors" width="200">
+		Colores de fuente de la interfaz:
 	</text>
 	<text name="text_box1">
-		Yo
+		Mi texto
 	</text>
 	<text name="text_box2">
 		Otros avatares
@@ -22,8 +22,8 @@
 	<text name="text_box5">
 		Errores
 	</text>
-	<text name="text_box10">
-		Directo
+	<text name="text_box6">
+		MIs de objetos
 	</text>
 	<text name="text_box7">
 		Propietario
@@ -31,14 +31,32 @@
 	<text name="text_box9">
 		URLs
 	</text>
+	<text name="text_box8">
+		Cabeceras de chat
+	</text>
+	<text name="ScriptDialogBgLabel">
+		Fondo diál. scripts
+	</text>
+	<text name="ScriptDialogFgLabel">
+		Texto diál. scripts
+	</text>
+	<text name="text_box10">
+		Directo
+	</text>
 	<text name="bubble_chat">
-		Color de fondo de la etiqueta del nombre (afectará también a los bocadillos del chat):
+		Opacidad de la etiqueta del nombre (afectará también a los bocadillos del chat):
 	</text>
 	<color_swatch name="background" tool_tip="Elige el color de las etiquetas de nombre"/>
-	<slider label="Opacidad:" name="bubble_chat_opacity" tool_tip="Elige la opacidad de las etiquetas de nombre"/>
+	<slider label="Opacidad:" name="bubble_chat_opacity" tool_tip="Configura la opacidad de las etiquetas de nombre"/>
 	<text name="floater_opacity">
 		Opacidad de la ventana:
 	</text>
 	<slider label="Activa:" name="active"/>
 	<slider label="Inactiva:" name="inactive"/>
+	<check_box name="FSScriptDialogNoTransparency" label="Mostrar diálogos de script siempre con fondo opaco"/>
+	<check_box name="override_pie_color_checkbox" label="Configurar manualmente opacidad y color de fondo del menú circular:"/>
+	<color_swatch name="pie_bg_color_override" tool_tip="Pulsa para escoger el color de fondo"/>
+	<color_swatch name="pie_selected_color_override" tool_tip="Pulsa para escoger el color de selección"/>
+        <slider label="Opacidad:" name="pie_menu_opacity" tool_tip="Configura la opacidad"/>
+	<slider label="Difuminado:" name="pie_menu_fade_out" tool_tip="Configura la intensidad del efecto de difuminado hacia los bordes del menú"/>
 </panel>

@@ -15,7 +15,8 @@
 			<check_box label="Sólo mis amigos y grupos pueden llamarme o enviarme MI" name="voice_call_friends_only_check"/>
 			<check_box label="Apagar micrófono cuando terminan las llamadas" name="auto_disengage_mic_check"/>
 			<check_box label="Aceptar automáticamente nuevos items de inventario" name="Auto_Accept_New_Inventory"/>
-			<check_box label="Abrir automáticamente el inventario al recibir items" name="Show_In_Inventory"/>
+			<check_box label="Mostrar automáticamente en el inventario los items recién aceptados" name="Show_In_Inventory"/>
+			<check_box label="Mostrar automáticamente las notas, texturas e hitos al aceptarlos" name="Show_New_Inventory"/>
 			<check_box label="Mostrar mis hitos favoritos en el desplegable &apos;Iniciar en&apos; de la pantalla de conexión" name="favorites_on_login_check"/>
 			<text name="Logs:">
 				Registros de chat:
@@ -46,6 +47,18 @@
 			<check_box label="No enviar pistas sobre mi punto de mira a otros" name="privatelookat" tool_tip="Evita que sea revelado a otros punto que enfocas"/>
 			<check_box label="No dar pistas sobre mis puntos de enfoque ni siquiera en mi propia pantalla" name="privateLocalLookat" tool_tip="Evita que la cabeza de tu avatar se mueva para mirar donde enfocas con la cámara en tu propia vista. Este movimiento no es necesariamente visible para otros, independientemente de que actives o no esta opción."/>
 			<check_box label="No envíes pistas sobre mi selección" name="privatepointat" tool_tip="Evita mostrar a los demás indicación alguna sobre el objeto que estás seleccionando"/>
+		</panel>
+		<panel label="Autorrespuesta" name="tab-autoresponse">
+			<text name="autorespond_response_label">
+				Respuesta automática (para el estado de Autorrespuesta):
+			</text>
+			<text name="autorespond_nf_response_label">
+				Respuesta automática (para el estado de Autorrespuesta para no-amigos):
+			</text>
+			<check_box label="Enviar autorrespuesta a avatares bloqueados" name="send_muted_av_response" tool_tip="Responde con el siguiente texto cuando alguien a quien has bloqueado te envía un MI."/>
+			<text name="muted_avatar_response_label">
+				Respuesta automática (para avatares bloqueados):
+			</text>
 		</panel>
 	</tab_container>
 </panel>

@@ -1020,6 +1020,12 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="AvatarSetAutorespond">
 		Autorrespuesta
 	</string>
+	<string name="AvatarSetNotAutorespondNonFriends">
+		Desactivar autorrespuesta para no-amigos
+	</string>
+	<string name="AvatarSetAutorespondNonFriends">
+		Autorrespuesta para no-amigos
+	</string>
 	<string name="shape">
 		Anatomía
 	</string>
@@ -1697,7 +1703,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Existe información sobre formas de pago
 	</string>
 	<string name="NoPaymentInfoOnFile">
-		No existe información archivada sobre formas de pago
+		Sin información sobre formas de pago
 	</string>
 	<string name="AgeVerified">
 		Edad verificada
@@ -4882,6 +4888,30 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="IMPrefix">
 		MI:
+	</string>
+	<string name="SanityCheckEquals">
+		La configuración de &quot;[CONTROL_NAME]&quot; debería establecerse a [VALUE_1].
+	</string>
+	<string name="SanityCheckNotEquals">
+		La configuración de &quot;[CONTROL_NAME]&quot; no debería establecerse a [VALUE_1].
+	</string>
+	<string name="SanityCheckLowerThan">
+		La configuración de &quot;[CONTROL_NAME]&quot; debería ser inferior a [VALUE_1].
+	</string>
+	<string name="SanityCheckGreaterThan">
+		La configuración de &quot;[CONTROL_NAME]&quot; debería ser superior a [VALUE_1].
+	</string>
+	<string name="SanityCheckBetween">
+		La configuración de &quot;[CONTROL_NAME]&quot; debería establecerse entre [VALUE_1] y [VALUE_2].
+	</string>
+	<string name="SanityCheckNotBetween">
+		La configuración de &quot;[CONTROL_NAME]&quot; no debería estar entre [VALUE_1] y [VALUE_2].
+	</string>
+	<string name="RlvEnabled">
+		Se activará el soporte para RestrainedLove después de reiniciar.
+	</string>
+	<string name="RlvDisabled">
+		Se desactivará el soporte para RestrainedLove después de reiniciar.
 	</string>
 </strings>
 

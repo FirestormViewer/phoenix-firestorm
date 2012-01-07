@@ -44,6 +44,7 @@
 		<menu label="Estado" name="Status">
 			<menu_item_call label="Ausente" name="Set Away"/>
 			<menu_item_call label="Autorresponder" name="Set Autorespond"/>
+			<menu_item_call label="Autorresponder a no-amigos" name="Set Autorespond to non-friends"/>
 			<menu_item_call label="Ocupado" name="Set Busy"/>
 		</menu>
 		<menu_item_call label="Amigos" name="My Friends"/>

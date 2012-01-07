@@ -140,7 +140,7 @@ KC: I used view_border's around text_editor's due to text render issues with bor
              right="-86"
              bevel_style="in"
              follows="left|top|right"
-             name="info_border" />
+             name="info_border2" />
             <text_editor
              left_delta="3"
              bottom_delta="2"
@@ -233,7 +233,7 @@ FIRE-2266: SJ: End change
              right="-6"
              bevel_style="in"
              follows="left|top|right"
-             name="info_border" />
+             name="info_border3" />
             <text
              top_delta="2"
              left_delta="2"
@@ -295,7 +295,7 @@ FIRE-2266: SJ: End change
              right="-6"
              bevel_style="in"
              follows="left|top|right"
-             name="info_border" />
+             name="info_border4" />
             <text
              top_delta="2"
              left_delta="2"
@@ -358,7 +358,7 @@ FIRE-2266: SJ: End change
              right="-6"
              bevel_style="in"
              follows="all"
-             name="info_border" />
+             name="info_border5" />
             <text_editor
              left_delta="1"
              top_delta="1"

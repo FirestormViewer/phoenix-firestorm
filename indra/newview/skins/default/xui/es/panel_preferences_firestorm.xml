@@ -31,7 +31,8 @@
 			<text name="SurfaceAreaThreshholdLabel" width="400">
 				Protección contra lag de texturas (puede 'romper' algunos objetos):
 			</text>
-			<check_box label="Ocultar automáticamente con grandes áreas de textura. Umbral:" name="RenderVolumeSAProtection" tool_tip="Te protege de objetos con grandes texturas sobre grandes superficies, a veces diseñados para provocar fallos del visor. El umbral por defecto es de 5.000 metros cuadrados, pero si crees que algunos objetos no se están dibujando y esta opción está activada, puedes necesitar aumentarlo."/>
+			<check_box label="Ocultar automáticamente objetos con grandes áreas de textura. Umbral:" name="RenderVolumeSAProtection" tool_tip="Te protege de objetos con grandes texturas sobre grandes superficies, a veces diseñados para provocar fallos del visor. El umbral por defecto es de 5.000 metros cuadrados, pero si crees que algunos objetos no se están dibujando y esta opción está activada, puedes necesitar aumentarlo." width="425"/>
+			<spinner left_pad="5" name="RenderVolumeSAFrameMax" width="60"/>
 			<check_box label="Activar protección contra spam" name="UseAntiSpam"/>
 			<text name="AntiSpamText1" width="305">
 				Máximo de líneas en un solo mensaje:
@@ -50,6 +51,9 @@
 			</text>
 			<spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Multiplicador de eventos para peticiones de precarga de sonido [Por defecto: 4]"/>
 			<button name="AntiSpamUnblock" label="Desbloquear todas las fuentes de spam" width="250"/>
+			<check_box label="Notificar cuando se reciben items demasiado rápido" name="FSNotifyIncomingObjectSpam"/>
+			<check_box label="Notificar cuando se reciben items de otros residentes demasiado rápido" name="FSNotifyIncomingObjectSpamFrom"/>
+			<slider name="FSOfferThrottleMaxCount" label="Umbral para acelerar la entrada de items:" tool_tip="Establece el umbral de ofertas de items entrantes en un intérvalo de 10 segundos para que se produzca la aceleración de la entrada. Por defecto, 5." label_width="235" width="360"/>
 		</panel>
 		<panel label="Avatar" name="firestorm_avatar">
 			<text name="HeadMovement">
@@ -232,6 +236,7 @@
 			<check_box label="Mostrar mi propio color" name="FSShowOwnTagColor_toggle" tool_tip="Cuando lo activas, tu etiqueta se mostrará en el color seleccionado."/>
 			<check_box label="Colorear de forma diferente los nombres de usuario" name="FSColorUsername_toggle" tool_tip="Muestra los nombres de usuario en un color diferente (ignora el color de la etiqueta para los nombres de usuario)" width="310"/>
 			<color_swatch name="usernamecolorswatch" tool_tip="Clic para abrir el selector de color"/>
+			<slider name="FSNameTagZOffsetCorrection" label="Corrección de altura:" label_width="125" width="265" tool_tip="Modifica la altura de las etiquetas de nombre de avatar. Por defecto, 0"/>
 		</panel>
 	</tab_container>
 </panel>
