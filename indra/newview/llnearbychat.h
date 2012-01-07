@@ -69,6 +69,7 @@ public:
 
 	virtual void setRect		(const LLRect &rect);
 
+	void clearChatHistory();
 	virtual void updateChatHistoryStyle();
 
 	static void processChatHistoryStyleUpdate(const LLSD& newvalue);

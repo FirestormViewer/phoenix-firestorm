@@ -457,9 +457,15 @@ void LLNearbyChat::getAllowedRect(LLRect& rect)
 	rect = gViewerWindow->getWorldViewRectScaled();
 }
 
-void LLNearbyChat::updateChatHistoryStyle()
+// exported here for "clrchat" command line -Zi
+void LLNearbyChat::clearChatHistory()
 {
 	mChatHistory->clear();
+}
+
+void LLNearbyChat::updateChatHistoryStyle()
+{
+	clearChatHistory();
 
 	LLSD do_not_log;
 	do_not_log["do_not_log"] = true;

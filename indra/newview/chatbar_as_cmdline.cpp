@@ -42,6 +42,7 @@
 #include "llworld.h"
 #include "lluuid.h"
 #include "llviewercontrol.h"
+#include "llnearbychat.h"
 
 #include "material_codes.h"
 #include "llvolume.h"
@@ -969,20 +970,17 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 
  			}
 #endif
-#if 0 //Uh, what do i do here? LGG can you help me here?
+
 			else if(command == std::string(sFSCmdLineClearChat))
 			{
-				LLFloaterChat* chat = LLFloaterChat::getInstance(LLSD());
+				LLNearbyChat* chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
 				if(chat)
 				{
-					LLViewerTextEditor*	history_editor = chat->getChild<LLViewerTextEditor>("Chat History Editor");
-					LLViewerTextEditor*	history_editor_with_mute = chat->getChild<LLViewerTextEditor>("Chat History Editor with mute");
-					history_editor->clear();
-					history_editor_with_mute->clear();
+					chat->clearChatHistory();
 					return false;
 				}
 			}
-#endif
+
 			else if(command == "zdrop")
 			{
 				std::string setting;

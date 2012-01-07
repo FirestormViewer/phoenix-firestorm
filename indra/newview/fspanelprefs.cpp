@@ -16,7 +16,7 @@
 
 static LLRegisterPanelClassWrapper<PanelPreferenceFirestorm> t_pref_fs("panel_preference_firestorm");
 
-PanelPreferenceFirestorm::PanelPreferenceFirestorm() : LLPanelPreference(), m_calcLineEditor(NULL), m_acLineEditor(NULL), m_tp2LineEditor(NULL), m_clearchatLineEditor(NULL), m_musicLineEditor(NULL)
+PanelPreferenceFirestorm::PanelPreferenceFirestorm() : LLPanelPreference()
 {
 }
 
@@ -35,22 +35,6 @@ BOOL PanelPreferenceFirestorm::postBuild()
 	getChild<LLUICtrl>("custom_beam_btn")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onBeam_new, this));
 	getChild<LLUICtrl>("refresh_beams")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::refreshBeamLists, this));
 	getChild<LLUICtrl>("delete_beam")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onBeamDelete, this));
-
-	m_tp2LineEditor = getChild<LLLineEditor>("FSCmdLineTP2");
-	m_clearchatLineEditor = getChild<LLLineEditor>("FSCmdLineClearChat");
-	m_musicLineEditor = getChild<LLLineEditor>("FSCmdLineMusic");
-	if(m_tp2LineEditor)
-	{
-		m_tp2LineEditor->setEnabled(FALSE);
-	}
-	if(m_clearchatLineEditor)
-	{
-		m_clearchatLineEditor->setEnabled(FALSE);
-	}
-	if(m_musicLineEditor)
-	{
-		m_musicLineEditor->setEnabled(FALSE);
-	}
 
 	//WS: Set the combo_box vars and refresh/reload them
 	m_UseLegacyClienttags = getChild<LLComboBox>("UseLegacyClienttags");		

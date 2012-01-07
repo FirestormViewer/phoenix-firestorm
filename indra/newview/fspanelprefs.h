@@ -25,13 +25,6 @@ public:
 	void applyTagCombos();
 
 protected:
-	LLLineEditor* m_calcLineEditor;
-	LLLineEditor* m_acLineEditor;
-	LLLineEditor* m_tp2LineEditor;
-	LLLineEditor* m_clearchatLineEditor;
-	LLLineEditor* m_musicLineEditor;
-	LLLineEditor* m_aoLineEditor;
-	
 	LLComboBox* m_UseLegacyClienttags;
 	LLComboBox* m_ColorClienttags;
 	LLComboBox* m_ClientTagsVisibility;

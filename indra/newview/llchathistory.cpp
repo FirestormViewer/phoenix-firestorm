@@ -759,6 +759,10 @@ void LLChatHistory::onClickMoreText()
 void LLChatHistory::clear()
 {
 	mLastFromName.clear();
+	// workaround: Setting the text to an empty line before clear() gets rid of
+	// the scrollbar, if present, which otherwise would get stuck until the next
+	// line was appended. -Zi
+	mEditor->setText(std::string(" \n"));
 	mEditor->clear();
 	mLastFromID = LLUUID::null;
 }
