@@ -21,6 +21,15 @@
 		scale.top="30"
 		scale.right="30" />
 
+	<!-- Script dialog background (white for recoloring) -->
+	<texture name="floater_script_background"
+		file_name="windows/floater_script_background.tga"
+		preload="true"
+		scale.left="30"
+		scale.bottom="30"
+		scale.top="30"
+		scale.right="30" />
+
 	<!-- PushButton_On hasn't come up yet -->
 
 	<!-- Idle push button -->

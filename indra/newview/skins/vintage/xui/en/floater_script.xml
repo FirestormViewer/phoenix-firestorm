@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+	bg_opaque_image="floater_script_background"
+	bg_opaque_image_overlay="ScriptDialog"
+	bg_alpha_image="floater_script_background"
+	bg_alpha_image_overlay="ScriptDialog"
+	background_visible="true"
+	legacy_header_height="18"
+	drop_shadow="false"
+	follows="all"
+	height="250"
+	layout="topleft"
+	name="script_floater"
+	can_dock="true"
+	can_minimize="false"
+	visible="false"
+	width="350"
+	can_resize="false"
+	min_width="350"
+	min_height="200">
+</floater>
