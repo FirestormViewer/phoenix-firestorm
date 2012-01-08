@@ -101,6 +101,7 @@ public:
 								can_close,
 								can_drag_on_left,
 								can_tear_off,
+								drop_shadow,		// ## Zi: Optional Drop Shadows
 								save_rect,
 								save_visibility,
 								save_dock_state,
@@ -384,6 +385,7 @@ private:
 	std::string		mInstanceName;		// Store the instance name so we can remove ourselves from the list
 	BOOL			mAutoTile;			// TRUE if placement of new instances tiles
 	
+	BOOL			mDropShadow;		// ## Zi: Optional Drop Shadows
 	BOOL			mCanTearOff;
 	BOOL			mCanMinimize;
 	BOOL			mCanClose;

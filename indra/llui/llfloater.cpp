@@ -162,6 +162,7 @@ LLFloater::Params::Params()
 	can_minimize("can_minimize", true),
 	can_close("can_close", true),
 	can_drag_on_left("can_drag_on_left", false),
+	drop_shadow("drop_shadow",true),		// ## Zi: Optional Drop Shadows
 	can_tear_off("can_tear_off", true),
 	save_dock_state("save_dock_state", false),
 	save_rect("save_rect", false),
@@ -1750,7 +1751,9 @@ void LLFloater::draw()
 	// draw background
 	if( isBackgroundVisible() )
 	{
-		drawShadow(this);
+		// ## Zi: Optional Drop Shadows
+		if(mDropShadow)
+			drawShadow(this);
 
 		S32 left = LLPANEL_BORDER_WIDTH;
 		S32 top = getRect().getHeight() - LLPANEL_BORDER_WIDTH;
@@ -2964,6 +2967,11 @@ void LLFloater::initFromParams(const LLFloater::Params& p)
 	mSingleInstance = p.single_instance;
 	mAutoTile = p.auto_tile;
 	mOpenCentered = p.open_centered;
+
+	// ## Zi: Optional Drop Shadows
+	// we do this here because the values in the constructor get ignored, probably due to
+	// the comment at the beginning of this method. -Zi
+	mDropShadow = p.drop_shadow;
 
 	if (p.save_rect && mRectControl.empty())
 	{
