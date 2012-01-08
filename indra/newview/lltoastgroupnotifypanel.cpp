@@ -251,3 +251,17 @@ bool LLToastGroupNotifyPanel::isAttachmentOpenable(LLAssetType::EType type)
 	}
 }
 
+// Copied from Ansariel: Override base method so we have the option to ignore
+// the global transparency settings and show the group notice always on
+// opaque background. -Zi
+F32 LLToastGroupNotifyPanel::getCurrentTransparency()
+{
+	if (gSavedSettings.getBOOL("FSGroupNotifyNoTransparency"))
+	{
+		return 1.0;
+	}
+	else
+	{
+		return LLUICtrl::getCurrentTransparency();
+	}
+}

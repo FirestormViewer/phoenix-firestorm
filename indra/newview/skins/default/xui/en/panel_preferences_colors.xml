@@ -120,7 +120,7 @@
      left="30"
      height="12"
      name="font_colors"
-     top_pad="20"
+     top_pad="15"
      width="120">
         UI Text Colors:
     </text>
@@ -212,7 +212,7 @@
      left_pad="5"
      mouse_opaque="false"
      name="text_box3"
-     top_delta="5"
+     top_delta="2"
      width="95">
         Objects
     </text>
@@ -322,7 +322,7 @@
      layout="topleft"
      left="40"
      name="owner"
-     top_pad="22"
+     top_pad="19"
      width="44" >
         <color_swatch.init_callback
          function="Pref.getUIColor"
@@ -418,7 +418,7 @@
      layout="topleft"
      left="40"
      name="DialogColorBg"
-     top_pad="22"
+     top_pad="19"
      width="44" >
         <color_swatch.init_callback
          function="Pref.getUIColor"
@@ -592,7 +592,7 @@
      min_val="0.00"
      name="inactive"
      show_text="true"
-     top_pad="5"
+     top_pad="2"
      width="415" />
 
     <check_box
@@ -606,6 +606,17 @@
      width="450"
      label="Show script dialogs always on opaque background" />
 
+    <check_box
+     control_name="FSGroupNotifyNoTransparency"
+     follows="left|top"
+     layout="topleft"
+     left="30"
+     height="12"
+     name="FSGroupNotifyNoTransparency"
+     top_pad="5"
+     width="450"
+     label="Show group notices always on opaque background" />
+
 <!-- ## Zi: Pie menu -->
     <check_box
      control_name="OverridePieColors"
@@ -614,7 +625,7 @@
      left="30"
      height="12"
      name="override_pie_color_checkbox"
-     top_pad="10"
+     top_pad="5"
      width="450"
      label="Override pie menu background color and opacity:" />
     <color_swatch
@@ -684,7 +695,7 @@
      min_value="0.0"
      name="pie_menu_fade_out"
      tool_tip="Choose the amount of fade out to the pie edges"
-     top_pad = "5"
+     top_pad="2"
      width="330" />
 <!-- ## Zi: Pie menu -->
 </panel>

@@ -49,6 +49,7 @@ public:
 
 	static bool onNewNotification(const LLSD& notification);
 
+	F32 getCurrentTransparency();
 
 	// Non-transient messages.  You can specify non-default button
 	// layouts (like one for script dialogs) by passing various
