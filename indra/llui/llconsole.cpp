@@ -210,15 +210,11 @@ void LLConsole::draw()
 		static const F32 padding_vert = 5;
 		S32 total_width = 0;
 		S32 total_height = 0;
-		F32 y_pos_paragraph = y_pos;
 
 		for (paragraph_it = mParagraphs.rbegin(); paragraph_it != mParagraphs.rend(); paragraph_it++)
 		{
 			total_height += llfloor( (*paragraph_it).mLines.size() * line_height + padding_vert);
-			S32 target_width =  llfloor( (*paragraph_it).mMaxWidth + padding_horizontal);
-			total_width = llmax(total_width, target_width);
-
-			y_pos_paragraph += ((*paragraph_it).mLines.size()) * line_height + padding_vert;
+			total_width = llmax(total_width, llfloor( (*paragraph_it).mMaxWidth + padding_horizontal));
 		}
 		imagep->drawSolid(-14, (S32)(y_pos + line_height / 2), total_width, total_height + (line_height - padding_vert) / 2, color);
 
