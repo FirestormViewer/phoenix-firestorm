@@ -202,56 +202,124 @@ void LLConsole::draw()
 	color.mV[VALPHA] *= console_opacity;
 
 	F32 line_height = mFont->getLineHeight();
+	BOOL classic_draw_mode = LLUI::sSettingGroups["config"]->getBOOL("FSConsoleClassicDrawMode");
 
-	for(paragraph_it = mParagraphs.rbegin(); paragraph_it != mParagraphs.rend(); paragraph_it++)
+	// Ansariel: Classic draw mode for console (Single block over all lines and with width of the longest line)
+	if (classic_draw_mode)
 	{
-		S32 target_height = llfloor( (*paragraph_it).mLines.size() * line_height + padding_vertical);
-		S32 target_width =  llfloor( (*paragraph_it).mMaxWidth + padding_horizontal);
+		static const F32 padding_vert = 5;
+		S32 total_width = 0;
+		S32 total_height = 0;
+		F32 y_pos_paragraph = y_pos;
 
-		y_pos += ((*paragraph_it).mLines.size()) * line_height;
-		imagep->drawSolid(-14, (S32)(y_pos + line_height - target_height), target_width, target_height, color);
-
-		F32 y_off=0;
-
-		F32 alpha;
-
-		if ((mLinePersistTime > 0.f) && ((*paragraph_it).mAddTime < fade_time))
+		for (paragraph_it = mParagraphs.rbegin(); paragraph_it != mParagraphs.rend(); paragraph_it++)
 		{
-			alpha = ((*paragraph_it).mAddTime - skip_time)/(mLinePersistTime - mFadeTime);
+			total_height += llfloor( (*paragraph_it).mLines.size() * line_height + padding_vert);
+			S32 target_width =  llfloor( (*paragraph_it).mMaxWidth + padding_horizontal);
+			total_width = llmax(total_width, target_width);
+
+			y_pos_paragraph += ((*paragraph_it).mLines.size()) * line_height + padding_vert;
 		}
-		else
-		{
-			alpha = 1.0f;
-		}
+		imagep->drawSolid(-14, (S32)(y_pos + line_height / 2), total_width, total_height + (line_height - padding_vert) / 2, color);
 
-		if( alpha > 0.f )
+		for (paragraph_it = mParagraphs.rbegin(); paragraph_it != mParagraphs.rend(); paragraph_it++)
 		{
-			for (lines_t::iterator line_it=(*paragraph_it).mLines.begin(); 
-					line_it != (*paragraph_it).mLines.end();
-					line_it ++)
+			F32 y_off=0;
+			F32 alpha;
+			S32 target_width =  llfloor( (*paragraph_it).mMaxWidth + padding_horizontal);
+			y_pos += ((*paragraph_it).mLines.size()) * line_height;
+
+			if ((mLinePersistTime > 0.f) && ((*paragraph_it).mAddTime < fade_time))
 			{
-				for (line_color_segments_t::iterator seg_it = (*line_it).mLineColorSegments.begin();
-						seg_it != (*line_it).mLineColorSegments.end();
-						seg_it++)
-				{
-					mFont->render((*seg_it).mText, 0, (*seg_it).mXPosition - 8, y_pos -  y_off,
-						LLColor4(
-							(*seg_it).mColor.mV[VRED], 
-							(*seg_it).mColor.mV[VGREEN], 
-							(*seg_it).mColor.mV[VBLUE], 
-							(*seg_it).mColor.mV[VALPHA]*alpha),
-						LLFontGL::LEFT, 
-						LLFontGL::BASELINE,
-						(*line_it).mStyleFlags, // Ansariel: Custom style flags for the font
-						LLFontGL::DROP_SHADOW,
-						S32_MAX,
-						target_width
-						);
-				}
-				y_off += line_height;
+				alpha = ((*paragraph_it).mAddTime - skip_time)/(mLinePersistTime - mFadeTime);
 			}
+			else
+			{
+				alpha = 1.0f;
+			}
+
+			if( alpha > 0.f )
+			{
+				for (lines_t::iterator line_it=(*paragraph_it).mLines.begin(); 
+						line_it != (*paragraph_it).mLines.end();
+						line_it ++)
+				{
+					for (line_color_segments_t::iterator seg_it = (*line_it).mLineColorSegments.begin();
+							seg_it != (*line_it).mLineColorSegments.end();
+							seg_it++)
+					{
+						mFont->render((*seg_it).mText, 0, (*seg_it).mXPosition - 8, y_pos -  y_off,
+							LLColor4(
+								(*seg_it).mColor.mV[VRED], 
+								(*seg_it).mColor.mV[VGREEN], 
+								(*seg_it).mColor.mV[VBLUE], 
+								(*seg_it).mColor.mV[VALPHA]*alpha),
+							LLFontGL::LEFT, 
+							LLFontGL::BASELINE,
+							(*line_it).mStyleFlags, // Ansariel: Custom style flags for the font
+							LLFontGL::DROP_SHADOW,
+							S32_MAX,
+							target_width
+							);
+					}
+					y_off += line_height;
+				}
+			}
+			y_pos  += padding_vert;
 		}
-		y_pos  += padding_vertical;
+	}
+	else
+	{
+		for(paragraph_it = mParagraphs.rbegin(); paragraph_it != mParagraphs.rend(); paragraph_it++)
+		{
+			S32 target_height = llfloor( (*paragraph_it).mLines.size() * line_height + padding_vertical);
+			S32 target_width =  llfloor( (*paragraph_it).mMaxWidth + padding_horizontal);
+
+			y_pos += ((*paragraph_it).mLines.size()) * line_height;
+			imagep->drawSolid(-14, (S32)(y_pos + line_height - target_height), target_width, target_height, color);
+
+			F32 y_off=0;
+
+			F32 alpha;
+
+			if ((mLinePersistTime > 0.f) && ((*paragraph_it).mAddTime < fade_time))
+			{
+				alpha = ((*paragraph_it).mAddTime - skip_time)/(mLinePersistTime - mFadeTime);
+			}
+			else
+			{
+				alpha = 1.0f;
+			}
+
+			if( alpha > 0.f )
+			{
+				for (lines_t::iterator line_it=(*paragraph_it).mLines.begin(); 
+						line_it != (*paragraph_it).mLines.end();
+						line_it ++)
+				{
+					for (line_color_segments_t::iterator seg_it = (*line_it).mLineColorSegments.begin();
+							seg_it != (*line_it).mLineColorSegments.end();
+							seg_it++)
+					{
+						mFont->render((*seg_it).mText, 0, (*seg_it).mXPosition - 8, y_pos -  y_off,
+							LLColor4(
+								(*seg_it).mColor.mV[VRED], 
+								(*seg_it).mColor.mV[VGREEN], 
+								(*seg_it).mColor.mV[VBLUE], 
+								(*seg_it).mColor.mV[VALPHA]*alpha),
+							LLFontGL::LEFT, 
+							LLFontGL::BASELINE,
+							(*line_it).mStyleFlags, // Ansariel: Custom style flags for the font
+							LLFontGL::DROP_SHADOW,
+							S32_MAX,
+							target_width
+							);
+					}
+					y_off += line_height;
+				}
+			}
+			y_pos  += padding_vertical;
+		}
 	}
 }
 

@@ -493,7 +493,7 @@
              label="Auto-close ((OOC)) parentheses"
              layout="topleft"
              top_pad="0"
-              left="30"
+             left="30"
              height="18"
              width="400" />
 
@@ -501,7 +501,7 @@
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="5"
+             top_pad="0"
              left="30"
              width="250"
              height="18"
@@ -666,6 +666,17 @@
              width="400">
               Console:
             </text>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="30"
+             width="200"
+             height="18"
+             name="FSConsoleClassicDrawMode"
+             control_name="FSConsoleClassicDrawMode"
+             label="Use classic draw mode for console"
+             tool_tip="Classic draw mode renders the console background as single block over all lines with width of the longest line."/>
             <check_box
              layout="topleft"
              follows="left|top"

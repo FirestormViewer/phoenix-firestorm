@@ -128,6 +128,7 @@
             <text name="console_enhancements">
               Konsole:
             </text>
+            <check_box name="FSConsoleClassicDrawMode" label="Klassischen Anzeigemodus für Konsole verwenden" tool_tip="Im klassischen Anzeigemodus wird der Hintergrund der Konsole als einzelner Block über alle Zeilen und mit der Breite der längsten Zeile dargestellt."/>
             <check_box name="ChatFullWidth" label="Bildschirmbreite für Konsole verwenden" width="240"/>
             <text name="requires_restart_label2">
               (Erfordert Neustart)
