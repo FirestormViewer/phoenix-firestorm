@@ -39,6 +39,9 @@
 #include "llviewerregion.h"
 #include "llworldmap.h"
 #include "llagentui.h"
+// [RLVa:KB] - Checked: 2010-09-03 (RLVa-1.2.1b)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 //////////////////////////////////////////////////////////////////////////////
 // LLTeleportHistoryItem
@@ -149,8 +152,16 @@ void LLTeleportHistory::updateCurrentLocation(const LLVector3d& new_pos)
 				mItems.erase (mItems.begin() + mCurrentItem + 1, mItems.end());
 			
 			// Append an empty item to the history and make it current.
-			mItems.push_back(LLTeleportHistoryItem("", LLVector3d()));
-			mCurrentItem++;
+//			mItems.push_back(LLTeleportHistoryItem("", LLVector3d()));
+//			mCurrentItem++;
+// [RLVa:KB] - Checked: 2010-09-03 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+			// Only append a new item if the list is currently empty or if not @showloc=n restricted and the last entry wasn't zero'ed out
+			if ( (mItems.size() == 0) || ((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) && (!mItems.back().mGlobalPos.isExactlyZero())) )
+			{
+				mItems.push_back(LLTeleportHistoryItem("", LLVector3d()));
+				mCurrentItem++;
+			}
+// [RLVa:KB]
 		}
 
 		// Update current history item.
@@ -160,11 +171,23 @@ void LLTeleportHistory::updateCurrentLocation(const LLVector3d& new_pos)
 			llassert(!"Invalid current teleport history item");
 			return;
 		}
-		LLVector3 new_pos_local = gAgent.getPosAgentFromGlobal(new_pos);
-		mItems[mCurrentItem].mFullTitle = getCurrentLocationTitle(true, new_pos_local);
-		mItems[mCurrentItem].mTitle = getCurrentLocationTitle(false, new_pos_local);
-		mItems[mCurrentItem].mGlobalPos	= new_pos;
-		mItems[mCurrentItem].mRegionID = gAgent.getRegion()->getRegionID();
+
+// [RLVa:KB] - Checked: 2010-09-03 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+		{
+// [/RLVa:KB]
+			LLVector3 new_pos_local = gAgent.getPosAgentFromGlobal(new_pos);
+			mItems[mCurrentItem].mFullTitle = getCurrentLocationTitle(true, new_pos_local);
+			mItems[mCurrentItem].mTitle = getCurrentLocationTitle(false, new_pos_local);
+			mItems[mCurrentItem].mGlobalPos	= new_pos;
+			mItems[mCurrentItem].mRegionID = gAgent.getRegion()->getRegionID();
+// [RLVa:KB] - Checked: 2010-09-03 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+		}
+		else
+		{
+			mItems[mCurrentItem] = LLTeleportHistoryItem(RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL), LLVector3d::zero);
+		}
+// [/RLVa:KB]
 	}
 
 	dump();
