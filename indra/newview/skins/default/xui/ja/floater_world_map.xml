@@ -79,7 +79,7 @@
 				<text name="events_label">
 					場所：
 				</text>
-				<layout_stack>
+				<layout_stack name="layoutstack_bottom_buttons">
 					<layout_panel name="layoutstackpanel_left">
 						<button label="テレポート" label_selected="テレポート" name="Teleport" tool_tip="選択した場所にテレポートします"/>
 						<button label="削除" name="Clear" tool_tip="追跡ラインをクリアして地図をリセットします"/>

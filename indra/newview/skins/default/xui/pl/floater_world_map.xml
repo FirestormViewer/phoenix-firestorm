@@ -70,7 +70,7 @@
 				<text name="events_label">
 					Lokalizacja:
 				</text>
-				<layout_stack>
+				<layout_stack name="layoutstack_bottom_buttons">
 					<layout_panel name="layoutstackpanel_left">
 						<button label="Teleportuj" name="Teleport" tool_tip="Teleportuj do wybranego miejsca"/>
 						<button label="Wyczyść" name="Clear" tool_tip="Wyczyść zapamiętane linie oraz zresetuj mapę"/>

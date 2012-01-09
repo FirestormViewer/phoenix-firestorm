@@ -70,7 +70,7 @@
 				<text name="events_label">
 					Luogo:
 				</text>
-				<layout_stack>
+				<layout_stack name="layoutstack_bottom_buttons">
 					<layout_panel name="layoutstackpanel_left">
 						<button label="Teleport" name="Teleport" tool_tip="Teleport al luogo selezionato"/>
 						<button label="Eliminare" name="Clear" tool_tip="Elimina le linee di monitoraggio e reimposta la mappa"/>

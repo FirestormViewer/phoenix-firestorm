@@ -107,7 +107,7 @@ title="CARTE DU MONDE">
 				tool_tip="Centrer la carte sur la position du marqueur. (Cliquer sur la carte pour définir un marqueur.)">
 				</button>
 		<!--alba: End of repro-->
-				<layout_stack>
+				<layout_stack name="layoutstack_bottom_buttons">
 					<layout_panel name="layoutstackpanel_left">
 		<!--alba: Here we go again-->
 						<button name="Clear" 

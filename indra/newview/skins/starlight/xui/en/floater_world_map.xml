@@ -669,6 +669,7 @@
       </spinner>
 
     <layout_stack
+	 name="layoutstack_bottom_buttons"
      left="0"
      top_pad="7"
      right="-7"
