@@ -108,7 +108,9 @@ private:
 	BOOL mUpdateDimensions;
 	S32 mLastHeight;
 	S32 mLastWidth;
-	F32 mAspectRatio;	
+	F32 mAspectRatio;
+
+	bool mShowingButtons;
 
 	LLLoadedCallbackEntry::source_callback_list_t mCallbackTextureList ; 
 };

@@ -71,7 +71,8 @@ LLPreviewTexture::LLPreviewTexture(const LLSD& key)
 	  mAspectRatio(0.f),
 	  mPreviewToSave(FALSE),
 	  mImage(NULL),
-	  mImageOldBoostLevel(LLViewerTexture::BOOST_NONE)
+	  mImageOldBoostLevel(LLViewerTexture::BOOST_NONE),
+	  mShowingButtons(false)
 {
 	updateImageID();
 	if (key.has("save_as"))
@@ -120,9 +121,15 @@ BOOL LLPreviewTexture::postBuild()
 		getChildView("Discard")->setVisible( false);
 	}
 	
-	childSetCommitCallback("save_tex_btn", onSaveAsBtn, this);
-	getChildView("save_tex_btn")->setVisible( true);
-	getChildView("save_tex_btn")->setEnabled(canSaveAs());
+	// Ansariel: No need to show the save button if we can't save anyway
+	if (canSaveAs())
+	{
+		childSetCommitCallback("save_tex_btn", onSaveAsBtn, this);
+	}
+	else
+	{
+		getChildView("save_tex_btn")->setVisible( false);
+	}
 	
 	if (!mCopyToInv) 
 	{
@@ -139,7 +146,7 @@ BOOL LLPreviewTexture::postBuild()
 	childSetCommitCallback("combo_aspect_ratio", onAspectRatioCommit, this);
 	LLComboBox* combo = getChild<LLComboBox>("combo_aspect_ratio");
 	combo->setCurrentByIndex(0);
-	
+
 	return LLPreview::postBuild();
 }
 
@@ -325,7 +332,9 @@ void LLPreviewTexture::reshape(S32 width, S32 height, BOOL called_from_parent)
 	LLPreview::reshape(width, height, called_from_parent);
 
 	LLRect dim_rect;
-	LLView *pView = findChildView( "dimensions" );
+	// Ansariel: Need the rect of the dimensions_panel
+	//LLView *pView = findChildView( "dimensions" );
+	LLView *pView = findChildView( "dimensions_panel" );
 	
 	if( pView )
 		dim_rect = pView->getRect();
@@ -510,10 +519,60 @@ void LLPreviewTexture::updateDimensions()
 	{
 		mUpdateDimensions = FALSE;
 		
+		// <Ansariel>: Show image at full resolution if possible
 		//reshape floater
-		reshape(getRect().getWidth(), getRect().getHeight());
+		//reshape(getRect().getWidth(), getRect().getHeight());
 
-		gFloaterView->adjustToFitScreen(this, FALSE);
+		//gFloaterView->adjustToFitScreen(this, FALSE);
+
+		// Move dimensions panel into correct position depending
+		// if any of the buttons is shown
+		LLView* button_panel = getChildView("button_panel");
+		LLView* dimensions_panel = getChildView("dimensions_panel");
+		dimensions_panel->setVisible(TRUE);
+		if (!getChildView("Keep")->getVisible() &&
+			!getChildView("Discard")->getVisible() &&
+			!getChildView("save_tex_btn")->getVisible())
+		{
+			button_panel->setVisible(FALSE);
+			if (mShowingButtons)
+			{
+				dimensions_panel->translate(0, -button_panel->getRect().mTop - 10);
+				mShowingButtons = false;
+			}
+		}
+		else
+		{
+			button_panel->setVisible(TRUE);
+			if (!mShowingButtons)
+			{
+				dimensions_panel->translate(0, button_panel->getRect().mTop + 10);
+				mShowingButtons = true;
+			}
+		}
+
+		// If this is 100% correct???
+		S32 floater_target_width = mImage->getFullWidth() + 2 * (LLPANEL_BORDER_WIDTH + PREVIEW_PAD) + PREVIEW_RESIZE_HANDLE_SIZE;;
+		S32 floater_target_height = mImage->getFullHeight() + 3 * CLIENT_RECT_VPAD + PREVIEW_BORDER + dimensions_panel->getRect().mTop + getChildView("desc")->getRect().getHeight();
+
+		// Scale down by factor 0.5 if image would exceed viewer window
+		if (gViewerWindow->getWindowWidthRaw() < floater_target_width || gViewerWindow->getWindowHeightRaw() < floater_target_height)
+		{
+			floater_target_width = mImage->getFullWidth() / 2 + 2 * (LLPANEL_BORDER_WIDTH + PREVIEW_PAD) + PREVIEW_RESIZE_HANDLE_SIZE;;
+			floater_target_height = mImage->getFullHeight() / 2 + 3 * CLIENT_RECT_VPAD + PREVIEW_BORDER + dimensions_panel->getRect().mTop + getChildView("desc")->getRect().getHeight();
+		}
+
+		// Resize floater
+		if (getHost())
+		{
+			getHost()->growToFit(floater_target_width, floater_target_height);
+		}
+		else
+		{
+			reshape(floater_target_width, floater_target_height);
+			gFloaterView->adjustToFitScreen(this, FALSE);
+		}
+		// </Ansariel>: Show image at full resolution if possible
 
 		LLRect dim_rect(getChildView("dimensions")->getRect());
 		LLRect aspect_label_rect(getChildView("aspect_ratio")->getRect());
@@ -575,7 +634,8 @@ void LLPreviewTexture::loadAsset()
 	mAssetStatus = PREVIEW_ASSET_LOADING;
 	mUpdateDimensions = TRUE;
 	updateDimensions();
-	getChildView("save_tex_btn")->setEnabled(canSaveAs());
+	//getChildView("save_tex_btn")->setEnabled(canSaveAs());
+	getChildView("save_tex_btn")->setVisible(canSaveAs());
 }
 
 LLPreview::EAssetStatus LLPreviewTexture::getAssetStatus()
