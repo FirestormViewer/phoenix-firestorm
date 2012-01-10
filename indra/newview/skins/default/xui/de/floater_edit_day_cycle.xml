@@ -98,7 +98,7 @@
 		Uhrzeit:
 	</text>
 	<time name="time" value="6:00"/>
-	<check_box label="Zu meinem neuen Tageszyklus machen" name="make_default_cb"/>
+	<check_box label="Zu meinem neuen Tageszyklus machen" name="make_default_cb" left="290" width="250"/>
 	<button label="Speichern" name="save"/>
 	<button label="Abbrechen" name="cancel"/>
 </floater>

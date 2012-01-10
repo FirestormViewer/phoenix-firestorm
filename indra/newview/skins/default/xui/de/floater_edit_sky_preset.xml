@@ -137,7 +137,7 @@
 			<check_box label="Sperren" name="WLCloudLockY"/>
 		</panel>
 	</tab_container>
-	<check_box label="Diese Voreinstellung zu meiner neuen Himmeleinstellung machen" name="make_default_cb"/>
+	<check_box label="Diese Voreinstellung zu meiner neuen Himmeleinstellung machen" name="make_default_cb" left="270" width="390"/>
 	<button label="Speichern" name="save"/>
 	<button label="Abbrechen" name="cancel"/>
 </floater>
