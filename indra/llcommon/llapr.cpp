@@ -281,7 +281,7 @@ bool ll_apr_warn_status(apr_status_t status)
 	if(APR_SUCCESS == status) return false;
 	char buf[MAX_STRING];	/* Flawfinder: ignore */
 	apr_strerror(status, buf, sizeof(buf));
-	LL_WARNS("APR") << "APR: " << buf << LL_ENDL;
+	LL_WARNS("APR") << "APR status " << status << ": " << buf << LL_ENDL;
 	return true;
 }
 
@@ -293,7 +293,7 @@ bool ll_apr_warn_status(apr_status_t status, apr_dso_handle_t *handle)
     // stores the output in a fixed 255-character internal buffer. (*sigh*)
     char buf[MAX_STRING];           /* Flawfinder: ignore */
     apr_dso_error(handle, buf, sizeof(buf));
-    LL_WARNS("APR") << "APR: " << buf << LL_ENDL;
+    LL_WARNS("APR") << "APR status " << status << ": " << buf << LL_ENDL;
     return result;
 }
 
