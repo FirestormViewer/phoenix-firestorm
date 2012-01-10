@@ -62,7 +62,7 @@
 		value="0.44 0.17 0 1" />
 	<color
 		name="ButtonFlashBgColor"
-		reference="White" />
+		value="0.725 0.58 0.361 1.0" />
 	<!-- Color of the push button label -->
 	<color
 		name="ButtonLabelColor"
