@@ -116,6 +116,56 @@
 		scale.bottom="10"
 		scale.right="4" />
 
+	<!-- our tab widgets don't distinguish between left, middle and right, so we
+		 use the same texture for all of them, see widgets/tab_container.xml -->
+	<texture name="TabTop_Left_Off"
+		file_name="containers/TabTop_Left_Off.png"
+		preload="true"
+		scale.left="4"
+		scale.top="24"
+		scale.right="60"
+		scale.bottom="4" />
+
+	<texture name="TabTop_Left_Selected"
+		file_name="containers/TabTop_Left_Selected.png"
+		preload="true"
+		scale.left="4"
+		scale.top="24"
+		scale.right="60"
+		scale.bottom="4" />
+
+	<texture name="TabLeft_Top_Off"
+		file_name="containers/TabLeft_Top_Off.png"
+		preload="true"
+		scale.left="16"
+		scale.top="4"
+		scale.right="60"
+		scale.bottom="4" />
+
+	<texture name="TabLeft_Top_Selected"
+		file_name="containers/TabLeft_Top_Selected.png"
+		preload="true"
+		scale.left="16"
+		scale.top="4"
+		scale.right="60"
+		scale.bottom="4" />
+
+	<texture name="TabBottom_Left_Off"
+		file_name="containers/TabBottom_Left_Off.png"
+		preload="true"
+		scale.left="4"
+		scale.top="24"
+		scale.right="60"
+		scale.bottom="4" />
+
+	<texture name="TabBottom_Left_Selected"
+		file_name="containers/TabBottom_Left_Selected.png"
+		preload="true"
+		scale.left="4"
+		scale.top="24"
+		scale.right="60"
+		scale.bottom="4" />
+
 	<!-- new-old icons :D -->
 	<texture name="Inv_Alpha"				file_name="legacy/inv_item_alpha.tga" />
 	<texture name="Inv_Animation"			file_name="legacy/inv_item_animation.tga" />

@@ -20,7 +20,7 @@
  right="-1"
  name="tabs"
  tab_min_width="50"
- tab_position="top" >
+ tab_position="bottom" >
 
     <!--General-->
     <panel
