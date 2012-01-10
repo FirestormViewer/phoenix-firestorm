@@ -3,13 +3,14 @@
 label_pad_bottom - vertical padding under tab button labels
 label_pad_left - padding to the left of tab button labels
 -->
-<tab_container name="tab_container" 
+<tab_container name="tab_container"
                mouse_opaque="false"
                tab_min_width="60"
                tab_max_width="150"
                use_custom_icon_ctrl="false"
                halign="left"
                font="SansSerifSmall"
+               label_shadow="true"
                tab_height="18"
                label_pad_bottom="1"
                label_pad_left="4">
