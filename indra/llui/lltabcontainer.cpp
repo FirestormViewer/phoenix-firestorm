@@ -1117,6 +1117,10 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
 			{
 				p.pad_left(indent);
 			}
+			else
+			{
+				p.pad_left(mLabelPadLeft);
+			}
 			
 			
 			if(mCustomIconCtrlUsed)
