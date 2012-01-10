@@ -222,6 +222,7 @@ LLTabContainer::Params::Params()
 	use_custom_icon_ctrl("use_custom_icon_ctrl", false),
 	tab_icon_ctrl_pad("tab_icon_ctrl_pad", 0),
 	use_ellipses("use_ellipses"),
+	label_shadow("label_shadow",false),		// no drop shadowed labels by default -Zi
 	font_halign("halign")
 {}
 
@@ -261,6 +262,7 @@ LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 	mLastTabParams(p.last_tab),
 	mCustomIconCtrlUsed(p.use_custom_icon_ctrl),
 	mTabIconCtrlPad(p.tab_icon_ctrl_pad),
+	mDropShadowedText(p.label_shadow),			// support for drop shadowed tab labels -Zi
 	mUseTabEllipses(p.use_ellipses)
 {
 	// AO: Treat the IM tab container specially 
@@ -1112,7 +1114,7 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
 			p.font_halign = mFontHalign;
 			p.pad_bottom( mLabelPadBottom );
 			p.tab_stop(false);
-			p.label_shadow(false);
+			p.label_shadow(mDropShadowedText);
 			if (indent)
 			{
 				p.pad_left(indent);
@@ -1147,7 +1149,7 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
 			p.image_unselected(tab_img);
 			p.image_selected(tab_selected_img);
 			p.tab_stop(false);
-			p.label_shadow(false);
+			p.label_shadow(mDropShadowedText);
 			// Try to squeeze in a bit more text
 			p.pad_left( mLabelPadLeft );
 			p.pad_right(2);

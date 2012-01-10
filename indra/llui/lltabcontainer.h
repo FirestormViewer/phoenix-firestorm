@@ -101,6 +101,11 @@ public:
 		Optional<LLFontGL::HAlign>			font_halign;
 
 		/**
+		 * Draw a drop shadow (soft)
+		 */
+		Optional<bool>						label_shadow;
+
+		/**
 		 * Tab label ellipses
 		 */
 		Optional<bool>						use_ellipses;
@@ -304,6 +309,7 @@ private:
 	
 	LLFontGL::HAlign                mFontHalign;
 	const LLFontGL*					mFont;
+	bool							mDropShadowedText;	// support drop shadowed tab text -Zi
 
 	TabParams						mFirstTabParams;
 	TabParams						mMiddleTabParams;
