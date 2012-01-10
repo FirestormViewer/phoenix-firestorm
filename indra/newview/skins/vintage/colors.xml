@@ -209,5 +209,18 @@
 	<!-- Floater title bar color, mostly used for sidebar related floaters -->
 	<color
 		name="TitleBarFocusColor"
-		reference="0.333 0.333 0.333 1.0" />
+		value="0.333 0.333 0.333 1.0" />
+	<!-- Colors for view borders, bevel boxes around elements -->
+	<color
+		name="DefaultHighlightLight"
+		value="0.451 0.518 0.608 1.0" />
+	<color
+		name="DefaultHighlightDark"
+		reference="DefaultHighlightLight" />
+	<color
+		name="DefaultShadowLight"
+		value="0.101 0.101 0.101 1.0" />
+	<color
+		name="DefaultShadowLight"
+		reference="Black" />
 </colors>
