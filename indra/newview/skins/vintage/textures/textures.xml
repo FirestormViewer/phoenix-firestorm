@@ -166,6 +166,15 @@
 		scale.right="60"
 		scale.bottom="4" />
 
+	<!-- Disabled text fields should have a bevel-in border -->
+	<texture name="TextField_Disabled"
+		file_name="widgets/TextField_Disabled.png"
+		preload="true"
+		scale.left="9"
+		scale.top="18"
+		scale.right="248"
+		scale.bottom="4" />
+
 	<!-- new-old icons :D -->
 	<texture name="Inv_Alpha"				file_name="legacy/inv_item_alpha.tga" />
 	<texture name="Inv_Animation"			file_name="legacy/inv_item_animation.tga" />
