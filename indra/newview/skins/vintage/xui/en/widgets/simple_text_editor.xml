@@ -6,7 +6,7 @@
 	max_length="255" 
 	embedded_items="false" 
 	allow_scroll="true"
-	border_visible="false"
+	border_visible="true"
 	word_wrap="false" 
 	ignore_tab="true"
 	line_spacing.pixels="1" 
