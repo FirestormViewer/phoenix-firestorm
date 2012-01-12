@@ -3559,7 +3559,7 @@ void LLVOAvatar::idleUpdateBelowWater()
 	BOOL wasBelowWater = mBelowWater;			// ## Zi: Animation Overrider
 	mBelowWater =  avatar_height < water_height;
 	// ## Zi: Animation Overrider
-	if (wasBelowWater != mBelowWater)
+	if (isSelf() && wasBelowWater!=mBelowWater)
 		AOEngine::instance().checkBelowWater(mBelowWater);
 	// ## Zi: Animation Overrider
 }

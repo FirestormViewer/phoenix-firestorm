@@ -172,6 +172,10 @@ void AOEngine::checkBelowWater(BOOL yes)
 	if(mUnderWater==yes)
 		return;
 
+	// only restart underwater/above water motion if the overridden motion is the one currently playing
+	if(mLastMotion!=mLastOverriddenMotion)
+		return;
+
 	gAgent.sendAnimationRequest(override(mLastOverriddenMotion,FALSE),ANIM_REQUEST_STOP);
 	mUnderWater=yes;
 	gAgent.sendAnimationRequest(override(mLastOverriddenMotion,TRUE),ANIM_REQUEST_START);
