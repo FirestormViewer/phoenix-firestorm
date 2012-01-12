@@ -61,7 +61,7 @@ class FloaterAO
 								  EAcceptance* accept,std::string& tooltip_msg);
 
 	protected:
-		LLScrollListItem* addAnimation(const std::string name);
+		LLScrollListItem* addAnimation(const std::string& name);
 
 		void onSelectSet();
 		void onSelectSetSmall();

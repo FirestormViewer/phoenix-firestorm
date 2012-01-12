@@ -98,16 +98,16 @@ class AOEngine
 		};
 
 		void enable(BOOL yes);
-		const LLUUID override(const LLUUID motion,BOOL start);
+		const LLUUID override(const LLUUID& motion,BOOL start);
 		void tick();
 		void update();
 		void reload(bool);
 		void reloadStateAnimations(AOSet::AOState* state);
 		void clear( bool );
 
-		const LLUUID getAOFolder();
+		const LLUUID& getAOFolder() const;
 
-		LLUUID addSet(const std::string name,BOOL reload=TRUE);
+		LLUUID addSet(const std::string& name,BOOL reload=TRUE);
 		BOOL removeSet(AOSet* set);
 
 		BOOL addAnimation(const AOSet* set,AOSet::AOState* state,const LLInventoryItem* item,BOOL reload=TRUE);
@@ -126,8 +126,8 @@ class AOEngine
 
 		void inMouselook(BOOL yes);
 		void selectSet(AOSet* set);
-		AOSet* selectSetByName(const std::string name);
-		AOSet* getSetByName(const std::string name);
+		AOSet* selectSetByName(const std::string& name);
+		AOSet* getSetByName(const std::string& name) const;
 
 		// callback from LLAppViewer
 		static void onLoginComplete();
@@ -135,7 +135,7 @@ class AOEngine
 		const std::vector<AOSet*> getSetList() const;
 		const std::string getCurrentSetName() const;
 		const AOSet* getDefaultSet() const;
-		BOOL renameSet(AOSet* set,const std::string name);
+		BOOL renameSet(AOSet* set,const std::string& name);
 
 		void setDefaultSet(AOSet* set);
 		void setOverrideSits(AOSet* set,BOOL yes);
@@ -153,22 +153,22 @@ class AOEngine
 	protected:
 		void init();
 
-		void setLastMotion(LLUUID motion);
-		void setLastOverriddenMotion(LLUUID motion);
+		void setLastMotion(const LLUUID& motion);
+		void setLastOverriddenMotion(const LLUUID& motion);
 		void setStateCycleTimer(const AOSet::AOState* state);
 
 		void stopAllStandVariants();
 		void stopAllSitVariants();
 
 		BOOL foreignAnimations();
-		LLUUID mapSwimming(LLUUID motion);
+		const LLUUID& mapSwimming(const LLUUID& motion) const;
 
 		void updateSortOrder(AOSet::AOState* state);
 		void saveSet(const AOSet* set);
 		void saveState(const AOSet::AOState* state);
 
 		BOOL createAnimationLink(const AOSet* set,AOSet::AOState* state,const LLInventoryItem* item);
-		void purgeFolder(LLUUID uuid);
+		void purgeFolder(const LLUUID& uuid) const;
 
 		static void onNotecardLoadComplete(	LLVFS* vfs,const LLUUID& assetUUID,LLAssetType::EType type,
 												void* userdata,S32 status,LLExtStat extStatus);

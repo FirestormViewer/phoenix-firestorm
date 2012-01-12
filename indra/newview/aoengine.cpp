@@ -125,13 +125,13 @@ void AOEngine::stopAllSitVariants()
 	gAgentAvatarp->LLCharacter::stopMotion(ANIM_AGENT_SIT_GROUND_CONSTRAINED);
 }
 
-void AOEngine::setLastMotion(LLUUID motion)
+void AOEngine::setLastMotion(const LLUUID& motion)
 {
 	if(motion!=ANIM_AGENT_TYPE)
 		mLastMotion=motion;
 }
 
-void AOEngine::setLastOverriddenMotion(LLUUID motion)
+void AOEngine::setLastOverriddenMotion(const LLUUID& motion)
 {
 	if(motion!=ANIM_AGENT_TYPE)
 		mLastOverriddenMotion=motion;
@@ -148,7 +148,7 @@ BOOL AOEngine::foreignAnimations()
 	return FALSE;
 }
 
-LLUUID AOEngine::mapSwimming(LLUUID motion)
+const LLUUID& AOEngine::mapSwimming(const LLUUID& motion) const
 {
 	S32 stateNum;
 
@@ -275,7 +275,7 @@ void AOEngine::setStateCycleTimer(const AOSet::AOState* state)
 		mCurrentSet->startTimer(timeout);
 }
 
-const LLUUID AOEngine::override(const LLUUID pMotion,BOOL start)
+const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 {
 	LLUUID animation;
 
@@ -617,7 +617,7 @@ void AOEngine::updateSortOrder(AOSet::AOState* state)
 	}
 }
 
-LLUUID AOEngine::addSet(const std::string name,BOOL reload)
+LLUUID AOEngine::addSet(const std::string& name,BOOL reload)
 {
 	if(mAOFolder.isNull())
 	{
@@ -702,7 +702,7 @@ BOOL AOEngine::addAnimation(const AOSet* set,AOSet::AOState* state,const LLInven
 }
 
 // needs a three-step process, since purge of categories only seems to work from trash
-void AOEngine::purgeFolder(LLUUID uuid)
+void AOEngine::purgeFolder(const LLUUID& uuid) const
 {
 	// unprotect it
 	BOOL wasProtected=gSavedPerAccountSettings.getBOOL("ProtectAOFolders");
@@ -1024,7 +1024,7 @@ void AOEngine::reload( bool aFromTimer )
 		enable(TRUE);
 }
 
-AOSet* AOEngine::getSetByName(const std::string name)
+AOSet* AOEngine::getSetByName(const std::string& name) const
 {
 	AOSet* found=0;
 	for(U32 index=0;index<mSets.size();index++)
@@ -1072,7 +1072,7 @@ void AOEngine::selectSet(AOSet* set)
 	}
 }
 
-AOSet* AOEngine::selectSetByName(const std::string name)
+AOSet* AOEngine::selectSetByName(const std::string& name)
 {
 	AOSet* set=getSetByName(name);
 	if(set)
@@ -1124,7 +1124,7 @@ void AOEngine::saveSet(const AOSet* set)
 	mUpdatedSignal();
 }
 
-BOOL AOEngine::renameSet(AOSet* set,const std::string name)
+BOOL AOEngine::renameSet(AOSet* set,const std::string& name)
 {
 	if(name.empty() || name.find(":")!=std::string::npos)
 		return FALSE;
@@ -1628,7 +1628,7 @@ void AOEngine::processImport( bool aFromTimer )
 	}
 }
 
-const LLUUID AOEngine::getAOFolder()
+const LLUUID& AOEngine::getAOFolder() const
 {
 	return mAOFolder;
 }

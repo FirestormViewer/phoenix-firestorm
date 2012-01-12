@@ -131,7 +131,7 @@ AOSet::AOState* AOSet::getState(S32 eName)
 	return &mStates[eName];
 }
 
-AOSet::AOState* AOSet::getStateByName(const std::string name)
+AOSet::AOState* AOSet::getStateByName(const std::string& name)
 {
 	for(S32 index=0;index<AOSTATES_MAX;index++)
 	{
@@ -147,7 +147,7 @@ AOSet::AOState* AOSet::getStateByName(const std::string name)
 	return NULL;
 }
 
-AOSet::AOState* AOSet::getStateByRemapID(const LLUUID id)
+AOSet::AOState* AOSet::getStateByRemapID(const LLUUID& id)
 {
 	for(S32 index=0;index<AOSTATES_MAX;index++)
 	{
@@ -159,7 +159,7 @@ AOSet::AOState* AOSet::getStateByRemapID(const LLUUID id)
 	return NULL;
 }
 
-LLUUID AOSet::getAnimationForState(AOState* state)
+const LLUUID& AOSet::getAnimationForState(AOState* state) const
 {
 	if(state)
 	{
@@ -209,22 +209,22 @@ BOOL AOSet::tick()
 	return FALSE;
 }
 
-const LLUUID AOSet::getInventoryUUID() const
+const LLUUID& AOSet::getInventoryUUID() const
 {
 	return mInventoryID;
 }
 
-void AOSet::setInventoryUUID(const LLUUID inventoryID)
+void AOSet::setInventoryUUID(const LLUUID& inventoryID)
 {
 	mInventoryID=inventoryID;
 }
 
-const std::string AOSet::getName() const
+const std::string& AOSet::getName() const
 {
 	return mName;
 }
 
-void AOSet::setName(std::string name)
+void AOSet::setName(const std::string& name)
 {
 	mName=name;
 }
@@ -279,12 +279,12 @@ void AOSet::setDirty(BOOL yes)
 	mDirty=yes;
 }
 
-void AOSet::setMotion(const LLUUID motion)
+void AOSet::setMotion(const LLUUID& motion)
 {
 	mCurrentMotion=motion;
 }
 
-LLUUID AOSet::getMotion() const
+const LLUUID& AOSet::getMotion() const
 {
 	return mCurrentMotion;
 }

@@ -89,11 +89,11 @@ class AOSet
 			BOOL mDirty;
 		};
 
-		const LLUUID getInventoryUUID() const;
-		void setInventoryUUID(const LLUUID inventoryID);
+		const LLUUID& getInventoryUUID() const;
+		void setInventoryUUID(const LLUUID& inventoryID);
 
-		const std::string getName() const;
-		void setName(std::string name);
+		const std::string& getName() const;
+		void setName(const std::string& name);
 
 		BOOL getSitOverride() const;
 		void setSitOverride(BOOL yes);
@@ -107,16 +107,16 @@ class AOSet
 		BOOL getComplete() const;
 		void setComplete(BOOL yes);
 
-		LLUUID getMotion() const;
-		void setMotion(const LLUUID motion);
+		const LLUUID& getMotion() const;
+		void setMotion(const LLUUID& motion);
 
 		BOOL getDirty() const;
 		void setDirty(BOOL yes);
 
 		AOState* getState(S32 eName);
-		AOState* getStateByName(const std::string name);
-		AOState* getStateByRemapID(const LLUUID id);
-		LLUUID getAnimationForState(AOState* state);
+		AOState* getStateByName(const std::string& name);
+		AOState* getStateByRemapID(const LLUUID& id);
+		const LLUUID& getAnimationForState(AOState* state) const;
 
 		void startTimer(F32 timeout);
 		void stopTimer();
