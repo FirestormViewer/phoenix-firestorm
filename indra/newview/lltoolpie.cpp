@@ -1033,6 +1033,17 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			// IDEVO: try to get display name + username
 			std::string final_name;
 			std::string full_name;
+
+			// Build group prefix -Zi
+			std::string group_title;
+			LLNameValue* group=hover_object->getNVPair("Title");
+			if(group)
+			{
+				group_title=group->getString();
+				if(!group_title.empty())
+					group_title+=" ";
+			}
+
 			if (!gCacheName->getFullName(hover_object->getID(), full_name))
 			{
 			LLNameValue* firstname = hover_object->getNVPair("FirstName");
@@ -1054,14 +1065,14 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			{
 //				final_name = av_name.getCompleteName();
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? group_title+av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
 // [/RLVa:KB]
 			}
 			else
 			{
 //				final_name = full_name;
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? full_name : RlvStrings::getAnonym(full_name);
+				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? group_title+full_name : RlvStrings::getAnonym(full_name);
 // [/RLVa:KB]
 			}
 
