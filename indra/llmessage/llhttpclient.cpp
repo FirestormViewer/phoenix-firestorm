@@ -229,6 +229,12 @@ static void request(
 	LLPumpIO::chain_t chain;
 
 	LLURLRequest* req = new LLURLRequest(method, url);
+	if(!req->isValid())//failed
+	{
+		delete req ;
+		return ;
+	}
+
 	req->setSSLVerifyCallback(LLHTTPClient::getCertVerifyCallback(), (void *)req);
 
 	
@@ -437,7 +443,9 @@ static LLSD blocking_request(
 {
 	lldebugs << "blockingRequest of " << url << llendl;
 	char curl_error_buffer[CURL_ERROR_SIZE] = "\0";
-	CURL* curlp = curl_easy_init();
+	CURL* curlp = LLCurl::newEasyHandle();
+	llassert_always(curlp != NULL) ;
+
 	LLHTTPBuffer http_buffer;
 	std::string body_str;
 	
@@ -531,7 +539,7 @@ static LLSD blocking_request(
 	}
 
 	// * Cleanup
-	curl_easy_cleanup(curlp);
+	LLCurl::deleteEasyHandle(curlp);
 	return response;
 }
 

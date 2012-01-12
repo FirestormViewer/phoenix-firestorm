@@ -198,6 +198,8 @@ public:
 	 */
 	void allowCookies();
 
+	/*virtual*/ bool isValid() ;
+
 public:
 	/** 
 	 * @brief Give this pipe a chance to handle a generated error

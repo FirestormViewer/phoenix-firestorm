@@ -83,6 +83,12 @@ LLURLRequestDetail::LLURLRequestDetail() :
 {
 	LLMemType m1(LLMemType::MTYPE_IO_URL_REQUEST);
 	mCurlRequest = new LLCurlEasyRequest();
+	
+	if(!mCurlRequest->isValid()) //failed.
+	{
+		delete mCurlRequest ;
+		mCurlRequest = NULL ;
+	}
 }
 
 LLURLRequestDetail::~LLURLRequestDetail()
@@ -260,12 +266,24 @@ void LLURLRequest::setModifiedSince(const time_t &if_modified_since)
 }
 // </AW: opensim>
 
+//virtual 
+bool LLURLRequest::isValid() 
+{
+	return mDetail->mCurlRequest && mDetail->mCurlRequest->isValid(); 
+}
+
 // virtual
 LLIOPipe::EStatus LLURLRequest::handleError(
 	LLIOPipe::EStatus status,
 	LLPumpIO* pump)
 {
 	LLMemType m1(LLMemType::MTYPE_IO_URL_REQUEST);
+	
+	if(!isValid())
+	{
+		return STATUS_EXPIRED ;
+	}
+
 	if(mCompletionCallback && pump)
 	{
 		LLURLRequestComplete* complete = NULL;
