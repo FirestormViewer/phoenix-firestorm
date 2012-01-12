@@ -1817,6 +1817,14 @@
     <string>Boolean</string>
     <key>Value</key>
     <integer>0</integer>
+    <key>SanityCheckType</key>
+    <string>Equals</string>
+    <key>SanityValue</key>
+    <array>
+      <integer>0</integer>
+    </array>
+    <key>SanityComment</key>
+    <string>This is an experimental feature and might result in textures being rendered blurry or otherwise distorted.</string>
   </map>
   <key>AutoAcceptNewInventory</key>
     <map>
@@ -4686,6 +4694,14 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+      <key>SanityCheckType</key>
+      <string>Equals</string>
+      <key>SanityValue</key>
+      <array>
+        <integer>0</integer>
+      </array>
+      <key>SanityComment</key>
+      <string>This is an experimental feature and might result in textures being stretched in a weird way across surfaces.</string>
     </map>
     <key>EnableUIHints</key>
     <map>
@@ -14384,6 +14400,14 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+      <key>SanityCheckType</key>
+      <string>Equals</string>
+      <key>SanityValue</key>
+      <array>
+        <integer>1</integer>
+      </array>
+      <key>SanityComment</key>
+      <string>Disabling this option might lead to severely degraded viewer performance and increased rezzing time.</string>
     </map>
     <key>RenderDelayVBUpdate</key>
     <map>
