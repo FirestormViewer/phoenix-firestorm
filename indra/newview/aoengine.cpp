@@ -137,13 +137,16 @@ void AOEngine::setLastOverriddenMotion(const LLUUID& motion)
 		mLastOverriddenMotion=motion;
 }
 
-BOOL AOEngine::foreignAnimations()
+BOOL AOEngine::foreignAnimations(const LLUUID& seat)
 {
 	for(LLVOAvatar::AnimSourceIterator sourceIterator=gAgentAvatarp->mAnimationSources.begin();
 		sourceIterator!=gAgentAvatarp->mAnimationSources.end();sourceIterator++)
 	{
 		if(sourceIterator->first!=gAgent.getID())
-			return TRUE;
+		{
+			if(seat.isNull() || sourceIterator->first==seat)
+				return TRUE;
+		}
 	}
 	return FALSE;
 }
@@ -260,7 +263,7 @@ void AOEngine::enable(BOOL yes)
 				lldebugs << "state "<< index <<" returned NULL." << llendl;
 		}
 
-		if(!foreignAnimations())
+		if(!foreignAnimations(LLUUID::null))
 			gAgent.sendAnimationRequest(mLastMotion,ANIM_REQUEST_START);
 
 		mCurrentSet->stopTimer();
@@ -466,7 +469,13 @@ const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 
 void AOEngine::checkSitCancel()
 {
-	if(foreignAnimations())
+	LLUUID seat;
+
+	const LLViewerObject* agentRoot=dynamic_cast<LLViewerObject*>(gAgentAvatarp->getRoot());
+	if(agentRoot)
+		seat=agentRoot->getID();
+
+	if(foreignAnimations(seat))
 	{
 		LLUUID animation=mCurrentSet->getStateByRemapID(ANIM_AGENT_SIT)->mCurrentAnimationID;
 		if(animation.notNull())
