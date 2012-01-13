@@ -1327,18 +1327,19 @@ void LLPanelPeople::updateNearbyList()
 	}
 
 	static LLCachedControl<S32> RadarAlertChannel(gSavedSettings, "RadarAlertChannel");
-	if (mRadarEnterAlerts.size() > 0)
+	U32 num_entering = mRadarEnterAlerts.size();
+	if (num_entering > 0)
 	{
 		mRadarFrameCount++;
 		S32 chan = S32(RadarAlertChannel);
-		std::string msg = llformat("%d,%d",mRadarFrameCount,(int)mRadarEnterAlerts.size());
-		while(mRadarEnterAlerts.size() > 0)
+		U32 num_this_pass = min(MAX_AVATARS_PER_ALERT,num_entering);
+		std::string msg = llformat("%d,%d",mRadarFrameCount,num_this_pass);
+		U32 loop = 0;
+		while(loop < num_entering)
 		{
-			int sz = min(MAX_AVATARS_PER_ALERT,(U32)mRadarEnterAlerts.size());
-			for (int i = 0; (i < sz);i++)
+			for (int i = 0; i < num_this_pass; i++)
 			{
-				msg = llformat("%s,%s",msg.c_str(),mRadarEnterAlerts.back().asString().c_str());
-				mRadarEnterAlerts.pop_back();
+				msg = llformat("%s,%s",msg.c_str(),mRadarEnterAlerts[loop + i].asString().c_str());
 			}
 			LLMessageSystem* msgs = gMessageSystem;
 			msgs->newMessage("ScriptDialogReply");
@@ -1351,20 +1352,24 @@ void LLPanelPeople::updateNearbyList()
 			msgs->addS32("ButtonIndex", 1);
 			msgs->addString("ButtonLabel", msg.c_str());
 			gAgent.sendReliableMessage();
+			loop += num_this_pass;
+			num_this_pass = min(MAX_AVATARS_PER_ALERT,num_entering-loop);
+			msg = llformat("%d,%d",mRadarFrameCount,num_this_pass);
 		}
 	}
-	if (mRadarLeaveAlerts.size() > 0)
+	U32 num_leaving  = mRadarLeaveAlerts.size();
+	if (num_leaving > 0)
 	{
 		mRadarFrameCount++;
 		S32 chan = S32(RadarAlertChannel);
-		std::string msg = llformat("%d,-%d",mRadarFrameCount,(int)mRadarLeaveAlerts.size());
-		while(mRadarLeaveAlerts.size() > 0)
-		{ 
-			int sz = min(MAX_AVATARS_PER_ALERT,(U32)mRadarLeaveAlerts.size());
-			for (int i = 0; (i < sz);i++)
+		U32 num_this_pass = min(MAX_AVATARS_PER_ALERT,num_leaving);
+		std::string msg = llformat("%d,-%d",mRadarFrameCount,min(MAX_AVATARS_PER_ALERT,num_leaving));
+		U32 loop = 0;
+		while(loop < num_leaving)
+		{
+			for (int i = 0; i < num_this_pass; i++)
 			{
-				msg = llformat("%s,%s",msg.c_str(),mRadarLeaveAlerts.back().asString().c_str());
-				mRadarLeaveAlerts.pop_back();
+				msg = llformat("%s,%s",msg.c_str(),mRadarLeaveAlerts[loop + i].asString().c_str());
 			}
 			LLMessageSystem* msgs = gMessageSystem;
 			msgs->newMessage("ScriptDialogReply");
@@ -1377,8 +1382,12 @@ void LLPanelPeople::updateNearbyList()
 			msgs->addS32("ButtonIndex", 1);
 			msgs->addString("ButtonLabel", msg.c_str());
 			gAgent.sendReliableMessage();
+			loop += num_this_pass;
+			num_this_pass = min(MAX_AVATARS_PER_ALERT,num_leaving-loop);
+			msg = llformat("%d,-%d",mRadarFrameCount,num_this_pass);
 		}
 	}
+
 	// reset any active alert requests
 	if (alertScripts)
 		mRadarAlertRequest = false;
