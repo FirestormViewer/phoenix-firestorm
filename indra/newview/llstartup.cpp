@@ -1880,8 +1880,9 @@ bool idle_startup()
 		gAgent.sendAgentDataUpdateRequest();
 
 		// Create the inventory views
-		llinfos << "Creating Inventory Views" << llendl;
-		LLFloaterReg::getInstance("inventory");
+		// This is done in the sidepanel floaters already -Zi
+		// llinfos << "Creating Inventory Views" << llendl;
+		// LLFloaterReg::getInstance("inventory");
 
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.1.0f
 		if (rlv_handler_t::isEnabled())
