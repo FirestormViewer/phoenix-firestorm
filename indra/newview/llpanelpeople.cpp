@@ -1580,7 +1580,7 @@ void LLPanelPeople::updateButtons()
 	buttonSetEnabled("share_btn",		item_selected);
 	buttonSetEnabled("im_btn",			multiple_selected); // allow starting the friends conference for multiple selection
 	buttonSetEnabled("call_btn",		multiple_selected && enable_calls);
-	buttonSetEnabled("teleport_btn",	multiple_selected && LLAvatarActions::canOfferTeleport(selected_uuids));
+	buttonSetEnabled("teleport_btn",	multiple_selected /* && LLAvatarActions::canOfferTeleport(selected_uuids) */ ); // LO - Dont block the TP button at all.
 
 	bool none_group_selected = item_selected && selected_id.isNull();
 	buttonSetEnabled("group_info_btn", !none_group_selected);
@@ -2280,7 +2280,7 @@ void LLPanelPeople::onTeleportButtonClicked()
 {
 	uuid_vec_t selected_uuids;
 	getCurrentItemIDs(selected_uuids);
-	LLAvatarActions::offerTeleport(selected_uuids);
+	LLAvatarActions::offerTeleport(LLAvatarActions::canOfferTeleport(selected_uuids));
 }
 
 void LLPanelPeople::onShareButtonClicked()
