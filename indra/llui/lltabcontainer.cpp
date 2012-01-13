@@ -219,8 +219,6 @@ LLTabContainer::Params::Params()
 	first_tab("first_tab"),
 	middle_tab("middle_tab"),
 	last_tab("last_tab"),
-	panel_border("panel_border",false),
-	panel_bevel_style("panel_bevel_style",LLViewBorder::BEVEL_OUT),
 	use_custom_icon_ctrl("use_custom_icon_ctrl", false),
 	tab_icon_ctrl_pad("tab_icon_ctrl_pad", 0),
 	use_ellipses("use_ellipses"),
@@ -242,8 +240,6 @@ LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 	mMaxScrollPos(0),
 	mTitleBox(NULL),
 	mTopBorderHeight(LLPANEL_BORDER_WIDTH),
-	mPanelBorder(p.panel_border),
-	mPanelBevelStyle(p.panel_bevel_style),
 	mLockedTabCount(0),
 	mMinTabWidth(0),
 	mMaxTabWidth(p.tab_max_width),
@@ -305,14 +301,6 @@ LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 	}
 
 	initButtons( );
-
-	if(mPanelBorder)
-	{
-		llwarns << "adding border " << mPanelBevelStyle << llendl;
-		LLViewBorder::Params p;
-		p.bevel_style(mPanelBevelStyle);
-		addChild( LLUICtrlFactory::create<LLViewBorder>(p) );
-	}
 }
 
 LLTabContainer::~LLTabContainer()

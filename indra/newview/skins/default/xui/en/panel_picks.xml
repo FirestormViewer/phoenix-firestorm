@@ -25,8 +25,6 @@ background_opaque="false"
   left="0"
   name="accordion"
   top="4"
- panel_border="true"
- panel_bevel_style="out"
   width="313">
     <panel
      layout="topleft"
