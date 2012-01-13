@@ -45,7 +45,7 @@ class LLTabContainer;
 class LLMenuButton;
 class LLMenuGL;
 
-const U32	MAX_AVATARS_PER_ALERT = 7; // maximum number of UUIDs we can cram into a single channel radar alert message
+const U32	MAX_AVATARS_PER_ALERT = 6; // maximum number of UUIDs we can cram into a single channel radar alert message
 const U32	COARSE_OFFSET_INTERVAL = 7; // seconds after which we query the bridge for a coarse location adjustment
 const U32   MAX_OFFSET_REQUESTS = 60; // 2048 / UUID size, leaving overhead space
 const U32	NAMEFORMAT_DISPLAYNAME = 0;
