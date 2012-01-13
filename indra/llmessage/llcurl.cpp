@@ -231,12 +231,6 @@ CURL* LLCurl::Easy::allocEasyHandle()
 	if (sFreeHandles.empty())
 	{
 		ret = curl_easy_init();
-
-		// Ansariel: Added some debug code
-		if (!ret)
-		{
-			llwarns << "curl_easy_init() failed!" << llendl;
-		}
 	}
 	else
 	{
