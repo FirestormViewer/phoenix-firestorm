@@ -926,7 +926,7 @@ void LLCurlThread::CurlRequest::finishRequest(bool completed)
 	}
 	else
 	{
-		mMulti->cleanup() ; //being idle too long, remove the request.
+		mCurlThread->cleanupMulti(mMulti) ; //being idle too long, remove the request.
 	}
 
 	mMulti = NULL ;
@@ -987,6 +987,13 @@ void LLCurlThread::deleteMulti(LLCurl::Multi* multi)
 {
 	delete multi ;
 }
+
+//private
+void LLCurlThread::cleanupMulti(LLCurl::Multi* multi) 
+{
+	multi->cleanup() ;
+}
+
 //------------------------------------------------------------
 
 //static
