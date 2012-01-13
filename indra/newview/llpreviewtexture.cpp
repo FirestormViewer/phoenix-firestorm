@@ -562,6 +562,10 @@ void LLPreviewTexture::updateDimensions()
 			floater_target_height = mImage->getFullHeight() / 2 + 3 * CLIENT_RECT_VPAD + PREVIEW_BORDER + dimensions_panel->getRect().mTop + getChildView("desc")->getRect().getHeight();
 		}
 
+		// Preserve minimum floater size
+		floater_target_width = llmax(floater_target_width, getMinWidth());
+		floater_target_height = llmax(floater_target_height, getMinHeight());
+
 		// Resize floater
 		if (getHost())
 		{
