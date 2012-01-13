@@ -120,6 +120,12 @@ public:
 		 */
 		Optional<S32>						tab_icon_ctrl_pad;
 
+		/**
+		 * Defines if all panels should get a panel added automatically
+		 */
+		Optional<bool>						panel_border;
+		Optional<LLViewBorder::EBevel>		panel_bevel_style;
+
 		Params();
 	};
 
@@ -318,6 +324,9 @@ private:
 	bool							mCustomIconCtrlUsed;
 	S32								mTabIconCtrlPad;
 	bool							mUseTabEllipses;
+
+	bool							mPanelBorder;
+	LLViewBorder::EBevel			mPanelBevelStyle;
 };
 
 #endif  // LL_TABCONTAINER_H
