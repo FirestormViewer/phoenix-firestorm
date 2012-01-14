@@ -188,9 +188,6 @@ void LLFloaterAnimPreview::setAnimCallbacks()
 //-----------------------------------------------------------------------------
 BOOL LLFloaterAnimPreview::postBuild()
 {
-	LLKeyframeMotion* motionp = NULL;
-	LLBVHLoader* loaderp = NULL;
-
 	if (!LLFloaterNameDesc::postBuild())
 	{
 		return FALSE;
@@ -198,30 +195,43 @@ BOOL LLFloaterAnimPreview::postBuild()
 
 	getChild<LLUICtrl>("name_form")->setCommitCallback(boost::bind(&LLFloaterAnimPreview::onCommitName, this));
 
+	childSetAction("reload_btn", onBtnReload, this);
 	childSetAction("ok_btn", onBtnOK, this);
 	setDefaultBtn();
+	
+	if (sUseDummy) 
+	{ 
+		LLRect rect = getRect(); 
+		translate(0, PREVIEW_TEXTURE_HEIGHT-30); 
+		reshape(rect.getWidth(), rect.getHeight() + PREVIEW_TEXTURE_HEIGHT-30); 
 
-  if (sUseDummy) 
-  { 
-    LLRect rect = getRect(); 
-    translate(0, PREVIEW_TEXTURE_HEIGHT-30); 
-    reshape(rect.getWidth(), rect.getHeight() + PREVIEW_TEXTURE_HEIGHT-30); 
-
-	mPreviewRect.set(PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT, getRect().getWidth() - PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD); 
-    mPreviewImageRect.set(0.f, 1.f, 1.f, 0.f); 
-  } 
-
+		mPreviewRect.set(PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT, getRect().getWidth() - PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD); 
+		mPreviewImageRect.set(0.f, 1.f, 1.f, 0.f); 
+	} 
+	
 	mPlayButton = getChild<LLButton>( "play_btn");
 	mPlayButton->setClickedCallback(boost::bind(&LLFloaterAnimPreview::onBtnPlay, this));
-	mPlayButton->setVisible(true);
-
 	mPauseButton = getChild<LLButton>( "pause_btn");
 	mPauseButton->setClickedCallback(boost::bind(&LLFloaterAnimPreview::onBtnPause, this));
-	mPauseButton->setVisible(false);
-	
 	mStopButton = getChild<LLButton>( "stop_btn");
 	mStopButton->setClickedCallback(boost::bind(&LLFloaterAnimPreview::onBtnStop, this));
 
+	loadBVH();
+
+	return TRUE;
+}
+
+//-----------------------------------------------------------------------------
+// loadBVH()
+//-----------------------------------------------------------------------------
+BOOL LLFloaterAnimPreview::loadBVH()
+{
+	LLKeyframeMotion* motionp = NULL;
+	LLBVHLoader* loaderp = NULL;
+
+	mPlayButton->setVisible(true);
+	mPauseButton->setVisible(false);
+	
 	getChildView("bad_animation_text")->setVisible(FALSE);
 
 	std::string exten = gDirUtilp->getExtension(mFilename);
@@ -372,19 +382,27 @@ BOOL LLFloaterAnimPreview::postBuild()
 }
 
 //-----------------------------------------------------------------------------
+// unloadMotion()
+//-----------------------------------------------------------------------------
+void LLFloaterAnimPreview::unloadMotion()
+{
+	if (mMotionID.notNull() && mAnimPreview && !sUseDummy) 
+	{ 
+		resetMotion(); 
+		mAnimPreview->getPreviewAvatar()->removeMotion(mMotionID); 
+		LLKeyframeDataCache::removeKeyframeData(mMotionID); 
+	} 
+
+	mMotionID.setNull(); 
+	mAnimPreview = NULL;
+}
+
+//-----------------------------------------------------------------------------
 // LLFloaterAnimPreview()
 //-----------------------------------------------------------------------------
 LLFloaterAnimPreview::~LLFloaterAnimPreview()
 {
-  if (mMotionID.notNull() && mAnimPreview && !sUseDummy) 
-  { 
-    resetMotion(); 
-    mAnimPreview->getPreviewAvatar()->removeMotion(mMotionID); 
-    LLKeyframeDataCache::removeKeyframeData(mMotionID); 
-  } 
-
-	mMotionID.setNull(); 
-	mAnimPreview = NULL;
+	unloadMotion();
 
 	setEnabled(FALSE);
 }
@@ -1029,6 +1047,18 @@ void LLFloaterAnimPreview::onBtnOK(void* userdata)
 	}
 
 	floaterp->closeFloater(false);
+}
+
+//-----------------------------------------------------------------------------
+// onBtnReload()
+//-----------------------------------------------------------------------------
+void LLFloaterAnimPreview::onBtnReload(void* userdata)
+{
+	LLFloaterAnimPreview* floaterp = (LLFloaterAnimPreview*)userdata;
+	if (!floaterp->getEnabled()) return;
+	
+	floaterp->unloadMotion();
+	floaterp->loadBVH();
 }
 
 //-----------------------------------------------------------------------------

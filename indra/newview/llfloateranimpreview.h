@@ -102,10 +102,13 @@ public:
 	bool validateEaseIn(const LLSD& data);
 	bool validateEaseOut(const LLSD& data);
 	static void	onBtnOK(void*);
+	static void	onBtnReload(void*);
 	static void onSaveComplete(const LLUUID& asset_uuid, LLAssetType::EType type, void* user_data, S32 status, LLExtStat ext_status);
 	static bool sUseDummy;
 private:
 	void setAnimCallbacks() ;
+	BOOL loadBVH();
+	void unloadMotion();
 	
 protected:
 	void			draw();

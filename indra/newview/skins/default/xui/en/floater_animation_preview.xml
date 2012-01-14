@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  can_minimize="false"
- height="360"
+ height="387"
  left="30"
  layout="topleft"
  name="Animation Preview"
@@ -550,15 +550,24 @@ Maximum animation length is [MAX_LENGTH] seconds.
         Unable to read animation file.
 We recommend BVH files exported from Poser 4.
     </text>
-    <button
-    	bottom="-5"
-     follows="bottom|left"
-     height="23"
-     label="Upload (L$[AMOUNT])"
-     layout="topleft"
-     left="10"
-     name="ok_btn"
-     width="128" />
+  <button
+    bottom="-32"
+   follows="bottom|left"
+   height="23"
+   label="Reload file"
+   layout="topleft"
+   left="10"
+   name="reload_btn"
+   width="128" />
+  <button
+    bottom="-5"
+   follows="bottom|left"
+   height="23"
+   label="Upload (L$[AMOUNT])"
+   layout="topleft"
+   left="10"
+   name="ok_btn"
+   width="128" />
     <button
     	bottom="-5"
      follows="bottom|left"
