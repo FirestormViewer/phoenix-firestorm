@@ -463,7 +463,7 @@ void LLFloaterMove::sUpdateMovementStatus()
 	LLFloaterMove* pFloater = LLFloaterReg::findTypedInstance<LLFloaterMove>("moveview");
 	if (pFloater)
 	{
-		pFloater->mModeControlButtonMap[MM_RUN]->setEnabled(gRlvHandler.hasBehaviour(RLV_BHVR_ALWAYSRUN));
+		pFloater->mModeControlButtonMap[MM_RUN]->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_ALWAYSRUN));
 		pFloater->mModeControlButtonMap[MM_FLY]->setEnabled(gAgent.canFly());
 	}
 }
