@@ -108,7 +108,11 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	//LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
 	floater->setAutoFocus(FALSE);
 
-	if(LLScriptFloaterManager::OBJ_SCRIPT == LLScriptFloaterManager::getObjectType(notification_id))
+	LLScriptFloaterManager::e_object_type floaterType=LLScriptFloaterManager::getObjectType(notification_id);
+
+	// for some reason an inventory offer comes back as OBJ_UNKNOWN -Zi
+	if(floaterType==LLScriptFloaterManager::OBJ_UNKNOWN ||
+	   floaterType==LLScriptFloaterManager::OBJ_SCRIPT)
 	{
 		floater->setSavePosition(true);
 		if(gSavedSettings.getBOOL("ShowScriptDialogsTopRight"))
@@ -121,6 +125,21 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 			S32 height=pos.getHeight();
 			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width,
 								 gViewerWindow->getWorldViewHeightScaled()-height,
+								 width,height);
+			floater->setRect(pos);
+			floater->savePosition();
+		}
+		// do this only for inventory offers -Zi
+		else if(floaterType==LLScriptFloaterManager::OBJ_UNKNOWN)
+		{
+			// undock the dialog
+			floater->setDocked(false,true);
+			LLRect pos=floater->getRect();
+
+			S32 width=pos.getWidth();
+			S32 height=pos.getHeight();
+			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width,
+								 LLBottomTray::instance().getRect().getHeight(),
 								 width,height);
 			floater->setRect(pos);
 			floater->savePosition();
