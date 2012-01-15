@@ -31,10 +31,19 @@
 		<text name="GroupTopRightRequiresRestart">
 			(Erfordert Neustart)
 		</text>
+		<text name="ScriptDialogsPerObjectLabel">
+			Skriptdialoge pro Objekt:
+		</text>
+		<combo_box name="ScriptDialogPerObjectDropdown">
+			<combo_box.item label="Einer pro Objekt" name="ScriptDialogOption_0"/>
+			<combo_box.item label="Einer pro Objekt &amp; Kanal" name="ScriptDialogOption_1"/>
+			<combo_box.item label="Unbeschränkt" name="ScriptDialogOption_2"/>
+        </combo_box>
 		<text name="UsePieMenuLabel">
 			Pie-Menü:
 		</text>
 		<check_box label="Pie-Menü aktivieren" name="UsePieMenu" tool_tip="Aktiviert das klassische V1.x-Kontextmenü in Kuchenform anstelle des standardmäßigen Kontextmenüs."/>
+		<check_box name="ShowNetStats" label="Laganzeige aktivieren" tool_tip="Aktiviert die Laganzeige in der Statuszeile"/>
 
 		<text name="ButtonFlashing">
 			Blinkende Buttons:
@@ -44,7 +53,6 @@
 		<text name="ButtonFlashRateText">
 			Hz
 		</text>
-		<check_box name="ShowNetStats" label="Laganzeige aktivieren" tool_tip="Aktiviert die Laganzeige in der Statuszeile"/>
 		<text name="ToastSettings">
 			Benachrichtigungseinstellungen (Popups, Konsole, Toasts):
 		</text>
