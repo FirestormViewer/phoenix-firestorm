@@ -305,7 +305,7 @@ bool LLControlVariable::isSane()
 	bool sanity=FALSE;
 
 	// it's the default value, or we can't check sanity, assume it's sane
-	if(mValues[1].isUndefined())
+	if(mValues.size() < 2 || !mValues[1] || mValues[1].isUndefined())
 		return TRUE;
 
 	switch(mSanityType)
