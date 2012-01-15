@@ -121,15 +121,9 @@ BOOL LLPreviewTexture::postBuild()
 		getChildView("Discard")->setVisible( false);
 	}
 	
-	// Ansariel: No need to show the save button if we can't save anyway
-	if (canSaveAs())
-	{
-		childSetCommitCallback("save_tex_btn", onSaveAsBtn, this);
-	}
-	else
-	{
-		getChildView("save_tex_btn")->setVisible( false);
-	}
+	childSetCommitCallback("save_tex_btn", onSaveAsBtn, this);
+	getChildView("save_tex_btn")->setVisible(canSaveAs()); // Ansariel: No need to show the save button if we can't save anyway
+	getChildView("save_tex_btn")->setEnabled(canSaveAs());
 	
 	if (!mCopyToInv) 
 	{
@@ -638,7 +632,7 @@ void LLPreviewTexture::loadAsset()
 	mAssetStatus = PREVIEW_ASSET_LOADING;
 	mUpdateDimensions = TRUE;
 	updateDimensions();
-	//getChildView("save_tex_btn")->setEnabled(canSaveAs());
+	getChildView("save_tex_btn")->setEnabled(canSaveAs());
 	getChildView("save_tex_btn")->setVisible(canSaveAs());
 }
 
