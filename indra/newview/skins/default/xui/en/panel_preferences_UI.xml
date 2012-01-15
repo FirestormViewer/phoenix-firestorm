@@ -91,7 +91,7 @@
          layout="topleft"
          left_delta="0"
          name="ShowAllHoverTips"
-         top_pad="7"
+         top_pad="2"
          width="256" />
         <check_box
          control_name="ShowLandHoverTip"
@@ -102,7 +102,7 @@
          layout="topleft"
          left_delta="0"
          name="ShowLandHoverTips"
-         top_pad="7"
+         top_pad="2"
          width="256" />
 
         <text
@@ -177,7 +177,7 @@
          left_delta="0"
          name="ShowGroupNoticesTopRight"
          tool_tip="Set this to move group notifications to the top right corner of the screen (Classic V1.x behavior)."
-         top_pad="7"
+         top_pad="2"
          width="256" />
         <text
          type="string"
@@ -196,26 +196,58 @@
          type="string"
          left="5"
          top_pad="10"
-         length="1"
+         width="170"
          follows="left|top"
-         height="12"
+         height="16"
          layout="topleft"
-         name="UsePieMenuLabel"
-         width="128">
-          Pie Menu:
+         name="ScriptDialogsPerObjectLabel">
+            Script Dialogs per Object:
         </text>
+        <combo_box
+         control_name="ScriptDialogPerObject"
+         height="23"
+         layout="topleft"
+         left="17"
+         top_pad ="5"
+         name="ScriptDialogPerObjectDropdown"
+         width="180">
+            <combo_box.item
+             label="One per Object"
+             name="0"
+             value="0"/>
+            <combo_box.item
+             label="One per Object and Channel"
+             name="1"
+             value="1"/>
+            <combo_box.item
+             label="Unconstrained"
+             name="2"
+             value="2"/>
+        </combo_box>
+
         <check_box
          control_name="UsePieMenu"
          height="16"
          initial_value="true"
          label="Use Pie Menu"
          layout="topleft"
-         left="15"
+         left="5"
          name="UsePieMenu"
          tool_tip="Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments."
-         top_pad="5"
+         top_pad="12"
          width="256" />
 
+        <check_box
+         top_pad="2"
+         control_name="ShowNetStats"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         name="ShowNetStats"
+         label="Show lag meter"
+         left="5"
+         width="270"
+         tool_tip="Show lag meter in the Status Overlay"/>
 
         <text
          type="string"
@@ -273,18 +305,6 @@
          width="50">
             Hz
         </text>
-
-        <check_box
-         top_pad="2"
-         control_name="ShowNetStats"
-         follows="left|top"
-         height="16"
-         initial_value="false"
-         name="ShowNetStats"
-         label="Show lag meter"
-         left="15"
-         width="270"
-         tool_tip="Show lag meter in the Status Overlay"/>
 
         <text
          type="string"
