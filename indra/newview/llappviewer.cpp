@@ -2165,11 +2165,15 @@ bool LLAppViewer::initThreads()
 
 void errorCallback(const std::string &error_string)
 {
+	LLStringUtil::format_map_t map;
+	map["ERROR_DETAILS"]=error_string;
+	std::string error_display_string=LLTrans::getString("MBApplicationErrorDetails",map);
+
 #if !LL_RELEASE_FOR_DOWNLOAD
-	if (OSBTN_CANCEL == OSMessageBox(error_string, LLTrans::getString("MBFatalError"), OSMB_OKCANCEL))
+	if (OSBTN_CANCEL == OSMessageBox(error_display_string, LLTrans::getString("MBApplicationError"), OSMB_OKCANCEL))
 		return;
 #else
-	OSMessageBox(error_string, LLTrans::getString("MBFatalError"), OSMB_OK);
+	OSMessageBox(error_display_string, LLTrans::getString("MBApplicationError"), OSMB_OK);
 #endif // !LL_RELEASE_FOR_DOWNLOAD
 
 	//Set the ErrorActivated global so we know to create a marker file
