@@ -23,11 +23,11 @@
 		<menu_item_call name="inventory_new_window" label="Zusätzliches Inventar-Fenster">
 		</menu_item_call>
 		<menu_item_separator />
-		<menu_item_call name="inventory_show_filters" label="Zeige Filter">
+		<menu_item_call name="inventory_show_filters" label="Filter anzeigen">
 		</menu_item_call>
-		<menu_item_call name="inventory_reset_filters" label="Resete Filter">
+		<menu_item_call name="inventory_reset_filters" label="Filter zurücksetzen">
 		</menu_item_call>
-		<menu_item_call name="inventory_close_all_folders" label="Schließe alle Fenster">
+		<menu_item_call name="inventory_close_all_folders" label="Alle Fenster schließen">
 		</menu_item_call>
 		<menu_item_separator />
 		<menu_item_call name="inventory_empty_trash" label="Papierkorb leeren">
