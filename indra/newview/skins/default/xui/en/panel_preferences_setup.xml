@@ -103,7 +103,7 @@
      initial_value="1024"
      layout="topleft"
      left_delta="140"
-     max_val="10240"
+     max_val="9984"
      min_val="64"
      name="cache_size"
      top_delta="-2"
