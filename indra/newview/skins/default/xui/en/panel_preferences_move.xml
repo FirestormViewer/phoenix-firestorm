@@ -517,6 +517,17 @@
          width="270"
          control_name="WorldmapFilterDuplicateLandmarks"
          tool_tip="Filters duplicate Landmark entries in the Landmark list on the World Map."/>
-    </panel>
+
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Show additional region information on World Map"
+         left="15"
+         name="FSAdvancedWorldmapRegionInfo"
+         width="270"
+         control_name="FSAdvancedWorldmapRegionInfo"
+         tool_tip="Shows additional region infos on the world map (avatar count and maturity level)."/>
+	 </panel>
 </tab_container>
 </panel>
