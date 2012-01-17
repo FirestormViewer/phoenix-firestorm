@@ -35,6 +35,7 @@
 #include "llpointer.h"	// LLPointer<>
 //#include "llviewertexturelist.h"
 #include "llsafehandle.h"
+#include "llremoteparcelrequest.h"
 
 typedef std::set<LLUUID, lluuid_less> uuid_list_t;
 const F32 CACHE_REFRESH_TIME	= 2.5f;
@@ -129,7 +130,7 @@ public:
 
 
 class LLPanelLandGeneral
-:	public LLPanel
+:	public LLPanel, LLRemoteParcelInfoObserver
 {
 public:
 	LLPanelLandGeneral(LLSafeHandle<LLParcelSelection>& parcelp);
@@ -178,6 +179,7 @@ protected:
 	LLLineEditor*	mEditName;
 	LLTextBox*		mLabelDesc;
 	LLTextEditor*	mEditDesc;
+	LLLineEditor*	mEditUUID;
 
 	LLTextBox*		mTextSalePending;
 
@@ -234,6 +236,13 @@ protected:
 	static LLPointer<LLParcelSelection>	sSelectionForBuyPass;
 
 	static LLHandle<LLFloater> sBuyPassDialogHandle;
+
+	S32			mLastParcelLocalID;
+
+// LLRemoteParcelInfoObserver interface:
+/*virtual*/ void processParcelInfo(const LLParcelData& parcel_data);
+/*virtual*/ void setParcelID(const LLUUID& parcel_id);
+/*virtual*/ void setErrorStatus(U32 status, const std::string& reason);
 };
 
 class LLPanelLandObjects

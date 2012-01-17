@@ -65,8 +65,14 @@
 			<panel.string name="time_stamp_template">
 				[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
 			</panel.string>
+			<panel.string name="error_resolving_uuid">
+				Parzellen-ID konnte nicht ermittelt werden.
+			</panel.string>
 			<text name="Name:">
 				Name:
+			</text>
+			<text name="UUID:">
+				Parzellen-ID:
 			</text>
 			<text name="Description:">
 				Beschreibung:
