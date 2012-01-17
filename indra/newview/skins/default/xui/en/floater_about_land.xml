@@ -131,7 +131,7 @@
              height="23"
              layout="topleft"
              left_pad="2"
-             max_length="63"
+             max_length_bytes="63"
              name="Name"
              top_delta="0"
              width="365" />
@@ -509,7 +509,7 @@ Loading...
              name="DwellText"
              top_delta="0"
              width="186">
-                0
+                Loading...
             </text>
 
             <button
@@ -1107,7 +1107,7 @@ Loading...
              follows="left|top"
              height="23"
              layout="topleft"
-             max_length="6"
+             max_length_bytes="6"
              name="clean other time"
              left_pad="0"
              width="46"
@@ -1684,7 +1684,7 @@ Only large parcels can be listed in search.
              height="23"
              layout="topleft"
              left_pad="0"
-             max_length="255"
+             max_length_bytes="255"
              name="media_url"
              select_on_focus="true"
              width="300"
@@ -1715,7 +1715,7 @@ Only large parcels can be listed in search.
              height="20"
              layout="topleft"
              left="110"
-             max_length="255"
+             max_length_bytes="255"
              name="url_description"
              select_on_focus="true"
              tool_tip="Text displayed next to play/load button"
@@ -1870,7 +1870,7 @@ Only large parcels can be listed in search.
              height="23"
              layout="topleft"
              left="100"
-             max_length="255"
+             max_length_bytes="255"
              name="music_url"
              top_delta="0"
              right="-15"
