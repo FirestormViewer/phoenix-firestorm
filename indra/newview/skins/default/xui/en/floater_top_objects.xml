@@ -196,12 +196,12 @@
     <button
      follows="bottom|right"
      height="22"
-     image_overlay="Refresh_Off"
+     label="Refresh"
      layout="topleft"
      name="refresh_btn"
      right="-8"
      top_pad="5"
-     width="23">
+     width="100">
       <button.commit_callback
           function="TopObjects.Refresh" />
     </button>
@@ -228,6 +228,18 @@
      width="130">
       <button.commit_callback
           function="TopObjects.ReturnAll" />
+    </button>
+    <button
+     follows="bottom|left"
+     height="23"
+     label="Teleport to"
+     layout="topleft"
+     left_pad="10"
+     name="teleport_to_btn"
+     top_delta="0"
+     width="130">
+      <button.commit_callback
+          function="TopObjects.TeleportToObject" />
     </button>
     <button
      follows="bottom|left"

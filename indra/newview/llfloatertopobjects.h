@@ -68,6 +68,8 @@ private:
 	void onDisableAll();
 	void onDisableSelected();
 
+	void onTeleportToObject();
+
 	static bool callbackReturnAll(const LLSD& notification, const LLSD& response);
 	static bool callbackDisableAll(const LLSD& notification, const LLSD& response);
 
