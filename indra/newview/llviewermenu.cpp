@@ -414,6 +414,8 @@ void set_underclothes_menu_options()
 
 void init_menus()
 {
+	S32 top = gViewerWindow->getRootView()->getRect().getHeight();
+
 	// Initialize actions
 	initialize_menus();
 
@@ -506,7 +508,7 @@ void init_menus()
 	*/
 
 	gMenuBarView = LLUICtrlFactory::getInstance()->createFromFile<LLMenuBarGL>("menu_viewer.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-	//	gMenuBarView->setRect(LLRect(0, top, 0, top - MENU_BAR_HEIGHT)); ND_MERGE
+	gMenuBarView->setRect(LLRect(0, top, 0, top - MENU_BAR_HEIGHT));
 
 	// If we are not in production, use a different color to make it apparent.
 	// ONLY change the color IF we are in beta. Otherwise leave it alone so it can use the skinned color. -Zi
