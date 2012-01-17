@@ -68,6 +68,7 @@ class LLInventoryCollectFunctor;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class LLInventoryModel
 {
+	LOG_CLASS(LLInventoryModel);
 public:
 	friend class LLInventoryModelFetchDescendentsResponder;
 
