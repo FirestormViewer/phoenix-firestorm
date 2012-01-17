@@ -77,4 +77,5 @@ glob:indra/newview/search_history.txt
 glob:indra/newview/filters.xml
 glob:indra/newview/avatar_icons_cache.txt
 glob:indra/newview/avatar_lad.log
+glob:*.diff
 glob:fmod*

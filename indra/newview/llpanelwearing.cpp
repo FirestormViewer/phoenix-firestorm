@@ -29,10 +29,10 @@
 #include "llpanelwearing.h"
 
 #include "llappearancemgr.h"
+#include "llfloatersidepanelcontainer.h"
 #include "llinventoryfunctions.h"
 #include "llinventorymodel.h"
 #include "llinventoryobserver.h"
-#include "llsidetray.h"
 #include "llviewermenu.h"
 #include "llwearableitemslist.h"
 #include "llsdserialize.h"
@@ -41,7 +41,7 @@
 // Context menu and Gear menu helper.
 static void edit_outfit()
 {
-	LLSideTray::getInstance()->showPanel("sidepanel_appearance", LLSD().with("type", "edit_outfit"));
+	LLFloaterSidePanelContainer::showPanel("appearance", LLSD().with("type", "edit_outfit"));
 }
 
 // [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a

@@ -118,6 +118,8 @@ private:
 	ContextMenu mContextMenu;
 	LLContextMenu*			mAccordionTabMenu;
 	LLHandle<LLView>		mGearMenuHandle;
+
+	boost::signals2::connection mTeleportHistoryChangedConnection;
 };
 
 

@@ -1,39 +1,7 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<toggleable_menu 
-     name="menu_group_plus"
-     left="0" bottom="0" visible="false"
-     mouse_opaque="false">
-  <menu_item_check
-   label="Сортировать по последним"
-   name="sort_most">
-      <menu_item_check.on_click
-       function="People.Recent.ViewSort.Action"
-       parameter="sort_recent" />
-      <menu_item_check.on_check
-       function="People.Recent.ViewSort.CheckItem"
-       parameter="sort_recent" />
-  </menu_item_check>
-  <menu_item_check
-   label="Сортировать по имени"
-   name="sort_name">
-      <menu_item_check.on_click
-       function="People.Recent.ViewSort.Action"
-       parameter="sort_name" />
-      <menu_item_check.on_check
-       function="People.Recent.ViewSort.CheckItem"
-       parameter="sort_name" />
-  </menu_item_check>
-  <menu_item_separator layout="topleft" />
-  <menu_item_check name="view_icons" label="Посмотреть ярлыки людей">
-    <menu_item_check.on_click
-     function="People.Recent.ViewSort.Action"
-     parameter="view_icons" />
-    <menu_item_check.on_check
-     function="CheckControl"
-     parameter="RecentListShowIcons" />
-  </menu_item_check>
-  <menu_item_separator layout="topleft" />
-  <menu_item_call name="show_blocked_list" label="Показать объекты заблокированных пользователей">
-    <menu_item_call.on_click function="SideTray.ShowPanel" userdata="panel_block_list_sidetray" />
-  </menu_item_call>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="Сортировать по времени" name="sort_most"/>
+	<menu_item_check label="Сортировать по имени" name="sort_name"/>
+	<menu_item_check label="Показывать значки людей" name="view_icons"/>
+	<menu_item_call label="Показать черный список" name="show_blocked_list"/>
 </toggleable_menu>

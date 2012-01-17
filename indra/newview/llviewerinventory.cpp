@@ -34,7 +34,9 @@
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llagentwearables.h"
+#include "llfloatersidepanelcontainer.h"
 #include "llviewerfoldertype.h"
+#include "llfloatersidepanelcontainer.h"
 #include "llfolderview.h"
 #include "llviewercontrol.h"
 #include "llconsole.h"
@@ -43,7 +45,6 @@
 #include "llinventorymodel.h"
 #include "llinventorymodelbackgroundfetch.h"
 #include "llgesturemgr.h"
-#include "llsidetray.h"
 
 #include "llinventorybridge.h"
 #include "llinventorypanel.h"
@@ -220,7 +221,7 @@ public:
 		// support secondlife:///app/inventory/show
 		if (params[0].asString() == "show")
 		{
-			LLSideTray::getInstance()->showPanel("sidepanel_inventory", LLSD());
+			LLFloaterSidePanelContainer::showPanel("inventory", LLSD());
 			return true;
 		}
 
@@ -979,7 +980,7 @@ void ModifiedCOFCallback::fire(const LLUUID& inv_item)
 	if( gAgentCamera.cameraCustomizeAvatar() )
 	{
 		// If we're in appearance editing mode, the current tab may need to be refreshed
-		LLSidepanelAppearance *panel = dynamic_cast<LLSidepanelAppearance*>(LLSideTray::getInstance()->getPanel("sidepanel_appearance"));
+		LLSidepanelAppearance *panel = dynamic_cast<LLSidepanelAppearance*>(LLFloaterSidePanelContainer::getPanel("appearance"));
 		if (panel)
 		{
 			panel->showDefaultSubpart();
@@ -1218,7 +1219,23 @@ void move_inventory_item(
 	gAgent.sendReliableMessage();
 }
 
-void copy_inventory_from_notecard(const LLUUID& object_id, const LLUUID& notecard_inv_id, const LLInventoryItem *src, U32 callback_id)
+const LLUUID get_folder_by_itemtype(const LLInventoryItem *src)
+{
+	LLUUID retval = LLUUID::null;
+	
+	if (src)
+	{
+		retval = gInventory.findCategoryUUIDForType(LLFolderType::assetTypeToFolderType(src->getType()));
+	}
+	
+	return retval;
+}
+
+void copy_inventory_from_notecard(const LLUUID& destination_id,
+								  const LLUUID& object_id,
+								  const LLUUID& notecard_inv_id,
+								  const LLInventoryItem *src,
+								  U32 callback_id)
 {
 	if (NULL == src)
 	{
@@ -1264,7 +1281,7 @@ void copy_inventory_from_notecard(const LLUUID& object_id, const LLUUID& notecar
     body["notecard-id"] = notecard_inv_id;
     body["object-id"] = object_id;
     body["item-id"] = src->getUUID();
-	body["folder-id"] = gInventory.findCategoryUUIDForType(LLFolderType::assetTypeToFolderType(src->getType()));
+	body["folder-id"] = destination_id;
     body["callback-id"] = (LLSD::Integer)callback_id;
 
     request["message"] = "CopyInventoryFromNotecard";

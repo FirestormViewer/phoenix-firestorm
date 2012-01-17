@@ -30,7 +30,6 @@
 #include "ao.h"
 #include "aoengine.h"
 #include "aoset.h"
-#include "llbottomtray.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
 #include "llnotificationsutil.h"
@@ -283,9 +282,10 @@ void FloaterAO::enableStateControls(BOOL yes)
 
 void FloaterAO::onOpen(const LLSD& key)
 {
-	LLButton* anchor_panel=LLBottomTray::instance().getChild<LLButton>("ao_btn");
-	if(anchor_panel)
-		setDockControl(new LLDockControl(anchor_panel,this,getDockTongue(),LLDockControl::TOP));
+	// ND_MERGE LLBottomTray is gone in FUI
+	// LLButton* anchor_panel=LLBottomTray::instance().getChild<LLButton>("ao_btn");
+	// if(anchor_panel)
+	// 	setDockControl(new LLDockControl(anchor_panel,this,getDockTongue(),LLDockControl::TOP));
 }
 
 void FloaterAO::onSelectSet()

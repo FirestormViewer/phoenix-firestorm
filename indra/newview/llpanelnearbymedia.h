@@ -116,7 +116,6 @@ private:
 	/* ## Zi: Media/Stream separation
 	void onClickParcelAudioPlay();
 	void onClickParcelAudioStop();
-	void onClickParcelAudioStart();
 	void onClickParcelAudioPause();
 	## Zi: Media/Stream separation
 	*/

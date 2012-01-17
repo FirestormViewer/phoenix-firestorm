@@ -93,9 +93,6 @@ public:
 	void removeItem(S32 idx);
 
 	void save();
-	void load();
-
-	void dump() const;
 
 	/**
 	 * Set a callback to be called upon history changes.
@@ -117,6 +114,9 @@ protected:
 	friend class RlvUIEnabler;
 // [/RLVa:KB]
 
+	void load();
+	void dump() const;
+	
 	void onTeleportHistoryChange();
 	bool compareByTitleAndGlobalPos(const LLTeleportHistoryPersistentItem& a, const LLTeleportHistoryPersistentItem& b);
 

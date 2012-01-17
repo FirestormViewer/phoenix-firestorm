@@ -1,170 +1,23 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- background_visible="false"
- bg_alpha_color="Transparent"
- color="Transparent"
- follows="left|bottom|right"
- focus_root="true"
- height="37"
- layout="topleft"
- name="navigation_bar"
- chrome="true"
- width="1024">
-
-	<panel
-	 background_visible="false"
-	 follows="left|top|right"
-	 height="22"
-	 layout="topleft"
-	 top_delta="0"
-	 top_pad="0"
-	 name="navigation_panel"
-	 width="1024">
-	     <pull_button
-	     follows="left|top"
-	     direction="down"
-	     height="23"
-	     image_overlay="Arrow_Left_Off"
-	     image_bottom_pad="1"
-	     layout="topleft"
-	     left="5"
-	     name="back_btn"
-	     tool_tip="Go back to previous location"
-	     top="0"
-	     width="31" />
-	    <pull_button
-	     follows="left|top"
-	     direction="down"
-	     height="23"
-	     image_overlay="Arrow_Right_Off"
-	     image_bottom_pad="1"
-	     layout="topleft"
-	     left_pad="0"
-	     name="forward_btn"
-	     tool_tip="Go forward one location"
-	     top_delta="0"
-	     width="31" />
-	    <button
-	     follows="left|top"
-	     height="23"
-	     image_bottom_pad="1"
-	     image_overlay="Home_Off"
-	     layout="topleft"
-	     left_pad="7"
-	     name="home_btn"
-	     tool_tip="Teleport to home location"
-	     top_delta="0"
-	     width="32" />
-          <!-- About Land Button here -->         
-	    <button
-	     follows="left|top"
-	     height="23"
-           use_ellipses="true"
-	     layout="topleft"
-	     left_pad="7"
-	     name="About_Land"
-	     label="Land" 
-	     tool_tip="Pops up Land Information window"
-	     top_delta="0"
-	     width="43">
-		 <button.init_callback
-               function="Button.SetFloaterToggle"
-               parameter="about_land" />
-		 </button>
-          <!-- end of About Land Button -->
-
-          <!-- Windlight Button here -->  
-	    <button
-	     follows="left|top"
-	     height="23"
-           use_ellipses="true"
-	     layout="topleft"
-	     left_pad="7"
-	     name="Sky"
-	     label="Sky" 
-	     tool_tip="Pops up Sky Editor window"
-	     top_delta="0"
-	     width="30">
-		 <button.init_callback
-               function="Button.SetFloaterToggle"
-               parameter="env_windlight" />
-		 </button>
-          <!-- end of Windlight Button -->
-
-
-	    <location_input
-	     follows="left|right|top"
-	     halign="right"
-	     height="23"
-	     label="Location"
-	     layout="topleft"
-	     left_pad="7"
-	     max_chars="254"
-	     mouse_opaque="false"
-	     name="location_combo"
-	     top_delta="0"
-	     width="80">
-
-	    </location_input>
-         <combo_list
-         mouse_wheel_opaque="true"/>
-        <search_combo_box
-	     follows="top|right"
-	     left_pad="10"
-	     halign="right"
-	     height="23"
-	     label="Search"
-	     layout="topleft"
-	     mouse_opaque="false"
-	     name="search_combo_box"
-	     tool_tip="Search"
-	     top_delta="0"
-	     width="200" >
-         <combo_editor
-          label="Search MetaVerse"
-          name="search_combo_editor"/>
-         <combo_list
-          draw_border="true"
-          border.highlight_light_color="FocusColor"
-          border.highlight_dark_color="FocusColor"
-          border.shadow_light_color="FocusColor"
-          border.shadow_dark_color="FocusColor"/>
-        </search_combo_box>
-
-	</panel>
-  <favorites_bar
- 	 background_visible="false"
- 	 bg_alpha_color="Transparent"
- 	 color="Transparent"
-     follows="left|top|right"
-     top_pad="2"
-     font="SansSerifSmall"
-     height="15"
-     layout="topleft"
-     left="0"
-     name="favorite"
-     image_drag_indication="Accordion_ArrowOpened_Off"
-     tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
-     width="1024">
-        <label
-         follows="left|top"
-         height="15"
-         layout="topleft"
-         top_pad="2"
-         left="10"
-         name="favorites_bar_label"
-         text_color="LtGray"
-         tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
-         width="102">
-          Favorites Bar
-        </label>
-        <chevron_button name=">>"
-             image_unselected="TabIcon_Close_Off"
-             image_selected="TabIcon_Close_Off"
-             tab_stop="false"
-             follows="left|bottom"
-             tool_tip="Show more of My Favorites"
-             width="15"
-             height="15"/>
-  </favorites_bar>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="navigation_bar">
+	<layout_stack name="nvp_stack">
+		<layout_panel name="navigation_layout_panel">
+			<panel name="navigation_panel">
+				<pull_button name="back_btn" tool_tip="Вернуться в предыдущее место"/>
+				<pull_button name="forward_btn" tool_tip="Перейти в следующее место"/>
+				<button name="home_btn" tool_tip="Телепортация домой"/>
+				<location_input label="Место" name="location_combo"/>
+			</panel>
+		</layout_panel>
+		<layout_panel name="favorites_layout_panel">
+			<favorites_bar name="favorite" tool_tip="Перетаскивайте сюда закладки, чтобы было удобнее переходить в любимые места в Second Life!">
+				<label name="favorites_bar_label" tool_tip="Перетаскивайте сюда закладки, чтобы было удобнее переходить в любимые места в Second Life!">
+					Избранное
+				</label>
+				<more_button name="&gt;&gt;" tool_tip="Показать больше избранного">
+					Больше ▼
+				</more_button>
+			</favorites_bar>
+		</layout_panel>
+	</layout_stack>
 </panel>

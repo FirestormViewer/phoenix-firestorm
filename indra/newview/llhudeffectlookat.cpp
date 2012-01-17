@@ -594,13 +594,14 @@ void LLHUDEffectLookAt::render()
 
 		// render crosshair
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-		glMatrixMode(GL_MODELVIEW);
+		gGL.matrixMode(LLRender::MM_MODELVIEW);
 		gGL.pushMatrix();
 
 		gGL.translatef(target.mV[VX], target.mV[VY], target.mV[VZ]);
-		glScalef(0.3f, 0.3f, 0.3f);
+		gGL.scalef(0.3f, 0.3f, 0.3f);
 		gGL.begin(LLRender::LINES);
 		{
+//			LLColor3 color = (*mAttentions)[mTargetType].mColor;
 			gGL.color3f(lookAtColor.mV[VRED], lookAtColor.mV[VGREEN], lookAtColor.mV[VBLUE]);
 			gGL.vertex3f(-1.f, 0.f, 0.f);
 			gGL.vertex3f(1.f, 0.f, 0.f);

@@ -1,385 +1,52 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- border="true"
- follows="top|left"
- height="510"
- help_topic="panel_region_estate_tab"
- label="Estate"
- layout="topleft"
- left="0"
- name="Estate"
- top="320"
- width="530">
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="32"
-     layout="topleft"
-     left="10"
-     name="estate_help_text"
-     top="14"
-     word_wrap="true"
-     >
-        Changes to settings on this tab will affect all regions in the estate.
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     font="SansSerif"
-     height="20"
-     layout="topleft"
-     right="160"
-     name="estate_text"
-     top_pad="2"
-     halign="right"
-     width="140">
-        Estate:
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     font="SansSerif"
-     height="20"
-     layout="topleft"
-     top_delta="0"
-     name="estate_name"
-     left_pad="6"
-     width="150">
-        (unknown)
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     font="SansSerif"
-     height="20"
-     layout="topleft"
-     right="160"
-     name="owner_text"
-     top_pad="6"
-     halign="right"
-     width="150">
-        Владелец региона:
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     font="SansSerif"
-     height="20"
-     layout="topleft"
-     top_delta="0"
-     name="estate_owner"
-     left_pad="6"
-     use_ellipses="true"
-     width="290">
-        (unknown)
-    </text>
-
-    <view_border
-     bevel_style="none"
-     follows="top|left"
-     height="95"
-     layout="topleft"
-     left="10"
-     top_pad="5"
-     width="470" />
-
-    <check_box
-     height="20"
-     label="Разрешить публичный доступ"
-     layout="topleft"
-     left="20"
-     name="externally_visible_check"
-     top_delta="5"
-     width="200" />
-
-    <check_box
-     height="20"
-     label="Разрешить голосовй чат"
-     layout="topleft"
-     left="280"
-     name="voice_chat_check"
-     top_delta="0"
-     width="200" />
-    <check_box
-     height="20"
-     label="Разрешить прямой Телепорт"
-     layout="topleft"
-     left_delta="0"
-     name="allow_direct_teleport"
-     top_pad="4"
-     width="80" />
-    <button
-     enabled="false"
-     follows="left|top"
-     height="23"
-     label="Apply"
-     layout="topleft"
-     name="apply_btn"
-     top_pad="15"
-     left_delta="0"
-     width="97" />
-
-    <text
-     type="string"
-     length="1"
-     follows="top|left"
-     height="16"
-     layout="topleft"
-     left="20"
-     name="Only Allow"
-     top_delta="-30"
-     width="278">
-        Огр. доступа только для резедентов с:
-    </text>
-    <check_box
-     follows="top|left"
-     height="16"
-     label="Платёжной инфо."
-     layout="topleft"
-     left_delta="0"
-     name="limit_payment"
-     tool_tip="Ban unidentified Residents"
-     top_pad="2"
-     width="278" />
-    <check_box
-     follows="top|left"
-     height="16"
-     label="Проверкой возроста"
-     layout="topleft"
-     left_delta="0"
-     name="limit_age_verified"
-     tool_tip="Ban Residents who have not verified their age. See the [SUPPORT_SITE] for more information."
-     top_pad="2"
-     width="278" />
-
-    <text
-     type="string"
-     length="1"
-     bottom="34"
-     follows="left|top"
-     height="20"
-     layout="topleft"
-     name="estate_manager_label"
-     top_pad="30"
-     left="10"
-     width="200">
-        Менеджеры региона:
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="20"
-     layout="topleft"
-     left="280"
-     name="allow_resident_label"
-     top_delta="0"
-     width="200">
-        Допускается Резиденты:
-    </text>
-
-    <!-- Estate Managers box -->
-    <view_border
-     bevel_style="none"
-     follows="top|left"
-     height="71"
-     layout="topleft"
-     left="10"
-     top_pad="-5"
-     width="200" />
-    <name_list
-     follows="left|top"
-     height="71"
-     layout="topleft"
-     left_delta="0"
-     multi_select="true"
-     name="estate_manager_name_list"
-     top_delta="0"
-     width="200" />
-
-    <!-- Allowed Residents box -->
-    <view_border
-     bevel_style="none"
-     follows="top|left"
-     height="71"
-     layout="topleft"
-     left="280"
-     top_delta="0"
-     width="200" />
-    <name_list
-     follows="left|top"
-     height="71"
-     layout="topleft"
-     left_delta="0"
-     multi_select="true"
-     name="allowed_avatar_name_list"
-     top_delta="0"
-     width="200" />
-
-    <!-- Estate Managers buttons -->
-    <button
-     follows="left|top"
-     height="23"
-     label="Доб..."
-     layout="topleft"
-     left="10"
-     name="add_estate_manager_btn"
-     top_pad="6"
-     width="97" />
-    <button
-     follows="left|top"
-     height="23"
-     label="Убрать..."
-     layout="topleft"
-     name="remove_estate_manager_btn"
-     left_pad="6"
-     width="97" />
-
-    <!-- Allowed Residents buttons -->
-    <button
-     follows="left|top"
-     height="23"
-     left="280"
-     label="Доб..."
-     layout="topleft"
-     name="add_allowed_avatar_btn"
-     top_delta="0"
-     width="97" />
-    <button
-     follows="left|top"
-     height="23"
-     label="Убрать..."
-     layout="topleft"
-     name="remove_allowed_avatar_btn"
-     left_pad="6"
-     top_delta="0"
-     width="97" />
-
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="20"
-     layout="topleft"
-     left="10"
-     name="allow_group_label"
-     top_pad="10"
-     width="200">
-        Допускается Группы:
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="20"
-     layout="topleft"
-     left="280"
-     name="ban_resident_label"
-     top_delta="0"
-     width="200">
-        Запрещенные Резиденты:
-    </text>
-
-    <!-- Allowed Groups box -->
-    <view_border
-     bevel_style="none"
-     follows="top|left"
-     height="71"
-     layout="topleft"
-     left="10"
-     top_pad="-5"
-     width="200" />
-    <name_list
-     follows="left|top"
-     height="71"
-     layout="topleft"
-     left_delta="0"
-     multi_select="true"
-     name="allowed_group_name_list"
-     top_delta="0"
-     width="200" />
-
-    <!-- Banned Residents box -->
-    <view_border
-     bevel_style="none"
-     follows="top|left"
-     height="71"
-     layout="topleft"
-     left="280"
-     top_delta="0"
-     width="200" />
-    <name_list
-     follows="left|top"
-     height="71"
-     layout="topleft"
-     left_delta="0"
-     multi_select="true"
-     name="banned_avatar_name_list"
-     top_delta="0"
-     width="200" />
-
-    <!-- Allowed Groups buttons -->
-    <button
-     follows="left|top"
-     height="23"
-     label="Доб..."
-     layout="topleft"
-     left="10"
-     name="add_allowed_group_btn"
-     top_pad="6"
-     width="97" />
-    <button
-     follows="left|top"
-     height="23"
-     label="Убрать..."
-     layout="topleft"
-     name="remove_allowed_group_btn"
-     left_pad="6"
-     top_delta="0"
-     width="97" />
-
-    <!-- Banned Residents buttons -->
-    <button
-     follows="left|top"
-     height="23"
-     label="Доб..."
-     layout="topleft"
-     left="280"
-     name="add_banned_avatar_btn"
-     top_delta="0"
-     width="97" />
-    <button
-     follows="left|top"
-     height="23"
-     label="Убрать..."
-     layout="topleft"
-     name="remove_banned_avatar_btn"
-     top_delta="0"
-     left_pad="6"
-     width="97" />
-
-    <button
-     follows="left|top"
-     height="23"
-     label="Отправить сообщение для региона..."
-     layout="topleft"
-     left="10"
-     name="message_estate_btn"
-     top_pad="20"
-     width="220" />
-    <button
-     follows="left|top"
-     height="23"
-     label="Выкенуть всех резидентов..."
-     layout="topleft"
-     left="280"
-     name="kick_user_from_estate_btn"
-     top_delta="0"
-     width="220" />
-
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Землевладение" name="Estate">
+	<text name="estate_help_text">
+		Изменение параметров на этой вкладке повлияет на все регионы этого землевладения.
+	</text>
+	<text name="estate_text">
+		Землевладение:
+	</text>
+	<text name="estate_name">
+		(неизвестно)
+	</text>
+	<text name="owner_text">
+		Землевладелец:
+	</text>
+	<text name="estate_owner">
+		(неизвестно)
+	</text>
+	<check_box label="Глобальное время" name="use_global_time_check"/>
+	<check_box label="Фиксированное" name="fixed_sun_check"/>
+	<slider label="Фаза" name="sun_hour_slider"/>
+	<check_box label="Разрешить общий доступ" name="externally_visible_check"/>
+	<text name="Only Allow">
+		Разрешить доступ только аккаунтам с подтверждением:
+	</text>
+	<check_box label="Информации об оплате в файле" name="limit_payment" tool_tip="Банить нераспознанных жителей"/>
+	<check_box label="Проверка возраста" name="limit_age_verified" tool_tip="Банить жителей, не прошедших проверку возраста. Более подробная информация находится здесь: [SUPPORT_SITE]."/>
+	<check_box label="Разрешить голосовое общение" name="voice_chat_check"/>
+	<check_box label="Разрешить прямой телепорт" name="allow_direct_teleport"/>
+	<button label="Применить" name="apply_btn"/>
+	<button label="Сообщение в землевладение..." name="message_estate_btn"/>
+	<button label="Выкинуть жителя с землевладения..." name="kick_user_from_estate_btn"/>
+	<text name="estate_manager_label">
+		Менеджеры землевладения:
+	</text>
+	<button label="Удалить..." name="remove_estate_manager_btn"/>
+	<button label="Добавить..." name="add_estate_manager_btn"/>
+	<text name="allow_resident_label">
+		Допущенные жители:
+	</text>
+	<button label="Удалить..." name="remove_allowed_avatar_btn"/>
+	<button label="Добавить..." name="add_allowed_avatar_btn"/>
+	<text name="allow_group_label">
+		Допущенные группы:
+	</text>
+	<button label="Удалить..." name="remove_allowed_group_btn"/>
+	<button label="Добавить..." name="add_allowed_group_btn"/>
+	<text name="ban_resident_label">
+		Забаненные жители:
+	</text>
+	<button label="Удалить..." name="remove_banned_avatar_btn"/>
+	<button label="Добавить..." name="add_banned_avatar_btn"/>
 </panel>

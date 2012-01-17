@@ -1,58 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- can_close="false"
- can_minimize="false"
- height="100"
- layout="topleft"
- title="Сохранить костюм"
- name="modal container"
- width="240">
-    <button
-     height="23"
-     label="Сохранить"
-     label_selected="Save"
-     layout="topleft"
-     left="20"
-     name="Save"
-     top="70"
-     width="82" />
-    <button
-     height="23"
-     label="Отменить"
-     label_selected="Cancel"
-     layout="topleft"
-     left_pad="36"
-     name="Cancel"
-     top_delta="0"
-     width="82" />
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="30"
-     layout="topleft"
-     left="20"
-     word_wrap="true"
-     name="Сохранить элемент как:"
-     top="10"
-     width="200">
-        Сохранить то что одето
-как новый костюм:
-    </text>
-    <line_editor
-     type="string"
-     length="1"
-     border_style="line"
-     border_thickness="1"
-     follows="left|top"
-     height="23"
-     layout="topleft"
-     left_delta="0"
-     show_text_as_tentative="false"
-     top_pad="0"
-     max_length="63"
-     name="name ed"
-     width="200">
-        [DESC] (Новый)
-    </line_editor>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="modal container" title="СОХРАНИТЬ КОСТЮМ">
+	<button label="Сохранить" label_selected="Сохранить" name="Save"/>
+	<button label="Отмена" label_selected="Отмена" name="Cancel"/>
+	<text name="Save item as:">
+		Сохранить текущую одежду
+как новый костюм
+	</text>
+	<line_editor name="name ed">
+		[DESC] (новый)
+	</line_editor>
 </floater>

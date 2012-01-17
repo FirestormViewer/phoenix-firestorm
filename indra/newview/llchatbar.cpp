@@ -60,7 +60,6 @@
 #include "llui.h"
 #include "llviewermenu.h"
 #include "lluictrlfactory.h"
-#include "llbottomtray.h"
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -106,7 +105,7 @@ LLChatBar::LLChatBar()
 	mGestureCombo(NULL),
 	mObserver(NULL)
 {
-	setIsChrome(TRUE);
+	//setIsChrome(TRUE);
 }
 
 

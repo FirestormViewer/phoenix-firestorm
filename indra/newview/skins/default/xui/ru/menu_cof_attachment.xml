@@ -1,13 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<context_menu
- layout="topleft"
- name="COF Attachment">
-    <menu_item_call
-     label="Отделить"
-     layout="topleft"
-     name="detach">
-        <on_click
-         function="Attachment.Detach"
-         parameter="detach"/>
-    </menu_item_call>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="COF Attachment">
+	<menu_item_call label="Отсоединить" name="detach"/>
 </context_menu>

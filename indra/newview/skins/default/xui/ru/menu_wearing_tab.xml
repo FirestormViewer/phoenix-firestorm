@@ -1,44 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<context_menu
- layout="topleft"
- name="Wearing">
-    <menu_item_call
-     label="Править"
-     layout="topleft"
-     name="edit_item">
-        <on_click
-         function="Wearing.EditItem" />
-    </menu_item_call>
-    <menu_item_call
-     label="Снять"
-     layout="topleft"
-     name="take_off">
-        <on_click
-         function="Wearing.TakeOff" />
-    </menu_item_call>
-    <menu_item_call
-     label="Отделить"
-     layout="topleft"
-     name="detach">
-        <on_click
-         function="Wearing.Detach"
-         parameter="detach"/>
-    </menu_item_call>
-    <menu_item_call
-     label="Снять / Отделить"
-     layout="topleft"
-     name="take_off_or_detach">
-        <on_click
-         function="Wearing.TakeOffDetach" />
-    </menu_item_call>
-    <menu_item_separator
-     layout="topleft"
-     name="edit_outfit_separator" />
-    <menu_item_call
-     label="Править костюм"
-     layout="topleft"
-     name="edit">
-        <on_click
-         function="Wearing.EditOutfit" />
-    </menu_item_call>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Wearing">
+	<menu_item_call label="Снять" name="take_off"/>
+	<menu_item_call label="Отсоединить" name="detach"/>
+	<menu_item_call label="Изменить костюм" name="edit"/>
 </context_menu>

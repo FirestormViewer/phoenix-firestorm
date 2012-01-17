@@ -1,26 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<toggleable_menu 
-     name="menu_group_plus"
-     left="0" bottom="0" visible="false"
-     mouse_opaque="false">
-  <menu_item_check
-   label="Отображать ярлык группы"
-   layout="topleft"
-   name="Display Group Icons">
-      <menu_item_check.on_click
-       function="People.Groups.ViewSort.Action"
-       parameter="show_icons" />
-      <menu_item_check.on_check
-       function="CheckControl"
-       parameter="GroupListShowIcons" />
-  </menu_item_check>
-  <menu_item_call
-   label="Выйти из выбранной группы"
-   layout="topleft"
-   name="Leave Selected Group">
-      <menu_item_call.on_click
-       function="People.Group.Minus.Action"/>
-      <menu_item_call.on_enable
-       function="People.Group.Minus.Enable"/>
-  </menu_item_call>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="Показывать значки группы" name="Display Group Icons"/>
+	<menu_item_call label="Покинуть выбранную группу" name="Leave Selected Group"/>
 </toggleable_menu>

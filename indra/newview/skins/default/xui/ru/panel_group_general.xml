@@ -1,420 +1,56 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- label="General"
- width="470"
- height="420"
- class="panel_group_general"
- name="general_tab"
- layout="topleft"
- follows="all">
-    <panel.string
-     name="help_text">
-        The General tab contains general information about this group, a list of members, general Group Preferences and member options.
-
-Hover your mouse over the options for more help.
-    </panel.string>
-    <panel.string
-     name="group_info_unchanged">
-        General group information has changed
-    </panel.string>
-    <panel.string
-     name="incomplete_member_data_str">
-        Retrieving member data
-    </panel.string>
-
-   <panel
-    name="group_general_panel"
-    left="8"
-    top="8"
-    height="404"
-    width="455"
-    follows="all"
-    layout="topleft">
-
-    <text
-     name="group_key"
-     left="0"
-     top="2"
-     width="68"
-     height="20"
-     type="string"
-     follows="top|left"
-     layout="topleft">
-    Group Key:
-    </text>
-
-    <view_border
-      left_pad="0"
-      top="0"
-      width="282"
-      height="18"
-      bevel_style="in"
-      follows="left|top|right"
-      name="info_border" />
-     <text_editor
-      name="group_key"
-      label="Group Key:"
-      left_delta="0"
-      top_delta="0"
-      width="282"
-      height="20"
-      h_pad="4"
-      v_pad="3"
-      bg_visible="false"
-      enabled="false"
-      allow_scroll="false"
-      initial_value="(loading ...)"
-      follows="top|left|right"
-      layout="topleft" />
-
-
-    <button
-     name="copy_uri"
-     left_pad="4"
-     right="-1"
-     height="20"
-     label="Copy URI"
-     follows="top|right" />
-
-    <text
-     name="prepend_founded_by"
-     left="0"
-     top_pad="4"
-     width="68"
-     height="20"
-     type="string"
-     follows="top|left"
-     layout="topleft">
-    Founded by:
-    </text>
-
-    <text
-     name="founder_name"
-     left_pad="4"
-     right="-1"
-     height="20"
-     initial_value="(loading ...)"
-     type="string"
-     use_ellipses="true"
-     follows="top|left|right"
-     layout="topleft" />
-
-    <texture_picker
-     name="insignia"
-     tool_tip="Click to choose a picture"
-     height="110"
-     left="0"
-     top_pad="4"
-     width="100"
-     default_image_name="Generic_Group_Large"
-     label=""
-     no_commit_on_selection="true"
-     follows="left|top"
-     layout="topleft" />
-
-    <text_editor
-     name="charter"
-     left_pad="4"
-     top_pad="-109"
-     right="-1"
-     height="86"
-     type="string"
-     follows="left|top|right"
-     max_length="511"
-     word_wrap="true"
-     layout="topleft">
-    Group Charter
-    </text_editor>
-
-    <text
-     name="join_cost_text"
-     width="246"
-     top_pad="8"
-     height="20"
-     halign="right"
-     type="string"
-     visible="true"
-     follows="top|right"
-     layout="topleft">
-    Join (L$00000)
-    </text>
-
-    <button
-     name="btn_join"
-     top_delta="-4"
-     left_pad="4"
-     right="-1"
-     height="20"
-     label="JOIN NOW!"
-     visible="true"
-     follows="top|right"
-     layout="topleft" />
-
-<!--
-    removing layouts due to bugs or strange side-effects with name_list and scroll_list
-
-    <layout_stack
-     name="group_members_preferences_layout"
-     left="0"
-     top_pad="4"
-     right="-1"
-     height="242"
-     orientation="vertical"
-     follows="all"
-     layout="topleft">
-
-    <layout_panel
-     width="228"
-     name="group_members_layout_panel"
-     user_resize="false"
-     follows="top|left|right"
-     layout="topleft">
-//-->
-    <name_list
-     left="0"
-     top_pad="4"
-     height="112"
-     column_padding="0"
-     draw_heading="true"
-     heading_height="23"
-     name="visible_members"
-     short_names="false"
-     follows="all"
-     layout="topleft">
-        <name_list.columns
-         label="Member"
-         name="name"
-         relative_width="0.4" />
-        <name_list.columns
-         label="Title"
-         name="title"
-         relative_width="0.4" />
-        <name_list.columns
-         label="Status"
-         name="status"
-         relative_width="0.2" />
-    </name_list>
-<!--
-    </layout_panel>
-
-    <layout_panel
-     width="228"
-     height="115"
-     name="group_preferences_container"
-     user_resize="false"
-     auto_resize="false"
-     follows="top|left|right"
-     layout="topleft">
-//-->
-
-    <layout_stack
-     name="group_preferences_layout"
-     top_pad="4"
-     right="-1"
-     height="131"
-     orientation="horizontal"
-     follows="bottom|left|right"
-     layout="topleft">
-
-    <layout_panel
-     width="228"
-     name="user_preferences_container"
-     bevel_style="in"
-     border="true"
-     user_resize="true"
-     follows="top|left|right"
-     layout="topleft">
-
-        <text
-         left="0"
-         top_pad="4"
-         width="300"
-         type="string"
-         height="16"
-         text_color="EmphasisColor"
-         name="my_group_settngs_label"
-         follows="left|top|right"
-         layout="topleft">
-        My Group Settings
-        </text>
-
-        <check_box
-         height="16"
-         label="Show in my profile"
-         layout="topleft"
-         left="0"
-         name="list_groups_in_profile"
-         tool_tip="Sets whether you want to show this group in your profile"
-         top_pad="4"
-         width="295" />
-
-        <check_box
-         height="16"
-         font="SansSerifSmall"
-         label="Receive group notices"
-         layout="topleft"
-         left="0"
-         name="receive_notices"
-         tool_tip="Sets whether you want to receive Notices from this group.  Uncheck this box if this group is spamming you."
-         top_pad="4"
-         width="300" />
-
-         <text
-         name="active_title_label"
-         left="0"
-         top_pad="30"
-         width="200"
-         height="12"
-         type="string"
-         follows="left|top|right"
-         layout="topleft">
-            Current title:
-        </text>
-
-        <combo_box
-         follows="left|top|right"
-         height="23"
-         layout="topleft"
-         left="0"
-         right="-5"
-         name="active_title"
-         tool_tip="Sets the title that appears in your avatar's name tag when this group is active."
-         top_pad="2" />
-
-    </layout_panel>
-
-    <layout_panel
-     name="preferences_divider"
-     width="2"
-     border="false"
-     auto_resize="false"
-     user_resize="false"
-     follows="top|left|right"
-     layout="topleft" />
-
-    <layout_panel
-     name="group_preferences_container"
-     width="228"
-     bevel_style="in"
-     border="true"
-     user_resize="true"
-     follows="top|left|right"
-     layout="topleft">
-
-
-        <text
-         follows="left|top|right"
-         left="4"
-         height="16"
-         type="string"
-         text_color="EmphasisColor"
-         name="group_settngs_label"
-         right="-1"
-         layout="topleft">
-         Group Setup
-        </text>
-
-        <check_box
-         name="show_in_group_list"
-         tool_tip="Let people see this group in search results"
-         label="Show in search"
-         left="0"
-         top_pad="4"
-         width="10"
-         height="16"
-         initial_value="true"
-         layout="topleft" />
-
-        <check_box
-         name="open_enrollement"
-         label="Anyone can join"
-         tool_tip="Sets whether this group allows new members to join without being invited."
-         top_pad="4"
-         left="0"
-         height="16"
-         width="10"
-         layout="topleft" />
-
-<!--
-        <layout_stack
-         name="enrollment_fee_layout"
-         top_pad="4"
-         right="-1"
-         height="16"
-         orientation="horizontal"
-         follows="all"
-         layout="topleft">
-
-        <layout_panel
-         name="enrollment_fee_checkbox_panel"
-         width="90"
-         height="16"
-         auto_resize="false"
-         user_resize="false"
-         layout="topleft">
-//-->
-        <check_box
-         name="check_enrollment_fee"
-         tool_tip="Sets whether to require an enrollment fee to join the group"
-         label="Cost to join"
-         top_pad="4"
-         width="10"
-         height="16"
-         layout="topleft" />
-
-<!--
-        </layout_panel>
-
-        <layout_panel
-         name="enrollment_fee_spinner_panel"
-         width="114"
-         user_resize="false"
-         layout="topleft">
-//-->
-        <spinner
-         name="spin_enrollment_fee"
-         tool_tip="New members must pay this fee to join the group when Enrollment Fee is checked."
-         top_pad="0"
-         left_pad="14"
-         width="100"
-         height="16"
-         label="L$"
-         label_width="20"
-         decimal_digits="0"
-         increment="1"
-         max_val="99999"
-         follows="top|left"
-         layout="topleft" />
-<!--
-        </layout_panel>
-        </layout_stack>
-//-->
-        <combo_box
-         name="group_mature_check"
-         tool_tip="Sets whether your group contains information rated as Moderate"
-         left="0"
-         top_pad="8"
-         right="-1"
-         height="23"
-         follows="left|right|top"
-         layout="topleft">
-            <combo_item name="select_mature" value="Select">
-            - Select maturity rating -
-            </combo_item>
-            <combo_box.item
-             label="Moderate Content"
-             name="mature"
-             value="Mature" />
-            <combo_box.item
-             label="General Content"
-             name="pg"
-             value="Not Mature" />
-        </combo_box>
-    </layout_panel>
-    </layout_stack>
-<!--
-    </layout_panel>
-    </layout_stack>
-//-->
-    </panel>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Общие" name="general_tab">
+	<panel.string name="help_text">
+		Вкладка «Общие» содержит общие сведения о данной группе, список участников, общие настройки группы и параметры участников.
+Чтобы получить справку, наведите курсор мыши на параметр.
+	</panel.string>
+	<panel.string name="group_info_unchanged">
+		Общая информация о группе изменена
+	</panel.string>
+	<panel.string name="incomplete_member_data_str">
+		Получение данных участника
+	</panel.string>
+	<panel name="group_info_top">
+		<texture_picker label="" name="insignia" tool_tip="Щелкните для выбора изображения"/>
+		<text name="prepend_founded_by">
+			Основатель:
+		</text>
+		<text name="join_cost_text">
+			Бесплатно
+		</text>
+		<button label="ПРИСОЕДИНИТЬСЯ!" name="btn_join"/>
+	</panel>
+	<text_editor name="charter">
+		Устав группы
+	</text_editor>
+	<name_list name="visible_members">
+		<name_list.columns label="Участник" name="name"/>
+		<name_list.columns label="Титул" name="title"/>
+		<name_list.columns label="Статус" name="status"/>
+	</name_list>
+	<text name="my_group_settngs_label">
+		Я
+	</text>
+	<text name="active_title_label">
+		Титул:
+	</text>
+	<combo_box name="active_title" tool_tip="Установить титул, который будет показан вместе с вашим именем, когда эта группа активна."/>
+	<check_box label="Получать уведомления от группы" name="receive_notices" tool_tip="Включите, если хотите получать уведомления от этой группы.  Снимите этот флажок, если группа шлет вам нежелательные сообщения."/>
+	<check_box label="Показывать в моем профиле" name="list_groups_in_profile" tool_tip="Включите, если хотите, чтобы группа отображалась в вашем профиле"/>
+	<panel name="preferences_container">
+		<text name="group_settngs_label">
+			Группа
+		</text>
+		<check_box label="Открытая регистрация" name="open_enrollement" tool_tip="Устанавливается, если в этой группе можно зарегистрироваться без приглашения."/>
+		<check_box label="Платная регистрация" name="check_enrollment_fee" tool_tip="Устанавливается, если в этой группе требуется оплата за вступление."/>
+		<spinner label="L$" name="spin_enrollment_fee" tool_tip="Новые участники должны будут оплатить взнос, если регистрация платная."/>
+		<combo_box name="group_mature_check" tool_tip="Устанавливает, содержит ли группа информацию категории умеренной дозволенности">
+			<combo_item name="select_mature">
+				- Выберите рейтинг зрелости -
+			</combo_item>
+			<combo_box.item label="Умеренный контент" name="mature"/>
+			<combo_box.item label="Общий контент" name="pg"/>
+		</combo_box>
+		<check_box initial_value="истина" label="Показать в поиске" name="show_in_group_list" tool_tip="Позволить людям видеть эту группу в результатах поиска"/>
+	</panel>
 </panel>

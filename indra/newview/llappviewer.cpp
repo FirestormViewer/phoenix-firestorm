@@ -75,13 +75,13 @@
 //#include "llfirstuse.h"
 #include "llrender.h"
 #include "llteleporthistory.h"
+#include "lltoast.h"
 #include "lllocationhistory.h"
 #include "llfasttimerview.h"
 #include "llvector4a.h"
 #include "llviewermenufile.h"
 #include "llvoicechannel.h"
 #include "llvoavatarself.h"
-#include "llsidetray.h"
 #include "llurlmatch.h"
 #include "lltextutil.h"
 #include "lllogininstance.h"
@@ -94,6 +94,7 @@
 #include "llweb.h"
 #include "llsecondlifeurls.h"
 #include "llupdaterservice.h"
+#include "llcallfloater.h"
 
 // Linden library includes
 #include "llavatarnamecache.h"
@@ -119,6 +120,8 @@
 
 // Third party library includes
 #include <boost/bind.hpp>
+#include <boost/foreach.hpp>
+
 
 
 #if LL_WINDOWS
@@ -562,6 +565,8 @@ static void settings_to_globals()
 
 	LLSurface::setTextureSize(gSavedSettings.getU32("RegionTextureSize"));
 	
+	LLRender::sGLCoreProfile = gSavedSettings.getBOOL("RenderGLCoreProfile");
+
 	LLImageGL::sGlobalUseAnisotropic	= gSavedSettings.getBOOL("RenderAnisotropic");
 	LLVOVolume::sLODFactor				= gSavedSettings.getF32("RenderVolumeLODFactor");
 	LLVOVolume::sDistanceFactor			= 1.f-LLVOVolume::sLODFactor * 0.1f;
@@ -596,42 +601,6 @@ static void settings_modify()
 	gDebugGL = gSavedSettings.getBOOL("RenderDebugGL") || gDebugSession;
 	gDebugPipeline = gSavedSettings.getBOOL("RenderDebugPipeline");
 	gAuditTexture = gSavedSettings.getBOOL("AuditTexture");
-#if LL_VECTORIZE
-	if (gSysCPU.hasAltivec())
-	{
-		gSavedSettings.setBOOL("VectorizeEnable", TRUE );
-		gSavedSettings.setU32("VectorizeProcessor", 0 );
-	}
-	else
-	if (gSysCPU.hasSSE2())
-	{
-		gSavedSettings.setBOOL("VectorizeEnable", TRUE );
-		gSavedSettings.setU32("VectorizeProcessor", 2 );
-	}
-	else
-	if (gSysCPU.hasSSE())
-	{
-		gSavedSettings.setBOOL("VectorizeEnable", TRUE );
-		gSavedSettings.setU32("VectorizeProcessor", 1 );
-	}
-	else
-	{
-		// Don't bother testing or running if CPU doesn't support it. JC
-		gSavedSettings.setBOOL("VectorizePerfTest", FALSE );
-		gSavedSettings.setBOOL("VectorizeEnable", FALSE );
-		gSavedSettings.setU32("VectorizeProcessor", 0 );
-		gSavedSettings.setBOOL("VectorizeSkin", FALSE);
-	}
-#else
-	// This build target doesn't support SSE, don't test/run.
-	gSavedSettings.setBOOL("VectorizePerfTest", FALSE );
-	gSavedSettings.setBOOL("VectorizeEnable", FALSE );
-	gSavedSettings.setU32("VectorizeProcessor", 0 );
-	gSavedSettings.setBOOL("VectorizeSkin", FALSE);
-
-	// disable fullscreen mode, unsupported
-	//gSavedSettings.setBOOL("WindowFullScreen", FALSE);
-#endif
 }
 
 class LLFastTimerLogThread : public LLThread
@@ -881,7 +850,7 @@ bool LLAppViewer::init()
 		LLViewerAssetStatsFF::init();
 	}
 
-    initThreads();
+	initThreads();
 	LL_INFOS("InitInfo") << "Threads initialized." << LL_ENDL ;
 
 	// Initialize settings early so that the defaults for ignorable dialogs are
@@ -965,9 +934,9 @@ bool LLAppViewer::init()
 	LLWeb::initClass();			  // do this after LLUI
 	
 	// Provide the text fields with callbacks for opening Urls
-	LLUrlAction::setOpenURLCallback(&LLWeb::loadURL);
-	LLUrlAction::setOpenURLInternalCallback(&LLWeb::loadURLInternal);
-	LLUrlAction::setOpenURLExternalCallback(&LLWeb::loadURLExternal);
+	LLUrlAction::setOpenURLCallback(boost::bind(&LLWeb::loadURL, _1, LLStringUtil::null, LLStringUtil::null));
+	LLUrlAction::setOpenURLInternalCallback(boost::bind(&LLWeb::loadURLInternal, _1, LLStringUtil::null, LLStringUtil::null));
+	LLUrlAction::setOpenURLExternalCallback(boost::bind(&LLWeb::loadURLExternal, _1, true, LLStringUtil::null));
 	LLUrlAction::setExecuteSLURLCallback(&LLURLDispatcher::dispatchFromTextEditor);
 
 	// Let code in llui access the viewer help floater
@@ -992,8 +961,6 @@ bool LLAppViewer::init()
 	LLGroupMgr::parseRoleActions("role_actions.xml");
 
 	LLAgent::parseTeleportMessages("teleport_strings.xml");
-
-	LLViewerJointMesh::updateVectorize();
 
 	// load MIME type -> media impl mappings
 	std::string mime_types_name;
@@ -1311,6 +1278,7 @@ bool LLAppViewer::mainLoop()
 
 	LLVoiceChannel::initClass();
 	LLVoiceClient::getInstance()->init(gServicePump);
+	LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLCallFloater::sOnCurrentChannelChanged, _1), true);
 	LLTimer frameTimer,idleTimer;
 	LLTimer debugTime;
 	LLViewerJoystick* joystick(LLViewerJoystick::getInstance());
@@ -1345,7 +1313,7 @@ bool LLAppViewer::mainLoop()
 			if (gViewerWindow)
 			{
 				LLFastTimer t2(FTM_MESSAGES);
-				gViewerWindow->mWindow->processMiscNativeEvents();
+				gViewerWindow->getWindow()->processMiscNativeEvents();
 			}
 		
 			pingMainloopTimeout("Main:GatherInput");
@@ -1358,7 +1326,7 @@ bool LLAppViewer::mainLoop()
 					llwarns << " Someone took over my signal/exception handler (post messagehandling)!" << llendl;
 				}
 
-				gViewerWindow->mWindow->gatherInput();
+				gViewerWindow->getWindow()->gatherInput();
 			}
 
 #if 1 && !LL_RELEASE_FOR_DOWNLOAD
@@ -1387,9 +1355,9 @@ bool LLAppViewer::mainLoop()
 				// Scan keyboard for movement keys.  Command keys and typing
 				// are handled by windows callbacks.  Don't do this until we're
 				// done initializing.  JC
-				if ((gHeadlessClient || gViewerWindow->mWindow->getVisible())
+				if ((gHeadlessClient || gViewerWindow->getWindow()->getVisible())
 					&& gViewerWindow->getActive()
-					&& !gViewerWindow->mWindow->getMinimized()
+					&& !gViewerWindow->getWindow()->getMinimized()
 					&& LLStartUp::getStartupState() == STATE_STARTED
 					&& (gHeadlessClient || !gViewerWindow->getShowProgress())
 					&& !gFocusMgr.focusLocked())
@@ -1468,7 +1436,7 @@ bool LLAppViewer::mainLoop()
 				}
 
 				// yield cooperatively when not running as foreground window
-				if (   (gViewerWindow && !gViewerWindow->mWindow->getVisible())
+				if (   (gViewerWindow && !gViewerWindow->getWindow()->getVisible())
 						|| !gFocusMgr.getAppHasFocus())
 				{
 					// Sleep if we're not rendering, or the window is minimized.
@@ -2145,7 +2113,7 @@ bool LLAppViewer::initThreads()
 	LLAppViewer::sTextureFetch = new LLTextureFetch(LLAppViewer::getTextureCache(),
 													sImageDecodeThread,
 													enable_threads && true,
-													app_metrics_qa_mode);
+													app_metrics_qa_mode);	
 
 	if (LLFastTimer::sLog || LLFastTimer::sMetricLog)
 	{
@@ -2230,42 +2198,37 @@ bool LLAppViewer::loadSettingsFromDirectory(const std::string& location_key,
 		llerrs << "Invalid settings location list" << llendl;
 	}
 
-	for(LLInitParam::ParamIterator<SettingsGroup>::const_iterator it = mSettingsLocationList->groups.begin(), end_it = mSettingsLocationList->groups.end();
-		it != end_it;
-		++it)
+	BOOST_FOREACH(const SettingsGroup& group, mSettingsLocationList->groups)
 	{
 		// skip settings groups that aren't the one we requested
-		if (it->name() != location_key) continue;
+		if (group.name() != location_key) continue;
 
-		ELLPath path_index = (ELLPath)it->path_index();
+		ELLPath path_index = (ELLPath)group.path_index();
 		if(path_index <= LL_PATH_NONE || path_index >= LL_PATH_LAST)
 		{
 			llerrs << "Out of range path index in app_settings/settings_files.xml" << llendl;
 			return false;
 		}
 
-		LLInitParam::ParamIterator<SettingsFile>::const_iterator file_it, end_file_it;
-		for (file_it = it->files.begin(), end_file_it = it->files.end();
-			file_it != end_file_it;
-			++file_it)
+		BOOST_FOREACH(const SettingsFile& file, group.files)
 		{
-			llinfos << "Attempting to load settings for the group " << file_it->name()
+			llinfos << "Attempting to load settings for the group " << file.name()
 			    << " - from location " << location_key << llendl;
 
-			LLControlGroup* settings_group = LLControlGroup::getInstance(file_it->name);
+			LLControlGroup* settings_group = LLControlGroup::getInstance(file.name);
 			if(!settings_group)
 			{
-				llwarns << "No matching settings group for name " << file_it->name() << llendl;
+				llwarns << "No matching settings group for name " << file.name() << llendl;
 				continue;
 			}
 
 			std::string full_settings_path;
 
-			if (file_it->file_name_setting.isProvided() 
-				&& gSavedSettings.controlExists(file_it->file_name_setting))
+			if (file.file_name_setting.isProvided() 
+				&& gSavedSettings.controlExists(file.file_name_setting))
 			{
 				// try to find filename stored in file_name_setting control
-				full_settings_path = gSavedSettings.getString(file_it->file_name_setting);
+				full_settings_path = gSavedSettings.getString(file.file_name_setting);
 				if (full_settings_path.empty())
 				{
 					continue;
@@ -2279,16 +2242,16 @@ bool LLAppViewer::loadSettingsFromDirectory(const std::string& location_key,
 			else
 			{
 				// by default, use specified file name
-				full_settings_path = gDirUtilp->getExpandedFilename((ELLPath)path_index, file_it->file_name());
+				full_settings_path = gDirUtilp->getExpandedFilename((ELLPath)path_index, file.file_name());
 			}
 
-			if(settings_group->loadFromFile(full_settings_path, set_defaults, file_it->persistent))
+			if(settings_group->loadFromFile(full_settings_path, set_defaults, file.persistent))
 			{	// success!
 				llinfos << "Loaded settings file " << full_settings_path << llendl;
 			}
 			else
 			{	// failed to load
-				if(file_it->required)
+				if(file.required)
 				{
 					llerrs << "Error: Cannot load required settings file from: " << full_settings_path << llendl;
 					return false;
@@ -2311,20 +2274,15 @@ bool LLAppViewer::loadSettingsFromDirectory(const std::string& location_key,
 std::string LLAppViewer::getSettingsFilename(const std::string& location_key,
 											 const std::string& file)
 {
-	for(LLInitParam::ParamIterator<SettingsGroup>::const_iterator it = mSettingsLocationList->groups.begin(), end_it = mSettingsLocationList->groups.end();
-		it != end_it;
-		++it)
+	BOOST_FOREACH(const SettingsGroup& group, mSettingsLocationList->groups)
 	{
-		if (it->name() == location_key)
+		if (group.name() == location_key)
 		{
-			LLInitParam::ParamIterator<SettingsFile>::const_iterator file_it, end_file_it;
-			for (file_it = it->files.begin(), end_file_it = it->files.end();
-				file_it != end_file_it;
-				++file_it)
+			BOOST_FOREACH(const SettingsFile& settings_file, group.files)
 			{
-				if (file_it->name() == file)
+				if (settings_file.name() == file)
 				{
-					return file_it->file_name;
+					return settings_file.file_name;
 				}
 			}
 		}
@@ -3085,48 +3043,15 @@ void LLAppViewer::initUpdater()
 
 void LLAppViewer::checkForCrash(void)
 {
-    
 #if LL_SEND_CRASH_REPORTS
 	if (gLastExecEvent == LAST_EXEC_FROZE)
     {
-        llinfos << "Last execution froze, requesting to send crash report." << llendl;
-        //
-        // Pop up a freeze or crash warning dialog
-        //
-        S32 choice;
-	const S32 cb = gCrashSettings.getS32("CrashSubmitBehavior");
-        if(cb == CRASH_BEHAVIOR_ASK)
-        {
-            std::ostringstream msg;
-			msg << LLTrans::getString("MBFrozenCrashed");
-			std::string alert = LLTrans::getString("APP_NAME") + " " + LLTrans::getString("MBAlert");
-            choice = OSMessageBox(msg.str(),
-                                  alert,
-                                  OSMB_YESNO);
-        } 
-        else if(cb == CRASH_BEHAVIOR_NEVER_SEND)
-        {
-            choice = OSBTN_NO;
-        }
-        else
-        {
-            choice = OSBTN_YES;
-        }
-
-        if (OSBTN_YES == choice)
-        {
-            llinfos << "Sending crash report." << llendl;
+        llinfos << "Last execution froze, sending a crash report." << llendl;
             
-            bool report_freeze = true;
-            handleCrashReporting(report_freeze);
-        }
-        else
-        {
-            llinfos << "Not sending crash report." << llendl;
-        }
+		bool report_freeze = true;
+		handleCrashReporting(report_freeze);
     }
 #endif // LL_SEND_CRASH_REPORTS    
-    
 }
 
 //
@@ -3152,11 +3077,21 @@ bool LLAppViewer::initWindow()
 
 	// always start windowed
 	BOOL ignorePixelDepth = gSavedSettings.getBOOL("IgnorePixelDepth");
-	gViewerWindow = new LLViewerWindow(gWindowTitle, 
-		VIEWER_WINDOW_CLASSNAME,
-		gSavedSettings.getS32("WindowX"), gSavedSettings.getS32("WindowY"),
-		gSavedSettings.getS32("WindowWidth"), gSavedSettings.getS32("WindowHeight"),
-		gSavedSettings.getBOOL("FullScreen"), ignorePixelDepth);
+
+	LLViewerWindow::Params window_params;
+	window_params
+		.title(gWindowTitle)
+		.name(VIEWER_WINDOW_CLASSNAME)
+		.x(gSavedSettings.getS32("WindowX"))
+		.y(gSavedSettings.getS32("WindowY"))
+		.width(gSavedSettings.getU32("WindowWidth"))
+		.height(gSavedSettings.getU32("WindowHeight"))
+		.min_width(gSavedSettings.getU32("MinWindowWidth"))
+		.min_height(gSavedSettings.getU32("MinWindowHeight"))
+		.fullscreen(gSavedSettings.getBOOL("FullScreen"))
+		.ignore_pixel_depth(ignorePixelDepth);
+
+	gViewerWindow = new LLViewerWindow(window_params);
 
 	LL_INFOS("AppInit") << "gViewerwindow created." << LL_ENDL;
 
@@ -3183,7 +3118,7 @@ bool LLAppViewer::initWindow()
 		
 	if (gSavedSettings.getBOOL("WindowMaximized"))
 	{
-		gViewerWindow->mWindow->maximize();
+		gViewerWindow->getWindow()->maximize();
 	}
 
 	//
@@ -3226,7 +3161,7 @@ bool LLAppViewer::initWindow()
 
 	if (gSavedSettings.getBOOL("WindowMaximized"))
 	{
-		gViewerWindow->mWindow->maximize();
+		gViewerWindow->getWindow()->maximize();
 	}
 
 	LLUI::sWindow = gViewerWindow->getWindow();
@@ -3238,7 +3173,7 @@ bool LLAppViewer::initWindow()
 	gViewerWindow->initBase();
 
 	// show viewer window
-	//gViewerWindow->mWindow->show();
+	//gViewerWindow->getWindow()->show();
 
 	LL_INFOS("AppInit") << "Window initialization done." << LL_ENDL;
 	return true;
@@ -3272,12 +3207,12 @@ void LLAppViewer::cleanupSavedSettings()
 	// as we don't track it in callbacks
 	if(NULL != gViewerWindow)
 	{
-		BOOL maximized = gViewerWindow->mWindow->getMaximized();
+		BOOL maximized = gViewerWindow->getWindow()->getMaximized();
 		if (!maximized)
 		{
 			LLCoordScreen window_pos;
 			
-			if (gViewerWindow->mWindow->getPosition(&window_pos))
+			if (gViewerWindow->getWindow()->getPosition(&window_pos))
 			{
 				gSavedSettings.setS32("WindowX", window_pos.mX);
 				gSavedSettings.setS32("WindowY", window_pos.mY);
@@ -3729,7 +3664,7 @@ void LLAppViewer::requestQuit()
 				gFloaterView->closeAllChildren(true);
 			}
 
-			LLSideTray::getInstance()->notifyChildren(LLSD().with("request","quit"));
+			//			LLSideTray::getInstance()->notifyChildren(LLSD().with("request","quit")); ND_MERGE
 		} // ~LO
 		
 		// Quit immediately
@@ -3754,8 +3689,6 @@ void LLAppViewer::requestQuit()
 		gFloaterView->closeAllChildren(true);
 	}
 
-	LLSideTray::getInstance()->notifyChildren(LLSD().with("request","quit"));
-
 	send_stats();
 
 	gLogoutTimer.reset();
@@ -3773,20 +3706,6 @@ static bool finish_quit(const LLSD& notification, const LLSD& response)
 	return false;
 }
 static LLNotificationFunctorRegistration finish_quit_reg("ConfirmQuit", finish_quit);
-
-static bool switch_standard_skin_and_quit(const LLSD& notification, const LLSD& response)
-{
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-
-	if (option == 0)
-	{
-		gSavedSettings.setString("SessionSettingsFile", "");
-		LLAppViewer::instance()->requestQuit();
-	}
-	return false;
-}
-
-static LLNotificationFunctorRegistration standard_skin_quit_reg("SwitchToStandardSkinAndQuit", switch_standard_skin_and_quit);
 
 void LLAppViewer::userQuit()
 {
@@ -4246,7 +4165,7 @@ bool finish_disconnect(const LLSD& notification, const LLSD& response)
 			gFloaterView->closeAllChildren(true);
 		}
 
-		LLSideTray::getInstance()->notifyChildren(LLSD().with("request","quit"));
+		//		LLSideTray::getInstance()->notifyChildren(LLSD().with("request","quit")); ND_MERGE
         LLAppViewer::instance()->forceQuit();
 	}
 	return false;
@@ -4261,7 +4180,7 @@ bool finish_forced_disconnect(const LLSD& notification, const LLSD& response)
 		gFloaterView->closeAllChildren(true);
 	}
 
-	LLSideTray::getInstance()->notifyChildren(LLSD().with("request","quit"));
+	//	LLSideTray::getInstance()->notifyChildren(LLSD().with("request","quit")); ND_MERGE
 	LLAppViewer::instance()->forceQuit();
 	return false;
 }
@@ -4443,6 +4362,7 @@ void LLAppViewer::idle()
 	LLFrameTimer::updateFrameTime();
 	LLFrameTimer::updateFrameCount();
 	LLEventTimer::updateClass();
+	LLNotificationsUI::LLToast::updateClass();
 	LLCriticalDamp::updateInterpolants();
 	LLMortician::updateClass();
 	LLFilePickerThread::clearDead();  //calls LLFilePickerThread::notify()
@@ -4664,7 +4584,7 @@ void LLAppViewer::idle()
 	///////////////////////////////////////
 	// Agent and camera movement
 	//
-		LLCoordGL current_mouse = gViewerWindow->getCurrentMouse();
+	LLCoordGL current_mouse = gViewerWindow->getCurrentMouse();
 
 	{
 		// After agent and camera moved, figure out if we need to
@@ -4866,10 +4786,6 @@ void LLAppViewer::idleShutdown()
 		return;
 	}
 
-	if (LLSideTray::getInstance()->notifyChildren(LLSD().with("request","wait_quit")))
-	{
-		return;
-	}
 
 
 	

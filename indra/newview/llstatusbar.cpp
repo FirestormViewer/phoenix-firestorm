@@ -74,7 +74,7 @@
 #include "lllandmarkactions.h"
 #include "lllocationinputctrl.h"
 #include "llparcel.h"
-#include "llsidetray.h"
+#include "llfloatersidepanelcontainer.h"
 #include "llslurl.h"
 #include "llviewerinventory.h"
 
@@ -144,6 +144,7 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mTextTime(NULL),
 	mSGBandwidth(NULL),
 	mSGPacketLoss(NULL),
+	mBtnStats(NULL),
 	mBtnVolume(NULL),
 	mBoxBalance(NULL),
 	mBalance(0),
@@ -221,8 +222,6 @@ BOOL LLStatusBar::handleRightMouseDown(S32 x, S32 y, MASK mask)
 
 BOOL LLStatusBar::postBuild()
 {
-	LLControlVariablePtr mode_control = gSavedSettings.getControl("SessionSettingsFile");
-
 	gMenuBarView->setRightMouseDownCallback(boost::bind(&show_navbar_context_menu, _1, _2, _3));
 
 	mTextTime = getChild<LLTextBox>("TimeText" );
@@ -230,8 +229,12 @@ BOOL LLStatusBar::postBuild()
 	getChild<LLUICtrl>("buyL")->setCommitCallback(
 		boost::bind(&LLStatusBar::onClickBuyCurrency, this));
 
+	getChild<LLUICtrl>("goShop")->setCommitCallback(boost::bind(&LLWeb::loadURLExternal, gSavedSettings.getString("MarketplaceURL")));
+
 	mBoxBalance = getChild<LLTextBox>("balance");
 	mBoxBalance->setClickedCallback( &LLStatusBar::onClickBalance, this );
+	
+	mBtnStats = getChildView("stat_btn");
 
 	mBtnVolume = getChild<LLButton>( "volume_btn" );
 	mBtnVolume->setClickedCallback( onClickVolume, this );
@@ -338,42 +341,11 @@ BOOL LLStatusBar::postBuild()
 	mParcelMgrConnection = LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(
 			boost::bind(&LLStatusBar::onAgentParcelChange, this));
 
-	LLUICtrl& mode_combo = getChildRef<LLUICtrl>("mode_combo");
-	mode_combo.setValue(gSavedSettings.getString("SessionSettingsFile"));
-	mode_combo.setCommitCallback(boost::bind(&LLStatusBar::onModeChange, this, getChild<LLUICtrl>("mode_combo")->getValue(), _2));
-
 	if (!gSavedSettings.getBOOL("ShowNetStats"))
 	{
 		updateNetstatVisibility(LLSD(FALSE));
 	}
-
 	return TRUE;
-}
-
-void LLStatusBar::onModeChange(const LLSD& original_value, const LLSD& new_value)
-{
-	if (original_value.asString() != new_value.asString())
-	{
-		LLNotificationsUtil::add("ModeChange", LLSD(), LLSD(), boost::bind(&LLStatusBar::onModeChangeConfirm, this, original_value, new_value, _1, _2));
-	}
-}
-
-void LLStatusBar::onModeChangeConfirm(const LLSD& original_value, const LLSD& new_value, const LLSD& notification, const LLSD& response)
-{
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	switch (option)
-	{
-	case 0:
-		gSavedSettings.getControl("SessionSettingsFile")->set(new_value);
-		LLAppViewer::instance()->requestQuit();
-		break;
-	case 1:
-		// revert to original value
-		getChild<LLUICtrl>("mode_combo")->setValue(original_value);
-		break;
-	default:
-		break;
-	}
 }
 
 // Per-frame updates of visibility
@@ -423,17 +395,10 @@ void LLStatusBar::refresh()
 	{
 		gMenuBarView->reshape(MENU_RIGHT, gMenuBarView->getRect().getHeight());
 	}
-	// also update the parcel info panel pos -KC
-	if ((MENU_RIGHT + MENU_PARCEL_SPACING) != mParcelInfoPanel->getRect().mLeft)
-	{
-		updateParcelPanel();
-	}
 
-	// It seems this button does no longer exist. I believe this was an overlay button on top of
-	// the net stats graphs to call up the lag meter floater. In case someone revives this, make
-	// sure to use a mSGStatsButton variable, because this function here is called an awful lot
-	// while the viewer runs, and dynamic lookup is very expensive. -Zi
-	// getChildView("stat_btn")->setEnabled(net_stats_visible);
+	mSGBandwidth->setVisible(net_stats_visible);
+	mSGPacketLoss->setVisible(net_stats_visible);
+	mBtnStats->setEnabled(net_stats_visible);
 
 	// update the master volume button state
 	bool mute_audio = LLAppViewer::instance()->getMasterSystemAudioMute();
@@ -506,9 +471,10 @@ void LLStatusBar::setBalance(S32 balance)
 		const S32 HPAD = 24;
 		LLRect balance_rect = mBoxBalance->getTextBoundingRect();
 		LLRect buy_rect = getChildView("buyL")->getRect();
+		LLRect shop_rect = getChildView("goShop")->getRect();
 		LLView* balance_bg_view = getChildView("balance_bg");
 		LLRect balance_bg_rect = balance_bg_view->getRect();
-		balance_bg_rect.mLeft = balance_bg_rect.mRight - (buy_rect.getWidth() + balance_rect.getWidth() + HPAD);
+		balance_bg_rect.mLeft = balance_bg_rect.mRight - (buy_rect.getWidth() + shop_rect.getWidth() + balance_rect.getWidth() + HPAD);
 		balance_bg_view->setShape(balance_bg_rect);
 	}
 
@@ -1079,11 +1045,11 @@ void LLStatusBar::onContextMenuItemClicked(const LLSD::String& item)
 
 			if(landmark == NULL)
 			{
-				LLSideTray::getInstance()->showPanel("panel_places", LLSD().with("type", "create_landmark"));
+				LLFloaterSidePanelContainer::showPanel("panel_places", LLSD().with("type", "create_landmark"));
 			}
 			else
 			{
-				LLSideTray::getInstance()->showPanel("panel_places",
+				LLFloaterSidePanelContainer::showPanel("panel_places",
 						LLSD().with("type", "landmark").with("id",landmark->getUUID()));
 			}
 		}
@@ -1104,7 +1070,7 @@ void LLStatusBar::onInfoButtonClicked()
 	{
 		return;
 	}
-	//LLSideTray::getInstance()->showPanel("panel_places", LLSD().with("type", "agent"));
+	//LLFloaterSidePanelContainer::showPanel("panel_places", LLSD().with("type", "agent"));
 	LLFloaterReg::showInstance("about_land");
 }
 

@@ -59,6 +59,9 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llworld.h"
+#include "llclipboard.h"
+
+
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "rlvlocks.h"
@@ -808,7 +811,7 @@ void LLToolDragAndDrop::pick(const LLPickInfo& pick_info)
 
 	LLViewerObject* hit_obj = pick_info.getObject();
 	LLSelectMgr::getInstance()->unhighlightAll();
-
+	bool highlight_object = false;
 	// Treat attachments as part of the avatar they are attached to.
 	if (hit_obj != NULL)
 	{
@@ -850,16 +853,7 @@ void LLToolDragAndDrop::pick(const LLPickInfo& pick_info)
 		{
 			target = DT_OBJECT;
 			hit_face = pick_info.mObjectFace;
-			// if any item being dragged will be applied to the object under our cursor
-			// highlight that object
-			for (S32 i = 0; i < (S32)mCargoIDs.size(); i++)
-			{
-				if (mCargoTypes[i] != DAD_OBJECT || (pick_info.mKeyMask & MASK_CONTROL))
-				{
-					LLSelectMgr::getInstance()->highlightObjectAndFamily(hit_obj);
-					break;
-				}
-			}
+			highlight_object = true;
 		}
 	}
 	else if (pick_info.mPickType == LLPickInfo::PICK_LAND)
@@ -905,6 +899,19 @@ void LLToolDragAndDrop::pick(const LLPickInfo& pick_info)
 		}
 	}
 
+	if (highlight_object && mLastAccept > ACCEPT_NO_LOCKED)
+	{
+		// if any item being dragged will be applied to the object under our cursor
+		// highlight that object
+		for (S32 i = 0; i < (S32)mCargoIDs.size(); i++)
+		{
+			if (mCargoTypes[i] != DAD_OBJECT || (pick_info.mKeyMask & MASK_CONTROL))
+			{
+				LLSelectMgr::getInstance()->highlightObjectAndFamily(hit_obj);
+				break;
+			}
+		}
+	}
 	ECursorType cursor = acceptanceToCursor( mLastAccept );
 	gViewerWindow->getWindow()->setCursor( cursor );
 
@@ -2585,6 +2592,10 @@ LLInventoryObject* LLToolDragAndDrop::locateInventory(
 		{
 			item = (LLViewerInventoryItem*)preview->getDragItem();
 		}
+	}
+	else if(mSource == SOURCE_VIEWER)
+	{
+		item = (LLViewerInventoryItem*)gClipboard.getSourceObject();
 	}
 	if(item) return item;
 	if(cat) return cat;

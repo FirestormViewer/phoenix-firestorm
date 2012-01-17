@@ -374,8 +374,10 @@ void LLPreview::onBtnCopyToInv(void* userdata)
 		// Copy to inventory
 		if (self->mNotecardInventoryID.notNull())
 		{
-			copy_inventory_from_notecard(self->mNotecardObjectID,
-				self->mNotecardInventoryID, item);
+			copy_inventory_from_notecard(LLUUID::null,
+										 self->mNotecardObjectID,
+										 self->mNotecardInventoryID,
+										 item);
 		}
 		else
 		{

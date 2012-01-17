@@ -35,6 +35,7 @@
 #include "llavataractions.h"
 #include "llfloaterinventory.h"
 #include "llfloaterreg.h"
+#include "llfloatersidepanelcontainer.h"
 #include "llfolderview.h"
 #include "llimfloater.h"
 #include "llimview.h"
@@ -42,7 +43,6 @@
 #include "llinventoryfunctions.h"
 #include "llinventorymodelbackgroundfetch.h"
 #include "llsidepanelinventory.h"
-#include "llsidetray.h"
 #include "llviewerattachmenu.h"
 #include "llviewerfoldertype.h"
 #include "llvoavatarself.h"
@@ -244,6 +244,12 @@ void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
 	getFilter()->setFilterCategoryTypes(getFilter()->getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
 	getFilter()->setFilterCategoryTypes(getFilter()->getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_OUTBOX));
 
+	// set the filter for the empty folder if the debug setting is on
+	if (gSavedSettings.getBOOL("DebugHideEmptySystemFolders"))
+	{
+		getFilter()->setFilterEmptySystemFolders();
+	}
+	
 	// Initialize base class params.
 	LLPanel::initFromParams(params);
 }
@@ -395,10 +401,11 @@ void LLInventoryPanel::setShowFolderState(LLInventoryFilter::EFolderShow show)
 	getFilter()->setShowFolderState(show);
 }
 
-void LLInventoryPanel::setWorn(BOOL sl)
-{
-	getFilter()->setFilterWorn(sl);
-}
+// ND_MERGE Worn is gone in FUI
+// void LLInventoryPanel::setWorn(BOOL sl)
+// {
+// 	getFilter()->setFilterWorn(sl);
+// }
 
 LLInventoryFilter::EFolderShow LLInventoryPanel::getShowFolderState()
 {
@@ -722,11 +729,12 @@ LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id, long aRecurs
   				if (new_listener)
   				{
 					LLFolderViewFolder* folderp = createFolderViewFolder(new_listener);
-					// <ND> Subfolder JIT
-					folderp->setPanel(this);
-					folderp->setFolderId( id );
-					// </ND>
-  					folderp->setItemSortOrder(mFolderRoot->getSortOrder());
+					if (folderp)
+					{
+						folderp->setPanel(this);
+						folderp->setFolderId( id );
+						folderp->setItemSortOrder(mFolderRoot->getSortOrder());
+					}
   					itemp = folderp;
   				}
   			}
@@ -922,8 +930,10 @@ void LLInventoryPanel::onFocusReceived()
 	LLEditMenuHandler::gEditMenuHandler = mFolderRoot;
 
 // [SL:KB] - Patch: Inventory-ActivePanel | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
-	s_fActiveSidebar = (LLSideTray::instanceCreated()) && (hasAncestor(LLSideTray::getInstance()->getPanel("sidepanel_inventory")));
+//	s_fActiveSidebar = (LLSideTray::instanceCreated()) && (hasAncestor(LLFloaterSidePanelContainer::getPanel("sidepanel_inventory"))); ND_MERGE
 // [/SL:KB]
+
+	s_fActiveSidebar = false;
 
 	LLPanel::onFocusReceived();
 }
@@ -1156,10 +1166,9 @@ void LLInventoryPanel::dumpSelectionInformation(void* user_data)
 
 BOOL is_inventorysp_active()
 {
-	if (!LLSideTray::getInstance()->isPanelActive("sidepanel_inventory")) return FALSE;
-	LLSidepanelInventory *inventorySP = dynamic_cast<LLSidepanelInventory *>(LLSideTray::getInstance()->getPanel("sidepanel_inventory"));
-	if (!inventorySP) return FALSE; 
-	return inventorySP->isMainInventoryPanelActive();
+	LLSidepanelInventory *sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+	if (!sidepanel_inventory || !sidepanel_inventory->isInVisibleChain()) return FALSE;
+	return sidepanel_inventory->isMainInventoryPanelActive();
 }
 
 // static
@@ -1169,51 +1178,30 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 	LLInventoryPanel* res = NULL;
 	LLFloater* active_inv_floaterp = NULL;
 
-//	// A. If the inventory side panel is open, use that preferably.
-//	if (is_inventorysp_active())
-// [SL:KB] - Patch: Inventory-ActivePanel | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
-	// A. If the inventory side panel is open and the last inventory panel the user had focus on, use that preferably.
-	if ( (is_inventorysp_active()) && (s_fActiveSidebar) )
-// [/SL:KB]
+	LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
+	if (!floater_inventory)
 	{
-		LLSidepanelInventory *inventorySP = dynamic_cast<LLSidepanelInventory *>(LLSideTray::getInstance()->getPanel("sidepanel_inventory"));
-		if (inventorySP)
-		{
-			return inventorySP->getActivePanel();
-		}
+		llwarns << "Could not find My Inventory floater" << llendl;
+		return FALSE;
 	}
-	// or if it is in floater undocked from sidetray get it and remember z order of floater to later compare it
-	// with other inventory floaters order.
-	else if (!LLSideTray::getInstance()->isTabAttached("sidebar_inventory"))
-	{
-		LLSidepanelInventory *inventorySP =
-			dynamic_cast<LLSidepanelInventory *>(LLSideTray::getInstance()->getPanel("sidepanel_inventory"));
-		LLFloater* inv_floater = LLFloaterReg::findInstance("side_bar_tab", LLSD("sidebar_inventory"));
-		if (inventorySP && inv_floater)
-		{
-			res = inventorySP->getActivePanel();
-			z_min = gFloaterView->getZOrder(inv_floater);
-			active_inv_floaterp = inv_floater;
-		}
-		else
-		{
-			llwarns << "Inventory tab is detached from sidetray, but  either panel or floater were not found!" << llendl;
-		}
-	}
-	
-	// B. Iterate through the inventory floaters and return whichever is on top.
+
+	LLSidepanelInventory *inventory_panel =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+
+	// Iterate through the inventory floaters and return whichever is on top.
 	LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("inventory");
 	for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin(); iter != inst_list.end(); ++iter)
 	{
-		LLFloaterInventory* iv = dynamic_cast<LLFloaterInventory*>(*iter);
-		if (iv && iv->getVisible())
+		LLFloaterSidePanelContainer* inventory_floater = dynamic_cast<LLFloaterSidePanelContainer*>(*iter);
+		inventory_panel = inventory_floater->findChild<LLSidepanelInventory>("main_panel");
+
+		if (inventory_floater && inventory_panel && inventory_floater->getVisible())
 		{
-			S32 z_order = gFloaterView->getZOrder(iv);
+			S32 z_order = gFloaterView->getZOrder(inventory_floater);
 			if (z_order < z_min)
 			{
-				res = iv->getPanel();
+				res = inventory_panel->getActivePanel();
 				z_min = z_order;
-				active_inv_floaterp = iv;
+				active_inv_floaterp = inventory_floater;
 			}
 		}
 	}
@@ -1226,23 +1214,75 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 		{
 			active_inv_floaterp->setMinimized(FALSE);
 		}
-
-		return res;
-	}
-		
-	// C. If no panels are open and we don't want to force open a panel, then just abort out.
-	if (!auto_open) return NULL;
-	
-	// D. Open the inventory side panel and use that.
-    LLSD key;
-	LLSidepanelInventory *sidepanel_inventory =
-		dynamic_cast<LLSidepanelInventory *>(LLSideTray::getInstance()->showPanel("sidepanel_inventory", key));
-	if (sidepanel_inventory)
+	}	
+	else if (auto_open)
 	{
-		return sidepanel_inventory->getActivePanel();
+		floater_inventory->openFloater();
+
+		res = inventory_panel->getActivePanel();
 	}
 
-	return NULL;
+	return res;
+}
+
+//static
+void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const LLUUID& obj_id)
+{
+	LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
+
+	if (active_panel)
+	{
+		LL_DEBUGS("Messaging") << "Highlighting" << obj_id  << LL_ENDL;
+		
+		LLViewerInventoryItem * item = gInventory.getItem(obj_id);
+		LLViewerInventoryCategory * cat = gInventory.getCategory(obj_id);
+		
+		bool in_inbox = false;
+		bool in_outbox = false;
+		
+		LLViewerInventoryCategory * parent_cat = NULL;
+		
+		if (item)
+		{
+			parent_cat = gInventory.getCategory(item->getParentUUID());
+		}
+		else if (cat)
+		{
+			parent_cat = gInventory.getCategory(cat->getParentUUID());
+		}
+		
+		if (parent_cat)
+		{
+			in_inbox = (LLFolderType::FT_INBOX == parent_cat->getPreferredType());
+			in_outbox = (LLFolderType::FT_OUTBOX == parent_cat->getPreferredType());
+		}
+		
+		if (in_inbox || in_outbox)
+		{
+			LLSidepanelInventory * sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+			LLInventoryPanel * inventory_panel = NULL;
+			
+			if (in_inbox)
+			{
+				sidepanel_inventory->openInbox();
+				inventory_panel = sidepanel_inventory->getInboxPanel();
+			}
+			else
+			{
+				sidepanel_inventory->openOutbox();
+				inventory_panel = sidepanel_inventory->getOutboxPanel();
+			}
+
+			if (inventory_panel)
+			{
+				inventory_panel->setSelection(obj_id, TAKE_FOCUS_YES);
+			}
+		}
+		else
+		{
+			active_panel->setSelection(obj_id, TAKE_FOCUS_YES);
+		}
+	}
 }
 
 void LLInventoryPanel::addHideFolderType(LLFolderType::EType folder_type)
@@ -1289,29 +1329,31 @@ LLInventoryRecentItemsPanel::LLInventoryRecentItemsPanel( const Params& params)
 	mInvFVBridgeBuilder = &RECENT_ITEMS_BUILDER;
 }
 
-/************************************************************************/
-/* Worn Inventory Panel related class                                 */
-/************************************************************************/
-class LLInventoryWornItemsPanel;
-static LLDefaultChildRegistry::Register<LLInventoryWornItemsPanel> t_worn_inventory_panel("worn_inventory_panel");
+//ND_MERGE worn is gone in FUI
 
-//static const LLWornInventoryBridgeBuilder WORN_ITEMS_BUILDER;
-static LLWornInventoryBridgeBuilder WORN_ITEMS_BUILDER; // <ND/> const makes GCC >= 4.6 very angry about not user defined default ctor.
-class LLInventoryWornItemsPanel : public LLInventoryPanel
-{
-public:
-	struct Params :	public LLInitParam::Block<Params, LLInventoryPanel::Params>
-	{};
+// /************************************************************************/
+// /* Worn Inventory Panel related class                                 */
+// /************************************************************************/
+// class LLInventoryWornItemsPanel;
+// static LLDefaultChildRegistry::Register<LLInventoryWornItemsPanel> t_worn_inventory_panel("worn_inventory_panel");
 
-protected:
-	LLInventoryWornItemsPanel (const Params&);
-	friend class LLUICtrlFactory;
-};
+// //static const LLWornInventoryBridgeBuilder WORN_ITEMS_BUILDER;
+// static LLWornInventoryBridgeBuilder WORN_ITEMS_BUILDER; // <ND/> const makes GCC >= 4.6 very angry about not user defined default ctor.
+// class LLInventoryWornItemsPanel : public LLInventoryPanel
+// {
+// public:
+// 	struct Params :	public LLInitParam::Block<Params, LLInventoryPanel::Params>
+// 	{};
 
-LLInventoryWornItemsPanel::LLInventoryWornItemsPanel( const Params& params)
-: LLInventoryPanel(params)
-{
-	// replace bridge builder to have necessary View bridges.
-	mInvFVBridgeBuilder = &WORN_ITEMS_BUILDER;
-}
+// protected:
+// 	LLInventoryWornItemsPanel (const Params&);
+// 	friend class LLUICtrlFactory;
+// };
+
+// LLInventoryWornItemsPanel::LLInventoryWornItemsPanel( const Params& params)
+// : LLInventoryPanel(params)
+// {
+// 	// replace bridge builder to have necessary View bridges.
+// 	mInvFVBridgeBuilder = &WORN_ITEMS_BUILDER;
+// }
 

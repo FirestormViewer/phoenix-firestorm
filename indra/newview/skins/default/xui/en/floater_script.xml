@@ -6,7 +6,6 @@
  border_visible="false"
  bg_alpha_color="ScriptDialog"
  bg_opaque_color="ScriptDialog"
- follows="left|top|right|bottom"
  height="250"
  layout="topleft"
  name="script_floater"

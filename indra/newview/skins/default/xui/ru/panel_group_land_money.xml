@@ -1,380 +1,85 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- label="Land &amp; L$"
- name="land_money_tab"
- left="0"
- top="0"
- width="470"
- height="420"
- follows="all"
- layout="topleft">
-    <panel.string
-     name="help_text">
-   A warning appears until the Total Land in Use is less than or = to the Total Contribution.
-    </panel.string>
-    <panel.string
-     name="cant_view_group_land_text">
-        You don&apos;t have permission to view group owned land
-    </panel.string>
-    <panel.string
-     name="epmty_view_group_land_text">
-        No entries
-    </panel.string>
-    <panel.string
-     name="cant_view_group_accounting_text">
-        You don&apos;t have permission to view the group&apos;s accounting information.
-    </panel.string>
-    <panel.string
-     name="loading_txt">
-        Loading...
-    </panel.string>
-    <panel.string
-     name="land_contrib_error">
-        Unable to set your land contribution
-    </panel.string>
-   <!-- <text
-     type="string"
-     follows="left|top"
-     font="SansSerifBig"
-     height="16"
-     layout="topleft"
-     left="10"
-     name="group_land_heading"
-     top_pad="10"
-     width="260">
-        Group Owned Land
-    </text> -->
-
-    <scroll_list
-     draw_heading="true"
-     follows="top|left|right"
-     height="156"
-     layout="topleft"
-     left="0"
-     right="-1"
-     top="0"
-     sort_column="0"
-     sort_ascending="true"
-     name="group_parcel_list"
-     width="313">
-        <scroll_list.columns
-         label="Parcel"
-         name="name"
-         relative_width="0.2" />
-        <scroll_list.columns
-         label="Region"
-         name="location"
-         relative_width="0.2" />
-        <scroll_list.columns
-         label="Type"
-         name="type"
-         relative_width="0.2" />
-        <scroll_list.columns
-         label="Area"
-         name="area"
-         relative_width="0.2" />
-        <scroll_list.columns
-         label="Hidden"
-         name="hidden"
-         relative_width="0.2" />
-    </scroll_list>
-    <button
-     right="-4"
-     width="60"
-     top_pad="2"
-     height="23"
-     label="Map"
-     label_selected="Map"
-     name="map_button"
-     enabled="false"
-     follows="top|right"
-     layout="topleft" />
-
-    <text
-     type="string"
-     follows="left|top"
-     halign="right"
-     height="16"
-     layout="topleft"
-     left="0"
-     name="total_land_in_use_label"
-     top_pad="-23"
-     width="110">
-        Total land in use:
-    </text>
-    <text
-    text_color="EmphasisColor"
-     type="string"
-     follows="left|top"
-     height="16"
-     layout="topleft"
-     left_pad="5"
-     name="total_land_in_use_value"
-     top_delta="0"
-     width="80">
-        [AREA] m²
-    </text>
-    <text
-     type="string"
-     follows="left|top"
-     halign="right"
-     height="16"
-     layout="topleft"
-     left="0"
-     top_pad="2"
-     name="land_available_label"
-     width="110">
-        Land available:
-    </text>Nivi Snowpaw
-    <text
-    text_color="EmphasisColor"
-     type="string"
-     follows="left|top"
-     height="16"
-     layout="topleft"
-     left_pad="5"
-     name="land_available_value"
-     top_delta="0"
-     width="80">
-        [AREA] m²
-    </text>
-    <text
-     type="string"
-     follows="left|top"
-     halign="right"
-     height="16"
-     layout="topleft"
-     left="0"
-     top_pad="2"
-     name="total_contributed_land_label"
-     width="110">
-        Total contribution:
-    </text>
-    <text
-    text_color="EmphasisColor"
-     type="string"
-     follows="left|top"
-     height="16"
-     layout="topleft"
-     left_pad="5"
-     name="total_contributed_land_value"
-     top_delta="0"
-     width="80">
-        [AREA] m²
-    </text>
-    <text
-     type="string"
-     follows="left|top"
-     halign="right"
-     height="16"
-     layout="topleft"
-     left="0"
-     top_pad="2"
-     name="your_contribution_label"
-     width="110">
-        Your contribution:
-    </text>
-    <line_editor
-     follows="left|top"
-     height="19"
-     layout="topleft"
-     left_pad="5"
-     name="your_contribution_line_editor"
-     top_delta="0"
-     width="80" />
-    <text
-     type="string"
-     follows="left|top"
-     height="16"
-     layout="topleft"
-     left_pad="3"
-     name="your_contribution_units"
-     top_delta="2"
-     width="40"
-      >
-        m²
-    </text>
-     <text
-     type="string"
-     follows="left|top"
-     halign="left"
-     height="16"
-     layout="topleft"
-     name="your_contribution_max_value"
-     top_pad="2"
-     left_pad="-120"
-     width="110">
-        ([AMOUNT] max)
-    </text>
-    <text
-     type="string"
-     follows="left|top"
-     font="SansSerifBig"
-     height="16"
-     layout="topleft"
-     left="0"
-     name="group_money_heading"
-     text_color="EmphasisColor"
-     top_pad="0"
-     width="100">
-        Group L$
-    </text>
-    <icon
-     height="16"
-     image_name="Parcel_Exp_Color"
-     layout="topleft"
-     left="75"
-     name="group_over_limit_icon"
-     color="Green"
-     left_pad="4"
-     visible="true"
-     width="18" />
-    <text
-     follows="left|top"
-     type="string"
-     word_wrap="true"
-     height="16"
-     layout="topleft"
-     left_pad="2"
-     name="group_over_limit_text"
-     text_color="ColorPaletteEntry29"
-     top_delta="0"
-     width="313">
-        More land credits are needed to support land in use
-    </text>
-
-    <tab_container
-     follows="all"
-     height="152"
-     halign="center"
-     layout="topleft"
-     left="0"
-     right="-1"
-     name="group_money_tab_container"
-     tab_position="top"
-     top_pad="2"
-     width="313">
-
-<!-- PLANNING panel -->
-
-        <panel
-         border="false"
-         follows="all"
-         label="PLANNING"
-         layout="topleft"
-         left="0"
-         help_topic="group_money_planning_tab"
-         name="group_money_planning_tab"
-         top="0"
-         width="313">
-            <text_editor
-             enabled="false"
-             type="string"
-             follows="all"
-             layout="topleft"
-             left="0"
-             max_length="4096"
-             name="group_money_planning_text"
-             top="2"
-             bottom="-1"
-             width="313"
-             word_wrap="true">
-                Loading...
-            </text_editor>
-        </panel>
-
-<!-- DETAILS panel -->
-
-        <panel
-         border="false"
-         follows="all"
-         label="DETAILS"
-         layout="topleft"
-         left="0"
-         help_topic="group_money_details_tab"
-         name="group_money_details_tab"
-         top="0"
-         width="313">
-        <text_editor
-         enabled="false"
-         type="string"
-         follows="all"
-         bottom="-1"
-         layout="topleft"
-         left="0"
-         max_length="4096"
-         name="group_money_details_text"
-         top="2"
-         width="313"
-         word_wrap="true">
-         Loading...
-        </text_editor>
-        <button
-         follows="bottom|right"
-         height="18"
-         image_overlay="Arrow_Left_Off"
-         layout="topleft"
-         name="earlier_details_button"
-         tool_tip="Back"
-         right="-25"
-         bottom="-1"
-         width="25" />
-        <button
-         follows="bottom|right"
-         height="18"
-         image_overlay="Arrow_Right_Off"
-         layout="topleft"
-         name="later_details_button"
-         tool_tip="Next"
-         left_pad="0"
-         width="25" />
-        </panel>
-
-<!-- SALES panel -->
-
-        <panel
-         border="false"
-         follows="all"
-         label="SALES"
-         layout="topleft"
-         left="0"
-         help_topic="group_money_sales_tab"
-         name="group_money_sales_tab"
-         top="0"
-         width="313">
-        <text_editor
-         enabled="false"
-         type="string"
-         follows="all"
-         bottom="-1"
-         layout="topleft"
-         left="0"
-         max_length="4096"
-         name="group_money_sales_text"
-         top="2"
-         width="313"
-         word_wrap="true">
-         Loading...
-        </text_editor>
-        <button
-         follows="bottom|right"
-         height="18"
-         image_overlay="Arrow_Left_Off"
-         layout="topleft"
-         name="earlier_sales_button"
-         tool_tip="Back"
-         right="-25"
-         bottom="-1"
-         width="25" />
-        <button
-         follows="bottom|right"
-         height="18"
-         image_overlay="Arrow_Right_Off"
-         layout="topleft"
-         name="later_sales_button"
-         tool_tip="Next"
-         left_pad="0"
-         width="25" />
-        </panel>
-    </tab_container>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Земля и L$" name="land_money_tab">
+	<panel.string name="help_text">
+		Если общее количество использованной земли не превышает общий взнос, отобразится предупреждение.
+	</panel.string>
+	<panel.string name="cant_view_group_land_text">
+		У вас нет прав для просмотра принадлежащей группе земли
+	</panel.string>
+	<panel.string name="epmty_view_group_land_text">
+		Нет данных
+	</panel.string>
+	<panel.string name="cant_view_group_accounting_text">
+		У вас нет прав для просмотра информации о счетах группы.
+	</panel.string>
+	<panel.string name="loading_txt">
+		Загрузка...
+	</panel.string>
+	<panel.string name="land_contrib_error">
+		Не удается задать ваш земельный взнос
+	</panel.string>
+	<panel name="layout_panel_landmoney">
+		<scroll_list name="group_parcel_list">
+			<scroll_list.columns label="Участок" name="name"/>
+			<scroll_list.columns label="Регион" name="location"/>
+			<scroll_list.columns label="Тип" name="type"/>
+			<scroll_list.columns label="Площадь" name="area"/>
+			<scroll_list.columns label="Скрыто" name="hidden"/>
+		</scroll_list>
+		<text name="total_contributed_land_label">
+			Общий взнос:
+		</text>
+		<text name="total_contributed_land_value">
+			[AREA] м²
+		</text>
+		<button label="Карта" label_selected="Карта" name="map_button"/>
+		<text name="total_land_in_use_label">
+			Всего используется земли:
+		</text>
+		<text name="total_land_in_use_value">
+			[AREA] м²
+		</text>
+		<text name="land_available_label">
+			Доступно земли:
+		</text>
+		<text name="land_available_value">
+			[AREA] м²
+		</text>
+		<text name="your_contribution_label">
+			Ваш взнос:
+		</text>
+		<text name="your_contribution_units">
+			м²
+		</text>
+		<text name="your_contribution_max_value">
+			(максимум: [AMOUNT])
+		</text>
+		<text name="group_over_limit_text">
+			Для эффективного использования земли нужно больше земельных кредитов
+		</text>
+		<text name="group_money_heading">
+			Группы L$
+		</text>
+	</panel>
+	<tab_container name="group_money_tab_container">
+		<panel label="ПЛАНИРОВАНИЕ" name="group_money_planning_tab">
+			<text_editor name="group_money_planning_text">
+				Загрузка...
+			</text_editor>
+		</panel>
+		<panel label="ДАННЫЕ" name="group_money_details_tab">
+			<text_editor name="group_money_details_text">
+				Загрузка...
+			</text_editor>
+			<button name="earlier_details_button" tool_tip="Назад"/>
+			<button name="later_details_button" tool_tip="Далее"/>
+		</panel>
+		<panel label="ПРОДАЖИ" name="group_money_sales_tab">
+			<text_editor name="group_money_sales_text">
+				Загрузка...
+			</text_editor>
+			<button name="earlier_sales_button" tool_tip="Назад"/>
+			<button name="later_sales_button" tool_tip="Далее"/>
+		</panel>
+	</tab_container>
 </panel>

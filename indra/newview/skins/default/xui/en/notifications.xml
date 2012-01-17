@@ -2475,6 +2475,7 @@ Would you be my friend?
    type="alertmodal">
 Are you sure you want to remove [NAME] from your Friends List?
     <tag>friendship</tag>
+Do you want to remove &lt;nolink&gt;[NAME]&lt;/nolink&gt; from your Friends List?
     <tag>confirm</tag>
     <usetemplate
      name="okcancelbuttons"
@@ -3515,7 +3516,7 @@ Are you sure you want to return the selected objects to their owners? Transferab
    icon="alert.tga"
    name="GroupLeaveConfirmMember"
    type="alert">
-You are currently a member of the group [GROUP].
+You are currently a member of the group &lt;nolink&gt;[GROUP]&lt;/nolink&gt;.
 Leave Group?
     <tag>group</tag>
     <tag>confirm</tag>
@@ -4825,6 +4826,34 @@ Are you sure you want to quit?
 
   <notification
    icon="alertmodal.tga"
+   name="ConfirmRestoreToybox"
+   type="alertmodal">
+    <unique/>
+This action will restore your default buttons and toolbars.
+
+You cannot undo this action.
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="ConfirmClearAllToybox"
+   type="alertmodal">
+    <unique/>
+This action will return all buttons to the toolbox and your toolbars will be empty.
+    
+You cannot undo this action.
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="DeleteItems"
    type="alertmodal">
     <unique/>
@@ -5477,6 +5506,7 @@ Topic: [SUBJECT], Message: [MESSAGE]
    type="notifytip">
 [NAME] is online.
     <tag>friendship</tag>
+&lt;nolink&gt;[NAME]&lt;/nolink&gt; is Online
   </notification>
 
   <notification
@@ -5485,6 +5515,7 @@ Topic: [SUBJECT], Message: [MESSAGE]
    type="notifytip">
 [NAME] is offline.
     <tag>friendship</tag>
+&lt;nolink&gt;[NAME]&lt;/nolink&gt; is Offline
   </notification>
 
   <notification
@@ -5493,6 +5524,7 @@ Topic: [SUBJECT], Message: [MESSAGE]
    type="notifytip">
 You cannot add yourself as a friend.
     <tag>friendship</tag>
+Although you&apos;re very nice, you can&apos;t add yourself as a friend.
   </notification>
 
   <notification
@@ -5769,21 +5801,23 @@ Your calling card was declined.
   </notification>
 
   <notification
-   icon="notifytip.tga"
-   name="TeleportToLandmark"
-   type="notifytip">
-You can teleport to locations like &apos;[NAME]&apos; by opening the Places panel on the right side of your screen, and then select the Landmarks tab.
-Click on any landmark to select it, then click &apos;Teleport&apos; at the bottom of the panel.
-(You can also double-click on the landmark, or right-click it and choose &apos;Teleport&apos;.)
+ icon="notifytip.tga"
+ name="TeleportToLandmark"
+ type="notifytip">
+    To teleport to locations like &apos;[NAME]&apos;, click on the &quot;Places&quot; button,
+    then select the Landmarks tab in the window that opens. Click on any
+    landmark to select it, then click &apos;Teleport&apos; at the bottom of the window.
+    (You can also double-click on the landmark, or right-click it and
+    choose &apos;Teleport&apos;.)
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="TeleportToPerson"
    type="notifytip">
-You can contact residents like &apos;[NAME]&apos; by opening the People panel on the right side of your screen.
-Select the resident from the list, then click &apos;IM&apos; at the bottom of the panel.
-(You can also double-click on their name in the list, or right-click and choose &apos;IM&apos;).
+    To contact Residents like &apos;[NAME]&apos;, click on the &quot;People&quot; button , select a Resident from the window that opens, then click &apos;IM&apos; at the
+    bottom of the window.
+    (You can also double-click on their name in the list, or right-click and choose &apos;IM&apos;).
   </notification>
 
   <notification
@@ -5831,6 +5865,15 @@ Please select at least one type of content to search (General, Moderate, or Adul
   <notification
    icon="notify.tga"
    name="PaymentSent"
+   persist="true"
+   type="notify">
+    <tag>funds</tag>
+[MESSAGE]
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="PaymentFailure"
    persist="true"
    type="notify">
     <tag>funds</tag>
@@ -6497,7 +6540,7 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
    name="FriendshipAccepted"
    type="offer">
     <tag>friendship</tag>
-[NAME] accepted your friendship offer.
+&lt;nolink&gt;[NAME]&lt;/nolink&gt; accepted your friendship offer.
   </notification>
 
   <notification
@@ -6506,7 +6549,7 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
    persist="true"
    type="notify">
     <tag>friendship</tag>
-[NAME] declined your friendship offer.
+&lt;nolink&gt;[NAME]&lt;/nolink&gt; declined your friendship offer.
   </notification>
   
     <notification
@@ -7331,6 +7374,26 @@ With the following residents:
      ignoretext="Confirm before I share an item"
      name="okcancelignore"
      notext="Cancel"
+     yestext="OK"/>
+  </notification>
+  
+  <notification
+   icon="notifytip.tga"
+   name="ShareFolderConfirmation"
+   type="alertmodal">
+Only one folder at a time can be shared.
+
+Are you sure you want to share the following items:
+
+&lt;nolink&gt;[ITEMS]&lt;/nolink&gt;
+
+With the following Residents:
+
+[RESIDENTS]
+  <tag>confirm</tag>
+	<usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
      yestext="Ok"/>
   </notification>
   
@@ -7555,7 +7618,7 @@ Mute everyone?
     <usetemplate
      ignoretext="Confirm before I mute all participants in a group call"
      name="okcancelignore"
-     yestext="Ok"
+     yestext="OK"
      notext="Cancel">
       <unique/>
     </usetemplate>
@@ -7852,20 +7915,7 @@ You must authenticate [APP_NAME] before you can upload images to Flickr. Please 
 </notification>
 
   <notification
-	name="ModeChange"
-	label=""
-	type="alertmodal">
-    <unique/>
-Changing modes requires you to quit and restart.
-    <tag>confirm</tag>
-    <usetemplate
-   name="okcancelbuttons"
-   yestext="Quit"
-   notext="Don't Quit"/>
-    </notification>
 
-
-  <notification
  name="NoClassifieds"
  label=""
  type="alertmodal">
@@ -8073,6 +8123,20 @@ Failed dismally to upload "[TITLE]" to Flickr. Dunno why.
    notext="Don't Quit"/>
   </notification>
 
+  <notification
+    name="ConfirmHideUI"
+    label=""
+    type="alertmodal">
+    <unique/>
+    <tag>confirm</tag>
+    This action will hide all menu items and buttons. To get them back, click [SHORTCUT] again.
+    <usetemplate
+      name="okcancelignore"
+      yestext="OK"
+      notext="Cancel"
+      ignoretext="Confirm before hiding UI"/>
+  </notification>
+  
   <global name="UnsupportedGLRequirements">
 You do not appear to have the proper hardware requirements for [APP_NAME]. [APP_NAME] requires an OpenGL graphics card that has multitexture support. If this is the case, you may want to make sure that you have the latest drivers for your graphics card, and service packs and patches for your operating system.
 

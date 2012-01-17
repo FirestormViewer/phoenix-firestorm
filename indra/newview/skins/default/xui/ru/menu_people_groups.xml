@@ -1,57 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<menu name="menu_group_plus"
- left="0" bottom="0" visible="false"
- mouse_opaque="false" opaque="true" color="MenuDefaultBgColor">
-  <menu_item_call
-   label="Просмотр информации"
-   name="View Info">
-    <menu_item_call.on_click
-     function="People.Groups.Action"
-     parameter="view_info" />
-    <menu_item_call.on_enable
-     function="People.Groups.Enable"
-     parameter="view_info" />
-  </menu_item_call>
-  <menu_item_call
-   label="Чат"
-   name="Chat">
-    <menu_item_call.on_click
-     function="People.Groups.Action"
-     parameter="chat" />
-    <menu_item_call.on_enable
-     function="People.Groups.Enable"
-     parameter="chat" />
-  </menu_item_call>
-  <menu_item_call
-   label="Позвонить"
-   name="Call">
-    <menu_item_call.on_click
-     function="People.Groups.Action"
-     parameter="call" />
-    <menu_item_call.on_enable
-     function="People.Groups.Enable"
-     parameter="call" />
-  </menu_item_call>
-  <menu_item_separator />
-  <menu_item_call
-   label="Активировать"
-   name="Activate">
-    <menu_item_call.on_click
-     function="People.Groups.Action"
-     parameter="activate" />
-    <menu_item_call.on_enable
-     function="People.Groups.Enable"
-     parameter="activate" />
-  </menu_item_call>
-  <menu_item_separator />
-  <menu_item_call
-   label="Покинуть"
-   name="Leave">
-    <menu_item_call.on_click
-     function="People.Groups.Action"
-     parameter="leave" />
-    <menu_item_call.on_enable
-     function="People.Groups.Enable"
-     parameter="leave" />
-  </menu_item_call>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu name="menu_group_plus">
+	<menu_item_call label="Информация" name="View Info"/>
+	<menu_item_call label="Чат" name="Chat"/>
+	<menu_item_call label="Звонок" name="Call"/>
+	<menu_item_call label="Активация" name="Activate"/>
+	<menu_item_call label="Покинуть" name="Leave"/>
 </menu>

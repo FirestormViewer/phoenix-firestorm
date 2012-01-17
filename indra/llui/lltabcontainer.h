@@ -116,6 +116,11 @@ public:
 		Optional<bool>						use_custom_icon_ctrl;
 
 		/**
+		 * Open tabs on hover in drag and drop situations
+		 */
+		Optional<bool>						open_tabs_on_drag_and_drop;
+		
+		/**
 		 *  Paddings for LLIconCtrl in case of LLCustomButtonIconCtrl usage(use_custom_icon_ctrl = true)
 		 */
 		Optional<S32>						tab_icon_ctrl_pad;
@@ -316,6 +321,7 @@ private:
 	TabParams						mLastTabParams;
 
 	bool							mCustomIconCtrlUsed;
+	bool							mOpenTabsOnDragAndDrop;
 	S32								mTabIconCtrlPad;
 	bool							mUseTabEllipses;
 };

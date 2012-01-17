@@ -1,103 +1,18 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- can_minimize="false"
- can_close="false" 
- height="300"
- layout="topleft"
- name="Display Name"
- help_topic="display_name"
- save_rect="false"
- title="Изменить отображаемое имя" 
- width="445">
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     font="SansSerif"
-     height="40"
-     layout="topleft"
-     left="25"
-     name="info_text"
-     top="40"
-     use_ellipses="true"
-     width="380"
-     wrap="true">
-      Имя, которое вы дадите аватару, называется отображаемое имя. Вы можете изменить его один раз в неделю
-    </text>
-	<text
-     type="string"
-     length="1"
-     follows="left|top"
-     font="SansSerif"
-     height="25"
-     layout="topleft"
-     left="25"
-	 text_color="EmphasisColor" 
-     name="lockout_text"
-     top="80"
-     use_ellipses="true"
-	 visible="false" 
-     width="410"
-     wrap="true">
-		Вы не можете изменить свое отображаемое имя, пока: [TIME].
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Display Name" title="СМЕНА ЭКРАННОГО ИМЕНИ">
+	<text name="info_text">
+		Имя, которое вы даете аватару, называется экранным именем. Вы можете менять его раз в неделю.
 	</text>
-    <text
-      top_pad="10"
-      width="150"
-      height="20"
-      font="SansSerif"
-      name="set_name_label">
-      Новое имя:
-    </text>
-    <line_editor
-      width="330"
-      name="display_name_editor"
-      max_length_chars="31"
-      height="20"
-      top_pad="5"
-      left="50" />
-	<text
-       top_pad="15"
-       left="25"
-       width="300"
-       height="20"
-      font="SansSerif"
-    name="set_name_label">
-      Введите новое имя еще раз для подтверждения:
-    </text>
-    <line_editor
-      width="330"
-      name="display_name_confirm"
-      max_length_chars="31"
-      height="20"
-      top_pad="5"
-      left="50" />
-    <button
-     height="23"
-     label="Сохранить"
-     layout="topleft"
-     font="SansSerif"
-     left="35"
-     name="save_btn"
-     tool_tip="Сохранить ваше отображаемое имя" 
-     top_pad="40"
-     width="120" />
-    <button
-     height="23"
-     label="Сброс"
-     layout="topleft"
-     font="SansSerif"
-     left_pad="5"
-     name="reset_btn"
-     tool_tip="Сделать ваше отображайщее имя как ваше имя мользователя"
-     width="120" />
-    <button
-     height="23"
-     label="Отмена"
-     font="SansSerif"
-     layout="topleft"
-     left_pad="5"
-     name="cancel_btn"
-     width="120" />
+	<text name="lockout_text">
+		Вы не можете менять экранное имя до: [TIME].
+	</text>
+	<text name="set_name_label">
+		Новое экранное имя:
+	</text>
+	<text name="name_confirm_label">
+		Наберите новое имя еще раз для подтверждения:
+	</text>
+	<button label="Сохранить" name="save_btn" tool_tip="Сохранить ваше новое экранное имя"/>
+	<button label="Сброс" name="reset_btn" tool_tip="Сменить экранное имя на имя пользователя"/>
+	<button label="Отмена" name="cancel_btn"/>
 </floater>

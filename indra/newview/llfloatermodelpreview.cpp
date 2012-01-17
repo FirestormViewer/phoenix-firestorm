@@ -26,6 +26,10 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#if LL_MSVC
+#pragma warning (disable : 4263)
+#pragma warning (disable : 4264)
+#endif
 #include "dae.h"
 //#include "dom.h"
 #include "dom/domAsset.h"
@@ -47,6 +51,10 @@
 #include "dom/domScale.h"
 #include "dom/domTranslate.h"
 #include "dom/domVisual_scene.h"
+#if LL_MSVC
+#pragma warning (default : 4263)
+#pragma warning (default : 4264)
+#endif
 
 #include "llfloatermodelpreview.h"
 
@@ -103,6 +111,7 @@
 #include "llviewerobjectlist.h"
 #include "llanimationstates.h"
 #include "llviewernetwork.h"
+#include "llviewershadermgr.h"
 #include "glod/glod.h"
 #include <boost/algorithm/string.hpp>
 // <AW: opensim-limits>
@@ -502,6 +511,11 @@ BOOL LLFloaterModelPreview::postBuild()
 	//{
 	//	validate_url = "http://secondlife.com/my/account/mesh.php";
 	//}
+	//else if (current_grid == "damballah")
+	//{
+	//	// Staging grid has its own naming scheme.
+	//	validate_url = "http://secondlife-staging.com/my/account/mesh.php";
+	//}
 	//else
 	//{
 	//	validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php",current_grid.c_str());
@@ -777,6 +791,11 @@ void LLFloaterModelPreview::draw()
 
 	if (!mModelPreview->mLoading)
 	{
+		if ( mModelPreview->getLoadState() == LLModelLoader::ERROR_MATERIALS )
+		{
+			childSetTextArg("status", "[STATUS]", getString("status_material_mismatch"));
+		}
+		else
 		if ( mModelPreview->getLoadState() > LLModelLoader::ERROR_PARSING )
 		{		
 			childSetTextArg("status", "[STATUS]", getString(LLModel::getStatusString(mModelPreview->getLoadState() - LLModelLoader::ERROR_PARSING)));
@@ -1028,38 +1047,38 @@ void LLFloaterModelPreview::onPhysicsBrowse(LLUICtrl* ctrl, void* userdata)
 //static
 void LLFloaterModelPreview::onPhysicsUseLOD(LLUICtrl* ctrl, void* userdata)
 {
-	S32 num_modes = 4;
-	S32 which_mode = 3;
-	static S32 previous_mode = which_mode;
+	S32 num_lods = 4;
+	S32 which_mode;
 
 	LLCtrlSelectionInterface* iface = sInstance->childGetSelectionInterface("physics_lod_combo");
 	if (iface)
 	{
 		which_mode = iface->getFirstSelectedIndex();
 	}
+	else
+	{
+		llwarns << "no iface" << llendl;
+		return;
+	}
+
+	if (which_mode <= 0)
+	{
+		llwarns << "which_mode out of range, " << which_mode << llendl;
+	}
 
 	S32 file_mode = iface->getItemCount() - 1;
-	bool file_browse = which_mode == file_mode;
-	bool lod_to_file = file_browse && (previous_mode != file_mode);
-	bool file_to_lod = !file_browse && (previous_mode == file_mode);
-
-	if (!lod_to_file)
+	if (which_mode < file_mode)
 	{
-		which_mode = num_modes - which_mode;
-		sInstance->mModelPreview->setPhysicsFromLOD(which_mode);
+		S32 which_lod = num_lods - which_mode;
+		sInstance->mModelPreview->setPhysicsFromLOD(which_lod);
 	}
 
-	if (lod_to_file || file_to_lod)
+	LLModelPreview *model_preview = sInstance->mModelPreview;
+	if (model_preview)
 	{
-		LLModelPreview *model_preview = sInstance->mModelPreview;
-		if (model_preview)
-		{
-			model_preview->refresh();
-			model_preview->updateStatusMessages();
-		}
+		model_preview->refresh();
+		model_preview->updateStatusMessages();
 	}
-
-	previous_mode = which_mode;
 }
 
 //static 
@@ -3354,6 +3373,7 @@ void LLModelPreview::rebuildUploadData()
 				
 				if ( !mModel[i][j]->matchMaterialOrder(mBaseModel[j], refFaceCnt, modelFaceCnt ) )
 				{
+					setLoadState( LLModelLoader::ERROR_MATERIALS );
 					mFMP->childDisable( "calculate_btn" );
 				}
 			}
@@ -3882,6 +3902,15 @@ void LLModelPreview::genLODs(S32 which_lod, U32 decimation, bool enforce_tri_lim
 
 	LLVertexBuffer::unbind();
 
+	bool no_ff = LLGLSLShader::sNoFixedFunction;
+	LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
+	LLGLSLShader::sNoFixedFunction = false;
+
+	if (shader)
+	{
+		shader->unbind();
+	}
+	
 	stop_gloderror();
 	static U32 cur_name = 1;
 
@@ -4180,6 +4209,13 @@ void LLModelPreview::genLODs(S32 which_lod, U32 decimation, bool enforce_tri_lim
 
 	mResourceCost = calcResourceCost();
 
+	LLVertexBuffer::unbind();
+	LLGLSLShader::sNoFixedFunction = no_ff;
+	if (shader)
+	{
+		shader->bind();
+	}
+
 	/*if (which_lod == -1 && mScene[LLModel::LOD_PHYSICS].empty())
 	 { //build physics scene
 	 mScene[LLModel::LOD_PHYSICS] = mScene[LLModel::LOD_LOW];
@@ -4393,11 +4429,6 @@ void LLModelPreview::updateStatusMessages()
 		{
 			skinAndRigOk = false;
 		}	
-		else
-		if ( !isLegacyRigValid() )
-		{
-			mFMP->childDisable("calculate_btn");
-		}
 	}
 	
 	if(upload_ok && mModelLoader)
@@ -4930,6 +4961,8 @@ BOOL LLModelPreview::render()
 	LLMutexLock lock(this);
 	mNeedsUpdate = FALSE;
 
+	bool use_shaders = LLGLSLShader::sNoFixedFunction;
+
 	bool edges = mViewOption["show_edges"];
 	bool joint_positions = mViewOption["show_joint_positions"];
 	bool skin_weight = mViewOption["show_skin_weight"];
@@ -4946,25 +4979,33 @@ BOOL LLModelPreview::render()
 	LLGLDisable fog(GL_FOG);
 
 	{
+		if (use_shaders)
+		{
+			gUIProgram.bind();
+		}
 		//clear background to blue
-		glMatrixMode(GL_PROJECTION);
+		gGL.matrixMode(LLRender::MM_PROJECTION);
 		gGL.pushMatrix();
-		glLoadIdentity();
-		glOrtho(0.0f, width, 0.0f, height, -1.0f, 1.0f);
+		gGL.loadIdentity();
+		gGL.ortho(0.0f, width, 0.0f, height, -1.0f, 1.0f);
 
-		glMatrixMode(GL_MODELVIEW);
+		gGL.matrixMode(LLRender::MM_MODELVIEW);
 		gGL.pushMatrix();
-		glLoadIdentity();
+		gGL.loadIdentity();
 
 		gGL.color4f(0.169f, 0.169f, 0.169f, 1.f);
 
 		gl_rect_2d_simple( width, height );
 
-		glMatrixMode(GL_PROJECTION);
+		gGL.matrixMode(LLRender::MM_PROJECTION);
 		gGL.popMatrix();
 
-		glMatrixMode(GL_MODELVIEW);
+		gGL.matrixMode(LLRender::MM_MODELVIEW);
 		gGL.popMatrix();
+		if (use_shaders)
+		{
+			gUIProgram.unbind();
+		}
 	}
 
 	LLFloaterModelPreview* fmp = LLFloaterModelPreview::sInstance;
@@ -5077,7 +5118,7 @@ BOOL LLModelPreview::render()
 		refresh();
 	}
 
-	glLoadIdentity();
+	gGL.loadIdentity();
 	gPipeline.enableLightsPreview();
 
 	LLQuaternion camera_rot = LLQuaternion(mCameraPitch, LLVector3::y_axis) *
@@ -5102,6 +5143,11 @@ BOOL LLModelPreview::render()
 
 	const U32 type_mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_TEXCOORD0;
 
+	if (use_shaders)
+	{
+		gObjectPreviewProgram.bind();
+	}
+
 	LLGLEnable normalize(GL_NORMALIZE);
 
 	if (!mBaseModel.empty() && mVertexBuffer[5].empty())
@@ -5113,6 +5159,8 @@ BOOL LLModelPreview::render()
 
 	if (!mModel[mPreviewLOD].empty())
 	{
+		mFMP->childEnable("reset_btn");
+
 		bool regen = mVertexBuffer[mPreviewLOD].empty();
 		if (!regen)
 		{
@@ -5163,7 +5211,7 @@ BOOL LLModelPreview::render()
 				gGL.pushMatrix();
 				LLMatrix4 mat = instance.mTransform;
 
-				glMultMatrixf((GLfloat*) mat.mMatrix);
+				gGL.multMatrix((GLfloat*) mat.mMatrix);
 
 				for (U32 i = 0; i < mVertexBuffer[mPreviewLOD][model].size(); ++i)
 				{
@@ -5179,7 +5227,8 @@ BOOL LLModelPreview::render()
 							const std::string& binding = instance.mModel->mMaterialList[i];						
 							const LLImportMaterial& material = instance.mMaterial[binding];
 
-							glColor4fv(material.mDiffuseColor.mV);
+							gGL.diffuseColor4fv(material.mDiffuseColor.mV);
+
 							if (material.mDiffuseMap.notNull())
 							{
 								if (material.mDiffuseMap->getDiscardLevel() > -1)
@@ -5192,12 +5241,12 @@ BOOL LLModelPreview::render()
 					}
 					else
 					{
-						glColor4f(1,1,1,1);
+						gGL.diffuseColor4f(1,1,1,1);
 					}
 
 					buffer->drawRange(LLRender::TRIANGLES, 0, buffer->getNumVerts()-1, buffer->getNumIndices(), 0);
 					gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-					glColor3f(0.4f, 0.4f, 0.4f);
+					gGL.diffuseColor3f(0.4f, 0.4f, 0.4f);
 
 					if (edges)
 					{
@@ -5245,7 +5294,7 @@ BOOL LLModelPreview::render()
 						gGL.pushMatrix();
 						LLMatrix4 mat = instance.mTransform;
 
-						glMultMatrixf((GLfloat*) mat.mMatrix);
+						gGL.multMatrix((GLfloat*) mat.mMatrix);
 
 
 						bool render_mesh = true;
@@ -5310,12 +5359,12 @@ BOOL LLModelPreview::render()
 								LLVertexBuffer* buffer = mVertexBuffer[LLModel::LOD_PHYSICS][model][i];
 
 								gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-								glColor4f(0.4f, 0.4f, 0.0f, 0.4f);
+								gGL.diffuseColor4f(0.4f, 0.4f, 0.0f, 0.4f);
 
 								buffer->setBuffer(type_mask & buffer->getTypeMask());
 								buffer->drawRange(LLRender::TRIANGLES, 0, buffer->getNumVerts()-1, buffer->getNumIndices(), 0);
 
-								glColor3f(1.f, 1.f, 0.f);
+								gGL.diffuseColor3f(1.f, 1.f, 0.f);
 
 								glLineWidth(2.f);
 								glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -5335,7 +5384,7 @@ BOOL LLModelPreview::render()
 					//show degenerate triangles
 					LLGLDepthTest depth(GL_TRUE, GL_TRUE, GL_ALWAYS);
 					LLGLDisable cull(GL_CULL_FACE);
-					glColor4f(1.f,0.f,0.f,1.f);
+					gGL.diffuseColor4f(1.f,0.f,0.f,1.f);
 					const LLVector4a scale(0.5f);
 
 					for (LLMeshUploadThread::instance_list::iterator iter = mUploadData.begin(); iter != mUploadData.end(); ++iter)
@@ -5352,7 +5401,7 @@ BOOL LLModelPreview::render()
 						gGL.pushMatrix();
 						LLMatrix4 mat = instance.mTransform;
 
-						glMultMatrixf((GLfloat*) mat.mMatrix);
+						gGL.multMatrix((GLfloat*) mat.mMatrix);
 
 
 						LLPhysicsDecomp* decomp = gMeshRepo.mDecompThread;
@@ -5418,7 +5467,16 @@ BOOL LLModelPreview::render()
 
 			if (joint_positions)
 			{
+				LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
+				if (shader)
+				{
+					gDebugProgram.bind();
+				}
 				getPreviewAvatar()->renderCollisionVolumes();
+				if (shader)
+				{
+					shader->bind();
+				}
 			}
 
 			for (LLModelLoader::scene::iterator iter = mScene[mPreviewLOD].begin(); iter != mScene[mPreviewLOD].end(); ++iter)
@@ -5457,7 +5515,7 @@ BOOL LLModelPreview::render()
 								}
 							}
 
-							for (U32 j = 0; j < buffer->getRequestedVerts(); ++j)
+							for (U32 j = 0; j < buffer->getNumVerts(); ++j)
 							{
 								LLMatrix4 final_mat;
 								final_mat.mMatrix[0][0] = final_mat.mMatrix[1][1] = final_mat.mMatrix[2][2] = final_mat.mMatrix[3][3] = 0.f;
@@ -5501,11 +5559,12 @@ BOOL LLModelPreview::render()
 
 							const std::string& binding = instance.mModel->mMaterialList[i];
 							const LLImportMaterial& material = instance.mMaterial[binding];
+
 							buffer->setBuffer(type_mask & buffer->getTypeMask());
-							glColor4fv(material.mDiffuseColor.mV);
+							gGL.diffuseColor4fv(material.mDiffuseColor.mV);
 							gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 							buffer->draw(LLRender::TRIANGLES, buffer->getNumIndices(), 0);
-							glColor3f(0.4f, 0.4f, 0.4f);
+							gGL.diffuseColor3f(0.4f, 0.4f, 0.4f);
 
 							if (edges)
 							{
@@ -5520,6 +5579,11 @@ BOOL LLModelPreview::render()
 				}
 			}
 		}
+	}
+
+	if (use_shaders)
+	{
+		gObjectPreviewProgram.unbind();
 	}
 
 	gGL.popMatrix();
@@ -5610,6 +5674,7 @@ void LLFloaterModelPreview::onReset(void* user_data)
 	assert_main_thread();
 
 	LLFloaterModelPreview* fmp = (LLFloaterModelPreview*) user_data;
+	fmp->childDisable("reset_btn");
 	LLModelPreview* mp = fmp->mModelPreview;
 	std::string filename = mp->mLODFile[3]; 
 

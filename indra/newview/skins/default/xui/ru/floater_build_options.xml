@@ -1,82 +1,33 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- follows="right"
- height="180"
- layout="topleft"
- name="build options floater"
- help_topic="build_options_floater"
- save_rect="true"
- title="Опции сетки"
- width="264">
-    <spinner
-     control_name="GridResolution"
-     follows="left|top"
-     height="23"
-     initial_value="1"
-     label="Еденицы сетки (метры)"
-     label_width="160"
-     layout="topleft"
-     left="10"
-     max_val="5"
-     min_val="0.01"
-     name="GridResolution"
-     top="25"
-     width="230" />
-    <spinner
-     control_name="GridDrawSize"
-     decimal_digits="1"
-     follows="left|top"
-     height="23"
-     increment="0.5"
-     initial_value="5"
-     label="Протяженность сетки (метры)"
-     label_width="160"
-     layout="topleft"
-     left_delta="0"
-     max_val="50"
-     min_val="1"
-     name="GridDrawSize"
-     top_pad="0"
-     width="230" />
-    <check_box
-     control_name="GridSubUnit"
-     height="16"
-     label="Привязать к подразделениям"
-     layout="topleft"
-     name="GridSubUnit"
-     top_pad="0"
-     width="200" />
-    <check_box
-     control_name="GridCrossSections"
-     height="16"
-     label="Посмотреть сечения"
-     layout="topleft"
-     name="GridCrossSection"
-     top_pad="5"
-     width="200" />
-   <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="16"
-         layout="topleft"
-         left="10"
-         tool_tip="Прозрачность сетки"
-         name="grid_opacity_label"
-         top_pad="5"
-         width="128">
-            Прозрачность:
-   </text>
-    <slider
-     control_name="GridOpacity"
-     follows="left"
-     height="18"
-     increment="0.05"
-     initial_value="0.7"
-     layout="topleft"
-     name="GridOpacity"
-     show_text="false"
-     top_pad="0"
-     width="210" />
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="build options floater" title="НАСТРОЙКИ СЕТКИ">
+	<floater.string name="grid_screen_text">
+		Экран
+	</floater.string>
+	<floater.string name="grid_local_text">
+		Локальная
+	</floater.string>
+	<floater.string name="grid_world_text">
+		Мир
+	</floater.string>
+	<floater.string name="grid_reference_text">
+		Точка отсчета
+	</floater.string>
+	<floater.string name="grid_attachment_text">
+		Присоединение
+	</floater.string>
+	<text name="grid_mode_label" tool_tip="Прозрачность сетки">
+		Режим
+	</text>
+	<combo_box name="combobox grid mode" tool_tip="Выберите тип линейки сетки для размещения объекта">
+		<combo_box.item label="Всемирная" name="World"/>
+		<combo_box.item label="Локальная сетка" name="Local"/>
+		<combo_box.item label="Координатная сетка" name="Reference"/>
+	</combo_box>
+	<spinner label="Единицы (метры)" name="GridResolution"/>
+	<spinner label="Пространство (метры)" name="GridDrawSize"/>
+	<check_box label="Привязывать к субъячейкам" name="GridSubUnit"/>
+	<check_box label="Показывать плоскость пересечения" name="GridCrossSection"/>
+	<text name="grid_opacity_label" tool_tip="Прозрачность сетки">
+		Прозрачность:
+	</text>
 </floater>

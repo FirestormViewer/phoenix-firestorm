@@ -97,13 +97,14 @@ private:
 	static std::vector<LLViewDrawContext*> sDrawContextStack;
 };
 
-class LLViewWidgetRegistry : public LLChildRegistry<LLViewWidgetRegistry>
-{};
-
-class LLView : public LLMouseHandler, public LLMortician, public LLFocusableElement
+class LLView 
+:	public LLMouseHandler,			// handles mouse events
+	public LLFocusableElement,		// handles keyboard events
+	public LLMortician,				// lazy deletion
+	public LLHandleProvider<LLView>	// passes out weak references to self
 {
 public:
-	struct Follows : public LLInitParam::Choice<Follows>
+	struct Follows : public LLInitParam::ChoiceBlock<Follows>
 	{
 		Alternative<std::string>	string;
 		Alternative<U32>			flags;
@@ -152,7 +153,8 @@ public:
 		Params();
 	};
 
-	typedef LLViewWidgetRegistry child_registry_t;
+	// most widgets are valid children of LLView
+	typedef LLDefaultChildRegistry child_registry_t;
 
 	void initFromParams(const LLView::Params&);
 
@@ -242,7 +244,7 @@ public:
 
 	ECursorType	getHoverCursor() { return mHoverCursor; }
 
-	const std::string& getToolTip() const			{ return mToolTipMsg.getString(); }
+	virtual const std::string getToolTip() const			{ return mToolTipMsg.getString(); }
 
 	void		sendChildToFront(LLView* child);
 	void		sendChildToBack(LLView* child);
@@ -307,8 +309,6 @@ public:
 	void			pushVisible(BOOL visible)	{ mLastVisible = mVisible; setVisible(visible); }
 	void			popVisible()				{ setVisible(mLastVisible); }
 	BOOL			getLastVisible()	const	{ return mLastVisible; }
-
-	LLHandle<LLView>	getHandle()				{ mHandle.bind(this); return mHandle; }
 
 	U32			getFollows() const				{ return mReshapeFlags; }
 	BOOL		followsLeft() const				{ return mReshapeFlags & FOLLOWS_LEFT; }
@@ -433,7 +433,7 @@ public:
 	/*virtual*/ BOOL	handleRightMouseUp(S32 x, S32 y, MASK mask);	
 	/*virtual*/ BOOL	handleToolTip(S32 x, S32 y, MASK mask);
 
-	/*virtual*/ const std::string&	getName() const;
+	/*virtual*/ const std::string& getName() const;
 	/*virtual*/ void	onMouseCaptureLost();
 	/*virtual*/ BOOL	hasMouseCapture();
 	/*virtual*/ void	screenPointToLocal(S32 screen_x, S32 screen_y, S32* local_x, S32* local_y) const;
@@ -472,6 +472,20 @@ public:
 		return dynamic_cast<T*>(widgetp);
 	}
 
+	template <class T> T* getParentByType() const
+	{
+		LLView* parent = getParent();
+		while(parent)
+		{
+			if (dynamic_cast<T*>(parent))
+			{
+				return static_cast<T*>(parent);
+			}
+			parent = parent->getParent();
+		}
+		return NULL;
+	}
+
 	//////////////////////////////////////////////
 	// statics
 	//////////////////////////////////////////////
@@ -487,7 +501,6 @@ public:
 	// return query for iterating over focus roots in tab order
 	static const LLCtrlQuery & getFocusRootsQuery();
 
-	static void deleteViewByHandle(LLHandle<LLView> handle);
 	static LLWindow*	getWindow(void) { return LLUI::sWindow; }
 
 	// Set up params after XML load before calling new(),
@@ -595,10 +608,11 @@ private:
 	BOOL		mIsFocusRoot;
 	BOOL		mUseBoundingRect; // hit test against bounding rectangle that includes all child elements
 
-	LLRootHandle<LLView> mHandle;
 	BOOL		mLastVisible;
 
 	S32			mNextInsertionOrdinal;
+
+	bool		mInDraw;
 
 	static LLWindow* sWindow;	// All root views must know about their window.
 

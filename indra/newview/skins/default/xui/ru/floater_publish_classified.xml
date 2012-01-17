@@ -1,61 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- can_minimize="false"
- height="200"
- layout="topleft"
- name="publish_classified"
- title="Публикация объявления"
- width="320">
-    <text
-     top="20"
-     follows="top|left"
-     font="SansSerif"
-     height="60"
-     layout="topleft"
-     left="15"
-     word_wrap="true"
-     name="explanation_text">
-     
-Ваше объявление будет работать в течение одной недели со дня опубликования.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="publish_classified" title="Публикация рекламы">
+	<text name="explanation_text">
+		Ваша реклама будет действительна в течение недели с момента публикации.
         
-Помните, сборы возврату не подлежат.
-
-    </text>
-    <spinner
-     decimal_digits="0"
-     follows="left|top"
-     font="SansSerif"
-     halign="left"
-     height="23"
-     increment="1"
-     label_width="50"
-     label="Цена: L$ "
-     v_pad="10"
-     layout="topleft"
-     left="15"
-     value="50"
-     min_val="50"
-     max_val="99999"
-     name="price_for_listing"
-     top_pad="10"
-     tool_tip="Цена для включения в перечень."
-     width="150" />
-    <button
-     follows="top|left"
-     height="22"
-     label="Публикация"
-     layout="topleft"
-     left="105"
-     name="publish_btn"
-     top="160"
-     width="100" />
-    <button
-     follows="top|left"
-     height="22"
-     label="Отмена"
-     layout="topleft"
-     left_pad="5"
-     name="cancel_btn"
-     width="100" />
+Помните, оплата за рекламу не возвращается.
+	</text>
+	<spinner label="Цена: L$" name="price_for_listing" tool_tip="Цена за размещение." value="50"/>
+	<button label="Опубликовать" name="publish_btn"/>
+	<button label="Отмена" name="cancel_btn"/>
 </floater>

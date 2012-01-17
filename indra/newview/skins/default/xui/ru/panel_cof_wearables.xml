@@ -1,81 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- background_visible="true"
- bg_alpha_color="DkGray"
- border="false"
- follows="all"
- height="200"
- left="0"
- name="cof_wearables"
- width="311">
-
-    <tab_container
-     name="wearable_accordion"
-     background_visible="true"
-     bg_alpha_color="DkGray2"
-     fit_parent="true"
-     layout="topleft"
-     follows="all"
-     halign="center"
-     tab_position="top"
-     tab_width="80"
-     top="0"
-     height="198"
-     width="311">
-
-        <panel
-         layout="topleft"
-         name="tab_clothing"
-         title="Одежда">
-            <flat_list_view
-             allow_select="true"
-             follows="all"
-             height="10"
-             item_pad="3"
-             keep_selection_visible_on_reshape="true"
-             layout="topleft"
-             left="0"
-             multi_select="true"
-             name="list_clothing"
-             top="0"
-             width="311" />
-        </panel>
-        <panel
-         layout="topleft"
-         name="tab_attachments"
-         title="Вложения">
-            <flat_list_view
-             allow_select="true"
-             follows="all"
-             height="10"
-             item_pad="3"
-             layout="topleft"
-             left="0"
-             keep_selection_visible_on_reshape="true"
-             multi_select="true"
-             name="list_attachments"
-             top="0"
-             width="311">
-              <flat_list_view.no_items_text
-               value="Нет одетых вложений" />
-              </flat_list_view>
-        </panel>
-        <panel
-         layout="topleft"
-         name="tab_body_parts"
-         title="Части тела">
-            <flat_list_view
-             allow_select="true"
-             follows="all"
-             height="10"
-             item_pad="3"
-             keep_selection_visible_on_reshape="true"
-             layout="topleft"
-             left="0"
-             multi_select="true"
-             name="list_body_parts"
-             top="0"
-             width="311" />
-        </panel>
-    </tab_container>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="cof_wearables">
+	<accordion name="cof_wearables_accordion">
+		<accordion_tab name="tab_clothing" title="Одежда"/>
+		<accordion_tab name="tab_attachments" title="Присоединения"/>
+		<accordion_tab name="tab_body_parts" title="Части тела"/>
+	</accordion>
 </panel>

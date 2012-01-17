@@ -1,109 +1,33 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- can_close="false"
- can_minimize="false"
- can_tear_off="false"
- height="125"
- layout="topleft"
- name="incoming call"
- help_topic="incoming_call"
- title="Входящий вызов"
- width="410">
-    <floater.string
-     name="lifetime">
-        5
-    </floater.string>
-    <floater.string
-     name="localchat">
-        Голосового чат рядом
-    </floater.string>
-    <floater.string
-     name="anonymous">
-        анонимный
-    </floater.string>
-    <floater.string
-     name="VoiceInviteP2P">
-        звонит.
-    </floater.string>
-    <floater.string
-     name="VoiceInviteAdHoc">
-        присоединился в голосовой чат.
-    </floater.string>
-    <floater.string
-     name="VoiceInviteGroup">
-      только что присоединился '[GROUP]' речевой канал.
-    </floater.string>
-    <floater.string
-     name="VoiceInviteQuestionGroup">
-      Хотите оставить [CURRENT_CHAT] и присоединиться к призыву с '[GROUP]'?
-    </floater.string>
-    <floater.string
-     name="VoiceInviteQuestionDefault">
-      Хотите оставить [CURRENT_CHAT] и присоединиться к этому голосовому чату?
-    </floater.string>
-    <avatar_icon
-     enabled="false"
-     follows="left|top"
-     height="36"
-     image_name="icon_avatar_online.tga"
-     layout="topleft"
-     left_delta="19"
-     top="35"
-     width="36" />
-    <group_icon
-     enabled="false"
-     follows="left|top"
-     height="36"
-     layout="topleft"
-     top="35"
-     width="36" />
-    <text
-     clip_partial="true"
-     font="SansSerifLarge"
-     height="37"
-     layout="topleft"
-     left="77"
-     name="caller name"
-     top="20"
-     use_ellipses="true"
-     width="315"
-     word_wrap="true" />
-    <text
-     clip_partial="true"
-     font="SansSerif"
-     height="30"
-     layout="topleft"
-     left="77"
-     name="question"
-     top_pad="5"
-     use_ellipses="true"
-     width="315"
-     word_wrap="true">
-     Хотите оставить [CURRENT_CHAT] и присоединиться к этому голосовому чат?
-    </text>
-    <button
-     height="24"
-     label="Принять"
-     label_selected="Принять"
-     layout="topleft"
-     left="70"
-     name="Accept"
-     top="92"
-     width="100" />
-    <button
-     height="24"
-     label="Отклонить"
-     label_selected="Отклонить"
-     layout="topleft"
-     name="Reject"
-     left_pad="10"
-     width="100" />
-    <button
-     height="24"
-     label="Начать ЛС"
-     layout="topleft"
-     name="Start IM"
-     left_pad="10"
-     width="100" />
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="incoming call" title="Входящий звонок">
+	<floater.string name="lifetime">
+		5
+	</floater.string>
+	<floater.string name="localchat">
+		Локальный голосовой чат
+	</floater.string>
+	<floater.string name="anonymous">
+		анонимно
+	</floater.string>
+	<floater.string name="VoiceInviteP2P">
+		вызывает.
+	</floater.string>
+	<floater.string name="VoiceInviteAdHoc">
+		теперь участвует в групповом голосовом чате.
+	</floater.string>
+	<floater.string name="VoiceInviteGroup">
+		присоединился (-лась) к голосовому каналу «[GROUP]».
+	</floater.string>
+	<floater.string name="VoiceInviteQuestionGroup">
+		Хотите выйти из чата «[CURRENT_CHAT]» и присоединиться к звонку «[GROUP]»?
+	</floater.string>
+	<floater.string name="VoiceInviteQuestionDefault">
+		Хотите выйти из чата «[CURRENT_CHAT]» и присоединиться к этому голосовому чату?
+	</floater.string>
+	<text name="question">
+		Хотите выйти из чата «[CURRENT_CHAT]» и присоединиться к этому голосовому чату?
+	</text>
+	<button label="Принять" label_selected="Принять" name="Accept"/>
+	<button label="Отклонить" label_selected="Отклонить" name="Reject"/>
+	<button label="Начать IM" name="Start IM"/>
 </floater>

@@ -39,6 +39,7 @@
 #include "llavataractions.h" 
 #include "llfloateropenobject.h"
 #include "llfloaterreg.h"
+#include "llfloatersidepanelcontainer.h"
 #include "llfloaterworldmap.h"
 #include "llfolderview.h"
 #include "llfriendcard.h"
@@ -59,7 +60,6 @@
 #include "llpreviewtexture.h"
 #include "llselectmgr.h"
 #include "llsidepanelappearance.h"
-#include "llsidetray.h"
 #include "lltrans.h"
 #include "llviewerassettype.h"
 #include "llviewerfoldertype.h"
@@ -1280,7 +1280,7 @@ void LLItemBridge::performAction(LLInventoryModel* model, std::string action)
 		std::string buffer;
 		asset_id.toString(buffer);
 
-		gViewerWindow->mWindow->copyTextToClipboard(utf8str_to_wstring(buffer));
+		gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(buffer));
 		return;
 	}
 	else if ("copy" == action)
@@ -2160,7 +2160,7 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 #endif
 				}
 			}
-			if (move_is_into_outbox && !move_is_from_outbox)
+			else if (move_is_into_outbox && !move_is_from_outbox)
 			{
 				dropFolderToOutbox(inv_cat);
 			}
@@ -3810,10 +3810,12 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 		// because they must contain only links to wearable items.
 		accept = !(move_is_into_current_outfit || move_is_into_outfit);
 
-		if(drop)
+		if(accept && drop)
 		{
-			copy_inventory_from_notecard(LLToolDragAndDrop::getInstance()->getObjectID(),
-										 LLToolDragAndDrop::getInstance()->getSourceID(), inv_item);
+			copy_inventory_from_notecard(mUUID,  // Drop to the chosen destination folder
+										 LLToolDragAndDrop::getInstance()->getObjectID(),
+										 LLToolDragAndDrop::getInstance()->getSourceID(),
+										 inv_item);
 		}
 	}
 	else if(LLToolDragAndDrop::SOURCE_LIBRARY == source)
@@ -4118,7 +4120,7 @@ void LLLandmarkBridge::performAction(LLInventoryModel* model, std::string action
 			key["type"] = "landmark";
 			key["id"] = item->getUUID();
 
-			LLSideTray::getInstance()->showPanel("panel_places", key);
+			LLFloaterSidePanelContainer::showPanel("places", key);
 		}
 	}
 	else
@@ -5104,7 +5106,7 @@ void remove_inventory_category_from_avatar( LLInventoryCategory* category )
 	if (gAgentCamera.cameraCustomizeAvatar())
 	{
 		// switching to outfit editor should automagically save any currently edited wearable
-		LLSideTray::getInstance()->showPanel("sidepanel_appearance", LLSD().with("type", "edit_outfit"));
+		LLFloaterSidePanelContainer::showPanel("appearance", LLSD().with("type", "edit_outfit"));
 	}
 
 	remove_inventory_category_from_avatar_step2(TRUE, category->getUUID() );

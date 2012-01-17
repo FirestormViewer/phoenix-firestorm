@@ -1,28 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- can_minimize="false"
- height="108"
- layout="topleft"
- name="whitelist_entry"
- single_instance="true"
- help_topic="whitelist_entry"
- title="Белый список"
- width="390">
-
-  <text type="string" length="1" bottom="20" follows="top|left" height="15" layout="topleft"
-     left="10" name="media_label" top="20">
-        Введите URL или URL шаблону, чтобы добавить к списку разрешенных областей
-    </text>
-
-  <line_editor bottom_delta="40" enabled="true" follows="left|top" font="SansSerif"
-	     height="20" left="10" name="whitelist_entry"
-	     tool_tip="Введите URL или URL по умолчанию для белого списка"
-	     width="350" />
-
-  <button follows="top|left" height="20" label="Ок"
-     layout="topleft" left="10" name="ok_btn" bottom_delta="28" width="64" />
-  
-  <button follows="top|left" height="20" label="Отмена"
-     layout="topleft" left_pad="5" name="cancel_btn" bottom_delta="0" width="64" />
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="whitelist_entry" title="БЕЛЫЙ СПИСОК">
+	<text name="media_label">
+		Введите URL-адрес или шаблон URL-адреса для добавления в список разрешенных доменов
+	</text>
+	<line_editor name="whitelist_entry" tool_tip="Введите URL-адрес или шаблон URL-адреса в белый список"/>
+	<button label="OK" name="ok_btn"/>
+	<button label="Отмена" name="cancel_btn"/>
 </floater>

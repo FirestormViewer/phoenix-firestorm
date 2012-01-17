@@ -27,7 +27,7 @@
 #ifndef LLFLOATERCAMERA_H
 #define LLFLOATERCAMERA_H
 
-#include "lltransientdockablefloater.h"
+#include "llfloater.h"
 #include "lliconctrl.h"
 #include "lltextbox.h"
 #include "llflatlistview.h"
@@ -45,8 +45,7 @@ enum ECameraControlMode
 	CAMERA_CTRL_MODE_PRESETS
 };
 
-class LLFloaterCamera
-	:	public LLTransientDockableFloater
+class LLFloaterCamera : public LLFloater
 {
 	friend class LLFloaterReg;
 	
@@ -103,9 +102,6 @@ private:
 	/* sets a new mode preserving previous one and updates ui*/
 	void setMode(ECameraControlMode mode);
 
-	/** set title appropriate to passed mode */
-	void setModeTitle(const ECameraControlMode mode);
-
 	/* updates the state (UI) according to the current mode */
 	void updateState();
 
@@ -125,6 +121,8 @@ private:
 	static bool sFreeCamera;
 	static bool sAppearanceEditing;
 	BOOL mClosed;
+
+	void setModeTitle(const ECameraControlMode mode);
 
 	bool mUseFlatUI;	// <AW: Flat cam floater>
 	ECameraControlMode mPrevMode;

@@ -33,8 +33,9 @@
 //#include "llchatitemscontainerctrl.h"
 #include "lliconctrl.h"
 #include "llspinctrl.h"
-#include "llsidetray.h"
+#include "llfloatersidepanelcontainer.h"
 #include "llfocusmgr.h"
+#include "lllogchat.h"
 #include "llresizebar.h"
 #include "llresizehandle.h"
 #include "llmenugl.h"
@@ -52,7 +53,6 @@
 
 #include "lldraghandle.h"
 
-#include "llbottomtray.h"
 #include "llnearbychatbar.h"
 #include "llfloaterreg.h"
 #include "lltrans.h"
@@ -87,16 +87,14 @@ static LLChatTypeTrigger sChatTypeTriggers[] = {
 	{ "/shout"	, CHAT_TYPE_SHOUT}
 };
 
-LLNearbyChat::LLNearbyChat(const LLSD& key) 
-	: LLDockableFloater(NULL, false, false, key)
-	,mChatHistory(NULL)
-	,mInputEditor(NULL)
-{
-	
-}
+static LLRegisterPanelClassWrapper<LLNearbyChat> t_panel_nearby_chat("panel_nearby_chat");
 
-LLNearbyChat::~LLNearbyChat()
+LLNearbyChat::LLNearbyChat(const LLNearbyChat::Params& p) 
+:	LLPanel(p),
+	mChatHistory(NULL),
+	mInputEditor(NULL)
 {
+
 }
 
 void LLNearbyChat::updateFSUseNearbyChatConsole(const LLSD &data)
@@ -175,64 +173,49 @@ BOOL LLNearbyChat::postBuild()
 
 	// Nicky D.; End FIRE-3066
 
+	// ND_MERGE
 	// <vertical tab docking> -AO
-	if(isChatMultiTab())
-	{
-		LLButton* slide_left = getChild<LLButton>("slide_left_btn");
-		slide_left->setVisible(false);
-		LLButton* slide_right = getChild<LLButton>("slide_right_btn");
-		slide_right->setVisible(false);
+	// if(isChatMultiTab())
+	// {
+	// 	LLButton* slide_left = getChild<LLButton>("slide_left_btn");
+	// 	slide_left->setVisible(false);
+	// 	LLButton* slide_right = getChild<LLButton>("slide_right_btn");
+	// 	slide_right->setVisible(false);
 		
 		
-		if (getDockControl() == NULL)
-		{
-			LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
-			if (floater_container)
-			{
-				if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
-				{
-					// first set the tear-off host to this floater
-					setHost(floater_container);
-					// clear the tear-off host right after, the "last host used" will still stick
-					setHost(NULL);
-					// reparent the floater to the main view
-					gFloaterView->addChild(this);
-				}
-				else
-				{
-					floater_container->addFloater(this, FALSE);
-				}
-				floater_container->setVisible(FALSE);
-			}
-		}
+	// 	if (getDockControl() == NULL)
+	// 	{
+	// 		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+	// 		if (floater_container)
+	// 		{
+	// 			if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
+	// 			{
+	// 				// first set the tear-off host to this floater
+	// 				setHost(floater_container);
+	// 				// clear the tear-off host right after, the "last host used" will still stick
+	// 				setHost(NULL);
+	// 				// reparent the floater to the main view
+	// 				gFloaterView->addChild(this);
+	// 			}
+	// 			else
+	// 			{
+	// 				floater_container->addFloater(this, FALSE);
+	// 			}
+	// 			floater_container->setVisible(FALSE);
+	// 		}
+	// 	}
 
-		FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
-		gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&LLNearbyChat::updateFSUseNearbyChatConsole, this, _2));
+	// 	FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
+	// 	gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&LLNearbyChat::updateFSUseNearbyChatConsole, this, _2));
 		
-		return LLDockableFloater::postBuild();
-	}
+	// 	return LLPanel::postBuild();
+	// }
+	// /ND_MERGE
 	
-	if(!LLDockableFloater::postBuild())
+
+	if(!LLPanel::postBuild())
 		return false;
 
-	if (getDockControl() == NULL)
-	{
-		setDockControl(new LLDockControl(
-			LLBottomTray::getInstance()->getNearbyChatBar(), this,
-			getDockTongue(), LLDockControl::TOP, boost::bind(&LLNearbyChat::getAllowedRect, this, _1)));
-	}
-
-	// This doesn't seem to apply anymore? It makes the chat and spin box colors
-	// appear wrong when focused and unfocused, so disable this. -Zi
-#if 0
-        //fix for EXT-4621 
-        //chrome="true" prevents floater from stilling capture
-        setIsChrome(true);
-	//chrome="true" hides floater caption 
-	if (mDragHandle)
-		mDragHandle->setTitleVisible(TRUE);
-#endif
-	
 	return true;
 }
 
@@ -292,15 +275,17 @@ void	LLNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 	}
 	
 	// AO: IF tab mode active, flash our tab
-	if(isChatMultiTab())
-	{
-		LLMultiFloater* hostp = getHost();
-		if( !isInVisibleChain()
-		   && hostp)
-		{
-			hostp->setFloaterFlashing(this, TRUE);
-		}
-	}
+	// ND_MERGE
+	// if(isChatMultiTab())
+	// {
+	// 	LLMultiFloater* hostp = getHost();
+	// 	if( !isInVisibleChain()
+	// 	   && hostp)
+	// 	{
+	// 		hostp->setFloaterFlashing(this, TRUE);
+	// 	}
+	// }
+	// ND_MERGE
 
 	if (gSavedPerAccountSettings.getBOOL("LogNearbyChat"))
 	{
@@ -348,7 +333,7 @@ void LLNearbyChat::onNearbySpeakers()
 {
 	LLSD param;
 	param["people_panel_tab_name"] = "nearby_panel";
-	LLSideTray::getInstance()->showPanel("panel_people",param);
+	LLFloaterSidePanelContainer::showPanel("people", "panel_people", param);
 }
 
 // static
@@ -379,19 +364,30 @@ void LLNearbyChat::onChatChannelVisibilityChanged()
 	getChild<LLLayoutPanel>("channel_spinner_visibility_panel")->setVisible(gSavedSettings.getBOOL("FSShowChatChannel"));
 }
 
-void	LLNearbyChat::openFloater(const LLSD& key)
+// ND_MERGE
+// void	LLNearbyChat::openFloater(const LLSD& key)
+// {
+// 	// We override this to put nearbychat in the IM floater. -AO
+// 	if(isChatMultiTab())
+// 	{
+// 		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+// 		// only show the floater container if we are actually attached -Zi
+// 		if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
+// 		{
+// 			floater_container->showFloater(this, LLTabContainer::START);
+// 		}
+// 		setVisible(TRUE);
+// 		LLFloater::openFloater(key);
+// 	}
+// }
+// /ND_MERGE
+
+void LLNearbyChat::removeScreenChat()
 {
-	// We override this to put nearbychat in the IM floater. -AO
-	if(isChatMultiTab())
+	LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLUUID(gSavedSettings.getString("NearByChatChannelUUID")));
+	if(chat_channel)
 	{
-		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
-		// only show the floater container if we are actually attached -Zi
-		if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
-		{
-			floater_container->showFloater(this, LLTabContainer::START);
-		}
-		setVisible(TRUE);
-		LLFloater::openFloater(key);
+		chat_channel->removeToastsFromChannel();
 	}
 }
 
@@ -399,13 +395,9 @@ void	LLNearbyChat::setVisible(BOOL visible)
 {
 	if(visible)
 	{
-		LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLUUID(gSavedSettings.getString("NearByChatChannelUUID")));
-		if(chat_channel)
-		{
-			chat_channel->removeToastsFromChannel();
-		}
+		removeScreenChat();
 	}
-	LLDockableFloater::setVisible(visible);
+	LLPanel::setVisible(visible);
 	
 	// <Ansariel> Support for chat console
 	static LLCachedControl<bool> chatHistoryTornOff(gSavedSettings, "ChatHistoryTornOff");
@@ -422,7 +414,7 @@ void	LLNearbyChat::setVisible(BOOL visible)
 		{
 			// In case the nearby chat is undocked OR docked and the IM floater
 			// is visible, show console only if nearby chat is not visible.
-			gConsole->setVisible(!isVisible(this));
+			gConsole->setVisible(!getVisible());
 		}
 	}
 	// </Ansariel> Support for chat console
@@ -430,26 +422,21 @@ void	LLNearbyChat::setVisible(BOOL visible)
 
 void	LLNearbyChat::onOpen(const LLSD& key )
 {
+	// ND_MERGE
 	// We override this to put nearbychat in the IM floater. -AO
-	if(isChatMultiTab() && ! isVisible(this))
-	{
-		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
-		// only show the floater container if we are actually attached -Zi
-		if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
-		{
-			floater_container->showFloater(this, LLTabContainer::START);
-		}
-		setVisible(TRUE);
-	}
-	
-	LLDockableFloater::onOpen(key);
-}
+	// if(isChatMultiTab() && ! isVisible(this))
+	// {
+	// 	LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+	// 	// only show the floater container if we are actually attached -Zi
+	// 	if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
+	// 	{
+	// 		floater_container->showFloater(this, LLTabContainer::START);
+	// 	}
+	// 	setVisible(TRUE);
+	// }
+	// ND_MERGE
 
-
-
-void LLNearbyChat::setRect	(const LLRect &rect)
-{
-	LLDockableFloater::setRect(rect);
+	LLPanel::onOpen(key);
 }
 
 void LLNearbyChat::getAllowedRect(LLRect& rect)
@@ -479,7 +466,8 @@ void LLNearbyChat::updateChatHistoryStyle()
 //static 
 void LLNearbyChat::processChatHistoryStyleUpdate(const LLSD& newvalue)
 {
-	LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+	LLFloater* chat_bar = LLFloaterReg::getInstance("chat_bar");
+	LLNearbyChat* nearby_chat = chat_bar->findChild<LLNearbyChat>("nearby_chat");
 	if(nearby_chat)
 		nearby_chat->updateChatHistoryStyle();
 }
@@ -732,7 +720,8 @@ void LLNearbyChat::loadHistory()
 //static
 LLNearbyChat* LLNearbyChat::getInstance()
 {
-	return LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+	LLFloater* chat_bar = LLFloaterReg::getInstance("chat_bar");
+	return chat_bar->findChild<LLNearbyChat>("nearby_chat");
 }
 
 bool LLNearbyChat::isChatMultiTab()
@@ -742,35 +731,39 @@ bool LLNearbyChat::isChatMultiTab()
 	return is_single_window;
 }
 
-void LLNearbyChat::setDocked(bool docked, bool pop_on_undock)
-{
-	if((!isChatMultiTab()) && gSavedSettings.getBOOL("ChatHistoryTornOff"))
-	{
-		LLDockableFloater::setDocked(docked, pop_on_undock);
-	}
-}
+// ND_MERGE
+// void LLNearbyChat::setDocked(bool docked, bool pop_on_undock)
+// {
+// 	if((!isChatMultiTab()) && gSavedSettings.getBOOL("ChatHistoryTornOff"))
+// 	{
+// 		LLDockableFloater::setDocked(docked, pop_on_undock);
+// 	}
+// }
+// /ND_MERGE
 
 BOOL LLNearbyChat::getVisible()
 {
-	if(isChatMultiTab())
+	// ND_MERGE
+	// if(isChatMultiTab())
+	// {
+	// 	LLIMFloaterContainer* im_container = LLIMFloaterContainer::getInstance();
+		
+	// 	// Treat inactive floater as invisible.
+	// 	bool is_active = im_container->getActiveFloater() == this;
+		
+	// 	//torn off floater is always inactive
+	// 	if (!is_active && getHost() != im_container)
+	// 	{
+	// 		return LLDockableFloater::getVisible();
+	// 	}
+		
+	// 	// getVisible() returns TRUE when Tabbed IM window is minimized.
+	// 	return is_active && !im_container->isMinimized() && im_container->getVisible();
+	// }
+	// else
+	// ND_MERGE
 	{
-		LLIMFloaterContainer* im_container = LLIMFloaterContainer::getInstance();
-		
-		// Treat inactive floater as invisible.
-		bool is_active = im_container->getActiveFloater() == this;
-		
-		//torn off floater is always inactive
-		if (!is_active && getHost() != im_container)
-		{
-			return LLDockableFloater::getVisible();
-		}
-		
-		// getVisible() returns TRUE when Tabbed IM window is minimized.
-		return is_active && !im_container->isMinimized() && im_container->getVisible();
-	}
-	else
-	{
-		return LLDockableFloater::getVisible();
+		return LLPanel::getVisible();
 	}
 }
 
@@ -802,7 +795,7 @@ BOOL	LLNearbyChat::handleMouseDown(S32 x, S32 y, MASK mask)
 	
 	if(mChatHistory)
 		mChatHistory->setFocus(TRUE);
-	return LLDockableFloater::handleMouseDown(x, y, mask);
+	return LLPanel::handleMouseDown(x, y, mask);
 }
 
 void LLNearbyChat::draw()
@@ -815,6 +808,6 @@ void LLNearbyChat::draw()
 		setTransparencyType(hasFocus() ? TT_ACTIVE : TT_INACTIVE);
 	}
 
-	LLDockableFloater::draw();
+	LLPanel::draw();
 }
 #endif

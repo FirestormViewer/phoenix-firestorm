@@ -1,28 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<context_menu
- layout="topleft"
- name="Url Popup">
-    <menu_item_call
-     label="Показать информацию о группе"
-     layout="topleft"
-     name="show_group">
-        <menu_item_call.on_click
-         function="Url.ShowProfile" />
-    </menu_item_call>
-    <menu_item_separator
-     layout="topleft" />
-    <menu_item_call
-     label="Копировать группу в буфер обмена"
-     layout="topleft"
-     name="url_copy_label">
-        <menu_item_call.on_click
-         function="Url.CopyLabel" />
-    </menu_item_call>
-    <menu_item_call
-     label="Копировать SLurl в буфер обмена"
-     layout="topleft"
-     name="url_copy">
-        <menu_item_call.on_click
-         function="Url.CopyUrl" />
-    </menu_item_call>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Url Popup">
+	<menu_item_call label="Показать информацию группы" name="show_group"/>
+	<menu_item_call label="Копировать группу в буфер обмена" name="url_copy_label"/>
+	<menu_item_call label="Копировать URL-адрес SL в буфер обмена" name="url_copy"/>
 </context_menu>

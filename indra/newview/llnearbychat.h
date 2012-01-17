@@ -1,4 +1,4 @@
-/** 
+ /** 
  * @file llnearbychat.h
  * @brief nearby chat history scrolling panel implementation
  *
@@ -27,19 +27,18 @@
 #ifndef LL_LLNEARBYCHAT_H_
 #define LL_LLNEARBYCHAT_H_
 
-#include "lldockablefloater.h"
 #include "llscrollbar.h"
 #include "llviewerchat.h"
+#include "llfloater.h"
 
 class LLResizeBar;
 class LLChatHistory;
 class LLLineEditor;
 
-class LLNearbyChat: public LLDockableFloater
+class LLNearbyChat: public LLPanel
 {
 public:
-	LLNearbyChat(const LLSD& key);
-	~LLNearbyChat();
+	LLNearbyChat(const Params& p = LLPanel::getDefaultParams());
 
 	BOOL	postBuild			();
 
@@ -63,12 +62,9 @@ public:
 #endif	
 	
 	/*virtual*/ void	onOpen	(const LLSD& key);
-
 	/*virtual*/ void	setVisible(BOOL visible);
-	void	openFloater(const LLSD& key);
-
-	virtual void setRect		(const LLRect &rect);
-
+	//	void	openFloater(const LLSD& key); ND_MERGE
+	
 	void clearChatHistory();
 	virtual void updateChatHistoryStyle();
 
@@ -78,9 +74,12 @@ public:
 
 	static LLNearbyChat* getInstance();
 	
+	void removeScreenChat();
+
+	
 	static bool isChatMultiTab();
 	
-	void setDocked(bool docked, bool pop_on_undock = true);
+	//	void setDocked(bool docked, bool pop_on_undock = true); ND_MERGE
 	
 	BOOL getVisible();
 	void doSendMsg( std::string msg, EChatType type);
@@ -98,7 +97,7 @@ private:
 	void	getAllowedRect		(LLRect& rect);
 
 	void	onNearbySpeakers	();
-	
+
 	void	setTyping(bool typing);
 	static void		onInputEditorFocusReceived( LLFocusableElement* caller, void* userdata );
 	static void		onInputEditorFocusLost(LLFocusableElement* caller, void* userdata);

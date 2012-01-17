@@ -156,7 +156,7 @@ public:
 	U64 getFilterLinks();		// ## Zi: Filter Links Menu
 
 	void setShowFolderState(LLInventoryFilter::EFolderShow show);
-	void setWorn(BOOL sl);
+	//	void setWorn(BOOL sl); ND_MERGE Worn is gone in FUI
 	LLInventoryFilter::EFolderShow getShowFolderState();
 	// This method is called when something has changed about the inventory.
 	void modelChanged(U32 mask);
@@ -182,6 +182,8 @@ public:
 	// Find whichever inventory panel is active / on top.
 	// "Auto_open" determines if we open an inventory panel if none are open.
 	static LLInventoryPanel *getActiveInventoryPanel(BOOL auto_open = TRUE);
+	
+	static void openInventoryPanelAndSetSelection(BOOL auto_open, const LLUUID& obj_id);
 
 protected:
 	void openStartFolderOrMyInventory(); // open the first level of inventory

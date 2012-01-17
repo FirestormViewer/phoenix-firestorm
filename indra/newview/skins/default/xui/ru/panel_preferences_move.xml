@@ -1,65 +1,39 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Движение" name="move_panel">
-	<tab_container label="Move and View" name="tabs">
-		<!--View-->
-		<panel name="tab-view">
-			<slider label="Угол обзора:" name="camera_fov"/>
-			<slider label="Расстояние:" name="camera_offset_scale"/>
-			<check_box label="Разрешить большую свободу камере" name="DisableCameraConstraints" tool_tip="" />
-			<text name="heading2">
-			  Автоматическая установка позиции для:
-			</text>
-			<check_box label="Режима создания/редактирования" name="edit_camera_movement" tool_tip="Производить автоматическое позиционирование камеры при входе в режим редактирования и выходе из него"/>
-			<check_box label="Изменения внешности" name="appearance_camera_movement" tool_tip="Производить автоматическое позиционирование камеры в режиме изменения внешности"/>
-			<check_box initial_value="true" label="Боковой панели" name="appearance_sidebar_positioning" tool_tip="Производить автоматическое позиционирование камеры для боковой панели"/>
-			<check_box label="Показать аватара от 1-го лица" name="first_person_avatar_visible"/>
-			<check_box label="Показать настройки от 1ого лица" name="mouselook_instructions_visible"/>
-			<text name=" Mouse Sensitivity" width="195">
-				Чувствительность мыши:
-			</text>
-			<check_box label="Инвертировать" name="invert_mouse"/>
-		</panel>
-
-		<!-- Movement -->
-		<panel label="Движение" name="tab-movement">
-			<check_box label="Клавиши стрелок всегда перемещают меня" name="arrow_keys_move_avatar_check"/>
-			<check_box label="Бег после двойного нажатия на клавишу" name="tap_tap_hold_to_run"/>
-			<check_box label="Взлететь / Приземлиться при удержании вверх / вниз" name="automatic_fly" />
-			<check_box label="Звуковой эффект при телепортации" name="PlayTeleportSound"/>
-			<text name="single_click_action_lbl">
-				Простой щелчок для:
-			</text>
-			<combo_box name="single_click_action_combo">
-				<combo_box.item label="нету" name="0"/>
-				<combo_box.item label="Автопилота" name="1"/>
-			</combo_box>
-			<text name="double_click_action_lbl">
-				Двойной щелчок для:
-			</text>
-			<combo_box name="double_click_action_combo">
-				<combo_box.item label="нету" name="0"/>
-				<combo_box.item label="Автопилота" name="1"/>
-				<combo_box.item label="Телепортации" name="2"/>
-			</combo_box>
-			<button label="Настройки 3D джойстика" name="joystick_setup_button"/>
-		</panel>
-
-		<!-- Firestorm -->
-		<panel label="Файршторм" name="tab-firestorm">
-			<text name="camera_options_label">
-			   Опции камеры:
-			</text>
-			<check_box label="Нажатие на ваш аватар держит положение камеры" name="clickonavatarkeepscamera" tool_tip=""/>
-			<check_box label="Отключить минимальное расстояние приближения камеры" name="disableminzoomdist" tool_tip=""/>
-			<check_box label="Разрешить двигаться камере без ограничений(не через примитивы)" name="ignorecameraconstraints" tool_tip=""/>
-			<text name="ignorecameraconstraints_requires_restart">
-				(перезапуск)
-			</text>
-			<check_box label="Повернуть радар по поз. аватара" name="minimaprotate" tool_tip=""/>
-			<check_box name="MiniMapChatRing" label="Показать кольцо на радаре, который указывает диапазона чата"/>
-			<check_box name="FSAdvancedTooltips" label="Доп. информация в подсказках"/>
-			<check_box label="Повернуть Аватара если он идёт задом" name="backwardsturnavatar" tool_tip="Задом, в смысле тороны..."/>
-			<check_box label="Фильтра дубликатов закладок(LM) на карте мира" name="WorldmapFilterDuplicateLandmarks" tool_tip=""/>
-		</panel>
-	</tab_container>
+<panel label="Перемещение" name="move_panel">
+	<slider label="Угол обзора" name="camera_fov"/>
+	<slider label="Расстояние" name="camera_offset_scale"/>
+	<text name="heading2">
+		Автоматическая установка позиции для:
+	</text>
+	<check_box label="создания/редактирования" name="edit_camera_movement" tool_tip="Автоматическое позиционирование камеры при входе в режим редактирования и выходе из него"/>
+	<check_box label="внешности" name="appearance_camera_movement" tool_tip="Автоматическое позиционирование камеры в режиме редактирования"/>
+	<text name="keyboard_lbl">
+		Клавиатура:
+	</text>
+	<check_box label="Клавиши со стрелками всегда перемещают меня" name="arrow_keys_move_avatar_check"/>
+	<check_box label="Бег после двойного нажатия клавиши" name="tap_tap_hold_to_run"/>
+	<text name="mouse_lbl">
+		Мышь:
+	</text>
+	<check_box label="Показывать меня при обзоре мышью" name="first_person_avatar_visible"/>
+	<text name=" Mouse Sensitivity">
+		Чувствительность мыши:
+	</text>
+	<check_box label="Инвертировать" name="invert_mouse"/>
+	<text name="single_click_action_lbl">
+		Один щелчок на земле:
+	</text>
+	<combo_box name="single_click_action_combo">
+		<combo_box.item label="Без действия" name="0"/>
+		<combo_box.item label="Перемещение в точку щелчка" name="1"/>
+	</combo_box>
+	<text name="double_click_action_lbl">
+		Двойной щелчок на земле:
+	</text>
+	<combo_box name="double_click_action_combo">
+		<combo_box.item label="Без действия" name="0"/>
+		<combo_box.item label="Перемещение в точку щелчка" name="1"/>
+		<combo_box.item label="Телепортация в точку щелчка" name="2"/>
+	</combo_box>
+	<button label="Другие устройства" name="joystick_setup_button"/>
 </panel>

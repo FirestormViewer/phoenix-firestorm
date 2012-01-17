@@ -31,12 +31,12 @@
 #include "llagent.h"
 #include "llagentui.h"
 #include "llclipboard.h"
+#include "llfloatersidepanelcontainer.h"
 #include "llfloaterreg.h"
 #include "lllandmarkactions.h"
 #include "lllocationinputctrl.h"
 #include "llnotificationsutil.h"
 #include "llparcel.h"
-#include "llsidetray.h"
 #include "llslurl.h"
 #include "llstatusbar.h"
 #include "lltrans.h"
@@ -204,6 +204,11 @@ void LLPanelTopInfoBar::onVisibilityChange(const LLSD& show)
 	gFloaterView->setMinimizePositionVerticalOffset(minimize_pos_offset);
 }
 
+boost::signals2::connection LLPanelTopInfoBar::setResizeCallback( const resize_signal_t::slot_type& cb )
+{
+	return mResizeSignal.connect(cb);
+}
+
 void LLPanelTopInfoBar::draw()
 {
 	updateParcelInfoText();
@@ -225,6 +230,7 @@ void LLPanelTopInfoBar::buildLocationString(std::string& loc_str, bool show_coor
 
 void LLPanelTopInfoBar::setParcelInfoText(const std::string& new_text)
 {
+	LLRect old_rect = getRect();
 	const LLFontGL* font = mParcelInfoText->getDefaultFont();
 	S32 new_text_width = font->getWidth(new_text);
 
@@ -236,6 +242,11 @@ void LLPanelTopInfoBar::setParcelInfoText(const std::string& new_text)
 	mParcelInfoText->reshape(rect.getWidth(), rect.getHeight(), TRUE);
 	mParcelInfoText->setRect(rect);
 	layoutParcelIcons();
+
+	if (old_rect != getRect())
+	{
+		mResizeSignal();
+	}
 }
 
 void LLPanelTopInfoBar::update()
@@ -343,6 +354,8 @@ void LLPanelTopInfoBar::updateHealth()
 
 void LLPanelTopInfoBar::layoutParcelIcons()
 {
+	LLRect old_rect = getRect();
+
 	// TODO: remove hard-coded values and read them as xml parameters
 	static const int FIRST_ICON_HPAD = 32;
 	static const int LAST_ICON_HPAD = 11;
@@ -359,6 +372,11 @@ void LLPanelTopInfoBar::layoutParcelIcons()
 	LLRect rect = getRect();
 	rect.set(rect.mLeft, rect.mTop, left + LAST_ICON_HPAD, rect.mBottom);
 	setRect(rect);
+
+	if (old_rect != getRect())
+	{
+		mResizeSignal();
+	}
 }
 
 S32 LLPanelTopInfoBar::layoutWidget(LLUICtrl* ctrl, S32 left)
@@ -437,12 +455,11 @@ void LLPanelTopInfoBar::onContextMenuItemClicked(const LLSD::String& item)
 
 		if(landmark == NULL)
 		{
-			LLSideTray::getInstance()->showPanel("panel_places", LLSD().with("type", "create_landmark"));
+			LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
 		}
 		else
 		{
-			LLSideTray::getInstance()->showPanel("panel_places",
-					LLSD().with("type", "landmark").with("id",landmark->getUUID()));
+			LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
 		}
 	}
 	else if (item == "copy")
@@ -457,6 +474,6 @@ void LLPanelTopInfoBar::onContextMenuItemClicked(const LLSD::String& item)
 
 void LLPanelTopInfoBar::onInfoButtonClicked()
 {
-	//LLSideTray::getInstance()->showPanel("panel_places", LLSD().with("type", "agent"));
+//	LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
 	LLFloaterReg::showInstance("about_land");
 }

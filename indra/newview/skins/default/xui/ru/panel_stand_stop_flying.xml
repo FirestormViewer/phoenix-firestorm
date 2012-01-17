@@ -1,32 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Width and height of this panel should be synchronized with "panel_modes" in the floater_moveview.xml-->
-<panel
- height="21"
- layout="topleft"
- name="panel_stand_stop_flying"
- mouse_opaque="false"
- visible="true"
- width="78">
-    <button
-     follows="left|bottom"
-     height="19"
-     label="Встать"
-     layout="topleft"
-     left="1"
-     name="stand_btn"
-     tool_tip="Нажмте, чтоб встать"
-     top="2"
-     visible="false"
-     width="77" />
-    <button
-     follows="left|bottom"
-     height="19"
-     label="Не летать"
-     layout="topleft"
-     left="1"
-     name="stop_fly_btn"
-     tool_tip="Нажмите, чтоб прекратить летать"
-     top="2"
-     visible="false"
-     width="77" />
+<panel name="panel_stand_stop_flying">
+	<button label="Встать" name="stand_btn" tool_tip="Щелкните здесь, чтобы встать."/>
+	<button label="Прекратить полет" name="stop_fly_btn" tool_tip="Прекратить полет"/>
 </panel>

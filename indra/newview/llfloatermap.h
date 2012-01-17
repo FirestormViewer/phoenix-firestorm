@@ -47,11 +47,7 @@ public:
 	/*virtual*/ BOOL	handleRightMouseDown( S32 x, S32 y, MASK mask );
 	/*virtual*/ void	reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
 	/*virtual*/ void	draw();
-	/*virtual*/ void	onFocusLost();
-	/*virtual*/ void	onFocusReceived();
 
-	/*virtual*/ void	setMinimized(BOOL b);
-	
 private:
 	void handleZoom(const LLSD& userdata);
 	void handleStopTracking (const LLSD& userdata);
@@ -63,8 +59,8 @@ private:
 	void handleShowProfile();
 	void handleStartTracking();
 
-	void stretchMiniMap(S32 width,S32 height);
-	
+	void setMinimized( BOOL );
+
 	LLMenuGL*		mPopupMenu;
 
 	LLTextBox*		mTextBoxEast;

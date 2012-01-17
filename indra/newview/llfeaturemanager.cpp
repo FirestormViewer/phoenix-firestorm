@@ -51,6 +51,7 @@
 #include "llcontrol.h"
 #include "llboost.h"
 #include "llweb.h"
+#include "llviewershadermgr.h"
 
 #if LL_WINDOWS
 #include "lldxhardware.h"
@@ -666,8 +667,10 @@ void LLFeatureManager::applyFeatures(bool skipFeatures)
 
 void LLFeatureManager::setGraphicsLevel(S32 level, bool skipFeatures)
 {
-	applyBaseMasks();
+	LLViewerShaderMgr::sSkipReload = true;
 
+	applyBaseMasks();
+	
 	switch (level)
 	{
 		case 0:
@@ -688,6 +691,9 @@ void LLFeatureManager::setGraphicsLevel(S32 level, bool skipFeatures)
 	}
 
 	applyFeatures(skipFeatures);
+
+	LLViewerShaderMgr::sSkipReload = false;
+	LLViewerShaderMgr::instance()->setShaders();
 }
 
 void LLFeatureManager::applyBaseMasks()
@@ -729,7 +735,7 @@ void LLFeatureManager::applyBaseMasks()
 	{
 		maskFeatures("NoPixelShaders");
 	}
-	if (!gGLManager.mHasVertexShader)
+	if (!gGLManager.mHasVertexShader || !mGPUSupported)
 	{
 		maskFeatures("NoVertexShaders");
 	}

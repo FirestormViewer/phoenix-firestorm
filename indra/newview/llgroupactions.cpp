@@ -34,10 +34,10 @@
 #include "llagent.h"
 #include "llcommandhandler.h"
 #include "llfloaterreg.h"
+#include "llfloatersidepanelcontainer.h"
 #include "llgroupmgr.h"
 #include "llimview.h" // for gIMMgr
 #include "llnotificationsutil.h"
-#include "llsidetray.h"
 #include "llstatusbar.h"	// can_afford_transaction()
 #include "llimfloater.h"
 //-TT  ShowGroupFloaters
@@ -94,7 +94,7 @@ public:
 			{
 				LLSD params;
 				params["people_panel_tab_name"] = "groups_panel";
-				LLSideTray::getInstance()->showPanel("panel_people", params);
+				LLFloaterSidePanelContainer::showPanel("people", "panel_people", params);
 				return true;
 			}
             return false;
@@ -268,68 +268,15 @@ void LLGroupActions::activate(const LLUUID& group_id)
 	gAgent.sendReliableMessage();
 }
 
-/*
 static bool isGroupUIVisible()
 {
 	static LLPanel* panel = 0;
 	if(!panel)
-		panel = LLSideTray::getInstance()->getPanel("panel_group_info_sidetray");
+		panel = LLFloaterSidePanelContainer::getPanel("people", "panel_group_info_sidetray");
 	if(!panel)
 		return false;
 	return panel->isInVisibleChain();
 }
-*/
-
-//-TT - Patch : ShowGroupFloaters
-static bool isGroupVisible(const LLUUID& group_id)
-{
-	static LLPanelGroup* panel = 0;
-	LLSideTray *sidetray = LLSideTray::getInstance();
-	
-	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
-	{
-		//AO reworked logic for only updated profiles that are already visible.
-		panel = sidetray->getPanel<LLPanelGroup>("panel_group_info_sidetray");
-		if(!panel)
-			return false;
-		else if (panel->getID() != group_id)
-			return false;
-		if (sidetray->isTabAttached("sidebar_people"))
-		{
-			return panel->isInVisibleChain();
-		}
-		else
-		{
-			return sidetray->isFloaterPanelVisible("panel_group_info_sidetray");
-		}
-	}
-	else
-	{
-		bool vis = LLFloaterReg::instanceVisible("floater_group_view", LLSD().with("group_id", group_id));
-		//AO: spams log for each notice in well during login, bad!
-		//llinfos << "checking visibility for group ID: " << group_id << " visible =" << vis << llendl;
-		return vis;
-
-		//LLFloater *floater = LLFloaterReg::getInstance("floater_group_view", LLSD().with("group_id", group_id));
-		//panel = floater->findChild<LLPanelGroup>("panel_group_info_sidetray");
-		//return panel->isInVisibleChain();
-	}
-	//AO reworked logic for only updated profiles that are already visible.
-    //panel = sidetray->getPanel<LLPanelGroup>("panel_group_info_sidetray");
-	//if(!panel)
-	//	return false;
- //   if (panel->getID() != group_id)
-	//	return false;
-	//if (sidetray->isTabAttached("sidebar_people"))
-	//{
-	//	return panel->isInVisibleChain();
-	//}
-	//else
-	//{
-	//	return sidetray->isFloaterPanelVisible("panel_group_info_sidetray");
-	//}
-}
-//-TT
 
 // static 
 void LLGroupActions::inspect(const LLUUID& group_id)
@@ -351,7 +298,7 @@ void LLGroupActions::show(const LLUUID& group_id)
 		params["group_id"] = group_id;
 		params["open_tab_name"] = "panel_group_info_sidetray";
 
-		LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
+		LLFloaterSidePanelContainer::showPanel("panel_group_info_sidetray", params);
 //-TT - Patch : ShowGroupFloaters
 	}
 	else
@@ -371,16 +318,16 @@ void LLGroupActions::show(const LLUUID& group_id, const std::string& tab_name)
 	params["group_id"] = group_id;
 	params["open_tab_name"] = tab_name;
 
-	LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
+	LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
 }
 
 void LLGroupActions::refresh_notices()
 {
-	//if(!isGroupUIVisible())
-	//	return;
-
-	if(!isGroupVisible(LLUUID::null))
+	if(!isGroupUIVisible())
 		return;
+
+	//	if(!isGroupVisible(LLUUID::null)) ND_MERGE
+	//	return;
 
 	LLSD params;
 	params["group_id"] = LLUUID::null;
@@ -392,7 +339,7 @@ void LLGroupActions::refresh_notices()
 	{
 //-TT
 		// AO: We don't change modals on people unless they manually request this
-		//LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
+//	LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
 //-TT - Patch : ShowGroupFloaters
 	}
 	else
@@ -405,32 +352,18 @@ void LLGroupActions::refresh_notices()
 //static 
 void LLGroupActions::refresh(const LLUUID& group_id)
 {
-	//if(!isGroupUIVisible())
-	//	return;
-
-	if(!isGroupVisible(group_id))
+	if(!isGroupUIVisible())
 		return;
+
+	//if(!isGroupVisible(group_id)) ND_MERGE
+	//		return;
 
 	LLSD params;
 	params["group_id"] = group_id;
 	params["open_tab_name"] = "panel_group_info_sidetray";
 	params["action"] = "refresh";
 
-//-TT - Patch : ShowGroupFloaters
-	llinfos << "refreshing group ID: " << group_id << llendl;
-	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
-	{
-//-TT
-		LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
-//-TT - Patch : ShowGroupFloaters
-	}
-	else
-	{
-		LLFloaterReg::showInstance("floater_group_view", LLSD().with("group_id", group_id));//params); //LLSD().with("group_id", group_id));
-		//LLFloater *floater = LLFloaterReg::getInstance("floater_group_view", LLSD().with("group_id", group_id));
-		//panel = floater->findChild<LLPanelGroup>("panel_group_info_sidetray");
-	}
-//-TT
+	LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
 }
 
 //static 
@@ -441,29 +374,17 @@ void LLGroupActions::createGroup()
 	params["open_tab_name"] = "panel_group_info_sidetray";
 	params["action"] = "create";
 
-////-TT - Patch : ShowGroupFloaters
-//	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
-//	{
-////-TT
-		params["open_tab_name"] = "panel_group_info_sidetray";
- 
-		LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
-////-TT - Patch : ShowGroupFloaters
-//	}
-//	else
-//	{
-//		LLFloaterReg::showInstance("floater_group_view", params);  //LLSD().with("group_id", group_id));
-//	}
-////-TT
+	LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+
 }
 //static
 void LLGroupActions::closeGroup(const LLUUID& group_id)
 {
-	//if(!isGroupUIVisible())
-	//	return;
-
-	if(!isGroupVisible(group_id))
+	if(!isGroupUIVisible())
 		return;
+
+	//	if(!isGroupVisible(group_id)) ND_MERGE
+	//	return;
 
 	LLSD params;
 	params["group_id"] = group_id;
@@ -474,7 +395,7 @@ void LLGroupActions::closeGroup(const LLUUID& group_id)
 	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
 	{
 //-TT
-		LLSideTray::getInstance()->showPanel("panel_group_info_sidetray", params);
+		LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
 //-TT - Patch : ShowGroupFloaters
 	}
 	else

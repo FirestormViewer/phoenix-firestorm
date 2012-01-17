@@ -26,7 +26,7 @@
 	</floater.string>
     <floater.string
      name="status_selectcount">
-        [OBJ_COUNT] Objekt(e) [LAND_IMPACT] PE
+		[OBJ_COUNT] Objekte ausgewählt, Auswirkung auf Land [LAND_IMPACT]
     </floater.string>
     <floater.string
      name="status_remaining_capacity">

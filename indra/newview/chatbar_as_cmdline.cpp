@@ -68,13 +68,11 @@
 #include "llnotificationmanager.h"
 #include "llfloaterreg.h"
 
-#include "llfloaterchat.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerparcelmedia.h"
 #include "llparcel.h"
 #include "llaudioengine.h"
 #include "llviewerparcelmediaautoplay.h"
-#include "lloverlaybar.h"
 #include "lggautocorrectfloater.h"
 #include "lggautocorrect.h"
 

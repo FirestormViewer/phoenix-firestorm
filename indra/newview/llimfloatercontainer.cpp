@@ -52,6 +52,7 @@ LLIMFloaterContainer::LLIMFloaterContainer(const LLSD& seed)
 
 LLIMFloaterContainer::~LLIMFloaterContainer()
 {
+	mNewMessageConnection.disconnect();
 	LLTransientFloaterMgr::getInstance()->removeControlView(LLTransientFloaterMgr::IM, this);
 }
 
@@ -63,7 +64,7 @@ BOOL LLIMFloaterContainer::postBuild()
 		addFloater(FSFloaterContacts::getInstance(), TRUE);
 	}
 
-	LLIMModel::instance().mNewMsgSignal.connect(boost::bind(&LLIMFloaterContainer::onNewMessageReceived, this, _1));
+	mNewMessageConnection = LLIMModel::instance().mNewMsgSignal.connect(boost::bind(&LLIMFloaterContainer::onNewMessageReceived, this, _1));
 	// Do not call base postBuild to not connect to mCloseSignal to not close all floaters via Close button
 	// mTabContainer will be initialized in LLMultiFloater::addChild()
 	return TRUE;
@@ -79,23 +80,26 @@ void LLIMFloaterContainer::onOpen(const LLSD& key)
 	// Add localchat by default if it's not already on the screen somewhere else. -AO	
 	// But only if it hasnt been already so we can reopen it to the same tab -KC
 	// Improved handling to leave most of the work to the LL tear-off code -Zi
-	LLFloater* floater = LLNearbyChat::getInstance();
-	if (! LLFloater::isVisible(floater) && (floater->getHost() != this))
-	{
-		if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
-		{
-			// first set the tear-off host to this floater
-			floater->setHost(this);
-			// clear the tear-off host right after, the "last host used" will still stick
-			floater->setHost(NULL);
-			// reparent to floater view
-			gFloaterView->addChild(floater);
-		}
-		else
-		{
-			LLMultiFloater::showFloater(floater);
-		}
-	}
+
+	// ND_MERGE
+	// LLPanel* floater = LLNearbyChat::getInstance();
+	// if (! LLFloater::isVisible(floater) && (floater->getHost() != this))
+	// {
+	// 	if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
+	// 	{
+	// 		// first set the tear-off host to this floater
+	// 		floater->setHost(this);
+	// 		// clear the tear-off host right after, the "last host used" will still stick
+	// 		floater->setHost(NULL);
+	// 		// reparent to floater view
+	// 		gFloaterView->addChild(floater);
+	// 	}
+	// 	else
+	// 	{
+	// 		LLMultiFloater::showFloater(floater);
+	// 	}
+	// }
+	// /ND_MERGE
 	
 	
 /*

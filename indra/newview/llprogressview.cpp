@@ -263,7 +263,7 @@ void LLProgressView::fade(BOOL in)
 
 void LLProgressView::drawStartTexture(F32 alpha)
 {
-	glPushMatrix();	
+	gGL.pushMatrix();	
 	if (gStartTexture)
 	{
 		LLGLSUIDefault gls_ui;
@@ -276,13 +276,13 @@ void LLProgressView::drawStartTexture(F32 alpha)
 		// stretch image to maintain aspect ratio
 		if (image_aspect > view_aspect)
 		{
-			glTranslatef(-0.5f * (image_aspect / view_aspect - 1.f) * width, 0.f, 0.f);
-			glScalef(image_aspect / view_aspect, 1.f, 1.f);
+			gGL.translatef(-0.5f * (image_aspect / view_aspect - 1.f) * width, 0.f, 0.f);
+			gGL.scalef(image_aspect / view_aspect, 1.f, 1.f);
 		}
 		else
 		{
-			glTranslatef(0.f, -0.5f * (view_aspect / image_aspect - 1.f) * height, 0.f);
-			glScalef(1.f, view_aspect / image_aspect, 1.f);
+			gGL.translatef(0.f, -0.5f * (view_aspect / image_aspect - 1.f) * height, 0.f);
+			gGL.scalef(1.f, view_aspect / image_aspect, 1.f);
 		}
 		gl_rect_2d_simple_tex( getRect().getWidth(), getRect().getHeight() );
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
@@ -293,7 +293,7 @@ void LLProgressView::drawStartTexture(F32 alpha)
 		gGL.color4f(0.f, 0.f, 0.f, alpha);		// ## Zi: Fade teleport screens
 		gl_rect_2d(getRect());
 	}
-	glPopMatrix();
+	gGL.popMatrix();
 }
 
 

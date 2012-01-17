@@ -384,5 +384,6 @@ bool LLCrashLoggerWindows::cleanup()
 		sleep_and_pump_messages(3);
 	}
 	PostQuitMessage(0);
+	commonCleanup();
 	return true;
 }

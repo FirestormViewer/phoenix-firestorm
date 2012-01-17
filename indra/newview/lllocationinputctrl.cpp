@@ -44,11 +44,11 @@
 
 // newview includes
 #include "llagent.h"
+#include "llfloatersidepanelcontainer.h"
 #include "llinventoryobserver.h"
 #include "lllandmarkactions.h"
 #include "lllandmarklist.h"
 #include "llteleporthistory.h"
-#include "llsidetray.h"
 #include "llslurl.h"
 #include "llstatusbar.h"			// getHealth()
 #include "lltrans.h"
@@ -608,7 +608,7 @@ void LLLocationInputCtrl::onInfoButtonClicked()
 		return;
 // [/RLVa:KB]
 
-	LLSideTray::getInstance()->showPanel("panel_places", LLSD().with("type", "agent"));
+	LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
 }
 
 void LLLocationInputCtrl::onForSaleButtonClicked()
@@ -636,11 +636,11 @@ void LLLocationInputCtrl::onAddLandmarkButtonClicked()
 		key["type"] = "landmark";
 		key["id"] = landmark->getUUID();
 
-		LLSideTray::getInstance()->showPanel("panel_places", key);
+		LLFloaterSidePanelContainer::showPanel("places", key);
 	}
 	else
 	{
-		LLSideTray::getInstance()->showPanel("panel_places", LLSD().with("type", "create_landmark"));
+		LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
 	}
 }
 
@@ -1119,12 +1119,11 @@ void LLLocationInputCtrl::onLocationContextMenuItemClicked(const LLSD& userdata)
 			
 			if(!landmark)
 			{
-				LLSideTray::getInstance()->showPanel("panel_places", LLSD().with("type", "create_landmark"));
+			LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
 			}
 			else
 			{
-				LLSideTray::getInstance()->showPanel("panel_places", 
-						LLSD().with("type", "landmark").with("id",landmark->getUUID()));
+			LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
 			}
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
 		}

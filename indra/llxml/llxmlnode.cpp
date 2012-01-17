@@ -1311,7 +1311,7 @@ bool LLXMLNode::getAttribute(const LLStringTableEntry* name, LLXMLNodePtr& node,
 	{
 		return mDefault->getAttribute(name, node, FALSE);
 	}
-	node = new LLXMLNode();
+	
 	return false;
 }
 

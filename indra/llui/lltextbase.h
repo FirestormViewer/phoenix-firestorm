@@ -249,7 +249,7 @@ public:
 	friend class LLNormalTextSegment;
 	friend class LLUICtrlFactory;
 
-	struct LineSpacingParams : public LLInitParam::Choice<LineSpacingParams>
+	struct LineSpacingParams : public LLInitParam::ChoiceBlock<LineSpacingParams>
 	{
 		Alternative<F32>	multiple;
 		Alternative<S32>	pixels;
@@ -484,6 +484,8 @@ protected:
 	void                			getSegmentAndOffset( S32 startpos, segment_set_t::const_iterator* seg_iter, S32* offsetp ) const;
 	void                			getSegmentAndOffset( S32 startpos, segment_set_t::iterator* seg_iter, S32* offsetp );
 	LLTextSegmentPtr    			getSegmentAtLocalPos( S32 x, S32 y, bool hit_past_end_of_line = true);
+	segment_set_t::iterator			getEditableSegIterContaining(S32 index);
+	segment_set_t::const_iterator	getEditableSegIterContaining(S32 index) const;
 	segment_set_t::iterator			getSegIterContaining(S32 index);
 	segment_set_t::const_iterator	getSegIterContaining(S32 index) const;
 	void                			clearSegments();

@@ -1,69 +1,15 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- can_close="false"
- can_minimize="false"
- height="500"
- layout="topleft"
- name="modal container"
- width="600">
-    <floater.string
-     name="real_url">
-        http://secondlife.com/app/tos/
-    </floater.string>
-    <floater.string
-     name="loading_url">
-        data:text/html,%3Chtml%3E%3Chead%3E%3C/head%3E%3Cbody text=%22000000%22%3E%3Ch2%3E Загрузка %3Ca%20target%3D%22_external%22%20href%3D%22http%3A//secondlife.com/app/tos/%22%3ETerms%20of%20Service%3C/a%3E...%3C/h2%3E %3C/body%3E %3C/html%3E
-    </floater.string>
-    <button
-     enabled="false"
-     height="20"
-     label="Продолжить"
-     label_selected="Продолжить"
-     layout="topleft"
-     left="484"
-     name="Continue"
-     top="464"
-     width="100" />
-    <button
-     height="20"
-     label="Отмена"
-     label_selected="Отмена"
-     layout="topleft"
-     left_delta="-468"
-     name="Cancel"
-     top_delta="0"
-     width="100" />
-    <check_box
-     follows="top|right"
-     height="16"
-     label="Я согласен с Условиями предоставления услуг и политикой конфиденциальности"
-     layout="topleft"
-     left_delta="0"
-     name="agree_chk"
-     top_delta="-45"
-     width="55" />
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     font="SansSerif"
-     height="30"
-     layout="topleft"
-     left_delta="0"
-     name="tos_heading"
-     top_delta="-399"
-     word_wrap="true"
-     width="552">
-        Пожалуйста, внимательно прочитайте следующие Условия использования и политику конфиденциальности. Чтобы продолжить вход в [CURRENT_GRID], вы должны принять условия лицензионного соглашения.
-    </text>
-    <web_browser
-      trusted_content="true" 
-     follows="left|top"
-     height="340"
-     layout="topleft"
-     left_delta="0"
-     name="tos_html"
-     top_delta="40"
-     width="568" />
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="modal container">
+	<floater.string name="real_url">
+		http://secondlife.com/app/tos/
+	</floater.string>
+	<floater.string name="loading_url">
+		data:text/html,%3Chtml%3E%3Chead%3E%3C/head%3E%3Cbody text=%22000000%22%3E%3Ch2%3E Loading %3Ca%20target%3D%22_external%22%20href%3D%22http%3A//secondlife.com/app/tos/%22%3ETerms%20of%20Service%3C/a%3E...%3C/h2%3E %3C/body%3E %3C/html%3E
+	</floater.string>
+	<button label="Продолжить" label_selected="Продолжить" name="Continue"/>
+	<button label="Отмена" label_selected="Отмена" name="Cancel"/>
+	<check_box label="Я принимаю условия Пользовательского соглашения и Политики конфиденциальности" name="agree_chk"/>
+	<text name="tos_heading">
+		Внимательно прочитайте Пользовательское соглашение и Политику конфиденциальности. Для входа в [SECOND_LIFE] вы должны согласиться с условиями соглашения.
+	</text>
 </floater>

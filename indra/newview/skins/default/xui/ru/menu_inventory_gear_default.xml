@@ -1,31 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_gear_default">
-	<menu_item_call label="Новое окно с инвентарем" name="new_window"/>
+	<menu_item_call label="Новое окно инвентаря" name="new_window"/>
 	<menu_item_check label="Сортировать по имени" name="sort_by_name"/>
-	<menu_item_check label="Сортировать по последнему принятому" name="sort_by_recent"/>
-	<menu_item_check label="Сортировать папки всегда по имени" name="sort_folders_by_name"/>
-	<menu_item_check label="Системные папки сверху" name="sort_system_folders_to_top"/>
-	 	<!-- ## Zi: Extended Inventory Search -->
-    <menu label="Искать по..." name="inventory_search_menu">
-    <menu_item_check name="inventory_search_by_name" label="Имени"/>
-    <menu_item_check name="inventory_search_by_creator" label="Создателю"/>
-    <menu_item_check name="inventory_search_by_description" label="Описанию"/>
-    <menu_item_check name="inventory_search_by_uuid" label="UUID"/>
-    <menu_item_check name="inventory_search_by_all" label="Все"/>
-    <!-- Not implemented yet
-    <menu_item_check name="inventory_show_partial_results" label="Показать не полный резудьтат"/>
-    -->
-    </menu>
-    <!-- ## Zi: Extended Inventory Search -->
-	<menu_item_check label="Добавить придмет нажав 2х Л.К.М" name="add_inv_toggle"/>
+	<menu_item_check label="Сортировать по времени" name="sort_by_recent"/>
+	<menu_item_check label="Всегда сортировать папки по имени" name="sort_folders_by_name"/>
+	<menu_item_check label="Показывать системные папки вверху" name="sort_system_folders_to_top"/>
 	<menu_item_call label="Показать фильтры" name="show_filters"/>
 	<menu_item_call label="Сбросить фильтры" name="reset_filters"/>
 	<menu_item_call label="Закрыть все папки" name="close_folders"/>
-	<menu_item_call label="Очистить потерянное и найденное" name="empty_lostnfound"/>
+	<menu_item_call label="Очистить бюро находок" name="empty_lostnfound"/>
 	<menu_item_call label="Сохранить текстуру как" name="Save Texture As"/>
 	<menu_item_call label="Поделиться" name="Share"/>
 	<menu_item_call label="Найти оригинал" name="Find Original"/>
 	<menu_item_call label="Найти все ссылки" name="Find All Links"/>
 	<menu_item_call label="Очистить корзину" name="empty_trash"/>
 </toggleable_menu>
- 

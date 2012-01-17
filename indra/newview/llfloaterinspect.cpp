@@ -37,6 +37,7 @@
 #include "llselectmgr.h"
 #include "lltoolcomp.h"
 #include "lltoolmgr.h"
+#include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llviewerobject.h"
 #include "lluictrlfactory.h"

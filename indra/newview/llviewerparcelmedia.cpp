@@ -46,7 +46,6 @@
 //#include "llfirstuse.h"
 #include "llpluginclassmedia.h"
 #include "llviewertexture.h"
-#include "lloverlaybar.h"
 #include "llsdserialize.h"
 
 // Static Variables

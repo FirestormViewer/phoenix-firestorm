@@ -481,7 +481,7 @@ private:
 	S32				mHighlightedItem;
 	class LLViewBorder*	mBorder;
 	LLContextMenu	*mPopupMenu;
-
+	
 	LLView			*mCommentTextView;
 
 	LLWString		mSearchString;

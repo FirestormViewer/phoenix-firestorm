@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="bottom_tray">
 	<string name="DragIndicationImageName" value="Accordion_ArrowOpened_Off"/>
-	<string name="SpeakBtnToolTip" value="Включение микрофона Вкл/Выкл"/>
-	<string name="VoiceControlBtnToolTip" value="Показать/Скрыть панель управления голосом"/>
+	<string name="SpeakBtnToolTip" value="Включить/выключить микрофон"/>
+	<string name="VoiceControlBtnToolTip" value="Показать/скрыть панель управления голосом"/>
 	<layout_stack name="toolbar_stack">
 		<layout_panel name="speak_panel">
 			<talk_button name="talk">
@@ -10,57 +10,32 @@
 			</talk_button>
 		</layout_panel>
 		<layout_panel name="gesture_panel">
-			<gesture_combo_list label="Гестуры" name="Жесты" tool_tip="Показать / Скрыть жесты"/>
-		</layout_panel>
-		<layout_panel name="bottom_sbhome">
-			<bottomtray_button name="sidebar_home_btn" tool_tip="Показать / Скрыть сайдтаб дом"/>
-		</layout_panel>
-		<layout_panel name="bottom_sbme">
-			<bottomtray_button name="sidebar_me_btn" tool_tip="Показать / Скрыть профиль аватара"/>
-		</layout_panel>
-		<layout_panel name="bottom_sbpeople">
-			<bottomtray_button name="sidebar_people_btn" tool_tip="Показать / Скрыть панель контактов (Ctrl+Shift+A)"/>
-		</layout_panel>
-		<layout_panel name="bottom_sbplaces">
-			<bottomtray_button name="sidebar_places_btn" tool_tip="Показать / Скрыть панель профиля"/>
-		</layout_panel>
-		<layout_panel name="bottom_sbappearance">
-			<bottomtray_button name="sidebar_appearance_btn" tool_tip="Показать / Скрыть панель редактирования внешности"/>
+			<gesture_combo_list label="Жесты" name="Gesture" tool_tip="Показать/скрыть жесты"/>
 		</layout_panel>
 		<layout_panel name="movement_panel">
-			<bottomtray_button label="Движением" name="movement_btn" tool_tip="Показать / Скрыть управление движением"/>
+			<bottomtray_button label="Перемещение" name="movement_btn" tool_tip="Показать/скрыть панель управления движением"/>
 		</layout_panel>
 		<layout_panel name="cam_panel">
-			<bottomtray_button label="Вид" name="camera_btn" tool_tip="Показать / Скрыть управление камерой"/>
+			<bottomtray_button label="Камера" name="camera_btn" tool_tip="Показать/скрыть управление камерой"/>
 		</layout_panel>
 		<layout_panel name="snapshot_panel">
-			<bottomtray_button label="" name="snapshots" tool_tip="Скриншот"/>
+			<bottomtray_button name="snapshots" tool_tip="Сделать снимок"/>
 		</layout_panel>
 		<layout_panel name="build_btn_panel">
-			<bottomtray_button label="Строить" name="build_btn" tool_tip="Показать / Скрыть инструменты строительства (Ctrl+3)"/>
+			<bottomtray_button label="Строительство" name="build_btn" tool_tip="Показать/скрыть инструменты"/>
 		</layout_panel>
 		<layout_panel name="search_btn_panel">
-			<bottomtray_button label="Поиск" name="search_btn" tool_tip="Показать / Скрыть поиск (Ctrl+F)"/>
+			<bottomtray_button label="Поиск" name="search_btn" tool_tip="Показать/скрыть поиск"/>
 		</layout_panel>
 		<layout_panel name="world_map_btn_panel">
-			<bottomtray_button label="Карта" name="world_map_btn" tool_tip="Показать / Скрыть карту мира (Ctrl+M)"/>
+			<bottomtray_button label="Карта" name="world_map_btn" tool_tip="Показать/скрыть карту мира"/>
 		</layout_panel>
 		<layout_panel name="mini_map_btn_panel">
-			<bottomtray_button label="Мини-карта" name="mini_map_btn" tool_tip="Показать / Скрыть мини-карту (Ctrl+Shift+M)"/>
-		</layout_panel>
-		<layout_panel name="bottom_sbinv">
-			<bottomtray_button name="sidebar_inv_btn" tool_tip="Показать / Скрыть инвентарь (Ctrl+I)"/>
-		</layout_panel>
-        <layout_panel name="quickprefs_btn_panel">
-			<bottomtray_button label="Быстрые настройки" name="quickprefs_toggle" tool_tip="Показать / Скрыть панель быстрых настроек"/>
-        </layout_panel>
-		<layout_panel name="ao_btn_panel">
-			<bottomtray_button name="ao_toggle_btn" tool_tip="Включить/выключить анимацию аватара"/>
-			<bottomtray_button name="ao_btn" tool_tip="Показать / Скрыть панель управления анимациями аватара"/>
+			<bottomtray_button label="Миникарта" name="mini_map_btn" tool_tip="Показать/скрыть миникарту"/>
 		</layout_panel>
 		<layout_panel name="im_well_panel">
 			<chiclet_im_well name="im_well">
-				<button name="Unread IM messages" tool_tip="ЛС"/>
+				<button name="Unread IM messages" tool_tip="Общение"/>
 			</chiclet_im_well>
 		</layout_panel>
 		<layout_panel name="notification_well_panel">

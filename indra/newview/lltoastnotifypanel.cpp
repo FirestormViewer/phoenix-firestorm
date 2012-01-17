@@ -95,8 +95,6 @@ mCloseNotificationOnDestroy(true)
 		sFont = LLFontGL::getFontSansSerif();
 		sFontSmall = LLFontGL::getFontSansSerifSmall();
 	}
-	// clicking on a button does not steal current focus
-	setIsChrome(TRUE);
 	// initialize
 	setFocusRoot(!mIsTip);
 	// get a form for the notification

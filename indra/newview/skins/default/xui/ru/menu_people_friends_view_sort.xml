@@ -1,47 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<toggleable_menu
-     name="menu_group_plus"
-     left="0" bottom="0" visible="false"
-     mouse_opaque="false">
-  <menu_item_check
-   label="Сортировать по имени"
-   name="sort_name">
-      <menu_item_check.on_click
-       function="People.Friends.ViewSort.Action"
-       parameter="sort_name" />
-      <menu_item_check.on_check
-       function="People.Friends.ViewSort.CheckItem"
-       parameter="sort_name" />
-  </menu_item_check>
-  <menu_item_check
-   label="Сортировать по статусу"
-   name="sort_status">
-      <menu_item_check.on_click
-       function="People.Friends.ViewSort.Action"
-       parameter="sort_status" />
-      <menu_item_check.on_check
-       function="People.Friends.ViewSort.CheckItem"
-       parameter="sort_status" />
-  </menu_item_check>
-  <menu_item_separator layout="topleft" />
-  <menu_item_check name="view_icons" label="Просмотр ярлыком пользователей">
-    <menu_item_check.on_click
-     function="People.Friends.ViewSort.Action"
-     parameter="view_icons" />
-    <menu_item_check.on_check
-     function="CheckControl"
-     parameter="FriendsListShowIcons" />
-  </menu_item_check>
-  <menu_item_check name="view_permissions" label="Просмотр предоствленных прав">
-    <menu_item_check.on_click
-     function="People.Friends.ViewSort.Action"
-     parameter="view_permissions" />
-    <menu_item_check.on_check
-     function="CheckControl"
-     parameter="FriendsListShowPermissions" />
-  </menu_item_check>
-  <menu_item_separator layout="topleft" />
-  <menu_item_call name="show_blocked_list" label="Показать объекты заблокированных пользователей">
-    <menu_item_call.on_click function="SideTray.ShowPanel" parameter="panel_block_list_sidetray" />
-  </menu_item_call>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="Сортировать по имени" name="sort_name"/>
+	<menu_item_check label="Сортировать по статусу" name="sort_status"/>
+	<menu_item_check label="Показывать значки" name="view_icons"/>
+	<menu_item_check label="Показывать разрешенные действия" name="view_permissions"/>
+	<menu_item_call label="Показать черный список" name="show_blocked_list"/>
 </toggleable_menu>

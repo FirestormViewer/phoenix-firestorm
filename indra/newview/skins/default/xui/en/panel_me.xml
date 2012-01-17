@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-
-<!-- This is the sidebar profile container of the current user -->
-
 <panel
  border="false"
  follows="all"
@@ -13,41 +10,11 @@
  top="0"
  background_visible="true"
  width="333">
-   <!--<text
-    type="string"
-    follows="top|left|right"
-    font="SansSerifHugeBold"
-    height="20"
-    layout="topleft"
-    left="15"
-    name="user_name"
-    text_color="white"
-    top="0"
-    mouse_opaque="true"
-    width="280">
-          (Loading...)
-   </text> -->
-    <tab_container
-     follows="all"
-     height="555"
-     halign="center"
-     layout="topleft"
-     left="5"
-     name="tabs"
-     tab_position="top"
-     top_pad="10"
-     width="317">
-      <panel
-         class="panel_my_profile"
-         filename="panel_my_profile.xml"
-         label="PROFILE"
-         help_topic="panel_my_profile_tab"
-         name="panel_profile" />
-      <panel
-         class="panel_picks"
-         filename="panel_picks.xml"
+    <panel
+         label="MY PROFILE"
+        class="panel_picks"
+        filename="panel_picks.xml"
          label="PICKS"
-         help_topic="panel_my_picks_tab"
-         name="panel_picks" />
-    </tab_container>
+        help_topic="panel_my_picks_tab"
+        name="panel_picks"/>
 </panel>

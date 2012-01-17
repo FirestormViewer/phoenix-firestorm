@@ -1,201 +1,31 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- height="224"
- layout="topleft"
- name="Hardware Settings Floater"
- help_topic="hardware_settings_floater"
- title="HARDWARE SETTINGS"
- width="615">
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="16"
-     layout="topleft"
-     left="10"
-     name="Filtering:"
-     top="20"
-     width="188">
-        Filtering:
-    </text>
-    <check_box
-     control_name="RenderAnisotropic"
-     height="16"
-     label="Anisotropic Filtering (slower when enabled)"
-     layout="topleft"
-     left_pad="10"
-     name="ani"
-     top_delta="0"
-     width="256" />
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="22"
-     layout="topleft"
-     left="10"
-     name="Antialiasing:"
-     top_pad="7"
-     width="188">
-        Antialiasing:
-    </text>
-    <combo_box
-     control_name="RenderFSAASamples"
-     height="22"
-     initial_value="false"
-     label="Antialiasing"
-     layout="topleft"
-     left_pad="10"
-     name="fsaa"
-     top_delta="-4"
-     width="130">
-        <combo_box.item
-         label="Disabled"
-         name="FSAADisabled"
-         value="0" />
-        <combo_box.item
-         label="2x"
-         name="2x"
-         value="2" />
-        <combo_box.item
-         label="4x"
-         name="4x"
-         value="4" />
-        <combo_box.item
-         label="8x"
-         name="8x"
-         value="8" />
-        <combo_box.item
-         label="16x"
-         name="16x"
-         value="16" />
-    </combo_box>
-   <text
-     type="string"
-     top_delta="0"
-     length="1"
-     follows="left|top"
-     height="16"
-     layout="topleft"
-     left_pad="10"
-     name="antialiasing restart"
-     width="188">
-      (requires viewer restart)
-    </text>
-    <spinner
-     top_delta="0"
-     control_name="RenderGamma"
-     decimal_digits="2"
-     follows="left|top"
-     height="16"
-     increment="0.01"
-     initial_value="1"
-     label="Gamma:"
-     label_width="198"
-     layout="topleft"
-     left="10"
-     max_val="2"
-     name="gamma"
-     top_pad="10"
-     width="262" />
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="16"
-     layout="topleft"
-     left_pad="10"
-     name="(brightness, lower is brighter)"
-     top_delta="2"
-     width="385">
-        (0 = default brightness, lower = brighter)
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="16"
-     layout="topleft"
-     left="10"
-     name="Enable VBO:"
-     top_pad="10"
-     width="188">
-        Enable VBO:
-    </text>
-    <check_box
-     control_name="RenderVBOEnable"
-     height="16"
-     initial_value="true"
-     label="Enable OpenGL Vertex Buffer Objects"
-     layout="topleft"
-     left_pad="10"
-     name="vbo"
-     tool_tip="Enabling this on modern hardware gives a performance gain.  However, older hardware often has poor implementations of VBOs and you may get crashes when this is enabled."
-     width="315" />
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="16"
-     layout="topleft"
-     left="10"
-     name="Enable VBO Stream:"
-     top_pad="10"
-     width="188">
-        Enable VBO Stream:
-    </text>
-
-     <check_box  
-      control_name="RenderUseStreamVBO"
-      height="16" 
-      initial_value="false"
-      label="Enable Streamed VBOs"
-      left_pad="10"
-      name="vbo_stream"
-      tool_tip="Disabling this may improve performance when VBOs are enabled. Disabling produced observable improvement on various AMD GPUs."
-     width="315" />
-
-
-    <slider
-     control_name="TextureMemory"
-     decimal_digits="0"
-     follows="left|top"
-     height="20"
-     increment="16"
-     initial_value="32"
-     label="Texture Memory (MB):"
-     label_width="195"
-     layout="topleft"
-     left="10"
-     max_val="1024"
-     name="GraphicsCardTextureMemory"
-     tool_tip="Amount of memory to allocate for textures. Defaults to video card memory. Reducing this may improve performance but may also make textures blurry."
-     top_pad="10"
-     width="360" />
-    <spinner
-     control_name="RenderFogRatio"
-     decimal_digits="1"
-     follows="left|top"
-     height="22"
-     initial_value="4"
-     label="Fog Distance Ratio:"
-     label_width="198"
-     layout="topleft"
-     left_delta="0"
-     max_val="10"
-     min_val="0.5"
-     name="fog"
-     top_pad="7"
-     width="262" />
-    <button
-     follows="right|bottom"
-     height="22"
-     label="OK"
-     label_selected="OK"
-     layout="topleft"
-     left="-102"
-     name="OK"
-     top="192"
-     width="90" />
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Hardware Settings Floater" title="АППАРАТНЫЕ НАСТРОЙКИ">
+	<text name="Filtering:">
+		Фильтрация:
+	</text>
+	<check_box label="Анизотропная фильтрация (медленнее, если включено)" name="ani"/>
+	<text name="antialiasing label">
+		Сглаживание:
+	</text>
+	<combo_box label="Сглаживание" name="fsaa">
+		<combo_box.item label="Выключено" name="FSAADisabled"/>
+		<combo_box.item label="2x" name="2x"/>
+		<combo_box.item label="4x" name="4x"/>
+		<combo_box.item label="8x" name="8x"/>
+		<combo_box.item label="16x" name="16x"/>
+	</combo_box>
+	<text name="antialiasing restart">
+		(требуется перезапуск)
+	</text>
+	<spinner label="Гамма:" name="gamma"/>
+	<text name="(brightness, lower is brighter)">
+		(чем меньше, тем ярче. 0 – яркость по умолчанию)
+	</text>
+	<text name="Enable VBO:">
+		Включить VBO:
+	</text>
+	<check_box initial_value="истина" label="Включить объекты вершинных буферов OpenGL" name="vbo" tool_tip="Включение этого параметра на современном оборудовании даст увеличение производительности.  Однако на старом оборудовании это может привести к сбою приложения."/>
+	<slider label="Память для текстур (Мб):" name="GraphicsCardTextureMemory" tool_tip="Количество памяти, отводимое для текстур. По умолчанию равно памяти видеокарты. Уменьшение поможет увеличить производительность, но текстуры могут стать размытыми."/>
+	<spinner label="Дистанция тумана:" name="fog"/>
+	<button label="OK" label_selected="OK" name="OK"/>
 </floater>

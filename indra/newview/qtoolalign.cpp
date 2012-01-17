@@ -251,7 +251,7 @@ void render_cone_bbox(LLBBox bbox)
 	setup_transforms_bbox(bbox);
 
 	gGL.flush();
-	gCone.render(CONE_LOD_HIGHEST);
+	gCone.render();
 
 	gGL.popMatrix();
 }

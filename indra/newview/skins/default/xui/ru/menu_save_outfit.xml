@@ -1,22 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<toggleable_menu
- height="201"
- layout="topleft"
- mouse_opaque="false"
- name="save_outfit_menu"
- width="120">
-    <menu_item_call 
-     name="save_outfit" 
-     label="Сохранить">
-        <menu_item_call.on_click 
-         function="Outfit.Save.Action"
-         userdata=""/>
-        </menu_item_call>
-    <menu_item_call 
-     name="save_as_new_outfit" 
-     label="Сохранить как">
-        <menu_item_call.on_click 
-         function="Outfit.SaveAs.Action"
-         userdata="" />
-    </menu_item_call>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="save_outfit_menu">
+	<menu_item_call label="Сохранить" name="save_outfit"/>
+	<menu_item_call label="Сохранить как" name="save_as_new_outfit"/>
 </toggleable_menu>

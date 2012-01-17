@@ -1,26 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<context_menu
- layout="topleft"
- name="Teleport History Item Context Menu">
-    <menu_item_call
-     label="Телепорт"
-     layout="topleft"
-     name="Teleport">
-        <menu_item_call.on_click
-         function="TeleportHistory.Teleport" />
-    </menu_item_call>
-    <menu_item_call
-     label="Больше информации"
-     layout="topleft"
-     name="More Information">
-        <menu_item_call.on_click
-         function="TeleportHistory.MoreInformation" />
-    </menu_item_call>
-    <menu_item_call
-     label="Копировать в буфер обмена"
-     layout="topleft"
-     name="CopyToClipboard">
-        <menu_item_call.on_click
-         function="TeleportHistory.CopyToClipboard" />
-    </menu_item_call>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Teleport History Item Context Menu">
+	<menu_item_call label="Телепорт" name="Teleport"/>
+	<menu_item_call label="Информация" name="More Information"/>
+	<menu_item_call label="Копировать в буфер обмена" name="CopyToClipboard"/>
 </context_menu>

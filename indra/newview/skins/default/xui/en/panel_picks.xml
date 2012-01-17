@@ -7,9 +7,9 @@ background_opaque="false"
  height="450"
  label="Picks"
  layout="topleft"
- left="0"
+ left="8"
  name="panel_picks"
- top="0"
+ top_pad="0"
  width="313">
  <string
   name="no_picks"

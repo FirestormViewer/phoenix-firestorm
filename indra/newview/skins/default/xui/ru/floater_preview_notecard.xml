@@ -1,102 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- auto_tile="true"
- can_resize="true"
- default_tab_group="1"
- follows="left|top"
- height="361"
- layout="topleft"
- min_height="243"
- min_width="234"
- name="preview notecard"
- help_topic="preview_notecard"
- save_rect="true"
- title="Заметки:"
- width="400">
-    <floater.string
-     name="no_object">
-        Не удается найти объект, содержащий эту заметку.
-    </floater.string>
-    <floater.string
-     name="not_allowed">
-        У вас не достаточно прав, для просмотра этой заметки.
-    </floater.string>
-    <floater.string
-     name="Title">
-        Заметка: [NAME]
-    </floater.string>
-    <icon
-     follows="top|right"
-     height="18"
-     image_name="Запереть"
-     layout="topleft"
-     left="322"
-     mouse_opaque="true"
-     name="lock"
-     top="4"
-     width="18" />
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     font="SansSerif"
-     height="19"
-     layout="topleft"
-     left="10"
-     name="desc txt"
-     top="22"
-     width="90">
-        Описание:
-    </text>
-    <line_editor
-     border_style="line"
-     border_thickness="1"
-     follows="left|top|right"
-     font="SansSerif"
-     height="22"
-     layout="topleft"
-     left_pad="0"
-     max_length="127"
-     name="desc"
-     width="296" />
-    <text_editor
-     type="string"
-     length="1"
-     embedded_items="true"
-     follows="left|top|right|bottom"
-     font="SansSerif"
-     height="281"
-     ignore_tab="false"
-     layout="topleft"
-     left="4"
-     max_length="65536"
-     name="Редактор заметок"
-     parse_urls="false" 
-     tab_group="1"
-     top="46"
-     width="392"
-     word_wrap="true">
-        Загрузка...
-    </text_editor>
-    <button
-     follows="right|bottom"
-     height="22"
-     label="Сохранить"
-     label_selected="Сохранить"
-     layout="topleft"
-     left="178"
-     name="Save"
-     top="332"
-     width="100" />
-    <button
-     follows="right|bottom"
-     height="22"
-     label="Удалить"
-     label_selected="Удалить"
-     layout="topleft"
-     left="288"
-     name="Delete"
-     top="332"
-     width="100" />
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview notecard" title="ЗАМЕТКА:">
+	<floater.string name="no_object">
+		Невозможно найти объект, содержащий эту заметку.
+	</floater.string>
+	<floater.string name="not_allowed">
+		У вас нет прав для просмотра заметки.
+	</floater.string>
+	<floater.string name="Title">
+		Заметка: [NAME]
+	</floater.string>
+	<text name="desc txt">
+		Описание:
+	</text>
+	<text_editor name="Notecard Editor">
+		Загрузка...
+	</text_editor>
+	<button label="Сохранить" label_selected="Сохранить" name="Save"/>
+	<button label="Удалить" label_selected="Удалить" name="Delete"/>
 </floater>

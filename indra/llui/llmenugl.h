@@ -516,6 +516,9 @@ public:
 
 	static class LLMenuHolderGL* sMenuContainer;
 	
+	void resetScrollPositionOnShow(bool reset_scroll_pos) { mResetScrollPositionOnShow = reset_scroll_pos; }
+	bool isScrollPositionOnShowReset() { return mResetScrollPositionOnShow; }
+
 protected:
 	void createSpilloverBranch();
 	void cleanupSpilloverBranch();
@@ -565,6 +568,7 @@ private:
 	KEY				mJumpKey;
 	BOOL			mCreateJumpKeys;
 	S32				mShortcutPad;
+	bool			mResetScrollPositionOnShow;
 }; // end class LLMenuGL
 
 
@@ -677,7 +681,7 @@ public:
 
 			BOOL	appendContextSubMenu(LLContextMenu *menu);
 
-			LLHandle<LLContextMenu> getHandle() { mHandle.bind(this); return mHandle; }
+			LLHandle<LLContextMenu> getHandle() { return getDerivedHandle<LLContextMenu>(); }
 
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
 			// NOTE: this is currently only used for spell checking so don't presume this will return something meaningful elsewhere

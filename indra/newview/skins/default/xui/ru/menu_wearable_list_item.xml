@@ -1,90 +1,14 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<context_menu
- name="Outfit Wearable Context Menu">
-    <menu_item_call
-     label="Заменить"
-     layout="topleft"
-     name="wear_replace">
-        <on_click
-         function="Wearable.Wear" />
-    </menu_item_call>
-    <menu_item_call
-     label="Одеть"
-     layout="topleft"
-     name="wear_wear">
-        <on_click
-         function="Wearable.Wear" />
-    </menu_item_call>
-    <menu_item_call
-     label="Добавить"
-     layout="topleft"
-     name="wear_add">
-        <on_click
-         function="Wearable.Add" />
-    </menu_item_call>
-    <context_menu
-     label="Присоединить к"
-     layout="topleft"
-     name="wearable_attach_to" />
-    <context_menu
-     label="Присоединить к HUD"
-     layout="topleft"
-     name="wearable_attach_to_hud" />
-    <menu_item_call
-     label="Править"
-     layout="topleft"
-     name="edit">
-        <on_click
-         function="Wearable.Edit" />
-    </menu_item_call>
-    <menu_item_call
-     label="Снять / Отсоеденить"
-     layout="topleft"
-     name="take_off_or_detach">
-        <on_click
-         function="Wearable.TakeOffDetach" />
-    </menu_item_call>
-    <menu_item_call
-     label="Отсоеденить"
-     layout="topleft"
-     name="detach">
-        <on_click
-         function="Attachment.Detach" />
-    </menu_item_call>
-    <menu_item_call
-     label="Снять"
-     layout="topleft"
-     name="take_off">
-        <on_click
-         function="Clothing.TakeOff" />
-    </menu_item_call>
-    <menu_item_call
-     label="Профиль элемента"
-     layout="topleft"
-     name="object_profile">
-        <on_click
-         function="Attachment.Profile" />
-    </menu_item_call>
-    <menu_item_separator />
-    <menu_item_call
-     label="Показать оригинал"
-     layout="topleft"
-     name="show_original">
-        <on_click
-         function="Wearable.ShowOriginal" />
-    </menu_item_call>
-    <menu_item_call
-     label="Сделать новое"
-     layout="topleft"
-     name="create_new"
-     translate="false">
-        <on_click
-         function="Wearable.CreateNew" />
-    </menu_item_call>
-    <menu_item_call
-     label="--нет опций--"
-     layout="topleft"
-     name="--no options--"
-     translate="false">
-    </menu_item_call>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Outfit Wearable Context Menu">
+	<menu_item_call label="Заменить" name="wear_replace"/>
+	<menu_item_call label="Надеть" name="wear_wear"/>
+	<menu_item_call label="Добавить" name="wear_add"/>
+	<menu_item_call label="Снять / отсоединить" name="take_off_or_detach"/>
+	<menu_item_call label="Отсоединить" name="detach"/>
+	<context_menu label="Присоединить" name="wearable_attach_to"/>
+	<context_menu label="Присоединить к данным в игре" name="wearable_attach_to_hud"/>
+	<menu_item_call label="Снять" name="take_off"/>
+	<menu_item_call label="Изменить" name="edit"/>
+	<menu_item_call label="Профиль объекта" name="object_profile"/>
+	<menu_item_call label="Показать оригинал" name="show_original"/>
 </context_menu>

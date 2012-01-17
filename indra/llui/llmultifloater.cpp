@@ -205,7 +205,7 @@ void LLMultiFloater::addFloater(LLFloater* floaterp, BOOL select_added_floater, 
 
 	// update torn off status and remove title bar
 	floaterp->setTornOff(FALSE);
-	floaterp->setTitleVisible(FALSE);
+	//	floaterp->setTitleVisible(FALSE);
 	LLRect rect = floaterp->getRect();
 	rect.mTop -= floaterp->getHeaderHeight();
 	floaterp->setRect(rect);
@@ -315,7 +315,7 @@ void LLMultiFloater::removeFloater(LLFloater* floaterp)
 
 	// update torn off status and add title bar
 	floaterp->setTornOff(TRUE);
-	floaterp->setTitleVisible(TRUE);
+	//	floaterp->setTitleVisible(TRUE);
 	LLRect rect = floaterp->getRect();
 	rect.mTop += floaterp->getHeaderHeight();
 	floaterp->setRect(rect);

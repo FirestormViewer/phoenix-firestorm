@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="nearby_chat" title="Главный чат">
-	<layout_stack name="im_panels">
-		<layout_panel>
-			<button name="translate_btn" tool_tip="Использовать переводчик"/>
-			<line_editor name="chat_box" label="В главный чат"/>
-		</layout_panel>
-	</layout_stack>
+<floater name="nearby_chat" title="ЛОКАЛЬНЫЙ ЧАТ">
+	<check_box label="Перевод чата" name="translate_chat_checkbox"/>
 </floater>

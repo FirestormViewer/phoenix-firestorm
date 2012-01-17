@@ -44,7 +44,6 @@
 #include "llfilepicker.h"
 #include "llfile.h"
 #include "llsdserialize.h"
-#include "llfloaterchat.h"
 #include "llchat.h"
 #include "llinventorymodel.h"
 #include "llhost.h"

@@ -1,30 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<context_menu
- layout="topleft"
- name="Url Popup">
-    <menu_item_call
-     label="Показать на карте"
-     layout="topleft"
-     name="show_on_map">
-        <menu_item_call.on_click
-         function="Url.Execute" />
-    </menu_item_call>
-    <menu_item_separator
-     layout="topleft" />
-    <menu_item_call
-     label="Телепортироваться в это место"
-     layout="topleft"
-     name="teleport_to_location">
-        <menu_item_call.on_click
-         function="Url.Teleport" />
-    </menu_item_call>
-    <menu_item_separator
-     layout="topleft" />
-    <menu_item_call
-     label="Копировать SLurl в буфер обмена"
-     layout="topleft"
-     name="url_copy">
-        <menu_item_call.on_click
-         function="Url.CopyUrl" />
-    </menu_item_call>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Url Popup">
+	<menu_item_call label="Показать на карте" name="show_on_map"/>
+	<menu_item_call label="Телепорт в местоположение" name="teleport_to_location"/>
+	<menu_item_call label="Копировать URL-адрес SL в буфер обмена" name="url_copy"/>
 </context_menu>

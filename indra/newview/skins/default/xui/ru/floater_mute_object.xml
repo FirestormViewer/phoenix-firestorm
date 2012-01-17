@@ -1,64 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- can_minimize="false"
- height="130"
- layout="topleft"
- name="block by name"
- help_topic="mute_by_name"
- title="Блокировка объекта по имени"
- width="375">
-    <text
-     type="string"
-     length="1"
-     follows="top|left"
-     font="SansSerifLarge"
-     height="16"
-     layout="topleft"
-     left="10"
-     top="25"
-     name="message">
-        Заблокировать объект:
-    </text>
-    <line_editor
-     type="string"
-     length="1"
-     follows="top|right"
-     font="SansSerif"
-     height="20"
-     layout="topleft"
-     left_delta="0"
-     name="object_name"
-     top_pad="5"
-     width="350">
-        Имя объекта
-    </line_editor>
-    <text
-     type="string"
-     length="1"
-     follows="top|left"
-     font="SansSerifSmall"
-     height="16"
-     layout="topleft"
-     left="30"
-     name="note">
-      * Только текст заблокированных объектов, не звуки
-    </text>
-    <button
-     follows="bottom|left"
-     height="23"
-     label="Ок"
-     layout="topleft"
-     left="155"
-     name="OK"
-     top_pad="10"
-     width="100" />
-    <button
-     follows="bottom|right"
-     height="23"
-     label="Отмена"
-     layout="topleft"
-     left_pad="5"
-     name="Cancel"
-     width="100" />
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="block by name" title="В ЧЕРНЫЙ СПИСОК">
+	<text name="message">
+		Внести в черный список объект:
+	</text>
+	<line_editor name="object_name">
+		Название объекта
+	</line_editor>
+	<text name="note">
+		* Блокируются только сообщения объекта, но не звуки
+	</text>
+	<button label="ОК" name="OK"/>
+	<button label="Отмена" name="Cancel"/>
 </floater>

@@ -35,6 +35,7 @@
 #include "llfloaterreg.h"
 #include "lllocalcliprect.h"
 #include "lltrans.h"
+#include "llnearbychatbar.h"
 
 #include "llviewercontrol.h"
 #include "llagentdata.h"
@@ -325,12 +326,12 @@ BOOL	LLNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 			return TRUE;
 		else
 		{
-			LLFloaterReg::showInstance("nearby_chat",LLSD());
+			LLNearbyChatBar::getInstance()->showHistory();
 			return FALSE;
 		}
 	}
 
-	LLFloaterReg::showInstance("nearby_chat",LLSD());
+	LLNearbyChatBar::getInstance()->showHistory();
 	return LLPanel::handleMouseUp(x,y,mask);
 }
 

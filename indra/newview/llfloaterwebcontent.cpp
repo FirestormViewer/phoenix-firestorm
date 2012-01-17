@@ -48,7 +48,8 @@ LLFloaterWebContent::_Params::_Params()
 	show_chrome("show_chrome", true),
 	allow_address_entry("allow_address_entry", true),
 	preferred_media_size("preferred_media_size"),
-	trusted_content("trusted_content", false)
+	trusted_content("trusted_content", false),
+	show_page_title("show_page_title", true)
 {}
 
 LLFloaterWebContent::LLFloaterWebContent( const Params& params )
@@ -63,7 +64,8 @@ LLFloaterWebContent::LLFloaterWebContent( const Params& params )
 	mBtnForward(NULL),
 	mBtnReload(NULL),
 	mBtnStop(NULL),
-	mUUID(params.id())
+	mUUID(params.id()),
+	mShowPageTitle(params.show_page_title)
 {
 	mCommitCallbackRegistrar.add( "WebContent.Back", boost::bind( &LLFloaterWebContent::onClickBack, this ));
 	mCommitCallbackRegistrar.add( "WebContent.Forward", boost::bind( &LLFloaterWebContent::onClickForward, this ));
@@ -108,20 +110,6 @@ BOOL LLFloaterWebContent::postBuild()
 	return TRUE;
 }
 
-bool LLFloaterWebContent::matchesKey(const LLSD& key)
-{
-	LLUUID id = key["id"];
-	if (id.notNull())
-	{
-		return id == mKey["id"].asUUID();
-	}
-	else
-	{
-		return key["target"].asString() == mKey["target"].asString();
-	}
-}
-
-
 void LLFloaterWebContent::initializeURLHistory()
 {
 	// start with an empty list
@@ -143,56 +131,31 @@ void LLFloaterWebContent::initializeURLHistory()
 	}
 }
 
+bool LLFloaterWebContent::matchesKey(const LLSD& key)
+{
+	Params p(mKey);
+	Params other_p(key);
+	if (!other_p.target().empty() && other_p.target() != "_blank")
+	{
+		return other_p.target() == p.target();
+	}
+	else
+	{
+		return other_p.id() == p.id();
+	}
+}
+
 //static
 LLFloater* LLFloaterWebContent::create( Params p)
 {
-	lldebugs << "url = " << p.url() << ", target = " << p.target() << ", uuid = " << p.id() << llendl;
-
-	if (!p.id.isProvided())
-	{
-		p.id = LLUUID::generateNewID().asString();
-	}
-
-	if(p.target().empty() || p.target() == "_blank")
-	{
-		p.target = p.id();
-	}
-
-	S32 browser_window_limit = gSavedSettings.getS32("WebContentWindowLimit");
-
-	LLSD sd;
-	sd["target"] = p.target;
-	if(LLFloaterReg::findInstance(p.window_class, sd) != NULL)
-	{
-		// There's already a web browser for this tag, so we won't be opening a new window.
-	}
-	else if(browser_window_limit != 0)
-	{
-		// showInstance will open a new window.  Figure out how many web browsers are already open,
-		// and close the least recently opened one if this will put us over the limit.
-
-		LLFloaterReg::const_instance_list_t &instances = LLFloaterReg::getFloaterList(p.window_class);
-		lldebugs << "total instance count is " << instances.size() << llendl;
-
-		for(LLFloaterReg::const_instance_list_t::const_iterator iter = instances.begin(); iter != instances.end(); iter++)
-		{
-			lldebugs << "    " << (*iter)->getKey()["target"] << llendl;
-		}
-
-		if(instances.size() >= (size_t)browser_window_limit)
-		{
-			// Destroy the least recently opened instance
-			(*instances.begin())->closeFloater();
-		}
-	}
-
-	return LLFloaterReg::showInstance(p.window_class, p);
+	preCreate(p);
+	return new LLFloaterWebContent(p);
 }
 
 //static
 void LLFloaterWebContent::closeRequest(const std::string &uuid)
 {
-	LLFloaterWebContent* floaterp = getInstance(uuid);
+	LLFloaterWebContent* floaterp = instance_tracker_t::getInstance(uuid);
 	if (floaterp)
 	{
 		floaterp->closeFloater(false);
@@ -202,7 +165,7 @@ void LLFloaterWebContent::closeRequest(const std::string &uuid)
 //static
 void LLFloaterWebContent::geometryChanged(const std::string &uuid, S32 x, S32 y, S32 width, S32 height)
 {
-	LLFloaterWebContent* floaterp = getInstance(uuid);
+	LLFloaterWebContent* floaterp = instance_tracker_t::getInstance(uuid);
 	if (floaterp)
 	{
 		floaterp->geometryChanged(x, y, width, height);
@@ -234,6 +197,43 @@ void LLFloaterWebContent::geometryChanged(S32 x, S32 y, S32 width, S32 height)
 	LLRect new_rect;
 	getParent()->screenRectToLocal(geom, &new_rect);
 	setShape(new_rect);	
+}
+
+// static
+void LLFloaterWebContent::preCreate(LLFloaterWebContent::Params& p)
+{
+	lldebugs << "url = " << p.url() << ", target = " << p.target() << ", uuid = " << p.id() << llendl;
+
+	if (!p.id.isProvided())
+	{
+		p.id = LLUUID::generateNewID().asString();
+	}
+
+	if(p.target().empty() || p.target() == "_blank")
+	{
+		p.target = p.id();
+	}
+
+	S32 browser_window_limit = gSavedSettings.getS32("WebContentWindowLimit");
+	if(browser_window_limit != 0)
+	{
+		// showInstance will open a new window.  Figure out how many web browsers are already open,
+		// and close the least recently opened one if this will put us over the limit.
+
+		LLFloaterReg::const_instance_list_t &instances = LLFloaterReg::getFloaterList(p.window_class);
+		lldebugs << "total instance count is " << instances.size() << llendl;
+
+		for(LLFloaterReg::const_instance_list_t::const_iterator iter = instances.begin(); iter != instances.end(); iter++)
+		{
+			lldebugs << "    " << (*iter)->getKey()["target"] << llendl;
+		}
+
+		if(instances.size() >= (size_t)browser_window_limit)
+		{
+			// Destroy the least recently opened instance
+			(*instances.begin())->closeFloater();
+		}
+	}
 }
 
 void LLFloaterWebContent::open_media(const Params& p)
@@ -389,10 +389,13 @@ void LLFloaterWebContent::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent
 	{
 		std::string page_title = self->getMediaName();
 		// simulate browser behavior - title is empty, use the current URL
-		if ( page_title.length() > 0 )
-			setTitle( page_title );
-		else
-			setTitle( mCurrentURL );
+		if (mShowPageTitle)
+		{
+			if ( page_title.length() > 0 )
+				setTitle( page_title );
+			else
+				setTitle( mCurrentURL );
+		}
 	}
 	else if(event == MEDIA_EVENT_LINK_HOVERED )
 	{

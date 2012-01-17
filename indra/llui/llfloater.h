@@ -35,6 +35,7 @@
 #include "lluuid.h"
 //#include "llnotificationsutil.h"
 #include <set>
+#include <boost/signals2.hpp>
 
 class LLDragHandle;
 class LLResizeHandle;
@@ -59,11 +60,35 @@ const BOOL CLOSE_NO = FALSE;
 const BOOL ADJUST_VERTICAL_YES = TRUE;
 const BOOL ADJUST_VERTICAL_NO = FALSE;
 
-class LLFloater : public LLPanel
+namespace LLFloaterEnums
 {
-friend class LLFloaterView;
-friend class LLFloaterReg;
-friend class LLMultiFloater;
+	enum EOpenPositioning
+	{
+		OPEN_POSITIONING_NONE,
+		OPEN_POSITIONING_CASCADING,
+		OPEN_POSITIONING_CASCADE_GROUP,
+		OPEN_POSITIONING_CENTERED,
+		OPEN_POSITIONING_SPECIFIED,
+		OPEN_POSITIONING_COUNT
+	};
+}
+
+namespace LLInitParam
+{
+	template<>
+	struct TypeValues<LLFloaterEnums::EOpenPositioning> : public TypeValuesHelper<LLFloaterEnums::EOpenPositioning>
+	{
+		static void declareValues();
+	};
+}
+
+
+class LLFloater : public LLPanel, public LLInstanceTracker<LLFloater>
+{
+	friend class LLFloaterView;
+	friend class LLFloaterReg;
+	friend class LLMultiFloater;
+
 public:
 	struct KeyCompare
 	{
@@ -95,7 +120,7 @@ public:
 								short_title;
 		
 		Optional<bool>			single_instance,
-								auto_tile,
+								reuse_instance,
 								can_resize,
 								can_minimize,
 								can_close,
@@ -106,7 +131,13 @@ public:
 								save_visibility,
 								save_dock_state,
 								can_dock,
-								open_centered;
+								show_title;
+		
+		Optional<LLFloaterEnums::EOpenPositioning>	open_positioning;
+		Optional<S32>								specified_left;
+		Optional<S32>								specified_bottom;
+
+		
 		Optional<S32>			header_height,
 								legacy_header_height; // HACK see initFromXML()
 
@@ -126,6 +157,8 @@ public:
 		
 		Optional<CommitCallbackParam> open_callback,
 									  close_callback;
+
+		Ignored					follows;
 		
 		Params();
 	};
@@ -145,6 +178,7 @@ public:
 	bool buildFromFile(const std::string &filename, LLXMLNodePtr output_node = NULL);
 
 	boost::signals2::connection setMinimizeCallback( const commit_signal_t::slot_type& cb );
+	boost::signals2::connection setOpenCallback( const commit_signal_t::slot_type& cb );
 	boost::signals2::connection setCloseCallback( const commit_signal_t::slot_type& cb );
 
 	void initFromParams(const LLFloater::Params& p);
@@ -181,7 +215,6 @@ public:
 	void			setShortTitle( const std::string& short_title );
 	std::string		getShortTitle() const;
 	void			setHideOnMinimize(bool hide);
-	void			setTitleVisible(bool visible);
 	virtual void	setMinimized(BOOL b);
 	void			moveResizeHandlesToFront();
 	void			addDependentFloater(LLFloater* dependent, BOOL reposition = TRUE);
@@ -205,6 +238,7 @@ public:
 	void			setCanTearOff(BOOL can_tear_off);
 	virtual void	setCanResize(BOOL can_resize);
 	void			setCanDrag(BOOL can_drag);
+	bool			getCanDrag();
 	void			setHost(LLMultiFloater* host);
 	BOOL			isResizable() const				{ return mResizable; }
 	void			setResizeLimits( S32 min_width, S32 min_height );
@@ -253,7 +287,7 @@ public:
 	void			clearSnapTarget() { mSnappedTo.markDead(); }
 	LLHandle<LLFloater>	getSnapTarget() const { return mSnappedTo; }
 
-	LLHandle<LLFloater> getHandle() const { return mHandle; }
+	LLHandle<LLFloater> getHandle() const { return getDerivedHandle<LLFloater>(); }
 	const LLSD& 	getKey() { return mKey; }
 	virtual bool	matchesKey(const LLSD& key) { return mSingleInstance || KeyCompare::equate(key, mKey); }
 	
@@ -266,8 +300,6 @@ public:
 	virtual void    setDocked(bool docked, bool pop_on_undock = true);
 
 	virtual void    setTornOff(bool torn_off) { mTornOff = torn_off; }
-
-	void			stackWith(LLFloater& other);
 
 	// Return a closeable floater, if any, given the current focus.
 	static LLFloater* getClosableFloaterFromFocus(); 
@@ -292,16 +324,22 @@ public:
 
 	void			updateTransparency(ETypeTransparency transparency_type);
 		
-protected:
-	virtual void    applySavedVariables();
+	void			enableResizeCtrls(bool enable, bool width = true, bool height = true);
 
-	void			applyRectControl();
-	void			applyDockState();
-	void			applyMinimizedState();
+	bool			isPositioning(LLFloaterEnums::EOpenPositioning p) const { return (p == mOpenPositioning); }
+protected:
+	void			applyControlsAndPosition(LLFloater* other);
+
+	void			stackWith(LLFloater& other);
+
+	virtual bool	applyRectControl();
+	bool			applyDockState();
+	void			applyPositioning(LLFloater* other);
 	void			storeRectControl();
 	void			storeVisibilityControl();
 	void			storeDockStateControl();
 	void			storeMinimizeStateControl();
+	void			applyMinimizedState();
 
 	void		 	setKey(const LLSD& key);
 	void		 	setInstanceName(const std::string& name);
@@ -343,7 +381,6 @@ private:
 	BOOL			offerClickToButton(S32 x, S32 y, MASK mask, EFloaterButton index);
 	void			addResizeCtrls();
 	void			layoutResizeCtrls();
-	void			enableResizeCtrls(bool enable);
 	void 			addDragHandle();
 	void			layoutDragHandle();		// repair layout
 
@@ -382,8 +419,8 @@ private:
 	LLUIString		mShortTitle;
 	
 	BOOL			mSingleInstance;	// TRUE if there is only ever one instance of the floater
+	bool			mReuseInstance;		// true if we want to hide the floater when we close it instead of destroying it
 	std::string		mInstanceName;		// Store the instance name so we can remove ourselves from the list
-	BOOL			mAutoTile;			// TRUE if placement of new instances tiles
 	
 	BOOL			mDropShadow;		// ## Zi: Optional Drop Shadows
 	BOOL			mCanTearOff;
@@ -391,8 +428,11 @@ private:
 	BOOL			mCanClose;
 	BOOL			mDragOnLeft;
 	BOOL			mResizable;
-	bool			mOpenCentered;
 	bool			mHideOnMinimize;
+
+	LLFloaterEnums::EOpenPositioning	mOpenPositioning;
+	S32									mSpecifiedLeft;
+	S32									mSpecifiedBottom;
 	
 	S32				mMinWidth;
 	S32				mMinHeight;
@@ -431,18 +471,9 @@ private:
 	typedef void(*click_callback)(LLFloater*);
 	static click_callback sButtonCallbacks[BUTTON_COUNT];
 
-	typedef std::map<LLHandle<LLFloater>, LLFloater*> handle_map_t;
-	typedef std::map<LLHandle<LLFloater>, LLFloater*>::iterator handle_map_iter_t;
-	static handle_map_t	sFloaterMap;
-
-	std::vector<LLHandle<LLView> > mMinimizedHiddenChildren;
-
 	BOOL			mHasBeenDraggedWhileMinimized;
 	S32				mPreviousMinimizedBottom;
 	S32				mPreviousMinimizedLeft;
-
-//	LLFloaterNotificationContext* mNotificationContext;
-	LLRootHandle<LLFloater>		mHandle;	
 };
 
 
@@ -490,6 +521,10 @@ public:
 	BOOL			allChildrenClosed();
 	void			shiftFloaters(S32 x_offset, S32 y_offset);
 
+	void			hideAllFloaters();
+	void			showHiddenFloaters();
+
+
 	LLFloater* getFrontmost() const;
 	LLFloater* getBackmost() const;
 	LLFloater* getParentFloater(LLView* viewp) const;
@@ -504,11 +539,16 @@ public:
 	void setFloaterSnapView(LLHandle<LLView> snap_view) {mSnapView = snap_view; }
 
 private:
+	void hiddenFloaterClosed(LLFloater* floater);
+
+	LLRect				mLastSnapRect;
 	LLHandle<LLView>	mSnapView;
 	BOOL			mFocusCycleMode;
 	S32				mSnapOffsetBottom;
 	S32				mSnapOffsetRight;
 	S32				mMinimizePositionVOffset;
+	typedef std::vector<std::pair<LLHandle<LLFloater>, boost::signals2::connection> > hidden_floaters_t;
+	hidden_floaters_t mHiddenFloaters;
 };
 
 //

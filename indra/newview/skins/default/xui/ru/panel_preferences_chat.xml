@@ -1,204 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Чат" name="chat">
-	<tab_container
-	 label="Файршторм"
-	 layout="topleft"
-	 follows="all"
-	 top="5"
-	 bottom="-10"
-	 left="1"
-	 right="-1"
-	 name="tabs"
-	 tab_min_width="50"
-	 tab_position="top" >
-        <panel label="Основное" name="ChatGeneral">
-			<text name="font_size">
-				Размер шрифта чата:
-			</text>
-			<radio_group name="chat_font_size">
-				<radio_item label="Мален" name="radio" value="0"/>
-				<radio_item label="Средний" name="radio2" value="1"/>
-				<radio_item label="Большой" name="radio3" value="2"/>
-			</radio_group>
-			<text name="console_font_size">
-				Размер шрифта на экране:
-			</text>
-			<radio_group name="chat_console_font_size">
-				<radio_item label="Мален" name="consradio"/>
-				<radio_item label="Средний" name="consradio2"/>
-				<radio_item label="Большой" name="consradio3"/>
-			</radio_group>
-			<check_box label="Не выделять чат после отправки сообщения" name="CloseChatOnReturn"/>
-			<check_box initial_value="true" label="Воспроизводить анимацию набора когда пишете " name="play_typing_animation"/>
-			<check_box label="Воспроизводить анимации аватара (например, если кричит) " name="play_avatar_animations"/>
-			<check_box label="Воспроизводить звук когда пишут" name="play_typing_sound"/> 
-			<check_box label="Отправлять ЛС на E-Mail, если я offline" name="send_im_to_email"/>
-			<check_box label="Убрать заголовки чата (вернуться к стилю V1)" name="plain_text_chat_history"/>
-			<check_box label="При использовании заголовков чата показывать мини-ярлыки" name="ShowChatMiniIcons"/>
-			<check_box label="Штамп времени в локальном чате" name="hide_timestamps_nearby_chat"/>
-			<check_box label="Штамп времени в ЛС" name="hide_timestamps_im"/>
-			<check_box label="Чат в пузырьках" name="bubble_text_chat"/>
-			<check_box label="Показать индекатор ввода над аватаром в пузыре" name="bubble_text_typing"/>
-			<text name="inworld_typing_rg_label" width="115">
-			   При нажатии букв:
-			</text>
-			<radio_group name="inworld_typing_preference">
-				<radio_item label="Начать общий чат" name="radio_start_chat" width="130"/>
-		<radio_item label="Влияет на движение (папример WASD)" name="radio_move"/>
-			</radio_group>
-			<text name="show_ims_in_label"
-				  width="115">
-				Показать ЛС в:
-			</text>
-			<text name="req_restart_ims"
-				  left_pad="55"
-				  width="120">
-				(Требуется перезагрузка)
-			</text>
-			<radio_group name="chat_window" tool_tip="Отображать ваши ЛС в отдельных окнах или в виде вкладок (Требуется перезагрузка)."
-				 left_pad="10">
-		<radio_item label="Отдельном окне" name="radio" value="0"/>
-		<radio_item label="Закладках" name="radio2" value="1"/>
+<panel label="Текстовый чат" name="chat">
+	<text name="font_size">
+		Размер шрифта:
+	</text>
+	<radio_group name="chat_font_size">
+		<radio_item label="Мелкий" name="radio" value="0"/>
+		<radio_item label="Средний" name="radio2" value="1"/>
+		<radio_item label="Крупный" name="radio3" value="2"/>
 	</radio_group>
-            <text name="tab_direction_label" width="160">
-              Чат табы:
-            </text>
-            <radio_group name="chat_tab_direction" tool_tip="Изменить расположение чат табов">
-                <radio_item label="Горизон." name="radio_horizontal"/>
-                <radio_item label="Верти." name="radio_vertical"/>
-            </radio_group>
-            <text
-             name="req_restart_chattabs">
-                 (Перезагрузка)
-            </text>
-			<check_box label="Использевать машинный перевод (от Google bereitgestellt)" name="translate_chat_checkbox"/>
-			<text name="translate_language_text">
-				Переводить чат на: 
-			</text>
-			<combo_box name="translate_language_combobox" width="200">
-		<combo_box.item label="Системный" name="System Default Language"/>
-		<combo_box.item label="English (английский)" name="English"/>
-		<combo_box.item label="Dansk (Датский) - Beta" name="Danish"/>
-		<combo_box.item label="Deutsch (Немецкий) - Beta" name="German"/>
-		<combo_box.item label="Español (Испанский) - Beta" name="Spanish"/>
-		<combo_box.item label="Français (Французский) - Beta" name="French"/>
-		<combo_box.item label="Italiano (Итальянский) - Beta" name="Italian"/>
-		<combo_box.item label="Nederlands (Голландский) - Beta" name="Dutch"/>
-		<combo_box.item label="Polski (Польский) - Beta" name="Polish"/>
-		<combo_box.item label="Português (Португальский) - Beta" name="Portugese"/>
-		<combo_box.item label="Русский (Russisch)" name="Russian"/>
-		<combo_box.item label="Türkçe (Türkisch)" name="Turkish"/>
-		<combo_box.item label="Українська (Украинский)" name="Ukrainian"/>
-		<combo_box.item label="中文 (简体) (Китайский)" name="Chinese"/>
-		<combo_box.item label="日本語 (Японский)" name="Japanese"/>
-		<combo_box.item label="한국어 (Korean)" name="Korean"/>
-			</combo_box>
-		</panel>
-		
-        <!-- Chat: Notifications -->
-        <!-- This tab is only for notifications related directly to chat and not for notification options that simply use nearby chat -->
-        <panel label="Нотификации" name="ChatNotifications">
-            <text name="disable_toast_label">
-                 Всплывающие окна для входящего чата:
-            </text>
-            <check_box name="EnableGroupChatPopups" label="Групповые" tool_tip=""/>
-            <check_box name="EnableIMChatPopups" label="ЛС" tool_tip=""/>
-            <check_box name="FSUseNearbyChatConsole" label="Чат консоли вместо тост нотификацый (Viewer 1.x стиль)"/>
-            <check_box name="FSLogImToChatConsole" label="Показать ЛС и Групповые чаты в консолье"/>
-        </panel>
-		
-        <!-- Chat: Firestorm -->
-        <panel label="файшторм" name="ChatFirestorm">
-            <text name="chat_and_im_enhancements">
-              Чат- и ЛС-Дополнения:
-            </text>
-            <check_box name="AllowMUpose" label="&quot;:&quot; как синоним для &quot;/me&quot;"/>
-            <check_box name="EmotesUseItalic" label="Курсив для использования эмоций" left_delta="250"/>
-            <check_box name="AutoCloseOOC" label="Закрывать ((OOC))-Скобки"/>
-
-            <!-- Localchat chat bar -->
-            <check_box name="FSNearbyChatbar" label="Добавить строку ввода в окно чата" width="300"/>
-            <check_box name="FSShowChatChannel" label="Отображать канал в окне чата"/>
-            <check_box label="Скрыть главную строку ввода." name="AutohideChatBar" tool_tip="снизу, возле символов."/>
-            <check_box label="Выкл. строку ввода после ввода." name="CloseChatOnReturn"/>
-            <check_box name="FSMarkObjects" label="Маркировать обьекты без имени"/>
-
-            <!-- Groups -->
-            <text name="group_enhancements">
-             Групповой чат:
-            </text>
-            <check_box name="FSBoldGroupMods" label="Выделить модераторов"/>
-            <check_box name="FSMuteAllGroups" label="выкл. все групповые чаты"/>
-            <check_box name="FSMuteGroupWhenNoticesDisabled" label="Если опция 'получить нотификации' выкл. также выкл. групповой чат."/>
-
-            <!-- Logging -->
-            <text name="logging_enhancements">
-              История чата:
-            </text>
-            <check_box label="Показать штамп времени в локальном чате" name="hide_timestamps_nearby_chat"/>
-            <check_box label="Не воказать штамп времени в ЛС" name="hide_timestamps_im"/>
-            <check_box name="FSShowIMInChatHistory" label="Показать Лс в локальном чате"/>
-            <check_box name="FSLogIMInChatHistory" label="сохранить ЛС в локальном чате" width="190"/>
-            <text name="requires_save_chat_logs" width="280">
-              (Требует сохронение истории чата)
-            </text>
-
-            <!-- Console -->
-            <text name="console_enhancements">
-              Консоль:
-            </text>
-            <check_box name="ChatFullWidth" label="Ширина экрана для консолья" width="240"/>
-            <text name="requires_restart_label2">
-              (Требует рестарт)
-            </text>
-            <spinner label="Скрыть чат:"
-             label_width="130"
-             name="fade_chat_time"
-             width="180" />
-            <text name="text_box4">
-                (секунд)
-            </text>
-            <spinner name="max_chat_count"/>
-            <text name="text_box5">
-                (# строк)
-            </text>
-        </panel>
-
-        <!-- Chat: Radar -->
-        <panel label="Радар" name="ChatRadar">
-            <check_box name="reportChatRange" label="Радар сообшит, если Аватары покинули или вошли в радиус чата"/>
-            <check_box name="reportDrawRange" label="Радар сообшит, если Аватары покинули или вошли в радиус прорисовки"/>
-            <check_box name="RadarReportSimRange" label="Радар сообшит, если Аватары покинули или вошли в регион"/>
-        </panel>
-
-        <!-- Chat: Keyword Alerts -->
-        <panel label="Ключевые слова" name="ChatKeywordAlerts">
-            <check_box name="FSKeywordOn" label="Вкл. Ключевые слова"/>
-            <check_box name="FSKeywordInChat" label="Проверять локальный чат на Ключевые слова"/>
-            <check_box name="FSKeywordInIM" label="проверять Лс на Ключевые слова"/>
-            <text name="textFSKeywords">
-				Ключевые слова (через запятую):
-            </text>
-            <check_box name="FSKeywordChangeColor" label="Выделить цветом"/>
-            <color_swatch name="colorswatch" left="220" tool_tip="Нажмите, для выбора"/>
-            <check_box name="FSKeywordPlaySound" label="Звук"/>
-            <text name="textFSKeywordSound" width="200">
-              UUID для звука:
-            </text>
-        </panel>
-
-        <!-- Chat: Text Input -->
-        <panel label="Ввод текста" name="ChatTextInput">
-            <check_box label="Проверка орфографии" name="checkSpellCheck" width="200"/>
-                Источник:
-            <text name="textDictionaryMain" width="105">
-            </text>
-            <check_box label="Авто корректура" name="lgg_ac_enable"
-             tool_tip=""/>
-            <button name="lgg_ac_showgui" label="Настройки Авто-корректуры"
-             width="170">
-            </button>
-        </panel>
-
-	</tab_container>
+	<check_box initial_value="истина" label="Воспроизводить анимацию ввода текста при общении" name="play_typing_animation"/>
+	<check_box label="Отправлять мне сообщения по почте, когда меня нет в сети" name="send_im_to_email"/>
+	<check_box label="Вести журнал текстового IM и чата" name="plain_text_chat_history"/>
+	<check_box label="Чат в пузырьках" name="bubble_text_chat"/>
+	<text name="show_ims_in_label">
+		Показывать сообщения:
+	</text>
+	<text name="requires_restart_label">
+		(требуется перезапуск)
+	</text>
+	<radio_group name="chat_window" tool_tip="Показывать IM-сообщения в отдельных окнах или же в одном окне с несколькими вкладками (требуется перезапуск)">
+		<radio_item label="В отдельных окнах" name="radio" value="0"/>
+		<radio_item label="На вкладках" name="radio2" value="1"/>
+	</radio_group>
+	<text name="disable_toast_label">
+		Включить всплывающие сообщения с новыми репликами в чате:
+	</text>
+	<check_box label="Групповой чат" name="EnableGroupChatPopups" tool_tip="Отображать всплывающие уведомления при появлении сообщений в групповом чате"/>
+	<check_box label="Текстовые чаты" name="EnableIMChatPopups" tool_tip="Отображать всплывающие уведомления при получении IM-сообщений"/>
+	<spinner label="Время отображения всплывающих реплик:" name="nearby_toasts_lifetime"/>
+	<spinner label="Время затухания всплывающих реплик:" name="nearby_toasts_fadingtime"/>
+	<button label="Настройки перевода чата" name="ok_btn"/>
 </panel>

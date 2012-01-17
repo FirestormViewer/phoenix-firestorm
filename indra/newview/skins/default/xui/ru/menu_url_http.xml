@@ -1,37 +1,7 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<context_menu
- layout="topleft"
- name="Url Popup">
-    <menu_item_call
-     label="Открыть Web страницу"
-     layout="topleft"
-     name="url_open">
-        <menu_item_call.on_click
-         function="Url.Open" />
-    </menu_item_call>
-    <menu_item_separator
-     layout="topleft" />
-    <menu_item_call
-     label="Открыть во встроенном браузере"
-     layout="topleft"
-     name="url_open_internal">
-        <menu_item_call.on_click
-         function="Url.OpenInternal" />
-    </menu_item_call>
-    <menu_item_call
-     label="Открыть во внешнем браузере"
-     layout="topleft"
-     name="url_open_external">
-        <menu_item_call.on_click
-         function="Url.OpenExternal" />
-    </menu_item_call>
-    <menu_item_separator
-     layout="topleft" />
-    <menu_item_call
-     label="Копировать URL в буфер обмена"
-     layout="topleft"
-     name="url_copy">
-        <menu_item_call.on_click
-         function="Url.CopyUrl" />
-    </menu_item_call>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Url Popup">
+	<menu_item_call label="Открыть веб-страницу" name="url_open"/>
+	<menu_item_call label="Открыть во внутреннем браузере" name="url_open_internal"/>
+	<menu_item_call label="Открыть во внешнем браузере" name="url_open_external"/>
+	<menu_item_call label="Копировать URL-адрес в буфер обмена" name="url_copy"/>
 </context_menu>

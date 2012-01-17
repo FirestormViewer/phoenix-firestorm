@@ -36,11 +36,13 @@
 #include "llviewercontrol.h"
 #include "llfolderview.h"
 #include "llinventorybridge.h"
+#include "llviewerfoldertype.h"
+// linden library includes
+#include "lltrans.h"
+
 #include "llinventoryfunctions.h" // needed to query worn status
 #include "llappearancemgr.h" // needed to query whether we are in COF
 
-// linden library includes
-#include "lltrans.h"
 
 LLInventoryFilter::FilterOps::FilterOps() :
 	mFilterObjectTypes(0xffffffffffffffffULL),
@@ -197,7 +199,7 @@ bool LLInventoryFilter::checkFolder(const LLFolderViewFolder* folder)
 
 	const LLFolderViewEventListener* listener = folder->getListener();
 	const LLUUID folder_id = listener->getUUID();
-
+	
 	if (mFilterOps.mFilterTypes & FILTERTYPE_CATEGORY)
 	{
 		// Can only filter categories for items in your inventory
@@ -289,15 +291,33 @@ BOOL LLInventoryFilter::checkAgainstFilterType(const LLFolderViewItem* item) con
 	////////////////////////////////////////////////////////////////////////////////
 	// FILTERTYPE_WORN
 	// Pass if this item is worn (hiding COF and Outfits folders)
-	if (filterTypes & FILTERTYPE_WORN)
+//	if (filterTypes & FILTERTYPE_WORN)
+//	{
+//		if (!object) return FALSE;
+//		LLUUID cat_id = object->getParentUUID();
+//		const LLViewerInventoryCategory *cat = gInventory.getCategory(cat_id);
+//		return !LLAppearanceMgr::instance().getIsInCOF(object_id)
+//			&& (!cat || cat->getPreferredType() != LLFolderType::FT_OUTFIT)
+//			&& get_is_item_worn(object_id);
+//	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	// FILTERTYPE_EMPTYFOLDERS
+	// Pass if this item is a folder and is not a system folder that should be hidden
+	if (filterTypes & FILTERTYPE_EMPTYFOLDERS)
 	{
-		if (!object) return FALSE;
-		LLUUID cat_id = object->getParentUUID();
-		const LLViewerInventoryCategory *cat = gInventory.getCategory(cat_id);
-		return !LLAppearanceMgr::instance().getIsInCOF(object_id)
-			&& (!cat || cat->getPreferredType() != LLFolderType::FT_OUTFIT)
-			&& get_is_item_worn(object_id);
+		if (object_type == LLInventoryType::IT_CATEGORY)
+		{
+			bool is_hidden_if_empty = LLViewerFolderType::lookupIsHiddenIfEmpty(listener->getPreferredType());
+			if (is_hidden_if_empty)
+			{
+				// Force the fetching of those folders so they are hidden iff they really are empty...
+				gInventory.fetchDescendentsOf(object_id);
+				return FALSE;
+			}
+		}
 	}
+
 	return TRUE;
 }
 
@@ -433,6 +453,11 @@ void LLInventoryFilter::setFilterWearableTypes(U64 types)
 {
 	updateFilterTypes(types, mFilterOps.mFilterWearableTypes);
 	mFilterOps.mFilterTypes |= FILTERTYPE_WEARABLE;
+}
+
+void LLInventoryFilter::setFilterEmptySystemFolders()
+{
+	mFilterOps.mFilterTypes |= FILTERTYPE_EMPTYFOLDERS;
 }
 
 void LLInventoryFilter::setFilterUUID(const LLUUID& object_id)
@@ -686,11 +711,12 @@ void LLInventoryFilter::setShowFolderState(EFolderShow state)
 	}
 }
 
-void LLInventoryFilter::setFilterWorn(BOOL sl)
-{
-	setModified();
-	mFilterOps.mFilterTypes |= FILTERTYPE_WORN;
-}
+// ND_MERGE Worn is gone in FUI
+// void LLInventoryFilter::setFilterWorn(BOOL sl)
+// {
+// 	setModified();
+// 	mFilterOps.mFilterTypes |= FILTERTYPE_WORN;
+// }
 
 void LLInventoryFilter::setSortOrder(U32 order)
 {

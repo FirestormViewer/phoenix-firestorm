@@ -52,6 +52,7 @@
 #include "llvovolume.h"
 #include "llstatusbar.h"
 #include "llsdutil.h"
+#include "llvieweraudio.h"
 
 #include "llfloaterreg.h"
 #include "llfloaterpreference.h" // for the gear icon
@@ -821,22 +822,51 @@ void LLPanelNearByMedia::onCheckItem(LLUICtrl* ctrl, const LLUUID &row_id)
 
 bool LLPanelNearByMedia::setDisabled(const LLUUID &row_id, bool disabled)
 {
-	/* ## Zi: Media/Stream separation
-	if (row_id == PARCEL_AUDIO_LIST_ITEM_UUID)
-	{
-		if (disabled) onClickParcelAudioStop();
-		else onClickParcelAudioStart();
-		return true;
-	}
-	else
-	## Zi: Media/Stream separation */
+	// if (row_id == PARCEL_AUDIO_LIST_ITEM_UUID)
+	// {
+	// 	if (disabled)
+	// 	{
+	// 		onClickParcelAudioStop();
+	// 	}
+	// 	else
+	// 	{
+	// 		onClickParcelAudioPlay();
+	// 	}
+	// 	return true;
+	// }
+	// else if (row_id == PARCEL_MEDIA_LIST_ITEM_UUID)
+	// {
+	// 	if (disabled)
+	// 	{
+	// 		onClickDisableParcelMedia();
+	// 	}
+	// 	else
+	// 	{
+	// 		onClickEnableParcelMedia();
+	// 	}
+	// 	return true;
+	// }
+	// else {
+	// 	LLViewerMediaImpl* impl = LLViewerMedia::getMediaImplFromTextureID(row_id);
+	// 	if(impl)
+	// 	{
+	// 		impl->setDisabled(disabled, true);
+	// 		return true;
+	// 	}
+	// }
+	// return false;
+
 	if (row_id == PARCEL_MEDIA_LIST_ITEM_UUID)
 	{
-		if (disabled) onClickDisableParcelMedia();
-		else onClickEnableParcelMedia();
-		return true;
+		if (disabled)
+			onClickDisableParcelMedia();
+		else
+			onClickEnableParcelMedia();
+		return
+			true;
 	}
-	else {
+	else
+	{
 		LLViewerMediaImpl* impl = LLViewerMedia::getMediaImplFromTextureID(row_id);
 		if(impl)
 		{
@@ -845,6 +875,7 @@ bool LLPanelNearByMedia::setDisabled(const LLUUID &row_id, bool disabled)
 		}
 	}
 	return false;
+
 }
 								
 //static
@@ -884,31 +915,11 @@ void LLPanelNearByMedia::onClickParcelMediaPause()
 }
 
 /* ## Zi: Media/Stream separation
-void LLPanelNearByMedia::onClickParcelAudioStart()
-{
-	// User *explicitly* started the internet stream, so keep the stream
-	// playing and updated as they cross to other parcels etc.
-	mParcelAudioAutoStart = true;
-		
-	if (!gAudiop)
-		return;
-
-	if (gSavedSettings.getBOOL("MediaEnableFilter"))
-	{
-		LLViewerParcelMedia::filterAudioUrl(LLViewerMedia::getParcelAudioURL());
-	}
-	else
-	{
-		gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
-	}
-}
-
 void LLPanelNearByMedia::onClickParcelAudioPlay()
 {
 	// User *explicitly* started the internet stream, so keep the stream
 	// playing and updated as they cross to other parcels etc.
 	mParcelAudioAutoStart = true;
-
 	if (!gAudiop)
 		return;
 
@@ -917,15 +928,12 @@ void LLPanelNearByMedia::onClickParcelAudioPlay()
 		// 'false' means unpause
 		gAudiop->pauseInternetStream(false);
 	}
-	else {
+	else
+	{
 		if (gSavedSettings.getBOOL("MediaEnableFilter"))
-		{
 			LLViewerParcelMedia::filterAudioUrl(LLViewerMedia::getParcelAudioURL());
-		}
 		else
-		{
-			gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
-		}
+			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(LLViewerMedia::getParcelAudioURL());
 	}
 }
 
@@ -935,11 +943,10 @@ void LLPanelNearByMedia::onClickParcelAudioStop()
 	// re-start audio when i.e. they move to another parcel, until
 	// they explicitly start it again.
 	mParcelAudioAutoStart = false;
-
 	if (!gAudiop)
 		return;
 
-	gAudiop->stopInternetStream();
+	LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
 }
 
 void LLPanelNearByMedia::onClickParcelAudioPause()
@@ -952,6 +959,7 @@ void LLPanelNearByMedia::onClickParcelAudioPause()
 }
 ## Zi: Media/Stream separation
 */
+
 bool LLPanelNearByMedia::shouldShow(LLViewerMediaImpl* impl)
 {	
 	const LLSD &choice_llsd = mShowCtrl->getSelectedValue();

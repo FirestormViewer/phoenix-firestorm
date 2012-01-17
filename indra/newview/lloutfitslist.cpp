@@ -35,12 +35,12 @@
 #include "llaccordionctrltab.h"
 #include "llagentwearables.h"
 #include "llappearancemgr.h"
+#include "llfloatersidepanelcontainer.h"
 #include "llinventoryfunctions.h"
 #include "llinventorymodel.h"
 #include "lllistcontextmenu.h"
 #include "llnotificationsutil.h"
 #include "lloutfitobserver.h"
-#include "llsidetray.h"
 #include "lltransutil.h"
 #include "llviewermenu.h"
 #include "llvoavatar.h"
@@ -355,7 +355,7 @@ protected:
 
 	static void editOutfit()
 	{
-		LLSideTray::getInstance()->showPanel("sidepanel_appearance", LLSD().with("type", "edit_outfit"));
+		LLFloaterSidePanelContainer::showPanel("appearance", LLSD().with("type", "edit_outfit"));
 	}
 
 	static void renameOutfit(const LLUUID& outfit_cat_id)

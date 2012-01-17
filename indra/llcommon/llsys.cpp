@@ -611,6 +611,7 @@ LLCPUInfo::LLCPUInfo()
 		out << " (" << mCPUMHz << " MHz)";
 	}
 	mCPUString = out.str();
+	LLStringUtil::trim(mCPUString);
 }
 
 bool LLCPUInfo::hasAltivec() const

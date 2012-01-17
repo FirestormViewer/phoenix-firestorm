@@ -65,7 +65,7 @@ public:
 private:
 	typedef std::map<LLUUID,LLFloater*> avatarID_panel_map_t;
 	avatarID_panel_map_t mSessions;
-
+	boost::signals2::connection mNewMessageConnection;
 };
 
 #endif // LL_LLIMFLOATERCONTAINER_H

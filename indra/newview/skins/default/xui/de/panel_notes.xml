@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Notizen &amp; Privatsphäre" name="panel_notes">
-	<text name="status_message" value="Meine Notizen:"/>
-	<text name="status_message2" value="Diese Person kann:"/>
-	<check_box label="meinen Online-Status sehen." name="status_check"/>
-	<check_box label="mich auf der Karte sehen." name="map_check"/>
-	<check_box label="meine Objekte bearbeiten, löschen oder nehmen." name="objects_check"/>
-</panel>

@@ -592,7 +592,6 @@ void LLCurl::Multi::cleanup()
 	{
 		return ; //nothing to clean.
 	}
-
 	// Clean up active
 	for(easy_active_list_t::iterator iter = mEasyActiveList.begin();
 		iter != mEasyActiveList.end(); ++iter)

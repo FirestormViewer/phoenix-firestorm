@@ -483,6 +483,7 @@ void LLScrollListCtrl::updateLayout()
 	{
 		mCommentTextView = getChildView("comment_text");
 	}
+
 	mCommentTextView->setShape(mItemListRect);
 
 	// how many lines of content in a single "page"

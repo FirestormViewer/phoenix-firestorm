@@ -42,6 +42,7 @@
 #include "llpumpio.h"
 #include "llhttpclient.h"
 #include "llsdserialize.h"
+#include "llproxy.h"
 
 // [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
 #ifdef LL_WINDOWS
@@ -595,4 +596,10 @@ bool LLCrashLogger::init()
 	}
 	
 	return true;
+}
+
+// For cleanup code common to all platforms.
+void LLCrashLogger::commonCleanup()
+{
+	LLProxy::cleanupClass();
 }

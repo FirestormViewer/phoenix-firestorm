@@ -1,30 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<menu
- layout="topleft"
- visible="false"
- name="Gear Wearing">
-    <menu_item_call
-     label="Править костюм"
-     layout="topleft"
-     name="edit">
-        <on_click
-         function="Gear.Edit" />
-    </menu_item_call>
-    <menu_item_call
-     label="Снять"
-     layout="topleft"
-     name="takeoff">
-        <on_click
-         function="Gear.TakeOff" />
-        <on_enable
-         function="Gear.OnEnable"
-         parameter="take_off" />
-    </menu_item_call>
-  <menu_item_call
-     label="Копировать список костюмов в буфер обмена"
-     layout="topleft"
-     name="copy">
-    <on_click
-     function="Gear.Copy" />
-  </menu_item_call>
-</menu>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Gear Wearing">
+	<menu_item_call label="Изменить костюм" name="edit"/>
+	<menu_item_call label="Снять" name="takeoff"/>
+	<menu_item_call label="Копировать список костюмов в буфер обмена" name="copy"/>
+</toggleable_menu>

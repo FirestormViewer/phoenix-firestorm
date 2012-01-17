@@ -34,9 +34,9 @@
 #include "llappviewer.h"
 #include "llavatarnamecache.h"
 #include "llbutton.h"
-#include "llbottomtray.h"
 #include "llchannelmanager.h"
 #include "llchiclet.h"
+#include "llchicletbar.h"
 #include "llfloaterabout.h"		// for sysinfo button -Zi
 #include "llfloaterreg.h"
 #include "llimfloatercontainer.h" // to replace separate IM Floaters with multifloater container
@@ -56,7 +56,6 @@
 #include "llinventorymodel.h"
 #include "llrootview.h"
 #include "llspeakers.h"
-#include "llsidetray.h"
 #include "llviewerchat.h"
 
 //AO: For moving callbacks from control panel into this class
@@ -72,11 +71,6 @@
 #include "fsdata.h"
 #include "llversioninfo.h"
 #include "llcheckboxctrl.h"
-
-static const S32 RECT_PADDING_NOT_INIT = -1;
-static const S32 RECT_PADDING_NEED_RECALC = -2;
-
-S32 LLIMFloater::sAllowedRectRightPadding = RECT_PADDING_NOT_INIT;
 
 LLIMFloater::LLIMFloater(const LLUUID& session_id)
   : LLTransientDockableFloater(NULL, true, session_id),
@@ -149,14 +143,14 @@ void LLIMFloater::onFocusLost()
 {
 	LLIMModel::getInstance()->resetActiveSessionID();
 	
-	LLBottomTray::getInstance()->getChicletPanel()->setChicletToggleState(mSessionID, false);
+	LLChicletBar::getInstance()->getChicletPanel()->setChicletToggleState(mSessionID, false);
 }
 
 void LLIMFloater::onFocusReceived()
 {
 	LLIMModel::getInstance()->setActiveSessionID(mSessionID);
 
-	LLBottomTray::getInstance()->getChicletPanel()->setChicletToggleState(mSessionID, true);
+	LLChicletBar::getInstance()->getChicletPanel()->setChicletToggleState(mSessionID, true);
 
 	if (getVisible())
 	{
@@ -971,7 +965,7 @@ LLIMFloater* LLIMFloater::show(const LLUUID& session_id)
 		if (floater->getDockControl() == NULL)
 		{
 			LLChiclet* chiclet =
-					LLBottomTray::getInstance()->getChicletPanel()->findChiclet<LLChiclet>(
+					LLChicletBar::getInstance()->getChicletPanel()->findChiclet<LLChiclet>(
 							session_id);
 			if (chiclet == NULL)
 			{
@@ -979,11 +973,11 @@ LLIMFloater* LLIMFloater::show(const LLUUID& session_id)
 			}
 			else
 			{
-				LLBottomTray::getInstance()->getChicletPanel()->scrollToChiclet(chiclet);
+				LLChicletBar::getInstance()->getChicletPanel()->scrollToChiclet(chiclet);
 			}
 
 			floater->setDockControl(new LLDockControl(chiclet, floater, floater->getDockTongue(),
-					LLDockControl::TOP,  boost::bind(&LLIMFloater::getAllowedRect, floater, _1)));
+					LLDockControl::BOTTOM));
 		}
 
 		// window is positioned, now we can show it.
@@ -991,43 +985,6 @@ LLIMFloater* LLIMFloater::show(const LLUUID& session_id)
 	}
 
 	return floater;
-}
-
-//static
-bool LLIMFloater::resetAllowedRectPadding()
-{
-	//reset allowed rect right padding if "SidebarCameraMovement" option 
-	//or sidebar state changed
-	sAllowedRectRightPadding = RECT_PADDING_NEED_RECALC ;
-	return true;
-}
-
-void LLIMFloater::getAllowedRect(LLRect& rect)
-{
-	if (sAllowedRectRightPadding == RECT_PADDING_NOT_INIT) //wasn't initialized
-	{
-		gSavedSettings.getControl("SidebarCameraMovement")->getSignal()->connect(boost::bind(&LLIMFloater::resetAllowedRectPadding));
-
-		LLSideTray*	side_bar = LLSideTray::getInstance();
-		side_bar->setVisibleWidthChangeCallback(boost::bind(&LLIMFloater::resetAllowedRectPadding));
-		sAllowedRectRightPadding = RECT_PADDING_NEED_RECALC;
-	}
-
-	rect = gViewerWindow->getWorldViewRectScaled();
-	if (sAllowedRectRightPadding == RECT_PADDING_NEED_RECALC) //recalc allowed rect right padding
-	{
-		LLPanel* side_bar_tabs =
-				gViewerWindow->getRootView()->getChild<LLPanel> (
-						"side_bar_tabs");
-		sAllowedRectRightPadding = side_bar_tabs->getRect().getWidth();
-		LLTransientFloaterMgr::getInstance()->addControlView(side_bar_tabs);
-
-		if (gSavedSettings.getBOOL("SidebarCameraMovement") == FALSE)
-		{
-			sAllowedRectRightPadding += LLSideTray::getInstance()->getVisibleWidth();
-		}
-	}
-	rect.mRight -= sAllowedRectRightPadding;
 }
 
 void LLIMFloater::setDocked(bool docked, bool pop_on_undock)
@@ -1085,7 +1042,7 @@ void LLIMFloater::setVisible(BOOL visible)
 
 	if(!visible)
 	{
-		LLIMChiclet* chiclet = LLBottomTray::getInstance()->getChicletPanel()->findChiclet<LLIMChiclet>(mSessionID);
+		LLIMChiclet* chiclet = LLChicletBar::getInstance()->getChicletPanel()->findChiclet<LLIMChiclet>(mSessionID);
 		if(chiclet)
 		{
 			chiclet->setToggleState(false);

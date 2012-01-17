@@ -1,321 +1,50 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- height="700"
- layout="topleft"
- name="avatar_texture_debug"
- help_topic="avatar_texture_debug"
- title="AVATAR TEXTURES"
- width="940"
- can_resize="true">
-    <floater.string
-     name="InvalidAvatar">
-        INVALID AVATAR
-    </floater.string>
-
-    <scroll_container
-     color="SL-Background"
-     opaque="true"
-     follows="all"
-     height="680"
-     layout="topleft"
-     left="5"
-     top_pad="15"
-     name="profile_scroll"
-     reserve_scroll_corner="false"
-     width="930">
-    <panel
-     name="scroll_content_panel"
-     follows="left|top"
-     min_height="300"
-     layout="topleft"
-     top="0"
-     background_visible="false"
-     left="0"
-	 height="680">
-    <text
-     type="string"
-     length="1"
-     height="16"
-     layout="topleft"
-     left="15"
-     name="label"
-     top="20"
-     width="90">
-        Baked
-Textures
-    </text>
-    <text
-     type="string"
-     length="1"
-     height="16"
-     layout="topleft"
-     left_pad="22"
-     name="composite_label"
-     top_delta="0"
-     width="120">
-        Composite
-Textures
-    </text>
-    <button
-     height="40"
-     label="Dump IDs to Console"
-     label_selected="Dump"
-     layout="topleft"
-     name="Dump"
-     top_delta="0"
-	 right="-10"
-     width="150" />
-
-    <panel
-     name="scroll_content_panel"
-     follows="left|top"
-     min_height="300"
-     layout="topleft"
-     top="43"
-     background_visible="false"
-     height="930"
-     left="0"
-     width="1230">
-
-    <texture_picker
-     height="103"
-     label="Hair"
-     layout="topleft"
-     left="10"
-     name="hair-baked"
-     top="17"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Hair"
-     layout="topleft"
-     left_pad="21"
-     name="hair_grain"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Hair Alpha"
-     layout="topleft"
-     left_pad="7"
-     name="hair_alpha"
-     top_delta="0"
-     width="92" />
-
-    <texture_picker
-     height="103"
-     label="Head"
-     layout="topleft"
-     left="10"
-     name="head-baked"
-     top_delta="100"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Makeup"
-     layout="topleft"
-     left_pad="21"
-     name="head_bodypaint"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Head Alpha"
-     layout="topleft"
-     left_pad="7"
-     name="head_alpha"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Head Tattoo"
-     layout="topleft"
-     left_pad="7"
-     name="head_tattoo"
-     top_delta="0"
-     width="92" />
-
-    <texture_picker
-     height="103"
-     label="Eyes"
-     layout="topleft"
-     left="10"
-     name="eyes-baked"
-     top_delta="100"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Eye"
-     layout="topleft"
-     left_pad="21"
-     name="eyes_iris"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Eyes Alpha"
-     layout="topleft"
-     left_pad="7"
-     name="eyes_alpha"
-     top_delta="0"
-     width="92" />
-
-    <texture_picker
-     height="103"
-     label="Upper Body"
-     layout="topleft"
-     left="10"
-     name="upper-baked"
-     top_delta="100"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Upper BodyPaint"
-     layout="topleft"
-     left_pad="21"
-     name="upper_bodypaint"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Undershirt"
-     layout="topleft"
-     left_pad="7"
-     name="upper_undershirt"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Gloves"
-     layout="topleft"
-     left_pad="7"
-     name="upper_gloves"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Shirt"
-     layout="topleft"
-     left_pad="7"
-     name="upper_shirt"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Upper Jacket"
-     layout="topleft"
-     left_pad="7"
-     name="upper_jacket"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Upper Alpha"
-     layout="topleft"
-     left_pad="7"
-     name="upper_alpha"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Upper Tattoo"
-     layout="topleft"
-     left_pad="7"
-     name="upper_tattoo"
-     top_delta="0"
-     width="92" />
-
-    <texture_picker
-     height="103"
-     label="Lower Body"
-     layout="topleft"
-     left="10"
-     name="lower-baked"
-     top_delta="100"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Lower BodyPaint"
-     layout="topleft"
-     left_pad="21"
-     name="lower_bodypaint"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Underpants"
-     layout="topleft"
-     left_pad="7"
-     name="lower_underpants"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Socks"
-     layout="topleft"
-     left_pad="7"
-     name="lower_socks"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Shoes"
-     layout="topleft"
-     left_pad="7"
-     name="lower_shoes"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Pants"
-     layout="topleft"
-     left_pad="7"
-     name="lower_pants"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Jacket"
-     layout="topleft"
-     left_pad="7"
-     name="lower_jacket"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Lower Alpha"
-     layout="topleft"
-     left_pad="7"
-     name="lower_alpha"
-     top_delta="0"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Lower Tattoo"
-     layout="topleft"
-     left_pad="7"
-     name="lower_tattoo"
-     top_delta="0"
-     width="92" />
-
-    <texture_picker
-     height="103"
-     label="Skirt"
-     layout="topleft"
-     left="10"
-     name="skirt-baked"
-     top_delta="100"
-     width="92" />
-    <texture_picker
-     height="103"
-     label="Skirt"
-     layout="topleft"
-     left_pad="21"
-     name="skirt"
-     top_delta="0"
-     width="92" />
-</panel>
-</panel>
-</scroll_container>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatar_texture_debug" title="ТЕКСТУРЫ АВАТАРА">
+	<floater.string name="InvalidAvatar">
+		НЕПРАВИЛЬНЫЙ АВАТАР
+	</floater.string>
+	<scroll_container name="profile_scroll">
+		<panel name="scroll_content_panel">
+			<text name="label">
+				Сброшенные
+Текстуры
+			</text>
+			<text name="composite_label">
+				Сложные
+Текстуры
+			</text>
+			<button label="Вывод ID на консоль" label_selected="Вывод" name="Dump"/>
+			<panel name="scroll_content_panel">
+				<texture_picker label="Волосы" name="hair-baked"/>
+				<texture_picker label="Волосы" name="hair_grain"/>
+				<texture_picker label="Альфа волос" name="hair_alpha"/>
+				<texture_picker label="Голова" name="head-baked"/>
+				<texture_picker label="Макияж" name="head_bodypaint"/>
+				<texture_picker label="Альфа головы" name="head_alpha"/>
+				<texture_picker label="Тату головы" name="head_tattoo"/>
+				<texture_picker label="Глаза" name="eyes-baked"/>
+				<texture_picker label="Глаз" name="eyes_iris"/>
+				<texture_picker label="Альфа глаз" name="eyes_alpha"/>
+				<texture_picker label="Верхняя часть тела" name="upper-baked"/>
+				<texture_picker label="Раскраска верхней части тела" name="upper_bodypaint"/>
+				<texture_picker label="Майка" name="upper_undershirt"/>
+				<texture_picker label="Перчатки" name="upper_gloves"/>
+				<texture_picker label="Рубашка" name="upper_shirt"/>
+				<texture_picker label="Верх пиджака" name="upper_jacket"/>
+				<texture_picker label="Альфа верха" name="upper_alpha"/>
+				<texture_picker label="Тату верха" name="upper_tattoo"/>
+				<texture_picker label="Нижняя часть тела" name="lower-baked"/>
+				<texture_picker label="Раскраска нижней части тела" name="lower_bodypaint"/>
+				<texture_picker label="Трусы" name="lower_underpants"/>
+				<texture_picker label="Носки" name="lower_socks"/>
+				<texture_picker label="Обувь" name="lower_shoes"/>
+				<texture_picker label="Брюки" name="lower_pants"/>
+				<texture_picker label="Пиджак" name="lower_jacket"/>
+				<texture_picker label="Альфа низа" name="lower_alpha"/>
+				<texture_picker label="Тату низа" name="lower_tattoo"/>
+				<texture_picker label="Юбка" name="skirt-baked"/>
+				<texture_picker label="Юбка" name="skirt"/>
+			</panel>
+		</panel>
+	</scroll_container>
 </floater>

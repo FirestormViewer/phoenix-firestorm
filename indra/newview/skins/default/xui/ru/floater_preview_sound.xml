@@ -1,62 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- auto_tile="true"
- height="85"
- layout="topleft"
- name="preview_sound"
- help_topic="preview_sound"
- width="280">
-    <floater.string
-     name="Title">
-        Звук: [NAME]
-    </floater.string>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     font="SansSerif"
-     height="19"
-     layout="topleft"
-     left="10"
-     top="22"
-     name="desc txt"
-     width="90">
-        Описание:
-    </text>
-    <line_editor
-     border_style="line"
-     border_thickness="1"
-     follows="left|top|right"
-     font="SansSerif"
-     height="19"
-     layout="topleft"
-     left_pad="0"
-     max_length="127"
-     name="desc"
-     width="170" />
-    <button
-     follows="left|top"
-     height="22"
-     label="Запустить всем"
-     label_selected="Запустить всем"
-     layout="topleft"
-     name="Sound play btn"
-     sound_flags="0"
-     top="55"
-     left="10"
-     tool_tip="Воспроизвести этот звук, чтобы другие могли услышать его"
-     width="125" />
-    <button
-     follows="left|top"
-     height="22"
-     label="Запустить себе"
-     label_selected="Запустить себе"
-     layout="topleft"
-     name="Sound audition btn"
-     sound_flags="0"
-     tool_tip="Воспроизвести этот звук, чтобы только вы могли его услышать"
-     left_pad="10"
-     width="125" />
-
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview_sound">
+	<floater.string name="Title">
+		Звук: [NAME]
+	</floater.string>
+	<text name="desc txt">
+		Описание:
+	</text>
+	<button label="Проиграть для всех" label_selected="Проиграть для всех" name="Sound play btn" tool_tip="Воспроизведение этого звука могут слышать другие участники"/>
+	<button label="Проиграть для себя" label_selected="Проиграть для себя" name="Sound audition btn" tool_tip="Воспроизведение этого звука могу слышать только я"/>
 </floater>

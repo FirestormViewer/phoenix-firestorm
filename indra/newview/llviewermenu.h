@@ -136,8 +136,6 @@ bool enable_buy_object();
 bool handle_go_to();
 bool update_grid_help();
 
-void toggle_destination_and_avatar_picker(const LLSD& show);
-
 // Export to XML or Collada
 void handle_export_selected( void * );
 

@@ -8,7 +8,7 @@
 	<menu_item_check label="Schaltfläche „Bauen“" name="ShowBuildButton"/>
 	<menu_item_check label="Schaltfläche „Suchen“" name="ShowSearchButton"/>
 	<menu_item_check label="Schaltfläche „Karte“" name="ShowWorldMapButton"/>
-	<menu_item_check label="Schaltfläche „Minikarte“" name="ShowMiniMapButton"/>
+	<menu_item_check label="Minikarten-Schaltfläche" name="ShowMiniMapButton"/>
 	<menu_item_check label="Schaltfläche „Startseite“" name="ShowHomeButton"/>
 	<menu_item_check label="Schaltfläche „Mein Profil“" name="ShowMeButton"/>
 	<menu_item_check label="Schaltfläche „Orte“" name="ShowPlacesButton"/>

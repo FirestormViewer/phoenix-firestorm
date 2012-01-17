@@ -1,3983 +1,460 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<menu_bar
- bg_visible="false"
- follows="left|top|right"
- name="Main Menu">
-    <menu
-     create_jump_keys="true"
-     label="Аватар"
-     name="Me"
-     tear_off="true">
-        
-        <menu_item_call
-             label="Аккаунт"
-             name="Manage Account">
-                <menu_item_call.on_click
-                 function="PromptShowURL"
-                 name="ManageMyAccount_url"
-                 parameter="WebLaunchJoinNow,http://secondlife.com/account/" />
-        </menu_item_call>
-        
-        <menu_item_call
-         label="Купить L$"
-         name="Buy and Sell L$">
-            <menu_item_call.on_click
-             function="BuyCurrency" />
-        </menu_item_call>
-
-        <menu_item_separator/>
-        
-        <menu_item_call
-         label="Настройки"
-         name="Preferences"
-         shortcut="control|P">
-            <menu_item_call.on_click
-             function="Floater.Show"
-             parameter="preferences" />
-        </menu_item_call>
-        
-        <menu_item_call
-         label="Профиль"
-         name="Profile">
-            <menu_item_call.on_click
-             function="ShowAgentProfile"
-             parameter="agent" />
-        </menu_item_call>
-        
-        <menu_item_call
-         label="Костюмы"
-         name="ChangeOutfit">
-            <menu_item_call.on_click
-             function="CustomizeAvatar" />
-            <menu_item_call.on_enable
-             function="Edit.EnableCustomizeAvatar" />
-        </menu_item_call>
-        
-        <menu_item_call
-         label="Снимок"
-         name="Take Snapshot"
-         shortcut="control|shift|S">
-            <menu_item_call.on_click
-             function="Floater.Show"
-             parameter="snapshot" />
-        </menu_item_call>
-        
-        <menu_item_check
-         label="Инвентарь"
-         name="Inventory"
-         shortcut="control|shift|I"
-		 visible="false">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="inventory" />
-            <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="inventory" />
-        </menu_item_check>
-        
-        <menu_item_check
-         label="Инвентарь"
-         name="ShowSidetrayInventory"
-         shortcut="control|I"
-		 visible="true">
-            <menu_item_check.on_check
-             function="SidetrayPanelVisible"
-             parameter="sidepanel_inventory" />
-            <menu_item_check.on_click
-             function="ShowSidetrayPanel"
-             parameter="sidepanel_inventory" />
-        </menu_item_check>
-        
-        <menu_item_check
-         label="Управление движением"
-         name="Movement Controls">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="moveview" />
-            <menu_item_check.on_click
-             function="World.Toggle.MovementControls" />
-        </menu_item_check>
-   
-	<menu
-             create_jump_keys="true"
-             label="Движение"
-             name="Movement"
-             tear_off="true">
-`     
-          <menu_item_call
-             label="Сесть"
-             layout="topleft"
-             shortcut="alt|shift|S"
-             name="Sit Down Here">
-                <menu_item_call.on_click
-                 function="Self.SitDown"
-                 parameter="" />
-                <menu_item_call.on_enable
-                 function="Self.EnableSitDown" />
-           </menu_item_call>
-           <menu_item_check
-             label="Лететь"
-             name="Fly"
-             shortcut="Home">
-                <menu_item_check.on_check
-                 function="Agent.getFlying" />
-                <menu_item_check.on_click
-                 function="Agent.toggleFlying" />
-                <menu_item_check.on_enable
-                 function="Agent.enableFlying" />
-            </menu_item_check>
-            <menu_item_check
-             label="Всегда бежать"
-             name="Always Run"
-             shortcut="control|R">
-                <menu_item_check.on_check
-                 function="World.CheckAlwaysRun" />
-                <menu_item_check.on_click
-                 function="World.AlwaysRun" />
-            </menu_item_check>
-          <menu_item_check
-             label="Принудительно сесть на землю"
-             shortcut="control|alt|S"
-             name="Force Toggle Sitting">
-                <menu_item_check.on_check
-                 function="Self.getForceSit" />
-                <menu_item_check.on_click
-                 function="Self.ForceSit"/>
-                <menu_item_check.on_enable
-                 function="Self.EnableForceSit" />
-           </menu_item_check>
-		   <menu_item_check
-			 label="Фантом"
-             shortcut="control|alt|P"
-			 name="Avatar Phantom">
-                <menu_item_check.on_check
-                   function="Self.getPhantom" />
-                <menu_item_check.on_click
-                   function="Self.togglePhantom" />
-			</menu_item_check>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu_bar name="Main Menu">
+	<menu label="Я" name="Me">
+		<menu_item_call label="Профиль…" name="Profile"/>
+		<menu_item_call label="Внешность..." name="ChangeOutfit"/>
+		<menu_item_call label="Выберите аватар..." name="Avatar Picker"/>
+		<menu_item_check label="Инвентарь..." name="Inventory"/>
+		<menu_item_call label="Новое окно инвентаря" name="NewInventoryWindow"/>
+		<menu_item_call label="Места..." name="Places"/>
+		<menu_item_call label="Подборка..." name="Picks"/>
+		<menu_item_call label="Управление камерой..." name="Camera Controls"/>
+		<menu label="Движение" name="Movement">
+			<menu_item_call label="Сесть" name="Sit Down Here"/>
+			<menu_item_check label="Полет" name="Fly"/>
+			<menu_item_check label="Всегда бегать" name="Always Run"/>
+			<menu_item_call label="Остановить анимацию" name="Stop Animating My Avatar"/>
+		</menu>
+		<menu label="Статус" name="Status">
+			<menu_item_call label="Нет на месте" name="Set Away"/>
+			<menu_item_call label="Не беспокоить" name="Set Busy"/>
+		</menu>
+		<menu_item_call label="Запрос статуса администратора" name="Request Admin Options"/>
+		<menu_item_call label="Выход из статуса администратора" name="Leave Admin Options"/>
+		<menu_item_call label="Купить L$" name="Buy and Sell L$"/>
+		<menu_item_call label="Информационная панель аккаунта..." name="Manage My Account"/>
+		<menu_item_call label="Настройки..." name="Preferences"/>
+		<menu_item_call label="Кнопки панели инструментов..." name="Toolbars"/>
+		<menu_item_call label="Скрыть все элементы управления" name="Hide UI"/>
+		<menu_item_call label="Выход из [APP_NAME]" name="Quit"/>
 	</menu>
-        
-        <menu_item_check
-         label="Управление камерой"
-         name="Camera Controls">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="camera" />
-            <menu_item_check.on_click
-             function="World.Toggle.CameraControls" />
-        </menu_item_check>
-        
-        <menu
-         create_jump_keys="true"
-         label="Здоровье аватара"
-         name="avhealth"
-         tear_off="true">
-   	        <menu_item_call
-	         label="Остановить анимации аватара"
-	         name="Stop Animating My Avatar">
-	            <menu_item_call.on_click
-	             function="Tools.StopAllAnimations" />
-	        </menu_item_call>
-	        <menu_item_call
-	         label="Принудительное обновление внешности (Rebake)"
-	         name="Rebake Texture"
-		 shortcut="control|alt|R">
-	            <menu_item_call.on_click
-	             function="Advanced.RebakeTextures" />
-	        </menu_item_call>
-		<menu_item_call
-                    label="Восстановить стандартный Мужской Аватар (Character Test)"
-                    name="ResetDefaultAvM">
-                    <menu_item_call.on_click
-                     function="Advanced.TestMale" />
-		</menu_item_call>
-          <menu_item_call
-                          label="Восстановить стандартный Женский Аватар (Character Test)"
-                          name="ResetDefaultAvF">
-            <menu_item_call.on_click
-             function="Advanced.TestFemale" />
-          </menu_item_call>
-	        <menu_item_check
-	         label="Показать вес загрузки аватара"
-	         name="Avatar Rendering Cost">
-	            <menu_item_check.on_check
-	             function="Advanced.CheckInfoDisplay"
-	             parameter="shame" />
-	            <menu_item_check.on_click
-	             function="Advanced.ToggleInfoDisplay"
-	             parameter="shame" />
-	        </menu_item_check>
-	        <menu_item_call
-             label="Уровень лагов"
-             name="Lag Meter">
-                <menu_item_call.on_click
-                 function="Floater.Show"
-                 parameter="lagmeter" />
-            </menu_item_call>
-          <menu_item_call
-             label="Пересоздать мост LSL"
-             name="Recreate LSL Bridge">
-            <menu_item_call.on_click
-             function="RecreateLSLBridge"/>
-          </menu_item_call>
-        </menu>
-        
-        <menu
-         create_jump_keys="true"
-         label="Загрузить"
-         layout="topleft"
-         name="Upload"
-         tear_off="true">
-            <menu_item_call
-             label="Изображение (L$[COST])..."
-             layout="topleft"
-             name="Upload Image"
-             shortcut="control|U">
-                <menu_item_call.on_click
-                 function="File.UploadImage"
-                 parameter="" />
-                <menu_item_call.on_enable
-                 function="File.EnableUpload" />
-                <menu_item_call.on_visible
-                 function="Upload.CalculateCosts"
-                 parameter="Upload Image" />
-            </menu_item_call>
-            <menu_item_call
-             label="Звук (L$[COST])..."
-             layout="topleft"
-             name="Upload Sound">
-                <menu_item_call.on_click
-                 function="File.UploadSound"
-                 parameter="" />
-                <menu_item_call.on_enable
-                 function="File.EnableUpload" />
-                <menu_item_call.on_visible
-                 function="Upload.CalculateCosts"
-                 parameter="Upload Sound" />
-            </menu_item_call>
-            <menu_item_call
-             label="Анимацию (L$[COST])..."
-             layout="topleft"
-             name="Upload Animation">
-                <menu_item_call.on_click
-                 function="File.UploadAnim"
-                 parameter="" />
-                <menu_item_call.on_enable
-                 function="File.EnableUpload" />
-                <menu_item_call.on_visible
-                 function="Upload.CalculateCosts"
-                 parameter="Upload Animation" />
-            </menu_item_call>
-            <menu_item_call
-             label="Массовая (Multi-file) загрузка..."
-             layout="topleft"
-             name="Bulk Upload">
-                <menu_item_call.on_click
-                 function="File.UploadBulk"
-                 parameter="" />
-            </menu_item_call>
-            <menu_item_call
-             label="Установить по умолчанию права загрузки"
-             name="perm prefs">
-                <menu_item_call.on_click
-                 function="Floater.Toggle"
-                 parameter="perm_prefs" />
-            </menu_item_call>
-        </menu>
-
-        
-        <menu_item_call
-         label="Запрос статуса Админ"
-         name="Request Admin Options"
-         shortcut="control|alt|G"
-		 visible="false">
-            <menu_item_call.on_click
-             function="Advanced.RequestAdminStatus" />
-        </menu_item_call>
-        
-        <menu_item_call
-         label="Покинуть статус Админ"
-         name="Leave Admin Options"
-         shortcut="control|alt|shift|G"
-		 visible="false">
-            <menu_item_call.on_click
-             function="Advanced.LeaveAdminStatus" />
-        </menu_item_call>
-
-        <menu_item_separator/>
-
-        <menu_item_call
-         label="Выход [APP_NAME]"
-         name="Quit"
-         shortcut="control|Q">
-            <menu_item_call.on_click
-             function="File.Quit" />
-        </menu_item_call>
-    </menu>
-    
-    <!-- Comm Menu -->
-    
-    <menu
-     create_jump_keys="true"
-     label="Общение"
-     name="Communicate"
-     tear_off="true">
-     
-        <menu
-         create_jump_keys="true"
-         label="Online Статус"
-         name="Status"
-         tear_off="true">
-            <menu_item_call
-             label="Отошел"
-             name="Set Away">
-                <menu_item_call.on_click
-                 function="World.SetAway" />
-            </menu_item_call>
-			<menu_item_call
-             label="Автоответчик"
-             name="Set Autorespond">
-                <menu_item_call.on_click
-                 function="World.SetAutorespond"/>
-            </menu_item_call>
-            <menu_item_call
-             label="Недоступен"
-             name="Set Busy">
-                <menu_item_call.on_click
-                 function="World.SetBusy"/>
-            </menu_item_call>
-        </menu>
-        
-        <menu_item_separator/>
-             
-        <menu_item_call
-         label="Друзья"
-         name="My Friends"
-         shortcut="control|shift|F">
-            <menu_item_call.on_click
-             function="SideTray.PanelPeopleTab"
-             parameter="friends_panel" />
-            </menu_item_call>
-        <menu_item_check
-         label="Контакты"
-         name="Contacts"
-         shortcut="control|alt|shift|F">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="imcontacts" />
-            <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="imcontacts" />
-            </menu_item_check>
-        <menu_item_call
-         label="Группы"
-         name="My Groups"
-         shortcut="control|shift|G">
-            <menu_item_call.on_click
-             function="SideTray.PanelPeopleTab"
-             parameter="groups_panel" />
-        </menu_item_call>
-        <menu_item_check
-         label="Локальный чат"
-         name="Nearby Chat"
-         shortcut="control|H"
-         use_mac_ctrl="true">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="nearby_chat" />
-            <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="nearby_chat" />
-        </menu_item_check>
-        <menu_item_check
-         label="Беседы"
-         name="Conversations"
-         shortcut="control|T"
-         use_mac_ctrl="true">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="im_container" />
-            <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="im_container" />
-        </menu_item_check>
-
-        <menu_item_separator/>
-
-        <menu_item_check
-         label="Жесты"
-         name="Gestures"
-         shortcut="control|G">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="gestures" />
-            <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="gestures" />
-        </menu_item_check>
-
-        <menu_item_check
-         label="Голосовые фильтра"
-         name="ShowVoice"
-         visibility_control="VoiceMorphingEnabled">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="voice_effect" />
-            <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="voice_effect" />
-        </menu_item_check>
-        
-        <!--menu_item_call
-         label="Чат"
-         name="Chat">
-            <menu_item_call.on_click
-             function="World.Chat" />
-        </menu_item_call-->
-    </menu>
-    
-    <!-- World Menu -->
-    
-    <menu
-     create_jump_keys="true"
-     label="Мир"
-     name="World"
-     tear_off="true">
-     
-        <menu_item_call
-            label="Ближайшие аватары"
-            name="Active Speakers"
-            shortcut="control|shift|A">
-            <menu_item_call.on_click
-             function="SideTray.PanelPeopleTab"
-             parameter="nearby_panel" />
-        </menu_item_call>
-            
-        <menu_item_check
-             label="мини-Карта"
-             name="Mini-Map"
-             shortcut="control|shift|M">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="mini_map" />
-            <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="mini_map" />
-        </menu_item_check>
-        
-         <menu_item_check
-             label="Карта Мира"
-             name="World Map"
-             shortcut="control|M"
-             use_mac_ctrl="true">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="world_map" />
-            <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="world_map" />
-        </menu_item_check>
-
-        <menu_item_separator/>
-        
-        <menu_item_call
-         label="Сделать закладку места"
-         name="Create Landmark Here">
-            <menu_item_call.on_click
-             function="World.CreateLandmark" />
-            <menu_item_call.on_enable
-             function="World.EnableCreateLandmark" />
-        </menu_item_call>
-
-        <menu_item_call
-         label="Профиль места"
-         layout="topleft"
-         name="Place Profile">
-            <menu_item_call.on_click
-             function="World.PlaceProfile" />
-        </menu_item_call>
-        
-        <menu_item_call
-         label="Детали участка"
-         name="About Land">
-            <menu_item_call.on_click
-             function="Floater.Show"
-             parameter="about_land" />
-        </menu_item_call>
-        
-        <menu_item_call
-         label="Детали региона"
-         name="Region/Estate">
-            <menu_item_call.on_click
-             function="Floater.Show"
-             parameter="region_info" />
-        </menu_item_call>
-
-        <menu_item_separator/>
-
-        <menu_item_call
-             label="Купить землю"
-             name="Buy Land">
-                <menu_item_call.on_click
-                 function="Land.Buy" />
-                <menu_item_call.on_enable
-                 function="World.EnableBuyLand" />
-            </menu_item_call>
-        
-        <menu_item_call
-             label="Показать владельца земли"
-             name="My Land">
-                <menu_item_call.on_click
-                 function="Floater.Show"
-                 parameter="land_holdings" />
-        </menu_item_call>
-        
-        <menu
-           create_jump_keys="true"
-           label="Показать больше"
-           name="LandShow"
-           tear_off="true">
-          
-           <menu_item_check
-                 label="Бан линии"
-                 name="Ban Lines">
-                <menu_item_check.on_check
-                   control="ShowBanLines" />
-                <menu_item_check.on_click
-                   function="ToggleControl"
-                   parameter="ShowBanLines" />
-           </menu_item_check>
-           
-           <menu_item_check
-                 label="Маяки"
-                 name="beacons"
-                 shortcut="control|alt|shift|N">
-                    <menu_item_check.on_check
-                     function="Floater.Visible"
-                     parameter="beacons" />
-                    <menu_item_check.on_click
-                     function="Floater.Toggle"
-                     parameter="beacons" />
-          </menu_item_check>
-          
-          <menu_item_check
-             label="Линии собственности"
-             name="Property Lines"
-             shortcut="control|alt|shift|P">
-            <menu_item_check.on_check
-               control="ShowPropertyLines" />
-            <menu_item_check.on_click
-               function="ToggleControl"
-               parameter="ShowPropertyLines" />
-          </menu_item_check>
-          
-          <menu_item_check
-             label="Владельцы земли"
-             name="Land Owners">
-            <menu_item_check.on_check
-               control="ShowParcelOwners" />
-            <menu_item_check.on_click
-               function="ToggleControl"
-               parameter="ShowParcelOwners" />
-          </menu_item_check>
-          
-          <menu_item_check
-             label="Координаты"
-             name="Coordinates">
-            <menu_item_check.on_click
-               function="ToggleControl"
-               parameter="NavBarShowCoordinates" />
-            <menu_item_check.on_check
-               control="NavBarShowCoordinates" />
-          </menu_item_check>
-          
-          <menu_item_check
-             label="Разрешения участка"
-             name="Parcel Properties">
-            <menu_item_check.on_click
-               function="ToggleControl"
-               parameter="NavBarShowParcelProperties" />
-            <menu_item_check.on_check
-               control="NavBarShowParcelProperties" />
-          </menu_item_check>
-          <menu_item_separator />
-          <menu_item_check
-             label="Дополнительное меню"
-             name="Show Advanced Menu"
-             shortcut="control|alt|shift|D">
-            <on_check
-               function="CheckControl"
-               parameter="UseDebugMenus" />
-            <on_click
-               function="ToggleControl"
-               parameter="UseDebugMenus" />
-          </menu_item_check>
-        </menu>
-
-        <menu_item_separator/>
-
-	    <menu_item_call
-	     label="Телепортироваться домой"
-	     name="Teleport Home"
-	     shortcut="control|shift|H">
-         <menu_item_call.on_click
-            function="World.TeleportHome" />
-         <menu_item_call.on_enable
-            function="World.EnableTeleportHome" />
-        </menu_item_call>
-        
-        <menu_item_call
-             label="Установить дом тут"
-             name="Set Home to Here">
-                <menu_item_call.on_click
-                 function="World.SetHomeLocation" />
-                <menu_item_call.on_enable
-                 function="World.EnableSetHomeLocation" />
-        </menu_item_call>
-        
-    <!--    <menu_item_check
-         label="Показать панель навигации"
-         name="ShowNavbarNavigationPanel">
-           <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="ShowNavbarNavigationPanel" />
-             <menu_item_check.on_check
-             function="CheckControl"
-             parameter="ShowNavbarNavigationPanel" />
-        </menu_item_check>
-       <menu_item_check
-         label="Показать панель Избранного"
-         name="ShowNavbarFavoritesPanel">
-           <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="ShowNavbarFavoritesPanel" />
-             <menu_item_check.on_check
-             function="CheckControl"
-             parameter="ShowNavbarFavoritesPanel" />
-        </menu_item_check>
-        <menu_item_separator/>-->
-
-    <menu
-         create_jump_keys="true"
-         label="Время суток"
-         name="Environment Settings"
-         tear_off="true">
-            <menu_item_call
-             label="Восход"
-             name="Sunrise">
-                <menu_item_call.on_click
-                 function="World.EnvSettings"
-                 parameter="sunrise" />
-            </menu_item_call>
-            <menu_item_call
-             label="День"
-             name="Noon"
-             shortcut="control|shift|Y">
-                <menu_item_call.on_click
-                 function="World.EnvSettings"
-                 parameter="noon" />
-            </menu_item_call>
-            <menu_item_call
-             label="Закат"
-             name="Sunset"
-             shortcut="control|shift|N">
-                <menu_item_call.on_click
-                 function="World.EnvSettings"
-                 parameter="sunset" />
-            </menu_item_call>
-            <menu_item_call
-             label="Ночь"
-             name="Midnight">
-                <menu_item_call.on_click
-                 function="World.EnvSettings"
-                 parameter="midnight" />
-            </menu_item_call>
-            <menu_item_call
-             label="Установки региона"
-             name="Revert to Region Default">
-                <menu_item_call.on_click
-                 function="World.EnvSettings"
-                 parameter="default" />
-            </menu_item_call>
-        </menu>
-        <menu_item_call
-         label="Редактор окружающей среды"
-         name="Environment Editor">
-            <menu_item_call.on_click
-             function="World.EnvSettings"
-             parameter="editor" />
-        </menu_item_call>
-        <menu_item_call
-            label="Редактор неба"
-            layout="topleft"
-            name="Windlight">
-            <menu_item_call.on_click
-             function="Floater.Show"
-             parameter="env_windlight" />
-        </menu_item_call>
-		<menu_item_separator/>
-		<menu_item_call
-		 label="Облать поиска"
-		 name="area_search">
-			<menu_item_call.on_click
-			 function="Floater.Toggle"
-			 parameter="area_search" />
-		</menu_item_call>
-    </menu>
-    <menu
-     create_jump_keys="true"
-     label="Строить"
-     name="BuildTools"
-     tear_off="true"
-     visible="true">
-       <menu_item_check
-         label="Строить"
-         name="Show Build Tools"
-         shortcut="control|B">
-            <menu_item_check.on_check
-             function="Build.Active" />
-            <menu_item_check.on_click
-             function="Build.Toggle" />
-            <menu_item_check.on_enable
-             function="Build.Enabled" />
-       </menu_item_check>
-       <menu
-          create_jump_keys="true"
-          label="Выбрать инструмент строительства"
-          name="Select Tool"
-          tear_off="true">
-         <menu_item_call
-			label="Фокусировка"
-			name="Focus"
-			shortcut="control|1">
-           <menu_item_call.on_click
-              function="Tools.SelectTool"
-              parameter="focus" />
-         </menu_item_call>
-         <menu_item_call
-			label="Перемещение"
-			name="Move"
-			shortcut="control|2">
-           <menu_item_call.on_click
-              function="Tools.SelectTool"
-              parameter="move" />
-         </menu_item_call>
-         <menu_item_call
-			label="Правка"
-			name="Edit"
-			shortcut="control|3">
-           <menu_item_call.on_click
-              function="Tools.SelectTool"
-              parameter="edit" />
-         </menu_item_call>
-         <menu_item_call
-			label="Создание"
-			name="Create"
-			shortcut="control|4">
-           <menu_item_call.on_click
-              function="Tools.SelectTool"
-              parameter="create" />
-         </menu_item_call>
-         <menu_item_call
-			label="Земля"
-			name="Land"
-			shortcut="control|5">
-           <menu_item_call.on_click
-              function="Tools.SelectTool"
-              parameter="land" />
-         </menu_item_call>
-	   </menu>
-        <menu_item_call
-           label="Объеденить"
-           name="Link"
-           shortcut="control|L">
-          <menu_item_call.on_click
-             function="Tools.Link" />
-          <menu_item_call.on_enable
-             function="Tools.EnableLink" />
-        </menu_item_call>
-        <menu_item_call
-           label="Разъеденить"
-           name="Unlink"
-           shortcut="control|shift|L">
-          <menu_item_call.on_click
-             function="Tools.Unlink" />
-          <menu_item_call.on_enable
-             function="Tools.EnableUnlink" />
-        </menu_item_call>
-        <menu_item_check
-             label="Редактировать объедененные части"
-             name="Edit Linked Parts">
-                <menu_item_check.on_check
-                 control="EditLinkedParts" />
-                <menu_item_check.on_click
-                 function="Tools.EditLinkedParts"
-                 parameter="EditLinkedParts" />
-                <menu_item_check.on_enable
-                 function="Tools.EnableToolNotPie" />
-            </menu_item_check>
-        <menu
-         create_jump_keys="true"
-         label="Выбрать объедененные части"
-         name="Select Linked Parts"
-         tear_off="true">
-            <menu_item_call
-             label="Выбрать следуйщую часть"
-             name="Select Next Part"
-	     shortcut="control|.">
-                <menu_item_call.on_click
-                 function="Tools.SelectNextPart"
-                 parameter="next" />
-                <menu_item_call.on_enable
-                 function="Tools.EnableSelectNextPart" />
-            </menu_item_call>
-            <menu_item_call
-             label="Выбрать предыдущую часть"
-             name="Select Previous Part"
-	     shortcut="control|,">
-                <menu_item_call.on_click
-                 function="Tools.SelectNextPart"
-                 parameter="previous" />
-                <menu_item_call.on_enable
-                 function="Tools.EnableSelectNextPart" />
-            </menu_item_call>
-            <menu_item_call
-             label="Добавить следующую часть"
-             name="Include Next Part"
-	     shortcut="control|shift|.">
-                <menu_item_call.on_click
-                 function="Tools.SelectNextPart"
-                 parameter="includenext" />
-                <menu_item_call.on_enable
-                 function="Tools.EnableSelectNextPart" />
-            </menu_item_call>
-            <menu_item_call
-             label="Добавить предыдущую часть"
-             name="Include Previous Part"
-	     shortcut="control|shift|,">
-                <menu_item_call.on_click
-                 function="Tools.SelectNextPart"
-                 parameter="includeprevious" />
-                <menu_item_call.on_enable
-                 function="Tools.EnableSelectNextPart" />
-            </menu_item_call>
-        </menu>
-        <menu_item_separator/>
-
-        <menu_item_call
-           label="Центрировать на выбранном"
-           name="Focus on Selection"
-           shortcut="H">
-          <menu_item_call.on_click
-             function="Tools.LookAtSelection"
-             parameter="focus" />
-          <menu_item_call.on_enable
-             function="Tools.SomethingSelectedNoHUD" />
-        </menu_item_call>
-        <menu_item_call
-           label="Масштабировать выбранное"
-           name="Zoom to Selection"
-           shortcut="shift|H">
-          <menu_item_call.on_click
-             function="Tools.LookAtSelection"
-             parameter="zoom" />
-          <menu_item_call.on_enable
-             function="Tools.SomethingSelectedNoHUD" />
-        </menu_item_call>
-
-        <menu_item_separator/>
-
-        <menu
-         create_jump_keys="true"
-         label="Объект"
-         name="Object"
-         tear_off="true">
-          <menu_item_call
-             label="Купить"
-             name="Menu Object Buy">
-            <menu_item_call.on_click
-               function="Tools.BuyOrTake"/>
-            <menu_item_call.on_visible
-               function="Tools.VisibleBuyObject"/>
-            <menu_item_call.on_enable
-               function="Tools.EnableBuyOrTake"/>
-          </menu_item_call>
-          <menu_item_call
-             label="Взять"
-             name="Menu Object Take">
-            <menu_item_call.on_click
-               function="Tools.BuyOrTake"/>
-            <menu_item_call.on_visible
-               function="Tools.VisibleTakeObject"/>
-            <menu_item_call.on_enable
-               function="Tools.EnableBuyOrTake"/>
-          </menu_item_call>
-          <menu_item_call
-			 label="Взять копию"
-			 name="Take Copy">
-			<menu_item_call.on_click
-               function="Tools.TakeCopy" />
-			<menu_item_call.on_enable
-               function="Tools.EnableTakeCopy" />
-          </menu_item_call>
-          <menu_item_call
-			 label="Сохранить в инвентарь"
-			 name="Save Object Back to My Inventory">
-			<menu_item_call.on_click
-               function="Tools.SaveToInventory" />
-			<menu_item_call.on_enable
-               function="Tools.EnableSaveToInventory" />
-          </menu_item_call>
-          <menu_item_call
-			 label="Вернуть в содержимое"
-			 name="Save Object Back to Object Contents">
-			<menu_item_call.on_click
-               function="Tools.SaveToObjectInventory" />
-			<menu_item_call.on_enable
-               function="Tools.EnableSaveToObjectInventory" />
-          </menu_item_call>
-          <menu_item_call
-			 label="Вернуть объект"
-			 name="Return Object back to Owner">
-			<menu_item_call.on_click
-               function="Object.Return" />
-			<menu_item_call.on_enable
-               function="Object.EnableReturn" />
-          </menu_item_call>
+	<menu label="Общение" name="Communicate">
+		<menu_item_check label="Чат..." name="Nearby Chat"/>
+		<menu_item_check label="Говорить" name="Speak"/>
+		<menu_item_check label="Настройки голоса..." name="Nearby Voice"/>
+		<menu_item_check label="Изменение голоса..." name="ShowVoice"/>
+		<menu_item_check label="Жесты..." name="Gestures"/>
+		<menu_item_call label="Друзья" name="My Friends"/>
+		<menu_item_call label="Группы" name="My Groups"/>
+		<menu_item_call label="Люди неподалеку" name="Active Speakers"/>
+	</menu>
+	<menu label="Мир" name="World">
+		<menu_item_call label="Добавить закладку на это место" name="Create Landmark Here"/>
+		<menu_item_call label="Пункты..." name="Destinations"/>
+		<menu_item_check label="Карта мира" name="World Map"/>
+		<menu_item_check label="Миникарта" name="Mini-Map"/>
+		<menu_item_check label="Поиск" name="Search"/>
+		<menu_item_call label="Телепортация домой" name="Teleport Home"/>
+		<menu_item_call label="Установить дом здесь" name="Set Home to Here"/>
+		<menu_item_call label="Снимок" name="Take Snapshot"/>
+		<menu_item_call label="Профиль места" name="Place Profile"/>
+		<menu_item_call label="О земле" name="About Land"/>
+		<menu_item_call label="Регион/землевладение" name="Region/Estate"/>
+		<menu_item_call label="Мои владения..." name="My Land"/>
+		<menu_item_call label="Купить эту землю" name="Buy Land"/>
+		<menu label="Показать" name="LandShow">
+			<menu_item_check label="Линии запрета" name="Ban Lines"/>
+			<menu_item_check label="Метки" name="beacons"/>
+			<menu_item_check label="Границы собственности" name="Property Lines"/>
+			<menu_item_check label="Владельцы земли" name="Land Owners"/>
+			<menu_item_check label="Координаты" name="Coordinates"/>
+			<menu_item_check label="Свойства участка" name="Parcel Properties"/>
+			<menu_item_check label="Меню «Дополнительно»" name="Show Advanced Menu"/>
 		</menu>
-        <menu
-           create_jump_keys="true"
-           label="Скрипты"
-           name="Scripts"
-           tear_off="true">
-          <menu_item_call
-             label="Перекомпиляция скриптов (Mono)"
-             name="Mono">
-            <menu_item_call.on_click
-               function="Tools.SelectedScriptAction"
-               parameter="compile mono" />
-            <menu_item_call.on_enable
-               function="EditableSelectedMono" />
-          </menu_item_call>
-          <menu_item_call
-             label="Перекомпиляция скриптов (LSL)"
-             name="LSL">
-            <menu_item_call.on_click
-               function="Tools.SelectedScriptAction"
-               parameter="compile lsl" />
-            <menu_item_call.on_enable
-               function="EditableSelected" />
-          </menu_item_call>
-          <menu_item_call
-             label="Сбросить скрипты"
-             name="Reset Scripts">
-            <menu_item_call.on_click
-               function="Tools.SelectedScriptAction"
-               parameter="reset" />
-            <menu_item_call.on_enable
-               function="EditableSelected" />
-          </menu_item_call>
-          <menu_item_call
-             label="Включить скрипты"
-             name="Set Scripts to Running">
-            <menu_item_call.on_click
-               function="Tools.SelectedScriptAction"
-               parameter="start" />
-            <menu_item_call.on_enable
-               function="EditableSelected" />
-          </menu_item_call>
-          <menu_item_call
-             label="Выключить скрипты"
-             name="Set Scripts to Not Running">
-            <menu_item_call.on_click
-               function="Tools.SelectedScriptAction"
-               parameter="stop" />
-            <menu_item_call.on_enable
-               function="EditableSelected" />
-          </menu_item_call>
-        </menu>
-
-        <menu_item_separator/>
-
-        <menu
-         create_jump_keys="true"
-         label="Опции"
-         name="Options"
-         tear_off="true">
-	   <menu_item_check
-	       label="Показать дополнительные разрешения"
-	       name="DebugPermissions">
-			  <menu_item_check.on_check
-				 function="CheckControl"
-				 parameter="DebugPermissions" />
-			  <menu_item_check.on_click
-				 function="ToggleControl"
-				 parameter="DebugPermissions" />
-			</menu_item_check>
-
-            <menu_item_separator/>
-
-            <menu_item_check
-                 label="Выбрать только мои объекты"
-                 name="Select Only My Objects">
-                    <menu_item_check.on_check
-                     control="SelectOwnedOnly" />
-                    <menu_item_check.on_click
-                     function="Tools.SelectOnlyMyObjects"
-                     parameter="agents" />
-                </menu_item_check>
-                <menu_item_check
-                 label="Выбрать только передвигаемые объекты"
-                 name="Select Only Movable Objects">
-                    <menu_item_check.on_check
-                     control="SelectMovableOnly" />
-                    <menu_item_check.on_click
-                     function="Tools.SelectOnlyMovableObjects"
-                     parameter="movable" />
-                </menu_item_check>
-                <menu_item_check
-                 label="Выбрать ближайшие"
-                 name="Select By Surrounding">
-                    <menu_item_check.on_check
-                     control="RectangleSelectInclusive" />
-                    <menu_item_check.on_click
-                     function="Tools.SelectBySurrounding" />
-            </menu_item_check>
-
-          <menu_item_separator/>
-
-                <menu_item_check
-                 label="Показать выбранные контуры"
-                 name="Show Selection Outlines">
-                    <menu_item_check.on_check
-                     function="CheckControl"
-                     parameter="RenderHighlightSelections" />
-                    <menu_item_check.on_click
-                     function="ToggleControl"
-                     parameter="RenderHighlightSelections" />
-                </menu_item_check>
-                <menu_item_check
-                 label="Показать скрытое выделение"
-                 name="Show Hidden Selection">
-                    <menu_item_check.on_check
-                     control="RenderHiddenSelections" />
-                    <menu_item_check.on_click
-                     function="Tools.ShowHiddenSelection" />
-                </menu_item_check>
-                <menu_item_check
-                 label="Показать радиус света для выбранного"
-                 name="Show Light Radius for Selection">
-                    <menu_item_check.on_check
-                     control="RenderLightRadius" />
-                    <menu_item_check.on_click
-                     function="Tools.ShowSelectionLightRadius" />
-                </menu_item_check>
-                <menu_item_check
-                 label="Показать луч выбора"
-                 name="Show Selection Beam">
-                    <menu_item_check.on_check
-                     control="ShowSelectionBeam" />
-                    <menu_item_check.on_click
-                     function="ToggleControl"
-                     parameter="ShowSelectionBeam" />
-                </menu_item_check>
-
-        <menu_item_separator/>
-
-                <menu_item_check
-                 label="Привязка к сетке"
-                 name="Snap to Grid"
-                 shortcut="G">
-                    <menu_item_check.on_check
-                     control="SnapEnabled" />
-                    <menu_item_check.on_click
-                     function="ToggleControl"
-                     parameter="SnapEnabled" />
-                    <menu_item_check.on_enable
-                     function="Tools.EnableToolNotPie" />
-                </menu_item_check>
-                <menu_item_call
-                 label="Сдвиг к ближайшему узлу XY сетки"
-                 name="Snap Object XY to Grid"
-                 shortcut="shift|X">
-                    <menu_item_call.on_click
-                     function="Tools.SnapObjectXY" />
-                    <menu_item_call.on_enable
-                     function="Tools.EnableToolNotPie" />
-                </menu_item_call>
-                <menu_item_call
-                 label="Использовать выбранное для сетки"
-                 name="Use Selection for Grid"
-                 shortcut="shift|G">
-                    <menu_item_call.on_click
-                     function="Tools.UseSelectionForGrid" />
-                    <menu_item_call.on_enable
-                     function="SomethingSelected" />
-                </menu_item_call>
-                <menu_item_call
-                 label="Опции сетки"
-                 name="Grid Options"
-                 shortcut="control|shift|B">
-                    <menu_item_call.on_click
-                     function="Floater.Show"
-                     parameter="build_options" />
-                    <menu_item_call.on_enable
-                     function="Tools.EnableToolNotPie" />
-                </menu_item_call>
-        </menu>
-        <menu
-         create_jump_keys="true"
-         label="Загрузить"
-         layout="topleft"
-         name="Upload"
-         tear_off="true">
-            <menu_item_call
-             label="Изображение (L$[COST])..."
-             layout="topleft"
-             name="Upload Image"
-             shortcut="control|U">
-                <menu_item_call.on_click
-                 function="File.UploadImage"
-                 parameter="" />
-                <menu_item_call.on_enable
-                 function="File.EnableUpload" />
-                <menu_item_call.on_visible
-                 function="Upload.CalculateCosts"
-                 parameter="Upload Image" />
-            </menu_item_call>
-            <menu_item_call
-             label="Звук (L$[COST])..."
-             layout="topleft"
-             name="Upload Sound">
-                <menu_item_call.on_click
-                 function="File.UploadSound"
-                 parameter="" />
-                <menu_item_call.on_enable
-                 function="File.EnableUpload" />
-                <menu_item_call.on_visible
-                 function="Upload.CalculateCosts"
-                 parameter="Upload Sound" />
-            </menu_item_call>
-            <menu_item_call
-             label="Анимацию (L$[COST])..."
-             layout="topleft"
-             name="Upload Animation">
-                <menu_item_call.on_click
-                 function="File.UploadAnim"
-                 parameter="" />
-                <menu_item_call.on_enable
-                 function="File.EnableUpload" />
-                <menu_item_call.on_visible
-                 function="Upload.CalculateCosts"
-                 parameter="Upload Animation" />
-            </menu_item_call>
-            <menu_item_call
-             label="Массовая (L$[COST] за файл)..."
-             layout="topleft"
-             name="Bulk Upload">
-                <menu_item_call.on_click
-                 function="File.UploadBulk"
-                 parameter="" />
-            </menu_item_call>
-            <menu_item_call
-             label="Установить права загрузки по умолчанию"
-             name="perm prefs">
-                <menu_item_call.on_click
-                 function="Floater.Toggle"
-                 parameter="perm_prefs" />
-            </menu_item_call>
-        </menu>
-        <menu_item_separator/>
-        <menu_item_call
-         enabled="false"
-         label="Отменить"
-         name="Undo"
-         shortcut="control|Z">
-            <on_click
-             function="Edit.Undo"
-             userdata="" />
-            <on_enable
-             function="Edit.EnableUndo" />
-        </menu_item_call>
-        <menu_item_call
-         enabled="false"
-         label="Повторить"
-         name="Redo"
-         shortcut="control|Y">
-            <on_click
-             function="Edit.Redo"
-             userdata="" />
-            <on_enable
-             function="Edit.EnableRedo" />
-        </menu_item_call>        
-    </menu>
-    
-    <!-- Content Menu -->
-    
-    <menu
-    	create_jump_keys="true"
-    	label="Содержимое"
-    	name="Content"
-    	tear_off="true">
-        <menu_item_call
-             label="Поиск"
-             name="Search">
-             <menu_item_call.on_click
-                 function="Floater.Show"
-                 parameter="search"/>
-       </menu_item_call>
-    	<menu_item_call
-             label="Магазин SL"
-             name="SL Marketplace">
-             <menu_item_call.on_click
-             function="PromptShowURL"
-             name="Xstreet_url"
-             parameter="WebLaunchExternalTarget,https://marketplace.secondlife.com/" />
-       </menu_item_call>
-       <menu_item_call
-             label="Информация о торгах L$"
-             name="LindenXchange">
-             <menu_item_call.on_click
-             function="PromptShowURL"
-             name="lindenxchange_url"
-             parameter="WebLaunchExternalTarget,https://secure-web30.secondlife.com/my/lindex/market.php" />
-       </menu_item_call>  
-    	<menu_item_call
-             label="Библиотека скриптов"
-             name="Script Library">
-             <menu_item_call.on_click
-             function="PromptShowURL"
-             name="script_library_url"
-             parameter="WebLaunchExternalTarget,http://wiki.secondlife.com/wiki/LSL_Library" />
-       </menu_item_call> 
-      </menu>   
-    
-    <!-- Help Menu -->
-    
-    
-    <menu
-     create_jump_keys="true"
-     label="Помощь"
-     name="Help"
-     tear_off="true">
-        <menu_item_check
-         label="Enable Tooltips"
-         name="Enable Hints">
-          <on_check
-            control="EnableUIHints"/>
-          <on_click
-            function="ToggleUIHints"/>
-        </menu_item_check>
-        
-        <menu_item_call
-         label="Firestorm Wiki"
-         name="Firestorm Wiki"
-	     shortcut="F1">
-             <menu_item_call.on_click
-             function="PromptShowURL"
-             name="script_library_url"
-             parameter="WebLaunchExternalTarget,http://wiki.phoenixviewer.com/doku.php?id=firestorm" />
-       </menu_item_call>
-       <menu_item_call
-         label="Помощь Second Life"
-         name="current_grid_help">
-             <menu_item_call.on_click
-             function="PromptShowURL"
-             name="script_library_url"
-             parameter="WebLaunchExternalTarget,https://support.secondlife.com/" />
-        </menu_item_call>
-<!--        <menu_item_call
-         label="Обучение"
-         name="Tutorial">
-            <menu_item_call.on_click
-             function="Floater.Show"
-             parameter="hud" />
-        </menu_item_call>-->
-
-        <menu_item_separator/>
-		<menu_item_call
-             label="Проверить статус сетки"
-             name="Grid Status">
-             <menu_item_call.on_click
-             function="PromptShowURL"
-             name="GridStatus_url"
-             parameter="WebLaunchExternalTarget,http://status.secondlifegrid.net/" />
-        </menu_item_call>
-        <menu_item_call
-             label="Жалоба"
-             name="Report Abuse">
-                <menu_item_call.on_click
-                 function="ReportAbuse" />
-            </menu_item_call>
-        <menu_item_call
-             label="Сообщить об ошибке"
-             name="Report Bug">
-                <menu_item_call.on_click
-                 function="ShowHelp"
-                 parameter="file_a_jira" />
-            </menu_item_call>
-
-        <menu_item_separator/>
-
-        <menu_item_check
-            label="Активировать кнопку системной информации"
-            name="Enable Sysinfo Button">
-            <menu_item_check.on_check
-                function="CheckControl"
-                parameter="SysinfoButtonInIM" />
-            <menu_item_check.on_click
-                function="ToggleControl"
-                parameter="SysinfoButtonInIM" />
-        </menu_item_check>
-
-        <menu_item_separator/>
-
-        <menu_item_call
-         label="О [APP_NAME]"
-         name="About Second Life">
-            <menu_item_call.on_click
-             function="Floater.Show"
-             parameter="sl_about" />
-        </menu_item_call>
-    </menu>
-    
-    <!-- Advanced Menu -->
-    
-    <menu
-     create_jump_keys="true"
-     label="Дополнительно"
-     name="Advanced"
-     tear_off="true"
-     visible="false">
-        <menu_item_call
-         label="Обновить текстуры"
-         name="Rebake Texture">
-            <menu_item_call.on_click
-             function="Advanced.RebakeTextures" />
-        </menu_item_call>
-        <menu_item_call
-           label="Установить размер UI по умолчанию"
-           name="Set UI Size to Default">
-          <menu_item_call.on_click
-             function="View.DefaultUISize" />
-        </menu_item_call>
-        <menu_item_call
-         label="Установить размер окна..."
-         name="Set Window Size...">
-          <menu_item_call.on_click
-           function="Floater.Show"
-           parameter="window_size" />
-        </menu_item_call>
-
-        <menu_item_separator/>
-
-        <menu_item_check
-         label="Ограничение расстояния выбора"
-         name="Limit Select Distance">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="LimitSelectDistance" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="LimitSelectDistance" />
-        </menu_item_check>
-        <menu_item_check
-         label="Отключить ограничение камеры"
-         name="Disable Camera Distance">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="DisableCameraConstraints" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="DisableCameraConstraints" />
-        </menu_item_check>
-        
-        <menu_item_separator/>
-
-        <menu_item_check
-         label="Снимок высокого разрешения"
-         name="HighResSnapshot">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="HighResSnapshot" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="HighResSnapshot" />
-        </menu_item_check>
-        <menu_item_check
-         label="Тихое создание снимка"
-         name="QuietSnapshotsToDisk">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="QuietSnapshotsToDisk" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="QuietSnapshotsToDisk" />
-        </menu_item_check>
-        <menu_item_check
-         label="Сжимать снимок"
-         name="CompressSnapshotsToDisk">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="CompressSnapshotsToDisk" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="CompressSnapshotsToDisk" />
-        </menu_item_check>
-
-        <menu_item_separator/>
-
-        <menu
-         create_jump_keys="true"
-         label="Производительность"
-         name="Performance Tools"
-         tear_off="true">
-            <menu_item_call
-             label="Уровень лагов"
-             name="Lag Meter">
-                <menu_item_call.on_click
-                 function="Floater.Show"
-                 parameter="lagmeter" />
-            </menu_item_call>
-            <menu_item_check
-             label="Статистика"
-             name="Statistics Bar"
-             shortcut="control|shift|1">
-                <menu_item_check.on_check
-                 function="Floater.Visible"
-                 parameter="stats" />
-                <menu_item_check.on_click
-                 function="Floater.Toggle"
-                 parameter="stats" />
-            </menu_item_check>
-      <menu_item_check
-        label="Показать вес отображения аватара"
-        name="Avatar Rendering Cost">
-           <menu_item_check.on_check
-            function="Advanced.CheckInfoDisplay"
-            parameter="shame" />
-           <menu_item_check.on_click
-            function="Advanced.ToggleInfoDisplay"
-            parameter="shame" />
-       </menu_item_check>
-        </menu>
-        <menu
-         create_jump_keys="true"
-         label="Подсветка и видимость"
-         name="Highlighting and Visibility"
-         tear_off="true">
-         <menu_item_check
-                 label="Анимировать поисковой луч"
-                 name="Cheesy Beacon">
-                    <menu_item_check.on_check
-                     function="CheckControl"
-                     parameter="CheesyBeacon" />
-                    <menu_item_check.on_click
-                     function="ToggleControl"
-                     parameter="CheesyBeacon" />
-                </menu_item_check>
-            <menu_item_check
-             label="Скрыть частицы"
-             name="Hide Particles"
-             shortcut="control|alt|shift|=">
-                <menu_item_check.on_check
-                 function="View.CheckRenderType"
-                 parameter="hideparticles" />
-                <menu_item_check.on_click
-                 function="View.ToggleRenderType"
-                 parameter="hideparticles" />
-            </menu_item_check>
-            <menu_item_check
-             label="Скрыть выбранное"
-             name="Hide Selected">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="HideSelectedObjects" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="HideSelectedObjects" />
-            </menu_item_check>
-            <menu_item_check
-             label="Подсветка прозрачного"
-             name="Highlight Transparent"
-             shortcut="control|alt|T">
-                <menu_item_check.on_check
-                 function="View.CheckHighlightTransparent" />
-                <menu_item_check.on_click
-                 function="View.HighlightTransparent" />
-            </menu_item_check>
-            <menu_item_check
-             label="Показывать HUD"
-             name="Show HUD Attachments"
-             shortcut="alt|shift|H">
-                <menu_item_check.on_check
-                 function="View.CheckHUDAttachments" />
-                <menu_item_check.on_click
-                 function="View.ShowHUDAttachments" />
-            </menu_item_check>
-            <menu_item_check
-             label="Показывать прицел при обзоре мышью"
-             name="ShowCrosshairs">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="ShowCrosshairs" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="ShowCrosshairs" />
-            </menu_item_check>
-  <!-- <menu
-         create_jump_keys="true"
-         label="Всплывающие подсказки"
-         name="Hover Tips"
-         tear_off="true">
-            <menu_item_check
-             label="Показывать подсказки"
-             name="Show Tips"
-             shortcut="control|shift|T">
-                <menu_item_check.on_check
-                 function="View.CheckShowHoverTips" />
-                <menu_item_check.on_click
-                 function="View.ShowHoverTips" />
-            </menu_item_check>
-
-            <menu_item_separator/>
-
-            <menu_item_check
-             label="Показывать подсказки земли"
-             name="Land Tips">
-                <menu_item_check.on_check
-                 control="ShowLandHoverTip" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="ShowLandHoverTip" />
-                <menu_item_check.on_enable
-                 function="View.CheckShowHoverTips" />
-            </menu_item_check>
-           <menu_item_check
-             label="Показывать подсказки всех объектов"
-             name="Tips On All Objects">
-                <menu_item_check.on_check
-                 control="ShowAllObjectHoverTip" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="ShowAllObjectHoverTip" />
-                <menu_item_check.on_enable
-                 function="View.CheckShowHoverTips" />
-            </menu_item_check>
-        </menu>-->
-
-        </menu>
-
-        <menu
-         create_jump_keys="true"
-         label="Типы прогрузки"
-         name="Rendering Types"
-         tear_off="true">
-            <menu_item_check
-             label="Простой"
-             name="Simple"
-             shortcut="control|alt|shift|1">
-                <menu_item_check.on_check
-                 function="Advanced.CheckRenderType"
-                 parameter="simple" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleRenderType"
-                 parameter="simple" />
-            </menu_item_check>
-            <menu_item_check
-             label="Альфа"
-             name="Alpha"
-             shortcut="control|alt|shift|2">
-                <menu_item_check.on_check
-                 function="Advanced.CheckRenderType"
-                 parameter="alpha" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleRenderType"
-                 parameter="alpha" />
-            </menu_item_check>
-            <menu_item_check
-             label="Деревья"
-             name="Tree"
-             shortcut="control|alt|shift|3">
-                <menu_item_check.on_check
-                 function="Advanced.CheckRenderType"
-                 parameter="tree" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleRenderType"
-                 parameter="tree" />
-            </menu_item_check>
-            <menu_item_check
-             label="Аватары"
-             name="Character"
-             shortcut="control|alt|shift|4">
-                <menu_item_check.on_check
-                 function="Advanced.CheckRenderType"
-                 parameter="character" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleRenderType"
-                 parameter="character" />
-            </menu_item_check>
-            <menu_item_check
-             label="Отображение земли"
-             name="SurfacePath"
-             shortcut="control|alt|shift|5">
-                <menu_item_check.on_check
-                 function="Advanced.CheckRenderType"
-                 parameter="surfacePath" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleRenderType"
-                 parameter="surfacePath" />
-            </menu_item_check>
-            <menu_item_check
-             label="Небо"
-             name="Sky"
-             shortcut="control|alt|shift|6">
-                <menu_item_check.on_check
-                 function="Advanced.CheckRenderType"
-                 parameter="sky" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleRenderType"
-                 parameter="sky" />
-            </menu_item_check>
-            <menu_item_check
-             label="Вода"
-             name="Water"
-             shortcut="control|alt|shift|7">
-                <menu_item_check.on_check
-                 function="Advanced.CheckRenderType"
-                 parameter="water" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleRenderType"
-                 parameter="water" />
-            </menu_item_check>
-            <menu_item_check
-             label="Земля"
-             name="Ground"
-             shortcut="control|alt|shift|8">
-                <menu_item_check.on_check
-                 function="Advanced.CheckRenderType"
-                 parameter="ground" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleRenderType"
-                 parameter="ground" />
-            </menu_item_check>
-            <menu_item_check
-             label="Громкость"
-             name="Volume"
-             shortcut="control|alt|shift|9">
-                <menu_item_check.on_check
-                 function="Advanced.CheckRenderType"
-                 parameter="volume" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleRenderType"
-                 parameter="volume" />
-            </menu_item_check>
-            <menu_item_check
-             label="Трава"
-             name="Grass"
-             shortcut="control|alt|shift|0">
-                <menu_item_check.on_check
-                 function="Advanced.CheckRenderType"
-                 parameter="grass" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleRenderType"
-                 parameter="grass" />
-            </menu_item_check>
-            <menu_item_check
-             label="Облака"
-             name="Clouds"
-             shortcut="control|alt|shift|-">
-                <menu_item_check.on_check
-                 function="Advanced.CheckRenderType"
-                 parameter="clouds" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleRenderType"
-                 parameter="clouds" />
-            </menu_item_check>
-            <menu_item_check
-             label="Частицы"
-             name="Particles"
-             shortcut="control|alt|shift|=">
-                <menu_item_check.on_check
-                 function="Advanced.CheckRenderType"
-                 parameter="particles" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleRenderType"
-                 parameter="particles" />
-            </menu_item_check>
-            <menu_item_check
-             label="Толчки"
-             name="Bump"
-             shortcut="control|alt|shift|\">
-                <menu_item_check.on_check
-                 function="Advanced.CheckRenderType"
-                 parameter="bump" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleRenderType"
-                 parameter="bump" />
-            </menu_item_check>
-        </menu>
-        <menu
-         create_jump_keys="true"
-         label="Гаджеты прогрузки"
-         name="Rendering Features"
-         tear_off="true">
-            <menu_item_check
-             label="UI"
-             name="UI"
-             shortcut="control|alt|F1">
-                <menu_item_check.on_check
-                 function="Advanced.CheckFeature"
-                 parameter="ui" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleFeature"
-                 parameter="ui" />
-            </menu_item_check>
-            <menu_item_check
-             label="Выбраный"
-             name="Selected"
-             shortcut="control|alt|F2">
-                <menu_item_check.on_check
-                 function="Advanced.CheckFeature"
-                 parameter="selected" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleFeature"
-                 parameter="selected" />
-            </menu_item_check>
-            <menu_item_check
-             label="Подсвеченый"
-             name="Highlighted"
-             shortcut="control|alt|F3">
-                <menu_item_check.on_check
-                 function="Advanced.CheckFeature"
-                 parameter="highlighted" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleFeature"
-                 parameter="highlighted" />
-            </menu_item_check>
-            <menu_item_check
-             label="Динамические текстуры"
-             name="Dynamic Textures"
-             shortcut="control|alt|F4">
-                <menu_item_check.on_check
-                 function="Advanced.CheckFeature"
-                 parameter="dynamic textures" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleFeature"
-                 parameter="dynamic textures" />
-            </menu_item_check>
-            <menu_item_check
-             label="Тени ног"
-             name="Foot Shadows"
-             shortcut="control|alt|F5">
-                <menu_item_check.on_check
-                 function="Advanced.CheckFeature"
-                 parameter="foot shadows" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleFeature"
-                 parameter="foot shadows" />
-            </menu_item_check>
-            <menu_item_check
-             label="Туман"
-             name="Fog"
-             shortcut="control|alt|F6">
-                <menu_item_check.on_check
-                 function="Advanced.CheckFeature"
-                 parameter="fog" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleFeature"
-                 parameter="fog" />
-            </menu_item_check>
-            <menu_item_check
-             label="Test FRInfo"
-             name="Test FRInfo"
-             shortcut="control|alt|F8">
-                <menu_item_check.on_check
-                 function="Advanced.CheckFeature"
-                 parameter="fr info" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleFeature"
-                 parameter="fr info" />
-            </menu_item_check>
-            <menu_item_check
-             label="Гибкие объекты"
-             name="Flexible Objects"
-             shortcut="control|alt|F9">
-                <menu_item_check.on_check
-                 function="Advanced.CheckFeature"
-                 parameter="flexible" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleFeature"
-                 parameter="flexible" />
-            </menu_item_check>
-        </menu>        
-		<menu
-		 label="RLVa"
-		 name="RLVa"
-		 tear_off="true"
-		 visible="false">
-			<menu
-			 label="Отладка"
-			 name="Debug"
-			 tear_off="true">
-				<menu_item_check
-				 label="Показать сообщения отладки"
-				 name="Show Debug Messages">
-					<menu_item_check.on_check
-					 function="CheckControl"
-					 parameter="RestrainedLoveDebug" />
-					<menu_item_check.on_click
-					 function="ToggleControl"
-					 parameter="RestrainedLoveDebug" />
-				</menu_item_check>
-				<menu_item_separator/>
-				<menu_item_check
-				 label="Включить наследственные имена"
-				 name="Enable Legacy Naming">
-					<menu_item_check.on_check
-					 function="CheckControl"
-					 parameter="RLVaEnableLegacyNaming" />
-					<menu_item_check.on_click
-					 function="ToggleControl"
-					 parameter="RLVaEnableLegacyNaming" />
-				</menu_item_check>
-        <menu_item_check
-				 label="Включить общую одежду"
-				 name="Enable Shared Wear">
-          <menu_item_check.on_check
-					 function="CheckControl"
-					 parameter="RLVaEnableSharedWear" />
-          <menu_item_check.on_click
-					 function="ToggleControl"
-					 parameter="RLVaEnableSharedWear" />
-        </menu_item_check>
-        <menu_item_check
-				 label="Rename Shared Items on Wear"
-				 name="Rename Shared Items on Wear">
-					<menu_item_check.on_check
-					 function="CheckControl"
-					 parameter="RLVaSharedInvAutoRename" />
-					<menu_item_check.on_click
-					 function="ToggleControl"
-					 parameter="RLVaSharedInvAutoRename" />
-				</menu_item_check>
-				<menu_item_separator/>
-				<menu_item_check
-				 label="Locks..."
-				 name="Locks">
-					<menu_item_check.on_check
-					 function="Floater.Visible"
-					 parameter="rlv_locks" />
-					<menu_item_check.on_click
-					 function="Floater.Toggle"
-					 parameter="rlv_locks" />
-				</menu_item_check>
+		<menu label="Солнце" name="Environment Settings">
+			<menu_item_call label="Восход" name="Sunrise"/>
+			<menu_item_call label="Полдень" name="Noon"/>
+			<menu_item_call label="Закат" name="Sunset"/>
+			<menu_item_call label="Полночь" name="Midnight"/>
+			<menu_item_call label="Использовать настройки региона" name="Use Region Settings"/>
+		</menu>
+		<menu label="Редактор среды" name="Environment Editor">
+			<menu_item_call label="Настройки среды..." name="Environment Settings"/>
+			<menu label="Настройки воды" name="Water Presets">
+				<menu_item_call label="Создать настройку..." name="new_water_preset"/>
+				<menu_item_call label="Изменить настройку..." name="edit_water_preset"/>
+				<menu_item_call label="Удалить настройку..." name="delete_water_preset"/>
 			</menu>
-			<menu_item_separator/>
-			<menu_item_check
-			 label="Hide Locked Layers"
-			 name="Hide Locked Layers">
-				<menu_item_check.on_check
-				 function="CheckControl"
-				 parameter="RLVaHideLockedLayers" />
-				<menu_item_check.on_click
-				 function="ToggleControl"
-				 parameter="RLVaHideLockedLayers" />
-			</menu_item_check>
-			<menu_item_check
-			 label="Hide Locked Attachments"
-			 name="Hide Locked Attachments">
-				<menu_item_check.on_check
-				 function="CheckControl"
-				 parameter="RLVaHideLockedAttachments" />
-				<menu_item_check.on_click
-				 function="ToggleControl"
-				 parameter="RLVaHideLockedAttachments" />
-			</menu_item_check>
-			<menu_item_separator/>
-			<menu_item_check
-			 label="Forbid Give to #RLV"
-			 name="Forbid Give to #RLV">
-				<menu_item_check.on_check
-				 function="CheckControl"
-				 parameter="RestrainedLoveForbidGiveToRLV" />
-				<menu_item_check.on_click
-				 function="ToggleControl"
-				 parameter="RestrainedLoveForbidGiveToRLV" />
-			</menu_item_check>
-			<menu_item_check
-			 label="Show Name Tags"
-			 name="Show Name Tags">
-				<menu_item_check.on_check
-				 function="CheckControl"
-				 parameter="RLVaShowNameTags" />
-				<menu_item_check.on_click
-				 function="ToggleControl"
-				 parameter="RLVaShowNameTags" />
-			</menu_item_check>
-			<menu_item_separator/>
-			<menu_item_check
-			 label="Ограничения..."
-			 name="Restrictions">
-				<menu_item_check.on_check
-				 function="Floater.Visible"
-				 parameter="rlv_behaviours" />
-				<menu_item_check.on_click
-				 function="Floater.Toggle"
-				 parameter="rlv_behaviours" />
-			</menu_item_check>
+			<menu label="Настройки неба" name="Sky Presets">
+				<menu_item_call label="Создать настройку..." name="new_sky_preset"/>
+				<menu_item_call label="Изменить настройку..." name="edit_sky_preset"/>
+				<menu_item_call label="Удалить настройку..." name="delete_sky_preset"/>
+			</menu>
+			<menu label="Суточные настройки" name="Day Presets">
+				<menu_item_call label="Создать настройку..." name="new_day_preset"/>
+				<menu_item_call label="Изменить настройку..." name="edit_day_preset"/>
+				<menu_item_call label="Удалить настройку..." name="delete_day_preset"/>
+			</menu>
 		</menu>
-        <menu_item_check
-         label="Использовать плагин производительности"
-         name="Use Plugin Read Thread">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="PluginUseReadThread" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="PluginUseReadThread" />
-        </menu_item_check>
-        <menu_item_call
-         label="Очистить кэш группы"
-         name="ClearGroupCache">
-            <menu_item_call.on_click
-             function="Advanced.ClearGroupCache"
-             parameter="ClearGroupCache" />
-        </menu_item_call>
-        <menu_item_check
-         label="Сглаживание мыши"
-         name="Mouse Smoothing">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="MouseSmooth" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="MouseSmooth" />
-        </menu_item_check>
-
-        <menu_item_separator/>
-
-        <menu
-         create_jump_keys="true"
-         label="Горячие клавиши"
-         name="Shortcuts"
-         tear_off="true"
-         visible="false">
-          <menu_item_call
-             label="Изображение (L$[COST])..."
-             name="Upload Image"
-             shortcut="control|U">
-            <menu_item_call.on_click
-               function="File.UploadImage"
-               parameter="" />
-            <menu_item_call.on_enable
-               function="File.EnableUpload" />
-            </menu_item_call>
-            <menu_item_check
-               label="Поиск"
-               name="Search"
-               shortcut="control|F">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="search" />
-            <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="search" />
-            </menu_item_check>
-            <menu_item_call
-             enabled="false"
-             label="Отвязать клавиши"
-             name="Release Keys">
-                <menu_item_call.on_click
-                 function="Tools.ReleaseKeys"
-                 parameter="" />
-                <menu_item_call.on_enable
-                 function="Tools.EnableReleaseKeys"
-                 parameter="" />
-            </menu_item_call>
-            <menu_item_call
-             label="Установить размер UI по умолчанию"
-             name="Set UI Size to Default">
-                <menu_item_call.on_click
-                 function="View.DefaultUISize" />
-            </menu_item_call>
-            <!-- This second, alternative shortcut for Show Advanced Menu is for backward compatibility.  The main shortcut has been changed so it's Linux-friendly, where the old shortcut is typically eaten by the window manager. -->
-            <menu_item_check
-               label="Показать дополнительное меню - legacy shortcut"
-               name="Show Advanced Menu - legacy shortcut"
-               shortcut="control|alt|D">
-              <on_check
-                 function="CheckControl"
-                 parameter="UseDebugMenus" />
-              <on_click
-                 function="ToggleControl"
-                 parameter="UseDebugMenus" />
-            </menu_item_check>
-
-            <menu_item_separator/>
-
-            <menu_item_check
-             label="Всегда бежать"
-             name="Always Run"
-             shortcut="control|R">
-                <menu_item_check.on_check
-                 function="World.CheckAlwaysRun" />
-                <menu_item_check.on_click
-                 function="World.AlwaysRun" />
-            </menu_item_check>
-            <menu_item_check
-             label="Лететь"
-             name="Fly"
-             shortcut="Home">
-                <menu_item_check.on_check
-                 function="Agent.getFlying" />
-                <menu_item_check.on_click
-                 function="Agent.toggleFlying" />
-                <menu_item_check.on_enable
-                 function="Agent.enableFlying" />
-            </menu_item_check>
-
-            <menu_item_separator/>
-
-            <menu_item_call
-             label="Закрыть окно"
-             name="Close Window"
-             shortcut="control|W">
-                <menu_item_call.on_click
-                 function="File.CloseWindow" />
-                <menu_item_call.on_enable
-                 function="File.EnableCloseWindow" />
-            </menu_item_call>
-            <!--<menu_item_call
-             label="Закрыть все окна"
-             name="Close All Windows"
-             shortcut="control|shift|W">
-                <menu_item_call.on_click
-                 function="File.CloseAllWindows" />
-                <menu_item_call.on_enable
-                 function="File.EnableCloseAllWindows" />
-            </menu_item_call> -->
-
-            <menu_item_separator/>
-
-            <menu_item_call
-             label="Снимок на диск"
-             name="Snapshot to Disk"
-             shortcut="control|`"
-             use_mac_ctrl="true">
-                <menu_item_call.on_click
-                 function="File.TakeSnapshotToDisk" />
-            </menu_item_call>
-
-            <menu_item_separator/>
-
-            <menu_item_call
-             label="Обзор мышью"
-             name="Mouselook"
-             shortcut="M">
-                <menu_item_call.on_click
-                 function="View.Mouselook" />
-                <menu_item_call.on_enable
-                 function="View.EnableMouselook" />
-            </menu_item_call>
-            <menu_item_check
-             label="Обзор джойстиком"
-             name="Joystick Flycam"
-             shortcut="alt|shift|F">
-                <menu_item_check.on_check
-                 function="View.CheckJoystickFlycam" />
-                <menu_item_check.on_click
-                 function="View.JoystickFlycam" />
-                <menu_item_check.on_enable
-                 function="View.EnableJoystickFlycam" />
-            </menu_item_check>
-            <menu_item_call
-             label="Сброс вида"
-             name="Reset View"
-             shortcut="Esc">
-                <menu_item_call.on_click
-                 function="View.ResetView" />
-            </menu_item_call>
-            <menu_item_call
-             label="Смотреть на последнего говорившего"
-             name="Look at Last Chatter"
-             shortcut="control|\">
-                <menu_item_call.on_click
-                 function="View.LookAtLastChatter" />
-                <menu_item_call.on_enable
-                 function="View.EnableLastChatter" />
-            </menu_item_call>
-
-            <menu_item_separator/>
-
-            <menu
-             create_jump_keys="true"
-             label="Выбрать инструменты"
-             name="Select Tool"
-             tear_off="true">
-                <menu_item_call
-                 label="Фокусировка"
-                 name="Focus"
-                 shortcut="control|1">
-                    <menu_item_call.on_click
-                     function="Tools.SelectTool"
-                     parameter="focus" />
-                </menu_item_call>
-                <menu_item_call
-                 label="Перемещение"
-                 name="Move"
-                 shortcut="control|2">
-                    <menu_item_call.on_click
-                     function="Tools.SelectTool"
-                     parameter="move" />
-                </menu_item_call>
-                <menu_item_call
-                 label="Правка"
-                 name="Edit"
-                 shortcut="control|3">
-                    <menu_item_call.on_click
-                     function="Tools.SelectTool"
-                     parameter="edit" />
-                </menu_item_call>
-                <menu_item_call
-                 label="Создание"
-                 name="Create"
-                 shortcut="control|4">
-                    <menu_item_call.on_click
-                     function="Tools.SelectTool"
-                     parameter="create" />
-                </menu_item_call>
-                <menu_item_call
-                 label="Земля"
-                 name="Land"
-                 shortcut="control|5">
-                    <menu_item_call.on_click
-                     function="Tools.SelectTool"
-                     parameter="land" />
-                </menu_item_call>
-            </menu>
-
-            <menu_item_separator/>
-
-            <menu_item_call
-             label="Приблизить"
-             name="Zoom In"
-             shortcut="control|0">
-                <menu_item_call.on_click
-                 function="View.ZoomIn" />
-            </menu_item_call>
-            <menu_item_call
-             label="Сбросить увеличение"
-             name="Zoom Default"
-             shortcut="control|9">
-                <menu_item_call.on_click
-                 function="View.ZoomDefault" />
-            </menu_item_call>
-            <menu_item_call
-             label="Отдалить"
-             name="Zoom Out"
-             shortcut="control|8">
-                <menu_item_call.on_click
-                 function="View.ZoomOut" />
-            </menu_item_call>
-        </menu> <!--Shortcuts-->
-
-        <menu_item_separator/>
-
-        <menu_item_check
-         label="Отключить пределы полета"
-         name="Fly Override"
-	 shortcut="control|alt|V">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="PhoenixAlwaysFly" />
-            <menu_item_check.on_click
-             function="ToggleControl" 
-             parameter="PhoenixAlwaysFly" />
-        </menu_item_check>
-
-        <menu_item_check
-           label="RestrainedLove API (RLVa)"
-           name="RLV API">
-              <menu_item_check.on_check
-               function="RLV.CheckEnabled" />
-              <menu_item_check.on_click
-               function="RLV.ToggleEnabled" />
-        </menu_item_check>
-        <menu_item_call
-         label="Показать настройки отладки"
-         shortcut="control|alt|shift|S"
-         name="Debug Settings">
-            <menu_item_call.on_click
-             function="Advanced.ShowDebugSettings"
-             parameter="all" />
-        </menu_item_call>
-     <menu_item_check
-         label="Показать меню разработчика"
-         name="Debug Mode"
-         shortcut="control|alt|Q">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="QAMode" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="QAMode" />
-        </menu_item_check>
-    </menu>
-    <menu
-     create_jump_keys="true"
-     label="Разработка"
-     name="Develop"
-     tear_off="true"
-     visible="false">
-        <menu
-         create_jump_keys="true"
-         label="Консоли"
-         name="Consoles"
-         tear_off="true">
-            <menu_item_check
-             label="Консоль текстур"
-             name="Texture Console"
-             shortcut="control|shift|3"
-             use_mac_ctrl="true">
-                <menu_item_check.on_check
-                 function="Advanced.CheckConsole"
-                 parameter="texture" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleConsole"
-                 parameter="texture" />
-            </menu_item_check>
-            <menu_item_check
-             label="Консоль отладки"
-             name="Debug Console"
-             shortcut="control|shift|4"
-             use_mac_ctrl="true">
-                <menu_item_check.on_check
-                 function="Advanced.CheckConsole"
-                 parameter="debug" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleConsole"
-                 parameter="debug" />
-            </menu_item_check>
-            <menu_item_call
-             label="Консоль уведомлений"
-             name="Notifications"
-             shortcut="control|shift|5">
-              <menu_item_call.on_click
-               function="Floater.Toggle"
-               parameter="notifications_console" />
-            </menu_item_call>
-            <menu_item_check
-               label="Консоль размера текстур"
-               name="Texture Size"
-               shortcut="control|shift|6">
-              <menu_item_check.on_check
-               function="Advanced.CheckConsole"
-               parameter="texture size" />
-              <menu_item_check.on_click
-               function="Advanced.ToggleConsole"
-               parameter="texture size" />
-            </menu_item_check>
-            <menu_item_check
-               label="Консоль категорий текстур"
-               name="Texture Category"
-               shortcut="control|shift|7">
-              <menu_item_check.on_check
-               function="Advanced.CheckConsole"
-               parameter="texture category" />
-              <menu_item_check.on_click
-               function="Advanced.ToggleConsole"
-               parameter="texture category" />
-            </menu_item_check>
-            <menu_item_check
-             label="Fast Timers"
-             name="Fast Timers"
-             shortcut="control|shift|9"
-             use_mac_ctrl="true">
-                <menu_item_check.on_check
-                 function="Advanced.CheckConsole"
-                 parameter="fast timers" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleConsole"
-                 parameter="fast timers" />
-            </menu_item_check>
-            <menu_item_check
-             label="Память"
-             name="Memory"
-             shortcut="control|shift|0"
-             use_mac_ctrl="true">
-                <menu_item_check.on_check
-                 function="Advanced.CheckConsole"
-                 parameter="memory view" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleConsole"
-                 parameter="memory view" />
-            </menu_item_check>
-
-            <menu_item_separator/>
-
-            <menu_item_call
-             label="Информацию о регионе в консоль отладки"
-             name="Region Info to Debug Console">
-                <menu_item_call.on_click
-                 function="Advanced.DumpInfoToConsole"
-                 parameter="region" />
-            </menu_item_call>
-            <menu_item_call
-             label="Информацию о группе в консоль отладки"
-             name="Group Info to Debug Console">
-                <menu_item_call.on_click
-                 function="Advanced.DumpInfoToConsole"
-                 parameter="group" />
-            </menu_item_call>
-            <menu_item_call
-             label="Информацию возможностей в консоль отладки"
-             name="Capabilities Info to Debug Console">
-                <menu_item_call.on_click
-                 function="Advanced.DumpInfoToConsole"
-                 parameter="capabilities" />
-            </menu_item_call>
-
-            <menu_item_separator/>
-
-            <menu_item_check
-             label="Камера"
-             name="Camera">
-                <menu_item_check.on_check
-                 function="Advanced.CheckHUDInfo"
-                 parameter="camera" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleHUDInfo"
-                 parameter="camera" />
-            </menu_item_check>
-            <menu_item_check
-             label="Ветер"
-             name="Wind">
-                <menu_item_check.on_check
-                 function="Advanced.CheckHUDInfo"
-                 parameter="wind" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleHUDInfo"
-                 parameter="wind" />
-            </menu_item_check>
-            <menu_item_check
-             label="Угол обзора"
-             name="FOV">
-                <menu_item_check.on_check
-                 function="Advanced.CheckHUDInfo"
-                 parameter="fov" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleHUDInfo"
-                 parameter="fov" />
-            </menu_item_check>
-            <menu_item_check
-             label="Значок"
-             name="Badge"
-			 shortcut="alt|control|shift|h">
-                <menu_item_check.on_click
-                 function="Advanced.ToggleHUDInfo"
-                 parameter="badge" />
-            </menu_item_check>
-        </menu>
-        <menu
-         create_jump_keys="true"
-         label="Показать информацию"
-         name="Display Info"
-         tear_off="true">
-            <menu_item_check
-             label="Показать время"
-             name="Show Time">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="DebugShowTime" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="DebugShowTime" />
-            </menu_item_check>
-            <menu_item_check
-             label="Показать информацию текстуры"
-             name="Show Texture Info">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="DebugShowTextureInfo" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="DebugShowTextureInfo" />
-            </menu_item_check>
-            <menu_item_check
-             label="Показать информацию по отрисовке"
-             name="Show Render Info">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="DebugShowRenderInfo" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="DebugShowRenderInfo" />
-            </menu_item_check>
-            <menu_item_check
-             label="Показать матрицы"
-             name="Show Matrices">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="DebugShowRenderMatrices" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="DebugShowRenderMatrices" />
-            </menu_item_check>
-            <menu_item_check
-             label="Показать цвет под курсором"
-             name="Show Color Under Cursor">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="DebugShowColor" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="DebugShowColor" />
-            </menu_item_check>
-            <menu_item_check
-               label="Показать память"
-               name="Show Memory">
-              <menu_item_check.on_check
-               function="CheckControl"
-               parameter="DebugShowMemory" />
-              <menu_item_check.on_click
-               function="ToggleControl"
-               parameter="DebugShowMemory" />
-            </menu_item_check>
-
-            <menu_item_separator/>
-
-            <menu_item_check
-             label="Показать обновления объектов"
-             name="Show Updates"
-             shortcut="control|alt|shift|U">
-                <menu_item_check.on_check
-                 function="Advanced.CheckShowObjectUpdates"
-                 parameter="ObjectUpdates" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleShowObjectUpdates" />
-            </menu_item_check>
-        </menu>
-
-        <menu_item_separator/>
-
-        <menu
-         create_jump_keys="true"
-         label="Симулировать Ошибку"
-         name="Force Errors"
-         tear_off="true">
-            <menu_item_call
-             label="Симулировать точку разрыва"
-             name="Force Breakpoint"
-             shortcut="control|alt|shift|B">
-                <menu_item_call.on_click
-                 function="Advanced.ForceErrorBreakpoint" />
-            </menu_item_call>
-            <menu_item_call
-             label="Симулировать Ошибку LL и аварию"
-             name="Force LLError And Crash">
-                <menu_item_call.on_click
-                 function="Advanced.ForceErrorLlerror" />
-            </menu_item_call>
-            <menu_item_call
-             label="Симулировать плохой доступ к памяти"
-             name="Force Bad Memory Access">
-                <menu_item_call.on_click
-                 function="Advanced.ForceErrorBadMemoryAccess" />
-            </menu_item_call>
-            <menu_item_call
-             label="Симулировать бесконечный повтор"
-             name="Force Infinite Loop">
-                <menu_item_call.on_click
-                 function="Advanced.ForceErrorInfiniteLoop" />
-            </menu_item_call>
-            <menu_item_call
-             label="Симулировать аварию драйвера"
-             name="Force Driver Carsh">
-                <menu_item_call.on_click
-                 function="Advanced.ForceErrorDriverCrash" />
-            </menu_item_call>
-            <menu_item_call
-             label="Симулировать исключение ПО"
-             name="Force Software Exception">
-                <menu_item_call.on_click
-                 function="Advanced.ForceErrorSoftwareException" />
-            </menu_item_call>
-            <menu_item_call
-             label="Симулировать отключение клиента"
-             name="Force Disconnect Viewer">
-                <menu_item_call.on_click
-                 function="Advanced.ForceErrorDisconnectViewer" />
-            </menu_item_call>
-            <menu_item_call
-             label="Симулировать утерю памяти"
-             name="Memory Leaking Simulation">
-               <menu_item_call.on_click
-                function="Floater.Show"
-                parameter="mem_leaking" />
-               </menu_item_call>
-        </menu>
-        <menu
-         create_jump_keys="true"
-         label="Тестирование отрисовки"
-         name="Render Tests"
-         tear_off="true">
-            <menu_item_check
-             label="Смещение камеры"
-             name="Camera Offset">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="CameraOffset" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="CameraOffset" />
-            </menu_item_check>
-            <menu_item_check
-             label="Неопределенность частоты кадров"
-             name="Randomize Framerate">
-                <menu_item_check.on_check
-                 function="Advanced.CheckRandomizeFramerate"
-                 parameter="Randomize Framerate" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleRandomizeFramerate" />
-            </menu_item_check>
-            <menu_item_check
-             label="Переодически медленный кадр"
-             name="Periodic Slow Frame">
-                <menu_item_check.on_check
-                 function="Advanced.CheckPeriodicSlowFrame"
-                 parameter="points" />
-                <menu_item_check.on_click
-                 function="Advanced.TogglePeriodicSlowFrame"
-                 parameter="points" />
-            </menu_item_check>
-            <menu_item_check
-             label="Тест кадров"
-             name="Frame Test">
-                <menu_item_check.on_check
-                 function="Advanced.CheckFrameTest"
-                 parameter="Frame Test" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleFrameTest" />
-            </menu_item_check>
-        </menu>
-      <menu
-        create_jump_keys="true"
-        label="Отрисовка метаданных"
-        name="Render Metadata"
-        tear_off="true">
-        <menu_item_check
-         label="Ограничительные рамки"
-         name="Bounding Boxes">
-        <menu_item_check.on_check
-         function="Advanced.CheckInfoDisplay"
-         parameter="bboxes" />
-        <menu_item_check.on_click
-         function="Advanced.ToggleInfoDisplay"
-         parameter="bboxes" />
-        </menu_item_check>
-        <menu_item_check
-         label="Октодерево"
-         name="Octree">
-          <menu_item_check.on_check
-           function="Advanced.CheckInfoDisplay"
-           parameter="octree" />
-          <menu_item_check.on_click
-           function="Advanced.ToggleInfoDisplay"
-           parameter="octree" />
-        </menu_item_check>
-        <menu_item_check
-         label="Усеченные тени"
-         name="Shadow Frusta">
-          <menu_item_check.on_check
-           function="Advanced.CheckInfoDisplay"
-           parameter="shadow frusta" />
-          <menu_item_check.on_click
-           function="Advanced.ToggleInfoDisplay"
-           parameter="shadow frusta" />
-        </menu_item_check>
-        <menu_item_check
-         label="Окклюзия"
-         name="Occlusion">
-          <menu_item_check.on_check
-           function="Advanced.CheckInfoDisplay"
-           parameter="occlusion" />
-          <menu_item_check.on_click
-           function="Advanced.ToggleInfoDisplay"
-           parameter="occlusion" />
-        </menu_item_check>
-        <menu_item_check
-         label="Render Batches"
-         name="Render Batches">
-          <menu_item_check.on_check
-           function="Advanced.CheckInfoDisplay"
-           parameter="render batches" />
-          <menu_item_check.on_click
-           function="Advanced.ToggleInfoDisplay"
-           parameter="render batches" />
-        </menu_item_check>
-        <menu_item_check
-         label="Обновление типа"
-         name="Update Type">
-          <menu_item_check.on_check
-           function="Advanced.CheckInfoDisplay"
-           parameter="update type" />
-          <menu_item_check.on_click
-           function="Advanced.ToggleInfoDisplay"
-           parameter="update type" />
-        </menu_item_check>
-        <menu_item_check
-         label="Анимация текстур"
-         name="Texture Anim">
-          <menu_item_check.on_check
-           function="Advanced.CheckInfoDisplay"
-           parameter="texture anim" />
-          <menu_item_check.on_click
-           function="Advanced.ToggleInfoDisplay"
-           parameter="texture anim" />
-        </menu_item_check>
-        <menu_item_check
-         label="Приоритет текстур"
-         name="Texture Priority">
-          <menu_item_check.on_check
-           function="Advanced.CheckInfoDisplay"
-           parameter="texture priority" />
-          <menu_item_check.on_click
-           function="Advanced.ToggleInfoDisplay"
-           parameter="texture priority" />
-        </menu_item_check>
-        <menu_item_check
-         label="Площадь текстур"
-         name="Texture Area">
-          <menu_item_check.on_check
-           function="Advanced.CheckInfoDisplay"
-           parameter="texture area" />
-          <menu_item_check.on_click
-           function="Advanced.ToggleInfoDisplay"
-           parameter="texture area" />
-        </menu_item_check>
-        <menu_item_check
-         label="Face Area"
-         name="Face Area">
-          <menu_item_check.on_check
-           function="Advanced.CheckInfoDisplay"
-           parameter="face area" />
-          <menu_item_check.on_click
-           function="Advanced.ToggleInfoDisplay"
-           parameter="face area" />
-        </menu_item_check>
-        <menu_item_check
-         label="Свет"
-         name="Lights">
-          <menu_item_check.on_check
-           function="Advanced.CheckInfoDisplay"
-           parameter="lights" />
-          <menu_item_check.on_click
-           function="Advanced.ToggleInfoDisplay"
-           parameter="lights" />
-        </menu_item_check>
-        <menu_item_check
-         label="Столкновение скелета"
-         name="Collision Skeleton">
-          <menu_item_check.on_check
-           function="Advanced.CheckInfoDisplay"
-           parameter="collision skeleton" />
-          <menu_item_check.on_click
-           function="Advanced.ToggleInfoDisplay"
-           parameter="collision skeleton" />
-        </menu_item_check>
-        <menu_item_check
-         label="Raycasting"
-         name="Raycast">
-          <menu_item_check.on_check
-           function="Advanced.CheckInfoDisplay"
-           parameter="raycast" />
-          <menu_item_check.on_click
-           function="Advanced.ToggleInfoDisplay"
-           parameter="raycast" />
-        </menu_item_check>
-      </menu>
-        <menu
-         create_jump_keys="true"
-         label="Прорисовка"
-         name="Rendering"
-         tear_off="true">
-            <menu_item_check
-             label="Оси"
-             name="Axes">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="ShowAxes" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="ShowAxes" />
-            </menu_item_check>
-            <menu_item_check
-             label="Касательный базис"
-             name="Tangent Basis">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="ShowTangentBasis" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="ShowTangentBasis" />
-            </menu_item_check>
-            <menu_item_call
-             label="Выбранный базис информации текстуры"
-             name="Selected Texture Info Basis"
-             shortcut="control|alt|shift|T">
-                <menu_item_call.on_click
-                 function="Advanced.SelectedTextureInfo" />
-            </menu_item_call>
-            <menu_item_check
-             label="Каркас"
-             name="Wireframe"
-             shortcut="control|shift|R">
-                <menu_item_check.on_check
-                 function="Advanced.CheckWireframe"
-                 parameter="Wireframe" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleWireframe" />
-            </menu_item_check>
-            <menu_item_check
-             label="Окклюзия объект-объект"
-             name="Object-Object Occlusion"
-             shortcut="control|shift|O">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="UseOcclusion" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="UseOcclusion" />
-                <menu_item_check.on_enable
-                 function="Advanced.EnableObjectObjectOcclusion" />
-            </menu_item_check>
-          <menu_item_check
-             label="Объекты буфера кадров"
-             name="Framebuffer Objects">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="RenderUseFBO" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="RenderUseFBO" />
-            <menu_item_check.on_enable
-                 function="Advanced.EnableRenderFBO" />
-           </menu_item_check>
-
-          <menu_item_separator />
-
-          <menu_item_check
-                       label="Освещение и тени"
-                       name="Lighting and Shadows">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="RenderDeferred" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="RenderDeferred" />
-            <menu_item_check.on_enable
-                 function="Advanced.EnableRenderDeferred" />
-          </menu_item_check>
-          <menu_item_check
-                       label="   Тени для Солнца/Луны/Прожекторов"
-                       name="Shadows from Sun/Moon/Projectors">
-            <menu_item_check.on_check
-             function="Advanced.CheckRenderShadowOption"
-             parameter="RenderShadowDetail" />
-            <menu_item_check.on_click
-             function="Advanced.ClickRenderShadowOption"
-             parameter="RenderShadowDetail" />
-            <menu_item_check.on_enable
-                 function="Advanced.EnableRenderDeferredOptions" />
-          </menu_item_check>
-          <menu_item_check
-                   label="   SSAO и размытость теней"
-                   name="SSAO and Shadow Smoothing">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="RenderDeferredSSAO" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="RenderDeferredSSAO" />
-            <menu_item_check.on_enable
-                 function="Advanced.EnableRenderDeferredOptions" />
-          </menu_item_check>
-          <menu_item_check
-                   label="   Глобальное освещение (пробный)"
-                   name="Global Illumination">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="RenderDeferredGI" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="RenderDeferredGI" />
-            <menu_item_check.on_enable
-                 function="Advanced.EnableRenderDeferredOptions" />
-          </menu_item_check>
-
-          <menu_item_separator />
-
-          <menu_item_check
-             label="Отладить GL"
-             name="Debug GL">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="RenderDebugGL" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="RenderDebugGL" />
-            </menu_item_check>
-            <menu_item_check
-             label="Отладить Pipeline"
-             name="Debug Pipeline">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="RenderDebugPipeline" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="RenderDebugPipeline" />
-            </menu_item_check>
-            <menu_item_check
-             label="Автоматическая альфа маска (Отлаженна)"
-             name="Automatic Alpha Masks (deferred)">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="RenderAutoMaskAlphaDeferred" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="RenderAutoMaskAlphaDeferred" />
-            </menu_item_check>
-            <menu_item_check
-             label="Автоматическая альфа маска (Не отлаженна)"
-             name="Automatic Alpha Masks (non-deferred)">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="RenderAutoMaskAlphaNonDeferred" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="RenderAutoMaskAlphaNonDeferred" />
-            </menu_item_check>
-            <menu_item_check
-             label="Анимация текстуры"
-             name="Animation Textures">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="AnimateTextures" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="AnimateTextures" />
-            </menu_item_check>
-            <menu_item_check
-             label="Отключить текстуры"
-             name="Disable Textures">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="TextureDisable" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="TextureDisable" />
-            </menu_item_check>
-            <menu_item_check
-              label="Полное разрешение текстур"
-             name="Rull Res Textures">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="TextureLoadFullRes" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="TextureLoadFullRes" />
-            </menu_item_check>
-            <menu_item_check
-               label="Аудит текстуры"
-               name="Audit Textures">
-              <menu_item_check.on_check
-               function="CheckControl"
-               parameter="AuditTexture" />
-              <menu_item_check.on_click
-               function="ToggleControl"
-               parameter="AuditTexture" />
-            </menu_item_check>
-            <menu_item_check
-             label="Атлас текстур (пробный)"
-             name="Texture Atlas">
-              <menu_item_check.on_check
-               function="CheckControl"
-               parameter="EnableTextureAtlas" />
-              <menu_item_check.on_click
-               function="ToggleControl"
-               parameter="EnableTextureAtlas" />
-            </menu_item_check>
-              <menu_item_check
-             label="Отрисовка прикрепленного света"
-             name="Render Attached Lights">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="RenderAttachedLights" />
-                <menu_item_check.on_click
-                 function="Advanced.HandleAttachedLightParticles"
-                 parameter="RenderAttachedLights" />
-            </menu_item_check>
-            <menu_item_check
-             label="Отрисовка прикрепленных частиц"
-             name="Render Attached Particles">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="RenderAttachedParticles" />
-                <menu_item_check.on_click
-                 function="Advanced.HandleAttachedLightParticles"
-                 parameter="RenderAttachedParticles" />
-            </menu_item_check>
-            <menu_item_check
-             label="Колебание свечения объектов"
-             name="Hover Glow Objects">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="RenderHoverGlowEnable" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="RenderHoverGlowEnable" />
-            </menu_item_check>
-        </menu>
-
-        <menu
-         create_jump_keys="true"
-         label="Сеть"
-         name="Network"
-         tear_off="true">
-            <menu_item_check
-             label="Pause Agent"
-             name="AgentPause">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="AgentPause" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="AgentPause" />
-            </menu_item_check>
-
-            <menu_item_separator/>
-
-            <menu_item_call
-             label="Включение журнала сообщений"
-             name="Enable Message Log">
-                <menu_item_call.on_click
-                 function="Advanced.EnableMessageLog" />
-            </menu_item_call>
-            <menu_item_call
-             label="Выключить журнал сообщений"
-             name="Disable Message Log">
-                <menu_item_call.on_click
-                 function="Advanced.DisableMessageLog" />
-            </menu_item_call>
-
-            <menu_item_separator/>
-
-            <menu_item_check
-             label="Скорость интерполяции объектов"
-             name="Velocity Interpolate Objects">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="VelocityInterpolate" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="VelocityInterpolate" />
-            </menu_item_check>
-            <menu_item_check
-             label="Проверка позиций интерполяции объекта"
-             name="Ping Interpolate Object Positions">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="PingInterpolate" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="PingInterpolate" />
-            </menu_item_check>
-
-            <menu_item_separator/>
-
-            <menu_item_call
-             label="Выпадение пакетов"
-             name="Drop a Packet"
-             shortcut="control|alt|L">
-                <menu_item_call.on_click
-                 function="Advanced.DropPacket" />
-            </menu_item_call>
-        </menu>
-        <menu_item_call
-         label="Дамп скрипта камеры"
-         name="Dump Scripted Camera">
-            <menu_item_call.on_click
-             function="Advanced.DumpScriptedCamera" />
-        </menu_item_call>
-        <menu_item_call
-             label="Удары, толчки, просмотры"
-             name="Bumps, Pushes &amp;amp; Hits">
-                <menu_item_call.on_click
-                 function="Floater.Show"
-                 parameter="bumps" />
-            </menu_item_call>
-
-        <menu
-         create_jump_keys="true"
-         label="Recorder"
-         name="Recorder"
-         tear_off="true">
-            <menu_item_call
-             label="Начать воспроизведение"
-             name="Start Playback">
-                <menu_item_call.on_click
-                 function="Advanced.AgentPilot"
-                 parameter="start playback" />
-            </menu_item_call>
-            <menu_item_call
-             label="Остановить воспроизведение"
-             name="Stop Playback">
-                <menu_item_call.on_click
-                 function="Advanced.AgentPilot"
-                 parameter="stop playback" />
-            </menu_item_call>
-            <menu_item_check
-             label="Повторять воспроизведение"
-             name="Loop Playback">
-                <menu_item_check.on_check
-                 function="Advanced.CheckAgentPilotLoop"
-                 parameter="loopPlayback" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleAgentPilotLoop" />
-            </menu_item_check>
-            <menu_item_call
-             label="Начать запись"
-             name="Start Record">
-                <menu_item_call.on_click
-                 function="Advanced.AgentPilot"
-                 parameter="start record" />
-            </menu_item_call>
-            <menu_item_call
-             label="Остановить запись"
-             name="Stop Record">
-                <menu_item_call.on_click
-                 function="Advanced.AgentPilot"
-                 parameter="stop record" />
-            </menu_item_call>
-        </menu>
-
-        <menu
-         create_jump_keys="true"
-         label="Мир"
-         name="World"
-         tear_off="true">
-            <menu_item_check
-             label="Sim Sun Override"
-             name="Sim Sun Override">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="SkyOverrideSimSunPosition" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="SkyOverrideSimSunPosition" />
-            </menu_item_check>
-            <menu_item_check
-             label="Cheesy Beacon"
-             name="Cheesy Beacon">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="CheesyBeacon" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="CheesyBeacon" />
-            </menu_item_check>
-            <menu_item_check
-             label="Fixed Weather"
-             name="Fixed Weather">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="FixedWeather" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="FixedWeather" />
-            </menu_item_check>
-            <menu_item_call
-             label="Dump Region Object Cache"
-             name="Dump Region Object Cache">
-                <menu_item_call.on_click
-                 function="Advanced.DumpRegionObjectCache" />
-            </menu_item_call>
-        </menu>
-        <menu
-         create_jump_keys="true"
-         label="UI"
-         name="UI"
-         tear_off="true">
-         <!--   <menu_item_check
-             label="New Bottom Bar"
-             name="New Bottom Bar">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="BottomPanelNew" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="BottomPanelNew" />
-            </menu_item_check>-->
-            <menu_item_call
-             label="Тестирование медиа браузера"
-             name="Web Browser Test">
-                <menu_item_call.on_click
-                 function="Advanced.WebBrowserTest"
-                 parameter="http://secondlife.com/app/search/slurls.html"/>
-            </menu_item_call>
-          <menu_item_call
-           label="Web Content Browser"
-           name="Web Content Browser"
-           shortcut="control|alt|W">
-            <menu_item_call.on_click
-             function="Advanced.WebContentTest"
-             parameter="http://google.com"/>
-          </menu_item_call>
-          <menu_item_call
-             label="Dump SelectMgr"
-             name="Dump SelectMgr">
-                <menu_item_call.on_click
-                 function="Advanced.DumpSelectMgr" />
-            </menu_item_call>
-            <menu_item_call
-             label="Dump Inventory"
-             name="Dump Inventory">
-                <menu_item_call.on_click
-                 function="Advanced.DumpInventory" />
-            </menu_item_call>
-            <menu_item_call
-             label="Dump Timers"
-             name="Dump Timers">
-                <menu_item_call.on_click
-                 function="Advanced.DumpTimers" />
-            </menu_item_call>
-            <menu_item_call
-             label="Dump Focus Holder"
-             name="Dump Focus Holder">
-                <menu_item_call.on_click
-                 function="Advanced.DumpFocusHolder" />
-            </menu_item_call>
-            <menu_item_call
-             label="Print Selected Object Info"
-             name="Print Selected Object Info"
-             shortcut="control|shift|P">
-                <menu_item_call.on_click
-                 function="Advanced.PrintSelectedObjectInfo" />
-            </menu_item_call>
-            <menu_item_call
-             label="Print Agent Info"
-             name="Print Agent Info"
-             shortcut="shift|P">
-                <menu_item_call.on_click
-                 function="Advanced.PrintAgentInfo" />
-            </menu_item_call>
-            <menu_item_call
-             label="Memory Stats"
-             name="Memory Stats"
-             shortcut="control|alt|shift|M">
-                <menu_item_call.on_click
-                 function="Advanced.PrintTextureMemoryStats" />
-            </menu_item_call>
-            <menu_item_check
-             label="Двойное нажатие для автопилота"
-             name="Double-ClickAuto-Pilot">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="DoubleClickAutoPilot" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="DoubleClickAutoPilot" />
-            </menu_item_check>
-            <menu_item_check
-             label="Двойное нажатие для телепортации"
-             name="DoubleClick Teleport">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="DoubleClickTeleport" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="DoubleClickTeleport" />
-            </menu_item_check>
-
-            <menu_item_separator />
-
-            <menu_item_check
-             label="Debug SelectMgr"
-             name="Debug SelectMgr">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="DebugSelectMgr" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="DebugSelectMgr" />
-            </menu_item_check>
-            <menu_item_check
-             label="Debug Clicks"
-             name="Debug Clicks">
-                <menu_item_check.on_check
-                 function="Advanced.CheckDebugClicks"
-                 parameter="DebugClicks" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleDebugClicks"
-                 parameter="DebugClicks" />
-            </menu_item_check>
-            <menu_item_check
-             label="Debug Views"
-             name="Debug Views">
-                <menu_item_check.on_check
-                 function="Advanced.CheckDebugViews" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleDebugViews" />
-            </menu_item_check>
-            <menu_item_check
-             label="Debug Name Tooltips"
-             name="Debug Name Tooltips">
-                <menu_item_check.on_check
-                 function="Advanced.CheckXUINameTooltips"
-                 parameter="XUINameTooltips" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleXUINameTooltips" />
-            </menu_item_check>
-            <menu_item_check
-             label="Debug Mouse Events"
-             name="Debug Mouse Events">
-                <menu_item_check.on_check
-                 function="Advanced.CheckDebugMouseEvents"
-                 parameter="MouseEvents" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleDebugMouseEvents" />
-            </menu_item_check>
-            <menu_item_check
-             label="Debug Keys"
-             name="Debug Keys">
-                <menu_item_check.on_check
-                 function="Advanced.CheckDebugKeys"
-                 parameter="DebugKeys" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleDebugKeys" />
-            </menu_item_check>
-            <menu_item_check
-             label="Debug Window Process"
-             name="Debug WindowProc">
-                <menu_item_check.on_check
-                 function="Advanced.CheckDebugWindowProc"
-                 parameter="DebugWindowProc" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleDebugWindowProc"
-                 parameter="DebugWindowProc" />
-            </menu_item_check>
-        </menu>
-        <menu
-         create_jump_keys="true"
-         label="XUI"
-         name="XUI"
-         tear_off="true">
-            <menu_item_call
-               label="Reload Color Settings"
-               name="Reload Color Settings">
-              <menu_item_call.on_click
-               function="Advanced.ReloadColorSettings" />
-            </menu_item_call>
-            <menu_item_call
-             label="Show Font Test"
-             name="Show Font Test">
-                <menu_item_call.on_click
-                 function="Floater.Show"
-                 parameter="font_test" />
-            </menu_item_call>
-            <menu_item_call
-             label="Загрузить из XML"
-             name="Load from XML">
-                <menu_item_call.on_click
-                 function="Advanced.LoadUIFromXML" />
-            </menu_item_call>
-            <menu_item_call
-             label="Сохранить в XML"
-             name="Save to XML">
-                <menu_item_call.on_click
-                 function="Advanced.SaveUIToXML" />
-            </menu_item_call>
-            <menu_item_check
-             label="Показать XUI имена"
-             name="Show XUI Names">
-                <menu_item_check.on_check
-                 function="Advanced.CheckXUINames"
-                 parameter="showUIname" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleXUINames" />
-            </menu_item_check>
-          <menu_item_call
-           label="Отправить тестовое ЛС"
-           name="Send Test IMs">
-            <menu_item_call.on_click
-             function="Advanced.SendTestIMs" />
-          </menu_item_call>
-          <menu_item_call
-           label="Flush Names Caches"
-           name="Flush Names Caches">
-            <menu_item_call.on_click
-             function="Advanced.FlushNameCaches" />
-          </menu_item_call>
-        </menu>
-        <menu
-         create_jump_keys="true"
-         label="Аватар"
-         name="Character"
-         tear_off="true">
-            <menu
-             create_jump_keys="true"
-             label="Grab Baked Texture"
-             name="Grab Baked Texture"
-             tear_off="true">
-                <menu_item_call
-                 label="Iris"
-                 name="Iris">
-                    <menu_item_call.on_click
-                     function="Advanced.GrabBakedTexture"
-                     parameter="iris" />
-                    <menu_item_call.on_enable
-                     function="Advanced.EnableGrabBakedTexture"
-					 parameter="iris" />
-                </menu_item_call>
-                <menu_item_call
-                 label="Голова"
-                 name="Head">
-                    <menu_item_call.on_click
-                     function="Advanced.GrabBakedTexture"
-                     parameter="head" />
-                    <menu_item_call.on_enable
-                     function="Advanced.EnableGrabBakedTexture"
-					 parameter="head" />
-                </menu_item_call>
-                <menu_item_call
-                 label="Верхняя часть тела"
-                 name="Upper Body">
-                    <menu_item_call.on_click
-                     function="Advanced.GrabBakedTexture"
-                     parameter="upper" />
-                    <menu_item_call.on_enable
-                     function="Advanced.EnableGrabBakedTexture"
-					 parameter="upper" />
-                </menu_item_call>
-                <menu_item_call
-                 label="нижняя часть тела"
-                 name="Lower Body">
-                    <menu_item_call.on_click
-                     function="Advanced.GrabBakedTexture"
-                     parameter="lower" />
-                    <menu_item_call.on_enable
-                     function="Advanced.EnableGrabBakedTexture"
-					 parameter="lower" />
-                </menu_item_call>
-                <menu_item_call
-                 label="Юбка"
-                 name="Skirt">
-                    <menu_item_call.on_click
-                     function="Advanced.GrabBakedTexture"
-                     parameter="skirt" />
-                    <menu_item_call.on_enable
-                     function="Advanced.EnableGrabBakedTexture"
-					 parameter="skirt" />
-                </menu_item_call>
-            </menu>
-            <menu
-             create_jump_keys="true"
-             label="Проверка персонажа"
-             name="Character Tests"
-             tear_off="true">
-                <menu_item_call
-                 label="Внешность в XML"
-                 name="Appearance To XML">
-                    <menu_item_call.on_click
-                     function="Advanced.AppearanceToXML" />
-                </menu_item_call>
-                <menu_item_call
-                 label="Переключить геометрию персонажа"
-                 name="Toggle Character Geometry">
-                    <menu_item_call.on_click
-                     function="Advanced.ToggleCharacterGeometry" />
-                    <menu_item_call.on_enable
-                     function="IsGodCustomerService" />
-                </menu_item_call>
-                <menu_item_call
-                 label="Тестирование мужчины"
-                 name="Test Male">
-                    <menu_item_call.on_click
-                     function="Advanced.TestMale" />
-                </menu_item_call>
-                <menu_item_call
-                 label="Тестирование женщины"
-                 name="Test Female">
-                    <menu_item_call.on_click
-                     function="Advanced.TestFemale" />
-                </menu_item_call>
-                <menu_item_call
-                 label="Переключение PG"
-                 name="Toggle PG">
-                    <menu_item_call.on_click
-                     function="Advanced.TogglePG" />
-                </menu_item_call>
-                <menu_item_check
-                 label="Подтвердить выбранный аватар"
-                 name="Allow Select Avatar">
-                    <menu_item_check.on_check
-                     function="CheckControl"
-                     parameter="AllowSelectAvatar" />
-                    <menu_item_check.on_click
-                     function="ToggleControl"
-                     parameter="AllowSelectAvatar" />
-                </menu_item_check>
-            </menu>
-            <menu_item_call
-             label="Принудительные параметры по умолчанию"
-             name="Force Params to Default">
-                <menu_item_call.on_click
-                 function="Advanced.ForceParamsToDefault" />
-            </menu_item_call>
-            <menu_item_check
-             label="Информация анимации"
-             name="Animation Info">
-                <menu_item_check.on_check
-                 function="Advanced.CheckAnimationInfo"
-                 parameter="AnimationInfo" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleAnimationInfo"
-                 parameter="" />
-            </menu_item_check>
-            <menu_item_check
-             label="Медленное движение анимации"
-             name="Slow Motion Animations">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="SlowMotionAnimation" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="SlowMotionAnimation" />
-            </menu_item_check>
-            <menu_item_check
-             label="Показать кто смотрит"
-             name="Show Look At">
-                <menu_item_check.on_check
-                 function="Advanced.CheckShowLookAt"
-                 parameter="ShowLookAt" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleShowLookAt" />
-            </menu_item_check>
-            <menu_item_check
-             label="Show Point At"
-             name="Show Point At">
-                <menu_item_check.on_check
-                 function="Advanced.CheckShowPointAt"
-                 parameter="ShowPointAt" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleShowPointAt" />
-            </menu_item_check>
-            <menu_item_check
-             label="Debug Joint Updates"
-             name="Debug Joint Updates">
-                <menu_item_check.on_check
-                 function="Advanced.CheckDebugJointUpdates"
-                 parameter="DebugJointUpdates" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleDebugJointUpdates" />
-            </menu_item_check>
-            <menu_item_check
-             label="Отключить LOD"
-             name="Disable LOD">
-                <menu_item_check.on_check
-                 function="Advanced.CheckDisableLOD"
-                 parameter="DisableLOD" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleDisableLOD" />
-            </menu_item_check>
-            <menu_item_check
-             label="Debug Character Vis"
-             name="Debug Character Vis">
-                <menu_item_check.on_check
-                 function="Advanced.CheckDebugCharacterVis"
-                 parameter="DebugCharacterVis" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleDebugCharacterVis" />
-            </menu_item_check>
-            <menu_item_check
-             label="Показать столкновение скелета"
-             name="Show Collision Skeleton">
-                <menu_item_check.on_check
-                 function="Advanced.CheckInfoDisplay"
-                 parameter="collision skeleton" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleInfoDisplay"
-                 parameter="collision skeleton" />
-            </menu_item_check>
-            <menu_item_check
-             label="Display Agent Target"
-             name="Display Agent Target">
-                <menu_item_check.on_check
-                 function="Advanced.CheckInfoDisplay"
-                 parameter="agent target" />
-                <menu_item_check.on_click
-                 function="Advanced.ToggleInfoDisplay"
-                 parameter="agent target" />
-            </menu_item_check>
-<!-- Appears not to exist anymore
-            <menu_item_check
-             label="Отладка вращения"
-             name="Debug Rotation">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="DebugAvatarRotation" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="DebugAvatarRotation" />
-            </menu_item_check> -->
--->
-            <menu_item_call
-             label="Дамп вложения"
-             name="Dump Attachments">
-                <menu_item_call.on_click
-                 function="Advanced.DumpAttachments" />
-            </menu_item_call>
-            <menu_item_call
-             label="Отладка текстур аватара"
-             name="Debug Avatar Textures"
-             shortcut="control|alt|shift|A">
-                <menu_item_call.on_click
-                 function="Advanced.DebugAvatarTextures" />
-            </menu_item_call>
-            <menu_item_call
-             label="Дамп локальных текстур"
-             name="Dump Local Textures"
-             shortcut="alt|shift|M">
-                <menu_item_call.on_click
-                 function="Advanced.DumpAvatarLocalTextures" />
-            </menu_item_call>
-			<menu_item_call
-			 label="Перезагрузить облачные частицы аватара"
-			 name="Reload Avatar Cloud Particle">
-				<menu_item_call.on_click
-				 function="Advanced.ReloadAvatarCloudParticle" />
-			</menu_item_call>
+	</menu>
+	<menu label="Строительство" name="BuildTools">
+		<menu_item_check label="Строительство" name="Show Build Tools"/>
+		<menu label="Выбрать инструменты" name="Select Tool">
+			<menu_item_call label="Фокус" name="Focus"/>
+			<menu_item_call label="Перемещение" name="Move"/>
+			<menu_item_call label="Редактирование" name="Edit"/>
+			<menu_item_call label="Создание" name="Create"/>
+			<menu_item_call label="Земля" name="Land"/>
 		</menu>
-        <menu_item_separator/>
-
-        <menu_item_check
-         label="HTTP текстуры"
-         name="HTTP Textures">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="ImagePipelineUseHTTP" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="ImagePipelineUseHTTP" />
-        </menu_item_check>
-        <menu_item_call
-         label="Сжатие изображений"
-         name="Compress Images">
-            <menu_item_call.on_click
-             function="Advanced.CompressImage" />
-        </menu_item_call>
-        <menu_item_check
-         label="Отладка выходного мини-дампа"
-         name="Output Debug Minidump">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="SaveMinidump" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="SaveMinidump" />
-        </menu_item_check>
-        <menu_item_check
-         label="Console Window on next Run"
-         name="Console Window">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="ShowConsoleWindow" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="ShowConsoleWindow" />
-        </menu_item_check>
-
-        <menu_item_separator/>
-
-        <menu_item_call
-         label="Запрос статуса администратора"
-         name="Request Admin Options"
-         shortcut="control|alt|G">
-            <menu_item_call.on_click
-             function="Advanced.RequestAdminStatus" />
-        </menu_item_call>
-        <menu_item_call
-         label="Выйти из статуса администратора"
-         name="Leave Admin Options"
-         shortcut="control|alt|shift|G">
-            <menu_item_call.on_click
-             function="Advanced.LeaveAdminStatus" />
-        </menu_item_call>
-        <menu_item_check
-         label="Показать меню администратора"
-         name="View Admin Options">
-            <menu_item_check.on_enable
-             function="Advanced.EnableViewAdminOptions" />
-            <menu_item_check.on_check
-             function="Advanced.CheckViewAdminOptions"
-             parameter="ViewAdminOptions" />
-            <menu_item_check.on_click
-             function="Advanced.ToggleViewAdminOptions" />
-        </menu_item_check>
-    </menu>
-    <menu
-     create_jump_keys="true"
-     label="Администратор"
-     name="Admin"
-     tear_off="true"
-     visible="false">
-        <menu
-         create_jump_keys="true"
-         label="Объект"
-         tear_off="true">
-            <menu_item_call
-             label="Взять копию"
-             name="Take Copy"
-             shortcut="control|alt|shift|O">
-                <menu_item_call.on_click
-                 function="Admin.ForceTakeCopy" />
-                <menu_item_call.on_enable
-                 function="IsGodCustomerService" />
-            </menu_item_call>
-            <menu_item_call
-             label="Принудительно стать владельцем"
-             name="Force Owner To Me">
-                <menu_item_call.on_click
-                 function="Admin.HandleObjectOwnerSelf" />
-                <menu_item_call.on_enable
-                 function="IsGodCustomerService" />
-            </menu_item_call>
-            <menu_item_call
-             label="Принудительные права владельца"
-             name="Force Owner Permissive">
-                <menu_item_call.on_click
-                 function="Admin.HandleObjectOwnerPermissive" />
-                <menu_item_call.on_enable
-                 function="IsGodCustomerService" />
-            </menu_item_call>
-            <menu_item_call
-             label="Удалить"
-             name="Delete"
-             shortcut="control|alt|shift|Del">
-                <menu_item_call.on_click
-                 function="Admin.HandleForceDelete" />
-                <menu_item_call.on_enable
-                 function="IsGodCustomerService" />
-            </menu_item_call>
-            <menu_item_call
-             label="Lock"
-             name="Lock"
-             shortcut="control|alt|shift|L">
-                <menu_item_call.on_click
-                 function="Admin.HandleObjectLock" />
-                <menu_item_call.on_enable
-                 function="IsGodCustomerService" />
-            </menu_item_call>
-            <menu_item_call
-             label="Get Assets IDs"
-             name="Get Assets IDs"
-             shortcut="control|alt|shift|I">
-                <menu_item_call.on_click
-                 function="Admin.HandleObjectAssetIDs" />
-                <menu_item_call.on_enable
-                 function="IsGodCustomerService" />
-            </menu_item_call>
-        </menu>
-        <menu
-         create_jump_keys="true"
-         label="Участок"
-         name="Parcel"
-         tear_off="true">
-            <menu_item_call
-             label="Force Owner To Me"
-             name="Owner To Me">
-                <menu_item_call.on_click
-                 function="Admin.HandleForceParcelOwnerToMe" />
-                <menu_item_call.on_enable
-                 function="IsGodCustomerService" />
-            </menu_item_call>
-            <menu_item_call
-             label="Set to Linden Content"
-             name="Set to Linden Content"
-             shortcut="control|alt|shift|C">
-                <menu_item_call.on_click
-                 function="Admin.HandleForceParcelToContent" />
-                <menu_item_call.on_enable
-                 function="IsGodCustomerService" />
-            </menu_item_call>
-            <menu_item_call
-             label="Claim Public Land"
-             name="Claim Public Land">
-                <menu_item_call.on_click
-                 function="Admin.HandleClaimPublicLand" />
-                <menu_item_call.on_enable
-                 function="IsGodCustomerService" />
-            </menu_item_call>
-        </menu>
-        <menu
-         create_jump_keys="true"
-         label="Регион"
-         name="Region"
-         tear_off="true">
-            <menu_item_call
-             label="Dump Temp Asset Data"
-             name="Dump Temp Asset Data">
-                <menu_item_call.on_click
-                 function="Admin.HandleRegionDumpTempAssetData" />
-                <menu_item_call.on_enable
-                 function="IsGodCustomerService" />
-            </menu_item_call>
-            <menu_item_call
-             label="Save Region State"
-             name="Save Region State">
-                <menu_item_call.on_click
-                 function="Admin.OnSaveState" />
-                <menu_item_call.on_enable
-                 function="IsGodCustomerService" />
-            </menu_item_call>
-        </menu>
-        <menu_item_call
-         label="Инструменнты Бога"
-         name="God Tools">
-            <menu_item_call.on_click
-             function="Floater.Show"
-             parameter="god_tools" />
-            <menu_item_call.on_enable
-             function="IsGodCustomerService" />
-        </menu_item_call>
-    </menu>
-    
-    
-    <!-- God Menu -->
-    
-    <menu
-     create_jump_keys="true"
-     label="Администратор"
-     name="Deprecated"
-     tear_off="true"
-     visible="false">
-        <menu
-         create_jump_keys="true"
-         label="Прикрепить объект"
-         mouse_opaque="false"
-         name="Attach Object"
-         tear_off="true" />
-        <menu
-         create_jump_keys="true"
-         label="Отделить объект"
-         mouse_opaque="false"
-         name="Detach Object"
-         tear_off="true" />
-        <menu
-         create_jump_keys="true"
-         label="Снять одежду"
-         mouse_opaque="false"
-         name="Take Off Clothing"
-         tear_off="true">
-            <menu_item_call
-             label="Рубашку"
-             name="Shirt">
-                <menu_item_call.on_click
-                 function="Edit.TakeOff"
-                 parameter="shirt" />
-                <menu_item_call.on_enable
-                 function="Edit.EnableTakeOff"
-                 parameter="shirt" />
-            </menu_item_call>
-            <menu_item_call
-             label="Штаны"
-             name="Pants">
-                <menu_item_call.on_click
-                 function="Edit.TakeOff"
-                 parameter="pants" />
-                <menu_item_call.on_enable
-                 function="Edit.EnableTakeOff"
-                 parameter="pants" />
-            </menu_item_call>
-            <menu_item_call
-             label="Обувь"
-             name="Shoes">
-                <menu_item_call.on_click
-                 function="Edit.TakeOff"
-                 parameter="shoes" />
-                <menu_item_call.on_enable
-                 function="Edit.EnableTakeOff"
-                 parameter="shoes" />
-            </menu_item_call>
-            <menu_item_call
-             label="Носки"
-             name="Socks">
-                <menu_item_call.on_click
-                 function="Edit.TakeOff"
-                 parameter="socks" />
-                <menu_item_call.on_enable
-                 function="Edit.EnableTakeOff"
-                 parameter="socks" />
-            </menu_item_call>
-            <menu_item_call
-             label="Куртку"
-             name="Jacket">
-                <menu_item_call.on_click
-                 function="Edit.TakeOff"
-                 parameter="jacket" />
-                <menu_item_call.on_enable
-                 function="Edit.EnableTakeOff"
-                 parameter="jacket" />
-            </menu_item_call>
-            <menu_item_call
-             label="Перчатки"
-             name="Gloves">
-                <menu_item_call.on_click
-                 function="Edit.TakeOff"
-                 parameter="gloves" />
-                <menu_item_call.on_enable
-                 function="Edit.EnableTakeOff"
-                 parameter="gloves" />
-            </menu_item_call>
-            <menu_item_call
-             label="Майку"
-             name="Menu Undershirt">
-                <menu_item_call.on_click
-                 function="Edit.TakeOff"
-                 parameter="undershirt" />
-                <menu_item_call.on_enable
-                 function="Edit.EnableTakeOff"
-                 parameter="undershirt" />
-            </menu_item_call>
-            <menu_item_call
-             label="Трусы"
-             name="Menu Underpants">
-                <menu_item_call.on_click
-                 function="Edit.TakeOff"
-                 parameter="underpants" />
-                <menu_item_call.on_enable
-                 function="Edit.EnableTakeOff"
-                 parameter="underpants" />
-            </menu_item_call>
-            <menu_item_call
-             label="Юбку"
-             name="Skirt">
-                <menu_item_call.on_click
-                 function="Edit.TakeOff"
-                 parameter="skirt" />
-                <menu_item_call.on_enable
-                 function="Edit.EnableTakeOff"
-                 parameter="skirt" />
-            </menu_item_call>
-            <menu_item_call
-             label="Альфа"
-             name="Alpha">
-                <menu_item_call.on_click
-                 function="Edit.TakeOff"
-                 parameter="alpha" />
-                <menu_item_call.on_enable
-                 function="Edit.EnableTakeOff"
-                 parameter="alpha" />
-            </menu_item_call>
-            <menu_item_call
-             label="Тату"
-             name="Tattoo">
-                <menu_item_call.on_click
-                 function="Edit.TakeOff"
-                 parameter="tattoo" />
-                <menu_item_call.on_enable
-                 function="Edit.EnableTakeOff"
-                 parameter="tattoo" />
-            </menu_item_call>
-            <menu_item_call
-             label="Физику"
-             name="Physics">
-                <menu_item_call.on_click
-                 function="Edit.TakeOff"
-                 parameter="physics" />
-                <menu_item_call.on_enable
-                 function="Edit.EnableTakeOff"
-                 parameter="physics" />
-            </menu_item_call>
-            <menu_item_call
-             label="Всю одежду"
-             name="All Clothes">
-                <menu_item_call.on_click
-                 function="Edit.TakeOff"
-                 parameter="all" />
-            </menu_item_call>
-        </menu>
-        <menu
-         create_jump_keys="true"
-         label="Помощь"
-         name="Help"
-         tear_off="true">
-            <menu_item_call
-             label="Официальный Linden Блог"
-             name="Official Linden Blog">
-                <menu_item_call.on_click
-                 function="PromptShowURL"
-                 name="OfficialLindenBlog_url"
-                 parameter="WebLaunchSupportWiki,http://blog.secondlife.com/" />
-            </menu_item_call>
-            <menu_item_call
-             label="портал скриптов"
-             name="Scripting Portal">
-                <menu_item_call.on_click
-                 function="PromptShowURL"
-                 name="ScriptingPortal_url"
-                 parameter="WebLaunchLSLWiki,http://wiki.secondlife.com/wiki/LSL_Portal" />
-            </menu_item_call>
-            <menu
-             create_jump_keys="true"
-             label="Bug Reporting"
-             name="Bug Reporting"
-             tear_off="true">
-                <menu_item_call
-                 label="Public Issue Tracker"
-                 name="Public Issue Tracker">
-                    <menu_item_call.on_click
-                     function="PromptShowURL"
-                     name="PublicIssueTracker_url"
-                     parameter="WebLaunchPublicIssue,http://jira.secondlife.com" />
-                </menu_item_call>
-                <menu_item_call
-                 label="Public Issue Tracker Help"
-                 name="Publc Issue Tracker Help">
-                    <menu_item_call.on_click
-                     function="PromptShowURL"
-                     name="PublicIssueTrackerHelp_url"
-                     parameter="WebLaunchPublicIssueHelp,http://wiki.secondlife.com/wiki/Issue_tracker" />
-                </menu_item_call>
-
-                <menu_item_separator/>
-
-                <menu_item_call
-                 label="Bug Reporting 101"
-                 name="Bug Reporing 101">
-                    <menu_item_call.on_click
-                     function="PromptShowURL"
-                     name="BugReporting101_url"
-                     parameter="WebLaunchBugReport101,http://wiki.secondlife.com/wiki/Bug_Reporting_101" />
-                </menu_item_call>
-                <menu_item_call
-                 label="Вопросы безопасности"
-                 name="Security Issues">
-                    <menu_item_call.on_click
-                     function="PromptShowURL"
-                     name="SecurityIssues_url"
-                     parameter="WebLaunchSecurityIssues,http://wiki.secondlife.com/wiki/Security_issues" />
-                </menu_item_call>
-                <menu_item_call
-                 label="QA Wiki"
-                 name="QA Wiki">
-                    <menu_item_call.on_click
-                     function="PromptShowURL"
-                     name="QAWiki_url"
-                     parameter="WebLaunchQAWiki,http://wiki.secondlife.com/wiki/QA_Portal" />
-                </menu_item_call>
-            </menu>
-        </menu>
-    </menu>
+		<menu_item_call label="Объединить" name="Link"/>
+		<menu_item_call label="Разъединить" name="Unlink"/>
+		<menu_item_check label="Редактировать объединенные части" name="Edit Linked Parts"/>
+		<menu label="Выбрать объединенные части" name="Select Linked Parts">
+			<menu_item_call label="Выбрать следующую" name="Select Next Part"/>
+			<menu_item_call label="Выбрать предыдущую" name="Select Previous Part"/>
+			<menu_item_call label="Включить следующую" name="Include Next Part"/>
+			<menu_item_call label="Включить предыдущую" name="Include Previous Part"/>
+		</menu>
+		<menu_item_call label="Фокус на выбранном" name="Focus on Selection"/>
+		<menu_item_call label="Приблизить к выбранному" name="Zoom to Selection"/>
+		<menu label="Объект" name="Object">
+			<menu_item_call label="Купить" name="Menu Object Buy"/>
+			<menu_item_call label="Взять" name="Menu Object Take"/>
+			<menu_item_call label="Взять копию" name="Take Copy"/>
+			<menu_item_call label="Сохранить в моем инвентаре" name="Save Object Back to My Inventory"/>
+			<menu_item_call label="Сохранить в контенте объектов" name="Save Object Back to Object Contents"/>
+			<menu_item_call label="Вернуть объект" name="Return Object back to Owner"/>
+		</menu>
+		<menu label="Скрипты" name="Scripts">
+			<menu_item_call label="Перекомпилировать скрипты (Mono)" name="Mono"/>
+			<menu_item_call label="Перекомпилировать скрипты (LSL)" name="LSL"/>
+			<menu_item_call label="Сброс скриптов" name="Reset Scripts"/>
+			<menu_item_call label="Запустить скрипты" name="Set Scripts to Running"/>
+			<menu_item_call label="Остановить скрипты" name="Set Scripts to Not Running"/>
+		</menu>
+		<menu label="Параметры" name="Options">
+			<menu_item_check label="Показать расширенные разрешения" name="DebugPermissions"/>
+			<menu_item_check label="Выбирать только мои объекты" name="Select Only My Objects"/>
+			<menu_item_check label="Выбирать только перемещаемые объекты" name="Select Only Movable Objects"/>
+			<menu_item_check label="Выбор близлежащих" name="Select By Surrounding"/>
+			<menu_item_check label="Выделять контуры выбранного" name="Show Selection Outlines"/>
+			<menu_item_check label="Показывать скрытые выбранные объекты" name="Show Hidden Selection"/>
+			<menu_item_check label="Показать радиус освещения для выбранных" name="Show Light Radius for Selection"/>
+			<menu_item_check label="Показать луч выбора" name="Show Selection Beam"/>
+			<menu_item_check label="Привязка к сетке" name="Snap to Grid"/>
+			<menu_item_call label="Сдвиг к ближайшему узлу XY сетки" name="Snap Object XY to Grid"/>
+			<menu_item_call label="Использовать выбранное для сетки" name="Use Selection for Grid"/>
+			<menu_item_call label="Параметры сетки" name="Grid Options"/>
+		</menu>
+		<menu label="Передача" name="Upload">
+			<menu_item_call label="Изображение (L$[COST])..." name="Upload Image"/>
+			<menu_item_call label="Звук (L$[COST])..." name="Upload Sound"/>
+			<menu_item_call label="Анимация (L$[COST])..." name="Upload Animation"/>
+			<menu_item_call label="Модель..." name="Upload Model"/>
+			<menu_item_call label="Все сразу (L$[COST] за файл)..." name="Bulk Upload"/>
+			<menu_item_call label="Установить разрешения на передачу по умолчанию" name="perm prefs"/>
+		</menu>
+		<menu_item_call label="Отменить" name="Undo"/>
+		<menu_item_call label="Вернуть" name="Redo"/>
+	</menu>
+	<menu label="Справка" name="Help">
+		<menu_item_call label="Инструкции..." name="How To"/>
+		<menu_item_call label="Справка по [SECOND_LIFE]" name="Second Life Help"/>
+		<menu_item_call label="Жалоба" name="Report Abuse"/>
+		<menu_item_call label="Сообщить об ошибке" name="Report Bug"/>
+		<menu_item_call label="О [APP_NAME]" name="About Second Life"/>
+	</menu>
+	<menu label="Дополнительно" name="Advanced">
+		<menu_item_call label="Обновить текстуры" name="Rebake Texture"/>
+		<menu_item_call label="Сбросить размер интерфейса" name="Set UI Size to Default"/>
+		<menu_item_call label="Задать размер окна..." name="Set Window Size..."/>
+		<menu_item_check label="Ограничение расстояния выбора" name="Limit Select Distance"/>
+		<menu_item_check label="Отключить ограничение камеры" name="Disable Camera Distance"/>
+		<menu_item_check label="Снимок высокого разрешения" name="HighResSnapshot"/>
+		<menu_item_check label="Тихое создание снимка" name="QuietSnapshotsToDisk"/>
+		<menu label="Производительность" name="Performance Tools">
+			<menu_item_call label="Запаздывание" name="Lag Meter"/>
+			<menu_item_check label="Статистика" name="Statistics Bar"/>
+			<menu_item_check label="Показать вес отрисовки для аватаров" name="Avatar Rendering Cost"/>
+		</menu>
+		<menu label="Подсветка и видимость" name="Highlighting and Visibility">
+			<menu_item_check label="Мигающий маяк" name="Cheesy Beacon"/>
+			<menu_item_check label="Скрыть частицы" name="Hide Particles"/>
+			<menu_item_check label="Скрыть выбранное" name="Hide Selected"/>
+			<menu_item_check label="Подсветка прозрачного" name="Highlight Transparent"/>
+			<menu_item_check label="Показывать присоединения HUD" name="Show HUD Attachments"/>
+			<menu_item_check label="Показывать прицел при обзоре мышью" name="ShowCrosshairs"/>
+		</menu>
+		<menu label="Типы визуализации" name="Rendering Types">
+			<menu_item_check label="Обычная" name="Simple"/>
+			<menu_item_check label="Альфа" name="Alpha"/>
+			<menu_item_check label="Дерево" name="Tree"/>
+			<menu_item_check label="Аватары" name="Character"/>
+			<menu_item_check label="Исправление поверхности" name="Surface Patch"/>
+			<menu_item_check label="Небо" name="Sky"/>
+			<menu_item_check label="Вода" name="Water"/>
+			<menu_item_check label="Земля" name="Ground"/>
+			<menu_item_check label="Объем" name="Volume"/>
+			<menu_item_check label="Трава" name="Grass"/>
+			<menu_item_check label="Облака" name="Clouds"/>
+			<menu_item_check label="Частицы" name="Particles"/>
+			<menu_item_check label="Рельефное" name="Bump"/>
+		</menu>
+		<menu label="Функции визуализации" name="Rendering Features">
+			<menu_item_check label="Интерфейс пользователя" name="UI"/>
+			<menu_item_check label="Выбрано" name="Selected"/>
+			<menu_item_check label="Выделено" name="Highlighted"/>
+			<menu_item_check label="Динамические текстуры" name="Dynamic Textures"/>
+			<menu_item_check label="Тени от ног" name="Foot Shadows"/>
+			<menu_item_check label="Туман" name="Fog"/>
+			<menu_item_check label="Проверить данные FR" name="Test FRInfo"/>
+			<menu_item_check label="Гибкие объекты" name="Flexible Objects"/>
+		</menu>
+		<menu_item_check label="Использовать поток для чтения подключаемых модулей" name="Use Plugin Read Thread"/>
+		<menu_item_call label="Очистить кэш группы" name="ClearGroupCache"/>
+		<menu_item_check label="Сглаживание мышью" name="Mouse Smoothing"/>
+		<menu_item_call label="Освободить клавиши" name="Release Keys"/>
+		<menu label="Горячие клавиши" name="Shortcuts">
+			<menu_item_call label="Изображение (L$[COST])..." name="Upload Image"/>
+			<menu_item_check label="Поиск" name="Search"/>
+			<menu_item_check label="Показать меню «Дополнительно» - старое сочетание клавиш" name="Show Advanced Menu - legacy shortcut"/>
+			<menu_item_call label="Закрыть окно" name="Close Window"/>
+			<menu_item_call label="Закрыть все окна" name="Close All Windows"/>
+			<menu_item_call label="Сохранить снимок на диске" name="Snapshot to Disk"/>
+			<menu_item_call label="Обзор мышью" name="Mouselook"/>
+			<menu_item_check label="Обзор джойстиком" name="Joystick Flycam"/>
+			<menu_item_call label="Сброс обзора" name="Reset View"/>
+			<menu_item_call label="Смотреть на последнего говорившего" name="Look at Last Chatter"/>
+			<menu label="Выбрать инструменты" name="Select Tool">
+				<menu_item_call label="Фокус" name="Focus"/>
+				<menu_item_call label="Перемещение" name="Move"/>
+				<menu_item_call label="Редактирование" name="Edit"/>
+				<menu_item_call label="Создание" name="Create"/>
+				<menu_item_call label="Земля" name="Land"/>
+			</menu>
+			<menu_item_call label="Приблизить" name="Zoom In"/>
+			<menu_item_call label="Стандартный масштаб" name="Zoom Default"/>
+			<menu_item_call label="Отодвинуть" name="Zoom Out"/>
+		</menu>
+		<menu_item_call label="Отладочные настройки" name="Debug Settings"/>
+		<menu_item_check label="Показать меню разработчика" name="Debug Mode"/>
+	</menu>
+	<menu label="Разработка" name="Develop">
+		<menu label="Консоли" name="Consoles">
+			<menu_item_check label="Консоль текстур" name="Texture Console"/>
+			<menu_item_check label="Консоль отладки" name="Debug Console"/>
+			<menu_item_call label="Консоль уведомлений" name="Notifications"/>
+			<menu_item_check label="Консоль размера текстуры" name="Texture Size"/>
+			<menu_item_check label="Консоль категории текстуры" name="Texture Category"/>
+			<menu_item_check label="Оперативные таймеры" name="Fast Timers"/>
+			<menu_item_check label="Память" name="Memory"/>
+			<menu_item_check label="Статистика по сцене" name="Scene Statistics"/>
+			<menu_item_call label="Данные о регионе на консоль отладки" name="Region Info to Debug Console"/>
+			<menu_item_call label="Данны о группе на консоль отладки" name="Group Info to Debug Console"/>
+			<menu_item_call label="Данные о способностях на консоль отладки" name="Capabilities Info to Debug Console"/>
+			<menu_item_check label="Камера" name="Camera"/>
+			<menu_item_check label="Ветер" name="Wind"/>
+			<menu_item_check label="Угол обзора" name="FOV"/>
+			<menu_item_check label="Значок" name="Badge"/>
+		</menu>
+		<menu label="Показать данные" name="Display Info">
+			<menu_item_check label="Показать время" name="Show Time"/>
+			<menu_item_check label="Показывать цену передачи" name="Show Upload Cost"/>
+			<menu_item_check label="Показать данные по отрисовке" name="Show Render Info"/>
+			<menu_item_check label="Показать данные о текстурах" name="Show Texture Info"/>
+			<menu_item_check label="Показать матрицы" name="Show Matrices"/>
+			<menu_item_check label="Показать цвет под курсором" name="Show Color Under Cursor"/>
+			<menu_item_check label="Показать память" name="Show Memory"/>
+			<menu_item_check label="Показать закрытые данные о памяти" name="Show Private Mem Info"/>
+			<menu_item_check label="Показать изменения объектов" name="Show Updates"/>
+		</menu>
+		<menu label="Принудительно вызвать ошибку" name="Force Errors">
+			<menu_item_call label="Принудительно перейти в точку останова" name="Force Breakpoint"/>
+			<menu_item_call label="Принудительно вызвать ошибку LL и сбой" name="Force LLError And Crash"/>
+			<menu_item_call label="Принудительный неправильный доступ к памяти" name="Force Bad Memory Access"/>
+			<menu_item_call label="Принудительное зацикливание" name="Force Infinite Loop"/>
+			<menu_item_call label="Принудительный сбой драйвера" name="Force Driver Carsh"/>
+			<menu_item_call label="Принудительное исключение" name="Force Software Exception"/>
+			<menu_item_call label="Принудительно отключить клиент" name="Force Disconnect Viewer"/>
+			<menu_item_call label="Имитировать утечку памяти" name="Memory Leaking Simulation"/>
+		</menu>
+		<menu label="Тесты визуализации" name="Render Tests">
+			<menu_item_check label="Сдвиг камеры" name="Camera Offset"/>
+			<menu_item_check label="Случайная частота кадров" name="Randomize Framerate"/>
+			<menu_item_check label="Периодическое замедление кадров" name="Periodic Slow Frame"/>
+			<menu_item_check label="Тест кадров" name="Frame Test"/>
+		</menu>
+		<menu label="Визуализировать метаданные" name="Render Metadata">
+			<menu_item_check label="Рамки" name="Bounding Boxes"/>
+			<menu_item_check label="Нормали" name="Normals"/>
+			<menu_item_check label="Октадерево" name="Octree"/>
+			<menu_item_check label="Тень от усеченной пирамиды" name="Shadow Frusta"/>
+			<menu_item_check label="Физические формы" name="Physics Shapes"/>
+			<menu_item_check label="Смыкание" name="Occlusion"/>
+			<menu_item_check label="Визуализация порциями" name="Render Batches"/>
+			<menu_item_check label="Тип обновления" name="Update Type"/>
+			<menu_item_check label="Анимация текстуры" name="Texture Anim"/>
+			<menu_item_check label="Приоритет текстуры" name="Texture Priority"/>
+			<menu_item_check label="Площадь текстуры" name="Texture Area"/>
+			<menu_item_check label="Площадь грани" name="Face Area"/>
+			<menu_item_check label="Данные об уровнях детализации" name="LOD Info"/>
+			<menu_item_check label="Очередь построителя" name="Build Queue"/>
+			<menu_item_check label="Освещение" name="Lights"/>
+			<menu_item_check label="Каркас столкновений" name="Collision Skeleton"/>
+			<menu_item_check label="Лучи" name="Raycast"/>
+			<menu_item_check label="Направления ветра" name="Wind Vectors"/>
+			<menu_item_check label="Сложность визуализации" name="rendercomplexity"/>
+			<menu_item_check label="Лепка" name="Sculpt"/>
+		</menu>
+		<menu label="Визуализация" name="Rendering">
+			<menu_item_check label="Оси" name="Axes"/>
+			<menu_item_check label="Касательный базис" name="Tangent Basis"/>
+			<menu_item_call label="Выбранная текстура в основе" name="Selected Texture Info Basis"/>
+			<menu_item_check label="Каркас" name="Wireframe"/>
+			<menu_item_check label="Смыкание объектов" name="Object-Object Occlusion"/>
+			<menu_item_check label="Освещение и тени" name="Lighting and Shadows"/>
+			<menu_item_check label="Тени от солнца, луны и прожекторов" name="Shadows from Sun/Moon/Projectors"/>
+			<menu_item_check label="SSAO и сглаживание теней" name="SSAO and Shadow Smoothing"/>
+			<menu_item_check label="Отладка GL" name="Debug GL"/>
+			<menu_item_check label="Отладка конвейера" name="Debug Pipeline"/>
+			<menu_item_check label="Автоматические альфа-маски (отложенные)" name="Automatic Alpha Masks (deferred)"/>
+			<menu_item_check label="Автоматические альфа-маски (не отложенные)" name="Automatic Alpha Masks (non-deferred)"/>
+			<menu_item_check label="Текстуры анимаций" name="Animation Textures"/>
+			<menu_item_check label="Отключить текстуры" name="Disable Textures"/>
+			<menu_item_check label="Текстуры в полном разрешении" name="Rull Res Textures"/>
+			<menu_item_check label="Проверить текстуры" name="Audit Textures"/>
+			<menu_item_check label="Атлас текстур (экспериментальная функция)" name="Texture Atlas"/>
+			<menu_item_check label="Визуализация присоединенных источников света" name="Render Attached Lights"/>
+			<menu_item_check label="Визуализация присоединенных частиц" name="Render Attached Particles"/>
+			<menu_item_check label="Парящие светящиеся объекты" name="Hover Glow Objects"/>
+		</menu>
+		<menu label="Сеть" name="Network">
+			<menu_item_check label="Приостановить клиент" name="AgentPause"/>
+			<menu_item_call label="Включить журнал сообщений" name="Enable Message Log"/>
+			<menu_item_call label="Отключить журнал сообщений" name="Disable Message Log"/>
+			<menu_item_check label="Скорость интерполяции объектов" name="Velocity Interpolate Objects"/>
+			<menu_item_check label="Прикрепить объекты для интерполяции" name="Ping Interpolate Object Positions"/>
+			<menu_item_call label="Опустить пакет" name="Drop a Packet"/>
+		</menu>
+		<menu_item_call label="Дамп камеры со скриптами" name="Dump Scripted Camera"/>
+		<menu_item_call label="Столкновения, толчки и удары" name="Bumps, Pushes &amp;amp; Hits"/>
+		<menu label="Диктофон" name="Recorder">
+			<menu_item_call label="Начать воспроизведение" name="Start Playback"/>
+			<menu_item_call label="Остановить воспроизведение" name="Stop Playback"/>
+			<menu_item_check label="Зациклить воспроизведение" name="Loop Playback"/>
+			<menu_item_call label="Начать запись" name="Start Record"/>
+			<menu_item_call label="Остановить запись" name="Stop Record"/>
+		</menu>
+		<menu label="Мир" name="World">
+			<menu_item_check label="Перекрытие солнца в симуляторе" name="Sim Sun Override"/>
+			<menu_item_check label="Мигающий маяк" name="Cheesy Beacon"/>
+			<menu_item_check label="Неизменная погода" name="Fixed Weather"/>
+			<menu_item_call label="Вывод кэша региональных объектов" name="Dump Region Object Cache"/>
+		</menu>
+		<menu label="Интерфейс пользователя" name="UI">
+			<menu_item_call label="Проверка медиабраузера" name="Web Browser Test"/>
+			<menu_item_call label="Браузер для просмотра веб-контента" name="Web Content Browser"/>
+			<menu_item_call label="Вывод SelectMgr" name="Dump SelectMgr"/>
+			<menu_item_call label="Вывод инвентаря" name="Dump Inventory"/>
+			<menu_item_call label="Вывод таймеров" name="Dump Timers"/>
+			<menu_item_call label="Вывод средства фокусировки" name="Dump Focus Holder"/>
+			<menu_item_call label="Печать информации о выбранных объектах" name="Print Selected Object Info"/>
+			<menu_item_call label="Печать информации об агенте" name="Print Agent Info"/>
+			<menu_item_call label="Статистическая информация о памяти" name="Memory Stats"/>
+			<menu_item_check label="Консоль отладки региона" name="Region Debug Console"/>
+			<menu_item_check label="Отладка SelectMgr" name="Debug SelectMgr"/>
+			<menu_item_check label="Отладка щелчков мышью" name="Debug Clicks"/>
+			<menu_item_check label="Отладка обзора" name="Debug Views"/>
+			<menu_item_check label="Отладка контекстных окон к названиям" name="Debug Name Tooltips"/>
+			<menu_item_check label="Отладка выполняемых с помощью мыши действий" name="Debug Mouse Events"/>
+			<menu_item_check label="Отладка клавиш" name="Debug Keys"/>
+			<menu_item_check label="Отладка WindowProc" name="Debug WindowProc"/>
+		</menu>
+		<menu label="XUI" name="XUI">
+			<menu_item_call label="Обновить настройки цветов" name="Reload Color Settings"/>
+			<menu_item_call label="Показать проверку шрифтов" name="Show Font Test"/>
+			<menu_item_check label="Показать имена XUI" name="Show XUI Names"/>
+			<menu_item_call label="Отправить тестовое сообщение" name="Send Test IMs"/>
+			<menu_item_call label="Очистить кэши имен" name="Flush Names Caches"/>
+		</menu>
+		<menu label="Аватар" name="Character">
+			<menu label="Захват запеченных текстур" name="Grab Baked Texture">
+				<menu_item_call label="Радужка" name="Iris"/>
+				<menu_item_call label="Голова" name="Head"/>
+				<menu_item_call label="Верхняя часть тела" name="Upper Body"/>
+				<menu_item_call label="Нижняя часть тела" name="Lower Body"/>
+				<menu_item_call label="Юбка" name="Skirt"/>
+			</menu>
+			<menu label="Проверка персонажа" name="Character Tests">
+				<menu_item_call label="Внешний вид в XML" name="Appearance To XML"/>
+				<menu_item_call label="Активировать геометрию персонажа" name="Toggle Character Geometry"/>
+				<menu_item_call label="Проверка мужчины" name="Test Male"/>
+				<menu_item_call label="Проверка женщины" name="Test Female"/>
+				<menu_item_call label="Активировать PG-контент" name="Toggle PG"/>
+				<menu_item_check label="Разрешить выбор аватара" name="Allow Select Avatar"/>
+			</menu>
+			<menu_item_call label="Скинуть параметры" name="Force Params to Default"/>
+			<menu_item_check label="Данные об анимации" name="Animation Info"/>
+			<menu_item_check label="Анимация медленных движений" name="Slow Motion Animations"/>
+			<menu_item_check label="Показать взгляд" name="Show Look At"/>
+			<menu_item_check label="Показать указание" name="Show Point At"/>
+			<menu_item_check label="Отладка обновленных движений суставов" name="Debug Joint Updates"/>
+			<menu_item_check label="Отключить детализацию" name="Disable LOD"/>
+			<menu_item_check label="Отладка видимости персонажа" name="Debug Character Vis"/>
+			<menu_item_check label="Показать скелет" name="Show Collision Skeleton"/>
+			<menu_item_check label="Отобразить действие агента" name="Display Agent Target"/>
+			--&gt;
+			<menu_item_call label="Вывод присоединений" name="Dump Attachments"/>
+			<menu_item_call label="Отладка текстур аватара" name="Debug Avatar Textures"/>
+			<menu_item_call label="Вывод локальных текстур" name="Dump Local Textures"/>
+		</menu>
+		<menu_item_check label="Текстуры HTTP" name="HTTP Textures"/>
+		<menu_item_check label="Инвентарь HTTP" name="HTTP Inventory"/>
+		<menu_item_call label="Сжатие изображений" name="Compress Images"/>
+		<menu_item_check label="Вывод минидампа при отладке" name="Output Debug Minidump"/>
+		<menu_item_check label="Окно консоли при следующем запуске" name="Console Window"/>
+		<menu_item_call label="Запрос статуса администратора" name="Request Admin Options"/>
+		<menu_item_call label="Выход из статуса администратора" name="Leave Admin Options"/>
+		<menu_item_check label="Показать меню администратора" name="View Admin Options"/>
+	</menu>
+	<menu label="Администратор" name="Admin">
+		<menu label="Object">
+			<menu_item_call label="Взять копию" name="Take Copy"/>
+			<menu_item_call label="Назначить себя владельцем" name="Force Owner To Me"/>
+			<menu_item_call label="Назначить полноправным владельцем" name="Force Owner Permissive"/>
+			<menu_item_call label="Удалить" name="Delete"/>
+			<menu_item_call label="На месте" name="Lock"/>
+			<menu_item_call label="Получить ID активов" name="Get Assets IDs"/>
+		</menu>
+		<menu label="Участок" name="Parcel">
+			<menu_item_call label="Назначить себя владельцем" name="Owner To Me"/>
+			<menu_item_call label="Задать для контента Linden" name="Set to Linden Content"/>
+			<menu_item_call label="Претензия на публичную землю" name="Claim Public Land"/>
+		</menu>
+		<menu label="Регион" name="Region">
+			<menu_item_call label="Вывод временных данных актива" name="Dump Temp Asset Data"/>
+			<menu_item_call label="Сохранить состояние региона" name="Save Region State"/>
+		</menu>
+		<menu_item_call label="Инструменты творца" name="God Tools"/>
+	</menu>
+	<menu label="Администратор" name="Deprecated">
+		<menu label="Присоединить объект" name="Attach Object"/>
+		<menu label="Отсоединить объект" name="Detach Object"/>
+		<menu label="Снять одежду" name="Take Off Clothing">
+			<menu_item_call label="Рубашка" name="Shirt"/>
+			<menu_item_call label="Брюки" name="Pants"/>
+			<menu_item_call label="Обувь" name="Shoes"/>
+			<menu_item_call label="Носки" name="Socks"/>
+			<menu_item_call label="Пиджак" name="Jacket"/>
+			<menu_item_call label="Перчатки" name="Gloves"/>
+			<menu_item_call label="Майка" name="Menu Undershirt"/>
+			<menu_item_call label="Трусы" name="Menu Underpants"/>
+			<menu_item_call label="Юбка" name="Skirt"/>
+			<menu_item_call label="Альфа" name="Alpha"/>
+			<menu_item_call label="Тату" name="Tattoo"/>
+			<menu_item_call label="Физика" name="Physics"/>
+			<menu_item_call label="Вся одежда" name="All Clothes"/>
+		</menu>
+		<menu label="Справка" name="Help">
+			<menu_item_call label="Официальный блог Linden" name="Official Linden Blog"/>
+			<menu_item_call label="Портал скриптов" name="Scripting Portal"/>
+			<menu label="Сообщение об ошибке" name="Bug Reporting">
+				<menu_item_call label="Общедоступное средство отслеживания проблем" name="Public Issue Tracker"/>
+				<menu_item_call label="Справка по общедоступному средству отслеживания проблем" name="Publc Issue Tracker Help"/>
+				<menu_item_call label="Сообщение об ошибке 101" name="Bug Reporing 101"/>
+				<menu_item_call label="Проблемы безопасности" name="Security Issues"/>
+				<menu_item_call label="QA Wiki" name="QA Wiki"/>
+			</menu>
+		</menu>
+	</menu>
 </menu_bar>

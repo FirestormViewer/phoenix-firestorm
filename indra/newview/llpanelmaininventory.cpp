@@ -28,6 +28,7 @@
 #include "llpanelmaininventory.h"
 
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "llavataractions.h"
 #include "llcombobox.h"
 #include "lldndbutton.h"
@@ -39,6 +40,7 @@
 #include "llinventorymodelbackgroundfetch.h"
 #include "llinventorypanel.h"
 #include "llfiltereditor.h"
+#include "llfloatersidepanelcontainer.h"
 #include "llfloaterreg.h"
 #include "llmenubutton.h"
 #include "lloutfitobserver.h"
@@ -52,7 +54,6 @@
 #include "llviewermenu.h"
 #include "llviewertexturelist.h"
 #include "llsidepanelinventory.h"
-#include "llsidetray.h"
 
 const std::string FILTERS_FILENAME("filters.xml");
 
@@ -112,7 +113,7 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	mCommitCallbackRegistrar.add("Inventory.EmptyTrash", boost::bind(&LLInventoryModel::emptyFolderType, &gInventory, "ConfirmEmptyTrash", LLFolderType::FT_TRASH));
 	mCommitCallbackRegistrar.add("Inventory.EmptyLostAndFound", boost::bind(&LLInventoryModel::emptyFolderType, &gInventory, "ConfirmEmptyLostAndFound", LLFolderType::FT_LOST_AND_FOUND));
 	mCommitCallbackRegistrar.add("Inventory.DoCreate", boost::bind(&LLPanelMainInventory::doCreate, this, _2));
- 	mCommitCallbackRegistrar.add("Inventory.NewWindow", boost::bind(&LLPanelMainInventory::newWindow, this));
+ 	//mCommitCallbackRegistrar.add("Inventory.NewWindow", boost::bind(&LLPanelMainInventory::newWindow, this));
 	mCommitCallbackRegistrar.add("Inventory.ShowFilters", boost::bind(&LLPanelMainInventory::toggleFindOptions, this));
 	mCommitCallbackRegistrar.add("Inventory.ResetFilters", boost::bind(&LLPanelMainInventory::resetFilters, this));
 	mCommitCallbackRegistrar.add("Inventory.Share",  boost::bind(&LLAvatarActions::shareWithAvatars));
@@ -200,27 +201,28 @@ BOOL LLPanelMainInventory::postBuild()
 		recent_items_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, recent_items_panel, _1, _2));
 	}
 
-	LLInventoryPanel* worn_items_panel = getChild<LLInventoryPanel>("Worn Items");
-	if (worn_items_panel)
-	{
-		worn_items_panel->setWorn(TRUE);
-		worn_items_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::DEFAULT_SORT_ORDER));
-		worn_items_panel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
-		//worn_items_panel->getFilter()->markDefault();
-		worn_items_panel->getFilter()->setFilterObjectTypes(0xffffffff - (0x1 << LLInventoryType::IT_GESTURE));
+	// ND_MERGE Worn items it gone in FUI. I'm not sad about that...
+	// 	LLInventoryPanel* worn_items_panel = getChild<LLInventoryPanel>("Worn Items");
+	// if (worn_items_panel)
+	// {
+	// 	worn_items_panel->setWorn(TRUE);
+	// 	worn_items_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::DEFAULT_SORT_ORDER));
+	// 	worn_items_panel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
+	// 	//worn_items_panel->getFilter()->markDefault();
+	// 	worn_items_panel->getFilter()->setFilterObjectTypes(0xffffffff - (0x1 << LLInventoryType::IT_GESTURE));
 
-		// <ND> Do not go all crazy and recurse through the whole inventory
-//		worn_items_panel->openAllFolders();
-		if( worn_items_panel->getRootFolder() )
-		{
-			worn_items_panel->getRootFolder()->setOpenArrangeRecursively(TRUE, LLFolderViewFolder::RECURSE_NO);
-			worn_items_panel->getRootFolder()->arrangeAll();
-		}
-		// </ND>
+	// 	// <ND> Do not go all crazy and recurse through the whole inventory
+	// 	//		worn_items_panel->openAllFolders();
+	// 	if( worn_items_panel->getRootFolder() )
+	// 	{
+	// 		worn_items_panel->getRootFolder()->setOpenArrangeRecursively(TRUE, LLFolderViewFolder::RECURSE_NO);
+	// 		worn_items_panel->getRootFolder()->arrangeAll();
+	// 	}
+	// 	// </ND>
 
-		worn_items_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, worn_items_panel, _1, _2));
-	}
-
+	// 	worn_items_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, worn_items_panel, _1, _2));
+	// }
+	// /ND_MERGE
 
 	// Now load the stored settings from disk, if available.
 	std::ostringstream filterSaveName;
@@ -245,15 +247,18 @@ BOOL LLPanelMainInventory::postBuild()
 			}
 		}
 
-	   if(worn_items_panel)
-	   {
-			   if(savedFilterState.has(worn_items_panel->getFilter()->getName()))
-			   {
-					   LLSD worn_items = savedFilterState.get(
-							   worn_items_panel->getFilter()->getName());
-					   worn_items_panel->getFilter()->fromLLSD(worn_items);
-			   }
-	   }
+		// ND_MERGE Worn items it gone in FUI. I'm not sad about that...
+	   // if(worn_items_panel)
+	   // {
+	   // 		   if(savedFilterState.has(worn_items_panel->getFilter()->getName()))
+	   // 		   {
+	   // 				   LLSD worn_items = savedFilterState.get(
+	   // 						   worn_items_panel->getFilter()->getName());
+	   // 				   worn_items_panel->getFilter()->fromLLSD(worn_items);
+	   // 		   }
+	   // }
+		// /ND_MERGE
+
 	}
 
 	mFilterEditor = getChild<LLFilterEditor>("inventory search editor");
@@ -393,7 +398,13 @@ void LLPanelMainInventory::closeAllFolders()
 
 void LLPanelMainInventory::newWindow()
 {
-	LLFloaterInventory::showAgentInventory();
+	static S32 instance_num = 0;
+	instance_num = (instance_num + 1) % S32_MAX;
+
+	if (!gAgentCamera.cameraMouselook())
+	{
+		LLFloaterReg::showTypedInstance<LLFloaterSidePanelContainer>("inventory", LLSD(instance_num));
+	}
 }
 
 void LLPanelMainInventory::doCreate(const LLSD& userdata)
@@ -799,8 +810,13 @@ void LLPanelMainInventory::updateItemcountText()
 
 void LLPanelMainInventory::onFocusReceived()
 {
-	LLSidepanelInventory * sidepanel_inventory = LLSideTray::getInstance()->getPanel<LLSidepanelInventory>("sidepanel_inventory");
-	
+	LLSidepanelInventory *sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+	if (!sidepanel_inventory)
+	{
+		llwarns << "Could not find Inventory Panel in My Inventory floater" << llendl;
+		return;
+	}
+
 	sidepanel_inventory->clearSelections(false, true, true);
 }
 
@@ -1408,7 +1424,7 @@ BOOL LLPanelMainInventory::isActionEnabled(const LLSD& userdata)
 
 	if (command_name == "share")
 	{
-		LLSidepanelInventory* parent = dynamic_cast<LLSidepanelInventory*>(LLSideTray::getInstance()->getPanel("sidepanel_inventory"));
+		LLSidepanelInventory* parent = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
 		return parent ? parent->canShare() : FALSE;
 	}
 

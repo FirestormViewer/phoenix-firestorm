@@ -1,247 +1,53 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- can_resize="true"
- height="350"
- layout="topleft"
- min_height="200"
- min_width="400"
- name="avatarpicker"
- help_topic="avatarpicker"
- title="CHOOSE RESIDENT"
- width="500">
-    <floater.string
-     name="not_found">
-        &apos;[TEXT]&apos; не найден
-    </floater.string>
-    <floater.string
-     name="no_one_near">
-        Никто не рядом
-    </floater.string>
-    <floater.string
-     name="no_results">
-        Нет результатов
-    </floater.string>
-    <floater.string
-     name="searching">
-        Идет поиск ...
-    </floater.string>
-    <!-- For multiple person selection, use "Select" and "Close" 
-      instead of "OK" and "Cancel" because "Cancel" still keeps the ones 
-      you have already selected.  The code will show the appropriate
-      set of buttons. -->
-    <string name="Select">Выбрать</string>
-    <string name="Close">Закрыть</string>
-    <tab_container
-     follows="all"
-     height="300"
-     layout="topleft"
-     left="0"
-     name="ResidentChooserTabs"
-     tab_drag_commit="true"
-     tab_position="top"
-     top="20"
-     width="500">
-        <panel
-         border="none"
-         height="150"
-         label="Поиск"
-         layout="topleft"
-         left="6"
-         help_topic="avatarpicker"
-         name="SearchPanel"
-         top="150"
-         width="132">
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="16"
-             layout="topleft"
-             left="10"
-             name="InstructSearchResidentName"
-             top="8"
-             width="220">
-                Введите часть имени человека:
-            </text>
-            <line_editor
-	     bevel_style="none"
-	     border_style="line"
-	     border.border_thickness="0"
-	     commit_on_focus_lost="false"
-             follows="left|top|right"
-             height="23"
-             left_delta="0"
-             name="Edit"
-             top_pad="0"
-             width="65" />
-            <button
-             follows="top|right"
-             height="23"
-             label="Го"
-             label_selected="Go"
-             layout="topleft"
-             left_pad="5"
-             name="Find"
-             width="45" />
-          <scroll_list
-            draw_heading="true" 
-           follows="all"
-           height="98"
-           layout="topleft"
-           left="0"
-           name="SearchResults"
-           top="52"
-           width="132">
-            <columns
-              label="Имя"
-              name="name"
-              width="150" />
-            <columns
-              label="Имя пользователя"
-              name="username"
-              width="150" />
-          </scroll_list>
-        </panel>
-        <panel
-         border="none"
-         height="150"
-         label="Друзья"
-         layout="topleft"
-         left="6"
-         help_topic="avatarpicker"
-         name="FriendsPanel"
-         top="150"
-         width="132">
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="16"
-             layout="topleft"
-             left="10"
-             name="InstructSelectFriend"
-             top="5"
-             width="200">
-                Выберите:
-            </text>
-            <button
-             follows="top|right"
-             layout="topleft"
-             right="-5"
-             top ="5"
-             height="20"
-             width="20"
-             name="RefreshFriends"
-             image_overlay="Refresh_Off">
-             <button.commit_callback 
-              function="Refresh.FriendList"/>
-            </button>
-            <scroll_list
-             follows="all"
-             height="120"
-             border="false"
-             layout="topleft"
-             left="0"
-             name="Friends"
-             sort_column="0"
-             top_pad="5"
-             width="132" />
-        </panel>
-
-        <panel
-         border="none"
-         height="150"
-         label="Близко"
-         layout="topleft"
-         left="6"
-         help_topic="avatarpicker"
-         name="NearMePanel"
-         top="150"
-         width="132">
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="16"
-             layout="topleft"
-             left="10"
-             name="InstructSelectResident"
-             top="8"
-             width="220">
-                Найти в близи:
-            </text>
-            <slider
-             control_name="NearMeRange"
-             decimal_digits="0"
-             follows="left|top"
-             height="18"
-             increment="1"
-             initial_value="20"
-             label="Дальность"
-             layout="topleft"
-             left="10"
-             max_val="130"
-             min_val="5"
-             name="near_me_range"
-             top_pad="0"
-             width="160" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="18"
-             layout="topleft"
-             left_pad="0"
-             name="meters"
-             width="60">
-                Метров
-            </text>
-            <button
-             follows="top|left"
-             layout="topleft"
-             left_pad="0"
-             height="28"
-             width="28"
-             name="Refresh"
-             image_overlay="Refresh_Off" />
-          <scroll_list
-             draw_heading="true"
-             follows="all"
-             height="100"
-             border="false"
-             layout="topleft"
-             left="0"
-             name="NearMe"
-             sort_column="0"
-             top="52"
-             width="132">
-            <columns
-              label="Имя"
-              name="name"
-              width="150" />
-            <columns
-              label="Имя пользователя"
-              name="username"
-              width="150" />
-          </scroll_list>
-        </panel>
-    </tab_container>
-    <button
-     follows="left|bottom"
-     height="23"
-     label="OK"
-     label_selected="OK"
-     name="ok_btn"
-     top_pad="3"
-     left="10"
-     width="100" />
-    <button
-     follows="left|bottom"
-     height="23"
-     label="Отмена"
-     label_selected="Cancel"
-     name="cancel_btn"
-     width="100"
-     left_pad="5" />
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatarpicker" title="ВЫБЕРИТЕ ЖИТЕЛЯ">
+	<floater.string name="not_found">
+		Текст «[TEXT]» не найден
+	</floater.string>
+	<floater.string name="no_one_near">
+		Рядом никого нет
+	</floater.string>
+	<floater.string name="no_results">
+		Нет результатов
+	</floater.string>
+	<floater.string name="searching">
+		Поиск...
+	</floater.string>
+	<string name="Select">
+		Выбрать
+	</string>
+	<string name="Close">
+		Закрыть
+	</string>
+	<tab_container name="ResidentChooserTabs">
+		<panel label="Поиск" name="SearchPanel">
+			<text name="InstructSearchResidentName">
+				Наберите часть имени жителя:
+			</text>
+			<button label="Перейти" label_selected="Перейти" name="Find"/>
+			<scroll_list name="SearchResults">
+				<columns label="Название" name="name"/>
+				<columns label="Имя пользователя" name="username"/>
+			</scroll_list>
+		</panel>
+		<panel label="Друзья" name="FriendsPanel">
+			<text name="InstructSelectFriend">
+				Выберите жителя:
+			</text>
+		</panel>
+		<panel label="Рядом со мной" name="NearMePanel">
+			<text name="InstructSelectResident">
+				Выберите жителя поблизости:
+			</text>
+			<slider label="Расстояние" name="near_me_range"/>
+			<text name="meters">
+				Метров
+			</text>
+			<scroll_list name="NearMe">
+				<columns label="Название" name="name"/>
+				<columns label="Имя пользователя" name="username"/>
+			</scroll_list>
+		</panel>
+	</tab_container>
+	<button label="ОК" label_selected="ОК" name="ok_btn"/>
+	<button label="Отмена" label_selected="Отмена" name="cancel_btn"/>
 </floater>

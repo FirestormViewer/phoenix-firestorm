@@ -83,8 +83,6 @@
 			<menu_item_check label="Parzelleneigenschaften" name="Parcel Properties"/>
 			<menu_item_check label="Menü „Erweitert“" name="Show Advanced Menu"/>
 		</menu>
-		<menu_item_call label="Teleport nach Hause" name="Teleport Home"/>
-		<menu_item_call label="Hier als Zuhause wählen" name="Set Home to Here"/>
 		<menu label="Sonne" name="Environment Settings">
 			<menu_item_call label="Sonnenaufgang" name="Sunrise"/>
 			<menu_item_call label="Mittag" name="Noon"/>
@@ -225,7 +223,7 @@
 		<menu label="Performance Tools" name="Performance Tools">
 			<menu_item_call label="Lag-Anzeige" name="Lag Meter"/>
 			<menu_item_check label="Statistikleiste" name="Statistics Bar"/>
-			<menu_item_check label="Avatar-Darstellungskosten anzeigen" name="Avatar Rendering Cost"/>
+			<menu_item_check label="Zuggewicht für Avatare anzeigen" name="Avatar Rendering Cost"/>
 		</menu>
 		<menu label="Hervorhebung und Sichtbarkeit" name="Highlighting and Visibility">
 			<menu_item_check label="Pulsierende Leuchtmarkierung" name="Cheesy Beacon"/>

@@ -941,8 +941,13 @@ LLMenuItemBranchGL::LLMenuItemBranchGL(const LLMenuItemBranchGL::Params& p)
 
 LLMenuItemBranchGL::~LLMenuItemBranchGL()
 {
-	LLView::deleteViewByHandle(mBranchHandle);
+	if (mBranchHandle.get())
+	{
+		mBranchHandle.get()->die();
+	}
 }
+
+
 
 // virtual
 LLView* LLMenuItemBranchGL::getChildView(const std::string& name, BOOL recurse) const
@@ -1680,7 +1685,8 @@ LLMenuGL::LLMenuGL(const LLMenuGL::Params& p)
 	mSpilloverMenu(NULL),
 	mJumpKey(p.jump_key),
 	mCreateJumpKeys(p.create_jump_keys),
-	mNeedsArrange(FALSE), 
+	mNeedsArrange(FALSE),
+	mResetScrollPositionOnShow(true),
 	mShortcutPad(p.shortcut_pad)
 {
 	typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
@@ -1725,7 +1731,7 @@ void LLMenuGL::setCanTearOff(BOOL tear_off)
 	{
 		LLMenuItemTearOffGL::Params p;
 		mTearOffItem = LLUICtrlFactory::create<LLMenuItemTearOffGL>(p);
-		addChildInBack(mTearOffItem);
+		addChild(mTearOffItem);
 	}
 	else if (!tear_off && mTearOffItem != NULL)
 	{
@@ -3037,7 +3043,7 @@ void LLMenuGL::showPopup(LLView* spawning_view, LLMenuGL* menu, S32 x, S32 y)
 	S32 mouse_x, mouse_y;
 
 	// Resetting scrolling position
-	if (menu->isScrollable())
+	if (menu->isScrollable() && menu->isScrollPositionOnShowReset())
 	{
 		menu->mFirstVisibleItem = NULL;
 	}

@@ -2346,7 +2346,7 @@ bool LLViewerFetchedTexture::doLoadedCallbacks()
 	{
 		destroyRawImage();
 		return false; //paused
-	}
+	}	
 	if(sCurrentTime - mLastCallBackActiveTime > MAX_INACTIVE_TIME && !mIsFetching)
 	{
 		clearCallbackEntryList() ; //remove all callbacks.
@@ -2371,7 +2371,7 @@ bool LLViewerFetchedTexture::doLoadedCallbacks()
 		// Remove ourself from the global list of textures with callbacks
 		gTextureList.mCallbackList.erase(this);
 		return false ;
-	}
+	}	
 
 	S32 gl_discard = getDiscardLevel();
 
@@ -2651,9 +2651,9 @@ void LLViewerFetchedTexture::destroyRawImage()
 			}		
 			setCachedRawImage() ;
 		}
-
+		
 		mRawImage = NULL;
-
+	
 		mIsRawImageValid = FALSE;
 		mRawDiscardLevel = INVALID_DISCARD_LEVEL;
 	}

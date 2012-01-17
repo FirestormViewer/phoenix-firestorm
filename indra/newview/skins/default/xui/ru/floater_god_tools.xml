@@ -1,776 +1,96 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- height="384"
- layout="topleft"
- name="godtools floater"
- help_topic="godtools_floater"
- title="GOD TOOLS"
- width="400">
-    <tab_container
-     follows="left|top"
-     height="364"
-     layout="topleft"
-     left="0"
-     name="GodTools Tabs"
-     tab_position="top"
-     top="20"
-     width="400">
-        <panel
-         border="true"
-         follows="left|top|right|bottom"
-         height="347"
-         label="Grid"
-         layout="topleft"
-         left="1"
-         mouse_opaque="false"
-         help_topic="godtools_grid_tab"
-         name="grid"
-         top="16"
-         width="398">
-            <button
-             follows="left|top"
-             height="20"
-             label="Flush This Region&apos;s Map Visibility Caches"
-             label_selected="Flush This Region&apos;s Map Visibility Caches"
-             layout="topleft"
-             left="10"
-             name="Flush This Region&apos;s Map Visibility Caches"
-             top_pad="30"
-             width="350">
-				<button.commit_callback
-				function="GridTools.FlushMapVisibilityCaches" />
-			</button>
-        </panel>
-        <panel
-         border="true"
-         follows="left|top|right|bottom"
-         height="347"
-         label="Region"
-         layout="topleft"
-         left_delta="0"
-         mouse_opaque="false"
-         help_topic="godtools_region_tab"
-         name="region"
-         top_delta="0"
-         width="398">
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="10"
-             name="Region Name:"
-             top="12"
-             width="80">
-                Region Name:
-            </text>
-            <line_editor
-             border_style="line"
-             border_thickness="1"
-             follows="left|top|right"
-             height="20"
-             layout="topleft"
-             left_pad="0"
-             max_length="63"
-             name="region name"
-             top_delta="0"
-             width="250">
-			       <line_editor.commit_callback
-					function="RegionTools.ChangeAnything" />
-			</line_editor>
-            <check_box
-             height="16"
-             label="Prelude"
-             layout="topleft"
-             left="10"
-             name="check prelude"
-             tool_tip="Set this to make the region a prelude"
-             top_pad="10"
-             width="180">
-			       <check_box.commit_callback
-					function="RegionTools.ChangePrelude" />
-			</check_box>
-            <check_box
-             height="16"
-             label="Fixed Sun"
-             layout="topleft"
-             left_delta="0"
-             name="check fixed sun"
-             tool_tip="Fix the sun position (like in Region/Estate &gt; Terrain"
-             top_pad="4"
-             width="180">
-			       <check_box.commit_callback
-					function="RegionTools.ChangeAnything" />
-			</check_box>
-            <check_box
-             height="16"
-             label="Reset Home On Teleport"
-             layout="topleft"
-             left_delta="0"
-             name="check reset home"
-             tool_tip="When Resident teleports out, reset their home to the destination position."
-             top_pad="4"
-             width="180">
-			       <check_box.commit_callback
-					function="RegionTools.ChangeAnything" />
-			</check_box>
-            <check_box
-             height="16"
-             label="Visible"
-             layout="topleft"
-             left_delta="0"
-             name="check visible"
-             tool_tip="Set this to make the region visible to non-gods"
-             top_pad="4"
-             width="180">
-			       <check_box.commit_callback
-					function="RegionTools.ChangeAnything" />
-			</check_box>
-            <check_box
-             height="16"
-             label="Damage"
-             layout="topleft"
-             left_delta="0"
-             name="check damage"
-             tool_tip="Set this to enable damage in this region"
-             top_pad="4"
-             width="180">
-			       <check_box.commit_callback
-					function="RegionTools.ChangeAnything" />
-			</check_box>
-            <check_box
-             height="16"
-             label="Block Traffic Tracking"
-             layout="topleft"
-             left_delta="0"
-             name="block dwell"
-             tool_tip="Set this to make the region not compute traffic"
-             top_pad="4"
-             width="180">
-			       <check_box.commit_callback
-					function="RegionTools.ChangeAnything" />
-			</check_box>
-            <check_box
-             height="16"
-             label="Block Terraform"
-             layout="topleft"
-             left_delta="0"
-             name="block terraform"
-             tool_tip="Set this to disallow people terraforming their land"
-             top_pad="4"
-             width="180">
-			       <check_box.commit_callback
-					function="RegionTools.ChangeAnything" />
-			</check_box>
-            <check_box
-             height="16"
-             label="Sandbox"
-             layout="topleft"
-             left_delta="0"
-             name="is sandbox"
-             tool_tip="Toggle whether this is a sandbox region"
-             top_pad="4"
-             width="180">
-			       <check_box.commit_callback
-					function="RegionTools.ChangeAnything" />
-			</check_box>
-            <button
-             follows="top|right"
-             height="22"
-             label="Bake Terrain"
-             label_selected="Bake Terrain"
-             layout="topleft"
-             left="12"
-             name="Bake Terrain"
-             tool_tip="Save the current terrain as default"
-             top_pad="32"
-             width="110">
-			       <button.commit_callback
-					function="RegionTools.BakeTerrain" />
-			</button>
-            <button
-             follows="top|right"
-             height="22"
-             label="Revert Terrain"
-             label_selected="Revert Terrain"
-             layout="topleft"
-             name="Revert Terrain"
-             tool_tip="Replace the current terrain with default"
-             top_pad="10"
-             width="110">
-			       <button.commit_callback
-					function="RegionTools.RevertTerrain" />
-			</button>
-            <button
-             follows="top|right"
-             height="22"
-             label="Swap Terrain"
-             label_selected="Swap Terrain"
-             layout="topleft"
-             name="Swap Terrain"
-             tool_tip="Swap current terrain with default"
-             top_pad="10"
-             width="110">
-			       <button.commit_callback
-					function="RegionTools.SwapTerrain" />
-			</button>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             font="SansSerif"
-             height="16"
-             layout="topleft"
-             left="200"
-             name="estate id"
-             top="40"
-             width="190">
-                Estate ID:
-            </text>
-            <line_editor
-             border_style="line"
-             border_thickness="1"
-             follows="top|right"
-             height="16"
-             layout="topleft"
-             left_delta="108"
-             max_length="10"
-             name="estate"
-             top_delta="0"
-             width="50" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             font="SansSerif"
-             height="16"
-             layout="topleft"
-             left="200"
-             name="parent id"
-             top_pad="4"
-             width="190">
-                Parent ID:
-            </text>
-            <line_editor
-             border_style="line"
-             border_thickness="1"
-             follows="top|right"
-             height="16"
-             layout="topleft"
-             left_delta="108"
-             max_length="10"
-             name="parentestate"
-             tool_tip="This is the parent estate for this region"
-             top_delta="0"
-             width="50">
-			       <line_editor.commit_callback
-					function="RegionTools.ChangeAnything" />
-			</line_editor>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="16"
-             layout="topleft"
-             left="200"
-             name="Grid Pos: "
-             top_pad="4"
-             width="190">
-                Grid Pos:
-            </text>
-            <line_editor
-             border_style="line"
-             border_thickness="1"
-             follows="top|right"
-             height="16"
-             layout="topleft"
-             left_delta="88"
-             max_length="10"
-             name="gridposx"
-             tool_tip="This is the grid x position for this region"
-             top_delta="0"
-             width="50">
-			       <line_editor.commit_callback
-					function="RegionTools.ChangeAnything" />
-			</line_editor>
-            <line_editor
-             border_style="line"
-             border_thickness="1"
-             follows="top|right"
-             height="16"
-             layout="topleft"
-             left_pad="10"
-             max_length="10"
-             name="gridposy"
-             tool_tip="This is the grid y position for this region"
-             top_delta="0"
-             width="40">
-			       <line_editor.commit_callback
-					function="RegionTools.ChangeAnything" />
-			</line_editor>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="16"
-             layout="topleft"
-             left="200"
-             name="Redirect to Grid: "
-             top_pad="4"
-             width="88">
-                Redirect to Grid:
-            </text>
-            <line_editor
-             border_style="line"
-             border_thickness="1"
-             follows="top|right"
-             height="16"
-             layout="topleft"
-             left_pad="0"
-             max_length="10"
-             name="redirectx"
-             width="50">
-			       <line_editor.commit_callback
-					function="RegionTools.ChangeAnything" />
-			</line_editor>
-            <line_editor
-             border_style="line"
-             border_thickness="1"
-             follows="top|right"
-             height="16"
-             layout="topleft"
-             left_pad="10"
-             max_length="10"
-             name="redirecty"
-             top_delta="0"
-             width="40">
-			       <line_editor.commit_callback
-					function="RegionTools.ChangeAnything" />
-			</line_editor>
-              <text
-             type="string"
-             length="1"
-             follows="left|top"
-             font="SansSerif"
-             height="16"
-             layout="topleft"
-             left="200"
-             name="billable factor text"
-             top_pad="10"
-             width="110">
-                Billable Factor:
-            </text>
-	      <spinner
-             follows="top|right"
-             height="16"
-             initial_value="1"
-             layout="topleft"
-             max_val="4"
-             name="billable factor"
-             left_pad="0"
-             width="80">
-			       <spinner.commit_callback
-					function="RegionTools.ChangeAnything" />
-			</spinner>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             font="SansSerif"
-             height="16"
-             layout="topleft"
-             left="200"
-             name="land cost text"
-             top_pad="10"
-             width="110">
-                L$ per m²:
-            </text>
-            <spinner
-             follows="top|right"
-             height="16"
-             increment="1"
-             initial_value="1"
-             layout="topleft"
-             left_pad="0"
-             max_val="100"
-             name="land cost"
-             width="80">
-			       <spinner.commit_callback
-					function="RegionTools.ChangeAnything" />
-			</spinner>
-
-            <button
-             follows="top|right"
-             height="22"
-             label="Refresh"
-             label_selected="Refresh"
-             layout="topleft"
-             left="278"
-             name="Refresh"
-             tool_tip="Click here to refresh the above information"
-             top_pad="10"
-             width="110">
-				<button.commit_callback
-				function="RegionTools.Refresh" />
-			</button>
-            <button
-             follows="top|right"
-             height="22"
-             label="Apply"
-             label_selected="Apply"
-             layout="topleft"
-             left="278"
-             name="Apply"
-             tool_tip="Click here to apply any changes from above"
-             top="317"
-             width="110">
-				<button.commit_callback
-				function="RegionTools.ApplyChanges" />
-			</button>
-            <button
-             follows="top|right"
-             height="22"
-             label="Select Region"
-             label_selected="Select Region"
-             layout="topleft"
-             left="130"
-             name="Select Region"
-             tool_tip="Select the whole region with the land tool"
-             top="238"
-             width="110">
-				<button.commit_callback
-				function="RegionTools.SelectRegion" />
-			</button>
-            <button
-             follows="top|right"
-             height="22"
-             label="Autosave now"
-             label_selected="Autosave now"
-             layout="topleft"
-             left_delta="0"
-             name="Autosave now"
-             tool_tip="Save gzipped state to autosave directory"
-             top_pad="10"
-             width="110">
-				<button.commit_callback
-				function="RegionTools.SaveState" />
-			</button>
-        </panel>
-        <panel
-         border="true"
-         follows="left|top|right|bottom"
-         height="347"
-         label="Objects"
-         layout="topleft"
-         left_delta="0"
-         mouse_opaque="false"
-         help_topic="godtools_objects_tab"
-         name="objects"
-         top_delta="0"
-         width="398">
-            <panel.string
-             name="no_target">
-                (no target)
-            </panel.string>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="10"
-             name="Region Name:"
-             top="10"
-             width="80">
-                Region Name:
-            </text>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left_pad="10"
-             name="region name"
-             top_delta="0"
-             width="320">
-                Welsh
-            </text>
-            <check_box
-             height="16"
-             label="Disable Scripts"
-             layout="topleft"
-             left="10"
-             name="disable scripts"
-             tool_tip="Set this to disable all scripts in this region"
-             top="30"
-             width="110">
-				<check_box.commit_callback
-					function="ObjectTools.ChangeAnything" />
-			</check_box>
-            <check_box
-             height="16"
-             label="Disable Collisions"
-             layout="topleft"
-             left_pad="10"
-             name="disable collisions"
-             tool_tip="Set this to disable non-agent collisions in this region"
-             top_delta="0"
-             width="121">
-				<check_box.commit_callback
-					function="ObjectTools.ChangeAnything" />
-			</check_box>
-            <check_box
-             height="16"
-             label="Disable Physics"
-             layout="topleft"
-             left_delta="120"
-             name="disable physics"
-             tool_tip="Set this to disable all physics in this region"
-             top_delta="0"
-             width="130">
-				<check_box.commit_callback
-					function="ObjectTools.ChangeAnything" />
-			</check_box>
-            <button
-             follows="top|right"
-             height="22"
-             label="Apply"
-             label_selected="Apply"
-             layout="topleft"
-             left="278"
-             name="Apply"
-             tool_tip="Click here to apply any changes from above"
-             top="54"
-             width="110">
-				<button.commit_callback
-				function="ObjectTools.ApplyChanges" />
-			</button>
-			<button
-             follows="top|right"
-             height="22"
-             label="Set Target"
-             label_selected="Set Target"
-             layout="topleft"
-             left="8"
-             name="Set Target"
-             tool_tip="Set the target avatar for object deletion"
-             top="78"
-             width="110">
-				<button.commit_callback
-				function="ObjectTools.Set" />
-			</button>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left_pad="12"
-             name="target_avatar_name"
-             top_delta="0"
-             width="260">
-                (no target)
-            </text>
-            <button
-             follows="top|right"
-             height="22"
-             label="Delete Target&apos;s Scripted Objects On Others Land"
-             label_selected="Delete Target&apos;s Scripted Objects On Others Land"
-             layout="topleft"
-             left="8"
-             name="Delete Target&apos;s Scripted Objects On Others Land"
-             tool_tip="Delete all scripted objects owned by the target on land not owned by the target. (no copy) objects will be returned."
-             top="126"
-             width="380">
-				<button.commit_callback
-				function="ObjectTools.DeletePublicOwnedBy" />
-			</button>
-            <button
-             follows="top|right"
-             height="22"
-             label="Delete Target&apos;s Scripted Objects On *Any* Land"
-             label_selected="Delete Target&apos;s Scripted Objects On *Any* Land"
-             layout="topleft"
-             left_delta="0"
-             name="Delete Target&apos;s Scripted Objects On *Any* Land"
-             tool_tip="Delete all scripted objects owned by the target in this region. (no copy) objects will be returned."
-             top_pad="28"
-             width="380">
-				<button.commit_callback
-				function="ObjectTools.DeleteAllScriptedOwnedBy" />
-			</button>
-            <button
-             follows="top|right"
-             height="22"
-             label="Delete *ALL* Of Target&apos;s Objects"
-             label_selected="Delete *ALL* Of Target&apos;s Objects"
-             layout="topleft"
-             left_delta="0"
-             name="Delete *ALL* Of Target&apos;s Objects"
-             tool_tip="Delete all objects owned by the target in this region. (no copy) objects will be returned."
-             top_pad="28"
-             width="380">
-				<button.commit_callback
-				function="ObjectTools.DeleteAllOwnedBy" />
-			</button>
-			<button
-             follows="top|right"
-             height="20"
-             label="Get Top Colliders"
-             label_selected="Get Top Colliders"
-             layout="topleft"
-             left="12"
-             name="Get Top Colliders"
-             tool_tip="Gets list of objects experiencing the most narrowphase callbacks"
-             top_pad="20"
-             width="130">
-				<button.commit_callback
-				function="ObjectTools.GetTopColliders" />
-			</button>
-            <button
-             follows="top|right"
-             height="20"
-             label="Get Top Scripts"
-             label_selected="Get Top Scripts"
-             layout="topleft"
-             left_delta="0"
-             name="Get Top Scripts"
-             tool_tip="Gets list of objects spending the most time running scripts"
-             top_pad="5"
-             width="130">
-				<button.commit_callback
-				function="ObjectTools.GetTopScripts" />
-			</button>
-            <button
-             follows="top|right"
-             height="20"
-             label="Scripts digest"
-             label_selected="Scripts digest"
-             layout="topleft"
-             left_delta="0"
-             name="Scripts digest"
-             tool_tip="Gets a list of all scripts and number of occurences of each"
-             top_pad="5"
-             width="130" >
-				<button.commit_callback
-				function="ObjectTools.GetScriptDigest" />
-			</button>
-        </panel>
-        <panel
-         border="true"
-         follows="left|top|right|bottom"
-         height="347"
-         label="Request"
-         layout="topleft"
-         left_delta="0"
-         help_topic="godtools_request_tab"
-         name="request"
-         top_delta="0"
-         width="398">
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="22"
-             layout="topleft"
-             left="10"
-             name="Destination:"
-             top="12"
-             width="80">
-                Destination:
-            </text>
-            <combo_box
-             height="22"
-             layout="topleft"
-             left_pad="10"
-             name="destination"
-             top_delta="0"
-             width="290">
-                <combo_box.item
-                 label="Selection"
-                 name="item1"
-                 value="Selection" />
-                <combo_box.item
-                 label="Agent Region"
-                 name="item2"
-                 value="Agent Region" />
-            </combo_box>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="22"
-             layout="topleft"
-             left="10"
-             name="Request:"
-             top_pad="10"
-             width="80">
-                Request:
-            </text>
-            <combo_box
-             allow_text_entry="true"
-             height="22"
-             layout="topleft"
-             left_pad="10"
-             name="request"
-             top_delta="0"
-             width="290">
-                <combo_box.item
-                 label="colliders &lt;steps&gt;"
-                 name="item1"
-                 value="colliders &lt;steps&gt;" />
-                <combo_box.item
-                 label="scripts &lt;count&gt;,&lt;optional pattern&gt;"
-                 name="item2"
-                 value="scripts &lt;count&gt;,&lt;optional pattern&gt;" />
-                <combo_box.item
-                 label="objects &lt;pattern&gt;"
-                 name="item3"
-                 value="objects &lt;pattern&gt;" />
-                <combo_box.item
-                 label="rez &lt;asset_id&gt;"
-                 name="item4"
-                 value="rez &lt;asset_id&gt;" />
-            </combo_box>
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
-             layout="topleft"
-             left="10"
-             name="Parameter:"
-             top_pad="10"
-             width="80">
-                Parameter:
-            </text>
-            <line_editor
-             border_style="line"
-             border_thickness="1"
-             follows="left|top"
-             height="22"
-             layout="topleft"
-             left_pad="10"
-             max_length="63"
-             name="parameter"
-             top_delta="0"
-             width="290" />
-            <button
-             follows="left|top"
-             height="20"
-             label="Make Request"
-             label_selected="Make Request"
-             layout="topleft"
-             left="10"
-             name="Make Request"
-             top_pad="10"
-             width="140">
-				<button.commit_callback
-					function="GodTools.Request" />
-			</button>
-        </panel>
-    </tab_container>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="godtools floater" title="ИНСТРУМЕНТЫ ТВОРЦА">
+	<tab_container name="GodTools Tabs">
+		<panel label="Сетка" name="grid">
+			<button label="Обновить кэш данных карты этого региона" label_selected="Обновить кэш данных карты этого региона" name="Flush This Region&apos;s Map Visibility Caches"/>
+		</panel>
+		<panel label="Регион" name="region">
+			<text name="Region Name:">
+				Название региона:
+			</text>
+			<check_box label="Буферная зона" name="check prelude" tool_tip="Сделать этот регион буферной зоной"/>
+			<check_box label="Солнце на месте" name="check fixed sun" tool_tip="Фиксация положения солнца (как в меню «Регион/Землевладение &gt; Ландшафт»)"/>
+			<check_box label="Сброс дома при телепортации" name="check reset home" tool_tip="Дом жителей, которые телепортируются отсюда, будет там, куда они телепортируются."/>
+			<check_box label="Видимый" name="check visible" tool_tip="Сделать регион видимым не только для творцов"/>
+			<check_box label="Повреждения" name="check damage" tool_tip="Сделать возможными повреждения в регионе"/>
+			<check_box label="Блокировать отслеживание трафика" name="block dwell" tool_tip="Выберите, чтобы для региона не отслеживался трафик"/>
+			<check_box label="Запретить терраформирование" name="block terraform" tool_tip="Выберите, чтобы жители не могли изменять ландшафт своей земли"/>
+			<check_box label="Песочница" name="is sandbox" tool_tip="Выберите, является ли этот регион «песочницей»"/>
+			<button label="Зафиксировать пределы" label_selected="Зафиксировать пределы" name="Bake Terrain" tool_tip="Сохранить текущий ландшафт как стандартный"/>
+			<button label="Вернуть ландшафт" label_selected="Вернуть ландшафт" name="Revert Terrain" tool_tip="Заменить текущий ландшафт ландшафтом по умолчанию"/>
+			<button label="Поменять ландшафты" label_selected="Поменять ландшафты" name="Swap Terrain" tool_tip="Поменять местами текущий ландшафт и ландшафт по умолчанию"/>
+			<text name="estate id">
+				ИД землевладения:
+			</text>
+			<text name="parent id">
+				ИД родового объекта:
+			</text>
+			<line_editor name="parentestate" tool_tip="Родовое землевладение для этого региона"/>
+			<text name="Grid Pos: ">
+				Полож. сетки:
+			</text>
+			<line_editor name="gridposx" tool_tip="Положение сетки по оси x для этого региона"/>
+			<line_editor name="gridposy" tool_tip="Положение сетки по оси y для этого региона"/>
+			<text name="Redirect to Grid: ">
+				Перенаправить на сетку:
+			</text>
+			<text name="billable factor text">
+				Ценовой коэффициент:
+			</text>
+			<text name="land cost text">
+				L$ за м²:
+			</text>
+			<button label="Обновить" label_selected="Обновить" name="Refresh" tool_tip="Обновление приведенной выше информации"/>
+			<button label="Применить" label_selected="Применить" name="Apply" tool_tip="Применить все изменения выше"/>
+			<button label="Выбрать регион" label_selected="Выбрать регион" name="Select Region" tool_tip="Выбор всего региона с помощью инструмента изменения ландшафта"/>
+			<button label="Автосохранение" label_selected="Автосохранение" name="Autosave now" tool_tip="Сохранить в каталоге автосохранения состояние в архиве Gzip"/>
+		</panel>
+		<panel label="Объекты" name="objects">
+			<panel.string name="no_target">
+				(нет персонажа)
+			</panel.string>
+			<text name="Region Name:">
+				Название региона:
+			</text>
+			<text name="region name">
+				Уэльс
+			</text>
+			<check_box label="Отключить скрипты" name="disable scripts" tool_tip="Отключение всех скриптов в этом регионе"/>
+			<check_box label="Отключить столкновения" name="disable collisions" tool_tip="Отключение столкновений не-агентов в этом регионе"/>
+			<check_box label="Отключить физику" name="disable physics" tool_tip="Отключение всех физических параметров в этом регионе"/>
+			<button label="Применить" label_selected="Применить" name="Apply" tool_tip="Применить все изменения выше"/>
+			<button label="Задать персонаж" label_selected="Задать персонаж" name="Set Target" tool_tip="Выберите аватар-персонаж для удаления объекта"/>
+			<text name="target_avatar_name">
+				(нет персонажа)
+			</text>
+			<button label="Удалить принадлежащие персонажу объекты со скриптами на чужой земле" label_selected="Удалить принадлежащие персонажу объекты со скриптами на чужой земле" name="Delete Target&apos;s Scripted Objects On Others Land" tool_tip="Удаление всех объектов со скриптами, принадлежащих персонажу, на земле, не принадлежащей персонажу. «Не копируемые» объекты будут возвращены."/>
+			<button label="Удалить принадлежащие персонажу объекты со скриптами на *всех* землях" label_selected="Удалить принадлежащие персонажу объекты со скриптами на *всех* землях" name="Delete Target&apos;s Scripted Objects On *Any* Land" tool_tip="Удаление всех объектов со скриптами, принадлежащих персонажу, в этом регионе. «Не копируемые» объекты будут возвращены."/>
+			<button label="Удалить *ВСЕ* объекты персонажа" label_selected="Удалить *ВСЕ* объекты персонажа" name="Delete *ALL* Of Target&apos;s Objects" tool_tip="Удаление всех объектов, принадлежащих персонажу, в этом регионе. «Не копируемые» объекты будут возвращены."/>
+			<button label="Самые активные участники столкновений" label_selected="Самые активные участники столкновений" name="Get Top Colliders" tool_tip="Список объектов, для которых наблюдается больше всего детализированных обратных вызовов"/>
+			<button label="Загрузить лучшие скрипты" label_selected="Загрузить лучшие скрипты" name="Get Top Scripts" tool_tip="Список объектов, в которых скрипты выполняются дольше всего"/>
+			<button label="Сводка по скриптам" label_selected="Сводка по скриптам" name="Scripts digest" tool_tip="Список всех скриптов с числом использований по каждому из них"/>
+		</panel>
+		<panel label="Запрос" name="request">
+			<text name="Destination:">
+				Пункт назначения:
+			</text>
+			<combo_box name="destination">
+				<combo_box.item label="назначенный" name="item1"/>
+				<combo_box.item label="текущий регион" name="item2"/>
+			</combo_box>
+			<text name="Request:">
+				Запрос:
+			</text>
+			<combo_box name="request">
+				<combo_box.item label="участники столкновений &lt;steps&gt;" name="item1"/>
+				<combo_box.item label="скрипты: &lt;count&gt;,&lt;optional pattern&gt;" name="item2"/>
+				<combo_box.item label="объекты &lt;pattern&gt;" name="item3"/>
+				<combo_box.item label="выложить &lt;asset_id&gt;" name="item4"/>
+			</combo_box>
+			<text name="Parameter:">
+				Параметр:
+			</text>
+			<button label="сделать запрос" label_selected="Сделать запрос" name="Make Request"/>
+		</panel>
+	</tab_container>
 </floater>

@@ -1,58 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Другое" name="main inventory panel">
+<panel label="Вещи" name="main inventory panel">
 	<panel.string name="ItemcountFetching">
-    Выборка [ITEM_COUNT] элементов... [FILTER]
+		Обнаружено [ITEM_COUNT] вещей... [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountCompleted">
-    [ITEM_COUNT] Элементов [FILTER]
+		[ITEM_COUNT] вещей [FILTER]
 	</panel.string>
 	<text name="ItemcountText">
-		Элементы:
+		Вещи:
 	</text>
-	<filter_editor label="Фильтр инвентаря" name="inventory search editor"/>
-	<button name="collapse_btn" label="Закрыть папки" />
-	<button name="expand_btn" label="Раскрыть папки" />
-	<text name="filter_label" value="Filter:"/>
-	<combo_box name="filter_combo_box" width="100">
-		<combo_box.item value="filter_type_all" label="Все" />
-		<combo_box.item value="filter_separator" label="------------" enabled="false" />
-		<combo_box.item value="filter_type_animations" label="Анимации" />
-		<combo_box.item value="filter_type_calling_cards" label="Визитки" />
-		<combo_box.item value="filter_type_clothing" label="Одежда / Тело" />
-		<combo_box.item value="filter_type_gestures" label="Жесты" />
-		<combo_box.item value="filter_type_landmarks" label="Закладки" />
-		<combo_box.item value="filter_type_notecards" label="Закладки" />
-		<combo_box.item value="filter_type_objects" label="Объекты" />
-		<combo_box.item value="filter_type_scripts" label="Скрипты" />
-		<combo_box.item value="filter_type_sounds" label="Звуки" />
-		<combo_box.item value="filter_type_textures" label="Текстуры" />
-		<combo_box.item value="filter_type_snapshots" label="Фото" />
-		<combo_box.item value="filter_type_meshes" label="Меши" />
-		<combo_box.item value="filter_separator" label="------------" enabled="false" />
-		<combo_box.item value="filter_type_custom" label="Свои настройки..." />
-	</combo_box>
+	<filter_editor label="Фильтр для инвентаря" name="inventory search editor"/>
 	<tab_container name="inventory filter tabs">
-		<inventory_panel label="INVENTAR" name="All Items"/>
-		<recent_inventory_panel label="Недавно" name="Recent Items"/>
-		<worn_inventory_panel label="Надетые" name="Worn Items"/>		
+		<inventory_panel label="МОЙ ИНВЕНТАРЬ" name="All Items"/>
+		<recent_inventory_panel label="НЕДАВНИЕ" name="Recent Items"/>
 	</tab_container>
-	<panel name="bottom_panel">
-		<panel name="options_gear_btn_panel">
-			<menu_button name="options_gear_btn" tool_tip="Показать доп. опции"/>
-		</panel>
-		<panel name="add_btn_panel">
-			<button name="add_btn" tool_tip="Добавить новый Объект"/>
-		</panel>
-		<panel name="new_inventory_panel">
-			<button name="new_inv_btn" tool_tip="Доп. окно инвентаря"/>
-		</panel>
-		<panel name="dummy_panel">
-			<text name="ItemcountText">
-				Объекты
-			</text>
-		</panel>
-		<panel name="trash_btn_panel">
-			<dnd_button name="trash_btn" tool_tip="Удалить выбор"/>
-		</panel>
-	</panel>
+	<layout_stack name="bottom_panel">
+		<layout_panel name="options_gear_btn_panel">
+			<menu_button name="options_gear_btn" tool_tip="Показать дополнительные параметры"/>
+		</layout_panel>
+		<layout_panel name="add_btn_panel">
+			<button name="add_btn" tool_tip="Добавить новую вещь"/>
+		</layout_panel>
+		<layout_panel name="trash_btn_panel">
+			<dnd_button name="trash_btn" tool_tip="Удалить выбранную вещь"/>
+		</layout_panel>
+	</layout_stack>
 </panel>

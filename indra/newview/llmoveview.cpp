@@ -37,7 +37,6 @@
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llvoavatarself.h" // to check gAgentAvatarp->isSitting()
-#include "llbottomtray.h"
 #include "llbutton.h"
 #include "llfirstuse.h"
 #include "llfloaterreg.h"
@@ -46,7 +45,8 @@
 #include "lluictrlfactory.h"
 #include "llviewerwindow.h"
 #include "llviewercontrol.h"
-#include "llselectmgr.h" 
+#include "llselectmgr.h"
+#include "lltoolbarview.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "lltooltip.h"
@@ -62,15 +62,13 @@ const F32 MOVE_BUTTON_DELAY = 0.0f;
 const F32 YAW_NUDGE_RATE = 0.05f;	// fraction of normal speed
 const F32 NUDGE_TIME = 0.25f;		// in seconds
 
-const std::string BOTTOM_TRAY_BUTTON_NAME = "movement_btn";
-
 //
 // Member functions
 //
 
 // protected
 LLFloaterMove::LLFloaterMove(const LLSD& key)
-:	LLTransientDockableFloater(NULL, true, key),
+:	LLFloater(key),
 	mForwardButton(NULL),
 	mBackwardButton(NULL),
 	mTurnLeftButton(NULL), 
@@ -95,10 +93,7 @@ LLFloaterMove::~LLFloaterMove()
 // virtual
 BOOL LLFloaterMove::postBuild()
 {
-	setIsChrome(TRUE);
-	setTitleVisible(TRUE); // restore title visibility after chrome applying
-	
-	LLDockableFloater::postBuild();
+//	updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730) ND_MERGE line was deleted in FS
 	
 	// Code that implements floater buttons toggling when user moves via keyboard is located in LLAgent::propagate()
 
@@ -160,10 +155,10 @@ BOOL LLFloaterMove::postBuild()
 // virtual
 void LLFloaterMove::setVisible(BOOL visible)
 {
-	// Do nothing with Stand/Stop Flying panel in excessive calls of this method (from LLTransientFloaterMgr?).
+	// Do nothing with Stand/Stop Flying panel in excessive calls of this method.
 	if (getVisible() == visible)
 	{
-		LLTransientDockableFloater::setVisible(visible);
+		LLFloater::setVisible(visible);
 		return;
 	}
 
@@ -182,7 +177,7 @@ void LLFloaterMove::setVisible(BOOL visible)
 		LLPanelStandStopFlying::getInstance()->reparent(NULL);
 	}
 
-	LLTransientDockableFloater::setVisible(visible);
+	LLFloater::setVisible(visible);
 }
 
 // static 
@@ -455,30 +450,6 @@ void LLFloaterMove::setModeTitle(const EMovementMode mode)
 	setTitle(title);
 }
 
-/**
- * Updates position of the floater to be center aligned with Move button.
- */
-void LLFloaterMove::updatePosition()
-{
-	LLBottomTray* tray = LLBottomTray::getInstance();
-	if (!tray) return;
-
-	LLButton* movement_btn = tray->findChild<LLButton>(BOTTOM_TRAY_BUTTON_NAME);
-
-	if (movement_btn)
-	{
-		//align centers of a button and a floater
-		S32 x = movement_btn->calcScreenRect().getCenterX() - getRect().getWidth()/2;
-
-		S32 y = 0;
-		if (!mModeActionsPanel->getVisible())
-		{
-			y = mModeActionsPanel->getRect().getHeight();
-		}
-		setOrigin(x, y);
-	}
-}
-
 //static
 //void LLFloaterMove::sUpdateFlyingStatus()
 //{
@@ -524,7 +495,6 @@ void LLFloaterMove::enableInstance(BOOL bEnable)
 
 void LLFloaterMove::onOpen(const LLSD& key)
 {
-
 	if (gAgent.getFlying())
 	{
 		setFlyingMode(TRUE);
@@ -536,24 +506,12 @@ void LLFloaterMove::onOpen(const LLSD& key)
 		setSittingMode(TRUE);
 		showModeButtons(FALSE);
 	}
-// AO: no dock control to save titlebar space
-//      LLButton *anchor_panel = LLBottomTray::getInstance()->getChild<LLButton>("movement_btn");
-//	setDockControl(new LLDockControl(
-//		anchor_panel, this,
-//		getDockTongue(), LLDockControl::TOP));
 
 
 //	sUpdateFlyingStatus();
 // [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
 	sUpdateMovementStatus();
 // [/RLVa:KB]
-}
-
-//virtual
-void LLFloaterMove::setDocked(bool docked, bool pop_on_undock/* = true*/)
-{
-	//LLTransientDockableFloater::setDocked(docked, pop_on_undock);
-	return;
 }
 
 void LLFloaterMove::setModeButtonToggleState(const EMovementMode mode)
@@ -786,23 +744,30 @@ void LLPanelStandStopFlying::onStopFlyingButtonClick()
  */
 void LLPanelStandStopFlying::updatePosition()
 {
-	LLBottomTray* tray = LLBottomTray::getInstance();
-	if (!tray || mAttached) return;
+	if (mAttached) return;
 
-	LLButton* movement_btn = tray->findChild<LLButton>(BOTTOM_TRAY_BUTTON_NAME);
+	S32 y_pos = 0;
+	S32 bottom_tb_center = 0;
+	if (LLToolBar* toolbar_bottom = gToolBarView->getChild<LLToolBar>("toolbar_bottom"))
+	{
+		y_pos = toolbar_bottom->getRect().getHeight();
+		bottom_tb_center = toolbar_bottom->getRect().getCenterX();
+	}
 
-	S32 x = 0;
-	if (movement_btn)
+	S32 left_tb_width = 0;
+	if (LLToolBar* toolbar_left = gToolBarView->getChild<LLToolBar>("toolbar_left"))
 	{
-		// Align centers of the button and the panel.
-		x = movement_btn->calcScreenRect().getCenterX() - getRect().getWidth()/2;
+		left_tb_width = toolbar_left->getRect().getWidth();
 	}
-	else
+
+	if(LLPanel* panel_ssf_container = getRootView()->getChild<LLPanel>("stand_stop_flying_container"))
 	{
-		x = tray->calcScreenRect().getCenterX() - getRect().getWidth()/2;
+		panel_ssf_container->setOrigin(0, y_pos);
 	}
-	setOrigin(x, 0);
+
+	S32 x_pos = bottom_tb_center-getRect().getWidth()/2 - left_tb_width;
+
+	setOrigin( x_pos, 0);
 }
-
 
 // EOF

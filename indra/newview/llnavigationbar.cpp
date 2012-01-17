@@ -45,7 +45,6 @@
 #include "llpaneltopinfobar.h"
 #include "llteleporthistory.h"
 #include "llsearchcombobox.h"
-#include "llsidetray.h"
 #include "llslurl.h"
 #include "llurlregistry.h"
 #include "llurldispatcher.h"
@@ -55,7 +54,6 @@
 #include "llworldmapmessage.h"
 #include "llappviewer.h"
 #include "llviewercontrol.h"
-#include "llfloatermediabrowser.h"
 #include "llweb.h"
 #include "llhints.h"
 
@@ -271,7 +269,6 @@ LLNavigationBar::LLNavigationBar()
 	mBtnForward(NULL),
 	mBtnHome(NULL),
 	mCmbLocation(NULL),
-	mSearchComboBox(NULL),
 	mPurgeTPHistoryItems(false),
 	mSaveToLocationHistory(false)
 {
@@ -293,10 +290,7 @@ BOOL LLNavigationBar::postBuild()
 	mBtnForward	= getChild<LLPullButton>("forward_btn");
 	mBtnHome	= getChild<LLButton>("home_btn");
 	
-	mCmbLocation= getChild<LLLocationInputCtrl>("location_combo"); 
-	mSearchComboBox	= getChild<LLSearchComboBox>("search_combo_box");
-
-	fillSearchComboBox();
+	mCmbLocation= getChild<LLLocationInputCtrl>("location_combo");
 
 	mBtnBack->setEnabled(FALSE);
 	mBtnBack->setClickedCallback(boost::bind(&LLNavigationBar::onBackButtonClicked, this));
@@ -311,8 +305,6 @@ BOOL LLNavigationBar::postBuild()
 	mBtnHome->setClickedCallback(boost::bind(&LLNavigationBar::onHomeButtonClicked, this));
 
 	mCmbLocation->setCommitCallback(boost::bind(&LLNavigationBar::onLocationSelection, this));
-	
-	mSearchComboBox->setCommitCallback(boost::bind(&LLNavigationBar::onSearchCommit, this));
 
 	mTeleportFinishConnection = LLViewerParcelMgr::getInstance()->
 		setTeleportFinishedCallback(boost::bind(&LLNavigationBar::onTeleportFinished, this, _1));
@@ -339,7 +331,7 @@ BOOL LLNavigationBar::postBuild()
 	LLTeleportHistory::getInstance()->setHistoryChangedCallback(
 			boost::bind(&LLNavigationBar::onTeleportHistoryChanged, this));
 
-	LLHints::registerHintTarget("nav_bar", LLView::getHandle());
+	LLHints::registerHintTarget("nav_bar", getHandle());
 
 	return TRUE;
 }
@@ -355,26 +347,6 @@ void LLNavigationBar::setVisible(BOOL visible)
 			LL_WARNS("LLNavigationBar")<<"NavigationBar has an unknown name of the parent: "<<getParent()->getName()<< LL_ENDL;
 		}
 		getParent()->setVisible(visible);	
-	}
-}
-
-
-void LLNavigationBar::fillSearchComboBox()
-{
-	if(!mSearchComboBox)
-	{
-		return;
-	}
-
-	LLSearchHistory::getInstance()->load();
-
-	LLSearchHistory::search_history_list_t search_list = 
-		LLSearchHistory::getInstance()->getSearchHistoryList();
-	LLSearchHistory::search_history_list_t::const_iterator it = search_list.begin();
-	for( ; search_list.end() != it; ++it)
-	{
-		LLSearchHistory::LLSearchHistoryItem item = *it;
-		mSearchComboBox->add(item.search_query);
 	}
 }
 
@@ -428,16 +400,6 @@ void LLNavigationBar::onForwardButtonClicked()
 void LLNavigationBar::onHomeButtonClicked()
 {
 	gAgent.teleportHome();
-}
-
-void LLNavigationBar::onSearchCommit()
-{
-	std::string search_query = mSearchComboBox->getSimple();
-	if(!search_query.empty())
-	{
-		LLSearchHistory::getInstance()->addEntry(search_query);
-	}
-	invokeSearch(search_query);	
 }
 
 void LLNavigationBar::onTeleportHistoryMenuItemClicked(const LLSD& userdata)
@@ -750,84 +712,4 @@ int LLNavigationBar::getDefNavBarHeight()
 int LLNavigationBar::getDefFavBarHeight()
 {
 	return mDefaultFpRect.getHeight();
-}
-
-void LLNavigationBar::showNavigationPanel(BOOL npVisible)
-// AO: Rewrite for transparency
-{
-	bool fpVisible = gSavedSettings.getBOOL("ShowNavbarFavoritesPanel");
-	LLPanel* np = getChild<LLPanel>("navigation_panel");
-	llinfos << "showing navpanel :" << npVisible << llendl;
-	llinfos << "DEBUG: mDefaultNpRect = mLeft,mTop,mRight,mBottom = " << mDefaultNpRect.mLeft << "," << mDefaultNpRect.mTop << "," << mDefaultNpRect.mRight << "," << mDefaultNpRect.mBottom << llendl;
-	LLRect r;
-	LLRect curRect = getRect();
-	
-	if (npVisible)
-	{
-		if (fpVisible) // Show both panels
-		{
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom));
-		}
-		else // NavPanel only 
-		{
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom + mDefaultFpRect.getHeight()));
-			np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop - mDefaultFpRect.getHeight() + 5,curRect.mRight, mDefaultNpRect.mBottom - mDefaultFpRect.getHeight() + 5));
-		}
-	}
-	else 
-	{
-		if (fpVisible) // Show favorite bar only
-		{
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom+mDefaultNpRect.getHeight()+4));
-		}
-		else // show nothing
-		{
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop+5,curRect.mRight, mDefaultNavContainerRect.mTop+5));
-		}
-	}
-	
-	np->setVisible(npVisible);			
-	return;
-}
-
-void LLNavigationBar::showFavoritesPanel(BOOL visible)
-// AO: Rewrite for transparency
-{
-	
-	bool npVisible = gSavedSettings.getBOOL("ShowNavbarNavigationPanel");
-
-	LLFavoritesBarCtrl* fb = getChild<LLFavoritesBarCtrl>("favorite");
-	LLPanel* np = getChild<LLPanel>("navigation_panel");
-	LLRect curRect = getRect();
-	LLRect r = getRect();
-	
-	fb->setVisible(visible);
-	
-	if (visible)
-	{
-		if (npVisible) // NavBar + FavBar
-		{
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom));
-			np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop + 5,curRect.mRight, mDefaultNpRect.mBottom + 5));
-		}
-		else 
-		{
-			// Show FavBar Only
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom+mDefaultNpRect.getHeight()+4));
-		}
-	}
-	else 
-	{
-		if (npVisible) // NavBar
-		{
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom + mDefaultFpRect.getHeight()));
-			np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop - mDefaultFpRect.getHeight() + 5,curRect.mRight, mDefaultNpRect.mBottom - mDefaultFpRect.getHeight() + 5));
-	
-		}
-		else 
-		{
-			// show nothing
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop+5,curRect.mRight, mDefaultNavContainerRect.mTop+5));
-		}
-	}
 }

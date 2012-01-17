@@ -35,7 +35,7 @@
 #include "llpanelpeople.h"
 #include "llavatarlist.h"
 #include "llavatarlistitem.h"
-#include "llsidetray.h"
+#include "llfloatersidepanelcontainer.h"
 
 #ifdef LL_STANDALONE
 #include <expat.h>
@@ -94,7 +94,7 @@ FSLSLBridgeRequestRadarPosResponder::FSLSLBridgeRequestRadarPosResponder()
 }
 void FSLSLBridgeRequestRadarPosResponder::result(const LLSD& content)
 {
-	LLPanel* panel_people = LLSideTray::getInstance()->getPanel("panel_people");
+	LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("panel_people");
 	if (panel_people)
 	{
 		LLAvatarList* nearbyList = ((LLPanelPeople*)panel_people)->getNearbyList();

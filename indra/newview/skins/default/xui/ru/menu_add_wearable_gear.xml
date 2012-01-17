@@ -1,41 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<menu
- layout="topleft"
- name="Add Wearable Gear Menu">
-    <menu_item_check
-     label="Сортировать по последнему"
-     layout="topleft"
-     name="sort_by_most_recent">
-        <on_check
-         function="AddWearable.Gear.Check"
-         parameter="by_most_recent" />
-        <on_click
-         function="AddWearable.Gear.Sort"
-         parameter="by_most_recent" />
-    </menu_item_check>
-    <menu_item_check
-     label="Сортировать по имени"
-     layout="topleft"
-     name="sort_by_name">
-        <on_check
-         function="AddWearable.Gear.Check"
-         parameter="by_name" />
-        <on_click
-         function="AddWearable.Gear.Sort"
-         parameter="by_name" />
-    </menu_item_check>
-    <menu_item_check
-     label="Сортировать по типу"
-     layout="topleft"
-     name="sort_by_type">
-        <on_check
-         function="AddWearable.Gear.Check"
-         parameter="by_type" />
-        <on_click
-         function="AddWearable.Gear.Sort"
-         parameter="by_type" />
-        <on_visible
-         function="AddWearable.Gear.Visible"
-         parameter="by_type" />
-    </menu_item_check>
-</menu>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Add Wearable Gear Menu">
+	<menu_item_check label="Сортировать по времени" name="sort_by_most_recent"/>
+	<menu_item_check label="Сортировать по имени" name="sort_by_name"/>
+	<menu_item_check label="Сортировать по типу" name="sort_by_type"/>
+</toggleable_menu>

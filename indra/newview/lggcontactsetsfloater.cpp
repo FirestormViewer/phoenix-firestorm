@@ -42,7 +42,6 @@
 #include "llfilepicker.h"
 #include "llfile.h"
 #include "llsdserialize.h"
-#include "llfloaterchat.h"
 #include "llchat.h"
 #include "llviewerinventory.h"
 #include "llinventorymodel.h"

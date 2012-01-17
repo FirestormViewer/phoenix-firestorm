@@ -2099,7 +2099,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://interest.secondlife.com/viewer/avatar</string>
+      <string>http://lecs-viewer-web-components.s3.amazonaws.com/v3.0/[GRID_LOWERCASE]/avatars.html</string>
     </map>
     <key>AvatarBakedTextureUploadTimeout</key>
     <map>
@@ -2630,27 +2630,16 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>ButtonFlashCount</key>
+    <key>EnableButtonFlashing</key>
     <map>
       <key>Comment</key>
-      <string>Number of flashes after which flashing buttons stay lit up</string>
+      <string>Allow UI to flash buttons to get your attention</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>S32</string>
+      <string>Boolean</string>
       <key>Value</key>
-      <integer>8</integer>
-    </map>
-    <key>ButtonFlashRate</key>
-    <map>
-      <key>Comment</key>
-      <string>Frequency at which buttons flash (hz)</string>
-      <key>Persist</key>
       <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>1.25</real>
     </map>
     <key>ButtonHPad</key>
     <map>
@@ -2894,6 +2883,18 @@
     <real>0.5</real>
   </map>
 
+  <key>CameraMaxCoF</key>
+  <map>
+    <key>Comment</key>
+    <string>Maximum camera circle of confusion for DoF effect</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>10.0</real>
+  </map>
+
   <key>CameraFNumber</key>
   <map>
     <key>Comment</key>
@@ -3064,17 +3065,6 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>ChatVisible</key>
-    <map>
-      <key>Comment</key>
-      <string>Chat bar is visible</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
     <key>ChatWindow</key>
     <map>
       <key>Comment</key>
@@ -3112,17 +3102,6 @@
     <map>
       <key>Comment</key>
       <string>Close chat after hitting return</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>CloseSnapshotOnKeep</key>
-    <map>
-      <key>Comment</key>
-      <string>Close snapshot window after saving snapshot</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -3426,6 +3405,17 @@
       <integer>1</integer>
       <key>Type</key>
       <string>S32</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>DebugHideEmptySystemFolders</key>
+    <map>
+      <key>Comment</key>
+      <string>Hide empty system folders when on</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
     </map>
@@ -4673,17 +4663,6 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>EnableRippleWater</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether to use ripple water shader or not</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
     <key>EnableTextureAtlas</key>
     <map>
       <key>Comment</key>
@@ -4712,7 +4691,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>EnableVoiceChat</key>
     <map>
@@ -5573,6 +5552,17 @@
       <key>Value</key>
       <string>http://wiki.phoenixviewer.com/doku.php?id=[TOPIC]</string>
     </map>
+    <key>HowToHelpURL</key>
+    <map>
+      <key>Comment</key>
+      <string>URL for How To help content</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>http://lecs-viewer-web-components.s3.amazonaws.com/v3.0/[GRID_LOWERCASE]/howto/index.html</string>
+    </map>    
     <key>HomeSidePanelURL</key>
     <map>
       <key>Comment</key>
@@ -6210,6 +6200,17 @@
       <string>0.0.0</string>
     </map>
   
+    <key>LastSnapshotToProfileHeight</key>
+    <map>
+      <key>Comment</key>
+      <string>The height of the last profile snapshot, in px</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>768</integer>
+    </map>
     <key>LastSnapshotToEmailHeight</key>
     <map>
       <key>Comment</key>
@@ -6220,6 +6221,17 @@
       <string>S32</string>
       <key>Value</key>
       <integer>768</integer>
+    </map>
+    <key>LastSnapshotToProfileWidth</key>
+    <map>
+      <key>Comment</key>
+      <string>The width of the last profile snapshot, in px</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>1024</integer>
     </map>
     <key>LastSnapshotToEmailWidth</key>
     <map>
@@ -6275,17 +6287,6 @@
       <string>S32</string>
       <key>Value</key>
       <integer>512</integer>
-    </map>
-    <key>LastSnapshotType</key>
-    <map>
-      <key>Comment</key>
-      <string>Select this as next type of snapshot to take (0 = postcard, 1 = texture, 2 = local image)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>0</integer>
     </map>
     <key>LeftClickShowMenu</key>
     <map>
@@ -6648,7 +6649,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/</string>
+      <string>https://marketplace.secondlife.com/</string>
     </map>
     <key>MarketplaceURL_objectFemale</key>
     <map>
@@ -6659,7 +6660,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/attachments</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/attachments</string>
     </map>
     <key>MarketplaceURL_objectMale</key>
     <map>
@@ -6670,7 +6671,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/attachments</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/attachments</string>
     </map>
     <key>MarketplaceURL_clothingFemale</key>
     <map>
@@ -6681,7 +6682,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/clothing_female_avatar</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/clothing_female_avatar</string>
     </map>
     <key>MarketplaceURL_clothingMale</key>
     <map>
@@ -6692,7 +6693,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/clothing_male_avatar</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/clothing_male_avatar</string>
     </map>
     <key>MarketplaceURL_bodypartFemale</key>
     <map>
@@ -6703,7 +6704,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com</string>
+      <string>https://marketplace.secondlife.com/</string>
     </map>
     <key>MarketplaceURL_bodypartMale</key>
     <map>
@@ -6714,7 +6715,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/</string>
+      <string>https://marketplace.secondlife.com/</string>
     </map>
     <key>MarketplaceURL_glovesMale</key>
     <map>
@@ -6725,7 +6726,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/gloves_both_women_and_men</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/gloves_both_women_and_men</string>
     </map>
     <key>MarketplaceURL_glovesFemale</key>
     <map>
@@ -6736,7 +6737,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/gloves_both_women_and_men</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/gloves_both_women_and_men</string>
     </map>
     <key>MarketplaceURL_jacketFemale</key>
     <map>
@@ -6747,7 +6748,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/jacket_womens</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/jacket_womens</string>
     </map>
     <key>MarketplaceURL_jacketMale</key>
     <map>
@@ -6758,7 +6759,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/jacket_mens</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/jacket_mens</string>
     </map>
     <key>MarketplaceURL_physicsFemale</key>
     <map>
@@ -6791,7 +6792,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/shirt_womens</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/shirt_womens</string>
     </map>
     <key>MarketplaceURL_shirtMale</key>
     <map>
@@ -6802,7 +6803,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/shirt_mens</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/shirt_mens</string>
     </map>
     <key>MarketplaceURL_undershirtFemale</key>
     <map>
@@ -6813,7 +6814,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/undershirt_womens</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/undershirt_womens</string>
     </map>
     <key>MarketplaceURL_undershirtMale</key>
     <map>
@@ -6824,7 +6825,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/undershirt_mens</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/undershirt_mens</string>
     </map>
     <key>MarketplaceURL_skirtFemale</key>
     <map>
@@ -6835,7 +6836,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/skirts_women</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/skirts_women</string>
     </map>
     <key>MarketplaceURL_skirtMale</key>
     <map>
@@ -6846,7 +6847,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/skirts_women</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/skirts_women</string>
     </map>
     <key>MarketplaceURL_pantsFemale</key>
     <map>
@@ -6857,7 +6858,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/pants_women</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/pants_women</string>
     </map>
     <key>MarketplaceURL_pantsMale</key>
     <map>
@@ -6868,7 +6869,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/pants_men</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/pants_men</string>
     </map>
     <key>MarketplaceURL_underpantsFemale</key>
     <map>
@@ -6879,7 +6880,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/underwear_women</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/underwear_women</string>
     </map>
     <key>MarketplaceURL_underpantsMale</key>
     <map>
@@ -6890,7 +6891,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/underwear_men</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/underwear_men</string>
     </map>
     <key>MarketplaceURL_shoesFemale</key>
     <map>
@@ -6901,7 +6902,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/shoes_women</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/shoes_women</string>
     </map>
     <key>MarketplaceURL_shoesMale</key>
     <map>
@@ -6912,7 +6913,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/shoes_men</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/shoes_men</string>
     </map>
     <key>MarketplaceURL_socksFemale</key>
     <map>
@@ -6923,7 +6924,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/socks_women</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/socks_women</string>
     </map>
     <key>MarketplaceURL_socksMale</key>
     <map>
@@ -6934,7 +6935,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/socks_women</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/socks_women</string>
     </map>
     <key>MarketplaceURL_tattooMale</key>
     <map>
@@ -6945,7 +6946,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/tattoo_both_women_and_men</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/tattoo_both_women_and_men</string>
     </map>
     <key>MarketplaceURL_tattooFemale</key>
     <map>
@@ -6956,7 +6957,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/tattoo_both_women_and_men</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/tattoo_both_women_and_men</string>
     </map>
     <key>MarketplaceURL_hairFemale</key>
     <map>
@@ -6967,7 +6968,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/womens_hair</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/womens_hair</string>
     </map>
     <key>MarketplaceURL_hairMale</key>
     <map>
@@ -6978,7 +6979,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/mens_hair</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/mens_hair</string>
     </map>
     <key>MarketplaceURL_eyesFemale</key>
     <map>
@@ -6989,7 +6990,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/womens_eyes</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/womens_eyes</string>
     </map>
     <key>MarketplaceURL_eyesMale</key>
     <map>
@@ -7000,7 +7001,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/mens_eyes</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/mens_eyes</string>
     </map>
     <key>MarketplaceURL_shapeFemale</key>
     <map>
@@ -7011,7 +7012,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/womens_shape</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/womens_shape</string>
     </map>
     <key>MarketplaceURL_shapeMale</key>
     <map>
@@ -7022,7 +7023,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/mens_shape</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/mens_shape</string>
     </map>
     <key>MarketplaceURL_skinFemale</key>
     <map>
@@ -7033,7 +7034,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/womens_skin</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/womens_skin</string>
     </map>
     <key>MarketplaceURL_skinMale</key>
     <map>
@@ -7044,7 +7045,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/trampoline/viewer21/mens_skin</string>
+      <string>https://marketplace.secondlife.com/trampoline/viewer21/mens_skin</string>
     </map>
     <key>MaxDragDistance</key>
     <map>
@@ -9195,7 +9196,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>-1</integer>
     </map>
-  <key>RenderAvatarLODFactor</key>
+    <key>RenderAvatarLODFactor</key>
     <map>
       <key>Comment</key>
       <string>Controls level of detail of avatars (multiplier for current screen area when calculated level of detail)</string>
@@ -9493,7 +9494,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>6</integer>
+    <integer>16</integer>
   </map>
     <key>RenderDebugTextureBind</key>
     <map>
@@ -9553,162 +9554,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
-
-  <key>RenderAnimateTrees</key>
-  <map>
-    <key>Comment</key>
-    <string>Use GL matrix ops to animate tree branches.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>0</integer>
-  </map>
-
-  <key>RenderGIRange</key>
-  <map>
-    <key>Comment</key>
-    <string>Distance to cut off GI effect.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>96</real>
-  </map>
-
-  <key>RenderGILuminance</key>
-  <map>
-    <key>Comment</key>
-    <string>Luminance factor of global illumination contribution.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>0.075</real>
-  </map>
-  
-  <key>RenderGIBrightness</key>
-  <map>
-    <key>Comment</key>
-    <string>Brightness factor of global illumination contribution.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>0.3</real>
-  </map>
-
-  <key>RenderGINoise</key>
-  <map>
-    <key>Comment</key>
-    <string>Noise of position sampling for GI photon mapping.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>0.7</real>
-  </map>
-
-  <key>RenderGIAttenuation</key>
-  <map>
-    <key>Comment</key>
-    <string>Distance attenuation factor for indirect lighting.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>0.1</real>
-  </map>
-
-  <key>RenderGIBlurBrightness</key>
-  <map>
-    <key>Comment</key>
-    <string>Brightness factor of global illumination blur effect.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>1.025</real>
-  </map>
-
-  <key>RenderGIBlurEdgeWeight</key>
-  <map>
-    <key>Comment</key>
-    <string>Edge weight for GI soften filter (sharpness).</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>0.8</real>
-  </map>
-
-  <key>RenderGIBlurIncrement</key>
-  <map>
-    <key>Comment</key>
-    <string>Increment of scale for each pass of global illumination blur effect.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>0.8</real>
-  </map>
-
-  <key>RenderLuminanceScale</key>
-  <map>
-    <key>Comment</key>
-    <string>Luminance value scalar for darkening effect.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>1.0</real>
-  </map>
-
-  <key>RenderSunLuminanceScale</key>
-  <map>
-    <key>Comment</key>
-    <string>Sun Luminance value scalar for darkening effect.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>1.0</real>
-  </map>
-
-  <key>RenderSunLuminanceOffset</key>
-  <map>
-    <key>Comment</key>
-    <string>Sun Luminance value offset for darkening effect.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>0</real>
-  </map>
-
-  <key>RenderLuminanceDetail</key>
-  <map>
-    <key>Comment</key>
-    <string>Mipmap level to use for luminance</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>16.0</real>
-   </map>
 
   <key>RenderMinimumLODTriangleCount</key>
   <map>
@@ -9846,7 +9691,19 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
-  
+
+  <key>CameraDoFResScale</key>
+  <map>
+    <key>Comment</key>
+    <string>Amount to scale down depth of field resolution.  Valid range is 0.25 (quarter res) to 1.0 (full res)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.7</real>
+  </map>
+
   <key>RenderSpotLightsInNondeferred</key>
   <map>
     <key>Comment</key>
@@ -10030,18 +9887,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <integer>0</integer>
   </map>
 
-  <key>RenderDeferredGI</key>
-  <map>
-    <key>Comment</key>
-    <string>Enable GI in deferred renderer.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>0</integer>
-  </map>
-
   <key>RenderDeferredSun</key>
   <map>
     <key>Comment</key>
@@ -10185,92 +10030,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <real>0</real>
   </map>
 
-  <key>RenderGIAmbiance</key>
-  <map>
-    <key>Comment</key>
-    <string>Ambiance factor of global illumination contribution.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>0.5</real>
-  </map>
-
-  <key>RenderGIMinRenderSize</key>
-  <map>
-    <key>Comment</key>
-    <string>Minimum size of objects to put into GI source map.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>0.5</real>
-  </map>
-
-  <key>RenderGIBlurColorCurve</key>
-  <map>
-    <key>Comment</key>
-    <string>Color curve for GI softening kernel</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Vector3</string>
-    <key>Value</key>
-    <array>
-      <real>1.0</real>
-      <real>0.6</real>
-      <real>0.02</real>
-    </array>
-  </map>
-
-  <key>RenderGIBlurPasses</key>
-  <map>
-    <key>Comment</key>
-    <string>Scale of GI softening kernel.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>U32</string>
-    <key>Value</key>
-    <real>4</real>
-  </map>
-
-  <key>RenderGIBlurSize</key>
-  <map>
-    <key>Comment</key>
-    <string>Scale of GI softening kernel.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>4.0</real>
-  </map>
-  <key>RenderGIBlurSamples</key>
-  <map>
-    <key>Comment</key>
-    <string>Number of samples to take for each pass of GI blur (value range 1-16).  Actual number of samples is value * 2 - 1.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>U32</string>
-    <key>Value</key>
-    <real>16</real>
-  </map>
-  <key>RenderGIBlurDistFactor</key>
-  <map>
-    <key>Comment</key>
-    <string>Distance scaler for GI blur.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>0.0</real>
-  </map>
-
   <key>RenderDynamicLOD</key>
     <map>
       <key>Comment</key>
@@ -10313,7 +10072,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>RenderAutoMaskAlphaDeferred</key>
     <map>
@@ -10369,6 +10128,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <real>1.0</real>
+    </map>
+    <key>RenderGLCoreProfile</key>
+    <map>
+      <key>Comment</key>
+      <string>Don't use a compatibility profile OpenGL context.  Requires restart.  Basic shaders MUST be enabled.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
     <key>RenderGlow</key>
     <map>
@@ -10995,6 +10765,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>RenderUseVAO</key>
+    <map>
+      <key>Comment</key>
+      <string>Use GL Vertex Array Objects</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>RenderVBOMappingDisable</key>
     <map>
       <key>Comment</key>
@@ -11004,7 +10785,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
   <key>RenderUseStreamVBO</key>
   <map>
@@ -11461,7 +11242,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ShowBuildButton</key>
     <map>
       <key>Comment</key>
-      <string>Shows/Hides Build button in the bottom tray.</string>
+      <string>Shows/hides build button in the bottom tray.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -11472,7 +11253,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ShowCameraButton</key>
     <map>
       <key>Comment</key>
-      <string>Show/Hide View button in the bottom tray.</string>
+      <string>Show/hide view button in the bottom tray.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -11615,7 +11396,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ShowGestureButton</key>
     <map>
       <key>Comment</key>
-      <string>Shows/Hides Gesture button in the bottom tray.</string>
+      <string>Shows/hides gesture button in the bottom tray.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -11648,7 +11429,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ShowMiniMapButton</key>
     <map>
       <key>Comment</key>
-      <string>Shows/Hides Mini-Map button in the bottom tray.</string>
+      <string>Shows/hides mini-map button in the bottom tray.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -11692,7 +11473,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ShowMoveButton</key>
     <map>
       <key>Comment</key>
-      <string>Shows/Hides Move button in the bottom tray.</string>
+      <string>Shows/hides move button in the bottom tray.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -11758,7 +11539,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ShowSearchButton</key>
     <map>
       <key>Comment</key>
-      <string>Shows/Hides Search button in the bottom tray.</string>
+      <string>Shows/hides search button in the bottom tray.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -11802,7 +11583,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ShowNavbarFavoritesPanel</key>    
     <map>
       <key>Comment</key>
-      <string>Show/Hide Navigation Bar Favorites Panel</string>
+      <string>Show/hide navigation bar favorites panel</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -11813,7 +11594,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ShowNavbarNavigationPanel</key>        
     <map>
       <key>Comment</key>
-      <string>Show/Hide Navigation Bar Navigation Panel</string>
+      <string>Show/hide navigation bar navigation panel</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -11824,7 +11605,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ShowWorldMapButton</key>
     <map>
       <key>Comment</key>
-      <string>Shows/Hides Map button in the bottom tray.</string>
+      <string>Shows/hides map button in the bottom tray.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -11835,18 +11616,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ShowMiniLocationPanel</key>
     <map>
       <key>Comment</key>
-      <string>Show/Hide Mini-Location Panel</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>SidebarCameraMovement</key>
-    <map>
-      <key>Comment</key>
-      <string>Reflects world rect changing while changing sidebar visibility.</string>
+      <string>Show/hide mini-location panel</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -12481,28 +12251,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>  
-    <key>SnapshotLocalLastResolution</key>
-    <map>
-      <key>Comment</key>
-      <string>Take next local snapshot at this resolution</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>SnapshotPostcardLastResolution</key>
-    <map>
-      <key>Comment</key>
-      <string>Take next postcard snapshot at this resolution</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>SnapshotQuality</key>
     <map>
       <key>Comment</key>
@@ -12535,17 +12283,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string>http://photos.apps.staging.avatarsunited.com/viewer_config</string>
-    </map>
-    <key>SnapshotTextureLastResolution</key>
-    <map>
-      <key>Comment</key>
-      <string>Take next texture snapshot at this resolution</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>0</integer>
     </map>
     <key>SpeedTest</key>
     <map>
@@ -12846,7 +12583,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>0.699999988079</real>
     </map>
-    <key>ToolTipFadeTime</key>
+     <key>ToolTipFastDelay</key>
+    <map>
+      <key>Comment</key>
+      <string>Seconds before displaying tooltip when mouse stops over UI element (when a tooltip is already visible)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.1</real>
+    </map>   <key>ToolTipFadeTime</key>
     <map>
       <key>Comment</key>
       <string>Seconds over which tooltip fades away</string>
@@ -14366,7 +14113,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <boolean>1</boolean>
     </map>
     <key>UseFreezeFrame</key>
     <map>
@@ -14581,50 +14328,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>1</integer>
       <key>Type</key>
       <string>U32</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>VectorizeEnable</key>
-    <map>
-      <key>Comment</key>
-      <string>Enable general vector operations and data alignment.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>VectorizePerfTest</key>
-    <map>
-      <key>Comment</key>
-      <string>Test SSE/vectorization performance and choose fastest version.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>VectorizeProcessor</key>
-    <map>
-      <key>Comment</key>
-      <string>0=Compiler Default, 1=SSE, 2=SSE2, autodetected</string>
-      <key>Persist</key>
-      <integer>0</integer>
-      <key>Type</key>
-      <string>U32</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>VectorizeSkin</key>
-    <map>
-      <key>Comment</key>
-      <string>Enable vector operations for avatar skinning.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
     </map>
@@ -15139,6 +14842,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>MinWindowHeight</key>
+    <map>
+      <key>Comment</key>
+      <string>SL viewer minimum window height in pixels</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>WindowHeight</key>
     <map>
       <key>Comment</key>
@@ -15146,7 +14860,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>S32</string>
+      <string>U32</string>
       <key>Value</key>
       <integer>738</integer>
     </map>
@@ -15161,6 +14875,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>MinWindowWidth</key>
+    <map>
+      <key>Comment</key>
+      <string>SL viewer minimum window width in pixels</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>WindowWidth</key>
     <map>
       <key>Comment</key>
@@ -15168,7 +14893,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>S32</string>
+      <string>U32</string>
       <key>Value</key>
       <integer>1024</integer>
     </map>
@@ -16296,7 +16021,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Comment</key>
       <string>Settings that are a applied per session (not saved).</string>
       <key>Persist</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
@@ -16307,7 +16032,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Comment</key>
       <string>User settings that are a applied per session (not saved).</string>
       <key>Persist</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
@@ -16545,17 +16270,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>http://common-flash-secondlife-com.s3.amazonaws.com/viewer/v2.6/agni/404.html</string>
     </map>
-    <key>DestinationsAndAvatarsVisibility</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether destination panel or avatar picker are open (0=destination guide, 1=avatar picker, default=nothing)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>OpenIMOnVoice</key>
     <map>
       <key>Comment</key>
@@ -16589,10 +16303,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>WebProfileRect</key>
+     <key>WebProfileFloaterRect</key>
     <map>
       <key>Comment</key>
-      <string>Web profile dimensions</string>
+      <string>Web profile floater dimensions</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -16600,8 +16314,8 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <array>
         <integer>0</integer>
-        <integer>650</integer>
-        <integer>490</integer>
+        <integer>680</integer>
+        <integer>485</integer>
         <integer>0</integer>
         </array>
     </map>

@@ -1,156 +1,31 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- can_minimize="false"
- height="440"
- layout="topleft"
- name="Image Preview"
- help_topic="image_preview"
- width="300">
-    <text
-     type="string"
-     length="1"
-     bottom_delta="40"
-     follows="top|left"
-     height="15"
-     layout="topleft"
-     left="10"
-     name="name_label">
-        Имя:
-    </text>
-    <line_editor
-     follows="top|left|right"
-     height="19"
-     layout="topleft"
-     left_delta="0"
-     name="name_form"
-     top_pad="5"
-     width="280" />
-    <text
-     type="string"
-     length="1"
-     bottom_delta="20"
-     follows="top|left"
-     height="15"
-     layout="topleft"
-     name="description_label">
-        Описание:
-    </text>
-    <line_editor
-     follows="top|left|right"
-     height="19"
-     layout="topleft"
-     left_delta="0"
-     name="description_form"
-     top_pad="5"
-     width="280" />
-    <text
-     type="string"
-     length="1"
-     bottom_delta="30"
-     follows="top|left"
-     height="25"
-     width="105"
-     word_wrap="true"
-     layout="topleft"
-     name="preview_label">
-        Просмотр изображения в качестве:
-    </text>
-    <combo_box
-     height="18"
-     label="Тип одежды"
-     layout="topleft"
-     left_delta="110"
-     name="clothing_type_combo"
-     top_delta="3"
-     width="160">
-        <item
-         label="изображение"
-         value="Image"
-         name="Image" />
-        <item
-         label="волосы"
-         value="Hair"
-         name="Hair" />
-        <item
-         label="Женская голова"
-         value="Female Head"
-         name="FemaleHead" />
-        <item
-         label="Женская Верхняя часть тела"
-         value="Female Upper Body"
-         name="FemaleUpperBody" />
-        <item
-         label="Женская Нижняя часть тела"
-         value="Female Lower Body"
-         name="FemaleLowerBody" />
-        <item
-         label="Мужская глава"
-         value="Male Head"
-         name="MaleHead" />
-        <item
-         label="Мужская Верхняя часть тела"
-         value="Male Upper Body"
-         name="MaleUpperBody" />
-        <item
-         label="Мужская Нижняя часть тела"
-         value="Male Lower Body"
-         name="MaleLowerBody" />
-        <item
-         label="юбка"
-         value="Skirt"
-         name="Skirt" />
-        <item
-         label="Скульптовый Prim"
-         value="Sculpted Prim"
-         name="SculptedPrim" />
-    </combo_box>
-    <text
-     type="string"
-     length="1"
-     bottom="225"
-     height="45"
-     word_wrap="true"
-     follows="top|left"
-     layout="topleft"
-     left="10"
-     name="bad_image_text">
-        Невозможно прочитать изображение.
-
-Попробуйте сохранить изображение как 24-битный Targa(.tga).
-    </text>
-    <check_box
-     control_name="LosslessJ2CUpload"
-     enabled="false"
-     follows="bottom|left"
-     height="16"
-     label="Сжатие без потерь"
-     layout="topleft"
-     left_delta="2"
-     name="lossless_check"
-     top_pad="162"
-     width="280" />
-     <check_box
-      control_name="TemporaryUpload" enabled="true"
-      follows="bottom|left" height="16" initial_value="false"
-      left_delta="155" name="temp_check" width="280" label="Temporary (Free)"
-       tooltip="Sets the asset to be temporary, meaning its free, but in return, only good for a short time before it ceases to exist." />
-    <button
-     follows="bottom|right"
-     height="20"
-     label="Отмена"
-     layout="topleft"
-     left="165"
-     name="cancel_btn"
-     top="410"
-     width="125" />
-    <button
-     follows="bottom|left"
-     height="20"
-     label="Загрузка (L$[AMOUNT])"
-     layout="topleft"
-     left_delta="-150"
-     name="ok_btn"
-     top_delta="0"
-     width="125" />
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Image Preview">
+	<text name="name_label">
+		Название:
+	</text>
+	<text name="description_label">
+		Описание:
+	</text>
+	<text name="preview_label">
+		Показать изображение как:
+	</text>
+	<combo_box label="Тип одежды" name="clothing_type_combo">
+		<item label="Изображение" name="Image" value="Изображение"/>
+		<item label="Волосы" name="Hair" value="Волосы"/>
+		<item label="Женская голова" name="FemaleHead" value="Женская голова"/>
+		<item label="Верхняя часть тела женщины" name="FemaleUpperBody" value="Верхняя часть тела женщины"/>
+		<item label="Нижняя часть тела женщины" name="FemaleLowerBody" value="Нижняя часть тела женщины"/>
+		<item label="Мужская голова" name="MaleHead" value="Мужская голова"/>
+		<item label="Верхняя часть тела мужчины" name="MaleUpperBody" value="Верхняя часть тела мужчины"/>
+		<item label="Нижняя часть тела мужчины" name="MaleLowerBody" value="Нижняя часть тела мужчины"/>
+		<item label="Юбка" name="Skirt" value="Юбка"/>
+		<item label="Скульптурный примитив" name="SculptedPrim" value="Скульптурный примитив"/>
+	</combo_box>
+	<text name="bad_image_text">
+		Невозможно прочитать изображение.
+Попробуйте сохранить изображение как 24-битный TGA-файл (Targa).
+	</text>
+	<check_box label="Использовать сжатие без потерь" name="lossless_check"/>
+	<button label="Отмена" name="cancel_btn"/>
+	<button label="Передать (L$[AMOUNT])" name="ok_btn"/>
 </floater>

@@ -121,6 +121,7 @@ LLView::Params::Params()
 
 LLView::LLView(const LLView::Params& p)
 :	mVisible(p.visible),
+	mInDraw(false),
 	mName(p.name),
 	mParentView(NULL),
 	mReshapeFlags(FOLLOWS_NONE),
@@ -281,6 +282,9 @@ void LLView::moveChildToBackOfTabGroup(LLUICtrl* child)
 // virtual
 bool LLView::addChild(LLView* child, S32 tab_group)
 {
+	// NOTE: Changed this to not crash in release mode
+	llassert(mInDraw == false);
+
 	if (!child)
 	{
 		return false;
@@ -330,6 +334,7 @@ bool LLView::addChildInBack(LLView* child, S32 tab_group)
 // remove the specified child from the view, and set it's parent to NULL.
 void LLView::removeChild(LLView* child)
 {
+	llassert_always(mInDraw == false);
 	//llassert_always(sDepth == 0); // Avoid re-ordering while drawing; it can cause subtle iterator bugs
 	if (child->mParentView == this) 
 	{
@@ -870,15 +875,16 @@ BOOL LLView::handleToolTip(S32 x, S32 y, MASK mask)
 
 	// parents provide tooltips first, which are optionally
 	// overridden by children, in case child is mouse_opaque
-	if (!mToolTipMsg.empty())
+	std::string tooltip = getToolTip();
+	if (!tooltip.empty())
 	{
 		// allow "scrubbing" over ui by showing next tooltip immediately
 		// if previous one was still visible
 		F32 timeout = LLToolTipMgr::instance().toolTipVisible() 
-			? 0.f
+			? LLUI::sSettingGroups["config"]->getF32( "ToolTipFastDelay" )
 			: LLUI::sSettingGroups["config"]->getF32( "ToolTipDelay" );
 		LLToolTipMgr::instance().show(LLToolTip::Params()
-			.message(mToolTipMsg)
+			.message(tooltip)
 			.sticky_rect(calcScreenRect())
 			.delay_time(timeout));
 
@@ -1086,6 +1092,7 @@ void LLView::draw()
 
 void LLView::drawChildren()
 {
+	mInDraw = true;
 	if (!mChildList.empty())
 	{
 		LLView* rootp = LLUI::getRootView();		
@@ -1124,6 +1131,7 @@ void LLView::drawChildren()
 		}
 		--sDepth;
 	}
+	mInDraw = false;
 }
 
 void LLView::dirtyRect()
@@ -1222,7 +1230,7 @@ void LLView::drawChild(LLView* childp, S32 x_offset, S32 y_offset, BOOL force_dr
 		if ((childp->getVisible() && childp->getRect().isValid()) 
 			|| force_draw)
 		{
-			glMatrixMode(GL_MODELVIEW);
+			gGL.matrixMode(LLRender::MM_MODELVIEW);
 			LLUI::pushMatrix();
 			{
 				LLUI::translate((F32)childp->getRect().mLeft + x_offset, (F32)childp->getRect().mBottom + y_offset, 0.f);
@@ -1607,13 +1615,6 @@ LLView* LLView::findNextSibling(LLView* child)
 	}
 
 	return (next_it != mChildList.end()) ? *next_it : NULL;
-}
-
-void LLView::deleteViewByHandle(LLHandle<LLView> handle)
-{
-	LLView* viewp = handle.get();
-
-	delete viewp;
 }
 
 

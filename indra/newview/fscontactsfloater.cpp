@@ -48,7 +48,7 @@
 #include "llimfloatercontainer.h"
 #include "llnotificationsutil.h"
 #include "llscrolllistctrl.h"
-#include "llsidetray.h"
+#include "llfloatersidepanelcontainer.h"
 #include "llstartup.h"
 #include "llviewercontrol.h"
 #include "llvoiceclient.h"

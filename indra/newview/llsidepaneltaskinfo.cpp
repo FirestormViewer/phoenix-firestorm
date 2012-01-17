@@ -121,7 +121,7 @@ BOOL LLSidepanelTaskInfo::postBuild()
 	childSetCommitCallback("checkbox next owner can transfer",	&LLSidepanelTaskInfo::onCommitNextOwnerTransfer,this);
 	childSetCommitCallback("clickaction",						&LLSidepanelTaskInfo::onCommitClickAction,this);
 	childSetCommitCallback("search_check",						&LLSidepanelTaskInfo::onCommitIncludeInSearch,this);
-
+	
 	mDAPermModify = getChild<LLUICtrl>("perm_modify");
 	mDACreator = getChildView("Creator:");
 	mDACreatorName = getChild<LLUICtrl>("Creator Name");
@@ -156,7 +156,7 @@ BOOL LLSidepanelTaskInfo::postBuild()
 	mDAE = getChildView("E:");
 	mDAN = getChildView("N:");
 	mDAF = getChildView("F:");
-
+	
 	return TRUE;
 }
 

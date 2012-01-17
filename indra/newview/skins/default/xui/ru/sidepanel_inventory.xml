@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Имещество" name="objects panel">
+<panel label="Вещи" name="objects panel">
 	<panel label="" name="sidepanel__inventory_panel">
 		<layout_stack name="inventory_layout_stack">
 			<layout_panel name="inbox_outbox_layout_panel">
@@ -7,18 +7,18 @@
 					<layout_panel name="inbox_layout_panel">
 						<panel label="" name="marketplace_inbox">
 							<string name="InboxLabelWithArg">
-								Полученные товарЫ ([NUM])
+								Полученные вещи ([NUM])
 							</string>
 							<string name="InboxLabelNoArg">
-								Полученные товары
+								Полученные вещи
 							</string>
-							<button label="Erhaltene Artikel" name="inbox_btn"/>
+							<button label="Полученные вещи" name="inbox_btn"/>
 							<text name="inbox_fresh_new_count">
-								[NUM] нов.
+								Новых: [NUM]
 							</text>
-							<panel tool_tip="Перетащите элементы  чтобы управлять ими и использовать их">
+							<panel tool_tip="Drag and drop items to your inventory to manage and use them">
 								<text name="inbox_inventory_placeholder">
-									Покупки с маркетплейса (Marketplace) .
+									Покупки из торгового центра будут доставлены сюда.
 								</text>
 							</panel>
 						</panel>
@@ -26,13 +26,13 @@
 					<layout_panel name="outbox_layout_panel">
 						<panel label="" name="marketplace_outbox">
 							<string name="OutboxLabelWithArg">
-								Коробка дилера ([NUM])
+								Торговые исходящие ([NUM])
 							</string>
 							<string name="OutboxLabelNoArg">
-								Коробка дилера 
+								Торговые исходящие
 							</string>
-							<button label="Коробка дилера " name="outbox_btn"/>
-							<button label="" name="outbox_sync_btn" tool_tip="Переместить в магазин (Marketplace) "/>
+							<button label="Торговые исходящие" name="outbox_btn"/>
+							<button label="" name="outbox_sync_btn" tool_tip="Выставить на витрину моего магазина"/>
 							<panel>
 								<panel name="outbox_inventory_placeholder_panel">
 									<text name="outbox_inventory_placeholder_title">
@@ -51,13 +51,13 @@
 					<button label="Профиль" name="info_btn" tool_tip="Показать профиль объекта"/>
 				</layout_panel>
 				<layout_panel name="share_btn_lp">
-					<button label="Поделиться" name="share_btn" tool_tip="Поделиться элементом инвентаря"/>
+					<button label="Поделиться" name="share_btn" tool_tip="Поделиться вещью из инвентаря"/>
 				</layout_panel>
 				<layout_panel name="shop_btn_lp">
-					<button label="Магазин" name="shop_btn" tool_tip="Открыть сайт с магазином"/>
+					<button label="Торговый центр" name="shop_btn" tool_tip="Открыть страницу торгового центра"/>
 					<button label="Надеть" name="wear_btn" tool_tip="Надеть выбранный костюм"/>
-					<button label="Воспроизвести" name="play_btn"/>
-					<button label="Телепорт" name="teleport_btn" tool_tip="Телепортироваться в выбранное место"/>
+					<button label="Проиграть" name="play_btn"/>
+					<button label="Телепорт" name="teleport_btn" tool_tip="Телепортироваться в выбранную область"/>
 				</layout_panel>
 			</layout_stack>
 		</panel>

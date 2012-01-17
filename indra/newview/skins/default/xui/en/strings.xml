@@ -16,16 +16,16 @@
 	<string name="StartupDetectingHardware">Detecting hardware...</string>
 	<string name="StartupLoading">Loading [APP_NAME]...</string>
 	<string name="StartupClearingCache">Clearing cache...</string>
-	<string name="StartupInitializingTextureCache">Initializing Texture Cache...</string>
+	<string name="StartupInitializingTextureCache">Initializing texture cache...</string>
 	<string name="StartupInitializingVFS">Initializing VFS...</string>
-  <string name="StartupRequireDriverUpdate">Graphics Initialization Failed. Please Update Your Graphics Driver!</string>
+  <string name="StartupRequireDriverUpdate">Graphics initialization failed. Please update your graphics driver!</string>
 
 	<!--  progress -->
 	<string name="ProgressRestoring">Restoring...</string>
-	<string name="ProgressChangingResolution">Changing Resolution...</string>
+	<string name="ProgressChangingResolution">Changing resolution...</string>
 
 	<!-- Legacy strings, almost never used -->
-	<string name="Fullbright">Fullbright (Legacy)</string>	<!-- used in the Build > materials dropdown-->
+	<string name="Fullbright">Fullbright (legacy)</string>	<!-- used in the Build > materials dropdown-->
 
 	<!-- Login -->
 	<string name="LoginInProgress">Logging in. [APP_NAME] may appear frozen.  Please wait.</string>
@@ -38,8 +38,8 @@
   <string name="LoginInitializingMultimedia">Initializing multimedia...</string>
   <string name="LoginInitializingFonts">Loading fonts...</string>
   <string name="LoginVerifyingCache">Verifying cache files (can take 60-90 seconds)...</string>
-	<string name="LoginProcessingResponse">Processing Response...</string>
-	<string name="LoginInitializingWorld">Initializing World...</string>
+	<string name="LoginProcessingResponse">Processing response...</string>
+	<string name="LoginInitializingWorld">Initializing world...</string>
 	<string name="LoginDecodingImages">Decoding images...</string>
 	<string name="LoginInitializingQuicktime">Initializing QuickTime...</string>
 	<string name="LoginQuicktimeNotFound">QuickTime not found - unable to initialize.</string>
@@ -56,7 +56,7 @@
         <string name="CertBasicConstraints">Too many certificates were in the servers Certificate chain.  Please contact your Grid administrator.</string>
         <string name="CertInvalidSignature">The certificate signature returned by the Grid server could not be verified.  Please contact your Grid administrator.</string>
 
-	<string name="LoginFailedNoNetwork">Network Error: Could not establish connection, please check your network connection.</string>
+	<string name="LoginFailedNoNetwork">Network error: Could not establish connection, please check your network connection.</string>
 	<string name="LoginFailed">Login failed.</string>
 	<string name="Quit">Quit</string>
 	<string name="create_account_url">http://join.secondlife.com/</string>
@@ -88,7 +88,7 @@ We are very sorry for the inconvenience.</string>
 Logins are currently restricted to employees only.
 Check www.secondlife.com/status for updates.</string>
 	<string name="LoginFailedPremiumOnly">Second Life logins are temporarily restricted in order to make sure that those in-world have the best possible experience.
-	 	
+
 People with free accounts will not be able to access Second Life during this time, to make room for those who have paid for Second Life.</string>
 	<string name="LoginFailedComputerProhibited">Second Life cannot be accessed from this computer.
 If you feel this is an error, please contact
@@ -182,7 +182,7 @@ Please try logging in again in a minute.</string>
 	<string name="TooltipOutboxWorn">You are wearing one or more of these objects. Remove them from your avatar and try moving them again.</string>
 	<string name="TooltipOutboxFolderLevels">This folder has too many levels of subfolders. Rearrange the interior folders to a maximum of 4 levels deep (Root Folder contains A contains B contains C).</string>
 	<string name="TooltipOutboxTooManyObjects">This folder contains more than 200 objects. Box some of the items to reduce the object count.</string>
-	
+
 	<!-- tooltips for Urls -->
 	<string name="TooltipHttpUrl">Click to view this web page</string>
 	<string name="TooltipSLURL">Click to view this location's information</string>
@@ -202,7 +202,7 @@ Please try logging in again in a minute.</string>
 	<string name="TooltipObjectIMUrl">Click to view this object's description</string>
 	<string name="TooltipMapUrl">Click to view this location on a map</string>
 	<string name="TooltipSLAPP">Click to run the secondlife:// command</string>
-	<string name="CurrentURL" value=" CurrentURL: [CurrentURL]" />	
+	<string name="CurrentURL" value=" CurrentURL: [CurrentURL]" />
 
 	<!-- text for SLURL labels -->
 	<string name="SLurlLabelTeleport">Teleport to</string>
@@ -450,9 +450,10 @@ Please try logging in again in a minute.</string>
 	<string name="compressed_image_files">Compressed Images</string>
 	<string name="load_files">Load Files</string>
 	<string name="choose_the_directory">Choose Directory</string>
+	<string name="script_files">Scripts</string>
 
-	<!-- LSL Usage Hover Tips -->
-	<!-- NOTE: For now these are set as translate="false", until DEV-40761 is implemented (to internationalize the rest of tooltips in the same window).
+  <!-- LSL Usage Hover Tips -->
+  <!-- NOTE: For now these are set as translate="false", until DEV-40761 is implemented (to internationalize the rest of tooltips in the same window).
              This has no effect on viewer code, but prevents Linden Lab internal localization tool from scraping these strings.  -->
 	<string name="LSLTipSleepTime" translate="false">
 Sleeps script for [SLEEP_TIME] seconds.
@@ -1977,7 +1978,7 @@ Returns a string with the requested data about the region
   <string name="physics">Physics</string>
   <string name="invalid">invalid</string>
   <string name="none">none</string>
-  
+
   <!-- Not Worn Wearable Types -->
 	<string name="shirt_not_worn">Shirt not worn</string>
 	<string name="pants_not_worn">Pants not worn</string>
@@ -2014,7 +2015,7 @@ Returns a string with the requested data about the region
 
   <!-- Wearable List-->
   <string name="NewWearable">New [WEARABLE_ITEM]</string>
-  
+
 	<!-- LLGroupNotify -->
 	<!-- used in the construction of a Group Notice blue dialog box, buttons, tooltip etc. Seems to be no longer utilized by code in Viewer 2.0 -->
 	<string name="next">Next</string>
@@ -2057,7 +2058,7 @@ Returns a string with the requested data about the region
 	<string name="PlacesNoMatchingItems">Didn't find what you're looking for? Try [secondlife:///app/search/places/[SEARCH_TERM] Search].</string>
 	<string name="FavoritesNoMatchingItems">Drag a landmark here to add it to your favorites.</string>
 	<string name="InventoryNoTexture">You do not have a copy of this texture in your inventory</string>
-	<string name="InventoryInboxNoItems">Items purchased through the marketplace will be delivered here.</string>
+	<string name="InventoryInboxNoItems">When you purchase or otherwise receive an item, it will appear here so you can drag it to a folder in your inventory, or delete it if you do not wish to keep it.</string>
 	<string name="MarketplaceURL">http://marketplace.[DOMAIN_NAME]</string>
 	<string name="MarketplaceURL_CreateStore">http://marketplace.[DOMAIN_NAME]/create_store</string>
 	<string name="MarketplaceURL_LearnMore">http://marketplace.[DOMAIN_NAME]/learn_more</string>
@@ -2079,6 +2080,8 @@ Returns a string with the requested data about the region
 	<string name="Marketplace Error Folder Depth">Error: This item contains too many levels of nested folders.  Reorganize it to a maximum of 3 levels of nested folders.</string>
 	<string name="Marketplace Error Unsellable Item">Error: This item can not be sold on the marketplace.</string>
 	<string name="Marketplace Error Internal Import">Error: There was a problem with this item.  Try again later.</string>
+
+	<string name="Open landmarks">Open landmarks</string>
 
 	<!-- use value="" because they have preceding spaces -->
 	<string name="no_transfer" value=" (no transfer)" />
@@ -2165,6 +2168,7 @@ Returns a string with the requested data about the region
 	<string name="InvFolder #RLV">#RLV</string>
 	
 	<string name="no_attachments">No attachments worn</string>
+    <string name="Attachments remain">Attachments ([COUNT] slots remain)</string>
 
 	<!-- inventory FVBridge -->
 	<!--  This is used in llpanelinventory.cpp when constructing a context menu for an item for Sale  -->
@@ -2347,7 +2351,7 @@ Returns a string with the requested data about the region
 	<string name="ScriptLimitsRequestWrongRegion">Error: script information is only available in your current region</string>
 	<string name="ScriptLimitsRequestWaiting">Retrieving information...</string>
 	<string name="ScriptLimitsRequestDontOwnParcel">You do not have permission to examine this parcel</string>
-	
+
 	<string name="SITTING_ON">Sitting On</string>
 	<string name="ATTACH_CHEST">Chest</string>
 	<string name="ATTACH_HEAD">Head</string>
@@ -2388,7 +2392,7 @@ Returns a string with the requested data about the region
 	<string name="ATTACH_HUD_BOTTOM">HUD Bottom</string>
 	<string name="ATTACH_HUD_BOTTOM_RIGHT">HUD Bottom Right</string>
   <string name="ATTACH_BRIDGE">Bridge</string>
-  
+			
   <!-- script editor -->
 	<string name="CursorPos">Line [LINE], Column [COLUMN]</string>
 
@@ -2401,7 +2405,7 @@ Returns a string with the requested data about the region
 
 	<!-- panel contents -->
 	<string name="PanelContentsTooltip">Content of object</string>
-	<string name="PanelContentsNewScript">New Script</string>	
+	<string name="PanelContentsNewScript">New Script</string>
 
   <!-- panel preferences general -->
   <string name="BusyModeResponseDefault">The Resident you messaged is in &apos;unavailable mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
@@ -2431,7 +2435,7 @@ Returns a string with the requested data about the region
 	<!-- panel classified -->
 	<string name="ClassifiedClicksTxt">Clicks: [TELEPORT] teleport, [MAP] map, [PROFILE] profile</string>
 	<string name="ClassifiedUpdateAfterPublish">(will update after publish)</string>
-  
+
   <!-- panel picks -->
   <string name="NoPicksClassifiedsText">You haven't created any Picks or Classifieds. Click the Plus button below to create a Pick or Classified.</string>
   <string name="NoAvatarPicksClassifiedsText">User has no picks or classifieds</string>
@@ -3322,7 +3326,7 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
     You have blocked this Resident. Sending a message will automatically unblock them.
   </string>
   <!--Some times string name is getting from the body of server response.
-  For ex.: from gIMMgr::showSessionStartError in the LLViewerChatterBoxSessionStartReply::post. 
+  For ex.: from gIMMgr::showSessionStartError in the LLViewerChatterBoxSessionStartReply::post.
   In case of the EXT-3115 issue 'generic' is passed into the gIMMgr::showSessionStartError as a string name.
   Also there are some other places where "generic" is used.
   So, let add string with name="generic" with the same value as "generic_request_error" -->
@@ -3348,7 +3352,7 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
     You are not a session moderator.
   </string>
   <!--Some times string name is getting from the body of server response.
-  For ex.: from gIMMgr::showSessionStartError in the LLViewerChatterBoxSessionStartReply::post. 
+  For ex.: from gIMMgr::showSessionStartError in the LLViewerChatterBoxSessionStartReply::post.
   In case of the EXT-3562 issue 'muted' is passed into the gIMMgr::showSessionStartError as a string name.
   So, let add string with name="muted" with the same value as "muted_error" -->
   <string name="muted">
@@ -3361,13 +3365,13 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
     Unable to add users to chat session with [RECIPIENT].
   </string>
   <!--Some times string name is getting from the body of server response.
-  For ex.: from gIMMgr::showSessionStartError in the LLViewerChatterBoxSessionStartReply::post. 
+  For ex.: from gIMMgr::showSessionStartError in the LLViewerChatterBoxSessionStartReply::post.
   In case of the EXT-3562 issue 'message' is passed into the gIMMgr::showSessionStartError as a string name.
   So, let add string with name="message" with the same value as "message_session_event" -->
   <string name="message">
     The message sent to [RECIPIENT] is still being processed.
     If the message does not appear in the next few minutes, it may have been dropped by the server.
-  </string>  
+  </string>
   <string name="message_session_event">
     The message sent to [RECIPIENT] is still being processed.
     If the message does not appear in the next few minutes, it may have been dropped by the server.
@@ -3376,7 +3380,7 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
     Error while moderating.
   </string>
   <!--Some times string name is getting from the body of server response.
-  For ex.: from gIMMgr::showSessionStartError in the LLViewerChatterBoxSessionStartReply::post. 
+  For ex.: from gIMMgr::showSessionStartError in the LLViewerChatterBoxSessionStartReply::post.
   In case of the EXT-3459 issue 'removed' is passed into the gIMMgr::showSessionStartError as a string name.
   So, let add string with name="removed" with the same value as "removed_from_group" -->
   <string name="removed">
@@ -3397,9 +3401,9 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
 	<string name="session_initialization_timed_out_error">
 		The session initialization is timed out
 	</string>
-  
+
   <string name="Home position set.">Home position set.</string>
-  
+
   <string name="voice_morphing_url">http://secondlife.com/landing/voicemorphing</string>
 
   <!-- Financial operations strings -->
@@ -3409,6 +3413,10 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
   <string name="you_paid_ldollars_no_info">You paid L$[AMOUNT].</string>
   <string name="you_paid_ldollars_no_reason">You paid [NAME] L$[AMOUNT].</string>
   <string name="you_paid_ldollars_no_name">You paid L$[AMOUNT] [REASON].</string>
+  <string name="you_paid_failure_ldollars">You failed to pay [NAME] L$[AMOUNT] [REASON].</string>
+  <string name="you_paid_failure_ldollars_no_info">You failed to pay L$[AMOUNT].</string>
+  <string name="you_paid_failure_ldollars_no_reason">You failed to pay [NAME] L$[AMOUNT].</string>
+  <string name="you_paid_failure_ldollars_no_name">You failed to pay L$[AMOUNT] [REASON].</string>
   <string name="for item">for [ITEM]</string>
   <string name="for a parcel of land">for a parcel of land</string>
   <string name="for a land access pass">for a land access pass</string>
@@ -3417,20 +3425,20 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
   <string name="to join a group">to join a group</string>
   <string name="to upload">to upload</string>
   <string name="to publish a classified ad">to publish a classified ad</string>
-  
+
   <string name="giving">Giving L$ [AMOUNT]</string>
   <string name="uploading_costs">Uploading costs L$ [AMOUNT]</string>
   <string name="this_costs">This costs L$ [AMOUNT]</string>
   <string name="buying_selected_land">Buying selected land for L$ [AMOUNT]</string>
   <string name="this_object_costs">This object costs L$ [AMOUNT]</string>
-  
+
   <string name="group_role_everyone">Everyone</string>
   <string name="group_role_officers">Officers</string>
   <string name="group_role_owners">Owners</string>
   <string name="group_member_status_online">Online</string>
 
   <string name="uploading_abuse_report">Uploading...
-  
+
 Abuse Report</string>
 
   <!-- names for new inventory items-->
@@ -3524,23 +3532,23 @@ Abuse Report</string>
 
   <!-- birth date format shared by avatar inspector and profile panels -->
   <string name="AvatarBirthDateFormat">[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt]</string>
-  
+
   <string name="DefaultMimeType">none/none</string>
   <string name="texture_load_dimensions_error">Can't load images larger than [WIDTH]*[HEIGHT]</string>
 
   <!-- language specific white-space characters, delimiters, spacers, item separation symbols -->
   <string name="sentences_separator" value=" "></string>
   <string name="words_separator" value=", "/>
-  
+
   <string name="server_is_down">
 	Despite our best efforts, something unexpected has gone wrong.
 
-	Please check status.secondlifegrid.net to see if there is a known problem with the service.  
+	Please check status.secondlifegrid.net to see if there is a known problem with the service.
         If you continue to experience problems, please check your network and firewall setup.
   </string>
 
-  <!-- overriding datetime formating. 
-	didn't translate if this is not needed for current localization 
+  <!-- overriding datetime formating.
+	didn't translate if this is not needed for current localization
   -->
   <string name="dateTimeWeekdaysNames">Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday</string>
   <string name="dateTimeWeekdaysShortNames">Sun:Mon:Tue:Wed:Thu:Fri:Sat</string>
@@ -3573,7 +3581,7 @@ Abuse Report</string>
   <string name="DeleteItem">Delete selected item?</string>
 
   <string name="EmptyOutfitText">There are no items in this outfit</string>
- 
+
  <!-- External editor status codes -->
  <string name="ExternalEditorNotSet">Select an editor using the ExternalEditor setting.</string>
  <string name="ExternalEditorNotFound">Cannot find the external editor you specified.
@@ -3709,8 +3717,64 @@ Try enclosing path to the editor with double quotes.
   <string name="BeaconSound">Viewing sound beacons (yellow)</string>
   <string name="BeaconMedia">Viewing media beacons (white)</string>
   <string name="ParticleHiding">Hiding Particles</string>
-  
-  <!-- Mesh UI terms -->
+
+  <!-- commands -->
+
+  <string name="Command_AboutLand_Label">About land</string>
+  <string name="Command_Appearance_Label">Appearance</string>
+  <string name="Command_Avatar_Label">Avatar</string>
+  <string name="Command_Build_Label">Build</string>
+  <string name="Command_Chat_Label">Chat</string>
+  <string name="Command_Compass_Label">Compass</string>
+  <string name="Command_Destinations_Label">Destinations</string>
+  <string name="Command_Gestures_Label">Gestures</string>
+  <string name="Command_HowTo_Label">How to</string>
+  <string name="Command_Inventory_Label">Inventory</string>
+  <string name="Command_Map_Label">Map</string>
+  <string name="Command_Marketplace_Label">Marketplace</string>
+  <string name="Command_MiniMap_Label">Mini-map</string>
+  <string name="Command_Move_Label">Walk / run / fly</string>
+  <string name="Command_People_Label">People</string>
+  <string name="Command_Picks_Label">Picks</string>
+  <string name="Command_Places_Label">Places</string>
+  <string name="Command_Preferences_Label">Preferences</string>
+  <string name="Command_Profile_Label">Profile</string>
+  <string name="Command_Search_Label">Search</string>
+  <string name="Command_Snapshot_Label">Snapshot</string>
+  <string name="Command_Speak_Label">Speak</string>
+  <string name="Command_View_Label">Camera controls</string>
+  <string name="Command_Voice_Label">Voice settings</string>
+
+  <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
+  <string name="Command_Appearance_Tooltip">Change your avatar</string>
+  <string name="Command_Avatar_Tooltip">Choose a complete avatar</string>
+  <string name="Command_Build_Tooltip">Building objects and reshaping terrain</string>
+  <string name="Command_Chat_Tooltip">Chat with people nearby using text</string>
+  <string name="Command_Compass_Tooltip">Compass</string>
+  <string name="Command_Destinations_Tooltip">Destinations of interest</string>
+  <string name="Command_Gestures_Tooltip">Gestures for your avatar</string>
+  <string name="Command_HowTo_Tooltip">How to do common tasks</string>
+  <string name="Command_Inventory_Tooltip">View and use your belongings</string>
+  <string name="Command_Map_Tooltip">Map of the world</string>
+  <string name="Command_Marketplace_Tooltip">Go shopping</string>
+  <string name="Command_MiniMap_Tooltip">Show nearby people</string>
+  <string name="Command_Move_Tooltip">Moving your avatar</string>
+  <string name="Command_People_Tooltip">Friends, groups, and nearby people</string>
+  <string name="Command_Picks_Tooltip">Places to show as favorites in your profile</string>
+  <string name="Command_Places_Tooltip">Places you've saved</string>
+  <string name="Command_Preferences_Tooltip">Preferences</string>
+  <string name="Command_Profile_Tooltip">Edit or view your profile</string>
+  <string name="Command_Search_Tooltip">Find places, events, people</string>
+  <string name="Command_Snapshot_Tooltip">Take a picture</string>
+  <string name="Command_Speak_Tooltip">Speak with people nearby using your microphone</string>
+  <string name="Command_View_Tooltip">Changing camera angle</string>
+  <string name="Command_Voice_Tooltip">Volume controls for calls and people near you in world</string>
+
+  <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
+  <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>
+  <string name="Toolbar_Right_Tooltip" >currently in your right toolbar</string>
+
+ <!-- Mesh UI terms -->
   <string name="Retain%">Retain%</string>
   <string name="Detail">Detail</string>
   <string name="Better Detail">Better Detail</string>
@@ -3720,6 +3784,12 @@ Try enclosing path to the editor with double quotes.
   <string name="Preview">Preview</string>
   <string name="Normal">Normal</string>
 
+  <!-- Snapshot image quality levels -->
+  <string name="snapshot_quality_very_low">Very Low</string>
+  <string name="snapshot_quality_low">Low</string>
+  <string name="snapshot_quality_medium">Medium</string>
+  <string name="snapshot_quality_high">High</string>
+  <string name="snapshot_quality_very_high">Very High</string>
   <string name="IMPrefix">IM:</string>
 
   <!-- Settings sanity checks -->
@@ -3732,4 +3802,5 @@ Try enclosing path to the editor with double quotes.
 
   <string name="RlvEnabled">RestrainedLove Support will be enabled after you restart.</string>
   <string name="RlvDisabled">RestrainedLove Support will be disabled after you restart.</string>
-</strings>
+
+  </strings>

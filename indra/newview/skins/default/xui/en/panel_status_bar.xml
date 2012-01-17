@@ -2,7 +2,7 @@
 <panel
  background_opaque="true"
  background_visible="true"
- bg_opaque_color="MouseGray"
+ bg_opaque_color="DkGray"
  chrome="true"
  follows="top|right"
  height="19"

@@ -102,3 +102,12 @@ void LLFloaterInventory::onOpen(const LLSD& key)
 	LLFilterEditor* filter_editor = mPanelMainInventory->getChild<LLFilterEditor>("inventory search editor");
 	filter_editor->setFocus(TRUE);
 }
+
+void LLFloaterInventory::onClose(bool app_quitting)
+{
+	LLFloater::onClose(app_quitting);
+	if (mKey.asInteger() > 1)
+	{
+		destroy();
+	}
+}

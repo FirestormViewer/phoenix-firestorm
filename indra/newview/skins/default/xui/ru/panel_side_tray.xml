@@ -1,181 +1,29 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Side tray cannot show background because it is always
 	partially on screen to hold tab buttons. -->
-<side_tray
-  name="sidebar"
-  background_visible="false"
-  mouse_opaque="true"
-  width="333"
-  collapsed="true"
->
-<icon
-   scale_image="true"
-   follows="top|left|right|bottom"
-   height="600"
-   top="10"
-   bottom="0"
-   image_name="TaskPanel_BG.png"
-   width="333" />
-  <!-- Individual tabs must show background to have seemless
-	appearance up to tray panel header word like "Home".
-	Embedded panels are inset by a pixel and so their
-	backgrounds will not block the world fully. -->
-
-  <sidetray_tab
-    name="sidebar_openclose"
-    help_topic="sidebar_openclose"
-    tab_title="Toggle Sidebar"
-    description="Toggle Sidebar."
-    image="TabIcon_Open_Off"
-	image_selected="TabIcon_Close_Off"
-    mouse_opaque="false"
-    background_visible="true"
-  >
-    <panel /> <!-- dummy panel, never to actually be seen -->
-  </sidetray_tab>
-
-  <sidetray_tab
-    name="sidebar_home"
-    help_topic="sidebar_home"
-    tab_title="Home"
-    description="Home."
-    image="TabIcon_Home_Off"
-    image_selected="TabIcon_Home_Selected"
-    mouse_opaque="false"
-    background_visible="true"
-  >
-      <panel
-        class="panel_sidetray_home"
-        name="panel_home"
-        filename="panel_sidetray_home_tab.xml"
-        label="home"
-      />
-  </sidetray_tab>
-
-  <sidetray_tab
-    name="sidebar_me"
-    help_topic="sidebar_me"
-    tab_title="Профиль"
-    description="Редактировать ваш профиль и изображения."
-    image="TabIcon_Me_Off"
-    image_selected="TabIcon_Me_Selected"
-    mouse_opaque="false"
-    background_visible="true"
-  >
-    <panel_container
-      name="panel_container_me"
-      default_panel_name="panel_me"
-      width="333"
-    >
-      <panel
-        class="panel_me"
-        name="panel_me"
-        filename="panel_me.xml"
-        label="Аватар"
-      />
-
-    </panel_container>
-  </sidetray_tab>
-
-  <sidetray_tab
-    name="sidebar_people"
-    help_topic="sidebar_people"
-    tab_title="Пользователи"
-    description="Найдите друзей, пользователей или тех кто рядом."
-    image="TabIcon_People_Off"
-    image_selected="TabIcon_People_Selected"
-    mouse_opaque="false"
-    background_visible="true"
-  >
-    <panel_container
-      name="panel_container_people"
-      default_panel_name="panel_people"
-      width="333"
-    >
-      <panel
-        class="panel_people"
-        name="panel_people"
-        filename="panel_people.xml"
-      />
-      <panel
-        class="panel_profile_view"
-        name="panel_profile_view"
-        filename="panel_profile_view.xml"
-      />
-      <panel
-        class="panel_group_info_sidetray"
-        name="panel_group_info_sidetray"
-        filename="panel_group_info_sidetray.xml"
-        label="Профиль группы"
-        font="SansSerifBold"
-      />
-      <panel
-        class="panel_block_list_sidetray"
-        name="panel_block_list_sidetray"
-        filename="panel_block_list_sidetray.xml"
-        label="Объекты заблокированных пользователей"
-        font="SansSerifBold"
-      />
-
-    </panel_container>
-  </sidetray_tab>
-
-  <sidetray_tab
-    name="sidebar_places"
-    help_topic="sidebar_places"
-    tab_title="Места"
-    label="Места"
-    description="Найдите и посетите места, в которых вы были ранее."
-    image="TabIcon_Places_Off"
-	image_selected="TabIcon_Places_Selected"
-    mouse_opaque="false"
-    background_visible="true"
-  >
-      <panel
-        class="panel_places"
-        name="panel_places"
-        filename="panel_places.xml"
-        label="Места"
-        font="SansSerifBold"
-      />
-  </sidetray_tab>
-
-  <sidetray_tab
-    name="sidebar_inventory"
-    help_topic="sidebar_inventory"
-    tab_title="Инвентарь"
-    description="Ваш инвентарь."
-    image="TabIcon_Things_Off"
-    image_selected="TabIcon_Things_Selected"
-    mouse_opaque="false"
-    background_visible="true"
-  >
-      <panel
-        class="sidepanel_inventory"
-        name="sidepanel_inventory"
-        filename="sidepanel_inventory.xml"
-        label="Править инвентарь"
-        font="SansSerifBold"
-      />
-  </sidetray_tab>
-
-  <sidetray_tab
-    name="sidebar_appearance"
-    help_topic="sidebar_appearance"
-    tab_title="Внешность"
-    description="Измените вашу внешность."
-    image="TabIcon_Appearance_Off"
-    image_selected="TabIcon_Appearance_Selected"
-    mouse_opaque="false"
-    background_visible="true"
-  >
-      <panel
-        class="sidepanel_appearance"
-        name="sidepanel_appearance"
-        filename="sidepanel_appearance.xml"
-        label="Править внешность"
-        font="SansSerifBold"
-      />
-  </sidetray_tab>
-
+<side_tray name="sidebar">
+	<sidetray_tab description="Открыть/закрыть боковую панель" name="sidebar_openclose" tab_title="Открыть/закрыть боковую панель"/>
+	<sidetray_tab description="Дом." name="sidebar_home" tab_title="Дом">
+		<panel label="дом" name="panel_home"/>
+	</sidetray_tab>
+	<sidetray_tab description="Изменение своего профиля и подборки." name="sidebar_me" tab_title="Мой профиль">
+		<panel_container name="panel_container">
+			<panel label="Я" name="panel_me"/>
+		</panel_container>
+	</sidetray_tab>
+	<sidetray_tab description="Поиск друзей, контактов и находящихся поблизости людей." name="sidebar_people" tab_title="Люди">
+		<panel_container name="panel_container">
+			<panel label="Профиль группы" name="panel_group_info_sidetray"/>
+			<panel label="Черный список жителей и объектов" name="panel_block_list_sidetray"/>
+		</panel_container>
+	</sidetray_tab>
+	<sidetray_tab description="Поиск мест, которые можно было бы посетить или которые вы уже посещали ранее." label="Места" name="sidebar_places" tab_title="Места">
+		<panel label="Места" name="panel_places"/>
+	</sidetray_tab>
+	<sidetray_tab description="Просмотрите свой инвентарь." name="sidebar_inventory" tab_title="Мой инвентарь">
+		<panel label="Изменить инвентарь" name="sidepanel_inventory"/>
+	</sidetray_tab>
+	<sidetray_tab description="Изменение внешнего вида и текущего образа." name="sidebar_appearance" tab_title="Мой внешний вид">
+		<panel label="Изменить внешний вид" name="sidepanel_appearance"/>
+	</sidetray_tab>
 </side_tray>

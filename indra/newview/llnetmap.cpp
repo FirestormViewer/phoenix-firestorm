@@ -70,7 +70,7 @@
 #include "llavatarlist.h"
 #include "llavatarlistitem.h"
 #include "llpanelpeople.h"
-#include "llsidetray.h"
+#include "llfloatersidepanelcontainer.h"
 #include "lggcontactsets.h"
 
 #include "llnotificationsutil.h"
@@ -214,10 +214,10 @@ void LLNetMap::draw()
 	LLVector3 offset = gGL.getUITranslation();
 	LLVector3 scale = gGL.getUIScale();
 
-	glLoadIdentity();
+	gGL.loadIdentity();
 	gGL.loadUIIdentity();
 
-	glScalef(scale.mV[0], scale.mV[1], scale.mV[2]);
+	gGL.scalef(scale.mV[0], scale.mV[1], scale.mV[2]);
 	gGL.translatef(offset.mV[0], offset.mV[1], offset.mV[2]);
 	
 	{
@@ -225,7 +225,7 @@ void LLNetMap::draw()
 		{
 			gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
-			glMatrixMode(GL_MODELVIEW);
+			gGL.matrixMode(LLRender::MM_MODELVIEW);
 
 			// Draw background rectangle
 			LLColor4 background_color = mBackgroundColor.get();
@@ -246,7 +246,7 @@ void LLNetMap::draw()
 		{
 			// rotate subsequent draws to agent rotation
 			rotation = atan2( LLViewerCamera::getInstance()->getAtAxis().mV[VX], LLViewerCamera::getInstance()->getAtAxis().mV[VY] );
-			glRotatef( rotation * RAD_TO_DEG, 0.f, 0.f, 1.f);
+			gGL.rotatef( rotation * RAD_TO_DEG, 0.f, 0.f, 1.f);
 		}
 
 		// figure out where agent is
@@ -595,7 +595,7 @@ void LLNetMap::draw()
 			// If we don't rotate the map, we have to rotate the frustum.
 			gGL.pushMatrix();
 				gGL.translatef( ctr_x, ctr_y, 0 );
-				glRotatef( atan2( LLViewerCamera::getInstance()->getAtAxis().mV[VX], LLViewerCamera::getInstance()->getAtAxis().mV[VY] ) * RAD_TO_DEG, 0.f, 0.f, -1.f);
+				gGL.rotatef( atan2( LLViewerCamera::getInstance()->getAtAxis().mV[VX], LLViewerCamera::getInstance()->getAtAxis().mV[VY] ) * RAD_TO_DEG, 0.f, 0.f, -1.f);
 				gGL.begin( LLRender::TRIANGLES  );
 					gGL.vertex2f( 0, 0 );
 					gGL.vertex2f( -half_width_pixels, far_clip_pixels );
@@ -821,7 +821,7 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 			// Ansariel: Try to get distance from the nearby people panel
 			//           aka radar. This usually contains better data,
 			//           especially when above 1020m.
-			LLPanel* panel_people = LLSideTray::getInstance()->getPanel("panel_people");
+			LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("panel_people");
 			if (panel_people != NULL)
 			{
 				LLAvatarListItem* avatar_list_item = ((LLPanelPeople*)panel_people)->getNearbyList()->getAvatarListItem(avatar_id);
@@ -1282,7 +1282,7 @@ void LLNetMap::startTracking()
 {
 	if (mClosestAgentAtLastRightClick.notNull())
 	{
-		LLPanelPeople* panel_people = (LLPanelPeople*)LLSideTray::getInstance()->getPanel("panel_people");
+		LLPanelPeople* panel_people = (LLPanelPeople*)LLFloaterSidePanelContainer::getPanel("panel_people");
 		if (panel_people != NULL)
 		{
 			panel_people->startTracking(mClosestAgentAtLastRightClick);

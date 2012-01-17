@@ -42,6 +42,7 @@
 #include "llavataractions.h"
 #include "lltrans.h"
 #include "llfloaterreg.h"
+#include "llfloatersidepanelcontainer.h"
 #include "llmutelist.h"
 #include "llstylemap.h"
 #include "llslurl.h"
@@ -59,8 +60,6 @@
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f)
 #include "rlvcommon.h"
 // [/RLVa:KB]
-
-#include "llsidetray.h"//for blocked objects panel
 
 // llviewernetwork.h : SJ: Needed to find the grid we are running on
 #include "llviewernetwork.h"
@@ -157,7 +156,7 @@ public:
 		{
 			LLMuteList::getInstance()->add(LLMute(getAvatarId(), mFrom, LLMute::OBJECT));
 
-			LLSideTray::getInstance()->showPanel("panel_block_list_sidetray", LLSD().with("blocked_to_select", getAvatarId()));
+			LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD().with("blocked_to_select", getAvatarId()));
 		}
 	}
 

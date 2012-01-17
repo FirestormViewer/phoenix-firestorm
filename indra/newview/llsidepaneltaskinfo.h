@@ -40,7 +40,6 @@
 class LLCheckBoxCtrl;
 class LLComboBox;
 class LLNameBox;
-class LLCheckBoxCtrl;
 class LLViewerObject;
 
 class LLSidepanelTaskInfo : public LLSidepanelInventorySubpanel
@@ -120,7 +119,7 @@ private:
 	LLPointer<LLViewerObject>	mObject;
 	LLObjectSelectionHandle		mObjectSelection;
 	static LLSidepanelTaskInfo* sActivePanel;
-
+	
 private:
 	// Pointers cached here to speed up the "disableAll" function which gets called on idle
 	LLUICtrl*	mDAPermModify;

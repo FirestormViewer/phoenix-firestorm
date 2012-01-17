@@ -1,365 +1,73 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- legacy_header_height="18"
- auto_tile="true"
- height="460"
- layout="topleft"
- name="gesture_preview"
- help_topic="gesture_preview"
- width="280">
-    <floater.string
-     name="step_anim">
-        Animation to play:
-    </floater.string>
-    <floater.string
-     name="step_sound">
-        Sound to play:
-    </floater.string>
-    <floater.string
-     name="step_chat">
-        Chat to say:
-    </floater.string>
-    <floater.string
-     name="step_wait">
-        Wait:
-    </floater.string>
-    <floater.string
-     name="stop_txt">
-        Stop
-    </floater.string>
-    <floater.string
-     name="preview_txt">
-        Preview
-    </floater.string>
-    <floater.string
-     name="none_text">
-        -- None --
-    </floater.string>
-    <floater.string
-     name="Title">
-        Gesture: [NAME]
-    </floater.string>
-    <text
-     type="string"
-     length="1"
-     follows="top|left"
-     font="SansSerifSmall"
-     height="10"
-     layout="topleft"
-     left="10"
-     name="desc_label"
-     top_pad="25"
-     font.style="BOLD"
-     width="100">
-        Description:
-    </text>
-    <line_editor
-     follows="left|top"
-     height="20"
-     layout="topleft"
-     left_delta="89"
-     name="desc"
-     top_delta="-4"
-     width="175" />
-    <text
-     type="string"
-     length="1"
-     follows="top|left"
-     font="SansSerifSmall"
-     height="10"
-     layout="topleft"
-     left="10"
-     font.style="BOLD"
-     name="trigger_label"
-     top_pad="10"
-     width="100">
-        Trigger:
-    </text>
-    <line_editor
-     follows="left|top"
-     height="20"
-     layout="topleft"
-     left_delta="89"
-     max_length="31"
-     name="trigger_editor"
-     top_delta="-4"
-     width="175" />
-    <text
-     type="string"
-     length="1"
-     follows="top|left"
-     font="SansSerifSmall"
-     height="10"
-     layout="topleft"
-     left="10"
-     font.style="BOLD"
-     name="replace_text"
-     tool_tip="Replace the trigger word(s) with these words. For example, trigger &apos;hello&apos; replace with &apos;howdy&apos; will turn the chat &apos;I wanted to say hello&apos; into &apos;I wanted to say howdy&apos; as well as playing the gesture!"
-     top_pad="10"
-     width="210">
-        Replace with:
-    </text>
-    <line_editor
-     follows="left|top"
-     height="20"
-     layout="topleft"
-     left_delta="99"
-     max_length="31"
-     name="replace_editor"
-     tool_tip="Replace the trigger word(s) with these words. For example, trigger &apos;hello&apos; replace with &apos;howdy&apos; will turn the chat &apos;I wanted to say hello&apos; into &apos;I wanted to say howdy&apos; as well as playing the gesture"
-     top_delta="-4"
-     width="165" />
-    <text
-     type="string"
-     length="1"
-     follows="top|left"
-     font="SansSerifSmall"
-     height="10"
-     layout="topleft"
-     left="10"
-     font.style="BOLD"
-     name="key_label"
-     top_pad="10"
-     width="150">
-        Shortcut Key:
-    </text>
-    <combo_box
-     height="20"
-     label="None"
-     layout="topleft"
-     left_delta="154"
-     name="modifier_combo"
-     top_delta="-4"
-     width="55" />
-    <combo_box
-     height="20"
-     label="None"
-     layout="topleft"
-     left_pad="4"
-     name="key_combo"
-     top_delta="0"
-     width="50" />
-    <text
-     type="string"
-     length="1"
-     follows="top|left"
-     font="SansSerifSmall"
-     height="10"
-     layout="topleft"
-     left="10"
-     font.style="BOLD"
-     name="library_label"
-     top_delta="25"
-     width="100">
-        Library:
-    </text>
-    <scroll_list
-     follows="top|left"
-     height="60"
-     layout="topleft"
-     left="10"
-     name="library_list"
-     top_delta="15"
-     width="180">
-        <scroll_list.rows
-         name="action_animation"
-         value="Animation" />
-        <scroll_list.rows
-         name="action_sound"
-         value="Sound" />
-        <scroll_list.rows
-         name="action_chat"
-         value="Chat" />
-        <scroll_list.rows
-         name="action_wait"
-         value="Wait" />
-    </scroll_list>
-    <button
-     follows="top|left"
-     height="20"
-     label="Add &gt;&gt;"
-     layout="topleft"
-     left_pad="10"
-     name="add_btn"
-     top_delta="-1"
-     width="70" />
-    <text
-     type="string"
-     length="1"
-     follows="top|left"
-     font="SansSerifSmall"
-     height="10"
-     layout="topleft"
-     left="10"
-     font.style="BOLD"
-     name="steps_label"
-     top_pad="50"
-     width="100">
-        Steps:
-    </text>
-    <scroll_list
-     follows="top|left"
-     height="85"
-     layout="topleft"
-     left="10"
-     name="step_list"
-     top_pad="5"
-     width="180" />
-    <button
-     follows="top|left"
-     height="20"
-     label="Up"
-     layout="topleft"
-     left_pad="10"
-     name="up_btn"
-     top_delta="-1"
-     width="70" />
-    <button
-     follows="top|left"
-     height="20"
-     label="Down"
-     layout="topleft"
-     left_delta="0"
-     name="down_btn"
-     top_pad="10"
-     width="70" />
-    <button
-     follows="top|left"
-     height="20"
-     label="Remove"
-     layout="topleft"
-     left_delta="0"
-     name="delete_btn"
-     top_pad="10"
-     width="70" />
-    <text
-     follows="top|left"
-     height="60"
-     layout="topleft"
-     left="15"
-     name="options_text"
-     top="315"
-     width="205">
-	 (options)
-	 </text>
-    <combo_box
-     follows="top|left"
-     height="20"
-     layout="topleft"
-     left_delta="15"
-     name="animation_list"
-     top="330"
-     width="100"/>
-    <combo_box
-     follows="top|left"
-     height="20"
-     layout="topleft"
-     left_delta="0"
-     name="sound_list"
-     top="330"
-     width="100" />
-    <line_editor
-     follows="top|left"
-     height="20"
-     layout="topleft"
-     left_delta="0"
-     max_length="127"
-     name="chat_editor"
-     top="330"
-     width="100" />
-    <radio_group
-     draw_border="false"
-     follows="top|left"
-     height="40"
-     layout="topleft"
-     left_pad="8"
-     name="animation_trigger_type"
-     top="330"
-     width="80">
-        <radio_item
-         height="16"
-         label="Start"
-         layout="topleft"
-         left="3"
-         name="start"
-         top_delta="45"
-         width="80" />
-        <radio_item
-         height="16"
-         label="Stop"
-         layout="topleft"
-         left_delta="0"
-         name="stop"
-         top_pad="3"
-         width="80" />
-    </radio_group>
-    <check_box
-     follows="top|left"
-     height="20"
-     label="until animations are done"
-     layout="topleft"
-     left="28"
-     name="wait_anim_check"
-     top="330"
-     width="100" />
-    <check_box
-     follows="top|left"
-     height="20"
-     label="time in seconds:"
-     layout="topleft"
-     left_delta="0"
-     name="wait_time_check"
-     top_delta="20"
-     width="115" />
-    <line_editor
-     follows="top|left"
-     height="20"
-     layout="topleft"
-     left_pad="10"
-     max_length="15"
-     name="wait_time_editor"
-     top_delta="1"
-     width="50" />
-    <text
-     type="string"
-     length="1"
-     follows="top|left"
-     font="SansSerifSmall"
-     height="30"
-     layout="topleft"
-     left="10"
-     name="help_label"
-     top_pad="20"
-     word_wrap="true"
-     width="265">
-        All steps happen simultaneously, unless you add wait steps.
-    </text>
-    <check_box
-     follows="top|left"
-     height="20"
-     label="Active"
-     layout="topleft"
-     left="20"
-     name="active_check"
-     tool_tip="Active gestures can be triggered by chatting their trigger phrases or pressing their hot keys.  Gestures usually become inactive when there is a key binding conflict."
-     top_pad="0"
-     width="100" />
-    <button
-     follows="top|left"
-     height="20"
-     label="Preview"
-     layout="topleft"
-     left_delta="75"
-     name="preview_btn"
-     top_delta="2"
-     width="80" />
-    <button
-     follows="top|left"
-     height="20"
-     label="Save"
-     layout="topleft"
-     left_pad="10"
-     name="save_btn"
-     top_delta="0"
-     width="80" />
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="gesture_preview">
+	<floater.string name="step_anim">
+		Воспроизвести анимацию:
+	</floater.string>
+	<floater.string name="step_sound">
+		Воспроизвести звук:
+	</floater.string>
+	<floater.string name="step_chat">
+		Сказать в чат:
+	</floater.string>
+	<floater.string name="step_wait">
+		Ждать:
+	</floater.string>
+	<floater.string name="stop_txt">
+		Стоп
+	</floater.string>
+	<floater.string name="preview_txt">
+		Предварительный просмотр
+	</floater.string>
+	<floater.string name="none_text">
+		- Ничего -
+	</floater.string>
+	<floater.string name="Title">
+		Жест: [NAME]
+	</floater.string>
+	<text name="desc_label">
+		Описание:
+	</text>
+	<text name="trigger_label">
+		Сигнал:
+	</text>
+	<text name="replace_text" tool_tip="Заменить сигнальное слово этими словами. Например, если сигнал – «здравствуйте», а заменитель – «привет», то при вводе в чат фразы «Я хотел сказать здравствуйте» появится «Я хотел сказать привет» вместе с жестом.">
+		Заменитель:
+	</text>
+	<line_editor name="replace_editor" tool_tip="Заменить сигнальное слово этими словами. Например, если сигнал – «здравствуйте», а заменитель – «привет», то при вводе в чат фразы «Я хотел сказать здравствуйте» появится «Я хотел сказать привет» вместе с жестом."/>
+	<text name="key_label">
+		Горячая клавиша:
+	</text>
+	<combo_box label="Нет" name="modifier_combo"/>
+	<combo_box label="Нет" name="key_combo"/>
+	<text name="library_label">
+		Библиотека:
+	</text>
+	<scroll_list name="library_list">
+		<scroll_list.rows name="action_animation" value="Анимация"/>
+		<scroll_list.rows name="action_sound" value="Звук"/>
+		<scroll_list.rows name="action_chat" value="Чат"/>
+		<scroll_list.rows name="action_wait" value="Ожидание"/>
+	</scroll_list>
+	<button label="Добавить &gt;&gt;" name="add_btn"/>
+	<text name="steps_label">
+		Шаги:
+	</text>
+	<button label="Вверх" name="up_btn"/>
+	<button label="Вниз" name="down_btn"/>
+	<button label="Удалить" name="delete_btn"/>
+	<text name="options_text">
+		(параметры)
+	</text>
+	<radio_group name="animation_trigger_type">
+		<radio_item label="Старт" name="start"/>
+		<radio_item label="Стоп" name="stop"/>
+	</radio_group>
+	<check_box label="до завершения анимации" name="wait_anim_check"/>
+	<check_box label="время в секундах:" name="wait_time_check"/>
+	<text name="help_label">
+		Все шаги выполняются одновременно, если только вы не добавите шаги ожидания.
+	</text>
+	<check_box label="Активный" name="active_check" tool_tip="Активные жесты можно включить путем ввода их триггеров в чат или нажатием горячих клавиш.  Жесты обычно становятся неактивными, если возникает конфликт клавиш."/>
+	<button label="Предварительный просмотр" name="preview_btn"/>
+	<button label="Сохранить" name="save_btn"/>
 </floater>
