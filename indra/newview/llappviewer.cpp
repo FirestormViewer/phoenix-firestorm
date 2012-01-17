@@ -5406,9 +5406,7 @@ void LLAppViewer::handleLoginComplete()
 	//AO : Warn users cache purge will affect usability
 	if (mPurgeCache)
 	{
-		LLSD args;
-		args["MESSAGE"] = llformat("Your viewer cache is currently empty. Please be aware that you may experience slow framerates and inventory loading for a short time while new content downloads." );
-		LLNotificationsUtil::add("GenericAlert", args);
+		LLNotificationsUtil::add("CacheEmpty");
 	}
 	// </AO>
 	

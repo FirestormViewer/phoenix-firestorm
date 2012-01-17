@@ -3311,4 +3311,9 @@ Der Name der Debug-Einstellung wurde in die Zwischenablage kopiert. Er kann jetz
   <notification name="TeleportToAvatarNotPossible">
 Teleportieren zum Avatar nicht möglich, da die exakte Position unbekannt ist.
   </notification>
+  
+   <notification name="CacheEmpty">
+Der Viewercache ist momentan leer. Während des Downloads von neuen Inhalten kann es daher zu niedrigeren Frameraten und langsamerem Laden des Inventars kommen.
+  </notification>
+
 </notifications>
