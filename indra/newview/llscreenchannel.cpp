@@ -55,21 +55,19 @@ LLRect LLScreenChannelBase::getChannelRect()
 {
 	LLFastTimer _(FTM_GET_CHANNEL_RECT);
 
-	if (mFloaterSnapRegion == NULL)
-	{
+	if (!mFloaterSnapRegion)
 		mFloaterSnapRegion = gViewerWindow->getRootView()->getChildView("floater_snap_region");
-	}
 	
-	if (mChicletRegion == NULL)
-	{
+	if (!mChicletRegion)
 		mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
-	}
 	
 	LLRect channel_rect;
 	LLRect chiclet_rect;
 
-	mFloaterSnapRegion->localRectToScreen(mFloaterSnapRegion->getLocalRect(), &channel_rect);
-	mChicletRegion->localRectToScreen(mChicletRegion->getLocalRect(), &chiclet_rect);
+	if( mFloaterSnapRegion )
+		mFloaterSnapRegion->localRectToScreen(mFloaterSnapRegion->getLocalRect(), &channel_rect);
+	if( mChicletRegion )
+		mChicletRegion->localRectToScreen(mChicletRegion->getLocalRect(), &chiclet_rect);
 
 	channel_rect.mTop = chiclet_rect.mBottom;
 	return channel_rect;
@@ -91,7 +89,9 @@ LLScreenChannelBase::LLScreenChannelBase(const Params& p)
 	mShowToasts(true),
 	mID(p.id),
 	mDisplayToastsAlways(p.display_toasts_always),
-	mChannelAlignment(p.channel_align)
+	mChannelAlignment(p.channel_align),
+	mFloaterSnapRegion(0),
+	mChicletRegion(0)
 {
 	if(gSavedSettings.getBOOL("ShowGroupNoticesTopRight"))
 		mToastAlignment = NA_TOP;
@@ -104,15 +104,11 @@ LLScreenChannelBase::LLScreenChannelBase(const Params& p)
 
 BOOL LLScreenChannelBase::postBuild()
 {
-	if (mFloaterSnapRegion == NULL)
-	{
+	if (!mFloaterSnapRegion)
 		mFloaterSnapRegion = gViewerWindow->getRootView()->getChildView("floater_snap_region");
-	}
 	
-	if (mChicletRegion == NULL)
-	{
+	if (!mChicletRegion)
 		mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
-	}
 	
 	return TRUE;
 }
@@ -152,7 +148,6 @@ void LLScreenChannelBase::updatePositionAndSize(LLRect rect)
 	}
 	setRect(this_rect);
 	redrawToasts();
-	
 }
 
 void LLScreenChannelBase::init(S32 channel_left, S32 channel_right)
