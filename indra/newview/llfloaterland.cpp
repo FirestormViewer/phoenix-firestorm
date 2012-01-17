@@ -77,6 +77,8 @@
 #include "lltrans.h"
 
 #include "llgroupactions.h"
+#include "llsdutil_math.h"
+#include "llregionhandle.h"
 
 static std::string OWNER_ONLINE 	= "0";
 static std::string OWNER_OFFLINE	= "1";
@@ -356,7 +358,8 @@ void* LLFloaterLand::createPanelLandAccess(void* data)
 LLPanelLandGeneral::LLPanelLandGeneral(LLParcelSelectionHandle& parcel)
 :	LLPanel(),
 	mUncheckedSell(FALSE),
-	mParcel(parcel)
+	mParcel(parcel),
+	mLastParcelLocalID(0)
 {
 }
 
@@ -365,6 +368,9 @@ BOOL LLPanelLandGeneral::postBuild()
 	mEditName = getChild<LLLineEditor>("Name");
 	mEditName->setCommitCallback(onCommitAny, this);	
 	getChild<LLLineEditor>("Name")->setPrevalidate(LLTextValidate::validateASCIIPrintableNoPipe);
+
+	mEditUUID = getChild<LLLineEditor>("UUID");
+	mEditUUID->setEnabled(FALSE);
 
 	mEditDesc = getChild<LLTextEditor>("Description");
 	mEditDesc->setCommitOnFocusLost(TRUE);
@@ -507,6 +513,8 @@ void LLPanelLandGeneral::refresh()
 		// nothing selected, disable panel
 		mEditName->setEnabled(FALSE);
 		mEditName->setText(LLStringUtil::null);
+
+		mEditUUID->setText(LLStringUtil::null);
 
 		mEditDesc->setEnabled(FALSE);
 		mEditDesc->setText(getString("no_selection_text"));
@@ -685,6 +693,7 @@ void LLPanelLandGeneral::refresh()
 
 		mEditName->setText( parcel->getName() );
 		mEditDesc->setText( parcel->getDesc() );
+		mEditUUID->setText(LLStringUtil::null);
 
 		BOOL for_sale = parcel->getForSale();
 				
@@ -785,6 +794,42 @@ void LLPanelLandGeneral::refresh()
 
 		BOOL use_pass = parcel->getParcelFlag(PF_USE_PASS_LIST) && !LLViewerParcelMgr::getInstance()->isCollisionBanned();;
 		mBtnBuyPass->setEnabled(use_pass);
+
+		// <Ansariel> Retrieve parcel UUID. We need to ask the itself for the
+		//            parcel UUID, because LLParcel gets initialized with a
+		//            null ID.
+		//            Following part is basically copied from
+		//            LLPanelScriptLimitsRegionMemory::StartRequestChain()
+		if (regionp && gAgent.getRegion() && gAgent.getRegion()->getRegionID() == regionp->getRegionID() &&
+			(mLastParcelLocalID == 0 || mLastParcelLocalID != parcel->getLocalID()) )
+		{
+			mLastParcelLocalID = parcel->getLocalID();
+			std::string url = regionp->getCapability("RemoteParcelRequest");
+			if (!url.empty())
+			{
+				LLSD body;
+				body["location"] = ll_sd_from_vector3(parcel->getCenterpoint());
+
+				LLUUID region_id = regionp->getRegionID();
+				if (!region_id.isNull())
+				{
+					body["region_id"] = region_id;
+				}
+
+				LLVector3d pos_global = regionp->getCenterGlobal();
+				if (!pos_global.isExactlyZero())
+				{
+					U64 region_handle = to_region_handle(pos_global);
+					body["region_handle"] = ll_sd_from_U64(region_handle);
+				}
+				LLHTTPClient::post(url, body, new LLRemoteParcelRequestResponder(getObserverHandle()));
+			}
+			else
+			{
+				mEditUUID->setText(getString("error_resolving_uuid"));
+			}
+		}
+		// </Ansariel>
 	}
 }
 
@@ -1059,6 +1104,28 @@ void LLPanelLandGeneral::onClickStopSellLand(void* data)
 
 	LLViewerParcelMgr::getInstance()->sendParcelPropertiesUpdate(parcel);
 }
+
+// <Ansariel> For retrieving the parcel UUID:
+//            Implementation of LLRemoteParcelInfoObserver interface
+void LLPanelLandGeneral::processParcelInfo(const LLParcelData& parcel_data)
+{
+}
+
+void LLPanelLandGeneral::setParcelID(const LLUUID& parcel_id)
+{
+	// No sanity check needed here. LLRemoteParcelRequestResponder
+	// will do that for us!
+	mEditUUID->setText(parcel_id.asString());
+}
+
+// virtual
+void LLPanelLandGeneral::setErrorStatus(U32 status, const std::string& reason)
+{
+	mEditUUID->setText(getString("error_resolving_uuid"));
+	mLastParcelLocalID = 0;
+	llwarns << "Can't handle remote parcel request."<< " Http Status: "<< status << ". Reason : "<< reason<<llendl;
+}
+// </Ansariel>
 
 //---------------------------------------------------------------------------
 // LLPanelLandObjects

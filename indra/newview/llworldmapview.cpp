@@ -111,6 +111,7 @@ std::map<std::string,std::string> LLWorldMapView::sStringsMap;
 const F32 DRAW_TEXT_THRESHOLD = 96.f;		// Don't draw text under that resolution value (res = width region in meters)
 const S32 DRAW_SIMINFO_THRESHOLD = 3;		// Max level for which we load or display sim level information (level in LLWorldMipmap sense)
 const S32 DRAW_LANDFORSALE_THRESHOLD = 2;	// Max level for which we load or display land for sale picture data (level in LLWorldMipmap sense)
+const S32 DRAW_MATURITY_THRESHOLD = 1;		// Ansariel: Max level for which the maturity level will be shown (level in LLWorldMipmap sense)
 
 // When on, draw an outline for each mipmap tile gotten from S3
 #define DEBUG_DRAW_TILE 0
@@ -308,6 +309,7 @@ void LLWorldMapView::draw()
 	static LLCachedControl<bool> mapShowPeople(gSavedSettings, "MapShowPeople");
 	static LLCachedControl<bool> showMatureEvents(gSavedSettings, "ShowMatureEvents");
 	static LLCachedControl<bool> showAdultEvents(gSavedSettings, "ShowAdultEvents");
+	static LLCachedControl<bool> drawAdvancedRegionInfo(gSavedSettings, "FSAdvancedWorldmapRegionInfo");
 
 	LLTextureView::clearDebugImages();
 
@@ -476,25 +478,31 @@ void LLWorldMapView::draw()
 			{
 				mesg = info->getName();
 
-				// Only show agent count when region is online
-				if (!info->isDown())
+				if (drawAdvancedRegionInfo)
 				{
-					S32 agent_count = info->getAgentCount();
-					LLViewerRegion *region = gAgent.getRegion();
-					if (region && region->getHandle() == info->getHandle())
+					// Only show agent count when region is online
+					if (!info->isDown())
 					{
-						++agent_count; // Bump by 1 if we're in this region
+						S32 agent_count = info->getAgentCount();
+						LLViewerRegion *region = gAgent.getRegion();
+						if (region && region->getHandle() == info->getHandle())
+						{
+							++agent_count; // Bump by 1 if we're in this region
+						}
+						if (agent_count > 0)
+						{
+							mesg += llformat(" (%d)", agent_count);
+						}
 					}
-					if (agent_count > 0)
+				
+					// Let the LLSimInfo instance do the translation;
+					// it knows everything needed for this, including
+					// offline status!
+					if (level <= DRAW_MATURITY_THRESHOLD)
 					{
-						mesg += llformat(" (%d)", agent_count);
+						mesg += llformat(" (%s)", info->getAccessString().c_str());
 					}
 				}
-				
-				// Let the LLSimInfo instance do the translation;
-				// it knows everything needed for this, including
-				// offline status!
-				mesg += llformat(" (%s)", info->getAccessString().c_str());
 			}
 			if (!mesg.empty())
 			{

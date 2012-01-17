@@ -503,7 +503,7 @@ things in this group. There&apos;s a broad variety of Abilities.
          type="string"
          layout="topleft"
          follows="left|top|right"
-         max_length="20">
+         max_length_bytes="20">
         </line_editor>
 
         <text
@@ -525,7 +525,7 @@ things in this group. There&apos;s a broad variety of Abilities.
          height="20"
          type="string"
          follows="left|top|right"
-         max_length="20"
+         max_length_bytes="20"
          layout="topleft">
         </line_editor>
 

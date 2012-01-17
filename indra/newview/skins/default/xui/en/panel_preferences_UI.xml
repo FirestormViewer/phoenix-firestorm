@@ -213,15 +213,15 @@
          width="180">
             <combo_box.item
              label="One per Object"
-             name="0"
+             name="ScriptDialogOption_0"
              value="0"/>
             <combo_box.item
-             label="One per Object and Channel"
-             name="1"
+             label="One per Object &amp; Channel"
+             name="ScriptDialogOption_1"
              value="1"/>
             <combo_box.item
              label="Unconstrained"
-             name="2"
+             name="ScriptDialogOption_2"
              value="2"/>
         </combo_box>
 

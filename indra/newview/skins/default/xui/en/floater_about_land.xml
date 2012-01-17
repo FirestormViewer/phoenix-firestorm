@@ -112,6 +112,9 @@
             <panel.string name="time_stamp_template">
 				[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
 			</panel.string>
+			<panel.string name="error_resolving_uuid">
+				The parcel ID could not be resolved.
+			</panel.string>
             <text
              type="string"
              length="1"
@@ -120,7 +123,7 @@
              layout="topleft"
              left="10"
              name="Name:"
-             top="10"
+             top="6"
              width="100">
                 Name:
             </text>
@@ -129,8 +132,28 @@
              height="23"
              layout="topleft"
              left_pad="2"
-             max_length="63"
+             max_length_bytes="63"
              name="Name"
+             top_delta="0"
+             width="365" />
+            <text
+             type="string"
+             length="1"
+             follows="left|top"
+             height="13"
+             layout="topleft"
+             left="10"
+             name="UUID:"
+             width="100">
+                Parcel ID:
+            </text>
+            <line_editor
+             follows="left|top"
+             height="20"
+             layout="topleft"
+             left_pad="2"
+             max_length="63"
+             name="UUID"
              top_delta="0"
              width="365" />
             <text
@@ -157,7 +180,7 @@
              type="string"
              length="1"
              follows="left|top"
-             height="16"
+             height="14"
              layout="topleft"
              left="10"
              name="LandType"
@@ -169,7 +192,7 @@
              type="string"
              length="1"
              follows="left|top"
-             height="16"
+             height="14"
              layout="topleft"
              left_pad="2"
              name="LandTypeText"
@@ -181,7 +204,7 @@
              type="string"
              length="1"
              follows="left|top"
-             height="16"
+             height="14"
              layout="topleft"
              left="10"
              name="ContentRating"
@@ -192,7 +215,7 @@
              type="string"
              length="1"
              follows="left|top"
-             height="20"
+             height="18"
              layout="topleft"
              left_pad="2"
              valign="center" 
@@ -205,7 +228,7 @@
              type="string"
              length="1"
              follows="left|top"
-             height="16"
+             height="14"
              layout="topleft"
              left="10"
              name="Owner:"
@@ -217,7 +240,7 @@
              type="string"
              length="1"
              follows="left|top"
-             height="16"
+             height="14"
              layout="topleft"
              left_pad="2"
              name="OwnerText"
@@ -228,7 +251,7 @@
             </text>
              <button
      follows="right"
-     height="23"
+     height="21"
      image_pressed="Info_Press"
      image_unselected="Info_Over"
      left_pad="3"
@@ -247,7 +270,7 @@
              type="string"
              length="1"
              follows="left|top"
-             height="16"
+             height="14"
              layout="topleft"
              left="10"
              name="Group:"
@@ -268,7 +291,7 @@ Loading...
 	    </text>
             <button
      follows="right"
-     height="23"
+     height="21"
      image_pressed="Info_Press"
      image_unselected="Info_Over"
      left_pad="3"
@@ -287,7 +310,7 @@ Loading...
              top_delta="-2"/>
             <check_box
              enabled="false"
-             height="16"
+             height="14"
              label="Allow Deed to Group"
              layout="topleft"
              left="108"
@@ -309,19 +332,19 @@ Loading...
              width="90" />
             <check_box
              enabled="false"
-             height="16"
+             height="14"
              label="Owner Makes Contribution With Deed"
              layout="topleft"
              left="108"
              name="check contrib"
              tool_tip="When the land is deeded to the group, the former owner contributes enough land allocation to support it."
              width="199"
-             top_pad="0"/>
+             top_pad="-2"/>
             <text
              type="string"
              length="1"
              follows="left|top"
-             height="16"
+             height="14"
              layout="topleft"
              left="10"
              name="For Sale:"
@@ -332,7 +355,7 @@ Loading...
              type="string"
              length="1"
              follows="left|top"
-             height="16"
+             height="14"
              layout="topleft"
              left_pad="2"
              name="Not for sale."
@@ -343,7 +366,7 @@ Loading...
              type="string"
              length="1"
              follows="left|top"
-             height="16"
+             height="14"
              layout="topleft"
              left_delta="0"
              name="For Sale: Price L$[PRICE]."
@@ -353,7 +376,7 @@ Loading...
             <text
              enabled="false"
              follows="left|top"
-             height="16"
+             height="14"
              layout="topleft"
              left_delta="0"
              name="SalePending"
@@ -373,7 +396,7 @@ Loading...
              type="string"
              length="1"
              follows="left|top"
-             height="16"
+             height="14"
              layout="topleft"
              left_delta="-199"
              name="For sale to"
@@ -386,7 +409,7 @@ Loading...
              type="string"
              length="1"
              follows="left|top"
-             height="16"
+             height="14"
              layout="topleft"
              left_delta="0"
              name="Sell with landowners objects in parcel."
@@ -398,7 +421,7 @@ Loading...
              type="string"
              length="1"
              follows="left|top"
-             height="16"
+             height="14"
              layout="topleft"
              left_delta="0"
              name="Selling with no objects in parcel."
@@ -415,13 +438,13 @@ Loading...
              right="-10"
              name="Cancel Land Sale"
              left_pad="5"
-             top_pad="7"
+             top_pad="5"
              width="180" />
             <text
              type="string"
              length="1"
              follows="left|top"
-             height="16"
+             height="14"
              layout="topleft"
              left="10"
              name="Claimed:"
@@ -433,7 +456,7 @@ Loading...
              type="string"
              length="1"
              follows="left|top"
-             height="16"
+             height="14"
              layout="topleft"
              left_pad="2"
              name="DateClaimText"
@@ -1085,7 +1108,7 @@ Loading...
              follows="left|top"
              height="23"
              layout="topleft"
-             max_length="6"
+             max_length_bytes="6"
              name="clean other time"
              left_pad="0"
              width="46"
@@ -1667,7 +1690,7 @@ Only large parcels can be listed in search.
              height="23"
              layout="topleft"
              left_pad="0"
-             max_length="255"
+             max_length_bytes="255"
              name="media_url"
              select_on_focus="true"
              width="300"
@@ -1698,7 +1721,7 @@ Only large parcels can be listed in search.
              height="20"
              layout="topleft"
              left="110"
-             max_length="255"
+             max_length_bytes="255"
              name="url_description"
              select_on_focus="true"
              tool_tip="Text displayed next to play/load button"
@@ -1853,7 +1876,7 @@ Only large parcels can be listed in search.
              height="23"
              layout="topleft"
              left="100"
-             max_length="255"
+             max_length_bytes="255"
              name="music_url"
              top_delta="0"
              right="-15"
