@@ -1615,7 +1615,12 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 	{
 		LLViewerObject* objectp = *iter;
 
-		if (!objectp || objectp->isDead() || !objectp->getRegion() || objectp->isOrphaned() || objectp->isAttachment())
+		if(objectp->isDead())//some dead objects somehow not cleaned.
+		{
+			continue ;
+		}
+
+		if (!objectp->getRegion() || objectp->isOrphaned() || objectp->isAttachment())
 		{
 			continue;
 		}
@@ -1633,12 +1638,12 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 			}
 		}
 
-		F32 approx_radius = (scale.mV[VX] + scale.mV[VY]) * 0.325; // <- 0.5f * 0.5f * 1.3f;  // 1.3 is a fudge
+		F32 approx_radius = (scale.mV[VX] + scale.mV[VY]) * 0.5f * 0.5f * 1.3f;  // 1.3 is a fudge
 
 		// Limit the size of megaprims so they don't blot out everything on the minimap.
 		// Attempting to draw very large megaprims also causes client lag.
 		// See DEV-17370 and DEV-29869/SNOW-79 for details.
-		approx_radius = llmin(approx_radius, F32(max_radius));
+		approx_radius = llmin(approx_radius, (F32)max_radius);
 
 		LLColor4U color = above_water_color;
 		if( objectp->permYouOwner() )
@@ -1657,8 +1662,8 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 				}
 				else
 				{
-					color = you_own_above_water_color;
-				}
+				color = you_own_above_water_color;
+			}
 			}
 			else
 			{
@@ -1666,13 +1671,14 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 				{
 					color = group_own_below_water_color;
 				}
-				else
-				{
-					color = you_own_below_water_color;
-				}
+			else
+			{
+				color = you_own_below_water_color;
 			}
 		}
-		else if( pos.mdV[VZ] < water_height )
+		}
+		else
+		if( pos.mdV[VZ] < water_height )
 		{
 			color = below_water_color;
 		}

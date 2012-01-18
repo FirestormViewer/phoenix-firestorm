@@ -144,6 +144,7 @@ void LLWorldMapView::initClass()
 	
 	sStringsMap["loading"] = LLTrans::getString("texture_loading");
 	
+	sStringsMap["offline"] = LLTrans::getString("worldmap_offline");
 	// Missing translation for agent position
 	sStringsMap["agent_position"] = LLTrans::getString("worldmap_agent_position");
 }

@@ -180,20 +180,20 @@ void LLSidepanelTaskInfo::disableAll()
 {
 	mDAPermModify->setEnabled(FALSE);
 	mDAPermModify->setValue(LLStringUtil::null);
- 
+
 	mDACreator->setEnabled(FALSE);
 	mDACreatorName->setValue(LLStringUtil::null);
 	mDACreatorName->setEnabled(FALSE);
- 
+
 	mDAOwner->setEnabled(FALSE);
 	mDAOwnerName->setValue(LLStringUtil::null);
 	mDAOwnerName->setEnabled(FALSE);
- 
+
 	mDAGroup->setEnabled(FALSE);
 	mDAGroupName->setValue(LLStringUtil::null);
 	mDAGroupName->setEnabled(FALSE);
 	mDAButtonSetGroup->setEnabled(FALSE);
- 
+
 	mDAObjectName->setValue(LLStringUtil::null);
 	mDAObjectName->setEnabled(FALSE);
 	mDAName->setEnabled(FALSE);
@@ -202,18 +202,18 @@ void LLSidepanelTaskInfo::disableAll()
 	mDADescription->setEnabled(FALSE);
 	mDAObjectDescription->setValue(LLStringUtil::null);
 	mDAObjectDescription->setEnabled(FALSE);
- 
-	mDAPermissions->setEnabled(FALSE);
 
+	mDAPermissions->setEnabled(FALSE);
+		
 	mDACheckboxShareWithGroup->setValue(FALSE);
 	mDACheckboxShareWithGroup->setEnabled(FALSE);
 	mDAButtonDeed->setEnabled(FALSE);
- 
+
 	mDACheckboxAllowEveryoneMove->setValue(FALSE);
 	mDACheckboxAllowEveryoneMove->setEnabled(FALSE);
 	mDACheckboxAllowEveryoneCopy->setValue(FALSE);
 	mDACheckboxAllowEveryoneCopy->setEnabled(FALSE);
- 
+
 	//Next owner can:
 	mDANextOwnerCan->setEnabled(FALSE);
 	mDACheckboxNextOwnerCanModify->setValue(FALSE);
@@ -222,23 +222,23 @@ void LLSidepanelTaskInfo::disableAll()
 	mDACheckboxNextOwnerCanCopy->setEnabled(FALSE);
 	mDACheckboxNextOwnerCanTransfer->setValue(FALSE);
 	mDACheckboxNextOwnerCanTransfer->setEnabled(FALSE);
- 
+
 	//checkbox for sale
 	mDACheckboxForSale->setValue(FALSE);
 	mDACheckboxForSale->setEnabled(FALSE);
- 
+
 	//checkbox include in search
 	mDASearchCheck->setValue(FALSE);
 	mDASearchCheck->setEnabled(FALSE);
-
+		
 	mDAComboSaleType->setValue(LLSaleInfo::FS_COPY);
 	mDAComboSaleType->setEnabled(FALSE);
-
+		
 	mDACost->setEnabled(FALSE);
 	mDACost->setValue(getString("Cost Default"));
 	mDAEditCost->setValue(LLStringUtil::null);
 	mDAEditCost->setEnabled(FALSE);
-
+		
 	mDALabelClickAction->setEnabled(FALSE);
 	if (mDAComboClickAction)
 	{
@@ -252,7 +252,7 @@ void LLSidepanelTaskInfo::disableAll()
 	mDAE->setVisible(FALSE);
 	mDAN->setVisible(FALSE);
 	mDAF->setVisible(FALSE);
-
+	
 	mOpenBtn->setEnabled(FALSE);
 	mPayBtn->setEnabled(FALSE);
 	mBuyBtn->setEnabled(FALSE);

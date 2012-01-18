@@ -66,6 +66,7 @@ public:
 	/// show the search floater with a new search
 	/// see search() for details on the key parameter.
 	/*virtual*/ void onOpen(const LLSD& key);
+
 	/*virtual*/ void onClose(bool app_quitting);
 
 	/// perform a search with the specific search term.

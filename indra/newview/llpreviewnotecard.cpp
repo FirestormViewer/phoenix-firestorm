@@ -37,9 +37,6 @@
 #include "llviewerwindow.h"
 #include "llbutton.h"
 #include "llfloaterreg.h"
-// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
-#include "llfloatersearchreplace.h"
-// [/SL:KB]
 #include "llinventorydefines.h"
 #include "llinventorymodel.h"
 #include "lllineeditor.h"
@@ -60,6 +57,10 @@
 #include "llappviewer.h"		// app_abort_quit()
 #include "lllineeditor.h"
 #include "lluictrlfactory.h"
+
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+#include "llfloatersearchreplace.h"
+// [/SL:KB]
 
 ///----------------------------------------------------------------------------
 /// Class LLPreviewNotecard

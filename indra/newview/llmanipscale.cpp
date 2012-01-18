@@ -844,16 +844,6 @@ void LLManipScale::drag( S32 x, S32 y )
     gAgentCamera.clearFocusObject();
 }
 
-//-TT 2.8.2 - removing this
-//// patch up for mesh, to be removed during real mesh merge -Zi
-//// also affects many max_prim_scale factors. Check the changeset 4e777db5f7e4
-//F32 llmanipscale_max_prim_scale()
-//{
-//	if(gAgent.getRegion()->getCapability("GetMesh").empty())
-//		return DEFAULT_MAX_PRIM_SCALE;
-//	return 64.f;
-//}
-
 // Scale around the 
 void LLManipScale::dragCorner( S32 x, S32 y )
 {

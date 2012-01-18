@@ -315,20 +315,24 @@ void LLHUDEffectLookAt::packData(LLMessageSystem *mesgsys)
 		target_offset_global.setVec(2.5, 0.0, 0.0); 
 		target_object = mSourceObject; 
 	} 
-		// Pack the default data
-		LLHUDEffect::packData(mesgsys);
-		// Pack the type-specific data.  Uses a fun packed binary format.  Whee!
-		U8 packed_data[PKT_SIZE];
-		memset(packed_data, 0, PKT_SIZE);
+	// Pack the default data
+	LLHUDEffect::packData(mesgsys);
+
+	// Pack the type-specific data.  Uses a fun packed binary format.  Whee!
+	U8 packed_data[PKT_SIZE];
+	memset(packed_data, 0, PKT_SIZE);
 
 	if (mSourceObject)
 	{
 		htonmemcpy(&(packed_data[SOURCE_AVATAR]), mSourceObject->mID.mData, MVT_LLUUID, 16);
 	}
-	else //um ... we already returned ... how's that the case?
+	else
 	{
 		htonmemcpy(&(packed_data[SOURCE_AVATAR]), LLUUID::null.mData, MVT_LLUUID, 16);
 	}
+
+	// pack both target object and position
+	// position interpreted as offset if target object is non-null
 	if (mTargetObject)
 	{
 		htonmemcpy(&(packed_data[TARGET_OBJECT]), target_object->mID.mData, MVT_LLUUID, 16);
@@ -407,6 +411,7 @@ void LLHUDEffectLookAt::unpackData(LLMessageSystem *mesgsys, S32 blocknum)
 	{
 		//llwarns << "Could not find target object for lookat effect" << llendl;
 	}
+
 	U8 lookAtTypeUnpacked = 0;
 	htonmemcpy(&lookAtTypeUnpacked, &(packed_data[LOOKAT_TYPE]), MVT_U8, 1);
 	if ((U8)LOOKAT_NUM_TARGETS > lookAtTypeUnpacked) 

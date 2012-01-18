@@ -46,8 +46,6 @@
 #include "llcolorswatch.h"
 #include "llcombobox.h"
 #include "llfocusmgr.h"
-#include "llinventoryfunctions.h"
-#include "llinventorymodel.h"
 #include "llmanipscale.h"
 #include "llpreviewscript.h"
 #include "llresmgr.h"
@@ -67,12 +65,16 @@
 #include "pipeline.h"
 #include "llviewercontrol.h"
 #include "lluictrlfactory.h"
-#include "llwindow.h" // for clipboad operations -KC
 //#include "llfirstuse.h"
+
+#include "llwindow.h" // for clipboad operations -KC
+
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "llvoavatarself.h"
 // [/RLVa:KB]
+#include "llinventoryfunctions.h"
+#include "llinventorymodel.h"
 
 #include "lldrawpool.h"
 

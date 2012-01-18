@@ -37,9 +37,6 @@
 #include "llviewercontrol.h"
 #include "llviewerregion.h"		// getCapability()
 #include "llworld.h"
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 // Linden libraries
 #include "llavatarnamecache.h"	// IDEVO
@@ -55,6 +52,10 @@
 #include "message.h"
 
 //#include "llsdserialize.h"
+
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 //put it back as a member once the legacy path is out?
 static std::map<LLUUID, LLAvatarName> sAvatarNameMap;

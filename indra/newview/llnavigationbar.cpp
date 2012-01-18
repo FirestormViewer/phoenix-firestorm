@@ -63,9 +63,10 @@
 #include "llfavoritesbar.h"
 #include "llagentui.h"
 
-#include "llstatusbar.h"
-
 #include <boost/regex.hpp>
+
+
+#include "llstatusbar.h"
 
 //-- LLTeleportHistoryMenuItem -----------------------------------------------
 

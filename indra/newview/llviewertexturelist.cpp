@@ -1189,6 +1189,9 @@ void LLViewerTextureList::updateMaxResidentTexMem(S32 mem)
 		mMaxTotalTextureMemInMegaBytes -= (mMaxResidentTexMemInMegaBytes >> 2);
 	}
 
+//	//system mem
+//	S32 system_ram = (S32)BYTES_TO_MEGA_BYTES(gSysMemory.getPhysicalMemoryClamped()); // In MB
+
 	//minimum memory reserved for non-texture use.
 	//if system_raw >= 1GB, reserve at least 512MB for non-texture use;
 	//otherwise reserve half of the system_ram for non-texture use.

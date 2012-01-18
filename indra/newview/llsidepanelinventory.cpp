@@ -35,7 +35,6 @@
 #include "lldate.h"
 #include "llfirstuse.h"
 #include "llfloatersidepanelcontainer.h"
-#include "llfiltereditor.h"
 #include "llfoldertype.h"
 #include "llhttpclient.h"
 #include "llinventorybridge.h"
@@ -59,6 +58,8 @@
 #include "llviewermedia.h"
 #include "llviewernetwork.h"
 #include "llweb.h"
+
+#include "llfiltereditor.h"
 
 static LLRegisterPanelClassWrapper<LLSidepanelInventory> t_inventory("sidepanel_inventory");
 

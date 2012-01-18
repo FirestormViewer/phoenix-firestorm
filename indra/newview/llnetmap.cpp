@@ -152,7 +152,7 @@ void LLNetMap::setScale( F32 scale )
 	mCurPan *= scale / mScale;
 	mScale = scale;
 	sScale = scale; // Ansariel: Synchronize scale throughout instances
-
+	
 	if (mObjectImagep.notNull())
 	{
 		F32 width = (F32)(getRect().getWidth());
@@ -372,7 +372,6 @@ void LLNetMap::draw()
 		//localMouse(&local_mouse_x, &local_mouse_y);
 		LLUI::getMousePositionLocal(this, &local_mouse_x, &local_mouse_y);
 		mClosestAgentToCursor.setNull();
-
 		F32 closest_dist_squared = F32_MAX; // value will be overridden in the loop
 		F32 min_pick_dist_squared = (mDotRadius * MIN_PICK_SCALE) * (mDotRadius * MIN_PICK_SCALE);
 
@@ -564,7 +563,8 @@ void LLNetMap::draw()
 		}
 
 		// Draw frustum
-		F32 meters_to_pixels = mScale / LLWorld::getInstance()->getRegionWidthInMeters();
+		F32 meters_to_pixels = mScale/ LLWorld::getInstance()->getRegionWidthInMeters();
+
 		F32 horiz_fov = LLViewerCamera::getInstance()->getView() * LLViewerCamera::getInstance()->getAspect();
 		F32 far_clip_meters = LLViewerCamera::getInstance()->getFar();
 		F32 far_clip_pixels = far_clip_meters * meters_to_pixels;

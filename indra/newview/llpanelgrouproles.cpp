@@ -50,6 +50,7 @@
 #include "llviewertexturelist.h"
 #include "llviewerwindow.h"
 #include "llfocusmgr.h"
+#include "llviewercontrol.h"
 
 #include "roles_constants.h"
 
@@ -743,10 +744,12 @@ LLPanelGroupMembersSubTab::LLPanelGroupMembersSubTab()
 	mHasMatch(FALSE),
 	mNumOwnerAdditions(0)
 {
+//	mUdpateSessionID = LLUUID::null;
 }
 
 LLPanelGroupMembersSubTab::~LLPanelGroupMembersSubTab()
 {
+//	gSavedSettings.setString("GroupMembersSortOrder", mMembersList->getSortColumnName());
 }
 
 BOOL LLPanelGroupMembersSubTab::postBuildSubTab(LLView* root)
@@ -773,6 +776,17 @@ BOOL LLPanelGroupMembersSubTab::postBuildSubTab(LLView* root)
 	// Show the member's profile on double click.
 	mMembersList->setDoubleClickCallback(onMemberDoubleClick, this);
 	mMembersList->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+	
+//	LLSD row;
+//	row["columns"][0]["column"] = "name";
+//	row["columns"][1]["column"] = "donated";
+//	row["columns"][2]["column"] = "online";
+//	mMembersList->addElement(row);
+//	std::string order_by = gSavedSettings.getString("GroupMembersSortOrder");
+//	if(!order_by.empty())
+//	{
+//		mMembersList->sortByColumn(order_by, TRUE);
+//	}	
 
 	LLButton* button = parent->getChild<LLButton>("member_invite", recurse);
 	if ( button )
@@ -1530,6 +1544,10 @@ void LLPanelGroupMembersSubTab::update(LLGroupChange gc)
 		mMemberProgress = gdatap->mMembers.begin();
 		mPendingMemberUpdate = TRUE;
 		mHasMatch = FALSE;
+//		// Generate unique ID for current updateMembers()- see onNameCache for details.
+//		// Using unique UUID is perhaps an overkill but this way we are perfectly safe
+//		// from coincidences.
+//		mUdpateSessionID.generate();
 	}
 	else
 	{
@@ -1581,7 +1599,9 @@ void LLPanelGroupMembersSubTab::updateMembers()
 
 	//cleanup list only for first iretation
 	if(mMemberProgress == gdatap->mMembers.begin())
+	{
 		mMembersList->deleteAllItems();
+	}
 
 
 	LLGroupMgrGroupData::member_list_t::iterator end = gdatap->mMembers.end();

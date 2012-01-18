@@ -43,16 +43,13 @@
 #include "llviewerregion.h"
 #include "llversioninfo.h"
 #include "llweb.h"
-// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.4.0a)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 // Linden library includes
 #include "llaudioengine.h"
 #include "llbutton.h"
 #include "llcurl.h"
 #include "llglheaders.h"
-//#include "llfloater.h" moved to llfloaterabout.h for fsdata info
+#include "llfloater.h"
 #include "llfloaterreg.h"
 #include "llimagej2c.h"
 #include "llsys.h"
@@ -67,6 +64,11 @@
 #if LL_WINDOWS
 #include "lldxhardware.h"
 #endif
+
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.4.0a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 
 extern LLMemoryInfo gSysMemory;
 extern U32 gPacketsIn;
@@ -93,6 +95,28 @@ public:
 ///----------------------------------------------------------------------------
 /// Class LLFloaterAbout moved to llfloaterabout.h for fsdata info
 ///----------------------------------------------------------------------------
+//class LLFloaterAbout 
+//	: public LLFloater
+//{
+//	friend class LLFloaterReg;
+//private:
+//	LLFloaterAbout(const LLSD& key);
+//	virtual ~LLFloaterAbout();
+//
+//public:
+//	/*virtual*/ BOOL postBuild();
+//
+//	/// Obtain the data used to fill out the contents string. This is
+//	/// separated so that we can programmatically access the same info.
+//	static LLSD getInfo();
+//	void onClickCopyToClipboard();
+//
+//	void updateServerReleaseNotesURL(const std::string& url);
+//
+//private:
+//	void setSupportText(const std::string& server_release_notes_url);
+//};
+
 
 // Default constructor
 LLFloaterAbout::LLFloaterAbout(const LLSD& key) 

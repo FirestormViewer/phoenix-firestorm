@@ -987,7 +987,7 @@ void LLFolderViewItem::draw()
 	const bool up_to_date = mListener && mListener->isUpToDate();
 	const bool possibly_has_children = ((up_to_date && hasVisibleChildren()) // we fetched our children and some of them have passed the filter...
 										|| (!up_to_date && mListener && mListener->hasChildren())); // ...or we know we have children but haven't fetched them (doesn't obey filter)
-	if (possibly_has_children )
+	if (possibly_has_children)
 	{
 		LLUIImage* arrow_image = default_params.folder_arrow_image;
 		gl_draw_scaled_rotated_image(

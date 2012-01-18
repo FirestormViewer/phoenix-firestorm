@@ -437,10 +437,10 @@ std::string LLFloaterReg::declareDockStateControl(const std::string& name)
 {
 	std::string controlname = getDockStateControlName(name);
 	LLFloater::getControlGroup()->declareBOOL(controlname, TRUE,
-											  llformat("Window Docking state for %s", name.c_str()),
-											  TRUE);
+												 llformat("Window Docking state for %s", name.c_str()),
+												 TRUE);
 	return controlname;
-	
+
 }
 
 //static

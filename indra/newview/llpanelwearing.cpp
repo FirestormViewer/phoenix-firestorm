@@ -28,11 +28,14 @@
 
 #include "llpanelwearing.h"
 
+#include "lltoggleablemenu.h"
+
 #include "llappearancemgr.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llinventoryfunctions.h"
 #include "llinventorymodel.h"
 #include "llinventoryobserver.h"
+#include "llmenubutton.h"
 #include "llviewermenu.h"
 #include "llwearableitemslist.h"
 #include "llsdserialize.h"
@@ -83,10 +86,14 @@ public:
 
 		enable_registrar.add("Gear.OnEnable", boost::bind(&LLPanelWearing::isActionEnabled, mPanelWearing, _2));
 
+//		mMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>(
 		mMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>(
 			"menu_wearing_gear.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 		llassert(mMenu);
 	}
+
+//	LLToggleableMenu* getMenu() { return mMenu; }
+
 
 	void show(LLView* spawning_view)
 	{
@@ -112,6 +119,7 @@ private:
 		}
 	}
 
+//	LLToggleableMenu*		mMenu;
 	LLMenuGL*		mMenu;
 	LLPanelWearing* mPanelWearing;
 };
@@ -227,6 +235,10 @@ BOOL LLPanelWearing::postBuild()
 {
 	mCOFItemsList = getChild<LLWearableItemsList>("cof_items_list");
 	mCOFItemsList->setRightMouseDownCallback(boost::bind(&LLPanelWearing::onWearableItemsListRightClick, this, _1, _2, _3));
+
+//	LLMenuButton* menu_gear_btn = getChild<LLMenuButton>("options_gear_btn");
+
+//	menu_gear_btn->setMenu(mGearMenu->getMenu());
 
 	return TRUE;
 }

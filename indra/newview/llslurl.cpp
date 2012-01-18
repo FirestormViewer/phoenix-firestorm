@@ -14,14 +14,14 @@
  * 
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  * 
- * Linden Research, Inc., 945 Battery Street, San Francisco, CA 94111 USA
+ * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
 
@@ -43,23 +43,21 @@ const char* LLSLURL::SLURL_HTTPS_SCHEME		 = "https";
 const char* LLSLURL::SLURL_SECONDLIFE_SCHEME	 = "secondlife";
 const char* LLSLURL::SLURL_X_GRID_LOCATION_INFO_SCHEME = "x-grid-location-info";
 
-// For DnD - even though www.slurl.com redirects to slurl.com in a browser, you can copy and drag
+// For DnD - even though www.slurl.com redirects to slurl.com in a browser, you  can copy and drag
 // text with www.slurl.com or a link explicitly pointing at www.slurl.com so testing for this
 // version is required also.
 
-const char* LLSLURL::WWW_SLURL_COM	 = "www.slurl.com";
-const char* LLSLURL::MAPS_SECONDLIFE_COM = "maps.secondlife.com";
+const char* LLSLURL::WWW_SLURL_COM				 = "www.slurl.com";
+const char* LLSLURL::MAPS_SECONDLIFE_COM		 = "maps.secondlife.com";
 
 // <AW: opensim>
 const char* LLSLURL::SLURL_COM           = "slurl.com";
-const char* LLSLURL::SLURL_APP_PATH = "app";
+const char* LLSLURL::SLURL_APP_PATH              = "app";
 const char* LLSLURL::SLURL_SECONDLIFE_PATH	 = "secondlife";
-const char* LLSLURL::SLURL_REGION_PATH = "region";
-const char* LLSLURL::SIM_LOCATION_HOME = "home";
-const char* LLSLURL::SIM_LOCATION_LAST = "last";
+const char* LLSLURL::SLURL_REGION_PATH           = "region";
+const char* LLSLURL::SIM_LOCATION_HOME           = "home";
+const char* LLSLURL::SIM_LOCATION_LAST           = "last";
 // </AW: opensim>
-
-
 
 // resolve a simstring from a slurl
 LLSLURL::LLSLURL(const std::string& slurl)
@@ -83,72 +81,72 @@ LLSLURL::LLSLURL(const std::string& slurl)
 		// parse the slurl as a uri
 		if(slurl.find(':') == std::string::npos)
 		{
-			// There may be no scheme ('secondlife:' etc.) passed in. In that case
+			// There may be no scheme ('secondlife:' etc.) passed in.  In that case
 			// we want to normalize the slurl by putting the appropriate scheme
-			// in front of the slurl. So, we grab the appropriate slurl base
+			// in front of the slurl.  So, we grab the appropriate slurl base
 			// from the grid manager which may be http://slurl.com/secondlife/ for maingrid, or
 			// https://<hostname>/region/ for Standalone grid (the word region, not the region name)
 			// these slurls are typically passed in from the 'starting location' box on the login panel,
 			// where the user can type in <regionname>/<x>/<y>/<z>
 			std::string fixed_slurl = LLGridManager::getInstance()->getSLURLBase();
-			// the slurl that was passed in might have a prepended /, or not. So,
+			// the slurl that was passed in might have a prepended /, or not.  So,
 			// we strip off the prepended '/' so we don't end up with http://slurl.com/secondlife/<region>/<x>/<y>/<z>
 			// or some such.
-
+			
 			if(slurl[0] == '/')
-			{
+		    {
 				fixed_slurl += slurl.substr(1);
-			}
+		    }
 			else
-			{
+		    {
 				fixed_slurl += slurl;
-			}
+		    }
 			// We then load the slurl into a LLURI form
 			slurl_uri = LLURI(fixed_slurl);
 		}
 		else
 		{
-			// as we did have a scheme, implying a URI style slurl, we
-			// simply parse it as a URI
-			slurl_uri = LLURI(slurl);
+		    // as we did have a scheme, implying a URI style slurl, we
+		    // simply parse it as a URI
+		    slurl_uri = LLURI(slurl);
 		}
-
+		
 		LLSD path_array = slurl_uri.pathArray();
-
+		
 		// determine whether it's a maingrid URI or an Standalone/open style URI
-		// by looking at the scheme. If it's a 'secondlife:' slurl scheme or
+		// by looking at the scheme.  If it's a 'secondlife:' slurl scheme or
 		// 'sl:' scheme, we know it's maingrid
-
+		
 		// At the end of this if/else block, we'll have determined the grid,
 		// and the slurl type (APP or LOCATION)
 		if(slurl_uri.scheme() == LLSLURL::SLURL_SECONDLIFE_SCHEME)
 		{
 			LL_DEBUGS("SLURL") << "secondlife scheme" << LL_ENDL;
-			// parse a maingrid style slurl. We know the grid is maingrid
+			// parse a maingrid style slurl.  We know the grid is maingrid
 			// so grab it.
 			// A location slurl for maingrid (with the special schemes) can be in the form
 			// secondlife://<regionname>/<x>/<y>/<z>
 			// or
 			// secondlife://<Grid>/secondlife/<region>/<x>/<y>/<z>
 			// where if grid is empty, it specifies Agni
-
+			
 			// An app style slurl for maingrid can be
 			// secondlife://<Grid>/app/<app parameters>
 			// where an empty grid implies Agni
-
+			
 			// we'll start by checking the top of the 'path' which will be 
 			// either 'app', 'secondlife', or <x>.
-
+			
 			// default to maingrid
-
+			
 			mGrid = MAINGRID;
-
+			
 			LL_DEBUGS("SLURL") << "slurl_uri.hostNameAndPort(): " << slurl_uri.hostNameAndPort() << LL_ENDL;
 			LL_DEBUGS("SLURL") << "path_array[0]: " << path_array[0].asString() << LL_ENDL;
 
 			if ((path_array[0].asString() == LLSLURL::SLURL_SECONDLIFE_PATH) ||
 				(path_array[0].asString() == LLSLURL::SLURL_APP_PATH))
-			{
+		    {
 				// it's in the form secondlife://<grid>/(app|secondlife)
 				// so parse the grid name to derive the grid ID
 				if (!slurl_uri.hostName().empty())
@@ -166,7 +164,7 @@ LLSLURL::LLSLURL(const std::string& slurl)
 				{
 					LL_DEBUGS("SLURL") << "secondlife:///secondlife/<region>" << LL_ENDL;
 					// If the slurl is in the form secondlife:///secondlife/<region> form, 
-					// then we are in fact on maingrid. 
+					// then we are in fact on maingrid.  
 					mGrid = MAINGRID;
 				}
 				else if(path_array[0].asString() == LLSLURL::SLURL_APP_PATH)
@@ -174,7 +172,7 @@ LLSLURL::LLSLURL(const std::string& slurl)
 					LL_DEBUGS("SLURL") << "app style slurls, no grid name specified" << LL_ENDL;
 					// for app style slurls, where no grid name is specified, assume the currently
 					// selected or logged in grid.
-					mGrid = LLGridManager::getInstance()->getGrid();
+					mGrid =  LLGridManager::getInstance()->getGrid();
 				}
 
 				if(mGrid.empty())
@@ -193,16 +191,16 @@ LLSLURL::LLSLURL(const std::string& slurl)
 					mType = APP;
 				}
 				path_array.erase(0);
-			}
+		    }
 			else
-			{
+		    {
 				LL_DEBUGS("SLURL") << "secondlife://<region>" << LL_ENDL;
 				// it wasn't a /secondlife/<region> or /app/<params>, so it must be secondlife://<region>
 				// therefore the hostname will be the region name, and it's a location type
 				mType = LOCATION;
 				// 'normalize' it so the region name is in fact the head of the path_array
 				path_array.insert(0, slurl_uri.hostNameAndPort());
-			}
+		    }
 		}
 		else if(   (slurl_uri.scheme() == LLSLURL::SLURL_HTTP_SCHEME)
 		 	|| (slurl_uri.scheme() == LLSLURL::SLURL_HTTPS_SCHEME)
@@ -210,16 +208,16 @@ LLSLURL::LLSLURL(const std::string& slurl)
 		 	|| (slurl_uri.scheme() == LLSLURL::HOP_SCHEME	) // <AW: hop:// protocol>
 			)
 		{
-			// We're dealing with either a Standalone style slurl or slurl.com slurl
-			if ((slurl_uri.hostName() == LLSLURL::SLURL_COM) ||
-			(slurl_uri.hostName() == LLSLURL::WWW_SLURL_COM) || 
-			(slurl_uri.hostName() == LLSLURL::MAPS_SECONDLIFE_COM))
+		    // We're dealing with either a Standalone style slurl or slurl.com slurl
+		  if ((slurl_uri.hostName() == LLSLURL::SLURL_COM) ||
+		      (slurl_uri.hostName() == LLSLURL::WWW_SLURL_COM) || 
+		      (slurl_uri.hostName() == LLSLURL::MAPS_SECONDLIFE_COM))
 			{
 				LL_DEBUGS("SLURL") << "slurl style slurl.com"  << LL_ENDL;
 				// slurl.com implies maingrid
 				mGrid = MAINGRID;
 			}
-			else
+		    else
 			{
 				LL_DEBUGS("SLURL") << "slurl style Standalone"  << LL_ENDL;
 				// Don't try to match any old http://<host>/ URL as a SLurl.
@@ -244,23 +242,22 @@ LLSLURL::LLSLURL(const std::string& slurl)
 					return;
 				}
 
-				// As it's a Standalone grid/open, we will always have a hostname,
-				// as Standalone/open style urls are properly formed,
-				// unlike the stinky maingrid style
+				// As it's a Standalone grid/open, we will always have a hostname, as Standalone/open  style
+				// urls are properly formed, unlike the stinky maingrid style
 				mGrid = slurl_uri.hostNameAndPort();
 			}
 
-			if (path_array.size() == 0)
+		    if (path_array.size() == 0)
 			{
 				LL_DEBUGS("SLURL") << "its a broken slurl"  << LL_ENDL;
 				// um, we need a path...
 				return;
 			}
-
+			
 			// we need to normalize the urls so
 			// the path portion starts with the 'command' that we want to do
-			// it can either be region or app. 
-			if ((path_array[0].asString() == LLSLURL::SLURL_REGION_PATH) ||
+			// it can either be region or app.  
+		    if ((path_array[0].asString() == LLSLURL::SLURL_REGION_PATH) ||
 				(path_array[0].asString() == LLSLURL::SLURL_SECONDLIFE_PATH))
 			{
 				LL_DEBUGS("SLURL") << "its a location slurl"  << LL_ENDL;
@@ -274,7 +271,7 @@ LLSLURL::LLSLURL(const std::string& slurl)
 				LL_DEBUGS("SLURL") << "its an app slurl"  << LL_ENDL;
 				mType = APP;
 				path_array.erase(0);
-				// leave app appended.
+				// leave app appended.  
 			}
 // <AW: hop:// protocol>
 			else if ( slurl_uri.scheme() == LLSLURL::HOP_SCHEME)
@@ -293,28 +290,28 @@ LLSLURL::LLSLURL(const std::string& slurl)
 		}
 		else
 		{
-			// invalid scheme, so bail
+		    // invalid scheme, so bail
 			LL_DEBUGS("SLURL")<< "invalid scheme" << LL_ENDL;
-			return;
+		    return;
 		}
- 
- 
+		
+		
 		if(path_array.size() == 0)
 		{
 			LL_DEBUGS("SLURL") << "path_array.size() == 0"  << LL_ENDL;
 			// we gotta have some stuff after the specifier as to whether it's a region or command
 			return;
 		}
-
+		
 		// now that we know whether it's an app slurl or a location slurl,
 		// parse the slurl into the proper data structures.
 		if(mType == APP)
-		{ 
+		{		
 			// grab the app command type and strip it (could be a command to jump somewhere, 
 			// or whatever )
 			mAppCmd = path_array[0].asString();
 			path_array.erase(0);
-
+			
 			// Grab the parameters
 			mAppPath = path_array;
 			// and the query
@@ -329,7 +326,6 @@ LLSLURL::LLSLURL(const std::string& slurl)
 			// are optional
 			mRegion = LLURI::unescape(path_array[0].asString());
 			LL_DEBUGS("SLURL") << "mRegion: "  << mRegion << LL_ENDL;
-
 			path_array.erase(0);
 			
 			// parse the x, y, and optionally z
@@ -362,7 +358,7 @@ LLSLURL::LLSLURL(const std::string& slurl)
 
 
 // Create a slurl for the middle of the region
-LLSLURL::LLSLURL(const std::string& grid,
+LLSLURL::LLSLURL(const std::string& grid, 
 				 const std::string& region)
 {
 	mGrid = grid;
@@ -373,7 +369,7 @@ LLSLURL::LLSLURL(const std::string& grid,
 
 
 
-// create a slurl given the position. The position will be modded with the region
+// create a slurl given the position.  The position will be modded with the region
 // width handling global positions as well
 LLSLURL::LLSLURL(const std::string& grid, 
 		 const std::string& region, 
@@ -390,39 +386,39 @@ LLSLURL::LLSLURL(const std::string& grid,
 
 
 // create a simstring
-LLSLURL::LLSLURL(const std::string& region,
+LLSLURL::LLSLURL(const std::string& region, 
 		 const LLVector3& position)
 {
-	*this = LLSLURL(LLGridManager::getInstance()->getGrid(),
-			region, position);
+  *this = LLSLURL(LLGridManager::getInstance()->getGrid(),
+		  region, position);
 }
 
 // create a slurl from a global position
-LLSLURL::LLSLURL(const std::string& grid,
-		 const std::string& region,
+LLSLURL::LLSLURL(const std::string& grid, 
+		 const std::string& region, 
 		 const LLVector3d& global_position)
 {
-	*this = LLSLURL(grid,
-			region, LLVector3(global_position.mdV[VX],
-					global_position.mdV[VY],
-					global_position.mdV[VZ]));
+  *this = LLSLURL(grid,
+		  region, LLVector3(global_position.mdV[VX],
+				    global_position.mdV[VY],
+				    global_position.mdV[VZ]));
 }
 
 // create a slurl from a global position
 LLSLURL::LLSLURL(const std::string& region, 
 		 const LLVector3d& global_position)
 {
-	*this = LLSLURL(LLGridManager::getInstance()->getGrid(),
-			region, global_position);
+  *this = LLSLURL(LLGridManager::getInstance()->getGrid(),
+		  region, global_position);
 }
 
 LLSLURL::LLSLURL(const std::string& command, const LLUUID&id, const std::string& verb)
 {
-	mType = APP;
-	mAppCmd = command;
-	mAppPath = LLSD::emptyArray();
-	mAppPath.append(LLSD(id));
-	mAppPath.append(LLSD(verb));
+  mType = APP;
+  mAppCmd = command;
+  mAppPath = LLSD::emptyArray();
+  mAppPath.append(LLSD(id));
+  mAppPath.append(LLSD(verb));
 }
 
 
@@ -439,7 +435,7 @@ std::string LLSLURL::getSLURLString() const
 				// lookup the grid
 				S32 x = llround( (F32)mPosition[VX] );
 				S32 y = llround( (F32)mPosition[VY] );
-				S32 z = llround( (F32)mPosition[VZ] );
+				S32 z = llround( (F32)mPosition[VZ] );	
 				std::string ret = LLGridManager::getInstance()->getSLURLBase(mGrid);
 // 				ret.append(LLURI::escape(mRegion)); 
 // 				ret.append(llformat("/%d/%d/%d",x,y,z));
@@ -468,15 +464,16 @@ std::string LLSLURL::getSLURLString() const
 				app_url << "?" << mAppQuery;
 			}
 			return app_url.str();
-		} 
+		}	
 		default:
-			LL_WARNS("AppInit") << "Unexpected SLURL type for SLURL string" << (int)mType << LL_ENDL;
+			LL_WARNS("AppInit") << "Unexpected SLURL type for SLURL string" << (int)mType << LL_ENDL;			
 			return std::string();
 	}
 }
 
 std::string LLSLURL::getLoginString() const
 {
+	
 	std::stringstream unescaped_start;
 	switch(mType)
 	{
@@ -497,7 +494,7 @@ std::string LLSLURL::getLoginString() const
 			LL_WARNS("AppInit") << "Unexpected SLURL type for login string" << (int)mType << LL_ENDL;
 			break;
 	}
-	return xml_escape_string(unescaped_start.str());
+	return  xml_escape_string(unescaped_start.str());
 }
 
 bool LLSLURL::operator==(const LLSLURL& rhs)
@@ -511,7 +508,7 @@ bool LLSLURL::operator==(const LLSLURL& rhs)
 					(mPosition == rhs.mPosition));
 		case APP:
 			return getSLURLString() == rhs.getSLURLString();
- 
+			
 		case HOME_LOCATION:
 		case LAST_LOCATION:
 			return true;
@@ -531,11 +528,11 @@ std::string LLSLURL::getLocationString() const
 					mRegion.c_str(),
 					(int)llround(mPosition[0]),
 					(int)llround(mPosition[1]),
-					(int)llround(mPosition[2]));
+					(int)llround(mPosition[2]));						 
 }
 std::string LLSLURL::asString() const
 {
-	std::ostringstream result;
+    std::ostringstream result;
 	result << 	" mAppCmd:" << getAppCmd() <<
 			" mAppPath:" + getAppPath().asString() <<
 			" mAppQueryMap:" + getAppQueryMap().asString() <<
@@ -545,7 +542,7 @@ std::string LLSLURL::asString() const
 			" mPosition: " <<
 			" mType: " << mType <<
 			" mPosition: " << mPosition;
-	return result.str();
+    return result.str();
 }
 
 // <AW: opensim>

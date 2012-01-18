@@ -42,13 +42,11 @@
 #include "llviewercamera.h"
 #include "lldraghandle.h"
 #include "lltextbox.h"
-#include "llviewermenu.h"
-
 #include "llfloaterworldmap.h"
 #include "llagent.h"
 
 #include "rlvhandler.h"
-
+#include "llviewermenu.h"
 
 //
 // Constants
@@ -137,35 +135,35 @@ BOOL LLFloaterMap::postBuild()
 	return TRUE;
 }
 
-BOOL LLFloaterMap::handleDoubleClick( S32 x, S32 y, MASK mask )
+BOOL LLFloaterMap::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
-    // If floater is minimized, minimap should be shown on doubleclick (STORM-299)
-    if (isMinimized())
-    {
-        setMinimized(FALSE);
-        return TRUE;
-    }
+	// If floater is minimized, minimap should be shown on doubleclick (STORM-299)
+	if (isMinimized())
+	{
+		setMinimized(FALSE);
+		return TRUE;
+	}
 
-    LLVector3d pos_global = mMap->viewPosToGlobal(x, y);
-    
-    // If we're not tracking a beacon already, double-click will set one 
-    if (!LLTracker::isTracking(NULL))
-    {
-        LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
-        if (world_map)
-        {
-            world_map->trackLocation(pos_global);
-        }
-    }
-    
-    if (gSavedSettings.getBOOL("DoubleClickTeleport"))
-    {
-        // If DoubleClickTeleport is on, double clicking the minimap will teleport there
-        gAgent.teleportViaLocationLookAt(pos_global);
-    }
-    else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
-    {
-        LLFloaterReg::showInstance("world_map");
+	LLVector3d pos_global = mMap->viewPosToGlobal(x, y);
+	
+	// If we're not tracking a beacon already, double-click will set one 
+	if (!LLTracker::isTracking(NULL))
+	{
+		LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
+		if (world_map)
+		{
+			world_map->trackLocation(pos_global);
+		}
+	}
+	
+	if (gSavedSettings.getBOOL("DoubleClickTeleport"))
+	{
+		// If DoubleClickTeleport is on, double clicking the minimap will teleport there
+		gAgent.teleportViaLocationLookAt(pos_global);
+	}
+	else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
+	{
+		LLFloaterReg::showInstance("world_map");
     }
     return TRUE;
 }

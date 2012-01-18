@@ -171,6 +171,8 @@ BOOL LLPanelIMControlPanel::postBuild()
 	
 	getChild<LLUICtrl>("volume_slider")->setCommitCallback(boost::bind(&LLPanelIMControlPanel::onVolumeChange, this, _2));
 
+//	getChildView("add_friend_btn")->setEnabled(!LLAvatarActions::isFriend(getChild<LLAvatarIconCtrl>("avatar_icon")->getAvatarId()));
+
 	setFocusReceivedCallback(boost::bind(&LLPanelIMControlPanel::onFocusReceived, this));
 	
 	return LLPanelChatControlPanel::postBuild();

@@ -38,7 +38,7 @@
 #include <map>
 #include <list>
 
-#define MIN_VIDEO_RAM_IN_MEGA_BYTES    64
+#define MIN_VIDEO_RAM_IN_MEGA_BYTES    64  // ND_MERGE V/Dev is 32, is this intentional we use 64?
 #define MAX_VIDEO_RAM_IN_MEGA_BYTES    512 // 512MB max for performance reasons.
 
 class LLFace;
@@ -317,11 +317,11 @@ public:
 	static LLFrameTimer sEvaluationTimer;
 	static F32 sDesiredDiscardBias;
 	static F32 sDesiredDiscardScale;
-	static U32 sBoundTextureMemoryInBytes;
-	static U32 sTotalTextureMemoryInBytes;
+	static S32 sBoundTextureMemoryInBytes;
+	static S32 sTotalTextureMemoryInBytes;
 	static S32 sMaxBoundTextureMemInMegaBytes;
 	static S32 sMaxTotalTextureMemInMegaBytes;
-	static U32 sMaxDesiredTextureMemInBytes ;
+	static S32 sMaxDesiredTextureMemInBytes ;
 	static S8  sCameraMovingDiscardBias;
 	static S32 sMaxSculptRez ;
 	static S32 sMinLargeImageSize ;

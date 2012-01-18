@@ -98,4 +98,3 @@ private:
 };
 
 #endif // LL_CALC_H
-

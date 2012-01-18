@@ -45,7 +45,6 @@
 #include "llinventorybridge.h"
 #include "llinventorydefines.h"
 #include "llinventoryfunctions.h"
-#include "llparcel.h"
 #include "llpreviewnotecard.h"
 #include "llrootview.h"
 #include "llselectmgr.h"
@@ -54,7 +53,6 @@
 #include "lltrans.h"
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
-#include "llviewerparcelmgr.h"
 #include "llviewerstats.h"
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
@@ -66,6 +64,8 @@
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+#include "llparcel.h"
+#include "llviewerparcelmgr.h"
 
 // syntactic sugar
 #define callMemberFunction(object,ptrToMember)  ((object).*(ptrToMember))
@@ -1704,11 +1704,11 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 		return ACCEPT_NO;
 	}
 
-    const LLUUID &outbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_OUTBOX, false);
-    if(gInventory.isObjectDescendentOf(item->getUUID(), outbox_id))
-    {
-        return ACCEPT_NO;
-    }
+	const LLUUID &outbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_OUTBOX, false);
+	if(gInventory.isObjectDescendentOf(item->getUUID(), outbox_id))
+	{
+		return ACCEPT_NO;
+	}
 
 // [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.2.1f
 	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )

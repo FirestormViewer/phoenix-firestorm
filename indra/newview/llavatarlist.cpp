@@ -70,8 +70,7 @@ LLAvatarListItem* LLAvatarList::getAvatarListItem(const LLUUID& id)
 	return (LLAvatarListItem*)getItemByValue(id);
 }
 
-void LLAvatarList::toggleIcons() 
-// Togggles the display of Avatar icons
+void LLAvatarList::toggleIcons()
 {
 	if (!mIgnoreGlobalIcons)
 	{
@@ -270,7 +269,7 @@ LLAvatarList::LLAvatarList(const Params& p)
 		mLITUpdateTimer->setTimerExpirySec(0); // zero to force initial update
 		mLITUpdateTimer->start();
 	}
-
+	
 	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&LLAvatarList::handleDisplayNamesOptionChanged, this));
 }
 

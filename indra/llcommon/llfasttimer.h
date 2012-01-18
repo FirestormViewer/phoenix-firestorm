@@ -32,5 +32,4 @@
 // pull in the actual class definition
 #include "llfasttimer_class.h"
 
-
 #endif // LL_LLFASTTIMER_H

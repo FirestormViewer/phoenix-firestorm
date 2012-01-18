@@ -32,7 +32,6 @@
 #include "llagentui.h"
 #include "llclipboard.h"
 #include "llfloatersidepanelcontainer.h"
-#include "llfloaterreg.h"
 #include "lllandmarkactions.h"
 #include "lllocationinputctrl.h"
 #include "llnotificationsutil.h"
@@ -45,6 +44,8 @@
 #include "llviewermenu.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
+
+#include "llfloaterreg.h"
 
 class LLPanelTopInfoBar::LLParcelChangeObserver : public LLParcelObserver
 {

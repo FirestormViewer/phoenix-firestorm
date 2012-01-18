@@ -195,6 +195,10 @@ bool NearbyMenu::enableContextMenuItem(const LLSD& userdata)
 		return (LLAvatarTracker::instance().isBuddyOnline(id) && is_agent_mappable(id))
 					|| gAgent.isGodlike();
 	}
+//	else if(item == std::string("can_offer_teleport")) ND_MERGE this lines had been missing from FS, intentional?
+//	{
+//		return LLAvatarActions::canOfferTeleport(mUUIDs);
+//	}
 	return false;
 }
 

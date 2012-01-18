@@ -36,7 +36,6 @@
 #include "llagent.h"
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
-#include "llcombobox.h"
 #include "llavataractions.h"
 #include "llinventorydefines.h"
 #include "llinventoryobserver.h"
@@ -62,6 +61,7 @@
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b)
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "llcombobox.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLPropertiesObserver

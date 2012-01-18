@@ -397,6 +397,7 @@ void LLAvatarActions::showProfile(const LLUUID& id)
 		LLAvatarNameCache::get(id, boost::bind(&on_avatar_name_show_profile, _1, _2));
 	}
 }
+
 //static 
 bool LLAvatarActions::profileVisible(const LLUUID& id)
 {

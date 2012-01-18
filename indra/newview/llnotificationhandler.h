@@ -217,6 +217,7 @@ protected:
 	void onRejectToast(LLUUID& id);
 };
 
+
 /**
  * Handler for group system notices.
  */

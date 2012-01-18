@@ -57,6 +57,7 @@
 //-TT - Patch : ShowGroupFloaters
 #include "llviewercontrol.h"
 //-TT
+
 static LLRegisterPanelClassWrapper<LLPanelGroup> t_panel_group("panel_group_info_sidetray");
 
 
@@ -636,7 +637,7 @@ void LLPanelGroup::showNotice(const std::string& subject,
 {
 //	LLPanelGroup* panel = LLFloaterSidePanelContainer::getPanel<LLPanelGroup>("people", "panel_group_info_sidetray");
 //-TT - Patch : ShowGroupFloaters
-	LLPanelGroup* panel;
+	LLPanelGroup* panel(0);
 
 	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
 	{

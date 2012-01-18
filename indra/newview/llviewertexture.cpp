@@ -81,11 +81,11 @@ S32 LLViewerTexture::sAuxCount = 0;
 LLFrameTimer LLViewerTexture::sEvaluationTimer;
 F32 LLViewerTexture::sDesiredDiscardBias = 0.f;
 F32 LLViewerTexture::sDesiredDiscardScale = 1.1f;
-U32 LLViewerTexture::sBoundTextureMemoryInBytes = 0;
-U32 LLViewerTexture::sTotalTextureMemoryInBytes = 0;
+S32 LLViewerTexture::sBoundTextureMemoryInBytes = 0;
+S32 LLViewerTexture::sTotalTextureMemoryInBytes = 0;
 S32 LLViewerTexture::sMaxBoundTextureMemInMegaBytes = 0;
 S32 LLViewerTexture::sMaxTotalTextureMemInMegaBytes = 0;
-U32 LLViewerTexture::sMaxDesiredTextureMemInBytes = 0 ;
+S32 LLViewerTexture::sMaxDesiredTextureMemInBytes = 0 ;
 S8  LLViewerTexture::sCameraMovingDiscardBias = 0 ;
 S32 LLViewerTexture::sMaxSculptRez = 128 ; //max sculpt image size
 const S32 MAX_CACHED_RAW_IMAGE_AREA = 64 * 64 ;

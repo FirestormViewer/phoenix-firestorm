@@ -31,12 +31,6 @@
 
 #include "llviewerfloaterreg.h"
 
-#include "ao.h"				// ## Zi: Animation Overrider
-#include "kvfloaterflickrauth.h"
-#include "kvfloaterflickrupload.h"
-#include "lggautocorrectfloater.h"
-#include "lggbeamcolormapfloater.h"
-#include "lggbeammapfloater.h"
 #include "llcompilequeue.h"
 #include "llcallfloater.h"
 #include "llfasttimerview.h"
@@ -82,7 +76,6 @@
 #include "llfloaterlagmeter.h"
 #include "llfloaterland.h"
 #include "llfloaterlandholdings.h"
-#include "llfloaterlocalbitmap.h"
 #include "llfloatermap.h"
 #include "llfloatermemleak.h"
 #include "llfloatermodelwizard.h"
@@ -101,9 +94,6 @@
 #include "llfloaterscriptdebug.h"
 #include "llfloaterscriptlimits.h"
 #include "llfloatersearch.h"
-// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-26 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
-#include "llfloatersearchreplace.h"
-// [/SL:KB]
 #include "llfloatersellland.h"
 #include "llfloatersettingsdebug.h"
 #include "llfloatersidepanelcontainer.h"
@@ -132,9 +122,6 @@
 #include "llnearbychat.h"
 #include "llpanelblockedlist.h"
 #include "llpanelclassified.h"
-//-TT - Patch : ShowGroupFloaters
-#include "llpanelgroup.h"
-//-TT
 #include "llpreviewanim.h"
 #include "llpreviewgesture.h"
 #include "llpreviewnotecard.h"
@@ -148,6 +135,8 @@
 #include "llnearbychatbar.h"
 
 // *NOTE: Please add files in alphabetical order to keep merges easy.
+// ND: And for FS please put yours after this line, for easier merges too
+
 // [RLVa:KB] - Checked: 2010-03-11
 #include "rlvfloaters.h"
 // [/RLVa:KB]
@@ -158,6 +147,22 @@
 #include "particleeditor.h"
 #include "quickprefs.h"	// Quick Preferences panel	-WoLf
 #include "lggcontactsetsfloater.h"
+
+#include "ao.h"				// ## Zi: Animation Overrider
+#include "kvfloaterflickrauth.h"
+#include "kvfloaterflickrupload.h"
+#include "lggautocorrectfloater.h"
+#include "lggbeamcolormapfloater.h"
+#include "lggbeammapfloater.h"
+
+//-TT - Patch : ShowGroupFloaters
+#include "llpanelgroup.h"
+//-TT
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-26 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+#include "llfloatersearchreplace.h"
+// [/SL:KB]
+#include "llfloaterlocalbitmap.h"
+
 // handle secondlife:///app/openfloater/{NAME} URLs
 class LLFloaterOpenHandler : public LLCommandHandler
 {
@@ -185,9 +190,9 @@ LLFloaterOpenHandler gFloaterOpenHandler;
 void LLViewerFloaterReg::registerFloaters()
 {
 	// *NOTE: Please keep these alphabetized for easier merges
+	// ND: And for FS please put yours after this line, for easier merges too
 
 	LLFloaterAboutUtil::registerFloater();
-	LLFloaterReg::add("autocorrect", "floater_autocorrect.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LGGAutoCorrectFloater>);
 	LLFloaterReg::add("fast_timers", "floater_fast_timers.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFastTimerView>);
 	LLFloaterReg::add("about_land", "floater_about_land.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLand>);
 	LLFloaterReg::add("appearance", "floater_my_appearance.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSidePanelContainer>);
@@ -222,6 +227,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("env_edit_day_cycle", "floater_edit_day_cycle.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterEditDayCycle>);
 
 	LLFloaterReg::add("event", "floater_event.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterEvent>);
+	
 	LLFloaterReg::add("font_test", "floater_font_test.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterFontTest>);
 
 	LLFloaterReg::add("gestures", "floater_gesture.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterGesture>);
@@ -231,7 +237,6 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("help_browser", "floater_help_browser.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterHelpBrowser>);	
 	LLFloaterReg::add("hud", "floater_hud.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterHUD>);
 
-	LLFloaterReg::add("imcontacts", "floater_fs_contacts.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterContacts>);
 	LLFloaterReg::add("impanel", "floater_im_session.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLIMFloater>);
 	LLFloaterReg::add("im_container", "floater_im_container.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLIMFloaterContainer>);
 	LLFloaterReg::add("im_well_window", "floater_sys_well.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLIMWellWindow>);
@@ -252,8 +257,6 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("media_settings", "floater_media_settings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterMediaSettings>);	
 	LLFloaterReg::add("message_critical", "floater_critical.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterTOS>);
 	LLFloaterReg::add("message_tos", "floater_tos.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterTOS>);
-	// AO: Firestorm Money (tip) tracker 
-	LLFloaterReg::add("money_tracker", "floater_fs_money_tracker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSMoneyTracker>);
 	LLFloaterReg::add("moveview", "floater_moveview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterMove>);
 	LLFloaterReg::add("mute_object_by_name", "floater_mute_object.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterGetBlockedObjectName>);
 	LLFloaterReg::add("mini_map", "floater_map.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterMap>);
@@ -284,8 +287,6 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("preview_texture", "floater_preview_texture.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLPreviewTexture>, "preview");
 	LLFloaterReg::add("properties", "floater_inventory_item_properties.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterProperties>);
 	LLFloaterReg::add("publish_classified", "floater_publish_classified.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLPublishClassifiedFloater>);
-
-	LLFloaterReg::add("quickprefs", "floater_quickprefs.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);  // Quick Preferences panel -WoLf
 
 	LLFloaterReg::add("telehubs", "floater_telehub.xml",&LLFloaterReg::build<LLFloaterTelehub>);
 	LLFloaterReg::add("test_inspectors", "floater_test_inspectors.xml", &LLFloaterReg::build<LLFloaterTestInspectors>);
@@ -335,7 +336,13 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("world_map", "floater_world_map.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterWorldMap>);	
 
 	// *NOTE: Please keep these alphabetized for easier merges
-	// ND And for FS please put yours after this line, for easier merges too
+	// ND: And for FS please put yours after this line, for easier merges too
+
+	LLFloaterReg::add("autocorrect", "floater_autocorrect.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LGGAutoCorrectFloater>);
+	LLFloaterReg::add("imcontacts", "floater_fs_contacts.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterContacts>);
+	// AO: Firestorm Money (tip) tracker 
+	LLFloaterReg::add("money_tracker", "floater_fs_money_tracker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSMoneyTracker>);
+	LLFloaterReg::add("quickprefs", "floater_quickprefs.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);  // Quick Preferences panel -WoLf
 
 	LLFloaterReg::add("animation_overrider", "floater_ao.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterAO>);	// ## Zi: Animation Overrider
 	LLFloaterReg::add("area_search", "floater_fs_area_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSAreaSearch>);

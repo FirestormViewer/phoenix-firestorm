@@ -39,14 +39,10 @@
 #include "llnearbychat.h"
 #include "llnotificationhandler.h"
 #include "llnotifications.h"
-#include "llimview.h"
-#include "llagent.h"
 // [SL:KB] - Patch: Chat-Logs | Checked: 2010-11-18 (Catznip-2.4.0c) | Added: Catznip-2.4.0c
 #include "llavatarnamecache.h"
 // [/SL:KB]
 #include "llfloaterreg.h"
-#include "llnearbychat.h"
-#include "llimfloater.h"
 // [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
 #include "rlvhandler.h"
 // [/RLVa:KB]

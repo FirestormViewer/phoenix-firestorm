@@ -34,7 +34,6 @@
 #include "lltoastpanel.h"
 #include "llviewercontrol.h"
 #include "llviewerwindow.h"
-#include "llrootview.h"
 #include "llfloaterreg.h"
 #include "lltrans.h"
 
@@ -46,6 +45,8 @@
 
 #include <algorithm>
 
+#include "llrootview.h"
+
 using namespace LLNotificationsUI;
 
 bool LLScreenChannel::mWasStartUpToastShown = false;
@@ -55,19 +56,21 @@ LLRect LLScreenChannelBase::getChannelRect()
 {
 	LLFastTimer _(FTM_GET_CHANNEL_RECT);
 
-	if (!mFloaterSnapRegion)
+	if (mFloaterSnapRegion == NULL)
+	{
 		mFloaterSnapRegion = gViewerWindow->getRootView()->getChildView("floater_snap_region");
+	}
 	
-	if (!mChicletRegion)
+	if (mChicletRegion == NULL)
+	{
 		mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+	}
 	
 	LLRect channel_rect;
 	LLRect chiclet_rect;
 
-	if( mFloaterSnapRegion )
-		mFloaterSnapRegion->localRectToScreen(mFloaterSnapRegion->getLocalRect(), &channel_rect);
-	if( mChicletRegion )
-		mChicletRegion->localRectToScreen(mChicletRegion->getLocalRect(), &chiclet_rect);
+	mFloaterSnapRegion->localRectToScreen(mFloaterSnapRegion->getLocalRect(), &channel_rect);
+	mChicletRegion->localRectToScreen(mChicletRegion->getLocalRect(), &chiclet_rect);
 
 	channel_rect.mTop = chiclet_rect.mBottom;
 	return channel_rect;
@@ -90,8 +93,8 @@ LLScreenChannelBase::LLScreenChannelBase(const Params& p)
 	mID(p.id),
 	mDisplayToastsAlways(p.display_toasts_always),
 	mChannelAlignment(p.channel_align),
-	mFloaterSnapRegion(0),
-	mChicletRegion(0)
+	mFloaterSnapRegion(NULL),
+	mChicletRegion(NULL)
 {
 	if(gSavedSettings.getBOOL("ShowGroupNoticesTopRight"))
 		mToastAlignment = NA_TOP;
@@ -104,11 +107,15 @@ LLScreenChannelBase::LLScreenChannelBase(const Params& p)
 
 BOOL LLScreenChannelBase::postBuild()
 {
-	if (!mFloaterSnapRegion)
+	if (mFloaterSnapRegion == NULL)
+	{
 		mFloaterSnapRegion = gViewerWindow->getRootView()->getChildView("floater_snap_region");
+	}
 	
-	if (!mChicletRegion)
+	if (mChicletRegion == NULL)
+	{
 		mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+	}
 	
 	return TRUE;
 }
@@ -148,6 +155,7 @@ void LLScreenChannelBase::updatePositionAndSize(LLRect rect)
 	}
 	setRect(this_rect);
 	redrawToasts();
+	
 }
 
 void LLScreenChannelBase::init(S32 channel_left, S32 channel_right)

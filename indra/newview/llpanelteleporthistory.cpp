@@ -27,6 +27,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llfloaterreg.h"
+#include "llmenubutton.h"
 
 #include "llfloaterworldmap.h"
 #include "llpanelteleporthistory.h"
@@ -40,6 +41,7 @@
 #include "llfloatersidepanelcontainer.h"
 #include "llnotificationsutil.h"
 #include "lltextbox.h"
+#include "lltoggleablemenu.h"
 #include "llviewermenu.h"
 #include "lllandmarkactions.h"
 #include "llclipboard.h"
@@ -451,9 +453,15 @@ BOOL LLTeleportHistoryPanel::postBuild()
 	registrar.add("TeleportHistory.ClearTeleportHistory",  boost::bind(&LLTeleportHistoryPanel::onClearTeleportHistory,  this));
 	mEnableCallbackRegistrar.add("TeleportHistory.GearMenu.Enable", boost::bind(&LLTeleportHistoryPanel::isActionEnabled, this, _2));
 
+//	mMenuGearButton = getChild<LLMenuButton>("gear_btn");
+
+//	LLToggleableMenu* gear_menu  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_teleport_history_gear.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());;
 	LLMenuGL* gear_menu  = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_teleport_history_gear.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if(gear_menu)
+	{
 		mGearMenuHandle  = gear_menu->getHandle();
+//		mMenuGearButton->setMenu(gear_menu);
+	}
 
 	return TRUE;
 }

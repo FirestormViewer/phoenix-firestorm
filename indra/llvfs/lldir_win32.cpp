@@ -237,7 +237,7 @@ U32 LLDir_Win32::countFilesInDir(const std::string &dirname, const std::string &
 
 
 // get the next file in the directory
-// AO: Used by LGG slection beams
+// AO: Used by LGG selection beams
 BOOL LLDir_Win32::getNextFileInDir(const std::string &dirname, const std::string &mask, std::string &fname)
 {
     BOOL fileFound = FALSE;

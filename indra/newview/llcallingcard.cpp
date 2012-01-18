@@ -49,7 +49,6 @@
 #include "llbutton.h"
 #include "llinventoryobserver.h"
 #include "llinventorymodel.h"
-#include "llnotificationmanager.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llresmgr.h"
@@ -61,9 +60,11 @@
 #include "llviewerwindow.h"
 #include "llvoavatar.h"
 #include "llavataractions.h"
+
 #include "lggcontactsets.h"
 #include "llnearbychat.h"
 #include "llfloaterreg.h"
+#include "llnotificationmanager.h"
 
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
@@ -515,16 +516,14 @@ void LLAvatarTracker::removeParticularFriendObserver(const LLUUID& buddy_id, LLF
 
     observer_map_t::iterator obs_it = mParticularFriendObserverMap.find(buddy_id);
     if(obs_it == mParticularFriendObserverMap.end())
-	{
-		return;
-	}
-	
+        return;
+
     obs_it->second.erase(observer);
 
     // purge empty sets from the map
 	// AO: Remove below check as last resort to resolve a crash from dangling pointer.
 	// TODO: clean up all observers and don't leave dangling pointers here.
-	if (obs_it->second.size() == 0) 
+    if (obs_it->second.size() == 0)
     	mParticularFriendObserverMap.erase(obs_it);
 }
 
@@ -813,7 +812,7 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 		notification =
 			LLNotificationsUtil::add("FriendOffline", args, payload);
 	}
-	
+
 	// If there's an open IM session with this agent, send a notification there too.
 	LLUUID session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, agent_id);
 	std::string notify_msg = notification->getMessage();

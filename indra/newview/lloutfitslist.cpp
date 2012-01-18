@@ -39,8 +39,10 @@
 #include "llinventoryfunctions.h"
 #include "llinventorymodel.h"
 #include "lllistcontextmenu.h"
+#include "llmenubutton.h"
 #include "llnotificationsutil.h"
 #include "lloutfitobserver.h"
+#include "lltoggleablemenu.h"
 #include "lltransutil.h"
 #include "llviewermenu.h"
 #include "llvoavatar.h"
@@ -123,6 +125,9 @@ public:
 		enable_registrar.add("Gear.OnEnable", boost::bind(&LLOutfitListGearMenu::onEnable, this, _2));
 		enable_registrar.add("Gear.OnVisible", boost::bind(&LLOutfitListGearMenu::onVisible, this, _2));
 
+//		mMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>(
+//			"menu_outfit_gear.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+
 		mMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>(
 			"menu_outfit_gear.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 		llassert(mMenu);
@@ -149,6 +154,8 @@ public:
 		mMenu->setItemVisible("sepatator2", have_selection);
 		mMenu->arrangeAndClear(); // update menu height
 	}
+
+//	LLToggleableMenu* getMenu() { return mMenu; }
 
 private:
 	const LLUUID& getSelectedOutfitID()
@@ -273,7 +280,8 @@ private:
 		return true;
 	}
 
-	LLOutfitsList*	mOutfitList;
+	LLOutfitsList*			mOutfitList;
+//	LLToggleableMenu*		mMenu;
 	LLMenuGL*		mMenu;
 };
 
@@ -402,6 +410,12 @@ BOOL LLOutfitsList::postBuild()
 {
 	mAccordion = getChild<LLAccordionCtrl>("outfits_accordion");
 	mAccordion->setComparator(&OUTFIT_TAB_NAME_COMPARATOR);
+
+// ND_MERGE did not exit in FS
+//	LLMenuButton* menu_gear_btn = getChild<LLMenuButton>("options_gear_btn");
+//
+//	menu_gear_btn->setMouseDownCallback(boost::bind(&LLOutfitListGearMenu::updateItemsVisibility, mGearMenu));
+//	menu_gear_btn->setMenu(mGearMenu->getMenu());
 
 	return TRUE;
 }

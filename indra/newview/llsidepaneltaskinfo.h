@@ -157,5 +157,6 @@ private:
 	LLView*		mDAN;
 	LLView*		mDAF;
 };
- 
+
+
 #endif // LL_LLSIDEPANELTASKINFO_H

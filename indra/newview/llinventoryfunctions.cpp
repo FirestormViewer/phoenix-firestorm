@@ -43,10 +43,6 @@
 #include "message.h"
 
 // newview includes
-#include "aoengine.h"			// ## Zi: Animation Overrider
-//-TT Client LSL Bridge
-#include "fslslbridge.h"		
-//-TT
 #include "llappearancemgr.h"
 #include "llappviewer.h"
 //#include "llfirstuse.h"
@@ -85,10 +81,15 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llwearablelist.h"
+
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+#include "aoengine.h"			// ## Zi: Animation Overrider
+//-TT Client LSL Bridge
+#include "fslslbridge.h"		
+//-TT
 
 BOOL LLInventoryState::sWearNewClothing = FALSE;
 LLUUID LLInventoryState::sWearNewClothingTransactionID;

@@ -759,9 +759,7 @@ void LLSDXMLParser::Impl::endElementHandler(const XML_Char* name)
 		
 		case ELEMENT_REAL:
 			{
-// SA: it seems sscanf does not always give expected result (for instance 0.009999999776482582092285156 is decoded as 0 under Linux)
 				value = LLSD(mCurrentContent).asReal();
-
 				// removed since this breaks when locale has decimal separator that isn't '.'
 				// investigated changing local to something compatible each time but deemed higher
 				// risk that just using LLSD.asReal() each time.

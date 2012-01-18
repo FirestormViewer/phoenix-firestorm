@@ -299,6 +299,7 @@ static bool handleChatPersistTimeChanged(const LLSD& newvalue)
 {
 	if(gConsole)
 	{
+//		gConsole->setLinePersistTime((F32) newvalue.asReal()); ND_MERGE V/dev uses asReal here, FS asInterger. Intentional?
 		gConsole->setLinePersistTime((F32) newvalue.asInteger());
 	}
 	return true;
@@ -682,8 +683,6 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderAutoMaskAlphaNonDeferred")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
 	gSavedSettings.getControl("RenderObjectBump")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
 	gSavedSettings.getControl("RenderMaxVBOSize")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
-	//gSavedSettings.getControl("RenderUseStreamVBO")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
-	//gSavedSettings.getControl("RenderUseFBO")->getSignal()->connect(boost::bind(&handleRenderUseFBOChanged, _2));
 	gSavedSettings.getControl("RenderDeferredNoise")->getSignal()->connect(boost::bind(&handleReleaseGLBufferChanged, _2));
 	gSavedSettings.getControl("RenderUseImpostors")->getSignal()->connect(boost::bind(&handleRenderUseImpostorsChanged, _2));
 	gSavedSettings.getControl("RenderDebugGL")->getSignal()->connect(boost::bind(&handleRenderDebugGLChanged, _2));

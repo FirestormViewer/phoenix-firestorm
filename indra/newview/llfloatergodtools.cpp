@@ -242,6 +242,16 @@ void LLFloaterGodTools::processRegionInfo(LLMessageSystem* msg)
 	msg->getF32Fast(_PREHASH_RegionInfo, _PREHASH_ObjectBonusFactor, object_bonus_factor);
 	msg->getF32Fast(_PREHASH_RegionInfo, _PREHASH_BillableFactor, billable_factor);
 	msg->getF32Fast(_PREHASH_RegionInfo, _PREHASH_WaterHeight, water_height);
+
+// ND_MERGE; was missing in FS
+//	if (host != gAgent.getRegionHost())
+//	{
+//		// Update is for a different region than the one we're in.
+//		// Just check for a waterheight change.
+//		LLWorld::getInstance()->waterHeightRegionInfo(sim_name, water_height);
+//		return;
+//	}
+
 	msg->getF32Fast(_PREHASH_RegionInfo, _PREHASH_TerrainRaiseLimit, terrain_raise_limit);
 	msg->getF32Fast(_PREHASH_RegionInfo, _PREHASH_TerrainLowerLimit, terrain_lower_limit);
 	msg->getS32Fast(_PREHASH_RegionInfo, _PREHASH_PricePerMeter, price_per_meter);

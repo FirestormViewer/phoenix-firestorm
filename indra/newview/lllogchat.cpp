@@ -278,7 +278,7 @@ std::string LLLogChat::timestamp(bool withdate)
 	else
 	{
 		timeStr = "[" + LLTrans::getString("TimeHour") + "]:["
-				  + LLTrans::getString ("TimeMin")+"]";
+			      + LLTrans::getString ("TimeMin")+"]";
 		if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
 		{
 			timeStr += ":["

@@ -239,15 +239,11 @@ void LLFloaterInspect::refresh()
 		substitution["datetime"] = (S32) timestamp;
 		LLStringUtil::format (timeStr, substitution);
 
-		LLAvatarName av_name;
-//		LLAvatarNameCache::get(obj->mPermissions->getOwner(), &av_name);
-//		owner_name = av_name.getCompleteName();
-//		LLAvatarNameCache::get(obj->mPermissions->getCreator(), &av_name);
-//		creator_name = av_name.getCompleteName();
-// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 		const LLUUID& idOwner = obj->mPermissions->getOwner();
+		const LLUUID& idCreator = obj->mPermissions->getCreator();
+		LLAvatarName av_name;
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 
-		// Ansariel - Fixing the avatar name lookup: Only
 		// work with the name if we actually get a result
 		// from the name cache. If not, defer setting the
 		// actual name and set a placeholder.
@@ -263,12 +259,6 @@ void LLFloaterInspect::refresh()
 			LLAvatarNameCache::get(idOwner, boost::bind(&LLFloaterInspect::onGetAvNameCallback, _1, _2, this));
 		}
 
-		const LLUUID& idCreator = obj->mPermissions->getCreator();
-
-		// Ansariel - Fixing the avatar name lookup: Only
-		// work with the name if we actually get a result
-		// from the name cache. If not, defer setting the
-		// actual name and set a placeholder.
 		if (LLAvatarNameCache::get(idCreator, &av_name))
 		{
 			bool fRlvFilterCreator = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idCreator != gAgent.getID()) && 

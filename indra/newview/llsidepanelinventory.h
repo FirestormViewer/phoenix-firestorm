@@ -63,7 +63,7 @@ public:
 
 	LLPanelMainInventory* getMainInventoryPanel() const { return mPanelMainInventory; }
 	BOOL isMainInventoryPanelActive() const;
-	
+
 	void clearSelections(bool clearMain, bool clearInbox, bool clearOutbox);
 	std::set<LLUUID> getInboxOrOutboxSelectionList();
 

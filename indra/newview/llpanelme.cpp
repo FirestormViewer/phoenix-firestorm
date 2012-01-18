@@ -34,7 +34,6 @@
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llagentwearables.h"
-#include "llclipboard.h"
 #include "llfirstuse.h"
 #include "llfloaterreg.h"
 #include "llhints.h"

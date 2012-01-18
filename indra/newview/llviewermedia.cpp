@@ -2662,7 +2662,7 @@ void LLViewerMediaImpl::navigateTo(const std::string& url, const std::string& mi
 		
 		return;
 	}
-	
+
 	navigateInternal();
 }
 

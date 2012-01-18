@@ -31,7 +31,6 @@
 
 #include "llavatarname.h"
 #include "llfloater.h"
-#include "llavatarname.h"
 
 //class LLTool;
 class LLObjectSelection;
@@ -59,7 +58,6 @@ public:
 	static void onGetAvNameCallback(const LLUUID& idCreator, const LLAvatarName& av_name, void* FloaterPtr);
 
 	LLScrollListCtrl* mObjectList;
-
 protected:
 	// protected members
 	void setDirty() { mDirty = TRUE; }

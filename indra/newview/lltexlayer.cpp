@@ -408,10 +408,10 @@ BOOL LLTexLayerSetBuffer::isReadyToUpload() const
 			// If we hit our timeout and have textures available at even lower resolution, then upload.
 			const BOOL is_upload_textures_timeout = mNeedsUploadTimer.getElapsedTimeF32() >= texture_timeout_threshold;
 			const BOOL has_lower_lod = mTexLayerSet->isLocalTextureDataAvailable();
-
 			ready = has_lower_lod && is_upload_textures_timeout;
 		}
 	}
+
 	return ready;
 }
 
@@ -683,16 +683,12 @@ void LLTexLayerSetBuffer::onTextureUploadComplete(const LLUUID& uuid,
 				++failures;
 				S32 max_attempts = baked_upload_data->mIsHighestRes ? BAKE_UPLOAD_ATTEMPTS : 1; // only retry final bakes
 				llwarns << "Baked" << resolution << "texture upload for " << name << " failed (attempt " << failures << "/" << max_attempts << ")" << llendl;
-
 				if (failures < max_attempts)
 				{
-					//llcont << llformat("retrying in %.1f seconds.", BAKE_UPLOAD_RETRY_DELAY);
-
 					layerset_buffer->mUploadFailCount = failures;
 					layerset_buffer->mUploadRetryTimer.start();
 					layerset_buffer->requestUpload();
 				}
-				//llcont << llendl;
 			}
 		}
 		else

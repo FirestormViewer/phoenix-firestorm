@@ -42,7 +42,6 @@
 #include "llimview.h"
 #include "llfloaterreg.h"
 #include "llparticipantlist.h"
-#include "llsliderctrl.h"
 #include "llspeakers.h"
 #include "lltextutil.h"
 #include "lltransientfloatermgr.h"
@@ -52,6 +51,8 @@
 #include "llvoicechannel.h"
 #include "llviewerparcelmgr.h"
 #include "llfirstuse.h"
+
+#include "llsliderctrl.h"
 
 static void get_voice_participants_uuids(uuid_vec_t& speakers_uuids);
 void reshape_floater(LLCallFloater* floater, S32 delta_height);

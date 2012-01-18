@@ -96,7 +96,6 @@ public:
 
 		FT_COUNT,
 
-
 		FT_NONE = -1
 	};
 

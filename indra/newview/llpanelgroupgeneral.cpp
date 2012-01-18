@@ -32,10 +32,6 @@
 #include "llagent.h"
 #include "roles_constants.h"
 
-// for copy URI button
-#include "llclipboard.h"
-
-
 // UI elements
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
@@ -54,6 +50,9 @@
 #include "lltexturectrl.h"
 #include "lltrans.h"
 #include "llviewerwindow.h"
+
+// for copy URI button
+#include "llclipboard.h"
 
 static LLRegisterPanelClassWrapper<LLPanelGroupGeneral> t_panel_group_general("panel_group_general");
 
@@ -704,6 +703,7 @@ void LLPanelGroupGeneral::updateMembers()
 
 	if (!mListVisibleMembers || !gdatap 
 		|| !gdatap->isMemberDataComplete())
+//		|| gdatap->mMembers.empty()) ND_MERGE, line was missing in FS, intentional?
 	{
 		return;
 	}

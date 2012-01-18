@@ -33,6 +33,8 @@
 #include <string>
 #include <vector>
 
+#include <boost/signals2.hpp>
+
 #include "imageids.h"			// IMG_INVISIBLE
 #include "llchat.h"
 #include "lldrawpoolalpha.h"
@@ -46,7 +48,6 @@
 #include "lltexglobalcolor.h"
 #include "lldriverparam.h"
 #include "material_codes.h"		// LL_MCODE_END
-#include <boost/signals2.hpp>
 
 extern const LLUUID ANIM_AGENT_BODY_NOISE;
 extern const LLUUID ANIM_AGENT_BREATHE_ROT;

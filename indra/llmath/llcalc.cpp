@@ -160,4 +160,3 @@ bool LLCalc::evalString(const std::string& expression, F32& result)
 	
 	return true;
 }
-

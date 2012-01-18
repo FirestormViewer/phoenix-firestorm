@@ -35,7 +35,6 @@
 #include "llcombobox.h"
 #include "llfilepicker.h"
 #include "llfloaterreg.h"
-#include "llimagepng.h"
 #include "llimagetga.h"
 #include "llinventory.h"
 #include "llnotificationsutil.h"
@@ -50,6 +49,8 @@
 #include "lluictrlfactory.h"
 #include "llviewerwindow.h"
 #include "lllineeditor.h"
+
+#include "llimagepng.h"
 
 const S32 CLIENT_RECT_VPAD = 4;
 
@@ -140,7 +141,7 @@ BOOL LLPreviewTexture::postBuild()
 	childSetCommitCallback("combo_aspect_ratio", onAspectRatioCommit, this);
 	LLComboBox* combo = getChild<LLComboBox>("combo_aspect_ratio");
 	combo->setCurrentByIndex(0);
-
+	
 	return LLPreview::postBuild();
 }
 
@@ -274,6 +275,7 @@ BOOL LLPreviewTexture::canSaveAs() const
 	return mIsCopyable && !mLoadingFullImage && mImage.notNull() && !mImage->isMissingAsset();
 }
 
+
 // virtual
 void LLPreviewTexture::saveAs()
 {
@@ -286,7 +288,7 @@ void LLPreviewTexture::saveAs(EFileformatType format)
 		return;
 
 	LLFilePicker& file_picker = LLFilePicker::instance();
-	const LLInventoryItem* item = getItem();
+	const LLInventoryItem* item = getItem() ;
 
 	loaded_callback_func callback;
 	LLFilePicker::ESaveFilter saveFilter;
@@ -309,7 +311,6 @@ void LLPreviewTexture::saveAs(EFileformatType format)
 		// User canceled or we failed to acquire save file.
 		return;
 	}
-
 	// remember the user-approved/edited file name.
 	mSaveFileName = file_picker.getFirstFile();
 	mLoadingFullImage = TRUE;

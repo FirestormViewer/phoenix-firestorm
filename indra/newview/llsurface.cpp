@@ -1168,8 +1168,13 @@ void LLSurface::setWaterHeight(F32 height)
 	if (!mWaterObjp.isNull())
 	{
 		LLVector3 water_pos_region = mWaterObjp->getPositionRegion();
+//		bool changed = water_pos_region.mV[VZ] != height; ND_MERGE; was missing in FS, intentional?
 		water_pos_region.mV[VZ] = height;
 		mWaterObjp->setPositionRegion(water_pos_region);
+//		if (changed) ND_MERGE; was missing in FS, intentional?
+//		{
+//			LLWorld::getInstance()->updateWaterObjects();
+//		}
 	}
 	else
 	{

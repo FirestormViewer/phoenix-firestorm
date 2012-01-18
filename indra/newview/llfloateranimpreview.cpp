@@ -211,8 +211,12 @@ BOOL LLFloaterAnimPreview::postBuild()
 	
 	mPlayButton = getChild<LLButton>( "play_btn");
 	mPlayButton->setClickedCallback(boost::bind(&LLFloaterAnimPreview::onBtnPlay, this));
+//	mPlayButton->setVisible(true);
+
 	mPauseButton = getChild<LLButton>( "pause_btn");
 	mPauseButton->setClickedCallback(boost::bind(&LLFloaterAnimPreview::onBtnPause, this));
+//	mPauseButton->setVisible(false);
+	
 	mStopButton = getChild<LLButton>( "stop_btn");
 	mStopButton->setClickedCallback(boost::bind(&LLFloaterAnimPreview::onBtnStop, this));
 

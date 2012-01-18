@@ -55,6 +55,7 @@
 #include "message.h"
 #include "pipeline.h"
 #include "llappviewer.h"		// for do_disconnect()
+
 #include <deque>
 #include <queue>
 #include <map>
@@ -816,6 +817,20 @@ void LLWorld::setLandFarClip(const F32 far_clip)
 	}
 }
 
+// ND_MERGE; was missing in FS
+// Some region that we're connected to, but not the one we're in, gave us
+// a (possibly) new water height. Update it in our local copy.
+//void LLWorld::waterHeightRegionInfo(std::string const& sim_name, F32 water_height)
+//{
+//	for (region_list_t::iterator iter = mRegionList.begin(); iter != mRegionList.end(); ++iter)
+//	{
+//		if ((*iter)->getName() == sim_name)
+//		{
+//			(*iter)->setWaterHeight(water_height);
+//			break;
+//		}
+//	}
+//}
 
 void LLWorld::updateWaterObjects()
 {
@@ -931,7 +946,7 @@ void LLWorld::updateWaterObjects()
 			// The edge water objects can be dead because they're attached to the region that the
 			// agent was in when they were originally created.
 			mEdgeWaterObjects[dir] = (LLVOWater *)gObjectList.createObjectViewer(LLViewerObject::LL_VO_VOID_WATER,
-				gAgent.getRegion());
+																				 gAgent.getRegion());
 			waterp = mEdgeWaterObjects[dir];
 			waterp->setUseTexture(FALSE);
 			waterp->setIsEdgePatch(TRUE);

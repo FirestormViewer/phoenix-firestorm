@@ -2289,7 +2289,6 @@ void LLLiveLSLEditor::onLoad(void* userdata)
 void LLLiveLSLEditor::onSave(void* userdata, BOOL close_after_save)
 {
 	LLLiveLSLEditor* self = (LLLiveLSLEditor*)userdata;
-
 	self->mCloseAfterSave = close_after_save;
 	self->saveIfNeeded();
 }

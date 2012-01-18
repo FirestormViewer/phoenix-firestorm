@@ -113,12 +113,6 @@ BOOL LLFloaterSearch::postBuild()
 
 void LLFloaterSearch::onOpen(const LLSD& key)
 {
-	////-TT 2.8.2 - replacing with LL new.
-	//if ( (key.has("category")) || ((mBrowser) && (mBrowser->getCurrentNavUrl().empty())) )
-	//{
-	//	search(key);
-	//}
-
 	Params p(key);
 	p.trusted_content = true;
 	p.allow_address_entry = false;

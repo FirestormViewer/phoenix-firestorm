@@ -280,6 +280,7 @@ private:
 	static void onReset(void* userdata);
 
 	void loadScriptText(LLVFS *vfs, const LLUUID &uuid, LLAssetType::EType type);
+
 	static void onErrorList(LLUICtrl*, void* user_data);
 
 	static void* createScriptEdPanel(void* userdata);

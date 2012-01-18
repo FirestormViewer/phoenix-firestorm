@@ -38,7 +38,6 @@
 #include "llfontgl.h"
 
 // project includes
-#include "llagent.h"
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
 #include "llcolorswatch.h"
@@ -63,9 +62,8 @@
 #include "lluictrlfactory.h"
 #include "llpluginclassmedia.h"
 #include "llviewertexturelist.h"
-// clipboad for debugging -KC
-// #include "llwindow.h"
-// #include "llsdserialize.h"
+
+#include "llagent.h"
 
 //
 // Methods
@@ -1176,6 +1174,9 @@ void LLPanelFace::onClickAutoFix(void* userdata)
 	LLPanelFaceSendFunctor sendfunc;
 	LLSelectMgr::getInstance()->getSelection()->applyToObjects(&sendfunc);
 }
+
+
+
 // TODO: I don't know who put these in or what these are for???
 void LLPanelFace::setMediaURL(const std::string& url)
 {

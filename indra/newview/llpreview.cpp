@@ -35,11 +35,6 @@
 #include "llresmgr.h"
 #include "lltextbox.h"
 #include "llfloaterreg.h"
-// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
-#include "llfloatersearchreplace.h"
-#include "llpreviewnotecard.h"
-#include "llpreviewscript.h"
-// [/SL:KB]
 #include "llfocusmgr.h"
 #include "lltooldraganddrop.h"
 #include "llradiogroup.h"
@@ -54,6 +49,12 @@
 #include "llviewerinventory.h"
 #include "llviewerwindow.h"
 #include "lltrans.h"
+
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+#include "llfloatersearchreplace.h"
+#include "llpreviewnotecard.h"
+#include "llpreviewscript.h"
+// [/SL:KB]
 
 // Constants
 
@@ -117,7 +118,6 @@ const LLInventoryItem *LLPreview::getItem() const
 	else if (mObjectUUID.isNull())
 	{
 		// it's an inventory item, so get the item.
-//		item = gInventory.getItem(mItemUUID);
 // [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-11 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
 		if (LLInventoryType::IT_NONE == mAuxItem->getInventoryType())
 			item = gInventory.getItem(mItemUUID);

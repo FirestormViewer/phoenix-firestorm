@@ -38,23 +38,15 @@
 #include "llviewerobject.h"
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
-#include "rlvhandler.h"
-#include "llvoavatarself.h"
-// [/RLVa:KB]
 #include "llsdutil.h"
 #include "llsdutil_math.h"
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
-#include "rlvhandler.h"
-#include "llvoavatarself.h"
-// [/RLVa:KB]
 #include "lltoolgrab.h"
 #include "llhudeffectlookat.h"
 #include "llagentcamera.h"
+
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "llvoavatarself.h"
-// [/RLVa:KB]
 
 LLAgentListener::LLAgentListener(LLAgent &agent)
   : LLEventAPI("LLAgent",
@@ -168,6 +160,7 @@ void LLAgentListener::requestSit(LLSD const & event_data) const
     //mAgent.getAvatarObject()->sitOnObject();
     // shamelessly ripped from llviewermenu.cpp:handle_sit_or_stand()
     // *TODO - find a permanent place to share this code properly.
+
 	LLViewerObject *object = NULL;
 	if (event_data.has("obj_uuid"))
 	{
@@ -187,8 +180,8 @@ void LLAgentListener::requestSit(LLSD const & event_data) const
 	}
 // [/RLVa:KB]
 
-	if (object && object->getPCode() == LL_PCODE_VOLUME)
-	{
+    if (object && object->getPCode() == LL_PCODE_VOLUME)
+    {
 // [RLVa:KB] - Checked: 2010-08-29 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
 		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_STANDTP)) && (isAgentAvatarValid()) )
 		{
@@ -201,16 +194,16 @@ void LLAgentListener::requestSit(LLSD const & event_data) const
 		}
 // [/RLVa:KB]
 
-		gMessageSystem->newMessageFast(_PREHASH_AgentRequestSit);
-		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-		gMessageSystem->addUUIDFast(_PREHASH_AgentID, mAgent.getID());
-		gMessageSystem->addUUIDFast(_PREHASH_SessionID, mAgent.getSessionID());
-		gMessageSystem->nextBlockFast(_PREHASH_TargetObject);
-		gMessageSystem->addUUIDFast(_PREHASH_TargetID, object->mID);
-		gMessageSystem->addVector3Fast(_PREHASH_Offset, LLVector3(0,0,0));
+        gMessageSystem->newMessageFast(_PREHASH_AgentRequestSit);
+        gMessageSystem->nextBlockFast(_PREHASH_AgentData);
+        gMessageSystem->addUUIDFast(_PREHASH_AgentID, mAgent.getID());
+        gMessageSystem->addUUIDFast(_PREHASH_SessionID, mAgent.getSessionID());
+        gMessageSystem->nextBlockFast(_PREHASH_TargetObject);
+        gMessageSystem->addUUIDFast(_PREHASH_TargetID, object->mID);
+        gMessageSystem->addVector3Fast(_PREHASH_Offset, LLVector3(0,0,0));
 
-        	object->getRegion()->sendReliableMessage();
-    	}
+        object->getRegion()->sendReliableMessage();
+    }
 	else
 	{
 		llwarns << "LLAgent requestSit could not find the sit target: " 

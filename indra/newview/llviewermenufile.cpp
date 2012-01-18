@@ -60,7 +60,6 @@
 #include "llappviewer.h"
 #include "lluploaddialog.h"
 #include "lltrans.h"
-#include "llimfloatercontainer.h"
 #include "llfloaterbuycurrency.h"
 
 // linden libraries
@@ -78,6 +77,10 @@
 
 // system libraries
 #include <boost/tokenizer.hpp>
+
+#include "llinventorydefines.h"
+#include "llimfloatercontainer.h"
+
 
 class LLFileEnableUpload : public view_listener_t
 {
@@ -1077,27 +1080,26 @@ void temp_upload_done_callback(const LLUUID& uuid, void* user_data, S32 result, 
 }
 
 static LLAssetID upload_new_resource_prep(
-        const LLTransactionID& tid,
-        LLAssetType::EType asset_type,
-        LLInventoryType::EType& inventory_type,
-        std::string& name,
-        const std::string& display_name,
-        std::string& description)
+	const LLTransactionID& tid,
+	LLAssetType::EType asset_type,
+	LLInventoryType::EType& inventory_type,
+	std::string& name,
+	const std::string& display_name,
+	std::string& description)
 {
-        LLAssetID uuid = generate_asset_id_for_new_upload(tid);
+	LLAssetID uuid = generate_asset_id_for_new_upload(tid);
 
-        increase_new_upload_stats(asset_type);
+	increase_new_upload_stats(asset_type);
 
-        assign_defaults_and_show_upload_message(
-                asset_type,
-                inventory_type,
-                name,
-                display_name,
-                description);
+	assign_defaults_and_show_upload_message(
+		asset_type,
+		inventory_type,
+		name,
+		display_name,
+		description);
 
-        return uuid;
+	return uuid;
 }
-
 
 LLSD generate_new_resource_upload_capability_body(
 	LLAssetType::EType asset_type,
@@ -1207,7 +1209,10 @@ void upload_new_resource(
 	llinfos << "Expected Upload Cost: " << expected_upload_cost << llendl;
 	lldebugs << "Folder: " << gInventory.findCategoryUUIDForType((destination_folder_type == LLFolderType::FT_NONE) ? LLFolderType::assetTypeToFolderType(asset_type) : destination_folder_type) << llendl;
 	lldebugs << "Asset Type: " << LLAssetType::lookup(asset_type) << llendl;
-	std::string url = gAgent.getRegion()->getCapability("NewFileAgentInventory");
+
+	std::string url = gAgent.getRegion()->getCapability(
+		"NewFileAgentInventory");
+
 	if (!url.empty() && !temp_upload)
 	{
 		llinfos << "New Agent Inventory via capability" << llendl;
@@ -1273,12 +1278,14 @@ void upload_new_resource(
 		{
 			asset_callback = callback;
 		}
-		gAssetStorage->storeAssetData(data->mAssetInfo.mTransactionID, data->mAssetInfo.mType,
-										asset_callback,
-										(void*)data,
-										temp_upload,
-										TRUE,
-										temp_upload);
+		gAssetStorage->storeAssetData(
+			data->mAssetInfo.mTransactionID,
+			data->mAssetInfo.mType,
+			asset_callback,
+			(void*)data,
+			temp_upload,
+			TRUE,
+			temp_upload);
 	}
 }
 

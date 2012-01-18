@@ -34,20 +34,15 @@
 #include "llviewercontrol.h"
 //#include "llfirstuse.h"
 #include "llfloatertools.h"
-#include "llparcel.h"
 #include "llselectmgr.h"
 #include "llstatusbar.h"
 #include "lltoolcomp.h"
 #include "lltoolmgr.h"
 #include "llviewerobject.h"
-#include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
 #include "llworld.h"
 #include "llui.h"
-// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0a)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 //Headers added for functions moved from viewer.cpp
 #include "llvograss.h"
@@ -65,9 +60,15 @@
 
 // linden library headers
 #include "llprimitive.h"
-#include "roles_constants.h"
 #include "llwindow.h"			// incBusyCount()
 #include "material_codes.h"
+
+// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+#include "llparcel.h"
+#include "llviewerparcelmgr.h"
+#include "roles_constants.h"
 
 const LLVector3 DEFAULT_OBJECT_SCALE(0.5f, 0.5f, 0.5f);
 

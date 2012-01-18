@@ -39,9 +39,10 @@
 #include "llsdutil.h"
 #include "llmediaentry.h"
 #include "lltextureentry.h"
+#include "llviewerregion.h"
+
 #include "llviewercontrol.h"
 #include "llviewerparcelmedia.h"
-#include "llviewerregion.h"
 
 //
 // When making a request

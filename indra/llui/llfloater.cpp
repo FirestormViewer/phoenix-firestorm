@@ -546,6 +546,7 @@ LLFloater::~LLFloater()
 	setVisible(false); // We're not visible if we're destroyed
 	storeVisibilityControl();
 	storeDockStateControl();
+
 	delete mMinimizeSignal;
 }
 
@@ -1169,7 +1170,7 @@ void LLFloater::handleReshape(const LLRect& new_rect, bool by_user)
 }
 
 void LLFloater::setMinimized(BOOL minimize)
-{	
+{
 	const LLFloater::Params& default_params = LLFloater::getDefaultParams();
 	S32 floater_header_size = default_params.header_height;
 	static LLUICachedControl<S32> minimized_width ("UIMinimizedWidth", 0);
@@ -1327,7 +1328,7 @@ void LLFloater::setMinimized(BOOL minimize)
 		// Reshape *after* setting mMinimized
 		reshape( mExpandedRect.getWidth(), mExpandedRect.getHeight(), TRUE );
 	}
-	
+
 	make_ui_sound("UISndWindowClose");
 	updateTitleButtons();
 	applyTitle ();

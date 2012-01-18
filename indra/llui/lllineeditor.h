@@ -271,7 +271,6 @@ public:
 	static BOOL		postvalidateFloat(const std::string &str);
 
 	bool			prevalidateInput(const LLWString& wstr);
-
 	BOOL			evaluateFloat();
 
 	// line history support:

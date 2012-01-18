@@ -174,7 +174,6 @@ private:
 	void					setAccordionCollapsedByUser(const std::string& name, bool collapsed);
 	bool					isAccordionCollapsedByUser(LLUICtrl* acc_tab);
 	bool					isAccordionCollapsedByUser(const std::string& name);
-	
 
 	LLFilterEditor*			mFilterEditor;
 	LLTabContainer*			mTabContainer;
@@ -192,18 +191,18 @@ private:
 	LLHandle<LLView>		mGroupsViewSortMenuHandle;
 	LLHandle<LLView>		mRecentViewSortMenuHandle;
 
-	Updater*			mFriendListUpdater;
-	Updater*			mNearbyListUpdater;
-	Updater*			mRecentListUpdater;
-	Updater*			mButtonsUpdater;
+	Updater*				mFriendListUpdater;
+	Updater*				mNearbyListUpdater;
+	Updater*				mRecentListUpdater;
+	Updater*				mButtonsUpdater;
 
- 	LLMenuButton*			mNearbyGearButton;
- 	LLMenuButton*			mFriendsGearButton;
+	LLMenuButton*			mNearbyGearButton;
+	LLMenuButton*			mFriendsGearButton;
 	LLMenuButton*			mGroupsGearButton;
 	LLMenuButton*			mRecentGearButton;
 
-	std::string			mFilterSubString;
-	std::string			mFilterSubStringOrig;
+	std::string				mFilterSubString;
+	std::string				mFilterSubStringOrig;
 	
 	LLUIColor			mChatRangeColor;
 	LLUIColor			mShoutRangeColor;

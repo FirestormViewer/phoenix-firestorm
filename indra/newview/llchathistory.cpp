@@ -56,6 +56,7 @@
 #include "llworld.h"
 #include "lluiconstants.h"
 #include "llstring.h"
+
 #include "llviewercontrol.h"
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f)
 #include "rlvcommon.h"
@@ -274,7 +275,7 @@ public:
 		if((chat.mFromID.isNull() && chat.mFromName.empty()) || (chat.mFromName == SYSTEM_FROM && chat.mFromID.isNull()))
 		{
 			mSourceType = CHAT_SOURCE_SYSTEM;
-		}
+		}  
 
 		mUserNameFont = style_params.font();
 		LLTextBox* user_name = getChild<LLTextBox>("user_name");
@@ -292,6 +293,7 @@ public:
 			updateMinUserNameWidth();
 		}
 		else if (mSourceType == CHAT_SOURCE_AGENT
+//				 && !mAvatarID.isNull()
 				 && chat.mChatStyle != CHAT_STYLE_HISTORY)
 		{
 			// ...from a normal user, lookup the name and fill in later.
@@ -364,7 +366,8 @@ public:
 			}
 // [/RLVa:KB]
 		}
-		else {
+		else
+		{
 			// ...from an object, just use name as given
 			mFrom = chat.mFromName;
 			user_name->setValue(mFrom);
@@ -485,7 +488,9 @@ public:
 		user_name->setValue( LLSD(mFrom) );
 		user_name->setToolTip( av_name.mUsername );
 
-		if (gSavedSettings.getBOOL("NameTagShowUsernames") && LLAvatarNameCache::useDisplayNames())
+		if (gSavedSettings.getBOOL("NameTagShowUsernames") && 
+			LLAvatarNameCache::useDisplayNames() ) //&&
+//			!av_name.mIsDisplayNameDefault)
 		{
 			LLStyle::Params style_params_name;
 			LLColor4 userNameColor = LLUIColorTable::instance().getColor("EmphasisColor");

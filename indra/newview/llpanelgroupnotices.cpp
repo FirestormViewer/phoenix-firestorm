@@ -1,4 +1,4 @@
-/**
+/** 
  * @file llpanelgroupnotices.cpp
  * @brief A panel to display group notices.
  *

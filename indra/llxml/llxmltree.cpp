@@ -534,11 +534,11 @@ BOOL LLXmlTreeParser::parseFile(const std::string &path, LLXmlTreeNode** root, B
 {
 	llassert( !mRoot );
 	llassert( !mCurrent );
-	
+
 	mKeepContents = keep_contents;
-	
+
 	BOOL success = LLXmlParser::parseFile(path);
-	
+
 	*root = mRoot;
 	mRoot = NULL;
 	

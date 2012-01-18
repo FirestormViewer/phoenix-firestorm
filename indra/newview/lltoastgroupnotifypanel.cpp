@@ -45,12 +45,12 @@
 
 #include "llglheaders.h"
 #include "llagent.h"
-#include "llslurl.h"
 #include "llavatariconctrl.h"
 #include "llfloaterinventory.h"
 #include "llinventorytype.h"
 
 #include "llgroupactions.h"
+#include "llslurl.h"
 
 const S32 LLToastGroupNotifyPanel::DEFAULT_MESSAGE_MAX_LINE_COUNT	= 7;
 
@@ -58,7 +58,7 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(LLNotificationPtr& notification
 :	LLToastPanel(notification),
 	mInventoryOffer(NULL)
 {
-	buildFromFile("panel_group_notify.xml");
+	buildFromFile( "panel_group_notify.xml");
 	const LLSD& payload = notification->getPayload();
 	LLGroupData groupData;
 	if (!gAgent.getGroupData(payload["group_id"].asUUID(),groupData))

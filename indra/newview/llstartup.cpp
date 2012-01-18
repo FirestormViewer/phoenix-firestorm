@@ -187,13 +187,6 @@
 #include "llavatariconctrl.h"
 #include "llvoicechannel.h"
 
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a)
-#include "rlvhandler.h"
-// [/RLVa:KB]
-//-TT Bridge 
-#include "fslslbridge.h"
-//-TT
-
 #include "lllogin.h"
 #include "llevents.h"
 #include "llstartuplistener.h"
@@ -211,6 +204,12 @@
 // NaCl - Antispam Registry
 #include "NACLantispam.h"
 // NaCl End
+// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+//-TT Bridge 
+#include "fslslbridge.h"
+//-TT
 
 //
 // exported globals
@@ -806,7 +805,7 @@ bool idle_startup()
 		//
 		if (gUserCredential.isNull())
 		{
-			gUserCredential = gLoginHandler.initializeLoginInfo();                    
+			gUserCredential = gLoginHandler.initializeLoginInfo();
 		}
 		// Previous initializeLoginInfo may have generated user credentials.  Re-check them.
 		if (gUserCredential.isNull())
@@ -2476,10 +2475,9 @@ bool first_run_dialog_callback(const LLSD& notification, const LLSD& response)
 
 void set_startup_status(const F32 frac, const std::string& string, const std::string& msg)
 {
-	// AO: We don't print chat yet because chatting too early disables the voice control.
-	
 	gViewerWindow->setProgressPercent(frac*100);
 	gViewerWindow->setProgressString(string);
+
 	gViewerWindow->setProgressMessage(msg);
 }
 
@@ -3620,7 +3618,7 @@ bool process_login_success_response()
 		gSavedSettings.setString("CurrentMapServerURL", map_server_url); 
 		LL_INFOS("LLStartup") << "map-server-url : no map-server-url answer, we use the default setting for the map : " << map_server_url << LL_ENDL;
 	}
-
+	
 	// Default male and female avatars allowing the user to choose their avatar on first login.
 	// These may be passed up by SLE to allow choice of enterprise avatars instead of the standard
 	// "new ruth."  Not to be confused with 'initial-outfit' below 
