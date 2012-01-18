@@ -94,7 +94,7 @@ protected:
 	void		onNameTagOpacityChange(const LLSD& newvalue);
 
 	// ## Zi: Pie menu
-	// make sure controls get greyed out or enwbled when pie color override is toggled
+	// make sure controls get greyed out or enabled when pie color override is toggled
 	void onPieColorsOverrideChanged();
 	// ## Zi: Pie menu
 
@@ -119,6 +119,11 @@ protected:
 	// updates click/double-click action controls depending on values from settings.xml
 	void updateClickActionControls();
 	
+	// ## Zi: Optional Edit Appearance Lighting
+	// make sure controls get greyed out or enabled when appearance camera movement is toggled
+	void onAppearanceCameraChanged();
+	// ## Zi: Optional Edit Appearance Lighting
+
 	// This function squirrels away the current values of the controls so that
 	// cancel() can restore them.	
 	void saveSettings();

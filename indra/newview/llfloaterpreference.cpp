@@ -499,6 +499,11 @@ BOOL LLFloaterPreference::postBuild()
 
 	getChild<LLComboBox>("language_combobox")->setCommitCallback(boost::bind(&LLFloaterPreference::onLanguageChange, this));
 
+// ## Zi: Optional Edit Appearance Lighting
+	gSavedSettings.getControl("AppearanceCameraMovement")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAppearanceCameraChanged, this));
+	onAppearanceCameraChanged();
+// ## Zi: Optional Edit Appearance Lighting
+
 	// if floater is opened before login set default localized busy message
 	if (LLStartUp::getStartupState() < STATE_STARTED)
 	{
@@ -551,6 +556,14 @@ void LLFloaterPreference::onBusyResponseChanged()
 		gSavedPerAccountSettings.setBOOL("BusyResponseChanged", FALSE );
 	}
 }
+
+// ## Zi: Optional Edit Appearance Lighting
+void LLFloaterPreference::onAppearanceCameraChanged()
+{
+	BOOL enable=gSavedSettings.getBOOL("AppearanceCameraMovement");
+	getChild<LLCheckBoxCtrl>("EditAppearanceLighting")->setEnabled(enable);
+}
+// ## Zi: Optional Edit Appearance Lighting
 
 LLFloaterPreference::~LLFloaterPreference()
 {
