@@ -355,7 +355,7 @@ FIRE-2266: SJ: End change
 
             <button
              follows="left|bottom"
-             left="15"
+             left="28"
              top_pad="5"
              height="20"
              label="+"
