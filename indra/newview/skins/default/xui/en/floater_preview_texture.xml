@@ -124,7 +124,7 @@
      follows="left|right|bottom"
      layout="topleft"
      bottom="-1"
-     height="22"
+     height="32"
 	 width="545"
 	 visible="false">
 	 
