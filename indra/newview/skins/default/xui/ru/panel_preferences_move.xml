@@ -5,18 +5,12 @@
 	<text name="heading2">
 		Автоматическая установка позиции для:
 	</text>
-	<check_box label="создания/редактирования" name="edit_camera_movement" tool_tip="Автоматическое позиционирование камеры при входе в режим редактирования и выходе из него"/>
-	<check_box label="внешности" name="appearance_camera_movement" tool_tip="Автоматическое позиционирование камеры в режиме редактирования"/>
-	<text name="keyboard_lbl">
-		Клавиатура:
-	</text>
-	<check_box label="Клавиши со стрелками всегда перемещают меня" name="arrow_keys_move_avatar_check"/>
-	<check_box label="Бег после двойного нажатия клавиши" name="tap_tap_hold_to_run"/>
-	<text name="mouse_lbl">
-		Мышь:
-	</text>
-	<check_box label="Показывать меня при обзоре мышью" name="first_person_avatar_visible"/>
-	<text name=" Mouse Sensitivity">
+			<check_box label="Режима создания/редактирования" name="edit_camera_movement" tool_tip="Производить автоматическое позиционирование камеры при входе в режим редактирования и выходе из него"/>
+			<check_box label="Изменения внешности" name="appearance_camera_movement" tool_tip="Производить автоматическое позиционирование камеры в режиме изменения внешности"/>
+			<check_box initial_value="true" label="Боковой панели" name="appearance_sidebar_positioning" tool_tip="Производить автоматическое позиционирование камеры для боковой панели"/>
+			<check_box label="Показать аватара от 1-го лица" name="first_person_avatar_visible"/>
+			<check_box label="Показать настройки от 1ого лица" name="mouselook_instructions_visible"/>
+			<text name="Mouse Sensitivity" width="195">
 		Чувствительность мыши:
 	</text>
 	<check_box label="Инвертировать" name="invert_mouse"/>

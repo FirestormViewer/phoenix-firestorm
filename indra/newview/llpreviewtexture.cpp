@@ -532,7 +532,7 @@ void LLPreviewTexture::updateDimensions()
 			button_panel->setVisible(FALSE);
 			if (mShowingButtons)
 			{
-				dimensions_panel->translate(0, -button_panel->getRect().mTop - 10);
+				dimensions_panel->translate(0, -button_panel->getRect().mTop);
 				mShowingButtons = false;
 			}
 		}
@@ -541,7 +541,7 @@ void LLPreviewTexture::updateDimensions()
 			button_panel->setVisible(TRUE);
 			if (!mShowingButtons)
 			{
-				dimensions_panel->translate(0, button_panel->getRect().mTop + 10);
+				dimensions_panel->translate(0, button_panel->getRect().mTop);
 				mShowingButtons = true;
 			}
 		}

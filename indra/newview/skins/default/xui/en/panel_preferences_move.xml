@@ -153,7 +153,17 @@
          layout="topleft"
          name="appearance_camera_movement"
          tool_tip="Use automatic camera positioning while in edit mode"
-         width="242" />
+         width="100" />
+        <check_box
+         control_name="EditAppearanceLighting"
+         follows="left|top"
+         height="16"
+         label="Add Additional Lighting"
+         layout="topleft"
+		 left_pad="10"
+         name="EditAppearanceLighting"
+         tool_tip="Enable or disable the additional lighting used while editing avatar appearance."
+         width="150" />
 <!-- This does not work.
     <check_box
      control_name="SidebarCameraMovement"
@@ -176,7 +186,7 @@
          mouse_opaque="false"
          visible="true"
          width="18"
-         top_pad="2"
+         top_pad="6"
          left="30" />
         <check_box
          control_name="FirstPersonAvatarVisible"
@@ -204,7 +214,7 @@
          height="10"
          layout="topleft"
          left_delta="3"
-         name=" Mouse Sensitivity"
+         name="Mouse Sensitivity"
          top_pad="5"
          width="160">
          Mouselook mouse sensitivity:
@@ -247,7 +257,7 @@
          height="20"
          label="Arrow keys always move me"
          layout="topleft"
-         left_delta="48"
+         left_delta="10"
          name="arrow_keys_move_avatar_check"
          width="237"
          top_pad="2"/>
@@ -308,7 +318,7 @@
          length="1"
          height="10"
          layout="topleft"
-         left="86"
+         left="48"
          name="single_click_action_lbl"
          width="150"
          top_pad="10">
@@ -338,7 +348,7 @@
          length="1"
          height="10"
          layout="topleft"
-         left="86"
+         left="48"
          name="double_click_action_lbl"
          width="150"
          top_pad="10">
@@ -370,7 +380,7 @@
          follows="top|left"
          height="23"
          label="Joystick Configuration"
-         left="130"
+         left="100"
          name="joystick_setup_button"
          top_pad="5"
          width="155">

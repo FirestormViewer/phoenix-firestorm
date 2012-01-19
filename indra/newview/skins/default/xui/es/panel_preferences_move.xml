@@ -14,7 +14,7 @@
 			<check_box label="Editar apariencia" name="appearance_camera_movement" tool_tip="Usar posicionamiento automático de cámara cuando se entra o sale del modo de edición de la apariencia o vestuario"/>
 			<check_box label="Mostrar mi avatar en vista subjetiva" name="first_person_avatar_visible"/>
 			<check_box label="Mostrar instrucciones de vista subjetiva" name="mouselook_instructions_visible" tool_tip=""/>
-			<text name=" Mouse Sensitivity" width="220">
+			<text name="Mouse Sensitivity" width="220">
 				Sensibilidad del ratón en vista subjetiva
 			</text>
 			<check_box label="Invertir" name="invert_mouse"/>

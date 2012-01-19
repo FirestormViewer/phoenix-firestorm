@@ -12,7 +12,7 @@
 			<check_box label="Aspetto fisico" name="appearance_camera_movement" tool_tip="Utilizza il posizionamento automatico della camera in modalità modifica"/>
 			<check_box initial_value="vero" label="Barra laterale" name="appearance_sidebar_positioning" tool_tip="Utilizza il posizionamento automatico della fotocamera per la barra laterale"/>
 			<check_box label="Mostra in modalità Mouselook" name="first_person_avatar_visible"/>
-			<text name=" Mouse Sensitivity">
+			<text name="Mouse Sensitivity">
 				Sensibilità mouse visuale soggettiva:
 			</text>
 			<check_box label="Inverti" name="invert_mouse"/>

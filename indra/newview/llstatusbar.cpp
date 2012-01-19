@@ -149,6 +149,7 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mBoxBalance(NULL),
 	mBalance(0),
 	mHealth(100),
+	mShowParcelIcons(TRUE),
 	mSquareMetersCredit(0),
 	mSquareMetersCommitted(0),
 	mAudioStreamEnabled(FALSE)	// ## Zi: Media/Stream separation
@@ -328,14 +329,15 @@ BOOL LLStatusBar::postBuild()
 	LLControlVariable* ctrl = gSavedSettings.getControl("NavBarShowParcelProperties").get();
 	if (ctrl)
 	{
-		mParcelPropsCtrlConnection = ctrl->getSignal()->connect(boost::bind(&LLStatusBar::updateParcelIcons, this));
+		mParcelPropsCtrlConnection = ctrl->getSignal()->connect(boost::bind(&LLStatusBar::onNavBarShowParcelPropertiesCtrlChanged, this));
+		onNavBarShowParcelPropertiesCtrlChanged();
 	}
 
 	// Connecting signal for updating parcel text on "Show Coordinates" setting change.
 	ctrl = gSavedSettings.getControl("NavBarShowCoordinates").get();
 	if (ctrl)
 	{
-		mShowCoordsCtrlConnection = ctrl->getSignal()->connect(boost::bind(&LLStatusBar::onNavBarShowParcelPropertiesCtrlChanged, this));
+		mShowCoordsCtrlConnection = ctrl->getSignal()->connect(boost::bind(&LLStatusBar::onNavBarShowCoordinatesCtrlChanged, this));
 	}
 
 	mParcelMgrConnection = LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(
@@ -762,6 +764,12 @@ void LLStatusBar::handleLoginComplete()
 
 void LLStatusBar::onNavBarShowParcelPropertiesCtrlChanged()
 {
+	mShowParcelIcons=gSavedSettings.getBOOL("NavBarShowParcelProperties");
+	update();
+}
+
+void LLStatusBar::onNavBarShowCoordinatesCtrlChanged()
+{
 	std::string new_text;
 
 	// don't need to have separate show_coords variable; if user requested the coords to be shown
@@ -867,8 +875,7 @@ void LLStatusBar::updateParcelIcons()
 	if (!agent_region || !agent_parcel)
 		return;
 
-	static LLUICachedControl<bool> show_parcel_properties("NavBarShowParcelProperties", true);
-	if (show_parcel_properties)
+	if (mShowParcelIcons)
 	{
 		LLParcel* current_parcel;
 		LLViewerRegion* selection_region = vpm->getSelectionRegion();
@@ -911,8 +918,6 @@ void LLStatusBar::updateParcelIcons()
 		mBuyParcelBtn->setVisible(is_for_sale);
 		mPWLBtn->setVisible(has_pwl);
 		mPWLBtn->setEnabled(has_pwl);
-
-		layoutParcelIcons();
 	}
 	else
 	{
@@ -921,15 +926,17 @@ void LLStatusBar::updateParcelIcons()
 			mParcelIcon[i]->setVisible(false);
 		}
 		mDamageText->setVisible(false);
+		mBuyParcelBtn->setVisible(false);
+		mPWLBtn->setVisible(false);
 	}
+
+	layoutParcelIcons();
 }
 
 void LLStatusBar::updateHealth()
 {
-	static LLUICachedControl<bool> show_icons("NavBarShowParcelProperties", false);
-
 	// *FIXME: Status bar owns health information, should be in agent
-	if (show_icons && gStatusBar)
+	if (mShowParcelIcons && gStatusBar)
 	{
 		static S32 last_health = -1;
 		S32 health = gStatusBar->getHealth();

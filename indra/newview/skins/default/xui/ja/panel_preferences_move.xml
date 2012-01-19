@@ -12,7 +12,7 @@
 			<check_box label="容姿" name="appearance_camera_movement" tool_tip="編集モードに入ったときに、自動カメラポジションを使います"/>
 			<check_box initial_value="true" label="サイドバー" name="appearance_sidebar_positioning" tool_tip="サイドバーに自動カメラポジションを使います"/>
 			<check_box label="一人称視点で表示する" name="first_person_avatar_visible"/>
-			<text name=" Mouse Sensitivity">
+			<text name="Mouse Sensitivity">
 				一人称視点のマウスの感度：
 			</text>
 			<check_box label="切り替え" name="invert_mouse"/>

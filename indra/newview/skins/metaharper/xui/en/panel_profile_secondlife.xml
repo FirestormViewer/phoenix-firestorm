@@ -353,18 +353,26 @@ FIRE-2266: SJ: End change
              width="45"
              value="Groups:" />
 
+            <button
+             follows="left|bottom"
+             left="28"
+             top_pad="5"
+             height="20"
+             label="+"
+             label_selected="+"
+             name="group_invite"
+             tool_tip="Invite to Group"
+             width="20" />
+
             <group_list
             left_pad="8"
-            top_delta="0"
+            top_delta="-20"
             height="80"
             right="-6"
             border_visible="true"
             for_agent="false"
             follows="left|bottom|right"
             name="group_list" />
-
-            <!--<button follows="left|top" left="15"  top="240" height="20" halign="center"
-            label="+" label_selected="+" name="PhoenixGroupInvite_Button" tool_tip="Invite to Group." width="40" />-->
 
             <layout_stack
              top_pad="8"

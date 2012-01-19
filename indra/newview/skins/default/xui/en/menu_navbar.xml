@@ -22,8 +22,8 @@
       label="Show Parcel Properties"
       name="Show Parcel Properties">
       <menu_item_check.on_click
-        function="Navbar.Action"
-        parameter="show_properties" />
+        function="ToggleControl"
+        parameter="NavBarShowParcelProperties" />
       <menu_item_check.on_check
         control="NavBarShowParcelProperties" />
     </menu_item_check>

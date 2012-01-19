@@ -12,7 +12,7 @@
 			<check_box label="編輯外觀" name="appearance_camera_movement" tool_tip="使用編輯模式時自動調整攝影機位置功能"/>
 			<check_box initial_value="true" label="側邊欄" name="appearance_sidebar_positioning" tool_tip="使用開啟側邊欄時自動調整攝影機位置功能"/>
 			<check_box label="將我顯示於第一人稱視角中" name="first_person_avatar_visible"/>
-			<text name=" Mouse Sensitivity">
+			<text name="Mouse Sensitivity">
 				第一人稱視角滑鼠敏感度：
 			</text>
 			<check_box label="反轉" name="invert_mouse"/>

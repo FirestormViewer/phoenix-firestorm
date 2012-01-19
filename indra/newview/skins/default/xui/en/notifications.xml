@@ -8618,4 +8618,10 @@ Teleport to this avatar not possible, because the exact position is unknown.
   <tag>fail</tag>
   </notification>
 
+  <notification
+   icon="alertmodal.tga"
+   name="CacheEmpty"
+   type="alertmodal">
+Your viewer cache is currently empty. Please be aware that you may experience slow framerates and inventory loading for a short time while new content downloads.
+  </notification>
 </notifications>
