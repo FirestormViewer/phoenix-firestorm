@@ -175,11 +175,6 @@ ATI Radeon HD 6600				.*ATI.*Radeon HD *66..						3		1
 ATI Radeon HD 6700				.*ATI.*Radeon HD *67..						3		1
 ATI Radeon HD 6800				.*ATI.*Radeon HD *68..						3		1
 ATI Radeon HD 6900				.*ATI.*Radeon HD *69..						3		1
-ATI Radeon HD 7500				.*ATI.*Radeon HD *75..						3		1
-ATI Radeon HD 7600				.*ATI.*Radeon HD *76..						3		1
-ATI Radeon HD 7700				.*ATI.*Radeon HD *77..						3		1
-ATI Radeon HD 7800				.*ATI.*Radeon HD *78..						3		1
-ATI Radeon HD 7900				.*ATI.*Radeon HD *79..						3		1
 ATI Radeon OpenGL				.*ATI.*Radeon OpenGL.*						0		0
 ATI Radeon 2100					.*ATI.*Radeon 21..							0		1
 ATI Radeon 3000					.*ATI.*Radeon 30..							0		1
@@ -300,7 +295,6 @@ NVIDIA 310						.*NVIDIA .*GeForce 310.*					3		1
 NVIDIA 315M						.*NVIDIA .*GeForce 315M.*					2		1
 NVIDIA 315						.*NVIDIA .*GeForce 315.*					3		1
 NVIDIA 320M						.*NVIDIA .*GeForce 320M.*					2		1
-NVIDIA 610M						.*NVIDIA .*GeForce 610M.*					2		1
 NVIDIA G100M					.*NVIDIA .*100M.*							0		1
 NVIDIA G100						.*NVIDIA .*100.*							0		1
 NVIDIA G102M					.*NVIDIA .*102M.*							0		1
@@ -346,7 +340,6 @@ NVIDIA GT 530M					.*NVIDIA .*GT *530(M)?.*					3		1
 NVIDIA GT 540M					.*NVIDIA .*GT *54.(M)?.*					3		1
 NVIDIA GT 550M					.*NVIDIA .*GT *550(M)?.*					3		1
 NVIDIA GT 555M					.*NVIDIA .*GT *555(M)?.*					3		1
-NVIDIA GT 630M					.*NVIDIA .*GT *630(M)?.*					3		1
 NVIDIA GTS 160M					.*NVIDIA .*GT(S)? *160(M)?.*				2		1
 NVIDIA GTS 240					.*NVIDIA .*GTS *24.*						3		1
 NVIDIA GTS 250					.*NVIDIA .*GTS *25.*						3		1
@@ -539,5 +532,4 @@ XGI								XGI.*										0		0
 VIA								VIA.*										0		0
 Apple Generic					Apple.*Generic.*							0		0
 Apple Software Renderer			Apple.*Software Renderer.*					0		0
-Oracle VirtualBox Graphics		Humper.*									0		1
 Humper							Humper.*									0		1

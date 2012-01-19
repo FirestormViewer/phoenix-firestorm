@@ -30,12 +30,12 @@ list all
 RenderAnisotropic				1	0
 RenderAvatarCloth				1	1
 RenderAvatarLODFactor			1	1.0
-RenderAvatarPhysicsLODFactor	1	1.0
+RenderAvatarPhysicsLODFactor 1	1.0
 RenderAvatarMaxVisible          1   12
 RenderAvatarVP					1	1
 RenderCubeMap					1	1
 RenderDelayVBUpdate				1	0
-RenderFarClip					1	192
+RenderFarClip					1	256
 RenderFlexTimeFactor			1	1.0
 RenderFogRatio					1	4.0
 RenderGamma						1	0
@@ -47,7 +47,7 @@ RenderNightBrightness			1	1.0
 RenderObjectBump				1	1
 RenderReflectionDetail			1	4
 RenderTerrainDetail				1	1
-RenderTerrainLODFactor			1	4.0
+RenderTerrainLODFactor			1	2.0
 RenderTransparentWater			1	1
 RenderTreeLODFactor				1	1.0
 RenderUseImpostors				1	1
@@ -84,19 +84,16 @@ RenderAvatarVP				1	0
 RenderFarClip				1	64
 RenderFlexTimeFactor		1	0
 RenderGlowResolutionPow		1	8
-RenderLightingDetail		1	0
-RenderMaxPartCount			1	250
 RenderLocalLights			1	0
+RenderMaxPartCount			1	0
 RenderObjectBump			1	0
 RenderReflectionDetail		1	0
 RenderTerrainDetail			1	0
-RenderTerrainLODFactor		1	1.0
+RenderTerrainLODFactor		1	1
 RenderTransparentWater		1	0
 RenderTreeLODFactor			1	0
 RenderUseImpostors			1	1
-RenderVolumeLODFactor		1	2.0
-RenderTextureMemoryMultiple	1	0.5
-RenderWaterReflections		1	0
+RenderVolumeLODFactor		1	0.5
 VertexShaderEnable			1	0
 WindLightUseAtmosShaders	1	0
 WLSkyDetail					1	48
@@ -104,6 +101,7 @@ RenderDeferred				1	0
 RenderDeferredSSAO			1	0
 RenderShadowDetail			1	0
 RenderFSAASamples			1	0
+
 //
 // Mid Graphics Settings
 //
@@ -121,19 +119,18 @@ RenderMaxPartCount			1	2048
 RenderObjectBump			1	1
 RenderReflectionDetail		1	0
 RenderTerrainDetail			1	1
-RenderTerrainLODFactor		1	2.0
+RenderTerrainLODFactor		1	1.0
 RenderTransparentWater		1	1
 RenderTreeLODFactor			1	0.5
-RenderTextureMemoryMultiple	1	0.5
 RenderUseImpostors			1	1
-RenderVolumeLODFactor		1	2.0
-RenderWaterReflections		1	0
+RenderVolumeLODFactor		1	1.125
 VertexShaderEnable			1	1
 WindLightUseAtmosShaders	1	0
 WLSkyDetail					1	48
 RenderDeferred				1	0
 RenderDeferredSSAO			1	0
 RenderShadowDetail			1	0
+RenderFSAASamples			1	0
 
 //
 // High Graphics Settings (purty)
@@ -152,12 +149,11 @@ RenderMaxPartCount			1	4096
 RenderObjectBump			1	1
 RenderReflectionDetail		1	0
 RenderTerrainDetail			1	1
-RenderTerrainLODFactor		1	3.0
+RenderTerrainLODFactor		1	2.0
 RenderTransparentWater		1	1
 RenderTreeLODFactor			1	0.5
 RenderUseImpostors			1	1
-RenderVolumeLODFactor		1	2.0
-RenderWaterReflections		1	0
+RenderVolumeLODFactor		1	1.125
 VertexShaderEnable			1	1
 WindLightUseAtmosShaders	1	1
 WLSkyDetail					1	48
@@ -175,7 +171,7 @@ RenderAvatarCloth			1	1
 RenderAvatarLODFactor		1	1.0
 RenderAvatarPhysicsLODFactor 1	1.0
 RenderAvatarVP				1	1
-RenderFarClip				1	192
+RenderFarClip				1	256
 RenderFlexTimeFactor		1	1.0
 RenderGlowResolutionPow		1	9
 RenderLocalLights			1	1
@@ -183,12 +179,11 @@ RenderMaxPartCount			1	8192
 RenderObjectBump			1	1
 RenderReflectionDetail		1	4
 RenderTerrainDetail			1	1
-RenderTerrainLODFactor		1	4.0
+RenderTerrainLODFactor		1	2.0
 RenderTransparentWater		1	1
 RenderTreeLODFactor			1	1.0
 RenderUseImpostors			1	1
-RenderVolumeLODFactor		1	3.0
-RenderWaterReflections		1	1
+RenderVolumeLODFactor		1	2.0
 VertexShaderEnable			1	1
 WindLightUseAtmosShaders	1	1
 WLSkyDetail					1	128
@@ -389,9 +384,6 @@ list NVIDIA_GeForce_8600
 RenderTextureMemoryMultiple			1	0.375	
 RenderUseImpostors				0	0
 UseOcclusion				0	0
-
-list NVIDIA_GeForce_9600M
-RenderTextureMemoryMultiple		1	1.0
 
 /// tweaked ATI to 96 Draw distance
 
