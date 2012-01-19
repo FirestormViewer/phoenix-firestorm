@@ -168,7 +168,7 @@
          min_val="-2147483647"
          mouse_opaque="true"
          name="ChatChannel"
-		 tool_tip="Channel to send chat on. Enabled in Preferences->Firestorm->Chat->Show channel selection in chat bar." />
+		 tool_tip="Channel to send chat on. Enabled in Preferences -> Chat -> Firestorm -> Show channel selection in chat bar." />
 
       </layout_panel>
       </layout_stack>
