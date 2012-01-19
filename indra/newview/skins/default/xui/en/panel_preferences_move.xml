@@ -257,7 +257,7 @@
          height="20"
          label="Arrow keys always move me"
          layout="topleft"
-         left_delta="48"
+         left_delta="10"
          name="arrow_keys_move_avatar_check"
          width="237"
          top_pad="2"/>
@@ -318,7 +318,7 @@
          length="1"
          height="10"
          layout="topleft"
-         left="86"
+         left="48"
          name="single_click_action_lbl"
          width="150"
          top_pad="10">
@@ -348,7 +348,7 @@
          length="1"
          height="10"
          layout="topleft"
-         left="86"
+         left="48"
          name="double_click_action_lbl"
          width="150"
          top_pad="10">
@@ -380,7 +380,7 @@
          follows="top|left"
          height="23"
          label="Joystick Configuration"
-         left="130"
+         left="100"
          name="joystick_setup_button"
          top_pad="5"
          width="155">
