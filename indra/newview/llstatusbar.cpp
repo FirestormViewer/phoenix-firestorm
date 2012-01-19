@@ -397,10 +397,21 @@ void LLStatusBar::refresh()
 	{
 		gMenuBarView->reshape(MENU_RIGHT, gMenuBarView->getRect().getHeight());
 	}
+	// also update the parcel info panel pos -KC
+	if ((MENU_RIGHT + MENU_PARCEL_SPACING) != mParcelInfoPanel->getRect().mLeft)
+	{
+		updateParcelPanel();
+	}
 
-	mSGBandwidth->setVisible(net_stats_visible);
-	mSGPacketLoss->setVisible(net_stats_visible);
-	mBtnStats->setEnabled(net_stats_visible);
+	// Ansariel: This is done in LLStatusBar::updateNetstatVisibility()
+	//mSGBandwidth->setVisible(net_stats_visible);
+	//mSGPacketLoss->setVisible(net_stats_visible);
+
+	// It seems this button does no longer exist. I believe this was an overlay button on top of
+	// the net stats graphs to call up the lag meter floater. In case someone revives this, make
+	// sure to use a mSGStatsButton variable, because this function here is called an awful lot
+	// while the viewer runs, and dynamic lookup is very expensive. -Zi
+	//mBtnStats->setEnabled(net_stats_visible);
 
 	// update the master volume button state
 	bool mute_audio = LLAppViewer::instance()->getMasterSystemAudioMute();
