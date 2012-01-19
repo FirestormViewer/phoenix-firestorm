@@ -822,7 +822,8 @@ void LLNearbyChatHandler::onAvatarNameLookup(const LLUUID& agent_id, const LLAva
 	LLViewerChat::getChatColor(chat_msg, chatcolor);
 	gConsole->addConsoleLine(consoleChat, chatcolor);
 	LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
-	gConsole->setVisible(!nearby_chat->getVisible());
+	if( nearby_chat )
+		gConsole->setVisible(!nearby_chat->getVisible());
 }
 
 void LLNearbyChatHandler::onDeleteToast(LLToast* toast)
