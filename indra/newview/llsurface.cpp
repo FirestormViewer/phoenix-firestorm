@@ -654,7 +654,7 @@ BOOL LLSurface::idleUpdate(F32 max_update_time)
 		std::set<LLSurfacePatch *>::iterator curiter = iter++;
 		LLSurfacePatch *patchp = *curiter;
 		patchp->updateNormals();
-		patchp->updateVerticalStats();
+//		patchp->updateVerticalStats();
 		if (max_update_time == 0.f || update_timer.getElapsedTimeF32() < max_update_time)
 		{
 			if (patchp->updateTexture())
