@@ -191,9 +191,14 @@ private:
 	void onContextMenuItemClicked(const LLSD::String& userdata);
 
 	/**
-	 * Called when user checks/unchecks Show Coordinates menu item.
+	 * Called when user checks/unchecks Show Paracel Properies menu item
 	 */
 	void onNavBarShowParcelPropertiesCtrlChanged();
+
+	/**
+	 * Called when user checks/unchecks Show Coordinates menu item.
+	 */
+	void onNavBarShowCoordinatesCtrlChanged();
 
 	/**
 	 * Shorthand to call updateParcelInfoText() and updateParcelIcons().
@@ -204,6 +209,11 @@ private:
 	 * Updates parcel info text (mParcelInfoText).
 	 */
 	void updateParcelInfoText();
+
+	/**
+	 * Updates the visibility state of the parcel icons according to parcel properties
+	 */
+	void updateParcelIconVisibility();
 
 	void onBuyLandClicked();
 
@@ -273,6 +283,7 @@ private:
 	S32				mSquareMetersCredit;
 	S32				mSquareMetersCommitted;
 	BOOL			mAudioStreamEnabled;
+	BOOL			mShowParcelIcons;
 	LLFrameTimer*	mBalanceTimer;
 	LLFrameTimer*	mHealthTimer;
 	LLPanelVolumePulldown* mPanelVolumePulldown;
