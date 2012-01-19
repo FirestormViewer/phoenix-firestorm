@@ -107,6 +107,12 @@ static LLFastTimer::DeclareTimer FTM_GEN_TRIANGLES("Generate Triangles");
 static LLFastTimer::DeclareTimer FTM_GEN_VOLUME("Generate Volumes");
 static LLFastTimer::DeclareTimer FTM_VOLUME_TEXTURES("Volume Textures");
 
+static bool enableVolumeSAPProtection()
+{
+	static LLCachedControl<bool> protect(gSavedSettings,"RenderVolumeSAProtection");
+	return protect;
+}
+
 // Implementation class of LLMediaDataClientObject.  See llmediadataclient.h
 class LLMediaDataClientObjectImpl : public LLMediaDataClientObject
 {
@@ -1609,7 +1615,10 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 			LLFastTimer t(FTM_GEN_FLEX);
 			res = mVolumeImpl->doUpdateGeometry(drawable);
 		}
-		mVolumeSurfaceArea = getVolume()->sculptGetSurfaceArea();
+
+		if( enableVolumeSAPProtection() )
+			mVolumeSurfaceArea = getVolume()->sculptGetSurfaceArea();
+		
 		updateFaceFlags();
 		return res;
 	}
@@ -1707,7 +1716,8 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 		genBBoxes(FALSE);
 	}
 
-	mVolumeSurfaceArea = getVolume()->sculptGetSurfaceArea();
+	if( enableVolumeSAPProtection() )
+		mVolumeSurfaceArea = getVolume()->sculptGetSurfaceArea();
 
 	// Update face flags
 	updateFaceFlags();
@@ -4161,22 +4171,21 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 		llassert_always(vobj);
 
 		// AO:  Z's protection auto-derender code
-		static LLCachedControl<bool> tex_protect(gSavedSettings,"RenderVolumeSAProtection");
-		if (tex_protect)
+		if (enableVolumeSAPProtection())
 		{
 	   		static LLCachedControl<F32> volume_sa_thresh(gSavedSettings,"RenderVolumeSAThreshold");
-    			static LLCachedControl<F32> sculpt_sa_thresh(gSavedSettings, "RenderSculptSAThreshold");
-    			static LLCachedControl<F32> volume_sa_max_frame(gSavedSettings, "RenderVolumeSAFrameMax");
-    			F32 max_for_this_vol = (vobj->isSculpted()) ? sculpt_sa_thresh : volume_sa_thresh;
+			static LLCachedControl<F32> sculpt_sa_thresh(gSavedSettings, "RenderSculptSAThreshold");
+			static LLCachedControl<F32> volume_sa_max_frame(gSavedSettings, "RenderVolumeSAFrameMax");
+			F32 max_for_this_vol = (vobj->isSculpted()) ? sculpt_sa_thresh : volume_sa_thresh;
 
-    			if (vobj->mVolumeSurfaceArea > max_for_this_vol)
-    			{
-      				LLPipeline::sVolumeSAFrame += vobj->mVolumeSurfaceArea;
-      				if(LLPipeline::sVolumeSAFrame > volume_sa_max_frame)
-      				{
-        				continue;
-      				}
-    			}
+			if (vobj->mVolumeSurfaceArea > max_for_this_vol)
+			{
+				LLPipeline::sVolumeSAFrame += vobj->mVolumeSurfaceArea;
+				if(LLPipeline::sVolumeSAFrame > volume_sa_max_frame)
+				{
+					continue;
+				}
+			}
 		}
 		// </AO>
 
