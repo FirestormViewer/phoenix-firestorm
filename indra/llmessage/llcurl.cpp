@@ -228,6 +228,8 @@ LLMutex* LLCurl::Easy::sHandleMutexp = NULL ;
 //static
 CURL* LLCurl::Easy::allocEasyHandle()
 {
+	llassert(LLCurl::getCurlThread()) ;
+
 	CURL* ret = NULL;
 
 	LLMutexLock lock(sHandleMutexp) ;
@@ -500,6 +502,7 @@ void LLCurl::Easy::prepRequest(const std::string& url,
 	LLProxy::getInstance()->applyProxySettings(this);
 
 	mOutput.reset(new LLBufferArray);
+	mOutput->setThreaded(true);
 	setopt(CURLOPT_WRITEFUNCTION, (void*)&curlWriteCallback);
 	setopt(CURLOPT_WRITEDATA, (void*)this);
 
