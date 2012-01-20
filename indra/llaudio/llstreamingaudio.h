@@ -47,9 +47,9 @@ class LLStreamingAudioInterface
 	virtual std::string getURL() = 0;
 
         // These three are Firestorm additions and thus optional.
-        virtual bool hasNewMetadata() { return false; }
-        virtual std::string getCurrentArtist() { return NULL; }
-        virtual std::string getCurrentTitle() { return NULL; }
+	virtual bool hasNewMetadata() { return false; }
+	virtual std::string getCurrentArtist() { return ""; }
+	virtual std::string getCurrentTitle() { return ""; }
 };
 
 #endif // LL_STREAMINGAUDIO_H

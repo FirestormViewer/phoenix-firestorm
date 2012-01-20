@@ -50,12 +50,24 @@ class LLStreamingAudio_MediaPlugins : public LLStreamingAudioInterface
 	/*virtual*/ F32 getGain();
 	/*virtual*/ std::string getURL();
 
+	// <ND> For FS metadata extraction
+	virtual bool hasNewMetadata();
+	virtual std::string getCurrentArtist();
+	virtual std::string getCurrentTitle();
+	// </ND>
+
 private:
 	LLPluginClassMedia* initializeMedia(const std::string& media_type);
 
 	LLPluginClassMedia *mMediaPlugin;
 
 	std::string mURL;
+
+	// <ND> stream metadata from plugin
+	std::string mArtist;
+	std::string mTitle;
+	// </ND>
+
 	F32 mGain;
 };
 

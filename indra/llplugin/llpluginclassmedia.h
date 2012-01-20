@@ -422,7 +422,20 @@ protected:
 	F64				mDuration;
 	F64				mCurrentRate;
 	F64				mLoadedDuration;
-	
+
+public:
+	// <ND> Enable gstreamer plugin to report title/artist of current stream
+	std::string const& getArtist() const
+	{ return mArtist; }
+
+	std::string const& getTitle() const
+	{ return mTitle; }
+
+private:
+	std::string mArtist;
+	std::string mTitle;
+	// </ND>
+
 //--------------------------------------
 	//debug use only
 	//

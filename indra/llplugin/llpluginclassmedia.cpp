@@ -863,6 +863,14 @@ void LLPluginClassMedia::receivePluginMessage(const LLPluginMessage &message)
 	if(message_class == LLPLUGIN_MESSAGE_CLASS_MEDIA)
 	{
 		std::string message_name = message.getName();
+
+		// <ND> Enable gs	treamer plugin to report title/artist of current stream
+		if( message_name == "ndMediadata_change" )
+		{
+			mTitle = message.getValue( "title" );
+			mArtist = message.getValue( "artist" );
+		}
+		else // </ND>
 		if(message_name == "texture_params")
 		{
 			mRequestedTextureDepth = message.getValueS32("depth");
