@@ -405,7 +405,7 @@ void RlvUIEnabler::onToggleShowMinimap()
 	// ND_MERGE
 
 	// Break/reestablish the visibility connection for the nearby people panel embedded minimap instance
-	LLPanel* pPeoplePanel = LLFloaterSidePanelContainer::getPanel("panel_people");
+	LLPanel* pPeoplePanel = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
 	LLPanel* pNetMapPanel = (pPeoplePanel) ? pPeoplePanel->getChild<LLPanel>("minimaplayout", TRUE) : NULL;  //AO: firestorm specific
 	RLV_ASSERT( (pPeoplePanel) && (pNetMapPanel) );
 	if (pNetMapPanel)
@@ -426,7 +426,7 @@ void RlvUIEnabler::onToggleShowNames(bool fQuitting)
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 
 	// Refresh the nearby people list
-	LLPanelPeople* pPeoplePanel = dynamic_cast<LLPanelPeople*>(LLFloaterSidePanelContainer::getPanel("panel_people"));
+	LLPanelPeople* pPeoplePanel = dynamic_cast<LLPanelPeople*>(LLFloaterSidePanelContainer::getPanel("people", "panel_people"));
 	RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
 	if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
 		pPeoplePanel->getNearbyList()->updateAvatarNames();

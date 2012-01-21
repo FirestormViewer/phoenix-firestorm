@@ -94,7 +94,7 @@ FSLSLBridgeRequestRadarPosResponder::FSLSLBridgeRequestRadarPosResponder()
 }
 void FSLSLBridgeRequestRadarPosResponder::result(const LLSD& content)
 {
-	LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("panel_people");
+	LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
 	if (panel_people)
 	{
 		LLAvatarList* nearbyList = ((LLPanelPeople*)panel_people)->getNearbyList();

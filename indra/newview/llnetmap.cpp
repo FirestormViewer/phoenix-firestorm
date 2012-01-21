@@ -821,7 +821,7 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 			// Ansariel: Try to get distance from the nearby people panel
 			//           aka radar. This usually contains better data,
 			//           especially when above 1020m.
-			LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("panel_people");
+			LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
 			if (panel_people != NULL)
 			{
 				LLAvatarListItem* avatar_list_item = ((LLPanelPeople*)panel_people)->getNearbyList()->getAvatarListItem(avatar_id);
@@ -1282,7 +1282,7 @@ void LLNetMap::startTracking()
 {
 	if (mClosestAgentAtLastRightClick.notNull())
 	{
-		LLPanelPeople* panel_people = (LLPanelPeople*)LLFloaterSidePanelContainer::getPanel("panel_people");
+		LLPanelPeople* panel_people = (LLPanelPeople*)LLFloaterSidePanelContainer::getPanel("people", "panel_people");
 		if (panel_people != NULL)
 		{
 			panel_people->startTracking(mClosestAgentAtLastRightClick);

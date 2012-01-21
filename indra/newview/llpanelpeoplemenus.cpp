@@ -226,14 +226,14 @@ void NearbyMenu::teleportToAvatar()
 // AO: wrapper for functionality managed by LLPanelPeople, because it manages the nearby avatar list.
 // Will only work for avatars within radar range.
 {
-	LLPanelPeople* peoplePanel = dynamic_cast<LLPanelPeople*>(LLFloaterSidePanelContainer::getPanel("panel_people"));
+	LLPanelPeople* peoplePanel = dynamic_cast<LLPanelPeople*>(LLFloaterSidePanelContainer::getPanel("people", "panel_people"));
 	peoplePanel->teleportToAvatar(mUUIDs.front());
 }
 
 // Ansariel: Avatar tracking feature
 void NearbyMenu::onTrackAvatarMenuItemClick()
 {
-	LLPanelPeople* peoplePanel = dynamic_cast<LLPanelPeople*>(LLFloaterSidePanelContainer::getPanel("panel_people"));
+	LLPanelPeople* peoplePanel = dynamic_cast<LLPanelPeople*>(LLFloaterSidePanelContainer::getPanel("people", "panel_people"));
 	peoplePanel->startTracking(mUUIDs.front());
 }
 
