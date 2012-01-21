@@ -61,6 +61,8 @@ private:
 
 	void setMinimized( BOOL );
 
+	void stretchMiniMap(S32 width,S32 height);
+	
 	LLMenuGL*		mPopupMenu;
 
 	LLTextBox*		mTextBoxEast;
