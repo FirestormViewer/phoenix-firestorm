@@ -237,4 +237,28 @@
            is_running_function="Floater.IsOpen"
            is_running_parameters="voice_controls"
            />
+
+<!-- Firestorm command buttons -->
+  <command name="quickprefs"
+           available_in_toybox="true"
+           icon="phoenix_18"
+           label_ref="Command_Quickprefs_Label"
+           tooltip_ref="Command_Quickprefs_Tooltip"
+           execute_function="Floater.ToggleOrBringToFront"
+           execute_parameters="quickprefs"
+           is_running_function="Floater.IsOpen"
+           is_running_parameters="quickprefs"
+           />
+
+  <command name="animationoverride"
+           available_in_toybox="true"
+           icon="ao_toggle_18"
+           label_ref="Command_AO_Label"
+           tooltip_ref="Command_AO_Tooltip"
+           execute_function="Floater.ToggleOrBringToFront"
+           execute_parameters="animation_overrider"
+           is_running_function="Floater.IsOpen"
+           is_running_parameters="animation_overrider"
+           />
+
 </commands>
